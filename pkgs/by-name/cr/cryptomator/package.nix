@@ -3,7 +3,7 @@
   fetchFromGitHub,
   fuse3,
   glib,
-  jdk23,
+  jdk24,
   lib,
   libayatana-appindicator,
   makeShellWrapper,
@@ -13,7 +13,7 @@
 }:
 
 let
-  jdk = jdk23.override { enableJavaFX = true; };
+  jdk = jdk24.override { enableJavaFX = true; };
 in
 maven.buildMavenPackage rec {
   pname = "cryptomator";

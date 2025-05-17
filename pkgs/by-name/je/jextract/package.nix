@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   gradle,
-  jdk23,
+  jdk24,
   llvmPackages,
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   gradleFlags = [
     "-Pllvm_home=${lib.getLib llvmPackages.libclang}"
-    "-Pjdk22_home=${jdk23}"
+    "-Pjdk22_home=${jdk24}"
   ];
 
   doCheck = true;
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
     description = "Tool which mechanically generates Java bindings from a native library headers";
     mainProgram = "jextract";
     homepage = "https://github.com/openjdk/jextract";
-    platforms = jdk23.meta.platforms;
+    platforms = jdk24.meta.platforms;
     license = licenses.gpl2Only;
     maintainers = with maintainers; [
       jlesquembre

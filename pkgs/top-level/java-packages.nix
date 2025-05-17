@@ -48,7 +48,6 @@ with pkgs;
       openjdk11 = mkOpenjdk "11";
       openjdk17 = mkOpenjdk "17";
       openjdk21 = mkOpenjdk "21";
-      openjdk23 = mkOpenjdk "23";
       openjdk24 = mkOpenjdk "24";
 
       # Legacy aliases
