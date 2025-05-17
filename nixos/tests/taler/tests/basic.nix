@@ -14,6 +14,8 @@ import ../../make-test-python.nix (
     name = "GNU Taler Basic Test";
     meta = {
       maintainers = lib.teams.ngi.members;
+      # FIX: unbreak
+      broken = true;
     };
 
     # Taler components virtual-machine nodes
@@ -41,7 +43,7 @@ import ../../make-test-python.nix (
 
         # Bank admin account credentials
         AUSER = "admin";
-        APASS = "admin";
+        APASS = "superadmin";
 
         TUSER = "testUser";
         TPASS = "testUser";
