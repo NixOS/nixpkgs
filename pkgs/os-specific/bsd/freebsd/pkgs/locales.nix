@@ -31,6 +31,8 @@ let
         mandoc
         groff
       ] ++ lib.optional needsLocaledef localedef;
+
+      meta.platforms = lib.platforms.unix;
     };
   directories = {
     colldef = true;
