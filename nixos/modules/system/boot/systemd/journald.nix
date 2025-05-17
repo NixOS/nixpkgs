@@ -133,10 +133,12 @@ in
         "syslog.socket"
       ];
 
-    systemd.sockets.systemd-journald-audit.wantedBy = [
-      "systemd-journald.service"
-      "sockets.target"
-    ];
+    systemd.sockets.systemd-journald-audit = lib.mkIf (!config.boot.isContainer) {
+      wantedBy = [
+        "systemd-journald.service"
+        "sockets.target"
+      ];
+    };
 
     environment.etc = {
       "systemd/journald.conf".text = ''
