@@ -435,11 +435,11 @@ in
         before = [ "phpfpm-davis.service" ];
         after =
           lib.optional mysqlLocal "mysql.service"
-          ++ lib.optional pgsqlLocal "postgresql.service"
+          ++ lib.optional pgsqlLocal "postgresql.target"
           ++ [ "davis-env-setup.service" ];
         requires =
           lib.optional mysqlLocal "mysql.service"
-          ++ lib.optional pgsqlLocal "postgresql.service"
+          ++ lib.optional pgsqlLocal "postgresql.target"
           ++ [ "davis-env-setup.service" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = defaultServiceConfig // {
@@ -474,7 +474,7 @@ in
           "davis-db-migrate.service"
         ]
         ++ lib.optional mysqlLocal "mysql.service"
-        ++ lib.optional pgsqlLocal "postgresql.service";
+        ++ lib.optional pgsqlLocal "postgresql.target";
       systemd.services.phpfpm-davis.serviceConfig.ReadWritePaths = [ cfg.dataDir ];
 
       services.nginx = lib.mkIf (cfg.nginx != null) {

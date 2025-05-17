@@ -207,7 +207,7 @@ import ../../make-test-python.nix (
         nginx.wait_for_unit("nginx.service")
         nginx.wait_for_open_port(443)
         databases.wait_for_unit("redis-mastodon.service")
-        databases.wait_for_unit("postgresql.service")
+        databases.wait_for_unit("postgresql.target")
         databases.wait_for_open_port(31637)
         databases.wait_for_open_port(5432)
       '';
