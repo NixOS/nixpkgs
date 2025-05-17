@@ -59,8 +59,15 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dolphin-emu";
     repo = "dolphin";
     tag = finalAttrs.version;
+    hash = "sha256-1IqrQi2aBUFpa3n/WI7nF1wqBPyyfpv02YIFfX/911w=";
     fetchSubmodules = true;
-    hash = "sha256-vhXiEgJO8sEv937Ed87LaS7289PLZlxQGFTZGFjs1So=";
+    leaveDotGit = true;
+    postFetch = ''
+      pushd $out
+      git rev-parse HEAD 2>/dev/null >$out/COMMIT
+      find $out -name .git -print0 | xargs -0 rm -rf
+      popd
+    '';
   };
 
   strictDeps = true;
@@ -124,7 +131,6 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags =
     [
       (lib.cmakeFeature "DISTRIBUTOR" "NixOS")
-      (lib.cmakeFeature "DOLPHIN_WC_REVISION" finalAttrs.src.rev)
       (lib.cmakeFeature "DOLPHIN_WC_DESCRIBE" finalAttrs.version)
       (lib.cmakeFeature "DOLPHIN_WC_BRANCH" "master")
     ]
@@ -138,6 +144,10 @@ stdenv.mkDerivation (finalAttrs: {
       # Note: The updater isn't available on linux, so we don't need to disable it there.
       (lib.cmakeBool "ENABLE_AUTOUPDATE" false)
     ];
+  preConfigure = ''
+    appendToVar cmakeFlags "-DDOLPHIN_WC_REVISION=$(cat COMMIT)"
+    rm COMMIT
+  '';
 
   qtWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}"
