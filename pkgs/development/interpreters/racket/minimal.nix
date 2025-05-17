@@ -13,7 +13,7 @@
 
   disableDocs ? false,
 
-  callPackage,
+  newScope,
   writers,
 }:
 
@@ -112,39 +112,51 @@ stdenv.mkDerivation (finalAttrs: {
       $out/bin/racket -U -u ${configureInstallation}
     '';
 
-  passthru = {
-    # Functionalities #
-    updateScript = {
-      command = ./update.py;
-      attrPath = "racket";
-      supportedFeatures = [ "commit" ];
-    };
-    writeScript =
-      nameOrPath:
-      {
-        libraries ? [ ],
-        ...
-      }@config:
-      assert lib.assertMsg (libraries == [ ]) "library integration for Racket has not been implemented";
-      writers.makeScriptWriter (
-        builtins.removeAttrs config [ "libraries" ]
-        // {
-          interpreter = "${lib.getExe finalAttrs.finalPackage}";
-        }
-      ) nameOrPath;
-    writeScriptBin = name: finalAttrs.passthru.writeScript "/bin/${name}";
+  passthru =
+    let
+      callWithRacket = newScope { racket = finalAttrs.finalPackage; };
+    in
+    {
+      # Functionalities #
+      updateScript = {
+        command = ./update.py;
+        attrPath = "racket";
+        supportedFeatures = [ "commit" ];
+      };
+      writeScript =
+        nameOrPath:
+        {
+          libraries ? [ ],
+          ...
+        }@config:
+        assert lib.assertMsg (libraries == [ ]) "library integration for Racket has not been implemented";
+        writers.makeScriptWriter (
+          builtins.removeAttrs config [ "libraries" ]
+          // {
+            interpreter = "${lib.getExe finalAttrs.finalPackage}";
+          }
+        ) nameOrPath;
+      writeScriptBin = name: finalAttrs.passthru.writeScript "/bin/${name}";
 
-    # Tests #
-    tests = builtins.mapAttrs (name: path: callPackage path { racket = finalAttrs.finalPackage; }) {
-      ## Basic ##
-      write-greeting = ./tests/write-greeting.nix;
-      get-version-and-variant = ./tests/get-version-and-variant.nix;
-      load-openssl = ./tests/load-openssl.nix;
+      # Package system #
+      makePackage = callWithRacket ./package-system/make-package.nix { };
+      buildPackages = callWithRacket ./package-system/build-packages.nix { };
+      withPackages = finalAttrs.passthru.buildPackages.override { isTethered = true; };
+      pkgs = callWithRacket ./package-system/pkgs.nix { };
 
-      ## Nixpkgs supports ##
-      nix-write-script = ./tests/nix-write-script.nix;
+      # Tests #
+      tests = builtins.mapAttrs (_: p: callWithRacket p { }) {
+        ## Basic ##
+        write-greeting = ./tests/write-greeting.nix;
+        get-version-and-variant = ./tests/get-version-and-variant.nix;
+        load-openssl = ./tests/load-openssl.nix;
+
+        ## Nixpkgs supports ##
+        nix-write-script = ./tests/nix-write-script.nix;
+        nix-make-package = ./tests/nix-make-package.nix;
+        nix-with-packages = ./tests/nix-with-packages.nix;
+      };
     };
-  };
 
   meta = {
     description = "Programmable programming language (minimal distribution)";

@@ -1,0 +1,3905 @@
+{
+  "_2d": {
+    "checksum": "4b55ab9443de12259c1cba71825c62d0696be371",
+    "dependencies": [
+      "2d-lib",
+      "2d-doc"
+    ],
+    "description": "2d syntax",
+    "name": "2d",
+    "source": {
+      "args": {
+        "sha256": "1klpw6g1j1r7gyc4pclrwx7vhm9k2y1bl352k2mdmdy7llw4iidk",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/2d.zip"
+      },
+      "method": "url"
+    }
+  },
+  "_2d-doc": {
+    "checksum": "9114553ad0cda6abaec7f838574e91dcba35adb3",
+    "dependencies": [
+      "2d-lib",
+      "scribble-lib",
+      "racket-doc",
+      "syntax-color-doc",
+      "syntax-color-lib"
+    ],
+    "description": "Documentation for \"2d\"",
+    "name": "2d-doc",
+    "source": {
+      "args": {
+        "sha256": "08nb01r386xhigq8kss54dhp7in5zkwlj6dcxcwidn55k1gz0yjm",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/2d-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "_2d-lib": {
+    "checksum": "2e9f1d63ca312a57761c738dec59c57cc3c4a47e",
+    "dependencies": [
+      "scribble-lib",
+      "syntax-color-lib"
+    ],
+    "description": "Implementation (no documentation) for \"2d\"",
+    "name": "2d-lib",
+    "source": {
+      "args": {
+        "sha256": "09kiqyzwl40phwvskm58899my52s13ihc3n1m3xbw3fpjmshfwj2",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/2d-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "algol60": {
+    "checksum": "4eadabc0e4f3054251a75bd9f57b1df7910a1d95",
+    "dependencies": [
+      "compatibility-lib",
+      "drracket-plugin-lib",
+      "errortrace-lib",
+      "gui-lib",
+      "parser-tools-lib",
+      "string-constants-lib",
+      "at-exp-lib",
+      "rackunit-lib",
+      "racket-doc",
+      "scribble-doc",
+      "scribble-lib",
+      "drracket-tool-lib",
+      "drracket-plugin-lib"
+    ],
+    "description": "An implementation of the Algol60 language",
+    "name": "algol60",
+    "source": {
+      "args": {
+        "sha256": "1qh7hr2mwyals5vf93mwam9a3jdvypnbmkpmyrlrff30gwxy27k4",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/algol60.zip"
+      },
+      "method": "url"
+    }
+  },
+  "at-exp-lib": {
+    "checksum": "2d64be5cf9424c687920f4186039aa7f0b76c060",
+    "description": "Libraries for @-expressions",
+    "name": "at-exp-lib",
+    "source": {
+      "args": {
+        "sha256": "11a0zlvnka7009hddig4ai23scq974v1v0z9iw9gbwhcrz243y5y",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/at-exp-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "cext-lib": {
+    "checksum": "43b030f336858e74c7c2391435bcabfd5aa7e7e7",
+    "dependencies": [
+      "compiler-lib",
+      "dynext-lib",
+      "scheme-lib"
+    ],
+    "description": "Tools for managing C extensions, such as `raco ctool`",
+    "name": "cext-lib",
+    "source": {
+      "args": {
+        "sha256": "0mc78v14zgg1ckyvs7vc0iqg8690l0p3hl9wnfybmv8gzqs47y4i",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/cext-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "class-iop-lib": {
+    "checksum": "dcf3fa98d33f27acbd292104ee9a568867bbebeb",
+    "description": "Implementation (no documentation) for \"class-iop\"",
+    "name": "class-iop-lib",
+    "source": {
+      "args": {
+        "sha256": "13nbg1g4rpg612cs1wpagv4937cdad9pvaq44pl7z9niy7axsmg2",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/class-iop-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "compatibility": {
+    "checksum": "f06f4ba26acc8433c02f0c764e100a1dfa6e49ea",
+    "dependencies": [
+      "compatibility-lib",
+      "compatibility-doc"
+    ],
+    "description": "Libraries that implement legacy interfaces",
+    "name": "compatibility",
+    "source": {
+      "args": {
+        "sha256": "0hf55nka8x24w3vg7iy8vx7gzm8l2589cylvqlx33vg9hanymwn0",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/compatibility.zip"
+      },
+      "method": "url"
+    }
+  },
+  "compatibility-doc": {
+    "checksum": "21d51795291497be99b548962a486109b979f040",
+    "dependencies": [
+      "scribble-lib",
+      "compatibility-lib",
+      "pconvert-lib",
+      "sandbox-lib",
+      "compiler-lib",
+      "gui-lib",
+      "racket-doc",
+      "data-doc",
+      "mzscheme-doc",
+      "scheme-lib",
+      "scheme-doc"
+    ],
+    "description": "documentation part of \"compatibility\"",
+    "name": "compatibility-doc",
+    "source": {
+      "args": {
+        "sha256": "01cvj2sksqgr198s1hm0r5gmpbdnk1xjgkmgjwsk4v6ibvavzz6f",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/compatibility-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "compatibility-lib": {
+    "checksum": "dde90a8a87bc20c8215ced8d1b52e9019d16d72f",
+    "dependencies": [
+      "scheme-lib",
+      "net-lib",
+      "sandbox-lib"
+    ],
+    "description": "implementation (no documentation) part of \"compatibility\"",
+    "name": "compatibility-lib",
+    "source": {
+      "args": {
+        "sha256": "1gk8hdv2ih923fx2xy44v11s2fzcqq9jc8lzdn6fb230s1271m98",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/compatibility-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "compiler": {
+    "checksum": "a4c83bb0f21b6f68b6a9157d3ce62a9e0b2893b6",
+    "dependencies": [
+      "compiler-lib"
+    ],
+    "description": "Racket compilation tools, such as `raco exe'",
+    "name": "compiler",
+    "source": {
+      "args": {
+        "sha256": "0aj509ifxf1mrhc0cx7jx1hramqlni4nvblpxb4ry1fb6vslpirc",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/compiler.zip"
+      },
+      "method": "url"
+    }
+  },
+  "compiler-lib": {
+    "checksum": "e3a30463d6745ae32345cec258ff5003320d69b9",
+    "dependencies": [
+      "scheme-lib",
+      "zo-lib"
+    ],
+    "description": "implementation (no documentation) part of \"compiler\"",
+    "name": "compiler-lib",
+    "source": {
+      "args": {
+        "sha256": "1z4zyrz7kzbkzr16b15bbw0xnmfh3sxxwnz6c5ls9c4j72ml0l7x",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/compiler-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "contract-profile": {
+    "checksum": "2005a75c811215d1c565ada0f2b0ce270e74c529",
+    "dependencies": [
+      "math-lib",
+      "profile-lib",
+      "racket-doc",
+      "scribble-lib",
+      "rackunit-lib"
+    ],
+    "description": "Profiling tool for contracts",
+    "name": "contract-profile",
+    "source": {
+      "args": {
+        "sha256": "093rn1n98mhb536b9xppan7jl3p9l6229zxpib628jf1am0jf1nv",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/contract-profile.zip"
+      },
+      "method": "url"
+    }
+  },
+  "data": {
+    "checksum": "2aaa248d4425a46eae510714aa7ac8d6433deb86",
+    "dependencies": [
+      "data-lib",
+      "data-enumerate-lib",
+      "data-doc"
+    ],
+    "description": "Data strucutures",
+    "name": "data",
+    "source": {
+      "args": {
+        "sha256": "0zmw9gqi1cv6rbcrqh7x0fr2h7hy9x5dc9hjzm2lzkbswmc4bshi",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/data.zip"
+      },
+      "method": "url"
+    }
+  },
+  "data-doc": {
+    "checksum": "de5c8719d94188fa1e644f426c9ca71c98981458",
+    "dependencies": [
+      "data-lib",
+      "data-enumerate-lib",
+      "racket-doc",
+      "scribble-lib",
+      "plot-lib",
+      "math-doc",
+      "math-lib",
+      "pict-doc",
+      "pict-lib"
+    ],
+    "description": "documentation part of \"data\"",
+    "name": "data-doc",
+    "source": {
+      "args": {
+        "sha256": "1lm360nlni7j57s4z5yrzi719xqb1p4n47czadjg2scg4f9bpbdz",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/data-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "data-enumerate-lib": {
+    "checksum": "f1eca37c4bdbcbe473b76b6cd608b56d38cbad40",
+    "dependencies": [
+      "data-lib",
+      "math-lib",
+      "rackunit-lib"
+    ],
+    "description": "implementation (no documentation) of \"data/enumerate\"",
+    "name": "data-enumerate-lib",
+    "source": {
+      "args": {
+        "sha256": "06ppm1nhzh866a0j4k90s5safv3ryqjzgg9mkan4jq5dh382nyk6",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/data-enumerate-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "data-lib": {
+    "checksum": "09e3d6fa861d428451fffe0c64d19bb0238de73b",
+    "dependencies": [
+      "rackunit-lib"
+    ],
+    "description": "implementation (no documentation) part of \"data\"",
+    "name": "data-lib",
+    "source": {
+      "args": {
+        "sha256": "12dzzgr3qqsdkgnvrwazcqqm31irsmbyr383bk2nwglwkic5zywh",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/data-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "datalog": {
+    "checksum": "8eb3e41769dd6eb027c3a5bd0b13526c4cd55570",
+    "dependencies": [
+      "parser-tools-lib",
+      "syntax-color-lib",
+      "racket-doc",
+      "scribble-lib",
+      "rackunit-lib"
+    ],
+    "description": "An implementation of the Datalog language",
+    "name": "datalog",
+    "source": {
+      "args": {
+        "sha256": "0kf651690sral39kmhvjgpbq8majrw0fnwghdyvph8052nnv3m96",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/datalog.zip"
+      },
+      "method": "url"
+    }
+  },
+  "db": {
+    "checksum": "57b3f3431a4c9be8b0506d9fe398a17351c54140",
+    "dependencies": [
+      "db-lib",
+      "db-doc"
+    ],
+    "description": "Database connectivity",
+    "name": "db",
+    "source": {
+      "args": {
+        "sha256": "0256fknagj0qh13aiy6rgv4x9700hxp21bbygd1hngba0db28m9l",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/db.zip"
+      },
+      "method": "url"
+    }
+  },
+  "db-doc": {
+    "checksum": "8f31c80559ba09811e037f66eb2981a56eb0035a",
+    "dependencies": [
+      "srfi-lite-lib",
+      "web-server-doc",
+      "scribble-lib",
+      "sandbox-lib",
+      "web-server-lib",
+      "db-lib",
+      "racket-doc"
+    ],
+    "description": "documentation part of \"db\"",
+    "name": "db-doc",
+    "source": {
+      "args": {
+        "sha256": "157zw5k1njd9ar8cpwq6wkssv15f599jzpbza61xrs3lj0g0f867",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/db-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "db-lib": {
+    "checksum": "97a91acc0f0b7899ff6a5683182291829115cf42",
+    "dependencies": [
+      "srfi-lite-lib",
+      "unix-socket-lib",
+      "sasl-lib"
+    ],
+    "description": "implementation (no documentation) part of \"db\"",
+    "name": "db-lib",
+    "source": {
+      "args": {
+        "sha256": "09bzqdnih2i8vha4kijx6ys58hswakbacj3wqfl0q27ga932i1s6",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/db-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "deinprogramm": {
+    "checksum": "53133618e07a6edc40c3ed05f80a6b40ddc40b76",
+    "dependencies": [
+      "compatibility-lib",
+      "deinprogramm-signature",
+      "drracket",
+      "drracket-plugin-lib",
+      "errortrace-lib",
+      "gui-lib",
+      "htdp-lib",
+      "pconvert-lib",
+      "scheme-lib",
+      "simple-tree-text-markup-lib",
+      "string-constants-lib",
+      "trace",
+      "wxme-lib",
+      "snip-lib",
+      "draw-lib",
+      "at-exp-lib",
+      "htdp-doc",
+      "racket-doc",
+      "racket-index",
+      "rackunit-lib",
+      "scribble-lib"
+    ],
+    "description": "Teaching languages for _Die Macht der Abstraktion_",
+    "name": "deinprogramm",
+    "source": {
+      "args": {
+        "sha256": "0n6xi80gkhp52vsxhaz9w2xj8107n7ihzl92v8xalx2fw22x7fl7",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/deinprogramm.zip"
+      },
+      "method": "url"
+    }
+  },
+  "deinprogramm-signature": {
+    "checksum": "001a75879c1656ee103f2e61a7b2ceccb1c153fb",
+    "dependencies": [
+      "compatibility-lib",
+      "drracket-plugin-lib",
+      "gui-lib",
+      "htdp-lib",
+      "scheme-lib",
+      "srfi-lib",
+      "string-constants-lib"
+    ],
+    "description": "Signature support for teaching languages for _Die Macht der Abstraktion_",
+    "name": "deinprogramm-signature",
+    "source": {
+      "args": {
+        "sha256": "0nwgllkdbx8mr90sdylzhic095npwb63bsk63z238ipywfmd3igh",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/deinprogramm-signature.zip"
+      },
+      "method": "url"
+    }
+  },
+  "distributed-places": {
+    "checksum": "0d688d0b333ed89dbda789c33cf034b77e2f6c0b",
+    "dependencies": [
+      "distributed-places-lib",
+      "distributed-places-doc"
+    ],
+    "description": "Libraries for distributed computations",
+    "name": "distributed-places",
+    "source": {
+      "args": {
+        "sha256": "1qkm05997alrx7ijg52qhi0wp3ycnnlid7axryyn9nj8rdwy7xvx",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/distributed-places.zip"
+      },
+      "method": "url"
+    }
+  },
+  "distributed-places-doc": {
+    "checksum": "2cc6fe6ef5c0fcc1cc269857632062c8a7701ff5",
+    "dependencies": [
+      "distributed-places-lib",
+      "racket-doc",
+      "sandbox-lib",
+      "scribble-lib"
+    ],
+    "description": "documentation part of \"distributed-places\"",
+    "name": "distributed-places-doc",
+    "source": {
+      "args": {
+        "sha256": "1ww4xw8hpawn6avdnii6x9lhhndfk4bb8rw24qf1mrrlxhcyy0m9",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/distributed-places-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "distributed-places-lib": {
+    "checksum": "23f16db971bccd3faf1e7d1e1f0dee89ad1f4585",
+    "description": "implementation (no documentation) part of \"distributed-places\"",
+    "name": "distributed-places-lib",
+    "source": {
+      "args": {
+        "sha256": "1irylck9hmnkgsk9ybgk0a16hk01c93mxr75cmwp4b13b653adf2",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/distributed-places-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "draw": {
+    "checksum": "d7b00cd76028f20bf5c40afa5a119e5167edd9c3",
+    "dependencies": [
+      "draw-lib",
+      "draw-doc"
+    ],
+    "description": "Drawing libraries",
+    "name": "draw",
+    "source": {
+      "args": {
+        "sha256": "0fwjxr99877f1ipcc3s07sij4x4qxnvix0gjcfm26ycmv2cx6k25",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/draw.zip"
+      },
+      "method": "url"
+    }
+  },
+  "draw-doc": {
+    "checksum": "9a3378928184fceaa87523edccaf4b598fac7798",
+    "dependencies": [
+      "gui-doc",
+      "pict-doc",
+      "at-exp-lib",
+      "gui-lib",
+      "pict-lib",
+      "scribble-lib",
+      "draw-lib",
+      "racket-doc"
+    ],
+    "description": "documentation part of \"draw\"",
+    "name": "draw-doc",
+    "source": {
+      "args": {
+        "sha256": "007wah2r89gh3ry4sq8844s2jq6b0yp1aqs8v07mqwg66fhl9i99",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/draw-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "draw-lib": {
+    "checksum": "f635e485ef33e2a96257adb8116aa7ab6dd39098",
+    "description": "implementation (no documentation) part of \"draw\"",
+    "name": "draw-lib",
+    "source": {
+      "args": {
+        "sha256": "1q2rm7m5ggrk0aayjw3p0nbvpcpwiqhpk7w13sh88y39gqzgmmw5",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/draw-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "drracket": {
+    "checksum": "0c1437888deffc77f04c3884a7133f82a0706802",
+    "dependencies": [
+      "scheme-lib",
+      "data-lib",
+      "compiler-lib",
+      "planet-lib",
+      "compatibility-lib",
+      "draw-lib",
+      "errortrace-lib",
+      "macro-debugger-text-lib",
+      "parser-tools-lib",
+      "pconvert-lib",
+      "pict-lib",
+      "profile-lib",
+      "sandbox-lib",
+      "scribble-lib",
+      "snip-lib",
+      "string-constants-lib",
+      "typed-racket-lib",
+      "wxme-lib",
+      "gui-lib",
+      "racket-index",
+      "racket-doc",
+      "html-lib",
+      "images-lib",
+      "icons",
+      "typed-racket-more",
+      "trace",
+      "macro-debugger",
+      "net-lib",
+      "tex-table",
+      "htdp-lib",
+      "drracket-plugin-lib",
+      "gui-pkg-manager-lib",
+      "drracket-tool-lib",
+      "drracket-tool-doc",
+      "pict-snip-lib",
+      "option-contract-lib",
+      "syntax-color-lib",
+      "quickscript",
+      "simple-tree-text-markup-lib",
+      "mzscheme-doc",
+      "net-doc",
+      "planet-doc",
+      "compatibility-doc",
+      "string-constants-doc",
+      "draw-doc",
+      "errortrace-doc",
+      "gui-doc",
+      "pict-doc",
+      "profile-doc",
+      "r5rs-doc",
+      "at-exp-lib",
+      "rackunit-lib",
+      "scheme-doc",
+      "syntax-color-doc"
+    ],
+    "description": "The DrRacket programming environment",
+    "name": "drracket",
+    "source": {
+      "args": {
+        "sha256": "054xxp16mby53nxrgf2akr9kgsrzhhxfp1vi1m9javhx9pvmm166",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/drracket.zip"
+      },
+      "method": "url"
+    }
+  },
+  "drracket-plugin-lib": {
+    "checksum": "55c26b79cc6be5b789312cb86507aac7b9a1be27",
+    "dependencies": [
+      "compatibility-lib"
+    ],
+    "description": "DrRacket's plugin API",
+    "name": "drracket-plugin-lib",
+    "source": {
+      "args": {
+        "sha256": "1vh8zcks0mki8msbawgq3x93smg9aw6mdgn0639lhxvq80jfnhbd",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/drracket-plugin-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "drracket-tool": {
+    "checksum": "03a926a1e985ed549fdda3193ed5747e8a78c891",
+    "dependencies": [
+      "drracket-tool-lib",
+      "drracket-tool-doc"
+    ],
+    "description": "Programmatic interface to some IDE tools that DrRacket supports",
+    "name": "drracket-tool",
+    "source": {
+      "args": {
+        "sha256": "189ysgpmcffnrc9dzh314if1hrxzj20m74k2fsvdjphc5pnnaqn8",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/drracket-tool.zip"
+      },
+      "method": "url"
+    }
+  },
+  "drracket-tool-doc": {
+    "checksum": "96e40d9dc3ace414d6b7aba62bd686b0a26f3514",
+    "dependencies": [
+      "scribble-lib",
+      "drracket-tool-lib",
+      "racket-doc",
+      "gui-doc",
+      "gui-lib",
+      "drracket"
+    ],
+    "description": "Docs for the programmatic interface to some IDE tools that DrRacket supports",
+    "name": "drracket-tool-doc",
+    "source": {
+      "args": {
+        "sha256": "0p2p96fbna2w79k0l63633wqammyrfbmzdmqkfniis2bnd4hp8mh",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/drracket-tool-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "drracket-tool-lib": {
+    "checksum": "21db2b4bf9fce4da1baf07e548a7bf69146fdd63",
+    "dependencies": [
+      "drracket-tool-text-lib",
+      "scribble-lib",
+      "string-constants-lib",
+      "scribble-lib",
+      "racket-index",
+      "gui-lib",
+      "at-exp-lib",
+      "rackunit-lib"
+    ],
+    "description": "Code implementing programmatic interfaces to some IDE tools that DrRacket supports",
+    "name": "drracket-tool-lib",
+    "source": {
+      "args": {
+        "sha256": "02py5rlzcsxzdhdc3l6cglpfsffshbdxchjpg2va73r2xvgh3yjp",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/drracket-tool-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "drracket-tool-text-lib": {
+    "checksum": "f64bc88b93c8dd6e5d23de336015a6e4c40df55e",
+    "dependencies": [
+      "scribble-lib",
+      "string-constants-lib",
+      "racket-index",
+      "at-exp-lib",
+      "rackunit-lib"
+    ],
+    "description": "Code implementing non-GUI programmatic interfaces to some IDE tools that DrRacket supports",
+    "name": "drracket-tool-text-lib",
+    "source": {
+      "args": {
+        "sha256": "1lbw1ggdjk9finzp11dada9h717va901qb0g3v63pbpd7nkjwwf2",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/drracket-tool-text-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "ds-store": {
+    "checksum": "d3d57462b5fec4e186c65361db661e8e49ad845c",
+    "dependencies": [
+      "ds-store-lib",
+      "ds-store-doc"
+    ],
+    "description": "Libraries for manipulating \".DS_Store\" files",
+    "name": "ds-store",
+    "source": {
+      "args": {
+        "sha256": "1nfr92s1gjsml4qgdwvc582a1sd687flfsplb6mkgl98icl4c95f",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/ds-store.zip"
+      },
+      "method": "url"
+    }
+  },
+  "ds-store-doc": {
+    "checksum": "7716f5cedaf44a870c22cb1330925f299de01eb2",
+    "dependencies": [
+      "scribble-lib",
+      "racket-doc",
+      "ds-store-lib"
+    ],
+    "description": "documentation part of \"ds-store\"",
+    "name": "ds-store-doc",
+    "source": {
+      "args": {
+        "sha256": "1lgfbvrna31nbm89a3fkzv0qri1fd034l9cvkvz76arfyafxb0fk",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/ds-store-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "ds-store-lib": {
+    "checksum": "67b498c31b44bb21f53e6021783b0e10a064b3ce",
+    "description": "implementation (no documentation) part of \"ds-store\"",
+    "name": "ds-store-lib",
+    "source": {
+      "args": {
+        "sha256": "1i24g3v7jvm789pwl9bbxyf12x7z3c521rwkpbjkzxg4a8fbfjxl",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/ds-store-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "dynext-lib": {
+    "checksum": "1033970f76154c3055b9d43d8c120a5483b58800",
+    "description": "Library for running a C compiler/linker",
+    "name": "dynext-lib",
+    "source": {
+      "args": {
+        "sha256": "14d59xnws3y1j2jb71ybq4f10lijj8bkshpdwfwysrq1wc1i5xnn",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/dynext-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "eli-tester": {
+    "checksum": "a32a1aa1fec4c0e9785062c99ddfb4e58d6d7cc1",
+    "dependencies": [
+      "rackunit-lib"
+    ],
+    "description": "Testing framework",
+    "name": "eli-tester",
+    "source": {
+      "args": {
+        "sha256": "1g2x25rdj4dmlxjrp30ah4ay5j0p1zslirf278lmqmnz9cr66z8x",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/eli-tester.zip"
+      },
+      "method": "url"
+    }
+  },
+  "eopl": {
+    "checksum": "59232c8d41d49774cae00ae95257b3645dc44662",
+    "dependencies": [
+      "compatibility-lib",
+      "rackunit-lib",
+      "racket-doc",
+      "scribble-lib",
+      "scheme-doc"
+    ],
+    "description": "Teaching language for _Essentials of Programming Languages_",
+    "name": "eopl",
+    "source": {
+      "args": {
+        "sha256": "0a4c51bm36qm5ccmfhm96ms76cywqy6yrkkfnijb3c0rkgl52r2r",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/eopl.zip"
+      },
+      "method": "url"
+    }
+  },
+  "errortrace": {
+    "checksum": "dc9ea2c27750fd82b4ab6f5d7c8375db79136b8f",
+    "dependencies": [
+      "errortrace-lib",
+      "errortrace-doc"
+    ],
+    "description": "library",
+    "name": "errortrace",
+    "source": {
+      "args": {
+        "sha256": "0akdx9czz7wp6jnf5ryvzhfrb097906b8wdd7j8na935r3zf8ki4",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/errortrace.zip"
+      },
+      "method": "url"
+    }
+  },
+  "errortrace-doc": {
+    "checksum": "2035fd3d3c0e763f11c9e370194e17ef005f7ac3",
+    "dependencies": [
+      "racket-doc",
+      "errortrace-lib",
+      "scribble-lib"
+    ],
+    "description": "documentation part of \"errortrace\"",
+    "name": "errortrace-doc",
+    "source": {
+      "args": {
+        "sha256": "0c6ackgrr087mwp2sh8mbd0ngh7844f91nkp3ihnzg5fcfr31dha",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/errortrace-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "errortrace-lib": {
+    "checksum": "2f7f59c444db164a7a78764a7b503597d57362e0",
+    "dependencies": [
+      "source-syntax"
+    ],
+    "description": "implementation (no documentation) part of \"errortrace\"",
+    "name": "errortrace-lib",
+    "source": {
+      "args": {
+        "sha256": "1fwqg0cvkgixqydj678shil13j761dsg6z8k79l8zglhvb8vijda",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/errortrace-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "expeditor": {
+    "checksum": "a5cdad2a54da09a12e03f8719a58c848d7d50dd7",
+    "dependencies": [
+      "expeditor-lib",
+      "expeditor-doc"
+    ],
+    "description": "Terminal expression editor",
+    "name": "expeditor",
+    "source": {
+      "args": {
+        "sha256": "1g3nlai3qwk6drx1rph7k51qfv0h6qzwri40yw17g0x0nnah6xfc",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/expeditor.zip"
+      },
+      "method": "url"
+    }
+  },
+  "expeditor-doc": {
+    "checksum": "bf607776c587c79c3876e694b9204f3498d9e6d8",
+    "dependencies": [
+      "scribble-lib",
+      "expeditor-lib",
+      "racket-doc"
+    ],
+    "description": "documentation part of \"expeditor\"",
+    "name": "expeditor-doc",
+    "source": {
+      "args": {
+        "sha256": "1lpm3q7vhbw2b9bb04583fy1b6yx7013gy8q4i6dkn9c1vnmxvb0",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/expeditor-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "expeditor-lib": {
+    "checksum": "0da0217b445d79fc23e4b9303765c17f85d2b247",
+    "dependencies": [
+      "syntax-color-lib"
+    ],
+    "description": "implementation (no documentation) part of \"expeditor\"",
+    "name": "expeditor-lib",
+    "source": {
+      "args": {
+        "sha256": "1y2xxz7yp6vk9frdq5fa5nc2s7l4ijwnv8v0ylmfpc630zh4w52x",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/expeditor-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "frtime": {
+    "checksum": "a3864a652ff49b7cfe5e5015f970cc0c2ec8044c",
+    "dependencies": [
+      "srfi-lite-lib",
+      "compatibility-lib",
+      "drracket",
+      "gui-lib",
+      "pict-lib",
+      "string-constants-lib",
+      "draw-doc",
+      "gui-doc",
+      "racket-doc",
+      "scribble-lib",
+      "rackunit"
+    ],
+    "description": "The implementation of the FrTime language",
+    "name": "frtime",
+    "source": {
+      "args": {
+        "sha256": "1hphiz2axqqvgypm8hxas6f5gx61307yis5v1f8s5z70n9qqxcpz",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/frtime.zip"
+      },
+      "method": "url"
+    }
+  },
+  "future-visualizer": {
+    "checksum": "4f8c202121743da2aed3a737304285985bda8a18",
+    "dependencies": [
+      "data-lib",
+      "draw-lib",
+      "pict-lib",
+      "gui-lib",
+      "future-visualizer-pict",
+      "scheme-lib",
+      "scribble-lib",
+      "racket-doc",
+      "rackunit-lib"
+    ],
+    "description": "Graphical performance tools for using futures",
+    "name": "future-visualizer",
+    "source": {
+      "args": {
+        "sha256": "0347gip761kj149klx2i2rm3bd53hvdbadl4wn7bcmw52g9vvvg5",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/future-visualizer.zip"
+      },
+      "method": "url"
+    }
+  },
+  "future-visualizer-pict": {
+    "checksum": "6d59fd3b52463cf9b596f1e9da147ca8c901e1bf",
+    "dependencies": [
+      "data-lib",
+      "draw-lib",
+      "pict-lib"
+    ],
+    "description": "The drawing and data representation portions of the future visualizer",
+    "name": "future-visualizer-pict",
+    "source": {
+      "args": {
+        "sha256": "1w013y4wv1sjsnk03a7pxg26l620lzxhxfnv9why7hqizmv5w6l2",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/future-visualizer-pict.zip"
+      },
+      "method": "url"
+    }
+  },
+  "future-visualizer-typed": {
+    "checksum": "b0fc1fd5afa53848e81901f2d109dc9f195f6a60",
+    "dependencies": [
+      "future-visualizer",
+      "typed-racket-lib"
+    ],
+    "description": "type declarations for \"future-visualizer\"",
+    "name": "future-visualizer-typed",
+    "source": {
+      "args": {
+        "sha256": "11cy5991fw8xygmndxg7y2r7bzrfmnwpyx8zbh4y47inphy6qqf2",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/future-visualizer-typed.zip"
+      },
+      "method": "url"
+    }
+  },
+  "games": {
+    "checksum": "106a4db62d60cdc54f68adbc2f821a30f671a07e",
+    "dependencies": [
+      "draw-lib",
+      "drracket",
+      "gui-lib",
+      "net-lib",
+      "htdp-lib",
+      "math-lib",
+      "scribble-lib",
+      "racket-index",
+      "sgl",
+      "srfi-lib",
+      "string-constants-lib",
+      "data-enumerate-lib",
+      "typed-racket-lib",
+      "typed-racket-more",
+      "draw-doc",
+      "gui-doc",
+      "racket-doc",
+      "pict-lib",
+      "rackunit-lib",
+      "htdp-doc"
+    ],
+    "description": "Games",
+    "name": "games",
+    "source": {
+      "args": {
+        "sha256": "1nx3f0vq8zx7p8mhxzrppgr0y64p5zc3hmiaznp87027fs6giwwh",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/games.zip"
+      },
+      "method": "url"
+    }
+  },
+  "gui": {
+    "checksum": "5242643ba979aa37fb9a287bd3588d1836a6a58c",
+    "dependencies": [
+      "gui-lib",
+      "gui-doc"
+    ],
+    "description": "Graphical user interface toolkit",
+    "name": "gui",
+    "source": {
+      "args": {
+        "sha256": "11937sv8x2qd5gfvcq8x2qjpqyci1sfm1536gl29ir60rn84881q",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/gui.zip"
+      },
+      "method": "url"
+    }
+  },
+  "gui-doc": {
+    "checksum": "6218a73763b77334d5e0c3e6d72444af52d9f0ee",
+    "dependencies": [
+      "scheme-lib",
+      "syntax-color-doc",
+      "at-exp-lib",
+      "draw-doc",
+      "draw-lib",
+      "scribble-lib",
+      "snip-lib",
+      "string-constants-lib",
+      "syntax-color-lib",
+      "wxme-lib",
+      "gui-lib",
+      "pict-lib",
+      "racket-doc",
+      "string-constants-doc",
+      "simple-tree-text-markup-doc"
+    ],
+    "description": "documentation part of \"gui\"",
+    "name": "gui-doc",
+    "source": {
+      "args": {
+        "sha256": "1im2qpiga2yy5jdm892qx9p4yz74snq1yrk9qgrwk0xwirxwxkad",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/gui-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "gui-lib": {
+    "checksum": "53268182ba9e2e8a3cc12e8b419138913acb74d1",
+    "dependencies": [
+      "srfi-lite-lib",
+      "data-lib",
+      "icons",
+      "syntax-color-lib",
+      "draw-lib",
+      "snip-lib",
+      "wxme-lib",
+      "pict-lib",
+      "scheme-lib",
+      "scribble-lib",
+      "string-constants-lib",
+      "option-contract-lib",
+      "2d-lib",
+      "compatibility-lib",
+      "tex-table",
+      "simple-tree-text-markup-lib",
+      "at-exp-lib",
+      "rackunit-lib"
+    ],
+    "description": "implementation (no documentation) part of \"gui\"",
+    "name": "gui-lib",
+    "source": {
+      "args": {
+        "sha256": "07skzvashi06mcn0p0n4qxcq6papsrlfi6cljf3hyll2xy4m58nq",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/gui-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "gui-pkg-manager-lib": {
+    "checksum": "370964dbf8afcd955a98274dfa192cbf3bdafa47",
+    "dependencies": [
+      "gui-lib",
+      "string-constants-lib"
+    ],
+    "description": "implementation (no documentation) part of \"gui-pkg-manager\"",
+    "name": "gui-pkg-manager-lib",
+    "source": {
+      "args": {
+        "sha256": "0z0s6mvn02mim0kg34iapci3x2lc547kx2sbccdmzj35581lrs2a",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/gui-pkg-manager-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "htdp": {
+    "checksum": "dbc90c31103999e461f0738cb93dec753df8d424",
+    "dependencies": [
+      "htdp-lib",
+      "htdp-doc"
+    ],
+    "description": "Teaching languages for _How to Design Programs_",
+    "name": "htdp",
+    "source": {
+      "args": {
+        "sha256": "1mnnnrsqysmsxlnb4jzpvbb47797r1k25zbimvd2mcv2flb383h1",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/htdp.zip"
+      },
+      "method": "url"
+    }
+  },
+  "htdp-doc": {
+    "checksum": "dd924b7fd0a03e3bf784991518657cfd12cd2799",
+    "dependencies": [
+      "scribble-lib",
+      "at-exp-lib",
+      "draw-lib",
+      "gui-lib",
+      "htdp-lib",
+      "plai",
+      "sandbox-lib",
+      "pict-lib",
+      "mzscheme-doc",
+      "scheme-lib",
+      "compatibility-doc",
+      "draw-doc",
+      "drracket",
+      "gui-doc",
+      "pict-doc",
+      "racket-doc"
+    ],
+    "description": "documentation part of \"htdp\"",
+    "name": "htdp-doc",
+    "source": {
+      "args": {
+        "sha256": "0wbi5cdysvx7nzcmi335rmhzi5gvzxdcwycxdrnkbmmavf9d3l48",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/htdp-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "htdp-lib": {
+    "checksum": "1e9fe434ed02cda5485d7660ca50f75dbf0cd37b",
+    "dependencies": [
+      "compatibility-lib",
+      "draw-lib",
+      "drracket-plugin-lib",
+      "errortrace-lib",
+      "html-lib",
+      "images-gui-lib",
+      "images-lib",
+      "net-lib",
+      "pconvert-lib",
+      "plai-lib",
+      "r5rs-lib",
+      "sandbox-lib",
+      "scheme-lib",
+      "scribble-lib",
+      "simple-tree-text-markup-lib",
+      "slideshow-lib",
+      "snip-lib",
+      "srfi-lite-lib",
+      "string-constants-lib",
+      "typed-racket-lib",
+      "typed-racket-more",
+      "web-server-lib",
+      "wxme-lib",
+      "gui-lib",
+      "deinprogramm-signature",
+      "pict-lib",
+      "racket-index",
+      "at-exp-lib",
+      "rackunit-lib"
+    ],
+    "description": "implementation (no documentation) part of \"htdp\"",
+    "name": "htdp-lib",
+    "source": {
+      "args": {
+        "sha256": "0d4vz6y2ahmls3fhxl35xcps8ynbbva3vpis4ml3c910j4yypzvf",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/htdp-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "html": {
+    "checksum": "41b3f45a1e08585a6f93781eb47bc6fb6660502b",
+    "dependencies": [
+      "html-lib",
+      "html-doc"
+    ],
+    "description": "HTML parsing and generation",
+    "name": "html",
+    "source": {
+      "args": {
+        "sha256": "0c3idsairfb0wrjjbw22rsfpv3iyrif5vz0nk5qrp6q1kwrra9an",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/html.zip"
+      },
+      "method": "url"
+    }
+  },
+  "html-doc": {
+    "checksum": "8841a706c6ee89f52ee4417a1ad6406af1c93272",
+    "dependencies": [
+      "scribble-lib",
+      "html-lib",
+      "racket-doc"
+    ],
+    "description": "documentation part of \"html\"",
+    "name": "html-doc",
+    "source": {
+      "args": {
+        "sha256": "1g2awzvrl6cmfpj9kyg9kd1wxapq9zz10vlwsw7v91czjxx5wrp2",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/html-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "html-lib": {
+    "checksum": "f20891139ecb47a92ec54b753abdbd2809716ee5",
+    "description": "implementation (no documentation) part of \"html\"",
+    "name": "html-lib",
+    "source": {
+      "args": {
+        "sha256": "1i0m0rsgr22hmxkxxkgbi5rlh00k53z7m62ynglavr8nns17fj97",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/html-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "icons": {
+    "checksum": "9ff195078c4938b7a61f6be444cbfa6ebb91140b",
+    "description": "An assortment of images",
+    "name": "icons",
+    "source": {
+      "args": {
+        "sha256": "1c1c3dzsc86zrd2vaiac27371m9z9hk2r6kf5scij86dfqi56lm5",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/icons.zip"
+      },
+      "method": "url"
+    }
+  },
+  "images": {
+    "checksum": "448fc36bc71b9371e314a5d56c7106c1bd91f319",
+    "dependencies": [
+      "images-lib",
+      "images-gui-lib",
+      "images-doc"
+    ],
+    "description": "Functions (and docs and tests) for constructing icons and logos",
+    "name": "images",
+    "source": {
+      "args": {
+        "sha256": "05a4fl8rlvi02ypgn3qywmk7fm4fji4rnyra6ssifyj3vjii9lz0",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/images.zip"
+      },
+      "method": "url"
+    }
+  },
+  "images-doc": {
+    "checksum": "fd972c60c9e6a493ad22ea39d9e1d6c5a8c717d5",
+    "dependencies": [
+      "images-lib",
+      "draw-doc",
+      "gui-doc",
+      "pict-doc",
+      "slideshow-doc",
+      "typed-racket-doc",
+      "draw-lib",
+      "gui-lib",
+      "pict-lib",
+      "racket-doc",
+      "scribble-lib",
+      "slideshow-lib",
+      "typed-racket-lib"
+    ],
+    "description": "Documentation for images-lib",
+    "name": "images-doc",
+    "source": {
+      "args": {
+        "sha256": "0y6sxrs2v10y61hf7phgy5grhcj799fyzskqlsnm4qbrcv5mqwlx",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/images-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "images-gui-lib": {
+    "checksum": "7bc79e7c62b3ffa07c6fc0e70915e3c1dcbcef0d",
+    "dependencies": [
+      "draw-lib",
+      "gui-lib",
+      "string-constants-lib"
+    ],
+    "description": "Functions for constructing icons and logos",
+    "name": "images-gui-lib",
+    "source": {
+      "args": {
+        "sha256": "1gdlb1bfqdywvwskb8k2dvgrdz82y1vfd8v1cqa8f40c9swpap34",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/images-gui-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "images-lib": {
+    "checksum": "da0af39638060714096c4781f9da9ad19185797a",
+    "dependencies": [
+      "draw-lib",
+      "typed-racket-lib",
+      "scribble-lib"
+    ],
+    "description": "Functions for constructing icons and logos",
+    "name": "images-lib",
+    "source": {
+      "args": {
+        "sha256": "15scsraqqlhzxifv3waz20w8fdi33rpk87hk45q3x62qyk4ldiff",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/images-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "lazy": {
+    "checksum": "c8fab9481acb2100c8abadc5a2d5a76828960f76",
+    "dependencies": [
+      "drracket-plugin-lib",
+      "htdp-lib",
+      "string-constants-lib",
+      "compatibility-lib",
+      "mzscheme-doc",
+      "scheme-lib",
+      "eli-tester",
+      "racket-doc",
+      "scribble-lib"
+    ],
+    "description": "The implementation of the Lazy Racket language",
+    "name": "lazy",
+    "source": {
+      "args": {
+        "sha256": "1fq1639f8bjlz80rhkpycisnnmkz7xkacav5356qjszfpamhx368",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/lazy.zip"
+      },
+      "method": "url"
+    }
+  },
+  "macro-debugger": {
+    "checksum": "107dea46975d5c8840da03d1fcfc6cfc19d2d902",
+    "dependencies": [
+      "class-iop-lib",
+      "compatibility-lib",
+      "data-lib",
+      "gui-lib",
+      "images-lib",
+      "images-gui-lib",
+      "parser-tools-lib",
+      "macro-debugger-text-lib",
+      "snip-lib",
+      "wxme-lib",
+      "draw-lib",
+      "racket-index",
+      "rackunit-lib",
+      "scribble-lib",
+      "racket-doc"
+    ],
+    "description": "The macro debugger tool",
+    "name": "macro-debugger",
+    "source": {
+      "args": {
+        "sha256": "0bcrn7xvgisqj14adifw109qfn470vg94gkwqmc5q7r52a6cxm6x",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/macro-debugger.zip"
+      },
+      "method": "url"
+    }
+  },
+  "macro-debugger-text-lib": {
+    "checksum": "9c846afcc88439f5d7cf7e6f8459e1ee7f411b48",
+    "dependencies": [
+      "db-lib",
+      "class-iop-lib",
+      "parser-tools-lib"
+    ],
+    "description": "The macro debugger tool with a console interface",
+    "name": "macro-debugger-text-lib",
+    "source": {
+      "args": {
+        "sha256": "1xgz2q3fii3zwgm6wvgk3gv33vzflwpf7sqwzkhj29rxfamwkp03",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/macro-debugger-text-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "main-distribution": {
+    "checksum": "30dd255f6a8e80c4b143cb57ab7be3369be9faae",
+    "dependencies": [
+      "2d",
+      "algol60",
+      "at-exp-lib",
+      "compatibility",
+      "contract-profile",
+      "compiler",
+      "data",
+      "datalog",
+      "db",
+      "deinprogramm",
+      "draw",
+      "draw-doc",
+      "draw-lib",
+      "drracket",
+      "drracket-tool",
+      "eopl",
+      "expeditor",
+      "errortrace",
+      "future-visualizer",
+      "future-visualizer-typed",
+      "frtime",
+      "games",
+      "gui",
+      "htdp",
+      "html",
+      "icons",
+      "images",
+      "lazy",
+      "macro-debugger",
+      "macro-debugger-text-lib",
+      "make",
+      "math",
+      "mysterx",
+      "mzcom",
+      "mzscheme",
+      "net",
+      "net-cookies",
+      "optimization-coach",
+      "option-contract",
+      "parser-tools",
+      "pconvert-lib",
+      "pict",
+      "pict-snip",
+      "picturing-programs",
+      "plai",
+      "planet",
+      "plot",
+      "preprocessor",
+      "profile",
+      "r5rs",
+      "r6rs",
+      "racket-doc",
+      "distributed-places",
+      "racket-cheat",
+      "racket-index",
+      "racklog",
+      "rackunit",
+      "rackunit-typed",
+      "readline",
+      "realm",
+      "redex",
+      "sandbox-lib",
+      "sasl",
+      "schemeunit",
+      "scribble",
+      "serialize-cstruct-lib",
+      "sgl",
+      "shell-completion",
+      "simple-tree-text-markup",
+      "slatex",
+      "slideshow",
+      "snip",
+      "srfi",
+      "string-constants",
+      "swindle",
+      "syntax-color",
+      "trace",
+      "typed-racket",
+      "typed-racket-more",
+      "unix-socket",
+      "web-server",
+      "wxme",
+      "xrepl",
+      "ds-store"
+    ],
+    "description": "A package that combines all of the packages in the main Racket distribution",
+    "name": "main-distribution",
+    "source": {
+      "args": {
+        "sha256": "0z7n04rqzfpins11wr3gql0iawrp0nwdd1rlgyl45bbxg7yhzdxb",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/main-distribution.zip"
+      },
+      "method": "url"
+    }
+  },
+  "make": {
+    "checksum": "5fb962405246153fac4ebcf395a8f6b3794736c8",
+    "dependencies": [
+      "scheme-lib",
+      "cext-lib",
+      "compiler-lib",
+      "compatibility-lib",
+      "racket-doc",
+      "scribble-lib"
+    ],
+    "description": "Simple timestamp- and dependency-triggered actions",
+    "name": "make",
+    "source": {
+      "args": {
+        "sha256": "1g5xrkw4y0baplli9z5acmxk842dgwz9936qgza0zfx4yfj8yhx7",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/make.zip"
+      },
+      "method": "url"
+    }
+  },
+  "math": {
+    "checksum": "15ed1517afa2926a50115875efd84604777f56c7",
+    "dependencies": [
+      "math-lib",
+      "math-doc"
+    ],
+    "description": "Functions and data structures useful for working with numbers and collections of numbers, along with docs and tests",
+    "name": "math",
+    "source": {
+      "args": {
+        "sha256": "1lsvhp34nllvgc5k90j02vns55lsipkvi09rvawaw2z0ns4cv7mh",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/math.zip"
+      },
+      "method": "url"
+    }
+  },
+  "math-doc": {
+    "checksum": "fdac21bbb2703bd2323e7ff277b5ff1db6597c36",
+    "dependencies": [
+      "at-exp-lib",
+      "math-lib",
+      "plot-doc",
+      "plot-gui-lib",
+      "racket-doc",
+      "sandbox-lib",
+      "scribble-lib",
+      "typed-racket-doc",
+      "typed-racket-lib",
+      "2d-lib"
+    ],
+    "description": "Math library documentation",
+    "name": "math-doc",
+    "source": {
+      "args": {
+        "sha256": "19a9wbk3wklvd4vky2qbr1yr9glzln7mry09j8g3isa0m6dkjlww",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/math-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "math-lib": {
+    "checksum": "da5ec80128fc20e9a7ca23b42b234b9032d95ee1",
+    "dependencies": [
+      "r6rs-lib",
+      "typed-racket-lib"
+    ],
+    "description": "Math library",
+    "name": "math-lib",
+    "source": {
+      "args": {
+        "sha256": "08w4nlljpmcmzynfxl4cq2sqs45pc18i11zrhsrdgglhz6r8f92b",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/math-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "mysterx": {
+    "checksum": "9ced5dd15f4b1f6417333d90ef5ab01ec3e26cdb",
+    "dependencies": [
+      "scheme-lib",
+      "racket-doc",
+      "at-exp-lib",
+      "scribble-lib"
+    ],
+    "description": "Legacy library for working with COM on Windows",
+    "name": "mysterx",
+    "source": {
+      "args": {
+        "sha256": "1qh3gy3iv4i68j0jcvx9mmyf609w2bc12x8qg1a6f4glxb5wk4b8",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/mysterx.zip"
+      },
+      "method": "url"
+    }
+  },
+  "mzcom": {
+    "checksum": "47fb6b32f97a28c7043c0dbdc8df14d2996294f7",
+    "dependencies": [
+      "compatibility-lib",
+      "scheme-lib",
+      "racket-doc",
+      "mysterx",
+      "scribble-lib"
+    ],
+    "description": "COM control to instantate a Racket instance",
+    "name": "mzcom",
+    "source": {
+      "args": {
+        "sha256": "12ww19r41h7idwmmnvxb8zcksjd83svlpagg67gph7j6h4y7iqgr",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/mzcom.zip"
+      },
+      "method": "url"
+    }
+  },
+  "mzscheme": {
+    "checksum": "ac2b67bcd95e6b605872e21ef638ae65bb1dec5a",
+    "dependencies": [
+      "mzscheme-lib",
+      "mzscheme-doc"
+    ],
+    "description": "The legacy MzScheme language",
+    "name": "mzscheme",
+    "source": {
+      "args": {
+        "sha256": "0x3d6iqrfaf76q1plygfihxcrvlzscl9avk49fvgplibi448vs4m",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/mzscheme.zip"
+      },
+      "method": "url"
+    }
+  },
+  "mzscheme-doc": {
+    "checksum": "d4a411aa74d2ba1de45134a22603693f82ab04f6",
+    "dependencies": [
+      "compatibility-lib",
+      "r5rs-doc",
+      "r5rs-lib",
+      "racket-doc",
+      "scheme-lib",
+      "scheme-doc",
+      "scribble-lib"
+    ],
+    "description": "documentation part of \"mzscheme\"",
+    "name": "mzscheme-doc",
+    "source": {
+      "args": {
+        "sha256": "1wi8qiqhgf3cpj4ar5y8c1d1lzjypbn5la3fwwjh9lyy3hp33h04",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/mzscheme-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "mzscheme-lib": {
+    "checksum": "7427ff95249c8bea6f7a9ee2dd8bf3cccb1c5a50",
+    "dependencies": [
+      "scheme-lib"
+    ],
+    "description": "implementation (no documentation) part of \"mzscheme\"",
+    "name": "mzscheme-lib",
+    "source": {
+      "args": {
+        "sha256": "1vvj0q83mh9jclsj80yg2w3ksr27bm1yab1qixwzdcbcdm5dlc70",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/mzscheme-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "net": {
+    "checksum": "d5cee2202af1bc72e38982506cb245f6ea477b9c",
+    "dependencies": [
+      "net-lib",
+      "net-doc"
+    ],
+    "description": "Networking libraries",
+    "name": "net",
+    "source": {
+      "args": {
+        "sha256": "0mdl4l8l2211fdxa5v4m26awp5ijv025jg763sfi1n0viwj3jjn6",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/net.zip"
+      },
+      "method": "url"
+    }
+  },
+  "net-cookies": {
+    "checksum": "aee934881fceae108e1e47e597d8e49ffaafd54c",
+    "dependencies": [
+      "net-cookies-lib",
+      "net-cookies-doc"
+    ],
+    "description": "RFC6265-compliant cookie handling for client and server",
+    "name": "net-cookies",
+    "source": {
+      "args": {
+        "sha256": "0jrzz2ygjp9mbdy423i0jld2ncj3crnr3yzbx7i6gjrx50s8hqx2",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/net-cookies.zip"
+      },
+      "method": "url"
+    }
+  },
+  "net-cookies-doc": {
+    "checksum": "43718bdce53d2a55b0c15507193b88dce4bc56b0",
+    "dependencies": [
+      "net-cookies-lib",
+      "racket-doc",
+      "web-server-lib",
+      "web-server-doc",
+      "net-doc",
+      "scribble-lib"
+    ],
+    "description": "RFC6265-compliant cookie handling for client and server (doc)",
+    "name": "net-cookies-doc",
+    "source": {
+      "args": {
+        "sha256": "00fqhq3x3j098mc8fmavn1db6k29njg825l8rf46ij9yvqzc39i1",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/net-cookies-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "net-cookies-lib": {
+    "checksum": "c798281137d50cb4c16eabdf6ec918179c50b9f2",
+    "description": "RFC6265-compliant cookie handling for client and server (lib)",
+    "name": "net-cookies-lib",
+    "source": {
+      "args": {
+        "sha256": "0hgv9bq7wcxgipj2h1i4ja7xmqzxalzx7vaw1rn9qyk7vncx5w42",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/net-cookies-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "net-doc": {
+    "checksum": "c8a5d2abc3d03f0ad2044453f608c726bd56a501",
+    "dependencies": [
+      "compatibility-lib",
+      "net-lib",
+      "racket-doc",
+      "scribble-lib"
+    ],
+    "description": "documentation part of \"net\"",
+    "name": "net-doc",
+    "source": {
+      "args": {
+        "sha256": "0xw5ifd0cws47nbj2z2pnnspffzb6bdjcfbr395lcrq0yq1lh98b",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/net-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "net-lib": {
+    "checksum": "2467a8c982ba2fe9bc62525f5b20c0271ca92afc",
+    "dependencies": [
+      "srfi-lite-lib"
+    ],
+    "description": "implementation (no documentation) part of \"net\"",
+    "name": "net-lib",
+    "source": {
+      "args": {
+        "sha256": "0sj706h5a6nhrhplk0r51yfrhz4kckwi8hqd2gbrmil91vix6g39",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/net-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "optimization-coach": {
+    "checksum": "9dad2dc48be709fb2d5da947eac1373103aa5a6a",
+    "dependencies": [
+      "drracket",
+      "typed-racket-lib",
+      "profile-lib",
+      "rackunit-lib",
+      "gui-lib",
+      "data-lib",
+      "source-syntax",
+      "images-lib",
+      "sandbox-lib",
+      "string-constants-lib",
+      "scribble-lib"
+    ],
+    "description": "Optimization Coach Plug-In for DrRacket",
+    "name": "optimization-coach",
+    "source": {
+      "args": {
+        "sha256": "08jmi6n42hsycidhg57wf1fh3y7qql6hi1l416qxsprn5vhgk7hb",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/optimization-coach.zip"
+      },
+      "method": "url"
+    }
+  },
+  "option-contract": {
+    "checksum": "ca7d0d281b3303a6a07e77a6559b86e7e1d32b9f",
+    "dependencies": [
+      "option-contract-lib",
+      "option-contract-doc"
+    ],
+    "description": "Experimental libraries for option contracts",
+    "name": "option-contract",
+    "source": {
+      "args": {
+        "sha256": "1m6xjs3qmqyqc9k8yd3mac0z23ilx11a9mnwny03hk022g90nhgr",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/option-contract.zip"
+      },
+      "method": "url"
+    }
+  },
+  "option-contract-doc": {
+    "checksum": "df06278cb81261b9f683de97871427f7442340ba",
+    "dependencies": [
+      "option-contract-lib",
+      "scribble-lib",
+      "racket-doc"
+    ],
+    "description": "Documentation for \"option-contract\"",
+    "name": "option-contract-doc",
+    "source": {
+      "args": {
+        "sha256": "10qjq201rwz47p65g1wcjld31acfqz5jcgk6car67yd4nhb3z6p0",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/option-contract-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "option-contract-lib": {
+    "checksum": "8dbde8919cb23ad095be49790fb036e274f1dc4a",
+    "description": "Implementation (no documentation) for \"option-contract\"",
+    "name": "option-contract-lib",
+    "source": {
+      "args": {
+        "sha256": "0miizfm3qsynd4ccshp1kdfjy0828mdmrf75mk1s1lbnqjp5hdar",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/option-contract-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "parser-tools": {
+    "checksum": "bc8aac3625dde9df646d6adfed3aee405fc94896",
+    "dependencies": [
+      "parser-tools-lib",
+      "parser-tools-doc"
+    ],
+    "description": "Lex- and Yacc-style parsing tools",
+    "name": "parser-tools",
+    "source": {
+      "args": {
+        "sha256": "03lkr4csvb6kib9ijr5yfmp3hmy8w2bqc8ahbqj90b34bhhy8fc3",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/parser-tools.zip"
+      },
+      "method": "url"
+    }
+  },
+  "parser-tools-doc": {
+    "checksum": "bc44051ec79c67bb6660d7beeba5df08deed2966",
+    "dependencies": [
+      "scheme-lib",
+      "racket-doc",
+      "syntax-color-doc",
+      "parser-tools-lib",
+      "scribble-lib"
+    ],
+    "description": "documentation part of \"parser-tools\"",
+    "name": "parser-tools-doc",
+    "source": {
+      "args": {
+        "sha256": "1h90hsfbrmmgfdbww3yclam1hfrihsv4z8k57dbi7zkp0ngm9sma",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/parser-tools-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "parser-tools-lib": {
+    "checksum": "beed77235394ad173dcebf4386d96e8f2f3ea2f9",
+    "dependencies": [
+      "rackunit-lib"
+    ],
+    "description": "implementation (no documentation) part of \"parser-tools\"",
+    "name": "parser-tools-lib",
+    "source": {
+      "args": {
+        "sha256": "0n5745wdvkgxicavryavd0vrqg3smkqmzlwp42z74wnswva1xbfi",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/parser-tools-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "pconvert-lib": {
+    "checksum": "1427e224d596f40b746d6c35a5cf4f5fdcdd1d73",
+    "dependencies": [
+      "compatibility-lib"
+    ],
+    "description": "Legacy library for printing Racket values",
+    "name": "pconvert-lib",
+    "source": {
+      "args": {
+        "sha256": "1gbk4zx4bmhxdnm7ckk3ga87b07k834njrpfg10aqf0np9a3cr3i",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/pconvert-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "pict": {
+    "checksum": "6d22bed92ad4d3d6f2af1f13117583565bc778f5",
+    "dependencies": [
+      "pict-lib",
+      "pict-doc"
+    ],
+    "description": "Building pictures with functional combinators",
+    "name": "pict",
+    "source": {
+      "args": {
+        "sha256": "04nsj6xh4339bv3ppgmdbi4riclpjd5hzfadxar0ln8zgf289hbz",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/pict.zip"
+      },
+      "method": "url"
+    }
+  },
+  "pict-doc": {
+    "checksum": "f69dabf56a0f0deea919eafd6de117875b989e54",
+    "dependencies": [
+      "mzscheme-doc",
+      "draw-doc",
+      "gui-doc",
+      "slideshow-doc",
+      "draw-lib",
+      "gui-lib",
+      "scribble-lib",
+      "slideshow-lib",
+      "pict-lib",
+      "racket-doc",
+      "scribble-doc"
+    ],
+    "description": "documentation part of \"pict\"",
+    "name": "pict-doc",
+    "source": {
+      "args": {
+        "sha256": "03xbyfkgf1z5biqj3ksamg14839ri84d3zmymxxzy75mcxxd8x2v",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/pict-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "pict-lib": {
+    "checksum": "9f952eceb4711676309aaff55b0b9423a181536f",
+    "dependencies": [
+      "scheme-lib",
+      "compatibility-lib",
+      "draw-lib",
+      "syntax-color-lib",
+      "rackunit-lib"
+    ],
+    "description": "implementation (no documentation) part of \"pict\"",
+    "name": "pict-lib",
+    "source": {
+      "args": {
+        "sha256": "1zncphglzix5rhbhb8v0vz9w73ng3lm20wpc07zrbdfifh4x36rg",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/pict-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "pict-snip": {
+    "checksum": "97e753c3774865c9fa3c84e1566ab52e96204bef",
+    "dependencies": [
+      "pict-snip-lib",
+      "pict-snip-doc"
+    ],
+    "description": "Build snips out of picts",
+    "name": "pict-snip",
+    "source": {
+      "args": {
+        "sha256": "1iz0i2rdpspnk1n3zxsckfp3a6l79mbdafmwqdp94g92mgw7lj2q",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/pict-snip.zip"
+      },
+      "method": "url"
+    }
+  },
+  "pict-snip-doc": {
+    "checksum": "256ec21ac72e08adc049c472d3b6d081a822c3d8",
+    "dependencies": [
+      "pict-snip-lib",
+      "gui-doc",
+      "pict-doc",
+      "pict-lib",
+      "racket-doc",
+      "scribble-lib",
+      "snip-lib"
+    ],
+    "description": "documentation part of \"pict\"",
+    "name": "pict-snip-doc",
+    "source": {
+      "args": {
+        "sha256": "1qcc0cv3j514bz91rdn5bghyq15zqx6prxjxw3kxqa2q5972pgq3",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/pict-snip-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "pict-snip-lib": {
+    "checksum": "7b2f040934cd5c929ad263e4c5834c015bb23cc3",
+    "dependencies": [
+      "draw-lib",
+      "snip-lib",
+      "pict-lib",
+      "wxme-lib",
+      "rackunit-lib",
+      "gui-lib"
+    ],
+    "description": "implementation (no documentation) part of \"pict-snip\"",
+    "name": "pict-snip-lib",
+    "source": {
+      "args": {
+        "sha256": "1asjcm2br9dgz66dcyrnp58da3izvb6593vx2p390z30aag79l1p",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/pict-snip-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "picturing-programs": {
+    "checksum": "a3814df1a2aaa509ab0cdc360faabdda45398a30",
+    "dependencies": [
+      "draw-lib",
+      "gui-lib",
+      "snip-lib",
+      "htdp-lib",
+      "racket-doc",
+      "htdp-doc",
+      "scribble-lib"
+    ],
+    "description": "Teaching libraries for _Picturing Programs_",
+    "name": "picturing-programs",
+    "source": {
+      "args": {
+        "sha256": "1j9m8s0i07wv0wjll0ccnd1x5h8k47918yr00mnigix09170pdhg",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/picturing-programs.zip"
+      },
+      "method": "url"
+    }
+  },
+  "plai": {
+    "checksum": "dba4cd5c39c99c654ee024c3e98375193949a22a",
+    "dependencies": [
+      "plai-doc",
+      "plai-lib"
+    ],
+    "description": "Teaching languages for _Programming Languages: Application and Interpretation_",
+    "name": "plai",
+    "source": {
+      "args": {
+        "sha256": "1pjy6ngj2lawwwafl4l78p01lkx62absaivwmxpg8svfckl9vr8n",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/plai.zip"
+      },
+      "method": "url"
+    }
+  },
+  "plai-doc": {
+    "checksum": "f2ecc8dfbb2fd5ea235bb94d3fc3c9d5e39143f9",
+    "dependencies": [
+      "scheme-lib",
+      "srfi-lite-lib",
+      "gui-lib",
+      "sandbox-lib",
+      "web-server-lib",
+      "plai-lib",
+      "at-exp-lib",
+      "scheme-doc",
+      "eli-tester",
+      "pconvert-lib",
+      "rackunit-lib",
+      "racket-doc",
+      "web-server-doc",
+      "scribble-lib",
+      "drracket-tool-lib"
+    ],
+    "description": "Documentation for teaching languages for _Programming Languages: Application and Interpretation_",
+    "name": "plai-doc",
+    "source": {
+      "args": {
+        "sha256": "0vg80yww92mjnnsf2v01d7xy4fa47i7k43q5kvarvzj4z2hp5y2i",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/plai-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "plai-lib": {
+    "checksum": "96767b72aee5141c43a5c66fada975d59c4dfa61",
+    "dependencies": [
+      "scheme-lib",
+      "srfi-lite-lib",
+      "gui-lib",
+      "draw-lib",
+      "sandbox-lib",
+      "web-server-lib",
+      "at-exp-lib",
+      "eli-tester",
+      "pconvert-lib",
+      "rackunit-lib",
+      "drracket-tool-lib"
+    ],
+    "description": "Implementation (no documentation) for teaching languages for _Programming Languages: Application and Interpretation_",
+    "name": "plai-lib",
+    "source": {
+      "args": {
+        "sha256": "13zcjyiyfx8w9wifrb2spy6y3mzx8sjvfdi00lsp9aa5z33znjlf",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/plai-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "planet": {
+    "checksum": "2593d9943e0f41ed5716091cc1866d95dcd83903",
+    "dependencies": [
+      "planet-lib",
+      "planet-doc"
+    ],
+    "description": "Legacy support for automatic package distribution",
+    "name": "planet",
+    "source": {
+      "args": {
+        "sha256": "1kyi9xfpsszdd225js79dzxldz73r56lnishhlxzch9jsi7bj2lk",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/planet.zip"
+      },
+      "method": "url"
+    }
+  },
+  "planet-doc": {
+    "checksum": "8aeae4cba093a6a431a81658532a1a6eaae0b5fa",
+    "dependencies": [
+      "planet-lib",
+      "scribble-lib",
+      "racket-doc",
+      "scribble-doc"
+    ],
+    "description": "documentation part of \"planet\"",
+    "name": "planet-doc",
+    "source": {
+      "args": {
+        "sha256": "0yf16vlkn9gkfr034g0s7j7dzz59p2wq1nnshcjarz0j0wa85hmy",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/planet-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "planet-lib": {
+    "checksum": "f2193d8e5158fc38585d63bff38f4ce6791fa1be",
+    "dependencies": [
+      "srfi-lite-lib"
+    ],
+    "description": "implementation (no documentation) part of \"planet\"",
+    "name": "planet-lib",
+    "source": {
+      "args": {
+        "sha256": "0wv0zkdy7f2l3cika7pplaqfz5mqvvf9sdjx3vg76wm1i0abak7q",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/planet-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "plot": {
+    "checksum": "073482d12dce6a375991c2d6c203c6cdd799d550",
+    "dependencies": [
+      "plot-lib",
+      "plot-gui-lib",
+      "plot-doc"
+    ],
+    "description": "Functions (and docs and tests) for plotting",
+    "name": "plot",
+    "source": {
+      "args": {
+        "sha256": "14m5830x7gma1ccv400s45jjmpplnlhs9kg1ws7g8cbqfnp691v8",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/plot.zip"
+      },
+      "method": "url"
+    }
+  },
+  "plot-compat": {
+    "checksum": "b4bb65fb5c2f24f0b63731523cff899b2707ea2f",
+    "dependencies": [
+      "plot-gui-lib",
+      "draw-lib",
+      "plot-lib",
+      "snip-lib"
+    ],
+    "description": "Compatibility library for Plot 5.1.3 and earlier",
+    "name": "plot-compat",
+    "source": {
+      "args": {
+        "sha256": "0fnjwl912z50nn8immzc3pjm2z5jq2m8fpj52gyxrkss8j615ccj",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/plot-compat.zip"
+      },
+      "method": "url"
+    }
+  },
+  "plot-doc": {
+    "checksum": "6233b7dacca3177d81e4e9076032c52b0545cf1e",
+    "dependencies": [
+      "plot-lib",
+      "plot-gui-lib",
+      "db-doc",
+      "db-lib",
+      "draw-doc",
+      "draw-lib",
+      "gui-doc",
+      "gui-lib",
+      "pict-doc",
+      "pict-lib",
+      "plot-compat",
+      "racket-doc",
+      "scribble-lib",
+      "slideshow-doc",
+      "slideshow-lib",
+      "srfi-doc",
+      "math-lib",
+      "math-doc"
+    ],
+    "description": "Documentation for plot",
+    "name": "plot-doc",
+    "source": {
+      "args": {
+        "sha256": "1yfily4762c446cjgff2lhg8a086n15il7bbz8syk1i9zwd56hn1",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/plot-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "plot-gui-lib": {
+    "checksum": "7928307ce5c21d4b21377052f57c88362d4fc284",
+    "dependencies": [
+      "plot-lib",
+      "math-lib",
+      "gui-lib",
+      "snip-lib",
+      "typed-racket-lib",
+      "typed-racket-more"
+    ],
+    "description": "Plot GUI interface",
+    "name": "plot-gui-lib",
+    "source": {
+      "args": {
+        "sha256": "067mb3h6lbvv8amarjpj701kzh58076hlsnz0rxrg6wpxwkij8b5",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/plot-gui-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "plot-lib": {
+    "checksum": "716360b005fd8ec5ada5f8b7b2ce487eec79323a",
+    "dependencies": [
+      "draw-lib",
+      "pict-lib",
+      "db-lib",
+      "srfi-lite-lib",
+      "typed-racket-lib",
+      "typed-racket-more",
+      "compatibility-lib",
+      "math-lib"
+    ],
+    "description": "Plot non-GUI interface",
+    "name": "plot-lib",
+    "source": {
+      "args": {
+        "sha256": "1q2xg8gdzd3mzk51aiyxqjb28nj9hjzfilbjaf7rxzvmzlfa6ry3",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/plot-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "preprocessor": {
+    "checksum": "5fb5ab5feb3a24d62ccd1635de5cbc4f0f42132d",
+    "dependencies": [
+      "scheme-lib",
+      "compatibility-lib",
+      "racket-doc",
+      "scribble-lib"
+    ],
+    "description": "Preprocessors for text with embedded Racket code (mostly replaced by scribble/text)",
+    "name": "preprocessor",
+    "source": {
+      "args": {
+        "sha256": "00zrdrnf34cckkrnm3h2kkb1izcnardbx3shzxn52p87110cp4zs",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/preprocessor.zip"
+      },
+      "method": "url"
+    }
+  },
+  "profile": {
+    "checksum": "cbaad2df0404ab91f8c0dda2259282e8236beb93",
+    "dependencies": [
+      "profile-lib",
+      "profile-doc"
+    ],
+    "description": "Libraries for statistical performance profiling",
+    "name": "profile",
+    "source": {
+      "args": {
+        "sha256": "1x2fxf4nghy8npqzd7vilh0pdihj6cjfvc95hsnn7n3jq3r39z5h",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/profile.zip"
+      },
+      "method": "url"
+    }
+  },
+  "profile-doc": {
+    "checksum": "42f5a08100251ffafdbb88219c0e16fb18c47e05",
+    "dependencies": [
+      "scribble-lib",
+      "profile-lib",
+      "errortrace-doc",
+      "errortrace-lib",
+      "racket-doc"
+    ],
+    "description": "documentation part of \"profile\"",
+    "name": "profile-doc",
+    "source": {
+      "args": {
+        "sha256": "0jv15bcb5z0rdcbli93amx2wc640inif52vyd93c8ri8szgsf6fp",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/profile-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "profile-lib": {
+    "checksum": "f5f9a71c80bbe4d916be66a8a9f2332e561e77ee",
+    "dependencies": [
+      "errortrace-lib",
+      "at-exp-lib",
+      "rackunit-lib"
+    ],
+    "description": "implementation (no documentation) part of \"profile\"",
+    "name": "profile-lib",
+    "source": {
+      "args": {
+        "sha256": "012pixy76ipxvikivmp78w7vgyy9dbg9nljx15i2n5w1nwlm4dgq",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/profile-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "quickscript": {
+    "checksum": "0d0f271a88bc4703eca1aac84aca48365ffc33f3",
+    "dependencies": [
+      "drracket-plugin-lib",
+      "drracket",
+      "gui-lib",
+      "net-lib",
+      "scribble-lib",
+      "at-exp-lib",
+      "drracket",
+      "gui-doc",
+      "racket-doc",
+      "draw-doc",
+      "rackunit-lib"
+    ],
+    "description": "Scripting engine for DrRacket.\r\nExtends DrRacket with scripting capabilities and menu items. The package quickscript-extra contains additional sample scripts.",
+    "name": "quickscript",
+    "source": {
+      "args": {
+        "sha256": "1sib76y7raadp0mm0yxzsr34nxddz56dq0gq6m8jdy7281fk2val",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/quickscript.zip"
+      },
+      "method": "url"
+    }
+  },
+  "r5rs": {
+    "checksum": "ef4ae4fca0d1f8a8f7758ff507243a6475c8b065",
+    "dependencies": [
+      "r5rs-lib",
+      "r5rs-doc"
+    ],
+    "description": "Legacy R5RS (Scheme) language",
+    "name": "r5rs",
+    "source": {
+      "args": {
+        "sha256": "19lpd1anyrm32scd50gkcas7wriyr367m8jqqb2hmax35aqf8j1y",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/r5rs.zip"
+      },
+      "method": "url"
+    }
+  },
+  "r5rs-doc": {
+    "checksum": "226da72fb53ff4de9ed01beae60a155f036171ab",
+    "dependencies": [
+      "mzscheme-doc",
+      "scheme-lib",
+      "scribble-lib",
+      "r5rs-lib",
+      "compatibility-lib",
+      "racket-doc"
+    ],
+    "description": "documentation part of \"r5rs\"",
+    "name": "r5rs-doc",
+    "source": {
+      "args": {
+        "sha256": "17slwd2gwhrws2r80lq2xvvyx268czfbrialyci1pbf5p2vc5gj2",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/r5rs-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "r5rs-lib": {
+    "checksum": "ec9653a103af61bf189d229bd2fe31c0bbf1e736",
+    "dependencies": [
+      "scheme-lib",
+      "compatibility-lib"
+    ],
+    "description": "implementation (no documentation) part of \"r5rs\"",
+    "name": "r5rs-lib",
+    "source": {
+      "args": {
+        "sha256": "0p2lp6d9b8akyhx4l6md8lv1lyqr8kdxcn6cx3pdqh6hq1sc3583",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/r5rs-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "r6rs": {
+    "checksum": "7f17e98818d698ba4bf96e9b583d0efaad2f3aba",
+    "dependencies": [
+      "r6rs-lib",
+      "r6rs-doc"
+    ],
+    "description": "Legacy R6RS (Scheme) language",
+    "name": "r6rs",
+    "source": {
+      "args": {
+        "sha256": "15yn2cvf6pwqyklc5ba99cv9vxkc8pvzhb8fj0kim6pc48qw3ac0",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/r6rs.zip"
+      },
+      "method": "url"
+    }
+  },
+  "r6rs-doc": {
+    "checksum": "68d9943a2543c1350749e47f053fd2649a16f4b4",
+    "dependencies": [
+      "racket-index",
+      "r5rs-doc",
+      "scribble-lib",
+      "r6rs-lib",
+      "racket-doc"
+    ],
+    "description": "documentation part of \"r6rs\"",
+    "name": "r6rs-doc",
+    "source": {
+      "args": {
+        "sha256": "0rn051av0g53casl0494946daligrkk395i49rq44lzjlk2k45xw",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/r6rs-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "r6rs-lib": {
+    "checksum": "0cbd02767bb8a038408e4d43842fbc33b4bb38f7",
+    "dependencies": [
+      "scheme-lib",
+      "r5rs-lib",
+      "compatibility-lib"
+    ],
+    "description": "implementation (no documentation) part of \"r6rs\"",
+    "name": "r6rs-lib",
+    "source": {
+      "args": {
+        "sha256": "0avz7k0hwih1v2lq5w4b7p81wk81pnd5s1w8mgjbysbinf8jlmj1",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/r6rs-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "racket-cheat": {
+    "checksum": "43b38600e60f021c9ea4d6f6f0571a6d5d60f07e",
+    "dependencies": [
+      "scribble-lib",
+      "db-doc",
+      "db-lib",
+      "drracket",
+      "net-doc",
+      "net-lib",
+      "parser-tools-doc",
+      "parser-tools-lib",
+      "pict-doc",
+      "pict-lib",
+      "racket-doc",
+      "sandbox-lib",
+      "slideshow-doc",
+      "slideshow-lib"
+    ],
+    "description": "a user-friendly index into the Racket documentation",
+    "name": "racket-cheat",
+    "source": {
+      "args": {
+        "sha256": "0yhdc7wmk32548q0dk92f5rjs4idxszcnkva9w0jhg4v5r2sfw4k",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/racket-cheat.zip"
+      },
+      "method": "url"
+    }
+  },
+  "racket-doc": {
+    "checksum": "a18c85124ae9b60712d3621f36cf264794c16604",
+    "dependencies": [
+      "scheme-lib",
+      "net-lib",
+      "sandbox-lib",
+      "scribble-lib",
+      "racket-index",
+      "rackunit-doc",
+      "errortrace-doc",
+      "at-exp-lib",
+      "rackunit-lib",
+      "gui-doc",
+      "gui-lib",
+      "draw-doc",
+      "draw-lib",
+      "pict-lib",
+      "readline-lib",
+      "readline-doc",
+      "syntax-color-doc",
+      "syntax-color-lib",
+      "scribble-doc",
+      "future-visualizer",
+      "distributed-places-doc",
+      "distributed-places-lib",
+      "serialize-cstruct-lib",
+      "cext-lib",
+      "net-doc",
+      "planet-doc",
+      "compiler-lib",
+      "compatibility-lib",
+      "xrepl-lib",
+      "xrepl-doc"
+    ],
+    "description": "Base Racket documentation",
+    "name": "racket-doc",
+    "source": {
+      "args": {
+        "sha256": "0vymkq8gj0035a2gm64s312xja3l13aqrcyzwa47hmrpi8klyqyr",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/racket-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "racket-index": {
+    "checksum": "4c81e7fdbcb855ec2f3ae96e486785b6a560e41f",
+    "dependencies": [
+      "scribble-lib",
+      "scheme-lib",
+      "at-exp-lib"
+    ],
+    "description": "Racket Documentation driver",
+    "name": "racket-index",
+    "source": {
+      "args": {
+        "sha256": "0d4iy88g87h8h29nvzp6anxhnz89sfd1p0x08qp69hsn8zag55s1",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/racket-index.zip"
+      },
+      "method": "url"
+    }
+  },
+  "racklog": {
+    "checksum": "7857e9bcc4f58d19336a6fe454df22e3b80a42f2",
+    "dependencies": [
+      "datalog",
+      "eli-tester",
+      "rackunit-lib",
+      "racket-doc",
+      "scribble-lib"
+    ],
+    "description": "The implementation of the Racklog (embedded Prolog) language",
+    "name": "racklog",
+    "source": {
+      "args": {
+        "sha256": "1fyv06wkyil0a1y4ph7n5asdnhz6nkjr0z1jmh7zdp47cz30bcv3",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/racklog.zip"
+      },
+      "method": "url"
+    }
+  },
+  "rackunit": {
+    "checksum": "3d9724279bf760f99da716e9e9e36688887032de",
+    "dependencies": [
+      "rackunit-lib",
+      "rackunit-doc",
+      "rackunit-gui",
+      "rackunit-plugin-lib"
+    ],
+    "description": "RackUnit testing framework",
+    "name": "rackunit",
+    "source": {
+      "args": {
+        "sha256": "1pn7lz6dzsisc498dvsnzzid02ihgzdn2aiwgragfnyl3sr1gsi3",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/rackunit.zip"
+      },
+      "method": "url"
+    }
+  },
+  "rackunit-doc": {
+    "checksum": "de2a3c6a31c244a1cbef0e58ec31da3504f9d56e",
+    "dependencies": [
+      "compiler-lib",
+      "racket-index",
+      "racket-doc",
+      "rackunit-gui",
+      "rackunit-lib",
+      "scribble-lib"
+    ],
+    "description": "RackUnit documentation",
+    "name": "rackunit-doc",
+    "source": {
+      "args": {
+        "sha256": "1d4il1k8mdkhff2xy0ihqvyv9zm078zc9q8yq23rm40qvphh3lzl",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/rackunit-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "rackunit-gui": {
+    "checksum": "a1124213b1c43d86751e98840df4da7bc5d954a5",
+    "dependencies": [
+      "rackunit-lib",
+      "class-iop-lib",
+      "data-lib",
+      "gui-lib"
+    ],
+    "description": "RackUnit test runner GUI",
+    "name": "rackunit-gui",
+    "source": {
+      "args": {
+        "sha256": "1ffiaid3zanf391adrdyyy2aj3pk62n00s5avpznkvn94sjwb5x2",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/rackunit-gui.zip"
+      },
+      "method": "url"
+    }
+  },
+  "rackunit-lib": {
+    "checksum": "8ce32c67160965026b9d8cc7d490f5eeeb786dc5",
+    "dependencies": [
+      "testing-util-lib"
+    ],
+    "description": "RackUnit testing framework",
+    "name": "rackunit-lib",
+    "source": {
+      "args": {
+        "sha256": "0wvd23lhasff5xvv0r6vjdv8gxnalgxg64zrwb6vnb7i75kwnphk",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/rackunit-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "rackunit-plugin-lib": {
+    "checksum": "a378dd67c70d472a29eeda772ac66476ec18e759",
+    "dependencies": [
+      "rackunit-lib",
+      "rackunit-gui",
+      "gui-lib",
+      "drracket-plugin-lib"
+    ],
+    "description": "RackUnit testing framework DrRacket plugin",
+    "name": "rackunit-plugin-lib",
+    "source": {
+      "args": {
+        "sha256": "0ascphivfrbn5vwnas0k9hx9h51m51d5gmyjadiyq032jlsi54jk",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/rackunit-plugin-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "rackunit-typed": {
+    "checksum": "190fb6c93ac398c27ade04e13f4c0b7ea12a8108",
+    "dependencies": [
+      "racket-index",
+      "rackunit-gui",
+      "rackunit-lib",
+      "typed-racket-lib",
+      "testing-util-lib"
+    ],
+    "description": "Typed Racket interface to the RackUnit testing framework",
+    "name": "rackunit-typed",
+    "source": {
+      "args": {
+        "sha256": "0aga4i9jp408amc3z7zgykblpsi4jgs2f58plv7l8jqyliy2dvha",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/rackunit-typed.zip"
+      },
+      "method": "url"
+    }
+  },
+  "readline": {
+    "checksum": "060b23937b72d27f30e0b86efd9e530f2ce28e8a",
+    "dependencies": [
+      "readline-lib",
+      "readline-doc"
+    ],
+    "description": "GNU Readline access from Racket",
+    "name": "readline",
+    "source": {
+      "args": {
+        "sha256": "0zh60bif1hqghi8dn4lkgb27sbsv9xk49m5djq1v7svkccpbspr6",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/readline.zip"
+      },
+      "method": "url"
+    }
+  },
+  "readline-doc": {
+    "checksum": "058bccb4fff68aa4e9387c892493cf776af60b51",
+    "dependencies": [
+      "scribble-lib",
+      "readline-lib",
+      "racket-doc"
+    ],
+    "description": "documentation part of \"readline\"",
+    "name": "readline-doc",
+    "source": {
+      "args": {
+        "sha256": "0kyrcdwx2ghg26pqn1shk15kijjix1j6ggipzr34srwx4lyhg0fi",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/readline-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "readline-lib": {
+    "checksum": "91f99fdc1f05a2959528a3e91b72be652121baa3",
+    "description": "implementation (no documentation) part of \"readline\"",
+    "name": "readline-lib",
+    "source": {
+      "args": {
+        "sha256": "1wrr1r37zwqs7s1zx44ikw6q9r4q51d7sa0g2nyn6fjaqx862yyr",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/readline-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "realm": {
+    "checksum": "95e893964325a311f7290eba851a53091d88cc5b",
+    "dependencies": [
+      "htdp-lib",
+      "rackunit-lib"
+    ],
+    "description": "Sample code for _Realm of Racket_",
+    "name": "realm",
+    "source": {
+      "args": {
+        "sha256": "065msdynvfqhf2lzic1x4dx6shfc8vq6nysiacvaygk0b0pygrv4",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/realm.zip"
+      },
+      "method": "url"
+    }
+  },
+  "redex": {
+    "checksum": "2efe1623dca053cd429f8ccfe28e5a4d1f939317",
+    "dependencies": [
+      "redex-doc",
+      "redex-examples",
+      "redex-lib",
+      "redex-gui-lib"
+    ],
+    "description": "PLT Redex libraries for practical semantics engineering",
+    "name": "redex",
+    "source": {
+      "args": {
+        "sha256": "1vsrgfam7ivxc4czk3hagva91yahjwia0pyikfqxqjqkyz9f06x9",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/redex.zip"
+      },
+      "method": "url"
+    }
+  },
+  "redex-benchmark": {
+    "checksum": "2ee277448dfd1c947d528c708ec41a898e45209b",
+    "dependencies": [
+      "compiler-lib",
+      "rackunit-lib",
+      "redex-lib",
+      "redex-examples",
+      "math-lib",
+      "plot-lib"
+    ],
+    "description": "PLT Redex Benchmark",
+    "name": "redex-benchmark",
+    "source": {
+      "args": {
+        "sha256": "0id5cgy4arw281rpr6f4qk8akqww97n82yi2ygkr6id3wdp7165j",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/redex-benchmark.zip"
+      },
+      "method": "url"
+    }
+  },
+  "redex-doc": {
+    "checksum": "2aec7b9d49b66b7ada667ed8800a72c96b0a6468",
+    "dependencies": [
+      "racket-doc",
+      "draw-doc",
+      "gui-doc",
+      "htdp-doc",
+      "pict-doc",
+      "slideshow-doc",
+      "at-exp-lib",
+      "data-doc",
+      "data-enumerate-lib",
+      "scribble-lib",
+      "gui-lib",
+      "htdp-lib",
+      "pict-lib",
+      "redex-gui-lib",
+      "redex-benchmark",
+      "rackunit-lib",
+      "sandbox-lib"
+    ],
+    "description": "documentation part of \"redex\"",
+    "name": "redex-doc",
+    "source": {
+      "args": {
+        "sha256": "1ll5636nrhdzklmbfhag7kr59i1d72966xyy87pbcf3z8jhfw7hx",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/redex-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "redex-examples": {
+    "checksum": "e4053b9312dc672649df4bb5c0e1964173ae9c68",
+    "dependencies": [
+      "compiler-lib",
+      "rackunit-lib",
+      "redex-gui-lib",
+      "slideshow-lib",
+      "math-lib",
+      "plot-lib"
+    ],
+    "description": "PLT Redex examples",
+    "name": "redex-examples",
+    "source": {
+      "args": {
+        "sha256": "18g29dbznm7midaqd34sfk891gm7chjsk5jsd3dfjf02apxll447",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/redex-examples.zip"
+      },
+      "method": "url"
+    }
+  },
+  "redex-gui-lib": {
+    "checksum": "6c8359e7a10ead8dc26d9f7ab3917ecc721561c1",
+    "dependencies": [
+      "scheme-lib",
+      "draw-lib",
+      "gui-lib",
+      "data-lib",
+      "profile-lib",
+      "redex-lib",
+      "redex-pict-lib",
+      "pict-lib",
+      "rackunit-lib"
+    ],
+    "description": "implementation (no documentation) part of \"redex\" gui",
+    "name": "redex-gui-lib",
+    "source": {
+      "args": {
+        "sha256": "09z3xhj4b9d0bazr19kdlw77mavwh5qx1vk1bpjrn4p8rh5a6vpv",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/redex-gui-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "redex-lib": {
+    "checksum": "cda3c9e1c5a5551ea570d152adf10d1c25bf37f8",
+    "dependencies": [
+      "data-enumerate-lib",
+      "scheme-lib",
+      "data-lib",
+      "math-lib",
+      "tex-table",
+      "profile-lib",
+      "typed-racket-lib",
+      "testing-util-lib",
+      "2d-lib",
+      "rackunit-lib"
+    ],
+    "description": "implementation (no documentation) part of \"redex\"",
+    "name": "redex-lib",
+    "source": {
+      "args": {
+        "sha256": "1xvzim2fyh914kvksx9dchwd89rkkr515nljmw1d9sx18mzhdfvk",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/redex-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "redex-pict-lib": {
+    "checksum": "4a4e031d23b98cd24afa027bab9fc9d652a2bcad",
+    "dependencies": [
+      "scheme-lib",
+      "draw-lib",
+      "data-lib",
+      "profile-lib",
+      "redex-lib",
+      "pict-lib",
+      "rackunit-lib"
+    ],
+    "description": "implementation (no documentation) part of \"redex\" using picts",
+    "name": "redex-pict-lib",
+    "source": {
+      "args": {
+        "sha256": "19iwkcnxfvbyg5c0ja66xh6i9z95ybgsl8a26bc6vrhdphjj1m62",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/redex-pict-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "sandbox-lib": {
+    "checksum": "1903a86feda6960d96954760bf570854dcd9efea",
+    "dependencies": [
+      "scheme-lib",
+      "errortrace-lib"
+    ],
+    "description": "Library for sandboxing Racket programs",
+    "name": "sandbox-lib",
+    "source": {
+      "args": {
+        "sha256": "12jv8l884ajbssf4sim39q05ay86bk1jh58bv4ii8i4i58p8g75r",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/sandbox-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "sasl": {
+    "checksum": "907dd0cc3170d10b91436481e9a72bcc1248ab87",
+    "dependencies": [
+      "sasl-lib",
+      "sasl-doc"
+    ],
+    "description": "SASL authentication client support",
+    "name": "sasl",
+    "source": {
+      "args": {
+        "sha256": "1f1s9daddnhy9lp5jfp2cdp378r630w7d3xrx2pfd964b7x89s7w",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/sasl.zip"
+      },
+      "method": "url"
+    }
+  },
+  "sasl-doc": {
+    "checksum": "272701f20a0775dcef5da8221eabfd314b8c82a0",
+    "dependencies": [
+      "scribble-lib",
+      "sasl-lib",
+      "racket-doc"
+    ],
+    "description": "SASL authentication client support",
+    "name": "sasl-doc",
+    "source": {
+      "args": {
+        "sha256": "1dawx0g6wbk4m1b6i9fdfnvrs97pvfhw8016ddhqqsxxxl6cldjx",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/sasl-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "sasl-lib": {
+    "checksum": "0ef79c5579cb309b4471a93666bc483b0ec93c01",
+    "description": "SASL authentication client support",
+    "name": "sasl-lib",
+    "source": {
+      "args": {
+        "sha256": "1jdh2qiij0bqfn8qpgpwwycq01mg0r7lqglzyfdf1j2a68vni1nv",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/sasl-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "scheme-doc": {
+    "checksum": "bac7795851099901da5c73e12a47d6aed105e8f7",
+    "dependencies": [
+      "scheme-lib",
+      "net-lib",
+      "sandbox-lib",
+      "scribble-lib",
+      "racket-index",
+      "racket-doc",
+      "gui-lib",
+      "gui-doc",
+      "compatibility-doc"
+    ],
+    "description": "Documentation for `scheme` languages and libraries",
+    "name": "scheme-doc",
+    "source": {
+      "args": {
+        "sha256": "164r051zc2y2j9vcfjilj1xv6bhdx7blpqnlw8ffbj9d5f6zihpa",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/scheme-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "scheme-lib": {
+    "checksum": "6c68c3cc49ea22fbcf6b1b930c9e1dec4c49848e",
+    "description": "Legacy (Scheme) libraries",
+    "name": "scheme-lib",
+    "source": {
+      "args": {
+        "sha256": "02y97i6ikwwb02l5j478vaa11q8bcv73vf368gvkwa1dlhgbys9s",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/scheme-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "schemeunit": {
+    "checksum": "858658d2173de62977c3a9b767546cc828e303d8",
+    "dependencies": [
+      "rackunit-lib",
+      "rackunit-gui"
+    ],
+    "description": "Legacy SchemeUnit testing framework",
+    "name": "schemeunit",
+    "source": {
+      "args": {
+        "sha256": "1j4dyqrx7n9myg3wbdg266lv22i0qckrzfmflfdys5vnwmhira8b",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/schemeunit.zip"
+      },
+      "method": "url"
+    }
+  },
+  "scribble": {
+    "checksum": "9ed44ee3c0334d52686675b1a160fe83403cff75",
+    "dependencies": [
+      "scribble-lib",
+      "scribble-doc"
+    ],
+    "description": "Racket documentatation and typesetting tool",
+    "name": "scribble",
+    "source": {
+      "args": {
+        "sha256": "10jmb500ii1g8ywvqaaf6kdqyhfjvgnl7x9v93bf46y4rdg4h1gb",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/scribble.zip"
+      },
+      "method": "url"
+    }
+  },
+  "scribble-doc": {
+    "checksum": "6dfc5dc3f26b82ca20959b13043e0484fb86aa7e",
+    "dependencies": [
+      "racket-index",
+      "net-doc",
+      "scheme-lib",
+      "draw-doc",
+      "at-exp-lib",
+      "compatibility-lib",
+      "draw-lib",
+      "pict-lib",
+      "pict-doc",
+      "sandbox-lib",
+      "scribble-lib",
+      "scribble-text-lib",
+      "racket-doc"
+    ],
+    "description": "documentation part of \"scribble\"",
+    "name": "scribble-doc",
+    "source": {
+      "args": {
+        "sha256": "006dnafk31faw4kj73pxaicrq1kbdiihf5kyk4xn6bswf129c2zk",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/scribble-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "scribble-html-lib": {
+    "checksum": "d76ec80eb874c842c1f51d4ce44a25085c1dfc14",
+    "dependencies": [
+      "scheme-lib",
+      "at-exp-lib",
+      "scribble-text-lib"
+    ],
+    "description": "Language for HTML with embedded Racket code",
+    "name": "scribble-html-lib",
+    "source": {
+      "args": {
+        "sha256": "06rfx3q1ad9sf8sh71qvf7srly30bvdc891a6dbxrwahmaga1p99",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/scribble-html-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "scribble-lib": {
+    "checksum": "9b351395bdb9def20afd9e158b25133b8efca0b4",
+    "dependencies": [
+      "scheme-lib",
+      "compatibility-lib",
+      "scribble-text-lib",
+      "scribble-html-lib",
+      "planet-lib",
+      "net-lib",
+      "at-exp-lib",
+      "draw-lib",
+      "syntax-color-lib",
+      "sandbox-lib",
+      "typed-racket-lib",
+      "rackunit-lib"
+    ],
+    "description": "implementation (no documentation) part of \"scribble\"",
+    "name": "scribble-lib",
+    "source": {
+      "args": {
+        "sha256": "1ax39lgzgarpa3z3fc9q4h1n4ghji09hkxvkddvsxhng4hi1icln",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/scribble-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "scribble-text-lib": {
+    "checksum": "2fae4333381cf09ec3cf2e4665b64bf50368de00",
+    "dependencies": [
+      "scheme-lib",
+      "at-exp-lib"
+    ],
+    "description": "Language for text with embedded Racket code",
+    "name": "scribble-text-lib",
+    "source": {
+      "args": {
+        "sha256": "1g8jzh7i178y2hgyn22z9r5b3aryjvnb5m6h4724wc6p9pajpgld",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/scribble-text-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "serialize-cstruct-lib": {
+    "checksum": "84b92d24f5df28cd20dfeba9788ae676348614ca",
+    "description": "serialization support for C structs",
+    "name": "serialize-cstruct-lib",
+    "source": {
+      "args": {
+        "sha256": "1dfnckyvn50x1xsgw3gzpp3p4cfnrgx0fzik1nwrpbmppw3s89qd",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/serialize-cstruct-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "sgl": {
+    "checksum": "359d869a23798e94049242cac35c9cddb4ba2c37",
+    "dependencies": [
+      "scheme-lib",
+      "compatibility-lib",
+      "gui-lib",
+      "draw-doc",
+      "gui-doc",
+      "racket-doc",
+      "scribble-lib"
+    ],
+    "description": "Legacy OpenGL library",
+    "name": "sgl",
+    "source": {
+      "args": {
+        "sha256": "0k6vicf93pi32k22vb5yl7gwirl7rpcsldwnl6vry6j67rl8csr6",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/sgl.zip"
+      },
+      "method": "url"
+    }
+  },
+  "shell-completion": {
+    "checksum": "992e3705389cafa1d677031554c4f4a0c391a778",
+    "description": "Completion scribpts for bash and zsh",
+    "name": "shell-completion",
+    "source": {
+      "args": {
+        "sha256": "038iq1b79j7z3hnza5gx1xjsx78vmbjs4j5cgd1izy0f2r2q8g9j",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/shell-completion.zip"
+      },
+      "method": "url"
+    }
+  },
+  "simple-tree-text-markup": {
+    "checksum": "ab42c215c14f8d9778fd389e96ecb2939deda392",
+    "dependencies": [
+      "simple-tree-text-markup-lib",
+      "simple-tree-text-markup-doc"
+    ],
+    "description": "This is a tree-based combinator library for simple markup, mainly for\r\ndisplaying messages in a REPL.\r\n\r\nThis is a meta-package, containing simple-tree-text-markup-lib and simple-tree-text-markup-doc.",
+    "name": "simple-tree-text-markup",
+    "source": {
+      "args": {
+        "sha256": "02mv2n9hq4xwjw3dm2xkv3dlp7j7r75vy3pwyn22lj5d6hmwbja5",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/simple-tree-text-markup.zip"
+      },
+      "method": "url"
+    }
+  },
+  "simple-tree-text-markup-doc": {
+    "checksum": "2a3c426d23fed5430a85504b3ae339533384dbf4",
+    "dependencies": [
+      "scheme-lib",
+      "at-exp-lib",
+      "scribble-lib",
+      "racket-doc",
+      "simple-tree-text-markup-lib",
+      "draw-doc",
+      "draw-lib",
+      "gui-doc",
+      "snip-lib"
+    ],
+    "description": "This is a tree-based combinator library for simple markup, mainly for\r\ndisplaying messages in a REPL.\r\n\r\nThis package contains the documentation.",
+    "name": "simple-tree-text-markup-doc",
+    "source": {
+      "args": {
+        "sha256": "06hdzhw9n29bb2qwkwamb7wbk1hv6g9rhazshsqdc0dh8j9xbhf6",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/simple-tree-text-markup-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "simple-tree-text-markup-lib": {
+    "checksum": "b9eb6450651853ef941863c0f5fbf6b57034a132",
+    "description": "This is a tree-based combinator library for simple markup, mainly for\r\ndisplaying messages in a REPL.\r\n\r\nThis package contains the actual implementation.",
+    "name": "simple-tree-text-markup-lib",
+    "source": {
+      "args": {
+        "sha256": "15hx8i9ar192mmkvv0wvx3qjk5i7ljk54z3liknwz7mcqk8jqf15",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/simple-tree-text-markup-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "slatex": {
+    "checksum": "55f1b638cd00708a1a1654d3278c7d39711b18ca",
+    "dependencies": [
+      "scheme-lib",
+      "compatibility-lib",
+      "racket-index",
+      "eli-tester",
+      "racket-doc",
+      "scribble-lib"
+    ],
+    "description": "SLaTeX (Scheme in LaTeX)",
+    "name": "slatex",
+    "source": {
+      "args": {
+        "sha256": "133jrp0izhvzjvnc2kcv2fxcrndrdxf2sm1h08ygjwvjj341c6rg",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/slatex.zip"
+      },
+      "method": "url"
+    }
+  },
+  "slideshow": {
+    "checksum": "b1e17a9e773247d7c2ddd5fe4d0a5437df15b2b5",
+    "dependencies": [
+      "slideshow-lib",
+      "slideshow-exe",
+      "slideshow-plugin",
+      "slideshow-doc"
+    ],
+    "description": "Slide-presentation tool",
+    "name": "slideshow",
+    "source": {
+      "args": {
+        "sha256": "16ws9767chlpxhx5r5yk84gv5mzx0jf0xyxw92m310b9nax0461p",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/slideshow.zip"
+      },
+      "method": "url"
+    }
+  },
+  "slideshow-doc": {
+    "checksum": "74d0e0af04e44d798c591467a44f7f0669c723d2",
+    "dependencies": [
+      "scheme-lib",
+      "draw-doc",
+      "gui-doc",
+      "pict-doc",
+      "scribble-doc",
+      "gui-lib",
+      "pict-lib",
+      "scribble-lib",
+      "slideshow-lib",
+      "racket-doc",
+      "at-exp-lib"
+    ],
+    "description": "documentation part of \"slideshow\"",
+    "name": "slideshow-doc",
+    "source": {
+      "args": {
+        "sha256": "13nb3my8basfwcf1cqfrpd3s6g3c5alz6d9p8vy0bg4flakhadw0",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/slideshow-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "slideshow-exe": {
+    "checksum": "95feed192f60a0200bc471d9186891e72b654fd5",
+    "dependencies": [
+      "compatibility-lib",
+      "gui-lib",
+      "pict-lib",
+      "slideshow-lib"
+    ],
+    "description": "executables for \"slideshow\"",
+    "name": "slideshow-exe",
+    "source": {
+      "args": {
+        "sha256": "0mnc12vjih11v0ks1ywv56jxa3wll0y3gbj78nx7ci6z79dhvp95",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/slideshow-exe.zip"
+      },
+      "method": "url"
+    }
+  },
+  "slideshow-lib": {
+    "checksum": "ae676e0cf4260a8d3565b8402ac8d0bcba3107c5",
+    "dependencies": [
+      "scheme-lib",
+      "compatibility-lib",
+      "draw-lib",
+      "pict-lib",
+      "gui-lib"
+    ],
+    "description": "implementation (no documentation) part of \"slideshow\"",
+    "name": "slideshow-lib",
+    "source": {
+      "args": {
+        "sha256": "1mp1dvlqf4hp2f6zgi203gyl3zx5n1kfbqf364hwhzwk3b0r9pbz",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/slideshow-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "slideshow-plugin": {
+    "checksum": "1e75ed281f75e8c21b22eeda6b5da07f37a65b76",
+    "dependencies": [
+      "slideshow-lib",
+      "pict-lib",
+      "string-constants-lib",
+      "compatibility-lib",
+      "drracket-plugin-lib",
+      "gui-lib"
+    ],
+    "description": "Slideshow's DrRacket plugin",
+    "name": "slideshow-plugin",
+    "source": {
+      "args": {
+        "sha256": "1vzw80ci07vvk6zq73jlypic4x1hnznzdi058yis2lw5rzms7adm",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/slideshow-plugin.zip"
+      },
+      "method": "url"
+    }
+  },
+  "snip": {
+    "checksum": "54d89ef2255dca396d861da9dbac73cae4c21b72",
+    "dependencies": [
+      "snip-lib",
+      "gui-doc"
+    ],
+    "description": "Text and graphics editor extension protocol",
+    "name": "snip",
+    "source": {
+      "args": {
+        "sha256": "1za4ka1npczy4gdp635inw163rk59ffvhrdjxjx0x2200yhc1r5s",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/snip.zip"
+      },
+      "method": "url"
+    }
+  },
+  "snip-lib": {
+    "checksum": "ecee9cafb6b49a259e48b47dee7e128e357d8dbb",
+    "dependencies": [
+      "draw-lib"
+    ],
+    "description": "implementation (no documentation) part of \"snip\"",
+    "name": "snip-lib",
+    "source": {
+      "args": {
+        "sha256": "1dxg2jvsw1yfqdv76i00pkgvlnrlndsx65m07imqpn0yq4079rb5",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/snip-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "source-syntax": {
+    "checksum": "78e20c93af587298f0e305c5c6b571f37619bd34",
+    "description": "find mappings from expanded to source syntax",
+    "name": "source-syntax",
+    "source": {
+      "args": {
+        "sha256": "1n6vy0lnx5gg5cq56dhdc0plpyzad554ksiwhhjkffab30pa4ymc",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/source-syntax.zip"
+      },
+      "method": "url"
+    }
+  },
+  "srfi": {
+    "checksum": "abc3ca581e58fa1f9048ebb7495220c26e7e23ef",
+    "dependencies": [
+      "srfi-lib",
+      "srfi-doc"
+    ],
+    "description": "Legacy SRFI (Scheme) libraries",
+    "name": "srfi",
+    "source": {
+      "args": {
+        "sha256": "072j6mny47z1nklqmns216nr9dq1naz940xlq3rr4sm5h3l5rgvv",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/srfi.zip"
+      },
+      "method": "url"
+    }
+  },
+  "srfi-doc": {
+    "checksum": "74786e2ed2c46b680b4f31dec122aacf29fd3d74",
+    "dependencies": [
+      "mzscheme-doc",
+      "scheme-doc",
+      "scheme-lib",
+      "scribble-lib",
+      "srfi-lib",
+      "racket-doc",
+      "racket-index",
+      "compatibility-lib"
+    ],
+    "description": "documentation part of \"srfi\"",
+    "name": "srfi-doc",
+    "source": {
+      "args": {
+        "sha256": "1cxd9dpfr5wa9kx8c36fs96q19z0dfbbib1c2538bk36h9izcls5",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/srfi-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "srfi-lib": {
+    "checksum": "e4303368161ab7df5335f5cbb720b09b09cda1e4",
+    "dependencies": [
+      "scheme-lib",
+      "srfi-lite-lib",
+      "r6rs-lib",
+      "compatibility-lib"
+    ],
+    "description": "implementation (no documentation) part of \"srfi\"",
+    "name": "srfi-lib",
+    "source": {
+      "args": {
+        "sha256": "0xsb384nxfnsayrri9hcq6zy85pcy8s5djym6p52lzfar095mqpi",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/srfi-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "srfi-lite-lib": {
+    "checksum": "a022ea1875c8adf63a7bb3b40027e5d2e69d0b18",
+    "description": "implementation of the most widely used \"srfi\" libraries",
+    "name": "srfi-lite-lib",
+    "source": {
+      "args": {
+        "sha256": "1il40v5apzymfhxcy72qdchglk4yz1wrx3y4ghgny7d2fhbp5vn0",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/srfi-lite-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "string-constants": {
+    "checksum": "bc894c64addc829936f2bc75489ff96d8085d4f1",
+    "dependencies": [
+      "string-constants-lib",
+      "string-constants-doc"
+    ],
+    "description": "String constants to support internationalization, especially in DrRacket",
+    "name": "string-constants",
+    "source": {
+      "args": {
+        "sha256": "19r7yinj7wqv0na761aas0h6fb3vlp34yra91gj9asg42mdf9bka",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/string-constants.zip"
+      },
+      "method": "url"
+    }
+  },
+  "string-constants-doc": {
+    "checksum": "619397d265274f3625029383cf5c7c102263e527",
+    "dependencies": [
+      "string-constants-lib",
+      "racket-doc",
+      "scribble-lib"
+    ],
+    "description": "String constants documentation",
+    "name": "string-constants-doc",
+    "source": {
+      "args": {
+        "sha256": "1dl3476hz3hdr69bmhikr3w0zxgmgp09wdmm5i44hhdc8r32hjwn",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/string-constants-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "string-constants-lib": {
+    "checksum": "e16804f2119842002c3feaa8cc01aef75b599ee2",
+    "description": "String constants to support internationalization, especially in DrRacket",
+    "name": "string-constants-lib",
+    "source": {
+      "args": {
+        "sha256": "0xdl5sbvx8rjrfdsc8gfg5iqji7charkhzq3cxi7w1ndf1wfpf1z",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/string-constants-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "swindle": {
+    "checksum": "bb22cd49318f881ab9cf6c07e70e951fb244bf08",
+    "dependencies": [
+      "scheme-lib",
+      "compatibility-lib",
+      "drracket-plugin-lib",
+      "gui-lib",
+      "net-lib",
+      "string-constants-lib",
+      "compatibility-doc",
+      "racket-doc",
+      "scribble-lib"
+    ],
+    "description": "The implementation of the Swindle language",
+    "name": "swindle",
+    "source": {
+      "args": {
+        "sha256": "05wkg9ly1ndbx10bvyl2m5wzyy2m1jvcjmcvdxf6ihmv3vl0cl4q",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/swindle.zip"
+      },
+      "method": "url"
+    }
+  },
+  "syntax-color": {
+    "checksum": "ade4a27afd1b080decdd57e630d82cc4b4e83bae",
+    "dependencies": [
+      "syntax-color-lib",
+      "syntax-color-doc"
+    ],
+    "description": "Program syntax coloring for editors and typesetting",
+    "name": "syntax-color",
+    "source": {
+      "args": {
+        "sha256": "1mr4rvinzi3p4v9arhnfjjfxqasq555hjnh6r0h5z72kzl9xyjb3",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/syntax-color.zip"
+      },
+      "method": "url"
+    }
+  },
+  "syntax-color-doc": {
+    "checksum": "4e32648059d189dc42c6ad70488fe4a14c21cbad",
+    "dependencies": [
+      "gui-doc",
+      "scribble-doc",
+      "gui-lib",
+      "scribble-lib",
+      "racket-doc",
+      "syntax-color-lib"
+    ],
+    "description": "documentation part of \"syntax-color\"",
+    "name": "syntax-color-doc",
+    "source": {
+      "args": {
+        "sha256": "1s5vqw8n674c1qm98iz6rh0achb18hhk2vda8b5klq4ywa6dnn2w",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/syntax-color-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "syntax-color-lib": {
+    "checksum": "7ce9b7c8e0e026fdf510219d4e38ab79cd501d6e",
+    "dependencies": [
+      "parser-tools-lib",
+      "option-contract-lib",
+      "rackunit-lib"
+    ],
+    "description": "implementation (no documentation) part of \"syntax-color\"",
+    "name": "syntax-color-lib",
+    "source": {
+      "args": {
+        "sha256": "1n5ac2qmkkm7fay0i3jrifqxghhba7fhdic3k4rwm8r0vssil3g0",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/syntax-color-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "testing-util-lib": {
+    "checksum": "d4b0e7391422093f7b36b28b58cc3a2eaa26eb44",
+    "dependencies": [
+      "compiler-lib"
+    ],
+    "description": "For tracking test results and displaying a summary message (used by RackUnit)",
+    "name": "testing-util-lib",
+    "source": {
+      "args": {
+        "sha256": "0shlif5ydnjzlpkm64v1ys6d3b0q68zg7r2d2f5gnzvqy4yrhkpn",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/testing-util-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "tex-table": {
+    "checksum": "ad568d7932c50040ecc1df613deee3b99fdf7ad5",
+    "description": "Table of TeX-style abbreviations",
+    "name": "tex-table",
+    "source": {
+      "args": {
+        "sha256": "14jfns09ixpgk3gipl3vg04jn8p84c52pckmc9hdnw0b6b9qzwpg",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/tex-table.zip"
+      },
+      "method": "url"
+    }
+  },
+  "trace": {
+    "checksum": "55e568cc2bbcdd72951808bb0ebd4e84af6e6048",
+    "dependencies": [
+      "scheme-lib",
+      "compatibility-lib",
+      "scribble-lib",
+      "racket-doc"
+    ],
+    "description": "Instrumentation to show function calls",
+    "name": "trace",
+    "source": {
+      "args": {
+        "sha256": "1qmr67bcxm3c45gxm47s28q4xp69ffl8512wr9m2aklc1fsjggir",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/trace.zip"
+      },
+      "method": "url"
+    }
+  },
+  "typed-racket": {
+    "checksum": "c854863ecc61e8e7cae2365e3e84816eef1769f1",
+    "dependencies": [
+      "typed-racket-lib",
+      "typed-racket-doc"
+    ],
+    "description": "The implementation of the Typed Racket language",
+    "name": "typed-racket",
+    "source": {
+      "args": {
+        "sha256": "03xc7xwz46vg4gig1i2gjkwg4sjhv76whpqmnxc4wqbacknks4sz",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/typed-racket.zip"
+      },
+      "method": "url"
+    }
+  },
+  "typed-racket-compatibility": {
+    "checksum": "d909fff1334a5d25309a96dd791a5b20275da516",
+    "dependencies": [
+      "scheme-lib",
+      "typed-racket-lib"
+    ],
+    "description": "compatibility library for older Typed Racket-based languages",
+    "name": "typed-racket-compatibility",
+    "source": {
+      "args": {
+        "sha256": "19xz0zladwbpy0sjfbfjmykqjf8s5av3d6b70ndawir44r9n13as",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/typed-racket-compatibility.zip"
+      },
+      "method": "url"
+    }
+  },
+  "typed-racket-doc": {
+    "checksum": "bb05c470077112d28e908ac54d3ed1d5e303addd",
+    "dependencies": [
+      "net-doc",
+      "net-cookies-doc",
+      "scheme-lib",
+      "srfi-lite-lib",
+      "r6rs-doc",
+      "srfi-doc",
+      "r6rs-lib",
+      "sandbox-lib",
+      "at-exp-lib",
+      "scribble-lib",
+      "pict-lib",
+      "typed-racket-lib",
+      "typed-racket-compatibility",
+      "typed-racket-more",
+      "racket-doc",
+      "draw-lib",
+      "web-server-doc",
+      "scheme-doc"
+    ],
+    "description": "documentation part of \"typed-racket\"",
+    "name": "typed-racket-doc",
+    "source": {
+      "args": {
+        "sha256": "0zr34fa4jbibh8zb38pkbv4sdyv141njcn53sm31kjmdaznjh530",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/typed-racket-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "typed-racket-lib": {
+    "checksum": "9fbc6d50de9fd46186db4b911b780de3c61496b4",
+    "dependencies": [
+      "source-syntax",
+      "pconvert-lib",
+      "compatibility-lib",
+      "string-constants-lib"
+    ],
+    "description": "implementation (no documentation) part of \"typed-racket\"",
+    "name": "typed-racket-lib",
+    "source": {
+      "args": {
+        "sha256": "1jyaac4gcfz9zj3kvivprxpg7ad8qd8x9cija031gjcrnc5hcdhj",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/typed-racket-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "typed-racket-more": {
+    "checksum": "68bf2be96de370bcd2bc29509213c9b0ade91651",
+    "dependencies": [
+      "srfi-lite-lib",
+      "net-lib",
+      "net-cookies-lib",
+      "web-server-lib",
+      "db-lib",
+      "draw-lib",
+      "rackunit-lib",
+      "rackunit-gui",
+      "rackunit-typed",
+      "snip-lib",
+      "typed-racket-lib",
+      "gui-lib",
+      "pict-lib",
+      "images-lib",
+      "racket-index",
+      "sandbox-lib",
+      "pconvert-lib"
+    ],
+    "description": "Types for various libraries",
+    "name": "typed-racket-more",
+    "source": {
+      "args": {
+        "sha256": "1br81mqs9447ri3lp3zn1s3kid0frdwvnl7yfjr7zg409f5x4c2k",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/typed-racket-more.zip"
+      },
+      "method": "url"
+    }
+  },
+  "unix-socket": {
+    "checksum": "8e169c605e073bf30b523575f38ec2f89b5b9ee1",
+    "dependencies": [
+      "unix-socket-lib",
+      "unix-socket-doc"
+    ],
+    "description": "Unix Domain Sockets",
+    "name": "unix-socket",
+    "source": {
+      "args": {
+        "sha256": "0n9kw7136m3isy01160jny4gmf9d7id86nwbfk49s6ga25hga86k",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/unix-socket.zip"
+      },
+      "method": "url"
+    }
+  },
+  "unix-socket-doc": {
+    "checksum": "9047e40dcdf5402448d22a1bd8e8b7cd17c56f20",
+    "dependencies": [
+      "net-lib",
+      "unix-socket-lib",
+      "web-server-lib",
+      "scribble-lib",
+      "net-doc",
+      "racket-doc",
+      "web-server-doc"
+    ],
+    "description": "Documentation for \"unix-socket\"",
+    "name": "unix-socket-doc",
+    "source": {
+      "args": {
+        "sha256": "00imhw9ja3dli1lbnhc9krg6l77vbmzgzblzdnadh4ahrlkay1cf",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/unix-socket-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "unix-socket-lib": {
+    "checksum": "9b0107f5984dc91de038885ea50dd27b0db8712d",
+    "dependencies": [
+      "net-lib"
+    ],
+    "description": "Implementation (no documentation) for \"unix-socket\"",
+    "name": "unix-socket-lib",
+    "source": {
+      "args": {
+        "sha256": "0ikziniqidg9hvi5ixggr083bzq30ppcqqa4s1qz5f62mir650n6",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/unix-socket-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "web-server": {
+    "checksum": "d9df380339103479e0579dbfb3a45cca416b3319",
+    "dependencies": [
+      "web-server-lib",
+      "web-server-doc"
+    ],
+    "description": "An HTTP server",
+    "name": "web-server",
+    "source": {
+      "args": {
+        "sha256": "06cp7kwahpdp07al92flnwdgi11sr2fbkdhrjj9yacpd4pdjrxqj",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/web-server.zip"
+      },
+      "method": "url"
+    }
+  },
+  "web-server-doc": {
+    "checksum": "98ca958791521f0eca6721c529d7fdf8f337ffed",
+    "dependencies": [
+      "net-doc",
+      "net-cookies-doc",
+      "rackunit-doc",
+      "db-doc",
+      "scribble-doc",
+      "db-lib",
+      "net-lib",
+      "net-cookies-lib",
+      "rackunit-lib",
+      "sandbox-lib",
+      "scribble-lib",
+      "web-server-lib",
+      "racket-doc"
+    ],
+    "description": "documentation part of \"web-server\"",
+    "name": "web-server-doc",
+    "source": {
+      "args": {
+        "sha256": "18r9gbc218jxj03hcrk3f8sbzw8zsw38j1gjp4isxqsx1c4gcy6h",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/web-server-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "web-server-lib": {
+    "checksum": "b4045cfc6981534fb00d057136c9364dd8fff017",
+    "dependencies": [
+      "srfi-lite-lib",
+      "net-lib",
+      "net-cookies-lib",
+      "scribble-text-lib",
+      "parser-tools-lib",
+      "rackunit-lib"
+    ],
+    "description": "implementation (no documentation) part of \"web-server\"",
+    "name": "web-server-lib",
+    "source": {
+      "args": {
+        "sha256": "036a5ivzqbn590q6m45085r5akgjb9inlw0z25vqqf7sp4ih1gmp",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/web-server-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "wxme": {
+    "checksum": "32c156a1474d42da6f2a529e73e0867182eda900",
+    "dependencies": [
+      "wxme-lib",
+      "gui-doc"
+    ],
+    "description": "Decoding the WXME graphical file format in a text-only environment",
+    "name": "wxme",
+    "source": {
+      "args": {
+        "sha256": "03jp0ixzgmcjy0p3m608qf77pwd7vhs67jar4yk1bblk9m6f2hs6",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/wxme.zip"
+      },
+      "method": "url"
+    }
+  },
+  "wxme-lib": {
+    "checksum": "4c71ca20404a80f9bf80226eac94ddc548948eae",
+    "dependencies": [
+      "scheme-lib",
+      "compatibility-lib",
+      "snip-lib"
+    ],
+    "description": "implementation (no documentation) part of \"wxme\"",
+    "name": "wxme-lib",
+    "source": {
+      "args": {
+        "sha256": "1ig4yccd4360pgkamkcqk717l3lfnw1a2i2wz798d0qipgf96hn9",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/wxme-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "xrepl": {
+    "checksum": "8901a86159ff374dab25373fb54bafc1b41460a8",
+    "dependencies": [
+      "xrepl-lib",
+      "xrepl-doc"
+    ],
+    "description": "Console-oriented extended REPL for Racket",
+    "name": "xrepl",
+    "source": {
+      "args": {
+        "sha256": "0jxcqjrnx7nihxkwwhdpik1s8r5df89lc2nvgm23miyvfznm1zaz",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/xrepl.zip"
+      },
+      "method": "url"
+    }
+  },
+  "xrepl-doc": {
+    "checksum": "d07cae876f8b7cda3d39dba8deb166203b019c73",
+    "dependencies": [
+      "sandbox-lib",
+      "scribble-lib",
+      "errortrace-doc",
+      "macro-debugger",
+      "profile-doc",
+      "readline-doc",
+      "macro-debugger-text-lib",
+      "profile-lib",
+      "readline-lib",
+      "xrepl-lib",
+      "racket-doc"
+    ],
+    "description": "documentation part of \"xrepl\"",
+    "name": "xrepl-doc",
+    "source": {
+      "args": {
+        "sha256": "1q6b5s8m2lcdn347s36wadlqn06a9c2z90ksjvxb1km6slps8ll0",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/xrepl-doc.zip"
+      },
+      "method": "url"
+    }
+  },
+  "xrepl-lib": {
+    "checksum": "9720c42b8017571b6e5e9797e2e2e68ca0e080e1",
+    "dependencies": [
+      "readline-lib",
+      "scribble-text-lib"
+    ],
+    "description": "implementation (no documentation) part of \"xrepl\"",
+    "name": "xrepl-lib",
+    "source": {
+      "args": {
+        "sha256": "0fdkgw0w4rz40p7fx1nhdnfhqhdd76wp3p40z9l6dyxzjxv6ib8k",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/xrepl-lib.zip"
+      },
+      "method": "url"
+    }
+  },
+  "zo-lib": {
+    "checksum": "d68040f5ea932e1268bf5a3e6adfc5d3ed155576",
+    "description": "Libraries for handling zo files",
+    "name": "zo-lib",
+    "source": {
+      "args": {
+        "sha256": "1hyb0awpwwdk73s3xa4gapxhrw4w56nk11gc9kypylc65fzwh3pc",
+        "url": "https://download.racket-lang.org/releases/8.15/pkgs/zo-lib.zip"
+      },
+      "method": "url"
+    }
+  }
+}
