@@ -556,6 +556,9 @@ let
           # Then increase the required space to account for the reserved blocks.
           fudge=$(compute_fudge $diskUsage)
           requiredFilesystemSpace=$(( diskUsage + fudge ))
+          # Similarly, increase the required inodes count.
+          fudgeInodes=$(compute_fudge $numInodes)
+          requiredInodes=$(( numInodes + fudgeInodes ))
 
           # Round up to the nearest block size.
           # This ensures whole $blockSize bytes block sizes in the filesystem
@@ -573,7 +576,9 @@ let
 
           printf "Automatic disk size...\n"
           printf "  Closure space use: %d bytes\n" $diskUsage
-          printf "  fudge: %d bytes\n" $fudge
+          printf "  Closure inodes use: %d\n" $requiredInodes
+          printf "  fudge (space): %d bytes\n" $fudge
+          printf "  fudge (inodes): %d\n" $fudgeInodes
           printf "  Filesystem size needed: %d bytes\n" $requiredFilesystemSpace
           printf "  Additional space: %d bytes\n" $additionalSpace
           printf "  Disk image size: %d bytes\n" $diskSize
@@ -592,11 +597,11 @@ let
           # Get start & length of the root partition in sectors to $START and $SECTORS.
           eval $(partx $diskImage -o START,SECTORS --nr ${rootPartition} --pairs)
 
-          mkfs.${fsType} -b ${blockSize} -F -L ${label} $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
+          mkfs.${fsType} -b ${blockSize} -N $requiredInodes -F -L ${label} $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
         ''
       else
         ''
-          mkfs.${fsType} -b ${blockSize} -F -L ${label} $diskImage
+          mkfs.${fsType} -b ${blockSize} -N $requiredInodes -F -L ${label} $diskImage
         ''
     }
 
