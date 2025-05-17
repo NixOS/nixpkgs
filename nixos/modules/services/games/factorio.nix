@@ -295,6 +295,28 @@ in
           Autosaving on connected Windows clients will be disabled regardless of autosave_only_on_server option.
         '';
       };
+
+      rConSettings = lib.mkOption {
+        description = "Rcon submodule";
+        default = null;
+        type = lib.types.nullOr (lib.types.submodule {
+          options = {
+            password = lib.mkOption {
+              type = lib.types.str;
+              description = ''
+              Rcon server password (warning, this password will be visible in the nix store)
+              '';
+            };
+            bindAddress = lib.mkOption {
+              type = lib.types.str;
+              description = ''
+              Bind address for rcon server
+              '';
+              example = "127.0.0.1:25575";
+            };
+          };
+        });
+      };
     };
   };
 
@@ -338,6 +360,9 @@ in
           (lib.optionalString (cfg.mods != [ ]) "--mod-directory=${modDir}")
           (playerListOption "server-adminlist" cfg.admins)
           (playerListOption "server-whitelist" cfg.allowedPlayers)
+          (lib.optionalString (cfg.allowedPlayers != []) "--use-server-whitelist")
+          (lib.optionalString (cfg.rConSettings != null) "--rcon-password=${cfg.rConSettings.password}")
+          (lib.optionalString (cfg.rConSettings != null) "--rcon-bind=${cfg.rConSettings.bindAddress}")
           (lib.optionalString (cfg.allowedPlayers != [ ]) "--use-server-whitelist")
         ];
 
