@@ -3,6 +3,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   cython,
@@ -26,6 +27,14 @@ buildPythonPackage rec {
     tag = "lxml-${version}";
     hash = "sha256-TGv2ZZQ7GU+fAWRApESUL1bbxQobbmLai8wr09xYOUw=";
   };
+
+  patches = lib.optionals (lib.versionOlder version "5.5") [
+    # Fix for Cython 3.1.0 that should be included in lxml version 5.5
+    (fetchpatch {
+      url = "https://github.com/lxml/lxml/commit/6d5d6aed2e38e1abc625f29c0b3e97fc8c60ae3b.patch";
+      hash = "sha256-HQTJZTfMqRc8mwyeNoRFFbYy8f1GBScMPqUiyQB3lHE=";
+    })
+  ];
 
   # setuptoolsBuildPhase needs dependencies to be passed through nativeBuildInputs
   nativeBuildInputs = [
