@@ -413,7 +413,7 @@ in
   drawterm = discoverTests (import ./drawterm.nix);
   draupnir = runTest ./matrix/draupnir.nix;
   draupnir-with-pantalaimon = runTest {
-    imports = [ ./matrix/draupnir.nix };
+    imports = [ ./matrix/draupnir.nix ];
     _module.args.withPantalaimon = true;
   };
   drbd = handleTest ./drbd.nix { };
