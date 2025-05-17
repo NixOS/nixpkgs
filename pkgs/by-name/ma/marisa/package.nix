@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "marisa";
-  version = "0.2.6";
+  version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "s-yata";
     repo = "marisa-trie";
     rev = "v${version}";
-    sha256 = "1hy8hfksizk1af6kg8z3b9waiz6d5ggd73fiqcvmhfgra36dscyq";
+    sha256 = "sha256-+OGtDbwl7ar3i65POkTGyC4AYkOT4YuASfdt5FGJ8yM=";
   };
 
   enableParallelBuilding = true;
