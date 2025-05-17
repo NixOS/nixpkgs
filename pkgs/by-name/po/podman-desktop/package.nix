@@ -4,9 +4,9 @@
   fetchFromGitHub,
   makeWrapper,
   copyDesktopItems,
-  electron_34,
+  electron_35,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   makeDesktopItem,
   darwin,
   nix-update-script,
@@ -18,7 +18,7 @@
 }:
 
 let
-  electron = electron_34;
+  electron = electron_35;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "podman-desktop";
@@ -58,9 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-GYdetO/WiEQAvVSvu81tKqkOH7YUgkB7RVW0Crd/2ww=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-2k0BbE9FkWEErsTuCECjy+iI3u1Biv1MF9hI7Oq3Aus=";
+    hash = "sha256-IjCO2mLDHhb1fB92plBAFcH1RpmOtiUGlFHEEAAHOJ8=";
   };
 
   patches = [
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs =
     [
       nodejs
-      pnpm_9.configHook
+      pnpm_10.configHook
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       copyDesktopItems
