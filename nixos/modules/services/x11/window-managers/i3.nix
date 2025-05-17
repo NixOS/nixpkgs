@@ -16,7 +16,6 @@ let
   defaultPackages = [
     dmenu
     i3status
-    i3lock
   ];
 in
 
@@ -77,6 +76,7 @@ in
     environment.etc."i3/config" = mkIf (cfg.configFile != null) {
       source = cfg.configFile;
     };
+    programs.i3lock.enable = mkDefault cfg.includeDefaultPackages;
   };
 
   imports = [
@@ -95,7 +95,7 @@ in
         "i3"
         "extraPackages"
       ]
-      "Move any packages you configured here to environment.systemPackages and set services.x11.window-managers.i3.includeDefaultPackages to 'false' to disable the defaults."
+      "Move any packages you configured here to environment.systemPackages and set services.x11.window-managers.i3.includeDefaultPackages to 'false' to disable the defaults. If you configured i3lock, use programs.i3lock.enable instead."
     )
   ];
 }
