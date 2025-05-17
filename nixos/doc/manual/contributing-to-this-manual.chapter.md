@@ -17,6 +17,10 @@ There's also [a convenient development daemon](https://nixos.org/manual/nixpkgs/
 
 The above instructions don't deal with the appendix of available `configuration.nix` options, and the manual pages related to NixOS. These are built, and written in a different location and in a different format, as explained in the next sections.
 
+## Shell utilities {#sec-contributing-shell}
+
+Check the instructions provided in the [Nixpkgs manual docs README](../../../doc/README.md#shell-utilities).
+
 ## Testing redirects {#sec-contributing-redirects}
 
 Once you have a successful build, you can open the relevant HTML (path mentioned above) in a browser along with the anchor, and observe the redirection.
