@@ -180,9 +180,9 @@
     "hash": "sha256-mwN0b9AIUEqW9Wnzetj/kCzHFJXn4SPao8beef8qzEU="
   },
   "kirigami": {
-    "version": "6.14.0",
-    "url": "mirror://kde/stable/frameworks/6.14/kirigami-6.14.0.tar.xz",
-    "hash": "sha256-Fixim6UOfa5EOe9QJyoMFQy6s3FBWn0esWDb42OPYZo="
+    "version": "6.14.1",
+    "url": "mirror://kde/stable/frameworks/6.14/kirigami-6.14.1.tar.xz",
+    "hash": "sha256-LJG04pUURPfW89at2W3EHGK/nb90eoWU1dL8kY0nMJ8="
   },
   "kitemmodels": {
     "version": "6.14.0",
@@ -290,9 +290,9 @@
     "hash": "sha256-JKzW0rhYK91q6b/KlyeKlnY+4YSmzey8Dc1k/U/COLI="
   },
   "kwallet": {
-    "version": "6.14.0",
-    "url": "mirror://kde/stable/frameworks/6.14/kwallet-6.14.0.tar.xz",
-    "hash": "sha256-p0d+Tl58y0NJHFoOzK32oz6WIIjVrzLEtrSqy5IPWeM="
+    "version": "6.14.1",
+    "url": "mirror://kde/stable/frameworks/6.14/kwallet-6.14.1.tar.xz",
+    "hash": "sha256-70gr4tUhH3EdV4qh0fN/ceZBpqUv034RMn4ZkV/UISc="
   },
   "kwidgetsaddons": {
     "version": "6.14.0",
