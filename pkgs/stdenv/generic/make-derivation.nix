@@ -570,11 +570,21 @@ let
           // optionalAttrs (hardeningDisable != [ ] || hardeningEnable != [ ] || stdenv.hostPlatform.isMusl) {
             NIX_HARDENING_ENABLE = builtins.concatStringsSep " " enabledHardeningOptions;
           }
-          // optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform ? gcc.arch) {
-            requiredSystemFeatures = attrs.requiredSystemFeatures or [ ] ++ [
-              "gccarch-${stdenv.hostPlatform.gcc.arch}"
-            ];
-          }
+          //
+            # TODO: remove platform condition
+            # Our `aarch64-linux` has `{ arch = "armv8-a"; }` set by default
+            # Enabling this check could be a breaking change as it requires to edit nix.conf
+            # NixOS module already sets gccarch, unsure of nix installers and other distributions
+            optionalAttrs
+              (
+                (stdenv.buildPlatform.isx86_64 || stdenv.buildPlatform.isLoongArch64)
+                && stdenv.buildPlatform ? gcc.arch
+              )
+              {
+                requiredSystemFeatures = attrs.requiredSystemFeatures or [ ] ++ [
+                  "gccarch-${stdenv.buildPlatform.gcc.arch}"
+                ];
+              }
           // optionalAttrs (stdenv.buildPlatform.isDarwin) (
             let
               allDependencies = concatLists (concatLists dependencies);
