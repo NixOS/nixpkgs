@@ -9723,6 +9723,8 @@ self: super: with self; {
 
   nanobind = callPackage ../development/python-modules/nanobind { };
 
+  nanoeigenpy = callPackage ../development/python-modules/nanoeigenpy { };
+
   nanoemoji = callPackage ../development/python-modules/nanoemoji { };
 
   nanoid = callPackage ../development/python-modules/nanoid { };
