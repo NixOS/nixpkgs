@@ -60,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dmodules_path=${apacheHttpd}/modules"
     "-Dsystemduserunitdir=${placeholder "out"}/etc/systemd/user"
   ];
+  mesonBuildType = "release";
 
   nativeBuildInputs = [
     pkg-config
