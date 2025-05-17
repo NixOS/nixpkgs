@@ -21519,6 +21519,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  yaml-companion-nvim = buildVimPlugin {
+    pname = "yaml-companion.nvim";
+    version = "2024-07-14";
+    src = fetchFromGitHub {
+      owner = "someone-stole-my-name";
+      repo = "yaml-companion.nvim";
+      rev = "131b0d67bd2e0f1a02e0daf2f3460482221ce3c0";
+      sha256 = "16115xvzzqmq8d5whjv772x2xnllly1zcql5wzpdhsf7dvqkvpp3";
+    };
+    meta.homepage = "https://github.com/someone-stole-my-name/yaml-companion.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   yanky-nvim = buildVimPlugin {
     pname = "yanky.nvim";
     version = "2025-04-14";
