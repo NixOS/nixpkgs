@@ -10,187 +10,311 @@ with lib;
 let
   cfg = config.services.pdns-recursor;
 
-  oneOrMore = type: with types; either type (listOf type);
-  valueType =
-    with types;
-    oneOf [
-      int
-      str
-      bool
-      path
-    ];
-  configType = with types; attrsOf (nullOr (oneOrMore valueType));
+  cfgName = "recursor";
 
-  toBool = val: if val then "yes" else "no";
-  serialize =
-    val:
-    with types;
-    if str.check val then
-      val
-    else if int.check val then
-      toString val
-    else if path.check val then
-      toString val
-    else if bool.check val then
-      toBool val
-    else if builtins.isList val then
-      (concatMapStringsSep "," serialize val)
-    else
-      "";
+  configDir =
+    pkgs.runCommand "${cfgName}.yml"
+      {
+        nativeBuildInputs = [ pkgs.remarshal ];
+        passAsFile = [ "value" ];
+        value = builtins.toJSON cfg.settings;
+      }
+      ''
+        mkdir "$out"
+        json2yaml -i "$valuePath" -o "$out/${cfgName}.yml"
+      '';
 
-  configDir = pkgs.writeTextDir "recursor.conf" (
-    concatStringsSep "\n" (flip mapAttrsToList cfg.settings (name: val: "${name}=${serialize val}"))
-  );
+  settingsFormat = pkgs.formats.yaml { };
 
-  mkDefaultAttrs = mapAttrs (n: v: mkDefault v);
+  forwardZoneMkChange =
+    field: config:
+    let
+      value = getAttrFromPath [ "services" "pdns-recursor" field ] config;
+    in
+    mapAttrsToList (zone: uri: {
+      inherit zone;
+      forwarders = [ uri ];
+    }) value;
 
+  forwardZone = types.submodule {
+    options = {
+      zone = mkOption {
+        description = ''
+          zone
+        '';
+        type = types.str;
+      };
+      forwarders = mkOption {
+        description = ''
+          forwarders
+        '';
+        type = types.listOf types.str;
+      };
+      recurse = mkOption {
+        description = ''
+          recurse ?
+        '';
+        type = types.bool;
+        default = false;
+      };
+      notify_allowed = mkOption {
+        description = ''
+          Notify allowed ?
+        '';
+        type = types.bool;
+        default = false;
+      };
+    };
+  };
 in
 {
   options.services.pdns-recursor = {
     enable = mkEnableOption "PowerDNS Recursor, a recursive DNS server";
 
-    dns.address = mkOption {
-      type = oneOrMore types.str;
-      default = [
-        "::"
-        "0.0.0.0"
-      ];
-      description = ''
-        IP addresses Recursor DNS server will bind to.
-      '';
-    };
-
-    dns.port = mkOption {
-      type = types.port;
-      default = 53;
-      description = ''
-        Port number Recursor DNS server will bind to.
-      '';
-    };
-
-    dns.allowFrom = mkOption {
-      type = types.listOf types.str;
-      default = [
-        "127.0.0.0/8"
-        "10.0.0.0/8"
-        "100.64.0.0/10"
-        "169.254.0.0/16"
-        "192.168.0.0/16"
-        "172.16.0.0/12"
-        "::1/128"
-        "fc00::/7"
-        "fe80::/10"
-      ];
-      example = [
-        "0.0.0.0/0"
-        "::/0"
-      ];
-      description = ''
-        IP address ranges of clients allowed to make DNS queries.
-      '';
-    };
-
-    api.address = mkOption {
-      type = types.str;
-      default = "0.0.0.0";
-      description = ''
-        IP address Recursor REST API server will bind to.
-      '';
-    };
-
-    api.port = mkOption {
-      type = types.port;
-      default = 8082;
-      description = ''
-        Port number Recursor REST API server will bind to.
-      '';
-    };
-
-    api.allowFrom = mkOption {
-      type = types.listOf types.str;
-      default = [
-        "127.0.0.1"
-        "::1"
-      ];
-      example = [
-        "0.0.0.0/0"
-        "::/0"
-      ];
-      description = ''
-        IP address ranges of clients allowed to make API requests.
-      '';
-    };
-
-    exportHosts = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether to export names and IP addresses defined in /etc/hosts.
-      '';
-    };
-
-    forwardZones = mkOption {
-      type = types.attrs;
-      default = { };
-      description = ''
-        DNS zones to be forwarded to other authoritative servers.
-      '';
-    };
-
-    forwardZonesRecurse = mkOption {
-      type = types.attrs;
-      example = {
-        eth = "[::1]:5353";
-      };
-      default = { };
-      description = ''
-        DNS zones to be forwarded to other recursive servers.
-      '';
-    };
-
-    dnssecValidation = mkOption {
-      type = types.enum [
-        "off"
-        "process-no-validate"
-        "process"
-        "log-fail"
-        "validate"
-      ];
-      default = "validate";
-      description = ''
-        Controls the level of DNSSEC processing done by the PowerDNS Recursor.
-        See https://doc.powerdns.com/md/recursor/dnssec/ for a detailed explanation.
-      '';
-    };
-
-    serveRFC1918 = mkOption {
-      type = types.bool;
-      default = true;
-      description = ''
-        Whether to directly resolve the RFC1918 reverse-mapping domains:
-        `10.in-addr.arpa`,
-        `168.192.in-addr.arpa`,
-        `16-31.172.in-addr.arpa`
-        This saves load on the AS112 servers.
-      '';
-    };
-
     settings = mkOption {
-      type = configType;
-      default = { };
-      example = literalExpression ''
-        {
-          loglevel = 8;
-          log-common-errors = true;
-        }
-      '';
       description = ''
-        PowerDNS Recursor settings. Use this option to configure Recursor
-        settings not exposed in a NixOS option or to bypass one.
-        See the full documentation at
-        <https://doc.powerdns.com/recursor/settings.html>
-        for the available options.
+        Global configuration transcribed in YAML format
       '';
+      type = types.submodule {
+        options = {
+
+          carbon = mkOption {
+            default = { };
+            description = ''
+              Global carbon configuration transcribed in YAML format
+            '';
+            type = types.submodule { freeformType = settingsFormat.type; };
+          };
+
+          dnssec = mkOption {
+            default = { };
+            description = ''
+              Global dnssec configuration transcribed in YAML format
+            '';
+            type = types.submodule {
+              freeformType = settingsFormat.type;
+              options = {
+                validation = mkOption {
+                  type = types.enum [
+                    "off"
+                    "process-no-validate"
+                    "process"
+                    "log-fail"
+                    "validate"
+                  ];
+                  default = "validate";
+                  description = ''
+                    Controls the level of DNSSEC processing done by the PowerDNS Recursor.
+                    See https://doc.powerdns.com/md/recursor/dnssec/ for a detailed explanation.
+                  '';
+                };
+              };
+            };
+          };
+
+          ecs = mkOption {
+            default = { };
+            description = ''
+              Global ecs configuration transcribed in YAML format
+            '';
+            type = types.submodule { freeformType = settingsFormat.type; };
+          };
+
+          incoming = mkOption {
+            default = { };
+            description = ''
+              Global incoming configuration transcribed in YAML format
+            '';
+            type = types.submodule {
+              freeformType = settingsFormat.type;
+              options = {
+                allow_from = mkOption {
+                  type = types.listOf types.str;
+                  default = [
+                    "127.0.0.0/8"
+                    "10.0.0.0/8"
+                    "100.64.0.0/10"
+                    "169.254.0.0/16"
+                    "192.168.0.0/16"
+                    "172.16.0.0/12"
+                    "::1/128"
+                    "fc00::/7"
+                    "fe80::/10"
+                  ];
+                  example = [
+                    "0.0.0.0/0"
+                    "::/0"
+                  ];
+                  description = ''
+                    IP address ranges of clients allowed to make DNS queries.
+                  '';
+                };
+
+                listen = mkOption {
+                  type = types.listOf types.str;
+                  default = [
+                    "::"
+                    "0.0.0.0"
+                  ];
+                  description = ''
+                    IP addresses Recursor DNS server will bind to.
+                  '';
+                };
+
+                port = mkOption {
+                  type = types.port;
+                  default = 53;
+                  description = ''
+                    Port number Recursor DNS server will bind to.
+                  '';
+                };
+              };
+            };
+          };
+
+          logging = mkOption {
+            default = { };
+            description = ''
+              Global logging configuration transcribed in YAML format
+            '';
+            type = types.submodule { freeformType = settingsFormat.type; };
+          };
+
+          nod = mkOption {
+            default = { };
+            description = ''
+              Global nod configuration transcribed in YAML format
+            '';
+            type = types.submodule { freeformType = settingsFormat.type; };
+          };
+
+          outgoing = mkOption {
+            default = { };
+            description = ''
+              Global outgoing configuration transcribed in YAML format
+            '';
+            type = types.submodule { freeformType = settingsFormat.type; };
+          };
+
+          packetcache = mkOption {
+            default = { };
+            description = ''
+              Global packetcache configuration transcribed in YAML format
+            '';
+            type = types.submodule { freeformType = settingsFormat.type; };
+          };
+
+          recordcache = mkOption {
+            default = { };
+            description = ''
+              Global recordcache configuration transcribed in YAML format
+            '';
+            type = types.submodule { freeformType = settingsFormat.type; };
+          };
+
+          recursor = mkOption {
+            description = ''
+              Global recursor configuration transcribed in YAML format
+            '';
+            type = types.submodule {
+              freeformType = settingsFormat.type;
+              options = {
+                export_etc_hosts = mkOption {
+                  type = types.bool;
+                  default = false;
+                  description = ''
+                    Whether to export names and IP addresses defined in /etc/hosts.
+                  '';
+                };
+
+                forward_zones = mkOption {
+                  type = types.listOf forwardZone;
+                  default = { };
+                  description = ''
+                    DNS zones to be forwarded to other authoritative servers.
+                  '';
+                };
+
+                forward_zones_recurse = mkOption {
+                  type = types.listOf forwardZone;
+                  example = [
+                    {
+                      zone = "example1.com";
+                      forwarders = [ "[::1]:5300" ];
+                    }
+                  ];
+                  default = { };
+                  description = ''
+                    DNS zones to be forwarded to other recursive servers.
+                  '';
+                };
+
+                serve_rfc1918 = mkOption {
+                  type = types.bool;
+                  default = true;
+                  description = ''
+                    Whether to directly resolve the RFC1918 reverse-mapping domains:
+                    `10.in-addr.arpa`,
+                    `168.192.in-addr.arpa`,
+                    `16-31.172.in-addr.arpa`
+                    This saves load on the AS112 servers.
+                  '';
+                };
+              };
+            };
+          };
+
+          snmp = mkOption {
+            default = { };
+            description = ''
+              Global snmp configuration transcribed in YAML format
+            '';
+            type = types.submodule { freeformType = settingsFormat.type; };
+          };
+
+          webservice = mkOption {
+            default = { };
+            description = ''
+              Global webservice configuration transcribed in YAML format
+            '';
+            type = types.submodule {
+              freeformType = settingsFormat.type;
+              options = {
+                address = mkOption {
+                  type = types.str;
+                  default = "0.0.0.0";
+                  description = ''
+                    IP address Recursor REST API server will bind to.
+                  '';
+                };
+
+                port = mkOption {
+                  type = types.port;
+                  default = 8082;
+                  description = ''
+                    Port number Recursor REST API server will bind to.
+                  '';
+                };
+
+                allow_from = mkOption {
+                  type = types.listOf types.str;
+                  default = [
+                    "127.0.0.1"
+                    "::1"
+                  ];
+                  example = [
+                    "0.0.0.0/0"
+                    "::/0"
+                  ];
+                  description = ''
+                    IP address ranges of clients allowed to make API requests.
+                  '';
+                };
+              };
+            };
+          };
+        };
+      };
     };
 
     luaConfig = mkOption {
@@ -207,26 +331,17 @@ in
 
     environment.etc."pdns-recursor".source = configDir;
 
-    services.pdns-recursor.settings = mkDefaultAttrs {
-      local-address = cfg.dns.address;
-      local-port = cfg.dns.port;
-      allow-from = cfg.dns.allowFrom;
-
-      webserver-address = cfg.api.address;
-      webserver-port = cfg.api.port;
-      webserver-allow-from = cfg.api.allowFrom;
-
-      forward-zones = mapAttrsToList (zone: uri: "${zone}.=${uri}") cfg.forwardZones;
-      forward-zones-recurse = mapAttrsToList (zone: uri: "${zone}.=${uri}") cfg.forwardZonesRecurse;
-      export-etc-hosts = cfg.exportHosts;
-      dnssec = cfg.dnssecValidation;
-      serve-rfc1918 = cfg.serveRFC1918;
-      lua-config-file = pkgs.writeText "recursor.lua" cfg.luaConfig;
-
-      daemon = false;
-      write-pid = false;
-      log-timestamp = false;
-      disable-syslog = true;
+    services.pdns-recursor.settings = mkDefault {
+      settings = {
+        logging = {
+          disable_syslog = true;
+          timestamp = false;
+        };
+        recursor = {
+          lua_config_file = pkgs.writeText "recursor.lua" cfg.luaConfig;
+          write_pid = false;
+        };
+      };
     };
 
     systemd.packages = [ pkgs.pdns-recursor ];
@@ -253,11 +368,125 @@ in
   };
 
   imports = [
-    (mkRemovedOptionModule [
-      "services"
-      "pdns-recursor"
-      "extraConfig"
-    ] "To change extra Recursor settings use services.pdns-recursor.settings instead.")
+    (mkRenamedOptionModule
+      [ "services" "pdns-recursor" "dns" "address" ]
+      [
+        "services"
+        "pdns-recursor"
+        "settings"
+        "incoming"
+        "listen"
+      ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "pdns-recursor" "dns" "allowFrom" ]
+      [
+        "services"
+        "pdns-recursor"
+        "settings"
+        "incoming"
+        "allow_from"
+      ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "pdns-recursor" "dns" "port" ]
+      [
+        "services"
+        "pdns-recursor"
+        "settings"
+        "incoming"
+        "port"
+      ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "pdns-recursor" "api" "address" ]
+      [
+        "services"
+        "pdns-recursor"
+        "settings"
+        "webservice"
+        "address"
+      ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "pdns-recursor" "api" "allowFrom" ]
+      [
+        "services"
+        "pdns-recursor"
+        "settings"
+        "webservice"
+        "allow_from"
+      ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "pdns-recursor" "api" "port" ]
+      [
+        "services"
+        "pdns-recursor"
+        "settings"
+        "webservice"
+        "port"
+      ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "pdns-recursor" "exportHosts" ]
+      [
+        "services"
+        "pdns-recursor"
+        "settings"
+        "recursor"
+        "export_etc_hosts"
+      ]
+    )
+    (mkChangedOptionModule
+      [ "services" "pdns-recursor" "forwardZones" ]
+      [
+        "services"
+        "pdns-recursor"
+        "settings"
+        "recursor"
+        "forward_zones"
+      ]
+      (forwardZoneMkChange "forwardZones")
+    )
+    (mkChangedOptionModule
+      [
+        "services"
+        "pdns-recursor"
+        "forwardZonesRecurse"
+      ]
+      [
+        "services"
+        "pdns-recursor"
+        "settings"
+        "recursor"
+        "forward_zones_recurse"
+      ]
+      (forwardZoneMkChange "forwardZonesRecurse")
+    )
+    (mkRenamedOptionModule
+      [ "services" "pdns-recursor" "serveRFC1918" ]
+      [
+        "services"
+        "pdns-recursor"
+        "settings"
+        "recursor"
+        "serve_rfc1918"
+      ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "pdns-recursor" "dnssecValidation" ]
+      [
+        "services"
+        "pdns-recursor"
+        "settings"
+        "dnssec"
+        "validation"
+      ]
+    )
+    (mkRemovedOptionModule [ "services" "pdns-recursor" "extraConfig" ]
+      "Declare additional parameters in the format following the YAML format of the official documentation in services.pdns-recursor.settings."
+    )
   ];
 
   meta.maintainers = with lib.maintainers; [ rnhmjoj ];
