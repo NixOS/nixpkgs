@@ -100,7 +100,6 @@ stdenv.mkDerivation {
     mv -t $out bin include lib-python lib_pypy site-packages
     mv $out/bin/libpypy*-c${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/
     ${lib.optionalString stdenv.hostPlatform.isLinux ''
-      mv lib/libffi.so.6* $out/lib/
       rm $out/bin/*.debug
     ''}
 
