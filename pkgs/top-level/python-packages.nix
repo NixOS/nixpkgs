@@ -11732,8 +11732,6 @@ self: super: with self; {
 
   purl = callPackage ../development/python-modules/purl { };
 
-  push-receiver = callPackage ../development/python-modules/push-receiver { };
-
   pushbullet-py = callPackage ../development/python-modules/pushbullet-py { };
 
   pushover-complete = callPackage ../development/python-modules/pushover-complete { };
