@@ -11,7 +11,7 @@
   recurseIntoAttrs,
   generateSplicesForMkScope,
   makeScopeWithSplicing',
-  stdenvNoCC,
+  writeScriptBin,
 }:
 
 let
@@ -69,6 +69,11 @@ let
       // lib.mapAttrs' (k: v: lib.nameValuePair "${k}-bin" v) dotnet-bin
       // {
         inherit callPackage fetchNupkg buildDotnetSdk;
+
+        generate-dotnet-sdk = writeScriptBin "generate-dotnet-sdk" (
+          # Don't include current nixpkgs in the exposed version. We want to make the script runnable without nixpkgs repo.
+          builtins.replaceStrings [ " -I nixpkgs=./." ] [ "" ] (builtins.readFile ./update.sh)
+        );
 
         # Convert a "stdenv.hostPlatform.system" to a dotnet RID
         systemToDotnetRid =
