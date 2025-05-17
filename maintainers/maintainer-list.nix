@@ -11176,6 +11176,12 @@
     matrix = "@jboy:utwente.io";
     name = "John Boy";
   };
+  jbr = {
+    email = "jeanb.rocher@gmail.com";
+    githubId = 16919118;
+    github = "jbrocher";
+    name = "Jean-Baptiste Rocher";
+  };
   jc = {
     name = "Josh Cooper";
     email = "josh@cooper.is";
