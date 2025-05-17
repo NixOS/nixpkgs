@@ -54,6 +54,7 @@
   libjson,
   libsecret,
   libcanberra-gtk3,
+  sane-backends,
 
   homepage,
   version,
@@ -173,6 +174,7 @@ stdenv.mkDerivation rec {
     xorg.libXScrnSaver
     xorg.libXtst
     zlib
+    sane-backends
   ];
 
   runtimeDependencies = [
