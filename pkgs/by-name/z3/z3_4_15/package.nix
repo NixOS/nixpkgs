@@ -13,9 +13,9 @@
   findlib ? null,
   zarith ? null,
   versionInfo ? {
-    regex = "^v(4\\.14\\.[0-9]+)$";
-    version = "4.14.1";
-    hash = "sha256-pTsDzf6Frk4mYAgF81wlR5Kb1x56joFggO5Fa3G2s70=";
+    regex = "^z3-(4\\.[0-9]+\\.[0-9]+)$";
+    version = "4.15.0";
+    hash = "sha256-fk3NyV6vIDXivhiNOW2Y0i5c+kzc7oBqaeBWj/JjpTM=";
   },
   ...
 }:
