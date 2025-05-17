@@ -88,6 +88,10 @@ let
 
     sourceRoot = if stdenv.hostPlatform.isx86_64 then "Joplin ${version}" else ".";
 
+    postPatch = ''
+      chmod a+x Joplin.app/Contents/Resources/build/7zip/7za
+    '';
+
     installPhase = ''
       runHook preInstall
       mkdir -p $out/Applications
