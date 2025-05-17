@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "souffle";
-  version = "2.4.1";
+  version = "2.5";
 
   src = fetchFromGitHub {
     owner = "souffle-lang";
     repo = "souffle";
     rev = version;
-    sha256 = "sha256-U3/1iNOLFzuXiBsVDAc5AXnK4F982Uifp18jjFNUv2o=";
+    sha256 = "sha256-Umfeb1pGAeK5K3QDRD/labC6IJLsPPJ73ycsAV4yPNM=";
   };
 
   patches = [
