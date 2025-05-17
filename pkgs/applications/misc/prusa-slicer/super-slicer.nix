@@ -22,21 +22,38 @@ let
     ./super-slicer-use-boost186.patch
   ];
 
+  wxGTK31-prusa = wxGTK31.overrideAttrs (old: {
+    pname = "wxwidgets-prusa3d-patched";
+    version = "3.1.4";
+    src = fetchFromGitHub {
+      owner = "prusa3d";
+      repo = "wxWidgets";
+      rev = "489f6118256853cf5b299d595868641938566cdb";
+      hash = "sha256-xGL5I2+bPjmZGSTYe1L7VAmvLHbwd934o/cxg9baEvQ=";
+      fetchSubmodules = true;
+    };
+  });
+
   versions = {
     stable = {
       version = "2.5.59.13";
       hash = "sha256-FkoGcgVoBeHSZC3W5y30TBPmPrWnZSlO66TgwskgqAU=";
       inherit patches;
+      overrides = {
+        wxGTK-override = wxGTK31-prusa;
+      };
     };
     latest = {
       version = "2.5.59.13";
       hash = "sha256-FkoGcgVoBeHSZC3W5y30TBPmPrWnZSlO66TgwskgqAU=";
       inherit patches;
+      overrides = {
+        wxGTK-override = wxGTK31-prusa;
+      };
     };
     beta = {
-      version = "2.5.60.0";
-      hash = "sha256-dDRK07SatLLhuoc2fJKbHUwAofRRvBUoXWO61W2blFM=";
-      inherit patches;
+      version = "2.7.61.2";
+      hash = "sha256-plqN3RE4KoroG1/35UURjEnpGk3RYqigNGOt5iAVbaE=";
     };
   };
 
@@ -44,7 +61,8 @@ let
     {
       version,
       hash,
-      patches,
+      patches ? [ ],
+      ...
     }:
     super: {
       inherit version pname patches;
@@ -115,23 +133,12 @@ let
       passthru = allVersions;
 
     };
-  wxGTK31-prusa = wxGTK31.overrideAttrs (old: {
-    pname = "wxwidgets-prusa3d-patched";
-    version = "3.1.4";
-    src = fetchFromGitHub {
-      owner = "prusa3d";
-      repo = "wxWidgets";
-      rev = "489f6118256853cf5b299d595868641938566cdb";
-      hash = "sha256-xGL5I2+bPjmZGSTYe1L7VAmvLHbwd934o/cxg9baEvQ=";
-      fetchSubmodules = true;
-    };
-  });
   prusa-slicer-deps-override = prusa-slicer.override {
-    wxGTK-override = wxGTK31-prusa;
     opencascade-override = opencascade-occt_7_6;
   };
   allVersions = builtins.mapAttrs (
-    _name: version: (prusa-slicer-deps-override.overrideAttrs (override version))
+    _name: version:
+    (prusa-slicer-deps-override.override (version.overrides or { })).overrideAttrs (override version)
   ) versions;
 in
 allVersions.stable
