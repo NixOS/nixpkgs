@@ -2,9 +2,9 @@
 , tiles ? true
 , debug ? false
 , useXdgDir ? false
-, version ? "2025-05-14"
-, rev ? "5fe71bf02f544436e0f218ed53f4a4f0f560be6b"
-, sha256 ? "sha256-hfeHrvZjo7ttLG4SQmlJ//xUt8wUU9DY1K9FrVpZKGA="
+, version ? "v0.8.0-unstable-2025-05-17"
+, rev ? "4192d73997fa78a05e06b99fae8e34dd021226c5"
+, sha256 ? "sha256-jeyyJw5tkgvVgvpnDj5XkobzP8NBMd0YFk2ShTRcd9U="
 }:
 
 let
