@@ -12,6 +12,7 @@ fi
 wrapDotnetProgram() {
     local -r dotnetRuntime=@dotnetRuntime@
     local -r wrapperPath=@wrapperPath@
+    local -r libraryPathName=@libraryPathName@
 
     local -r dotnetFromEnvScript='dotnetFromEnv() {
     local dotnetPath
@@ -34,7 +35,7 @@ dotnetFromEnv'
     if (( ${#dotnetRuntimeDepsArray[@]} > 0 )); then
         local libraryPathArray=("${dotnetRuntimeDepsArray[@]/%//lib}")
         local OLDIFS="$IFS" IFS=':'
-        dotnetRuntimeDepsFlags+=("--suffix" "LD_LIBRARY_PATH" ":" "${libraryPathArray[*]}")
+        dotnetRuntimeDepsFlags+=("--suffix" "$libraryPathName" ":" "${libraryPathArray[*]}")
         IFS="$OLDIFS"
     fi
 
