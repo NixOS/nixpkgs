@@ -15,18 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "jesec-rtorrent";
-  version = "0.9.8-r16";
+  version = "0.9.8-r16-unstable-2023-07-21";
 
   src = fetchFromGitHub {
     owner = "jesec";
     repo = "rtorrent";
-    rev = "v${version}";
-    hash = "sha256-i7c1jSawHshj1kaXl8tdpelIKU24okeg9K5/+ht6t2k=";
+    rev = "199e8f85244c8eb1c30163d51755570ad86139bb";
+    hash = "sha256-AWWOvvUNNOIbNiwY/uz55iKt8A0YuMsyWGjaLgKUOCY=";
   };
-
-  patches = [
-    ./avoid-stack-overflow-for-lockfile-buf.patch
-  ];
 
   passthru = {
     inherit libtorrent;
