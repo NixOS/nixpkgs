@@ -16,16 +16,16 @@
 # files.
 
 let
-  version = "3.11";
+  version = "3.12";
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnugrep";
   inherit version;
 
   src = fetchurl {
     url = "mirror://gnu/grep/grep-${version}.tar.xz";
-    hash = "sha256-HbKu3eidDepCsW2VKPiUyNFdrk4ZC1muzHj1qVEnbqs=";
+    hash = "sha256-JkmyfA6Q5jLq3NdXvgbG6aT0jZQd5R58D4P/dkCKB7k=";
   };
 
   # Some gnulib tests fail
@@ -107,4 +107,4 @@ stdenv.mkDerivation {
   passthru = {
     inherit pcre2;
   };
-}
+})
