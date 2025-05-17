@@ -170,9 +170,19 @@ def generate_config_entry(profile: str, gen: str) -> str:
     boot_json = json.load(open(os.path.join(get_system_path(profile, gen), 'boot.json'), 'r'))
     boot_spec = bootjson_to_bootspec(boot_json)
 
-    entry = config_entry(2, boot_spec, f'Generation {gen}', time)
-    for spec, spec_boot_spec in boot_spec.specialisations.items():
-        entry += config_entry(2, spec_boot_spec, f'Generation {gen}, Specialisation {spec}', str(time))
+    specialisation_list = boot_spec.specialisations.items()
+    depth = 2
+    entry = ""
+
+    if len(specialisation_list) > 0:
+        depth += 1
+        entry += '/' * (depth-1) + f'Generation {gen}' + '\n'
+        entry += config_entry(depth, boot_spec, f'Default', str(time))
+    else:
+        entry += config_entry(depth, boot_spec, f'Generation {gen}', str(time))
+
+    for spec, spec_boot_spec in specialisation_list:
+        entry += config_entry(depth, spec_boot_spec, f'{spec}', str(time))
     return entry
 
 
