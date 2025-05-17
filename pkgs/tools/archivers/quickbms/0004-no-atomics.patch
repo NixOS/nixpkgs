@@ -1,0 +1,13 @@
+diff --git a/extra/stdatomic.h b/extra/stdatomic.h
+index 6af810f..737ee44 100644
+--- a/extra/stdatomic.h
++++ b/extra/stdatomic.h
+@@ -67,7 +67,7 @@
+ #endif
+
+ #if !defined(__CLANG_ATOMICS) && !defined(__GNUC_ATOMICS)
+-#if __has_feature(c_atomic)
++#if __has_feature(nonexistent_feature)
+ #define	__CLANG_ATOMICS
+ #elif __GNUC_PREREQ__(4, 7)
+ #define	__GNUC_ATOMICS
