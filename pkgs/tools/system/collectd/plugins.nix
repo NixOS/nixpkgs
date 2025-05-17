@@ -42,8 +42,8 @@
   varnish,
   xen,
   yajl,
-  # Defaults to `null` for all supported plugins (except xen, which is marked as
-  # insecure), otherwise a list of plugin names for a custom build
+  # Defaults to `null` for all supported plugins, otherwise a list of plugin
+  # names for a custom build
   enabledPlugins ? null,
   ...
 }:
@@ -195,7 +195,9 @@ let
   buildInputs =
     if enabledPlugins == null then
       builtins.concatMap pluginBuildInputs (
-        builtins.attrNames (builtins.removeAttrs plugins [ "xencpu" ])
+        builtins.attrNames (
+          builtins.removeAttrs plugins (lib.optional (!lib.meta.availableOn stdenv.hostPlatform xen) "xencpu")
+        )
       )
     else
       builtins.concatMap pluginBuildInputs enabledPlugins;
