@@ -17,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "magika";
-  version = "0.6.1";
+  version = "0.6.2";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-490ixzk2Ywsc150PQS1tmlPcmbpeNwmxrFP1a8mY5jU=";
+    hash = "sha256-N+tq6AIPbmjyMbwGBSwKDL6Ob6J0kts0Xo3IZ9vOsGc=";
   };
 
   nativeBuildInputs = [ hatchling ];
