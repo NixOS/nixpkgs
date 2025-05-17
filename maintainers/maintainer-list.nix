@@ -13951,7 +13951,7 @@
     email = "lheintzmann1@disroot.org";
     github = "lheintzmann1";
     githubId = 141759313;
-    name = "Lucas Heintzmann"
+    name = "Lucas Heintzmann";
   };
   lhvwb = {
     email = "nathaniel.baxter@gmail.com";
