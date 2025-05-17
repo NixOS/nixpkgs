@@ -1,0 +1,91 @@
+{
+    "release_date": "2024-02-05",
+    "release_label": "9.0.0",
+    "release_product": "cudnn",
+    "cudnn": {
+        "name": "NVIDIA CUDA Deep Neural Network library",
+        "license": "cudnn",
+        "license_path": "cudnn/LICENSE.txt",
+        "version": "9.0.0.312",
+        "linux-x86_64": {
+            "cuda11": {
+                "relative_path": "cudnn/linux-x86_64/cudnn-linux-x86_64-9.0.0.312_cuda11-archive.tar.xz",
+                "sha256": "52fa7088deb25d4555e37996b3d767e61d5d4397b7d45cce50bfc54cd8608a63",
+                "md5": "a56a8c3143f7b29e1ab28f42c1612949",
+                "size": "878943764"
+            },
+            "cuda12": {
+                "relative_path": "cudnn/linux-x86_64/cudnn-linux-x86_64-9.0.0.312_cuda12-archive.tar.xz",
+                "sha256": "d3890e609d6530ee5b88ff95b60c8e6b1c1ec7fa966ec533925f20f896fcc630",
+                "md5": "2d66eca078f49f9bb88f60cbc8ffdaed",
+                "size": "884762828"
+            }
+        },
+        "cuda_variant": [
+            "11",
+            "12"
+        ],
+        "linux-ppc64le": {
+            "cuda11": {
+                "relative_path": "cudnn/linux-ppc64le/cudnn-linux-ppc64le-9.0.0.312_cuda11-archive.tar.xz",
+                "sha256": "e8044c8d8932351fd0b0e9794b329ebf68408d7c42cc873ac3e40f6bb6be544d",
+                "md5": "753ffd78ece71ceb7d9c087f36cdc97d",
+                "size": "880270724"
+            },
+            "cuda12": {
+                "relative_path": "cudnn/linux-ppc64le/cudnn-linux-ppc64le-9.0.0.312_cuda12-archive.tar.xz",
+                "sha256": "b8ef6f249128e1985893a8787a21de35cb83ec47c6dc6fd1809061dd9a3ffb20",
+                "md5": "2cb57aa267bdad225ba0f20b36161037",
+                "size": "884272740"
+            }
+        },
+        "linux-sbsa": {
+            "cuda11": {
+                "relative_path": "cudnn/linux-sbsa/cudnn-linux-sbsa-9.0.0.312_cuda11-archive.tar.xz",
+                "sha256": "997e53e92e4047373edab0512c1efc7f2067111532abdeab974fe395947ae0ef",
+                "md5": "d72e421d8941c740e1be4b615bcaf309",
+                "size": "876952264"
+            },
+            "cuda12": {
+                "relative_path": "cudnn/linux-sbsa/cudnn-linux-sbsa-9.0.0.312_cuda12-archive.tar.xz",
+                "sha256": "430fbf5b513c69e989b3a3a5a572369778ce0c214ce1259af6b935f9cab7dd54",
+                "md5": "6666fde8aba096c2a41332da6643fdc9",
+                "size": "881467580"
+            }
+        },
+        "windows-x86_64": {
+            "cuda11": {
+                "relative_path": "cudnn/windows-x86_64/cudnn-windows-x86_64-9.0.0.312_cuda11-archive.zip",
+                "sha256": "a9b223a5cc3822b4d5d3e2a1aff90a55d1138d4714cb503842379fadacb4c305",
+                "md5": "eeb4c91f0bf9bd555d4c021ce88beab8",
+                "size": "671408613"
+            },
+            "cuda12": {
+                "relative_path": "cudnn/windows-x86_64/cudnn-windows-x86_64-9.0.0.312_cuda12-archive.zip",
+                "sha256": "ee40e0bb0d695e4793979cc88cbbe58ad1d83a0584a57a056c9259743fd86992",
+                "md5": "10d5afe5a53ee3089477bf154b8e9245",
+                "size": "674578905"
+            }
+        },
+        "linux-aarch64": {
+            "cuda12": {
+                "relative_path": "cudnn/linux-aarch64/cudnn-linux-aarch64-9.0.0.312_cuda12-archive.tar.xz",
+                "sha256": "38552583ebb8de96e83c9e6ec70d050254d8dc635ba47098d171ab3cc78b14f4",
+                "md5": "635c8334a3a9c1459a4f1f96a263ae9a",
+                "size": "904793708"
+            }
+        }
+    },
+    "cudnn_samples": {
+        "name": "NVIDIA cuDNN samples",
+        "license": "cudnn",
+        "license_path": "cudnn_samples/LICENSE.txt",
+        "version": "9.0.0.312",
+        "source": {
+            "relative_path": "cudnn_samples/source/cudnn_samples-source-9.0.0.312-archive.tar.xz",
+            "sha256": "ac4d2d0e0c56f66e6d4a67ae27cd2033a9fbec74f2793b36de40750be689d55f",
+            "md5": "4fa604c033dfd7f92c92b4e1e67a69ab",
+            "size": "1665112"
+        }
+    }
+}

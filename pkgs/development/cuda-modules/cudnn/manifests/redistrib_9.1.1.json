@@ -1,0 +1,77 @@
+{
+    "release_date": "2024-05-02",
+    "release_label": "9.1.1",
+    "release_product": "cudnn",
+    "cudnn": {
+        "name": "NVIDIA CUDA Deep Neural Network library",
+        "license": "cudnn",
+        "license_path": "cudnn/LICENSE.txt",
+        "version": "9.1.1.17",
+        "linux-x86_64": {
+            "cuda11": {
+                "relative_path": "cudnn/linux-x86_64/cudnn-linux-x86_64-9.1.1.17_cuda11-archive.tar.xz",
+                "sha256": "15a8b77123c1911606b45703691ad0990892c6098070ffab0bcaa003183a7dcb",
+                "md5": "e51befdc0ec0b05a41c394559afe7706",
+                "size": "860223884"
+            },
+            "cuda12": {
+                "relative_path": "cudnn/linux-x86_64/cudnn-linux-x86_64-9.1.1.17_cuda12-archive.tar.xz",
+                "sha256": "992b4be26899cc4c618bb1f6989261df7d0a9f9032b2217bf1fce9dd3228c904",
+                "md5": "3070d68644f976d5d90ba03001f9eda5",
+                "size": "862719644"
+            }
+        },
+        "cuda_variant": [
+            "11",
+            "12"
+        ],
+        "linux-sbsa": {
+            "cuda11": {
+                "relative_path": "cudnn/linux-sbsa/cudnn-linux-sbsa-9.1.1.17_cuda11-archive.tar.xz",
+                "sha256": "534984ea42f9e754d78aace88d6b5bed124c2557d84350c9488776e4d0dffa56",
+                "md5": "fdf8be589716b837bc5e403af8c7f076",
+                "size": "858354908"
+            },
+            "cuda12": {
+                "relative_path": "cudnn/linux-sbsa/cudnn-linux-sbsa-9.1.1.17_cuda12-archive.tar.xz",
+                "sha256": "19bd66ee9fb30348f18801a398d0bec98b4663866efa244ca122825b3429526c",
+                "md5": "f76b0e9d99eca1ce51c1c5d004962dd2",
+                "size": "861104620"
+            }
+        },
+        "windows-x86_64": {
+            "cuda11": {
+                "relative_path": "cudnn/windows-x86_64/cudnn-windows-x86_64-9.1.1.17_cuda11-archive.zip",
+                "sha256": "58cec56a754ffdea3d19c5bec88c4cbbf4d00b94fe1ecbf10a3b3b8fa1d1b00e",
+                "md5": "e22b13375c1027e90501d8793bc87f30",
+                "size": "669855455"
+            },
+            "cuda12": {
+                "relative_path": "cudnn/windows-x86_64/cudnn-windows-x86_64-9.1.1.17_cuda12-archive.zip",
+                "sha256": "3f1efb1a82e480594594e8b1fc8075a4852b4ada5a1fea3c8ec4b3ed1e5122ed",
+                "md5": "a233724bd523e74e29dfc6a046e5f247",
+                "size": "669632100"
+            }
+        },
+        "linux-aarch64": {
+            "cuda12": {
+                "relative_path": "cudnn/linux-aarch64/cudnn-linux-aarch64-9.1.1.17_cuda12-archive.tar.xz",
+                "sha256": "03d3969d2cb0182db7167b75edc362384e6b48b6686c318e05022a4f711c7edf",
+                "md5": "2ad3e4a74e59e19cc1aeaae09a015dfd",
+                "size": "891318940"
+            }
+        }
+    },
+    "cudnn_samples": {
+        "name": "NVIDIA cuDNN samples",
+        "license": "cudnn",
+        "license_path": "cudnn_samples/LICENSE.txt",
+        "version": "9.1.1.17",
+        "source": {
+            "relative_path": "cudnn_samples/source/cudnn_samples-source-9.1.1.17-archive.tar.xz",
+            "sha256": "67f900d296cf6ac6504f580471938f0ad7f406de0812f2d5d5e36eb12418de92",
+            "md5": "bd7916436ecc8d5eef271229e0d1d08f",
+            "size": "1666608"
+        }
+    }
+}

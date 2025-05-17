@@ -27,6 +27,7 @@
   # See ./modules/generic/manifests/feature/release.nix
   featureRelease,
   cudaMajorMinorVersion,
+  _cudb,
 }:
 let
   inherit (lib)
@@ -34,7 +35,6 @@ let
     lists
     strings
     trivial
-    licenses
     teams
     sourceTypes
     ;
@@ -321,31 +321,13 @@ in
     description = "${redistribRelease.name}. By downloading and using the packages you accept the terms and conditions of the ${finalAttrs.meta.license.shortName}";
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
     broken = lists.any trivial.id (attrsets.attrValues finalAttrs.brokenConditions);
-    platforms = trivial.pipe supportedRedistArchs [
-      # Map each redist arch to the equivalent nix system or null if there is no equivalent.
-      (builtins.map flags.getNixSystem)
-      # Filter out unsupported systems
-      (builtins.filter (nixSystem: !(strings.hasPrefix "unsupported-" nixSystem)))
-    ];
+    platforms = builtins.attrNames _cudb.recipes.${pname}.platforms;
     badPlatforms =
       let
         isBadPlatform = lists.any trivial.id (attrsets.attrValues finalAttrs.badPlatformsConditions);
       in
       lists.optionals isBadPlatform finalAttrs.meta.platforms;
-    license =
-      if redistName == "cuda" then
-        # Add the package-specific license.
-        let
-          licensePath =
-            if redistribRelease.license_path != null then
-              redistribRelease.license_path
-            else
-              "${pname}/LICENSE.txt";
-          url = "https://developer.download.nvidia.com/compute/cuda/redist/${licensePath}";
-        in
-        lib.licenses.nvidiaCudaRedist // { inherit url; }
-      else
-        licenses.unfree;
+    license = _cudb.licenses.${_cudb.recipes.${pname}.license}.compiled;
     teams = [ teams.cuda ];
   };
 })).overrideAttrs
