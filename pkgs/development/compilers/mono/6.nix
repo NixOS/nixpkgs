@@ -4,11 +4,11 @@
   fetchpatch,
 }:
 
-callPackage ./generic.nix (rec {
-  version = "6.14.0";
+callPackage ./generic.nix rec {
+  version = "6.14.1";
   src = fetchurl {
     url = "https://dl.winehq.org/mono/sources/mono/mono-${version}.tar.xz";
-    hash = "sha256-bdZLOQD15dX1UBbYnM92NchznLszzbgcHDthYi6R1RA=";
+    hash = "sha256-MCTJfAvIy81hHEAdX5lFKHBBCM6zHzGyjepHgwBNCCA=";
   };
   extraPatches = [
     # https://gitlab.winehq.org/mono/mono/-/merge_requests/101
@@ -18,4 +18,4 @@ callPackage ./generic.nix (rec {
       hash = "sha256-qyc3t1OyDzWBSnNW+W2YpdgFfTBs1Ew13jwdGKs09u0=";
     })
   ];
-})
+}
