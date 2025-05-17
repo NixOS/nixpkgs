@@ -5838,6 +5838,7 @@ with pkgs;
 
   rust_1_89 = callPackage ../development/compilers/rust/1_89.nix {
     llvm_20 = llvmPackages_20.libllvm;
+    llvmPackages = llvmPackages_20;
   };
   rust = rust_1_89;
 
