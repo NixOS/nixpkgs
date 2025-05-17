@@ -98,6 +98,9 @@
   "sec-nixos-test-wifi-vwifi-server": [
     "index.html#sec-nixos-test-wifi-vwifi-server"
   ],
+  "sec-nixpkgs-release-25.05-deprecations": [
+    "release-notes.html#sec-nixpkgs-release-25.05-deprecations"
+  ],
   "sec-obtaining": [
     "index.html#sec-obtaining"
   ],
