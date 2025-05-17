@@ -1,0 +1,61 @@
+diff --git a/lib/utils_device.c b/lib/utils_device.c
+index 998d5e4f2176a2670100fde7c872145b32555a16..84acf29b75f55519403052e8fc870d855dc57afc 100644
+--- a/lib/utils_device.c
++++ b/lib/utils_device.c
+@@ -48,7 +48,7 @@ struct device {
+ 
+ static size_t device_fs_block_size_fd(int fd)
+ {
+-	size_t page_size = crypt_getpagesize();
++	size_t max_size = MAX_SECTOR_SIZE;
+ 
+ #if HAVE_SYS_STATVFS_H
+ 	struct statvfs buf;
+@@ -57,10 +57,10 @@ static size_t device_fs_block_size_fd(int fd)
+ 	 * NOTE: some filesystems (NFS) returns bogus blocksize (1MB).
+ 	 * Page-size io should always work and avoids increasing IO beyond aligned LUKS header.
+ 	 */
+-	if (!fstatvfs(fd, &buf) && buf.f_bsize && buf.f_bsize <= page_size)
++	if (!fstatvfs(fd, &buf) && buf.f_bsize && buf.f_bsize <= max_size)
+ 		return (size_t)buf.f_bsize;
+ #endif
+-	return page_size;
++	return max_size;
+ }
+ 
+ static size_t device_block_size_fd(int fd, size_t *min_size)
+@@ -533,7 +533,7 @@ void device_topology_alignment(struct crypt_device *cd,
+ 
+ 	/* minimum io size */
+ 	if (ioctl(fd, BLKIOMIN, &min_io_size) == -1) {
+-		log_dbg(cd, "Topology info for %s not supported, using default offset %lu bytes.",
++		log_dbg(cd, "Topology info for %s not supported, using default alignment %lu bytes.",
+ 			device->path, default_alignment);
+ 		goto out;
+ 	}
+diff --git a/lib/utils_wipe.c b/lib/utils_wipe.c
+index 464c6ff28a283a86a705943bc5b450976f0194b8..6ab2f36a2705e54c667c85d7a5818b402c2b43c9 100644
+--- a/lib/utils_wipe.c
++++ b/lib/utils_wipe.c
+@@ -172,6 +172,10 @@ int crypt_wipe_device(struct crypt_device *cd,
+ 	/* Note: LUKS1 calls it with wipe_block not aligned to multiple of bsize */
+ 	bsize = device_block_size(cd, device);
+ 	alignment = device_alignment(device);
++
++	log_dbg(cd, "Wipe device %s [%u], offset %" PRIu64 ", length %" PRIu64 ", block %zu, bsize %zu, align %zu.",
++		device_path(device), (unsigned)pattern, offset, length, wipe_block_size, bsize, alignment);
++
+ 	if (!bsize || !alignment || !wipe_block_size)
+ 		return -EINVAL;
+ 
+@@ -287,9 +291,6 @@ int crypt_wipe(struct crypt_device *cd,
+ 	if (!wipe_block_size)
+ 		wipe_block_size = 1024*1024;
+ 
+-	log_dbg(cd, "Wipe [%u] device %s, offset %" PRIu64 ", length %" PRIu64 ", block %zu.",
+-		(unsigned)pattern, device_path(device), offset, length, wipe_block_size);
+-
+ 	r = crypt_wipe_device(cd, device, pattern, offset, length,
+ 			      wipe_block_size, progress, usrptr);
+ 
+
