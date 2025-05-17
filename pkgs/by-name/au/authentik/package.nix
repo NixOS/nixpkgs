@@ -16,13 +16,13 @@
 }:
 
 let
-  version = "2025.2.3";
+  version = "2025.4.0";
 
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
     rev = "version/${version}";
-    hash = "sha256-aaSAlFIc5Gn5PJPVuObi24Y86/3N3yFJVQTx1tV2i2A=";
+    hash = "sha256-QuIgeu3CN6S44/zSiaj+iIkDz2494mb1MWvD3eYYkVE=";
   };
 
   meta = with lib; {
@@ -45,7 +45,7 @@ let
 
     sourceRoot = "source/website";
 
-    outputHash = "sha256-lPpphGi8l2X/fR9YoJv37piAe82oqSLAKHze8oTrGNc=";
+    outputHash = "sha256-AnQpjCoCTzm28Wl/t3YHx0Kl0CuMHL2OgRjRB1Trrsw=";
     outputHashMode = "recursive";
 
     nativeBuildInputs = [
@@ -55,7 +55,7 @@ let
 
     buildPhase = ''
       npm ci --cache ./cache
-      rm -r ./cache node_modules/@parcel/watcher-linux-* node_modules/.package-lock.json
+      rm -r ./cache node_modules/.package-lock.json
     '';
 
     installPhase = ''
@@ -131,7 +131,7 @@ let
       ln -s ${src}/website $out/
       ln -s ${clientapi} $out/web/node_modules/@goauthentik/api
     '';
-    npmDepsHash = "sha256-uVur1DyXaIGPny7u/JQyx9HQ7VJqeSi2pPSORZgLjEw=";
+    npmDepsHash = "sha256-i95sH+KUgAQ76cv1+7AE/UA6jsReQMttDGWClNE2Ol4=";
 
     postPatch = ''
       cd web
@@ -215,14 +215,19 @@ let
             --replace-fail '/blueprints' "$out/blueprints" \
             --replace-fail './media' '/var/lib/authentik/media'
           substituteInPlace pyproject.toml \
-            --replace-fail 'dumb-init = "*"' "" \
+            --replace-fail '"dumb-init",' "" \
             --replace-fail 'djangorestframework-guardian' 'djangorestframework-guardian2'
           substituteInPlace authentik/stages/email/utils.py \
             --replace-fail 'web/' '${webui}/'
         '';
 
         nativeBuildInputs = [
-          prev.poetry-core
+          prev.hatchling
+          prev.pythonRelaxDepsHook
+        ];
+
+        pythonRelaxDeps = [
+          "xmlsec"
         ];
 
         propagatedBuildInputs =
@@ -298,6 +303,7 @@ let
           ++ django-storages.optional-dependencies.s3
           ++ opencontainers.optional-dependencies.reggie
           ++ psycopg.optional-dependencies.c
+          ++ psycopg.optional-dependencies.pool
           ++ uvicorn.optional-dependencies.standard;
 
         postInstall = ''
@@ -330,7 +336,7 @@ let
 
     env.CGO_ENABLED = 0;
 
-    vendorHash = "sha256-aG/VqpmHJeGyF98aS0jgwEAq1R5c8VggeJxLWS9W8HY=";
+    vendorHash = "sha256-cEB22KFDONcJBq/FvLpYKN7Zd06mh8SACvCSuj5i4fI=";
 
     postInstall = ''
       mv $out/bin/server $out/bin/authentik
