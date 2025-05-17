@@ -1,0 +1,27 @@
+diff --git a/thtk/CMakeLists.txt b/thtk/CMakeLists.txt
+index 27379c4..9a6c63a 100644
+--- a/thtk/CMakeLists.txt
++++ b/thtk/CMakeLists.txt
+@@ -27,7 +27,7 @@ set_target_properties(thtk PROPERTIES
+ 
+ find_package(PkgConfig)
+ if (PKG_CONFIG_FOUND)
+-  configure_file(thtk.pc.in ${CMAKE_CURRENT_BINARY_DIR}/thtk.pc)
++  configure_file(thtk.pc.in ${CMAKE_CURRENT_BINARY_DIR}/thtk.pc @ONLY)
+   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/thtk.pc
+     DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+ endif()
+diff --git a/thtk/thtk.pc.in b/thtk/thtk.pc.in
+index 15526e6..89b0315 100644
+--- a/thtk/thtk.pc.in
++++ b/thtk/thtk.pc.in
+@@ -1,7 +1,7 @@
+ prefix = @CMAKE_INSTALL_PREFIX@
+ exec_prefix = ${prefix}
+-includedir = ${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
+-libdir = ${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
++includedir = ${prefix}/include
++libdir = ${exec_prefix}/lib
+ 
+ Name: @PROJECT_NAME@
+ Description: Touhou Toolkit shared library
