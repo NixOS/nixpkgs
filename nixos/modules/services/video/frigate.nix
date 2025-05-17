@@ -127,6 +127,7 @@ in
     enable = mkEnableOption "Frigate NVR";
 
     package = mkPackageOption pkgs "frigate" { };
+    ffmpegPackage = mkPackageOption pkgs "ffmpeg-headless" { };
 
     hostname = mkOption {
       type = str;
@@ -630,7 +631,7 @@ in
         [
           # unfree:
           # config.boot.kernelPackages.nvidiaPackages.latest.bin
-          ffmpeg-headless
+          cfg.ffmpegPackage
           libva-utils
           procps
           radeontop
