@@ -6479,6 +6479,12 @@
     githubId = 131907205;
     name = "David Thievon";
   };
+  dolphindalt = {
+    email = "dolphindalt@gmail.com";
+    github = "dolphindalt";
+    githubId = 13937320;
+    name = "Dalton Caron";
+  };
   domenkozar = {
     email = "domen@dev.si";
     github = "domenkozar";
