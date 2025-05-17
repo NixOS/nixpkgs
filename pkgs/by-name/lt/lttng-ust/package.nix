@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lttng-ust";
-  version = "2.13.8";
+  version = "2.13.9";
 
   src = fetchurl {
     url = "https://lttng.org/files/lttng-ust/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-1O+Y2rmjetT1JMyv39UK9PJmA5tSjdWvq8545JAk2Tc=";
+    sha256 = "sha256-KtbWmlSh2STBikqnojPbEE48wzK83SQOGWv3rb7T9xI=";
   };
 
   outputs = [
