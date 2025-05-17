@@ -4829,7 +4829,7 @@ let
           name = "teroshdl";
           publisher = "teros-technology";
           version = "7.0.3";
-          hash = "sha256-JEFNYSyGCsmsiJ89R4fWy/cUU6pDW1HA2P1Sr90QJHU=";
+          hash = "sha256-Bt31ia0X4sQQfREq8PPVEGt/oGe/Oob0yQbYkwNRSsk=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/teros-technology.teroshdl/changelog";
