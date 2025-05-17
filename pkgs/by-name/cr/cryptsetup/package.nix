@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   lvm2,
   json_c,
   asciidoctor,
@@ -43,6 +44,14 @@ stdenv.mkDerivation rec {
   patches = [
     # Allow reading tokens from a relative path, see #167994
     ./relative-token-path.patch
+
+    # Do not use pagesize as fallback for block size.
+    # Remove when https://gitlab.com/cryptsetup/cryptsetup/-/merge_requests/782 is in the latest stable release
+    # Fixes https://gitlab.com/cryptsetup/cryptsetup/-/issues/943
+    (fetchpatch {
+      url = "https://gitlab.com/cryptsetup/cryptsetup/-/commit/a39a0d00e504ad7a89442874f72cf0561d6089c4.diff";
+      hash = "sha256-teQ/uFYrKuS0ksMEv7rP+d9EUuOl3sINsNhDC88P0xw=";
+    })
   ];
 
   postPatch = ''
