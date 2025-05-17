@@ -5978,7 +5978,7 @@ with pkgs;
   wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
 
   rust_1_87 = callPackage ../development/compilers/rust/1_87.nix {
-    llvm_20 = llvmPackages_20.libllvm;
+    llvm = llvmPackages.libllvm;
   };
   rust = rust_1_87;
 
