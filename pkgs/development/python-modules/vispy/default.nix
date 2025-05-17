@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "vispy";
-  version = "0.14.3";
+  version = "0.15.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-77u4R6kIuvfnFpq5vylhOKOTZPNn5ssKjsA61xaZ0x0=";
+    hash = "sha256-rDwLAmQ033J249GPNZXrrhpqkt+hqwYpMiL9gRzi+lU=";
   };
 
   patches = lib.optionals (!stdenv.hostPlatform.isDarwin) [
