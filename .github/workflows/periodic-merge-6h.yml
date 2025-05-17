@@ -35,4 +35,5 @@ jobs:
     with:
       from: ${{ matrix.pairs.from }}
       into: ${{ matrix.pairs.into }}
+    name: ${{ format('{0} → {1}', matrix.pairs.from, matrix.pairs.into) }}
     secrets: inherit
