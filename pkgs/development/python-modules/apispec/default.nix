@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "apispec";
-  version = "6.8.1";
+  version = "6.8.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9JFsu3vhVpY7GPWSmg5CvSNJE1g0toCoGxJDK8+qmjk=";
+    hash = "sha256-zltpufzwJQy1a6DBpSp1/yLC98WGZU5XiEOZAYxRnyY=";
   };
 
   nativeBuildInputs = [ flit-core ];
