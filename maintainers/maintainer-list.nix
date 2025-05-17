@@ -11132,6 +11132,7 @@
     name = "Jappie Klooster";
   };
   jappie3 = {
+    email = "jappie3+git@jappie.dev";
     name = "Jappie3";
     matrix = "@jappie:jappie.dev";
     github = "Jappie3";
@@ -25639,6 +25640,11 @@
     email = "v@anomalous.eu";
     github = "deviant";
     githubId = 68829907;
+  };
+  vaavaav = {
+    name = "Pedro Peixoto";
+    github = "vaavaav";
+    githubId = 56087034;
   };
   vaci = {
     email = "vaci@vaci.org";
