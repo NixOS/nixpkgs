@@ -127,11 +127,11 @@ stubs
   ### L ###
 
   libauto = throw "'darwin.libauto' has been removed, as it was broken and unmaintained"; # added 2024-05-10
-  libresolvHeaders = lib.warn "darwin.libresolvHeaders: use `lib.getInclude darwin.libresolv`; this will be removed in 25.11" (
+  libresolvHeaders = lib.warnOnInstantiate "darwin.libresolvHeaders: use `lib.getInclude darwin.libresolv`; this will be removed in 25.11" (
     lib.getDev self.libresolv
   ); # added 2025-04-20
   libtapi = pkgs.libtapi; # 2024-08-16
-  libutilHeaders = lib.warn "darwin.libutilHeaders: use `lib.getInclude darwin.libutil`; this will be removed in 25.11" (
+  libutilHeaders = lib.warnOnInstantiate "darwin.libutilHeaders: use `lib.getInclude darwin.libutil`; this will be removed in 25.11" (
     lib.getDev self.libutil
   ); # added 2025-04-20
 
@@ -154,7 +154,8 @@ stubs
   ### S ###
 
   stdenvNoCF =
-    lib.warn "darwin.stdenvNoCF: use `stdenv` or `stdenvNoCC`; this will be removed in 25.11"
+    lib.warnOnInstantiate
+      "darwin.stdenvNoCF: use `stdenv` or `stdenvNoCC`; this will be removed in 25.11"
       (
         pkgs.stdenv.override {
           extraBuildInputs = [ ];
