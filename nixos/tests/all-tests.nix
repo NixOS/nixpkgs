@@ -309,6 +309,7 @@ in
   cloud-init = handleTest ./cloud-init.nix { };
   cloud-init-hostname = handleTest ./cloud-init-hostname.nix { };
   cloudlog = handleTest ./cloudlog.nix { };
+  cmk-agent = handleTest ./cmk-agent.nix { };
   cntr = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./cntr.nix { };
   cockpit = handleTest ./cockpit.nix { };
   cockroachdb = handleTestOn [ "x86_64-linux" ] ./cockroachdb.nix { };
