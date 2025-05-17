@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cpr";
-  version = "1.11.0";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "libcpr";
     repo = "cpr";
     tag = finalAttrs.version;
-    hash = "sha256-jWyss0krj8MVFqU1LAig+4UbXO5pdcWIT+hCs9DxemM=";
+    hash = "sha256-nKX9AYVC4e3B+vOzXWZu8S4I5BNpKnqkFJ2e8bVAUE4=";
   };
 
   nativeBuildInputs = [

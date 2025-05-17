@@ -10181,10 +10181,6 @@ self: super: with self; {
 
   oath = callPackage ../development/python-modules/oath { };
 
-  oauth = callPackage ../development/python-modules/oauth { };
-
-  oauth2 = callPackage ../development/python-modules/oauth2 { };
-
   oauth2client = callPackage ../development/python-modules/oauth2client { };
 
   oauthenticator = callPackage ../development/python-modules/oauthenticator { };
@@ -10318,6 +10314,8 @@ self: super: with self; {
   };
 
   onnxruntime-tools = callPackage ../development/python-modules/onnxruntime-tools { };
+
+  onnxslim = callPackage ../development/python-modules/onnxslim { };
 
   onvif-zeep = callPackage ../development/python-modules/onvif-zeep { };
 

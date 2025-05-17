@@ -7825,6 +7825,12 @@
     github = "hatch01";
     githubId = 42416805;
   };
+  ezrizhu = {
+    name = "Ezri Zhu";
+    email = "me@ezrizhu.com";
+    github = "ezrizhu";
+    githubId = 44515009;
+  };
   f--t = {
     email = "git@f-t.me";
     github = "f--t";
@@ -16076,6 +16082,12 @@
     github = "mikefaille";
     githubId = 978196;
     name = "Michaël Faille";
+  };
+  mikehorn = {
+    email = "mikehornproton@proton.me";
+    github = "MikeHorn-git";
+    githubId = 123373126;
+    name = "Mike Horn";
   };
   mikesperber = {
     email = "sperber@deinprogramm.de";
@@ -25627,6 +25639,11 @@
     email = "v@anomalous.eu";
     github = "deviant";
     githubId = 68829907;
+  };
+  vaavaav = {
+    name = "Pedro Peixoto";
+    github = "vaavaav";
+    githubId = 56087034;
   };
   vaci = {
     email = "vaci@vaci.org";
