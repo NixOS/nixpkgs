@@ -1,4 +1,5 @@
 import base64
+import concurrent.futures
 import io
 import os
 import platform
@@ -137,8 +138,28 @@ def _preprocess_screenshot(screenshot_path: str, negate: bool = False) -> str:
     return out_file
 
 
+def _ocr_task(image_path: str, model_id: int) -> str:
+    ret = subprocess.run(
+        [
+            "tesseract",
+            image_path,
+            "-",
+            "--oem",
+            str(model_id),
+            "-c",
+            "debug_file=/dev/null",
+            "--psm",
+            "11",
+        ],
+        capture_output=True,
+    )
+    if ret.returncode != 0:
+        raise MachineError(f"OCR failed with exit code {ret.returncode}")
+    return ret.stdout.decode("utf-8")
+
+
 def _perform_ocr_on_screenshot(
-    screenshot_path: str, model_ids: Iterable[int]
+    screenshot_path: str, model_ids: Iterable[int], parallelism: int = 1
 ) -> list[str]:
     if shutil.which("tesseract") is None:
         raise MachineError("OCR requested but enableOCR is false")
@@ -146,26 +167,20 @@ def _perform_ocr_on_screenshot(
     processed_image = _preprocess_screenshot(screenshot_path, negate=False)
     processed_negative = _preprocess_screenshot(screenshot_path, negate=True)
 
+    ocr_futures = []
     model_results = []
-    for image in [screenshot_path, processed_image, processed_negative]:
-        for model_id in model_ids:
-            ret = subprocess.run(
-                [
-                    "tesseract",
-                    image,
-                    "-",
-                    "--oem",
-                    str(model_id),
-                    "-c",
-                    "debug_file=/dev/null",
-                    "--psm",
-                    "11",
-                ],
-                capture_output=True,
-            )
-            if ret.returncode != 0:
-                raise MachineError(f"OCR failed with exit code {ret.returncode}")
-            model_results.append(ret.stdout.decode("utf-8"))
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=parallelism) as executor:
+        for image in [screenshot_path, processed_image, processed_negative]:
+            for model_id in model_ids:
+                ocr_futures.append(executor.submit(_ocr_task, image, model_id))
+
+        for ocr_future in concurrent.futures.as_completed(ocr_futures):
+            try:
+                model_results.append(ocr_future.result())
+            except Exception as e:
+                executor.shutdown(wait=True, cancel_futures=True)
+                raise e
 
     return model_results
 
@@ -1004,10 +1019,14 @@ class Machine:
         self.execute(f"fold -w 80 /dev/vcs{tty} | systemd-cat")
 
     def _get_screen_text_variants(self, model_ids: Iterable[int]) -> list[str]:
+        ocr_parallelism = int(os.getenv("NIX_BUILD_CORES", "1"))
+
         with tempfile.TemporaryDirectory() as tmpdir:
             screenshot_path = os.path.join(tmpdir, "ppm")
             self.send_monitor_command(f"screendump {screenshot_path}")
-            return _perform_ocr_on_screenshot(screenshot_path, model_ids)
+            return _perform_ocr_on_screenshot(
+                screenshot_path, model_ids, ocr_parallelism
+            )
 
     def get_screen_text_variants(self) -> list[str]:
         """
