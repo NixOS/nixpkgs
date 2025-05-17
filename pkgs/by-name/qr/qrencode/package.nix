@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  SDL2,
   libpng,
   libiconv,
   autoreconfHook,
@@ -36,8 +35,6 @@ stdenv.mkDerivation (finalAttrs: rec {
     libiconv
     libpng
   ];
-
-  nativeCheckInputs = [ SDL2 ];
 
   doCheck = false;
 
