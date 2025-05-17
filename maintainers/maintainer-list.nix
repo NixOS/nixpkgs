@@ -5197,6 +5197,17 @@
     githubId = 176372446;
     name = "Katja Kwast";
   };
+  culxttes = {
+    email = "culottes@sagbot.com";
+    name = "Edouard Haddag";
+    github = "culxttes";
+    githubId = 59392138;
+    keys = [
+      {
+        fingerprint = "C15C C360 2178 F45D BCD5  D07D A2A7 3EE1 93D1 6B42";
+      }
+    ];
+  };
   curran = {
     email = "curran@mercury.com";
     github = "curranosaurus";
