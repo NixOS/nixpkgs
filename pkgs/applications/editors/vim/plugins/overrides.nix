@@ -3953,6 +3953,13 @@ in
     ];
   };
 
+  yaml-schema-detect-nvim = super.yaml-schema-detect-nvim.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      nvim-lspconfig
+    ];
+  };
+
   yanky-nvim = super.yanky-nvim.overrideAttrs {
     nvimSkipModules = [
       # Optional telescope integration
