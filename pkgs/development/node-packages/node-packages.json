@@ -124,6 +124,7 @@
 , "np"
 , "npm-merge-driver"
 , "nrm"
+, "openapi-typescript"
 , "parsoid"
 , "peerflix"
 , "peerflix-server"
