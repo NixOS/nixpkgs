@@ -45,7 +45,7 @@ SWITCH_TO_CONFIGURATION_CMD_PREFIX: Final = [
     "--service-type=exec",
     "--unit=nixos-rebuild-switch-to-configuration",
 ]
-logger = logging.getLogger(__name__)
+logger: Final = logging.getLogger(__name__)
 
 
 def build(
