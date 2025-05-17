@@ -25,9 +25,9 @@ buildPythonPackage rec {
     hash = "sha256-zltpufzwJQy1a6DBpSp1/yLC98WGZU5XiEOZAYxRnyY=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [ packaging ];
+  dependencies = [ packaging ];
 
   optional-dependencies = {
     marshmallow = [ marshmallow ];
