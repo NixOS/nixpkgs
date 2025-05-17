@@ -26446,6 +26446,12 @@
     githubId = 5185341;
     name = "Will Cohen";
   };
+  WillemToorenburgh = {
+    email = "willemtoorenburgh@gmail.com";
+    github = "willemtoorenburgh";
+    githubId = 50425141;
+    name = "Willem Toorenburgh";
+  };
   williamvds = {
     email = "nixpkgs@williamvds.me";
     github = "williamvds";
