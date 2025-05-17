@@ -379,6 +379,10 @@ let
           "x86_64-linux"
           "aarch64-linux"
         ];
+        pkgsBolt.stdenv = [
+          "x86_64-linux"
+          "aarch64-linux"
+        ];
         pkgsArocc.stdenv = [
           "x86_64-linux"
           "aarch64-linux"

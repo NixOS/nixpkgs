@@ -16,6 +16,7 @@
   patches ? [ ],
   devExtraCmakeFlags ? [ ],
   fetchpatch,
+  replaceVars,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -83,12 +84,19 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mkdir -p $dev/lib
     mv $out/lib/libLLVMBOLT*.a $dev/lib
+
+    mkdir -p $out/nix-support
+    cp $setupHook $out/nix-support/setup-hook
   '';
 
   outputs = [
     "out"
     "dev"
   ];
+
+  setupHook = replaceVars ./setup-hook.sh.in {
+    readelf = lib.getExe' libllvm "llvm-readelf";
+  };
 
   meta = llvm_meta // {
     homepage = "https://github.com/llvm/llvm-project/tree/main/bolt";

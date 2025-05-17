@@ -69,6 +69,9 @@ lib.init bootStages
           extraNativeBuildInputs =
             old.extraNativeBuildInputs
             ++ lib.optionals (hostPlatform.isLinux && !buildPlatform.isLinux) [ buildPackages.patchelf ]
+            ++ lib.optionals hostPlatform.useBolt [
+              buildPackages.llvmPackages.bolt
+            ]
             ++ lib.optional (
               let
                 f =
