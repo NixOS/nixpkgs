@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "minify";
-  version = "2.23.1";
+  version = "2.23.3";
 
   src = fetchFromGitHub {
     owner = "tdewolff";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-v0KLQlf2WhI18uanVtvWfX6/7s9ZtfPM5AGyEIHZf54=";
+    hash = "sha256-HH63DbSXVAfI4M6LZSMt0YIC0XbP+aiRVuAPcBsNS5w=";
   };
 
   vendorHash = "sha256-Btc5d/wwDmjhyDZwAIHDSbXuh8xqq/nIjTAkPsdeHU4=";
