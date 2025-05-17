@@ -5,26 +5,25 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.xserver.windowManager.yeahwm;
 in
 {
   ###### interface
-  options = {
-    services.xserver.windowManager.yeahwm.enable = mkEnableOption "yeahwm";
+  options.services.xserver.windowManager.yeahwm = {
+    enable = lib.mkEnableOption "yeahwm";
+    package = lib.mkPackageOption pkgs "yeahwm" { };
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton {
+  config = lib.mkIf cfg.enable {
+    services.xserver.windowManager.session = lib.singleton {
       name = "yeahwm";
       start = ''
-        ${pkgs.yeahwm}/bin/yeahwm &
+        ${cfg.package}/bin/yeahwm &
         waitPID=$!
       '';
     };
-    environment.systemPackages = [ pkgs.yeahwm ];
+    environment.systemPackages = [ cfg.package ];
   };
 }
