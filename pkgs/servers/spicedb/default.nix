@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -22,6 +23,15 @@ buildGoModule rec {
   ];
 
   subPackages = [ "cmd/spicedb" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd spicedb \
+      --bash <($out/bin/spicedb completion bash) \
+      --fish <($out/bin/spicedb completion fish) \
+      --zsh <($out/bin/spicedb completion zsh)
+  '';
 
   meta = with lib; {
     description = "Open source permission database";
