@@ -1,9 +1,11 @@
 {
-  deviceNameStrategy,
+  csv-files,
+  device-name-strategy,
+  discovery-mode,
+  mounts,
   glibc,
   jq,
   lib,
-  mounts,
   nvidia-container-toolkit,
   nvidia-driver,
   runtimeShell,
@@ -36,7 +38,14 @@ writeScriptBin "nvidia-cdi-generator" ''
   function cdiGenerate {
     ${lib.getExe' nvidia-container-toolkit "nvidia-ctk"} cdi generate \
       --format json \
-      --device-name-strategy ${deviceNameStrategy} \
+      ${
+        if (builtins.length csv-files) > 0 then
+          lib.concatMapStringsSep "\n" (file: "--csv.file ${file} \\") csv-files
+        else
+          "\\"
+      }
+      --discovery-mode ${discovery-mode} \
+      --device-name-strategy ${device-name-strategy} \
       --ldconfig-path ${lib.getExe' glibc "ldconfig"} \
       --library-search-path ${lib.getLib nvidia-driver}/lib \
       --nvidia-cdi-hook-path ${lib.getExe' nvidia-container-toolkit.tools "nvidia-cdi-hook"}
