@@ -25,6 +25,7 @@ let
 
   jre' = jre_minimal.override {
     jdk = jdk17_headless;
+    jdkOnBuild = jdk17_headless;
     # from https://gitlab.com/signald/signald/-/blob/0.23.0/build.gradle#L173
     modules = [
       "java.base"
