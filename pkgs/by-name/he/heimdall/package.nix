@@ -61,7 +61,9 @@ stdenv.mkDerivation rec {
     homepage = "https://git.sr.ht/~grimler/Heimdall";
     description = "Cross-platform tool suite to flash firmware onto Samsung Galaxy devices";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [
+      timschumi
+    ];
     platforms = platforms.unix;
     mainProgram = "heimdall${lib.optionalString enableGUI "-frontend"}";
   };
