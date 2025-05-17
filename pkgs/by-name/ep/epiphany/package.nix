@@ -5,6 +5,7 @@
   ninja,
   gettext,
   fetchurl,
+  fetchpatch,
   pkg-config,
   gtk4,
   glib,
@@ -43,6 +44,22 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://gnome/sources/epiphany/${lib.versions.major finalAttrs.version}/epiphany-${finalAttrs.version}.tar.xz";
     hash = "sha256-2ilT5+K3O/dHPAozl5EE15NieVKV6qCio46hiFN9rxM=";
   };
+
+  patches = [
+    # shell: Fix startup crash on Pantheon
+    # https://gitlab.gnome.org/GNOME/epiphany/-/merge_requests/1818
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/epiphany/-/commit/ac33dc67ea66a44a5c81bb4b419423e4f315f3b3.patch";
+      hash = "sha256-meufd5gnhLcK0dgIXEMDnid9e1R2M1D3jZ9Yoh6YobM=";
+    })
+
+    # action-bar-end: Fix startup crash on Pantheon
+    # https://gitlab.gnome.org/GNOME/epiphany/-/merge_requests/1819
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/epiphany/-/commit/605a12faa56fec14940ea403ed06f6894c75d519.patch";
+      hash = "sha256-GnZQC4rtBYRr+x9mF8pCFDcDOjEJj+27ECdXBNL42kQ=";
+    })
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
