@@ -4824,6 +4824,23 @@ let
 
       tekumara.typos-vscode = callPackage ./tekumara.typos-vscode { };
 
+      teros-technology.teroshdl = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "teroshdl";
+          publisher = "teros-technology";
+          version = "7.0.3";
+          hash = "sha256-Bt31ia0X4sQQfREq8PPVEGt/oGe/Oob0yQbYkwNRSsk=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/teros-technology.teroshdl/changelog";
+          description = "Visual Studio Code extension for HDL developments (SystemVerilog/Verilog/VHDL)";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=teros-technology.teroshdl";
+          homepage = "https://github.com/TerosTechnology/vscode-terosHDL";
+          license = lib.licenses.gpl3;
+          maintainers = [ lib.maintainers.lheintzmann1 ];
+        };
+      };
+
       theangryepicbanana.language-pascal = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "language-pascal";
