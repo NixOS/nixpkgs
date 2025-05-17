@@ -4729,8 +4729,6 @@ with pkgs;
 
   tweet-hs = haskell.lib.compose.justStaticExecutables haskellPackages.tweet-hs;
 
-  tkgate = callPackage ../applications/science/electronics/tkgate/1.x.nix { };
-
   tremor-rs = callPackage ../tools/misc/tremor-rs { };
 
   tremor-language-server = callPackage ../tools/misc/tremor-rs/ls.nix { };
