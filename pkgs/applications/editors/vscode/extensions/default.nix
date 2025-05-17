@@ -4837,6 +4837,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=teros-technology.teroshdl";
           homepage = "https://github.com/TerosTechnology/vscode-terosHDL";
           license = lib.licenses.gpl3;
+          maintainers = [ lib.maintainers.lheintzmann1 ];
         };
       };
 
