@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchzip,
-  fetchpatch,
   bzip2,
   lzo,
   openssl_1_1,
@@ -11,29 +10,29 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.11.0";
+  version = "0.12.0";
   pname = "quickbms";
 
   src = fetchzip {
     url = "https://aluigi.altervista.org/papers/quickbms-src-${version}.zip";
-    hash = "sha256-uQKTE36pLO8uhrX794utqaDGUeyqRz6zLCQFA7DYkNc=";
+    hash = "sha256-thD4wYjiYuwCzjuXmhVfMEhhlSHHOLa5yl0uDhF6aMA=";
   };
 
   patches = [
     # Fix errors on x86_64 and _rotl definition
-    (fetchpatch {
-      name = "0001-fix-compile.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix-compile.patch?h=quickbms&id=a2e3e4638295d7cfe39513bfef9447fb23154a6b";
-      hash = "sha256-49fT/L4BNzMYnq1SXhFMgSDLybLkz6KSbgKmUpZZu08=";
-      stripLen = 1;
-    })
+    ./0001-fix-compile.patch
   ] ++ lib.optional (!opensslSupport) ./0002-disable-openssl.patch;
 
   buildInputs = [
     bzip2
     lzo
     zlib
-  ] ++ lib.optional (opensslSupport) openssl_1_1;
+  ] ++ lib.optional opensslSupport openssl_1_1;
+
+  env.NIX_CFLAGS_COMPILE = builtins.toString [
+    "-Wno-error=implicit-function-declaration"
+    "-Wno-error=incompatible-pointer-types"
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
