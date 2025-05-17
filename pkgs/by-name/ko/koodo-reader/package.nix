@@ -3,42 +3,49 @@
   stdenv,
   fetchFromGitHub,
   fetchYarnDeps,
-  yarnConfigHook,
-  yarnBuildHook,
-  nodejs,
   makeDesktopItem,
+
   copyDesktopItems,
   makeWrapper,
+  nodejs,
+  yarnConfigHook,
+  yarnBuildHook,
   wrapGAppsHook3,
+  xcbuild,
+
   electron,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "koodo-reader";
-  version = "1.7.4";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "troyeguo";
     repo = "koodo-reader";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rLW5FS8xM7Z49AaLq0KzBCoRgAVxwTDCHQFdIaEyygA=";
+    hash = "sha256-UuNRINIFLf73TL6UviNaD7aW3ZddDv2f/GX945leP4U=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-58mxYt2wD6SGzhvo9c44CPmdX+/tLnbJCMPafo4txbY=";
+    hash = "sha256-49ETjTwv2pURAHJ17syc3etjQuyewDjWji8SbOiry6k=";
   };
 
   nativeBuildInputs =
     [
       makeWrapper
+      nodejs
+      (nodejs.python.withPackages (ps: [ ps.setuptools ]))
       yarnConfigHook
       yarnBuildHook
-      nodejs
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       copyDesktopItems
       wrapGAppsHook3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      xcbuild
     ];
 
   dontWrapGApps = true;
@@ -51,6 +58,14 @@ stdenv.mkDerivation (finalAttrs: {
   postBuild = ''
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
+
+    # this is just the cpu-features install script without the node-gyp rebuild part
+    # we cannot rebuild yet, because we haven't fixed the nan headers (see below)
+    node node_modules/cpu-features/buildcheck.js > node_modules/cpu-features/buildcheck.gypi
+
+    export npm_config_nodedir=${electron.headers}
+    yarn --offline postinstall # fixup nan headers to work with electron and rebuild native libs
+
     yarn --offline run electron-builder --dir \
       -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version}
