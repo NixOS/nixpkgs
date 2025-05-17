@@ -82,6 +82,15 @@ stdenv.mkDerivation (finalAttrs: {
           # only on some aarch64-linux systems?
           "cpio/test/test_basic.c"
           "cpio/test/test_format_newc.c"
+        ]
+        # Newer releases of macOS will sometimes add the `com.apple.provenance` xattr to files. It is unknown what
+        # triggers macOS to start doing this to files and folders, but once it starts happening, the xattr is
+        # unavoidable and cannot be removed without disabling SIP. Unfortunately, the presence of this xattr causes the
+        # bsdtar `test_copy` test to fail, so disable the test just in case the system is affected.
+        # Reference: https://eclecticlight.co/2023/05/10/how-macos-now-tracks-the-provenance-of-apps/
+        # Upstream issue: https://github.com/libarchive/libarchive/issues/2510
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          "tar/test/test_copy.c"
         ];
       removeTest = testPath: ''
         substituteInPlace Makefile.am --replace-fail "${testPath}" ""
