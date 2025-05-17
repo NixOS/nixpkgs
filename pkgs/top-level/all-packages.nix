@@ -14902,6 +14902,8 @@ with pkgs;
 
   cataclysm-dda-git = cataclysmDDA.git.tiles;
 
+  cataclysm-bn-git = cataclysmDDA.bn-git.tiles;
+
   chessx = libsForQt5.callPackage ../games/chessx { };
 
   chiaki = libsForQt5.callPackage ../games/chiaki { };
