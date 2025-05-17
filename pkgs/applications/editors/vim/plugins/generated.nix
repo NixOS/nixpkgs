@@ -21532,6 +21532,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  yaml-schema-detect-nvim = buildVimPlugin {
+    pname = "yaml-schema-detect.nvim";
+    version = "2025-05-15";
+    src = fetchFromGitHub {
+      owner = "cwrau";
+      repo = "yaml-schema-detect.nvim";
+      rev = "18b40548cb9a8c70e0d35c362e5f7150d6baef12";
+      sha256 = "1kydjk8816b2348yny3ci0dqd96syy7jsf4g577dm7d0rsskimz8";
+    };
+    meta.homepage = "https://github.com/cwrau/yaml-schema-detect.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   yanky-nvim = buildVimPlugin {
     pname = "yanky.nvim";
     version = "2025-04-14";
