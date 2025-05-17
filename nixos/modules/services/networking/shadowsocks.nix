@@ -30,6 +30,22 @@ let
 
   configFile = pkgs.writeText "shadowsocks.json" (builtins.toJSON opts);
 
+  pkgTitleMap = {
+    "${getName pkgs.shadowsocks-libev}" = "libev";
+    "${getName pkgs.shadowsocks-rust}" = "rust";
+  };
+
+  commandsMap = {
+    "${getName pkgs.shadowsocks-libev}" = {
+      server = "ss-server";
+    };
+    "${getName pkgs.shadowsocks-rust}" = {
+      server = "ssserver";
+    };
+  };
+
+  getServiceUnitName = pkg: "shadowsocks-${pkgTitleMap.${getName cfg.package}}";
+  getExecCommand = pkg: runMode: commandsMap.${getName cfg.package}.${runMode};
 in
 
 {
@@ -48,14 +64,27 @@ in
         '';
       };
 
+      package = mkPackageOption pkgs "Shadowsocks" {
+        default = "shadowsocks-libev";
+        example = "services.shadowsocks.package = pkgs.shadowsocks-libev";
+        extraDescription = "Shadowsocks implementation package to use.";
+      };
+
       localAddress = mkOption {
-        type = types.coercedTo types.str singleton (types.listOf types.str);
+        type =
+          with types;
+          oneOf [
+            str
+            (listOf str)
+          ];
+        # Keeped for compatibility
         default = [
           "[::0]"
           "0.0.0.0"
         ];
         description = ''
           Local addresses to which the server binds.
+          Note: shadowsocks-rust accepts only string parameter.
         '';
       };
 
@@ -164,14 +193,19 @@ in
           (noPasswd && !noPasswdFile) || (!noPasswd && noPasswdFile);
         message = "Option `password` or `passwordFile` must be set and cannot be set simultaneously";
       }
+      {
+        # Ensure localAddress is a string if package is shadowsocks-rust
+        assertion = !(cfg.package == pkgs.shadowsocks-rust && !lib.strings.isString cfg.localAddress);
+        message = "Option `localAddress` must be a string when using shadowsocks-rust.";
+      }
     ];
 
-    systemd.services.shadowsocks-libev = {
-      description = "shadowsocks-libev Daemon";
+    systemd.services.${getServiceUnitName cfg.package} = {
+      description = "${getServiceUnitName cfg.package} Daemon";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path =
-        [ pkgs.shadowsocks-libev ]
+        [ cfg.package ]
         ++ optional (cfg.plugin != null) cfg.plugin
         ++ optional (cfg.passwordFile != null) pkgs.jq;
       serviceConfig.PrivateTmp = true;
@@ -179,7 +213,9 @@ in
         ${optionalString (cfg.passwordFile != null) ''
           cat ${configFile} | jq --arg password "$(cat "${cfg.passwordFile}")" '. + { password: $password }' > /tmp/shadowsocks.json
         ''}
-        exec ss-server -c ${if cfg.passwordFile != null then "/tmp/shadowsocks.json" else configFile}
+        exec ${getExecCommand cfg.package "server"} -c ${
+          if cfg.passwordFile != null then "/tmp/shadowsocks.json" else configFile
+        }
       '';
     };
   };
