@@ -3,12 +3,11 @@
   stdenv,
   fetchFromSourcehut,
   cmake,
+  kdePackages,
   libusb1,
   pkg-config,
-  wrapQtAppsHook,
   zlib,
   enableGUI ? false,
-  qtbase ? null,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +27,7 @@ stdenv.mkDerivation rec {
       zlib
     ]
     ++ lib.lists.optionals enableGUI [
-      qtbase
+      kdePackages.qtbase
     ];
   nativeBuildInputs =
     [
@@ -36,7 +35,7 @@ stdenv.mkDerivation rec {
       pkg-config
     ]
     ++ lib.lists.optionals enableGUI [
-      wrapQtAppsHook
+      kdePackages.wrapQtAppsHook
     ];
 
   cmakeFlags = [
