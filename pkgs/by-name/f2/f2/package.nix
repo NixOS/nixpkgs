@@ -4,23 +4,23 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "f2";
-  version = "2.0.3";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "ayoisaiah";
     repo = "f2";
-    rev = "v${version}";
-    sha256 = "sha256-AjuWaSEP2X3URZBPD05laV32ms/pULooSQKXUz8sqsU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hl4giLTQtqJiPseiTzWPtksEYlyQpE1UOC7JMUF9v4Y=";
   };
 
-  vendorHash = "sha256-xKw9shfAtRjD0f4BGALM5VPjGOaYz1IqXWcctHcV/p8=";
+  vendorHash = "sha256-xeylGT32bGMJjGdpQQH8DBpqxtvMxpqSEsLPbeoUzl4=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${version}"
+    "-X=github.com/ayoisaiah/f2/v2/app.VersionString=${finalAttrs.version}"
   ];
 
   # has no tests
@@ -33,4 +33,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ zendo ];
     mainProgram = "f2";
   };
-}
+})
