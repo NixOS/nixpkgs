@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   gdb,
+  isPyPy,
   ncurses,
   numpy,
   pkg-config,
@@ -36,7 +37,9 @@ buildPythonPackage rec {
     ncurses
   ];
 
-  env.LC_ALL = "en_US.UTF-8";
+  env = lib.optionalAttrs (!isPyPy) {
+    LC_ALL = "en_US.UTF-8";
+  };
 
   # https://github.com/cython/cython/issues/2785
   # Temporary solution
