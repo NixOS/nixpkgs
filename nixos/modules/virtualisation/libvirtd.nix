@@ -12,9 +12,9 @@ let
   cfg = config.virtualisation.libvirtd;
   vswitch = config.virtualisation.vswitch;
   configFile = pkgs.writeText "libvirtd.conf" ''
+    ${cfg.extraConfig}
     auth_unix_ro = "polkit"
     auth_unix_rw = "polkit"
-    ${cfg.extraConfig}
   '';
   qemuConfigFile = pkgs.writeText "qemu.conf" ''
     ${optionalString cfg.qemu.ovmf.enable ''
