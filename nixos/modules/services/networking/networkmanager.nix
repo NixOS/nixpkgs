@@ -707,6 +707,8 @@ in
       ++ optional cfg.enableStrongSwan pkgs.strongswanNM
       ++ optional (cfg.dns == "dnsmasq") pkgs.dnsmasq;
 
+    services.firewalld.packages = [ cfg.package ];
+
     services.udev.packages = packages;
   };
 }
