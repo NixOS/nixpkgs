@@ -7,34 +7,35 @@
   qemu,
   makeBinaryWrapper,
   autoPatchelfHook,
+  lima,
 }:
 
 let
-  version = "0.22.0";
+  version = "1.0.7";
 
   dist = {
     aarch64-darwin = rec {
       archSuffix = "Darwin-arm64";
       url = "https://github.com/lima-vm/lima/releases/download/v${version}/lima-${version}-${archSuffix}.tar.gz";
-      sha256 = "271e0224d3e678450424abd4e6766a14ea52b146824bf8cfac7a0f486ceb2a0c";
+      hash = "sha256-+jg2Eo4ZkgynETu8yZCDmcVvBmW0sE8pTddqoC7ziQU=";
     };
 
     x86_64-darwin = rec {
       archSuffix = "Darwin-x86_64";
       url = "https://github.com/lima-vm/lima/releases/download/v${version}/lima-${version}-${archSuffix}.tar.gz";
-      sha256 = "f2d331ef783e0bb00e193efc3d5c9438df5d284b1cbac771e5d239c3459b2b3d";
+      hash = "sha256-H6UhGWjVo/iV+i3cmjZpWsKHo/ZSa4MUfGJYLYNwVcw=";
     };
 
     aarch64-linux = rec {
       archSuffix = "Linux-aarch64";
       url = "https://github.com/lima-vm/lima/releases/download/v${version}/lima-${version}-${archSuffix}.tar.gz";
-      sha256 = "8c5c6dc21fae19c5645bf8db8f441aeab7fba21fbe882b2b9db58c126d07846b";
+      hash = "sha256-H3AsafkS7Lh0okHc0D8FOHrlQI5b5QTNPehbUUOVjM8=";
     };
 
     x86_64-linux = rec {
       archSuffix = "Linux-x86_64";
       url = "https://github.com/lima-vm/lima/releases/download/v${version}/lima-${version}-${archSuffix}.tar.gz";
-      sha256 = "58e66114ae1e991512a86b6952ab3a1ffe0e12e08199a9a3ea13c3d2f24b307e";
+      hash = "sha256-sMQ58+tiGoyHk2g3j5jJSDf2J+sg1DUBJCcmSJxGSg4=";
     };
   };
 in
@@ -47,7 +48,7 @@ stdenvNoCC.mkDerivation {
         or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}")
       )
       url
-      sha256
+      hash
       ;
   };
 
@@ -71,6 +72,7 @@ stdenvNoCC.mkDerivation {
       # the shell completion only works with a patched $out/bin/limactl and so
       # needs to run after the autoPatchelfHook is executed in postFixup.
       doShellCompletion() {
+        export LIMA_HOME="$(mktemp -d)"
         installShellCompletion --cmd limactl \
           --bash <($out/bin/limactl completion bash) \
           --fish <($out/bin/limactl completion fish) \
@@ -83,10 +85,14 @@ stdenvNoCC.mkDerivation {
     '';
 
   doInstallCheck = true;
-  installCheckPhase = ''
-    USER=nix $out/bin/limactl validate $out/share/lima/examples/default.yaml
-    USER=nix $out/bin/limactl validate $out/share/lima/examples/experimental/vz.yaml
-  '';
+  installCheckPhase =
+    ''
+      pushd $out/share/lima
+    ''
+    + lima.installCheckPhase
+    + ''
+      popd
+    '';
 
   # Stripping removes entitlements of the binary on Darwin making it non-operational.
   # Therefore, disable stripping on Darwin.
@@ -117,11 +123,11 @@ stdenvNoCC.mkDerivation {
       rm SHA256SUMS
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lima-vm/lima";
     description = "Linux virtual machines (on macOS, in most cases)";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ tricktron ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ tricktron ];
+    platforms = lib.platforms.unix;
   };
 }
