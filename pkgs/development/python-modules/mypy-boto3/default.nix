@@ -358,8 +358,8 @@ rec {
       "sha256-ABRIC59mat4ek0yrWxcHUr62whXmaZef47yDR7A2rl0=";
 
   mypy-boto3-controltower =
-    buildMypyBoto3Package "controltower" "1.38.15"
-      "sha256-UdmjmkHw97cpq6vDS6d48a3DOLkZ/RJATTH8DxfhFpY=";
+    buildMypyBoto3Package "controltower" "1.38.17"
+      "sha256-RtmXag1W6xxWlr9FZsIf8YtBeJoL91Ssflck/Ok1C3Q=";
 
   mypy-boto3-cur =
     buildMypyBoto3Package "cur" "1.38.0"
