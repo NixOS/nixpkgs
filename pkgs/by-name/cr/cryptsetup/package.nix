@@ -43,6 +43,11 @@ stdenv.mkDerivation rec {
   patches = [
     # Allow reading tokens from a relative path, see #167994
     ./relative-token-path.patch
+
+    # Do not use pagesize as fallback for block size.
+    # Remove when https://gitlab.com/cryptsetup/cryptsetup/-/merge_requests/782 is merged
+    # Fixes https://gitlab.com/cryptsetup/cryptsetup/-/issues/943
+    ./no-pgsize-as-blk-size.patch
   ];
 
   postPatch = ''
