@@ -6256,7 +6256,9 @@ self: super: with self; {
 
   hdbscan = callPackage ../development/python-modules/hdbscan { };
 
-  hdf5plugin = callPackage ../development/python-modules/hdf5plugin { };
+  hdf5plugin = callPackage ../development/python-modules/hdf5plugin {
+    inherit (pkgs) zstd lz4;
+  };
 
   hdfs = callPackage ../development/python-modules/hdfs { };
 
@@ -10317,6 +10319,8 @@ self: super: with self; {
 
   onnxruntime-tools = callPackage ../development/python-modules/onnxruntime-tools { };
 
+  onnxslim = callPackage ../development/python-modules/onnxslim { };
+
   onvif-zeep = callPackage ../development/python-modules/onvif-zeep { };
 
   onvif-zeep-async = callPackage ../development/python-modules/onvif-zeep-async { };
@@ -13369,6 +13373,8 @@ self: super: with self; {
   pysdcp = callPackage ../development/python-modules/pysdcp { };
 
   pysdl2 = callPackage ../development/python-modules/pysdl2 { };
+
+  pysdl3 = callPackage ../development/python-modules/pysdl3 { };
 
   pysearpc = toPythonModule (pkgs.libsearpc.override { python3 = self.python; });
 

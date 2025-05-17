@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "screen";
-  version = "5.0.0";
+  version = "5.0.1";
 
   src = fetchurl {
     url = "mirror://gnu/screen/screen-${version}.tar.gz";
-    hash = "sha256-8Eo50AoOXHyGpVM4gIkDCCrV301z3xov00JZdq7ZSXE=";
+    hash = "sha256-La429Ns3n/zRS2kVlrpuwYrDqeIrxHrCOXiatYQJhp0=";
   };
 
   configureFlags = [
@@ -24,13 +24,6 @@ stdenv.mkDerivation rec {
 
   # We need _GNU_SOURCE so that mallocmock_reset() is defined: https://savannah.gnu.org/bugs/?66416
   NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE=1 -Wno-int-conversion -Wno-incompatible-pointer-types";
-
-  patches = [
-    # GNU Screen 5.0 uses strncpy incorrectly in SendCmdMessage
-    # This causes issues detected when using -D_FORTIFY_SOURCE=3
-    # e.g. https://savannah.gnu.org/bugs/index.php?66215
-    ./buffer-overflow-SendCmdMessage.patch
-  ];
 
   nativeBuildInputs = [
     autoreconfHook

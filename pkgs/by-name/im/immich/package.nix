@@ -31,12 +31,69 @@
   perl,
   pixman,
   vips,
+  buildPackages,
   sourcesJSON ? ./sources.json,
 }:
 let
   buildNpmPackage' = buildNpmPackage.override { inherit nodejs; };
   sources = lib.importJSON sourcesJSON;
   inherit (sources) version;
+
+  esbuild_0_23 = buildPackages.esbuild.override {
+    buildGoModule =
+      args:
+      buildPackages.buildGoModule (
+        args
+        // rec {
+          version = "0.23.0";
+          src = fetchFromGitHub {
+            owner = "evanw";
+            repo = "esbuild";
+            tag = "v${version}";
+            hash = "sha256-AH4Y5ELPicAdJZY5CBf2byOxTzOyQFRh4XoqRUQiAQw=";
+          };
+          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+        }
+      );
+  };
+
+  esbuild_0_25 = buildPackages.esbuild.override {
+    buildGoModule =
+      args:
+      buildPackages.buildGoModule (
+        args
+        // rec {
+          version = "0.25.2";
+          src = fetchFromGitHub {
+            owner = "evanw";
+            repo = "esbuild";
+            tag = "v${version}";
+            hash = "sha256-aDxheDMeQYqCT9XO3In6RbmzmXVchn+bjgf3nL3VE4I=";
+          };
+          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+        }
+      );
+  };
+
+  # Immich server does not actually need esbuild, but react-email and vite do.
+  # As esbuild doesn't support passing multiple binaries, we use a custom
+  # "shim", that picks the right version depending on the working directory.
+  # The correct version can be looked up in package-lock.json
+  # TODO: There are numerous other env vars this *could* be based on.
+  esbuildShim = buildPackages.writeShellScriptBin "esbuild" ''
+    echo "nixpkgs: esbuild shim for '$PWD'" >&2
+    case "$PWD" in
+      "/build/server/node_modules/esbuild")
+        exec ${lib.getExe esbuild_0_23} "$@"
+      ;;
+      "/build/server/node_modules/vite/node_modules/esbuild")
+        exec ${lib.getExe esbuild_0_25} "$@"
+        exit 0
+      ;;
+    esac
+    echo "nixpkgs: Couldn't resolve esbuild version for '$PWD'" >&2
+    exit 1
+  '';
 
   buildLock = {
     sources =
@@ -206,6 +263,7 @@ buildNpmPackage' {
   makeCacheWritable = true;
 
   env.SHARP_FORCE_GLOBAL_LIBVIPS = 1;
+  env.ESBUILD_BINARY_PATH = lib.getExe esbuildShim;
 
   preBuild = ''
     # If exiftool-vendored.pl isn't found, exiftool is searched for on the PATH
