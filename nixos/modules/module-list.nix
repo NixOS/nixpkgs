@@ -330,6 +330,7 @@
   ./programs/virt-manager.nix
   ./programs/vivid.nix
   ./programs/wavemon.nix
+  ./programs/way-shell.nix
   ./programs/wayland/cardboard.nix
   ./programs/wayland/hyprland.nix
   ./programs/wayland/hyprlock.nix
