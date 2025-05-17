@@ -21,6 +21,12 @@ buildPythonPackage rec {
     hash = "sha256-UpNqmMyy8uHW48sYUospGfaDHn4/kk54i1hzutzlEps=";
   };
 
+  postPatch = ''
+    substituteInPlace _moderngl.py \
+      --replace-fail '"libGL.so"' '"${libGL}/lib/libGL.so"' \
+      --replace-fail '"libEGL.so"' '"${libGL}/lib/libEGL.so"'
+  '';
+
   build-system = [ setuptools ];
 
   buildInputs = [
