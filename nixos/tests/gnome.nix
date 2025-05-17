@@ -14,6 +14,7 @@
       services.xserver.displayManager = {
         gdm.enable = true;
         gdm.debug = true;
+        gdm.xorg = false;
       };
 
       services.displayManager.autoLogin = {
