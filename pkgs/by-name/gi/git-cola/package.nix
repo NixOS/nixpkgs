@@ -7,6 +7,8 @@
   git,
   qt5,
   versionCheckHook,
+  makeDesktopItem,
+  copyDesktopItems,
   nix-update-script,
 }:
 
@@ -38,6 +40,7 @@ python3Packages.buildPythonApplication rec {
     gettext
     qt5.wrapQtAppsHook
     python3Packages.setuptools-scm
+    copyDesktopItems
   ];
 
   nativeCheckInputs = [
@@ -56,6 +59,17 @@ python3Packages.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      desktopName = pname;
+      exec = meta.mainProgram;
+      icon = pname;
+      comment = meta.description;
+      categories = [ "Development" ];
+    })
+  ];
 
   passthru.updateScript = nix-update-script { };
 
