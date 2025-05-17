@@ -18,6 +18,16 @@ let
 
   # ROCm, if actively updated will always be at the latest version
   versions = {
+    "21" = rec {
+      version = "21.1.0-unstable-2025-07-21";
+      rev = "9413a66e04ba34f429b05efe00adff0c1f1e0a58";
+      hash = "sha256-sVHIQ6z/G0ZiuUoNEfSeOvC+rD+gd7rmdO+BBCXyCJk=";
+    };
+    "20" = rec {
+      version = "20.1.2";
+      rev = "v${version}";
+      hash = "sha256-bZYLDEolzbW2SH0gYA41tPLT/SxExVC54qgPIlI6zJM=";
+    };
     "19" = rec {
       version = "19.1.6";
       rev = "v${version}";
@@ -96,7 +106,7 @@ stdenv.mkDerivation {
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
     "-DLLVM_EXTERNAL_SPIRV_HEADERS_SOURCE_DIR=${spirv-headers.src}"
   ]
-  ++ lib.optional (llvmMajor == "19") "-DBASE_LLVM_VERSION=${lib.versions.majorMinor llvm.version}.0";
+  ++ lib.optional (llvmMajor == "21") "-DBASE_LLVM_VERSION=${lib.versions.majorMinor llvm.version}.0";
 
   # FIXME: CMake tries to run "/llvm-lit" which of course doesn't exist
   doCheck = false;
