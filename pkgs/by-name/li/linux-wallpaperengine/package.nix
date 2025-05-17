@@ -28,41 +28,50 @@
   cef-binary,
   libdecor,
   autoPatchelfHook,
+  python3,
+  libpng,
+  fftw,
+  file,
+  kissfftFloat,
 }:
 
 let
   cef = cef-binary.overrideAttrs (oldAttrs: {
-    version = "120.1.10";
+    version = "135.0.17";
     __intentionallyOverridingVersion = true; # `cef-binary` uses the overridden `srcHash` values in its source FOD
-    gitRevision = "3ce3184";
-    chromiumVersion = "120.0.6099.129";
+    gitRevision = "cbc1c5b";
+    chromiumVersion = "135.0.7049.52";
 
     srcHash =
       {
-        aarch64-linux = "sha256-l0PSW4ZeLhfEauf1bez1GoLfu9cwXZzEocDlGI9yFsQ=";
-        x86_64-linux = "sha256-OdIVEy77tiYRfDWXgyceSstFqCNeZHswzkpw06LSnP0=";
+        aarch64-linux = "sha256-LK5JvtcmuwCavK7LnWmMF2UDpM5iIZOmsuZS/t9koDs=";
+        x86_64-linux = "sha256-JKwZgOYr57GuosM31r1Lx3DczYs35HxtuUs5fxPsTcY=";
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
   });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "linux-wallpaperengine";
-  version = "0-unstable-2024-11-08";
+  version = "0-unstable-2025-05-15";
 
   src = fetchFromGitHub {
     owner = "Almamu";
     repo = "linux-wallpaperengine";
-    rev = "4a063d0b84d331a0086b3f4605358ee177328d41";
-    hash = "sha256-IRTGFxHPRRRSg0J07pq8fpo1XbMT4aZC+wMVimZlH/Y=";
+    rev = "3c334aac29998d1812d1dfff51270683596f310c";
+    hash = "sha256-HDP/BLhPgWCtziTVei54Vc+7qxX4aYaNXtyYXpWVTLk=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     autoPatchelfHook
+    python3
+    file
   ];
 
   buildInputs = [
+    libpng
     libdecor
     ffmpeg
     libglut
@@ -85,6 +94,8 @@ stdenv.mkDerivation rec {
     libffi
     wayland-scanner
     libXrandr
+    fftw
+    kissfftFloat
   ];
 
   cmakeFlags = [
@@ -93,11 +104,18 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/app/linux-wallpaperengine"
   ];
 
-  preFixup = ''
-    patchelf --set-rpath "${lib.makeLibraryPath buildInputs}:${cef}" $out/app/linux-wallpaperengine/linux-wallpaperengine
+  postInstall = ''
+    rm -rf $out/bin $out/lib $out/include
     chmod 755 $out/app/linux-wallpaperengine/linux-wallpaperengine
     mkdir $out/bin
     ln -s $out/app/linux-wallpaperengine/linux-wallpaperengine $out/bin/linux-wallpaperengine
+  '';
+
+  preFixup = ''
+    find $out/app/linux-wallpaperengine -type f -exec file {} \; | grep 'ELF' | cut -d: -f1 | while read -r elf_file; do
+      patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$elf_file"
+    done
+    patchelf --set-rpath "${lib.makeLibraryPath finalAttrs.buildInputs}:$out/app/linux-wallpaperengine" $out/app/linux-wallpaperengine/linux-wallpaperengine
   '';
 
   meta = {
@@ -112,4 +130,4 @@ stdenv.mkDerivation rec {
     ];
     hydraPlatforms = [ "x86_64-linux" ]; # Hydra "aarch64-linux" fails with "Output limit exceeded"
   };
-}
+})
