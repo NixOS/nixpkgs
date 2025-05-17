@@ -11366,6 +11366,8 @@ with pkgs;
 
   sdrangel = qt6Packages.callPackage ../applications/radio/sdrangel { };
 
+  sgx-dcap-default-qpl = callPackage ../os-specific/linux/sgx/dcap-default-qpl { };
+
   sgx-sdk = callPackage ../os-specific/linux/sgx/sdk { };
 
   sgx-psw = callPackage ../os-specific/linux/sgx/psw {
