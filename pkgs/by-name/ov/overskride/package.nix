@@ -19,21 +19,19 @@
 }:
 let
 
-  owner = "kaii-lb";
-  name = "overskride";
-  version = "0.6.1";
+  version = "0.6.2";
 
 in
 rustPlatform.buildRustPackage {
 
-  pname = name;
+  pname = "overskride";
   inherit version;
 
   src = fetchFromGitHub {
-    inherit owner;
-    repo = name;
-    rev = "v${version}";
-    hash = "sha256-SqaPhub/HwZz7uBg/kevH8LvPDVLgRd/Rvi03ivNrRc=";
+    owner = "kaii-lb";
+    repo = "overskride";
+    tag = "v${version}";
+    hash = "sha256-eMT0wNTpW75V08rmwFtU6NkmZ4auiujzYgbcktewNcI=";
   };
 
   useFetchCargoVendor = true;
@@ -69,20 +67,18 @@ rustPlatform.buildRustPackage {
   '';
 
   # The "Validate appstream file" test fails.
-  # TODO: This appears to have been fixed upstream
-  # so checks should be enabled with the next version.
   doCheck = false;
 
   preFixup = ''
-    glib-compile-schemas $out/share/gsettings-schemas/${name}-${version}/glib-2.0/schemas
+    glib-compile-schemas $out/share/gsettings-schemas/overskride-${version}/glib-2.0/schemas
   '';
 
   meta = with lib; {
     description = "A Bluetooth and Obex client that is straight to the point, DE/WM agnostic, and beautiful";
-    homepage = "https://github.com/${owner}/${name}";
-    changelog = "https://github.com/${owner}/${name}/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/kaii-lb/overskride";
+    changelog = "https://github.com/kaii-lb/overskride/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
-    mainProgram = name;
+    mainProgram = "overskride";
     maintainers = with maintainers; [ mrcjkb ];
     platforms = platforms.linux;
   };
