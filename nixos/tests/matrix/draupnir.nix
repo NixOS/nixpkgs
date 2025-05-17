@@ -1,5 +1,6 @@
 {
   pkgs,
+  withPantalaimon ? false
   ...
 }:
 let
