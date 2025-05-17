@@ -8,6 +8,7 @@
   qt6,
   versionCheckHook,
   zlib,
+  withGUI ? true,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "zint";
@@ -32,13 +33,16 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix-installation-of-cmake-files.patch
   ];
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-    qt6.wrapQtAppsHook
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      ninja
+    ]
+    ++ lib.optionals withGUI [
+      qt6.wrapQtAppsHook
+    ];
 
-  buildInputs = [
+  buildInputs = lib.optionals withGUI [
     qt6.qtbase
     qt6.qtsvg
     qt6.qttools
@@ -49,12 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  cmakeFlags = [ (lib.cmakeBool "ZINT_QT6" true) ];
+  cmakeFlags = [ (lib.cmakeBool "ZINT_QT6" withGUI) ];
 
   doInstallCheck = true;
   nativeCheckInputs = [ versionCheckHook ];
 
-  postInstall = ''
+  postInstall = lib.optionalString withGUI ''
     install -Dm644 -t $out/share/applications $src/zint-qt.desktop
     install -Dm644 -t $out/share/pixmaps $src/zint-qt.png
     install -Dm644 -t $out/share/icons/hicolor/scalable/apps $src/frontend_qt/images/scalable/zint-qt.svg
@@ -64,8 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Barcode generating tool and library";
     longDescription = ''
       The Zint project aims to provide a complete cross-platform open source
-      barcode generating solution. The package currently consists of a Qt based
-      GUI, a CLI command line executable and a library with an API to allow
+      barcode generating solution. The package currently consists of "${lib.optionalString withGUI "a Qt based GUI, "}
+      a CLI command line executable and a library with an API to allow
       developers access to the capabilities of Zint.
     '';
     homepage = "https://www.zint.org.uk";
