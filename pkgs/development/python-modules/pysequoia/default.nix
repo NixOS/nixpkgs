@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysequoia" ];
 
-  meta = with lib; {
+  meta = {
     description = "This library provides OpenPGP facilities in Python through the Sequoia PGP library";
     downloadPage = "https://github.com/wiktor-k/pysequoia";
     homepage = "https://github.com/wiktor-k/pysequoia";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }
