@@ -1,9 +1,9 @@
 {
+  cudaLib,
   cudaOlder,
   cudaPackages,
   cudaMajorMinorVersion,
   lib,
-  mkVersionedPackageName,
   patchelf,
   requireFile,
   stdenv,
@@ -103,7 +103,9 @@ finalAttrs: prevAttrs: {
     # unless it is not available, in which case the default cudnn derivation will be used.
     cudnn =
       let
-        desiredName = mkVersionedPackageName "cudnn" finalAttrs.passthru.featureRelease.cudnnVersion;
+        desiredName = cudaLib.utils.mkVersionedName "cudnn" (
+          lib.versions.majorMinor finalAttrs.passthru.featureRelease.cudnnVersion
+        );
       in
       if finalAttrs.passthru.featureRelease.cudnnVersion == null || (cudaPackages ? desiredName) then
         cudaPackages.cudnn
