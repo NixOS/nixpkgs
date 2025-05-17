@@ -54,31 +54,7 @@ sub isStatic {
     return 0;
 }
 
-# Remove dangling symlinks that point to /etc/static.  These are
-# configuration files that existed in a previous configuration but not
-# in the current one.  For efficiency, don't look under /etc/nixos
-# (where all the NixOS sources live).
-sub cleanup {
-    if ($File::Find::name eq "/etc/nixos") {
-        $File::Find::prune = 1;
-        return;
-    }
-    if (-l $_) {
-        my $target = readlink $_;
-        if (substr($target, 0, length $static) eq $static) {
-            my $x = "/etc/static/" . substr($File::Find::name, length "/etc/");
-            unless (-l $x) {
-                print STDERR "removing obsolete symlink ‘$File::Find::name’...\n";
-                unlink "$_";
-            }
-        }
-    }
-}
-
-find(\&cleanup, "/etc");
-
-
-# Use /etc/.clean to keep track of copied files.
+# Use /etc/.clean to keep track of copied files and symlinks.
 my @oldCopied = read_file("/etc/.clean", chomp => 1, err_mode => 'quiet');
 open CLEAN, ">>/etc/.clean";
 
@@ -131,13 +107,15 @@ sub link {
         print CLEAN "$fn\n";
     } elsif (-l "$_") {
         atomicSymlink "$static/$fn", $target or warn "could not create symlink $target";
+        push @copied, $fn;
+        print CLEAN "$fn\n";
     }
 }
 
 find(\&link, $etc);
 
 
-# Delete files that were copied in a previous version but not in the
+# Delete files and symlinks that were copied in a previous version but not in the
 # current.
 foreach my $fn (@oldCopied) {
     if (!defined $created{$fn}) {
