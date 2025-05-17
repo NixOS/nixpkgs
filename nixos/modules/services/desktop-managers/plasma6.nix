@@ -110,6 +110,7 @@ in
 
           # Core Plasma parts
           kwin
+          kwin-x11
           kscreen
           libkscreen
           kscreenlocker
@@ -156,6 +157,7 @@ in
         ];
         optionalPackages =
           [
+            aurorae
             plasma-browser-integration
             konsole
             (lib.getBin qttools) # Expose qdbus in PATH
@@ -339,7 +341,31 @@ in
         capabilities = "cap_sys_nice+ep";
         source = "${lib.getBin pkgs.kdePackages.kwin}/bin/kwin_wayland";
       };
+
+      ksystemstats_intel_helper = {
+        owner = "root";
+        group = "root";
+        capabilities = "cap_perfmon+ep";
+        source = "${pkgs.kdePackages.ksystemstats}/libexec/ksystemstats_intel_helper";
+      };
+
+      ksgrd_network_helper = {
+        owner = "root";
+        group = "root";
+        capabilities = "cap_net_raw+ep";
+        source = "${pkgs.kdePackages.libksysguard}/libexec/ksysguard/ksgrd_network_helper";
+      };
     };
+
+    # Recommended by upstream
+    security.polkit.extraConfig = ''
+      // Allow current user or their system services to change the system time zone and time synchronization
+      polkit.addRule(function(action, subject) {
+        if ((action.id == "org.freedesktop.timedate1.set-timezone" || action.id == "org.freedesktop.timedate1.set-ntp") && subject.active) {
+          return polkit.Result.YES;
+        }
+      });
+    '';
 
     programs.dconf.enable = true;
 
