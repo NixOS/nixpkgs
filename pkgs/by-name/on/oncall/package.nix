@@ -5,45 +5,20 @@
   fetchPypi,
   oncall,
   nixosTests,
-
-  # Override Python packages using
-  # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
-  # Applied after defaultOverrides
-  packageOverrides ? self: super: { },
+  fetchpatch,
 }:
-let
-  defaultOverrides = [
-    # Override the version of some packages pinned in Oncall's setup.py
-    (self: super: {
-      # Support for Falcon 4.X missing
-      # https://github.com/linkedin/oncall/issues/430
-      falcon = super.falcon.overridePythonAttrs (oldAttrs: rec {
-        version = "3.1.3";
-        src = fetchFromGitHub {
-          owner = "falconry";
-          repo = "falcon";
-          tag = version;
-          hash = "sha256-7719gOM8WQVjODwOSo7HpH3HMFFeCGQQYBKktBAevig=";
-        };
-      });
-    })
-  ];
-
-  python = python3.override {
-    self = python;
-    packageOverrides = lib.composeManyExtensions (defaultOverrides ++ [ packageOverrides ]);
-  };
-in
-python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "oncall";
-  version = "2.1.7";
+  # Using newer revision for Falcon 4 patch to work
+  version = "0-unstable-2025-04-15";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "linkedin";
     repo = pname;
-    tag = "v${version}";
-    hash = "sha256-oqzU4UTpmAcZhqRilquxWQVyHv8bqq0AGraiSqwauiI=";
+    #tag = "v${version}";
+    rev = "030f5d0286b253e4300d36de1954c7b2a7490a76";
+    hash = "sha256-Lox9aqYKsl/vg6mNwr0MoLmJQkC+kEf7AqvCCKhgo94=";
   };
 
   patches = [
@@ -55,9 +30,17 @@ python.pkgs.buildPythonApplication rec {
 
     # Log Python errors to uwsgi
     ./verbose_logging.patch
+
+    # Add support for Falcon 4
+    # https://github.com/linkedin/oncall/pull/433
+    (fetchpatch {
+      url = "https://github.com/linkedin/oncall/commit/4ccf2239fb8c8aeda376f57735461174f48614f2.patch";
+      hash = "sha256-XT7Z6NUg2zxoRtgxaM0ZbBhXtO9xvhKv30Jo1ZaEGMU=";
+      name = "falcon_4_support.patch";
+    })
   ];
 
-  dependencies = with python.pkgs; [
+  dependencies = with python3.pkgs; [
     beaker
     falcon
     falcon-cors
@@ -80,7 +63,7 @@ python.pkgs.buildPythonApplication rec {
     cp -r configs db "$out/share/"
   '';
 
-  checkInputs = with python.pkgs; [
+  checkInputs = with python3.pkgs; [
     pytestCheckHook
     pytest-mock
   ];
@@ -113,14 +96,13 @@ python.pkgs.buildPythonApplication rec {
     tests = {
       inherit (nixosTests) oncall;
     };
-    inherit python;
-    pythonPath = "${python.pkgs.makePythonPath dependencies}:${oncall}/${python.sitePackages}";
+    pythonPath = "${python3.pkgs.makePythonPath dependencies}:${oncall}/${python3.sitePackages}";
   };
 
   meta = {
     description = "A calendar web-app designed for scheduling and managing on-call shifts";
     homepage = "http://oncall.tools";
-    changelog = "https://github.com/linkedin/oncall/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/linkedin/oncall/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ onny ];
     mainProgram = "oncall";
