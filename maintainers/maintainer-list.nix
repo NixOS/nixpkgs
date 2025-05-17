@@ -11482,7 +11482,7 @@
     githubId = 30251156;
     name = "Jesse Moore";
   };
-  jethair= {
+  jethair = {
     email = "jethair@duck.com";
     github = "JetHair";
     githubId = 106916147;
