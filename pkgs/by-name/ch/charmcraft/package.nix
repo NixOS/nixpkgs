@@ -76,7 +76,7 @@ python3Packages.buildPythonApplication rec {
     export HOME="$(pwd)/check-phase"
   '';
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTests = [
     # Relies upon the `charm` tool being installed

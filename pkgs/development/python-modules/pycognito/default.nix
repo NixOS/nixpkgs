@@ -46,7 +46,7 @@ buildPythonPackage rec {
     requests-mock
   ] ++ moto.optional-dependencies.cognitoidp;
 
-  pytestFlagsArray = [ "tests.py" ];
+  enabledTestPaths = [ "tests.py" ];
 
   disabledTests = [
     # Test requires network access

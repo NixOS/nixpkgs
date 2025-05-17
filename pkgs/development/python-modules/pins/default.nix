@@ -75,7 +75,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pins" ];
 
-  pytestFlagsArray = [ "pins/tests/" ];
+  enabledTestPaths = [ "pins/tests/" ];
 
   disabledTestPaths = [
     # Tests require network access

@@ -87,7 +87,7 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ] ++ optional-dependencies.schemas;
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTests = [
     # require network access
