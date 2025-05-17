@@ -1,4 +1,5 @@
 {
+  pkgs,
   lib,
   buildGoModule,
   fetchFromGitHub,
@@ -22,6 +23,39 @@ buildGoModule rec {
       hash = "sha256-Tp05B3tmctnSYIQzCxCc/fhcAWWuEz2ifu/CQZt0XPU=";
     })
   ];
+
+  postPatch =
+    let
+      path = lib.makeBinPath (
+        with pkgs;
+        [
+          gawk
+          coreutils
+          gnugrep
+        ]
+      );
+    in
+    ''
+
+      # Make docopts.sh get its dependencies from Nix.
+      # First, next to the first non-comment line, inject code to add the
+      # dependencies to the PATH.
+      awk -i inplace '!inserted && !/^#/ {
+        print "__NIX_OLD_PATH=\"$PATH\""
+        print "PATH=\"${path}:$PATH\""
+        inserted = 1
+      }
+      { print }' docopts.sh
+      # Now, since this will be sourced by the user and we don't want to clobber
+      # PATH in their scripts, add a line at the end to restore the old PATH.
+      echo 'PATH="$__NIX_OLD_PPATH"' >> docopts.sh
+    '';
+
+  # Include docopts.sh, which can be sourced for a convenient interface, see:
+  # https://github.com/docopt/docopts/blob/master/examples/arguments_example.sh
+  postInstall = ''
+    cp ./docopts.sh $out/bin/docopts.sh
+  '';
 
   vendorHash = "sha256-+pMgaHB69itbQ+BDM7/oaJg3HrT1UN+joJL7BO/2vxE=";
 
