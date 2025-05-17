@@ -29,7 +29,7 @@ let
     ];
   };
 
-  version = "0.0.21";
+  version = "0.0.22";
   tag = "v${version}";
 in
 buildPythonPackage {
@@ -43,7 +43,7 @@ buildPythonPackage {
     owner = "mindsdb";
     repo = "type_infer";
     inherit tag;
-    hash = "sha256-Q5f4WihaT88R+x4jMUuRNBvWglkGdS5oi+o9jOk+tSE=";
+    hash = "sha256-xfm/dGZUF1UlQz/OXYYsHzSE+j5G/updfLzW0a4+vSM=";
   };
 
   pythonRelaxDeps = [
