@@ -20,7 +20,6 @@
   pytest-xdist,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
   shapely,
   strenum,
@@ -29,12 +28,9 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
-  pname = "labelbox";
+let
   version = "6.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Labelbox";
@@ -42,6 +38,27 @@ buildPythonPackage rec {
     tag = "v.${version}";
     hash = "sha256-aMJJZ9ONnjFK/J4pyLTFQox/cC8ij85IYNlJTFrfV2I=";
   };
+
+  lbox-clients = buildPythonPackage {
+    inherit src version pyproject;
+
+    pname = "lbox-clients";
+
+    sourceRoot = "${src.name}/libs/lbox-clients";
+
+    build-system = [ hatchling ];
+
+    dependencies = [
+      google-api-core
+      requests
+    ];
+
+  };
+in
+buildPythonPackage rec {
+  inherit src version pyproject;
+
+  pname = "labelbox";
 
   sourceRoot = "${src.name}/libs/labelbox";
 
@@ -54,6 +71,7 @@ buildPythonPackage rec {
 
   dependencies = [
     google-api-core
+    lbox-clients
     pydantic
     python-dateutil
     requests
@@ -97,11 +115,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "labelbox" ];
 
-  meta = with lib; {
+  meta = {
     description = "Platform API for LabelBox";
     homepage = "https://github.com/Labelbox/labelbox-python";
     changelog = "https://github.com/Labelbox/labelbox-python/releases/tag/v.${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ rakesh4g ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ rakesh4g ];
   };
 }
