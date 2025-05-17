@@ -7,13 +7,31 @@
 let
   cfg = config.system.autoUpgrade;
 
+  checkUpdates = pkgs.writeScript "check-updates" ''
+    #!${pkgs.bash}/bin/bash
+
+    # Check if we are in flake mode
+    if [ -n "${toString cfg.flake}" ]; then
+      ${config.system.build.nixos-rebuild}/bin/nixos-rebuild dry-activate --flake ${toString cfg.flake}
+    else
+      # Update channels if necessary
+      ${pkgs.nix}/bin/nix-channel --update >/dev/null 2>&1
+      ${config.system.build.nixos-rebuild}/bin/nixos-rebuild dry-run
+    fi
+
+    exit_code=$?
+    if [ $exit_code -eq 0 ]; then
+      touch /run/systemd/system-update
+      exit 0
+    else
+      exit 1
+    fi
+  '';
+
 in
 {
-
   options = {
-
     system.autoUpgrade = {
-
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -22,6 +40,16 @@ in
           version. If enabled, a systemd timer will run
           `nixos-rebuild switch --upgrade` once a
           day.
+        '';
+      };
+
+      onShutdown = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Whether to upgrade NixOS before shutdown/reboot.
+          If enabled, the system will run `nixos-rebuild switch --upgrade`
+          before shutting down or rebooting.
         '';
       };
 
@@ -173,129 +201,194 @@ in
           system was powered down.
         '';
       };
-
     };
-
   };
 
-  config = lib.mkIf cfg.enable {
-
-    assertions = [
-      {
-        assertion = !((cfg.channel != null) && (cfg.flake != null));
-        message = ''
-          The options 'system.autoUpgrade.channel' and 'system.autoUpgrade.flake' cannot both be set.
-        '';
-      }
-    ];
-
-    system.autoUpgrade.flags = (
-      if cfg.flake == null then
-        [ "--no-build-output" ]
-        ++ lib.optionals (cfg.channel != null) [
-          "-I"
-          "nixpkgs=${cfg.channel}/nixexprs.tar.xz"
-        ]
-      else
-        [
-          "--refresh"
-          "--flake ${cfg.flake}"
-        ]
-    );
-
-    systemd.services.nixos-upgrade = {
-      description = "NixOS Upgrade";
-
-      restartIfChanged = false;
-      unitConfig.X-StopOnRemoval = false;
-
-      serviceConfig.Type = "oneshot";
-
-      environment =
-        config.nix.envVars
-        // {
-          inherit (config.environment.sessionVariables) NIX_PATH;
-          HOME = "/root";
+  config = lib.mkMerge [
+    {
+      assertions = [
+        {
+          assertion = !((cfg.channel != null) && (cfg.flake != null));
+          message = ''
+            The options 'system.autoUpgrade.channel' and 'system.autoUpgrade.flake' cannot both be set.
+          '';
         }
-        // config.networking.proxy.envVars;
-
-      path = with pkgs; [
-        coreutils
-        gnutar
-        xz.bin
-        gzip
-        gitMinimal
-        config.nix.package.out
-        config.programs.ssh.package
       ];
 
-      script =
-        let
-          nixos-rebuild = "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
-          date = "${pkgs.coreutils}/bin/date";
-          readlink = "${pkgs.coreutils}/bin/readlink";
-          shutdown = "${config.systemd.package}/bin/shutdown";
-          upgradeFlag = lib.optional (cfg.channel == null) "--upgrade";
-        in
-        if cfg.allowReboot then
-          ''
-            ${nixos-rebuild} boot ${toString (cfg.flags ++ upgradeFlag)}
-            booted="$(${readlink} /run/booted-system/{initrd,kernel,kernel-modules})"
-            built="$(${readlink} /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
-
-            ${lib.optionalString (cfg.rebootWindow != null) ''
-              current_time="$(${date} +%H:%M)"
-
-              lower="${cfg.rebootWindow.lower}"
-              upper="${cfg.rebootWindow.upper}"
-
-              if [[ "''${lower}" < "''${upper}" ]]; then
-                if [[ "''${current_time}" > "''${lower}" ]] && \
-                   [[ "''${current_time}" < "''${upper}" ]]; then
-                  do_reboot="true"
-                else
-                  do_reboot="false"
-                fi
-              else
-                # lower > upper, so we are crossing midnight (e.g. lower=23h, upper=6h)
-                # we want to reboot if cur > 23h or cur < 6h
-                if [[ "''${current_time}" < "''${upper}" ]] || \
-                   [[ "''${current_time}" > "''${lower}" ]]; then
-                  do_reboot="true"
-                else
-                  do_reboot="false"
-                fi
-              fi
-            ''}
-
-            if [ "''${booted}" = "''${built}" ]; then
-              ${nixos-rebuild} ${cfg.operation} ${toString cfg.flags}
-            ${lib.optionalString (cfg.rebootWindow != null) ''
-              elif [ "''${do_reboot}" != true ]; then
-                echo "Outside of configured reboot window, skipping."
-            ''}
-            else
-              ${shutdown} -r +1
-            fi
-          ''
+      system.autoUpgrade.flags = (
+        if cfg.flake == null then
+          [ "--no-build-output" ]
+          ++ lib.optionals (cfg.channel != null) [
+            "-I"
+            "nixpkgs=${cfg.channel}/nixexprs.tar.xz"
+          ]
         else
+          [
+            "--refresh"
+            "--flake ${cfg.flake}"
+          ]
+      );
+    }
+
+    (lib.mkIf cfg.enable {
+      systemd.services.nixos-upgrade = {
+        description = "NixOS Upgrade";
+
+        restartIfChanged = false;
+        unitConfig.X-StopOnRemoval = false;
+
+        serviceConfig.Type = "oneshot";
+
+        environment =
+          config.nix.envVars
+          // {
+            inherit (config.environment.sessionVariables) NIX_PATH;
+            HOME = "/root";
+          }
+          // config.networking.proxy.envVars;
+
+        path = [
+          pkgs.coreutils
+          pkgs.gnutar
+          pkgs.xz.bin
+          pkgs.gzip
+          pkgs.gitMinimal
+          config.nix.package.out
+          config.programs.ssh.package
+        ];
+
+        script =
+          let
+            nixos-rebuild = "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
+            date = "${pkgs.coreutils}/bin/date";
+            readlink = "${pkgs.coreutils}/bin/readlink";
+            shutdown = "${config.systemd.package}/bin/shutdown";
+            upgradeFlag = lib.optional (cfg.channel == null) "--upgrade";
+          in
+          if cfg.allowReboot then
+            ''
+              ${nixos-rebuild} boot ${toString (cfg.flags ++ upgradeFlag)}
+              booted="$(${readlink} /run/booted-system/{initrd,kernel,kernel-modules})"
+              built="$(${readlink} /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
+
+              ${lib.optionalString (cfg.rebootWindow != null) ''
+                current_time="$(${date} +%H:%M)"
+
+                lower="${cfg.rebootWindow.lower}"
+                upper="${cfg.rebootWindow.upper}"
+
+                if [[ "''${lower}" < "''${upper}" ]]; then
+                  if [[ "''${current_time}" > "''${lower}" ]] && \
+                     [[ "''${current_time}" < "''${upper}" ]]; then
+                    do_reboot="true"
+                  else
+                    do_reboot="false"
+                  fi
+                else
+                  # lower > upper, so we are crossing midnight (e.g. lower=23h, upper=6h)
+                  # we want to reboot if cur > 23h or cur < 6h
+                  if [[ "''${current_time}" < "''${upper}" ]] || \
+                     [[ "''${current_time}" > "''${lower}" ]]; then
+                    do_reboot="true"
+                  else
+                    do_reboot="false"
+                  fi
+                fi
+              ''}
+
+              if [ "''${booted}" = "''${built}" ]; then
+                ${nixos-rebuild} ${cfg.operation} ${toString cfg.flags}
+              ${lib.optionalString (cfg.rebootWindow != null) ''
+                elif [ "''${do_reboot}" != true ]; then
+                  echo "Outside of configured reboot window, skipping."
+              ''}
+              else
+                ${shutdown} -r +1
+              fi
+            ''
+          else
+            ''
+              ${nixos-rebuild} ${cfg.operation} ${toString (cfg.flags ++ upgradeFlag)}
+            '';
+
+        startAt = cfg.dates;
+
+        after = [ "network-online.target" ];
+        wants = [ "network-online.target" ];
+      };
+
+      systemd.timers.nixos-upgrade = {
+        timerConfig = {
+          RandomizedDelaySec = cfg.randomizedDelaySec;
+          FixedRandomDelay = cfg.fixedRandomDelay;
+          Persistent = cfg.persistent;
+        };
+      };
+    })
+
+    (lib.mkIf cfg.onShutdown {
+      systemd.services.nixos-upgrade-shutdown = {
+        description = "NixOS Upgrade on Shutdown";
+
+        unitConfig = {
+          DefaultDependencies = false;
+          Before = [
+            "shutdown.target"
+            "reboot.target"
+            "final.target"
+            "poweroff.target"
+            "halt.target"
+          ];
+          Conflicts = [
+            "shutdown.target"
+            "reboot.target"
+          ];
+        };
+
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          User = "root";
+          TimeoutStartSec = "0";
+          TimeoutStopSec = "infinity";
+          ExecCondition = "${checkUpdates}";
+        };
+
+        environment =
+          config.nix.envVars
+          // {
+            inherit (config.environment.sessionVariables) NIX_PATH;
+            HOME = "/root";
+          }
+          // config.networking.proxy.envVars;
+
+        path = [
+          pkgs.coreutils
+          pkgs.gnutar
+          pkgs.xz.bin
+          pkgs.gzip
+          pkgs.gitMinimal
+          config.nix.package.out
+          config.programs.ssh.package
+        ];
+
+        script =
+          let
+            nixos-rebuild = "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
+            upgradeFlag = lib.optional (cfg.channel == null && cfg.flake == null) "--upgrade";
+          in
           ''
-            ${nixos-rebuild} ${cfg.operation} ${toString (cfg.flags ++ upgradeFlag)}
+            if [ -e /run/systemd/system-update ]; then
+              ${nixos-rebuild} switch ${toString (cfg.flags ++ upgradeFlag)}
+              rm -f /run/systemd/system-update
+              touch /run/systemd/system-upgraded
+            fi
           '';
 
-      startAt = cfg.dates;
-
-      after = [ "network-online.target" ];
-      wants = [ "network-online.target" ];
-    };
-
-    systemd.timers.nixos-upgrade = {
-      timerConfig = {
-        RandomizedDelaySec = cfg.randomizedDelaySec;
-        FixedRandomDelay = cfg.fixedRandomDelay;
-        Persistent = cfg.persistent;
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network-online.target" ];
+        wants = [ "network-online.target" ];
       };
-    };
-  };
-
+    })
+  ];
 }
