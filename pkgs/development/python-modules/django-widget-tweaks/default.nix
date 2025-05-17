@@ -6,25 +6,26 @@
   django,
   python,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "django-widget-tweaks";
   version = "1.5.1";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jazzband";
-    repo = pname;
+    repo = "django-widget-tweaks";
     tag = version;
     hash = "sha256-ymjBuNGfndUwQdBU2xnc9CA51oOaEPA+RaAspJMKQ04=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ django ];
+  dependencies = [ django ];
 
   checkPhase = ''
     ${python.interpreter} -m django test --settings=tests.settings
