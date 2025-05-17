@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "proj-datumgrid";
-    rev = version;
+    tag = version;
     sha256 = "132wp77fszx33wann0fjkmi1isxvsb0v9iw0gd9sxapa9h6hf3am";
   };
 

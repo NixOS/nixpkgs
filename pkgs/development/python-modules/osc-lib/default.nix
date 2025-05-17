@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "osc-lib";
-    rev = version;
+    tag = version;
     hash = "sha256-P1f0wwtOo0LKbc3ay0Vh8GGi/2nRXcTr9JOByc2nlZY=";
   };
 

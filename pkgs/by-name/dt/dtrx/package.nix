@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "dtrx-py";
     repo = "dtrx";
-    rev = version;
+    tag = version;
     sha256 = "sha256-LB3F6jcqQPRsjFO4L2fPAPnacDAdtcaadgGbwXA9LAw=";
   };
 

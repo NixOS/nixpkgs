@@ -123,7 +123,7 @@ lib.makeExtensible (self: {
       src = fetchFromGitHub {
         owner = "lix-project";
         repo = "lix";
-        rev = version;
+        tag = version;
         hash = "sha256-f8k+BezKdJfmE+k7zgBJiohtS3VkkriycdXYsKOm3sc=";
       };
 
@@ -155,7 +155,7 @@ lib.makeExtensible (self: {
       src = fetchFromGitHub {
         owner = "lix-project";
         repo = "lix";
-        rev = version;
+        tag = version;
         hash = "sha256-hiGtfzxFkDc9TSYsb96Whg0vnqBVV7CUxyscZNhed0U=";
       };
 
@@ -187,7 +187,7 @@ lib.makeExtensible (self: {
       src = fetchFromGitHub {
         owner = "lix-project";
         repo = "lix";
-        rev = version;
+        tag = version;
         hash = "sha256-CCKIAE84dzkrnlxJCKFyffAxP3yfsOAbdvydUGqq24g=";
       };
 
@@ -202,7 +202,7 @@ lib.makeExtensible (self: {
       version = "2.92.0";
       src = fetchgit {
         url = "https://git.lix.systems/lix-project/nix-eval-jobs.git";
-        rev = version;
+        tag = version;
         hash = "sha256-tPr61X9v/OMVt7VXOs1RRStciwN8gDGxEKx+h0/Fg48=";
       };
     };
@@ -218,7 +218,7 @@ lib.makeExtensible (self: {
         domain = "git.lix.systems";
         owner = "lix-project";
         repo = "lix";
-        rev = version;
+        tag = version;
         hash = "sha256-hsFe4Tsqqg4l+FfQWphDtjC79WzNCZbEFhHI8j2KJzw=";
       };
 

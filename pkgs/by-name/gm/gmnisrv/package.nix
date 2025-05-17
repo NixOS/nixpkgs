@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "gmnisrv";
-    rev = version;
+    tag = version;
     sha256 = "sha256-V9HXXYQIo3zeqZjJEn+dhemNg6AU+ee3FRmBmXgLuYQ=";
   };
 

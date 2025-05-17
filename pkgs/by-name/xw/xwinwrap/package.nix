@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchbzr {
     url = "https://code.launchpad.net/~shantanu-goel/xwinwrap/devel";
-    rev = version;
+    tag = version;
     sha256 = "1annhqc71jcgx5zvcy31c1c488ygx4q1ygrwyy2y0ww743smbchw";
   };
 

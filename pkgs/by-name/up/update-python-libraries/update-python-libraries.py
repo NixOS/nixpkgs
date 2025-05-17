@@ -487,7 +487,7 @@ def _update_package(path, target):
         raise ValueError(f"Unable to retrieve old hash for {pname}")
 
     if fetcher == "fetchFromGitHub":
-        # in the case of fetchFromGitHub, it's common to see `rev = version;` or `rev = "v${version}";`
+        # in the case of fetchFromGitHub, it's common to see `tag = version;` or `rev = "v${version}";`
         # in which no string value is meant to be substituted. However, we can just overwrite the previous value.
         regex = r"((?:rev|tag)\s+=\s+[^;]*;)"
         regex = re.compile(regex)

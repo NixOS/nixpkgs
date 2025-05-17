@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OpenHMD";
     repo = "OpenHMD";
-    rev = version;
+    tag = version;
     sha256 = "1hkpdl4zgycag5k8njvqpx01apxmm8m8pvhlsxgxpqiqy9a38ccg";
   };
 

@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "hyprland-community";
     repo = "hyprland-autoname-workspaces";
-    rev = version;
+    tag = version;
     hash = "sha256-M/3mqO7G2E5NW2uE+X8P4UhEl0r1fPXuxyb1NowJQnY=";
   };
 

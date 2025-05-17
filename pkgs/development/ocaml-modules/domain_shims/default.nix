@@ -11,7 +11,7 @@ buildDunePackage rec {
   src = fetchFromGitLab {
     owner = "gasche";
     repo = "domain-shims";
-    rev = version;
+    tag = version;
     hash = "sha256-/5Cw+M0A1rnT7gFqzryd4Z0tylN0kZgSBXtn9jr8u1c=";
   };
 

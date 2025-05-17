@@ -28,7 +28,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "phuhl";
     repo = "linux_notification_center";
-    rev = version;
+    tag = version;
     hash = "sha256-VU9NaQVS0n8hFRjWMvCMkaF5mZ4hpnluV31+/SAK7tU=";
   };
 

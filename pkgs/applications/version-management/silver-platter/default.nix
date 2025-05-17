@@ -26,7 +26,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "silver-platter";
-    rev = version;
+    tag = version;
     hash = "sha256-k+C4jrC4FO/yy9Eb6x4lv1zyyp/eGkpMcDqZ0KoxfBs=";
   };
 

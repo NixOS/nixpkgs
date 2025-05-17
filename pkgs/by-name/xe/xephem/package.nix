@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "XEphem";
     repo = "XEphem";
-    rev = version;
+    tag = version;
     hash = "sha256-TuzXrWoJOAHg31DrJObPcHBXgtqR/KWKFRsqddPzL4c=";
   };
 

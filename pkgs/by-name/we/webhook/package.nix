@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "adnanh";
     repo = "webhook";
-    rev = version;
+    tag = version;
     sha256 = "sha256-3Ew72ADGTlvp6w37nYbCng7HHCZ0a7kVf3DNRNyCkZU=";
   };
 

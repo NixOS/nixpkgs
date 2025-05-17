@@ -12,7 +12,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "AltGr";
     repo = "ocaml-mccs";
-    rev = version;
+    tag = version;
     hash = "sha256-xvcqPXyzVGXXFYRVdFPaCfieFEguWffWVB04ImEuPvQ=";
   };
 

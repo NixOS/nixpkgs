@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "thorkill";
     repo = "eresi";
-    rev = version;
+    tag = version;
     sha256 = "0a5a7mh2zw9lcdrl8n1mqccrc0xcgj7743l7l4kslkh722fxv625";
   };
 

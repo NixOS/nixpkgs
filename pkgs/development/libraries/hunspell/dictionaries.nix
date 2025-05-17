@@ -903,7 +903,7 @@ rec {
     src = fetchFromGitHub {
       owner = "OpenTaal";
       repo = "opentaal-hunspell";
-      rev = version;
+      tag = version;
       sha256 = "0jma8mmrncyzd77kxliyngs4z6z4769g3nh0a7xn2pd4s5y2xdpy";
     };
 
@@ -1194,7 +1194,7 @@ rec {
     src = fetchFromGitHub {
       owner = "spellcheck-ko";
       repo = "hunspell-dict-ko";
-      rev = version;
+      tag = version;
       hash = "sha256-eHuNppqB536wHXftzDghpB3cM9CNFKW1z8f0SNkEiD8=";
     };
 

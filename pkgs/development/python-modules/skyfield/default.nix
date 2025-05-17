@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "skyfielders";
     repo = "python-skyfield";
-    rev = version;
+    tag = version;
     hash = "sha256-PZ63sohdfpop3nYQr2RIMjPbrL9jdfincEhw5D8NZ+Y=";
   };
 

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "letoams";
     repo = "hash-slinger";
-    rev = version;
+    tag = version;
     sha256 = "sha256-IN+jo2EuGx+3bnANKz+d/3opFBUCSmkBS/sCU3lT7Zs=";
   };
 

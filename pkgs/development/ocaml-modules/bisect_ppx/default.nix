@@ -13,7 +13,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "aantron";
     repo = "bisect_ppx";
-    rev = version;
+    tag = version;
     hash = "sha256-3qXobZLPivFDtls/3WNqDuAgWgO+tslJV47kjQPoi6o=";
   };
 

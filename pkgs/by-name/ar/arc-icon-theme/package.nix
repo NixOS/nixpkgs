@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "horst3180";
     repo = "arc-icon-theme";
-    rev = version;
+    tag = version;
     hash = "sha256-TfYtzwo69AC5hHbzEqB4r5Muqvn/eghCGSlmjMCFA7I=";
   };
 

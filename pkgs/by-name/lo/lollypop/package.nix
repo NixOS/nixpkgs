@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = pname;
-    rev = version;
+    tag = version;
     fetchSubmodules = true;
     hash = "sha256-hdReviNgcigXuNqJns6aPW+kixlpmRXtqrLlm/LGHBo=";
   };

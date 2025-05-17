@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nixos-generators";
-    rev = version;
+    tag = version;
     sha256 = "sha256-wHmtB5H8AJTUaeGHw+0hsQ6nU4VyvVrP2P4NeCocRzY=";
   };
   strictDeps = true;

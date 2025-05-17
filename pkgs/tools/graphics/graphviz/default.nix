@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "graphviz";
     repo = "graphviz";
-    rev = version;
+    tag = version;
     hash = "sha256-Uxqg/7+LpSGX4lGH12uRBxukVw0IswFPfpb2EkLsaiI=";
   };
 

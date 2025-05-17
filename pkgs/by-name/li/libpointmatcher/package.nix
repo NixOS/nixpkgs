@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "norlab-ulaval";
     repo = "libpointmatcher";
-    rev = version;
+    tag = version;
     hash = "sha256-OkfWdim0JDKiBx5spYpkMyFrLQP3AMWBVDpzmFwqNFM=";
   };
 

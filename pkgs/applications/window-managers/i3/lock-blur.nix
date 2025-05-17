@@ -14,7 +14,7 @@ i3lock-color.overrideAttrs (oldAttrs: rec {
   src = fetchFromGitHub {
     owner = "karulont";
     repo = "i3lock-blur";
-    rev = version;
+    tag = version;
     sha256 = "sha256-rBQHYVD9rurzTEXrgEnOziOP22D2EePC1+EV9Wi2pa0=";
   };
 

@@ -7,7 +7,7 @@
   src ? fetchFromGitHub {
     owner = "NixOS";
     repo = "nix";
-    rev = version;
+    tag = version;
     inherit hash;
   },
   patches ? [ ],

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ihhub";
     repo = "fheroes2";
-    rev = version;
+    tag = version;
     hash = "sha256-Z6pepW2hHaDNkkMVxuekoNNibsuicyGLmA8Y9isy8Mo=";
   };
 

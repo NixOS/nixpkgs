@@ -25,7 +25,7 @@ pythonPackages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "telepresenceio";
     repo = "telepresence";
-    rev = version;
+    tag = version;
     sha256 = "1ccc8bzcdxp6rh6llk7grcnmyc05fq7dz5w0mifdzjv3a473hsky";
   };
 

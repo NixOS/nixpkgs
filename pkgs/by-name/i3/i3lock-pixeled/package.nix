@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "Ma27";
     repo = "i3lock-pixeled";
-    rev = version;
+    tag = version;
     sha256 = "1l9yjf9say0mcqnnjkyj4z3f6y83bnx4jsycd1h10p3m8afbh8my";
   };
 

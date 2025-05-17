@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mapbox";
     repo = "cligj";
-    rev = version;
+    tag = version;
     hash = "sha256-0f9+I6ozX93Vn0l7+WR0mpddDZymJQ3+Krovt6co22Y=";
   };
 

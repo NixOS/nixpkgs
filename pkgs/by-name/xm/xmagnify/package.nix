@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "amiloradovsky";
     repo = "magnify";
-    rev = version;
+    tag = version;
     sha256 = "1ngnp5f5zl3v35vhbdyjpymy6mwrs0476fm5nd7dzkba7n841jdh";
   };
 

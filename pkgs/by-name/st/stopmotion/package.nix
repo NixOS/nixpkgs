@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://invent.kde.org/multimedia/stopmotion";
-    rev = version;
+    tag = version;
     hash = "sha256-wqrB0mo7sI9ntWF9QlYmGiRiIoLkMzD+mQ6BzhbAKX8=";
   };
 

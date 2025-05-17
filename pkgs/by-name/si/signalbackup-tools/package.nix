@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bepaald";
     repo = "signalbackup-tools";
-    rev = version;
+    tag = version;
     hash = "sha256-JUMAA7B+2yJlkAd3JoJgEk8N73FzmbJFeMbrEx/BiVg=";
   };
 

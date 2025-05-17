@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "CuraEngine";
-    rev = version;
+    tag = version;
     sha256 = "sha256-8V21TRSqCN+hkTlz51d5A5oK5JOwEtx+ROt8cfJBL/0=";
   };
 

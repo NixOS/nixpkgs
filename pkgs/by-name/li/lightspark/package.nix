@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lightspark";
     repo = "lightspark";
-    rev = version;
+    tag = version;
     hash = "sha256-2+Kmwj2keCMR7UbKbY6UvrkX4CnW61elres8ltiZuUg=";
   };
 

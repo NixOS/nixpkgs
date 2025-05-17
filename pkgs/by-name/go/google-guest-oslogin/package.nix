@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "guest-oslogin";
-    rev = version;
+    tag = version;
     sha256 = "sha256-9QCB94HVbeLjioJuSN1Aa+EqFncojPoWFxw5mS9bDGw=";
   };
 

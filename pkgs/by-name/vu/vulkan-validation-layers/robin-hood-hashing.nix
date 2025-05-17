@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "martinus";
     repo = "robin-hood-hashing";
-    rev = version; # pin
+    tag = version; # pin
     sha256 = "sha256-J4u9Q6cXF0SLHbomP42AAn5LSKBYeVgTooOhqxOIpuM=";
   };
 

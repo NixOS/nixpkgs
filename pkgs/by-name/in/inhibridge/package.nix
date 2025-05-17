@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     domain = "codeberg.org";
     owner = "Scrumplex";
     repo = "inhibridge";
-    rev = version;
+    tag = version;
     hash = "sha256-cKVw3Gd4Ml8BeXjZqTN6ToeRzO9PI+Sn45gpltlRuWM=";
   };
 

@@ -10,7 +10,7 @@ let
   src = fetchFromGitLab {
     owner = "coolercontrol";
     repo = "coolercontrol";
-    rev = version;
+    tag = version;
     hash = "sha256-xIc0ZecQGyjMQWVaucKomu7SbaHy+ymg5dkOjHjtJ9c=";
   };
 

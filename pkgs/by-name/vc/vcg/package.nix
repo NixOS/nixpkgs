@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cnr-isti-vclab";
     repo = "vcglib";
-    rev = version;
+    tag = version;
     sha256 = "sha256-U3pu1k2pCH+G4CtacaDQ9SgkFX5A9/O/qrdpgWvB1+U=";
   };
 

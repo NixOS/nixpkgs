@@ -13,7 +13,7 @@ ocamlPackages.buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "rescript-lang";
     repo = "rescript-vscode";
-    rev = version;
+    tag = version;
     hash = "sha256-v+qCVge57wvA97mtzbxAX9Fvi7ruo6ZyIC14O8uWl9Y=";
   };
 

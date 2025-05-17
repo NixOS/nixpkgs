@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ical2org-py";
     repo = "ical2org.py";
-    rev = version;
+    tag = version;
     hash = "sha256-vBi1WYXMuDFS/PnwFQ/fqN5+gIvtylXidfZklyd6LcI=";
   };
 

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Opendigitalradio";
     repo = "dablin";
-    rev = version;
+    tag = version;
     sha256 = "sha256-1rjL0dSEgF7FF72KiT6Tyj7/wbRc24LzyzmM1IGdglc=";
   };
 

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wemake-services";
     repo = "django-split-settings";
-    rev = version;
+    tag = version;
     hash = "sha256-Bk2/DU+K524mCUvteWT0fIQH5ZgeMHiufMTF+dJYVtc=";
   };
 

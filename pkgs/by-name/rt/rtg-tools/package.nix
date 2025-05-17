@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "RealTimeGenomics";
     repo = "rtg-tools";
-    rev = version;
+    tag = version;
     hash = "sha256-fMrrjrgaGxBVxn6qMq2g0oFv6qtfhZcQlkvv1E9Os6Y=";
   };
 

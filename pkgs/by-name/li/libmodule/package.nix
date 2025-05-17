@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "FedeDP";
     repo = "libmodule";
-    rev = version;
+    tag = version;
     sha256 = "sha256-wkRiDWO9wUyxkAeqvm99u22Jq4xnQJx6zS7Sb+R8iMg=";
   };
 

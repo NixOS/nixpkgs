@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "osdlyrics";
     repo = "osdlyrics";
-    rev = version;
+    tag = version;
     hash = "sha256-4jEF1LdMwaLNF6zvzAuGW8Iu4dzhrFLutX69LwSjTAI=";
   };
 

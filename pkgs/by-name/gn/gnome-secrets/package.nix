@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "secrets";
-    rev = version;
+    tag = version;
     hash = "sha256-FyBtw7Gkvd5XONkM7OVGxE+S5FpuUIl7KWLFHoQeoN4=";
   };
 

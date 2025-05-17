@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "merbanan";
     repo = "rtl_433";
-    rev = version;
+    tag = version;
     hash = "sha256-S0jtcgbpS2NOezZJ0uq1pVj0nsa82F0NRmQD9glILz4=";
   };
 

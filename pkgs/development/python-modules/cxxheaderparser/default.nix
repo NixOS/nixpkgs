@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "robotpy";
     repo = "cxxheaderparser";
-    rev = version;
+    tag = version;
     hash = "sha256-+Q8EaVhx8/e+37GEHW3In5tMTIMl+5MySuCLgAzTypo=";
   };
 

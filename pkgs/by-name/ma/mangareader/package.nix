@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "g-fb";
     repo = "mangareader";
-    rev = version;
+    tag = version;
     hash = "sha256-XX0VaXVYmAs5vmgwslflKIYx1peITp4VmReLkv1nV3I=";
   };
 

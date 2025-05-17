@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-wayland-session";
-    rev = version;
+    tag = version;
     hash = "sha256-VjOLw6ByS0se9jy1VY4xhBSs26yvoffFVAc1v0gMyYk=";
   };
 

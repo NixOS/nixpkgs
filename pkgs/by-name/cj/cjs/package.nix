@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cjs";
-    rev = version;
+    tag = version;
     hash = "sha256-2lkIWroOo3hxu9/L/Ty7CADzVrZ0ohyHVmm65NoNlD4=";
   };
 

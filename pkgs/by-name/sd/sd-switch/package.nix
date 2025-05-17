@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromSourcehut {
     owner = "~rycee";
     repo = "sd-switch";
-    rev = version;
+    tag = version;
     hash = "sha256-lP65PrMFhbNoWyObFsJK06Hgv9w83hyI/YiKcL5rXhY=";
   };
 

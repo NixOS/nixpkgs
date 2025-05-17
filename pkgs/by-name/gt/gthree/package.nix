@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "alexlarsson";
     repo = "gthree";
-    rev = version;
+    tag = version;
     sha256 = "09fcnjc3j21lh5fjf067wm35sb4qni4vgzing61kixnn2shy79iy";
   };
 

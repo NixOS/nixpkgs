@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitLab {
     owner = "dalibo";
     repo = "postgresql_anonymizer";
-    rev = version;
+    tag = version;
     hash = "sha256-MGdGvd4P1fFKdd6wnS2V5Tdly6hJlAmSA4TspnO/6Tk=";
   };
 

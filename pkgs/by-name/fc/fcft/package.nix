@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "fcft";
-    rev = version;
+    tag = version;
     hash = "sha256:08fr6zcqk4qp1k3r0di6v60qfyd3q5k9jnxzlsx2p1lh0nils0xa";
   };
 

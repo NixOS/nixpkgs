@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ros-infrastructure";
     repo = "catkin_pkg";
-    rev = version;
+    tag = version;
     hash = "sha256-lHUKhE9dQLO1MbkstUEiGrHc9Rm+bY/AmgLyh7AbvFQ=";
   };
 

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "fbdtemme";
     repo = "bencode";
-    rev = version;
+    tag = version;
     hash = "sha256-zpxvADZfYTUdlNLMZJSCanPL40EGl9BBCxR7oDhvOTw=";
   };
 

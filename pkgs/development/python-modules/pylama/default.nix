@@ -27,7 +27,7 @@ let
       name = "${pname}-${version}-source";
       owner = "klen";
       repo = "pylama";
-      rev = version;
+      tag = version;
       hash = "sha256-WOGtZ412tX3YH42JCd5HIngunluwtMmQrOSUZp23LPU=";
     };
 

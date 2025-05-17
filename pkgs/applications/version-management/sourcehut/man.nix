@@ -24,7 +24,7 @@ let
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "man.sr.ht";
-    rev = version;
+    tag = version;
     hash = "sha256-c2xFC1pmOSGGMP4RVOmgFogj7CY2kHrADsWsm7M5ZK4=";
   };
 

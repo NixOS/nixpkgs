@@ -18,7 +18,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "inhabitedtype";
     repo = "ocaml-webmachine";
-    rev = version;
+    tag = version;
     sha256 = "03ynb1l2jjqba88m9r8m5hwlm8izpfp617r4vcab5kmdim1l2ffx";
   };
 

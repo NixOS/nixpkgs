@@ -34,7 +34,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KDE";
     repo = "qtcurve";
-    rev = version;
+    tag = version;
     sha256 = "XP9VTeiVIiMm5mkXapCKWxfcvaYCkhY3S5RXZNR3oWo=";
   };
 

@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "mattbas";
     repo = "${pname}";
-    rev = version;
+    tag = version;
     hash = "sha256-8oHJCQdP2xxSSDM0MDkSrG89WgCtMKm1AKlddnq3gig=";
     fetchSubmodules = true;
   };

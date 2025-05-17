@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "GrahamDumpleton";
     repo = "mod_wsgi";
-    rev = version;
+    tag = version;
     hash = "sha256-FhOSU8/4QoWa73bNi/qkgKm3CeEEdboh2MgxgQxcYzE=";
   };
 

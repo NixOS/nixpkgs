@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dde-api-proxy";
-    rev = version;
+    tag = version;
     hash = "sha256-QE31BOh2LFlY6te+2+nSHGbhLsikSX8V7xSvcLzCWRA=";
   };
 

@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "containers";
     repo = "crun";
-    rev = version;
+    tag = version;
     hash = "sha256-uAB/IJ1psGKvOTVhj00VlNadxSKTXvg1eU97bngVblw=";
     fetchSubmodules = true;
   };

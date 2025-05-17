@@ -14,7 +14,7 @@ buildDunePackage rec {
     domain = "framagit.org";
     owner = "zoggy";
     repo = "higlo";
-    rev = version;
+    tag = version;
     hash = "sha256-A5Su4+eBOq/WNdY/3EBQ3KqrRQuaCI1x25cEuoZp4Mo=";
   };
 

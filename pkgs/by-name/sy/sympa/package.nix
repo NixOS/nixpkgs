@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "sympa-community";
     repo = "sympa";
-    rev = version;
+    tag = version;
     sha256 = "sha256-XvLTO2Wau34zMoi+5d16JnWd/K96w2py9xC5oLlRfRM=";
   };
 

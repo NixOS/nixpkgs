@@ -11,7 +11,7 @@ buildFishPlugin rec {
   src = fetchFromGitHub {
     owner = "meaningful-ooo";
     repo = pname;
-    rev = version;
+    tag = version;
     sha256 = "sha256-MdcZUDRtNJdiyo2l9o5ma7nAX84xEJbGFhAVhK+Zm1w=";
   };
 

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "ipcalc";
     repo = "ipcalc";
-    rev = version;
+    tag = version;
     hash = "sha256-9eaR1zG8tjSGlkpyY1zTHAVgN5ypuyRfeRq6ct6zsLU=";
   };
 

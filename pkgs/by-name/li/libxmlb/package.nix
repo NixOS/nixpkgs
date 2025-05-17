@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "libxmlb";
-    rev = version;
+    tag = version;
     hash = "sha256-6S/4X6dYsVj9v98LoDJjir6Kmb5L8PloD23yvvkiD6o=";
   };
 

@@ -20,7 +20,7 @@ buildPecl rec {
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-php-driver";
-    rev = version;
+    tag = version;
     hash = "sha256-o4fy46oh3iWLAcszcFo1m5GdalQs6OswT+OQTYo2cZc=";
     fetchSubmodules = true;
   };

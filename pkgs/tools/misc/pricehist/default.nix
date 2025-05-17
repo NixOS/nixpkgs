@@ -20,7 +20,7 @@ buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "chrisberkhout";
     repo = "pricehist";
-    rev = version;
+    tag = version;
     hash = "sha256-SBRJxNnA+nOxO6h97WZZHwhxoXeNtb5+rDayn4Hw6so=";
   };
 

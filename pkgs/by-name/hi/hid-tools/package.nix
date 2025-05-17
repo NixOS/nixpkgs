@@ -14,7 +14,7 @@ python3.pkgs.buildPythonPackage rec {
     domain = "gitlab.freedesktop.org";
     owner = "libevdev";
     repo = "hid-tools";
-    rev = version;
+    tag = version;
     hash = "sha256-h880jJcZDc9pIPf+nr30wu2i9y3saAKFZpooJ4MF67E=";
   };
 

@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "liquidat";
     repo = "nagios-icinga-openvpn";
-    rev = version;
+    tag = version;
     sha256 = "1vz3p7nckc5k5f06nm1xfzpykhyndh2dzyagmifrzg5k478p1lpm";
   };
 

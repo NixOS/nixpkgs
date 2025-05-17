@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "trntv";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-y8IQzOGs78T44jLcNNjPlfopyptX3Mhv2LdawqS1T+U=";
   };
 

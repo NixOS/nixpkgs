@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adamchainz";
     repo = "pytest-reverse";
-    rev = version;
+    tag = version;
     hash = "sha256-JEJwl/4RL1THQ7cGaS/84KdhIQHB9eLTY5uV+84ald8=";
   };
 

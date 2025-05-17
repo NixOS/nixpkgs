@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "fonts";
-    rev = version;
+    tag = version;
     sha256 = "sha256-YiE7yaH0ZrF1/Cp+3bcJYm2cExQjFcat6JLMJPjhops=";
   };
 

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "bitseater";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-hubKusrs0Hh8RryoEI29pnhTSNsIbtGMltlH4qoM6gE=";
   };
 

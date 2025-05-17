@@ -20,7 +20,7 @@ buildDunePackage rec {
   src = fetchFromGitLab {
     owner = "irill";
     repo = "dose3";
-    rev = version;
+    tag = version;
     hash = "sha256-K0fYSAWV48Rers/foDrEIqieyJ0PvpXkuYrFrZGBkkE=";
   };
 

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ros";
     repo = "urdfdom";
-    rev = version;
+    tag = version;
     hash = "sha256-t1ff5aRHE7LuQdCXuooWPDUgPWjyYyQmQUB1RJmte1w=";
   };
 

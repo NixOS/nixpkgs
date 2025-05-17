@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "TabViewer";
     repo = "tabview";
-    rev = version;
+    tag = version;
     sha256 = "1d1l8fhdn3w2zg7wakvlmjmgjh9lh9h5fal1clgyiqmhfix4cn4m";
   };
 

@@ -13,7 +13,7 @@ buildGoModule rec {
     domain = "git.mills.io";
     owner = "prologic";
     repo = "zs";
-    rev = version;
+    tag = version;
     hash = "sha256-V8+p19kvVh64yCreNVp4RVdkJkjrq8Q5VbjaJWekZHY=";
   };
 

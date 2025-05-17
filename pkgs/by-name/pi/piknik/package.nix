@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "jedisct1";
     repo = "piknik";
-    rev = version;
+    tag = version;
     hash = "sha256-Kdqh3sQuO0iT0RW2hU+nrmBltxCFiqOSL00cbDHZJjc=";
   };
 

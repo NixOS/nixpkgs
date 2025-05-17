@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromSourcehut {
     owner = "~cnx";
     repo = "ipwhl-utils";
-    rev = version;
+    tag = version;
     hash = "sha256-YaIYcoUnbiv9wUOFIzGj2sWGbh7NsqRQcqOR2X6+QZA=";
   };
 

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.com";
     owner = "DavidGriffith";
     repo = "frotz";
-    rev = version;
+    tag = version;
     hash = "sha256-GvGxojD8d5GVy/d8h3q6K7KJroz2lsKbfE0F0acjBl8=";
   };
 

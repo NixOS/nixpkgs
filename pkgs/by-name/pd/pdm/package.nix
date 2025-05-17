@@ -15,7 +15,7 @@ let
       resolvelib = super.resolvelib.overridePythonAttrs (old: rec {
         version = "1.1.0";
         src = old.src.override {
-          rev = version;
+          tag = version;
           hash = "sha256-UBdgFN+fvbjz+rp8+rog8FW2jwO/jCfUPV7UehJKiV8=";
         };
       });

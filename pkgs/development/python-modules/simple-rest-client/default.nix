@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "allisson";
     repo = "python-simple-rest-client";
-    rev = version;
+    tag = version;
     hash = "sha256-IaLo7nBMIabi4ZjZ4ZLJliCL/dzidaCBCmn0cq7Fzdw=";
   };
 

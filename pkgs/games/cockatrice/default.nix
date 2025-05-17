@@ -18,7 +18,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Cockatrice";
     repo = "Cockatrice";
-    rev = version;
+    tag = version;
     sha256 = "sha256-zXAK830SdGT3xN3ST8h9LLy/oWr4MH6TZf57gLfI0e8=";
   };
 

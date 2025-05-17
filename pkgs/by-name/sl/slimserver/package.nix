@@ -38,7 +38,7 @@ perlPackages.buildPerlPackage rec {
   src = fetchFromGitHub {
     owner = "LMS-Community";
     repo = "slimserver";
-    rev = version;
+    tag = version;
     hash = "sha256-rwaHlNM5KGqvk8SAdinvCGT5+UUAU8I2jiN5Ine/eds=";
   };
 

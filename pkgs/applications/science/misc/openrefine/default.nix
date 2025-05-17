@@ -15,7 +15,7 @@ let
   src = fetchFromGitHub {
     owner = "openrefine";
     repo = "openrefine";
-    rev = version;
+    tag = version;
     hash = "sha256-wV5ur31JEGcMSLRHQq/H6GlsdpEzTH6ZxBkE9Sj6TkU=";
   };
 

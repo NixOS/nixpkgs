@@ -22,7 +22,7 @@ let
       src = fetchFromGitHub {
         owner = "varnish";
         repo = "varnish-modules";
-        rev = version;
+        tag = version;
         inherit hash;
       };
 

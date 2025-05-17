@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "libosmo-abis";
-    rev = version;
+    tag = version;
     hash = "sha256-TxK+r+GhqPjvFYA3AX3JXjRwhEyjoLcPTR1lpkgSlUo=";
   };
 

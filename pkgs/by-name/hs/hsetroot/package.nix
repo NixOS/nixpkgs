@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "himdel";
     repo = "hsetroot";
-    rev = version;
+    tag = version;
     sha256 = "1jbk5hlxm48zmjzkaq5946s58rqwg1v1ds2sdyd2ba029hmvr722";
   };
 

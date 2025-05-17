@@ -24,7 +24,7 @@ let
     src = fetchFromGitHub {
       owner = "DependencyTrack";
       repo = "frontend";
-      rev = version;
+      tag = version;
       hash = "sha256-JuZM/IJd+6xtiC2Tq4ecArmT24D1m8J719UZG+iP2s0=";
     };
 
@@ -49,7 +49,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "DependencyTrack";
     repo = "dependency-track";
-    rev = version;
+    tag = version;
     hash = "sha256-GcA6Vv3H0gujkRYxipLg9ydk/HorNzwWkEAjKnMrHro=";
   };
 

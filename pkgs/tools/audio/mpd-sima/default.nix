@@ -13,7 +13,7 @@ buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "kaliko";
     repo = "sima";
-    rev = version;
+    tag = version;
     hash = "sha256-lMvM1EqS1govhv4B2hJzIg5DFQYgEr4yJJtgOQxnVlY=";
   };
 

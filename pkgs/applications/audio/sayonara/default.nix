@@ -30,7 +30,7 @@ mkDerivation rec {
   src = fetchFromGitLab {
     owner = "luciocarreras";
     repo = "sayonara-player";
-    rev = version;
+    tag = version;
     hash = "sha256-ZcuWe1dsLJS4/nLXSSKB7wzPU9COFyE4vPSwZIo0bgI=";
   };
 

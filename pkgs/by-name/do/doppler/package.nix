@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "dopplerhq";
     repo = "cli";
-    rev = version;
+    tag = version;
     hash = "sha256-mT6AB3Xtjm7AHtdF3eKn7dfnd/3ul1nCiZ5e4cHUXbc=";
   };
 

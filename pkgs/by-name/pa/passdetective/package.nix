@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "aydinnyunus";
     repo = "PassDetective";
-    rev = version;
+    tag = version;
     hash = "sha256-ln+nKESCYNQwTB6njNQBNUGmF+NXqgzmM1sb/d6ZBcU=";
   };
 

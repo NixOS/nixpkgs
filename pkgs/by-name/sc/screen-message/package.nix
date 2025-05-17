@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nomeata";
     repo = "screen-message";
-    rev = version;
+    tag = version;
     hash = "sha256-fwKle+aXZuiNo5ksrigj7BGLv2fUILN2GluHHZ6co6s=";
   };
 

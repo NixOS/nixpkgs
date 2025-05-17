@@ -13,7 +13,7 @@ ocamlPackages.buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "besport";
     repo = "ocsigen-i18n";
-    rev = version;
+    tag = version;
     hash = "sha256-NIl1YUTws8Ff4nrqdhU7oS/TN0lxVQgrtyEZtpS1ojM=";
   };
 

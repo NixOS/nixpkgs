@@ -32,7 +32,7 @@ let
       src = fetchFromGitHub {
         owner = "fmtlib";
         repo = "fmt";
-        rev = version;
+        tag = version;
         inherit hash;
       };
 

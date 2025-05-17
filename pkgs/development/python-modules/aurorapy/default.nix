@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "energievalsabbia";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-rGwfGq3zdoG9NCGqVN29Q4bWApk5B6CRdsW9ctWgOec=";
   };
 

@@ -14,7 +14,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "TritonDataCenter";
     repo = "node-triton";
-    rev = version;
+    tag = version;
     hash = "sha256-udS5CnaaeaY+owOrbC3R2jrNBpuTBKOkHrIS2AlHWAE=";
   };
 

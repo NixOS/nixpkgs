@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nicolas-van";
     repo = "multirun";
-    rev = version;
+    tag = version;
     hash = "sha256-I95nxZD65tHiok4MzsGG7gyaxPHbqQLuRWdHUPNhLu8=";
   };
 

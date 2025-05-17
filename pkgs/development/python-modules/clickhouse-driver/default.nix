@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mymarilyn";
     repo = "clickhouse-driver";
-    rev = version;
+    tag = version;
     hash = "sha256-l0YHWY25PMHgZG/sAZjtGhwmcxWdA8k96zlm9hbKcek=";
   };
 

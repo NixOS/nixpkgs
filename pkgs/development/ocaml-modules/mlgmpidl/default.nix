@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nberth";
     repo = "mlgmpidl";
-    rev = version;
+    tag = version;
     hash = "sha256-ZmSDKZiHko8MCeIuZL53HjupfwO6PAm8QOCc9O3xJOk=";
   };
 

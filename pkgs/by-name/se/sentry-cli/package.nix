@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-cli";
-    rev = version;
+    tag = version;
     hash = "sha256-uGYL+xEXcf7+qe9NUvzFVjGGx33UpwjS7EHD/xVV+9Q=";
   };
   doCheck = false;

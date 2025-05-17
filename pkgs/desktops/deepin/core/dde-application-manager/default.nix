@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-KUwX7oilV562WDxkBhTQhwz2lgcQIYwkmRRglWj0zh8=";
   };
 

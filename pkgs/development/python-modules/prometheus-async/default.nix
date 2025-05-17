@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "prometheus-async";
-    rev = version;
+    tag = version;
     hash = "sha256-e/BVxATpafxddq26Rt7XTiK4ajY+saUApXbmTG0/I6I=";
   };
 

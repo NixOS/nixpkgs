@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "drawpile";
     repo = "drawpile";
-    rev = version;
+    tag = version;
     sha256 = "sha256-xcutcSpbFt+pb7QP1E/RG6iNnZwpfhIZTxr+1usLKHc=";
   };
 

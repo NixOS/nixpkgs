@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "perseas";
     repo = "Pyrseas";
-    rev = version;
+    tag = version;
     sha256 = "sha256-+MxnxvbLMxK1Ak+qKpKe3GHbzzC+XHO0eR7rl4ON9H4=";
   };
 

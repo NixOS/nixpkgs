@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "peternijssen";
     repo = "spiderpy";
-    rev = version;
+    tag = version;
     hash = "sha256-Yujy8HSMbK2DQ/913r2c74hKPYDfcHFKq04ysqxG+go=";
   };
 

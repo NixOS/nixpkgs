@@ -19,7 +19,7 @@ buildPythonPackage rec {
     domain = "codeberg.org";
     owner = "hjacobs";
     repo = "python-clickclick";
-    rev = version;
+    tag = version;
     hash = "sha256-gefU6CI4ibtvonsaKZmuffuUNUioBn5ODs72BI5zXOw=";
   };
 

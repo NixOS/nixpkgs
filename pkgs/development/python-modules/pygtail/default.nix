@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bgreenlee";
     repo = "pygtail";
-    rev = version;
+    tag = version;
     hash = "sha256-TlXTlxeGDd+elGpMjxcJCmRuJmp5k9xj6MrViRzcST4=";
   };
 

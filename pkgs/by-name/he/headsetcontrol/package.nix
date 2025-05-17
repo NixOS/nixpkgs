@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Sapd";
     repo = "HeadsetControl";
-    rev = version;
+    tag = version;
     sha256 = "sha256-N1c94iAJgCPhGNDCGjMINg0AL2wPX5gVIsJ+pzn/l9Y=";
   };
 

@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "tabos";
     repo = "banking";
-    rev = version;
+    tag = version;
     hash = "sha256-x/um40sRD58d5LuuJlyietCV1Rw4H5VSO0I3ZwD5kO8=";
   };
 

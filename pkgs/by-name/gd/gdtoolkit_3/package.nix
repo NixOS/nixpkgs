@@ -16,7 +16,7 @@ let
         src = fetchFromGitHub {
           owner = "lark-parser";
           repo = "lark";
-          rev = version;
+          tag = version;
           hash = "sha256-KN9buVlH8hJ8t0ZP5yefeYM5vH5Gg7a7TEDGKJYpozs=";
           fetchSubmodules = true;
         };

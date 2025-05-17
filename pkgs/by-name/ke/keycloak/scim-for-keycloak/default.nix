@@ -11,7 +11,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "Captain-P-Goldfish";
     repo = "scim-for-keycloak";
-    rev = version;
+    tag = version;
     hash = "sha256-kHjCVkcD8C0tIaMExDlyQmcWMhypisR1nyG93laB8WU=";
   };
 

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "dqpb";
     repo = "gmetronome";
-    rev = version;
+    tag = version;
     hash = "sha256-/UWOvVeZILDR29VjBK+mFJt1hzWcOljOr7J7+cMrKtM=";
   };
 

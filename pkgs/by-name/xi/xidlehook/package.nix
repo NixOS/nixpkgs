@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitLab {
     owner = "jD91mZM2";
     repo = "xidlehook";
-    rev = version;
+    tag = version;
 
     sha256 = "1pl7f8fhxfcy0c6c08vkagp0x1ak96vc5wgamigrk1nkd6l371lb";
   };

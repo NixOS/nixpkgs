@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "visioncortex";
     repo = "vtracer";
-    rev = version;
+    tag = version;
     hash = "sha256-n5AUc4C0eUfeVe3zTo0ZC/KWMS1/uW/+3Uoz8Q2qQI0=";
   };
 

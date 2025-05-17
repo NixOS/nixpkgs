@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wimpysworld";
     repo = "obs-rgb-levels-filter";
-    rev = version;
+    tag = version;
     sha256 = "sha256-QREwK9nBhjCBFslXUj9bGUGPgfEns8QqlgP5e2O/0oU=";
   };
 

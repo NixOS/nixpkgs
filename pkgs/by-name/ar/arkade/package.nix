@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "alexellis";
     repo = "arkade";
-    rev = version;
+    tag = version;
     hash = "sha256-V6ms3Av0/g2S7Q2NLltz7CnnvE1m+cemmwoHKL1e0tM=";
   };
 

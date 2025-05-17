@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "habitat-sh";
     repo = "habitat";
-    rev = version;
+    tag = version;
     hash = "sha256-+5If4veDOGTTIhYxhAiq1cC4Sy6vAmjX5hrmUmpGlFU=";
   };
 

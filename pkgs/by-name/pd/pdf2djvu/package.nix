@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jwilk";
     repo = "pdf2djvu";
-    rev = version;
+    tag = version;
     sha256 = "sha256-j4mYdmLZ56qTA1KbWBjBvyTyLaeuIITKYsALRIO7lj0=";
   };
 

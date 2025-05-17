@@ -20,7 +20,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "NickvisionApps";
     repo = "Denaro";
-    rev = version;
+    tag = version;
     hash = "sha256-fEhwup8SiYvKH2FtzruEFsj8axG5g3YJ917aqc8dn/8=";
   };
 

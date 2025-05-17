@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "Archive";
     repo = "gdk-pixbuf-xlib";
-    rev = version;
+    tag = version;
     hash = "sha256-b4EUaYzg2NlBMU90dGQivOvkv9KKSzES/ymPqzrelu8=";
   };
 

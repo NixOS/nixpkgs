@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "public";
     group = "BC";
     repo = "belle-sip";
-    rev = version;
+    tag = version;
     hash = "sha256-PZnAB+LOlwkiJO0ICqYqn0TgqQY2KdUbgGJRFSzGxdE=";
   };
 

@@ -18,7 +18,7 @@ lib.throwIfNot (lib.versionAtLeast ocaml.version "4.07")
     src = fetchFromGitHub {
       owner = "rems-project";
       repo = "linksem";
-      rev = version;
+      tag = version;
       hash = "sha256-7/YfDK3TruKCckMzAPLRrwBkHRJcX1S+AzXHWRxkZPA=";
     };
 

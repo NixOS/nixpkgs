@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "resurrecting-open-source-projects";
     repo = "scrot";
-    rev = version;
+    tag = version;
     sha256 = "sha256-ExZH+bjpEvdbSYM8OhV+cyn4j+0YrHp5/b+HsHKAHCA=";
   };
 

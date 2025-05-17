@@ -8,7 +8,7 @@
 stdenv.mkDerivation rec {
   pname = "jpcre2";
   version = "10.32.01";
-  rev = version;
+  tag = version;
 
   src = fetchFromGitHub {
     owner = "jpcre2";

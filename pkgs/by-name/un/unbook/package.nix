@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "ludios";
     repo = "unbook";
-    rev = version;
+    tag = version;
     hash = "sha256-whWWh/jQ4RkGA3T1VCmt6zhpQQCzh2jASYg69IlfEeo=";
   };
 

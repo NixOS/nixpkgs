@@ -16,7 +16,7 @@ resholve.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-direnv";
-    rev = version;
+    tag = version;
     hash = "sha256-H59MMmyQ9Tl9CLKKkXIv2NZddrrJNLv8XOOI2e4pG64=";
   };
 

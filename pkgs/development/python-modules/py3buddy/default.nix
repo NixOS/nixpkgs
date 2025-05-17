@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "armijnhemel";
     repo = "py3buddy";
-    rev = version;
+    tag = version;
     hash = "sha256-KJ0xGEXHY6o2074WFZ0u7gATS+wrrjyzanYretckWYk=";
   };
 

@@ -17,7 +17,7 @@ buildLuarocksPackage rec {
   src = fetchFromGitHub {
     owner = "luvit";
     repo = "luv";
-    rev = version;
+    tag = version;
     # Need deps/lua-compat-5.3 only
     fetchSubmodules = true;
     hash = "sha256-PS3+qpELpX0tr7UqrlnE4NYScJb50j+9J4fbH9CTr/s=";

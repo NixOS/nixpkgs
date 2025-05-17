@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MoshiBin";
     repo = "ssdpy";
-    rev = version;
+    tag = version;
     hash = "sha256-luOanw4aOepGxoGtmnWZosq9JyHLJb3E+25tPkkL1w0=";
   };
 

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "spacetx";
     repo = pname;
-    rev = version;
+    tag = version;
     sha256 = "1vpg8varvfx0nj6xscdfm7m118hzsfz7qfzn28r9rsfvrhr0dlcw";
   };
 

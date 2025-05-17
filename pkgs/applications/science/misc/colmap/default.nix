@@ -39,7 +39,7 @@ stdenv'.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "colmap";
     repo = "colmap";
-    rev = version;
+    tag = version;
     hash = "sha256-Xb4JOttCMERwPYs5DyGKHw+f9Wik1/rdJQKbgVuygH8=";
   };
 

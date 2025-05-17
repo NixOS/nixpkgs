@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "pwithnall";
     repo = "malcontent";
-    rev = version;
+    tag = version;
     hash = "sha256-DVoTJrpXk5AoRMz+TxEP3NIAA/OOGRzZurLyGp0UBUo=";
   };
 

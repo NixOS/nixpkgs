@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromSourcehut {
     owner = "~kennylevinsen";
     repo = "poweralertd";
-    rev = version;
+    tag = version;
     hash = "sha256-WzqThv3Vu8R+g6Bn8EfesRk18rchCvw/UMPwbn9YC80=";
   };
 

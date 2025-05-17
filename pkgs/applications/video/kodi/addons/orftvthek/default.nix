@@ -15,7 +15,7 @@ buildKodiAddon rec {
   src = fetchFromGitHub {
     owner = "s0faking";
     repo = namespace;
-    rev = version;
+    tag = version;
     sha256 = "sha256-bCVsR7lH0REJmG3OKU8mRRvw/PhSrLfhufmVBmw05+k=";
   };
 

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "AGWA";
     repo = "git-crypt";
-    rev = version;
+    tag = version;
     sha256 = "sha256-GcGCX6hoKL+sNLAeGEzZpaM+cdFjcNlwYExfOFEPi0I=";
   };
 

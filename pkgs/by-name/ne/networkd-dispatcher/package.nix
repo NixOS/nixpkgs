@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.com";
     owner = "craftyguy";
     repo = "networkd-dispatcher";
-    rev = version;
+    tag = version;
     hash = "sha256-yO9/HlUkaQmW/n9N3vboHw//YMzBjxIHA2zAxgZNEv0=";
   };
 

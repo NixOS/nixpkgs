@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "reagento";
     repo = "dataclass-factory";
-    rev = version;
+    tag = version;
     hash = "sha256-0BIWgyAV1hJzFX4xYFqswvQi5F1Ce+V9FKSmNYuJfZM=";
   };
 

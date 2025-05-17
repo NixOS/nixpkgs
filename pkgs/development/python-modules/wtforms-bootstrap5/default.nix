@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
     repo = "wtforms-bootstrap5";
-    rev = version;
+    tag = version;
     hash = "sha256-TJJ3KOeC9JXnxK0YpnfeBNq1KHwaAZ4+t9CXbc+85Ro=";
   };
 

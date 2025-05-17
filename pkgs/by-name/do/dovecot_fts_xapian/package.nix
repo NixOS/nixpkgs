@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "grosjo";
     repo = "fts-xapian";
-    rev = version;
+    tag = version;
     hash = "sha256-jHXeCJVdRWGdLMooh5cq5ZeZPM5fDo1lO6U5VMcwf3g=";
   };
 

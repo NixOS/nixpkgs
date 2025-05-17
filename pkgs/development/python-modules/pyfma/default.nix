@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nschloe";
     repo = "pyfma";
-    rev = version;
+    tag = version;
     hash = "sha256-1qNa+FcIAP1IMzdNKrEbTVPo6gTOSCvhTRIHm6REJoo=";
   };
 

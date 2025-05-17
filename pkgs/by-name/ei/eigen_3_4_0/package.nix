@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "libeigen";
     repo = "eigen";
-    rev = version;
+    tag = version;
     hash = "sha256-1/4xMetKMDOgZgzz3WMxfHUEpmdAm52RqZvz6i0mLEw=";
   };
 

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "RHVoice";
     repo = "RHVoice";
-    rev = version;
+    tag = version;
     fetchSubmodules = true;
     hash = "sha256-bkKEEtKF9ULEJ0sAGgWlxpIq4SbFLBSGbmThvvOLO5w=";
   };

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pywavefront";
     repo = "PyWavefront";
-    rev = version;
+    tag = version;
     hash = "sha256-ci40L2opJ+NYYtaAeX1Y5pzkdK+loFspTriX/xv4KR8=";
   };
 

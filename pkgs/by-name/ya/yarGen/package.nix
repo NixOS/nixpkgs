@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Neo23x0";
     repo = "yarGen";
-    rev = version;
+    tag = version;
     sha256 = "6PJNAeeLAyUlZcIi0g57sO1Ex6atn7JhbK9kDbNrZ6A=";
   };
 

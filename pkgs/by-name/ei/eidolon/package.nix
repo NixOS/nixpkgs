@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromSourcehut {
     owner = "~nicohman";
     repo = "eidolon";
-    rev = version;
+    tag = version;
     hash = "sha256-Ofc3i+iMmbUgY3bomUk4rM3bEQInTV3rIPz3m0yZw/o=";
   };
 

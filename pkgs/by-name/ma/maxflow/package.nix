@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "gerddie";
     repo = "maxflow";
-    rev = version;
+    tag = version;
     hash = "sha256-a84SxGMnfBEaoMEeeIFffTOtErSN5yzZBrAUDjkalGY=";
   };
 

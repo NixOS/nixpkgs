@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "freundlich";
     repo = "fcppt";
-    rev = version;
+    tag = version;
     sha256 = "1pcmi2ck12nanw1rnwf8lmyx85iq20897k6daxx3hw5f23j1kxv6";
   };
 

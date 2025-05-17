@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromSourcehut {
     owner = "~martijnbraam";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-Mh3NSEYscnzw6kjR9m0XbTygj07cIQwdyLcdLpfKi3Y=";
   };
 

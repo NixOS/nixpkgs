@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     sha256 = "05r0a69w0hv2qhjpb2bxd0lmp2vv5r2d4iggg6ly4miam0i318jy";
-    rev = version;
+    tag = version;
     repo = "icmake";
     owner = "fbb-git";
   };

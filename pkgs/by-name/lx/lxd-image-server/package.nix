@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Avature";
     repo = "lxd-image-server";
-    rev = version;
+    tag = version;
     sha256 = "yx8aUmMfSzyWaM6M7+WcL6ouuWwOpqLzODWSdNgwCwo=";
   };
 

@@ -14,7 +14,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "VERIMAG-Polyhedra";
     repo = "vpl";
-    rev = version;
+    tag = version;
     hash = "sha256-mSD/xSweeK9WMxWDdX/vzN96iXo74RkufjuNvtzsP9o=";
   };
 

@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pradyunsg";
     repo = "sphinx-inline-tabs";
-    rev = version;
+    tag = version;
     hash = "sha256-1oZheHDNOQU0vWL3YClQrJe94WyUJ72bCAF1UKtjJ0w=";
   };
 

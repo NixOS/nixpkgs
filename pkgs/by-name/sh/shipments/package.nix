@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromSourcehut {
     owner = "~martijnbraam";
     repo = "shipments";
-    rev = version;
+    tag = version;
     hash = "sha256-8wX1s5mPCdMINIQP4m5q5StKqxY6CGBBxIxyQAvU7Pc=";
   };
 

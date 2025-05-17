@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "DavidGriffith";
     repo = "minipro";
-    rev = version;
+    tag = version;
     hash = "sha256-NIaBN+T/EzYBhBtBEIvIAmqmksYDDiMJsWm9zCzZOxE=";
   };
 

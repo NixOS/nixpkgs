@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "weaveworks";
     repo = pname;
-    rev = version;
+    tag = version;
     hash = "sha256-lRRB6yAELCNzXWiuxaEHTwlTG7/x3AC97ZnaEtJ3AVs=";
   };
 

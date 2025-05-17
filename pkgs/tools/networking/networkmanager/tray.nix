@@ -17,7 +17,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "palinek";
     repo = pname;
-    rev = version;
+    tag = version;
     sha256 = "sha256-JTH1cmkgdW2aRWMYPRvOAvCJz0ClCIpjUtcWcqJQGSU=";
   };
 

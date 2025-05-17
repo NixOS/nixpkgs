@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "xteve-project";
     repo = "xTeVe";
-    rev = version;
+    tag = version;
     hash = "sha256-hD4GudSkGZO41nR/CgcMg/SqKjpAO1yJDkfwa8AUges=";
   };
 

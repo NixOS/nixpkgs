@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rakudo";
     repo = "rakudo";
-    rev = version;
+    tag = version;
     hash = "sha256-gVW1CB2LbgXV4uApmcl0/uxkcl9/PKk8sxj2R5dgowI=";
     fetchSubmodules = true;
   };

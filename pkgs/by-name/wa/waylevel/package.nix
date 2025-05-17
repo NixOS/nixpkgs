@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromSourcehut {
     owner = "~shinyzenith";
     repo = "waylevel";
-    rev = version;
+    tag = version;
     hash = "sha256-T2gqiRcKrKsvwGNnWrxR1Ga/VX4AyllYn1H25aIKt5s=";
   };
 

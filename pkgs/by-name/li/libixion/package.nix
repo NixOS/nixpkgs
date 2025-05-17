@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "ixion";
     repo = "ixion";
-    rev = version;
+    tag = version;
     hash = "sha256-BrexWRaxrLTWuoU62kqws3tlSqVOHecSV5MXc4ZezFs=";
   };
 

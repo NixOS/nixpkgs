@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "PROJ";
-    rev = version;
+    tag = version;
     sha256 = "0mymvfvs8xggl4axvlj7kc1ksd9g94kaz6w1vdv0x2y5mqk93gx9";
   };
 

@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lionheart";
     repo = pname;
-    rev = version;
+    tag = version;
     sha256 = "0ppc3vwv48ahqx6n5c7d7066zhi31cjdik0ma9chq6fscq2idgdf";
   };
 

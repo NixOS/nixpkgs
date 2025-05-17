@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jubalh";
     repo = "nudoku";
-    rev = version;
+    tag = version;
     hash = "sha256-aOtP23kNd15DdV6on7o80QnEf0CiUBubHfFE8M1mhg0=";
   };
 

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mtorromeo";
     repo = "r8168";
-    rev = version;
+    tag = version;
     sha256 = "0bHGs8jyWd+ZiixOoNkBqhS9RjDpRp3vveAgk1YuOWU=";
   };
 

@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   src = fetchhg {
     url = "https://bitbucket.org/olegoandreev/purple-vk-plugin";
-    rev = version;
+    tag = version;
     sha256 = "02p57fgx8ml00cbrb4f280ak2802svz80836dzk9f1zwm1bcr2qc";
   };
 

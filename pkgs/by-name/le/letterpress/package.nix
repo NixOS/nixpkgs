@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "letterpress";
-    rev = version;
+    tag = version;
     hash = "sha256-9U8iH3V4WMljdtWLmb0RlexLeAN5StJ0c9RlEB2E7Xs=";
   };
 

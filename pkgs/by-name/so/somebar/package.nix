@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromSourcehut {
     owner = "~raphi";
     repo = "somebar";
-    rev = version;
+    tag = version;
     sha256 = "sha256-PBxCy1dZrOL1nmhVDQozvF0XL79uKMhhERGNpPPzaRU=";
   };
 

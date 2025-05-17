@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "HyperionGray";
     repo = "trio-websocket";
-    rev = version;
+    tag = version;
     hash = "sha256-TGFf4WUeZDrjp/UiQ9O/GoaK5BRC2aaGZVPfqZ4Ip9I=";
   };
 

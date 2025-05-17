@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lucy";
     repo = "tewi-font";
-    rev = version;
+    tag = version;
     sha256 = "1axv9bv10xlcmgfyjh3z5kn5fkg3m6n1kskcs5hvlmyb6m1zk91j";
   };
 

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "a-sassmannshausen";
     repo = "guile-config";
-    rev = version;
+    tag = version;
     hash = "sha256-n4ukGCyIx5G1ITfKSqS6FGJ6dnDBsyxXKSFNi81E4Gg=";
   };
 

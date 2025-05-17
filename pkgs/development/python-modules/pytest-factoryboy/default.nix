@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-factoryboy";
-    rev = version;
+    tag = version;
     sha256 = "sha256-GYqYwtbmMWVqImVPPBbZNRJJGcbksUPsIbi6QuPRMco=";
   };
 

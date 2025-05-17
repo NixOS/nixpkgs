@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ubuntu";
     repo = "yaru";
-    rev = version;
+    tag = version;
     hash = "sha256-axaUQ2E0FpWI66yWpQS+zsk7ee5ysllgUbqCZePzcD8=";
   };
 

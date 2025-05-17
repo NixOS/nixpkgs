@@ -20,7 +20,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "agateau";
     repo = "sfxr-qt";
-    rev = version;
+    tag = version;
     hash = "sha256-JAWDk7mGkPtQ5yaA6UT9hlAy770MHrTBhBP9G8UqFKg=";
     fetchSubmodules = true;
   };
