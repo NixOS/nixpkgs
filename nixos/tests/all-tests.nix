@@ -642,12 +642,17 @@ in
   immich-public-proxy = handleTest ./web-apps/immich-public-proxy.nix { };
   incron = handleTest ./incron.nix { };
   incus = pkgs.recurseIntoAttrs (
-    handleTest ./incus {
+    import ./incus {
+      inherit runTest;
       lts = false;
-      inherit system pkgs;
     }
   );
-  incus-lts = pkgs.recurseIntoAttrs (handleTest ./incus { inherit system pkgs; });
+  incus-lts = pkgs.recurseIntoAttrs (
+    import ./incus {
+      inherit runTest;
+      lts = true;
+    }
+  );
   influxdb = handleTest ./influxdb.nix { };
   influxdb2 = handleTest ./influxdb2.nix { };
   initrd-network-openvpn = handleTestOn [ "x86_64-linux" "i686-linux" ] ./initrd-network-openvpn { };
