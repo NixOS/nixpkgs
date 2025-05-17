@@ -4,6 +4,7 @@
   stdenv,
   fetchFromGitHub,
   fetchFromGitLab,
+  fetchpatch2,
   applyPatches,
   autoAddDriverRunpath,
   avahi,
@@ -71,6 +72,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     patches = [
       ./force-enable-steamvr_lh.patch
+      (fetchpatch2 {
+        url = "https://gitlab.freedesktop.org/monado/monado/-/commit/2a6932d46dad9aa957205e8a47ec2baa33041076.patch";
+        hash = "sha256-CZMbGgx7mEDcjcoRJHDZ5P6BecFW8CB4fpzxQ9bpAvE=";
+      })
     ];
 
     postPatch = ''
@@ -191,14 +196,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "An OpenXR streaming application to a standalone headset";
     homepage = "https://github.com/WiVRn/WiVRn/";
     changelog = "https://github.com/WiVRn/WiVRn/releases/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ passivelemon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.passivelemon ];
+    platforms = lib.platforms.linux;
     mainProgram = "wivrn-server";
-    sourceProvenance = with sourceTypes; [ fromSource ];
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
   };
 })
