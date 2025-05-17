@@ -6,8 +6,21 @@
   xar,
   cpio,
   pulseaudioSupport ? true,
-  xdgDesktopPortalSupport ? true,
+  xdgDesktopPortalPkgs ? (
+    # return empty list here to disable xdg-desktop-portal support
+    pkgs: [
+      pkgs.kdePackages.xdg-desktop-portal-kde
+      pkgs.lxqt.xdg-desktop-portal-lxqt
+      pkgs.plasma5Packages.xdg-desktop-portal-kde
+      pkgs.xdg-desktop-portal-gnome
+      pkgs.xdg-desktop-portal-gtk
+      pkgs.xdg-desktop-portal-hyprland
+      pkgs.xdg-desktop-portal-wlr
+      pkgs.xdg-desktop-portal-xapp
+    ]
+  ),
   callPackage,
+  nixosTests,
   buildFHSEnv,
 }:
 
@@ -100,6 +113,7 @@ let
 
     passthru.updateScript = ./update.sh;
     passthru.tests.startwindow = callPackage ./test.nix { };
+    passthru.tests.nixos-module = nixosTests.zoom-us;
 
     meta = {
       homepage = "https://zoom.us/";
@@ -179,17 +193,8 @@ let
       pkgs.libpulseaudio
       pkgs.pulseaudio
     ]
-    ++ lib.optionals xdgDesktopPortalSupport [
-      pkgs.kdePackages.xdg-desktop-portal-kde
-      pkgs.lxqt.xdg-desktop-portal-lxqt
-      pkgs.plasma5Packages.xdg-desktop-portal-kde
-      pkgs.xdg-desktop-portal
-      pkgs.xdg-desktop-portal-gnome
-      pkgs.xdg-desktop-portal-gtk
-      pkgs.xdg-desktop-portal-hyprland
-      pkgs.xdg-desktop-portal-wlr
-      pkgs.xdg-desktop-portal-xapp
-    ];
+    ++ lib.optional (xdgDesktopPortalPkgs pkgs != [ ]) pkgs.xdg-desktop-portal
+    ++ xdgDesktopPortalPkgs pkgs;
 
   # We add the `unpacked` zoom archive to the FHS env
   # and also bind-mount its `/opt` directory.
