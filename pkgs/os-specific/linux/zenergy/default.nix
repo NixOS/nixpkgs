@@ -12,13 +12,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "zenergy";
-  version = "0-unstable-2024-10-10";
+  version = "0-unstable-2025-04-15";
 
   src = fetchFromGitHub {
     owner = "BoukeHaarsma23";
     repo = "zenergy";
-    rev = "7c4e83d5e2f887f4c31edaf92e5f94e9448e9764";
-    hash = "sha256-5fYelEr4IYnuXrly15IcyicFrF0tYjs7OBqIhUYQXZ0=";
+    rev = "f77293fc4aa8c2f5645b2d05d8f0d476220cba9a";
+    hash = "sha256-T9ualNYna2Ip19dqz1mOcFWX5oKWIhf9SGMaXovS8QE=";
   };
 
   nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
