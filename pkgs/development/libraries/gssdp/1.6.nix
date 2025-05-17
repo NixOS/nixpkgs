@@ -60,7 +60,8 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "manpages" enableManpages)
   ];
 
-  doCheck = true;
+  # On Darwin: Failed to bind socket, Operation not permitted
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postFixup = ''
     # Move developer documentation to devdoc output.
@@ -83,7 +84,6 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    broken = stdenv.hostPlatform.isDarwin;
     description = "GObject-based API for handling resource discovery and announcement over SSDP";
     homepage = "http://www.gupnp.org/";
     license = licenses.lgpl2Plus;
