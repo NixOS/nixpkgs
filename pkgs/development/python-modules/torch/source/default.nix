@@ -184,6 +184,7 @@ let
     paths = with rocmPackages; [
       rocm-core
       clr
+      composable_kernel
       rccl
       miopen
       aotriton
@@ -323,20 +324,23 @@ buildPythonPackage rec {
 
       # Replace hard-coded rocm paths
       substituteInPlace caffe2/CMakeLists.txt \
-        --replace-fail "/opt/rocm" "${rocmtoolkit_joined}" \
         --replace-fail "hcc/include" "hip/include" \
         --replace-fail "rocblas/include" "include/rocblas" \
         --replace-fail "hipsparse/include" "include/hipsparse"
 
       # Doesn't pick up the environment variable?
       substituteInPlace third_party/kineto/libkineto/CMakeLists.txt \
-        --replace-fail "\''$ENV{ROCM_SOURCE_DIR}" "${rocmtoolkit_joined}" \
-        --replace-fail "/opt/rocm" "${rocmtoolkit_joined}"
+        --replace-fail "\''$ENV{ROCM_SOURCE_DIR}" "${rocmtoolkit_joined}"
 
       # Strangely, this is never set in cmake
       substituteInPlace cmake/public/LoadHIP.cmake \
         --replace "set(ROCM_PATH \$ENV{ROCM_PATH})" \
           "set(ROCM_PATH \$ENV{ROCM_PATH})''\nset(ROCM_VERSION ${lib.concatStrings (lib.intersperse "0" (lib.splitVersion rocmPackages.clr.version))})"
+
+      # Use composable kernel as dependency, rather then built-in third-party
+      substituteInPlace aten/src/ATen/CMakeLists.txt \
+        --replace-fail "list(APPEND ATen_HIP_INCLUDE \''${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/composable_kernel/include)" "" \
+        --replace-fail "list(APPEND ATen_HIP_INCLUDE \''${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/composable_kernel/library/include)" ""
     ''
     # Detection of NCCL version doesn't work particularly well when using the static binary.
     + lib.optionalString cudaSupport ''
