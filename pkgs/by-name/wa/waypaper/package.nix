@@ -1,13 +1,13 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   gobject-introspection,
   wrapGAppsHook3,
   killall,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "waypaper";
   version = "2.6";
   pyproject = true;
@@ -24,15 +24,15 @@ python3.pkgs.buildPythonApplication rec {
     wrapGAppsHook3
   ];
 
-  build-system = [ python3.pkgs.setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
-  dependencies = [
-    python3.pkgs.pygobject3
-    python3.pkgs.platformdirs
-    python3.pkgs.pillow
-    python3.pkgs.imageio
-    python3.pkgs.imageio-ffmpeg
-    python3.pkgs.screeninfo
+  dependencies = with python3Packages; [
+    imageio
+    imageio-ffmpeg
+    pillow
+    platformdirs
+    pygobject3
+    screeninfo
   ];
 
   propagatedBuildInputs = [ killall ];
