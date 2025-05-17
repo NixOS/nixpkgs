@@ -29,14 +29,14 @@
 }:
 
 let
-  version = "6.6.0";
+  version = "6.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Labelbox";
     repo = "labelbox-python";
     tag = "v.${version}";
-    hash = "sha256-aMJJZ9ONnjFK/J4pyLTFQox/cC8ij85IYNlJTFrfV2I=";
+    hash = "sha256-EstHsY9yFeUhQAx3pgvKk/o3EMkr3JeHDDg/p6meDIE=";
   };
 
   lbox-clients = buildPythonPackage {
@@ -48,11 +48,23 @@ let
 
     build-system = [ hatchling ];
 
+    postPatch = ''
+      substituteInPlace pyproject.toml \
+        --replace "--durations=20 --cov=lbox.example" "--durations=20"
+    '';
+
     dependencies = [
       google-api-core
       requests
     ];
 
+    nativeCheckInputs = [
+      pytestCheckHook
+    ];
+
+    doCheck = true;
+
+    __darwinAllowLocalNetworking = true;
   };
 in
 buildPythonPackage rec {
@@ -112,6 +124,10 @@ buildPythonPackage rec {
     "tests/data"
     "tests/unit/test_label_data_type.py"
   ];
+
+  doCheck = true;
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "labelbox" ];
 
