@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
@@ -25,6 +26,8 @@ buildGoModule (finalAttrs: {
 
   # has no tests
   doCheck = false;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Command-line batch renaming tool";
