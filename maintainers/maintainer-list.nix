@@ -6694,6 +6694,12 @@
     githubId = 252042;
     keys = [ { fingerprint = "85F3 72DF 4AF3 EF13 ED34  72A3 0AAF 2901 E804 0715"; } ];
   };
+  DrVoidest = {
+    name = "Dr. Void";
+    email = "Dr.Void_Industries@proton.me";
+    github = "DrVoidest";
+    githubId = 177856788;
+  };
   DrymarchonShaun = {
     name = "Shaun";
     email = "drymarchonshaun@protonmail.com";
