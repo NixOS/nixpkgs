@@ -4432,6 +4432,8 @@ self: super: with self; {
 
   elmax-api = callPackage ../development/python-modules/elmax-api { };
 
+  elvia = callPackage ../development/python-modules/elvia { };
+
   email-validator = callPackage ../development/python-modules/email-validator { };
 
   emailthreads = callPackage ../development/python-modules/emailthreads { };
