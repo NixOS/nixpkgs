@@ -1,8 +1,8 @@
 {
   blake3 = {
     url = "https://github.com/geopjr/blake3.cr.git";
-    rev = "v1.3.0";
-    sha256 = "0pc3h7b5gfkmxlw708qaqjfzjvv5ig3iwxxainq6pwfhpff4a5wd";
+    rev = "v1.4.0";
+    sha256 = "1kp3rqddcsjj15syfnfvsx694nmpjzxmgawnf7y7dxdakk3przlw";
   };
   gettext = {
     url = "https://github.com/geopjr/gettext.cr.git";
@@ -11,8 +11,8 @@
   };
   gi-crystal = {
     url = "https://github.com/hugopl/gi-crystal.git";
-    rev = "v0.24.0";
-    sha256 = "0x356xn35008l573qhyl1sdddc9cc5i3bsa4c7865kgq9521ifyh";
+    rev = "v0.25.0";
+    sha256 = "0lgs85khg6yzmw7vnkjxygrga1618440hayjc51jmjcfh2lff1k2";
   };
   gtk4 = {
     url = "https://github.com/hugopl/gtk4.cr.git";
@@ -25,9 +25,9 @@
     sha256 = "06wgqxwyib5416yp53j2iwcbr3bl4jjxb1flm7z103l365par694";
   };
   libadwaita = {
-    url = "https://github.com/geopjr/libadwaita.cr.git";
-    rev = "cffabb56e911d2a90c53c2fd14d6bd08bf5ac446";
-    sha256 = "0gcq04vgxg0vff9fcalgzq9phq0y76diihkzhlfn91bdxwkx7rl3";
+    url = "https://github.com/hugopl/libadwaita.cr.git";
+    rev = "v0.1.0";
+    sha256 = "13iqij1rwqdlsd9gls3gz4i4frlsda3yasdbbmrzpa8d3qm3p8yq";
   };
   non-blocking-spawn = {
     url = "https://github.com/geopjr/non-blocking-spawn.git";

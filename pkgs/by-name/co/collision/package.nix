@@ -21,13 +21,13 @@
 
 crystal.buildCrystalPackage rec {
   pname = "Collision";
-  version = "3.9.0";
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "Collision";
     rev = "v${version}";
-    hash = "sha256-c/74LzDM63w5zW8z2T8o4Efvuzj791/zTSKEDN32uak=";
+    hash = "sha256-ZXGhMicwlkXUw8I6HUNVxY4vCaVixdV76+wYn34Py6Q=";
   };
 
   postPatch = ''
@@ -39,20 +39,23 @@ crystal.buildCrystalPackage rec {
   copyShardDeps = true;
 
   preBuild = ''
-    cd lib/gi-crystal && shards build -Dpreview_mt --release --no-debug
-    cd ../.. && mkdir bin/ && cp lib/gi-crystal/bin/gi-crystal bin/
+    cd lib/gi-crystal && shards build -Dpreview_mt --release --no-debug && \
+    install -Dm755 bin/gi-crystal ../../bin/gi-crystal && cd ../..
   '';
 
   # Crystal compiler has a strange issue with OpenSSL. The project will not compile due to
   # main_module:(.text+0x6f0): undefined reference to `SSL_library_init'
   # There is an explanation for this https://danilafe.com/blog/crystal_nix_revisited/
   # Shortly, adding pkg-config to buildInputs along with openssl fixes the issue.
-
-  nativeBuildInputs = [
-    wrapGAppsHook4
-    pkg-config
-    gobject-introspection
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+  nativeBuildInputs =
+    [
+      wrapGAppsHook4
+      pkg-config
+      gobject-introspection
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      desktopToDarwinBundle
+    ];
 
   buildInputs = [
     libadwaita
@@ -82,7 +85,7 @@ crystal.buildCrystalPackage rec {
   passthru = {
     updateScript = _experimental-update-script-combinators.sequence [
       (gitUpdater { rev-prefix = "v"; })
-      (_experimental-update-script-combinators.copyAttrOutputToFile "collision.shardLock" ./shard.lock)
+      (_experimental-update-script-combinators.copyAttrOutputToFile "collision.shardLock" "./shard.lock")
       {
         command = [
           (writeShellScript "update-lock" "cd $1; ${lib.getExe crystal2nix}")
@@ -93,7 +96,7 @@ crystal.buildCrystalPackage rec {
       {
         command = [
           "rm"
-          ./shard.lock
+          "./shard.lock"
         ];
         supportedFeatures = [ "silent" ];
       }
