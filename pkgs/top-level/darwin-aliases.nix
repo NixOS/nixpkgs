@@ -49,18 +49,9 @@ let
 
   mkStub = pkgs.callPackage ../os-specific/darwin/apple-sdk/mk-stub.nix { };
 
-  warnStub =
-    prefix:
-    lib.warn "${prefix} these stubs do nothing and will be removed in Nixpkgs 25.11; see <https://nixos.org/manual/nixpkgs/stable/#sec-darwin> for documentation and migration instructions";
+  apple_sdk_11_0 = pkgs.callPackage ../os-specific/darwin/apple-sdk-11.0 { };
 
-  apple_sdk_11_0 = warnStub "darwin.apple_sdk_11_0.*:" (
-    pkgs.callPackage ../os-specific/darwin/apple-sdk-11.0 { }
-  );
-
-  apple_sdk_12_3 =
-    warnStub
-      "darwin.apple_sdk_12_3.*: add `apple-sdk_12` to build inputs instead to use the macOS 12 SDK."
-      (pkgs.callPackage ../os-specific/darwin/apple-sdk-12.3 { });
+  apple_sdk_12_3 = pkgs.callPackage ../os-specific/darwin/apple-sdk-12.3 { };
 
   apple_sdk = apple_sdk_11_0;
 
@@ -102,7 +93,7 @@ let
       "objc4"
       "ppp"
       "xnu"
-    ] (name: warnStub "darwin.${name}:" (mkStub "11.0" name));
+    ] (mkStub "darwin" "11.0");
 in
 
 stubs
