@@ -4283,8 +4283,6 @@ with pkgs;
 
   qlcplus = libsForQt5.callPackage ../applications/misc/qlcplus { };
 
-  quickbms = pkgsi686Linux.callPackage ../tools/archivers/quickbms { };
-
   qdigidoc = libsForQt5.callPackage ../tools/security/qdigidoc { };
 
   qjournalctl = libsForQt5.callPackage ../applications/system/qjournalctl { };
