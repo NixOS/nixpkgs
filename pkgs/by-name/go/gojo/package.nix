@@ -23,6 +23,10 @@ buildGoModule rec {
     versionCheckHook
   ];
   versionCheckProgramArg = "-v";
+  postInstallCheck = ''
+    $out/bin/gojo -V > /dev/null
+    seq 1 10 | $out/bin/gojo -a | grep '^\[1,2,3,4,5,6,7,8,9,10\]$' > /dev/null
+  '';
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
