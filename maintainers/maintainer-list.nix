@@ -4411,6 +4411,13 @@
     githubId = 631802;
     keys = [ { fingerprint = "099E 3F97 FA08 3D47 8C75  EBEC E0EB AD78 F019 0BD9"; } ];
   };
+  chillcicada = {
+    email = "2210227279@qq.com";
+    name = "chillcicada";
+    github = "chillcicada";
+    githubId = 116548943;
+    keys = [ { fingerprint = "734C 20B3 33C4 FAB3 0BD0  743A 34C2 1231 0A99 754B"; } ];
+  };
   chiroptical = {
     email = "chiroptical@gmail.com";
     github = "chiroptical";
@@ -8105,6 +8112,12 @@
     github = "fgaz";
     githubId = 8182846;
     name = "Francesco Gazzetta";
+  };
+  fgrcl = {
+    email = "fgrclaberge@gmail.com";
+    github = "FGRCL";
+    githubId = 35940434;
+    name = "Francois LaBerge";
   };
   fidgetingbits = {
     name = "fidgetingbits";
@@ -18243,10 +18256,11 @@
     name = "Dakota";
   };
   ohheyrj = {
-    email = "richard+nix@ohheyrj.co.uk";
+    email = "richard@ohheyrj.co.uk";
     github = "ohheyrj";
     name = "ohheyrj";
     githubId = 5339261;
+    keys = [ { fingerprint = "4258 3FE7 12E9 6071 E84D  53C7 6E1D A270 0B72 746D"; } ];
   };
   oida = {
     email = "oida@posteo.de";
