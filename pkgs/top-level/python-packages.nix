@@ -11803,6 +11803,8 @@ self: super: with self; {
 
   pixel-ring = callPackage ../development/python-modules/pixel-ring { };
 
+  pixutils = callPackage ../development/python-modules/pixutils { };
+
   pizzapi = callPackage ../development/python-modules/pizzapi { };
 
   pjsua2 =
