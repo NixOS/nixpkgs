@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hwdata";
-  version = "0.393";
+  version = "0.395";
 
   src = fetchFromGitHub {
     owner = "vcrhonek";
     repo = "hwdata";
     rev = "v${version}";
-    hash = "sha256-RDp5NY9VYD0gylvzYpg9BytfRdQ6dim1jJtv32yeF3k=";
+    hash = "sha256-wLdJGaJVqClso75iRSpSVlobdx7Rv01YreiPsDzwjok=";
   };
 
   configureFlags = [ "--datadir=${placeholder "out"}/share" ];
