@@ -808,6 +808,7 @@ in
       copilot-lua
       plenary-nvim
     ];
+    buildInputs = [ luaPackages.tiktoken_core ];
   };
 
   copilot-cmp = super.copilot-cmp.overrideAttrs {
