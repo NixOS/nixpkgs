@@ -9,10 +9,10 @@
 
 buildMozillaMach rec {
   pname = "firefox";
-  version = "138.0.3";
+  version = "138.0.4";
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-    sha512 = "0f1c8ee05bec465b55429c18d788856574c5b2e31d911f15f76d31c00de84d8b8681961799c4101cd1540bd228afd201a4b59fd7c9a88918695040965b9dc0f1";
+    sha512 = "64d80456da8df27d7eeed7eb20c35fcf213bc948eb48739b6101e2c476ea9a9133da928477a79683c96c160f8d53bed52be487f01a8d29e38d39071f12676806";
   };
 
   meta = {
