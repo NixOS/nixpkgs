@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  pkgsStatic,
   python3,
   docutils,
   bzip2,
@@ -132,6 +133,10 @@ let
       '';
 
       doCheck = true;
+
+      passthru.tests = lib.optionalAttrs (lib.versionAtLeast version "3") {
+        static = pkgsStatic.botan3;
+      };
 
       meta = with lib; {
         description = "Cryptographic algorithms library";
