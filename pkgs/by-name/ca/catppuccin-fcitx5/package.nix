@@ -3,6 +3,8 @@
   stdenvNoCC,
   fetchFromGitHub,
   unstableGitUpdater,
+
+  withRoundedCorners ? false,
 }:
 stdenvNoCC.mkDerivation {
   pname = "catppuccin-fcitx5";
@@ -18,12 +20,19 @@ stdenvNoCC.mkDerivation {
   dontConfigure = true;
   dontBuild = true;
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/share/fcitx5
-    cp -r src $out/share/fcitx5/themes
-    runHook postInstall
-  '';
+  installPhase =
+    ''
+      runHook preInstall
+    ''
+    + lib.optionalString withRoundedCorners ''
+      find src -name theme.conf -exec sed -iE 's/^# (Image=(panel|highlight).svg)/\1/' {} +
+    ''
+    + ''
+      mkdir -p $out/share/fcitx5
+      cp -r src $out/share/fcitx5/themes
+
+      runHook postInstall
+    '';
 
   passthru.updateScript = unstableGitUpdater { };
 
