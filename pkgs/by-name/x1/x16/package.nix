@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   SDL2,
   callPackage,
   zlib,
@@ -17,6 +18,15 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "r${finalAttrs.version}";
     hash = "sha256-E4TosRoORCWLotOIXROP9oqwqo1IRSa6X13GnmuxE9A=";
   };
+
+  # Fix build on GCC 14
+  # TODO: Remove for next release as it should already be included in upstream
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/X16Community/x16-emulator/commit/3da83c93d46a99635cf73a6f9fdcf1bd4a4ae04f.patch";
+      hash = "sha256-DZItqq7B1lXZ6VFsQUdQKn0wt1HaX4ymq2pI2DamY3w=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace Makefile \
