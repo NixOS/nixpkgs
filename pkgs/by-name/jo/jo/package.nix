@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     mainProgram = "jo";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
+      xiaoxiangmoe
       markus1189
     ];
     platforms = lib.platforms.all;
