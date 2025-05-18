@@ -38,11 +38,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --zsh --name _watchexec completions/zsh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Executes commands in response to file modifications";
     homepage = "https://watchexec.github.io/";
-    license = with licenses; [ asl20 ];
-    maintainers = [ maintainers.michalrus ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [
+      michalrus
+    ];
     mainProgram = "watchexec";
   };
 })
