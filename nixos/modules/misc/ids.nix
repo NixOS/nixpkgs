@@ -167,7 +167,7 @@ in
       nsd = 126;
       gitolite = 127;
       znc = 128;
-      polipo = 129;
+      # polipo = 129; removed 2025-05-18
       mopidy = 130;
       #docker = 131; # unused
       gdm = 132;
@@ -507,7 +507,7 @@ in
       nsd = 126;
       gitolite = 127;
       znc = 128;
-      polipo = 129;
+      # polipo = 129; removed 2025-05-18
       mopidy = 130;
       docker = 131;
       gdm = 132;

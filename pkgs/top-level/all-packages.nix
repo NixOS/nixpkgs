@@ -9333,6 +9333,7 @@ with pkgs;
 
   inherit
     ({
+      protobuf_31 = callPackage ../development/libraries/protobuf/31.nix { };
       protobuf_30 = callPackage ../development/libraries/protobuf/30.nix { };
       protobuf_29 = callPackage ../development/libraries/protobuf/29.nix { };
       protobuf_28 = callPackage ../development/libraries/protobuf/28.nix { };
@@ -9344,6 +9345,7 @@ with pkgs;
         abseil-cpp = abseil-cpp_202103;
       };
     })
+    protobuf_31
     protobuf_30
     protobuf_29
     protobuf_28
@@ -13199,7 +13201,9 @@ with pkgs;
 
   luddite = with python3Packages; toPythonApplication luddite;
 
-  lutris-unwrapped = python3.pkgs.callPackage ../applications/misc/lutris { };
+  lutris-unwrapped = python3.pkgs.callPackage ../applications/misc/lutris {
+    inherit (pkgs) meson;
+  };
   lutris = callPackage ../applications/misc/lutris/fhsenv.nix { };
   lutris-free = lutris.override {
     steamSupport = false;
@@ -15226,10 +15230,6 @@ with pkgs;
 
   rott-shareware = rott.override {
     buildShareware = true;
-  };
-
-  starsector = callPackage ../games/starsector {
-    openjdk = openjdk17;
   };
 
   scummvm = callPackage ../games/scummvm { };
