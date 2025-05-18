@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = true;
     description = "Filesystem benchmark tool based on load patterns";
     mainProgram = "dbench";
     homepage = "https://dbench.samba.org/";

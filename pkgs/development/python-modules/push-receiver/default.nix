@@ -33,5 +33,7 @@ buildPythonPackage rec {
     description = "Subscribe to GCM/FCM and receive notifications";
     license = licenses.unlicense;
     maintainers = with maintainers; [ veehaitch ];
+    # Unmaintained and build issue with new protobuf
+    broken = true;
   };
 }

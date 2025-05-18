@@ -198,7 +198,6 @@ python.pkgs.buildPythonApplication rec {
       requests
       sentry-sdk
       sepaxml
-      slimit
       stripe
       text-unidecode
       tlds
