@@ -91,7 +91,9 @@ let
       ];
   };
   deriveBiocAnn = mkDerive {
-    mkHomepage = { name, ... }: "http://www.bioconductor.org/packages/${name}.html";
+    mkHomepage =
+      { name, biocVersion }:
+      "https://www.bioconductor.org/packages/${biocVersion}/data/annotation/html/${name}.html";
     mkUrls =
       {
         name,
@@ -104,7 +106,9 @@ let
     hydraPlatforms = [ ];
   };
   deriveBiocExp = mkDerive {
-    mkHomepage = { name, ... }: "http://www.bioconductor.org/packages/${name}.html";
+    mkHomepage =
+      { name, biocVersion }:
+      "https://www.bioconductor.org/packages/${biocVersion}/data/experiment/html/${name}.html";
     mkUrls =
       {
         name,

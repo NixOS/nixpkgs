@@ -1125,8 +1125,6 @@ with pkgs;
     };
   };
 
-  memos = callPackage ../servers/memos { };
-
   mkosi = python3Packages.callPackage ../tools/virtualization/mkosi { inherit systemd; };
 
   mkosi-full = mkosi.override { withQemu = true; };
@@ -4289,8 +4287,6 @@ with pkgs;
   qarte = libsForQt5.callPackage ../applications/video/qarte { };
 
   qlcplus = libsForQt5.callPackage ../applications/misc/qlcplus { };
-
-  quickbms = pkgsi686Linux.callPackage ../tools/archivers/quickbms { };
 
   qdigidoc = libsForQt5.callPackage ../tools/security/qdigidoc { };
 

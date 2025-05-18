@@ -12,48 +12,45 @@
   unzip,
   pip,
   pythonOlder,
-  setuptools,
+  setuptools-scm,
 }:
 
 let
-  version = "0.57.18";
+  version = "0.62.3";
   gqlgen = import ./fix-gqlgen-trimpath.nix {
     inherit unzip;
-    gqlgenVersion = "0.17.45";
+    gqlgenVersion = "0.17.64";
   };
+
+  patches = [ ./patches/core-go-update/lists/patch-deps.patch ];
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "lists.sr.ht";
     rev = version;
-    hash = "sha256-l+QPocnwHTjrU+M0wnm4tBrbz8KmSb6DovC+skuAnLc=";
+    hash = "sha256-HU3hnKdIoseCo1/lt3GIOQ5d3joykN11/Bzvk4xvH4Y=";
   };
 
   listssrht-api = buildGoModule (
     {
-      inherit src version;
+      inherit src version patches;
       pname = "listssrht-api";
       modRoot = "api";
-      vendorHash = "sha256-UeVs/+uZNtv296bzXIBio2wcg3Uzu3fBM4APzF9O0hY=";
+      vendorHash = "sha256-XKDEr8ESs9oBh7DKu2jgPEMDY99nN25inkNwU/rrza8=";
     }
     // gqlgen
   );
 in
 buildPythonPackage rec {
-  inherit src version;
+  inherit src version patches;
   pname = "listssrht";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace "all: api" ""
-  '';
-
   nativeBuildInputs = [
     pip
-    setuptools
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
@@ -65,13 +62,20 @@ buildPythonPackage rec {
     emailthreads
   ];
 
-  preBuild = ''
-    export PKGVER=${version}
-    export SRHT_PATH=${srht}/${python.sitePackages}/srht
+  env = {
+    PKGVER = version;
+    SRHT_PATH = "${srht}/${python.sitePackages}/srht";
+    PREFIX = placeholder "out";
+  };
+
+  postBuild = ''
+    make SASSC_INCLUDE=-I${srht}/share/sourcehut/scss/ all-share
   '';
 
   postInstall = ''
-    ln -s ${listssrht-api}/bin/api $out/bin/listssrht-api
+    ln -s ${listssrht-api}/bin/api $out/bin/lists.sr.ht-api
+    install -Dm644 schema.sql $out/share/sourcehut/lists.sr.ht-schema.sql
+    make install-share
   '';
 
   pythonImportsCheck = [ "listssrht" ];

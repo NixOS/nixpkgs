@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
+    broken = true;
     description = "Stand-alone binary AndroidManifest.xml decoder";
     longDescription = ''
       This tool accepts either a binary or a text XML file and prints the
