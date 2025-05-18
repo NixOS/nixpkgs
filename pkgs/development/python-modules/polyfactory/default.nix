@@ -53,7 +53,7 @@ buildPythonPackage rec {
     "test_type_alias"
   ];
 
-  pythonImporeCheck = [ "polyfactory" ];
+  pythonImportsCheck = [ "polyfactory" ];
 
   meta = {
     homepage = "https://polyfactory.litestar.dev/";

@@ -102,6 +102,10 @@ in
       "services"
       "chronos"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "services"
+      "clamsmtp"
+    ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "confluence" ]
       "Atlassian software has been removed, as support for the Atlassian Server products ended in February 2024 and there was insufficient interest in maintaining the Atlassian Data Center replacements"
     )
