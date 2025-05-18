@@ -26,12 +26,14 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Small utility to create JSON objects";
     homepage = "https://github.com/jpmens/jo";
     mainProgram = "jo";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.markus1189 ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      markus1189
+    ];
+    platforms = lib.platforms.all;
   };
 }
