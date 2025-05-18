@@ -1,0 +1,55 @@
+diff --git a/jose/backends/__init__.py b/jose/backends/__init__.py
+index e7bba69..9918969 100644
+--- a/jose/backends/__init__.py
++++ b/jose/backends/__init__.py
+@@ -1,10 +1,4 @@
+-try:
+-    from jose.backends.cryptography_backend import get_random_bytes  # noqa: F401
+-except ImportError:
+-    try:
+-        from jose.backends.pycrypto_backend import get_random_bytes  # noqa: F401
+-    except ImportError:
+-        from jose.backends.native import get_random_bytes  # noqa: F401
++from jose.backends.native import get_random_bytes  # noqa: F401
+ 
+ try:
+     from jose.backends.cryptography_backend import CryptographyRSAKey as RSAKey  # noqa: F401
+diff --git a/jose/backends/cryptography_backend.py b/jose/backends/cryptography_backend.py
+index 1525cf2..3dce986 100644
+--- a/jose/backends/cryptography_backend.py
++++ b/jose/backends/cryptography_backend.py
+@@ -26,33 +26,11 @@ from ..utils import (
+     long_to_base64,
+ )
+ from .base import Key
++from . import get_random_bytes
+ 
+ _binding = None
+ 
+ 
+-def get_random_bytes(num_bytes):
+-    """
+-    Get random bytes
+-
+-    Currently, Cryptography returns OS random bytes. If you want OpenSSL
+-    generated random bytes, you'll have to switch the RAND engine after
+-    initializing the OpenSSL backend
+-    Args:
+-        num_bytes (int): Number of random bytes to generate and return
+-    Returns:
+-        bytes: Random bytes
+-    """
+-    global _binding
+-
+-    if _binding is None:
+-        _binding = Binding()
+-
+-    buf = _binding.ffi.new("char[]", num_bytes)
+-    _binding.lib.RAND_bytes(buf, num_bytes)
+-    rand_bytes = _binding.ffi.buffer(buf, num_bytes)[:]
+-    return rand_bytes
+-
+-
+ class CryptographyECKey(Key):
+     SHA256 = hashes.SHA256
+     SHA384 = hashes.SHA384
