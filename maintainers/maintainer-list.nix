@@ -8144,6 +8144,12 @@
     githubId = 40620903;
     name = "figsoda";
   };
+  filippo-biondi = {
+    email = "biondifilippo00@gmail.com";
+    github = "filippo-biondi";
+    githubId = 83963482;
+    name = "Filippo Biondi";
+  };
   fionera = {
     email = "nix@fionera.de";
     github = "fionera";
