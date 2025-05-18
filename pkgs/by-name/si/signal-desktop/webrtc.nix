@@ -74,7 +74,11 @@ stdenv.mkDerivation (finalAttrs: {
   ninjaFlags = [ "webrtc" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D obj/libwebrtc${stdenv.hostPlatform.extensions.staticLibrary} $out/lib/libwebrtc${stdenv.hostPlatform.extensions.staticLibrary}
+
+    runHook postInstall
   '';
 
   meta = {
