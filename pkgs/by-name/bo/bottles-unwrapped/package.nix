@@ -26,7 +26,7 @@
   vmtouch,
   libportal,
   nix-update-script,
-  removeWarningPopup ? false, # Final reminder to report any issues on nixpkgs' bugtracker
+  removeWarningPopup ? false,
 }:
 
 python3Packages.buildPythonApplication rec {
