@@ -44,6 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [
       michalrus
+      prince213
     ];
     mainProgram = "watchexec";
   };
