@@ -14,9 +14,9 @@
   static ? stdenv.hostPlatform.isStatic, # generates static libraries *only*
 
   # build ESDM RNG plugin
-  with_esdm ? false,
+  withEsdm ? false,
   # useful, but have to disable tests for now, as /dev/tpmrm0 is not accessible
-  with_tpm2 ? false,
+  withTpm2 ? false,
   policy ? null,
 }:
 
@@ -69,13 +69,13 @@ let
           bzip2
           zlib
         ]
-        ++ lib.optionals (stdenv.hostPlatform.isLinux && with_tpm2) [
+        ++ lib.optionals (stdenv.hostPlatform.isLinux && withTpm2) [
           tpm2-tss
         ]
         ++ lib.optionals (lib.versionAtLeast version "3.6.0") [
           jitterentropy
         ]
-        ++ lib.optionals (lib.versionAtLeast version "3.7.0" && with_esdm) [
+        ++ lib.optionals (lib.versionAtLeast version "3.7.0" && withEsdm) [
           esdm
         ];
 
@@ -101,13 +101,13 @@ let
         ++ lib.optionals stdenv.cc.isClang [
           "--cc=clang"
         ]
-        ++ lib.optionals (stdenv.hostPlatform.isLinux && with_tpm2) [
+        ++ lib.optionals (stdenv.hostPlatform.isLinux && withTpm2) [
           "--with-tpm2"
         ]
         ++ lib.optionals (lib.versionAtLeast version "3.6.0") [
           "--enable-modules=jitter_rng"
         ]
-        ++ lib.optionals (lib.versionAtLeast version "3.7.0" && with_esdm) [
+        ++ lib.optionals (lib.versionAtLeast version "3.7.0" && withEsdm) [
           "--enable-modules=esdm_rng"
         ]
         ++ lib.optionals (lib.versionAtLeast version "3.8.0" && policy != null) [
