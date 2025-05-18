@@ -173,6 +173,10 @@ stdenv.mkDerivation (finalAttrs: {
       asl20
       mit
     ];
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode
+    ];
     maintainers = with lib.maintainers; [ rc-zb ];
     mainProgram = "racket";
     platforms = lib.platforms.all;
