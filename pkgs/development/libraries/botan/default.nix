@@ -17,13 +17,17 @@
   with_esdm ? false,
   # useful, but have to disable tests for now, as /dev/tpmrm0 is not accessible
   with_tpm2 ? false,
-  # only allow BSI approved algorithms, FFI and SHAKE for XMSS
-  with_bsi_policy ? false,
-  # only allow NIST approved algorithms
-  with_fips140_policy ? false,
+  policy ? null,
 }:
 
-assert (!with_bsi_policy && !with_fips140_policy) || (with_bsi_policy != with_fips140_policy);
+assert lib.assertOneOf "policy" policy [
+  # no explicit policy is given. The defaults by the library are used
+  null
+  # only allow BSI approved algorithms, FFI and SHAKE for XMSS
+  "bsi"
+  # only allow NIST approved algorithms in FIPS 140
+  "fips140"
+];
 
 let
   common =
@@ -106,13 +110,12 @@ let
         ++ lib.optionals (lib.versionAtLeast version "3.7.0" && with_esdm) [
           "--enable-modules=esdm_rng"
         ]
-        ++ lib.optionals (lib.versionAtLeast version "3.8.0" && with_bsi_policy) [
-          "--module-policy=bsi"
+        ++ lib.optionals (lib.versionAtLeast version "3.8.0" && policy != null) [
+          "--module-policy=${policy}"
+        ]
+        ++ lib.optionals (lib.versionAtLeast version "3.8.0" && policy == "bsi") [
           "--enable-module=ffi"
           "--enable-module=shake"
-        ]
-        ++ lib.optionals (lib.versionAtLeast version "3.8.0" && with_fips140_policy) [
-          "--module-policy=fips140"
         ];
 
       configurePhase = ''
