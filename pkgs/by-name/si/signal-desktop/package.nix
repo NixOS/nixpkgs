@@ -15,6 +15,7 @@
   noto-fonts-color-emoji,
   nixosTests,
   withAppleEmojis ? false,
+  commandLineArgs ? [ ],
 }:
 let
   nodejs = nodejs_22;
@@ -203,7 +204,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper '${lib.getExe electron}' "$out/bin/signal-desktop" \
       --add-flags "$out/share/signal-desktop/app.asar" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --add-flags ${lib.escapeShellArgs commandLineArgs}
 
     runHook postInstall
   '';
