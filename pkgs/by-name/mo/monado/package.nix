@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch2,
   writeText,
   bluez,
   cjson,
@@ -74,6 +75,14 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-VxTxvw+ftqlh3qF5qWxpK1OJsRowkRXu0xEH2bDckUA=";
   };
+
+  patches = [
+    # Remove with v26
+    (fetchpatch2 {
+      url = "https://gitlab.freedesktop.org/monado/monado/-/commit/2a6932d46dad9aa957205e8a47ec2baa33041076.patch";
+      hash = "sha256-CZMbGgx7mEDcjcoRJHDZ5P6BecFW8CB4fpzxQ9bpAvE=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

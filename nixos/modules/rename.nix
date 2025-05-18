@@ -193,6 +193,9 @@ in
     (mkRemovedOptionModule [ "services" "pantheon" "files" ] ''
       This module was removed, please add pkgs.pantheon.elementary-files to environment.systemPackages directly.
     '')
+    (mkRemovedOptionModule [ "services" "polipo" ] ''
+      The polipo project is unmaintained and archived upstream.
+    '')
     (mkRemovedOptionModule [ "services" "prey" ] ''
       prey-bash-client is deprecated upstream
     '')
