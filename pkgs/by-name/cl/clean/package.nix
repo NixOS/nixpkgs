@@ -55,6 +55,7 @@ stdenv.mkDerivation {
       and generic functions.
     '';
 
+    broken = true;
     homepage = "http://wiki.clean.cs.ru.nl/Clean";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.erin ];
