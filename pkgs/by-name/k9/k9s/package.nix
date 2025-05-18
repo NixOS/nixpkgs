@@ -75,6 +75,7 @@ buildGoModule rec {
       markus1189
       bryanasdev000
       qjoly
+      devusb
     ];
   };
 }
