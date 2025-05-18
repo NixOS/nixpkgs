@@ -35,7 +35,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     installManPage doc/watchexec.1
-    installShellCompletion --zsh --name _watchexec completions/zsh
+    installShellCompletion --cmd watchexec \
+      --bash completions/bash \
+      --fish completions/fish \
+      --zsh completions/zsh
   '';
 
   meta = {
