@@ -9,14 +9,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jo";
   version = "1.9";
 
   src = fetchFromGitHub {
     owner = "jpmens";
     repo = "jo";
-    rev = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-1q4/RpxfoAdtY3m8bBuj7bhD17V+4dYo3Vb8zMbI1YU=";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})
