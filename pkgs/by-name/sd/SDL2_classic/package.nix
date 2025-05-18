@@ -48,15 +48,9 @@
   withStatic ? stdenv.hostPlatform.isMinGW,
   # passthru.tests
   testers,
-  guile-sdl2,
-  jazz2,
-  SDL2_ttf,
-  SDL2_net,
-  SDL2_gfx,
-  SDL2_sound,
-  SDL2_mixer,
-  SDL2_image,
-  python3Packages,
+  SDL2_classic_ttf,
+  SDL2_classic_mixer,
+  SDL2_classic_image,
 }:
 
 # NOTE: When editing this expression see if the same change applies to
@@ -64,13 +58,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2";
-  version = "2.32.4";
+  version = "2.32.6";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-4yUJkttUAbDC/5IdcCFY5ZTIG1qsxEEOjTTuplXV/p4=";
+    hash = "sha256-sXlW+ivDRCNMcZDzZEfOPGvFGU0aE4n/fO+Wxym6GGw=";
   };
   dontDisableStatic = if withStatic then 1 else 0;
   outputs = [
@@ -211,22 +205,16 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "release-(.*)"
+        "release-(2\\..*)"
       ];
     };
     tests = {
-      pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       inherit
-        guile-sdl2
-        jazz2
-        SDL2_ttf
-        SDL2_net
-        SDL2_gfx
-        SDL2_sound
-        SDL2_mixer
-        SDL2_image
+        SDL2_classic_ttf
+        SDL2_classic_mixer
+        SDL2_classic_image
         ;
-      inherit (python3Packages) pygame pygame-ce pygame-sdl2;
     };
   };
 
