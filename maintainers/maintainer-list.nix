@@ -16928,6 +16928,12 @@
     githubId = 1131571;
     name = "naelstrof";
   };
+  naggie = {
+    name = "Cal Bryant";
+    email = "callan.bryant@gmail.com";
+    github = "naggie";
+    githubId = 208440;
+  };
   nagisa = {
     name = "Simonas Kazlauskas";
     email = "nixpkgs@kazlauskas.me";
