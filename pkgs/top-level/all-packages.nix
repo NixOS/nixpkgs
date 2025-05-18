@@ -15234,10 +15234,6 @@ with pkgs;
     buildShareware = true;
   };
 
-  starsector = callPackage ../games/starsector {
-    openjdk = openjdk17;
-  };
-
   scummvm = callPackage ../games/scummvm { };
 
   inherit (callPackage ../games/scummvm/games.nix { })
