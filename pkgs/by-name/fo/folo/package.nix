@@ -10,7 +10,7 @@
   stdenv,
 }:
 stdenv.mkDerivation rec {
-  pname = "follow";
+  pname = "folo";
 
   version = "0.6.3";
 
@@ -60,8 +60,8 @@ stdenv.mkDerivation rec {
   dontCheckForBrokenSymlinks = true;
 
   desktopItem = makeDesktopItem {
-    name = "follow";
-    desktopName = "Follow";
+    name = "folo";
+    desktopName = "Folo";
     comment = "Next generation information browser";
     icon = "follow";
     exec = "follow";
