@@ -20,6 +20,7 @@
   lsb-release,
   pciutils,
   procps,
+  gamemode,
   gamescope,
   mangohud,
   vkbasalt-cli,
@@ -103,6 +104,7 @@ python3Packages.buildPythonApplication rec {
       imagemagick
       vkbasalt-cli
 
+      gamemode
       gamescope
       mangohud
       vmtouch
