@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "flask-cors";
-  version = "5.0.1";
+  version = "6.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "corydolphin";
     repo = "flask-cors";
     tag = version;
-    hash = "sha256-UVMZGdUpEKx5w85sSe8wSzjNYjsKPdbyBX7/QHJ3cyQ=";
+    hash = "sha256-J9OTWVS0GXxfSedfHeifaJ0LR8xFKksf0RGsKSc581E=";
   };
 
   build-system = [
