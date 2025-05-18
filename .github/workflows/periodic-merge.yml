@@ -15,7 +15,6 @@ on:
 jobs:
   merge:
     runs-on: ubuntu-24.04-arm
-    name: ${{ inputs.from }} → ${{ inputs.into }}
     steps:
       # Use a GitHub App to create the PR so that CI gets triggered
       # The App is scoped to Repository > Contents and Pull Requests: write for Nixpkgs
