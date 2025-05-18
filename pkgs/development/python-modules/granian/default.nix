@@ -71,7 +71,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests/" ];
 
-  pythonImportCheck = [ "granian" ];
+  pythonImportsCheck = [ "granian" ];
 
   versionCheckProgramArg = "--version";
 
