@@ -145,6 +145,7 @@ let
         maintainers = with maintainers; [
           raskin
           thillux
+          nikstur
         ];
         platforms = platforms.unix;
         license = licenses.bsd2;
