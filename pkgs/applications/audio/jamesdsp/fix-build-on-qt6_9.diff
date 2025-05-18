@@ -1,0 +1,22 @@
+diff --git a/src/subprojects/AutoEqIntegration/AeqPackageManager.cpp b/src/subprojects/AutoEqIntegration/AeqPackageManager.cpp
+index 01940a1..2ec9c5b 100644
+--- a/src/subprojects/AutoEqIntegration/AeqPackageManager.cpp
++++ b/src/subprojects/AutoEqIntegration/AeqPackageManager.cpp
+@@ -133,7 +133,7 @@ QtPromise::QPromise<AeqVersion> AeqPackageManager::getLocalVersion()
+     return QtPromise::QPromise<AeqVersion>{[&](
+         const QtPromise::QPromiseResolve<AeqVersion>& resolve,
+                 const QtPromise::QPromiseReject<AeqVersion>& reject) {
+-            QFile versionJson = (databaseDirectory() + "/version.json");
++            QFile versionJson(databaseDirectory() + "/version.json");
+             if(!versionJson.exists())
+             {
+                 reject();
+@@ -159,7 +159,7 @@ QtPromise::QPromise<QVector<AeqMeasurement>> AeqPackageManager::getLocalIndex()
+     return QtPromise::QPromise<QVector<AeqMeasurement>>{[&](
+         const QtPromise::QPromiseResolve<QVector<AeqMeasurement>>& resolve,
+                 const QtPromise::QPromiseReject<QVector<AeqMeasurement>>& reject) {
+-            QFile indexJson = (databaseDirectory() + "/index.json");
++            QFile indexJson(databaseDirectory() + "/index.json");
+             if(!indexJson.exists())
+             {
+                 reject();
