@@ -1967,17 +1967,6 @@
     };
     meta.homepage = "https://github.com/cstrahan/tree-sitter-nix";
   };
-  norg = buildGrammar {
-    language = "norg";
-    version = "0.0.0+rev=d89d95a";
-    src = fetchFromGitHub {
-      owner = "nvim-neorg";
-      repo = "tree-sitter-norg";
-      rev = "d89d95af13d409f30a6c7676387bde311ec4a2c8";
-      hash = "sha256-z3h5qMuNKnpQgV62xZ02F5vWEq4VEnm5lxwEnIFu+Rw=";
-    };
-    meta.homepage = "https://github.com/nvim-neorg/tree-sitter-norg";
-  };
   nqc = buildGrammar {
     language = "nqc";
     version = "0.0.0+rev=14e6da1";
