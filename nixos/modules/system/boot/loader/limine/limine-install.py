@@ -249,6 +249,10 @@ def main():
             partition formatted as FAT.
         '''))
 
+    if config('secureBoot')['enable'] and not config('secureBoot')['createAndEnrollKeys'] and not os.path.exists("/var/lib/sbctl"):
+        print("There are no sbctl secure boot keys present. Please generate some.")
+        sys.exit(1)
+
     if not os.path.exists(limine_dir):
         os.makedirs(limine_dir)
     else:
@@ -350,6 +354,28 @@ def main():
                 subprocess.run([limine_binary, 'enroll-config', dest_path, b2sum.hexdigest()])
             except:
                 print('error: failed to enroll limine config.', file=sys.stderr)
+                sys.exit(1)
+
+        if config('secureBoot')['enable']:
+            sbctl = os.path.join(config('secureBoot')['sbctl'], 'bin', 'sbctl')
+            if config('secureBoot')['createAndEnrollKeys']:
+                print("TEST MODE: creating and enrolling keys")
+                try:
+                    subprocess.run([sbctl, 'create-keys'])
+                except:
+                    print('error: failed to create keys', file=sys.stderr)
+                    sys.exit(1)
+                try:
+                    subprocess.run([sbctl, 'enroll-keys', '--yes-this-might-brick-my-machine'])
+                except:
+                    print('error: failed to enroll keys', file=sys.stderr)
+                    sys.exit(1)
+
+            print('signing limine...')
+            try:
+                subprocess.run([sbctl, 'sign', dest_path])
+            except:
+                print('error: failed to sign limine', file=sys.stderr)
                 sys.exit(1)
 
         if not config('efiRemovable') and not config('canTouchEfiVariables'):
