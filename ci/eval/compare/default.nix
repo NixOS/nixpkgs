@@ -7,8 +7,8 @@
   python3,
 }:
 {
-  beforeResultDir,
-  afterResultDir,
+  beforeDir,
+  afterDir,
   touchedFilesJson,
   githubAuthorId,
   byName ? false,
@@ -20,7 +20,7 @@ let
 
     ---
     Inputs:
-    - beforeResultDir, afterResultDir: The evaluation result from before and after the change.
+    - beforeDir, afterDir: The evaluation result from before and after the change.
       They can be obtained by running `nix-build -A ci.eval.full` on both revisions.
 
     ---
@@ -83,8 +83,8 @@ let
       data = builtins.unsafeDiscardStringContext raw;
     in
     builtins.fromJSON data;
-  beforeAttrs = getAttrs beforeResultDir;
-  afterAttrs = getAttrs afterResultDir;
+  beforeAttrs = getAttrs beforeDir;
+  afterAttrs = getAttrs afterDir;
 
   # Attrs
   # - keys: "added", "changed" and "removed"
@@ -149,8 +149,8 @@ runCommand "compare"
     maintainers = builtins.toJSON maintainers;
     passAsFile = [ "maintainers" ];
     env = {
-      BEFORE_DIR = "${beforeResultDir}";
-      AFTER_DIR = "${afterResultDir}";
+      BEFORE_DIR = "${beforeDir}";
+      AFTER_DIR = "${afterDir}";
     };
   }
   ''
