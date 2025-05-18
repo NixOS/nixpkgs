@@ -146,7 +146,8 @@ stdenv.mkDerivation rec {
     for f in $out/bin/*; do
       wrapProgram $f \
         --prefix GUILE_LOAD_PATH : "$out/${guile.siteDir}:$GUILE_LOAD_PATH" \
-        --prefix GUILE_LOAD_COMPILED_PATH : "$out/${guile.siteCcacheDir}:$GUILE_LOAD_COMPILED_PATH"
+        --prefix GUILE_LOAD_COMPILED_PATH : "$out/${guile.siteCcacheDir}:$GUILE_LOAD_COMPILED_PATH" \
+        --prefix GUILE_EXTENSIONS_PATH : "${guile-ssh}/lib/guile/3.0/extensions:$GUILE_EXTENSIONS_PATH"
     done
   '';
 
