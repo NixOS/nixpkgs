@@ -3889,8 +3889,6 @@ broken-packages:
   - midisurface # failure in job https://hydra.nixos.org/build/233224559 at 2023-09-02
   - mig-swagger-ui # failure in job https://hydra.nixos.org/build/295095369 at 2025-04-22
   - mighttpd2 # failure in job https://hydra.nixos.org/build/233213125 at 2023-09-02
-  - migrant-core # failure in job https://hydra.nixos.org/build/295095347 at 2025-04-22
-  - migrant-postgresql-simple # failure in job https://hydra.nixos.org/build/233191795 at 2023-09-02
   - mikmod # failure in job https://hydra.nixos.org/build/233247364 at 2023-09-02
   - mikrokosmos # failure in job https://hydra.nixos.org/build/233232143 at 2023-09-02
   - miku # failure in job https://hydra.nixos.org/build/233212186 at 2023-09-02
