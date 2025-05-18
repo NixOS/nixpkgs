@@ -12,8 +12,6 @@ let
       "${config.i18n.defaultLocale}/${config.i18n.defaultCharset}"
     ]
     ++ lib.pipe config.i18n.extraLocaleSettings [
-      # TODO: Explain why is this filter added here...
-      (lib.filterAttrs (n: v: n != "LANGUAGE"))
       (lib.mapAttrs (n: v: (sanitizeUTF8Capitalization v)))
       (lib.mapAttrsToList (LCRole: lang: lang + "/" + (config.i18n.localeCharsets.${LCRole} or "UTF-8")))
     ]
