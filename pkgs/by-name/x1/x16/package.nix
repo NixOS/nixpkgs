@@ -6,6 +6,7 @@
   SDL2,
   callPackage,
   zlib,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "X16Community";
     repo = "x16-emulator";
-    rev = "r${finalAttrs.version}";
+    tag = "r${finalAttrs.version}";
     hash = "sha256-E4TosRoORCWLotOIXROP9oqwqo1IRSa6X13GnmuxE9A=";
   };
 
@@ -58,14 +59,16 @@ stdenv.mkDerivation (finalAttrs: {
     run = (callPackage ./run.nix { }) {
       inherit (finalAttrs.finalPackage) emulator rom;
     };
+
+    updateScript = nix-update-script { };
   };
 
   meta = {
     homepage = "https://cx16forum.com/";
     description = "Official emulator of CommanderX16 8-bit computer";
-    changelog = "https://github.com/X16Community/x16-emulator/blob/r${finalAttrs.version}/RELEASES.md";
+    changelog = "https://github.com/X16Community/x16-emulator/blob/${finalAttrs.src.rev}/RELEASES.md";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ pluiedev ];
     mainProgram = "x16emu";
     inherit (SDL2.meta) platforms;
     broken = stdenv.hostPlatform.isAarch64; # ofborg fails to compile it
