@@ -91,6 +91,8 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     # cryptography 44 compat issue
     "--deselect=tests/transport/test__mtls_helper.py::TestDecryptPrivateKey::test_success"
+    # https://github.com/googleapis/google-auth-library-python/issues/1763
+    "--deselect=tests/test__service_account_info.py::test_from_dict_bad_private_key"
   ];
 
   __darwinAllowLocalNetworking = true;
