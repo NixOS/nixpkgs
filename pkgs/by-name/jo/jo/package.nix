@@ -5,6 +5,7 @@
   autoreconfHook,
   pandoc,
   pkg-config,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,6 +26,8 @@ stdenv.mkDerivation rec {
     pandoc
     pkg-config
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Small utility to create JSON objects";
