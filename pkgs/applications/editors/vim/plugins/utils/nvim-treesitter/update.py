@@ -19,44 +19,40 @@ NURR_JSON_URL = (
 
 def generate_grammar(lang, parser_info):
     """Generate grammar for a language based on the parser info"""
-    try:
-        if "install_info" not in parser_info:
-            log.warning(f"Parser {lang} does not have install_info, skipping")
-            return ""
+    if "install_info" not in parser_info:
+        log.warning(f"Parser {lang} does not have install_info, skipping")
+        return ""
 
-        install_info = parser_info["install_info"]
+    install_info = parser_info["install_info"]
 
-        url = install_info["url"]
-        rev = install_info["revision"]
+    url = install_info["url"]
+    rev = install_info["revision"]
 
-        generated = f"""  {lang} = buildGrammar {{
+    generated = f"""  {lang} = buildGrammar {{
     language = "{lang}";
     version = "0.0.0+rev={rev[:7]}";
     src = """
 
-        generated += subprocess.check_output(
-            ["nurl", url, rev, "--indent=4"], text=True
-        )
-        generated += ";"
+    generated += subprocess.check_output(
+        ["nurl", url, rev, "--indent=4"], text=True
+    )
+    generated += ";"
 
-        location = install_info.get("location", "")
-        if location:
-            generated += f"""
+    location = install_info.get("location", "")
+    if location:
+        generated += f"""
     location = "{location}";"""
 
-        if install_info.get("generate", False):
-            generated += """
+    if install_info.get("generate", False):
+        generated += """
     generate = true;"""
 
-        generated += f"""
+    generated += f"""
     meta.homepage = "{url}";
   }};
 """
 
-        return generated
-    except Exception as e:
-        log.error(f"Error generating grammar for {lang}: {e}")
-        return ""
+    return generated
 
 
 def fetch_nurr_parsers():
@@ -87,11 +83,7 @@ def fetch_nurr_parsers():
 
 def process_parser_info(parser_info):
     """Process a single parser info entry and generate grammar for it"""
-    try:
-        return generate_grammar(parser_info["lang"], parser_info)
-    except Exception as e:
-        log.error(f"Error processing parser: {e}")
-        return ""
+    return generate_grammar(parser_info["lang"], parser_info)
 
 
 def update_grammars():
