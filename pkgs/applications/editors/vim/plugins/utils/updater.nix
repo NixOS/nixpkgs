@@ -25,6 +25,7 @@ buildPythonApplication {
 
   pythonPath = [
     python3Packages.gitpython
+    python3Packages.requests
   ];
 
   dontUnpack = true;
