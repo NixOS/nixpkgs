@@ -47,30 +47,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop-unwrapped";
-  version = "5.14.2";
+  version = "5.14.3";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-A9bP1aX+YRoc9Y4ZwWzJc4In2IF1y2adOzQhGoWXR/s=";
+    hash = "sha256-nNYQpWbBK+E/LAbwTWpNUhs2+wb8iuMfqkxJKjaFmhg=";
   };
 
-  postPatch =
-    # https://github.com/desktop-app/cmake_helpers/issues/393
-    ''
-      substituteInPlace cmake/external/lz4/CMakeLists.txt \
-        --replace-fail 'lz4::lz4' 'LZ4::lz4'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
-        --replace-fail '"libasound.so.2"' '"${lib.getLib alsa-lib}/lib/libasound.so.2"'
-      substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioOutputALSA.cpp \
-        --replace-fail '"libasound.so.2"' '"${lib.getLib alsa-lib}/lib/libasound.so.2"'
-      substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
-        --replace-fail '"libpulse.so.0"' '"${lib.getLib libpulseaudio}/lib/libpulse.so.0"'
-    '';
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
+      --replace-fail '"libasound.so.2"' '"${lib.getLib alsa-lib}/lib/libasound.so.2"'
+    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioOutputALSA.cpp \
+      --replace-fail '"libasound.so.2"' '"${lib.getLib alsa-lib}/lib/libasound.so.2"'
+    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
+      --replace-fail '"libpulse.so.0"' '"${lib.getLib libpulseaudio}/lib/libpulse.so.0"'
+  '';
 
   nativeBuildInputs =
     [

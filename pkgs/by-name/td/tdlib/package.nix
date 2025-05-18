@@ -47,8 +47,8 @@ stdenv.mkDerivation {
     # The tdlib authors do not set tags for minor versions, but
     # external programs depending on tdlib constrain the minor
     # version, hence we set a specific commit with a known version.
-    rev = "aaddce62789bd9d6175d0543f40b7cfdfa5da0d4";
-    hash = "sha256-rDEHOzcyn+m6fClRKYDvpoDaCH5iv8g7onnFQzS1MKo=";
+    rev = "51743dfd01dff6179e2d8f7095729caa4e2222e9";
+    hash = "sha256-duD8a/fppkmaKrvkHnbSxRnCLS60aNVcgaYyCoHzKgE=";
   };
 
   buildInputs = [
@@ -91,10 +91,6 @@ stdenv.mkDerivation {
     ''
     + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
       sed -i "/vptr/d" test/CMakeLists.txt
-    ''
-    + lib.optionalString tde2eOnly ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'NAMESPACE tde2e::' 'NAMESPACE Td::'
     '';
 
   passthru.updateScript = lib.getExe updateScript;
