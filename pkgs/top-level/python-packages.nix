@@ -18631,6 +18631,8 @@ self: super: with self; {
 
   validobj = callPackage ../development/python-modules/validobj { };
 
+  valkey = callPackage ../development/python-modules/valkey { };
+
   vallox-websocket-api = callPackage ../development/python-modules/vallox-websocket-api { };
 
   vapoursynth = callPackage ../development/python-modules/vapoursynth { inherit (pkgs) vapoursynth; };
