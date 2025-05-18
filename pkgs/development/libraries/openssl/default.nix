@@ -28,6 +28,11 @@
 # files.
 
 let
+  # We will load config from `/etc` if custom `conf` is not provided.
+  # For static builds, we will move the custom config to `etc` output
+  # to minimize the size of output whose path will be hardcoded.
+  etcOutput = if static && conf != null then "etc" else "out";
+
   common =
     {
       version,
@@ -91,11 +96,11 @@ let
         ]
         ++ lib.optional withDocs "doc"
         # Separate output for the runtime dependencies of the static build.
-        # Specifically, move OPENSSLDIR into this output, as its path will be
+        # Specifically, move OPENSSLDIR into this output, as its path may be
         # compiled into 'libcrypto.a'. This makes it a runtime dependency of
         # any package that statically links openssl, so we want to keep that
         # output minimal.
-        ++ lib.optional static "etc";
+        ++ lib.optional (etcOutput == "etc") "etc";
       setOutputFlags = false;
       separateDebugInfo =
         !stdenv.hostPlatform.isDarwin && !(stdenv.hostPlatform.useLLVM or false) && stdenv.cc.isGNU;
@@ -164,15 +169,7 @@ let
         [
           "shared" # "shared" builds both shared and static libraries
           "--libdir=lib"
-          (
-            if !static then
-              "--openssldir=etc/ssl"
-            else
-              # Move OPENSSLDIR to the 'etc' output for static builds. Prepend '/.'
-              # to the path to make it appear absolute before variable expansion,
-              # else the 'prefix' would be prepended to it.
-              "--openssldir=/.$(etc)/etc/ssl"
-          )
+          "--openssldir=${lib.optionalString (conf != null) (placeholder etcOutput)}/etc/ssl"
         ]
         ++ lib.optionals withCryptodev [
           "-DHAVE_CRYPTODEV"
@@ -226,6 +223,13 @@ let
         "MANSUFFIX=ssl"
       ];
 
+      installFlags = [
+        # When we configure `/etc/ssl`, it is not writeable so we need to override
+        # the installation path with a package output. Config files will not be loaded
+        # from the package but can still be useful as a reference.
+        "OPENSSLDIR=${placeholder etcOutput}/etc/ssl"
+      ];
+
       enableParallelBuilding = true;
 
       postInstall =
@@ -242,9 +246,6 @@ let
               if [ -n "$(echo $out/lib/*.so $out/lib/*.dylib $out/lib/*.dll)" ]; then
                   rm "$out/lib/"*.a
               fi
-
-              # 'etc' is a separate output on static builds only.
-              etc=$out
             ''
         )
         + ''
@@ -267,6 +268,9 @@ let
 
           mkdir $dev
           mv $out/include $dev/
+
+          # 'etc' is a separate output on static builds with explicit config only.
+          etc=${placeholder etcOutput}
 
           # remove dependency on Perl at runtime
           rm -r $etc/etc/ssl/misc
