@@ -1,19 +1,19 @@
 {
   lib,
   fetchFromGitHub,
-  rustPlatform,
   nix-update-script,
+  rustPlatform,
+  stdenv,
 }:
-
 rustPlatform.buildRustPackage {
   pname = "nufmt";
-  version = "0-unstable-2025-04-28";
+  version = "0-unstable-2025-05-23";
 
   src = fetchFromGitHub {
     owner = "nushell";
     repo = "nufmt";
-    rev = "feafe695659c4d5153018a78fad949d088d8a480";
-    hash = "sha256-4FnZIlZWuvSAXMQbdyONNrgIuMxH5Vq3MFbb8J2CnHM=";
+    rev = "62fd38af2f6536bb19ecc78a4dd0f0e1245c0939";
+    hash = "sha256-JG8XCXEdjVERQ9f6ZsYCLXVGN85qPWCQhS2svJYW390=";
   };
 
   nativeBuildInputs = [
@@ -21,7 +21,14 @@ rustPlatform.buildRustPackage {
   ];
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-zS4g/uMh1eOoPo/RZfanL6afCEU5cnyzHrIqkvuQVrg=";
+  cargoHash = "sha256-KDXC2/1GcJL6qH+L/FzzQCA7kJigtKOfxVDLv5qXYao=";
+
+  # NOTE: Patch follows similar intention upstream https://github.com/nushell/nufmt/commit/62fd38af2f6536bb19ecc78a4dd0f0e1245c0939
+  postPatch = ''
+    substituteInPlace tests/main.rs --replace-fail \
+      'const TEST_BINARY: &str = "target/debug/nufmt";' \
+      'const TEST_BINARY: &str = "target/${stdenv.hostPlatform.rust.rustcTarget}/release/nufmt";'
+  '';
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
