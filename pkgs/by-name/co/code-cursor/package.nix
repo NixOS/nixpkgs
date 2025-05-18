@@ -191,6 +191,7 @@ stdenvNoCC.mkDerivation {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
       aspauldingcode
+      prince213
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "cursor";
