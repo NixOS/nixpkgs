@@ -4,6 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -40,6 +41,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --fish completions/fish \
       --zsh completions/zsh
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Executes commands in response to file modifications";
