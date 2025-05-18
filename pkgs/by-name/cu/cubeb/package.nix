@@ -62,6 +62,18 @@ stdenv.mkDerivation {
     backendLibs = lib.optionals lazyLoad backendLibs;
   };
 
+  postInstall = ''
+    # TODO: remove after https://github.com/mozilla/cubeb/pull/813 is merged
+    mkdir -p $out/lib/pkgconfig/
+    echo > $out/lib/pkgconfig/libcubeb.pc \
+    "Name: libcubeb
+    Description: Cross platform audio library
+    Version: 0.0.0
+    Requires.private: libpulse
+    Libs: -L"$out/lib" -lcubeb
+    Libs.private: -lstdc++"
+  '';
+
   meta = with lib; {
     description = "Cross platform audio library";
     mainProgram = "cubeb-test";
