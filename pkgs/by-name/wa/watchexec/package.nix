@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "watchexec";
   version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "watchexec";
     repo = "watchexec";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BJRvz3rFLaOCNhOsEo0rSOgB9BCJ2LMB9XEw8RBWXXs=";
   };
 
@@ -45,4 +45,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ maintainers.michalrus ];
     mainProgram = "watchexec";
   };
-}
+})
