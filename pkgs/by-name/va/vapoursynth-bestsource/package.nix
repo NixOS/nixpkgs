@@ -8,6 +8,7 @@
   vapoursynth,
   ffmpeg,
   xxHash,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,6 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace meson.build \
       --replace-fail "vapoursynth_dep.get_variable(pkgconfig: 'libdir')" "get_option('libdir')"
   '';
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "R";
+    ignoredVersions = "*-RC*";
+  };
 
   meta = {
     description = "Wrapper library around FFmpeg that ensures sample and frame accurate access to audio and video";
