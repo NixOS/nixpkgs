@@ -1135,6 +1135,7 @@ mapAliases {
   lxd-unwrapped = lib.warnOnInstantiate "lxd-unwrapped has been renamed to lxd-unwrapped-lts" lxd-unwrapped-lts; # Added 2024-04-01
   lzma = throw "'lzma' has been renamed to/replaced by 'xz'"; # Converted to throw 2024-10-17
   lzwolf = throw "'lzwolf' has been removed because it's no longer maintained upstream. Consider using 'ecwolf'"; # Added 2025-03-02
+
   ### M ###
 
   ma1sd = throw "ma1sd was dropped as it is unmaintained"; # Added 2024-07-10
@@ -1148,6 +1149,7 @@ mapAliases {
   maligned = throw "maligned was deprecated upstream in favor of x/tools/go/analysis/passes/fieldalignment"; # Added 20204-08-24
   manicode = throw "manicode has been renamed to codebuff"; # Added 2024-12-10
   manta = throw "manta does not support python3, and development has been abandoned upstream"; # Added 2025-03-17
+  manticore = throw "manticore is no longer maintained since 2020, and doesn't build since smlnj-110.99.7.1"; # Added 2025-05-17
 
   maple-mono-NF = throw ''
     maple-mono-NF had been moved to maple-mono.NF.
