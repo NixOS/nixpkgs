@@ -96,7 +96,7 @@ let
           --option restrict-eval true \
           --option allow-import-from-derivation false \
           --query --available \
-          --no-name --attr-path --out-path \
+          --out-path --json \
           --show-trace \
           --arg chunkSize "$chunkSize" \
           --arg myChunk "$myChunk" \
@@ -188,7 +188,7 @@ let
           rm "$chunkOutputDir"/stats/"$seq_end"
         fi
 
-        cat "$chunkOutputDir"/result/* > $out/${evalSystem}/paths
+        cat "$chunkOutputDir"/result/* | jq -s 'add | map_values(.outputs)' > $out/${evalSystem}/paths.json
       '';
 
   combine =
@@ -204,22 +204,8 @@ let
       ''
         mkdir -p $out
 
-        # Transform output paths to JSON
-        cat ${resultsDir}/*/paths |
-          jq --sort-keys --raw-input --slurp '
-            split("\n") |
-            map(select(. != "") | split(" ") | map(select(. != ""))) |
-            map(
-              {
-                key: .[0],
-                value: .[1] | split(";") | map(split("=") |
-                  if length == 1 then
-                    { key: "out", value: .[0] }
-                  else
-                    { key: .[0], value: .[1] }
-                  end) | from_entries}
-            ) | from_entries
-          ' > $out/outpaths.json
+        # Combine output paths from all systems
+        cat ${resultsDir}/*/paths.json | jq -s add > $out/outpaths.json
 
         mkdir -p $out/stats
 
