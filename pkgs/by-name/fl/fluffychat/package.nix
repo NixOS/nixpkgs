@@ -49,6 +49,7 @@ flutter327.buildFlutterApplication (
       maintainers = with maintainers; [
         mkg20001
         tebriel
+        aleksana
       ];
       platforms = [
         "x86_64-linux"
