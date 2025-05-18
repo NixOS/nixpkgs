@@ -5,8 +5,19 @@
   cmake,
   protobuf,
   webrtc,
+  pkg-config,
+  cubeb,
+  libpulseaudio,
 }:
-
+let
+  cubeb' = cubeb.override {
+    alsaSupport = false;
+    pulseSupport = true;
+    jackSupport = false;
+    sndioSupport = false;
+    buildSharedLibs = false;
+  };
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ringrtc";
   version = "2.51.0";
@@ -28,12 +39,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   doCheck = false;
 
+  env = {
+    LIBCUBEB_SYS_USE_PKG_CONFIG = 1;
+    LIBCUBEB_STATIC = 1;
+  };
+
   nativeBuildInputs = [
     protobuf
     cmake
+    pkg-config
   ];
   buildInputs = [
     webrtc
+    cubeb'
+    libpulseaudio
   ];
 
   meta = {
