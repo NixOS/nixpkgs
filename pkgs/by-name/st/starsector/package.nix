@@ -4,27 +4,30 @@
   libGL,
   makeWrapper,
   openal,
-  openjdk,
+  openjdk17,
   stdenv,
   xorg,
   copyDesktopItems,
   makeDesktopItem,
   writeScript,
 }:
-
+let
+  openjdk = openjdk17;
+in
 stdenv.mkDerivation rec {
   pname = "starsector";
-  version = "0.98a-RC7";
+  version = "0.98a-RC8";
 
   src = fetchzip {
     url = "https://f005.backblazeb2.com/file/fractalsoftworks/release/starsector_linux-${version}.zip";
-    sha256 = "sha256-qA4/9AvRWBOIbNKA9U8U7PoPmIwz8wgJZyYFln7LZHw=";
+    sha256 = "sha256-W/6QpgKbUJC+jWOlAOEEGStee5KJuLi020kRtPQXK3U=";
   };
 
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
   ];
+
   buildInputs = [
     xorg.libXxf86vm
     openal
@@ -80,7 +83,7 @@ stdenv.mkDerivation rec {
   # pass-through CLI args ($@) to the JVM.
   postPatch = ''
     substituteInPlace starsector.sh \
-      --replace-fail "./jre_linux/bin/java" "${openjdk}/bin/java" \
+      --replace-fail "./jre_linux/bin/java" "${lib.getExe openjdk}" \
       --replace-fail "./native/linux" "$out/share/starsector/native/linux" \
       --replace-fail "./compiler_directives.txt" "$out/share/starsector/compiler_directives.txt" \
       --replace-fail "=." "=\''${XDG_DATA_HOME:-\$HOME/.local/share}/starsector" \
@@ -92,7 +95,7 @@ stdenv.mkDerivation rec {
     #!nix-shell -i bash -p curl gnugrep common-updater-scripts
     set -eou pipefail;
     version=$(curl -s https://fractalsoftworks.com/preorder/ | grep -oP "https://f005.backblazeb2.com/file/fractalsoftworks/release/starsector_linux-\K.*?(?=\.zip)" | head -1)
-    update-source-version ${pname} "$version" --file=./pkgs/games/starsector/default.nix
+    update-source-version ${pname} "$version" --file=./pkgs/by-name/st/starsector/package.nix
   '';
 
   meta = with lib; {
