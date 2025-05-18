@@ -1,17 +1,21 @@
 #!/usr/bin/env nix-shell
-#!nix-shell update-shell.nix -i python
+#!nix-shell ./update-shell.nix -i python
 
 import json
 import logging
 import os
 import subprocess
 from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 
 import requests
 
 log = logging.getLogger("vim-updater")
 
-NURR_JSON_URL = "https://raw.githubusercontent.com/nvim-neorocks/nurr/main/tree-sitter-parsers.json"
+NURR_JSON_URL = (
+    "https://raw.githubusercontent.com/nvim-neorocks/nurr/main/tree-sitter-parsers.json"
+)
+
 
 def generate_grammar(lang, parser_info):
     """Generate grammar for a language based on the parser info"""
@@ -30,7 +34,9 @@ def generate_grammar(lang, parser_info):
     version = "0.0.0+rev={rev[:7]}";
     src = """
 
-        generated += subprocess.check_output(["nurl", url, rev, "--indent=4"], text=True)
+        generated += subprocess.check_output(
+            ["nurl", url, rev, "--indent=4"], text=True
+        )
         generated += ";"
 
         location = install_info.get("location", "")
@@ -82,8 +88,7 @@ def fetch_nurr_parsers():
 def process_parser_info(parser_info):
     """Process a single parser info entry and generate grammar for it"""
     try:
-        lang = parser_info["lang"]
-        return generate_grammar(lang, parser_info)
+        return generate_grammar(parser_info["lang"], parser_info)
     except Exception as e:
         log.error(f"Error processing parser: {e}")
         return ""
@@ -119,13 +124,10 @@ def update_grammars():
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
     generated = update_grammars()
-    output_path = os.path.join(
-        os.path.dirname(__file__),
-        "../../nvim-treesitter/generated.nix"
-    )
+    output_path = Path(__file__).parent.parent / "nvim-treesitter/generated.nix"
     log.info("Writing output to %s", output_path)
     with open(output_path, "w") as f:
         f.write(generated)
