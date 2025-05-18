@@ -77,6 +77,22 @@ let
     patches = [ ./001-Ws-protocol-add-missing-libs.patch ];
   });
 
+  prefixVar = "\${" + "prefix}";
+  # Latest commits are not compatible, use older version
+  xtensorCompat = xtensor.overrideAttrs (old: {
+    src = fetchFromGitHub {
+      owner = "xtensor-stack";
+      repo = "xtensor";
+      rev = "8ef0ee649fcd7476242af1d2072b45364036937d";
+      hash = "sha256-qxOgaa0tIojlqxJxW00SUPRZp7gBJA0dLyQ3ToNk2Os=";
+    };
+
+    preConfigure = ''
+      echo "Fixing xtensor.pc.in for Nix compatibility..."
+      find . -name xtensor.pc.in -exec sed -i 's|${prefixVar}/@CMAKE_INSTALL_LIBDIR@|@CMAKE_INSTALL_FULL_LIBDIR@|g' {} \;
+    '';
+  });
+
   # Latest commits are not compatible, use older version
   xlinkCompat = xlink.overrideAttrs (old: {
     src = fetchFromGitHub {
@@ -198,9 +214,9 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libX11
     httplib
     openssl
-    (if stdenv.isDarwin then protobuf_21 else protobuf)
+    protobuf_21
     cproto
-    xtensor
+    xtensorCompat
     xtl
     samplesLib
     nlohmann_json
@@ -250,6 +266,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "DEPTHAI_BOOTSTRAP_VCPKG" false)
     (lib.cmakeBool "BUILD_SHARED_LIBS" true)
     (lib.cmakeBool "DEPTHAI_PCL_SUPPORT" true)
+    (lib.cmakeBool "DEPTHAI_XTENSOR_SUPPORT" true)
     (lib.cmakeBool "DEPTHAI_BUILD_PYTHON" true)
     (lib.cmakeBool "DEPTHAI_PYTHON_ENABLE_TESTS" true)
     (lib.cmakeBool "DEPTHAI_INSTALL" true)
