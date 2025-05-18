@@ -567,6 +567,7 @@ mapAliases {
   ec2-utils = amazon-ec2-utils; # Added 2022-02-01
 
   ecryptfs-helper = throw "'ecryptfs-helper' has been removed, for filesystem-level encryption, use fscrypt"; # Added 2025-04-08
+  edbrowse = throw "'edbrowse' has been removed as it was unmaintained in Nixpkgs"; # Added 2025-05-18
   edUnstable = throw "edUnstable was removed; use ed instead"; # Added 2024-07-01
   edgedb = throw "edgedb replaced to gel because of change of upstream"; # Added 2025-02-24
   eintopf = lauti; # Project was renamed, added 2025-05-01
