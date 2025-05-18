@@ -5,6 +5,7 @@
   autoreconfHook,
   pandoc,
   pkg-config,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -26,6 +27,16 @@ stdenv.mkDerivation rec {
     pandoc
     pkg-config
   ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "-v";
+  postInstallCheck = ''
+    $out/bin/jo -V > /dev/null
+    seq 1 10 | $out/bin/jo -a | grep '^\[1,2,3,4,5,6,7,8,9,10\]$' > /dev/null
+  '';
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
