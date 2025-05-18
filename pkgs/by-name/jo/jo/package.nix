@@ -43,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Small utility to create JSON objects";
     homepage = "https://github.com/jpmens/jo";
+    changelog = "https://github.com/jpmens/jo/blob/${finalAttrs.version}/ChangeLog";
     mainProgram = "jo";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
