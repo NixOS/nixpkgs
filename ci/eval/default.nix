@@ -193,9 +193,9 @@ let
 
   combine =
     {
-      resultsDir,
+      evalDir,
     }:
-    runCommand "combined-result"
+    runCommand "combined-eval"
       {
         nativeBuildInputs = [
           jq
@@ -205,11 +205,11 @@ let
         mkdir -p $out
 
         # Combine output paths from all systems
-        cat ${resultsDir}/*/paths.json | jq -s add > $out/outpaths.json
+        cat ${evalDir}/*/paths.json | jq -s add > $out/outpaths.json
 
         mkdir -p $out/stats
 
-        for d in ${resultsDir}/*; do
+        for d in ${evalDir}/*; do
           cp -r "$d"/stats-by-chunk $out/stats/$(basename "$d")
         done
       '';
@@ -225,8 +225,8 @@ let
       quickTest ? false,
     }:
     let
-      results = symlinkJoin {
-        name = "results";
+      evals = symlinkJoin {
+        name = "evals";
         paths = map (
           evalSystem:
           singleSystem {
@@ -236,7 +236,7 @@ let
       };
     in
     combine {
-      resultsDir = results;
+      evalDir = evals;
     };
 
 in
