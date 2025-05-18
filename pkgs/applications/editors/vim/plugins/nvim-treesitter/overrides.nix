@@ -8,6 +8,7 @@
   runCommand,
   vimPlugins,
   tree-sitter-grammars,
+  buildEnv,
 }:
 
 self: super:
@@ -68,8 +69,16 @@ let
   # pkgs.vimPlugins.nvim-treesitter.withAllGrammars
   withPlugins =
     f:
-    self.nvim-treesitter.overrideAttrs {
-      passthru.dependencies = map grammarToPlugin (f (tree-sitter.builtGrammars // builtGrammars));
+    buildEnv {
+      inherit (super.nvim-treesitter)
+        name
+        pname
+        version
+        passthru
+        ;
+      paths = [
+        self.nvim-treesitter
+      ] ++ map grammarToPlugin (f (tree-sitter.builtGrammars // builtGrammars));
     };
 
   withAllGrammars = withPlugins (_: allGrammars);
