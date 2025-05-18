@@ -3,8 +3,6 @@
   buildNpmPackage,
   fetchFromGitHub,
   fetchpatch,
-  libmongocrypt,
-  krb5,
   testers,
   nix-update-script,
 }:
@@ -53,7 +51,12 @@ buildNpmPackage (finalAttrs: {
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
     };
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^(?:v|mongosh@)(\\d+\\.\\d+\\.\\d+)$"
+      ];
+    };
   };
 
   meta = {
