@@ -93,6 +93,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/eclipse/sumo";
     license = licenses.epl20;
-    maintainers = with maintainers; [ mtreca ];
+    maintainers = with maintainers; [ ];
   };
 }
