@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "2.16";
+  version = "2.17";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "lilydjwg";
     repo = "nvchecker";
     tag = "v${version}";
-    hash = "sha256-HdL3BnjQZzKXtjhQqDst6dJH82g3BONFsGUnwzDMRDA=";
+    hash = "sha256-jA41WoD0WXdb8CM9dUchIAhYd4GoUA9zLYbkaPIScLg=";
   };
 
   build-system = [ setuptools ];
