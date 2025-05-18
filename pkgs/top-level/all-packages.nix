@@ -351,8 +351,6 @@ with pkgs;
     perlPackages = perl538Packages;
   };
 
-  collision = callPackage ../applications/misc/collision { };
-
   coolercontrol = recurseIntoAttrs (callPackage ../applications/system/coolercontrol { });
 
   copilot-language-server-fhs = copilot-language-server.fhs;
