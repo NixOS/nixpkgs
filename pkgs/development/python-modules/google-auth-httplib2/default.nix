@@ -9,12 +9,13 @@
   pytest-localserver,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-auth-httplib2";
   version = "0.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -23,7 +24,9 @@ buildPythonPackage rec {
     hash = "sha256-OKp7rfSPl08euYYXlOnAyyoFEaTsBnmx+IbRCPVkDgU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-auth
     httplib2
   ];
@@ -36,6 +39,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-localserver
   ];
+
+  pythonImportsCheck = [ "google_auth_httplib2" ];
 
   meta = with lib; {
     description = "Google Authentication Library: httplib2 transport";
