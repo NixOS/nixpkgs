@@ -31,7 +31,12 @@ buildGoModule rec {
     hash = "sha256-WhviYa9H3FsYRgnUhheP6dRj9A9l2nrGeFAhUj5TCKU=";
   };
 
-  vendorHash = "sha256-dY67FbRka58duZ4xElQr9uOCEonURhkPOyj3NKhW9gc=";
+  patches = [
+    # TODO: remove after updating to 1.69.3
+    ./purego-update.patch
+  ];
+
+  vendorHash = "sha256-Wu9d98SIENCkJYoGT/f9KN8vnYYGMN7HxhzqtkOYQ/8=";
 
   subPackages = [ "." ];
 
