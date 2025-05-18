@@ -1,4 +1,14 @@
-{ stdenvNoCC, fetchurl, _7zz, cpio, xar, xcbuild, versionCheckHook, writeShellScript, lib }:
+{
+  stdenvNoCC,
+  fetchurl,
+  _7zz,
+  cpio,
+  xar,
+  xcbuild,
+  versionCheckHook,
+  writeShellScript,
+  lib,
+}:
 
 stdenvNoCC.mkDerivation {
   pname = "ps-remote-play";
@@ -19,13 +29,13 @@ stdenvNoCC.mkDerivation {
     cd $TMPDIR
     cat RemotePlay.pkg/Payload | gunzip -dc | cpio -i
     runHook postUnpack
-    '';
+  '';
   installPhase = ''
     runHook preInstall
     mkdir -p $out/Applications
     mv RemotePlay.app $out/Applications
     runHook postInstall
-    '';
+  '';
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = writeShellScript "version-check" ''
     ${xcbuild}/bin/PlistBuddy -c "Print :CFBundleShortVersionString" "$1"
