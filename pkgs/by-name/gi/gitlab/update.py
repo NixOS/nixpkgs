@@ -242,7 +242,7 @@ def update_rubyenv():
     subprocess.check_output(["rm", "-rf", "vendor", "gems"], cwd=rubyenv_dir)
 
     # Reformat gemset.nix
-    subprocess.check_output(["nix-shell", "--run", "treefmt pkgs/applications/version-management/gitlab"], cwd=NIXPKGS_PATH)
+    subprocess.check_output(["nix-shell", "--run", "treefmt pkgs/by-name/gi/gitlab"], cwd=NIXPKGS_PATH)
 
 
 @cli.command("update-gitaly")
@@ -378,7 +378,7 @@ def commit_gitlab(old_version: str, new_version: str, new_rev: str) -> None:
         [
             "git",
             "add",
-            "pkgs/applications/version-management/gitlab",
+            "pkgs/by-name/gi/gitlab",
             "pkgs/by-name/gi/gitaly",
             "pkgs/by-name/gi/gitlab-elasticsearch-indexer",
             "pkgs/by-name/gi/gitlab-pages",
