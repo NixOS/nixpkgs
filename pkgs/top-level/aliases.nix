@@ -568,6 +568,7 @@ mapAliases {
   ecryptfs-helper = throw "'ecryptfs-helper' has been removed, for filesystem-level encryption, use fscrypt"; # Added 2025-04-08
   edUnstable = throw "edUnstable was removed; use ed instead"; # Added 2024-07-01
   edgedb = throw "edgedb replaced to gel because of change of upstream"; # Added 2025-02-24
+  edge-runtime = throw "'edge-runtime' was removed as it was unused, unmaintained, likely insecure and failed to build"; # Added 2025-05-18
   eintopf = lauti; # Project was renamed, added 2025-05-01
   elasticsearch7Plugins = elasticsearchPlugins;
   electronplayer = throw "'electronplayer' has been removed as it had been discontinued upstream since October 2024"; # Added 2024-12-17
