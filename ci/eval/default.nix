@@ -31,7 +31,7 @@ let
       );
     };
 
-  nix = nixVersions.nix_2_24;
+  nix = nixVersions.latest;
 
   supportedSystems = builtins.fromJSON (builtins.readFile ../supportedSystems.json);
 

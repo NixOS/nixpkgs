@@ -266,8 +266,8 @@ rec {
       "sha256-II4WIgBsWK3+CXk/XFzWpmlEXsbBuWt4C3onExl2u0o=";
 
   mypy-boto3-codebuild =
-    buildMypyBoto3Package "codebuild" "1.38.2"
-      "sha256-JsdVk9mmYTF0lCLpAsh4gRt9EpxJU0KPRLhAqqB7q0E=";
+    buildMypyBoto3Package "codebuild" "1.38.17"
+      "sha256-QnIaGy8R8HAt69dK9+iJfOwyQTIv0Dl9hI12GXlsFlg=";
 
   mypy-boto3-codecatalyst =
     buildMypyBoto3Package "codecatalyst" "1.38.0"
@@ -294,8 +294,8 @@ rec {
       "sha256-twmdIgbVpRFwUcRu0Kyoti+Y1KCPmRgaCsf6Kozhmg8=";
 
   mypy-boto3-codepipeline =
-    buildMypyBoto3Package "codepipeline" "1.38.12"
-      "sha256-HTZJEjSM1J/lQPFSDIRDQZW8DdskT4L9Te6zPUoqT8c=";
+    buildMypyBoto3Package "codepipeline" "1.38.18"
+      "sha256-C++b8vPawYw1J2nsjf0b2brkHQfAeT10zsaO9molFgk=";
 
   mypy-boto3-codestar =
     buildMypyBoto3Package "codestar" "1.35.0"
@@ -358,8 +358,8 @@ rec {
       "sha256-ABRIC59mat4ek0yrWxcHUr62whXmaZef47yDR7A2rl0=";
 
   mypy-boto3-controltower =
-    buildMypyBoto3Package "controltower" "1.38.15"
-      "sha256-UdmjmkHw97cpq6vDS6d48a3DOLkZ/RJATTH8DxfhFpY=";
+    buildMypyBoto3Package "controltower" "1.38.17"
+      "sha256-RtmXag1W6xxWlr9FZsIf8YtBeJoL91Ssflck/Ok1C3Q=";
 
   mypy-boto3-cur =
     buildMypyBoto3Package "cur" "1.38.0"
@@ -414,8 +414,8 @@ rec {
       "sha256-mFFkE37/+8k+YZ4ZJdg3QiFN2bkqArnSmjoCWdxMJ4c=";
 
   mypy-boto3-dms =
-    buildMypyBoto3Package "dms" "1.38.0"
-      "sha256-R1ZfmeNMPkkCg/O/nDR0Vqa7oNXlhxYOUG5jHW05NSo=";
+    buildMypyBoto3Package "dms" "1.38.17"
+      "sha256-fGqy3xSfdZPi4BX9o+nqjAQzSnx64y1PllxB6j+4ISY=";
 
   mypy-boto3-docdb =
     buildMypyBoto3Package "docdb" "1.38.0"
@@ -462,8 +462,8 @@ rec {
       "sha256-aSZu8mxsTho4pvWWbNwlJf0IROjqjTlIUEE5DJkAje4=";
 
   mypy-boto3-ecs =
-    buildMypyBoto3Package "ecs" "1.38.15"
-      "sha256-2SM1EqTNnvyNEUbeTz9RmG3CsOfkQ3enuvQFOH2je8A=";
+    buildMypyBoto3Package "ecs" "1.38.18"
+      "sha256-UjzMLvaDYVIrmHDFO/TlyofiwRqGlHA+aDqWcRepHdI=";
 
   mypy-boto3-efs =
     buildMypyBoto3Package "efs" "1.38.0"
@@ -498,8 +498,8 @@ rec {
       "sha256-bGXPSBRUfkiRc2Isx79953gV2qv2rCE9N+L11CEceug=";
 
   mypy-boto3-emr =
-    buildMypyBoto3Package "emr" "1.38.0"
-      "sha256-EG/qlpfpGaRJJhYPUACHM+TlHSwY+bYpgG5VxBAYTh0=";
+    buildMypyBoto3Package "emr" "1.38.18"
+      "sha256-q/1574BCv6rcHog3kEXBFr0K0FNrqE3nj0JTfCTsC8A=";
 
   mypy-boto3-emr-containers =
     buildMypyBoto3Package "emr-containers" "1.38.0"
@@ -574,8 +574,8 @@ rec {
       "sha256-abALPaOoxM8dvwqd8j41mTT1Zmcn/sEVzlopSMc+fYM=";
 
   mypy-boto3-glue =
-    buildMypyBoto3Package "glue" "1.38.12"
-      "sha256-0McJ3i8jtqknfsA7sN9P7+IOMqbHSFMQScF9g0m8Wgk=";
+    buildMypyBoto3Package "glue" "1.38.18"
+      "sha256-iqCNIirn02Gl0oQW00xKxwp+3yOFrGXpkskIH4C5njs=";
 
   mypy-boto3-grafana =
     buildMypyBoto3Package "grafana" "1.38.0"
@@ -942,8 +942,8 @@ rec {
       "sha256-2hV5TYKrrowbOqQZiw0DphDW2d2lFo8PYGolyqewznw=";
 
   mypy-boto3-neptune =
-    buildMypyBoto3Package "neptune" "1.38.0"
-      "sha256-dXEMhPcqBlAz7+wy59JOS5x5Hy1PobC3McunN/2oabQ=";
+    buildMypyBoto3Package "neptune" "1.38.18"
+      "sha256-5rStsb6FVG4I/4n3y4phDxUbfh9HTmOinaW/BQikp1Q=";
 
   mypy-boto3-neptunedata =
     buildMypyBoto3Package "neptunedata" "1.38.0"
@@ -1234,8 +1234,8 @@ rec {
       "sha256-7oaAwnhk493zZlzZF6VL2rd2kWIw72ojUI7sEgwauTU=";
 
   mypy-boto3-service-quotas =
-    buildMypyBoto3Package "service-quotas" "1.38.0"
-      "sha256-Ir+1OlQHTY3BqVeZQBXOyn+ZVV+ZLIbcwOWU63LOcbw=";
+    buildMypyBoto3Package "service-quotas" "1.38.18"
+      "sha256-93p1eVFFroBiRwpBWJMSa++CyP6/I9PaMFA8u4qHvvk=";
 
   mypy-boto3-servicecatalog =
     buildMypyBoto3Package "servicecatalog" "1.38.10"
@@ -1426,8 +1426,8 @@ rec {
       "sha256-naClNCiAqHalhT/+8cI510kBzYxpY3Z+wppDpQbZtdg=";
 
   mypy-boto3-workspaces =
-    buildMypyBoto3Package "workspaces" "1.38.13"
-      "sha256-j4ccEWcU2RBS9TZvVzmPwI2n58JkRFkmyVRyovMtKS4=";
+    buildMypyBoto3Package "workspaces" "1.38.17"
+      "sha256-vS6+uLpngMP/U2zM207LPzdzVl2DpB36/zyuM625r3o=";
 
   mypy-boto3-workspaces-web =
     buildMypyBoto3Package "workspaces-web" "1.38.0"

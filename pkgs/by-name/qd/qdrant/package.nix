@@ -12,18 +12,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "qdrant";
-  version = "1.13.6";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant";
     tag = "v${version}";
-    hash = "sha256-l/nWlpV3eecTzFK3MnHzmXGYocxKw+YPsyfHWuE/rwg=";
+    hash = "sha256-o9Nv4UsFgVngKWpe5sUR8tovtpB81tJBSm6We6DN20c=";
   };
 
   useFetchCargoVendor = true;
 
-  cargoHash = "sha256-VUUL+oz8nCCNvDohDLfRai+KKd6uG0RLti31mk40wVY=";
+  cargoHash = "sha256-xt7uu+YZGazbKwXEKXeIwcGg8G4djQx7nKpQYFv/L3Y=";
 
   nativeBuildInputs = [
     protobuf

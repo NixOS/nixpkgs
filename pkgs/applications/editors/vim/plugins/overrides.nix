@@ -302,7 +302,9 @@ in
       "blink-cmp-npm.utils.compute_meta_spec"
       "blink-cmp-npm.utils.generate_doc_spec"
       "blink-cmp-npm.utils.ignore_version_spec"
+      "blink-cmp-npm.utils.is_cursor_in_dependencies_node_spec"
       "blink-cmp-npm.utils.semantic_sort_spec"
+      "minit"
     ];
   };
 
@@ -620,9 +622,10 @@ in
     dependencies = [ self.plenary-nvim ];
     nvimSkipModules = [
       # Optional provider dependencies
-      "codecompanion.providers.diff.mini_diff"
-      "codecompanion.providers.actions.telescope"
       "codecompanion.providers.actions.mini_pick"
+      "codecompanion.providers.actions.snacks"
+      "codecompanion.providers.actions.telescope"
+      "codecompanion.providers.diff.mini_diff"
       # Requires setup call
       "codecompanion.actions.static"
       "codecompanion.actions.init"
@@ -1088,6 +1091,12 @@ in
     ];
   };
 
+  ecolog-nvim = super.ecolog-nvim.overrideAttrs {
+    nvimSkipModules = [
+      "repro"
+    ];
+  };
+
   efmls-configs-nvim = super.efmls-configs-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
   };
@@ -1505,6 +1514,10 @@ in
       substituteInPlace lua/kulala/config/defaults.lua \
         --replace-fail 'curl_path = "curl"' 'curl_path = "${lib.getExe curl}"'
     '';
+    nvimSkipModules = [
+      # Requires some extra work to get CLI working in nixpkgs
+      "cli.kulala_cli"
+    ];
   };
 
   LazyVim = super.LazyVim.overrideAttrs {
@@ -3943,6 +3956,20 @@ in
       "xmake.action"
       "xmake.command"
       "xmake.runner_wrapper"
+    ];
+  };
+
+  yaml-companion-nvim = super.yaml-companion-nvim.overrideAttrs {
+    dependencies = [
+      self.nvim-lspconfig
+      self.plenary-nvim
+    ];
+  };
+
+  yaml-schema-detect-nvim = super.yaml-schema-detect-nvim.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      nvim-lspconfig
     ];
   };
 
