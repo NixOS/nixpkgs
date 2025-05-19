@@ -23,14 +23,14 @@
 let
   boost_static = boost.override { enableStatic = true; };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openshadinglanguage";
   version = "1.14.5.1";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenShadingLanguage";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-dmGVCx4m2bkeKhAJbU1mrzEDAmnL++7GA5okb9wwk/Y=";
   };
 
@@ -51,7 +51,9 @@ stdenv.mkDerivation rec {
       --replace-fail "NO_DEFAULT_PATH" ""
   '';
 
-  preConfigure = "patchShebangs src/liboslexec/serialize-bc.bash ";
+  preConfigure = ''
+    patchShebangs src/liboslexec/serialize-bc.bash
+  '';
 
   nativeBuildInputs = [
     bison
@@ -83,11 +85,11 @@ stdenv.mkDerivation rec {
       --replace '=''${exec_prefix}//' '=/'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Advanced shading language for production GI renderers";
     homepage = "https://opensource.imageworks.com/osl.html";
-    maintainers = with maintainers; [ hodapp ];
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ hodapp ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
-}
+})
