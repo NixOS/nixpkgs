@@ -6,6 +6,7 @@
   doxygen,
   eigen,
   fetchFromGitHub,
+  fetchpatch,
   fmt,
   gfortran,
   gts,
@@ -64,13 +65,13 @@ in
 freecad-utils.makeCustomizable (
   stdenv.mkDerivation (finalAttrs: {
     pname = "freecad";
-    version = "1.0.0";
+    version = "1.0.1";
 
     src = fetchFromGitHub {
       owner = "FreeCAD";
       repo = "FreeCAD";
       rev = finalAttrs.version;
-      hash = "sha256-u7RYSImUMAgKaAQSAGCFha++RufpZ/QuHAirbSFOUCI=";
+      hash = "sha256-VFTNawXxu2ofjj2Frg4OfVhiMKFywBhm7lZunP85ZEQ=";
       fetchSubmodules = true;
     };
 
@@ -151,7 +152,10 @@ freecad-utils.makeCustomizable (
     patches = [
       ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
       ./0002-FreeCad-OndselSolver-pkgconfig.patch
-      ./0003-Gui-take-in-account-module-path-argument.patch
+      (fetchpatch {
+        url = "https://github.com/FreeCAD/FreeCAD/commit/8e04c0a3dd9435df0c2dec813b17d02f7b723b19.patch?full_index=1";
+        hash = "sha256-H6WbJFTY5/IqEdoi5N+7D4A6pVAmZR4D+SqDglwS18c=";
+      })
     ];
 
     cmakeFlags =
