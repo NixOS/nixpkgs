@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
 }:
@@ -24,5 +25,6 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     mainProgram = "dnstake";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
