@@ -13,8 +13,8 @@
   ncurses,
   nixos-option,
   stdenvNoCC,
-  unixtools,
   unstableGitUpdater,
+  runCommand,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -79,8 +79,27 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --subst-var-by OUT "$out"
   '';
 
-  passthru.updateScript = unstableGitUpdater {
-    url = "https://github.com/nix-community/home-manager/";
+  passthru = {
+    updateScript = unstableGitUpdater {
+      url = "https://github.com/nix-community/home-manager/";
+    };
+    tests = {
+      /**
+        Ensure that upstream's packaging code has not changed.
+        Otherwise we might have to modify ours accordingly.
+        This is a fixed-output derivation triggered by version bumps.
+      */
+      upstreamPackaging =
+        runCommand "home-manager-${finalAttrs.version}.nix"
+          {
+            outputHashMode = "recursive";
+            outputHash = "sha256-O290IaZj50YwuCPtzyeAK9pMSseZpBwgXHG/lpVfzFY=";
+          }
+          ''
+            echo "# upstream packaging code (for reference only)" > $out
+            cat ${finalAttrs.src}/home-manager/default.nix >> $out
+          '';
+    };
   };
 
   meta = {
