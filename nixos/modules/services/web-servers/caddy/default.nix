@@ -48,6 +48,7 @@ let
         Caddyfile = pkgs.writeTextDir "Caddyfile" ''
           {
             ${cfg.globalConfig}
+            admin ${cfg.admin}
           }
           ${cfg.extraConfig}
           ${concatMapStringsSep "\n" mkVHostConf virtualHosts}
@@ -68,6 +69,8 @@ let
   configPath = "/etc/${etcConfigFile}";
 
   mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix lib;
+
+  adminUsingUnixSocket = hasPrefix "unix/" cfg.admin;
 in
 {
   imports = [
@@ -83,6 +86,28 @@ in
   # interface
   options.services.caddy = {
     enable = mkEnableOption "Caddy web server";
+
+    admin = mkOption {
+      default = "unix//run/caddy-admin.sock";
+      type = types.str;
+      description = ''
+        Administration endpoint which can be accessed via HTTP using a REST API.
+
+        ::: {.note}
+        If left as the default value, the admin endpoint will be set to a
+        unix socket at `/run/caddy-admin.sock`.
+        The value can be set to the string "off" to disable the admin endpoint,
+        a unix socket (e.g. "unix//var/run/caddy.sock"), a URL (e.g. "localhost:12345"),
+        or options specified in <https://caddyserver.com/docs/caddyfile/options#admin>.
+        :::
+      '';
+      example = ''
+        :2019 {
+          origins localhost
+          enforce_origin
+        }
+      '';
+    };
 
     user = mkOption {
       default = "caddy";
@@ -384,6 +409,10 @@ in
     assertions =
       [
         {
+          assertion = cfg.enableReload -> cfg.admin != "off";
+          message = "The admin endpoint must be enabled to use the reload feature";
+        }
+        {
           assertion = cfg.configFile == configFile -> cfg.adapter == "caddyfile" || cfg.adapter == null;
           message = "To specify an adapter other than 'caddyfile' please provide your own configuration via `services.caddy.configFile`";
         }
@@ -410,11 +439,24 @@ in
     boot.kernel.sysctl."net.core.wmem_max" = mkDefault 2500000;
 
     systemd.packages = [ cfg.package ];
+    systemd.sockets = optionalAttrs adminUsingUnixSocket {
+      caddy-admin = {
+        description = "Caddy admin socket";
+        wantedBy = [ "sockets.target" ];
+        socketConfig = {
+          ListenStream = removePrefix "unix/" cfg.admin;
+          SocketMode = "0660";
+          SocketUser = cfg.user;
+          SocketGroup = cfg.group;
+        };
+      };
+    };
     systemd.services.caddy = {
       wants = map (certName: "acme-finished-${certName}.target") vhostCertNames;
       after =
         map (certName: "acme-selfsigned-${certName}.service") vhostCertNames
-        ++ map (certName: "acme-${certName}.service") independentCertNames; # avoid loading self-signed key w/ real cert, or vice-versa
+        ++ map (certName: "acme-${certName}.service") independentCertNames # avoid loading self-signed key w/ real cert, or vice-versa
+        ++ optional adminUsingUnixSocket "caddy-admin.socket";
       before = map (certName: "acme-${certName}.service") dependentCertNames;
 
       wantedBy = [ "multi-user.target" ];
