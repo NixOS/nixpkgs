@@ -157,6 +157,7 @@ in
     assertions = builtins.filter ({ assertion, ... }: !assertion) (
       columnar.domainAssertions "license" "shortNames" cudb.licenses
       ++ columnar.domainAssertions "packages" "pnames" cudb.packages
+      ++ columnar.domainAssertions "systems" "nvidia" cudb.systems
     );
     licenses =
       let
