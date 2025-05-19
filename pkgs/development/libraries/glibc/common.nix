@@ -64,6 +64,9 @@ stdenv.mkDerivation (
 
     enableParallelBuilding = true;
 
+    # Bolt works best with clang
+    dontUseBolt = stdenv.cc.isGNU;
+
     patches =
       [
         /*
