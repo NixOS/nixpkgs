@@ -54,14 +54,14 @@ stdenv.mkDerivation (finalAttrs: {
         inherit (finalAttrs) src nativeBuildInputs;
         outputHashMode = "recursive";
         outputHashAlgo = "sha256";
-        outputHash = "sha256-5YRYCMrGi8DsJcH1SJtJhbdVEEaZ9WI467xGl1ClglY=";
+        outputHash = "sha256-P42Mue0mEWtUYk72SiKjHGgy+nxFhbz0ajazYW4ELcc=";
       }
       ''
         runPhase unpackPhase
         export HOME=$TMPDIR/home
         npm config set progress false
         npm config set cafile ${cacert}/etc/ssl/certs/ca-bundle.crt
-        for p in $(find -name package.json -exec dirname {} \;)
+        for p in $(find -name package-lock.json -exec dirname {} \;)
         do (
           cd $p
           if [ -e node_modules ]
@@ -70,10 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
             exit 0
           fi
           mkdir node_modules
-          if [ -e package-lock.json ]
-          then npm ci --ignore-scripts
-          else npm i --ignore-scripts
-          fi
+          npm ci --ignore-scripts
           mkdir -p $out/$p
           cp -r node_modules $out/$p/
         )
@@ -139,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     ## unpack all of the prefetched node_modules folders
     + ''
-      for p in $(find -name package.json -exec dirname {} \;)
+      for p in $(find -name package-lock.json -exec dirname {} \;)
       do (
         cd $p
         if [ -e node_modules ]
