@@ -20,7 +20,7 @@ index 802b08b5..e3de0536 100644
              error_dialog = Adw.AlertDialog.new(
                  _("Unsupported Environment"),
 -                f"{body} <a href='https://{download_url}' title='https://{download_url}'>{download_url}.</a>",
-+                f"{body} <a href='https://{bugtracker_url}' title='https://{bugtracker_url}'>{bugtracker_url}.</a> \nThis warning can be disabled by overriding the package: `(pkgs.bottles.override {{ removeWarningPopup = false; }})`",
++                f"{body} <a href='https://{bugtracker_url}' title='https://{bugtracker_url}'>{bugtracker_url}.</a> \nThis warning can be disabled by overriding the package: `(pkgs.bottles.override {{ removeWarningPopup = true; }})`",
              )
  
              error_dialog.add_response("close", _("Close"))
