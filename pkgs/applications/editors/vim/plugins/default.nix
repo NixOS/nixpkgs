@@ -62,6 +62,9 @@ let
   aliases = if config.allowAliases then (import ./aliases.nix lib) else final: prev: { };
 in
 lib.pipe initialPackages [
+  # deprecated, but added first so it can be overriden by normal `plugins`
+  # see https://github.com/NixOS/nixpkgs/issues/407318
+  (extends luaPackagePlugins)
   (extends plugins)
   (extends cocPlugins)
   (extends nodePackagePlugins)
