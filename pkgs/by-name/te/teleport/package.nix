@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo123Module,
   rustPlatform,
   fetchFromGitHub,
   fetchpatch,
@@ -15,18 +15,18 @@
   rustc,
   stdenv,
   xdg-utils,
-  wasm-bindgen-cli,
+  wasm-bindgen-cli_0_2_95,
   wasm-pack,
   nixosTests,
 
   withRdpClient ? true,
 
-  version,
-  hash,
-  vendorHash,
+  version ? "17.4.8",
+  hash ? "sha256-BMiV4xMDy/21B2kl/vkXD14LKQ9t/qj6K8HFnU9Td7w=",
+  vendorHash ? "sha256-/JP0/4fFdCuDFLQ+mh7CQNMJ4n3yDNyvnLfbmRl/TBA=",
   extPatches ? [ ],
-  cargoHash,
-  pnpmHash,
+  cargoHash ? "sha256-qz8gkooQTuBlPWC4lHtvBQpKkd+nEZ0Hl7AVg9JkPqs=",
+  pnpmHash ? "sha256-TZb1nABTbR+SPgykc/KMRkHW7oLawem6KWmdOFAbLbk=",
 }:
 let
   # This repo has a private submodule "e" which fetchgit cannot handle without failing.
@@ -39,7 +39,7 @@ let
   pname = "teleport";
   inherit version;
 
-  rdpClient = rustPlatform.buildRustPackage rec {
+  rdpClient = rustPlatform.buildRustPackage (finalAttrs: {
     pname = "teleport-rdpclient";
     useFetchCargoVendor = true;
     inherit cargoHash;
@@ -52,15 +52,15 @@ let
 
     # https://github.com/NixOS/nixpkgs/issues/161570 ,
     # buildRustPackage sets strictDeps = true;
-    nativeCheckInputs = buildInputs;
+    nativeCheckInputs = finalAttrs.buildInputs;
 
     OPENSSL_NO_VENDOR = "1";
 
     postInstall = ''
       mkdir -p $out/include
-      cp ${buildAndTestSubdir}/librdprs.h $out/include/
+      cp ${finalAttrs.buildAndTestSubdir}/librdprs.h $out/include/
     '';
-  };
+  });
 
   webassets = stdenv.mkDerivation {
     pname = "teleport-webassets";
@@ -84,7 +84,7 @@ let
       rustc
       rustc.llvmPackages.lld
       rustPlatform.cargoSetupHook
-      wasm-bindgen-cli
+      wasm-bindgen-cli_0_2_95
       wasm-pack
     ];
 
@@ -120,7 +120,7 @@ let
     '';
   };
 in
-buildGoModule rec {
+buildGo123Module (finalAttrs: {
   inherit pname src version;
   inherit vendorHash;
   proxyVendor = true;
@@ -190,11 +190,11 @@ buildGoModule rec {
 
   passthru.tests = nixosTests.teleport;
 
-  meta = with lib; {
+  meta = {
     description = "Certificate authority and access plane for SSH, Kubernetes, web applications, and databases";
     homepage = "https://goteleport.com/";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       arianvp
       justinas
       sigma
@@ -203,9 +203,9 @@ buildGoModule rec {
       techknowlogick
       juliusfreudenberger
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     # go-libfido2 is broken on platforms with less than 64-bit because it defines an array
     # which occupies more than 31 bits of address space.
     broken = stdenv.hostPlatform.parsed.cpu.bits < 64;
   };
-}
+})
