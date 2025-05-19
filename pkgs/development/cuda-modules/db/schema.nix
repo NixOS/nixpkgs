@@ -75,7 +75,7 @@ in
         {
           pname = mkOption { type = SetOfStr; };
 
-          # :: PName -> String
+          # :: PName -> Option<String>
           name = mkColumnOption index { type = nullOr str; } { };
 
           # :: PName -> Set<SystemStringNvidia>
@@ -107,12 +107,12 @@ in
           index = cudb.license.shortName;
         in
         {
-          # :: Str -> ()
+          # :: String -> ()
           shortName = mkOption {
             type = attrsOf Unit;
           };
 
-          # :: Str -> Option<Str>
+          # :: String -> Option<String>
           distribution_path =
             mkColumnOption index
               {
@@ -122,7 +122,7 @@ in
                 example."CUDA Toolkit" = "cutensor/redist/";
               };
 
-          # :: Str -> Option<Str>
+          # :: String -> Option<String>
           license_path =
             mkColumnOption index
               {
@@ -132,7 +132,7 @@ in
                 example."CUDA Toolkit" = "cuda_cudart/LICENSE.txt";
               };
 
-          # :: Str -> License
+          # :: String -> License
           compiled = mkColumnOption index { type = License; } { };
         };
 
