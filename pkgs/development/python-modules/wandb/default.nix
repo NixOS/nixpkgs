@@ -78,23 +78,23 @@
 }:
 
 let
-  version = "0.19.10";
+  version = "0.19.11";
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
     tag = "v${version}";
-    hash = "sha256-SptjImAK0hDAr7UZjUMWnAVB1bxyzoATlyrPek5Tm48=";
+    hash = "sha256-JsciaNN1l3Ldty8dB2meRXWz62JdLRXeG09b7PNrQx4=";
   };
 
   gpu-stats = rustPlatform.buildRustPackage {
     pname = "gpu-stats";
-    version = "0.3.0";
+    version = "0.4.0";
     inherit src;
 
     sourceRoot = "${src.name}/gpu_stats";
 
     useFetchCargoVendor = true;
-    cargoHash = "sha256-kkWvTLduxFVIEvi4e65QQ7S0kHTRJ8XW028o430L91s=";
+    cargoHash = "sha256-q8csheytw57C6+wPPaANkMkW1Smoo+IViiA6Cdrag4Q=";
 
     checkFlags = [
       # fails in sandbox
