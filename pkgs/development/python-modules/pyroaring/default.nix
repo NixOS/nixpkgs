@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyroaring";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Ezibenroc";
     repo = "PyRoaringBitMap";
     tag = version;
-    hash = "sha256-pnANvqyQ5DpG4NWSgWkAkXvSNLO67nfa97nEz3fYf1Y=";
+    hash = "sha256-Zs/MO1R4iBHDfTRVizMl6KyEWI6k2iDX7jAkBZs7kZE=";
   };
 
   build-system = [
