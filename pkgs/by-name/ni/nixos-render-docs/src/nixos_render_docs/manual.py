@@ -271,8 +271,9 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
 
     def __init__(self, toplevel_tag: str, revision: str, html_params: HTMLParameters,
                  manpage_urls: Mapping[str, str], xref_targets: dict[str, XrefTarget],
-                 redirects: Redirects | None, in_dir: Path, base_path: Path):
+                 redirects: Redirects | None, in_dir: Path, base_path: Path, outfile: Path):
         super().__init__(toplevel_tag, revision, manpage_urls, xref_targets)
+        self._outfile = outfile
         self._in_dir = in_dir
         self._base_path = base_path.absolute()
         self._html_params = html_params
@@ -291,14 +292,14 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         target_path.write_bytes(content)
         return f"./{self._html_params.media_dir}/{target_name}"
 
-    def _push(self, tag: str, hlevel_offset: int) -> Any:
-        result = (self._toplevel_tag, self._headings, self._attrspans, self._hlevel_offset, self._in_dir)
+    def _push(self, tag: str, hlevel_offset: int, outfile: Path) -> Any:
+        result = (self._toplevel_tag, self._headings, self._attrspans, self._hlevel_offset, self._in_dir, self._outfile)
         self._hlevel_offset += hlevel_offset
-        self._toplevel_tag, self._headings, self._attrspans = tag, [], []
+        self._toplevel_tag, self._headings, self._attrspans, self._outfile = tag, [], [], outfile
         return result
 
     def _pop(self, state: Any) -> None:
-        (self._toplevel_tag, self._headings, self._attrspans, self._hlevel_offset, self._in_dir) = state
+        (self._toplevel_tag, self._headings, self._attrspans, self._hlevel_offset, self._in_dir, self._outfile) = state
 
     def _render_book(self, tokens: Sequence[Token]) -> str:
         assert tokens[4].children
@@ -331,19 +332,19 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         home = toc.root
 
         if toc.prev:
-            prev_link = f'<link rel="prev" href="{toc.prev.target.href_from(toc.target)}" title="{toc.prev.target.title}" />'
-            prev_a = f'<a accesskey="p" href="{toc.prev.target.href_from(toc.target)}">Prev</a>'
+            prev_link = f'<link rel="prev" href="{toc.prev.target.href_from(toc.target.path)}" title="{toc.prev.target.title}" />'
+            prev_a = f'<a accesskey="p" href="{toc.prev.target.href_from(toc.target.path)}">Prev</a>'
         if toc.parent:
             up_link = (
-                f'<link rel="up" href="{toc.parent.target.href_from(toc.target)}" '
+                f'<link rel="up" href="{toc.parent.target.href_from(toc.target.path)}" '
                 f'title="{toc.parent.target.title}" />'
             )
             if (part := toc.parent) and part.kind != 'book':
                 assert part.target.title
                 parent_title = part.target.title
         if toc.next:
-            next_link = f'<link rel="next" href="{toc.next.target.href_from(toc.target)}" title="{toc.next.target.title}" />'
-            next_a = f'<a accesskey="n" href="{toc.next.target.href_from(toc.target)}">Next</a>'
+            next_link = f'<link rel="next" href="{toc.next.target.href_from(toc.target.path)}" title="{toc.next.target.title}" />'
+            next_a = f'<a accesskey="n" href="{toc.next.target.href_from(toc.target.path)}">Next</a>'
         if toc.prev or toc.parent or toc.next:
             nav_html = "\n".join([
                 '  <div class="navheader">',
@@ -388,7 +389,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             "".join((f'<script src="{html.escape(relative_path_from(toc.target.path, script), True)}" type="text/javascript"></script>'
                      for script in scripts)),
             f' <meta name="generator" content="{html.escape(self._html_params.generator, True)}" />',
-            f' <link rel="home" href="{home.target.href_from(toc.target)}" title="{home.target.title}" />' if home.target.href() else "",
+            f' <link rel="home" href="{home.target.href_from(toc.target.path)}" title="{home.target.title}" />' if home.target.href() else "",
             f' {up_link}{prev_link}{next_link}',
             ' </head>',
             ' <body>',
@@ -402,15 +403,15 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         nav_html = ""
         home = toc.root
         if toc.prev:
-            prev_a = f'<a accesskey="p" href="{toc.prev.target.href_from(toc.target)}">Prev</a>'
+            prev_a = f'<a accesskey="p" href="{toc.prev.target.href_from(toc.target.path)}">Prev</a>'
             assert toc.prev.target.title
             prev_text = toc.prev.target.title
         if toc.parent:
-            home_a = f'<a accesskey="h" href="{home.target.href_from(toc.target)}">Home</a>'
+            home_a = f'<a accesskey="h" href="{home.target.href_from(toc.target.path)}">Home</a>'
             if toc.parent != home:
-                up_a = f'<a accesskey="u" href="{toc.parent.target.href_from(toc.target)}">Up</a>'
+                up_a = f'<a accesskey="u" href="{toc.parent.target.href_from(toc.target.path)}">Up</a>'
         if toc.next:
-            next_a = f'<a accesskey="n" href="{toc.next.target.href_from(toc.target)}">Next</a>'
+            next_a = f'<a accesskey="n" href="{toc.next.target.href_from(toc.target.path)}">Next</a>'
             assert toc.next.target.title
             next_text = toc.next.target.title
         if toc.prev or toc.parent or toc.next:
@@ -453,7 +454,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 result.append(
                     f'<dt>'
                     f' <span class="{html.escape(child.kind, True)}">'
-                    f'  <a href="{child.target.href_from(root_toc.target)}">{child.target.toc_html}</a>'
+                    f'  <a href="{child.target.href_from(root_toc.target.path)}">{child.target.toc_html}</a>'
                     f' </span>'
                     f'</dt>'
                 )
@@ -467,7 +468,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             if not lst:
                 return ""
             entries = [
-                f'<dt>{i}. <a href="{e.target.href_from(toc.target)}">{e.target.toc_html}</a></dt>'
+                f'<dt>{i}. <a href="{e.target.href_from(toc.target.path)}">{e.target.toc_html}</a></dt>'
                 for _, e in enumerate(lst, start=1)
             ]
             return (
@@ -522,6 +523,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
     def _included_thing(self, tag: str, token: Token, tokens: Sequence[Token], i: int) -> str:
         into = token.meta['include-args'].get('into-file')
         split_pages = self._html_params.split_pages and not into
+
         fragments = token.meta['included']
 
         hoffset = (
@@ -532,11 +534,15 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
 
         outer = [ self._maybe_close_partintro() ]
 
-        state = self._push(tag, hoffset)
         if split_pages:
             toc = TocEntry.of(fragments[0][0][0])
             in_dir = self._in_dir
             for included, path in fragments:
+                assert Path(path).is_relative_to(Path(in_dir))
+                sub_file = Path(path).relative_to(Path(in_dir)).with_suffix(".html")
+
+                state = self._push(tag, hoffset, sub_file)
+
                 inner = [
                     self._file_header(toc),
                     '<div class="content">',
@@ -546,9 +552,6 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 ]
                 self._in_dir = (in_dir / path).parent
 
-                assert Path(path).is_relative_to(Path(in_dir))
-                sub_file = Path(path).relative_to(Path(in_dir)).with_suffix(".html").as_posix()
-
                 file_path = (self._base_path / sub_file).with_suffix(".html")
 
                 if not file_path.parent.exists():
@@ -556,15 +559,19 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
 
                 file_path.write_text("".join(inner))
                 self._in_dir = self._in_dir.parent
+                self._pop(state)
         else:
             inner = []
             if into:
+                state = self._push(tag, hoffset, into)
                 toc = TocEntry.of(fragments[0][0][0])
                 inner.append(self._file_header(toc))
                 inner.append('<div class="content">')
                 # we do not set _hlevel_offset=0 because docbook didn't either.
             else:
+                state = self._push(tag, hoffset, self._outfile)
                 inner = outer
+
             in_dir = self._in_dir
             for included, path in fragments:
                 try:
@@ -577,7 +584,8 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 inner.append(self._file_footer(toc))
                 (self._base_path / into).write_text("".join(inner))
 
-        self._pop(state)
+            self._pop(state)
+
         return "".join(outer)
 
     def _included_thing_split(self, tag: str, token: Token, tokens: Sequence[Token], i: int) -> str:
@@ -699,7 +707,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
     def convert(self, infile: Path, outfile: Path) -> None:
         self._renderer = ManualHTMLRenderer(
             'book', self._revision, self._html_params, self._manpage_urls, self._xref_targets,
-            self._redirects, infile.parent, outfile.parent)
+            self._redirects, infile.parent, outfile.parent, outfile)
         super().convert(infile, outfile)
 
     def _parse(self, src: str, *, auto_id_prefix: None | str = None) -> list[Token]:

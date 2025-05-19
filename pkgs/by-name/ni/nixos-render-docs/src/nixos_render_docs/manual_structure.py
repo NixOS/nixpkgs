@@ -135,8 +135,8 @@ class XrefTarget:
        mostly useful for docbook compatibility"""
     drop_target: bool = False
 
-    def href_from(self, origin: XrefTarget) -> str:
-        path = relative_path_from(origin.path, self.path)
+    def href_from(self, origin: str) -> str:
+        path = relative_path_from(origin, self.path)
         return path if self.drop_fragment else f"{path}#{html.escape(self.id, True)}"
 
     def href(self) -> str:
