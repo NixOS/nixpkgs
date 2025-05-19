@@ -11,7 +11,6 @@
   fetchFromGitHub,
   isPyPy,
   libiconv,
-  libxcrypt,
   openssl,
   pkg-config,
   pretend,
@@ -57,8 +56,7 @@ buildPythonPackage rec {
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-    ]
-    ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];
+    ];
 
   dependencies = lib.optionals (!isPyPy) [ cffi ];
 
