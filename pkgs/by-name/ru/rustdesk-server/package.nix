@@ -22,18 +22,8 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "async-speed-limit-0.3.1" = "sha256-iOel6XA07RPrBjQAFLnxXX4VBpDrYZaqQc9clnsOorI=";
-      "confy-0.4.0-2" = "sha256-V7BCKISrkJIxWC3WT5+B5Vav86YTQvdO9TO6A++47FU=";
-      "default_net-0.1.0" = "sha256-wwVcnS99I1NJFeSihy5YrB5p0y+OHXTX81DQ+TtyFBU=";
-      "machine-uid-0.3.0" = "sha256-rEOyNThg6p5oqE9URnxSkPtzyW8D4zKzLi9pAnzTElE=";
-      "reqwest-0.11.23" = "sha256-kEUT+gs4ziknDiGdPMLnj5pmxC5SBpLopZ8jZ34GDWc=";
-      "sysinfo-0.29.10" = "sha256-/UsFAvlWs/F7X1xT+97Fx+pnpCguoPHU3hTynqYMEs4=";
-      "tokio-socks-0.5.2-1" = "sha256-i1dfNatqN4dinMcyAdLhj9hJWVsT10OWpCXsxl7pifI=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-U1LTnqi2iEsm2U7t0Fr4VJWLo1MdQmeTKrPsNqRWap0=";
 
   nativeBuildInputs = [
     pkg-config

@@ -366,11 +366,21 @@ in
         Whether to configure Tika and Gotenberg to process Office and e-mail files with OCR.
       '';
     };
+
+    manage = lib.mkOption {
+      type = lib.types.package;
+      readOnly = true;
+      description = ''
+        The package derivation for the `paperless-manage` wrapper script.
+        Useful for other modules that need to add this specific script to a service's PATH.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
+        services.paperless.manage = manage;
         environment.systemPackages = [ manage ];
 
         services.redis.servers.paperless.enable = lib.mkIf enableRedis true;
