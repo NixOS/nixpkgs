@@ -2,23 +2,33 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  python312,
+  fetchpatch2,
+  python3Packages,
   nixosTests,
   fetchurl,
 }:
 let
   pname = "open-webui";
-  version = "0.6.9";
+  version = "0.6.10";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-Eib5UpPPQHXHOBVWrsNH1eEJrF8Vx9XshGYUnnAehpM=";
+    hash = "sha256-OZPZlF6tXzfuFU8/ZavE67E8+XdRu+7oCA1eD0EA9fg=";
   };
 
   frontend = buildNpmPackage rec {
     inherit pname version src;
+
+    patches = [
+      # Git is not available in the sandbox
+      # Remove this patch at the next release
+      (fetchpatch2 {
+        url = "https://github.com/open-webui/open-webui/commit/ed0659aca60eedadadba4362b309015b4a8368c6.patch";
+        hash = "sha256-lTzCdAk9gagIfN5Ld1tCS3gp/oVm4+CRy/lD42702WM=";
+      })
+    ];
 
     # the backend for run-on-client-browser python execution
     # must match lock file in open-webui
@@ -30,7 +40,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-Vcc8ExET53EVtNUhb4JoxYIUWoQ++rVTpxUPgcZ+GNI=";
+    npmDepsHash = "sha256-F/xum76SHFwX/77kPHTFayJ00wv6ZWE09hw8taUbMMQ=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
@@ -57,11 +67,11 @@ let
     '';
   };
 in
-python312.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   inherit pname version src;
   pyproject = true;
 
-  build-system = with python312.pkgs; [ hatchling ];
+  build-system = with python3Packages; [ hatchling ];
 
   # Not force-including the frontend build directory as frontend is managed by the `frontend` derivation above.
   postPatch = ''
@@ -80,7 +90,7 @@ python312.pkgs.buildPythonApplication rec {
   ];
 
   dependencies =
-    with python312.pkgs;
+    with python3Packages;
     [
       accelerate
       aiocache
@@ -118,6 +128,7 @@ python312.pkgs.buildPythonApplication rec {
       google-auth-httplib2
       google-auth-oauthlib
       google-cloud-storage
+      google-genai
       google-generativeai
       googleapis-common-protos
       iso-639
