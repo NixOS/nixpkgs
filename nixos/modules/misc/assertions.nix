@@ -1,4 +1,10 @@
-{ lib, ... }:
+{
+  config,
+  lib,
+  options,
+  ...
+}:
+
 {
 
   options = {
@@ -31,8 +37,19 @@
       '';
     };
 
+    assertAndWarn = lib.mkOption {
+      description = ''
+        A function that prints the ${options.warnings} and returns its argument if the ${options.assertions} all pass.
+        Otherwise, it throws an error with the assertion messages.
+      '';
+    };
+
   };
-  # impl of assertions is in
-  # - <nixpkgs/nixos/modules/system/activation/top-level.nix>
-  # - <nixpkgs/nixos/modules/system/service/portable/lib.nix>
+
+  config = {
+
+    assertAndWarn = val: lib.asserts.checkAssertWarn config.assertions config.warnings val;
+
+  };
+
 }
