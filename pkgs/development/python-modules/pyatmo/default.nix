@@ -1,6 +1,7 @@
 {
   lib,
   aiohttp,
+  anyio,
   buildPythonPackage,
   fetchFromGitHub,
   oauthlib,
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pyatmo";
-  version = "9.0.0";
+  version = "9.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "jabesq";
     repo = "pyatmo";
     tag = "v${version}";
-    hash = "sha256-DGtfXM0Bfo5iyJ66/Bm5rQB2/ZYA+ZhlkUci1viynWY=";
+    hash = "sha256-7qdgKp1E2efsOdt7cvd911/H7lYzcQidizQPkdLcFNk=";
   };
 
   pythonRelaxDeps = [
@@ -45,6 +46,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    anyio
     pytest-asyncio
     pytest-mock
     pytestCheckHook
