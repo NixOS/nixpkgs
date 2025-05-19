@@ -345,6 +345,7 @@ let
         upperChars
         toLower
         toUpper
+        toCamelCase
         toSentenceCase
         addContextFrom
         splitString
