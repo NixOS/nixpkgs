@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     (lib.cmakeOptionType "string" "CMAKE_CXX_FLAGS" "-Wno-error=deprecated-declarations")
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Plugin to stream everywhere from a single instance of OBS";
     homepage = "https://github.com/Aitum/obs-aitum-multistream";
-    maintainers = with maintainers; [ flexiondotorg ];
-    license = licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ flexiondotorg ];
+    license = lib.licenses.gpl2Plus;
     platforms = [
       "x86_64-linux"
       "i686-linux"
