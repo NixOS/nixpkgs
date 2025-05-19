@@ -889,6 +889,7 @@
   ./services/misc/rmfakecloud.nix
   ./services/misc/rkvm.nix
   ./services/misc/rshim.nix
+  ./services/misc/rsync.nix
   ./services/misc/safeeyes.nix
   ./services/misc/sdrplay.nix
   ./services/misc/servarr/lidarr.nix
