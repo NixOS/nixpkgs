@@ -2056,6 +2056,16 @@ runTests {
     expected = basicTestDerivation.second;
   };
 
+  testGetFirstOutputWithPath = {
+    expr = getFirstOutput [ "out" "first" ] ./misc.nix;
+    expected = ./misc.nix;
+  };
+
+  testGetFirstOutputWithString = {
+    expr = getFirstOutput [ "out" "first" ] "./misc.nix";
+    expected = "./misc.nix";
+  };
+
   testMergeAttrsListExample1 = {
     expr = attrsets.mergeAttrsList [
       {
