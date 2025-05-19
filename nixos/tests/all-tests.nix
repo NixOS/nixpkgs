@@ -1346,6 +1346,7 @@ in
   systemd-homed = handleTest ./systemd-homed.nix { };
   systemtap = handleTest ./systemtap.nix { };
   startx = import ./startx.nix { inherit pkgs runTest; };
+  szurubooru = handleTest ./szurubooru.nix { };
   taler = handleTest ./taler { };
   tandoor-recipes = handleTest ./tandoor-recipes.nix { };
   tandoor-recipes-script-name = handleTest ./tandoor-recipes-script-name.nix { };
