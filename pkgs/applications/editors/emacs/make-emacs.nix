@@ -82,7 +82,8 @@
   withGTK3 ? withPgtk && !noGui,
   withGlibNetworking ? withPgtk || withGTK3 || (withX && withXwidgets),
   withGpm ? stdenv.hostPlatform.isLinux,
-  withImageMagick ? lib.versionOlder version "27" && (withX || withNS),
+  # https://github.com/emacs-mirror/emacs/blob/master/etc/NEWS.27#L140-L142
+  withImageMagick ? false,
   # Emacs 30+ has native JSON support
   withJansson ? lib.versionOlder version "30",
   withMailutils ? true,
@@ -90,13 +91,13 @@
   withNS ? stdenv.hostPlatform.isDarwin && !(variant == "macport" || noGui),
   withPgtk ? false,
   withSelinux ? stdenv.hostPlatform.isLinux,
-  withSQLite3 ? lib.versionAtLeast version "29",
+  withSQLite3 ? true,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   withToolkitScrollBars ? true,
-  withTreeSitter ? lib.versionAtLeast version "29",
-  withWebP ? lib.versionAtLeast version "29",
+  withTreeSitter ? true,
+  withWebP ? true,
   withX ? !(stdenv.hostPlatform.isDarwin || noGui || withPgtk),
-  withXinput2 ? withX && lib.versionAtLeast version "29",
+  withXinput2 ? withX,
   withXwidgets ?
     !stdenv.hostPlatform.isDarwin
     && !noGui
@@ -128,6 +129,7 @@ assert noGui -> !(withX || withGTK3 || withNS || variant == "macport");
 assert withAcl -> stdenv.hostPlatform.isLinux;
 assert withAlsaLib -> stdenv.hostPlatform.isLinux;
 assert withGpm -> stdenv.hostPlatform.isLinux;
+assert withImageMagick -> (withX || withNS);
 assert withNS -> stdenv.hostPlatform.isDarwin && !(withX || variant == "macport");
 assert withPgtk -> withGTK3 && !withX;
 assert withXwidgets -> !noGui && (withGTK3 || withPgtk);
