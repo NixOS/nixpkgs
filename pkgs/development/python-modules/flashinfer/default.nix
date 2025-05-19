@@ -4,7 +4,8 @@
 #
 # This means that if you plan to use flashinfer, you will need to set the
 # environment varaible `CUDA_HOME` to `cudatoolkit`.
-{ lib,
+{
+  lib,
   buildPythonPackage,
   symlinkJoin,
   fetchFromGitHub,
@@ -12,7 +13,7 @@
   cmake,
   ninja,
   numpy,
-  torch
+  torch,
 }:
 
 assert torch.cudaSupport;
@@ -34,7 +35,8 @@ let
     hash = "sha256-d4czDoEv0Focf1bJHOVGX4BDS/h5O7RPoM/RrujhgFQ=";
   };
 
-in buildPythonPackage {
+in
+buildPythonPackage {
   inherit pname version;
 
   src = fetchFromGitHub {
@@ -64,7 +66,7 @@ in buildPythonPackage {
   # compiled kernels cached for future use. JIT mode allows fast installation,
   # as no CUDA kernels are pre-compiled, making it ideal for development and
   # testing. JIT version is also available as a sdist in PyPI.
-  # 
+  #
   # AOT mode: Core CUDA kernels are pre-compiled and included in the library,
   # reducing runtime compilation overhead. If a required kernel is not
   # pre-compiled, it will be compiled at runtime using JIT. AOT mode is
@@ -86,12 +88,13 @@ in buildPythonPackage {
 
   meta = with lib; {
     homepage = "https://flashinfer.ai/";
-    description = '';
-      FlashInfer is a library and kernel generator for Large Language Models
-      that provides high-performance implementation of LLM GPU kernels such as
-      FlashAttention, PageAttention and LoRA. FlashInfer focus on LLM serving
-      and inference, and delivers state-of-the-art performance across diverse
-      scenarios.
+    description = ''
+      ;
+            FlashInfer is a library and kernel generator for Large Language Models
+            that provides high-performance implementation of LLM GPU kernels such as
+            FlashAttention, PageAttention and LoRA. FlashInfer focus on LLM serving
+            and inference, and delivers state-of-the-art performance across diverse
+            scenarios.
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ breakds ];
