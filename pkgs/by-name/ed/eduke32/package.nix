@@ -16,6 +16,7 @@
   SDL2,
   SDL2_mixer,
   graphicsmagick,
+  unstableGitUpdater,
 }:
 
 let
@@ -177,6 +178,8 @@ stdenv.mkDerivation (finalAttrs: {
     + ''
       runHook postInstall
     '';
+
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
     description = "Enhanched port of Duke Nukem 3D for various platforms";
