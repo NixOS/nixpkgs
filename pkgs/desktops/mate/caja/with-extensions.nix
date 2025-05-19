@@ -63,5 +63,5 @@ stdenv.mkDerivation {
     )
   '';
 
-  inherit (caja.meta) ;
+  inherit (caja) meta;
 }
