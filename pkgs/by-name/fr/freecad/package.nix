@@ -37,6 +37,7 @@
   qtVersion ? 5,
   qt5,
   qt6,
+  nix-update-script,
 }:
 let
   inherit (python311Packages)
@@ -210,7 +211,15 @@ freecad-utils.makeCustomizable (
       ln -s $out/bin/FreeCADCmd $out/bin/freecadcmd
     '';
 
-    passthru.tests = callPackage ./tests { };
+    passthru = {
+      tests = callPackage ./tests { };
+      updateScript = nix-update-script {
+        extraArgs = [
+          "--version-regex"
+          "([0-9.]+)"
+        ];
+      };
+    };
 
     meta = {
       homepage = "https://www.freecad.org";
