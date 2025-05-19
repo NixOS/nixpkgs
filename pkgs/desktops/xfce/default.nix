@@ -45,6 +45,8 @@ makeScopeWithSplicing' {
 
       thunar-media-tags-plugin = callPackage ./thunar-plugins/media-tags { };
 
+      thunar-shares-plugin = callPackage ./thunar-plugins/shares { };
+
       thunar-vcs-plugin = callPackage ./thunar-plugins/vcs { };
 
       tumbler = callPackage ./core/tumbler { };
