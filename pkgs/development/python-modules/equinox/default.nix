@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "equinox";
-  version = "0.12.1";
+  version = "0.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "equinox";
     tag = "v${version}";
-    hash = "sha256-mw2fk+527b6Rx6FGe6QJf3ZbxZ3rjYFXKleX2g6AryU=";
+    hash = "sha256-q/5gNXA8TnHwtm+krVBulHH3QMj9E2JVQgXJk6QYjUI=";
   };
 
   # Relax speed constraints on tests that can fail on busy builders
@@ -56,16 +56,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests =
-    [
-      # AssertionError: assert '<function te...n.<locals>.f>' == '<function f>'
-      # https://github.com/patrick-kidger/equinox/issues/1008
-      "test_function"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
-      "test_filter"
-    ];
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
+    "test_filter"
+  ];
 
   pythonImportsCheck = [ "equinox" ];
 
