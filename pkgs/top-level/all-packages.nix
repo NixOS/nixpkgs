@@ -9201,9 +9201,7 @@ with pkgs;
     };
   };
 
-  opencsg = callPackage ../development/libraries/opencsg {
-    inherit (qt5) qmake;
-  };
+  opencsg = callPackage ../development/libraries/opencsg { };
 
   opencv4 = callPackage ../development/libraries/opencv/4.x.nix {
     pythonPackages = python3Packages;
