@@ -1111,5 +1111,12 @@
     "url": "https://azcliprod.blob.core.windows.net/cli-extensions/workloads-1.1.0-py3-none-any.whl",
     "hash": "sha256-hpNEiU4IBe5krQcXEX0oIArfVCXB7Lv6O1sbkrdSAok=",
     "description": "Microsoft Azure Command-Line Tools Workloads Extension"
+  },
+  "zones": {
+    "pname": "zones",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/zones-1.0.0b1-py3-none-any.whl",
+    "hash": "sha256-/CPMEVqdxeyzt2l3K8+eqv5Hs+EWjXJeKdWtD4xxGG0=",
+    "description": "Microsoft Azure Command-Line Tools Zones Extension"
   }
 }
