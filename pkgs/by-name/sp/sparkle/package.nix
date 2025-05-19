@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sparkle";
-  version = "1.6.2";
+  version = "1.6.4";
 
   src =
     let
@@ -31,8 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
     fetchurl {
       url = "https://github.com/xishang0128/sparkle/releases/download/${finalAttrs.version}/sparkle-linux-${finalAttrs.version}-${arch}.deb";
       hash = selectSystem {
-        x86_64-linux = "sha256-lUsKTEtUevBKmz21gu/AEAGXCmp0zcdSafRdncLBlQk=";
-        aarch64-linux = "sha256-sdsrUnOnvZYxs9tHSFf1k4sgJ9anp9P4s3Wz4oJY5ZU=";
+        x86_64-linux = "sha256-Q2TWrYNz3BAV8rBflxMuIQOogs+QJmmEidnGSOXaZgQ=";
+        aarch64-linux = "sha256-m/aAnAJpu9ycXECQJNrCpwFN76kWGFKvWfLXiJQbrWE=";
       };
     };
 
@@ -57,8 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r opt $out/opt
     cp -r usr/share $out/share
     substituteInPlace $out/share/applications/sparkle.desktop \
-      --replace-fail "/opt/Sparkle/sparkle" "sparkle"
-    ln -s $out/opt/Sparkle/sparkle $out/bin/sparkle
+      --replace-fail "/opt/sparkle/sparkle" "sparkle"
+    ln -s $out/opt/sparkle/sparkle $out/bin/sparkle
 
     runHook postInstall
   '';
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
           udev
           libayatana-appindicator
         ]
-      } $out/opt/Sparkle/sparkle
+      } $out/opt/sparkle/sparkle
   '';
 
   passthru.updateScript = ./update.sh;
