@@ -137,7 +137,7 @@ buildGoModule (finalAttrs: {
           winetricks
         ]
       } \
-      --prefix PUREGOTK_LIB_FOLDER : ${finalAttrs.passthru.libraryPath}/lib
+      --set-default PUREGOTK_LIB_FOLDER ${finalAttrs.passthru.libraryPath}/lib
   '';
 
   passthru = {

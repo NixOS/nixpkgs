@@ -68,7 +68,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Official CLI for LangGraph API";
-    homepage = "https://github.com/langchain-ai/langgraph/libs/cli";
+    homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/cli";
     changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${version}";
     mainProgram = "langgraph";
     license = lib.licenses.mit;

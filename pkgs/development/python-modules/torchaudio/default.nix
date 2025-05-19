@@ -15,6 +15,7 @@
   pybind11,
   sox,
   torch,
+  llvmPackages,
 
   cudaSupport ? torch.cudaSupport,
   cudaPackages,
@@ -76,7 +77,7 @@ let
 in
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.6.0";
+  version = "2.7.0";
   pyproject = true;
 
   stdenv = torch.stdenv;
@@ -85,7 +86,7 @@ buildPythonPackage rec {
     owner = "pytorch";
     repo = "audio";
     tag = "v${version}";
-    hash = "sha256-WNdDBB2nShbPPW7GU5cMij00u5PUdN+j5pm41yrKnCA=";
+    hash = "sha256-/5XIVj0jLE7+A1LZxA3bFH3mdwNIcrV4XMOa4xznr/w=";
   };
 
   patches = [
@@ -133,7 +134,7 @@ buildPythonPackage rec {
     pybind11
     sox
     torch.cxxdev
-  ];
+  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   dependencies = [ torch ];
 
@@ -161,6 +162,9 @@ buildPythonPackage rec {
     platforms =
       lib.platforms.linux
       ++ lib.optionals (!cudaSupport && !rocmSupport) lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ junjihashimoto ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      junjihashimoto
+    ];
   };
 }
