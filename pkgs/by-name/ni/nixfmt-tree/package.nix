@@ -21,7 +21,7 @@ let
   treefmtWithConfig = treefmt.withConfig {
     name = "nixfmt-tree";
 
-    settings = [
+    settings = lib.mkMerge [
       # Default settings
       {
         _file = ./package.nix;
