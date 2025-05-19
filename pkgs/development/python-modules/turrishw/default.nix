@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library and program for Turris hardware listing";
     homepage = "https://github.com/turris-cz/turrishw";
-    changelog = "https://github.com/turris-cz/turrishw/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/turris-cz/turrishw/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
