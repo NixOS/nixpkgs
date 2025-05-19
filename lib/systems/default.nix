@@ -103,6 +103,7 @@ let
             throw "2022-05-23: isCompatible has been removed in favor of canExecute, refer to the 22.11 changelog for details";
           # Derived meta-data
           useLLVM = final.isFreeBSD || final.isOpenBSD;
+          useLTO = false;
 
           libc =
             if final.isDarwin then

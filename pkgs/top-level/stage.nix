@@ -386,6 +386,20 @@ let
       };
     });
 
+    pkgsLTO = nixpkgsFun {
+      overlays = [
+        (self': super': {
+          pkgsLTO = super';
+        })
+      ] ++ overlays;
+      # Bootstrap a cross stdenv with LTO.
+      # This is currently not possible when compiling natively,
+      # so we don't need to check hostPlatform != buildPlatform.
+      crossSystem = stdenv.hostPlatform // {
+        useLTO = true;
+      };
+    };
+
     pkgsExtraHardening = nixpkgsFun {
       overlays = [
         (
