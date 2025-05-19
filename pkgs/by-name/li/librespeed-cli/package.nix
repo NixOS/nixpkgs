@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
 }:
@@ -27,5 +28,6 @@ buildGoModule rec {
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ fab ];
     mainProgram = "speedtest-cli";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
