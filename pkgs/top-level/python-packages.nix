@@ -2685,6 +2685,8 @@ self: super: with self; {
 
   colcon-defaults = callPackage ../development/python-modules/colcon-defaults { };
 
+  colcon-mixin = callPackage ../development/python-modules/colcon-mixin { };
+
   colcon-notification = callPackage ../development/python-modules/colcon-notification { };
 
   colcon-parallel-executor = callPackage ../development/python-modules/colcon-parallel-executor { };
