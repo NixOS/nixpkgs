@@ -46,7 +46,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/google/magika";
     license = licenses.asl20;
     maintainers = with maintainers; [ mihaimaruseac ];
-    mainProgram = "magika";
+    mainProgram = "magika-python-client";
     # Currently, disabling on AArch64 as it onnx runtime crashes on ofborg
     broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux;
   };
