@@ -7,14 +7,14 @@
   libXcursor,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "sxwm";
   version = "1.5";
 
   src = fetchFromGitHub {
     owner = "uint23";
     repo = "sxwm";
-    tag = "v${finalAttrs.version}";
+    rev = "v${version}";
     sha256 = "sha256-CMqVAHrW5oluTmB/DHg65wf8NCSX5fksH/L+GQXZV+o=";
   };
 
