@@ -23,7 +23,7 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    services.xserver.windowManager.session = singleton {
+    services.xserver.windowManager.session = lib.singleton {
       name = "sxwm";
       start = ''
         ${pkgs.sxwm}/bin/sxwm &
