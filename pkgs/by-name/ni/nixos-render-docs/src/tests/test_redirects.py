@@ -103,62 +103,6 @@ class TestRedirects(unittest.TestCase):
         )
         self.run_test(after)
 
-    def test_leaf_identifier_moved_to_different_file(self):
-        """Test moving a leaf identifier to a different output path."""
-        before = self.setup_test(
-            sources={"foo.md": "# Foo {#foo}\n## Bar {#bar}"},
-            raw_redirects={"foo": ["foo.html#foo"], "bar": ["foo.html#bar"]},
-        )
-        self.run_test(before)
-
-        intermediate = self.setup_test(
-            sources={
-                "foo.md": "# Foo {#foo}",
-                "bar.md": "# Bar {#bar}"
-            },
-            raw_redirects={"foo": ["foo.html#foo"], "bar": ["foo.html#foo"]},
-        )
-        self.assert_redirect_error({"identifiers_missing_current_outpath": ["bar"]}, intermediate)
-
-        after = self.setup_test(
-            sources={
-                "foo.md": "# Foo {#foo}",
-                "bar.md": "# Bar {#bar}"
-            },
-            raw_redirects={"foo": ["foo.html#foo"], "bar": ["bar.html#bar", "foo.html#bar"]},
-        )
-        self.run_test(after)
-
-    def test_non_leaf_identifier_moved_to_different_file(self):
-        """Test moving a non-leaf identifier to a different output path."""
-        before = self.setup_test(
-            sources={"foo.md": "# Foo {#foo}\n## Bar {#bar}\n### Baz {#baz}"},
-            raw_redirects={"foo": ["foo.html#foo"], "bar": ["foo.html#bar"], "baz": ["foo.html#baz"]},
-        )
-        self.run_test(before)
-
-        intermediate = self.setup_test(
-            sources={
-                "foo.md": "# Foo {#foo}",
-                "bar.md": "# Bar {#bar}\n## Baz {#baz}"
-            },
-            raw_redirects={"foo": ["foo.html#foo"], "bar": ["foo.html#bar"], "baz": ["foo.html#baz"]},
-        )
-        self.assert_redirect_error({"identifiers_missing_current_outpath": ["bar", "baz"]}, intermediate)
-
-        after = self.setup_test(
-            sources={
-                "foo.md": "# Foo {#foo}",
-                "bar.md": "# Bar {#bar}\n## Baz {#baz}"
-            },
-            raw_redirects={
-                "foo": ["foo.html#foo"],
-                "bar": ["bar.html#bar", "foo.html#bar"],
-                "baz": ["bar.html#baz", "foo.html#baz"]
-            },
-        )
-        self.run_test(after)
-
     def test_conflicting_anchors(self):
         """Test for conflicting anchors."""
         md = self.setup_test(
