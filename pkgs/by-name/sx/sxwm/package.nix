@@ -28,9 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://github.com/uint23/sxwm";
+    changelog = "https://github.com/uint23/sxwm/releases/tag/v${finalAttrs.version}";
     description = "Minimal. Fast. Configurable. Tiling Window Manager for X11";
-    license = licenses.mit;
-    maintainers = [ maintainers.Xano-verse ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.Xano-verse ];
+    platforms = lib.platforms.unix;
   };
-}
+})
