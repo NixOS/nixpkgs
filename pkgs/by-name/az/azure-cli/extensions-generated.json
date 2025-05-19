@@ -827,9 +827,9 @@
   },
   "portal": {
     "pname": "portal",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/portal-1.0.0b1-py3-none-any.whl",
-    "hash": "sha256-0/pZ1Wo3IUB3hSNxdo6MhVsgf5sdEfO+Tp/dsOGseWk=",
+    "version": "1.0.0b2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/portal-1.0.0b2-py3-none-any.whl",
+    "hash": "sha256-JXUW9FWgF+UVqvFDXC0qGPTCjuIDevimJ1AW+5FANdY=",
     "description": "Microsoft Azure Command-Line Tools Portal Extension"
   },
   "powerbidedicated": {
