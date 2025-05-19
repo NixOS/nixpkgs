@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "uint23";
     repo = "sxwm";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-CMqVAHrW5oluTmB/DHg65wf8NCSX5fksH/L+GQXZV+o=";
   };
 
