@@ -77,14 +77,17 @@ stdenv.mkDerivation (finalAttrs: {
         done
       '';
 
-  npm_config_nodedir = nodejs;
-  npm_config_node_gyp = "${nodejs}/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js";
-
   NODE_OPTIONS = "--openssl-legacy-provider";
   NODE_ENV = "production";
+
+  # skip unnecessary binary downloads
   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+
+  # ensure the correct node-gyp (from nixpkgs) is used
   NIX_NODEJS_BUILDNPMPACKAGE = "1";
+  npm_config_nodedir = nodejs;
+  npm_config_node_gyp = "${nodejs}/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js";
 
   nativeBuildInputs = [
     nodejs
