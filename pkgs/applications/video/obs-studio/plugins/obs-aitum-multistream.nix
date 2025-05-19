@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Aitum";
     repo = "obs-aitum-multistream";
-    rev = version;
-    sha256 = "sha256-TqddyTBRWLyfwYi9I0nQE8Z19YL2RwkZqUwi7F9XpwQ=";
+    tag = version;
+    hash = "sha256-TqddyTBRWLyfwYi9I0nQE8Z19YL2RwkZqUwi7F9XpwQ=";
   };
 
   # Fix FTBFS with Qt >= 6.8
