@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "growattserver";
-  version = "1.7.0";
+  version = "1.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "indykoning";
     repo = "PyPi_GrowattServer";
     tag = version;
-    hash = "sha256-oEI5WWwPO7HmB0lt0bP9VVbg0+wMF73XVRyYX/GvTHE=";
+    hash = "sha256-rob2+uXuBD5Gf05rNFFEW210JxrTbWN7knk9Tnz7wOE=";
   };
 
   nativeBuildInputs = [ setuptools ];
