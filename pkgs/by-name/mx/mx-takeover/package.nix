@@ -24,10 +24,10 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool to work with DNS MX records";
-    mainProgram = "mx-takeover";
     homepage = "https://github.com/musana/mx-takeover";
-    changelog = "https://github.com/musana/mx-takeover/releases/tag/v${version}";
+    changelog = "https://github.com/musana/mx-takeover/releases/tag/v${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "mx-takeover";
   };
 }
