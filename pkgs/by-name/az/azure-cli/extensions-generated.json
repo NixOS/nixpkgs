@@ -771,9 +771,9 @@
   },
   "nsp": {
     "pname": "nsp",
-    "version": "1.0.0b3",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/nsp-1.0.0b3-py3-none-any.whl",
-    "hash": "sha256-Nsxf4BMEWkvx5od7YsLwQLZdULc5glwtcDC7qClx5T8=",
+    "version": "1.0.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/nsp-1.0.0-py3-none-any.whl",
+    "hash": "sha256-nlRya9v8U6q/sjGV5XNgsSLDBeVPPSF/to4KIvvckvE=",
     "description": "Microsoft Azure Command-Line Tools Nsp Extension"
   },
   "offazure": {
