@@ -108,5 +108,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://maigret.readthedocs.io";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
