@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
 }:
@@ -29,5 +30,6 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     mainProgram = "mx-takeover";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
