@@ -14076,8 +14076,6 @@ with pkgs;
     waylandSupport = true;
   };
 
-  sxwm = callPackage ../applications/window-managers/sxwm { };
-
   syncplay = python3.pkgs.callPackage ../applications/networking/syncplay { };
 
   syncplay-nogui = syncplay.override { enableGUI = false; };
