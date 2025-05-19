@@ -37,11 +37,11 @@ buildGoModule (finalAttrs: {
   # panic: httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Go tool for building GraphQL client with gqlgen";
     mainProgram = "gqlgenc";
     homepage = "https://github.com/Yamashou/gqlgenc";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wattmto ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ wattmto ];
   };
 })
