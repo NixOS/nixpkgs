@@ -1660,6 +1660,8 @@ self: super: with self; {
 
   bases = callPackage ../development/python-modules/bases { };
 
+  basic-colormath = callPackage ../development/python-modules/basic-colormath { };
+
   bash-kernel = callPackage ../development/python-modules/bash-kernel { };
 
   bashlex = callPackage ../development/python-modules/bashlex { };
@@ -2720,6 +2722,8 @@ self: super: with self; {
   colorthief = callPackage ../development/python-modules/colorthief { };
 
   colorzero = callPackage ../development/python-modules/colorzero { };
+
+  colormanager = callPackage ../development/python-modules/color-manager { };
 
   colour = callPackage ../development/python-modules/colour { };
 
