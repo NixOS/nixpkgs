@@ -81,7 +81,7 @@ stdenv.mkDerivation {
 ```
 
 Note: It is possible to have multiple, different instances of `darwinMinVersionHook` in your inputs.
-When that happens, the one with the  highest version is always used.
+When that happens, the one with the highest version is always used.
 
 #### Picking an SDK version {#sec-darwin-troubleshooting-picking-sdk-version}
 
@@ -89,14 +89,13 @@ The following is a list of Xcode versions, the SDK version in Nixpkgs, and the a
 Check your package’s documentation (platform support or installation instructions) to find which Xcode or SDK version to use.
 Generally, only the last SDK release for a major version is packaged.
 
-| Xcode version      | SDK version        | Nixpkgs attribute            |
-|--------------------|--------------------|------------------------------|
-| 12.0–12.5.1        | 11.3               | `apple-sdk_11` / `apple-sdk` |
-| 13.0–13.4.1        | 12.3               | `apple-sdk_12`               |
-| 14.0–14.3.1        | 13.3               | `apple-sdk_13`               |
-| 15.0–15.4          | 14.4               | `apple-sdk_14`               |
-| 16.0               | 15.0               | `apple-sdk_15`               |
-
+| Xcode version | SDK version | Nixpkgs attribute            |
+| ------------- | ----------- | ---------------------------- |
+| 12.0–12.5.1   | 11.3        | `apple-sdk_11` / `apple-sdk` |
+| 13.0–13.4.1   | 12.3        | `apple-sdk_12`               |
+| 14.0–14.3.1   | 13.3        | `apple-sdk_13`               |
+| 15.0–15.4     | 14.4        | `apple-sdk_14`               |
+| 16.0          | 15.0        | `apple-sdk_15`               |
 
 #### Darwin Default SDK versions {#sec-darwin-troubleshooting-darwin-defaults}
 
@@ -105,7 +104,6 @@ Because of the ways that minimum version and SDK can be changed that are not vis
 If you need to parameterize over a specific version, create a function that takes the version as a parameter instead of relying on these attributes.
 
 On macOS, the `darwinMinVersion` and `darwinSdkVersion` are always the same, and are currently set to 11.3.
-
 
 #### `xcrun` cannot find a binary {#sec-darwin-troubleshooting-xcrun}
 
@@ -215,7 +213,7 @@ Note that if any binaries in your outputs linked those dylibs, you may need to u
 
 The SDK is a package, and it can be propagated.
 `darwinMinVersionHook` with a version specified can also be propagated.
-However, most packages should *not* do this.
+However, most packages should _not_ do this.
 The exception is compilers.
 When you propagate an SDK, it becomes part of your derivation’s public API, and changing the SDK or removing it can be a breaking change.
 That is why propagating it is only recommended for compilers.

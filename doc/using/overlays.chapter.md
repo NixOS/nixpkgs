@@ -1,6 +1,6 @@
 # Overlays {#chap-overlays}
 
-This chapter describes how to extend and change Nixpkgs using overlays.  Overlays are used to add layers in the fixed-point used by Nixpkgs to compose the set of all packages.
+This chapter describes how to extend and change Nixpkgs using overlays. Overlays are used to add layers in the fixed-point used by Nixpkgs to compose the set of all packages.
 
 Nixpkgs can be configured with a list of overlays, which are applied in order. This means that the order of the overlays can be significant if multiple layers override the same package.
 
@@ -10,7 +10,7 @@ The list of overlays can be set either explicitly in a Nix expression, or throug
 
 ### Set overlays in NixOS or Nix expressions {#sec-overlays-argument}
 
-On a NixOS system the value of the `nixpkgs.overlays` option, if present, is passed to the system Nixpkgs directly as an argument. Note that this does not affect the overlays for non-NixOS operations (e.g.  `nix-env`), which are [looked up](#sec-overlays-lookup) independently.
+On a NixOS system the value of the `nixpkgs.overlays` option, if present, is passed to the system Nixpkgs directly as an argument. Note that this does not affect the overlays for non-NixOS operations (e.g. `nix-env`), which are [looked up](#sec-overlays-lookup) independently.
 
 The list of overlays can be passed explicitly when importing nixpkgs, for example `import <nixpkgs> { overlays = [ overlay1 overlay2 ]; }`.
 
@@ -30,13 +30,13 @@ The list of overlays is determined as follows.
 
 If we are looking for overlays at a path, then there are two cases:
 
--   If the path is a file, then the file is imported as a Nix expression and used as the list of overlays.
+- If the path is a file, then the file is imported as a Nix expression and used as the list of overlays.
 
--   If the path is a directory, then we take the content of the directory, order it lexicographically, and attempt to interpret each as an overlay by:
+- If the path is a directory, then we take the content of the directory, order it lexicographically, and attempt to interpret each as an overlay by:
 
-    -   Importing the file, if it is a `.nix` file.
+  - Importing the file, if it is a `.nix` file.
 
-    -   Importing a top-level `default.nix` file, if it is a directory.
+  - Importing a top-level `default.nix` file, if it is a directory.
 
 Because overlays that are set in NixOS configuration do not affect non-NixOS operations such as `nix-env`, the `overlays.nix` option provides a convenient way to use the same overlays for a NixOS system configuration and user configuration: the same file can be used as `overlays.nix` and imported as the value of `nixpkgs.overlays`.
 
@@ -67,33 +67,33 @@ Overlays are similar to other methods for customizing Nixpkgs, in particular the
 
 ## Using overlays to configure alternatives {#sec-overlays-alternatives}
 
-Certain software packages have different implementations of the same interface. Other distributions have functionality to switch between these. For example, Debian provides [DebianAlternatives](https://wiki.debian.org/DebianAlternatives).  Nixpkgs has what we call `alternatives`, which are configured through overlays.
+Certain software packages have different implementations of the same interface. Other distributions have functionality to switch between these. For example, Debian provides [DebianAlternatives](https://wiki.debian.org/DebianAlternatives). Nixpkgs has what we call `alternatives`, which are configured through overlays.
 
 ### BLAS/LAPACK {#sec-overlays-alternatives-blas-lapack}
 
 In Nixpkgs, we have multiple implementations of the BLAS/LAPACK numerical linear algebra interfaces. They are:
 
--   [OpenBLAS](https://www.openblas.net/)
+- [OpenBLAS](https://www.openblas.net/)
 
-    The Nixpkgs attribute is `openblas` for ILP64 (integer width = 64 bits) and `openblasCompat` for LP64 (integer width = 32 bits).  `openblasCompat` is the default.
+  The Nixpkgs attribute is `openblas` for ILP64 (integer width = 64 bits) and `openblasCompat` for LP64 (integer width = 32 bits). `openblasCompat` is the default.
 
--   [LAPACK reference](https://www.netlib.org/lapack/) (also provides BLAS and CBLAS)
+- [LAPACK reference](https://www.netlib.org/lapack/) (also provides BLAS and CBLAS)
 
-    The Nixpkgs attribute is `lapack-reference`.
+  The Nixpkgs attribute is `lapack-reference`.
 
--   [Intel MKL](https://software.intel.com/en-us/mkl) (only works on the x86_64 architecture, unfree)
+- [Intel MKL](https://software.intel.com/en-us/mkl) (only works on the x86_64 architecture, unfree)
 
-    The Nixpkgs attribute is `mkl`.
+  The Nixpkgs attribute is `mkl`.
 
--   [BLIS](https://github.com/flame/blis)
+- [BLIS](https://github.com/flame/blis)
 
-    BLIS, available through the attribute `blis`, is a framework for linear algebra kernels. In addition, it implements the BLAS interface.
+  BLIS, available through the attribute `blis`, is a framework for linear algebra kernels. In addition, it implements the BLAS interface.
 
--   [AMD BLIS/LIBFLAME](https://developer.amd.com/amd-aocl/blas-library/) (optimized for modern AMD x86_64 CPUs)
+- [AMD BLIS/LIBFLAME](https://developer.amd.com/amd-aocl/blas-library/) (optimized for modern AMD x86_64 CPUs)
 
-    The AMD fork of the BLIS library, with attribute `amd-blis`, extends BLIS with optimizations for modern AMD CPUs. The changes are usually submitted to the upstream BLIS project after some time. However, AMD BLIS typically provides some performance improvements on AMD Zen CPUs. The complementary AMD LIBFLAME library, with attribute `amd-libflame`, provides a LAPACK implementation.
+  The AMD fork of the BLIS library, with attribute `amd-blis`, extends BLIS with optimizations for modern AMD CPUs. The changes are usually submitted to the upstream BLIS project after some time. However, AMD BLIS typically provides some performance improvements on AMD Zen CPUs. The complementary AMD LIBFLAME library, with attribute `amd-libflame`, provides a LAPACK implementation.
 
-Introduced in [PR #83888](https://github.com/NixOS/nixpkgs/pull/83888), we are able to override the `blas` and `lapack` packages to use different implementations, through the `blasProvider` and `lapackProvider` argument. This can be used to select a different provider. BLAS providers will have symlinks in `$out/lib/libblas.so.3` and `$out/lib/libcblas.so.3` to their respective BLAS libraries.  Likewise, LAPACK providers will have symlinks in `$out/lib/liblapack.so.3` and `$out/lib/liblapacke.so.3` to their respective LAPACK libraries. For example, Intel MKL is both a BLAS and LAPACK provider. An overlay can be created to use Intel MKL that looks like:
+Introduced in [PR #83888](https://github.com/NixOS/nixpkgs/pull/83888), we are able to override the `blas` and `lapack` packages to use different implementations, through the `blasProvider` and `lapackProvider` argument. This can be used to select a different provider. BLAS providers will have symlinks in `$out/lib/libblas.so.3` and `$out/lib/libcblas.so.3` to their respective BLAS libraries. Likewise, LAPACK providers will have symlinks in `$out/lib/liblapack.so.3` and `$out/lib/liblapacke.so.3` to their respective LAPACK libraries. For example, Intel MKL is both a BLAS and LAPACK provider. An overlay can be created to use Intel MKL that looks like:
 
 ```nix
 self: super:
@@ -154,12 +154,12 @@ stdenv.mkDerivation {
 
 All programs that are built with [MPI](https://en.wikipedia.org/wiki/Message_Passing_Interface) support use the generic attribute `mpi` as an input. At the moment Nixpkgs natively provides two different MPI implementations:
 
--   [Open MPI](https://www.open-mpi.org/) (default), attribute name
-    `openmpi`
+- [Open MPI](https://www.open-mpi.org/) (default), attribute name
+  `openmpi`
 
--   [MPICH](https://www.mpich.org/), attribute name `mpich`
+- [MPICH](https://www.mpich.org/), attribute name `mpich`
 
--   [MVAPICH](https://mvapich.cse.ohio-state.edu/), attribute name `mvapich`
+- [MVAPICH](https://mvapich.cse.ohio-state.edu/), attribute name `mvapich`
 
 To provide MPI enabled applications that use `MPICH`, instead of the default `Open MPI`, use the following overlay:
 

@@ -1,6 +1,6 @@
 # Meta-attributes {#chap-meta}
 
-Nix packages can declare *meta-attributes* that contain information about a package such as a description, its homepage, its license, and so on. For instance, the GNU Hello package has a `meta` declaration like this:
+Nix packages can declare _meta-attributes_ that contain information about a package such as a description, its homepage, its license, and so on. For instance, the GNU Hello package has a `meta` declaration like this:
 
 ```nix
 {
@@ -43,7 +43,6 @@ The general requirements of a description are:
 - Not end with a period (or any punctuation for that matter).
 - Provide factual information.
   - Avoid subjective language.
-
 
 Wrong: `"libpng is a library that allows you to decode PNG images."`
 
@@ -101,7 +100,7 @@ The name of the main binary for the package. This affects the binary `nix run` e
 
 ### `priority` {#var-meta-priority}
 
-The *priority* of the package, used by `nix-env` to resolve file name conflicts between packages. See the [manual page for `nix-env`](https://nixos.org/manual/nix/stable/command-ref/nix-env) for details. Example: `"10"` (a low-priority package).
+The _priority_ of the package, used by `nix-env` to resolve file name conflicts between packages. See the [manual page for `nix-env`](https://nixos.org/manual/nix/stable/command-ref/nix-env) for details. Example: `"10"` (a low-priority package).
 
 ### `platforms` {#var-meta-platforms}
 
@@ -213,7 +212,7 @@ Catch-all for free software licenses not listed above.
 
 ### `lib.licenses.unfreeRedistributable`, `"unfree-redistributable"` {#lib.licenses.unfreeredistributable-unfree-redistributable}
 
-Unfree package that can be redistributed in binary form. That is, it’s legal to redistribute the *output* of the derivation. This means that the package can be included in the Nixpkgs channel.
+Unfree package that can be redistributed in binary form. That is, it’s legal to redistribute the _output_ of the derivation. This means that the package can be included in the Nixpkgs channel.
 
 Sometimes proprietary software can only be redistributed unmodified. Make sure the builder doesn’t actually modify the original binaries; otherwise we’re breaking the license. For instance, the NVIDIA X11 drivers can be redistributed unmodified, but our builder applies `patchelf` to make them work. Thus, its license is `"unfree"` and it cannot be included in the Nixpkgs channel.
 
@@ -233,7 +232,7 @@ If a package contains elements that are not built from the original source by a 
 
 Adding this information helps users who have needs related to build transparency and supply-chain security to gain some visibility into their installed software or set policy to allow or disallow installation based on source provenance.
 
-The presence of a particular `sourceType` in a package's `meta.sourceProvenance` list indicates that the package contains some components falling into that category, though the *absence* of that `sourceType` does not *guarantee* the absence of that category of `sourceType` in the package's contents. A package with no `meta.sourceProvenance` set implies it has no *known* `sourceType`s other than `fromSource`.
+The presence of a particular `sourceType` in a package's `meta.sourceProvenance` list indicates that the package contains some components falling into that category, though the _absence_ of that `sourceType` does not _guarantee_ the absence of that category of `sourceType` in the package's contents. A package with no `meta.sourceProvenance` set implies it has no _known_ `sourceType`s other than `fromSource`.
 
 The meaning of the `meta.sourceProvenance` attribute does not depend on the value of the `meta.license` attribute.
 

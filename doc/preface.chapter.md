@@ -10,6 +10,7 @@ This document is the user [_reference_](https://nix.dev/contributing/documentati
 It describes entire public interface of Nixpkgs in a concise and orderly manner, and all relevant behaviors, with examples and cross-references.
 
 To discover other kinds of documentation:
+
 - [nix.dev](https://nix.dev/): Tutorials and guides for getting things done with Nix
 - [NixOS **Option Search**](https://search.nixos.org/options) and reference documentation
 - [Nixpkgs **Package Search**](https://search.nixos.org/packages)

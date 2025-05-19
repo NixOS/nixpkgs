@@ -1,4 +1,3 @@
-
 # `redisTestHook` {#sec-redisTestHook}
 
 This hook starts a Redis server during `checkPhase`. Example:
@@ -20,6 +19,7 @@ stdenv.mkDerivation {
 ```
 
 If you use a custom `checkPhase`, remember to add the `runHook` calls:
+
 ```nix
 {
   checkPhase = ''
@@ -42,7 +42,7 @@ Exported variables:
 
 Bash-only variables:
 
- - `redisTestPort`: Port to use by Redis. Defaults to `6379`
+- `redisTestPort`: Port to use by Redis. Defaults to `6379`
 
 Example usage:
 

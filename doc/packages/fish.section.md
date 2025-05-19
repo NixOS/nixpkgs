@@ -2,7 +2,6 @@
 
 Fish is a "smart and user-friendly command line shell" with support for plugins.
 
-
 ## Vendor Fish scripts {#sec-fish-vendor}
 
 Any package may ship its own Fish completions, configuration snippets, and
@@ -13,7 +12,6 @@ When the `programs.fish.enable` and
 `programs.fish.vendor.{completions,config,functions}.enable` options from the
 NixOS Fish module are set to true, those paths are symlinked in the current
 system environment and automatically loaded by Fish.
-
 
 ## Packaging Fish plugins {#sec-fish-plugins-pkg}
 
@@ -31,7 +29,6 @@ and package-local Fish functions specified in `checkPlugins` and
 
 See `pkgs/shells/fish/plugins/pure.nix` for an example of Fish plugin package
 using `buildFishPlugin` and running unit tests with the `fishtape` test runner.
-
 
 ## Fish wrapper {#sec-fish-wrapper}
 

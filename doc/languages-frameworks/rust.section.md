@@ -253,56 +253,56 @@ rustPlatform.buildRustPackage {
 ### Cross compilation {#cross-compilation}
 
 By default, Rust packages are compiled for the host platform, just like any
-other package is.  The `--target` passed to rust tools is computed from this.
+other package is. The `--target` passed to rust tools is computed from this.
 By default, it takes the `stdenv.hostPlatform.config` and replaces components
 where they are known to differ. But there are ways to customize the argument:
 
- - To choose a different target by name, define
-   `stdenv.hostPlatform.rust.rustcTarget` as that name (a string), and that
-   name will be used instead.
+- To choose a different target by name, define
+  `stdenv.hostPlatform.rust.rustcTarget` as that name (a string), and that
+  name will be used instead.
 
-   For example:
+  For example:
 
-   ```nix
-   import <nixpkgs> {
-     crossSystem = (import <nixpkgs/lib>).systems.examples.armhf-embedded // {
-       rust.rustcTarget = "thumbv7em-none-eabi";
-     };
-   }
-   ```
+  ```nix
+  import <nixpkgs> {
+    crossSystem = (import <nixpkgs/lib>).systems.examples.armhf-embedded // {
+      rust.rustcTarget = "thumbv7em-none-eabi";
+    };
+  }
+  ```
 
-   will result in:
+  will result in:
 
-   ```shell
-   --target thumbv7em-none-eabi
-   ```
+  ```shell
+  --target thumbv7em-none-eabi
+  ```
 
- - To pass a completely custom target, define
-   `stdenv.hostPlatform.rust.rustcTarget` with its name, and
-   `stdenv.hostPlatform.rust.platform` with the value.  The value will be
-   serialized to JSON in a file called
-   `${stdenv.hostPlatform.rust.rustcTarget}.json`, and the path of that file
-   will be used instead.
+- To pass a completely custom target, define
+  `stdenv.hostPlatform.rust.rustcTarget` with its name, and
+  `stdenv.hostPlatform.rust.platform` with the value. The value will be
+  serialized to JSON in a file called
+  `${stdenv.hostPlatform.rust.rustcTarget}.json`, and the path of that file
+  will be used instead.
 
-   For example:
+  For example:
 
-   ```nix
-   import <nixpkgs> {
-     crossSystem = (import <nixpkgs/lib>).systems.examples.armhf-embedded // {
-       rust.rustcTarget = "thumb-crazy";
-       rust.platform = {
-         foo = "";
-         bar = "";
-       };
-     };
-   }
-   ```
+  ```nix
+  import <nixpkgs> {
+    crossSystem = (import <nixpkgs/lib>).systems.examples.armhf-embedded // {
+      rust.rustcTarget = "thumb-crazy";
+      rust.platform = {
+        foo = "";
+        bar = "";
+      };
+    };
+  }
+  ```
 
-   will result in:
+  will result in:
 
-   ```shell
-   --target /nix/store/asdfasdfsadf-thumb-crazy.json # contains {"foo":"","bar":""}
-   ```
+  ```shell
+  --target /nix/store/asdfasdfsadf-thumb-crazy.json # contains {"foo":"","bar":""}
+  ```
 
 Note that currently custom targets aren't compiled with `std`, so `cargo test`
 will fail. This can be ignored by adding `doCheck = false;` to your derivation.
@@ -349,9 +349,9 @@ This can only be worked around by patching the affected tests accordingly.
 
 In some instances, it may be necessary to disable testing altogether (with `doCheck = false;`):
 
-* If no tests exist -- the `checkPhase` should be explicitly disabled to skip
+- If no tests exist -- the `checkPhase` should be explicitly disabled to skip
   unnecessary build steps to speed up the build.
-* If tests are highly impure (e.g. due to network usage).
+- If tests are highly impure (e.g. due to network usage).
 
 There will obviously be some corner-cases not listed above where it's sensible to disable tests.
 The above are just guidelines, and exceptions may be granted on a case-by-case basis.
@@ -462,12 +462,12 @@ The `src` attribute is required, as well as a hash specified through
 one of the `hash` attribute. The following optional attributes can
 also be used:
 
-* `name`: the name that is used for the dependencies tarball.  If
+- `name`: the name that is used for the dependencies tarball. If
   `name` is not specified, then the name `cargo-deps` will be used.
-* `sourceRoot`: when the `Cargo.lock`/`Cargo.toml` are in a
+- `sourceRoot`: when the `Cargo.lock`/`Cargo.toml` are in a
   subdirectory, `sourceRoot` specifies the relative path to these
   files.
-* `patches`: patches to apply before vendoring. This is useful when
+- `patches`: patches to apply before vendoring. This is useful when
   the `Cargo.lock`/`Cargo.toml` files need to be patched before
   vendoring.
 
@@ -510,7 +510,7 @@ you of the correct hash.
 
 `rustPlatform` provides the following hooks to automate Cargo builds:
 
-* `cargoSetupHook`: configure Cargo to use dependencies vendored
+- `cargoSetupHook`: configure Cargo to use dependencies vendored
   through `fetchCargoVendor` or `importCargoLock`. This hook uses the
   `cargoDeps` environment variable to find the vendored
   dependencies. If a project already vendors its dependencies, the
@@ -518,29 +518,29 @@ you of the correct hash.
   `Cargo.toml`/`Cargo.lock` files are not in `sourceRoot`, then the
   optional `cargoRoot` is used to specify the Cargo root directory
   relative to `sourceRoot`.
-* `cargoBuildHook`: use Cargo to build a crate. If the crate to be
+- `cargoBuildHook`: use Cargo to build a crate. If the crate to be
   built is a crate in e.g. a Cargo workspace, the relative path to the
   crate to build can be set through the optional `buildAndTestSubdir`
   environment variable. Features can be specified with
   `cargoBuildNoDefaultFeatures` and `cargoBuildFeatures`. Additional
   Cargo build flags can be passed through `cargoBuildFlags`.
-* `maturinBuildHook`: use [Maturin](https://github.com/PyO3/maturin)
+- `maturinBuildHook`: use [Maturin](https://github.com/PyO3/maturin)
   to build a Python wheel. Similar to `cargoBuildHook`, the optional
   variable `buildAndTestSubdir` can be used to build a crate in a
   Cargo workspace. Additional Maturin flags can be passed through
   `maturinBuildFlags`.
-* `cargoCheckHook`: run tests using Cargo. The build type for checks
+- `cargoCheckHook`: run tests using Cargo. The build type for checks
   can be set using `cargoCheckType`. Features can be specified with
   `cargoCheckNoDefaultFeatures` and `cargoCheckFeatures`. Additional
   flags can be passed to the tests using `checkFlags` and
   `checkFlagsArray`. By default, tests are run in parallel. This can
   be disabled by setting `dontUseCargoParallelTests`.
-* `cargoNextestHook`: run tests using
+- `cargoNextestHook`: run tests using
   [cargo-nextest](https://github.com/nextest-rs/nextest). The same
   options for `cargoCheckHook` also applies to `cargoNextestHook`.
-* `cargoInstallHook`: install binaries and static/shared libraries
+- `cargoInstallHook`: install binaries and static/shared libraries
   that were built using `cargoBuildHook`.
-* `bindgenHook`: for crates which use `bindgen` as a build dependency, lets
+- `bindgenHook`: for crates which use `bindgen` as a build dependency, lets
   `bindgen` find `libclang` and `libclang` find the libraries in `buildInputs`.
 
 #### Examples {#examples}
@@ -602,7 +602,7 @@ buildPythonPackage rec {
 ```
 
 In some projects, the Rust crate is not in the main Python source
-directory.  In such cases, the `cargoRoot` attribute can be used to
+directory. In such cases, the `cargoRoot` attribute can be used to
 specify the crate's directory relative to `sourceRoot`. In the
 following example, the crate is in `src/rust`, as specified in the
 `cargoRoot` attribute. Note that we also need to specify the correct
@@ -748,7 +748,7 @@ stdenv.mkDerivation (finalAttrs: {
 When run, `cargo build` produces a file called `Cargo.lock`,
 containing pinned versions of all dependencies. Nixpkgs contains a
 tool called `crate2Nix` (`nix-shell -p crate2nix`), which can be
-used to turn a `Cargo.lock` into a Nix expression.  That Nix
+used to turn a `Cargo.lock` into a Nix expression. That Nix
 expression calls `rustc` directly (hence bypassing Cargo), and can
 be used to compile a crate and all its dependencies.
 
@@ -916,6 +916,7 @@ To package things that require Rust nightly, `RUSTC_BOOTSTRAP = true;` can somet
 :::
 
 There are two community maintained approaches to Rust toolchain management:
+
 - [oxalica's Rust overlay](https://github.com/oxalica/rust-overlay)
 - [fenix](https://github.com/nix-community/fenix)
 
@@ -1027,6 +1028,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 ```
 
 Follow the below steps to try that snippet.
+
 1. save the above snippet as `default.nix` in that directory
 2. cd into that directory and run `nix-build`
 
@@ -1038,12 +1040,12 @@ and cross compilation in its [Examples](https://github.com/nix-community/fenix#e
 ## Using `git bisect` on the Rust compiler {#using-git-bisect-on-the-rust-compiler}
 
 Sometimes an upgrade of the Rust compiler (`rustc`) will break a
-downstream package.  In these situations, being able to `git bisect`
+downstream package. In these situations, being able to `git bisect`
 the `rustc` version history to find the offending commit is quite
-useful.  Nixpkgs makes it easy to do this.
+useful. Nixpkgs makes it easy to do this.
 
 First, roll back your nixpkgs to a commit in which its `rustc` used
-*the most recent one which doesn't have the problem.*  You'll need
+_the most recent one which doesn't have the problem._ You'll need
 to do this because of `rustc`'s extremely aggressive
 version-pinning.
 
@@ -1080,14 +1082,14 @@ repository:
 If the problem you're troubleshooting only manifests when
 cross-compiling you can uncomment the `lib.optionalAttrs` in the
 example above, and replace `isAarch64` with the target that is
-having problems.  This will speed up your bisect quite a bit, since
+having problems. This will speed up your bisect quite a bit, since
 the host compiler won't need to be rebuilt.
 
 Now, you can start a `git bisect` in the directory where you checked
-out the `rustc` source code.  It is recommended to select the
+out the `rustc` source code. It is recommended to select the
 endpoint commits by searching backwards from `origin/master` for the
-*commits which added the release notes for the versions in
-question.*  If you set the endpoints to commits on the release
+_commits which added the release notes for the versions in
+question._ If you set the endpoints to commits on the release
 branches (i.e. the release tags), git-bisect will often get confused
 by the complex merge-commit structures it will need to traverse.
 

@@ -3,7 +3,7 @@
 ## Packaging COSMIC applications {#ssec-cosmic-packaging}
 
 COSMIC (Computer Operating System Main Interface Components) is a desktop environment developed by
-System76, primarily for the Pop!_OS Linux distribution. Applications in the COSMIC ecosystem are
+System76, primarily for the Pop!\_OS Linux distribution. Applications in the COSMIC ecosystem are
 written in Rust and use libcosmic, which builds on the Iced GUI framework. This section explains
 how to properly package and integrate COSMIC applications within Nix.
 

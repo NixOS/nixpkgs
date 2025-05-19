@@ -76,6 +76,7 @@ See [](#ex-portableService-hello) to understand how to use the output of `portab
 
 []{#ex-pkgs-portableService}
 :::{.example #ex-portableService-hello}
+
 # Building a Portable Service image
 
 The following example builds a Portable Service image with the `hello` package, along with a service unit that runs it.
@@ -134,9 +135,11 @@ Removed /etc/systemd/system.attached/hello.service.d.
 Removed /etc/portables/hello_2.12.1.raw.
 Removed /etc/systemd/system.attached.
 ```
+
 :::
 
 :::{.example #ex-portableService-symlinks}
+
 # Specifying symlinks when building a Portable Service image
 
 Some services may expect files or directories to be available globally.
@@ -175,4 +178,5 @@ portableService {
   ];
 }
 ```
+
 :::

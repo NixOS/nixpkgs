@@ -1,4 +1,5 @@
 # Generators {#sec-generators}
+
 Generators are functions that create file formats from nix data structures, e. g. for configuration files. There are generators available for: `INI`, `JSON` and `YAML`
 
 All generators follow a similar call interface: `generatorName configFunctions data`, where `configFunctions` is an attrset of user-defined functions that format nested parts of the content. They each have common defaults, so often they do not need to be set manually. An example is `mkSectionName ? (name: libStr.escape [ "[" "]" ] name)` from the `INI` generator. It receives the name of a section and sanitizes it. The default `mkSectionName` escapes `[` and `]` with a backslash.

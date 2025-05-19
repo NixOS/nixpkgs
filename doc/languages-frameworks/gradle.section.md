@@ -105,6 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 })
 ```
+
 The limitation of this method is that you cannot override the `pkg` derivations's arguments.
 
 In the former case, the update script will stay the same even if the derivation is called with different arguments. In the latter case, the update script will change depending on the derivation arguments. It's up to you to decide which one would work best for your derivation.
@@ -170,11 +171,11 @@ The Gradle setup hook accepts the following environment variables:
   creation is used.
   - Note that reproducible archives might break some builds. One example
     of an error caused by it is `Could not create task ':jar'. Replacing
-    an existing task that may have already been used by other plugins is
-    not supported`. If you get such an error, the easiest "fix" is
+an existing task that may have already been used by other plugins is
+not supported`. If you get such an error, the easiest "fix" is
     disabling reproducible archives altogether by setting
     `gradleInitScript` to something like `writeText
-    "empty-init-script.gradle" ""`
+"empty-init-script.gradle" ""`
 - `enableParallelBuilding` / `enableParallelChecking` /
   `enableParallelUpdating` - pass `--parallel` to Gradle in the
   build/check phase or in the update script. Defaults to true. If the

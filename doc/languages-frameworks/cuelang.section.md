@@ -26,6 +26,7 @@ Cuelang schemas are similar to JSON, here is a quick cheatsheet:
 Nixpkgs provides a `pkgs.writeCueValidator` helper, which will write a validation script based on the provided Cuelang schema.
 
 Here is an example:
+
 ```nix
 pkgs.writeCueValidator (pkgs.writeText "schema.cue" ''
   #Def1: {
@@ -40,6 +41,7 @@ pkgs.writeCueValidator (pkgs.writeText "schema.cue" ''
 `document` : match your input data against this fragment of structure or definition, e.g. you may use the same schema file but different documents based on the data you are validating.
 
 Another example, given the following `validator.nix` :
+
 ```nix
 {
   pkgs ? import <nixpkgs> { },
@@ -66,6 +68,7 @@ The result is a script that will validate the file you pass as the first argumen
 It can be any format that `cue vet` supports, i.e. YAML or JSON for example.
 
 Here is an example, named `example.json`, given the following JSON:
+
 ```json
 { "field1": "abc" }
 ```
@@ -88,4 +91,4 @@ field1: conflicting values 3 and string (mismatched types int and string):
 
 **Known limitations**
 
-* The script will enforce **concrete** values and will not accept lossy transformations (strictness). You can add these options if you need them.
+- The script will enforce **concrete** values and will not accept lossy transformations (strictness). You can add these options if you need them.
