@@ -11,13 +11,13 @@
   libX11,
   SDL2,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "golly";
   version = "4.3";
 
   src = fetchurl {
     hash = "sha256-UdJHgGPn7FDN4rYTgfPBAoYE5FGC43TP8OFBmYIqCB0=";
-    url = "mirror://sourceforge/project/golly/golly/golly-${version}/golly-${version}-src.tar.gz";
+    url = "mirror://sourceforge/project/golly/golly/golly-${finalAttrs.version}/golly-${finalAttrs.version}-src.tar.gz";
   };
 
   buildInputs = [
@@ -63,6 +63,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp ../golly ../bgolly "$out/bin"
 
@@ -71,13 +73,16 @@ stdenv.mkDerivation rec {
 
     mkdir -p "$out/share/golly"
     cp -r ../{Help,Patterns,Scripts,Rules} "$out/share/golly"
+
+    runHook postInstall
   '';
 
   meta = {
     description = "Cellular automata simulation program";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
+    homepage = "https://golly.sourceforge.io/";
     downloadPage = "https://sourceforge.net/projects/golly/files/golly";
   };
-}
+})
