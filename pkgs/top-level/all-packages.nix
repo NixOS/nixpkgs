@@ -91,6 +91,36 @@ with pkgs;
   gccStdenvNoLibs = mkStdenvNoLibs gccStdenv;
   clangStdenvNoLibs = mkStdenvNoLibs clangStdenv;
 
+  stdenvUutilsCoreutils =
+    let
+      uutils-coreutils = pkgs.uutils-coreutils-minimal;
+      bintools = wrapBintoolsWith {
+        bintools = stdenv.cc.bintools.bintools;
+        coreutils = uutils-coreutils;
+      };
+    in
+    stdenv.override {
+      cc = stdenv.cc.override {
+        coreutils = uutils-coreutils;
+        inherit bintools;
+      };
+
+      initialPath = (lib.remove coreutils stdenv.initialPath) ++ [ uutils-coreutils ];
+      allowedRequisites = lib.mapNullable (
+        rs:
+        (lib.remove [
+          bintools
+          expand-response-params
+          coreutils
+        ] rs)
+        ++ [
+          bintools
+          expand-response-params
+          uutils-coreutils
+        ]
+      ) (stdenv.allowedRequisites or null);
+    };
+
   # For convenience, allow callers to get the path to Nixpkgs.
   path = ../..;
 
@@ -2710,13 +2740,15 @@ with pkgs;
     llvmPackages = llvmPackages_13;
   };
 
-  coreutils = callPackage ../tools/misc/coreutils { };
+  coreutils =
+    if stdenv.hostPlatform.useUutilsCoreutils or false then uutils-coreutils else gnu-coreutils;
+  gnu-coreutils = callPackage ../tools/misc/coreutils { };
 
   # The coreutils above are built with dependencies from
   # bootstrapping. We cannot override it here, because that pulls in
   # openssl from the previous stage as well.
-  coreutils-full = callPackage ../tools/misc/coreutils { minimal = false; };
-  coreutils-prefixed = coreutils.override {
+  coreutils-full = gnu-coreutils.override { minimal = false; };
+  coreutils-prefixed = gnu-coreutils.override {
     withPrefix = true;
     singleBinary = false;
   };
@@ -2877,6 +2909,11 @@ with pkgs;
 
   uutils-coreutils-noprefix = uutils-coreutils.override { prefix = null; };
 
+  uutils-coreutils-minimal = pkgs.uutils-coreutils.override {
+    prefix = null;
+    withDocs = false;
+  };
+
   vorta = qt6Packages.callPackage ../applications/backup/vorta { };
 
   xkcdpass = with python3Packages; toPythonApplication xkcdpass;
@@ -2977,7 +3014,10 @@ with pkgs;
     inherit (windows) libgnurx;
   };
 
-  findutils = callPackage ../tools/misc/findutils { };
+  findutils = callPackage ../tools/misc/findutils {
+    coreutils =
+      if stdenv.hostPlatform.useUutilsCoreutils or false then uutils-coreutils-minimal else gnu-coreutils;
+  };
 
   bsd-fingerd = bsd-finger.override {
     buildProduct = "daemon";
