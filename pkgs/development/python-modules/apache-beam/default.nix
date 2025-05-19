@@ -63,14 +63,14 @@
 
 buildPythonPackage rec {
   pname = "apache-beam";
-  version = "2.63.0";
+  version = "2.65.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "beam";
     tag = "v${version}";
-    hash = "sha256-ixJstawgU3UGtNKVzkwMCLkdY7QKTbxNe6JJ7vG+vmA=";
+    hash = "sha256-vDW0PVNep+egIZBe4t8IPwLgsQDmoO4rrA4wUoAHzfg=";
   };
 
   pythonRelaxDeps = [
@@ -366,7 +366,7 @@ buildPythonPackage rec {
   meta = {
     description = "Unified model for defining both batch and streaming data-parallel processing pipelines";
     homepage = "https://beam.apache.org/";
-    changelog = "https://github.com/apache/beam/blob/release-${version}/CHANGES.md";
+    changelog = "https://github.com/apache/beam/blob/release-${src.tag}/CHANGES.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
   };
