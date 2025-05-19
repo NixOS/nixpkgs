@@ -596,9 +596,9 @@
   },
   "k8s-runtime": {
     "pname": "k8s-runtime",
-    "version": "1.0.4",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/k8s_runtime-1.0.4-py3-none-any.whl",
-    "hash": "sha256-ruLTAI2BjXg0IUnm8dLHkiq7vkPzI9UebNWMc7HGezo=",
+    "version": "2.0.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/k8s_runtime-2.0.0-py3-none-any.whl",
+    "hash": "sha256-SSW6qtKarGtCPsi88PWG4IWX5YzTQ9WoyNqiKbx8mok=",
     "description": "Microsoft Azure Command-Line Tools K8sRuntime Extension"
   },
   "kusto": {
