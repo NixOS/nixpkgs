@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
 
   cfg = config.services.xserver.windowManager.sxwm;
@@ -18,12 +16,12 @@ in
   ###### interface
 
   options = {
-    services.xserver.windowManager.sxwm.enable = mkEnableOption "sxwm";
+    services.xserver.windowManager.sxwm.enable = lib.mkEnableOption "sxwm";
   };
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     services.xserver.windowManager.session = singleton {
       name = "sxwm";
