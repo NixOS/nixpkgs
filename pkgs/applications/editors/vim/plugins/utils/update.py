@@ -3,9 +3,9 @@
 # run with:
 # $ nix run .\#vimPluginsUpdater
 # format:
-# $ nix run nixpkgs#python3Packages.ruff -- update.py
+# $ nix run nixpkgs#ruff -- format update.py
 # type-check:
-# $ nix run nixpkgs#python3Packages.mypy -- update.py
+# $ nix run nixpkgs#mypy -- update.py
 # linted:
 # $ nix run nixpkgs#python3Packages.flake8 -- --ignore E501,E265,E402 update.py
 
