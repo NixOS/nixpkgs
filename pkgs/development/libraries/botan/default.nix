@@ -27,6 +27,8 @@ assert lib.assertOneOf "policy" policy [
   "bsi"
   # only allow NIST approved algorithms in FIPS 140
   "fips140"
+  # only allow "modern" algorithms
+  "modern"
 ];
 
 let
