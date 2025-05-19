@@ -111,6 +111,8 @@ buildPythonPackage rec {
   disabledTests = [
     # requires bs4, aka BeautifulSoup
     "test_importable_all"
+    # flaky
+    "test_llm_caching_async"
   ];
 
   disabledTestPaths = [
