@@ -1,18 +1,15 @@
 {
   lib,
   stdenv,
-  mkDerivation,
   fetchFromGitHub,
   cmake,
   fuse3,
   readline,
   pkg-config,
-  qtbase,
-  qttools,
-  wrapQtAppsHook,
+  qt6,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "android-file-transfer";
   version = "4.5";
 
@@ -29,12 +26,12 @@ mkDerivation rec {
     cmake
     readline
     pkg-config
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
   buildInputs = [
     fuse3
-    qtbase
-    qttools
+    qt6.qtbase
+    qt6.qttools
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
