@@ -3,44 +3,35 @@
   lib,
   fetchFromGitHub,
   cmake,
-  libcaption,
   obs-studio,
-  qtbase,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "obs-replay-source";
   version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-replay-source";
-    tag = finalAttrs.version;
-    hash = "sha256-+PSALDqHXPyR0J7YnLn3QgPN6eIoH3yTIm1Bp7Li8c8=";
+    rev = version;
+    sha256 = "sha256-+PSALDqHXPyR0J7YnLn3QgPN6eIoH3yTIm1Bp7Li8c8=";
   };
 
   nativeBuildInputs = [ cmake ];
-
-  buildInputs = [
-    libcaption
-    obs-studio
-    qtbase
-  ];
+  buildInputs = [ obs-studio ];
 
   postInstall = ''
-    mkdir -p $out/lib $out/share
-    mv $out/obs-plugins/64bit $out/lib/obs-plugins
-    rm -rf $out/obs-plugins
-    mv $out/data $out/share/obs
+    rm -rf $out/obs-plugins $out/data
   '';
 
-  dontWrapQtApps = true;
-
-  meta = {
+  meta = with lib; {
     description = "Replay source for OBS studio";
     homepage = "https://github.com/exeldro/obs-replay-source";
-    license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ pschmitt ];
+    license = licenses.gpl2Only;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+      flexiondotorg
+      pschmitt
+    ];
   };
-})
+}
