@@ -19,10 +19,8 @@
 #
 
 import inspect
-import json
 import logging
 import os
-import subprocess
 import textwrap
 from pathlib import Path
 from typing import List, Tuple
@@ -136,20 +134,7 @@ class VimEditor(pluginupdate.Editor):
         # TODO this should probably be skipped when running outside a nixpkgs checkout
         if self.nvim_treesitter_updated:
             print("updating nvim-treesitter grammars")
-            cmd = [
-                "nix",
-                "build",
-                "vimPlugins.nvim-treesitter.src",
-                "-f",
-                self.nixpkgs,
-                "--print-out-paths",
-            ]
-            log.debug("Running command: %s", " ".join(cmd))
-            nvim_treesitter_dir = subprocess.check_output(
-                cmd, text=True, timeout=90
-            ).strip()
-
-            generated = treesitter.update_grammars(nvim_treesitter_dir)
+            generated = treesitter.update_grammars()
             treesitter_generated_nix_path = os.path.join(
                 NIXPKGS_NVIMTREESITTER_FOLDER, "generated.nix"
             )
