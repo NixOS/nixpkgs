@@ -197,6 +197,7 @@ in
 
               [node]
               nickname = ${settings.nickname}
+              # tcp6 means a tcp6 socket - those handle both, ipv4 and ipv6 connections.
               tub.port = tcp6:${toString settings.tub.port}
               ${lib.optionalString (settings.tub.location != null) "tub.location = ${settings.tub.location}"}
             '';
