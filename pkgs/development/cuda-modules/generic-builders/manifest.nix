@@ -321,13 +321,15 @@ in
     description = "${redistribRelease.name}. By downloading and using the packages you accept the terms and conditions of the ${finalAttrs.meta.license.shortName}";
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
     broken = lists.any trivial.id (attrsets.attrValues finalAttrs.brokenConditions);
-    platforms = builtins.attrNames _cudb.recipes.${pname}.platforms;
+    platforms = builtins.attrNames (
+      lib.concatMapAttrs (name: _: _cudb.systems.fromNvidia.${name}) _cudb.packages.systemsNv.${pname}
+    );
     badPlatforms =
       let
         isBadPlatform = lists.any trivial.id (attrsets.attrValues finalAttrs.badPlatformsConditions);
       in
       lists.optionals isBadPlatform finalAttrs.meta.platforms;
-    license = _cudb.licenses.${_cudb.recipes.${pname}.license}.compiled;
+    license = _cudb.licenses.compiled.${_cudb.packages.license.${pname}};
     teams = [ teams.cuda ];
   };
 })).overrideAttrs

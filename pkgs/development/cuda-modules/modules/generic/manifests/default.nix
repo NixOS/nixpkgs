@@ -7,12 +7,16 @@ let
 in
 {
   options.generic.manifests = {
-    feature = import ./feature/manifest.nix { inherit lib config; };
+    feature = lib.mkOption {
+      description = "Feature manifest is an attribute set which includes a mapping from package name to release";
+      example = trivial.importJSON ../../../cuda/manifests/feature_11.5.2.json;
+      type = types.submodule { imports = [ ./feature/manifest.nix ]; };
+    };
 
     redistrib = lib.mkOption {
       description = "Redistributable manifest is an attribute set which includes a mapping from package name to release";
       example = trivial.importJSON ../../../cuda/manifests/redistrib_11.5.2.json;
-      type = types.submodule (import ./redistrib/manifest.nix { inherit lib; });
+      type = types.submodule { imports = [ ./redistrib/manifest.nix ]; };
     };
   };
 }

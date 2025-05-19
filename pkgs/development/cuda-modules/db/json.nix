@@ -5,16 +5,16 @@
 path:
 
 let
-  platformsMap = {
-    "source".platforms = lib.platforms.all;
-    "linux-aarch64".platforms = [ "aarch64-linux" ];
-    "linux-all".platforms = lib.platforms.linux;
-    "linux-ppc64le".platforms = [ "powerpc64le-linux" ];
-    "linux-sbsa".platforms = [ "aarch64-linux" ];
-    "linux-x86_64".platforms = [ "x86_64-linux" ];
-    "windows-x86_64".platforms = lib.platforms.windows;
-  };
-  known.platforms = builtins.attrNames platformsMap;
+  inherit (lib) types;
+  known.systemsNv = [
+    "source"
+    "linux-aarch64"
+    "linux-all"
+    "linux-ppc64le"
+    "linux-sbsa"
+    "linux-x86_64"
+    "windows-x86_64"
+  ];
   known.badProducts = [
     "cudnn-v8-9-cuda-12"
     "cudnn-v8-9-cuda-11"
@@ -34,30 +34,51 @@ let
     name: p:
     !(builtins.elem name known.toplevel)
     && builtins.isAttrs p
-    && builtins.any (lib.flip builtins.elem known.platforms) (builtins.attrNames p);
+    && builtins.any looksLikeSystem (builtins.attrNames p);
+  looksLikeSystem = lib.flip builtins.elem known.systemsNv;
   licenseOf =
-    pname: rawPackage:
-    if rawPackage.license != null then
-      rawPackage.license
-    else if productName == "cuda" then
-      lib.licenses.nvidiaCudaRedist.shortName
-    else if productName != null then
-      productName
-    else
-      null;
-  evaluated = lib.evalModules {
-    modules = [
-      (builtins.fromJSON (builtins.readFile path))
-      (import ../modules/generic/manifests/redistrib/manifest.nix { inherit lib; })
-    ];
-  };
-  raw = evaluated.config;
-  concatMapRaw = lib.flip lib.concatMap (lib.attrsToList raw);
-  concatMapAttrsRaw = lib.flip lib.concatMapAttrs raw;
+    pname: perSystem:
+    lib.addErrorContext "While inferring the license of ${pname}" (
+      if perSystem.license or null != null then
+        perSystem.license
+      else if productName == "cuda" then
+        lib.licenses.nvidiaCudaRedist.shortName
+      else if productName != null then
+        productName
+      else
+        null
+    );
+  # Handle inconsistencies like "Imex" v. "Nvidia-Imex"
+  mkChooseLonger' =
+    maxPrio: s:
+    lib.mkOverride (lib.modules.defaultOverridePriority - (lib.min maxPrio (lib.stringLength s))) s;
+  mkChooseLonger = mkChooseLonger' 40;
+  evaluated =
+    let
+      manifestDecl = ../modules/generic/manifests/redistrib/manifest.nix;
+      featureDecl = ../modules/generic/manifests/feature/manifest.nix;
+    in
+    lib.evalModules {
+      modules = [
+        (builtins.fromJSON (builtins.readFile path) // { _file = path; })
+        {
+          freeformType =
+            if lib.hasPrefix "feature_" (builtins.baseNameOf path) then
+              (types.submodule {
+                imports = [ featureDecl ];
+              })
+            else
+              (types.submodule {
+                imports = [ manifestDecl ];
+              });
+          _file = ./json.nix;
+        }
+      ];
+    };
   productName =
-    if builtins.elem raw.release_product known.badProducts then
+    if builtins.elem raw.release_product or null known.badProducts then
       builtins.head (
-        lib.optionals (raw.release_product != null)
+        lib.optionals (raw.release_product or null != null)
           # Cf. cudnn circa 8.9 (e.g. cudnn-v8-9-cuda-12)
           (lib.splitString "-" raw.release_product)
         ++ concatMapRaw (
@@ -67,7 +88,6 @@ let
           in
           lib.optionals (looksLikePackage name rawPackage) (
             lib.optionals (builtins.elem name known.products) [
-              name
             ]
           )
         )
@@ -75,51 +95,155 @@ let
       )
     else
       raw.release_product;
+  distribution_path = if productName == null then null else "${productName}/redist/";
+
+  raw = evaluated.config;
+  concatMapRaw = lib.flip lib.concatMap (lib.attrsToList raw);
+
+  rawPackages = lib.filterAttrs looksLikePackage raw;
+
+  fmapPackages =
+    let
+      apply = f: { name, value }: f name value;
+      fmapAttrsToList = attrs: f: lib.concatMap (apply f) (lib.attrsToList attrs);
+    in
+    f:
+    fmapAttrsToList rawPackages (
+      pname: perSystem:
+      let
+        hasTags = perSystem._recurseForTags or false; # `or false` branch for feature_*.json
+        otherAttrs = lib.filterAttrs (name: _: !(looksLikeSystem name)) perSystem;
+        actualSystems = lib.filterAttrs (
+          name: _:
+          !(builtins.elem name [
+            "_recurseForTags"
+            "cuda_variant"
+            "license"
+            "license_path"
+            "version"
+            "name"
+          ])
+        ) perSystem;
+        result =
+          if hasTags then
+            fmapAttrsToList actualSystems (
+              systemNv: perTag:
+              lib.addErrorContext "While unpacking `${pname}.${systemNv}` as `perTag`" (
+                fmapAttrsToList perTag (
+                  tag: rawPackage:
+                  lib.addErrorContext "While parsing systemNv=${systemNv} tag=${tag} from path=${path}" (
+                    f otherAttrs pname systemNv tag rawPackage
+                  )
+                )
+              )
+            )
+          else
+            fmapAttrsToList actualSystems (systemNv: rawPackage: f otherAttrs pname systemNv null rawPackage);
+      in
+      lib.addErrorContext "While parsing pname=${pname} from path=${path}" result
+    );
 
   mkDefaultHarder = lib.mkOverride 900;
+  mkDefaultWeaker = lib.mkOverride 1100;
+  pnames = lib.mapAttrs (_: _: 1) rawPackages;
 in
+
+{ config, ... }:
+
 {
-  recipes = concatMapAttrsRaw (
-    name: rawPackage:
-    let
-      license = licenseOf name rawPackage;
-    in
-    lib.optionalAttrs (looksLikePackage name rawPackage) {
-      ${name} =
+  _file = ./json.nix;
+  config = lib.mkMerge (
+    (fmapPackages (
+      otherAttrs: pname: systemNv: _: rawPackage: [
         {
-          license = if rawPackage.license != null then license else lib.mkDefault license;
-          platforms = lib.genAttrs (builtins.concatMap (
-            nv-platform: platformsMap.${nv-platform}.platforms or [ ]
-          ) (builtins.attrNames rawPackage)) (_: "");
+          packages.name.${pname} =
+            if otherAttrs ? name then mkChooseLonger otherAttrs.name else lib.mkDefault pname;
         }
-        // lib.optionalAttrs (rawPackage.name != null) {
-          name =
+      ]
+    ))
+    ++ (fmapPackages (
+      _: pname: systemNv: _: rawPackage:
+      lib.optionals (looksLikeSystem systemNv) [
+        {
+          packages.systemsNv.${pname}.${systemNv} = 1;
+        }
+      ]
+    ))
+    ++ [
+      {
+        packages = {
+          inherit pnames;
+          license =
             let
-              # Handle inconsistencies like "Imex" v. "Nvidia-Imex"
-              prioByLength =
-                maxPrio: s:
-                lib.mkOverride (lib.modules.defaultOverridePriority - (lib.min maxPrio (lib.stringLength s))) s;
+              licenseWithPriority =
+                otherAttrs: pname: systemNv: _: rawPackage:
+                let
+                  license = licenseOf pname otherAttrs;
+                in
+                lib.optionals (license != null) [
+                  {
+                    ${pname} = mkChooseLonger license;
+                  }
+                ];
             in
-            prioByLength 40 rawPackage.name;
+            lib.mergeAttrsList (fmapPackages licenseWithPriority);
+          overrideLicenseUrl =
+            let
+              overrideUrl =
+                otherAttrs: pname: systemNv: _: _:
+                let
+                  shortName = licenseOf pname otherAttrs;
+                  defined = distribution_path != null && otherAttrs.license_path or null != null;
+                  proposal = "${config.base_url}${distribution_path}${otherAttrs.license_path}";
+                  needsOverride = proposal != config.licenses.compiled.${shortName}.url;
+                in
+                lib.optionals (defined && needsOverride) [
+                  {
+                    ${pname} = mkDefaultHarder proposal;
+                  }
+                ];
+            in
+            lib.mergeAttrsList (fmapPackages overrideUrl);
         };
-    }
-  );
-  licenses = concatMapAttrsRaw (
-    name: rawPackage:
-    let
-      shortName = licenseOf name rawPackage;
-    in
-    lib.optionalAttrs (looksLikePackage name rawPackage && shortName != null) {
-      ${shortName} =
-        {
-          license_path = lib.mkDefault "${name}/LICENSE.txt";
-        }
-        // lib.optionalAttrs (productName != null) {
-          distribution_path = mkDefaultHarder "${productName}/redist/";
-        }
-        // lib.optionalAttrs (rawPackage.license_path != null) {
-          license_path = rawPackage.license_path;
-        };
-    }
+        licenses =
+          let
+            shortNames = lib.concatMapAttrs (
+              pname: perSystem:
+              let
+                shortName = licenseOf pname perSystem;
+              in
+              lib.optionalAttrs (shortName != null) { ${shortName} = 1; }
+            ) rawPackages;
+          in
+          {
+            inherit shortNames;
+            license_path = lib.concatMapAttrs (
+              pname: perSystem:
+              let
+                shortName = licenseOf pname perSystem;
+              in
+              lib.optionalAttrs (shortName != null) { ${shortName} = mkDefaultHarder "${pname}/LICENSE.txt"; }
+            ) rawPackages;
+            distribution_path = lib.mapAttrs (
+              _: _:
+              if distribution_path == null then
+                mkDefaultWeaker null
+              else
+                mkDefaultHarder distribution_path
+            ) shortNames;
+            compiled = lib.concatMapAttrs (
+              pname: perSystem:
+              let
+                shortName = licenseOf pname perSystem;
+              in
+              lib.optionalAttrs (shortName != null) {
+                ${shortName} = {
+                  redistributable = mkDefaultWeaker true;
+                };
+              }
+            ) rawPackages;
+          };
+      }
+    ]
   );
 }

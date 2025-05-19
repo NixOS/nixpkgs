@@ -1,53 +1,25 @@
 { lib, config, ... }:
 let
-  inherit (lib) mkOption;
+  inherit (lib) mkOption types;
   inherit (lib.types)
     attrsOf
-    nullOr
     bool
+    enum
+    listOf
+    nullOr
     str
     submodule
-    enum
     ;
 
-  Unit = enum [ "" ];
+  Unit = enum [ 1 ];
   SetOfStr = attrsOf Unit;
 
+  columnar = import ./columnar.nix;
   cudb = config;
 in
 {
-  imports = [
-  ];
   options =
     let
-      Recipe = submodule (
-        { name, ... }:
-        let
-          pname = name;
-        in
-        {
-          options = {
-            pname = mkOption {
-              type = str;
-              default = pname;
-            };
-            name = mkOption {
-              type = nullOr str;
-              default = null;
-            };
-            platforms = mkOption {
-              type = SetOfStr;
-              default = { };
-              description = "All platforms potentially supported by the package";
-            };
-            license = mkOption {
-              type = enum (builtins.attrNames config.licenses);
-              default = "${pname} EULA";
-              defaultText = "\${pname} EULA";
-            };
-          };
-        }
-      );
       License = submodule (
         { name, config, ... }:
         let
@@ -55,100 +27,160 @@ in
         in
         {
           options = {
-            distribution_path = mkOption {
-              type = nullOr str;
-              example = "cutensor/redist/";
+            fullName = mkOption {
+              type = str;
+              default = config.shortName;
+              defaultText = "<shortName>";
             };
-            license_path = mkOption {
-              type = nullOr str;
-              # default = "cuda_cudart/LICENSE.txt";
+            shortName = mkOption {
+              type = str;
+              default = shortName;
+              defaultText = "<name>";
             };
-            compiled = {
-              fullName = mkOption {
-                type = str;
-                default = config.compiled.shortName;
-                defaultText = "<shortName>";
-              };
-              shortName = mkOption {
-                type = str;
-                default = shortName;
-                defaultText = "<name>";
-              };
-              free = mkOption {
-                type = bool;
-                default = false;
-              };
-              redistributable = mkOption {
-                type = bool;
-                default = true;
-              };
-              deprecated = mkOption {
-                type = bool;
-                default = false;
-              };
-              spdxId = mkOption {
-                type = nullOr str;
-                default = null;
-              };
-              url = mkOption {
-                type = nullOr str;
-                default = "${cudb.base_url}${config.distribution_path}${config.license_path}";
-                defaultText = "\${cudb.base_url}\${distribution_path}\${license_path}";
-              };
+            free = mkOption {
+              type = bool;
+              default = false;
+            };
+            redistributable = mkOption {
+              type = bool;
+              default = true;
+            };
+            deprecated = mkOption {
+              type = bool;
+              default = false;
+            };
+            spdxId = mkOption {
+              type = nullOr str;
+              default = null;
+            };
+            url = mkOption {
+              type = nullOr str;
+              default =
+                let
+                  ensureComposable = base: if lib.hasSuffix "/" base then base else "${base}/";
+                  base_url = ensureComposable cudb.base_url;
+                  distribution_path = ensureComposable cudb.licenses.distribution_path.${name};
+                  license_path = cudb.licenses.license_path.${name};
+                in
+                "${base_url}${distribution_path}${license_path}";
+              defaultText = "\${base_url}\${distribution_path}\${license_path}";
             };
           };
         }
       );
     in
     {
-      recipes = mkOption {
-        default = { };
-        type = attrsOf Recipe;
+      packages = {
+        pnames = mkOption {
+          type = SetOfStr;
+        };
+        name = mkOption {
+          type = attrsOf (nullOr str);
+        };
+        # :: PName -> SystemStringNvidia
+        systemsNv = mkOption {
+          type = attrsOf SetOfStr;
+          default = { };
+          example = {
+            libcublas = {
+              linux-aarch64 = 1;
+              linux-sbsa = 1;
+              linux-x86_64 = 1;
+            };
+          };
+        };
+        # :: PName -> LicenseShortName
+        license = mkOption {
+          type =
+            let
+              licenseNames = builtins.attrNames config.licenses.shortNames;
+            in
+            attrsOf (enum licenseNames);
+        };
+        # :: PName -> Option<Url>
+        overrideLicenseUrl = mkOption {
+          type = attrsOf (nullOr str);
+        };
       };
-      licenses = mkOption {
-        default = { };
-        type = attrsOf License;
+      licenses = {
+        # :: Str -> ()
+        shortNames = mkOption {
+          type = attrsOf Unit;
+        };
+        # :: Str -> Option<Str>
+        distribution_path = mkOption {
+          type = attrsOf (nullOr str);
+          example."CUDA Toolkit" = "cutensor/redist/";
+        };
+        # :: Str -> Option<Str>
+        license_path = mkOption {
+          type = attrsOf (nullOr str);
+          example."CUDA Toolkit" = "cuda_cudart/LICENSE.txt";
+        };
+        # :: Str -> License
+        compiled = mkOption {
+          type = attrsOf License;
+          default = { };
+        };
+      };
+      # :: SystemStringNvidia -> ()
+      systems.nvidia = mkOption {
+        type = SetOfStr;
+      };
+      # :: SystemStringNvidia -> System -> ()
+      systems.fromNvidia = mkOption {
+        type = attrsOf (attrsOf Unit);
+      };
+      # :: SystemStringNvidia -> Bool
+      systems.isSource = mkOption {
+        type = attrsOf bool;
+      };
+      # :: SystemStringNvidia -> Bool
+      systems.isJetson = mkOption {
+        type = attrsOf bool;
+      };
+      systems.jetsonCompatible = mkOption {
+        type = attrsOf bool;
       };
       base_url = mkOption {
         type = str;
         default = "https://developer.download.nvidia.com/compute/";
       };
+
+      assertions = mkOption {
+        type = listOf types.unspecified;
+        default = [ ];
+      };
     };
-  # Fill in the gaps
+  imports = [ ./static.nix ];
   config = {
+    assertions = builtins.filter ({ assertion, ... }: !assertion) (
+      columnar.domainAssertions "license" "shortNames" cudb.licenses
+      ++ columnar.domainAssertions "packages" "pnames" cudb.packages
+    );
     licenses =
       let
-        redist = lib.licenses.nvidiaCudaRedist;
-        legacy = lib.licenses.nvidiaCuda;
+        inherit (cudb.licenses) shortNames;
       in
       {
-        "${redist.shortName}" = {
-          compiled = redist;
-        };
-        "${legacy.shortName}" = {
-          compiled = redist;
-          distribution_path = lib.mkDefault null;
-          license_path = lib.mkDefault null;
-        };
-        "MIT" = {
-          compiled = lib.licenses.mit;
-          distribution_path = lib.mkDefault null;
-          license_path = lib.mkDefault null;
-        };
-        "NvidiaProprietary" = {
-          compiled = lib.licenses.unfree // {
-            shortName = "NvidiaProprietary";
-            spdxId = "LicenseRef-NvidiaProprietary"; # Shows up e.g. in TensorRT's doc/Acknowledgements.txt
-            url = lib.mkDefault null;
-          };
-          distribution_path = lib.mkDefault null;
-          license_path = lib.mkDefault null;
-        };
+        compiled = lib.mapAttrs (
+          shortName: _: lib.mkDefault (lib.licenses.nvidiaProprietary // { inherit shortName; })
+        ) shortNames;
+        license_path = lib.mapAttrs (_: _: lib.mkDefault null) shortNames;
+        distribution_path = lib.mapAttrs (_: _: lib.mkDefault null) shortNames;
       };
-    recipes = {
-      tensorrt = {
-        license = "NvidiaProprietary";
+    packages =
+      let
+        inherit (cudb.packages) pnames;
+      in
+      {
+        name = lib.mapAttrs (pname: _: lib.mkDefault pname) pnames;
+        license = lib.mapAttrs (_: _: lib.mkDefault lib.licenses.nvidiaProprietary.shortName) pnames;
+        systemsNv = lib.mapAttrs (_: _: lib.mkDefault { }) pnames;
+        overrideLicenseUrl = lib.mapAttrs (_: _: lib.mkDefault null) pnames;
       };
+    systems = {
+      fromNvidia = lib.mapAttrs (_: _: lib.mkDefault { }) cudb.systems.nvidia;
     };
   };
 }

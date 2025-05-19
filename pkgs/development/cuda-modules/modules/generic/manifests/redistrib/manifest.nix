@@ -9,7 +9,7 @@ in
 {
   keepIndent = {
     # Allow any attribute name as these will be the package names
-    freeformType = types.attrsOf Release.type;
+    freeformType = types.attrsOf Release;
     options = {
       release_date = options.mkOption {
         description = "Release date of the manifest";
@@ -30,6 +30,7 @@ in
         default = null;
       };
     };
+    _file = ./manifest.nix;
   };
 }
 .keepIndent

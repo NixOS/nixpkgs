@@ -30,16 +30,22 @@ let
   releasesModules = builtins.map parseReleasesFile [
     ../tensorrt/releases.nix
   ];
+  evaluated =
+    evalModules {
+      modules =
+        extraModules
+        ++ releasesModules
+        ++ manifestModules
+        ++ [
+          ./schema.nix
+        ];
+    }
+    // {
+      inherit intreeManifests;
+    };
+  errors = builtins.concatMap ({ assertion, message }: lib.optionals (!assertion) [message]) evaluated.config.assertions;
+  error = if errors == [ ] then null else lib.concatStringsSep "\n" errors;
 in
-evalModules {
-  modules =
-    extraModules
-    ++ releasesModules
-    ++ manifestModules
-    ++ [
-      ./schema.nix
-    ];
-}
-// {
-  inherit intreeManifests;
+evaluated // {
+  validConfig = assert lib.assertMsg (errors == [ ]) error; evaluated.config;
 }
