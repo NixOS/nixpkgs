@@ -5,7 +5,6 @@
   fetchFromGitHub,
   fetchYarnDeps,
   replaceVars,
-  runCommand,
   writeShellScriptBin,
 
   copyDesktopItems,
