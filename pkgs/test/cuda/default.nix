@@ -49,5 +49,7 @@ in
   recurseIntoAttrs
 ])
 // {
-  db = (formats.json { }).generate "cudb.json" (import ../../development/cuda-modules/db { }).config;
+  db =
+    (formats.json { }).generate "cudb.json"
+      (import ../../development/cuda-modules/db { }).validConfig;
 }
