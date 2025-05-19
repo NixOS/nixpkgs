@@ -9,7 +9,7 @@
   dprint,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dprint";
   version = "0.50.0";
 
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "dprint";
     repo = "dprint";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-6AgbKH5f7N/yYqq7KBVHOqYbyuZkjFSaYwZwIXsgd9o=";
   };
 
@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     tests.version = testers.testVersion {
-      inherit version;
+      inherit (finalAttrs) version;
 
       package = dprint;
       command = ''
@@ -68,7 +68,7 @@ rustPlatform.buildRustPackage rec {
       It offers multiple WASM plugins to support various languages. It's written in
       Rust, so it’s small, fast, and portable.
     '';
-    changelog = "https://github.com/dprint/dprint/releases/tag/${version}";
+    changelog = "https://github.com/dprint/dprint/releases/tag/${finalAttrs.version}";
     homepage = "https://dprint.dev";
     license = licenses.mit;
     maintainers = with maintainers; [
@@ -78,4 +78,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "dprint";
   };
-}
+})
