@@ -1,15 +1,12 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
   cmake,
-  clang,
-  libclang,
-  libxml2,
   zlib,
   openexr,
   openimageio_2,
-  llvm,
+  llvmPackages_15,
   boost,
   flex,
   bison,
@@ -17,20 +14,25 @@
   pugixml,
   util-linux,
   python3,
+  qt6,
+  robin-map,
+  libxml2,
 }:
 
 let
+  llvmPackages = llvmPackages_15;
   boost_static = boost.override { enableStatic = true; };
 in
-stdenv.mkDerivation rec {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "openshadinglanguage";
-  version = "1.13.11.0";
+  version = "1.14.5.1";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenShadingLanguage";
-    rev = "v${version}";
-    hash = "sha256-E/LUTtT0ZU0SBuwtJPA0FznvOuc2a3aJn2/n3ru5l0s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dmGVCx4m2bkeKhAJbU1mrzEDAmnL++7GA5okb9wwk/Y=";
   };
 
   cmakeFlags = [
@@ -40,28 +42,35 @@ stdenv.mkDerivation rec {
 
     # Build system implies llvm-config and llvm-as are in the same directory.
     # Override defaults.
-    "-DLLVM_DIRECTORY=${llvm}"
-    "-DLLVM_CONFIG=${llvm.dev}/bin/llvm-config"
-    "-DLLVM_BC_GENERATOR=${clang}/bin/clang++"
+    "-DLLVM_DIRECTORY=${llvmPackages.llvm}"
+    "-DLLVM_CONFIG=${llvmPackages.llvm.dev}/bin/llvm-config"
+    "-DLLVM_BC_GENERATOR=${llvmPackages.clang}/bin/clang++"
 
-    # Set C++11 to C++14 required for LLVM10+
-    "-DCMAKE_CXX_STANDARD=14"
+    # Set C++17 required for LLVM15+
+    "-DCMAKE_CXX_STANDARD=17"
+    "-DCLANG_LIBRARY_DIR=${llvmPackages.clang-unwrapped}/lib"
+    "-DCLANG_LIBRARIES=clang-cpp"
   ];
 
-  preConfigure = "patchShebangs src/liboslexec/serialize-bc.bash ";
+  preConfigure = ''
+    patchShebangs src/liboslexec/serialize-bc.bash
+  '';
 
   nativeBuildInputs = [
-    bison
-    clang
     cmake
+    bison
     flex
+    llvmPackages.clang
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs =
     [
       boost_static
-      libclang
-      llvm
+      llvmPackages.llvm
+      llvmPackages.clang
+      llvmPackages.libclang
+      llvmPackages.clang-unwrapped
       openexr
       openimageio_2
       partio
@@ -69,6 +78,8 @@ stdenv.mkDerivation rec {
       python3.pkgs.pybind11
       util-linux # needed just for hexdump
       zlib
+      qt6.qtbase
+      robin-map
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libxml2
@@ -76,14 +87,14 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace "$out"/lib/pkgconfig/*.pc \
-      --replace '=''${exec_prefix}//' '=/'
+      --replace-fail '=''${exec_prefix}//' '=/'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Advanced shading language for production GI renderers";
     homepage = "https://opensource.imageworks.com/osl.html";
-    maintainers = with maintainers; [ hodapp ];
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.hodapp ];
+    platforms = lib.platforms.unix;
   };
-}
+})
