@@ -5,7 +5,6 @@
   ...
 }:
 
-with lib;
 
 let
 
