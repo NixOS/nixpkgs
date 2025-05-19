@@ -30,9 +30,11 @@ let
         ${optionalString (
           hostOpts.useACMEHost != null
         ) "tls ${sslCertDir}/cert.pem ${sslCertDir}/key.pem"}
-        log {
-          ${hostOpts.logFormat}
-        }
+        ${optionalString (hostOpts.logFormat != null) ''
+          log {
+            ${hostOpts.logFormat}
+          }
+        ''}
 
         ${hostOpts.extraConfig}
       }
