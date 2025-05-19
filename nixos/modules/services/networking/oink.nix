@@ -85,6 +85,9 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       script = "${cfg.package}/bin/oink -c ${oinkConfig}";
+      serviceConfig = {
+        Restart = "on-failure";
+      };
     };
   };
 }
