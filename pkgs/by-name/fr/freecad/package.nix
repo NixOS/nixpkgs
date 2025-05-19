@@ -10,7 +10,6 @@
   gfortran,
   gts,
   hdf5,
-  libf2c,
   libGLU,
   libredwg,
   libsForQt5,
@@ -81,6 +80,8 @@ freecad-utils.makeCustomizable (
         ninja
         pkg-config
         gfortran
+        swig
+        doxygen
         wrapGAppsHook3
       ]
       ++ lib.optionals (qtVersion == 5) [
@@ -93,7 +94,6 @@ freecad-utils.makeCustomizable (
       [
         boost
         coin3d
-        doxygen
         eigen
         fmt
         gitpython # for addon manager
@@ -101,7 +101,6 @@ freecad-utils.makeCustomizable (
         hdf5
         libGLU
         libXmu
-        libf2c
         matplotlib
         medfile
         mpi
@@ -115,7 +114,6 @@ freecad-utils.makeCustomizable (
         python
         pyyaml # (at least for) PyrateWorkbench
         scipy
-        swig
         vtk
         xercesc
         yaml-cpp
