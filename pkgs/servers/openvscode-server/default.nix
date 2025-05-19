@@ -218,8 +218,6 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    # Depends on nodejs_18 that has been removed.
-    broken = true;
     mainProgram = "openvscode-server";
   };
 })
