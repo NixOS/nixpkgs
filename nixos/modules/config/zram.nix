@@ -109,6 +109,15 @@ in
           as there's no gain from keeping them in RAM.
         '';
       };
+
+      recommendedSysctlSettings = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Enable sysctl settings from https://wiki.archlinux.org/title/Zram#Optimizing_swap_on_zram.
+          May set values which aren't ideal for non-zram swap
+        '';
+      };
     };
 
   };
@@ -121,6 +130,22 @@ in
         message = "A single writeback device cannot be shared among multiple zram devices";
       }
     ];
+
+    # https://wiki.archlinux.org/title/Zram#Optimizing_swap_on_zram
+    boot.kernel.sysctl = lib.mkIf cfg.recommendedSysctlSettings {
+      # https://github.com/pop-os/default-settings/blob/041cd94158142d6a34d2e684c847ac239a5ba086/etc/sysctl.d/10-pop-default-settings.conf#L2-L3
+      # These values are what PopOS always uses, Perhaps they could be moved to `nixos/modules/config/sysctl.nix`
+      "vm.watermark_boost_factor" = 0;
+      "vm.watermark_scale_factor" = 125;
+      # See https://github.com/pop-os/default-settings/blob/041cd94158142d6a34d2e684c847ac239a5ba086/usr/bin/pop-zram-config
+      # and https://web.archive.org/web/20231027213550/https://old.reddit.com/r/Fedora/comments/mzun99/new_zram_tuning_benchmarks/
+      # These values are what PopOS uses when setting up zram
+      # > Number of consecutive pages to read in advance. Higher values increase compression
+      # > for zram devices, but at the cost of significantly reduced IOPS and higher latency.
+      # > It is highly recommended to use 0 for zstd; and 1 for speedier algorithms.
+      "vm.page-cluster" = if cfg.algorithm == "zstd" then 0 else 1;
+      "vm.swappiness" = 180;
+    };
 
     services.zram-generator.enable = true;
 
