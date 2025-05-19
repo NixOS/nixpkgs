@@ -4532,14 +4532,6 @@ with pkgs;
 
   teamviewer = libsForQt5.callPackage ../applications/networking/remote/teamviewer { };
 
-  inherit
-    (callPackages ../servers/teleport {
-    })
-    teleport_16
-    teleport_17
-    teleport
-    ;
-
   telepresence = callPackage ../tools/networking/telepresence {
     pythonPackages = python3Packages;
   };
@@ -16522,8 +16514,6 @@ with pkgs;
   pgadmin4 = callPackage ../tools/admin/pgadmin { };
 
   pgadmin4-desktopmode = callPackage ../tools/admin/pgadmin { server-mode = false; };
-
-  pgmodeler = qt6Packages.callPackage ../applications/misc/pgmodeler { };
 
   philipstv = with python3Packages; toPythonApplication philipstv;
 
