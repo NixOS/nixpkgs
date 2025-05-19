@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "logseq";
     repo = "logseq";
-    rev = "${finalAttrs.version}";
+    tag = "${finalAttrs.version}";
     hash = "sha256-eqs6yTooN40b30jwftXMXpIt6JA9zghVb39XXXsh3Ps=";
   };
 
