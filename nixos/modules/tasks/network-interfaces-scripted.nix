@@ -136,6 +136,12 @@ let
           conflicts = [ "shutdown.target" ];
           wantedBy = [ "multi-user.target" ] ++ optional hasDefaultGatewaySet "network-online.target";
 
+          # Stop+starting the network can break
+          # switch-to-configuration on NFS clients by reloading the
+          # systemd config when the NFS server is unreachable. Do an
+          # in-place restart after systemd has reloaded instead.
+          stopIfChanged = false;
+
           unitConfig.ConditionCapability = "CAP_NET_ADMIN";
 
           path = [ pkgs.iproute2 ];
