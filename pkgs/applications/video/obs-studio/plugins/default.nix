@@ -48,6 +48,8 @@
 
   obs-ndi = qt6Packages.callPackage ./obs-ndi { };
 
+  obs-noise = callPackage ./obs-noise.nix { };
+
   obs-nvfbc = callPackage ./obs-nvfbc.nix { };
 
   obs-pipewire-audio-capture = callPackage ./obs-pipewire-audio-capture.nix { };
