@@ -241,7 +241,10 @@ freecad-utils.makeCustomizable (
         right at home with FreeCAD.
       '';
       license = lib.licenses.lgpl2Plus;
-      maintainers = with lib.maintainers; [ srounce ];
+      maintainers = with lib.maintainers; [
+        srounce
+        grimmauld
+      ];
       platforms = lib.platforms.linux;
     };
   })
