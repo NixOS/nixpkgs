@@ -687,9 +687,9 @@
   },
   "mixed-reality": {
     "pname": "mixed-reality",
-    "version": "0.0.5",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/mixed_reality-0.0.5-py2.py3-none-any.whl",
-    "hash": "sha256-AmqvWPmtAtdIN9IaH1wSImSlmBTgt8OVwm5f3BKTGH4=",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/mixed_reality-1.0.0b1-py2.py3-none-any.whl",
+    "hash": "sha256-o8Grh7xfaLhlvW+T1WLkDR6kvcSFqs/gkAZz3j+rmGk=",
     "description": "Mixed Reality Azure CLI Extension"
   },
   "mobile-network": {
