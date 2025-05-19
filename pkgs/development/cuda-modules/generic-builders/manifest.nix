@@ -322,14 +322,14 @@ in
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
     broken = lists.any trivial.id (attrsets.attrValues finalAttrs.brokenConditions);
     platforms = builtins.attrNames (
-      lib.concatMapAttrs (name: _: _cudb.systems.fromNvidia.${name}) _cudb.packages.systemsNv.${pname}
+      lib.concatMapAttrs (name: _: _cudb.system.fromNvidia.${name}) _cudb.package.systemsNv.${pname}
     );
     badPlatforms =
       let
         isBadPlatform = lists.any trivial.id (attrsets.attrValues finalAttrs.badPlatformsConditions);
       in
       lists.optionals isBadPlatform finalAttrs.meta.platforms;
-    license = _cudb.licenses.compiled.${_cudb.packages.license.${pname}};
+    license = _cudb.license.compiled.${_cudb.package.license.${pname}};
     teams = [ teams.cuda ];
   };
 })).overrideAttrs

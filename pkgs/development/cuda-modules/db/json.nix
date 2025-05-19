@@ -145,7 +145,7 @@ let
 
   mkDefaultHarder = lib.mkOverride 900;
   mkDefaultWeaker = lib.mkOverride 1100;
-  pnames = lib.mapAttrs (_: _: 1) rawPackages;
+  pname = lib.mapAttrs (_: _: 1) rawPackages;
 in
 
 { config, ... }:
@@ -156,7 +156,7 @@ in
     (fmapPackages (
       otherAttrs: pname: systemNv: _: rawPackage: [
         {
-          packages.name.${pname} =
+          package.name.${pname} =
             if otherAttrs ? name then mkChooseLonger otherAttrs.name else lib.mkDefault pname;
         }
       ]
@@ -165,14 +165,15 @@ in
       _: pname: systemNv: _: rawPackage:
       lib.optionals (looksLikeSystem systemNv) [
         {
-          packages.systemsNv.${pname}.${systemNv} = 1;
+          package.systemsNv.${pname}.${systemNv} = 1;
+          system.nvidia.${systemNv} = 1;
         }
       ]
     ))
     ++ [
       {
-        packages = {
-          inherit pnames;
+        package = {
+          inherit pname;
           license =
             let
               licenseWithPriority =
@@ -195,7 +196,7 @@ in
                   shortName = licenseOf pname otherAttrs;
                   defined = distribution_path != null && otherAttrs.license_path or null != null;
                   proposal = "${config.base_url}${distribution_path}${otherAttrs.license_path}";
-                  needsOverride = proposal != config.licenses.compiled.${shortName}.url;
+                  needsOverride = proposal != config.license.compiled.${shortName}.url;
                 in
                 lib.optionals (defined && needsOverride) [
                   {
@@ -205,7 +206,7 @@ in
             in
             lib.mergeAttrsList (fmapPackages overrideUrl);
         };
-        licenses =
+        license =
           let
             shortNames = lib.concatMapAttrs (
               pname: perSystem:
@@ -216,7 +217,7 @@ in
             ) rawPackages;
           in
           {
-            inherit shortNames;
+            shortName = shortNames;
             license_path = lib.concatMapAttrs (
               pname: perSystem:
               let

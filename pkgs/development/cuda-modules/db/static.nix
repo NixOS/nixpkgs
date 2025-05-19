@@ -6,20 +6,20 @@ let
   listToSetOfStr = lst: builtins.listToAttrs (map (name: lib.nameValuePair name unit) lst);
 in
 {
-  licenses =
+  license =
     let
       redist = lib.licenses.nvidiaCudaRedist;
       legacy = lib.licenses.nvidiaCuda;
       generic = lib.licenses.nvidiaProprietary;
     in
-    columnar.defaults "shortNames"
+    columnar.defaults "shortName"
       {
         compiled = lib.licenses.unfree;
         distribution_path = null;
         license_path = null;
       }
       {
-        shortNames = {
+        shortName = {
           "CUDA Toolkit" = 1;
           "${legacy.shortName}" = 1;
           "${generic.shortName}" = 1;
@@ -33,7 +33,7 @@ in
         };
         distribution_path = { };
       };
-  systems =
+  system =
     columnar.defaults "nvidia"
       {
         fromNvidia = { };
@@ -74,9 +74,9 @@ in
           "linux-aarch64" = true;
         };
       };
-  packages = {
+  package = {
     # Compensate for missing manifests
-    pnames.tensorrt = 1;
+    pname.tensorrt = 1;
     license.tensorrt = lib.licenses.nvidiaProprietary.shortName;
   };
 }

@@ -59,8 +59,8 @@ in
                 let
                   ensureComposable = base: if lib.hasSuffix "/" base then base else "${base}/";
                   base_url = ensureComposable cudb.base_url;
-                  distribution_path = ensureComposable cudb.licenses.distribution_path.${name};
-                  license_path = cudb.licenses.license_path.${name};
+                  distribution_path = ensureComposable cudb.license.distribution_path.${name};
+                  license_path = cudb.license.license_path.${name};
                 in
                 "${base_url}${distribution_path}${license_path}";
               defaultText = "\${base_url}\${distribution_path}\${license_path}";
@@ -70,8 +70,8 @@ in
       );
     in
     {
-      packages = {
-        pnames = mkOption {
+      package = {
+        pname = mkOption {
           type = SetOfStr;
         };
         name = mkOption {
@@ -93,7 +93,7 @@ in
         license = mkOption {
           type =
             let
-              licenseNames = builtins.attrNames config.licenses.shortNames;
+              licenseNames = builtins.attrNames config.license.shortName;
             in
             attrsOf (enum licenseNames);
         };
@@ -102,9 +102,9 @@ in
           type = attrsOf (nullOr str);
         };
       };
-      licenses = {
+      license = {
         # :: Str -> ()
-        shortNames = mkOption {
+        shortName = mkOption {
           type = attrsOf Unit;
         };
         # :: Str -> Option<Str>
@@ -124,22 +124,22 @@ in
         };
       };
       # :: SystemStringNvidia -> ()
-      systems.nvidia = mkOption {
+      system.nvidia = mkOption {
         type = SetOfStr;
       };
       # :: SystemStringNvidia -> System -> ()
-      systems.fromNvidia = mkOption {
+      system.fromNvidia = mkOption {
         type = attrsOf (attrsOf Unit);
       };
       # :: SystemStringNvidia -> Bool
-      systems.isSource = mkOption {
+      system.isSource = mkOption {
         type = attrsOf bool;
       };
       # :: SystemStringNvidia -> Bool
-      systems.isJetson = mkOption {
+      system.isJetson = mkOption {
         type = attrsOf bool;
       };
-      systems.jetsonCompatible = mkOption {
+      system.jetsonCompatible = mkOption {
         type = attrsOf bool;
       };
       base_url = mkOption {
@@ -155,13 +155,13 @@ in
   imports = [ ./static.nix ];
   config = {
     assertions = builtins.filter ({ assertion, ... }: !assertion) (
-      columnar.domainAssertions "license" "shortNames" cudb.licenses
-      ++ columnar.domainAssertions "packages" "pnames" cudb.packages
-      ++ columnar.domainAssertions "systems" "nvidia" cudb.systems
+      columnar.domainAssertions "license" "shortName" cudb.license
+      ++ columnar.domainAssertions "package" "pname" cudb.package
+      ++ columnar.domainAssertions "system" "nvidia" cudb.system
     );
-    licenses =
+    license =
       let
-        inherit (cudb.licenses) shortNames;
+        shortNames = cudb.license.shortName;
       in
       {
         compiled = lib.mapAttrs (
@@ -170,18 +170,18 @@ in
         license_path = lib.mapAttrs (_: _: lib.mkDefault null) shortNames;
         distribution_path = lib.mapAttrs (_: _: lib.mkDefault null) shortNames;
       };
-    packages =
+    package =
       let
-        inherit (cudb.packages) pnames;
+        inherit (cudb.package) pname;
       in
       {
-        name = lib.mapAttrs (pname: _: lib.mkDefault pname) pnames;
-        license = lib.mapAttrs (_: _: lib.mkDefault lib.licenses.nvidiaProprietary.shortName) pnames;
-        systemsNv = lib.mapAttrs (_: _: lib.mkDefault { }) pnames;
-        overrideLicenseUrl = lib.mapAttrs (_: _: lib.mkDefault null) pnames;
+        name = lib.mapAttrs (pname: _: lib.mkDefault pname) pname;
+        license = lib.mapAttrs (_: _: lib.mkDefault lib.licenses.nvidiaProprietary.shortName) pname;
+        systemsNv = lib.mapAttrs (_: _: lib.mkDefault { }) pname;
+        overrideLicenseUrl = lib.mapAttrs (_: _: lib.mkDefault null) pname;
       };
-    systems = {
-      fromNvidia = lib.mapAttrs (_: _: lib.mkDefault { }) cudb.systems.nvidia;
+    system = {
+      fromNvidia = lib.mapAttrs (_: _: lib.mkDefault { }) cudb.system.nvidia;
     };
   };
 }
