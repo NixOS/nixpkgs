@@ -11,10 +11,8 @@ let
     submodule
     ;
 
-  Unit = enum [ 1 ];
-  SetOfStr = attrsOf Unit;
+  inherit (import ./columnar.nix) Unit SetOfStr mkColumnOption;
 
-  columnar = import ./columnar.nix;
   cudb = config;
 in
 {
@@ -70,78 +68,100 @@ in
       );
     in
     {
-      package = {
-        pname = mkOption {
-          type = SetOfStr;
-        };
-        name = mkOption {
-          type = attrsOf (nullOr str);
-        };
-        # :: PName -> SystemStringNvidia
-        systemsNv = mkOption {
-          type = attrsOf SetOfStr;
-          default = { };
-          example = {
-            libcublas = {
-              linux-aarch64 = 1;
-              linux-sbsa = 1;
-              linux-x86_64 = 1;
+      package =
+        let
+          index = cudb.package.pname;
+        in
+        {
+          pname = mkOption { type = SetOfStr; };
+
+          # :: PName -> String
+          name = mkColumnOption index { type = nullOr str; } { };
+
+          # :: PName -> Set<SystemStringNvidia>
+          systemsNv = mkColumnOption index { type = SetOfStr; } {
+            example = {
+              libcublas = {
+                linux-aarch64 = 1;
+                linux-sbsa = 1;
+                linux-x86_64 = 1;
+              };
             };
           };
+
+          # :: PName -> LicenseShortName
+          license = mkColumnOption index {
+            type =
+              let
+                licenseNames = builtins.attrNames config.license.shortName;
+              in
+              enum licenseNames;
+          } { };
+
+          # :: PName -> Option<Url>
+          overrideLicenseUrl = mkColumnOption index { type = nullOr str; } { };
         };
-        # :: PName -> LicenseShortName
-        license = mkOption {
-          type =
-            let
-              licenseNames = builtins.attrNames config.license.shortName;
-            in
-            attrsOf (enum licenseNames);
+
+      license =
+        let
+          index = cudb.license.shortName;
+        in
+        {
+          # :: Str -> ()
+          shortName = mkOption {
+            type = attrsOf Unit;
+          };
+
+          # :: Str -> Option<Str>
+          distribution_path =
+            mkColumnOption index
+              {
+                type = nullOr str;
+              }
+              {
+                example."CUDA Toolkit" = "cutensor/redist/";
+              };
+
+          # :: Str -> Option<Str>
+          license_path =
+            mkColumnOption index
+              {
+                type = nullOr str;
+              }
+              {
+                example."CUDA Toolkit" = "cuda_cudart/LICENSE.txt";
+              };
+
+          # :: Str -> License
+          compiled = mkColumnOption index { type = License; } { };
         };
-        # :: PName -> Option<Url>
-        overrideLicenseUrl = mkOption {
-          type = attrsOf (nullOr str);
+
+      system =
+        let
+          index = cudb.system.nvidia;
+        in
+        {
+          # :: SystemStringNvidia -> ()
+          nvidia = mkOption {
+            type = SetOfStr;
+          };
+          # :: SystemStringNvidia -> System -> ()
+          fromNvidia = mkColumnOption index {
+            type = attrsOf Unit;
+          } { };
+          # :: SystemStringNvidia -> Bool
+          isSource = mkColumnOption index {
+            type = bool;
+          } { };
+          # :: SystemStringNvidia -> Bool
+          isJetson = mkColumnOption index {
+            type = bool;
+          } { };
+          jetsonCompatible = mkColumnOption index {
+            type = bool;
+          } { };
         };
-      };
-      license = {
-        # :: Str -> ()
-        shortName = mkOption {
-          type = attrsOf Unit;
-        };
-        # :: Str -> Option<Str>
-        distribution_path = mkOption {
-          type = attrsOf (nullOr str);
-          example."CUDA Toolkit" = "cutensor/redist/";
-        };
-        # :: Str -> Option<Str>
-        license_path = mkOption {
-          type = attrsOf (nullOr str);
-          example."CUDA Toolkit" = "cuda_cudart/LICENSE.txt";
-        };
-        # :: Str -> License
-        compiled = mkOption {
-          type = attrsOf License;
-          default = { };
-        };
-      };
-      # :: SystemStringNvidia -> ()
-      system.nvidia = mkOption {
-        type = SetOfStr;
-      };
-      # :: SystemStringNvidia -> System -> ()
-      system.fromNvidia = mkOption {
-        type = attrsOf (attrsOf Unit);
-      };
-      # :: SystemStringNvidia -> Bool
-      system.isSource = mkOption {
-        type = attrsOf bool;
-      };
-      # :: SystemStringNvidia -> Bool
-      system.isJetson = mkOption {
-        type = attrsOf bool;
-      };
-      system.jetsonCompatible = mkOption {
-        type = attrsOf bool;
-      };
+
       base_url = mkOption {
         type = str;
         default = "https://developer.download.nvidia.com/compute/";
@@ -154,11 +174,6 @@ in
     };
   imports = [ ./static.nix ];
   config = {
-    assertions = builtins.filter ({ assertion, ... }: !assertion) (
-      columnar.domainAssertions "license" "shortName" cudb.license
-      ++ columnar.domainAssertions "package" "pname" cudb.package
-      ++ columnar.domainAssertions "system" "nvidia" cudb.system
-    );
     license =
       let
         shortNames = cudb.license.shortName;

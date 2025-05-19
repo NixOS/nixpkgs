@@ -1,7 +1,24 @@
 let
   lib = import ../../../../lib;
+  inherit (lib.types) attrsOf enum submodule;
+
+  unit = 1;
+  Unit = enum [ unit ];
 in
 {
+  inherit unit Unit;
+  SetOfStr = attrsOf Unit;
+
+  # :: Column -> MkOptionArgs -> MkOptionArgs -> Option
+  mkColumnOption =
+    indexColumn: optionArgsRow: optionArgsCol:
+    lib.mkOption (
+      optionArgsCol
+      // {
+        type = submodule { options = lib.mapAttrs (name: _: lib.mkOption optionArgsRow) indexColumn; };
+      }
+    );
+
   # :: ColumnName -> (AttrsOf Any) -> (AttrsOf Column) -> (AttrsOf Column)
   defaults =
     indexColumn: columnDefaults: columns:
@@ -23,32 +40,4 @@ in
         }
       ) colNames
     );
-
-  # :: ColumnName -> (AttrsOf Column) -> List { message :: Str, assertion: Bool }
-  domainAssertions =
-    tableName: indexColumnName: columns:
-    let
-      indexColumn = columns.${indexColumnName};
-      names = builtins.attrNames indexColumn;
-    in
-    lib.concatMap (
-      columnName:
-      let
-        column = lib.addErrorContext "While validating column ${columnName}" columns.${columnName};
-        newNames = builtins.attrNames column;
-        missing = builtins.filter (name: !(lib.hasAttr name column)) names;
-        unexpected = builtins.filter (name: !(lib.hasAttr name indexColumn)) newNames;
-        symDiff = missing ++ unexpected;
-        missingStr = lib.optionalString (missing != [ ]) " missing ${lib.concatStringsSep ", " missing}";
-        unexpectedStr = lib.optionalString (
-          unexpected != [ ]
-        ) " unexpected ${lib.concatStringsSep ", " unexpected}";
-      in
-      lib.optionals (indexColumnName != columnName) [
-        {
-          message = "${tableName}.${columnName}'s domain doesn't match ${indexColumnName}:${missingStr}${unexpectedStr}";
-          assertion = symDiff == [ ];
-        }
-      ]
-    ) (builtins.attrNames columns);
 }
