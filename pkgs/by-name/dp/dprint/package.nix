@@ -30,6 +30,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
   ];
 
+  cargoBuildFlags = [
+    "--package=dprint"
+    # Required only for dprint package tests; the binary is removed in postInstall.
+    "--package=test-process-plugin"
+  ];
+
+  cargoTestFlags = [
+    "--package=dprint"
+  ];
+
   checkFlags = [
     # Require creating directory and network access
     "--skip=plugins::cache_fs_locks::test"
@@ -40,13 +50,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=utils::url::test::unsafe_ignore_cert"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    export DPRINT_CACHE_DIR="$(mktemp -d)"
-    installShellCompletion --cmd dprint \
-      --bash <($out/bin/dprint completions bash) \
-      --zsh <($out/bin/dprint completions zsh) \
-      --fish <($out/bin/dprint completions fish)
-  '';
+  postInstall =
+    ''
+      rm "$out/bin/test-process-plugin"
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      export DPRINT_CACHE_DIR="$(mktemp -d)"
+      installShellCompletion --cmd dprint \
+        --bash <($out/bin/dprint completions bash) \
+        --zsh <($out/bin/dprint completions zsh) \
+        --fish <($out/bin/dprint completions fish)
+    '';
 
   passthru = {
     tests.version = testers.testVersion {
