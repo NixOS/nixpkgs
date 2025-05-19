@@ -8,7 +8,6 @@
   release_version,
   runCommand,
   python3,
-  python3Packages,
   patches ? [ ],
   cmake,
   ninja,
@@ -40,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
       python3
     ]
     ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
-    ++ (lib.optional isFullBuild python3Packages.pyyaml);
+    ++ (lib.optional isFullBuild python3.pkgs.pyyaml);
 
   buildInputs = lib.optional isFullBuild linuxHeaders;
 
