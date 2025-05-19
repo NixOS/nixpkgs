@@ -72,8 +72,8 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   buildPhase = ''
-    make -C gwnum -f ${gwnum}
-    make -C ${srcDir}
+    make -C gwnum -f ${gwnum} ''${enableParallelBuilding:+-j$NIX_BUILD_CORES}
+    make -C ${srcDir} ''${enableParallelBuilding:+-j$NIX_BUILD_CORES}
   '';
 
   installPhase = ''
