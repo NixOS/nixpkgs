@@ -48,25 +48,24 @@ Based on the packages defined in `pkgs/top-level/python-packages.nix` an
 attribute set is created for each available Python interpreter. The available
 sets are
 
-* `pkgs.python27Packages`
-* `pkgs.python3Packages`
-* `pkgs.python310Packages`
-* `pkgs.python311Packages`
-* `pkgs.python312Packages`
-* `pkgs.python313Packages`
-* `pkgs.python314Packages`
-* `pkgs.pypy27Packages`
-* `pkgs.pypy310Packages`
+- `pkgs.python27Packages`
+- `pkgs.python3Packages`
+- `pkgs.python310Packages`
+- `pkgs.python311Packages`
+- `pkgs.python312Packages`
+- `pkgs.python313Packages`
+- `pkgs.python314Packages`
+- `pkgs.pypy27Packages`
+- `pkgs.pypy310Packages`
 
 and the aliases
 
-* `pkgs.python2Packages` pointing to `pkgs.python27Packages`
-* `pkgs.python3Packages` pointing to `pkgs.python312Packages`
-* `pkgs.pythonPackages` pointing to `pkgs.python2Packages`
-* `pkgs.pypy2Packages` pointing to `pkgs.pypy27Packages`
-* `pkgs.pypy3Packages` pointing to `pkgs.pypy310Packages`
-* `pkgs.pypyPackages` pointing to `pkgs.pypy2Packages`
-
+- `pkgs.python2Packages` pointing to `pkgs.python27Packages`
+- `pkgs.python3Packages` pointing to `pkgs.python312Packages`
+- `pkgs.pythonPackages` pointing to `pkgs.python2Packages`
+- `pkgs.pypy2Packages` pointing to `pkgs.pypy27Packages`
+- `pkgs.pypy3Packages` pointing to `pkgs.pypy310Packages`
+- `pkgs.pypyPackages` pointing to `pkgs.pypy2Packages`
 
 #### `buildPythonPackage` function {#buildpythonpackage-function}
 
@@ -147,13 +146,13 @@ buildPythonPackage rec {
 
 The `buildPythonPackage` mainly does four things:
 
-* In the [`buildPhase`](#build-phase), it calls `${python.pythonOnBuildForHost.interpreter} -m build --wheel` to
+- In the [`buildPhase`](#build-phase), it calls `${python.pythonOnBuildForHost.interpreter} -m build --wheel` to
   build a wheel binary zipfile.
-* In the [`installPhase`](#ssec-install-phase), it installs the wheel file using `${python.pythonOnBuildForHost.interpreter} -m installer *.whl`.
-* In the [`postFixup`](#var-stdenv-postFixup) phase, the `wrapPythonPrograms` bash function is called to
+- In the [`installPhase`](#ssec-install-phase), it installs the wheel file using `${python.pythonOnBuildForHost.interpreter} -m installer *.whl`.
+- In the [`postFixup`](#var-stdenv-postFixup) phase, the `wrapPythonPrograms` bash function is called to
   wrap all programs in the `$out/bin/*` directory to include `$PATH`
   environment variable and add dependent libraries to script's `sys.path`.
-* In the [`installCheck`](#ssec-installCheck-phase) phase, `${python.interpreter} -m pytest` is run.
+- In the [`installCheck`](#ssec-installCheck-phase) phase, `${python.interpreter} -m pytest` is run.
 
 By default tests are run because [`doCheck = true`](#var-stdenv-doCheck). Test dependencies, like
 e.g. the test runner, should be added to [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs).
@@ -166,14 +165,14 @@ as the interpreter unless overridden otherwise.
 All parameters from [`stdenv.mkDerivation`](#sec-using-stdenv) function are still supported. The
 following are specific to `buildPythonPackage`:
 
-* `catchConflicts ? true`: If `true`, abort package build if a package name
+- `catchConflicts ? true`: If `true`, abort package build if a package name
   appears more than once in dependency tree. Default is `true`.
-* `disabled ? false`: If `true`, package is not built for the particular Python
+- `disabled ? false`: If `true`, package is not built for the particular Python
   interpreter version.
-* `dontWrapPythonPrograms ? false`: Skip wrapping of Python programs.
-* `permitUserSite ? false`: Skip setting the `PYTHONNOUSERSITE` environment
+- `dontWrapPythonPrograms ? false`: Skip wrapping of Python programs.
+- `permitUserSite ? false`: Skip setting the `PYTHONNOUSERSITE` environment
   variable in wrapped programs.
-* `pyproject`: Whether the pyproject format should be used. As all other formats
+- `pyproject`: Whether the pyproject format should be used. As all other formats
   are deprecated, you are recommended to set this to `true`. When you do so,
   `pypaBuildHook` will be used, and you can add the required build dependencies
   from `build-system.requires` to `build-system`. Note that the pyproject
@@ -183,7 +182,7 @@ following are specific to `buildPythonPackage`:
   package. This can be useful for packages that don't support the pyproject
   format. When unset, the legacy `setuptools` hooks are used for backwards
   compatibility.
-* `makeWrapperArgs ? []`: A list of strings. Arguments to be passed to
+- `makeWrapperArgs ? []`: A list of strings. Arguments to be passed to
   [`makeWrapper`](#fun-makeWrapper), which wraps generated binaries. By default, the arguments to
   [`makeWrapper`](#fun-makeWrapper) set `PATH` and `PYTHONPATH` environment variables before calling
   the binary. Additional arguments here can allow a developer to set environment
@@ -197,36 +196,35 @@ following are specific to `buildPythonPackage`:
   when `makeWrapperArgs` shell variable is specified as a space-separated string (instead of a Bash array) in the build script, the string content is Bash-expanded before concatenated into the `wrapProgram` command. Still, developers should not rely on such behaviours, but use `__structuredAttrs = true` to specify flags containing spaces (e.g. `makeWrapperArgs = [ "--set" "GREETING" "Hello, world!" ]`), or use -pre and -post phases to specify flags with Bash-expansions (e.g. `preFixup = ''makeWrapperArgs+=(--prefix PATH : "$SOME_PATH")`'').
   :::
 
-* `namePrefix`: Prepends text to `${name}` parameter. In case of libraries, this
+- `namePrefix`: Prepends text to `${name}` parameter. In case of libraries, this
   defaults to `"python3.8-"` for Python 3.8, etc., and in case of applications to `""`.
-* `pypaBuildFlags ? []`: A list of strings. Arguments to be passed to `python -m build --wheel`.
-* `pythonPath ? []`: List of packages to be added into `$PYTHONPATH`. Packages
+- `pypaBuildFlags ? []`: A list of strings. Arguments to be passed to `python -m build --wheel`.
+- `pythonPath ? []`: List of packages to be added into `$PYTHONPATH`. Packages
   in `pythonPath` are not propagated (contrary to [`propagatedBuildInputs`](#var-stdenv-propagatedBuildInputs)).
-* `preShellHook`: Hook to execute commands before `shellHook`.
-* `postShellHook`: Hook to execute commands after `shellHook`.
-* `removeBinByteCode ? true`: Remove bytecode from `/bin`. Bytecode is only
+- `preShellHook`: Hook to execute commands before `shellHook`.
+- `postShellHook`: Hook to execute commands after `shellHook`.
+- `removeBinByteCode ? true`: Remove bytecode from `/bin`. Bytecode is only
   created when the filenames end with `.py`.
-* `setupPyGlobalFlags ? []`: List of flags passed to `setup.py` command.
-* `setupPyBuildFlags ? []`: List of flags passed to `setup.py build_ext` command.
+- `setupPyGlobalFlags ? []`: List of flags passed to `setup.py` command.
+- `setupPyBuildFlags ? []`: List of flags passed to `setup.py build_ext` command.
 
 The [`stdenv.mkDerivation`](#sec-using-stdenv) function accepts various parameters for describing
 build inputs (see "Specifying dependencies"). The following are of special
 interest for Python packages, either because these are primarily used, or
 because their behaviour is different:
 
-* `nativeBuildInputs ? []`: Build-time only dependencies. Typically executables.
-* `build-system ? []`: Build-time only Python dependencies. Items listed in `build-system.requires`/`setup_requires`.
-* `buildInputs ? []`: Build and/or run-time dependencies that need to be
+- `nativeBuildInputs ? []`: Build-time only dependencies. Typically executables.
+- `build-system ? []`: Build-time only Python dependencies. Items listed in `build-system.requires`/`setup_requires`.
+- `buildInputs ? []`: Build and/or run-time dependencies that need to be
   compiled for the host machine. Typically non-Python libraries which are being
   linked.
-* `nativeCheckInputs ? []`: Dependencies needed for running the [`checkPhase`](#ssec-check-phase). These
+- `nativeCheckInputs ? []`: Dependencies needed for running the [`checkPhase`](#ssec-check-phase). These
   are added to [`nativeBuildInputs`](#var-stdenv-nativeBuildInputs) when [`doCheck = true`](#var-stdenv-doCheck). Items listed in
   `tests_require` go here.
-* `dependencies ? []`: Aside from propagating dependencies,
+- `dependencies ? []`: Aside from propagating dependencies,
   `buildPythonPackage` also injects code into and wraps executables with the
   paths included in this list. Items listed in `install_requires` go here.
-* `optional-dependencies ? { }`: Optional feature flagged dependencies.  Items listed in `extras_require` go here.
-
+- `optional-dependencies ? { }`: Optional feature flagged dependencies. Items listed in `extras_require` go here.
 
 ##### Overriding Python packages {#overriding-python-packages}
 
@@ -492,11 +490,10 @@ specified packages in its path.
 
 ##### `python.buildEnv` arguments {#python.buildenv-arguments}
 
-
-* `extraLibs`: List of packages installed inside the environment.
-* `postBuild`: Shell command executed after the build of environment.
-* `ignoreCollisions`: Ignore file collisions inside the environment (default is `false`).
-* `permitUserSite`: Skip setting the `PYTHONNOUSERSITE` environment variable in
+- `extraLibs`: List of packages installed inside the environment.
+- `postBuild`: Shell command executed after the build of environment.
+- `ignoreCollisions`: Ignore file collisions inside the environment (default is `false`).
+- `permitUserSite`: Skip setting the `PYTHONNOUSERSITE` environment variable in
   wrapped binaries in the environment.
 
 #### `python.withPackages` function {#python.withpackages-function}
@@ -641,7 +638,7 @@ impacting the global environment or each other.
 
 The simplest way to start playing with the way nix wraps and sets up Python
 environments is with `nix-shell` at the cmdline. These environments create a
-temporary shell session with a Python and a *precise* list of packages (plus
+temporary shell session with a Python and a _precise_ list of packages (plus
 their runtime dependencies), with no other Python packages in the Python
 interpreter's scope.
 
@@ -692,7 +689,7 @@ that sets up an interpreter pointing to them. This matters much more for "big"
 modules like `pytorch` or `tensorflow`.
 
 Module names usually match their names on [pypi.org](https://pypi.org/), but
-normalized according to PEP 503/508. (e.g. Foo__Bar.baz -> foo-bar-baz)
+normalized according to PEP 503/508. (e.g. Foo\_\_Bar.baz -> foo-bar-baz)
 You can use the [Nixpkgs search website](https://nixos.org/nixos/packages.html)
 to find them as well (along with non-python packages).
 
@@ -725,7 +722,7 @@ The dot product of [1 2] and [3 4] is: 11
 But if we maintain the script ourselves, and if there are more dependencies, it
 may be nice to encode those dependencies in source to make the script re-usable
 without that bit of knowledge. That can be done by using `nix-shell` as a
-[shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)), like so:
+[shebang](<https://en.wikipedia.org/wiki/Shebang_(Unix)>), like so:
 
 ```python
 #!/usr/bin/env nix-shell
@@ -891,7 +888,7 @@ One limitation of this is that you can only have 1 Python env installed
 globally, since they conflict on the `python` to load out of your `PATH`.
 
 If you get a conflict or prefer to keep the setup clean, you can have `nix-env`
-atomically *uninstall* all other imperatively installed packages and replace
+atomically _uninstall_ all other imperatively installed packages and replace
 your profile with just `myEnv` by using the `--replace` flag.
 
 ##### Environment defined in `/etc/nixos/configuration.nix` {#environment-defined-in-etcnixosconfiguration.nix}
@@ -1284,6 +1281,7 @@ However, many repositories' test suites do not translate well to nix's build
 sandbox, and will generally need many tests to be disabled.
 
 This is achievable by
+
 - Including paths or test items (`path/to/file.py::MyClass` or `path/to/file.py::MyClass::test_method`) with positional arguments.
 - Excluding paths with `--ignore` or globbed paths with `--ignore-glob`.
 - Excluding test items using the `--deselect` flag.
@@ -1313,13 +1311,13 @@ Adding `pytest` is not required, since it is included with `pytestCheckHook`.
 
 `pytestCheckHook` recognizes the following attributes:
 
-- `enabledTestPaths` and `disabledTestPaths`:   To specify path globs (files or directories) or test items.
+- `enabledTestPaths` and `disabledTestPaths`: To specify path globs (files or directories) or test items.
 
-- `enabledTests` and `disabledTests`:   To specify keywords for class names or test method names.
+- `enabledTests` and `disabledTests`: To specify keywords for class names or test method names.
 
-- `enabledTestMarks` and `disabledTestMarks`:   To specify test marks.
+- `enabledTestMarks` and `disabledTestMarks`: To specify test marks.
 
-- `pytestFlags`:   To append additional command-line arguments to `pytest`.
+- `pytestFlags`: To append additional command-line arguments to `pytest`.
 
 By default, `pytest` automatically discovers which tests to run.
 If tests are explicitly enabled, only those tests will run.
@@ -2045,9 +2043,9 @@ configure alternatives](#sec-overlays-alternatives-blas-lapack)".
 
 In a `setup.py` or `setup.cfg` it is common to declare dependencies:
 
-* `setup_requires` corresponds to `build-system`
-* `install_requires` corresponds to `dependencies`
-* `tests_require` corresponds to [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs)
+- `setup_requires` corresponds to `build-system`
+- `install_requires` corresponds to `dependencies`
+- `tests_require` corresponds to [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs)
 
 ### How to enable interpreter optimizations? {#optimizations}
 
@@ -2139,10 +2137,10 @@ Occasionally packages don't make use of a common test framework, which may then 
 
 #### Common issues {#common-issues}
 
-* Tests that attempt to access `$HOME` can be fixed by using `writableTmpDirAsHomeHook` in
+- Tests that attempt to access `$HOME` can be fixed by using `writableTmpDirAsHomeHook` in
   `nativeCheckInputs`, which sets up a writable temporary directory as the home directory. Alternatively,
   you can achieve the same effect manually (e.g. in `preCheck`) with: `export HOME=$(mktemp -d)`.
-* Compiling with Cython causes tests to fail with a `ModuleNotLoadedError`.
+- Compiling with Cython causes tests to fail with a `ModuleNotLoadedError`.
   This can be fixed with two changes in the derivation: 1) replacing `pytest` with
   `pytestCheckHook` and 2) adding a `preCheck` containing `cd $out` to run
   tests within the built output.
@@ -2153,48 +2151,48 @@ Occasionally packages don't make use of a common test framework, which may then 
 
 The following rules are desired to be respected:
 
-* Python libraries are called from `python-packages.nix` and packaged with
+- Python libraries are called from `python-packages.nix` and packaged with
   [`buildPythonPackage`](#buildpythonpackage-function). The expression of a library should be in
   `pkgs/development/python-modules/<name>/default.nix`.
-* Python applications live outside of `python-packages.nix` and are packaged
+- Python applications live outside of `python-packages.nix` and are packaged
   with [`buildPythonApplication`](#buildpythonapplication-function).
-* Make sure libraries build for all Python interpreters.
+- Make sure libraries build for all Python interpreters.
   If it fails to build on some Python versions, consider disabling them by setting `disable = pythonAtLeast "3.x"` along with a comment.
-* The two parameters, `pyproject` and `build-system` are set to avoid the legacy setuptools/distutils build.
-* Only unversioned attributes (e.g. `pydantic`, but not `pypdantic_1`) can be included in `dependencies`,
+- The two parameters, `pyproject` and `build-system` are set to avoid the legacy setuptools/distutils build.
+- Only unversioned attributes (e.g. `pydantic`, but not `pypdantic_1`) can be included in `dependencies`,
   since due to `PYTHONPATH` limitations we can only ever support a single version for libraries
   without running into duplicate module name conflicts.
-* The version restrictions of `dependencies` can be relaxed by [`pythonRelaxDepsHook`](#using-pythonrelaxdepshook).
-* Make sure the tests are enabled using for example [`pytestCheckHook`](#using-pytestcheckhook) and, in the case of
+- The version restrictions of `dependencies` can be relaxed by [`pythonRelaxDepsHook`](#using-pythonrelaxdepshook).
+- Make sure the tests are enabled using for example [`pytestCheckHook`](#using-pytestcheckhook) and, in the case of
   libraries, are passing for all interpreters. If certain tests fail they can be
   disabled individually. Try to avoid disabling the tests altogether. In any
   case, when you disable tests, leave a comment explaining why.
-* `pythonImportsCheck` is set. This is still a good smoke test even if `pytestCheckHook` is set.
-* `meta.platforms` takes the default value in many cases.
+- `pythonImportsCheck` is set. This is still a good smoke test even if `pytestCheckHook` is set.
+- `meta.platforms` takes the default value in many cases.
   It does not need to be set explicitly unless the package requires a specific platform.
-* The file is formatted with `nixfmt-rfc-style`.
-* Commit names of Python libraries must reflect that they are Python
+- The file is formatted with `nixfmt-rfc-style`.
+- Commit names of Python libraries must reflect that they are Python
   libraries (e.g. `python312Packages.numpy: 1.11 -> 1.12` rather than `numpy: 1.11 -> 1.12`).
-* The current default version of python should be included
+- The current default version of python should be included
   in commit messages to enable automatic builds by ofborg.
   For example `python312Packages.numpy: 1.11 -> 1.12` should be used rather
   than `python3Packages.numpy: 1.11 -> 1.12`.
   Note that `pythonPackages` is an alias for `python27Packages`.
-* Attribute names in `python-packages.nix` as well as `pname`s should match the
+- Attribute names in `python-packages.nix` as well as `pname`s should match the
   library's name on PyPI, but be normalized according to [PEP
   0503](https://www.python.org/dev/peps/pep-0503/#normalized-names). This means
   that characters should be converted to lowercase and `.` and `_` should be
-  replaced by a single `-` (foo-bar-baz instead of Foo__Bar.baz).
+  replaced by a single `-` (foo-bar-baz instead of Foo\_\_Bar.baz).
   If necessary, `pname` has to be given a different value within `fetchPypi`.
-* It's generally preferable to fetch `src` directly from the repo and not from
+- It's generally preferable to fetch `src` directly from the repo and not from
   PyPI. Use `fetchPypi` when there's a clear technical reason to do so.
-* Packages from sources such as GitHub and GitLab that do not exist on PyPI
+- Packages from sources such as GitHub and GitLab that do not exist on PyPI
   should not use a name that is already used on PyPI. When possible, they should
   use the package repository name prefixed with the owner (e.g. organization) name
   and using a `-` as delimiter.
-* Attribute names in `python-packages.nix` should be sorted alphanumerically to
+- Attribute names in `python-packages.nix` should be sorted alphanumerically to
   avoid merge conflicts and ease locating attributes.
-* Non-python runtime dependencies should be added via explicit wrapping or
+- Non-python runtime dependencies should be added via explicit wrapping or
   patching (using e.g. `substituteInPlace`), rather than through propagation via
   `dependencies`/`propagatedBuildInputs`, to reduce clutter in `$PATH`.
 
@@ -2248,10 +2246,10 @@ time for the majority of active Python projects to support the latest stable
 interpreter. To help ease the migration for Nixpkgs users
 between Python interpreters the schedule below will be used:
 
-| When | Event |
-| --- | --- |
+| When                | Event                                                                                       |
+| ------------------- | ------------------------------------------------------------------------------------------- |
 | After YY.11 Release | Bump CPython package set window. The latest and previous latest stable should now be built. |
-| After YY.05 Release | Bump default CPython interpreter to latest stable. |
+| After YY.05 Release | Bump default CPython interpreter to latest stable.                                          |
 
 In practice, this means that the Python community will have had a stable interpreter
 for ~2 months before attempting to update the package set. And this will

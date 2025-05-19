@@ -100,37 +100,37 @@ xcodeenv.buildApp {
 
 The above function takes a variety of parameters:
 
-* The `name` and `src` parameters are mandatory and specify the name of the app
+- The `name` and `src` parameters are mandatory and specify the name of the app
   and the location where the source code resides
-* `sdkVersion` specifies which version of the iOS SDK to use.
+- `sdkVersion` specifies which version of the iOS SDK to use.
 
 It also possible to adjust the `xcodebuild` parameters. This is only needed in
 rare circumstances. In most cases the default values should suffice:
 
-* Specifies which `xcodebuild` target to build. By default it takes the target
+- Specifies which `xcodebuild` target to build. By default it takes the target
   that has the same name as the app.
-* The `configuration` parameter can be overridden if desired. By default, it
+- The `configuration` parameter can be overridden if desired. By default, it
   will do a debug build for the simulator and a release build for real devices.
-* The `scheme` parameter specifies which `-scheme` parameter to propagate to
+- The `scheme` parameter specifies which `-scheme` parameter to propagate to
   `xcodebuild`. By default, it corresponds to the app name.
-* The `sdk` parameter specifies which SDK to use. By default, it picks
+- The `sdk` parameter specifies which SDK to use. By default, it picks
   `iphonesimulator` for simulator builds and `iphoneos` for release builds.
-* The `xcodeFlags` parameter specifies arbitrary command line parameters that
+- The `xcodeFlags` parameter specifies arbitrary command line parameters that
   should be propagated to `xcodebuild`.
 
 By default, builds are carried out for the iOS simulator. To do release builds
 (builds for real iOS devices), you must set the `release` parameter to `true`.
 In addition, you need to set the following parameters:
 
-* `certificateFile` refers to a P12 certificate file.
-* `certificatePassword` specifies the password of the P12 certificate.
-* `provisioningProfile` refers to the provision profile needed to sign the app
-* `signMethod` should refer to `ad-hoc` for signing the app with an ad-hoc
+- `certificateFile` refers to a P12 certificate file.
+- `certificatePassword` specifies the password of the P12 certificate.
+- `provisioningProfile` refers to the provision profile needed to sign the app
+- `signMethod` should refer to `ad-hoc` for signing the app with an ad-hoc
   certificate, `enterprise` for enterprise certificates and `app-store` for App
   store certificates.
-* `generateIPA` specifies that we want to produce an IPA file (this is probably
+- `generateIPA` specifies that we want to produce an IPA file (this is probably
   what you want)
-* `generateXCArchive` specifies that we want to produce an xcarchive file.
+- `generateXCArchive` specifies that we want to produce an xcarchive file.
 
 When building IPA files on Hydra and when it is desired to allow iOS devices to
 install IPAs by browsing to the Hydra build products page, you can enable the
@@ -138,10 +138,10 @@ install IPAs by browsing to the Hydra build products page, you can enable the
 
 When enabled, you need to configure the following options:
 
-* The `installURL` parameter refers to the URL of a PHP script that composes the
+- The `installURL` parameter refers to the URL of a PHP script that composes the
   `itms-services://` URL allowing iOS devices to install the IPA file.
-* `bundleId` refers to the bundle ID value of the app
-* `appVersion` refers to the app's version number
+- `bundleId` refers to the bundle ID value of the app
+- `appVersion` refers to the app's version number
 
 To use wireless adhoc distributions, you must also install the corresponding
 PHP script on a web server (see section: 'Installing the PHP script for wireless

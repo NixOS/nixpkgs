@@ -61,6 +61,7 @@ Note that no user namespace is created, which means that you won't be able to ru
 ### Examples {#ssec-pkgs-ociTools-buildContainer-examples}
 
 ::: {.example #ex-ociTools-buildContainer-bash}
+
 # Creating an OCI runtime container that runs `bash`
 
 This example uses `ociTools.buildContainer` to create a simple container that runs `bash`.
@@ -95,4 +96,5 @@ help
 GNU bash, version 5.2.26(1)-release (x86_64-pc-linux-gnu)
 (some output removed for clarity)
 ```
+
 :::
