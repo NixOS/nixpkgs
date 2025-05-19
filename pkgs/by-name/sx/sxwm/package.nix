@@ -7,7 +7,7 @@
   libXcursor,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sxwm";
   version = "1.5";
 
