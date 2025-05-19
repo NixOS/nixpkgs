@@ -100,11 +100,12 @@ buildNpmPackage {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "Anytype";
+      name = "anytype";
       exec = "anytype";
       icon = "anytype";
       desktopName = "Anytype";
       comment = description;
+      mimeTypes = [ "x-scheme-handler/anytype" ];
       categories = [
         "Utility"
         "Office"
