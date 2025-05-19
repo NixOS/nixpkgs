@@ -29,13 +29,13 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "fluent-bit";
   # FIXME: We are deliberately on 3.2.6 as 3.2.7 and above are causing segfaults (https://github.com/fluent/fluent-bit/issues/10139)
-  version = "3.2.6";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-bit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-S0sb954n17z+zrVNkYd6yiV01aNbOLJLOV+34PRkSXQ=";
+    hash = "sha256-UMWYybrk0TRV5adFbL2J0EOjOUvv7vQgas36CpaJG9I=";
   };
 
   # The source build documentation covers some dependencies and CMake options.
