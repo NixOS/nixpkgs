@@ -4973,6 +4973,8 @@ self: super: with self; {
 
   fitbit = callPackage ../development/python-modules/fitbit { };
 
+  fitdecode = callPackage ../development/python-modules/fitdecode { };
+
   fitfile = callPackage ../development/python-modules/fitfile { };
 
   fivem-api = callPackage ../development/python-modules/fivem-api { };
@@ -18663,6 +18665,12 @@ self: super: with self; {
 
   vega-datasets = callPackage ../development/python-modules/vega-datasets { };
 
+  vegafusion = callPackage ../development/python-modules/vegafusion { };
+
+  vegafusion-embed = callPackage ../development/python-modules/vegafusion-embed {
+    inherit (pkgs) protobuf;
+  };
+
   vehicle = callPackage ../development/python-modules/vehicle { };
 
   velbus-aio = callPackage ../development/python-modules/velbus-aio { };
@@ -18737,6 +18745,10 @@ self: super: with self; {
 
   vivisect = callPackage ../development/python-modules/vivisect {
     inherit (pkgs.libsForQt5) wrapQtAppsHook;
+  };
+
+  vl-convert-python = callPackage ../development/python-modules/vl-convert {
+    inherit (pkgs) protobuf;
   };
 
   vllm = callPackage ../development/python-modules/vllm { };
