@@ -64,10 +64,14 @@ in
 lib.pipe initialPackages [
   (extends plugins)
   (extends cocPlugins)
-  (extends luaPackagePlugins)
   (extends nodePackagePlugins)
   (extends nonGeneratedPlugins)
   (extends overrides)
   (extends aliases)
+  # deprecated, but added last so it only adds them if they haven't been set
+  # before. If you get a warning, add the missing plugin to `vim-plugin-names`
+  #
+  # see https://github.com/NixOS/nixpkgs/issues/407318
+  (extends luaPackagePlugins)
   lib.makeExtensible
 ]

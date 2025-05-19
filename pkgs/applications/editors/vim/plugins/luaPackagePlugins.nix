@@ -41,7 +41,9 @@ let
 in
 lib.genAttrs luarocksPackageNames (
   name:
-  buildNeovimPlugin {
-    luaAttr = luaPackages.${name};
-  }
+  prev.${name} or (lib.warnOnInstantiate "Using neovim plugins through luarocks is deprecated"
+    (buildNeovimPlugin {
+      luaAttr = luaPackages.${name};
+    })
+  )
 )
