@@ -5,14 +5,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gqlgenc";
   version = "0.32.1";
 
   src = fetchFromGitHub {
     owner = "yamashou";
     repo = "gqlgenc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-AGbE+R3502Igl4/HaN8yvFVJBsKQ6iVff8IEvddJLEo=";
   };
 
@@ -26,7 +26,7 @@ buildGoModule rec {
 
   ldflags = [
     "-X"
-    "main.version=${version}"
+    "main.version=${finalAttrs.version}"
   ];
 
   doInstallCheck = true;
@@ -44,4 +44,4 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ wattmto ];
   };
-}
+})
