@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
@@ -24,6 +25,9 @@ buildPythonPackage rec {
   build-system = [ hatchling ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  # Tests don't work on darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   pythonImportsCheck = [ "turrishw" ];
 
