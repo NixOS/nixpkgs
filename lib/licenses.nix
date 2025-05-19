@@ -1058,6 +1058,17 @@ lib.mapAttrs mkLicense (
       redistributable = true;
     };
 
+    # A catch-all copyright notice, usually not granting any rights.
+    # Appears e.g. in TensorRT, warp.
+    nvidiaProprietary = {
+      shortName = "NvidiaProprietary";
+      fullName = "NVIDIA Copyright Notice";
+      spdxId = "LicenseRef-NvidiaProprietary";
+      url = null;
+      free = false;
+      redistributable = false;
+    };
+
     obsidian = {
       fullName = "Obsidian End User Agreement";
       url = "https://obsidian.md/eula";
