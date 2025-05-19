@@ -7485,6 +7485,8 @@ self: super: with self; {
 
   kivy-garden-modernmenu = callPackage ../development/python-modules/kivy-garden-modernmenu { };
 
+  kivymd = callPackage ../development/python-modules/kivymd { };
+
   kiwiki-client = callPackage ../development/python-modules/kiwiki-client { };
 
   kiwisolver = callPackage ../development/python-modules/kiwisolver { };
