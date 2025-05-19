@@ -2,9 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   rustPlatform,
   just,
   libcosmicAppHook,
+  jq,
+  gnused,
   glib,
   nix-update-script,
   nixosTests,
@@ -23,7 +26,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-7AOdSk9XIXFCDyCus3XgOK3ZBVa4CvX+NFM0jHf7Wbs=";
+  cargoHash = "sha256-5W6HF/dvZ7mQjodOoOt+GCw2lMg5qV5cH9zbdEyMBls=";
+  cargoPatches = [
+    (fetchpatch {
+      url = "https://github.com/pop-os/cosmic-files/commit/e740cf4968f227a48d12ca9e12f8ae7888d4a6ed.patch";
+      hash = "sha256-juETvT/s7qZewcEdmn0/ysGqJ63FQ3JX5m3MYzo6idQ=";
+    })
+  ];
 
   env = {
     VERGEN_GIT_COMMIT_DATE = "2025-04-22";
@@ -33,6 +42,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     just
     libcosmicAppHook
+    jq
+    gnused
   ];
 
   buildInputs = [ glib ];
@@ -73,17 +84,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     defaultCargoTestFlags="$cargoTestFlags"
 
-    # Some tests with the `compio` runtime expect io_uring support but that
-    # is disabled in the Nix sandbox and the tests fail because they can't
-    # run in the sandbox. Ideally, the `compio` crate should fallback to a
-    # non-io_uring runtime but for some reason, that doesn't happen.
-    cargoTestFlags="$defaultCargoTestFlags --package cosmic-files -- \
-      --skip operation::tests::copy_dir_to_same_location \
-      --skip operation::tests::copy_file_to_same_location \
-      --skip operation::tests::copy_file_with_diff_name_to_diff_dir \
-      --skip operation::tests::copy_file_with_extension_to_same_loc \
-      --skip operation::tests::copy_to_diff_dir_doesnt_dupe_files \
-      --skip operation::tests::copying_file_multiple_times_to_same_location"
+    cargoTestFlags="$defaultCargoTestFlags --package cosmic-files --no-default-features --features $(cargo metadata --no-deps --format-version 1 | jq --raw-output '.packages[] | select(.name == "cosmic-files") | .features.default | join(",")' | sed -e 's/io-uring,//')"
     runHook cargoCheckHook
 
     cargoTestFlags="$defaultCargoTestFlags --package cosmic-files-applet"
