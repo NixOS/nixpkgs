@@ -39,18 +39,27 @@ stdenv.mkDerivation rec {
     sourceRoot=$(echo */gui-wx)
   '';
 
-  postPatch = ''
-    sed -e 's@PYTHON_SHLIB@${python3}/lib/libpython3.so@' -i wxprefs.cpp
-    ! grep _SHLIB *.cpp
+  postPatch =
+    ''
+      sed -e 's@PYTHON_SHLIB@${python3}/lib/libpython3.so@' -i wxprefs.cpp
+      ! grep _SHLIB *.cpp
 
-    grep /lib/libpython wxprefs.cpp
-  '';
+      grep /lib/libpython wxprefs.cpp
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace makefile-gtk \
+        --replace-fail '-Wl,--as-needed' "" \
+        --replace-fail '-lGL ' "" \
+        --replace-fail '-lGLU' ""
+    '';
 
   makeFlags = [
     "-f"
     "makefile-gtk"
     "ENABLE_SOUND=1"
     "GOLLYDIR=${placeholder "out"}/share/golly"
+    "CXXC=${stdenv.cc.targetPrefix}c++"
+    "WX_CONFIG=${lib.getExe' (lib.getDev wxGTK) "wx-config"}"
   ];
 
   installPhase = ''
@@ -68,7 +77,7 @@ stdenv.mkDerivation rec {
     description = "Cellular automata simulation program";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     downloadPage = "https://sourceforge.net/projects/golly/files/golly";
   };
 }
