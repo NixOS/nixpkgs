@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
@@ -40,6 +41,11 @@ buildPythonPackage rec {
     "--deselect=tests/validation.py::TestValidateAndInsert::testRun"
     "--deselect=tests/validation.py::TestValidateUpdateInsert::testRun"
     "--deselect=tests/validators.py::TestValidators::test_IS_IN_DB"
+  ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+    "test_scheduler"
   ];
 
   pythonImportsCheck = [ "pydal" ];
