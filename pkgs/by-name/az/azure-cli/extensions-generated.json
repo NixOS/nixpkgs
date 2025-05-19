@@ -344,9 +344,9 @@
   },
   "devcenter": {
     "pname": "devcenter",
-    "version": "6.2.3",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/devcenter-6.2.3-py3-none-any.whl",
-    "hash": "sha256-w0IE25YKaUtrtHzExBn2lEQC8UnXOZkbPMh2czkhAfw=",
+    "version": "7.0.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/devcenter-7.0.0-py3-none-any.whl",
+    "hash": "sha256-UQgGkRRJ3WGPKT3agMb533CKD/A1dq/66Z/4K13VuK0=",
     "description": "Microsoft Azure Command-Line Tools DevCenter Extension"
   },
   "diskpool": {
