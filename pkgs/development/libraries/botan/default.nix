@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  pkgsStatic,
   python3,
   docutils,
   bzip2,
@@ -13,16 +14,22 @@
   static ? stdenv.hostPlatform.isStatic, # generates static libraries *only*
 
   # build ESDM RNG plugin
-  with_esdm ? false,
+  withEsdm ? false,
   # useful, but have to disable tests for now, as /dev/tpmrm0 is not accessible
-  with_tpm2 ? false,
-  # only allow BSI approved algorithms, FFI and SHAKE for XMSS
-  with_bsi_policy ? false,
-  # only allow NIST approved algorithms
-  with_fips140_policy ? false,
+  withTpm2 ? false,
+  policy ? null,
 }:
 
-assert (!with_bsi_policy && !with_fips140_policy) || (with_bsi_policy != with_fips140_policy);
+assert lib.assertOneOf "policy" policy [
+  # no explicit policy is given. The defaults by the library are used
+  null
+  # only allow BSI approved algorithms, FFI and SHAKE for XMSS
+  "bsi"
+  # only allow NIST approved algorithms in FIPS 140
+  "fips140"
+  # only allow "modern" algorithms
+  "modern"
+];
 
 let
   common =
@@ -64,23 +71,21 @@ let
           bzip2
           zlib
         ]
-        ++ lib.optionals (stdenv.hostPlatform.isLinux && with_tpm2) [
+        ++ lib.optionals (stdenv.hostPlatform.isLinux && withTpm2) [
           tpm2-tss
         ]
         ++ lib.optionals (lib.versionAtLeast version "3.6.0") [
           jitterentropy
         ]
-        ++ lib.optionals (lib.versionAtLeast version "3.7.0" && with_esdm) [
+        ++ lib.optionals (lib.versionAtLeast version "3.7.0" && withEsdm) [
           esdm
         ];
 
       buildTargets =
-        lib.optionals finalAttrs.finalPackage.doCheck [ "tests" ]
+        [ "cli" ]
+        ++ lib.optionals finalAttrs.finalPackage.doCheck [ "tests" ]
         ++ lib.optionals static [ "static" ]
-        ++ lib.optionals (!static) [
-          "cli"
-          "shared"
-        ];
+        ++ lib.optionals (!static) [ "shared" ];
 
       botanConfigureFlags =
         [
@@ -98,22 +103,21 @@ let
         ++ lib.optionals stdenv.cc.isClang [
           "--cc=clang"
         ]
-        ++ lib.optionals (stdenv.hostPlatform.isLinux && with_tpm2) [
+        ++ lib.optionals (stdenv.hostPlatform.isLinux && withTpm2) [
           "--with-tpm2"
         ]
         ++ lib.optionals (lib.versionAtLeast version "3.6.0") [
           "--enable-modules=jitter_rng"
         ]
-        ++ lib.optionals (lib.versionAtLeast version "3.7.0" && with_esdm) [
+        ++ lib.optionals (lib.versionAtLeast version "3.7.0" && withEsdm) [
           "--enable-modules=esdm_rng"
         ]
-        ++ lib.optionals (lib.versionAtLeast version "3.8.0" && with_bsi_policy) [
-          "--module-policy=bsi"
+        ++ lib.optionals (lib.versionAtLeast version "3.8.0" && policy != null) [
+          "--module-policy=${policy}"
+        ]
+        ++ lib.optionals (lib.versionAtLeast version "3.8.0" && policy == "bsi") [
           "--enable-module=ffi"
           "--enable-module=shake"
-        ]
-        ++ lib.optionals (lib.versionAtLeast version "3.8.0" && with_fips140_policy) [
-          "--module-policy=fips140"
         ];
 
       configurePhase = ''
@@ -133,7 +137,11 @@ let
         ln -s botan-*.pc botan.pc || true
       '';
 
-      doCheck = !static;
+      doCheck = true;
+
+      passthru.tests = lib.optionalAttrs (lib.versionAtLeast version "3") {
+        static = pkgsStatic.botan3;
+      };
 
       meta = with lib; {
         description = "Cryptographic algorithms library";
@@ -142,6 +150,7 @@ let
         maintainers = with maintainers; [
           raskin
           thillux
+          nikstur
         ];
         platforms = platforms.unix;
         license = licenses.bsd2;
