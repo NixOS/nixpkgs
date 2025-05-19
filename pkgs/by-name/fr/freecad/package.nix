@@ -24,7 +24,7 @@
   opencascade-occt_7_6,
   opencascade-occt,
   pkg-config,
-  python311Packages,
+  python312Packages,
   spaceNavSupport ? stdenv.hostPlatform.isLinux,
   ifcSupport ? false,
   stdenv,
@@ -40,7 +40,7 @@
   qt6,
 }:
 let
-  inherit (python311Packages)
+  inherit (python312Packages)
     boost
     gitpython
     ifcopenshell
