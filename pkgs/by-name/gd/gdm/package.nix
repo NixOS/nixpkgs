@@ -18,6 +18,7 @@
   systemd,
   dconf,
   gtk3,
+  orca,
   pam,
   libgudev,
   libselinux,
@@ -164,6 +165,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     # We are setting DESTDIR so the post-install script does not compile the schemas.
     glib-compile-schemas "$out/share/glib-2.0/schemas"
+
+    # Fix finding orca by the greeter.
+    substituteInPlace "$out/share/gdm/greeter/autostart/orca-autostart.desktop" \
+      --replace-fail "Exec=orca" "Exec=${lib.getExe orca}"
   '';
 
   env = {
