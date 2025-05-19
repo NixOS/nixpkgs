@@ -7875,6 +7875,8 @@ self: super: with self; {
 
   kivy-garden = callPackage ../development/python-modules/kivy-garden { };
 
+  kivymd = callPackage ../development/python-modules/kivymd { };
+
   kiwiki-client = callPackage ../development/python-modules/kiwiki-client { };
 
   kiwisolver = callPackage ../development/python-modules/kiwisolver { };
