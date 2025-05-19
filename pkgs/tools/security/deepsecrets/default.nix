@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3,
   fetchFromGitHub,
 }:
@@ -52,5 +53,6 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "deepsecrets";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
