@@ -1,4 +1,5 @@
 {
+  callPackage,
   lib,
   runCommand,
   writeShellScript,
@@ -227,16 +228,7 @@ let
         done
       '';
 
-  compare = import ./compare {
-    inherit
-      lib
-      jq
-      runCommand
-      writeText
-      supportedSystems
-      python3
-      ;
-  };
+  compare = callPackage ./compare { };
 
   full =
     {
