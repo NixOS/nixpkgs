@@ -15,9 +15,8 @@
 
     # Inputs
 
-    : A treefmt module. See [options reference].
-
-    [options reference]: https://nixos.org/manual/nixpkgs/unstable#sec-treefmt-options-reference
+    `module`
+    : A treefmt module. See [options reference](#sec-treefmt-options-reference).
   */
   evalConfig =
     module:
@@ -49,9 +48,8 @@
 
     # Inputs
 
-    : A treefmt module. See [options reference].
-
-    [options reference]: https://nixos.org/manual/nixpkgs/unstable#sec-treefmt-options-reference
+    `module`
+    : A treefmt module. See [options reference](#sec-treefmt-options-reference).
   */
   withConfig =
     module:
@@ -75,7 +73,8 @@
     # Inputs
 
     `settings`
-    : A settings module, used to build a treefmt config file
+    : A settings module, used to build a treefmt config file.
+      See [`settings` option reference](#opt-treefmt-settings).
   */
   buildConfig =
     module:
