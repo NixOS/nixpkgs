@@ -85,15 +85,25 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     };
     tests = {
       /**
-        Ensure that upstream's packaging code has not changed.
-        Otherwise we might have to modify ours accordingly.
         This is a fixed-output derivation triggered by version bumps.
+        The `outputHash` below would need to be updated manually from time
+        to time. It records the hash of upstream's packaging file, i.e.
+
+          $src/home-manager/default.nix
+
+        The test will fail (by design) once this packaging file is changed
+        upstream. The failure serves as an indicator that we should probably
+        update the `package.nix` here in Nixpkgs as well.
+
+        Once the changes from $src/home-manager/default.nix is incorporated
+        here, we can update the `outputHash` below to silence the test
+        failure.
       */
       upstreamPackaging =
-        runCommand "home-manager-${finalAttrs.version}.nix"
+        runCommand "home-manager-upstream-package-${finalAttrs.version}.nix"
           {
-            outputHashMode = "recursive";
             outputHash = "sha256-O290IaZj50YwuCPtzyeAK9pMSseZpBwgXHG/lpVfzFY=";
+            outputHashMode = "recursive";
           }
           ''
             echo "# upstream packaging code (for reference only)" > $out
