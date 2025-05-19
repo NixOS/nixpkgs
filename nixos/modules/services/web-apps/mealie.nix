@@ -39,6 +39,15 @@ in
       };
     };
 
+    extraOptions = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = [ "--forwarded-allow-ips=10.44.0.11" ];
+      description = ''
+        Specifies extra command line arguments to pass to mealie (Gunicorn).
+      '';
+    };
+
     credentialsFile = lib.mkOption {
       type = with lib.types; nullOr path;
       default = null;
@@ -59,6 +68,12 @@ in
           Configure local PostgreSQL database server for Mealie.
         '';
       };
+    };
+
+    trustedProxies = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      description = "A list of trusted proxies. You must set this when you are using OIDC behind https, otherwise the generated redirect url will have the wrong url scheme.";
     };
   };
 
@@ -84,7 +99,7 @@ in
         DynamicUser = true;
         User = "mealie";
         ExecStartPre = "${pkg}/libexec/init_db";
-        ExecStart = "${lib.getExe pkg} -b ${cfg.listenAddress}:${builtins.toString cfg.port}";
+        ExecStart = "${lib.getExe pkg} -b ${cfg.listenAddress}:${builtins.toString cfg.port} ${lib.escapeShellArgs cfg.extraOptions}";
         EnvironmentFile = lib.mkIf (cfg.credentialsFile != null) cfg.credentialsFile;
         StateDirectory = "mealie";
         StandardOutput = "journal";
@@ -95,6 +110,10 @@ in
       DB_ENGINE = "postgres";
       POSTGRES_URL_OVERRIDE = "postgresql://mealie:@/mealie?host=/run/postgresql";
     };
+
+    services.mealie.extraOptions = lib.mkIf (cfg.trustedProxies != [ ]) [
+      "--forwarded-allow-ips=${lib.concatStringsSep "," cfg.trustedProxies}"
+    ];
 
     services.postgresql = lib.mkIf cfg.database.createLocally {
       enable = true;
