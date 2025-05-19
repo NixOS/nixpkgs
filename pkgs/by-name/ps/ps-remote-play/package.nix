@@ -14,8 +14,8 @@ stdenvNoCC.mkDerivation {
   pname = "ps-remote-play";
   version = "8.0.0";
   src = fetchurl {
-    url = "https://remoteplay.dl.playstation.net/remoteplay/module/mac/RemotePlayInstaller.pkg";
-    sha256 = "sha256-+iyK9RcaFLqVlRZaHMGxxlMpxkGgCuP+zzW12xOjms4=";
+    url = "https://web.archive.org/web/20250519143727/https://remoteplay.dl.playstation.net/remoteplay/module/mac/RemotePlayInstaller.pkg";
+    hash = "sha256-+iyK9RcaFLqVlRZaHMGxxlMpxkGgCuP+zzW12xOjms4=";
   };
   buildInputs = [
     _7zz
@@ -44,11 +44,12 @@ stdenvNoCC.mkDerivation {
     "${placeholder "out"}/Applications/RemotePlay.app/Contents/Info.plist"
   ];
   doInstallCheck = true;
-  meta = with lib; {
+  meta = {
     homepage = "https://remoteplay.dl.playstation.net/remoteplay/lang/gb/";
-    maintainers = [ maintainers.ohheyrj ];
+    maintainers = with lib.maintainers; [ ohheyrj ];
     description = "PS Remote Play is a free app that lets you stream and play your PS5 or PS4 games on compatible devices like smartphones, tablets, PCs, and Macs, allowing you to game remotely over Wi-Fi or mobile data.";
-    license = licenses.unfree;
-    platforms = platforms.darwin;
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.darwin;
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }
