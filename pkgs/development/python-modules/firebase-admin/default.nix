@@ -61,6 +61,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/firebase/firebase-admin-python";
     changelog = "https://github.com/firebase/firebase-admin-python/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jhahn ];
+    maintainers = with lib.maintainers; [
+      jhahn
+      sarahec
+    ];
   };
 }
