@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "telegram-mac";
+  pname = "telegram-mac-bin";
   version = "11.8.2.271692";
   src = fetchzip {
     url = "https://osx.telegram.org/updates/Telegram-${version}.app.zip";
