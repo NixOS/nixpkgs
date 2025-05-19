@@ -113,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       lzcunt
       phip1611
+      prince213
       surfaceflinger
     ];
   };
