@@ -339,8 +339,10 @@ def main():
         else:
             raise Exception(f'Unsupported CPU family: {cpu_family}')
 
+        efi_loader_directory_name = 'boot' if config('efiRemovable') else 'limine'
+
         efi_path = os.path.join(config('liminePath'), 'share', 'limine', boot_file)
-        dest_path = os.path.join(config('efiMountPoint'), 'efi', 'boot' if config('efiRemovable') else 'limine', boot_file)
+        dest_path = os.path.join(config('efiMountPoint'), 'efi', efi_loader_directory_name, boot_file)
 
         copy_file(efi_path, dest_path)
 
@@ -357,28 +359,25 @@ def main():
             print('warning: boot.loader.efi.canTouchEfiVariables is set to false while boot.loader.limine.efiInstallAsRemovable.\n  This may render the system unbootable.')
 
         if config('canTouchEfiVariables'):
-            if config('efiRemovable'):
-                print('note: boot.loader.limine.efiInstallAsRemovable is true, no need to add EFI entry.')
-            else:
-                efibootmgr = os.path.join(config('efiBootMgrPath'), 'bin', 'efibootmgr')
-                efi_partition = find_mounted_device(config('efiMountPoint'))
-                efi_disk = find_disk_device(efi_partition)
-                efibootmgr_output = subprocess.check_output([
-                    efibootmgr,
-                    '-c',
-                    '-d', efi_disk,
-                    '-p', efi_partition.removeprefix(efi_disk).removeprefix('p'),
-                    '-l', f'\\efi\\limine\\{boot_file}',
-                    '-L', 'Limine',
-                ], stderr=subprocess.STDOUT, universal_newlines=True)
+            efibootmgr = os.path.join(config('efiBootMgrPath'), 'bin', 'efibootmgr')
+            efi_partition = find_mounted_device(config('efiMountPoint'))
+            efi_disk = find_disk_device(efi_partition)
+            efibootmgr_output = subprocess.check_output([
+                efibootmgr,
+                '-c',
+                '-d', efi_disk,
+                '-p', efi_partition.removeprefix(efi_disk).removeprefix('p'),
+                '-l', f'\\efi\\{efi_loader_directory_name}\\{boot_file}',
+                '-L', 'Limine',
+            ], stderr=subprocess.STDOUT, universal_newlines=True)
 
-                for line in efibootmgr_output.split('\n'):
-                    if matches := re.findall(r'Boot([0-9a-fA-F]{4}) has same label Limine', line):
-                        subprocess.run(
-                            [efibootmgr, '-b', matches[0], '-B'],
-                            stdout=subprocess.DEVNULL,
-                            stderr=subprocess.DEVNULL,
-                        )
+            for line in efibootmgr_output.split('\n'):
+                if matches := re.findall(r'Boot([0-9a-fA-F]{4}) has same label Limine', line):
+                    subprocess.run(
+                        [efibootmgr, '-b', matches[0], '-B'],
+                        stdout=subprocess.DEVNULL,
+                        stderr=subprocess.DEVNULL,
+                    )
     if config('biosSupport'):
         if cpu_family != 'x86':
             raise Exception(f'Unsupported CPU family for BIOS install: {cpu_family}')
