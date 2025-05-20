@@ -14,9 +14,9 @@
 
       services.xserver.enable = true;
 
-      services.xserver.displayManager = {
-        gdm.enable = true;
-        gdm.debug = true;
+      services.displayManager.gdm = {
+        enable = true;
+        debug = true;
       };
 
       services.displayManager.autoLogin = {
@@ -24,9 +24,9 @@
         user = user.name;
       };
 
-      services.xserver.desktopManager.gnome.enable = true;
-      services.xserver.desktopManager.gnome.debug = true;
-      services.xserver.desktopManager.gnome.flashback.enableMetacity = true;
+      services.desktopManager.gnome.enable = true;
+      services.desktopManager.gnome.debug = true;
+      services.desktopManager.gnome.flashback.enableMetacity = true;
       services.displayManager.defaultSession = "gnome-flashback-metacity";
     };
 

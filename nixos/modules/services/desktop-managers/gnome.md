@@ -10,8 +10,8 @@ To enable the GNOME desktop use:
 
 ```nix
 {
-  services.xserver.desktopManager.gnome.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
+  services.desktopManager.gnome.enable = true;
+  services.displayManager.gdm.enable = true;
 }
 ```
 
@@ -76,17 +76,17 @@ GNOME Flashback provides a desktop environment based on the classic GNOME 2 arch
 
 ```nix
 {
-  services.xserver.desktopManager.gnome.flashback.enableMetacity = true;
+  services.desktopManager.gnome.flashback.enableMetacity = true;
 }
 ```
 
-It is also possible to create custom sessions that replace Metacity with a different window manager using [](#opt-services.xserver.desktopManager.gnome.flashback.customSessions).
+It is also possible to create custom sessions that replace Metacity with a different window manager using [](#opt-services.desktopManager.gnome.flashback.customSessions).
 
 The following example uses `xmonad` window manager:
 
 ```nix
 {
-  services.xserver.desktopManager.gnome.flashback.customSessions = [
+  services.desktopManager.gnome.flashback.customSessions = [
     {
       wmName = "xmonad";
       wmLabel = "XMonad";
@@ -143,10 +143,10 @@ Overrides really only change the default values for GSettings keys so if you or 
 :::
 
 You can override the default GSettings values using the
-[](#opt-services.xserver.desktopManager.gnome.extraGSettingsOverrides) option.
+[](#opt-services.desktopManager.gnome.extraGSettingsOverrides) option.
 
 Take note that whatever packages you want to override GSettings for, you need to add them to
-[](#opt-services.xserver.desktopManager.gnome.extraGSettingsOverridePackages).
+[](#opt-services.desktopManager.gnome.extraGSettingsOverridePackages).
 
 You can use `dconf-editor` tool to explore which GSettings you can set.
 
@@ -154,7 +154,7 @@ You can use `dconf-editor` tool to explore which GSettings you can set.
 
 ```nix
 {
-  services.xserver.desktopManager.gnome = {
+  services.desktopManager.gnome = {
     extraGSettingsOverrides = ''
       # Change default background
       [org.gnome.desktop.background]
