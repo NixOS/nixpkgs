@@ -37,7 +37,7 @@ let
     ."hash_${arch}-${os}";
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "ocis-bin";
+  pname = "ocis_70-bin";
   version = "7.0.1";
 
   src = fetchurl {
