@@ -19,17 +19,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "stalwart-mail";
-  version = "0.11.8";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
-    repo = "mail-server";
-    tag = "v${version}";
-    hash = "sha256-VqGosbSQxNeOS+kGtvXAmz6vyz5mJlXvKZM57B1Xue4=";
+    repo = "stalwart";
+    # tag = "v${version}";
+    rev = "8511de8a4dbc9cc0a62e9a616061f430ab15f13f";
+    hash = "sha256-nCrcUL/Il99a/fRv9fAol2mRg7EEKSJxqcFW0pkLMWM=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-iheURWxO0cOvO+FV01l2Vmo0B+S2mXzue6mx3gapftQ=";
+  cargoHash = "sha256-I1Pj8zi4ZPreg95iSmZNqOevGRUazDFmyOLFqZgIx2A=";
 
   nativeBuildInputs = [
     pkg-config
@@ -44,7 +45,7 @@ rustPlatform.buildRustPackage rec {
     zstd
   ] ++ lib.optionals (stdenv.hostPlatform.isLinux && withFoundationdb) [ foundationdb ];
 
-  # Issue: https://github.com/stalwartlabs/mail-server/issues/1104
+  # Issue: https://github.com/stalwartlabs/stalwart/issues/1104
   buildNoDefaultFeatures = true;
   buildFeatures = [
     "sqlite"
@@ -152,9 +153,10 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Secure & Modern All-in-One Mail Server (IMAP, JMAP, SMTP)";
-    homepage = "https://github.com/stalwartlabs/mail-server";
-    changelog = "https://github.com/stalwartlabs/mail-server/blob/main/CHANGELOG.md";
+    homepage = "https://github.com/stalwartlabs/stalwart";
+    changelog = "https://github.com/stalwartlabs/stalwart/blob/main/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
+    mainProgram = "stalwart";
     maintainers = with lib.maintainers; [
       happysalada
       onny
