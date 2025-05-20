@@ -25143,6 +25143,12 @@
     github = "totoroot";
     githubId = 39650930;
   };
+  tournev = {
+    name = "Vincent Tourneur";
+    email = "vincent@pimoid.fr";
+    github = "vtourneur";
+    githubId = 48284424;
+  };
   ToxicFrog = {
     email = "toxicfrog@ancilla.ca";
     github = "ToxicFrog";
