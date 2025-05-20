@@ -15,7 +15,12 @@ let
     assertMsg
     ;
   inherit (lib.attrsets) mapAttrs' filterAttrs;
-  inherit (builtins) isString match typeOf;
+  inherit (builtins)
+    isString
+    match
+    typeOf
+    elemAt
+    ;
 
 in
 rec {
@@ -484,4 +489,38 @@ rec {
     assert assertMsg (match ".*/.*" y == null)
       "lib.meta.getExe': The second argument \"${y}\" is a nested path with a \"/\" character, but it should just be the name of the executable instead.";
     "${getBin x}/bin/${y}";
+
+  tryCPEFullVersionWithVendor = vendor: version: {
+    success = true;
+    value = cpeFullVersionWithVendor vendor version;
+  };
+  cpeFullVersionWithVendor = vendor: version: {
+    inherit vendor version;
+    update = "*";
+  };
+
+  tryCPEPatchVersionInUpdateWithVendor =
+    vendor: version:
+    let
+      regex = "([0-9]+\.[0-9]+)\.([0-9]+)";
+      # we have to call toString here in case version is an attrset with __toString attribute
+      versionMatch = builtins.match regex (toString version);
+    in
+    if versionMatch == null then
+      {
+        success = false;
+        value = throw "version ${version} doesn't match regex `${regex}`";
+      }
+    else
+      {
+        success = true;
+        value = {
+          inherit vendor;
+          version = elemAt versionMatch 0;
+          update = elemAt versionMatch 1;
+        };
+      };
+
+  cpePatchVersionInUpdateWithVendor =
+    vendor: version: (tryCPEPatchVersionInUpdateWithVendor vendor version).value;
 }
