@@ -731,6 +731,7 @@ mapAliases {
   gfortran7 = throw "gfortran7 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-11-20
   gfortran8 = throw "gfortran8 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-11-20
   gg = go-graft; # Added 2025-03-07
+  ggobi = throw "'ggobi' has been removed from Nixpkgs, as it is unmaintained and broken"; # Added 2025-05-18
   ghostwriter = makePlasma5Throw "ghostwriter"; # Added 2023-03-18
   git-annex-utils = throw "'git-annex-utiks' has been removed as it is unmaintained"; # Added 2025-05-18
   git-codeowners = throw "'git-codeowners' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
@@ -1217,6 +1218,7 @@ mapAliases {
   microcodeAmd = microcode-amd; # Added 2024-09-08
   microcodeIntel = microcode-intel; # Added 2024-09-08
   micropad = throw "micropad has been removed, since it was unmaintained and blocked the Electron 27 removal."; # Added 2025-02-24
+  microsoft-edge = throw "microsoft-edge has been removed due to lack of maintenance in nixpkgs"; # Added 2025-05-19
   microsoft_gsl = microsoft-gsl; # Added 2023-05-26
   MIDIVisualizer = midivisualizer; # Added 2024-06-12
   mikutter = throw "'mikutter' has been removed because the package was broken and had no maintainers"; # Added 2024-10-01

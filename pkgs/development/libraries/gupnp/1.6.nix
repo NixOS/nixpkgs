@@ -15,7 +15,7 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gupnp";
   version = "1.6.8";
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gupnp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gupnp/${lib.versions.majorMinor finalAttrs.version}/gupnp-${finalAttrs.version}.tar.xz";
     hash = "sha256-cKADzr1oV3KT+z5q9J/5AiA7+HaLL8XWUd3B8PoeEek=";
   };
 
@@ -54,7 +54,8 @@ stdenv.mkDerivation rec {
     "-Dgtk_doc=true"
   ];
 
-  doCheck = true;
+  # On Darwin: Failed to bind socket, Operation not permitted
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
@@ -64,7 +65,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       attrPath = "gupnp_1_6";
-      packageName = pname;
+      packageName = "gupnp";
     };
   };
 
@@ -73,6 +74,6 @@ stdenv.mkDerivation rec {
     description = "Implementation of the UPnP specification";
     mainProgram = "gupnp-binding-tool-1.6";
     license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
-}
+})

@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
     inherit hash;
   };
 
-  KANIDM_BUILD_PROFILE = "release_nixpgs_${arch}";
+  KANIDM_BUILD_PROFILE = "release_nixpkgs_${arch}";
 
   patches = lib.optionals enableSecretProvisioning [
     "${patchDir}/oauth2-basic-secret-modify.patch"
@@ -59,7 +59,7 @@ rustPlatform.buildRustPackage rec {
   postPatch =
     let
       format = (formats.toml { }).generate "${KANIDM_BUILD_PROFILE}.toml";
-      socket_path = if stdenv.hostPlatform.isLinux then "/run/kanidm/sock" else "/var/run/kanidm.socket";
+      socket_path = if stdenv.hostPlatform.isLinux then "/run/kanidmd/sock" else "/var/run/kanidm.socket";
       profile =
         {
           cpu_flags = if stdenv.hostPlatform.isx86_64 then "x86_64_legacy" else "none";
