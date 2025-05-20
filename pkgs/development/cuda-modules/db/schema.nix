@@ -11,7 +11,12 @@ let
     submodule
     ;
 
-  inherit (import ./columnar.nix) Unit SetOfStr mkColumnOption;
+  inherit (import ./columnar.nix)
+    Unit
+    SetOfStr
+    mkColumnOption
+    assertSubset
+    ;
 
   cudb = config;
 in
@@ -68,6 +73,40 @@ in
       );
     in
     {
+      # :: Str -> ()
+      product = mkOption {
+        type = SetOfStr;
+        default = { };
+      };
+
+      # :: ProductName -> PName -> ProductVersion -> Option<PackageVersion>
+      release = mkColumnOption cudb.product {
+        type = attrsOf (attrsOf (nullOr str));
+        default = { };
+      } { default = { }; };
+
+      # :: PName -> Version -> Set<SHA256>
+      archive.bucket = mkColumnOption cudb.package.pname {
+        type = attrsOf SetOfStr;
+        default = { };
+      } { };
+      archive.sha256 = mkOption {
+        type = attrsOf (submodule {
+          options = {
+            systemNv = mkOption {
+              type = enum (builtins.attrNames cudb.system.nvidia);
+            };
+            tags = mkOption {
+              type = SetOfStr;
+              default = { };
+            };
+            url = mkOption {
+              type = nullOr str;
+            };
+          };
+        });
+      };
+
       package =
         let
           index = cudb.package.pname;
@@ -164,7 +203,12 @@ in
 
       base_url = mkOption {
         type = str;
+        description = "Base URL for redistributable packages";
         default = "https://developer.download.nvidia.com/compute/";
+      };
+      trt_base_url = mkOption {
+        type = str;
+        description = "Base URL for (non-redistributable) TensorRT packages";
       };
 
       assertions = mkOption {
@@ -198,5 +242,20 @@ in
     system = {
       fromNvidia = lib.mapAttrs (_: _: lib.mkDefault { }) cudb.system.nvidia;
     };
+    assertions =
+      [
+        {
+          message = "TensorRT license can't be redistributable";
+          assertion = !cudb.license.compiled.${cudb.package.license.tensorrt}.redistributable;
+        }
+      ]
+      ++ lib.flatten (
+        builtins.attrValues (
+          lib.mapAttrs (
+            product: pnameVersions:
+            assertSubset "package.pname" cudb.package.pname "release.${product}" pnameVersions
+          ) cudb.release
+        )
+      );
   };
 }

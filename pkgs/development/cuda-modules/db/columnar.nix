@@ -40,4 +40,11 @@ in
         }
       ) colNames
     );
+
+  assertSubset = indexName: index: tableName: table: [
+    {
+      message = "${tableName} defines items outside ${indexName}";
+      assertion = lib.all (lib.flip builtins.elem (builtins.attrNames index)) (builtins.attrNames table);
+    }
+  ];
 }

@@ -79,4 +79,5 @@ in
     pname.tensorrt = 1;
     license.tensorrt = lib.licenses.nvidiaProprietary.shortName;
   };
+  trt_base_url = "https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/{version}/tars/";
 }

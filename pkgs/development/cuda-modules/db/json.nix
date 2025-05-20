@@ -95,6 +95,10 @@ let
       )
     else
       raw.release_product;
+  releaseLabel =
+    raw.release_label or (builtins.head (
+      lib.match "^.*_([0-9]{1,2}(\\.[0-9]{1,3}){1,3})\\.json$" (builtins.baseNameOf path) # Forgive me Lord
+    ));
   distribution_path = if productName == null then null else "${productName}/redist/";
 
   raw = evaluated.config;
@@ -170,6 +174,32 @@ in
         }
       ]
     ))
+    ++ lib.optionals (productName != null) [
+      {
+        product.${productName} = 1;
+      }
+    ]
+    ++ lib.optionals (productName != null) (
+      fmapPackages (
+        otherAttrs: pname: systemNv: tag: rawPackage:
+        lib.optionals (looksLikeSystem systemNv && otherAttrs ? version) [
+          {
+            release.${productName}.${pname} = {
+              ${releaseLabel} = otherAttrs.version;
+            };
+            archive.bucket.${pname}.${otherAttrs.version}.${rawPackage.sha256} = 1;
+            archive.sha256.${rawPackage.sha256} =
+              {
+                inherit systemNv;
+                url = "${config.base_url}${rawPackage.relative_path}";
+              }
+              // lib.optionalAttrs (tag != null) {
+                tags.${tag} = 1;
+              };
+          }
+        ]
+      )
+    )
     ++ [
       {
         package = {
@@ -226,11 +256,7 @@ in
               lib.optionalAttrs (shortName != null) { ${shortName} = mkDefaultHarder "${pname}/LICENSE.txt"; }
             ) rawPackages;
             distribution_path = lib.mapAttrs (
-              _: _:
-              if distribution_path == null then
-                mkDefaultWeaker null
-              else
-                mkDefaultHarder distribution_path
+              _: _: if distribution_path == null then mkDefaultWeaker null else mkDefaultHarder distribution_path
             ) shortNames;
             compiled = lib.concatMapAttrs (
               pname: perSystem:
