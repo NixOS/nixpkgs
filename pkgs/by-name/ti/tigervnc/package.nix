@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   xorg,
   xkeyboard_config,
   zlib,
@@ -26,23 +25,15 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.14.0";
+  version = "1.15.0";
   pname = "tigervnc";
 
   src = fetchFromGitHub {
     owner = "TigerVNC";
     repo = "tigervnc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TgVV/4MRsQHYKpDf9L5eHMLVpdwvNy1KPDIe7xMlQ9o=";
+    hash = "sha256-ZuuvRJe/lAqULWObPxGHVJrDPCTK4IVSqX0K1rWOctw=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "vncauth-security-type.patch";
-      url = "https://github.com/TigerVNC/tigervnc/commit/4f6a3521874da5a67fd746389cfa9b6199eb3582.diff";
-      hash = "sha256-lSkR8e+jsBwkQUJZmA0tb8nM5iSbYtO8uVXtgk5wdF8=";
-    })
-  ];
 
   postPatch =
     lib.optionalString stdenv.hostPlatform.isLinux ''
