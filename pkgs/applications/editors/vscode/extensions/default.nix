@@ -4824,6 +4824,8 @@ let
 
       tekumara.typos-vscode = callPackage ./tekumara.typos-vscode { };
 
+      teros-technology.teroshdl = callPackage ./teros-technology-teroshdl { };
+
       theangryepicbanana.language-pascal = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "language-pascal";
