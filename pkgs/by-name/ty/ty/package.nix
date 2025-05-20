@@ -83,6 +83,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/astral-sh/ty/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "ty";
-    maintainers = [ lib.maintainers.bengsparks ];
+    maintainers = with lib.maintainers; [
+      bengsparks
+      GaetanLepage
+    ];
   };
 })
