@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nix-update-script,
   makeWrapper,
+  nixosTests,
 
   # for addons
   buildNpmPackage,
@@ -76,6 +77,8 @@ buildGoModule (finalAttrs: {
     cp -r static templates $out/share
     cp config.yml_sample $out/share/examples/config.yml
   '';
+
+  passthru.tests = nixosTests.omnom;
 
   meta = {
     description = "A webpage bookmarking and snapshotting service";
