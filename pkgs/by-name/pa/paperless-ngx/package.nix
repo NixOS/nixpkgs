@@ -26,13 +26,13 @@
   xorg,
 }:
 let
-  version = "2.15.3";
+  version = "2.16.1";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
-    hash = "sha256-zkOOUMyAvYYJnYn4s7D4tsYhodVX5kvPdXBBknBsusY=";
+    hash = "sha256-wdcwSWaixNceVqrCXStf+0jnWbigd3k5FXRF0o2UbW0=";
   };
 
   python = python3.override {
@@ -69,7 +69,7 @@ let
 
       pnpmDeps = pnpm.fetchDeps {
         inherit pname version src;
-        hash = "sha256-yoTXlxXLcWD2DMxqjb02ZORJ+E0xE1DbZm1VL7vXM4g=";
+        hash = "sha256-tSBpZ+1aPLUI0SKpOyKo+OLsJZiyDCxRb+5hKMPrxL8=";
       };
 
       nativeBuildInputs =
@@ -323,7 +323,7 @@ python.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool to scan, index, and archive all of your physical documents";
     homepage = "https://docs.paperless-ngx.com/";
-    changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/v${version}";
+    changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     mainProgram = "paperless-ngx";
