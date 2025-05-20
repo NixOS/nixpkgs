@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vtsls";
-  version = "0.2.8";
+  version = "0.2.9";
 
   src = fetchFromGitHub {
     owner = "yioneko";
     repo = "vtsls";
     rev = "server-v${finalAttrs.version}";
-    hash = "sha256-Ng+aOBnxFRbMjoUy6+DvIk2yVpvJT+AMsbvDb+IlYpY=";
+    hash = "sha256-vlw84nigvQqRB9OQBxOmrR9CClU9M4dNgF/nrvGN+sk=";
     fetchSubmodules = true;
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       version
       ;
-    hash = "sha256-xenPpKsIjEIyVeZDjwjLaBbpWLqWQDBaLLfyzxtrsTI=";
+    hash = "sha256-SdqeTYRH60CyU522+nBo0uCDnzxDP48eWBAtGTL/pqg=";
   };
 
   # Patches to get submodule sha from file instead of 'git submodule status'
