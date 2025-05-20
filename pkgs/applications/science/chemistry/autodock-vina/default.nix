@@ -2,23 +2,23 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  boost,
+  boost186,
   glibc,
 }:
 let
-  boost' = boost.override {
+  boost' = boost186.override {
     enableShared = false;
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "autodock-vina";
-  version = "1.2.6";
+  version = "1.2.7";
 
   src = fetchFromGitHub {
     owner = "ccsb-scripps";
     repo = "autodock-vina";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y0whqBecZt5D/5HEfL005rCq4lAJTr2mUxy5rygCEtc=";
+    hash = "sha256-AQJl/EUAkdIQJZSN27sbjG7dYbQxeEb8Pd+p2kKRnvA=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/build/${
@@ -46,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.boost = boost';
 
   meta = with lib; {
     description = "One of the fastest and most widely used open-source docking engines";

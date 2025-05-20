@@ -23,6 +23,7 @@
 let
   cef = cef-binary.overrideAttrs (oldAttrs: {
     version = "126.2.18";
+    __intentionallyOverridingVersion = true; # `cef-binary` uses the overridden `srcHash` values in its source FOD
     gitRevision = "3647d39";
     chromiumVersion = "126.0.6478.183";
 
@@ -65,11 +66,15 @@ let
       jdk17
     ];
 
-    cmakeFlags = [
-      "-D CMAKE_BUILD_TYPE=Release"
-      "-D BOLT_LUAJIT_INCLUDE_DIR=${luajit}/include"
-      "-G Ninja"
-    ];
+    cmakeFlags =
+      [
+        "-D CMAKE_BUILD_TYPE=Release"
+        "-D BOLT_LUAJIT_INCLUDE_DIR=${luajit}/include"
+        "-G Ninja"
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isAarch64) [
+        (lib.cmakeFeature "PROJECT_ARCH" "arm64")
+      ];
 
     preConfigure = ''
       mkdir -p cef

@@ -134,8 +134,6 @@ stdenv.mkDerivation (finalAttrs: {
         gnused
         ;
       inherit runtimeShell;
-      # patch context
-      OUTPUT = null;
     })
 
     # Meson does not support using different directories during build and

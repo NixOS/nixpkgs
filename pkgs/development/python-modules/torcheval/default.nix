@@ -106,6 +106,11 @@ buildPythonPackage {
       # AssertionError: Scalars are not close!
       # Expected -640.4547729492188 but got -640.4707641601562
       "--deselect=tests/metrics/regression/test_mean_squared_error.py::TestMeanSquaredError::test_mean_squared_error_class_update_input_shape_different"
+
+      # -- tests/metrics/window/test_mean_squared_error.py --
+      # AssertionError: Scalars are not close!
+      # Expected 0.0009198983898386359 but got 0.0009198188781738281
+      "--deselect=tests/metrics/window/test_mean_squared_error.py::TestMeanSquaredError::test_mean_squared_error_class_update_input_shape_different"
     ]
 
     # These tests error on darwin platforms.

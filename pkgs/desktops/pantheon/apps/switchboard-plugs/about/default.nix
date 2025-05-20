@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-about";
-  version = "8.2.0";
+  version = "8.2.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-NMi+QyIunUIzg9IlzeUCz2eQrQlF28lufFc51XOQljU=";
+    sha256 = "sha256-H4BDLP3yzQi+ougpvBvnv1R1TImzUjSOVDGbOqw9hvg=";
   };
 
   nativeBuildInputs = [

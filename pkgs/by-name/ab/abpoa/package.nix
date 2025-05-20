@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "${lib.optionalString enablePython "py"}abpoa";
-  version = "1.5.3";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "yangao07";
     repo = "abPOA";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-90mkXp4cC0Omnx0C7ab7NNs/M2oedIcICTUJl3qhcyo=";
+    hash = "sha256-E6XdiRULgJy9rf4NfXGBqUC+m0pMZKMsA5pHvCNNLJk=";
   };
 
   patches = [ ./simd-arch.patch ];
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = lib.optionalString (!enablePython) ''
     runHook preInstall
 
-    install -Dm755 ./bin/abpoa -t $out/bin
+    install -Dm755 ./bin/abpoa* $out/bin/abpoa
 
     runHook postInstall
   '';

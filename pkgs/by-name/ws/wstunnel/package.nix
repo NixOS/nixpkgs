@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "10.1.11";
+  version = "10.3.0";
 in
 
 rustPlatform.buildRustPackage {
@@ -19,11 +19,11 @@ rustPlatform.buildRustPackage {
     owner = "erebe";
     repo = "wstunnel";
     tag = "v${version}";
-    hash = "sha256-CtJws2O5ywR2prIlDoMbsPi6SH+ffxdqfCKUByukqpA=";
+    hash = "sha256-Eq5d80hLg0ZkXtnObDQXmC+weUq9eN5SIQ6teVxB3a4=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-YZrScEdRNZ/RU3PBRThw29Yu04N42nwe5DLLABRZtLw=";
+  cargoHash = "sha256-V5ohlS+dTrmhsvxpXW9JA7YpH/LWiyepUwEdBRrHiYE=";
 
   cargoBuildFlags = [ "--package wstunnel-cli" ];
 

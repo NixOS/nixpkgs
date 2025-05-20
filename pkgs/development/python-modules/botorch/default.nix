@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "botorch";
-  version = "0.13.0";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "botorch";
     tag = "v${version}";
-    hash = "sha256-Hik0HPHFoN1+uIeVxG7UPKc1ADBoTTBkL2+LhHDrr+s=";
+    hash = "sha256-IyRi5kXePnDv2q6SrXLtdltQ1/2/zQ3EBx5phtuX8sE=";
   };
 
   build-system = [
@@ -79,7 +79,7 @@ buildPythonPackage rec {
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
-    changelog = "https://github.com/pytorch/botorch/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/pytorch/botorch/blob/${src.tag}/CHANGELOG.md";
     description = "Bayesian Optimization in PyTorch";
     homepage = "https://botorch.org";
     license = lib.licenses.mit;

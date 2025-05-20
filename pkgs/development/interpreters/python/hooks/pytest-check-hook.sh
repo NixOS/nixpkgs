@@ -38,7 +38,8 @@ function pytestCheckPhase() {
         else
             # The `|| kill "$$"` trick propagates the errors from the process substitutiton subshell,
             # which is suggested by a StackOverflow answer: https://unix.stackexchange.com/a/217643
-            readarray -t -O"${#flagsArray[@]}" flagsArray < <(@pythonCheckInterpreter@ - "$path" <<EOF || kill "$$")
+            readarray -t -O"${#flagsArray[@]}" flagsArray < <(
+                @pythonCheckInterpreter@ - "$path" <<EOF || kill "$$"
 import glob
 import sys
 path_glob=sys.argv[1]
@@ -50,6 +51,7 @@ if not len(path_expanded):
 for path in path_expanded:
     print(path)
 EOF
+            )
         fi
     done
 

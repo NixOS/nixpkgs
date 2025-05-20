@@ -19,13 +19,13 @@ let
 in
 buildNpmPackage rec {
   pname = "penpot-desktop";
-  version = "0.13.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "author-more";
     repo = "penpot-desktop";
     tag = "v${version}";
-    hash = "sha256-ZN0SoPvzZlCGrWOfYw/ain+3+IWLwl6mKLhhArf4MIg=";
+    hash = "sha256-ztvwabsy7PiT8m0+DDehvwV8oclJCb1BymEpkjTPtZ8=";
   };
 
   makeCacheWritable = true;
@@ -33,7 +33,7 @@ buildNpmPackage rec {
     "--engine-strict"
     "--legacy-peer-deps"
   ];
-  npmDepsHash = "sha256-wJpcgSp9V0GJm8I+3LgFwo2Nq/Hu5qW24peKBwNvzMo=";
+  npmDepsHash = "sha256-aRdqq0tMuNXkSy/NYdwir+LfwAr466dLi2b4vO/yjdg=";
   # Do not run the default build script as it leads to errors caused by the electron-builder configuration
   dontNpmBuild = true;
 

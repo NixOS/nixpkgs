@@ -5,12 +5,12 @@
 }:
 
 let
-  version = "1.5.0";
+  version = "1.6.0";
   src = fetchFromGitHub {
     owner = "tynany";
     repo = "frr_exporter";
     rev = "v${version}";
-    hash = "sha256-lGS3/lKtNRmG8zM2V1I9vXhMXoqjMHchHZdag0qECR4=";
+    hash = "sha256-Dk8YcaUzpM65WlSTJojVZb3IDGIZ7DGWOstRgyA/sYw=";
   };
 in
 buildGoModule {

@@ -11,8 +11,6 @@
   XCTest,
   sqlite,
   ncurses,
-  CryptoKit,
-  LocalAuthentication,
 }:
 let
   sources = callPackage ../sources.nix { };
@@ -35,17 +33,12 @@ stdenv.mkDerivation {
     swift
     swiftpm
   ];
-  buildInputs =
-    [
-      Foundation
-      XCTest
-      sqlite
-      ncursesInput
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CryptoKit
-      LocalAuthentication
-    ];
+  buildInputs = [
+    Foundation
+    XCTest
+    sqlite
+    ncursesInput
+  ];
 
   configurePhase =
     generated.configure

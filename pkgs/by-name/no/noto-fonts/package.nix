@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation rec {
 
   outputs = [
     "out"
-    "megamerge" # Experimental fonts created by mergeing regular notofonts
+    "megamerge" # Experimental fonts created by merging regular notofonts
   ];
 
   _variants = map (variant: builtins.replaceStrings [ " " ] [ "" ] variant) variants;

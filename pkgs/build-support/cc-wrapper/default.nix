@@ -745,9 +745,17 @@ stdenvNoCC.mkDerivation {
     # no `/usr/include`, there’s essentially no risk to dropping
     # the flag there. See discussion in NixOS/nixpkgs#191152.
     #
-    + optionalString ((cc.isClang or false) && !(cc.isROCm or false) && !targetPlatform.isDarwin) ''
-      echo " -nostdlibinc" >> $out/nix-support/cc-cflags
-    ''
+    +
+      optionalString
+        (
+          (cc.isClang or false)
+          && !(cc.isROCm or false)
+          && !targetPlatform.isDarwin
+          && !targetPlatform.isAndroid
+        )
+        ''
+          echo " -nostdlibinc" >> $out/nix-support/cc-cflags
+        ''
 
     ##
     ## Man page and info support
@@ -872,6 +880,7 @@ stdenvNoCC.mkDerivation {
       cc = optionalString (!nativeTools) cc;
       wrapperName = "CC_WRAPPER";
       inherit suffixSalt coreutils_bin bintools;
+      bintools_targetPrefix = bintools.targetPrefix;
       inherit libc_bin libc_dev libc_lib;
       inherit darwinPlatformForCC;
       default_hardening_flags_str = builtins.toString defaultHardeningFlags;

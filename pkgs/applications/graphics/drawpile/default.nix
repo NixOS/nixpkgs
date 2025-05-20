@@ -1,7 +1,6 @@
 {
   stdenv,
   lib,
-  mkDerivation,
   fetchFromGitHub,
   cargo,
   extra-cmake-modules,
@@ -9,21 +8,16 @@
   rustPlatform,
 
   # common deps
-  karchive,
-  qtwebsockets,
+  libzip,
+  qt6Packages,
 
   # client deps
-  qtbase,
-  qtkeychain,
-  qtmultimedia,
-  qtsvg,
-  qttools,
+  ffmpeg,
   libsecret,
   libwebp,
 
   # optional client deps
   giflib,
-  kdnssd,
   libvpx,
   miniupnpc,
 
@@ -45,17 +39,17 @@ assert lib.assertMsg (
 ) "You must specify at least one of buildClient, buildServer, or buildExtraTools.";
 
 let
-  clientDeps = [
+  clientDeps = with qt6Packages; [
     qtbase
     qtkeychain
     qtmultimedia
     qtsvg
     qttools
+    ffmpeg
     libsecret
     libwebp
     # optional:
     giflib # gif animation export support
-    kdnssd # local server discovery with Zeroconf
     libvpx # WebM video export
     miniupnpc # automatic port forwarding
   ];
@@ -67,7 +61,7 @@ let
   ] ++ lib.optional withSystemd systemd;
 
 in
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "drawpile";
   version = "2.2.2";
 
@@ -88,12 +82,18 @@ mkDerivation rec {
     extra-cmake-modules
     rustc
     rustPlatform.cargoSetupHook
+    (
+      if buildClient || buildServerGui then
+        qt6Packages.wrapQtAppsHook
+      else
+        qt6Packages.wrapQtAppsNoGuiHook
+    )
   ];
 
   buildInputs =
     [
-      karchive
-      qtwebsockets
+      libzip
+      qt6Packages.qtwebsockets
     ]
     ++ lib.optionals buildClient clientDeps
     ++ lib.optionals buildServer serverDeps;

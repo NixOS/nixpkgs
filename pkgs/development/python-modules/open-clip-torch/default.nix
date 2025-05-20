@@ -95,7 +95,5 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ iynaix ];
     mainProgram = "open-clip";
-    # Segfaults during pythonImportsCheck phase
-    broken = stdenv.hostPlatform.system == "x86_64-darwin";
   };
 }

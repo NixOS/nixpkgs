@@ -7,7 +7,6 @@
   glib,
   expat,
   libmicrohttpd,
-  darwin,
 }:
 stdenv.mkDerivation {
   pname = "stabber-unstable";
@@ -37,7 +36,7 @@ stdenv.mkDerivation {
     glib
     expat
     libmicrohttpd
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  ];
 
   meta = with lib; {
     description = "Stubbed XMPP Server";

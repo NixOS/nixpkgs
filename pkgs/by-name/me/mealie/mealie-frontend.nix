@@ -29,7 +29,10 @@ stdenv.mkDerivation {
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror "$yarnOfflineCache"
     fixup-yarn-lock yarn.lock
-    yarn install --frozen-lockfile --offline --no-progress --non-interactive
+    # TODO: Remove --ignore-engines once upstream supports nodejs_20+
+    # https://github.com/mealie-recipes/mealie/issues/5400
+    # https://github.com/mealie-recipes/mealie/pull/5184
+    yarn install --frozen-lockfile --offline --no-progress --non-interactive --ignore-engines
     patchShebangs node_modules/
 
     runHook postConfigure
@@ -55,7 +58,5 @@ stdenv.mkDerivation {
     description = "Frontend for Mealie";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ litchipi ];
-    # Depends on nodejs_18 that has been removed.
-    broken = true;
   };
 }

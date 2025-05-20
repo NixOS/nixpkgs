@@ -12,6 +12,7 @@ with import common/ec2.nix { inherit makeTest pkgs; };
 let
   imageCfg =
     (import ../lib/eval-config.nix {
+      system = null;
       modules = [
         ../maintainers/scripts/ec2/amazon-image.nix
         ../modules/testing/test-instrumentation.nix

@@ -2,23 +2,39 @@
   lib,
   stdenv,
   fetchurl,
+
   libX11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "3dpong";
   version = "0.5";
+
   src = fetchurl {
-    url = "ftp://ftp.tuxpaint.org/unix/x/3dpong/src/3dpong-${version}.tar.gz";
-    sha256 = "1ibb79sbzlbn4ra3n0qk22gqr6fg7q0jy6cm0wg2qj4z64c7hmdi";
+    url = "https://tuxpaint.org/ftp/unix/x/3dpong/src/3dpong-${finalAttrs.version}.tar.gz";
+    hash = "sha256-sVV4GDGfSCweB5UZLwE+z5mMnxATAztUJnbRv3Q6a8U=";
   };
+
+  postPatch = ''
+    substituteInPlace src/3dpong.c --replace-fail \
+      "#include <stdio.h>" \
+      "#include <stdio.h>
+       #include <unistd.h>"
+
+    substituteInPlace src/randnum.c --replace-fail \
+      "#include <stdio.h>" \
+      "#include <stdio.h>
+       #include <stdlib.h>"
+
+    substituteInPlace src/text.c --replace-fail \
+      "#include <X11/Xlib.h>" \
+      "#include <X11/Xlib.h>
+       #include <string.h>"
+  '';
 
   buildInputs = [ libX11 ];
 
-  preConfigure = ''
-    sed -i s,/usr/local,$out, Makefile
-    mkdir -p $out/bin
-  '';
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = {
     homepage = "http://www.newbreedsoftware.com/3dpong/";
@@ -26,4 +42,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

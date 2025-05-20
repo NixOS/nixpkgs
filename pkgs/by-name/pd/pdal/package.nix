@@ -2,6 +2,7 @@
   lib,
   stdenv,
   callPackage,
+  ctestCheckHook,
   fetchFromGitHub,
   testers,
 
@@ -92,6 +93,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+  # tests are flaky and they seem to fail less often when they don't run in
+  # parallel
+  enableParallelChecking = false;
 
   disabledTests = [
     # Tests failing due to TileDB library implementation, disabled also
@@ -112,19 +116,15 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Failure
     "pdal_app_plugin_test"
+
+    # Removed in GDAL 3.11
+    "pdal_io_gdal_writer_test"
   ];
 
   nativeCheckInputs = [
     gdal # gdalinfo
+    ctestCheckHook
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    # tests are flaky and they seem to fail less often when they don't run in
-    # parallel
-    ctest -j 1 --output-on-failure -E '^${lib.concatStringsSep "|" finalAttrs.disabledTests}$'
-    runHook postCheck
-  '';
 
   postInstall = ''
     patchShebangs --update --build $out/bin/pdal-config

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "nexia";
-  version = "2.7.0";
+  version = "2.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "nexia";
     tag = version;
-    hash = "sha256-q7g4MIMW4yIUhvSMN3EmMU/9EsT+jOiJ9gV9P7sjVhg=";
+    hash = "sha256-5gx66PVyrpL/9EXEWsHxKZVHmpfOKluN3LLok2qW3oU=";
   };
 
   build-system = [ setuptools ];

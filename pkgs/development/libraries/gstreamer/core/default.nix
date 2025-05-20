@@ -14,9 +14,6 @@
   elfutils, # for libdw
   bash-completion,
   lib,
-  Cocoa,
-  CoreServices,
-  xpc,
   testers,
   rustc,
   withRust ?
@@ -35,6 +32,7 @@
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
   directoryListingUpdater,
+  apple-sdk_gstreamer,
 }:
 
 let
@@ -102,9 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
       libunwind
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-      CoreServices
-      xpc
+      apple-sdk_gstreamer
     ];
 
   propagatedBuildInputs = [

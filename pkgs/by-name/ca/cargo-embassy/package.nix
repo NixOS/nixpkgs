@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
@@ -18,7 +19,7 @@ rustPlatform.buildRustPackage {
     hash = "sha256-C8eFQFHYIj2P+zPOKLVBNX97UDVbbcdjbqh5n53ktCU=";
   };
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     udev
   ];
 
@@ -34,6 +35,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/adinack/cargo-embassy";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.samw ];
+    platforms = lib.platforms.unix;
     mainProgram = "cargo-embassy";
   };
 }

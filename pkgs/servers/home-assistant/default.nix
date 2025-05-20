@@ -172,16 +172,6 @@ let
         };
       });
 
-      pymelcloud = super.pymelcloud.overridePythonAttrs (oldAttrs: {
-        version = "2.5.9";
-        src = fetchFromGitHub {
-          owner = "vilppuvuorinen";
-          repo = "pymelcloud";
-          rev = "33a827b6cd0b34f276790faa49bfd0994bb7c2e4"; # 2.5.x branch
-          sha256 = "sha256-Q3FIo9YJwtWPHfukEBjBANUQ1N1vr/DMnl1dgiN7vYg=";
-        };
-      });
-
       notifications-android-tv = super.notifications-android-tv.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.5";
         format = "setuptools";
@@ -202,6 +192,16 @@ let
         ];
 
         doCheck = false; # no tests
+      });
+
+      plexapi = super.plexapi.overrideAttrs (oldAttrs: rec {
+        version = "4.15.16";
+        src = fetchFromGitHub {
+          owner = "pkkid";
+          repo = "python-plexapi";
+          tag = version;
+          hash = "sha256-NwGGNN6LC3gvE8zoVL5meNWMbqZjJ+6PcU2ebJTfJmU=";
+        };
       });
 
       # Pinned due to API changes in 0.1.0
@@ -377,7 +377,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.4.4";
+  hassVersion = "2025.5.2";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -388,7 +388,7 @@ python.pkgs.buildPythonApplication rec {
   pyproject = true;
 
   # check REQUIRED_PYTHON_VER in homeassistant/const.py
-  disabled = python.pythonOlder "3.11";
+  disabled = python.pythonOlder "3.13";
 
   # don't try and fail to strip 6600+ python files, it takes minutes!
   dontStrip = true;
@@ -398,13 +398,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-MiBsVsgV/M8ge7XQ4e4VpdAKTVZBCDu3Jqql2YHx9rY=";
+    hash = "sha256-el5s82R4MuTjUnMVXRQj4PhPxJxHoL6Jqvc6XRnJl8w=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-qOhOs6I2Jx/7GWVeCBJ6d77w3RCFjsvFxDUbR60Ucf0=";
+    hash = "sha256-lddnAM3fja9enPYRSonwSe1aG8t55jSJQNveWPwrhOE=";
   };
 
   build-system = with python.pkgs; [

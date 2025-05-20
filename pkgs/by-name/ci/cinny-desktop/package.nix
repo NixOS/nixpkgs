@@ -7,11 +7,8 @@
   cinny,
   desktop-file-utils,
   wrapGAppsHook3,
-  makeBinaryWrapper,
   pkg-config,
   openssl,
-  dbus,
-  glib,
   glib-networking,
   webkitgtk_4_0,
   jq,
@@ -64,30 +61,28 @@ rustPlatform.buildRustPackage rec {
         --set-key="Categories" --set-value="Network;InstantMessaging;" \
         $out/share/applications/cinny.desktop
     '';
-  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    wrapProgram "$out/bin/cinny" \
-      --inherit-argv0 \
+
+  preFixup = ''
+    gappsWrapperArgs+=(
       --set-default WEBKIT_DISABLE_DMABUF_RENDERER "1"
+    )
   '';
 
-  nativeBuildInputs = [
-    wrapGAppsHook3
-    pkg-config
-    cargo-tauri_1.hook
-    desktop-file-utils
-    makeBinaryWrapper
-  ];
-
-  buildInputs =
+  nativeBuildInputs =
     [
-      openssl
+      cargo-tauri_1.hook
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      dbus
-      glib
-      glib-networking
-      webkitgtk_4_0
+      desktop-file-utils
+      pkg-config
+      wrapGAppsHook3
     ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    glib-networking
+    openssl
+    webkitgtk_4_0
+  ];
 
   meta = {
     description = "Yet another matrix client for desktop";

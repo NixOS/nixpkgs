@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
       qt6.qtwebengine
       qt6Packages.qtkeychain
     ]
-    ++ (lib.optionals stdenv.hostPlatform.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cups
-    ]);
+    ];
 
   nativeBuildInputs = [
     pkg-config

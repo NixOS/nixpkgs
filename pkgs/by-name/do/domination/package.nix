@@ -30,7 +30,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "domination";
-  version = "1.3.3";
+  version = "1.3.4";
 
   # The .zip releases do not contain the build.xml file
   src = fetchsvn {
@@ -40,8 +40,8 @@ stdenv.mkDerivation {
     # https://sourceforge.net/p/domination/code/HEAD/tree/Domination/ChangeLog.txt
     # Alternatively, look for revs like "changelog update",
     # "new version x.y.z info on website", or "website update for x.y.z".
-    rev = "2616";
-    hash = "sha256-/h9TstRxMpeoEsIeSN0MRmyRsiBHomguIPch1Zda8s8=";
+    rev = "2664";
+    hash = "sha256-bkaHpqJSc3UvwNT7LwuPUT8xN0g6QypfLSHlLmm8nX8=";
   };
 
   nativeBuildInputs = [

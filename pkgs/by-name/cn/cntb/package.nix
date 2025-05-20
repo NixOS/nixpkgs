@@ -5,13 +5,13 @@
 }:
 buildGoModule rec {
   pname = "cntb";
-  version = "1.5.4";
+  version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "contabo";
     repo = "cntb";
     rev = "v${version}";
-    hash = "sha256-4QS1fkXVcGxhZDPRLDc0xKl4jr8W4og/Qf591i3gzxk=";
+    hash = "sha256-chO59HBpMXXFMIt+7UjUxE3WtzUak8VhD/ahEXT5l/k=";
     # docs contains two files with the same name but different cases,
     # this leads to a different hash on case insensitive filesystems (e.g. darwin)
     # https://github.com/contabo/cntb/issues/34
@@ -22,7 +22,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  vendorHash = "sha256-LOGSllVQ28bXaqHXEv1Zd1vcTRZTZ5wy+gSQv1JWKMU=";
+  vendorHash = "sha256-D0B1a2qbTGpAK1PkB+wqsReft14/SoKY3/I6k+pB2D0=";
 
   ldflags = [
     "-X contabo.com/cli/cntb/cmd.version=${src.rev}"

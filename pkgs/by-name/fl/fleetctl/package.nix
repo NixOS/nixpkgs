@@ -1,44 +1,41 @@
 {
   lib,
   buildGoModule,
-  fetchFromGitHub,
+  fleet,
   writableTmpDirAsHomeHook,
   versionCheckHook,
   stdenv,
 }:
 
-buildGoModule rec {
-  pname = "fleectl";
-  version = "4.67.1";
+buildGoModule (finalAttrs: {
+  pname = "fleetctl";
 
-  src = fetchFromGitHub {
-    owner = "fleetdm";
-    repo = "fleet";
-    tag = "fleet-v${version}";
-    hash = "sha256-shaOPK7BbIDARopzGehlIA6aPdRiFRP9hrFRNO3kfGA=";
-  };
-  vendorHash = "sha256-UkdHwjCcxNX7maI4QClLm5WWaLXwGlEu80eZXVoYy60=";
+  inherit (fleet) version src vendorHash;
 
   subPackages = [
     "cmd/fleetctl"
   ];
 
   ldflags = [
-    "-X github.com/fleetdm/fleet/v4/server/version.appName=${pname}"
-    "-X github.com/fleetdm/fleet/v4/server/version.version=${version}"
+    "-X github.com/fleetdm/fleet/v4/server/version.appName=fleetctl"
+    "-X github.com/fleetdm/fleet/v4/server/version.version=${finalAttrs.version}"
   ];
 
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
-    versionCheckHook
   ];
 
   # Try to access /var/empty/.goquery/history subfolders
   doCheck = !stdenv.hostPlatform.isDarwin;
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   meta = {
     homepage = "https://github.com/fleetdm/fleet";
-    changelog = "https://github.com/fleetdm/fleet/releases/tag/fleet-v${version}";
+    changelog = "https://github.com/fleetdm/fleet/releases/tag/fleet-v${finalAttrs.version}";
     description = "CLI tool for managing Fleet";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
@@ -46,4 +43,4 @@ buildGoModule rec {
     ];
     mainProgram = "fleetctl";
   };
-}
+})

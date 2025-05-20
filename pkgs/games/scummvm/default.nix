@@ -19,11 +19,6 @@
   libX11,
   SDL2,
   zlib,
-  Cocoa,
-  AudioToolbox,
-  Carbon,
-  CoreMIDI,
-  AudioUnit,
   cctools,
   nix-update-script,
 }:
@@ -46,13 +41,6 @@ stdenv.mkDerivation rec {
       alsa-lib
       libGLU
       libGL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-      AudioToolbox
-      Carbon
-      CoreMIDI
-      AudioUnit
     ]
     ++ [
       curl
@@ -86,8 +74,7 @@ stdenv.mkDerivation rec {
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace config.mk \
-        --replace x86_64-apple-darwin-ranlib ${cctools}/bin/ranlib \
-        --replace aarch64-apple-darwin-ranlib ${cctools}/bin/ranlib
+        --replace-fail ${stdenv.hostPlatform.config}-ranlib ${cctools}/bin/ranlib
     '';
 
   NIX_CFLAGS_COMPILE = [ "-fpermissive" ];

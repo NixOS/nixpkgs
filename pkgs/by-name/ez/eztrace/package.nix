@@ -9,6 +9,7 @@
   libbfd,
   libopcodes,
   otf2,
+  ctestCheckHook,
   versionCheckHook,
 }:
 
@@ -54,8 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "EZTRACE_ENABLE_MEMORY" true)
-    # This test is somewhat flaky and fails once per several rebuilds.
-    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;memory_tests")
   ];
 
   nativeBuildInputs = [
@@ -72,8 +71,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+  disabledTests = [
+    # This test is somewhat flaky and fails once per several rebuilds.
+    "memory_tests"
+  ];
   nativeCheckInputs = [
     otf2 # `otf2-print` needed by compiler_instrumentation_tests,pthread_tests,posixio_tests
+    ctestCheckHook
   ];
 
   postInstall = ''

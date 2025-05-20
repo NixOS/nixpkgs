@@ -12,7 +12,6 @@
   cairo,
   groff,
   tcl,
-  darwin,
 }:
 
 perl.pkgs.toPerlModule (
@@ -49,7 +48,6 @@ perl.pkgs.toPerlModule (
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         tcl
-        darwin.apple_sdk.frameworks.ApplicationServices
       ];
 
     postInstall = ''

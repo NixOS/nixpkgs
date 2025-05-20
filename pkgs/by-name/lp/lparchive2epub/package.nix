@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "lparchive2epub";
-  version = "1.2.4";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Arwalk";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-z8/cIevqPKo7Eukk4WVxgSjzO1EYUYWD8orAdUKR8z8=";
+    tag = "v${version}";
+    hash = "sha256-h1i/p14Zzzr0SK+OjcCnXpsVjJl7mrbeLJ5JlnA0wPU=";
   };
 
   build-system = with python3Packages; [ poetry-core ];

@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
+  patches = [
+    ./int_main.patch # https://github.com/jgoerzen/gopher/pull/8
+  ];
+
   preConfigure = "export LIBS=-lncurses";
 
   meta = with lib; {

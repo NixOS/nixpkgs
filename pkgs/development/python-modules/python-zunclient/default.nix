@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "python-zunclient";
-  version = "5.1.0";
+  version = "5.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "openstack";
     repo = "python-zunclient";
     tag = version;
-    hash = "sha256-2gC2aMaMI//QKIpbDNT9cii17680g4X1c0rgrgPbAsg=";
+    hash = "sha256-YdE5a/qm91Nv2TW9pot9sn5GwvnFuqPCgiuLF6O7reA=";
   };
 
   env.PBR_VERSION = version;

@@ -10,27 +10,27 @@
   foundationdb,
   zstd,
   stdenv,
-  darwin,
   nix-update-script,
   nixosTests,
   rocksdb,
   callPackage,
   withFoundationdb ? false,
+  stalwartEnterprise ? false,
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "stalwart-mail";
-  version = "0.11.7";
+  pname = "stalwart-mail" + (lib.optionalString stalwartEnterprise "-enterprise");
+  version = "0.11.8";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "mail-server";
     tag = "v${version}";
-    hash = "sha256-pBCj/im5UB7A92LBuLeB6EAHTJEuN62BG5Nkj8qsNNA=";
+    hash = "sha256-VqGosbSQxNeOS+kGtvXAmz6vyz5mJlXvKZM57B1Xue4=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-B+xsTVsh9QBAybKiJq0Sb7rveOsH05vuCmNQ5t/UZnk=";
+  cargoHash = "sha256-iheURWxO0cOvO+FV01l2Vmo0B+S2mXzue6mx3gapftQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -47,15 +47,18 @@ rustPlatform.buildRustPackage rec {
 
   # Issue: https://github.com/stalwartlabs/mail-server/issues/1104
   buildNoDefaultFeatures = true;
-  buildFeatures = [
-    "sqlite"
-    "postgres"
-    "mysql"
-    "rocks"
-    "elastic"
-    "s3"
-    "redis"
-  ] ++ lib.optionals withFoundationdb [ "foundationdb" ];
+  buildFeatures =
+    [
+      "sqlite"
+      "postgres"
+      "mysql"
+      "rocks"
+      "elastic"
+      "s3"
+      "redis"
+    ]
+    ++ lib.optionals withFoundationdb [ "foundationdb" ]
+    ++ lib.optionals stalwartEnterprise [ "enterprise" ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
@@ -155,7 +158,17 @@ rustPlatform.buildRustPackage rec {
     description = "Secure & Modern All-in-One Mail Server (IMAP, JMAP, SMTP)";
     homepage = "https://github.com/stalwartlabs/mail-server";
     changelog = "https://github.com/stalwartlabs/mail-server/blob/main/CHANGELOG.md";
-    license = lib.licenses.agpl3Only;
+    license =
+      [ lib.licenses.agpl3Only ]
+      ++ lib.optionals stalwartEnterprise [
+        {
+          fullName = "Stalwart Enterprise License 1.0 (SELv1) Agreement";
+          url = "https://github.com/stalwartlabs/mail-server/blob/main/LICENSES/LicenseRef-SEL.txt";
+          free = false;
+          redistributable = false;
+        }
+      ];
+
     maintainers = with lib.maintainers; [
       happysalada
       onny

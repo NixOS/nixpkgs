@@ -3,7 +3,7 @@
   backendStdenv,
   cmake,
   cudatoolkit,
-  cudaVersion,
+  cudaMajorMinorVersion,
   fetchFromGitHub,
   fetchpatch,
   freeimage,
@@ -20,7 +20,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "cuda-samples";
-  version = cudaVersion;
+  version = cudaMajorMinorVersion;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";

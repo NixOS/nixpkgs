@@ -4,8 +4,6 @@
   rustPlatform,
   fetchFromGitHub,
   protobuf,
-  darwin,
-  stdenv,
   buildNpmPackage,
 }:
 let
@@ -32,8 +30,6 @@ let
         useFetchCargoVendor = true;
 
         nativeBuildInputs = [ protobuf ];
-
-        buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
 
         cargoBuildFlags = [
           "--package"

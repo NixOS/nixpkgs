@@ -91,15 +91,9 @@ rec {
       installPhase =
         with builtins;
         let
-          toolchain = rec {
-            prefix = x: "JAVA_TOOLCHAIN_NIX_${toString x}";
-            varDefs = (lib.imap0 (i: x: "${prefix i} ${x}") javaToolchains);
-            varNames = lib.imap0 (i: x: prefix i) javaToolchains;
-            property = " -Porg.gradle.java.installations.fromEnv='${concatStringsSep "," varNames}'";
-          };
-          varDefs = concatStringsSep "\n" (
-            map (x: "  --set ${x} \\") ([ "JAVA_HOME ${java}" ] ++ toolchain.varDefs)
-          );
+          # set toolchains via installations.path property in gradle.properties.
+          # See https://docs.gradle.org/current/userguide/toolchains.html#sec:custom_loc
+          toolchainPaths = "org.gradle.java.installations.paths=${concatStringsSep "," javaToolchains}";
           jnaLibraryPath = if stdenv.hostPlatform.isLinux then lib.makeLibraryPath [ udev ] else "";
           jnaFlag =
             if stdenv.hostPlatform.isLinux then "--add-flags \"-Djna.library.path=${jnaLibraryPath}\"" else "";
@@ -111,9 +105,11 @@ rec {
           gradle_launcher_jar=$(echo $out/lib/gradle/lib/gradle-launcher-*.jar)
           test -f $gradle_launcher_jar
           makeWrapper ${java}/bin/java $out/bin/gradle \
-            ${varDefs}
+            --set JAVA_HOME ${java} \
             ${jnaFlag} \
-            --add-flags "-classpath $gradle_launcher_jar org.gradle.launcher.GradleMain${toolchain.property}"
+            --add-flags "-classpath $gradle_launcher_jar org.gradle.launcher.GradleMain"
+
+          echo "${toolchainPaths}" > $out/lib/gradle/gradle.properties
         '';
 
       dontFixup = !stdenv.hostPlatform.isLinux;
@@ -229,8 +225,8 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_8 = gen {
-    version = "8.13";
-    hash = "sha256-IPGxF2I3JUpvwgTYQ0GW+hGkz7OHVnUZxhVW6HEK7Xg=";
+    version = "8.14";
+    hash = "sha256-Ya0xDTx9Pl2hMbdrvyK1pMB4bp2JLa6MFljUtITePKo=";
     defaultJava = jdk21;
   };
 
@@ -286,7 +282,8 @@ rec {
             tests = {
               toolchains =
                 let
-                  javaVersion = lib.versions.major (lib.getVersion jdk23);
+                  javaVersion = lib.getVersion jdk23;
+                  javaMajorVersion = lib.versions.major javaVersion;
                 in
                 runCommand "detects-toolchains-from-nix-env"
                   {
@@ -302,10 +299,14 @@ rec {
                   }
                   ''
                     cp -a $src/* .
-                    substituteInPlace ./build.gradle --replace-fail '@JAVA_VERSION@' '${javaVersion}'
+                    substituteInPlace ./build.gradle --replace-fail '@JAVA_VERSION@' '${javaMajorVersion}'
                     env GRADLE_USER_HOME=$TMPDIR/gradle org.gradle.native.dir=$TMPDIR/native \
                     gradle run --no-daemon --quiet --console plain > $out
-                    test "$(<$out)" = "${javaVersion}"
+                    actual="$(<$out)"
+                    if [[ "${javaVersion}" != "$actual"* ]]; then
+                      echo "Error: Expected '${javaVersion}', to start with '$actual'" >&2
+                      exit 1
+                    fi
                   '';
             } // gradle.tests;
           }

@@ -25,10 +25,8 @@
   jq,
   curl,
   common-updater-scripts,
-  nix,
   runtimeShell,
   gnupg,
-  darwin,
   installShellFiles,
 }:
 
@@ -40,7 +38,6 @@
 }@args:
 
 let
-  inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
 
   majorVersion = lib.versions.major version;
   minorVersion = lib.versions.minor version;
@@ -176,6 +173,8 @@ let
       done
     '';
 
+  downloadDir = if lib.strings.hasInfix "-rc." version then "download/rc" else "dist";
+
   package = stdenv.mkDerivation (
     finalAttrs:
     let
@@ -188,7 +187,7 @@ let
       inherit pname version;
 
       src = fetchurl {
-        url = "https://nodejs.org/dist/v${version}/node-v${version}.tar.xz";
+        url = "https://nodejs.org/${downloadDir}/v${version}/node-v${version}.tar.xz";
         inherit sha256;
       };
 
@@ -213,20 +212,14 @@ let
       # NB: technically, we do not need bash in build inputs since all scripts are
       # wrappers over the corresponding JS scripts. There are some packages though
       # that use bash wrappers, e.g. polaris-web.
-      buildInputs =
-        lib.optionals stdenv.hostPlatform.isDarwin [
-          CoreServices
-          ApplicationServices
-        ]
-        ++ [
-          zlib
-          libuv
-          openssl
-          http-parser
-          icu
-          bash
-        ]
-        ++ lib.optionals useSharedSQLite [ sqlite ];
+      buildInputs = [
+        zlib
+        libuv
+        openssl
+        http-parser
+        icu
+        bash
+      ] ++ lib.optionals useSharedSQLite [ sqlite ];
 
       nativeBuildInputs =
         [
@@ -443,6 +436,9 @@ let
                 "test-fs-readv-sync"
                 "test-vm-memleak"
               ]
+              ++ lib.optional (
+                stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isx86_64 && majorVersion == "20"
+              ) "test-tick-processor-arguments" # flaky
             )
           }"
         ];
@@ -519,20 +515,20 @@ let
       passthru.tests = {
         version = testers.testVersion {
           package = self;
-          version = "v${version}";
+          version = "v${lib.head (lib.strings.splitString "-rc." version)}";
         };
       };
 
       passthru.updateScript = import ./update.nix {
         inherit
           writeScript
-          coreutils
-          gnugrep
-          jq
-          curl
           common-updater-scripts
+          coreutils
+          curl
+          fetchurl
+          gnugrep
           gnupg
-          nix
+          jq
           runtimeShell
           ;
         inherit lib;

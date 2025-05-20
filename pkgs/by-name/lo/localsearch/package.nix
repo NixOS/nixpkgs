@@ -19,11 +19,11 @@
   bzip2,
   dbus,
   exempi,
+  ffmpeg,
   giflib,
   glib,
   gobject-introspection,
   gnome,
-  gst_all_1,
   icu,
   json-glib,
   libcue,
@@ -39,7 +39,6 @@
   libtiff,
   libuuid,
   libxml2,
-  networkmanager,
   poppler,
   systemd,
   taglib,
@@ -50,11 +49,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "localsearch";
-  version = "3.8.2";
+  version = "3.9.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/localsearch/${lib.versions.majorMinor finalAttrs.version}/localsearch-${finalAttrs.version}.tar.xz";
-    hash = "sha256-zaaRlfaEU1eo2RwCNnDv6SI49NE4oe96FAH0WiqEA84=";
+    hash = "sha256-1C9AjcP7KP5U9amrv18d7PWBjbnC6exRwJRkvf0MFLk=";
   };
 
   patches = [
@@ -87,16 +86,11 @@ stdenv.mkDerivation (finalAttrs: {
       bzip2
       dbus
       exempi
+      ffmpeg
       giflib
       gexiv2
       totem-pl-parser
       tinysparql
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-      gst_all_1.gst-plugins-bad
-      gst_all_1.gst-plugins-ugly
-      gst_all_1.gstreamer
-      gst_all_1.gst-libav
       icu
       json-glib
       libcue
@@ -116,7 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libseccomp
-      networkmanager
       systemd
       upower
     ]

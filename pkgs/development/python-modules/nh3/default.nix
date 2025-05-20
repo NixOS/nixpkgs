@@ -6,7 +6,6 @@
   rustPlatform,
   libiconv,
   fetchFromGitHub,
-  darwin,
 }:
 let
   pname = "nh3";
@@ -36,7 +35,6 @@ buildPythonPackage {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-    darwin.apple_sdk.frameworks.Security
   ];
 
   pythonImportsCheck = [ "nh3" ];

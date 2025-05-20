@@ -50,13 +50,24 @@ in
         Expects the format of an `EnvironmentFile=`, as described by {manpage}`systemd.exec(5)`.
       '';
     };
+
+    database = {
+      createLocally = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Configure local PostgreSQL database server for Mealie.
+        '';
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
     systemd.services.mealie = {
       description = "Mealie, a self hosted recipe manager and meal planner";
 
-      after = [ "network-online.target" ];
+      after = [ "network-online.target" ] ++ lib.optional cfg.database.createLocally "postgresql.service";
+      requires = lib.optional cfg.database.createLocally "postgresql.service";
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
@@ -77,6 +88,22 @@ in
         StateDirectory = "mealie";
         StandardOutput = "journal";
       };
+    };
+
+    services.mealie.settings = lib.mkIf cfg.database.createLocally {
+      DB_ENGINE = "postgres";
+      POSTGRES_URL_OVERRIDE = "postgresql://mealie:@/mealie?host=/run/postgresql";
+    };
+
+    services.postgresql = lib.mkIf cfg.database.createLocally {
+      enable = true;
+      ensureDatabases = [ "mealie" ];
+      ensureUsers = [
+        {
+          name = "mealie";
+          ensureDBOwnership = true;
+        }
+      ];
     };
   };
 }

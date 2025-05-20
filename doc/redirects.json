@@ -5,6 +5,21 @@
   "chap-release-notes": [
     "release-notes.html#chap-release-notes"
   ],
+  "chap-toolchains": [
+    "index.html#chap-toolchains"
+  ],
+  "cmake-ctest": [
+    "index.html#cmake-ctest"
+  ],
+  "cmake-ctest-disabled-tests": [
+    "index.html#cmake-ctest-disabled-tests"
+  ],
+  "cmake-ctest-flags": [
+    "index.html#cmake-ctest-flags"
+  ],
+  "cmake-ctest-variables": [
+    "index.html#cmake-ctest-variables"
+  ],
   "ex-build-helpers-extendMkDerivation": [
     "index.html#ex-build-helpers-extendMkDerivation"
   ],
@@ -43,6 +58,9 @@
   "no-broken-symlinks.sh": [
     "index.html#no-broken-symlinks.sh"
   ],
+  "nostrictaliasing": [
+    "index.html#nostrictaliasing"
+  ],
   "pkgs-replacevars": [
     "index.html#pkgs-replacevars",
     "index.html#pkgs-substituteall",
@@ -50,6 +68,9 @@
   ],
   "pkgs-replacevarswith": [
     "index.html#pkgs-replacevarswith"
+  ],
+  "part-toolchains": [
+    "index.html#part-toolchains"
   ],
   "preface": [
     "index.html#preface"
@@ -84,6 +105,12 @@
   "sec-build-helper-extendMkDerivation": [
     "index.html#sec-build-helper-extendMkDerivation"
   ],
+  "sec-building-packages-with-llvm": [
+    "index.html#sec-building-packages-with-llvm"
+  ],
+  "sec-building-packages-with-llvm-using-clang-stdenv": [
+    "index.html#sec-building-packages-with-llvm-using-clang-stdenv"
+  ],
   "sec-inkscape": [
     "index.html#sec-inkscape"
   ],
@@ -110,6 +137,30 @@
   ],
   "chap-overlays": [
     "index.html#chap-overlays"
+  ],
+  "sec-nixpkgs-release-25.11": [
+    "release-notes.html#sec-nixpkgs-release-25.11"
+  ],
+  "sec-nixpkgs-release-25.11-highlights": [
+    "release-notes.html#sec-nixpkgs-release-25.11-highlights"
+  ],
+  "sec-nixpkgs-release-25.11-incompatibilities": [
+    "release-notes.html#sec-nixpkgs-release-25.11-incompatibilities"
+  ],
+  "sec-nixpkgs-release-25.11-lib": [
+    "release-notes.html#sec-nixpkgs-release-25.11-lib"
+  ],
+  "sec-nixpkgs-release-25.11-lib-breaking": [
+    "release-notes.html#sec-nixpkgs-release-25.11-lib-breaking"
+  ],
+  "sec-nixpkgs-release-25.11-lib-deprecations": [
+    "release-notes.html#sec-nixpkgs-release-25.11-lib-deprecations"
+  ],
+  "sec-nixpkgs-release-25.11-lib-additions-improvements": [
+    "release-notes.html#sec-nixpkgs-release-25.11-lib-additions-improvements"
+  ],
+  "sec-nixpkgs-release-25.11-notable-changes": [
+    "release-notes.html#sec-nixpkgs-release-25.11-notable-changes"
   ],
   "sec-nixpkgs-release-25.05": [
     "release-notes.html#sec-nixpkgs-release-25.05"
@@ -344,6 +395,9 @@
   ],
   "chap-stdenv": [
     "index.html#chap-stdenv"
+  ],
+  "sec-using-llvm": [
+    "index.html#sec-using-llvm"
   ],
   "sec-using-stdenv": [
     "index.html#sec-using-stdenv"
@@ -1100,6 +1154,9 @@
   ],
   "var-meta-broken": [
     "index.html#var-meta-broken"
+  ],
+  "var-meta-knownVulnerabilities": [
+    "index.html#var-meta-knownVulnerabilities"
   ],
   "sec-meta-license": [
     "index.html#sec-meta-license"

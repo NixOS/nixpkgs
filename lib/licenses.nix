@@ -257,6 +257,11 @@ lib.mapAttrs mkLicense (
       fullName = "BSD Protection License";
     };
 
+    bsdSourceCode = {
+      spdxId = "BSD-Source-Code";
+      fullName = "BSD Source Code Attribution";
+    };
+
     bsl11 = {
       spdxId = "BUSL-1.1";
       fullName = "Business Source License 1.1";
@@ -452,6 +457,11 @@ lib.mapAttrs mkLicense (
       fullName = "Common Public License 1.0";
     };
 
+    cronyx = {
+      spdxId = "Cronyx";
+      fullName = "Cronyx License";
+    };
+
     curl = {
       spdxId = "curl";
       fullName = "curl License";
@@ -639,6 +649,11 @@ lib.mapAttrs mkLicense (
     gpl2ClasspathPlus = {
       fullName = "GNU General Public License v2.0 or later (with Classpath exception)";
       url = "https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception";
+    };
+
+    gpl2UBDLPlus = {
+      fullName = "GNU General Public License v3.0 or later (with UBDL exception)";
+      url = "https://spdx.org/licenses/UBDL-exception.html";
     };
 
     gpl2Oss = {
@@ -935,6 +950,11 @@ lib.mapAttrs mkLicense (
     mit0 = {
       spdxId = "MIT-0";
       fullName = "MIT No Attribution";
+    };
+
+    mitOpenGroup = {
+      spdxId = "MIT-open-group";
+      fullName = "MIT Open Group variant";
     };
 
     mpl10 = {
@@ -1326,6 +1346,11 @@ lib.mapAttrs mkLicense (
     unicode-dfs-2016 = {
       spdxId = "Unicode-DFS-2016";
       fullName = "Unicode License Agreement - Data Files and Software (2016)";
+    };
+
+    unicodeTOU = {
+      spdxId = "Unicode-TOU";
+      fullName = "Unicode Terms of Use";
     };
 
     unlicense = {

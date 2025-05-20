@@ -206,12 +206,15 @@ in
       ];
 
     # Otherwise GDM will not be able to start correctly and display Wayland sessions
-    systemd.packages = with pkgs.gnome; [
+    systemd.packages = [
       gdm
       pkgs.gnome-session
       pkgs.gnome-shell
     ];
-    environment.systemPackages = [ pkgs.adwaita-icon-theme ];
+    environment.systemPackages = [
+      pkgs.adwaita-icon-theme
+      pkgs.gdm # For polkit rules
+    ];
 
     # We dont use the upstream gdm service
     # it has to be disabled since the gdm package has it

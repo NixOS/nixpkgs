@@ -26,6 +26,7 @@ import ./make-test-python.nix (
 
     containerSystem =
       (import ../lib/eval-config.nix {
+        system = null;
         modules = [ container ];
       }).config.system.build.toplevel;
 

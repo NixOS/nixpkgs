@@ -349,6 +349,15 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           enableThreading = false;
           enableCrypt = false;
         };
+
+        # Let gettext "checking for working iconv" success without trying
+        # to convert between UTF-8 and EUC-JP which doesn't work here
+        # because of missing locale and gconv, same for libunistring below
+        gettext = super.gettext.overrideAttrs (attrs: {
+          env = attrs.env or { } // {
+            am_cv_func_iconv_works = "yes";
+          };
+        });
       };
 
       # `gettext` comes with obsolete config.sub/config.guess that don't recognize LoongArch64.

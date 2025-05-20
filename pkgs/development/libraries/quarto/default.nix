@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  pandoc_3_6,
+  pandoc,
   typst,
   esbuild,
   deno,
@@ -16,14 +16,33 @@
   quarto,
   extraPythonPackages ? ps: [ ],
   sysctl,
+  which,
 }:
+
+let
+  rWithPackages = rWrapper.override {
+    packages = [
+      rPackages.rmarkdown
+    ] ++ extraRPackages;
+  };
+
+  pythonWithPackages = python3.withPackages (
+    ps:
+    with ps;
+    [
+      jupyter
+      ipython
+    ]
+    ++ (extraPythonPackages ps)
+  );
+in
 stdenv.mkDerivation (final: {
   pname = "quarto";
-  version = "1.6.43";
+  version = "1.7.31";
 
   src = fetchurl {
     url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${final.version}/quarto-${final.version}-linux-amd64.tar.gz";
-    hash = "sha256-9cwGPduP0BN0fNtMb8lklK5FftJMuuPaqCFRN8vL+cI=";
+    hash = "sha256-YRSe4MLcJCaqBDGwHiYxOxAGFcehZLIVCkXjTE0ezFc=";
   };
 
   patches = [
@@ -32,36 +51,20 @@ stdenv.mkDerivation (final: {
 
   nativeBuildInputs = [
     makeWrapper
+    which
   ];
 
   dontStrip = true;
 
   preFixup = ''
     wrapProgram $out/bin/quarto \
-      --prefix QUARTO_DENO : ${lib.getExe deno} \
-      --prefix QUARTO_PANDOC : ${lib.getExe pandoc_3_6} \
-      --prefix QUARTO_ESBUILD : ${lib.getExe esbuild} \
-      --prefix QUARTO_DART_SASS : ${lib.getExe dart-sass} \
-      --prefix QUARTO_TYPST : ${lib.getExe typst} \
-      ${
-        lib.optionalString (rWrapper != null)
-          "--prefix QUARTO_R : ${
-            rWrapper.override { packages = [ rPackages.rmarkdown ] ++ extraRPackages; }
-          }/bin/R"
-      } \
-      ${lib.optionalString (python3 != null)
-        "--prefix QUARTO_PYTHON : ${
-          python3.withPackages (
-            ps:
-            with ps;
-            [
-              jupyter
-              ipython
-            ]
-            ++ (extraPythonPackages ps)
-          )
-        }/bin/python3"
-      }
+      --set QUARTO_DENO ${lib.getExe deno} \
+      --set QUARTO_PANDOC ${lib.getExe pandoc} \
+      --set QUARTO_ESBUILD ${lib.getExe esbuild} \
+      --set QUARTO_DART_SASS ${lib.getExe dart-sass} \
+      --set QUARTO_TYPST ${lib.getExe typst} \
+      ${lib.optionalString (rWrapper != null) "--set QUARTO_R ${rWithPackages}/bin/R"} \
+      ${lib.optionalString (python3 != null) "--set QUARTO_PYTHON ${pythonWithPackages}/bin/python3"}
   '';
 
   installPhase = ''
@@ -81,7 +84,7 @@ stdenv.mkDerivation (final: {
     quarto-check =
       runCommand "quarto-check"
         {
-          nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ sysctl ];
+          nativeBuildInputs = [ which ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ sysctl ];
         }
         ''
           export HOME="$(mktemp -d)"

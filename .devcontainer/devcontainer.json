@@ -10,6 +10,10 @@
       "extraNixConfig": "experimental-features = nix-command flakes,sandbox = true"
     }
   },
+  // Fixup permissions inside container.
+  // https://github.com/NixOS/nix/issues/6680#issuecomment-1230902525
+  "postCreateCommand": "sudo apt-get install -y acl",
+  "postStartCommand": "sudo setfacl -k /tmp; if [ -e /dev/kvm ]; then sudo chgrp $(id -g) /dev/kvm; fi",
   "customizations": {
     "vscode": {
       "extensions": [

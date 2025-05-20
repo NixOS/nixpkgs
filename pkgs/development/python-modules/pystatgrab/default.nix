@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   cython,
   fetchFromGitHub,
@@ -10,7 +9,6 @@
   setuptools,
   unittestCheckHook,
   wheel,
-  darwin,
 }:
 
 buildPythonPackage rec {
@@ -39,7 +37,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     libstatgrab
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ IOKit ]);
+  ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 

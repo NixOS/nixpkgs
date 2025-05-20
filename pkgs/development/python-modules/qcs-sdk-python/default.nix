@@ -11,7 +11,6 @@
   qcs-api-client-common,
   quil,
   rustPlatform,
-  darwin,
   libiconv,
   syrupy,
 }:
@@ -50,8 +49,6 @@ buildPythonPackage rec {
   };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
     libiconv
   ];
 

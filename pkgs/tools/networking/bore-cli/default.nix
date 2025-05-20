@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,10 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-uaSnH3pLpgASjauNWE94cpLxeAmVPqa/VUksR12hnGM=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-  ];
 
   # tests do not find grcov path correctly
   meta = with lib; {

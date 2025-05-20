@@ -16,7 +16,6 @@ mkYaziPlugin {
 
   meta = {
     description = "Switch the preview pane between hidden and shown";
-    homepage = "https://yazi-rs.github.io";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
   };

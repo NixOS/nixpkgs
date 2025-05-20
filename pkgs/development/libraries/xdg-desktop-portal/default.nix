@@ -92,7 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
       pipewire
       gst_all_1.gst-plugins-base
       libgudev
-      umockdev
 
       # For icon validator
       gdk-pixbuf
@@ -125,6 +124,8 @@ stdenv.mkDerivation (finalAttrs: {
     umockdev
   ];
 
+  checkInputs = [ umockdev ];
+
   mesonFlags =
     [
       "--sysconfdir=/etc"
@@ -153,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs tests/run-test.sh
   '';
 
-  preCheck = ''
+  preCheck = lib.optionalString finalAttrs.finalPackage.doCheck ''
     # For test_trash_file
     export HOME=$(mktemp -d)
 

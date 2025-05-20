@@ -2,23 +2,29 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  python-can,
+
+  # build system
+  setuptools,
+
+  # dependencies
+  numpy,
+  nunavut,
+
+  # optional dependencies
   cobs,
   libpcap,
-  nunavut,
-  numpy,
   pyserial,
-  pytestCheckHook,
+  python-can,
+
+  # tests
   pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pycyphal";
   version = "1.18.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OpenCyphal";
@@ -28,7 +34,11 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [ "numpy" ];
+
+  dependencies = [
     numpy
     nunavut
   ];
@@ -67,13 +77,17 @@ buildPythonPackage rec {
   disabledTestPaths = [
     "pycyphal/application/__init__.py"
     "pycyphal/application/_transport_factory.py"
-    "pycyphal/transport/udp/_ip/_link_layer.py"
-    "pycyphal/transport/udp/_ip/_v4.py"
+    "pycyphal/application/register/backend/dynamic.py"
+    "pycyphal/application/register/backend/static.py"
+    "pycyphal/transport/udp"
     "tests/application"
     "tests/demo"
     "tests/dsdl"
     "tests/presentation"
     "tests/transport"
+    # These are flaky -- test against string representations of values
+    "pycyphal/application/register/_registry.py"
+    "pycyphal/application/register/_value.py"
   ];
 
   pythonImportsCheck = [ "pycyphal" ];

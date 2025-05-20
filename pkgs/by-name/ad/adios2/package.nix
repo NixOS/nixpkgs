@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
       bzip2
       lz4
       c-blosc2
-      hdf5-mpi
+      (hdf5-mpi.override { inherit mpi; })
       libfabric
       libpng
       libsodium

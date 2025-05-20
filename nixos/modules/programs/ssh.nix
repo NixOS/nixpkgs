@@ -341,13 +341,13 @@ in
       # Custom options from `extraConfig`, to override generated options
       ${cfg.extraConfig}
 
+      # Generated options from other settings
+      Host *
       ${lib.optionalString cfg.systemd-ssh-proxy.enable ''
         # See systemd-ssh-proxy(1)
         Include ${config.systemd.package}/lib/systemd/ssh_config.d/20-systemd-ssh-proxy.conf
       ''}
 
-      # Generated options from other settings
-      Host *
       GlobalKnownHostsFile ${builtins.concatStringsSep " " knownHostsFiles}
 
       ${lib.optionalString (!config.networking.enableIPv6) "AddressFamily inet"}

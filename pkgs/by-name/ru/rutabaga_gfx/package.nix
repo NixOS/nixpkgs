@@ -93,5 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     maintainers = with maintainers; [ qyliss ];
     platforms = platforms.darwin ++ platforms.linux;
+    # error[E0432]: unresolved import `self::consts`
+    badPlatforms = [ "loongarch64-linux" ];
   };
 })

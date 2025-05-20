@@ -12,17 +12,16 @@
   ninja,
   meson-python,
 
-  AppKit,
   fontconfig,
   freetype,
   libjpeg,
   libpng,
   libX11,
   portmidi,
-  SDL2_classic,
-  SDL2_classic_image,
-  SDL2_classic_mixer,
-  SDL2_classic_ttf,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_ttf,
   numpy,
 
   pygame-gui,
@@ -60,6 +59,8 @@ buildPythonPackage rec {
         ]) buildInputs
       );
     })
+    # https://github.com/libsdl-org/sdl2-compat/issues/476
+    ./skip-rle-tests.patch
   ];
 
   postPatch =
@@ -99,11 +100,11 @@ buildPythonPackage rec {
     libjpeg
     libpng
     portmidi
-    SDL2_classic
-    (SDL2_classic_image.override { enableSTB = false; })
-    SDL2_classic_mixer
-    SDL2_classic_ttf
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
+    SDL2
+    (SDL2_image.override { enableSTB = false; })
+    SDL2_mixer
+    SDL2_ttf
+  ];
 
   nativeCheckInputs = [
     numpy
@@ -115,7 +116,7 @@ buildPythonPackage rec {
 
   env =
     {
-      SDL_CONFIG = lib.getExe' (lib.getDev SDL2_classic) "sdl2-config";
+      SDL_CONFIG = lib.getExe' (lib.getDev SDL2) "sdl2-config";
     }
     // lib.optionalAttrs stdenv.cc.isClang {
       NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";

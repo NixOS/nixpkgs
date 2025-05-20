@@ -14,7 +14,6 @@
   openjpeg,
   jbig2dec,
   libjpeg,
-  darwin,
   gumbo,
   enableX11 ? (!stdenv.hostPlatform.isDarwin),
   libX11,
@@ -142,19 +141,10 @@ stdenv.mkDerivation rec {
       curl
       openssl
     ]
-    ++ lib.optionals enableGL (
-      if stdenv.hostPlatform.isDarwin then
-        with darwin.apple_sdk.frameworks;
-        [
-          GLUT
-          OpenGL
-        ]
-      else
-        [
-          freeglut-mupdf
-          libGLU
-        ]
-    )
+    ++ lib.optionals (enableGL && !stdenv.hostPlatform.isDarwin) [
+      freeglut-mupdf
+      libGLU
+    ]
     ++ lib.optionals enableOcr [
       leptonica
       tesseract

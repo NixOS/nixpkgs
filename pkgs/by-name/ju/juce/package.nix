@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  overrideSDK,
   fetchFromGitHub,
 
   # Native build inputs
@@ -14,7 +13,7 @@
   freetype,
   curl,
   libglvnd,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   pcre2,
   libsysprof-capture,
   util-linuxMinimal,
@@ -32,14 +31,6 @@
   versionCheckHook,
   nix-update-script,
 }:
-
-let
-  # Rebind this in a separate let-binding so that we can then rebind stdenv without infrec below
-  stdenv' = stdenv;
-in
-let
-  stdenv = if stdenv'.hostPlatform.isDarwin then overrideSDK stdenv' "11.0" else stdenv';
-in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "juce";
@@ -80,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib # libasound.so
       libglvnd # libGL.so
-      webkitgtk_4_0 # webkit2gtk-4.0
+      webkitgtk_4_1 # webkit2gtk-4.0
       util-linuxMinimal
       libselinux
       libsepol

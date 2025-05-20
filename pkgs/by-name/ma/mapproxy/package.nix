@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mapproxy";
-  version = "4.0.2";
+  version = "4.1.1";
   disabled = python3Packages.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mapproxy";
     repo = "mapproxy";
     tag = version;
-    hash = "sha256-2c9tYra6EM1eL+bk1Kg+HVy6oXRKWTJz4ZnZA7hX2HA=";
+    hash = "sha256-rsravNSmvx1/291VvfRm0Yx1eg32UJd+egeG4S2SNnk=";
   };
 
   prePatch = ''

@@ -10,7 +10,6 @@
   libuuid,
   libunwind,
   openssl,
-  darwin,
   lttng-ust,
   pam,
   testers,
@@ -38,7 +37,14 @@ stdenv.mkDerivation rec {
     passthru.sources.${stdenv.hostPlatform.system}
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  sourceRoot = ".";
+  sourceRoot = "source";
+
+  unpackPhase = ''
+    runHook preUnpack
+    mkdir -p "$sourceRoot"
+    tar xf $src --directory="$sourceRoot"
+    runHook postUnpack
+  '';
 
   strictDeps = true;
 
@@ -58,9 +64,6 @@ stdenv.mkDerivation rec {
       libuuid
       libunwind
       openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.Libsystem
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       lttng-ust

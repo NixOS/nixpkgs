@@ -4,7 +4,6 @@
   protobuf,
   rustPlatform,
   fetchFromGitHub,
-  darwin,
   pkgsBuildHost,
   openssl,
   pkg-config,
@@ -14,9 +13,6 @@
   gurk-rs,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) Cocoa;
-in
 rustPlatform.buildRustPackage rec {
   pname = "gurk-rs";
   version = "0.6.4";
@@ -41,7 +37,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+  buildInputs = [ openssl ];
 
   NIX_LDFLAGS = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     "-framework"

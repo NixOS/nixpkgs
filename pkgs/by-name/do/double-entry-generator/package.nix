@@ -6,15 +6,15 @@
 }:
 buildGoModule rec {
   pname = "double-entry-generator";
-  version = "2.8.0";
+  version = "2.10.1";
   src = fetchFromGitHub {
     owner = "deb-sig";
     repo = "double-entry-generator";
-    hash = "sha256-DsNcQacbdBzOMK9mVuuK8yz9RXqykYLhXE5YSFYmipA=";
+    hash = "sha256-zAkiTUnuk6o2wFta1hG0RRD8/LIdgNFcSYvQ0Y2zeJY=";
     rev = "v${version}";
   };
 
-  vendorHash = "sha256-/QMt8zPvHM9znUc0+iUC82bOUJoBmH+shJ9D7AHiQ1E=";
+  vendorHash = "sha256-NoWUaawApdTSWGRul9mpOxgRZWTE7LTz3pJgwU2NWVU=";
 
   excludedPackages = [ "hack" ];
 

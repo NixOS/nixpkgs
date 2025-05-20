@@ -2,7 +2,9 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
+  writableTmpDirAsHomeHook,
   docbook-xsl-nons,
   libxslt,
   pkg-config,
@@ -62,19 +64,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freerdp";
-  version = "3.14.1";
+  version = "3.15.0-unstable-2025-05-16";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
     rev = finalAttrs.version;
-    hash = "sha256-3hBssoD6l0d1DC5SRhE7HQlcoxNPjz3G8jbQx2rzp60=";
+    hash = "sha256-xz1vP58hElXe/jLVrJOSpXcbqShBV7LHRpzqPLa2fDU=";
   };
+
+  patches = [
+    # Patch from https://github.com/FreeRDP/FreeRDP/pull/11439
+    # To be removed at the next release
+    (fetchpatch2 {
+      url = "https://github.com/FreeRDP/FreeRDP/commit/67fabc34dce7aa3543e152f78cb4ea88ac9d1244.patch";
+      hash = "sha256-kYCEjH1kXZJbg2sN6YNhh+y19HTTCaC7neof8DTKZ/8=";
+    })
+  ];
 
   postPatch =
     ''
-      export HOME=$TMP
-
       # skip NIB file generation on darwin
       substituteInPlace "client/Mac/CMakeLists.txt" "client/Mac/cli/CMakeLists.txt" \
         --replace-fail "if(NOT IS_XCODE)" "if(FALSE)"
@@ -100,6 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     docbook-xsl-nons
     pkg-config
     wayland-scanner
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs =
@@ -198,15 +208,15 @@ stdenv.mkDerivation (finalAttrs: {
     inherit gnome-remote-desktop;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Remote Desktop Protocol Client";
     longDescription = ''
       FreeRDP is a client-side implementation of the Remote Desktop Protocol (RDP)
       following the Microsoft Open Specifications.
     '';
     homepage = "https://www.freerdp.com/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.unix;
   };
 })

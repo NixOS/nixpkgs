@@ -14,57 +14,54 @@
   unzip,
   pip,
   pythonOlder,
-  setuptools,
+  setuptools-scm,
 }:
 let
-  version = "0.89.15";
+  version = "0.95.1";
   gqlgen = import ./fix-gqlgen-trimpath.nix {
     inherit unzip;
-    gqlgenVersion = "0.17.39";
+    gqlgenVersion = "0.17.64";
   };
+
+  patches = [ ./patches/core-go-update/builds/patch-deps.patch ];
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "builds.sr.ht";
     rev = version;
-    hash = "sha256-rmNaBnTPDDQO/ImkGkMwW8fyjQyBUBchTEnbtAK24pw=";
+    hash = "sha256-On/dKqIuqsCLAgYkJQOeYL7Ne983JzEYKhuLpD5vNu4=";
   };
 
   buildsrht-api = buildGoModule (
     {
-      inherit src version;
+      inherit src version patches;
       pname = "buildsrht-api";
       modRoot = "api";
-      vendorHash = "sha256-dwpuB+aYqzhGSdGVq/F9FTdHWMBkGMtVuZ7I3hB3b+Q=";
+      vendorHash = "sha256-GOM7fmJvfPJW3+XzvlwQZ9hBknlXwBKjGSmtIiapleY=";
     }
     // gqlgen
   );
 
   buildsrht-worker = buildGoModule (
     {
-      inherit src version;
+      inherit src version patches;
       pname = "buildsrht-worker";
       modRoot = "worker";
-      vendorHash = "sha256-dwpuB+aYqzhGSdGVq/F9FTdHWMBkGMtVuZ7I3hB3b+Q=";
+      vendorHash = "sha256-nEXnCeUxlUMNUqhe82MKREXcaC9pvqZqyqhyQW+jQjQ=";
     }
     // gqlgen
   );
 in
 buildPythonPackage rec {
-  inherit src version;
+  inherit src version patches;
   pname = "buildsrht";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace "all: api worker" ""
-  '';
-
   nativeBuildInputs = [
     pip
-    setuptools
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
@@ -78,9 +75,14 @@ buildPythonPackage rec {
     lxml
   ];
 
-  preBuild = ''
-    export PKGVER=${version}
-    export SRHT_PATH=${srht}/${python.sitePackages}/srht
+  env = {
+    PKGVER = version;
+    SRHT_PATH = "${srht}/${python.sitePackages}/srht";
+    PREFIX = placeholder "out";
+  };
+
+  postBuild = ''
+    make SASSC_INCLUDE=-I${srht}/share/sourcehut/scss/ all-share
   '';
 
   postInstall = ''
@@ -89,8 +91,10 @@ buildPythonPackage rec {
 
     cp -r images $out/lib
     cp contrib/submit_image_build $out/bin/builds.sr.ht
-    ln -s ${buildsrht-api}/bin/api $out/bin/buildsrht-api
-    ln -s ${buildsrht-worker}/bin/worker $out/bin/buildsrht-worker
+    ln -s ${buildsrht-api}/bin/api $out/bin/builds.sr.ht-api
+    ln -s ${buildsrht-worker}/bin/worker $out/bin/builds.sr.ht-worker
+    install -Dm644 schema.sql $out/share/sourcehut/builds.sr.ht-schema.sql
+    make install-share
   '';
 
   pythonImportsCheck = [ "buildsrht" ];

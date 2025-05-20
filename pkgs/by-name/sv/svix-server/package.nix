@@ -6,37 +6,30 @@
   openssl,
   protobuf,
   stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "svix-server";
-  version = "1.64.1";
+  version = "1.65.0";
 
   src = fetchFromGitHub {
     owner = "svix";
     repo = "svix-webhooks";
     rev = "v${version}";
-    hash = "sha256-ZaSUTGv/l54tKvXd2hUeQYKTUmQOUm2dpZE7J8auWb0=";
+    hash = "sha256-SmNiQeVoTASMW6T5mcInZLlNok32olWRr2+daq/c684=";
   };
 
   sourceRoot = "${src.name}/server";
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-h19xpILPudOMSC99wBB1CA/981eK+FHgsGJAJOFPeuw=";
+  cargoHash = "sha256-vpPWEYVKEboubbWeuxyXz/M53Ura8gSpuneH/L7Qtmw=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      openssl
-      protobuf
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+    protobuf
+  ];
 
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";

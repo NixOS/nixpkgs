@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mvfst";
-  version = "2025.02.10.00";
+  version = "2025.04.21.00";
 
   outputs = [
     "bin"
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "mvfst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IsBydt1T33yedlaoyKl43fB7Dsuu4RPPiJuUtwZIUGg=";
+    hash = "sha256-/84smnZ2L1zDmkO1w9VQzVhXKt/S5azQr7Xpr8/dOA4=";
   };
 
   patches = [
@@ -58,6 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkInputs = [
     gtest
+  ];
+
+  hardeningDisable = [
+    # causes test failures on aarch64
+    "pacret"
+    # causes empty cmake files to be generated
+    "trivialautovarinit"
   ];
 
   cmakeFlags =

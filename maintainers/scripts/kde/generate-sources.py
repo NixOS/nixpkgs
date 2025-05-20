@@ -46,7 +46,7 @@ def to_sri(hash):
 
 @click.command
 @click.argument(
-    "set",
+    "pkgset",
     type=click.Choice(["frameworks", "gear", "plasma"]),
     required=True
 )
@@ -71,9 +71,9 @@ def to_sri(hash):
     type=str,
     default=None,
 )
-def main(set: str, version: str, nixpkgs: pathlib.Path, sources_url: str | None):
+def main(pkgset: str, version: str, nixpkgs: pathlib.Path, sources_url: str | None):
     root_dir = nixpkgs / "pkgs/kde"
-    set_dir = root_dir / set
+    set_dir = root_dir / pkgset
     generated_dir = root_dir / "generated"
     metadata = utils.KDERepoMetadata.from_json(generated_dir)
 
@@ -82,7 +82,7 @@ def main(set: str, version: str, nixpkgs: pathlib.Path, sources_url: str | None)
             "frameworks": f"frameworks/{version}/",
             "gear": f"release-service/{version}/src/",
             "plasma": f"plasma/{version}/",
-        }[set]
+        }[pkgset]
         sources_url = f"https://download.kde.org/stable/{set_url}"
 
     client = httpx.Client()
@@ -91,6 +91,7 @@ def main(set: str, version: str, nixpkgs: pathlib.Path, sources_url: str | None)
     bs = bs4.BeautifulSoup(sources.text, features="html.parser")
 
     results = {}
+    projects_to_update_rust = set()
     for item in bs.select("tr")[3:]:
         link = item.select_one("td:nth-child(2) a")
         if not link:
@@ -100,6 +101,9 @@ def main(set: str, version: str, nixpkgs: pathlib.Path, sources_url: str | None)
 
         if project_name not in metadata.projects_by_name:
             print(f"Warning: unknown tarball: {project_name}")
+
+        if project_name in PROJECTS_WITH_RUST:
+            projects_to_update_rust.add(project_name)
 
         if version_and_ext.endswith(".sig"):
             continue
@@ -126,19 +130,8 @@ def main(set: str, version: str, nixpkgs: pathlib.Path, sources_url: str | None)
         pkg_dir = set_dir / project_name
         pkg_file = pkg_dir / "default.nix"
 
-        if project_name in PROJECTS_WITH_RUST:
-            print(f"Updating cargoDeps hash for {set}/{project_name}...")
-            subprocess.run([
-                "nix-update",
-                f"kdePackages.{project_name}",
-                "--version",
-                "skip",
-                "--override-filename",
-                pkg_file
-            ])
-
         if not pkg_file.exists():
-            print(f"Generated new package: {set}/{project_name}")
+            print(f"Generated new package: {pkgset}/{project_name}")
             pkg_dir.mkdir(parents=True, exist_ok=True)
             with pkg_file.open("w") as fd:
                 fd.write(LEAF_TEMPLATE.render(pname=project_name) + "\n")
@@ -149,8 +142,19 @@ def main(set: str, version: str, nixpkgs: pathlib.Path, sources_url: str | None)
 
     sources_dir = generated_dir / "sources"
     sources_dir.mkdir(parents=True, exist_ok=True)
-    with (sources_dir / f"{set}.json").open("w") as fd:
+    with (sources_dir / f"{pkgset}.json").open("w") as fd:
         json.dump(results, fd, indent=2)
+
+    for project_name in projects_to_update_rust:
+            print(f"Updating cargoDeps hash for {pkgset}/{project_name}...")
+            subprocess.run([
+                "nix-update",
+                f"kdePackages.{project_name}",
+                "--version",
+                "skip",
+                "--override-filename",
+                pkg_file
+            ])
 
 
 if __name__ == "__main__":

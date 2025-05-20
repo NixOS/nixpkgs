@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "streamlit";
-  version = "1.44.1";
+  version = "1.45.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xpFO1tW3aHC0YVEEdoBts3DzZCWuDmZU0ifJiCiBmNM=";
+    hash = "sha256-431WwK9SQNvCQJdogOgTZmicKQpVk3ZBckb5s/UbQhc=";
   };
 
   build-system = [

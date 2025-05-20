@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "albumentations";
-  version = "2.0.5";
+  version = "2.0.6";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "albumentations-team";
     repo = "albumentations";
     tag = version;
-    hash = "sha256-WqU25I1DxBqZAXd2+sNMUv/HOL4towlGTnFnpCGmMgY=";
+    hash = "sha256-n00WE8RwwLx/vHRkIrOhrampFPVkPhAkS6zZ4XjEHTk=";
   };
 
   patches = [

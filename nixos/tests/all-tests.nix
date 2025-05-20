@@ -373,7 +373,6 @@ in
   croc = handleTest ./croc.nix { };
   cross-seed = runTest ./cross-seed.nix;
   cyrus-imap = runTest ./cyrus-imap.nix;
-  darling = handleTest ./darling.nix { };
   darling-dmg = runTest ./darling-dmg.nix;
   dae = handleTest ./dae.nix { };
   davis = runTest ./davis.nix;
@@ -421,7 +420,7 @@ in
   ecryptfs = handleTest ./ecryptfs.nix { };
   fscrypt = handleTest ./fscrypt.nix { };
   fastnetmon-advanced = runTest ./fastnetmon-advanced.nix;
-  eintopf = handleTest ./eintopf.nix { };
+  eintopf = runTest ./eintopf.nix;
   ejabberd = handleTest ./xmpp/ejabberd.nix { };
   elk = handleTestOn [ "x86_64-linux" ] ./elk.nix { };
   emacs-daemon = runTest ./emacs-daemon.nix;
@@ -619,7 +618,7 @@ in
   odoo = handleTest ./odoo.nix { };
   odoo17 = handleTest ./odoo.nix { package = pkgs.odoo17; };
   odoo16 = handleTest ./odoo.nix { package = pkgs.odoo16; };
-  odoo15 = handleTest ./odoo.nix { package = pkgs.odoo15; };
+  oncall = runTest ./web-apps/oncall.nix;
   # 9pnet_virtio used to mount /nix partition doesn't support
   # hibernation. This test happens to work on x86_64-linux but
   # not on other platforms.
@@ -729,11 +728,13 @@ in
   lidarr = handleTest ./lidarr.nix { };
   lightdm = handleTest ./lightdm.nix { };
   lighttpd = runTest ./lighttpd.nix;
+  livekit = runTest ./networking/livekit.nix;
   limesurvey = handleTest ./limesurvey.nix { };
   limine = import ./limine { inherit runTest; };
   listmonk = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./listmonk.nix { };
   litellm = runTest ./litellm.nix;
   litestream = handleTest ./litestream.nix { };
+  lk-jwt-service = runTest ./matrix/lk-jwt-service.nix;
   lldap = handleTest ./lldap.nix { };
   localsend = handleTest ./localsend.nix { };
   locate = handleTest ./locate.nix { };
@@ -780,6 +781,7 @@ in
   matrix-alertmanager = runTest ./matrix/matrix-alertmanager.nix;
   matrix-appservice-irc = runTest ./matrix/appservice-irc.nix;
   matrix-conduit = handleTest ./matrix/conduit.nix { };
+  matrix-continuwuity = runTest ./matrix/continuwuity.nix;
   matrix-synapse = handleTest ./matrix/synapse.nix { };
   matrix-synapse-workers = handleTest ./matrix/synapse-workers.nix { };
   mautrix-meta-postgres = handleTest ./matrix/mautrix-meta-postgres.nix { };
@@ -1017,13 +1019,14 @@ in
   paperless = handleTest ./paperless.nix { };
   parsedmarc = handleTest ./parsedmarc { };
   password-option-override-ordering = handleTest ./password-option-override-ordering.nix { };
-  pdns-recursor = handleTest ./pdns-recursor.nix { };
+  pdns-recursor = runTest ./pdns-recursor.nix;
   pds = handleTest ./pds.nix { };
   peerflix = handleTest ./peerflix.nix { };
   peering-manager = handleTest ./web-apps/peering-manager.nix { };
   peertube = handleTestOn [ "x86_64-linux" ] ./web-apps/peertube.nix { };
   peroxide = handleTest ./peroxide.nix { };
   pgadmin4 = runTest ./pgadmin4.nix;
+  pgbackrest = import ./pgbackrest { inherit runTest; };
   pgbouncer = handleTest ./pgbouncer.nix { };
   pghero = runTest ./pghero.nix;
   pgweb = runTest ./pgweb.nix;
@@ -1115,7 +1118,7 @@ in
   private-gpt = handleTest ./private-gpt.nix { };
   privatebin = runTest ./privatebin.nix;
   privoxy = handleTest ./privoxy.nix { };
-  prometheus = handleTest ./prometheus { };
+  prometheus = import ./prometheus { inherit runTest; };
   prometheus-exporters = handleTest ./prometheus-exporters.nix { };
   prosody = handleTest ./xmpp/prosody.nix { };
   prosody-mysql = handleTest ./xmpp/prosody-mysql.nix { };
@@ -1190,6 +1193,7 @@ in
   schleuder = handleTest ./schleuder.nix { };
   scion-freestanding-deployment = handleTest ./scion/freestanding-deployment { };
   scrutiny = runTest ./scrutiny.nix;
+  scx = runTest ./scx/default.nix;
   sddm = handleTest ./sddm.nix { };
   sdl3 = handleTest ./sdl3.nix { };
   seafile = handleTest ./seafile.nix { };
@@ -1270,6 +1274,7 @@ in
   syncthing-no-settings = handleTest ./syncthing-no-settings.nix { };
   syncthing-init = handleTest ./syncthing-init.nix { };
   syncthing-many-devices = handleTest ./syncthing-many-devices.nix { };
+  syncthing-folders = runTest ./syncthing-folders.nix;
   syncthing-relay = handleTest ./syncthing-relay.nix { };
   sysinit-reactivation = runTest ./sysinit-reactivation.nix;
   systemd = handleTest ./systemd.nix { };
@@ -1294,7 +1299,7 @@ in
   systemd-initrd-luks-unl0kr = handleTest ./systemd-initrd-luks-unl0kr.nix { };
   systemd-initrd-modprobe = handleTest ./systemd-initrd-modprobe.nix { };
   systemd-initrd-shutdown = handleTest ./systemd-shutdown.nix { systemdStage1 = true; };
-  systemd-initrd-simple = handleTest ./systemd-initrd-simple.nix { };
+  systemd-initrd-simple = runTest ./systemd-initrd-simple.nix;
   systemd-initrd-swraid = handleTest ./systemd-initrd-swraid.nix { };
   systemd-initrd-vconsole = handleTest ./systemd-initrd-vconsole.nix { };
   systemd-initrd-networkd = handleTest ./systemd-initrd-networkd.nix { };
@@ -1386,6 +1391,7 @@ in
   tuptime = handleTest ./tuptime.nix { };
   turbovnc-headless-server = handleTest ./turbovnc-headless-server.nix { };
   turn-rs = handleTest ./turn-rs.nix { };
+  tusd = runTest ./tusd/default.nix;
   tuxguitar = runTest ./tuxguitar.nix;
   twingate = runTest ./twingate.nix;
   typesense = handleTest ./typesense.nix { };
@@ -1419,10 +1425,6 @@ in
   varnish60 = runTest {
     imports = [ ./varnish.nix ];
     _module.args.package = pkgs.varnish60;
-  };
-  varnish76 = runTest {
-    imports = [ ./varnish.nix ];
-    _module.args.package = pkgs.varnish76;
   };
   varnish77 = runTest {
     imports = [ ./varnish.nix ];

@@ -21,8 +21,6 @@
   qtsvg,
   qttools,
   qtwayland,
-  CoreFoundation,
-  Security,
   provider ? "riseup",
 }:
 let
@@ -121,17 +119,11 @@ buildGoModule rec {
     qtsvg
   ];
 
-  buildInputs =
-    [
-      qtbase
-      qtdeclarative
-      qtsvg
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreFoundation
-      Security
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ];
+  buildInputs = [
+    qtbase
+    qtdeclarative
+    qtsvg
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ];
 
   # FIXME: building on Darwin currently fails
   # due to missing debug symbols for Qt,

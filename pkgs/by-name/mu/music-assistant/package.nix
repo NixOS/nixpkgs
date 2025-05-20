@@ -48,14 +48,14 @@ assert
 
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.5.0";
+  version = "2.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = version;
-    hash = "sha256-yugtL3dCuGb2OSTy49V4mil9EnfACcGrYCA1rW/lo+4=";
+    hash = "sha256-RkbU2MqQ7XSv7f6gvgS0AZ8jy63fUAomC41dEk8qyOI=";
   };
 
   patches = [

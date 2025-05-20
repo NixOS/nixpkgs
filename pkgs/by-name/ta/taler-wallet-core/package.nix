@@ -104,5 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.ngi ];
     platforms = lib.platforms.linux;
     mainProgram = "taler-wallet-cli";
+    # ./configure doesn't understand --build / --host
+    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 })

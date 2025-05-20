@@ -1,23 +1,19 @@
 {
   lib,
-  python311Packages,
+  python3Packages,
   fetchFromGitHub,
   bashate,
 }:
 
-let
-  pythonPackages = python311Packages;
-in
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "kolla";
-  version = "18.1.0";
-
+  version = "19.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "kolla";
-    hash = "sha256-jLD6ILihymQlWkkpGYC4OX8BKLpQurAK6Y5Xpju+QAI=";
+    hash = "sha256-yVNMCqg6eAUhLg3iAjDkYpMoIKc6OksDri9jNpyaS7c=";
     rev = version;
   };
 
@@ -26,21 +22,22 @@ pythonPackages.buildPythonApplication rec {
       --replace-fail "os.path.join(sys.prefix, 'share/kolla')," \
       "os.path.join(PROJECT_ROOT, '../../../share/kolla'),"
 
-    substituteInPlace test-requirements.txt \
-      --replace-fail "hacking>=3.0.1,<3.1.0" "hacking"
-
     sed -e 's/git_info = .*/git_info = "${version}"/' -i kolla/version.py
   '';
+
+  pythonRelaxDeps = [
+    "hacking"
+  ];
 
   # fake version to make pbr.packaging happy
   env.PBR_VERSION = version;
 
-  build-system = with pythonPackages; [
+  build-system = with python3Packages; [
     setuptools
     pbr
   ];
 
-  dependencies = with pythonPackages; [
+  dependencies = with python3Packages; [
     docker
     jinja2
     oslo-config
@@ -49,10 +46,10 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   postInstall = ''
-    cp kolla/template/repos.yaml $out/${pythonPackages.python.sitePackages}/kolla/template/
+    cp kolla/template/repos.yaml $out/${python3Packages.python.sitePackages}/kolla/template/
   '';
 
-  nativeCheckInputs = with pythonPackages; [
+  nativeCheckInputs = with python3Packages; [
     testtools
     stestr
     oslotest

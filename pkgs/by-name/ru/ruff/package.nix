@@ -16,17 +16,19 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruff";
-  version = "0.11.7";
+  version = "0.11.10";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
     tag = finalAttrs.version;
-    hash = "sha256-DXu9/DRwcffZtsql/Qk+6GyzhiYXUyW6R9FCAvLhn6o=";
+    hash = "sha256-8psRFBhOzcFYYOU1aLf2tQwSZeWyn3TjUtfMR8HJ4FE=";
   };
 
+  cargoBuildFlags = [ "--package=ruff" ];
+
   useFetchCargoVendor = true;
-  cargoHash = "sha256-4TK7HEdSCvUGqsAH+dnPgMBYmT/0mOnvQXHr/PtcsT0=";
+  cargoHash = "sha256-KwTqm345bRwn5PXn/bTakiBNNjJCIstkXGpqtyCiK4k=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -54,12 +56,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # This causes errors like "error: linker `cc` not found" on static builds
   doCheck = !stdenv.hostPlatform.isStatic;
 
-  # Failing on darwin for an unclear reason, but probably due to sandbox.
-  # According to the maintainers, those tests are from an experimental crate that isn't actually
-  # used by ruff currently and can thus be safely skipped.
-  cargoTestFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+  # Exclude tests from `ty`-related crates, run everything else.
+  # Ordinarily we would run all the tests, but there is significant overlap with the `ty` package in nixpkgs,
+  # which ruff shares a monorepo with.
+  # As such, we leave running `ty` tests to the `ty` package, and concentrate on everything else.
+  cargoTestFlags = [
     "--workspace"
-    "--exclude=red_knot"
+    "--exclude=ty"
+    "--exclude=ty_ide"
+    "--exclude=ty_project"
+    "--exclude=ty_python_semantic"
+    "--exclude=ty_server"
+    "--exclude=ty_test"
+    "--exclude=ty_vendored"
+    "--exclude=ty_wasm"
   ];
 
   nativeInstallCheckInputs = [
@@ -82,6 +92,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "ruff";
     maintainers = with lib.maintainers; [
+      bengsparks
       figsoda
       GaetanLepage
     ];

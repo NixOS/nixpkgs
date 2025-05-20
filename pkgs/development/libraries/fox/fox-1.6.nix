@@ -16,7 +16,6 @@
   libXfixes,
   mesa,
   xinput,
-  CoreServices,
 }:
 
 stdenv.mkDerivation rec {
@@ -42,7 +41,7 @@ stdenv.mkDerivation rec {
     libGL
     libXfixes
     xinput
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin CoreServices;
+  ];
 
   doCheck = true;
 

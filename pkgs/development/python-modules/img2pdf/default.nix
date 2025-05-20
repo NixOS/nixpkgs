@@ -3,7 +3,6 @@
   pkgs,
   buildPythonPackage,
   fetchFromGitea,
-  fetchpatch,
   replaceVars,
   colord,
   setuptools,
@@ -23,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "img2pdf";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchFromGitea {
@@ -31,15 +30,10 @@ buildPythonPackage rec {
     owner = "josch";
     repo = "img2pdf";
     tag = version;
-    hash = "sha256-/nxXgGsnj5ktxUYt9X8/9tJzXgoU8idTjVgLh+8jol8=";
+    hash = "sha256-71u6ex+UAEFPDtR9QI8Ezah5zCorn4gMdAnzFz4blsI=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "exiftool-13.23-compat.patch";
-      url = "https://gitlab.mister-muffin.de/josch/img2pdf/commit/59132f20f8a40f6ed4e5cd2a3719bf55473ba4d7.patch";
-      hash = "sha256-A36YSZ6kBFzEa2lSKIVHRg9r6Oi8FGkOnmt2YxlkwWw=";
-    })
     (replaceVars ./default-icc-profile.patch {
       srgbProfile =
         if stdenv.hostPlatform.isDarwin then

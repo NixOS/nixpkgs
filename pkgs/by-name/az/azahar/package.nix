@@ -27,6 +27,7 @@
   pipewire,
   pkg-config,
   portaudio,
+  SDL2,
   sndio,
   spirv-tools,
   soundtouch,
@@ -34,10 +35,7 @@
   vulkan-headers,
   xorg,
   zstd,
-  enableSDL2 ? true,
-  SDL2,
-  enableQt ? true,
-  enableQtTranslations ? enableQt,
+  enableQtTranslations ? true,
   qt6,
   enableCubeb ? true,
   cubeb,
@@ -53,20 +51,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "azahar";
-  version = "2120.3";
+  version = "2121.1";
 
   src = fetchzip {
-    # TODO: use this when https://github.com/azahar-emu/azahar/issues/779 is resolved
-    # url = "https://github.com/azahar-emu/azahar/releases/download/${finalAttrs.version}/lime3ds-unified-source-${finalAttrs.version}.tar.xz";
-    url = "https://github.com/azahar-emu/azahar/releases/download/${finalAttrs.version}/azahar-unified-source-20250414-00e3bbb.tar.xz";
-    hash = "sha256-3QKicmpmWDM7x9GDJ8sxm2Xu+0Yfho4LkSWMp+ixzRk=";
+    url = "https://github.com/azahar-emu/azahar/releases/download/${finalAttrs.version}/azahar-unified-source-${finalAttrs.version}.tar.xz";
+    hash = "sha256-jadQsuU1SfvUc5DO5XqZXTe53U9XGOHScDGx66Oh18Q=";
   };
 
   nativeBuildInputs = [
     cmake
     doxygen
     pkg-config
-  ] ++ lib.optionals enableQt [ qt6.wrapQtAppsHook ];
+    qt6.wrapQtAppsHook
+  ];
 
   buildInputs =
     [
@@ -91,7 +88,12 @@ stdenv.mkDerivation (finalAttrs: {
       openssl
       pipewire
       portaudio
+      qt6.qtbase
+      qt6.qtmultimedia
+      qt6.qttools
+      qt6.qtwayland
       soundtouch
+      SDL2
       sndio
       spirv-tools
       vulkan-headers
@@ -99,17 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
       xorg.libXext
       zstd
     ]
-    ++ optionals enableQt (
-      with qt6;
-      [
-        qtbase
-        qtmultimedia
-        qttools
-        qtwayland
-      ]
-    )
     ++ optionals enableQtTranslations [ qt6.qttools ]
-    ++ optionals enableSDL2 [ SDL2 ]
     ++ optionals enableCubeb [ cubeb ]
     ++ optionals useDiscordRichPresence [ rapidjson ];
 
@@ -147,10 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "DISABLE_SYSTEM_LODEPNG" true)
     (cmakeBool "DISABLE_SYSTEM_VMA" true)
     (cmakeBool "DISABLE_SYSTEM_XBYAK" true)
-    (cmakeBool "ENABLE_QT" enableQt)
     (cmakeBool "ENABLE_QT_TRANSLATION" enableQtTranslations)
-    (cmakeBool "ENABLE_SDL2" enableSDL2)
-    (cmakeBool "ENABLE_SDL2_FRONTEND" enableSDL2)
     (cmakeBool "ENABLE_CUBEB" enableCubeb)
     (cmakeBool "USE_DISCORD_PRESENCE" useDiscordRichPresence)
   ];

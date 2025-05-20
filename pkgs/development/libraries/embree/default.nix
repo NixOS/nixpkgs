@@ -7,7 +7,7 @@
   ispc,
   tbb,
   glfw,
-  openimageio_2,
+  openimageio,
   libjpeg,
   libpng,
   libpthreadstubs,
@@ -15,15 +15,15 @@
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "embree";
-  version = "4.3.3";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "embree";
     repo = "embree";
-    rev = "v${version}";
-    sha256 = "sha256-bHVokEfnTW2cJqx3Zz2x1hIH07WamPAVFY9tiv6nHd0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bHVokEfnTW2cJqx3Zz2x1hIH07WamPAVFY9tiv6nHd0=";
   };
 
   postPatch = ''
@@ -50,20 +50,20 @@ stdenv.mkDerivation rec {
   buildInputs = [
     tbb
     glfw
-    openimageio_2
+    openimageio
     libjpeg
     libpng
     libX11
     libpthreadstubs
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ glib ];
 
-  meta = with lib; {
+  meta = {
     description = "High performance ray tracing kernels from Intel";
     homepage = "https://embree.github.io/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       hodapp
     ];
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
   };
-}
+})

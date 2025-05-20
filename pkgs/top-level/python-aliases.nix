@@ -322,6 +322,7 @@ mapAliases ({
   htmllaundry = throw "htmllaundry has been removed because it is abandoned"; # added 2024-06-04
   HTSeq = htseq; # added 2023-02-19
   hug = throw "hug was marked broken since 2021 and has not established compatibility with newer dependency versions. It has therefore been removed."; # added 2024-11-15
+  huisbaasje-client = throw "huisbaasje-client has been removed because it was replaced with energyflip-client"; # added 2025-05-12
   hyperkitty = throw "Please use pkgs.mailmanPackages.hyperkitty"; # added 2022-04-29
   hydra-check = throw "The Python package hydra-check was removed in favor of the top-level rust based pkgs.hydra-check"; # added 2022-04-29
   ihatemoney = throw "ihatemoney was removed because it is no longer maintained downstream"; # added 2023-04-08
@@ -385,6 +386,7 @@ mapAliases ({
   livestreamer-curses = throw "'livestreamer-curses' has been removed as it, and livestreamer itself are unmaintained."; # added 2023-11-14
   lmcloud = pylamarzocco; # added 2024-11-26
   localstack = throw "localstack was promoted to a top-level attribute"; # added 2025-02-21
+  logi-circle = throw "logi-circle has been removed because the logi_circle integration was removed from Home Assistant"; # added 2025-05-13
   logilab_astng = throw "logilab-astng has not been released since 2013 and is unmaintained"; # added 2022-11-29
   logilab_common = logilab-common; # added 2022-11-21
   loo-py = loopy; # added 2022-05-03
@@ -415,6 +417,7 @@ mapAliases ({
   mitmproxy-wireguard = throw "mitmproxy-wireguard has been removed because it was replaced by upstream with mitmproxy-rs"; # added 2023-11-06
   mkdocs-awesome-pages-plugin = mkdocs-awesome-nav; # added 2025-03-10
   mkdocs-minify = mkdocs-minify-plugin; # added 2023-11-28
+  mne-python = mne; # added 2025-05-02
   modestmaps = throw "modestmaps is unmaintained and was never enabled for anything except Python27"; # Added 2025-03-23
   mox = throw "mox was removed because it is unmaintained"; # added 2023-02-21
   mox3 = throw "mox3 was removed because it is unmaintained"; # added 2024-08-30
@@ -452,6 +455,8 @@ mapAliases ({
   notifymuch = throw "notifymuch has been promoted to a top-level attribute name: `pkgs.notifymuch`"; # added 2022-10-02
   Nuitka = nuitka; # added 2023-02-19
   ntlm-auth = throw "ntlm-auth has been removed, because it relies on the md4 implementation provided by openssl. Use pyspnego instead.";
+  oauth = throw "oauth has been removed as it is unmaintained"; # added 2025-05-16
+  oauth2 = throw "oauth2 has been removed as it is unmaintained"; # added 2025-05-16
   openai-triton = triton; # added 2024-07-18
   openai-triton-bin = triton-bin; # added 2024-07-18
   openai-triton-cuda = triton-cuda; # added 2024-07-18
@@ -507,6 +512,7 @@ mapAliases ({
   proxy_tools = proxy-tools; # added 2023-11-05
   pur = throw "pur has been renamed to pkgs.pur"; # added 2021-11-08
   pushbullet = pushbullet-py; # Added 2022-10-15
+  push-receiver = throw "push-receiver has been removed since it is unmaintained for 3 years"; # added 2025-05-17
   Pweave = pweave; # added 2023-02-19
   pwndbg = throw "'pwndbg' has been removed due to dependency version incompatibilities that are infeasible to maintain in nixpkgs. Use the downstream flake that pwndbg provides instead: https://github.com/pwndbg/pwndbg"; # Added 2025-02-09
   pxml = throw "pxml was removed, because it was disabled on all python version since 3.8 and last updated in 2020."; # added 2024-05-13
@@ -521,6 +527,7 @@ mapAliases ({
   pycontracts = throw "pycontracts has been removed, since upstream is no longer active and it is broken on modern Python versions."; # added 2024-08-09
   pydns = py3dns; # added 2024-10-25
   pydrive = throw "pydrive is broken and deprecated and has been replaced with pydrive2."; # added 2022-06-01
+  pyephember = throw "pyephember was removed because Home Assistant switched to pyephember2"; # added 2025-05-07
   pyjet = throw "pyjet is deprecated, use fastjet instead"; # added 2023-05-10
   pygame_sdl2 = pygame-sdl2; # added 2024-01-07
   pygogo = throw "pygogo has been removed, since it is abandoned and had no maintainer"; # added 2024-07-27
@@ -546,6 +553,7 @@ mapAliases ({
   pymatgen-lammps = throw "pymatgen-lammps has been removed because it is unmaintained and broken"; # added 2023-06-20
   pymazda = throw "pymazda has been removed, because the upstream repo has been affected by a DCMA claim."; # added 2023-10-16
   pymc3 = pymc; # added 2022-06-05, module was rename starting with 4.0.0
+  pymelcloud = python-melcloud; # added 2025-05-08
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
   PyMVGLive = pymvglive; # added 2023-02-19
   pymyq = python-myq; # added 2023-10-20
@@ -686,6 +694,7 @@ mapAliases ({
   ruff-lsp = throw "ruff-lsp has been deprecated, use `ruff server` instead"; # added 2025-04-21
   runway-python = throw "SDK has been deprecated and was archived by upstream"; # added 2023-05-03
   safe = throw "safe has been removed, it was unmaintained sinced October 2019"; # added 2024-07-28
+  sabyenc = throw "sabyenc has been removed, due to no updates since June 2019 and being superseded by sabyenc3"; # added 2025-05-03
   sampledata = throw "sampledata has been removed, it was unmaintained since 2017"; # added 2024-07-27
   sapi-python-client = kbcstorage; # added 2022-04-20
   scikitimage = scikit-image; # added 2023-05-14
@@ -703,6 +712,7 @@ mapAliases ({
   shouldbe = throw "shouldbe was removed, because it was disabled on all python version since 3.8 and last updated in 2019."; # added 2024-05-12
   sip_4 = sip4; # added 2024-01-07
   slackclient = slack-sdk; # added 2024-06-27
+  slimit = throw "slimit was removed, because it was an unused and broken leaf package last updated in 2018."; # added 2025-05-17
   ssh-mitm = throw "ssh-mitm was removed in favor of the top-level ssh-mitm"; # added 2023-05-09
   smart_open = smart-open; # added 2021-03-14
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
@@ -772,6 +782,7 @@ mapAliases ({
   types-paramiko = throw "types-paramiko has been removed because it was unused."; # added 2022-05-30
   ufoLib2 = ufolib2; # added 2024-01-07
   ukrainealarm = throw "ukrainealarm has been removed, as it has been replaced as a home-assistant dependency by uasiren."; # added 2024-01-05
+  unblob-native = throw "unblob-native has been removed because its functionality is merged into unblob 25.4.14."; # Added 2025-05-02
   unittest2 = throw "unittest2 has been removed as it's a backport of unittest that's unmaintained and not needed beyond Python 3.4."; # added 2022-12-01
   update_checker = update-checker; # added 2024-01-07
   uproot3 = throw "uproot3 has been removed, use uproot instead"; # added 2022-12-13

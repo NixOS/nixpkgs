@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "aiohomeconnect";
-  version = "0.16.3";
+  version = "0.17.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "MartinHjelmare";
     repo = "aiohomeconnect";
     tag = "v${version}";
-    hash = "sha256-BwLbShldDhd5jqes4WvzP/+c7vjrY83KWLbYs0ON3K4=";
+    hash = "sha256-cHY+e4g5DeMUChXOFDexY0PViiMpT6gYPxPTkfBcssk=";
   };
 
   build-system = [ setuptools ];
@@ -60,7 +60,7 @@ buildPythonPackage rec {
   meta = {
     description = "An asyncio client for the Home Connect API";
     homepage = "https://github.com/MartinHjelmare/aiohomeconnect";
-    changelog = "https://github.com/MartinHjelmare/aiohomeconnect/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/MartinHjelmare/aiohomeconnect/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

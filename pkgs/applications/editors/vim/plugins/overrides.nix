@@ -118,6 +118,10 @@
   # typst-preview dependencies
   tinymist,
   websocat,
+  # luau-lsp-nvim dependencies
+  luau-lsp,
+  # nvim-vstsl dependencies
+  vtsls,
 }:
 self: super:
 let
@@ -290,6 +294,18 @@ in
 
   blink-cmp-git = super.blink-cmp-git.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
+  };
+
+  blink-cmp-npm-nvim = super.blink-cmp-npm-nvim.overrideAttrs {
+    nvimSkipModules = [
+      # Test files
+      "blink-cmp-npm.utils.compute_meta_spec"
+      "blink-cmp-npm.utils.generate_doc_spec"
+      "blink-cmp-npm.utils.ignore_version_spec"
+      "blink-cmp-npm.utils.is_cursor_in_dependencies_node_spec"
+      "blink-cmp-npm.utils.semantic_sort_spec"
+      "minit"
+    ];
   };
 
   blink-emoji-nvim = super.blink-emoji-nvim.overrideAttrs {
@@ -606,14 +622,24 @@ in
     dependencies = [ self.plenary-nvim ];
     nvimSkipModules = [
       # Optional provider dependencies
-      "codecompanion.providers.diff.mini_diff"
-      "codecompanion.providers.actions.telescope"
       "codecompanion.providers.actions.mini_pick"
+      "codecompanion.providers.actions.snacks"
+      "codecompanion.providers.actions.telescope"
+      "codecompanion.providers.diff.mini_diff"
       # Requires setup call
       "codecompanion.actions.static"
       "codecompanion.actions.init"
       # Test
       "minimal"
+    ];
+  };
+
+  codecompanion-history-nvim = super.codecompanion-history-nvim.overrideAttrs {
+    dependencies = with self; [
+      # transitive dependency for codecompanion-nvim
+      plenary-nvim
+
+      codecompanion-nvim
     ];
   };
 
@@ -1065,6 +1091,12 @@ in
     ];
   };
 
+  ecolog-nvim = super.ecolog-nvim.overrideAttrs {
+    nvimSkipModules = [
+      "repro"
+    ];
+  };
+
   efmls-configs-nvim = super.efmls-configs-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
   };
@@ -1291,6 +1323,13 @@ in
     ];
   };
 
+  GPTModels-nvim = super.GPTModels-nvim.overrideAttrs {
+    dependencies = with self; [
+      nui-nvim
+      telescope-nvim
+    ];
+  };
+
   guard-collection = super.guard-collection.overrideAttrs {
     dependencies = [ self.guard-nvim ];
   };
@@ -1457,6 +1496,14 @@ in
     passthru.python3Dependencies = ps: [ ps.jupytext ];
   };
 
+  kanagawa-paper-nvim = super.kanagawa-paper-nvim.overrideAttrs {
+    nvimSkipModules = [
+      # skipping wezterm theme switcher since it relies on a wezterm module
+      # that does not seem to be available, tried to build setting wezterm-nvim as a dep
+      "wezterm.theme_switcher"
+    ];
+  };
+
   kulala-nvim = super.kulala-nvim.overrideAttrs {
     dependencies = with self; [
       nvim-treesitter
@@ -1467,6 +1514,10 @@ in
       substituteInPlace lua/kulala/config/defaults.lua \
         --replace-fail 'curl_path = "curl"' 'curl_path = "${lib.getExe curl}"'
     '';
+    nvimSkipModules = [
+      # Requires some extra work to get CLI working in nixpkgs
+      "cli.kulala_cli"
+    ];
   };
 
   LazyVim = super.LazyVim.overrideAttrs {
@@ -1680,6 +1731,11 @@ in
     checkInputs = [ self.luasnip ];
   };
 
+  luau-lsp-nvim = super.luau-lsp-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+    runtimeDeps = [ luau-lsp ];
+  };
+
   magma-nvim = super.magma-nvim.overrideAttrs {
     passthru.python3Dependencies =
       ps: with ps; [
@@ -1751,8 +1807,12 @@ in
   };
 
   mason-nvim = super.mason-nvim.overrideAttrs {
-    # lua/mason-vendor/zzlib/inflate-bwo.lua:15: 'end' expected near '&'
-    nvimSkipModules = "mason-vendor.zzlib.inflate-bwo";
+    nvimSkipModules = [
+      # lua/mason-vendor/zzlib/inflate-bwo.lua:15: 'end' expected near '&'
+      "mason-vendor.zzlib.inflate-bwo"
+      # E5108: Error executing lua ...mplugin-mason.nvim-2025-05-06/lua/mason-test/helpers.lua:7: module 'luassert.spy' not found:
+      "mason-test.helpers"
+    ];
   };
 
   mason-tool-installer-nvim = super.mason-tool-installer-nvim.overrideAttrs {
@@ -2576,6 +2636,11 @@ in
     nvimSkipModules = "client.client";
   };
 
+  nvim-vtsls = super.nvim-vtsls.overrideAttrs {
+    runtimeDeps = [ vtsls ];
+    dependencies = [ self.nvim-lspconfig ];
+  };
+
   nvzone-menu = super.nvzone-menu.overrideAttrs {
     checkInputs = with self; [
       # Optional integrations
@@ -2621,6 +2686,10 @@ in
     dependencies = with self; [
       plenary-nvim
     ];
+  };
+
+  oil-git-status-nvim = super.oil-git-status-nvim.overrideAttrs {
+    dependencies = [ self.oil-nvim ];
   };
 
   ollama-nvim = super.ollama-nvim.overrideAttrs {
@@ -2744,9 +2813,15 @@ in
     ];
   };
 
-  peek-nvim = super.peek-nvim.overrideAttrs {
-    runtimeDeps = [ deno ];
-  };
+  peek-nvim = super.peek-nvim.overrideAttrs (old: {
+    patches = [
+      # Patch peek-nvim to run using nixpkgs deno
+      # This means end-users have to build peek-nvim the first time they use it...
+      (replaceVars ./patches/peek-nvim/cmd.patch {
+        deno = lib.getExe deno;
+      })
+    ];
+  });
 
   persisted-nvim = super.persisted-nvim.overrideAttrs {
     nvimSkipModules = [
@@ -3321,6 +3396,10 @@ in
     ];
   };
 
+  timerly = super.timerly.overrideAttrs {
+    dependencies = [ self.nvzone-volt ];
+  };
+
   tmux-complete-vim = super.tmux-complete-vim.overrideAttrs {
     # Vim plugin with optional nvim-compe lua module
     nvimSkipModules = [ "compe_tmux" ];
@@ -3877,6 +3956,20 @@ in
       "xmake.action"
       "xmake.command"
       "xmake.runner_wrapper"
+    ];
+  };
+
+  yaml-companion-nvim = super.yaml-companion-nvim.overrideAttrs {
+    dependencies = [
+      self.nvim-lspconfig
+      self.plenary-nvim
+    ];
+  };
+
+  yaml-schema-detect-nvim = super.yaml-schema-detect-nvim.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      nvim-lspconfig
     ];
   };
 

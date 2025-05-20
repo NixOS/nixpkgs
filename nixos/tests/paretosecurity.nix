@@ -117,15 +117,17 @@
     xfce.succeed("xdotool click 1")
     xfce.wait_for_text("Run Checks")
 
-    # Test 5: paretosecurity:// URL handler is registered
-    xfce.succeed("su - alice -c 'xdg-open paretosecurity://foo'")
-
-    # Test 6: Desktop entry
+    # Test 5: Desktop entry
     xfce.succeed("xdotool mousemove 10 10")
     xfce.succeed("xdotool click 1")  # hide the tray icon window
     xfce.succeed("xdotool click 1")  # show the Applications menu
     xfce.succeed("xdotool mousemove 10 200")
     xfce.succeed("xdotool click 1")
     xfce.wait_for_text("Pareto Security")
+
+    # Test 6: paretosecurity:// URL handler is registered
+    xfce.execute("su - alice -c 'xdg-open paretosecurity://foo >/dev/null &'")
+    xfce.wait_for_text("Failed to add device")
+
   '';
 }

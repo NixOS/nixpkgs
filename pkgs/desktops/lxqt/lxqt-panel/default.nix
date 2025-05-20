@@ -23,7 +23,6 @@
   lxqt-build-tools,
   lxqt-globalkeys,
   lxqt-menu-data,
-  menu-cache,
   pcre,
   qtbase,
   qtsvg,
@@ -36,13 +35,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-panel";
-  version = "2.1.4";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-WS+rPiPB/BBmg4yNkpZ2cFJG/1awdjCN0ziWtcESRP4=";
+    hash = "sha256-BMdiSm+FJXeLRGGoCdUpJjFu8JRk0+95LPZJSTFMqrM=";
   };
 
   nativeBuildInputs = [
@@ -72,7 +71,6 @@ stdenv.mkDerivation rec {
     lm_sensors
     lxqt-globalkeys
     lxqt-menu-data
-    menu-cache
     pcre
     qtbase
     qtsvg

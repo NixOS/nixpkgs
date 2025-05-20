@@ -7,12 +7,13 @@
   mock,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-dns";
   version = "0.35.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,7 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-CsRNqesPoLEilRPNiIB0q9AhGZLEBCMAr9HBbUFHRVM=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-api-core
     google-cloud-core
   ];
@@ -37,7 +40,7 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    # requires credentials
+    # Test requires credentials
     "test_quota"
   ];
 

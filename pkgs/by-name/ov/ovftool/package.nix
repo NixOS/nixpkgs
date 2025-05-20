@@ -129,7 +129,6 @@ stdenv.mkDerivation (final: {
       openssl
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.Libsystem
       libxml2
     ];
 
@@ -244,7 +243,6 @@ stdenv.mkDerivation (final: {
       done
 
       # Patches for ovftool binary
-      change_args+=(-change /usr/lib/libSystem.B.dylib ${darwin.Libsystem}/lib/libSystem.B.dylib)
       change_args+=(-change /usr/lib/libc++.1.dylib ${stdenv.cc.libcxx}/lib/libc++.1.dylib)
       change_args+=(-change /usr/lib/libiconv.2.dylib ${libiconv}/lib/libiconv.2.dylib)
       change_args+=(-change /usr/lib/libxml2.2.dylib ${libxml2}/lib/libxml2.2.dylib)
@@ -263,7 +261,7 @@ stdenv.mkDerivation (final: {
       otool -L "$out/libexec/ovftool"
 
       # Additional patches for ovftool dylibs
-      change_args+=(-change /usr/lib/libresolv.9.dylib ${darwin.Libsystem}/lib/libresolv.9.dylib)
+      change_args+=(-change /usr/lib/libresolv.9.dylib ${lib.getLib darwin.libresolv}/lib/libresolv.9.dylib)
       change_args+=(-change @loader_path/libcares.2.dylib ${c-ares}/lib/libcares.2.dylib)
       change_args+=(-change @loader_path/libexpat.dylib ${expat}/lib/libexpat.dylib)
       change_args+=(-change @loader_path/libicudata.60.2.dylib ${icu60}/lib/libicudata.60.2.dylib)

@@ -32,8 +32,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    nodejs
     yarn
   ];
+
+  strictDeps = true;
 
   dontConfigure = true;
 

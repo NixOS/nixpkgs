@@ -6,7 +6,6 @@
   pkg-config,
   postgresql,
   postgresqlBuildExtension,
-  stdenv,
   xxHash,
 }:
 

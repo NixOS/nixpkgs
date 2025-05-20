@@ -100,6 +100,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    # error: implicit instantiation of undefined template 'std::char_traits<unsigned char>'
+    broken = stdenv.hostPlatform.isDarwin;
     changelog = "https://downloads.isc.org/isc/kea/${version}/Kea-${version}-ReleaseNotes.txt";
     homepage = "https://kea.isc.org/";
     description = "High-performance, extensible DHCP server by ISC";

@@ -5,7 +5,6 @@
   cmake,
   doxygen,
   zlib,
-  Foundation,
 }:
 
 let
@@ -31,7 +30,7 @@ let
         doxygen
       ];
 
-      buildInputs = [ zlib ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
+      buildInputs = [ zlib ];
 
       doInstallCheck = true;
 

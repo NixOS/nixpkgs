@@ -16,7 +16,6 @@
   fetchpatch,
   gfortran,
   gpuTargets ? [ ], # Non-CUDA targets, that is HIP
-  rocmPackages_5 ? null,
   rocmPackages,
   lapack,
   lib,
@@ -49,7 +48,12 @@ let
   inherit (effectiveCudaPackages) cudaAtLeast flags cudaOlder;
 
   effectiveRocmPackages =
-    if strings.versionOlder version "2.8.0" then rocmPackages_5 else rocmPackages;
+    if strings.versionOlder version "2.8.0" then
+      throw ''
+        the required ROCm 5.7 version for magma ${version} has been removed
+      ''
+    else
+      rocmPackages;
 
   # NOTE: The lists.subtractLists function is perhaps a bit unintuitive. It subtracts the elements
   #   of the first list *from* the second list. That means:
@@ -254,6 +258,6 @@ stdenv.mkDerivation {
       || !(cudaSupport || rocmSupport) # At least one back-end enabled
       || (cudaSupport && rocmSupport) # Mutually exclusive
       || (cudaSupport && strings.versionOlder version "2.7.1" && cudaPackages_11 == null)
-      || (rocmSupport && strings.versionOlder version "2.8.0" && rocmPackages_5 == null);
+      || (rocmSupport && strings.versionOlder version "2.8.0");
   };
 }

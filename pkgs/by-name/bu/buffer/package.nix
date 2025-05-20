@@ -17,14 +17,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "buffer";
-  version = "0.9.7";
+  version = "0.9.10";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "cheywood";
     repo = "buffer";
-    rev = finalAttrs.version;
-    hash = "sha256-W6LTTQvIMAB99q2W11EBlBknJnOuv4ptgf5SSM422Cg=";
+    tag = finalAttrs.version;
+    hash = "sha256-amWfrZX1b1OmLhL7w8j/+iEwYRnO1DVR580pLkjtS/g=";
   };
 
   nativeBuildInputs = [
@@ -54,12 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Minimal editing space for all those things that don't need keeping";
     homepage = "https://gitlab.gnome.org/cheywood/buffer";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "buffer";
-    maintainers = with maintainers; [ michaelgrahamevans ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ michaelgrahamevans ];
+    platforms = lib.platforms.linux;
   };
 })

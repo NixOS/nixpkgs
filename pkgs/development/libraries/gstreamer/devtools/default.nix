@@ -23,6 +23,7 @@
   directoryListingUpdater,
   _experimental-update-script-combinators,
   common-updater-scripts,
+  apple-sdk_gstreamer,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -73,11 +74,15 @@ stdenv.mkDerivation (finalAttrs: {
       hotdoc
     ];
 
-  buildInputs = [
-    cairo
-    python3
-    json-glib
-  ];
+  buildInputs =
+    [
+      cairo
+      python3
+      json-glib
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+      apple-sdk_gstreamer
+    ];
 
   propagatedBuildInputs = [
     gstreamer

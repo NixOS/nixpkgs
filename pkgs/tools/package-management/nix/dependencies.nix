@@ -4,27 +4,10 @@ regular@{
   aws-sdk-cpp,
   fetchFromGitHub,
   pkgs,
-  stdenv,
 }:
-
-let
-  stdenv =
-    if regular.stdenv.isDarwin && regular.stdenv.isx86_64 then darwinStdenv else regular.stdenv;
-
-  # Fix the following error with the default x86_64-darwin SDK:
-  #
-  #     error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
-  #
-  # Despite the use of the 10.13 deployment target here, the aligned
-  # allocation function Clang uses with this setting actually works
-  # all the way back to 10.6.
-  darwinStdenv = regular.pkgs.overrideSDK regular.stdenv { darwinMinVersion = "10.13"; };
-in
 
 {
   scopeFunction = scope: {
-    inherit stdenv;
-
     boehmgc = regular.boehmgc.override { enableLargeConfig = true; };
 
     # old nix fails to build with newer aws-sdk-cpp and the patch doesn't apply

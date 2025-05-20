@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zizmor";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
-    owner = "woodruffw";
+    owner = "zizmorcore";
     repo = "zizmor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Has3PrXJIKQh6FdhZ3aGvqJ5keHTRqa+nDAb4fv3xWg=";
+    hash = "sha256-HDQDaIZVxMTkVTwCNyevSdVZELw8e6hIN/NhaHLcT24=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-uXUvEbQpY9E7kTOeXMFN/9b4u4tn/S3HCs0a65Hssn4=";
+  cargoHash = "sha256-hr/1RFXvbsRLxlmXNPuU3x+i41byE+v5k2aBg5UIbvM=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
@@ -28,8 +28,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Tool for finding security issues in GitHub Actions setups";
-    homepage = "https://woodruffw.github.io/zizmor/";
-    changelog = "https://github.com/woodruffw/zizmor/releases/tag/v${finalAttrs.version}";
+    homepage = "https://docs.zizmor.sh/";
+    changelog = "https://github.com/zizmorcore/zizmor/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lesuisse ];
     mainProgram = "zizmor";

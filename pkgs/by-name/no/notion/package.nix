@@ -94,7 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21;
     mainProgram = "notion";
     maintainers = with lib.maintainers; [
-      jfb
       raboof
       NotAShelf
     ];

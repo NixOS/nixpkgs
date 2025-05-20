@@ -68,7 +68,6 @@ in
         ExecStart = "${lib.getExe cfg.package} serve -config ${configFile}";
         ProtectSystem = "full";
         SystemCallArchitectures = "native";
-        MemoryDenyWriteExecute = true;
         NoNewPrivileges = true;
         PrivateTmp = true;
         PrivateDevices = true;
@@ -89,7 +88,6 @@ in
         ProtectKernelTunables = true;
         LockPersonality = true;
         Restart = "on-failure";
-
       };
     };
   };

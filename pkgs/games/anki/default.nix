@@ -22,8 +22,6 @@
   writeShellScriptBin,
   yarn,
 
-  AVKit,
-  CoreAudio,
   swift,
 
   mesa,
@@ -153,64 +151,58 @@ python3.pkgs.buildPythonApplication {
     qt6.qtsvg
   ] ++ lib.optional stdenv.hostPlatform.isLinux qt6.qtwayland;
 
-  propagatedBuildInputs =
-    with python3.pkgs;
-    [
-      # This rather long list came from running:
-      #    grep --no-filename -oE "^[^ =]*" python/{requirements.base.txt,requirements.bundle.txt,requirements.qt6_lin.txt} | \
-      #      sort | uniq | grep -v "^#$"
-      # in their repo at the git tag for this version
-      # There's probably a more elegant way, but the above extracted all the
-      # names, without version numbers, of their python dependencies. The hope is
-      # that nixpkgs versions are "close enough"
-      # I then removed the ones the check phase failed on (pythonCatchConflictsPhase)
-      attrs
-      beautifulsoup4
-      blinker
-      build
-      certifi
-      charset-normalizer
-      click
-      colorama
-      decorator
-      flask
-      flask-cors
-      google-api-python-client
-      idna
-      importlib-metadata
-      itsdangerous
-      jinja2
-      jsonschema
-      markdown
-      markupsafe
-      orjson
-      packaging
-      pip
-      pip-system-certs
-      pip-tools
-      protobuf
-      pyproject-hooks
-      pyqt6
-      pyqt6-sip
-      pyqt6-webengine
-      pyrsistent
-      pysocks
-      requests
-      send2trash
-      setuptools
-      soupsieve
-      tomli
-      urllib3
-      waitress
-      werkzeug
-      wheel
-      wrapt
-      zipp
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AVKit
-      CoreAudio
-    ];
+  propagatedBuildInputs = with python3.pkgs; [
+    # This rather long list came from running:
+    #    grep --no-filename -oE "^[^ =]*" python/{requirements.base.txt,requirements.bundle.txt,requirements.qt6_lin.txt} | \
+    #      sort | uniq | grep -v "^#$"
+    # in their repo at the git tag for this version
+    # There's probably a more elegant way, but the above extracted all the
+    # names, without version numbers, of their python dependencies. The hope is
+    # that nixpkgs versions are "close enough"
+    # I then removed the ones the check phase failed on (pythonCatchConflictsPhase)
+    attrs
+    beautifulsoup4
+    blinker
+    build
+    certifi
+    charset-normalizer
+    click
+    colorama
+    decorator
+    flask
+    flask-cors
+    google-api-python-client
+    idna
+    importlib-metadata
+    itsdangerous
+    jinja2
+    jsonschema
+    markdown
+    markupsafe
+    orjson
+    packaging
+    pip
+    pip-system-certs
+    pip-tools
+    protobuf
+    pyproject-hooks
+    pyqt6
+    pyqt6-sip
+    pyqt6-webengine
+    pyrsistent
+    pysocks
+    requests
+    send2trash
+    setuptools
+    soupsieve
+    tomli
+    urllib3
+    waitress
+    werkzeug
+    wheel
+    wrapt
+    zipp
+  ];
 
   nativeCheckInputs = with python3.pkgs; [
     pytest

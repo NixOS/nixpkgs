@@ -8,11 +8,12 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "pytibber";
-  version = "0.31.1";
+  version = "0.31.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "pyTibber";
     tag = version;
-    hash = "sha256-qQ/F7SF91wiWelV6kFBDjv5UmrrcD5TmwCsNuG5c25s=";
+    hash = "sha256-/k9XnRgfaE59+Fi/5AhCJt4/jFLdYeDCNaoGCDYGWso=";
   };
 
   build-system = [ setuptools ];
@@ -29,7 +30,8 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     gql
-  ] ++ gql.optional-dependencies.websockets;
+    websockets
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio

@@ -11,6 +11,8 @@ from pathlib import Path
 from typing import Any
 from unittest import TestCase
 
+from colorama import Style
+
 from test_driver.errors import MachineError, RequestedAssertionFailed
 from test_driver.logger import AbstractLogger
 from test_driver.machine import Machine, NixStartScript, retry
@@ -175,6 +177,19 @@ class Driver:
             + ", ".join(list(general_symbols.keys()))
         )
         return {**general_symbols, **machine_symbols, **vlan_symbols}
+
+    def dump_machine_ssh(self, offset: int) -> None:
+        print("SSH backdoor enabled, the machines can be accessed like this:")
+        print(
+            f"{Style.BRIGHT}Note:{Style.RESET_ALL} this requires {Style.BRIGHT}systemd-ssh-proxy(1){Style.RESET_ALL} to be enabled (default on NixOS 25.05 and newer)."
+        )
+        names = [machine.name for machine in self.machines]
+        longest_name = len(max(names, key=len))
+        for num, name in enumerate(names, start=offset + 1):
+            spaces = " " * (longest_name - len(name) + 2)
+            print(
+                f"    {name}:{spaces}{Style.BRIGHT}ssh -o User=root vsock/{num}{Style.RESET_ALL}"
+            )
 
     def test_script(self) -> None:
         """Run the test script"""

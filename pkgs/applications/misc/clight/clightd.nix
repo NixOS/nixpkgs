@@ -12,7 +12,6 @@
   libusb1,
   libjpeg,
   libmodule,
-  pcre,
   libXdmcp,
   util-linux,
   libpthreadstubs,
@@ -23,6 +22,7 @@
   enableGamma ? true,
   libdrm,
   libXrandr,
+  libiio,
   wayland,
   enableScreen ? true,
   enableYoctolight ? true,
@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "clightd";
-  version = "5.8";
+  version = "5.9";
 
   src = fetchFromGitHub {
     owner = "FedeDP";
     repo = "Clightd";
     rev = version;
-    hash = "sha256-Lmno/TJVCQVNzfpKNZzuDf2OM6w6rbz+zJTr3zVo/CM=";
+    hash = "sha256-LOhBBd7QL5kH4TzMFgrh70C37WsFdsiKArP+tIEiPWo=";
   };
 
   # dbus-1.pc has datadir=/etc
@@ -81,8 +81,8 @@ stdenv.mkDerivation rec {
       libusb1
       libjpeg
       libmodule
+      libiio
 
-      pcre
       libXdmcp
       util-linux
       libpthreadstubs

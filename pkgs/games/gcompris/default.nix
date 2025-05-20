@@ -15,6 +15,7 @@
   qtmultimedia,
   qtsensors,
   qttools,
+  extra-cmake-modules,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,6 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-E3l+5l4rsauidl6Ik5gSWf+SGpVaAVi5X51etl1D05w=";
   };
 
+  # fix concatenation of absolute paths like
+  # /nix/store/77zcv3vmndif01d4wh1rh0d1dyvyqzpy-gcompris-25.0/bin/..//nix/store/77zcv3vmndif01d4wh1rh0d1dyvyqzpy-gcompris-25.0/share/gcompris-qt/rcc/core.rcc
+  postPatch = ''
+    substituteInPlace src/core/config.h.in  --replace-fail \
+      "../@_data_dest_dir@" "../share/gcompris-qt"
+  '';
+
   cmakeFlags = [
     (lib.cmakeFeature "QML_BOX2D_LIBRARY" "${qmlbox2d}/${qtbase.qtQmlPrefix}/Box2D.2.1")
     (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
@@ -33,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     gettext
     ninja
     qttools

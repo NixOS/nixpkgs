@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "python-mistralclient";
-  version = "5.3.0";
+  version = "5.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "openstack";
     repo = "python-mistralclient";
     rev = version;
-    hash = "sha256-Vi56+OlFU2Aj7yJ/cH5y0ZbzPhglTciJcTnkbA0S7Qo=";
+    hash = "sha256-c1kMDyRNMZKnDvL993WvZSsjkXgYLM2+9KBmF+I4vnM=";
   };
 
   env.PBR_VERSION = version;
