@@ -26,6 +26,7 @@
   apache-beam,
   beautifulsoup4,
   click,
+  cloudpickle,
   datasets,
   ffmpeg,
   imagemagick,
@@ -101,6 +102,7 @@ buildPythonPackage rec {
     apache-beam
     beautifulsoup4
     click
+    cloudpickle
     datasets
     ffmpeg
     imagemagick
