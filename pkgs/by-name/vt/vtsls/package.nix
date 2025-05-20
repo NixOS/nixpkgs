@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "yioneko";
     repo = "vtsls";
-    rev = "server-v${finalAttrs.version}";
+    tag = "server-v${finalAttrs.version}";
     hash = "sha256-vlw84nigvQqRB9OQBxOmrR9CClU9M4dNgF/nrvGN+sk=";
     fetchSubmodules = true;
   };
