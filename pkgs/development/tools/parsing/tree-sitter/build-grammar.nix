@@ -48,7 +48,7 @@ let
   */
   grammar = lib.findFirst (lib.matchAttrs {
     name = language;
-  }) (throw "no grammar defined for '${language}' in ${src}/tree-sitter.json") package.grammars;
+  }) (lib.warn "no grammar defined for '${language}' in ${src}" { }) package.grammars;
 
   /**
     A relative path from the directory containing tree-sitter.json to another
