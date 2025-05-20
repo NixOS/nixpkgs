@@ -1,4 +1,5 @@
 {
+  cudaData,
   cudaLib,
   cudaNamePrefix,
   lib,
@@ -6,8 +7,8 @@
 }:
 let
   inherit (builtins) deepSeq toJSON tryEval;
-  inherit (cudaLib.data) cudaCapabilityToInfo;
-  inherit (cudaLib.utils) formatCapabilities;
+  inherit (cudaData) cudaCapabilityToInfo;
+  inherit (cudaLib) formatCapabilities;
   inherit (lib.asserts) assertMsg;
 in
 # When changing names or formats: pause, validate, and update the assert

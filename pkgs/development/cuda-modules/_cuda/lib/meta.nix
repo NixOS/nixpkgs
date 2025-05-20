@@ -1,4 +1,4 @@
-{ cudaLib, lib }:
+{ _cuda, lib }:
 {
   /**
     Returns a list of bad platforms for a given package if assertsions in `finalAttrs.passthru.platformAssertions`
@@ -18,7 +18,7 @@
   _mkMetaBadPlatforms =
     warn: finalAttrs:
     let
-      failedAssertionsString = cudaLib.utils._mkFailedAssertionsString finalAttrs.passthru.platformAssertions;
+      failedAssertionsString = _cuda.lib._mkFailedAssertionsString finalAttrs.passthru.platformAssertions;
       hasFailedAssertions = failedAssertionsString != "";
       finalStdenv = finalAttrs.finalPackage.stdenv;
     in
@@ -62,7 +62,7 @@
   _mkMetaBroken =
     warn: finalAttrs:
     let
-      failedAssertionsString = cudaLib.utils._mkFailedAssertionsString finalAttrs.passthru.brokenAssertions;
+      failedAssertionsString = _cuda.lib._mkFailedAssertionsString finalAttrs.passthru.brokenAssertions;
       hasFailedAssertions = failedAssertionsString != "";
     in
     lib.warnIf (warn && hasFailedAssertions)

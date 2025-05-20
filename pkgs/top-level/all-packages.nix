@@ -2723,9 +2723,8 @@ with pkgs;
 
   cron = isc-cron;
 
-  cudaLib = import ../development/cuda-modules/lib;
-
-  cudaFixups = import ../development/cuda-modules/fixups;
+  # Top-level fix-point used in `cudaPackages`' internals
+  _cuda = import ../development/cuda-modules/_cuda;
 
   cudaPackages_11_0 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "11.0"; };
   cudaPackages_11_1 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "11.1"; };

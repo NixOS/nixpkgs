@@ -14,7 +14,7 @@
 
 let
   lib = import ../../lib;
-  cudaLib = import ../development/cuda-modules/lib;
+  inherit (import ../development/cuda-modules/_cuda) cudaLib;
 in
 
 {
@@ -27,7 +27,7 @@ in
   # Attributes passed to nixpkgs.
   nixpkgsArgs ? {
     config = {
-      allowUnfreePredicate = cudaLib.utils.allowUnfreeCudaPredicate;
+      allowUnfreePredicate = cudaLib.allowUnfreeCudaPredicate;
       "${variant}Support" = true;
       inHydra = true;
 

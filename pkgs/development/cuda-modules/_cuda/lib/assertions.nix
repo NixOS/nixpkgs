@@ -1,4 +1,4 @@
-{ cudaLib, lib }:
+{ _cuda, lib }:
 {
   /**
     Evaluate assertions and add error context to return value.
@@ -16,7 +16,7 @@
   _evaluateAssertions =
     assertions:
     let
-      failedAssertionsString = cudaLib.utils._mkFailedAssertionsString assertions;
+      failedAssertionsString = _cuda.lib._mkFailedAssertionsString assertions;
     in
     if failedAssertionsString == "" then
       true
@@ -45,7 +45,7 @@
     # Examples
 
     :::{.example}
-    ## `cudaLib.utils._mkFailedAssertionsString` usage examples
+    ## `_cuda.lib._mkFailedAssertionsString` usage examples
 
     ```nix
     _mkFailedAssertionsString [
@@ -103,7 +103,7 @@
     # Examples
 
     :::{.example}
-    ## `cudaLib.utils._mkMissingPackagesAssertions` usage examples
+    ## `_cuda.lib._mkMissingPackagesAssertions` usage examples
 
     ```nix
     {
@@ -114,7 +114,7 @@
     }:
     let
       inherit (lib.attrsets) recursiveUpdate;
-      inherit (cudaLib.utils) _mkMissingPackagesAssertions;
+      inherit (_cuda.lib) _mkMissingPackagesAssertions;
     in
     prevAttrs: {
       passthru = prevAttrs.passthru or { } // {
