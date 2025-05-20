@@ -18,7 +18,7 @@
 
   # Apache
   apache = [
-    "https://dlcdn.apache.org/"
+    "https://downloads.apache.org/"
     "https://www-eu.apache.org/dist/"
     "https://ftp.wayne.edu/apache/"
     "https://www.apache.org/dist/"
@@ -62,7 +62,7 @@
     "ftp://ftp.nluug.nl/mirror/languages/gcc/"
     "ftp://ftp.fu-berlin.de/unix/languages/gcc/"
     "ftp://ftp.irisa.fr/pub/mirrors/gcc.gnu.org/gcc/"
-    "ftp://gcc.gnu.org/pub/gcc/"
+    "https://gcc.gnu.org/pub/gcc/"
   ];
 
   # GNOME
@@ -277,7 +277,7 @@
 
   # X.org
   xorg = [
-    "https://xorg.freedesktop.org/releases/"
+    "https://www.x.org/releases/"
     "https://ftp.x.org/archive/"
   ];
 
@@ -286,7 +286,7 @@
   # Perl CPAN
   cpan = [
     "https://cpan.metacpan.org/"
-    "https://cpan.perl.org/"
+    "https://www.cpan.org/"
     "https://mirrors.kernel.org/CPAN/"
     "https://backpan.perl.org/" # for old releases
   ];
