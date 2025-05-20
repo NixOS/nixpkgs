@@ -23,11 +23,9 @@ buildPythonPackage rec {
     hash = "sha256-XNTG3Vo//cFvrl3/FXaVmO0PfwCXTauvOwIP0nsjlHg=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "calamine-0.26.1" = "sha256-qlquNX13PQmzuzl+URo7cFDtNODzwIUQXIK8bqZ2iqc=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-xqWtZV1gv2DfDF4Rf/HuyHPFPURbAaLlvY8AtdfjovY=";
   };
 
   buildInputs = [ libiconv ];
