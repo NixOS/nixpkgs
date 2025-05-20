@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
     ];
 
   cmakeFlags = [
-    "-DDISABLE_FRONTEND=${if enableGUI then "OFF" else "ON"}"
-    "-DLIBUSB_LIBRARY=${libusb1}"
+    (lib.cmakeBool "DISABLE_FRONTEND" (!enableGUI))
+    (lib.cmakeFeature "LIBUSB_LIBRARY" "${libusb1}")
   ];
 
   installPhase =
