@@ -14,19 +14,19 @@
 }:
 let
   pname = "keymapp";
-  version = "1.3.6";
+  version = "1.3.7";
 
   sources = rec {
     aarch64-darwin = {
       # Upstream does not provide archives of previous versions,
       # therefore a capture using the wayback machine is used
-      url = "https://web.archive.org/web/20250427080926/https://oryx.nyc3.cdn.digitaloceanspaces.com/keymapp/keymapp-latest.dmg";
-      hash = "sha256-sn8IkSV8AEqm8z/TiS1399hITBC9lnSSjQn/k0xWl6I=";
+      url = "https://web.archive.org/web/20250520135916/https://oryx.nyc3.cdn.digitaloceanspaces.com/keymapp/keymapp-latest.dmg";
+      hash = "sha256-H6xRau7pWuSF5Aa6lblwi/Lg5KxC+HM3rtUMjX+hEE8=";
     };
     x86_64-darwin = aarch64-darwin;
     aarch64-linux = {
       url = "https://oryx.nyc3.cdn.digitaloceanspaces.com/keymapp/keymapp-${version}.tar.gz";
-      hash = "sha256-LWO4aeNmGgZ+T41pb6HwC3tnwaiGviDIq63QMsrlkEc=";
+      hash = "sha256-qHvHCDzWRhuhDg2kuU8kmikQDXElQtVEmPAelHz4aPo=";
     };
     x86_64-linux = aarch64-linux;
   };
