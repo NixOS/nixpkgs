@@ -22,7 +22,7 @@
 # I've (@connorbaker) attempted to do that, though I'm unsure of how this will interact with overrides.
 {
   config,
-  cudaLib,
+  _cuda,
   cudaMajorMinorVersion,
   lib,
   newScope,
@@ -38,25 +38,28 @@ let
     versions
     ;
 
+  cudaLib = _cuda.lib;
+
   # Since Jetson capabilities are never built by default, we can check if any of them were requested
   # through final.config.cudaCapabilities and use that to determine if we should change some manifest versions.
   # Copied from backendStdenv.
   jetsonCudaCapabilities = lib.filter (
-    cudaCapability: cudaLib.data.cudaCapabilityToInfo.${cudaCapability}.isJetson
-  ) cudaLib.data.allSortedCudaCapabilities;
+    cudaCapability: _cuda.db.cudaCapabilityToInfo.${cudaCapability}.isJetson
+  ) _cuda.db.allSortedCudaCapabilities;
   hasJetsonCudaCapability =
     lib.intersectLists jetsonCudaCapabilities (config.cudaCapabilities or [ ]) != [ ];
-  redistSystem = cudaLib.utils.getRedistSystem hasJetsonCudaCapability stdenv.hostPlatform.system;
+  redistSystem = _cuda.lib.getRedistSystem hasJetsonCudaCapability stdenv.hostPlatform.system;
 
   passthruFunction = final: {
     # NOTE:
-    # It is important that cudaLib and cudaFixups are not part of the package set fixed-point. As described by
+    # It is important that _cuda is not part of the package set fixed-point. As described by
     # @SomeoneSerge:
     # > The layering should be: configuration -> (identifies/is part of) cudaPackages -> (is built using) cudaLib.
     # > No arrows should point in the reverse directions.
     # That is to say that cudaLib should only know about package sets and configurations, because it implements
     # functionality for interpreting configurations, resolving them against data, and constructing package sets.
     # This decision is driven both by a separation of concerns and by "NAMESET STRICTNESS" (see above).
+    # Also see the comment in `pkgs/top-level/all-packages.nix` about the `_cuda` attribute.
 
     inherit cudaMajorMinorVersion;
 
@@ -77,17 +80,17 @@ let
     };
 
     flags =
-      cudaLib.utils.formatCapabilities {
+      cudaLib.formatCapabilities {
         inherit (final.backendStdenv) cudaCapabilities cudaForwardCompat;
-        inherit (cudaLib.data) cudaCapabilityToInfo;
+        inherit (_cuda.db) cudaCapabilityToInfo;
       }
       # TODO(@connorbaker): Enable the corresponding warnings in `../development/cuda-modules/aliases.nix` after some
       # time to allow users to migrate to cudaLib and backendStdenv.
       // {
-        inherit (cudaLib.utils) dropDots;
+        inherit (cudaLib) dropDots;
         cudaComputeCapabilityToName =
-          cudaCapability: cudaLib.data.cudaCapabilityToInfo.${cudaCapability}.archName;
-        dropDot = cudaLib.utils.dropDots;
+          cudaCapability: _cuda.db.cudaCapabilityToInfo.${cudaCapability}.archName;
+        dropDot = cudaLib.dropDots;
         isJetsonBuild = final.backendStdenv.hasJetsonCudaCapability;
       };
 

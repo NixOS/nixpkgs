@@ -1,4 +1,7 @@
-{ cudaLib, lib }:
+{ _cuda, lib }:
+let
+  cudaLib = _cuda.lib;
+in
 {
   /**
     Replaces dots in a string with underscores.
@@ -18,7 +21,7 @@
     # Examples
 
     :::{.example}
-    ## `cudaLib.utils.dotsToUnderscores` usage examples
+    ## `cudaLib.dotsToUnderscores` usage examples
 
     ```nix
     dotsToUnderscores "1.2.3"
@@ -46,7 +49,7 @@
     # Examples
 
     :::{.example}
-    ## `cudaLib.utils.dropDots` usage examples
+    ## `cudaLib.dropDots` usage examples
 
     ```nix
     dropDots "1.2.3"
@@ -110,7 +113,7 @@
         realArches :: List String
         ```
       */
-      realArches = lib.map cudaLib.utils.mkRealArchitecture cudaCapabilities;
+      realArches = lib.map cudaLib.mkRealArchitecture cudaCapabilities;
 
       /**
         The virtual architectures for the given CUDA capabilities.
@@ -124,7 +127,7 @@
         virtualArches :: List String
         ```
       */
-      virtualArches = lib.map cudaLib.utils.mkVirtualArchitecture cudaCapabilities;
+      virtualArches = lib.map cudaLib.mkVirtualArchitecture cudaCapabilities;
 
       /**
         The gencode flags for the given CUDA capabilities.
@@ -137,8 +140,8 @@
       */
       gencode =
         let
-          base = lib.map (cudaLib.utils.mkGencodeFlag "sm") cudaCapabilities;
-          forward = cudaLib.utils.mkGencodeFlag "compute" (lib.last cudaCapabilities);
+          base = lib.map (cudaLib.mkGencodeFlag "sm") cudaCapabilities;
+          forward = cudaLib.mkGencodeFlag "compute" (lib.last cudaCapabilities);
         in
         base ++ lib.optionals cudaForwardCompat [ forward ];
     in
@@ -190,7 +193,7 @@
         cmakeCudaArchitecturesString :: String
         ```
       */
-      cmakeCudaArchitecturesString = cudaLib.utils.mkCmakeCudaArchitecturesString cudaCapabilities;
+      cmakeCudaArchitecturesString = cudaLib.mkCmakeCudaArchitecturesString cudaCapabilities;
 
       /**
         The gencode string for the given CUDA capabilities.
@@ -222,7 +225,7 @@
     # Examples
 
     :::{.example}
-    ## `cudaLib.utils.mkCmakeCudaArchitecturesString` usage examples
+    ## `cudaLib.mkCmakeCudaArchitecturesString` usage examples
 
     ```nix
     mkCmakeCudaArchitecturesString [ "8.9" "10.0a" ]
@@ -230,7 +233,7 @@
     ```
     :::
   */
-  mkCmakeCudaArchitecturesString = lib.concatMapStringsSep ";" cudaLib.utils.dropDots;
+  mkCmakeCudaArchitecturesString = lib.concatMapStringsSep ";" cudaLib.dropDots;
 
   /**
     Produces a gencode flag from a CUDA capability.
@@ -254,7 +257,7 @@
     # Examples
 
     :::{.example}
-    ## `cudaLib.utils.mkGencodeFlag` usage examples
+    ## `cudaLib.mkGencodeFlag` usage examples
 
     ```nix
     mkGencodeFlag "sm" "8.9"
@@ -270,7 +273,7 @@
   mkGencodeFlag =
     archPrefix: cudaCapability:
     let
-      cap = cudaLib.utils.dropDots cudaCapability;
+      cap = cudaLib.dropDots cudaCapability;
     in
     "-gencode=arch=compute_${cap},code=${archPrefix}_${cap}";
 
@@ -292,7 +295,7 @@
     # Examples
 
     :::{.example}
-    ## `cudaLib.utils.mkRealArchitecture` usage examples
+    ## `cudaLib.mkRealArchitecture` usage examples
 
     ```nix
     mkRealArchitecture "8.9"
@@ -305,7 +308,7 @@
     ```
     :::
   */
-  mkRealArchitecture = cudaCapability: "sm_" + cudaLib.utils.dropDots cudaCapability;
+  mkRealArchitecture = cudaCapability: "sm_" + cudaLib.dropDots cudaCapability;
 
   /**
     Create a versioned attribute name from a version by replacing dots with underscores.
@@ -329,7 +332,7 @@
     # Examples
 
     :::{.example}
-    ## `cudaLib.utils.mkVersionedName` usage examples
+    ## `cudaLib.mkVersionedName` usage examples
 
     ```nix
     mkVersionedName "hello" "1.2.3"
@@ -342,7 +345,7 @@
     ```
     :::
   */
-  mkVersionedName = name: version: "${name}_${cudaLib.utils.dotsToUnderscores version}";
+  mkVersionedName = name: version: "${name}_${cudaLib.dotsToUnderscores version}";
 
   /**
     Produces a virtual architecture string from a CUDA capability.
@@ -362,7 +365,7 @@
     # Examples
 
     :::{.example}
-    ## `cudaLib.utils.mkVirtualArchitecture` usage examples
+    ## `cudaLib.mkVirtualArchitecture` usage examples
 
     ```nix
     mkVirtualArchitecture "8.9"
@@ -375,5 +378,5 @@
     ```
     :::
   */
-  mkVirtualArchitecture = cudaCapability: "compute_" + cudaLib.utils.dropDots cudaCapability;
+  mkVirtualArchitecture = cudaCapability: "compute_" + cudaLib.dropDots cudaCapability;
 }

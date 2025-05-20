@@ -1,7 +1,10 @@
-{ cudaLib, lib }:
+{
+  _cuda,
+  lib,
+}:
 {
   # See ./assertions.nix for documentation.
-  inherit (import ./assertions.nix { inherit cudaLib lib; })
+  inherit (import ./assertions.nix { inherit _cuda lib; })
     _evaluateAssertions
     _mkFailedAssertionsString
     _mkMissingPackagesAssertions
@@ -16,13 +19,13 @@
     ;
 
   # See ./meta.nix for documentation.
-  inherit (import ./meta.nix { inherit cudaLib lib; })
+  inherit (import ./meta.nix { inherit _cuda lib; })
     _mkMetaBadPlatforms
     _mkMetaBroken
     ;
 
   # See ./redist.nix for documentation.
-  inherit (import ./redist.nix { inherit cudaLib lib; })
+  inherit (import ./redist.nix { inherit _cuda lib; })
     _redistSystemIsSupported
     getNixSystems
     getRedistSystem
@@ -30,7 +33,7 @@
     ;
 
   # See ./strings.nix for documentation.
-  inherit (import ./strings.nix { inherit cudaLib lib; })
+  inherit (import ./strings.nix { inherit _cuda lib; })
     dotsToUnderscores
     dropDots
     formatCapabilities
@@ -42,7 +45,7 @@
     ;
 
   # See ./versions.nix for documentation.
-  inherit (import ./versions.nix { inherit cudaLib lib; })
+  inherit (import ./versions.nix { inherit _cuda lib; })
     majorMinorPatch
     trimComponents
     ;

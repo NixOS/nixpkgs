@@ -1,4 +1,4 @@
-{ cudaLib, lib }:
+{ _cuda, lib }:
 {
   /**
     Returns a boolean indicating whether the provided redist system is supported by any of the provided redist systems.
@@ -27,7 +27,7 @@
     # Examples
 
     :::{.example}
-    ## `cudaLib.utils._redistSystemIsSupported` usage examples
+    ## `cudaLib._redistSystemIsSupported` usage examples
 
     ```nix
     _redistSystemIsSupported "linux-x86_64" [ "linux-x86_64" ]
@@ -81,7 +81,7 @@
     # Examples
 
     :::{.example}
-    ## `cudaLib.utils.getNixSystems` usage examples
+    ## `cudaLib.getNixSystems` usage examples
 
     ```nix
     getNixSystems "linux-sbsa"
@@ -137,7 +137,7 @@
     # Examples
 
     :::{.example}
-    ## `cudaLib.utils.getRedistSystem` usage examples
+    ## `cudaLib.getRedistSystem` usage examples
 
     ```nix
     getRedistSystem true "aarch64-linux"
@@ -181,7 +181,7 @@
   mkRedistUrl =
     redistName: relativePath:
     lib.concatStringsSep "/" (
-      [ cudaLib.data.redistUrlPrefix ]
+      [ _cuda.db.redistUrlPrefix ]
       ++ (
         if redistName != "tensorrt" then
           [
