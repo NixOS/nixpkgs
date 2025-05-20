@@ -29,18 +29,10 @@
     "ftp://ftp.funet.fi/pub/mirrors/apache.org/"
   ];
 
-  # Bioconductor mirrors (from https://bioconductor.org/about/mirrors/)
-  # The commented-out ones don't seem to allow direct package downloads;
-  # they serve error messages that result in hash mismatches instead
+  # Bioconductor mirrors
   bioc = [
-    # http://bioc.ism.ac.jp/
-    # http://bioc.openanalytics.eu/
-    # http://bioconductor.fmrp.usp.br/
-    # http://mirror.aarnet.edu.au/pub/bioconductor/
-    # http://watson.nci.nih.gov/bioc_mirror/
-    "https://bioconductor.statistik.tu-dortmund.de/packages/"
-    "https://mirrors.ustc.edu.cn/bioc/"
-    "http://bioconductor.jp/packages/"
+    # Served via CloudFront
+    "https://bioconductor.org/packages/"
   ];
 
   # CRAN mirrors
