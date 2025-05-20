@@ -77,7 +77,7 @@ buildPythonPackage {
   '';
 
   CUDA_HOME = "${cudaPackages.cudatoolkit}";
-  TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" torch.cudaCapabilities}";
+  TORCH_CUDA_ARCH_LIST = lib.concatStringsSep ";" torch.cudaCapabilities;
 
   dependencies = [
     numpy
