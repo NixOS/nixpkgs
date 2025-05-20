@@ -11,22 +11,12 @@
   # Alsa Project
   alsa = [
     "https://www.alsa-project.org/files/pub/"
-    "ftp://ftp.alsa-project.org/pub/"
-    "http://alsa.cybermirror.org/"
-    "http://www.mirrorservice.org/sites/ftp.alsa-project.org/pub/"
   ];
 
   # Apache
   apache = [
     "https://downloads.apache.org/"
-    "https://www-eu.apache.org/dist/"
-    "https://ftp.wayne.edu/apache/"
-    "https://www.apache.org/dist/"
     "https://archive.apache.org/dist/" # fallback for old releases
-    "https://apache.cs.uu.nl/"
-    "https://apache.cs.utah.edu/"
-    "http://ftp.tudelft.nl/apache/"
-    "ftp://ftp.funet.fi/pub/mirrors/apache.org/"
   ];
 
   # Bioconductor mirrors
@@ -43,17 +33,10 @@
   # BitlBee mirrors, see https://www.bitlbee.org/main.php/mirrors.html
   bitlbee = [
     "https://get.bitlbee.org/"
-    "https://ftp.snt.utwente.nl/pub/software/bitlbee/"
-    "http://bitlbee.intergenia.de/"
   ];
 
   # GCC
   gcc = [
-    "https://mirror.koddos.net/gcc/"
-    "https://bigsearcher.com/mirrors/gcc/"
-    "ftp://ftp.nluug.nl/mirror/languages/gcc/"
-    "ftp://ftp.fu-berlin.de/unix/languages/gcc/"
-    "ftp://ftp.irisa.fr/pub/mirrors/gcc.gnu.org/gcc/"
     "https://gcc.gnu.org/pub/gcc/"
   ];
 
@@ -61,12 +44,6 @@
   gnome = [
     # This one redirects to some mirror closeby, so it should be all you need
     "https://download.gnome.org/"
-
-    "https://fr2.rpmfind.net/linux/gnome.org/"
-    "https://ftp.acc.umu.se/pub/GNOME/"
-    "https://ftp.belnet.be/mirror/ftp.gnome.org/"
-    "ftp://ftp.cse.buffalo.edu/pub/Gnome/"
-    "ftp://ftp.nara.wide.ad.jp/pub/X11/GNOME/"
   ];
 
   # GNU (https://www.gnu.org/prep/ftp.html)
@@ -78,10 +55,6 @@
   # GnuPG
   gnupg = [
     "https://gnupg.org/ftp/gcrypt/"
-    "https://mirrors.dotsrc.org/gcrypt/"
-    "https://ftp.heanet.ie/mirrors/ftp.gnupg.org/gcrypt/"
-    "https://www.mirrorservice.org/sites/ftp.gnupg.org/gcrypt/"
-    "http://www.ring.gr.jp/pub/net/"
   ];
 
   # IBiblio (former metalab/sunsite)
@@ -89,21 +62,15 @@
   # however there are other useful files outside it
   ibiblioPubLinux = [
     "https://www.ibiblio.org/pub/Linux/"
-    "ftp://ftp.ibiblio.org/pub/linux/"
-    "ftp://ftp.gwdg.de/pub/linux/metalab/"
-    "ftp://ftp.metalab.unc.edu/pub/linux/"
   ];
 
   kde = [
     "https://download.kde.org/"
-    "https://ftp.funet.fi/pub/mirrors/ftp.kde.org/pub/kde/"
   ];
 
   # kernel.org's /pub (/pub/{linux,software}) tree
   kernel = [
     "https://cdn.kernel.org/pub/"
-    "http://linux-kernel.uio.no/pub/"
-    "ftp://ftp.funet.fi/pub/mirrors/ftp.kernel.org/pub/"
   ];
 
   # MySQL
@@ -118,7 +85,6 @@
 
   # Mozilla projects
   mozilla = [
-    "https://download.cdn.mozilla.net/pub/mozilla.org/"
     "https://archive.mozilla.org/pub/"
   ];
 
@@ -162,7 +128,6 @@
   # SAMBA
   samba = [
     "https://download.samba.org/pub/"
-    "http://download.samba.org/pub/"
   ];
 
   # GNU Savannah
@@ -174,57 +139,35 @@
   # SourceForge
   sourceforge = [
     "https://downloads.sourceforge.net/"
-    "https://prdownloads.sourceforge.net/"
-    "https://netcologne.dl.sourceforge.net/sourceforge/"
-    "https://versaweb.dl.sourceforge.net/sourceforge/"
-    "https://freefr.dl.sourceforge.net/sourceforge/"
-    "https://osdn.dl.sourceforge.net/sourceforge/"
   ];
 
   # TCSH shell
   tcsh = [
     "https://astron.com/pub/tcsh/"
     "https://astron.com/pub/tcsh/old/"
-    "http://ftp.funet.fi/pub/mirrors/ftp.astron.com/pub/tcsh/"
-    "http://ftp.funet.fi/pub/mirrors/ftp.astron.com/pub/tcsh/old/"
-    "ftp://ftp.astron.com/pub/tcsh/"
-    "ftp://ftp.astron.com/pub/tcsh/old/"
-    "ftp://ftp.funet.fi/pub/unix/shells/tcsh/"
-    "ftp://ftp.funet.fi/pub/unix/shells/tcsh/old/"
   ];
 
   # XFCE
   xfce = [
     "https://archive.xfce.org/"
-    "https://mirror.netcologne.de/xfce/"
-    "https://archive.be.xfce.org/xfce/"
-    "https://archive.al-us.xfce.org/"
-    "http://archive.se.xfce.org/xfce/"
-    "http://mirror.perldude.de/archive.xfce.org/"
-    "http://archive.be2.xfce.org/"
-    "http://ftp.udc.es/xfce/"
   ];
 
   # X.org
   xorg = [
     "https://www.x.org/releases/"
-    "https://ftp.x.org/archive/"
   ];
 
   ### Programming languages' package repos
 
   # Perl CPAN
   cpan = [
-    "https://cpan.metacpan.org/"
     "https://www.cpan.org/"
-    "https://mirrors.kernel.org/CPAN/"
     "https://backpan.perl.org/" # for old releases
   ];
 
   # D DUB
   dub = [
     "https://code.dlang.org/packages/"
-    "https://codemirror.dlang.org/packages/"
   ];
 
   # Haskell Hackage
@@ -235,16 +178,11 @@
   # Lua Rocks
   luarocks = [
     "https://luarocks.org/"
-    "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/"
-    "https://luafr.org/moonrocks/"
   ];
 
   # Python PyPI
   pypi = [
     "https://files.pythonhosted.org/packages/source/"
-    # pypi.io is a more semantic link, but atm it’s referencing
-    # files.pythonhosted.org over two redirects
-    "https://pypi.io/packages/source/"
   ];
 
   ### Linux distros
