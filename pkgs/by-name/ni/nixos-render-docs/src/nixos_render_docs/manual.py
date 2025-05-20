@@ -538,7 +538,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             toc = TocEntry.of(fragments[0][0][0])
             in_dir = self._in_dir
             for included, path in fragments:
-                assert Path(path).is_relative_to(Path(in_dir))
+                assert Path(path).is_relative_to(Path(in_dir)), f"path = {path}, in_dir = {in_dir}"
                 sub_file = Path(path).relative_to(Path(in_dir)).with_suffix(".html")
 
                 state = self._push(tag, hoffset, sub_file)
@@ -586,89 +586,6 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
 
             self._pop(state)
 
-        return "".join(outer)
-
-    def _included_thing_split(self, tag: str, token: Token, tokens: Sequence[Token], i: int) -> str:
-        outer = []
-        # since books have no non-include content the toplevel book wrapper will not count
-        # towards nesting depth. other types will have at least a title+id heading which
-        # *does* count towards the nesting depth. test_chapters give a -1 to included sections
-        # mirroring the special handing in _make_hN. sigh.
-        hoffset = (
-            0 if not self._headings
-            else self._headings[-1].level - 1 if self._toplevel_tag == 'chapter'
-            else self._headings[-1].level
-        )
-        outer.append(self._maybe_close_partintro())
-        fragments : Iterable[Tuple[any, Path]] = token.meta['included']
-        into = token.meta['include-args'].get('into-file')
-
-        state = self._push(tag, hoffset)
-        toc = TocEntry.of(fragments[0][0][0])
-
-        in_dir = self._in_dir
-
-
-        for included, path in fragments:
-            inner = [
-                self._file_header(toc),
-                self.render(included),
-                self._file_footer(toc)
-            ]
-
-            self._in_dir = (in_dir / path).parent
-
-            if Path(path).is_relative_to(Path(in_dir)):
-                sub_file = Path(path).relative_to(Path(in_dir)).with_suffix(".html").as_posix()
-            else:
-                # The path is not relative, likely it is absolute:
-                # We arbitrary take the basename and write it next to the outfile.
-                sub_file = Path(path).with_suffix(".html").name
-
-            file_path = (self._base_path / sub_file).with_suffix(".html")
-
-            print(f"1) write file to: {file_path}")
-
-            if not file_path.parent.exists():
-                file_path.parent.mkdir(exist_ok=True)
-
-            file_path.write_text("".join(inner))
-
-        self._pop(state)
-        return "".join(outer)
-
-    def _included_thing_single_page(self, tag: str, token: Token, tokens: Sequence[Token], i: int) -> str:
-        outer, inner = [], []
-        # since books have no non-include content the toplevel book wrapper will not count
-        # towards nesting depth. other types will have at least a title+id heading which
-        # *does* count towards the nesting depth. test_chapters give a -1 to included sections
-        # mirroring the special handing in _make_hN. sigh.
-        hoffset = (
-            0 if not self._headings
-            else self._headings[-1].level - 1 if self._toplevel_tag == 'chapter'
-            else self._headings[-1].level
-        )
-        outer.append(self._maybe_close_partintro())
-        into = token.meta['include-args'].get('into-file')
-        fragments = token.meta['included']
-        state = self._push(tag, hoffset)
-        if into:
-            toc = TocEntry.of(fragments[0][0][0])
-            inner.append(self._file_header(toc))
-            # we do not set _hlevel_offset=0 because docbook didn't either.
-        else:
-            inner = outer
-        in_dir = self._in_dir
-        for included, path in fragments:
-            try:
-                self._in_dir = (in_dir / path).parent
-                inner.append(self.render(included))
-            except Exception as e:
-                raise RuntimeError(f"rendering {path}") from e
-        if into:
-            inner.append(self._file_footer(toc))
-            (self._base_path / into).write_text("".join(inner))
-        self._pop(state)
         return "".join(outer)
 
     def included_options(self, token: Token, tokens: Sequence[Token], i: int) -> str:

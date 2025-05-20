@@ -7,5 +7,5 @@ part2/chapters.md
 ```
 
 ```{=include=} appendix html:into-file=//appendix.html
-appendix.md
+./appendix/appendix.md
 ```
