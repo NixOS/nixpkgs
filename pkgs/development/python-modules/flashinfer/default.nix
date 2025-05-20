@@ -16,8 +16,6 @@
   torch,
 }:
 
-assert torch.cudaSupport;
-
 let
   pname = "flashinfer";
   version = "0.2.5";
