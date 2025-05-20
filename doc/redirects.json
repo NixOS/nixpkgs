@@ -46,6 +46,12 @@
   "inkscape-plugins": [
     "index.html#inkscape-plugins"
   ],
+  "lib-meta-cpeFullVersionWithVendor": [
+    "index.html#lib-meta-cpeFullVersionWithVendor"
+  ],
+  "lib-meta-cpePatchVersionInUpdateWithVendor": [
+    "index.html#lib-meta-cpePatchVersionInUpdateWithVendor"
+  ],
   "major-ghc-deprecation": [
     "index.html#major-ghc-deprecation"
   ],
@@ -137,6 +143,12 @@
   ],
   "sec-language-cosmic": [
     "index.html#sec-language-cosmic"
+  ],
+  "sec-meta-identifiers": [
+    "index.html#sec-meta-identifiers"
+  ],
+  "sec-meta-identifiers-cpe": [
+    "index.html#sec-meta-identifiers-cpe"
   ],
   "sec-modify-via-packageOverrides": [
     "index.html#sec-modify-via-packageOverrides"
@@ -531,6 +543,15 @@
   ],
   "typst-package-scope-and-usage": [
     "index.html#typst-package-scope-and-usage"
+  ],
+  "var-meta-identifiers-cpe": [
+    "index.html#var-meta-identifiers-cpe"
+  ],
+  "var-meta-identifiers-cpeParts": [
+    "index.html#var-meta-identifiers-cpeParts"
+  ],
+  "var-meta-identifiers-possibleCPEs": [
+    "index.html#var-meta-identifiers-possibleCPEs"
   ],
   "var-meta-teams": [
     "index.html#var-meta-teams"
@@ -3027,7 +3048,7 @@
   "ex-buildGoModule": [
     "index.html#ex-buildGoModule"
   ],
-  "ssec-go-toolchain-versions" : [
+  "ssec-go-toolchain-versions": [
     "index.html#ssec-go-toolchain-versions"
   ],
   "buildGoModule-goModules-override": [
