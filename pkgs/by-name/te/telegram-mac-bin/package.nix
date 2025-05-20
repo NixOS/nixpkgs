@@ -7,10 +7,10 @@
 
 stdenv.mkDerivation rec {
   pname = "telegram-mac-bin";
-  version = "11.8.2.271692";
+  version = "11.11.272320";
   src = fetchzip {
     url = "https://osx.telegram.org/updates/Telegram-${version}.app.zip";
-    sha256 = "SPln4iiPb2zRnVoXYHYiCM8Di04YKM5CW6fgenLwlNY=";
+    sha256 = "iwueBSX22m/KIJvB+JC6RD8U0XOZSURyObfVjrcP5yw=";
   };
 
   buildPhase = ''
