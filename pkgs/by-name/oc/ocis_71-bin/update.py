@@ -1,7 +1,7 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -I nixpkgs=./. -i python3 -p common-updater-scripts gnused nix coreutils python312
 """
-Updater script for the ocis-bin package.
+Updater script for the ocis_71-bin package.
 
 This script fetches an HTML table from a specified URL and parses it to determine the release type
 (either "Rolling" or "Production") of a given software version. It uses the built-in urllib.request
@@ -22,7 +22,7 @@ TRACKING_CHANNEL = "Production"  # Either Rolling or Production
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN", None)
 
 MAJOR_MINOR_VERSION = 7.1
-PKG_NAME = f"ocis-bin71"
+PKG_NAME = f"ocis_71-bin"
 
 class TableParser(HTMLParser):
     def __init__(self, version):
