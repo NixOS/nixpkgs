@@ -46,9 +46,15 @@ buildPythonPackage {
     cmake
     ninja
     (lib.getBin cudaPackages.cuda_nvcc)
-    (lib.getLib cudaPackages.cuda_cudart)
   ];
   dontUseCmakeConfigure = true;
+
+  buildInputs = [
+    cudaPackages.cuda_cudart
+    cudaPackages.libcublas
+    cudaPackages.cuda_cccl
+    cudaPackages.libcurand
+  ];
 
   postPatch = ''
     rmdir 3rdparty/cutlass
