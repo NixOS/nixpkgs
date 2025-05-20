@@ -52,6 +52,8 @@
 
   obs-pipewire-audio-capture = callPackage ./obs-pipewire-audio-capture.nix { };
 
+  obs-recursion-effect = callPackage ./obs-recursion-effect.nix { };
+
   obs-replay-source = qt6Packages.callPackage ./obs-replay-source.nix { };
 
   obs-rgb-levels-filter = callPackage ./obs-rgb-levels-filter.nix { };
