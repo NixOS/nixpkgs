@@ -7,19 +7,20 @@
 
 let
 
-  cfg = config.services.xserver.displayManager;
+  cfg = config.services.displayManager.gdm;
   gdm = pkgs.gdm;
+  xdmcfg = config.services.xserver.displayManager;
   pamLogin = config.security.pam.services.login;
   settingsFormat = pkgs.formats.ini { };
-  configFile = settingsFormat.generate "custom.conf" cfg.gdm.settings;
+  configFile = settingsFormat.generate "custom.conf" cfg.settings;
 
   xSessionWrapper =
-    if (cfg.setupCommands == "") then
+    if (xdmcfg.setupCommands == "") then
       null
     else
       pkgs.writeScript "gdm-x-session-wrapper" ''
         #!${pkgs.bash}/bin/bash
-        ${cfg.setupCommands}
+        ${xdmcfg.setupCommands}
         exec "$@"
       '';
 
@@ -41,7 +42,7 @@ let
 
   defaultSessionName = config.services.displayManager.defaultSession;
 
-  setSessionScript = pkgs.callPackage ./account-service-util.nix { };
+  setSessionScript = pkgs.callPackage ../x11/display-managers/account-service-util.nix { };
 in
 
 {
@@ -72,6 +73,35 @@ in
       "gdm"
       "nvidiaWayland"
     ] "We defer to GDM whether Wayland should be enabled.")
+
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "displayManager" "gdm" "enable" ]
+      [ "services" "displayManager" "gdm" "enable" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "displayManager" "gdm" "debug" ]
+      [ "services" "displayManager" "gdm" "debug" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "displayManager" "gdm" "banner" ]
+      [ "services" "displayManager" "gdm" "banner" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "displayManager" "gdm" "settings" ]
+      [ "services" "displayManager" "gdm" "settings" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "displayManager" "gdm" "wayland" ]
+      [ "services" "displayManager" "gdm" "wayland" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "displayManager" "gdm" "autoSuspend" ]
+      [ "services" "displayManager" "gdm" "autoSuspend" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "displayManager" "gdm" "autoLogin" "delay" ]
+      [ "services" "displayManager" "gdm" "autoLogin" "delay" ]
+    )
   ];
 
   meta = {
@@ -82,7 +112,7 @@ in
 
   options = {
 
-    services.xserver.displayManager.gdm = {
+    services.displayManager.gdm = {
 
       enable = lib.mkEnableOption "GDM, the GNOME Display Manager";
 
@@ -145,7 +175,7 @@ in
 
   ###### implementation
 
-  config = lib.mkIf cfg.gdm.enable {
+  config = lib.mkIf cfg.enable {
 
     services.xserver.displayManager.lightdm.enable = false;
 
@@ -170,7 +200,7 @@ in
 
       environment =
         {
-          GDM_X_SERVER_EXTRA_ARGS = toString (lib.filter (arg: arg != "-terminate") cfg.xserverArgs);
+          GDM_X_SERVER_EXTRA_ARGS = toString (lib.filter (arg: arg != "-terminate") xdmcfg.xserverArgs);
           XDG_DATA_DIRS = lib.makeSearchPath "share" [
             gdm # for gnome-login.session
             config.services.displayManager.sessionData.desktops
@@ -274,7 +304,7 @@ in
     systemd.user.services.dbus.wantedBy = [ "default.target" ];
 
     programs.dconf.profiles.gdm.databases =
-      lib.optionals (!cfg.gdm.autoSuspend) [
+      lib.optionals (!cfg.autoSuspend) [
         {
           settings."org/gnome/settings-daemon/plugins/power" = {
             sleep-inactive-ac-type = "nothing";
@@ -284,11 +314,11 @@ in
           };
         }
       ]
-      ++ lib.optionals (cfg.gdm.banner != null) [
+      ++ lib.optionals (cfg.banner != null) [
         {
           settings."org/gnome/login-screen" = {
             banner-message-enable = true;
-            banner-message-text = cfg.gdm.banner;
+            banner-message-text = cfg.banner;
           };
         }
       ]
@@ -297,21 +327,21 @@ in
     # Use AutomaticLogin if delay is zero, because it's immediate.
     # Otherwise with TimedLogin with zero seconds the prompt is still
     # presented and there's a little delay.
-    services.xserver.displayManager.gdm.settings = {
+    services.displayManager.gdm.settings = {
       daemon = lib.mkMerge [
-        { WaylandEnable = cfg.gdm.wayland; }
+        { WaylandEnable = cfg.wayland; }
         # nested if else didn't work
-        (lib.mkIf (config.services.displayManager.autoLogin.enable && cfg.gdm.autoLogin.delay != 0) {
+        (lib.mkIf (config.services.displayManager.autoLogin.enable && cfg.autoLogin.delay != 0) {
           TimedLoginEnable = true;
           TimedLogin = config.services.displayManager.autoLogin.user;
-          TimedLoginDelay = cfg.gdm.autoLogin.delay;
+          TimedLoginDelay = cfg.autoLogin.delay;
         })
-        (lib.mkIf (config.services.displayManager.autoLogin.enable && cfg.gdm.autoLogin.delay == 0) {
+        (lib.mkIf (config.services.displayManager.autoLogin.enable && cfg.autoLogin.delay == 0) {
           AutomaticLoginEnable = true;
           AutomaticLogin = config.services.displayManager.autoLogin.user;
         })
       ];
-      debug = lib.mkIf cfg.gdm.debug {
+      debug = lib.mkIf cfg.debug {
         Enable = true;
       };
     };
