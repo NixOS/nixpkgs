@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rmg";
-  version = "0.7.8";
+  version = "0.7.9";
 
   src = fetchFromGitHub {
     owner = "Rosalie241";
     repo = "RMG";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ijoXKZbK4tm1KQ4I7R/g12tCUqrg4wRRRBCPPL03WEk=";
+    hash = "sha256-RPjt79kDBgA8hxhDAZUU+xMuDcAMoxDhWt6NpTFHeMI=";
   };
 
   nativeBuildInputs = [
