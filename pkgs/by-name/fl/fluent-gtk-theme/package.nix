@@ -6,6 +6,7 @@
   gtk-engine-murrine,
   jdupes,
   sassc,
+  iconVariants ? [ ], # default: default
   themeVariants ? [ ], # default: blue
   colorVariants ? [ ], # default: all
   sizeVariants ? [ ], # default: standard
@@ -15,7 +16,29 @@
 let
   pname = "fluent-gtk-theme";
 in
-lib.checkListOfEnum "${pname}: theme variants"
+lib.checkListOfEnum "${pname}: icon variants"
+  [
+    "default"
+    "apple"
+    "simple"
+    "gnome"
+    "ubuntu"
+    "arch"
+    "manjaro"
+    "fedora"
+    "debian"
+    "void"
+    "opensuse"
+    "popos"
+    "mxlinux"
+    "zorin"
+    "endeavouros"
+    "tux"
+    "nixos"
+  ]
+  iconVariants
+  lib.checkListOfEnum
+  "${pname}: theme variants"
   [
     "default"
     "purple"
@@ -87,7 +110,7 @@ lib.checkListOfEnum "${pname}: theme variants"
         ${lib.optionalString (colorVariants != [ ]) "--color " + toString colorVariants} \
         ${lib.optionalString (sizeVariants != [ ]) "--size " + toString sizeVariants} \
         ${lib.optionalString (tweaks != [ ]) "--tweaks " + toString tweaks} \
-        --icon nixos \
+        ${lib.optionalString (iconVariants != [ ]) "--icon " + builtins.toString iconVariants} \
         --dest $out/share/themes
 
       jdupes --quiet --link-soft --recurse $out/share
