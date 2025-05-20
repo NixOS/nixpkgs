@@ -4,6 +4,7 @@
   fetchFromGitHub,
   kernel,
   kernelModuleMakeFlags,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +30,8 @@ stdenv.mkDerivation rec {
   '';
 
   installFlags = [ "INSTALL_MOD_PATH=${placeholder "out"}" ];
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = with lib; {
     description = "Linux driver for Intel Touch Host Controller";
