@@ -7,18 +7,18 @@
 }:
 
 let
+  mainProgram = "pinact";
+in
+buildGoModule (finalAttrs: {
   pname = "pinact";
   version = "3.1.2";
+
   src = fetchFromGitHub {
     owner = "suzuki-shunsuke";
     repo = "pinact";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5jJzlMMpfk9fFDoqR0NJNacquZ4Zma0YF/pi80Miv0Y=";
   };
-  mainProgram = "pinact";
-in
-buildGoModule {
-  inherit pname version src;
 
   vendorHash = "sha256-kK4r0mCktlbhJr6iHD0Q/k1DralieN2AUg+zREZ06DA=";
 
@@ -40,7 +40,7 @@ buildGoModule {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version} -X main.commit=v${version}"
+    "-X main.version=${finalAttrs.version} -X main.commit=v${finalAttrs.version}"
   ];
 
   subPackages = [
@@ -51,8 +51,8 @@ buildGoModule {
     inherit mainProgram;
     description = "Pin GitHub Actions versions";
     homepage = "https://github.com/suzuki-shunsuke/pinact";
-    changelog = "https://github.com/suzuki-shunsuke/pinact/releases/tag/v${version}";
+    changelog = "https://github.com/suzuki-shunsuke/pinact/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kachick ];
   };
-}
+})
