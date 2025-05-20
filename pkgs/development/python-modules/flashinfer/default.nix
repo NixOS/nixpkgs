@@ -88,13 +88,13 @@ buildPythonPackage {
 
   meta = with lib; {
     homepage = "https://flashinfer.ai/";
-    description = ''
-      ;
-            FlashInfer is a library and kernel generator for Large Language Models
-            that provides high-performance implementation of LLM GPU kernels such as
-            FlashAttention, PageAttention and LoRA. FlashInfer focus on LLM serving
-            and inference, and delivers state-of-the-art performance across diverse
-            scenarios.
+    description = "Library and kernel generator for Large Language Models";
+    longDescription = ''
+      FlashInfer is a library and kernel generator for Large Language Models
+      that provides high-performance implementation of LLM GPU kernels such as
+      FlashAttention, PageAttention and LoRA. FlashInfer focus on LLM serving
+      and inference, and delivers state-of-the-art performance across diverse
+      scenarios.
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ breakds ];
