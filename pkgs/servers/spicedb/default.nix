@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "spicedb";
-  version = "1.43.0";
+  version = "1.44.0";
 
   src = fetchFromGitHub {
     owner = "authzed";
     repo = "spicedb";
     rev = "v${version}";
-    hash = "sha256-UWd9N64nkoZTDI61Mv6afqsMiqyOkT3+UByzhsGz7yM=";
+    hash = "sha256-7QWYqMAX3K16ITkDaVlrEzTH7uIaKDtZom04mBhPZS8=";
   };
 
-  vendorHash = "sha256-zJ/bSY9AKCJlq2+AIhbz5sOS1w94zLs2qxflgIAoJho=";
+  vendorHash = "sha256-X+AQgn5aVIFOV+F8H8Byf1tsu7CVb0PwjzS8x5xn3l0=";
 
   ldflags = [
     "-X 'github.com/jzelinskie/cobrautil/v2.Version=${src.rev}'"
