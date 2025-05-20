@@ -136,6 +136,13 @@ buildPythonPackage rec {
     "--deselect=tensorflow_datasets/text/c4_wsrs/c4_wsrs_test.py::C4WSRSTest"
   ];
 
+  disabledTests = [
+    # Since updating apache-beam to 2.65.0
+    # RuntimeError: Unable to pickle fn CallableWrapperDoFn...: maximum recursion depth exceeded
+    # https://github.com/tensorflow/datasets/issues/11055
+    "test_download_and_prepare_as_dataset"
+  ];
+
   disabledTestPaths = [
     # Sandbox violations: network access, filesystem write attempts outside of build dir, ...
     "tensorflow_datasets/core/dataset_builder_test.py"
