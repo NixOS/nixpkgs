@@ -160,7 +160,6 @@ broken-packages:
   - amazonka-iam-policy # failure in job https://hydra.nixos.org/build/233233098 at 2023-09-02
   - amazonka-mtl # failure in job https://hydra.nixos.org/build/295091544 at 2025-04-22
   - amazonka-s3-encryption # failure in job https://hydra.nixos.org/build/295091601 at 2025-04-22
-  - amazonka-s3-streaming # failure in job https://hydra.nixos.org/build/295091587 at 2025-04-22
   - AMI # failure in job https://hydra.nixos.org/build/233232505 at 2023-09-02
   - amqp-conduit # failure in job https://hydra.nixos.org/build/233228080 at 2023-09-02
   - amqp-streamly # failure in job https://hydra.nixos.org/build/295091669 at 2025-04-22

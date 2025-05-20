@@ -3209,7 +3209,8 @@ with haskellLib;
         src = amazonkaSrc + "/${dir}";
       })
         drv;
-    isAmazonkaService = name: lib.hasPrefix "amazonka-" name && name != "amazonka-test";
+    isAmazonkaService =
+      name: lib.hasPrefix "amazonka-" name && name != "amazonka-test" && name != "amazonka-s3-streaming";
     amazonkaServices = lib.filter isAmazonkaService (lib.attrNames super);
     amazonkaServiceOverrides = (
       lib.genAttrs amazonkaServices (
