@@ -205,6 +205,7 @@ freecad-utils.makeCustomizable (
 
     postFixup = ''
       mv $out/share/doc $out
+      ln -s $out/doc $out/share/doc
       ln -s $out/bin/FreeCAD $out/bin/freecad
       ln -s $out/bin/FreeCADCmd $out/bin/freecadcmd
     '';
