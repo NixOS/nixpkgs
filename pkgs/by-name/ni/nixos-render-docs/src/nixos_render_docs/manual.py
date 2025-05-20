@@ -362,7 +362,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 '  </div>',
             ])
 
-        scripts = self._html_params.scripts
+        scripts = list(self._html_params.scripts[:])
         if self._redirects:
             redirects_file_name = f'{toc.target.path.split('.html')[0]}-redirects.js'
             redirects_path = Path(f'{Path(self._base_path)}/{redirects_file_name}')
@@ -372,7 +372,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 redirects_path.parent.mkdir(parents=True, exist_ok=True)
 
             with open(redirects_path.as_posix(), 'w') as file:
-                file.write(self._redirects.get_redirect_script(str(self._outfile)))
+                file.write(self._redirects.get_redirect_script(toc.target.path, str(self._outfile)))
 
             scripts.append(redirects_file_name)
 
@@ -707,7 +707,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
     def convert(self, infile: Path, outfile: Path) -> None:
         self._renderer = ManualHTMLRenderer(
             'book', self._revision, self._html_params, self._manpage_urls, self._xref_targets,
-            self._redirects, infile.parent, outfile.parent, outfile)
+            self._redirects, infile.parent, outfile.parent, Path(outfile.name))
         super().convert(infile, outfile)
 
     def _parse(self, src: str, *, auto_id_prefix: None | str = None) -> list[Token]:

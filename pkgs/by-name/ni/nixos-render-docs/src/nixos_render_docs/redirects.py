@@ -162,7 +162,7 @@ class Redirects:
 
         self._xref_targets = xref_targets
 
-    def get_client_redirects(self, target: str):
+    def get_client_redirects(self, target: str, current_location: str):
         paths_to_target = {src for src, dest in self.get_server_redirects().items() if dest == target}
         client_redirects = {}
         for locations in self._raw_redirects.values():
@@ -172,7 +172,8 @@ class Redirects:
                 path, anchor = location.split('#')
                 if path not in [target, *paths_to_target]:
                     continue
-                client_redirects[anchor] = locations[0]
+                _, id_to_redirect_to = locations[0].split("#")
+                client_redirects[anchor] = self._xref_targets[id_to_redirect_to].href_from(current_location)
         return client_redirects
 
     def get_server_redirects(self):
@@ -183,6 +184,6 @@ class Redirects:
                     server_redirects[location] = self._xref_targets[identifier].path
         return server_redirects
 
-    def get_redirect_script(self, target: str) -> str:
-        client_redirects = self.get_client_redirects(target)
+    def get_redirect_script(self, target: str, current_location: str) -> str:
+        client_redirects = self.get_client_redirects(target, current_location)
         return self._redirects_script.replace('REDIRECTS_PLACEHOLDER', json.dumps(client_redirects))
