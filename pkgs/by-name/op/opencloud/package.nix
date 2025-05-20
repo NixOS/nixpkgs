@@ -96,6 +96,7 @@ buildGoModule rec {
 
   passthru = {
     web = callPackage ./web.nix { };
+    idp-web = callPackage ./idp-web.nix { };
     tests = { inherit (nixosTests) opencloud; };
     updateScript = nix-update-script { };
   };
