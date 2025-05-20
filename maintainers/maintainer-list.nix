@@ -6476,6 +6476,11 @@
       }
     ];
   };
+  Dev380 = {
+    name = "Dev380";
+    github = "Dev380";
+    githubId = 49997896;
+  };
   developer-guy = {
     name = "Batuhan Apaydın";
     email = "developerguyn@gmail.com";
