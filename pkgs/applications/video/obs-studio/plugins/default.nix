@@ -66,6 +66,8 @@
 
   obs-source-switcher = callPackage ./obs-source-switcher.nix { };
 
+  obs-stroke-glow-shadow = callPackage ./obs-stroke-glow-shadow.nix { };
+
   obs-teleport = callPackage ./obs-teleport { };
 
   obs-text-pthread = callPackage ./obs-text-pthread.nix { };
