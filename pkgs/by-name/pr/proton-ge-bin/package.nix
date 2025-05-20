@@ -70,6 +70,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/GloriousEggroll/proton-ge-custom";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+      Gliczy
       NotAShelf
       Scrumplex
       shawn8901
