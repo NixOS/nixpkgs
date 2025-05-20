@@ -71,6 +71,9 @@
   "ch-installation": [
     "index.html#ch-installation"
   ],
+  "sec-contributing-development-env": [
+    "index.html#sec-contributing-development-env"
+  ],
   "sec-mattermost": [
     "index.html#sec-mattermost"
   ],
