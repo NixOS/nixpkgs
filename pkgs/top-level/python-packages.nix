@@ -8250,7 +8250,7 @@ self: super: with self; {
 
   llvmlite = callPackage ../development/python-modules/llvmlite {
     # llvmlite always requires a specific version of llvm.
-    llvm = pkgs.llvm_15;
+    llvm = pkgs.llvm_16;
   };
 
   lm-eval = callPackage ../development/python-modules/lm-eval { };
