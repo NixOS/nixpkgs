@@ -1,0 +1,14 @@
+diff --git a/RdtClient.Web/Program.cs b/RdtClient.Web/Program.cs
+index d1d676a..a816871 100644
+--- a/RdtClient.Web/Program.cs
++++ b/RdtClient.Web/Program.cs
+@@ -20,6 +20,9 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+ builder.Configuration.AddJsonFile("appsettings.json", false, false);
+ builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true, false);
+ 
++builder.Configuration.AddEnvironmentVariables();
++builder.Configuration.AddCommandLine(args);
++
+ // Bind AppSettings
+ var appSettings = new AppSettings();
+ builder.Configuration.Bind(appSettings);
