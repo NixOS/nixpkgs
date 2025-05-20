@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   jazz2-content,
+  curl,
   libopenmpt,
   libvorbis,
   openal,
@@ -16,19 +17,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jazz2";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "deathkiller";
     repo = "jazz2-native";
     tag = finalAttrs.version;
-    hash = "sha256-9Fsm4hiNIEi5OVZLOLccSUkFmHnQ+ZUoBor+DZ9edVo=";
+    hash = "sha256-dj+BEAx626vSPy26+Ip3uaj3SBE1SWkfbh5P8U0iXsg=";
   };
 
   patches = [ ./nocontent.patch ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
+    curl
     libGL
     libopenmpt
     libvorbis
