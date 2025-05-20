@@ -108,7 +108,7 @@ let
   # Patch version changes should not break the build, so we only use major and minor
   # computeName :: RedistribRelease -> String
   computeName =
-    { version, ... }: cudaLib.utils.mkVersionedName redistName (lib.versions.majorMinor version);
+    { version, ... }: cudaLib.mkVersionedName redistName (lib.versions.majorMinor version);
 in
 final: _:
 let

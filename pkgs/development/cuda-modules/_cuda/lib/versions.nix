@@ -1,4 +1,7 @@
-{ cudaLib, lib }:
+{ _cuda, lib }:
+let
+  cudaLib = _cuda.lib;
+in
 {
   /**
     Extracts the major, minor, and patch version from a string.
@@ -18,7 +21,7 @@
     # Examples
 
     :::{.example}
-    ## `cudaLib.utils.majorMinorPatch` usage examples
+    ## `_cuda.lib.majorMinorPatch` usage examples
 
     ```nix
     majorMinorPatch "11.0.3.4"
@@ -26,7 +29,7 @@
     ```
     :::
   */
-  majorMinorPatch = cudaLib.utils.trimComponents 3;
+  majorMinorPatch = cudaLib.trimComponents 3;
 
   /**
     Get a version string with no more than than the specified number of components.
@@ -48,7 +51,7 @@
     # Examples
 
     :::{.example}
-    ## `cudaLib.utils.trimComponents` usage examples
+    ## `_cuda.lib.trimComponents` usage examples
 
     ```nix
     trimComponents 1 "1.2.3.4"

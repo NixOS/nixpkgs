@@ -5,8 +5,7 @@
   autoPatchelfHook,
   backendStdenv,
   callPackage,
-  cudaFixups,
-  cudaLib,
+  _cuda,
   fetchurl,
   lib,
   markForCudatoolkitRootHook,
@@ -45,7 +44,7 @@ let
   # Last step before returning control to `callPackage` (adds the `.override` method)
   # we'll apply (`overrideAttrs`) necessary package-specific "fixup" functions.
   # Order is significant.
-  maybeFixup = cudaFixups.${pname} or null;
+  maybeFixup = _cuda.fixups.${pname} or null;
   fixup = if maybeFixup != null then callPackage maybeFixup { } else { };
 
   # Get the redist systems for which package provides distributables.
@@ -54,9 +53,9 @@ let
   # redistSystem :: String
   # The redistSystem is the name of the system for which the redistributable is built.
   # It is `"unsupported"` if the redistributable is not supported on the target system.
-  redistSystem = cudaLib.utils.getRedistSystem backendStdenv.hasJetsonCudaCapability hostPlatform.system;
+  redistSystem = _cuda.lib.getRedistSystem backendStdenv.hasJetsonCudaCapability hostPlatform.system;
 
-  sourceMatchesHost = lib.elem hostPlatform.system (cudaLib.utils.getNixSystems redistSystem);
+  sourceMatchesHost = lib.elem hostPlatform.system (_cuda.lib.getNixSystems redistSystem);
 in
 (backendStdenv.mkDerivation (finalAttrs: {
   # NOTE: Even though there's no actual buildPhase going on here, the derivations of the
@@ -327,7 +326,7 @@ in
     broken = lists.any trivial.id (attrsets.attrValues finalAttrs.brokenConditions);
     platforms = trivial.pipe supportedRedistSystems [
       # Map each redist system to the equivalent nix systems.
-      (lib.concatMap cudaLib.utils.getNixSystems)
+      (lib.concatMap _cuda.lib.getNixSystems)
       # Take all the unique values.
       lib.unique
       # Sort the list.

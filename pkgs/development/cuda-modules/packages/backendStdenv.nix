@@ -7,7 +7,7 @@
 # Cf. https://github.com/NixOS/nixpkgs/pull/218265 for context
 {
   config,
-  cudaLib,
+  _cuda,
   cudaMajorMinorVersion,
   lib,
   pkgs,
@@ -16,8 +16,8 @@
 }:
 let
   inherit (builtins) toJSON;
-  inherit (cudaLib.data) allSortedCudaCapabilities cudaCapabilityToInfo nvccCompatibilities;
-  inherit (cudaLib.utils)
+  inherit (_cuda.db) allSortedCudaCapabilities cudaCapabilityToInfo nvccCompatibilities;
+  inherit (_cuda.lib)
     _cudaCapabilityIsDefault
     _cudaCapabilityIsSupported
     _evaluateAssertions
