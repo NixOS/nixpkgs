@@ -73,6 +73,9 @@ buildPythonApplication rec {
     description = "DVD Creator for Linux";
     homepage = "https://www.rastersoft.com/programas/devede.html";
     license = licenses.gpl3;
-    maintainers = [ maintainers.bdimcheff ];
+    maintainers = [
+      maintainers.bdimcheff
+      maintainers.baksa
+    ];
   };
 }
