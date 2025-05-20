@@ -40,6 +40,8 @@
 
   obs-livesplit-one = callPackage ./obs-livesplit-one { };
 
+  obs-media-controls = qt6Packages.callPackage ./obs-media-controls.nix { };
+
   obs-move-transition = callPackage ./obs-move-transition.nix { };
 
   obs-multi-rtmp = qt6Packages.callPackage ./obs-multi-rtmp { };
