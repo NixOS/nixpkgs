@@ -3,12 +3,12 @@
 The Nixpkgs support for Dhall assumes some familiarity with Dhall's language
 support for importing Dhall expressions, which is documented here:
 
-* [`dhall-lang.org` - Installing packages](https://docs.dhall-lang.org/tutorials/Language-Tour.html#installing-packages)
+- [`dhall-lang.org` - Installing packages](https://docs.dhall-lang.org/tutorials/Language-Tour.html#installing-packages)
 
 ## Remote imports {#ssec-dhall-remote-imports}
 
 Nixpkgs bypasses Dhall's support for remote imports using Dhall's
-semantic integrity checks.  Specifically, any Dhall import can be protected by
+semantic integrity checks. Specifically, any Dhall import can be protected by
 an integrity check like:
 
 ```dhall
@@ -20,15 +20,15 @@ https://prelude.dhall-lang.org/v20.1.0/package.dhall
 cache instead of fetching the URL.
 
 Nixpkgs uses this trick to add all of a Dhall expression's dependencies into the
-cache so that the Dhall interpreter never needs to resolve any remote URLs.  In
+cache so that the Dhall interpreter never needs to resolve any remote URLs. In
 fact, Nixpkgs uses a Dhall interpreter with remote imports disabled when
 packaging Dhall expressions to enforce that the interpreter never resolves a
-remote import.  This means that Nixpkgs only supports building Dhall expressions
+remote import. This means that Nixpkgs only supports building Dhall expressions
 if all of their remote imports are protected by semantic integrity checks.
 
-Instead of remote imports, Nixpkgs uses Nix to fetch remote Dhall code.  For
+Instead of remote imports, Nixpkgs uses Nix to fetch remote Dhall code. For
 example, the Prelude Dhall package uses `pkgs.fetchFromGitHub` to fetch the
-`dhall-lang` repository containing the Prelude.  Relying exclusively on Nix
+`dhall-lang` repository containing the Prelude. Relying exclusively on Nix
 to fetch Dhall code ensures that Dhall packages built using Nix remain pure and
 also behave well when built within a sandbox.
 
@@ -135,14 +135,14 @@ result
 
 … where:
 
-* `source.dhall` contains the result of interpreting our Dhall package:
+- `source.dhall` contains the result of interpreting our Dhall package:
 
   ```ShellSession
   $ cat ./result/source.dhall
   True
   ```
 
-* The `.cache` subdirectory contains one binary cache product encoding the
+- The `.cache` subdirectory contains one binary cache product encoding the
   same result as `source.dhall`:
 
   ```ShellSession
@@ -150,7 +150,7 @@ result
   True
   ```
 
-* `binary.dhall` contains a Dhall expression which handles fetching and decoding
+- `binary.dhall` contains a Dhall expression which handles fetching and decoding
   the same cache product:
 
   ```ShellSession
@@ -165,8 +165,8 @@ result
   ```
 
 The `source.dhall` file is only present for packages that specify
-`source = true;`.  By default, Dhall packages omit the `source.dhall` in order
-to conserve disk space when they are used exclusively as dependencies.  For
+`source = true;`. By default, Dhall packages omit the `source.dhall` in order
+to conserve disk space when they are used exclusively as dependencies. For
 example, if we build the Prelude package it will only contain the binary
 encoding of the expression:
 
@@ -184,7 +184,7 @@ result
 ```
 
 Typically, you only specify `source = true;` for the top-level Dhall expression
-of interest (such as our example `true.nix` Dhall package).  However, if you
+of interest (such as our example `true.nix` Dhall package). However, if you
 wish to specify `source = true` for all Dhall packages, then you can amend the
 Dhall overlay like this:
 
@@ -234,68 +234,68 @@ package from a single file, but most Dhall packages consist of more than one
 file and there are two derived utilities that you may find more useful when
 packaging multiple files:
 
-* `buildDhallDirectoryPackage` - build a Dhall package from a local directory
+- `buildDhallDirectoryPackage` - build a Dhall package from a local directory
 
-* `buildDhallGitHubPackage` - build a Dhall package from a GitHub repository
+- `buildDhallGitHubPackage` - build a Dhall package from a GitHub repository
 
 The `buildDhallPackage` is the lowest-level function and accepts the following
 arguments:
 
-* `name`: The name of the derivation
+- `name`: The name of the derivation
 
-* `dependencies`: Dhall dependencies to build and cache ahead of time
+- `dependencies`: Dhall dependencies to build and cache ahead of time
 
-* `code`: The top-level expression to build for this package
+- `code`: The top-level expression to build for this package
 
-  Note that the `code` field accepts an arbitrary Dhall expression.  You're
+  Note that the `code` field accepts an arbitrary Dhall expression. You're
   not limited to just a file.
 
-* `source`: Set to `true` to include the decoded result as `source.dhall` in the
+- `source`: Set to `true` to include the decoded result as `source.dhall` in the
   build product, at the expense of requiring more disk space
 
-* `documentationRoot`: Set to the root directory of the package if you want
+- `documentationRoot`: Set to the root directory of the package if you want
   `dhall-docs` to generate documentation underneath the `docs` subdirectory of
   the build product
 
 The `buildDhallDirectoryPackage` is a higher-level function implemented in terms
 of `buildDhallPackage` that accepts the following arguments:
 
-* `name`: Same as `buildDhallPackage`
+- `name`: Same as `buildDhallPackage`
 
-* `dependencies`: Same as `buildDhallPackage`
+- `dependencies`: Same as `buildDhallPackage`
 
-* `source`: Same as `buildDhallPackage`
+- `source`: Same as `buildDhallPackage`
 
-* `src`: The directory containing Dhall code that you want to turn into a Dhall
+- `src`: The directory containing Dhall code that you want to turn into a Dhall
   package
 
-* `file`: The top-level file (`package.dhall` by default) that is the entrypoint
+- `file`: The top-level file (`package.dhall` by default) that is the entrypoint
   to the rest of the package
 
-* `document`: Set to `true` to generate documentation for the package
+- `document`: Set to `true` to generate documentation for the package
 
 The `buildDhallGitHubPackage` is another higher-level function implemented in
 terms of `buildDhallPackage` that accepts the following arguments:
 
-* `name`: Same as `buildDhallPackage`
+- `name`: Same as `buildDhallPackage`
 
-* `dependencies`: Same as `buildDhallPackage`
+- `dependencies`: Same as `buildDhallPackage`
 
-* `source`: Same as `buildDhallPackage`
+- `source`: Same as `buildDhallPackage`
 
-* `owner`: The owner of the repository
+- `owner`: The owner of the repository
 
-* `repo`: The repository name
+- `repo`: The repository name
 
-* `rev`: The desired revision (or branch, or tag)
+- `rev`: The desired revision (or branch, or tag)
 
-* `directory`: The subdirectory of the Git repository to package (if a
+- `directory`: The subdirectory of the Git repository to package (if a
   directory other than the root of the repository)
 
-* `file`: The top-level file (`${directory}/package.dhall` by default) that is
+- `file`: The top-level file (`${directory}/package.dhall` by default) that is
   the entrypoint to the rest of the package
 
-* `document`: Set to `true` to generate documentation for the package
+- `document`: Set to `true` to generate documentation for the package
 
 Additionally, `buildDhallGitHubPackage` accepts the same arguments as
 `fetchFromGitHub`, such as `hash` or `fetchSubmodules`.
@@ -303,7 +303,7 @@ Additionally, `buildDhallGitHubPackage` accepts the same arguments as
 ## `dhall-to-nixpkgs` {#ssec-dhall-dhall-to-nixpkgs}
 
 You can use the `dhall-to-nixpkgs` command-line utility to automate
-packaging Dhall code.  For example:
+packaging Dhall code. For example:
 
 ```ShellSession
 $ nix-shell -p haskellPackages.dhall-nixpkgs nix-prefetch-git
@@ -330,7 +330,7 @@ $ nix-shell -p haskellPackages.dhall-nixpkgs nix-prefetch-git
 :::
 
 The utility takes care of automatically detecting remote imports and converting
-them to package dependencies.  You can also use the utility on local
+them to package dependencies. You can also use the utility on local
 Dhall directories, too:
 
 ```ShellSession
@@ -413,7 +413,7 @@ error: build of '/nix/store/0f1hla7ff1wiaqyk1r2ky4wnhnw114fi-true.drv' failed
 
 … because the default Prelude selected by Nixpkgs revision
 `94b2848559b12a8ed1fe433084686b2a81123c99is` is version 20.1.0, which doesn't
-have the same integrity check as version 19.0.0.  This means that version
+have the same integrity check as version 19.0.0. This means that version
 19.0.0 is not cached and the interpreter is not allowed to fall back to
 importing the URL.
 
@@ -458,7 +458,7 @@ like this:
 
 You can override any of the arguments to `buildDhallGitHubPackage` or
 `buildDhallDirectoryPackage` using the `overridePackage` attribute of a package.
-For example, suppose we wanted to selectively enable `source = true` just for the Prelude.  We can do that like this:
+For example, suppose we wanted to selectively enable `source = true` just for the Prelude. We can do that like this:
 
 ```nix
 {

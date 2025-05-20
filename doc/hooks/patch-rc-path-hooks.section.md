@@ -1,4 +1,3 @@
-
 # `patchRcPath` hooks {#sec-patchRcPathHooks}
 
 These hooks provide shell-specific utilities (with the same name as the hook) to patch shell scripts meant to be sourced by software users.
@@ -9,10 +8,10 @@ When shipped from the upstream, they sometimes use commands that might not be av
 
 The compatible shells for each hook are:
 
- - `patchRcPathBash`: [Bash](https://www.gnu.org/software/bash/), [ksh](http://www.kornshell.org/), [zsh](https://www.zsh.org/) and other shells supporting the Bash-like parameter expansions.
- - `patchRcPathCsh`: Csh scripts, such as those targeting [tcsh](https://www.tcsh.org/).
- - `patchRcPathFish`: [Fish](https://fishshell.com/) scripts.
- - `patchRcPathPosix`: POSIX-conformant shells supporting the limited parameter expansions specified by the POSIX standard. Current implementation uses the parameter expansion `${foo-}` only.
+- `patchRcPathBash`: [Bash](https://www.gnu.org/software/bash/), [ksh](http://www.kornshell.org/), [zsh](https://www.zsh.org/) and other shells supporting the Bash-like parameter expansions.
+- `patchRcPathCsh`: Csh scripts, such as those targeting [tcsh](https://www.tcsh.org/).
+- `patchRcPathFish`: [Fish](https://fishshell.com/) scripts.
+- `patchRcPathPosix`: POSIX-conformant shells supporting the limited parameter expansions specified by the POSIX standard. Current implementation uses the parameter expansion `${foo-}` only.
 
 For each supported shell, it modifies the script with a `PATH` prefix that is later removed when the script ends.
 It allows nested patching, which guarantees that a patched script may source another patched script.

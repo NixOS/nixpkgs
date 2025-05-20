@@ -66,9 +66,11 @@ overrideMavenAttrs :: (AttrSet -> Derivation) | ((AttrSet -> Attrset) -> Derivat
 ```
 
 The output of `buildMavenPackage` has an `overrideMavenAttrs` attribute, which is a function that takes either
+
 - any subset of the attributes that can be passed to `buildMavenPackage`
 
   or
+
 - a function that takes the argument passed to the previous invocation of `buildMavenPackage` (conventionally called `old`) and returns an attribute set that can be passed to `buildMavenPackage`
 
 and returns a derivation that builds a Maven package based on the old and new arguments merged.
@@ -76,6 +78,7 @@ and returns a derivation that builds a Maven package based on the old and new ar
 This is similar to [](#sec-pkg-overrideAttrs), but notably does not allow accessing the final value of the argument to `buildMavenPackage`.
 
 :::{.example}
+
 ### `overrideMavenAttrs` Example
 
 Use `overrideMavenAttrs` to build `jd-cli` version 1.2.0 and disable some flaky test:
@@ -103,6 +106,7 @@ jd-cli.overrideMavenAttrs (old: rec {
   mvnHash = "sha256-N9XC1pg6Y4sUiBWIQUf16QSXCuiAPpXEHGlgApviF4I=";
 })
 ```
+
 :::
 
 ### Offline build {#maven-offline-build}
@@ -112,17 +116,18 @@ By default, `buildMavenPackage` does the following:
 1. Run `mvn package -Dmaven.repo.local=$out/.m2 ${mvnParameters}` in the
    `fetchedMavenDeps` [fixed-output derivation](https://nixos.org/manual/nix/stable/glossary.html#gloss-fixed-output-derivation).
 2. Run `mvn package -o -nsu "-Dmaven.repo.local=$mvnDeps/.m2"
-   ${mvnParameters}` again in the main derivation.
+${mvnParameters}` again in the main derivation.
 
 As a result, tests are run twice.
 This also means that a failing test will trigger a new attempt to realise the fixed-output derivation, which in turn downloads all dependencies again.
 For bigger Maven projects, this might lead to a long feedback cycle.
 
 Use `buildOffline = true` to change the behaviour of `buildMavenPackage to the following:
+
 1. Run `mvn de.qaware.maven:go-offline-maven-plugin:1.2.8:resolve-dependencies
-   -Dmaven.repo.local=$out/.m2 ${mvnDepsParameters}` in the fixed-output derivation.
+-Dmaven.repo.local=$out/.m2 ${mvnDepsParameters}` in the fixed-output derivation.
 2. Run `mvn package -o -nsu "-Dmaven.repo.local=$mvnDeps/.m2"
-   ${mvnParameters}` in the main derivation.
+${mvnParameters}` in the main derivation.
 
 As a result, all dependencies are downloaded in step 1 and the tests are executed in step 2.
 A failing test only triggers a rebuild of step 2 as it can reuse the dependencies of step 1 because they have not changed.
@@ -132,6 +137,7 @@ Test dependencies are not downloaded in step 1 and are therefore missing in
 step 2 which will most probably fail the build. The `go-offline` plugin cannot
 handle these so-called [dynamic dependencies](https://github.com/qaware/go-offline-maven-plugin?tab=readme-ov-file#dynamic-dependencies).
 In that case you must add these dynamic dependencies manually with:
+
 ```nix
 maven.buildMavenPackage rec {
   manualMvnArtifacts = [
@@ -141,6 +147,7 @@ maven.buildMavenPackage rec {
   ];
 }
 ```
+
 :::
 
 ### Stable Maven plugins {#stable-maven-plugins}
@@ -175,6 +182,7 @@ To make sure that your package does not add extra manual effort when upgrading M
 ```
 
 ## Manually using `mvn2nix` {#maven-mvn2nix}
+
 ::: {.warning}
 This way is no longer recommended; see [](#maven-buildmavenpackage) for the simpler and preferred way.
 :::
@@ -221,6 +229,7 @@ You find this demo project at [https://github.com/fzakaria/nixos-maven-example](
 ### Solving for dependencies {#solving-for-dependencies}
 
 #### buildMaven with NixOS/mvn2nix-maven-plugin {#buildmaven-with-nixosmvn2nix-maven-plugin}
+
 `buildMaven` is an alternative method that tries to follow similar patterns of other programming languages by generating a lock file. It relies on the maven plugin [mvn2nix-maven-plugin](https://github.com/NixOS/mvn2nix-maven-plugin).
 
 First you generate a `project-info.json` file using the maven plugin.
@@ -247,11 +256,10 @@ First you generate a `project-info.json` file using the maven plugin.
 This file is then given to the `buildMaven` function, and it returns 2 attributes.
 
 **`repo`**:
-    A Maven repository that is a symlink farm of all the dependencies found in the `project-info.json`
-
+A Maven repository that is a symlink farm of all the dependencies found in the `project-info.json`
 
 **`build`**:
-    A simple derivation that runs through `mvn compile` & `mvn package` to build the JAR. You may use this as inspiration for more complicated derivations.
+A simple derivation that runs through `mvn compile` & `mvn package` to build the JAR. You may use this as inspiration for more complicated derivations.
 
 Here is an [example](https://github.com/fzakaria/nixos-maven-example/blob/main/build-maven-repository.nix) of building the Maven repository
 
@@ -280,6 +288,7 @@ The benefit over the _double invocation_ as we will see below, is that the _/nix
 ```
 
 #### Double Invocation {#double-invocation}
+
 ::: {.note}
 This pattern is the simplest but may cause unnecessary rebuilds due to the output hash changing.
 :::
@@ -569,6 +578,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 })
 ```
+
 ::: {.note}
 Our script produces a dependency on `jre` rather than `jdk` to restrict the runtime closure necessary to run the application.
 :::
