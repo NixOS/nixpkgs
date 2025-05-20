@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildGoModule,
+  installShellFiles,
   versionCheckHook,
   nix-update-script,
 }:
@@ -25,6 +27,17 @@ buildGoModule (finalAttrs: {
   env.CGO_ENABLED = 0;
 
   doCheck = true;
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd '${mainProgram}' \
+      --bash <("$out/bin/${mainProgram}" completion bash) \
+      --zsh <("$out/bin/${mainProgram}" completion zsh) \
+      --fish <("$out/bin/${mainProgram}" completion fish)
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
