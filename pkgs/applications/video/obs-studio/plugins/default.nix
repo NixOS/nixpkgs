@@ -58,6 +58,8 @@
 
   obs-scale-to-sound = callPackage ./obs-scale-to-sound.nix { };
 
+  obs-scene-as-transition = callPackage ./obs-scene-as-transition.nix { };
+
   obs-shaderfilter = qt6Packages.callPackage ./obs-shaderfilter.nix { };
 
   obs-source-clone = callPackage ./obs-source-clone.nix { };
