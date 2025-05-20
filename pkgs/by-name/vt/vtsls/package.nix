@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nodejs_22,
   gitMinimal,
+  gitSetupHook,
   pnpm_8,
   nix-update-script,
 }:
@@ -24,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs_22
     # patches are applied with git during build
     gitMinimal
+    gitSetupHook
     pnpm_8.configHook
   ];
 
@@ -49,10 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
-
-    # During build vtsls needs a working git installation.
-    git config --global user.name nixbld
-    git config --global user.email nixbld@example.com
 
     # during build this sha is used as a marker to skip applying patches and
     # copying files, which doesn't matter in this case
