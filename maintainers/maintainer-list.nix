@@ -23338,6 +23338,13 @@
     githubId = 5512096;
     name = "Sébastien Guimmara";
   };
+  sh3rm4n = {
+    name = "Fabian Viöl";
+    email = "f.vioel@gmail.com";
+    matrix = "@Sh3Rm4n:matrix.org";
+    github = "Sh3Rm4n";
+    githubId = 29653149;
+  };
   shackra = {
     name = "Jorge Javier Araya Navarro";
     email = "jorge@esavara.cr";
