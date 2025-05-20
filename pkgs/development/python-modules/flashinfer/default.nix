@@ -87,6 +87,7 @@ buildPythonPackage {
   ];
 
   meta = with lib; {
+    broken = !torch.cudaSupport || !config.cudaSupport;
     homepage = "https://flashinfer.ai/";
     description = "Library and kernel generator for Large Language Models";
     longDescription = ''
