@@ -1,26 +1,36 @@
 {
   lib,
   buildPythonPackage,
+  catalogue,
+  curated-tokenizers,
   fetchFromGitHub,
+  huggingface-hub,
   setuptools,
+  tokenizers,
   torch,
 }:
 
 buildPythonPackage rec {
   pname = "curated-transformers";
-  version = "0.1.1";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "curated-transformers";
     tag = "v${version}";
-    hash = "sha256-QhJZnQIa9TilwdQCUlxnQCEc6Suj669cht6WHUAr/Gw=";
+    hash = "sha256-2sedBVpwCppviWix+d3tJFTrLBe+2IBlWnCKgV6MucA=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ torch ];
+  dependencies = [
+    catalogue
+    curated-tokenizers
+    huggingface-hub
+    tokenizers
+    torch
+  ];
 
   # Unit tests are hard to use, since most tests rely on downloading
   # models from Hugging Face Hub.
