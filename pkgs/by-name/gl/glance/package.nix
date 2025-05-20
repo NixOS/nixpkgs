@@ -18,7 +18,9 @@ buildGoModule (finalAttrs: {
     hash = "sha256-syWalphoKjUYrQjKrQUMDijgILQ+AIOVTMqYCiYVWyU=";
   };
 
-  vendorHash = "sha256-81FAWMe7ksmbklXGGg15v2W4nuT6AcBHLIhXF7bI78c=";
+  patches = [ ./update_purego.patch ];
+
+  vendorHash = "sha256-esPtCg63A40mX9hADOhEa+NjNk+9MI/0qZG3uE91qxg=";
 
   ldflags = [
     "-s"
