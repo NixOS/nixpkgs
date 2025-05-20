@@ -888,7 +888,14 @@ in
         (
           defaultServiceConfig
           // {
-            BindReadOnlyPaths = mergePaths (defaultServiceConfig.BindReadOnlyPaths ++ secretPaths);
+            BindReadOnlyPaths = mergePaths (
+              defaultServiceConfig.BindReadOnlyPaths
+              ++ secretPaths
+              ++ (lib.optionals (cfg.provision.enable && !cfg.provision.acceptInvalidCerts) [
+                "-/etc/ssl"
+                "-/etc/static/ssl"
+              ])
+            );
           }
         )
         {
