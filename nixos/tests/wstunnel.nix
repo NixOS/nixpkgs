@@ -8,8 +8,6 @@ in
 {
   name = "wstunnel";
 
-  meta.platforms = lib.platforms.linux;
-
   nodes = {
     server = {
       virtualisation.vlans = [ 1 ];

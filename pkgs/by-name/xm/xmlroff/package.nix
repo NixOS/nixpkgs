@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = true;
     description = "XSL Formatter";
     homepage = "http://xmlroff.org/";
     platforms = platforms.unix;
