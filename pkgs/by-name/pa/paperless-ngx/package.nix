@@ -156,6 +156,7 @@ python.pkgs.buildPythonApplication rec {
     "filelock"
     "python-dotenv"
     "rapidfuzz"
+    "redis"
     # TODO: https://github.com/NixOS/nixpkgs/pull/373099
     "zxing-cpp"
   ];
