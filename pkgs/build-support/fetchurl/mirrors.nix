@@ -144,11 +144,10 @@
 
   # OSDN (formerly SourceForge.jp)
   osdn = [
-    "https://osdn.dl.osdn.jp/"
-    "https://osdn.mirror.constant.com/"
-    "https://mirrors.gigenet.com/OSDN/"
-    "https://osdn.dl.sourceforge.jp/"
-    "https://jaist.dl.sourceforge.jp/"
+    # The official servers are dead; packages should be moved off
+    # or considered for dropping, but mirrors.dotsrc.org seems to
+    # work for now.
+    "https://mirrors.dotsrc.org/osdn/"
   ];
 
   # Qt
