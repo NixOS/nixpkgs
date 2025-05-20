@@ -46,6 +46,7 @@ buildPythonPackage {
     cmake
     ninja
     (lib.getBin cudaPackages.cuda_nvcc)
+    (lib.getLib cudaPackages.cuda_cudart)
   ];
   dontUseCmakeConfigure = true;
 
