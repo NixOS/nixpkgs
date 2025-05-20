@@ -48,9 +48,6 @@
   withStatic ? stdenv.hostPlatform.isMinGW,
   # passthru.tests
   testers,
-  SDL2_classic_ttf,
-  SDL2_classic_mixer,
-  SDL2_classic_image,
 }:
 
 # NOTE: When editing this expression see if the same change applies to
@@ -210,11 +207,6 @@ stdenv.mkDerivation (finalAttrs: {
     };
     tests = {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      inherit
-        SDL2_classic_ttf
-        SDL2_classic_mixer
-        SDL2_classic_image
-        ;
     };
   };
 
