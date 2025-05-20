@@ -339,7 +339,7 @@ let
     patches =
       prev.patches or [ ]
       ++ lib.singleton (fetchpatch {
-        url = "https://github.com/util-linux/util-linux/pull/3479.patch";
+        url = "https://github.com/util-linux/util-linux/commit/7dbfe31a83f45d5aef2b508697e9511c569ffbc8.patch";
         hash = "sha256-bJqpZiPli5Pm/XpDA445Ab5jesXrlcnaO6e4V0B3rSw=";
       });
   });
