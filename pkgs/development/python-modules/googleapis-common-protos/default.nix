@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "googleapis-common-protos";
-  version = "1.69.2";
+  version = "1.70.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
     rev = "googleapis-common-protos-v${version}";
-    hash = "sha256-5PzidE1CWN+pt7+gcAtbuXyL/pq6cnn0MCRkBfmeUSw=";
+    hash = "sha256-E1LISOLQcXqUMTTPLR+lwkR6gF1fuGGB44j38cIK/Z4=";
   };
 
   sourceRoot = "${src.name}/packages/googleapis-common-protos";
