@@ -50,11 +50,13 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
 
+    cd auditlog_tests
     # strip escape codes otherwise tests fail
     # see https://github.com/jazzband/django-auditlog/issues/644
     TEST_DB_USER=$PGUSER \
     TEST_DB_HOST=$PGHOST \
-    ${python.interpreter} runtests.py | cat
+    ${python.interpreter} ./manage.py test | cat
+    cd ..
 
     runHook postCheck
   '';
