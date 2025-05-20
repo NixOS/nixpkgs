@@ -392,6 +392,7 @@ rec {
 
       postMount = ''
         echo "Packing raw image..."
+        mkdir -p $out
         tar -C mnt --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cf $out/layer.tar .
       '';
 
