@@ -114,15 +114,6 @@
     "ftp://ftp.metalab.unc.edu/pub/linux/"
   ];
 
-  # ImageMagick mirrors, see https://www.imagemagick.org/script/mirror.php
-  imagemagick = [
-    "https://www.imagemagick.org/download/"
-    "https://mirror.checkdomain.de/imagemagick/"
-    "https://ftp.nluug.nl/ImageMagick/"
-    "https://ftp.sunet.se/mirror/imagemagick.org/ftp/"
-    "ftp://ftp.sunet.se/mirror/imagemagick.org/ftp/" # also contains older versions removed from most mirrors
-  ];
-
   kde = [
     "https://download.kde.org/"
     "https://ftp.funet.fi/pub/mirrors/ftp.kde.org/pub/kde/"
@@ -158,11 +149,6 @@
     "https://mirrors.gigenet.com/OSDN/"
     "https://osdn.dl.sourceforge.jp/"
     "https://jaist.dl.sourceforge.jp/"
-  ];
-
-  # PostgreSQL
-  postgresql = [
-    "https://ftp.postgresql.org/pub/"
   ];
 
   # Qt
@@ -266,12 +252,6 @@
     "https://osdn.dl.sourceforge.net/sourceforge/"
   ];
 
-  # Steam Runtime
-  steamrt = [
-    "https://repo.steampowered.com/steamrt/"
-    "https://public.abbradar.moe/steamrt/"
-  ];
-
   # TCSH shell
   tcsh = [
     "https://astron.com/pub/tcsh/"
@@ -338,25 +318,7 @@
     "https://pypi.io/packages/source/"
   ];
 
-  # Python Test-PyPI
-  testpypi = [
-    "https://test.pypi.io/packages/source/"
-  ];
-
   ### Linux distros
-
-  # CentOS
-  centos = [
-    # For old releases
-    "https://vault.centos.org/"
-    "https://archive.kernel.org/centos-vault/"
-    "https://ftp.jaist.ac.jp/pub/Linux/CentOS-vault/"
-    "https://mirrors.aliyun.com/centos-vault/"
-    "https://mirror.chpc.utah.edu/pub/vault.centos.org/"
-    "https://mirror.math.princeton.edu/pub/centos-vault/"
-    "https://mirrors.tripadvisor.com/centos-vault/"
-    "http://mirror.centos.org/centos/"
-  ];
 
   # Debian
   debian = [
@@ -369,37 +331,6 @@
     "ftp://ftp.ru.debian.org/debian/"
     "http://archive.debian.org/debian-archive/debian/"
     "ftp://ftp.funet.fi/pub/mirrors/ftp.debian.org/debian/"
-  ];
-
-  # Fedora
-  # Please add only full mirrors that carry old Fedora distributions as well
-  # See: https://mirrors.fedoraproject.org/publiclist (but not all carry old content)
-  fedora = [
-    "https://archives.fedoraproject.org/pub/fedora/"
-    "https://fedora.osuosl.org/"
-    "https://ftp.funet.fi/pub/mirrors/ftp.redhat.com/pub/fedora/"
-    "https://ftp.linux.cz/pub/linux/fedora/"
-    "https://archives.fedoraproject.org/pub/archive/fedora/"
-    "http://ftp.nluug.nl/pub/os/Linux/distr/fedora/"
-    "http://mirror.csclub.uwaterloo.ca/fedora/"
-    "http://mirror.1000mbps.com/fedora/"
-  ];
-
-  # Gentoo
-  gentoo = [
-    "https://ftp.snt.utwente.nl/pub/os/linux/gentoo/"
-    "https://distfiles.gentoo.org/"
-    "https://mirrors.kernel.org/gentoo/"
-  ];
-
-  # openSUSE
-  opensuse = [
-    "https://opensuse.hro.nl/opensuse/distribution/"
-    "https://ftp.funet.fi/pub/linux/mirrors/opensuse/distribution/"
-    "https://ftp.opensuse.org/pub/opensuse/distribution/"
-    "https://ftp5.gwdg.de/pub/opensuse/discontinued/distribution/"
-    "https://mirrors.edge.kernel.org/opensuse/distribution/"
-    "http://ftp.hosteurope.de/mirror/ftp.opensuse.org/discontinued/"
   ];
 
   # Ubuntu
