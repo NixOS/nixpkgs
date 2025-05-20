@@ -994,6 +994,7 @@ in
   orthanc = runTest ./orthanc.nix;
   owncast = handleTest ./owncast.nix { };
   outline = handleTest ./outline.nix { };
+  i18n = runTest ./i18n.nix;
   image-contents = handleTest ./image-contents.nix { };
   openvscode-server = handleTest ./openvscode-server.nix { };
   open-webui = runTest ./open-webui.nix;
