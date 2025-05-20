@@ -148,7 +148,6 @@
     # Asia (HTTPS)
     "https://mirrors.tuna.tsinghua.edu.cn/sagemath/spkg/upstream/"
     "https://mirrors.ustc.edu.cn/sagemath/spkg/upstream/"
-    "http://ftp.tsukuba.wide.ad.jp/software/sage/spkg/upstream/"
     "https://ftp.yz.yamagata-u.ac.jp/pub/math/sage/spkg/upstream/"
     "https://mirror.yandex.ru/mirrors/sage.math.washington.edu/spkg/upstream/"
 
@@ -158,24 +157,6 @@
     # Europe (HTTPS)
     "https://sage.mirror.garr.it/mirrors/sage/spkg/upstream/"
     "https://www-ftp.lip6.fr/pub/math/sagemath/spkg/upstream/"
-
-    # Africa (non-HTTPS)
-    "ftp://ftp.sun.ac.za/pub/mirrors/www.sagemath.org/spkg/upstream/"
-
-    # America, North (non-HTTPS)
-    "http://www.cecm.sfu.ca/sage/spkg/upstream/"
-
-    # America, South (non-HTTPS)
-    "http://sagemath.c3sl.ufpr.br/spkg/upstream/"
-    "http://linorg.usp.br/sage/spkg/upstream"
-
-    # Asia (non-HTTPS)
-    "http://ftp.kaist.ac.kr/sage/spkg/upstream/"
-    "http://ftp.riken.jp/sagemath/spkg/upstream/"
-
-    # Europe (non-HTTPS)
-    "http://mirrors.fe.up.pt/pub/sage/spkg/upstream/"
-    "http://ftp.ntua.gr/pub/sagemath/spkg/upstream/"
   ];
 
   # SAMBA
