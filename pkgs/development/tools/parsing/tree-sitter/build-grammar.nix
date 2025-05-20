@@ -30,7 +30,7 @@ let
         srcVersion = json.metadata.version;
       in
       lib.warnIf (
-        srcVersion != version
+        srcVersion != lib.head (lib.splitString "+" version)
       ) "${language} grammar version (${version}) differs from source (${srcVersion})" json
     else
       # Older grammars may not contain this file. The tree-sitter CLI provides
