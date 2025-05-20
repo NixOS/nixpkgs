@@ -25,14 +25,14 @@
   ffmpeg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.14.0";
   pname = "tigervnc";
 
   src = fetchFromGitHub {
     owner = "TigerVNC";
     repo = "tigervnc";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TgVV/4MRsQHYKpDf9L5eHMLVpdwvNy1KPDIe7xMlQ9o=";
   };
 
@@ -125,10 +125,10 @@ stdenv.mkDerivation rec {
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
-      mv 'TigerVNC Viewer ${version}.app' $out/Applications/
+      mv 'TigerVNC Viewer ${finalAttrs.version}.app' $out/Applications/
       rm $out/bin/vncviewer
       echo "#!/usr/bin/env bash
-      open $out/Applications/TigerVNC\ Viewer\ ${version}.app --args \$@" >> $out/bin/vncviewer
+      open $out/Applications/TigerVNC\ Viewer\ ${finalAttrs.version}.app --args \$@" >> $out/bin/vncviewer
       chmod +x $out/bin/vncviewer
     '';
 
@@ -198,4 +198,4 @@ stdenv.mkDerivation rec {
     # Prevent a store collision.
     priority = 4;
   };
-}
+})
