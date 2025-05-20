@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ithc";
-  version = "unstable-2022-06-07";
+  version = "0-unstable-2025-05-27";
 
   src = fetchFromGitHub {
     owner = "quo";
     repo = "ithc-linux";
-    rev = "5af2a2213d2f3d944b19ec7ccdb96f16d56adddb";
-    hash = "sha256-p4TooWUOWPfNdePE18ESmRJezPDAl9nLb55LQtkJiSg=";
+    rev = "6d53c9c21797df5da975bd27db22bd89ee0cead3";
+    hash = "sha256-uO+tsCn6LZlAXq1jvqwpFuLluzlWr/auJy9R6Uiv0PE=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     license = licenses.publicDomain;
     maintainers = with maintainers; [ aacebedo ];
     platforms = platforms.linux;
-    broken = kernel.kernelOlder "5.9" || kernel.kernelAtLeast "6.10";
+    broken = kernel.kernelOlder "5.9";
   };
 }
