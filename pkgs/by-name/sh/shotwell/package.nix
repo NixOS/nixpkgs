@@ -91,11 +91,13 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     # Pull in HEIF support.
     # In postInstall to run before gappsWrapperArgsHook.
-    export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
-      extraLoaders = [
-        libheif.out
-      ];
-    }}"
+    export GDK_PIXBUF_MODULE_FILE="${
+      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+        extraLoaders = [
+          libheif.out
+        ];
+      }
+    }"
   '';
 
   passthru = {
