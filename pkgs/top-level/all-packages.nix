@@ -2170,8 +2170,6 @@ with pkgs;
     # If buildGoModule is overridden, provide a matching version of the go attribute
   };
 
-  f3d_egl = f3d.override { vtk_9 = vtk_9_egl; };
-
   fast-cli = nodePackages.fast-cli;
 
   fdroidcl = pkgs.callPackage ../development/mobile/fdroidcl { };
