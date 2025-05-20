@@ -278,6 +278,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         self._base_path = base_path.absolute()
         self._html_params = html_params
         self._redirects = redirects
+        self._into_file_context = None
 
     def _pull_image(self, src: str) -> str:
         src_path = Path(src)
@@ -522,7 +523,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
 
     def _included_thing(self, tag: str, token: Token, tokens: Sequence[Token], i: int) -> str:
         into = token.meta['include-args'].get('into-file')
-        split_pages = self._html_params.split_pages and not into
+        split_pages = self._html_params.split_pages and not (into or self._into_file_context)
 
         fragments = token.meta['included']
 
@@ -567,6 +568,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 toc = TocEntry.of(fragments[0][0][0])
                 inner.append(self._file_header(toc))
                 inner.append('<div class="content">')
+                self._into_file_context = into
                 # we do not set _hlevel_offset=0 because docbook didn't either.
             else:
                 state = self._push(tag, hoffset, self._outfile)
@@ -583,6 +585,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 inner.append('</div>')
                 inner.append(self._file_footer(toc))
                 (self._base_path / into).write_text("".join(inner))
+                self._into_file_context = None
 
             self._pop(state)
 
@@ -680,7 +683,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
 
     # xref | (id, type, heading inlines, file, starts new file)
     def _collect_ids(self, tokens: Sequence[Token], in_file: str, target_file: str, typ: str, file_changed: bool
-                     ) -> list[XrefTarget | tuple[str, str, Token, str, bool]]:
+                     , into_file_contexte: bool) -> list[XrefTarget | tuple[str, str, Token, str, bool]]:
         result: list[XrefTarget | tuple[str, str, Token, str, bool]] = []
         # collect all IDs and their xref substitutions. headings are deferred until everything
         # has been parsed so we can resolve links in headings. if that's even used anywhere.
@@ -701,7 +704,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
                 for si, (sub, _path) in enumerate(bt.meta['included']):
                     if into:
                         sub_file = into
-                    elif self._html_params.split_pages:
+                    elif self._html_params.split_pages and not into_file_contexte:
                         if Path(_path).is_relative_to(Path(in_file).parent):
                             sub_file = Path(_path).relative_to(Path(in_file).parent).with_suffix(".html").as_posix()
                         else:
@@ -709,7 +712,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
                     else:
                         sub_file = target_file
 
-                    result += self._collect_ids(sub, in_file, sub_file, subtyp, si == 0 and sub_file != target_file)
+                    result += self._collect_ids(sub, in_file, sub_file, subtyp, si == 0 and sub_file != target_file, into or False)
 
             elif bt.type == 'example_open' and (id := cast(str, bt.attrs.get('id', ''))):
                 result.append((id, 'example', tokens[i + 2], target_file, False))
@@ -721,7 +724,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
                 result.append(XrefTarget(id, "???", None, None, target_file))
             elif bt.type == 'inline':
                 assert bt.children is not None
-                result += self._collect_ids(bt.children, in_file, target_file, typ, False)
+                result += self._collect_ids(bt.children, in_file, target_file, typ, False, into_file_contexte)
             elif id := cast(str, bt.attrs.get('id', '')):
                 # anchors and examples have no titles we could use, but we'll have to put
                 # *something* here to communicate that there's no title.
@@ -761,7 +764,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
     def _postprocess(self, infile: Path, outfile: Path, tokens: Sequence[Token]) -> None:
         self._number_block('example', "Example", tokens)
         self._number_block('figure', "Figure", tokens)
-        xref_queue = self._collect_ids(tokens, str(infile), outfile.name, 'book', True)
+        xref_queue = self._collect_ids(tokens, str(infile), outfile.name, 'book', True, False)
 
         failed = False
         deferred = []
