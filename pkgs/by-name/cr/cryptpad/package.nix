@@ -1,6 +1,7 @@
 {
   bash,
   buildNpmPackage,
+  coreutils,
   fetchFromGitHub,
   fetchpatch,
   fetchurl,
@@ -147,7 +148,7 @@ buildNpmPackage {
     # directory.
     makeWrapper "${lib.getExe nodejs}" "$out/bin/cryptpad" \
       --add-flags "$out_cryptpad/server.js" \
-      --run "for d in customize.dist lib www; do ln -sf \"$out_cryptpad/\$d\" .; done" \
+      --run "for d in customize.dist lib www; do ${coreutils}/bin/ln -sf \"$out_cryptpad/\$d\" .; done" \
       --run "if ! [ -d customize ]; then \"${lib.getExe nodejs}\" \"$out_cryptpad/scripts/build.js\"; fi"
   '';
 
