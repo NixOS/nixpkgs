@@ -6,10 +6,11 @@
 # environment varaible `CUDA_HOME` to `cudatoolkit`.
 {
   lib,
+  config,
   buildPythonPackage,
-  symlinkJoin,
   fetchFromGitHub,
   setuptools,
+  cudaPackages,
   cmake,
   ninja,
   numpy,
@@ -19,11 +20,6 @@
 let
   pname = "flashinfer";
   version = "0.2.5";
-
-  inherit (torch) cudaPackages;
-  inherit (cudaPackages) cudaMajorMinorVersion;
-
-  cudaMajorMinorVersionString = lib.replaceStrings [ "." ] [ "" ] cudaMajorMinorVersion;
 
   src_cutlass = fetchFromGitHub {
     owner = "NVIDIA";
@@ -49,7 +45,7 @@ buildPythonPackage {
   nativeBuildInputs = [
     cmake
     ninja
-    cudaPackages.cudatoolkit
+    (lib.getBin cudaPackages.cuda_nvcc)
   ];
   dontUseCmakeConfigure = true;
 
@@ -76,7 +72,6 @@ buildPythonPackage {
     export TORCH_NVCC_FLAGS="--maxrregcount=64"
   '';
 
-  CUDA_HOME = "${cudaPackages.cudatoolkit}";
   TORCH_CUDA_ARCH_LIST = lib.concatStringsSep ";" torch.cudaCapabilities;
 
   dependencies = [
