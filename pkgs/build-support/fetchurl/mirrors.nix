@@ -278,32 +278,21 @@
 
   # Debian
   debian = [
-    "https://httpredir.debian.org/debian/"
-    "https://ftp.debian.org/debian/"
-    "https://mirrors.edge.kernel.org/debian/"
-    "ftp://ftp.de.debian.org/debian/"
-    "ftp://ftp.fr.debian.org/debian/"
-    "ftp://ftp.nl.debian.org/debian/"
-    "ftp://ftp.ru.debian.org/debian/"
-    "http://archive.debian.org/debian-archive/debian/"
-    "ftp://ftp.funet.fi/pub/mirrors/ftp.debian.org/debian/"
+    "https://deb.debian.org/debian/"
+    # For old releases
+    "https://archive.debian.org/debian-archive/debian/"
   ];
 
   # Ubuntu
   ubuntu = [
-    "https://nl.archive.ubuntu.com/ubuntu/"
+    "https://archive.ubuntu.com/ubuntu/"
     "https://old-releases.ubuntu.com/ubuntu/"
-    "https://mirrors.edge.kernel.org/ubuntu/"
-    "http://de.archive.ubuntu.com/ubuntu/"
-    "http://archive.ubuntu.com/ubuntu/"
   ];
 
   # ... and other OSes in general
 
   # OpenBSD
   openbsd = [
-    "https://ftp.openbsd.org/pub/OpenBSD/"
-    "ftp://ftp.nluug.nl/pub/OpenBSD/"
-    "ftp://ftp-stud.fht-esslingen.de/pub/OpenBSD/"
+    "https://cdn.openbsd.org/pub/OpenBSD/"
   ];
 }
