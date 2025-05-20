@@ -43,7 +43,11 @@ buildDotnetModule {
 
   dotnet-sdk = dotnet-sdk;
   dotnet-runtime = dotnet-runtime;
-  dotnetBuildFlags = [ "--no-self-contained" "-p:Version=${version}" "-p:AssemblyVersion=${version}" ];
+  dotnetBuildFlags = [
+    "--no-self-contained"
+    "-p:Version=${version}"
+    "-p:AssemblyVersion=${version}"
+  ];
 
   executables = [ "RdtClient.Web" ];
 
