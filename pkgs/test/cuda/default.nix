@@ -2,7 +2,10 @@
   lib,
   recurseIntoAttrs,
 
+  asciidoc,
   formats,
+  nixosOptionsDoc,
+  runCommand,
 
   cudaPackages,
 
@@ -36,6 +39,8 @@ let
       "cuda-library-samples"
       "saxpy"
     ];
+  dbEvaluation = import ../../development/cuda-modules/db { };
+  dbDocs = nixosOptionsDoc { inherit (dbEvaluation) options; };
 in
 (lib.trivial.pipe args [
   (lib.filterAttrs (name: _: lib.hasPrefix "cudaPackages" name))
@@ -49,7 +54,16 @@ in
   recurseIntoAttrs
 ])
 // {
-  db =
-    (formats.json { }).generate "cudb.json"
-      (import ../../development/cuda-modules/db { }).validConfig;
+  db = (formats.json { }).generate "cudb.json" dbEvaluation.validConfig;
+  dbDocs = dbDocs // {
+    html =
+      runCommand "cudb-options.html"
+        {
+          nativeBuildInputs = [ asciidoc ];
+          src = dbDocs.optionsAsciiDoc;
+        }
+        ''
+          asciidoc -o "$out" "$src"
+        '';
+  };
 }
