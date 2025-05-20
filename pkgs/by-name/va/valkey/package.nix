@@ -9,6 +9,7 @@
   which,
   ps,
   getconf,
+  nix-update-script,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
   # dependency ordering is broken at the moment when building with openssl
@@ -23,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valkey";
-  version = "8.0.3";
+  version = "8.1.1";
 
   src = fetchFromGitHub {
     owner = "valkey-io";
     repo = "valkey";
-    rev = finalAttrs.version;
-    hash = "sha256-IzerctJUc478dJu2AH20s/A3psiAZWDjQG3USQWqpos=";
+    tag = finalAttrs.version;
+    hash = "sha256-C0Xp2+1w2J3pHqkNIi9p+AEDjPNwkmopDfAgGNSdrNg=";
   };
 
   patches = lib.optional useSystemJemalloc ./use_system_jemalloc.patch;
@@ -86,16 +87,20 @@ stdenv.mkDerivation (finalAttrs: {
       tests/support/util.tcl
 
     # skip some more flaky tests
+    # (memefficiency requires jemalloc)
     ./runtest \
       --no-latency \
       --timeout 2000 \
       --clients $NIX_BUILD_CORES \
       --tags -leaks \
+      --skipunit unit/memefficiency \
       --skipunit integration/failover \
       --skipunit integration/aof-multi-part
 
     runHook postCheck
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://valkey.io/";
