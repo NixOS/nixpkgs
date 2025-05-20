@@ -2,6 +2,8 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  python,
+  nix-update-script,
 
   # build-system
   cython,
@@ -53,8 +55,30 @@ buildPythonPackage rec {
     "tree_sitter_language_pack.bindings"
   ];
 
-  # No tests in the pypi archive
-  doCheck = false;
+  # No tests in the pypi archive, we add a test to check that all bindings can be imported
+  checkPhase = ''
+    runHook preCheck
+
+    cat <<EOF > test-import-bindings.py
+    import sys
+    import os
+    if (cwd := os.getcwd()) in sys.path:
+      # remove current working directory from sys.path, use PYTHONPATH instead
+      sys.path.remove(cwd)
+
+    from typing import get_args
+    from tree_sitter_language_pack import SupportedLanguage, get_binding
+
+    for lang in get_args(SupportedLanguage):
+      get_binding(lang)
+    EOF
+
+    ${python.interpreter} test-import-bindings.py
+
+    runHook postCheck
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Comprehensive collection of tree-sitter languages";
