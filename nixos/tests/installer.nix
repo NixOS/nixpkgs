@@ -651,14 +651,11 @@ let
         # put global maintainers here, individuals go into makeInstallerTest fkt call
         maintainers = (meta.maintainers or [ ]);
         # non-EFI tests can only run on x86
-        platforms =
-          if isEfi then
-            platforms.linux
-          else
-            [
-              "x86_64-linux"
-              "i686-linux"
-            ];
+        platforms = mkIf (!isEfi) [
+          "x86_64-linux"
+          "x86_64-darwin"
+          "i686-linux"
+        ];
       };
       nodes =
         let

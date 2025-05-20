@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "element-call";
-  version = "0.10.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "element-call";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hKlzp6dDYRp1fM6soho84nP0phkQkaGJEGUf0MqzQGc=";
+    hash = "sha256-SNwNo3v2HydNXtb3H3Xh2mYBIagMkWjitlKWTfraeVU=";
   };
 
   matrixJsSdkRevision = "19b1b901f575755d29d1fe03ca48cbf7c1cae05c";
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-Pv9ioa6F5gNx+8oMJvvRI/LTJGJ4ALrIQFvoH++szuo=";
+    hash = "sha256-Z8gTt4W78w2DdkRhnaPLG2RIwfT64RFs5+UobARDG4c=";
   };
 
   nativeBuildInputs = [
