@@ -1,5 +1,6 @@
 {
   lib,
+  callPackage,
   buildGoModule,
   fetchFromGitHub,
   ncurses,
@@ -94,6 +95,7 @@ buildGoModule rec {
   excludedPackages = [ "tests/*" ];
 
   passthru = {
+    web = callPackage ./web.nix { };
     tests = { inherit (nixosTests) opencloud; };
     updateScript = nix-update-script { };
   };
