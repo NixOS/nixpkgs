@@ -162,7 +162,7 @@ in
         serviceConfig = {
           ExecStart = [
             ""
-            "${cfg.package}/bin/stalwart-mail --config=${configFile}"
+            "${lib.getExe cfg.package} --config=${configFile}"
           ];
           LoadCredential = lib.mapAttrsToList (key: value: "${key}:${value}") cfg.credentials;
 
