@@ -1,7 +1,7 @@
-{ cudaLib, lib }:
+{ cudaData, lib }:
 {
   # See ./cuda.nix for documentation.
-  inherit (import ./cuda.nix { inherit cudaLib lib; })
+  inherit (import ./cuda.nix { inherit cudaData lib; })
     allSortedCudaCapabilities
     cudaArchNameToCapabilities
     cudaCapabilityToInfo
@@ -28,5 +28,5 @@
     cudaPackagesPath :: Path
     ```
   */
-  cudaPackagesPath = ./..;
+  cudaPackagesPath = ./../..;
 }

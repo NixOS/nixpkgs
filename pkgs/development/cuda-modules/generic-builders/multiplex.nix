@@ -64,8 +64,7 @@ let
   # Compute versioned attribute name to be used in this package set
   # Patch version changes should not break the build, so we only use major and minor
   # computeName :: Package -> String
-  computeName =
-    { version, ... }: cudaLib.utils.mkVersionedName pname (lib.versions.majorMinor version);
+  computeName = { version, ... }: cudaLib.mkVersionedName pname (lib.versions.majorMinor version);
 
   # The newest package for each major-minor version, with newest first.
   # newestPackages :: List Package

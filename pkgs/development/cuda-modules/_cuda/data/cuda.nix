@@ -1,4 +1,4 @@
-{ cudaLib, lib }:
+{ cudaData, lib }:
 {
   /**
     All CUDA capabilities, sorted by version.
@@ -42,9 +42,7 @@
     ];
     ```
   */
-  allSortedCudaCapabilities = lib.sort lib.versionOlder (
-    lib.attrNames cudaLib.data.cudaCapabilityToInfo
-  );
+  allSortedCudaCapabilities = lib.sort lib.versionOlder (lib.attrNames cudaData.cudaCapabilityToInfo);
 
   /**
     Mapping of CUDA micro-architecture name to capabilities belonging to that micro-architecture.
@@ -56,8 +54,8 @@
     ```
   */
   cudaArchNameToCapabilities = lib.groupBy (
-    cudaCapability: cudaLib.data.cudaCapabilityToInfo.${cudaCapability}.archName
-  ) cudaLib.data.allSortedCudaCapabilities;
+    cudaCapability: cudaData.cudaCapabilityToInfo.${cudaCapability}.archName
+  ) cudaData.allSortedCudaCapabilities;
 
   /**
     Attribute set of supported CUDA capability mapped to information about that capability.

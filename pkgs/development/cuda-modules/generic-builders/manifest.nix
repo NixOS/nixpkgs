@@ -54,9 +54,9 @@ let
   # redistSystem :: String
   # The redistSystem is the name of the system for which the redistributable is built.
   # It is `"unsupported"` if the redistributable is not supported on the target system.
-  redistSystem = cudaLib.utils.getRedistSystem backendStdenv.hasJetsonCudaCapability hostPlatform.system;
+  redistSystem = cudaLib.getRedistSystem backendStdenv.hasJetsonCudaCapability hostPlatform.system;
 
-  sourceMatchesHost = lib.elem hostPlatform.system (cudaLib.utils.getNixSystems redistSystem);
+  sourceMatchesHost = lib.elem hostPlatform.system (cudaLib.getNixSystems redistSystem);
 in
 (backendStdenv.mkDerivation (finalAttrs: {
   # NOTE: Even though there's no actual buildPhase going on here, the derivations of the
@@ -327,7 +327,7 @@ in
     broken = lists.any trivial.id (attrsets.attrValues finalAttrs.brokenConditions);
     platforms = trivial.pipe supportedRedistSystems [
       # Map each redist system to the equivalent nix systems.
-      (lib.concatMap cudaLib.utils.getNixSystems)
+      (lib.concatMap cudaLib.getNixSystems)
       # Take all the unique values.
       lib.unique
       # Sort the list.

@@ -103,7 +103,7 @@ finalAttrs: prevAttrs: {
     # unless it is not available, in which case the default cudnn derivation will be used.
     cudnn =
       let
-        desiredName = cudaLib.utils.mkVersionedName "cudnn" (
+        desiredName = cudaLib.mkVersionedName "cudnn" (
           lib.versions.majorMinor finalAttrs.passthru.featureRelease.cudnnVersion
         );
       in

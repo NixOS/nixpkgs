@@ -1,4 +1,8 @@
-{ cudaLib, lib }:
+{
+  cudaData,
+  cudaLib,
+  lib,
+}:
 {
   # See ./assertions.nix for documentation.
   inherit (import ./assertions.nix { inherit cudaLib lib; })
@@ -22,7 +26,7 @@
     ;
 
   # See ./redist.nix for documentation.
-  inherit (import ./redist.nix { inherit cudaLib lib; })
+  inherit (import ./redist.nix { inherit cudaData lib; })
     _redistSystemIsSupported
     getNixSystems
     getRedistSystem
