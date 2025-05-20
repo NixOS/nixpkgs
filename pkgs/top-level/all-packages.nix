@@ -14935,15 +14935,6 @@ with pkgs;
 
   cutemaze = qt6Packages.callPackage ../games/cutemaze { };
 
-  deliantra-server = callPackage ../games/deliantra/server.nix {
-    # perl538 defines 'struct object' in sv.h. many conflicts result
-    perl = perl540;
-    perlPackages = perl540Packages;
-  };
-  deliantra-arch = callPackage ../games/deliantra/arch.nix { };
-  deliantra-maps = callPackage ../games/deliantra/maps.nix { };
-  deliantra-data = callPackage ../games/deliantra/data.nix { };
-
   ddnet-server = ddnet.override { buildClient = false; };
 
   duckmarines = callPackage ../games/duckmarines { love = love_0_10; };
