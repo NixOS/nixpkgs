@@ -5708,7 +5708,6 @@ with pkgs;
 
   openjfx17 = openjfx;
   openjfx21 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "21"; };
-  openjfx23 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "23"; };
   openjfx24 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "24"; };
 
   openjdk8-bootstrap = javaPackages.compiler.openjdk8-bootstrap;
@@ -13016,7 +13015,7 @@ with pkgs;
   jabref = callPackage ../applications/office/jabref {
     jdk = jdk21.override {
       enableJavaFX = true;
-      openjfx_jdk = openjfx23;
+      openjfx_jdk = openjfx24;
     };
   };
 

@@ -1375,6 +1375,7 @@ mapAliases {
   openjfx19 = throw "OpenJFX 19 was removed as it has reached its end of life"; # Added 2024-08-01
   openjfx20 = throw "OpenJFX 20 was removed as it has reached its end of life"; # Added 2024-08-01
   openjfx22 = throw "OpenJFX 22 was removed as it has reached its end of life"; # Added 2024-09-24
+  openjfx23 = throw "OpenJFX 23 was removed as it has reached its end of life"; # Added 2025-05-20
   openjpeg_2 = throw "'openjpeg_2' has been renamed to/replaced by 'openjpeg'"; # Converted to throw 2024-10-17
   openlens = throw "Lens Closed its source code, package obsolete/stale - consider lens as replacement"; # Added 2024-09-04
   openlp = throw "openlp has been removed for now because the outdated version depended on insecure and removed packages and it needs help to upgrade and maintain it; see https://github.com/NixOS/nixpkgs/pull/314882"; # Added 2024-07-29

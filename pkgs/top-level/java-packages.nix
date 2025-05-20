@@ -3,7 +3,7 @@
 with pkgs;
 
 {
-  inherit (pkgs) openjfx17 openjfx21 openjfx23;
+  inherit (pkgs) openjfx17 openjfx21 openjfx24;
 
   compiler =
     let

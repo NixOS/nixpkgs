@@ -58,13 +58,11 @@
   enableJavaFX ? false,
   openjfx17,
   openjfx21,
-  openjfx23,
   openjfx24,
   openjfx_jdk ?
     {
       "17" = openjfx17;
       "21" = openjfx21;
-      "23" = openjfx23;
       "24" = openjfx24;
     }
     .${featureVersion} or (throw "JavaFX is not supported on OpenJDK ${featureVersion}"),
