@@ -10,9 +10,8 @@
   unibilium,
   utf8proc,
   tree-sitter,
-  fetchurl,
   buildPackages,
-  treesitter-parsers ? import ./treesitter-parsers.nix { inherit fetchurl; },
+  treesitter-parsers ? import ./treesitter-parsers.nix { inherit fetchFromGitHub; },
   fixDarwinDylibNames,
   glibcLocales ? null,
   procps ? null,
@@ -115,20 +114,7 @@ stdenv.mkDerivation (
 
     dontFixCmake = true;
 
-    inherit lua;
-    treesitter-parsers =
-      treesitter-parsers
-      // {
-        markdown = treesitter-parsers.markdown // {
-          location = "tree-sitter-markdown";
-        };
-      }
-      // {
-        markdown_inline = treesitter-parsers.markdown // {
-          language = "markdown_inline";
-          location = "tree-sitter-markdown-inline";
-        };
-      };
+    inherit lua treesitter-parsers;
 
     buildInputs =
       [
@@ -224,8 +210,8 @@ stdenv.mkDerivation (
                 inherit (grammar) src;
                 version = "neovim-${finalAttrs.version}";
                 language = grammar.language or language;
-                location = grammar.location or null;
               }
+              // lib.optionalAttrs (grammar ? location) { inherit (grammar) location; }
             }/parser \
             $out/lib/nvim/parser/${language}.so
         '') finalAttrs.treesitter-parsers

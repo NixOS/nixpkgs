@@ -55,7 +55,10 @@ let
     directory containing the src/ folder, which contains the actual generated
     parser.
   */
-  location = grammar.path or ".";
+  # FIXME: neovim and nvim-treesitter currently rely on passing location rather
+  # than a src attribute with a correctly positioned root (e.g. for grammars in
+  # monorepos). Use this if present for now.
+  location = args.location or grammar.path or ".";
 in
 stdenv.mkDerivation (
   {
