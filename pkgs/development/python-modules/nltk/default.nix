@@ -41,6 +41,7 @@ buildPythonPackage rec {
 
   passthru = {
     data = pkgs.nltk-data;
+    dataDir = pkgs.callPackage ./data-dir.nix { };
   };
 
   meta = with lib; {
