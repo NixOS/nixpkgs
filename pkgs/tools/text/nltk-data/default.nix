@@ -61,7 +61,7 @@ lib.makeScope newScope (self: {
     location = "tokenizers";
     hash = "sha256-OzMkruoYbFKqzuimOXIpE5lhHz8tmSqOFoLT+fjdTVg=";
   };
-  punkt_tab = makeNltkDataPackage {
+  punkt-tab = makeNltkDataPackage {
     pname = "punkt_tab";
     location = "tokenizers";
     hash = "sha256-OzMkruoYbFKqzuimOXIpE5lhHz8tmSqOFoLT+fjdTVg=";
