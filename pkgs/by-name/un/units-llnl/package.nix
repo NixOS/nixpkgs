@@ -9,7 +9,7 @@
   # namespace. Allowing it
   namespace ? "llnl::units",
   # This is also the baseType needed by scipp
-  baseType ? "uint64_t"
+  baseType ? "uint64_t",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
