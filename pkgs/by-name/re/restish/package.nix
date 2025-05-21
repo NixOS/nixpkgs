@@ -3,19 +3,19 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  restish,
   testers,
   xorg,
+  writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "restish";
   version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "danielgtaylor";
     repo = "restish";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-a0ObgFgWEsLYjGmCCi/py2PADAWJ0By+AZ4wh+Yeam4=";
   };
 
@@ -32,23 +32,25 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
-  passthru.tests.version = testers.testVersion {
-    package = restish;
-  };
+  passthru.tests.version =
+    (testers.testVersion {
+      package = finalAttrs.finalPackage;
+    }).overrideAttrs
+      (old: {
+        nativeBuildInputs = old.nativeBuildInputs ++ [ writableTmpDirAsHomeHook ];
+      });
 
   meta = with lib; {
     description = "CLI tool for interacting with REST-ish HTTP APIs";
     homepage = "https://rest.sh/";
-    changelog = "https://github.com/danielgtaylor/restish/releases/tag/v${version}";
+    changelog = "https://github.com/danielgtaylor/restish/releases/tag/v${finalAttrs.version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     mainProgram = "restish";
   };
-}
+})
