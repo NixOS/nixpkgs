@@ -5,6 +5,9 @@
   pkg-config,
   pcre,
   hyperscan,
+  testers,
+  runCommand,
+  wordfence-cli,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -44,6 +47,36 @@ python3Packages.buildPythonApplication rec {
 
   format = "pyproject";
   doCheck = false;
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = wordfence-cli;
+      command = "wordfence --version";
+      version = "Wordfence CLI ${version}";
+    };
+
+    pcreSupported =
+      runCommand "wordfence-cli-pcre-supported"
+        {
+          nativeBuildInputs = [ wordfence-cli ];
+        }
+        ''
+          out=$(wordfence --version)
+          echo "$out" | grep -F "PCRE Supported: Yes"
+          touch $out
+        '';
+
+    vectorscanSupported =
+      runCommand "wordfence-cli-vectorscan-supported"
+        {
+          nativeBuildInputs = [ wordfence-cli ];
+        }
+        ''
+          out=$(wordfence --version)
+          echo "$out" | grep -F "Vectorscan Supported: Yes"
+          touch $out
+        '';
+  };
 
   meta = with lib; {
     description = "Wordfence malware and vulnerability scanner command line utility";
