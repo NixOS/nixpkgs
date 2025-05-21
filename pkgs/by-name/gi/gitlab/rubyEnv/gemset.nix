@@ -1732,17 +1732,6 @@ src: {
     };
     version = "0.6.5";
   };
-  discordrb-webhooks = {
-    dependencies = [ "rest-client" ];
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "1c933kq48sqja1a2fc4ki9w8x5ajl6lp67hslka5k05hwfyaiysj";
-      type = "gem";
-    };
-    version = "3.5.0";
-  };
   docile = {
     groups = [
       "coverage"
