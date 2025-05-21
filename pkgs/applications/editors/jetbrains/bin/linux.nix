@@ -117,33 +117,43 @@ lib.makeOverridable mkDerivation (
       jdk=${jdk.home}
       item=${desktopItem}
 
-      launcher="$out/$pname/bin/${loName}"
-      if [ -e "$launcher" ]; then
-        rm "$launcher".sh # We do not wrap the old script-style launcher anymore.
-      else
-        launcher+=.sh
+      needsWrapping=()
+
+      if [ -f "$out/$pname/bin/${loName}" ]; then
+        needsWrapping+=("$out/$pname/bin/${loName}")
+      fi
+      if [ -f "$out/$pname/bin/${loName}.sh" ]; then
+        needsWrapping+=("$out/$pname/bin/${loName}.sh")
       fi
 
-      wrapProgram  "$launcher" \
-        --prefix PATH : "${
-          lib.makeBinPath [
-            jdk
-            coreutils
-            gnugrep
-            which
-            git
-          ]
-        }" \
-        --suffix PATH : "${lib.makeBinPath [ python3 ]}" \
-        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath extraLdPath}" \
-        ${lib.concatStringsSep " " extraWrapperArgs} \
-        --set-default JDK_HOME "$jdk" \
-        --set-default ANDROID_JAVA_HOME "$jdk" \
-        --set-default JAVA_HOME "$jdk" \
-        --set-default JETBRAINS_CLIENT_JDK "$jdk" \
-        --set-default ${hiName}_JDK "$jdk" \
-        --set-default LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive" \
-        --set-default ${vmoptsIDE}_VM_OPTIONS ${vmoptsFile}
+      for launcher in "''${needsWrapping[@]}"
+      do
+        wrapProgram  "$launcher" \
+          --prefix PATH : "${
+            lib.makeBinPath [
+              jdk
+              coreutils
+              gnugrep
+              which
+              git
+            ]
+          }" \
+          --suffix PATH : "${lib.makeBinPath [ python3 ]}" \
+          --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath extraLdPath}" \
+          ${lib.concatStringsSep " " extraWrapperArgs} \
+          --set-default JDK_HOME "$jdk" \
+          --set-default ANDROID_JAVA_HOME "$jdk" \
+          --set-default JAVA_HOME "$jdk" \
+          --set-default JETBRAINS_CLIENT_JDK "$jdk" \
+          --set-default ${hiName}_JDK "$jdk" \
+          --set-default LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive" \
+          --set-default ${vmoptsIDE}_VM_OPTIONS ${vmoptsFile}
+      done
+
+      launcher="$out/$pname/bin/${loName}"
+      if [ ! -e "$launcher" ]; then
+        launcher+=.sh
+      fi
 
       ln -s "$launcher" $out/bin/$pname
       rm -rf $out/$pname/plugins/remote-dev-server/selfcontained/
