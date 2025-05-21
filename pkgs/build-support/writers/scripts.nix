@@ -930,7 +930,7 @@ rec {
             if libraries == [ ] then
               python.interpreter
             else if (lib.isFunction libraries) then
-              (python.withPackages (ps: libraries ps)).interpreter
+              (python.withPackages libraries).interpreter
             else
               (python.withPackages (ps: libraries)).interpreter
           else
