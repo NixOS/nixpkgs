@@ -314,7 +314,7 @@ python.pkgs.buildPythonApplication rec {
       ;
     nltkData = with nltk-data; [
       punkt-tab
-      snowball_data
+      snowball-data
       stopwords
     ];
     tests = { inherit (nixosTests) paperless; };
