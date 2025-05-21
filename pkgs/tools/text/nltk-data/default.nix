@@ -10,6 +10,7 @@ let
     version = "0-unstable-2024-07-29";
     nativeBuildInputs = [ unzip ];
     dontBuild = true;
+    dontFixup = true;
     meta = with lib; {
       description = "NLTK Data";
       homepage = "https://github.com/nltk/nltk_data";
