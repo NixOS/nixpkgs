@@ -39,7 +39,10 @@
   ibusSupport ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isDarwin,
   jackSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   libdecorSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
-  openglSupport ? lib.meta.availableOn stdenv.hostPlatform libGL,
+  openglSupport ?
+    lib.meta.availableOn stdenv.hostPlatform libGL
+    # libGL is null on Darwin because we use system version
+    || stdenv.hostPlatform.isDarwin,
   pipewireSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   pulseaudioSupport ?
     config.pulseaudio or stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
