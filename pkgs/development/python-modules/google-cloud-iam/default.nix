@@ -1,17 +1,17 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   google-api-core,
   google-auth,
   grpc-google-iam-v1,
   libcst,
   mock,
+  nix-update-script,
   proto-plus,
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -20,13 +20,14 @@ buildPythonPackage rec {
   version = "2.18.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    pname = "google_cloud_iam";
-    inherit version;
-    hash = "sha256-JlStzDhOHRigXFxO5V+MWxZcsjt0ECzNS8JV1ITFCnk=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "google-cloud-python";
+    tag = "google-cloud-iam-v${version}";
+    sha256 = "";
   };
+
+  sourceRoot = "${src.name}/packages/google-cloud-iam";
 
   build-system = [ setuptools ];
 
@@ -55,11 +56,22 @@ buildPythonPackage rec {
     "google.cloud.iam_credentials_v1"
   ];
 
-  meta = with lib; {
+    passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "google-cloud-iam-v([0-9.]+)"
+    ];
+  };
+
+
+  meta = {
     description = "IAM Service Account Credentials API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-iam";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-iam-v${version}/packages/google-cloud-iam/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ austinbutler ];
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/${src.tag}/packages/google-cloud-iam/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      austinbutler
+      sarahec
+    ];
   };
 }
