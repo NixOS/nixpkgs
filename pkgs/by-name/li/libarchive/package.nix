@@ -11,7 +11,6 @@
   lzo,
   openssl,
   pkg-config,
-  sharutils,
   xz,
   zlib,
   zstd,
@@ -33,30 +32,14 @@
 assert xarSupport -> libxml2 != null;
 stdenv.mkDerivation (finalAttrs: {
   pname = "libarchive";
-  version = "3.7.8";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "libarchive";
     repo = "libarchive";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-fjE3b9rDHf1Xubpm9guvX6I8a2loYsGHj3epLceueUw=";
+    hash = "sha256-nL2p2h+U25fhQQjbj16yhxhU8xEEuhNynIx7SNzl6Mo=";
   };
-
-  patches = [
-    # The `.pc` file lists `iconv` in `Requires.private` when `-liconv`
-    # is required, even though common platforms in that situation like
-    # Darwin don’t ship a `.pc` file for their `libiconv`. This isn’t
-    # upstreamed as there are a handful of closed or regressed PRs
-    # trying to fix it already and it seems upstream added this to deal
-    # with some non‐portable MSYS2 thing or something.
-    #
-    # See:
-    #
-    # * <https://github.com/libarchive/libarchive/issues/1766>
-    # * <https://github.com/libarchive/libarchive/issues/1819>
-    # * <https://github.com/Homebrew/homebrew-core/blob/f8e9e8d4f30979dc99146b5877fce76be6d35124/Formula/lib/libarchive.rb#L48-L52>
-    ./fix-pkg-config-iconv.patch
-  ];
 
   outputs = [
     "out"
@@ -109,7 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
       zlib
       zstd
     ]
-    ++ lib.optional stdenv.hostPlatform.isUnix sharutils
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       acl
       attr
