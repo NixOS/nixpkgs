@@ -461,6 +461,8 @@ let
               return ${toString vhost.redirectCode} https://$host$request_uri;
             }
             ${acmeLocation}
+
+            ${vhost.extraConfigForceSSL}
           }
         ''}
 
