@@ -244,6 +244,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (noSanitizers && lib.versionAtLeast release_version "19") [
     (lib.cmakeBool "COMPILER_RT_BUILD_CTX_PROFILE" false)
   ]
+  ++
+    lib.optional (useLLVM && stdenv.hostPlatform.isAarch64)
+      # Fixes https://github.com/NixOS/nixpkgs/issues/393603
+      (lib.cmakeBool "COMPILER_RT_DISABLE_AARCH64_FMV" false)
   ++ devExtraCmakeFlags;
 
   outputs = [
