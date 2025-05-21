@@ -4803,6 +4803,8 @@ self: super: with self; {
 
   fastapi-mail = callPackage ../development/python-modules/fastapi-mail { };
 
+  fastapi-mcp = callPackage ../development/python-modules/fastapi-mcp { };
+
   fastapi-sso = callPackage ../development/python-modules/fastapi-sso { };
 
   fastavro = callPackage ../development/python-modules/fastavro { };
