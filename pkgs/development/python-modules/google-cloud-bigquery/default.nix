@@ -1,12 +1,13 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   setuptools,
 
   # dependencies
+  bigquery-magics,
   google-api-core,
   google-cloud-bigquery-storage,
   google-cloud-core,
@@ -40,15 +41,17 @@ buildPythonPackage rec {
   version = "3.31.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "google_cloud_bigquery";
-    inherit version;
-    hash = "sha256-uJ3HFtvkq9t6T4c/cFAQAoe8mFFOBhTF1UzWqOn7CZE=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "python-bigquery";
+    rev = "v${version}";
+    sha256 = "sha256-LvfL4U/7bP4XZD2Ebhw57pa9NPr/vOKn874WXZFSW14=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
+    bigquery-magics
     google-api-core
     google-cloud-bigquery-storage
     google-cloud-core
@@ -147,6 +150,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-bigquery";
     changelog = "https://github.com/googleapis/python-bigquery/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.sarahec ];
   };
 }
