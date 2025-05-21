@@ -18,23 +18,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "gitoxide";
-  version = "0.42.0";
+  version = "0.44.0";
 
   src = fetchFromGitHub {
     owner = "GitoxideLabs";
     repo = "gitoxide";
-    rev = "v${version}";
-    hash = "sha256-hrCWt4cCnlH3NKH5Uugf/rvVN+YpbeZgZ/lhnQGZ2I0=";
+    tag = "v${version}";
+    hash = "sha256-TZK4H0PRxsjzDhW05bXD7GkP2JHrBb1tu/oid6GkAWs=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-q35MQGN/tvsK7gg0a/ljoVY6wedy7rwKlSakONgBIgk=";
-
-  patches = [
-    # TODO: remove after next update
-    # https://github.com/GitoxideLabs/gitoxide/pull/1929
-    ./fix-cargo-dependencies.patch
-  ];
+  cargoHash = "sha256-5kd9drLnejphmJ6KQ1jSmerIt+rRB4/rFKxhuedkpRk=";
 
   nativeBuildInputs = [
     cmake
@@ -62,7 +56,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Command-line application for interacting with git repositories";
     homepage = "https://github.com/GitoxideLabs/gitoxide";
-    changelog = "https://github.com/GitoxideLabs/gitoxide/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/GitoxideLabs/gitoxide/blob/${src.tag}/CHANGELOG.md";
     license = with licenses; [
       mit # or
       asl20
