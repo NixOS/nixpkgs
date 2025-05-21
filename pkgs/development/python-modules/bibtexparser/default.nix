@@ -2,26 +2,26 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pyparsing,
+  setuptools,
+  pylatexenc,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "bibtexparser";
-  version = "1.4.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.0.0b8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sciunto-org";
     repo = "python-${pname}";
     tag = "v${version}";
-    hash = "sha256-9m+7RbeJMJssviyIezPrSLMMGcQTHYaOFQwLhnu04Es=";
+    hash = "sha256-531Mh/5DUYayXm1H0v4dPX0P9mRcqcQcU/A+f4wwqxg=";
   };
 
-  propagatedBuildInputs = [ pyparsing ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pylatexenc ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
