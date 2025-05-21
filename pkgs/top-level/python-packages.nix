@@ -11953,6 +11953,8 @@ self: super: with self; {
 
   pulumi-random = pkgs.pulumiPackages.pulumi-random.sdks.python;
 
+  punpy = callPackage ../development/python-modules/punpy { };
+
   pure-cdb = callPackage ../development/python-modules/pure-cdb { };
 
   pure-eval = callPackage ../development/python-modules/pure-eval { };
