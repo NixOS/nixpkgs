@@ -6,7 +6,7 @@
   dotnetCorePackages,
   sqlite,
   withFFmpeg ? true, # replace bundled ffprobe binary with symlink to ffmpeg package.
-  ffmpeg,
+  servarr-ffmpeg,
   fetchYarnDeps,
   yarn,
   fixup-yarn-lock,
@@ -72,7 +72,7 @@ buildDotnetModule {
     hash = "sha256-YkBFvv+g4p22HdM/GQAHVGGW1yLYGWpNtRq7+QJiLIw=";
   };
 
-  ffprobe = lib.optionalDrvAttr withFFmpeg (lib.getExe' ffmpeg "ffprobe");
+  ffprobe = lib.optionalDrvAttr withFFmpeg (lib.getExe' servarr-ffmpeg "ffprobe");
 
   postConfigure = ''
     yarn config --offline set yarn-offline-mirror "$yarnOfflineCache"
