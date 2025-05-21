@@ -15829,6 +15829,8 @@ self: super: with self; {
 
   scim2-tester = callPackage ../development/python-modules/scim2-tester { };
 
+  scipp = callPackage ../development/python-modules/scipp { };
+
   scipy = callPackage ../development/python-modules/scipy { };
 
   scmrepo = callPackage ../development/python-modules/scmrepo { };
