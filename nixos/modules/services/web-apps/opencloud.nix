@@ -80,6 +80,18 @@ in
           The possible config options are currently not well documented, see source code:
           https://github.com/opencloud-eu/opencloud/blob/main/pkg/config/config.go
         '';
+
+        example = {
+          proxy = {
+            auto_provision_accounts = true;
+            oidc.rewrite_well_known = true;
+            role_assignment = {
+              driver = "oidc";
+              oidc_role_mapper.role_claim = "opencloud_roles";
+            };
+          };
+          web.web.config.oidc.scope = "openid profile email opencloud_roles";
+        };
       };
 
       environmentFile = lib.mkOption {
@@ -104,6 +116,8 @@ in
           Extra environment variables to set for the service.
 
           Use this to set configuration that may affect multiple microservices.
+
+          Set `OC_INSECURE = "false"` if you want OpenCloud to terminate TLS.
 
           Configuration provided here will override `settings`.
         '';
