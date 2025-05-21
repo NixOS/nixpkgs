@@ -149,15 +149,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
-    "celery"
     "django-allauth"
-    "django-extensions"
-    "drf-spectacular-sidecar"
-    "filelock"
-    "python-dotenv"
-    "rapidfuzz"
-    # TODO: https://github.com/NixOS/nixpkgs/pull/373099
-    "zxing-cpp"
   ];
 
   dependencies =
