@@ -220,10 +220,13 @@ in
     };
 
     nginx = lib.mkOption {
-      type = lib.types.submodule (
-        lib.recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) { }
+      type = lib.types.nullOr (
+        lib.types.submodule (
+          lib.recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {
+          }
+        )
       );
-      default = null;
+      default = { };
       example = ''
         {
           serverAliases = [
@@ -235,7 +238,7 @@ in
         }
       '';
       description = ''
-        With this option, you can customize the nginx virtualHost settings.
+        Use this option to customize an nginx virtual host. To disable the nginx set this to null.
       '';
     };
 
@@ -308,18 +311,16 @@ in
           message = "One of services.davis.database.urlFile or services.davis.database.createLocally must be set.";
         }
         {
-          assertion = (mail.dsn != null) != (mail.dsnFile != null);
-          message = "One of (and only one of) services.davis.mail.dsn or services.davis.mail.dsnFile must be set.";
+          assertion = !(mail.dsn != null && mail.dsnFile != null);
+          message = "services.davis.mail.dsn and services.davis.mail.dsnFile cannot both be set.";
         }
       ];
       services.davis.config =
         {
           APP_ENV = "prod";
           APP_CACHE_DIR = "${cfg.dataDir}/var/cache";
-          # note: we do not need the log dir (we log to stdout/journald), by davis/symfony will try to create it, and the default value is one in the nix-store
-          #       so we set it to a path under dataDir to avoid something like: Unable to create the "logs" directory (/nix/store/5cfskz0ybbx37s1161gjn5klwb5si1zg-davis-4.4.1/var/log).
           APP_LOG_DIR = "${cfg.dataDir}/var/log";
-          LOG_FILE_PATH = "/dev/stdout";
+          LOG_FILE_PATH = "%kernel.logs_dir%/%kernel.environment%.log";
           DATABASE_DRIVER = db.driver;
           INVITE_FROM_ADDRESS = mail.inviteFromAddress;
           APP_SECRET._secret = cfg.appSecretFile;
@@ -330,7 +331,14 @@ in
           CALDAV_ENABLED = true;
           CARDDAV_ENABLED = true;
         }
-        // (if mail.dsn != null then { MAILER_DSN = mail.dsn; } else { MAILER_DSN._secret = mail.dsnFile; })
+        // (
+          if mail.dsn != null then
+            { MAILER_DSN = mail.dsn; }
+          else if mail.dsnFile != null then
+            { MAILER_DSN._secret = mail.dsnFile; }
+          else
+            { }
+        )
         // (
           if db.createLocally then
             {
@@ -381,6 +389,7 @@ in
           APP_CACHE_DIR = "${cfg.dataDir}/var/cache";
           APP_LOG_DIR = "${cfg.dataDir}/var/log";
         };
+        phpPackage = lib.mkDefault cfg.package.passthru.php;
         settings =
           {
             "listen.mode" = "0660";
