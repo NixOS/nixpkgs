@@ -87,8 +87,8 @@ let
   cutlass = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
-    tag = "v3.8.0";
-    hash = "sha256-oIzlbKRdOh6gp6nRZ8udLSqleBFoFtgM7liCBlHZLOk=";
+    tag = "v3.9.2";
+    hash = "sha256-teziPNA9csYvhkG5t2ht8W8x5+1YGGbHm8VKx4JoxgI=";
   };
 
   flashmla = stdenv.mkDerivation {
@@ -109,6 +109,7 @@ let
 
     # flashmla normally relies on `git submodule update` to fetch cutlass
     buildPhase = ''
+      ls -al
       rm -rf csrc/cutlass
       ln -sf ${cutlass} csrc/cutlass
     '';
@@ -128,8 +129,8 @@ let
     src = fetchFromGitHub {
       owner = "vllm-project";
       repo = "flash-attention";
-      rev = "dc9d410b3e2d6534a4c70724c2515f4def670a22";
-      hash = "sha256-ZQ0bOBIb+8IMmya8dmimKQ17KTBplX81IirdnBJpX5M=";
+      rev = "8798f27777fb57f447070301bf33a9f9c607f491";
+      hash = "sha256-teziPNA9csYvhkG5t2ht8W8x5+1YGGbHm8VKx4JoxgI=";
     };
 
     dontConfigure = true;
@@ -147,7 +148,7 @@ let
 
   cpuSupport = !cudaSupport && !rocmSupport;
 
-  # https://github.com/pytorch/pytorch/blob/v2.6.0/torch/utils/cpp_extension.py#L2046-L2048
+  # https://github.com/pytorch/pytorch/blob/v2.7.0/torch/utils/cpp_extension.py#L2343-L2345
   supportedTorchCudaCapabilities =
     let
       real = [
@@ -169,6 +170,11 @@ let
         "9.0"
         "9.0a"
         "10.0"
+        "10.0a"
+        "10.1"
+        "10.1a"
+        "12.0"
+        "12.0a"
       ];
       ptx = lists.map (x: "${x}+PTX") real;
     in
@@ -228,16 +234,16 @@ in
 
 buildPythonPackage rec {
   pname = "vllm";
-  version = "0.8.3";
+  version = "0.9.0";
   pyproject = true;
 
   stdenv = torch.stdenv;
 
   src = fetchFromGitHub {
     owner = "vllm-project";
-    repo = pname;
+    repo = "vllm";
     tag = "v${version}";
-    hash = "sha256-LiEBkVwJTT4WoCTk9pI0ykTjmv1pDMzksmFwVktoxMY=";
+    hash = "sha256-uavJFv3B/k3ZGSTId680eR7fjoXxwPWs1uvACYahFxk=";
   };
 
   patches = [
@@ -417,12 +423,12 @@ buildPythonPackage rec {
   # updates the cutlass fetcher instead
   passthru.skipBulkUpdate = true;
 
-  meta = with lib; {
+  meta = {
     description = "High-throughput and memory-efficient inference and serving engine for LLMs";
     changelog = "https://github.com/vllm-project/vllm/releases/tag/v${version}";
     homepage = "https://github.com/vllm-project/vllm";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       happysalada
       lach
     ];
