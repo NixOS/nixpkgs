@@ -15539,6 +15539,8 @@ self: super: with self; {
 
   schedule = callPackage ../development/python-modules/schedule { };
 
+  scheduler = callPackage ../development/python-modules/scheduler { };
+
   schema = callPackage ../development/python-modules/schema { };
 
   schema-salad = callPackage ../development/python-modules/schema-salad { };
@@ -16567,6 +16569,8 @@ self: super: with self; {
   sqlalchemy = callPackage ../development/python-modules/sqlalchemy { };
 
   sqlalchemy-citext = callPackage ../development/python-modules/sqlalchemy-citext { };
+
+  sqlalchemy-cockroachdb = callPackage ../development/python-modules/sqlalchemy-cockroachdb { };
 
   sqlalchemy-continuum = callPackage ../development/python-modules/sqlalchemy-continuum { };
 
