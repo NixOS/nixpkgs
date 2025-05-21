@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   aiohttp,
   aioitertools,
   botocore,
@@ -26,8 +25,6 @@ buildPythonPackage rec {
   pname = "aiobotocore";
   version = "2.22.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
@@ -93,7 +90,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python client for amazon services";
     homepage = "https://github.com/aio-libs/aiobotocore";
-    changelog = "https://github.com/aio-libs/aiobotocore/releases/tag/${src.tag}";
+    changelog = "https://github.com/aio-libs/aiobotocore/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ teh ];
   };
