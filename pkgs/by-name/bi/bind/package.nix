@@ -136,13 +136,16 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests = {
-      withCheck = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
-      inherit (nixosTests) bind;
-      prometheus-exporter = nixosTests.prometheus-exporters.bind;
-      kubernetes-dns-single-node = nixosTests.kubernetes.dns-single-node;
-      kubernetes-dns-multi-node = nixosTests.kubernetes.dns-multi-node;
-    };
+    tests =
+      {
+        withCheck = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
+        inherit (nixosTests) bind;
+        prometheus-exporter = nixosTests.prometheus-exporters.bind;
+      }
+      // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
+        kubernetes-dns-single-node = nixosTests.kubernetes.dns-single-node;
+        kubernetes-dns-multi-node = nixosTests.kubernetes.dns-multi-node;
+      };
 
     updateScript = gitUpdater {
       # No nicer place to find latest stable release.
