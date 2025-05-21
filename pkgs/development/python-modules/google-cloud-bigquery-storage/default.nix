@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery-storage";
-  version = "2.30.0";
+  version = "2.31.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-bigquery-storage";
     tag = "v${version}";
-    hash = "sha256-Wu2+6i4D3pye+pYjOVnNRBJcOd11GyHjJmiXWaT8zjw=";
+    hash = "sha256-l4q8L8c4LCGacvaY1znNWEHYS1LYg6CcY/9NJoFTOCU=";
   };
 
   build-system = [ setuptools ];
@@ -60,8 +60,7 @@ buildPythonPackage rec {
   meta = {
     description = "BigQuery Storage API API client library";
     homepage = "https://github.com/googleapis/python-bigquery-storage";
-    changelog = "https://github.com/googleapis/python-bigquery-storage/blob/v${version}/CHANGELOG.md";
-
+    changelog = "https://github.com/googleapis/python-bigquery-storage/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sarahec ];
     mainProgram = "fixup_bigquery_storage_v1_keywords.py";
