@@ -43,6 +43,6 @@ buildPythonPackage rec {
     mainProgram = "nltk";
     homepage = "http://nltk.org/";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.bengsparks ];
   };
 }
