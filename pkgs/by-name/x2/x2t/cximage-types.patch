@@ -1,0 +1,76 @@
+diff --git a/DesktopEditor/cximage/jasper/jpc/jpc_qmfb.c b/DesktopEditor/cximage/jasper/jpc/jpc_qmfb.c
+index 00d406d948..afe7283373 100644
+--- a/DesktopEditor/cximage/jasper/jpc/jpc_qmfb.c
++++ b/DesktopEditor/cximage/jasper/jpc/jpc_qmfb.c
+@@ -83,6 +83,7 @@
+ #include "jasper/jas_malloc.h"
+ #include "jasper/jas_math.h"
+ 
++#include "jpc_fix.h"
+ #include "jpc_qmfb.h"
+ #include "jpc_tsfb.h"
+ #include "jpc_math.h"
+@@ -96,7 +97,7 @@
+ 
+ int jpc_ft_analyze(jpc_fix_t *a, int xstart, int ystart, int width, int height,
+   int stride);
+-int jpc_ft_synthesize(int *a, int xstart, int ystart, int width, int height,
++int jpc_ft_synthesize(jpc_fix_t *a, int xstart, int ystart, int width, int height,
+   int stride);
+ 
+ int jpc_ns_analyze(jpc_fix_t *a, int xstart, int ystart, int width, int height,
+@@ -1592,7 +1593,7 @@ int jpc_ft_analyze(jpc_fix_t *a, int xstart, int ystart, int width, int height,
+ 
+ }
+ 
+-int jpc_ft_synthesize(int *a, int xstart, int ystart, int width, int height,
++int jpc_ft_synthesize(jpc_fix_t *a, int xstart, int ystart, int width, int height,
+   int stride)
+ {
+ 	int numrows = height;
+diff --git a/DesktopEditor/cximage/jasper/jpc/jpc_qmfb.h b/DesktopEditor/cximage/jasper/jpc/jpc_qmfb.h
+index 4f43440bca..eb431d4213 100644
+--- a/DesktopEditor/cximage/jasper/jpc/jpc_qmfb.h
++++ b/DesktopEditor/cximage/jasper/jpc/jpc_qmfb.h
+@@ -76,6 +76,8 @@
+ 
+ #include "jasper/jas_seq.h"
+ 
++#include "jpc_fix.h"
++
+ /******************************************************************************\
+ * Constants.
+ \******************************************************************************/
+@@ -101,8 +103,8 @@ any particular platform.  Hopefully, it is not too unreasonable, however. */
+ #endif
+ 
+ typedef struct {
+-	int (*analyze)(int *, int, int, int, int, int);
+-	int (*synthesize)(int *, int, int, int, int, int);
++	int (*analyze)(jpc_fix_t *, int, int, int, int, int);
++	int (*synthesize)(jpc_fix_t *, int, int, int, int, int);
+ 	double *lpenergywts;
+ 	double *hpenergywts;
+ } jpc_qmfb2d_t;
+diff --git a/DesktopEditor/cximage/jasper/jpc/jpc_tsfb.c b/DesktopEditor/cximage/jasper/jpc/jpc_tsfb.c
+index 2a4eaee670..f5ac889c21 100644
+--- a/DesktopEditor/cximage/jasper/jpc/jpc_tsfb.c
++++ b/DesktopEditor/cximage/jasper/jpc/jpc_tsfb.c
+@@ -119,7 +119,7 @@ void jpc_tsfb_destroy(jpc_tsfb_t *tsfb)
+ 	free(tsfb);
+ }
+ 
+-int jpc_tsfb_analyze2(jpc_tsfb_t *tsfb, int *a, int xstart, int ystart,
++int jpc_tsfb_analyze2(jpc_tsfb_t *tsfb, jpc_fix_t *a, int xstart, int ystart,
+   int width, int height, int stride, int numlvls)
+ {
+ 	if (width > 0 && height > 0) {
+@@ -150,7 +150,7 @@ int jpc_tsfb_analyze(jpc_tsfb_t *tsfb, jas_seq2d_t *a)
+ #endif
+ }
+ 
+-int jpc_tsfb_synthesize2(jpc_tsfb_t *tsfb, int *a, int xstart, int ystart,
++int jpc_tsfb_synthesize2(jpc_tsfb_t *tsfb, jpc_fix_t *a, int xstart, int ystart,
+   int width, int height, int stride, int numlvls)
+ {
+ 	if (numlvls > 0) {

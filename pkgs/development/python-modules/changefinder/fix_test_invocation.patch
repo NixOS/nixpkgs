@@ -1,0 +1,13 @@
+diff --git a/test/test.py b/test/test.py
+index 85a9f4e..a5f44fd 100644
+--- a/test/test.py
++++ b/test/test.py
+@@ -4,7 +4,7 @@ import numpy as np
+ 
+ 
+ class TestChangeFinder():
+-    def setup(self):
++    def setup_method(self):
+         self._term = 30
+         self._smooth = 7
+         self._order = 1

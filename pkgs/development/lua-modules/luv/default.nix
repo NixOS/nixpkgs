@@ -1,0 +1,95 @@
+{
+  lib,
+  buildLuarocksPackage,
+  cmake,
+  fetchFromGitHub,
+  libuv,
+  lua,
+  luaOlder,
+  nix-update-script,
+  runCommand,
+}:
+
+buildLuarocksPackage rec {
+  pname = "luv";
+  version = "1.50.0-1";
+
+  src = fetchFromGitHub {
+    owner = "luvit";
+    repo = "luv";
+    rev = version;
+    # Need deps/lua-compat-5.3 only
+    fetchSubmodules = true;
+    hash = "sha256-PS3+qpELpX0tr7UqrlnE4NYScJb50j+9J4fbH9CTr/s=";
+  };
+
+  # to make sure we dont use bundled deps
+  prePatch = ''
+    rm -rf deps/lua deps/luajit deps/libuv
+  '';
+
+  buildInputs = [ libuv ];
+  nativeBuildInputs = [ cmake ];
+
+  # Need to specify WITH_SHARED_LIBUV=ON cmake flag, but
+  # Luarocks doesn't take cmake variables from luarocks config.
+  # Need to specify it in rockspec. See https://github.com/luarocks/luarocks/issues/1160.
+  knownRockspec = runCommand "luv-${version}.rockspec" { } ''
+    patch ${src}/luv-scm-0.rockspec -o - > $out <<'EOF'
+    --- a/luv-scm-0.rockspec
+    +++ b/luv-scm-0.rockspec
+    @@ -1,5 +1,5 @@
+     package = "luv"
+    -version = "scm-0"
+    +version = "${version}"
+     source = {
+       url = 'git://github.com/luvit/luv.git'
+     }
+    @@ -24,6 +24,7 @@
+     build =
+       type = 'cmake',
+       variables = {
+    +     WITH_SHARED_LIBUV="ON",
+          CMAKE_C_FLAGS="$(CFLAGS)",
+          CMAKE_MODULE_LINKER_FLAGS="$(LIBFLAG)",
+          LUA_LIBDIR="$(LUA_LIBDIR)",
+    EOF
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    rm tests/test-{dns,thread,tty}.lua
+    luarocks test
+  '';
+
+  disabled = luaOlder "5.1";
+
+  passthru = {
+    tests.test =
+      runCommand "luv-${version}-test"
+        {
+          nativeBuildInputs = [ (lua.withPackages (ps: [ ps.luv ])) ];
+        }
+        ''
+          lua <<EOF
+          local uv = require("luv")
+          assert(uv.fs_mkdir(assert(uv.os_getenv("out")), 493))
+          print(uv.version_string())
+          EOF
+        '';
+
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
+    homepage = "https://github.com/luvit/luv";
+    description = "Bare libuv bindings for lua";
+    longDescription = ''
+      This library makes libuv available to lua scripts. It was made for the luvit
+      project but should usable from nearly any lua project.
+    '';
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ stasjok ];
+    platforms = lua.meta.platforms;
+  };
+}
