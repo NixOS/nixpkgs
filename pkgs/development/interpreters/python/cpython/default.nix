@@ -24,6 +24,7 @@
   sqlite,
   xz,
   zlib,
+  zstd,
 
   # platform-specific dependencies
   bashNonInteractive,
@@ -226,6 +227,9 @@ let
       sqlite
       xz
       zlib
+    ]
+    ++ optionals (passthru.pythonAtLeast "3.14") [
+      zstd
     ]
     ++ optionals bluezSupport [
       bluez
