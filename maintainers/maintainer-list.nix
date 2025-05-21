@@ -26287,6 +26287,12 @@
     github = "waynr";
     githubId = 1441126;
   };
+  wcarlsen = {
+    name = "Willi Carlsen";
+    email = "carlsenwilli@gmail.com";
+    github = "wcarlsen";
+    githubId = 17003032;
+  };
   wchresta = {
     email = "wchresta.nix@chrummibei.ch";
     github = "wchresta";
