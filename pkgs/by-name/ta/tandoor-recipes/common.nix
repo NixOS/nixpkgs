@@ -14,7 +14,7 @@ rec {
   meta = with lib; {
     homepage = "https://tandoor.dev/";
     changelog = "https://github.com/TandoorRecipes/recipes/releases/tag/${version}";
-    license = licenses.agpl3Only;
+    license = licenses.commons-clause;
     maintainers = with maintainers; [ jvanbruegge ];
   };
 }
