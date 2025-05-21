@@ -1587,8 +1587,8 @@ let
           # semver scheme, contrary to preview versions which are listed on
           # the VSCode Marketplace and use a calver scheme. We should avoid
           # using preview versions, because they expire after two weeks.
-          version = "17.0.3";
-          hash = "sha256-jU1N5tJ4V3jzSNW9oE8AH5PRhTmsiIGnu65+IH5NxO0=";
+          version = "17.1.0";
+          hash = "sha256-WPSMf1yLXSDqImpMTxn1eXcSrimVSVjjaXDzFMQ/l0E=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
@@ -1841,8 +1841,8 @@ let
         mktplcRef = {
           name = "dependi";
           publisher = "fill-labs";
-          version = "0.7.14";
-          hash = "sha256-iLF2kxhSw39JBIs5K6hVmrEKueS8C22rnKCs+CiphwY=";
+          version = "0.7.15";
+          hash = "sha256-BXilurHO9WATC0PhT/scpZWEiRhJ9cSlq59opEM6wlE=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/fill-labs.dependi/changelog";
@@ -2514,8 +2514,8 @@ let
         mktplcRef = {
           name = "Ionide-fsharp";
           publisher = "Ionide";
-          version = "7.25.8";
-          hash = "sha256-/pnLLFj6Iwn14GLGbuc2Ex7IbNmXFiH1Btd12cCGGes=";
+          version = "7.25.10";
+          hash = "sha256-2d12itLc9qBZZ7nQNS/80K46dde2RUKpkWgPwFxogIs=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Ionide.Ionide-fsharp/changelog";
@@ -4823,6 +4823,8 @@ let
       tecosaur.latex-utilities = callPackage ./tecosaur.latex-utilities { };
 
       tekumara.typos-vscode = callPackage ./tekumara.typos-vscode { };
+
+      teros-technology.teroshdl = callPackage ./teros-technology-teroshdl { };
 
       theangryepicbanana.language-pascal = buildVscodeMarketplaceExtension {
         mktplcRef = {
