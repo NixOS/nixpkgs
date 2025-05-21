@@ -6,10 +6,8 @@ from pytest import MonkeyPatch
 import nixos_rebuild.models as m
 import nixos_rebuild.process as p
 
-from .helpers import get_qualified_name
 
-
-@patch(get_qualified_name(p.subprocess.run), autospec=True)
+@patch("subprocess.run", autospec=True)
 def test_run(mock_run: Any) -> None:
     p.run_wrapper(["test", "--with", "flags"], check=True)
     mock_run.assert_called_with(
@@ -96,7 +94,7 @@ def test_run(mock_run: Any) -> None:
     )
 
 
-@patch(get_qualified_name(p.subprocess.run), autospec=True)
+@patch("subprocess.run", autospec=True)
 def test__kill_long_running_ssh_process(mock_run: Any) -> None:
     p._kill_long_running_ssh_process(
         [
@@ -135,9 +133,7 @@ def test_remote_from_name(monkeypatch: MonkeyPatch) -> None:
         sudo_password=None,
     )
 
-    # get_qualified_name doesn't work because getpass is aliased to another
-    # function
-    with patch(f"{p.__name__}.getpass", autospec=True, return_value="password"):
+    with patch("getpass.getpass", autospec=True, return_value="password"):
         monkeypatch.setenv("NIX_SSHOPTS", "-f foo -b bar -t")
         assert m.Remote.from_arg("user@localhost", True, True) == m.Remote(
             "user@localhost",
