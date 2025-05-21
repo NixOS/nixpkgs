@@ -16284,6 +16284,8 @@ with pkgs;
     icu = icu71;
   };
 
+  meilisearch_1_11 = callPackage ../by-name/me/meilisearch/package.nix { version = "1.11.3"; };
+
   mongocxx = callPackage ../development/libraries/mongocxx/default.nix { };
 
   muse = libsForQt5.callPackage ../applications/audio/muse { };
