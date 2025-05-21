@@ -16935,4 +16935,8 @@ with pkgs;
   rustdesk-flutter = callPackage ../by-name/ru/rustdesk-flutter/package.nix {
     flutter = flutter324;
   };
+
+  davis = callPackage ../by-name/da/davis/package.nix {
+    php = php83; # https://github.com/tchapi/davis/issues/195
+  };
 }
