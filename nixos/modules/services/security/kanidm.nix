@@ -54,15 +54,10 @@ let
     ++ optional (cfg.provision.extraJsonFile != null) cfg.provision.extraJsonFile
     ++ mapAttrsToList (_: x: x.basicSecretFile) cfg.provision.systems.oauth2
   );
-  secretDirectories = unique (
-    map builtins.dirOf (
-      [
-        cfg.serverSettings.tls_chain
-        cfg.serverSettings.tls_key
-      ]
-      ++ optionals cfg.provision.enable provisionSecretFiles
-    )
-  );
+  secretPaths = [
+    cfg.serverSettings.tls_chain
+    cfg.serverSettings.tls_key
+  ] ++ optionals cfg.provision.enable provisionSecretFiles;
 
   # Merge bind mount paths and remove paths where a prefix is already mounted.
   # This makes sure that if e.g. the tls_chain is in the nix store and /nix/store is already in the mount
@@ -881,7 +876,7 @@ in
         (
           defaultServiceConfig
           // {
-            BindReadOnlyPaths = mergePaths (defaultServiceConfig.BindReadOnlyPaths ++ secretDirectories);
+            BindReadOnlyPaths = mergePaths (defaultServiceConfig.BindReadOnlyPaths ++ secretPaths);
           }
         )
         {
@@ -895,8 +890,6 @@ in
 
           BindPaths =
             [
-              # To create the socket
-              "/run/kanidmd:/run/kanidmd"
               # To store backups
               cfg.serverSettings.online_backup.path
             ]
