@@ -1338,6 +1338,11 @@
     name = "alyaeanyx";
     keys = [ { fingerprint = "1F73 8879 5E5A 3DFC E2B3 FA32 87D1 AADC D25B 8DEE"; } ];
   };
+  am-on = {
+    name = "Amon Stopinšek";
+    github = "am-on";
+    githubId = 8530224;
+  };
   amadaluzia = {
     email = "amad@atl.tools";
     github = "amadaluzia";

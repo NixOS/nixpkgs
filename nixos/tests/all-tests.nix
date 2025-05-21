@@ -1466,6 +1466,7 @@ in
   wmderland = handleTest ./wmderland.nix { };
   workout-tracker = handleTest ./workout-tracker.nix { };
   wpa_supplicant = import ./wpa_supplicant.nix { inherit pkgs runTest; };
+  wordfence-cli = handleTest ./wordfence-cli.nix { };
   wordpress = runTest ./wordpress.nix;
   wrappers = handleTest ./wrappers.nix { };
   writefreely = import ./web-apps/writefreely.nix { inherit pkgs runTest; };
