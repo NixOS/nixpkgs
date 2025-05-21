@@ -30,7 +30,7 @@
 
   testScript = ''
     start_all()
-    machine.wait_for_unit("postgresql.service")
+    machine.wait_for_unit("postgresql.target")
     machine.wait_for_unit("davis-env-setup.service")
     machine.wait_for_unit("davis-db-migrate.service")
     machine.wait_for_unit("nginx.service")

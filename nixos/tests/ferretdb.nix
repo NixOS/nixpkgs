@@ -29,8 +29,8 @@ with import ../lib/testing-python.nix { inherit system; };
         };
 
         systemd.services.ferretdb.serviceConfig = {
-          Requires = "postgresql.service";
-          After = "postgresql.service";
+          Requires = "postgresql.target";
+          After = "postgresql.target";
         };
 
         services.postgresql = {

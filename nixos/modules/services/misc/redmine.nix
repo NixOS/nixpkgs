@@ -416,7 +416,7 @@ in
       after =
         [ "network.target" ]
         ++ optional mysqlLocal "mysql.service"
-        ++ optional pgsqlLocal "postgresql.service";
+        ++ optional pgsqlLocal "postgresql.target";
       wantedBy = [ "multi-user.target" ];
       environment.RAILS_ENV = "production";
       environment.RAILS_CACHE = "${cfg.stateDir}/cache";

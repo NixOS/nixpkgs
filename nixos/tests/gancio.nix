@@ -68,7 +68,7 @@ import ./make-test-python.nix (
     testScript = ''
       start_all()
 
-      server.wait_for_unit("postgresql")
+      server.wait_for_unit("postgresql.target")
       server.wait_for_unit("gancio")
       server.wait_for_unit("nginx")
       server.wait_for_file("/run/gancio/socket")

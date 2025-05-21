@@ -337,7 +337,7 @@ in
       description = "Zabbix Proxy";
 
       wantedBy = [ "multi-user.target" ];
-      after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
+      after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.target";
 
       path = [ "/run/wrappers" ] ++ cfg.extraPackages;
       preStart =

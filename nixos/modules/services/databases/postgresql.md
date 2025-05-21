@@ -91,18 +91,13 @@ database migrations.
 **Advantage:** compatible with postgres < 15, because it's run
 as the database superuser `postgres`.
 
-##### in database `postStart` {#module-services-postgres-initializing-extra-permissions-superuser-post-start}
-
-**Disadvantage:** need to take care of ordering yourself. In this
-example, `mkAfter` ensures that permissions are assigned after any
-databases from `ensureDatabases` and `extraUser1` from `ensureUsers`
-are already created.
+##### in database's setup `postStart` {#module-services-postgres-initializing-extra-permissions-superuser-post-start}
 
 ```nix
   {
-    systemd.services.postgresql.postStart = lib.mkAfter ''
-      $PSQL service1 -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
-      $PSQL service1 -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
+    systemd.services.postgresql-setup.postStart = ''
+      psql service1 -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
+      psql service1 -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
       # ....
     '';
   }
@@ -116,13 +111,13 @@ are already created.
       serviceConfig.Type = "oneshot";
       requiredBy = "service1.service";
       before = "service1.service";
-      after = "postgresql.service";
+      after = "postgresql-setup.service";
       serviceConfig.User = "postgres";
-      environment.PSQL = "psql --port=${toString services.postgresql.settings.port}";
+      environment.PGPORT = toString services.postgresql.settings.port;
       path = [ postgresql ];
       script = ''
-        $PSQL service1 -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
-        $PSQL service1 -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
+        psql service1 -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
+        psql service1 -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
         # ....
       '';
     };
@@ -139,11 +134,11 @@ are already created.
 
 ```nix
   {
-    environment.PSQL = "psql --port=${toString services.postgresql.settings.port}";
+    environment.PGPORT = toString services.postgresql.settings.port;
     path = [ postgresql ];
     systemd.services."service1".preStart = ''
-      $PSQL -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
-      $PSQL -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
+      psql -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
+      psql -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
       # ....
     '';
   }
@@ -159,11 +154,11 @@ are already created.
       before = "service1.service";
       after = "postgresql.service";
       serviceConfig.User = "service1";
-      environment.PSQL = "psql --port=${toString services.postgresql.settings.port}";
+      environment.PGPORT = toString services.postgresql.settings.port;
       path = [ postgresql ];
       script = ''
-        $PSQL -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
-        $PSQL -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
+        psql -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
+        psql -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
         # ....
       '';
     };
