@@ -22,7 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-h9EnvT3kvYmk+BJl5fpZyxsZmydEAXU3D3QX0rx66Gg=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     joblib
     regex
