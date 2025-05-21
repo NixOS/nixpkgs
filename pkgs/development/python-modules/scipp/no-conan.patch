@@ -1,0 +1,70 @@
+diff --git c/CMakeLists.txt w/CMakeLists.txt
+index ed6aca811..07de59a2c 100644
+--- c/CMakeLists.txt
++++ w/CMakeLists.txt
+@@ -44,6 +44,7 @@ project(
+   LANGUAGES CXX
+ )
+ add_definitions(-DSCIPP_VERSION="${SCIPP_VERSION_PEP440}")
++option(USE_CONAN "Use conan to fetch and build dependencies" ON)
+ 
+ if(SKBUILD)
+   # AppleClang 15 changed linking order
+diff --git c/lib/CMakeLists.txt w/lib/CMakeLists.txt
+index 93e3ccfba..c3c8c1216 100644
+--- c/lib/CMakeLists.txt
++++ w/lib/CMakeLists.txt
+@@ -14,8 +14,9 @@ set(CMAKE_MODULE_PATH
+ )
+ 
+ option(BENCHMARK "Enable benchmarks" OFF)
+-
+-include(scipp-conan)
++if(USE_CONAN)
++  include(scipp-conan)
++endif()
+ 
+ set(Python_FIND_IMPLEMENTATIONS CPython PyPy)
+ 
+@@ -31,7 +32,11 @@ find_package(GTest CONFIG REQUIRED)
+ # instead of `Development`
+ find_package(Python 3.8 REQUIRED COMPONENTS Interpreter Development.Module)
+ find_package(pybind11 CONFIG REQUIRED)
+-find_package(LLNL-Units REQUIRED)
++if(USE_CONAN)
++  find_package(LLNL-Units REQUIRED)
++else()
++  find_package(units REQUIRED)
++endif()
+ 
+ # Generate files for free scipp API functions
+ include(scipp-functions)
+diff --git c/lib/units/CMakeLists.txt w/lib/units/CMakeLists.txt
+index 1459e3ce8..30bb3fae1 100644
+--- c/lib/units/CMakeLists.txt
++++ w/lib/units/CMakeLists.txt
+@@ -20,7 +20,11 @@ target_compile_definitions(
+   ${TARGET_NAME} PUBLIC SCIPP_UNITS_${SCIPP_UNITS_SYSTEM}
+ )
+ include_directories(SYSTEM ${GMOCK_INCLUDE_DIR} ${GTEST_INCLUDE_DIR})
+-target_link_libraries(${TARGET_NAME} PUBLIC scipp-common LLNL-Units::LLNL-Units)
++if(USE_CONAN)
++  target_link_libraries(${TARGET_NAME} PUBLIC scipp-common LLNL-Units::LLNL-Units)
++else()
++  target_link_libraries(${TARGET_NAME} PUBLIC scipp-common units::units)
++endif()
+ target_include_directories(
+   ${TARGET_NAME}
+   PUBLIC $<INSTALL_INTERFACE:include>
+diff --git c/pyproject.toml w/pyproject.toml
+index aa62f4fe3..c438506ed 100644
+--- c/pyproject.toml
++++ w/pyproject.toml
+@@ -1,7 +1,6 @@
+ [build-system]
+ requires = [
+   "setuptools>=68",
+-  "conan==1.66.0",
+   "scikit-build-core"
+ ]
+ build-backend = "scikit_build_core.build"
