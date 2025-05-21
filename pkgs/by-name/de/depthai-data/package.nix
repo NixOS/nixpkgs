@@ -12,8 +12,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "phodina";
     repo = "depthai-data";
-    rev = "2c7e6a5cf55d95eb94e522a1cd512441524d031c";
-    hash = "sha256-T4qLkmLtQUei509tqTPfnzz8AQRQ1MiHniZzH172im8=";
+    rev = "4d010261561f614009acdbb763dc2f132f0d8401";
+    hash = "sha256-Yo54QttxC6/KVIrM2fpAol2f23Vq1IL2oSvBEQ0Ovek=";
   };
 
   # No build phase needed, this is just data
