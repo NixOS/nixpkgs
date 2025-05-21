@@ -1796,6 +1796,8 @@ self: super: with self; {
 
   bidsschematools = callPackage ../development/python-modules/bidsschematools { };
 
+  bigquery-magics = callPackage ../development/python-modules/python-bigquery-magics { };
+
   biliass = callPackage ../development/python-modules/biliass { };
 
   bilibili-api-python = callPackage ../development/python-modules/bilibili-api-python { };
