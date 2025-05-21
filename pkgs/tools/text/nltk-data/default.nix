@@ -15,7 +15,10 @@ let
       homepage = "https://github.com/nltk/nltk_data";
       license = licenses.asl20;
       platforms = platforms.all;
-      maintainers = with maintainers; [ happysalada ];
+      maintainers = with maintainers; [
+        bengsparks
+        happysalada
+      ];
     };
   };
   makeNltkDataPackage =
