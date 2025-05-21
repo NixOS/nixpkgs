@@ -18,14 +18,14 @@
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.14.5";
   pname = "chafa";
 
   src = fetchFromGitHub {
     owner = "hpjansson";
     repo = "chafa";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-9RkN0yZnHf5cx6tsp3P6jsi0/xtplWxMm3hYCPjWj0M=";
   };
 
@@ -83,4 +83,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "chafa";
   };
-}
+})
