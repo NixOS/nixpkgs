@@ -5029,6 +5029,8 @@ self: super: with self; {
 
   flasgger = callPackage ../development/python-modules/flasgger { };
 
+  flashinfer = callPackage ../development/python-modules/flashinfer { };
+
   flashtext = callPackage ../development/python-modules/flashtext { };
 
   flask = callPackage ../development/python-modules/flask { };
