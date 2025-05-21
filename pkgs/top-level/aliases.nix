@@ -1352,6 +1352,7 @@ mapAliases {
   nltk-data.averaged_perceptron_tagger = nltk-data.averaged-perceptron-tagger; # Added 2025-05-21
   nltk-data.averaged_perceptron_tagger_eng = nltk-data.averaged-perceptron-tagger-eng; # Added 2025-05-21
   nltk-data.punkt_tab = nltk-data.punkt-tab; # Added 2025-05-21
+  nltk-data.snowball_data = nltk-data.snowball-data; # Added 2025-05-21
   nmap-unfree = throw "'nmap-unfree' has been renamed to/replaced by 'nmap'"; # Converted to throw 2024-10-17
   noah = throw "'noah' has been removed because it was broken and its upstream archived"; # Added 2025-05-10
   nodejs_18 = throw "Node.js 18.x has reached End-Of-Life and has been removed"; # Added 2025-04-23

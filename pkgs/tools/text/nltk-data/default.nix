@@ -76,7 +76,7 @@ lib.makeScope newScope (self: {
     location = "taggers";
     hash = "sha256-tl3Cn2okhBkUtTXvAmFRx72Brez6iTGRdmFTwFmpk3M=";
   };
-  snowball_data = makeNltkDataPackage {
+  snowball-data = makeNltkDataPackage {
     pname = "snowball_data";
     location = "stemmers";
     hash = "sha256-mNefwOPVJGz9kXV3LV4DuV7FJpNir/Nwg4ujd0CogEk=";
