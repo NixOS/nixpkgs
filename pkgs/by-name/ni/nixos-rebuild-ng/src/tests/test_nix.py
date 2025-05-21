@@ -809,7 +809,7 @@ def test_switch_to_configuration_with_systemd_run(
 
 
 @patch(
-    get_qualified_name(n.Path.glob, n),
+    "pathlib.Path.glob",
     autospec=True,
     return_value=[
         Path("/nix/var/nix/profiles/per-user/root/channels/nixos"),
@@ -817,7 +817,7 @@ def test_switch_to_configuration_with_systemd_run(
         Path("/nix/var/nix/profiles/per-user/root/channels/home-manager"),
     ],
 )
-@patch(get_qualified_name(n.Path.is_dir, n), autospec=True, return_value=True)
+@patch("pathlib.Path.is_dir", autospec=True, return_value=True)
 def test_upgrade_channels(mock_is_dir: Mock, mock_glob: Mock) -> None:
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
         n.upgrade_channels(False)
