@@ -4708,8 +4708,6 @@ with pkgs;
     callPackage ../development/tools/continuous-integration/woodpecker/server.nix
       { };
 
-  wordfence-cli = callPackage ../tools/security/wordfence-cli { };
-
   wpscan = callPackage ../tools/security/wpscan { };
 
   testdisk = libsForQt5.callPackage ../tools/system/testdisk { };
