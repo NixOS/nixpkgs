@@ -23,13 +23,12 @@ let
 in
 {
   manifests ? intreeManifests, # :: List Path
+  releaseFiles ? [ ../tensorrt/releases.nix ],
   extraModules ? [ ],
 }:
 let
   manifestModules = builtins.map jsonToModule manifests;
-  releasesModules = builtins.map parseReleasesFile [
-    ../tensorrt/releases.nix
-  ];
+  releasesModules = builtins.map parseReleasesFile releaseFiles;
   evaluated =
     evalModules {
       modules =
