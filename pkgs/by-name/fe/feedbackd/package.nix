@@ -25,16 +25,16 @@
 
 let
   themes = fetchFromGitLab {
-    domain = "source.puri.sm";
-    owner = "Librem5";
+    domain = "gitlab.freedesktop.org";
+    owner = "agx";
     repo = "feedbackd-device-themes";
-    rev = "v0.4.0";
-    hash = "sha256-kY/+DyRxKEUzq7ctl6Va14AKUCpWU7NRQhJOwhtkJp8=";
+    rev = "v0.8.3";
+    hash = "sha256-z+A2G1g2gNfC0cVWUO/LT3QVvXeotcBd+5UEpEtcPfY=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "feedbackd";
-  version = "0.8.1";
+  version = "0.8.2";
 
   outputs = [
     "out"
@@ -43,11 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitLab {
-    domain = "source.puri.sm";
-    owner = "Librem5";
+    domain = "gitlab.freedesktop.org";
+    owner = "agx";
     repo = "feedbackd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-J2BNDF9TyW+srW0pGbGt4/Uw4KPVf/Ke+HJVBldmfCA=";
+    hash = "sha256-Hd+kHLr+d1+mg9BbD1pCfVZuwmf7Hk02xmDTmR3foh4=";
   };
 
   depsBuildBuild = [
@@ -114,9 +114,15 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   meta = with lib; {
-    description = "Daemon to provide haptic (and later more) feedback on events";
-    homepage = "https://source.puri.sm/Librem5/feedbackd";
-    license = licenses.gpl3Plus;
+    description = "Theme based Haptic, Visual and Audio Feedback";
+    homepage = "https://gitlab.freedesktop.org/agx/feedbackd/";
+    license = with licenses; [
+      # feedbackd
+      gpl3Plus
+
+      # libfeedback library
+      lgpl21Plus
+    ];
     maintainers = with maintainers; [
       pacman99
       Luflosi
