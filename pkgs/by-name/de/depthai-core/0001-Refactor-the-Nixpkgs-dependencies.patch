@@ -1,0 +1,94 @@
+From a2c99f32c799af5a4900063e0946b89a6c412334 Mon Sep 17 00:00:00 2001
+From: Petr Hodina <phodina@luxonis.com>
+Date: Tue, 20 May 2025 16:59:57 +0200
+Subject: [PATCH 1/4] Refactor the Nixpkgs dependencies
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6af55ba64..f03209fa2 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -118,6 +118,7 @@ set(PROJECT_EXPORT_GROUP "${PROJECT_NAME}Targets")
+ 
+ ## Check if cloned or sources
+ find_package(Git)
++find_package(foxglove-websocket)
+ if(GIT_FOUND)
+     execute_process(
+         COMMAND ${GIT_EXECUTABLE} rev-parse --show-toplevel
+@@ -407,11 +408,11 @@ if(DEPTHAI_BUILD_ZOO_HELPER)
+         src/utility/Logging.cpp
+     )
+     set(ZOO_HELPER_LINK_LIBRARIES
+-        nlohmann_json::nlohmann_json
++        nlohmann_json
+         fmt::fmt
+         yaml-cpp::yaml-cpp
+-        CURL::libcurl
+-        cpr::cpr
++        curl
++        cpr
+     )
+     target_compile_definitions(zoo_helper PRIVATE DEPTHAI_ENABLE_CURL)
+     add_executable(zoo_helper ${ZOO_HELPER_SOURCES})
+@@ -681,10 +682,7 @@ endif()
+ # link libraries
+ target_link_libraries(${TARGET_CORE_NAME}
+     PUBLIC
+-        nlohmann_json::nlohmann_json
+-        libnop
+-    INTERFACE
+-        XLinkPublic
++        nlohmann_json
+     PRIVATE
+         fmt::fmt
+         yaml-cpp::yaml-cpp
+@@ -695,10 +693,8 @@ target_link_libraries(${TARGET_CORE_NAME}
+         LibArchive::LibArchive
+         ZLIB::ZLIB
+         httplib::httplib
+-        semver::semver
+         magic_enum::magic_enum
+-        liblzma::liblzma
+-        lz4::lz4
++        lz4
+ )
+ 
+ if(DEPTHAI_ENABLE_MP4V2)
+@@ -716,9 +712,9 @@ if(DEPTHAI_ENABLE_PROTOBUF)
+ endif()
+ 
+ if(DEPTHAI_ENABLE_REMOTE_CONNECTION)
+-    target_link_libraries(${TARGET_CORE_NAME} PRIVATE
+-        foxglove-websocket::foxglove-websocket
+-    )
++	target_link_libraries(${TARGET_CORE_NAME} PRIVATE
++	    foxglove_websocket
++	)
+     target_compile_definitions(${TARGET_CORE_NAME} PRIVATE DEPTHAI_ENABLE_REMOTE_CONNECTION)
+ endif()
+ 
+@@ -758,7 +754,7 @@ endif()
+ 
+ if(DEPTHAI_XTENSOR_SUPPORT)
+     target_compile_definitions(${TARGET_CORE_NAME} PUBLIC DEPTHAI_XTENSOR_SUPPORT)
+-    target_link_libraries(${TARGET_CORE_NAME} PUBLIC xtensor)
++    target_link_libraries(${TARGET_CORE_NAME} PUBLIC)
+ endif()
+ 
+ # Specify available FW
+diff --git a/cmake/depthaiDependencies.cmake b/cmake/depthaiDependencies.cmake
+index 3a44e70f2..7abbfa57c 100644
+--- a/cmake/depthaiDependencies.cmake
++++ b/cmake/depthaiDependencies.cmake
+@@ -47,7 +47,6 @@ if(NOT CONFIG_MODE OR (CONFIG_MODE AND NOT DEPTHAI_SHARED_LIBS))
+     endif()
+     # libarchive for firmware packages
+     find_package(LibArchive ${_QUIET}  REQUIRED)
+-    find_package(liblzma ${_QUIET} CONFIG REQUIRED)
+     # httplib for Gate communication
+     find_package(httplib ${_QUIET} CONFIG REQUIRED)
+     # ZLIB for compressing Apps
+-- 
+2.47.2
+

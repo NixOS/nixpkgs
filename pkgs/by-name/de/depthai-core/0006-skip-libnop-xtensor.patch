@@ -1,21 +1,40 @@
+From 4bdef9c3444cbd6c1e234b96d2ee0d90d5f57994 Mon Sep 17 00:00:00 2001
+From: Petr Hodina <phodina@luxonis.com>
+Date: Tue, 20 May 2025 17:12:46 +0200
+Subject: [PATCH] xtensor
+
+
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 162eb12b0..83f2776d4 100644
+index e5a04effe..e73081420 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -827,7 +824,6 @@ endif()
+@@ -411,7 +411,7 @@ if(DEPTHAI_BUILD_ZOO_HELPER)
+         src/utility/Logging.cpp
+     )
+     set(ZOO_HELPER_LINK_LIBRARIES
+-        nlohmann_json::nlohmann_json
++        nlohmann_json
+         fmt::fmt
+         yaml-cpp::yaml-cpp
+         curl
+@@ -685,7 +685,7 @@ endif()
+ # link libraries
  target_link_libraries(${TARGET_CORE_NAME}
      PUBLIC
-         nlohmann_json::nlohmann_json
--        libnop
-         spdlog::spdlog
-         yaml-cpp::yaml-cpp
+-        nlohmann_json::nlohmann_json
++        nlohmann_json
+         libnop
      INTERFACE
-@@ -901,7 +898,7 @@ endif()
+         XLinkPublic
+@@ -760,7 +760,7 @@ endif()
  
  if(DEPTHAI_XTENSOR_SUPPORT)
      target_compile_definitions(${TARGET_CORE_NAME} PUBLIC DEPTHAI_XTENSOR_SUPPORT)
 -    target_link_libraries(${TARGET_CORE_NAME} PUBLIC xtensor)
-+    #target_link_libraries(${TARGET_CORE_NAME} PUBLIC xtensor)
++    target_link_libraries(${TARGET_CORE_NAME} PUBLIC)
  endif()
  
  # Specify available FW
+-- 
+2.47.2
+

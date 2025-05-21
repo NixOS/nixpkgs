@@ -1,0 +1,91 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6af55ba64..f069ebd63 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -753,6 +753,7 @@ target_compile_definitions(${TARGET_CORE_NAME}
+ if(DEPTHAI_ENABLE_LIBUSB)
+     target_compile_definitions(${TARGET_CORE_NAME} PRIVATE DEPTHAI_ENABLE_LIBUSB)
+     target_compile_definitions(${TARGET_CORE_NAME} PRIVATE DEPTHAI_HAVE_LIBUSB_SUPPORT)
++    target_link_libraries(depthai-core PRIVATE PkgConfig::LIBUSB)
+     set(DEPTHAI_HAVE_LIBUSB_SUPPORT ON)
+ endif()
+ 
+@@ -816,7 +817,7 @@ macro(add_runtime_dependencies depending_target dependency)
+     endif()
+ endmacro()
+ # Add libusb dll in build time
+-add_runtime_dependencies(${TARGET_CORE_NAME} usb-1.0)
++add_runtime_dependencies(${TARGET_CORE_NAME} PkgConfig::LIBUSB)
+ 
+ ########################
+ # OpenCV Support 2
+@@ -1051,7 +1052,7 @@ if(DEPTHAI_SANITIZE)
+     if(DEPTHAI_XLINK_LOCAL)
+         add_sanitizers(XLink)
+         if(XLINK_LIBUSB_LOCAL)
+-            add_sanitizers(usb-1.0)
++            add_sanitizers(PkgConfig::LIBUSB)
+         endif()
+     endif()
+ endif()
+diff --git a/cmake/depthaiDependencies.cmake b/cmake/depthaiDependencies.cmake
+index 3a44e70f2..603d2fb88 100644
+--- a/cmake/depthaiDependencies.cmake
++++ b/cmake/depthaiDependencies.cmake
+@@ -168,7 +168,8 @@ set(BUILD_SHARED_LIBS OFF)
+ set(XLINK_ENABLE_LIBUSB ${DEPTHAI_ENABLE_LIBUSB} CACHE BOOL "Enable libusb" FORCE)
+ set(XLINK_INSTALL_PUBLIC_ONLY ON CACHE BOOL "Install only public headers" FORCE)
+ if(DEPTHAI_ENABLE_LIBUSB)
+-    find_package(usb-1.0 ${_QUIET} CONFIG REQUIRED)
++    find_package(PkgConfig REQUIRED)
++    pkg_check_modules(LIBUSB REQUIRED IMPORTED_TARGET libusb-1.0)
+ endif()
+ if(DEPTHAI_XLINK_LOCAL AND (NOT CONFIG_MODE))
+     add_subdirectory("${DEPTHAI_XLINK_LOCAL}" ${CMAKE_CURRENT_BINARY_DIR}/XLink)
+diff --git a/examples/cpp/CMakeLists.txt b/examples/cpp/CMakeLists.txt
+index 473ac0696..948e15309 100644
+--- a/examples/cpp/CMakeLists.txt
++++ b/examples/cpp/CMakeLists.txt
+@@ -34,7 +34,7 @@ function(dai_add_example example_name example_src enable_test use_pcl)
+     elseif(NOT DEPTHAI_MERGED_TARGET)
+         set(DEPTHAI_TARGET depthai::opencv)
+     endif()
+-    target_link_libraries(${example_name} PRIVATE utility ${DEPTHAI_TARGET} ${OpenCV_LIBS} Threads::Threads)
++    target_link_libraries(${example_name} PRIVATE utility ${DEPTHAI_TARGET} ${OpenCV_LIBS} PkgConfig::LIBUSB Threads::Threads)
+     # Set compiler features (c++17), and disables extensions (g++17)
+     set_property(TARGET ${example_name} PROPERTY CXX_STANDARD 17)
+     set_property(TARGET ${example_name} PROPERTY CXX_STANDARD_REQUIRED ON)
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index f1707b1e4..faee1a9fd 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -56,7 +56,7 @@ function(dai_add_test test_name test_src)
+     if(NOT DEPTHAI_MERGED_TARGET)
+         set(DEPTHAI_TARGET depthai::opencv)
+     endif()
+-    target_link_libraries(${test_name} PRIVATE ${DEPTHAI_TARGET} ${OpenCV_LIBS} Catch2::Catch2WithMain Threads::Threads spdlog::spdlog)
++    target_link_libraries(${test_name} PRIVATE ${DEPTHAI_TARGET} ${OpenCV_LIBS} PkgConfig::LIBUSB Catch2::Catch2WithMain Threads::Threads spdlog::spdlog)
+ 
+     # Add sanitizers for tests as well
+     if(COMMAND add_sanitizers)
+diff --git a/tests/integration/CMakeLists.txt b/tests/integration/CMakeLists.txt
+index 178f9fa0e..0a721a527 100644
+--- a/tests/integration/CMakeLists.txt
++++ b/tests/integration/CMakeLists.txt
+@@ -45,13 +45,13 @@ enable_testing()
+ # Create target dependant on depthai::core
+ add_executable(integration-test-core src/main.cpp)
+ target_link_libraries(integration-test-core PRIVATE depthai::core)
+-add_runtime_dependencies(integration-test-core usb-1.0)
++add_runtime_dependencies(integration-test-core PkgConfig::LIBUSB)
+ add_test(integration-test-core integration-test-core)
+ 
+ # Create target dependant on depthai::opencv (if available)
+ if(TARGET depthai::opencv)
+     add_executable(integration-test-opencv src/main.cpp)
+     target_link_libraries(integration-test-opencv PRIVATE depthai::opencv)
+-    add_runtime_dependencies(integration-test-opencv usb-1.0)
++    add_runtime_dependencies(integration-test-opencv PkgConfig::LIBUSB)
+     add_test(integration-test-opencv integration-test-opencv)
+ endif()
+

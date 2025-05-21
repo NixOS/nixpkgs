@@ -40,6 +40,7 @@
   catch2_3,
   xorg,
   git,
+  nanorpc,
   bzip2,
   lz4,
   xz,
@@ -155,44 +156,40 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "depthai-core";
-  version = "3.0.0-alpha.15";
+  version = "v3_develop";
 
   src = fetchFromGitHub {
     owner = "luxonis";
     repo = "depthai-core";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-kEULv+9S9dV5qu2ienh/WmxtQjS3cVV3yC5Q9zTf7ZQ=";
+    rev = "c4a52f6958e78c26e9dba284df5bacdc724bb761";
+    hash = "sha256-tvmxZYt3g5JZlT8ZfqXqy4FSXul/F+Hx8rOixBGe7jk=";
     fetchSubmodules = true;
   };
 
   patches = [
     # Offine build
     (fetchpatch {
-      url = "https://github.com/luxonis/depthai-core/pull/1303/commits/cc8fd0fe76b460b512a515e8c3a2919fa72358c8.patch";
-      hash = "sha256-0v3KhRzod89gG4ce2m1G+ie3iW4IYnztKZ3cwKb/MG0=";
+      url = "https://github.com/luxonis/depthai-core/commit/c00689619e2f6c2b6964fe2996d2786c63246fdf.patch";
+      hash = "sha256-HNj9G/liesj/X4yaH/9DzS+XbxVruKgGjwz9XvbDd78=";
     })
     # CMake system install and fix RPATH
     (fetchpatch {
-      url = "https://github.com/luxonis/depthai-core/pull/1309/commits/0571499c79658afb5112bd6c3488a649dc045d64.patch";
-      hash = "sha256-4ctLBhnD6Vzy4Si+OFnyUXCQ0wkt7630UDnk7odww0c=";
+      url = "https://github.com/luxonis/depthai-core/commit/16a13b5cc64a21f450b54acbb0c787aa87cdbf9a.patch";
+      hash = "sha256-a1Og87QyhYJXoTEuasOhEYqelvj7BszlYZYKCedart8=";
     })
 
-    ./0002-cmake-Fix-build-dependencies.patch
-    ./0003-cmake-Skip-some-dependencies.patch
-    ./0004-cmake-Enable-build-of-3rdparty-dependencies.patch
+    ./0001-Refactor-the-Nixpkgs-dependencies.patch
+    ./0002-cmake-Add-option-to-enable-disable-3rdparty-dependen.patch
+    ./0003-Allow-offline-build.patch
+    ./0004-use-external-nanorpc.patch
     ./0005-magic-enum.patch
-    ./0006-skip-libnop-xtensor.patch
-    ./0007-we-still-need-thirdparty.patch
+    ./0006-fix-include-directory-for-tests.patch
+    ./0007-libusb.patch
 
-    # BechmarkOut.cpp fix cast to double
-    (fetchpatch {
-      url = "https://github.com/luxonis/depthai-core/pull/1302/commits/aa51312342906f321ba34c07f405a413c231e50c.patch";
-      hash = "sha256-YgniRH8qPwUzhIUXSAD0AO7K8Wlce4rZD6BUn/a09bU=";
-    })
     # Color.hpp fix cast to float
     (fetchpatch {
-      url = "https://github.com/luxonis/depthai-core/pull/1302/commits/4abe505665bcc606161b4574a25dcbfd643b8fb9.patch";
-      hash = "sha256-y99LZvAWJTO3co8UPj9OFrfwmmawbNwTHSyb+dp1F/I=";
+      url = "https://github.com/luxonis/depthai-core/commit/4e4edd6f3fb11f7453d67aef9c856aa060432b17.patch";
+      hash = "sha256-5y7PcJPegCfsM41b3GIrVTINNmQdf+HND+jmV3WQmPQ=";
     })
   ];
 
@@ -235,6 +232,7 @@ stdenv.mkDerivation (finalAttrs: {
     mp4v2
     pcl
     eigen
+    nanorpc
     jsoncpp
     fmt
     mcap
@@ -258,15 +256,22 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
+    (lib.cmakeBool "DEPTHAI_ENABLE_LIBUSB" true)
+
+    (lib.cmakeBool "DEPTHAI_XLINK_LOCAL" false)
+
     (lib.cmakeBool "DEPTHAI_FETCH_ARTIFACTS" false)
     (lib.cmakeBool "DEPTHAI_3RDPARTY_ENABLE" false)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_RERUN_SDK" "${rerun_sdk}")
     (lib.cmakeFeature "CMAKE_INCLUDE_PATH" "include/3rdparty")
     (lib.cmakeBool "DEPTHAI_BOOTSTRAP_VCPKG" false)
-    (lib.cmakeBool "DEPTHAI_BOOTSTRAP_VCPKG" false)
     (lib.cmakeBool "BUILD_SHARED_LIBS" true)
     (lib.cmakeBool "DEPTHAI_PCL_SUPPORT" true)
     (lib.cmakeBool "DEPTHAI_XTENSOR_SUPPORT" true)
+    (lib.cmakeBool "DEPTHAI_XTENSOR_EXTERNAL" true)
+    (lib.cmakeBool "DEPTHAI_JSON_EXTERNAL" true)
+    (lib.cmakeBool "DEPTHAI_LIBNOP_EXTERNAL" true)
+    (lib.cmakeBool "DEPTHAI_ENABLE_MP4V2" false)
     (lib.cmakeBool "DEPTHAI_BUILD_PYTHON" true)
     (lib.cmakeBool "DEPTHAI_PYTHON_ENABLE_TESTS" true)
     (lib.cmakeBool "DEPTHAI_INSTALL" true)
@@ -283,6 +288,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "DEPTHAI_ENABLE_BACKWARD" true)
 
     # Note: as they run in parallel they require lot of RAM
+    # TODO: fails on libusb
     (lib.cmakeBool "DEPTHAI_BUILD_TESTS" true)
     (lib.cmakeBool "DEPTHAI_TEST_EXAMPLES" true)
 
