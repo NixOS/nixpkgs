@@ -23,6 +23,13 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=implicit-function-declaration"
+    "-Wno-error=implicit-int"
+    "-Wno-error=return-mismatch"
+  ];
+
+
   preBuild =
     ''
       makeFlagsArray=(
