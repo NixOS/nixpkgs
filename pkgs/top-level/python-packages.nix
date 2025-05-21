@@ -3527,6 +3527,8 @@ self: super: with self; {
 
   columnize = callPackage ../development/python-modules/columnize { };
 
+  comet-maths = callPackage ../development/python-modules/comet-maths { };
+
   comet-ml = callPackage ../development/python-modules/comet-ml { };
 
   cometblue-lite = callPackage ../development/python-modules/cometblue-lite { };
