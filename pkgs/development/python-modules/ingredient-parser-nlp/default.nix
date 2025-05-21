@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   # Needed for tests
   preCheck = ''
-    export NLTK_DATA=${nltk-data.averaged_perceptron_tagger_eng}
+    export NLTK_DATA=${nltk-data.averaged-perceptron-tagger-eng}
   '';
 
   meta = {

@@ -71,7 +71,7 @@ lib.makeScope newScope (self: {
     location = "taggers";
     hash = "sha256-tl3Cn2okhBkUtTXvAmFRx72Brez6iTGRdmFTwFmpk3M=";
   };
-  averaged_perceptron_tagger_eng = makeNltkDataPackage {
+  averaged-perceptron-tagger-eng = makeNltkDataPackage {
     pname = "averaged_perceptron_tagger_eng";
     location = "taggers";
     hash = "sha256-tl3Cn2okhBkUtTXvAmFRx72Brez6iTGRdmFTwFmpk3M=";
