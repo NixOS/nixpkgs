@@ -1,3 +1,4 @@
+from functools import cache
 from typing import Any
 from pathlib import Path
 
@@ -21,6 +22,7 @@ class Freezeable:
             _frozen_classes[cls] = frozen
         self.__class__ = frozen
 
+@cache
 def relative_path_from(origin: str, to: str) -> str:
     path_to = Path(origin)
     path_from = Path(to)

@@ -130,7 +130,7 @@ stdenvNoCC.mkDerivation {
     mkdir -p "$out"
 
     cat > "$out/index.md" << 'EOF'
-    ```{=include=} sections auto-id-prefix=auto-generated
+    ```{=include=} sections auto-id-prefix=auto-generated html:into-file=//functions-lib.html
     EOF
 
     ${lib.concatMapStrings (
