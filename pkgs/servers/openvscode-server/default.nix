@@ -18,7 +18,7 @@
   ripgrep,
   cctools,
   nixosTests,
-  prefetch-npm-deps
+  prefetch-npm-deps,
 }:
 let
 
