@@ -2685,6 +2685,8 @@ self: super: with self; {
 
   colcon-argcomplete = callPackage ../development/python-modules/colcon-argcomplete { };
 
+  colcon-cargo = callPackage ../development/python-modules/colcon-cargo { };
+
   colcon-defaults = callPackage ../development/python-modules/colcon-defaults { };
 
   colcon-mixin = callPackage ../development/python-modules/colcon-mixin { };
@@ -2692,6 +2694,10 @@ self: super: with self; {
   colcon-notification = callPackage ../development/python-modules/colcon-notification { };
 
   colcon-parallel-executor = callPackage ../development/python-modules/colcon-parallel-executor { };
+
+  colcon-ros-domain-id-coordinator =
+    callPackage ../development/python-modules/colcon-ros-domain-id-coordinator
+      { };
 
   collections-extended = callPackage ../development/python-modules/collections-extended { };
 
@@ -5022,6 +5028,8 @@ self: super: with self; {
   flammkuchen = callPackage ../development/python-modules/flammkuchen { };
 
   flasgger = callPackage ../development/python-modules/flasgger { };
+
+  flashinfer = callPackage ../development/python-modules/flashinfer { };
 
   flashtext = callPackage ../development/python-modules/flashtext { };
 
