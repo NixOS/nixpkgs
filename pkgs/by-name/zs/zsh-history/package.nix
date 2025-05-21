@@ -6,7 +6,7 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "zsh-history";
   version = "2019-12-10";
 

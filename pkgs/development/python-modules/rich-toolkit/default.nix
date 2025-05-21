@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   hatchling,
@@ -18,15 +18,14 @@
 
 buildPythonPackage rec {
   pname = "rich-toolkit";
-  version = "0.13.2";
+  version = "0.14.1";
   pyproject = true;
 
-  # No tags on Git
-  # https://github.com/patrick91/rich-toolkit/issues/21
-  src = fetchPypi {
-    pname = "rich_toolkit";
-    inherit version;
-    hash = "sha256-/qklV1MN58KPEhy+1XKtk9ng3cYMPKZD8bgx8vVrldM=";
+  src = fetchFromGitHub {
+    owner = "patrick91";
+    repo = "rich-toolkit";
+    tag = "v${version}";
+    hash = "sha256-RoK84ejiJRgcs4bEJTBAGULDPDJh6rtrxrovwKWZ/Oc=";
   };
 
   build-system = [
@@ -49,6 +48,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    changelog = "https://github.com/patrick91/rich-toolkit/releases/tag/${src.tag}";
     description = "Rich toolkit for building command-line applications";
     homepage = "https://pypi.org/project/rich-toolkit";
     license = lib.licenses.mit;

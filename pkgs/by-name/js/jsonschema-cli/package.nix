@@ -8,22 +8,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jsonschema-cli";
-  version = "0.29.0";
+  version = "0.30.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-kpdvvCnMsHfogXmAqNeo1Cl1hZtCPHqkfhYm8ipWToo=";
+    hash = "sha256-AjBVvEixkP7khm3/0U81E/G7tCKoqnfNG05gpgYlqNE=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Yti1KKJDRXMhDo84/ymZk2AkWp9HtU2LW2h63gfzIGY=";
+  cargoHash = "sha256-3hZAEjJrJ5vw6kXwY+xTv/mO0lx/KNmXA2lULJkX9aE=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

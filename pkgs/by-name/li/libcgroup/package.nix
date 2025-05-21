@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libcgroup";
-  version = "3.1";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "libcgroup";
+    repo = "libcgroup";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-CnejQcOyW3QzHuvsAdKe4M4XgmG9ufRaEBdO48+8ZqQ=";
+    hash = "sha256-kWW9ID/eYZH0O/Ge8pf3Cso4yu644R5EiQFYfZMcizs=";
   };
 
   nativeBuildInputs = [

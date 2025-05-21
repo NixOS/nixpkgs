@@ -1,25 +1,41 @@
 # This module generates nixos-install, nixos-rebuild,
 # nixos-generate-config, etc.
 
-{ config, lib, pkgs, options, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
-  makeProg = args: pkgs.replaceVarsWith (args // {
-    dir = "bin";
-    isExecutable = true;
-    nativeBuildInputs = [
-      pkgs.installShellFiles
-    ];
-    postInstall = ''
-      installManPage ${args.manPage}
-    '';
-  });
+  makeProg =
+    args:
+    pkgs.replaceVarsWith (
+      args
+      // {
+        dir = "bin";
+        isExecutable = true;
+        nativeBuildInputs = [
+          pkgs.installShellFiles
+        ];
+        postInstall = ''
+          installManPage ${args.manPage}
+        '';
+      }
+    );
 
   nixos-generate-config = makeProg {
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
     replacements = {
-      perl = "${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl";
+      perl = "${
+        pkgs.perl.withPackages (p: [
+          p.FileSlurp
+          p.ConfigIniFiles
+        ])
+      }/bin/perl";
       hostPlatformSystem = pkgs.stdenv.hostPlatform.system;
       detectvirt = "${config.systemd.package}/bin/systemd-detect-virt";
       btrfs = "${pkgs.btrfs-progs}/bin/btrfs";
@@ -36,13 +52,17 @@ let
       inherit (pkgs) runtimeShell;
       inherit (config.system.nixos) version codeName revision;
       inherit (config.system) configurationRevision;
-      json = builtins.toJSON ({
-        nixosVersion = config.system.nixos.version;
-      } // lib.optionalAttrs (config.system.nixos.revision != null) {
-        nixpkgsRevision = config.system.nixos.revision;
-      } // lib.optionalAttrs (config.system.configurationRevision != null) {
-        configurationRevision = config.system.configurationRevision;
-      });
+      json = builtins.toJSON (
+        {
+          nixosVersion = config.system.nixos.version;
+        }
+        // lib.optionalAttrs (config.system.nixos.revision != null) {
+          nixpkgsRevision = config.system.nixos.revision;
+        }
+        // lib.optionalAttrs (config.system.configurationRevision != null) {
+          configurationRevision = config.system.configurationRevision;
+        }
+      );
     };
     manPage = ./manpages/nixos-version.8;
   };
@@ -139,8 +159,8 @@ let
 
       # programs.firefox.enable = true;
 
-      # List packages installed in system profile. To search, run:
-      # \$ nix search wget
+      # List packages installed in system profile.
+      # You can use https://search.nixos.org/ to find more packages (and options).
       # environment.systemPackages = with pkgs; [
       #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
       #   wget
@@ -254,7 +274,7 @@ in
     description = ''
       Disable nixos-rebuild, nixos-generate-config, nixos-installer
       and other NixOS tools. This is useful to shrink embedded,
-      read-only systems which are not expected to be rebuild or
+      read-only systems which are not expected to rebuild or
       reconfigure themselves. Use at your own risk!
     '';
   };
@@ -266,26 +286,46 @@ in
     '';
   };
 
-  imports = let
-    mkToolModule = { name, package ? pkgs.${name} }: { config, ... }: {
-      options.system.tools.${name}.enable = lib.mkEnableOption "${name} script" // {
-        default = config.nix.enable && ! config.system.disableInstallerTools;
-        defaultText = "config.nix.enable && !config.system.disableInstallerTools";
-      };
+  imports =
+    let
+      mkToolModule =
+        {
+          name,
+          package ? pkgs.${name},
+        }:
+        { config, ... }:
+        {
+          options.system.tools.${name}.enable = lib.mkEnableOption "${name} script" // {
+            default = config.nix.enable && !config.system.disableInstallerTools;
+            defaultText = "config.nix.enable && !config.system.disableInstallerTools";
+          };
 
-      config = lib.mkIf config.system.tools.${name}.enable {
-        environment.systemPackages = [ package ];
-      };
-    };
-  in [
-    (mkToolModule { name = "nixos-build-vms"; })
-    (mkToolModule { name = "nixos-enter"; })
-    (mkToolModule { name = "nixos-generate-config"; package = config.system.build.nixos-generate-config; })
-    (mkToolModule { name = "nixos-install"; package = config.system.build.nixos-install; })
-    (mkToolModule { name = "nixos-option"; })
-    (mkToolModule { name = "nixos-rebuild"; package = config.system.build.nixos-rebuild; })
-    (mkToolModule { name = "nixos-version"; package = nixos-version; })
-  ];
+          config = lib.mkIf config.system.tools.${name}.enable {
+            environment.systemPackages = [ package ];
+          };
+        };
+    in
+    [
+      (mkToolModule { name = "nixos-build-vms"; })
+      (mkToolModule { name = "nixos-enter"; })
+      (mkToolModule {
+        name = "nixos-generate-config";
+        package = config.system.build.nixos-generate-config;
+      })
+      (mkToolModule {
+        name = "nixos-install";
+        package = config.system.build.nixos-install;
+      })
+      (mkToolModule { name = "nixos-option"; })
+      (mkToolModule {
+        name = "nixos-rebuild";
+        package = config.system.build.nixos-rebuild;
+      })
+      (mkToolModule {
+        name = "nixos-version";
+        package = nixos-version;
+      })
+    ];
 
   config = {
     documentation.man.man-db.skipPackages = [ nixos-version ];
@@ -293,10 +333,7 @@ in
     # These may be used in auxiliary scripts (ie not part of toplevel), so they are defined unconditionally.
     system.build = {
       inherit nixos-generate-config nixos-install;
-      nixos-rebuild =
-        if config.system.rebuild.enableNg
-          then nixos-rebuild-ng
-          else nixos-rebuild;
+      nixos-rebuild = if config.system.rebuild.enableNg then nixos-rebuild-ng else nixos-rebuild;
       nixos-option = lib.warn "Accessing nixos-option through `config.system.build` is deprecated, use `pkgs.nixos-option` instead." pkgs.nixos-option;
       nixos-enter = lib.warn "Accessing nixos-enter through `config.system.build` is deprecated, use `pkgs.nixos-enter` instead." pkgs.nixos-enter;
     };

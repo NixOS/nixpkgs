@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "kubemq-community";
@@ -12,9 +16,13 @@ buildGoModule rec {
 
   env.CGO_ENABLED = 0;
 
-  ldflags=[ "-w" "-s" "-X main.version=${version}" ];
+  ldflags = [
+    "-w"
+    "-s"
+    "-X main.version=${version}"
+  ];
 
-  doCheck = false;  # grpc tests are flaky
+  doCheck = false; # grpc tests are flaky
 
   vendorHash = "sha256-L1BxxSI2t0qWXizge+X3BrpGPaSy5Dk81vKuI0N5Ywg=";
 

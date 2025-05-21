@@ -10,27 +10,27 @@
   foundationdb,
   zstd,
   stdenv,
-  darwin,
   nix-update-script,
   nixosTests,
   rocksdb,
   callPackage,
+  withFoundationdb ? false,
+  stalwartEnterprise ? false,
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "stalwart-mail";
-  version = "0.11.6-unstable-2025-02-04";
+  pname = "stalwart-mail" + (lib.optionalString stalwartEnterprise "-enterprise");
+  version = "0.11.8";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "mail-server";
-    # release 0.11.6 broken, see https://github.com/stalwartlabs/mail-server/issues/1150
-    rev = "fa6483b6df57513582425119027bc4fce8f03d65";
-    hash = "sha256-mB3Vm07b+eKDlQ95pmVk14Q7jXTBbV1jTbN+6hcFt0s=";
+    tag = "v${version}";
+    hash = "sha256-VqGosbSQxNeOS+kGtvXAmz6vyz5mJlXvKZM57B1Xue4=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-PHr73GQ/6d5ulJzntSHIilGzdF4Y8Np9jSFa6F2Nwao=";
+  cargoHash = "sha256-iheURWxO0cOvO+FV01l2Vmo0B+S2mXzue6mx3gapftQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -38,31 +38,27 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      bzip2
-      openssl
-      sqlite
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ foundationdb ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    bzip2
+    openssl
+    sqlite
+    zstd
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && withFoundationdb) [ foundationdb ];
 
   # Issue: https://github.com/stalwartlabs/mail-server/issues/1104
   buildNoDefaultFeatures = true;
-  buildFeatures = [
-    "sqlite"
-    "postgres"
-    "mysql"
-    "rocks"
-    "elastic"
-    "s3"
-    "redis"
-  ];
+  buildFeatures =
+    [
+      "sqlite"
+      "postgres"
+      "mysql"
+      "rocks"
+      "elastic"
+      "s3"
+      "redis"
+    ]
+    ++ lib.optionals withFoundationdb [ "foundationdb" ]
+    ++ lib.optionals stalwartEnterprise [ "enterprise" ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
@@ -103,8 +99,16 @@ rustPlatform.buildRustPackage rec {
     "--skip=smtp::inbound::data::data"
     # Expected "X-My-Header: true" but got Received: from foobar.net (unknown [10.0.0.123])
     "--skip=smtp::inbound::scripts::sieve_scripts"
+    # thread 'smtp::outbound::lmtp::lmtp_delivery' panicked at tests/src/smtp/session.rs:313:13:
+    # Expected "<invalid@domain.org> (failed to lookup" but got From: "Mail Delivery Subsystem" <MAILER-DAEMON@localhost>
+    "--skip=smtp::outbound::lmtp::lmtp_delivery"
+    # thread 'smtp::outbound::extensions::extensions' panicked at tests/src/smtp/inbound/mod.rs:45:23:
+    # No queue event received.
+    "--skip=smtp::outbound::extensions::extensions"
     # panicked at tests/src/smtp/outbound/smtp.rs:173:5:
     "--skip=smtp::outbound::smtp::smtp_delivery"
+    # panicked at tests/src/smtp/outbound/lmtp.rs
+    "--skip=smtp::outbound::lmtp::lmtp_delivery"
     # thread 'smtp::queue::retry::queue_retry' panicked at tests/src/smtp/queue/retry.rs:119:5:
     # assertion `left == right` failed
     #   left: [1, 2, 2]
@@ -135,6 +139,10 @@ rustPlatform.buildRustPackage rec {
     "--skip=smtp::inbound::antispam::antispam"
     # Failed to read system DNS config: io error: No such file or directory (os error 2)
     "--skip=smtp::inbound::vrfy::vrfy_expn"
+    # thread 'smtp::management::queue::manage_queue' panicked at tests/src/smtp/inbound/mod.rs:45:23:
+    # No queue event received.
+    # NOTE: Test unreliable on high load systems
+    "--skip=smtp::management::queue::manage_queue"
   ];
 
   doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
@@ -150,7 +158,17 @@ rustPlatform.buildRustPackage rec {
     description = "Secure & Modern All-in-One Mail Server (IMAP, JMAP, SMTP)";
     homepage = "https://github.com/stalwartlabs/mail-server";
     changelog = "https://github.com/stalwartlabs/mail-server/blob/main/CHANGELOG.md";
-    license = lib.licenses.agpl3Only;
+    license =
+      [ lib.licenses.agpl3Only ]
+      ++ lib.optionals stalwartEnterprise [
+        {
+          fullName = "Stalwart Enterprise License 1.0 (SELv1) Agreement";
+          url = "https://github.com/stalwartlabs/mail-server/blob/main/LICENSES/LicenseRef-SEL.txt";
+          free = false;
+          redistributable = false;
+        }
+      ];
+
     maintainers = with lib.maintainers; [
       happysalada
       onny

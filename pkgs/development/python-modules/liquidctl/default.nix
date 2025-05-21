@@ -16,12 +16,11 @@
   colorlog,
   crcmod,
   pillow,
-  fetchpatch,
 }:
 
 buildPythonPackage rec {
   pname = "liquidctl";
-  version = "1.14.0";
+  version = "1.15.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -30,7 +29,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-HkMxYULeWcAYdlEI4N4qv7AGh/+xY0zuvV2mFPStPq8=";
+    hash = "sha256-ifYPUAF0lR9aCwiseNQZXbq+d+CXD/MwnZQhAM1TRLI=";
   };
 
   nativeBuildInputs = [
@@ -78,7 +77,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Cross-platform CLI and Python drivers for AIO liquid coolers and other devices";
     homepage = "https://github.com/liquidctl/liquidctl";
-    changelog = "https://github.com/liquidctl/liquidctl/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/liquidctl/liquidctl/blob/${src.tag}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
       arturcygan

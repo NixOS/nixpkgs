@@ -1,14 +1,15 @@
-{ lib
-, mkXfceDerivation
-, cairo
-, glib
-, gtk3
-, gtk-layer-shell
-, libX11
-, libxfce4ui
-, libxfce4util
-, xfce4-panel
-, libxfce4windowing
+{
+  lib,
+  mkXfceDerivation,
+  cairo,
+  glib,
+  gtk3,
+  gtk-layer-shell,
+  libX11,
+  libxfce4ui,
+  libxfce4util,
+  xfce4-panel,
+  libxfce4windowing,
 }:
 
 mkXfceDerivation {
@@ -34,6 +35,6 @@ mkXfceDerivation {
     description = "Modern, minimalist taskbar for Xfce";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

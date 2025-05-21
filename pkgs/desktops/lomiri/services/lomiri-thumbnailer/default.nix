@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
   nixosTests,
   testers,
@@ -48,6 +49,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
+    # Fix compat with taglib 2.x
+    # Remove when version > 3.0.4
+    (fetchpatch {
+      name = "0001-lomiri-thumbnailer-Fix-taglib-2.x-compat.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/commit/b7f1055e36cd6e33314bb9f6648f93e977a33267.patch";
+      hash = "sha256-9RHtxqsgdMkgIyswaeL5yS6+o/YvzT+HgRD8KL/RfNM=";
+    })
+
     # Remove when https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/merge_requests/23 merged & in release
     ./1001-doc-liblomiri-thumbnailer-qt-Honour-CMAKE_INSTALL_DO.patch
     ./1002-Re-enable-documentation.patch
@@ -122,6 +131,9 @@ stdenv.mkDerivation (finalAttrs: {
       gst-plugins-base
       gst-plugins-good
       gst-plugins-bad
+      # Something seems borked with bad's h264 decoder, add libav as a workaround
+      # https://github.com/NixOS/nixpkgs/issues/399599#issuecomment-2816268226
+      gst-libav
       # maybe add ugly to cover all kinds of formats?
     ]);
 
@@ -195,7 +207,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl3Only
       lgpl3Only
     ];
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "liblomiri-thumbnailer-qt"

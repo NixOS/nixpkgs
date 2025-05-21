@@ -6,17 +6,17 @@
 }:
 let
   pname = "navicat-premium";
-  version = "17.1.8";
+  version = "17.2.2";
 
   src =
     {
       x86_64-linux = fetchurl {
-        url = "https://web.archive.org/web/20250208181645/https://dn.navicat.com/download/navicat17-premium-en-x86_64.AppImage";
-        hash = "sha256-dPZIgq0vuBF4K2U12EKdGnDpfS67Afxmw+G7eLyYdpg=";
+        url = "https://web.archive.org/web/20250409204831/https://dn.navicat.com/download/navicat17-premium-en-x86_64.AppImage";
+        hash = "sha256-btSHD4hDqaqtdiwgd6jJraUqTcS4lGabPD/Q+UJS6KM=";
       };
       aarch64-linux = fetchurl {
-        url = "https://web.archive.org/web/20250208182611/https://dn.navicat.com/download/navicat17-premium-en-aarch64.AppImage";
-        hash = "sha256-IDcL4uqhTd20UOX3Zt8lpeTj8FhcbT+7RtsEzcP5dGI=";
+        url = "https://web.archive.org/web/20250409211232/https://dn.navicat.com/download/navicat17-premium-en-aarch64.AppImage";
+        hash = "sha256-D7dVxcHdrlc2Exa+gR8MkY8Tk9+afZXTRTvNzGWGOco=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");

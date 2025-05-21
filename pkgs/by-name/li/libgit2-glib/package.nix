@@ -14,12 +14,11 @@
   libgit2,
   glib,
   python3,
-  fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgit2-glib";
-  version = "1.2.0";
+  version = "1.2.1";
 
   outputs = [
     "out"
@@ -28,16 +27,9 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "EzHa2oOPTh9ZGyZFnUQSajJd52LcPNJhU6Ma+9/hgZA=";
+    url = "mirror://gnome/sources/libgit2-glib/${lib.versions.majorMinor finalAttrs.version}/libgit2-glib-${finalAttrs.version}.tar.xz";
+    sha256 = "l0I6d5ACs76HUcdfnXkEnfzMo2FqJhWfwWJIZ3K6eF8=";
   };
-
-  patches = [
-    # See:
-    # * <https://gitlab.gnome.org/GNOME/libgit2-glib/-/merge_requests/40>
-    # * <https://gitlab.gnome.org/GNOME/libgit2-glib/-/merge_requests/46>
-    ./libgit2-1.9.0.patch
-  ];
 
   nativeBuildInputs = [
     meson
@@ -71,7 +63,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "libgit2-glib";
       versionPolicy = "none";
     };
   };
@@ -80,7 +72,7 @@ stdenv.mkDerivation rec {
     description = "Glib wrapper library around the libgit2 git access library";
     homepage = "https://gitlab.gnome.org/GNOME/libgit2-glib";
     license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.linux;
   };
-}
+})

@@ -1,9 +1,9 @@
 <p align="center">
   <a href="https://nixos.org">
     <picture>
-      <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/NixOS/nixos-homepage/main/public/logo/nixos-hires.png">
+      <source media="(prefers-color-scheme: light)" srcset="https://nixos.org/logo/nixos-hires.png">
       <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/master/logo/nixos-white.png">
-      <img src="https://raw.githubusercontent.com/NixOS/nixos-homepage/main/public/logo/nixos-hires.png" width="500px" alt="NixOS logo">
+      <img src="https://nixos.org/logo/nixos-hires.png" width="500px" alt="NixOS logo">
     </picture>
   </a>
 </p>
@@ -14,7 +14,7 @@
 </p>
 
 [Nixpkgs](https://github.com/nixos/nixpkgs) is a collection of over
-100,000 software packages that can be installed with the
+120,000 software packages that can be installed with the
 [Nix](https://nixos.org/nix/) package manager. It also implements
 [NixOS](https://nixos.org/nixos/), a purely-functional Linux distribution.
 
@@ -27,7 +27,7 @@
 # Community
 
 * [Discourse Forum](https://discourse.nixos.org/)
-* [Matrix Chat](https://matrix.to/#/#community:nixos.org)
+* [Matrix Chat](https://matrix.to/#/#space:nixos.org)
 * [NixOS Weekly](https://weekly.nixos.org/)
 * [Official wiki](https://wiki.nixos.org/)
 * [Community-maintained list of ways to get in touch](https://wiki.nixos.org/wiki/Get_In_Touch#Chat) (Discord, Telegram, IRC, etc.)

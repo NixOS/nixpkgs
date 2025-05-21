@@ -43,13 +43,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-telephony-service";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-telephony-service";
     tag = finalAttrs.version;
-    hash = "sha256-vEMTnflHszgANSZHcVGx1goMWVe7/6eZLYCIxq8aMt4=";
+    hash = "sha256-7WKKRUEEF3NL8S1xg8E1WcD3dGasrw49pydeC4CyL+c=";
   };
 
   postPatch =
@@ -215,7 +215,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/ubports/development/core/lomiri-telephony-service";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-telephony-service/-/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
   };
 })

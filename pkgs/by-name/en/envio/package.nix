@@ -1,19 +1,13 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
-  fetchpatch,
   installShellFiles,
-  darwin,
   gpgme,
   libgpg-error,
   pkg-config,
   rustPlatform,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) Security;
-in
 rustPlatform.buildRustPackage rec {
   pname = "envio";
   version = "0.6.1";
@@ -36,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libgpg-error
     gpgme
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  ];
 
   postInstall = ''
     installManPage man/*.1

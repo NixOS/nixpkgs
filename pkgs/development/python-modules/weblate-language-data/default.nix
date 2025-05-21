@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "weblate-language-data";
-  version = "2025.2";
+  version = "2025.5";
   pyproject = true;
 
   src = fetchPypi {
     pname = "weblate_language_data";
     inherit version;
-    hash = "sha256-T3O107CQ01loE68vlQtcCjeytxCSiu0m5Oj5P06z2NU=";
+    hash = "sha256-+gT1630GfTd2lHD6dvrETaURwZY9RfS08HsYxMLVWko=";
   };
 
   build-system = [ setuptools ];
@@ -29,6 +29,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Language definitions used by Weblate";
     homepage = "https://github.com/WeblateOrg/language-data";
+    changelog = "https://github.com/WeblateOrg/language-data/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ erictapen ];
   };

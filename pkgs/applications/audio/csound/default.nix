@@ -9,10 +9,6 @@
   bison,
   boost,
   gettext,
-  Accelerate,
-  AudioUnit,
-  CoreAudio,
-  CoreMIDI,
   portaudio,
   alsa-lib ? null,
   libpulseaudio ? null,
@@ -27,7 +23,7 @@
   fltk ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "csound";
   version = "6.18.1-unstable-2024-07-02";
 
@@ -61,10 +57,6 @@ stdenv.mkDerivation rec {
       boost
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Accelerate
-      AudioUnit
-      CoreAudio
-      CoreMIDI
       portaudio
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux (
@@ -93,5 +85,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.marcweber ];
     platforms = platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

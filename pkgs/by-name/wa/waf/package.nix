@@ -1,11 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, callPackage
-, ensureNewerSourcesForZipFilesHook
-, python3
-# optional list of extra waf tools, e.g. `[ "doxygen" "pytest" ]`
-, extraTools ? []
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  callPackage,
+  ensureNewerSourcesForZipFilesHook,
+  python3,
+  makeWrapper,
+  # optional list of extra waf tools, e.g. `[ "doxygen" "pytest" ]`
+  extraTools ? [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,6 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     ensureNewerSourcesForZipFilesHook
     python3
+    makeWrapper
   ];
 
   buildInputs = [
@@ -39,24 +42,31 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postConfigure
   '';
 
-  buildPhase = let
-    extraToolsList =
-      lib.optionalString (extraTools != [])
-        "--tools=\"${lib.concatStringsSep "," extraTools}\"";
-  in
-  ''
-    runHook preBuild
+  buildPhase =
+    let
+      extraToolsList = lib.optionalString (
+        extraTools != [ ]
+      ) "--tools=\"${lib.concatStringsSep "," extraTools}\"";
+    in
+    ''
+      runHook preBuild
 
-    python waf-light build ${extraToolsList}
+      python waf-light build ${extraToolsList}
 
-    runHook postBuild
-  '';
+      substituteInPlace waf \
+        --replace "w = test(i + '/lib/' + dirname)" \
+                  "w = test('$out/${python3.sitePackages}')"
+
+      runHook postBuild
+    '';
 
   installPhase = ''
     runHook preInstall
 
-    install -D waf $out/bin/waf
-
+    install -D waf "$out"/bin/waf
+    wrapProgram "$out"/bin/waf --set PYTHONPATH "$out"/${python3.sitePackages}
+    mkdir -p "$out"/${python3.sitePackages}/
+    cp -r waflib "$out"/${python3.sitePackages}/
     runHook postInstall
   '';
 
@@ -70,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://waf.io";
     description = "Meta build system";
-    changelog  = "https://gitlab.com/ita1024/waf/blob/waf-${finalAttrs.version}/ChangeLog";
+    changelog = "https://gitlab.com/ita1024/waf/blob/waf-${finalAttrs.version}/ChangeLog";
     license = lib.licenses.bsd3;
     mainProgram = "waf";
     maintainers = with lib.maintainers; [ ];

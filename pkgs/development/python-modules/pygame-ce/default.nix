@@ -12,7 +12,6 @@
   ninja,
   meson-python,
 
-  AppKit,
   fontconfig,
   freetype,
   libjpeg,
@@ -60,8 +59,8 @@ buildPythonPackage rec {
         ]) buildInputs
       );
     })
-    # Skip tests that should be disabled without video driver
-    ./skip-surface-tests.patch
+    # https://github.com/libsdl-org/sdl2-compat/issues/476
+    ./skip-rle-tests.patch
   ];
 
   postPatch =
@@ -102,10 +101,10 @@ buildPythonPackage rec {
     libpng
     portmidi
     SDL2
-    SDL2_image
+    (SDL2_image.override { enableSTB = false; })
     SDL2_mixer
     SDL2_ttf
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
+  ];
 
   nativeCheckInputs = [
     numpy
@@ -117,7 +116,7 @@ buildPythonPackage rec {
 
   env =
     {
-      SDL_CONFIG = "${SDL2.dev}/bin/sdl2-config";
+      SDL_CONFIG = lib.getExe' (lib.getDev SDL2) "sdl2-config";
     }
     // lib.optionalAttrs stdenv.cc.isClang {
       NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
@@ -128,6 +127,8 @@ buildPythonPackage rec {
     # No audio or video device in test environment
     export SDL_VIDEODRIVER=dummy
     export SDL_AUDIODRIVER=disk
+    # traceback for segfaults
+    export PYTHONFAULTHANDLER=1
   '';
 
   checkPhase = ''

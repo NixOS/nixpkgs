@@ -6,6 +6,7 @@
   fetchFromGitHub,
   hatchling,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
@@ -26,7 +27,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "--cov --cov-report term-missing --cov=src/aioweenect --asyncio-mode=auto" ""
+      --replace-fail "--asyncio-mode=auto" ""
   '';
 
   pythonRelaxDeps = [ "aiohttp" ];
@@ -38,6 +39,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 

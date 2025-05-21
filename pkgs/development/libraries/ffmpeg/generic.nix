@@ -56,7 +56,7 @@
   withBzlib ? withHeadlessDeps,
   withCaca ? withFullDeps, # Textual display (ASCII art)
   withCdio ? withFullDeps && withGPL, # Audio CD grabbing
-  withCelt ? withHeadlessDeps, # CELT decoder
+  withCelt ? withFullDeps, # CELT decoder
   withChromaprint ? withFullDeps, # Audio fingerprinting
   withCodec2 ? withFullDeps, # codec2 en/decoding
   withCuda ? withFullDeps && withNvcodec,
@@ -72,7 +72,12 @@
   withNvcodec ?
     withHeadlessDeps
     && (
-      with stdenv; !isDarwin && !isAarch32 && !hostPlatform.isRiscV && hostPlatform == buildPlatform
+      with stdenv;
+      !isDarwin
+      && !isAarch32
+      && !hostPlatform.isLoongArch64
+      && !hostPlatform.isRiscV
+      && hostPlatform == buildPlatform
     ), # dynamically linked Nvidia code
   withFlite ? withFullDeps, # Voice Synthesis
   withFontconfig ? withHeadlessDeps, # Needed for drawtext filter
@@ -90,7 +95,7 @@
   withKvazaar ? withFullDeps, # HEVC encoding
   withLadspa ? withFullDeps, # LADSPA audio filtering
   withLc3 ? withFullDeps && lib.versionAtLeast version "7.1", # LC3 de/encoding
-  withLcevcdec ? false && lib.versionAtLeast version "7.1", # LCEVC decoding # FIXME currently makes ffmpeg crash in any operation on non-AVX CPUs
+  withLcevcdec ? withFullDeps && lib.versionAtLeast version "7.1", # LCEVC decoding
   withLcms2 ? withFullDeps, # ICC profile support via lcms2
   withLzma ? withHeadlessDeps, # xz-utils
   withMetal ? false, # Unfree and requires manual downloading of files
@@ -424,6 +429,13 @@ stdenv.mkDerivation (
 
     patches =
       [ ]
+      ++ optionals (lib.versionOlder version "5") [
+        (fetchpatch2 {
+          name = "rename_iszero";
+          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/b27ae2c0b704e83f950980102bc3f12f9ec17cb0";
+          hash = "sha256-l1t4LcUDSW757diNu69NzvjenW5Mxb5aYtXz64Yl9gs=";
+        })
+      ]
       ++ optionals (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2") [
         (fetchpatch2 {
           # this can be removed post 6.1
@@ -462,9 +474,24 @@ stdenv.mkDerivation (
           hash = "sha256-sqUUSOPTPLwu2h8GbAw4SfEf+0oWioz52BcpW1n4v3Y=";
         })
       ]
-      ++ optionals (lib.versionAtLeast version "7.1") [
+      ++ optionals (lib.versionOlder version "7.1.1") [
+        (fetchpatch2 {
+          name = "texinfo-7.1.patch";
+          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/4d9cdf82ee36a7da4f065821c86165fe565aeac2";
+          hash = "sha256-BZsq1WI6OgtkCQE8koQu0CNcb5c8WgTu/LzQzu6ZLuo=";
+        })
+      ]
+      ++ optionals (lib.versionOlder version "7" && stdenv.hostPlatform.isAarch32) [
+        (fetchpatch2 {
+          name = "binutils-2-43-compat.patch";
+          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/654bd47716c4f36719fb0f3f7fd8386d5ed0b916";
+          hash = "sha256-OLiQHKBNp2p63ZmzBBI4GEGz3WSSP+rMd8ITfZSVRgY=";
+        })
+      ]
+      ++ optionals (lib.versionAtLeast version "7.1" && lib.versionOlder version "7.1.1") [
         ./fix-fate-ffmpeg-spec-disposition-7.1.patch
-
+      ]
+      ++ optionals (lib.versionAtLeast version "7.1.1") [
         # Expose a private API for Chromium / Qt WebEngine.
         (fetchpatch2 {
           url = "https://gitlab.archlinux.org/archlinux/packaging/packages/ffmpeg/-/raw/a02c1a15706ea832c0d52a4d66be8fb29499801a/add-av_stream_get_first_dts-for-chromium.patch";
@@ -1011,6 +1038,10 @@ stdenv.mkDerivation (
   }
   // lib.optionalAttrs withCudaLLVM {
     # remove once https://github.com/NixOS/nixpkgs/issues/318674 is addressed properly
-    hardeningDisable = [ "zerocallusedregs" ];
+    hardeningDisable = [
+      "pacret"
+      "shadowstack"
+      "zerocallusedregs"
+    ];
   }
 )

@@ -9,7 +9,7 @@
 
 let
   attach = buildPackages.writeShellScriptBin "attach" ''
-    export PATH="${
+    export PATH="''${PATH:+''${PATH}:}${
       lib.makeBinPath [
         buildPackages.bash
         buildPackages.coreutils

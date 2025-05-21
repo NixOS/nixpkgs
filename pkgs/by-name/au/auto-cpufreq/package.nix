@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  fetchpatch,
   replaceVars,
   gobject-introspection,
   wrapGAppsHook3,
@@ -57,6 +58,13 @@ python3Packages.buildPythonPackage rec {
     ./prevent-install-and-copy.patch
     # patch to prevent update
     ./prevent-update.patch
+
+    # ps-util python package bounds are too strict for version 2.5.0
+    (fetchpatch {
+      name = "auto-cpufreq-2.5.0-ps-util-relax-constraints.patch";
+      url = "https://github.com/AdnanHodzic/auto-cpufreq/commit/8f026ac6497050c0e07c55b751c4b80401e932ec.patch";
+      sha256 = "sha256-hcEcuy7oW4fZgfOLSap3pnWk7H1Q757tgfl7HIUyWiM=";
+    })
   ];
 
   postPatch = ''

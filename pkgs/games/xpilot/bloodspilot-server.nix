@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./server-gcc5.patch
+    ./bloodspilot-server-strcpy-fix.patch
   ];
 
   meta = with lib; {

@@ -8,7 +8,7 @@
   yojson,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "telegraml";
   version = "unstable-2021-06-17";
 

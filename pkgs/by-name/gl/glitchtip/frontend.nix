@@ -2,28 +2,35 @@
   lib,
   fetchFromGitLab,
   buildNpmPackage,
+  fetchNpmDeps,
   jq,
   moreutils,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "glitchtip-frontend";
-  version = "4.2.5";
+  version = "4.2.10";
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "glitchtip-frontend";
-    tag = "v${version}";
-    hash = "sha256-yLpDjHnt8ZwpT+KlmEtXMYgrpnbYlVzJ/MZMELVO/j8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6ZOwAP6VB/uBrV6Yjc9jvzTNdfInekbLO/9PO57S9X8=";
   };
 
-  npmDepsHash = "sha256-sR/p/JRVuaemN1euZ/VrJ0j1q7fkS/Zi6R1m6lPvygs=";
+  npmDeps = fetchNpmDeps {
+    inherit (finalAttrs) src;
+    hash = "sha256-uEyET3y8LfjTasaJ+Hl206/Q7ov69mA7oNa0mhgcUEQ=";
+  };
 
   postPatch = ''
-    ${lib.getExe jq} '. + {
-      "devDependencies": .devDependencies | del(.cypress, ."cypress-localstorage-commands")
-    }' package.json | ${lib.getExe' moreutils "sponge"} package.json
+    jq '.devDependencies |= del(.cypress, ."cypress-localstorage-commands")' package.json | sponge package.json
   '';
+
+  nativeBuildInputs = [
+    moreutils
+    jq
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -44,11 +51,11 @@ buildNpmPackage rec {
   meta = {
     description = "Frontend for GlitchTip";
     homepage = "https://glitchtip.com";
-    changelog = "https://gitlab.com/glitchtip/glitchtip-frontend/-/releases/v${version}";
+    changelog = "https://gitlab.com/glitchtip/glitchtip-frontend/-/releases/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       defelo
       felbinger
     ];
   };
-}
+})

@@ -7,7 +7,7 @@
   fetchpatch2,
   alsa-lib,
   aubio,
-  boost,
+  boost186,
   cairomm,
   cppunit,
   curl,
@@ -52,7 +52,7 @@
   soundtouch,
   sratom,
   suil,
-  taglib,
+  taglib_1,
   vamp-plugin-sdk,
   wafHook,
   xjadeo,
@@ -127,7 +127,7 @@ stdenv.mkDerivation rec {
     [
       alsa-lib
       aubio
-      boost
+      boost186
       cairomm
       cppunit
       curl
@@ -166,7 +166,7 @@ stdenv.mkDerivation rec {
       soundtouch
       sratom
       suil
-      taglib
+      taglib_1
       vamp-plugin-sdk
     ]
     ++ lib.optionals videoSupport [

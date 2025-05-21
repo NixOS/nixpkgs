@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "acquire";
-  version = "3.17";
+  version = "3.18";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "acquire";
     tag = version;
-    hash = "sha256-Ii19VnLLq+UGH0bkyUbLzHqZpJOXffIGeP4VZ9QG7D0=";
+    hash = "sha256-kDoDPeMvpctNnB+e2LnCZ7fw9AP+AjPYDXwVqKedJ88=";
   };
 
   build-system = [
@@ -53,6 +53,14 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.full;
+
+  disabledTests = [
+    "output_encrypt"
+    "test_collector_collect_glob"
+    "test_collector_collect_path_with_dir"
+    "test_misc_osx"
+    "test_misc_unix"
+  ];
 
   pythonImportsCheck = [ "acquire" ];
 

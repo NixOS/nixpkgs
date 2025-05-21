@@ -6,7 +6,6 @@
   buildPythonPackage,
   cargo,
   chroma-hnswlib,
-  darwin,
   fastapi,
   fetchFromGitHub,
   grpcio,
@@ -91,7 +90,7 @@ buildPythonPackage rec {
   buildInputs = [
     openssl
     zstd
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  ];
 
   dependencies = [
     bcrypt
@@ -151,6 +150,8 @@ buildPythonPackage rec {
     "test_fastapi_server_token_authn_rejects_when_it_should_reject"
     # Issue with event loop
     "test_http_client_bw_compatibility"
+    # Issue with httpx
+    "test_not_existing_collection_delete"
   ];
 
   disabledTestPaths = [

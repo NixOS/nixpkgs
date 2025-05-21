@@ -52,6 +52,14 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/ubports/development/core/mediascanner2/-/commit/1e65b32e32a0536b9e2f283ba563fa78b6ef6d61.patch";
       hash = "sha256-Xhm5+/E/pP+mn+4enqdsor1oRqfYTzabg1ODVfIhra4=";
     })
+
+    # Fix taglib 2.x compat
+    # Remove when version > 0.117
+    (fetchpatch {
+      name = "0002-mediascanner2-Fix-taglib-2.x-compat.patch";
+      url = "https://gitlab.com/ubports/development/core/mediascanner2/-/commit/0ce744ecb32abb39516d1b9f98d47c3e86690158.patch";
+      hash = "sha256-hz/EB83yNoxhxkEcg7ZMezknpKajhH1BNkYD3wrf/eY=";
+    })
   ];
 
   postPatch = ''
@@ -124,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Media scanner service & access library";
     homepage = "https://gitlab.com/ubports/development/core/mediascanner2";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     mainProgram = "mediascanner-service-2.0";
     platforms = lib.platforms.linux;
     pkgConfigModules = [ "mediascanner-2.0" ];

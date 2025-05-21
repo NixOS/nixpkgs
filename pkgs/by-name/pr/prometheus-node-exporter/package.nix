@@ -1,36 +1,26 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   nixosTests,
-  darwin,
 }:
 
 buildGoModule rec {
   pname = "node_exporter";
-  version = "1.9.0";
+  version = "1.9.1";
   rev = "v${version}";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "prometheus";
     repo = "node_exporter";
-    hash = "sha256-mm4ZQjpIxaCbKIhZak0ZD4HVx3t+0m6YwjtIWak8RXc=";
+    hash = "sha256-il0wf00pUSHUrqz0Y1lr++yywlhr+Ww2pGKBeGAEnPc=";
   };
 
-  vendorHash = "sha256-rItbct0UIWs9zulyoQF647RwLJkTsBTDJHLORCgVDo8=";
+  vendorHash = "sha256-ujW5dH3ItIaML+LlaTXT0BK/T1ZGZq/cKnLOqNPBhWc=";
 
   # FIXME: tests fail due to read-only nix store
   doCheck = false;
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      CoreFoundation
-      IOKit
-    ]
-  );
 
   excludedPackages = [ "docs/node-mixin" ];
 

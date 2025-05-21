@@ -164,6 +164,7 @@ runCommand (lib.appendToName "with-packages" emacs).name
           # buffer.
           rm -f $siteStart $siteStartByteCompiled $subdirs $subdirsByteCompiled
           cat >"$siteStart" <<EOF
+          ;;; -*- lexical-binding: t -*-
           (let ((inhibit-message t))
             (load "$emacs/share/emacs/site-lisp/site-start"))
           ;; "$out/share/emacs/site-lisp" is added to load-path in wrapper.sh
@@ -175,11 +176,14 @@ runCommand (lib.appendToName "with-packages" emacs).name
           EOF
 
           # Generate a subdirs.el that statically adds all subdirectories to load-path.
+          cat >"$subdirs" <<EOF
+          ;;; -*- lexical-binding: t -*-
+          EOF
           $emacs/bin/emacs \
             --batch \
             --load ${./mk-wrapper-subdirs.el} \
             --eval "(prin1 (macroexpand-1 '(mk-subdirs-expr \"$out/share/emacs/site-lisp\")))" \
-            > "$subdirs"
+            >> "$subdirs"
 
           # Byte-compiling improves start-up time only slightly, but costs nothing.
           $emacs/bin/emacs --batch -f batch-byte-compile "$siteStart" "$subdirs"

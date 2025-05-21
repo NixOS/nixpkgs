@@ -229,6 +229,7 @@ in
 
     systemd.services.privoxy = {
       description = "Filtering web proxy";
+      documentation = [ "man:privoxy(8)" ];
       after = [
         "network.target"
         "nss-lookup.target"
@@ -282,9 +283,8 @@ in
         # This allows setting absolute key/crt paths
         ca-directory = "/var/empty";
         certificate-directory = "/run/privoxy/certs";
-        trusted-cas-file = "/etc/ssl/certs/ca-certificates.crt";
+        trusted-cas-file = config.security.pki.caBundle;
       });
-
   };
 
   imports =

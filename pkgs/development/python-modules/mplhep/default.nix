@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "mplhep";
-  version = "0.3.56";
+  version = "0.3.59";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "mplhep";
     tag = "v${version}";
-    hash = "sha256-sMJpJUEtIqmu7kCgZp43t9XLy/6nkDgKcxC4nFb+1po=";
+    hash = "sha256-Xanj2AkFRq/zu2ntTHVt1QkikN0bYfRcBj6CBho15os=";
   };
 
   build-system = [
@@ -68,7 +68,7 @@ buildPythonPackage rec {
   meta = {
     description = "Extended histogram plots on top of matplotlib and HEP compatible styling similar to current collaboration requirements (ROOT)";
     homepage = "https://github.com/scikit-hep/mplhep";
-    changelog = "https://github.com/scikit-hep/mplhep/releases/tag/v${version}";
+    changelog = "https://github.com/scikit-hep/mplhep/releases/tag/${src.tag}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ veprbl ];
   };

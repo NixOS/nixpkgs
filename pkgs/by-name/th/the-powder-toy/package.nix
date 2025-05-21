@@ -1,6 +1,5 @@
 {
   bzip2,
-  Cocoa,
   copyDesktopItems,
   curl,
   fetchFromGitHub,
@@ -8,6 +7,7 @@
   jsoncpp,
   lib,
   libpng,
+  libX11,
   lua,
   luajit,
   meson,
@@ -42,11 +42,12 @@ stdenv.mkDerivation rec {
     fftwFloat
     jsoncpp
     libpng
+    libX11
     lua
     luajit
     SDL2
     zlib
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
+  ];
 
   mesonFlags = [ "-Dworkaround_elusive_bzip2=false" ];
 

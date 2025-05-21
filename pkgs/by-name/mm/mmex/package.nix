@@ -4,7 +4,6 @@
   fetchFromGitHub,
   appstream,
   cmake,
-  fetchpatch,
   gettext,
   git,
   makeWrapper,

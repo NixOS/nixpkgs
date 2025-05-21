@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "httpx";
-  version = "1.6.10";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "httpx";
     tag = "v${version}";
-    hash = "sha256-lU5LtYFnWJu4yZTqdJFqLnaAUOQ3Nc2EaNPrvTxoW3Q=";
+    hash = "sha256-V4OTIUm7KSUSKgQczkOtIw8HlkLEMgvX53a4caQP5IU=";
   };
 
-  vendorHash = "sha256-+m0TPKIBCnRfswrMw9+w1r/pWaRmkI+s0RRbv5X5GBo=";
+  vendorHash = "sha256-lwk/ajywAJ969U5gpYQgIg8+u1xKARFH+HTk2+OgY4A=";
 
   subPackages = [ "cmd/httpx" ];
 
@@ -32,7 +32,7 @@ buildGoModule rec {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = [ "-version" ];
+  versionCheckProgramArg = "-version";
 
   meta = with lib; {
     description = "Fast and multi-purpose HTTP toolkit";

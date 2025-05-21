@@ -1,13 +1,13 @@
 {
   lib,
   stdenv,
+  desktop-file-utils,
   fetchFromGitHub,
   gobject-introspection,
-  gtk3,
-  libgee,
-  libhandy,
+  gtk4,
+  libadwaita,
   libsecret,
-  libsoup_2_4,
+  libsoup_3,
   meson,
   ninja,
   nix-update-script,
@@ -15,52 +15,48 @@
   pkg-config,
   python3,
   vala,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "taxi";
-  version = "2.0.2";
+  version = "2.0.2-unstable-2024-12-26";
 
+  # Temporarily disable nixpkgs-update before we have a tagged release.
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
-    owner = "Alecaddd";
-    repo = pname;
-    rev = version;
-    sha256 = "1a4a14b2d5vqbk56drzbbldp0nngfqhwycpyv8d3svi2nchkvpqa";
+    owner = "ellie-commons";
+    repo = "taxi";
+    rev = "b1c81490641f102005d9451a33d21610c0637e22";
+    sha256 = "sha256-boPwRSHzFpbrzRoSmNWf/fgi3cJDEt9qjZHWQWutL+o=";
   };
 
   nativeBuildInputs = [
+    desktop-file-utils
     gobject-introspection
     meson
     ninja
     pkg-config
     python3
     vala
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    gtk3
-    libgee
-    libhandy
+    gtk4
+    libadwaita
     libsecret
-    libsoup_2_4
-    pantheon.granite
+    libsoup_3
+    pantheon.granite7
   ];
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
-
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    homepage = "https://github.com/Alecaddd/taxi";
+    homepage = "https://github.com/ellie-commons/taxi";
     description = "FTP Client that drives you anywhere";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
+    teams = [ teams.pantheon ];
     platforms = platforms.linux;
-    mainProgram = "com.github.alecaddd.taxi";
+    mainProgram = "io.github.ellie_commons.taxi";
   };
 }

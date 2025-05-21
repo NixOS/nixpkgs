@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "dllogger";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.5";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "NVIDIA";
     repo = "dllogger";
     tag = "v${version}";
-    hash = "sha256-Hpr4yeRl+Dyaz6lRyH/5P6UQT184JEHPqgVlf4qHvOg=";
+    hash = "sha256-kT6FhAl4JZlFPdzKYopAJBurYVMaU5umn/qZADfPjkE=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Logging tool for deep learning";
     homepage = "https://github.com/NVIDIA/dllogger";
-    changelog = "https://github.com/NVIDIA/dllogger/releases/tag/v${version}";
+    changelog = "https://github.com/NVIDIA/dllogger/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ natsukium ];
   };

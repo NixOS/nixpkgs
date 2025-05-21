@@ -18,6 +18,6 @@ buildPythonPackage rec {
     description = "Templating system for Python";
     mainProgram = "em.py";
     maintainers = with maintainers; [ nkalupahana ];
-    license = licenses.lgpl21Only;
+    license = licenses.bsd3;
   };
 }

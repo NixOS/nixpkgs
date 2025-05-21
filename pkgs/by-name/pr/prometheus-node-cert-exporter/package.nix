@@ -1,11 +1,10 @@
 {
   lib,
-  buildGo122Module,
+  buildGoModule,
   fetchFromGitHub,
-  nixosTests,
 }:
 
-buildGo122Module {
+buildGoModule {
   pname = "node-cert-exporter";
   version = "1.1.7-unstable-2024-12-26";
 

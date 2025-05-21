@@ -4,23 +4,20 @@
   aiounittest,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyfronius";
-  version = "0.7.6";
+  version = "0.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nielstron";
     repo = "pyfronius";
     tag = version;
-    hash = "sha256-zyRcMueKZbk2QWhF3d500NUpvljikO8fsDnePy6Tq90=";
+    hash = "sha256-Ns4OpBvj40aQkCBTnKHMTSpyNu5zgfXDtmz1aW3bmEU=";
   };
 
   build-system = [ setuptools ];

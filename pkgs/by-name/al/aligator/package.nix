@@ -8,7 +8,7 @@
   gbenchmark,
   graphviz,
   lib,
-  llvmPackages, # llvm/Support/Host.h required by casadi 3.6.5 and not available in llvm 18
+  llvmPackages,
   pinocchio,
   pkg-config,
   proxsuite-nlp,
@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aligator";
-  version = "0.8.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "Simple-Robotics";
     repo = "aligator";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-o4QjxTaZUa17hZsCv4hCI2cedaHoojBtLe8SVUkl0bo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oy2qcJbIGr5pe+XYWKntfsc6Ie7oEU1qqrPXjuqULmY=";
   };
 
   outputs = [
@@ -36,13 +36,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    doxygen
-    cmake
-    graphviz
-    pkg-config
-  ] ++ lib.optional pythonSupport python3Packages.pythonImportsCheckHook;
-  buildInputs = [ fmt ] ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
+  nativeBuildInputs =
+    [
+      doxygen
+      cmake
+      graphviz
+      pkg-config
+    ]
+    ++ lib.optionals pythonSupport [
+      python3Packages.pythonImportsCheckHook
+    ];
+  buildInputs =
+    [ fmt ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      llvmPackages.openmp
+    ];
   propagatedBuildInputs =
     [ suitesparse ]
     ++ lib.optionals pythonSupport [
@@ -74,14 +82,19 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && pythonSupport) [
       # ignore one failing test for now
-      (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;aligator-test-py-integrators")
+      (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'aligator-test-py-rollout|aligator-test-py-frames'")
     ];
 
   # Fontconfig error: Cannot load default config file: No such file: (null)
   env.FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
-  # Fontconfig error: No writable cache directories
-  preBuild = "export XDG_CACHE_HOME=$(mktemp -d)";
+  preBuild = ''
+    # silence matplotlib warning
+    export MPLCONFIGDIR=$(mktemp -d)
+
+    # Fontconfig error: No writable cache directories
+    export XDG_CACHE_HOME=$(mktemp -d)
+  '';
 
   doCheck = true;
   pythonImportsCheck = [ "aligator" ];

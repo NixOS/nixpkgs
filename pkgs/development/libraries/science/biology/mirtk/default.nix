@@ -14,7 +14,7 @@
   tbb,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mirtk";
   version = "unstable-2022-07-22";
 

@@ -1,11 +1,11 @@
 {
   lib,
   fetchFromGitHub,
-  php,
+  php82,
   dataDir ? "/var/lib/agorakit",
 }:
 
-php.buildComposerProject2 (finalAttrs: {
+php82.buildComposerProject2 (finalAttrs: {
   pname = "agorakit";
   version = "1.9.3";
 

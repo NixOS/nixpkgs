@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchgit
-, zlib
-, gnutlsSupport ? false
-, gnutls
-, nettle
-, opensslSupport ? true
-, openssl
+{
+  lib,
+  stdenv,
+  fetchgit,
+  zlib,
+  gnutlsSupport ? false,
+  gnutls,
+  nettle,
+  opensslSupport ? true,
+  openssl,
 }:
 
 assert (gnutlsSupport || opensslSupport);
@@ -26,19 +27,27 @@ stdenv.mkDerivation {
     makeFlagsArray+=(CC="$CC")
   '';
 
-  makeFlags = [
-    "prefix=$(out)"
-    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-  ]
+  makeFlags =
+    [
+      "prefix=$(out)"
+      "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+    ]
     ++ lib.optional gnutlsSupport "CRYPTO=GNUTLS"
     ++ lib.optional opensslSupport "CRYPTO=OPENSSL"
     ++ lib.optional stdenv.hostPlatform.isDarwin "SYS=darwin";
 
-  propagatedBuildInputs = [ zlib ]
-    ++ lib.optionals gnutlsSupport [ gnutls nettle ]
+  propagatedBuildInputs =
+    [ zlib ]
+    ++ lib.optionals gnutlsSupport [
+      gnutls
+      nettle
+    ]
     ++ lib.optional opensslSupport openssl;
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   separateDebugInfo = true;
 

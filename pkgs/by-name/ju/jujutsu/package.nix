@@ -5,7 +5,6 @@
   fetchFromGitHub,
   installShellFiles,
   pkg-config,
-  zstd,
   libgit2,
   libssh2,
   openssl,
@@ -14,33 +13,23 @@
   openssh,
   buildPackages,
   nix-update-script,
-  testers,
-  jujutsu,
+  versionCheckHook,
 }:
 
-let
-  version = "0.27.0";
-in
-
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jujutsu";
-  inherit version;
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "jj-vcs";
     repo = "jj";
-    tag = "v${version}";
-    hash = "sha256-fBgJrSglH46+NHu3spk5mC51ASDHWnOoW6veKZ0R2YA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jyhjKppwK+emwLEXtOJKU0f4mPdLzDrQabnHhpyUzmw=";
   };
 
   useFetchCargoVendor = true;
 
-  cargoPatches = [
-    # <https://github.com/jj-vcs/jj/pull/5315>
-    ./libgit2-1.9.0.patch
-  ];
-
-  cargoHash = "sha256-35DJdAUXc2gb/EXECScwinSzzp7uaxFbUxedjqRGfj8=";
+  cargoHash = "sha256-1bb7YWXExS62s83rprHa0byUBJUCdw6JDYkQ3VZcje8=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -48,7 +37,6 @@ rustPlatform.buildRustPackage {
   ];
 
   buildInputs = [
-    zstd
     libgit2
     libssh2
   ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
@@ -75,6 +63,12 @@ rustPlatform.buildRustPackage {
     "jj-cli"
   ];
 
+  # taplo-cli (used in tests) always creates a reqwest client, which
+  # requires configd access on macOS.
+  sandboxProfile = ''
+    (allow mach-lookup (global-name "com.apple.SystemConfiguration.configd"))
+  '';
+
   env = {
     # Disable vendored libraries.
     ZSTD_SYS_USE_PKG_CONFIG = "1";
@@ -96,20 +90,19 @@ rustPlatform.buildRustPackage {
         --zsh <(COMPLETE=zsh ${jj})
     '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/jj";
+  versionCheckProgramArg = "--version";
+
   passthru = {
     updateScript = nix-update-script { };
-    tests = {
-      version = testers.testVersion {
-        package = jujutsu;
-        command = "jj --version";
-      };
-    };
   };
 
   meta = {
     description = "Git-compatible DVCS that is both simple and powerful";
     homepage = "https://github.com/jj-vcs/jj";
-    changelog = "https://github.com/jj-vcs/jj/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/jj-vcs/jj/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       _0x4A6F
@@ -119,4 +112,4 @@ rustPlatform.buildRustPackage {
     ];
     mainProgram = "jj";
   };
-}
+})

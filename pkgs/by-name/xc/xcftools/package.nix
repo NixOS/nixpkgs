@@ -39,6 +39,9 @@ stdenv.mkDerivation rec {
 
     # xcfview needs mailcap and isn't that useful anyway
     sed -i -e '/BINARIES/s/xcfview//' Makefile.in
+
+    # add missing header
+    sed -e '1i#include <stdlib.h>' -i xcf-general.c
   '';
 
   meta = {

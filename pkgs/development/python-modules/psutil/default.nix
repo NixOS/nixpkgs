@@ -2,10 +2,8 @@
   lib,
   stdenv,
   buildPythonPackage,
-  CoreFoundation,
   fetchPypi,
   setuptools,
-  IOKit,
   pytestCheckHook,
   python,
   pythonOlder,
@@ -13,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "psutil";
-  version = "6.1.1";
+  version = "7.0.0";
   pyproject = true;
 
   inherit stdenv;
@@ -22,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-z4SWcowY8tC0UZjwaJW+UvNmEXEXRrfzDEZLQitQ4vU=";
+    hash = "sha256-e+nD66OL7Mtkleozr9mCpEB0t48oxDSh9RzAf9MVxFY=";
   };
 
   postPatch = ''
@@ -34,11 +32,6 @@ buildPythonPackage rec {
   '';
 
   build-system = [ setuptools ];
-
-  buildInputs =
-    # workaround for https://github.com/NixOS/nixpkgs/issues/146760
-    lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [ CoreFoundation ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

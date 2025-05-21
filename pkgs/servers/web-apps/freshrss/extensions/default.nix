@@ -56,7 +56,7 @@ let
         };
       };
 
-      reading-time = buildFreshRssExtension rec {
+      reading-time = buildFreshRssExtension {
         FreshRssExtUniqueId = "ReadingTime";
         pname = "reading-time";
         version = "1.5";

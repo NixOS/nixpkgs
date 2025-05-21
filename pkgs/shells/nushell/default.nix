@@ -9,9 +9,6 @@
   pkg-config,
   python3,
   xorg,
-  Libsystem,
-  AppKit,
-  Security,
   nghttp2,
   libgit2,
   withDefaultFeatures ? true,
@@ -19,10 +16,11 @@
   testers,
   nushell,
   nix-update-script,
+  curlMinimal,
 }:
 
 let
-  version = "0.102.0";
+  version = "0.104.0";
 in
 
 rustPlatform.buildRustPackage {
@@ -33,11 +31,11 @@ rustPlatform.buildRustPackage {
     owner = "nushell";
     repo = "nushell";
     tag = version;
-    hash = "sha256-ISiixFQ2m++WKX66SnvF1VZpgYJjgchRWSlo/Cp/Ybs=";
+    hash = "sha256-F4nHCOpbcvmdXDX5KJc9MS3hIIrtMlZR8IjDU7Us/xs=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-3cmNlCTawMUpr6kSyT/YZzC717FoXkF0uTeE/D8BSFM=";
+  cargoHash = "sha256-zem4HgxO0DD22Bxvs9KN3Zb5E991svV5qcw7MfDUOq4=";
 
   nativeBuildInputs =
     [ pkg-config ]
@@ -51,20 +49,15 @@ rustPlatform.buildRustPackage {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       zlib
-      Libsystem
-      Security
     ]
     ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ xorg.libX11 ]
     ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isDarwin) [
-      AppKit
       nghttp2
       libgit2
     ];
 
   buildNoDefaultFeatures = !withDefaultFeatures;
   buildFeatures = additionalFeatures [ ];
-
-  doCheck = !stdenv.hostPlatform.isDarwin; # Skip checks on darwin. Failing tests since 0.96.0
 
   checkPhase = ''
     runHook preCheck
@@ -81,6 +74,10 @@ rustPlatform.buildRustPackage {
     )
     runHook postCheck
   '';
+
+  checkInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    curlMinimal
+  ];
 
   passthru = {
     shellPath = "/bin/nu";

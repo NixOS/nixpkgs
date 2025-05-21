@@ -1,4 +1,10 @@
-{lib, stdenv, fetchurl, unzip, findXMLCatalogs}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  findXMLCatalogs,
+}:
 
 let
   # Urgh, DocBook 4.1.2 doesn't come with an XML catalog.  Use the one
@@ -10,7 +16,12 @@ let
 in
 
 import ./generic.nix {
-  inherit lib stdenv unzip findXMLCatalogs;
+  inherit
+    lib
+    stdenv
+    unzip
+    findXMLCatalogs
+    ;
   version = "4.1.2";
   src = fetchurl {
     url = "https://docbook.org/xml/4.1.2/docbkx412.zip";

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   lib,
   libiconv,
-  Security,
   nixosTests,
 }:
 
@@ -29,7 +28,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-    Security
   ];
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) wireguard; };

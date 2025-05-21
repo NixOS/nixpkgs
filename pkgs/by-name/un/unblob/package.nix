@@ -1,11 +1,14 @@
 {
   lib,
-  fetchpatch,
+  libiconv,
   python3,
   fetchFromGitHub,
   gitUpdater,
   makeWrapper,
+  rustPlatform,
+  stdenvNoCC,
   e2fsprogs,
+  erofs-utils,
   jefferson,
   lz4,
   lziprecover,
@@ -24,6 +27,7 @@ let
   # These dependencies are only added to PATH
   runtimeDeps = [
     e2fsprogs
+    erofs-utils
     jefferson
     lziprecover
     lzop
@@ -39,7 +43,7 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "unblob";
-  version = "25.1.8";
+  version = "25.4.14";
   pyproject = true;
   disabled = python3.pkgs.pythonOlder "3.9";
 
@@ -47,14 +51,21 @@ python3.pkgs.buildPythonApplication rec {
     owner = "onekey-sec";
     repo = "unblob";
     tag = version;
-    hash = "sha256-PGpJPAo9q52gQ3EGusYtDA2e0MG5kFClqCYPB2DvuMs=";
+    hash = "sha256-kWZGQX8uSKdFW+uauunHcruXhJ5XpBfyDY7gPyWGK90=";
     forceFetchGit = true;
     fetchLFS = true;
+  };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-lGsDax7+CUACeYChDqdPsVbKE/hH94CPek6UBVz1eqs=";
   };
 
   strictDeps = true;
 
   build-system = with python3.pkgs; [ poetry-core ];
+
+  buildInputs = lib.optionals stdenvNoCC.hostPlatform.isDarwin [ libiconv ];
 
   dependencies = with python3.pkgs; [
     arpy
@@ -70,15 +81,17 @@ python3.pkgs.buildPythonApplication rec {
     pyfatfs
     pyperscan
     python-magic
+    pyzstd
     rarfile
     rich
     structlog
     treelib
-    unblob-native
   ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with rustPlatform; [
     makeWrapper
+    maturinBuildHook
+    cargoSetupHook
   ];
 
   # These are runtime-only CLI dependencies, which are used through
@@ -87,6 +100,8 @@ python3.pkgs.buildPythonApplication rec {
     "jefferson"
     "ubi-reader"
   ];
+
+  pythonRelaxDeps = [ "lz4" ];
 
   pythonImportsCheck = [ "unblob" ];
 
@@ -105,12 +120,18 @@ python3.pkgs.buildPythonApplication rec {
 
   versionCheckProgramArg = "--version";
 
-  pytestFlagsArray = [
-    "--no-cov"
-    # `disabledTests` swallows the parameters between square brackets
-    # https://github.com/tytso/e2fsprogs/issues/152
-    "-k 'not test_all_handlers[filesystem.extfs]'"
-  ];
+  pytestFlagsArray =
+    let
+      # `disabledTests` swallows the parameters between square brackets
+      disabled = [
+        # https://github.com/tytso/e2fsprogs/issues/152
+        "test_all_handlers[filesystem.extfs]"
+      ];
+    in
+    [
+      "--no-cov"
+      "-k 'not ${lib.concatStringsSep " and not " disabled}'"
+    ];
 
   passthru = {
     updateScript = gitUpdater { };

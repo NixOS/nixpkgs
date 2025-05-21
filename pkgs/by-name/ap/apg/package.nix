@@ -5,7 +5,7 @@
   openssl,
   autoreconfHook,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "apg";
   version = "unstable-2015-01-29";
 

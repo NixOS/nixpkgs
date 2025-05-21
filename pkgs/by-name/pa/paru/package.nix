@@ -53,9 +53,9 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     installManPage man/paru.8 man/paru.conf.5
-    installShellCompletion --bash completions/bash
-    installShellCompletion --fish completions/fish
-    installShellCompletion --zsh completions/zsh
+    installShellCompletion --name paru.bash --bash completions/bash
+    installShellCompletion --name paru.fish --fish completions/fish
+    installShellCompletion --name _paru --zsh completions/zsh
     cp -r locale "$out/share/"
   '';
 

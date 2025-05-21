@@ -8,7 +8,7 @@
   libX11,
   libXt,
   libGL,
-  openimageio,
+  openimageio_2,
   imath,
   python,
   apple-sdk_14,
@@ -18,6 +18,9 @@ buildPythonPackage rec {
   pname = "materialx";
   version = "1.38.10";
 
+  # nixpkgs-update: no auto update
+  # Updates are disabled due to API breakage in 1.39+ that breaks almost all
+  # consumers.
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "MaterialX";
@@ -34,7 +37,7 @@ buildPythonPackage rec {
 
   buildInputs =
     [
-      openimageio
+      openimageio_2
       imath
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [

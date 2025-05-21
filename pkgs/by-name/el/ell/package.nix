@@ -1,23 +1,28 @@
-{ lib, stdenv
-, fetchgit
-, autoreconfHook
-, pkg-config
-, dbus
-, sysctl
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  pkg-config,
+  dbus,
+  sysctl,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ell";
-  version = "0.71";
+  version = "0.76";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
   separateDebugInfo = true;
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/libs/ell/ell.git";
     rev = version;
-    hash = "sha256-nbfWjV0zPPx2kcnD/aRaWSXUGIqrUX7Z4U45ASk5Ric=";
+    hash = "sha256-LSTmcVBKI+EpDiTpiKFEeIIXIXc6C5gOYn5zf7sHe/I=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +40,11 @@ stdenv.mkDerivation rec {
 
   # Runs multiple dbus instances on the same port failing the bind.
   enableParallelChecking = false;
+
+  # 'unit/test-hwdb' fails in the sandbox as it relies on
+  # '/etc/udev/hwdb.bin' file presence in the sandbox. `nixpkgs` does
+  # not provide it today in any form. Let's skip the test.
+  env.XFAIL_TESTS = "unit/test-hwdb";
 
   # tests sporadically fail on musl
   doCheck = !stdenv.hostPlatform.isMusl;
@@ -54,6 +64,9 @@ stdenv.mkDerivation rec {
     changelog = "https://git.kernel.org/pub/scm/libs/ell/ell.git/tree/ChangeLog?h=${version}";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mic92 dtzWill ];
+    maintainers = with maintainers; [
+      mic92
+      dtzWill
+    ];
   };
 }

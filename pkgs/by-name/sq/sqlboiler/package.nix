@@ -1,20 +1,21 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "sqlboiler";
-  version = "4.18.0";
+  version = "4.19.0";
 
   src = fetchFromGitHub {
     owner = "volatiletech";
     repo = "sqlboiler";
     tag = "v${version}";
-    hash = "sha256-gpRegyW6LrKj45MDl+eOKrTqTo1wn7JOd4zPDexOB6M=";
+    hash = "sha256-vsrC/i8ekjlKMVjH91XT9iizZaSD5Mi/p/4AFWBfAlQ=";
   };
 
-  vendorHash = "sha256-BTrQPWThfJ7gWXi/Y1l/s2BmkW5lVYS/PP0WRwntQxA=";
+  vendorHash = "sha256-K1Bo2aENteZYjx7jRczqdcoYZn5G8ywtCtHkVB7Reus=";
 
   tags = [
     "mysql"

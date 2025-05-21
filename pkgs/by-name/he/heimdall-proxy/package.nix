@@ -1,12 +1,12 @@
 {
   fetchFromGitHub,
-  buildGo124Module,
+  buildGoModule,
   lib,
 }:
 let
-  version = "0.15.8";
+  version = "0.16.2";
 in
-buildGo124Module {
+buildGoModule {
   pname = "heimdall-proxy";
 
   inherit version;
@@ -15,10 +15,10 @@ buildGo124Module {
     owner = "dadrus";
     repo = "heimdall";
     tag = "v${version}";
-    hash = "sha256-UUQWYChZEb/5mc2YYwIJSQ+pCUXIwvB09KaR0FoKrA4=";
+    hash = "sha256-RzRjcg9GocqXpBh8C34LrSLbSrJWd9y4+YEWJaAD8d0=";
   };
 
-  vendorHash = "sha256-4bnVqUV3H/mZ9FiApZk6pVbRWAqpy17+/dGxXR0fjW0=";
+  vendorHash = "sha256-GVUO5a6m85C7JRJ9WBTB7JDHRaiU2Nq3clWQUedKp98=";
 
   tags = [ "sqlite" ];
 

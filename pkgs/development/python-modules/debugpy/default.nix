@@ -11,6 +11,7 @@
   pytestCheckHook,
   pytest-xdist,
   pytest-timeout,
+  pytest-retry,
   importlib-metadata,
   psutil,
   untangle,
@@ -24,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.8.13";
+  version = "1.8.14";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -33,7 +34,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "debugpy";
     tag = "v${version}";
-    hash = "sha256-pQtslK+kiu1bw3RFKReFr+HeCiv7R/X07n0faEquJQE=";
+    hash = "sha256-IOR6Dbbg/HK4/1re0BEWafwmpBMnQJCo5ojDMB2KgV4=";
   };
 
   patches =
@@ -84,7 +85,6 @@ buildPythonPackage rec {
             "i686-linux" = "-shared -o attach_linux_x86.so";
             "aarch64-linux" = "-shared -o attach_linux_arm64.so";
             "x86_64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach_x86_64.dylib";
-            "i686-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach_x86.dylib";
             "aarch64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach_arm64.dylib";
           }
           .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
@@ -99,6 +99,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-xdist
     pytest-timeout
+    pytest-retry
 
     ## Used by test helpers:
     importlib-metadata
@@ -129,7 +130,12 @@ buildPythonPackage rec {
   '';
 
   # Override default arguments in pytest.ini
-  pytestFlagsArray = [ "--timeout=0" ];
+  pytestFlags = [ "--timeout=0" ];
+
+  disabledTests = [
+    # hanging test (flaky)
+    "test_systemexit"
+  ];
 
   # Fixes hanging tests on Darwin
   __darwinAllowLocalNetworking = true;
@@ -147,7 +153,6 @@ buildPythonPackage rec {
       "i686-linux"
       "aarch64-linux"
       "x86_64-darwin"
-      "i686-darwin"
       "aarch64-darwin"
     ];
   };

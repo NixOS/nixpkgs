@@ -5,7 +5,7 @@
   pnpm_9,
   nodejs,
   makeWrapper,
-  prisma-engines,
+  pkgs,
   ffmpeg,
   openssl,
   vips,
@@ -15,9 +15,26 @@
 }:
 
 let
+  prisma-engines = pkgs.prisma-engines.overrideAttrs (
+    finalAttrs: prevAttrs: {
+      version = "6.5.0";
+      src = fetchFromGitHub {
+        inherit (prevAttrs.src) owner repo;
+        rev = finalAttrs.version;
+        hash = "sha256-m3LBIMIVMI5GlY0+QNw/nTlNWt2rGOZ28z+CfdP51cY=";
+      };
+      cargoHash = "sha256-yG+omKAS1eWq3sFgKXMoZWhTP4M34dVRes7OhhTUyTQ=";
+      cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
+        inherit (finalAttrs) pname version src;
+        hash = finalAttrs.cargoHash;
+      };
+    }
+  );
+
   environment = {
     NEXT_TELEMETRY_DISABLED = "1";
-    FFMPEG_BIN = lib.getExe ffmpeg;
+    FFMPEG_PATH = lib.getExe ffmpeg;
+    FFPROBE_PATH = lib.getExe' ffmpeg "ffprobe";
     PRISMA_SCHEMA_ENGINE_BINARY = lib.getExe' prisma-engines "schema-engine";
     PRISMA_QUERY_ENGINE_BINARY = lib.getExe' prisma-engines "query-engine";
     PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines}/lib/libquery_engine.node";
@@ -28,18 +45,18 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zipline";
-  version = "4.0.0";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "diced";
     repo = "zipline";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-q+/fjSvrPoTDwk+vxg7qltoJvD/cLcAG5fzKen1cAuk=";
+    hash = "sha256-waUc2DzD7oQ/ZuPKvUwu3Yj6uxrZauR4phcQwh7YfKw=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-rDm3LFFB65SdSfqABMZelhfx4Cq6u0EV3xdDp9lBR54=";
+    hash = "sha256-Q1PHXoiqUorAGcpIvM5iBvPINLRv+dAo0awhG4gvsrI=";
   };
 
   buildInputs = [ vips ];
@@ -101,6 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
+    inherit prisma-engines;
     tests = { inherit (nixosTests) zipline; };
     updateScript = nix-update-script { };
   };

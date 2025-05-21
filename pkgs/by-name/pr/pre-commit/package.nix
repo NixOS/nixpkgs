@@ -7,7 +7,6 @@
   coursier,
   dotnet-sdk,
   gitMinimal,
-  glibcLocales,
   go,
   nodejs,
   perl,
@@ -52,7 +51,6 @@ buildPythonApplication rec {
     [
       cargo
       gitMinimal
-      glibcLocales
       go
       libiconv # For rust tests on Darwin
       perl
@@ -101,7 +99,7 @@ buildPythonApplication rec {
     + ''
       export GIT_AUTHOR_NAME=test GIT_COMMITTER_NAME=test \
              GIT_AUTHOR_EMAIL=test@example.com GIT_COMMITTER_EMAIL=test@example.com \
-             VIRTUALENV_NO_DOWNLOAD=1 PRE_COMMIT_NO_CONCURRENCY=1 LANG=en_US.UTF-8
+             VIRTUALENV_NO_DOWNLOAD=1 PRE_COMMIT_NO_CONCURRENCY=1
     ''
     + lib.optionalString (!i686Linux) ''
       # Resolve `.NET location: Not found` errors for dotnet tests
@@ -198,6 +196,11 @@ buildPythonApplication rec {
   pythonImportsCheck = [
     "pre_commit"
   ];
+
+  # add gitMinimal as fallback, if git is not installed
+  preFixup = ''
+    makeWrapperArgs+=(--suffix PATH : ${lib.makeBinPath [ gitMinimal ]})
+  '';
 
   passthru.tests = callPackage ./tests.nix {
     inherit gitMinimal pre-commit;

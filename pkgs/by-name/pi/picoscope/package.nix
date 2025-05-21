@@ -30,7 +30,8 @@
 let
   shared_meta = lib: {
     homepage = "https://www.picotech.com/downloads/linux";
-    maintainers = with lib.maintainers; [ wirew0rm ] ++ lib.teams.lumiguide.members;
+    maintainers = with lib.maintainers; [ wirew0rm ];
+    teams = [ lib.teams.lumiguide ];
     platforms = [ "x86_64-linux" ];
     license = lib.licenses.unfree;
   };
@@ -43,7 +44,7 @@ let
       autoPatchelfHook,
       dpkg,
     }:
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation {
       pname = "libpicoipp";
       inherit (sources.libpicoipp) version;
       src = fetchurl { inherit (sources.libpicoipp) url sha256; };
@@ -79,7 +80,7 @@ let
       version,
       sha256,
     }:
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation {
       pname = "lib${name}";
       inherit version;
       src = fetchurl { inherit url sha256; };

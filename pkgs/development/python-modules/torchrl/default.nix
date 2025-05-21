@@ -38,7 +38,7 @@
   tensorboard,
   wandb,
 
-  # checks
+  # tests
   imageio,
   pytest-rerunfailures,
   pytestCheckHook,
@@ -48,14 +48,14 @@
 
 buildPythonPackage rec {
   pname = "torchrl";
-  version = "0.7.1";
+  version = "0.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "rl";
     tag = "v${version}";
-    hash = "sha256-+GE84GusipNZ18euV8ag0AbOtUrYfOxUAeXeCgF2OiI=";
+    hash = "sha256-ANoqIAVKSq023hG83Q71t8oLzud1LeVN5WVPYL3nOks=";
   };
 
   build-system = [
@@ -139,6 +139,20 @@ buildPythonPackage rec {
       # https://github.com/pytorch/rl/discussions/2483
       "test_resetting_strategies"
       "test_torchrl_to_gym"
+      "test_vecenvs_nan"
+
+      # gym.error.VersionNotFound: Environment version `v5` for environment `HalfCheetah` doesn't exist.
+      "test_collector_run"
+      "test_transform_inverse"
+
+      # OSError: Unable to synchronously create file (unable to truncate a file which is already open)
+      "test_multi_env"
+      "test_simple_env"
+
+      # ImportWarning: Ignoring non-library in plugin directory:
+      # /nix/store/cy8vwf1dacp3xfwnp9v6a1sz8bic8ylx-python3.12-mujoco-3.3.2/lib/python3.12/site-packages/mujoco/plugin/libmujoco.so.3.3.2
+      "test_auto_register"
+      "test_info_dict_reader"
 
       # mujoco.FatalError: an OpenGL platform library has not been loaded into this process, this most likely means that a valid OpenGL context has not been created before mjr_makeContext was called
       "test_vecenvs_env"
@@ -183,11 +197,8 @@ buildPythonPackage rec {
   meta = {
     description = "Modular, primitive-first, python-first PyTorch library for Reinforcement Learning";
     homepage = "https://github.com/pytorch/rl";
-    changelog = "https://github.com/pytorch/rl/releases/tag/${src.tag}";
+    changelog = "https://github.com/pytorch/rl/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
-    # torhcrl is not compatible with our current version of gymnasium (>=1.0)
-    # https://github.com/pytorch/rl/pull/2473
-    broken = true;
   };
 }

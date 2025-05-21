@@ -4,7 +4,6 @@
   fetchFromGitHub,
   unstableGitUpdater,
   buildPackages,
-  gnu-efi,
   mtools,
   openssl,
   perl,
@@ -49,10 +48,9 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ipxe";
-  version = "1.21.1-unstable-2025-01-10";
+  version = "1.21.1-unstable-2025-05-16";
 
   nativeBuildInputs = [
-    gnu-efi
     mtools
     openssl
     perl
@@ -67,8 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ipxe";
     repo = "ipxe";
-    rev = "d88eb0a1935942cdeccd3efee38f9765d2f1c235";
-    hash = "sha256-R6ytWBqs0ntOtlc8K4C3gXtDRBa1hf7kpWTRZz9/h4s=";
+    rev = "83449702e09236dccebd4913d5823d5e00b643e0";
+    hash = "sha256-od4ZX0Tgc0S/b73jIvPmCEHNijlKDYJPjmOhoRmyNSM=";
   };
 
   # Calling syslinux on a FAT image isn't going to work on Aarch64.
@@ -112,22 +110,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildFlags = lib.attrNames targets;
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    ''
+      runHook preInstall
 
-    mkdir -p $out
-    ${lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (
-        from: to: if to == null then "cp -v ${from} $out" else "cp -v ${from} $out/${to}"
-      ) targets
-    )}
-
-    # Some PXE constellations especially with dnsmasq are looking for the file with .0 ending
-    # let's provide it as a symlink to be compatible in this case.
-    ln -s undionly.kpxe $out/undionly.kpxe.0
-
-    runHook postInstall
-  '';
+      mkdir -p $out
+      ${lib.concatStringsSep "\n" (
+        lib.mapAttrsToList (
+          from: to: if to == null then "cp -v ${from} $out" else "cp -v ${from} $out/${to}"
+        ) targets
+      )}
+    ''
+    + lib.optionalString stdenv.hostPlatform.isx86 ''
+      # Some PXE constellations especially with dnsmasq are looking for the file with .0 ending
+      # let's provide it as a symlink to be compatible in this case.
+      ln -s undionly.kpxe $out/undionly.kpxe.0
+    ''
+    + ''
+      runHook postInstall
+    '';
 
   enableParallelBuilding = true;
 
@@ -141,7 +142,15 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Network boot firmware";
     homepage = "https://ipxe.org/";
-    license = lib.licenses.gpl2Only;
+    license = with lib.licenses; [
+      bsd2
+      bsd3
+      gpl2Only
+      gpl2UBDLPlus
+      isc
+      mit
+      mpl11
+    ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ sigmasquadron ];
   };

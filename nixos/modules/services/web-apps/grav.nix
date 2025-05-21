@@ -102,24 +102,12 @@ in
         phpPackage = cfg.phpPackage.buildEnv {
           extensions =
             { all, enabled }:
-            with all;
-            [
+            enabled
+            ++ (with all; [
               apcu
-              ctype
-              curl
-              dom
-              exif
-              filter
-              gd
-              mbstring
-              opcache
-              openssl
-              session
-              simplexml
               xml
               yaml
-              zip
-            ];
+            ]);
 
           extraConfig = generators.toKeyValue { mkKeyValue = generators.mkKeyValueDefault { } " = "; } {
             output_buffering = "0";
@@ -132,7 +120,7 @@ in
             "opcache.memory_consumption" = "128";
             "opcache.revalidate_freq" = "1";
             "opcache.fast_shutdown" = "1";
-            "openssl.cafile" = "/etc/ssl/certs/ca-certificates.crt";
+            "openssl.cafile" = config.security.pki.caBundle;
             catch_workers_output = "yes";
 
             upload_max_filesize = cfg.maxUploadSize;

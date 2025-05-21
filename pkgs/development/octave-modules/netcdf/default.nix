@@ -1,7 +1,8 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, netcdf
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  netcdf,
 }:
 
 buildOctavePackage rec {
@@ -17,10 +18,10 @@ buildOctavePackage rec {
     netcdf
   ];
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/netcdf/index.html";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/netcdf/";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "NetCDF interface for Octave";
   };
 }

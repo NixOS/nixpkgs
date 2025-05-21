@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
+    repo = "mint-l-theme";
     rev = version;
     hash = "sha256-umY14seqUjNugN6+wzMDIGbCiis/InseDwVR85PqrGs=";
   };
@@ -42,6 +42,6 @@ stdenvNoCC.mkDerivation rec {
     description = "Mint-L theme for the Cinnamon desktop";
     license = licenses.gpl3Plus; # from debian/copyright
     platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    teams = [ teams.cinnamon ];
   };
 }

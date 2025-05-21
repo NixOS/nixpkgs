@@ -37,14 +37,14 @@
 
 buildPythonPackage rec {
   pname = "monty";
-  version = "2025.1.9";
+  version = "2025.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "materialsvirtuallab";
     repo = "monty";
     tag = "v${version}";
-    hash = "sha256-+9nxuvrtl04Fb+GQJUn+fxg4sq1pXK59UkUTkKH16YQ=";
+    hash = "sha256-3UoACKJtPm2BrkJP8z7BFrh3baRyL/S3VwCG3K8AQn0=";
   };
 
   build-system = [
@@ -111,7 +111,7 @@ buildPythonPackage rec {
       patterns such as singleton and cached_class, and many more.
     ";
     homepage = "https://github.com/materialsvirtuallab/monty";
-    changelog = "https://github.com/materialsvirtuallab/monty/releases/tag/v${version}";
+    changelog = "https://github.com/materialsvirtuallab/monty/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ psyanticy ];
   };

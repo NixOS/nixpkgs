@@ -15,7 +15,7 @@
   gcc-unwrapped,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "delayarchitect";
   version = "unstable-2022-01-16";
 

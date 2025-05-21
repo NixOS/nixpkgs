@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "unityhub";
-  version = "3.11.1";
+  version = "3.12.1";
 
   src = fetchurl {
     url = "https://hub-dist.unity3d.com/artifactory/hub-debian-prod-local/pool/main/u/unity/unityhub_amd64/unityhub-amd64-${version}.deb";
-    sha256 = "sha256-1JRV8hohI+UoNYtpuU3HChUOpOFT6ZWEak96s0NmSJU=";
+    sha256 = "sha256-Zpzl3H8cgVmPqpRAakL3m12OZ04Ddzpm+2krkuEkwrk=";
   };
 
   nativeBuildInputs = [
@@ -109,6 +109,7 @@ stdenv.mkDerivation rec {
 
         # Unity Editor 6000 specific dependencies
         harfbuzz
+        vulkan-loader
       ]
       ++ extraLibs pkgs;
   };

@@ -1,0 +1,11 @@
+--- a/project.py
++++ b/project.py
+@@ -247,7 +247,7 @@
+         dbus_lib_dirs = []
+         dbus_libs = []
+ 
+-        args = ['pkg-config', '--cflags-only-I', '--libs dbus-1']
++        args = ['pkg-config', '--cflags-only-I', '--libs dbus-1', 'dbus-python']
+ 
+         for line in self.read_command_pipe(args, fatal=False):
+             for flag in line.strip().split():

@@ -101,7 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://apps.gnome.org/Biblioteca/";
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ bot-wxt1221 ] ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    teams = [ lib.teams.gnome-circle ];
     license = lib.licenses.gpl3Only;
     description = "Documentation viewer for GNOME";
     mainProgram = "biblioteca";

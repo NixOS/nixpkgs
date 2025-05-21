@@ -4,7 +4,7 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "kafka-minion";
   version = "2.2.7";
 

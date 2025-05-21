@@ -36,7 +36,8 @@
   withSecurityKey ? !stdenv.hostPlatform.isStatic,
   withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl && withSecurityKey,
   withPAM ? stdenv.hostPlatform.isLinux,
-  dsaKeysSupport ? false,
+  # Attempts to mlock the entire sshd process on startup to prevent swapping.
+  withLinuxMemlock ? stdenv.hostPlatform.isLinux,
   linkOpenssl ? true,
   isNixos ? stdenv.hostPlatform.isLinux,
 }:
@@ -106,7 +107,6 @@ stdenv.mkDerivation (finalAttrs: {
       "--with-libedit=yes"
       "--disable-strip"
       (lib.withFeature withPAM "pam")
-      (lib.enableFeature dsaKeysSupport "dsa-keys")
     ]
     ++ lib.optional (etcDir != null) "--sysconfdir=${etcDir}"
     ++ lib.optional (!withSecurityKey) "--disable-security-key"
@@ -119,6 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional (!linkOpenssl) "--without-openssl"
     ++ lib.optional withLdns "--with-ldns"
     ++ lib.optional stdenv.hostPlatform.isOpenBSD "--with-bsd-auth"
+    ++ lib.optional withLinuxMemlock "--with-linux-memlock-onfault"
     ++ extraConfigureFlags;
 
   ${if stdenv.hostPlatform.isStatic then "NIX_LDFLAGS" else null} =
@@ -201,6 +202,13 @@ stdenv.mkDerivation (finalAttrs: {
     "sysconfdir=\${out}/etc/ssh"
   ];
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    for binary in ssh sshd; do
+      $out/bin/$binary -V 2>&1 | grep -P "$(printf '^OpenSSH_\\Q%s\\E,' "$version")"
+    done
+  '';
+
   passthru = {
     inherit withKerberos;
     tests = {
@@ -214,16 +222,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta =
-    with lib;
-    {
-      description = "Implementation of the SSH protocol${extraDesc}";
-      homepage = "https://www.openssh.com/";
-      changelog = "https://www.openssh.com/releasenotes.html";
-      license = licenses.bsd2;
-      platforms = platforms.unix ++ platforms.windows;
-      maintainers = (extraMeta.maintainers or [ ]) ++ (with maintainers; [ aneeshusa ]);
-      mainProgram = "ssh";
-    }
-    // extraMeta;
+  meta = {
+    description = "Implementation of the SSH protocol${extraDesc}";
+    homepage = "https://www.openssh.com/";
+    changelog = "https://www.openssh.com/releasenotes.html";
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
+    maintainers = extraMeta.maintainers or [ ];
+    mainProgram = "ssh";
+  } // extraMeta;
 })

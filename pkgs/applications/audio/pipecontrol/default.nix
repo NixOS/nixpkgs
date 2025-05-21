@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pipecontrol";
-  version = "0.2.11";
+  version = "0.2.12";
 
   src = fetchFromGitHub {
     owner = "portaloffreedom";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-jMP8hPv0Rv/OIVIzR/5R8LmEcyzwtcof9Ire86WtISc=";
+    sha256 = "sha256-WvQFmoEaxnkI61wPldSnMAoPAxNtI399hdHb/9bkPqc=";
   };
 
   nativeBuildInputs = [

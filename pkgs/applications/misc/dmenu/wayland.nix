@@ -16,7 +16,7 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "dmenu-wayland";
   version = "unstable-2023-05-18";
 

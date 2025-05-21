@@ -6,6 +6,8 @@
   cacert,
   unicode-emoji,
   unicode-character-database,
+  unicode-idna,
+  publicsuffix-list,
   cmake,
   ninja,
   pkg-config,
@@ -30,32 +32,18 @@
 }:
 
 let
-  unicode-idna = fetchurl {
-    url = "https://www.unicode.org/Public/idna/${unicode-character-database.version}/IdnaMappingTable.txt";
-    hash = "sha256-QCy9KF8flS/NCDS2NUHVT2nT2PG4+Fmb9xoaFJNfgsQ=";
-  };
-  adobe-icc-profiles = fetchurl {
-    url = "https://download.adobe.com/pub/adobe/iccprofiles/win/AdobeICCProfilesCS4Win_end-user.zip";
-    hash = "sha256-kgQ7fDyloloPaXXQzcV9tgpn3Lnr37FbFiZzEb61j5Q=";
-    name = "adobe-icc-profiles.zip";
-  };
-  public_suffix_commit = "9094af5c6cb260e69137c043c01be18fee01a540";
-  public-suffix-list = fetchurl {
-    url = "https://raw.githubusercontent.com/publicsuffix/list/${public_suffix_commit}/public_suffix_list.dat";
-    hash = "sha256-0szHUz1T0MXOQ9tcXoKY2F/bI3s7hsYCjURqywZsf1w=";
-  };
   # Note: The cacert version is synthetic and must match the version in the package's CMake
   cacert_version = "2023-12-12";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2025-03-04";
+  version = "0-unstable-2025-05-18";
 
   src = fetchFromGitHub {
     owner = "LadybirdWebBrowser";
     repo = "ladybird";
-    rev = "12f5e9c5f87072fb1c54739d8a185e43356b5bd5";
-    hash = "sha256-AvuMJ+udk+Tk5P77WxgX2T0BdbLF4mN/SJPJoEjiWZM=";
+    rev = "4d039fc3d4bf2ca9bf85c482d0b989c2128567ba";
+    hash = "sha256-J29UpFxyKEdHvIOMl3DhvtxIKtEgi6weZsk2UU0py8k=";
   };
 
   postPatch = ''
@@ -80,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ${unicode-character-database}/share/unicode build/Caches/UCD
     chmod +w build/Caches/UCD
     cp ${unicode-emoji}/share/unicode/emoji/emoji-test.txt build/Caches/UCD
-    cp ${unicode-idna} build/Caches/UCD/IdnaMappingTable.txt
+    cp ${unicode-idna}/share/unicode/idna/IdnaMappingTable.txt build/Caches/UCD
     echo -n ${unicode-character-database.version} > build/Caches/UCD/version.txt
     chmod -w build/Caches/UCD
 
@@ -89,11 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     echo -n ${cacert_version} > build/Caches/CACERT/version.txt
 
     mkdir build/Caches/PublicSuffix
-    cp ${public-suffix-list} build/Caches/PublicSuffix/public_suffix_list.dat
-
-    mkdir build/Caches/AdobeICCProfiles
-    cp ${adobe-icc-profiles} build/Caches/AdobeICCProfiles/adobe-icc-profiles.zip
-    chmod +w build/Caches/AdobeICCProfiles
+    cp ${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat build/Caches/PublicSuffix
   '';
 
   nativeBuildInputs = [
@@ -138,6 +122,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags =
     [
+      # Takes an enormous amount of resources, even with mold
+      (lib.cmakeBool "ENABLE_LTO_FOR_RELEASE" false)
       # Disable network operations
       "-DSERENITY_CACHE_DIR=Caches"
       "-DENABLE_NETWORK_DOWNLOADS=OFF"

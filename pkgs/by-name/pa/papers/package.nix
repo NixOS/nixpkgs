@@ -15,9 +15,7 @@
   itstool,
   poppler,
   nautilus,
-  darwin,
   djvulibre,
-  libspectre,
   libarchive,
   libsecret,
   wrapGAppsHook4,
@@ -27,7 +25,8 @@
   gsettings-desktop-schemas,
   dbus,
   gi-docgen,
-  libgxps,
+  libsysprof-capture,
+  libspelling,
   withLibsecret ? true,
   supportNautilus ? (!stdenv.hostPlatform.isDarwin),
   libadwaita,
@@ -38,7 +37,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "papers";
-  version = "47.3";
+  version = "48.2";
 
   outputs = [
     "out"
@@ -48,19 +47,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/papers/${lib.versions.major finalAttrs.version}/papers-${finalAttrs.version}.tar.xz";
-    hash = "sha256-PlhTk+gef6D5r55U38hvYSa1w9hS6pDf3DumsHlSxKo=";
+    hash = "sha256-HpvFlhNCS/ZVIjxr3Khzri8d2ifPAtc0K/9bVZBRYG0=";
   };
-
-  cargoRoot = "shell-rs";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs)
       src
       pname
       version
-      cargoRoot
       ;
-    hash = "sha256-66pOdZxgzbvXkvF07rNvWtcF/dJ2+RuS24IeI/VWykE=";
+    hash = "sha256-1HFecOTn84m9lT166HlmYjqP+KN/ZOTWW4ztigrpqNQ=";
   };
 
   nativeBuildInputs = [
@@ -89,9 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
       gsettings-desktop-schemas
       libadwaita
       libarchive
-      libgxps
       librsvg
-      libspectre
+      libsysprof-capture
+      libspelling
       pango
       poppler
     ]
@@ -100,16 +96,10 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals supportNautilus [
       nautilus
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Foundation
     ];
 
   mesonFlags =
-    [
-      "-Dps=enabled"
-    ]
-    ++ lib.optionals (!withLibsecret) [
+    lib.optionals (!withLibsecret) [
       "-Dkeyring=disabled"
     ]
     ++ lib.optionals (!supportNautilus) [
@@ -151,6 +141,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     mainProgram = "papers";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
   };
 })

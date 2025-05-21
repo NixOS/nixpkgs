@@ -50,6 +50,9 @@ let
     stringLength
     ;
 
+  getOptionalAttrs =
+    names: attrs: lib.getAttrs (lib.intersectLists names (lib.attrNames attrs)) attrs;
+
   leftPadName =
     name: against:
     let
@@ -103,8 +106,12 @@ let
     "doInstallCheck"
     "pyproject"
     "format"
+    "disabledTestMarks"
     "disabledTestPaths"
     "disabledTests"
+    "enabledTestMarks"
+    "enabledTestPaths"
+    "enabledTests"
     "pytestFlags"
     "pytestFlagsArray"
     "unittestFlags"
@@ -195,8 +202,6 @@ in
   meta ? { },
 
   doCheck ? true,
-
-  disabledTestPaths ? [ ],
 
   # Allow passing in a custom stdenv to buildPython*
   stdenv ? python.stdenv,
@@ -437,24 +442,30 @@ let
       installCheckPhase = attrs.checkPhase;
     }
     // optionalAttrs (attrs.doCheck or true) (
-      optionalAttrs (disabledTestPaths != [ ]) {
-        disabledTestPaths = disabledTestPaths;
-      }
-      // optionalAttrs (attrs ? disabledTests) {
-        disabledTests = attrs.disabledTests;
-      }
-      // optionalAttrs (attrs ? pytestFlags) {
-        pytestFlags = attrs.pytestFlags;
-      }
-      // optionalAttrs (attrs ? pytestFlagsArray) {
-        pytestFlagsArray = attrs.pytestFlagsArray;
-      }
-      // optionalAttrs (attrs ? unittestFlags) {
-        unittestFlags = attrs.unittestFlags;
-      }
-      // optionalAttrs (attrs ? unittestFlagsArray) {
-        unittestFlagsArray = attrs.unittestFlagsArray;
-      }
+      getOptionalAttrs [
+        "disabledTestMarks"
+        "disabledTestPaths"
+        "disabledTests"
+        "pytestFlags"
+        "pytestFlagsArray"
+        "unittestFlags"
+        "unittestFlagsArray"
+      ] attrs
+      //
+        lib.mapAttrs
+          (
+            name: value:
+            lib.throwIf (
+              attrs.${name} == [ ]
+            ) "${lib.getName finalAttrs}: ${name} must be unspecified, null or a non-empty list." attrs.${name}
+          )
+          (
+            getOptionalAttrs [
+              "enabledTestMarks"
+              "enabledTestPaths"
+              "enabledTests"
+            ] attrs
+          )
     )
   );
 

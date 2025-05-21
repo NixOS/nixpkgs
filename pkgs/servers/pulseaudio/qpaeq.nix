@@ -21,7 +21,7 @@ let
     startupNotify = false;
   };
 in
-mkDerivation rec {
+mkDerivation {
   pname = "qpaeq";
   inherit (pulseaudio) version src;
 

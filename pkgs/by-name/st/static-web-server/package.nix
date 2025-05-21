@@ -2,26 +2,22 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  darwin,
   nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "static-web-server";
-  version = "2.36.0";
+  version = "2.36.1";
 
   src = fetchFromGitHub {
     owner = "static-web-server";
-    repo = pname;
+    repo = "static-web-server";
     rev = "v${version}";
-    hash = "sha256-TE0V9Ai7lLb1TBtusDV+ACuPO8/1VUjeVZzA4XoL3VQ=";
+    hash = "sha256-labHPDsPRyF/cxHFoOJ5n+tBFn1KF2QdB/hZnDGWf1Q=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-uGEn+UvHse4tGOAQGzEoFpJxqbXM0u4IrXmMVgKz8z4=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  cargoHash = "sha256-Sri2NTCN5vIf/5KVI+BtyOBAjkXoGpOJjP2iOh/M5NU=";
 
   # Some tests rely on timestamps newer than 18 Nov 1974 00:00:00
   preCheck = ''

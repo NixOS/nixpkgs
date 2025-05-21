@@ -28,7 +28,6 @@
   freetype,
   gst_all_1,
   harfbuzz,
-  libcxx,
   libGL,
   libunwind,
   libxkbcommon,
@@ -62,13 +61,13 @@ in
 
 rustPlatform.buildRustPackage {
   pname = "servo";
-  version = "0-unstable-2025-03-05";
+  version = "0-unstable-2025-05-15";
 
   src = fetchFromGitHub {
     owner = "servo";
     repo = "servo";
-    rev = "69e749947910480e97ffaf22031316ebe7f67b9c";
-    hash = "sha256-p06547WijlfAUgMzbCyQUFx7Xq+eUI+iB6inQguzJ1c=";
+    rev = "103cbed928b0b9ecd7084b5e9dcab135eca19327";
+    hash = "sha256-TMrtD7f0bay6NtodM3SZfi8tLCQp6dE5iBicyGXZAco=";
     # Breaks reproducibility depending on whether the picked commit
     # has other ref-names or not, which may change over time, i.e. with
     # "ref-names: HEAD -> main" as long this commit is the branch HEAD
@@ -79,14 +78,7 @@ rustPlatform.buildRustPackage {
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-znHKck88XXjl+v3iJFCjq0Cxyxh1HrtLbK9o3y8Kelw=";
-
-  postPatch = ''
-    # Remap absolute path between modules to include SEMVER
-    substituteInPlace ../servo-0-unstable-*-vendor/servo_atoms-0.0.1/build.rs --replace-fail \
-      "../style/counter_style/predefined.rs" \
-      "../style-0.0.1/counter_style/predefined.rs"
-  '';
+  cargoHash = "sha256-7PTrE2FA2cvOKU35qTYBr7cop65gWY+zSOVlDZiJdow=";
 
   # set `HOME` to a temp dir for write access
   # Fix invalid option errors during linking (https://github.com/mozilla/nixpkgs-mozilla/commit/c72ff151a3e25f14182569679ed4cd22ef352328)
@@ -138,10 +130,14 @@ rustPlatform.buildRustPackage {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_14
-      libcxx
     ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
+  # Builds with additional features for aarch64, see https://github.com/servo/servo/issues/36819
+  buildFeatures = lib.optionals stdenv.hostPlatform.isAarch64 [
+    "servo_allocator/use-system-allocator"
+  ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
 
   # copy resources into `$out` to be used during runtime
   # link runtime libraries

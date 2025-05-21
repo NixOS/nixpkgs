@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 let
-  version = "1.2.0.0";
+  version = "1.2.1";
   tag = "v${version}";
 in
 buildGoModule {
@@ -15,10 +15,10 @@ buildGoModule {
     owner = "yorukot";
     repo = "superfile";
     inherit tag;
-    hash = "sha256-ByCKpNUWwVzO6A8Ad9V0P0lsquYgVqDS3eCta5iOfXI=";
+    hash = "sha256-yClDrDpt6QUWeAtWkG0tkmFqnaviRixz6Kez0q4cRuk=";
   };
 
-  vendorHash = "sha256-5mjy6Mu/p7UJCxn2XRbgtfGmrS+9bEt4+EVheYZcDpY=";
+  vendorHash = "sha256-STiuaNcmoviHBXGcSPPs39sICsks3Z8I3ANdnlUqA/k=";
 
   ldflags = [
     "-s"

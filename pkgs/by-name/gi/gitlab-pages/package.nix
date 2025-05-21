@@ -6,17 +6,17 @@
 
 buildGoModule rec {
   pname = "gitlab-pages";
-  version = "17.9.1";
+  version = "18.0.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-pages";
     rev = "v${version}";
-    hash = "sha256-M+VtrMUiXc2e8Kk6ZSLbysWLmw7rlLSTVloBz0O4gP0=";
+    hash = "sha256-c2y11lMeHBi62Ql63HGolF454GkFp7UCErHGk5Bvgvw=";
   };
 
-  vendorHash = "sha256-2UtdooVoyoWr4yOPCRBAjkftn29DhJonpJSguHwfHNE=";
+  vendorHash = "sha256-BjCwPt1duDINHP7L0qT2KNTjOZ62bWgVij88ztjjyPg=";
   subPackages = [ "." ];
 
   meta = with lib; {
@@ -25,6 +25,6 @@ buildGoModule rec {
     homepage = "https://gitlab.com/gitlab-org/gitlab-pages";
     changelog = "https://gitlab.com/gitlab-org/gitlab-pages/-/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = teams.gitlab.members;
+    teams = [ teams.gitlab ];
   };
 }

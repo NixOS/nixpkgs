@@ -16,7 +16,7 @@
   librsvg,
   streamripper,
   udisks,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   iconTheme ? adwaita-icon-theme,
   deviceDetectionSupport ? true,
   documentationSupport ? true,
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "exaile";
-    repo = pname;
+    repo = "exaile";
     rev = version;
     sha256 = "sha256-9SK0nvGdz2j6qp1JTmSuLezxX/kB93CZReSfAnfKZzg=";
   };
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional multimediaKeySupport keybinder3
     ++ lib.optional (musicBrainzSupport || cdMetadataSupport) python3.pkgs.musicbrainzngs
     ++ lib.optional podcastSupport python3.pkgs.feedparser
-    ++ lib.optional wikipediaSupport webkitgtk_4_0;
+    ++ lib.optional wikipediaSupport webkitgtk_4_1;
 
   nativeCheckInputs = with python3.pkgs; [
     pytest

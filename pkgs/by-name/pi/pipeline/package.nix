@@ -17,7 +17,7 @@
   desktop-file-utils,
   blueprint-compiler,
   sqlite,
-  clapper,
+  clapper-unwrapped,
   gettext,
   gst_all_1,
   gtuber,
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     openssl
     sqlite
-    clapper
+    clapper-unwrapped
 
     gst_all_1.gstreamer
     gst_all_1.gst-libav

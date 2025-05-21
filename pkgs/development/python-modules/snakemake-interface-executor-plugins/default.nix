@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "snakemake-interface-executor-plugins";
-  version = "9.3.3";
+  version = "9.3.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = "snakemake-interface-executor-plugins";
     tag = "v${version}";
-    hash = "sha256-1QmpL+YhpH7CmMKI9C60GnpVBveq9IPM2mrlMOdjUs4=";
+    hash = "sha256-mmaMzb+nhnLb06OGbjjdVeEQQc81OjVNdrUXdToHJ7Y=";
   };
 
   build-system = [ poetry-core ];

@@ -2,9 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   SDL2,
   SDL2_image,
+  libX11,
   rtaudio,
   rtmidi,
   glew,
@@ -13,31 +13,18 @@
   cmake,
   pkg-config,
   zenity,
+  withEditor ? true,
 }:
-let
-  # package depends on SDL2main static library
-  SDL2' = SDL2.override {
-    withStatic = true;
-  };
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "theforceengine";
-  version = "1.15.000";
+  version = "1.22.300";
 
   src = fetchFromGitHub {
     owner = "luciusDXL";
     repo = "TheForceEngine";
-    rev = "v${version}";
-    hash = "sha256-pcPR2KCGbyL1JABF30yJrlcLPGU2h0//Ghf7e7zYO0s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-m/VNlcuvpJkcfTpL97gCUTQtdAWqimVrhU0qLj0Erck=";
   };
-
-  patches = [
-    # https://github.com/luciusDXL/TheForceEngine/pull/493 -- fixes finding data files outside program directory
-    (fetchpatch {
-      url = "https://github.com/luciusDXL/TheForceEngine/commit/476a5277666bfdffb33ed10bdd1177bfe8ec3a70.diff";
-      hash = "sha256-ZcfKIXQMcWMmnM4xfQRd/Ozl09vkQr3jUxZ5e4Mw5CU=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -45,20 +32,21 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    SDL2'
+    SDL2
     SDL2_image
+    libX11
     rtaudio
     rtmidi
     glew
     alsa-lib
     angelscript
+    zenity
   ];
 
   hardeningDisable = [ "format" ];
 
   cmakeFlags = [
-    (lib.cmakeBool "ENABLE_EDITOR" true)
-    (lib.cmakeBool "ENABLE_FORCE_SCRIPT" true)
+    (lib.cmakeBool "ENABLE_EDITOR" withEditor)
   ];
 
   prePatch = ''
@@ -72,12 +60,12 @@ stdenv.mkDerivation rec {
       --replace-fail "flags(flag::has_zenity) ? \"zenity\"" "flags(flag::has_zenity) ? \"${lib.getExe zenity}\""
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern \"Jedi Engine\" replacement supporting Dark Forces, mods, and in the future, Outlaws";
     mainProgram = "theforceengine";
     homepage = "https://theforceengine.github.io";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ devusb ];
-    platforms = [ "x86_64-linux" ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ devusb ];
+    platforms = lib.platforms.linux;
   };
-}
+})

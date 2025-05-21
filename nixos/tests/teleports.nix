@@ -34,14 +34,20 @@
     machine.wait_for_x()
 
     with subtest("teleports launches"):
-        machine.execute("teleports >&2 &")
+        machine.succeed("teleports >&2 &")
+        machine.wait_for_console_text("authorizationStateWaitPhoneNumber")
+        machine.send_key("alt-f10")
+        machine.sleep(2)
         machine.wait_for_text(r"(TELEports|Phone Number)")
         machine.screenshot("teleports_open")
 
     machine.succeed("pkill -f teleports")
 
     with subtest("teleports localisation works"):
-        machine.execute("env LANG=de_DE.UTF-8 teleports >&2 &")
+        machine.succeed("env LANG=de_DE.UTF-8 teleports >&2 &")
+        machine.wait_for_console_text("authorizationStateWaitPhoneNumber")
+        machine.send_key("alt-f10")
+        machine.sleep(2)
         machine.wait_for_text("Telefonnummer")
         machine.screenshot("teleports_localised")
   '';

@@ -15,6 +15,8 @@ mkDerivation {
     export MAKEOBJDIRPREFIX=$TMP/obj
   '';
 
+  alwaysKeepStatic = true;
+
   meta = with lib; {
     platform = platforms.freebsd;
     license = licenses.cddl;

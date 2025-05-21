@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-Dsqlcipher=1"
-    (lib.cmakeBool "ENABLE_TESTING" (finalAttrs.doCheck or false))
+    (lib.cmakeBool "ENABLE_TESTING" (finalAttrs.finalPackage.doCheck or false))
   ];
 
   doCheck = true;

@@ -37,15 +37,15 @@
   gtk3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "profanity";
-  version = "0.14.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "profanity-im";
     repo = "profanity";
-    rev = version;
-    hash = "sha256-u/mp+vtMj602LfrulA+nhLNH8K6sqKIOuPJzhZusVmE=";
+    rev = finalAttrs.version;
+    hash = "sha256-3TmnbTnL8SPSd3seThavOOJVELi8kWLSlZlAub24KZ4=";
   };
 
   patches = [
@@ -106,10 +106,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals pythonPluginSupport [ "--enable-python-plugins" ]
     ++ lib.optionals omemoSupport [ "--enable-omemo" ];
 
-  preAutoreconf = ''
-    mkdir m4
-  '';
-
   doCheck = true;
 
   LC_ALL = "en_US.utf8";
@@ -126,4 +122,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.devhell ];
     platforms = platforms.unix;
   };
-}
+})

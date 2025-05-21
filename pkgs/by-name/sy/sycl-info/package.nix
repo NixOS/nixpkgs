@@ -12,7 +12,7 @@
   doctest,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sycl-info";
   version = "unstable-2019-11-19";
 
@@ -53,6 +53,6 @@ stdenv.mkDerivation rec {
     mainProgram = "sycl-info";
     platforms = platforms.linux;
     license = licenses.asl20;
-    maintainers = with maintainers; [ davidtwco ];
+    maintainers = [ ];
   };
 }

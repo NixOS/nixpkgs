@@ -6,7 +6,7 @@
   zstd,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "unzrip";
   version = "unstable-2023-04-16";
 

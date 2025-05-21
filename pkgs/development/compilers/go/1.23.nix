@@ -5,7 +5,6 @@
   tzdata,
   replaceVars,
   iana-etc,
-  xcbuild,
   mailcap,
   buildPackages,
   pkgsBuildTarget,
@@ -20,27 +19,6 @@ let
 
   skopeoTest = skopeo.override { buildGoModule = buildGo123Module; };
 
-  goarch =
-    platform:
-    {
-      "aarch64" = "arm64";
-      "arm" = "arm";
-      "armv5tel" = "arm";
-      "armv6l" = "arm";
-      "armv7l" = "arm";
-      "i686" = "386";
-      "mips" = "mips";
-      "mips64el" = "mips64le";
-      "mipsel" = "mipsle";
-      "powerpc64" = "ppc64";
-      "powerpc64le" = "ppc64le";
-      "riscv64" = "riscv64";
-      "s390x" = "s390x";
-      "x86_64" = "amd64";
-      "wasm32" = "wasm";
-    }
-    .${platform.parsed.cpu.name} or (throw "Unsupported system: ${platform.parsed.cpu.name}");
-
   # We need a target compiler which is still runnable at build time,
   # to handle the cross-building case where build != host == target
   targetCC = pkgsBuildTarget.targetPackages.stdenv.cc;
@@ -49,11 +27,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
-  version = "1.23.6";
+  version = "1.23.9";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-A5xbBOZSedrO7opvcecL0Fz1uAF4K293xuGeLtBREiI=";
+    hash = "sha256-CPZBlUdWPtnnA30SuciQlnfHL3X2LvhYh+2dv0m40t0=";
   };
 
   strictDeps = true;
@@ -61,10 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     [ ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.libc.out ]
     ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
-
-  depsTargetTargetPropagated = lib.optionals stdenv.targetPlatform.isDarwin [
-    xcbuild
-  ];
 
   depsBuildTarget = lib.optional isCross targetCC;
 
@@ -92,22 +66,18 @@ stdenv.mkDerivation (finalAttrs: {
     ./go_no_vendor_checks-1.23.patch
   ];
 
-  GOOS = if stdenv.targetPlatform.isWasi then "wasip1" else stdenv.targetPlatform.parsed.kernel.name;
-  GOARCH = goarch stdenv.targetPlatform;
+  inherit (stdenv.targetPlatform.go) GOOS GOARCH GOARM;
   # GOHOSTOS/GOHOSTARCH must match the building system, not the host system.
   # Go will nevertheless build a for host system that we will copy over in
   # the install phase.
-  GOHOSTOS = stdenv.buildPlatform.parsed.kernel.name;
-  GOHOSTARCH = goarch stdenv.buildPlatform;
+  GOHOSTOS = stdenv.buildPlatform.go.GOOS;
+  GOHOSTARCH = stdenv.buildPlatform.go.GOARCH;
 
   # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
   # to be different from CC/CXX
   CC_FOR_TARGET = if isCross then "${targetCC}/bin/${targetCC.targetPrefix}cc" else null;
   CXX_FOR_TARGET = if isCross then "${targetCC}/bin/${targetCC.targetPrefix}c++" else null;
 
-  GOARM = toString (
-    lib.intersectLists [ (stdenv.hostPlatform.parsed.cpu.version or "") ] [ "5" "6" "7" ]
-  );
   GO386 = "softfloat"; # from Arch: don't assume sse2 on i686
   # Wasi does not support CGO
   CGO_ENABLED = if stdenv.targetPlatform.isWasi then 0 else 1;
@@ -166,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/go
-    cp -a bin pkg src lib misc api doc go.env $out/share/go
+    cp -a bin pkg src lib misc api doc go.env VERSION $out/share/go
     mkdir -p $out/bin
     ln -s $out/share/go/bin/* $out/bin
     runHook postInstall
@@ -191,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Go Programming language";
     homepage = "https://go.dev/";
     license = licenses.bsd3;
-    maintainers = teams.golang.members;
+    teams = [ teams.golang ];
     platforms = platforms.darwin ++ platforms.linux ++ platforms.wasi ++ platforms.freebsd;
     mainProgram = "go";
   };

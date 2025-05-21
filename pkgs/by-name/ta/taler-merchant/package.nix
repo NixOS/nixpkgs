@@ -11,17 +11,20 @@
   autoreconfHook,
   makeWrapper,
   jq,
+  libgcrypt,
+  texinfo,
+  curl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-merchant";
-  version = "0.14.1";
+  version = "0.14.6-unstable-2025-03-02";
 
   src = fetchgit {
     url = "https://git.taler.net/merchant.git";
-    rev = "v${finalAttrs.version}";
+    rev = "c84ed905e2d4af60162a7def5c0fc430394930e6";
     fetchSubmodules = true;
-    hash = "sha256-ac7ajHBLW6BJrL0iaa+b7XNZHMEEmbAo17URIdPSXd8=";
+    hash = "sha256-LXmrY8foiYOxCik23d3f4t9+tldbm7bVGG8eQOLsm+A=";
   };
 
   postUnpack = ''
@@ -42,6 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     autoreconfHook
     makeWrapper
+    libgcrypt # AM_PATH_LIBGCRYPT
+    texinfo # makeinfo
   ];
 
   buildInputs = taler-exchange.buildInputs ++ [
@@ -50,6 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
     # for ltdl.h
     libtool
   ];
+
+  strictDeps = true;
 
   propagatedBuildInputs = [ gnunet ];
 
@@ -61,6 +68,10 @@ stdenv.mkDerivation (finalAttrs: {
     cat Makefile.am.in Makefile.am.ext >> Makefile.am
     popd
   '';
+
+  configureFlags = [
+    "ac_cv_path__libcurl_config=${lib.getDev curl}/bin/curl-config"
+  ];
 
   # NOTE: The executables that need database access fail to detect the
   # postgresql library in `$out/lib/taler`, so we need to wrap them.

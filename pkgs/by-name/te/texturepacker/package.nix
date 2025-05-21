@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "texturepacker";
-  version = "7.6.0";
+  version = "7.6.3";
 
   src = fetchurl {
     url = "https://www.codeandweb.com/download/texturepacker/${finalAttrs.version}/TexturePacker-${finalAttrs.version}.deb";
-    hash = "sha256-7xEIXgrMAV/MUGd+STjRtUAftVF2jj2OuH7SnSMpXk0=";
+    hash = "sha256-A1YNy6Y5EdOnV0dY0VN/k7nX26L/uaHqDHmdC5N1Otk=";
   };
 
   nativeBuildInputs = [

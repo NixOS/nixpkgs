@@ -12,13 +12,13 @@ assert cudaSupport -> cudaPackages != null;
 
 stdenv.mkDerivation rec {
   pname = "umpire";
-  version = "2024.07.0";
+  version = "2025.03.0";
 
   src = fetchFromGitHub {
     owner = "LLNL";
     repo = "umpire";
     rev = "v${version}";
-    hash = "sha256-JbYaJe4bqlB272aZxB3Amw8fX/pmZr/4/7kaukAiK8c=";
+    hash = "sha256-IL8jfG0qTDjp80E8bniNYUiH77PTtL4QIwMCEkqdwSE=";
     fetchSubmodules = true;
   };
 

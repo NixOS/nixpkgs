@@ -33,11 +33,9 @@ php.buildComposerProject2 (finalAttrs: {
   '';
   vendorHash = "sha256-QObqXzazypumDnFtfNiFSZdpZ7PbsBZZBUsS3fseZok=";
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     broken = lib.versionOlder php.version "8.2";
@@ -46,6 +44,6 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://github.com/vimeo/psalm";
     license = lib.licenses.mit;
     mainProgram = "psalm";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

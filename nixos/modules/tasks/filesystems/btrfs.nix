@@ -166,6 +166,7 @@ in
             in
             nameValuePair "btrfs-scrub-${fs'}" {
               description = "btrfs scrub on ${fs}";
+              documentation = [ "man:btrfs-scrub(8)" ];
               # scrub prevents suspend2ram or proper shutdown
               conflicts = [
                 "shutdown.target"

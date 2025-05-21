@@ -3,6 +3,14 @@
         "date": "2022-07-27",
         "new": "true-zen-nvim"
     },
+    "codeium-nvim": {
+        "date": "2025-04-09",
+        "new": "windsurf-nvim"
+    },
+    "codeium-vim": {
+        "date": "2025-04-09",
+        "new": "windsurf-vim"
+    },
     "compe-conjure": {
         "date": "2024-11-19",
         "new": "cmp-conjure"

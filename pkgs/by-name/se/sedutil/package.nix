@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sedutil";
-  version = "1.49.6";
+  version = "1.49.13";
 
   src = fetchFromGitHub {
     owner = "Drive-Trust-Alliance";
     repo = "sedutil";
     tag = version;
-    hash = "sha256-5Fj5bFjtkaxan2vqQTxxlpcR3FK2HrFS6/9cM2xaZRI=";
+    hash = "sha256-bSeTbpeecufXNZKNb5A0gWYF3qkBc2fSmNTZxkDW+Vc=";
   };
 
   postPatch = ''

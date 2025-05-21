@@ -2,13 +2,12 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  nix,
+  nixVersions,
   nixosTests,
   boost,
   pkg-config,
   stdenv,
   installShellFiles,
-  darwin,
   crates ? [ "attic-client" ],
 }:
 rustPlatform.buildRustPackage {
@@ -27,24 +26,17 @@ rustPlatform.buildRustPackage {
     installShellFiles
   ];
 
-  buildInputs =
-    [
-      nix
-      boost
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [
+    nixVersions.nix_2_24
+    boost
+  ];
 
   cargoBuildFlags = lib.concatMapStrings (c: "-p ${c} ") crates;
   cargoHash = "sha256-AbpWnYfBMrR6oOfy2LkQvIPYsClCWE89bJav+iHTtLM=";
   useFetchCargoVendor = true;
 
   ATTIC_DISTRIBUTOR = "nixpkgs";
-  NIX_INCLUDE_PATH = "${lib.getDev nix}/include";
+  NIX_INCLUDE_PATH = "${lib.getDev nixVersions.nix_2_24}/include";
 
   # Attic interacts with Nix directly and its tests require trusted-user access
   # to nix-daemon to import NARs, which is not possible in the build sandbox.

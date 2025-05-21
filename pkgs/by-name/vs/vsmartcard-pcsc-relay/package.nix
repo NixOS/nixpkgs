@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
   pkg-config,
   libtool,
   autoreconfHook,
@@ -11,7 +10,6 @@
   help2man,
   gengetopt,
   vsmartcard-vpcd,
-  darwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,31 +26,27 @@ stdenv.mkDerivation (finalAttrs: {
     help2man
   ];
 
-  buildInputs =
-    [
-      pcsclite
-      libnfc
-      gengetopt
-      (python3.withPackages (
-        pp: with pp; [
-          pyscard
-          pycrypto
-          pbkdf2
-          pillow
-          gnureadline
-        ]
-      ))
-    ]
-    ++ lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.PCSC
-    ];
+  buildInputs = [
+    pcsclite
+    libnfc
+    gengetopt
+    (python3.withPackages (
+      pp: with pp; [
+        pyscard
+        pycrypto
+        pbkdf2
+        pillow
+        gnureadline
+      ]
+    ))
+  ];
 
   meta = {
     description = "Relays a smart card using an contact-less interface";
     homepage = "https://frankmorgner.github.io/vsmartcard/pcsc-relay/README.html";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with lib.maintainers; [ stargate01 ];
   };
 })

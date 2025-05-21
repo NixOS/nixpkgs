@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   obs-studio,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   glib-networking,
   meson,
   cmake,
@@ -12,7 +12,7 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "obs-webkitgtk";
   version = "unstable-2023-11-10";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     obs-studio
-    webkitgtk_4_0
+    webkitgtk_4_1
     glib-networking
   ];
 

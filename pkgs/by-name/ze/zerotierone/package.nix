@@ -12,7 +12,6 @@
   rustc,
   zlib,
   libiconv,
-  darwin,
   fetchpatch,
 }:
 
@@ -83,8 +82,6 @@ stdenv.mkDerivation {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      darwin.apple_sdk.frameworks.SystemConfiguration
-      darwin.apple_sdk.frameworks.CoreServices
     ];
 
   enableParallelBuilding = true;

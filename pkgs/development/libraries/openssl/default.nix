@@ -98,7 +98,10 @@ let
         ++ lib.optional static "etc";
       setOutputFlags = false;
       separateDebugInfo =
-        !stdenv.hostPlatform.isDarwin && !(stdenv.hostPlatform.useLLVM or false) && stdenv.cc.isGNU;
+        !stdenv.hostPlatform.isDarwin
+        && !stdenv.hostPlatform.isAndroid
+        && !(stdenv.hostPlatform.useLLVM or false)
+        && stdenv.cc.isGNU;
 
       nativeBuildInputs =
         lib.optional (!stdenv.hostPlatform.isWindows) makeBinaryWrapper
@@ -300,7 +303,8 @@ let
         description = "Cryptographic library that implements the SSL and TLS protocols";
         license = lib.licenses.openssl;
         mainProgram = "openssl";
-        maintainers = with lib.maintainers; [ thillux ] ++ lib.teams.stridtech.members;
+        maintainers = with lib.maintainers; [ thillux ];
+        teams = [ lib.teams.stridtech ];
         pkgConfigModules = [
           "libcrypto"
           "libssl"

@@ -5,7 +5,7 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "3.3-unstable-2023-05-08";
   pname = "httptunnel";
 

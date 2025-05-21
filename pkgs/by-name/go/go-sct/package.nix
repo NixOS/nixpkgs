@@ -6,7 +6,7 @@
   wayland,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "go-sct";
   version = "unstable-2022-01-32";
 

@@ -6,14 +6,14 @@
 }:
 let
   pname = "volanta";
-  version = "1.10.10";
+  version = "1.11.3";
   src = fetchurl {
-    url = "https://cdn.volanta.app/software/volanta-app/${version}-a7ebf1c7/volanta-${version}.AppImage";
-    hash = "sha256-pdMPC3flJzguRYmS+xKiAXWQ4BKsD3N48S27djXDtuo=";
+    url = "https://cdn.volanta.app/software/volanta-app/${version}-622dc10d/volanta-${version}.AppImage";
+    hash = "sha256-vplJEE+D2Yzr4fD//CdLRAYAKQp6a1RR0jZ1N46Q8xU=";
   };
   appImageContents = appimageTools.extract { inherit pname version src; };
 in
-appimageTools.wrapType2 rec {
+appimageTools.wrapType2 {
   inherit pname version src;
 
   nativeBuildInputs = [ makeWrapper ];

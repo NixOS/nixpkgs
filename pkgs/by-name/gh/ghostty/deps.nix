@@ -148,8 +148,8 @@ linkFarm name [
     name = "12200df4ebeaed45de26cb2c9f3b6f3746d8013b604e035dae658f86f586c8c91d2f";
     path = fetchZigArtifact {
       name = "vaxis";
-      url = "git+https://github.com/rockorager/libvaxis/?ref=main#6d729a2dc3b934818dffe06d2ba3ce02841ed74b";
-      hash = "sha256-fFf79fCy4QQFVNcN722tSMjB6FyVEzCB36oH1olk9JQ=";
+      url = "https://github.com/rockorager/libvaxis/archive/6d729a2dc3b934818dffe06d2ba3ce02841ed74b.tar.gz";
+      hash = "sha256-OCNs6Gl2ruq5dBm4uIxs93hoXw/+n+x1+bIDfQGDx3s=";
     };
   }
   {
@@ -172,8 +172,8 @@ linkFarm name [
     name = "12201f0d542e7541cf492a001d4d0d0155c92f58212fbcb0d224e95edeba06b5416a";
     path = fetchZigArtifact {
       name = "z2d";
-      url = "git+https://github.com/vancluever/z2d?ref=v0.4.0#4638bb02a9dc41cc2fb811f092811f6a951c752a";
-      hash = "sha256-YpWXn1J3JKQSCrWB25mAfzd1/T56QstEZnhPzBwxgoM=";
+      url = "https://github.com/vancluever/z2d/archive/4638bb02a9dc41cc2fb811f092811f6a951c752a.tar.gz";
+      hash = "sha256-P0UJ54RO/vVyDa+UkBl+QEOjzoMMEFSOTexQP/uBXfc=";
     };
   }
   {
@@ -212,8 +212,8 @@ linkFarm name [
     name = "1220edc3b8d8bedbb50555947987e5e8e2f93871ca3c8e8d4cc8f1377c15b5dd35e8";
     path = fetchZigArtifact {
       name = "zf";
-      url = "git+https://github.com/natecraddock/zf/?ref=main#ed99ca18b02dda052e20ba467e90b623c04690dd";
-      hash = "sha256-t6QNrEJZ4GZZsYixjYvpdrYoCmNbG8TTUmGs2MFa4sU=";
+      url = "https://github.com/natecraddock/zf/archive/ed99ca18b02dda052e20ba467e90b623c04690dd.tar.gz";
+      hash = "sha256-/oLryY3VQfjbtQi+UP+n6FJTVA/YxIetjO+6Ovrh6/E=";
     };
   }
   {
@@ -237,7 +237,7 @@ linkFarm name [
     path = fetchZigArtifact {
       name = "wayland";
       url = "https://deps.files.ghostty.org/wayland-9cb3d7aa9dc995ffafdbdef7ab86a949d0fb0e7d.tar.gz";
-      hash = "sha256-m9G72jdG30KH2yQhNBcBJ46OnekzuX0i2uIOyczkpLk=";
+      hash = "sha256-6kGR1o5DdnflHzqs3ieCmBAUTpMdOXoyfcYDXiw5xQ0=";
     };
   }
   {
@@ -252,8 +252,8 @@ linkFarm name [
     name = "12207e0851c12acdeee0991e893e0132fc87bb763969a585dc16ecca33e88334c566";
     path = fetchZigArtifact {
       name = "plasma_wayland_protocols";
-      url = "git+https://github.com/KDE/plasma-wayland-protocols?ref=main#db525e8f9da548cffa2ac77618dd0fbe7f511b86";
-      hash = "sha256-iWRv3+OfmHxmeCJ8m0ChjgZX6mwXlcFmK8P/Vt8gDj4=";
+      url = "https://github.com/KDE/plasma-wayland-protocols/archive/db525e8f9da548cffa2ac77618dd0fbe7f511b86.tar.gz";
+      hash = "sha256-XFi6IUrNjmvKNCbcCLAixGqN2Zeymhs+KLrfccIN9EE=";
     };
   }
   {
@@ -372,8 +372,8 @@ linkFarm name [
     name = "12207ff340169c7d40c570b4b6a97db614fe47e0d83b5801a932dcd44917424c8806";
     path = fetchZigArtifact {
       name = "pixels";
-      url = "git+https://github.com/make-github-pseudonymous-again/pixels?ref=main#d843c2714d32e15b48b8d7eeb480295af537f877";
-      hash = "sha256-kXYGO0qn2PfyOYCrRA49BHIgTzdmKhI8SNO1ZKfUYEE=";
+      url = "https://github.com/make-github-pseudonymous-again/pixels/archive/d843c2714d32e15b48b8d7eeb480295af537f877.tar.gz";
+      hash = "sha256-Veg7FtCRCCUCvxSb9FfzH0IJLFmCZQ4/+657SIcb8Ro=";
     };
   }
   {

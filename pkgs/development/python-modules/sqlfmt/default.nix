@@ -4,7 +4,6 @@
   buildPythonPackage,
   click,
   fetchFromGitHub,
-  fetchPypi,
   gitpython,
   importlib-metadata,
   jinja2,

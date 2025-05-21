@@ -1,20 +1,21 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
 }:
 
 buildGoModule rec {
   pname = "go-judge";
-  version = "1.9.0";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "criyle";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Dq3gs5iDpunI4NKuIJL3132jrJpyeuqnD/Z+WKTBLHg=";
+    hash = "sha256-AmbhfCKUpvZt/me73EhBQqw8yDnItn1zKiemf/JRz24=";
   };
 
-  vendorHash = "sha256-phX5H1ImnBhcWWFnzoIsf/xgxw4HtTKFBvjtymKS7O0=";
+  vendorHash = "sha256-eUtkelLucf11ANT6vkWuBOaL5bgb+9D8YsVsZTMMjmg=";
 
   tags = [
     "nomsgpack"

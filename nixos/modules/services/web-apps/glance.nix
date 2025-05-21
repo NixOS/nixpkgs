@@ -8,15 +8,27 @@ let
   cfg = config.services.glance;
 
   inherit (lib)
-    mkEnableOption
-    mkPackageOption
-    mkOption
-    mkIf
+    catAttrs
+    concatMapStrings
     getExe
+    mkEnableOption
+    mkIf
+    mkOption
+    mkPackageOption
     types
     ;
 
+  inherit (builtins)
+    concatLists
+    isAttrs
+    isList
+    attrNames
+    getAttr
+    ;
+
   settingsFormat = pkgs.formats.yaml { };
+  settingsFile = settingsFormat.generate "glance.yaml" cfg.settings;
+  mergedSettingsFile = "/run/glance/glance.yaml";
 in
 {
   options.services.glance = {
@@ -69,7 +81,9 @@ in
                       { type = "calendar"; }
                       {
                         type = "weather";
-                        location = "Nivelles, Belgium";
+                        location = {
+                          _secret = "/var/lib/secrets/glance/location";
+                        };
                       }
                     ];
                   }
@@ -84,6 +98,13 @@ in
         Configuration written to a yaml file that is read by glance. See
         <https://github.com/glanceapp/glance/blob/main/docs/configuration.md>
         for more.
+
+        Settings containing secret data should be set to an
+        attribute set containing the attribute
+        <literal>_secret</literal> - a string pointing to a file
+        containing the value the option should be set to. See the
+        example in `services.glance.settings.pages` at the weather widget
+        with a location secret to get a better picture of this.
       '';
     };
 
@@ -102,13 +123,41 @@ in
       description = "Glance feed dashboard server";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
+      path = [ pkgs.replace-secret ];
 
       serviceConfig = {
-        ExecStart =
+        ExecStartPre =
           let
-            glance-yaml = settingsFormat.generate "glance.yaml" cfg.settings;
+            findSecrets =
+              data:
+              if isAttrs data then
+                if data ? _secret then
+                  [ data ]
+                else
+                  concatLists (map (attr: findSecrets (getAttr attr data)) (attrNames data))
+              else if isList data then
+                concatLists (map findSecrets data)
+              else
+                [ ];
+            secretPaths = catAttrs "_secret" (findSecrets cfg.settings);
+            mkSecretReplacement = secretPath: ''
+              replace-secret ${
+                lib.escapeShellArgs [
+                  "_secret: ${secretPath}"
+                  secretPath
+                  mergedSettingsFile
+                ]
+              }
+            '';
+            secretReplacements = concatMapStrings mkSecretReplacement secretPaths;
           in
-          "${getExe cfg.package} --config ${glance-yaml}";
+          # Use "+" to run as root because the secrets may not be accessible to glance
+          "+"
+          + pkgs.writeShellScript "glance-start-pre" ''
+            install -m 600 -o $USER ${settingsFile} ${mergedSettingsFile}
+            ${secretReplacements}
+          '';
+        ExecStart = "${getExe cfg.package} --config ${mergedSettingsFile}";
         WorkingDirectory = "/var/lib/glance";
         StateDirectory = "glance";
         RuntimeDirectory = "glance";
@@ -125,7 +174,7 @@ in
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectControlGroups = true;
-        ProcSubset = "pid";
+        ProcSubset = "all";
         RestrictNamespaces = true;
         RestrictRealtime = true;
         SystemCallArchitectures = "native";

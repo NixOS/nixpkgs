@@ -20,6 +20,7 @@
   torch,
 
   # tests
+  datafusion,
   duckdb,
   ml-dtypes,
   pandas,
@@ -27,21 +28,18 @@
   polars,
   pytestCheckHook,
   tqdm,
-
-  # passthru
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "pylance";
-  version = "0.23.2";
+  version = "0.27.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
     tag = "v${version}";
-    hash = "sha256-HVT/39zhcviVkF6dKM+ZIy7vGW6tOWEBUXTEIuFaVno=";
+    hash = "sha256-fk32CnWH9wVKfTgT2Es6+tnvB+rPzkA8in0J726JHx0=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -53,7 +51,7 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
-    hash = "sha256-H5Z6YgaSfRrRPGZVbgNWxcFboS1I65p+08c1VgaL+lE=";
+    hash = "sha256-N7ODbv+q9xX8lb4vvUzMGTul/whNw+dVrBp/YcEaREI=";
   };
 
   nativeBuildInputs = [
@@ -86,6 +84,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "lance" ];
 
   nativeCheckInputs = [
+    datafusion
     duckdb
     ml-dtypes
     pandas
@@ -104,25 +103,18 @@ buildPythonPackage rec {
       # Writes to read-only build directory
       "test_add_data_storage_version"
       "test_fix_data_storage_version"
+
+      # AttributeError: 'SessionContext' object has no attribute 'register_table_provider'
+      "test_table_loading"
+
+      # subprocess.CalledProcessError: Command ... returned non-zero exit status 1.
+      # ModuleNotFoundError: No module named 'lance'
+      "test_tracing"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       # OSError: LanceError(IO): Resources exhausted: Failed to allocate additional 1245184 bytes for ExternalSorter[0]...
       "test_merge_insert_large"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # AttributeError: module 'torch.distributed' has no attribute 'is_initialized'
-      "test_blob_api"
-      "test_convert_int_tensors"
-      "test_filtered_sampling_odd_batch_size"
-      "test_ground_truth"
-      "test_index_cast_centroids"
-      "test_index_with_no_centroid_movement"
-      "test_iter_filter"
-      "test_iter_over_dataset_fixed_shape_tensor"
-      "test_iter_over_dataset_fixed_size_lists"
     ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python wrapper for Lance columnar format";

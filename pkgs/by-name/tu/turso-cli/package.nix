@@ -8,13 +8,13 @@
 }:
 buildGoModule rec {
   pname = "turso-cli";
-  version = "0.98.1";
+  version = "1.0.10";
 
   src = fetchFromGitHub {
     owner = "tursodatabase";
     repo = "turso-cli";
     rev = "v${version}";
-    hash = "sha256-UNh4MYWzu8LJQOYwW6ZWotE+FLAOYlNxDIgzii27qoU=";
+    hash = "sha256-aXFMsY8bxj+NJizeThlebcv8nNvjqF7q+AN6sQ4/5PQ=";
   };
 
   vendorHash = "sha256-tBO21IgUczwMgrEyV7scV3YTY898lYHASaLeXqvBopU=";

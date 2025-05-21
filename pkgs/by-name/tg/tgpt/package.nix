@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "tgpt";
-  version = "2.9.1";
+  version = "2.9.4";
 
   src = fetchFromGitHub {
     owner = "aandrew-me";
     repo = "tgpt";
     tag = "v${version}";
-    hash = "sha256-6kJwJedFnALP4hpoaQ5DR/zN1KijgwFpYSBb1o+XCHw=";
+    hash = "sha256-FCc1D/q+8i/ZFZDgtBoMpF+GEnHne4M5bazJWnF5GbE=";
   };
 
   vendorHash = "sha256-hPbvzhYHOxytQs3NkSVaZhFH0TbOlr4U/QiH+vemTrc=";

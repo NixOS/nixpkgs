@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   version = "2.0.18";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "numactl";
+    repo = "numactl";
     rev = "v${version}";
     hash = "sha256-ry29RUNa0Hv5gIhy2RTVT94mHhgfdIwb5aqjBycxxj0=";
   };

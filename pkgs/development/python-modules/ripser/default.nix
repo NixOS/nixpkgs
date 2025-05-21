@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "ripser";
-  version = "0.6.10";
+  version = "0.6.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-tda";
     repo = "ripser.py";
     tag = "v${version}";
-    hash = "sha256-w6d/JRBYoxvu1r02WbwfG94GvB1NGG2Rwd5maSNYPhg=";
+    hash = "sha256-AviAcpaK0UWqa6spba9bLmBQnprINCrZC/wuRLqiXVA=";
   };
 
   build-system = [
@@ -79,7 +79,7 @@ buildPythonPackage rec {
   meta = {
     description = "Lean Persistent Homology Library for Python";
     homepage = "https://ripser.scikit-tda.org";
-    changelog = "https://github.com/scikit-tda/ripser.py/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/scikit-tda/ripser.py/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

@@ -53,5 +53,7 @@ stdenv.mkDerivation rec {
     ];
     platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.bzizou ];
+    # uses __off64_t, srand48_r, lrand48_r, drand48_r
+    broken = stdenv.hostPlatform.isMusl;
   };
 }

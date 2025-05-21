@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "versality";
     repo = "keylight-cli";
     tag = "v${version}";
-    sha256 = "sha256-gzTvMBa7JVckxLnltlR5XOj6BBbfPXZei7Wj3f1n4Kw=";
+    hash = "sha256-boL6Sg+C9OxMEcr5tAFCn8NxCDrJ6I2nMn9/2yMOYRI=";
   };
 
   buildInputs = [ babashka ];

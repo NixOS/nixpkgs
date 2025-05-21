@@ -2,32 +2,26 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "overpy";
-  version = "0.6";
-  format = "setuptools";
+  version = "0.7";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "DinoTools";
     repo = "python-overpy";
-    rev = version;
-    hash = "sha256-Tl+tzxnPASL4J6D/BYCEWhXe/mI12OVgNT5lyby3s7A=";
+    tag = version;
+    hash = "sha256-+bMpA4xDvnQl6Q0M2iGrsUHGLuR/gLimJgmZCMzsLvA=";
   };
 
-  patches = [
-    (fetchpatch {
-      # Remove pytest-runner
-      url = "https://patch-diff.githubusercontent.com/raw/DinoTools/python-overpy/pull/104.patch";
-      hash = "sha256-ScS0vd2P+wyQGyCQV6/4cUcqoQ+S07tGpEovuz9oBMw=";
-    })
-  ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

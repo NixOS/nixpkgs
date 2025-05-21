@@ -108,8 +108,7 @@
   withDocumentation ? true,
   withEfi ? stdenv.hostPlatform.isEfi,
   withFido2 ? true,
-  # conflicts with the NixOS /etc management
-  withFirstboot ? false,
+  withFirstboot ? true,
   withGcrypt ? true,
   withHomed ? !stdenv.hostPlatform.isMusl,
   withHostnamed ? true,
@@ -198,7 +197,7 @@ assert withBootloader -> withEfi;
 let
   wantCurl = withRemote || withImportd;
 
-  version = "257.2";
+  version = "257.5";
 
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
@@ -216,7 +215,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd";
     rev = "v${version}";
-    hash = "sha256-A64RK+EIea98dpq8qzXld4kbDGvYsKf/vDnNtMmwSBM=";
+    hash = "sha256-mn/JB/nrOz2TOobu2d+XBH2dVH3vn/HPvWN4Zz6s+SM=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -247,9 +246,14 @@ stdenv.mkDerivation (finalAttrs: {
       ./0016-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
       ./0017-meson.build-do-not-create-systemdstatedir.patch
       ./0018-Revert-bootctl-update-list-remove-all-instances-of-s.patch # https://github.com/systemd/systemd/issues/33392
+      # systemd tries to link the systemd-ssh-proxy ssh config snippet with tmpfiles
+      # if the install prefix is not /usr, but that does not work for us
+      # because we include the config snippet manually
+      ./0019-meson-Don-t-link-ssh-dropins.patch
+      ./0020-install-unit_file_exists_full-follow-symlinks.patch
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
-      ./0019-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
+      ./0021-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
     ]
     ++ lib.optionals stdenv.hostPlatform.isMusl (
       let
@@ -332,11 +336,13 @@ stdenv.mkDerivation (finalAttrs: {
     [
       # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111523
       "trivialautovarinit"
-      # breaks clang -target bpf; should be fixed to filter target?
     ]
     ++ (lib.optionals withLibBPF [
+      # breaks clang -target bpf; should be fixed to not use
+      # a wrapped clang?
       "zerocallusedregs"
       "shadowstack"
+      "pacret"
     ]);
 
   nativeBuildInputs =
@@ -497,8 +503,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.mesonOption "umount-path" "${lib.getOutput "mount" util-linux}/bin/umount")
 
       # SSH
-      # Disabled for now until someone makes this work.
-      (lib.mesonOption "sshconfdir" "no")
+      (lib.mesonOption "sshconfdir" "")
       (lib.mesonOption "sshdconfdir" "no")
 
       # Features
@@ -883,6 +888,7 @@ stdenv.mkDerivation (finalAttrs: {
       withKmod
       withLocaled
       withMachined
+      withNetworkd
       withPortabled
       withTimedated
       withTpm2Tss
@@ -892,20 +898,112 @@ stdenv.mkDerivation (finalAttrs: {
       kbd
       ;
 
-    tests = {
-      inherit (nixosTests)
-        switchTest
-        systemd-journal
-        systemd-journal-gateway
-        systemd-journal-upload
-        ;
-      cross =
-        let
-          systemString = if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform";
-        in
-        pkgsCross.${systemString}.systemd;
-      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    };
+    # Many TPM2-related units are only installed if this trio of features are
+    # enabled. See https://github.com/systemd/systemd/blob/876ee10e0eb4bbb0920bdab7817a9f06cc34910f/units/meson.build#L521
+    withTpm2Units = withTpm2Tss && withBootloader && withOpenSSL;
+
+    tests =
+      let
+        # Some entries in the `nixosTests.systemd-*` set of attributes are collections of tests,
+        # not individual tests themselves. Let's gather them into one set.
+        gatherNixosTestsFromCollection =
+          prefix: collection:
+          lib.mapAttrs' (name: value: {
+            name = "${prefix}-${name}";
+            inherit value;
+          }) collection;
+
+        # Here's all the nixosTests that are collections of tests, rather than individual tests.
+        collectedNixosTests = lib.mergeAttrsList (
+          lib.mapAttrsToList gatherNixosTestsFromCollection {
+            inherit (nixosTests)
+              systemd-binfmt
+              systemd-boot
+              systemd-initrd-networkd
+              systemd-repart
+              installer-systemd-stage-1
+              ;
+          }
+        );
+
+        # ... and here's all the individual tests.
+        individualNixosTests = {
+          inherit (nixosTests)
+            fsck-systemd-stage-1
+            hibernate-systemd-stage-1
+            switchTest
+            systemd
+            systemd-analyze
+            systemd-bpf
+            systemd-confinement
+            systemd-coredump
+            systemd-cryptenroll
+            systemd-credentials-tpm2
+            systemd-escaping
+            systemd-initrd-btrfs-raid
+            systemd-initrd-luks-fido2
+            systemd-initrd-luks-keyfile
+            systemd-initrd-luks-empty-passphrase
+            systemd-initrd-luks-password
+            systemd-initrd-luks-tpm2
+            systemd-initrd-luks-unl0kr
+            systemd-initrd-modprobe
+            systemd-initrd-shutdown
+            systemd-initrd-simple
+            systemd-initrd-swraid
+            systemd-initrd-vconsole
+            systemd-initrd-networkd-ssh
+            systemd-initrd-networkd-openvpn
+            systemd-initrd-vlan
+            systemd-journal
+            systemd-journal-gateway
+            systemd-journal-upload
+            systemd-lock-handler
+            systemd-machinectl
+            systemd-networkd
+            systemd-networkd-bridge
+            systemd-networkd-dhcpserver
+            systemd-networkd-dhcpserver-static-leases
+            systemd-networkd-ipv6-prefix-delegation
+            systemd-networkd-vrf
+            systemd-no-tainted
+            systemd-nspawn
+            systemd-nspawn-configfile
+            systemd-oomd
+            systemd-portabled
+            systemd-resolved
+            systemd-shutdown
+            systemd-sysupdate
+            systemd-sysusers-mutable
+            systemd-sysusers-immutable
+            systemd-sysusers-password-option-override-ordering
+            systemd-timesyncd
+            systemd-timesyncd-nscd-dnssec
+            systemd-user-linger
+            systemd-user-tmpfiles-rules
+            systemd-misc
+            systemd-userdbd
+            systemd-homed
+            ;
+        };
+
+        # Finally, make an attrset we're fairly sure is just tests.
+        relevantNixosTests = lib.mapAttrs (
+          name: value:
+          assert lib.assertMsg (lib.isDerivation value) "${name} is not a derivation";
+          value
+        ) (individualNixosTests // collectedNixosTests);
+      in
+      relevantNixosTests
+      // {
+        cross =
+          let
+            systemString = if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform";
+          in
+          pkgsCross.${systemString}.systemd;
+
+        pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      };
   };
 
   meta = {
@@ -939,10 +1037,7 @@ stdenv.mkDerivation (finalAttrs: {
       ofl
       publicDomain
     ];
-    maintainers = with lib.maintainers; [
-      flokli
-      kloenk
-    ];
+    teams = [ lib.teams.systemd ];
     pkgConfigModules = [
       "libsystemd"
       "libudev"

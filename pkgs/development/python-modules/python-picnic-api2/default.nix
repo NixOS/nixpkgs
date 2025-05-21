@@ -1,8 +1,8 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   lib,
-  poetry-core,
   pytestCheckHook,
   python-dotenv,
   requests,
@@ -11,17 +11,17 @@
 
 buildPythonPackage rec {
   pname = "python-picnic-api2";
-  version = "1.2.2";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "codesalatdev";
     repo = "python-picnic-api";
     tag = "v${version}";
-    hash = "sha256-pO0aIdMKSC8AT/Bu5axl1NZbbF8IM/cOygLRT8eRKlU=";
+    hash = "sha256-lr8xlSu5kvkNNEM22Pc+PFGs4re+Ytw2ct97h6ydY04=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     requests
@@ -30,18 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "python_picnic_api2" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # tests access the actual API
     "integration_tests"
-  ];
-
-  disabledTests = [
-    # tests don't expect requests to come with the br transfer-encoding
-    "test_update_auth_token"
   ];
 
   meta = {

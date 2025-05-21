@@ -2,8 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   pytestCheckHook,
-  setuptools,
   sqlalchemy,
   wtforms,
 }:
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    setuptools
+    hatchling
   ];
 
   dependencies = [

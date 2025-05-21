@@ -7,31 +7,30 @@
   cinny,
   desktop-file-utils,
   wrapGAppsHook3,
-  makeBinaryWrapper,
   pkg-config,
   openssl,
-  dbus,
-  glib,
   glib-networking,
   webkitgtk_4_0,
+  jq,
+  moreutils,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cinny-desktop";
   # We have to be using the same version as cinny-web or this isn't going to work.
-  version = "4.5.0";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny-desktop";
     tag = "v${version}";
-    hash = "sha256-FXGziCGd3537VcO4dzO8ZvsFSK/k6QSyQlcEC4RyQto=";
+    hash = "sha256-ls0ZxXiIrjyLL0MoxOTU/RK0k323nUiQfxtlwsEL45U=";
   };
 
   sourceRoot = "${src.name}/src-tauri";
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-NESiUh8ylGna2uasyyo59TpViRorE7Cxo0ivmIKkUdU=";
+  cargoHash = "sha256-NSzGB6o6BBoak2gbSOu8ucWA+R+behuTxeMnKpyA7no=";
 
   postPatch =
     let
@@ -46,10 +45,9 @@ rustPlatform.buildRustPackage rec {
         };
     in
     ''
-      substituteInPlace tauri.conf.json \
-        --replace-warn '"distDir": "../cinny/dist",' '"distDir": "${cinny'}",'
-      substituteInPlace tauri.conf.json \
-        --replace-warn '"cd cinny && npm run build"' '""'
+      ${lib.getExe jq} \
+        'del(.tauri.updater) | .build.distDir = "${cinny'}" | del(.build.beforeBuildCommand)' tauri.conf.json \
+        | ${lib.getExe' moreutils "sponge"} tauri.conf.json
     '';
 
   postInstall =
@@ -63,30 +61,28 @@ rustPlatform.buildRustPackage rec {
         --set-key="Categories" --set-value="Network;InstantMessaging;" \
         $out/share/applications/cinny.desktop
     '';
-  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    wrapProgram "$out/bin/cinny" \
-      --inherit-argv0 \
+
+  preFixup = ''
+    gappsWrapperArgs+=(
       --set-default WEBKIT_DISABLE_DMABUF_RENDERER "1"
+    )
   '';
 
-  nativeBuildInputs = [
-    wrapGAppsHook3
-    pkg-config
-    cargo-tauri_1.hook
-    desktop-file-utils
-    makeBinaryWrapper
-  ];
-
-  buildInputs =
+  nativeBuildInputs =
     [
-      openssl
+      cargo-tauri_1.hook
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      dbus
-      glib
-      glib-networking
-      webkitgtk_4_0
+      desktop-file-utils
+      pkg-config
+      wrapGAppsHook3
     ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    glib-networking
+    openssl
+    webkitgtk_4_0
+  ];
 
   meta = {
     description = "Yet another matrix client for desktop";

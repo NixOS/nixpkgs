@@ -5,8 +5,6 @@
   stdenv,
   pkgs,
 
-  fetchpatch2,
-
   gradle_8,
   gradle_7,
   perl,
@@ -38,11 +36,13 @@
   jdk17_headless,
   jdk21_headless,
   jdk23_headless,
+  jdk24_headless,
   jdk-bootstrap ?
     {
       "17" = jdk17_headless;
       "21" = jdk21_headless;
       "23" = jdk23_headless;
+      "24" = jdk24_headless;
     }
     .${featureVersion},
 }:

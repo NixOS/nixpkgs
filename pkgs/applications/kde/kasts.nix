@@ -29,7 +29,7 @@ let
     gst-plugins-bad
     ;
 in
-mkDerivation rec {
+mkDerivation {
   pname = "kasts";
 
   nativeBuildInputs = [

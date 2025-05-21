@@ -16,6 +16,7 @@
   libjack2,
   libjpeg,
   libnghttp2,
+  libudev-zero,
   libxkbcommon,
   makeWrapper,
   pango,
@@ -30,12 +31,12 @@
 
 stdenv.mkDerivation rec {
   pname = "bitwig-studio-unwrapped";
-  version = "5.3.1";
+  version = "5.3.5";
 
   src = fetchurl {
     name = "bitwig-studio-${version}.deb";
     url = "https://www.bitwig.com/dl/Bitwig%20Studio/${version}/installer_linux/";
-    hash = "sha256-mxodFCu4SDzofnoZZZ7TPDUIrRc3UJt8TuEBwDOo2wQ=";
+    hash = "sha256-dfEWOQTZVMUb6v+u2wQlFgTXupokFTjWgKKA6W/Rrzc=";
   };
 
   nativeBuildInputs = [
@@ -66,6 +67,7 @@ stdenv.mkDerivation rec {
     xorg.libX11
     xorg.libXtst
     libxkbcommon
+    libudev-zero
     pango
     pipewire
     (lib.getLib stdenv.cc.cc)

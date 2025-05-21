@@ -7,12 +7,12 @@
 
 appimageTools.wrapType2 rec {
   pname = "cider-2";
-  version = "2.6.0";
+  version = "2.6.1";
 
   src = requireFile {
     name = "cider-linux-x64.AppImage";
     url = "https://cidercollective.itch.io/cider";
-    sha256 = "18by764idifnjs5h2cydv4qjm7w95lzdlxjkscp289w3jdpbmd05";
+    sha256 = "0qjhsssccxiq92zs04zhi53bkaf2qwfq7ryic1w9sha59ffyxqbf";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -33,7 +33,8 @@ appimageTools.wrapType2 rec {
       install -m 444 -D ${contents}/Cider.desktop $out/share/applications/${pname}.desktop
       substituteInPlace $out/share/applications/${pname}.desktop \
         --replace-warn 'Exec=Cider' 'Exec=${pname}'
-      cp -r ${contents}/usr/share/icons $out/share
+      install -Dm444 ${contents}/usr/share/icons/hicolor/256x256/cider.png \
+                     $out/share/icons/hicolor/256x256/apps/cider.png
     '';
 
   meta = {

@@ -122,6 +122,7 @@ in
     systemd.services.triggerhappy = {
       wantedBy = [ "multi-user.target" ];
       description = "Global hotkey daemon";
+      documentation = [ "man:thd(1)" ];
       serviceConfig = {
         ExecStart = "${pkgs.triggerhappy}/bin/thd ${
           lib.optionalString (cfg.user != "root") "--user ${cfg.user}"

@@ -1,40 +1,49 @@
 {
   lib,
-  anyio,
   buildPythonPackage,
-  dirty-equals,
-  distro,
   fetchFromGitHub,
-  google-auth,
+
+  # build-system
   hatch-fancy-pypi-readme,
   hatchling,
+
+  # dependencies
+  anyio,
+  distro,
   httpx,
   jiter,
-  nest-asyncio,
   pydantic,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  respx,
   sniffio,
   tokenizers,
   typing-extensions,
+
+  # optional dependencies
+  google-auth,
+
+  # test
+  dirty-equals,
+  nest-asyncio,
+  pytest-asyncio,
+  pytestCheckHook,
+  respx,
 }:
 
 buildPythonPackage rec {
   pname = "anthropic";
-  version = "0.47.2";
+  version = "0.51.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     tag = "v${version}";
-    hash = "sha256-W7ByBoPTpSOww+hf/uOQdpRm0NxX7vA9QbSLd9mVQdE=";
+    hash = "sha256-gD3qZpPKtKZtuoGqnKVgFp0gCxpL0Aq5NGFCMk+z3cQ=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"hatchling==1.26.3"' '"hatchling>=1.26.3"'
+  '';
 
   build-system = [
     hatchling
@@ -46,8 +55,8 @@ buildPythonPackage rec {
     distro
     httpx
     jiter
-    sniffio
     pydantic
+    sniffio
     tokenizers
     typing-extensions
   ];
@@ -58,23 +67,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     dirty-equals
-    pytest-asyncio
     nest-asyncio
+    pytest-asyncio
     pytestCheckHook
     respx
   ];
 
   pythonImportsCheck = [ "anthropic" ];
 
-  disabledTests =
-    [
-      # Test require network access
-      "test_copy_build_request"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # Fails on RuntimeWarning: coroutine method 'aclose' of 'AsyncStream._iter_events' was never awaited
-      "test_multi_byte_character_multiple_chunks[async]"
-    ];
+  disabledTests = [
+    # Test require network access
+    "test_copy_build_request"
+  ];
 
   disabledTestPaths = [
     # Test require network access
@@ -87,11 +91,14 @@ buildPythonPackage rec {
     "ignore::DeprecationWarning"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Anthropic's safety-first language model APIs";
     homepage = "https://github.com/anthropics/anthropic-sdk-python";
     changelog = "https://github.com/anthropics/anthropic-sdk-python/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = [
+      lib.maintainers.natsukium
+      lib.maintainers.sarahec
+    ];
   };
 }

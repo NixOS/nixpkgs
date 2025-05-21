@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libzim";
-  version = "9.2.3";
+  version = "9.3.0";
 
   src = fetchFromGitHub {
     owner = "openzim";
     repo = "libzim";
     tag = version;
-    hash = "sha256-z22+cDlFQtLMLFh5+7Nt9LsGFyBPi3HeZhYb0LK86Oc=";
+    hash = "sha256-DZiFeZ2ry3JpXDs3mvf0q7diwhkjQ2730KQkDQPbgcY=";
   };
 
   patches = [
@@ -60,11 +60,14 @@ stdenv.mkDerivation rec {
     "-Dtest_data_dir=none"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Reference implementation of the ZIM specification";
     homepage = "https://github.com/openzim/libzim";
     changelog = "https://github.com/openzim/libzim/releases/tag/${version}";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      fab
+      greg
+    ];
   };
 }

@@ -7,7 +7,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "copier";
-  version = "9.4.1";
+  version = "9.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
     postFetch = ''
       rm $out/tests/demo/doc/ma*ana.txt
     '';
-    hash = "sha256-bNz3xFYksgdN9iXbkZIHWsHpRa9aICxBZmzy/t0+3z0=";
+    hash = "sha256-mezmXrOvfqbZGZadNZklQZt/OEKqRYnwugNkZc88t6o=";
   };
 
   POETRY_DYNAMIC_VERSIONING_BYPASS = version;
@@ -49,16 +49,14 @@ python3.pkgs.buildPythonApplication rec {
     questionary
   ];
 
-  makeWrapperArgs = [
-    "--suffix PATH : ${lib.makeBinPath [ git ]}"
-  ];
+  makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ git ]}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library and command-line utility for rendering projects templates";
     homepage = "https://copier.readthedocs.io";
     changelog = "https://github.com/copier-org/copier/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ greg ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ greg ];
     mainProgram = "copier";
   };
 }

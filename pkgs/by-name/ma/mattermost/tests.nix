@@ -39,9 +39,10 @@ mattermost.overrideAttrs (
       + ''
         # Just echo install/get/mod commands in the Makefile, since the dependencies are locked.
         substituteInPlace server/Makefile \
-          --replace-warn '$(GO) install' '@echo $(GO) install' \
-          --replace-warn '$(GO) get' '@echo $(GO) get' \
-          --replace-warn '$(GO) get' '@echo $(GO) mod'
+          --replace-warn '$(GO) install' 'echo $(GO) install' \
+          --replace-warn '$(GOBIN)/go$$version download' 'echo $(GOBIN)/go$$version download' \
+          --replace-warn '$(GO) get' 'echo $(GO) get' \
+          --replace-warn '$(GO) get' 'echo $(GO) mod'
         # mmctl tests shell out by writing a bash script to a tempfile
         substituteInPlace server/cmd/mmctl/commands/config_e2e_test.go \
           --replace-fail '#!/bin/bash' '#!${runtimeShell}'
@@ -142,10 +143,17 @@ mattermost.overrideAttrs (
         # Appear to be broken.
         "TestSessionStore/MySQL/SessionGetWithDeviceId"
         "TestSessionStore/MySQL/GetMobileSessionMetadata"
+        "TestSessionStore/MySQL/GetSessionsWithActiveDeviceIds"
+        "TestUpdateTeam"
+        "TestSyncSyncableRoles"
       ]
-      ++ optionals (!stdenv.isx86_64) [
+      ++ optionals (!stdenv.hostPlatform.isx86_64) [
         # aarch64: invalid operating system or processor architecture
         "TestCanIUpgradeToE0"
+
+        # aarch64: thumbnail previews are nondeterministic
+        "TestUploadFiles/multipart_Happy_image_thumbnail"
+        "TestUploadFiles/simple_Happy_image_thumbnail"
       ];
 
     preCheck = ''

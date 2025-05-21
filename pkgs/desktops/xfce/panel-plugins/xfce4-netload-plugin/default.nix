@@ -26,6 +26,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Internet load speed plugin for Xfce4 panel";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

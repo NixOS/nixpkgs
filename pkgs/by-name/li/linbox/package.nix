@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "linbox-team";
-    repo = pname;
+    repo = "linbox";
     rev = "v${version}";
     sha256 = "sha256-mW84a98KPLqcHMjX3LIYTmVe0ngUdz6RJLpoDaAqKU8=";
   };
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     description = "C++ library for exact, high-performance linear algebra";
     mainProgram = "linbox-config";
     license = licenses.lgpl21Plus;
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
     platforms = platforms.unix;
     homepage = "https://linalg.org/";
   };

@@ -7,7 +7,6 @@
   pbr,
   cliff,
   debtcollector,
-  iso8601,
   netaddr,
   openstacksdk,
   osc-lib,
@@ -51,7 +50,6 @@ buildPythonPackage rec {
   dependencies = [
     cliff
     debtcollector
-    iso8601
     netaddr
     openstacksdk
     osc-lib
@@ -93,6 +91,6 @@ buildPythonPackage rec {
     description = "Python bindings for the OpenStack Networking API";
     homepage = "https://github.com/openstack/python-neutronclient/";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

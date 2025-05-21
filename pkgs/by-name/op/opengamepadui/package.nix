@@ -1,12 +1,10 @@
 {
   alsa-lib,
-  autoPatchelfHook,
   cargo,
   dbus,
   fetchFromGitHub,
   gamescope,
-  godot_4,
-  godot_4-export-templates,
+  godot_4_4,
   hwdata,
   lib,
   libGL,
@@ -25,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opengamepadui";
-  version = "0.35.8";
+  version = "0.39.2";
 
   buildType = if withDebug then "debug" else "release";
 
@@ -33,56 +31,34 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ShadowBlip";
     repo = "OpenGamepadUI";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vMb08Wqjt5j6IgMnXuZr6MGNk1CprVn2GTNDdOxnFG0=";
+    hash = "sha256-r7AR3PAYgTS/KvL44xkAr/iJM19grbmjwjZyzOSFXMc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     sourceRoot = "source/${finalAttrs.cargoRoot}";
-    hash = "sha256-sTzMewIfKHbmVhSPZgUIzFFz1ahK+PMoQ5oB4GEt8nY=";
+    hash = "sha256-T79G2bShJuFRfaCqG3IDHqW0s68yAdGyv58kdDYg6kg=";
   };
   cargoRoot = "extensions";
 
   nativeBuildInputs = [
-    autoPatchelfHook
     cargo
-    godot_4
-    godot_4-export-templates
+    godot_4_4
     pkg-config
     rustPlatform.cargoSetupHook
-  ];
-
-  runtimeDependencies = [
-    alsa-lib
-    dbus
-    gamescope
-    hwdata
-    libGL
-    libpulseaudio
-    mesa-demos
-    udev
-    upower
-    vulkan-loader
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXext
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXres
-    xorg.libXtst
   ];
 
   dontStrip = withDebug;
 
   env =
     let
-      versionAndRelease = lib.splitString "-" godot_4.version;
+      versionAndRelease = lib.splitString "-" godot_4_4.version;
     in
     {
-      GODOT = lib.getExe godot_4;
+      GODOT = lib.getExe godot_4_4;
       GODOT_VERSION = lib.elemAt versionAndRelease 0;
       GODOT_RELEASE = lib.elemAt versionAndRelease 1;
-      EXPORT_TEMPLATE = "${godot_4-export-templates}";
+      EXPORT_TEMPLATE = "${godot_4_4.export-template}/share/godot/export_templates";
       BUILD_TYPE = "${finalAttrs.buildType}";
     };
 
@@ -93,15 +69,26 @@ stdenv.mkDerivation (finalAttrs: {
   preBuild = ''
     # Godot looks for export templates in HOME
     export HOME=$(mktemp -d)
-    mkdir -p $HOME/.local/share/godot/export_templates
-    ln -s "${godot_4-export-templates}" "$HOME/.local/share/godot/export_templates/$GODOT_VERSION.$GODOT_RELEASE"
+    mkdir -p $HOME/.local/share/godot/
+    ln -s "$EXPORT_TEMPLATE" "$HOME"/.local/share/godot/
   '';
 
-  postInstall = ''
-    # The Godot binary looks in "../lib" for gdextensions
-    mkdir -p $out/share/lib
-    mv $out/share/opengamepadui/*.so $out/share/lib
-  '';
+  postInstall =
+    let
+      runtimeDependencies = [
+        gamescope
+        hwdata
+        mesa-demos
+        udev
+        upower
+      ];
+    in
+    ''
+      # The Godot binary looks in "../lib" for gdextensions
+      mkdir -p $out/share/lib
+      mv $out/share/opengamepadui/*.so $out/share/lib
+      patchelf --add-rpath ${lib.makeLibraryPath runtimeDependencies} $out/share/lib/*.so
+    '';
 
   passthru.updateScript = nix-update-script { };
 

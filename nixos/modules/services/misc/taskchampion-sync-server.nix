@@ -22,6 +22,12 @@ in
       type = types.str;
       default = "taskchampion";
     };
+    host = lib.mkOption {
+      description = "Host address on which to serve";
+      type = types.str;
+      default = "127.0.0.1";
+      example = "0.0.0.0";
+    };
     port = lib.mkOption {
       description = "Port on which to serve";
       type = types.port;
@@ -79,7 +85,7 @@ in
         DynamicUser = false;
         ExecStart = ''
           ${lib.getExe cfg.package} \
-            --port ${builtins.toString cfg.port} \
+            --listen "${cfg.host}:${builtins.toString cfg.port}" \
             --data-dir ${cfg.dataDir} \
             --snapshot-versions ${builtins.toString cfg.snapshot.versions} \
             --snapshot-days ${builtins.toString cfg.snapshot.days} \

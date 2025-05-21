@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "prrte";
-  version = "3.0.8";
+  version = "3.0.10";
 
   src = fetchFromGitHub {
     owner = "openpmix";
     repo = "prrte";
     rev = "v${version}";
-    hash = "sha256-4Xc6We0mXpKCwfHlmqi+WbFjdQegWHGzWrEnMVqkqtU=";
+    hash = "sha256-Pnm0t7dJhT0MEYEKBHh6l16V5b/zOSxsd5OWda5SIzI=";
     fetchSubmodules = true;
   };
 
@@ -73,6 +73,12 @@ stdenv.mkDerivation rec {
     hwloc
     zlib
     pmix
+  ];
+
+  # Setting this manually, required for RiscV cross-compile
+  configureFlags = [
+    "--with-pmix=${lib.getDev pmix}"
+    "--with-pmix-libdir=${lib.getLib pmix}/lib"
   ];
 
   enableParallelBuilding = true;

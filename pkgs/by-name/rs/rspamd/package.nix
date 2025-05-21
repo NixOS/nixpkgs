@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   doctest,
   fmt_11,
@@ -14,6 +13,7 @@
   pkg-config,
   sqlite,
   ragel,
+  fasttext,
   icu,
   vectorscan,
   jemalloc,
@@ -24,29 +24,23 @@
   xxHash,
   zstd,
   libarchive,
-  withBlas ? true,
+  # Enabling blas support breaks bayes filter training from dovecot in nixos-mailserver tests
+  # https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/issues/321
+  withBlas ? false,
   withLuaJIT ? stdenv.hostPlatform.isx86_64,
   nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rspamd";
-  version = "3.11.0";
+  version = "3.11.1";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
     rev = version;
-    hash = "sha256-id5nmxdqx+0m0JCCvwaEuUAQkMLTlWadfieJ0wO/wJI=";
+    hash = "sha256-vG52R8jYJlCgQqhA8zbZLMES1UxfxknAVOt87nhcflM=";
   };
-
-  patches = [
-    # remove https://www.nixspam.net/ because it has been shutdown
-    (fetchpatch {
-      url = "https://github.com/rspamd/rspamd/commit/dc6e7494c2440cd6c4e474b5ee3c4fabdad1f6bf.patch";
-      hash = "sha256-7zY+l5ADLWgPTTBNG/GxX23uX2OwQ33hyzSuokTLgqc=";
-    })
-  ];
 
   hardeningEnable = [ "pie" ];
 
@@ -66,6 +60,7 @@ stdenv.mkDerivation rec {
       pcre
       sqlite
       ragel
+      fasttext
       icu
       jemalloc
       libsodium
@@ -89,6 +84,8 @@ stdenv.mkDerivation rec {
     "-DDBDIR=/var/lib/rspamd"
     "-DLOGDIR=/var/log/rspamd"
     "-DLOCAL_CONFDIR=/etc/rspamd"
+    "-DENABLE_BLAS=${if withBlas then "ON" else "OFF"}"
+    "-DENABLE_FASTTEXT=ON"
     "-DENABLE_JEMALLOC=ON"
     "-DSYSTEM_DOCTEST=ON"
     "-DSYSTEM_FMT=ON"

@@ -14,7 +14,7 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gpm";
   version = "unstable-2020-06-17";
 

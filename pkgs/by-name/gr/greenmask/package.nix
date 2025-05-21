@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "greenmask";
-  version = "0.2.8";
+  version = "0.2.11";
 
   src = fetchFromGitHub {
     owner = "GreenmaskIO";
     repo = "greenmask";
     tag = "v${version}";
-    hash = "sha256-Upgf/VmWHtvldIx3n6e3NTHDzs7XoZUBVcEVC+ix9cQ=";
+    hash = "sha256-KHM/r4zDJrZMIC7+Kp+98xhV5r4zkpxc1ffqf0jgnLs=";
   };
 
-  vendorHash = "sha256-UY79Fex8hwaXtFLefBUeyO7PxJevWWaQU5MEOAMLPkA=";
+  vendorHash = "sha256-g3/WuLDb4mAzklT+nxQ1U/l+JDzSubENMB5hWjIaIIU=";
 
   subPackages = [ "cmd/greenmask/" ];
 

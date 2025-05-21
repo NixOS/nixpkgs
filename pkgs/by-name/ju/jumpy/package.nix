@@ -12,7 +12,6 @@
   vulkan-loader,
   wayland,
   xorg,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "fishfolk";
-    repo = pname;
+    repo = "jumpy";
     rev = "v${version}";
     sha256 = "sha256-ggePJH2kKJ17aOWRKUnLyolIdSzlc6Axf5Iw74iFfek=";
   };
@@ -50,7 +49,6 @@ rustPlatform.buildRustPackage rec {
       xorg.libXrandr
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.Cocoa
       rustPlatform.bindgenHook
     ];
 

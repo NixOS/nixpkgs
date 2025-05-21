@@ -4,13 +4,14 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools,
+  hatchling,
 
   # dependencies
   affine,
   dask,
   numpy,
   odc-geo,
+  odc-loader,
   pandas,
   pystac,
   rasterio,
@@ -29,18 +30,18 @@
 
 buildPythonPackage rec {
   pname = "odc-stac";
-  version = "0.3.11";
+  version = "0.4.0rc2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "opendatacube";
     repo = "odc-stac";
     tag = "v${version}";
-    hash = "sha256-uudBzxVGt3RW4ppDrFYfA9LMa2xPfs3FTBzVS19FjB4=";
+    hash = "sha256-I25qAJEryYaYO7KIVIoTlgzLS6PWkNG6b4NFyhghyKQ=";
   };
 
   build-system = [
-    setuptools
+    hatchling
   ];
 
   dependencies = [
@@ -48,6 +49,7 @@ buildPythonPackage rec {
     dask
     numpy
     odc-geo
+    odc-loader
     pandas
     pystac
     rasterio
@@ -76,9 +78,6 @@ buildPythonPackage rec {
     # urllib url open error
     "test_norm_geom"
     "test_output_geobox"
-    "test_mem_reader"
-    "test_memreader_zarr"
-
   ];
 
   pythonImportsCheck = [

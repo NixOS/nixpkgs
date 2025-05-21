@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imsprog";
-  version = "1.5.1";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "bigbigmdm";
     repo = "IMSProg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cgMjXfquftiGngIYjSnC/HkWRmb15kyLNzp+ekWXM+I=";
+    hash = "sha256-vT2SAhHfgs4HR0V0Tu0MLCL9nizf9u4z/H70PJKhA9k=";
   };
 
   strictDeps = true;

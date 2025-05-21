@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "djangorestframework-stubs";
-  version = "3.15.2";
+  version = "3.15.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "typeddjango";
     repo = "djangorestframework-stubs";
     tag = version;
-    hash = "sha256-ZpnPJZhuKZCy6tV8KBRC4Wjr3t0igQOkkUyVtmmVRMg=";
+    hash = "sha256-6bs/FGCxxV1sE4J3aqzYS1wIr82mWlnGGXIuYOF5+dw=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "PEP-484 stubs for Django REST Framework";
     homepage = "https://github.com/typeddjango/djangorestframework-stubs";
-    changelog = "https://github.com/typeddjango/djangorestframework-stubs/releases/tag/${version}";
+    changelog = "https://github.com/typeddjango/djangorestframework-stubs/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ elohmeier ];
   };

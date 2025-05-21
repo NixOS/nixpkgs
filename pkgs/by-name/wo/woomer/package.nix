@@ -21,12 +21,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-puALhN54ma2KToXUF8ipaYysyayjaSp+ISZ3AgQvniw=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libwayshot-0.3.2-dev" = "sha256-QETmdzA7a1XMGdMU7tUNSJzzDw/4nkH9gKZv3pP0Nwc=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-VQee/2adBvJpJDihWuo22JNyDKLkZ9PrVqWPB/gJ9Sw=";
 
   strictDeps = true;
 

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "JoseExposito";
-    repo = pname;
+    repo = "touchegg";
     rev = version;
     sha256 = "sha256-he6ERl6ZNWuD5StUqQWsUjeJ35nD0b8KddIAvntqlOI=";
   };
@@ -80,6 +80,6 @@ stdenv.mkDerivation rec {
     mainProgram = "touchegg";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }

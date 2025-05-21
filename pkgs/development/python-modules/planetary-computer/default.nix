@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "planetary-computer";
-  version = "1.0.0";
+  version = "1.0.0.post0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "planetary-computer-sdk-for-python";
     tag = "v${version}";
-    hash = "sha256-FcTEXtZ2zZQ3i4zmwecaZHdaHni7UbHSF9TDKP/k4sw=";
+    hash = "sha256-NPHUxThSZzENw4W91WAOqChyIl6Z/Afi4mddz+lXlXA=";
   };
 
   build-system = [
@@ -77,7 +77,7 @@ buildPythonPackage rec {
   meta = {
     description = "Planetary Computer SDK for Python";
     homepage = "https://github.com/microsoft/planetary-computer-sdk-for-python";
-    changelog = "https://github.com/microsoft/planetary-computer-sdk-for-python/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/microsoft/planetary-computer-sdk-for-python/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ daspk04 ];
     mainProgram = "planetarycomputer";

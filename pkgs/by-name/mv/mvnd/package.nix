@@ -1,5 +1,4 @@
 {
-  darwin,
   fetchFromGitHub,
   graalvmPackages,
   installShellFiles,
@@ -40,7 +39,7 @@ maven.buildMavenPackage rec {
     graalvmPackages.graalvm-ce
     installShellFiles
     makeWrapper
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk_11_0.frameworks.Foundation ];
+  ];
 
   mvnDepsParameters = mvnParameters;
   mvnParameters = lib.concatStringsSep " " [

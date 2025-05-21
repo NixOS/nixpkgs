@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -22,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "databricks-sdk";
-  version = "0.44.1";
+  version = "0.53.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "databricks-sdk-py";
     tag = "v${version}";
-    hash = "sha256-+zRsw+nQjkee7AGg0xW7HHbROUAz6cVO91XDlgGtJfs=";
+    hash = "sha256-QuPoez1F9v87LGM0Ov6Wg2f5pLAr0uDqZ0b08Xda5+k=";
   };
 
   build-system = [
@@ -54,28 +53,29 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  disabledTests =
-    [
-      # Require internet access
-      # ValueError: default auth: cannot configure default credentials, please check...
-      "test_azure_cli_does_not_specify_tenant_id_with_msi"
-      "test_azure_cli_fallback"
-      "test_azure_cli_user_no_management_access"
-      "test_azure_cli_user_with_management_access"
-      "test_azure_cli_with_warning_on_stderr"
-      "test_azure_cli_workspace_header_present"
-      "test_config_azure_cli_host"
-      "test_config_azure_cli_host_and_resource_id"
-      "test_config_azure_cli_host_and_resource_i_d_configuration_precedence"
-      "test_load_azure_tenant_id_404"
-      "test_load_azure_tenant_id_happy_path"
-      "test_load_azure_tenant_id_no_location_header"
-      "test_load_azure_tenant_id_unparsable_location_header"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      # requests.exceptions.ChunkedEncodingError: ("Connection broken: ConnectionResetError(54, 'Connection reset by peer')", ConnectionResetError(54, 'Connection reset by peer'))
-      "test_github_oidc_flow_works_with_azure"
-    ];
+  disabledTests = [
+    # Require internet access
+    # ValueError: default auth: cannot configure default credentials, please check...
+    "test_azure_cli_does_not_specify_tenant_id_with_msi"
+    "test_azure_cli_fallback"
+    "test_azure_cli_user_no_management_access"
+    "test_azure_cli_user_with_management_access"
+    "test_azure_cli_with_warning_on_stderr"
+    "test_azure_cli_workspace_header_present"
+    "test_config_azure_cli_host"
+    "test_config_azure_cli_host_and_resource_id"
+    "test_config_azure_cli_host_and_resource_i_d_configuration_precedence"
+    "test_load_azure_tenant_id_404"
+    "test_load_azure_tenant_id_happy_path"
+    "test_load_azure_tenant_id_no_location_header"
+    "test_load_azure_tenant_id_unparsable_location_header"
+    # Take an exceptionally long time when sandboxing is enabled due to retries
+    "test_multipart_upload"
+    "test_rewind_seekable_stream"
+    "test_resumable_upload"
+    # flaky -- ConnectionBroken under heavy load indicates a timing issue
+    "test_github_oidc_flow_works_with_azure"
+  ];
 
   __darwinAllowLocalNetworking = true;
 

@@ -10,6 +10,7 @@
   pydantic,
   pydantic-settings,
   pytest-asyncio,
+  pytest-examples,
   pytestCheckHook,
   python-dotenv,
   rich,
@@ -17,21 +18,25 @@
   starlette,
   typer,
   uvicorn,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "mcp";
-  version = "1.3.0";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "python-sdk";
     tag = "v${version}";
-    hash = "sha256-DbRXD4o/uFfpGvrux8lm7/t2utdFDEFg2G7CiraCJd0=";
+    hash = "sha256-APm3x4tcDbp8D2ygW43wFyP0llJ6fXZiINHRYShp9ZY=";
   };
 
   postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ', "uv-dynamic-versioning"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
     substituteInPlace tests/client/test_stdio.py \
       --replace '/usr/bin/tee' '${lib.getExe' coreutils "tee"}'
   '';
@@ -61,18 +66,29 @@ buildPythonPackage rec {
     rich = [
       rich
     ];
+    ws = [
+      websockets
+    ];
   };
 
   pythonImportsCheck = [ "mcp" ];
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-examples
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::pydantic.warnings.PydanticDeprecatedSince211"
+  ];
 
   disabledTests = [
     # attempts to run the package manager uv
     "test_command_execution"
+    # performance-dependent test
+    "test_messages_are_executed_concurrently"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -82,6 +98,6 @@ buildPythonPackage rec {
     description = "Official Python SDK for Model Context Protocol servers and clients";
     homepage = "https://github.com/modelcontextprotocol/python-sdk";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ josh ];
   };
 }

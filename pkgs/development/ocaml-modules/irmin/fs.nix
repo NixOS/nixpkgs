@@ -9,7 +9,7 @@
   irmin-watcher,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
 
   pname = "irmin-fs";
 

@@ -8,6 +8,7 @@
   gtk3,
   gst_all_1,
   gtksourceview,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -25,6 +26,7 @@ python3Packages.buildPythonApplication rec {
     pkg-config
     gobject-introspection
     wrapGAppsHook3
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
@@ -50,7 +52,6 @@ python3Packages.buildPythonApplication rec {
   '';
 
   preBuild = ''
-    export HOME=$(mktemp -d)
     export PYTHONPATH=./lib:$PYTHONPATH
     python pgn2ecodb.py
     python create_theme_preview.py

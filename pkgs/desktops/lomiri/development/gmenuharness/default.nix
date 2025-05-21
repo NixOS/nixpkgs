@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library to test GMenuModel structures";
     homepage = "https://gitlab.com/ubports/development/core/gmenuharness";
     license = licenses.gpl3Only;
-    maintainers = teams.lomiri.members;
+    teams = [ teams.lomiri ];
     platforms = platforms.unix;
     pkgConfigModules = [
       "libgmenuharness"

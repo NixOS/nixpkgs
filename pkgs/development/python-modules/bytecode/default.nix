@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "bytecode";
-  version = "0.16.0";
+  version = "0.16.2";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "vstinner";
     repo = pname;
     tag = version;
-    hash = "sha256-Nj/GKZC+zZt1M4Qd7CMXQCLwTIu64aidasH4PwBLtzw=";
+    hash = "sha256-74qEwAYHXV4HakJQ05A9K7LuO0xP28Hub6no09KO4r4=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

@@ -4,7 +4,7 @@
   bundlerUpdateScript,
 }:
 
-bundlerApp rec {
+bundlerApp {
   gemdir = ./.;
   pname = "pgsync";
   exes = [ "pgsync" ];

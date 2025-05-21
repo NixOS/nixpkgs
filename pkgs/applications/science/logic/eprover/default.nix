@@ -6,13 +6,13 @@
   enableHO ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eprover";
-  version = "3.1";
+  version = "3.2";
 
   src = fetchurl {
-    url = "https://wwwlehre.dhbw-stuttgart.de/~sschulz/WORK/E_DOWNLOAD/V_${version}/E.tgz";
-    hash = "sha256-+E2z7JAkiNXhZrWRXFbhI5f9NmB0Q4eixab4GlAFqYY=";
+    url = "https://wwwlehre.dhbw-stuttgart.de/~sschulz/WORK/E_DOWNLOAD/V_${finalAttrs.version}/E.tgz";
+    hash = "sha256-B0yOX8MGJHY0HOeQ/RWtgATTIta2YnhEvSdoqIML1K4=";
   };
 
   buildInputs = [ which ];
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     sed -e 's/ *CC *= *gcc$//' -i Makefile.vars
   '';
+
   configureFlags =
     [
       "--exec-prefix=$(out)"
@@ -29,14 +30,13 @@ stdenv.mkDerivation rec {
       "--enable-ho"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Automated theorem prover for full first-order logic with equality";
     homepage = "http://www.eprover.org/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [
       raskin
-      gebner
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

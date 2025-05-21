@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "minizip-ng";
-  version = "4.0.8";
+  version = "4.0.9";
 
   src = fetchFromGitHub {
     owner = "zlib-ng";
     repo = "minizip-ng";
     rev = finalAttrs.version;
-    hash = "sha256-NFl2R+o1SBXNAt2TOMMsbIh+IHJu78p56caT4h2TDeU=";
+    hash = "sha256-iAiw+ihVfcSNl6UdBad7FjT5Zwa+brndg60v7ceCzC8=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/zlib-ng/minizip-ng";
     license = licenses.zlib;
     maintainers = with maintainers; [
-      gebner
       ris
     ];
     platforms = platforms.unix;

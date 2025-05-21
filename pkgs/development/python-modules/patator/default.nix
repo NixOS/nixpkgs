@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "patator";
-  version = "1.0";
+  version = "1.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VQ7JPyQOY9X/7LVAvTwftoOegt4KyfERgu38HfmsYDM=";
+    hash = "sha256-BupB/s4HNk6DUxbrHB/onqeS7kL0WsGPZ2jqKUj7DJw=";
   };
 
   postPatch = ''

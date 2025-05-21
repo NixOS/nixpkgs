@@ -8,6 +8,7 @@
   bison,
   systemd,
   boost186,
+  libedit,
   openssl,
   patchelf,
   mariadb-connector-c,
@@ -29,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "icinga2${nameSuffix}";
-  version = "2.14.3";
+  version = "2.14.5";
 
   src = fetchFromGitHub {
     owner = "icinga";
     repo = "icinga2";
     rev = "v${version}";
-    hash = "sha256-QXe/+yQlyyOa78eEiudDni08SCUP3nhTYVpbmVUVKA8=";
+    hash = "sha256-5FQIcOvuq1GHX80rYuZ3jCM3CF9Fq1149nvlO1njqfA=";
   };
 
   patches = [
@@ -81,6 +82,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     boost186
+    libedit
     openssl
     systemd
   ] ++ lib.optional withPostgresql libpq;
@@ -125,6 +127,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.icinga.com";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.helsinki-systems.members;
+    teams = [ lib.teams.helsinki-systems ];
   };
 }

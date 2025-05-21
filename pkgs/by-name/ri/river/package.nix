@@ -17,14 +17,14 @@
   wayland-scanner,
   wlroots_0_18,
   xwayland,
-  zig_0_13,
+  zig_0_14,
   withManpages ? true,
   xwaylandSupport ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "river";
-  version = "0.3.7";
+  version = "0.3.9";
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
@@ -34,16 +34,18 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "river";
     rev = "refs/tags/v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-4ac0LGQtLldHyXJ2GIRMHV+VZfUrRFdBYLiAHX5lWcw=";
+    hash = "sha256-g6qjSkvcA2Ud4W+/NVzYZjiWoWkAuKvuD20KlO/zGhE=";
   };
 
-  deps = callPackage ./build.zig.zon.nix { };
+  deps = callPackage ./build.zig.zon.nix {
+    zig = zig_0_14;
+  };
 
   nativeBuildInputs = [
     pkg-config
     wayland-scanner
     xwayland
-    zig_0_13.hook
+    zig_0_14.hook
   ] ++ lib.optional withManpages scdoc;
 
   buildInputs = [

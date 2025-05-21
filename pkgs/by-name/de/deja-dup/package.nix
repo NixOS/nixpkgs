@@ -90,7 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://apps.gnome.org/DejaDup/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jtojnar ] ++ lib.teams.gnome-circle.members;
+    maintainers = with maintainers; [ jtojnar ];
+    teams = [ teams.gnome-circle ];
     platforms = platforms.linux;
     mainProgram = "deja-dup";
   };

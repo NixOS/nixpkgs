@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  buildGo122Module,
+  buildGoModule,
   buildNpmPackage,
   makeWrapper,
   exiftool,
@@ -36,7 +36,7 @@ let
   };
 in
 
-buildGo122Module {
+buildGoModule {
   pname = "photofield";
   inherit version src;
 

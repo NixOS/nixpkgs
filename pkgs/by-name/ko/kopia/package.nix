@@ -1,4 +1,13 @@
-{ lib, buildGoModule, fetchFromGitHub, gitUpdater, installShellFiles, stdenv, testers, kopia }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  gitUpdater,
+  installShellFiles,
+  stdenv,
+  testers,
+  kopia,
+}:
 
 buildGoModule rec {
   pname = "kopia";

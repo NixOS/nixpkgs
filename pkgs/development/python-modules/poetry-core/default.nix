@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "poetry-core";
-  version = "2.0.1";
+  version = "2.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = "poetry-core";
     tag = version;
-    hash = "sha256-X3HFvnjbQ8An856QwSsWm5bmzs9KuscPE9LaVebNfgk=";
+    hash = "sha256-fNj/LI4A4RjjPzYT+0ekwqmm3qzzZL3aACOe8BHviuk=";
   };
 
   nativeCheckInputs = [
@@ -64,6 +64,6 @@ buildPythonPackage rec {
     description = "Poetry PEP 517 Build Backend";
     homepage = "https://github.com/python-poetry/poetry-core/";
     license = licenses.mit;
-    maintainers = teams.python.members;
+    teams = [ teams.python ];
   };
 }

@@ -1,4 +1,5 @@
 {
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -9,16 +10,16 @@
 
 buildGoModule rec {
   pname = "pscale";
-  version = "0.221.0";
+  version = "0.241.0";
 
   src = fetchFromGitHub {
     owner = "planetscale";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-wWcBQG6GRub14TL6IEgQ9YJkFp3vVPj0TfpJJgyuECY=";
+    sha256 = "sha256-he9LLC8ijbgfmTDVURKZhU5RyOJC8U4vjPQBNNtC9WI=";
   };
 
-  vendorHash = "sha256-ZTBW6YCWNVh/PQV43JXHR9dTm7Qq7uL6vRm/A49gYp4=";
+  vendorHash = "sha256-Gt2dDgIAn7Hjlb2VI5VBKP7IfzkMZvCyLmOYYBtLx3o=";
 
   ldflags = [
     "-s"
@@ -30,7 +31,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd pscale \
       --bash <($out/bin/pscale completion bash) \
       --fish <($out/bin/pscale completion fish) \

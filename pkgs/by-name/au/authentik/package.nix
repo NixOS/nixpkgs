@@ -7,6 +7,7 @@
   buildNpmPackage,
   buildGoModule,
   runCommand,
+  bash,
   chromedriver,
   openapi-generator-cli,
   nodejs,
@@ -15,13 +16,13 @@
 }:
 
 let
-  version = "2025.2.1";
+  version = "2025.2.3";
 
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
     rev = "version/${version}";
-    hash = "sha256-KZalpsM9rvki9GD+urf8idHOEnvBJtkSvE1b2b4KL/4=";
+    hash = "sha256-aaSAlFIc5Gn5PJPVuObi24Y86/3N3yFJVQTx1tV2i2A=";
   };
 
   meta = with lib; {
@@ -30,6 +31,7 @@ let
     homepage = "https://goauthentik.io/";
     license = licenses.mit;
     platforms = platforms.linux;
+    broken = stdenvNoCC.buildPlatform != stdenvNoCC.hostPlatform;
     maintainers = with maintainers; [
       jvanbruegge
       risson
@@ -43,7 +45,7 @@ let
 
     sourceRoot = "source/website";
 
-    outputHash = "sha256-GIFz1ku0bS/GaWehOp2z9Te9qpWt61DQrw0LA+z/XCk=";
+    outputHash = "sha256-lPpphGi8l2X/fR9YoJv37piAe82oqSLAKHze8oTrGNc=";
     outputHashMode = "recursive";
 
     nativeBuildInputs = [
@@ -53,7 +55,7 @@ let
 
     buildPhase = ''
       npm ci --cache ./cache
-      rm -r ./cache
+      rm -r ./cache node_modules/@parcel/watcher-linux-* node_modules/.package-lock.json
     '';
 
     installPhase = ''
@@ -276,7 +278,7 @@ let
             pyyaml
             requests-oauthlib
             scim2-filter-parser
-            sentry-sdk_2
+            sentry-sdk
             service-identity
             setproctitle
             structlog
@@ -341,6 +343,8 @@ in
 stdenvNoCC.mkDerivation {
   pname = "authentik";
   inherit src version;
+
+  buildInputs = [ bash ];
 
   postPatch = ''
     rm Makefile

@@ -87,7 +87,7 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.asl20;
     description = "BGP sessions management tool";
     mainProgram = "peering-manager";
-    maintainers = teams.wdz.members;
+    teams = [ teams.wdz ];
     platforms = platforms.linux;
   };
 }

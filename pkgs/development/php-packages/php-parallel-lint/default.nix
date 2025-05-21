@@ -28,6 +28,6 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://github.com/php-parallel-lint/PHP-Parallel-Lint";
     license = lib.licenses.bsd2;
     mainProgram = "parallel-lint";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

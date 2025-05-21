@@ -1,10 +1,11 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, otel-desktop-viewer
-, stdenv
-, apple-sdk_12
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  otel-desktop-viewer,
+  stdenv,
+  apple-sdk_12,
 }:
 
 buildGoModule rec {
@@ -25,7 +26,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-pH16DCYeW8mdnkkRi0zqioovZu9slVc3gAdhMYu2y98=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin apple-sdk_12;
 

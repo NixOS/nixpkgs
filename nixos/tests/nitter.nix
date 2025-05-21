@@ -8,7 +8,7 @@ import ./make-test-python.nix (
     # These credentials are from the nitter wiki and are expired. We must provide
     # credentials in the correct format, otherwise nitter fails to start. They
     # must not be valid, as unauthorized errors are handled gracefully.
-    guestAccountFile = pkgs.writeText "guest_accounts.jsonl" ''
+    sessionsFile = pkgs.writeText "sessions.jsonl" ''
       {"oauth_token":"1719213587296620928-BsXY2RIJEw7fjxoNwbBemgjJhueK0m","oauth_token_secret":"N0WB0xhL4ng6WTN44aZO82SUJjz7ssI3hHez2CUhTiYqy"}
     '';
   in
@@ -22,7 +22,7 @@ import ./make-test-python.nix (
         # Test CAP_NET_BIND_SERVICE
         server.port = 80;
         # Provide dummy guest accounts
-        guestAccounts = guestAccountFile;
+        inherit sessionsFile;
       };
     };
 

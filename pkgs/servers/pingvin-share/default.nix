@@ -5,12 +5,12 @@
 }:
 
 let
-  version = "1.9.1";
+  version = "1.11.1";
   src = fetchFromGitHub {
     owner = "stonith404";
     repo = "pingvin-share";
     rev = "v${version}";
-    hash = "sha256-Yy1Ncqgl5A/0bQ9BAtOdQCCmYNL+AfShm1dDtEydO9c=";
+    hash = "sha256-ye26VyfeKcQk1gTLxVqsYmrqK0nqmU2Cl+fIrWdryLQ=";
   };
 in
 

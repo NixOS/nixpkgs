@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bison
-, cmake
-, flex
-, pkg-config
-, boost
-, icu
-, libstemmer
-, mariadb-connector-c
-, re2
-, nlohmann_json
-, testers
-, manticoresearch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  cmake,
+  flex,
+  pkg-config,
+  boost,
+  icu,
+  libstemmer,
+  mariadb-connector-c,
+  re2,
+  nlohmann_json,
+  testers,
+  manticoresearch,
 }:
 
 let

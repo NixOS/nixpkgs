@@ -1,8 +1,8 @@
 {
   lib,
   aiohttp,
+  aiohttp-sse-client2,
   aioresponses,
-  aiosseclient,
   buildPythonPackage,
   fetchFromGitHub,
   mashumaro,
@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pysmartthings";
-  version = "2.5.0";
+  version = "3.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -26,15 +26,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "andrewsayre";
     repo = "pysmartthings";
-    rev = "v${version}";
-    hash = "sha256-0D0si3VBGtnQ8+kUKiquPo/IJXeBgR7SFc/1nxhiPvw=";
+    tag = "v${version}";
+    hash = "sha256-tQ+AQDHwr9JO4AQ+2ZAGQbSrfnuzPUEi2F19wLijv1Y=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
-    aiosseclient
+    aiohttp-sse-client2
     mashumaro
     orjson
     yarl
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for interacting with the SmartThings cloud API";
     homepage = "https://github.com/andrewsayre/pysmartthings";
-    changelog = "https://github.com/andrewsayre/pysmartthings/releases/tag/v${version}";
+    changelog = "https://github.com/andrewsayre/pysmartthings/releases/tag/${src.tag}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

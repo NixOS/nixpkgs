@@ -66,7 +66,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/fizzyizzy05/binary";
     changelog = "https://github.com/fizzyizzy05/binary/releases/tag/${version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
     mainProgram = "binary";
     platforms = lib.platforms.linux;
   };

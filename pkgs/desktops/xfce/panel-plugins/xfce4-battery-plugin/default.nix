@@ -28,6 +28,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Battery plugin for Xfce panel";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

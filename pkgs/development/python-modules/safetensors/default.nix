@@ -5,11 +5,23 @@
   fetchFromGitHub,
   rustPlatform,
 
-  # tests
-  h5py,
+  # optional-dependencies
   numpy,
-  pytestCheckHook,
   torch,
+  tensorflow,
+  flax,
+  jax,
+  mlx,
+  paddlepaddle,
+  h5py,
+  huggingface-hub,
+  setuptools-rust,
+  pytest,
+  pytest-benchmark,
+  hypothesis,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -35,6 +47,39 @@ buildPythonPackage rec {
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
+
+  optional-dependencies = lib.fix (self: {
+    numpy = [ numpy ];
+    torch = self.numpy ++ [
+      torch
+    ];
+    tensorflow = self.numpy ++ [
+      tensorflow
+    ];
+    pinned-tf = self.numpy ++ [
+      tensorflow
+    ];
+    jax = self.numpy ++ [
+      flax
+      jax
+    ];
+    mlx = [
+      mlx
+    ];
+    paddlepaddle = self.numpy ++ [
+      paddlepaddle
+    ];
+    testing = self.numpy ++ [
+      h5py
+      huggingface-hub
+      setuptools-rust
+      pytest
+      pytest-benchmark
+      hypothesis
+    ];
+    all = self.torch ++ self.numpy ++ self.pinned-tf ++ self.jax ++ self.paddlepaddle ++ self.testing;
+    dev = self.all;
+  });
 
   nativeCheckInputs = [
     h5py

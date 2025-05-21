@@ -175,6 +175,6 @@ stdenv.mkDerivation rec {
     homepage = "https://munin-monitoring.org/";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.bjornfor ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -3,11 +3,18 @@
   stdenv,
   fetchurl,
   pkg-config,
+  autoconf,
+  automake116x,
   zlib,
   shadow,
   capabilitiesSupport ? stdenv.hostPlatform.isLinux,
   libcap_ng,
   libxcrypt,
+  # Disable this by default because `mount` is setuid. However, we also support
+  # "dlopen" as a value here. Note that the nixpkgs setuid wrapper and ld-linux.so will filter out LD_LIBRARY_PATH
+  # if you set this to dlopen, so ensure you're accessing it without the wrapper if you depend on that.
+  cryptsetupSupport ? false,
+  cryptsetup,
   ncursesSupport ? true,
   ncurses,
   pamSupport ? true,
@@ -24,21 +31,31 @@
   gitUpdater,
 }:
 
+let
+  isMinimal = cryptsetupSupport == false && !nlsSupport && !ncursesSupport && !systemdSupport;
+in
 stdenv.mkDerivation rec {
-  pname =
-    "util-linux" + lib.optionalString (!nlsSupport && !ncursesSupport && !systemdSupport) "-minimal";
-  version = "2.40.4";
+  pname = "util-linux" + lib.optionalString isMinimal "-minimal";
+  version = "2.41";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/util-linux-${version}.tar.xz";
-    hash = "sha256-XB2vczsE6YWa/cO9h8xIEYDuD4i1wJRrFv3skxl1+3k=";
+    hash = "sha256-ge6Ts8/f6318QJDO3rode7zpFB/QtQG2hrP+R13cpMY=";
   };
 
-  patches = [
-    ./rtcwake-search-PATH-for-shutdown.patch
-    # https://github.com/util-linux/util-linux/pull/3013
-    ./fix-darwin-build.patch
-  ];
+  patches =
+    [
+      ./rtcwake-search-PATH-for-shutdown.patch
+      # https://github.com/util-linux/util-linux/pull/3013
+      ./fix-darwin-build.patch
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+      (fetchurl {
+        name = "bits-only-build-when-cpu_set_t-is-available.patch";
+        url = "https://lore.kernel.org/util-linux/20250501075806.88759-1-hi@alyssa.is/raw";
+        hash = "sha256-G7Cdv8636wJEjgt9am7PaDI8bpSF8sO9bFWEIiAL25A=";
+      })
+    ];
 
   # We separate some of the utilities into their own outputs. This
   # allows putting together smaller systems depending on only part of
@@ -60,7 +77,7 @@ stdenv.mkDerivation rec {
 
   postPatch =
     ''
-      patchShebangs tests/run.sh tools/all_syscalls
+      patchShebangs tests/run.sh tools/all_syscalls tools/all_errnos
 
       substituteInPlace sys-utils/eject.c \
         --replace "/bin/umount" "$bin/bin/umount"
@@ -88,10 +105,19 @@ stdenv.mkDerivation rec {
       "--disable-su" # provided by shadow
       (lib.enableFeature writeSupport "write")
       (lib.enableFeature nlsSupport "nls")
+      (lib.withFeatureAs (cryptsetupSupport != false) "cryptsetup" (
+        if cryptsetupSupport == true then
+          "yes"
+        else if cryptsetupSupport == "dlopen" then
+          "dlopen"
+        else
+          throw "invalid cryptsetupSupport value: ${toString cryptsetupSupport}"
+      ))
       (lib.withFeature ncursesSupport "ncursesw")
       (lib.withFeature systemdSupport "systemd")
       (lib.withFeatureAs systemdSupport "systemdsystemunitdir" "${placeholder "bin"}/lib/systemd/system/")
       (lib.withFeatureAs systemdSupport "tmpfilesdir" "${placeholder "out"}/lib/tmpfiles.d")
+      (lib.withFeatureAs systemdSupport "sysusersdir" "${placeholder "out"}/lib/sysusers.d")
       (lib.enableFeature translateManpages "poman")
       "SYSCONFSTATICDIR=${placeholder "lib"}/lib"
     ]
@@ -105,6 +131,10 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Doesn't build on Darwin, also doesn't really make sense on Darwin
       "--disable-liblastlog2"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isStatic [
+      # Mandatory shared library.
+      "--disable-pam-lastlog2"
     ];
 
   makeFlags = [
@@ -113,10 +143,17 @@ stdenv.mkDerivation rec {
     "usrsbin_execdir=${placeholder "bin"}/sbin"
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-    installShellFiles
-  ] ++ lib.optionals translateManpages [ po4a ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      installShellFiles
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+      autoconf
+      automake116x
+    ]
+    ++ lib.optionals translateManpages [ po4a ]
+    ++ lib.optionals (cryptsetupSupport == "dlopen") [ cryptsetup ];
 
   buildInputs =
     [
@@ -124,6 +161,7 @@ stdenv.mkDerivation rec {
       libxcrypt
       sqlite
     ]
+    ++ lib.optionals (cryptsetupSupport == true) [ cryptsetup ]
     ++ lib.optionals pamSupport [ pam ]
     ++ lib.optionals capabilitiesSupport [ libcap_ng ]
     ++ lib.optionals ncursesSupport [ ncurses ]
@@ -174,12 +212,12 @@ stdenv.mkDerivation rec {
     hasCol = stdenv.hostPlatform.libc == "glibc";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.kernel.org/pub/linux/utils/util-linux/";
     description = "Set of system utilities for Linux";
     changelog = "https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v${lib.versions.majorMinor version}/v${version}-ReleaseNotes";
     # https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/tree/README.licensing
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       gpl2Plus
       gpl3Plus
@@ -188,7 +226,8 @@ stdenv.mkDerivation rec {
       bsdOriginalUC
       publicDomain
     ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ numinit ];
+    platforms = lib.platforms.unix;
     pkgConfigModules = [
       "blkid"
       "fdisk"

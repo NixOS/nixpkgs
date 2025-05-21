@@ -7,7 +7,7 @@
   ocamlbuild,
   topkg,
   cmdliner,
-  version ? if lib.versionAtLeast ocaml.version "4.14" then "0.9.9" else "0.9.8",
+  version ? if lib.versionAtLeast ocaml.version "4.14" then "0.9.10" else "0.9.8",
 }:
 
 lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
@@ -21,7 +21,7 @@ lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
       url = "https://erratique.ch/software/uuidm/releases/uuidm-${version}.tbz";
       hash =
         {
-          "0.9.9" = "sha256-jOgNF05dpoU/XQEefSZhn3zSlQ1BA1b/U4Ib9j2mvFo=";
+          "0.9.10" = "sha256-kWVZSofWMyky5nAuxoh1xNhwMKZ2qUahL3Dh27J36Vc=";
           "0.9.8" = "sha256-/GZbkJVDQu1UY8SliK282kUWAVMfOnpQadUlRT/tJrM=";
         }
         ."${version}";

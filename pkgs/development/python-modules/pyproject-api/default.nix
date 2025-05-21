@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "pyproject-api";
-  version = "1.8.0";
+  version = "1.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "tox-dev";
     repo = "pyproject-api";
     tag = version;
-    hash = "sha256-zFV44xqbwe1QsIVurvsjqY+zxC+X2hCljZ5u70kNTSU=";
+    hash = "sha256-4oX/h3EiLZIfHhU6zBD9ZQYnHGrid93LkJzaC6swBdI=";
   };
 
   outputs = [

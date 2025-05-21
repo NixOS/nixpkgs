@@ -24,18 +24,21 @@
   responses,
   syrupy,
   toml,
+
+  # passthru
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-openai";
-  version = "0.3.5";
+  version = "0.3.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-openai==${version}";
-    hash = "sha256-we9LPZeR/eIr+4uDXbBlTm43iapC+MCB0BrbH49Uknw=";
+    hash = "sha256-JsPdG62vvM8b/u5bo6FyXQhhGua/Sd74L/8CtMI7Fjc=";
   };
 
   sourceRoot = "${src.name}/libs/partners/openai";
@@ -46,6 +49,12 @@ buildPythonPackage rec {
   '';
 
   build-system = [ pdm-backend ];
+
+  pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individul components.
+    "langchain-core"
+  ];
 
   dependencies = [
     langchain-core
@@ -81,6 +90,7 @@ buildPythonPackage rec {
     "test_azure_openai_uses_actual_secret_value_from_secretstr"
     "test_azure_serialized_secrets"
     "test_chat_openai_get_num_tokens"
+    "test_embed_documents_with_custom_chunk_size"
     "test_get_num_tokens_from_messages"
     "test_get_token_ids"
     "test_init_o1"
@@ -89,10 +99,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_openai" ];
 
-  passthru = {
-    inherit (langchain-core) updateScript;
-    # updates the wrong fetcher rev attribute
-    skipBulkUpdate = true;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "langchain-openai==([0-9.]+)"
+    ];
   };
 
   meta = {

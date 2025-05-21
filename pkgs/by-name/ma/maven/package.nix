@@ -5,6 +5,7 @@
   jdk_headless,
   makeWrapper,
   stdenvNoCC,
+  testers,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "maven";
@@ -57,6 +58,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           maven = finalAttrs.finalPackage;
         }
       );
+      tests = {
+        version = testers.testVersion {
+          package = finalAttrs.finalPackage;
+          command = ''
+            env MAVEN_OPTS="-Dmaven.repo.local=$TMPDIR/m2" \
+              mvn --version
+          '';
+        };
+      };
     };
 
   meta = {
@@ -74,7 +84,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ];
     license = lib.licenses.asl20;
     mainProgram = "mvn";
-    maintainers = with lib.maintainers; [ tricktron ] ++ lib.teams.java.members;
+    maintainers = with lib.maintainers; [ tricktron ];
+    teams = [ lib.teams.java ];
     inherit (jdk_headless.meta) platforms;
   };
 })

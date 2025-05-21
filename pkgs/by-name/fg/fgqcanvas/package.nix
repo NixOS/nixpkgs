@@ -7,7 +7,7 @@
   qt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "fgqcanvas";
   version = "0-unstable-2024-02-11";
 

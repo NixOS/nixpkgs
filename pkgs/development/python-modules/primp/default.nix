@@ -8,8 +8,6 @@
   runCommand,
   boringssl,
   libiconv,
-  SystemConfiguration,
-  patchelf,
   gcc-unwrapped,
   python,
   fetchpatch,
@@ -38,7 +36,7 @@ let
     # Remove bazel specific build file to make way for build directory
     # This is a problem on Darwin because of case-insensitive filesystem
     preBuild =
-      (lib.optionalString stdenv.isDarwin ''
+      (lib.optionalString stdenv.hostPlatform.isDarwin ''
         rm ../BUILD
       '')
       + oa.preBuild;
@@ -63,20 +61,20 @@ let
 in
 buildPythonPackage rec {
   pname = "primp";
-  version = "0.12.0";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deedy5";
     repo = "primp";
     tag = "v${version}";
-    hash = "sha256-yzcrUER+NiDfSjJ3my45IS+2GmeusvJgyX5nFSaqFUk=";
+    hash = "sha256-LrSygeioJlccOH1oyagw02ankkZK+H6Mzrgy8tB83mo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-gCNnP0B0D6AJ1L/E6sQKASx8BbSJU5jTNia+tL2USvU=";
+    hash = "sha256-iPf25DMGNHrWYByNTylB6bPpLfzs0ADwgkjfhVxiiXA=";
   };
 
   nativeBuildInputs = [
@@ -87,12 +85,11 @@ buildPythonPackage rec {
 
   # TODO: Can we improve this?
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    ${lib.getExe patchelf} --add-rpath ${lib.getLib gcc-unwrapped.lib} --add-needed libstdc++.so.6 $out/${python.sitePackages}/primp/primp.abi3.so
+    patchelf --add-rpath ${lib.getLib gcc-unwrapped.lib} --add-needed libstdc++.so.6 $out/${python.sitePackages}/primp/primp.abi3.so
   '';
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-    SystemConfiguration
   ];
 
   env.BORING_BSSL_PATH = boringssl-wrapper;
@@ -109,7 +106,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/deedy5/primp/releases/tag/${version}";
-    description = "PRIMP (Python Requests IMPersonate). The fastest python HTTP client that can impersonate web browsers.";
+    description = "Python Requests IMPersonate, the fastest Python HTTP client that can impersonate web browsers";
     homepage = "https://github.com/deedy5/primp";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ drupol ];

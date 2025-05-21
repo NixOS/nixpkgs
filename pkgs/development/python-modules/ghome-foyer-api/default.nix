@@ -25,10 +25,14 @@ buildPythonPackage rec {
     hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     grpcio
     protobuf
   ];
+
+  doCheck = false; # no tests
+
+  pythonRelaxDeps = [ "protobuf" ];
 
   meta = {
     description = "Generated Python protobuf stubs for Google Home internal API";

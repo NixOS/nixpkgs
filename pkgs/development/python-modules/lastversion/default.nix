@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "lastversion";
-  version = "3.5.0";
+  version = "3.5.7";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dvershinin";
     repo = "lastversion";
-    rev = "v${version}";
-    hash = "sha256-SeDLpMP8cF6CC3qJ6V8dLErl6ihpnl4lHeBkp7jtQgI=";
+    tag = "v${version}";
+    hash = "sha256-z3QrtnhIgXLVyaDNm0XqaVqZb05K3pq8mbweTpphdBQ=";
   };
 
   build-system = [ setuptools ];
@@ -78,7 +78,7 @@ buildPythonPackage rec {
   meta = {
     description = "Find the latest release version of an arbitrary project";
     homepage = "https://github.com/dvershinin/lastversion";
-    changelog = "https://github.com/dvershinin/lastversion/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/dvershinin/lastversion/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ ShamrockLee ];
     mainProgram = "lastversion";

@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel ? false,
-  kernelModuleMakeFlags ? [],
+  kernelModuleMakeFlags ? [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {

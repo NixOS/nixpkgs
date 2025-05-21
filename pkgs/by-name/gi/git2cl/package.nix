@@ -5,7 +5,7 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "git2cl";
   version = "unstable-2008-08-27";
 

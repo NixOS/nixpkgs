@@ -1,17 +1,28 @@
-{ lib, callPackage, buildDunePackage, fetchurl
-, fix, menhir, menhirLib, menhirSdk, merlin-extend, ppxlib, cppo, ppx_derivers
-, dune-build-info
+{
+  lib,
+  callPackage,
+  buildDunePackage,
+  fetchurl,
+  fix,
+  menhir,
+  menhirLib,
+  menhirSdk,
+  merlin-extend,
+  ppxlib,
+  cppo,
+  ppx_derivers,
+  dune-build-info,
 }:
 
 buildDunePackage rec {
   pname = "reason";
-  version = "3.14.0";
+  version = "3.15.0";
 
   minimalOCamlVersion = "4.11";
 
   src = fetchurl {
     url = "https://github.com/reasonml/reason/releases/download/${version}/reason-${version}.tbz";
-    hash = "sha256-HQm6JKBZR0Wrazi01fgerYVltzy2mtRq8cLCb40yTwA=";
+    hash = "sha256-7D0gJfQ5Hw0riNIFPmJ6haoa3dnFEyDp5yxpDgX7ZqY=";
   };
 
   nativeBuildInputs = [

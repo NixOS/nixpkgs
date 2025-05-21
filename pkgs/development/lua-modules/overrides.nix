@@ -4,7 +4,7 @@
   cargo,
   cmake,
 
-  # plenary utilities
+  ast-grep,
   which,
   findutils,
   coreutils,
@@ -15,7 +15,6 @@
   fetchFromGitHub,
   fetchpatch,
   fetchurl,
-  fixDarwinDylibNames,
   fzf,
   glib,
   glibc,
@@ -33,7 +32,6 @@
   libpsl,
   libpq,
   libuuid,
-  libuv,
   libxcrypt,
   libyaml,
   lua-language-server,
@@ -74,7 +72,7 @@ in
   argparse = prev.argparse.overrideAttrs (oa: {
 
     doCheck = true;
-    checkInputs = [ final.busted ];
+    nativeCheckInputs = [ final.busted ];
 
     checkPhase = ''
       runHook preCheck
@@ -86,16 +84,6 @@ in
   ##########################################3
   #### manual fixes for generated packages
   ##########################################3
-  bit32 = prev.bit32.overrideAttrs (oa: {
-    # Small patch in order to no longer redefine a Lua 5.2 function that Luajit
-    # 2.1 also provides, see https://github.com/LuaJIT/LuaJIT/issues/325 for
-    # more
-    patches = [
-      ./bit32.patch
-    ];
-    meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
-  });
-
   busted = prev.busted.overrideAttrs (oa: {
     nativeBuildInputs = oa.nativeBuildInputs ++ [
       installShellFiles
@@ -111,7 +99,7 @@ in
     '';
   });
 
-  cqueues = prev.cqueues.overrideAttrs (oa: rec {
+  cqueues = prev.cqueues.overrideAttrs (oa: {
     # Parse out a version number without the Lua version inserted
     version =
       let
@@ -121,8 +109,9 @@ in
         rev = lib.last (lib.splitString "-" (lib.last rel));
       in
       "${date}-${rev}";
+    __intentionallyOverridingVersion = true;
 
-    meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
+    meta.broken = luaOlder "5.1" || luaAtLeast "5.5";
 
     nativeBuildInputs = oa.nativeBuildInputs ++ [
       gnum4
@@ -143,13 +132,13 @@ in
     # version, which doesn't work well for us, so modify it
     postConfigure =
       let
-        inherit (prev.cqueues) pname;
+        inherit (final.cqueues) pname version;
       in
       ''
         # 'all' target auto-detects correct Lua version, which is fine for us as
         # we only have the right one available :)
         sed -Ei ''${rockspecFilename} \
-          -e 's|lua == 5.[[:digit:]]|lua >= 5.1, <= 5.3|' \
+          -e 's|lua == 5.[[:digit:]]|lua >= 5.1, <= 5.4|' \
           -e 's|build_target = "[^"]+"|build_target = "all"|' \
           -e 's|version = "[^"]+"|version = "${version}"|'
         specDir=$(dirname ''${rockspecFilename})
@@ -188,11 +177,13 @@ in
           "T[\"files()\"][\"icons\"] = new_set({ parametrize = { { \"devicons\" }, { \"mini\" } } })" \
           "T[\"files()\"][\"icons\"] = new_set({ parametrize = { { \"mini\" } } })"
 
-      # TODO: Figure out why 2 files extra for `fd`
-      substituteInPlace tests/file/ui_spec.lua \
-        --replace-fail \
-          "T[\"files()\"][\"executable\"] = new_set({ parametrize = { { \"fd\" }, { \"rg\" }, { \"find|dir\" } } }, {" \
-          "T[\"files()\"][\"executable\"] = new_set({ parametrize = { { \"rg\" }, { \"find|dir\" } } }, {"
+      # TODO: Figure out why 2 files extra
+      substituteInPlace tests/screenshots/tests-file-ui_spec.lua---files\(\)---executable---1-+-args-{-\'fd\'-} \
+        --replace-fail "112" "114"
+
+      # TODO: Figure out why 2 files extra
+      substituteInPlace tests/screenshots/tests-file-ui_spec.lua---files\(\)---preview-should-work-after-chdir-#1864 \
+        --replace-fail "111" "113"
 
       make test
 
@@ -210,14 +201,41 @@ in
     '';
   });
 
-  http = prev.http.overrideAttrs (oa: {
-    patches = [
-      (fetchpatch {
-        name = "invalid-state-progression.patch";
-        url = "https://github.com/daurnimator/lua-http/commit/cb7b59474a.diff";
-        sha256 = "1vmx039n3nqfx50faqhs3wgiw28ws416rhw6vh6srmh9i826dac7";
-      })
+  grug-far-nvim = prev.grug-far-nvim.overrideAttrs ({
+    doCheck = lua.luaversion == "5.1" && !stdenv.hostPlatform.isDarwin;
+    nativeCheckInputs = [
+      final.busted
+      final.mini-test
+      final.nlua
+      ripgrep
+      neovim-unwrapped
     ];
+
+    # feel free to disable the checks. They are mostly screenshot based
+    checkPhase = ''
+      runHook preCheck
+      # feel free to disable/adjust the tests
+      rm tests/base/test_apply.lua tests/base/test_vimscript_interpreter.lua
+
+      # Dependencies needed in special location
+      mkdir -p deps/{ripgrep,astgrep}
+      mkdir {temp_test_dir,temp_history_dir}
+      ln -s ${lib.getExe ripgrep} deps/ripgrep/rg
+      ln -s ${lib.getExe ast-grep} deps/astgrep/ast-grep
+      ln -s ${vimPlugins.mini-nvim} deps/mini.nvim
+
+      # Update dependency check to respect packaged version
+      substituteInPlace lua/grug-far/test/dependencies.lua \
+        --replace-fail "local RG_VERSION = '14.1.0'" "local RG_VERSION = '${lib.getVersion ripgrep}'" \
+        --replace-fail "local SG_VERSION = '0.35.0'" "local SG_VERSION = '${lib.getVersion ast-grep}'"
+
+      make test dir=base
+      runHook postCheck
+    '';
+
+  });
+
+  http = prev.http.overrideAttrs (oa: {
     /*
       TODO: separate docs derivation? (pandoc is heavy)
       nativeBuildInputs = [ pandoc ];
@@ -692,6 +710,8 @@ in
     };
   });
 
+  lux-lua = final.callPackage ./lux-lua.nix { inherit lua; };
+
   lz-n = prev.lz-n.overrideAttrs (oa: {
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [
@@ -771,10 +791,12 @@ in
   });
 
   neorg = prev.neorg.overrideAttrs (oa: {
+    # Relax dependencies
     postConfigure = ''
       substituteInPlace ''${rockspecFilename} \
         --replace-fail "'nvim-nio ~> 1.7'," "'nvim-nio >= 1.7'," \
-        --replace-fail "'plenary.nvim == 0.1.4'," "'plenary.nvim',"
+        --replace-fail "'plenary.nvim == 0.1.4'," "'plenary.nvim'," \
+        --replace-fail "'nui.nvim == 0.3.0'," "'nui.nvim',"
     '';
   });
 
@@ -817,57 +839,6 @@ in
       rm tests/plenary/job_spec.lua tests/plenary/scandir_spec.lua tests/plenary/curl_spec.lua
       make test
       runHook postCheck
-    '';
-  });
-
-  # as advised in https://github.com/luarocks/luarocks/issues/1402#issuecomment-1080616570
-  # we shouldn't use luarocks machinery to build complex cmake components
-  libluv = stdenv.mkDerivation {
-
-    pname = "libluv";
-    inherit (prev.luv) version meta src;
-
-    cmakeFlags = [
-      "-DBUILD_SHARED_LIBS=ON"
-      "-DBUILD_MODULE=OFF"
-      "-DWITH_SHARED_LIBUV=ON"
-      "-DLUA_BUILD_TYPE=System"
-      "-DWITH_LUA_ENGINE=${if isLuaJIT then "LuaJit" else "Lua"}"
-    ];
-
-    # to make sure we dont use bundled deps
-    postUnpack = ''
-      rm -rf deps/lua deps/libuv
-    '';
-
-    buildInputs = [
-      libuv
-      final.lua
-    ];
-
-    nativeBuildInputs = [
-      pkg-config
-      cmake
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
-  };
-
-  luv = prev.luv.overrideAttrs (oa: {
-
-    nativeBuildInputs = oa.nativeBuildInputs ++ [ pkg-config ];
-    buildInputs = [ libuv ];
-
-    # Use system libuv instead of building local and statically linking
-    luarocksConfig = lib.recursiveUpdate oa.luarocksConfig {
-      variables = {
-        WITH_SHARED_LIBUV = "ON";
-      };
-    };
-
-    # we unset the LUA_PATH since the hook erases the interpreter defaults (To fix)
-    # tests is not run since they are not part of the tarball anymore
-    preCheck = ''
-      unset LUA_PATH
-      rm tests/test-{dns,thread}.lua
     '';
   });
 
@@ -1055,10 +1026,13 @@ in
     ];
   });
 
-  tl = prev.tl.overrideAttrs ({
+  tl = prev.tl.overrideAttrs (oa: {
     preConfigure = ''
       rm luarocks.lock
     '';
+    meta = oa.meta // {
+      mainProgram = "tl";
+    };
   });
 
   toml-edit = prev.toml-edit.overrideAttrs (oa: {
@@ -1114,13 +1088,13 @@ in
   orgmode = prev.orgmode.overrideAttrs (oa: {
     # Patch in tree-sitter-orgmode dependency
     postPatch = ''
-      substituteInPlace lua/orgmode/utils/treesitter/install.lua lua/orgmode/health.lua \
+      substituteInPlace lua/orgmode/config/init.lua \
         --replace-fail \
-          "pcall(vim.treesitter.language.add, 'org')" \
-          "pcall(function() vim.treesitter.language.add('org', { path = '${final.tree-sitter-orgmode}/lib/lua/${final.tree-sitter-orgmode.lua.luaversion}/parser/org.so'}) end)"
-
-      substituteInPlace lua/orgmode/utils/treesitter/install.lua \
-        --replace-fail "if M.outdated() then" "if false then"
+        "require('orgmode.utils.treesitter.install').install()" \
+        "pcall(function() vim.treesitter.language.add('org', { path = '${final.tree-sitter-orgmode}/lib/lua/${final.tree-sitter-orgmode.lua.luaversion}/parser/org.so'}) end)" \
+        --replace-fail \
+        "require('orgmode.utils.treesitter.install').reinstall()" \
+        "pcall(function() vim.treesitter.language.add('org', { path = '${final.tree-sitter-orgmode}/lib/lua/${final.tree-sitter-orgmode.lua.luaversion}/parser/org.so'}) end)"
     '';
   });
 

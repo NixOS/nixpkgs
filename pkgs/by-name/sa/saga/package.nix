@@ -20,7 +20,6 @@
   vigra,
   pdal,
   libpq,
-  darwin,
   unixODBC,
   poppler,
   hdf5,
@@ -42,6 +41,14 @@ stdenv.mkDerivation rec {
   };
 
   sourceRoot = "saga-${version}/saga-gis";
+
+  patches = [
+    # Patches from https://sourceforge.net/p/saga-gis/code/merge-requests/38/.
+    # These are needed to fix building on Darwin (technically the first is not
+    # required, but the second doesn't apply without it).
+    ./darwin-patch-1.patch
+    ./darwin-patch-2.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -72,7 +79,6 @@ stdenv.mkDerivation rec {
     # See https://groups.google.com/forum/#!topic/nix-devel/h_vSzEJAPXs
     # for why the have additional buildInputs on darwin
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Cocoa
       unixODBC
       poppler
       netcdf
@@ -88,13 +94,11 @@ stdenv.mkDerivation rec {
     homepage = "https://saga-gis.sourceforge.io";
     changelog = "https://sourceforge.net/p/saga-gis/wiki/Changelog ${version}/";
     license = licenses.gpl2Plus;
-    maintainers =
-      with maintainers;
-      teams.geospatial.members
-      ++ [
-        michelk
-        mpickering
-      ];
+    maintainers = with maintainers; [
+      michelk
+      mpickering
+    ];
+    teams = [ teams.geospatial ];
     platforms = with platforms; unix;
   };
 }

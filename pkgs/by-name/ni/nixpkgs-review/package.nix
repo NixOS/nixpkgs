@@ -18,14 +18,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nixpkgs-review";
-  version = "3.1.0";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nixpkgs-review";
     tag = version;
-    hash = "sha256-yqHqtH4NhNL+JsqN/QXWPlW/28I4kaFvjwxx819zZkw=";
+    hash = "sha256-Ey07yahJQv5ppf8TiwIt1Cn4xo4QMZ5v+CsJRDelWNY=";
   };
 
   build-system = [
@@ -47,7 +47,7 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   makeWrapperArgs =
     let

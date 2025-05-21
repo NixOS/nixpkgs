@@ -8,7 +8,7 @@
   dbus,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mmsd";
   version = "unstable-2019-07-15";
 

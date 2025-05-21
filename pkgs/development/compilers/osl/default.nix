@@ -8,7 +8,7 @@
   libxml2,
   zlib,
   openexr,
-  openimageio,
+  openimageio_2,
   llvm,
   boost,
   flex,
@@ -20,9 +20,7 @@
 }:
 
 let
-
   boost_static = boost.override { enableStatic = true; };
-
 in
 stdenv.mkDerivation rec {
   pname = "openshadinglanguage";
@@ -65,7 +63,7 @@ stdenv.mkDerivation rec {
       libclang
       llvm
       openexr
-      openimageio
+      openimageio_2
       partio
       pugixml
       python3.pkgs.pybind11

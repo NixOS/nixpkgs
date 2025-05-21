@@ -17,7 +17,7 @@ buildNimSbom (finalAttrs: {
     owner = "~ehmry";
     repo = "nim_lk";
     rev = finalAttrs.version;
-    hash = "sha256-1WD1UVi6N7tftE69LAhx86Qxc97oMHKARFsCVGqtEm4=";
+    hash = "sha256-BZNQs8zMtBMcqafvU+WyjtBZQJ8zhQIPSR51j7C9Z6g=";
   };
 
   buildInputs = [ openssl ];

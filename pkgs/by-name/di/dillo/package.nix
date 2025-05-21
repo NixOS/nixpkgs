@@ -3,16 +3,12 @@
   autoreconfHook,
   fetchFromGitHub,
   fltk,
-  giflib,
-  libXcursor,
-  libXi,
-  libXinerama,
   libjpeg,
   libpng,
+  libwebp,
   libressl,
   mbedtls,
   openssl,
-  perl,
   pkg-config,
   stdenv,
   which,
@@ -48,15 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    fltk
-    giflib
-    libXcursor
-    libXi
-    libXinerama
     libjpeg
     libpng
-    perl
+    libwebp
     ssl
+    fltk
   ];
 
   outputs = [
@@ -88,6 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "dillo";
     maintainers = with lib.maintainers; [ ];
     license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
   };
 })

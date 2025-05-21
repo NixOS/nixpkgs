@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "pyquil";
-  version = "4.16.0";
+  version = "4.16.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "pyquil";
     tag = "v${version}";
-    hash = "sha256-6nJ0eozqbzHDF3e/Q/bVJnng1b+LUL2tsv4X7sWE9/0=";
+    hash = "sha256-itDy42rhHiX9oXQQ+eKE3/Xdh4cBzdS3jetanTrxuFo=";
   };
 
   pythonRelaxDeps = [
@@ -77,7 +77,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for creating Quantum Instruction Language (Quil) programs";
     homepage = "https://github.com/rigetti/pyquil";
-    changelog = "https://github.com/rigetti/pyquil/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/rigetti/pyquil/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

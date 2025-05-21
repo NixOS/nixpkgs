@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mathmod";
-  version = "12.0";
+  version = "12.1";
 
   src = fetchFromGitHub {
     owner = "parisolab";
     repo = "mathmod";
     tag = finalAttrs.version;
-    hash = "sha256-h1iI7bheJVfE2+0m6Yk7QNCkl9Vye97tqb/WkQExVcQ=";
+    hash = "sha256-gDIYDXI9X24JAM1HP10EhJXkHZV2X8QngD5KPCUqdyI=";
   };
 
   patches = [ ./fix-paths.patch ];

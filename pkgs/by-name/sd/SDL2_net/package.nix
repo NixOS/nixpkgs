@@ -1,7 +1,6 @@
 {
   lib,
   SDL2,
-  darwin,
   fetchFromGitHub,
   pkg-config,
   stdenv,
@@ -30,10 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.libobjc
-  ];
-
   propagatedBuildInputs = [ SDL2 ];
 
   configureFlags = [
@@ -47,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/libsdl-org/SDL_net";
     description = "SDL multiplatform networking library";
     license = lib.licenses.zlib;
-    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
+    teams = [ lib.teams.sdl ];
     inherit (SDL2.meta) platforms;
   };
 })

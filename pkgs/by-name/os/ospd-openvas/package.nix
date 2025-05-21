@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ospd-openvas";
-  version = "22.8.0";
+  version = "22.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "ospd-openvas";
     tag = "v${version}";
-    hash = "sha256-bjX+20/fOHA+GUBHSGuQeCiwDaeRTRiQlZw0ILq8rmA=";
+    hash = "sha256-UrEcT65SlhJ33QHbAarAuVVSsZlzo/5JxlKSTL7/lsM=";
   };
 
   pythonRelaxDeps = [

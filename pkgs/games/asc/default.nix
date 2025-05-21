@@ -28,7 +28,7 @@
   libogg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "asc";
   version = "2.6.3.0";
 

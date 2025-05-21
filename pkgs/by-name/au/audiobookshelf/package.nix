@@ -4,7 +4,7 @@
   fetchFromGitHub,
   runCommand,
   buildNpmPackage,
-  nodejs_18,
+  nodejs,
   ffmpeg-full,
   nunicode,
   util-linux,
@@ -14,8 +14,6 @@
 }:
 
 let
-  nodejs = nodejs_18;
-
   source = builtins.fromJSON (builtins.readFile ./source.json);
   pname = "audiobookshelf";
 

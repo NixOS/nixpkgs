@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromSourcehut,
   ncurses,
+  withNotmuch ? true,
   notmuch,
   scdoc,
   python3Packages,
@@ -13,14 +14,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "aerc";
   version = "0.20.1";
 
   src = fetchFromSourcehut {
     owner = "~rjarry";
     repo = "aerc";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-IBTM3Ersm8yUCgiBLX8ozuvMEbfmY6eW5xvJD20UgRA=";
   };
 
@@ -50,14 +51,13 @@ buildGoModule rec {
 
   buildInputs = [
     python3Packages.python
-    notmuch
     gawk
-  ];
+  ] ++ lib.optional withNotmuch notmuch;
 
   installPhase = ''
     runHook preInstall
 
-    make $makeFlags GOFLAGS="$GOFLAGS -tags=notmuch" install
+    make $makeFlags GOFLAGS="$GOFLAGS${lib.optionalString withNotmuch " -tags=notmuch"}" install
 
     runHook postInstall
   '';
@@ -91,7 +91,7 @@ buildGoModule rec {
   meta = {
     description = "Email client for your terminal";
     homepage = "https://aerc-mail.org/";
-    changelog = "https://git.sr.ht/~rjarry/aerc/tree/${version}/item/CHANGELOG.md";
+    changelog = "https://git.sr.ht/~rjarry/aerc/tree/${finalAttrs.version}/item/CHANGELOG.md";
     maintainers = with lib.maintainers; [
       defelo
       sikmir
@@ -100,4 +100,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -2,7 +2,6 @@
   clangStdenv,
   lib,
   fetchurl,
-  fetchpatch,
   dotnetCorePackages,
   jq,
   curl,
@@ -45,7 +44,7 @@ let
     buildPlatform
     targetPlatform
     ;
-  inherit (swiftPackages) apple_sdk swift;
+  inherit (swiftPackages) swift;
 
   releaseManifest = lib.importJSON releaseManifestFile;
   inherit (releaseManifest) release sourceRepository tag;
@@ -112,24 +111,12 @@ stdenv.mkDerivation rec {
       krb5
       lttng-ust_2_12
     ]
-    ++ lib.optionals isDarwin (
-      with apple_sdk.frameworks;
-      [
-        xcbuild
-        swift
-        (krb5.overrideAttrs (old: {
-          # the propagated build inputs break swift compilation
-          buildInputs = old.buildInputs ++ old.propagatedBuildInputs;
-          propagatedBuildInputs = [ ];
-        }))
-        sigtool
-        Foundation
-        CoreFoundation
-        CryptoKit
-        System
-      ]
-      ++ lib.optional (lib.versionAtLeast version "9") GSS
-    );
+    ++ lib.optionals isDarwin [
+      xcbuild
+      swift
+      krb5
+      sigtool
+    ];
 
   # This is required to fix the error:
   # > CSSM_ModuleLoad(): One or more parameters passed to a function were not valid.
@@ -157,7 +144,8 @@ stdenv.mkDerivation rec {
   postPatch =
     ''
       # set the sdk version in global.json to match the bootstrap sdk
-      jq '(.tools.dotnet=$dotnet)' global.json --arg dotnet "$(${bootstrapSdk}/bin/dotnet --version)" > global.json~
+      sdk_version=$(HOME=$(mktemp -d) ${bootstrapSdk}/bin/dotnet --version)
+      jq '(.tools.dotnet=$dotnet)' global.json --arg dotnet "$sdk_version" > global.json~
       mv global.json{~,}
 
       patchShebangs $(find -name \*.sh -type f -executable)
@@ -313,7 +301,6 @@ stdenv.mkDerivation rec {
           src/aspnetcore/Directory.Build.props
       ''
       + ''
-
         # stop passing -sdk without a path
         # stop using xcrun
         # add -module-cache-path to fix swift errors, see sandboxProfile
@@ -323,22 +310,21 @@ stdenv.mkDerivation rec {
           src/runtime/src/native/libs/System.Security.Cryptography.Native.Apple/CMakeLists.txt \
           --replace-fail ' -sdk ''${CMAKE_OSX_SYSROOT}' "" \
           --replace-fail 'xcrun swiftc' 'swiftc -module-cache-path "$ENV{HOME}/.cache/module-cache"'
-      ''
-      + lib.optionalString (lib.versionAtLeast version "9") (
-        ''
-          # fix: strip: error: unknown argument '-n'
-          substituteInPlace \
-            src/runtime/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.targets \
-            src/runtime/src/native/managed/native-library.targets \
-            --replace-fail ' -no_code_signature_warning' ""
 
-          # ld: library not found for -ld_classic
-          substituteInPlace \
-            src/runtime/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.Unix.targets \
-        ''
-        + lib.optionalString (lib.versionOlder version "10") "  src/runtime/src/coreclr/tools/aot/ILCompiler/ILCompiler.csproj \\\n"
-        + "  --replace-fail 'Include=\"-ld_classic\"' \"\"\n"
-      )
+        # fix: strip: error: unknown argument '-n'
+        substituteInPlace \
+          src/runtime/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.targets \
+      ''
+      + lib.optionalString (lib.versionAtLeast version "9") "  src/runtime/src/native/managed/native-library.targets \\\n"
+      + ''
+          --replace-fail ' -no_code_signature_warning' ""
+
+        # ld: library not found for -ld_classic
+        substituteInPlace \
+          src/runtime/src/coreclr/nativeaot/BuildIntegration/Microsoft.NETCore.Native.Unix.targets \
+      ''
+      + lib.optionalString (lib.versionOlder version "10") "  src/runtime/src/coreclr/tools/aot/ILCompiler/ILCompiler.csproj \\\n"
+      + "  --replace-fail 'Include=\"-ld_classic\"' \"\"\n"
       + lib.optionalString (lib.versionOlder version "9") ''
         # [...]/build.proj(123,5): error : Did not find PDBs for the following SDK files:
         # [...]/build.proj(123,5): error : sdk/8.0.102/System.Resources.Extensions.dll

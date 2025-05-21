@@ -82,14 +82,14 @@ let
   ];
 in
 mkDerivation rec {
-  version = "3.34.15";
+  version = "3.40.6";
   pname = "qgis-ltr-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-TFnlQIizI+8CZgNpwkuipSCNT3OYIaOeoz6kIGcSYL4=";
+    hash = "sha256-pw5XxaGDsyQfeJL582Iic2sg5j8AUPvM+I53YLB4aG4=";
   };
 
   passthru = {
@@ -160,6 +160,11 @@ mkDerivation rec {
       "-DWITH_3D=True"
       "-DWITH_PDAL=True"
       "-DENABLE_TESTS=False"
+      "-DQT_PLUGINS_DIR=${qtbase}/${qtbase.qtPluginPrefix}"
+
+      # Remove for QGIS 3.42
+      "-DCMAKE_POLICY_DEFAULT_CMP0175=OLD"
+      "-DCMAKE_POLICY_DEFAULT_CMP0177=OLD"
     ]
     ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
     ++ lib.optional withServer [
@@ -196,7 +201,8 @@ mkDerivation rec {
     description = "Free and Open Source Geographic Information System";
     homepage = "https://www.qgis.org";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; teams.geospatial.members ++ [ lsix ];
+    maintainers = with maintainers; [ lsix ];
+    teams = [ teams.geospatial ];
     platforms = with platforms; linux;
   };
 }

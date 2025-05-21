@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "HDF4_ENABLE_SZIP_SUPPORT" szipSupport)
       (lib.cmakeBool "HDF4_ENABLE_SZIP_ENCODING" szipSupport)
       (lib.cmakeBool "HDF4_BUILD_JAVA" javaSupport)
-      (lib.cmakeBool "BUILD_TESTING" finalAttrs.doCheck)
+      (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
     ]
     ++ lib.optionals javaSupport [
       (lib.cmakeFeature "JAVA_HOME" "${jdk}")

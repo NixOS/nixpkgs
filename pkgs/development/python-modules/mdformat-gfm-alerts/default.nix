@@ -37,5 +37,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/KyleKing/mdformat-gfm-alerts/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
+    broken = true; # broken test due to changes in mdformat; compare https://github.com/KyleKing/mdformat-admon/issues/25
   };
 }

@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "snowflake-cli";
-  version = "3.4.1";
+  version = "3.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snowflakedb";
     repo = "snowflake-cli";
     tag = "v${version}";
-    hash = "sha256-W+/RW/oTFi7NyJZXlK9Yd3Gggmm+PtmOawWFSrK+SIo=";
+    hash = "sha256-MCJl6Mkkkp9JkG+8ZNfWAYQFMJccdtKfPdcnfaY8Y3w=";
   };
 
   build-system = with python3Packages; [
@@ -49,6 +49,7 @@ python3Packages.buildPythonApplication rec {
     pytest-randomly
     pytest-factoryboy
     pytest-xdist
+    pytest-httpserver
   ];
 
   pytestFlagsArray = [

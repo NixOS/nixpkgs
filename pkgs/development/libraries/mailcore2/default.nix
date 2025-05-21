@@ -14,7 +14,6 @@
   libxml2,
   libuuid,
   openssl,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -47,9 +46,6 @@ stdenv.mkDerivation rec {
       glib
       icu
       libuuid
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Foundation
     ];
 
   postPatch =

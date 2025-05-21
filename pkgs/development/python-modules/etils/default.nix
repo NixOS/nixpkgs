@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "etils";
-  version = "1.11.0";
+  version = "1.12.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-r/Mnijvn/d8wLf2AM16fkkJEZmxxI5zZHoNvPQVfHEo=";
+    hash = "sha256-xrnh8M5m0bv1T5kgGwimC6OW00RtnrGNS8ObJqLhpe4=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -46,11 +46,14 @@ buildPythonPackage rec {
     eapp = [
       absl-py # FIXME package simple-parsing
     ] ++ epy;
-    ecolab = [
-      jupyter
-      numpy
-      mediapy
-    ] ++ enp ++ epy;
+    ecolab =
+      [
+        jupyter
+        numpy
+        mediapy
+      ]
+      ++ enp
+      ++ epy;
     edc = epy;
     enp = [ numpy ] ++ epy;
     epath = [

@@ -22,7 +22,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "eartag";
-  version = "0.6.4";
+  version = "0.6.5";
   format = "other";
 
   src = fetchFromGitLab {
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     owner = "World";
     repo = pname;
     rev = version;
-    hash = "sha256-K93sj84MdDCQgIMghkjpGIieSrlnlQiw85JSgggRlf4=";
+    hash = "sha256-sxVivQppX8KdkvHaW6xQ64Wi8Nfv5Rmwf4NADBDpOOo=";
   };
 
   postPatch = ''
@@ -86,6 +86,7 @@ python3Packages.buildPythonApplication rec {
     # being incorrectly identified as unfree software.
     license = licenses.mit;
     mainProgram = "eartag";
-    maintainers = with maintainers; [ foo-dogsquared ] ++ lib.teams.gnome-circle.members;
+    maintainers = with maintainers; [ foo-dogsquared ];
+    teams = [ teams.gnome-circle ];
   };
 }

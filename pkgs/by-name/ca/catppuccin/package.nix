@@ -1,8 +1,10 @@
 let
   validThemes = [
+    "alacritty"
     "bat"
     "bottom"
     "btop"
+    "element"
     "grub"
     "hyprland"
     "k9s"
@@ -54,6 +56,14 @@ let
 
   selectedSources = map (themeName: builtins.getAttr themeName sources) themeList;
   sources = {
+    alacritty = fetchFromGitHub {
+      name = "alacritty";
+      owner = "catppuccin";
+      repo = "alacritty";
+      rev = "f6cb5a5c2b404cdaceaff193b9c52317f62c62f7";
+      hash = "sha256-H8bouVCS46h0DgQ+oYY8JitahQDj0V9p2cOoD4cQX+Q=";
+    };
+
     bat = fetchFromGitHub {
       name = "bat";
       owner = "catppuccin";
@@ -76,6 +86,14 @@ let
       repo = "btop";
       rev = "f437574b600f1c6d932627050b15ff5153b58fa3";
       hash = "sha256-mEGZwScVPWGu+Vbtddc/sJ+mNdD2kKienGZVUcTSl+c=";
+    };
+
+    element = fetchFromGitHub {
+      name = "element";
+      owner = "catppuccin";
+      repo = "element";
+      rev = "70b7ee121dcef28c6c8191d60df2f88b23c89084";
+      hash = "sha256-iUSPlmEvwL9akbPobkbDWPr6TTHA/LdCK2Nty7Zslls=";
     };
 
     grub = fetchFromGitHub {
@@ -214,6 +232,11 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
         local capitalizedAccent=$(sed 's/^\(.\)/\U\1/' <<< "${accent}")
 
       ''
+      + lib.optionalString (lib.elem "alacritty" themeList) ''
+        mkdir -p "$out/alacritty"
+        cp "${sources.alacritty}/catppuccin-${variant}.toml" "$out/alacritty/"
+
+      ''
       + lib.optionalString (lib.elem "bat" themeList) ''
         mkdir -p "$out/bat"
         cp "${sources.bat}/themes/Catppuccin "$capitalizedVariant".tmTheme" "$out/bat/"
@@ -227,6 +250,11 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
       + lib.optionalString (lib.elem "bottom" themeList) ''
         mkdir -p "$out/bottom"
         cp "${sources.bottom}/themes/${variant}.toml" "$out/bottom/"
+
+      ''
+      + lib.optionalString (lib.elem "element" themeList) ''
+        mkdir -p "$out/element"
+        cp -r "${sources.element}/themes/${variant}/${accent}.json" "$out/element/"
 
       ''
       + lib.optionalString (lib.elem "grub" themeList) ''

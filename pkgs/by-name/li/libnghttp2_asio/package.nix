@@ -8,7 +8,7 @@
   boost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libnghttp2_asio";
   version = "unstable-2022-08-11";
 

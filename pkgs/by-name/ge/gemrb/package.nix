@@ -15,6 +15,7 @@
   libpng,
   libvlc,
   libvorbis,
+  libX11,
   openal,
   python3,
   zlib,
@@ -60,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libvlc
     libvorbis
+    libX11
     openal
     python3
     zlib
@@ -68,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optionals (finalAttrs.doCheck or false) [ gtest ];
+  ] ++ lib.optionals (finalAttrs.finalPackage.doCheck or false) [ gtest ];
 
   cmakeFlags = [
     (lib.cmakeFeature "DATA_DIR" "${placeholder "out"}/share/gemrb")
@@ -79,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "LAYOUT" "opt")
     (lib.cmakeFeature "OPENGL_BACKEND" backend)
     (lib.cmakeFeature "OpenGL_GL_PREFERENCE" "GLVND")
-    (lib.cmakeBool "USE_TESTS" (finalAttrs.doCheck or false))
+    (lib.cmakeBool "USE_TESTS" (finalAttrs.finalPackage.doCheck or false))
   ];
 
   postInstall = ''

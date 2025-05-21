@@ -4,8 +4,8 @@ let
   base = callPackage ./generic.nix (
     (removeAttrs _args [ "fetchpatch" ])
     // {
-      version = "8.1.31";
-      hash = "sha256-CzmCizRRUcrxt5XZ9LkjyYhyMXdsMwdt/J2QpEOQ0Nw=";
+      version = "8.1.32";
+      hash = "sha256-oE/dPfBflI34qPLF0nq1TB9DgixSXzH9IMGaKCRS0Hw=";
     }
   );
 in

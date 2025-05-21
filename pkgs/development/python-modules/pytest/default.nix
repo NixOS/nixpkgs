@@ -29,12 +29,12 @@
 
 buildPythonPackage rec {
   pname = "pytest";
-  version = "8.3.4";
+  version = "8.3.5";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-llNw0GK84R5zho4DNausMbTT3g6C9AB0CNJCtPhhB2E=";
+    hash = "sha256-9O/nDMFOURVlrEdrV8J54SqFWxH0jyEq8QgO8iY9OEU=";
   };
 
   outputs = [
@@ -106,7 +106,7 @@ buildPythonPackage rec {
     description = "Framework for writing tests";
     homepage = "https://docs.pytest.org";
     changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
-    maintainers = teams.python.members;
+    teams = [ teams.python ];
     license = licenses.mit;
   };
 }

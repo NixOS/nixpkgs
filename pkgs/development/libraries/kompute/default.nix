@@ -36,6 +36,15 @@ stdenv.mkDerivation rec {
     "-DKOMPUTE_OPT_INSTALL=1"
   ];
 
+  patches = [
+    # FIXME: remove next update
+    (fetchpatch {
+      name = "vulkan-14-support.patch";
+      url = "https://github.com/KomputeProject/kompute/commit/299b11fb4b8a7607c5d2c27e2735f26b06ae8e29.patch";
+      sha256 = "sha256-JuoTQ+VjIdyF+I1IcT1ofbBjRS0Ibm2w6F2jrRJlx40=";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
     ninja

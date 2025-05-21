@@ -65,6 +65,14 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion =
+          (lib.versionAtLeast cfg.package.version "6") -> (!(cfg.settings ? name) && !(cfg.settings ? port));
+        message = "`services.centrifugo.settings` is v5 config, must be compatible with centrifugo v6 config format";
+      }
+    ];
+
     systemd.services.centrifugo = {
       description = "Centrifugo messaging server";
       wantedBy = [ "multi-user.target" ];

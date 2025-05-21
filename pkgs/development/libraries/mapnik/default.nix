@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mapnik";
-  version = "4.0.5";
+  version = "4.0.7";
 
   src = fetchFromGitHub {
     owner = "mapnik";
     repo = "mapnik";
     rev = "v${version}";
-    hash = "sha256-pReoyMdu8RYrberKcwGw0DKmkxVRJezZYcPAM/UAn6o=";
+    hash = "sha256-gJktRWcJiSGxxjvWFt+Kl9d7g+TOSPk2PfGP0LIVxt4=";
     fetchSubmodules = true;
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace configure \
-      --replace '$PYTHON scons/scons.py' ${buildPackages.scons}/bin/scons
+      --replace-fail '$PYTHON scons/scons.py' ${buildPackages.scons}/bin/scons
     rm -r scons
     # Remove bundled 'sparsehash' directory in favor of 'sparsehash' package
     rm -r deps/mapnik/sparsehash
@@ -125,13 +125,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open source toolkit for developing mapping applications";
     homepage = "https://mapnik.org";
-    maintainers =
-      with maintainers;
-      teams.geospatial.members
-      ++ [
-        hrdinka
-        hummeltech
-      ];
+    maintainers = with maintainers; [
+      hrdinka
+      hummeltech
+    ];
+    teams = [ teams.geospatial ];
     license = licenses.lgpl21Plus;
     platforms = platforms.all;
   };

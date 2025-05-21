@@ -14,7 +14,7 @@
   syndication,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "alligator";
 
   nativeBuildInputs = [

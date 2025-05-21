@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "pillow-heif";
-  version = "0.21.0";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bigcat88";
     repo = "pillow_heif";
     tag = "v${version}";
-    hash = "sha256-wmxfFapcd7vduR4tQ3grAhqS35GsNvYA/mCFscQ3aDs=";
+    hash = "sha256-xof6lFb0DhmWVmYuBNslcGZs82NRkcgZgt+SX9gsrBY=";
   };
 
   postPatch = ''
@@ -84,6 +84,8 @@ buildPythonPackage rec {
     [
       # Time based
       "test_decode_threads"
+      # Missing EXIF info on WEBP-AVIF variant
+      "test_exif_from_pillow"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # https://github.com/bigcat88/pillow_heif/issues/89

@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  fetchpatch,
   fetchPypi,
   setuptools,
   docutils,
@@ -14,15 +15,21 @@
 
 buildPythonPackage rec {
   pname = "nbsphinx";
-  version = "0.9.6";
+  version = "0.9.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wrKKLXAvEVmpW4Q4MXmOhuYKF/xke5v/m6FYU1XeVOM=";
+    hash = "sha256-q9KYpobVX6iU72l8UdRPJOU6oxLa2uOOgpIPJQpUVv4=";
   };
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/spatialaudio/nbsphinx/commit/a921973a5d8ecc39c6e02184572b79ab72c9978c.patch";
+      hash = "sha256-uxfSaOESWn8uVcUm+1ADzQgMQDEqaTs0TbfNYsS+E6I=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

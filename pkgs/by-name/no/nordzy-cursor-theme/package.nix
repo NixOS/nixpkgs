@@ -1,17 +1,18 @@
-{ stdenvNoCC
-, fetchFromGitHub
-, lib
+{
+  stdenvNoCC,
+  fetchFromGitHub,
+  lib,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "nordzy-cursor-theme";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "guillaumeboehm";
     repo = "Nordzy-cursors";
     rev = "v${version}";
-    sha256 = "sha256-3HUSl0CQcay4V9pO35cmOEZvrgNOJ3WNZahs+hJjUJU=";
+    sha256 = "sha256-pPcdlMa3H5RtbqIxvgxDkP4tw76H2UQujXbrINc3MxE=";
   };
 
   installPhase = ''

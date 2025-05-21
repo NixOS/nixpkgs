@@ -38,5 +38,11 @@ mkLibretroCore {
     description = "Parallel Mupen64plus rewrite for libretro";
     homepage = "https://github.com/libretro/parallel-n64";
     license = lib.licenses.gpl3Only;
+    badPlatforms = [
+      # ./mupen64plus-core/src/r4300/new_dynarec/arm64/linkage_aarch64.o: in function `.E12':
+      # (.text+0x5b4): relocation truncated to fit: R_AARCH64_CONDBR19 against symbol `invalidate_block' defined in .text section in ./mupen64plus-core/src/r4300/new_dynarec/new_dynarec_64.o
+      # collect2: error: ld returned 1 exit status
+      "aarch64-linux"
+    ];
   };
 }

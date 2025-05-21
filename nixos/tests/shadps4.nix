@@ -3,7 +3,6 @@
   name = "shadps4-openorbis-example";
   meta = {
     inherit (pkgs.shadps4.meta) maintainers;
-    platforms = lib.intersectLists lib.platforms.linux pkgs.shadps4.meta.platforms;
   };
 
   nodes.machine =
@@ -42,6 +41,8 @@
           TRACY_NO_INVARIANT_CHECK = "1";
         };
       };
+
+      virtualisation.memorySize = 2048;
     };
 
   enableOCR = true;
@@ -51,8 +52,8 @@
     import tempfile
     import subprocess
 
-    selectionColor: str = "#2A82DA"
-    openorbisColor: str = "#336081"
+    selectionColor: str = "#354953"
+    openorbisColor: str = "#306082"
 
     # Based on terminal-emulators.nix' check_for_pink
     def check_for_color(color: str) -> Callable[[bool], bool]:

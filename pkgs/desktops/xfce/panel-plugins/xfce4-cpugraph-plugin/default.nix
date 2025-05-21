@@ -12,7 +12,7 @@
   xorgproto,
 }:
 
-mkXfceDerivation rec {
+mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-cpugraph-plugin";
   version = "1.2.11";
@@ -34,6 +34,6 @@ mkXfceDerivation rec {
 
   meta = with lib; {
     description = "CPU graph show for Xfce panel";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

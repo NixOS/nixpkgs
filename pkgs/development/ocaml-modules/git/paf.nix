@@ -8,14 +8,12 @@
   ipaddr,
   logs,
   lwt,
-  mirage-clock,
-  mirage-time,
   rresult,
   tls,
   uri,
   bigstringaf,
   domain-name,
-  httpaf,
+  h1,
   mirage-flow,
   tls-mirage,
 }:
@@ -37,13 +35,11 @@ buildDunePackage {
     rresult
     ipaddr
     logs
-    mirage-clock
-    mirage-time
     tls
     uri
     bigstringaf
     domain-name
-    httpaf
+    h1
     mirage-flow
     tls-mirage
   ];

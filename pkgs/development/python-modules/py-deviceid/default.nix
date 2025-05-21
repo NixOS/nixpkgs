@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "py-deviceid";
-  version = "0.1.0";
+  version = "0.1.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "py_deviceid";
     inherit version;
-    hash = "sha256-RZBA/eCyhWPjx1//2Y8zPhmZ5BzEoNCYc+AFC9UNkEk=";
+    hash = "sha256-w+dXetojZm5/OeaTcN/ap2/p3nnAJjU3bWqgIpv6MOM=";
   };
 
   build-system = [

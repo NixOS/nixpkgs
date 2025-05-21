@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  pdm-backend,
 
   # dependencies
   langchain-core,
@@ -16,24 +16,33 @@
   pytest-asyncio,
   syrupy,
 
+  # passthru
   nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-ollama";
-  version = "0.2.2";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-ollama==${version}";
-    hash = "sha256-Ex8GndMHPHwSSMKu1JxnfGpRj55fh3TR19b3E+KrLUs=";
+    hash = "sha256-GRaWwUR26yZqjtO5f5p8abj/4KSrQE2uGAECGjeDxPY=";
   };
 
   sourceRoot = "${src.name}/libs/partners/ollama";
 
-  build-system = [ poetry-core ];
+  build-system = [
+    pdm-backend
+  ];
+
+  pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individul components.
+    "langchain-core"
+  ];
 
   dependencies = [
     langchain-core
@@ -54,11 +63,9 @@ buildPythonPackage rec {
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "langchain-ollama==(.*)"
+      "langchain-ollama==([0-9.]+)"
     ];
   };
-  # updates the wrong fetcher rev attribute
-  passthru.skipBulkUpdate = true;
 
   meta = {
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-ollama==${version}";

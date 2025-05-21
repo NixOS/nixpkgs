@@ -16,12 +16,12 @@
       "packages": [
         "dotenv"
       ],
-      "path": "/nix/store/9hxi0hvds11agbmpaha8zp1bgzf7vypv-source",
-      "ref": "2.0.1",
-      "rev": "48315332fe79ffce87c81b9d0bec992ba19b6966",
-      "sha256": "08y8xvpiqk75v0hxhgbhxfbxz7l95vavh1lv8kxkid8rb9p92zr4",
+      "path": "/nix/store/jkf2p6sp0506crd1awpq2x98m527v4mb-source",
+      "ref": "2.0.2",
+      "rev": "19bb965ef04f57128f4f4ea2e690ff9f7d6a81b1",
+      "sha256": "0dk0ixgpxmaz2kf12a3fvzdaknn38qnwgdhp7yag0m5fbhhz2kjc",
       "srcDir": "src",
-      "url": "https://github.com/euantorano/dotenv.nim/archive/48315332fe79ffce87c81b9d0bec992ba19b6966.tar.gz"
+      "url": "https://github.com/euantorano/dotenv.nim/archive/19bb965ef04f57128f4f4ea2e690ff9f7d6a81b1.tar.gz"
     },
     {
       "method": "fetchzip",

@@ -23,15 +23,15 @@
 }:
 
 let
-  version = "2025.1.861";
+  version = "2025.2.600";
   sources = {
     x86_64-linux = fetchurl {
       url = "https://pkg.cloudflareclient.com/pool/noble/main/c/cloudflare-warp/cloudflare-warp_${version}.0_amd64.deb";
-      hash = "sha256-9Y1mBKS74x1F3OEusqvm7W8RoJnfBHnXTtwbFVfhjc4=";
+      hash = "sha256-YY80XGTkKqE5pywuidvXPytv0/uMD4eMIcBlSpEV2Ps=";
     };
     aarch64-linux = fetchurl {
       url = "https://pkg.cloudflareclient.com/pool/noble/main/c/cloudflare-warp/cloudflare-warp_${version}.0_arm64.deb";
-      hash = "sha256-WM9c17t5rJDdGeMP17k/eZx4knLHd+MbkleIF1mNA4A=";
+      hash = "sha256-ueZL0rX1FCkd7jFpM2c63eu11vFBCUVnl1uOGxPClZU=";
     };
   };
 in
@@ -107,11 +107,12 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/warp-svc --prefix PATH : ${lib.makeBinPath [ nftables ]}
+    wrapProgram $out/bin/warp-cli --prefix PATH : ${lib.makeBinPath [ desktop-file-utils ]}
   '';
 
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   passthru = {
     inherit sources;
@@ -145,7 +146,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Replaces the connection between your device and the Internet with a modern, optimized, protocol";
-    homepage = "https://pkg.cloudflareclient.com/packages/cloudflare-warp";
+    homepage = "https://pkg.cloudflareclient.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     mainProgram = "warp-cli";

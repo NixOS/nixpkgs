@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
@@ -81,7 +86,14 @@ in
         package = mkPackageOption pkgs "yggdrasil-jumper" { };
 
         logLevel = mkOption {
-          type = enum [ "off" "error" "warn" "info" "debug" "trace" ];
+          type = enum [
+            "off"
+            "error"
+            "warn"
+            "info"
+            "debug"
+            "trace"
+          ];
           default = "info";
           description = ''
             Set logging verbosity for Yggdrasil Jumper.
@@ -105,39 +117,39 @@ in
       # Generate, concatenate and validate config file
       jumperSettings = format.generate "yggdrasil-jumper-settings" cfg.settings;
       jumperExtraConfig = pkgs.writeText "yggdrasil-jumper-extra-config" cfg.extraConfig;
-      jumperConfig =
-        pkgs.runCommand
-          "yggdrasil-jumper-config"
-          { }
-          ''
-            cat ${jumperSettings} ${jumperExtraConfig} \
-              | tee $out \
-              | ${cfg.package}/bin/yggdrasil-jumper --validate --config -
-          '';
+      jumperConfig = pkgs.runCommand "yggdrasil-jumper-config" { } ''
+        cat ${jumperSettings} ${jumperExtraConfig} \
+          | tee $out \
+          | ${cfg.package}/bin/yggdrasil-jumper --validate --config -
+      '';
     in
     mkIf cfg.enable {
-      assertions = [{
-        assertion = config.services.yggdrasil.enable;
-        message = "`services.yggdrasil.enable` must be true for `yggdrasil-jumper` to operate";
-      }];
+      assertions = [
+        {
+          assertion = config.services.yggdrasil.enable;
+          message = "`services.yggdrasil.enable` must be true for `yggdrasil-jumper` to operate";
+        }
+      ];
 
       services.yggdrasil.settings.Listen =
         let
           # By default linux dynamically alocates ports in range 32768..60999
           # `sysctl net.ipv4.ip_local_port_range`
           # See: https://xkcd.com/221/
-          prot_port = { "tls" = 11814; "quic" = 11814; };
+          prot_port = {
+            "tls" = 11814;
+            "quic" = 11814;
+          };
         in
-        mkIf
-          (cfg.retrieveListenAddresses && cfg.appendListenAddresses)
-          (mapAttrsToList (prot: port: "${prot}://127.0.0.1:${toString port}") prot_port);
+        mkIf (cfg.retrieveListenAddresses && cfg.appendListenAddresses) (
+          mapAttrsToList (prot: port: "${prot}://127.0.0.1:${toString port}") prot_port
+        );
 
       services.yggdrasil-jumper.settings = {
         yggdrasil_admin_listen = [ "unix:///run/yggdrasil/yggdrasil.sock" ];
-        yggdrasil_listen =
-          mkIf
-            cfg.retrieveListenAddresses
-            (filter (a: !hasPrefix "tcp://" a) config.services.yggdrasil.settings.Listen);
+        yggdrasil_listen = mkIf cfg.retrieveListenAddresses (
+          filter (a: !hasPrefix "tcp://" a) config.services.yggdrasil.settings.Listen
+        );
       };
 
       systemd.services.yggdrasil-jumper = {
@@ -152,7 +164,16 @@ in
 
           # TODO: Remove this delay after support for proper startup notification lands in `yggdrasil-go`
           ExecStartPre = "${pkgs.coreutils}/bin/sleep 5";
-          ExecStart = escapeShellArgs ([ "${cfg.package}/bin/yggdrasil-jumper" "--loglevel" "${cfg.logLevel}" "--config" "${jumperConfig}" ] ++ cfg.extraArgs);
+          ExecStart = escapeShellArgs (
+            [
+              "${cfg.package}/bin/yggdrasil-jumper"
+              "--loglevel"
+              "${cfg.logLevel}"
+              "--config"
+              "${jumperConfig}"
+            ]
+            ++ cfg.extraArgs
+          );
           KillSignal = "SIGINT";
 
           MemoryDenyWriteExecute = true;
@@ -162,7 +183,10 @@ in
           RestrictNamespaces = true;
           RestrictRealtime = true;
           SystemCallArchitectures = "native";
-          SystemCallFilter = [ "@system-service" "~@privileged" ];
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged"
+          ];
         };
       };
 

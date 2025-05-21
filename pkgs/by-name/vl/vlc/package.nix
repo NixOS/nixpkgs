@@ -1,35 +1,31 @@
 {
   lib,
-  SDL,
-  SDL_image,
   a52dec,
   alsa-lib,
   autoreconfHook,
   avahi,
+  cairo,
   curl,
   dbus,
   faad2,
   fetchpatch,
   fetchurl,
   # Please unpin FFmpeg on the next upstream release.
-  # Currently FFmpeg is pinned to 4.x because VAAPI acceleration is broken when
-  # building with newer versions:
-  # https://code.videolan.org/videolan/vlc/-/issues/26772
-  # This is intentional by upstream but VLC 4.0 will support newer FFmpeg.
-  ffmpeg_4,
+  ffmpeg_6,
   flac,
   fluidsynth,
+  fontconfig,
   freefont_ttf,
   freetype,
   fribidi,
   genericUpdater,
   gnutls,
+  harfbuzz,
+  libGL,
   libSM,
   libXext,
   libXinerama,
   libXpm,
-  libXv,
-  libXvMC,
   libarchive,
   libass,
   libbluray,
@@ -42,17 +38,19 @@
   libgcrypt,
   libgpg-error,
   libjack2,
+  libjpeg,
   libkate,
   libmad,
   libmatroska,
   libmicrodns,
   libmodplug,
+  libmpeg2,
   libmtp,
-  liboggz,
+  libogg,
   libopus,
   libplacebo_5,
+  libpng,
   libpulseaudio,
-  libraw1394,
   librsvg,
   libsForQt5,
   libsamplerate,
@@ -63,12 +61,10 @@
   libupnp,
   libv4l,
   libva,
-  libvdpau,
   libvorbis,
   libxml2,
   live555,
   lua5,
-  mpeg2dec,
   ncurses,
   perl,
   pkg-config,
@@ -80,8 +76,8 @@
   speex,
   srt,
   stdenv,
-  systemd,
-  taglib,
+  systemdLibs,
+  taglib_1,
   unzip,
   wayland,
   wayland-protocols,
@@ -115,6 +111,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-JNu+HX367qCZTV3vC73iABdzRxNtv+Vz9bakzuJa+7A=";
   };
 
+  depsBuildBuild = optionals waylandSupport [ pkg-config ];
+
   nativeBuildInputs =
     [
       autoreconfHook
@@ -136,22 +134,22 @@ stdenv.mkDerivation (finalAttrs: {
   # needing them
   buildInputs =
     [
-      SDL
-      SDL_image
       a52dec
       alsa-lib
       avahi
+      cairo
       dbus
       faad2
-      ffmpeg_4
+      ffmpeg_6
       flac
       fluidsynth
+      fontconfig
+      freetype
       fribidi
       gnutls
+      harfbuzz
+      libGL
       libSM
-      libXpm
-      libXv
-      libXvMC
       libarchive
       libass
       libbluray
@@ -164,16 +162,18 @@ stdenv.mkDerivation (finalAttrs: {
       libebml
       libgcrypt
       libgpg-error
+      libjpeg
       libkate
       libmad
       libmatroska
       libmodplug
+      libmpeg2
       libmtp
-      liboggz
+      libogg
       libopus
       libplacebo_5
+      libpng
       libpulseaudio
-      libraw1394
       librsvg
       libsamplerate
       libspatialaudio
@@ -183,30 +183,26 @@ stdenv.mkDerivation (finalAttrs: {
       libupnp
       libv4l
       libva
-      libvdpau
       libvorbis
       libxml2
       lua5
-      mpeg2dec
       ncurses
       samba
       schroedinger
       speex
       srt
-      systemd
-      taglib
+      systemdLibs
+      taglib_1
       xcbutilkeysyms
-      wayland-scanner # only required for configure script
       zlib
     ]
-    ++ optionals (!stdenv.hostPlatform.isAarch && !onlyLibVLC) [ live555 ]
+    ++ optionals (!onlyLibVLC) [ live555 ]
     ++ optionals jackSupport [ libjack2 ]
     ++ optionals chromecastSupport [
       libmicrodns
       protobuf
     ]
     ++ optionals skins2Support [
-      freetype
       libXext
       libXinerama
       libXpm
@@ -228,16 +224,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   env =
     {
-      # vlc depends on a c11-gcc wrapper script which we don't have so we need to
-      # set the path to the compiler
+      # vlc searches for c11-gcc, c11, c99-gcc, c99, which don't exist and would be wrong for cross compilation anyway.
       BUILDCC = "${pkgsBuildBuild.stdenv.cc}/bin/gcc";
-      PKG_CONFIG_WAYLAND_SCANNER_WAYLAND_SCANNER = "wayland-scanner";
+      LIVE555_PREFIX = live555;
     }
     // lib.optionalAttrs stdenv.cc.isGNU {
       NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
-    }
-    // lib.optionalAttrs (!stdenv.hostPlatform.isAarch) {
-      LIVE555_PREFIX = live555;
     };
 
   patches = [
@@ -247,6 +239,15 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://code.videolan.org/videolan/vlc/uploads/eb1c313d2d499b8a777314f789794f9d/0001-Add-lssl-and-lcrypto-to-liblive555_plugin_la_LIBADD.patch";
       hash = "sha256-qs3gY1ksCZlf931TSZyMuT2JD0sqrmcRCZwL+wVG0U8=";
     })
+    # support VAAPI hardware video decoding with newer ffmpeg
+    # upstream merge request: https://code.videolan.org/videolan/vlc/-/merge_requests/6606 (will be included in the next release)
+    (fetchpatch {
+      url = "https://code.videolan.org/videolan/vlc/-/commit/ba5dc03aecc1d96f81b76838f845ebde7348cf62.diff";
+      hash = "sha256-s6AI9O0V3AKOyw9LbQ9CgjaCi5m5+nLacKNLl5ZLC6Q=";
+    })
+    # make the plugins.dat file generation reproducible
+    # upstream merge request: https://code.videolan.org/videolan/vlc/-/merge_requests/7149
+    ./deterministic-plugin-cache.diff
   ];
 
   postPatch =
@@ -271,10 +272,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Most of the libraries are auto-detected so we don't need to set a bunch of
   # "--enable-foo" flags here
   configureFlags =
-    [
-      "--enable-srt" # Explicit enable srt to ensure the patch is applied.
-      "--with-kde-solid=$out/share/apps/solid/actions"
-    ]
+    [ "--with-kde-solid=$out/share/apps/solid/actions" ]
     ++ optionals onlyLibVLC [ "--disable-vlc" ]
     ++ optionals skins2Support [ "--enable-skins2" ]
     ++ optionals waylandSupport [ "--enable-wayland" ]
@@ -288,11 +286,6 @@ stdenv.mkDerivation (finalAttrs: {
   postConfigure = ''
     sed -i 's|^#define CONFIGURE_LINE.*$|#define CONFIGURE_LINE "<removed>"|g' config.h
   '';
-
-  # fails on high core machines
-  # ld: cannot find -lvlc_vdpau: No such file or directory
-  # https://code.videolan.org/videolan/vlc/-/issues/27338
-  enableParallelInstalling = false;
 
   # Add missing SOFA files
   # Given in EXTRA_DIST, but not in install-data target
@@ -313,6 +306,7 @@ stdenv.mkDerivation (finalAttrs: {
   # should be the same as pkgsBuildBuild.qt5.qttranslations.
   postFixup =
     ''
+      patchelf --add-rpath ${libv4l}/lib "$out/lib/vlc/plugins/access/libv4l2_plugin.so"
       find $out/lib/vlc/plugins -exec touch -d @1 '{}' ';'
       ${
         if stdenv.buildPlatform.canExecute stdenv.hostPlatform then "$out" else pkgsBuildBuild.libvlc

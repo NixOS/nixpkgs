@@ -20,7 +20,6 @@ let
       openssl,
       libtirpc,
       nfs-utils,
-      samba,
       gawk,
       gnugrep,
       gnused,
@@ -112,7 +111,7 @@ let
               enablePython = old.enablePython or true && enablePython;
             })
           }/bin/exportfs"
-          substituteInPlace ./lib/libshare/smb.h        --replace-fail "/usr/bin/net"            "${samba}/bin/net"
+          substituteInPlace ./lib/libshare/smb.h        --replace-fail "/usr/bin/net"            "/run/current-system/sw/bin/net"
           # Disable dynamic loading of libcurl
           substituteInPlace ./config/user-libfetch.m4   --replace-fail "curl-config --built-shared" "true"
           substituteInPlace ./config/user-systemd.m4    --replace-fail "/usr/lib/modules-load.d" "$out/etc/modules-load.d"

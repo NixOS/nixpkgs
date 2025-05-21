@@ -8,13 +8,13 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "mdbook-cmdrun";
   version = "0.6.0-unstable-2024-04-15";
 
   src = fetchFromGitHub {
     owner = "FauconFan";
-    repo = pname;
+    repo = "mdbook-cmdrun";
     rev = "d1fef67f100563c2a433b1f5dd5a71810db6b90d";
     hash = "sha256-Q2h64XCyDxLmmCNC3wTw81pBotaMEUjY5y0Oq6q20cQ=";
   };

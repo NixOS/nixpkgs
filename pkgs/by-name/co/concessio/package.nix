@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "concessio";
-  version = "0.1.9";
+  version = "0.1.10";
 
   src = fetchFromGitHub {
     owner = "ronniedroid";
     repo = "concessio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XH+4oEZSKa6lAS0zXxdlCsVJcGDglKSgaD+zoRM6Pws=";
+    hash = "sha256-GDiwpErxz6GiYajcRBOnX0RO1jeaSmpLLxqEsB3nJLA=";
   };
 
   strictDeps = true;

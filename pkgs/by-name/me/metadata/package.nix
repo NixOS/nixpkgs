@@ -9,7 +9,7 @@
   installShellFiles,
   asciidoc,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "metadata";
   version = "0.1.9";
 

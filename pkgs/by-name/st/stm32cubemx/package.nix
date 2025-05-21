@@ -14,13 +14,13 @@ let
   iconame = "STM32CubeMX";
   package = stdenvNoCC.mkDerivation rec {
     pname = "stm32cubemx";
-    version = "6.13.0";
+    version = "6.14.0";
 
     src = fetchzip {
       url = "https://sw-center.st.com/packs/resource/library/stm32cube_mx_v${
         builtins.replaceStrings [ "." ] [ "" ] version
       }-lin.zip";
-      hash = "sha256-ypZVVPmAsApaccWl7ZtAECwphD2SUUiVNC2DYC5rYb4=";
+      hash = "sha256-GOvoPyfPdQV/gjveuFpZjueTZD/BYuEWSHgQKBm3o3A=";
       stripRoot = false;
     };
 
@@ -52,6 +52,11 @@ let
 
       cat << EOF > $out/bin/${pname}
       #!${stdenvNoCC.shell}
+      updater_xml="\$HOME/.stm32cubemx/thirdparties/db/updaterThirdParties.xml"
+      if [ -e "\$updater_xml" ] && [ ! -w "\$updater_xml" ]; then
+        echo "Warning: Unwritable \$updater_xml prevents CubeMX software packages from working correctly. Fixing that."
+        (set -x; chmod u+w "\$updater_xml")
+      fi
       ${jdk21}/bin/java -jar $out/opt/STM32CubeMX/STM32CubeMX "\$@"
       EOF
       chmod +x $out/bin/${pname}
@@ -133,5 +138,8 @@ buildFHSEnv {
       xorg.libXext
       xorg.libXfixes
       xorg.libXrandr
+      libgcrypt
+      openssl
+      udev
     ];
 }

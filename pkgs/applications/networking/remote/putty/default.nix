@@ -1,5 +1,14 @@
-{ stdenv, lib, fetchurl, cmake, perl, pkg-config
-, gtk3, ncurses, darwin, copyDesktopItems, makeDesktopItem
+{
+  stdenv,
+  lib,
+  fetchurl,
+  cmake,
+  perl,
+  pkg-config,
+  gtk3,
+  ncurses,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,10 +23,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-cYd3wT1j0N/5H+AxYrwqBbTfyLCCdjTNYLUc79/2McY=";
   };
 
-  nativeBuildInputs = [ cmake perl pkg-config copyDesktopItems ];
+  nativeBuildInputs = [
+    cmake
+    perl
+    pkg-config
+    copyDesktopItems
+  ];
   buildInputs = lib.optionals stdenv.hostPlatform.isUnix [
-    gtk3 ncurses
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.libs.utmp;
+    gtk3
+    ncurses
+  ];
   enableParallelBuilding = true;
 
   desktopItems = [
@@ -27,7 +42,10 @@ stdenv.mkDerivation rec {
       icon = "putty";
       desktopName = "PuTTY";
       comment = "Connect to an SSH server with PuTTY";
-      categories = [ "GTK" "Network" ];
+      categories = [
+        "GTK"
+        "Network"
+      ];
     })
     (makeDesktopItem {
       name = "PuTTY Terminal Emulator";
@@ -35,7 +53,12 @@ stdenv.mkDerivation rec {
       icon = "pterm";
       desktopName = "Pterm";
       comment = "Start a PuTTY terminal session";
-      categories = [ "GTK" "System" "Utility" "TerminalEmulator" ];
+      categories = [
+        "GTK"
+        "System"
+        "Utility"
+        "TerminalEmulator"
+      ];
     })
   ];
 

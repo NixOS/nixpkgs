@@ -5,8 +5,6 @@
   robloxSupport ? true,
   pkg-config,
   openssl,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "kampfkarren";
-    repo = pname;
+    repo = "selene";
     rev = version;
     sha256 = "sha256-QE9kXGQWg0pHtSI1bTppn5IE+53KoxqFED1VvwkumEI=";
   };
@@ -27,13 +25,9 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    lib.optionals robloxSupport [
-      openssl
-    ]
-    ++ lib.optionals (robloxSupport && stdenv.hostPlatform.isDarwin) [
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = lib.optionals robloxSupport [
+    openssl
+  ];
 
   buildNoDefaultFeatures = !robloxSupport;
 

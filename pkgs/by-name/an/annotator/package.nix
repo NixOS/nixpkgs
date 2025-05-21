@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, meson
-, ninja
-, vala
-, wrapGAppsHook3
-, desktop-file-utils
-, libgee
-, pantheon
-, libxml2
-, libhandy
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  wrapGAppsHook3,
+  desktop-file-utils,
+  libgee,
+  pantheon,
+  libxml2,
+  libhandy,
 }:
 
 stdenv.mkDerivation rec {

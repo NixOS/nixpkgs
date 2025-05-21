@@ -225,7 +225,7 @@ let
       };
       gallery_cover_regex = mkOption {
         type = types.str;
-        default = "(poster|cover|folder|board)\.[^\.]+$";
+        default = "(poster|cover|folder|board)\\.[^.]+$";
         description = "Regex used to identify images as gallery covers";
       };
       no_proxy = mkOption {

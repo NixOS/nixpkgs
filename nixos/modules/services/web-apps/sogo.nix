@@ -113,7 +113,7 @@ in
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."sogo/sogo.conf.raw".source ];
 
-      environment.LDAPTLS_CACERT = "/etc/ssl/certs/ca-certificates.crt";
+      environment.LDAPTLS_CACERT = config.security.pki.caBundle;
 
       serviceConfig = {
         Type = "forking";

@@ -7,7 +7,6 @@
   cmake,
   darwinMinVersionHook,
   dbus,
-  fcitx5,
   fetchFromGitHub,
   ibus,
   installShellFiles,
@@ -47,7 +46,7 @@
   libudevSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   sndioSupport ? false,
   testSupport ? true,
-  waylandSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid,
+  waylandSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   x11Support ? !stdenv.hostPlatform.isAndroid && !stdenv.hostPlatform.isWindows,
 }:
 
@@ -57,7 +56,7 @@ assert lib.assertMsg (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3";
-  version = "3.2.6";
+  version = "3.2.12";
 
   outputs = [
     "lib"
@@ -69,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libsdl-org";
     repo = "SDL";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-SEL/JIenmueYayxZlWlMO3lTUOcqiaZZC6RJbbH4DmE=";
+    hash = "sha256-CPCbbVbi0gwSUkaEBOQPJwCU2NN9Lex2Z4hqBfIjn+o=";
   };
 
   postPatch =
@@ -100,7 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
       apple-sdk_11
     ]
     ++ lib.optionals ibusSupport [
-      fcitx5
       ibus
     ]
     ++ lib.optional waylandSupport zenity;
@@ -137,12 +135,8 @@ stdenv.mkDerivation (finalAttrs: {
       xorg.libXfixes
       xorg.libXi
       xorg.libXrandr
-    ];
-
-  propagatedBuildInputs = finalAttrs.dlopenPropagatedBuildInputs;
-
-  dlopenPropagatedBuildInputs =
-    [
+    ]
+    ++ [
       vulkan-headers
       vulkan-loader
     ]
@@ -176,12 +170,9 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     # Many dependencies are not directly linked to, but dlopen()'d at runtime. Adding them to the RPATH
     # helps them be found
-    NIX_LDFLAGS =
-      lib.optionalString
-        (stdenv.hostPlatform.hasSharedLibraries && stdenv.hostPlatform.extensions.sharedLibrary == ".so")
-        "-rpath ${
-          lib.makeLibraryPath (finalAttrs.dlopenBuildInputs ++ finalAttrs.dlopenPropagatedBuildInputs)
-        }";
+    NIX_LDFLAGS = lib.optionalString (
+      stdenv.hostPlatform.hasSharedLibraries && stdenv.hostPlatform.extensions.sharedLibrary == ".so"
+    ) "-rpath ${lib.makeLibraryPath (finalAttrs.dlopenBuildInputs)}";
   };
 
   passthru = {
@@ -235,6 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/libsdl-org/SDL/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ getchoo ];
+    teams = [ lib.teams.sdl ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     pkgConfigModules = [ "sdl3" ];
   };
