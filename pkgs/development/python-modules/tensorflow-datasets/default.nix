@@ -26,6 +26,7 @@
   apache-beam,
   beautifulsoup4,
   click,
+  cloudpickle,
   datasets,
   ffmpeg,
   imagemagick,
@@ -101,6 +102,7 @@ buildPythonPackage rec {
     apache-beam
     beautifulsoup4
     click
+    cloudpickle
     datasets
     ffmpeg
     imagemagick
@@ -134,6 +136,13 @@ buildPythonPackage rec {
     # AttributeError: 'NoneType' object has no attribute 'Table'
     "--deselect=tensorflow_datasets/core/file_adapters_test.py::test_read_write"
     "--deselect=tensorflow_datasets/text/c4_wsrs/c4_wsrs_test.py::C4WSRSTest"
+  ];
+
+  disabledTests = [
+    # Since updating apache-beam to 2.65.0
+    # RuntimeError: Unable to pickle fn CallableWrapperDoFn...: maximum recursion depth exceeded
+    # https://github.com/tensorflow/datasets/issues/11055
+    "test_download_and_prepare_as_dataset"
   ];
 
   disabledTestPaths = [

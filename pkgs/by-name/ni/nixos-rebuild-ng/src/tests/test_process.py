@@ -96,6 +96,37 @@ def test_run(mock_run: Any) -> None:
     )
 
 
+@patch(get_qualified_name(p.subprocess.run), autospec=True)
+def test__kill_long_running_ssh_process(mock_run: Any) -> None:
+    p._kill_long_running_ssh_process(
+        [
+            "nix",
+            "--extra-experimental-features",
+            "nix-command flakes",
+            "build",
+            "/nix/store/la0c8nmpr9xfclla0n4f3qq9iwgdrq4g-nixos-system-sankyuu-nixos-25.05.20250424.f771eb4.drv^*",
+        ],
+        m.Remote("user@localhost", opts=[], sudo_password=None),
+    )
+    mock_run.assert_called_with(
+        [
+            "ssh",
+            *p.SSH_DEFAULT_OPTS,
+            "user@localhost",
+            "--",
+            "pkill",
+            "--signal",
+            "SIGINT",
+            "--full",
+            "--",
+            r"nix\ \-\-extra\-experimental\-features\ 'nix\-command\ flakes'\ build\ '/nix/store/la0c8nmpr9xfclla0n4f3qq9iwgdrq4g\-nixos\-system\-sankyuu\-nixos\-25\.05\.20250424\.f771eb4\.drv\^\*'",
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+
+
 def test_remote_from_name(monkeypatch: MonkeyPatch) -> None:
     monkeypatch.setenv("NIX_SSHOPTS", "")
     assert m.Remote.from_arg("user@localhost", None, False) == m.Remote(
