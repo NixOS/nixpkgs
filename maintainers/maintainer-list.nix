@@ -17540,10 +17540,11 @@
     name = "Nicolò Balzarotti";
   };
   nicodemus26 = {
-    email = "nicodemus26@gmail.com";
+    email = "hi@nicodemus.dev";
     github = "nicodemus26";
     githubId = 58434;
     name = "Nicodemus Paradiso";
+    keys = [ { fingerprint = "5F59 D92C 686F 3812 5510 1040 285E 8D1B D1B5 FC10" ; } ];
   };
   nicolas-goudry = {
     email = "goudry.nicolas@gmail.com";
@@ -17564,13 +17565,6 @@
     githubId = 1155801;
     name = "nicoo";
     keys = [ { fingerprint = "E44E 9EA5 4B8E 256A FB73 49D3 EC9D 3708 72BC 7A8C"; } ];
-  };
-  nicodemus26 = {
-    email = "hi@nicodemus.dev";
-    github = "nicodemus26";
-    githubId = 58434;
-    name = "Nicodemus Paradiso";
-    keys = [ { fingerprint = "5F59 D92C 686F 3812 5510 1040 285E 8D1B D1B5 FC10" ; } ];
   };
   nidabdella = {
     name = "Mohamed Nidabdella";
