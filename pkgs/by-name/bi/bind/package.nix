@@ -27,11 +27,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bind";
-  version = "9.20.8";
+  version = "9.20.9";
 
   src = fetchurl {
     url = "https://downloads.isc.org/isc/bind9/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-MATZnEdr6rSamGwtSfkC4s13ZsmrGLJh6LNTyr86BLU=";
+    hash = "sha256-PSaQDtnJqFkHP/6puX4pLBJI2tGCebF7BfyyPDCR+G0=";
   };
 
   outputs = [
