@@ -41,6 +41,7 @@ in
             cfg.settings.COLLECT_API_ENDPOINT != null
           ) cfg.settings.COLLECT_API_ENDPOINT;
           trackerScriptNames = cfg.settings.TRACKER_SCRIPT_NAME;
+          basePath = cfg.settings.BASE_PATH;
         };
     };
 
@@ -166,6 +167,15 @@ in
             example = [ "tracker.js" ];
             description = ''
               Allows you to assign a custom name to the tracker script different from the default `script.js`.
+            '';
+          };
+          BASE_PATH = mkOption {
+            type = types.str;
+            default = "";
+            example = "/analytics";
+            description = ''
+              Allows you to host Umami under a subdirectory.
+              You may need to update your reverse proxy settings to correctly handle the BASE_PATH prefix.
             '';
           };
           DISABLE_UPDATES = mkOption {
