@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pytestCheckHook,
   requests,
@@ -11,16 +10,14 @@
 
 buildPythonPackage rec {
   pname = "fritzconnection";
-  version = "1.14.0";
+  version = "1.15.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "kbr";
     repo = "fritzconnection";
     tag = version;
-    hash = "sha256-1LLfSEOKqUIhWIR/RQEG0Bp41d908hAKDlslJlWCHys=";
+    hash = "sha256-ulY+nh9CSnxrktTlFSXAWJALkS4GwP/3dRIG07jQCWs=";
   };
 
   build-system = [ setuptools ];
