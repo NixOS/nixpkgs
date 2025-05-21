@@ -16,7 +16,6 @@
   psutil,
   pytestCheckHook,
   redisTestHook,
-  sentry-sdk,
   versionCheckHook,
 }:
 
@@ -44,18 +43,22 @@ buildPythonPackage rec {
     psutil
     pytestCheckHook
     redisTestHook
-    sentry-sdk
     versionCheckHook
   ];
   versionCheckProgramArg = "--version";
 
   __darwinAllowLocalNetworking = true;
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    # PermissionError: [Errno 13] Permission denied: '/tmp/rq-tests.txt'
-    "test_deleted_jobs_arent_executed"
-    "test_suspend_worker_execution"
-  ];
+  disabledTests =
+    [
+      # https://github.com/rq/rq/issues/2248
+      "test_work_and_quit"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # PermissionError: [Errno 13] Permission denied: '/tmp/rq-tests.txt'
+      "test_deleted_jobs_arent_executed"
+      "test_suspend_worker_execution"
+    ];
 
   pythonImportsCheck = [ "rq" ];
 
