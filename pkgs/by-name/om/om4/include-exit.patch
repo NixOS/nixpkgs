@@ -1,0 +1,14 @@
+Index: a/parser.y
+===================================================================
+--- a/parser.y
++++ a/parser.y
+@@ -16,8 +16,9 @@
+  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+  */
+ #include <math.h>
+ #include <stdint.h>
++#include <stdlib.h>
+ #define YYSTYPE	int32_t
+ extern int32_t end_result;
+ extern int yylex(void);
+ extern int yyerror(const char *);

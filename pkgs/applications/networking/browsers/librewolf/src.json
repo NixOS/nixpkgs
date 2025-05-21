@@ -1,0 +1,11 @@
+{
+  "packageVersion": "138.0.4-1",
+  "source": {
+    "rev": "138.0.4-1",
+    "hash": "sha256-KR8ZiueaEOXt2dw8T6ZvrQURV49Xu4cYe0XE8tEUmbw="
+  },
+  "firefox": {
+    "version": "138.0.4",
+    "hash": "sha512-ZNgEVtqN8n1+7tfrIMNfzyE7yUjrSHObYQHixHbqmpEz2pKEd6eWg8lsFg+NU77VK+SH8BqNKeONOQcfEmdoBg=="
+  }
+}
