@@ -10,8 +10,8 @@ python3.pkgs.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AndBondStyle";
     repo = "niimprint";
-    rev = "be39f68c16a5a7dc1b09bb173700d0ee1ec9cb66"; # Or a specific commit hash
-    sha256 = "sha256-+YISYchdqeVKrQ0h2cj5Jy2ezMjnQcWCCYm5f95H9dI="; # Needs to be updated
+    rev = "be39f68c16a5a7dc1b09bb173700d0ee1ec9cb66";
+    hash = "sha256-+YISYchdqeVKrQ0h2cj5Jy2ezMjnQcWCCYm5f95H9dI=";
   };
 
   format = "pyproject";
