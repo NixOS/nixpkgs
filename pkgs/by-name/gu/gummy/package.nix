@@ -15,6 +15,7 @@
   fmt,
   nlohmann_json,
   spdlog,
+  udevCheckHook,
   nix-update-script,
 }:
 
@@ -32,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -67,6 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     ln -s $out/libexec/gummyd $out/bin/gummyd
   '';
+
+  doInstallCheck = true;
 
   passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   passthru.updateScript = nix-update-script { };

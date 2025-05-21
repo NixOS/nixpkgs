@@ -23,6 +23,7 @@
   curl,
   tpm2-tools,
   coreutils,
+  udevCheckHook,
   clevisSupport ? false,
   nixosTests,
 }:
@@ -65,6 +66,7 @@ stdenv.mkDerivation rec {
     pkg-config
     asciidoc
     ncurses # tput
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -107,6 +109,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkTarget = "test";
+
+  doInstallCheck = true;
 
   # remove files for supporting dracut
   postInstall = ''

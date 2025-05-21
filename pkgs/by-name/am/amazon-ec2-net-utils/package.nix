@@ -12,6 +12,7 @@
   makeWrapper,
   nix-update-script,
   systemd,
+  udevCheckHook,
   util-linux,
 }:
 
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -100,6 +102,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  doInstallCheck = true;
 
   outputs = [
     "out"
