@@ -168,7 +168,6 @@ python.pkgs.buildPythonApplication rec {
       gpl3Only # The python codebase and all other parts of this codebase
     ];
     maintainers = with maintainers; [
-      globin
       hexa
     ];
     mainProgram = "esphome";
