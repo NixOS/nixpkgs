@@ -50,7 +50,10 @@ buildPythonPackage rec {
 
   build-system = [ pdm-backend ];
 
-  pythonRelaxDeps = [ "tenacity" ];
+  pythonRelaxDeps = [
+    "packaging"
+    "tenacity"
+  ];
 
   dependencies = [
     jsonpatch
