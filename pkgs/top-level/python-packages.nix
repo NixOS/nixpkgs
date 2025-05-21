@@ -12485,6 +12485,8 @@ self: super: with self; {
 
   objsize = callPackage ../development/python-modules/objsize { };
 
+  obsarray = callPackage ../development/python-modules/obsarray { };
+
   obsidian-callouts = callPackage ../development/python-modules/obsidian-callouts { };
 
   obsidian-media = callPackage ../development/python-modules/obsidian-media { };
