@@ -24,6 +24,7 @@ stdenvNoCC.mkDerivation rec {
     install -Dm644 *.otb -t $out/share/fonts/misc
     install -Dm644 *.woff -t $out/share/fonts/woff
     install -Dm644 *.woff2 -t $out/share/fonts/woff2
+    install -Dm664 *.psf -t $out/share/consolefonts
 
     runHook postInstall
   '';
