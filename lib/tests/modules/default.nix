@@ -11,5 +11,6 @@
     })
     config
     options
+    modules
     ;
 }
