@@ -118,6 +118,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.zotero.org";
+    downloadPage = "https://www.zotero.org/support/beta_builds";
     description = "Collect, organize, cite, and share your research sources";
     mainProgram = "zotero";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
