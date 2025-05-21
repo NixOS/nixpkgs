@@ -74,6 +74,7 @@ def is_encrypted(device: str) -> bool:
 def is_fs_type_supported(fs_type: str) -> bool:
     return fs_type.startswith('vfat')
 
+paths = {}
 
 def get_copied_path_uri(path: str, target: str) -> str:
     result = ''
@@ -85,6 +86,8 @@ def get_copied_path_uri(path: str, target: str) -> str:
 
     if not os.path.exists(dest_path):
         copy_file(path, dest_path)
+    else:
+        paths[dest_path] = True
 
     path_with_prefix = os.path.join('/limine', target, dest_file)
     result = f'boot():{path_with_prefix}'
@@ -203,7 +206,10 @@ def copy_file(from_path: str, to_path: str):
     if not os.path.exists(dirname):
         os.makedirs(dirname)
 
-    shutil.copyfile(from_path, to_path)
+    shutil.copyfile(from_path, to_path + ".tmp")
+    os.rename(to_path + ".tmp", to_path)
+
+    paths[to_path] = True
 
 def option_from_config(name: str, config_path: List[str], conversion: Callable[[str], str] | None = None) -> str:
     if config(*config_path):
@@ -245,12 +251,10 @@ def main():
 
     if not os.path.exists(limine_dir):
         os.makedirs(limine_dir)
-
-    if os.path.exists(os.path.join(limine_dir, 'kernels')):
-        print(f'nuking {os.path.join(limine_dir, "kernels")}')
-        shutil.rmtree(os.path.join(limine_dir, 'kernels'))
-
-    os.makedirs(os.path.join(limine_dir, "kernels"))
+    else:
+        for dir, dirs, files in os.walk(limine_dir, topdown=True):
+            for file in files:
+                paths[os.path.join(dir, file)] = False
 
     profiles = [('system', get_gens())]
 
@@ -269,13 +273,6 @@ def main():
         graphics: yes
         default_entry: 2
     ''')
-
-    if os.path.exists(os.path.join(limine_dir, 'wallpapers')):
-        print(f'nuking {os.path.join(limine_dir, "wallpapers")}')
-        shutil.rmtree(os.path.join(limine_dir, 'wallpapers'))
-
-    if len(config('style', 'wallpapers')) > 0:
-        os.makedirs(os.path.join(limine_dir, 'wallpapers'))
 
     for wallpaper in config('style', 'wallpapers'):
         config_file += f'''wallpaper: {get_copied_path_uri(wallpaper, 'wallpapers')}\n'''
@@ -317,6 +314,8 @@ def main():
     with open(config_file_path, 'w') as file:
         file.truncate()
         file.write(config_file.strip())
+
+    paths[config_file_path] = True
 
     for dest_path, source_path in config('additionalFiles').items():
         dest_path = os.path.join(limine_dir, dest_path)
@@ -408,5 +407,10 @@ def main():
             raise Exception(
                 'Failed to deploy BIOS stage 1 Limine bootloader!\n' +
                 'You might want to try enabling the `boot.loader.limine.forceMbr` option.')
+
+    print("removing unused boot files...")
+    for path in paths:
+        if not paths[path]:
+            os.remove(path)
 
 main()
