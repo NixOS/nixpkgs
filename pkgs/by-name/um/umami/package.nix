@@ -14,6 +14,7 @@
   databaseType ? "postgresql",
   collectApiEndpoint ? "",
   trackerScriptNames ? [ ],
+  basePath ? "",
 }:
 let
   sources = lib.importJSON ./sources.json;
@@ -95,6 +96,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   env.COLLECT_API_ENDPOINT = collectApiEndpoint;
   env.TRACKER_SCRIPT_NAME = lib.concatStringsSep "," trackerScriptNames;
+  env.BASE_PATH = basePath;
 
   # Allow prisma-cli to find prisma-engines without having to download them
   env.PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines'}/lib/libquery_engine.node";
