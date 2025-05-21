@@ -16,14 +16,14 @@ let
   gix = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/gix";
   ein = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/ein";
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitoxide";
   version = "0.44.0";
 
   src = fetchFromGitHub {
     owner = "GitoxideLabs";
     repo = "gitoxide";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TZK4H0PRxsjzDhW05bXD7GkP2JHrBb1tu/oid6GkAWs=";
   };
 
@@ -56,11 +56,11 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Command-line application for interacting with git repositories";
     homepage = "https://github.com/GitoxideLabs/gitoxide";
-    changelog = "https://github.com/GitoxideLabs/gitoxide/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/GitoxideLabs/gitoxide/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = with lib.licenses; [
       mit # or
       asl20
     ];
     maintainers = with lib.maintainers; [ syberant ];
   };
-}
+})
