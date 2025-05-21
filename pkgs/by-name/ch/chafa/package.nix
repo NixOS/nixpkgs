@@ -69,7 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    installShellCompletion --cmd chafa tools/completions/zsh-completion.zsh
+    installShellCompletion --cmd chafa \
+      --fish tools/completions/fish-completion.fish \
+      --zsh tools/completions/zsh-completion.zsh
   '';
 
   meta = {
