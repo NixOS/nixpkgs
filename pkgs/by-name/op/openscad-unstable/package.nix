@@ -141,6 +141,11 @@ clangStdenv.mkDerivation rec {
     rmdir $out/bin
   '';
 
+  preCheck = ''
+    export HOME=$TMPDIR/home
+    mkdir -p $HOME
+  '';
+
   nativeCheckInputs = [
     mesa.llvmpipeHook
     ctestCheckHook
