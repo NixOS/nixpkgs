@@ -112,7 +112,6 @@ buildGoModule rec {
     mainProgram = "rclone";
     maintainers = with maintainers; [
       SuperSandro2000
-      tomfitzhenry
     ];
   };
 }
