@@ -18,6 +18,7 @@
   ripgrep,
   cctools,
   nixosTests,
+  prefetch-npm-deps
 }:
 let
 
@@ -54,41 +55,51 @@ stdenv.mkDerivation (finalAttrs: {
         inherit (finalAttrs) src nativeBuildInputs;
         outputHashMode = "recursive";
         outputHashAlgo = "sha256";
-        outputHash = "sha256-nNr5vizZ8UwE0B08hDvLBLZYAfCA/5eSTOrqunfA574=";
+        outputHash = "sha256-lgzNpWFAIGNxjDZ60kRw80fP1qEItk3FN1s5t7KdxGA=";
+        env = {
+          FORCE_EMPTY_CACHE = true;
+          FORCE_GIT_DEPS = true;
+          npm_config_progress = false;
+          npm_config_cafile = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+        };
       }
       ''
         runPhase unpackPhase
         export HOME=$TMPDIR/home
-        npm config set progress false
-        npm config set cafile ${cacert}/etc/ssl/certs/ca-bundle.crt
-        for p in $(find -name package-lock.json -exec dirname {} \;)
+        mkdir $out
+        for p in $(find -name package-lock.json)
         do (
-          cd $p
-          if [ -e node_modules ]
-          then
-            echo >&2 "File exists $p/node_modules"
-            exit 0
-          fi
-          mkdir node_modules
-          npm ci --ignore-scripts
-          mkdir -p $out/$p
-          cp -r node_modules $out/$p/
+          ${prefetch-npm-deps}/bin/prefetch-npm-deps "$p" "$out"
+          local lockpath=$out/lockfiles/$p
+          mkdir -p "$(dirname $lockpath)"
+          mv $out/package-lock.json "$lockpath"
         )
         done
       '';
 
-  NODE_OPTIONS = "--openssl-legacy-provider";
-  NODE_ENV = "production";
+  env = {
+    NODE_OPTIONS = "--openssl-legacy-provider";
+    NODE_ENV = "development";
 
-  # skip unnecessary binary downloads
-  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";
-  ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    # skip unnecessary binary downloads
+    PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";
+    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
-  # ensure the correct node-gyp (from nixpkgs) is used
-  NIX_NODEJS_BUILDNPMPACKAGE = "1";
-  npm_config_nodedir = nodejs;
-  npm_config_node_gyp = "${nodejs}/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js";
+    # ensure the correct node-gyp (from nixpkgs) is used
+    NIX_NODEJS_BUILDNPMPACKAGE = "1";
+    npm_config_nodedir = nodejs;
+    npm_config_node_gyp = "${nodejs}/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js";
 
+    # use local npm cache (see <nixpkgs/pkgs/build-support/node/build-npm-package/hooks/npm-config-hook.sh>)
+    npm_config_cache = finalAttrs.nodeModules;
+    npm_config_offline = true;
+    npm_config_progress = false;
+
+    # for --fixup-lockfile
+    prefetchNpmDeps = "${prefetch-npm-deps}/bin/prefetch-npm-deps";
+    forceGitDeps = true;
+
+  };
   nativeBuildInputs = [
     nodejs
     nodejs.python
@@ -132,25 +143,35 @@ stdenv.mkDerivation (finalAttrs: {
       ln -s ${nodejs}/bin/node .build/node/v${nodejs.version}/${vsBuildTarget}/node
     '';
 
+  preConfigure = ''
+    export HOME=$TMPDIR/home
+    mkdir -p $HOME
+    mkdir -p $TMPDIR/cache/_cacache
+    # ln -s $nodeModules/_cacache/* $TMPDIR/cache/_cacache
+    # mkdir -p $TMPDIR/cache
+    cp -R $nodeModules/_cacache $TMPDIR/cache
+    chmod -R +w $TMPDIR/cache
+    export npm_config_cache=$TMPDIR/cache
+  '';
+
   configurePhase =
     ''
-      export HOME=$TMPDIR/home
-      mkdir -p $HOME
+      runHook preConfigure
     ''
     ## unpack all of the prefetched node_modules folders
     + ''
       for p in $(find -name package-lock.json -exec dirname {} \;)
       do (
+        echo "Setting up $p/node_modules"
         cd $p
         if [ -e node_modules ]
         then
           echo >&2 "File exists $p/node_modules"
           exit 0
         fi
-        cp -r $nodeModules/$p/node_modules .
-        chmod -R 700 node_modules
+        npm ci --ignore-scripts
+        patchShebangs node_modules
       )
-      patchShebangs $p/node_modules
       done
     ''
     ## put ripgrep binary into bin so postinstall does not try to download it
