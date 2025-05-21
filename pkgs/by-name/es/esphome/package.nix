@@ -17,6 +17,17 @@ let
     self = python;
     packageOverrides = self: super: {
       esphome-dashboard = self.callPackage ./dashboard.nix { };
+
+      paho-mqtt = super.paho-mqtt.overridePythonAttrs (oldAttrs: rec {
+        version = "1.6.1";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          tag = "v${version}";
+          hash = "sha256-9nH6xROVpmI+iTKXfwv2Ar1PAmWbEunI3HO0pZyK6Rg=";
+        };
+        build-system = with self; [ setuptools ];
+        doCheck = false;
+      });
     };
   };
 in
