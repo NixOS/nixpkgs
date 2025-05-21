@@ -2,16 +2,16 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   pytestCheckHook,
   pytest-cov-stub,
   pythonOlder,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "entry-points-txt";
   version = "0.2.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-hIUXxBJ0XSB4FrNZJdofJ1gTTncILNq9Xh+iAV1CD0s=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [ hatchling ];
 
   nativeCheckInputs = [
     pytestCheckHook
