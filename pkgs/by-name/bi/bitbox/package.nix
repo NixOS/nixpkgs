@@ -6,6 +6,7 @@
   clang,
   go,
   libsForQt5,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -76,7 +77,10 @@ stdenv.mkDerivation rec {
     clang
     go
     libsForQt5.wrapQtAppsHook
+    udevCheckHook
   ];
+
+  doInstallCheck = true;
 
   meta = {
     description = "Companion app for the BitBox02 hardware wallet";
