@@ -5,6 +5,8 @@
   python3,
   fixDarwinDylibNames,
   nix-update-script,
+  versionCheckHook,
+
   javaBindings ? false,
   ocamlBindings ? false,
   pythonBindings ? true,
@@ -12,11 +14,6 @@
   ocaml ? null,
   findlib ? null,
   zarith ? null,
-  versionInfo ? {
-    regex = "^z3-(4\\.[0-9]+\\.[0-9]+)$";
-    version = "4.15.0";
-    hash = "sha256-fk3NyV6vIDXivhiNOW2Y0i5c+kzc7oBqaeBWj/JjpTM=";
-  },
   ...
 }:
 
@@ -25,21 +22,21 @@ assert ocamlBindings -> ocaml != null && findlib != null && zarith != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "z3";
-  inherit (versionInfo) version;
+  version = "4.15.0";
 
   src = fetchFromGitHub {
     owner = "Z3Prover";
     repo = "z3";
     rev = "z3-${finalAttrs.version}";
-    inherit (versionInfo) hash;
+    hash = "sha256-fk3NyV6vIDXivhiNOW2Y0i5c+kzc7oBqaeBWj/JjpTM=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs =
     [ python3 ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames
-    ++ lib.optional javaBindings jdk
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ]
+    ++ lib.optionals javaBindings [ jdk ]
     ++ lib.optionals ocamlBindings [
       ocaml
       findlib
@@ -52,20 +49,29 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $OCAMLFIND_DESTDIR/stublibs
   '';
 
-  configurePhase =
-    lib.concatStringsSep " " (
-      [ "${python3.pythonOnBuildForHost.interpreter} scripts/mk_make.py --prefix=$out" ]
-      ++ lib.optional javaBindings "--java"
-      ++ lib.optional ocamlBindings "--ml"
-      ++ lib.optional pythonBindings "--python --pypkgdir=$out/${python3.sitePackages}"
-    )
-    + "\n"
-    + "cd build";
+  configurePhase = ''
+    runHook preConfigure
+
+    ${python3.pythonOnBuildForHost.interpreter} \
+      scripts/mk_make.py \
+      --prefix=$out \
+      ${lib.optionalString javaBindings "--java"} \
+      ${lib.optionalString ocamlBindings "--ml"} \
+      ${lib.optionalString pythonBindings "--python --pypkgdir=$out/${python3.sitePackages}"}
+
+    cd build
+
+    runHook postConfigure
+  '';
 
   doCheck = true;
   checkPhase = ''
+    runHook preCheck
+
     make -j $NIX_BUILD_CORES test
     ./test-z3 -a
+
+    runHook postCheck
   '';
 
   postInstall =
@@ -86,9 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/z3 -version 2>&1 | grep -F "Z3 version $version"
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   outputs =
     [
@@ -97,20 +101,15 @@ stdenv.mkDerivation (finalAttrs: {
       "dev"
       "python"
     ]
-    ++ lib.optional javaBindings "java"
-    ++ lib.optional ocamlBindings "ocaml";
+    ++ lib.optionals javaBindings [ "java" ]
+    ++ lib.optionals ocamlBindings [ "ocaml" ];
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs =
-        [
-          "--version-regex"
-          versionInfo.regex
-        ]
-        ++ lib.optionals (versionInfo.autoUpdate or null != null) [
-          "--override-filename"
-          versionInfo.autoUpdate
-        ];
+      extraArgs = [
+        "--version-regex"
+        "^z3-([0-9]+\\.[0-9]+\\.[0-9]+)$"
+      ];
     };
   };
 
