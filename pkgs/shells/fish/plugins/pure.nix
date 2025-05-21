@@ -2,8 +2,10 @@
   lib,
   buildFishPlugin,
   fetchFromGitHub,
-  git,
-  fishtape_3,
+
+# Disabled because of broken tests
+# git,
+# fishtape_3,
 }:
 
 buildFishPlugin rec {
@@ -17,14 +19,15 @@ buildFishPlugin rec {
     hash = "sha256-8zxqPU9N5XGbKc0b3bZYkQ3yH64qcbakMsHIpHZSne4=";
   };
 
-  nativeCheckInputs = [ git ];
-  checkPlugins = [ fishtape_3 ];
-  checkPhase = ''
-    rm tests/pure_tools_installer.test.fish
-    rm tests/_pure_uninstall.test.fish
-
-    fishtape tests/*.test.fish
-  '';
+  # Checks disabled because broken upstream https://github.com/pure-fish/pure/issues/360
+  # nativeCheckInputs = [ git ];
+  # checkPlugins = [ fishtape_3 ];
+  # checkPhase = ''
+  #   rm tests/pure_tools_installer.test.fish
+  #   rm tests/_pure_uninstall.test.fish
+  #
+  #   fishtape tests/*.test.fish
+  # '';
 
   meta = {
     description = "Pretty, minimal and fast Fish prompt, ported from zsh";
