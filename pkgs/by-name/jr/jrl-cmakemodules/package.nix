@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "jrl-umi3218";
     repo = "jrl-cmakemodules";
     rev = "3632eb9ed43e29d7acbc5b35d30c9b2aee801702";
-    hash = "sha256-0d6l5gg829b10glmygs56f0ag6dq8jqj3bfiq16j41rb9l2p6fal";
+    hash = "sha256-0o5DKt9BxZlAYTHp/BjzF6eJRP/d6lVlaV5P4xlzKnA=";
   };
 
   nativeBuildInputs = [ cmake ];
