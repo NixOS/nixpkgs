@@ -3269,6 +3269,21 @@ self: super:
 
   # 2025-5-15: Too strict bounds on base <4.19, see: https://github.com/zachjs/sv2v/issues/317
   sv2v = doJailbreak super.sv2v;
+
+  # 2025-05-20: Latest release was in 2012 and still depends on filesystem-conduit
+  hs-pkpass = lib.pipe super.hs-pkpass [
+    (overrideSrc {
+      version = "unstable-2023-03-07";
+      src = pkgs.fetchFromGitHub {
+        owner = "digitallyinduced";
+        repo = "hs-pkpass";
+        rev = "f829f3e3e287e462caaed154390426680f902a45";
+        hash = "sha256-X2HAkvuOqwd1HgF3wxai8VRVuI1j5usXxviZ9ocm5us=";
+      };
+    })
+    (pkg: pkg.overrideScope (_: _: { filesystem-conduit = null; }))
+    (addBuildDepend super.conduit-extra)
+  ];
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 

@@ -1612,7 +1612,6 @@ dont-distribute-packages:
  - hs-functors
  - hs-gen-iface
  - hs-ix
- - hs-pkpass
  - hs-profunctors
  - hs-sdl-term-emulator
  - hs2ats
