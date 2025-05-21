@@ -1,4 +1,3 @@
-import platform
 import subprocess
 from pathlib import Path
 from unittest.mock import Mock, patch
@@ -77,7 +76,7 @@ def test_flake_to_attr() -> None:
     )
 
 
-@patch(get_qualified_name(platform.node), autospec=True)
+@patch("platform.node", autospec=True)
 def test_flake_from_arg(
     mock_node: Mock, monkeypatch: MonkeyPatch, tmpdir: Path
 ) -> None:
@@ -119,7 +118,7 @@ def test_flake_from_arg(
             return_value=False,
         ),
         patch(
-            get_qualified_name(m.discover_git, m),
+            get_qualified_name(m.discover_git),
             autospec=True,
             return_value="/etc/nixos",
         ),
@@ -151,7 +150,7 @@ def test_flake_from_arg(
 
     with (
         patch(
-            get_qualified_name(m.subprocess.run),
+            "subprocess.run",
             autospec=True,
             return_value=subprocess.CompletedProcess([], 0, "remote-hostname\n"),
         ),
