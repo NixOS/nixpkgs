@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  objgraph,
   pytestCheckHook,
   pytest-codspeed,
   pytest-cov-stub,
@@ -13,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "multidict";
-  version = "6.4.3";
+  version = "6.2.0";
 
   disabled = pythonOlder "3.8";
 
@@ -23,7 +22,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "multidict";
     tag = "v${version}";
-    hash = "sha256-N5SmUhR2+1wnnhNNEGY2LKn0roDx781BvSw83CQj6tc=";
+    hash = "sha256-eiTD6vMSLMLlDmVwht6ZdGTHlyC62W4ecdiuhfJNaMQ=";
   };
 
   postPatch = ''
@@ -39,7 +38,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    objgraph
     pytestCheckHook
     pytest-codspeed
     pytest-cov-stub
