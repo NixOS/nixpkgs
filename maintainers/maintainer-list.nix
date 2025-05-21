@@ -11482,6 +11482,12 @@
     githubId = 30251156;
     name = "Jesse Moore";
   };
+  jethair = {
+    email = "jethair@duck.com";
+    github = "JetHair";
+    githubId = 106916147;
+    name = "JetHair";
+  };
   jethro = {
     email = "jethrokuan95@gmail.com";
     github = "jethrokuan";
@@ -16823,12 +16829,6 @@
     github = "mtpham99";
     githubId = 72663763;
     keys = [ { fingerprint = "DB3E A12D B291 594A 79C5 F6B3 10AB 6868 37F6 FA3F"; } ];
-  };
-  mtreca = {
-    email = "maxime.treca@gmail.com";
-    github = "mtreca";
-    githubId = 16440823;
-    name = "Maxime Tréca";
   };
   mtreskin = {
     email = "zerthurd@gmail.com";
@@ -24620,6 +24620,12 @@
     githubId = 6579555;
     name = "Jeroen Jetten";
   };
+  thetaoofsu = {
+    email = "TheTaoOfSu@protonmail.com";
+    github = "TheTaoOfSu";
+    githubId = 45526311;
+    name = "TheTaoOfSu";
+  };
   theuni = {
     email = "ct@flyingcircus.io";
     github = "ctheune";
@@ -25148,6 +25154,12 @@
     email = "git@thym.at";
     github = "totoroot";
     githubId = 39650930;
+  };
+  tournev = {
+    name = "Vincent Tourneur";
+    email = "vincent@pimoid.fr";
+    github = "vtourneur";
+    githubId = 48284424;
   };
   ToxicFrog = {
     email = "toxicfrog@ancilla.ca";

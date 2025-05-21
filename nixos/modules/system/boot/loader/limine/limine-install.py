@@ -249,6 +249,10 @@ def main():
             partition formatted as FAT.
         '''))
 
+    if config('secureBoot')['enable'] and not config('secureBoot')['createAndEnrollKeys'] and not os.path.exists("/var/lib/sbctl"):
+        print("There are no sbctl secure boot keys present. Please generate some.")
+        sys.exit(1)
+
     if not os.path.exists(limine_dir):
         os.makedirs(limine_dir)
     else:
@@ -352,6 +356,28 @@ def main():
                 print('error: failed to enroll limine config.', file=sys.stderr)
                 sys.exit(1)
 
+        if config('secureBoot')['enable']:
+            sbctl = os.path.join(config('secureBoot')['sbctl'], 'bin', 'sbctl')
+            if config('secureBoot')['createAndEnrollKeys']:
+                print("TEST MODE: creating and enrolling keys")
+                try:
+                    subprocess.run([sbctl, 'create-keys'])
+                except:
+                    print('error: failed to create keys', file=sys.stderr)
+                    sys.exit(1)
+                try:
+                    subprocess.run([sbctl, 'enroll-keys', '--yes-this-might-brick-my-machine'])
+                except:
+                    print('error: failed to enroll keys', file=sys.stderr)
+                    sys.exit(1)
+
+            print('signing limine...')
+            try:
+                subprocess.run([sbctl, 'sign', dest_path])
+            except:
+                print('error: failed to sign limine', file=sys.stderr)
+                sys.exit(1)
+
         if not config('efiRemovable') and not config('canTouchEfiVariables'):
             print('warning: boot.loader.efi.canTouchEfiVariables is set to false while boot.loader.limine.efiInstallAsRemovable.\n  This may render the system unbootable.')
 
@@ -362,9 +388,16 @@ def main():
                 efibootmgr = os.path.join(config('efiBootMgrPath'), 'bin', 'efibootmgr')
                 efi_partition = find_mounted_device(config('efiMountPoint'))
                 efi_disk = find_disk_device(efi_partition)
+
+                efibootmgr_output = subprocess.check_output([efibootmgr], stderr=subprocess.STDOUT, universal_newlines=True)
+                create_flag = '-c'
+                # Check the output of `efibootmgr` to find if limine is already installed and present in the boot record
+                if matches := re.findall(r'Boot[0-9a-fA-F]{4}\*? Limine', efibootmgr_output):
+                    create_flag = '-C' # if present, keep the same boot order
+
                 efibootmgr_output = subprocess.check_output([
                     efibootmgr,
-                    '-c',
+                    create_flag,
                     '-d', efi_disk,
                     '-p', efi_partition.removeprefix(efi_disk).removeprefix('p'),
                     '-l', f'\\efi\\limine\\{boot_file}',

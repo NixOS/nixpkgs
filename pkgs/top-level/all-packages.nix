@@ -13255,8 +13255,6 @@ with pkgs;
 
   michabo = libsForQt5.callPackage ../applications/misc/michabo { };
 
-  midori = wrapFirefox midori-unwrapped { };
-
   miniaudicle = qt6Packages.callPackage ../applications/audio/miniaudicle { };
 
   minitube = libsForQt5.callPackage ../applications/video/minitube { };
@@ -16219,8 +16217,6 @@ with pkgs;
     inherit (darwin) sigtool;
   };
 
-  lima-bin = callPackage ../applications/virtualization/lima/bin.nix { };
-
   image_optim = callPackage ../applications/graphics/image_optim { inherit (nodePackages) svgo; };
 
   # using the new configuration style proposal which is unstable
@@ -16934,5 +16930,9 @@ with pkgs;
 
   rustdesk-flutter = callPackage ../by-name/ru/rustdesk-flutter/package.nix {
     flutter = flutter324;
+  };
+
+  davis = callPackage ../by-name/da/davis/package.nix {
+    php = php83; # https://github.com/tchapi/davis/issues/195
   };
 }
