@@ -388,9 +388,16 @@ def main():
                 efibootmgr = os.path.join(config('efiBootMgrPath'), 'bin', 'efibootmgr')
                 efi_partition = find_mounted_device(config('efiMountPoint'))
                 efi_disk = find_disk_device(efi_partition)
+
+                efibootmgr_output = subprocess.check_output([efibootmgr], stderr=subprocess.STDOUT, universal_newlines=True)
+                create_flag = '-c'
+                # Check the output of `efibootmgr` to find if limine is already installed and present in the boot record
+                if matches := re.findall(r'Boot[0-9a-fA-F]{4}\*? Limine', efibootmgr_output):
+                    create_flag = '-C' # if present, keep the same boot order
+
                 efibootmgr_output = subprocess.check_output([
                     efibootmgr,
-                    '-c',
+                    create_flag,
                     '-d', efi_disk,
                     '-p', efi_partition.removeprefix(efi_disk).removeprefix('p'),
                     '-l', f'\\efi\\limine\\{boot_file}',
