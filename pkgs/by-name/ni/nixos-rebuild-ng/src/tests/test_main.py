@@ -1083,8 +1083,8 @@ def test_execute_test_flake(mock_run: Mock, tmp_path: Path) -> None:
 
 
 @patch(get_qualified_name(nr.process.subprocess.run), autospec=True)
-@patch(get_qualified_name(nr.nix.Path.exists, nr.nix), autospec=True, return_value=True)
-@patch(get_qualified_name(nr.nix.Path.mkdir, nr.nix), autospec=True)
+@patch("pathlib.Path.exists", autospec=True, return_value=True)
+@patch("pathlib.Path.mkdir", autospec=True)
 def test_execute_test_rollback(
     mock_path_mkdir: Mock,
     mock_path_exists: Mock,
