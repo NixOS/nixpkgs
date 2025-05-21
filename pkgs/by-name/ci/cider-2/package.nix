@@ -42,7 +42,10 @@ appimageTools.wrapType2 rec {
     homepage = "https://cider.sh";
     license = lib.licenses.unfree;
     mainProgram = "cider-2";
-    maintainers = with lib.maintainers; [ itsvic-dev ];
+    maintainers = with lib.maintainers; [
+      itsvic-dev
+      l0r3v
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }
