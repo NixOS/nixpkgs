@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   fetchPypi,
   buildPythonPackage,
   pythonOlder,
@@ -37,6 +38,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "nltk" ];
+
+  passthru = {
+    data = pkgs.nltk-data;
+  };
 
   meta = with lib; {
     description = "Natural Language Processing ToolKit";
