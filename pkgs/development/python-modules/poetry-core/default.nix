@@ -59,11 +59,11 @@ buildPythonPackage rec {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-int-conversion";
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/python-poetry/poetry-core/blob/${src.tag}/CHANGELOG.md";
     description = "Poetry PEP 517 Build Backend";
     homepage = "https://github.com/python-poetry/poetry-core/";
-    license = licenses.mit;
-    teams = [ teams.python ];
+    license = lib.licenses.mit;
+    teams = [ lib.teams.python ];
   };
 }
