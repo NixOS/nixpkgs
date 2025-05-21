@@ -8,10 +8,13 @@
   atk,
   cairo,
   dbus-glib,
+  firefox-esr,
   gdk-pixbuf,
   glib,
   gtk3,
   libGL,
+  nspr,
+  nss,
   xorg,
   libgbm,
   pango,
@@ -20,15 +23,15 @@
 
 stdenv.mkDerivation rec {
   pname = "zotero";
-  version = "7.0.0-beta.111+b4f6c050e";
+  version = "8.0-beta.10+5a96e7c90";
 
   src =
     let
       escapedVersion = lib.escapeURL version;
     in
     fetchurl {
-      url = "https://download.zotero.org/client/beta/${escapedVersion}/Zotero-${escapedVersion}_linux-x86_64.tar.bz2";
-      hash = "sha256-pZsmS4gKCT8UAjz9IJg5C7n4kk7bWT/7H5ONF20CzPM=";
+      url = "https://download.zotero.org/client/beta/${escapedVersion}/Zotero-${escapedVersion}_linux-x86_64.tar.xz";
+      hash = "sha256-tlIvUyp0wGQyyF1pvTqHaM019iV26mZlaqsgsRSzYMs=";
     };
 
   dontPatchELF = true;
@@ -82,11 +85,25 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
+    pkg_dir="$prefix/usr/lib/zotero-bin-${version}"
+
     # Copy package contents to the output directory
-    mkdir -p "$prefix/usr/lib/zotero-bin-${version}"
-    cp -r * "$prefix/usr/lib/zotero-bin-${version}"
+    mkdir -p "$pkg_dir"
+    cp -r * "$pkg_dir"
+
+    ln -sf ${nss}/lib/libfreeblpriv3.so "$pkg_dir/libfreeblpriv3.so"
+    ln -sf ${firefox-esr}/lib/firefox/libgkcodecs.so "$pkg_dir/libgkcodecs.so"
+    ln -sf ${firefox-esr}/lib/firefox/libmozsqlite3.so "$pkg_dir/libmozsqlite3.so"
+    ln -sf ${nspr}/lib/libnspr4.so "$pkg_dir/libnspr4.so"
+    ln -sf ${nss}/lib/libnss3.so "$pkg_dir/libnss3.so"
+    ln -sf ${nss}/lib/libnssckbi.so "$pkg_dir/libnssckbi.so"
+    ln -sf ${nss}/lib/libnssutil3.so "$pkg_dir/libnssutil3.so"
+    ln -sf ${nss}/lib/libsoftokn3.so "$pkg_dir/libsoftokn3.so"
+    ln -sf ${nss}/lib/libssl3.so "$pkg_dir/libssl3.so"
+    ln -sf ${firefox-esr}/lib/firefox/libxul.so "$pkg_dir/libxul.so"
+
     mkdir -p "$out/bin"
-    ln -s "$prefix/usr/lib/zotero-bin-${version}/zotero" "$out/bin/"
+    ln -s "$pkg_dir/zotero" "$out/bin/"
 
     # Install desktop file and icons
     mkdir -p $out/share/applications
