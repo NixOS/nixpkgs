@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fio";
-  version = "3.39";
+  version = "3.40";
 
   src = fetchFromGitHub {
     owner = "axboe";
     repo = "fio";
     rev = "fio-${version}";
-    sha256 = "sha256-wM2MWsirhfpbqe9w21hbmXSWDKUfEM2B7K7QWHmMnmE=";
+    sha256 = "sha256-rfO4JEZ+B15NvR2AiTnlbQq++UchPYiXz3vVsFaG6r4=";
   };
 
   buildInputs = [
