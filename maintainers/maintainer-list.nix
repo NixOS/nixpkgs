@@ -22826,6 +22826,11 @@
     githubId = 10352679;
     name = "Simon Hammes";
   };
+  simonhollingshead = {
+    github = "simonhollingshead";
+    githubId = 3343403;
+    name = "Simon Hollingshead";
+  };
   simonkampe = {
     email = "simon.kampe+nix@gmail.com";
     github = "simonkampe";
