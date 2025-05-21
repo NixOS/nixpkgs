@@ -2076,6 +2076,8 @@ let
 
         type_id = callPackage ../development/ocaml-modules/type_id { };
 
+        tyre = callPackage ../development/ocaml-modules/tyre { };
+
         tyxml = callPackage ../development/ocaml-modules/tyxml { };
 
         tyxml-lwd = callPackage ../development/ocaml-modules/lwd/tyxml-lwd.nix { };
