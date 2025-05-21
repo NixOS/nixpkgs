@@ -7,7 +7,6 @@
   setuptools,
 
   # dependencies
-  bigquery-magics,
   google-api-core,
   google-cloud-bigquery-storage,
   google-cloud-core,
@@ -38,20 +37,24 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery";
-  version = "3.31.0";
+  version = "3.33.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-bigquery";
-    rev = "v${version}";
-    sha256 = "sha256-LvfL4U/7bP4XZD2Ebhw57pa9NPr/vOKn874WXZFSW14=";
+    tag = "v${version}";
+    sha256 = "sha256-5HgIsW+6nS9MVaO9J7ZFTf+OcsTa/SRhW2B/2FI6Tpg=";
   };
 
   build-system = [ setuptools ];
 
+  pythonRemoveDeps = [
+    # break recursive dependency loop
+    "bigquery-magics"
+  ];
+
   dependencies = [
-    bigquery-magics
     google-api-core
     google-cloud-bigquery-storage
     google-cloud-core
@@ -128,6 +131,14 @@ buildPythonPackage rec {
     "test_structs"
     "test_table_clones"
     "test_table_snapshots"
+
+    # requires bigquery-magics which causes a dependency loop
+    "test_query"
+    "test_query_with_parameters"
+
+    # _COORDINATE_REFERENCE_SYSTEM is not defined
+    "test_rowiterator_to_geodataframe_with_custom_dtypes"
+    "test_rowiterator_to_geodataframe_with_default_dtypes"
   ];
 
   disabledTestPaths = [
@@ -138,6 +149,10 @@ buildPythonPackage rec {
 
     # ModuleNotFoundError: No module named 'google.cloud.resourcemanager_v3'
     "tests/system/test_client.py"
+
+    # Not tests but examples
+    "docs/samples/"
+    "samples/"
   ];
 
   pythonImportsCheck = [
@@ -145,10 +160,12 @@ buildPythonPackage rec {
     "google.cloud.bigquery_v2"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Google BigQuery API client library";
     homepage = "https://github.com/googleapis/python-bigquery";
-    changelog = "https://github.com/googleapis/python-bigquery/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/python-bigquery/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sarahec ];
   };
