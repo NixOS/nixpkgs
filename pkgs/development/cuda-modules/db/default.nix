@@ -20,6 +20,7 @@ let
     ) (builtins.attrNames (builtins.readDir root));
   jsonToModule = import ./json.nix { inherit lib; };
   parseReleasesFile = import ./release_file.nix { inherit lib; };
+  modulesPath = ../../../../.;
 in
 {
   manifests ? intreeManifests, # :: List Path
@@ -31,6 +32,7 @@ let
   releasesModules = builtins.map parseReleasesFile releaseFiles;
   evaluated =
     evalModules {
+      specialArgs = { inherit modulesPath; };
       modules =
         extraModules
         ++ releasesModules
