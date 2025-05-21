@@ -842,6 +842,19 @@ in
       })
     );
 
+  # Returns the per-version dependencies for building kernel configs
+  configDepsFor =
+    version:
+    [ buildPackages.stdenv.cc ]
+    ++ lib.optionals (lib.versionAtLeast version "4.16") [
+      buildPackages.bison
+      buildPackages.flex
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "5.18") [
+      # See https://cateee.net/lkddb/web-lkddb/PAHOLE_VERSION.html
+      buildPackages.pahole
+    ];
+
   # Derive one of the default .config files
   linuxConfig =
     {
@@ -853,13 +866,7 @@ in
     }:
     stdenvNoCC.mkDerivation {
       inherit name src;
-      depsBuildBuild = [
-        buildPackages.stdenv.cc
-      ]
-      ++ lib.optionals (lib.versionAtLeast version "4.16") [
-        buildPackages.bison
-        buildPackages.flex
-      ];
+      depsBuildBuild = configDepsFor version;
       patches = map (p: p.patch) kernelPatches; # Patches may include new configs.
       postPatch = ''
         patchShebangs scripts/
@@ -870,6 +877,29 @@ in
           ARCH=${stdenv.hostPlatform.linuxArch} \
           HOSTCC=${buildPackages.stdenv.cc.targetPrefix}gcc \
           ${makeTarget}
+      '';
+      installPhase = ''
+        cp .config $out
+      '';
+    };
+
+  # Merge multiple kernel configs
+  mergeKernelConfigs =
+    {
+      src,
+      configs,
+
+      name ? "merged.config",
+      version ? (builtins.parseDrvName src.name).version,
+    }:
+    stdenvNoCC.mkDerivation {
+      inherit name src;
+      depsBuildBuild = configDepsFor version;
+      postPatch = ''
+        patchShebangs scripts/
+      '';
+      buildPhase = ''
+        ./scripts/kconfig/merge_config.sh ${lib.concatStringsSep " " configs}
       '';
       installPhase = ''
         cp .config $out
