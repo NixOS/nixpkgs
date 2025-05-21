@@ -34,6 +34,19 @@ buildPythonPackage rec {
     hash = "sha256-q8BoF/pUTW2GMKBhNsqWDBto5+nASanWifS9AcNRc8Q=";
   };
 
+  postPatch =
+    ''
+      substituteInPlace pyproject.toml \
+        --replace-fail "setuptools~=69.2.0" "setuptools" \
+        --replace-fail "wheel~=0.44.0" "wheel" \
+        --replace-fail "cython>=0.29.1,<=3.0.11" "cython" \
+        --replace-fail "packaging~=24.0" packaging
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace kivy/lib/mtdev.py \
+        --replace-fail "LoadLibrary('libmtdev.so.1')" "LoadLibrary('${mtdev}/lib/libmtdev.so.1')"
+    '';
+
   build-system = [
     setuptools
     cython
@@ -89,18 +102,6 @@ buildPythonPackage rec {
     ]
   );
 
-  postPatch =
-    ''
-      substituteInPlace pyproject.toml \
-        --replace-fail "setuptools~=69.2.0" "setuptools" \
-        --replace-fail "wheel~=0.44.0" "wheel" \
-        --replace-fail "cython>=0.29.1,<=3.0.11" "cython"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace kivy/lib/mtdev.py \
-        --replace-fail "LoadLibrary('libmtdev.so.1')" "LoadLibrary('${mtdev}/lib/libmtdev.so.1')"
-    '';
-
   /*
     We cannot run tests as Kivy tries to import itself before being fully
     installed.
@@ -109,8 +110,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "kivy" ];
 
   meta = with lib; {
+    changelog = "https://github.com/kivy/kivy/releases/tag/${src.tag}";
     description = "Library for rapid development of hardware-accelerated multitouch applications";
-    homepage = "https://pypi.python.org/pypi/kivy";
+    homepage = "https://github.com/kivy/kivy";
     license = licenses.mit;
     maintainers = with maintainers; [ risson ];
   };
