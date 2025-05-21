@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
 
   # build-system
@@ -58,6 +59,11 @@ buildPythonPackage rec {
 
     export HOME=$TMPDIR
   '';
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fatal Python error: Aborted
+    "test_invalid_model_path"
+  ];
 
   disabledTestPaths = [
     # TODO: ModuleNotFoundError: No module named 'opennmt'
