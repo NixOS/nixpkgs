@@ -28,7 +28,11 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ textfsm ];
+  pythonRelaxDeps = [
+    "textfsm"
+  ];
+
+  dependencies = [ textfsm ];
 
   nativeCheckInputs = [
     invoke
