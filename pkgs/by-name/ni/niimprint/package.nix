@@ -40,7 +40,7 @@ python3.pkgs.buildPythonPackage rec {
     description = "A command line tool to print to Niimbot label printers";
     homepage = "https://github.com/AndBondStyle/niimprint";
     license = licenses.mit; # Repository appears to use MIT license
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ nicodemus26 ];
     platforms = platforms.all;
   };
 }
