@@ -446,8 +446,8 @@ rec {
       "sha256-RQh46jrXqj4bXTRJ+tPR9sql7yUn7Ek9u4p0OU0A7b0=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.38.14"
-      "sha256-+EI+0aGCa21XL3qoAr821F/j8dJTCaLcVRKP743szUQ=";
+    buildMypyBoto3Package "ec2" "1.38.19"
+      "sha256-FonE4x7zpgXEgLAtwv2qJ1I//IRUHSvSvvCLmy8CF1Y=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.38.0"
@@ -878,8 +878,8 @@ rec {
       "sha256-QKKwwaJJ7o/FEWPQpLT7yMapG5DR6bn3UTt5XcMlN9A=";
 
   mypy-boto3-mediapackagev2 =
-    buildMypyBoto3Package "mediapackagev2" "1.38.0"
-      "sha256-f+MhMUbwcntEUONIzYIFCcJQgvNGeDZqhPbA4HJkVU8=";
+    buildMypyBoto3Package "mediapackagev2" "1.38.19"
+      "sha256-XgeZlI03x32rfCt02ozAxWLOe6CBV+6qzgKhxkC6pc8=";
 
   mypy-boto3-mediastore =
     buildMypyBoto3Package "mediastore" "1.38.0"
