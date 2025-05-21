@@ -1,0 +1,55 @@
+diff --git a/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java b/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java
+index 4d8c46f8d5..ed311226f0 100644
+--- a/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java
++++ b/src/main/java/com/google/devtools/build/lib/rules/repository/RepositoryDelegatorFunction.java
+@@ -178,18 +178,8 @@ public final class RepositoryDelegatorFunction implements SkyFunction {
+         }
+       }
+       if (shouldUseCachedRepos(env, handler, repoRoot, rule)) {
+-        // Make sure marker file is up-to-date; correctly describes the current repository state
+-        byte[] markerHash = digestWriter.areRepositoryAndMarkerFileConsistent(handler, env);
+-        if (env.valuesMissing()) {
+-          return null;
+-        }
+-        if (markerHash != null) { // repo exist & up-to-date
+-          return RepositoryDirectoryValue.builder()
+-              .setPath(repoRoot)
+-              .setDigest(markerHash)
+-              .setExcludeFromVendoring(shouldExcludeRepoFromVendoring(handler, rule))
+-              .build();
+-        }
++        // Nix hack: Always consider cached dirs as up-to-date
++        return RepositoryDirectoryValue.builder().setPath(repoRoot).setDigest(digestWriter.writeMarkerFile()).build();
+       }
+ 
+       /* At this point: This is a force fetch, a local repository, OR The repository cache is old or
+@@ -610,11 +600,12 @@ public final class RepositoryDelegatorFunction implements SkyFunction {
+         builder.append(escape(key)).append(" ").append(escape(value)).append("\n");
+       }
+       String content = builder.toString();
+-      try {
+-        FileSystemUtils.writeContent(markerPath, UTF_8, content);
+-      } catch (IOException e) {
+-        throw new RepositoryFunctionException(e, Transience.TRANSIENT);
+-      }
++      // Nix hack: Do not write these pesky marker files
++      //try {
++      //  FileSystemUtils.writeContent(markerPath, UTF_8, content);
++      //} catch (IOException e) {
++      //  throw new RepositoryFunctionException(e, Transience.TRANSIENT);
++      //}
+       return new Fingerprint().addString(content).digestAndReset();
+     }
+ 
+diff --git a/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java b/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java
+index 649647c5f2..64d05b530c 100644
+--- a/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java
++++ b/src/main/java/com/google/devtools/build/lib/shell/JavaSubprocessFactory.java
+@@ -165,7 +165,6 @@ public class JavaSubprocessFactory implements SubprocessFactory {
+     }
+     builder.command(argv);
+     if (params.getEnv() != null) {
+-      builder.environment().clear();
+       builder.environment().putAll(params.getEnv());
+     }
+ 

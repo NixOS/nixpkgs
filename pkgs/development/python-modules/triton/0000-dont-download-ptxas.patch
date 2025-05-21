@@ -1,0 +1,15 @@
+diff --git a/python/setup.py b/python/setup.py
+index 18764ec13..b3bb5b60a 100644
+--- a/python/setup.py
++++ b/python/setup.py
+@@ -269,10 +269,6 @@ class CMakeBuild(build_ext):
+         subprocess.check_call(["cmake", self.base_dir] + cmake_args, cwd=cmake_dir, env=env)
+         subprocess.check_call(["cmake", "--build", "."] + build_args, cwd=cmake_dir)
+ 
+-
+-download_and_copy_ptxas()
+-
+-
+ setup(
+     name="triton",
+     version="2.1.0",

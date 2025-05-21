@@ -1,0 +1,82 @@
+From 4ff06a845979bd65e672ff4ab09f5310c681e13b Mon Sep 17 00:00:00 2001
+From: Arthur Kiyanovski <akiyano@amazon.com>
+Date: Tue, 30 Jul 2024 05:06:14 +0000
+Subject: [PATCH] workaround patch for kernel 6.10
+
+Signed-off-by: Arthur Kiyanovski <akiyano@amazon.com>
+---
+ kernel/linux/ena/config/test_defs.sh | 12 ++++++++++++
+ kernel/linux/ena/ena_xdp.c           |  5 ++---
+ kernel/linux/ena/kcompat.h           | 12 +++++++++++-
+ 3 files changed, 25 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/linux/ena/config/test_defs.sh b/kernel/linux/ena/config/test_defs.sh
+index f8951c3..0cf366b 100755
+--- a/kernel/linux/ena/config/test_defs.sh
++++ b/kernel/linux/ena/config/test_defs.sh
+@@ -60,3 +60,15 @@ try_compile_async "#include <linux/etherdevice.h>"       \
+                   "ENA_HAVE_ETH_HW_ADDR_SET"             \
+                   ""                                     \
+                   "5.15.0 <= LINUX_VERSION_CODE"
++
++try_compile_async "#include <net/xdp_sock_drv.h>"        \
++                  "xsk_buff_dma_sync_for_cpu(NULL);"     \
++                  "ENA_XSK_BUFF_DMA_SYNC_SINGLE_ARG"     \
++                  ""                                     \
++                  "6.10.0 <= LINUX_VERSION_CODE"
++
++try_compile_async "#include <linux/skbuff.h>"            \
++                  "__napi_alloc_skb(NULL, 0, 0);"        \
++                  "ENA_NAPI_ALLOC_SKB_EXPLICIT_GFP_MASK" \
++                  ""                                     \
++                  "6.10.0 > LINUX_VERSION_CODE"
+diff --git a/kernel/linux/ena/ena_xdp.c b/kernel/linux/ena/ena_xdp.c
+index 204389f..ecbaa9f 100644
+--- a/kernel/linux/ena/ena_xdp.c
++++ b/kernel/linux/ena/ena_xdp.c
+@@ -746,9 +746,8 @@ static struct sk_buff *ena_xdp_rx_skb_zc(struct ena_ring *rx_ring, struct xdp_bu
+ 	data_addr = xdp->data;
+ 
+ 	/* allocate a skb to store the frags */
+-	skb = __napi_alloc_skb(rx_ring->napi,
+-			       headroom + data_len,
+-			       GFP_ATOMIC | __GFP_NOWARN);
++	skb = napi_alloc_skb(rx_ring->napi,
++			     headroom + data_len);
+ 	if (unlikely(!skb)) {
+ 		ena_increase_stat(&rx_ring->rx_stats.skb_alloc_fail, 1,
+ 				  &rx_ring->syncp);
+diff --git a/kernel/linux/ena/kcompat.h b/kernel/linux/ena/kcompat.h
+index 6d5a069..7511087 100644
+--- a/kernel/linux/ena/kcompat.h
++++ b/kernel/linux/ena/kcompat.h
+@@ -998,10 +998,11 @@ static inline bool ktime_after(const ktime_t cmp1, const ktime_t cmp2)
+ #if (LINUX_VERSION_CODE < KERNEL_VERSION(3, 19, 0)) && \
+ 	!(RHEL_RELEASE_CODE && \
+ 	(RHEL_RELEASE_CODE >= RHEL_RELEASE_VERSION(7, 2)))
++#define ENA_KCOMAPT_NAPI_ALLOC_SKB
+ static inline struct sk_buff *napi_alloc_skb(struct napi_struct *napi,
+ 					     unsigned int length)
+ {
+-	return netdev_alloc_skb_ip_align(napi->dev, length);
++	return __netdev_alloc_skb_ip_align(napi->dev, length, GFP_ATOMIC | __GFP_NOWARN);
+ }
+ #endif
+ 
+@@ -1150,4 +1151,13 @@ static inline int irq_update_affinity_hint(unsigned int irq, const struct cpumas
+ #define ethtool_puts ethtool_sprintf
+ #endif /* ENA_HAVE_ETHTOOL_PUTS */
+ 
++#ifdef ENA_XSK_BUFF_DMA_SYNC_SINGLE_ARG
++#include <net/xdp_sock_drv.h>
++#define xsk_buff_dma_sync_for_cpu(xdp, xsk_pool) xsk_buff_dma_sync_for_cpu(xdp)
++#endif /* ENA_XSK_BUFF_DMA_SYNC_SINGLE_ARG */
++
++#if defined(ENA_NAPI_ALLOC_SKB_EXPLICIT_GFP_MASK) && !defined(ENA_KCOMAPT_NAPI_ALLOC_SKB)
++#define napi_alloc_skb(napi, len) __napi_alloc_skb(napi, len, GFP_ATOMIC | __GFP_NOWARN)
++#endif /* ENA_NAPI_ALLOC_SKB_EXPLICIT_GFP_MASK && !ENA_KCOMAPT_NAPI_ALLOC_SKB*/
++
+ #endif /* _KCOMPAT_H_ */
+-- 
+2.40.1
+
