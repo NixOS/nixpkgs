@@ -113,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
       seanrmurphy
       dezren39
       ryand56
+      ezrizhu
     ];
     mainProgram = "wrangler";
     # Tunneling and other parts of wrangler, which require workerd won't run on
