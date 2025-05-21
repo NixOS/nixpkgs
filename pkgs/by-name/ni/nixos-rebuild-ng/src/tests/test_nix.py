@@ -78,7 +78,7 @@ def test_build_flake(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> 
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
-@patch(get_qualified_name(n.uuid4, n), autospec=True)
+@patch("uuid.uuid4", autospec=True)
 def test_build_remote(
     mock_uuid4: Mock, mock_run: Mock, monkeypatch: MonkeyPatch
 ) -> None:
