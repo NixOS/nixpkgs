@@ -30,7 +30,7 @@
   secp256k1,
   speex,
   udev,
-  webrtc-audio-processing,
+  webrtc-audio-processing_0_3,
   yaml-cpp,
   zlib,
 
@@ -228,7 +228,7 @@ stdenv.mkDerivation rec {
       secp256k1
       speex
       udev
-      webrtc-audio-processing
+      webrtc-audio-processing_0_3
       yaml-cpp
       zlib
     ];
