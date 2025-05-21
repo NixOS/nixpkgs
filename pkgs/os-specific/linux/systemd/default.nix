@@ -18,6 +18,7 @@
   glibcLocales,
   autoPatchelfHook,
   fetchpatch,
+  callPackage,
 
   # glib is only used during tests (test-bus-gvariant, test-bus-marshal)
   glib,
@@ -86,6 +87,10 @@
   # closure of GHC via emscripten and jdk.
   bpftools,
   libbpf,
+
+  # vmlinux.h file containing the kernel's BTF information,
+  # used throughout systemd's BPF programs.
+  vmlinux-btf ? callPackage ./vmlinux-btf.nix { },
 
   # Needed to produce a ukify that works for cross compiling UKIs.
   targetPackages,
@@ -615,6 +620,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "b_pie" true)
 
   ]
+  ++ lib.optionals withLibBPF [
+    (lib.mesonOption "vmlinux-h" "provided")
+    (lib.mesonOption "vmlinux-h-path" "${vmlinux-btf}/vmlinux.h")
+  ]
   ++ lib.optionals (withShellCompletions == false) [
     (lib.mesonOption "bashcompletiondir" "no")
     (lib.mesonOption "zshcompletiondir" "no")
@@ -936,6 +945,7 @@ stdenv.mkDerivation (finalAttrs: {
       withUtmp
       util-linux
       kmod
+      vmlinux-btf
       ;
 
     kbd = kbd';
