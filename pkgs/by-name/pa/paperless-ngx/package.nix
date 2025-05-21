@@ -313,7 +313,7 @@ python.pkgs.buildPythonApplication rec {
       tesseract5
       ;
     nltkData = with nltk-data; [
-      punkt_tab
+      punkt-tab
       snowball_data
       stopwords
     ];
