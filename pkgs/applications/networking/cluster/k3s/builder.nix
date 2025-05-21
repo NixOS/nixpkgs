@@ -333,16 +333,10 @@ let
     }).overrideAttrs
       overrideContainerdAttrs;
 
-  # TODO (#405952): remove this patch. We had to add it to avoid a mass rebuild
-  # for the 25.05 release. Once the above PR is merged, switch back to plain util-linuxMinimal.
-  k3sUtilLinux = util-linuxMinimal.overrideAttrs (prev: {
-    patches =
-      prev.patches or [ ]
-      ++ lib.singleton (fetchpatch {
-        url = "https://github.com/util-linux/util-linux/commit/7dbfe31a83f45d5aef2b508697e9511c569ffbc8.patch";
-        hash = "sha256-bJqpZiPli5Pm/XpDA445Ab5jesXrlcnaO6e4V0B3rSw=";
-      });
-  });
+  # TODO (#409339): remove this patch. We had to add it to avoid a mass rebuild
+  # for the 25.05 release. Once the staging cycle referenced in the above PR completes,
+  # switch back to plain util-linuxMinimal.
+  k3sUtilLinux = util-linuxMinimal.withPatches;
 in
 buildGoModule rec {
   pname = "k3s";
