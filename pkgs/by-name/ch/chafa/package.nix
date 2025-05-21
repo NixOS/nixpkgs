@@ -77,7 +77,10 @@ stdenv.mkDerivation rec {
     homepage = "https://hpjansson.org/chafa/";
     license = licenses.lgpl3Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.mog ];
+    maintainers = with maintainers; [
+      mog
+      prince213
+    ];
     mainProgram = "chafa";
   };
 }
