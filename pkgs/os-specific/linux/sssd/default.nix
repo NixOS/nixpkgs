@@ -34,6 +34,7 @@
   keyutils,
   dbus,
   fakeroot,
+  libcap,
   libxslt,
   libxml2,
   libuuid,
@@ -54,6 +55,7 @@
   nix-update-script,
   nixosTests,
   withSudo ? false,
+  ensureNewerSourcesForZipFilesHook,
 }:
 
 let
@@ -61,13 +63,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sssd";
-  version = "2.9.5";
+  version = "2.10.2";
 
   src = fetchFromGitHub {
     owner = "SSSD";
     repo = "sssd";
     tag = finalAttrs.version;
-    hash = "sha256-wr6qFgM5XN3aizYVquj0xF+mVRgrkLWWhA3/gQOK8hQ=";
+    hash = "sha256-S4OJtG4hNQ0G5Qg1eD1pvJ6wihW7m+zB3i5izV3ZkR8=";
   };
 
   postPatch = ''
@@ -93,7 +95,10 @@ stdenv.mkDerivation (finalAttrs: {
         --with-os=fedora
         --with-pid-path=/run
         --with-python3-bindings
+        --without-python2-bindings
         --with-syslog=journald
+        --with-initscript=systemd
+        --with-systemdunitdir=$out/etc/systemd/system
         --without-selinux
         --without-semanage
         --with-xml-catalog-path=''${SGML_CATALOG_FILES%%:*}
@@ -114,6 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pkg-config
     doxygen
+    ensureNewerSourcesForZipFilesHook
   ];
   buildInputs = [
     augeas
@@ -132,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
       p: with p; [
         distutils
         python-ldap
+        setuptools
       ]
     ))
     popt
@@ -148,6 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
     keyutils
     dbus
     fakeroot
+    libcap
     libxslt
     libxml2
     libuuid
