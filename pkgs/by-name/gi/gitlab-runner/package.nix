@@ -22,7 +22,7 @@ buildGoModule rec {
   vendorHash = "sha256-1MwHss76apA9KoFhEU6lYiUACrPMGYzjhds6nTyNuJI=";
 
   # For patchShebangs
-  nativeBuildInputs = [ bash ];
+  buildInputs = [ bash ];
 
   patches = [
     ./fix-shell-path.patch
