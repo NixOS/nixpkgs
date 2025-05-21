@@ -72,12 +72,12 @@ stdenv.mkDerivation rec {
     installShellCompletion --cmd chafa tools/completions/zsh-completion.zsh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Terminal graphics for the 21st century";
     homepage = "https://hpjansson.org/chafa/";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       mog
       prince213
     ];
