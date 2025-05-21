@@ -20,6 +20,7 @@
   autoreconfHook,
   zlib,
   openssl,
+  softhsm,
   libedit,
   ldns,
   pkg-config,
@@ -133,7 +134,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false;
   enableParallelChecking = false;
-  nativeCheckInputs = [ openssl ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) hostname;
+  nativeCheckInputs = [
+    openssl
+    softhsm
+  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) hostname;
   preCheck = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     # construct a dummy HOME
     export HOME=$(realpath ../dummy-home)
@@ -177,6 +181,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     # set up NIX_REDIRECTS for direct invocations
     set -a; source ~/.ssh/environment.base; set +a
+
+    # The extra tests check PKCS#11 interactions, which softhsm emulates with software only
+    substituteInPlace regress/test-exec.sh \
+      --replace /usr/local/lib/softhsm/libsofthsm2.so ${lib.getLib softhsm}/lib/softhsm/libsofthsm2.so
   '';
   # integration tests hard to get working on darwin with its shaky
   # sandbox
@@ -188,6 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
       "unit"
       "file-tests"
       "interop-tests"
+      "extra-tests"
     ];
 
   postInstall = ''
