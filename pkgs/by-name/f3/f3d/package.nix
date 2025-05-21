@@ -84,6 +84,7 @@ stdenv.mkDerivation rec {
       "-DF3D_MODULE_EXTERNAL_RENDERING=ON"
       "-DF3D_PLUGIN_BUILD_ASSIMP=ON"
       "-DF3D_PLUGIN_BUILD_OCCT=ON"
+      "-DF3D_LINUX_INSTALL_DEFAULT_CONFIGURATION_FILE_IN_PREFIX=ON"
     ]
     ++ lib.optionals withManual [
       "-DF3D_LINUX_GENERATE_MAN=ON"
@@ -94,6 +95,11 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withUsd [
       "-DF3D_PLUGIN_BUILD_USD=ON"
     ];
+
+  # Install default configuration files, config and thumbnail.
+  postInstall = ''
+    cmake --install . --component configuration
+  '';
 
   meta = with lib; {
     description = "Fast and minimalist 3D viewer using VTK";
