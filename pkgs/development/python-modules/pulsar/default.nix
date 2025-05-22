@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pulsar";
-  version = "3.6.1";
+  version = "3.7.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "pulsar-client-python";
     tag = "v${version}";
-    hash = "sha256-KdPLp0BmZnobU4F6tuMj2DY/ya4QHeGcM/eEAivoXNI=";
+    hash = "sha256-M8Y72VgtPdM80AO9jRyyyOFW6wQ7dbKH33alLWcTLV8=";
   };
 
   disabled = pythonOlder "3.7";
