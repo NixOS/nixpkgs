@@ -12,6 +12,7 @@
   npmHooks,
   python3,
   rustc,
+  versionCheckHook,
   wasm-bindgen-cli_0_2_92,
   wasm-pack,
 }:
@@ -167,6 +168,12 @@ rustPlatform.buildRustPackage rec {
   '';
 
   buildFeatures = [ "extended" ];
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   meta = {
     description = "Generate low-bandwidth search index for your static website";
