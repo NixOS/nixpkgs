@@ -141,6 +141,10 @@ buildGoModule {
 
           # flaky: https://github.com/tailscale/tailscale/issues/11762
           "TestTwoDevicePing"
+
+          # timeout 10m
+          "TestTaildropIntegration"
+          "TestTaildropIntegration_Fresh"
         ]
         ++ lib.optionals stdenv.hostPlatform.isDarwin [
           # syscall default route interface en0 differs from netstat
