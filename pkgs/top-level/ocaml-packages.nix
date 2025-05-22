@@ -202,6 +202,8 @@ let
           git-binary = pkgs.git;
         };
 
+        cbor = callPackage ../development/ocaml-modules/cbor { };
+
         cfstream = callPackage ../development/ocaml-modules/cfstream { };
 
         chacha = callPackage ../development/ocaml-modules/chacha { };
