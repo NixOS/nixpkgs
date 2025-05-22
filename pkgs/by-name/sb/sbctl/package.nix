@@ -11,7 +11,7 @@
 
 buildGoModule rec {
   pname = "sbctl";
-  version = "0.16";
+  version = "0.17";
 
   src = fetchFromGitHub {
     owner = "Foxboron";
@@ -63,6 +63,7 @@ buildGoModule rec {
     homepage = "https://github.com/Foxboron/sbctl";
     license = licenses.mit;
     maintainers = with maintainers; [
+      Pokeylooted
       raitobezarius
       Scrumplex
     ];
