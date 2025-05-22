@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "ulid";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "oklog";
     repo = "ulid";
     rev = "v${version}";
-    hash = "sha256-/oQPgcO1xKbHXutxz0WPfIduShPrfH1l+7/mj8jLst8=";
+    hash = "sha256-kPNLaZMGwGc7ngPCivf/n4Bis219yOkGAaa6mt7+yTY=";
   };
 
   vendorHash = "sha256-s1YkEwFxE1zpUUCgwOAl8i6/9HB2rcGG+4kqnixTit0=";
