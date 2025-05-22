@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   enableVTK ? true,
   vtk,
@@ -18,14 +19,26 @@
 
 stdenv.mkDerivation rec {
   pname = if enablePython then "python-gdcm" else "gdcm";
-  version = "3.0.24";
+  version = "3.0.25";
 
   src = fetchFromGitHub {
     owner = "malaterre";
     repo = "GDCM";
     tag = "v${version}";
-    hash = "sha256-Zlb6UCP4aFZOJJNhFQBBrwzst+f37gs1zaCBMTOUgZE=";
+    hash = "sha256-PYVVlSqeAZCWvnWPqqWGQIWatMfPYqnrXc7cqi8UseU=";
   };
+
+  patches =
+    [
+      ./add-missing-losslylosslessarray-in-TestTransferSyntax.patch
+    ]
+    ++ lib.optionals (lib.versionOlder vtk.version "9.3") [
+      (fetchpatch2 {
+        url = "https://github.com/malaterre/GDCM/commit/3be6c2fa0945c91889bcf06e8c20e88f69692dd5.patch?full_index=1";
+        hash = "sha256-Yt5f4mxhP5n+L0A/CRq3CxKCqUT7LZ8uKdbCf9P71Zc=";
+        revert = true;
+      })
+    ];
 
   cmakeFlags =
     [
