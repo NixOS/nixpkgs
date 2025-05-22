@@ -1,9 +1,16 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   rustPlatform,
   versionCheckHook,
   nix-update-script,
+
+  # tests
+  nodejs,
+  python3,
+  php,
+  ruby,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -20,8 +27,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   useFetchCargoVendor = true;
   cargoHash = "sha256-JaYr6J3NOwVIHzGO4wLkke5O/T/9WUDENPgLP5Fwyhg=";
 
-  # tests require mask to be installed
-  doCheck = false;
+  preCheck = ''
+    export PATH=$PATH:$PWD/target/${stdenv.hostPlatform.rust.rustcTarget}/$cargoBuildType
+  '';
+
+  nativeCheckInputs = [
+    nodejs
+    python3
+    php
+    ruby
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
