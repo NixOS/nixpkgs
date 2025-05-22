@@ -28,26 +28,25 @@ rec {
   };
   _file = if builtins.isPath arg then arg else ./release_file.nix;
   imports = lib.flatten (
-    builtins.attrValues (
-      lib.mapAttrs (
-        pname:
-        { releases }:
-        lib.concatMap (
-          nameValue:
-          let
-            systemNv = nameValue.name;
-            packages = nameValue.value;
-          in
-          builtins.map (p: {
-            archive.bucket.${pname}.${p.version}.${p.hash} = 1;
-            archive.sha256.${p.hash} = {
-              inherit systemNv;
-              url = "${lib.replaceStrings [ "{version}" ] [ p.version ] config.trt_base_url}${p.filename}";
-            };
-          }) packages
-        ) (lib.attrsToList releases)
+    lib.mapAttrsToList (
+      pname:
+      { releases }:
+      lib.concatMap (
+        nameValue:
+        let
+          systemNv = nameValue.name;
+          packages = nameValue.value;
+        in
+        builtins.map (p: {
+          archive.bucket.${pname}.${p.version}.${p.hash} = 1;
+          archive.sha256.${p.hash} = {
+            inherit systemNv;
+            url = "${lib.replaceStrings [ "{version}" ] [ p.version ] config.trt_base_url}${p.filename}";
+          };
+        }) packages
+      ) (lib.attrsToList releases)
 
-      ) attrs
-    )
+    ) attrs
+
   );
 }
