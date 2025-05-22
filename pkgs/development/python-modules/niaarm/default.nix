@@ -37,6 +37,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "numpy"
     "scikit-learn"
+    "plotly"
   ];
 
   build-system = [ poetry-core ];
