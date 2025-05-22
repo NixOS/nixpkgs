@@ -18,14 +18,16 @@
 
 stdenv.mkDerivation rec {
   pname = if enablePython then "python-gdcm" else "gdcm";
-  version = "3.0.24";
+  version = "3.0.25";
 
   src = fetchFromGitHub {
     owner = "malaterre";
     repo = "GDCM";
     tag = "v${version}";
-    hash = "sha256-Zlb6UCP4aFZOJJNhFQBBrwzst+f37gs1zaCBMTOUgZE=";
+    hash = "sha256-PYVVlSqeAZCWvnWPqqWGQIWatMfPYqnrXc7cqi8UseU=";
   };
+
+  patches = [ ./add-missing-losslylosslessarray-in-TestTransferSyntax.patch ];
 
   cmakeFlags =
     [
