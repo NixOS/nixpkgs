@@ -42,13 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches =
-    [
-      # This is needed by freeimage
-      ./0001-Compile-transupp.c-as-part-of-the-library.patch
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [
-      ./0002-Make-exported-symbols-in-transupp.c-weak.patch
-    ]
+    [ ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW [
       ./mingw-boolean.patch
     ];
@@ -56,15 +50,10 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "bin"
     "dev"
-    "dev_private"
     "out"
     "man"
     "doc"
   ];
-
-  postFixup = ''
-    moveToOutput include/transupp.h $dev_private
-  '';
 
   nativeBuildInputs =
     [
@@ -100,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+    dev_private = throw "not supported anymore";
     tests = {
       inherit
         dvgrab
