@@ -1,0 +1,37 @@
+From e59bb88b413fa3fb6b074963d82a634a0a410885 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Fri, 16 May 2025 22:55:03 +0200
+Subject: [PATCH] treewide: Add missing LDM include dirs
+
+---
+ src/com/lomiri/content/service/CMakeLists.txt | 1 +
+ tests/acceptance-tests/CMakeLists.txt         | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/src/com/lomiri/content/service/CMakeLists.txt b/src/com/lomiri/content/service/CMakeLists.txt
+index 90b8b8b..f85c5e0 100644
+--- a/src/com/lomiri/content/service/CMakeLists.txt
++++ b/src/com/lomiri/content/service/CMakeLists.txt
+@@ -31,6 +31,7 @@ include_directories(
+   ${CMAKE_SOURCE_DIR}/src/com/lomiri/content
+   ${GIO_INCLUDE_DIRS}
+   ${GSETTINGS_INCLUDE_DIRS}
++  ${LOMIRI_DOWNLOAD_MANAGER_INCLUDE_DIRS}
+   ${LOMIRI_LAUNCH_INCLUDE_DIRS}
+   ${LIBERTINE_INCLUDE_DIRS}
+ )
+diff --git a/tests/acceptance-tests/CMakeLists.txt b/tests/acceptance-tests/CMakeLists.txt
+index ea243b1..82ba7da 100644
+--- a/tests/acceptance-tests/CMakeLists.txt
++++ b/tests/acceptance-tests/CMakeLists.txt
+@@ -51,6 +51,7 @@ foreach(test ${TESTS})
+     ${${test}_SOURCES}
+   )
+   find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Test)
++  target_include_directories(${test} PRIVATE ${LOMIRI_DOWNLOAD_MANAGER_INCLUDE_DIRS})
+   target_link_libraries(${test} Qt::Core Qt::Gui Qt::DBus Qt::Test)
+ 
+   target_link_libraries(${test}
+-- 
+2.47.2
+
