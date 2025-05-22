@@ -104,10 +104,6 @@ in
           Packages (`pname`, `version`) published in each release (`productName`, `productVersion)`, or, in NVIDIA manifests, `(release_product, release_label)`)'';
       };
 
-      # ∷ PName ⇒ Version ⇒ Set<SHA256>
-      archive.bucket = mkColumnOption cudb.package.pname (attrsOf SetOfStr) {
-        description = "`∷ PName ⇒ Version ⇒ SHA256 ⇒ ()`";
-      };
       archive.sha256 = mkOption {
         description = "`∷ SHA256 ⇒ { URL, SystemStringNvidia, CompatibilityTag ⇒ () }`";
         type = attrsOf (submodule {
@@ -147,6 +143,16 @@ in
           name = mkColumnOption index (nullOr str) {
             description = ''
               `∷ PName ⇒ Maybe String`
+            '';
+          };
+
+          # ∷ PName ⇒ Version ⇒ Set<SHA256>
+          version = mkColumnOption cudb.package.pname (attrsOf SetOfStr) {
+            description = ''
+              `∷ PName ⇒ Version ⇒ SHA256 ⇒ ()`
+
+              For each `pname`, lists known versions of the package, with
+              references to the corresponding `archive.sha256` entries.
             '';
           };
 
@@ -341,7 +347,6 @@ in
       ++ assertCompleteTable "pname" cudb.package
       ++ assertCompleteTable "shortName" cudb.license
       ++ assertCompleteTable "nvidia" cudb.system
-      ++ assertComplete "pname" cudb.package.pname "archive.bucket" cudb.archive.bucket
       ++ lib.flatten (
         builtins.attrValues (
           lib.mapAttrs (

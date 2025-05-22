@@ -182,7 +182,7 @@ in
             release.${productName}.${pname} = {
               ${releaseLabel} = otherAttrs.version;
             };
-            archive.bucket.${pname}.${otherAttrs.version}.${rawPackage.sha256} = 1;
+            package.version.${pname}.${otherAttrs.version}.${rawPackage.sha256} = 1;
             archive.sha256.${rawPackage.sha256} =
               {
                 inherit systemNv;

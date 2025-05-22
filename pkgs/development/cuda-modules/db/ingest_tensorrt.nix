@@ -38,7 +38,7 @@ rec {
           packages = nameValue.value;
         in
         builtins.map (p: {
-          archive.bucket.${pname}.${p.version}.${p.hash} = 1;
+          package.version.${pname}.${p.version}.${p.hash} = 1;
           archive.sha256.${p.hash} = {
             inherit systemNv;
             url = "${lib.replaceStrings [ "{version}" ] [ p.version ] config.trt_base_url}${p.filename}";
