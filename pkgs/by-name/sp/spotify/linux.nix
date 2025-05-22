@@ -48,20 +48,6 @@
 }:
 
 let
-  # TO UPDATE: just execute the ./update.sh script (won't do anything if there is no update)
-  # "rev" decides what is actually being downloaded
-  # If an update breaks things, one of those might have valuable info:
-  # https://aur.archlinux.org/packages/spotify/
-  # https://community.spotify.com/t5/Desktop-Linux
-  version = "1.2.59.514.g834e17d4";
-  # To get the latest stable revision:
-  # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/spotify?channel=stable' | jq '.download_url,.version,.last_updated'
-  # To get general information:
-  # curl -H 'Snap-Device-Series: 16' 'https://api.snapcraft.io/v2/snaps/info/spotify' | jq '.'
-  # More examples of api usage:
-  # https://github.com/canonical-websites/snapcraft.io/blob/master/webapp/publisher/snaps/views.py
-  rev = "86";
-
   deps = [
     alsa-lib
     at-spi2-atk
@@ -110,11 +96,24 @@ let
     xorg.libXtst
     zlib
   ];
-
 in
+stdenv.mkDerivation (finalAttrs: {
+  inherit pname;
 
-stdenv.mkDerivation {
-  inherit pname version;
+  # TO UPDATE: just execute the ./update.sh script (won't do anything if there is no update)
+  # "rev" decides what is actually being downloaded
+  # If an update breaks things, one of those might have valuable info:
+  # https://aur.archlinux.org/packages/spotify/
+  # https://community.spotify.com/t5/Desktop-Linux
+  version = "1.2.59.514.g834e17d4";
+
+  # To get the latest stable revision:
+  # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/spotify?channel=stable' | jq '.download_url,.version,.last_updated'
+  # To get general information:
+  # curl -H 'Snap-Device-Series: 16' 'https://api.snapcraft.io/v2/snaps/info/spotify' | jq '.'
+  # More examples of api usage:
+  # https://github.com/canonical-websites/snapcraft.io/blob/master/webapp/publisher/snaps/views.py
+  rev = "86";
 
   # fetch from snapcraft instead of the debian repository most repos fetch from.
   # That is a bit more cumbersome. But the debian repository only keeps the last
@@ -125,8 +124,8 @@ stdenv.mkDerivation {
   # spotify ourselves:
   # https://community.spotify.com/t5/Desktop-Linux/Redistribute-Spotify-on-Linux-Distributions/td-p/1695334
   src = fetchurl {
-    name = "spotify-${version}-${rev}.snap";
-    url = "https://api.snapcraft.io/api/v1/snaps/download/pOBIoZ2LrCB3rDohMxoYGnbN14EHOgD7_${rev}.snap";
+    name = "spotify-${finalAttrs.version}-${finalAttrs.rev}.snap";
+    url = "https://api.snapcraft.io/api/v1/snaps/download/pOBIoZ2LrCB3rDohMxoYGnbN14EHOgD7_${finalAttrs.rev}.snap";
     hash = "sha512-b9VlPwZ6JJ7Kt2p0ji1qtTJQHZE9d4KBO3iqQwsYh6k+ljtV/mSdinZi+B//Yb+KXhMErd0oaVzIpCCMqft6FQ==";
   };
 
@@ -151,10 +150,10 @@ stdenv.mkDerivation {
       echo "You probably chose the wrong revision."
       exit 1
     fi
-    if ! grep -q '${version}' meta/snap.yaml; then
+    if ! grep -q '${finalAttrs.version}' meta/snap.yaml; then
       echo "Package version differs from version found in snap metadata:"
       grep 'version: ' meta/snap.yaml
-      echo "While the nix package specifies: ${version}."
+      echo "While the nix package specifies: ${finalAttrs.version}."
       echo "You probably chose the wrong revision or forgot to update the nix version."
       exit 1
     fi
@@ -238,4 +237,4 @@ stdenv.mkDerivation {
       ma27
     ];
   };
-}
+})
