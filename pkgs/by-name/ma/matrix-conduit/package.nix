@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitLab {
     owner = "famedly";
     repo = "conduit";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cLPfgRchYLJXA13Xr1Yg3v+O/7SvxWYIAxaKvnsm7HM=";
   };
 
