@@ -5,37 +5,37 @@
   bison,
   c-ares,
   cmake,
-  curl,
   fetchFromGitHub,
+  fetchpatch,
   flex,
   jemalloc,
   libbacktrace,
   libbpf,
-  libnghttp2,
+  nghttp2,
   libpq,
   libyaml,
   luajit,
   nix-update-script,
   nixosTests,
+  msgpack-c,
   openssl,
   pkg-config,
   rdkafka,
+  sqlite,
   systemd,
   versionCheckHook,
-  zlib,
   zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fluent-bit";
-  # FIXME: We are deliberately on 3.2.6 as 3.2.7 and above are causing segfaults (https://github.com/fluent/fluent-bit/issues/10139)
-  version = "3.2.6";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-bit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-S0sb954n17z+zrVNkYd6yiV01aNbOLJLOV+34PRkSXQ=";
+    hash = "sha256-UMWYybrk0TRV5adFbL2J0EOjOUvv7vQgas36CpaJG9I=";
   };
 
   # The source build documentation covers some dependencies and CMake options.
@@ -49,15 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Fortunately, there's the undocumented `FLB_PREFER_SYSTEM_LIBS` CMake option to link against system libraries for
   # some dependencies.
   #
-  # See https://github.com/fluent/fluent-bit/blob/v3.2.6/CMakeLists.txt#L211-L218.
-  #
-  # Like `FLB_PREFER_SYSTEM_LIBS`, several CMake options aren't documented.
-  #
-  # See https://github.com/fluent/fluent-bit/blob/v3.2.6/CMakeLists.txt#L111-L157.
-  #
-  # The CMake options may differ across target platforms. We'll stick to the minimum.
-  #
-  # See https://github.com/fluent/fluent-bit/tree/v3.2.6/packaging/distros.
+  # See https://github.com/fluent/fluent-bit/blob/v4.0.2/CMakeLists.txt#L245
 
   strictDeps = true;
 
@@ -72,19 +64,16 @@ stdenv.mkDerivation (finalAttrs: {
     [
       arrow-glib
       c-ares
-      # Needed by rdkafka.
-      curl
       jemalloc
       libbacktrace
-      libnghttp2
+      nghttp2.dev
+      msgpack-c
       libpq
       libyaml
       luajit
       openssl
       rdkafka
-      # Needed by rdkafka.
-      zlib
-      # Needed by rdkafka.
+      sqlite.dev
       zstd
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -92,6 +81,13 @@ stdenv.mkDerivation (finalAttrs: {
       libbpf
       systemd
     ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/fluent/fluent-bit/pull/10387/commits/8b42317b4b6da9836bd8506e2f38164bf0bfb3df.patch";
+      hash = "sha256-kBQrfnOVBTILEtv+5rqvwo5oKS1reTiM8RPlCX917eM=";
+    })
+  ];
 
   cmakeFlags =
     [
