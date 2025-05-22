@@ -10,7 +10,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchzip {
     url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v${version}/FontPatcher.zip";
-    sha256 = "sha256-qPEeUR7Xxp6WaAhYwGtQpkPqd1LibVzRPdXlzFOrF2A=";
+    sha256 = "sha256-koZj0Tn1HtvvSbQGTc3RbXQdUU4qJwgClOVq1RXW6aM=";
     stripRoot = false;
   };
 
