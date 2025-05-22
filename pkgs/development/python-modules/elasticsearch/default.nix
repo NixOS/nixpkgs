@@ -10,7 +10,7 @@
   python-dateutil,
   pythonOlder,
   requests,
-  typing-extensions
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
