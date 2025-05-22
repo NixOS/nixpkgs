@@ -1,0 +1,12 @@
+diff --git a/lasso/xml/tools.c b/lasso/xml/tools.c
+index 385858d174..bbc87d9f1e 100644
+--- a/lasso/xml/tools.c
++++ b/lasso/xml/tools.c
+@@ -47,6 +47,7 @@
+ #include <libxml/xmlIO.h>
+ 
+ #include <openssl/evp.h>
++#include <openssl/pem.h>
+ 
+ #include <xmlsec/base64.h>
+ #include <xmlsec/crypto.h>

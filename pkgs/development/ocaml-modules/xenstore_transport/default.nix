@@ -8,7 +8,7 @@
 
 buildDunePackage rec {
   pname = "xenstore_transport";
-  version = "1.3.0";
+  version = "1.4.0";
 
   minimalOCamlVersion = "4.08";
   duneVersion = "3";
@@ -17,7 +17,7 @@ buildDunePackage rec {
     owner = "xapi-project";
     repo = "ocaml-xenstore-clients";
     rev = "v${version}";
-    sha256 = "1kxxd9i4qiq98r7sgvl59iq2ni7y6drnv48qj580q5cyiyyc85q3";
+    sha256 = "sha256-8dN8dgwhVrBgjmPHxFfPvmDlhz7eUaG0R0M8ACNhhFk=";
   };
 
   propagatedBuildInputs = [

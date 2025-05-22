@@ -103,9 +103,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [
       nadiaholmquist
-      grimmauld
-      marcin-serwin
     ];
+    teams = [ lib.teams.sdl ];
     platforms = lib.platforms.all;
     pkgConfigModules = [
       "sdl2-compat"

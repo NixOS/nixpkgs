@@ -24,8 +24,8 @@ let
     sha256Hash = "sha256-tPRTDFyKGPR1DKuJRBcwjWjNxylS/8Zv/Nd6vBmcujg=";
   };
   latestVersion = {
-    version = "2025.1.1.9"; # "Android Studio Narwhal | 2025.1.1 Canary 9"
-    sha256Hash = "sha256-4xgaGqVAK7Lrk6IleeekupApJZVNhNmCzSacHzr47f8=";
+    version = "2025.1.1.10"; # "Android Studio Narwhal | 2025.1.1 Canary 10"
+    sha256Hash = "sha256-GKLOlDkA4hSbKeI3Oob3Pmfxq0ji+q2yTK/z2jPV8FU=";
   };
 in
 {

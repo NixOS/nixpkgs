@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lib60870";
-  version = "2.3.4";
+  version = "2.3.5";
 
   src = fetchFromGitHub {
     owner = "mz-automation";
     repo = "lib60870";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bPBDM+/1+mIj5BSLukV/nYwOGUo4riGCBC61z3YKAkQ=";
+    hash = "sha256-TjphTBBGjzbevUR0N1GHK/nic1pAdjWeiqxEMLozQOc=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/lib60870-C";

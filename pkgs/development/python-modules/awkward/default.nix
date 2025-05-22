@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "2.8.2";
+  version = "2.8.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "awkward";
     tag = "v${version}";
-    hash = "sha256-OpEzctuCah/ueqw/D7ZadDLJLD3HqSdgAjFcEHhR47A=";
+    hash = "sha256-l7XCgD5UvQTva3lsKZmFSIT0nxReGuslWWuar31+pQQ=";
   };
 
   build-system = [

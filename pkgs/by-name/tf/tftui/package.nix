@@ -2,11 +2,11 @@
   lib,
   fetchFromGitHub,
   makeWrapper,
-  python3,
+  python3Packages,
   enableUsageTracking ? false,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "tftui";
   version = "0.13.5";
   pyproject = true;
@@ -19,15 +19,17 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   pythonRelaxDeps = [
+    "posthog"
     "textual"
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = [
     makeWrapper
-    poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = [ python3Packages.poetry-core ];
+
+  dependencies = with python3Packages; [
     posthog
     pyperclip
     requests

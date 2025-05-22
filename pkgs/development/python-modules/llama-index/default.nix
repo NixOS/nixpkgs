@@ -1,6 +1,6 @@
 {
   buildPythonPackage,
-  poetry-core,
+  hatchling,
   llama-index-agent-openai,
   llama-index-cli,
   llama-index-core,
@@ -22,7 +22,7 @@ buildPythonPackage {
 
   pyproject = true;
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   pythonRelaxDeps = [
     "llama-index-core"

@@ -12,11 +12,23 @@ import ./make-test-python.nix (
     };
     nodes.auditd = {
       security.auditd.enable = true;
+      security.audit.enable = true;
       environment.systemPackages = [ pkgs.audit ];
+      boot.kernel.sysctl."kernel.printk_ratelimit" = 0;
+      boot.kernelParams = [ "audit_backlog_limit=8192" ];
     };
     nodes.journaldAudit = {
       services.journald.audit = true;
+      security.audit.enable = true;
       environment.systemPackages = [ pkgs.audit ];
+      boot.kernel.sysctl."kernel.printk_ratelimit" = 0;
+      boot.kernelParams = [ "audit_backlog_limit=8192" ];
+    };
+    nodes.containerCheck = {
+      containers.c1 = {
+        autoStart = true;
+        config = { };
+      };
     };
 
     testScript = ''
@@ -50,6 +62,16 @@ import ./make-test-python.nix (
         # logs ideally should NOT end up in kmesg, but they do due to
         # https://github.com/systemd/systemd/issues/15324
         journaldAudit.succeed("journalctl _TRANSPORT=kernel --grep 'unit=systemd-journald'")
+
+
+      with subtest("container systemd-journald-audit not running"):
+        containerCheck.wait_for_unit("multi-user.target");
+        containerCheck.wait_until_succeeds("systemctl -M c1 is-active default.target");
+
+        # systemd-journald-audit.socket should exist but not run due to the upstream unit's `Condition*` settings
+        (status, output) = containerCheck.execute("systemctl -M c1 is-active systemd-journald-audit.socket")
+        containerCheck.log(output)
+        assert status == 3 and output == "inactive\n", f"systemd-journald-audit.socket should exist in a container but remain inactive, was {output}"
     '';
   }
 )

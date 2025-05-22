@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "langgraph-cli";
-  version = "0.2.8";
+  version = "0.2.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "cli==${version}";
-    hash = "sha256-WK31FbAqJRkJfNFMWZfnUJx0Gavu7HfcNrWBqRwiK3k=";
+    hash = "sha256-gSiyFjk1lXiCv7JpX4J00WAPoMv4VsXDuCswbFhP2kY=";
   };
 
   sourceRoot = "${src.name}/libs/cli";
@@ -68,7 +68,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Official CLI for LangGraph API";
-    homepage = "https://github.com/langchain-ai/langgraph/libs/cli";
+    homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/cli";
     changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${version}";
     mainProgram = "langgraph";
     license = lib.licenses.mit;

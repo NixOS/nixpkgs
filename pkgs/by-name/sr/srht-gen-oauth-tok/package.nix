@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-GcqP3XbVw2sR5n4+aLUmA4fthNkuVAGnhV1h7suJYdI=";
   };
 
+  patches = [ ./fix-html-parsing.patch ];
+
   buildInputs = [ perl ];
   nativeBuildInputs = [ perl ];
 

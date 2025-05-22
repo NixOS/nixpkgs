@@ -25,14 +25,14 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "awsebcli";
-  version = "3.23.3";
+  version = "3.24";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-elastic-beanstalk-cli";
     tag = version;
-    hash = "sha256-Jaj90NRCwaxRQQlB4s4Us+liYiNohpwRsHuvKM5WmbU=";
+    hash = "sha256-i1CcOlrrtizvQMXKoj5xQYlmaTB8JWb4X5S+EcnQXps=";
   };
 
   pythonRelaxDeps = [
@@ -50,6 +50,7 @@ python.pkgs.buildPythonApplication rec {
     botocore
     cement
     colorama
+    fabric
     pathspec
     pyyaml
     future

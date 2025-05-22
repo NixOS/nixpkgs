@@ -10,10 +10,7 @@
 {
   name = testName;
 
-  meta = {
-    platforms = lib.platforms.linux;
-    maintainers = lib.teams.cosmic.members;
-  };
+  meta.maintainers = lib.teams.cosmic.members;
 
   nodes.machine = {
     imports = [ ./common/user-account.nix ];

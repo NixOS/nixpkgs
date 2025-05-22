@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     gettext
+    glib # for glib-genmarshal
     libxslt
     docbook-xsl-nons
     docbook_xml_dtd_43
@@ -87,6 +88,7 @@ stdenv.mkDerivation rec {
   # - https://github.com/NixOS/nixpkgs/issues/51121
   # - At least “gnome-keyring:gkm::xdg-store / xdg-trust” is still flaky on 48.beta.
   doCheck = false;
+  strictDeps = true;
 
   checkPhase = ''
     runHook postCheck

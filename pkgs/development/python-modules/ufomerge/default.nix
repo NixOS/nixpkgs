@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "ufomerge";
-  version = "1.9.1";
+  version = "1.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "ufomerge";
     tag = "v${version}";
-    hash = "sha256-Efpfmow9tfPcE9ri13CKfahBDjaiMK1NBUAbG8FhYlM=";
+    hash = "sha256-vGRNfLZoI0ufEbfdGdyUyL9sS+9HdpeUj7ztqaQHI0I=";
   };
 
   build-system = [

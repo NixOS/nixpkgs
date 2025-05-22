@@ -24,12 +24,12 @@
   sassc,
   pythonOlder,
   minify,
-  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "srht";
-  version = "0.71.8";
+  version = "0.76.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "~sircmpwn";
     repo = "core.sr.ht";
     rev = version;
-    hash = "sha256-rDpm2HJOWScvIxOmHcat6y4CWdBE9T2gE/jZskYAFB0=";
+    hash = "sha256-lAN1JZXQuN2zxi/BdBtbNj52LPj9iYn0WB2OpyQcyuU=";
     fetchSubmodules = true;
   };
 
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    setuptools
+    setuptools-scm
   ];
 
   propagatedNativeBuildInputs = [
@@ -81,12 +81,19 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  PKGVER = version;
+  env = {
+    PREFIX = placeholder "out";
+    PKGVER = version;
+  };
+
+  postInstall = ''
+    make install
+  '';
 
   pythonImportsCheck = [ "srht" ];
 
   meta = with lib; {
-    homepage = "https://git.sr.ht/~sircmpwn/srht";
+    homepage = "https://git.sr.ht/~sircmpwn/core.sr.ht";
     description = "Core modules for sr.ht";
     license = licenses.bsd3;
     maintainers = with maintainers; [

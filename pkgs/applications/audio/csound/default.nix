@@ -85,5 +85,6 @@ stdenv.mkDerivation {
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.marcweber ];
     platforms = platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
