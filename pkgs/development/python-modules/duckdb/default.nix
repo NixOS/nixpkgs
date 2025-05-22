@@ -45,14 +45,14 @@ buildPythonPackage rec {
     OVERRIDE_GIT_DESCRIBE = "v${version}-0-g${rev}";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     pybind11
     setuptools-scm
   ];
 
   buildInputs = [ openssl ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     pandas
   ];
