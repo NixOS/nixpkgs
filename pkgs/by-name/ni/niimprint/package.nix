@@ -22,11 +22,11 @@ python3.pkgs.buildPythonPackage rec {
       --replace 'pillow = "^10.1.0"' 'pillow = ">=10.1.0"'
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     pillow
     pyserial
     click
@@ -38,7 +38,7 @@ python3.pkgs.buildPythonPackage rec {
   postInstall = ''
     mkdir -p $out/bin
     makeWrapper ${python3.interpreter} $out/bin/niimprint \
-      --prefix PYTHONPATH : ${python3.pkgs.makePythonPath propagatedBuildInputs}:$out/${python3.sitePackages} \
+      --prefix PYTHONPATH : ${python3.pkgs.makePythonPath dependencies}:$out/${python3.sitePackages} \
       --add-flags "-m niimprint"
   '';
 
