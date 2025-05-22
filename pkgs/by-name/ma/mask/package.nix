@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -20,6 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # tests require mask to be installed
   doCheck = false;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     description = "CLI task runner defined by a simple markdown file";
