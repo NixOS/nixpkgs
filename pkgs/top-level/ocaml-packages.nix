@@ -88,6 +88,8 @@ let
 
         benchmark = callPackage ../development/ocaml-modules/benchmark { };
 
+        bencode = callPackage ../development/ocaml-modules/bencode { };
+
         bheap = callPackage ../development/ocaml-modules/bheap { };
 
         bigarray-compat = callPackage ../development/ocaml-modules/bigarray-compat { };
