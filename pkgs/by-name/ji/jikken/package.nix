@@ -10,13 +10,13 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "jikken";
-  version = "0.8.2";
+  version = "0.8.2-develop";
 
   src = fetchFromGitHub {
     owner = "jikkenio";
     repo = "jikken";
     rev = "v${version}";
-    hash = "sha256-8A9b9Ms/unv+qQRd5jiTV/6SJa6ZYLsE0fK97ohacPI=";
+    hash = "sha256-ZoqHPvlQSh+deXwAvwb7WNNjC9pGSJs4oGSZl6DfbWE=";
   };
 
   useFetchCargoVendor = true;
