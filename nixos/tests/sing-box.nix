@@ -210,17 +210,21 @@ import ./make-test-python.nix (
 
           services.sing-box = {
             enable = true;
-            settings = {
-              inbounds = [
-                vmessInbound
-              ];
-              outbounds = [
-                {
-                  type = "direct";
-                  tag = "outbound:direct";
+            configFile = toString (
+              pkgs.writeText "test-sing-box-json-config" (
+                builtins.toJSON {
+                  inbounds = [
+                    vmessInbound
+                  ];
+                  outbounds = [
+                    {
+                      type = "direct";
+                      tag = "outbound:direct";
+                    }
+                  ];
                 }
-              ];
-            };
+              )
+            );
           };
         };
 
