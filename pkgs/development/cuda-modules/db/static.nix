@@ -3,7 +3,7 @@ let
   lib = import ../../../../lib;
 
   unit = 1;
-  listToSetOfStr = lst: builtins.listToAttrs (map (name: lib.nameValuePair name unit) lst);
+  listToSetOfStr = lib.flip lib.genAttrs (lib.const unit);
 in
 {
   license =
