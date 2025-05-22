@@ -9,6 +9,9 @@
   urls,
   version,
   hash,
+
+  # Include man pages
+  includeMan ? lib.toInt (lib.versions.major version) >= 15,
 }:
 
 fetchurl {
@@ -29,10 +32,17 @@ fetchurl {
 
     src=Library/Developer/CommandLineTools/SDKs/MacOSX${lib.versions.majorMinor version}.sdk
 
-    # Remove unwanted binaries, man pages, and folders from the SDK.
-    rm -rf $src/usr/bin $src/usr/share $src/System/Library/Perl
+    # Remove unwanted binaries and folders from the SDK.
+    rm -rf $src/usr/bin $src/System/Library/Perl
+    if [[ -z "${toString includeMan}" ]]; then
+      rm -rf $src/usr/share
+    fi
 
     mkdir -p "$out"
     cp -rd $src/* "$out"
   '';
+
+  passthru = {
+    inherit includeMan;
+  };
 }

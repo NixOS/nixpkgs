@@ -23,7 +23,10 @@ in
 
 let
   sdkInfo =
-    sdkVersions.${darwinSdkMajorVersion}
+    {
+      includeMan = lib.toInt (lib.versions.major sdkVersion) >= 15;
+    }
+    // sdkVersions.${darwinSdkMajorVersion}
       or (lib.throw "Unsupported SDK major version: ${darwinSdkMajorVersion}");
   sdkVersion = sdkInfo.version;
 
