@@ -23,12 +23,10 @@
   sparsehash,
   gitUpdater,
 }:
-
 let
-  boost' = boost.override {
-    enablePython = true;
-    inherit python;
-  };
+
+  boost' = boost.withPython python;
+
 in
 buildPythonPackage rec {
   pname = "graph-tool";
