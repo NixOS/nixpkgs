@@ -1,0 +1,10 @@
+--- vendor/github.com/jbowtie/gokogiri/xpath/expression.go
++++ vendor/github.com/jbowtie/gokogiri/xpath/expression.go
+@@ -3,6 +3,7 @@
+ /*
+ #include <libxml/xpath.h>
+ #include <libxml/xpathInternals.h>
++#include <stdlib.h>
+ #include <string.h>
+ 
+ void check_xpath_syntax_noop(void *ctx, const char *fmt, ...) {
