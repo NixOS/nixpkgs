@@ -61,8 +61,7 @@ let
             nativeBuildInputs = [ self ];
           }
           ''
-            out=$(wordfence --version)
-            echo "$out" | grep -F "PCRE Supported: Yes"
+            wordfence --version | grep -F "PCRE Supported: Yes"
             touch $out
           '';
 
@@ -72,8 +71,7 @@ let
             nativeBuildInputs = [ self ];
           }
           ''
-            out=$(wordfence --version)
-            echo "$out" | grep -F "Vectorscan Supported: Yes"
+            wordfence --version | grep -F "Vectorscan Supported: Yes"
             touch $out
           '';
     };
