@@ -87,9 +87,10 @@ in
 
   };
 
+  meta.maintainers = with lib.maintainers; [ _0x4A6F ];
+
   config = mkIf cfg.enable (mkMerge [
     {
-      meta.maintainers = with lib.maintainers; [ _0x4A6F ];
 
       systemd.services.xandikos = {
         description = "A Simple Calendar and Contact Server";

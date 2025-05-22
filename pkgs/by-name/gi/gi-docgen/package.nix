@@ -56,6 +56,6 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "gi-docgen";
     homepage = "https://gitlab.gnome.org/GNOME/gi-docgen";
     license = licenses.asl20; # OR GPL-3.0-or-later
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
   };
 }

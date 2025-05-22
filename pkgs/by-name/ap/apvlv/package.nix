@@ -20,7 +20,7 @@
   poppler,
   stdenv,
   testers,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
 }:
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxshmfence # otherwise warnings in compilation
     pcre
     poppler
-    webkitgtk_4_0
+    webkitgtk_4_1
   ];
 
   installPhase = ''

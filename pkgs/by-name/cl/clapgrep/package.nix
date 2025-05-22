@@ -1,64 +1,62 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
 
   wrapGAppsHook4,
   pkg-config,
   blueprint-compiler,
+  meson,
+  ninja,
+  rustc,
+  cargo,
+  desktop-file-utils,
 
   gtk4,
   libadwaita,
   glib,
+  poppler,
+  gtksourceview5,
 
   nix-update-script,
 }:
-let
-  version = "1.3.1";
-  appid = "de.leopoldluley.Clapgrep";
-in
-rustPlatform.buildRustPackage {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "clapgrep";
-  inherit version;
+  version = "25.05+1";
 
   src = fetchFromGitHub {
     owner = "luleyleo";
     repo = "clapgrep";
-    tag = "v${version}";
-    hash = "sha256-MYV8MrCIpa8eqp2iCLTNLZrVQOyGsMEGqlnEF43fyls=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DL3voYSsNGjPb1CnPuJGg+7UgWYZO7cH5T2Z37BuDSE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-tpWv8CznTxoAgOf0mb99peqUTQSfv+16dAmX8n7XVDQ=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src;
+    hash = "sha256-hTejIaXIAi8opZdE2X3vEi+VYoSti8RNB41ikVOWGPk=";
+  };
 
   nativeBuildInputs = [
+    meson
+    ninja
     wrapGAppsHook4
     pkg-config
     blueprint-compiler
+    rustc
+    rustPlatform.cargoSetupHook
+    cargo
+    desktop-file-utils
   ];
 
   buildInputs = [
     gtk4
     libadwaita
     glib
+    poppler
+    gtksourceview5
   ];
-
-  env.APP_ID = appid;
-
-  # see Justfile
-  postInstall = ''
-    mv $out/bin/clapgrep-gnome $out/bin/clapgrep
-    install -D assets/${appid}.desktop -t $out/share/applications
-    install -D assets/${appid}.metainfo.xml -t $out/share/metainfo
-    install -D assets/icons/hicolor/scalable/apps/${appid}.svg -t $out/share/icons/hicolor/scalable/apps
-
-    mkdir -p assets/locale
-    cat po/LINGUAS | while read lang; do
-      mkdir -p assets/locale/$lang/LC_MESSAGES;
-      msgfmt -o assets/locale/$lang/LC_MESSAGES/${appid}.mo po/$lang.po;
-    done
-    cp -r assets/locale -t $out/share
-  '';
 
   passthru.updateScript = nix-update-script { };
 
@@ -70,4 +68,4 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ pluiedev ];
     mainProgram = "clapgrep";
   };
-}
+})

@@ -74,7 +74,7 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://gitlab.gnome.org/GNOME/accerciser/-/blob/${version}/NEWS?ref_type=tags";
     description = "Interactive Python accessibility explorer";
     mainProgram = "accerciser";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.bsd3;
     platforms = platforms.linux;
   };

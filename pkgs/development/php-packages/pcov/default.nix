@@ -35,6 +35,6 @@ buildPecl {
     description = "Self contained php-code-coverage compatible driver for PHP";
     license = lib.licenses.php301;
     homepage = "https://github.com/krakjoe/pcov";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 }

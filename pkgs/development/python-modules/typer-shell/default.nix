@@ -28,6 +28,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "iterfzf"
+    "rich"
     "typer"
   ];
 

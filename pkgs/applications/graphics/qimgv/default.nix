@@ -1,21 +1,16 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitHub,
-
   cmake,
   pkg-config,
-
+  libsForQt5,
   exiv2,
   mpv,
   opencv4,
-  qtbase,
-  qtimageformats,
-  qtsvg,
-  qttools,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qimgv";
   version = "1.0.3-unstable-2024-10-11";
 
@@ -29,6 +24,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    libsForQt5.wrapQtAppsHook
   ];
 
   cmakeFlags = [
@@ -39,10 +35,10 @@ mkDerivation rec {
     exiv2
     mpv
     opencv4
-    qtbase
-    qtimageformats
-    qtsvg
-    qttools
+    libsForQt5.qtbase
+    libsForQt5.qtimageformats
+    libsForQt5.qtsvg
+    libsForQt5.qttools
   ];
 
   postPatch = ''

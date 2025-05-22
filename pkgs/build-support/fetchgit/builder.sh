@@ -6,7 +6,9 @@
 
 echo "exporting $url (rev $rev) into $out"
 
-$SHELL $fetcher --builder --url "$url" --out "$out" --rev "$rev" \
+runHook preFetch
+
+$SHELL $fetcher --builder --url "$url" --out "$out" --rev "$rev" --name "$name" \
   ${leaveDotGit:+--leave-dotGit} \
   ${fetchLFS:+--fetch-lfs} \
   ${deepClone:+--deepClone} \

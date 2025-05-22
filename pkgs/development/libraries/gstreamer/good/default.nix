@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   replaceVars,
   meson,
   nasm,
@@ -32,7 +33,6 @@
   libpulseaudio,
   libintl,
   libxml2,
-  Cocoa,
   lame,
   mpg123,
   twolame,
@@ -59,15 +59,22 @@
   # Checks meson.is_cross_build(), so even canExecute isn't enough.
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
+  gst-plugins-good,
+  directoryListingUpdater,
+  apple-sdk_gstreamer,
 }:
 
-# MMAL is not supported on aarch64, see:
-# https://github.com/raspberrypi/userland/issues/688
-assert raspiCameraSupport -> (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch32);
+let
+  # MMAL is not supported on aarch64, see:
+  # https://github.com/raspberrypi/userland/issues/688
+  hostSupportsRaspiCamera = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch32;
+in
 
-stdenv.mkDerivation rec {
+assert raspiCameraSupport -> hostSupportsRaspiCamera;
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-good";
-  version = "1.24.10";
+  version = "1.26.0";
 
   outputs = [
     "out"
@@ -75,16 +82,21 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-/OdI+mbXqO4fsmFInlnQHj+nh2I9bVw1BoQW/nzQrLM=";
+    url = "https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-${finalAttrs.version}.tar.xz";
+    hash = "sha256-nhjxOe9prQhnwt+7j+HRc2123xGqyD9g6NOtseLq8Ds=";
   };
 
   patches = [
-    # Reenable dynamic loading of libsoup on Darwin and use a different approach to do it.
-    ./souploader-darwin.diff
     # dlopen libsoup_3 with an absolute path
     (replaceVars ./souploader.diff {
       nixLibSoup3Path = "${lib.getLib libsoup_3}/lib";
+    })
+
+    (fetchpatch {
+      name = "musl.patch";
+      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/dd1fc2b7931f5789815e17dda2ef7c31b9fba563.patch";
+      stripLen = 2;
+      hash = "sha256-m2h1F6M2hzw3HxizmCyEEqkUQe0ccLWFBvgT2f+GjNE=";
     })
   ];
 
@@ -182,9 +194,6 @@ stdenv.mkDerivation rec {
         qtwayland
       ]
     )
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-    ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libdrm
       libGL
@@ -193,6 +202,9 @@ stdenv.mkDerivation rec {
       libavc1394
       libiec61883
       libgudev
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_gstreamer
     ]
     ++ lib.optionals enableWayland [
       wayland
@@ -204,7 +216,7 @@ stdenv.mkDerivation rec {
   mesonFlags =
     [
       "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-      "-Dglib-asserts=disabled" # asserts should be disabled on stable releases
+      "-Dglib_debug=disabled" # cast checks should be disabled on stable releases
       (lib.mesonEnable "doc" enableDocumentation)
     ]
     ++ lib.optionals (!qt5Support) [
@@ -243,20 +255,44 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs \
-      scripts/extract-release-date-from-doap-file.py
+      scripts/extract-release-date-from-doap-file.py \
+      ext/qt6/qsb-wrapper.py
   '';
 
-  NIX_LDFLAGS = [
-    # linking error on Darwin
-    # https://github.com/NixOS/nixpkgs/pull/70690#issuecomment-553694896
-    "-lncurses"
-  ];
+  env = {
+    NIX_LDFLAGS =
+      # linking error on Darwin
+      # https://github.com/NixOS/nixpkgs/pull/70690#issuecomment-553694896
+      "-lncurses";
+  };
 
   # fails 1 tests with "Unexpected critical/warning: g_object_set_is_valid_property: object class 'GstRtpStorage' has no property named ''"
   doCheck = false;
 
   # must be explicitly set since 5590e365
   dontWrapQtApps = true;
+
+  passthru = {
+    tests =
+      {
+        gtk = gst-plugins-good.override {
+          gtkSupport = true;
+        };
+        qt5 = gst-plugins-good.override {
+          qt5Support = true;
+        };
+        qt6 = gst-plugins-good.override {
+          qt6Support = true;
+        };
+      }
+      // lib.optionalAttrs hostSupportsRaspiCamera {
+        raspiCamera = gst-plugins-good.override {
+          raspiCameraSupport = true;
+        };
+      };
+
+    updateScript = directoryListingUpdater { };
+  };
 
   meta = with lib; {
     description = "GStreamer Good Plugins";
@@ -270,4 +306,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ matthewbauer ];
   };
-}
+})

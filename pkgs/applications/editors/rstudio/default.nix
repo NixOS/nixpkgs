@@ -33,7 +33,7 @@
   zip,
   git,
   makeWrapper,
-  electron_33,
+  electron_34,
   server ? false, # build server version
   pam,
   nixosTests,
@@ -42,13 +42,7 @@
 let
   # Note: we shouldn't use the latest electron here, since the node-abi dependency might
   # need to be updated every time the latest electron gets a new abi version number
-  electron = electron_33;
-
-  # unpack tarball containing electron's headers
-  electron-headers = runCommand "electron-headers" { } ''
-    mkdir -p $out
-    tar -C $out --strip-components=1 -xvf ${electron.headers}
-  '';
+  electron = electron_34;
 
   mathJaxSrc = fetchzip {
     url = "https://s3.amazonaws.com/rstudio-buildtools/mathjax-27.zip";
@@ -241,7 +235,7 @@ stdenv.mkDerivation rec {
         --replace-fail "npm ci && " ""
 
       # use electron's headers to make node-gyp compile against the electron ABI
-      export npm_config_nodedir="${electron-headers}"
+      export npm_config_nodedir="${electron.headers}"
 
       ### override the detected electron version
       substituteInPlace node_modules/@electron-forge/core-utils/dist/electron-version.js \

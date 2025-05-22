@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "types-pyyaml";
-  version = "6.0.12.20241230";
+  version = "6.0.12.20250402";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_pyyaml";
     inherit version;
-    hash = "sha256-fwdiLb00u5yLJk/oYKF+DvytANULXyfpOYSQnZNjSYw=";
+    hash = "sha256-18E8Pm0zW2r0sBIqAf8dJwq6hKuW0aGhBj7Lo+E+wHU=";
   };
 
   build-system = [ setuptools ];

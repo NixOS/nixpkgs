@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   ncurses,
-  automake,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +32,6 @@ stdenv.mkDerivation rec {
 
   # The fuloong2f is not supported by aalib still
   preConfigure = ''
-    cp ${automake}/share/automake*/config.{sub,guess} .
     configureFlagsArray+=(
       "--bindir=$bin/bin"
       "--includedir=$dev/include"

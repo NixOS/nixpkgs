@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "chispa";
-  version = "0.11.0";
+  version = "0.11.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "MrPowers";
     repo = "chispa";
     tag = "v${version}";
-    hash = "sha256-P9b/HabHckq6FWAgCYB/YLQqtu8M6NB536p4tByNF5Y=";
+    hash = "sha256-M4iYKWXI0wBSHt1tWd0vGvQ6FLRRE9TB2u6sTJnkFpY=";
   };
 
   build-system = [ poetry-core ];

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "gprof2dot";
-  version = "2024.06.06";
+  version = "2025.04.14";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "jrfonseca";
     repo = "gprof2dot";
     tag = version;
-    hash = "sha256-6TTshVbfYh/2Ss1uysGW0nxmNQdIiAhe4LldMS7hpCo=";
+    hash = "sha256-kX/DCXO/qwm1iF44gG7aBSUpG4Vf2Aer0zwrtq4YNHo=";
   };
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ graphviz ]}" ];
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     description = "Python script to convert the output from many profilers into a dot graph";
     mainProgram = "gprof2dot";
     homepage = "https://github.com/jrfonseca/gprof2dot";
-    changelog = "https://github.com/jrfonseca/gprof2dot/releases/tag/${version}";
+    changelog = "https://github.com/jrfonseca/gprof2dot/releases/tag/${src.tag}";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ pmiddend ];
   };

@@ -50,7 +50,6 @@ let
 
     # cross packagesets
     pkgsLLVM = true;
-    pkgsLLVMLibc = true;
     pkgsMusl = true;
     pkgsStatic = true;
     pkgsCross = true;

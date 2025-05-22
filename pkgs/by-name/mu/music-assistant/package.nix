@@ -42,16 +42,20 @@ let
   pythonPath = python.pkgs.makePythonPath providerDependencies;
 in
 
+assert
+  (lib.elem "airplay" providers)
+  -> throw "music-assistant: airplay support is missing libraop, a library we will not package because it depends on OpenSSL 1.1.";
+
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.5.0";
+  version = "2.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = version;
-    hash = "sha256-yugtL3dCuGb2OSTy49V4mil9EnfACcGrYCA1rW/lo+4=";
+    hash = "sha256-RkbU2MqQ7XSv7f6gvgS0AZ8jy63fUAomC41dEk8qyOI=";
   };
 
   patches = [
@@ -153,6 +157,11 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonImportsCheck = [ "music_assistant" ];
+
+  postFixup = ''
+    # binary native code, segfaults when autopatchelf'd, requires openssl 1.1 to build
+    rm $out/${python3.sitePackages}/music_assistant/providers/airplay/bin/cliraop-*
+  '';
 
   passthru = {
     inherit

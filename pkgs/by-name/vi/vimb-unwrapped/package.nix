@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  libsoup_2_4,
+  libsoup_3,
   webkitgtk_4_1,
   gtk3,
   glib-networking,
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    libsoup_2_4
+    libsoup_3
     webkitgtk_4_1
     glib-networking
     gsettings-desktop-schemas

@@ -29,6 +29,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Thunar extension for automatic management of removable drives and media";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

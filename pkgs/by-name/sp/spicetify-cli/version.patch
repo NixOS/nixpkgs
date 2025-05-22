@@ -1,0 +1,14 @@
+diff --git a/src/preprocess/preprocess.go b/src/preprocess/preprocess.go
+index ac0f084..f38ece2 100644
+--- a/src/preprocess/preprocess.go
++++ b/src/preprocess/preprocess.go
+@@ -66,7 +66,7 @@ func Start(version string, extractedAppsPath string, flags Flag) {
+ 	var cssTranslationMap = make(map[string]string)
+ 	// readSourceMapAndGenerateCSSMap(appPath)
+ 
+-	if version != "Dev" {
++	if version != "@version@" {
+ 		tag, err := FetchLatestTagMatchingOrMain(version)
+ 		if err != nil {
+ 			utils.PrintWarning("Cannot fetch version tag for CSS mappings")
+

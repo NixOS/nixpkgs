@@ -31,29 +31,11 @@
   enableGC ? !stdenv.hostPlatform.isWindows,
 }:
 
-let
-  inherit (lib) fileset;
-in
-
 mkMesonLibrary (finalAttrs: {
   pname = "nix-expr";
   inherit version;
 
   workDir = ./.;
-  fileset = fileset.unions [
-    ../../nix-meson-build-support
-    ./nix-meson-build-support
-    ../../.version
-    ./.version
-    ./meson.build
-    ./meson.options
-    ./primops/meson.build
-    (fileset.fileFilter (file: file.hasExt "cc") ./.)
-    (fileset.fileFilter (file: file.hasExt "hh") ./.)
-    ./lexer.l
-    ./parser.y
-    (fileset.difference (fileset.fileFilter (file: file.hasExt "nix") ./.) ./package.nix)
-  ];
 
   nativeBuildInputs = [
     bison

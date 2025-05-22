@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
     physfs
     openal
     gamenetworkingsockets
+    xorg.libX11
   ];
   # TODO(@sternenseemann): set proper rpath via cmake, so we don't need autoPatchelfHook
   runtimeDependencies = [ xorg.libX11 ];

@@ -11,7 +11,6 @@
   fetchFromGitHub,
   glib,
   gtk3,
-  libsoup_2_4,
   openssl,
   nix-update-script,
 }:
@@ -51,7 +50,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     glib
     gtk3
     openssl
-    libsoup_2_4
     webkitgtk_4_1
   ];
 

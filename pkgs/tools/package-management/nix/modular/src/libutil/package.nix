@@ -17,29 +17,11 @@
   version,
 }:
 
-let
-  inherit (lib) fileset;
-in
-
 mkMesonLibrary (finalAttrs: {
   pname = "nix-util";
   inherit version;
 
   workDir = ./.;
-  fileset = fileset.unions [
-    ../../nix-meson-build-support
-    ./nix-meson-build-support
-    ../../.version
-    ./.version
-    ./widecharwidth
-    ./meson.build
-    ./meson.options
-    ./linux/meson.build
-    ./unix/meson.build
-    ./windows/meson.build
-    (fileset.fileFilter (file: file.hasExt "cc") ./.)
-    (fileset.fileFilter (file: file.hasExt "hh") ./.)
-  ];
 
   buildInputs =
     [

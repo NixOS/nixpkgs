@@ -37,7 +37,7 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "2.1.2";
+  version = "2.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = "poetry";
     tag = version;
-    hash = "sha256-51pO/PP5OwTmi+1uy26CK/1oQ/P21wPBoRVE9Jv0TjA=";
+    hash = "sha256-aMmYgFdQhgMd99atAtr5MD0yniaIi+QTPJ0rMI2jMxk=";
   };
 
   build-system = [
@@ -132,6 +132,7 @@ buildPythonPackage rec {
     "test_builder_should_execute_build_scripts"
     "test_env_system_packages_are_relative_to_lib"
     "test_install_warning_corrupt_root"
+    "test_no_additional_output_in_verbose_mode"
     "test_project_plugins_are_installed_in_project_folder"
     "test_application_command_not_found_messages"
     # PermissionError: [Errno 13] Permission denied: '/build/pytest-of-nixbld/pytest-0/popen-gw3/test_find_poetry_managed_pytho1/.local/share/pypoetry/python/pypy@3.10.8/bin/python'
@@ -139,6 +140,11 @@ buildPythonPackage rec {
     "test_list_poetry_managed"
     "test_find_all_with_poetry_managed"
     "test_find_poetry_managed_pythons"
+    # Flaky
+    "test_threading_property_types"
+    "test_threading_single_thread_safe"
+    "test_threading_property_caching"
+    "test_threading_atomic_cached_property_different_instances"
   ];
 
   pytestFlagsArray = [
@@ -155,12 +161,12 @@ buildPythonPackage rec {
   # in the Python script, which runs after the wrapper.
   makeWrapperArgs = [ "--unset PYTHONPATH" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/python-poetry/poetry/blob/${src.rev}/CHANGELOG.md";
+  meta = {
+    changelog = "https://github.com/python-poetry/poetry/blob/${src.tag}/CHANGELOG.md";
     homepage = "https://python-poetry.org/";
     description = "Python dependency management and packaging made easy";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jakewaksbaum
       dotlambda
     ];

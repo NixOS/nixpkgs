@@ -4,6 +4,7 @@
   stdenv,
   bash,
   perl,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
+    mainProgram = "rush";
     broken = stdenv.hostPlatform.isDarwin;
     description = "Restricted User Shell";
 
@@ -51,12 +53,15 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.gnu.org/software/rush/";
     license = lib.licenses.gpl3Plus;
-
-    maintainers = [ ];
     platforms = lib.platforms.all;
+
+    maintainers = with lib.maintainers; [
+      c4f3z1n
+    ];
   };
 
   passthru = {
     shellPath = "/bin/rush";
+    tests = { inherit (nixosTests) rush; };
   };
 }

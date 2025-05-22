@@ -23,7 +23,7 @@ update_version_and_hashes() {
     # Update version number, using '#' as delimiter
     sed -i "/${channel} = {/,/};/{
         s#^\(\s*\)version = .*#\1version = \"$version\";#
-    }" ./default.nix
+    }" ./package.nix
 
     # Update hashes for each architecture
     for ARCH in "${!ARCHS[@]}"; do
@@ -37,7 +37,7 @@ update_version_and_hashes() {
         # Update the Nix file with the new hash, using '#' as delimiter and preserving indentation
         sed -i "/${channel} = {/,/};/{
             s#^\(\s*\)${ARCH} = .*#\1${ARCH} = \"${SRI_HASH}\";#
-        }" ./default.nix
+        }" ./package.nix
     done
 }
 

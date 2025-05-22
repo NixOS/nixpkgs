@@ -2,12 +2,11 @@
   lib,
   stdenv,
   fetchurl,
-  fetchFromGitLab,
   fetchpatch,
   cfitsio,
   cmake,
   curl,
-  eigen,
+  eigen_3_4_0,
   gsl,
   indi-full,
   kdePackages,
@@ -22,43 +21,21 @@
   zlib,
 }:
 
-let
-  # reverts 'eigen: 3.4.0 -> 3.4.0-unstable-2022-05-19'
-  # https://github.com/nixos/nixpkgs/commit/d298f046edabc84b56bd788e11eaf7ed72f8171c
-  eigen' = eigen.overrideAttrs (old: rec {
-    version = "3.4.0";
-    src = fetchFromGitLab {
-      owner = "libeigen";
-      repo = "eigen";
-      rev = version;
-      hash = "sha256-1/4xMetKMDOgZgzz3WMxfHUEpmdAm52RqZvz6i0mLEw=";
-    };
-    patches = (old.patches or [ ]) ++ [
-      # Fixes e.g. onnxruntime on aarch64-darwin:
-      # https://hydra.nixos.org/build/248915128/nixlog/1,
-      # originally suggested in https://github.com/NixOS/nixpkgs/pull/258392.
-      #
-      # The patch is from
-      # ["Fix vectorized reductions for Eigen::half"](https://gitlab.com/libeigen/eigen/-/merge_requests/699)
-      # which is two years old,
-      # but Eigen hasn't had a release in two years either:
-      # https://gitlab.com/libeigen/eigen/-/issues/2699.
-      (fetchpatch {
-        url = "https://gitlab.com/libeigen/eigen/-/commit/d0e3791b1a0e2db9edd5f1d1befdb2ac5a40efe0.patch";
-        hash = "sha256-8qiNpuYehnoiGiqy0c3Mcb45pwrmc6W4rzCxoLDSvj0=";
-      })
-    ];
-  });
-in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "kstars";
-  version = "3.7.5";
+  version = "3.7.6";
 
   src = fetchurl {
     url = "mirror://kde/stable/kstars/${finalAttrs.version}/kstars-${finalAttrs.version}.tar.xz";
-    hash = "sha256-L9hyVfdgFlFfM6MyjR4bUa86FHPbVg7xBWPY8YSHUXw=";
+    hash = "sha256-6hwWMmAGKJmldL8eTLQzzBsumk5thFoqGvm2dWk0Jpo=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://invent.kde.org/education/kstars/-/commit/92eb37bdb3e24bd06e6da9977f3bf76218c95339.diff";
+      hash = "sha256-f2m15op48FiPYsKJ7WudlejVwoiGYWGnX2QiCnBINU8=";
+    })
+  ];
 
   nativeBuildInputs = with kdePackages; [
     extra-cmake-modules
@@ -70,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     breeze-icons
     cfitsio
     curl
-    eigen'
+    eigen_3_4_0
     gsl
     indi-full
     kconfig

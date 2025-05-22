@@ -66,10 +66,8 @@ lib.runTests (
       "armv7l-linux"
       "armv7l-netbsd"
       "arm-none"
-      "armv7a-darwin"
     ];
     testarmv7 = mseteq armv7 [
-      "armv7a-darwin"
       "armv7a-linux"
       "armv7l-linux"
       "armv7a-netbsd"
@@ -84,7 +82,6 @@ lib.runTests (
       "i686-cygwin"
       "i686-windows"
       "i686-none"
-      "i686-darwin"
     ];
     testmips = mseteq mips [
       "mips-none"
@@ -145,9 +142,7 @@ lib.runTests (
     ];
     testdarwin = mseteq darwin [
       "x86_64-darwin"
-      "i686-darwin"
       "aarch64-darwin"
-      "armv7a-darwin"
     ];
     testfreebsd = mseteq freebsd [
       "aarch64-freebsd"

@@ -4,23 +4,27 @@
   fetchPypi,
   pytest,
   coverage,
+  setuptools,
   toml,
   tomli,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-cov";
-  version = "6.0.0";
-  format = "setuptools";
+  version = "6.1.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-/eC1lcoki7ji128CC0ZfOxB8ljLmodFwXxeDTIncrcA=";
+    pname = "pytest_cov";
+    inherit version;
+    hash = "sha256-7FXoKMZnVeW3SiG9fMA8MDqfkoOJwFY+ULpFSm2+cds=";
   };
+
+  build-system = [ setuptools ];
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     coverage
     toml
     tomli
@@ -40,6 +44,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Plugin for coverage reporting with support for both centralised and distributed testing, including subprocesses and multiprocessing";
     homepage = "https://github.com/pytest-dev/pytest-cov";
+    changelog = "https://github.com/pytest-dev/pytest-cov/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

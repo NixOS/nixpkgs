@@ -73,5 +73,8 @@ rustPlatform.buildRustPackage rec {
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ gaelreyrol ];
     mainProgram = "scaphandre";
+    # Upstream needs to decide what to do about a broken dependency
+    # https://github.com/hubblo-org/scaphandre/issues/403
+    broken = true;
   };
 }

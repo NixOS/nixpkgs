@@ -1,6 +1,5 @@
 {
   stdenv,
-  darwin,
   lib,
   libiconv,
   fetchurl,
@@ -74,7 +73,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      darwin.apple_sdk.frameworks.Security
     ];
 
   meta = with lib; {

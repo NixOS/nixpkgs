@@ -15,7 +15,6 @@
   fetchurl,
   file,
   python3,
-  darwin,
   cargo,
   cmake,
   rustc,
@@ -51,7 +50,6 @@ let
     optionalString
     concatStringsSep
     ;
-  inherit (darwin.apple_sdk.frameworks) Security;
   useLLVM = stdenv.targetPlatform.useLLVM or false;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -243,8 +241,8 @@ stdenv.mkDerivation (finalAttrs: {
         ln -s ${rustc.unwrapped}/lib/rustlib/${stdenv.hostPlatform.rust.rustcTargetSpec}/libstd-*.so build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-std/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/libstd.so
         ln -s ${rustc.unwrapped}/lib/rustlib/${stdenv.hostPlatform.rust.rustcTargetSpec}/librustc_driver-*.so build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/librustc.so
         ln -s ${rustc.unwrapped}/bin/rustc build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/rustc-main
-        touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-std/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.libstd.stamp
-        touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.librustc.stamp
+        touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-std/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.libstd-stamp
+        touch build/${stdenv.hostPlatform.rust.rustcTargetSpec}/stage0-rustc/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/.librustc-stamp
         python ./x.py --keep-stage=0 --stage=1 build library
 
         runHook postBuild
@@ -349,7 +347,6 @@ stdenv.mkDerivation (finalAttrs: {
     [ openssl ]
     ++ optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      Security
       zlib
     ]
     ++ optional (!withBundledLLVM) llvmShared.lib
@@ -412,7 +409,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://www.rust-lang.org/";
     description = "Safe, concurrent, practical language";
-    maintainers = with maintainers; [ havvy ] ++ teams.rust.members;
+    maintainers = with maintainers; [ havvy ];
+    teams = [ teams.rust ];
     license = [
       licenses.mit
       licenses.asl20

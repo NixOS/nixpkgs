@@ -19,7 +19,6 @@ python3Packages.buildPythonApplication rec {
   };
 
   postPatch = ''
-    sed -i -e '/install_requires/,/\]/{/beets/d}' setup.py
     sed -i -e '/namespace_packages/d' setup.py
     printf 'from pkgutil import extend_path\n__path__ = extend_path(__path__, __name__)\n' >beetsplug/__init__.py
 
@@ -28,13 +27,20 @@ python3Packages.buildPythonApplication rec {
     sed -i -e 's/util\.py3_path/os.fsdecode/g' tests/_common.py
   '';
 
-  build-system = with python3Packages; [ setuptools ];
+  nativeBuildInputs = [
+    beets
+  ];
 
-  dependencies = with python3Packages; [ six ];
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
+    six
+  ];
 
   nativeCheckInputs = [
     python3Packages.pytestCheckHook
-    beets
     writableTmpDirAsHomeHook
   ];
 

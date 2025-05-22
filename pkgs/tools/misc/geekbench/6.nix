@@ -11,15 +11,15 @@
 
 let
   inherit (stdenv.hostPlatform.uname) processor;
-  version = "6.3.0";
+  version = "6.4.0";
   sources = {
     "x86_64-linux" = {
       url = "https://cdn.geekbench.com/Geekbench-${version}-Linux.tar.gz";
-      hash = "sha256-AXJ5mXGc1RWnIkB13KtIdt7vKETEXowunzQZciQDnzs=";
+      hash = "sha256-Q4MwU3dIFheKKSMxzCBZI8XoForaN41BuRGVMhJaUKw=";
     };
     "aarch64-linux" = {
       url = "https://cdn.geekbench.com/Geekbench-${version}-LinuxARMPreview.tar.gz";
-      hash = "sha256-fbf01qa9wx3k9j8AEqv38fAM3F9tZOcnpH/wa/9rawQ=";
+      hash = "sha256-PZ95w2X4sqTLZGZ5wygt7WjSK4Gfgtdh/UCPo+8Ysc8=";
     };
   };
   geekbench_avx2 = lib.optionalString stdenv.hostPlatform.isx86_64 "geekbench_avx2";
@@ -62,12 +62,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform benchmark";
     homepage = "https://geekbench.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       michalrus
       asininemonkey
     ];

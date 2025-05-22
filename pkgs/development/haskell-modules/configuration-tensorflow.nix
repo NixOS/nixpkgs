@@ -23,7 +23,7 @@ let
     });
 in
 {
-  tensorflow-proto = doJailbreak (setTensorflowSourceRoot "tensorflow-proto" super.tensorflow-proto);
+  tensorflow-proto = setTensorflowSourceRoot "tensorflow-proto" super.tensorflow-proto;
 
   tensorflow = overrideCabal (drv: {
     libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.vector-split ];

@@ -228,7 +228,7 @@ let
         echo Found crate ${pkg.name} at $crateCargoTOML
         tree=$(dirname $crateCargoTOML)
 
-        ${python3Packages.python.interpreter} -c 'import sys, shutil; shutil.copytree(sys.argv[1], sys.argv[2], ignore_dangling_symlinks=True)' "$tree" "$out"
+        cp -prvL "$tree" "$out" || echo "Warning: certain files couldn't be copied!" >&2
         chmod u+w $out
 
         if grep -q workspace "$out/Cargo.toml"; then

@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pavolctld";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchgit {
     url = "https://git.tjkeller.xyz/pavolctld";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nmN8bQKQNGpCGvHQnZK9YQgB80SxRSds0V9Y7h/Guh8=";
+    hash = "sha256-gNEXED+9BkCCLi8oW2GZi9Azd/zOWUvu/bY0a1WbE/A=";
   };
 
   buildInputs = [ libpulseaudio ];

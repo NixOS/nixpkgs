@@ -42,6 +42,6 @@ stdenvNoCC.mkDerivation rec {
     description = "Mint-L theme for the Cinnamon desktop";
     license = licenses.gpl3Plus; # from debian/copyright
     platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    teams = [ teams.cinnamon ];
   };
 }

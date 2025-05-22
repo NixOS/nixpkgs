@@ -2,6 +2,8 @@
   lib,
   python313,
   fetchFromGitLab,
+  fetchFromGitHub,
+  rustPlatform,
   callPackage,
   stdenv,
   makeWrapper,
@@ -10,9 +12,27 @@
 
 let
   python = python313.override {
+    self = python;
     packageOverrides = final: prev: {
       django = final.django_5;
-      django-extensions = prev.django-extensions.overridePythonAttrs { doCheck = false; };
+      symbolic = prev.symbolic.overridePythonAttrs rec {
+        version = "10.2.1";
+        src = fetchFromGitHub {
+          owner = "getsentry";
+          repo = "symbolic";
+          tag = version;
+          hash = "sha256-3u4MTzaMwryGpFowrAM/MJOmnU8M+Q1/0UtALJib+9A=";
+          # the `py` directory is not included in the tarball, so we fetch the source via git instead
+          forceFetchGit = true;
+        };
+        cargoDeps = rustPlatform.fetchCargoVendor {
+          inherit src postPatch;
+          hash = "sha256-cpIVzgcxKfEA5oov6/OaXqknYsYZUoduLTn2qIXGL5U=";
+        };
+        postPatch = ''
+          ln -s ${./symbolic_Cargo.lock} Cargo.lock
+        '';
+      };
     };
   };
 
@@ -25,7 +45,6 @@ let
       brotli
       celery
       celery-batches
-      dj-stripe
       django
       django-allauth
       django-anymail
@@ -39,7 +58,6 @@ let
       django-organizations
       django-prometheus
       django-redis
-      django-sql-utils
       django-storages
       google-cloud-logging
       gunicorn
@@ -69,14 +87,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glitchtip";
-  version = "4.2.5";
+  version = "4.2.10";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "glitchtip-backend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OTf2rvx+ONnB7pLB7rinztXL7l2eZfIuI7PosCXaOH8=";
+    hash = "sha256-EGk/mhDlqGrJm/j5rTKeKRkJ/fRTspwtPJ+5OHwplfM=";
   };
 
   propagatedBuildInputs = pythonPackages;

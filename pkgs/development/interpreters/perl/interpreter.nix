@@ -71,7 +71,9 @@ stdenv.mkDerivation (
     disallowedReferences = [ stdenv.cc ];
 
     patches =
-      [ ]
+      [
+        ./CVE-2024-56406.patch
+      ]
       # Do not look in /usr etc. for dependencies.
       ++ lib.optional ((lib.versions.majorMinor version) == "5.38") ./no-sys-dirs-5.38.0.patch
       ++ lib.optional ((lib.versions.majorMinor version) == "5.40") ./no-sys-dirs-5.40.0.patch
@@ -270,6 +272,12 @@ stdenv.mkDerivation (
           --replace "${if stdenv.hasCC then stdenv.cc else "/no-such-path"}" /no-such-path \
           --replace "${
             if stdenv.hasCC && stdenv.cc.cc != null then stdenv.cc.cc else "/no-such-path"
+          }" /no-such-path \
+          --replace "${
+            if stdenv.hasCC && stdenv.cc.fallback_sdk or null != null then
+              stdenv.cc.fallback_sdk
+            else
+              "/no-such-path"
           }" /no-such-path \
           --replace "$man" /no-such-path
       ''

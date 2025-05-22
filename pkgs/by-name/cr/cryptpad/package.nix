@@ -1,6 +1,7 @@
 {
   bash,
   buildNpmPackage,
+  coreutils,
   fetchFromGitHub,
   fetchpatch,
   fetchurl,
@@ -13,7 +14,7 @@
 }:
 
 let
-  version = "2024.12.0";
+  version = "2025.3.0";
   # nix version of install-onlyoffice.sh
   # a later version could rebuild from sdkjs/web-apps as per
   # https://github.com/cryptpad/onlyoffice-builds/blob/main/build.sh
@@ -83,10 +84,10 @@ buildNpmPackage {
     owner = "cryptpad";
     repo = "cryptpad";
     rev = version;
-    hash = "sha256-oSrDajaCEc7I2AsDzKoO34ffd4OeXDwFDGm45yQDSvE=";
+    hash = "sha256-NxkVMsfLzdzifdn+f0C6mBJGd1oLwcMTAIXv+gBG7rI=";
   };
 
-  npmDepsHash = "sha256-1EwxAe+8FOrngZx5+FEeu9uHKWZNBpsECEGrsyiZ2GU=";
+  npmDepsHash = "sha256-GWkyRlizPSA72WwoY+mRLwaMeD/SXdo6oUVwsd2gp7c=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -99,12 +100,6 @@ buildNpmPackage {
     # fix httpSafePort setting
     # https://github.com/cryptpad/cryptpad/pull/1571
     ./0001-env.js-fix-httpSafePort-handling.patch
-    # https://github.com/cryptpad/cryptpad/pull/1740
-    (fetchpatch {
-      name = "Add `--check`, `--rdfind`, `--no-rdfind` options to `install-onlyoffice.sh`";
-      url = "https://github.com/cryptpad/cryptpad/commit/f38668735e777895db2eadd3413cff386fb12c0c.patch";
-      hash = "sha256-J4AK1XIa3q+/lD74p2c9O7jt0VEtofTmfAaQNU71sp8=";
-    })
   ];
 
   # cryptpad build tries to write in cache dir
@@ -147,7 +142,7 @@ buildNpmPackage {
     # directory.
     makeWrapper "${lib.getExe nodejs}" "$out/bin/cryptpad" \
       --add-flags "$out_cryptpad/server.js" \
-      --run "for d in customize.dist lib www; do ln -sf \"$out_cryptpad/\$d\" .; done" \
+      --run "for d in customize.dist lib www scripts; do ${coreutils}/bin/ln -sf \"$out_cryptpad/\$d\" .; done" \
       --run "if ! [ -d customize ]; then \"${lib.getExe nodejs}\" \"$out_cryptpad/scripts/build.js\"; fi"
   '';
 

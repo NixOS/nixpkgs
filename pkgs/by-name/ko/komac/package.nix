@@ -5,7 +5,6 @@
   pkg-config,
   openssl,
   rustPlatform,
-  darwin,
   testers,
   komac,
   dbus,
@@ -37,17 +36,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       installShellFiles
     ];
 
-  buildInputs =
-    [
-      dbus
-      openssl
-      zstd
-      bzip2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    dbus
+    openssl
+    zstd
+    bzip2
+  ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
@@ -83,7 +77,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/russellbanks/Komac/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
-      kachick
       HeitorAugustoLN
     ];
     mainProgram = "komac";

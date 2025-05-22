@@ -8,6 +8,7 @@
   setuptools,
 
   # dependencies
+  debtcollector,
   oslo-config,
   oslo-context,
   oslo-serialization,
@@ -24,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "oslo-log";
-  version = "6.2.0";
+  version = "7.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "oslo.log";
     tag = version;
-    hash = "sha256-IEhIhGE95zZiWp602rFc+NLco/Oyx9XEL5e2RExNBMs=";
+    hash = "sha256-ybWrNwP9L7iOzft10TgRFxA4mCRDVozVC2ZAopgITqo=";
   };
 
   # Manually set version because prb wants to get it from the git upstream repository (and we are
@@ -41,6 +42,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    debtcollector
     oslo-config
     oslo-context
     oslo-serialization
@@ -71,6 +73,6 @@ buildPythonPackage rec {
     mainProgram = "convert-json";
     homepage = "https://github.com/openstack/oslo.log";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.openstack.members;
+    teams = [ lib.teams.openstack ];
   };
 }

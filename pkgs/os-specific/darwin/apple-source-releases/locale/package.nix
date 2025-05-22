@@ -58,6 +58,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       lib.licenses.apsl10
       lib.licenses.apsl20
     ];
-    maintainers = lib.teams.darwin.members;
+    teams = [ lib.teams.darwin ];
   };
 })

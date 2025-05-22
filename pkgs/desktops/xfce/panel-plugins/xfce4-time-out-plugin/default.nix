@@ -29,6 +29,6 @@ mkXfceDerivation {
   meta = with lib; {
     description = "Panel plug-in to take periodical breaks from the computer";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

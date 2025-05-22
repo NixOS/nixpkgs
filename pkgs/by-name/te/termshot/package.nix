@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "termshot";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "homeport";
     repo = "termshot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vkxOUo1RyzZBN2+wRn8yWV930HrKRJnPwpHnxza5GNE=";
+    hash = "sha256-fk1Xlgf6WR6dAekv7gZXPfKTEvbnk7FT+mn8UYFbQnQ=";
   };
 
-  vendorHash = "sha256-Wsoy0jlwMYlN8yh7xncGrxTl0qJsPXV4IdYzU7jStzw=";
+  vendorHash = "sha256-RuIn4JNt4c47p2uiLtmCVYyY0/K1kJpmUboXHA5vhew=";
 
   ldflags = [
     "-s"

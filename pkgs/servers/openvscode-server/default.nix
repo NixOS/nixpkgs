@@ -18,9 +18,6 @@
   libkrb5,
   xorg,
   ripgrep,
-  AppKit,
-  Cocoa,
-  Security,
   cctools,
   nixosTests,
 }:
@@ -127,9 +124,6 @@ stdenv.mkDerivation (finalAttrs: {
       libkrb5
     ])
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      Cocoa
-      Security
       cctools
     ];
 
@@ -265,6 +259,8 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
+    # Depends on nodejs_18 that has been removed.
+    broken = true;
     mainProgram = "openvscode-server";
   };
 })

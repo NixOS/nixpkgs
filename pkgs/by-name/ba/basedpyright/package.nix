@@ -16,13 +16,13 @@
 
 buildNpmPackage rec {
   pname = "basedpyright";
-  version = "1.28.4";
+  version = "1.29.1";
 
   src = fetchFromGitHub {
     owner = "detachhead";
     repo = "basedpyright";
     tag = "v${version}";
-    hash = "sha256-Ml8lb8E9sFRSOjaTv1R0OO5+gjXJk2GoL4Fkb+yvb0g=";
+    hash = "sha256-DUcrR4UwqbP968QYPsjivf2FOUL6hwr5ZAGH+qA8Xtw=";
   };
 
   npmDepsHash = "sha256-wzetOJxHJXK7oY1cwOG9YOrKKIDhFPD17em6UQ2859M=";
@@ -49,7 +49,7 @@ buildNpmPackage rec {
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

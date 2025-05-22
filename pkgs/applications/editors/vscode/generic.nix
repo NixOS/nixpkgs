@@ -23,6 +23,7 @@
   wayland,
   libglvnd,
   libkrb5,
+  openssl,
 
   # Populate passthru.tests
   tests,
@@ -51,6 +52,7 @@
   sourceExecutableName ? executableName,
   useVSCodeRipgrep ? false,
   ripgrep,
+  hasVsceSign ? false,
 }:
 
 stdenv.mkDerivation (
@@ -233,6 +235,11 @@ stdenv.mkDerivation (
     dontConfigure = true;
     noDumpEnvVars = true;
 
+    stripExclude = lib.optional hasVsceSign [
+      # vsce-sign is a single executable application built with Node.js, and it becomes non-functional if stripped
+      "lib/vscode/resources/app/node_modules/@vscode/vsce-sign/bin/vsce-sign"
+    ];
+
     installPhase =
       ''
         runHook preInstall
@@ -324,13 +331,20 @@ stdenv.mkDerivation (
           ''
       );
 
-    postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-      patchelf \
-        --add-needed ${libglvnd}/lib/libGLESv2.so.2 \
-        --add-needed ${libglvnd}/lib/libGL.so.1 \
-        --add-needed ${libglvnd}/lib/libEGL.so.1 \
-        $out/lib/${libraryName}/${executableName}
-    '';
+    postFixup = lib.optionalString stdenv.hostPlatform.isLinux (
+      ''
+        patchelf \
+          --add-needed ${libglvnd}/lib/libGLESv2.so.2 \
+          --add-needed ${libglvnd}/lib/libGL.so.1 \
+          --add-needed ${libglvnd}/lib/libEGL.so.1 \
+          $out/lib/${libraryName}/${executableName}
+      ''
+      + (lib.optionalString hasVsceSign ''
+        patchelf \
+          --add-needed ${lib.getLib openssl}/lib/libssl.so \
+          $out/lib/vscode/resources/app/node_modules/@vscode/vsce-sign/bin/vsce-sign
+      '')
+    );
 
     inherit meta;
   }

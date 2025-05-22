@@ -36,6 +36,7 @@ buildPythonPackage rec {
     mainProgram = "isympy";
     homepage = "https://www.sympy.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ lovek323 ] ++ teams.sage.members;
+    maintainers = with maintainers; [ lovek323 ];
+    teams = [ teams.sage ];
   };
 }

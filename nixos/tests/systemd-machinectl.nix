@@ -20,11 +20,13 @@ import ./make-test-python.nix (
         imports = [ ../modules/profiles/minimal.nix ];
 
         system.stateVersion = config.system.nixos.release;
+
+        nixpkgs.pkgs = pkgs;
       };
 
     containerSystem =
       (import ../lib/eval-config.nix {
-        inherit (pkgs) system;
+        system = null;
         modules = [ container ];
       }).config.system.build.toplevel;
 

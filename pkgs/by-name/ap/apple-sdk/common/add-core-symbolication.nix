@@ -34,7 +34,7 @@ let
       description = "Reverse engineered headers for Apple's CoreSymbolication framework";
       homepage = "https://github.com/matthewbauer/CoreSymbolication";
       license = lib.licenses.mit;
-      maintainers = lib.teams.darwin.members;
+      teams = [ lib.teams.darwin ];
       platforms = lib.platforms.darwin;
     };
   });

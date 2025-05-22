@@ -9,17 +9,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hickory-dns";
-  version = "0.25.1";
+  version = "0.25.2";
 
   src = fetchFromGitHub {
     owner = "hickory-dns";
     repo = "hickory-dns";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-H8wJozmuXtJ6d96DMgQ/Uw2sp3sa+UKMXT9vf5azcyc=";
+    hash = "sha256-sPVulok18WAWyCXDNJzjioCO733vHmCcC5SjYrs/T+E=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-nuT2WUejpIhfI8WVTupAgdo7iav9YL1ipHu/PR4S2Hg=";
+  cargoHash = "sha256-q54faGF/eLdCRB0Eljkgl/x78Fnpm0eAEK9gCUwiAgo=";
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];

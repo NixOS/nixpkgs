@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace src/main.rs \
-      --replace "/bin/rm" "${coreutils}/bin/rm"
+      --replace-fail "/bin/rm" "${coreutils}/bin/rm"
   '';
 
   nativeBuildInputs = [ installShellFiles ];

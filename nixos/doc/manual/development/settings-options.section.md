@@ -412,7 +412,7 @@ have a predefined type and string generator already declared under
 
     `multiline` (default `true`)
 
-    :   Whether to procude a multiline output. The output may still wrap across
+    :   Whether to produce a multiline output. The output may still wrap across
         multiple lines if it would otherwise exceed `columnWidth`.
 
     `columnWidth` (default `100`)

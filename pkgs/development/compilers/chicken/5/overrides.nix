@@ -37,7 +37,6 @@ in
           pkgs.libglvnd
           pkgs.libGLU
         ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.darwin.apple_sdk.frameworks.OpenGL ]
         ++ lib.optionals stdenv.hostPlatform.isLinux [ pkgs.xorg.libX11 ]
       ))
       old
@@ -71,9 +70,14 @@ in
   epoxy =
     old:
     (addToPropagatedBuildInputsWithPkgConfig pkgs.libepoxy old)
-    // lib.optionalAttrs stdenv.cc.isClang {
+    // {
       env.NIX_CFLAGS_COMPILE = toString [
-        "-Wno-error=incompatible-function-pointer-types"
+        (
+          if stdenv.cc.isClang then
+            "-Wno-error=incompatible-function-pointer-types"
+          else
+            "-Wno-error=incompatible-pointer-types"
+        )
         "-Wno-error=int-conversion"
       ];
     };
@@ -82,21 +86,31 @@ in
   expat =
     old:
     (addToBuildInputsWithPkgConfig pkgs.expat old)
-    // lib.optionalAttrs stdenv.cc.isClang {
+    // {
       env.NIX_CFLAGS_COMPILE = toString [
-        "-Wno-error=incompatible-function-pointer-types"
+        (
+          if stdenv.cc.isClang then
+            "-Wno-error=incompatible-function-pointer-types"
+          else
+            "-Wno-error=incompatible-pointer-types"
+        )
       ];
     };
   ezxdisp =
     old:
     (addToBuildInputsWithPkgConfig pkgs.xorg.libX11 old)
-    // lib.optionalAttrs stdenv.cc.isClang {
+    // {
       env.NIX_CFLAGS_COMPILE = toString [
         "-Wno-error=implicit-function-declaration"
       ];
     };
   freetype = addToBuildInputsWithPkgConfig pkgs.freetype;
   fuse = addToBuildInputsWithPkgConfig pkgs.fuse;
+  gl-math = old: {
+    env.NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+    ];
+  };
   gl-utils = addPkgConfig;
   glfw3 = addToBuildInputsWithPkgConfig pkgs.glfw3;
   glls = addPkgConfig;
@@ -119,7 +133,7 @@ in
   mdh =
     old:
     (addToBuildInputs pkgs.pcre old)
-    // lib.optionalAttrs stdenv.cc.isClang {
+    // {
       env.NIX_CFLAGS_COMPILE = toString [
         "-Wno-error=implicit-function-declaration"
         "-Wno-error=implicit-int"
@@ -137,13 +151,10 @@ in
   mosquitto = addToPropagatedBuildInputs ([ pkgs.mosquitto ]);
   nanomsg = addToBuildInputs pkgs.nanomsg;
   ncurses = addToBuildInputsWithPkgConfig [ pkgs.ncurses ];
-  opencl = addToBuildInputs (
-    [
-      pkgs.opencl-headers
-      pkgs.ocl-icd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.darwin.apple_sdk.frameworks.OpenCL ]
-  );
+  opencl = addToBuildInputs ([
+    pkgs.opencl-headers
+    pkgs.ocl-icd
+  ]);
   openssl = addToBuildInputs pkgs.openssl;
   plot = addToBuildInputs pkgs.plotutils;
   postgresql = addToBuildInputsWithPkgConfig pkgs.libpq;
@@ -223,16 +234,10 @@ in
     };
   opengl =
     old:
-    (addToBuildInputsWithPkgConfig (
-      lib.optionals (!stdenv.hostPlatform.isDarwin) [
-        pkgs.libGL
-        pkgs.libGLU
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        pkgs.darwin.apple_sdk.frameworks.Foundation
-        pkgs.darwin.apple_sdk.frameworks.OpenGL
-      ]
-    ) old)
+    (addToBuildInputsWithPkgConfig (lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      pkgs.libGL
+      pkgs.libGLU
+    ]) old)
     // {
       postPatch = ''
         substituteInPlace opengl.egg \

@@ -199,13 +199,6 @@ in
       monospace = mkDefault [ "Hack" ];
     };
 
-    # Qt application style.
-    qt = {
-      enable = mkDefault true;
-      style = mkDefault "gtk2";
-      platformTheme = mkDefault "gtk2";
-    };
-
     environment.pathsToLink = [
       "/share" # TODO: https://github.com/NixOS/nixpkgs/issues/47173
     ];
@@ -252,8 +245,7 @@ in
     services.system-config-printer.enable = config.services.printing.enable;
 
     # For BCC's Sharing panel.
-    services.dleyna-renderer.enable = mkDefault true;
-    services.dleyna-server.enable = mkDefault true;
+    services.dleyna.enable = mkDefault true;
     services.gnome.gnome-user-share.enable = mkDefault true;
     services.gnome.rygel.enable = mkDefault true;
 

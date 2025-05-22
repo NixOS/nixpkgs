@@ -35,7 +35,10 @@ buildPythonPackage rec {
     hash = "sha256-CYNEpQFIWR7i7I7YJ5q/34KNhtQ7cjya97Z0fyeO5g8=";
   };
 
-  pythonRelaxDeps = [ "inflect" ];
+  pythonRelaxDeps = [
+    "inflect"
+    "isort"
+  ];
 
   build-system = [
     poetry-core

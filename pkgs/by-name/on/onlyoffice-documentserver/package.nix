@@ -61,9 +61,9 @@ let
       mkdir -p var/lib/onlyoffice/ var/www/onlyoffice/documentserver/fonts/
 
       # see usr/bin/documentserver-flush-cache.sh
-      cp var/www/onlyoffice/documentserver/web-apps/apps/api/documents/api.js.tpl var/www/onlyoffice/documentserver/web-apps/apps/api/documents/api.js
-      HASH=$(basename $out | cut -d '-' -f 1)
-      sed -i "s/{{HASH_POSTFIX}}/$HASH/g" var/www/onlyoffice/documentserver/web-apps/apps/api/documents/api.js
+      cp var/www/onlyoffice/documentserver/web-apps/apps/api/documents/api.js{.tpl,}
+      substituteInPlace var/www/onlyoffice/documentserver/web-apps/apps/api/documents/api.js \
+        --replace-fail '{{HASH_POSTFIX}}' "$(basename $out | cut -d '-' -f 1)"
 
       mv * $out/
     '';

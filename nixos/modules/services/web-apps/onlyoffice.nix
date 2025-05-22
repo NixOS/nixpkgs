@@ -114,7 +114,7 @@ in
               proxy_pass http://onlyoffice-docservice/$2$3;
             '';
             # /etc/nginx/includes/ds-docservice.conf
-            #disable caching for api.js
+            # disable caching for api.js
             "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\w]+)?\\/(web-apps\\/apps\\/api\\/documents\\/api\\.js)$".extraConfig =
               ''
                 expires -1;
@@ -124,26 +124,23 @@ in
             "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\w]+)?\\/(document_editor_service_worker\\.js)$".extraConfig =
               ''
                 expires 365d;
-                # gzip_static on;
-                alias  ${cfg.package}/var/www/onlyoffice/documentserver/sdkjs/common/serviceworker/$2;
+                alias ${cfg.package}/var/www/onlyoffice/documentserver/sdkjs/common/serviceworker/$2;
               '';
-            #suppress logging the unsupported locale error in web-apps
+            # suppress logging the unsupported locale error in web-apps
             "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\w]+)?\\/(web-apps)(\\/.*\\.json)$".extraConfig = ''
               expires 365d;
               error_log /dev/null crit;
               alias ${cfg.package}/var/www/onlyoffice/documentserver/$2$3;
             '';
-            #suppress logging the unsupported locale error in plugins
+            # suppress logging the unsupported locale error in plugins
             "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\w]+)?\\/(sdkjs-plugins)(\\/.*\\.json)$".extraConfig = ''
               expires 365d;
               error_log /dev/null crit;
-              # gzip_static on;
               alias ${cfg.package}/var/www/onlyoffice/documentserver/$2$3;
             '';
             "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\w]+)?\\/(web-apps|sdkjs|sdkjs-plugins|fonts|dictionaries)(\\/.*)$".extraConfig =
               ''
                 expires 365d;
-                # gzip_static on;
                 alias ${cfg.package}/var/www/onlyoffice/documentserver/$2$3;
               '';
             "~* ^(\\/cache\\/files.*)(\\/.*)".extraConfig = ''
@@ -302,9 +299,8 @@ in
               ' /run/onlyoffice/config/default.json | sponge /run/onlyoffice/config/default.json
 
             chmod u+w /run/onlyoffice/config/production-linux.json
-            jq '
-              .FileConverter.converter.x2tPath = "${cfg.x2t}/bin/x2t"
-              ' /run/onlyoffice/config/production-linux.json | sponge /run/onlyoffice/config/production-linux.json
+            jq '.FileConverter.converter.x2tPath = "${cfg.x2t}/bin/x2t"' \
+              /run/onlyoffice/config/production-linux.json | sponge /run/onlyoffice/config/production-linux.json
 
             if psql -d onlyoffice -c "SELECT 'task_result'::regclass;" >/dev/null; then
               psql -f ${cfg.package}/var/www/onlyoffice/documentserver/server/schema/postgresql/removetbl.sql

@@ -205,6 +205,9 @@ rec {
     }
   ) { };
 
+  luv = callPackage ../development/lua-modules/luv { };
+  libluv = callPackage ../development/lua-modules/luv/lib.nix { };
+
   luxio = callPackage (
     {
       fetchurl,
@@ -251,7 +254,6 @@ rec {
 
   nfd = callPackage ../development/lua-modules/nfd {
     inherit (pkgs) zenity;
-    inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
   };
 
   vicious = callPackage (

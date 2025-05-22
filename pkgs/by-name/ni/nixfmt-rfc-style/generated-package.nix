@@ -25,8 +25,8 @@ mkDerivation {
   pname = "nixfmt";
   version = "0.6.0";
   src = fetchzip {
-    url = "https://github.com/nixos/nixfmt/archive/3261d1016ecc753c59ff92767a257f91b587e705.tar.gz";
-    sha256 = "0jk6mgp710iwxyc7wa5kzz0p0rpcwbbs21smnv14cyii0jniz42s";
+    url = "https://github.com/nixos/nixfmt/archive/65af4b69133d19f534d97746c97c2d5b464f43b4.tar.gz";
+    sha256 = "0l0w3janvss1n1j7qkcml97zndm2jm2gbrzzs9d8l0ixnrw0cd5r";
   };
   isLibrary = true;
   isExecutable = true;

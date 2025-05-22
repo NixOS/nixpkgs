@@ -5,43 +5,46 @@
   installShellFiles,
   pkg-config,
   bzip2,
+  bzip3,
   xz,
+  git,
   zlib,
   zstd,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ouch";
-  version = "0.5.1";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "ouch-org";
     repo = "ouch";
     rev = version;
-    hash = "sha256-WO1fetu39fcLGcrbzFh+toHpnyxWuDVHtmjuH203hzQ=";
+    hash = "sha256-vNeOJOyQsjDUzScA1a/W+SI1Z67HTLiHjwWZZpr1Paw=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-LBigtb8kYAgPb4X+L0a/mzPLPEUk5aEHigZuI4Y8N+k=";
+  cargoHash = "sha256-mMoYJ3dLpb1Y3Ocdyxg1brE7xYeZBbtUg0J/2HTK0hE=";
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
+    rustPlatform.bindgenHook
+  ];
+
+  nativeCheckInputs = [
+    git
   ];
 
   buildInputs = [
     bzip2
+    bzip3
     xz
     zlib
     zstd
   ];
 
   buildFeatures = [ "zstd/pkg-config" ];
-
-  preCheck = ''
-    substituteInPlace tests/ui.rs \
-      --replace 'format!(r"/private{path}")' 'path.to_string()'
-  '';
 
   postInstall = ''
     installManPage artifacts/*.1
@@ -58,6 +61,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [
       figsoda
       psibi
+      krovuxdev
     ];
     mainProgram = "ouch";
   };

@@ -3,21 +3,24 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  curl,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "nbfc-linux";
-  version = "0.2.7";
+  version = "0.3.16";
 
   src = fetchFromGitHub {
     owner = "nbfc-linux";
     repo = "nbfc-linux";
-    rev = "${finalAttrs.version}";
-    hash = "sha256-1tLW/xEh01y8BjVbgIa95DkYWf7CDVSo/lI/1U28Xs8=";
+    tag = "${finalAttrs.version}";
+    hash = "sha256-vbpdBYrH8sf62UjVfSiJEwEDpKagGw8FIHkIBKwjy1Q=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
+
+  buildInputs = [ curl ];
+
   configureFlags = [
     "--prefix=${placeholder "out"}"
     "--sysconfdir=${placeholder "out"}/etc"

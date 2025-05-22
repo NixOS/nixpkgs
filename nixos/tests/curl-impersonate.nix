@@ -19,6 +19,9 @@
       We do that by creating a trusted CA and issuing a cert that includes
       all of the test domains as subject-alternative names and then spoofs the
       hostnames in /etc/hosts.
+    - We started skipping the test_http2_headers test due to log format differences
+      between the nghttpd2 version in nixpkgs and the outdated one curl-impersonate
+      uses upstream for its tests.
 */
 
 import ./make-test-python.nix (
@@ -125,7 +128,7 @@ import ./make-test-python.nix (
 
         # Run tests
         cd tests
-        pytest . --install-dir ../usr --capture-interface eth1
+        pytest . --install-dir ../usr --capture-interface eth1 --exitfirst -k 'not test_http2_headers'
       '';
   in
   {

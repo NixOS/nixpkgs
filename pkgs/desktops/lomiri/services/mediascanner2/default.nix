@@ -132,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Media scanner service & access library";
     homepage = "https://gitlab.com/ubports/development/core/mediascanner2";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     mainProgram = "mediascanner-service-2.0";
     platforms = lib.platforms.linux;
     pkgConfigModules = [ "mediascanner-2.0" ];

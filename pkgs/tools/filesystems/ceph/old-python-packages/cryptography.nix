@@ -82,7 +82,6 @@ buildPythonPackage rec {
   buildInputs =
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
       libiconv
     ]
     ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];

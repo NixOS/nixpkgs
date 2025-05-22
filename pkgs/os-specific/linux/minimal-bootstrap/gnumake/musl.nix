@@ -57,7 +57,7 @@ bash.runCommand "${pname}-${version}"
       description = "Tool to control the generation of non-source files from sources";
       homepage = "https://www.gnu.org/software/make";
       license = licenses.gpl3Plus;
-      maintainers = teams.minimal-bootstrap.members;
+      teams = [ teams.minimal-bootstrap ];
       mainProgram = "make";
       platforms = platforms.unix;
     };

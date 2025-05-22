@@ -7,6 +7,7 @@
   ocl-icd,
   tesseract,
   testers,
+  opencl-clhpp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,18 +24,23 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   passthru.tests = {
-    inherit ocl-icd tesseract hashcat;
+    inherit
+      ocl-icd
+      tesseract
+      hashcat
+      opencl-clhpp
+      ;
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
       moduleNames = [ "OpenCL-Headers" ];
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Khronos OpenCL headers version ${finalAttrs.version}";
     homepage = "https://www.khronos.org/registry/cl/";
-    license = licenses.asl20;
-    platforms = platforms.unix ++ platforms.windows;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
+    maintainers = [ lib.maintainers.xokdvium ];
   };
 })

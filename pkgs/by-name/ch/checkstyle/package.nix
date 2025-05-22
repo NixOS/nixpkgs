@@ -7,12 +7,12 @@
 }:
 
 stdenvNoCC.mkDerivation rec {
-  version = "10.22.0";
+  version = "10.23.1";
   pname = "checkstyle";
 
   src = fetchurl {
     url = "https://github.com/checkstyle/checkstyle/releases/download/checkstyle-${version}/checkstyle-${version}-all.jar";
-    sha256 = "sha256-U6QpASgCKxv3NTFINkJ9Aey4E9Y089RY5X2TNhSlIOs=";
+    sha256 = "sha256-bF0U+SLjVoCLTZLbdtFy98HZtYK7uw0zew2gGuisdH8=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];

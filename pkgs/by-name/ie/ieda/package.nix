@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchgit,
+  fetchFromGitHub,
+  fetchpatch,
   callPackages,
   cmake,
   ninja,
@@ -22,27 +24,40 @@
   onnxruntime,
 }:
 let
+  glog-lock = glog.overrideAttrs (oldAttrs: rec {
+    version = "0.6.0";
+    src = fetchFromGitHub {
+      owner = "google";
+      repo = "glog";
+      rev = "v${version}";
+      sha256 = "sha256-xqRp9vaauBkKz2CXbh/Z4TWqhaUtqfbsSlbYZR/kW9s=";
+    };
+  });
   rootSrc = stdenv.mkDerivation {
     pname = "iEDA-src";
-    version = "2024-09-10";
+    version = "2025-04-14";
     src = fetchgit {
       url = "https://gitee.com/oscc-project/iEDA";
-      rev = "a68b691b9d25fafd8c10fae3df7ef3837a42e052";
-      sha256 = "sha256-0rSESfNqI3ALipNAInwcYSccq9C0WuXI9na44TyYAgY=";
+      rev = "51d198884cde2ecda643071a1a6cb4ec0e09d881";
+      sha256 = "sha256-kDVEAttSqa8l7qcRs7MQiBgPbAKBExEQvIE8tc7PLpM=";
     };
 
     patches = [
-      ./fix-bump-gcc.patch
-
-      # We need to build rust projects with rustPlatform
-      # and remove hard coded linking to libonnxruntime
-      ./remove-subprojects-from-cmake.patch
+      # This patch is to fix the build error caused by the missing of the header file,
+      # and remove some libs or path that they hard-coded in the source code.
+      # Should be removed after we upstream these changes.
+      (fetchpatch {
+        url = "https://github.com/Emin017/iEDA/commit/e899b432776010048b558a939ad9ba17452cb44f.patch";
+        hash = "sha256-fLKsb/dgbT1mFCWEldFwhyrA1HSkKGMAbAs/IxV9pwM=";
+      })
+      # This patch is to fix the compile error on the newer version of gcc/g++
+      # which is caused by some incorrect declarations and usages of the Boost library.
+      # Should be removed after we upstream these changes.
+      (fetchpatch {
+        url = "https://github.com/Emin017/iEDA/commit/3a2c7e27a5bd349d72b3a7198358cd640c678802.patch";
+        hash = "sha256-2YROkQ92jGOJZr+4+LrwRJKxhA39Bypb1xFdo6aftu8=";
+      })
     ];
-
-    postPatch = ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")' 'set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O2")'
-    '';
 
     dontBuild = true;
     dontFixup = true;
@@ -56,7 +71,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "iEDA";
-  version = "0-unstable-2024-10-11";
+  version = "0-unstable-2025-04-14";
 
   src = rootSrc;
 
@@ -87,7 +102,7 @@ stdenv.mkDerivation {
     rustpkgs.verilog-parser
     rustpkgs.liberty-parser
     gtest
-    glog
+    glog-lock
     gflags
     boost
     onnxruntime
@@ -103,7 +118,22 @@ stdenv.mkDerivation {
   postInstall = ''
     # Tests rely on hardcoded path, so they should not be included
     rm $out/bin/*test $out/bin/*Test $out/bin/test_* $out/bin/*_app
+
+    # Copy scripts to the share directory for the test
+    mkdir -p $out/share/scripts
+    cp -r $src/scripts/hello.tcl $out/share/scripts/
   '';
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    # Run the tests
+    $out/bin/iEDA -script $out/share/scripts/hello.tcl
+
+    runHook postInstallCheck
+  '';
+
+  doInstallCheck = true;
 
   enableParallelBuild = true;
 
@@ -111,7 +141,10 @@ stdenv.mkDerivation {
     description = "Open-source EDA infracstructure and tools from Netlist to GDS for ASIC design";
     homepage = "https://gitee.com/oscc-project/iEDA";
     license = lib.licenses.mulan-psl2;
-    maintainers = with lib.maintainers; [ xinyangli ];
+    maintainers = with lib.maintainers; [
+      xinyangli
+      Emin017
+    ];
     mainProgram = "iEDA";
     platforms = lib.platforms.linux;
   };

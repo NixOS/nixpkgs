@@ -64,7 +64,7 @@ in
         RestartSec = "5s";
       };
     };
-
-    meta.maintainers = with lib.maintainers; [ malte-v ];
   };
+
+  meta.maintainers = with lib.maintainers; [ malte-v ];
 }

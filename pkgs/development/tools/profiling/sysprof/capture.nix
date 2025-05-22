@@ -25,6 +25,7 @@ stdenv.mkDerivation {
     "-Dtests=false"
     "-Dexamples=false"
     "-Dpolkit-agent=disabled" # only useful for sysprof-cli
+    "-Ddebuginfod=disabled"
   ];
 
   meta = sysprof.meta // {

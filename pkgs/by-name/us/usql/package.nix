@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "usql";
-  version = "0.19.19";
+  version = "0.19.21";
 
   src = fetchFromGitHub {
     owner = "xo";
     repo = "usql";
     tag = "v${version}";
-    hash = "sha256-IDCF/etK9mNjdcgQWEDj9tXP12c2CcEA2RamKlCXgRE=";
+    hash = "sha256-Ix1+uq5TpYp6JyT2KML8Ts/ElPeQCKz9qAW9DqQahbE=";
   };
 
   buildInputs = [
@@ -25,7 +25,7 @@ buildGoModule rec {
     icu
   ];
 
-  vendorHash = "sha256-Z1Mjc+sI+8VHO9TTXUzF4yRvCtDs4sr/dGtjacXWCfE=";
+  vendorHash = "sha256-YXpmzIPs6gvEspC9JrGHw4Yzs8wdtBTsGU9kTOT6c+0=";
   proxyVendor = true;
 
   # Exclude drivers from the bad group

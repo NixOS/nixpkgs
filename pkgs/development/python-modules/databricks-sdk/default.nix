@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "databricks-sdk";
-  version = "0.49.0";
+  version = "0.53.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "databricks-sdk-py";
     tag = "v${version}";
-    hash = "sha256-lNP3ETmRK6sRx9mP2JuIe/OcBbCDEvipST2LUjycgjs=";
+    hash = "sha256-QuPoez1F9v87LGM0Ov6Wg2f5pLAr0uDqZ0b08Xda5+k=";
   };
 
   build-system = [
@@ -69,6 +69,12 @@ buildPythonPackage rec {
     "test_load_azure_tenant_id_happy_path"
     "test_load_azure_tenant_id_no_location_header"
     "test_load_azure_tenant_id_unparsable_location_header"
+    # Take an exceptionally long time when sandboxing is enabled due to retries
+    "test_multipart_upload"
+    "test_rewind_seekable_stream"
+    "test_resumable_upload"
+    # flaky -- ConnectionBroken under heavy load indicates a timing issue
+    "test_github_oidc_flow_works_with_azure"
   ];
 
   __darwinAllowLocalNetworking = true;

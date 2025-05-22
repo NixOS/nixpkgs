@@ -3,28 +3,28 @@
   buildPythonPackage,
   fetchFromGitHub,
   colorama,
+  hatchling,
+  hatch-vcs,
   hypothesis,
-  poetry-core,
-  setuptools,
   pylama,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "isort";
-  version = "5.13.2";
+  version = "6.0.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "isort";
     tag = version;
-    hash = "sha256-/1iKYmtNRw9u59zzJDwV7b9+EPxFJDHvhjTioGt5LLU=";
+    hash = "sha256-+O6bIbIpEMRUhzGUOQtBlHB//DaXaaOTjqMBTFvYnLk=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-    setuptools
+  build-system = [
+    hatchling
+    hatch-vcs
   ];
 
   nativeCheckInputs = [

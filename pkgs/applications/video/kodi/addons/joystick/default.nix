@@ -27,6 +27,6 @@ buildKodiBinaryAddon rec {
     description = "Binary addon for raw joystick input";
     platforms = platforms.all;
     license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

@@ -6,16 +6,16 @@
 }:
 php.buildComposerProject2 (finalAttrs: {
   pname = "pretty-php";
-  version = "0.4.92";
+  version = "0.4.93";
 
   src = fetchFromGitHub {
     owner = "lkrms";
     repo = "pretty-php";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rKL6ViBEJf+GGxWood0DXVF8U7wuz22Z26SEdgDAJww=";
+    hash = "sha256-5gFTL4hcnEMKrffMpLRfneq5zeMHH50fjpvZcnefJZ8=";
   };
 
-  vendorHash = "sha256-V1oqMnDJgWujQXJJqyc2cvEvBbFv+KdXjXfb+sxs8/8=";
+  vendorHash = "sha256-cp6WPlEc3WCW19UqLgrqMv8zE9UrCiTuN+WqTpAsuWE=";
 
   passthru = {
     tests.version = testers.testVersion {

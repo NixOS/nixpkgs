@@ -4,7 +4,6 @@
   fetchurl,
   cmake,
   pkg-config,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,8 +14,6 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
   ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
 
   src = fetchurl {
     url = "http://ftp.musicbrainz.org/pub/musicbrainz/${pname}/${pname}-${version}.tar.gz";

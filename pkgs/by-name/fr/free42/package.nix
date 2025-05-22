@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "free42";
-  version = "3.1.10";
+  version = "3.3.4";
 
   src = fetchFromGitHub {
     owner = "thomasokken";
     repo = "free42";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-X1fNr+0xc15KmR+qbDOkQraYPUj50b1eWmSheIKl4e8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4EEk11/a9kie1sXO1lpJ7GGqjQ2Wvcvg7uhlD6RzyP0=";
   };
 
   nativeBuildInputs = [
@@ -26,9 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    alsa-lib
-  ];
+  buildInputs = [ alsa-lib ];
 
   postPatch = ''
     sed -i -e "s|/bin/ls|ls|" gtk/Makefile
@@ -86,7 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
                         $out/share/icons/hicolor/128x128/apps
 
     install -m755 gtk/free42dec gtk/free42bin $out/bin
-    install -m644 gtk/README $out/share/doc/free42/README-GTK
     install -m644 README $out/share/doc/free42/README
 
     install -m644 gtk/icon-48x48.xpm $out/share/icons/hicolor/48x48/apps/free42.xpm

@@ -1,4 +1,3 @@
-import platform
 import subprocess
 from pathlib import Path
 from unittest.mock import Mock, patch
@@ -77,7 +76,7 @@ def test_flake_to_attr() -> None:
     )
 
 
-@patch(get_qualified_name(platform.node), autospec=True)
+@patch("platform.node", autospec=True)
 def test_flake_from_arg(
     mock_node: Mock, monkeypatch: MonkeyPatch, tmpdir: Path
 ) -> None:
@@ -100,7 +99,7 @@ def test_flake_from_arg(
 
     # None when we do not have /etc/nixos/flake.nix
     with patch(
-        get_qualified_name(m.Path.exists, m),
+        "pathlib.Path.exists",
         autospec=True,
         return_value=False,
     ):
@@ -109,17 +108,17 @@ def test_flake_from_arg(
     # None when we have a file in /etc/nixos/flake.nix
     with (
         patch(
-            get_qualified_name(m.Path.exists, m),
+            "pathlib.Path.exists",
             autospec=True,
             return_value=True,
         ),
         patch(
-            get_qualified_name(m.Path.is_symlink, m),
+            "pathlib.Path.is_symlink",
             autospec=True,
             return_value=False,
         ),
         patch(
-            get_qualified_name(m.discover_git, m),
+            get_qualified_name(m.discover_git),
             autospec=True,
             return_value="/etc/nixos",
         ),
@@ -130,17 +129,17 @@ def test_flake_from_arg(
 
     with (
         patch(
-            get_qualified_name(m.Path.exists, m),
+            "pathlib.Path.exists",
             autospec=True,
             return_value=True,
         ),
         patch(
-            get_qualified_name(m.Path.is_symlink, m),
+            "pathlib.Path.is_symlink",
             autospec=True,
             return_value=True,
         ),
         patch(
-            get_qualified_name(m.Path.resolve, m),
+            "pathlib.Path.resolve",
             autospec=True,
             return_value=Path("/path/to/flake.nix"),
         ),
@@ -151,7 +150,7 @@ def test_flake_from_arg(
 
     with (
         patch(
-            get_qualified_name(m.subprocess.run),
+            "subprocess.run",
             autospec=True,
             return_value=subprocess.CompletedProcess([], 0, "remote-hostname\n"),
         ),
@@ -161,7 +160,7 @@ def test_flake_from_arg(
         )
 
 
-@patch(get_qualified_name(m.Path.mkdir, m), autospec=True)
+@patch("pathlib.Path.mkdir", autospec=True)
 def test_profile_from_arg(mock_mkdir: Mock) -> None:
     assert m.Profile.from_arg("system") == m.Profile(
         "system",

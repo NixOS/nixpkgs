@@ -51,7 +51,7 @@ vimUtils.buildVimPlugin {
     substituteInPlace lua/cord/server/fs/init.lua \
       --replace-fail \
         "or M.get_data_path()" \
-        "'${cord-server}'"
+        "or '${cord-server}'"
   '';
 
   passthru = {

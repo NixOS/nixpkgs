@@ -8,14 +8,14 @@
   runCommand,
   jj,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "jj";
   version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "tidwall";
     repo = "jj";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Yijap5ZghTBe1ahkQgjjxuo++SriJWXgRqrNXIVQ0os=";
   };
 
@@ -28,7 +28,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   passthru = {
@@ -71,4 +71,4 @@ buildGoModule rec {
     mainProgram = "jj";
     maintainers = with maintainers; [ katexochen ];
   };
-}
+})

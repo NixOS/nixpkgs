@@ -4,15 +4,11 @@
   SDL2_image,
   SDL2_mixer,
   cmake,
-  darwin,
   fetchFromGitHub,
   pkg-config,
   stdenv,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) Cocoa;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "doomretro";
   version = "5.6.2";
@@ -33,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     SDL2_image
     SDL2_mixer
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+  ];
 
   strictDeps = true;
 

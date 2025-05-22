@@ -34,14 +34,20 @@
     machine.wait_for_x()
 
     with subtest("lomiri clock launches"):
-        machine.execute("lomiri-clock-app >&2 &")
+        machine.succeed("lomiri-clock-app >&2 &")
+        machine.sleep(10)
+        machine.send_key("alt-f10")
+        machine.sleep(5)
         machine.wait_for_text(r"(clock.ubports|City|Alarms)")
         machine.screenshot("lomiri-clock_open")
 
     machine.succeed("pkill -f lomiri-clock-app")
 
     with subtest("lomiri clock localisation works"):
-        machine.execute("env LANG=de_DE.UTF-8 lomiri-clock-app >&2 &")
+        machine.succeed("env LANG=de_DE.UTF-8 lomiri-clock-app >&2 &")
+        machine.sleep(10)
+        machine.send_key("alt-f10")
+        machine.sleep(5)
         machine.wait_for_text(r"(Stadt|Weckzeiten)")
         machine.screenshot("lomiri-clock_localised")
   '';

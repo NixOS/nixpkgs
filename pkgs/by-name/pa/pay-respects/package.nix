@@ -2,37 +2,30 @@
   lib,
   fetchFromGitea,
   rustPlatform,
-  pkg-config,
-  openssl,
-  curl,
+  versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pay-respects";
-  version = "0.6.14";
+  version = "0.7.6";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "iff";
     repo = "pay-respects";
-    rev = "v${version}";
-    hash = "sha256-D6wkLrIzFpCTzOtVD8GcfBAZS48pNAIkTUTw3DRf7ds=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+50MKpZgJqjuUvJeFFv8fMILkJ3cOAN7R7kmlR+98II=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-QdeU+0o68j5Y0IKouyJ8ypZghuS8NKxCUpmZxi+sxuk=";
+  cargoHash = "sha256-TJP+GPkXwPvnBwiF0SCkn8NGz/xyrYjbUZKCbUUSqHQ=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
-
-  buildInputs = [
-    openssl
-    curl
-  ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
-    description = "Terminal command correction, alternative to `thefuck`, written in Rust";
+    description = "Terminal command correction, alternative to thefuck, written in Rust";
     homepage = "https://codeberg.org/iff/pay-respects";
+    changelog = "https://codeberg.org/iff/pay-respects/src/tag/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
       sigmasquadron
@@ -41,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "pay-respects";
   };
-}
+})
