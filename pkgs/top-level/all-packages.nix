@@ -9740,17 +9740,17 @@ with pkgs;
     wine = wineWowPackages.staging;
   };
 
-  vtk_9 = libsForQt5.callPackage ../development/libraries/vtk {
-    stdenv = if stdenv.cc.isClang then llvmPackages_17.stdenv else stdenv;
-  };
+  vtk_9 = libsForQt5.callPackage ../development/libraries/vtk { };
 
-  vtk_9_withQt5 = vtk_9.override { enableQt = true; };
+  vtk_9_withQt5 = vtk_9.override { withQt5 = true; };
+
+  vtk_9_withQt6 = vtk_9.override { withQt6 = true; };
 
   vtk = vtk_9;
 
-  vtk_9_egl = vtk_9.override { enableEgl = true; };
-
   vtkWithQt5 = vtk_9_withQt5;
+
+  vtkWithQt6 = vtk_9_withQt6;
 
   vulkan-caps-viewer = libsForQt5.callPackage ../tools/graphics/vulkan-caps-viewer { };
 
