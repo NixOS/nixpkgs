@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  name = "secureBoot";
+  name = "secureboot";
   meta.maintainers = with lib.maintainers; [
     programmerlexi
   ];
