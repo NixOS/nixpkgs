@@ -20,7 +20,9 @@
   pkg-config,
   polkit,
   gdm,
+  replaceVars,
   systemd,
+  tecla,
   upower,
   pam,
   wrapGAppsHook3,
@@ -64,12 +66,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-flashback";
-  version = "3.54.0";
+  version = "3.56.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-flashback/${lib.versions.majorMinor finalAttrs.version}/gnome-flashback-${finalAttrs.version}.tar.xz";
-    hash = "sha256-gkNa4wLNZK6xG25M0YTaj/+qzSSFFf+gIidZXDzPne4=";
+    hash = "sha256-LQ+iLzc9sIDq7w5Wk7lijN6ETyVjPVqQMTsEndlSkmA=";
   };
+
+  patches = [
+    (replaceVars ./fix-paths.patch {
+      tecla = lib.getExe tecla;
+    })
+  ];
 
   # make .desktop Execs absolute
   postPatch = ''
@@ -218,7 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-flashback";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-flashback/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = licenses.gpl2;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.linux;
   };
 })

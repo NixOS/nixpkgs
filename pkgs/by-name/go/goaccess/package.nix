@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "goaccess";
-  version = "1.9.3";
+  version = "1.9.4";
 
   src = fetchFromGitHub {
     owner = "allinurl";
     repo = "goaccess";
     tag = "v${version}";
-    hash = "sha256-ZOngDAHA88YQvkx2pk5ZSpBzxqelvCIR4z5hiFmfGyc=";
+    hash = "sha256-KevxuZuIrMybNlPZgVDLO0zQe4LfAKxfVBbHnyTUC/o=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -35,6 +35,12 @@ stdenv.mkDerivation rec {
     "--enable-utf8"
     "--with-openssl"
   ] ++ lib.optionals withGeolocation [ "--enable-geoip=mmdb" ];
+
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      "-DHOST_NAME_MAX=_POSIX_HOST_NAME_MAX"
+    ]
+  );
 
   meta = with lib; {
     description = "Real-time web log analyzer and interactive viewer that runs in a terminal in *nix systems";

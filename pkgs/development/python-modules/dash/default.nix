@@ -16,7 +16,6 @@
   dash-core-components,
   dash-table,
   importlib-metadata,
-  stringcase,
   typing-extensions,
   requests,
   retrying,
@@ -37,14 +36,14 @@
 
 buildPythonPackage rec {
   pname = "dash";
-  version = "3.0.0";
+  version = "3.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "dash";
     tag = "v${version}";
-    hash = "sha256-plGYBMwVQLBar48nv2BIH7ttfXM8Dnb3E0sPOZ2Et2M=";
+    hash = "sha256-EMIzvn2V04AUNNKQ9FFnsW61zkSS1PrqTF5T5LIifAc=";
   };
 
   nativeBuildInputs = [
@@ -83,7 +82,6 @@ buildPythonPackage rec {
     dash-core-components
     dash-table
     importlib-metadata
-    stringcase
     typing-extensions
     requests
     retrying
@@ -124,7 +122,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "dash" ];
 
   meta = {
-    changelog = "https://github.com/plotly/dash/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/plotly/dash/blob/${src.tag}/CHANGELOG.md";
     description = "Python framework for building analytical web applications";
     homepage = "https://dash.plot.ly/";
     license = lib.licenses.mit;

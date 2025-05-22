@@ -25,6 +25,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-gG1Rz5AtDLzikGFr8A3l25ypd+VoLw2oWjszy9ogDLk=";
   };
 
+  patches = lib.optionals (!stdenv.hostPlatform.isGnu) [
+    # Use POSIX basename on non-glib.
+    # Remove when https://github.com/pmem/ndctl/pull/263
+    # or equivalent fix is merged and released.
+    ./musl-compat.patch
+  ];
+
   outputs = [
     "out"
     "man"

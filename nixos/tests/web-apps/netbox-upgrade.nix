@@ -1,8 +1,18 @@
 import ../make-test-python.nix (
   { lib, pkgs, ... }:
   let
-    oldNetbox = pkgs.netbox_3_7;
-    newNetbox = pkgs.netbox_4_1;
+    oldNetbox = "netbox_4_1";
+    newNetbox = "netbox_4_2";
+
+    apiVersion =
+      version:
+      lib.pipe version [
+        (lib.splitString ".")
+        (lib.take 2)
+        (lib.concatStringsSep ".")
+      ];
+    oldApiVersion = apiVersion pkgs."${oldNetbox}".version;
+    newApiVersion = apiVersion pkgs."${newNetbox}".version;
   in
   {
     name = "netbox-upgrade";
@@ -15,12 +25,14 @@ import ../make-test-python.nix (
     };
 
     nodes.machine =
-      { config, ... }:
+      { config, pkgs, ... }:
       {
         virtualisation.memorySize = 2048;
         services.netbox = {
           enable = true;
-          package = oldNetbox;
+          # Pick the NetBox package from this config's "pkgs" argument,
+          # so that `nixpkgs.config.permittedInsecurePackages` works
+          package = pkgs."${oldNetbox}";
           secretKeyFile = pkgs.writeText "secret" ''
             abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
           '';
@@ -42,22 +54,13 @@ import ../make-test-python.nix (
 
         networking.firewall.allowedTCPPorts = [ 80 ];
 
-        specialisation.upgrade.configuration.services.netbox.package = lib.mkForce newNetbox;
+        nixpkgs.config.permittedInsecurePackages = [ pkgs."${oldNetbox}".name ];
+
+        specialisation.upgrade.configuration.services.netbox.package = lib.mkForce pkgs."${newNetbox}";
       };
 
     testScript =
       { nodes, ... }:
-      let
-        apiVersion =
-          version:
-          lib.pipe version [
-            (lib.splitString ".")
-            (lib.take 2)
-            (lib.concatStringsSep ".")
-          ];
-        oldApiVersion = apiVersion oldNetbox.version;
-        newApiVersion = apiVersion newNetbox.version;
-      in
       ''
         start_all()
         machine.wait_for_unit("netbox.target")

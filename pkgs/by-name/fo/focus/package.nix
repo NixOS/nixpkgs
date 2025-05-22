@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/phillbush/focus";
     license = licenses.publicDomain;
-    maintainers = with maintainers; [ azahi ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

@@ -220,18 +220,6 @@ stdenv.mkDerivation {
         ./nix-etag-1.15.4.patch
         ./nix-skip-check-logs-path.patch
       ]
-      ++
-        lib.optionals
-          (lib.elem pname [
-            "nginx"
-            "nginxQuic"
-            "tengine"
-          ])
-          [
-            # https://github.com/NixOS/nixpkgs/issues/357522
-            # https://github.com/zlib-ng/patches/blob/5a036c0a00120c75ee573b27f4f44ade80d82ff2/nginx/README.md
-            ./nginx-zlib-ng.patch
-          ]
       ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
         (fetchpatch {
           url = "https://raw.githubusercontent.com/openwrt/packages/c057dfb09c7027287c7862afab965a4cd95293a3/net/nginx/patches/102-sizeof_test_fix.patch";
@@ -316,13 +304,13 @@ stdenv.mkDerivation {
         license = [ licenses.bsd2 ] ++ concatMap (m: m.meta.license) modules;
         broken = lib.any (m: m.meta.broken or false) modules;
         platforms = platforms.all;
-        maintainers =
-          with maintainers;
-          [
-            fpletz
-            raitobezarius
-          ]
-          ++ teams.helsinki-systems.members
-          ++ teams.stridtech.members;
+        maintainers = with maintainers; [
+          fpletz
+          raitobezarius
+        ];
+        teams = with teams; [
+          helsinki-systems
+          stridtech
+        ];
       };
 }

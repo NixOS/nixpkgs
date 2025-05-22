@@ -28,8 +28,6 @@ buildHomeAssistantComponent {
     })
   ];
 
-  dontBuild = true;
-
   dependencies = [
     govee-led-wez
   ];

@@ -8,7 +8,7 @@ up a VirtualBox guest, follow these instructions:
 
 1.  Base Memory Size: 768 MB or higher.
 
-1.  New Hard Disk of 8 GB or higher.
+1.  New Hard Disk of 10 GB or higher.
 
 1.  Mount the CD-ROM with the NixOS ISO (by clicking on CD/DVD-ROM)
 

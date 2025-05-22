@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "ecdsa";
-  version = "0.19.0";
+  version = "0.19.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YOqtEZllmQDdCvUh7UYreTu9+GdDKzlI6HQWrkyva/g=";
+    hash = "sha256-R4y6e2JVWGb8s7s/6YXgbey9to71VxPE5auYxX1QjmE=";
   };
 
   propagatedBuildInputs = [ six ];

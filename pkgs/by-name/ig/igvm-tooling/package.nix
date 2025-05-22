@@ -5,7 +5,7 @@
   fetchpatch,
   which,
   acpica-tools,
-  nix-update-script,
+  unstableGitUpdater,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -62,7 +62,9 @@ python3.pkgs.buildPythonApplication rec {
     find $out/share/igvm-tooling/acpi -name "*.dsl" -exec iasl -f {} \;
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "igvm-";
+  };
 
   meta = {
     description = "IGVM Image Generator";

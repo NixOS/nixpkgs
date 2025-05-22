@@ -198,11 +198,10 @@ let
         "x86_64-darwin"
         "aarch64-darwin"
       ];
-      maintainers =
-        teams.flutter.members
-        ++ (with maintainers; [
-          ericdallo
-        ]);
+      maintainers = with maintainers; [
+        ericdallo
+      ];
+      teams = [ teams.flutter ];
     };
   };
 in

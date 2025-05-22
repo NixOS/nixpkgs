@@ -101,8 +101,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://git.taler.net/wallet-core.git/";
     description = "CLI wallet for GNU Taler written in TypeScript and Anastasis Web UI";
     license = lib.licenses.gpl3Plus;
-    maintainers = lib.teams.ngi.members;
+    teams = [ lib.teams.ngi ];
     platforms = lib.platforms.linux;
     mainProgram = "taler-wallet-cli";
+    # ./configure doesn't understand --build / --host
+    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 })

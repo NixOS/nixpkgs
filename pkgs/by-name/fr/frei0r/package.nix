@@ -6,7 +6,6 @@
   cairo,
   cmake,
   opencv,
-  pcre,
   pkg-config,
   cudaSupport ? config.cudaSupport,
   cudaPackages,
@@ -31,7 +30,6 @@ stdenv.mkDerivation rec {
     [
       cairo
       opencv
-      pcre
     ]
     ++ lib.optionals cudaSupport [
       cudaPackages.cuda_cudart

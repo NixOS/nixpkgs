@@ -102,6 +102,7 @@ lib.makeOverridable (
       optionalString
       optionalAttrs
       maintainers
+      teams
       platforms
       ;
 
@@ -411,9 +412,17 @@ lib.makeOverridable (
             if kernelConf.target == "uImage" && stdenv.hostPlatform.linuxArch == "arm" then
               "uinstall"
             else if
-              kernelConf.target == "zImage"
-              || kernelConf.target == "Image.gz"
-              || kernelConf.target == "vmlinuz.efi"
+              (
+                kernelConf.target == "zImage"
+                || kernelConf.target == "Image.gz"
+                || kernelConf.target == "vmlinuz.efi"
+              )
+              && builtins.elem stdenv.hostPlatform.linuxArch [
+                "arm"
+                "arm64"
+                "parisc"
+                "riscv"
+              ]
             then
               "zinstall"
             else
@@ -514,9 +523,8 @@ lib.makeOverridable (
             );
           license = lib.licenses.gpl2Only;
           homepage = "https://www.kernel.org/";
-          maintainers = lib.teams.linux-kernel.members ++ [
-            maintainers.thoughtpolice
-          ];
+          maintainers = [ maintainers.thoughtpolice ];
+          teams = [ teams.linux-kernel ];
           platforms = platforms.linux;
           badPlatforms =
             lib.optionals (lib.versionOlder version "4.15") [

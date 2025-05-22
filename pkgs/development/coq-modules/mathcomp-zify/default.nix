@@ -2,9 +2,9 @@
   lib,
   mkCoqDerivation,
   coq,
-  mathcomp-algebra,
-  mathcomp-ssreflect,
+  mathcomp-boot,
   mathcomp-fingroup,
+  mathcomp-algebra,
   stdlib,
   version ? null,
 }:
@@ -54,8 +54,8 @@ mkCoqDerivation {
   release."1.5.0+2.0+8.16".sha256 = "sha256-boBYGvXdGFc6aPnjgSZYSoW4kmN5khtNrSV3DUv9DqM=";
 
   propagatedBuildInputs = [
+    mathcomp-boot
     mathcomp-algebra
-    mathcomp-ssreflect
     mathcomp-fingroup
     stdlib
   ];

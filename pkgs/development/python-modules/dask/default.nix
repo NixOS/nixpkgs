@@ -110,7 +110,7 @@ buildPythonPackage rec {
     ]
     ++ optional-dependencies.array
     ++ optional-dependencies.dataframe;
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   pytestFlagsArray = [
     # Rerun failed tests up to three times

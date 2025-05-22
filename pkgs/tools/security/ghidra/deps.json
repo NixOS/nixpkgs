@@ -103,7 +103,7 @@
    "tar.gz": "sha256-FzNmYFJZqD3BicQyf/TDclSv7WW0+GbL2KXvLqRJ6PM="
   }
  },
- "https://github.com/NationalSecurityAgency/ghidra-data/raw/Ghidra_11.3.1": {
+ "https://github.com/NationalSecurityAgency/ghidra-data/raw/Ghidra_11.3.2": {
   "FunctionID/vs2012_x64": {
    "fidb": "sha256-1OmKs/eQuDF5MhhDC7oNiySl+/TaZbDB/6jLDPvrDNw="
   },
@@ -246,9 +246,6 @@
    "jar": "sha256-8CqV+hpele2z7YWf0Pt99wnRIaNSkO/4t03OKrf01u0=",
    "pom": "sha256-N/h3mLGDhRE8kYv6nhJ2/lBzXvj6hJtYAMUZ1U2/Efg="
   },
-  "com/google/protobuf#protobuf-bom/3.17.3": {
-   "pom": "sha256-bf431vImF9VqQUzNrf+NmFhaH3kXEr6HbCYWZxDR2N0="
-  },
   "com/google/protobuf#protobuf-bom/3.21.8": {
    "pom": "sha256-+7Ds/DyjGFddtifjOuRUwT1qTcp68UXRTT9m4IY8PPo="
   },
@@ -256,16 +253,9 @@
    "jar": "sha256-RP2JrzepsvHdQcCUqbtzPAe/f8eg4jhooQuvbjUfpeA=",
    "pom": "sha256-Gwqekab09LYqWmB4wibudwqo3FdnueRzwvwY8KOImAQ="
   },
-  "com/google/protobuf#protobuf-java/3.17.3": {
-   "jar": "sha256-SsVJsZJpQUGVgEnwYKHIJqMzQvYZ4QjO2MF9mHf14+0=",
-   "pom": "sha256-Km8izVJli4uxTBANs+F5NT+MNR0ENzo79voKOzlGStw="
-  },
   "com/google/protobuf#protobuf-java/3.21.8": {
    "jar": "sha256-C4WBrYENLfrv0Nz78VabFFBEhlAjjX4v1rF2yTLQjJU=",
    "pom": "sha256-OJBUBuApx6MYaW8O4RnFXM7HizN+oR5MMZWfDgardAg="
-  },
-  "com/google/protobuf#protobuf-parent/3.17.3": {
-   "pom": "sha256-T09Q5moqvM/o7SCbU/q3C4k+NfQ77FqB98GESbY+hrE="
   },
   "com/google/protobuf#protobuf-parent/3.21.8": {
    "pom": "sha256-bHKyrDl1sAnR5FdQlVnp+onyV4vShD3LTWo+XPgRFws="

@@ -199,6 +199,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-Wno-dev"
   ];
 
+  # Generate translation files
+  postBuild = "( cd .. && ./run_gettext.sh )";
+
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "$out/lib:${

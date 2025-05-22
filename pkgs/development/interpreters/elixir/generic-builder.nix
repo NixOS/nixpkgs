@@ -132,6 +132,6 @@ stdenv.mkDerivation ({
 
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = teams.beam.members;
+    teams = [ teams.beam ];
   };
 })

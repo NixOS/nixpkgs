@@ -8,6 +8,8 @@
   zstd,
   scx-common,
   scx,
+  protobuf,
+  libseccomp,
 }:
 rustPlatform.buildRustPackage {
   pname = "scx_rustscheds";
@@ -26,11 +28,13 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
+    protobuf
   ];
   buildInputs = [
     elfutils
     zlib
     zstd
+    libseccomp
   ];
 
   env = {

@@ -119,6 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
       openssl
       pam
       pcre2
+      protobufc
       python3
       readline
       rtrlib

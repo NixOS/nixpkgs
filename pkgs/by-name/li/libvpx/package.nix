@@ -99,10 +99,18 @@ let
   isGeneric =
     (stdenv.hostPlatform.isPower && stdenv.hostPlatform.isLittleEndian)
     || stdenv.hostPlatform.parsed.cpu.name == "armv6l"
+    || stdenv.hostPlatform.isLoongArch64
     || stdenv.hostPlatform.isRiscV;
 
   target =
-    if (stdenv.hostPlatform.isBSD || stdenv.hostPlatform != stdenv.buildPlatform) then
+    if
+      (
+        stdenv.hostPlatform.isBSD
+        || stdenv.hostPlatform != stdenv.buildPlatform
+        # https://issues.chromium.org/issues/359039635
+        || stdenv.hostPlatform.isLoongArch64
+      )
+    then
       (if isGeneric then "generic-gnu" else "${cpu}-${kernel}-gcc")
     else
       null;

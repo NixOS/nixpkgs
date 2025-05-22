@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   version = "2.1.0";
 
   src = fetchurl {
-    url = "https://download.savannah.gnu.org/releases/cuyo/cuyo-2.1.0.tar.gz";
+    url = "mirror://savannah/cuyo/cuyo-2.1.0.tar.gz";
     sha256 = "17yqv924x7yvwix7yz9jdhgyar8lzdhqvmpvv0any8rdkajhj23c";
   };
 

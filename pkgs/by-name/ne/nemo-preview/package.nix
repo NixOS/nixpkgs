@@ -58,6 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Quick previewer for Nemo, the Cinnamon desktop file manager";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.cinnamon.members;
+    teams = [ lib.teams.cinnamon ];
   };
 })

@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     homepage = "https://ipxe.org/wimboot";
     description = "Windows Imaging Format bootloader";
     license = licenses.gpl2Plus;
-    maintainers = teams.helsinki-systems.members;
+    teams = [ teams.helsinki-systems ];
     platforms = [ "x86_64-linux" ];
   };
 }

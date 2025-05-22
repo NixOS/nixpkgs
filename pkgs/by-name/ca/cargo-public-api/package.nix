@@ -5,8 +5,6 @@
   pkg-config,
   curl,
   openssl,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     curl
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  ];
 
   # Tests fail
   doCheck = false;

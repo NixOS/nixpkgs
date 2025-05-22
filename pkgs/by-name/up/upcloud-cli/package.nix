@@ -32,7 +32,7 @@ buildGoModule rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/upctl";
-  versionCheckProgramArg = [ "version" ];
+  versionCheckProgramArg = "version";
   doInstallCheck = true;
 
   passthru = {

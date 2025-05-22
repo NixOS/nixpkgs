@@ -3,32 +3,59 @@
   stdenv,
   fetchFromGitHub,
   fetchYarnDeps,
+  git,
+  yarn-berry,
   yarnConfigHook,
-  yarnBuildHook,
   nodejs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "element-call";
-  version = "0.9.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "element-call";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BugR5aXDxIQ9WOhaqXEoo0FdZHnYSvoqDoRJLDd4PUk=";
+    hash = "sha256-SNwNo3v2HydNXtb3H3Xh2mYBIagMkWjitlKWTfraeVU=";
   };
 
-  offlineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-7dUSt1k/5N6BaYrT272J6xxDGgloAsDw1dCFh327Itc=";
+  matrixJsSdkRevision = "19b1b901f575755d29d1fe03ca48cbf7c1cae05c";
+  matrixJsSdkOfflineCache = fetchYarnDeps {
+    yarnLock = "${finalAttrs.offlineCache}/checkouts/${finalAttrs.matrixJsSdkRevision}/yarn.lock";
+    hash = "sha256-pi2MW+58DCkHJDOxMWeXzF+v+5JhJFGQcUgsRsYjNvw=";
+  };
+
+  dontYarnInstallDeps = true;
+  preConfigure = ''
+    cp -r $offlineCache writable
+    chmod u+w -R writable
+    pushd writable/checkouts/${finalAttrs.matrixJsSdkRevision}/
+    mkdir -p .git/{refs,objects}
+    echo ${finalAttrs.matrixJsSdkRevision} > .git/HEAD
+    SKIP_YARN_COREPACK_CHECK=1 offlineCache=$matrixJsSdkOfflineCache yarnConfigHook
+    popd
+    offlineCache=writable
+  '';
+
+  missingHashes = ./missing-hashes.json;
+  offlineCache = yarn-berry.fetchYarnBerryDeps {
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-Z8gTt4W78w2DdkRhnaPLG2RIwfT64RFs5+UobARDG4c=";
   };
 
   nativeBuildInputs = [
+    git
+    yarn-berry.yarnBerryConfigHook
     yarnConfigHook
-    yarnBuildHook
     nodejs
   ];
+
+  buildPhase = ''
+    runHook preBuild
+    ${lib.getExe yarn-berry} build
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall

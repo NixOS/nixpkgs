@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/ubports/development/apps/lomiri-docviewer-app";
     changelog = "https://gitlab.com/ubports/development/apps/lomiri-docviewer-app/-/blob/v${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     mainProgram = "lomiri-docviewer-app";
     platforms = lib.platforms.linux;
   };

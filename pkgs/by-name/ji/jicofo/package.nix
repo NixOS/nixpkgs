@@ -9,10 +9,10 @@
 
 let
   pname = "jicofo";
-  version = "1.0-1124";
+  version = "1.0-1128";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
-    sha256 = "pnSp9naOGC4V8MlrBVZ9e4Qk4GZSQdepS2xocQSfw30=";
+    sha256 = "pWTOAvsvWGWgt4q9jNyp0faZrbRx0De3R5U5j+GNTDA=";
   };
 in
 stdenv.mkDerivation {
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/jitsi/jicofo";
     license = licenses.asl20;
-    maintainers = teams.jitsi.members;
+    teams = [ teams.jitsi ];
     platforms = platforms.linux;
   };
 }

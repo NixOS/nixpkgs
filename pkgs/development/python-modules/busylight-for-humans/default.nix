@@ -58,7 +58,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/JnyJny/busylight";
     changelog = "https://github.com/JnyJny/busylight/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = teams.helsinki-systems.members;
+    teams = [ teams.helsinki-systems ];
     mainProgram = "busylight";
   };
 }

@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation {
   dontConfigure = true;
   dontBuild = true;
   checkPhase = ''
-    find "$src" -type f -print0 | xargs -0 shellcheck
+    find "$src" -type f -print0 | xargs -0 shellcheck --source-path="$src"
   '';
   installPhase = ''
     touch "$out"

@@ -49,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-RtVKlw2ca8An4FodeD0RN95z9yHDHBgAxsEwLAmW7co=";
       name = "fix-build-with-new-pipewire.patch";
     })
+    ./fix-build-on-qt6_9.diff
   ];
 
   buildInputs =

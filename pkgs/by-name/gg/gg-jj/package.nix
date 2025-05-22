@@ -1,71 +1,52 @@
 {
   lib,
   stdenv,
-
   rustPlatform,
   fetchFromGitHub,
   fetchNpmDeps,
-  yq,
-
   cargo-tauri,
-  cargo,
-  rustc,
   nodejs,
   npmHooks,
   pkg-config,
   wrapGAppsHook3,
-
   openssl,
   webkitgtk_4_1,
-
   versionCheckHook,
   nix-update-script,
 }:
-stdenv.mkDerivation (finalAttrs: {
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gg";
-  version = "0.23.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "gulbanana";
     repo = "gg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iQxPJgMxBtyindkNdQkehwPf7ZgWCI09PToqs2y1Hfw=";
+    hash = "sha256-vmzALX1x7VfdnwN05bCwbnTL+HfFVyNiKFoT74tFuu8=";
   };
 
-  patches = [ ./native-tls.patch ];
   cargoRoot = "src-tauri";
+
   buildAndTestSubdir = "src-tauri";
 
-  # FIXME: Switch back to cargoHash when https://github.com/NixOS/nixpkgs/issues/356811 is fixed
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs)
-      pname
-      version
-      src
-      patches
-      ;
-    # Tries to apply patches inside cargoRoot.
-    prePatch = "pushd ..";
-    postPatch = "popd";
-    sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
-    hash = "sha256-zEYU5l57VxVKKhoGfa77kT05vwoLyAu9eyt7C9dhAGM=";
-  };
+  cargoHash = "sha256-esStQ55+T4uLbHbg7P7hqS6kIpXIMxouRSFkTo6dvAU=";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-SMz1ohPSF5tvf2d3is4PXhnjHG9hHuS5NYmHbe46HaU=";
+    hash = "sha256-yFDGH33maCndH4vgyMfNg0+c5jCOeoIAWUJgAPHXwsM=";
   };
 
-  nativeBuildInputs = [
-    cargo-tauri.hook
-    rustPlatform.cargoSetupHook
-    cargo
-    rustc
-    nodejs
-    npmHooks.npmConfigHook
-    pkg-config
-    wrapGAppsHook3
-  ];
+  nativeBuildInputs =
+    [
+      cargo-tauri.hook
+      nodejs
+      npmHooks.npmConfigHook
+      pkg-config
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      wrapGAppsHook3
+    ];
 
   buildInputs =
     [ openssl ]
@@ -89,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "GUI for the version control system Jujutsu";
     homepage = "https://github.com/gulbanana/gg";
-    changelog = "https://github.com/gulbanana/gg/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/gulbanana/gg/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [ asl20 ];
     inherit (cargo-tauri.hook.meta) platforms;
     maintainers = with lib.maintainers; [ pluiedev ];

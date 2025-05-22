@@ -12,15 +12,11 @@
 
 let
   cfg = config.services.displayManager.cosmic-greeter;
+  cfgAutoLogin = config.services.displayManager.autoLogin;
 in
 
 {
-  meta.maintainers = with lib.maintainers; [
-    thefossguy
-    HeitorAugustoLN
-    nyabinary
-    ahoneybun
-  ];
+  meta.maintainers = lib.teams.cosmic.members;
 
   options.services.displayManager.cosmic-greeter = {
     enable = lib.mkEnableOption "COSMIC greeter";
@@ -34,6 +30,10 @@ in
         default_session = {
           user = "cosmic-greeter";
           command = ''${lib.getExe' pkgs.coreutils "env"} XCURSOR_THEME="''${XCURSOR_THEME:-Pop}" systemd-cat -t cosmic-greeter ${lib.getExe pkgs.cosmic-comp} ${lib.getExe cfg.package}'';
+        };
+        initial_session = lib.mkIf (cfgAutoLogin.enable && (cfgAutoLogin.user != null)) {
+          user = cfgAutoLogin.user;
+          command = ''${lib.getExe' pkgs.coreutils "env"} XCURSOR_THEME="''${XCURSOR_THEME:-Pop}" systemd-cat -t cosmic-session ${lib.getExe pkgs.cosmic-session}'';
         };
       };
     };

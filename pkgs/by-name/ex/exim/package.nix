@@ -201,7 +201,8 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "exim";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tv ] ++ teams.helsinki-systems.members;
+    maintainers = with maintainers; [ tv ];
+    teams = [ teams.helsinki-systems ];
     changelog = "https://github.com/Exim/exim/blob/exim-${version}/doc/doc-txt/ChangeLog";
   };
 }

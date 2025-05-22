@@ -365,7 +365,7 @@ let
             homepage
             mainProgram
             license
-            maintainers
+            teams
             platforms
             ;
 

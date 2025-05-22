@@ -224,6 +224,8 @@ in
         platform = "linux";
         enable_estimator_updates = false;
       };
+      # suppress PolicyKit warnings if system control is disabled
+      machine.provider = lib.mkIf (!cfg.allowSystemControl) (lib.mkDefault "none");
     };
 
     security.polkit.extraConfig = lib.optionalString cfg.allowSystemControl ''

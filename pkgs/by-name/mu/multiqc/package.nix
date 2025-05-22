@@ -10,7 +10,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "multiqc";
-  version = "1.26";
+  version = "1.28";
 
   # Two data sources. One for the code, another for the test data
   srcs = [
@@ -19,13 +19,13 @@ python3Packages.buildPythonApplication rec {
       owner = "MultiQC";
       repo = "MultiQC";
       tag = "v${version}";
-      hash = "sha256-MPAw6gG/3LzdskkDXOTDEM1NpG0sH9GvklYFQ1ZXWIs=";
+      hash = "sha256-rYZaecoVAO1RE44XCw60aVwvWhKcZ/RrG3WpVRcLbuA=";
     })
     (fetchFromGitHub {
       owner = "MultiQC";
       repo = "test-data";
-      rev = "67435083a8bfa228dca3dda7d835facef15fc2c7";
-      hash = "sha256-oYmPIJSy6dOKPcMr3B4foGoWcerA29x0XeGoU4dSYsA=";
+      rev = "d775b73c106d48726653f2fd02e473b7acbd93d8";
+      hash = "sha256-uxBpMx22gWJmnbF9tVuVIdYdiqUh7n51swzu5hnfZQ0=";
       name = "test-data";
     })
   ];
@@ -53,6 +53,8 @@ python3Packages.buildPythonApplication rec {
     pydantic
     typeguard
     tqdm
+    python-dotenv
+    jsonschema
   ];
 
   optional-dependencies = {
@@ -96,7 +98,7 @@ python3Packages.buildPythonApplication rec {
       addBinToPathHook
     ];
 
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   disabledTests =
     # On darwin, kaleido fails to starts

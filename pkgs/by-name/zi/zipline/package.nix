@@ -5,7 +5,7 @@
   pnpm_9,
   nodejs,
   makeWrapper,
-  prisma-engines,
+  pkgs,
   ffmpeg,
   openssl,
   vips,
@@ -15,9 +15,26 @@
 }:
 
 let
+  prisma-engines = pkgs.prisma-engines.overrideAttrs (
+    finalAttrs: prevAttrs: {
+      version = "6.5.0";
+      src = fetchFromGitHub {
+        inherit (prevAttrs.src) owner repo;
+        rev = finalAttrs.version;
+        hash = "sha256-m3LBIMIVMI5GlY0+QNw/nTlNWt2rGOZ28z+CfdP51cY=";
+      };
+      cargoHash = "sha256-yG+omKAS1eWq3sFgKXMoZWhTP4M34dVRes7OhhTUyTQ=";
+      cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
+        inherit (finalAttrs) pname version src;
+        hash = finalAttrs.cargoHash;
+      };
+    }
+  );
+
   environment = {
     NEXT_TELEMETRY_DISABLED = "1";
-    FFMPEG_BIN = lib.getExe ffmpeg;
+    FFMPEG_PATH = lib.getExe ffmpeg;
+    FFPROBE_PATH = lib.getExe' ffmpeg "ffprobe";
     PRISMA_SCHEMA_ENGINE_BINARY = lib.getExe' prisma-engines "schema-engine";
     PRISMA_QUERY_ENGINE_BINARY = lib.getExe' prisma-engines "query-engine";
     PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines}/lib/libquery_engine.node";
@@ -101,6 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
+    inherit prisma-engines;
     tests = { inherit (nixosTests) zipline; };
     updateScript = nix-update-script { };
   };

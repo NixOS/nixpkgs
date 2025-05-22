@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   perl,
   wrapGAppsHook3,
@@ -24,33 +23,41 @@
   testers,
   xvfb-run,
   gitUpdater,
+  md4c,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stellarium";
-  version = "24.4";
+  version = "25.1";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/xF9hXlPKhmpvpx9t1IgSqpvvqrGnd0xaf0QMvu+9IA=";
+    hash = "sha256-rbnGSdzPuFdSqWPaKtF3n4oLZ9l+4jX7KtnmcrTvwbs=";
   };
 
   patches = [
-    # Fix indi headers from https://github.com/Stellarium/stellarium/pull/4025
+    # Patch from upstream to fix compilation with Qt 6.9
     (fetchpatch {
-      url = "https://github.com/Stellarium/stellarium/commit/9669d64fb4104830412c6c6c2b45811075a92300.patch";
-      hash = "sha256-CXeghxxRIV7Filveg+3pNAWymUpUuGnylvt4e8THJ8A=";
+      url = "https://github.com/Stellarium/stellarium/commit/bbcd60ae52b6f1395ef2390a2d2ba9d0f98db548.patch";
+      hash = "sha256-9VaqLASxn1udUApDZRI5SCqCXNGOHUcdbM+pKhW8ZAg=";
+    })
+
+    # Upstream patch to support building with a locally provided md4c package
+    (fetchpatch {
+      url = "https://github.com/Stellarium/stellarium/commit/972c6ba72f575964fbf2049a22d51b4d1fd3983c.patch";
+      hash = "sha256-ef1Jw5NeT0KLVKQt7VcvQh83n2ujMFK+Nv0165ZQ2r8=";
     })
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace CMakeLists.txt \
-      --replace 'SET(CMAKE_INSTALL_PREFIX "''${PROJECT_BINARY_DIR}/Stellarium.app/Contents")' \
+      --replace-fail 'SET(CMAKE_INSTALL_PREFIX "''${PROJECT_BINARY_DIR}/Stellarium.app/Contents")' \
                 'SET(CMAKE_INSTALL_PREFIX "${placeholder "out"}/Applications/Stellarium.app/Contents")'
     substituteInPlace src/CMakeLists.txt \
-      --replace "\''${_qt_bin_dir}/../" "${qtmultimedia}/lib/qt-6/"
+      --replace-fail "\''${_qt_bin_dir}/../" "${qtmultimedia}/lib/qt-6/"
   '';
 
   nativeBuildInputs = [
@@ -74,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
       indilib
       libnova
       exiv2
+      md4c
       nlopt
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [

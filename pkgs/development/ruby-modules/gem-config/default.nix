@@ -104,7 +104,6 @@
   shared-mime-info,
   libthai,
   libdatrie,
-  CoreServices,
   DarwinTools,
   cctools,
   libtool,
@@ -629,10 +628,6 @@ in
       '';
   };
 
-  hitimes = attrs: {
-    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
-  };
-
   hpricot = attrs: {
     dontBuild = false;
     patches = [
@@ -837,6 +832,12 @@ in
       curl
       libxml2
     ];
+    # https://github.com/oVirt/ovirt-engine-sdk-ruby/issues/13
+    env.NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=incompatible-pointer-types"
+      "-Wno-int-conversion"
+    ];
     dontBuild = false;
     meta.broken = stdenv.hostPlatform.isDarwin; # At least until releasing https://github.com/oVirt/ovirt-engine-sdk-ruby/pull/17
   };
@@ -879,7 +880,7 @@ in
     # Force pkg-config lookup for libpq.
     # See https://github.com/ged/ruby-pg/blob/6629dec6656f7ca27619e4675b45225d9e422112/ext/extconf.rb#L34-L55
     #
-    # Note that setting --with-pg-config=${lib.getDev postgresql}/bin/pg_config would add
+    # Note that setting --with-pg-config=${postgresql.pg_config}/bin/pg_config would add
     # an unnecessary reference to the entire postgresql package.
     buildFlags = [ "--with-pg-config=ignore" ];
     nativeBuildInputs = [ pkg-config ];

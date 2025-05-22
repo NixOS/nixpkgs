@@ -33,10 +33,6 @@
   blas,
   lapack,
   curl,
-  Cocoa,
-  Foundation,
-  libobjc,
-  libcxx,
   tzdata,
   withRecommendedPackages ? true,
   enableStrictBarrier ? false,
@@ -77,51 +73,44 @@ stdenv.mkDerivation (finalAttrs: {
     tzdata
     which
   ];
-  buildInputs =
-    [
-      bzip2
-      gfortran
-      libX11
-      libXmu
-      libXt
-      libXt
-      libjpeg
-      libpng
-      libtiff
-      ncurses
-      pango
-      pcre2
-      readline
-      (texliveSmall.withPackages (
-        ps: with ps; [
-          inconsolata
-          helvetic
-          ps.texinfo
-          fancyvrb
-          cm-super
-          rsfs
-        ]
-      ))
-      xz
-      zlib
-      less
-      texinfo
-      graphviz
-      icu
-      which
-      blas
-      lapack
-      curl
-      tcl
-      tk
-      jdk
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-      Foundation
-      libobjc
-      libcxx
-    ];
+  buildInputs = [
+    bzip2
+    gfortran
+    libX11
+    libXmu
+    libXt
+    libXt
+    libjpeg
+    libpng
+    libtiff
+    ncurses
+    pango
+    pcre2
+    readline
+    (texliveSmall.withPackages (
+      ps: with ps; [
+        inconsolata
+        helvetic
+        ps.texinfo
+        fancyvrb
+        cm-super
+        rsfs
+      ]
+    ))
+    xz
+    zlib
+    less
+    texinfo
+    graphviz
+    icu
+    which
+    blas
+    lapack
+    curl
+    tcl
+    tk
+    jdk
+  ];
   strictDeps = true;
 
   patches = [
@@ -173,8 +162,8 @@ stdenv.mkDerivation (finalAttrs: {
       --disable-R-framework
       --without-x
       OBJC="clang"
-      CPPFLAGS="-isystem ${lib.getDev libcxx}/include/c++/v1"
-      LDFLAGS="-L${lib.getLib libcxx}/lib"
+      CPPFLAGS="-isystem ${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
+      LDFLAGS="-L${lib.getLib stdenv.cc.libcxx}/lib"
     ''
     + ''
       )
@@ -258,6 +247,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "libR" ];
     platforms = platforms.all;
 
-    maintainers = with maintainers; [ jbedo ] ++ teams.sage.members;
+    maintainers = with maintainers; [ jbedo ];
+    teams = [ teams.sage ];
   };
 })

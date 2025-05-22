@@ -5,7 +5,6 @@
 
   # build-system
   pdm-backend,
-  poetry-core,
 
   # dependencies
   langchain-core,
@@ -17,26 +16,26 @@
   pytest-asyncio,
   syrupy,
 
+  # passthru
   nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-ollama";
-  version = "0.3.0";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-ollama==${version}";
-    hash = "sha256-KsQV2jM2rXbFg+ZlDnpw8sD3Nm8C37BWo+DkDTaMDtQ=";
+    hash = "sha256-GRaWwUR26yZqjtO5f5p8abj/4KSrQE2uGAECGjeDxPY=";
   };
 
   sourceRoot = "${src.name}/libs/partners/ollama";
 
   build-system = [
     pdm-backend
-    poetry-core
   ];
 
   pythonRelaxDeps = [
@@ -64,7 +63,7 @@ buildPythonPackage rec {
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "langchain-ollama==(.*)"
+      "langchain-ollama==([0-9.]+)"
     ];
   };
 

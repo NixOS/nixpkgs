@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.com/ubports/development/apps/lomiri-filemanager-app/-/blob/v${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl3Only;
     mainProgram = "lomiri-filemanager-app";
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
   };
 })

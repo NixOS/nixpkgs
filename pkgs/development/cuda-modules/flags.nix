@@ -6,7 +6,7 @@
   cudaCapabilities ? (config.cudaCapabilities or [ ]),
   cudaForwardCompat ? (config.cudaForwardCompat or true),
   lib,
-  cudaVersion,
+  cudaMajorMinorVersion,
   stdenv,
   # gpus :: List Gpu
   gpus,
@@ -44,9 +44,9 @@ let
     gpu:
     let
       inherit (gpu) minCudaVersion maxCudaVersion;
-      lowerBoundSatisfied = strings.versionAtLeast cudaVersion minCudaVersion;
+      lowerBoundSatisfied = strings.versionAtLeast cudaMajorMinorVersion minCudaVersion;
       upperBoundSatisfied =
-        (maxCudaVersion == null) || !(strings.versionOlder maxCudaVersion cudaVersion);
+        (maxCudaVersion == null) || !(strings.versionOlder maxCudaVersion cudaMajorMinorVersion);
     in
     lowerBoundSatisfied && upperBoundSatisfied;
 
@@ -57,7 +57,7 @@ let
     let
       inherit (gpu) dontDefaultAfter isJetson;
       newGpu = dontDefaultAfter == null;
-      recentGpu = newGpu || strings.versionAtLeast dontDefaultAfter cudaVersion;
+      recentGpu = newGpu || strings.versionAtLeast dontDefaultAfter cudaMajorMinorVersion;
     in
     recentGpu && !isJetson;
 
@@ -289,12 +289,14 @@ assert
     };
     actualWrapped = (builtins.tryEval (builtins.deepSeq actual actual)).value;
   in
-  asserts.assertMsg ((strings.versionAtLeast cudaVersion "11.2") -> (expected == actualWrapped)) ''
-    This test should only fail when using a version of CUDA older than 11.2, the first to support
-    8.6.
-    Expected: ${builtins.toJSON expected}
-    Actual: ${builtins.toJSON actualWrapped}
-  '';
+  asserts.assertMsg
+    ((strings.versionAtLeast cudaMajorMinorVersion "11.2") -> (expected == actualWrapped))
+    ''
+      This test should only fail when using a version of CUDA older than 11.2, the first to support
+      8.6.
+      Expected: ${builtins.toJSON expected}
+      Actual: ${builtins.toJSON actualWrapped}
+    '';
 # Check mixed Jetson and non-Jetson devices
 assert
   let

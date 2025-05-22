@@ -27,22 +27,12 @@
   test-daemon ? null,
 }:
 
-let
-  inherit (lib) fileset;
-in
-
 mkMesonDerivation (
   finalAttrs:
   {
     inherit pname version;
 
     workDir = ./.;
-    fileset = fileset.unions [
-      ../../scripts/nix-profile.sh.in
-      ../../.version
-      ../../tests/functional
-      ./.
-    ];
 
     # Hack for sake of the dev shell
     passthru.externalNativeBuildInputs =

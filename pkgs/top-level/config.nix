@@ -137,6 +137,18 @@ let
       '';
     };
 
+    allowVariants = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to expose the nixpkgs variants.
+
+        Variants are instances of the current nixpkgs instance with different stdenvs or other applied options.
+        This allows for using different toolchains, libcs, or global build changes across nixpkgs.
+        Disabling can ensure nixpkgs is only building for the platform which you specified.
+      '';
+    };
+
     cudaSupport = mkMassRebuild {
       type = types.bool;
       default = false;

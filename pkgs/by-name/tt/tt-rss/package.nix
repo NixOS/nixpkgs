@@ -1,3 +1,4 @@
+# nixpkgs-update: no auto update
 {
   lib,
   stdenv,
@@ -8,12 +9,12 @@
 
 stdenv.mkDerivation rec {
   pname = "tt-rss";
-  version = "0-unstable-2025-03-14";
+  version = "0-unstable-2025-04-17";
 
   src = fetchgit {
     url = "https://git.tt-rss.org/fox/tt-rss.git";
-    rev = "28cb97ddc5834ce8cfe24602a293b90348851495";
-    hash = "sha256-l4aGTxL9d+go9R7cn14XOoOr8JTrJSScgDIIHGvaB9Q=";
+    rev = "be82663ac9b59de8a135178a519efe9f7ebae213";
+    hash = "sha256-bZrmOOFB5HhiWsV6wWfqv3/wW4rf/05AX7qU+v1IBFE=";
   };
 
   installPhase = ''
@@ -30,13 +31,13 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit (nixosTests) tt-rss;
+    tests = { inherit (nixosTests) tt-rss; };
     updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
   };
 
   meta = with lib; {
     description = "Web-based news feed (RSS/Atom) aggregator";
-    license = licenses.gpl2Plus;
+    license = licenses.gpl3Plus;
     homepage = "https://tt-rss.org";
     maintainers = with maintainers; [
       gileri

@@ -44,6 +44,6 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://github.com/vimeo/psalm";
     license = lib.licenses.mit;
     mainProgram = "psalm";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

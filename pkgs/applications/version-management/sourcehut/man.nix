@@ -9,47 +9,45 @@
   unzip,
   pip,
   pythonOlder,
-  setuptools,
+  setuptools-scm,
 }:
 
 let
-  version = "0.16.5";
+  version = "0.18.1";
   gqlgen = import ./fix-gqlgen-trimpath.nix {
     inherit unzip;
-    gqlgenVersion = "0.17.43";
+    gqlgenVersion = "0.17.64";
   };
+
+  patches = [ ./patches/core-go-update/man/patch-deps.patch ];
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "man.sr.ht";
     rev = version;
-    hash = "sha256-JFMtif2kIE/fs5PNcQtkJikAFNszgZTU7BG/8fTncTI=";
+    hash = "sha256-c2xFC1pmOSGGMP4RVOmgFogj7CY2kHrADsWsm7M5ZK4=";
   };
 
   mansrht-api = buildGoModule (
     {
-      inherit src version;
+      inherit src version patches;
       pname = "mansrht-api";
       modRoot = "api";
-      vendorHash = "sha256-GVN11nEJqIHh8MtKvIXe4zcUwJph9eTSkJ2R+ufD+ic=";
+      vendorHash = "sha256-jKNHZrFydp3+cD8MR2izzE8bi4H2uT/7+x/wmPkEIIc=";
     }
     // gqlgen
   );
 in
 buildPythonPackage rec {
-  inherit src version;
+  inherit src version patches;
   pname = "mansrht";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  postPatch = ''
-    substituteInPlace Makefile --replace "all: api" ""
-  '';
-
   nativeBuildInputs = [
     pip
-    setuptools
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
@@ -57,13 +55,20 @@ buildPythonPackage rec {
     pygit2
   ];
 
-  preBuild = ''
-    export PKGVER=${version}
-    export SRHT_PATH=${srht}/${python.sitePackages}/srht
+  env = {
+    PKGVER = version;
+    SRHT_PATH = "${srht}/${python.sitePackages}/srht";
+    PREFIX = placeholder "out";
+  };
+
+  postBuild = ''
+    make SASSC_INCLUDE=-I${srht}/share/sourcehut/scss/ all-share
   '';
 
   postInstall = ''
-    ln -s ${mansrht-api}/bin/api $out/bin/mansrht-api
+    ln -s ${mansrht-api}/bin/api $out/bin/man.sr.ht-api
+    install -Dm644 schema.sql $out/share/sourcehut/man.sr.ht-schema.sql
+    make install-share
   '';
 
   pythonImportsCheck = [ "mansrht" ];

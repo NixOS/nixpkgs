@@ -8,17 +8,18 @@
   curl,
   cmake,
   ninja,
+  deterministic-host-uname,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rdkafka";
-  version = "2.8.0";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "confluentinc";
     repo = "librdkafka";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-OCCsxgEO8UvCcC0XwzqpqmaT8dV0Klrspp+2o1FbH2Y=";
+    sha256 = "sha256-u4+qskNw18TD59aiSTyv1XOYT2DI24uZnGEAzJ4YBJU=";
   };
 
   outputs = [
@@ -29,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
+    # cross: build system uses uname to determine host system
+    deterministic-host-uname
   ];
 
   buildInputs = [

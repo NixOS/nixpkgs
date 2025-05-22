@@ -7,21 +7,23 @@
   dbus,
   stdenv,
   xdg-desktop-portal-cosmic,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-session";
-  version = "1.0.0-alpha.6";
+  version = "1.0.0-alpha.7";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-session";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-2EKkVdZ7uNNJ/E/3knmeH3EBa+tkYmIxP3t9d6yacww=";
+    hash = "sha256-vozm4vcXV3RB9Pk6om1UNCfGh80vIVJvSwbzwGDQw3Y=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-iYObxjWJUKgZKGTkqtYgQK4758k0EYZGhIAM/oLxxso=";
+  cargoHash = "sha256-68budhhbt8wPY7sfDqwIs4MWB/NBXsswK6HbC2AnHqE=";
 
   postPatch = ''
     substituteInPlace data/start-cosmic \
@@ -42,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     (placeholder "out")
     "--set"
     "cosmic_dconf_profile"
-    "cosmic"
+    "${placeholder "out"}/etc/dconf/profile/cosmic"
     "--set"
     "cargo-target-dir"
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
@@ -50,31 +52,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env.XDP_COSMIC = "${xdg-desktop-portal-cosmic}/libexec/xdg-desktop-portal-cosmic";
 
-  postInstall = ''
-    dconf_profile_dst=$out/etc/dconf/profile/cosmic
-    if [ ! -f $dconf_profile_dst ]; then
-        install -Dm0644 data/dconf/profile/cosmic $dconf_profile_dst
-    else
-        # future proofing
-        echo 'The Justfile is now correctly installing the dconf profile.'
-        echo 'Please remove the dconf profile from the `postInstall` phase.'
-        exit 1
-    fi
-  '';
-
-  passthru.providedSessions = [ "cosmic" ];
+  passthru = {
+    providedSessions = [ "cosmic" ];
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
+  };
 
   meta = {
     homepage = "https://github.com/pop-os/cosmic-session";
     description = "Session manager for the COSMIC desktop environment";
     license = lib.licenses.gpl3Only;
     mainProgram = "cosmic-session";
-    maintainers = with lib.maintainers; [
-      a-kenji
-      nyabinary
-      thefossguy
-      HeitorAugustoLN
-    ];
+    teams = [ lib.teams.cosmic ];
     platforms = lib.platforms.linux;
   };
 })

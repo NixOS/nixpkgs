@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "hcp";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "hcp";
     tag = "v${version}";
-    hash = "sha256-DyfrT4Z4pF7o6nBoacpEE0jT/dxRRm7nr3KsXJTwtOQ=";
+    hash = "sha256-53UTxf83jc2tyWJe+BHSitwpQVc6Ecq0wsf8avGPJcM=";
   };
 
   vendorHash = "sha256-Tq7Lu9rZCLpy7CiZQey5/y1hZPEvdSsy1BgEFWNVeAk=";

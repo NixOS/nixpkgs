@@ -24,7 +24,7 @@
 }:
 
 let
-  version = "1.82.0";
+  version = "1.82.5";
 in
 buildGoModule {
   pname = "tailscale";
@@ -39,7 +39,7 @@ buildGoModule {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    hash = "sha256-/8MJE1Io0MRSUXiFirYDn6FH2qkWQHE7Fl3nJLjieDw=";
+    hash = "sha256-BFitj8A+TfNKTyXBB1YhsEs5NvLUfgJ2IbjB2ipf4xU=";
   };
 
   vendorHash = "sha256-SiUkN6BQK1IQmLfkfPetzvYqRu9ENK6+6txtGxegF5Y=";
@@ -60,6 +60,7 @@ buildGoModule {
     "cmd/derpprobe"
     "cmd/tailscaled"
     "cmd/tsidp"
+    "cmd/get-authkey"
   ];
 
   excludedPackages = [
@@ -134,6 +135,12 @@ buildGoModule {
           # test for a dev util which helps to fork golang.org/x/crypto/acme
           # not necessary and fails to match
           "TestSyncedToUpstream" # tempfork/acme
+
+          # flaky: https://github.com/tailscale/tailscale/issues/7030
+          "TestConcurrent"
+
+          # flaky: https://github.com/tailscale/tailscale/issues/11762
+          "TestTwoDevicePing"
         ]
         ++ lib.optionals stdenv.hostPlatform.isDarwin [
           # syscall default route interface en0 differs from netstat

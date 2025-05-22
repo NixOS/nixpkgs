@@ -578,21 +578,22 @@ in
     };
 
     networking.fqdn = mkOption {
-      readOnly = true;
       type = types.str;
       default =
         if (cfg.hostName != "" && cfg.domain != null) then
           "${cfg.hostName}.${cfg.domain}"
         else
           throw ''
-            The FQDN is required but cannot be determined. Please make sure that
-            both networking.hostName and networking.domain are set properly.
+            The FQDN is required but cannot be determined from `networking.hostName`
+            and `networking.domain`. Please ensure these options are set properly or
+            set `networking.fqdn` directly.
           '';
       defaultText = literalExpression ''"''${networking.hostName}.''${networking.domain}"'';
       description = ''
-        The fully qualified domain name (FQDN) of this host. It is the result
-        of combining `networking.hostName` and `networking.domain.` Using this
-        option will result in an evaluation error if the hostname is empty or
+        The fully qualified domain name (FQDN) of this host. By default, it is
+        the result of combining `networking.hostName` and `networking.domain.`
+
+        Using this option will result in an evaluation error if the hostname is empty or
         no domain is specified.
 
         Modules that accept a mere `networking.hostName` but prefer a fully qualified
@@ -603,17 +604,21 @@ in
     networking.fqdnOrHostName = mkOption {
       readOnly = true;
       type = types.str;
-      default = if cfg.domain == null then cfg.hostName else cfg.fqdn;
+      default =
+        if (cfg.domain != null || opt.fqdn.highestPrio < (mkOptionDefault { }).priority) then
+          cfg.fqdn
+        else
+          cfg.hostName;
       defaultText = literalExpression ''
-        if cfg.domain == null then cfg.hostName else cfg.fqdn
+        if config.networking.domain != null || config.networking.fqdn is set then config.networking.fqdn else config.networking.hostName
       '';
       description = ''
         Either the fully qualified domain name (FQDN), or just the host name if
-        it does not exists.
+        it does not exist.
 
         This is a convenience option for modules to read instead of `fqdn` when
         a mere `hostName` is also an acceptable value; this option does not
-        throw an error when `domain` is unset.
+        throw an error when `domain` or `fqdn` is unset.
       '';
     };
 

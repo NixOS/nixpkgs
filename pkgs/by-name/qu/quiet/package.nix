@@ -7,11 +7,11 @@
 
 appimageTools.wrapType2 rec {
   pname = "quiet";
-  version = "4.0.3";
+  version = "4.1.2";
 
   src = fetchurl {
     url = "https://github.com/TryQuiet/quiet/releases/download/@quiet/desktop@${version}/Quiet-${version}.AppImage";
-    hash = "sha256-BeN0O/Q95M42+2iRtYoko0mM4rLFVlzeRPXdls+5zOs=";
+    hash = "sha256-oYN+oXUvSeAR+gaRxEuBZHHV6lKTS7OrYVW4MMGoUO0=";
   };
 
   meta = {

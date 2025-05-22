@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  mkDerivation,
   fetchFromGitHub,
   alsa-lib,
   ffmpeg,
@@ -16,22 +15,24 @@
   pkg-config,
   libpulseaudio,
   libv4l,
+  pipewire,
   qtbase,
   qttools,
+  wrapQtAppsHook,
   cmake,
   ninja,
-  nix-update-script,
+  unstableGitUpdater,
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "simplescreenrecorder";
-  version = "0.4.4-unstable-2024-08-13";
+  version = "0.4.4-unstable-2025-01-25";
 
   src = fetchFromGitHub {
     owner = "MaartenBaert";
     repo = "ssr";
-    rev = "4e3ba13dd212fc4213fe0911f371bc7d34033b8d";
-    hash = "sha256-jBZkyrZOrUljWgO8U4SZOTCu3sOm83unQ7vyv+KkAuE=";
+    rev = "c50e83eea53f45eff503af58e6c86d0e928222f3";
+    hash = "sha256-pTgIooEOIYwOrSuXD0L5S7J7IsUIyzRuEX2ZziiIiAM=";
   };
 
   cmakeFlags = [
@@ -52,7 +53,9 @@ mkDerivation {
     pkg-config
     cmake
     ninja
+    wrapQtAppsHook
   ];
+
   buildInputs = [
     alsa-lib
     ffmpeg
@@ -65,12 +68,13 @@ mkDerivation {
     libGL
     libpulseaudio
     libv4l
+    pipewire
     qtbase
     qttools
     qtx11extras
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Screen recorder for Linux";

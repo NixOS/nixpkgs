@@ -123,5 +123,6 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with maintainers; [ emily ];
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
+    mainProgram = "whipper";
   };
 }

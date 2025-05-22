@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "ignite-cli";
-  version = "28.8.2";
+  version = "28.10.0";
 
   src = fetchFromGitHub {
     repo = "cli";
     owner = "ignite";
     rev = "v${version}";
-    hash = "sha256-d7+T0VlmKQgmAJ8eyDg8JDL9HHJbU+nOTvJP0GTuIRY=";
+    hash = "sha256-oGPiU6vC9T/fadyt97GkZBuPojINXnQPhtguwv7eyJU=";
   };
 
   vendorHash = "sha256-EaOs3m5AN0EYMO8j3mkKPOQwapi0WRaTIUJKTjDpmCo=";

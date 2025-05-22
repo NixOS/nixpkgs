@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "mdformat-admon";
-  version = "2.0.6";
+  version = "2.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "KyleKing";
     repo = "mdformat-admon";
     tag = "v${version}";
-    hash = "sha256-YyEiqry1dAm/2EEuQjPFEfdpLI+NiLhVcyx4jAyXs4E=";
+    hash = "sha256-y0TNyje2OXBY4oo9kBePlqSZAU36vbQQKZUPm/u6DAc=";
   };
 
   nativeBuildInputs = [ flit-core ];

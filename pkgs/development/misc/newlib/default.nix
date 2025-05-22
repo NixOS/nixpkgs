@@ -20,14 +20,22 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-M/EmBeAFSWWZbCXBOCs+RjsK+ReZAB9buMBjDy7IyFI=";
   };
 
-  patches = lib.optionals nanoizeNewlib [
-    # https://bugs.gentoo.org/723756
-    (fetchpatch {
-      name = "newlib-3.3.0-no-nano-cxx.patch";
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-libs/newlib/files/newlib-3.3.0-no-nano-cxx.patch?id=9ee5a1cd6f8da6d084b93b3dbd2e8022a147cfbf";
-      sha256 = "sha256-S3mf7vwrzSMWZIGE+d61UDH+/SK/ao1hTPee1sElgco=";
-    })
-  ];
+  patches =
+    [
+      (fetchpatch {
+        name = "0001-newlib-Fix-mips-libgloss-support.patch";
+        url = "https://sourceware.org/git/?p=newlib-cygwin.git;a=patch;h=8a8fb570d7c5310a03a34b3dd6f9f8bb35ee9f40";
+        hash = "sha256-hWS/X0jf/ZFXIR39NvNDVhkR8F81k9UWpsqDhZFxO5o=";
+      })
+    ]
+    ++ lib.optionals nanoizeNewlib [
+      # https://bugs.gentoo.org/723756
+      (fetchpatch {
+        name = "newlib-3.3.0-no-nano-cxx.patch";
+        url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-libs/newlib/files/newlib-3.3.0-no-nano-cxx.patch?id=9ee5a1cd6f8da6d084b93b3dbd2e8022a147cfbf";
+        sha256 = "sha256-S3mf7vwrzSMWZIGE+d61UDH+/SK/ao1hTPee1sElgco=";
+      })
+    ];
 
   depsBuildBuild = [
     buildPackages.stdenv.cc

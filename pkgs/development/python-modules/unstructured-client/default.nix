@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "unstructured-client";
-  version = "0.32.0";
+  version = "0.35.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Unstructured-IO";
     repo = "unstructured-python-client";
     tag = "v${version}";
-    hash = "sha256-2BAhjLHVWGjjbWTXmG/+GMKQutJaBCMLhU+/Dq/LK5c=";
+    hash = "sha256-f1sJei3OnLxVahsirZFUzdIpkEEMc8rZR3+8JfihCuM=";
   };
 
   preBuild = ''
@@ -36,6 +36,10 @@ buildPythonPackage rec {
   '';
 
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [
+    "pydantic"
+  ];
 
   dependencies = [
     aiofiles

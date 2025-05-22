@@ -180,12 +180,12 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    meta.maintainers = with lib.maintainers; [
-      thoughtpolice
-      vifino
-    ];
+  meta.maintainers = with lib.maintainers; [
+    thoughtpolice
+    vifino
+  ];
 
+  config = mkIf cfg.enable {
     environment.systemPackages = [ chronyPkg ];
 
     users.groups.chrony.gid = config.ids.gids.chrony;

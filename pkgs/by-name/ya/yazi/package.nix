@@ -16,6 +16,7 @@
     zoxide
     imagemagick
     chafa
+    resvg
   ],
 
   # deps
@@ -33,6 +34,7 @@
   zoxide,
   imagemagick,
   chafa,
+  resvg,
 
   settings ? { },
   plugins ? { },

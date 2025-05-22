@@ -12,7 +12,7 @@
   libserialport,
   doxygen,
   glibmm,
-  python,
+  python3,
   hidapi,
   libieee1284,
   bluez,
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     autoreconfHook
     doxygen
     pkg-config
-    python
+    python3
   ];
   buildInputs =
     [

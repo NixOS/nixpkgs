@@ -3,10 +3,8 @@
   fetchFromGitHub,
   lib,
   rustPlatform,
-  darwin,
   udev,
   protobuf,
-  libcxx,
   rocksdb_8_3,
   installShellFiles,
   pkg-config,
@@ -42,14 +40,6 @@ let
   version = "1.18.26";
   hash = "sha256-sJ0Zn5GMi64/S8zqomL/dYRVW8SOQWsP+bpcdatJC0A=";
   rocksdb = rocksdb_8_3;
-
-  inherit (darwin.apple_sdk_11_0) Libsystem;
-  inherit (darwin.apple_sdk_11_0.frameworks)
-    System
-    IOKit
-    AppKit
-    Security
-    ;
 in
 rustPlatform.buildRustPackage rec {
   pname = "solana-cli";
@@ -92,20 +82,10 @@ rustPlatform.buildRustPackage rec {
     protobuf
     pkg-config
   ];
-  buildInputs =
-    [
-      openssl
-      rustPlatform.bindgenHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libcxx
-      IOKit
-      Security
-      AppKit
-      System
-      Libsystem
-    ];
+  buildInputs = [
+    openssl
+    rustPlatform.bindgenHook
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ];
 
   doInstallCheck = true;
 
@@ -133,8 +113,8 @@ rustPlatform.buildRustPackage rec {
 
   # Require this on darwin otherwise the compiler starts rambling about missing
   # cmath functions
-  CPPFLAGS = lib.optionals stdenv.hostPlatform.isDarwin "-isystem ${lib.getDev libcxx}/include/c++/v1";
-  LDFLAGS = lib.optionals stdenv.hostPlatform.isDarwin "-L${lib.getLib libcxx}/lib";
+  CPPFLAGS = lib.optionals stdenv.hostPlatform.isDarwin "-isystem ${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
+  LDFLAGS = lib.optionals stdenv.hostPlatform.isDarwin "-L${lib.getLib stdenv.cc.libcxx}/lib";
 
   # If set, always finds OpenSSL in the system, even if the vendored feature is enabled.
   OPENSSL_NO_VENDOR = 1;

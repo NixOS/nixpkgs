@@ -1,8 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
+  fetchFromGitHub,
 
   # build-system
   hatch-vcs,
@@ -24,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "holoviews";
-  version = "1.20.0";
+  version = "1.20.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-KdGDBF+vo9hG3tqZnZaHuZuKvcGowGcS5Ur6V2uwKz4=";
+  src = fetchFromGitHub {
+    owner = "holoviz";
+    repo = "holoviews";
+    tag = "v${version}";
+    hash = "sha256-QCRVOBMKckPji5rH7iCSnmxbNwtGypMqdfBXilXmngE=";
   };
 
   postPatch = ''
@@ -70,12 +69,16 @@ buildPythonPackage rec {
     "test_server_dynamicmap_with_dims"
     "test_server_dynamicmap_with_stream"
     "test_server_dynamicmap_with_stream_dims"
+
+    # ModuleNotFoundError: No module named 'param'
+    "test_no_blocklist_imports"
   ];
 
   pythonImportsCheck = [ "holoviews" ];
 
   meta = {
     description = "Python data analysis and visualization seamless and simple";
+    changelog = "https://github.com/holoviz/holoviews/releases/tag/v${version}";
     mainProgram = "holoviews";
     homepage = "https://www.holoviews.org/";
     license = lib.licenses.bsd3;

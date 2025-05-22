@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "fn";
-  version = "0.6.40";
+  version = "0.6.42";
 
   src = fetchFromGitHub {
     owner = "fnproject";
     repo = "cli";
     rev = version;
-    hash = "sha256-myLoLpEiyVTDsFx97AFiS9KNAOQd7NU+W8PJl95a7k0=";
+    hash = "sha256-cVxanejijbHx455P5Elc4uiqHmG1+MtRoXiHr52YyAw=";
   };
 
   vendorHash = null;

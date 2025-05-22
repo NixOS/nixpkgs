@@ -155,7 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
       license = licenses.mit;
       platforms = platforms.linux ++ platforms.darwin;
       badPlatforms = [
-        "riscv64-linux"
+        "loongarch64-linux" # See https://github.com/LuaJIT/LuaJIT/issues/1278
         "riscv64-linux" # See https://github.com/LuaJIT/LuaJIT/issues/628
         "powerpc64le-linux" # `#error "No support for PPC64"`
       ];

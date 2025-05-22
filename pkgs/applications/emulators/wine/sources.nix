@@ -65,6 +65,23 @@ let
     source ${./update-lib.sh}
   '';
 
+  # Needed for wine versions < 10.2 to fix compatibility with binutils 2.44
+  # https://github.com/NixOS/nixpkgs/issues/399714
+  # https://bugs.winehq.org/show_bug.cgi?id=57819
+  # https://gitlab.winehq.org/wine/wine/-/merge_requests/7328
+  patches-binutils-2_44-fix-wine-older-than-10_2 = [
+    (pkgs.fetchpatch {
+      name = "ntdll-use-signed-type";
+      url = "https://gitlab.winehq.org/wine/wine/-/commit/fd59962827a715d321f91c9bdb43f3e61f9ebbc.patch";
+      hash = "sha256-PvFom9NJ32XZO1gYor9Cuk8+eaRFvmG572OAtNx1tks=";
+    })
+    (pkgs.fetchpatch {
+      name = "winebuild-avoid using-idata-section";
+      url = "https://gitlab.winehq.org/wine/wine/-/commit/c9519f68ea04915a60704534ab3afec5ec1b8fd7.patch";
+      hash = "sha256-vA58SfAgCXoCT+NB4SRHi85AnI4kj9S2deHGp4L36vI=";
+    })
+  ];
+
   inherit (pkgs) writeShellScript;
 in
 rec {
@@ -96,7 +113,7 @@ rec {
     patches = [
       # Also look for root certificates at $NIX_SSL_CERT_FILE
       ./cert-path.patch
-    ];
+    ] ++ patches-binutils-2_44-fix-wine-older-than-10_2;
 
     updateScript = writeShellScript "update-wine-stable" (''
       ${updateScriptPreamble}
@@ -115,10 +132,26 @@ rec {
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the hash for staging as well.
-    version = "10.4";
+    version = "10.5";
     url = "https://dl.winehq.org/wine/source/10.x/wine-${version}.tar.xz";
-    hash = "sha256-oJAZzlxCuga6kexCPUnY8qmo6sTBqSMMc+HRGWOdXpI=";
-    inherit (stable) patches;
+    hash = "sha256-wDbsHvR2dHdKX5lFgwIuni62j+j8GLOox55oWzvsibw=";
+
+    patches = [
+      # Also look for root certificates at $NIX_SSL_CERT_FILE
+      ./cert-path.patch
+    ];
+
+    # see https://gitlab.winehq.org/wine/wine-staging
+    staging = fetchFromGitLab {
+      inherit version;
+      hash = "sha256-rXA/55rwQSJR247E4H7cQdTtXRmjomRbls7THV3jfcE=";
+      domain = "gitlab.winehq.org";
+      owner = "wine";
+      repo = "wine-staging";
+      rev = "v${version}";
+
+      disabledPatchsets = [ ];
+    };
 
     ## see http://wiki.winehq.org/Gecko
     gecko32 = fetchurl rec {
@@ -147,8 +180,8 @@ rec {
       latest_mono=$(get_latest_lib_version wine-mono)
 
       update_staging() {
-          staging_url=$(get_source_attr staging.url)
-          set_source_attr staging hash "\"$(to_sri "$(nix-prefetch-url --unpack "''${staging_url//$1/$2}")")\""
+          staging_url=$(get_source_attr unstable.staging.url)
+          set_source_attr unstable.staging hash "\"$(to_sri "$(nix-prefetch-url --unpack "''${staging_url//$1/$2}")")\""
       }
 
       autobump unstable "$latest_unstable" "" update_staging
@@ -160,16 +193,47 @@ rec {
     '';
   };
 
-  staging = fetchFromGitLab rec {
-    # https://gitlab.winehq.org/wine/wine-staging
-    inherit (unstable) version;
-    hash = "sha256-LteUANxr+w1N9r6LNztjRfr3yXtJnUMi0uayTRtFoSU=";
-    domain = "gitlab.winehq.org";
-    owner = "wine";
-    repo = "wine-staging";
-    rev = "v${version}";
+  yabridge = fetchurl rec {
+    # NOTE: This is a pinned version with staging patches; don't forget to update them as well
+    version = "9.21";
+    url = "https://dl.winehq.org/wine/source/9.x/wine-${version}.tar.xz";
+    hash = "sha256-REK0f/2bLqRXEA427V/U5vTYKdnbeaJeYFF1qYjKL/8=";
 
-    disabledPatchsets = [ ];
+    patches = [
+      # Also look for root certificates at $NIX_SSL_CERT_FILE
+      ./cert-path.patch
+    ] ++ patches-binutils-2_44-fix-wine-older-than-10_2;
+
+    # see https://gitlab.winehq.org/wine/wine-staging
+    staging = fetchFromGitLab {
+      inherit version;
+      hash = "sha256-FDNszRUvM1ewE9Ij4EkuihaX0Hf0eTb5r7KQHMdCX3U=";
+      domain = "gitlab.winehq.org";
+      owner = "wine";
+      repo = "wine-staging";
+      rev = "v${version}";
+
+      disabledPatchsets = [ ];
+    };
+
+    ## see http://wiki.winehq.org/Gecko
+    gecko32 = fetchurl rec {
+      version = "2.47.4";
+      url = "https://dl.winehq.org/wine/wine-gecko/${version}/wine-gecko-${version}-x86.msi";
+      hash = "sha256-Js7MR3BrCRkI9/gUvdsHTGG+uAYzGOnvxaf3iYV3k9Y=";
+    };
+    gecko64 = fetchurl rec {
+      version = "2.47.4";
+      url = "https://dl.winehq.org/wine/wine-gecko/${version}/wine-gecko-${version}-x86_64.msi";
+      hash = "sha256-5ZC32YijLWqkzx2Ko6o9M3Zv3Uz0yJwtzCCV7LKNBm8=";
+    };
+
+    ## see http://wiki.winehq.org/Mono
+    mono = fetchurl rec {
+      version = "9.3.0";
+      url = "https://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}-x86.msi";
+      hash = "sha256-bKLArtCW/57CD69et2xrfX3oLZqIdax92fB5O/nD/TA=";
+    };
   };
 
   wayland = pkgs.lib.warnOnInstantiate "building wine with `wineRelease = \"wayland\"` is deprecated. Wine now builds with the wayland driver by default." stable; # added 2025-01-23

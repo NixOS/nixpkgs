@@ -43,6 +43,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/muicss/starlette-wtf/blob/v${version}/CHANGELOG.md";
     homepage = "https://github.com/muicss/starlette-wtf";
     license = licenses.mit;
-    maintainers = teams.wdz.members;
+    teams = [ teams.wdz ];
   };
 }

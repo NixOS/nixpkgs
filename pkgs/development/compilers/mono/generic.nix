@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchurl,
   bison,
   pkg-config,
   glib,
@@ -13,11 +12,9 @@
   zlib,
   bash,
   cacert,
-  Foundation,
-  libobjc,
   python3,
   version,
-  sha256,
+  src,
   autoconf,
   libtool,
   automake,
@@ -25,19 +22,13 @@
   which,
   gnumake42,
   enableParallelBuilding ? true,
-  srcArchiveSuffix ? "tar.bz2",
   extraPatches ? [ ],
   env ? { },
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mono";
-  inherit version env;
-
-  src = fetchurl {
-    inherit sha256;
-    url = "https://download.mono-project.com/sources/mono/${pname}-${version}.${srcArchiveSuffix}";
-  };
+  inherit version src env;
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -51,21 +42,17 @@ stdenv.mkDerivation rec {
     python3
     which
     gnumake42
+    gettext
   ];
-  buildInputs =
-    [
-      glib
-      gettext
-      libgdiplus
-      libX11
-      ncurses
-      zlib
-      bash
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Foundation
-      libobjc
-    ];
+  buildInputs = [
+    glib
+    gettext
+    libgdiplus
+    libX11
+    ncurses
+    zlib
+    bash
+  ];
 
   configureFlags = [
     "--x-includes=${libX11.dev}/include"
@@ -120,12 +107,22 @@ stdenv.mkDerivation rec {
       (
         stdenv.hostPlatform.isDarwin
         && stdenv.hostPlatform.isAarch64
-        && lib.versionOlder version "6.12.0.129"
+        && lib.versionOlder finalAttrs.version "6.12.0.129"
       )
       || !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-    homepage = "https://mono-project.com/";
+    homepage =
+      if lib.versionOlder finalAttrs.version "6.14.0" then
+        "https://mono-project.com/"
+      else
+        "https://gitlab.winehq.org/mono/mono";
     description = "Cross platform, open source .NET development framework";
     platforms = with platforms; darwin ++ linux;
+    knownVulnerabilities = lib.optionals (lib.versionOlder finalAttrs.version "6.14.0") [
+      ''
+        mono was archived upstream, see https://www.mono-project.com/
+        While WineHQ has taken over development, consider using 6.14.0 or newer.
+      ''
+    ];
     maintainers = with maintainers; [
       thoughtpolice
       obadz
@@ -149,4 +146,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "mono";
   };
-}
+})

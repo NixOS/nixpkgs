@@ -18,6 +18,7 @@
 
   # passthru / meta
   postgresql,
+  buildPackages,
 
   # GSSAPI
   gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic,
@@ -30,14 +31,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpq";
-  version = "17.4";
+  version = "17.5";
 
   src = fetchFromGitHub {
     owner = "postgres";
     repo = "postgres";
     # rev, not tag, on purpose: see generic.nix.
-    rev = "refs/tags/REL_17_4";
-    hash = "sha256-TEpvX28chR3CXiOQsNY12t8WfM9ywoZVX1e/6mj9DqE=";
+    rev = "refs/tags/REL_17_5";
+    hash = "sha256-jWV7hglu7IPMZbqHrZVZHLbZYjVuDeut7nH50aSQIBc=";
   };
 
   __structuredAttrs = true;
@@ -90,6 +91,15 @@ stdenv.mkDerivation (finalAttrs: {
     "-fdata-sections -ffunction-sections"
     + (if stdenv.cc.isClang then " -flto" else " -fmerge-constants -Wl,--gc-sections");
 
+  # This flag was introduced upstream in:
+  # https://github.com/postgres/postgres/commit/b6c7cfac88c47a9194d76f3d074129da3c46545a
+  # It causes errors when linking against libpq.a in pkgsStatic:
+  #   undefined reference to `pg_encoding_to_char'
+  # Unsetting the flag fixes it. The upstream reasoning to introduce it is about the risk
+  # to have initdb load a libpq.so from a different major version and how to avoid that.
+  # This doesn't apply to us with Nix.
+  env.NIX_CFLAGS_COMPILE = "-UUSE_PRIVATE_ENCODING_FUNCS";
+
   configureFlags =
     [
       "--enable-debug"
@@ -107,29 +117,19 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/socketdir-in-run-13+.patch
   ];
 
+  postPatch = ''
+    cat ${./pg_config.env.mk} >> src/common/Makefile
+  '';
+
   installPhase = ''
     runHook preInstall
 
-    make -C src/bin/pg_config install
-    make -C src/common install
+    make -C src/common install pg_config.env
     make -C src/include install
     make -C src/interfaces/libpq install
     make -C src/port install
 
-    # Pretend pg_config is located in $out/bin to return correct paths, but
-    # actually have it in -dev to avoid pulling in all other outputs.
-    moveToOutput bin/pg_config "$dev"
-    wrapProgram "$dev/bin/pg_config" --argv0 "$out/bin/pg_config"
-
-    # To prevent a "pg_config: could not find own program executable" error, we fake
-    # pg_config in the default output.
-    mkdir -p "$out/bin"
-    cat << EOF > "$out/bin/pg_config" && chmod +x "$out/bin/pg_config"
-    #!${stdenv.shell}
-    echo The real pg_config can be found in the -dev output.
-    exit 1
-    EOF
-
+    install -D src/common/pg_config.env "$dev/nix-support/pg_config.env"
     moveToOutput "lib/*.a" "$dev"
 
     rm -rfv $out/share
@@ -150,11 +150,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false;
 
+  passthru.pg_config = buildPackages.callPackage ./pg_config.nix {
+    inherit (finalAttrs) finalPackage;
+  };
+
   meta = {
     inherit (postgresql.meta)
       homepage
       license
-      maintainers
+      teams
       platforms
       ;
     description = "C application programmer's interface to PostgreSQL";

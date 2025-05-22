@@ -60,7 +60,7 @@ buildPythonPackage rec {
     description = "User friendly Rasterio plugin to read raster datasets";
     homepage = "https://cogeotiff.github.io/rio-tiler/";
     license = licenses.bsd3;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
     # Tests broken with gdal 3.10
     # https://github.com/cogeotiff/rio-tiler/issues/769
     broken = true;

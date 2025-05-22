@@ -3,6 +3,8 @@
   fetchgit,
   SDL,
   stdenv,
+  alsa-lib,
+  libGL,
   libogg,
   libvorbis,
   libmad,
@@ -21,6 +23,8 @@ stdenv.mkDerivation {
 
   buildInputs = [
     SDL
+    alsa-lib
+    libGL
     libogg
     libvorbis
     libmad

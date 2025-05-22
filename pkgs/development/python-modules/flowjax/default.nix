@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "flowjax";
-  version = "17.1.1";
+  version = "17.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danielward27";
     repo = "flowjax";
     tag = "v${version}";
-    hash = "sha256-CLtkO7Lr+FpC/RHnqDSmevpJ3/3EfuILrQSbcdNTqsI=";
+    hash = "sha256-NTP5QFJDe4tSAuHsQB4ZWyCcqLgW6uUaABfOG/TFgu0=";
   };
 
   build-system = [

@@ -13,7 +13,6 @@
   vulkan-loader,
   wayland,
   xorg,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -48,7 +47,6 @@ rustPlatform.buildRustPackage rec {
       xorg.libXrandr
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
       rustPlatform.bindgenHook
     ];
 

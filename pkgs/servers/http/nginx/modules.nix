@@ -824,7 +824,7 @@ let
         description = "SPNEGO HTTP Authentication Module";
         homepage = "https://github.com/stnoonan/spnego-http-auth-nginx-module";
         license = with licenses; [ bsd2 ];
-        maintainers = teams.deshaw.members;
+        teams = [ teams.deshaw ];
       };
     };
 
@@ -1082,7 +1082,7 @@ let
         homepage = "https://github.com/evanmiller/mod_zip";
         license = with licenses; [ bsd3 ];
         broken = stdenv.hostPlatform.isDarwin;
-        maintainers = teams.apm.members;
+        teams = [ teams.apm ];
       };
     };
 

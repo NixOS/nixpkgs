@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "lib4package";
-  version = "0.3.1";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anthonyharrison";
     repo = "lib4package";
     tag = "v${version}";
-    hash = "sha256-ZU5Lne2/xBgaFrTumWpZsuL9ckqdACrb0iRraWo+Rk0=";
+    hash = "sha256-AxAnSxm8eEnfi63SedWIdUvad1bD4g0rqBk4W/DQGHY=";
   };
 
   build-system = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/anthonyharrison/lib4package/releases/tag/v${version}";
+    changelog = "https://github.com/anthonyharrison/lib4package/releases/tag/${src.tag}";
     description = "Utility for handling package metadata to include in Software Bill of Materials (SBOMs";
     homepage = "https://github.com/anthonyharrison/lib4package";
     license = lib.licenses.asl20;

@@ -7,6 +7,8 @@
   glib,
   ncurses,
   libcap_ng,
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
+  systemdMinimal,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,21 +26,27 @@ stdenv.mkDerivation rec {
     autoreconfHook
     pkg-config
   ];
-  buildInputs = [
-    glib
-    ncurses
-    libcap_ng
-  ];
+  buildInputs =
+    [
+      glib
+      ncurses
+      libcap_ng
+    ]
+    ++ (lib.optionals enableSystemd [
+      systemdMinimal
+    ]);
 
-  LDFLAGS = "-lncurses";
+  configureFlags = lib.optionals enableSystemd [
+    "--with-systemd"
+  ];
 
   postInstall = ''
     # Systemd service
-    mkdir -p $out/lib/systemd/system
-    grep -vi "EnvironmentFile" misc/irqbalance.service >$out/lib/systemd/system/irqbalance.service
-    substituteInPlace $out/lib/systemd/system/irqbalance.service \
-      --replace /usr/sbin/irqbalance $out/bin/irqbalance \
-      --replace ' $IRQBALANCE_ARGS' ""
+    mkdir -p "$out/lib/systemd/system"
+    grep -vi "EnvironmentFile" misc/irqbalance.service >"$out/lib/systemd/system/irqbalance.service"
+    substituteInPlace "$out/lib/systemd/system/irqbalance.service" \
+      --replace-fail /usr/sbin/irqbalance "$out/bin/irqbalance --journal" \
+      --replace-fail ' $IRQBALANCE_ARGS' ""
   '';
 
   meta = with lib; {

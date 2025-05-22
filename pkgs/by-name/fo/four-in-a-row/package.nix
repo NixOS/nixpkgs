@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     changelog = "https://gitlab.gnome.org/GNOME/four-in-a-row/-/blob/${version}/NEWS?ref_type=tags";
     description = "Make lines of the same color to win";
     mainProgram = "four-in-a-row";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.gpl2;
     platforms = platforms.unix;
   };

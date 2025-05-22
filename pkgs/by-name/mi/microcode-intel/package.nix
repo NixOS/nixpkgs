@@ -4,29 +4,27 @@
   fetchFromGitHub,
   libarchive,
   iucode-tool,
+  buildPackages,
 }:
 
 stdenv.mkDerivation rec {
   pname = "microcode-intel";
-  version = "20250211";
+  version = "20250512";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "Intel-Linux-Processor-Microcode-Data-Files";
     rev = "microcode-${version}";
-    hash = "sha256-XfBVygHmUAV287MyBreoAyGcffGBEY7YKyj6AOytXZ4=";
+    hash = "sha256-xasV1w6+8qnD+RLWsReMo+xm7a9nguV2st3IC4FURDU=";
   };
 
-  nativeBuildInputs = [
-    iucode-tool
-    libarchive
-  ];
+  nativeBuildInputs = [ libarchive ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out kernel/x86/microcode
-    iucode_tool -w kernel/x86/microcode/GenuineIntel.bin intel-ucode/
+    ${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe iucode-tool} -w kernel/x86/microcode/GenuineIntel.bin intel-ucode/
     touch -d @$SOURCE_DATE_EPOCH kernel/x86/microcode/GenuineIntel.bin
     echo kernel/x86/microcode/GenuineIntel.bin | bsdtar --uid 0 --gid 0 -cnf - -T - | bsdtar --null -cf - --format=newc @- > $out/intel-ucode.img
 
