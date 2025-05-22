@@ -15,6 +15,14 @@ let
     "linux-x86_64"
     "windows-x86_64"
   ];
+  known.nonSystems = [
+    "_recurseForTags" # Added by our JSON-validating modules to indicate presence of `cuda_variant`
+    "cuda_variant" # Present in (newer) `cudnn` manifests
+    "license"
+    "license_path"
+    "version"
+    "name" # Package's descriptive name
+  ];
   known.badProducts = [
     "cudnn-v8-9-cuda-12"
     "cudnn-v8-9-cuda-11"
@@ -113,17 +121,7 @@ let
       let
         hasTags = perSystem._recurseForTags or false; # `or false` branch for feature_*.json
         otherAttrs = lib.filterAttrs (name: _: !(looksLikeSystem name)) perSystem;
-        actualSystems = lib.filterAttrs (
-          name: _:
-          !(builtins.elem name [
-            "_recurseForTags"
-            "cuda_variant"
-            "license"
-            "license_path"
-            "version"
-            "name"
-          ])
-        ) perSystem;
+        actualSystems = lib.filterAttrs (name: _: !(builtins.elem name known.nonSystems)) perSystem;
         result =
           if hasTags then
             fmapAttrsToList actualSystems (
