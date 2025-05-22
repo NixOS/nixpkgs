@@ -109,7 +109,7 @@ let
         # with pytest-httpbin 1.x
         preCheck = ''
           substituteInPlace pyproject.toml \
-            --replace '[tool.pytest.ini_options]' '[tool.notpytest.ini_options]'
+            --replace-fail '[tool.pytest.ini_options]' '[tool.notpytest.ini_options]'
         '';
       });
       pendulum = pySuper.pendulum.overridePythonAttrs (o: rec {
