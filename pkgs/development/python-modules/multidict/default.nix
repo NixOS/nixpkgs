@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "multidict";
-  version = "6.4.3";
+  version = "6.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "multidict";
     tag = "v${version}";
-    hash = "sha256-N5SmUhR2+1wnnhNNEGY2LKn0roDx781BvSw83CQj6tc=";
+    hash = "sha256-crnWaThjymY0nbY4yvD+wX20vQcBkPrFAI+UkexNAbo=";
   };
 
   postPatch = ''
