@@ -24,6 +24,7 @@
   nodejs ? null,
   fish ? null,
   python3 ? null,
+  wasmtime,
 }:
 stdenv.mkDerivation (
   finalAttrs:
@@ -113,6 +114,13 @@ stdenv.mkDerivation (
       ./system_rplugin_manifest.patch
     ];
 
+    # loosen the version requirement for wasmtime to use the nixpkgs version
+    patchPhase = ''
+      runHook prePatch
+      sed -i -E 's/find_package\(Wasmtime [0-9.]+ EXACT REQUIRED\)/find_package\(Wasmtime REQUIRED\)/' ./src/nvim/CMakeLists.txt
+      runHook postPatch
+    '';
+
     dontFixCmake = true;
 
     inherit lua;
@@ -161,6 +169,7 @@ stdenv.mkDerivation (
       cmake
       gettext
       pkg-config
+      wasmtime
     ];
 
     # extra programs test via `make functionaltest`
@@ -196,6 +205,7 @@ stdenv.mkDerivation (
       # third-party/CMakeLists.txt is not read at all.
       (lib.cmakeBool "USE_BUNDLED" false)
       (lib.cmakeBool "ENABLE_TRANSLATIONS" true)
+      (lib.cmakeBool "ENABLE_WASMTIME" true)
     ]
     ++ (
       if lua.pkgs.isLuaJIT then
