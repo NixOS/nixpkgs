@@ -72,7 +72,9 @@ in
         ''
           cat << EOF > "$out"
           <!DOCTYPE html>
-          <html><body>
+          <html>
+          <head><meta charset="utf-8"></head>
+          <body>
           EOF
 
           cmark "$src" >> "$out"
