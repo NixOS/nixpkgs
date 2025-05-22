@@ -8,14 +8,14 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tokei";
   version = "13.0.0-alpha.8";
 
   src = fetchFromGitHub {
     owner = "XAMPPRocky";
     repo = "tokei";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-jCI9VM3y76RI65E5UGuAPuPkDRTMyi+ydx64JWHcGfE=";
   };
 
@@ -30,9 +30,7 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-LzlyrKaRjUo6JnVLQnHidtI4OWa+GrhAc4D8RkL+nmQ=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   checkInputs = lib.optionals stdenv.hostPlatform.isDarwin [ zlib ];
 
@@ -52,4 +50,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ ];
     mainProgram = "tokei";
   };
-}
+})
