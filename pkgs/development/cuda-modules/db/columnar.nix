@@ -79,6 +79,8 @@ rec {
     indexName: columns:
     lib.concatMap (
       name:
-      lib.optionals name != indexName (assertComplete indexName columns.${indexName} name columns.${name})
+      lib.optionals (name != indexName) (
+        assertComplete indexName columns.${indexName} name columns.${name}
+      )
     ) (lib.attrNames columns);
 }
