@@ -19,6 +19,7 @@
   adwaita-icon-theme,
   gtksourceview4,
   xorriso,
+  libayatana-appindicator-gtk3,
   spiceSupport ? true,
   spice-gtk ? null,
   gst_all_1 ? null,
@@ -69,6 +70,7 @@ stdenv.mkDerivation rec {
       gsettings-desktop-schemas
       libosinfo
       gtksourceview4
+      libayatana-appindicator-gtk3
     ]
     ++ lib.optionals spiceSupport [
       gst_all_1.gst-plugins-base
