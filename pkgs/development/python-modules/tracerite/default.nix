@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools-scm,
   html5tagger,
+  setuptools,
   python,
   pythonOlder,
 }:
@@ -24,7 +25,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ html5tagger ];
+  propagatedBuildInputs = [
+    html5tagger
+    setuptools
+  ];
 
   postInstall = ''
     cp tracerite/style.css $out/${python.sitePackages}/tracerite
