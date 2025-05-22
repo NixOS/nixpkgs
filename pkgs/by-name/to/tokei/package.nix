@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "XAMPPRocky";
-    repo = pname;
+    repo = "tokei";
     rev = "v${version}";
     sha256 = "sha256-jCI9VM3y76RI65E5UGuAPuPkDRTMyi+ydx64JWHcGfE=";
   };
