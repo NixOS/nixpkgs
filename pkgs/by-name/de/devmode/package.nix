@@ -1,7 +1,7 @@
 {
   lib,
   findutils,
-  nodejs_latest,
+  live-server,
   parallel,
   rsync,
   watchexec,
@@ -12,8 +12,6 @@
   open ? "/index.html",
 }:
 let
-  inherit (nodejs_latest.pkgs) live-server;
-
   error-page = writeShellScriptBin "error-page" ''
     cat << EOF
     <!DOCTYPE html>
@@ -81,17 +79,12 @@ let
       ${lib.getExe build-and-copy}
   '';
 
-  # A Rust alternative to live-server exists, but it fails to open the temporary directory.
-  # `--no-css-inject`: without this it seems that only CSS is auto-reloaded.
-  # https://www.npmjs.com/package/live-server
+  # https://crates.io/crates/live-server
   server = writeShellScriptBin "server" ''
     set -euxo pipefail
 
-    ${lib.getExe' live-server "live-server"} \
+    ${lib.getExe live-server} \
       --host=127.0.0.1 \
-      --verbose \
-      --no-css-inject \
-      --entry-file=$error_page_relative \
       --open=${open} \
       $serve
   '';
