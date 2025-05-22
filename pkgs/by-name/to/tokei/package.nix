@@ -7,6 +7,7 @@
   libiconv,
   zlib,
   versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -41,6 +42,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=unstable" ]; };
 
   meta = {
     description = "Count your code, quickly";
