@@ -346,6 +346,7 @@ in
         systemsNv = lib.mapAttrs (_: _: lib.mkDefault { }) pname;
         outputs = lib.mapAttrs (_: _: lib.mkDefault { out = true; }) pname;
         overrideLicenseUrl = lib.mapAttrs (_: _: lib.mkDefault null) pname;
+        version = lib.mapAttrs (_: _: lib.mkDefault { }) pname;
       };
     system = {
       fromNvidia = lib.mapAttrs (_: _: lib.mkDefault { }) cudb.system.nvidia;
