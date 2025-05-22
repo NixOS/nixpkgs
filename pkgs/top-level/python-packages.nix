@@ -3863,6 +3863,8 @@ self: super: with self; {
 
   django-polymorphic = callPackage ../development/python-modules/django-polymorphic { };
 
+  django-postgres-partition = callPackage ../development/python-modules/django-postgres-partition { };
+
   django-postgresql-netfields =
     callPackage ../development/python-modules/django-postgresql-netfields
       { };
