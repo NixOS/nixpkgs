@@ -1,9 +1,7 @@
 {
   lib,
-  findutils,
   live-server,
   parallel,
-  rsync,
   watchexec,
   writeShellScriptBin,
   # arguments to `nix-build`, e.g. `"foo.nix -A bar"`
@@ -12,35 +10,12 @@
   open ? "/index.html",
 }:
 let
-  # The following would have been simpler:
-  # 1. serve from `$serve`
-  # 2. pass each build a `--out-link $serve/result`
-  # But that way live-server does not seem to detect changes and therefore no
-  # auto-reloads occur.
-  # Instead, we copy the contents of each build to the `$serve` directory.
-  # Using rsync here, instead of `cp`, to get as close to an atomic
-  # directory copy operation as possible. `--delay-updates` should
-  # also go towards that.
   build-and-copy = writeShellScriptBin "build-and-copy" ''
     set -euxo pipefail
 
-    set +e
-    stderr=$(2>&1 nix-build --out-link $out_link ${buildArgs})
-    exit_status=$?
-    set -e
-
-    if [ $exit_status -eq 0 ];
-    then
-      # setting permissions to be able to clean up
-      ${lib.getExe rsync} \
-        --recursive \
-        --chmod=u=rwX \
-        --delete-before \
-        --delay-updates \
-        --links \
-        $out_link/ \
-        $serve/
-    fi
+    out_link="$(nix-build --no-out-link ${buildArgs})"
+    rm -rf $serve
+    ln -sf $out_link $serve
   '';
 
   # https://watchexec.github.io/
@@ -74,8 +49,8 @@ writeShellScriptBin "devmode" ''
   tmpdir=$(mktemp -d)
   trap handle_exit EXIT
 
-  export out_link="$tmpdir/result"
   export serve="$tmpdir/serve"
+
   mkdir $serve
 
   ${lib.getExe parallel} \
