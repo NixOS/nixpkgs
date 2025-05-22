@@ -11,13 +11,13 @@
 buildHomeAssistantComponent rec {
   owner = "al-one";
   domain = "xiaomi_miot";
-  version = "1.0.18";
+  version = "1.0.19";
 
   src = fetchFromGitHub {
     owner = "al-one";
     repo = "hass-xiaomi-miot";
     rev = "v${version}";
-    hash = "sha256-eKh3oa/dPmOIywdTkRhItzP4LQNLguNDfkQWMJjQkpo=";
+    hash = "sha256-3vaMjY2NsKbw76UxzfAxMdijAeDnagDuM8ICa5Xwgg4=";
   };
 
   dependencies = [

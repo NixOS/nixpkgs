@@ -9,13 +9,13 @@
 }:
 let
   pname = "django-admin-sortable2";
-  version = "2.2.6";
+  version = "2.2.8";
 
   src = fetchFromGitHub {
     owner = "jrief";
     repo = "django-admin-sortable2";
     tag = version;
-    hash = "sha256-MIxZ33Q8dHo102zvQqMiOlxtPjkenQQYTRyXJOHdCqE=";
+    hash = "sha256-T5dppM/o305GCg5uU7re/FdjhXFUyiH/DO2JTVf6Xgg=";
   };
 
   assets = buildNpmPackage {
@@ -55,7 +55,7 @@ buildPythonPackage rec {
   meta = {
     description = "Generic drag-and-drop ordering for objects in the Django admin interface";
     homepage = "https://github.com/jrief/django-admin-sortable2";
-    changelog = "https://github.com/jrief/django-admin-sortable2/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/jrief/django-admin-sortable2/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sephi ];
   };

@@ -194,6 +194,16 @@ let
         doCheck = false; # no tests
       });
 
+      plexapi = super.plexapi.overrideAttrs (oldAttrs: rec {
+        version = "4.15.16";
+        src = fetchFromGitHub {
+          owner = "pkkid";
+          repo = "python-plexapi";
+          tag = version;
+          hash = "sha256-NwGGNN6LC3gvE8zoVL5meNWMbqZjJ+6PcU2ebJTfJmU=";
+        };
+      });
+
       # Pinned due to API changes in 0.1.0
       poolsense = super.poolsense.overridePythonAttrs (oldAttrs: rec {
         version = "0.0.8";
@@ -367,7 +377,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.5.1";
+  hassVersion = "2025.5.2";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -388,13 +398,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-/ItMm6/SV0MazK16NfW53XPcIV7ERUUabjcwHBC4c7Y=";
+    hash = "sha256-el5s82R4MuTjUnMVXRQj4PhPxJxHoL6Jqvc6XRnJl8w=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-zllQ0h1Ws+HNyfBvAAoKtovQtwkr0fNNtnF2pAjRrqM=";
+    hash = "sha256-lddnAM3fja9enPYRSonwSe1aG8t55jSJQNveWPwrhOE=";
   };
 
   build-system = with python.pkgs; [

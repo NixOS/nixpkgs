@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -80,17 +81,22 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  disabledTests = [
-    # NameError: name 'MockRemat' is not defined
-    # https://github.com/keras-team/keras/issues/21126
-    "test_functional_model_with_remat"
+  disabledTests =
+    [
+      # NameError: name 'MockRemat' is not defined
+      # https://github.com/keras-team/keras/issues/21126
+      "test_functional_model_with_remat"
 
-    # Tries to install the package in the sandbox
-    "test_keras_imports"
+      # Tries to install the package in the sandbox
+      "test_keras_imports"
 
-    # TypeError: this __dict__ descriptor does not support '_DictWrapper' objects
-    "test_reloading_default_saved_model"
-  ];
+      # TypeError: this __dict__ descriptor does not support '_DictWrapper' objects
+      "test_reloading_default_saved_model"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # Hangs forever
+      "test_fit_with_data_adapter"
+    ];
 
   disabledTestPaths = [
     # These tests succeed when run individually, but crash within the full test suite:

@@ -22,24 +22,18 @@
   openldap,
   glib,
   dbus,
-  docbook-xsl-nons,
-  cmark-gfm,
   iniparser,
+  pandoc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netatalk";
-  version = "4.2.0";
+  version = "4.2.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/netatalk/netatalk/netatalk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-doqRAU4pjcHRTvKOvjMN2tSZKOPDTzBzU7i90xf1ClI=";
+    hash = "sha256-EKPDpMEazsZX35wzxppiaeMZ26dZxeHfpB7lo/G4DEM=";
   };
-
-  patches = [
-    ./0000-no-install-under-usr-cupsd.patch
-    ./0001-no-install-under-var-CNID.patch
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -64,9 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     perl
     dbus
-    docbook-xsl-nons
-    cmark-gfm
     iniparser
+    pandoc
   ];
 
   mesonFlags = [
@@ -79,16 +72,16 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dwith-lockfile-path=/run/lock/"
     "-Dwith-cracklib=true"
     "-Dwith-cracklib-path=${cracklib.out}"
-    "-Dwith-docbook-path=${docbook-xsl-nons.out}/share/xml/docbook-xsl-nons/"
+    "-Dwith-statedir-creation=false"
   ];
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Apple Filing Protocol Server";
     homepage = "https://netatalk.io/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jcumming ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ jcumming ];
   };
 })

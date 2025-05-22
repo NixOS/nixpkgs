@@ -1,6 +1,5 @@
 {
   haskell,
-  haskellPackages,
   lib,
   stdenv,
 }:
@@ -8,7 +7,6 @@ let
   inherit (haskell.lib.compose) overrideCabal justStaticExecutables;
 
   overrides = {
-    patches = [ ./0001-Downgrade-cabal-version-for-ghc-9.6-compat.patch ];
     description = "OAuth credential MAnager";
     homepage = "https://github.com/pdobsan/oama";
     maintainers = with lib.maintainers; [ aidalgol ];
@@ -16,7 +14,7 @@ let
     passthru.updateScript = ./update.sh;
   };
 
-  raw-pkg = haskellPackages.callPackage ./generated-package.nix { };
+  raw-pkg = haskell.packages.ghc912.callPackage ./generated-package.nix { };
 in
 lib.pipe raw-pkg [
   (overrideCabal overrides)

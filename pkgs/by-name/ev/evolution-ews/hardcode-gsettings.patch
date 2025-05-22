@@ -7,7 +7,7 @@ index 32817df..da65217 100644
  
  	/* cannot save, when evolution is not installed */
 -	if (!e_ews_common_utils_gsettings_schema_exists ("org.gnome.evolution.mail"))
-+	if (!true)
++	if (!TRUE)
  		return FALSE;
  
  	if (!old_categories || !new_categories)
@@ -40,7 +40,7 @@ index 7374c36..7da2023 100644
  
  	/* cannot save, when evolution is not installed */
 -	if (!e_ews_common_utils_gsettings_schema_exists ("org.gnome.evolution.mail"))
-+	if (!true)
++	if (!TRUE)
  		return FALSE;
  
  	if (!old_categories || !new_categories)
@@ -73,7 +73,7 @@ index cec5417..2e744a0 100644
  	ICalTimezone *zone = NULL;
  
 -	if (e_ews_common_utils_gsettings_schema_exists ("org.gnome.evolution.calendar")) {
-+	if (true) {
++	if (TRUE) {
  		GSettings *settings;
  
 -		settings = g_settings_new ("org.gnome.evolution.calendar");
@@ -101,7 +101,7 @@ index 3458c10..7d21784 100644
  	gchar *location = NULL;
  
 -	if (e_ews_common_utils_gsettings_schema_exists ("org.gnome.evolution.calendar")) {
-+	if (true) {
++	if (TRUE) {
  		GSettings *settings;
  
 -		settings = g_settings_new ("org.gnome.evolution.calendar");

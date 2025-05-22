@@ -8,7 +8,6 @@
   procps,
   nixVersions,
   jq,
-  sta,
   python3,
 }:
 
@@ -31,11 +30,14 @@ let
       );
     };
 
-  nix = nixVersions.nix_2_24;
+  nix = nixVersions.latest;
 
   supportedSystems = builtins.fromJSON (builtins.readFile ../supportedSystems.json);
 
   attrpathsSuperset =
+    {
+      evalSystem,
+    }:
     runCommand "attrpaths-superset.json"
       {
         src = nixpkgs;
@@ -55,6 +57,7 @@ let
             -I "$src" \
             --option restrict-eval true \
             --option allow-import-from-derivation false \
+            --option eval-system "${evalSystem}" \
             --arg enableWarnings false > $out/paths.json
       '';
 
@@ -65,7 +68,7 @@ let
       # because `--argstr system` would only be passed to the ci/default.nix file!
       evalSystem,
       # The path to the `paths.json` file from `attrpathsSuperset`
-      attrpathFile ? "${attrpathsSuperset}/paths.json",
+      attrpathFile ? "${attrpathsSuperset { inherit evalSystem; }}/paths.json",
       # The number of attributes per chunk, see ./README.md for more info.
       chunkSize,
       checkMeta ? true,
@@ -184,10 +187,7 @@ let
           rm "$chunkOutputDir"/stats/"$seq_end"
         fi
 
-        # Make sure the glob doesn't break when there's no files
-        shopt -s nullglob
         cat "$chunkOutputDir"/result/* > $out/paths
-        cat "$chunkOutputDir"/stats/* > $out/stats.jsonstream
       '';
 
   combine =
@@ -198,7 +198,6 @@ let
       {
         nativeBuildInputs = [
           jq
-          sta
         ];
       }
       ''
@@ -220,39 +219,6 @@ let
                   end) | from_entries}
             ) | from_entries
           ' > $out/outpaths.json
-
-        # Computes min, mean, error, etc. for a list of values and outputs a JSON from that
-        statistics() {
-          local stat=$1
-          sta --transpose |
-            jq --raw-input --argjson stat "$stat" -n '
-              [
-                inputs |
-                  split("\t") |
-                  { key: .[0], value: (.[1] | fromjson) }
-              ] |
-                from_entries |
-                {
-                  key: ($stat | join(".")),
-                  value: .
-                }'
-        }
-
-        # Gets all available number stats (without .sizes because those are constant and not interesting)
-        readarray -t stats < <(jq -cs '.[0] | del(.sizes) | paths(type == "number")' ${resultsDir}/*/stats.jsonstream)
-
-        # Combines the statistics from all evaluations
-        {
-          echo "{ \"key\": \"minAvailMemory\", \"value\": $(cat ${resultsDir}/*/min-avail-memory | sta --brief --min) }"
-          echo "{ \"key\": \"minFreeSwap\", \"value\": $(cat ${resultsDir}/*/min-free-swap | sta --brief --min) }"
-          cat ${resultsDir}/*/total-time | statistics '["totalTime"]'
-          for stat in "''${stats[@]}"; do
-            cat ${resultsDir}/*/stats.jsonstream |
-              jq --argjson stat "$stat" 'getpath($stat)' |
-              statistics "$stat"
-          done
-        } |
-          jq -s from_entries > $out/stats.json
 
         mkdir -p $out/stats
 

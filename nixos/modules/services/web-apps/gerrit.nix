@@ -261,6 +261,7 @@ in
   meta.maintainers = with lib.maintainers; [
     edef
     zimbatm
+    felixsinger
   ];
   # uses attributes of the linked package
   meta.buildDocsInSandbox = false;

@@ -77,3 +77,22 @@ Instead of applying the patches to the worktree per the above instructions, one 
 For newer LLVM versions, enough has has been upstreamed,
 (see https://reviews.llvm.org/differential/query/5UAfpj_9zHwY/ for my progress upstreaming),
 that I have just assembled new gnu-install-dirs patches from the remaining unmerged patches instead of rebasing from the prior LLVM's gnu install dirs patch.
+
+## Adding a patch
+
+To add an LLVM patch in the Nixpkgs tree,
+
+1. Put the patch in the corresponding directory (`<VERSION>/<PACKAGE>`).
+
+   _Example_: If you want your patch to apply to clang version 12 (and, optionally, later versions), put it in `./12/clang`.
+2. Add the patch to the `patches` argument of the corresponding package in `./common`, guarded by a `lib.optionals` with the desired version constraints, passed through the `getVersionFile` function.
+
+   _Example_: If you want the patch `./12/llvm/fix-llvm-issue-49955.patch` to apply to LLVM 12, add `lib.optional (lib.versions.major release_version == "12") (getVersionFile "llvm/fix-llvm-issue-49955.patch")` to `./common/llvm/default.nix`.
+3. If you wish for this single patch to apply to multiple versions of the package, extend the conditions in the `lib.optional` guard and add the corresponding constraints to `./common/patches.nix`; note that `after` is inclusive and `before` is exclusive.
+
+   _Example_:
+   If you want the patch `./12/clang/purity.patch` to apply to versions 12, 13 and 14, you have to
+   - Modify the guard in `./common/clang/default.nix` as follows: `lib.optional (lib.versionAtLeast release_version "12" && lib.versionOlder release_version "15")`
+   - Add `{ "clang/purity.patch" = [ { after = 12; before = 15; path = ../12; } ]; }` to `common/patches.nix`.
+   You may have multiple different patches with the same name that would apply to different versions; in that case, add the necessary constraints to `common/patches.nix`.
+

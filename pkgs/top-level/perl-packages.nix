@@ -30215,6 +30215,9 @@ with self;
     patches = [
       # https://github.com/PerlGameDev/SDL/pull/304
       ../development/perl-modules/sdl-modern-perl.patch
+      # sdl-compat correctly reports the bit depth of the test image,
+      # while SDL_classic rounded to the next byte
+      ../development/perl-modules/sdl-compat-bit-depth.patch
       (fetchpatch {
         url = "https://aur.archlinux.org/cgit/aur.git/plain/surface-xs-declare-calc-offset-earlier.diff?h=perl-sdl&id=d4b6da86d33046cde0e84fa2cd6eaccff1667cab";
         hash = "sha256-dQ2O4dO18diSAilSZrZj6II+mBuKKI3cx9fR1SJqUvo=";
