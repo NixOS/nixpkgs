@@ -99,7 +99,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://leoeditor.com";
+    homepage = "https://leo-editor.github.io/leo-editor/";
     description = "A powerful folding editor";
     longDescription = "Leo is a PIM, IDE and outliner that accelerates the work flow of programmers, authors and web designers.";
     license = licenses.mit;
