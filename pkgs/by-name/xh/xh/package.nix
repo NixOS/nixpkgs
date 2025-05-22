@@ -7,6 +7,7 @@
   withNativeTls ? true,
   stdenv,
   openssl,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -57,6 +58,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     $out/bin/xh --help > /dev/null
     $out/bin/xhs --help > /dev/null
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Friendly and fast tool for sending HTTP requests";
