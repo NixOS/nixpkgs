@@ -270,6 +270,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       luftmensch-luftmensch
       khaneliman
+      defelo
     ];
     platforms = lib.platforms.all;
     mainProgram = "fastfetch";
