@@ -35,6 +35,9 @@ buildPythonPackage rec {
       substituteInPlace setup.py \
         --replace-fail "ParallelCompile()" 'ParallelCompile("NIX_BUILD_CORES")' \
         --replace-fail "define_macros.extend([('DUCKDB_EXTENSION_AUTOLOAD_DEFAULT', '1'), ('DUCKDB_EXTENSION_AUTOINSTALL_DEFAULT', '1')])" "pass"
+
+      substituteInPlace pyproject.toml \
+        --replace-fail 'setuptools_scm>=6.4,<8.0' 'setuptools_scm'
     '';
 
   env = {
@@ -42,14 +45,14 @@ buildPythonPackage rec {
     OVERRIDE_GIT_DESCRIBE = "v${version}-0-g${rev}";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     pybind11
     setuptools-scm
   ];
 
   buildInputs = [ openssl ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     pandas
   ];
