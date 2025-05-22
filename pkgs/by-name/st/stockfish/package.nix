@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
-  apple-sdk,
 }:
 
 let
