@@ -24,7 +24,7 @@ let
     name = "nltk-test-data";
     paths = [
       nltk-data.punkt
-      nltk-data.punkt_tab
+      nltk-data.punkt-tab
       nltk-data.stopwords
     ];
   };
