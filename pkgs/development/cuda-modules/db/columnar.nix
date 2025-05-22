@@ -71,8 +71,8 @@ rec {
     in
     [
       {
-        message = "${columnName} doesn't match the index ${indexName}: ${errors}";
-        assertion = lib.all (lib.flip builtins.elem (builtins.attrNames index)) (builtins.attrNames column);
+        message = "`${columnName}' doesn't match the index `${indexName}': ${errors}";
+        assertion = !leftCond && !rightCond;
       }
     ];
   assertCompleteTable =
