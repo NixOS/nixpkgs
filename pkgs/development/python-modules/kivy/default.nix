@@ -110,7 +110,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "kivy" ];
 
   meta = with lib; {
-    changelog = "https://github.com/kivy/kivy/releases/tag/${src.tags}";
+    changelog = "https://github.com/kivy/kivy/releases/tag/${src.tag}";
     description = "Library for rapid development of hardware-accelerated multitouch applications";
     homepage = "https://github.com/kivy/kivy";
     license = licenses.mit;
