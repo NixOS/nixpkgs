@@ -1,9 +1,7 @@
 {
   lib,
-  findutils,
   live-server,
   parallel,
-  rsync,
   watchexec,
   writeShellScriptBin,
   # arguments to `nix-build`, e.g. `"foo.nix -A bar"`
@@ -28,43 +26,24 @@ let
     EOF
   '';
 
-  # The following would have been simpler:
-  # 1. serve from `$serve`
-  # 2. pass each build a `--out-link $serve/result`
-  # But that way live-server does not seem to detect changes and therefore no
-  # auto-reloads occur.
-  # Instead, we copy the contents of each build to the `$serve` directory.
-  # Using rsync here, instead of `cp`, to get as close to an atomic
-  # directory copy operation as possible. `--delay-updates` should
-  # also go towards that.
   build-and-copy = writeShellScriptBin "build-and-copy" ''
     set -euxo pipefail
 
     set +e
-    stderr=$(2>&1 nix-build --out-link $out_link ${buildArgs})
+    stderr=$(2>&1 nix-build --no-out-link ${buildArgs})
     exit_status=$?
     set -e
 
+    rm -rf $serve
+
     if [ $exit_status -eq 0 ];
     then
-      # setting permissions to be able to clean up
-      ${lib.getExe rsync} \
-        --recursive \
-        --chmod=u=rwX \
-        --delete-before \
-        --delay-updates \
-        --links \
-        $out_link/ \
-        $serve/
+      out_link="$(nix-build --no-out-link ${buildArgs})"
+      ln -sf $out_link $serve
     else
-      set +x
-      ${lib.getExe error-page} "$stderr" > $error_page_absolute
-      set -x
+      mkdir -p "$(dirname $error_page_absolute)"
 
-      ${lib.getExe findutils} $serve \
-        -type f \
-        ! -name $error_page_relative \
-        -delete
+      ${lib.getExe error-page} "$stderr" > $error_page_absolute
     fi
   '';
 
@@ -99,11 +78,10 @@ writeShellScriptBin "devmode" ''
   tmpdir=$(mktemp -d)
   trap handle_exit EXIT
 
-  export out_link="$tmpdir/result"
   export serve="$tmpdir/serve"
+
   mkdir $serve
-  export error_page_relative=error.html
-  export error_page_absolute=$serve/$error_page_relative
+  export error_page_absolute="$serve/${open}"
   ${lib.getExe error-page} "building …" > $error_page_absolute
 
   ${lib.getExe parallel} \
