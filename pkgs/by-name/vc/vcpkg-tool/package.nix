@@ -24,13 +24,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vcpkg-tool";
-  version = "2025-04-16";
+  version = "2025-05-19";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vcpkg-tool";
     rev = finalAttrs.version;
-    hash = "sha256-4XqpYEbE7TJyfdDPomcghII3iqcoX99I2GDuSHX5q2g=";
+    hash = "sha256-st9VLiuvKHKkokUToxw4KQ4aekGMqx8rfVBmmeddgVk=";
   };
 
   nativeBuildInputs = [
