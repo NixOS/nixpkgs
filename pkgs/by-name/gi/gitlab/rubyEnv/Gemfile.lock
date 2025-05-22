@@ -544,8 +544,6 @@ GEM
     diffy (3.4.3)
     digest-crc (0.6.5)
       rake (>= 12.0.0, < 14.0.0)
-    discordrb-webhooks (3.5.0)
-      rest-client (>= 2.0.0)
     docile (1.4.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
@@ -2120,7 +2118,6 @@ DEPENDENCIES
   devise-two-factor (~> 4.1.1)
   diff_match_patch (~> 0.1.0)!
   diffy (~> 3.4)
-  discordrb-webhooks (~> 3.5)
   doorkeeper (~> 5.8, >= 5.8.1)
   doorkeeper-device_authorization_grant (~> 1.0.0)
   doorkeeper-openid_connect (~> 1.8.10)
