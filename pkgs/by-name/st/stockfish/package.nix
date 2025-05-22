@@ -3,6 +3,11 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
+  _experimental-update-script-combinators,
+  nix-update-script,
+  writeShellApplication,
+  nix,
+  gnugrep,
 }:
 
 let
@@ -24,16 +29,18 @@ let
 
   # These files can be found in src/evaluate.h
   nnueBigFile = "nn-1111cefa1111.nnue";
+  nnueBigHash = "sha256-ERHO+hERa3cWG9SxTatMUPJuWSDHVvSGFZK+Pc1t4XQ=";
   nnueBig = fetchurl {
     name = nnueBigFile;
     url = "https://tests.stockfishchess.org/api/nn/${nnueBigFile}";
-    sha256 = "sha256-ERHO+hERa3cWG9SxTatMUPJuWSDHVvSGFZK+Pc1t4XQ=";
+    hash = nnueBigHash;
   };
   nnueSmallFile = "nn-37f18f62d772.nnue";
+  nnueSmallHash = "sha256-N/GPYtdy8xB+HWqso4mMEww8hvKrY+ZVX7vKIGNaiZ0=";
   nnueSmall = fetchurl {
     name = nnueSmallFile;
     url = "https://tests.stockfishchess.org/api/nn/${nnueSmallFile}";
-    sha256 = "sha256-N/GPYtdy8xB+HWqso4mMEww8hvKrY+ZVX7vKIGNaiZ0=";
+    hash = nnueSmallHash;
   };
 in
 
@@ -44,8 +51,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "official-stockfish";
     repo = "Stockfish";
-    rev = "sf_${version}";
-    sha256 = "sha256-oXvLaC5TEUPlHjhm7tOxpNPY88QxYHFw+Cev3Q8NEeQ=";
+    tag = "sf_${version}";
+    hash = "sha256-oXvLaC5TEUPlHjhm7tOxpNPY88QxYHFw+Cev3Q8NEeQ=";
   };
 
   postUnpack = ''
@@ -62,6 +69,30 @@ stdenv.mkDerivation rec {
   buildFlags = [ "build" ];
 
   enableParallelBuilding = true;
+
+  passthru = {
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script {
+        extraArgs = [ "--version-regex=^sf_([\\d.]+)$" ];
+      })
+      (lib.getExe (writeShellApplication {
+        name = "${pname}-nnue-updater";
+        runtimeInputs = [
+          nix
+          gnugrep
+        ];
+        runtimeEnv = {
+          PNAME = pname;
+          PKG_FILE = builtins.toString ./package.nix;
+          NNUE_BIG_FILE = nnueBigFile;
+          NNUE_BIG_HASH = nnueBigHash;
+          NNUE_SMALL_FILE = nnueSmallFile;
+          NNUE_SMALL_HASH = nnueSmallHash;
+        };
+        text = builtins.readFile ./update.bash;
+      }))
+    ];
+  };
 
   meta = with lib; {
     homepage = "https://stockfishchess.org/";
