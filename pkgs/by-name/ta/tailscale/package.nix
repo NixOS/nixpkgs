@@ -98,6 +98,10 @@ buildGoModule {
 
     # several tests hang
     rm tsnet/tsnet_test.go
+
+    # new test, probably missing import
+    # reported: https://github.com/tailscale/tailscale/issues/16051
+    rm tsnet/packet_filter_test.go
   '';
 
   checkFlags =
