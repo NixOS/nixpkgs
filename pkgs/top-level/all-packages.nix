@@ -8181,6 +8181,35 @@ with pkgs;
     else
       null;
 
+  cxxlibCrossChooser =
+    name:
+    if name == null then
+      null
+    else if name == "libcxx" then
+      llvmPackages.libcxx
+    else if name == "libstdcxx" then
+      # TODO: split libstdcxx out of gcc
+      null
+    else
+      throw "Unknown libc ${name}";
+
+  cxxlibCross =
+    if stdenv.targetPlatform == stdenv.buildPlatform then
+      null
+    else
+      # TODO: use cxxlib when https://github.com/NixOS/nixpkgs/pull/365057 is merged
+      cxxlibCrossChooser (
+        if
+          stdenv.targetPlatform.useLLVM
+          || (stdenv.targetPlatform.useArocc or false)
+          || (stdenv.targetPlatform.useZig or false)
+          || stdenv.targetPlatform.isDarwin
+        then
+          "libcxx"
+        else
+          "libstdcxx"
+      );
+
   # We can choose:
   libcCrossChooser =
     name:
