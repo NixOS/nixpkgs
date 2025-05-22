@@ -119,7 +119,7 @@ in
 
       zsh.interactiveShellInit = lib.mkIf cfg.enableZshIntegration ''
         if ${lib.boolToString cfg.loadInNixShell} || printenv PATH | grep -vqc '/nix/store'; then
-         eval "$(${lib.getExe cfg.finalPackage} hook zsh)"
+          eval "$(${lib.getExe cfg.finalPackage} hook zsh)"
         fi
       '';
 
@@ -127,14 +127,13 @@ in
       #$IN_NIX_SHELL for "nix-shell"
       bash.interactiveShellInit = lib.mkIf cfg.enableBashIntegration ''
         if ${lib.boolToString cfg.loadInNixShell} || [ -z "$IN_NIX_SHELL$NIX_GCROOT$(printenv PATH | grep '/nix/store')" ] ; then
-         eval "$(${lib.getExe cfg.finalPackage} hook bash)"
+          eval "$(${lib.getExe cfg.finalPackage} hook bash)"
         fi
       '';
 
       fish.interactiveShellInit = lib.mkIf cfg.enableFishIntegration ''
-        if ${lib.boolToString cfg.loadInNixShell};
-        or printenv PATH | grep -vqc '/nix/store';
-         ${lib.getExe cfg.finalPackage} hook fish | source
+        if ${lib.boolToString cfg.loadInNixShell}; or printenv PATH | grep -vqc '/nix/store';
+          ${lib.getExe cfg.finalPackage} hook fish | source
         end
       '';
 
@@ -169,18 +168,18 @@ in
             source ${cfg.nix-direnv.package}/share/nix-direnv/direnvrc
           ''}
 
-           #Load direnvrcExtra
-           ${cfg.direnvrcExtra}
+          #Load direnvrcExtra
+          ${cfg.direnvrcExtra}
 
-           #Load user-configuration if present (~/.direnvrc or ~/.config/direnv/direnvrc)
-           direnv_config_dir_home="''${DIRENV_CONFIG_HOME:-''${XDG_CONFIG_HOME:-$HOME/.config}/direnv}"
-           if [[ -f $direnv_config_dir_home/direnvrc ]]; then
-             source "$direnv_config_dir_home/direnvrc" >&2
-           elif [[ -f $HOME/.direnvrc ]]; then
-             source "$HOME/.direnvrc" >&2
-           fi
+          #Load user-configuration if present (~/.direnvrc or ~/.config/direnv/direnvrc)
+          direnv_config_dir_home="''${DIRENV_CONFIG_HOME:-''${XDG_CONFIG_HOME:-$HOME/.config}/direnv}"
+          if [[ -f $direnv_config_dir_home/direnvrc ]]; then
+            source "$direnv_config_dir_home/direnvrc" >&2
+          elif [[ -f $HOME/.direnvrc ]]; then
+            source "$HOME/.direnvrc" >&2
+          fi
 
-           unset direnv_config_dir_home
+          unset direnv_config_dir_home
         '';
 
         "direnv/lib/zz-user.sh".text = ''
