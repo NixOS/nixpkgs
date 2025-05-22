@@ -62,15 +62,11 @@ let
       modules = [
         (lib.importJSON path)
         {
-          freeformType =
-            if lib.hasPrefix "feature_" (builtins.baseNameOf path) then
-              (types.submodule {
-                imports = [ featureDecl ];
-              })
-            else
-              (types.submodule {
-                imports = [ manifestDecl ];
-              });
+          freeformType = types.submodule {
+            imports = [
+              (if lib.hasPrefix "feature_" (builtins.baseNameOf path) then featureDecl else manifestDecl)
+            ];
+          };
           _file = toString ./json.nix;
         }
       ];
