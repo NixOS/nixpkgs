@@ -50,6 +50,12 @@
   "module-services-crab-hole-upstream-options": [
     "index.html#module-services-crab-hole-upstream-options"
   ],
+  "module-services-opencloud": [
+    "index.html#module-services-opencloud"
+  ],
+  "module-services-opencloud-basic-usage": [
+    "index.html#module-services-opencloud-basic-usage"
+  ],
   "module-services-strfry": [
     "index.html#module-services-strfry"
   ],

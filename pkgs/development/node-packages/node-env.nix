@@ -540,17 +540,16 @@ let
     in
     stdenv.mkDerivation (
       {
-        name = name + lib.optionalString (version != null) "-${version}";
-        strictDeps = true;
+        name = "${name}${if version == null then "" else "-${version}"}";
         buildInputs =
-          [ tarWrapper ]
+          [
+            tarWrapper
+            python
+            nodejs
+          ]
           ++ lib.optional (stdenv.hostPlatform.isLinux) pkgs.util-linux
           ++ lib.optional (stdenv.hostPlatform.isDarwin) libtool
           ++ buildInputs;
-        propagatedNativeBuildInputs = [
-          nodejs
-          python
-        ];
 
         inherit nodejs;
 

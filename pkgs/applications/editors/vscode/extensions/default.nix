@@ -5000,8 +5000,8 @@ let
         mktplcRef = {
           name = "uiua-vscode";
           publisher = "uiua-lang";
-          version = "0.0.63";
-          hash = "sha256-qlBcnQyH5VbgmBlTvVi59OpYtyuVrJLoSuRIbrBGFVE=";
+          version = "0.0.64";
+          hash = "sha256-mASTMZhXsM8IzaMmHsWRmf+pf1EjXyWsBMFXTcq7Acw=";
         };
         meta = {
           description = "VSCode language extension for Uiua";
@@ -5322,8 +5322,8 @@ let
         mktplcRef = {
           name = "vim";
           publisher = "vscodevim";
-          version = "1.29.0";
-          hash = "sha256-J3V8SZJZ2LSL8QfdoOtHI1ZDmGDVerTRYP4NZU17SeQ=";
+          version = "1.29.2";
+          hash = "sha256-RBh4yQxOoUpwNKedFjEeu6hO0tU9AAPlDrt2LhgZT50=";
         };
         meta = {
           license = lib.licenses.mit;
