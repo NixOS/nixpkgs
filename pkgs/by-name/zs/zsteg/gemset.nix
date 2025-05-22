@@ -14,10 +14,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1z3vnb8mhzns3ybf78vlj5cy6lq4pyfm8n40kqba2s33xccs3kl0";
+      sha256 = "0pswyhjz9d90bympsz6s0rgv24b8nrd4lk5y16kz67vdw6vbaqbp";
       type = "gem";
     };
-    version = "0.0.5";
+    version = "0.5.0";
   };
   prime = {
     dependencies = [
@@ -28,10 +28,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1973kz8lbck6ga5v42f55jk8b8pnbgwp9p67dl1xw15gvz55dsfl";
+      sha256 = "1qsk9q2n4yb80f5mwslxzfzm2ckar25grghk95cj7sbc1p2k3w5s";
       type = "gem";
     };
-    version = "0.1.2";
+    version = "0.1.3";
   };
   rainbow = {
     groups = [ "default" ];
@@ -48,10 +48,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0qq54imvbksnckzf9hrq9bjzcdb0n8wfv6l5jc0di10n88277jx6";
+      sha256 = "0y2pc7lr979pab5n5lvk3jhsi99fhskl5f2s6004v8sabz51psl3";
       type = "gem";
     };
-    version = "0.2.0";
+    version = "0.3.0";
   };
   zpng = {
     dependencies = [ "rainbow" ];
