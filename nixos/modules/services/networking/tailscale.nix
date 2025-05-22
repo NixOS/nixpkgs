@@ -213,7 +213,7 @@ in
             if [[ "$state" != "$lastState" ]]; then
               # https://github.com/tailscale/tailscale/blob/v1.72.1/ipn/backend.go#L24-L32
               case "$state" in
-                NeedsLogin)
+                NeedsLogin|NeedsMachineAuth|Stopped)
                   echo "Server needs authentication, sending auth key"
                   tailscale up --auth-key "$(cat ${cfg.authKeyFile})${params}" ${escapeShellArgs cfg.extraUpFlags}
                   ;;
