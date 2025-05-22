@@ -52,6 +52,7 @@ buildNpmPackage {
 
   patches = [
     ./0001-feat-update-Disable-auto-checking-for-updates-and-updating-manually.patch
+    ./0001-fix-single-instance-detection-when-not-packaged.patch
   ];
 
   buildPhase = ''
@@ -101,7 +102,7 @@ buildNpmPackage {
   desktopItems = [
     (makeDesktopItem {
       name = "anytype";
-      exec = "anytype";
+      exec = "anytype %U";
       icon = "anytype";
       desktopName = "Anytype";
       comment = description;
