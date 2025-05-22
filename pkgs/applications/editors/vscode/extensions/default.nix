@@ -4761,6 +4761,23 @@ let
         };
       };
 
+      tootone.org-mode = buildVscodeMarketplaceExtension {
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/tootone.org-mode/changelog";
+          description = "Emacs Org mode support for VSCode";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=tootone.org-mode";
+          homepage = "https://github.com/vscode-org-mode/vscode-org-mode";
+          license = lib.licenses.gpl3Only;
+          maintainers = [ ];
+        };
+        mktplcRef = {
+          name = "org-mode";
+          publisher = "tootone";
+          version = "0.5.0";
+          hash = "sha256-vXwo3oFLwK/wY7XEph9lGvXYIxjZsxeIE4TVAROmV2o=";
+        };
+      };
+
       tsandall.opa = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "opa";
