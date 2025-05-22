@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20 # or
       mit
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "tokei";
   };
 })
