@@ -305,8 +305,8 @@ python.pkgs.buildPythonApplication rec {
       tesseract5
       ;
     nltkData = with nltk-data; [
-      punkt-tab
-      snowball-data
+      punkt_tab
+      snowball_data
       stopwords
     ];
     tests = { inherit (nixosTests) paperless; };
