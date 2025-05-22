@@ -228,14 +228,6 @@ qtModule (
         (
           cd src/3rdparty/chromium;
 
-          patch -p2 < ${
-            (fetchpatch {
-              # support for building with python 3.12
-              name = "python312-imp.patch";
-              url = "https://codereview.qt-project.org/gitweb?p=qt/qtwebengine-chromium.git;a=patch;h=3664134f749f4851a14ab1953a9ee460a1fe0b68";
-              hash = "sha256-XY0dEdeuOTRMR7onmuNg1Axld8+pquKAzOfDAGSIzI4=";
-            })
-          }
           patch -p1 < ${
             (fetchpatch {
               # support for building with python 3.12
