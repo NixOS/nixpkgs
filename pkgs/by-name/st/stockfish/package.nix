@@ -29,8 +29,8 @@ let
       "unknown";
 
   # These files can be found in src/evaluate.h
-  nnueBigFile = "nn-1111cefa1111.nnue";
-  nnueBigHash = "sha256-ERHO+hERa3cWG9SxTatMUPJuWSDHVvSGFZK+Pc1t4XQ=";
+  nnueBigFile = "nn-1c0000000000.nnue";
+  nnueBigHash = "sha256-HAAAAAAApn1imZnZMtDDc/dFDOQ80S0FYoaPTq+a4q0=";
   nnueBig = fetchurl {
     name = nnueBigFile;
     url = "https://tests.stockfishchess.org/api/nn/${nnueBigFile}";
@@ -47,13 +47,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "stockfish";
-  version = "17";
+  version = "17.1";
 
   src = fetchFromGitHub {
     owner = "official-stockfish";
     repo = "Stockfish";
     tag = "sf_${version}";
-    hash = "sha256-oXvLaC5TEUPlHjhm7tOxpNPY88QxYHFw+Cev3Q8NEeQ=";
+    hash = "sha256-c8o1d7/yPnF3Eo7M/MSzYuYQr2qt2tIwyu7WfuKMAzg=";
   };
 
   postUnpack = ''
