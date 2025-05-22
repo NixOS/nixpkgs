@@ -96,6 +96,12 @@ let
           hash = "sha256-K9pEtD58rLFdTgX/PMH4vJeTbMRkYjQkECv8LDXpWRI=";
         };
         format = "setuptools";
+        disabledTests = [
+          # flaky
+          "test_session_scoping_changing"
+          # https://github.com/pallets-eco/flask-sqlalchemy/issues/1084
+          "test_persist_selectable"
+        ];
       });
       httpcore = pySuper.httpcore.overridePythonAttrs (o: {
         # nullify upstream's pytest flags which cause
