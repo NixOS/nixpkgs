@@ -19,6 +19,7 @@
   perl,
   makeWrapper,
   nix-update-script,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -54,15 +55,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs = [
-    glib
-    gtk3
-    openssl
-    webkitgtk_4_1
-    pango
-    cairo
-    pixman
-  ];
+  buildInputs =
+    [
+      glib
+      gtk3
+      openssl
+      pango
+      cairo
+      pixman
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      webkitgtk_4_1
+    ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -74,11 +78,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"bootstrap:vendor-protoc": "node scripts/vendor-protoc.cjs",' ""
   '';
 
+  archPlatforms =
+    {
+      "aarch64-darwin" = "aarch64-apple-darwin";
+      "x86_64-darwin" = "x86_64-apple-darwin";
+      "aarch64-linux" = "aarch64-unknown-linux-gnu";
+      "x86_64-linux" = "x86_64-unknown-linux-gnu";
+    }
+    .${stdenv.hostPlatform.system};
+
   preBuild = ''
     mkdir -p src-tauri/vendored/node
-    ln -s ${nodejs}/bin/node src-tauri/vendored/node/yaaknode-x86_64-unknown-linux-gnu
+    ln -s ${nodejs}/bin/node src-tauri/vendored/node/yaaknode-${finalAttrs.archPlatforms}
     mkdir -p src-tauri/vendored/protoc
-    ln -s ${protobuf}/bin/protoc src-tauri/vendored/protoc/yaakprotoc-x86_64-unknown-linux-gnu
+    ln -s ${protobuf}/bin/protoc src-tauri/vendored/protoc/yaakprotoc-${finalAttrs.archPlatforms}
     ln -s ${protobuf}/include src-tauri/vendored/protoc/include
   '';
 
@@ -90,11 +103,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = "popd";
 
-  postFixup = ''
-    wrapProgram $out/bin/yaak-app \
-      --inherit-argv0 \
-      --set-default WEBKIT_DISABLE_DMABUF_RENDERER 1
-  '';
+  postFixup =
+    if stdenv.hostPlatform.isLinux then
+      ''
+        wrapProgram $out/bin/yaak-app \
+          --inherit-argv0 \
+          --set-default WEBKIT_DISABLE_DMABUF_RENDERER 1
+      ''
+    else
+      "";
 
   passthru.updateScript = nix-update-script { };
 
@@ -105,6 +122,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ redyf ];
     mainProgram = "yaak";
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 })
