@@ -14662,8 +14662,6 @@ with pkgs;
 
   zotero_7 = pkgs.zotero;
 
-  zsteg = callPackage ../tools/security/zsteg { };
-
   zynaddsubfx = callPackage ../applications/audio/zynaddsubfx {
     guiModule = "zest";
     fftw = fftwSinglePrec;
