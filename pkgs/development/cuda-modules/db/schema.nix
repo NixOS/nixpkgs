@@ -185,6 +185,12 @@ in
                 description = "`∷ PName ⇒ LicenseShortName`";
               };
 
+          outputs = mkColumnOption index (attrsOf bool) {
+            description = ''
+              `∷ PName ⇒ OutputName ⇒ Bool`
+            '';
+            apply = lib.mapAttrs (pname: outputs: lib.filterAttrs (_outputName: enable: enable) outputs);
+          };
           overrideLicenseUrl = mkColumnOption index (nullOr str) {
             description = ''
               `∷ PName ⇒ Maybe Url`
@@ -196,6 +202,11 @@ in
             '';
           };
         };
+
+      output = mkOption {
+        type = SetOfStr;
+        description = "Known output names";
+      };
 
       license =
         let
@@ -347,6 +358,10 @@ in
       ++ assertCompleteTable "pname" cudb.package
       ++ assertCompleteTable "shortName" cudb.license
       ++ assertCompleteTable "nvidia" cudb.system
+      ++ lib.mapAttrsToList (pname: outputs: {
+        message = "package.output.${pname} must have at least one output enabled";
+        assertion = builtins.any lib.id (builtins.attrValues outputs);
+      }) cudb.package.outputs
       ++ lib.flatten (
         builtins.attrValues (
           lib.mapAttrs (

@@ -164,6 +164,9 @@ in
       _: pname: systemNv: _: rawPackage:
       lib.optionals (looksLikeSystem systemNv) [
         {
+          package.outputs.${pname} =
+            lib.filterAttrs (_: enable: enable)
+              rawPackage.outputs or { out = true; };
           package.systemsNv.${pname}.${systemNv} = 1;
           system.nvidia.${systemNv} = 1;
         }
