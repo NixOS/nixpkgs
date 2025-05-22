@@ -44,6 +44,7 @@
   # High-DPI support: Spotify's --force-device-scale-factor argument
   # not added if `null`, otherwise, should be a number.
   deviceScaleFactor ? null,
+  updateScript,
 }:
 
 let
@@ -226,6 +227,8 @@ stdenv.mkDerivation {
 
     runHook postFixup
   '';
+
+  passthru = { inherit updateScript; };
 
   meta = meta // {
     maintainers = with lib.maintainers; [
