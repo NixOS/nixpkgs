@@ -65,7 +65,12 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-xFVMWX3q3za1w8v58Eysk6vclPd4qpCuQMjMcwwHoh0=";
   };
 
+  env.GIT_VERSION = version;
+
   postPatch = ''
+    # Set the correct version, e.g. for `pagefind --version`
+    node .backstage/version.cjs
+
     # Tricky way to run npmConfigHook multiple times
     (
       local postPatchHooks=() # written to by npmConfigHook
