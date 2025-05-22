@@ -10,14 +10,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sing-box";
   version = "1.11.10";
 
   src = fetchFromGitHub {
     owner = "SagerNet";
-    repo = pname;
-    rev = "v${version}";
+    repo = "sing-box";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GcoAxfFH/eP97E7tN//LbNCSbEASfzDL5OYHyL54eh8=";
   };
 
@@ -42,7 +42,7 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
-    "-X=github.com/sagernet/sing-box/constant.Version=${version}"
+    "-X=github.com/sagernet/sing-box/constant.Version=${finalAttrs.version}"
   ];
 
   postInstall =
@@ -73,4 +73,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "sing-box";
   };
-}
+})
