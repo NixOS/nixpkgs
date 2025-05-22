@@ -781,6 +781,7 @@ in
   matrix-alertmanager = runTest ./matrix/matrix-alertmanager.nix;
   matrix-appservice-irc = runTest ./matrix/appservice-irc.nix;
   matrix-conduit = handleTest ./matrix/conduit.nix { };
+  matrix-continuwuity = runTest ./matrix/continuwuity.nix;
   matrix-synapse = handleTest ./matrix/synapse.nix { };
   matrix-synapse-workers = handleTest ./matrix/synapse-workers.nix { };
   mautrix-meta-postgres = handleTest ./matrix/mautrix-meta-postgres.nix { };

@@ -3065,14 +3065,13 @@ with pkgs;
 
   gibberish-detector = with python3Packages; toPythonApplication gibberish-detector;
 
-  gitlab = callPackage ../applications/version-management/gitlab { };
-  gitlab-ee = callPackage ../applications/version-management/gitlab {
+  gitlab-ee = callPackage ../by-name/gi/gitlab/package.nix {
     gitlabEnterprise = true;
   };
 
   gitlab-triage = callPackage ../applications/version-management/gitlab-triage { };
 
-  gitlab-workhorse = callPackage ../applications/version-management/gitlab/gitlab-workhorse { };
+  gitlab-workhorse = callPackage ../by-name/gi/gitlab/gitlab-workhorse { };
 
   gitqlient = libsForQt5.callPackage ../applications/version-management/gitqlient { };
 
@@ -13268,8 +13267,6 @@ with pkgs;
   meshlab-unstable = callPackage ../applications/graphics/meshlab-unstable { };
 
   michabo = libsForQt5.callPackage ../applications/misc/michabo { };
-
-  midori = wrapFirefox midori-unwrapped { };
 
   miniaudicle = qt6Packages.callPackage ../applications/audio/miniaudicle { };
 
