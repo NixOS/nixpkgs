@@ -2,20 +2,26 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  npm-lockfile-fix,
 }:
 
 buildNpmPackage rec {
   pname = "pm2";
-  version = "5.4.2";
+  version = "6.0.6";
 
   src = fetchFromGitHub {
     owner = "Unitech";
     repo = "pm2";
     rev = "v${version}";
-    hash = "sha256-8Fsh7rld7rtT55qVgj3/XbujNpZx0BfzTRcLjdPLFSA=";
+    hash = "sha256-ji6IOlPSEj+qpSusF3OX056KuZDL3JjvaTNT/UQTiqA=";
+
+    # Requested patch upstream: https://github.com/Unitech/pm2/pull/5985
+    postFetch = ''
+      ${lib.getExe npm-lockfile-fix} $out/package-lock.json
+    '';
   };
 
-  npmDepsHash = "sha256-Rp3euhURkZgVyszyAwrIftL7lY4aoP+Q4kSQBFxwTcs=";
+  npmDepsHash = "sha256-b+SSal4eNruQOMNAFoLLJdzfFhz1T3EieDv4kTwwA1Y=";
 
   dontNpmBuild = true;
 
