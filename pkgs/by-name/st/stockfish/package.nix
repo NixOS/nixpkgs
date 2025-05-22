@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
+  versionCheckHook,
   _experimental-update-script-combinators,
   nix-update-script,
   writeShellApplication,
@@ -69,6 +70,13 @@ stdenv.mkDerivation rec {
   buildFlags = [ "build" ];
 
   enableParallelBuilding = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/stockfish";
+  versionCheckProgramArg = "--help";
 
   passthru = {
     updateScript = _experimental-update-script-combinators.sequence [
