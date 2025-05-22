@@ -66,11 +66,11 @@ buildGoModule rec {
     tests = { inherit (nixosTests) sing-box; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sing-box.sagernet.org";
     description = "Universal proxy platform";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "sing-box";
   };
 }
