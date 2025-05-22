@@ -29,7 +29,7 @@ let
     EOF
   '';
 
-  build-and-copy = writeShellScriptBin "build-and-copy" ''
+  build-and-link = writeShellScriptBin "build-and-link" ''
     set -euxo pipefail
 
     set +e
@@ -54,7 +54,7 @@ let
       --shell=none \
       --restart \
       --print-events \
-      ${lib.getExe build-and-copy}
+      ${lib.getExe build-and-link}
   '';
 
   # https://crates.io/crates/live-server
