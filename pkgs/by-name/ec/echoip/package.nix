@@ -4,6 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   nixosTests,
+  nix-update-script,
 }:
 
 buildGoModule {
@@ -29,6 +30,7 @@ buildGoModule {
 
   passthru = {
     tests = { inherit (nixosTests) echoip; };
+    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
   };
 
   meta = {
