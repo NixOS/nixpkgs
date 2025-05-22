@@ -76,6 +76,8 @@
   efibootmgr,
   tpm2-tools,
 
+  fetchpatch2,
+
   # passthru
   nixosTests,
   nix-update-script,
@@ -173,8 +175,10 @@ stdenv.mkDerivation (finalAttrs: {
     # EFI capsule is located in fwupd-efi now.
     ./efi-app-path.patch
 
-    # See https://github.com/fwupd/fwupd/pull/8959
-    ./uefi-capsule-no-splash-fix-test.diff
+    (fetchpatch2 {
+      url = "https://github.com/fwupd/fwupd/pull/8959.diff?full_index=1";
+      hash = "sha256-w4uf1CXSyy1pqqM4lzMZoOFhDxadcU3Tdnz0dJgLW7w=";
+    })
   ];
 
   postPatch =
