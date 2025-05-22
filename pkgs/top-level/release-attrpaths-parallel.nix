@@ -9,6 +9,7 @@
   myChunk,
   checkMeta,
   includeBroken,
+  includeUnsupported ? false,
   systems,
 }:
 
@@ -18,7 +19,12 @@ let
 
   unfiltered = import ./release-outpaths.nix {
     inherit path;
-    inherit checkMeta includeBroken systems;
+    inherit
+      checkMeta
+      includeBroken
+      includeUnsupported
+      systems
+      ;
   };
 
   # Turns the unfiltered recursive attribute set into one that is limited to myAttrpaths
