@@ -74,6 +74,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       figsoda
       aaronjheng
+      defelo
     ];
     mainProgram = "xh";
   };
