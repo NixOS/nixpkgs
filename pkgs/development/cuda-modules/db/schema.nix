@@ -320,6 +320,7 @@ in
         type = listOf types.unspecified;
         default = [ ];
         description = "Assertions checked by `tests.cuda.db` when accessing `validConfig`";
+        apply = builtins.filter ({ assertion, ... }: !assertion);
       };
     };
   imports = [ ./static.nix ];
