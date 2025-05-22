@@ -35,13 +35,11 @@ in
             fullName = mkOption {
               type = str;
               default = config.shortName;
-              defaultText = "<shortName>";
               description = "Full (long, descriptive) name of the license";
             };
             shortName = mkOption {
               type = str;
               default = shortName;
-              defaultText = "<name>";
               description = ''
                 Short name used to identify the license
                 In `cudaPackages`, licenses from manifests are grouped by `shortName`s
@@ -86,7 +84,7 @@ in
       );
     in
     {
-      # ∷ Str → ()
+      # ∷ Str ⇒ ()
       product = mkOption {
         type = SetOfStr;
         default = { };
@@ -98,21 +96,20 @@ in
         description = "Corresponds to `release_product` in NVIDIA manifests";
       };
 
-      # ∷ ProductName → PName → ProductVersion → Option<PackageVersion>
       release = mkColumnOption cudb.product (attrsOf (attrsOf (nullOr str))) {
         default = { };
         description = ''
-          `∷ ProductName → PName → ProductVersion → Option<PackageVersion>`
+          `∷ ProductName ⇒ PName ⇒ ProductVersion ⇒ Maybe PackageVersion`
 
           Packages (`pname`, `version`) published in each release (`productName`, `productVersion)`, or, in NVIDIA manifests, `(release_product, release_label)`)'';
       };
 
-      # ∷ PName → Version → Set<SHA256>
+      # ∷ PName ⇒ Version ⇒ Set<SHA256>
       archive.bucket = mkColumnOption cudb.package.pname (attrsOf SetOfStr) {
-        description = "`∷ PName → Version → SHA256 → ()`";
+        description = "`∷ PName ⇒ Version ⇒ SHA256 ⇒ ()`";
       };
       archive.sha256 = mkOption {
-        description = "`∷ SHA256 → { URL, SystemStringNvidia, CompatibilityTag → () }`";
+        description = "`∷ SHA256 ⇒ { URL, SystemStringNvidia, CompatibilityTag ⇒ () }`";
         type = attrsOf (submodule {
           options = {
             systemNv = mkOption {
@@ -122,12 +119,12 @@ in
             tags = mkOption {
               type = SetOfStr;
               default = { };
-              description = "`∷ CompatibilityTag → ()`";
+              description = "`∷ CompatibilityTag ⇒ ()`";
             };
             url = mkOption {
               type = nullOr str;
               description = ''
-                `∷ Option<URI>`
+                `∷ Maybe URI`
                 Service to access the archive (e.g. from a FOD)'';
             };
           };
@@ -142,19 +139,18 @@ in
           pname = mkOption {
             type = SetOfStr;
             description = ''
-              `∷ PName → ()`
+              `∷ PName ⇒ ()`
 
               PNames of known packages'';
           };
 
-          # ∷ PName → Option<String>
           name = mkColumnOption index (nullOr str) {
             description = ''
-              `∷ PName → Option<String>`
+              `∷ PName ⇒ Maybe String`
             '';
           };
 
-          # ∷ PName → Set<SystemStringNvidia>
+          # ∷ PName ⇒ Set<SystemStringNvidia>
           systemsNv = mkColumnOption index SetOfStr {
             example = {
               libcublas = {
@@ -164,13 +160,13 @@ in
               };
             };
             description = ''
-              `∷ PName → SystemStringNvidia → ()`
+              `∷ PName ⇒ SystemStringNvidia ⇒ ()`
 
               (NVIDIA) system strings for which package has ever been published
             '';
           };
 
-          # ∷ PName → LicenseShortName
+          # ∷ PName ⇒ LicenseShortName
           license =
             mkColumnOption index
               (
@@ -180,13 +176,12 @@ in
                 enum licenseNames
               )
               {
-                description = "`∷ PName → LicenseShortName`";
+                description = "`∷ PName ⇒ LicenseShortName`";
               };
 
-          # ∷ PName → Option<Url>
           overrideLicenseUrl = mkColumnOption index (nullOr str) {
             description = ''
-              `∷ PName → Option<Url>`
+              `∷ PName ⇒ Maybe Url`
 
               In `cudaPackages`, licenses are grouped by `shortName`.
               Certain releases, e.g. `redist/cuda`, publish an independent copy
@@ -201,39 +196,37 @@ in
           index = cudb.license.shortName;
         in
         {
-          # ∷ String → ()
+          # ∷ String ⇒ ()
           shortName = mkOption {
             type = attrsOf Unit;
             description = ''
-              `∷ String → ()`
+              `∷ String ⇒ ()`
 
-              Identifies a licenses'';
+              Identifies a license
+            '';
           };
 
-          # ∷ String → Option<String>
           distribution_path = mkColumnOption index (nullOr str) {
             example."CUDA Toolkit" = "cutensor/redist/";
             description = ''
-              `∷ String → Option<String>`
+              `∷ String ⇒ Maybe String`
 
               Attribute from NVIDIA manifests used to form the download URL
             '';
           };
 
-          # ∷ String → Option<String>
           license_path = mkColumnOption index (nullOr str) {
             example."CUDA Toolkit" = "cuda_cudart/LICENSE.txt";
             description = ''
-              `∷ String → Option<String>`
+              `∷ String ⇒ Maybe String`
 
               Attribute from NVIDIA manifests used to form the download URL
             '';
           };
 
-          # ∷ String → License
           compiled = mkColumnOption index License {
             description = ''
-              `∷ String → License`
+              `∷ String ⇒ License`
 
               Data in `lib.licenses` format, to be used directly in `meta.license`
             '';
@@ -245,31 +238,37 @@ in
           index = cudb.system.nvidia;
         in
         {
-          # ∷ SystemStringNvidia → ()
+          # ∷ SystemStringNvidia ⇒ ()
           nvidia = mkOption {
             type = SetOfStr;
-            description = "`∷ SystemStringNvidia → ()`";
+            description = "`∷ SystemStringNvidia ⇒ ()`";
           };
-          # ∷ SystemStringNvidia → System → ()
+          # ∷ SystemStringNvidia ⇒ System ⇒ ()
           fromNvidia = mkColumnOption index (attrsOf Unit) {
             description = ''
-              `∷ SystemStringNvidia → SystemStringNix → ()`
+              `∷ SystemStringNvidia ⇒ SystemStringNix ⇒ ()`
 
 
               List of (Nixpkgs) platforms corresponding to the NVIDIA system strings
             '';
           };
-          # ∷ SystemStringNvidia → Bool
           isSource = mkColumnOption index bool {
-            description = "Whether system string marks a source release";
+            description = ''
+              ` ∷ SystemStringNvidia ⇒ Bool`
+
+              Whether system string marks a source release
+            '';
             example = {
               source = true;
               linux-sbsa = false;
             };
           };
-          # ∷ SystemStringNvidia → Bool
           isJetson = mkColumnOption index bool {
-            description = "Whether system string marks a jetson release";
+            description = ''
+              `∷ SystemStringNvidia ⇒ Bool`
+
+              Whether system string marks a jetson release
+            '';
             example = {
               source = false;
               linux-sbsa = false;
@@ -277,7 +276,11 @@ in
             };
           };
           jetsonCompatible = mkColumnOption index bool {
-            description = "Whether system string marks a release compatible with Jetson";
+            description = ''
+              `∷ SystemStringNvidia ⇒ Bool`
+
+              Whether system string marks a release compatible with Jetson
+            '';
             example = {
               source = true;
               linux-sbsa = false;

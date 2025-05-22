@@ -7,7 +7,7 @@ rec {
   Unit = enum [ unit ];
   SetOfStr = attrsOf Unit;
 
-  # ∷ Column → Type → MkOptionArgs → Option
+  # ∷ Column ⇒ Type ⇒ MkOptionArgs ⇒ Option
   mkColumnOption =
     indexColumn: rowType: optionArgsCol:
     lib.mkOption (
@@ -17,7 +17,7 @@ rec {
       }
     );
 
-  # ∷ ColumnName → (AttrsOf Any) → (AttrsOf Column) → (AttrsOf Column)
+  # ∷ ColumnName ⇒ (AttrsOf Any) ⇒ (AttrsOf Column) ⇒ (AttrsOf Column)
   defaults =
     indexColumn: columnDefaults: columns:
     let
