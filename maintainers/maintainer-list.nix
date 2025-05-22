@@ -17544,7 +17544,7 @@
     github = "nicodemus26";
     githubId = 58434;
     name = "Nicodemus Paradiso";
-    keys = [ { fingerprint = "5F59 D92C 686F 3812 5510 1040 285E 8D1B D1B5 FC10" ; } ];
+    keys = [ { fingerprint = "5F59 D92C 686F 3812 5510 1040 285E 8D1B D1B5 FC10"; } ];
   };
   nicolas-goudry = {
     email = "goudry.nicolas@gmail.com";
