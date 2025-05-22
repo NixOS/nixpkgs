@@ -4,7 +4,7 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage ({
+rustPlatform.buildRustPackage {
   pname = "dts-lsp";
   version = "0.1.5-unstable-2025-03-24";
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage ({
     maintainers = with lib.maintainers; [ filippo-biondi ];
     platforms = with lib.platforms; darwin ++ linux;
   };
-})
+}
