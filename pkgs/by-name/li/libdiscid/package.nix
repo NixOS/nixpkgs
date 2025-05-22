@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdiscid";
-  version = "0.6.4";
+  version = "0.6.5";
 
   nativeBuildInputs = [
     cmake
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "metabrainz";
     repo = "libdiscid";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oN/qpzdTa5+rD7kwDOW6UCg7bbDOy/AYmP8sv9Q8+Kk=";
+    hash = "sha256-lGq2iGt7c4h8HntEPeQcd7X+IykRLm0kvjrLswRWSSs=";
   };
 
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework CoreFoundation -framework IOKit";
