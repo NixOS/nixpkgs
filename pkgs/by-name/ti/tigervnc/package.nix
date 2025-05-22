@@ -194,6 +194,7 @@ stdenv.mkDerivation rec {
     description = "Fork of tightVNC, made in cooperation with VirtualGL";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
     # Prevent a store collision.
     priority = 4;
   };
