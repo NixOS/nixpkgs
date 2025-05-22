@@ -12,22 +12,6 @@
   open ? "/index.html",
 }:
 let
-  error-page = writeShellScriptBin "error-page" ''
-    cat << EOF
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <style>
-        @media (prefers-color-scheme: dark) {
-          :root { filter: invert(100%); }
-        }
-      </style>
-    </head>
-    <body><pre>$1</pre></body>
-    </html>
-    EOF
-  '';
-
   # The following would have been simpler:
   # 1. serve from `$serve`
   # 2. pass each build a `--out-link $serve/result`
@@ -56,15 +40,6 @@ let
         --links \
         $out_link/ \
         $serve/
-    else
-      set +x
-      ${lib.getExe error-page} "$stderr" > $error_page_absolute
-      set -x
-
-      ${lib.getExe findutils} $serve \
-        -type f \
-        ! -name $error_page_relative \
-        -delete
     fi
   '';
 
@@ -102,9 +77,6 @@ writeShellScriptBin "devmode" ''
   export out_link="$tmpdir/result"
   export serve="$tmpdir/serve"
   mkdir $serve
-  export error_page_relative=error.html
-  export error_page_absolute=$serve/$error_page_relative
-  ${lib.getExe error-page} "building …" > $error_page_absolute
 
   ${lib.getExe parallel} \
     --will-cite \
