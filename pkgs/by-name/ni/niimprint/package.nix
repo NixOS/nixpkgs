@@ -15,7 +15,7 @@ python3.pkgs.buildPythonPackage rec {
     hash = "sha256-+YISYchdqeVKrQ0h2cj5Jy2ezMjnQcWCCYm5f95H9dI="; # Needs to be updated
   };
 
-  format = "pyproject";
+  pyproject = true;
 
   # Relax Pillow version constraint to work with newer versions
   postPatch = ''
