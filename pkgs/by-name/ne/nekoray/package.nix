@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nekoray";
-  version = "4.3.4";
+  version = "4.3.5";
 
   src = fetchFromGitHub {
     owner = "Mahdi-zarei";
     repo = "nekoray";
     tag = finalAttrs.version;
-    hash = "sha256-h0LkH58+QQFeSwqhqOZDcFF0n98YJEHH/1tq72LdZpI=";
+    hash = "sha256-dq3rBvCFEs+4+UadFObMnHhIiYeFlpvvLjTo0lcG8rE=";
   };
 
   strictDeps = true;
@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) version src;
     sourceRoot = "${finalAttrs.src.name}/core/server";
 
-    vendorHash = "sha256-CTI9wDPJ9dYpUwvszY2nRfi+NW0nO8imt9lsQ7Nd1Q8=";
+    vendorHash = "sha256-hZiEIJ4/TcLUfT+pkqs6WfzjqppSTjKXEtQC+DS26Ug=";
 
     # ldflags and tags are taken from script/build_go.sh
     ldflags = [
