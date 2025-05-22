@@ -4,6 +4,7 @@
   lib,
   nix-update-script,
   rustPlatform,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -18,6 +19,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-YI2LN2DBzC1B5wCZOrGAZi/hkKHoAm6xLkdJ+8DDFo8=";
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/json-schema-catalog";
+  versionCheckProgramArg = "--version";
 
   passthru = {
     tests = {
