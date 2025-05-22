@@ -5,6 +5,7 @@
   rustPlatform,
   libiconv,
   zlib,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -27,6 +28,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # enable all output formats
   buildFeatures = [ "all" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     description = "Count your code, quickly";
