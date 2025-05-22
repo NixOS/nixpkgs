@@ -46,7 +46,7 @@ let
   looksLikeSystem = lib.flip builtins.elem known.systemsNv;
   licenseOf =
     pname: perSystem:
-    lib.addErrorContext "While inferring the license of ${pname}" (
+    lib.addErrorContext "while inferring the license of ${pname}" (
       if perSystem.license or null != null then
         perSystem.license
       else if productName == "cuda" then
@@ -126,10 +126,10 @@ let
           if hasTags then
             fmapAttrsToList actualSystems (
               systemNv: perTag:
-              lib.addErrorContext "While unpacking `${pname}.${systemNv}` as `perTag`" (
+              lib.addErrorContext "while unpacking `${pname}.${systemNv}` as `perTag`" (
                 fmapAttrsToList perTag (
                   tag: rawPackage:
-                  lib.addErrorContext "While parsing systemNv=${systemNv} tag=${tag} from path=${path}" (
+                  lib.addErrorContext "while parsing systemNv=${systemNv} tag=${tag} from path=${path}" (
                     f otherAttrs pname systemNv tag rawPackage
                   )
                 )
@@ -138,7 +138,7 @@ let
           else
             fmapAttrsToList actualSystems (systemNv: rawPackage: f otherAttrs pname systemNv null rawPackage);
       in
-      lib.addErrorContext "While parsing pname=${pname} from path=${path}" result
+      lib.addErrorContext "while parsing pname=${pname} from path=${path}" result
     );
 
   mkDefaultHarder = lib.mkOverride 900;
