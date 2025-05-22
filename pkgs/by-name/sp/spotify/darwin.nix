@@ -4,6 +4,7 @@
   meta,
   fetchurl,
   undmg,
+  updateScript,
   lib,
 }:
 
@@ -37,7 +38,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru = { inherit updateScript; };
+
   meta = meta // {
-    maintainers = with lib.maintainers; [ matteopacini ];
+    maintainers = with lib.maintainers; [
+      matteopacini
+      Enzime
+    ];
   };
 }
