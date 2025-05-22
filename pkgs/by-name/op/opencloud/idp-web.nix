@@ -44,7 +44,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "OpenCloud - IDP Web UI";
     homepage = "https://github.com/opencloud-eu/opencloud";
-    changelog = "https://github.com/opencloud-eu/opencloud/blob/v${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/opencloud-eu/opencloud/blob/v${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       christoph-heiss
