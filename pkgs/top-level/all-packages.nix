@@ -8228,6 +8228,39 @@ with pkgs;
       null;
 
   # We can choose:
+  ccChooser =
+    name:
+    if name == null then
+      null
+    else if name == "gcc" then
+      buildPackages.gcc or gcc
+    else if name == "clang" then
+      buildPackages.llvmPackages.clang or llvmPackages.clang
+    else if name == "arocc" then
+      buildPackages.arocc or arocc
+    else if name == "zig" then
+      buildPackages.zig.cc or zig.cc
+    else
+      throw "Unknown CC ${name}";
+
+  # The default C compiler to use, this has been provided by the stdenv for a long time.
+  # However, we're working to move it out of the stdenv. It is recommended to switch to
+  # this attribute and using an "stdenvNoCC" as soon as possible.
+  cc = # TODO: use cc when https://github.com/NixOS/nixpkgs/pull/365057 is merged
+    ccChooser (
+      if stdenv.targetPlatform.useLLVM or stdenv.targetPlatform.isDarwin then
+        "clang"
+      else if stdenv.targetPlatform.useArocc or false then
+        "arocc"
+      else if stdenv.targetPlatform.useZig or false then
+        "zig"
+      else if stdenv.targetPlatform.isGhcjs then
+        null
+      else
+        "gcc"
+    );
+
+  # We can choose:
   libcCrossChooser =
     name:
     # libc is hackily often used from the previous stage. This `or`

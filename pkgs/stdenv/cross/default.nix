@@ -59,7 +59,21 @@ lib.init bootStages
 
           # Prior overrides are surely not valid as packages built with this run on
           # a different platform, and so are disabled.
-          overrides = _: _: { };
+          overrides = self: super: {
+            cc = # TODO: use cc when https://github.com/NixOS/nixpkgs/pull/365057 is merged
+              super.ccChooser (
+                if crossSystem.useLLVM or crossSystem.isDarwin then
+                  "clang"
+                else if crossSystem.useArocc or false then
+                  "arocc"
+                else if crossSystem.useZig or false then
+                  "zig"
+                else if crossSystem.isGhcjs then
+                  null
+                else
+                  "gcc"
+              );
+          };
           extraBuildInputs = [ ]; # Old ones run on wrong platform
           allowedRequisites = null;
 
@@ -118,14 +132,20 @@ lib.init bootStages
                 throw "no C compiler provided for this platform"
               else if crossSystem.isDarwin then
                 buildPackages.llvmPackages.libcxxClang
-              else if crossSystem.useLLVM or false then
-                buildPackages.llvmPackages.clang
-              else if crossSystem.useZig or false then
-                buildPackages.zig.cc
-              else if crossSystem.useArocc or false then
-                buildPackages.arocc
+              # TODO: use cc when https://github.com/NixOS/nixpkgs/pull/365057 is merged
               else
-                buildPackages.gcc;
+                buildPackages.targetPackages.ccChooser (
+                  if crossSystem.useLLVM or crossSystem.isDarwin then
+                    "clang"
+                  else if crossSystem.useArocc or false then
+                    "arocc"
+                  else if crossSystem.useZig or false then
+                    "zig"
+                  else if crossSystem.isGhcjs then
+                    null
+                  else
+                    "gcc"
+                );
 
           };
         in
