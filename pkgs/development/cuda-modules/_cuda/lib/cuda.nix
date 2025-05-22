@@ -92,7 +92,7 @@
     # Examples
 
     :::{.example}
-    ## `cudaLib._mkCudaVariant` usage examples
+    ## `_cuda.lib._mkCudaVariant` usage examples
 
     ```nix
     _mkCudaVariant "11.0"

@@ -1,4 +1,4 @@
-{ cudaData, lib }:
+{ _cuda, lib }:
 {
   /**
     Returns a boolean indicating whether the provided redist system is supported by any of the provided redist systems.
@@ -181,7 +181,7 @@
   mkRedistUrl =
     redistName: relativePath:
     lib.concatStringsSep "/" (
-      [ cudaData.redistUrlPrefix ]
+      [ _cuda.db.redistUrlPrefix ]
       ++ (
         if redistName != "tensorrt" then
           [

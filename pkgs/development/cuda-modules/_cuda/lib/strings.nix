@@ -1,4 +1,7 @@
-{ cudaLib, lib }:
+{ _cuda, lib }:
+let
+  cudaLib = _cuda.lib;
+in
 {
   /**
     Replaces dots in a string with underscores.

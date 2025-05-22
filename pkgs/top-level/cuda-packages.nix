@@ -22,8 +22,7 @@
 # I've (@connorbaker) attempted to do that, though I'm unsure of how this will interact with overrides.
 {
   config,
-  cudaData,
-  cudaLib,
+  _cuda,
   cudaMajorMinorVersion,
   lib,
   newScope,
@@ -39,19 +38,21 @@ let
     versions
     ;
 
+  cudaLib = _cuda.lib;
+
   # Since Jetson capabilities are never built by default, we can check if any of them were requested
   # through final.config.cudaCapabilities and use that to determine if we should change some manifest versions.
   # Copied from backendStdenv.
   jetsonCudaCapabilities = lib.filter (
-    cudaCapability: cudaData.cudaCapabilityToInfo.${cudaCapability}.isJetson
-  ) cudaData.allSortedCudaCapabilities;
+    cudaCapability: _cuda.db.cudaCapabilityToInfo.${cudaCapability}.isJetson
+  ) _cuda.db.allSortedCudaCapabilities;
   hasJetsonCudaCapability =
     lib.intersectLists jetsonCudaCapabilities (config.cudaCapabilities or [ ]) != [ ];
-  redistSystem = cudaLib.getRedistSystem hasJetsonCudaCapability stdenv.hostPlatform.system;
+  redistSystem = _cuda.lib.getRedistSystem hasJetsonCudaCapability stdenv.hostPlatform.system;
 
   passthruFunction = final: {
     # NOTE:
-    # It is important that cudaLib and cudaFixups are not part of the package set fixed-point. As described by
+    # It is important that _cuda is not part of the package set fixed-point. As described by
     # @SomeoneSerge:
     # > The layering should be: configuration -> (identifies/is part of) cudaPackages -> (is built using) cudaLib.
     # > No arrows should point in the reverse directions.
@@ -81,14 +82,14 @@ let
     flags =
       cudaLib.formatCapabilities {
         inherit (final.backendStdenv) cudaCapabilities cudaForwardCompat;
-        inherit (cudaData) cudaCapabilityToInfo;
+        inherit (_cuda.db) cudaCapabilityToInfo;
       }
       # TODO(@connorbaker): Enable the corresponding warnings in `../development/cuda-modules/aliases.nix` after some
       # time to allow users to migrate to cudaLib and backendStdenv.
       // {
         inherit (cudaLib) dropDots;
         cudaComputeCapabilityToName =
-          cudaCapability: cudaData.cudaCapabilityToInfo.${cudaCapability}.archName;
+          cudaCapability: _cuda.db.cudaCapabilityToInfo.${cudaCapability}.archName;
         dropDot = cudaLib.dropDots;
         isJetsonBuild = final.backendStdenv.hasJetsonCudaCapability;
       };
