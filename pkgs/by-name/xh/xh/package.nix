@@ -9,14 +9,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xh";
   version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = "ducaale";
     repo = "xh";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-2c96O5SL6tcPSbxx8NYxG8LDX3ZgyxEMmEeJnKDwb38=";
   };
 
@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Friendly and fast tool for sending HTTP requests";
     homepage = "https://github.com/ducaale/xh";
-    changelog = "https://github.com/ducaale/xh/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/ducaale/xh/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       figsoda
@@ -69,4 +69,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "xh";
   };
-}
+})
