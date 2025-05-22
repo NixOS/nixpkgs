@@ -1,0 +1,13 @@
+diff --git a/pkg/model/api/config/plugin.go b/pkg/model/api/config/plugin.go
+index 9ece1ced..603c6b0b 100644
+--- a/pkg/model/api/config/plugin.go
++++ b/pkg/model/api/config/plugin.go
+@@ -17,7 +17,7 @@ import (
+ 	"os"
+ )
+ 
+-const (
++var (
+ 	DefaultPluginPath                   = "plugins"
+ 	DefaultPluginPathInContainer        = "/etc/perses/plugins"
+ 	DefaultArchivePluginPath            = "plugins-archive"
