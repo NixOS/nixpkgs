@@ -7,12 +7,9 @@
   cacert,
 }:
 
-let
-  version = "0.14.4";
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tailwindcss-language-server";
-  inherit version;
+  version = "0.14.4";
 
   src = fetchFromGitHub {
     owner = "tailwindlabs";
@@ -37,9 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm_9.configHook
   ];
 
-  buildInputs = [
-    nodejs_latest
-  ];
+  buildInputs = [ nodejs_latest ];
 
   pnpmWorkspaces = [ "@tailwindcss/language-server..." ];
   prePnpmInstall = ''
