@@ -15154,6 +15154,12 @@
     github = "mariuskimmina";
     githubId = 38843153;
   };
+  markasoftware = {
+    name = "Mark Polyakov";
+    email = "mark@markasoftware.com";
+    github = "markasoftware";
+    githubId = 6380084;
+  };
   markbeep = {
     email = "mrkswrn@gmail.com";
     github = "markbeep";
