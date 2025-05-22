@@ -67,7 +67,7 @@ buildPythonPackage rec {
   ];
 
   # test flags from .github/workflows/Python.yml
-  pytestFlagsArray = [ "--verbose" ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "tests/fast" ];
+  pytestFlagsArray = [ "tests/fast" ];
 
   disabledTestPaths = [
     # avoid dependency on mypy
