@@ -468,7 +468,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.AlienLibGumbo.x86_64-darwin
+      broken = stdenv.hostPlatform.isLinux; # Fails with: cannot find ./.libs/libgumbo.so
     };
   };
 
@@ -979,7 +979,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      broken = true; # DB.c:(.text+0x153): undefined reference to `Perl_init_debugger'
+      broken = stdenv.hostPlatform.isLinux; # DB.c: undefined reference to `Perl_init_debugger'
     };
   };
 
@@ -8273,14 +8273,13 @@ with self;
       TestRequires
     ];
     meta = {
-      description = "Grep-like program for searching source code";
+      description = "MessagePack serialization format";
       homepage = "https://github.com/msgpack/msgpack-perl";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
-      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.DataMessagePack.x86_64-darwin
     };
   };
 
@@ -8655,7 +8654,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.DataUtil.x86_64-darwin
     };
   };
 
@@ -9897,7 +9895,6 @@ with self;
         artistic1
         gpl1Only
       ];
-      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.DBDsybase.x86_64-darwin
     };
   };
 
@@ -13563,7 +13560,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.FileLibMagic.x86_64-darwin
     };
   };
 
@@ -15809,7 +15805,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.HTMLEscape.x86_64-darwin
     };
   };
 
@@ -21025,7 +21020,6 @@ with self;
       description = "Fast XS implementation of MaxMind DB reader";
       homepage = "https://metacpan.org/release/MaxMind-DB-Reader-XS";
       license = with lib.licenses; [ artistic2 ];
-      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.MaxMindDBReaderXS.x86_64-darwin
     };
   };
 
@@ -21063,7 +21057,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.MaxMindDBWriter.x86_64-darwin
     };
   };
 
@@ -32361,7 +32354,6 @@ with self;
         gpl2Plus
         artistic1
       ];
-      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.SysVirt.x86_64-darwin
     };
   };
 
@@ -35836,7 +35828,6 @@ with self;
         artistic1
         gpl1Plus
       ]; # taken from el6
-      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.TextIconv.x86_64-darwin
     };
   };
 
