@@ -33,5 +33,10 @@ function relativePathFrom(origin, to) {
 }
 
 if (redirects[anchor] && redirects[anchor] !== current_location) {
-	document.location.href = relativePathFrom(current_location, redirects[anchor]);
+    redirect_path = relativePathFrom(current_location, redirects[anchor]);
+    if (!redirect_path.includes('#')) {
+        redirect_path = redirect_path + "#" + anchor;
+    }
+
+	document.location.href = redirect_path;
 }

@@ -170,8 +170,9 @@ class Redirects:
                 if '#' not in location:
                     continue
                 path, anchor = location.split('#')
-                if path not in [target, *paths_to_target]:
-                    continue
+                # FIXME: Quick fix so that each file get the information to redirect to anywhere
+                # if path not in [target, *paths_to_target]:
+                #    continue
                 _, id_to_redirect_to = locations[0].split("#")
                 client_redirects[anchor] = self._xref_targets[id_to_redirect_to].href_from(current_location)
         return client_redirects
@@ -185,7 +186,9 @@ class Redirects:
         return server_redirects
 
     def get_redirect_script(self, target: str, current_location: str) -> str:
-        # client_redirects = self.get_client_redirects(target, current_location)
-        id_to_location = { id:xref.path for (id, xref) in self._xref_targets.items() }
+        client_redirects = self.get_client_redirects(target, current_location)
+
+        id_to_location = { id:xref.path for (id, xref) in self._xref_targets.items() } | client_redirects
         script = self._redirects_script.replace("LOCATION_PLACEHOLDER", current_location)
+
         return script.replace('REDIRECTS_PLACEHOLDER', json.dumps(id_to_location))
