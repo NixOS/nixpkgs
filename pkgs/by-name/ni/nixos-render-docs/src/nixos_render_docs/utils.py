@@ -24,20 +24,26 @@ class Freezeable:
 
 @cache
 def relative_path_from(origin: str, to: str) -> str:
-    path_to = Path(origin)
-    path_from = Path(to)
+    """
+    Calculate the relative path from origin file to destination file.
 
-    if path_to.root != path_from.root:
-        path_to = path_to.absolute()
-        path_from = path_from.absolute()
+    Args:
+        origin: The starting file path
+        to: The target file path to reach
 
-    nb_back = 0
-    while not path_from.is_relative_to(path_to.parent):
-        print(path_to, path_from)
+    Returns:
+        A relative path string that leads from origin to destination
 
-        path_to = path_to.parent
-        nb_back += 1
+    Example:
+        relative_path_from("index.html", "part1/chapters.html")
+        # Returns: "part1/chapters.html"
+    """
+    origin_path = Path(origin).resolve()
+    to_path = Path(to).resolve()
 
-    backtrack = "/".join([".." for _ in range(0, nb_back)])
+    # For file-to-file navigation, we calculate from the origin file's parent directory
+    origin_dir = origin_path.parent
 
-    return str(backtrack / path_from.relative_to(path_to.parent))
+    # Calculate relative path from origin's directory to destination
+    relative = to_path.relative_to(origin_dir, walk_up=True)
+    return str(relative)
