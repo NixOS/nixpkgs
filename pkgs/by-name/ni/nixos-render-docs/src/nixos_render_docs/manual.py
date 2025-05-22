@@ -538,7 +538,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         if split_pages:
             in_dir = self._in_dir
             for included, path in fragments:
-                toc = TocEntry.of(fragments[0][0][0])
+                toc = TocEntry.of(included[0])
                 assert Path(path).is_relative_to(Path(in_dir)), f"path = {path}, in_dir = {in_dir}"
                 sub_file = Path(path).relative_to(Path(in_dir)).with_suffix(".html")
 
