@@ -34,8 +34,11 @@ in
 
     extraPatches = [ ./ssh-keysign-8.5.patch ];
     extraMeta = {
-      maintainers = [ lib.maintainers.philiptaron ];
-      teams = [ lib.teams.helsinki-systems ];
+      maintainers = with lib.maintainers; [
+        philiptaron
+        numinit
+      ];
+      teams = with lib.teams; [ helsinki-systems ];
     };
   };
 
