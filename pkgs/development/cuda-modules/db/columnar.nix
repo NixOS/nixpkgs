@@ -1,25 +1,23 @@
 let
   lib = import ../../../../lib;
-  inherit (lib.types) attrsOf enum submodule;
-
+  inherit (lib.types) attrsOf enum;
+in
+rec {
   unit = 1;
   Unit = enum [ unit ];
-in
-{
-  inherit unit Unit;
   SetOfStr = attrsOf Unit;
 
-  # :: Column -> MkOptionArgs -> MkOptionArgs -> Option
+  # ∷ Column → Type → MkOptionArgs → Option
   mkColumnOption =
-    indexColumn: optionArgsRow: optionArgsCol:
+    indexColumn: rowType: optionArgsCol:
     lib.mkOption (
       optionArgsCol
       // {
-        type = submodule { options = lib.mapAttrs (name: _: lib.mkOption optionArgsRow) indexColumn; };
+        type = attrsOf rowType;
       }
     );
 
-  # :: ColumnName -> (AttrsOf Any) -> (AttrsOf Column) -> (AttrsOf Column)
+  # ∷ ColumnName → (AttrsOf Any) → (AttrsOf Column) → (AttrsOf Column)
   defaults =
     indexColumn: columnDefaults: columns:
     let
@@ -41,10 +39,46 @@ in
       ) colNames
     );
 
-  assertSubset = indexName: index: tableName: table: [
-    {
-      message = "${tableName} defines items outside ${indexName}";
-      assertion = lib.all (lib.flip builtins.elem (builtins.attrNames index)) (builtins.attrNames table);
-    }
-  ];
+  symmDiff = left: right: {
+    onlyLeft = lib.filterAttrs (name: _: !(lib.hasAttr name right)) left;
+    onlyRight = lib.filterAttrs (name: _: !(lib.hasAttr name left)) right;
+  };
+
+  assertSubset =
+    indexName: index: columnName: column:
+    let
+      sd = symmDiff index column;
+      diff = lib.concatStringsSep ", " (lib.attrNames sd.onlyRight);
+    in
+    [
+      {
+        message = "${columnName} defines items outside ${indexName}: ${diff}";
+        assertion = lib.all (lib.flip builtins.elem (builtins.attrNames index)) (builtins.attrNames column);
+      }
+    ];
+
+  assertComplete =
+    indexName: index: columnName: column:
+    let
+      sd = symmDiff index column;
+      leftCond = sd.onlyLeft != { };
+      rightCond = sd.onlyRight != { };
+      left = "is missing rows ${lib.concatStringsSep ", " (lib.attrNames sd.onlyLeft)}";
+      right = "defines undeclared rows ${lib.concatStringsSep ", " (lib.attrNames sd.onlyRight)}";
+      errors = lib.concatStringsSep ", and" (
+        lib.optionals leftCond [ left ] ++ lib.optionals rightCond [ right ]
+      );
+    in
+    [
+      {
+        message = "${columnName} doesn't match the index ${indexName}: ${errors}";
+        assertion = lib.all (lib.flip builtins.elem (builtins.attrNames index)) (builtins.attrNames column);
+      }
+    ];
+  assertCompleteTable =
+    indexName: columns:
+    lib.concatMap (
+      name:
+      lib.optionals name != indexName (assertComplete indexName columns.${indexName} name columns.${name})
+    ) (lib.attrNames columns);
 }

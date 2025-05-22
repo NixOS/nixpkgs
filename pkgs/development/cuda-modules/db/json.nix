@@ -60,7 +60,7 @@ let
     in
     lib.evalModules {
       modules = [
-        (builtins.fromJSON (builtins.readFile path) // { _file = path; })
+        (builtins.fromJSON (builtins.readFile path) // { _file = toString path; })
         {
           freeformType =
             if lib.hasPrefix "feature_" (builtins.baseNameOf path) then
@@ -71,7 +71,7 @@ let
               (types.submodule {
                 imports = [ manifestDecl ];
               });
-          _file = ./json.nix;
+          _file = toString ./json.nix;
         }
       ];
     };
@@ -155,7 +155,7 @@ in
 { config, ... }:
 
 {
-  _file = ./json.nix;
+  _file = toString ./json.nix;
   config = lib.mkMerge (
     (fmapPackages (
       otherAttrs: pname: systemNv: _: rawPackage: [
