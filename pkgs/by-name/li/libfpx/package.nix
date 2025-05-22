@@ -43,5 +43,10 @@ stdenv.mkDerivation rec {
     description = "Library for manipulating FlashPIX images";
     license = "Flashpix";
     platforms = platforms.all;
+    knownVulnerabilities = [
+      "CVE-2017-12921"
+      "CVE-2017-12925"
+      "CVE-2017-12920"
+    ];
   };
 }
