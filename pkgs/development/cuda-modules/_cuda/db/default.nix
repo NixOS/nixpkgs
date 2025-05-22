@@ -1,11 +1,13 @@
 let
-  lib = import ../../../../lib;
+  lib = import (nixpkgsPath + "/lib");
   inherit (lib) evalModules;
+
+  inherit (import ./nixpkgs_paths.nix) nixpkgsPath cudaPackagesPath;
 
   # NOTE: move to cudaLib
   intreeManifests =
     let
-      root = ../.;
+      root = cudaPackagesPath;
     in
     lib.concatMap (
       name:
@@ -20,11 +22,11 @@ let
     ) (builtins.attrNames (builtins.readDir root));
   jsonToModule = import ./json.nix { inherit lib; };
   ingestTensorrt = import ./ingest_tensorrt.nix { inherit lib; };
-  modulesPath = ../../../../.;
+  modulesPath = nixpkgsPath;
 in
 {
   manifests ? intreeManifests, # :: List Path
-  extraModules ? builtins.map ingestTensorrt [ ../tensorrt/releases.nix ],
+  extraModules ? builtins.map ingestTensorrt [ (cudaPackagesPath + "/tensorrt/releases.nix") ],
 }:
 let
   manifestModules = builtins.map jsonToModule manifests;

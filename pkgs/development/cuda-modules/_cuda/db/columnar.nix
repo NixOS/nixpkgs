@@ -1,11 +1,13 @@
 let
-  lib = import ../../../../lib;
+  lib = import libPath;
+  inherit (import ./nixpkgs_paths.nix) libPath;
   inherit (lib.types) attrsOf enum;
 in
 rec {
   unit = 1;
   Unit = enum [ unit ];
   SetOfStr = attrsOf Unit;
+  listToSetOfStr = lib.flip lib.genAttrs (lib.const unit);
 
   # ∷ Column ⇒ Type ⇒ MkOptionArgs ⇒ Option
   mkColumnOption =

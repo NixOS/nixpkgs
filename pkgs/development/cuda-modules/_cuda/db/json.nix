@@ -1,6 +1,8 @@
-# NOTE: belongs in cudaLib
+let
+  inherit (import ./nixpkgs_paths.nix) libPath cudaPackagesPath;
+in
 {
-  lib ? import ../../../../lib,
+  lib ? import libPath,
 }:
 path:
 
@@ -63,8 +65,8 @@ let
   mkChooseLonger = mkChooseLonger' 40;
   evaluated =
     let
-      manifestDecl = ../modules/generic/manifests/redistrib/manifest.nix;
-      featureDecl = ../modules/generic/manifests/feature/manifest.nix;
+      manifestDecl = cudaPackagesPath + "/modules/generic/manifests/redistrib/manifest.nix";
+      featureDecl = cudaPackagesPath + "/modules/generic/manifests/feature/manifest.nix";
     in
     lib.evalModules {
       modules = [

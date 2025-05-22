@@ -27,7 +27,7 @@
   # See ./modules/generic/manifests/feature/release.nix
   featureRelease,
   cudaMajorMinorVersion,
-  _cudb,
+  _cuda,
 }:
 let
   inherit (lib)
@@ -322,14 +322,14 @@ in
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
     broken = lists.any trivial.id (attrsets.attrValues finalAttrs.brokenConditions);
     platforms = builtins.attrNames (
-      lib.concatMapAttrs (name: _: _cudb.system.fromNvidia.${name}) _cudb.package.systemsNv.${pname}
+      lib.concatMapAttrs (name: _: _cuda.db.system.fromNvidia.${name}) _cuda.db.package.systemsNv.${pname}
     );
     badPlatforms =
       let
         isBadPlatform = lists.any trivial.id (attrsets.attrValues finalAttrs.badPlatformsConditions);
       in
       lists.optionals isBadPlatform finalAttrs.meta.platforms;
-    license = _cudb.license.compiled.${_cudb.package.license.${pname}};
+    license = _cuda.db.license.compiled.${_cuda.db.package.license.${pname}};
     teams = [ teams.cuda ];
   };
 })).overrideAttrs

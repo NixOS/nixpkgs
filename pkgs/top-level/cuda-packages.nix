@@ -51,9 +51,6 @@ let
       ;
   };
 
-  # TODO: Expose limited version
-  _cudb = (import ../development/cuda-modules/db { }).config;
-
   mkVersionedPackageName =
     name: version: name + "_" + strings.replaceStrings [ "." ] [ "_" ] (versions.majorMinor version);
 
@@ -141,8 +138,6 @@ let
         lib.packagesFromDirectoryRecursive {
           inherit (final) callPackage;
           directory = ../development/cuda-modules/packages;
-        } // {
-          inherit _cudb;
         }
       )
       (import ../development/cuda-modules/cuda/extension.nix { inherit cudaMajorMinorVersion lib; })

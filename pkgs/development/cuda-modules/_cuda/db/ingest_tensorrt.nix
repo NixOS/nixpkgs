@@ -1,8 +1,11 @@
 # NOTE: belongs in cudaLib
 # NOTE: cf. tensorrt/releases.nix for a sample input
 # NOTE: included in db/default.nix
+let
+  inherit (import ./nixpkgs_paths.nix) libPath;
+in
 {
-  lib ? import ../../../../lib,
+  lib ? import libPath,
 }:
 
 arg:

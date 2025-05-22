@@ -6,6 +6,7 @@
   formats,
   nixosOptionsDoc,
   runCommand,
+  _cuda,
 
   cudaPackages,
 
@@ -40,10 +41,10 @@ let
       "saxpy"
     ];
 
+  inherit (_cuda) db dbEvaluation;
   # Based on nixos/doc/manual/default.nix
   prefixesToStrip = [ ((toString dbEvaluation._module.specialArgs.modulesPath or ../../../.) + "/") ];
   stripAnyPrefixes = lib.flip (lib.foldr lib.removePrefix) prefixesToStrip;
-  dbEvaluation = import ../../development/cuda-modules/db { };
   dbDocs = nixosOptionsDoc {
     inherit (dbEvaluation) options;
     transformOptions = opt: opt // { declarations = map stripAnyPrefixes opt.declarations; };

@@ -323,7 +323,7 @@ in
         apply = builtins.filter ({ assertion, ... }: !assertion);
       };
     };
-  imports = [ ./static.nix ];
+  imports = [ ./bootstrap/static.nix ];
   config = {
     license =
       let

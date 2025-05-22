@@ -1,9 +1,10 @@
 let
-  columnar = import ./columnar.nix;
-  lib = import ../../../../lib;
+  lib = import libPath;
+  columnar = import ../columnar.nix;
 
-  unit = 1;
-  listToSetOfStr = lib.flip lib.genAttrs (lib.const unit);
+  inherit (import ../nixpkgs_paths.nix) libPath;
+
+  inherit (columnar) unit listToSetOfStr;
 in
 {
   license =
