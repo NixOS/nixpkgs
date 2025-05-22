@@ -1,7 +1,6 @@
 {
   lib,
   attrs,
-  bibtexparser,
   buildPythonPackage,
   colorlog,
   fetchFromGitHub,
@@ -12,7 +11,6 @@
   mock,
   postgresql,
   pylatexenc,
-  pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
   python-dateutil,
@@ -23,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "clldutils";
-  version = "3.24.2";
+  version = "3.21.0";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
@@ -31,14 +29,18 @@ buildPythonPackage rec {
     owner = "clld";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-xIs6Lq9iDdcM3j51F27x408oUldvy5nlvVdbrAS5Jz0=";
+    hash = "sha256-OD+WJ9JuYZb/oXDgVqL4i5YlcVEt0+swq0SB3cutyRo=";
   };
+
+  patchPhase = ''
+    substituteInPlace setup.cfg \
+      --replace-fail "--cov" ""
+  '';
 
   nativeBuildInputs = [ setuptools ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     attrs
-    bibtexparser
     colorlog
     lxml
     markdown
@@ -51,7 +53,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     postgresql
-    pytest-cov-stub
     pytest-mock
     pytestCheckHook
     git
