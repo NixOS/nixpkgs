@@ -74,6 +74,7 @@ def is_encrypted(device: str) -> bool:
 def is_fs_type_supported(fs_type: str) -> bool:
     return fs_type.startswith('vfat')
 
+paths = {}
 
 def get_copied_path_uri(path: str, target: str) -> str:
     result = ''
@@ -85,6 +86,8 @@ def get_copied_path_uri(path: str, target: str) -> str:
 
     if not os.path.exists(dest_path):
         copy_file(path, dest_path)
+    else:
+        paths[dest_path] = True
 
     path_with_prefix = os.path.join('/limine', target, dest_file)
     result = f'boot():{path_with_prefix}'
@@ -203,7 +206,10 @@ def copy_file(from_path: str, to_path: str):
     if not os.path.exists(dirname):
         os.makedirs(dirname)
 
-    shutil.copyfile(from_path, to_path)
+    shutil.copyfile(from_path, to_path + ".tmp")
+    os.rename(to_path + ".tmp", to_path)
+
+    paths[to_path] = True
 
 def option_from_config(name: str, config_path: List[str], conversion: Callable[[str], str] | None = None) -> str:
     if config(*config_path):
@@ -243,14 +249,16 @@ def main():
             partition formatted as FAT.
         '''))
 
+    if config('secureBoot')['enable'] and not config('secureBoot')['createAndEnrollKeys'] and not os.path.exists("/var/lib/sbctl"):
+        print("There are no sbctl secure boot keys present. Please generate some.")
+        sys.exit(1)
+
     if not os.path.exists(limine_dir):
         os.makedirs(limine_dir)
-
-    if os.path.exists(os.path.join(limine_dir, 'kernels')):
-        print(f'nuking {os.path.join(limine_dir, "kernels")}')
-        shutil.rmtree(os.path.join(limine_dir, 'kernels'))
-
-    os.makedirs(os.path.join(limine_dir, "kernels"))
+    else:
+        for dir, dirs, files in os.walk(limine_dir, topdown=True):
+            for file in files:
+                paths[os.path.join(dir, file)] = False
 
     profiles = [('system', get_gens())]
 
@@ -269,13 +277,6 @@ def main():
         graphics: yes
         default_entry: 2
     ''')
-
-    if os.path.exists(os.path.join(limine_dir, 'wallpapers')):
-        print(f'nuking {os.path.join(limine_dir, "wallpapers")}')
-        shutil.rmtree(os.path.join(limine_dir, 'wallpapers'))
-
-    if len(config('style', 'wallpapers')) > 0:
-        os.makedirs(os.path.join(limine_dir, 'wallpapers'))
 
     for wallpaper in config('style', 'wallpapers'):
         config_file += f'''wallpaper: {get_copied_path_uri(wallpaper, 'wallpapers')}\n'''
@@ -318,6 +319,8 @@ def main():
         file.truncate()
         file.write(config_file.strip())
 
+    paths[config_file_path] = True
+
     for dest_path, source_path in config('additionalFiles').items():
         dest_path = os.path.join(limine_dir, dest_path)
 
@@ -353,6 +356,28 @@ def main():
                 print('error: failed to enroll limine config.', file=sys.stderr)
                 sys.exit(1)
 
+        if config('secureBoot')['enable']:
+            sbctl = os.path.join(config('secureBoot')['sbctl'], 'bin', 'sbctl')
+            if config('secureBoot')['createAndEnrollKeys']:
+                print("TEST MODE: creating and enrolling keys")
+                try:
+                    subprocess.run([sbctl, 'create-keys'])
+                except:
+                    print('error: failed to create keys', file=sys.stderr)
+                    sys.exit(1)
+                try:
+                    subprocess.run([sbctl, 'enroll-keys', '--yes-this-might-brick-my-machine'])
+                except:
+                    print('error: failed to enroll keys', file=sys.stderr)
+                    sys.exit(1)
+
+            print('signing limine...')
+            try:
+                subprocess.run([sbctl, 'sign', dest_path])
+            except:
+                print('error: failed to sign limine', file=sys.stderr)
+                sys.exit(1)
+
         if not config('efiRemovable') and not config('canTouchEfiVariables'):
             print('warning: boot.loader.efi.canTouchEfiVariables is set to false while boot.loader.limine.efiInstallAsRemovable.\n  This may render the system unbootable.')
 
@@ -363,9 +388,16 @@ def main():
                 efibootmgr = os.path.join(config('efiBootMgrPath'), 'bin', 'efibootmgr')
                 efi_partition = find_mounted_device(config('efiMountPoint'))
                 efi_disk = find_disk_device(efi_partition)
+
+                efibootmgr_output = subprocess.check_output([efibootmgr], stderr=subprocess.STDOUT, universal_newlines=True)
+                create_flag = '-c'
+                # Check the output of `efibootmgr` to find if limine is already installed and present in the boot record
+                if matches := re.findall(r'Boot[0-9a-fA-F]{4}\*? Limine', efibootmgr_output):
+                    create_flag = '-C' # if present, keep the same boot order
+
                 efibootmgr_output = subprocess.check_output([
                     efibootmgr,
-                    '-c',
+                    create_flag,
                     '-d', efi_disk,
                     '-p', efi_partition.removeprefix(efi_disk).removeprefix('p'),
                     '-l', f'\\efi\\limine\\{boot_file}',
@@ -408,5 +440,10 @@ def main():
             raise Exception(
                 'Failed to deploy BIOS stage 1 Limine bootloader!\n' +
                 'You might want to try enabling the `boot.loader.limine.forceMbr` option.')
+
+    print("removing unused boot files...")
+    for path in paths:
+        if not paths[path]:
+            os.remove(path)
 
 main()
