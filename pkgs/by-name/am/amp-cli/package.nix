@@ -72,7 +72,7 @@ buildNpmPackage rec {
 
   meta = {
     description = "Amp is an AI coding agent, in research preview from Sourcegraph. This is the CLI for Amp.";
-    homepage = "https://github.com/sourcegraph/amp";
+    homepage = "https://ampcode.com/";
     downloadPage = "https://www.npmjs.com/package/@sourcegraph/amp";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
