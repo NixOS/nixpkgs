@@ -1,10 +1,4 @@
 {
-  majorVersion,
-  minorVersion,
-  sourceSha256,
-  patchesToFetch ? [ ],
-}:
-{
   stdenv,
   lib,
   fetchurl,
@@ -30,7 +24,7 @@
 let
   inherit (lib) optionalString optionals;
 
-  version = "${majorVersion}.${minorVersion}";
+  version = "9.2.6";
   pythonMajor = lib.substring 0 1 python.pythonVersion;
 
 in
@@ -39,8 +33,8 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    url = "https://www.vtk.org/files/release/${majorVersion}/VTK-${version}.tar.gz";
-    sha256 = sourceSha256;
+    url = "https://www.vtk.org/files/release/9.2/VTK-9.2.6.tar.gz";
+    sha256 = "sha256-BvyNScTlb0mMQPyzilY+2NTsMTWNAQHomI8LtNU53RI=";
   };
 
   nativeBuildInputs = [ cmake ];

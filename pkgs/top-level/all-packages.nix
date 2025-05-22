@@ -9740,7 +9740,7 @@ with pkgs;
     wine = wineWowPackages.staging;
   };
 
-  vtk_9 = libsForQt5.callPackage ../development/libraries/vtk/9.x.nix {
+  vtk_9 = libsForQt5.callPackage ../development/libraries/vtk {
     stdenv = if stdenv.cc.isClang then llvmPackages_17.stdenv else stdenv;
   };
 
