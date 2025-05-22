@@ -60,7 +60,7 @@ let
     in
     lib.evalModules {
       modules = [
-        (builtins.fromJSON (builtins.readFile path) // { _file = toString path; })
+        (lib.importJSON path)
         {
           freeformType =
             if lib.hasPrefix "feature_" (builtins.baseNameOf path) then
