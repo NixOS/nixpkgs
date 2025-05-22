@@ -3064,6 +3064,8 @@ self: super: with self; {
 
   curvefitgui = callPackage ../development/python-modules/curvefitgui { };
 
+  cusfpredict = callPackage ../development/python-modules/cusfpredict { };
+
   customtkinter = callPackage ../development/python-modules/customtkinter { };
 
   cut-cross-entropy = callPackage ../development/python-modules/cut-cross-entropy { };
