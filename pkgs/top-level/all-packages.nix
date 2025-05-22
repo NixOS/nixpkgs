@@ -4069,11 +4069,7 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
-  osl = libsForQt5.callPackage ../development/compilers/osl {
-    libclang = llvmPackages_15.libclang;
-    clang = clang_15;
-    llvm = llvm_15;
-  };
+  osl = callPackage ../development/compilers/osl { };
 
   ossec-agent = callPackage ../tools/security/ossec/agent.nix { };
 
