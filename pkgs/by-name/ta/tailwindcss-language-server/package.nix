@@ -5,6 +5,7 @@
   nodejs_latest,
   pnpm_9,
   cacert,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -64,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tailwind CSS Language Server";
