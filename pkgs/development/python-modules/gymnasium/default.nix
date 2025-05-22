@@ -89,6 +89,10 @@ buildPythonPackage rec {
     "tests/wrappers/test_record_video.py"
   ];
 
+  preCheck = ''
+    export SDL_VIDEODRIVER=dummy
+  '';
+
   disabledTests = [
     # Fails since jax 0.6.0
     # Fixed on master https://github.com/Farama-Foundation/Gymnasium/commit/94019feee1a0f945b9569cddf62780f4e1a224a5

@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "albumentations";
-  version = "2.0.6";
+  version = "2.0.7";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "albumentations-team";
     repo = "albumentations";
     tag = version;
-    hash = "sha256-n00WE8RwwLx/vHRkIrOhrampFPVkPhAkS6zZ4XjEHTk=";
+    hash = "sha256-3obvlYj+UwniEf+NokJDNqMysCGFXcJdI1Wckdfng2Y=";
   };
 
   patches = [
@@ -88,7 +88,7 @@ buildPythonPackage rec {
   meta = {
     description = "Fast image augmentation library and easy to use wrapper around other libraries";
     homepage = "https://github.com/albumentations-team/albumentations";
-    changelog = "https://github.com/albumentations-team/albumentations/releases/tag/${version}";
+    changelog = "https://github.com/albumentations-team/albumentations/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };

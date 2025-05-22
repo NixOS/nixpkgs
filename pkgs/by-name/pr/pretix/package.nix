@@ -82,6 +82,7 @@ python.pkgs.buildPythonApplication rec {
     "beautifulsoup4"
     "celery"
     "django-bootstrap3"
+    "django-localflavor"
     "django-phonenumber-field"
     "dnspython"
     "drf_ujson2"
@@ -198,7 +199,6 @@ python.pkgs.buildPythonApplication rec {
       requests
       sentry-sdk
       sepaxml
-      slimit
       stripe
       text-unidecode
       tlds

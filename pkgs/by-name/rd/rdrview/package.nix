@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rdrview";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "eafer";
     repo = "rdrview";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UFHRsaLGa/jv/S+VXtXIMgLuQUPgqbRgD35bBrJyuZA=";
+    hash = "sha256-wYeDtgfq6/W92WguPh9wiFaxR7CWSfLnfqTX1N7eT10=";
   };
 
   buildInputs = [

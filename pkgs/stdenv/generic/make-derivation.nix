@@ -87,7 +87,48 @@ let
       args = rattrs (args // { inherit finalPackage overrideAttrs; });
       #              ^^^^
 
-      overrideAttrs = f0: makeDerivationExtensible (lib.extends (lib.toExtension f0) rattrs);
+      overrideAttrs =
+        f0:
+        let
+          extends' =
+            overlay: f:
+            (
+              final:
+              let
+                prev = f final;
+                thisOverlay = overlay final prev;
+                warnForBadVersionOverride = (
+                  thisOverlay ? version
+                  && !(thisOverlay ? src)
+                  && !(thisOverlay.__intentionallyOverridingVersion or false)
+                );
+                pname = args.pname or "<unknown name>";
+                version = args.version or "<unknown version>";
+                pos = builtins.unsafeGetAttrPos "version" thisOverlay;
+              in
+              lib.warnIf warnForBadVersionOverride ''
+                ${
+                  args.name or "${pname}-${version}"
+                } was overridden with `version` but not `src` at ${pos.file or "<unknown file>"}:${
+                  builtins.toString pos.line or "<unknown line>"
+                }:${builtins.toString pos.column or "<unknown column>"}.
+
+                This is most likely not what you want. In order to properly change the version of a package, override
+                both the `version` and `src` attributes:
+
+                hello.overrideAttrs (oldAttrs: rec {
+                  version = "1.0.0";
+                  src = pkgs.fetchurl {
+                    url = "mirror://gnu/hello/hello-''${version}.tar.gz";
+                    hash = "...";
+                  };
+                })
+
+                (To silence this warning, set `__intentionallyOverridingVersion = true` in your `overrideAttrs` call.)
+              '' (prev // (builtins.removeAttrs thisOverlay [ "__intentionallyOverridingVersion" ]))
+            );
+        in
+        makeDerivationExtensible (extends' (lib.toExtension f0) rattrs);
 
       finalPackage = mkDerivationSimple overrideAttrs args;
 

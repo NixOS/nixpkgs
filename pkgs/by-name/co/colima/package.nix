@@ -6,14 +6,10 @@
   fetchFromGitHub,
   installShellFiles,
   lima,
-  lima-bin,
   makeWrapper,
   qemu,
   testers,
   colima,
-  # use lima-bin on darwin to support native macOS virtualization
-  # https://github.com/NixOS/nixpkgs/pull/209171
-  lima-drv ? if stdenv.hostPlatform.isDarwin then lima-bin else lima,
 }:
 
 buildGoModule rec {
@@ -55,7 +51,7 @@ buildGoModule rec {
     wrapProgram $out/bin/colima \
       --prefix PATH : ${
         lib.makeBinPath [
-          lima-drv
+          lima
           qemu
         ]
       }

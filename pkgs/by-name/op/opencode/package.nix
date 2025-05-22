@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "opencode";
-  version = "0.0.34";
+  version = "0.0.46";
 
   src = fetchFromGitHub {
     owner = "opencode-ai";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EaspkL0TEBJEUU3f75EhZ4BOIvbneUKnTNeNGhJdjYE=";
+    hash = "sha256-Q7ArUsFMpe0zayUMBJd+fC1K4jTGElIFep31Qa/L1jY=";
   };
 
-  vendorHash = "sha256-cFzkMunPkGQDFhQ4NQZixc5z7JCGNI7eXBn826rWEvk=";
+  vendorHash = "sha256-MVpluFTF/2S6tRQQAXE3ujskQZ3njBkfve0RQgk3IkQ=";
 
   checkFlags =
     let

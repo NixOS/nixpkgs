@@ -937,6 +937,13 @@ with self;
       dune-configurator
       ocaml_intrinsics_kernel
     ];
+    patches = [
+      # This patch is needed because of an issue with the aarch64 CRC32
+      # intrinsics that was introduced with ocaml_intrinsics v0.17. It should
+      # be removed as soon as
+      # https://github.com/janestreet/ocaml_intrinsics/pull/11 is merged.
+      ./ocaml_intrinsics-fix-aarch64-crc32-intrinsics.patch
+    ];
   };
 
   ocaml_openapi_generator = janePackage {

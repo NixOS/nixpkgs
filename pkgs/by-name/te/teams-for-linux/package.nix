@@ -16,16 +16,16 @@
 
 buildNpmPackage rec {
   pname = "teams-for-linux";
-  version = "2.0.12";
+  version = "2.0.13";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     tag = "v${version}";
-    hash = "sha256-FTXwDwdXeXAa6Nk73WPPrxyrXvQ8Yg9tqtdkeekK4x8=";
+    hash = "sha256-xkVJ8PrW2huf3oNVSYySQnzKPadsYFXnrMgi+mFXBQU=";
   };
 
-  npmDepsHash = "sha256-uwohbVV6zNdLmLgSihJsqRxm5ZR8P8mHeZdbCYjA78w=";
+  npmDepsHash = "sha256-jDJH/lAbmUURMkdv49S1KeE4I/MOEzK0ZDWh1sbnzXY=";
 
   nativeBuildInputs = [
     makeWrapper

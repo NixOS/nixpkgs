@@ -17,7 +17,7 @@
   gssdp-tools,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gssdp";
   version = "1.6.3";
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gssdp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gssdp/${lib.versions.majorMinor finalAttrs.version}/gssdp-${finalAttrs.version}.tar.xz";
     sha256 = "L+21r9sizxTVSYo5p3PKiXiKJQ/PcBGHg9+CHh8/NEY=";
   };
 
@@ -60,7 +60,8 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "manpages" enableManpages)
   ];
 
-  doCheck = true;
+  # On Darwin: Failed to bind socket, Operation not permitted
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postFixup = ''
     # Move developer documentation to devdoc output.
@@ -74,7 +75,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       attrPath = "gssdp_1_6";
-      packageName = pname;
+      packageName = "gssdp";
     };
 
     tests = {
@@ -83,11 +84,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    broken = stdenv.hostPlatform.isDarwin;
     description = "GObject-based API for handling resource discovery and announcement over SSDP";
     homepage = "http://www.gupnp.org/";
     license = licenses.lgpl2Plus;
     teams = [ teams.gnome ];
     platforms = platforms.all;
   };
-}
+})

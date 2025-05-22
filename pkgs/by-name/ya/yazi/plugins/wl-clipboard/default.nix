@@ -23,10 +23,10 @@ mkYaziPlugin {
     hash = "sha256-jlZgN93HjfK+7H27Ifk7fs0jJaIdnOyY1wKxHz1wX2c=";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Wayland implementation of a simple system clipboard for yazi file manager";
     homepage = "https://github.com/grappas/wl-clipboard.yazi";
-    license = lib.licenses.mit;
-    maintainters = with lib.maintainters; [ felipe-9 ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ felipe-9 ];
   };
 }

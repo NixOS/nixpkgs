@@ -9,11 +9,11 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "maigret";
   version = "0.4.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "soxoj";
-    repo = pname;
+    repo = "maigret";
     tag = "v${version}";
     hash = "sha256-Z8SnA7Z5+oKW0AOaNf+c/zR30lrPFmXaxxKkbnDXNNs=";
   };
@@ -27,7 +27,9 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     aiodns
     aiohttp
     aiohttp-socks
@@ -68,8 +70,6 @@ python3.pkgs.buildPythonApplication rec {
     yarl
   ];
 
-  __darwinAllowLocalNetworking = true;
-
   nativeCheckInputs = with python3.pkgs; [
     pytest-httpserver
     pytest-asyncio
@@ -77,6 +77,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = true;
+
   pythonRemoveDeps = [ "future-annotations" ];
 
   pytestFlagsArray = [
@@ -100,14 +101,13 @@ python3.pkgs.buildPythonApplication rec {
       "test_asyncio_progressbar_executor"
     ];
 
-  pythonImportsCheck = [
-    "maigret"
-  ];
+  pythonImportsCheck = [ "maigret" ];
 
   meta = with lib; {
     description = "Tool to collect details about an username";
     homepage = "https://maigret.readthedocs.io";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

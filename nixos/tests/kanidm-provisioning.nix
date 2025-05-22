@@ -23,7 +23,7 @@ import ./make-test-python.nix (
       { pkgs, lib, ... }:
       {
         services.kanidm = {
-          package = pkgs.kanidmWithSecretProvisioning;
+          package = pkgs.kanidmWithSecretProvisioning_1_6;
           enableServer = true;
           serverSettings = {
             origin = "https://${serverDomain}";

@@ -6,7 +6,7 @@
 }:
 
 let
-  mkStub = callPackage ../apple-sdk/mk-stub.nix { } "12.3";
+  mkStub = callPackage ../apple-sdk/mk-stub.nix { } "darwin.apple_sdk_12_3" "12.3";
 in
 lib.genAttrs [
   "CLTools_Executables"

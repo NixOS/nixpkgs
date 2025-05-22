@@ -3,7 +3,6 @@
   name = "shadps4-openorbis-example";
   meta = {
     inherit (pkgs.shadps4.meta) maintainers;
-    platforms = lib.intersectLists lib.platforms.linux pkgs.shadps4.meta.platforms;
   };
 
   nodes.machine =

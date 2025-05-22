@@ -17,7 +17,6 @@
   yapf,
 
   # dependencies
-  cloudpickle,
   crcmod,
   dill,
   fastavro,
@@ -63,14 +62,14 @@
 
 buildPythonPackage rec {
   pname = "apache-beam";
-  version = "2.63.0";
+  version = "2.65.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "beam";
     tag = "v${version}";
-    hash = "sha256-ixJstawgU3UGtNKVzkwMCLkdY7QKTbxNe6JJ7vG+vmA=";
+    hash = "sha256-vDW0PVNep+egIZBe4t8IPwLgsQDmoO4rrA4wUoAHzfg=";
   };
 
   pythonRelaxDeps = [
@@ -109,7 +108,6 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    cloudpickle
     crcmod
     dill
     fastavro

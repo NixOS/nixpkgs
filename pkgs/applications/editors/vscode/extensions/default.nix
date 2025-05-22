@@ -27,8 +27,8 @@ let
         mktplcRef = {
           name = "language-x86-64-assembly";
           publisher = "13xforever";
-          version = "3.1.4";
-          hash = "sha256-FJRDm1H3GLBfSKBSFgVspCjByy9m+j9OStlU+/pMfs8=";
+          version = "3.1.5";
+          hash = "sha256-WIhmAZLR2WOSqQF3ozJ/Vr3Rp6HdSK7L23T3h4AVaGM=";
         };
         meta = {
           description = "Cutting edge x86 and x86_64 assembly syntax highlighting";
@@ -89,8 +89,8 @@ let
         mktplcRef = {
           publisher = "42Crunch";
           name = "vscode-openapi";
-          version = "4.33.1";
-          hash = "sha256-iq0UpVaZMOzh4NIRPLk49ciFuO4A6PDSEMe1KKhfSxA=";
+          version = "4.33.2";
+          hash = "sha256-agCxi2UhJitdQmHIf6rK7WexkfljUQdqK5rLqzV4J6o=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/42Crunch.vscode-openapi/changelog";
@@ -1181,8 +1181,8 @@ let
         mktplcRef = {
           name = "vscode-database-client2";
           publisher = "cweijan";
-          version = "8.3.1";
-          hash = "sha256-SLZkuWChkNt4+99kAauDx3Dz3wjnYEfTsFFH/i6ugeo=";
+          version = "8.3.2";
+          hash = "sha256-cBFc8F8FwP7rSWyRTZqi19MihwHE6xNpb4I4O+4zhWs=";
         };
         meta = {
           description = "Database Client For Visual Studio Code";
@@ -1326,8 +1326,8 @@ let
         mktplcRef = {
           publisher = "denoland";
           name = "vscode-deno";
-          version = "3.44.1";
-          hash = "sha256-biYQdt275OpbADEPPvraOPb5omRbQfkOX5+lWbU/kkw=";
+          version = "3.44.2";
+          hash = "sha256-fwQvAqyYXg2oAUXUef9nW/WzZGillx0XRyXd/cMy7Ho=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/denoland.vscode-deno/changelog";
@@ -1587,8 +1587,8 @@ let
           # semver scheme, contrary to preview versions which are listed on
           # the VSCode Marketplace and use a calver scheme. We should avoid
           # using preview versions, because they expire after two weeks.
-          version = "17.0.3";
-          hash = "sha256-jU1N5tJ4V3jzSNW9oE8AH5PRhTmsiIGnu65+IH5NxO0=";
+          version = "17.1.0";
+          hash = "sha256-WPSMf1yLXSDqImpMTxn1eXcSrimVSVjjaXDzFMQ/l0E=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
@@ -1841,8 +1841,8 @@ let
         mktplcRef = {
           name = "dependi";
           publisher = "fill-labs";
-          version = "0.7.14";
-          hash = "sha256-iLF2kxhSw39JBIs5K6hVmrEKueS8C22rnKCs+CiphwY=";
+          version = "0.7.15";
+          hash = "sha256-BXilurHO9WATC0PhT/scpZWEiRhJ9cSlq59opEM6wlE=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/fill-labs.dependi/changelog";
@@ -2077,40 +2077,9 @@ let
         };
       };
 
-      github.copilot = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          publisher = "github";
-          name = "copilot";
-          # Verify which version is available with nix run nixpkgs#vsce -- show github.copilot --json
-          version = "1.317.0";
-          hash = "sha256-w8HH1ibkOrpuKi3Yhzr+DjVIY7HWZ2L4rYzNYrHkfbc=";
-        };
+      github.copilot = callPackage ./github.copilot { };
 
-        meta = {
-          description = "GitHub Copilot uses OpenAI Codex to suggest code and entire functions in real-time right from your editor";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=GitHub.copilot";
-          homepage = "https://github.com/features/copilot";
-          license = lib.licenses.unfree;
-          maintainers = [ lib.maintainers.Zimmi48 ];
-        };
-      };
-
-      github.copilot-chat = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          publisher = "github";
-          name = "copilot-chat";
-          # Verify which version is available with nix run nixpkgs#vsce -- show github.copilot-chat --json
-          version = "0.26.7"; # latest compatible with vscode ^1.98
-          hash = "sha256-aR6AGU/boDmYef0GWna5sUsyv9KYGCkugWpFIusDMNE=";
-        };
-        meta = {
-          description = "GitHub Copilot Chat is a companion extension to GitHub Copilot that houses experimental chat features";
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=GitHub.copilot-chat";
-          homepage = "https://github.com/features/copilot";
-          license = lib.licenses.unfree;
-          maintainers = [ lib.maintainers.laurent-f1z1 ];
-        };
-      };
+      github.copilot-chat = callPackage ./github.copilot-chat { };
 
       github.github-vscode-theme = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -2545,8 +2514,8 @@ let
         mktplcRef = {
           name = "Ionide-fsharp";
           publisher = "Ionide";
-          version = "7.25.8";
-          hash = "sha256-/pnLLFj6Iwn14GLGbuc2Ex7IbNmXFiH1Btd12cCGGes=";
+          version = "7.25.10";
+          hash = "sha256-2d12itLc9qBZZ7nQNS/80K46dde2RUKpkWgPwFxogIs=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Ionide.Ionide-fsharp/changelog";
@@ -3980,8 +3949,8 @@ let
         mktplcRef = {
           name = "prisma";
           publisher = "Prisma";
-          version = "6.7.1";
-          hash = "sha256-qgWCC2aIUGS8XG9E8Z9Ya2BGBmL8RwRcHNdbJJFvPws=";
+          version = "6.8.2";
+          hash = "sha256-jortg6SQId1373+4p3Tbej2Q1oz2UhUf+o8xb4PmOVM=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Prisma.prisma/changelog";
@@ -4058,8 +4027,8 @@ let
         mktplcRef = {
           publisher = "redhat";
           name = "java";
-          version = "1.41.2025031208";
-          hash = "sha256-0VWLkztB7anIs19QN1yPQvVjNim+DICv43IOMwEaM+E=";
+          version = "1.42.0";
+          hash = "sha256-m6RJm8eleMjDNy5ixfXWtOcPmsjNynCUNuF9lsCB8ho=";
         };
         buildInputs = [ jdk ];
         meta = {
@@ -4418,8 +4387,8 @@ let
         mktplcRef = {
           publisher = "shopify";
           name = "ruby-lsp";
-          version = "0.9.23";
-          hash = "sha256-toCxWCMun+siVVXH6tjfe71XeAoXyEBiRRR0ViaMDUw=";
+          version = "0.9.24";
+          hash = "sha256-nlPqdn7tOQhr4Z/8N0aHAnkqKtYrpQCzwRGsseT8K5g=";
         };
         meta = {
           description = "VS Code plugin for connecting with the Ruby LSP";
@@ -4706,8 +4675,8 @@ let
         mktplcRef = {
           name = "svelte-vscode";
           publisher = "svelte";
-          version = "109.6.0";
-          hash = "sha256-oyeVtOcTqvcIhG+mq0TmQyOZcp7fENCpy3M7bkaP+N4=";
+          version = "109.8.0";
+          hash = "sha256-T0pNjjeKKX/T1Oc+zvOHu74H4r4F9Ogk5gDV7z0+D9I=";
         };
         meta = {
           changelog = "https://github.com/sveltejs/language-tools/releases";
@@ -4854,6 +4823,8 @@ let
       tecosaur.latex-utilities = callPackage ./tecosaur.latex-utilities { };
 
       tekumara.typos-vscode = callPackage ./tekumara.typos-vscode { };
+
+      teros-technology.teroshdl = callPackage ./teros-technology-teroshdl { };
 
       theangryepicbanana.language-pascal = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -5029,8 +5000,8 @@ let
         mktplcRef = {
           name = "uiua-vscode";
           publisher = "uiua-lang";
-          version = "0.0.63";
-          hash = "sha256-qlBcnQyH5VbgmBlTvVi59OpYtyuVrJLoSuRIbrBGFVE=";
+          version = "0.0.64";
+          hash = "sha256-mASTMZhXsM8IzaMmHsWRmf+pf1EjXyWsBMFXTcq7Acw=";
         };
         meta = {
           description = "VSCode language extension for Uiua";
@@ -5351,8 +5322,8 @@ let
         mktplcRef = {
           name = "vim";
           publisher = "vscodevim";
-          version = "1.29.0";
-          hash = "sha256-J3V8SZJZ2LSL8QfdoOtHI1ZDmGDVerTRYP4NZU17SeQ=";
+          version = "1.29.2";
+          hash = "sha256-RBh4yQxOoUpwNKedFjEeu6hO0tU9AAPlDrt2LhgZT50=";
         };
         meta = {
           license = lib.licenses.mit;

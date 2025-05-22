@@ -351,8 +351,6 @@ with pkgs;
     perlPackages = perl538Packages;
   };
 
-  collision = callPackage ../applications/misc/collision { };
-
   coolercontrol = recurseIntoAttrs (callPackage ../applications/system/coolercontrol { });
 
   copilot-language-server-fhs = copilot-language-server.fhs;
@@ -1124,8 +1122,6 @@ with pkgs;
       enableJavaFX = true;
     };
   };
-
-  memos = callPackage ../servers/memos { };
 
   mkosi = python3Packages.callPackage ../tools/virtualization/mkosi { inherit systemd; };
 
@@ -2375,7 +2371,7 @@ with pkgs;
   patool = with python3Packages; toPythonApplication patool;
 
   pocket-casts = callPackage ../by-name/po/pocket-casts/package.nix {
-    electron = electron_34;
+    electron = electron_35;
   };
 
   pixcat = with python3Packages; toPythonApplication pixcat;
@@ -3069,14 +3065,13 @@ with pkgs;
 
   gibberish-detector = with python3Packages; toPythonApplication gibberish-detector;
 
-  gitlab = callPackage ../applications/version-management/gitlab { };
-  gitlab-ee = callPackage ../applications/version-management/gitlab {
+  gitlab-ee = callPackage ../by-name/gi/gitlab/package.nix {
     gitlabEnterprise = true;
   };
 
   gitlab-triage = callPackage ../applications/version-management/gitlab-triage { };
 
-  gitlab-workhorse = callPackage ../applications/version-management/gitlab/gitlab-workhorse { };
+  gitlab-workhorse = callPackage ../by-name/gi/gitlab/gitlab-workhorse { };
 
   gitqlient = libsForQt5.callPackage ../applications/version-management/gitqlient { };
 
@@ -4075,9 +4070,9 @@ with pkgs;
   };
 
   osl = libsForQt5.callPackage ../development/compilers/osl {
-    libclang = llvmPackages_15.libclang;
-    clang = clang_15;
-    llvm = llvm_15;
+    libclang = llvmPackages_19.libclang;
+    clang = clang_19;
+    llvm = llvm_19;
   };
 
   ossec-agent = callPackage ../tools/security/ossec/agent.nix { };
@@ -4236,11 +4231,6 @@ with pkgs;
 
   polaris-web = callPackage ../servers/polaris/web.nix { };
 
-  projectlibre = callPackage ../applications/misc/projectlibre {
-    jre = jre8;
-    jdk = jdk8;
-  };
-
   projectm_3 = libsForQt5.callPackage ../applications/audio/projectm_3 { };
 
   proxmark3 = libsForQt5.callPackage ../tools/security/proxmark3/default.nix { };
@@ -4289,8 +4279,6 @@ with pkgs;
   qarte = libsForQt5.callPackage ../applications/video/qarte { };
 
   qlcplus = libsForQt5.callPackage ../applications/misc/qlcplus { };
-
-  quickbms = pkgsi686Linux.callPackage ../tools/archivers/quickbms { };
 
   qdigidoc = libsForQt5.callPackage ../tools/security/qdigidoc { };
 
@@ -4543,14 +4531,6 @@ with pkgs;
 
   teamviewer = libsForQt5.callPackage ../applications/networking/remote/teamviewer { };
 
-  inherit
-    (callPackages ../servers/teleport {
-    })
-    teleport_16
-    teleport_17
-    teleport
-    ;
-
   telepresence = callPackage ../tools/networking/telepresence {
     pythonPackages = python3Packages;
   };
@@ -4580,8 +4560,6 @@ with pkgs;
   thinkpad-scripts = python3.pkgs.callPackage ../tools/misc/thinkpad-scripts { };
 
   tiled = libsForQt5.callPackage ../applications/editors/tiled { };
-
-  timetrap = callPackage ../applications/office/timetrap { };
 
   tinc = callPackage ../tools/networking/tinc { };
 
@@ -4691,6 +4669,7 @@ with pkgs;
     # Enable next line for console graphics. Note that it requires `sixel`
     # enabled terminals such as mlterm or xterm -ti 340
     SDL = SDL_sixel;
+    SDL_image = SDL_image.override { SDL = SDL_sixel; };
   };
 
   openconnectPackages = callPackage ../tools/networking/openconnect { };
@@ -4738,8 +4717,6 @@ with pkgs;
   td = callPackage ../tools/misc/td { };
 
   tweet-hs = haskell.lib.compose.justStaticExecutables haskellPackages.tweet-hs;
-
-  tkgate = callPackage ../applications/science/electronics/tkgate/1.x.nix { };
 
   tremor-rs = callPackage ../tools/misc/tremor-rs { };
 
@@ -6561,7 +6538,7 @@ with pkgs;
 
   pypy = pypy2;
   pypy2 = pypy27;
-  pypy3 = pypy310;
+  pypy3 = pypy311;
 
   # Python interpreter that is build with all modules, including tkinter.
   # These are for compatibility and should not be used inside Nixpkgs.
@@ -6633,6 +6610,7 @@ with pkgs;
     python3Minimal
     pypy27
     pypy310
+    pypy311
     ;
 
   # List of extensions with overrides to apply to all Python package sets.
@@ -6650,6 +6628,7 @@ with pkgs;
   pypy27Packages = pypy27.pkgs;
   pypy3Packages = pypy3.pkgs;
   pypy310Packages = pypy310.pkgs;
+  pypy311Packages = pypy311.pkgs;
 
   pythonManylinuxPackages = callPackage ./../development/interpreters/python/manylinux { };
 
@@ -6819,8 +6798,6 @@ with pkgs;
   or1k-newlib = callPackage ../development/misc/or1k/newlib.nix { };
 
   ### DEVELOPMENT / TOOLS
-
-  actiona = libsForQt5.callPackage ../applications/misc/actiona { };
 
   inherit (callPackage ../development/tools/alloy { })
     alloy5
@@ -7861,7 +7838,11 @@ with pkgs;
 
   boost = boost187;
 
-  inherit (callPackages ../development/libraries/botan { })
+  inherit
+    (callPackages ../development/libraries/botan {
+      # botan3 only sensibly works with libcxxStdenv when building static binaries
+      stdenv = if stdenv.hostPlatform.isStatic then buildPackages.libcxxStdenv else stdenv;
+    })
     botan2
     botan3
     ;
@@ -9351,6 +9332,7 @@ with pkgs;
 
   inherit
     ({
+      protobuf_31 = callPackage ../development/libraries/protobuf/31.nix { };
       protobuf_30 = callPackage ../development/libraries/protobuf/30.nix { };
       protobuf_29 = callPackage ../development/libraries/protobuf/29.nix { };
       protobuf_28 = callPackage ../development/libraries/protobuf/28.nix { };
@@ -9362,6 +9344,7 @@ with pkgs;
         abseil-cpp = abseil-cpp_202103;
       };
     })
+    protobuf_31
     protobuf_30
     protobuf_29
     protobuf_28
@@ -10290,10 +10273,6 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
-  clickhouse = callPackage ../servers/clickhouse {
-    llvmPackages = llvmPackages_16;
-  };
-
   clickhouse-cli = with python3Packages; toPythonApplication clickhouse-cli;
 
   couchdb3 = callPackage ../servers/http/couchdb/3.nix { };
@@ -11220,6 +11199,8 @@ with pkgs;
   linux_6_12_hardened = linuxKernel.kernels.linux_6_12_hardened;
   linuxPackages_6_13_hardened = linuxKernel.packages.linux_6_13_hardened;
   linux_6_13_hardened = linuxKernel.kernels.linux_6_13_hardened;
+  linuxPackages_6_14_hardened = linuxKernel.packages.linux_6_14_hardened;
+  linux_6_14_hardened = linuxKernel.kernels.linux_6_14_hardened;
 
   # GNU Linux-libre kernels
   linuxPackages-libre = linuxKernel.packages.linux_libre;
@@ -13203,8 +13184,6 @@ with pkgs;
   libutp = callPackage ../applications/networking/p2p/libutp { };
   libutp_3_4 = callPackage ../applications/networking/p2p/libutp/3.4.nix { };
 
-  ledger-web = callPackage ../applications/office/ledger-web { };
-
   linphone = libsForQt5.callPackage ../applications/networking/instant-messengers/linphone { };
 
   lmms = libsForQt5.callPackage ../applications/audio/lmms {
@@ -13219,7 +13198,9 @@ with pkgs;
 
   luddite = with python3Packages; toPythonApplication luddite;
 
-  lutris-unwrapped = python3.pkgs.callPackage ../applications/misc/lutris { };
+  lutris-unwrapped = python3.pkgs.callPackage ../applications/misc/lutris {
+    inherit (pkgs) meson;
+  };
   lutris = callPackage ../applications/misc/lutris/fhsenv.nix { };
   lutris-free = lutris.override {
     steamSupport = false;
@@ -13249,8 +13230,6 @@ with pkgs;
 
   mandelbulber = callPackage ../applications/graphics/mandelbulber { };
 
-  mapmap = libsForQt5.callPackage ../applications/video/mapmap { };
-
   mastodon-bot = nodePackages.mastodon-bot;
 
   matrix-commander =
@@ -13279,8 +13258,6 @@ with pkgs;
   meshlab-unstable = callPackage ../applications/graphics/meshlab-unstable { };
 
   michabo = libsForQt5.callPackage ../applications/misc/michabo { };
-
-  midori = wrapFirefox midori-unwrapped { };
 
   miniaudicle = qt6Packages.callPackage ../applications/audio/miniaudicle { };
 
@@ -14680,6 +14657,7 @@ with pkgs;
     # that it requires sixel graphics compatible terminals like mlterm
     # or xterm -ti 340
     SDL = SDL_sixel;
+    SDL_image = SDL_image.override { SDL = SDL_sixel; };
   };
 
   zotero_7 = pkgs.zotero;
@@ -14951,15 +14929,6 @@ with pkgs;
   cutechess = qt5.callPackage ../games/cutechess { };
 
   cutemaze = qt6Packages.callPackage ../games/cutemaze { };
-
-  deliantra-server = callPackage ../games/deliantra/server.nix {
-    # perl538 defines 'struct object' in sv.h. many conflicts result
-    perl = perl540;
-    perlPackages = perl540Packages;
-  };
-  deliantra-arch = callPackage ../games/deliantra/arch.nix { };
-  deliantra-maps = callPackage ../games/deliantra/maps.nix { };
-  deliantra-data = callPackage ../games/deliantra/data.nix { };
 
   ddnet-server = ddnet.override { buildClient = false; };
 
@@ -15247,10 +15216,6 @@ with pkgs;
 
   rott-shareware = rott.override {
     buildShareware = true;
-  };
-
-  starsector = callPackage ../games/starsector {
-    openjdk = openjdk17;
   };
 
   scummvm = callPackage ../games/scummvm { };
@@ -15721,8 +15686,6 @@ with pkgs;
 
   sageWithDoc = sage.override { withDoc = true; };
 
-  suitesparse_4_2 = callPackage ../development/libraries/science/math/suitesparse/4.2.nix { };
-  suitesparse_4_4 = callPackage ../development/libraries/science/math/suitesparse/4.4.nix { };
   suitesparse_5_3 = callPackage ../development/libraries/science/math/suitesparse {
     inherit (llvmPackages) openmp;
   };
@@ -16258,8 +16221,6 @@ with pkgs;
     inherit (darwin) sigtool;
   };
 
-  lima-bin = callPackage ../applications/virtualization/lima/bin.nix { };
-
   image_optim = callPackage ../applications/graphics/image_optim { inherit (nodePackages) svgo; };
 
   # using the new configuration style proposal which is unstable
@@ -16318,6 +16279,8 @@ with pkgs;
   mailcore2 = callPackage ../development/libraries/mailcore2 {
     icu = icu71;
   };
+
+  meilisearch_1_11 = callPackage ../by-name/me/meilisearch/package.nix { version = "1.11.3"; };
 
   mongocxx = callPackage ../development/libraries/mongocxx/default.nix { };
 
@@ -16542,8 +16505,6 @@ with pkgs;
 
   pgadmin4-desktopmode = callPackage ../tools/admin/pgadmin { server-mode = false; };
 
-  pgmodeler = qt6Packages.callPackage ../applications/misc/pgmodeler { };
-
   philipstv = with python3Packages; toPythonApplication philipstv;
 
   pyupgrade = with python3Packages; toPythonApplication pyupgrade;
@@ -16742,6 +16703,9 @@ with pkgs;
     # Note that it requires sixel capable terminals such as mlterm
     # or xterm -ti 340
     SDL = SDL_sixel;
+    SDL_gfx = SDL_gfx.override { SDL = SDL_sixel; };
+    SDL_image = SDL_image.override { SDL = SDL_sixel; };
+    SDL_ttf = SDL_ttf.override { SDL = SDL_sixel; };
   };
 
   yacreader = callPackage ../applications/graphics/yacreader { };
@@ -16972,5 +16936,9 @@ with pkgs;
 
   rustdesk-flutter = callPackage ../by-name/ru/rustdesk-flutter/package.nix {
     flutter = flutter324;
+  };
+
+  davis = callPackage ../by-name/da/davis/package.nix {
+    php = php83; # https://github.com/tchapi/davis/issues/195
   };
 }

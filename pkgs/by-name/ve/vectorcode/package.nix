@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  installShellFiles,
   versionCheckHook,
 
   lspSupport ? true,
@@ -63,10 +64,17 @@ python3Packages.buildPythonApplication rec {
     ];
   };
 
+  postInstall = ''
+    $out/bin/vectorcode --print-completion=bash >vectorcode.bash
+    $out/bin/vectorcode --print-completion=zsh >vectorcode.zsh
+    installShellCompletion vectorcode.{bash,zsh}
+  '';
+
   pythonImportsCheck = [ "vectorcode" ];
 
   nativeCheckInputs =
     [
+      installShellFiles
       versionCheckHook
     ]
     ++ (with python3Packages; [

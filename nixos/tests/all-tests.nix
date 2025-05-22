@@ -781,6 +781,7 @@ in
   matrix-alertmanager = runTest ./matrix/matrix-alertmanager.nix;
   matrix-appservice-irc = runTest ./matrix/appservice-irc.nix;
   matrix-conduit = handleTest ./matrix/conduit.nix { };
+  matrix-continuwuity = runTest ./matrix/continuwuity.nix;
   matrix-synapse = handleTest ./matrix/synapse.nix { };
   matrix-synapse-workers = handleTest ./matrix/synapse-workers.nix { };
   mautrix-meta-postgres = handleTest ./matrix/mautrix-meta-postgres.nix { };
@@ -974,6 +975,7 @@ in
   ombi = handleTest ./ombi.nix { };
   openarena = handleTest ./openarena.nix { };
   openbao = runTest ./openbao.nix;
+  opencloud = runTest ./opencloud.nix;
   openldap = handleTest ./openldap.nix { };
   opensearch = discoverTests (import ./opensearch.nix);
   openresty-lua = handleTest ./openresty-lua.nix { };
@@ -993,6 +995,7 @@ in
   orthanc = runTest ./orthanc.nix;
   owncast = handleTest ./owncast.nix { };
   outline = handleTest ./outline.nix { };
+  i18n = runTest ./i18n.nix;
   image-contents = handleTest ./image-contents.nix { };
   openvscode-server = handleTest ./openvscode-server.nix { };
   open-webui = runTest ./open-webui.nix;
@@ -1018,7 +1021,7 @@ in
   paperless = handleTest ./paperless.nix { };
   parsedmarc = handleTest ./parsedmarc { };
   password-option-override-ordering = handleTest ./password-option-override-ordering.nix { };
-  pdns-recursor = handleTest ./pdns-recursor.nix { };
+  pdns-recursor = runTest ./pdns-recursor.nix;
   pds = handleTest ./pds.nix { };
   peerflix = handleTest ./peerflix.nix { };
   peering-manager = handleTest ./web-apps/peering-manager.nix { };

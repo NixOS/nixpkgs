@@ -49,7 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "release-(3\\..*)"
+      ];
+    };
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
@@ -62,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
       charain
       Emin017
     ];
+    teams = [ lib.teams.sdl ];
     pkgConfigModules = [ "sdl3-ttf" ];
     platforms = lib.platforms.all;
   };

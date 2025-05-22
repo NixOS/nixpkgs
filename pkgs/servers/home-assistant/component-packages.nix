@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2025.5.1";
+  version = "2025.5.2";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -1429,10 +1429,11 @@
       ];
     "elvia" =
       ps: with ps; [
+        elvia
         fnv-hash-fast
         psutil-home-assistant
         sqlalchemy
-      ]; # missing inputs: elvia
+      ];
     "emby" =
       ps: with ps; [
         pyemby

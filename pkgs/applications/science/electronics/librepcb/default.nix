@@ -10,17 +10,20 @@
   libGLU,
   cmake,
   wrapQtAppsHook,
+  rustPlatform,
+  cargo,
+  rustc,
 }:
 
 stdenv.mkDerivation rec {
   pname = "librepcb";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    hash = "sha256-/Hw7ZTv2CbDcKuyI27wC46IxCcTnrXDS/Mf7csUTc7w=";
+    hash = "sha256-J4y0ikZNuOguN9msmEQzgcY0/REnOEOoDkY/ga+Cfd8=";
     fetchSubmodules = true;
   };
 
@@ -32,8 +35,19 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
     opencascade-occt
     libGLU
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
   ];
   buildInputs = [ qtbase ];
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit src;
+    sourceRoot = "source/${cargoRoot}";
+    hash = "sha256-1td3WjxbDq2lX7c0trpYRhO82ChNAG/ZABBRsekYtq4=";
+  };
+
+  cargoRoot = "libs/librepcb/rust-core";
 
   meta = with lib; {
     description = "Free EDA software to develop printed circuit boards";
