@@ -98,7 +98,10 @@ let
     gme = [ game-music-emu ];
     mad = [ libmad ];
     mikmod = [ libmikmod ];
-    mpg123 = [ mpg123 ];
+    mpg123 = [
+      libid3tag
+      mpg123
+    ];
     opus = [ libopus ];
     vorbis = [ libvorbis ];
     # Encoder plugins
@@ -196,7 +199,7 @@ let
     in
     stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.24.3";
+      version = "0.24.4";
 
       src = fetchFromGitHub {
         owner = "MusicPlayerDaemon";
