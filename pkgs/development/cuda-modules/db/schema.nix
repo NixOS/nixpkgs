@@ -344,6 +344,7 @@ in
         name = lib.mapAttrs (pname: _: lib.mkDefault pname) pname;
         license = lib.mapAttrs (_: _: lib.mkDefault lib.licenses.nvidiaProprietary.shortName) pname;
         systemsNv = lib.mapAttrs (_: _: lib.mkDefault { }) pname;
+        outputs = lib.mapAttrs (_: _: lib.mkDefault { out = true; }) pname;
         overrideLicenseUrl = lib.mapAttrs (_: _: lib.mkDefault null) pname;
       };
     system = {
