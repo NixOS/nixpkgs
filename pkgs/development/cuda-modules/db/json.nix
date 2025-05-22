@@ -92,6 +92,7 @@ let
           in
           lib.optionals (looksLikePackage name rawPackage) (
             lib.optionals (builtins.elem name known.products) [
+              name
             ]
           )
         )
