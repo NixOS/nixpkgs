@@ -46,7 +46,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "Web UI for OpenCloud built with Vue.js and TypeScript";
     homepage = "https://github.com/opencloud-eu/web";
-    changelog = "https://github.com/opencloud-eu/web/blob/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/opencloud-eu/web/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       christoph-heiss
