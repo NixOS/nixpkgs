@@ -10,11 +10,17 @@ python3.pkgs.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AndBondStyle";
     repo = "niimprint";
-    rev = "be39f68c16a5a7dc1b09bb173700d0ee1ec9cb66";
-    hash = "sha256-+YISYchdqeVKrQ0h2cj5Jy2ezMjnQcWCCYm5f95H9dI=";
+    rev = "be39f68c16a5a7dc1b09bb173700d0ee1ec9cb66"; # Or a specific commit hash
+    hash = "sha256-+YISYchdqeVKrQ0h2cj5Jy2ezMjnQcWCCYm5f95H9dI="; # Needs to be updated
   };
 
   format = "pyproject";
+
+  # Relax Pillow version constraint to work with newer versions
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'pillow = "^10.1.0"' 'pillow = ">=10.1.0"'
+  '';
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
@@ -25,7 +31,7 @@ python3.pkgs.buildPythonPackage rec {
     pyserial
     click
   ];
-  
+
   # Disable tests as the package doesn't have any
   doCheck = false;
 
@@ -37,10 +43,9 @@ python3.pkgs.buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A command line tool to print to Niimbot label printers";
+    description = "Command line tool to print to Niimbot label printers";
     homepage = "https://github.com/AndBondStyle/niimprint";
-    license = licenses.mit; # Repository appears to use MIT license
-    maintainers = with maintainers; [ nicodemus26 ];
-    platforms = platforms.all;
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }
