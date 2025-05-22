@@ -46,6 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       figsoda
       killercup
+      defelo
     ];
     mainProgram = "dua";
   };
