@@ -7,87 +7,89 @@
   hyperscan,
   testers,
   runCommand,
-  wordfence-cli,
 }:
 
-python3Packages.buildPythonApplication rec {
-  pname = "wordfence-cli";
-  version = "5.0.1";
+let
+  self = python3Packages.buildPythonApplication rec {
+    pname = "wordfence-cli";
+    version = "5.0.1";
 
-  src = fetchFromGitHub {
-    owner = "wordfence";
-    repo = "wordfence-cli";
-    rev = "v${version}";
-    sha256 = "13hb1xikm8824hhfmv9ggmmkp637yfkf7z58338p66z9l7hsjq1i";
-  };
-
-  nativeBuildInputs = with python3Packages; [
-    pkg-config
-    setuptools
-    pip
-    pcre
-    hyperscan
-  ];
-
-  propagatedBuildInputs = with python3Packages; [
-    packaging
-    requests
-    pymysql
-  ];
-
-  patches = [
-    ./library.patch
-  ];
-
-  postPatch = ''
-    substituteInPlace wordfence/util/library.py \
-      --replace '@PCRE_OUT@' "${pcre.out}" \
-      --replace '@HS_OUT@'  "${hyperscan.out}"
-  '';
-
-  format = "pyproject";
-  doCheck = false;
-
-  passthru.tests = {
-    version = testers.testVersion {
-      package = wordfence-cli;
-      command = "wordfence --version";
-      version = "Wordfence CLI ${version}";
+    src = fetchFromGitHub {
+      owner = "wordfence";
+      repo = "wordfence-cli";
+      rev = "v${version}";
+      sha256 = "13hb1xikm8824hhfmv9ggmmkp637yfkf7z58338p66z9l7hsjq1i";
     };
 
-    pcreSupported =
-      runCommand "wordfence-cli-pcre-supported"
-        {
-          nativeBuildInputs = [ wordfence-cli ];
-        }
-        ''
-          out=$(wordfence --version)
-          echo "$out" | grep -F "PCRE Supported: Yes"
-          touch $out
-        '';
-
-    vectorscanSupported =
-      runCommand "wordfence-cli-vectorscan-supported"
-        {
-          nativeBuildInputs = [ wordfence-cli ];
-        }
-        ''
-          out=$(wordfence --version)
-          echo "$out" | grep -F "Vectorscan Supported: Yes"
-          touch $out
-        '';
-  };
-
-  meta = with lib; {
-    description = "Wordfence malware and vulnerability scanner command line utility";
-    homepage = "https://github.com/wordfence/wordfence-cli";
-    changelog = "https://github.com/wordfence/wordfence-cli/releases";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
-      am-on
+    nativeBuildInputs = with python3Packages; [
+      pkg-config
+      setuptools
+      pip
+      pcre
+      hyperscan
     ];
-    platforms = [
-      "x86_64-linux"
+
+    propagatedBuildInputs = with python3Packages; [
+      packaging
+      requests
+      pymysql
     ];
+
+    patches = [
+      ./library.patch
+    ];
+
+    postPatch = ''
+      substituteInPlace wordfence/util/library.py \
+        --replace '@PCRE_OUT@' "${pcre.out}" \
+        --replace '@HS_OUT@'  "${hyperscan.out}"
+    '';
+
+    format = "pyproject";
+    doCheck = false;
+
+    passthru.tests = {
+      version = testers.testVersion {
+        package = self;
+        command = "wordfence --version";
+        version = "Wordfence CLI ${version}";
+      };
+
+      pcreSupported =
+        runCommand "wordfence-cli-pcre-supported"
+          {
+            nativeBuildInputs = [ self ];
+          }
+          ''
+            out=$(wordfence --version)
+            echo "$out" | grep -F "PCRE Supported: Yes"
+            touch $out
+          '';
+
+      vectorscanSupported =
+        runCommand "wordfence-cli-vectorscan-supported"
+          {
+            nativeBuildInputs = [ self ];
+          }
+          ''
+            out=$(wordfence --version)
+            echo "$out" | grep -F "Vectorscan Supported: Yes"
+            touch $out
+          '';
+    };
+
+    meta = with lib; {
+      description = "Wordfence malware and vulnerability scanner command line utility";
+      homepage = "https://github.com/wordfence/wordfence-cli";
+      changelog = "https://github.com/wordfence/wordfence-cli/releases";
+      license = licenses.gpl3;
+      maintainers = with maintainers; [
+        am-on
+      ];
+      platforms = [
+        "x86_64-linux"
+      ];
+    };
   };
-}
+in
+self
