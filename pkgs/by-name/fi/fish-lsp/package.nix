@@ -82,7 +82,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ndonfris/fish-lsp";
     license = lib.licenses.mit;
     mainProgram = "fish-lsp";
-    maintainers = with lib.maintainers; [ petertriho ];
+    maintainers = with lib.maintainers; [
+      llakala
+      petertriho
+    ];
     platforms = lib.platforms.unix;
   };
 })
