@@ -134,6 +134,15 @@ let
         # APEI Generic Hardware Error Source
         ACPI_APEI_GHES = (option yes);
 
+        # Without this, on some hardware the kernel fails at some
+        # point after the EFI stub has executed but before a console
+        # is set up.
+        # TODO: Figure out why that happens, in case this doesn't fix
+        # it for some hardware.
+        # Regardless, it's good to have the extra debug anyway, like
+        # other distros do.
+        ACPI_DEBUG = yes;
+
         # Enable lazy RCUs for power savings:
         # https://lore.kernel.org/rcu/20221019225138.GA2499943@paulmck-ThinkPad-P17-Gen-1/
         # RCU_LAZY depends on RCU_NOCB_CPU depends on NO_HZ_FULL
