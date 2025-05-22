@@ -13,19 +13,19 @@
   yarnBuildHook,
   yarnConfigHook,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fish-lsp";
   version = "1.0.8-4";
 
   src = fetchFromGitHub {
     owner = "ndonfris";
     repo = "fish-lsp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rtogxbcnmOEFT1v7aK+pzt9Z4B2O4rFwH3pTNVLTxiA=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
+    yarnLock = finalAttrs.src + "/yarn.lock";
     hash = "sha256-83QhVDG/zyMbHJbV48m84eimXejLKdeVrdk1uZjI8bk=";
   };
 
@@ -85,4 +85,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ petertriho ];
     platforms = lib.platforms.unix;
   };
-}
+})
