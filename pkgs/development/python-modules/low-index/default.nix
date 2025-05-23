@@ -1,9 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -11,17 +10,14 @@ buildPythonPackage rec {
   version = "1.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
-
-  src = fetchPypi {
-    inherit version;
-    pname = "low_index";
-    sha256 = "sha256-Pn5hDe8I75GxXHqoB3OWzaauWxnhs5NXF4tCnqiGFyg=";
+  src = fetchFromGitHub {
+    owner = "3-manifolds";
+    repo = "low_index";
+    rev = "v${version}_as_released";
+    sha256 = "sha256-T8hzC9ulikQ1pUdbXgjuKAX5oMJEycPvXWv74rCkQGY=";
   };
 
   build-system = [ setuptools ];
-
-  doCheck = true;
 
   pythonImportsCheck = [ "low_index" ];
 
