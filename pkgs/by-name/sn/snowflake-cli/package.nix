@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "snowflake-cli";
-  version = "3.7.2";
+  version = "3.8.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snowflakedb";
     repo = "snowflake-cli";
     tag = "v${version}";
-    hash = "sha256-MCJl6Mkkkp9JkG+8ZNfWAYQFMJccdtKfPdcnfaY8Y3w=";
+    hash = "sha256-1KEWpOk7xLg1ewgb6ku7i/PmmFLNJY4zGsLy/PEdMkc=";
   };
 
   build-system = with python3Packages; [
@@ -39,6 +39,8 @@ python3Packages.buildPythonApplication rec {
     urllib3
     gitpython
     pydantic
+    prompt-toolkit
+    snowflake-core
     snowflake-connector-python
   ];
 
