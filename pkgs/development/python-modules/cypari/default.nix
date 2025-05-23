@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fetchurl,
   setuptools,
-  pythonOlder,
   cython,
   bash,
   perl,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "cypari";
   version = "2.5.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "3-manifolds";
@@ -54,8 +51,6 @@ buildPythonPackage rec {
     perl
     texliveBasic
   ];
-
-  doCheck = true;
 
   pythonImportsCheck = [ "cypari" ];
 
