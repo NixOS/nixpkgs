@@ -3,18 +3,14 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
   cython,
 }:
 
 buildPythonPackage rec {
-
   pname = "knot-floer-homology";
   version = "1.2.2";
 
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "3-manifolds";
@@ -26,8 +22,6 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   nativeBuildInputs = [ cython ];
-
-  doCheck = true;
 
   pythonImportsCheck = [ "knot_floer_homology" ];
 
