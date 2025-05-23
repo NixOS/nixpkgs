@@ -1012,11 +1012,12 @@ let
     transmogR = [ pkgs.zlib.dev ];
     ulid = [ pkgs.zlib.dev ];
     unrtf = with pkgs; [
-      xz.dev
       bzip2.dev
-      zlib.dev
       icu.dev
       libdeflate
+      xz.dev
+      zlib.dev
+      zstd.dev
     ];
     nat = [ pkgs.which ];
     nat_templatebrains = [ pkgs.which ];
