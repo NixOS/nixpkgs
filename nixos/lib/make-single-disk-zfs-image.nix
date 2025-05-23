@@ -19,13 +19,13 @@
   # The NixOS configuration to be installed onto the disk image.
   config,
 
-  # size of the FAT partition, in megabytes.
+  # size of the FAT partition, in mebibytes.
   bootSize ? 1024
 
-  , # memory allocated for virtualized build instance
+  , # memory allocated for virtualized build instance, in mebibytes.
   memSize ? 1024,
 
-  # The size of the root partition, in megabytes.
+  # The size of the root partition, in mebibytes.
   rootSize ? 2048,
 
   # The name of the ZFS pool
