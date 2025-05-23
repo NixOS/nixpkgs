@@ -68,7 +68,18 @@ jobs:
 
                 return { mergedSha, targetSha }
               } else {
-                throw new Error("The PR has a merge conflict. Skipping the rest...")
+                console.log("The PR has a merge conflict.")
+
+                const mergedSha = prInfo.head.sha
+                const targetSha = (await github.rest.repos.compareCommitsWithBasehead({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  basehead: `${prInfo.base.sha}...${prInfo.head.sha}`
+                })).data.merge_base_commit.sha
+
+                console.log(`Checking the commits:\nmerged:${mergedSha}\ntarget:${targetSha}`)
+
+                return { mergedSha, targetSha }
               }
             }
             throw new Error("Not retrying anymore. It's likely that GitHub is having internal issues: check https://www.githubstatus.com.")
