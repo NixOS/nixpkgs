@@ -1,9 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
-  pythonOlder,
   snappy-manifolds,
 }:
 
@@ -13,24 +12,20 @@ buildPythonPackage rec {
 
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
-
-  src = fetchPypi {
-    pname = "snappy_15_knots";
-    inherit version;
-    sha256 = "sha256-LH+7+oJ6YskOn3ogvFxcF02s6/4klQ8LgN8Zn6QUzVw=";
+  src = fetchFromGitHub {
+    owner = "3-manifolds";
+    repo = "snappy_15_knots";
+    rev = "${version}_as_released";
+    sha256 = "sha256-fhJhHZFf4XuW/0V6LOuV4qoFWke3oFP0KArDpXLWh9g=";
   };
 
   build-system = [ setuptools ];
 
-  doCheck = true;
-
-  propagatedBuildInputs = [ snappy-manifolds ];
+  dependencies = [ snappy-manifolds ];
 
   pythonImportsCheck = [ "snappy_15_knots" ];
 
   meta = with lib; {
-
     description = "Database of snappy manifolds";
     homepage = "https://snappy.computop.org";
     license = licenses.gpl2;
