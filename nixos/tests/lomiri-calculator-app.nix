@@ -43,6 +43,12 @@
         machine.screenshot("lomiri-calculator")
 
     with subtest("lomiri calculator works"):
+        # Seems like on slower hardware, we might be using the app too quickly after its startup, with the math library
+        # not being set up properly yet:
+        # qml: [LOG]: Unable to calculate formula : "22*16", math.js: TypeError: Cannot call method 'evaluate' of null
+        # OfBorg aarch64 CI is *incredibly slow*, hence the long duration.
+        machine.sleep(60)
+
         machine.send_key("tab") # Fix focus
 
         machine.send_chars("22*16\n")
