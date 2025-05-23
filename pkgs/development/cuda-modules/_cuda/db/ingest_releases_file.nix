@@ -31,7 +31,7 @@ rec {
   system = {
     nvidia = lib.concatMapAttrs (_: lib.id) package.systemsNv;
   };
-  _file = if builtins.isPath arg then arg else ./release_file.nix;
+  _file = if builtins.isPath arg then arg else ./ingest_releases_file.nix;
   imports = lib.flatten (
     lib.mapAttrsToList (
       pname:
