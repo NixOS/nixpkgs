@@ -448,7 +448,52 @@ Composed types are types that take a type as parameter. `listOf
       If the attribute set is used _individually_ (e.g. `config.foo`), use `lazy = true;` so that `mkIf` conditions are evaluated *after* the attribute names are returned.
       This will be more robust and efficient, as the attribute values are not computed until it is needed.
 
-      It possible to combine both behaviors `submodule` with `freeformType = attrsWith { lazy = false; ... }` instead of `attrsWith`, in which case the declared options are allowed to refer to each other, but *only* through the submodule's module arguments.
+      It possible to combine both behaviors using `submodule` with `freeformType = attrsWith { lazy = false; ... }` instead of `attrsWith`, in which case the declared options are allowed to refer to each other, but *only* through the submodule's module arguments. See the following example.
+
+      ::: {#ex-freeform-attrsWith-recursive .example}
+      ### Free-form submodule with recursion
+
+      This module demonstrates use of a free-form submodule with recursion:
+
+      ```nix
+      { lib, ... }:
+      let
+        inherit (lib) mkOption types;
+      in
+      {
+        options.foo.settings = mkOption {
+          type = types.submodule ({ config, ... }: {
+            freeformType = types.attrsWith {
+              lazy = false;
+              elemType = types.str;
+            };
+            options = {
+              name = mkOption { type = types.str; };
+              displayName = mkOption { type = types.str; };
+            };
+          });
+        };
+        config.foo.settings = { config, ... }: {
+          name = "foo";
+          displayName = config.name;
+          extra = "bar";
+          ghost = lib.mkIf false "this disappears";
+        };
+      }
+      ```
+
+      It evaluates to the following configuration:
+
+      ```nix
+      {
+        foo.settings = {
+          name = "foo";
+          displayName = "foo";
+          extra = "bar";
+        };
+      }
+      ```
+      :::
 
     `placeholder` (`String`, default: `name` )
     : Placeholder string in documentation for the attribute names.
