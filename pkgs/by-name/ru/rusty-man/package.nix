@@ -32,6 +32,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://git.sr.ht/~ireas/rusty-man";
     changelog = "https://git.sr.ht/~ireas/rusty-man/tree/v${finalAttrs.version}/item/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [
+      figsoda
+      defelo
+    ];
   };
 })
