@@ -922,6 +922,7 @@ in
   nix-serve-ssh = handleTest ./nix-serve-ssh.nix { };
   nixops = handleTest ./nixops/default.nix { };
   nixos-generate-config = handleTest ./nixos-generate-config.nix { };
+  nixos-generate-config-luks-lvm = handleTest ./nixos-generate-config-luks-lvm.nix { };
   nixos-rebuild-install-bootloader = handleTestOn [
     "x86_64-linux"
   ] ./nixos-rebuild-install-bootloader.nix { };
