@@ -1,4 +1,7 @@
 {
+  "sec-option-types-composed-attrsWith-lazy": [
+    "index.html#sec-option-types-composed-attrsWith-lazy"
+  ],
   "sec-override-nixos-test": [
     "index.html#sec-override-nixos-test"
   ],

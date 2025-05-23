@@ -405,7 +405,7 @@ Composed types are types that take a type as parameter. `listOf
     An attribute set of where all the values are of *`t`* type.
 
     This type is *strict* in its values, which in turn means attributes cannot depend on other attributes.
-    See `lazy` in `attrsWith`.
+    See [`lazy` in `attrsWith`](#sec-option-types-composed-attrsWith-lazy).
 
 `types.lazyAttrsOf` *`t`*
 
@@ -414,25 +414,25 @@ Composed types are types that take a type as parameter. `listOf
     An attribute set of where all the values are of *`t`* type.
 
     This is the lazy version of `types.attrsOf`, allowing attributes to depend on each other, at the cost of potentially containing more attributes than desirable.
-    See `lazy` in `attrsWith`.
+    See [`lazy` in `attrsWith`](#sec-option-types-composed-attrsWith-lazy).
 
 `types.attrsWith` { *`elemType`*, *`lazy`* ? false, *`placeholder`* ? "name" }
 
 :   An attribute set of where all the values are of *`elemType`* type.
 
-    Multiple definitions result in the joined attribute set.
+    Multiple definitions will be merged in the resulting attribute set.
 
     **Parameters**
 
     `elemType` (Required)
     : Specifies the type of the values contained in the attribute set.
 
-    `lazy`
+    [`lazy`]{#sec-option-types-composed-attrsWith-lazy}
     : Determines whether the set of attribute names is evaluated before or after evaluating any attribute values.
 
       `lazy = true` is a preferable choice in principle, but requires extra effort if the option value is used in aggregate (e.g. `attrNames` or `toJSON`).
 
-      When `lazy`, the attribute names are determined by looking at the definitions without evaluating them.
+      When `lazy` is `true`, the attribute names are determined by looking at the definitions without evaluating them.
       If only a `mkIf false` occurs in an attribute, this may result in an error when the attribute value is accessed.
 
       When `lazy` is `false`, the attribute names are determined by evaluating the definitions to see if they are `mkIf` false, but this also causes the evaluation of regular non-`mkIf` definitions.
@@ -443,10 +443,10 @@ Composed types are types that take a type as parameter. `listOf
 
       **Recommendation**
 
-      If the attribute set is used _in aggregate_ (e.g. `attrNames`, `toJSON`), use the default `lazy = false;` option, so that `mkIf` conditions are evaluated *before* the attribute names are returned.
+      If the attribute set is used _in aggregate_ (e.g. `attrNames`, `toJSON`), use the default `lazy = false;`, so that `mkIf` conditions are evaluated *before* the attribute names are returned.
 
       If the attribute set is used _individually_ (e.g. `config.foo`), use `lazy = true;` so that `mkIf` conditions are evaluated *after* the attribute names are returned.
-      This will result in a more robust and efficient evaluation, as the attribute values are not evaluated until it is needed.
+      This will be more robust and efficient, as the attribute values are not computed until it is needed.
 
       It possible to combine both behaviors `submodule` with `freeformType = attrsWith { lazy = false; ... }` instead of `attrsWith`, in which case the declared options are allowed to refer to each other, but *only* through the submodule's module arguments.
 
