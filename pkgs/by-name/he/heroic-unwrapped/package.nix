@@ -3,12 +3,13 @@
   stdenv,
   fetchFromGitHub,
   nix-update-script,
-  pnpm_9,
+  # Pinned, because our FODs are not guaranteed to be stable between major versions.
+  pnpm_10,
   nodejs,
   python3,
   makeWrapper,
-  # Upstream uses EOL Electron 31.  Use next oldest version.
-  electron_34,
+  # Electron updates frequently break Heroic, so pin same version as upstream, or newest non-EOL.
+  electron_36,
   vulkan-helper,
   gogdl,
   legendary-heroic,
@@ -17,27 +18,27 @@
 }:
 
 let
-  electron = electron_34;
+  electron = electron_36;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-unwrapped";
-  version = "2.16.1";
+  version = "2.17.0";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-BnBzbbyi9cdO6W59cnY13hnhH+tjrTryTp9XIcERwh4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Tjme43vw+aIjyXBIsaNE8+bWrLKpIDJZpQaKb/bJYFQ=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-2IQyXULgFoz0rFQ8SwERgMDzzo7pZ3DbqhwrWNYSwRo=";
+    hash = "sha256-cV0+HZb6g65kGu1zOBueY954ol1bLGW8ddCniwAVWcw=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpm_10.configHook
     python3
     makeWrapper
   ];
