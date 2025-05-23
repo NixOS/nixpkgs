@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  pythonOlder,
   cython,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "fxrays";
   version = "1.3.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit version;
@@ -23,8 +20,6 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   nativeBuildInputs = [ cython ];
-
-  doCheck = true;
 
   pythonImportsCheck = [ "FXrays" ];
 
