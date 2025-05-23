@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
-    installShellCompletion completion/kubie.bash
+    installShellCompletion completion/kubie.{bash,fish}
 
     wrapProgram "$out/bin/kubie" \
       --prefix PATH : "${
