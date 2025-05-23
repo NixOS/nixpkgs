@@ -8241,6 +8241,34 @@ with pkgs;
           "libgcc_s"
       );
 
+  rtlibCrossChooser =
+    name:
+    if name == null then
+      null
+    else if name == "compiler-rt" then
+      llvmPackages.compiler-rt
+    else if name == "libgcc" then
+      libgcc
+    else
+      throw "Unknown rtlib ${name}";
+
+  rtlibCross =
+    if stdenv.targetPlatform == stdenv.buildPlatform then
+      null
+    else
+      # TODO: use rtlib when https://github.com/NixOS/nixpkgs/pull/365057 is merged
+      rtlibCrossChooser (
+        if
+          stdenv.targetPlatform.useLLVM
+          || (stdenv.targetPlatform.useArocc or false)
+          || (stdenv.targetPlatform.useZig or false)
+          || (stdenv.targetPlatform.isDarwin)
+        then
+          "compiler-rt"
+        else
+          "libgcc"
+      );
+
   # We can choose:
   libcCrossChooser =
     name:
