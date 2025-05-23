@@ -3,6 +3,7 @@
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -35,6 +36,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installManPage man-page/dust.1
     installShellCompletion completions/dust.{bash,fish} --zsh completions/_dust
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/dust";
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     description = "du + rust = dust. Like du but more intuitive";
