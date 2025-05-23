@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "openldap";
-  version = "2.6.9";
+  version = "2.6.10";
 
   src = fetchurl {
     url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${pname}-${version}.tgz";
-    hash = "sha256-LLfcc+nINA3/DZk1f7qleKvzDMZhnwUhlyxVVoHmsv8=";
+    hash = "sha256-wGXwSq1Cc3rr1gsv5JOXBKyEQma8CuqhYJ8MrZh75RY=";
   };
 
   patches = [
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     libtool
     openssl
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libxcrypt # causes linking issues on *-darwin
   ]
   ++ lib.optionals withModules [
