@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-8PATds7OaD7/8FQ6XDKrCMdTcpZwi453UYq9dX/sSBk=";
 
   meta = {
-    description = "A cowsay like program of a speaking cat, written in rust.";
+    description = "Cowsay like program of a speaking cat";
     homepage = "https://github.com/SchweGELBin/catspeak";
     changelog = "https://github.com/SchweGELBin/catspeak/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
