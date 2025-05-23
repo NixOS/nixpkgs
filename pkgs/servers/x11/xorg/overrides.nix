@@ -764,6 +764,11 @@ self: super:
       broken = true;
     };
   });
+  xf86videoast = super.xf86videoast.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      broken = true;
+    };
+  });
   xf86videogeode = super.xf86videogeode.overrideAttrs (attrs: {
     meta = attrs.meta // {
       broken = true;
