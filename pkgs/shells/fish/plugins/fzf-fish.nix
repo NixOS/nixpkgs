@@ -52,10 +52,15 @@ buildFishPlugin rec {
       rm tests/preview_file/custom_file_preview.fish
     ''
     + (
+      # Construct the command to be executed by fish
+      # This involves sourcing the fishtape.fish script and then running the fishtape function.
+      let
+        fishtapeCommand = "source ${fishtape_3}/share/fish/vendor_functions.d/fishtape.fish; fishtape";
+      in
       if stdenv.hostPlatform.isDarwin then
-        ''script /dev/null fish -c "fishtape tests/*/*.fish"''
+        ''script /dev/null fish -c "${fishtapeCommand} tests/*/*.fish"''
       else
-        ''script -c 'fish -c "fishtape tests/*/*.fish"' ''
+        ''script -c 'fish -c "${fishtapeCommand} tests/*/*.fish"' ''
     );
 
   meta = with lib; {
