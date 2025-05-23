@@ -329,6 +329,39 @@ rec {
       "avx512"
       "fma"
     ];
+    # LoongArch64
+    # https://github.com/loongson/la-toolchain-conventions
+    loongarch64 = [
+      "fpu64"
+    ];
+    la464 = [
+      "fpu64"
+      "lsx"
+      "lasx"
+    ];
+    la664 = [
+      "fpu64"
+      "lsx"
+      "lasx"
+      "div32"
+      "frecipe"
+      "lam-bh"
+      "lamcas"
+      "ld-seq-sa"
+    ];
+    "la64v1.0" = [
+      "fpu64"
+      "lsx"
+    ];
+    "la64v1.1" = [
+      "fpu64"
+      "lsx"
+      "div32"
+      "frecipe"
+      "lam-bh"
+      "lamcas"
+      "ld-seq-sa"
+    ];
     # other
     armv5te = [ ];
     armv6 = [ ];
@@ -486,6 +519,16 @@ rec {
       ampere1a = [ "ampere1" ] ++ inferiors.ampere1;
       ampere1b = [ "ampere1a" ] ++ inferiors.ampere1a;
 
+      # LoongArch64
+      loongarch64 = [ ];
+      "la64v1.0" = [ "loongarch64" ];
+      la464 = [ "la64v1.0" ] ++ inferiors."la64v1.0";
+      "la64v1.1" = [ "la64v1.0" ] ++ inferiors."la64v1.0";
+      la664 = withInferiors [
+        "la464"
+        "la64v1.1"
+      ];
+
       # other
       armv5te = [ ];
       armv6 = [ ];
@@ -574,5 +617,7 @@ rec {
       aesSupport = featureSupport "aes";
       fmaSupport = featureSupport "fma";
       fma4Support = featureSupport "fma4";
+      lsxSupport = featureSupport "lsx";
+      lasxSupport = featureSupport "lasx";
     };
 }
