@@ -19,4 +19,5 @@ in
 // {
   inherit version;
   yarnHash = "sha256-IC4d/skIHEzJPuKlq4rMAqV+ydqquA6toq4WWCfuDxo=";
+  yarnMissingHashes = null;
 }
