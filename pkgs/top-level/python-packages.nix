@@ -11520,6 +11520,8 @@ self: super: with self; {
 
   ploomber-extension = callPackage ../development/python-modules/ploomber-extension { };
 
+  plopp = callPackage ../development/python-modules/plopp { };
+
   plotext = callPackage ../development/python-modules/plotext { };
 
   plotille = callPackage ../development/python-modules/plotille { };
