@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools-scm,
   tkinter,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   version = "1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
-
   src = fetchPypi {
     inherit version;
     pname = "tkinter_gl";
@@ -22,9 +19,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ tkinter ];
-
-  doCheck = true;
+  dependencies = [ tkinter ];
 
   pythonImportsCheck = [ "tkinter_gl" ];
 
