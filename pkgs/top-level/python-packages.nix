@@ -17482,6 +17482,8 @@ self: super: with self; {
     py = python.override (lib.optionalAttrs (!python.isPyPy) { x11Support = true; });
   };
 
+  tkinter-gl = callPackage ../development/python-modules/tkinter-gl { };
+
   tld = callPackage ../development/python-modules/tld { };
 
   tldextract = callPackage ../development/python-modules/tldextract { };
