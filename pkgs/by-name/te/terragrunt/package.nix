@@ -4,29 +4,31 @@
   fetchFromGitHub,
   versionCheckHook,
   go-mockery,
+  mockgen,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "terragrunt";
-  version = "0.78.4";
+  version = "0.80.2";
 
   src = fetchFromGitHub {
     owner = "gruntwork-io";
     repo = "terragrunt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Xlqq1d6itQx0Y6MQJTY3tsZ8Q2S8EqRbqD1GGdIu9oA=";
+    hash = "sha256-FgytHWKtXK0tNDFOVOEciEzyVEXLbk9T2Nk8Se35HnY=";
   };
 
   nativeBuildInputs = [
     versionCheckHook
     go-mockery
+    mockgen
   ];
 
   preBuild = ''
     make generate-mocks
   '';
 
-  vendorHash = "sha256-sVA2bzQoeDdYRDaAC6DZtF4izuXhlHTUMKNkOIveG7c=";
+  vendorHash = "sha256-Zgoon6eMUXn2zaxHfJovtWV9Q11rDdkBrYzNqa73DsM=";
 
   doCheck = false;
 
