@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "~ireas";
     repo = "rusty-man";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-djprzmogT1OEf0/+twdxzx30YaMNzFjXkZd4IDsH8oo=";
+    hash = "sha256-djprzmogT1OEf0/+twdxzx30YaMNzFjXkZd4IDsH8oo=";
   };
 
   useFetchCargoVendor = true;
