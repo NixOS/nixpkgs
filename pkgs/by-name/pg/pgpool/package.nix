@@ -11,12 +11,12 @@
 
 stdenv.mkDerivation rec {
   pname = "pgpool-II";
-  version = "4.6.0";
+  version = "4.6.1";
 
   src = fetchurl {
     url = "https://www.pgpool.net/mediawiki/download.php?f=pgpool-II-${version}.tar.gz";
     name = "pgpool-II-${version}.tar.gz";
-    hash = "sha256-9oplcUQtfqU7afOddJrUV3kLABgOGbAZ/ILiNbqwcyE=";
+    hash = "sha256-D4gF2TvEAALIAZ3ECuA6caPRRL0589/+b6Aff8GbuOg=";
   };
 
   buildInputs = [
