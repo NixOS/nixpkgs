@@ -2476,6 +2476,7 @@ let
           bzip2
           icu
           which
+          zstd.dev
         ] ++ attrs.buildInputs;
         postInstall = ''
           install -d $out/bin $out/share/man/man1
