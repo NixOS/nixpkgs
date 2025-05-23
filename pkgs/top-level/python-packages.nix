@@ -7582,6 +7582,8 @@ self: super: with self; {
 
   knocki = callPackage ../development/python-modules/knocki { };
 
+  knot-floer-homology = callPackage ../development/python-modules/knot-floer-homology { };
+
   knx-frontend = callPackage ../development/python-modules/knx-frontend { };
 
   kombu = callPackage ../development/python-modules/kombu { };
