@@ -43,6 +43,7 @@
   optuna,
   ray,
   pydantic,
+  pyctcdecode,
   uvicorn,
   fastapi,
   starlette,
@@ -52,6 +53,7 @@
   pillow,
   timm,
   torchvision,
+  kenlm,
   av,
   sentencepiece,
 }:
@@ -87,9 +89,9 @@ buildPythonPackage rec {
     let
       audio = [
         librosa
-        # pyctcdecode
+        pyctcdecode
         phonemizer
-        # kenlm
+        kenlm
       ];
       vision = [ pillow ];
     in
