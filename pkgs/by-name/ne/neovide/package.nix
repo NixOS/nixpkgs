@@ -24,14 +24,14 @@
   wayland,
 }:
 
-rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
+rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } (finalAttrs: {
   pname = "neovide";
   version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "neovide";
     repo = "neovide";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-MLiLddF53OXDPYuJbTAscezxN09mxZkuSOZtQz07JSE=";
   };
 
@@ -122,15 +122,17 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
       install -m444 -Dt $out/share/applications assets/neovide.desktop
     '';
 
-  disallowedReferences = [ SKIA_SOURCE_DIR ];
+  disallowedReferences = [ finalAttrs.SKIA_SOURCE_DIR ];
 
   meta = {
     description = "Neovide is a simple, no-nonsense, cross-platform graphical user interface for Neovim";
     mainProgram = "neovide";
     homepage = "https://neovide.dev/";
-    changelog = "https://github.com/neovide/neovide/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ ck3d ];
+    changelog = "https://github.com/neovide/neovide/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      ck3d
+    ];
     platforms = lib.platforms.unix;
   };
-}
+})
