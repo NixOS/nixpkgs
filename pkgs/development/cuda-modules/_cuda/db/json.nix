@@ -77,7 +77,7 @@ let
               (if lib.hasPrefix "feature_" (builtins.baseNameOf path) then featureDecl else manifestDecl)
             ];
           };
-          _file = toString ./json.nix;
+          _file = ./json.nix;
         }
       ];
     };
@@ -157,7 +157,7 @@ in
 { config, ... }:
 
 {
-  _file = toString ./json.nix;
+  _file = ./json.nix;
   config = lib.mkMerge (
     (fmapPackages (
       otherAttrs: pname: systemNv: _: rawPackage: [
