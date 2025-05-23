@@ -1,9 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
-  pythonOlder,
   sphinx,
   tkinter,
 }:
@@ -13,20 +12,18 @@ buildPythonPackage rec {
   version = "2.4.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-l1MtpwBUl6IZXgjqQyT3QH2zXng0SrRtHoOkOifHUWo=";
+  src = fetchFromGitHub {
+    owner = "3-manifolds";
+    repo = pname;
+    rev = "${version}_as_released";
+    sha256 = "sha256-+WUyQvQY9Fx47GikzJ4gcCpSIjvk5756FP0bDdF6Ack=";
   };
 
   build-system = [ setuptools ];
 
   nativeBuildInputs = [ sphinx ];
 
-  propagatedBuildInputs = [ tkinter ];
-
-  doCheck = true;
+  dependencies = [ tkinter ];
 
   pythonImportsCheck = [ "plink" ];
 
