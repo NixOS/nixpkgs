@@ -17882,6 +17882,12 @@
     githubId = 810877;
     name = "Tom Doggett";
   };
+  noiioiu = {
+    github = "noiioiu";
+    githubId = 151288161;
+    name = "noiioiu";
+    keys = [ { fingerprint = "99CC 06D6 1456 3689 CE75  58F3 BF51 F00D 0748 2A89"; } ];
+  };
   noisersup = {
     email = "patryk@kwiatek.xyz";
     github = "noisersup";
