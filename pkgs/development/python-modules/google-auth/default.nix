@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.40.1";
+  version = "2.40.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-auth-library-python";
     tag = "v${version}";
-    hash = "sha256-t+KgDFLeiCwmXAfrv+qyrNNa1H1v5U34rURIArjmt94=";
+    hash = "sha256-jO6brNdTH8BitLKKP/nwrlUo5hfQnThT/bPbzefvRbM=";
   };
 
   build-system = [ setuptools ];
@@ -91,8 +91,6 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     # cryptography 44 compat issue
     "--deselect=tests/transport/test__mtls_helper.py::TestDecryptPrivateKey::test_success"
-    # https://github.com/googleapis/google-auth-library-python/issues/1763
-    "--deselect=tests/test__service_account_info.py::test_from_dict_bad_private_key"
   ];
 
   __darwinAllowLocalNetworking = true;
