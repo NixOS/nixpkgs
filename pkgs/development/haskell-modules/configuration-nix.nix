@@ -2294,6 +2294,8 @@ builtins.intersectAttrs super {
 
   # Workaround for flaky test: https://github.com/basvandijk/threads/issues/10
   threads = appendPatch ./patches/threads-flaky-test.patch super.threads;
+
+  PSQueue = enableSeparateTestOutput (overrideCabal (drv: {doCheck = true;}) super.PSQueue);
 }
 
 // lib.optionalAttrs pkgs.config.allowAliases (
