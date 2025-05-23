@@ -333,9 +333,6 @@ gem 'connection_pool', '~> 2.4', feature_category: :shared
 # Redis session store
 gem 'redis-actionpack', '~> 5.5.0', feature_category: :redis
 
-# Discord integration
-gem 'discordrb-webhooks', '~> 3.5', require: false, feature_category: :integrations
-
 # Jira integration
 gem 'jira-ruby', '~> 2.3.0', feature_category: :integrations
 gem 'atlassian-jwt', '~> 0.2.1', feature_category: :integrations

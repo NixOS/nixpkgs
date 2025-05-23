@@ -23,6 +23,7 @@ let
       PAPERLESS_THUMBNAIL_FONT_NAME = defaultFont;
       GRANIAN_HOST = cfg.address;
       GRANIAN_PORT = toString cfg.port;
+      GRANIAN_WORKERS_KILL_TIMEOUT = "60";
     }
     // lib.optionalAttrs (config.time.timeZone != null) {
       PAPERLESS_TIME_ZONE = config.time.timeZone;
