@@ -15,6 +15,7 @@
   openjpeg,
   zlib,
   pkg-config,
+  ctestCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -108,11 +109,10 @@ stdenv.mkDerivation rec {
       "TestRescaler2"
     ];
 
-  checkPhase = ''
-    runHook preCheck
-    ctest --exclude-regex '^(${lib.concatStringsSep "|" disabledTests})$'
-    runHook postCheck
-  '';
+  nativeCheckInputs = [
+    ctestCheckHook
+  ];
+
   doCheck = true;
   # note that when the test data is available to the build via `fetchSubmodules = true`,
   # a number of additional but much slower tests are enabled
