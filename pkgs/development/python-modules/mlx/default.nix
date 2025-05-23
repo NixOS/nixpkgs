@@ -2,13 +2,19 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pybind11,
+
+  # build-system
   cmake,
+  pybind11,
+  setuptools,
+
+  # nativeBuildInputs
   xcbuild,
   zsh,
+
+  # buildInputs
   blas,
   lapack,
-  setuptools,
 }:
 
 let
@@ -22,22 +28,21 @@ let
   nlohmann_json = fetchFromGitHub {
     owner = "nlohmann";
     repo = "json";
-    rev = "v3.11.3";
+    tag = "v3.11.3";
     hash = "sha256-7F0Jon+1oWL7uqet5i1IgHX0fUw/+z0QwEcA3zs5xHg=";
   };
 in
 buildPythonPackage rec {
   pname = "mlx";
   version = "0.21.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ml-explore";
     repo = "mlx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-wxv9bA9e8VyFv/FMh63sUTTNgkXHGQJNQhLuVynczZA=";
   };
-
-  pyproject = true;
 
   patches = [
     # With Darwin SDK 11 we cannot include vecLib/cblas_new.h, this needs to wait for PR #229210
@@ -47,10 +52,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "/usr/bin/xcrun" "${xcbuild}/bin/xcrun" \
+      --replace-fail "/usr/bin/xcrun" "${lib.getExe' xcbuild "xcrun"}" \
   '';
-
-  dontUseCmakeConfigure = true;
 
   # updates the wrong fetcher rev attribute
   passthru.skipBulkUpdate = true;
@@ -65,14 +68,18 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cmake
     pybind11
+    setuptools
+  ];
+  dontUseCmakeConfigure = true;
+
+  nativeBuildInputs = [
     xcbuild
     zsh
     gguf-tools
     nlohmann_json
-    setuptools
   ];
 
   buildInputs = [
@@ -80,13 +87,13 @@ buildPythonPackage rec {
     lapack
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ml-explore/mlx";
     description = "Array framework for Apple silicon";
     changelog = "https://github.com/ml-explore/mlx/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = [ "aarch64-darwin" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       viraptor
       Gabriella439
     ];
