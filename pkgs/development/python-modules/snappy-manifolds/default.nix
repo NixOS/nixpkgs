@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -12,8 +11,6 @@ buildPythonPackage rec {
 
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
-
   src = fetchPypi {
     pname = "snappy_manifolds";
     inherit version;
@@ -21,8 +18,6 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
-
-  doCheck = true;
 
   pythonImportsCheck = [ "snappy_manifolds" ];
 
