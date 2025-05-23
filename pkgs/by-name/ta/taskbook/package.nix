@@ -28,7 +28,7 @@ buildNpmPackage rec {
     description = "Tasks, boards & notes for the command-line habitat";
     homepage = "https://github.com/klaudiosinani/taskbook";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ skohtv ];
     mainProgram = "tb";
   };
 }
