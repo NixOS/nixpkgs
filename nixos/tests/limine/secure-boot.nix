@@ -1,9 +1,10 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 {
   name = "secureBoot";
-  meta.maintainers = with lib.maintainers; [
-    programmerlexi
-  ];
+  meta = {
+    inherit (pkgs.limine.meta) maintainers;
+  };
+
   meta.platforms = [
     "aarch64-linux"
     "i686-linux"
