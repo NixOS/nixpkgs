@@ -4,7 +4,6 @@
 
   buildGoModule,
   fetchFromGitHub,
-  fetchpatch,
 
   makeWrapper,
   installShellFiles,
