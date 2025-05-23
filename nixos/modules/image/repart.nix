@@ -403,7 +403,7 @@ in
           inherit fileSystems definitionsDirectory mkfsEnv;
         };
       in
-      lib.asserts.checkAssertWarn cfg.assertions cfg.warnings val;
+      cfg.assertAndWarn val;
   };
 
   meta.maintainers = with lib.maintainers; [
