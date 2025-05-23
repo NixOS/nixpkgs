@@ -3902,8 +3902,8 @@ let
         mktplcRef = {
           name = "material-icon-theme";
           publisher = "PKief";
-          version = "5.22.0";
-          hash = "sha256-E9UCSZe0hXnKwdNv6ua/Kzuy+wTFyeOGGVl7gFF4opY=";
+          version = "5.23.0";
+          hash = "sha256-numOqtLBqPKhlHXpdKtzg423vijR0p0a8f9niR2WrCc=";
         };
         meta = {
           description = "Material Design Icons for Visual Studio Code";
