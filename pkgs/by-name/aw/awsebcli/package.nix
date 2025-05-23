@@ -39,6 +39,7 @@ python.pkgs.buildPythonApplication rec {
     "botocore"
     "colorama"
     "pathspec"
+    "packaging"
     "PyYAML"
     "six"
     "termcolor"
@@ -53,7 +54,6 @@ python.pkgs.buildPythonApplication rec {
     fabric
     pathspec
     pyyaml
-    future
     requests
     semantic-version
     setuptools

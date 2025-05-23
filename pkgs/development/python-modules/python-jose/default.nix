@@ -24,6 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-rPtOZ25aKIN+g3cyv8n6cNejoj3yKk4zpjdLDyEG1e4=";
   };
 
+  patches = [
+    # https://github.com/mpdavis/python-jose/pull/381
+    ./cryptography-45.0.patch
+  ];
+
   pythonRelaxDeps = [
     # https://github.com/mpdavis/python-jose/pull/376
     "pyasn1"

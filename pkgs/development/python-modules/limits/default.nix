@@ -22,11 +22,12 @@
   redis,
   setuptools,
   typing-extensions,
+  valkey,
 }:
 
 buildPythonPackage rec {
   pname = "limits";
-  version = "4.0.1";
+  version = "5.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,7 +42,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/limits/_version.py"
     '';
-    hash = "sha256-JXXjRVn3RQMqNYRYXF4LuV2DHzVF8PTeGepFkt4jDFM=";
+    hash = "sha256-0D44XaSZtebMnn9mqXbaE7FB7usdu/eZ/4UE3Ye0oyA=";
   };
 
   patches = [
@@ -80,6 +81,7 @@ buildPythonPackage rec {
     # ];
     async-mongodb = [ motor ];
     async-etcd = [ aetcd ];
+    valkey = [ valkey ];
   };
 
   env = {
