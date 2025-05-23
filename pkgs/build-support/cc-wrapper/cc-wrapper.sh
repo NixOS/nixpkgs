@@ -250,6 +250,15 @@ if (( "${NIX_DEBUG:-0}" >= 1 )); then
 fi
 
 PATH="$path_backup"
+
+# Optionally run external hook.
+if [ -n "${NIX_CC_WRAPPER_HOOK:-}" ]; then
+    "$NIX_CC_WRAPPER_HOOK" @prog@ \
+        ${extraBefore+"${extraBefore[@]}"} \
+        ${params+"${params[@]}"} \
+        ${extraAfter+"${extraAfter[@]}"}
+fi
+
 # Old bash workaround, see above.
 
 if (( "${NIX_CC_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
