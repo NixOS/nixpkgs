@@ -314,6 +314,7 @@ in
       trt_base_url = mkOption {
         type = str;
         description = "Base URL for (non-redistributable) TensorRT packages";
+        default = "https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/{versionTriple}/tars/";
       };
 
       assertions = mkOption {
