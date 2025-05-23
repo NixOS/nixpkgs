@@ -101,15 +101,6 @@ in
           '';
         };
 
-        version = mkColumnOption cudb.release.product SetOfStr {
-          default = { };
-          description = ''
-            `∷ ProductName ⇒ ProductVersion ⇒ ()`
-
-            Corresponds to `release_label` in NVIDIA manifests
-          '';
-        };
-
         package = mkColumnOption cudb.product (attrsOf (attrsOf (nullOr str))) {
           default = { };
           description = ''

@@ -182,7 +182,6 @@ in
     ++ lib.optionals (releaseLabel != null) [
       {
         release.product.${productName} = 1;
-        release.version.${productName}.${releaseLabel} = 1;
         release.package.${productName}.${releaseLabel} = { };
       }
     ]
@@ -270,7 +269,7 @@ in
               let
                 shortName = licenseOf pname perSystem;
               in
-              lib.optionalAttrs (shortName != null) { ${shortName} = mkDefaultHarder "${pname}/LICENSE.txt"; }
+              lib.optionalAttrs (shortName != null) { ${shortName} = mkChooseLonger "${pname}/LICENSE.txt"; }
             ) rawPackages;
             distribution_path = lib.mapAttrs (
               _: _: if distribution_path == null then mkDefaultWeaker null else mkDefaultHarder distribution_path
