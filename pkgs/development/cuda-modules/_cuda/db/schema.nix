@@ -114,6 +114,7 @@ in
 
       archive.sha256 = mkOption {
         description = "`∷ SHA256 ⇒ { URL, SystemStringNvidia, CompatibilityTag ⇒ () }`";
+        default = { };
         type = attrsOf (submodule {
           options = {
             systemNv = mkOption {
