@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "-C"
     "ports/unix"
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ]; # also builds mpy-cross
 
   enableParallelBuilding = true;
