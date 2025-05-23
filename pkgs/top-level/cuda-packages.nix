@@ -171,6 +171,14 @@ let
       attrName: selection:
       final.callPackage ../development/cuda-modules/generic-builders/manifest.nix {
         inherit (selection) pname version src;
+        libPath =
+          if selection.pname != "cutensor" then
+            null
+          else
+            let
+              cudaMajorVersion = versions.major cudaMajorMinorVersion;
+            in
+            if cudaMajorMinorVersion == "10.2" then cudaMajorMinorVersion else cudaMajorVersion;
       }
     ) blueprint;
 
