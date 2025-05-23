@@ -998,11 +998,12 @@ let
       libpq
     ];
     asciicast = with pkgs; [
-      xz.dev
       bzip2.dev
-      zlib.dev
       icu.dev
       libdeflate
+      xz.dev
+      zlib.dev
+      zstd.dev
     ];
     island = [ pkgs.gsl.dev ];
     knowYourCG = with pkgs; [
