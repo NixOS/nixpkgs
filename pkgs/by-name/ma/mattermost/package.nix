@@ -261,7 +261,6 @@ buildMattermost rec {
       numinit
       kranzes
       mgdelacroix
-      fsagbuya
     ];
     platforms = lib.platforms.linux;
     mainProgram = "mattermost";
