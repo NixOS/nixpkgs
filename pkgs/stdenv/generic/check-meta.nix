@@ -34,6 +34,7 @@ let
     toList
     isList
     elem
+    elemAt
     ;
 
   inherit (lib.meta)
@@ -416,6 +417,9 @@ let
       # Used for the original location of the maintainer and team attributes to assist with pings.
       maintainersPosition = any;
       teamsPosition = any;
+
+      # FIXME: Add deep check for all these attributes
+      identifiers = attrs;
     };
 
   checkMetaAttr =
@@ -612,6 +616,40 @@ let
       maintainers =
         attrs.meta.maintainers or [ ]
         ++ concatMap (team: team.members or [ ]) attrs.meta.teams or [ ];
+    }
+    // {
+      identifiers =
+        let
+          versionMatch = builtins.match "([0-9]+\.[0-9]+)\.([0-9]+)" attrs.version;
+          versionParts =
+            if versionMatch == null then
+              {
+                inherit (attrs) version;
+                update = "";
+              }
+            else
+              {
+                version = elemAt versionMatch 0;
+                update = elemAt versionMatch 1;
+              };
+          cpeParts = {
+            vendor = throw "'meta.identifiers.cpeParts.vendor' is not specified";
+            product = attrs.pname;
+            inherit (versionParts) version update;
+            edition = "";
+            sw_edition = "";
+            target_sw = "";
+            target_hw = "";
+            language = "";
+            other = "";
+          } // attrs.meta.identifiers.cpeParts or { };
+          cpe = "cpe:2.3:a:${cpeParts.vendor}:${cpeParts.product}:${cpeParts.version}:${cpeParts.update}:${cpeParts.edition}:${cpeParts.sw_edition}:${cpeParts.target_sw}:${cpeParts.target_hw}:${cpeParts.language}:${cpeParts.other}";
+          v1 = { inherit cpeParts cpe; };
+        in
+        v1
+        // {
+          inherit v1;
+        };
     }
     // {
       # Expose the result of the checks for everyone to see.
