@@ -65,10 +65,14 @@ stdenv.mkDerivation {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     # assert that c++ bindings are included
     # note that this is only true for modern (>0.5) versions; the 0.3 series does not have these
     [[ -f $out/include/libsigrokcxx/libsigrokcxx.hpp ]] \
       || { echo 'C++ bindings were not generated; check configure output'; false; }
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {
