@@ -950,6 +950,7 @@ let
       pkgs.pcre2
     ];
     redux = [ pkgs.pkg-config ];
+    s2 = [ pkgs.pkg-config ];
     rswipl = with pkgs; [
       cmake
       pkg-config
@@ -1190,7 +1191,10 @@ let
     tfevents = [ pkgs.protobuf ];
     rsvg = [ pkgs.librsvg.dev ];
     ssh = with pkgs; [ libssh ];
-    s2 = [ pkgs.openssl.dev ];
+    s2 = with pkgs; [
+      abseil-cpp
+      openssl.dev
+    ];
     ArrayExpressHTS = with pkgs; [
       zlib.dev
       curl.dev
@@ -2127,8 +2131,10 @@ let
     });
 
     s2 = old.s2.overrideAttrs (attrs: {
-      PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
-      PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -lssl -lcrypto";
+      preConfigure = ''
+        substituteInPlace "configure" \
+          --replace-fail "absl_s2" "absl_flags absl_check"
+      '';
     });
 
     Rmpi = old.Rmpi.overrideAttrs (attrs: {
