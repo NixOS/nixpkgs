@@ -5,7 +5,7 @@
   ...
 }:
 let
-  version = "5.5.229";
+  version = "5.5.231";
   pname = "gdevelop";
   meta = {
     description = "Graphical Game Development Studio";
