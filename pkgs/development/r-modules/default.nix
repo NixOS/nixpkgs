@@ -1594,6 +1594,7 @@ let
     "calmate"
     "fgga"
     "fulltext"
+    "dataverse"
     "immuneSIM"
     "mastif"
     "shinymeta"
