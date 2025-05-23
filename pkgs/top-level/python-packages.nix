@@ -3112,6 +3112,8 @@ self: super: with self; {
 
   cynthion = callPackage ../development/python-modules/cynthion { };
 
+  cypari = callPackage ../development/python-modules/cypari { };
+
   cypari2 = callPackage ../development/python-modules/cypari2 { };
 
   cypherpunkpay = callPackage ../development/python-modules/cypherpunkpay { };
