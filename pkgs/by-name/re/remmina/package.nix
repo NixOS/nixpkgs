@@ -135,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
       ${lib.optionalString stdenv.hostPlatform.isDarwin ''
         --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
       ''}
+      --prefix PATH : "${lib.makeBinPath [ python3 ]}"
     )
   '';
 
