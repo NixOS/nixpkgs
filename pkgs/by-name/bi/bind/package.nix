@@ -27,11 +27,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bind";
-  version = "9.20.7";
+  version = "9.20.9";
 
   src = fetchurl {
     url = "https://downloads.isc.org/isc/bind9/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-QzI8jSLSFEKCw3tAYOwR6Ywkg14iVoiHb60IunuV3KY=";
+    hash = "sha256-PSaQDtnJqFkHP/6puX4pLBJI2tGCebF7BfyyPDCR+G0=";
   };
 
   outputs = [
@@ -136,13 +136,16 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests = {
-      withCheck = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
-      inherit (nixosTests) bind;
-      prometheus-exporter = nixosTests.prometheus-exporters.bind;
-      kubernetes-dns-single-node = nixosTests.kubernetes.dns-single-node;
-      kubernetes-dns-multi-node = nixosTests.kubernetes.dns-multi-node;
-    };
+    tests =
+      {
+        withCheck = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
+        inherit (nixosTests) bind;
+        prometheus-exporter = nixosTests.prometheus-exporters.bind;
+      }
+      // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
+        kubernetes-dns-single-node = nixosTests.kubernetes.dns-single-node;
+        kubernetes-dns-multi-node = nixosTests.kubernetes.dns-multi-node;
+      };
 
     updateScript = gitUpdater {
       # No nicer place to find latest stable release.
@@ -160,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://downloads.isc.org/isc/bind9/cur/${lib.versions.majorMinor finalAttrs.version}/doc/arm/html/notes.html#notes-for-bind-${
       lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
 
     outputsToInstall = [

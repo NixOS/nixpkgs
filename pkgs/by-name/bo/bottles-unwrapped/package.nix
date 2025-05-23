@@ -20,24 +20,25 @@
   lsb-release,
   pciutils,
   procps,
+  gamemode,
   gamescope,
   mangohud,
   vkbasalt-cli,
   vmtouch,
   libportal,
   nix-update-script,
-  removeWarningPopup ? false, # Final reminder to report any issues on nixpkgs' bugtracker
+  removeWarningPopup ? false,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "bottles-unwrapped";
-  version = "51.17";
+  version = "51.21";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = "bottles";
     tag = version;
-    hash = "sha256-m4ATWpAZxIBp1X0cNeyNGmt6aIBo/cHH+DpOMkLia0E=";
+    hash = "sha256-rUS2LRr7NqTvNd706AC/U/QUDcF8tzwkHDuS3R0O1KY=";
   };
 
   patches =
@@ -45,7 +46,6 @@ python3Packages.buildPythonApplication rec {
       ./vulkan_icd.patch
       ./redirect-bugtracker.patch
       ./remove-flatpak-check.patch
-      ./remove-core-tab.patch
     ]
     ++ (
       if removeWarningPopup then
@@ -104,6 +104,7 @@ python3Packages.buildPythonApplication rec {
       imagemagick
       vkbasalt-cli
 
+      gamemode
       gamescope
       mangohud
       vmtouch
@@ -132,6 +133,7 @@ python3Packages.buildPythonApplication rec {
       psydvl
       shamilton
       Gliczy
+      XBagon
     ];
     platforms = lib.platforms.linux;
     mainProgram = "bottles";
