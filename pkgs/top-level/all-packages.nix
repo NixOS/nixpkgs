@@ -4143,6 +4143,8 @@ with pkgs;
 
   pdfminer = with python3Packages; toPythonApplication pdfminer-six;
 
+  pdfium-binaries-v8 = pdfium-binaries.override { withV8 = true; };
+
   pgsync = callPackage ../development/tools/database/pgsync { };
 
   pdsh = callPackage ../tools/networking/pdsh {

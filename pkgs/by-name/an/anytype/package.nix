@@ -123,7 +123,6 @@ buildNpmPackage {
     license = lib.licenses.unfreeRedistributable;
     mainProgram = "anytype";
     maintainers = with lib.maintainers; [
-      running-grass
       autrimpo
       adda
     ];
