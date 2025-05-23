@@ -1,0 +1,49 @@
+From a407b571f327e7315f2ff75503d65295aade5531 Mon Sep 17 00:00:00 2001
+From: Guilhem Saurel <guilhem.saurel@laas.fr>
+Date: Mon, 2 Sep 2024 12:25:39 +0200
+Subject: [PATCH] CMake: look for system gtest
+
+---
+ test/CMakeLists.txt | 29 ++++++++++++++++-------------
+ 1 file changed, 16 insertions(+), 13 deletions(-)
+
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index 0d3ab0c2..55e4c8a6 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -20,19 +20,22 @@ SET(CMAKE_BUILD_TYPE DEBUG)
+ ################################################################################
+ # download and compile GTest
+ ################################################################################
+-INCLUDE(ExternalProject)
+-
+-# Download from GitHub
+-INCLUDE(FetchContent)
+-FetchContent_Declare(
+-    googletest
+-    URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip)
+-
+-# For Windows: Prevent overriding the parent project's compiler/linker settings
+-SET(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+-FetchContent_MakeAvailable(googletest)
+-
+-INCLUDE(GoogleTest)
++find_package(GTest)
++if(NOT GTEST_FOUND)
++    INCLUDE(ExternalProject)
++
++    # Download from GitHub
++    INCLUDE(FetchContent)
++    FetchContent_Declare(
++        googletest
++        URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip)
++
++    # For Windows: Prevent overriding the parent project's compiler/linker settings
++    SET(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
++    FetchContent_MakeAvailable(googletest)
++
++    INCLUDE(GoogleTest)
++endif()
+ 
+ ################################################################################
+ # add gtest dependency
