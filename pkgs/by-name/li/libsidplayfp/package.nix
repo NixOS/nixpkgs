@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsidplayfp";
-  version = "2.13.1";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "libsidplayfp";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-gUi7g+TZmF6XgacImVSNc69zpMckjCaqwfidIrrh38U=";
+    hash = "sha256-q1cUv4gpzL3wfssP7pWtDfDzFO47+kzpGy4GYLzEM50=";
   };
 
   outputs = [ "out" ] ++ lib.optionals docSupport [ "doc" ];
