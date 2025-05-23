@@ -1,10 +1,10 @@
 {
   lib,
+  fetchFromGitHub,
   buildPythonPackage,
   cairocffi,
   cssselect2,
   defusedxml,
-  fetchPypi,
   pillow,
   pytestCheckHook,
   setuptools,
@@ -16,34 +16,29 @@ buildPythonPackage rec {
   version = "2.7.1";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "CairoSVG";
-    inherit version;
-    hash = "sha256-QyUx1yNHKRuanr+2d3AmtgdWP9hxnEbudC2wrvcnG6A=";
+  src = fetchFromGitHub {
+    owner = "Kozea";
+    repo = "CairoSVG";
+    tag = version;
+    hash = "sha256-uam53zT2V7aR8daVNOWlZZiexIZPotJxLO2Jg2JQewQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cairocffi
     cssselect2
     defusedxml
     pillow
     tinycss2
+    cairocffi
   ];
-
-  propagatedNativeBuildInputs = [ cairocffi ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "pytest-runner" "" \
-      --replace "pytest-flake8" "" \
-      --replace "pytest-isort" "" \
-      --replace "pytest-cov" "" \
-      --replace "--flake8" "" \
-      --replace "--isort" ""
+      --replace "console-scripts" "console_scripts"
   '';
 
   pytestFlagsArray = [ "cairosvg/test_api.py" ];
