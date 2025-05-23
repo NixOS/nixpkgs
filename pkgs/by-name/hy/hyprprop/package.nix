@@ -14,13 +14,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "hyprprop";
-  version = "0.1-unstable-2025-05-12";
+  version = "0.1-unstable-2025-05-18";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "contrib";
-    rev = "8e6c02ac3dfbff878ef300266598737ee9cedf94";
-    hash = "sha256-VKs/GtedyOrcWiEOf9JPPX6ZgKzngXTVMUlqsL60G/c=";
+    rev = "910dad4c5755c1735d30da10c96d9086aa2a608d";
+    hash = "sha256-PMQoXbfmWPuXnF8EaWqRmvTvl7+WFUrDVgufFRPgOM4=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/hyprprop";
