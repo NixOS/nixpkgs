@@ -8463,6 +8463,8 @@ self: super: with self; {
 
   lottie = callPackage ../development/python-modules/lottie { };
 
+  low-index = callPackage ../development/python-modules/low-index { };
+
   lox = callPackage ../development/python-modules/lox { };
 
   lpc-checksum = callPackage ../development/python-modules/lpc-checksum { };
