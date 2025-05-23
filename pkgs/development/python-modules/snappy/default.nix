@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
   cython,
   snappy-15-knots,
   cypari,
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   version = "3.2";
 
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "3-manifolds";
@@ -62,7 +59,7 @@ buildPythonPackage rec {
       --replace "Exec=/usr/bin/env python3 -m snappy.app" "Exec=$out/bin/SnapPy"
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     cypari
     fxrays
     ipython
@@ -75,8 +72,6 @@ buildPythonPackage rec {
     spherogram
     tkinter-gl
   ] ++ lib.optionals include15CrossingKnots [ snappy-15-knots ];
-
-  doCheck = true;
 
   pythonImportsCheck = [ "snappy" ];
 
