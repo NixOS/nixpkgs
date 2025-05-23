@@ -22,7 +22,10 @@
 # I've (@connorbaker) attempted to do that, though I'm unsure of how this will interact with overrides.
 {
   config,
-  cudaMajorMinorVersion, # Left for compatibility
+  # Left for compatibility
+  cudaMajorMinorVersion ?
+    pinProducts.cuda
+      or (throw "cuda-packages.nix expects `pinProducts`, `cudaBlueprint`, or `cudaMajorMinorVersion` as argument"),
   pinProducts ? {
     cuda = cudaMajorMinorVersion;
   },

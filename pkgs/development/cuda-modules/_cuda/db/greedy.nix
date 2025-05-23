@@ -47,7 +47,7 @@ let
     );
 
   unrecognizedProducts = lib.filterAttrs (
-    name: version: selectQuantized db.release.version.${name} version == null
+    name: version: selectQuantized db.release.package.${name} version == null
   ) pinProducts;
   unrecognizedPackages = lib.filterAttrs (
     name: version: selectQuantized db.package.version.${name} version == null
