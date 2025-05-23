@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "msedgedriver";
   # finding a version that has all 4 builds is a pain
   # https://msedgewebdriverstorage.z22.web.core.windows.net/?form=MA13LH
-  version = "130.0.2849.1";
+  version = "134.0.3124.85";
 
   src =
     let
@@ -27,10 +27,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       };
 
       hash = selectSystem {
-        x86_64-linux = "sha256-U6YGD2PAhVUa7f+R5pmKLazGLOBbf3bRqzlwIJewA+w=";
-        aarch64-linux = "sha256-QJ1jRw8kkWbT8US5qI8DMZI/7Q8yJWpFXrfzGdxDWKE=";
-        x86_64-darwin = "sha256-Ejcv1DtuEiLJvTsv48AwoCQlFO3xM9PkM3HvZG65AC4=";
-        aarch64-darwin = "sha256-ykn4bYREE6xmJY02WiCRGsGnyWjnmnZM8FemK4XZqhc=";
+        x86_64-linux = "sha256-jxUcp95MeOdFu7wVyreN0HLue59vmGauf8YhuJ5A++g=";
+        aarch64-linux = "sha256-wit1fCDneijaO36BGzj1V41PdIsfdz5Lg9YOF7+kEKM=";
+        x86_64-darwin = "sha256-TW38b4CsOibyOrsFq2gip6TP04pjLx8mKbbftESmwWo=";
+        aarch64-darwin = "sha256-NmZTABjJpR8j4UlAW1bz/Gtj22bcTSHBin5+TMt2nN4=";
       };
     in
     fetchzip {
