@@ -193,11 +193,11 @@ let
   nativeBuildInputs =
     [
       nukeReferences
+      pkg-config
     ]
     ++ optionals (!stdenv.hostPlatform.isDarwin) [
       autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
       autoreconfHook
-      pkg-config
     ]
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       buildPackages.stdenv.cc
