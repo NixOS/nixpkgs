@@ -190,6 +190,7 @@ let
 
         fetchurlBoot = import ../../build-support/fetchurl/boot.nix {
           inherit system;
+          inherit (config) rewriteURL;
         };
 
         cc =
