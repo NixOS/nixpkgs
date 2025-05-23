@@ -118,14 +118,8 @@ lib.init bootStages
                 throw "no C compiler provided for this platform"
               else if crossSystem.isDarwin then
                 buildPackages.llvmPackages.libcxxClang
-              else if crossSystem.useLLVM or false then
-                buildPackages.llvmPackages.clang
-              else if crossSystem.useZig or false then
-                buildPackages.zig.cc
-              else if crossSystem.useArocc or false then
-                buildPackages.arocc
               else
-                buildPackages.gcc;
+                buildPackages.ccCross;
 
           };
         in

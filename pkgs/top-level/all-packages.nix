@@ -8270,6 +8270,38 @@ with pkgs;
       );
 
   # We can choose:
+  ccCrossChooser =
+    name:
+    if name == null then
+      null
+    else if name == "gcc" then
+      gcc
+    else if name == "clang" then
+      llvmPackages.clang
+    else if name == "arocc" then
+      arocc
+    else if name == "zig" then
+      zig.cc
+    else
+      throw "Unknown CC ${name}";
+
+  ccCross =
+    if stdenv.targetPlatform == stdenv.buildPlatform then
+      null
+    else
+      # TODO: use cc when https://github.com/NixOS/nixpkgs/pull/365057 is merged
+      ccCrossChooser (
+        if stdenv.targetPlatform.useLLVM or stdenv.targetPlatform.isDarwin then
+          "clang"
+        else if stdenv.targetPlatform.useArocc or false then
+          "arocc"
+        else if stdenv.targetPlatform.useZig or false then
+          "zig"
+        else
+          "gcc"
+      );
+
+  # We can choose:
   libcCrossChooser =
     name:
     # libc is hackily often used from the previous stage. This `or`
