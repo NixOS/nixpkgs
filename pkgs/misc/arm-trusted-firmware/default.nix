@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchFromGitLab,
   openssl,
-  pkgsCross,
+  crossStdenv,
   buildPackages,
 
   # Warning: this blob (hdcp.bin) runs on the main CPU (not the GPU) at
@@ -60,17 +60,17 @@ let
         depsBuildBuild = [ buildPackages.stdenv.cc ];
 
         # For Cortex-M0 firmware in RK3399
-        nativeBuildInputs = [ pkgsCross.arm-embedded.stdenv.cc ];
+        nativeBuildInputs = [ crossStdenv.libc.newlib.configs.arm-none-eabi.cc ];
         # Make the new toolchain guessing (from 2.11+) happy
         # https://github.com/ARM-software/arm-trusted-firmware/blob/4ec2948fe3f65dba2f19e691e702f7de2949179c/make_helpers/toolchains/rk3399-m0.mk#L21-L22
-        rk3399-m0-oc = "${pkgsCross.arm-embedded.stdenv.cc.targetPrefix}objcopy";
+        rk3399-m0-oc = "${crossStdenv.libc.newlib.configs.arm-none-eabi.cc.targetPrefix}objcopy";
 
         buildInputs = [ openssl ];
 
         makeFlags =
           [
             "HOSTCC=$(CC_FOR_BUILD)"
-            "M0_CROSS_COMPILE=${pkgsCross.arm-embedded.stdenv.cc.targetPrefix}"
+            "M0_CROSS_COMPILE=${crossStdenv.libc.newlib.configs.arm-none-eabi.cc.targetPrefix}"
             "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
             # Make the new toolchain guessing (from 2.11+) happy
             "CC=${stdenv.cc.targetPrefix}cc"
