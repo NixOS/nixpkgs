@@ -23,7 +23,10 @@
 {
   config,
   _cuda,
-  cudaMajorMinorVersion, # Left for compatibility
+  # Left for compatibility
+  cudaMajorMinorVersion ?
+    pinProducts.cuda
+      or (throw "cuda-packages.nix expects `pinProducts`, `cudaBlueprint`, or `cudaMajorMinorVersion` as argument"),
   pinProducts ? {
     cuda = cudaMajorMinorVersion;
   },

@@ -2722,21 +2722,60 @@ with pkgs;
   # Top-level fix-point used in `cudaPackages`' internals
   _cuda = import ../development/cuda-modules/_cuda;
 
-  cudaPackages_11_4 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "11.4"; };
-  cudaPackages_11_5 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "11.5"; };
-  cudaPackages_11_6 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "11.6"; };
-  cudaPackages_11_7 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "11.7"; };
-  cudaPackages_11_8 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "11.8"; };
+  cudaPackages_11_4 = callPackage ./cuda-packages.nix {
+    pinProducts.cuda = "11.4";
+    pinProducts.cudnn = "8.2";
+  };
+  cudaPackages_11_5 = callPackage ./cuda-packages.nix {
+    pinProducts.cuda = "11.5";
+    pinProducts.cudnn = "8.4";
+  };
+  cudaPackages_11_6 = callPackage ./cuda-packages.nix {
+    pinProducts.cuda = "11.6";
+    pinProducts.cudnn = "8.4";
+  };
+  cudaPackages_11_7 = callPackage ./cuda-packages.nix {
+    pinProducts.cuda = "11.7";
+    pinProducts.cudnn = "8.4";
+  };
+  cudaPackages_11_8 = callPackage ./cuda-packages.nix {
+    pinProducts.cuda = "11.8";
+    pinProducts.cudnn = if stdenv.hostPlatform.isAarch64 then "8.6" else "8.9";
+  };
   cudaPackages_11 = recurseIntoAttrs cudaPackages_11_8;
 
-  cudaPackages_12_0 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "12.0"; };
-  cudaPackages_12_1 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "12.1"; };
-  cudaPackages_12_2 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "12.2"; };
-  cudaPackages_12_3 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "12.3"; };
-  cudaPackages_12_4 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "12.4"; };
-  cudaPackages_12_5 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "12.5"; };
-  cudaPackages_12_6 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "12.6"; };
-  cudaPackages_12_8 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "12.8"; };
+  cudaPackages_12_0 = callPackage ./cuda-packages.nix {
+    pinProducts.cuda = "12.0";
+    pinProducts.cudnn = "8.9";
+  };
+  cudaPackages_12_1 = callPackage ./cuda-packages.nix {
+    pinProducts.cuda = "12.1";
+    pinProducts.cudnn = "8.9";
+  };
+  cudaPackages_12_2 = callPackage ./cuda-packages.nix {
+    pinProducts.cuda = "12.2";
+    pinProducts.cudnn = "9.7";
+  };
+  cudaPackages_12_3 = callPackage ./cuda-packages.nix {
+    pinProducts.cuda = "12.3";
+    pinProducts.cudnn = "9.7";
+  };
+  cudaPackages_12_4 = callPackage ./cuda-packages.nix {
+    pinProducts.cuda = "12.4";
+    pinProducts.cudnn = "9.7";
+  };
+  cudaPackages_12_5 = callPackage ./cuda-packages.nix {
+    pinProducts.cuda = "12.5";
+    pinProducts.cudnn = "9.7";
+  };
+  cudaPackages_12_6 = callPackage ./cuda-packages.nix {
+    pinProducts.cuda = "12.6";
+    pinProducts.cudnn = "9.7";
+  };
+  cudaPackages_12_8 = callPackage ./cuda-packages.nix {
+    pinProducts.cuda = "12.8";
+    pinProducts.cudnn = "9.7";
+  };
   cudaPackages_12 = cudaPackages_12_8; # Latest supported by cudnn
 
   cudaPackages = recurseIntoAttrs cudaPackages_12;
