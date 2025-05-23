@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+  doInstallCheck = true;
 
   meta = with lib; {
     homepage = "http://www.ddcutil.com/";
