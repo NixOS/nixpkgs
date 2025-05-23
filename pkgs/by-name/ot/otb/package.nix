@@ -234,9 +234,13 @@ stdenv.mkDerivation (finalAttrs: {
     ./1-otb-swig-include-itk.diff
   ];
 
-  postPatch = (
-    "substituteInPlace Modules/Core/Wrappers/SWIG/src/python/CMakeLists.txt --replace-fail '''$''{ITK_INCLUDE_DIRS}' ${otb-itk}/include/ITK-${itkMajorMinorVersion}"
-  );
+  postPatch = ''
+    substituteInPlace Modules/Core/Wrappers/SWIG/src/python/CMakeLists.txt \
+      --replace-fail ''\'''${ITK_INCLUDE_DIRS}' "${otb-itk}/include/ITK-${itkMajorMinorVersion}"
+
+    # Macro VNL_CONFIG_LEGACY_METHODS is needed to define the legacy vcl_* function.
+    sed -i '/#include "vnl\/vnl_matrix.h"/a #define VNL_CONFIG_LEGACY_METHODS 1' Modules/Core/Mosaic/include/otbMosaicFunctors.h
+  '';
 
   nativeBuildInputs = [
     cmake
