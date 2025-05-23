@@ -3,12 +3,11 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  pythonOlder,
   cython,
   networkx,
   decorator,
-  snappy-manifolds,
   knot-floer-homology,
+  snappy-manifolds,
   snappy-15-knots,
   include15CrossingKnots ? true,
 }:
@@ -19,8 +18,6 @@ buildPythonPackage rec {
 
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
-
   src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-NlvRsy8C/Nem+iGcoxTE1BzjRKsNLvO17YBzVQmNZ9o=";
@@ -30,14 +27,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cython ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     networkx
     decorator
     snappy-manifolds
     knot-floer-homology
   ] ++ lib.optionals include15CrossingKnots [ snappy-15-knots ];
-
-  doCheck = true;
 
   pythonImportsCheck = [ "spherogram" ];
 
