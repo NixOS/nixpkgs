@@ -95,12 +95,10 @@ buildGoModule {
     # want but also limits the tests
     unset subPackages
 
-    # several tests hang
-    rm tsnet/tsnet_test.go
-
-    # new test, probably missing import
-    # reported: https://github.com/tailscale/tailscale/issues/16051
-    rm tsnet/packet_filter_test.go
+    # several tests hang, but keeping the file for tsnet/packet_filter_test.go
+    # packet_filter_test issue: https://github.com/tailscale/tailscale/issues/16051
+    substituteInPlace tsnet/tsnet_test.go \
+      --replace-fail 'func Test' 'func skippedTest'
   '';
 
   checkFlags =
@@ -148,6 +146,9 @@ buildGoModule {
           # timeout 10m
           "TestTaildropIntegration"
           "TestTaildropIntegration_Fresh"
+
+          # context deadline exceeded
+          "TestPacketFilterFromNetmap"
         ]
         ++ lib.optionals stdenv.hostPlatform.isDarwin [
           # syscall default route interface en0 differs from netstat
