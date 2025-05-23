@@ -193,6 +193,7 @@ let
   nativeBuildInputs =
     [
       nukeReferences
+      pkg-config
     ]
     ++ optionals (!stdenv.hostPlatform.isDarwin || passthru.pythonAtLeast "3.14") [
       pkg-config
