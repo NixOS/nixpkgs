@@ -13,6 +13,8 @@
   pytest-examples,
   pytestCheckHook,
   python-dotenv,
+  python-multipart,
+  requests,
   rich,
   sse-starlette,
   starlette,
@@ -23,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "mcp";
-  version = "1.6.0";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "python-sdk";
     tag = "v${version}";
-    hash = "sha256-APm3x4tcDbp8D2ygW43wFyP0llJ6fXZiINHRYShp9ZY=";
+    hash = "sha256-UH91o2ElS0XLjH67R9QaJ/7AeX6oVkqqOc3588D4s0g=";
   };
 
   postPatch = ''
@@ -56,6 +58,7 @@ buildPythonPackage rec {
     sse-starlette
     starlette
     uvicorn
+    python-multipart
   ];
 
   optional-dependencies = {
@@ -77,6 +80,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-examples
     pytestCheckHook
+    requests
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlagsArray = [
@@ -89,6 +93,8 @@ buildPythonPackage rec {
     "test_command_execution"
     # performance-dependent test
     "test_messages_are_executed_concurrently"
+    # anyio.ClosedResourceError
+    "test_client_session_version_negotiation_failure"
   ];
 
   __darwinAllowLocalNetworking = true;
