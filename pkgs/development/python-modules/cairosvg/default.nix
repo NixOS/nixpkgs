@@ -1,14 +1,20 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   cairocffi,
   cssselect2,
   defusedxml,
-  fetchPypi,
   pillow,
-  pytestCheckHook,
-  setuptools,
   tinycss2,
+
+  # testing
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -16,15 +22,16 @@ buildPythonPackage rec {
   version = "2.7.1";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "CairoSVG";
-    inherit version;
-    hash = "sha256-QyUx1yNHKRuanr+2d3AmtgdWP9hxnEbudC2wrvcnG6A=";
+  src = fetchFromGitHub {
+    owner = "Kozea";
+    repo = "CairoSVG";
+    rev = version;
+    hash = "sha256-uam53zT2V7aR8daVNOWlZZiexIZPotJxLO2Jg2JQewQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cairocffi
     cssselect2
     defusedxml
@@ -32,7 +39,7 @@ buildPythonPackage rec {
     tinycss2
   ];
 
-  propagatedNativeBuildInputs = [ cairocffi ];
+  nativeBuildInputs = [ cairocffi ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
