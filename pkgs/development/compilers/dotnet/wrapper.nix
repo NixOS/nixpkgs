@@ -6,6 +6,7 @@
   testers,
   runCommand,
   runCommandWith,
+  darwin,
   expect,
   curl,
   installShellFiles,
@@ -223,6 +224,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
                 ]
                 ++ lib.optional stdenv.hostPlatform.isDarwin [
                   swiftPackages.swift
+                  darwin.ICU
                 ];
               build = ''
                 dotnet restore -p:PublishAot=true
