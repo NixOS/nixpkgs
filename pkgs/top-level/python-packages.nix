@@ -11327,6 +11327,8 @@ self: super: with self; {
 
   plfit = toPythonModule (pkgs.plfit.override { inherit (self) python; });
 
+  plink = callPackage ../development/python-modules/plink { };
+
   plone-testing = callPackage ../development/python-modules/plone-testing { };
 
   ploomber-core = callPackage ../development/python-modules/ploomber-core { };
