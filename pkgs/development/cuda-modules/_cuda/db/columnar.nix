@@ -9,9 +9,12 @@ rec {
   SetOfStr = attrsOf Unit;
   listToSetOfStr = lib.flip lib.genAttrs (lib.const unit);
 
-  # ∷ Column ⇒ Type ⇒ MkOptionArgs ⇒ Option
+  # ∷ attrsOf Unit ⇒ Type ⇒ MkOptionArgs ⇒ Option
+  #
+  # The first argument is kept for compatibility with the original intent of
+  # introducing assertions at declaration site.
   mkColumnOption =
-    indexColumn: rowType: optionArgsCol:
+    _index: rowType: optionArgsCol:
     lib.mkOption (
       optionArgsCol
       // {
