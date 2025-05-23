@@ -100,10 +100,15 @@ let
       )
     else
       raw.release_product;
-  releaseLabel =
-    raw.release_label or (builtins.head (
-      lib.match "^.*_([0-9]{1,2}(\\.[0-9]{1,3}){1,3})\\.json$" (builtins.baseNameOf path) # Forgive me Lord
-    ));
+  releaseLabel = maybeOr (raw.release_label or null) (
+    builtins.head (
+      lib.take 1 (
+        lib.match "^.*_([0-9]{1,2}(\\.[0-9]{1,3}){1,3})\\.json$" (builtins.baseNameOf path) # Forgive me Lord
+      )
+      ++ lib.optionals (raw ? cuda_cudart) [ raw.cuda_cudart.version or null ]
+      ++ [ null ]
+    )
+  );
   distribution_path = if productName == null then null else "${productName}/redist/";
 
   raw = evaluated.config;
@@ -122,7 +127,8 @@ let
       let
         hasTags = perSystem._recurseForTags or false; # `or false` branch for feature_*.json
         otherAttrs = lib.filterAttrs (name: _: !(looksLikeSystem name)) perSystem;
-        actualSystems = lib.filterAttrs (name: _: !(builtins.elem name known.nonSystems)) perSystem;
+        # actualSystems = lib.filterAttrs (name: _: !(builtins.elem name known.nonSystems)) perSystem;
+        actualSystems = lib.removeAttrs perSystem (lib.attrNames otherAttrs);
         result =
           if hasTags then
             fmapAttrsToList actualSystems (
@@ -145,6 +151,7 @@ let
   mkDefaultHarder = lib.mkOverride 900;
   mkDefaultWeaker = lib.mkOverride 1100;
   pname = lib.mapAttrs (_: _: 1) rawPackages;
+  maybeOr = maybe: default: if maybe != null then maybe else default;
 in
 
 { config, ... }:
@@ -172,13 +179,14 @@ in
         }
       ]
     ))
-    ++ lib.optionals (productName != null) [
+    ++ lib.optionals (releaseLabel != null) [
       {
         release.product.${productName} = 1;
         release.version.${productName}.${releaseLabel} = 1;
+        release.package.${productName}.${releaseLabel} = { };
       }
     ]
-    ++ lib.optionals (productName != null) (
+    ++ lib.optionals (releaseLabel != null) (
       fmapPackages (
         otherAttrs: pname: systemNv: tag: rawPackage:
         lib.optionals (looksLikeSystem systemNv && otherAttrs ? version) [

@@ -4,8 +4,10 @@
 let
   inherit (import ./nixpkgs_paths.nix) libPath;
 in
+
 {
   lib ? import libPath,
+  baseUrlAttr,
 }:
 
 arg:
@@ -42,14 +44,16 @@ rec {
         in
         builtins.map (p: {
           package.version.${pname}.${p.version}.${p.hash} = 1;
+          release.package.${pname}.${p.version}.${pname} = p.version;
           archive.sha256.${p.hash} = {
             inherit systemNv;
-            url = "${
-              lib.replaceStrings
-                [ "{version}" "{versionTriple}" ]
-                [ p.version (lib.concatStringsSep "." (lib.take 3 (lib.splitVersion p.version))) ]
-                config.trt_base_url
-            }${p.filename}";
+            url =
+              p.url or "${
+                lib.replaceStrings
+                  [ "{version}" "{versionTriple}" ]
+                  [ p.version (lib.concatStringsSep "." (lib.take 3 (lib.splitVersion p.version))) ]
+                  config.${baseUrlAttr}
+              }${p.filename}";
             extraConstraints =
               let
                 nextVersion =

@@ -21,12 +21,21 @@ let
       lib.optionals (lib.pathIsDirectory manifestsDir) manifests
     ) (builtins.attrNames (builtins.readDir root));
   jsonToModule = import ./json.nix { inherit lib; };
-  ingestTensorrt = import ./ingest_tensorrt.nix { inherit lib; };
+  ingestTensorrt = import ./ingest_releases_file.nix {
+    inherit lib;
+    baseUrlAttr = "trt_base_url";
+  };
+  ingestLegacyCudnn = import ./ingest_releases_file.nix {
+    inherit lib;
+    baseUrlAttr = "base_url";
+  };
   modulesPath = nixpkgsPath;
 in
 {
   manifests ? intreeManifests, # :: List Path
-  extraModules ? builtins.map ingestTensorrt [ (cudaPackagesPath + "/tensorrt/releases.nix") ],
+  extraModules ? builtins.map ingestTensorrt [ (cudaPackagesPath + "/tensorrt/releases.nix") ] ++ [
+    (ingestLegacyCudnn (cudaPackagesPath + "/cudnn/releases.nix"))
+  ],
 }:
 let
   manifestModules = builtins.map jsonToModule manifests;
