@@ -5,6 +5,7 @@
 
   # build-system
   cmake,
+  nanobind,
   pybind11,
   setuptools,
 
@@ -15,6 +16,10 @@
   # buildInputs
   blas,
   lapack,
+  fmt,
+
+  # tests
+  pytestCheckHook,
 }:
 
 let
@@ -34,23 +39,25 @@ let
 in
 buildPythonPackage rec {
   pname = "mlx";
-  version = "0.21.1";
+  version = "0.25.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ml-explore";
     repo = "mlx";
     tag = "v${version}";
-    hash = "sha256-wxv9bA9e8VyFv/FMh63sUTTNgkXHGQJNQhLuVynczZA=";
+    hash = "sha256-fkf/kKATr384WduFG/X81c5InEAZq5u5+hwrAJIg7MI=";
   };
 
   patches = [
-    # With Darwin SDK 11 we cannot include vecLib/cblas_new.h, this needs to wait for PR #229210
-    # In the meantime, pretend Accelerate is not available and use blas/lapack instead.
-    ./disable-accelerate.patch
+    # Use nixpkgs' fmt library instead of fetching it from GitHub
+    ./dont-fetch-fmt.patch
   ];
 
   postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "nanobind==2.4.0" "nanobind"
+
     substituteInPlace CMakeLists.txt \
       --replace-fail "/usr/bin/xcrun" "${lib.getExe' xcbuild "xcrun"}" \
   '';
@@ -70,6 +77,7 @@ buildPythonPackage rec {
 
   build-system = [
     cmake
+    nanobind
     pybind11
     setuptools
   ];
@@ -85,6 +93,11 @@ buildPythonPackage rec {
   buildInputs = [
     blas
     lapack
+    fmt
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   meta = {
