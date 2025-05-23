@@ -16297,6 +16297,8 @@ self: super: with self; {
 
   snapcast = callPackage ../development/python-modules/snapcast { };
 
+  snappy-15-knots = callPackage ../development/python-modules/snappy-15-knots { };
+
   snappy-manifolds = callPackage ../development/python-modules/snappy-manifolds { };
 
   snapshottest = callPackage ../development/python-modules/snapshottest { };
