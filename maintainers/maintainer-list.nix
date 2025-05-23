@@ -9503,6 +9503,12 @@
     githubId = 443978;
     name = "Gabriel Volpe";
   };
+  gwennlbh = {
+    email = "gwenn.lebihan7@gmail.com";
+    github = "gwennlbh";
+    githubId = 39094199;
+    name = "Gwenn Le Bihan";
+  };
   gwg313 = {
     email = "gwg313@pm.me";
     matrix = "@gwg313:matrix.org";
