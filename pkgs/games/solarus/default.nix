@@ -1,8 +1,10 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitLab,
+  fetchpatch,
   cmake,
+  ninja,
   luajit,
   SDL2,
   SDL2_image,
@@ -12,20 +14,26 @@
   openal,
   libmodplug,
   libvorbis,
-  qtbase,
-  qttools,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "solarus";
-  version = "1.6.4";
+  version = "2.0.0";
 
   src = fetchFromGitLab {
     owner = "solarus-games";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sbdlf+R9OskDQ5U5rqUX2gF8l/fj0sDJv6BL7H1I1Ng=";
+    sha256 = "sha256-Kfg4pFZrEhsIU4RQlOox3hMpk2PXbOzrkwDElPGnDjA=";
   };
+
+  patches = [
+    # https://gitlab.com/solarus-games/solarus/-/merge_requests/1570
+    (fetchpatch {
+      url = "https://gitlab.com/solarus-games/solarus/-/commit/8e1eee51cbfa5acf2511b059739153065b0ba21d.patch";
+      hash = "sha256-KevGavtUhpHRt85WLh9ApmZ8a+NeWB1zDDHKGT08yhQ=";
+    })
+  ];
 
   outputs = [
     "out"
@@ -35,7 +43,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    qttools
+    ninja
   ];
   buildInputs = [
     luajit
@@ -46,18 +54,13 @@ mkDerivation rec {
     openal
     libmodplug
     libvorbis
-    qtbase
     glm
   ];
 
   cmakeFlags = [
     (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-DGLM_ENABLE_EXPERIMENTAL")
+    (lib.cmakeFeature "CMAKE_INSTALL_DATADIR" "${placeholder "lib"}/share")
   ];
-
-  preFixup = ''
-    mkdir $lib/
-    mv $out/lib $lib
-  '';
 
   meta = with lib; {
     description = "Zelda-like ARPG game engine";
