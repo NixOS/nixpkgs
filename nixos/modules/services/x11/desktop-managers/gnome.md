@@ -120,17 +120,82 @@ You can install them like any other package:
 
 ```nix
 {
-  environment.systemPackages = [
-    gnomeExtensions.dash-to-dock
-    gnomeExtensions.gsconnect
-    gnomeExtensions.mpris-indicator-button
+  environment.systemPackages = with pkgs.gnomeExtensions; [
+    dash-to-dock
+    gsconnect
+    mpris-indicator-button
   ];
 }
 ```
 
-Unfortunately, we lack a way for these to be managed in a completely declarative way.
-So you have to enable them manually with an Extensions application.
-It is possible to use a [GSettings override](#sec-gnome-gsettings-overrides) for this on `org.gnome.shell.enabled-extensions`, but that will only influence the default value.
+Enable them with the `dconf` module:
+
+```nix
+programs.dconf = {
+  enable = true;
+  profiles.user.databases = [{
+    settings = with lib.gvariant; {
+      "org/gnome/shell" = {
+        enabled-extensions = [
+          pkgs.gnomeExtensions.dash-to-dock.extensionUuid
+          pkgs.gnomeExtensions.gsconnect.extensionUuid
+          pkgs.gnomeExtensions.mpris-indicator-button.extensionUuid
+        ];
+      };
+    };
+  }];
+}
+```
+
+Here's an example to install and enable all your Gnome extensions dynamically:
+
+```nix
+{ pkgs, lib, ... }:
+
+let
+  # all gnome extensions to install and enable 
+  extensions = with pkgs.gnomeExtensions; [
+    dask-to-dock
+    blur-my-shell
+  ];
+in
+{
+  environment.systemPackages = extensions;
+  
+  programs.dconf = {
+    enable = true;
+    profiles.user.databases = [{
+      settings = with lib.gvariant; {
+        "org/gnome/shell" = {
+          enabled-extensions =
+            builtins.map
+              (x: x.extensionUuid)
+              (lib.filter (p: p ? extensionUuid) extensions);
+        };
+      };
+    }];
+  };
+}
+```
+
+Editing your extensions' settings can be done through `dconf`:
+```nix
+programs.dconf = {
+  enable = true;
+  profiles.user.databases = [{
+    settings = with lib.gvariant; {
+      "org/gnome/shell/extensions/system-monitor" = {
+          disk-display = true;
+          disk-graph-width = graphWidth;
+      };
+    };
+  }];
+}
+``` 
+
+::: {.tip}
+If your extensions aren't enabled after a `nixos-rebuild switch`, run `dconf reset /org/gnome/shell/disabled-extensions` and `dconf reset /org/gnome/shell/enabled-extensions`, to make sure `dconf` follows what's in your config.
+:::
 
 ## GSettings Overrides {#sec-gnome-gsettings-overrides}
 
