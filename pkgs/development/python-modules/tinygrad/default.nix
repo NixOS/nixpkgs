@@ -32,6 +32,7 @@
   hypothesis,
   jax,
   librosa,
+  ml-dtypes,
   networkx,
   numpy,
   onnx,
@@ -44,6 +45,7 @@
   torch,
   tqdm,
   transformers,
+  z3-solver,
 
   # passthru
   tinygrad,
@@ -54,14 +56,14 @@
 
 buildPythonPackage rec {
   pname = "tinygrad";
-  version = "0.10.2";
+  version = "0.10.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tinygrad";
     repo = "tinygrad";
     tag = "v${version}";
-    hash = "sha256-BXQMacp6QjlgsVwhp2pxEZkRylZfKQhqIh92/0dPlfg=";
+    hash = "sha256-IQ0EAjj8kYUwzvMsAiNnvRm/twC40r9JWXUocaETjC8=";
   };
 
   patches = [
@@ -150,6 +152,7 @@ buildPythonPackage rec {
     hypothesis
     jax
     librosa
+    ml-dtypes
     networkx
     numpy
     onnx
@@ -162,6 +165,7 @@ buildPythonPackage rec {
     torch
     tqdm
     transformers
+    z3-solver
   ] ++ networkx.optional-dependencies.extra;
 
   disabledTests =
