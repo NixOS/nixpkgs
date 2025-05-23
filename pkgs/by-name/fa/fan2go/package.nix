@@ -7,16 +7,16 @@
 
 buildGo123Module rec {
   pname = "fan2go";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "markusressel";
     repo = pname;
     rev = version;
-    hash = "sha256-eSHeHBzDvzsDAck0zexwR8drasisvlQNTeowv92E2uc=";
+    hash = "sha256-eqnRL/gawNpqpQqp6j6OgkuIBXc4eP7n9w439ooR2T4=";
   };
 
-  vendorHash = "sha256-ad0e/cxbcU/KfPDOdD46KdCcvns83dgGDAyLLQiGyiA=";
+  vendorHash = "sha256-PJcY9XcPxkBqcdnj25zOqDQyS2hU4B6flOwNt7q9BTs=";
 
   buildInputs = [ lm_sensors ];
 
