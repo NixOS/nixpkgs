@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "cairosvg";
-  version = "2.7.1";
+  version = "2.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "CairoSVG";
-    rev = version;
-    hash = "sha256-uam53zT2V7aR8daVNOWlZZiexIZPotJxLO2Jg2JQewQ=";
+    tag = version;
+    hash = "sha256-KWUZA8pcHMnDEkAYZt3zDzPNynhGBuLZuagNPfHF8EA=";
   };
 
   build-system = [ setuptools ];
@@ -45,10 +45,6 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "pytest-runner" "" \
-      --replace "pytest-flake8" "" \
-      --replace "pytest-isort" "" \
-      --replace "pytest-cov" "" \
       --replace "--flake8" "" \
       --replace "--isort" ""
   '';
