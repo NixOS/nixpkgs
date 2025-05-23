@@ -8210,6 +8210,37 @@ with pkgs;
           "libstdcxx"
       );
 
+  unwinderlibCrossChooser =
+    name:
+    if name == null then
+      null
+    else if name == "libunwind" then
+      llvmPackages.libunwind
+    else if name == "libunwind-system" then
+      darwin.libunwind
+    else if name == "libgcc_s" then
+      libgcc
+    else
+      throw "Unknown unwinderlib ${name}";
+
+  unwinderlibCross =
+    if stdenv.targetPlatform == stdenv.buildPlatform then
+      null
+    else
+      # TODO: use unwinderlib when https://github.com/NixOS/nixpkgs/pull/365057 is merged
+      unwinderlibCrossChooser (
+        if
+          stdenv.targetPlatform.useLLVM
+          || (stdenv.targetPlatform.useArocc or false)
+          || (stdenv.targetPlatform.useZig or false)
+        then
+          "libunwind"
+        else if stdenv.targetPlatform.isDarwin then
+          "libunwind-system"
+        else
+          "libgcc_s"
+      );
+
   # We can choose:
   libcCrossChooser =
     name:
