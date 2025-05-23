@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2025.5.2";
+  version = "2025.5.3";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -4086,7 +4086,19 @@
       ];
     "onedrive" =
       ps: with ps; [
+        aiohasupervisor
+        cronsim
+        ha-ffmpeg
+        hass-nabucasa
+        hassil
+        home-assistant-intents
+        mutagen
         onedrive-personal-sdk
+        pymicro-vad
+        pyspeex-noise
+        python-matter-server
+        pyturbojpeg
+        securetar
       ];
     "onewire" =
       ps: with ps; [
