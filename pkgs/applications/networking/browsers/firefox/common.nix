@@ -556,7 +556,7 @@ buildStdenv.mkDerivation {
       zip
       zlib
     ]
-    ++ [ (if (lib.versionAtLeast version "138") then icu76 else icu73) ]
+    ++ [ (if (lib.versionAtLeast version "137") then icu76 else icu73) ]
     ++ lib.optionals (lib.versionOlder version "136") [ libpng ]
     ++ [
       (

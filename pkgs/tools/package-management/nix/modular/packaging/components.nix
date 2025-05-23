@@ -201,6 +201,8 @@ let
       }
     );
 
+  whenAtLeast = v: thing: if lib.versionAtLeast version v then thing else null;
+
 in
 
 # This becomes the pkgs.nixComponents attribute set
@@ -336,6 +338,7 @@ in
   nix-store-tests = callPackage ../src/libstore-tests/package.nix { };
 
   nix-fetchers = callPackage ../src/libfetchers/package.nix { };
+  ${whenAtLeast "2.29pre" "nix-fetchers-c"} = callPackage ../src/libfetchers-c/package.nix { };
   nix-fetchers-tests = callPackage ../src/libfetchers-tests/package.nix { };
 
   nix-expr = callPackage ../src/libexpr/package.nix { };
