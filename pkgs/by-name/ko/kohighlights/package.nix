@@ -75,6 +75,5 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dtomvan ];
     mainProgram = "KoHighlights";
-    platforms = lib.platforms.all;
   };
 }
