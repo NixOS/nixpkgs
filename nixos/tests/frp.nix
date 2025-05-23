@@ -1,5 +1,16 @@
 import ./make-test-python.nix (
   { pkgs, lib, ... }:
+  let
+    token = "1234";
+    dummyFile = pkgs.writeTextFile {
+      name = "secrets";
+      text = "dummy=value";
+    };
+    secretFile = pkgs.writeTextFile {
+      name = "secrets";
+      text = "token=${token}";
+    };
+  in
   {
     name = "frp";
     meta.maintainers = with lib.maintainers; [ zaldnoay ];
@@ -19,9 +30,15 @@ import ./make-test-python.nix (
         services.frp = {
           enable = true;
           role = "server";
+          environmentFile = [
+            (builtins.toPath dummyFile)
+            (builtins.toPath secretFile)
+          ];
           settings = {
             bindPort = 7000;
             vhostHTTPPort = 80;
+            auth.method = "token";
+            auth.token = "{{ .Envs.token }}";
           };
         };
       };
@@ -60,6 +77,8 @@ import ./make-test-python.nix (
           settings = {
             serverAddr = "10.0.0.1";
             serverPort = 7000;
+            auth.method = "token";
+            auth.token = token;
             proxies = [
               {
                 name = "web";

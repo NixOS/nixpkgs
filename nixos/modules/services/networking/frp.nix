@@ -15,6 +15,16 @@ in
   options = {
     services.frp = {
       enable = lib.mkEnableOption "frp";
+      environmentFile = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
+        description = ''
+          List of paths files that follows systemd environmentfile structure.
+          Can be used to pass secrets to settings attribute.
+
+          Example content of a file: SECRET_TOKEN=1234
+        '';
+        default = [ ];
+      };
 
       package = lib.mkPackageOption pkgs "frp" { };
 
@@ -66,6 +76,7 @@ in
             ExecStart = "${cfg.package}/bin/${executableFile} --strict_config -c ${configFile}";
             StateDirectoryMode = lib.optionalString isServer "0700";
             DynamicUser = true;
+            ${if cfg.environmentFile == [ ] then null else "EnvironmentFile"} = cfg.environmentFile;
             # Hardening
             UMask = lib.optionalString isServer "0007";
             CapabilityBoundingSet = serviceCapability;
