@@ -113,7 +113,7 @@ in
         package = mkColumnOption cudb.product (attrsOf (attrsOf (nullOr str))) {
           default = { };
           description = ''
-            `∷ ProductName ⇒ PName ⇒ ProductVersion ⇒ Maybe PackageVersion`
+            `∷ ProductName ⇒ ProductVersion ⇒ PName ⇒ Maybe PackageVersion`
 
             Packages (`pname`, `version`) published in each release (`(productName, productVersion)`),
             or, in NVIDIA manifests, `(release_product, release_label)`)
@@ -411,8 +411,21 @@ in
       }) cudb.package.outputs
       ++ lib.flatten (
         lib.mapAttrsToList (
-          product: pnameVersions:
-          assertSubset "package.pname" cudb.package.pname "release.${product}" pnameVersions
+          product: releasePackages:
+          lib.mapAttrsToList (
+            productVersion: pnameVersions:
+            assertSubset "package.pname" cudb.package.pname "release.${product}" pnameVersions
+            ++ [
+              {
+                message = ''release."${product}"."${productVersion}" contains values not declared in `package.version`'';
+                assertion = builtins.all lib.id (
+                  lib.mapAttrsToList (
+                    pname: version: cudb.package.version.${pname}.${version} or null != null
+                  ) pnameVersions
+                );
+              }
+            ]
+          ) releasePackages
         ) cudb.release.package
       );
   };

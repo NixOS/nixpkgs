@@ -22,11 +22,19 @@
 # I've (@connorbaker) attempted to do that, though I'm unsure of how this will interact with overrides.
 {
   config,
-  cudaMajorMinorVersion,
+  cudaMajorMinorVersion, # Left for compatibility
+  pinProducts ? {
+    cuda = cudaMajorMinorVersion;
+  },
+  pinPackages ? { },
+  cudaBlueprint ? null,
   lib,
   newScope,
   pkgs,
   stdenv,
+  callPackage,
+  hostPlatform,
+  _cuda,
 }:
 let
   inherit (lib)
@@ -37,6 +45,9 @@ let
     strings
     versions
     ;
+
+  parentCallPackage = callPackage;
+
   # MUST be defined outside fix-point (cf. "NAMESET STRICTNESS" above)
   fixups = import ../development/cuda-modules/fixups { inherit lib; };
   gpus = import ../development/cuda-modules/gpus.nix;
@@ -51,85 +62,114 @@ let
       ;
   };
 
+  solveGreedy' = import ../development/cuda-modules/_cuda/db/greedy.nix {
+    inherit lib _cuda;
+  };
+  solveGreedy =
+    args:
+    solveGreedy' (
+      args
+      // {
+        hostPlatform = hostPlatform // {
+          isJetson = flags.isJetsonBuild;
+        };
+      }
+    );
+
+  maybeOr = maybe: default: if maybe != null then maybe else default;
+  blueprint = maybeOr cudaBlueprint (solveGreedy {
+    inherit pinProducts pinPackages;
+  });
+
   mkVersionedPackageName =
     name: version: name + "_" + strings.replaceStrings [ "." ] [ "_" ] (versions.majorMinor version);
 
-  passthruFunction = final: {
-    inherit
-      cudaMajorMinorVersion
-      fixups
-      flags
-      gpus
-      lib
-      nvccCompatibilities
-      pkgs
-      ;
-    cudaMajorVersion = versions.major cudaMajorMinorVersion;
-    cudaOlder = strings.versionOlder cudaMajorMinorVersion;
-    cudaAtLeast = strings.versionAtLeast cudaMajorMinorVersion;
+  passthruFunction =
+    final:
+    {
+      inherit
+        cudaMajorMinorVersion
+        fixups
+        flags
+        gpus
+        lib
+        nvccCompatibilities
+        pkgs
+        ;
+      cudaMajorVersion = versions.major cudaMajorMinorVersion;
+      cudaOlder = strings.versionOlder cudaMajorMinorVersion;
+      cudaAtLeast = strings.versionAtLeast cudaMajorMinorVersion;
 
-    # NOTE: mkVersionedPackageName is an internal, implementation detail and should not be relied on by outside consumers.
-    # It may be removed in the future.
-    inherit mkVersionedPackageName;
+      # NOTE: mkVersionedPackageName is an internal, implementation detail and should not be relied on by outside consumers.
+      # It may be removed in the future.
+      inherit mkVersionedPackageName;
 
-    # Maintain a reference to the final cudaPackages.
-    # Without this, if we use `final.callPackage` and a package accepts `cudaPackages` as an
-    # argument, it's provided with `cudaPackages` from the top-level scope, which is not what we
-    # want. We want to provide the `cudaPackages` from the final scope -- that is, the *current*
-    # scope. However, we also want to prevent `pkgs/top-level/release-attrpaths-superset.nix` from
-    # recursing more than one level here.
-    cudaPackages = final // {
-      __attrsFailEvaluation = true;
-    };
+      # Maintain a reference to the final cudaPackages.
+      # Without this, if we use `final.callPackage` and a package accepts `cudaPackages` as an
+      # argument, it's provided with `cudaPackages` from the top-level scope, which is not what we
+      # want. We want to provide the `cudaPackages` from the final scope -- that is, the *current*
+      # scope. However, we also want to prevent `pkgs/top-level/release-attrpaths-superset.nix` from
+      # recursing more than one level here.
+      cudaPackages = final // {
+        __attrsFailEvaluation = true;
+      };
 
-    # Loose packages
-    # Barring packages which share a home (e.g., cudatoolkit and cudatoolkit-legacy-runfile), new packages
-    # should be added to ../development/cuda-modules/packages in "by-name" style, where they will be automatically
-    # discovered and added to the package set.
+      # Loose packages
+      # Barring packages which share a home (e.g., cudatoolkit and cudatoolkit-legacy-runfile), new packages
+      # should be added to ../development/cuda-modules/packages in "by-name" style, where they will be automatically
+      # discovered and added to the package set.
 
-    # TODO: Move to aliases.nix once all Nixpkgs has migrated to the splayed CUDA packages
-    cudatoolkit = final.callPackage ../development/cuda-modules/cudatoolkit/redist-wrapper.nix { };
-    cudatoolkit-legacy-runfile = final.callPackage ../development/cuda-modules/cudatoolkit { };
+      # TODO: Move to aliases.nix once all Nixpkgs has migrated to the splayed CUDA packages
+      cudatoolkit = final.callPackage ../development/cuda-modules/cudatoolkit/redist-wrapper.nix { };
+      cudatoolkit-legacy-runfile = final.callPackage ../development/cuda-modules/cudatoolkit { };
 
-    tests =
-      let
-        bools = [
-          true
-          false
-        ];
-        configs = {
-          openCVFirst = bools;
-          useOpenCVDefaultCuda = bools;
-          useTorchDefaultCuda = bools;
-        };
-        builder =
-          {
-            openCVFirst,
-            useOpenCVDefaultCuda,
-            useTorchDefaultCuda,
-          }@config:
-          {
-            name = strings.concatStringsSep "-" (
-              [
-                "test"
-                (if openCVFirst then "opencv" else "torch")
-              ]
-              ++ lists.optionals (if openCVFirst then useOpenCVDefaultCuda else useTorchDefaultCuda) [
-                "with-default-cuda"
-              ]
-              ++ [
-                "then"
-                (if openCVFirst then "torch" else "opencv")
-              ]
-              ++ lists.optionals (if openCVFirst then useTorchDefaultCuda else useOpenCVDefaultCuda) [
-                "with-default-cuda"
-              ]
-            );
-            value = final.callPackage ../development/cuda-modules/tests/opencv-and-torch config;
+      tests =
+        let
+          bools = [
+            true
+            false
+          ];
+          configs = {
+            openCVFirst = bools;
+            useOpenCVDefaultCuda = bools;
+            useTorchDefaultCuda = bools;
           };
-      in
-      attrsets.listToAttrs (attrsets.mapCartesianProduct builder configs);
-  };
+          builder =
+            {
+              openCVFirst,
+              useOpenCVDefaultCuda,
+              useTorchDefaultCuda,
+            }@config:
+            {
+              name = strings.concatStringsSep "-" (
+                [
+                  "test"
+                  (if openCVFirst then "opencv" else "torch")
+                ]
+                ++ lists.optionals (if openCVFirst then useOpenCVDefaultCuda else useTorchDefaultCuda) [
+                  "with-default-cuda"
+                ]
+                ++ [
+                  "then"
+                  (if openCVFirst then "torch" else "opencv")
+                ]
+                ++ lists.optionals (if openCVFirst then useTorchDefaultCuda else useOpenCVDefaultCuda) [
+                  "with-default-cuda"
+                ]
+              );
+              value = final.callPackage ../development/cuda-modules/tests/opencv-and-torch config;
+            };
+        in
+        attrsets.listToAttrs (attrsets.mapCartesianProduct builder configs);
+
+      cusparselt = final.libcusparse_lt;
+    }
+    // lib.mapAttrs (
+      attrName: selection:
+      final.callPackage ../development/cuda-modules/generic-builders/manifest.nix {
+        inherit (selection) pname version src;
+      }
+    ) blueprint;
 
   composedExtension = fixedPoints.composeManyExtensions (
     [
@@ -140,51 +180,6 @@ let
           directory = ../development/cuda-modules/packages;
         }
       )
-      (import ../development/cuda-modules/cuda/extension.nix { inherit cudaMajorMinorVersion lib; })
-      (import ../development/cuda-modules/generic-builders/multiplex.nix {
-        inherit
-          cudaMajorMinorVersion
-          flags
-          lib
-          mkVersionedPackageName
-          stdenv
-          ;
-        pname = "cudnn";
-        redistName = "cudnn";
-        releasesModule = ../development/cuda-modules/cudnn/releases.nix;
-        shimsFn = ../development/cuda-modules/cudnn/shims.nix;
-      })
-      (import ../development/cuda-modules/cutensor/extension.nix {
-        inherit
-          cudaMajorMinorVersion
-          flags
-          lib
-          mkVersionedPackageName
-          stdenv
-          ;
-      })
-      (import ../development/cuda-modules/cusparselt/extension.nix {
-        inherit
-          cudaMajorMinorVersion
-          flags
-          lib
-          mkVersionedPackageName
-          stdenv
-          ;
-      })
-      (import ../development/cuda-modules/generic-builders/multiplex.nix {
-        inherit
-          cudaMajorMinorVersion
-          flags
-          lib
-          mkVersionedPackageName
-          stdenv
-          ;
-        pname = "tensorrt";
-        redistName = "tensorrt";
-        releasesModule = ../development/cuda-modules/tensorrt/releases.nix;
-        shimsFn = ../development/cuda-modules/tensorrt/shims.nix;
-      })
       (import ../development/cuda-modules/cuda-samples/extension.nix {
         inherit cudaMajorMinorVersion lib stdenv;
       })

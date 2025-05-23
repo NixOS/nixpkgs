@@ -93,9 +93,7 @@ let
             rawPackage = value;
           in
           lib.optionals (looksLikePackage name rawPackage) (
-            lib.optionals (builtins.elem name known.products) [
-              name
-            ]
+            lib.filter (lib.flip builtins.elem known.products) ([ name ] ++ lib.splitString "_" name)
           )
         )
         ++ [ null ]
@@ -185,8 +183,8 @@ in
         otherAttrs: pname: systemNv: tag: rawPackage:
         lib.optionals (looksLikeSystem systemNv && otherAttrs ? version) [
           {
-            release.package.${productName}.${pname} = {
-              ${releaseLabel} = otherAttrs.version;
+            release.package.${productName}.${releaseLabel} = {
+              ${pname} = otherAttrs.version;
             };
             package.version.${pname}.${otherAttrs.version}.${rawPackage.sha256} = 1;
             archive.sha256.${rawPackage.sha256} =
