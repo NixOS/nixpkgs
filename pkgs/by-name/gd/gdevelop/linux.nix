@@ -6,6 +6,7 @@
   version,
   pname,
   meta,
+  passthru,
 }:
 let
   src =
@@ -29,6 +30,7 @@ appimageTools.wrapType2 {
     version
     src
     meta
+    passthru
     ;
 
   extraInstallCommands = ''
