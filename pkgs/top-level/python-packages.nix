@@ -12163,6 +12163,8 @@ self: super: with self; {
 
   pyct = callPackage ../development/python-modules/pyct { };
 
+  pyctcdecode = callPackage ../development/python-modules/pyctcdecode { };
+
   pyctr = callPackage ../development/python-modules/pyctr { };
 
   pycuda = callPackage ../development/python-modules/pycuda { inherit (pkgs.stdenv) mkDerivation; };
