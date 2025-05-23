@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pista";
-  version = "unstable-2023-02-20";
+  version = "0.1.5-unstable-2023-02-20";
 
   src = fetchFromGitHub {
     owner = "oppiliappan";
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-ADollmF60nJN8tnOZRCi755enFhf6A6M/1xqow9z110=";
+  cargoHash = "sha256-Wforq2PHruQPFFLIiXzhulh+pZen6fFCfTktHJgt+Vw=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     zlib
