@@ -7025,20 +7025,24 @@ with pkgs;
   #
   # In other words, try to only use this in wrappers, and only use those
   # wrappers from the next stage.
-  bintools-unwrapped =
-    let
-      inherit (stdenv.targetPlatform) linker;
-    in
-    if linker == "lld" then
+
+  bintoolsChooser =
+    name:
+    if name == null then
+      null
+    else if name == "lld" then
       llvmPackages.bintools-unwrapped
-    else if linker == "cctools" then
+    else if name == "cctools" then
       darwin.binutils-unwrapped
-    else if linker == "bfd" then
+    else if name == "bfd" then
       binutils-unwrapped
-    else if linker == "gold" then
+    else if name == "gold" then
       binutils-unwrapped.override { enableGoldDefault = true; }
     else
-      null;
+      throw "Unknown linker/bintools ${name}";
+
+  bintools-unwrapped = bintoolsChooser stdenv.targetPlatform.linker;
+
   bintoolsNoLibc = wrapBintoolsWith {
     bintools = bintools-unwrapped;
     libc = preLibcCrossHeaders;
