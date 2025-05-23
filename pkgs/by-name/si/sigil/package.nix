@@ -57,8 +57,18 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  dontWrapQtApps = true;
+
   preFixup = ''
     qtWrapperArgs+=(--prefix PYTHONPATH : "$PYTHONPATH")
+  '';
+
+  fixupPhase = ''
+    runHook preFixup
+
+    wrapQtApp "$out/bin/sigil"
+
+    runHook postFixup
   '';
 
   meta = {
