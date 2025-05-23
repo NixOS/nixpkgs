@@ -61,6 +61,7 @@ python3Packages.buildPythonApplication rec {
     runHook preInstall
 
     mkdir -p $out/bin $out/share/KoHighlights
+    rm -rf docs screens
     cp -r * $out/share/KoHighlights
     makeWrapper ${python3.interpreter} $out/bin/KoHighlights \
       --add-flags "$out/share/KoHighlights/main.py" \
