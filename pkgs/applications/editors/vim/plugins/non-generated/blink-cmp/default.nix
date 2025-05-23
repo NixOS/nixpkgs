@@ -8,12 +8,12 @@
   gitMinimal,
 }:
 let
-  version = "1.3.0";
+  version = "1.3.1";
   src = fetchFromGitHub {
     owner = "Saghen";
     repo = "blink.cmp";
     tag = "v${version}";
-    hash = "sha256-8lyDDrsh3sY7l0i0TPyhL69Oq0l63+/QPnLaU/mhq5A=";
+    hash = "sha256-ZMq7zXXP3QL73zNfgDNi7xipmrbNwBoFPzK4K0dr6Zs=";
   };
   blink-fuzzy-lib = rustPlatform.buildRustPackage {
     inherit version src;
