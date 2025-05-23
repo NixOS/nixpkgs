@@ -42,9 +42,15 @@ in
         { name, ... }:
         {
           options = {
-            passwordFile = passwordFileBase // { internal = true; };
-            repository = repositoryBase // { internal = true; };
-            repositoryFile = repositoryFileBase // { internal = true; };
+            passwordFile = passwordFileBase // {
+              internal = true;
+            };
+            repository = repositoryBase // {
+              internal = true;
+            };
+            repositoryFile = repositoryFileBase // {
+              internal = true;
+            };
 
             environmentFile = lib.mkOption {
               type = with lib.types; nullOr str;
@@ -327,7 +333,12 @@ in
                   };
 
                   RCLONE_CONFIG = lib.mkOption {
-                    type = with lib.types; nullOr (oneOf [str path]);
+                    type =
+                      with lib.types;
+                      nullOr (oneOf [
+                        str
+                        path
+                      ]);
                     default = null;
                     description = ''
                       Location of the rclone configuration file.
@@ -381,34 +392,34 @@ in
 
   config = {
     assertions =
-    (lib.mapAttrsToList (n: v: {
-      assertion = (v.settings.RESTIC_REPOSITORY == null) != (v.settings.RESTIC_REPOSITORY_FILE == null);
-      message = "services.restic.backups.${n}.settings: exactly one of RESTIC_REPOSITORY or RESTIC_REPOSITORY_FILE should be set";
-    }) config.services.restic.backups) ++
-    (lib.mapAttrsToList (n: v: {
-      assertion = (v.passwordFile == "");
-      message = "services.restic.backups.${n}.passwordFile: option was renamed to services.restic.backups.${n}.settings.RESTIC_PASSWORD_FILE";
-    }) config.services.restic.backups) ++
-    (lib.mapAttrsToList (n: v: {
-      assertion = (v.repository == null);
-      message = "services.restic.backups.${n}.repository: option was renamed to services.restic.backups.${n}.settings.RESTIC_REPOSITORY";
-    }) config.services.restic.backups) ++
-    (lib.mapAttrsToList (n: v: {
-      assertion = (v.repositoryFile == null);
-      message = "services.restic.backups.${n}.repositoryFile: option was renamed to services.restic.backups.${n}.settings.RESTIC_REPOSITORY_FILE";
-    }) config.services.restic.backups) ++
-    (lib.mapAttrsToList (n: v: {
-      assertion = (v.rcloneOptions == null);
-      message = "services.restic.backups.${n}.rcloneOptions: option was removed. Use services.restic.backups.${n}.settings instead";
-    }) config.services.restic.backups) ++
-    (lib.mapAttrsToList (n: v: {
-      assertion = (v.rcloneConfig == null);
-      message = "services.restic.backups.${n}.rcloneConfig: option was removed. Use services.restic.backups.${n}.settings instead";
-    }) config.services.restic.backups) ++
-    (lib.mapAttrsToList (n: v: {
-      assertion = (v.rcloneConfigFile == null);
-      message = "services.restic.backups.${n}.rcloneConfigFile: option was removed. Use services.restic.backups.${n}.settings.RCLONE_CONFIG instead";
-    }) config.services.restic.backups);
+      (lib.mapAttrsToList (n: v: {
+        assertion = (v.settings.RESTIC_REPOSITORY == null) != (v.settings.RESTIC_REPOSITORY_FILE == null);
+        message = "services.restic.backups.${n}.settings: exactly one of RESTIC_REPOSITORY or RESTIC_REPOSITORY_FILE should be set";
+      }) config.services.restic.backups)
+      ++ (lib.mapAttrsToList (n: v: {
+        assertion = (v.passwordFile == "");
+        message = "services.restic.backups.${n}.passwordFile: option was renamed to services.restic.backups.${n}.settings.RESTIC_PASSWORD_FILE";
+      }) config.services.restic.backups)
+      ++ (lib.mapAttrsToList (n: v: {
+        assertion = (v.repository == null);
+        message = "services.restic.backups.${n}.repository: option was renamed to services.restic.backups.${n}.settings.RESTIC_REPOSITORY";
+      }) config.services.restic.backups)
+      ++ (lib.mapAttrsToList (n: v: {
+        assertion = (v.repositoryFile == null);
+        message = "services.restic.backups.${n}.repositoryFile: option was renamed to services.restic.backups.${n}.settings.RESTIC_REPOSITORY_FILE";
+      }) config.services.restic.backups)
+      ++ (lib.mapAttrsToList (n: v: {
+        assertion = (v.rcloneOptions == null);
+        message = "services.restic.backups.${n}.rcloneOptions: option was removed. Use services.restic.backups.${n}.settings instead";
+      }) config.services.restic.backups)
+      ++ (lib.mapAttrsToList (n: v: {
+        assertion = (v.rcloneConfig == null);
+        message = "services.restic.backups.${n}.rcloneConfig: option was removed. Use services.restic.backups.${n}.settings instead";
+      }) config.services.restic.backups)
+      ++ (lib.mapAttrsToList (n: v: {
+        assertion = (v.rcloneConfigFile == null);
+        message = "services.restic.backups.${n}.rcloneConfigFile: option was removed. Use services.restic.backups.${n}.settings.RCLONE_CONFIG instead";
+      }) config.services.restic.backups);
 
     systemd.services = lib.mapAttrs' (
       name: backup:
