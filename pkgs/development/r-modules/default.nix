@@ -1742,6 +1742,10 @@ let
       postPatch = "patchShebangs configure";
     });
 
+    ymd = old.ymd.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
     SynExtend = old.SynExtend.overrideAttrs (attrs: {
       # build might fail due to race condition
       enableParallelBuilding = false;
