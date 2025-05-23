@@ -161,16 +161,6 @@
       "source": "hosted",
       "version": "5.8.2"
     },
-    "blur": {
-      "dependency": "direct main",
-      "description": {
-        "name": "blur",
-        "sha256": "4009ea0c63d55b335794ac5cbbe9544fd10527a21b6272bfb6a44b5eda1a814c",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "4.0.1"
-    },
     "boolean_selector": {
       "dependency": "transitive",
       "description": {
@@ -650,6 +640,26 @@
       },
       "source": "hosted",
       "version": "1.1.1"
+    },
+    "flex_color_picker": {
+      "dependency": "direct main",
+      "description": {
+        "name": "flex_color_picker",
+        "sha256": "8f753a1a026a13ea5cc5eddbae3ceb886f2537569ab2e5208efb1e3bb5af72ff",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.7.1"
+    },
+    "flex_seed_scheme": {
+      "dependency": "transitive",
+      "description": {
+        "name": "flex_seed_scheme",
+        "sha256": "b06d8b367b84cbf7ca5c5603c858fa5edae88486c4e4da79ac1044d73b6c62ec",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.5.1"
     },
     "flutter": {
       "dependency": "direct main",
@@ -2329,8 +2339,8 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "b75bb6e2b3c30126b17d73a67577ad43f5c65d7c",
-        "resolved-ref": "b75bb6e2b3c30126b17d73a67577ad43f5c65d7c",
+        "ref": "9902d7230d0d3be31317eb0558114f28afc861ce",
+        "resolved-ref": "9902d7230d0d3be31317eb0558114f28afc861ce",
         "url": "https://github.com/ubuntu/yaru.dart"
       },
       "source": "git",
