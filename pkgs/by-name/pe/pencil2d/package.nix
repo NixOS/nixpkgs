@@ -30,7 +30,7 @@ stdenv.mkDerivation (FinalAttrs: {
   ];
 
   meta = {
-    description = "An easy, intuitive tool to make 2D hand-drawn animations";
+    description = "Easy, intuitive tool to make 2D hand-drawn animations";
     homepage = "https://www.pencil2d.org/";
     downloadPage = "https://github.com/pencil2d/pencil";
     license = lib.licenses.gpl2;
