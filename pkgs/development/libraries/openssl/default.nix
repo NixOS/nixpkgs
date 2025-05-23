@@ -407,6 +407,9 @@ in
 
       # can be dropped again with 3.5.1, see: https://github.com/openssl/openssl/issues/27282
       ./3.5/quic_accept.patch
+
+      # can be dropped again with 3.5.1
+      ./3.5/CVE-2025-4575.patch
     ];
 
     withDocs = true;
