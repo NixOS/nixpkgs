@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "0hnyv3206r0rfprn3k7k6a0j959kagsfyrmyjm3gsf3vkhp5zmy1";
   };
 
+  patches = [
+    ./fix-compilation.patch
+  ];
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     glib
