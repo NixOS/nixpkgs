@@ -15,8 +15,11 @@
 
   # dependencies
   numpy,
+  typing-extensions,
 
+  # tests
   google-re2,
+  ml-dtypes,
   nbval,
   parameterized,
   pillow,
@@ -29,14 +32,14 @@ let
 in
 buildPythonPackage rec {
   pname = "onnx";
-  version = "1.17.0";
+  version = "1.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "onnx";
     repo = "onnx";
     tag = "v${version}";
-    hash = "sha256-9oORW0YlQ6SphqfbjcYb0dTlHc+1gzy9quH/Lj6By8Q=";
+    hash = "sha256-UhtF+CWuyv5/Pq/5agLL4Y95YNP63W2BraprhRqJOag=";
   };
 
   build-system = [
@@ -54,10 +57,12 @@ buildPythonPackage rec {
   dependencies = [
     protobuf
     numpy
+    typing-extensions
   ];
 
   nativeCheckInputs = [
     google-re2
+    ml-dtypes
     nbval
     parameterized
     pillow

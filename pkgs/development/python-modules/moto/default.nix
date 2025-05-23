@@ -37,7 +37,7 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "5.1.1";
+  version = "5.1.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     owner = "getmoto";
     repo = "moto";
     tag = version;
-    hash = "sha256-KMIOLM7KQqF2JwYWHWAD9GVKRTd2adVBubwWrnlHGoQ=";
+    hash = "sha256-bDRd1FTBpv6t2j8cBzcYiK4B0F4sLcoW9K0Wnd0oo+4=";
   };
 
   build-system = [
@@ -380,6 +380,9 @@ buildPythonPackage rec {
 
     # Infinite recursion with pycognito
     "tests/test_cognitoidp/test_cognitoidp.py"
+
+    # botocore.exceptions.ParamValidationError: Parameter validation failed: Unknown parameter in input: "EnableWorkDocs", must be one of: [...]
+    "tests/test_workspaces/test_workspaces.py"
   ];
 
   meta = {
