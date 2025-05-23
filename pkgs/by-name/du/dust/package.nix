@@ -31,7 +31,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  doCheck = false;
+  checkFlags = [
+    # disable tests that depend on the unicode files we removed above
+    "--skip=test_show_files_by_type"
+  ];
+
+  preCheck = ''
+    # These tests depend on the disk format of the build host.
+    rm tests/test_exact_output.rs
+    rm tests/tests_symlinks.rs
+  '';
 
   postInstall = ''
     installManPage man-page/dust.1
