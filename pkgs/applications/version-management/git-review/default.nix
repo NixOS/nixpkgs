@@ -1,7 +1,7 @@
 {
   lib,
-  fetchFromGitea,
   buildPythonApplication,
+  fetchFromGitea,
   pbr,
   requests,
   setuptools,
@@ -10,7 +10,7 @@
 
 buildPythonApplication rec {
   pname = "git-review";
-  version = "2.4.0";
+  version = "2.5.0";
 
   # Manually set version because prb wants to get it from the git
   # upstream repository (and we are installing from tarball instead)
@@ -21,7 +21,7 @@ buildPythonApplication rec {
     owner = "opendev";
     repo = "git-review";
     rev = version;
-    hash = "sha256-UfYc662NqnQt0+CKc+18jXnNTOcZv8urCNBsWd6x0VQ=";
+    hash = "sha256-RE5XAUS46Y/jtI0/csR59B9l1gYpHuwGQkbWqoTfxPk=";
   };
 
   outputs = [
@@ -50,6 +50,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Tool to submit code to Gerrit";
     homepage = "https://opendev.org/opendev/git-review";
+    changelog = "https://docs.opendev.org/opendev/git-review/latest/releasenotes.html#relnotes-${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ kira-bruneau ];
     mainProgram = "git-review";
