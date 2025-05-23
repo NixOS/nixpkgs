@@ -35,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "mcp";
-  version = "1.9.0";
+  version = "1.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "python-sdk";
     tag = "v${version}";
-    hash = "sha256-UH91o2ElS0XLjH67R9QaJ/7AeX6oVkqqOc3588D4s0g=";
+    hash = "sha256-8u02/tHR2F1CpjcHXHC8sZC+/JrWz1satqYa/zdSGDw=";
   };
 
   postPatch = ''
@@ -99,11 +99,15 @@ buildPythonPackage rec {
   disabledTests = [
     # attempts to run the package manager uv
     "test_command_execution"
+
     # performance-dependent test
     "test_messages_are_executed_concurrently"
 
     # ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
     "test_client_session_version_negotiation_failure"
+
+    # AttributeError: 'coroutine' object has no attribute 'client_metadata'
+    "TestOAuthClientProvider"
   ];
 
   __darwinAllowLocalNetworking = true;
