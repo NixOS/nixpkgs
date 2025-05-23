@@ -227,8 +227,8 @@ let
         --replace-fail 'CHROME_WRAPPER' 'WRAPPER'
       substituteInPlace $out/share/applications/com.google.Chrome.desktop \
         --replace-fail /usr/bin/google-chrome-$dist $exe
-      substituteInPlace $out/share/applications/google-$appname.desktop \
-        --replace-fail /usr/bin/google-chrome-$dist $exe
+      # duplicate of com.google.Chrome.desktop
+      rm $out/share/applications/google-$appname.desktop
       substituteInPlace $out/share/gnome-control-center/default-apps/google-$appname.xml \
         --replace-fail /opt/google/$appname/google-$appname $exe
       substituteInPlace $out/share/menu/google-$appname.menu \
