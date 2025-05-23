@@ -62,8 +62,8 @@ rec {
       "sha256-zp0Z4N8MRsKjQn7UaGC+MPkBT1mTP0wbJ0a5+p6A3/s=";
 
   mypy-boto3-amp =
-    buildMypyBoto3Package "amp" "1.38.0"
-      "sha256-nvTTdi/Mwtl8TE/CGonuuuFFd8b1tEPltEmO71KD5Cg=";
+    buildMypyBoto3Package "amp" "1.38.22"
+      "sha256-NoNqTKRj7/wlqoBwsEW/wgj1cBAHYRXgLVfZvkP5EV0=";
 
   mypy-boto3-amplify =
     buildMypyBoto3Package "amplify" "1.38.0"
@@ -110,8 +110,8 @@ rec {
       "sha256-5AFYyCJk6eHKDaqBSl8Po/jj6Fkwr5JYgMtxGrdWGRQ=";
 
   mypy-boto3-application-autoscaling =
-    buildMypyBoto3Package "application-autoscaling" "1.38.0"
-      "sha256-lN2dqLobOiGThkSnm3W+2HRJfBYJNe9GyaI8sYA4cRk=";
+    buildMypyBoto3Package "application-autoscaling" "1.38.21"
+      "sha256-UKN0UDZcBvmZ/9nSpcy4IOxIkL1PvOmC2w5bZpvk+L0=";
 
   mypy-boto3-application-insights =
     buildMypyBoto3Package "application-insights" "1.38.0"
@@ -146,8 +146,8 @@ rec {
       "sha256-1Fonc55fVM8ksqCTBwXVHeqhypgsYegoW8PEEPqcTF4=";
 
   mypy-boto3-auditmanager =
-    buildMypyBoto3Package "auditmanager" "1.38.0"
-      "sha256-qJY3OmSAYR4/YEnayDfoSWElMQ0EKT++/JO+nBqf4A4=";
+    buildMypyBoto3Package "auditmanager" "1.38.22"
+      "sha256-6OgMopfNAD7bpLnDFXlcejFqKYTOvrJOd/X39SHYa1A=";
 
   mypy-boto3-autoscaling =
     buildMypyBoto3Package "autoscaling" "1.38.0"
@@ -258,8 +258,8 @@ rec {
       "sha256-fAf1+/UqJJ3Ya88/HHoeRd/KalfOTFJKjk2xypF3Dko=";
 
   mypy-boto3-cloudwatch =
-    buildMypyBoto3Package "cloudwatch" "1.38.0"
-      "sha256-uzSSr2bpTrIDItc7eTBQ6lTxdCEYsY4255jk2v47Fn4=";
+    buildMypyBoto3Package "cloudwatch" "1.38.21"
+      "sha256-2fJzoFoENNelKUzoHz1F30azqv7DrujQsGWoIWopAHY=";
 
   mypy-boto3-codeartifact =
     buildMypyBoto3Package "codeartifact" "1.38.0"
@@ -446,8 +446,8 @@ rec {
       "sha256-RQh46jrXqj4bXTRJ+tPR9sql7yUn7Ek9u4p0OU0A7b0=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.38.20"
-      "sha256-8OsQwmsPFIkDkFJdNiE8YF4OXtHOsrnzPtOeKQRM5+g=";
+    buildMypyBoto3Package "ec2" "1.38.21"
+      "sha256-k8rn7BTpH0TPfzSzcqV+OaIqnZc6vLKeGpI/OaxzhkY=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.38.0"
@@ -574,8 +574,8 @@ rec {
       "sha256-abALPaOoxM8dvwqd8j41mTT1Zmcn/sEVzlopSMc+fYM=";
 
   mypy-boto3-glue =
-    buildMypyBoto3Package "glue" "1.38.20"
-      "sha256-4N+T4SvRqraR3juc+0jfbhmGrfCUALfpbrL8kmzygTw=";
+    buildMypyBoto3Package "glue" "1.38.22"
+      "sha256-qcUp+vqqmEXTnDIEs/tsu7Yz+nR/r2oISisqOB7xKis=";
 
   mypy-boto3-grafana =
     buildMypyBoto3Package "grafana" "1.38.0"
