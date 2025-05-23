@@ -15,17 +15,13 @@
   # Short package name (e.g., "cuda_cccl")
   # pname : String
   pname,
-  # Common name (e.g., "cutensor" or "cudnn") -- used in the URL.
-  # Also known as the Redistributable Name.
-  # redistName : String,
-  redistName,
+  # version : String
+  version,
+  # Maybe { URL, SHA256, ... }
+  src,
   # If libPath is non-null, it must be a subdirectory of `lib`.
   # The contents of `libPath` will be moved to the root of `lib`.
   libPath ? null,
-  # See ./modules/generic/manifests/redistrib/release.nix
-  redistribRelease,
-  # See ./modules/generic/manifests/feature/release.nix
-  featureRelease,
   cudaMajorMinorVersion,
 }:
 let
@@ -38,31 +34,27 @@ let
     sourceTypes
     ;
 
-  inherit (stdenv) hostPlatform;
+  systemsNv = _cuda.db.package.systemsNv.${pname};
 
   # Last step before returning control to `callPackage` (adds the `.override` method)
   # we'll apply (`overrideAttrs`) necessary package-specific "fixup" functions.
   # Order is significant.
   maybeFixup = _cuda.fixups.${pname} or null;
   fixup = if maybeFixup != null then callPackage maybeFixup { } else { };
-
-  # Get the redist systems for which package provides distributables.
-  # These are used by meta.platforms.
-  supportedRedistSystems = builtins.attrNames featureRelease;
-  # redistSystem :: String
-  # The redistSystem is the name of the system for which the redistributable is built.
-  # It is `"unsupported"` if the redistributable is not supported on the target system.
-  redistSystem = _cuda.lib.getRedistSystem backendStdenv.hasJetsonCudaCapability hostPlatform.system;
-
-  sourceMatchesHost = lib.elem hostPlatform.system (_cuda.lib.getNixSystems redistSystem);
 in
 (backendStdenv.mkDerivation (finalAttrs: {
   # NOTE: Even though there's no actual buildPhase going on here, the derivations of the
   # redistributables are sensitive to the compiler flags provided to stdenv. The patchelf package
   # is sensitive to the compiler flags provided to stdenv, and we depend on it. As such, we are
   # also sensitive to the compiler flags provided to stdenv.
-  inherit pname;
-  inherit (redistribRelease) version;
+
+  inherit pname version;
+  src = lib.mapNullable (
+    { url, sha256, ... }:
+    fetchurl {
+      inherit url sha256;
+    }
+  ) src;
 
   # Don't force serialization to string for structured attributes, like outputToPatterns
   # and brokenConditions.
@@ -72,45 +64,7 @@ in
   # Keep better track of dependencies.
   strictDeps = true;
 
-  # NOTE: Outputs are evaluated jointly with meta, so in the case that this is an unsupported platform,
-  # we still need to provide a list of outputs.
-  outputs =
-    let
-      # Checks whether the redistributable provides an output.
-      hasOutput =
-        output:
-        attrsets.attrByPath [
-          redistSystem
-          "outputs"
-          output
-        ] false featureRelease;
-      # Order is important here so we use a list.
-      possibleOutputs = [
-        "bin"
-        "lib"
-        "static"
-        "dev"
-        "doc"
-        "sample"
-        "python"
-      ];
-      # Filter out outputs that don't exist in the redistributable.
-      # NOTE: In the case the redistributable isn't supported on the target platform,
-      # we will have `outputs = [ "out" ] ++ possibleOutputs`. This is of note because platforms which
-      # aren't supported would otherwise have evaluation errors when trying to access outputs other than `out`.
-      # The alternative would be to have `outputs = [ "out" ]` when`redistSystem = "unsupported"`, but that would
-      # require adding guards throughout the entirety of the CUDA package set to ensure `cudaSupport` is true --
-      # recall that OfBorg will evaluate packages marked as broken and that `cudaPackages` will be evaluated with
-      # `cudaSupport = false`!
-      additionalOutputs =
-        if redistSystem == "unsupported" then
-          possibleOutputs
-        else
-          builtins.filter hasOutput possibleOutputs;
-      # The out output is special -- it's the default output and we always include it.
-      outputs = [ "out" ] ++ additionalOutputs;
-    in
-    outputs;
+  outputs = lib.attrNames _cuda.db.package.outputs.${pname};
 
   # Traversed in the order of the outputs specified in outputs;
   # entries are skipped if they don't exist in outputs.
@@ -153,18 +107,8 @@ in
   # Sets `meta.badPlatforms = meta.platforms` if any of the conditions are true.
   # Example: Broken on a specific architecture when some condition is met (like targeting Jetson).
   badPlatformsConditions = {
-    "No source" = !sourceMatchesHost;
+    "No source" = finalAttrs.src == null;
   };
-
-  # src :: Optional Derivation
-  # If redistSystem doesn't exist in redistribRelease, return null.
-  src = trivial.mapNullable (
-    { relative_path, sha256, ... }:
-    fetchurl {
-      url = "https://developer.download.nvidia.com/compute/${redistName}/redist/${relative_path}";
-      inherit sha256;
-    }
-  ) (redistribRelease.${redistSystem} or null);
 
   postPatch =
     # Pkg-config's setup hook expects configuration files in $out/share/pkgconfig
@@ -313,18 +257,20 @@ in
   '';
 
   passthru = {
-    # Provide access to the release information for fixup functions.
-    inherit redistribRelease featureRelease;
     # Make the CUDA-patched stdenv available
     stdenv = backendStdenv;
   };
 
   meta = {
-    description = "${redistribRelease.name}. By downloading and using the packages you accept the terms and conditions of the ${finalAttrs.meta.license.shortName}";
-    sourceProvenance = [ sourceTypes.binaryNativeCode ];
+    description = "${_cuda.db.package.name.${pname}}. By downloading and using the packages you accept the terms and conditions of the ${finalAttrs.meta.license.fullName}";
+    sourceProvenance =
+      if _cuda.db.system.isSource.${src.systemNv or ""} or false then
+        [ sourceTypes.fromSource ]
+      else
+        [ sourceTypes.binaryNativeCode ];
     broken = lists.any trivial.id (attrsets.attrValues finalAttrs.brokenConditions);
-    platforms = builtins.attrNames (
-      lib.concatMapAttrs (name: _: _cuda.db.system.fromNvidia.${name}) _cuda.db.package.systemsNv.${pname}
+    platforms = lib.attrNames (
+      lib.concatMapAttrs (systemNv: _: _cuda.db.system.fromNvidia.${systemNv}) systemsNv
     );
     badPlatforms =
       let
