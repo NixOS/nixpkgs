@@ -494,6 +494,70 @@ rec {
       loongson2f = [ ];
     };
 
+  /**
+    Check whether one GCC architecture has the the other inferior architecture.
+
+    # Inputs
+
+    `arch1`
+    : GCC architecture in string
+
+    `arch2`
+    : GCC architecture in string
+
+    # Type
+
+    ```
+    hasInferior :: string -> string -> bool
+    ```
+
+    # Examples
+    ::: {.example}
+    ## `lib.systems.architectures.hasInferior` usage example
+
+    ```nix
+    hasInferior "x86-64-v3" "x86-64"
+    => true
+    hasInferior "x86-64" "x86-64-v3"
+    => false
+    hasInferior "x86-64" "x86-64"
+    => false
+    ```
+  */
+  hasInferior = arch1: arch2: inferiors ? ${arch1} && lib.elem arch2 inferiors.${arch1};
+
+  /**
+    Check whether one GCC architecture can execute the other.
+
+    # Inputs
+
+    `arch1`
+    : GCC architecture in string
+
+    `arch2`
+    : GCC architecture in string
+
+    # Type
+
+    ```
+    canExecute :: string -> string -> bool
+    ```
+
+    # Examples
+    ::: {.example}
+    ## `lib.systems.architectures.canExecute` usage example
+
+    ```nix
+    canExecute "x86-64" "x86-64-v3"
+    => false
+    canExecute "x86-64-v3" "x86-64"
+    => true
+    canExecute "x86-64" "x86-64"
+    => true
+    ```
+  */
+  canExecute = arch1: arch2: arch1 == arch2 || hasInferior arch1 arch2;
+
   predicates =
     let
       featureSupport = feature: x: builtins.elem feature features.${x} or [ ];
