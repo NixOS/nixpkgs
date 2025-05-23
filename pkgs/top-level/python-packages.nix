@@ -16479,6 +16479,8 @@ self: super: with self; {
 
   spglib = callPackage ../development/python-modules/spglib { };
 
+  spherogram = callPackage ../development/python-modules/spherogram { };
+
   sphfile = callPackage ../development/python-modules/sphfile { };
 
   sphinx = callPackage ../development/python-modules/sphinx { };
