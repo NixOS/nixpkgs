@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  fmt,
+  fmt_11,
   catch2_3,
   staticBuild ? stdenv.hostPlatform.isStatic,
 
@@ -15,19 +15,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spdlog";
-  version = "1.15.2";
+  version = "1.15.3";
 
   src = fetchFromGitHub {
     owner = "gabime";
     repo = "spdlog";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9RhB4GdFjZbCIfMOWWriLAUf9DE/i/+FTXczr0pD0Vg=";
+    hash = "sha256-0rOR9G2Y4Z4OBZtUHxID0s1aXN9ejodHrurlVCA0pIo=";
   };
 
   nativeBuildInputs = [ cmake ];
   # Required to build tests, even if they aren't executed
   buildInputs = [ catch2_3 ];
-  propagatedBuildInputs = [ fmt ];
+  propagatedBuildInputs = [ fmt_11 ];
 
   cmakeFlags = [
     (lib.cmakeBool "SPDLOG_BUILD_SHARED" (!staticBuild))
