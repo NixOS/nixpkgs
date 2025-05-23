@@ -7467,6 +7467,8 @@ self: super: with self; {
 
   keke = callPackage ../development/python-modules/keke { };
 
+  kenlm = callPackage ../development/python-modules/kenlm { };
+
   keras = callPackage ../development/python-modules/keras { };
 
   kerberos = callPackage ../development/python-modules/kerberos { };
