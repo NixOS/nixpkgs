@@ -102,6 +102,7 @@ in
 // {
   inherit version;
   yarnHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+  yarnMissingHashes = null;
 }
 EOF
 SOURCE_DIR="$(nix-build --no-out-link -E '(import <nixpkgs> {}).callPackage ./source.nix {}')"
