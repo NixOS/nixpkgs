@@ -1182,6 +1182,7 @@ in
   rsyslogd = handleTest ./rsyslogd.nix { };
   rtkit = runTest ./rtkit.nix;
   rtorrent = handleTest ./rtorrent.nix { };
+  rundeck = runTest ./rundeck.nix { };
   rush = runTest ./rush.nix;
   rustls-libssl = handleTest ./rustls-libssl.nix { };
   rxe = handleTest ./rxe.nix { };
