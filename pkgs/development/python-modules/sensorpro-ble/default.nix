@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "sensorpro-ble";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "sensorpro-ble";
     tag = "v${version}";
-    hash = "sha256-YMcpe4daM4X23nOMubYNcmqlW8PttwDGC4WL9g4P+4I=";
+    hash = "sha256-/brgy3B/Hqgu1M4xmjciXJx25btN/iFgjT0TgTdij2o=";
   };
 
   build-system = [ poetry-core ];
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for Sensorpro BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/sensorpro-ble";
-    changelog = "https://github.com/Bluetooth-Devices/sensorpro-ble/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Bluetooth-Devices/sensorpro-ble/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
