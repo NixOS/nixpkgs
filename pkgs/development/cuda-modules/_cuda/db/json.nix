@@ -59,10 +59,6 @@ let
         null
     );
   # Handle inconsistencies like "Imex" v. "Nvidia-Imex"
-  mkChooseLonger' =
-    maxPrio: s:
-    lib.mkOverride (lib.modules.defaultOverridePriority - (lib.min maxPrio (lib.stringLength s))) s;
-  mkChooseLonger = mkChooseLonger' 40;
   evaluated =
     let
       manifestDecl = cudaPackagesPath + "/modules/generic/manifests/redistrib/manifest.nix";
@@ -163,7 +159,7 @@ in
       otherAttrs: pname: systemNv: _: rawPackage: [
         {
           package.name.${pname} =
-            if otherAttrs ? name then mkChooseLonger otherAttrs.name else lib.mkDefault pname;
+            if otherAttrs ? name then otherAttrs.name else lib.mkDefault pname;
         }
       ]
     ))
@@ -222,18 +218,18 @@ in
           inherit pname;
           license =
             let
-              licenseWithPriority =
+              maybeLicense =
                 otherAttrs: pname: systemNv: _: rawPackage:
                 let
                   license = licenseOf pname otherAttrs;
                 in
                 lib.optionals (license != null) [
                   {
-                    ${pname} = mkChooseLonger license;
+                    ${pname} = license;
                   }
                 ];
             in
-            lib.mergeAttrsList (fmapPackages licenseWithPriority);
+            lib.mergeAttrsList (fmapPackages maybeLicense);
           overrideLicenseUrl =
             let
               overrideUrl =
@@ -242,7 +238,7 @@ in
                   shortName = licenseOf pname otherAttrs;
                   defined = distribution_path != null && otherAttrs.license_path or null != null;
                   proposal = "${config.base_url}${distribution_path}${otherAttrs.license_path}";
-                  needsOverride = proposal != config.license.compiled.${shortName}.url;
+                  needsOverride = assert builtins.isString shortName; proposal != config.license.compiled.${shortName}.url or null;
                 in
                 lib.optionals (defined && needsOverride) [
                   {
@@ -269,7 +265,7 @@ in
               let
                 shortName = licenseOf pname perSystem;
               in
-              lib.optionalAttrs (shortName != null) { ${shortName} = mkChooseLonger "${pname}/LICENSE.txt"; }
+              lib.optionalAttrs (shortName != null) { ${shortName} = "${pname}/LICENSE.txt"; }
             ) rawPackages;
             distribution_path = lib.mapAttrs (
               _: _: if distribution_path == null then mkDefaultWeaker null else mkDefaultHarder distribution_path

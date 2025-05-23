@@ -29,13 +29,17 @@ let
     inherit lib;
     baseUrlAttr = "base_url";
   };
+  releaseFileModules =
+    builtins.map ingestTensorrt [ (cudaPackagesPath + "/tensorrt/releases.nix") ]
+    ++ [
+      (ingestLegacyCudnn (cudaPackagesPath + "/cudnn/releases.nix"))
+    ];
   modulesPath = nixpkgsPath;
 in
 {
   manifests ? intreeManifests, # :: List Path
-  extraModules ? builtins.map ingestTensorrt [ (cudaPackagesPath + "/tensorrt/releases.nix") ] ++ [
-    (ingestLegacyCudnn (cudaPackagesPath + "/cudnn/releases.nix"))
-  ],
+  extraModules ? [ ],
+  _includeReleaseFiles ? true,
 }:
 let
   manifestModules = builtins.map jsonToModule manifests;
@@ -45,6 +49,7 @@ let
       modules =
         extraModules
         ++ manifestModules
+        ++ lib.optionals _includeReleaseFiles releaseFileModules
         ++ [
           ./schema.nix
         ];

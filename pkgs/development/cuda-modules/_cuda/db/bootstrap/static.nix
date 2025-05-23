@@ -16,8 +16,8 @@ in
     columnar.defaults "shortName"
       {
         compiled = lib.licenses.unfree;
-        distribution_path = null;
-        license_path = null;
+        distribution_path = lib.mkDefault null;
+        license_path = lib.mkDefault null;
       }
       {
         shortName = {

@@ -9,6 +9,7 @@ let
     nullOr
     str
     submodule
+    mkOptionType
     ;
 
   inherit (import ./columnar.nix)
@@ -16,9 +17,43 @@ let
     SetOfStr
     mkColumnOption
     assertSubset
-    assertComplete
     assertCompleteTable
     ;
+
+  mergeByLength =
+    getLength: loc: defs:
+    if defs == [ ] then
+      abort "This case should never happen."
+    else if lib.length defs == 1 then
+      (lib.head defs).value
+    else
+      (lib.foldl' (
+        a: b:
+        let
+          aLen = getLength a.value;
+          bLen = getLength b.value;
+        in
+        if a.value == b.value then
+          a
+        else if aLen > bLen then
+          a
+        else if bLen > aLen then
+          b
+        else
+          throw "The option `${lib.showOption loc}' has conflicting definition values of same length:${
+            lib.showDefs [
+              a
+              b
+            ]
+          }"
+      ) (lib.head defs) (lib.tail defs)).value;
+  StrByLength = mkOptionType {
+    name = "StrByLength";
+    description = "string (merged by choosing longest)";
+    descriptionClass = "noun";
+    check = lib.isString;
+    merge = mergeByLength lib.stringLength;
+  };
 
   cudb = config;
 in
@@ -67,13 +102,17 @@ in
               description = "Optional SPDX Identifier";
             };
             url = mkOption {
-              type = nullOr str;
+              type = nullOr StrByLength;
               default =
                 let
-                  ensureComposable = base: if lib.hasSuffix "/" base then base else "${base}/";
+                  ensureComposable = lib.mapNullable (
+                    base:
+                    assert builtins.isString base || builtins.isPath base;
+                    if lib.hasSuffix "/" base then base else "${base}/"
+                  );
                   base_url = ensureComposable cudb.base_url;
-                  distribution_path = ensureComposable cudb.license.distribution_path.${name};
-                  license_path = cudb.license.license_path.${name};
+                  distribution_path = ensureComposable (cudb.license.distribution_path.${name} or null);
+                  license_path = cudb.license.license_path.${name} or null;
                 in
                 "${base_url}${distribution_path}${license_path}";
               defaultText = "\${base_url}\${distribution_path}\${license_path}";
@@ -153,9 +192,10 @@ in
               );
             };
             url = mkOption {
-              type = nullOr str;
+              type = nullOr StrByLength;
               description = ''
                 `∷ Maybe URI`
+
                 Service to access the archive (e.g. from a FOD)'';
             };
           };
@@ -175,7 +215,7 @@ in
               PNames of known packages'';
           };
 
-          name = mkColumnOption index (nullOr str) {
+          name = mkColumnOption index (nullOr StrByLength) {
             description = ''
               `∷ PName ⇒ Maybe String`
             '';
@@ -214,7 +254,7 @@ in
                 let
                   licenseNames = builtins.attrNames config.license.shortName;
                 in
-                enum licenseNames
+                enum licenseNames // { merge = mergeByLength lib.stringLength; }
               )
               {
                 description = "`∷ PName ⇒ LicenseShortName`";
@@ -226,7 +266,7 @@ in
             '';
             apply = lib.mapAttrs (pname: outputs: lib.filterAttrs (_outputName: enable: enable) outputs);
           };
-          overrideLicenseUrl = mkColumnOption index (nullOr str) {
+          overrideLicenseUrl = mkColumnOption index (nullOr StrByLength) {
             description = ''
               `∷ PName ⇒ Maybe Url`
 
@@ -258,7 +298,7 @@ in
             '';
           };
 
-          distribution_path = mkColumnOption index (nullOr str) {
+          distribution_path = mkColumnOption index (nullOr StrByLength) {
             example."CUDA Toolkit" = "cutensor/redist/";
             description = ''
               `∷ String ⇒ Maybe String`
@@ -267,7 +307,7 @@ in
             '';
           };
 
-          license_path = mkColumnOption index (nullOr str) {
+          license_path = mkColumnOption index (nullOr StrByLength) {
             example."CUDA Toolkit" = "cuda_cudart/LICENSE.txt";
             description = ''
               `∷ String ⇒ Maybe String`
