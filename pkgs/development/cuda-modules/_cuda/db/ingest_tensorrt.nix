@@ -25,7 +25,7 @@ rec {
     name = lib.mapAttrs (pname: _: pname) attrs;
     systemsNv = lib.mapAttrs (pname: { releases }: lib.mapAttrs (_: _: 1) releases) attrs;
   };
-  product = lib.mapAttrs (pname: _: 1) attrs;
+  release.product = lib.mapAttrs (pname: _: 1) attrs;
   system = {
     nvidia = lib.concatMapAttrs (_: lib.id) package.systemsNv;
   };
@@ -50,6 +50,29 @@ rec {
                 [ p.version (lib.concatStringsSep "." (lib.take 3 (lib.splitVersion p.version))) ]
                 config.trt_base_url
             }${p.filename}";
+            extraConstraints =
+              let
+                nextVersion =
+                  version:
+                  let
+                    ints = map lib.toInt (lib.splitVersion version);
+                    intsNext = lib.take (lib.length ints - 1) ints ++ [ (lib.last ints + 1) ];
+                  in
+                  lib.concatMapStringsSep "." toString intsNext;
+              in
+              {
+                "cuda" =
+                  lib.optionalAttrs (p.maxCudaVersion or null != null) {
+                    "<" = nextVersion p.maxCudaVersion;
+                  }
+                  // lib.optionalAttrs (p.minCudaVersion or null != null) {
+                    ">=" = p.minCudaVersion;
+                  };
+              }
+              // lib.optionalAttrs (p.cudnnVersion or null != null) {
+                "cudnn"."<" = nextVersion p.cudnnVersion;
+                "cudnn".">=" = p.cudnnVersion;
+              };
           };
         }) packages
       ) (lib.attrsToList releases)

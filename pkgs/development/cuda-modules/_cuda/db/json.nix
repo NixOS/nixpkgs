@@ -176,7 +176,8 @@ in
     ))
     ++ lib.optionals (productName != null) [
       {
-        product.${productName} = 1;
+        release.product.${productName} = 1;
+        release.version.${productName}.${releaseLabel} = 1;
       }
     ]
     ++ lib.optionals (productName != null) (
@@ -184,7 +185,7 @@ in
         otherAttrs: pname: systemNv: tag: rawPackage:
         lib.optionals (looksLikeSystem systemNv && otherAttrs ? version) [
           {
-            release.${productName}.${pname} = {
+            release.package.${productName}.${pname} = {
               ${releaseLabel} = otherAttrs.version;
             };
             package.version.${pname}.${otherAttrs.version}.${rawPackage.sha256} = 1;
@@ -194,7 +195,17 @@ in
                 url = "${config.base_url}${rawPackage.relative_path}";
               }
               // lib.optionalAttrs (tag != null) {
-                tags.${tag} = 1;
+                extraConstraints =
+                  let
+                    cudaMajorStr = builtins.head (lib.match "^cuda([0-9]{2})$" tag);
+                    cudaMajor = lib.strings.toInt cudaMajorStr;
+                  in
+                  lib.addErrorContext
+                    "while converting `tag` (`${tag}`; `json.nix` only supports tags like `cuda11`, `cuda12`, etc.) to `extraConstraints`"
+                    {
+                      cuda."<" = toString (cudaMajor + 1);
+                      cuda.">=" = cudaMajorStr;
+                    };
               };
           }
         ]

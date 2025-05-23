@@ -84,24 +84,41 @@ in
       );
     in
     {
-      # ∷ Str ⇒ ()
-      product = mkOption {
-        type = SetOfStr;
-        default = { };
-        example = {
-          "cuda" = 1;
-          "cudnn" = 1;
-          "tensorrt" = 1;
+
+      release = {
+        product = mkOption {
+          type = SetOfStr;
+          default = { };
+          example = {
+            "cuda" = 1;
+            "cudnn" = 1;
+            "tensorrt" = 1;
+          };
+          description = ''
+            `∷ ProductName ⇒ ()`
+
+            Corresponds to `release_product` in NVIDIA manifests
+          '';
         };
-        description = "Corresponds to `release_product` in NVIDIA manifests";
-      };
 
-      release = mkColumnOption cudb.product (attrsOf (attrsOf (nullOr str))) {
-        default = { };
-        description = ''
-          `∷ ProductName ⇒ PName ⇒ ProductVersion ⇒ Maybe PackageVersion`
+        version = mkColumnOption cudb.release.product SetOfStr {
+          default = { };
+          description = ''
+            `∷ ProductName ⇒ ProductVersion ⇒ ()`
 
-          Packages (`pname`, `version`) published in each release (`productName`, `productVersion)`, or, in NVIDIA manifests, `(release_product, release_label)`)'';
+            Corresponds to `release_label` in NVIDIA manifests
+          '';
+        };
+
+        package = mkColumnOption cudb.product (attrsOf (attrsOf (nullOr str))) {
+          default = { };
+          description = ''
+            `∷ ProductName ⇒ PName ⇒ ProductVersion ⇒ Maybe PackageVersion`
+
+            Packages (`pname`, `version`) published in each release (`(productName, productVersion)`),
+            or, in NVIDIA manifests, `(release_product, release_label)`)
+          '';
+        };
       };
 
       archive.sha256 = mkOption {
@@ -112,10 +129,36 @@ in
               type = enum (builtins.attrNames cudb.system.nvidia);
               description = "`∷ SystemStringNvidia`";
             };
-            tags = mkOption {
-              type = SetOfStr;
+            extraConstraints = mkOption {
               default = { };
               description = "`∷ CompatibilityTag ⇒ ()`";
+              type = attrsOf (
+                submodule (
+                  { name, ... }:
+                  {
+                    options = {
+                      "<" = lib.mkOption {
+                        type = nullOr str;
+                        default = null;
+                        description = ''
+                          `∷ VersionString`
+
+                          Package or product ${name} must be `versionOlder version ${name}.version`.
+                        '';
+                      };
+                      ">=" = lib.mkOption {
+                        type = nullOr str;
+                        default = null;
+                        description = ''
+                          `∷ VersionString`
+
+                          Package or product ${name} must be `versionAtLeast version ${name}.version`.
+                        '';
+                      };
+                    };
+                  }
+                )
+              );
             };
             url = mkOption {
               type = nullOr str;
@@ -367,12 +410,10 @@ in
         assertion = builtins.any lib.id (builtins.attrValues outputs);
       }) cudb.package.outputs
       ++ lib.flatten (
-        builtins.attrValues (
-          lib.mapAttrs (
-            product: pnameVersions:
-            assertSubset "package.pname" cudb.package.pname "release.${product}" pnameVersions
-          ) cudb.release
-        )
+        lib.mapAttrsToList (
+          product: pnameVersions:
+          assertSubset "package.pname" cudb.package.pname "release.${product}" pnameVersions
+        ) cudb.release.package
       );
   };
 }
