@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "temporalio";
-  version = "1.11.0";
+  version = "1.11.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "temporalio";
     repo = "sdk-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-942EmFOAYUWq58MW2rIVhDK9dHkzi62fUdOudYP94hU=";
+    hash = "sha256-08sb250WtbXdEj/VDqwO6JuGh67bjOpDnz6zxTIRDsE=";
     fetchSubmodules = true;
   };
 
