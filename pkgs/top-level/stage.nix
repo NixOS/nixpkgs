@@ -226,6 +226,24 @@ let
   # - pkgsi686Linux
   # NOTE: add new non-critical package sets to "pkgs/top-level/variants.nix"
   otherPackageSets = self: super: {
+    crossStdenv = import ./cross-stdenv.nix {
+      inherit
+        lib
+        stdenv
+        config
+        overlays
+        ;
+      inherit (self)
+        cxxlibCrossChooser
+        rtlibCrossChooser
+        unwinderlibCrossChooser
+        bintoolsChooser
+        ccCrossChooser
+        libcCrossChooser
+        wrapBintoolsWith
+        ;
+    };
+
     # This maps each entry in lib.systems.examples to its own package
     # set. Each of these will contain all packages cross compiled for
     # that target system. For instance, pkgsCross.raspberryPi.hello,
