@@ -22,6 +22,11 @@ python3Packages.buildPythonApplication rec {
 
   build-system = with python3Packages; [ setuptools-scm ];
 
+  pythonRemoveDeps = [
+    # https://github.com/notofonts/nototools/pull/901
+    "typed-ast"
+  ];
+
   dependencies = with python3Packages; [
     afdko
     appdirs
@@ -43,7 +48,6 @@ python3Packages.buildPythonApplication rec {
     regex
     scour
     toml
-    typed-ast
     ufonormalizer
     ufoprocessor
     unicodedata2
