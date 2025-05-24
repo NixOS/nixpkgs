@@ -1,10 +1,13 @@
 {
   buildAstalModule,
   json-glib,
+  vala-panel-appmenu,
 }:
 buildAstalModule {
   name = "tray";
-  buildInputs = [ json-glib ];
+  buildInputs = [
+    json-glib
+    vala-panel-appmenu
+  ];
   meta.description = "Astal module for StatusNotifierItem";
-  meta.broken = true; # https://github.com/NixOS/nixpkgs/issues/337630
 }
