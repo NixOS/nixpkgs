@@ -33,6 +33,7 @@ in
       settings = {
         enable_billing = true;
       };
+      ingestSyslog.enable = true;
     };
 
     # systemd oneshot to create a dummy admin user and a API token for testing
