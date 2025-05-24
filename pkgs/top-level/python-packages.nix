@@ -4921,6 +4921,8 @@ self: super: with self; {
 
   ffmpy = callPackage ../development/python-modules/ffmpy { };
 
+  ffpyplayer = callPackage ../development/python-modules/ffpyplayer { };
+
   fhir-py = callPackage ../development/python-modules/fhir-py { };
 
   fiblary3-fork = callPackage ../development/python-modules/fiblary3-fork { };
@@ -7512,6 +7514,8 @@ self: super: with self; {
   kivy-garden = callPackage ../development/python-modules/kivy-garden { };
 
   kivy-garden-modernmenu = callPackage ../development/python-modules/kivy-garden-modernmenu { };
+
+  kivymd = callPackage ../development/python-modules/kivymd { };
 
   kiwiki-client = callPackage ../development/python-modules/kiwiki-client { };
 
