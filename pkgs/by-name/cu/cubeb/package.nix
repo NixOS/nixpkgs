@@ -64,12 +64,12 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" buildSharedLibs)
-    "-DBUILD_TESTS=OFF" # tests require an audio server
-    "-DBUNDLE_SPEEX=OFF"
-    "-DUSE_SANITIZERS=OFF"
+    (lib.cmakeBool "BUILD_TESTS" false) # tests require an audio server
+    (lib.cmakeBool "BUNDLE_SPEEX" false)
+    (lib.cmakeBool "USE_SANITIZERS" false)
 
     # Whether to lazily load libraries with dlopen()
-    "-DLAZY_LOAD_LIBS=${if lazyLoad then "ON" else "OFF"}"
+    (lib.cmakeBool "LAZY_LOAD_LIBS" lazyLoad)
   ];
 
   passthru = {
