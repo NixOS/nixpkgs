@@ -119,7 +119,7 @@ lib.makeOverridable mkDerivation (
 
       launcher="$out/$pname/bin/${loName}"
       if [ -e "$launcher" ]; then
-        rm "$launcher".sh # We do not wrap the old script-style launcher anymore.
+        echo 'Normal launcher exists'
       else
         launcher+=.sh
       fi
