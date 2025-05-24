@@ -21,7 +21,7 @@ udevCheckHook() {
     echo Finished udevCheckPhase
 }
 
-if [[ -z "${dontUdevCheck-}" ]]; then
+if [[ -z "${dontUdevCheck-}" && -n "@udevadm@" ]]; then
     echo "Using udevCheckHook"
     preInstallCheckHooks+=(udevCheckHook)
 fi

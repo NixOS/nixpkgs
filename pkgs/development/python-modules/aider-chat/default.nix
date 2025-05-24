@@ -125,7 +125,7 @@ let
   aider-nltk-data = symlinkJoin {
     name = "aider-nltk-data";
     paths = [
-      nltk-data.punkt_tab
+      nltk-data.punkt-tab
       nltk-data.stopwords
     ];
   };

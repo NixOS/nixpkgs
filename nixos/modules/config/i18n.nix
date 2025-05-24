@@ -12,6 +12,8 @@ let
       "${config.i18n.defaultLocale}/${config.i18n.defaultCharset}"
     ]
     ++ lib.pipe config.i18n.extraLocaleSettings [
+      # See description of extraLocaleSettings for why is this ignored here.
+      (lib.filterAttrs (n: v: n != "LANGUAGE"))
       (lib.mapAttrs (n: v: (sanitizeUTF8Capitalization v)))
       (lib.mapAttrsToList (LCRole: lang: lang + "/" + (config.i18n.localeCharsets.${LCRole} or "UTF-8")))
     ]
@@ -92,6 +94,12 @@ in
           character set, and it must not be added manually here. To use a
           non-`UTF-8` character set such as ISO-XXXX-8, the
           {option}`i18n.localeCharsets` can be used.
+
+          Note that if the [`LANGUAGE`
+          key](https://www.gnu.org/software/gettext/manual/html_node/The-LANGUAGE-variable.html)
+          is used in this option, it is ignored when computing the locales
+          required to be installed, because the possible values of this key are
+          more diverse and flexible then the others.
         '';
       };
       localeCharsets = lib.mkOption {

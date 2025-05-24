@@ -193,6 +193,9 @@ mkDerivation rec {
     done
   '';
 
+  # >9k objects, >3h build time on a normal build slot
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = with lib; {
     description = "Free and Open Source Geographic Information System";
     homepage = "https://www.qgis.org";

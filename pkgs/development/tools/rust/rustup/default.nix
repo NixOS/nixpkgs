@@ -79,6 +79,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Random tests fail nondeterministically on macOS.
   # TODO: Investigate this.
   doCheck = !stdenv.hostPlatform.isDarwin;
+  # Random failures when running tests in parallel.
+  preCheck = ''
+    export NIX_BUILD_CORES=1
+  '';
 
   # skip failing tests
   checkFlags = [

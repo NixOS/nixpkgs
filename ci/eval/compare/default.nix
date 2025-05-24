@@ -1,10 +1,10 @@
 {
+  callPackage,
   lib,
   jq,
   runCommand,
   writeText,
   python3,
-  ...
 }:
 {
   beforeResultDir,
@@ -127,7 +127,7 @@ let
       }
     );
 
-  maintainers = import ./maintainers.nix {
+  maintainers = callPackage ./maintainers.nix { } {
     changedattrs = lib.attrNames (lib.groupBy (a: a.name) rebuildsPackagePlatformAttrs);
     changedpathsjson = touchedFilesJson;
     inherit byName;

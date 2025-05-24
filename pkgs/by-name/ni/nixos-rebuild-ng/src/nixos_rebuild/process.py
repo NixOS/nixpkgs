@@ -1,4 +1,5 @@
 import atexit
+import getpass
 import logging
 import os
 import re
@@ -6,7 +7,6 @@ import shlex
 import subprocess
 from collections.abc import Sequence
 from dataclasses import dataclass
-from getpass import getpass
 from typing import Final, Self, TypedDict, Unpack
 
 from . import tmpdir
@@ -46,7 +46,7 @@ class Remote:
             cls._validate_opts(opts, ask_sudo_password)
         sudo_password = None
         if ask_sudo_password:
-            sudo_password = getpass(f"[sudo] password for {host}: ")
+            sudo_password = getpass.getpass(f"[sudo] password for {host}: ")
         return cls(host, opts, sudo_password)
 
     @staticmethod

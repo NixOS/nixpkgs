@@ -24,15 +24,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkg-config
     cups
+    glib # Required for gdbus-codegen
+    pkg-config
   ];
 
   buildInputs = [
     avahi
+    cups
+    glib
     libcupsfilters
     libppd
-    glib
   ];
 
   configureFlags = [

@@ -9,6 +9,7 @@
   glib,
   libredirect,
   nixosTests,
+  udevCheckHook,
 }:
 let
   myPatchElf = file: ''
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     makeWrapper
     patchelf
+    udevCheckHook
   ];
   buildInputs = [
     libusb1
@@ -114,7 +116,7 @@ stdenv.mkDerivation rec {
     echo "brother5" > $out/etc/sane.d/dll.d/brother5.conf
 
     mkdir -p $out/etc/udev/rules.d
-    cp -p $PATH_TO_BRSCAN5/udev-rules/NN-brother-mfp-brscan5-1.0.2-2.rules \
+    install -m 0444 $PATH_TO_BRSCAN5/udev-rules/NN-brother-mfp-brscan5-1.0.2-2.rules \
       $out/etc/udev/rules.d/49-brother-mfp-brscan5-1.0.2-2.rules
 
     ETCDIR=$out/etc/opt/brother/scanner/brscan5
@@ -123,6 +125,9 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  # We want to run the udevCheckHook
+  doInstallCheck = true;
 
   dontPatchELF = true;
 

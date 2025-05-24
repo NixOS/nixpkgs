@@ -1467,7 +1467,7 @@ let
 
         ocaml-version = callPackage ../development/ocaml-modules/ocaml-version { };
 
-        ocaml-vdom = callPackage ../development/ocaml-modules/ocaml-vdom { };
+        ocaml-vdom = throw "2023-10-09: ocamlPackages.ocaml-vdom was renamed to ocamlPackages.vdom";
 
         ocamlbuild =
           if lib.versionOlder "4.03" ocaml.version then
@@ -2076,6 +2076,8 @@ let
 
         type_id = callPackage ../development/ocaml-modules/type_id { };
 
+        tyre = callPackage ../development/ocaml-modules/tyre { };
+
         tyxml = callPackage ../development/ocaml-modules/tyxml { };
 
         tyxml-lwd = callPackage ../development/ocaml-modules/lwd/tyxml-lwd.nix { };
@@ -2121,6 +2123,8 @@ let
         ### V ###
 
         vchan = callPackage ../development/ocaml-modules/vchan { };
+
+        vdom = callPackage ../development/ocaml-modules/vdom { };
 
         vector = callPackage ../development/ocaml-modules/vector { };
 

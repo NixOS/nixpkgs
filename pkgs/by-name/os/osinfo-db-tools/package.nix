@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   pkg-config,
   meson,
   ninja,
@@ -19,26 +18,14 @@
   libsoup_3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osinfo-db-tools";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchurl {
-    url = "https://releases.pagure.org/libosinfo/osinfo-db-tools-${version}.tar.xz";
-    sha256 = "sha256-i6bTG7XvBwVuOIeeBwZxr7z+wOtBqH+ZUEULu4MbCh0=";
+    url = "https://releases.pagure.org/libosinfo/osinfo-db-tools-${finalAttrs.version}.tar.xz";
+    hash = "sha256-8zFfZ10Ydw8l3qjtBLILj8gO+wD2DDfuXoFfnDd25/M=";
   };
-
-  patches = [
-    # Fix build with libxml 2.12
-    (fetchpatch {
-      url = "https://gitlab.com/libosinfo/osinfo-db-tools/-/commit/019487cbc79925e49988789bf533c78dab7e1842.patch";
-      hash = "sha256-skuspjHDRilwym+hFInrSvIZ+rrzBOoI7WeFj2SrGkc=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.com/libosinfo/osinfo-db-tools/-/commit/34378a4ac257f2f5fcf364786d1634a8c36b304f.patch";
-      hash = "sha256-I9vRRbnotqRi8+7q1eZLJwQLaT9J4G3h+3rKxlaCME4=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -60,12 +47,12 @@ stdenv.mkDerivation rec {
     libsoup_3
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools for managing the osinfo database";
     homepage = "https://libosinfo.org/";
-    changelog = "https://gitlab.com/libosinfo/osinfo-db-tools/-/blob/v${version}/NEWS";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.bjornfor ];
+    changelog = "https://gitlab.com/libosinfo/osinfo-db-tools/-/blob/v${finalAttrs.version}/NEWS";
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

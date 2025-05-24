@@ -37,13 +37,6 @@ buildPythonPackage rec {
     validators
   ];
 
-  pythonRelaxDeps = [
-    "requests"
-    "langcodes"
-    "pgpy-dtc"
-    "validators"
-  ];
-
   nativeCheckInputs = [
     pytestCheckHook
     requests-mock

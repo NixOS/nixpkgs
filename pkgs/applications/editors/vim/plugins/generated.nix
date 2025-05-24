@@ -3000,6 +3000,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  colorful-winsep-nvim = buildVimPlugin {
+    pname = "colorful-winsep.nvim";
+    version = "2025-04-11";
+    src = fetchFromGitHub {
+      owner = "nvim-zh";
+      repo = "colorful-winsep.nvim";
+      rev = "7bbe4e1353c0fe37c98bad2758aafc410280f6b3";
+      sha256 = "0nm3cr5wzfyanx01nw998cddq1vxww0xn6v8a7db3a2r8fjxp5fx";
+    };
+    meta.homepage = "https://github.com/nvim-zh/colorful-winsep.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   colorizer = buildVimPlugin {
     pname = "colorizer";
     version = "2022-01-03";
@@ -3245,6 +3258,19 @@ final: prev: {
       sha256 = "02z341iwj3gih3k3qyi014j5y7jddp4zl2np0671gmw43861bxcd";
     };
     meta.homepage = "https://github.com/Shougo/context_filetype.vim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  contextfiles-nvim = buildVimPlugin {
+    pname = "contextfiles.nvim";
+    version = "2025-05-07";
+    src = fetchFromGitHub {
+      owner = "banjo";
+      repo = "contextfiles.nvim";
+      rev = "d9541105d60c708e2ec6641109f5f2a6179c2a80";
+      sha256 = "1n8nkpy53mqr0hn26lqzcxmp8l6r2873yrsqxrj5cpis0f52qc45";
+    };
+    meta.homepage = "https://github.com/banjo/contextfiles.nvim/";
     meta.hydraPlatforms = [ ];
   };
 

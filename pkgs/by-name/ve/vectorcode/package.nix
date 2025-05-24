@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "vectorcode";
-  version = "0.6.7";
+  version = "0.6.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Davidyz";
     repo = "VectorCode";
     tag = version;
-    hash = "sha256-BDDvALeQSBVld2gEmcnlpf3GDpdEs64nFyE6cNKpeww=";
+    hash = "sha256-qXrXNt5uI/gePFyJ79y+zksSekq7BzsbL+1tvMQ/zKM=";
   };
 
   build-system = with python3Packages; [
@@ -95,7 +95,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Code repository indexing tool to supercharge your LLM experience";
     homepage = "https://github.com/Davidyz/VectorCode";
-    changelog = "https://github.com/Davidyz/VectorCode/releases/tag/${version}";
+    changelog = "https://github.com/Davidyz/VectorCode/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "vectorcode";

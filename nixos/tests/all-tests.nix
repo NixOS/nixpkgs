@@ -711,6 +711,7 @@ in
   languagetool = handleTest ./languagetool.nix { };
   lanraragi = handleTest ./lanraragi.nix { };
   latestKernel.login = handleTest ./login.nix { latestKernel = true; };
+  lasuite-docs = runTest ./web-apps/lasuite-docs.nix;
   lavalink = runTest ./lavalink.nix;
   leaps = handleTest ./leaps.nix { };
   lemmy = handleTest ./lemmy.nix { };
@@ -976,6 +977,7 @@ in
   ombi = handleTest ./ombi.nix { };
   openarena = handleTest ./openarena.nix { };
   openbao = runTest ./openbao.nix;
+  opencloud = runTest ./opencloud.nix;
   openldap = handleTest ./openldap.nix { };
   opensearch = discoverTests (import ./opensearch.nix);
   openresty-lua = handleTest ./openresty-lua.nix { };
@@ -1504,6 +1506,7 @@ in
   zipline = runTest ./zipline.nix;
   zoneminder = runTest ./zoneminder.nix;
   zookeeper = runTest ./zookeeper.nix;
+  zoom-us = runTest ./zoom-us.nix;
   zram-generator = runTest ./zram-generator.nix;
   zrepl = runTest ./zrepl.nix;
   zsh-history = runTest ./zsh-history.nix;

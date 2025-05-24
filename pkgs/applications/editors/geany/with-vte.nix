@@ -24,5 +24,15 @@ symlinkJoin {
       --prefix LD_LIBRARY_PATH : ${vte}/lib
   '';
 
-  inherit (geany.meta) ;
+  meta = {
+    inherit (geany.meta)
+      description
+      longDescription
+      homepage
+      license
+      maintainers
+      platforms
+      mainProgram
+      ;
+  };
 }

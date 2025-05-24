@@ -2685,6 +2685,8 @@ self: super: with self; {
 
   colcon-argcomplete = callPackage ../development/python-modules/colcon-argcomplete { };
 
+  colcon-cargo = callPackage ../development/python-modules/colcon-cargo { };
+
   colcon-defaults = callPackage ../development/python-modules/colcon-defaults { };
 
   colcon-mixin = callPackage ../development/python-modules/colcon-mixin { };
@@ -2692,6 +2694,10 @@ self: super: with self; {
   colcon-notification = callPackage ../development/python-modules/colcon-notification { };
 
   colcon-parallel-executor = callPackage ../development/python-modules/colcon-parallel-executor { };
+
+  colcon-ros-domain-id-coordinator =
+    callPackage ../development/python-modules/colcon-ros-domain-id-coordinator
+      { };
 
   collections-extended = callPackage ../development/python-modules/collections-extended { };
 
@@ -3787,6 +3793,8 @@ self: super: with self; {
 
   django-json-widget = callPackage ../development/python-modules/django-json-widget { };
 
+  django-lasuite = callPackage ../development/python-modules/django-lasuite { };
+
   django-leaflet = callPackage ../development/python-modules/django-leaflet { };
 
   django-libsass = callPackage ../development/python-modules/django-libsass { };
@@ -3959,7 +3967,11 @@ self: super: with self; {
   django_4 = callPackage ../development/python-modules/django/4.nix { };
 
   # Pre-release
-  django_5 = callPackage ../development/python-modules/django/5.nix { };
+  django_5 = self.django_5_1;
+
+  django_5_1 = callPackage ../development/python-modules/django/5_1.nix { };
+
+  django_5_2 = callPackage ../development/python-modules/django/5_2.nix { };
 
   djangocms-admin-style = callPackage ../development/python-modules/djangocms-admin-style { };
 
@@ -4797,6 +4809,8 @@ self: super: with self; {
 
   fastapi-mail = callPackage ../development/python-modules/fastapi-mail { };
 
+  fastapi-mcp = callPackage ../development/python-modules/fastapi-mcp { };
+
   fastapi-sso = callPackage ../development/python-modules/fastapi-sso { };
 
   fastavro = callPackage ../development/python-modules/fastavro { };
@@ -4832,6 +4846,8 @@ self: super: with self; {
   fastjet = callPackage ../development/python-modules/fastjet { };
 
   fastjsonschema = callPackage ../development/python-modules/fastjsonschema { };
+
+  fastmcp = callPackage ../development/python-modules/fastmcp { };
 
   fastmri = callPackage ../development/python-modules/fastmri { };
 
@@ -5022,6 +5038,8 @@ self: super: with self; {
   flammkuchen = callPackage ../development/python-modules/flammkuchen { };
 
   flasgger = callPackage ../development/python-modules/flasgger { };
+
+  flashinfer = callPackage ../development/python-modules/flashinfer { };
 
   flashtext = callPackage ../development/python-modules/flashtext { };
 
@@ -5677,6 +5695,8 @@ self: super: with self; {
   glean-sdk = callPackage ../development/python-modules/glean-sdk { };
 
   glfw = callPackage ../development/python-modules/glfw { };
+
+  gliner = callPackage ../development/python-modules/gliner { };
 
   glob2 = callPackage ../development/python-modules/glob2 { };
 
@@ -15531,6 +15551,8 @@ self: super: with self; {
 
   schedule = callPackage ../development/python-modules/schedule { };
 
+  scheduler = callPackage ../development/python-modules/scheduler { };
+
   schema = callPackage ../development/python-modules/schema { };
 
   schema-salad = callPackage ../development/python-modules/schema-salad { };
@@ -16560,6 +16582,8 @@ self: super: with self; {
 
   sqlalchemy-citext = callPackage ../development/python-modules/sqlalchemy-citext { };
 
+  sqlalchemy-cockroachdb = callPackage ../development/python-modules/sqlalchemy-cockroachdb { };
+
   sqlalchemy-continuum = callPackage ../development/python-modules/sqlalchemy-continuum { };
 
   sqlalchemy-file = callPackage ../development/python-modules/sqlalchemy-file { };
@@ -16715,6 +16739,8 @@ self: super: with self; {
   staticjinja = callPackage ../development/python-modules/staticjinja { };
 
   staticmap = callPackage ../development/python-modules/staticmap { };
+
+  staticvectors = callPackage ../development/python-modules/staticvectors { };
 
   statistics = callPackage ../development/python-modules/statistics { };
 
@@ -17888,6 +17914,8 @@ self: super: with self; {
   typed-ast = callPackage ../development/python-modules/typed-ast { };
 
   typed-settings = callPackage ../development/python-modules/typed-settings { };
+
+  typedunits = callPackage ../development/python-modules/typedunits { };
 
   typeguard = callPackage ../development/python-modules/typeguard { };
 

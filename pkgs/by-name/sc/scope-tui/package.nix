@@ -7,19 +7,19 @@
   alsa-lib,
   withPulseaudio ? true,
 }:
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "scope-tui";
-  version = "0.3.0-unstable-2024-05-06";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "alemidev";
     repo = "scope-tui";
-    rev = "c2fe70a69cfc15c4de6ea3f2a51580ec57a5c9e1";
-    hash = "sha256-6UPIZ2UB5wb0IkigaOXdQ/0ux9vHUGC4w5WnrjEd1bg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-bVe+Yyv+DcbEC15H968OhQhcFkAm7T5J6aQlKod5ocM=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-RcpKpjPNJhTAsX4iBNOwBxutl2qyBxsis2m5xtXBhh4=";
+  cargoHash = "sha256-o5pplwNtIe2z88ZwtCHree32kv16U/ryv8PmPIqxtPQ=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -40,4 +40,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "scope-tui";
     platforms = lib.platforms.linux;
   };
-}
+})
