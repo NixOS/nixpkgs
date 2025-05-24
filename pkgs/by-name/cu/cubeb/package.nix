@@ -32,13 +32,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "cubeb";
-  version = "unstable-2022-10-18";
+  version = "0-unstable-2025-04-02";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "cubeb";
-    rev = "27d2a102b0b75d9e49d43bc1ea516233fb87d778";
-    hash = "sha256-q+uz1dGU4LdlPogL1nwCR/KuOX4Oy3HhMdA6aJylBRk=";
+    rev = "975a727e5e308a04cfb9ecdf7ddaf1150ea3f733";
+    hash = "sha256-3IP++tdiJUwXR6t5mf/MkPd524K/LYESNMkQ8vy10jo=";
   };
 
   nativeBuildInputs = [
