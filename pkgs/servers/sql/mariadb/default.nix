@@ -370,17 +370,17 @@ self: {
   # see https://mariadb.org/about/#maintenance-policy for EOLs
   mariadb_106 = self.callPackage generic {
     # Supported until 2026-07-06
-    version = "10.6.21";
-    hash = "sha256-jX+XFps7ogRIWJZbjPwlQ2RADfQ+kFBC+S4kuPp7DZY=";
+    version = "10.6.22";
+    hash = "sha256-LKYA3H6F6tHzPCEvnXax8vgS0knIveAuXzjq0Jit5CA=";
   };
   mariadb_1011 = self.callPackage generic {
     # Supported until 2028-02-16
-    version = "10.11.11";
-    hash = "sha256-bynU1+QPxJr0oP5giYRQnvLRU9882K/kNZ3OPKDieJA=";
+    version = "10.11.13";
+    hash = "sha256-+Lc0dJ+9ZS6k4lW+jMeID5jQe2p/604eqMc2y0gNI+Q=";
   };
   mariadb_114 = self.callPackage generic {
     # Supported until 2029-05-29
-    version = "11.4.5";
-    hash = "sha256-/2WV+MSC+ZIeObl/oRIjd6afDcvZJVPGuQMsvw6bU1Q=";
+    version = "11.4.7";
+    hash = "sha256-vyBofKEvp+/ajficqx8qZhKIzqQaz49TGJtp1SlDR9A=";
   };
 }
