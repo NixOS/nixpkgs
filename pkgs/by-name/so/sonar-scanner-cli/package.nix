@@ -2,13 +2,29 @@
   lib,
   coreutils,
   fetchFromGitHub,
-  jre,
+  jre_minimal,
+  jdk21_headless,
   libarchive,
   makeWrapper,
   maven,
   nix-update-script,
 }:
 
+let
+  jre = jre_minimal.override {
+    jdk = jdk21_headless;
+    modules = [
+      "java.base"
+      "java.logging"
+      "java.naming"
+      "java.sql"
+      "java.xml"
+      "jdk.crypto.ec"
+      "jdk.jdwp.agent"
+      "jdk.unsupported"
+    ];
+  };
+in
 maven.buildMavenPackage rec {
   pname = "sonar-scanner-cli";
   version = "7.1.0.4889";
