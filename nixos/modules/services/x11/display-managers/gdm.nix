@@ -105,6 +105,14 @@ in
         '';
       };
 
+      xorg = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Allow GDM to run on Xorg.
+        '';
+      };
+
       autoSuspend = lib.mkOption {
         default = true;
         description = ''
@@ -147,6 +155,13 @@ in
 
   config = lib.mkIf cfg.gdm.enable {
 
+    assertions = [
+      {
+        assertion = cfg.gdm.wayland || cfg.gdm.xorg;
+        message = "Either the Wayland or Xorg session must be enabled.";
+      }
+    ];
+
     services.xserver.displayManager.lightdm.enable = false;
 
     users.users.gdm = {
@@ -168,9 +183,8 @@ in
       # Enable desktop session data
       enable = true;
 
-      environment =
+      environment = lib.mkMerge [
         {
-          GDM_X_SERVER_EXTRA_ARGS = toString (lib.filter (arg: arg != "-terminate") cfg.xserverArgs);
           XDG_DATA_DIRS = lib.makeSearchPath "share" [
             gdm # for gnome-login.session
             config.services.displayManager.sessionData.desktops
@@ -179,12 +193,18 @@ in
             pkgs.hicolor-icon-theme # empty icon theme as a base
           ];
         }
-        // lib.optionalAttrs (xSessionWrapper != null) {
+
+        (lib.mkIf cfg.gdm.xorg {
+          GDM_X_SERVER_EXTRA_ARGS = toString (lib.filter (arg: arg != "-terminate") cfg.xserverArgs);
+        })
+
+        (lib.mkIf (cfg.gdm.xorg && xSessionWrapper != null) {
           # Make GDM use this wrapper before running the session, which runs the
           # configured setupCommands. This relies on a patched GDM which supports
           # this environment variable.
           GDM_X_SESSION_WRAPPER = "${xSessionWrapper}";
-        };
+        })
+      ];
       execCmd = "exec ${gdm}/bin/gdm";
       preStart = lib.optionalString (defaultSessionName != null) ''
         # Set default session in session chooser to a specified values – basically ignore session history.
@@ -300,6 +320,7 @@ in
     services.xserver.displayManager.gdm.settings = {
       daemon = lib.mkMerge [
         { WaylandEnable = cfg.gdm.wayland; }
+        { XorgEnable = cfg.gdm.xorg; }
         # nested if else didn't work
         (lib.mkIf (config.services.displayManager.autoLogin.enable && cfg.gdm.autoLogin.delay != 0) {
           TimedLoginEnable = true;
@@ -318,7 +339,9 @@ in
 
     environment.etc."gdm/custom.conf".source = configFile;
 
-    environment.etc."gdm/Xsession".source = config.services.displayManager.sessionData.wrapper;
+    environment.etc."gdm/Xsession" = lib.mkIf cfg.gdm.xorg {
+      source = config.services.displayManager.sessionData.wrapper;
+    };
 
     # GDM LFS PAM modules, adapted somehow to NixOS
     security.pam.services = {
