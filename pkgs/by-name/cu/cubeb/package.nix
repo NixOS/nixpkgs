@@ -70,13 +70,13 @@ stdenv.mkDerivation {
     updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cross platform audio library";
     mainProgram = "cubeb-test";
     homepage = "https://github.com/mozilla/cubeb";
-    license = licenses.isc;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [
+    license = lib.licenses.isc;
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [
       zhaofengli
       marcin-serwin
     ];
