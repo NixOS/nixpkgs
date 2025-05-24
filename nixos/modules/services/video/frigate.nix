@@ -127,6 +127,9 @@ in
     enable = mkEnableOption "Frigate NVR";
 
     package = mkPackageOption pkgs "frigate" { };
+    ffmpegPackage = mkPackageOption pkgs "ffmpeg-headless" {
+      extraDescription = "Custom ffmpeg to optimize HWAccel (https://docs.frigate.video/configuration/hardware_acceleration)";
+    };
 
     hostname = mkOption {
       type = str;
@@ -630,7 +633,7 @@ in
         [
           # unfree:
           # config.boot.kernelPackages.nvidiaPackages.latest.bin
-          ffmpeg-headless
+          cfg.ffmpegPackage
           libva-utils
           procps
           radeontop
