@@ -45,26 +45,53 @@ let
     url = "https://github.com/kelektiv/node.bcrypt.js/releases/download/v${bcryptVersion}/bcrypt_lib-v${bcryptVersion}-napi-v3-${bcryptAttrs.arch}-${bcryptAttrs.libc}.tar.gz";
     inherit (bcryptAttrs) hash;
   };
+
+  sassEmbeddedHostPlatformAttrs = {
+    x86_64-linux = {
+      arch = "linux-x64";
+      hash = "sha256-uG4SpXWl5JeJaRUqZxoUNAbCTtVk9V+o8YVE4lhdIyM=";
+    };
+    aarch64-linux = {
+      arch = "linux-arm64";
+      hash = "";
+    };
+    x86_64-darwin = {
+      arch = "darwin-x64";
+      hash = "";
+    };
+    aarch64-darwin = {
+      arch = "darwin-arm64";
+      hash = "";
+    };
+  };
+  sassEmbeddedAttrs =
+    sassEmbeddedHostPlatformAttrs."${stdenv.hostPlatform.system}"
+      or (throw "Unsupported architecture: ${stdenv.hostPlatform.system}");
+  sassEmbeddedVersion = "1.62.0";
+  sassEmbeddedBinary = fetchurl {
+    url = "https://github.com/sass/dart-sass/releases/download/${sassEmbeddedVersion}/dart-sass-${sassEmbeddedVersion}-${sassEmbeddedAttrs.arch}.tar.gz";
+    inherit (sassEmbeddedAttrs) hash;
+  };
 in
 stdenv.mkDerivation rec {
   pname = "peertube";
-  version = "7.0.1";
+  version = "7.1.1";
 
   src = fetchFromGitHub {
     owner = "Chocobozzz";
     repo = "PeerTube";
     tag = "v${version}";
-    hash = "sha256-DoUSzqb8lrU+s5R95rxCN/5A8sgb11edAhv0T6YACRo=";
+    hash = "sha256-rRga8pR/gfEFyVOkh1xmreM/ZVjiMre316/beCkjJP4=";
   };
 
   yarnOfflineCacheServer = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-WLaIIyz6SEekLFeVO39Swpny5/x5Jc1zoxy/6bmOXTk=";
+    hash = "sha256-Z6ACAkgk0RbcqVIjwKlCEZbZH0CHQU9sixJW73VyYDE=";
   };
 
   yarnOfflineCacheClient = fetchYarnDeps {
     yarnLock = "${src}/client/yarn.lock";
-    hash = "sha256-/ZdORSnwk29ubsgKKB7RfHCetODNOH9DzkflQdDsMz0=";
+    hash = "sha256-fi1fSxL7EbsjQntnDj2S0WLVZWLcP6nLHXpsM0y5HRs=";
   };
 
   yarnOfflineCacheAppsCli = fetchYarnDeps {
