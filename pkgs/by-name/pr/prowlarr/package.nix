@@ -80,7 +80,12 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = ./update.sh;
-    tests.smoke-test = nixosTests.prowlarr;
+    tests = {
+      inherit (nixosTests)
+        prowlarr
+        prowlarr-custom-datadir
+        ;
+    };
   };
 
   meta = with lib; {

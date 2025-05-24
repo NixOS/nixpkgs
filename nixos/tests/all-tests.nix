@@ -1125,7 +1125,14 @@ in
   prosody = handleTest ./xmpp/prosody.nix { };
   prosody-mysql = handleTest ./xmpp/prosody-mysql.nix { };
   proxy = handleTest ./proxy.nix { };
-  prowlarr = handleTest ./prowlarr.nix { };
+  prowlarr = import ./prowlarr.nix {
+    inherit runTest;
+    dataDir = "/var/lib/prowlarr";
+  };
+  prowlarr-custom-datadir = import ./prowlarr.nix {
+    inherit runTest;
+    dataDir = "/srv/prowlarr";
+  };
   pt2-clone = handleTest ./pt2-clone.nix { };
   pykms = handleTest ./pykms.nix { };
   public-inbox = handleTest ./public-inbox.nix { };
