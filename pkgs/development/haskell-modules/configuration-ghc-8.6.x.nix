@@ -109,9 +109,6 @@ self: super: {
   # vector 0.12.2 indroduced doctest checks that don’t work on older compilers
   vector = dontCheck super.vector;
 
-  # https://github.com/haskellari/time-compat/issues/23
-  time-compat = dontCheck super.time-compat;
-
   mime-string = disableOptimization super.mime-string;
 
   # https://github.com/fpco/inline-c/issues/127 (recommend to upgrade to Nixpkgs GHC >=9.0)
