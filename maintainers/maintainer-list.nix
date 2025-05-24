@@ -10066,6 +10066,12 @@
     githubId = 130903;
     name = "Ana Hobden";
   };
+  hpfr = {
+    email = "liam@hpfr.net";
+    github = "hpfr";
+    githubId = 44043764;
+    name = "Liam Hupfer";
+  };
   hqurve = {
     email = "hqurve@outlook.com";
     github = "hqurve";
