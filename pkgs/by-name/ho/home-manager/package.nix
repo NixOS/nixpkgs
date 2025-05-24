@@ -13,20 +13,20 @@
   ncurses,
   nixos-option,
   stdenvNoCC,
-  unixtools,
   unstableGitUpdater,
+  runCommand,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "home-manager";
-  version = "0-unstable-2025-05-13";
+  version = "0-unstable-2025-05-18";
 
   src = fetchFromGitHub {
     name = "home-manager-source";
     owner = "nix-community";
     repo = "home-manager";
-    rev = "8d832ddfda9facf538f3dda9b6985fb0234f151c";
-    hash = "sha256-NnPzzXEqfYjfrimLzK0JOBItfdEJdP/i6SNTuunCGgw=";
+    rev = "97118a310eb8e13bc1b9b12d67267e55b7bee6c8";
+    hash = "sha256-B6jmKHUEX1jxxcdoYHl7RVaeohtAVup8o3nuVkzkloA=";
   };
 
   nativeBuildInputs = [
@@ -79,8 +79,37 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --subst-var-by OUT "$out"
   '';
 
-  passthru.updateScript = unstableGitUpdater {
-    url = "https://github.com/nix-community/home-manager/";
+  passthru = {
+    updateScript = unstableGitUpdater {
+      url = "https://github.com/nix-community/home-manager/";
+    };
+    tests = {
+      /**
+        This is a fixed-output derivation triggered by version bumps.
+        The `outputHash` below would need to be updated manually from time
+        to time. It records the hash of upstream's packaging file, i.e.
+
+          $src/home-manager/default.nix
+
+        The test will fail (by design) once this packaging file is changed
+        upstream. The failure serves as an indicator that we should probably
+        update the `package.nix` here in Nixpkgs as well.
+
+        Once the changes from $src/home-manager/default.nix is incorporated
+        here, we can update the `outputHash` below to silence the test
+        failure.
+      */
+      upstreamPackaging =
+        runCommand "home-manager-upstream-package-${finalAttrs.version}.nix"
+          {
+            outputHash = "sha256-O290IaZj50YwuCPtzyeAK9pMSseZpBwgXHG/lpVfzFY=";
+            outputHashMode = "recursive";
+          }
+          ''
+            echo "# upstream packaging code (for reference only)" > $out
+            cat ${finalAttrs.src}/home-manager/default.nix >> $out
+          '';
+    };
   };
 
   meta = {
