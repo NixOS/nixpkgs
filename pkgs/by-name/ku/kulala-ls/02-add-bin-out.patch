@@ -1,0 +1,14 @@
+diff --git a/package.json b/package.json
+index 9c82253..0b4b76e 100644
+--- a/package.json
++++ b/package.json
+@@ -17,6 +17,9 @@
+     "lint:server:eslint": "eslint pkg/server",
+     "lint:server:prettier": "prettier --check pkg/server"
+   },
++  "bin": {
++    "kulala-ls": "pkg/server/cli.cjs"
++  },
+   "workspaces": [
+     "pkg/*"
+   ],
