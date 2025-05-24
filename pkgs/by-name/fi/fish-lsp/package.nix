@@ -13,20 +13,22 @@
   yarnBuildHook,
   yarnConfigHook,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fish-lsp";
-  version = "1.0.8-4";
+  version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "ndonfris";
     repo = "fish-lsp";
-    tag = "v${version}";
-    hash = "sha256-rtogxbcnmOEFT1v7aK+pzt9Z4B2O4rFwH3pTNVLTxiA=";
+
+    # TODO: use tag when it's created
+    rev = "805784be6784f85e28005cca35baf621b99f5fef";
+    hash = "sha256-lnMrkuhG8svBH/fWvBPfd+RN7ve13V47ldMuj+80DU4=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
-    hash = "sha256-83QhVDG/zyMbHJbV48m84eimXejLKdeVrdk1uZjI8bk=";
+    yarnLock = finalAttrs.src + "/yarn.lock";
+    hash = "sha256-fe6aUesx6bgwPXSykugdVLHnHwDlHROFjtEQyxIwtvY=";
   };
 
   nativeBuildInputs = [
@@ -82,7 +84,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ndonfris/fish-lsp";
     license = lib.licenses.mit;
     mainProgram = "fish-lsp";
-    maintainers = with lib.maintainers; [ petertriho ];
+    maintainers = with lib.maintainers; [
+      llakala
+      petertriho
+    ];
     platforms = lib.platforms.unix;
   };
-}
+})
