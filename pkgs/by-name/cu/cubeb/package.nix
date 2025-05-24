@@ -10,6 +10,11 @@
   sndio,
   speexdsp,
   lazyLoad ? !stdenv.hostPlatform.isDarwin,
+  alsaSupport ? !stdenv.hostPlatform.isDarwin,
+  pulseSupport ? !stdenv.hostPlatform.isDarwin,
+  jackSupport ? !stdenv.hostPlatform.isDarwin,
+  sndioSupport ? !stdenv.hostPlatform.isDarwin,
+  buildSharedLibs ? true,
 }:
 
 assert lib.assertMsg (
@@ -17,12 +22,11 @@ assert lib.assertMsg (
 ) "cubeb: lazyLoad is inert on Darwin";
 
 let
-  backendLibs = [
-    alsa-lib
-    jack2
-    libpulseaudio
-    sndio
-  ];
+  backendLibs =
+    lib.optional alsaSupport alsa-lib
+    ++ lib.optional jackSupport jack2
+    ++ lib.optional pulseSupport libpulseaudio
+    ++ lib.optional sndioSupport sndio;
 
 in
 stdenv.mkDerivation {
@@ -44,7 +48,7 @@ stdenv.mkDerivation {
   buildInputs = [ speexdsp ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) backendLibs;
 
   cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
+    (lib.cmakeBool "BUILD_SHARED_LIBS" buildSharedLibs)
     "-DBUILD_TESTS=OFF" # tests require an audio server
     "-DBUNDLE_SPEEX=OFF"
     "-DUSE_SANITIZERS=OFF"
@@ -58,12 +62,27 @@ stdenv.mkDerivation {
     backendLibs = lib.optionals lazyLoad backendLibs;
   };
 
+  postInstall = ''
+    # TODO: remove after https://github.com/mozilla/cubeb/pull/813 is merged
+    mkdir -p $out/lib/pkgconfig/
+    echo > $out/lib/pkgconfig/libcubeb.pc \
+    "Name: libcubeb
+    Description: Cross platform audio library
+    Version: 0.0.0
+    Requires.private: libpulse
+    Libs: -L"$out/lib" -lcubeb
+    Libs.private: -lstdc++"
+  '';
+
   meta = with lib; {
     description = "Cross platform audio library";
     mainProgram = "cubeb-test";
     homepage = "https://github.com/mozilla/cubeb";
     license = licenses.isc;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ zhaofengli ];
+    maintainers = with maintainers; [
+      zhaofengli
+      marcin-serwin
+    ];
   };
 }
