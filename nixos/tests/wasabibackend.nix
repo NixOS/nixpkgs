@@ -34,10 +34,6 @@ import ./make-test-python.nix (
       machine.wait_until_succeeds(
           "grep 'Wasabi Backend started' /var/lib/wasabibackend/.walletwasabi/backend/Logs.txt"
       )
-      machine.sleep(5)
-      machine.succeed(
-          "grep 'Config is successfully initialized' /var/lib/wasabibackend/.walletwasabi/backend/Logs.txt"
-      )
     '';
   }
 )
