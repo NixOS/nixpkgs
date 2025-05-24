@@ -403,6 +403,7 @@ in
     imports = [ ./cassandra.nix ];
     _module.args.getPackage = pkgs: pkgs.cassandra;
   };
+  catnap = runTest ./catnap.nix;
   centrifugo = runTest ./centrifugo.nix;
   ceph-multi-node-bluestore = runTestOn [ "aarch64-linux" "x86_64-linux" ] (
     import ./ceph-multi-node-bluestore.nix { }
