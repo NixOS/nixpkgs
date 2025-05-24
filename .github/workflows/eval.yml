@@ -61,7 +61,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           ref: ${{ needs.prepare.outputs.mergedSha }}
-          path: nixpkgs
+          path: untrusted
 
       - name: Install Nix
         uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
@@ -72,7 +72,7 @@ jobs:
         env:
           MATRIX_SYSTEM: ${{ matrix.system }}
         run: |
-          nix-build nixpkgs/ci -A eval.singleSystem \
+          nix-build untrusted/ci -A eval.singleSystem \
             --argstr evalSystem "$MATRIX_SYSTEM" \
             --arg chunkSize 10000
           # If it uses too much memory, slightly decrease chunkSize
@@ -101,7 +101,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           ref: ${{ needs.prepare.outputs.mergedSha }}
-          path: nixpkgs
+          path: untrusted
 
       - name: Install Nix
         uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
@@ -110,7 +110,7 @@ jobs:
 
       - name: Combine all output paths and eval stats
         run: |
-          nix-build nixpkgs/ci -A eval.combine \
+          nix-build untrusted/ci -A eval.combine \
             --arg resultsDir ./intermediate \
             -o prResult
 
@@ -167,13 +167,13 @@ jobs:
         env:
           AUTHOR_ID: ${{ github.event.pull_request.user.id }}
         run: |
-          git -C nixpkgs fetch --depth 1 origin ${{ needs.prepare.outputs.targetSha }}
-          git -C nixpkgs worktree add ../target ${{ needs.prepare.outputs.targetSha }}
-          git -C nixpkgs diff --name-only ${{ needs.prepare.outputs.targetSha }} \
+          git -C untrusted fetch --depth 1 origin ${{ needs.prepare.outputs.targetSha }}
+          git -C untrusted worktree add ../trusted ${{ needs.prepare.outputs.targetSha }}
+          git -C untrusted diff --name-only ${{ needs.prepare.outputs.targetSha }} \
             | jq --raw-input --slurp 'split("\n")[:-1]' > touched-files.json
 
           # Use the target branch to get accurate maintainer info
-          nix-build target/ci -A eval.compare \
+          nix-build trusted/ci -A eval.compare \
             --arg beforeResultDir ./targetResult \
             --arg afterResultDir "$(realpath prResult)" \
             --arg touchedFilesJson ./touched-files.json \
@@ -222,15 +222,15 @@ jobs:
 
       # Important: This workflow job runs with extra permissions,
       # so we need to make sure to not run untrusted code from PRs
-      - name: Check out Nixpkgs at the base commit
+      - name: Check out Nixpkgs at the target commit
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           ref: ${{ needs.prepare.outputs.targetSha }}
-          path: base
+          path: trusted
           sparse-checkout: ci
 
       - name: Build the requestReviews derivation
-        run: nix-build base/ci -A requestReviews
+        run: nix-build trusted/ci -A requestReviews
 
       - name: Labelling pull request
         if: ${{ github.event_name == 'pull_request_target' && github.repository_owner == 'NixOS' }}
