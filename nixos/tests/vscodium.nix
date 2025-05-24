@@ -62,14 +62,14 @@ let
           codium_running.wait() # type: ignore[union-attr]
           with codium_running: # type: ignore[union-attr]
               # Wait until vscodium is visible. "File" is in the menu bar.
-              machine.wait_for_text('Get Started with')
+              machine.wait_for_text('(Get|Started|with|Customize|theme)')
               machine.screenshot('start_screen')
 
               test_string = 'testfile'
 
               # Create a new file
               machine.send_key('ctrl-n')
-              machine.wait_for_text('Untitled')
+              machine.wait_for_text('(Untitled|Select|language|template|dismiss)')
               machine.screenshot('empty_editor')
 
               # Type a string

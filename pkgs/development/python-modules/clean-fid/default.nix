@@ -44,6 +44,6 @@ buildPythonPackage {
     description = "PyTorch - FID calculation with proper image resizing and quantization steps [CVPR 2022]";
     homepage = "https://github.com/GaParmar/clean-fid";
     license = licenses.mit;
-    maintainers = teams.tts.members;
+    teams = [ teams.tts ];
   };
 }

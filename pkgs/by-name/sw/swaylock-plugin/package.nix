@@ -21,14 +21,14 @@
   wayland-scanner,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "swaylock-plugin";
-  version = "unstable-2025-01-28";
+  version = "1.8.2";
   src = fetchFromGitHub {
     owner = "mstoeckl";
     repo = "swaylock-plugin";
-    rev = "ac02c528bce8f529f33c85065d77eac1aceccbe5";
-    hash = "sha256-e4iQ7yCPkkJBpgD0aE94lsID8v3kXhr7YmAszfFi7zA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Wj5//yTZQMq6ummKSVsCJjSRcVHw2VgAhVbihXBm/qQ=";
   };
 
   strictDeps = true;
@@ -85,4 +85,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ picnoir ];
   };
-}
+})

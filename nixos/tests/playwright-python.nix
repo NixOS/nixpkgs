@@ -21,6 +21,7 @@ import ./make-test-python.nix (
             }
             ''
               import sys
+              import re
               from playwright.sync_api import sync_playwright
               from playwright.sync_api import expect
 
@@ -29,6 +30,7 @@ import ./make-test-python.nix (
                 "firefox": {},
                 "webkit": {}
               }
+              needle = re.compile("Nix.*Reference Manual")
               if len(sys.argv) != 3 or sys.argv[1] not in browsers.keys():
                   print(f"usage: {sys.argv[0]} [{'|'.join(browsers.keys())}] <url>")
                   sys.exit(1)
@@ -42,7 +44,7 @@ import ./make-test-python.nix (
                   context = browser.new_context()
                   page = context.new_page()
                   page.goto(url)
-                  expect(page.get_by_text("Nix Reference Manual")).to_be_visible()
+                  expect(page.get_by_text(needle)).to_be_visible()
             ''
           )
         ];

@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     mainProgram = "sage";
     homepage = "https://www.sagemath.org";
     license = licenses.gpl2Plus;
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
     platforms = platforms.linux ++ [ "aarch64-darwin" ];
   };
 }

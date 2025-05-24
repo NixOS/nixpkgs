@@ -37,6 +37,11 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools<77.0.0" "setuptools"
+  '';
+
   build-system = [ setuptools ];
 
   pythonRelaxDeps = [
@@ -72,6 +77,8 @@ buildPythonPackage rec {
     ];
 
   pythonImportsCheck = [ "finetuning_scheduler" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "PyTorch Lightning extension for foundation model experimentation with flexible fine-tuning schedules";

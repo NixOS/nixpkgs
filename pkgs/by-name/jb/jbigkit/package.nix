@@ -89,6 +89,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  # Testing deletes all files on each test, causes test failures.
+  enableParallelChecking = false;
+
   meta = {
     description = "Software implementation of the JBIG1 data compression standard";
     homepage = "http://www.cl.cam.ac.uk/~mgk25/jbigkit/";

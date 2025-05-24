@@ -1,38 +1,20 @@
 {
+  lib,
+  python3Packages,
   fetchFromSourcehut,
   file,
   installShellFiles,
   less,
-  lib,
   offpunk,
-  python3Packages,
   testers,
   timg,
   xdg-utils,
   xsel,
 }:
 
-let
-  pythonDependencies = with python3Packages; [
-    beautifulsoup4
-    chardet
-    cryptography
-    feedparser
-    readability-lxml
-    requests
-    setproctitle
-  ];
-  otherDependencies = [
-    file
-    less
-    timg
-    xdg-utils
-    xsel
-  ];
-in
 python3Packages.buildPythonApplication rec {
   pname = "offpunk";
-  version = "2.6";
+  version = "2.7.1";
   pyproject = true;
 
   disabled = python3Packages.pythonOlder "3.7";
@@ -41,14 +23,30 @@ python3Packages.buildPythonApplication rec {
     owner = "~lioploum";
     repo = "offpunk";
     rev = "v${version}";
-    hash = "sha256-bVWPmCs8vspW0leaNajEYy+c3WRRMzIB8b9nXDDB8tw=";
+    hash = "sha256-+Mbe1VLeF8Adf7bgVnbzvcWdPB4PXakCD9gO35jAYBY=";
   };
 
-  nativeBuildInputs = [
-    python3Packages.hatchling
-    installShellFiles
-  ];
-  propagatedBuildInputs = otherDependencies ++ pythonDependencies;
+  build-system = with python3Packages; [ hatchling ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  dependencies =
+    [
+      file
+      less
+      timg
+      xdg-utils
+      xsel
+    ]
+    ++ (with python3Packages; [
+      beautifulsoup4
+      chardet
+      cryptography
+      feedparser
+      readability-lxml
+      requests
+      setproctitle
+    ]);
 
   postInstall = ''
     installManPage man/*.1

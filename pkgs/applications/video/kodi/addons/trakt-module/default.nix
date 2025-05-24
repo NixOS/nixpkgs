@@ -35,6 +35,6 @@ buildKodiAddon rec {
     homepage = "https://github.com/Razzeee/script.module.trakt";
     description = "Python trakt.py library packed for Kodi";
     license = licenses.mit;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

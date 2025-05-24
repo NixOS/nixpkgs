@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
     homepage = "https://ccl.clozure.com/";
     license = licenses.asl20;
     mainProgram = "ccl";
-    maintainers = lib.teams.lisp.members;
+    teams = [ lib.teams.lisp ];
     platforms = attrNames options;
   };
 }

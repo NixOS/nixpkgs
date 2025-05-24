@@ -15,12 +15,13 @@
   # tests
   boto3,
   flask-sqlalchemy,
+  memcachedTestHook,
   pytestCheckHook,
   redis,
+  redisTestHook,
   pymongo,
   pymemcache,
   python-memcached,
-  pkgs,
 }:
 
 buildPythonPackage rec {
@@ -45,23 +46,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     flask-sqlalchemy
+    memcachedTestHook
     pytestCheckHook
     redis
+    redisTestHook
     pymongo
     pymemcache
     python-memcached
     boto3
   ];
-
-  preCheck = ''
-    ${lib.getExe' pkgs.valkey "redis-server"} &
-    ${lib.getExe pkgs.memcached} &
-  '';
-
-  postCheck = ''
-    kill %%
-    kill %%
-  '';
 
   disabledTests = [
     # unfree

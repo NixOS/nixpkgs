@@ -126,6 +126,20 @@ in
     # TODO system.switch.enable = false;?
     system.disableInstallerTools = true;
 
+    # Allow the system derivation to be substituted, so that
+    # users are less likely to run into a state where they need
+    # the builder running to build the builder if they just want
+    # to make a tweak that only affects the macOS side of things,
+    # like changing the QEMU args.
+    #
+    # TODO(winter): Move to qemu-vm? Trying it here for now as a
+    # low impact change that'll probably improve people's experience.
+    #
+    # (I have no clue what is going on in https://github.com/nix-darwin/nix-darwin/issues/1081
+    # though, as this fix would only apply to one person in that thread... hopefully someone
+    # comes across with a reproducer if this doesn't do it.)
+    system.systemBuilderArgs.allowSubstitutes = true;
+
     nix.settings = {
       min-free = cfg.min-free;
 
@@ -163,7 +177,7 @@ in
 
         hostPkgs = config.virtualisation.host.pkgs;
 
-        script = hostPkgs.writeShellScriptBin "create-builder" (
+        add-keys = hostPkgs.writeShellScriptBin "add-keys" (
           ''
             set -euo pipefail
           ''
@@ -191,9 +205,21 @@ in
             if ! ${hostPkgs.diffutils}/bin/cmp "''${PUBLIC_KEY}" ${publicKey}; then
               (set -x; sudo --reset-timestamp ${installCredentials} "''${KEYS}")
             fi
-            KEYS="$(${hostPkgs.nix}/bin/nix-store --add "$KEYS")" ${lib.getExe config.system.build.vm}
           ''
         );
+
+        run-builder = hostPkgs.writeShellScriptBin "run-builder" (''
+          set -euo pipefail
+          KEYS="''${KEYS:-./keys}"
+          KEYS="$(${hostPkgs.nix}/bin/nix-store --add "$KEYS")" ${lib.getExe config.system.build.vm}
+        '');
+
+        script = hostPkgs.writeShellScriptBin "create-builder" (''
+          set -euo pipefail
+          export KEYS="''${KEYS:-./keys}"
+          ${lib.getExe add-keys}
+          ${lib.getExe run-builder}
+        '');
 
       in
       script.overrideAttrs (old: {
@@ -205,6 +231,8 @@ in
           # Let users in the repl inspect the config
           nixosConfig = config;
           nixosOptions = options;
+
+          inherit add-keys run-builder;
         };
       });
 

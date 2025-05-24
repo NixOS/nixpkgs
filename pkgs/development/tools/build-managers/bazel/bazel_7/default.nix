@@ -34,7 +34,6 @@
   python3,
   # Apple dependencies
   cctools,
-  libcxx,
   libtool,
   sigtool,
   # Allow to independently override the jdks used to build and run respectively
@@ -406,7 +405,7 @@ stdenv.mkDerivation rec {
 
         # libcxx includes aren't added by libcxx hook
         # https://github.com/NixOS/nixpkgs/pull/41589
-        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${lib.getDev libcxx}/include/c++/v1"
+        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
         # for CLang 16 compatibility in external/upb dependency
         export NIX_CFLAGS_COMPILE+=" -Wno-gnu-offsetof-extensions"
 
@@ -527,7 +526,7 @@ stdenv.mkDerivation rec {
       binaryBytecode # source bundles dependencies as jars
     ];
     license = licenses.asl20;
-    maintainers = lib.teams.bazel.members;
+    teams = [ lib.teams.bazel ];
     mainProgram = "bazel";
     inherit platforms;
   };
@@ -554,7 +553,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
       cctools
-      libcxx
     ];
 
   # Bazel makes extensive use of symlinks in the WORKSPACE.

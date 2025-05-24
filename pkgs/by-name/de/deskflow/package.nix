@@ -29,17 +29,18 @@
   lerc,
   doxygen,
   writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "deskflow";
-  version = "1.20.1";
+  version = "1.21.2";
 
   src = fetchFromGitHub {
     owner = "deskflow";
     repo = "deskflow";
-    tag = "v${version}";
-    hash = "sha256-lX8K7HuC/Sxa5M0h+r5NmdFf032nVrE9JF6H+IBWPUA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gXFBn8hlI8MZ9Vy3goPjosn0JgvaAgZaFIGh/3rFdx8=";
   };
 
   postPatch = ''
@@ -106,15 +107,17 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     homepage = "https://github.com/deskflow/deskflow";
     description = "Share one mouse and keyboard between multiple computers on Windows, macOS and Linux";
     mainProgram = "deskflow";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ flacks ];
     license = with lib; [
       licenses.gpl2Plus
       licenses.openssl
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

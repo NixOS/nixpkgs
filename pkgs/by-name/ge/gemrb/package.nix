@@ -15,6 +15,7 @@
   libpng,
   libvlc,
   libvorbis,
+  libX11,
   openal,
   python3,
   zlib,
@@ -60,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libvlc
     libvorbis
+    libX11
     openal
     python3
     zlib

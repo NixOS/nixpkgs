@@ -2,8 +2,7 @@
   lib,
   python3Packages,
   fetchPypi,
-  wrapQtAppsHook,
-  qtbase,
+  libsForQt5,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -16,12 +15,12 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
     python3Packages.sip
     python3Packages.tomli
   ];
 
-  buildInputs = [ qtbase ];
+  buildInputs = [ libsForQt5.qtbase ];
 
   # veusz is a script and not an ELF-executable, so wrapQtAppsHook will not wrap
   # it automatically -> we have to do it explicitly

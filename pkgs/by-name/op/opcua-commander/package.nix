@@ -10,16 +10,16 @@
 }:
 buildNpmPackage rec {
   pname = "opcua-commander";
-  version = "0.39.0";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "node-opcua";
     repo = "opcua-commander";
     rev = version;
-    hash = "sha256-7KYwIdrhlvGR9RHZBfMFOcBa+opwx7Q/crCdvwZD6Y8=";
+    hash = "sha256-qoBpYN0EiXiuhH+hXjVPK2ET8Psjz52rocohU8ccVIg=";
   };
 
-  npmDepsHash = "sha256-g4WFLh+UnziQR2NZ4eL84Vrk+Mz99kFQiBkdGmBEMHE=";
+  npmDepsHash = "sha256-HB4boWgZWoG+ib+cCoQbUmrrV5rECR3dMwj2lCyJjT0=";
   nativeBuildInputs = [
     esbuild
     typescript

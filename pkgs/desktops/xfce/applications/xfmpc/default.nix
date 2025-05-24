@@ -32,7 +32,8 @@ mkXfceDerivation rec {
     description = "MPD client written in GTK";
     homepage = "https://docs.xfce.org/apps/xfmpc/start";
     changelog = "https://gitlab.xfce.org/apps/xfmpc/-/blob/xfmpc-${version}/NEWS";
-    maintainers = with maintainers; [ doronbehar ] ++ teams.xfce.members;
+    maintainers = with maintainers; [ doronbehar ];
+    teams = [ teams.xfce ];
     mainProgram = "xfmpc";
   };
 }

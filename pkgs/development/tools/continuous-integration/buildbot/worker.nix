@@ -54,7 +54,7 @@ buildPythonPackage ({
   meta = with lib; {
     homepage = "https://buildbot.net/";
     description = "Buildbot Worker Daemon";
-    maintainers = teams.buildbot.members;
+    teams = [ teams.buildbot ];
     license = licenses.gpl2;
   };
 })

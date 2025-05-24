@@ -1,27 +1,27 @@
 {
   "chromium": {
-    "version": "135.0.7049.52",
+    "version": "136.0.7103.113",
     "chromedriver": {
-      "version": "135.0.7049.42",
-      "hash_darwin": "sha256-CixR0TvndAgxvXYbetIqKg6NRu/z3pJe+USCZ0pyQd4=",
-      "hash_darwin_aarch64": "sha256-WKDi97j1F9+I6RYOsdiXVrgVibZ3ZoVPljo1XAtw0o8="
+      "version": "136.0.7103.114",
+      "hash_darwin": "sha256-RAWarx2vOh23XKvhNwAkCgG9swGxX1dw8LaqIQBPJFo=",
+      "hash_darwin_aarch64": "sha256-TZcO5RiRW0dN0+jBArclBkIvYSSirhmPgJXswfTufgk="
     },
     "deps": {
       "depot_tools": {
-        "rev": "85ec2718b5a29990c7eb67778348c9f76a00f392",
-        "hash": "sha256-eWlHnSRfLFcd3OoyCTIFewDf0eC9KQowScQOnphgfg8="
+        "rev": "f40ddcd8d51626fb7be3ab3c418b3f3be801623f",
+        "hash": "sha256-O9vVbrCqHD4w39Q8ZAxl1RwzJxbH/thjqacMtCnOPdg="
       },
       "gn": {
-        "rev": "4a8016dc391553fa1644c0740cc04eaac844121e",
-        "hash": "sha256-8NynNvLNCHxy8EYmsnPovKhXu9DcDcYBhg4A6d2QIfY="
+        "rev": "6e8e0d6d4a151ab2ed9b4a35366e630c55888444",
+        "hash": "sha256-vDKMt23RMDI+KX6CmjfeOhRv2haf/mDOuHpWKnlODcg="
       },
-      "npmHash": "sha256-wNrZaugdKJCyV1WchkKXzr/I1OW1AtjiC2p7qTZZOqU="
+      "npmHash": "sha256-QRjk9X4rJW3ofizK33R4T1qym1riqcnpBhDF+FfNZLo="
     },
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "9ba7e609d28c509a8ce9265c2247065d8d251173",
-        "hash": "sha256-PjvfckdlaMq9HWefGxFppgBumlqh7xoCoxYFwk/r630=",
+        "rev": "76fa3c1782406c63308c70b54f228fd39c7aaa71",
+        "hash": "sha256-U6WsxmGf4eFKVBBgppoHIfMlrT34a1oymZETzEhzkQA=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {
@@ -29,10 +29,15 @@
         "rev": "37f6e68a107df43b7d7e044fd36a13cbae3413f2",
         "hash": "sha256-d9uweklBffiuCWEb03ti1eFLnMac2qRtvggzXY1n/RU="
       },
+      "src/third_party/compiler-rt/src": {
+        "url": "https://chromium.googlesource.com/external/github.com/llvm/llvm-project/compiler-rt.git",
+        "rev": "bc2b30185219a2defe3c8a3b45f95a11386a7f6f",
+        "hash": "sha256-bfDMglQaiExTFwaVBroia+6G+9AHEVy5cQGocaEVOgA="
+      },
       "src/third_party/libc++/src": {
         "url": "https://chromium.googlesource.com/external/github.com/llvm/llvm-project/libcxx.git",
-        "rev": "7f8b68f91ca8b192375f5e71cd81fb3ed9650ef3",
-        "hash": "sha256-1P+p5MPXm0WkeYgzIxG2SBKZVPWplUlEo7xYI//Y0uw="
+        "rev": "449310fe2e37834a7e62972d2a690cade2ef596b",
+        "hash": "sha256-Ypi5fmWdoNA1IZDoKITlkNRITmho8HzVlgjlmtx0Y84="
       },
       "src/third_party/libc++abi/src": {
         "url": "https://chromium.googlesource.com/external/github.com/llvm/llvm-project/libcxxabi.git",
@@ -41,13 +46,13 @@
       },
       "src/third_party/libunwind/src": {
         "url": "https://chromium.googlesource.com/external/github.com/llvm/llvm-project/libunwind.git",
-        "rev": "62e217a12ee1133833d9890b2f7adde900e4efbd",
-        "hash": "sha256-FBMrvCCVwm0mmaQHDvKXljxxLwthpsFqhPE8yqBx5Aw="
+        "rev": "e2e6f2a67e9420e770b014ce9bba476fa2ab9874",
+        "hash": "sha256-LdRaxPo2i7uMeFxpR7R4o3V+1ycBcygT/D+gklsD0tA="
       },
       "src/third_party/llvm-libc/src": {
         "url": "https://chromium.googlesource.com/external/github.com/llvm/llvm-project/libc.git",
-        "rev": "a02de4d0d992b110c8b180fdec91258e7b60265f",
-        "hash": "sha256-LtxaimMmnman7BKLKpSR8rJtbEvHsmGVeHvzEukB4EY="
+        "rev": "97989c1bfa112c81f6499487fedc661dcf6d3b2e",
+        "hash": "sha256-9Ieaxe0PFIIP4RttODd8pTw/zVjQZGZtaYSybwnzTz0="
       },
       "src/chrome/test/data/perf/canvas_bench": {
         "url": "https://chromium.googlesource.com/chromium/canvas_bench.git",
@@ -66,8 +71,8 @@
       },
       "src/docs/website": {
         "url": "https://chromium.googlesource.com/website.git",
-        "rev": "441c86221443f48e818335d51f84cf1880c35aa4",
-        "hash": "sha256-nMLn2wTAr+3U1VpqWWq93zJHrlT+f1Yky8ONKk0kWjg="
+        "rev": "929dd3e6d02aac1f46653d03b2a644e2873a3bbb",
+        "hash": "sha256-lY4P2f90/9JwCpxuBFjim7KygczM8zMDQVUaEYaQjnA="
       },
       "src/media/cdm/api": {
         "url": "https://chromium.googlesource.com/chromium/cdm.git",
@@ -76,8 +81,8 @@
       },
       "src/net/third_party/quiche/src": {
         "url": "https://quiche.googlesource.com/quiche.git",
-        "rev": "25a56e315359eaebb2ff4213771016a4978a346d",
-        "hash": "sha256-ZkrAaNgCqG09CufQN35wFi09TVxvbf/U4jGNNMRLY0M="
+        "rev": "5077431b183c43f10890b865fc9f02a4dcf1dd85",
+        "hash": "sha256-CLvZTBvtTdOpC8eWUTWkb0ITJ5EViPmc6d5O8cTaKY8="
       },
       "src/testing/libfuzzer/fuzzers/wasm_corpus": {
         "url": "https://chromium.googlesource.com/v8/fuzzer_wasm_corpus.git",
@@ -91,8 +96,8 @@
       },
       "src/third_party/angle": {
         "url": "https://chromium.googlesource.com/angle/angle.git",
-        "rev": "079266db445215380befce453b1ab3bbdfeaf73d",
-        "hash": "sha256-Bcm9wxlLqp/ANg+cPvsuwAlaxVmef6g+12L5ZE4uCGA="
+        "rev": "fa40b7c586fd2da9fd7e5c4d893ecb1334553b9e",
+        "hash": "sha256-bIpN9lehrKpJYBKLeo8Szz0/aVe7NU2Eo2NIO5dAZ9w="
       },
       "src/third_party/angle/third_party/glmark2/src": {
         "url": "https://chromium.googlesource.com/external/github.com/glmark2/glmark2",
@@ -106,13 +111,13 @@
       },
       "src/third_party/angle/third_party/VK-GL-CTS/src": {
         "url": "https://chromium.googlesource.com/external/github.com/KhronosGroup/VK-GL-CTS",
-        "rev": "ba86fb95004331f2cf571dd9adefe2458290ee11",
-        "hash": "sha256-wl/T/WxVNctM4m4VSFFqqtJ0xkEBiuILYywAylqa0Oo="
+        "rev": "b6bb4bab7b4a36bc95566e00cb8f01051089afc3",
+        "hash": "sha256-L2ewIW6C+PTftbbXf+nlWcFD0y4naBNg7FLXMMxiWac="
       },
       "src/third_party/anonymous_tokens/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/anonymous-tokens.git",
-        "rev": "2e328dd4eace9648adcc943cac6a1792b5dcdec5",
-        "hash": "sha256-mh4s57NonFQzWNaPiKfe9kW4Ow7XAN+hW6Xpvgjvb0w="
+        "rev": "d708a2602a5947ee068f784daa1594a673d47c4a",
+        "hash": "sha256-GaRtZmYqajLUpt7ToRfMLBlyMiJB5yT9BaaT9pHH7OM="
       },
       "src/third_party/content_analysis_sdk/src": {
         "url": "https://chromium.googlesource.com/external/github.com/chromium/content_analysis_sdk.git",
@@ -121,13 +126,13 @@
       },
       "src/third_party/dav1d/libdav1d": {
         "url": "https://chromium.googlesource.com/external/github.com/videolan/dav1d.git",
-        "rev": "7d4b789f55389dad1820d6caf6a650038dad06e2",
-        "hash": "sha256-O6WOm6qTSgRmDR+yY2wH6t+7ob+TtZIA5Gax1ysEZh0="
+        "rev": "8d956180934f16244bdb58b39175824775125e55",
+        "hash": "sha256-+DY4p41VuAlx7NvOfXjWzgEhvtpebjkjbFwSYOzSjv4="
       },
       "src/third_party/dawn": {
         "url": "https://dawn.googlesource.com/dawn.git",
-        "rev": "bdc68b25b620d7302a955e2c38c548ebfe74ef31",
-        "hash": "sha256-R9SQiKUjLkLmPJwuWpw7fcibrWxSlXWkDsCra7Ci0UQ="
+        "rev": "1cffe7ec763900d104e4df62bc96d93f572157cb",
+        "hash": "sha256-VK+5saAJlZOluMAYKTKwNcnZALsCYkzgVfQHylt3584="
       },
       "src/third_party/dawn/third_party/glfw": {
         "url": "https://chromium.googlesource.com/external/github.com/glfw/glfw",
@@ -136,8 +141,8 @@
       },
       "src/third_party/dawn/third_party/dxc": {
         "url": "https://chromium.googlesource.com/external/github.com/microsoft/DirectXShaderCompiler",
-        "rev": "0a1143572d107c8b6980df092b84a79190ec1fbd",
-        "hash": "sha256-sUSQTOi0EuIHX9h27RXb5HnbcdfkG/U1K6EbBdjSto8="
+        "rev": "206b77577d15fc5798eb7ad52290388539b7146d",
+        "hash": "sha256-WXgiOlqtczrUkXp46Q/GTaYk0LDqebQSFbyWpD299Xw="
       },
       "src/third_party/dawn/third_party/dxheaders": {
         "url": "https://chromium.googlesource.com/external/github.com/microsoft/DirectX-Headers",
@@ -156,8 +161,8 @@
       },
       "src/third_party/dawn/third_party/webgpu-cts": {
         "url": "https://chromium.googlesource.com/external/github.com/gpuweb/cts",
-        "rev": "ce91fc1d085136f9c7ddca684d1764689d49b337",
-        "hash": "sha256-SsxohjLb+uoN5cMXU5DJDrtF1QVk8EWK/qvTLxCleUI="
+        "rev": "5fbd82847521cb2d584773facd56c2eb6a4df180",
+        "hash": "sha256-WTVOc2EVB/DJ4aDeB8XIF/ff6LSeEUMt2Xkvj5Hu4aU="
       },
       "src/third_party/highway/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/highway.git",
@@ -171,33 +176,28 @@
       },
       "src/third_party/boringssl/src": {
         "url": "https://boringssl.googlesource.com/boringssl.git",
-        "rev": "673e61fc215b178a90c0e67858bbf162c8158993",
-        "hash": "sha256-8Dl6Aol33o2FYID3oIw9grB0jY9VJnnnhmiNdyycTlU="
+        "rev": "a9993612faac4866bc33ca8ff37bfd0659af1c48",
+        "hash": "sha256-fUPl9E2b7RfanH0pZNArIkJ4lnnmCtyk7sCaTArCB70="
       },
       "src/third_party/breakpad/breakpad": {
         "url": "https://chromium.googlesource.com/breakpad/breakpad.git",
-        "rev": "0dfd77492fdb0dcd06027c5842095e2e908adc90",
-        "hash": "sha256-jOTRgF2WxsX5P0LgUI9zdCc0+NcqSnO310aq15msThY="
+        "rev": "657a441e5c1a818d4c10b7bafd431454e6614901",
+        "hash": "sha256-9MePkv10fwyJ0VDWRtvRcbLMAcJzZlziGTPzXJYjVJE="
       },
       "src/third_party/cast_core/public/src": {
         "url": "https://chromium.googlesource.com/cast_core/public",
-        "rev": "dcb3d2e87cebe20b6dda06d8b29abb9af27ca422",
-        "hash": "sha256-e8+rQhEU5+FfwjyEE1TM6emO0cUntuS4GN7y/BuC/U8="
+        "rev": "f5ee589bdaea60418f670fa176be15ccb9a34942",
+        "hash": "sha256-yQxm1GMMne80bLl1P7OAN3bJLz1qRNAvou2/5MKp2ig="
       },
       "src/third_party/catapult": {
         "url": "https://chromium.googlesource.com/catapult.git",
-        "rev": "93e56257a5089dc49f1dfd1240c527f5fe1b237f",
-        "hash": "sha256-K5sOlXx72YmXlm7cc7jWf3lKmHcMdVHTwVueJo5CoHY="
+        "rev": "5bda0fdab9d93ec9963e2cd858c7b49ad7fec7d4",
+        "hash": "sha256-xwR9gGE8uU8qFr7GgS3/1JiuTmj1tvcM5CoCfPMdW2M="
       },
       "src/third_party/ced/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/compact_enc_det.git",
         "rev": "ba412eaaacd3186085babcd901679a48863c7dd5",
         "hash": "sha256-ySG74Rj2i2c/PltEgHVEDq+N8yd9gZmxNktc56zIUiY="
-      },
-      "src/third_party/chromium-variations": {
-        "url": "https://chromium.googlesource.com/chromium-variations.git",
-        "rev": "270a25f8795caf0a798ebf5a7d69284e3d830d19",
-        "hash": "sha256-ZkETD+Pka5vItN70nhlGQelycFAEnb1Qfv9k2aDXZSE="
       },
       "src/third_party/cld_3/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/cld_3.git",
@@ -216,8 +216,8 @@
       },
       "src/third_party/cpuinfo/src": {
         "url": "https://chromium.googlesource.com/external/github.com/pytorch/cpuinfo.git",
-        "rev": "aaac07ee499895770c89163ce0920ef8bb41ed23",
-        "hash": "sha256-A86nAbKs7trVwwa1HFUNbV//6O1minvlHTpZR3vabrU="
+        "rev": "b73ae6ce38d5dd0b7fe46dbe0a4b5f4bab91c7ea",
+        "hash": "sha256-JNLaK105qDk9DxTqCFyXFfYn46dF+nZIaF5urSVRa0U="
       },
       "src/third_party/crc32c/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/crc32c.git",
@@ -226,23 +226,23 @@
       },
       "src/third_party/cros_system_api": {
         "url": "https://chromium.googlesource.com/chromiumos/platform2/system_api.git",
-        "rev": "b8d797a61689892adb182c9bec457c9bd24b26d2",
-        "hash": "sha256-44bD1nG7CRrvBcd9NbU4yksn7Ly9WYsWETXat/L3f0I="
+        "rev": "62ab80355a8194e051bd1d93a5c09093c7645a32",
+        "hash": "sha256-pZi6GRu7OGL7jbN4FM2qDsLCsT6cM+RM0a7XtFZVSVE="
       },
       "src/third_party/crossbench": {
         "url": "https://chromium.googlesource.com/crossbench.git",
-        "rev": "bf8d1d3aaf469343576db89f81df26aeb16bd62b",
-        "hash": "sha256-XscXxoCUSVGsBCB8xymEsaLc4WgzZPXu6zkRbv8ZQZw="
+        "rev": "ce46be2573328fa7b0fd1d23c04b63389f298122",
+        "hash": "sha256-Q0kdJdEmh+wbO5oeTp98OHKh9luz8u6PDztGToldZjk="
       },
       "src/third_party/depot_tools": {
         "url": "https://chromium.googlesource.com/chromium/tools/depot_tools.git",
-        "rev": "85ec2718b5a29990c7eb67778348c9f76a00f392",
-        "hash": "sha256-eWlHnSRfLFcd3OoyCTIFewDf0eC9KQowScQOnphgfg8="
+        "rev": "f40ddcd8d51626fb7be3ab3c418b3f3be801623f",
+        "hash": "sha256-O9vVbrCqHD4w39Q8ZAxl1RwzJxbH/thjqacMtCnOPdg="
       },
       "src/third_party/devtools-frontend/src": {
         "url": "https://chromium.googlesource.com/devtools/devtools-frontend",
-        "rev": "ad4e2fc82183b1463ac870818c28680bbc3de889",
-        "hash": "sha256-HS5O+r0GFe3Dfh+86JQlsEC+5Gcs1xmUkDyZ7qixqXw="
+        "rev": "4a53cbe7a1270c91ec60903ee792de658453becb",
+        "hash": "sha256-hEksLeJli/1TNNrDcUjv19cpyIJph6kfriNfe7FWO0U="
       },
       "src/third_party/dom_distiller_js/dist": {
         "url": "https://chromium.googlesource.com/chromium/dom-distiller/dist.git",
@@ -251,8 +251,8 @@
       },
       "src/third_party/eigen3/src": {
         "url": "https://chromium.googlesource.com/external/gitlab.com/libeigen/eigen.git",
-        "rev": "4c38131a16803130b66266a912029504f2cf23cd",
-        "hash": "sha256-dOq8RJ/V8kulSMK0OUWzHruiwJSP3f/86ih5gk2MMWQ="
+        "rev": "464c1d097891a1462ab28bf8bb763c1683883892",
+        "hash": "sha256-OJyfUyiR8PFSaWltx6Ig0RCB+LxPxrPtc0GUfu2dKrk="
       },
       "src/third_party/farmhash/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/farmhash.git",
@@ -296,8 +296,8 @@
       },
       "src/third_party/freetype/src": {
         "url": "https://chromium.googlesource.com/chromium/src/third_party/freetype2.git",
-        "rev": "5d4e649f740c675426fbe4cdaffc53ee2a4cb954",
-        "hash": "sha256-DxLHuzIvw7WIKKMCRBz4ne97j9DufoohXQZV6yZ5zfY="
+        "rev": "82090e67c24259c343c83fd9cefe6ff0be7a7eca",
+        "hash": "sha256-LhSIX7X0+dmLADYGNclg73kIrXmjTMM++tJ92MKzanA="
       },
       "src/third_party/freetype-testing/src": {
         "url": "https://chromium.googlesource.com/external/github.com/freetype/freetype2-testing.git",
@@ -316,18 +316,18 @@
       },
       "src/third_party/ink/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/ink.git",
-        "rev": "bf387a71d7def4b48bf24c8e09d412dfb9962746",
-        "hash": "sha256-OcGUJxKEjeiYJgknpyb/KvDu76GMaddxWO0Lj7l9Eu8="
+        "rev": "c542d619a8959415beda5a76fe89ffa2f83df886",
+        "hash": "sha256-sMqSHYs3lvuHXEov1K9xWRd8tUPG00QBJl6an0zrxwA="
       },
       "src/third_party/ink_stroke_modeler/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/ink-stroke-modeler.git",
-        "rev": "0999e4cf816b42c770d07916698bce943b873048",
-        "hash": "sha256-IQ+n+kHdEq8Q8/qaPGMvgD7cPN3zzaY8dbiokq6r/Vs="
+        "rev": "f61f28792a00c9bdcb3489fec81d8fd0ca1cbaba",
+        "hash": "sha256-XMLW/m+Qx+RVgo1DeYggBLjUYg/M+2eHwgjVWrA/Erw="
       },
       "src/third_party/instrumented_libs": {
         "url": "https://chromium.googlesource.com/chromium/third_party/instrumented_libraries.git",
-        "rev": "3cc43119a29158bcde39d288a8def4b8ec49baf8",
-        "hash": "sha256-7w5wMcmPcKLS91buxyRdcgaQjbKGFdmrKClvYVO3iko="
+        "rev": "69015643b3f68dbd438c010439c59adc52cac808",
+        "hash": "sha256-8kokdsnn5jD9KgM/6g0NuITBbKkGXWEM4BMr1nCrfdU="
       },
       "src/third_party/emoji-segmenter/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/emoji-segmenter.git",
@@ -346,8 +346,8 @@
       },
       "src/third_party/googletest/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/googletest.git",
-        "rev": "24a9e940d481f992ba852599c78bb2217362847b",
-        "hash": "sha256-oLknxClUh7l72ZAx7sxNDM6dUhMT0vUE2IdDjRLDKtk="
+        "rev": "52204f78f94d7512df1f0f3bea1d47437a2c3a58",
+        "hash": "sha256-8keF4E6ag/rikv5ROaWUB7oganjViupEAdxW1NJVgmE="
       },
       "src/third_party/hunspell_dictionaries": {
         "url": "https://chromium.googlesource.com/chromium/deps/hunspell_dictionaries.git",
@@ -376,8 +376,8 @@
       },
       "src/third_party/fuzztest/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/fuzztest.git",
-        "rev": "a32ca113e3b050693e4bb379525dfae519ebd0d9",
-        "hash": "sha256-eoV+g/QVzcI7PqDmAic5Ra9K/ba4IV1wXE4RFecuMuk="
+        "rev": "c31f0c0e6df5725c6b03124b579c9cf815fd10f4",
+        "hash": "sha256-Dz7DqucOxr5HzLNOdGNOG4iMw66bkOj64qOvqeADTic="
       },
       "src/third_party/domato/src": {
         "url": "https://chromium.googlesource.com/external/github.com/googleprojectzero/domato.git",
@@ -391,18 +391,18 @@
       },
       "src/third_party/libaom/source/libaom": {
         "url": "https://aomedia.googlesource.com/aom.git",
-        "rev": "99fcd816eeaa7da46688bc4b9f4f9e71be13c2e8",
-        "hash": "sha256-SOIvGkR3k7TAs9KFA3mFbBSq5h4eJghKo38IVioOK3U="
+        "rev": "9680f2b1781fb33b9eeb52409b75c679c8a954be",
+        "hash": "sha256-nfnt5JXyKR9JR3BflpGEkwzDo0lYa/oeCDm2bKH/j1g="
       },
       "src/third_party/crabbyavif/src": {
         "url": "https://chromium.googlesource.com/external/github.com/webmproject/CrabbyAvif.git",
-        "rev": "a75457c637a365910508f3c2c2b986a701b03a2e",
-        "hash": "sha256-v3+Rj3jS/lCYZNjjAXB6zohdvM45PKayB43jX37ntsU="
+        "rev": "02d0fad2c512380b7270d6e704c86521075d7d54",
+        "hash": "sha256-T9ibgp0glfY5EhwMiwlvXKZat0InDu7PoqE1H8/lS5A="
       },
       "src/third_party/nearby/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/nearby-connections.git",
-        "rev": "45d6317a64aad3d5060b800db267f7cea3f27198",
-        "hash": "sha256-SmU+c9YveQ4N13bteuhtmo0uvySeCnmZYpC5NYiMJuo="
+        "rev": "8acf9249344ea9ff9806d0d7f46e07640fddf550",
+        "hash": "sha256-qIIyCHay3vkE14GVCq77psm1OyuEYs4guAaQDlEwiMg="
       },
       "src/third_party/beto-core/src": {
         "url": "https://beto-core.googlesource.com/beto-core.git",
@@ -414,15 +414,25 @@
         "rev": "fa07beb12babc3b25e0c5b1f38c16aa8cb6b8f84",
         "hash": "sha256-GS4ccnuiqxMs/LVYAtvSlVAYFp4a5GoZsxcriTX3k78="
       },
+      "src/third_party/jetstream/main": {
+        "url": "https://chromium.googlesource.com/external/github.com/WebKit/JetStream.git",
+        "rev": "0260caf74b5c115507ee0adb6d9cdf6aefb0965f",
+        "hash": "sha256-DbRup4tOAYv27plzB2JKi2DBX2FVMDtFR7AzuovXUDU="
+      },
+      "src/third_party/jetstream/v2.2": {
+        "url": "https://chromium.googlesource.com/external/github.com/WebKit/JetStream.git",
+        "rev": "2145cedef4ca2777b792cb0059d3400ee2a6153c",
+        "hash": "sha256-zucA2tqNOsvjhwYQKZ5bFUC73ZF/Fu7KpBflSelvixw="
+      },
       "src/third_party/speedometer/main": {
         "url": "https://chromium.googlesource.com/external/github.com/WebKit/Speedometer.git",
-        "rev": "d6b5ffea959ad31e231c203d7446bf8b39e987ce",
-        "hash": "sha256-lCwGk4Q+OXwO8vOlOQrkgygYqLrwpku/PkR03oEdX3Y="
+        "rev": "c760d160caa05792d3ed7650e85861c9f9462506",
+        "hash": "sha256-/nAK2uLjpPem37XCHHx3LGZEpvL/7w4Uw5bVpQ4C6ms="
       },
       "src/third_party/speedometer/v3.1": {
         "url": "https://chromium.googlesource.com/external/github.com/WebKit/Speedometer.git",
-        "rev": "cc9ee085ae18f05961ff3dfa1ee1a90d67b7f8ee",
-        "hash": "sha256-28vGPZLaD9xSwursTRRK1xndedeBUZ5TF/4hdy0RjFc="
+        "rev": "1386415be8fef2f6b6bbdbe1828872471c5d802a",
+        "hash": "sha256-G89mrrgRaANT1vqzhKPQKemHbz56YwR+oku7rlRoCHw="
       },
       "src/third_party/speedometer/v3.0": {
         "url": "https://chromium.googlesource.com/external/github.com/WebKit/Speedometer.git",
@@ -466,8 +476,8 @@
       },
       "src/third_party/libjpeg_turbo": {
         "url": "https://chromium.googlesource.com/chromium/deps/libjpeg_turbo.git",
-        "rev": "927aabfcd26897abb9776ecf2a6c38ea5bb52ab6",
-        "hash": "sha256-qgHXAjCDFxQ+QqJ8pSmI1NUvHvKKTi4MkIe1I/+hUAI="
+        "rev": "e14cbfaa85529d47f9f55b0f104a579c1061f9ad",
+        "hash": "sha256-Ig+tmprZDvlf/M72/DTar2pbxat9ZElgSqdXdoM0lPs="
       },
       "src/third_party/liblouis/src": {
         "url": "https://chromium.googlesource.com/external/liblouis-github.git",
@@ -501,13 +511,13 @@
       },
       "src/third_party/libvpx/source/libvpx": {
         "url": "https://chromium.googlesource.com/webm/libvpx.git",
-        "rev": "2bfb9f9e0a9cca18cd5a0045e931b49dac390c79",
-        "hash": "sha256-BWid6iU7CDEElh8j13a+S767vwnO8qQg26Vp5nQGEHc="
+        "rev": "027bbee30a0103b99d86327b48d29567fed11688",
+        "hash": "sha256-+4I6B1aTa+txhey6LMeflU0pe39V6TJ+lNIJPh6yFGM="
       },
       "src/third_party/libwebm/source": {
         "url": "https://chromium.googlesource.com/webm/libwebm.git",
-        "rev": "b4f01ea3ed6fd00923caa383bb2cf6f7a0b7f633",
-        "hash": "sha256-yQ5MIUKtuWQM5SfD74vPeqGEdLJNss2/RBUZfq5701A="
+        "rev": "e79a98159fdf6d1aa37b3500e32c6410a2cbe268",
+        "hash": "sha256-t7An0vYzukel0poLaU4t2k78k3tTR5didbcV47cGWxQ="
       },
       "src/third_party/libwebp/src": {
         "url": "https://chromium.googlesource.com/webm/libwebp.git",
@@ -521,8 +531,8 @@
       },
       "src/third_party/lss": {
         "url": "https://chromium.googlesource.com/linux-syscall-support.git",
-        "rev": "ce877209e11aa69dcfffbd53ef90ea1d07136521",
-        "hash": "sha256-hE8uZf9Fst66qJkoVYChiB8G41ie+k9M4X0W+5JUSdw="
+        "rev": "ed31caa60f20a4f6569883b2d752ef7522de51e0",
+        "hash": "sha256-rhp4EcZYdgSfu9cqn+zxxGx6v2IW8uX8V+iA0UfZhFY="
       },
       "src/third_party/material_color_utilities/src": {
         "url": "https://chromium.googlesource.com/external/github.com/material-foundation/material-color-utilities.git",
@@ -536,8 +546,8 @@
       },
       "src/third_party/nasm": {
         "url": "https://chromium.googlesource.com/chromium/deps/nasm.git",
-        "rev": "f477acb1049f5e043904b87b825c5915084a9a29",
-        "hash": "sha256-SiRXHsUlWXtH6dbDjDjqNAm105ibEB3jOfNtQAM4CaY="
+        "rev": "767a169c8811b090df222a458b25dfa137fc637e",
+        "hash": "sha256-yg4qwhS68B/sWfcJeXUqPC69ppE8FaIyRc+IkUQXSnU="
       },
       "src/third_party/neon_2_sse/src": {
         "url": "https://chromium.googlesource.com/external/github.com/intel/ARM_NEON_2_x86_SSE.git",
@@ -551,8 +561,8 @@
       },
       "src/third_party/openscreen/src": {
         "url": "https://chromium.googlesource.com/openscreen",
-        "rev": "b756f3c04ba53983a94cd12eb29b7f22e472fd58",
-        "hash": "sha256-P6vAoVF1/geM6MjihcEBQtbf8CxE8sPSKTRLz8/c2yE="
+        "rev": "db9e1ea566813606ca055868be13f6ff4a760ab8",
+        "hash": "sha256-K/frmCf3JMvPVZc6ZKPFAQrq4Pz4io3XBvADS0O5u78="
       },
       "src/third_party/openscreen/src/buildtools": {
         "url": "https://chromium.googlesource.com/chromium/src/buildtools",
@@ -566,23 +576,23 @@
       },
       "src/third_party/pdfium": {
         "url": "https://pdfium.googlesource.com/pdfium.git",
-        "rev": "9afffebfa895ea6cdcc05516908c50bd7fe72797",
-        "hash": "sha256-89rJdhwUJtJCMO7FvVoTYO80swFRkoWUB/ZYs1tOLzE="
+        "rev": "ca83e69429af8f0bfa34b22dc54f538b9eebf5c5",
+        "hash": "sha256-6gsur+fx546YJn/PUOOthuj+XrSIruVUeAYl4nRI6xM="
       },
       "src/third_party/perfetto": {
-        "url": "https://android.googlesource.com/platform/external/perfetto.git",
-        "rev": "aa4d8267bafad6782a1f2c8d979104f2aaa622a0",
-        "hash": "sha256-smVQykQVZdhybEUz7BlRLc+FVNH0UyGh+0eSxP8Jzrc="
+        "url": "https://chromium.googlesource.com/external/github.com/google/perfetto.git",
+        "rev": "054635b91453895720951f7329619d003a98b3e4",
+        "hash": "sha256-2jKRhHLitR0m2a4/asvVvTqAOhUlyLsBBSjpQAer4GA="
       },
       "src/third_party/protobuf-javascript/src": {
         "url": "https://chromium.googlesource.com/external/github.com/protocolbuffers/protobuf-javascript",
-        "rev": "426b2e025aa59c23a1b6e19fbacd6b4a11bfad16",
-        "hash": "sha256-5uieIE6ygM4Ooz9xbu1NVKCHHsPn6Ekz6OzqfWiA7/M="
+        "rev": "eb785a9363664a402b6336dfe96aad27fb33ffa8",
+        "hash": "sha256-zq86SrDASl6aYPFPijRZp03hJqXUFz2Al/KkiNq7i0M="
       },
       "src/third_party/pthreadpool/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/pthreadpool.git",
-        "rev": "f94ab76fe99754960035d520dce28e15b647e8cf",
-        "hash": "sha256-NdKKMnXZ6rYOC2wA6a1bPNStxpemzGckN6PPWom6mFA="
+        "rev": "4e1831c02c74334a35ead03362f3342b6cea2a86",
+        "hash": "sha256-mB1QaAuY8vfv8FasPyio1AF75iYH+dM8t1GIr0Ty/+g="
       },
       "src/third_party/pyelftools": {
         "url": "https://chromium.googlesource.com/chromiumos/third_party/pyelftools.git",
@@ -591,8 +601,8 @@
       },
       "src/third_party/quic_trace/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/quic-trace.git",
-        "rev": "413da873d93a03d3662f24b881ea459a79f9c589",
-        "hash": "sha256-N1uFoNd3mz/LH1z06581Ds7BUyc67SNXUPzqomYREr8="
+        "rev": "ed3deb8a056b260c59f2fd42af6dfa3db48a8cad",
+        "hash": "sha256-vbXqddDgwqetU0bDYn3qo7OBqT5eG926/MbA1hKkCT0="
       },
       "src/third_party/pywebsocket3/src": {
         "url": "https://chromium.googlesource.com/external/github.com/GoogleChromeLabs/pywebsocket3.git",
@@ -611,13 +621,13 @@
       },
       "src/third_party/search_engines_data/resources": {
         "url": "https://chromium.googlesource.com/external/search_engines_data.git",
-        "rev": "48ba13bfb5488755a5d72aa60ff4a47069be498f",
-        "hash": "sha256-//z0HlMOkGTcp1IjbS0m+0dmgVYsG7EkfCiK2vvG2wU="
+        "rev": "07834ba1e5ebfb333d0b73556b7c4d62a53cb455",
+        "hash": "sha256-DTz351NpoygQLESm/z+fzFc/KGJyQelLnWpzNMmNT9o="
       },
       "src/third_party/skia": {
         "url": "https://skia.googlesource.com/skia.git",
-        "rev": "b99f146a03d3c98049768fd91c2bbe6594b02b2c",
-        "hash": "sha256-tl1GDmcStkuKMmzzsYuRG6Nrk4xDqgYYBoa1VsQNOwY="
+        "rev": "bcce46ca33b67cc302dd53927a63013b8f53bf73",
+        "hash": "sha256-ei95CJRfNPrsYt8XcDi7Pnl5dGiJu3qs7R4rAcZ24Uc="
       },
       "src/third_party/smhasher/src": {
         "url": "https://chromium.googlesource.com/external/smhasher.git",
@@ -631,13 +641,13 @@
       },
       "src/third_party/sqlite/src": {
         "url": "https://chromium.googlesource.com/chromium/deps/sqlite.git",
-        "rev": "567495a62a62dc013888500526e82837d727fe01",
-        "hash": "sha256-ltl3OTk/wZPSj3yYthNlKd3mBxef6l5uW6UYTwebNek="
+        "rev": "8a22b25ad7244abaf07e372cc6dc97e041d663a9",
+        "hash": "sha256-1vAGAF3idxgHGaqb5gT5k3KIGC2H3gqC3RTVU2ZRf4A="
       },
       "src/third_party/swiftshader": {
         "url": "https://swiftshader.googlesource.com/SwiftShader.git",
-        "rev": "c12c13839d689f411911326b1f72e96eb525686c",
-        "hash": "sha256-C8y5ShwMffNZpFuILYNw3WOMVJp/jPen/wNbFl1vqBY="
+        "rev": "4982425ff1bdcb2ce52a360edde58a379119bfde",
+        "hash": "sha256-QTGU9Dgc6rgMeFZvhZyYeYj5W+ClJO8Yfa4+K7TmEec="
       },
       "src/third_party/text-fragments-polyfill/src": {
         "url": "https://chromium.googlesource.com/external/github.com/GoogleChromeLabs/text-fragments-polyfill.git",
@@ -646,18 +656,18 @@
       },
       "src/third_party/tflite/src": {
         "url": "https://chromium.googlesource.com/external/github.com/tensorflow/tensorflow.git",
-        "rev": "d120e39920c0e61cc1227bc1abe50fd6ecd3ce66",
-        "hash": "sha256-9p0/tR3bPvCJn+6eofmQXKbyfzxfbeVexdvuHpn50wk="
+        "rev": "c8ed430d092acd485f00e7a9d7a888a0857d0430",
+        "hash": "sha256-S5zkpQZdhRdnZRUrUfi5FCrF2XFe3y/adAWwfh1OQYE="
       },
       "src/third_party/vulkan-deps": {
         "url": "https://chromium.googlesource.com/vulkan-deps",
-        "rev": "c1c31f4d17a9e4b2af40d85c89d573eb43187e0d",
-        "hash": "sha256-uEsy4PBhO3EBJF6YdWj32GmMabgKWQJUeW3cWInAinE="
+        "rev": "1648e664337ca19a4f8679cbb9547a5b4b926995",
+        "hash": "sha256-CI0X6zbRV/snGcQZOUKQFn8Zo6D6Out6nN027HGZaa8="
       },
       "src/third_party/glslang/src": {
         "url": "https://chromium.googlesource.com/external/github.com/KhronosGroup/glslang",
-        "rev": "8b822ee8ac2c3e52926820f46ad858532a895951",
-        "hash": "sha256-hPd5roeHOgMiz2VUx13bUsKKDSvgQAXRdk7wfdi6e48="
+        "rev": "e57f993cff981c8c3ffd38967e030f04d13781a9",
+        "hash": "sha256-nr7pGPNPMbmL/XnL27M4m5in8qnCDcpNtVsxBAc7zms="
       },
       "src/third_party/spirv-cross/src": {
         "url": "https://chromium.googlesource.com/external/github.com/KhronosGroup/SPIRV-Cross",
@@ -666,38 +676,38 @@
       },
       "src/third_party/spirv-headers/src": {
         "url": "https://chromium.googlesource.com/external/github.com/KhronosGroup/SPIRV-Headers",
-        "rev": "54a521dd130ae1b2f38fef79b09515702d135bdd",
-        "hash": "sha256-PScDq8HhQPFUs78N75QyL9oEykmjZmAhdxCAqQ0LJds="
+        "rev": "8c88e0c4c94a21de825efccba5f99a862b049825",
+        "hash": "sha256-s0Pe7kg5syKhK8qEZH8b7UCDa87Xk32Lh95cQbpLdAc="
       },
       "src/third_party/spirv-tools/src": {
         "url": "https://chromium.googlesource.com/external/github.com/KhronosGroup/SPIRV-Tools",
-        "rev": "f289d047f49fb60488301ec62bafab85573668cc",
-        "hash": "sha256-2Wv0dxVQ8NvuDRTcsXkH1GKmuA6lsIuwTl0j6kbTefo="
+        "rev": "2e83ad7e6f2cc51f7eaff3ffeb10e34351b3c157",
+        "hash": "sha256-u4WDbWywua71yWB1cVIt1IDZRe4NnT5bUq3yHLKBgPo="
       },
       "src/third_party/vulkan-headers/src": {
         "url": "https://chromium.googlesource.com/external/github.com/KhronosGroup/Vulkan-Headers",
-        "rev": "952f776f6573aafbb62ea717d871cd1d6816c387",
-        "hash": "sha256-LfJ7um+rzc4HdkJerHWkuPWeEc7ZFSBafbP+svAjklk="
+        "rev": "78c359741d855213e8685278eb81bb62599f8e56",
+        "hash": "sha256-VqKQeJd81feSgYnYLqb2sYirCmnHN9Rr19/4cPZ2TzE="
       },
       "src/third_party/vulkan-loader/src": {
         "url": "https://chromium.googlesource.com/external/github.com/KhronosGroup/Vulkan-Loader",
-        "rev": "809941a4ca137df69dc9c6e8eb456bd70309197c",
-        "hash": "sha256-FPXAofnMfgUkwwRGh8rqtXrmLjouP5A8umXV1pHm1ck="
+        "rev": "723d6b4aa35853315c6e021ec86388b3a2559fae",
+        "hash": "sha256-tDW5ed6gsDKlCKf4gT8MNi1yaafocUTohL1upGKB+Cc="
       },
       "src/third_party/vulkan-tools/src": {
         "url": "https://chromium.googlesource.com/external/github.com/KhronosGroup/Vulkan-Tools",
-        "rev": "fb8f5a5d69f4590ff1f5ecacb5e3957b6d11daee",
-        "hash": "sha256-fO6fkWOMYbf/um7gKFyjtrFE21g1kYx3lLvPv4gY7qw="
+        "rev": "289efccc7560f2b970e2b4e0f50349da87669311",
+        "hash": "sha256-Cw7LWBPRbDVlfmeMM4CYEC9xbfqT1wV7yuUcpGMLahs="
       },
       "src/third_party/vulkan-utility-libraries/src": {
         "url": "https://chromium.googlesource.com/external/github.com/KhronosGroup/Vulkan-Utility-Libraries",
-        "rev": "2d8f273ebd4b843c402d9ee881616895b854e42f",
-        "hash": "sha256-nD/WTBTwCnfZdwdNKldDVpcuirSghCIeJRBeX+uQXBk="
+        "rev": "0d5b49b80f17bca25e7f9321ad4e671a56f70887",
+        "hash": "sha256-NdvjtdCrNVKY23B4YDL33KB+/9HsSWTVolZJOto8+pc="
       },
       "src/third_party/vulkan-validation-layers/src": {
         "url": "https://chromium.googlesource.com/external/github.com/KhronosGroup/Vulkan-ValidationLayers",
-        "rev": "4e7b0c905b1a0401e24333800937cc8792efa037",
-        "hash": "sha256-CCpfWpyGki9klgHInjs6gAhw5shPXlzmFgccCHNfGQY="
+        "rev": "73d7d74bc979c8a16c823c4eae4ee881153e000a",
+        "hash": "sha256-2GII+RBRzPZTTib82srUEFDG+CbtPTZ6lX3oDJBC2gU="
       },
       "src/third_party/vulkan_memory_allocator": {
         "url": "https://chromium.googlesource.com/external/github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator.git",
@@ -706,8 +716,8 @@
       },
       "src/third_party/wasm_tts_engine/src": {
         "url": "https://chromium.googlesource.com/chromium/wasm-tts-engine",
-        "rev": "6ab3e63276a2d66ba3e7db4f87c5b7cb00e22130",
-        "hash": "sha256-ZcnKKnHsN1UyztAXClc2EUwfeX3yuLtMM2Zjwpnh62U="
+        "rev": "53d2aba6f0cf7db57e17edfc3ff6471871b0c125",
+        "hash": "sha256-t5eeehwspRLaowEMPLa8/lV5AHamXQBfH/un0DHLVAM="
       },
       "src/third_party/wayland/src": {
         "url": "https://chromium.googlesource.com/external/anongit.freedesktop.org/git/wayland/wayland.git",
@@ -736,23 +746,23 @@
       },
       "src/third_party/webgl/src": {
         "url": "https://chromium.googlesource.com/external/khronosgroup/webgl.git",
-        "rev": "450cceb587613ac1469c5a131fac15935c99e0e7",
-        "hash": "sha256-32r3BdmsNA89mo0k+vK1G3718AOjseE7cJlopZ/0pSw="
+        "rev": "c01b768bce4a143e152c1870b6ba99ea6267d2b0",
+        "hash": "sha256-mSketnpcDtz3NnhPkXMpMpq8MWcFiSviJbK6h06fcnw="
       },
       "src/third_party/webgpu-cts/src": {
         "url": "https://chromium.googlesource.com/external/github.com/gpuweb/cts.git",
-        "rev": "dcfb0d153f1e19905b0af26e640470c9ec5578e7",
-        "hash": "sha256-726p6OfKAzHtnjz/8WtMcsRxuq4wqyJv3+DHOHDTeYY="
+        "rev": "92f4eb4dae0f5439f2cdc7ce467d66b10e165f42",
+        "hash": "sha256-vXyp0+6eyKOzzQbkRa8f8dO+B9cyUCY2hCZEFc7+7lU="
       },
       "src/third_party/webpagereplay": {
         "url": "https://chromium.googlesource.com/webpagereplay.git",
-        "rev": "d812e180206934eb3b7ae411d82d61bc21c22f70",
-        "hash": "sha256-KAkkFVxEfQxbSjD+55LO4UZYWWwmGK6B9ENFSPljNu0="
+        "rev": "2c5049abfc2cf36ece82f7f84ebdcb786659eaf7",
+        "hash": "sha256-lMqCZ27TJ4aXKWDuN22VtceXh0jNH4Ll1234xCbEOro="
       },
       "src/third_party/webrtc": {
         "url": "https://webrtc.googlesource.com/src.git",
-        "rev": "04413d62f754a7b1a3a2d8c3df23bcde040112b2",
-        "hash": "sha256-sFoBgpPeMJQNSjNp8dDEUlB/7lJUpIXTpu0eRq94cGk="
+        "rev": "2c8f5be6924d507ee74191b1aeadcec07f747f21",
+        "hash": "sha256-cNONf88oSbsdYuSdPiLxgTI973qOP6fb1OKb2WMQMMg="
       },
       "src/third_party/wuffs/src": {
         "url": "https://skia.googlesource.com/external/github.com/google/wuffs-mirror-release-c.git",
@@ -771,8 +781,8 @@
       },
       "src/third_party/xnnpack/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/XNNPACK.git",
-        "rev": "7702e723fa25102db8b633ead4e3c221a5121487",
-        "hash": "sha256-n3FxY4HESzNyccQLENbuisU29v79c2x+7fYOsUrQnFg="
+        "rev": "d6fc3be20b0d3e3742157fa26c5359babaa8bc8b",
+        "hash": "sha256-p5DjGNH9IR0KPWSFmbsdt2PU+kHgWRAnBw7J9sLV/S8="
       },
       "src/third_party/zstd/src": {
         "url": "https://chromium.googlesource.com/external/github.com/facebook/zstd.git",
@@ -781,33 +791,33 @@
       },
       "src/v8": {
         "url": "https://chromium.googlesource.com/v8/v8.git",
-        "rev": "e2591684c45463aa1e46ebefc3fd35deee63f37c",
-        "hash": "sha256-tbGzFdqmkoSiVGk1WMRroWC3NR5GaHRuMwGzPhVodxk="
+        "rev": "5297e56d91816747d539abca52b578e5832135f0",
+        "hash": "sha256-Fi4pl6xSXkHF4XaQNfNzULVjQZSzDfaHFIyIxH103go="
       }
     }
   },
   "ungoogled-chromium": {
-    "version": "134.0.6998.165",
+    "version": "136.0.7103.113",
     "deps": {
       "depot_tools": {
-        "rev": "e42fac3e9c1726ab14a61a25e6291d9ccc49e688",
-        "hash": "sha256-BvEkk15Rm4nSoV/uWiwmQW/+gg2vpLQ187TbBAHl9Rk="
+        "rev": "f40ddcd8d51626fb7be3ab3c418b3f3be801623f",
+        "hash": "sha256-O9vVbrCqHD4w39Q8ZAxl1RwzJxbH/thjqacMtCnOPdg="
       },
       "gn": {
-        "rev": "ed1abc107815210dc66ec439542bee2f6cbabc00",
-        "hash": "sha256-EqbwCLkseND1v3UqM+49N7GuoXJ3PlJjWOes4OijQ3U="
+        "rev": "6e8e0d6d4a151ab2ed9b4a35366e630c55888444",
+        "hash": "sha256-vDKMt23RMDI+KX6CmjfeOhRv2haf/mDOuHpWKnlODcg="
       },
       "ungoogled-patches": {
-        "rev": "134.0.6998.165-1",
-        "hash": "sha256-Uia8tI3ZpryD+YVV9duH6sAmB/gKvsFg9RZVKYo/HX0="
+        "rev": "136.0.7103.113-1",
+        "hash": "sha256-+xQvBkwza1QLwWgijoMnih2k2v0I7cBiAjxOeqMf6A0="
       },
-      "npmHash": "sha256-oVoTruhxTymYiGkELd2Oa1wOfjGLtChQZozP4GzOO1A="
+      "npmHash": "sha256-QRjk9X4rJW3ofizK33R4T1qym1riqcnpBhDF+FfNZLo="
     },
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "fd886e2cb29dd984c13deec032832dee68d8abe3",
-        "hash": "sha256-xD06hGSrccTGB6fUGw0b7RrGNBQjNmdGKPaRqhXVVOY=",
+        "rev": "76fa3c1782406c63308c70b54f228fd39c7aaa71",
+        "hash": "sha256-U6WsxmGf4eFKVBBgppoHIfMlrT34a1oymZETzEhzkQA=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {
@@ -815,25 +825,30 @@
         "rev": "37f6e68a107df43b7d7e044fd36a13cbae3413f2",
         "hash": "sha256-d9uweklBffiuCWEb03ti1eFLnMac2qRtvggzXY1n/RU="
       },
+      "src/third_party/compiler-rt/src": {
+        "url": "https://chromium.googlesource.com/external/github.com/llvm/llvm-project/compiler-rt.git",
+        "rev": "bc2b30185219a2defe3c8a3b45f95a11386a7f6f",
+        "hash": "sha256-bfDMglQaiExTFwaVBroia+6G+9AHEVy5cQGocaEVOgA="
+      },
       "src/third_party/libc++/src": {
         "url": "https://chromium.googlesource.com/external/github.com/llvm/llvm-project/libcxx.git",
-        "rev": "2e25154d49c29fa9aa42c30ad4a027bd30123434",
-        "hash": "sha256-QxEbtsEKCs2Xgulq7nVWtAeOGkIYFOy/L1ROfXa5u8U="
+        "rev": "449310fe2e37834a7e62972d2a690cade2ef596b",
+        "hash": "sha256-Ypi5fmWdoNA1IZDoKITlkNRITmho8HzVlgjlmtx0Y84="
       },
       "src/third_party/libc++abi/src": {
         "url": "https://chromium.googlesource.com/external/github.com/llvm/llvm-project/libcxxabi.git",
-        "rev": "634228a732a1d9ae1a6d459556e8fc58707cf961",
-        "hash": "sha256-ln/DCNYJXVksbwdDBnxCfc4VwtjQlJXF7ktl/NxLupg="
+        "rev": "94c5d7a8edc09f0680aee57548c0b5d400c2840d",
+        "hash": "sha256-wMMfj3E2AQJxovoSEIuT2uTyrcGBurS1HrHZOmP36+g="
       },
       "src/third_party/libunwind/src": {
         "url": "https://chromium.googlesource.com/external/github.com/llvm/llvm-project/libunwind.git",
-        "rev": "e55d8cf51c6db1fdd4bb56c158945ec59772c8ee",
-        "hash": "sha256-JazjgI+ch9RgnsDgu6p4cT4UmCBor4x4sRi1ClLISAY="
+        "rev": "e2e6f2a67e9420e770b014ce9bba476fa2ab9874",
+        "hash": "sha256-LdRaxPo2i7uMeFxpR7R4o3V+1ycBcygT/D+gklsD0tA="
       },
       "src/third_party/llvm-libc/src": {
         "url": "https://chromium.googlesource.com/external/github.com/llvm/llvm-project/libc.git",
-        "rev": "6d0c8ee02e2fd44e69ac30e721e13be463035ee5",
-        "hash": "sha256-bF4hV9fY0GLYAHUnxSXkCxdZLMKR3wYWaqYJaM9aQiE="
+        "rev": "97989c1bfa112c81f6499487fedc661dcf6d3b2e",
+        "hash": "sha256-9Ieaxe0PFIIP4RttODd8pTw/zVjQZGZtaYSybwnzTz0="
       },
       "src/chrome/test/data/perf/canvas_bench": {
         "url": "https://chromium.googlesource.com/chromium/canvas_bench.git",
@@ -852,8 +867,8 @@
       },
       "src/docs/website": {
         "url": "https://chromium.googlesource.com/website.git",
-        "rev": "600fc3a0b121d5007b4bb97b001e756625e6d418",
-        "hash": "sha256-f3Tdz0ykxQ2FHbNweJwPdAZHA8eVpjPuxqRpxwhYtRM="
+        "rev": "929dd3e6d02aac1f46653d03b2a644e2873a3bbb",
+        "hash": "sha256-lY4P2f90/9JwCpxuBFjim7KygczM8zMDQVUaEYaQjnA="
       },
       "src/media/cdm/api": {
         "url": "https://chromium.googlesource.com/chromium/cdm.git",
@@ -862,8 +877,8 @@
       },
       "src/net/third_party/quiche/src": {
         "url": "https://quiche.googlesource.com/quiche.git",
-        "rev": "e7d001c82ee5bead5140481671828d5e156a525a",
-        "hash": "sha256-5YFqWgkyQ/PUKTkk1j3mAFD8JMbI+E4XRdSq34HFMWA="
+        "rev": "5077431b183c43f10890b865fc9f02a4dcf1dd85",
+        "hash": "sha256-CLvZTBvtTdOpC8eWUTWkb0ITJ5EViPmc6d5O8cTaKY8="
       },
       "src/testing/libfuzzer/fuzzers/wasm_corpus": {
         "url": "https://chromium.googlesource.com/v8/fuzzer_wasm_corpus.git",
@@ -877,13 +892,13 @@
       },
       "src/third_party/angle": {
         "url": "https://chromium.googlesource.com/angle/angle.git",
-        "rev": "914c97c116e09ef01a99fbbbe9cd28cda56552c7",
-        "hash": "sha256-Y4eX8YHwVXiXW4U8KGbFd4fTU/v/EAUpfwv6lB127Y4="
+        "rev": "fa40b7c586fd2da9fd7e5c4d893ecb1334553b9e",
+        "hash": "sha256-bIpN9lehrKpJYBKLeo8Szz0/aVe7NU2Eo2NIO5dAZ9w="
       },
       "src/third_party/angle/third_party/glmark2/src": {
         "url": "https://chromium.googlesource.com/external/github.com/glmark2/glmark2",
-        "rev": "cb550a25c75a99ae0def91a02e16ae29d73e6d1e",
-        "hash": "sha256-kqBpWHCxUl1ekmrbdPn6cL2y75nK4FxECJ5mo83Zgf4="
+        "rev": "6edcf02205fd1e8979dc3f3964257a81959b80c8",
+        "hash": "sha256-VebUALLFKwEa4+oE+jF8mBSzhJd6aflphPmcK1Em8bw="
       },
       "src/third_party/angle/third_party/rapidjson/src": {
         "url": "https://chromium.googlesource.com/external/github.com/Tencent/rapidjson",
@@ -892,13 +907,13 @@
       },
       "src/third_party/angle/third_party/VK-GL-CTS/src": {
         "url": "https://chromium.googlesource.com/external/github.com/KhronosGroup/VK-GL-CTS",
-        "rev": "48e7f3020f52ef9adc31aa0f5db01dc42cc487cd",
-        "hash": "sha256-g59uC7feByGR1Ema8LqUCr5XWKpDMeXXvlS2thOo5Ks="
+        "rev": "b6bb4bab7b4a36bc95566e00cb8f01051089afc3",
+        "hash": "sha256-L2ewIW6C+PTftbbXf+nlWcFD0y4naBNg7FLXMMxiWac="
       },
       "src/third_party/anonymous_tokens/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/anonymous-tokens.git",
-        "rev": "2e328dd4eace9648adcc943cac6a1792b5dcdec5",
-        "hash": "sha256-mh4s57NonFQzWNaPiKfe9kW4Ow7XAN+hW6Xpvgjvb0w="
+        "rev": "d708a2602a5947ee068f784daa1594a673d47c4a",
+        "hash": "sha256-GaRtZmYqajLUpt7ToRfMLBlyMiJB5yT9BaaT9pHH7OM="
       },
       "src/third_party/content_analysis_sdk/src": {
         "url": "https://chromium.googlesource.com/external/github.com/chromium/content_analysis_sdk.git",
@@ -907,13 +922,13 @@
       },
       "src/third_party/dav1d/libdav1d": {
         "url": "https://chromium.googlesource.com/external/github.com/videolan/dav1d.git",
-        "rev": "42b2b24fb8819f1ed3643aa9cf2a62f03868e3aa",
-        "hash": "sha256-qcs9QoZ/uWEQ8l1ChZ8nYctZnnWJ0VvCw1q2rEktC9g="
+        "rev": "8d956180934f16244bdb58b39175824775125e55",
+        "hash": "sha256-+DY4p41VuAlx7NvOfXjWzgEhvtpebjkjbFwSYOzSjv4="
       },
       "src/third_party/dawn": {
         "url": "https://dawn.googlesource.com/dawn.git",
-        "rev": "7056f50fdefc6bc46aa442e720d0336e2855b570",
-        "hash": "sha256-aYlcplXSGjFov9dqql6d+a1PxJWtZJNQaaezof0u9QQ="
+        "rev": "1cffe7ec763900d104e4df62bc96d93f572157cb",
+        "hash": "sha256-VK+5saAJlZOluMAYKTKwNcnZALsCYkzgVfQHylt3584="
       },
       "src/third_party/dawn/third_party/glfw": {
         "url": "https://chromium.googlesource.com/external/github.com/glfw/glfw",
@@ -922,8 +937,8 @@
       },
       "src/third_party/dawn/third_party/dxc": {
         "url": "https://chromium.googlesource.com/external/github.com/microsoft/DirectXShaderCompiler",
-        "rev": "c2ed9ad4ee775f3de903ce757c994aecc59a5306",
-        "hash": "sha256-jecGwARtdSr2OEC68749mpFUAHuYP/IzYUZyj23CwJE="
+        "rev": "206b77577d15fc5798eb7ad52290388539b7146d",
+        "hash": "sha256-WXgiOlqtczrUkXp46Q/GTaYk0LDqebQSFbyWpD299Xw="
       },
       "src/third_party/dawn/third_party/dxheaders": {
         "url": "https://chromium.googlesource.com/external/github.com/microsoft/DirectX-Headers",
@@ -942,8 +957,8 @@
       },
       "src/third_party/dawn/third_party/webgpu-cts": {
         "url": "https://chromium.googlesource.com/external/github.com/gpuweb/cts",
-        "rev": "24d5dfa7725d6ece31941c3f3343ba6362986d6b",
-        "hash": "sha256-AEGYE2rSsPcRzJSm97DGsrPVbhCH+lyVI61Z4qavKc8="
+        "rev": "5fbd82847521cb2d584773facd56c2eb6a4df180",
+        "hash": "sha256-WTVOc2EVB/DJ4aDeB8XIF/ff6LSeEUMt2Xkvj5Hu4aU="
       },
       "src/third_party/highway/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/highway.git",
@@ -957,33 +972,28 @@
       },
       "src/third_party/boringssl/src": {
         "url": "https://boringssl.googlesource.com/boringssl.git",
-        "rev": "ea42fe28775844ec8fe0444fc421398be42d51fe",
-        "hash": "sha256-g9i5v11uZy/3Smn8zSCFmC27Gdp5VP2b0ROrj+VmP1k="
+        "rev": "a9993612faac4866bc33ca8ff37bfd0659af1c48",
+        "hash": "sha256-fUPl9E2b7RfanH0pZNArIkJ4lnnmCtyk7sCaTArCB70="
       },
       "src/third_party/breakpad/breakpad": {
         "url": "https://chromium.googlesource.com/breakpad/breakpad.git",
-        "rev": "0dfd77492fdb0dcd06027c5842095e2e908adc90",
-        "hash": "sha256-jOTRgF2WxsX5P0LgUI9zdCc0+NcqSnO310aq15msThY="
+        "rev": "657a441e5c1a818d4c10b7bafd431454e6614901",
+        "hash": "sha256-9MePkv10fwyJ0VDWRtvRcbLMAcJzZlziGTPzXJYjVJE="
       },
       "src/third_party/cast_core/public/src": {
         "url": "https://chromium.googlesource.com/cast_core/public",
-        "rev": "fbc5e98031e1271a0a566fcd4d9092b2d3275d05",
-        "hash": "sha256-o5/Lbhh6HHSWCVCEyDwDCgs+PLm67si981w0HuIWY7c="
+        "rev": "f5ee589bdaea60418f670fa176be15ccb9a34942",
+        "hash": "sha256-yQxm1GMMne80bLl1P7OAN3bJLz1qRNAvou2/5MKp2ig="
       },
       "src/third_party/catapult": {
         "url": "https://chromium.googlesource.com/catapult.git",
-        "rev": "d5166861902b565df446e15181eba270fe168275",
-        "hash": "sha256-xkvz743+w0xsI0w4reAo2rfC4J7opl1biA3eNYuRn+o="
+        "rev": "5bda0fdab9d93ec9963e2cd858c7b49ad7fec7d4",
+        "hash": "sha256-xwR9gGE8uU8qFr7GgS3/1JiuTmj1tvcM5CoCfPMdW2M="
       },
       "src/third_party/ced/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/compact_enc_det.git",
         "rev": "ba412eaaacd3186085babcd901679a48863c7dd5",
         "hash": "sha256-ySG74Rj2i2c/PltEgHVEDq+N8yd9gZmxNktc56zIUiY="
-      },
-      "src/third_party/chromium-variations": {
-        "url": "https://chromium.googlesource.com/chromium-variations.git",
-        "rev": "84c18c7a0205fbd0a27b0214b16ded7fc44dc062",
-        "hash": "sha256-zXAmoKyj104BaIe4Rug18WbVKkyAsyWPCTPPEerinVo="
       },
       "src/third_party/cld_3/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/cld_3.git",
@@ -1002,8 +1012,8 @@
       },
       "src/third_party/cpuinfo/src": {
         "url": "https://chromium.googlesource.com/external/github.com/pytorch/cpuinfo.git",
-        "rev": "8a1772a0c5c447df2d18edf33ec4603a8c9c04a6",
-        "hash": "sha256-dKmZ5YXLhvVdxaJ4PefR+SWlh+MTFHNxOMeM6Vj7Gvo="
+        "rev": "b73ae6ce38d5dd0b7fe46dbe0a4b5f4bab91c7ea",
+        "hash": "sha256-JNLaK105qDk9DxTqCFyXFfYn46dF+nZIaF5urSVRa0U="
       },
       "src/third_party/crc32c/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/crc32c.git",
@@ -1012,23 +1022,23 @@
       },
       "src/third_party/cros_system_api": {
         "url": "https://chromium.googlesource.com/chromiumos/platform2/system_api.git",
-        "rev": "ea21b22629965105426f3df5e58190513e95a17e",
-        "hash": "sha256-xUaGf4MaEXg2RHgrGS1Uuz97vq5Vbt4HFV/AXYB4lCA="
+        "rev": "62ab80355a8194e051bd1d93a5c09093c7645a32",
+        "hash": "sha256-pZi6GRu7OGL7jbN4FM2qDsLCsT6cM+RM0a7XtFZVSVE="
       },
       "src/third_party/crossbench": {
         "url": "https://chromium.googlesource.com/crossbench.git",
-        "rev": "0391f0d11cbf3cf3c5bcf82e19e9d9839b1936ed",
-        "hash": "sha256-EL+lOTe1Vzg4JW2q7t3UoXzHHiEmLjf7khH9fXdplbo="
+        "rev": "ce46be2573328fa7b0fd1d23c04b63389f298122",
+        "hash": "sha256-Q0kdJdEmh+wbO5oeTp98OHKh9luz8u6PDztGToldZjk="
       },
       "src/third_party/depot_tools": {
         "url": "https://chromium.googlesource.com/chromium/tools/depot_tools.git",
-        "rev": "e42fac3e9c1726ab14a61a25e6291d9ccc49e688",
-        "hash": "sha256-BvEkk15Rm4nSoV/uWiwmQW/+gg2vpLQ187TbBAHl9Rk="
+        "rev": "f40ddcd8d51626fb7be3ab3c418b3f3be801623f",
+        "hash": "sha256-O9vVbrCqHD4w39Q8ZAxl1RwzJxbH/thjqacMtCnOPdg="
       },
       "src/third_party/devtools-frontend/src": {
         "url": "https://chromium.googlesource.com/devtools/devtools-frontend",
-        "rev": "65b3f414b81ffe4df49202af6fc75bc26a3cb109",
-        "hash": "sha256-rdBpJWdQ5VtFnIfbr/Vq1q1euSvkbY8iIqyuTMAS2KM="
+        "rev": "4a53cbe7a1270c91ec60903ee792de658453becb",
+        "hash": "sha256-hEksLeJli/1TNNrDcUjv19cpyIJph6kfriNfe7FWO0U="
       },
       "src/third_party/dom_distiller_js/dist": {
         "url": "https://chromium.googlesource.com/chromium/dom-distiller/dist.git",
@@ -1037,8 +1047,8 @@
       },
       "src/third_party/eigen3/src": {
         "url": "https://chromium.googlesource.com/external/gitlab.com/libeigen/eigen.git",
-        "rev": "2a35a917be47766a895be610bedd66006980b7e6",
-        "hash": "sha256-WG7uiduuMnXrvEpXJNGksrYkBsim+l7eiu5N+mx0Yr0="
+        "rev": "464c1d097891a1462ab28bf8bb763c1683883892",
+        "hash": "sha256-OJyfUyiR8PFSaWltx6Ig0RCB+LxPxrPtc0GUfu2dKrk="
       },
       "src/third_party/farmhash/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/farmhash.git",
@@ -1052,8 +1062,8 @@
       },
       "src/third_party/ffmpeg": {
         "url": "https://chromium.googlesource.com/chromium/third_party/ffmpeg.git",
-        "rev": "d10a0f8bf5ddcce572df95105152bc74041cae0c",
-        "hash": "sha256-OXumpRb9XB38dOCJmL3jDcabiJ08wAvydVlJwMgpCoQ="
+        "rev": "fbce2a76c00cd2e5aeffe3c2e71d44c284ec52d6",
+        "hash": "sha256-bGa0BCvzNxEKu9VZEwJ1NLt+b2KKWUxshpKSN2FHNEM="
       },
       "src/third_party/flac": {
         "url": "https://chromium.googlesource.com/chromium/deps/flac.git",
@@ -1080,15 +1090,10 @@
         "rev": "13d57703abca3005d97b19df1f2db731607a7dc2",
         "hash": "sha256-O5wD8wxgis0qYMaY+xZ21GBDVQFphMRvInCOswS6inA="
       },
-      "src/third_party/grpc/src": {
-        "url": "https://chromium.googlesource.com/external/github.com/grpc/grpc.git",
-        "rev": "a363b6c001139b9c8ffb7cd63f60a72f15349c3b",
-        "hash": "sha256-RKGZWtH2JmP2mXN+4ln/nCJvOyzynrYcfrxSY8k1vVg="
-      },
       "src/third_party/freetype/src": {
         "url": "https://chromium.googlesource.com/chromium/src/third_party/freetype2.git",
-        "rev": "b1f47850878d232eea372ab167e760ccac4c4e32",
-        "hash": "sha256-YxWz3O9see1dktqZnC551V12yU5jcOERTB1Hn1lwUNM="
+        "rev": "82090e67c24259c343c83fd9cefe6ff0be7a7eca",
+        "hash": "sha256-LhSIX7X0+dmLADYGNclg73kIrXmjTMM++tJ92MKzanA="
       },
       "src/third_party/freetype-testing/src": {
         "url": "https://chromium.googlesource.com/external/github.com/freetype/freetype2-testing.git",
@@ -1102,23 +1107,23 @@
       },
       "src/third_party/harfbuzz-ng/src": {
         "url": "https://chromium.googlesource.com/external/github.com/harfbuzz/harfbuzz.git",
-        "rev": "6d8035a99c279e32183ad063f0de201ef1b2f05c",
-        "hash": "sha256-isQvwaVdL4cM465A8Gs06VioAu8RvZFrwXDsXhfOoFo="
+        "rev": "8efd2d85c78fbba6ca09a3e454f77525f3b296ce",
+        "hash": "sha256-/WNGrvyvJ+FGqoIoHapaux1iu63zjID0yR30HYPpxaw="
       },
       "src/third_party/ink/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/ink.git",
-        "rev": "bf387a71d7def4b48bf24c8e09d412dfb9962746",
-        "hash": "sha256-OcGUJxKEjeiYJgknpyb/KvDu76GMaddxWO0Lj7l9Eu8="
+        "rev": "c542d619a8959415beda5a76fe89ffa2f83df886",
+        "hash": "sha256-sMqSHYs3lvuHXEov1K9xWRd8tUPG00QBJl6an0zrxwA="
       },
       "src/third_party/ink_stroke_modeler/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/ink-stroke-modeler.git",
-        "rev": "0999e4cf816b42c770d07916698bce943b873048",
-        "hash": "sha256-IQ+n+kHdEq8Q8/qaPGMvgD7cPN3zzaY8dbiokq6r/Vs="
+        "rev": "f61f28792a00c9bdcb3489fec81d8fd0ca1cbaba",
+        "hash": "sha256-XMLW/m+Qx+RVgo1DeYggBLjUYg/M+2eHwgjVWrA/Erw="
       },
       "src/third_party/instrumented_libs": {
         "url": "https://chromium.googlesource.com/chromium/third_party/instrumented_libraries.git",
-        "rev": "3cc43119a29158bcde39d288a8def4b8ec49baf8",
-        "hash": "sha256-7w5wMcmPcKLS91buxyRdcgaQjbKGFdmrKClvYVO3iko="
+        "rev": "69015643b3f68dbd438c010439c59adc52cac808",
+        "hash": "sha256-8kokdsnn5jD9KgM/6g0NuITBbKkGXWEM4BMr1nCrfdU="
       },
       "src/third_party/emoji-segmenter/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/emoji-segmenter.git",
@@ -1137,8 +1142,8 @@
       },
       "src/third_party/googletest/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/googletest.git",
-        "rev": "e235eb34c6c4fed790ccdad4b16394301360dcd4",
-        "hash": "sha256-jpXIcz5Uy6fDEvxTq8rTFx/M+0+SQ6TCDaqnp7nMtng="
+        "rev": "52204f78f94d7512df1f0f3bea1d47437a2c3a58",
+        "hash": "sha256-8keF4E6ag/rikv5ROaWUB7oganjViupEAdxW1NJVgmE="
       },
       "src/third_party/hunspell_dictionaries": {
         "url": "https://chromium.googlesource.com/chromium/deps/hunspell_dictionaries.git",
@@ -1167,8 +1172,8 @@
       },
       "src/third_party/fuzztest/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/fuzztest.git",
-        "rev": "44ac6c2594a880edbb9cb1e4e197c2b53d078130",
-        "hash": "sha256-AKXKxXqOMUb3APf5r15NmIMyhJ4ZmW5+t7y5XdgdZkw="
+        "rev": "c31f0c0e6df5725c6b03124b579c9cf815fd10f4",
+        "hash": "sha256-Dz7DqucOxr5HzLNOdGNOG4iMw66bkOj64qOvqeADTic="
       },
       "src/third_party/domato/src": {
         "url": "https://chromium.googlesource.com/external/github.com/googleprojectzero/domato.git",
@@ -1182,18 +1187,18 @@
       },
       "src/third_party/libaom/source/libaom": {
         "url": "https://aomedia.googlesource.com/aom.git",
-        "rev": "3990233fc06a35944d6d33797e63931802122a95",
-        "hash": "sha256-4NOQug0MlWZ18527V3IDuGcxGEJ4b+mZZbdzugWoBgQ="
+        "rev": "9680f2b1781fb33b9eeb52409b75c679c8a954be",
+        "hash": "sha256-nfnt5JXyKR9JR3BflpGEkwzDo0lYa/oeCDm2bKH/j1g="
       },
       "src/third_party/crabbyavif/src": {
         "url": "https://chromium.googlesource.com/external/github.com/webmproject/CrabbyAvif.git",
-        "rev": "c5938b119ef52f9ff628436c1e66c9a5322ece83",
-        "hash": "sha256-+6339vcd0KJj5V11dvJvs0YpQpTxsLmDuBoYVzyn9Ec="
+        "rev": "02d0fad2c512380b7270d6e704c86521075d7d54",
+        "hash": "sha256-T9ibgp0glfY5EhwMiwlvXKZat0InDu7PoqE1H8/lS5A="
       },
       "src/third_party/nearby/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/nearby-connections.git",
-        "rev": "97690c6996f683a6f3e07d75fc4557958c55ac7b",
-        "hash": "sha256-d1D9/6d7a1+27nD8VijhzRMglE2PqvAMK8+GbMeesSQ="
+        "rev": "8acf9249344ea9ff9806d0d7f46e07640fddf550",
+        "hash": "sha256-qIIyCHay3vkE14GVCq77psm1OyuEYs4guAaQDlEwiMg="
       },
       "src/third_party/beto-core/src": {
         "url": "https://beto-core.googlesource.com/beto-core.git",
@@ -1205,25 +1210,40 @@
         "rev": "fa07beb12babc3b25e0c5b1f38c16aa8cb6b8f84",
         "hash": "sha256-GS4ccnuiqxMs/LVYAtvSlVAYFp4a5GoZsxcriTX3k78="
       },
+      "src/third_party/jetstream/main": {
+        "url": "https://chromium.googlesource.com/external/github.com/WebKit/JetStream.git",
+        "rev": "0260caf74b5c115507ee0adb6d9cdf6aefb0965f",
+        "hash": "sha256-DbRup4tOAYv27plzB2JKi2DBX2FVMDtFR7AzuovXUDU="
+      },
+      "src/third_party/jetstream/v2.2": {
+        "url": "https://chromium.googlesource.com/external/github.com/WebKit/JetStream.git",
+        "rev": "2145cedef4ca2777b792cb0059d3400ee2a6153c",
+        "hash": "sha256-zucA2tqNOsvjhwYQKZ5bFUC73ZF/Fu7KpBflSelvixw="
+      },
       "src/third_party/speedometer/main": {
         "url": "https://chromium.googlesource.com/external/github.com/WebKit/Speedometer.git",
-        "rev": "d6b5ffea959ad31e231c203d7446bf8b39e987ce",
-        "hash": "sha256-lCwGk4Q+OXwO8vOlOQrkgygYqLrwpku/PkR03oEdX3Y="
+        "rev": "c760d160caa05792d3ed7650e85861c9f9462506",
+        "hash": "sha256-/nAK2uLjpPem37XCHHx3LGZEpvL/7w4Uw5bVpQ4C6ms="
+      },
+      "src/third_party/speedometer/v3.1": {
+        "url": "https://chromium.googlesource.com/external/github.com/WebKit/Speedometer.git",
+        "rev": "1386415be8fef2f6b6bbdbe1828872471c5d802a",
+        "hash": "sha256-G89mrrgRaANT1vqzhKPQKemHbz56YwR+oku7rlRoCHw="
       },
       "src/third_party/speedometer/v3.0": {
         "url": "https://chromium.googlesource.com/external/github.com/WebKit/Speedometer.git",
         "rev": "8d67f28d0281ac4330f283495b7f48286654ad7d",
         "hash": "sha256-qMQ4naX+4uUu3vtzzinjkhxX9/dNoTwj6vWCu4FdQmU="
       },
-      "src/third_party/speedometer/v2.0": {
-        "url": "https://chromium.googlesource.com/external/github.com/WebKit/Speedometer.git",
-        "rev": "732af0dfe867f8815e662ac637357e55f285dbbb",
-        "hash": "sha256-p7WUS8gZUaS+LOm7pNmRkwgxjx+V8R6yy7bbaEHaIs4="
-      },
       "src/third_party/speedometer/v2.1": {
         "url": "https://chromium.googlesource.com/external/github.com/WebKit/Speedometer.git",
         "rev": "8bf7946e39e47c875c00767177197aea5727e84a",
         "hash": "sha256-0z5tZlz32fYh9I1ALqfLm2WWO8HiRBwt0hcmgKQhaeM="
+      },
+      "src/third_party/speedometer/v2.0": {
+        "url": "https://chromium.googlesource.com/external/github.com/WebKit/Speedometer.git",
+        "rev": "732af0dfe867f8815e662ac637357e55f285dbbb",
+        "hash": "sha256-p7WUS8gZUaS+LOm7pNmRkwgxjx+V8R6yy7bbaEHaIs4="
       },
       "src/third_party/ukey2/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/ukey2.git",
@@ -1232,8 +1252,8 @@
       },
       "src/third_party/cros-components/src": {
         "url": "https://chromium.googlesource.com/external/google3/cros_components.git",
-        "rev": "1f1c782f06956a2deb5d33f09c466e4852099c71",
-        "hash": "sha256-80WqSMP5Vlc4OY+gfpU3SRGavs7fJbTQVW1AIhq6jmE="
+        "rev": "97dc8c7a1df880206cc54d9913a7e9d73677072a",
+        "hash": "sha256-CT9c4LqTwhldsxoEny8MesULwQC4k95F4tfCtRZErGM="
       },
       "src/third_party/libdrm/src": {
         "url": "https://chromium.googlesource.com/chromiumos/third_party/libdrm.git",
@@ -1252,8 +1272,8 @@
       },
       "src/third_party/libjpeg_turbo": {
         "url": "https://chromium.googlesource.com/chromium/deps/libjpeg_turbo.git",
-        "rev": "927aabfcd26897abb9776ecf2a6c38ea5bb52ab6",
-        "hash": "sha256-qgHXAjCDFxQ+QqJ8pSmI1NUvHvKKTi4MkIe1I/+hUAI="
+        "rev": "e14cbfaa85529d47f9f55b0f104a579c1061f9ad",
+        "hash": "sha256-Ig+tmprZDvlf/M72/DTar2pbxat9ZElgSqdXdoM0lPs="
       },
       "src/third_party/liblouis/src": {
         "url": "https://chromium.googlesource.com/external/liblouis-github.git",
@@ -1267,8 +1287,8 @@
       },
       "src/third_party/libprotobuf-mutator/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/libprotobuf-mutator.git",
-        "rev": "a304ec48dcf15d942607032151f7e9ee504b5dcf",
-        "hash": "sha256-ZyPweW+V5foxFQwjjMLkaRUo+FNV+kEDGIH/4oRV614="
+        "rev": "7bf98f78a30b067e22420ff699348f084f802e12",
+        "hash": "sha256-EaEC6R7SzqLw4QjEcWXFXhZc84lNBp6RSa9izjGnWKE="
       },
       "src/third_party/libsrtp": {
         "url": "https://chromium.googlesource.com/chromium/deps/libsrtp.git",
@@ -1287,13 +1307,13 @@
       },
       "src/third_party/libvpx/source/libvpx": {
         "url": "https://chromium.googlesource.com/webm/libvpx.git",
-        "rev": "7b3fa8114cf8ef23cbf91e50c368c1ca768d95d5",
-        "hash": "sha256-2FgBb0HzgMihGsWbEtQqyN2EXZs/y5+ToWL1ZXG35W0="
+        "rev": "027bbee30a0103b99d86327b48d29567fed11688",
+        "hash": "sha256-+4I6B1aTa+txhey6LMeflU0pe39V6TJ+lNIJPh6yFGM="
       },
       "src/third_party/libwebm/source": {
         "url": "https://chromium.googlesource.com/webm/libwebm.git",
-        "rev": "b4f01ea3ed6fd00923caa383bb2cf6f7a0b7f633",
-        "hash": "sha256-yQ5MIUKtuWQM5SfD74vPeqGEdLJNss2/RBUZfq5701A="
+        "rev": "e79a98159fdf6d1aa37b3500e32c6410a2cbe268",
+        "hash": "sha256-t7An0vYzukel0poLaU4t2k78k3tTR5didbcV47cGWxQ="
       },
       "src/third_party/libwebp/src": {
         "url": "https://chromium.googlesource.com/webm/libwebp.git",
@@ -1302,13 +1322,13 @@
       },
       "src/third_party/libyuv": {
         "url": "https://chromium.googlesource.com/libyuv/libyuv.git",
-        "rev": "5a9a6ea936085310f3b9fbd4a774868e6a984ec4",
-        "hash": "sha256-E5ePVHrEXMM8mS1qaUwPTqYO0BdP7TYuUhfX+BCiq/0="
+        "rev": "ccdf870348764e4b77fa3b56accb2a896a901bad",
+        "hash": "sha256-8sH11psWPXLMy3Q0tAizCZ/woUWvTCCUf44jcr2C4Xs="
       },
       "src/third_party/lss": {
         "url": "https://chromium.googlesource.com/linux-syscall-support.git",
-        "rev": "ce877209e11aa69dcfffbd53ef90ea1d07136521",
-        "hash": "sha256-hE8uZf9Fst66qJkoVYChiB8G41ie+k9M4X0W+5JUSdw="
+        "rev": "ed31caa60f20a4f6569883b2d752ef7522de51e0",
+        "hash": "sha256-rhp4EcZYdgSfu9cqn+zxxGx6v2IW8uX8V+iA0UfZhFY="
       },
       "src/third_party/material_color_utilities/src": {
         "url": "https://chromium.googlesource.com/external/github.com/material-foundation/material-color-utilities.git",
@@ -1322,8 +1342,8 @@
       },
       "src/third_party/nasm": {
         "url": "https://chromium.googlesource.com/chromium/deps/nasm.git",
-        "rev": "f477acb1049f5e043904b87b825c5915084a9a29",
-        "hash": "sha256-SiRXHsUlWXtH6dbDjDjqNAm105ibEB3jOfNtQAM4CaY="
+        "rev": "767a169c8811b090df222a458b25dfa137fc637e",
+        "hash": "sha256-yg4qwhS68B/sWfcJeXUqPC69ppE8FaIyRc+IkUQXSnU="
       },
       "src/third_party/neon_2_sse/src": {
         "url": "https://chromium.googlesource.com/external/github.com/intel/ARM_NEON_2_x86_SSE.git",
@@ -1332,18 +1352,18 @@
       },
       "src/third_party/openh264/src": {
         "url": "https://chromium.googlesource.com/external/github.com/cisco/openh264",
-        "rev": "33f7f48613258446decb33b3575fc0a3c9ed14e3",
-        "hash": "sha256-lZlZjX8GCJOc77VJ9i1fSWn63pfVOEcwwlzh0UpIgy4="
+        "rev": "652bdb7719f30b52b08e506645a7322ff1b2cc6f",
+        "hash": "sha256-tf0lnxATCkoq+xRti6gK6J47HwioAYWnpEsLGSA5Xdg="
       },
       "src/third_party/openscreen/src": {
         "url": "https://chromium.googlesource.com/openscreen",
-        "rev": "38d1445b41d1eb597fcd100688dbaff98aa072ed",
-        "hash": "sha256-KGVFyGp7ItKeapub3Bd+htXH/gMaaBd+k8iC7hLtvl0="
+        "rev": "db9e1ea566813606ca055868be13f6ff4a760ab8",
+        "hash": "sha256-K/frmCf3JMvPVZc6ZKPFAQrq4Pz4io3XBvADS0O5u78="
       },
       "src/third_party/openscreen/src/buildtools": {
         "url": "https://chromium.googlesource.com/chromium/src/buildtools",
-        "rev": "56013b77b6c0a650d00bde40e750e7c3b7c6bc3d",
-        "hash": "sha256-Dz7wMYQHVR7sjCGaQe2nxIxZsAxsK6GGDNpDvypPefo="
+        "rev": "00459762409cb29cecf398a23cdb0cae918b7515",
+        "hash": "sha256-QXGJRGyyuN0EPDAF7CAzcTSbjHkz8FRjhqd1JEFF/1o="
       },
       "src/third_party/openscreen/src/third_party/tinycbor/src": {
         "url": "https://chromium.googlesource.com/external/github.com/intel/tinycbor.git",
@@ -1352,23 +1372,23 @@
       },
       "src/third_party/pdfium": {
         "url": "https://pdfium.googlesource.com/pdfium.git",
-        "rev": "12f7715a6390050c5cffb7e4c9b2be1c2f2956d0",
-        "hash": "sha256-/u+HYjmxSIX2GlriEWYZQJ8TDFNfzSufATGq1j9zx9w="
+        "rev": "ca83e69429af8f0bfa34b22dc54f538b9eebf5c5",
+        "hash": "sha256-6gsur+fx546YJn/PUOOthuj+XrSIruVUeAYl4nRI6xM="
       },
       "src/third_party/perfetto": {
-        "url": "https://android.googlesource.com/platform/external/perfetto.git",
-        "rev": "0d78d85c2bfb993ab8dd9a85b6fee6caa6a0f357",
-        "hash": "sha256-bjgSwq4LPz9qN9rVqIJUTHetRguCx67Uq5oe1ksPqGE="
+        "url": "https://chromium.googlesource.com/external/github.com/google/perfetto.git",
+        "rev": "054635b91453895720951f7329619d003a98b3e4",
+        "hash": "sha256-2jKRhHLitR0m2a4/asvVvTqAOhUlyLsBBSjpQAer4GA="
       },
       "src/third_party/protobuf-javascript/src": {
         "url": "https://chromium.googlesource.com/external/github.com/protocolbuffers/protobuf-javascript",
-        "rev": "e34549db516f8712f678fcd4bc411613b5cc5295",
-        "hash": "sha256-TmP6xftUVTD7yML7UEM/DB8bcsL5RFlKPyCpcboD86U="
+        "rev": "eb785a9363664a402b6336dfe96aad27fb33ffa8",
+        "hash": "sha256-zq86SrDASl6aYPFPijRZp03hJqXUFz2Al/KkiNq7i0M="
       },
       "src/third_party/pthreadpool/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/pthreadpool.git",
-        "rev": "e1469417238e13eebaa001779fa031ed25c59def",
-        "hash": "sha256-cFRELaRtWspZaqtmdKmVPqM7HVskHlFMAny+Zv/Zflw="
+        "rev": "4e1831c02c74334a35ead03362f3342b6cea2a86",
+        "hash": "sha256-mB1QaAuY8vfv8FasPyio1AF75iYH+dM8t1GIr0Ty/+g="
       },
       "src/third_party/pyelftools": {
         "url": "https://chromium.googlesource.com/chromiumos/third_party/pyelftools.git",
@@ -1377,8 +1397,8 @@
       },
       "src/third_party/quic_trace/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/quic-trace.git",
-        "rev": "413da873d93a03d3662f24b881ea459a79f9c589",
-        "hash": "sha256-N1uFoNd3mz/LH1z06581Ds7BUyc67SNXUPzqomYREr8="
+        "rev": "ed3deb8a056b260c59f2fd42af6dfa3db48a8cad",
+        "hash": "sha256-vbXqddDgwqetU0bDYn3qo7OBqT5eG926/MbA1hKkCT0="
       },
       "src/third_party/pywebsocket3/src": {
         "url": "https://chromium.googlesource.com/external/github.com/GoogleChromeLabs/pywebsocket3.git",
@@ -1387,8 +1407,8 @@
       },
       "src/third_party/re2/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/re2.git",
-        "rev": "6dcd83d60f7944926bfd308cc13979fc53dd69ca",
-        "hash": "sha256-IeANwJlJl45yf8iu/AZNDoiyIvTCZIeK1b74sdCfAIc="
+        "rev": "c84a140c93352cdabbfb547c531be34515b12228",
+        "hash": "sha256-f/k2rloV2Nwb0KuJGUX4SijFxAx69EXcsXOG4vo+Kis="
       },
       "src/third_party/ruy/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/ruy.git",
@@ -1397,13 +1417,13 @@
       },
       "src/third_party/search_engines_data/resources": {
         "url": "https://chromium.googlesource.com/external/search_engines_data.git",
-        "rev": "6dc3b54b420e6e03a34ee7259fcd2b1978fac5f3",
-        "hash": "sha256-8RY3AU2V4iZKEmVwT7Z1Q3QlcTXDIdeyYwnQoyJcAUY="
+        "rev": "07834ba1e5ebfb333d0b73556b7c4d62a53cb455",
+        "hash": "sha256-DTz351NpoygQLESm/z+fzFc/KGJyQelLnWpzNMmNT9o="
       },
       "src/third_party/skia": {
         "url": "https://skia.googlesource.com/skia.git",
-        "rev": "aefbd9403c1b3032ad4cd0281ef312ed262c7125",
-        "hash": "sha256-tP6DnMeOoVqfTSn6bYXMLiCb4wg5f9uB28KzYMAeBUw="
+        "rev": "bcce46ca33b67cc302dd53927a63013b8f53bf73",
+        "hash": "sha256-ei95CJRfNPrsYt8XcDi7Pnl5dGiJu3qs7R4rAcZ24Uc="
       },
       "src/third_party/smhasher/src": {
         "url": "https://chromium.googlesource.com/external/smhasher.git",
@@ -1417,13 +1437,13 @@
       },
       "src/third_party/sqlite/src": {
         "url": "https://chromium.googlesource.com/chromium/deps/sqlite.git",
-        "rev": "567495a62a62dc013888500526e82837d727fe01",
-        "hash": "sha256-ltl3OTk/wZPSj3yYthNlKd3mBxef6l5uW6UYTwebNek="
+        "rev": "8a22b25ad7244abaf07e372cc6dc97e041d663a9",
+        "hash": "sha256-1vAGAF3idxgHGaqb5gT5k3KIGC2H3gqC3RTVU2ZRf4A="
       },
       "src/third_party/swiftshader": {
         "url": "https://swiftshader.googlesource.com/SwiftShader.git",
-        "rev": "86cf34f50cbe5a9f35da7eedad0f4d4127fb8342",
-        "hash": "sha256-PSkIU8zC+4AVcYu0vaYo6I1SSykrHgcgGVMBJanux8o="
+        "rev": "4982425ff1bdcb2ce52a360edde58a379119bfde",
+        "hash": "sha256-QTGU9Dgc6rgMeFZvhZyYeYj5W+ClJO8Yfa4+K7TmEec="
       },
       "src/third_party/text-fragments-polyfill/src": {
         "url": "https://chromium.googlesource.com/external/github.com/GoogleChromeLabs/text-fragments-polyfill.git",
@@ -1432,18 +1452,18 @@
       },
       "src/third_party/tflite/src": {
         "url": "https://chromium.googlesource.com/external/github.com/tensorflow/tensorflow.git",
-        "rev": "51c6eed226abcfeeb46864e837d01563cc5b907b",
-        "hash": "sha256-qXHENS/6NwHAr1/16eb079XzmwAnpLtVZuva8uGCf+8="
+        "rev": "c8ed430d092acd485f00e7a9d7a888a0857d0430",
+        "hash": "sha256-S5zkpQZdhRdnZRUrUfi5FCrF2XFe3y/adAWwfh1OQYE="
       },
       "src/third_party/vulkan-deps": {
         "url": "https://chromium.googlesource.com/vulkan-deps",
-        "rev": "2e4b45a53a0e2e66bcb6540ae384c53a517218d0",
-        "hash": "sha256-9ebWETg/fsS4MYZg74XHs/Nz3nX6BXBNVRN2PmyWXWM="
+        "rev": "1648e664337ca19a4f8679cbb9547a5b4b926995",
+        "hash": "sha256-CI0X6zbRV/snGcQZOUKQFn8Zo6D6Out6nN027HGZaa8="
       },
       "src/third_party/glslang/src": {
         "url": "https://chromium.googlesource.com/external/github.com/KhronosGroup/glslang",
-        "rev": "0549c7127c2fbab2904892c9d6ff491fa1e93751",
-        "hash": "sha256-LwspMo771iaV5YeEJWgdb8xi37KMa0rsSdvO3uqMOAI="
+        "rev": "e57f993cff981c8c3ffd38967e030f04d13781a9",
+        "hash": "sha256-nr7pGPNPMbmL/XnL27M4m5in8qnCDcpNtVsxBAc7zms="
       },
       "src/third_party/spirv-cross/src": {
         "url": "https://chromium.googlesource.com/external/github.com/KhronosGroup/SPIRV-Cross",
@@ -1452,38 +1472,38 @@
       },
       "src/third_party/spirv-headers/src": {
         "url": "https://chromium.googlesource.com/external/github.com/KhronosGroup/SPIRV-Headers",
-        "rev": "e7294a8ebed84f8c5bd3686c68dbe12a4e65b644",
-        "hash": "sha256-/p7kBW7mwpG/Uz0goMM7L3zjpOMBzGiuN+0ZBEOpORo="
+        "rev": "8c88e0c4c94a21de825efccba5f99a862b049825",
+        "hash": "sha256-s0Pe7kg5syKhK8qEZH8b7UCDa87Xk32Lh95cQbpLdAc="
       },
       "src/third_party/spirv-tools/src": {
         "url": "https://chromium.googlesource.com/external/github.com/KhronosGroup/SPIRV-Tools",
-        "rev": "ce37fd67f83cd1e8793b988d2e4126bbf72b19dd",
-        "hash": "sha256-SJcxmKdzOjg6lOJk/3m8qo7puvtci1YEU6dXKjthx0Q="
+        "rev": "2e83ad7e6f2cc51f7eaff3ffeb10e34351b3c157",
+        "hash": "sha256-u4WDbWywua71yWB1cVIt1IDZRe4NnT5bUq3yHLKBgPo="
       },
       "src/third_party/vulkan-headers/src": {
         "url": "https://chromium.googlesource.com/external/github.com/KhronosGroup/Vulkan-Headers",
-        "rev": "39f924b810e561fd86b2558b6711ca68d4363f68",
-        "hash": "sha256-twJJVBfnZbH/8Wn273h45K3BOnlAicqL2zJl6OfLm2E="
+        "rev": "78c359741d855213e8685278eb81bb62599f8e56",
+        "hash": "sha256-VqKQeJd81feSgYnYLqb2sYirCmnHN9Rr19/4cPZ2TzE="
       },
       "src/third_party/vulkan-loader/src": {
         "url": "https://chromium.googlesource.com/external/github.com/KhronosGroup/Vulkan-Loader",
-        "rev": "0508dee4ff864f5034ae6b7f68d34cb2822b827d",
-        "hash": "sha256-QqFC3Iyhw9Pq6TwBHxa0Ss7SW0bHo0Uz5N18oxl2ROg="
+        "rev": "723d6b4aa35853315c6e021ec86388b3a2559fae",
+        "hash": "sha256-tDW5ed6gsDKlCKf4gT8MNi1yaafocUTohL1upGKB+Cc="
       },
       "src/third_party/vulkan-tools/src": {
         "url": "https://chromium.googlesource.com/external/github.com/KhronosGroup/Vulkan-Tools",
-        "rev": "c52931f012cb7b48e42bbf2050a7fb2183b76406",
-        "hash": "sha256-nIzrishMMxWzOuD3aX8B6Iuq2kPsUF0Uuvz7GijTulY="
+        "rev": "289efccc7560f2b970e2b4e0f50349da87669311",
+        "hash": "sha256-Cw7LWBPRbDVlfmeMM4CYEC9xbfqT1wV7yuUcpGMLahs="
       },
       "src/third_party/vulkan-utility-libraries/src": {
         "url": "https://chromium.googlesource.com/external/github.com/KhronosGroup/Vulkan-Utility-Libraries",
-        "rev": "fe7a09b13899c5c77d956fa310286f7a7eb2c4ed",
-        "hash": "sha256-zI3y5aoP4QcYp677Oxj5Ef7lJyJwOMdGsaRBe+X9vpI="
+        "rev": "0d5b49b80f17bca25e7f9321ad4e671a56f70887",
+        "hash": "sha256-NdvjtdCrNVKY23B4YDL33KB+/9HsSWTVolZJOto8+pc="
       },
       "src/third_party/vulkan-validation-layers/src": {
         "url": "https://chromium.googlesource.com/external/github.com/KhronosGroup/Vulkan-ValidationLayers",
-        "rev": "a30aa23cfaff4f28f039c025c159128a6c336a7e",
-        "hash": "sha256-foa5hzqf1hPwOj3k57CloCe/j0qXW3zCQ4mwCT4epF4="
+        "rev": "73d7d74bc979c8a16c823c4eae4ee881153e000a",
+        "hash": "sha256-2GII+RBRzPZTTib82srUEFDG+CbtPTZ6lX3oDJBC2gU="
       },
       "src/third_party/vulkan_memory_allocator": {
         "url": "https://chromium.googlesource.com/external/github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator.git",
@@ -1492,8 +1512,8 @@
       },
       "src/third_party/wasm_tts_engine/src": {
         "url": "https://chromium.googlesource.com/chromium/wasm-tts-engine",
-        "rev": "7a91dbfddd93afa096a69fb7d292e22d4afecad2",
-        "hash": "sha256-bV+1YFEtCyTeZujsZtZiexT/aUTN3MaVerR2UdkUPBY="
+        "rev": "53d2aba6f0cf7db57e17edfc3ff6471871b0c125",
+        "hash": "sha256-t5eeehwspRLaowEMPLa8/lV5AHamXQBfH/un0DHLVAM="
       },
       "src/third_party/wayland/src": {
         "url": "https://chromium.googlesource.com/external/anongit.freedesktop.org/git/wayland/wayland.git",
@@ -1522,23 +1542,23 @@
       },
       "src/third_party/webgl/src": {
         "url": "https://chromium.googlesource.com/external/khronosgroup/webgl.git",
-        "rev": "450cceb587613ac1469c5a131fac15935c99e0e7",
-        "hash": "sha256-32r3BdmsNA89mo0k+vK1G3718AOjseE7cJlopZ/0pSw="
+        "rev": "c01b768bce4a143e152c1870b6ba99ea6267d2b0",
+        "hash": "sha256-mSketnpcDtz3NnhPkXMpMpq8MWcFiSviJbK6h06fcnw="
       },
       "src/third_party/webgpu-cts/src": {
         "url": "https://chromium.googlesource.com/external/github.com/gpuweb/cts.git",
-        "rev": "fb2b951ac3c23e453335edf35c9b3bad431d9009",
-        "hash": "sha256-tjY5ADd5tMFsYHk6xT+TXwsDYV5eI2oOywmyTjjAxYc="
+        "rev": "92f4eb4dae0f5439f2cdc7ce467d66b10e165f42",
+        "hash": "sha256-vXyp0+6eyKOzzQbkRa8f8dO+B9cyUCY2hCZEFc7+7lU="
       },
       "src/third_party/webpagereplay": {
         "url": "https://chromium.googlesource.com/webpagereplay.git",
-        "rev": "d812e180206934eb3b7ae411d82d61bc21c22f70",
-        "hash": "sha256-KAkkFVxEfQxbSjD+55LO4UZYWWwmGK6B9ENFSPljNu0="
+        "rev": "2c5049abfc2cf36ece82f7f84ebdcb786659eaf7",
+        "hash": "sha256-lMqCZ27TJ4aXKWDuN22VtceXh0jNH4Ll1234xCbEOro="
       },
       "src/third_party/webrtc": {
         "url": "https://webrtc.googlesource.com/src.git",
-        "rev": "8d78f5de6c27b2c793039989ea381f1428fb0100",
-        "hash": "sha256-IsjTrEnxIqINYYjWJmDp7rlubl5dJ2YMpJf/DrG/mRM="
+        "rev": "2c8f5be6924d507ee74191b1aeadcec07f747f21",
+        "hash": "sha256-cNONf88oSbsdYuSdPiLxgTI973qOP6fb1OKb2WMQMMg="
       },
       "src/third_party/wuffs/src": {
         "url": "https://skia.googlesource.com/external/github.com/google/wuffs-mirror-release-c.git",
@@ -1557,18 +1577,18 @@
       },
       "src/third_party/xnnpack/src": {
         "url": "https://chromium.googlesource.com/external/github.com/google/XNNPACK.git",
-        "rev": "0824e2965f6edc2297e55c8dff5a8ac4cb12aaad",
-        "hash": "sha256-eb9B9lXPB2GiC4qehB/HOU36W1e9RZ0N2oEbIifyrHE="
+        "rev": "d6fc3be20b0d3e3742157fa26c5359babaa8bc8b",
+        "hash": "sha256-p5DjGNH9IR0KPWSFmbsdt2PU+kHgWRAnBw7J9sLV/S8="
       },
       "src/third_party/zstd/src": {
         "url": "https://chromium.googlesource.com/external/github.com/facebook/zstd.git",
-        "rev": "ea0aa030cdf31f7897c5bfc153f0d36e92768095",
-        "hash": "sha256-UJsuaSzR4V8alLdtxzpla1v9WYHPKPp13YrgA4Y6/yA="
+        "rev": "ef2bf5781112a4cd6b62ac1817f7842bbdc7ea8f",
+        "hash": "sha256-hDDNrUXGxG/o1oZnypAnuLyIeM16Hy6x1KacGu9Hhmw="
       },
       "src/v8": {
         "url": "https://chromium.googlesource.com/v8/v8.git",
-        "rev": "4f282ae4acae85cdcc8c167cbc296a86d24c1cf6",
-        "hash": "sha256-wpz9W/ZurpCT/dGIHGpmdkI3dsXbP8TPNeee2w9zBU8="
+        "rev": "5297e56d91816747d539abca52b578e5832135f0",
+        "hash": "sha256-Fi4pl6xSXkHF4XaQNfNzULVjQZSzDfaHFIyIxH103go="
       }
     }
   }

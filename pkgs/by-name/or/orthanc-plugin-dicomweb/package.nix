@@ -13,7 +13,6 @@
   pugixml,
   libuuid,
   zlib,
-  pkg-config,
 }:
 
 let
@@ -40,18 +39,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "orthanc-plugin-dicomweb";
-  version = "1.18";
+  version = "1.20";
 
   src = fetchhg {
     url = "https://orthanc.uclouvain.be/hg/orthanc-dicomweb/";
     rev = "OrthancDicomWeb-${finalAttrs.version}";
-    hash = "sha256-ee271Fcu8yi1gZpTWrCuqhsBdFcPR/JK/fsnJg8PwIc=";
+    hash = "sha256-p1n4YAFC3W2B2YYsFm/1cJ/zqLsrycJgkMrcXFf/3Xk=";
   };
-
-  patches = [
-    # Fix Orthanc Framework headers files detection
-    ./fix-orthanc-framework-headers-detection.patch
-  ];
 
   postPatch = ''
     mkdir -p ThirdPartyDownloads
@@ -92,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_BUILD_TYPE=Release"
     "-DSTATIC_BUILD=OFF"
     "-DORTHANC_FRAMEWORK_SOURCE=system"
+    "-DORTHANC_FRAMEWORK_ROOT=${orthanc.framework}/include/orthanc-framework"
   ];
 
   meta = {

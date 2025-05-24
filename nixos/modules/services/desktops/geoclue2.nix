@@ -180,7 +180,7 @@ in
 
       geoProviderUrl = lib.mkOption {
         type = lib.types.str;
-        default = "https://location.services.mozilla.com/v1/geolocate?key=geoclue";
+        default = "https://api.beacondb.net/v1/geolocate";
         example = "https://www.googleapis.com/geolocation/v1/geolocate?key=YOUR_KEY";
         description = ''
           The url to the wifi GeoLocation Service.
@@ -210,7 +210,7 @@ in
 
       submissionUrl = lib.mkOption {
         type = lib.types.str;
-        default = "https://location.services.mozilla.com/v1/submit?key=geoclue";
+        default = "https://api.beacondb.net/v2/geosubmit";
         description = ''
           The url to submit data to a GeoLocation Service.
         '';

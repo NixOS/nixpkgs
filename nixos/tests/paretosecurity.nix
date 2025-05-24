@@ -4,58 +4,49 @@
   meta.maintainers = [ lib.maintainers.zupo ];
 
   nodes.terminal =
-    {
-      config,
-      pkgs,
-      lib,
-      ...
-    }:
-    let
-      # Create a patched version of the package that points to the local dashboard
-      # for easier testing
-      patchedPareto = pkgs.paretosecurity.overrideAttrs (oldAttrs: {
-        postPatch = ''
-          substituteInPlace team/report.go \
-            --replace-warn 'const reportURL = "https://dash.paretosecurity.com"' \
-                           'const reportURL = "http://dashboard"'
-        '';
-      });
-    in
+    { pkgs, ... }:
     {
       imports = [ ./common/user-account.nix ];
 
+      networking.firewall.enable = true;
       services.paretosecurity = {
         enable = true;
-        package = patchedPareto;
+
+        # Create a patched version of the package that points to the local dashboard
+        # for easier testing
+        package = pkgs.paretosecurity.overrideAttrs (oldAttrs: {
+          postPatch =
+            oldAttrs.postPatch or ""
+            + ''
+              substituteInPlace team/report.go \
+                --replace-warn 'const reportURL = "https://dash.paretosecurity.com"' \
+                               'const reportURL = "http://dashboard"'
+            '';
+        });
       };
 
     };
 
-  nodes.dashboard =
-    { config, pkgs, ... }:
-    {
-      networking.firewall.allowedTCPPorts = [ 80 ];
+  nodes.dashboard = {
+    networking.firewall.allowedTCPPorts = [ 80 ];
 
-      services.nginx = {
-        enable = true;
-        virtualHosts."dashboard" = {
-          locations."/api/v1/team/".extraConfig = ''
-            add_header Content-Type application/json;
-            return 200 '{"message": "Linked device."}';
-          '';
-        };
+    services.nginx = {
+      enable = true;
+      virtualHosts."dashboard" = {
+        locations."/api/v1/team/".extraConfig = ''
+          add_header Content-Type application/json;
+          return 200 '{"message": "Linked device."}';
+        '';
       };
     };
+  };
 
   nodes.xfce =
-    { config, pkgs, ... }:
+    { pkgs, ... }:
     {
       imports = [ ./common/user-account.nix ];
 
-      services.paretosecurity = {
-        enable = true;
-        trayIcon = true;
-      };
+      services.paretosecurity.enable = true;
 
       services.xserver.enable = true;
       services.xserver.displayManager.lightdm.enable = true;
@@ -64,11 +55,16 @@
       services.displayManager.autoLogin = {
         enable = true;
         user = "alice";
+
+      };
+
+      virtualisation.resolution = {
+        x = 640;
+        y = 480;
       };
 
       environment.systemPackages = [ pkgs.xdotool ];
       environment.variables.XAUTHORITY = "/home/alice/.Xauthority";
-
     };
 
   enableOCR = true;
@@ -94,7 +90,6 @@
       + " --skip 21830a4e-84f1-48fe-9c5b-beab436b2cdb"  # Disk encryption
       + " --skip 44e4754a-0b42-4964-9cc2-b88b2023cb1e"  # Pareto Security is up to date
       + " --skip f962c423-fdf5-428a-a57a-827abc9b253e"  # Password manager installed
-      + " --skip 2e46c89a-5461-4865-a92e-3b799c12034a"  # Firewall is enabled
       + "'"
     )
 
@@ -117,9 +112,22 @@
     ]:
         status, out = xfce.systemctl("is-enabled " + unit, "alice")
         assert status == 0, f"Unit {unit} is not enabled (status: {status}): {out}"
-    xfce.succeed("xdotool mousemove 850 10")
+    xfce.succeed("xdotool mousemove 460 10")
     xfce.wait_for_text("Pareto Security")
     xfce.succeed("xdotool click 1")
     xfce.wait_for_text("Run Checks")
+
+    # Test 5: Desktop entry
+    xfce.succeed("xdotool mousemove 10 10")
+    xfce.succeed("xdotool click 1")  # hide the tray icon window
+    xfce.succeed("xdotool click 1")  # show the Applications menu
+    xfce.succeed("xdotool mousemove 10 200")
+    xfce.succeed("xdotool click 1")
+    xfce.wait_for_text("Pareto Security")
+
+    # Test 6: paretosecurity:// URL handler is registered
+    xfce.execute("su - alice -c 'xdg-open paretosecurity://foo >/dev/null &'")
+    xfce.wait_for_text("Failed to add device")
+
   '';
 }

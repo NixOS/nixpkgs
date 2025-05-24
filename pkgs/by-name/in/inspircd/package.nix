@@ -168,10 +168,14 @@ stdenv.mkDerivation rec {
     "out"
   ];
 
-  nativeBuildInputs = [
-    perl
-    pkg-config
-  ];
+  nativeBuildInputs =
+    [
+      perl
+      pkg-config
+    ]
+    ++ lib.optionals (lib.elem "pgsql" extraModules) [
+      libpq.pg_config
+    ];
   buildInputs = extraInputs;
 
   configurePhase = ''

@@ -228,6 +228,8 @@
   "systemd-socket-activate(1)": "https://www.freedesktop.org/software/systemd/man/systemd-socket-activate.html",
   "systemd-socket-proxyd(8)": "https://www.freedesktop.org/software/systemd/man/systemd-socket-proxyd.html",
   "systemd-soft-reboot.service(8)": "https://www.freedesktop.org/software/systemd/man/systemd-soft-reboot.service.html",
+  "systemd-ssh-generator(8)": "https://www.freedesktop.org/software/systemd/man/systemd-ssh-generator.html",
+  "systemd-ssh-proxy(1)": "https://www.freedesktop.org/software/systemd/man/systemd-ssh-proxy.html",
   "systemd-stdio-bridge(1)": "https://www.freedesktop.org/software/systemd/man/systemd-stdio-bridge.html",
   "systemd-stub(7)": "https://www.freedesktop.org/software/systemd/man/systemd-stub.html",
   "systemd-suspend-then-hibernate.service(8)": "https://www.freedesktop.org/software/systemd/man/systemd-suspend-then-hibernate.service.html",

@@ -6,7 +6,6 @@
   ninja,
   nv-codec-headers-12,
   fetchFromGitHub,
-  fetchpatch,
   addDriverRunpath,
   autoAddDriverRunpath,
   cudaSupport ? config.cudaSupport,
@@ -40,7 +39,7 @@
   pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   libpulseaudio,
   browserSupport ? true,
-  libcef,
+  cef-binary,
   pciutils,
   pipewireSupport ? stdenv.hostPlatform.isLinux,
   withFdk ? true,
@@ -66,6 +65,19 @@
 let
   inherit (lib) optional optionals;
 
+  cef = cef-binary.overrideAttrs (oldAttrs: {
+    version = "127.3.5";
+    __intentionallyOverridingVersion = true; # `cef-binary` uses the overridden `srcHash` values in its source FOD
+    gitRevision = "114ea2a";
+    chromiumVersion = "127.0.6533.120";
+
+    srcHash =
+      {
+        aarch64-linux = "sha256-s8dR97rAO0mCUwbpYnPWyY3t8movq05HhZZKllhZdBs=";
+        x86_64-linux = "sha256-57E7bZKpViWno9W4AaaSjL9B4uxq+rDXAou1tsiODUg=";
+      }
+      .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
+  });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";
@@ -85,33 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Lets obs-browser build against CEF 90.1.0+
     ./Enable-file-access-and-universal-access-for-file-URL.patch
     ./fix-nix-plugin-path.patch
-    # TODO: remove when CHROME_VERSION_BUILD(libcef) >= 6367
-    (fetchpatch {
-      name = "Check-source-validity-before-attempting-to-log-rende.patch";
-      url = "https://github.com/obsproject/obs-browser/pull/478.patch";
-      revert = true;
-      stripLen = 1;
-      extraPrefix = "plugins/obs-browser/";
-      hash = "sha256-mQVhK4r8LlK2F9/jlDHA1V6M29mAfxWAU/VsMXYNrhU=";
-    })
-    # TODO: remove when CHROME_VERSION_BUILD(libcef) >= 6367
-    (fetchpatch {
-      name = "Print-browser-source-renderer-crashes-to-OBS-log.patch";
-      url = "https://github.com/obsproject/obs-browser/pull/475.patch";
-      revert = true;
-      stripLen = 1;
-      extraPrefix = "plugins/obs-browser/";
-      hash = "sha256-ha77OYpWn57JovPNE+izyDOB/2KlF3qWVv/PGEgyu84=";
-    })
-    # TODO: remove when CHROME_VERSION_BUILD(libcef) >= 6367
-    (fetchpatch {
-      name = "Log-error-if-CefInitialize-fails.patch.patch";
-      url = "https://github.com/obsproject/obs-browser/pull/477.patch";
-      revert = true;
-      stripLen = 1;
-      extraPrefix = "plugins/obs-browser/";
-      hash = "sha256-MMLFQtpWjfpti/38qEcOuXr1L3s1MPRHjuaZCjNmvt0=";
-    })
   ];
 
   nativeBuildInputs =
@@ -168,20 +153,12 @@ stdenv.mkDerivation (finalAttrs: {
       pipewire
       libdrm
     ]
-    ++ optional browserSupport libcef
+    ++ optional browserSupport cef
     ++ optional withFdk fdk_aac;
 
   # Copied from the obs-linuxbrowser
   postUnpack = lib.optionalString browserSupport ''
-    mkdir -p cef/Release cef/Resources cef/libcef_dll_wrapper/
-    for i in ${libcef}/share/cef/*; do
-      ln -s $i cef/Release/
-      ln -s $i cef/Resources/
-    done
-    ln -s ${libcef}/lib/*.so* cef/Release/
-    ln -s ${libcef}/libexec/cef/chrome-sandbox cef/Release/
-    ln -s ${libcef}/lib/libcef_dll_wrapper.a cef/libcef_dll_wrapper/
-    ln -s ${libcef}/include cef/
+    ln -s ${cef} cef
   '';
 
   postPatch = ''
@@ -243,8 +220,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     (lib.optionalString browserSupport ''
       # Link cef components again after patchelfing other libs
-      ln -s ${libcef}/lib/* $out/lib/obs-plugins/
-      ln -s ${libcef}/libexec/cef/* $out/lib/obs-plugins/
+      ln -sf ${cef}/${cef.buildType}/* $out/lib/obs-plugins/
     '')
   ];
 

@@ -6,10 +6,10 @@
 }:
 let
   pname = "volanta";
-  version = "1.10.11";
+  version = "1.11.3";
   src = fetchurl {
-    url = "https://cdn.volanta.app/software/volanta-app/${version}-5495eec5/volanta-${version}.AppImage";
-    hash = "sha256-DvAtgLe8eWG9sqxPaZGsk0CZWZci124bu2IFDU5Y1BQ=";
+    url = "https://cdn.volanta.app/software/volanta-app/${version}-622dc10d/volanta-${version}.AppImage";
+    hash = "sha256-vplJEE+D2Yzr4fD//CdLRAYAKQp6a1RR0jZ1N46Q8xU=";
   };
   appImageContents = appimageTools.extract { inherit pname version src; };
 in

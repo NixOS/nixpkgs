@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "gittuf";
-  version = "0.9.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "gittuf";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-gvRr+Q5XCfhtIOdxQdDwLXvo/+GHDuxaEcEpctevWew=";
+    hash = "sha256-sHaQOqD8CzAb8LIOqPpvTAzdmm/NoktLnAOhVNdRIeo=";
   };
 
-  vendorHash = "sha256-zGzcEaAQGwLz4JQnaOVO/b47mWFWs2JyrShAJqp2Rc4=";
+  vendorHash = "sha256-v45pMH05f6HmAcfujk25w5TN65nllLUMVlkNYm6Q/gM=";
 
   ldflags = [ "-X github.com/gittuf/gittuf/internal/version.gitVersion=${version}" ];
 

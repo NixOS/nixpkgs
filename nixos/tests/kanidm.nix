@@ -26,6 +26,7 @@ import ./make-test-python.nix (
       { pkgs, ... }:
       {
         services.kanidm = {
+          package = pkgs.kanidm_1_6;
           enableServer = true;
           serverSettings = {
             origin = "https://${serverDomain}";
@@ -55,6 +56,7 @@ import ./make-test-python.nix (
       { nodes, ... }:
       {
         services.kanidm = {
+          package = pkgs.kanidm_1_6;
           enableClient = true;
           clientSettings = {
             uri = "https://${serverDomain}";

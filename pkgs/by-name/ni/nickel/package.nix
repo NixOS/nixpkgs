@@ -4,26 +4,27 @@
   rustPlatform,
   fetchFromGitHub,
   python3,
+  gitMinimal,
   versionCheckHook,
   pkg-config,
-  nix,
+  nixVersions,
   nix-update-script,
   enableNixImport ? true,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nickel";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "nickel";
     tag = finalAttrs.version;
-    hash = "sha256-CnEGC4SnLRfAPl3WTv83xertH2ulG5onseZpq3vxfwc=";
+    hash = "sha256-I7cLVrkJhB3aJeE/A3tpFEUj0AkvcONSXD8NtnE5eQ0=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-CyO+W4332fJmeF2CL+9CCdPuion8MrxzkPotLA7my3U=";
+  cargoHash = "sha256-DzSfwBVeRT/GAXWyZKZjlDvj95bQzrkqIgZZ2EZw7eQ=";
 
   cargoBuildFlags = [
     "-p nickel-lang-cli"
@@ -33,13 +34,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs =
     [
       python3
+      gitMinimal
     ]
     ++ lib.optionals enableNixImport [
       pkg-config
     ];
 
   buildInputs = lib.optionals enableNixImport [
-    nix
+    nixVersions.nix_2_24
     boost
   ];
 
@@ -61,11 +63,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "dep:comrak" "comrak"
   '';
 
-  checkFlags = [
-    # https://github.com/tweag/nickel/blob/1.10.0/git/tests/main.rs#L60
-    # fails because src is not a git repo
-    # `cmd.current_dir(repo.path()).output()` errors with `NotFound`
-    "--skip=fetch_targets"
+  cargoTestFlags = [
+    # Skip the py-nickel tests because linking them fails on aarch64, and we
+    # aren't packaging py-nickel anyway
+    "--workspace"
+    "--exclude=py-nickel"
   ];
 
   postInstall = ''
@@ -76,7 +78,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -99,10 +101,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
       matthiasbeyer
     ];
     mainProgram = "nickel";
-    badPlatforms = [
-      # collect2: error: ld returned 1 exit status
-      # undefined reference to `PyExc_TypeError'
-      "aarch64-linux"
-    ];
   };
 })

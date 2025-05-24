@@ -37,7 +37,7 @@ let
 
   pname = "librewolf-bin-unwrapped";
 
-  version = "136.0.4-1";
+  version = "138.0.4-1";
 in
 
 stdenv.mkDerivation {
@@ -47,9 +47,9 @@ stdenv.mkDerivation {
     url = "https://gitlab.com/api/v4/projects/44042130/packages/generic/librewolf/${version}/librewolf-${version}-${arch}-package.tar.xz";
     hash =
       {
-        i686-linux = "sha256-olqGXteeHqT456SEMEHjPWcnypABGZbFvlpWKBF962Y=";
-        x86_64-linux = "sha256-3zcI1ND+laXFAv7nDlUEDjM007XHglnMYyFkd1n+sR8=";
-        aarch64-linux = "sha256-9OwVuKsTJZ7js846BZSzXiyz53d0ebXwugXyrmnFFQc=";
+        i686-linux = "sha256-9lHQQ9DGfIIjMhvtorrFTHjjt+qCFRdhgLmkDYn5/sI=";
+        x86_64-linux = "sha256-N4MmZgYtezRzofuxPreWM+MrPZbgrh/jhBtDqHndFzw=";
+        aarch64-linux = "sha256-y4wR6RgtEesvogy+fRtVwY6dMMrrC/bPjH35N/ARI2U=";
       }
       .${stdenv.hostPlatform.system} or throwSystem;
   };

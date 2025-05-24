@@ -99,6 +99,45 @@ in
               "builtin-3.${domain}".listenHTTP = ":80";
             };
           };
+
+          csr.configuration =
+            let
+              conf = pkgs.writeText "openssl.csr.conf" ''
+                [req]
+                default_bits = 2048
+                prompt = no
+                default_md = sha256
+                req_extensions = req_ext
+                distinguished_name = dn
+
+                [ dn ]
+                CN = ${config.networking.fqdn}
+
+                [ req_ext ]
+                subjectAltName = @alt_names
+
+                [ alt_names ]
+                DNS.1 = ${config.networking.fqdn}
+              '';
+              csrData =
+                pkgs.runCommandNoCC "csr-and-key"
+                  {
+                    buildInputs = [ pkgs.openssl ];
+                  }
+                  ''
+                    mkdir -p $out
+                    openssl req -new -newkey rsa:2048 -nodes \
+                      -keyout $out/key.pem \
+                      -out $out/request.csr \
+                      -config ${conf}
+                  '';
+            in
+            {
+              security.acme.certs."${config.networking.fqdn}" = {
+                csr = "${csrData}/request.csr";
+                csrKey = "${csrData}/key.pem";
+              };
+            };
         };
       };
   };
@@ -211,5 +250,10 @@ in
 
       with subtest("Validate permissions (self-signed)"):
           check_permissions(builtin, cert, "acme")
+
+      with subtest("Can renew using a CSR"):
+          builtin.succeed(f"systemctl clean acme-{cert}.service --what=state")
+          switch_to(builtin, "csr")
+          check_issuer(builtin, cert, "pebble")
     '';
 }

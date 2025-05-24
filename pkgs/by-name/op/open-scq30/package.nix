@@ -12,8 +12,6 @@
   gtk4,
   libadwaita,
   pango,
-  stdenv,
-  darwin,
   cargo-make,
 }:
 
@@ -35,22 +33,15 @@ rustPlatform.buildRustPackage rec {
     cargo-make
   ];
 
-  buildInputs =
-    [
-      cairo
-      dbus
-      gdk-pixbuf
-      glib
-      gtk4
-      libadwaita
-      pango
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.CoreBluetooth
-      darwin.apple_sdk.frameworks.CoreGraphics
-      darwin.apple_sdk.frameworks.Foundation
-    ];
+  buildInputs = [
+    cairo
+    dbus
+    gdk-pixbuf
+    glib
+    gtk4
+    libadwaita
+    pango
+  ];
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-3K+/CpTGWSjCRa2vOEcDvLIiZMdntugIqnzkXF4wkng=";

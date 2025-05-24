@@ -57,6 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.eyrie.org/~eagle/software/remctl";
     mainProgram = "remctl";
     license = licenses.mit;
-    maintainers = teams.deshaw.members;
+    teams = [ teams.deshaw ];
   };
 })

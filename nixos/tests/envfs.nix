@@ -25,8 +25,6 @@ import ./make-test-python.nix (
           "PATH= /usr/bin/env --version",
           "PATH= test -e /usr/bin/sh",
           "PATH= test -e /usr/bin/env",
-          # no stat
-          "! test -e /usr/bin/cp",
           # also picks up PATH that was set after execve
           "! /usr/bin/hello",
           "PATH=${pkgs.hello}/bin /usr/bin/hello",

@@ -4,25 +4,27 @@
   libGLU,
   SDL2,
   SDL2_net,
+  xorg,
   stdenv,
   zlib,
 }:
 
 stdenv.mkDerivation {
   pname = "supermodel";
-  version = "0-unstable-2024-11-07";
+  version = "0-unstable-2025-04-17";
 
   src = fetchFromGitHub {
     owner = "trzy";
     repo = "supermodel";
-    rev = "4e7356ab2c077aa3bc3d75fb6e164a1c943fe4c1";
-    hash = "sha256-ajRbgs6oMFF+dYHPsKM7FU16vuZcSovaNk2thdsUWtk=";
+    rev = "2272893a0511c0b3b50f6dda64addb7014717dd3";
+    hash = "sha256-3FdLBGxmi4Xj7ao2nvjLleJSTXvKQrhUWvnQr8DK/RY=";
   };
 
   buildInputs = [
     libGLU
     SDL2
     SDL2_net
+    xorg.libX11
     zlib
   ];
 

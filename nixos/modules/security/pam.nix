@@ -145,6 +145,11 @@ let
           description = "Name of the PAM service.";
         };
 
+        enable = lib.mkEnableOption "this PAM service" // {
+          default = true;
+          example = false;
+        };
+
         rules = lib.mkOption {
           # This option is experimental and subject to breaking changes without notice.
           visible = false;
@@ -1566,6 +1571,8 @@ let
         Defaults env_keep+=SSH_AUTH_SOCK
       '';
 
+  enabledServices = lib.filterAttrs (name: svc: svc.enable) config.security.pam.services;
+
 in
 
 {
@@ -2282,7 +2289,7 @@ in
       };
     };
 
-    environment.etc = lib.mapAttrs' makePAMService config.security.pam.services;
+    environment.etc = lib.mapAttrs' makePAMService enabledServices;
 
     security.pam.services =
       {
@@ -2298,11 +2305,11 @@ in
         '';
 
         # Most of these should be moved to specific modules.
-        i3lock = { };
-        i3lock-color = { };
-        vlock = { };
-        xlock = { };
-        xscreensaver = { };
+        i3lock.enable = lib.mkDefault config.programs.i3lock.enable;
+        i3lock-color.enable = lib.mkDefault config.programs.i3lock.enable;
+        vlock.enable = lib.mkDefault config.console.enable;
+        xlock.enable = lib.mkDefault config.services.xserver.enable;
+        xscreensaver.enable = lib.mkDefault config.services.xscreensaver.enable;
 
         runuser = {
           rootOK = true;
@@ -2327,11 +2334,11 @@ in
 
     security.apparmor.includes."abstractions/pam" =
       lib.concatMapStrings (name: "r ${config.environment.etc."pam.d/${name}".source},\n") (
-        lib.attrNames config.security.pam.services
+        lib.attrNames enabledServices
       )
       + (
         with lib;
-        pipe config.security.pam.services [
+        pipe enabledServices [
           lib.attrValues
           (catAttrs "rules")
           (lib.concatMap lib.attrValues)

@@ -13,20 +13,20 @@
 
 buildPythonPackage rec {
   pname = "glean-sdk";
-  version = "63.0.0";
+  version = "64.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "glean";
     rev = "v${version}";
-    hash = "sha256-egn6RYQHY173fvTCTYrTJltn923UowCjBZg1DI+iHSk=";
+    hash = "sha256-6UAZkVBxFJ1CWRn9enCLBBidIugAtxP7stbYlhh1ArA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-eLjPoSn0WqYGrMPqzVh/pzZvh3Ul+aZSYvuJspVM1cU=";
+    hash = "sha256-Ppc+6ex3yLC4xuhbZGZDKLqxDjSdGpgrLDpbbbqMgPY=";
   };
 
   build-system = [

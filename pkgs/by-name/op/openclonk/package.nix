@@ -1,44 +1,53 @@
 {
   lib,
   stdenv,
+
+  # sources
   fetchurl,
   fetchFromGitHub,
   fetchDebianPatch,
+
+  # nativeBuildInputs
   cmake,
+  ninja,
   pkg-config,
-  SDL2,
-  libvorbis,
-  libogg,
-  libjpeg,
-  libpng,
-  freetype,
-  glew,
-  tinyxml,
-  openal,
-  libepoxy,
+
+  # buildInputs
   curl,
   freealut,
-  readline,
+  freetype,
+  glew,
   libb2,
-  gcc-unwrapped,
-  enableSoundtrack ? false, # Enable the "Open Clonk Soundtrack - Explorers Journey" by David Oerther
+  libepoxy,
+  libjpeg,
+  libogg,
+  libpng,
+  libvorbis,
+  libXrandr,
+  openal,
+  readline,
+  SDL2,
+  tinyxml,
+
+  # Enable the "Open Clonk Soundtrack - Explorers Journey" by David Oerther
+  enableSoundtrack ? false,
 }:
 
 let
   soundtrack_src = fetchurl {
     url = "http://www.openclonk.org/download/Music.ocg";
-    sha256 = "1ckj0dlpp5zsnkbb5qxxfxpkiq76jj2fgj91fyf3ll7n0gbwcgw5";
+    hash = "sha256-Mye6pl1eSgEQ/vOLfDsdHDjp2ljb3euGKBr7s36+2W4=";
   };
 in
 stdenv.mkDerivation {
-  version = "unstable-2023-10-30";
+  version = "9.0-unstable-2025-01-11";
   pname = "openclonk";
 
   src = fetchFromGitHub {
     owner = "openclonk";
     repo = "openclonk";
-    rev = "5275334a11ef7c23ce809f35d6b443abd91b415f";
-    sha256 = "14x5b2rh739156l4072rbsnv9n862jz1zafi6ng158ja5fwl16l2";
+    rev = "db975b4a887883f4413d1ce3181f303d83ee0ab5";
+    hash = "sha256-Vt7umsfe2TVZAeKJOXCi2ZCbSv6wAotuMflS7ii7Y/E=";
   };
 
   patches = [
@@ -51,52 +60,47 @@ stdenv.mkDerivation {
     })
   ];
 
-  enableParallelInstalling = false;
-
   postInstall =
-    ''''
+    ''
+      mv $out/games/openclonk $out/bin
+      rm -r $out/games
+    ''
     + lib.optionalString enableSoundtrack ''
       ln -sv ${soundtrack_src} $out/share/games/openclonk/Music.ocg
     '';
 
   nativeBuildInputs = [
     cmake
+    ninja
     pkg-config
   ];
 
   buildInputs = [
-    SDL2
-    libvorbis
-    libogg
-    libjpeg
-    libpng
+    curl
+    freealut
     freetype
     glew
-    tinyxml
-    openal
-    freealut
-    libepoxy
-    curl
-    readline
     libb2
-  ];
-
-  cmakeFlags = [
-    "-DCMAKE_AR=${gcc-unwrapped}/bin/gcc-ar"
-    "-DCMAKE_RANLIB=${gcc-unwrapped}/bin/gcc-ranlib"
+    libepoxy
+    libjpeg
+    libogg
+    libpng
+    libvorbis
+    libXrandr
+    openal
+    readline
+    SDL2
+    tinyxml
   ];
 
   cmakeBuildType = "RelWithDebInfo";
 
-  meta = with lib; {
+  meta = {
     description = "Free multiplayer action game in which you control clonks, small but witty and nimble humanoid beings";
     homepage = "https://www.openclonk.org";
-    license = if enableSoundtrack then licenses.unfreeRedistributable else licenses.isc;
+    license = with lib.licenses; [ isc ] ++ lib.optional enableSoundtrack unfreeRedistributable;
     mainProgram = "openclonk";
-    maintainers = [ ];
-    platforms = [
-      "x86_64-linux"
-      "i686-linux"
-    ];
+    maintainers = with lib.maintainers; [ wolfgangwalther ];
+    platforms = lib.platforms.linux;
   };
 }

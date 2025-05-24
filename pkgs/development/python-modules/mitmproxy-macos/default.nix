@@ -2,11 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  mitmproxy-rs,
 }:
 
 buildPythonPackage rec {
   pname = "mitmproxy-macos";
-  version = "0.11.5";
+  inherit (mitmproxy-rs) version;
   format = "wheel";
 
   src = fetchPypi {
@@ -15,7 +16,7 @@ buildPythonPackage rec {
     format = "wheel";
     dist = "py3";
     python = "py3";
-    hash = "sha256-j3qqZGrMZLpHkKf01Gy5+/18sEEbm3pWfbBASGS/8o0=";
+    hash = "sha256-sNguT3p72v9+FU5XFLYV6p0fO6WvGYerPy68GINwbyA=";
   };
 
   # repo has no python tests

@@ -1,10 +1,8 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   kclvm,
-  darwin,
   rustc,
 }:
 rustPlatform.buildRustPackage rec {
@@ -23,16 +21,10 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-ZhrjxHqwWwcVkCVkJJnVm2CZLfRlrI2383ejgI+B2KQ=";
   cargoPatches = [ ./cargo_lock.patch ];
 
-  buildInputs =
-    [
-      kclvm
-      rustc
-    ]
-    ++ (lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ]);
+  buildInputs = [
+    kclvm
+    rustc
+  ];
 
   meta = with lib; {
     description = "A high-performance implementation of KCL written in Rust that uses LLVM as the compiler backend";

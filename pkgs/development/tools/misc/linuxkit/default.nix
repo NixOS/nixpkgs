@@ -4,8 +4,6 @@
   buildGoModule,
   fetchFromGitHub,
   git,
-  Cocoa,
-  Virtualization,
   sigtool,
   testers,
   linuxkit,
@@ -36,10 +34,6 @@ buildGoModule rec {
   # - sigtool is allows us to validly sign such executables with a dummy
   #   authority.
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
-    Virtualization
-  ];
 
   ldflags = [
     "-s"

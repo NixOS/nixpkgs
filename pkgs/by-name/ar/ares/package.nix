@@ -1,6 +1,5 @@
 {
   lib,
-  SDL2,
   alsa-lib,
   apple-sdk_14,
   cmake,
@@ -19,6 +18,8 @@
   moltenvk,
   openal,
   pkg-config,
+  replaceVars,
+  sdl3,
   stdenv,
   udev,
   vulkan-loader,
@@ -28,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ares";
-  version = "143";
+  version = "144";
 
   src = fetchFromGitHub {
     owner = "ares-emulator";
     repo = "ares";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uuFKbS7WvxkTyyQfuQ6iKPvRt+54zUPdjUlQ/ohBAr8=";
+    hash = "sha256-BpVyPdtsIUstLVf/HGO6vcAlLgJP5SgJbZtqEV/uJ2g=";
   };
 
   nativeBuildInputs =
@@ -49,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      SDL2
+      sdl3
       libao
       librashader
       vulkan-loader
@@ -73,7 +74,9 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   patches = [
-    ./darwin-build-fixes.patch
+    (replaceVars ./darwin-build-fixes.patch {
+      sdkVersion = apple-sdk_14.version;
+    })
   ];
 
   cmakeFlags = [

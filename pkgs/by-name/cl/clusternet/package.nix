@@ -1,10 +1,10 @@
 {
   lib,
   fetchFromGitHub,
-  buildGoModule,
+  buildGo123Module,
 }:
 
-buildGoModule rec {
+buildGo123Module rec {
   pname = "clusternet";
   version = "0.17.3";
 

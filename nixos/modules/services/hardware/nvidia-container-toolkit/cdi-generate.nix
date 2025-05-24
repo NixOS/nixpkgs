@@ -39,7 +39,7 @@ writeScriptBin "nvidia-cdi-generator" ''
       --device-name-strategy ${deviceNameStrategy} \
       --ldconfig-path ${lib.getExe' glibc "ldconfig"} \
       --library-search-path ${lib.getLib nvidia-driver}/lib \
-      --nvidia-ctk-path ${lib.getExe' nvidia-container-toolkit "nvidia-ctk"}
+      --nvidia-cdi-hook-path ${lib.getExe' nvidia-container-toolkit.tools "nvidia-cdi-hook"}
   }
 
   function additionalMount {

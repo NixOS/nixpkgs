@@ -38,11 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DOPENGL_INCLUDE_DIR=${libGLX.dev}/include"
-    "-DOPENGL_gl_LIBRARY:FILEPATH=${libGLX}/lib/libGL.dylib"
-    "-DOPENGL_glu_LIBRARY:FILEPATH=${libGLU}/lib/libGLU.dylib"
+    "-DOPENGL_INCLUDE_DIR=${lib.getInclude libGLX}/include"
+    "-DOPENGL_gl_LIBRARY:FILEPATH=${lib.getLib libGLX}/lib/libGL.dylib"
     "-DFREEGLUT_BUILD_DEMOS:BOOL=OFF"
-    "-DFREEGLUT_BUILD_STATIC:BOOL=OFF"
   ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

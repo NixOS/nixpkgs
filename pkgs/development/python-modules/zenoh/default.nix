@@ -5,8 +5,6 @@
   cargo,
   rustPlatform,
   rustc,
-  stdenv,
-  darwin,
 }:
 
 buildPythonPackage rec {
@@ -32,8 +30,6 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
     rustc
   ];
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
 
   pythonImportsCheck = [
     "zenoh"

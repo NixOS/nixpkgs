@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   buildPythonPackage,
   fetchFromGitea,
   replaceVars,
@@ -9,7 +10,6 @@
   pillow,
   stdenv,
   exiftool,
-  ghostscript,
   imagemagick,
   mupdf-headless,
   netpbm,
@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "img2pdf";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchFromGitea {
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "josch";
     repo = "img2pdf";
     tag = version;
-    hash = "sha256-/nxXgGsnj5ktxUYt9X8/9tJzXgoU8idTjVgLh+8jol8=";
+    hash = "sha256-71u6ex+UAEFPDtR9QI8Ezah5zCorn4gMdAnzFz4blsI=";
   };
 
   patches = [
@@ -61,7 +61,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     exiftool
-    ghostscript
+    pkgs.ghostscript
     imagemagick
     mupdf-headless
     netpbm

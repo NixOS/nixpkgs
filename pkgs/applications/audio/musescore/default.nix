@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   wrapGAppsHook3,
   wrapQtAppsHook,
@@ -35,14 +36,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.5.1";
+  version = "4.5.2";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ha3rBILekycHiPdcaPNsbvlF289NzFs9srP3unOuJRg=";
+    sha256 = "sha256-9jafh9zyf+tuC+WU6nQIMBVm+Gqqcig8jS2R1h/YnIo=";
   };
+
+  # Backport + additional patch to fix build on Qt 6.9
+  # FIXME: remove when no longer required
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/musescore/MuseScore/commit/05056ed19520060c3912a09a3adfa0927057f956.patch";
+      hash = "sha256-50Hytuu2lQRbAI2JEwlKeMUmJxTUtfqgwru6U760hAY=";
+    })
+    ./qt-6.9.patch
+  ];
 
   cmakeFlags = [
     "-DMUSE_APP_BUILD_MODE=release"

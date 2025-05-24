@@ -1,23 +1,24 @@
 {
   lib,
+  newScope,
   stdenv,
   fetchzip,
-  gfortran,
   replaceVars,
-  python3,
-  python3Packages,
-  blas,
-  lapack,
-  zlib, # propagated by p4est but required by petsc
+  bash,
+  pkg-config,
+  gfortran,
+  bison,
   mpi, # generic mpi dependency
   mpiCheckPhaseHook,
-  bash,
+  python3,
+  python3Packages,
 
   # Build options
-  petsc-optimized ? true,
-  petsc-scalar-type ? "real",
-  petsc-precision ? "double",
+  debug ? false,
+  scalarType ? "real",
+  precision ? "double",
   mpiSupport ? true,
+  fortranSupport ? true,
   pythonSupport ? false, # petsc python binding
   withExamples ? false,
   withFullDeps ? false, # full External libraries support
@@ -26,41 +27,95 @@
   # External libraries options
   withHdf5 ? withCommonDeps,
   withMetis ? withCommonDeps,
-  withScalapack ? withFullDeps,
+  withZlib ? (withP4est || withPtscotch),
+  withScalapack ? withCommonDeps && mpiSupport,
   withParmetis ? withFullDeps, # parmetis is unfree
-  withPtscotch ? withFullDeps,
-  withMumps ? withFullDeps,
+  withPtscotch ? withCommonDeps && mpiSupport,
+  withMumps ? withCommonDeps,
   withP4est ? withFullDeps,
+  withHypre ? withCommonDeps && mpiSupport,
+  withFftw ? withCommonDeps,
+  withSuperLu ? withCommonDeps,
+  withSuperLuDist ? withCommonDeps && mpiSupport,
+  withSuitesparse ? withCommonDeps,
 
   # External libraries
-  hdf5-fortran-mpi,
+  blas,
+  lapack,
+  hdf5,
   metis,
   parmetis,
   scotch,
   scalapack,
-  mumps_par,
-  pkg-config,
+  mumps,
   p4est,
+  zlib, # propagated by p4est but required by petsc
+  hypre,
+  fftw,
+  superlu,
+  superlu_dist,
+  suitesparse,
+
+  # Used in passthru.tests
+  petsc,
+  mpich,
 }:
 assert withFullDeps -> withCommonDeps;
 
 # This version of PETSc does not support a non-MPI p4est build
-assert withP4est -> (p4est.mpiSupport && mpiSupport);
+assert withP4est -> (mpiSupport && withZlib);
 
 # Package parmetis depend on metis and mpi support
 assert withParmetis -> (withMetis && mpiSupport);
 
-assert withPtscotch -> mpiSupport;
+assert withPtscotch -> (mpiSupport && withZlib);
 assert withScalapack -> mpiSupport;
-assert withMumps -> withScalapack;
+assert (withMumps && mpiSupport) -> withScalapack;
+assert withHypre -> mpiSupport;
+assert withSuperLuDist -> mpiSupport;
 
-stdenv.mkDerivation rec {
+let
+  petscPackages = lib.makeScope newScope (self: {
+    inherit
+      mpi
+      python3
+      python3Packages
+      # global override options
+      mpiSupport
+      fortranSupport
+      pythonSupport
+      precision
+      ;
+    enableMpi = self.mpiSupport;
+
+    petscPackages = self;
+    # external libraries
+    blas = self.callPackage blas.override { };
+    lapack = self.callPackage lapack.override { };
+    hdf5 = self.callPackage hdf5.override {
+      fortran = gfortran;
+      cppSupport = !mpiSupport;
+    };
+    metis = self.callPackage metis.override { };
+    parmetis = self.callPackage parmetis.override { };
+    scotch = self.callPackage scotch.override { };
+    scalapack = self.callPackage scalapack.override { };
+    mumps = self.callPackage mumps.override { };
+    p4est = self.callPackage p4est.override { };
+    hypre = self.callPackage hypre.override { };
+    fftw = self.callPackage fftw.override { };
+    superlu = self.callPackage superlu.override { };
+    superlu_dist = self.callPackage superlu_dist.override { };
+    suitesparse = self.callPackage suitesparse.override { };
+  });
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "petsc";
-  version = "3.22.4";
+  version = "3.23.2";
 
   src = fetchzip {
-    url = "https://web.cels.anl.gov/projects/petsc/download/release-snapshots/petsc-${version}.tar.gz";
-    hash = "sha256-8WV1ylXytkhiNa7YpWSOIpSvzLCCjdVVe5SiGfhicas=";
+    url = "https://web.cels.anl.gov/projects/petsc/download/release-snapshots/petsc-${finalAttrs.version}.tar.gz";
+    hash = "sha256-I/vxSo0CVvkcEPmbSahPog1MiyyG4IyNorrZUAPSTYw=";
   };
 
   strictDeps = true;
@@ -70,6 +125,7 @@ stdenv.mkDerivation rec {
       python3
       gfortran
       pkg-config
+      bison
     ]
     ++ lib.optional mpiSupport mpi
     ++ lib.optionals pythonSupport [
@@ -79,16 +135,22 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      blas
-      lapack
+      petscPackages.blas
+      petscPackages.lapack
     ]
-    ++ lib.optional withHdf5 hdf5-fortran-mpi
-    ++ lib.optional withP4est p4est
-    ++ lib.optional withMetis metis
-    ++ lib.optional withParmetis parmetis
-    ++ lib.optional withPtscotch scotch
-    ++ lib.optional withScalapack scalapack
-    ++ lib.optional withMumps mumps_par;
+    ++ lib.optional withZlib zlib
+    ++ lib.optional withHdf5 petscPackages.hdf5
+    ++ lib.optional withP4est petscPackages.p4est
+    ++ lib.optional withMetis petscPackages.metis
+    ++ lib.optional withParmetis petscPackages.parmetis
+    ++ lib.optional withPtscotch petscPackages.scotch
+    ++ lib.optional withScalapack petscPackages.scalapack
+    ++ lib.optional withMumps petscPackages.mumps
+    ++ lib.optional withHypre petscPackages.hypre
+    ++ lib.optional withSuperLu petscPackages.superlu
+    ++ lib.optional withSuperLuDist petscPackages.superlu_dist
+    ++ lib.optional withFftw petscPackages.fftw
+    ++ lib.optional withSuitesparse petscPackages.suitesparse;
 
   propagatedBuildInputs = lib.optional pythonSupport python3Packages.numpy;
 
@@ -107,59 +169,46 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [
-      "--with-blas=1"
-      "--with-lapack=1"
-      "--with-scalar-type=${petsc-scalar-type}"
-      "--with-precision=${petsc-precision}"
+      "--with-blaslapack=1"
+      "--with-scalar-type=${scalarType}"
+      "--with-precision=${precision}"
       "--with-mpi=${if mpiSupport then "1" else "0"}"
     ]
-    ++ lib.optional pythonSupport "--with-petsc4py=1"
+    ++ lib.optionals (!mpiSupport) [
+      "--with-cc=${stdenv.cc}/bin/${if stdenv.cc.isGNU then "gcc" else "clang"}"
+      "--with-cxx=${stdenv.cc}/bin/${if stdenv.cc.isGNU then "g++" else "clang++"}"
+      "--with-fc=${gfortran}/bin/gfortran"
+    ]
     ++ lib.optionals mpiSupport [
-      "--CC=mpicc"
-      "--with-cxx=mpicxx"
-      "--with-fc=mpif90"
+      "--with-cc=${lib.getDev mpi}/bin/mpicc"
+      "--with-cxx=${lib.getDev mpi}/bin/mpicxx"
+      "--with-fc=${lib.getDev mpi}/bin/mpif90"
     ]
-    ++ lib.optionals withMetis [
-      "--with-metis=1"
-      "--with-metis-dir=${metis}"
-    ]
-    ++ lib.optionals withParmetis [
-      "--with-parmetis=1"
-      "--with-parmetis-dir=${parmetis}"
-    ]
-    ++ lib.optionals withPtscotch [
-      "--with-ptscotch=1"
-      "--with-ptscotch-include=${lib.getDev scotch}/include"
-      "--with-ptscotch-lib=[-L${lib.getLib scotch}/lib,-lptscotch,-lptesmumps,-lptscotchparmetisv3,-lptscotcherr,-lesmumps,-lscotch,-lscotcherr]"
-    ]
-    ++ lib.optionals withScalapack [
-      "--with-scalapack=1"
-      "--with-scalapack-dir=${scalapack}"
-    ]
-    ++ lib.optionals withMumps [
-      "--with-mumps=1"
-      "--with-mumps-dir=${mumps_par}"
-    ]
-    ++ lib.optionals withP4est [
-      "--with-p4est=1"
-      "--with-zlib-include=${lib.getDev zlib}/include"
-      "--with-zlib-lib=[-L${lib.getLib zlib}/lib,-lz]"
-    ]
-    ++ lib.optionals withHdf5 [
-      "--with-hdf5=1"
-      "--with-hdf5-fortran-bindings=1"
-      "--with-hdf5-include=${lib.getDev hdf5-fortran-mpi}/include"
-      "--with-hdf5-lib=[-L${lib.getLib hdf5-fortran-mpi}/lib,-lhdf5]"
-    ]
-    ++ lib.optionals petsc-optimized [
+    ++ lib.optionals (!debug) [
       "--with-debugging=0"
       "COPTFLAGS=-O3"
       "FOPTFLAGS=-O3"
       "CXXOPTFLAGS=-O3"
       "CXXFLAGS=-O3"
-    ];
+    ]
+    ++ lib.optional (!fortranSupport) "--with-fortran-bindings=0"
+    ++ lib.optional pythonSupport "--with-petsc4py=1"
+    ++ lib.optional withMetis "--with-metis=1"
+    ++ lib.optional withParmetis "--with-parmetis=1"
+    ++ lib.optional withPtscotch "--with-ptscotch=1"
+    ++ lib.optional withScalapack "--with-scalapack=1"
+    ++ lib.optional withMumps "--with-mumps=1"
+    ++ lib.optional (withMumps && !mpiSupport) "--with-mumps-serial=1"
+    ++ lib.optional withP4est "--with-p4est=1"
+    ++ lib.optional withZlib "--with-zlib=1"
+    ++ lib.optional withHdf5 "--with-hdf5=1"
+    ++ lib.optional withHypre "--with-hypre=1"
+    ++ lib.optional withSuperLu "--with-superlu=1"
+    ++ lib.optional withSuperLuDist "--with-superlu_dist=1"
+    ++ lib.optional withFftw "--with-fftw=1"
+    ++ lib.optional withSuitesparse "--with-suitesparse=1";
 
-  hardeningDisable = lib.optionals (!petsc-optimized) [
+  hardeningDisable = lib.optionals debug [
     "fortify"
     "fortify3"
   ];
@@ -167,6 +216,30 @@ stdenv.mkDerivation rec {
   installTargets = [ (if withExamples then "install" else "install-lib") ];
 
   enableParallelBuilding = true;
+
+  # Ensure petscvariables contains absolute paths for compilers and flags so that downstream
+  # packages relying on PETSc's runtime configuration (e.g. form compilers, code generators)
+  # can correctly compile and link generated code
+  postInstall = lib.concatStringsSep "\n" (
+    map (
+      package:
+      let
+        pname = package.pname or package.name;
+        prefix =
+          if (pname == "blas" || pname == "lapack") then
+            "BLASLAPACK"
+          else
+            lib.toUpper (builtins.elemAt (lib.splitString "-" pname) 0);
+      in
+      ''
+        substituteInPlace $out/lib/petsc/conf/petscvariables \
+          --replace-fail "${prefix}_INCLUDE =" "${prefix}_INCLUDE = -I${lib.getDev package}/include" \
+          --replace-fail "${prefix}_LIB =" "${prefix}_LIB = -L${lib.getLib package}/lib"
+      ''
+    ) finalAttrs.buildInputs
+  );
+
+  __darwinAllowLocalNetworking = true;
 
   # This is needed as the checks need to compile and link the test cases with
   # -lpetsc, which is not available in the checkPhase, which is executed before
@@ -198,19 +271,43 @@ stdenv.mkDerivation rec {
   pythonImportsCheck = [ "petsc4py" ];
 
   passthru = {
-    inherit mpiSupport pythonSupport;
+    inherit
+      mpiSupport
+      pythonSupport
+      fortranSupport
+      ;
+    petscPackages = petscPackages.overrideScope (
+      final: prev: {
+        petsc = finalAttrs.finalPackage;
+      }
+    );
+    tests =
+      {
+        serial = petsc.override {
+          mpiSupport = false;
+        };
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+        fullDeps = petsc.override {
+          withFullDeps = true;
+          withParmetis = false;
+        };
+        mpich = petsc.override {
+          mpi = mpich;
+        };
+      };
   };
 
   setupHook = ./setup-hook.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Portable Extensible Toolkit for Scientific computation";
     homepage = "https://petsc.org/release/";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       cburstedde
       qbisi
     ];
   };
-}
+})

@@ -6,15 +6,15 @@
   kitex,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kitex";
-  version = "0.13.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "cloudwego";
     repo = "kitex";
-    rev = "v${version}";
-    hash = "sha256-1dgQgc9XljawyH+MIDPNqcwHMH0yW2BMY8TZnc+P13I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ivuAqHOerGkaEX/zfzViY1xhNrymMOBv8RPGAPNYp/4=";
   };
 
   vendorHash = "sha256-31OgNcAL2NJq5b96UmQnVecdusY4AtUP/O2MVCmPk+8=";
@@ -33,7 +33,7 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = kitex;
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
@@ -43,4 +43,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "kitex";
   };
-}
+})

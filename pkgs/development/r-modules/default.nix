@@ -25,7 +25,6 @@ let
 
   buildRPackage = pkgs.callPackage ./generic-builder.nix {
     inherit R;
-    inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa Foundation;
     inherit (pkgs) gettext gfortran;
   };
 
@@ -92,7 +91,9 @@ let
       ];
   };
   deriveBiocAnn = mkDerive {
-    mkHomepage = { name, ... }: "http://www.bioconductor.org/packages/${name}.html";
+    mkHomepage =
+      { name, biocVersion }:
+      "https://www.bioconductor.org/packages/${biocVersion}/data/annotation/html/${name}.html";
     mkUrls =
       {
         name,
@@ -105,7 +106,9 @@ let
     hydraPlatforms = [ ];
   };
   deriveBiocExp = mkDerive {
-    mkHomepage = { name, ... }: "http://www.bioconductor.org/packages/${name}.html";
+    mkHomepage =
+      { name, biocVersion }:
+      "https://www.bioconductor.org/packages/${biocVersion}/data/experiment/html/${name}.html";
     mkUrls =
       {
         name,
@@ -724,7 +727,7 @@ let
     RODBC = [ pkgs.libiodbc ];
     rpanel = [ pkgs.tclPackages.bwidget ];
     Rpoppler = [ pkgs.poppler ];
-    RPostgreSQL = with pkgs; [ libpq ];
+    RPostgreSQL = with pkgs; [ libpq.pg_config ];
     RProtoBuf = [ pkgs.protobuf ];
     RSclient = [ pkgs.openssl.dev ];
     Rserve = [ pkgs.openssl ];

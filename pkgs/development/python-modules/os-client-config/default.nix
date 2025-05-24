@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  fetchpatch,
   fetchPypi,
   fixtures,
   hacking,
@@ -24,6 +25,14 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-q8OKNR+MAG009+5fP2SN5ePs9kVcxdds/YidKRzfP04=";
   };
+
+  patches = [
+    # Fix compatibility with openstacksdk 4.5.0
+    (fetchpatch {
+      url = "https://github.com/openstack/os-client-config/commit/46bc2deb4c6762dc1dd674686283eb3fa4c1d5e6.patch";
+      hash = "sha256-wZdwCbgrRg0mxs542zjWAlXn0PzCotlbZaEyinYKwb4=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
@@ -54,9 +63,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "os_client_config" ];
 
   meta = with lib; {
-    homepage = "https://opendev.org/openstack/os-client-config";
-    description = "Collect client configuration for using OpenStack in consistent and comprehensive manner";
+    description = "Unified config handling for client libraries and programs";
+    homepage = "https://github.com/openstack/os-client-config";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

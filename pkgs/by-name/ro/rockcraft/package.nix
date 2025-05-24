@@ -7,17 +7,18 @@
   testers,
   rockcraft,
   cacert,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "rockcraft";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "rockcraft";
     rev = version;
-    hash = "sha256-cgNKMxQrD9/OfmY5YEnpbNDstDdXqc/wdfCb4HvsgNM=";
+    hash = "sha256-LrUs6/YRQYU0o1kmNdBhafvDIyw91FnW8+9i0Jj5f+Y=";
   };
 
   pyproject = true;
@@ -39,18 +40,22 @@ python3Packages.buildPythonApplication rec {
       pytest-mock
       pytest-subprocess
       pytestCheckHook
+      writableTmpDirAsHomeHook
     ]
     ++ [ dpkg ];
-
-  preCheck = ''
-    mkdir -p check-phase
-    export HOME="$(pwd)/check-phase"
-  '';
 
   disabledTests = [
     "test_project_all_platforms_invalid"
     "test_run_init_flask"
     "test_run_init_django"
+  ];
+
+  disabledTestPaths = [
+    # Relies upon info in the .git directory which is stripped by fetchFromGitHub,
+    # and the version is overridden anyway.
+    "tests/integration/test_version.py"
+    # Tests non-Nix native packaging
+    "tests/integration/test_setuptools.py"
   ];
 
   passthru = {

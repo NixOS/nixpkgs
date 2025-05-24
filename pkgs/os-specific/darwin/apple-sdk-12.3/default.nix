@@ -1,17 +1,12 @@
 # Compatibility stubs for packages that used the old SDK frameworks.
-# TODO(@reckenrode) Make these stubs warn after framework usage has been cleaned up in nixpkgs.
 {
   lib,
   callPackage,
-  newScope,
-  overrideSDK,
   pkgs,
-  stdenv,
-  stdenvNoCC,
 }:
 
 let
-  mkStub = callPackage ../apple-sdk/mk-stub.nix { } "12.3";
+  mkStub = callPackage ../apple-sdk/mk-stub.nix { } "darwin.apple_sdk_12_3" "12.3";
 in
 lib.genAttrs [
   "CLTools_Executables"

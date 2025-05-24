@@ -138,6 +138,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.libtiff;
     platforms = platforms.unix ++ platforms.windows;
     pkgConfigModules = [ "libtiff-4" ];
-    maintainers = teams.geospatial.members;
+    teams = [ teams.geospatial ];
   };
 })

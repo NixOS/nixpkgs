@@ -6,7 +6,7 @@
   expat,
   fetchFromGitHub,
   libxml2,
-  python,
+  python3,
   sphinx,
   stdenv,
   zlib,
@@ -35,14 +35,14 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace libcomps/src/python/src/CMakeLists.txt \
-      --replace "@PYTHON_INSTALL_DIR@" "$out/${python.sitePackages}"
+      --replace "@PYTHON_INSTALL_DIR@" "$out/${python3.sitePackages}"
   '';
 
   nativeBuildInputs = [
     check
     cmake
     doxygen
-    python
+    python3
     sphinx
   ];
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     ls $out/lib
-    moveToOutput "lib/${python.libPrefix}" "$py"
+    moveToOutput "lib/${python3.libPrefix}" "$py"
   '';
 
   meta = with lib; {

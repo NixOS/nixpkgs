@@ -327,6 +327,7 @@ in
         linux_6_6_hardened = hardenedKernelFor kernels.linux_6_6 { };
         linux_6_12_hardened = hardenedKernelFor kernels.linux_6_12 { };
         linux_6_13_hardened = hardenedKernelFor kernels.linux_6_13 { };
+        linux_6_14_hardened = hardenedKernelFor kernels.linux_6_14 { };
 
       }
       // lib.optionalAttrs config.allowAliases {
@@ -793,6 +794,7 @@ in
       linux_6_6_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_6_hardened);
       linux_6_12_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_12_hardened);
       linux_6_13_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_13_hardened);
+      linux_6_14_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_14_hardened);
 
       linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
       linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);

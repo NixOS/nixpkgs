@@ -6,17 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "apt-swarm";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
     repo = "apt-swarm";
     tag = "v${version}";
-    hash = "sha256-XE8VSMNqm131BBRIAycQebdGPiunMCG1fVnEffmej1o=";
+    hash = "sha256-zb0X6vIRKeI5Ysc88sTCJBlr9r8hrsTq5YR7YCg1L30=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Iu4CcBgcvRcERZdEZQP6fGGBVvyctpKrzFaoW/eIr5c=";
+  cargoHash = "sha256-PELTEzhsFa1nl7iqrjnuXEI0U7L8rL9XW9XqQ04rz/s=";
 
   meta = {
     description = "Experimental p2p gossip network for OpenPGP signature transparency";

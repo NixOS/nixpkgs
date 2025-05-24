@@ -5,6 +5,7 @@
   jre_headless,
   linkFarm,
   makeWrapper,
+  nixosTests,
   plugins ? [ ],
 }:
 let
@@ -41,7 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    tests = nixosTests.reposilite;
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description = "Lightweight and easy-to-use repository management software dedicated for the Maven based artifacts in the JVM ecosystem";

@@ -59,8 +59,15 @@
       machine.succeed("mkdir /root/Pictures /root/Videos")
       # Setup example data, OCR-friendly:
       # - White square, black text
+      # - Small text for display OCR
+      # - Big text for gallery preview OCR
       # - uppercase extension
-      machine.succeed("magick -size 500x500 -background white -fill black canvas:white -pointsize 70 -annotate +100+300 '${imageLabel}' /root/Pictures/output.PNG")
+      machine.succeed(
+          "magick -size 500x500 -background white -fill black canvas:white "
+          + "-pointsize 20 -annotate +100+100 '${imageLabel}' "
+          + "-pointsize 50 -annotate +100+300 '${imageLabel}' "
+          + "/root/Pictures/output.PNG"
+      )
 
       # Different image formats
       machine.succeed("magick /root/Pictures/output.PNG /root/Pictures/output.JPG")

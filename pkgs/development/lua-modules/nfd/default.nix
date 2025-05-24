@@ -1,5 +1,4 @@
 {
-  stdenv,
   fetchFromGitHub,
   buildLuarocksPackage,
   lua,
@@ -7,7 +6,6 @@
   lib,
   replaceVars,
   zenity,
-  AppKit,
 }:
 
 buildLuarocksPackage {
@@ -32,8 +30,6 @@ buildLuarocksPackage {
 
   luarocksConfig.variables.LUA_LIBDIR = "${lua}/lib";
   nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
 
   postInstall = ''
     find $out -name nfd_zenity.so -execdir mv {} nfd.so \;

@@ -9,6 +9,7 @@
   itstool,
   libtool,
   texinfo,
+  systemdMinimal,
   util-linux,
   autoreconfHook,
   glib,
@@ -36,13 +37,13 @@
 let
   inherit (python3Packages) python pyxdg wrapPython;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "speech-dispatcher";
-  version = "0.11.5";
+  version = "0.12.1";
 
   src = fetchurl {
-    url = "https://github.com/brailcom/speechd/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-HOR1n/q7rxrrQzpewHOb4Gdum9+66URKezvhsq8+wSs=";
+    url = "https://github.com/brailcom/speechd/releases/download/${finalAttrs.version}/speech-dispatcher-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-sUpSONKH0tzOTdQrvWbKZfoijn5oNwgmf3s0A297pLQ=";
   };
 
   patches =
@@ -77,8 +78,13 @@ stdenv.mkDerivation rec {
       libsndfile
       libao
       libpulseaudio
-      alsa-lib
       python
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      systemdMinimal # libsystemd
+    ]
+    ++ lib.optionals withAlsa [
+      alsa-lib
     ]
     ++ lib.optionals withEspeak [
       espeak
@@ -101,6 +107,7 @@ stdenv.mkDerivation rec {
       # Audio method falls back from left to right.
       "--with-default-audio-method=\"libao,pulse,alsa,oss\""
       "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+      "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
     ]
     ++ lib.optionals withPulse [
       "--with-pulse"
@@ -121,7 +128,7 @@ stdenv.mkDerivation rec {
       "--with-pico"
     ];
 
-  postPatch = ''
+  postPatch = lib.optionalString withPico ''
     substituteInPlace src/modules/pico.c --replace "/usr/share/pico/lang" "${svox}/share/pico/lang"
   '';
 
@@ -146,7 +153,8 @@ stdenv.mkDerivation rec {
       berce
       jtojnar
     ];
-    platforms = platforms.linux;
+    # TODO: remove checks for `withPico` once PR #375450 is merged
+    platforms = if withAlsa || withPico then platforms.linux else platforms.unix;
     mainProgram = "speech-dispatcher";
   };
-}
+})

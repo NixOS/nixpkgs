@@ -17,7 +17,7 @@ let
     cuda_nvcc
     libcublas
     ;
-  inherit (cudaPackages.cudaFlags) cudaCapabilities dropDot isJetsonBuild;
+  inherit (cudaPackages.flags) cudaCapabilities dropDot isJetsonBuild;
 in
 backendStdenv.mkDerivation {
   pname = "gpu-burn";

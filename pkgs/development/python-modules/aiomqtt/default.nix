@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aiomqtt";
-  version = "2.3.1";
+  version = "2.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "sbtinstruments";
     repo = "aiomqtt";
     tag = "v${version}";
-    hash = "sha256-1UTCcvzbuZJ3KpYsVxiaVn9MjjS1MYYduM4jASAOR3Y=";
+    hash = "sha256-b7kCLpJzZGx8YpC0M4O4fqFh3xP73CXFWbKaggD6bOI=";
   };
 
   build-system = [ hatchling ];

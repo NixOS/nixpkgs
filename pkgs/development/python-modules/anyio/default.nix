@@ -18,6 +18,7 @@
   trio,
 
   # tests
+  blockbuster,
   hypothesis,
   psutil,
   pytest-mock,
@@ -32,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "4.8.0";
+  version = "4.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -41,7 +42,7 @@ buildPythonPackage rec {
     owner = "agronholm";
     repo = "anyio";
     tag = version;
-    hash = "sha256-CwoU52W5MspzGAekTkFyUY88pqbY+68qCbck3neI2jE=";
+    hash = "sha256-kISaBHDkMOYYU9sdiQAXiq3jp1ehWOYFpvFbuceBWB0=";
   };
 
   build-system = [ setuptools-scm ];
@@ -63,6 +64,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    blockbuster
     exceptiongroup
     hypothesis
     psutil
@@ -80,6 +82,11 @@ buildPythonPackage rec {
     "'not network'"
   ];
 
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Work around "OSError: AF_UNIX path too long"
+    export TMPDIR="/tmp"
+  '';
+
   disabledTests =
     [
       # TypeError: __subprocess_run() got an unexpected keyword argument 'umask'
@@ -92,6 +99,16 @@ buildPythonPackage rec {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # PermissionError: [Errno 1] Operation not permitted: '/dev/console'
       "test_is_block_device"
+
+      # These tests become flaky under heavy load
+      "test_asyncio_run_sync_called"
+      "test_handshake_fail"
+      "test_run_in_custom_limiter"
+      "test_cancel_from_shielded_scope"
+      "test_start_task_soon_cancel_later"
+
+      # AssertionError: assert 'wheel' == 'nixbld'
+      "test_group"
     ];
 
   disabledTestPaths = [

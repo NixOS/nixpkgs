@@ -30,11 +30,31 @@ Before adding a new package, please consider the following questions:
 
 * Is the package ready for general use? We don't want to include projects that are too immature or are going to be abandoned immediately. In case of doubt, check with upstream.
 * Does the project have a clear license statement? Remember that software is unfree by default (all rights reserved), and merely providing access to the source code does not imply its redistribution. In case of doubt, ask upstream.
-* How realistic is it that it will be used by other people? It's good that nixpkgs caters to various niches, but if it's a niche of 5 people it's probably too small.
+* How realistic is it that it will be used by other people? It's good that nixpkgs caters to various niches, but if it's a niche of 5 people it's probably too small. A good estimate is checking upstream issues and pull requests, or other software repositories. Library packages should have at least one dependent.
+* Is the software actively maintained upstream? Especially packages that are security-critical, rely on fast-moving dependencies, or affect data integrity should see regular maintenance.
 * Are you willing to maintain the package? You should care enough about the package to be willing to keep it up and running for at least one complete Nixpkgs' release life-cycle.
   * In case you are not able to maintain the package you wrote, you can seek someone to fill that role, effectively adopting the package.
 
 If any of these questions' answer is no, then you should probably not add the package.
+
+Special care has to be taken with security-critical software components. Because entries in the Nix store are inert and do nothing by themselves, packages should be considered by their intended use, e.g. when used together with a NixOS module.
+
+* Any package that immediately would need to be tagged with `meta.knownVulnerabilities` is unlikely to be fit for nixpkgs.
+* Any package depending on a known-vulnerable library should be considered carefully.
+* Packages typically used with untrusted data should have a maintained and responsible upstream. For example:
+  * Any package which does not follow upstream security policies should be considered vulnerable. In particular, packages that vendor or fork web engines like Blink, Gecko or Webkit need to keep up with the frequent updates of those projects.
+  * Any security-critical fast-moving package such as Chrome or Firefox (or their forks) must have at least one active committer among the maintainers. This ensures no critical fixes are delayed unnecessarily, endangering unsuspecting users.
+  * Services which typically work on web traffic are working on untrusted input.
+  * Data (such as archives or rich documents) commonly shared over untrusted channels (e.g. email) is untrusted.
+* Applications in the Unix authentication stack such as PAM/D-Bus modules or SUID binaries should be considered carefully, and should have a maintained and responsible upstream.
+* Encryption libraries should have a maintained and responsible upstream.
+* Security-critical components that are part of larger packages should be unvendored (=use the nixpkgs package as dependency, instead of vendored and pinned sources).
+* A "responsible upstream" includes various aspects, such as:
+  * channels to disclose security concerns
+  * being responsive to security concerns, providing fixes or workarounds
+  * transparent public disclosure of security issues when they are found or fixed
+  * These aspects are sometimes hard to verify, in which case an upstream that is not known to be irresponsible should be considered as responsible.
+* Source-available software should be built from source where possible. Binary blobs risk supply chain attacks and vendored outdated libraries.
 
 This section describes a general framework of understanding and exceptions might apply.
 
@@ -501,28 +521,29 @@ When using the `patches` parameter to `mkDerivation`, make sure the patch name c
 
 ### Fetching patches
 
-In the interest of keeping our maintenance burden and the size of Nixpkgs to a minimum, patches already merged upstream or published elsewhere _should_ be retrieved using `fetchpatch`:
+In the interest of keeping our maintenance burden and the size of Nixpkgs to a minimum, patches already merged upstream or published elsewhere _should_ be retrieved using `fetchpatch2`:
 
 ```nix
 {
   patches = [
-    (fetchpatch {
+    (fetchpatch2 {
       name = "fix-check-for-using-shared-freetype-lib.patch";
-      url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=8f5d285";
+      url = "https://cgit.ghostscript.com/cgi-bin/cgit.cgi/ghostpdl.git/patch/?id=8f5d28536e4518716fdfe974e580194c8f57871d";
       hash = "sha256-uRcxaCjd+WAuGrXOmGfFeu79cUILwkRdBu48mwcBE7g=";
     })
   ];
 }
 ```
 
-If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch`. Check [the `fetchpatch` reference](https://nixos.org/manual/nixpkgs/unstable/#fetchpatch) for details.
+If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch2`. Check [the `fetchpatch` reference](https://nixos.org/manual/nixpkgs/unstable/#fetchpatch) for details.
+
+When adding patches in this manner you should be reasonably sure that the used URL is stable. Patches referencing open pull requests will change when the PR is updated and code forges (such as GitHub) usually garbage collect commits that are no longer reachable due to rebases/amends.
 
 ### Vendoring patches
 
 In the following cases, a `.patch` file _should_ be added to Nixpkgs repository, instead of retrieved:
 
 - solves problems unique to packaging in Nixpkgs
-- is already proposed upstream but not merged yet
 - cannot be fetched easily
 - has a high chance to disappear in the future due to unstable or unreliable URLs
 

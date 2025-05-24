@@ -108,7 +108,7 @@ stdenvNoCC.mkDerivation (
     meta = {
       description = "Frameworks and libraries required for building packages on Darwin";
       homepage = "https://developer.apple.com";
-      maintainers = lib.teams.darwin.members;
+      teams = [ lib.teams.darwin ];
       platforms = lib.platforms.darwin;
       badPlatforms = [ lib.systems.inspect.patterns.is32bit ];
     };

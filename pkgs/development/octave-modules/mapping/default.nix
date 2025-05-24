@@ -25,10 +25,10 @@ buildOctavePackage rec {
     geometry
   ];
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/mapping/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/mapping/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Simple mapping and GIS .shp .dxf and raster file functions";
   };
 }

@@ -28,6 +28,6 @@ php82.buildComposerProject2 (finalAttrs: {
     homepage = "https://github.com/box-project/box";
     license = lib.licenses.mit;
     mainProgram = "box";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

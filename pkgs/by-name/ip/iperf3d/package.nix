@@ -31,6 +31,7 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "iperf3d";
     homepage = "https://github.com/wobcom/iperf3d";
     license = licenses.mit;
-    maintainers = with maintainers; [ netali ] ++ teams.wdz.members;
+    maintainers = with maintainers; [ netali ];
+    teams = [ teams.wdz ];
   };
 }

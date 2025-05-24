@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "Font for concealing text";
     homepage = "https://github.com/elementary/fonts";
     license = licenses.ofl;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
     platforms = platforms.linux;
   };
 }

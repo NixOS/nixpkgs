@@ -12,7 +12,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "open-web-calendar";
-  version = "1.48";
+  version = "1.49";
   pyproject = true;
 
   disabled = python.pythonOlder "3.9";
@@ -20,7 +20,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchPypi {
     inherit version;
     pname = "open_web_calendar";
-    hash = "sha256-SSe5vkrfTpUFdSLglBxo5//VZfuXYnWs5sUKJL2zWOw=";
+    hash = "sha256-vtmIqiF85zn8CiMUWsCKJUzfiiK/j+xlZIyuIMGxR4I=";
   };
 
   # The Pypi tarball doesn't contain open_web_calendars/features

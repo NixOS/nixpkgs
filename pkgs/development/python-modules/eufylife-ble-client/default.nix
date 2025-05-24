@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "eufylife-ble-client";
-  version = "0.1.9";
+  version = "0.1.10";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "eufylife_ble_client";
     inherit version;
-    hash = "sha256-frW65AIaT4Vol/iI8oq4uCN5aoTLj+v63y3AvhUn3jg=";
+    hash = "sha256-hfUsFifkwr5qhYM6Otlxo4AAGu967p/eWCR+yBrC4eM=";
   };
 
   nativeBuildInputs = [ poetry-core ];

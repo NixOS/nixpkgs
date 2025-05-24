@@ -19,7 +19,7 @@ To enable the GNOME desktop use:
 While it is not strictly necessary to use GDM as the display manager with GNOME, it is recommended, as some features such as screen lock [might not work](#sec-gnome-faq-can-i-use-lightdm-with-gnome) without it.
 :::
 
-The default applications used in NixOS are very minimal, inspired by the defaults used in [gnome-build-meta](https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/40.0/elements/core/meta-gnome-core-utilities.bst).
+The default applications used in NixOS are very minimal, inspired by the defaults used in [gnome-build-meta](https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/48.0/elements/core/meta-gnome-core-apps.bst).
 
 ### GNOME without the apps {#sec-gnome-without-the-apps}
 
@@ -27,7 +27,7 @@ If you’d like to only use the GNOME desktop and not the apps, you can disable 
 
 ```nix
 {
-  services.gnome.core-utilities.enable = false;
+  services.gnome.core-apps.enable = false;
 }
 ```
 

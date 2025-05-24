@@ -11,7 +11,6 @@
   cereal,
   cgal,
   curl,
-  darwin,
   dbus,
   eigen,
   expat,
@@ -28,7 +27,6 @@
   nlopt,
   opencascade-occt_7_6_1,
   openvdb,
-  pcre,
   qhull,
   tbb_2021_11,
   wxGTK32,
@@ -36,27 +34,15 @@
   libbgcode,
   heatshrink,
   catch2,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
+  ctestCheckHook,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
   wxGTK-override ? null,
   opencascade-override ? null,
 }:
 let
-  wxGTK-prusa = wxGTK32.overrideAttrs (old: {
-    pname = "wxwidgets-prusa3d-patched";
-    version = "3.2.0";
-    configureFlags = old.configureFlags ++ [ "--disable-glcanvasegl" ];
-    patches = [ ./wxWidgets-Makefile.in-fix.patch ];
-    src = fetchFromGitHub {
-      owner = "prusa3d";
-      repo = "wxWidgets";
-      rev = "78aa2dc0ea7ce99dc19adc1140f74c3e2e3f3a26";
-      hash = "sha256-rYvmNmvv48JSKVT4ph9AS+JdstnLSRmcpWz1IdgBzQo=";
-      fetchSubmodules = true;
-    };
-  });
-  nanosvg-fltk = nanosvg.overrideAttrs (old: rec {
+  nanosvg-fltk = nanosvg.overrideAttrs (old: {
     pname = "nanosvg-fltk";
     version = "unstable-2022-12-22";
 
@@ -68,7 +54,7 @@ let
     };
   });
   openvdb_tbb_2021_8 = openvdb.override { tbb = tbb_2021_11; };
-  wxGTK-override' = if wxGTK-override == null then wxGTK-prusa else wxGTK-override;
+  wxGTK-override' = if wxGTK-override == null then wxGTK32 else wxGTK-override;
   opencascade-override' =
     if opencascade-override == null then opencascade-occt_7_6_1 else opencascade-override;
 in
@@ -89,15 +75,20 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/prusa3d/PrusaSlicer/commit/cdc3db58f9002778a0ca74517865527f50ade4c3.patch";
       hash = "sha256-zgpGg1jtdnCBaWjR6oUcHo5sGuZx5oEzpux3dpRdMAM=";
     })
+    # https://github.com/prusa3d/PrusaSlicer/pull/11769
+    ./fix-ambiguous-constructors.patch
   ];
 
-  # required for GCC 14
+  # Patch required for GCC 14.
   # (not applicable to super-slicer fork)
+  # Make Gcode viewer open newer bgcode files.
   postPatch = lib.optionalString (finalAttrs.pname == "prusa-slicer") ''
     substituteInPlace src/slic3r-arrange/include/arrange/DataStoreTraits.hpp \
       --replace-fail \
       "WritableDataStoreTraits<ArrItem>::template set" \
       "WritableDataStoreTraits<ArrItem>::set"
+    substituteInPlace src/platform/unix/PrusaGcodeviewer.desktop \
+      --replace-fail 'MimeType=text/x.gcode;' 'MimeType=application/x-bgcode;text/x.gcode;'
   '';
 
   nativeBuildInputs = [
@@ -130,7 +121,6 @@ stdenv.mkDerivation (finalAttrs: {
       nlopt
       opencascade-override'
       openvdb_tbb_2021_8
-      pcre
       qhull
       tbb_2021_11
       wxGTK-override'
@@ -138,13 +128,10 @@ stdenv.mkDerivation (finalAttrs: {
       libbgcode
       heatshrink
       catch2
-      webkitgtk_4_0
+      webkitgtk_4_1
     ]
     ++ lib.optionals withSystemd [
       systemd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.CoreWLAN
     ];
 
   strictDeps = true;
@@ -202,6 +189,17 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out/share/pixmaps/"
     ln -s "$out/share/PrusaSlicer/icons/PrusaSlicer.png" "$out/share/pixmaps/PrusaSlicer.png"
     ln -s "$out/share/PrusaSlicer/icons/PrusaSlicer-gcodeviewer_192px.png" "$out/share/pixmaps/PrusaSlicer-gcodeviewer.png"
+
+    mkdir -p "$out"/share/mime/packages
+    cat << EOF > "$out"/share/mime/packages/prusa-gcode-viewer.xml
+    <?xml version="1.0" encoding="UTF-8"?>
+    <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+      <mime-type type="application/x-bgcode">
+        <comment xml:lang="en">Binary G-code file</comment>
+        <glob pattern="*.bgcode"/>
+      </mime-type>
+    </mime-info>
+    EOF
   '';
 
   preFixup = ''
@@ -211,16 +209,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   doCheck = true;
-
-  checkPhase = ''
-    runHook preCheck
-
-    ctest \
-      --force-new-ctest-process \
-      -E 'libslic3r_tests|sla_print_tests'
-
-    runHook postCheck
-  '';
+  nativeCheckInputs = [ ctestCheckHook ];
+  checkFlags = [
+    "--force-new-ctest-process"
+    "-E"
+    "libslic3r_tests|sla_print_tests"
+  ];
 
   meta =
     with lib;
@@ -231,6 +225,7 @@ stdenv.mkDerivation (finalAttrs: {
       maintainers = with maintainers; [
         tweber
         tmarkus
+        fliegendewurst
       ];
       platforms = platforms.unix;
     }

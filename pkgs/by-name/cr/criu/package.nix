@@ -48,7 +48,6 @@ stdenv.mkDerivation rec {
     asciidoc
     xmlto
     libpaper
-    libuuid
     docbook_xsl
     which
     makeWrapper
@@ -64,6 +63,7 @@ stdenv.mkDerivation rec {
     libnet
     nftables
     libbsd
+    libuuid
   ];
   propagatedBuildInputs =
     [
@@ -95,6 +95,7 @@ stdenv.mkDerivation rec {
         "powerpc" = "ppc64";
         "s390" = "s390";
         "mips" = "mips";
+        "loongarch" = "loongarch64";
       };
     in
     [
@@ -146,6 +147,7 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
       "aarch64-linux"
       "armv7l-linux"
+      "loongarch64-linux"
     ];
     maintainers = [ maintainers.thoughtpolice ];
   };

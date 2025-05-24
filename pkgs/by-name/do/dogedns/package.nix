@@ -7,7 +7,6 @@
   pkg-config,
   openssl,
   pandoc,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -45,9 +44,7 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
     pandoc
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   postInstall = ''
     installShellCompletion completions/doge.{bash,fish,zsh}

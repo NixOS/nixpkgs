@@ -37,6 +37,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "beautifulsoup4"
     "lxml"
+    "pillow"
   ];
 
   build-system = [

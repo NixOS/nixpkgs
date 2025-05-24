@@ -1,17 +1,19 @@
 {
   mkKdeDerivation,
   replaceVars,
+  mediainfo,
+  mlt,
+  glaxnimate,
+  ffmpeg-full,
+  pkg-config,
+  shared-mime-info,
   qtsvg,
   qtmultimedia,
   qtnetworkauth,
   qqc2-desktop-style,
-  ffmpeg-full,
-  mediainfo,
-  mlt,
-  shared-mime-info,
   libv4l,
+  open-timeline-io,
   frei0r,
-  glaxnimate,
 }:
 mkKdeDerivation {
   pname = "kdenlive";
@@ -23,7 +25,14 @@ mkKdeDerivation {
     })
   ];
 
-  extraNativeBuildInputs = [ shared-mime-info ];
+  extraCmakeFlags = [
+    "-DFETCH_OTIO=0"
+  ];
+
+  extraNativeBuildInputs = [
+    pkg-config
+    shared-mime-info
+  ];
 
   extraBuildInputs = [
     qtsvg
@@ -32,8 +41,10 @@ mkKdeDerivation {
 
     qqc2-desktop-style
 
-    mlt
+    ffmpeg-full
     libv4l
+    mlt
+    open-timeline-io
   ];
 
   qtWrapperArgs = [

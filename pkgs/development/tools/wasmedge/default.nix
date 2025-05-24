@@ -2,17 +2,27 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  llvmPackages,
+  llvmPackages_17,
   boost,
   cmake,
   spdlog,
   libxml2,
   libffi,
-  Foundation,
   testers,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  # The supported version is found in the changelog, the documentation does indicate a minimum version but not a maximum.
+  # The project is also using a `flake.nix` so we can retrieve the used llvm version with:
+  #
+  # ```shell
+  # nix eval --inputs-from .# nixpkgs#llvmPackages.libllvm.version
+  # ```
+  #
+  # > Where `.#` is the flake path were the repo `wasmedge` was cloned at the expected version.
+  llvmPackages = llvmPackages_17;
+in
+llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "wasmedge";
   version = "0.14.1";
 
@@ -28,17 +38,13 @@ stdenv.mkDerivation (finalAttrs: {
     llvmPackages.lld
   ];
 
-  buildInputs =
-    [
-      boost
-      spdlog
-      llvmPackages.llvm
-      libxml2
-      libffi
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Foundation
-    ];
+  buildInputs = [
+    boost
+    spdlog
+    llvmPackages.llvm
+    libxml2
+    libffi
+  ];
 
   cmakeFlags =
     [

@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     description = "Database of graphs";
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
   };
 }

@@ -67,6 +67,6 @@ stdenv.mkDerivation rec {
       mit
     ];
     platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

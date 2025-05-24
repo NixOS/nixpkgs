@@ -64,25 +64,19 @@ final: prev: {
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         pkgs.xcbuild
       ];
-    buildInputs =
-      with pkgs;
-      [
-        # required by sharp
-        # https://sharp.pixelplumbing.com/install
-        vips
+    buildInputs = with pkgs; [
+      # required by sharp
+      # https://sharp.pixelplumbing.com/install
+      vips
 
-        libsecret
-        final.node-gyp-build
-        node-pre-gyp
+      libsecret
+      final.node-gyp-build
+      node-pre-gyp
 
-        pixman
-        cairo
-        pango
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        darwin.apple_sdk.frameworks.AppKit
-        darwin.apple_sdk.frameworks.Security
-      ];
+      pixman
+      cairo
+      pango
+    ];
 
     # add newer node-addon-api to build sharp
     # https://github.com/lovell/sharp/issues/3920
@@ -119,16 +113,11 @@ final: prev: {
 
   keyoxide = prev.keyoxide.override {
     nativeBuildInputs = [ pkgs.pkg-config ];
-    buildInputs =
-      with pkgs;
-      [
-        pixman
-        cairo
-        pango
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        darwin.apple_sdk.frameworks.CoreText
-      ];
+    buildInputs = with pkgs; [
+      pixman
+      cairo
+      pango
+    ];
   };
 
   makam = prev.makam.override {
@@ -177,75 +166,6 @@ final: prev: {
       '';
   };
 
-  postcss-cli = prev.postcss-cli.override (
-    oldAttrs:
-    let
-      esbuild-version = (lib.findFirst (dep: dep.name == "esbuild") null oldAttrs.dependencies).version;
-      esbuild-linux-x64 = {
-        name = "_at_esbuild_slash_esbuild-linux-x64";
-        packageName = "@esbuild/linux-x64";
-        version = esbuild-version;
-        src = fetchurl {
-          url = "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-${esbuild-version}.tgz";
-          sha512 = "sha512-9yl91rHw/cpwMCNytUDxwj2XjFpxML0y9HAOH9pNVQDpQrBxHy01Dx+vaMu0N1CKa/RzBD2hB4u//nfc+Sd3Cw==";
-        };
-      };
-      esbuild-linux-arm64 = {
-        name = "_at_esbuild_slash_esbuild-linux-arm64";
-        packageName = "@esbuild/linux-arm64";
-        version = esbuild-version;
-        src = fetchurl {
-          url = "https://registry.npmjs.org/@esbuild/linux-arm64/-/linux-arm64-${esbuild-version}.tgz";
-          sha512 = "sha512-9QAQjTWNDM/Vk2bgBl17yWuZxZNQIF0OUUuPZRKoDtqF2k4EtYbpyiG5/Dk7nqeK6kIJWPYldkOcBqjXjrUlmg==";
-        };
-      };
-      esbuild-darwin-x64 = {
-        name = "_at_esbuild_slash_esbuild-darwin-x64";
-        packageName = "@esbuild/darwin-x64";
-        version = esbuild-version;
-        src = fetchurl {
-          url = "https://registry.npmjs.org/@esbuild/darwin-x64/-/darwin-x64-${esbuild-version}.tgz";
-          sha512 = "sha512-DgDaYsPWFTS4S3nWpFcMn/33ZZwAAeAFKNHNa1QN0rI4pUjgqf0f7ONmXf6d22tqTY+H9FNdgeaAa+YIFUn2Rg==";
-        };
-      };
-      esbuild-darwin-arm64 = {
-        name = "_at_esbuild_slash_esbuild-darwin-arm64";
-        packageName = "@esbuild/darwin-arm64";
-        version = esbuild-version;
-        src = fetchurl {
-          url = "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-${esbuild-version}.tgz";
-          sha512 = "sha512-mVwdUb5SRkPayVadIOI78K7aAnPamoeFR2bT5nszFUZ9P8UpK4ratOdYbZZXYSqPKMHfS1wdHCJk1P1EZpRdvw==";
-        };
-      };
-    in
-    {
-      nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-      dependencies =
-        oldAttrs.dependencies
-        ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) esbuild-linux-x64
-        ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) esbuild-linux-arm64
-        ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) esbuild-darwin-x64
-        ++ lib.optional (
-          stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
-        ) esbuild-darwin-arm64;
-      postInstall = ''
-        wrapProgram "$out/bin/postcss" \
-          --prefix NODE_PATH : ${final.postcss}/lib/node_modules \
-          --prefix NODE_PATH : ${pkgs.autoprefixer}/node_modules
-        ln -s '${final.postcss}/lib/node_modules/postcss' "$out/lib/node_modules/postcss"
-      '';
-      passthru.tests = {
-        simple-execution = callPackage ./package-tests/postcss-cli.nix {
-          inherit (final) postcss-cli;
-        };
-      };
-      meta = oldAttrs.meta // {
-        maintainers = with lib.maintainers; [ Luflosi ];
-        license = lib.licenses.mit;
-      };
-    }
-  );
-
   pulp = prev.pulp.override {
     # tries to install purescript
     npmFlags = builtins.toString [ "--ignore-scripts" ];
@@ -286,18 +206,13 @@ final: prev: {
 
   vega-cli = prev.vega-cli.override {
     nativeBuildInputs = [ pkgs.pkg-config ];
-    buildInputs =
-      with pkgs;
-      [
-        node-pre-gyp
-        pixman
-        cairo
-        pango
-        libjpeg
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        darwin.apple_sdk.frameworks.CoreText
-      ];
+    buildInputs = with pkgs; [
+      node-pre-gyp
+      pixman
+      cairo
+      pango
+      libjpeg
+    ];
   };
 
   vega-lite = prev.vega-lite.override {
@@ -323,16 +238,11 @@ final: prev: {
     ];
     # These dependencies are required by
     # https://github.com/Automattic/node-canvas.
-    buildInputs =
-      with pkgs;
-      [
-        giflib
-        pixman
-        cairo
-        pango
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        darwin.apple_sdk.frameworks.CoreText
-      ];
+    buildInputs = with pkgs; [
+      giflib
+      pixman
+      cairo
+      pango
+    ];
   };
 }

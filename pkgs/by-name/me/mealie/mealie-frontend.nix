@@ -2,7 +2,7 @@ src: version:
 {
   lib,
   fetchYarnDeps,
-  nodejs_18,
+  nodejs_20,
   fixup-yarn-lock,
   stdenv,
   yarn,
@@ -19,8 +19,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     fixup-yarn-lock
-    nodejs_18
-    (yarn.override { nodejs = nodejs_18; })
+    nodejs_20
+    (yarn.override { nodejs = nodejs_20; })
   ];
 
   configurePhase = ''
@@ -29,7 +29,10 @@ stdenv.mkDerivation {
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror "$yarnOfflineCache"
     fixup-yarn-lock yarn.lock
-    yarn install --frozen-lockfile --offline --no-progress --non-interactive
+    # TODO: Remove --ignore-engines once upstream supports nodejs_20+
+    # https://github.com/mealie-recipes/mealie/issues/5400
+    # https://github.com/mealie-recipes/mealie/pull/5184
+    yarn install --frozen-lockfile --offline --no-progress --non-interactive --ignore-engines
     patchShebangs node_modules/
 
     runHook postConfigure

@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "owntone";
     repo = "owntone-server";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-Mj3G1+Hwa/zl0AM4SO6TcB4W3WJkpIDzrSPEFx0vaEk=";
   };
 

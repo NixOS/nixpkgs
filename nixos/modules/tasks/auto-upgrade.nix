@@ -9,7 +9,7 @@ let
   cfg = config.system.autoUpgrade;
   nixpkgs-cfg = config.nixpkgs;
   nixos-rebuild = lib.getExe config.system.build.nixos-rebuild;
-  upgradeFlag = if cfg.upgradeAll then "--upgrade-all" else "--upgrade";
+  upgradeFlag = lib.optional (cfg.channel == null && cfg.upgrade) (if cfg.upgradeAll then "--upgrade-all" else "--upgrade");
   upgradeScript =
     flags:
     pkgs.writeShellScript "upgrade-channels" ''
@@ -131,12 +131,22 @@ in
         '';
       };
 
+      upgrade = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Disable adding the `--upgrade` parameter when `channel`
+          is not set, such as when upgrading to the latest version
+          of a flake honouring its lockfile.
+        '';
+      };
+
       upgradeAll = lib.mkOption {
         type = lib.types.bool;
         default = false;
         description = ''
           Whether to pass `--upgrade-all` or `--upgrade` to `nixos-rebuild` when
-          upgrading the channels.
+          upgrading the channels. Has no impact unless `upgrade` is set to `true`.
         '';
       };
 

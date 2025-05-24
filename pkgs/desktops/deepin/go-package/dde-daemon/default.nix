@@ -156,6 +156,6 @@ buildGoModule rec {
     homepage = "https://github.com/linuxdeepin/dde-daemon";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }

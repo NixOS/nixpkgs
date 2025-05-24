@@ -5,6 +5,7 @@
   versionCheckHook,
   nixosTests,
   nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -46,11 +47,9 @@ python3Packages.buildPythonApplication rec {
     pytest-cov
     requests
     versionCheckHook
+    writableTmpDirAsHomeHook
   ];
-  versionCheckProgramArg = [ "--version" ];
-
-  # Fix tests by preventing them from writing to /homeless-shelter.
-  preCheck = "export HOME=$(mktemp -d)";
+  versionCheckProgramArg = "--version";
 
   __darwinAllowLocalNetworking = true;
 
@@ -66,6 +65,6 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/patroni/patroni/blob/v${version}/docs/releases.rst";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = lib.teams.deshaw.members;
+    teams = [ lib.teams.deshaw ];
   };
 }

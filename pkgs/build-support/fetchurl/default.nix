@@ -222,7 +222,7 @@ stdenvNoCC.mkDerivation (
 
     # If set, prefer the content-addressable mirrors
     # (http://tarballs.nixos.org) over the original URLs.
-    preferHashedMirrors = true;
+    preferHashedMirrors = false;
 
     # New-style output content requirements.
     inherit (hash_) outputHashAlgo outputHash;

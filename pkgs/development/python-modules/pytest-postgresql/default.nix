@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
@@ -62,7 +63,9 @@ buildPythonPackage rec {
     "pytest_postgresql.executor"
   ];
 
-  __darwinAllowLocalNetworking = true;
+  # Can't reliably run checkPhase on darwin because of nix bug, see:
+  #  https://github.com/NixOS/nixpkgs/issues/371242
+  doCheck = !stdenv.buildPlatform.isDarwin;
 
   meta = {
     homepage = "https://pypi.python.org/pypi/pytest-postgresql";

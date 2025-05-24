@@ -2,39 +2,46 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  protobuf,
 }:
-
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "postgres-lsp";
-  version = "0-unstable-2024-03-24";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
-    owner = "supabase";
-    repo = "postgres_lsp";
-    rev = "43ca9b675cb152ca7f38cfa6aff6dd2131dfa9a2";
-    hash = "sha256-n7Qbt9fGzC0CcleAtTWDInPz4oaPjI+pvIPrR5EYJ9U=";
+    owner = "supabase-community";
+    repo = "postgres-language-server";
+    tag = finalAttrs.version;
+    hash = "sha256-PL8irQ3R8m//BbtTjODBrBcG/bAdK+t6GZGAj0PkJwE=";
     fetchSubmodules = true;
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-9T3bm/TSjnFeF8iE4338I44espnFq6l36yOq8YFPaPQ=";
+  cargoHash = "sha256-lUZpjX3HljOXi0Wt2xZCUru8uinWlngLEs5wlqfFiJA=";
 
   nativeBuildInputs = [
-    protobuf
     rustPlatform.bindgenHook
   ];
 
-  cargoBuildFlags = [ "-p=postgres_lsp" ];
-  cargoTestFlags = cargoBuildFlags;
+  env = {
+    SQLX_OFFLINE = 1;
 
-  RUSTC_BOOTSTRAP = 1; # We need rust unstable features
-
-  meta = with lib; {
-    description = "Language Server for Postgres";
-    homepage = "https://github.com/supabase/postgres_lsp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
-    mainProgram = "postgres_lsp";
+    # As specified in the upstream: https://github.com/supabase-community/postgres-language-server/blob/main/.github/workflows/release.yml
+    RUSTFLAGS = "-C strip=symbols -C codegen-units=1";
+    PGT_VERSION = finalAttrs.version;
   };
-}
+
+  cargoBuildFlags = [ "-p=pgt_cli" ];
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
+  checkFlags = [
+    # Tries to write to the file system relatively to the current path
+    "--skip=syntax_error"
+  ];
+
+  meta = {
+    description = "Tools and language server for Postgres";
+    homepage = "https://pgtools.dev";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
+    mainProgram = "postgrestools";
+  };
+})

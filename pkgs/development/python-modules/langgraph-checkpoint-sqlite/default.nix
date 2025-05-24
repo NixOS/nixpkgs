@@ -2,24 +2,32 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  langgraph-checkpoint,
+
+  # build system
+  poetry-core,
+
+  # dependencies
   aiosqlite,
+  langgraph-checkpoint,
+
+  # testing
   pytest-asyncio,
   pytestCheckHook,
-  langgraph-sdk,
-  poetry-core,
+
+  # passthru
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint-sqlite";
-  version = "2.0.5";
+  version = "2.0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "checkpointsqlite==${version}";
-    hash = "sha256-8JNPKaaKDM7VROd1n9TDALN6yxKRz1CuAultBcqBMG0=";
+    hash = "sha256-UUlrhQS0C2rPp//+LwU2rgR4R3AM5fM9X3CYvi/DAy8=";
   };
 
   sourceRoot = "${src.name}/libs/checkpoint-sqlite";
@@ -45,9 +53,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  passthru = {
-    inherit (langgraph-sdk) updateScript;
-    skipBulkUpdate = true; # Broken, see https://github.com/NixOS/nixpkgs/issues/379898
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "checkpoint-sqlite==(\\d+\\.\\d+\\.\\d+)"
+    ];
   };
 
   meta = {

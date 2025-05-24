@@ -8,7 +8,6 @@
   apr,
   aprutil,
   python3,
-  darwin,
 }:
 
 stdenv.mkDerivation {
@@ -31,17 +30,13 @@ stdenv.mkDerivation {
     autoreconfHook
   ];
 
-  buildInputs =
-    [
-      wxGTK32
-      subversion
-      apr
-      aprutil
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Cocoa
-    ];
+  buildInputs = [
+    wxGTK32
+    subversion
+    apr
+    aprutil
+    python3
+  ];
 
   configureFlags = [
     "--with-svn-include=${subversion.dev}/include"

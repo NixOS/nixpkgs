@@ -13,7 +13,6 @@
   decorator,
 
   # native dependencies
-  GSS,
   krb5-c, # C krb5 library, not PyPI krb5
 
   # tests
@@ -52,8 +51,6 @@ buildPythonPackage rec {
   ];
 
   dependencies = [ decorator ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ GSS ];
 
   # k5test is marked as broken on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;

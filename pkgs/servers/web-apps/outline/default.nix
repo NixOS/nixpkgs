@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "outline";
-  version = "0.82.0";
+  version = "0.84.0";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${version}";
-    hash = "sha256-nCXyR4k/Ny0OLAE18B+GJDyOMTjt6rc375yj+d+c8zQ=";
+    hash = "sha256-wTarO1nVta4rxkJRa3NIhyu0IJUukO5trOdOj16Zwn0=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-RDMVlSVYPGAuyOTcI2CBgaaZ5wNT7lznYb4jbirKmqk=";
+    hash = "sha256-iXaiTPjbAV/aRIdUYrIf0Y4z43yRALqSxjF5wB2q0Mg=";
   };
 
   configurePhase = ''
@@ -93,13 +93,11 @@ stdenv.mkDerivation rec {
     homepage = "https://www.getoutline.com/";
     changelog = "https://github.com/outline/outline/releases";
     license = licenses.bsl11;
-    maintainers =
-      with maintainers;
-      [
-        cab404
-        yrd
-      ]
-      ++ teams.cyberus.members;
+    maintainers = with maintainers; [
+      cab404
+      yrd
+    ];
+    teams = [ teams.cyberus ];
     platforms = platforms.linux;
   };
 }

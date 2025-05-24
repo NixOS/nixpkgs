@@ -29,7 +29,7 @@ writeScript "update-${pname}" ''
   HOME=`mktemp -d`
   export GNUPGHOME=`mktemp -d`
 
-  curl https://keys.openpgp.org/vks/v1/by-fingerprint/14F26682D0916CDD81E37B6D61B7B526D98F0353 | gpg --import -
+  curl https://keys.openpgp.org/vks/v1/by-fingerprint/09BEED63F3462A2DFFAB3B875ECB6497C1A20256 | gpg --import -
 
   tmpfile=`mktemp`
   url=${baseUrl}
@@ -60,27 +60,28 @@ writeScript "update-${pname}" ''
 
   # this is a list of sha256 and tarballs for both arches
   # Upstream files contains python repr strings like b'somehash', hence the sed dance
-  shasums=`cat $HOME/shasums | sed -E s/"b'([a-f0-9]{64})'?(.*)"/'\1\2'/ | grep '\.tar\.[a-z0-9]\+'`
+  shasums=`cat $HOME/shasums | sed -E s/"b'([a-f0-9]{64})'?(.*)"/'\1\2'/ | grep '\.\(tar\.[a-z0-9]\+\|dmg\)$' | grep -v mac-EME-free`
 
   cat > $tmpfile <<EOF
   {
     version = "$version";
     sources = [
   EOF
-  for arch in linux-x86_64 linux-i686 linux-aarch64; do
+  for arch in linux-x86_64 linux-i686 linux-aarch64 mac; do
     # retriving a list of all tarballs for each arch
     #  - only select tarballs for current arch
     #  - only select tarballs for current version
     #  - rename space with colon so that for loop doesnt
     #  - inteprets sha and path as 2 lines
+    IFS=$'\n'
     for line in `echo "$shasums" | \
                  grep $arch | \
-                 grep "${baseName}-$version"'\.tar\.[a-z0-9]\+$' | \
-                 tr " " ":"`; do
+                 grep -i "${baseName}.$version"'\.\(tar\.[a-z0-9]\+\|dmg\)$' | \
+                 sed "s/ /:/ ; s/ /:/"`; do
       # create an entry for every locale
       cat >> $tmpfile <<EOF
       {
-        url = "$url$version/`echo $line | cut -d":" -f3`";
+        url = "$url$version/`echo $line | cut -d":" -f3 | sed "s/ /%20/"`";
         locale = "`echo $line | cut -d":" -f3 | sed "s/$arch\///" | sed "s/\/.*//"`";
         arch = "$arch";
         sha256 = "`echo $line | cut -d":" -f1`";
@@ -93,7 +94,7 @@ writeScript "update-${pname}" ''
   }
   EOF
 
-  mv $tmpfile ${channel}_sources.nix
+  mv $tmpfile ${channel}${if versionSuffix == "" then "" else "_${versionSuffix}"}_sources.nix
 
   popd
 ''

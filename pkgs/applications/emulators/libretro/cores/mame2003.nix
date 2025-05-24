@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "mame2003";
-  version = "0-unstable-2025-03-18";
+  version = "0-unstable-2025-05-16";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "mame2003-libretro";
-    rev = "8565eec2e963b78f07a5a1f4b74df1271f3ece13";
-    hash = "sha256-pChPUwKIOtP4nl9ReqlrgxOJ/qcO6m2SnHhx3Y+hktM=";
+    rev = "c24237583afcadb1c3c1727532bd4a49ebc5eff1";
+    hash = "sha256-zj1mNpfwYCUQAHAeg8+hVUOZ/xvIFhn65AeljjqI1Ss=";
   };
 
   # Fix build with GCC 14

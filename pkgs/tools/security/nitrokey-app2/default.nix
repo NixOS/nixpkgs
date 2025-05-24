@@ -41,7 +41,7 @@ python3.pkgs.buildPythonApplication rec {
     usb-monitor
   ];
 
-  pythonRelaxDeps = [ "pynitrokey" ];
+  pythonRelaxDeps = [ "nitrokey" ];
 
   pythonImportsCheck = [
     "nitrokeyapp"

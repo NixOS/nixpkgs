@@ -34,6 +34,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Allows you to setup and use multiple keyboard layouts";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

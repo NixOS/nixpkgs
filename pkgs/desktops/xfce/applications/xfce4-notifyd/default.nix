@@ -46,6 +46,6 @@ mkXfceDerivation {
   meta = with lib; {
     description = "Simple notification daemon for Xfce";
     mainProgram = "xfce4-notifyd-config";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

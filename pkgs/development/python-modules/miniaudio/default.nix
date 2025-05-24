@@ -1,14 +1,11 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
   miniaudio,
   cffi,
   pytestCheckHook,
-  AudioToolbox,
-  CoreAudio,
 }:
 
 let
@@ -44,11 +41,6 @@ buildPythonPackage rec {
   '';
 
   build-system = [ setuptools ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    AudioToolbox
-    CoreAudio
-  ];
 
   propagatedNativeBuildInputs = [ cffi ];
   dependencies = [ cffi ];

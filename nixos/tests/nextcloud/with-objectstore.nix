@@ -26,11 +26,13 @@ runTest (
 
     nodes = {
       nextcloud =
-        { config, pkgs, ... }:
         {
-          networking.firewall.allowedTCPPorts = [ 9000 ];
-          environment.systemPackages = [ pkgs.minio-client ];
-
+          config,
+          pkgs,
+          nodes,
+          ...
+        }:
+        {
           services.nextcloud.config.dbtype = "sqlite";
 
           services.nextcloud.config.objectstore.s3 = {
@@ -39,12 +41,65 @@ runTest (
             autocreate = true;
             key = accessKey;
             secretFile = "${pkgs.writeText "secretKey" secretKey}";
-            hostname = "nextcloud";
-            useSsl = false;
-            port = 9000;
+            hostname = "acme.test";
+            useSsl = true;
+            port = 443;
             usePathStyle = true;
             region = "us-east-1";
           };
+
+          security.pki.certificates = [
+            (builtins.readFile ../common/acme/server/ca.cert.pem)
+          ];
+
+          environment.systemPackages = [ pkgs.minio-client ];
+
+          # The dummy certs are for acme.test, so we pretend that's the FQDN
+          # of the minio VM.
+          networking.extraHosts = ''
+            ${nodes.minio.networking.primaryIPAddress} acme.test
+          '';
+        };
+
+      client =
+        { nodes, ... }:
+        {
+          security.pki.certificates = [
+            (builtins.readFile ../common/acme/server/ca.cert.pem)
+          ];
+          networking.extraHosts = ''
+            ${nodes.minio.networking.primaryIPAddress} acme.test
+          '';
+        };
+
+      minio =
+        { ... }:
+        {
+          security.pki.certificates = [
+            (builtins.readFile ../common/acme/server/ca.cert.pem)
+          ];
+
+          services.nginx = {
+            enable = true;
+            recommendedProxySettings = true;
+
+            virtualHosts."acme.test" = {
+              onlySSL = true;
+              sslCertificate = ../common/acme/server/acme.test.cert.pem;
+              sslCertificateKey = ../common/acme/server/acme.test.key.pem;
+              locations."/".proxyPass = "http://127.0.0.1:9000";
+            };
+          };
+
+          networking.extraHosts = ''
+            127.0.0.1 acme.test
+          '';
+
+          networking.firewall.allowedTCPPorts = [
+            9000
+            80
+            443
+          ];
 
           services.minio = {
             enable = true;
@@ -56,18 +111,22 @@ runTest (
     };
 
     test-helpers.init = ''
-      nextcloud.wait_for_open_port(9000)
+      minio.start()
+      minio.wait_for_open_port(9000)
+      minio.wait_for_unit("nginx.service")
+      minio.wait_for_open_port(443)
     '';
 
     test-helpers.extraTests =
       { nodes, ... }:
       ''
+
         with subtest("File is not on the filesystem"):
             nextcloud.succeed("test ! -e ${nodes.nextcloud.services.nextcloud.home}/data/root/files/test-shared-file")
 
         with subtest("Check if file is in S3"):
             nextcloud.succeed(
-                "mc config host add minio http://localhost:9000 ${accessKey} ${secretKey} --api s3v4"
+                "mc config host add minio https://acme.test ${accessKey} ${secretKey} --api s3v4"
             )
             files = nextcloud.succeed('mc ls minio/nextcloud|sort').strip().split('\n')
 
@@ -100,8 +159,8 @@ runTest (
         with subtest("Test download from S3"):
             client.succeed(
                 "env AWS_ACCESS_KEY_ID=${accessKey} AWS_SECRET_ACCESS_KEY=${secretKey} "
-                + f"${lib.getExe pkgs.awscli2} s3 cp s3://nextcloud/{file} test --endpoint-url http://nextcloud:9000 "
-                + "--region us-east-1"
+                + f"${lib.getExe pkgs.awscli2} s3 cp s3://nextcloud/{file} test --endpoint-url https://acme.test "
+                + "--region us-east-1 --ca-bundle /etc/ssl/certs/ca-bundle.crt"
             )
 
             client.succeed("test hi = $(cat test)")

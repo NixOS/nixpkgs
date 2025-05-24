@@ -1,7 +1,6 @@
 {
   lib,
   SDL2,
-  darwin,
   fetchurl,
   freetype,
   harfbuzz,
@@ -35,9 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       libGL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.libobjc
     ];
 
   configureFlags = [
@@ -58,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/libsdl-org/SDL_ttf";
     description = "Support for TrueType (.ttf) font files with Simple Directmedia Layer";
     license = lib.licenses.zlib;
-    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
+    teams = [ lib.teams.sdl ];
     inherit (SDL2.meta) platforms;
     pkgConfigModules = [ "SDL2_ttf" ];
   };

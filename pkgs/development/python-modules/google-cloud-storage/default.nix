@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
-  version = "2.19.0";
+  version = "3.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_storage";
     inherit version;
-    hash = "sha256-zQXp5xkbpstok02Ot2BU2b5FYqqJ28Qjb+7k19UTQrI=";
+    hash = "sha256-lEJzF5iXx8igfuFfLmRmoC2gx8S57M6sKiYBfLKXIEk=";
   };
 
   pythonRelaxDeps = [ "google-auth" ];

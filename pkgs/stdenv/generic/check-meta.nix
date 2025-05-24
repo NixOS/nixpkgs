@@ -26,6 +26,7 @@ let
     isAttrs
     isString
     mapAttrs
+    filterAttrs
     ;
 
   inherit (lib.lists)
@@ -108,7 +109,10 @@ let
 
   hasUnfreeLicense = attrs: hasLicense attrs && isUnfree attrs.meta.license;
 
-  hasNoMaintainers = attrs: attrs ? meta.maintainers && (length attrs.meta.maintainers) == 0;
+  hasNoMaintainers =
+    attrs:
+    (attrs ? meta.maintainers && (length attrs.meta.maintainers) == 0)
+    && (attrs ? meta.teams && (length attrs.meta.teams) == 0);
 
   isMarkedBroken = attrs: attrs.meta.broken or false;
 
@@ -368,6 +372,7 @@ let
         ];
       sourceProvenance = listOf attrs;
       maintainers = listOf (attrsOf any); # TODO use the maintainer type from lib/tests/maintainer-module.nix
+      teams = listOf (attrsOf any); # TODO similar to maintainers, use a teams type
       priority = int;
       pkgConfigModules = listOf str;
       inherit platforms;
@@ -386,6 +391,8 @@ let
             (isDerivation x && x ? meta.timeout);
       };
       timeout = int;
+      knownVulnerabilities = listOf str;
+      badPlatforms = platforms;
 
       # Needed for Hydra to expose channel tarballs:
       # https://github.com/NixOS/hydra/blob/53335323ae79ca1a42643f58e520b376898ce641/doc/manual/src/jobs.md#meta-fields
@@ -393,7 +400,6 @@ let
 
       # Weirder stuff that doesn't appear in the documentation?
       maxSilent = int;
-      knownVulnerabilities = listOf str;
       name = str;
       version = str;
       tag = str;
@@ -406,7 +412,10 @@ let
       isFcitxEngine = bool;
       isIbusEngine = bool;
       isGutenprint = bool;
-      badPlatforms = platforms;
+
+      # Used for the original location of the maintainer and team attributes to assist with pings.
+      maintainersPosition = any;
+      teamsPosition = any;
     };
 
   checkMetaAttr =
@@ -534,7 +543,7 @@ let
       {
         valid = "warn";
         reason = "maintainerless";
-        errormsg = "has no maintainers";
+        errormsg = "has no maintainers or teams";
       }
     # -----
     else
@@ -585,10 +594,24 @@ let
         )
       ] ++ optional (hasOutput "man") "man";
     }
+    // (filterAttrs (_: v: v != null) {
+      # CI scripts look at these to determine pings. Note that we should filter nulls out of this,
+      # or nix-env complains: https://github.com/NixOS/nix/blob/2.18.8/src/nix-env/nix-env.cc#L963
+      maintainersPosition = builtins.unsafeGetAttrPos "maintainers" (attrs.meta or { });
+      teamsPosition = builtins.unsafeGetAttrPos "teams" (attrs.meta or { });
+    })
     // attrs.meta or { }
     # Fill `meta.position` to identify the source location of the package.
     // optionalAttrs (pos != null) {
       position = pos.file + ":" + toString pos.line;
+    }
+    // {
+      # Maintainers should be inclusive of teams.
+      # Note that there may be external consumers of this API (repology, for instance) -
+      # if you add a new maintainer or team attribute please ensure that this expectation is still met.
+      maintainers =
+        attrs.meta.maintainers or [ ]
+        ++ concatMap (team: team.members or [ ]) attrs.meta.teams or [ ];
     }
     // {
       # Expose the result of the checks for everyone to see.

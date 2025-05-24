@@ -50,6 +50,15 @@
           '';
         };
 
+        suppressNvidiaDriverAssertion = lib.mkOption {
+          default = false;
+          type = lib.types.bool;
+          description = ''
+            Suppress the assertion for installing Nvidia driver.
+            Useful in WSL where drivers are mounted from Windows, not provided by NixOS.
+          '';
+        };
+
         mounts = lib.mkOption {
           type = lib.types.listOf (lib.types.submodule mountType);
           default = [ ];
@@ -98,8 +107,10 @@
     assertions = [
       {
         assertion =
-          config.hardware.nvidia.datacenter.enable || lib.elem "nvidia" config.services.xserver.videoDrivers;
-        message = ''`nvidia-container-toolkit` requires nvidia datacenter or desktop drivers: set `hardware.nvidia.datacenter.enable` or add "nvidia" to `services.xserver.videoDrivers`'';
+          config.hardware.nvidia.datacenter.enable
+          || lib.elem "nvidia" config.services.xserver.videoDrivers
+          || config.hardware.nvidia-container-toolkit.suppressNvidiaDriverAssertion;
+        message = ''`nvidia-container-toolkit` requires nvidia drivers: set `hardware.nvidia.datacenter.enable`, add "nvidia" to `services.xserver.videoDrivers`, or set `hardware.nvidia-container-toolkit.suppressNvidiaDriverAssertion` if the driver is provided by another NixOS module (e.g. from NixOS-WSL)'';
       }
     ];
 

@@ -6,6 +6,7 @@ import ./make-test-python.nix (
     nodes = {
       server = {
         services.taskchampion-sync-server.enable = true;
+        services.taskchampion-sync-server.host = "0.0.0.0";
         services.taskchampion-sync-server.openFirewall = true;
       };
       client =

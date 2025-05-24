@@ -2,7 +2,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_18,
+  nodejs_20,
   installShellFiles,
   makeWrapper,
   stdenv,
@@ -13,7 +13,7 @@ buildNpmPackage rec {
 
   version = "3.12.0";
 
-  nodejs = nodejs_18;
+  nodejs = nodejs_20;
 
   src = fetchFromGitHub {
     owner = "CleverCloud";
@@ -52,6 +52,6 @@ buildNpmPackage rec {
     description = "Deploy on Clever Cloud and control your applications, add-ons, services from command line";
     license = licenses.asl20;
     mainProgram = "clever";
-    maintainers = teams.clevercloud.members;
+    teams = [ teams.clevercloud ];
   };
 }

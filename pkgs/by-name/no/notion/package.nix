@@ -19,22 +19,16 @@
   xmessage,
   xterm,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "notion";
-  version = "4.0.2";
+  version = "4.0.4";
 
   src = fetchFromGitHub {
     owner = "raboof";
     repo = "notion";
-    rev = finalAttrs.version;
-    hash = "sha256-u5KoTI+OcnQu9m8/Lmsmzr8lEk9tulSE7RRFhj1oXJM=";
+    tag = finalAttrs.version;
+    hash = "sha256-L7WL8zn1Qkf5sqrhqZJqFe4B1l9ULXI3pt3Jpc87huk=";
   };
-
-  # error: 'PATH_MAX' undeclared
-  postPatch = ''
-    sed 1i'#include <linux/limits.h>' -i mod_notionflux/notionflux/notionflux.c
-  '';
 
   nativeBuildInputs = [
     gettext
@@ -90,8 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21;
     mainProgram = "notion";
     maintainers = with lib.maintainers; [
-      jfb
       raboof
+      NotAShelf
     ];
     platforms = lib.platforms.linux;
   };

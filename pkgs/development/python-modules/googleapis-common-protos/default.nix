@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "googleapis-common-protos";
-  version = "1.66.0";
+  version = "1.69.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "googleapis_common_protos";
     inherit version;
-    hash = "sha256-w+ezPRX9ylN0zApzRt2S/6hHQlzE6pQdlw8TaABS7Iw=";
+    hash = "sha256-PhuQSiejPIIbS3Sf0x0zTAycMOYRMCPUleSJeaPcnF8=";
   };
 
   build-system = [ setuptools ];

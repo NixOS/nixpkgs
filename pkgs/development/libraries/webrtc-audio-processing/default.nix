@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitLab,
   fetchurl,
-  darwin,
   abseil-cpp,
   meson,
   ninja,
@@ -29,6 +28,11 @@ stdenv.mkDerivation rec {
       url = "https://git.alpinelinux.org/aports/plain/community/webrtc-audio-processing-1/0001-rtc_base-Include-stdint.h-to-fix-build-failures.patch?id=625e19c19972e69e034c0870a31b375833d1ab5d";
       hash = "sha256-9nI22SJoU0H3CzsPSAObtCFTadtvkzdnqIh6mxmUuds=";
     })
+    # Add loongarch64 support
+    (fetchurl {
+      url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/0630fa25465530c0e7358f00016bdc812894f67f/community/webrtc-audio-processing-1/add-loongarch-support.patch";
+      hash = "sha256-Cn3KwKSSV/QJm1JW0pkEWB6OmeA0fRlVkiMU8OzXNzY=";
+    })
   ];
 
   outputs = [
@@ -45,14 +49,6 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     abseil-cpp
   ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      ApplicationServices
-      Foundation
-    ]
-  );
 
   env = lib.optionalAttrs stdenv.hostPlatform.isx86_32 {
     # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/issues/5
@@ -71,6 +67,7 @@ stdenv.mkDerivation rec {
         (
           platforms.arm
           ++ platforms.aarch64
+          ++ platforms.loongarch64
           ++ platforms.mips
           ++ platforms.power
           ++ platforms.riscv

@@ -23,18 +23,20 @@
   pytestCheckHook,
   syrupy,
   time-machine,
+  tree-sitter-markdown,
+  tree-sitter-python,
 }:
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "2.1.2";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "textual";
     tag = "v${version}";
-    hash = "sha256-VKo1idLu5sYGtuK8yZzVE6QrrMOciYIesbGVlqzNjfk=";
+    hash = "sha256-kPu8qjIbsSOgIdBTubjz6gR58Myu2ioWdpzk5LEedU4=";
   };
 
   build-system = [ poetry-core ];
@@ -63,33 +65,25 @@ buildPythonPackage rec {
     syrupy
     time-machine
     tree-sitter
+    tree-sitter-markdown
+    tree-sitter-python
   ];
 
   disabledTestPaths = [
     # Snapshot tests require syrupy<4
     "tests/snapshot_tests/test_snapshots.py"
-
-    # Flaky: https://github.com/Textualize/textual/issues/5511
-    # RuntimeError: There is no current event loop in thread 'MainThread'.
-    "tests/test_focus.py"
   ];
 
   disabledTests = [
     # Assertion issues
     "test_textual_env_var"
-
-    # Requirements for tests are not quite ready
-    "test_register_language"
-
-    # Requires python bindings for tree-sitter languages
-    # https://github.com/Textualize/textual/issues/5449
-    "test_setting_unknown_language"
-    "test_update_highlight_query"
   ];
 
-  # Some tests in groups require state from previous tests
-  # See https://github.com/Textualize/textual/issues/4924#issuecomment-2304889067
-  pytestFlagsArray = [ "--dist=loadgroup" ];
+  pytestFlagsArray = [
+    # Some tests in groups require state from previous tests
+    # See https://github.com/Textualize/textual/issues/4924#issuecomment-2304889067
+    "--dist=loadgroup"
+  ];
 
   pythonImportsCheck = [ "textual" ];
 

@@ -71,14 +71,14 @@
 
 stdenv.mkDerivation rec {
   pname = "home-assistant-chip-wheels";
-  version = "2024.11.4";
+  version = "2025.4.0";
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "chip-wheels";
     tag = version;
     fetchSubmodules = false;
     leaveDotGit = true;
-    hash = "sha256-hWdTm/Ojdvz0s9qIXbOs3yll7XfAdoTZrg4dgu7ISns=";
+    hash = "sha256-20dqVXHPgSxBveTxlbHEjTtp9NI1oVCVpBTDbjDI2QA=";
     postFetch = ''
       cd $out
       # Download connectedhomeip.
@@ -281,7 +281,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/home-assistant-libs/chip-wheels";
     changelog = "https://github.com/home-assistant-libs/chip-wheels/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.home-assistant.members;
+    teams = [ lib.teams.home-assistant ];
   };
 
 }

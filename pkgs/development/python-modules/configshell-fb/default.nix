@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "configshell-fb";
-  version = "2.0.0";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo = "configshell-fb";
     tag = "v${version}";
-    hash = "sha256-lP3WT9ASEj6WiCrurSU/e9FhIaeoQW/n9hi1XZMnV4Q=";
+    hash = "sha256-B5VEihg97r8BsKJdk1+LGyKb64QC+u/3ftumFXYTn6s=";
   };
 
   build-system = [
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for building configuration shells";
     homepage = "https://github.com/open-iscsi/configshell-fb";
-    changelog = "https://github.com/open-iscsi/configshell-fb/releases/tag/v${version}";
+    changelog = "https://github.com/open-iscsi/configshell-fb/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };

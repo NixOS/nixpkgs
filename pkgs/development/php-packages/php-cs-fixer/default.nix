@@ -32,6 +32,6 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://cs.symfony.com/";
     license = lib.licenses.mit;
     mainProgram = "php-cs-fixer";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

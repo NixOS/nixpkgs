@@ -137,7 +137,8 @@ stdenv.mkDerivation (finalAttrs: {
       ];
     };
     tests = {
-      inherit (nixosTests) ayatana-indicators;
+      startup = nixosTests.ayatana-indicators;
+      lomiri = nixosTests.lomiri.desktop-ayatana-indicator-datetime;
     };
     updateScript = gitUpdater { };
   };

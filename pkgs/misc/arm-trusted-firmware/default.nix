@@ -179,6 +179,13 @@ in
     platformCanUseHDCPBlob = true;
   };
 
+  armTrustedFirmwareRK3568 = buildArmTrustedFirmware rec {
+    extraMakeFlags = [ "bl31" ];
+    platform = "rk3568";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    filesToInstall = [ "build/${platform}/release/bl31/bl31.elf" ];
+  };
+
   armTrustedFirmwareRK3588 = buildArmTrustedFirmware rec {
     extraMakeFlags = [ "bl31" ];
     platform = "rk3588";

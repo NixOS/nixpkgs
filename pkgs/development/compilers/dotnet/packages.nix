@@ -227,7 +227,7 @@ let
       mkdir "$out"/bin
       ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
 
-      cp -Tr "$src/aspnetcore-runtime-${version}-${targetRid}" "$out"/share/dotnet
+      cp -Tr "$src/aspnetcore-runtime-${version}-${targetRid}"/shared/Microsoft.AspNetCore.App "$out"/share/dotnet/shared/Microsoft.AspNetCore.App
       chmod +w "$out"/share/dotnet/shared
 
       runHook postInstall

@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   fetchFromGitHub,
   gtk3,
@@ -10,6 +11,7 @@
   gobject-introspection,
   wrapGAppsHook3,
   gettext,
+  desktopToDarwinBundle,
   # Optional packages:
   enableOSM ? true,
   osm-gps-map,
@@ -52,13 +54,18 @@ buildPythonApplication rec {
     python3Packages.setuptools
   ];
 
-  nativeCheckInputs = [
-    glibcLocales
-    python3Packages.unittestCheckHook
-    python3Packages.jsonschema
-    python3Packages.mock
-    python3Packages.lxml
-  ];
+  nativeCheckInputs =
+    [
+      glibcLocales
+      python3Packages.unittestCheckHook
+      python3Packages.jsonschema
+      python3Packages.mock
+      python3Packages.lxml
+    ]
+    # TODO: use JHBuild to build the Gramps' bundle
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      desktopToDarwinBundle
+    ];
 
   buildInputs =
     [

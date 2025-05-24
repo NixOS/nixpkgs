@@ -1,11 +1,9 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitHub,
+  libsForQt5,
   libGLU,
-  qtbase,
-  qtscript,
-  qtxmlpatterns,
   lib3ds,
   bzip2,
   muparser,
@@ -43,7 +41,7 @@ let
     hash = "sha256-pKjnN9H6/A2zPvzpFed65J+mnNwG/dkSE2/pW7IlN58=";
   };
 in
-mkDerivation {
+stdenv.mkDerivation {
   pname = "meshlab-unstable";
   version = "2023.12-unstable-2025-02-21";
 
@@ -59,9 +57,9 @@ mkDerivation {
 
   buildInputs = [
     libGLU
-    qtbase
-    qtscript
-    qtxmlpatterns
+    libsForQt5.qtbase
+    libsForQt5.qtscript
+    libsForQt5.qtxmlpatterns
     lib3ds
     bzip2
     muparser
@@ -82,7 +80,10 @@ mkDerivation {
     structuresynth
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    libsForQt5.wrapQtAppsHook
+  ];
 
   preConfigure = ''
     mkdir src/external/downloads

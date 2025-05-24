@@ -17,25 +17,11 @@
   version,
 }:
 
-let
-  inherit (lib) fileset;
-in
-
 mkMesonDerivation (finalAttrs: {
   pname = "nix-manual";
   inherit version;
 
   workDir = ./.;
-  fileset =
-    fileset.difference
-      (fileset.unions [
-        ../../.version
-        # Too many different types of files to filter for now
-        ../../doc/manual
-        ./.
-      ])
-      # Do a blacklist instead
-      ../../doc/manual/package.nix;
 
   # TODO the man pages should probably be separate
   outputs = [

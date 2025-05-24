@@ -73,7 +73,8 @@ stdenv.mkDerivation rec {
     mainProgram = "mousai";
     homepage = "https://github.com/SeaDve/Mousai";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ] ++ lib.teams.gnome-circle.members;
+    maintainers = with maintainers; [ dotlambda ];
+    teams = [ teams.gnome-circle ];
     platforms = platforms.linux;
   };
 }

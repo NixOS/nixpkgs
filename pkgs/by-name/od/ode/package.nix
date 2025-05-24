@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  darwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -13,11 +12,6 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://bitbucket.org/odedevs/ode/downloads/ode-${finalAttrs.version}.tar.gz";
     hash = "sha256-yRooxv8mUChHhKeccmo4DWr+yH7PejXDKmvgxbdFE+g=";
   };
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-    darwin.apple_sdk.frameworks.GLUT
-  ];
 
   env.CXXFLAGS = lib.optionalString stdenv.cc.isClang (toString [
     "-std=c++14"

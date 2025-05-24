@@ -48,14 +48,14 @@ effectiveStdenv.mkDerivation rec {
   #   in \
   #   rWrapper.override{ packages = [ xgb ]; }"
   pname = lib.optionalString rLibrary "r-" + pnameBase;
-  version = "2.1.4";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "dmlc";
     repo = pnameBase;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-k1k6K11cWpG6PtzTt99q/rrkN3FyxCVEzfPI9fCTAjM=";
+    hash = "sha256-sa8Ea/3ypHqnjn0Rl5dgqGejh6921T6JVHXo8y5gp90=";
   };
 
   nativeBuildInputs =
@@ -87,6 +87,9 @@ effectiveStdenv.mkDerivation rec {
     ]
     ++ lib.optionals ncclSupport [ "-DUSE_NCCL=ON" ]
     ++ lib.optionals rLibrary [ "-DR_LIB=ON" ];
+
+  # on Darwin, cmake uses find_library to locate R instead of using the PATH
+  env.NIX_LDFLAGS = "-L${R}/lib/R/lib";
 
   preConfigure = lib.optionals rLibrary ''
     substituteInPlace cmake/RPackageInstall.cmake.in --replace "CMD INSTALL" "CMD INSTALL -l $out/library"
@@ -124,12 +127,14 @@ effectiveStdenv.mkDerivation rec {
         "Approx.PartitionerColumnSplit"
         "BroadcastTest.Basic"
         "CPUHistogram.BuildHistColSplit"
+        "CPUHistogram.BuildHistColumnSplit"
         "CPUPredictor.CategoricalPredictLeafColumnSplit"
         "CPUPredictor.CategoricalPredictionColumnSplit"
         "ColumnSplit/ColumnSplitTrainingTest*"
         "ColumnSplit/TestApproxColumnSplit*"
         "ColumnSplit/TestHistColumnSplit*"
         "ColumnSplitObjective/TestColumnSplit*"
+        "Cpu/ColumnSplitTrainingTest*"
         "CommGroupTest.Basic"
         "CommTest.Channel"
         "CpuPredictor.BasicColumnSplit"
@@ -150,6 +155,8 @@ effectiveStdenv.mkDerivation rec {
         "Quantile.SortedDistributedBasic"
         "QuantileHist.MultiPartitionerColumnSplit"
         "QuantileHist.PartitionerColumnSplit"
+        "Stats.SampleMean"
+        "Stats.WeightedSampleMean"
         "SimpleDMatrix.ColumnSplit"
         "TrackerAPITest.CAPI"
         "TrackerTest.AfterShutdown"
@@ -174,7 +181,6 @@ effectiveStdenv.mkDerivation rec {
     ''
     + ''
       cmake --install .
-      cp -r ../rabit/include/rabit $out/include
       runHook postInstall
     '';
 

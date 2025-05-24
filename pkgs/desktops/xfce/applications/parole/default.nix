@@ -41,6 +41,6 @@ mkXfceDerivation {
   meta = with lib; {
     description = "Modern simple media player";
     mainProgram = "parole";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

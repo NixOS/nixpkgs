@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "osc";
-  version = "0.4.7";
+  version = "0.4.8";
 
   src = fetchFromGitHub {
     owner = "theimpostor";
     repo = "osc";
     tag = "v${version}";
-    hash = "sha256-MfEBbYT99tEtlOMmdl3iq2d07KYsN1tu5tDRFW3676g=";
+    hash = "sha256-XVFNcQH4MFZKmuOD9b3t320/hE+s+3igjlyHBWGKr0Q=";
   };
 
-  vendorHash = "sha256-POtQWIjPObsfa3YZ1dLZgedZFUcc4HeTWjU20AucoKc=";
+  vendorHash = "sha256-k+4m9y7oAZqTr8S0zldJk5FeI3+/nN9RggKIfiyxzDI=";
 
   meta = {
     description = "Command line tool to access the system clipboard from anywhere using the ANSI OSC52 sequence";

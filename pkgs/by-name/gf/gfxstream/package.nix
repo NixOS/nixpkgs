@@ -8,7 +8,6 @@
   pkg-config,
   python3,
   aemu,
-  darwin,
   libdrm,
   libglvnd,
   vulkan-headers,
@@ -47,23 +46,13 @@ stdenv.mkDerivation {
     pkg-config
     python3
   ];
-  buildInputs =
-    [
-      aemu
-      libglvnd
-      vulkan-headers
-      vulkan-loader
-      xorg.libX11
-    ]
-    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libdrm) [ libdrm ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Cocoa
-      darwin.apple_sdk.frameworks.CoreGraphics
-      darwin.apple_sdk.frameworks.IOKit
-      darwin.apple_sdk.frameworks.IOSurface
-      darwin.apple_sdk.frameworks.OpenGL
-      darwin.apple_sdk.frameworks.QuartzCore
-    ];
+  buildInputs = [
+    aemu
+    libglvnd
+    vulkan-headers
+    vulkan-loader
+    xorg.libX11
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libdrm) [ libdrm ];
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_LDFLAGS = toString [

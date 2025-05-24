@@ -4,13 +4,17 @@
   fetchpatch,
   callPackage,
   runCommand,
-  python3,
+  python,
   encryptionSupport ? true,
   sqliteSupport ? true,
 }:
 
 let
-  python = python3.override {
+  # save for overriding it
+  python' = python;
+in
+let
+  python = python'.override {
     self = python;
     packageOverrides = final: prev: {
       # SQLAlchemy>=1,<1.4
