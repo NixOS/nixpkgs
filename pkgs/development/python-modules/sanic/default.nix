@@ -117,7 +117,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/sanic-org/sanic/";
     changelog = "https://github.com/sanic-org/sanic/releases/tag/${src.tag}";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ p0lyw0lf ];
     mainProgram = "sanic";
   };
 }

@@ -18717,6 +18717,12 @@
     name = "Philipp Rintz";
     matrix = "@philipp:srv.icu";
   };
+  p0lyw0lf = {
+    email = "p0lyw0lf@protonmail.com";
+    name = "PolyWolf";
+    github = "p0lyw0lf";
+    githubId = 31190026;
+  };
   p3psi = {
     name = "Elliot Boo";
     email = "p3psi.boo@gmail.com";
