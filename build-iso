@@ -1,0 +1,1 @@
+nix-build --log-format internal-json -v -A config.system.build.isoImage -I nixos-config=nixos/modules/installer/cd-dvd/installation-cd-graphical-calamares-cosmic.nix ./nixos/default.nix |& nom --json

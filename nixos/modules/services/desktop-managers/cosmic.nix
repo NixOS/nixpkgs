@@ -29,6 +29,7 @@ in
   config = lib.mkIf cfg.enable {
     # Environment packages
     environment.pathsToLink = [
+      "/share/applications"
       "/share/backgrounds"
       "/share/cosmic"
     ];
