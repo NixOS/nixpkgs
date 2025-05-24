@@ -2,9 +2,11 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 let
-  version = "1.2.1";
+  version = "1.3.0";
   tag = "v${version}";
 in
 buildGoModule {
@@ -15,15 +17,19 @@ buildGoModule {
     owner = "yorukot";
     repo = "superfile";
     inherit tag;
-    hash = "sha256-yClDrDpt6QUWeAtWkG0tkmFqnaviRixz6Kez0q4cRuk=";
+    hash = "sha256-w2YAk5/5FJNet1INHCjr35QqPuCbXRo07za8WkR3hiA=";
   };
 
-  vendorHash = "sha256-STiuaNcmoviHBXGcSPPs39sICsks3Z8I3ANdnlUqA/k=";
+  vendorHash = "sha256-83Vxh9RFYUMOuvtWVAsF2mlcvyU8BlBxZDWQhoj67UU=";
 
   ldflags = [
     "-s"
     "-w"
   ];
+
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Pretty fancy and modern terminal file manager";
