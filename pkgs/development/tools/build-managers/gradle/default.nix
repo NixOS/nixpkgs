@@ -1,7 +1,7 @@
 {
   jdk17,
   jdk21,
-  jdk23,
+  jdk24,
 }:
 
 rec {
@@ -282,7 +282,7 @@ rec {
             tests = {
               toolchains =
                 let
-                  javaVersion = lib.getVersion jdk23;
+                  javaVersion = lib.getVersion jdk24;
                   javaMajorVersion = lib.versions.major javaVersion;
                 in
                 runCommand "detects-toolchains-from-nix-env"
@@ -291,7 +291,7 @@ rec {
                     nativeBuildInputs = [
                       (gradle.override {
                         javaToolchains = [
-                          jdk23
+                          jdk24
                         ];
                       })
                     ];
