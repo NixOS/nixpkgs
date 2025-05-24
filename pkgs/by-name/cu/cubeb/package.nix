@@ -10,7 +10,6 @@
   libpulseaudio,
   sndio,
   speexdsp,
-  lazyLoad ? !stdenv.hostPlatform.isDarwin,
   alsaSupport ? !stdenv.hostPlatform.isDarwin,
   pulseSupport ? !stdenv.hostPlatform.isDarwin,
   jackSupport ? !stdenv.hostPlatform.isDarwin,
@@ -18,18 +17,6 @@
   buildSharedLibs ? true,
 }:
 
-assert lib.assertMsg (
-  stdenv.hostPlatform.isDarwin -> !lazyLoad
-) "cubeb: lazyLoad is inert on Darwin";
-
-let
-  backendLibs =
-    lib.optional alsaSupport alsa-lib
-    ++ lib.optional jackSupport jack2
-    ++ lib.optional pulseSupport libpulseaudio
-    ++ lib.optional sndioSupport sndio;
-
-in
 stdenv.mkDerivation {
   pname = "cubeb";
   version = "0-unstable-2025-04-02";
@@ -52,7 +39,12 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  buildInputs = [ speexdsp ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) backendLibs;
+  buildInputs =
+    [ speexdsp ]
+    ++ lib.optional alsaSupport alsa-lib
+    ++ lib.optional jackSupport jack2
+    ++ lib.optional pulseSupport libpulseaudio
+    ++ lib.optional sndioSupport sndio;
 
   patches = [
     # https://github.com/mozilla/cubeb/pull/813
@@ -69,12 +61,12 @@ stdenv.mkDerivation {
     (lib.cmakeBool "USE_SANITIZERS" false)
 
     # Whether to lazily load libraries with dlopen()
-    (lib.cmakeBool "LAZY_LOAD_LIBS" lazyLoad)
+    (lib.cmakeBool "LAZY_LOAD_LIBS" false)
   ];
 
   passthru = {
     # For downstream users when lazyLoad is true
-    backendLibs = lib.optionals lazyLoad backendLibs;
+    backendLibs = [ ];
     updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
   };
 
