@@ -24,6 +24,7 @@
   nodejs ? null,
   fish ? null,
   python3 ? null,
+  wasmtime,
 }:
 stdenv.mkDerivation (
   finalAttrs:
@@ -111,6 +112,7 @@ stdenv.mkDerivation (
       # necessary so that nix can handle `UpdateRemotePlugins` for the plugins
       # it installs. See https://github.com/neovim/neovim/issues/9413.
       ./system_rplugin_manifest.patch
+      ./unpin_wasmtime.patch
     ];
 
     dontFixCmake = true;
@@ -162,6 +164,7 @@ stdenv.mkDerivation (
       cmake
       gettext
       pkg-config
+      wasmtime
     ];
 
     # extra programs test via `make functionaltest`
@@ -198,6 +201,7 @@ stdenv.mkDerivation (
         # third-party/CMakeLists.txt is not read at all.
         (lib.cmakeBool "USE_BUNDLED" false)
         (lib.cmakeBool "ENABLE_TRANSLATIONS" true)
+        (lib.cmakeBool "ENABLE_WASMTIME" true)
       ]
       ++ (
         if lua.pkgs.isLuaJIT then
