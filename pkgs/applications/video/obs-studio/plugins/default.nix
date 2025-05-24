@@ -30,6 +30,8 @@
 
   obs-composite-blur = callPackage ./obs-composite-blur.nix { };
 
+  obs-dvd-screensaver = callPackage ./obs-dvd-screensaver.nix { };
+
   obs-freeze-filter = qt6Packages.callPackage ./obs-freeze-filter.nix { };
 
   obs-gradient-source = callPackage ./obs-gradient-source.nix { };
