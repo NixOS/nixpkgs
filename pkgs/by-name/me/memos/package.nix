@@ -14,15 +14,15 @@
   protoc-gen-validate,
 }:
 let
-  version = "0.24.2";
+  version = "0.24.3";
   src = fetchFromGitHub {
     owner = "usememos";
     repo = "memos";
     rev = "v${version}";
-    hash = "sha256-DWOJ6+lUTbOzMLsfTDNZfhgNomajNCnNi7U1A+tqXm4=";
+    hash = "sha256-lTMHUVrg3JzTneBh874tr0mbQPp7X3rMKrkOe+wcOL4=";
   };
 
-  protobufsGenerated = stdenvNoCC.mkDerivation {
+  memos-protobuf-gen = stdenvNoCC.mkDerivation {
     name = "memos-protobuf-gen";
     inherit src;
 
@@ -52,16 +52,16 @@ let
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-u+Wq/fXvWTjXdhC2h6RCsn7pjdFJ+gUdTPRvrn9cZ+k=";
+    outputHash = "sha256-cJK9wT5uj1MYjYZkzgMSL9nShCO2xPJOYZT+ebndwlY=";
   };
 
-  frontend = stdenvNoCC.mkDerivation (finalAttrs: {
+  memos-web = stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "memos-web";
     inherit version src;
     pnpmDeps = pnpm.fetchDeps {
       inherit (finalAttrs) pname version src;
       sourceRoot = "${finalAttrs.src.name}/web";
-      hash = "sha256-lopCa7F/foZ42cAwCxE+TWAnglTZg8jY8eRWmeck/W8=";
+      hash = "sha256-ooiH13yzMTCSqzmZVvVy2jWoIfJecMlE6JkwcG5EV5k=";
     };
     pnpmRoot = "web";
     nativeBuildInputs = [
@@ -69,7 +69,7 @@ let
       pnpm.configHook
     ];
     preBuild = ''
-      cp -r {${protobufsGenerated},.}/web/src/types/proto
+      cp -r {${memos-protobuf-gen},.}/web/src/types/proto
     '';
     buildPhase = ''
       runHook preBuild
@@ -85,20 +85,20 @@ let
 in
 buildGoModule {
   pname = "memos";
-  inherit version src;
+  inherit
+    version
+    src
+    memos-web
+    memos-protobuf-gen
+    ;
 
-  vendorHash = "sha256-hdL4N0tg/lYGTeiKl9P2QsV8HTxlvHfsSqsqq/C0cg8=";
+  vendorHash = "sha256-SWpnsTdti3hD1alvItpXllTJHGxeKP8q7WD2nBzFG7o=";
 
   preBuild = ''
     rm -rf server/router/frontend/dist
-    cp -r ${frontend} server/router/frontend/dist
-    cp -r {${protobufsGenerated},.}/proto/gen
+    cp -r ${memos-web} server/router/frontend/dist
+    cp -r {${memos-protobuf-gen},.}/proto/gen
   '';
-
-  patches = [
-    # to be removed in next release (test was removed upstream as part of a bigger commit)
-    ./nixbuild-check.patch
-  ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
