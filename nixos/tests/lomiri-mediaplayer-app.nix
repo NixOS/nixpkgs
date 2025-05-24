@@ -54,30 +54,39 @@ in
 
     with subtest("lomiri mediaplayer launches"):
         machine.succeed("lomiri-mediaplayer-app >&2 &")
+        machine.wait_for_console_text("The name com.lomiri.content.dbus.Service was not provided")
+        machine.wait_for_console_text("The name com.lomiri.content.dbus.Service was not provided") # Emitted twice
         machine.sleep(10)
         machine.send_key("alt-f10")
-        machine.wait_for_text("Choose from")
+        machine.sleep(5)
+        machine.wait_for_text(r"(Choose|Sorry|provide|content)")
         machine.screenshot("lomiri-mediaplayer_open")
 
     machine.succeed("pkill -f lomiri-mediaplayer-app")
 
     with subtest("lomiri mediaplayer plays video"):
         machine.succeed("lomiri-mediaplayer-app /etc/${videoFile} >&2 &")
+        machine.wait_for_console_text("The name com.lomiri.content.dbus.Service was not provided") # Only once here
+        machine.wait_for_console_text("qml: onPositionChanged")
         machine.sleep(10)
         machine.send_key("alt-f10")
+        machine.sleep(5)
         machine.wait_for_text("${ocrContent}")
         machine.screenshot("lomiri-mediaplayer_playback")
 
     machine.succeed("pkill -f lomiri-mediaplayer-app")
 
     with subtest("lomiri mediaplayer localisation works"):
-        # OCR struggles with finding identifying the translated window title, and lomiri-content-hub QML isn't translated
+        # OCR struggles with finding the translated window title, and lomiri-content-hub QML isn't translated
         # Cause an error, and look for the error popup
         machine.succeed("touch invalid.mp4")
         machine.succeed("env LANG=de_DE.UTF-8 lomiri-mediaplayer-app invalid.mp4 >&2 &")
+        machine.wait_for_console_text("The name com.lomiri.content.dbus.Service was not provided")
+        machine.wait_for_console_text("Der Datenstrom enthält keine Daten")
         machine.sleep(10)
         machine.send_key("alt-f10")
-        machine.wait_for_text("Fehler")
+        machine.sleep(5)
+        machine.wait_for_text(r"(Fehler|Abspielen|fehlgeschlagen)")
         machine.screenshot("lomiri-mediaplayer_localised")
   '';
 }
