@@ -7,7 +7,6 @@
   webrtc,
   pkg-config,
   cubeb,
-  libpulseaudio,
 }:
 let
   cubeb' = cubeb.override {
@@ -49,11 +48,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cmake
     pkg-config
   ];
-  buildInputs = [
-    webrtc
-    cubeb'
-    libpulseaudio
-  ];
+  buildInputs =
+    [
+      webrtc
+      cubeb'
+    ]
+    # Workaround for https://github.com/NixOS/nixpkgs/pull/394607
+    ++ cubeb'.buildInputs;
 
   meta = {
     homepage = "https://github.com/signalapp/ringrtc";

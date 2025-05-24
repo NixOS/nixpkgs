@@ -48,6 +48,11 @@ stdenv.mkDerivation {
 
   buildInputs = [ speexdsp ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) backendLibs;
 
+  patches = [
+    # https://github.com/mozilla/cubeb/pull/813
+    ./0001-cmake-add-pkg-config-file-generation.patch
+  ];
+
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" buildSharedLibs)
     "-DBUILD_TESTS=OFF" # tests require an audio server
@@ -63,18 +68,6 @@ stdenv.mkDerivation {
     backendLibs = lib.optionals lazyLoad backendLibs;
     updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
   };
-
-  postInstall = ''
-    # TODO: remove after https://github.com/mozilla/cubeb/pull/813 is merged
-    mkdir -p $out/lib/pkgconfig/
-    echo > $out/lib/pkgconfig/libcubeb.pc \
-    "Name: libcubeb
-    Description: Cross platform audio library
-    Version: 0.0.0
-    Requires.private: libpulse
-    Libs: -L"$out/lib" -lcubeb
-    Libs.private: -lstdc++"
-  '';
 
   meta = with lib; {
     description = "Cross platform audio library";
