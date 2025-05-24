@@ -95,6 +95,23 @@ in
       }
     '';
 
+    programs.fish.interactiveShellInit = ''
+      function fish_command_not_found
+        set p "${commandNotFound}/bin/command-not-found"
+        if test -x $p -a -f "${cfg.dbPath}"
+          $p $argv
+          if test $status -eq 126
+              $argv
+          else
+              return 127
+          end
+        else
+          echo "$argv[1]: command not found" >&2
+          return 127
+        end
+      end
+    '';
+
     environment.systemPackages = [ commandNotFound ];
   };
 
