@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -33,12 +34,17 @@ buildGoModule rec {
     cp -r ./static $static
   '';
 
+  passthru = {
+    tests.vm = nixosTests.galene.basic;
+  };
+
   meta = with lib; {
     description = "Videoconferencing server that is easy to deploy, written in Go";
     homepage = "https://github.com/jech/galene";
     changelog = "https://github.com/jech/galene/raw/galene-${version}/CHANGES";
     license = licenses.mit;
     platforms = platforms.linux;
+    teams = [ lib.teams.ngi ];
     maintainers = with maintainers; [
       rgrunbla
       erdnaxe
