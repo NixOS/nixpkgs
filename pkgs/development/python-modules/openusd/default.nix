@@ -121,7 +121,6 @@ buildPythonPackage rec {
       materialx
       opencolorio
       openimageio
-      opensubdiv
       ptex
       tbb
     ]
@@ -139,6 +138,7 @@ buildPythonPackage rec {
       boost
       jinja2
       numpy
+      opensubdiv
       pyopengl
       distutils
     ]
