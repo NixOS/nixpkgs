@@ -354,7 +354,11 @@ in
       description = ''
         Attrset of the LibreNMS configuration.
         See <https://docs.librenms.org/Support/Configuration/> for reference.
-        All possible options are listed [here](https://github.com/librenms/librenms/blob/master/resources/definitions/config_definitions.json).
+
+        All possible options and their defaults are listed [here](https://github.com/librenms/librenms/blob/master/misc/config_definitions.json).
+        Be aware, that in case you want to extend a setting that is of type list, you will overwrite the defaults and not extend them.
+        Therefore you have to include the defaults as well, if you want to use them.
+
         See <https://docs.librenms.org/Extensions/Authentication/> for setting other authentication methods.
       '';
       default = { };
