@@ -3,6 +3,8 @@
 
 rec {
 
+  inherit (builtins) compareVersions;
+
   /**
     Break a version string into its component parts.
 
