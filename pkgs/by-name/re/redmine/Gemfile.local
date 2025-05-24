@@ -1,1 +1,2 @@
 gem 'webrick'
+gem 'sidekiq'
