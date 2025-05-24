@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     lz4
     zlib
     zstd
@@ -54,15 +54,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = !static;
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru.tests = {
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    cmake-config = testers.hasCmakeConfigModules {
+      moduleNames = [ "Blosc2" ];
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = with lib; {
     description = "Blocking, shuffling and loss-less compression library";
     homepage = "https://www.blosc.org";
     changelog = "https://github.com/Blosc/c-blosc/releases/tag/v${finalAttrs.version}";
-    pkgConfigModules = [
-      "blosc"
-    ];
+    pkgConfigModules = [ "blosc2" ];
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ ris ];
