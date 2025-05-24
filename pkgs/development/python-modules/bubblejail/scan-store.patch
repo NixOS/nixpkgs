@@ -1,0 +1,13 @@
+diff --git a/src/bubblejail/services.py b/src/bubblejail/services.py
+index 4aad731..e0e294d 100644
+--- a/src/bubblejail/services.py
++++ b/src/bubblejail/services.py
+@@ -177,6 +177,7 @@ class BubblejailDefaults(BubblejailService):
+         # Distro packaged libraries and binaries
+         yield ReadOnlyBind("/usr")
+         yield ReadOnlyBind("/opt")
++        yield ReadOnlyBind("/nix")
+         # Recreate symlinks in / or mount them read-only if its not a symlink.
+         # Should be portable between distros.
+         for root_path in Path("/").iterdir():
+
