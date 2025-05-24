@@ -40,7 +40,7 @@ buildGoModule rec {
     homepage = "https://github.com/yoheimuta/protolint";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.zane ];
+    maintainers = [ ];
     mainProgram = "protolint";
   };
 }
