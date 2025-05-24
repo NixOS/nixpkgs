@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "maturin";
-  version = "1.7.5";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "PyO3";
     repo = "maturin";
     rev = "v${version}";
-    hash = "sha256-rggMNvvWj6yAczWt0ztNoXvxafERV5jzbXKlVXt+GbU=";
+    hash = "sha256-Ix1UTVYJRPTii/LqJQto+und+BrSAIZeHlTA6biysm0=";
   };
 
-  cargoHash = "sha256-kLTLUkOYQPdFOXyjBoPMT/2IMC2oILK+i/jY0iDjS2o=";
+  cargoHash = "sha256-xC0zCDGE0AynMUc5qSkgOYB3JqOWDlc8oz4yi6cGCJs=";
 
   patches = [
     # Sorts RECORD file in wheel archives to make them deterministic. See: https://github.com/NixOS/nixpkgs/issues/384708
