@@ -26,20 +26,11 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           sparse-checkout: .github/actions
-      - name: Check if the PR can be merged and get the test merge commit
+      - name: Check if the PR can be merged and checkout merged and target commits
         uses: ./.github/actions/get-merge-commit
-        id: get-merge-commit
-
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          ref: ${{ steps.get-merge-commit.outputs.mergedSha }}
-          # Fetches the merge commit and its parents
-          fetch-depth: 2
-          path: untrusted
-
-      - name: Checking out target branch
-        run: |
-          git -C untrusted worktree add ../trusted ${{ steps.get-merge-commit.outputs.targetSha }}
+          merged-as-untrusted: true
+          target-as-trusted: true
 
       - uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
 
