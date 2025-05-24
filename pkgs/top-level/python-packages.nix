@@ -17909,8 +17909,6 @@ self: super: with self; {
     inherit (pkgs) file zlib;
   };
 
-  typed-ast = callPackage ../development/python-modules/typed-ast { };
-
   typed-settings = callPackage ../development/python-modules/typed-settings { };
 
   typedunits = callPackage ../development/python-modules/typedunits { };
