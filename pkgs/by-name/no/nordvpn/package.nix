@@ -155,7 +155,9 @@ buildGoModule (finalAttrs: {
     description = "NordVPN application for Linux.";
     longDescription = ''
       NordVPN application for Linux.
-      This package currently does not support meshnet and firewall must be disabled via `networking.firewall.enable = false;`.
+      This package currently does not support meshnet.
+      Additionally, if using firewall via `networking.firewall.enable = true;`,
+      then should set `networking.firewall.checkReversePath` to either `"loose"` or `false`.
       Contributions are welcome!
     '';
     homepage = "https://github.com/nordsecurity/nordvpn-linux";
