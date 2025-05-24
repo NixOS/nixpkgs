@@ -14,6 +14,7 @@
   SDL2_mixer,
   SDL2_ttf,
   python3,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
     zlib
     curl
     python3
+    xorg.libX11
   ];
 
   cmakeFlags = [
