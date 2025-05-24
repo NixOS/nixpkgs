@@ -58,21 +58,26 @@ import ./make-test-python.nix (
           services.restic.backups = {
             remotebackup = {
               inherit
-                passwordFile
                 paths
                 exclude
                 pruneOpts
                 backupPrepareCommand
                 backupCleanupCommand
                 ;
-              repository = remoteRepository;
+              settings = {
+                RESTIC_PASSWORD_FILE = passwordFile;
+                RESTIC_REPOSITORY = remoteRepository;
+              };
               initialize = true;
               timerConfig = null; # has no effect here, just checking that it doesn't break the service
             };
             remote-from-file-backup = {
-              inherit passwordFile exclude pruneOpts;
+              inherit exclude pruneOpts;
+              settings = {
+                RESTIC_PASSWORD_FILE = passwordFile;
+                RESTIC_REPOSITORY_FILE = pkgs.writeText "repositoryFile" remoteFromFileRepository;
+              };
               initialize = true;
-              repositoryFile = pkgs.writeText "repositoryFile" remoteFromFileRepository;
               paths = [
                 "/opt/a_dir/a_file"
                 "/opt/a_dir/a_file_2"
@@ -83,53 +88,63 @@ import ./make-test-python.nix (
             };
             inhibit-test = {
               inherit
-                passwordFile
                 paths
                 exclude
                 pruneOpts
                 ;
-              repository = remoteInhibitTestRepository;
+              settings = {
+                RESTIC_PASSWORD_FILE = passwordFile;
+                RESTIC_REPOSITORY = remoteInhibitTestRepository;
+              };
               initialize = true;
               inhibitsSleep = true;
             };
             remote-noinit-backup = {
               inherit
-                passwordFile
                 exclude
                 pruneOpts
                 paths
                 ;
+              settings = {
+                RESTIC_PASSWORD_FILE = passwordFile;
+                RESTIC_REPOSITORY = remoteNoInitRepository;
+              };
               initialize = false;
-              repository = remoteNoInitRepository;
             };
             rclonebackup = {
               inherit
-                passwordFile
                 paths
                 exclude
                 pruneOpts
                 ;
-              initialize = true;
-              repository = rcloneRepository;
-              rcloneConfig = {
-                type = "local";
-                one_file_system = true;
+              settings = {
+                RESTIC_PASSWORD_FILE = passwordFile;
+                RESTIC_REPOSITORY = rcloneRepository;
+                RCLONE_TYPE = "local";
+                RCLONE_ONE_FILE_SYSTEM = "true";
+                RCLONE_CONFIG_LOCAL_TYPE = "local";
+                # This gets overridden by rcloneSettings.RCLONE_CONFIG_LOCAL_TYPE
+                RCLONE_CONFIG = pkgs.writeText "rclone.conf" ''
+                  [local]
+                  type=ftp
+                '';
               };
+              initialize = true;
 
-              # This gets overridden by rcloneConfig.type
-              rcloneConfigFile = pkgs.writeText "rclone.conf" ''
-                [local]
-                type=ftp
-              '';
             };
             remoteprune = {
-              inherit passwordFile;
-              repository = remoteRepository;
+              settings = {
+                RESTIC_PASSWORD_FILE = passwordFile;
+                RESTIC_REPOSITORY = remoteRepository;
+              };
               pruneOpts = [ "--keep-last 1" ];
             };
             custompackage = {
-              inherit passwordFile paths;
-              repository = "some-fake-repository";
+              inherit paths;
+              settings = {
+                RESTIC_PASSWORD_FILE = passwordFile;
+                RESTIC_REPOSITORY = "some-fake-repository";
+              };
               package = pkgs.writeShellScriptBin "restic" ''
                 echo "$@" >> /root/fake-restic.log;
               '';
@@ -138,8 +153,6 @@ import ./make-test-python.nix (
               checkOpts = [ "--some-check-option" ];
             };
           };
-
-          environment.sessionVariables.RCLONE_CONFIG_LOCAL_TYPE = "local";
         };
     };
 
