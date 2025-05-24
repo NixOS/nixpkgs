@@ -121,8 +121,8 @@ stdenv.mkDerivation {
 
   postPatch = ''
     # gnat2why/gnat_src points to the GNAT sources
-    tar xf ${gnat.cc.src} gcc-${gnat.cc.version}/gcc/ada
-    mv gcc-${gnat.cc.version}/gcc/ada gnat2why/gnat_src
+    tar xf ${gnat.cc.src} --wildcards gcc-*/gcc/ada
+    mv gcc-*/gcc/ada gnat2why/gnat_src
   '';
 
   configurePhase = ''
