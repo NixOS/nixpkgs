@@ -83,6 +83,44 @@ let
       # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
       rust = args.rust or args.rustc or { };
 
+      toolchain = {
+        cc =
+          if final.useLLVM || final.isDarwin then
+            "clang"
+          else if final.useArocc then
+            "arocc"
+          else if final.useZig then
+            "zig"
+          else
+            "gcc";
+
+        bintools =
+          if final.useLLVM || final.useArocc || final.useZig || final.isDarwin then "llvm" else "gnu";
+
+        cxxlib =
+          if final.useLLVM || final.useArocc || final.useZig || final.isDarwin then "libcxx" else "libstdcxx";
+
+        cxxrtlib =
+          if final.useLLVM || final.useArocc || final.useZig || final.isDarwin then
+            "libcxxabi"
+          else
+            "libcxxrt";
+
+        unwinderlib =
+          if final.useLLVM || final.useArocc || final.useZig then
+            "libunwind"
+          else if final.isDarwin then
+            "libunwind-system"
+          else
+            "libgcc_s";
+
+        rtlib =
+          if final.useLLVM || final.useArocc || final.useZig || final.isDarwin then
+            "compiler-rt"
+          else
+            "libgcc";
+      };
+
       final =
         {
           # Prefer to parse `config` as it is strictly more informative.
@@ -117,6 +155,8 @@ let
             throw "2022-05-23: isCompatible has been removed in favor of canExecute, refer to the 22.11 changelog for details";
           # Derived meta-data
           useLLVM = final.isFreeBSD || final.isOpenBSD;
+          useArocc = false;
+          useZig = false;
 
           libc =
             if final.isDarwin then
@@ -161,7 +201,7 @@ let
           # independently, so we are just doing `linker` and keeping `useLLVM` for
           # now.
           linker =
-            if final.useLLVM or false then
+            if final.useLLVM then
               "lld"
             else if final.isDarwin then
               "cctools"
@@ -170,6 +210,7 @@ let
             # choice.
             else
               "bfd";
+
           # The standard lib directory name that non-nixpkgs binaries distributed
           # for this platform normally assume.
           libDir =
@@ -411,6 +452,7 @@ let
         )
         // mapAttrs (n: v: v final.parsed) inspect.predicates
         // mapAttrs (n: v: v final.gcc.arch or "default") architectures.predicates
+        // toolchain
         // args
         // {
           rust = rust // {
@@ -568,6 +610,7 @@ let
     assert foldl (pass: { assertion, message }: if assertion final then pass else throw message) true (
       final.parsed.abi.assertions or [ ]
     );
+    assert toolchain == lib.mapAttrs (key: _: final.${key}) toolchain;
     final;
 
 in
