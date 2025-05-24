@@ -1,29 +1,31 @@
 {
   lib,
   stdenv,
-  fetchzip,
+  fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "generaluser";
-  version = "1.471";
+  version = "2.0.2-unstable-2025-04-21";
 
-  # we can't use fetchurl since stdenv does not handle unpacking *.zip's by default.
-  src = fetchzip {
-    # Linked on https://www.schristiancollins.com/generaluser.php:
-    url = "https://www.dropbox.com/s/4x27l49kxcwamp5/GeneralUser_GS_${version}.zip";
-    sha256 = "sha256-lwUlWubXiVZ8fijKuNF54YQjT0uigjNAbjKaNjmC51s=";
+  src = fetchFromGitHub {
+    owner = "mrbumpy409";
+    repo = "GeneralUser-GS";
+    rev = "74d4cfe4042a61ddab17d4f86dbccd9d2570eb2a";
+    hash = "sha256-I27l8F/BFAo6YSNbtAV14AKVsPIJTHFG2eGudseWmjo=";
   };
 
   installPhase = ''
-    install -Dm644 GeneralUser*.sf2 $out/share/soundfonts/GeneralUser-GS.sf2
+    runHook preInstall
+    install -Dm644 $src/GeneralUser-GS.sf2 $out/share/soundfonts/GeneralUser-GS.sf2
+    runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "SoundFont bank featuring 259 instrument presets and 11 drum kits";
+  meta = {
+    description = "General MIDI SoundFont with a low memory footprint";
     homepage = "https://www.schristiancollins.com/generaluser.php";
-    license = licenses.generaluser;
-    platforms = platforms.all;
-    maintainers = [ ];
+    license = lib.licenses.generaluser;
+    maintainers = with lib.maintainers; [ keenanweaver ];
+    platforms = lib.platforms.all;
   };
-}
+})
