@@ -18353,8 +18353,6 @@ self: super: with self; {
 
   types-tqdm = callPackage ../development/python-modules/types-tqdm { };
 
-  types-typed-ast = callPackage ../development/python-modules/types-typed-ast { };
-
   types-ujson = callPackage ../development/python-modules/types-ujson { };
 
   types-urllib3 = callPackage ../development/python-modules/types-urllib3 { };
