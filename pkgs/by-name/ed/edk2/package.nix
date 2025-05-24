@@ -30,8 +30,6 @@ let
     else
       throw "Unsupported architecture";
 
-  buildType = if stdenv.hostPlatform.isDarwin then "CLANGPDB" else "GCC5";
-
   edk2 = stdenv.mkDerivation {
     pname = "edk2";
     version = "202411";
@@ -166,6 +164,7 @@ let
           finalAttrs:
           let
             attrs = lib.toFunction attrsOrFun finalAttrs;
+            buildType = attrs.buildType or (if stdenv.hostPlatform.isDarwin then "CLANGPDB" else "GCC5");
           in
           {
             inherit (edk2) src;
