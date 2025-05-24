@@ -24,6 +24,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           ref: ${{ steps.get-merge-commit.outputs.mergedSha }}
+          path: untrusted
 
       - uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
         with:
@@ -33,4 +34,4 @@ jobs:
       - name: Parse all nix files
         run: |
           # Tests multiple versions at once, let's make sure all of them run, so keep-going.
-          nix-build ci -A parse --keep-going
+          nix-build untrusted/ci -A parse --keep-going
