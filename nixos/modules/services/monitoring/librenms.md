@@ -70,3 +70,19 @@ services.librenms = {
   };
 };
 ```
+
+## Ingest Syslog traffic
+
+It is a good security practice to ship logs to a remote system in case the system gets breaches so one can try to reconstruct the events even when the attacker deletes the logs on the compromised system.
+
+LibreNMS has support for Syslog built in but it isn't configured by default on NixOS.
+
+```nix
+networking.firewall.allowedTCPPorts = [
+  514 # Required for Syslog
+];
+networking.firewall.allowedUDPPorts = [
+  514 # Required for Syslog
+];
+services.librenms.ingest-syslog.enable = true;
+```

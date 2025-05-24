@@ -43,6 +43,11 @@ let
     $sudo ${package}/artisan "$@"
   '';
 
+  libreNMSSyslogWrapper = pkgs.writeShellScriptBin "librenms-syslog" ''
+    cd ${package}
+    exec ${package.phpPackage}/bin/php ${package}/syslog.php "$@"
+  '';
+
   lnmsWrapper = pkgs.writeShellScriptBin "lnms" ''
     cd ${package}
     sudo=exec
@@ -337,6 +342,23 @@ in
       };
     };
 
+    ingestSyslog = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable a syslog-ng service on this LibreNMS instance in order to ingest and display Syslog traffic.
+        '';
+      };
+      syslogPort = mkOption {
+        type = types.port;
+        default = 514;
+        description = ''
+          Port accepting syslog traffic.
+        '';
+      };
+    };
+
     environmentFile = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -523,6 +545,26 @@ in
         "listen.owner" = config.services.nginx.user;
         "listen.group" = config.services.nginx.group;
       } // cfg.poolConfig;
+    };
+
+    services.syslog-ng = lib.mkIf cfg.ingestSyslog.enable {
+      enable = true;
+      # Taken from here: https://docs.librenms.org/Extensions/Syslog/
+      extraConfig = ''
+        source s_net {
+          tcp(port(${toString cfg.ingestSyslog.syslogPort}) flags(syslog-protocol));
+          udp(port(${toString cfg.ingestSyslog.syslogPort}) flags(syslog-protocol));
+        };
+
+        destination d_librenms {
+          program("${libreNMSSyslogWrapper}/bin/librenms-syslog" template ("''$HOST||''$FACILITY||''$PRIORITY||''$LEVEL||''$TAG||''$R_YEAR-''$R_MONTH-''$R_DAY ''$R_HOUR:''$R_MIN:''$R_SEC||''$MSG||''$PROGRAM\n") template-escape(yes));
+        };
+
+        log {
+          source(s_net);
+          destination(d_librenms);
+        };
+      '';
     };
 
     systemd.services.librenms-scheduler = {
