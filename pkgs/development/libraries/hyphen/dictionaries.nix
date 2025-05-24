@@ -9,10 +9,6 @@
 }:
 
 let
-  libreofficeRepository = "https://anongit.freedesktop.org/git/libreoffice/dictionaries.git";
-  libreofficeCommit = "9e27d044d98e65f89af8c86df722a77be827bdc8";
-  libreofficeSubdir = "de";
-
   mkDictFromLibreofficeGit =
     {
       subdir,
