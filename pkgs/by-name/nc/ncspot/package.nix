@@ -16,7 +16,7 @@
   python3,
   rustPlatform,
   testers,
-  ueberzug,
+  ueberzugpp,
   withALSA ? stdenv.hostPlatform.isLinux,
   withClipboard ? true,
   withCover ? false,
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optional stdenv.hostPlatform.isLinux openssl
     ++ lib.optional (withALSA || withRodio) alsa-lib
     ++ lib.optional withClipboard libxcb
-    ++ lib.optional withCover ueberzug
+    ++ lib.optional withCover ueberzugpp
     ++ lib.optional (withMPRIS || withNotify) dbus
     ++ lib.optional withNcurses ncurses
     ++ lib.optional withPortAudio portaudio
