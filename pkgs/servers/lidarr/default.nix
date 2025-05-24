@@ -27,16 +27,16 @@ let
     ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   hash =
     {
-      x64-linux_hash = "sha256-PwHIUbXxk9VOKd+I7EcrTEYlikfw2NUdO6IQdiQWhWs=";
-      arm64-linux_hash = "sha256-uu7iVexyss29Q7mZ280KeDLZWp6wwCh+TJj9XeZc/lQ=";
-      x64-osx_hash = "sha256-POjIY2iPoYOQQci6AV/7X8t7GGbxVqROjlMzwERH/3c=";
-      arm64-osx_hash = "sha256-JSdiyA0opa4dy5/RTSn/QvnKJ9VCWJcGhTkH5YIi5lg=";
+      x64-linux_hash = "sha256-QHCHB7ep23nd8YAF3klzvAd9ZNkCTI9P2pELQwmsrDw=";
+      arm64-linux_hash = "sha256-UBXDuVTRb7EWVjWbeNUn1TLb5W7hkvvbpxZuLhohgaA=";
+      x64-osx_hash = "sha256-W58yF2XMeLHjP3hNCM+EomTqfgXeYtyjHTaffeA05xY=";
+      arm64-osx_hash = "sha256-N9/h3Yc37/81c66KskhTk714EZkSUEAHJzGnpHeK2JQ=";
     }
     ."${arch}-${os}_hash";
 in
 stdenv.mkDerivation rec {
   pname = "lidarr";
-  version = "2.10.3.4602";
+  version = "2.11.2.4629";
 
   src = fetchurl {
     url = "https://github.com/lidarr/Lidarr/releases/download/v${version}/Lidarr.master.${version}.${os}-core-${arch}.tar.gz";
