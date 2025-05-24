@@ -24,18 +24,18 @@ let
   # It either serializes a top-level definition "key: { values };"
   # or an expression "key = { values };"
   mkAttrsString =
-    top:
+    top: toList:
     mapAttrsToList (
       k: v:
       let
-        sep = if (top && isAttrs v) then ":" else "=";
+        sep = if (top && isAttrs v) then ": " else " = ";
       in
-      "${escape [ sep ] k}${sep}${mkValueString v};"
+      "${escape [ sep ] k}${sep}${mkValueString toList v};"
     );
 
   # This serializes a Nix expression to the libconfig format.
   mkValueString =
-    v:
+    top: v:
     if types.bool.check v then
       boolToString v
     else if types.int.check v then
@@ -43,11 +43,13 @@ let
     else if types.float.check v then
       toString v
     else if types.str.check v then
-      "\"${escape [ "\"" ] v}\""
-    else if builtins.isList v then
-      "[ ${concatMapStringsSep " , " mkValueString v} ]"
+      ''"${escape [ ''"'' ] v}"''
+    else if (builtins.isList v && top) then
+      "( ${concatMapStringsSep " ,\n" (mkValueString false) v} )" # it's LIST according to libconfig settings (ARRAY!=LIST)
+    else if (builtins.isList v && (!top)) then
+      "[ ${concatMapStringsSep " , " (mkValueString false) v} ]" # it's ARRAY according to libconfig settings (ARRAY!=LIST)
     else if types.attrs.check v then
-      "{ ${concatStringsSep " " (mkAttrsString false v)} }"
+      "{ ${concatStringsSep "\n" (mkAttrsString false false v)} }"
     else
       throw ''
         invalid expression used in option services.picom.settings:
