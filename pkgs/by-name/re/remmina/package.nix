@@ -124,6 +124,9 @@ stdenv.mkDerivation (finalAttrs: {
       "-DHAVE_LIBAPPINDICATOR=OFF"
       "-DWITH_CUPS=OFF"
       "-DWITH_ICON_CACHE=OFF"
+      # Don't use system installed Python like on GitHub Actions runners
+      "-DPYTHON_INCLUDE_DIR=${python3}/include/${python3.libPrefix}"
+      "-DPYTHON_LIBRARY=${python3}/lib/libpython${python3.pythonVersion}${stdenv.hostPlatform.extensions.sharedLibrary}"
     ];
 
   dontWrapQtApps = true;
