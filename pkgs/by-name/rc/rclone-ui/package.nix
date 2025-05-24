@@ -41,9 +41,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   useFetchCargoVendor = true;
   cargoHash = "sha256-o21of2eS2KZtg1U1E6RwdaA8jGhEVzg7HkgOv1k5wxI=";
 
-  # Disable tauri bundle updater, can be removed when #389107 is merged
-  patches = [ ./remove_updater.patch ];
-
   postPatch = ''
     substituteInPlace src-tauri/Cargo.toml \
        --replace-fail 'name = "app"' 'name = "${finalAttrs.pname}"'
