@@ -1,10 +1,14 @@
-{ lib, config, ... }:
+{ lib, ... }:
 let
-  inherit (lib) options trivial types;
-  Release = import ./release.nix { inherit lib config; };
+  inherit (lib) types;
+  inherit (types) attrsOf submodule;
+  outputsOption = import ./outputs.nix { inherit lib; };
 in
-options.mkOption {
-  description = "Feature manifest is an attribute set which includes a mapping from package name to release";
-  example = trivial.importJSON ../../../../cuda/manifests/feature_11.5.2.json;
-  type = types.attrsOf Release.type;
+{
+  freeformType = attrsOf (
+    attrsOf (submodule {
+      options.outputs = outputsOption;
+      _file = ./outputs.nix;
+    })
+  );
 }
