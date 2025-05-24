@@ -58,10 +58,12 @@ let
       Secret = "not-secure-secret";
       TimeBasedCredentials = false;
     };
+    Relay = {
+      CredentialsTTL = "24h";
+    };
 
     Signal = {
       Proto = "https";
-      URI = "${cfg.domain}:443";
       Username = "";
       Password = null;
     };
@@ -139,7 +141,7 @@ in
   options.services.netbird.server.management = {
     enable = mkEnableOption "Netbird Management Service";
 
-    package = mkPackageOption pkgs "netbird" { };
+    package = mkPackageOption pkgs "netbird-server" { };
 
     domain = mkOption {
       type = str;
@@ -220,95 +222,92 @@ in
       inherit (settingsFormat) type;
 
       defaultText = literalExpression ''
-        defaultSettings = {
-          Stuns = [
+        Stuns = [
+          {
+            Proto = "udp";
+            URI = "stun:''${cfg.turnDomain}:3478";
+            Username = "";
+            Password = null;
+          }
+        ];
+
+        TURNConfig = {
+          Turns = [
             {
               Proto = "udp";
-              URI = "stun:''${cfg.turnDomain}:3478";
-              Username = "";
-              Password = null;
+              URI = "turn:''${cfg.turnDomain}:3478";
+              Username = "netbird";
+              Password = "netbird";
             }
           ];
 
-          TURNConfig = {
-            Turns = [
-              {
-                Proto = "udp";
-                URI = "turn:''${cfg.turnDomain}:3478";
-                Username = "netbird";
-                Password = "netbird";
-              }
-            ];
+          CredentialsTTL = "12h";
+          Secret = "not-secure-secret";
+          TimeBasedCredentials = false;
+        };
 
-            CredentialsTTL = "12h";
-            Secret = "not-secure-secret";
-            TimeBasedCredentials = false;
+        Signal = {
+          Proto = "https";
+          Username = "";
+          Password = null;
+        };
+
+        ReverseProxy = {
+          TrustedHTTPProxies = [ ];
+          TrustedHTTPProxiesCount = 0;
+          TrustedPeers = [ "0.0.0.0/0" ];
+        };
+
+        Datadir = "${stateDir}/data";
+        DataStoreEncryptionKey = "genEVP6j/Yp2EeVujm0zgqXrRos29dQkpvX0hHdEUlQ=";
+        StoreConfig = { Engine = "sqlite"; };
+
+        HttpConfig = {
+          Address = "127.0.0.1:''${builtins.toString cfg.port}";
+          IdpSignKeyRefreshEnabled = true;
+          OIDCConfigEndpoint = cfg.oidcConfigEndpoint;
+        };
+
+        IdpManagerConfig = {
+          ManagerType = "none";
+          ClientConfig = {
+            Issuer = "";
+            TokenEndpoint = "";
+            ClientID = "netbird";
+            ClientSecret = "";
+            GrantType = "client_credentials";
           };
 
-          Signal = {
-            Proto = "https";
-            URI = "''${cfg.domain}:443";
-            Username = "";
-            Password = null;
+          ExtraConfig = { };
+          Auth0ClientCredentials = null;
+          AzureClientCredentials = null;
+          KeycloakClientCredentials = null;
+          ZitadelClientCredentials = null;
+        };
+
+        DeviceAuthorizationFlow = {
+          Provider = "none";
+          ProviderConfig = {
+            Audience = "netbird";
+            Domain = null;
+            ClientID = "netbird";
+            TokenEndpoint = null;
+            DeviceAuthEndpoint = "";
+            Scope = "openid profile email offline_access api";
+            UseIDToken = false;
           };
+        };
 
-          ReverseProxy = {
-            TrustedHTTPProxies = [ ];
-            TrustedHTTPProxiesCount = 0;
-            TrustedPeers = [ "0.0.0.0/0" ];
-          };
-
-          Datadir = "''${stateDir}/data";
-          DataStoreEncryptionKey = "genEVP6j/Yp2EeVujm0zgqXrRos29dQkpvX0hHdEUlQ=";
-          StoreConfig = { Engine = "sqlite"; };
-
-          HttpConfig = {
-            Address = "127.0.0.1:''${builtins.toString cfg.port}";
-            IdpSignKeyRefreshEnabled = true;
-            OIDCConfigEndpoint = cfg.oidcConfigEndpoint;
-          };
-
-          IdpManagerConfig = {
-            ManagerType = "none";
-            ClientConfig = {
-              Issuer = "";
-              TokenEndpoint = "";
-              ClientID = "netbird";
-              ClientSecret = "";
-              GrantType = "client_credentials";
-            };
-
-            ExtraConfig = { };
-            Auth0ClientCredentials = null;
-            AzureClientCredentials = null;
-            KeycloakClientCredentials = null;
-            ZitadelClientCredentials = null;
-          };
-
-          DeviceAuthorizationFlow = {
-            Provider = "none";
-            ProviderConfig = {
-              Audience = "netbird";
-              Domain = null;
-              ClientID = "netbird";
-              TokenEndpoint = null;
-              DeviceAuthEndpoint = "";
-              Scope = "openid profile email offline_access api";
-              UseIDToken = false;
-            };
-          };
-
-          PKCEAuthorizationFlow = {
-            ProviderConfig = {
-              Audience = "netbird";
-              ClientID = "netbird";
-              ClientSecret = "";
-              AuthorizationEndpoint = "";
-              TokenEndpoint = "";
-              Scope = "openid profile email offline_access api";
-              RedirectURLs = "http://localhost:53000";
-              UseIDToken = false;
-            };
+        PKCEAuthorizationFlow = {
+          ProviderConfig = {
+            Audience = "netbird";
+            ClientID = "netbird";
+            ClientSecret = "";
+            AuthorizationEndpoint = "";
+            TokenEndpoint = "";
+            Scope = "openid profile email offline_access api";
+            RedirectURLs = "http://localhost:53000";
+            UseIDToken = false;
           };
         };
       '';
@@ -340,8 +339,6 @@ in
       default = "INFO";
       description = "Log level of the netbird services.";
     };
-
-    enableNginx = mkEnableOption "Nginx reverse-proxy for the netbird management service";
   };
 
   config = mkIf cfg.enable {
@@ -452,27 +449,5 @@ in
       stopIfChanged = false;
     };
 
-    services.nginx = mkIf cfg.enableNginx {
-      enable = true;
-
-      virtualHosts.${cfg.domain} = {
-        locations = {
-          "/api".proxyPass = "http://localhost:${builtins.toString cfg.port}";
-
-          "/management.ManagementService/".extraConfig = ''
-            # This is necessary so that grpc connections do not get closed early
-            # see https://stackoverflow.com/a/67805465
-            client_body_timeout 1d;
-
-            grpc_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-
-            grpc_pass grpc://localhost:${builtins.toString cfg.port};
-            grpc_read_timeout 1d;
-            grpc_send_timeout 1d;
-            grpc_socket_keepalive on;
-          '';
-        };
-      };
-    };
   };
 }
