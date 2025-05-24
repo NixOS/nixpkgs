@@ -209,7 +209,7 @@ in
       };
 
       listenOnIpv6 = lib.mkOption {
-        default = [ "any" ];
+        default = if config.networking.enableIPv6 then [ "any" ] else [ "none" ];
         type = lib.types.listOf lib.types.str;
         description = ''
           Ipv6 interfaces to listen on.
