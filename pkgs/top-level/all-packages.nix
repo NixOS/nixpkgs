@@ -13031,7 +13031,9 @@ with pkgs;
 
   glabels-qt = libsForQt5.callPackage ../applications/graphics/glabels-qt { };
 
-  grafana = callPackage ../servers/monitoring/grafana { };
+  grafana = callPackage ../servers/monitoring/grafana {
+    buildGoModule = buildGo124Module;
+  };
   grafanaPlugins = callPackages ../servers/monitoring/grafana/plugins { };
 
   grafana-loki = callPackage ../servers/monitoring/loki { };
