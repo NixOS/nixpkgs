@@ -5,12 +5,12 @@
   fetchFromGitHub,
   fetchYarnDeps,
   replaceVars,
-  runCommand,
   writeShellScriptBin,
 
   copyDesktopItems,
   cctools,
   clojure,
+  darwin,
   makeDesktopItem,
   makeWrapper,
   nodejs,
@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "logseq";
-  version = "0.10.9-unstable-2025-03-11";
+  version = "0.10.11";
 
   src = fetchFromGitHub {
     owner = "logseq";
     repo = "logseq";
-    rev = "ac0a0dae727c46b348d0f1410138d5e49d446692";
-    hash = "sha256-esCB51BeWnni/JFL4yMKcJj5lka2+hLpcvWGify0T2o=";
+    tag = finalAttrs.version;
+    hash = "sha256-tH17Kusc9XyldkstKzINGtzhfEkeqaTRxVjS238/q5E=";
   };
 
   patches = [
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   yarnOfflineCacheRoot = fetchYarnDeps {
     name = "logseq-${finalAttrs.version}-yarn-deps-root";
     inherit (finalAttrs) src;
-    hash = "sha256-z4G675kxfpmG2AJlbK5bfeUUgX7jz1ys2FlMNHJqrQ4=";
+    hash = "sha256-Lz63rtah5DHkxJhXgSSwsLlrPVTHm1OuT5TeTuTvp+I=";
   };
 
   # ./static and ./resources are combined into ./static by the build process
@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     name = "logseq-${finalAttrs.version}-yarn-deps-static-resources";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/static";
-    hash = "sha256-xuZj2EKHxvkiDPKMLh3ZSvLT54k+buHqg9lRTFv8rNI=";
+    hash = "sha256-BXQu+j6RsoMsKQt4GI0V1RO4sLGJzcG46UtNCRsjsY0=";
   };
 
   yarnOfflineCacheAmplify = fetchYarnDeps {
@@ -151,6 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools
+      darwin.autoSignDarwinBinariesHook
       xcbuild
     ];
 
