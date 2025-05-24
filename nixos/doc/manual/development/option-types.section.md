@@ -141,7 +141,8 @@ merging is handled.
 
 `types.extensionFunction`
 
-:   A type for an extension function (ie. overlay) to the Nixpkgs package set.
+:   An extension function (e.g. `final: prev: { }`). Typically used to overlay
+    the Nixpkgs package set or other "extensible" attrsets.
 
 ### Numeric types {#sec-option-types-numeric}
 
