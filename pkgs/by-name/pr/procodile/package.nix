@@ -4,12 +4,12 @@
   bundlerUpdateScript,
 }:
 
-bundlerApp {
+bundlerApp rec {
   pname = "procodile";
   gemdir = ./.;
   exes = [ "procodile" ];
 
-  passthru.updateScript = bundlerUpdateScript "procodile";
+  passthru.updateScript = bundlerUpdateScript pname;
 
   meta = with lib; {
     description = "Run processes in the background (and foreground) on Mac & Linux from a Procfile (for production and/or development environments)";
@@ -20,6 +20,6 @@ bundlerApp {
       nicknovitski
     ];
     platforms = platforms.unix;
-    mainProgram = "procodile";
+    mainProgram = pname;
   };
 }
