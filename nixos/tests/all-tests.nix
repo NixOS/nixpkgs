@@ -711,6 +711,7 @@ in
   languagetool = handleTest ./languagetool.nix { };
   lanraragi = handleTest ./lanraragi.nix { };
   latestKernel.login = handleTest ./login.nix { latestKernel = true; };
+  lasuite-docs = runTest ./web-apps/lasuite-docs.nix;
   lavalink = runTest ./lavalink.nix;
   leaps = handleTest ./leaps.nix { };
   lemmy = handleTest ./lemmy.nix { };

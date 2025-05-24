@@ -178,6 +178,11 @@ buildPythonPackage rec {
       # AssertionError: 2.1376906810000946 not less than 2.0
       "test_recursive_pad"
 
+      # Since updated onnx to 1.18.0:
+      # onnxruntime.capi.onnxruntime_pybind11_state.Fail: [ONNXRuntimeError] : 1 : FAIL : Load model from ...
+      # Unsupported model IR version: 11, max supported IR version: 10
+      "test_quant_128"
+
       # Require internet access
       "test_benchmark_openpilot_model"
       "test_bn_alone"
