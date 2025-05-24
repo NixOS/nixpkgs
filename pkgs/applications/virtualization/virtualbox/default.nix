@@ -389,15 +389,18 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s "${finalAttrs.virtualboxGuestAdditionsIso}" "$out/share/virtualbox/VBoxGuestAdditions.iso"
   '';
 
-  preFixup =
+  postFixup =
     optionalString (!headless) ''
       wrapQtApp $out/bin/VirtualBox
     ''
-    # If hardening is disabled, wrap the VirtualBoxVM binary instead of patching
-    # the source code (see postPatch).
     + optionalString (!headless && !enableHardening) ''
       wrapQtApp $out/libexec/virtualbox/VirtualBoxVM \
-         --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ vulkan-loader ]}"
+         --prefix LD_LIBRARY_PATH : "${
+           lib.makeLibraryPath [
+             libGL
+             vulkan-loader
+           ]
+         }"
     '';
 
   passthru = {
