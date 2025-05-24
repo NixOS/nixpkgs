@@ -8,7 +8,6 @@
   cpuinfo,
   cubeb,
   curl,
-  discord-rpc,
   extra-cmake-modules,
   libXrandr,
   libbacktrace,
@@ -20,6 +19,11 @@
   vulkan-loader,
   wayland,
   wayland-scanner,
+
+  alsa-lib,
+  jack2,
+  libpulseaudio,
+  sndio,
 }:
 
 let
@@ -57,6 +61,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     cpuinfo
+    cubeb
     curl
     libXrandr
     libbacktrace
@@ -70,7 +75,13 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     sources.soundtouch-patched
     sources.spirv-cross-patched
     wayland
-  ] ++ cubeb.passthru.backendLibs;
+
+    # for the vendored cubeb fork
+    alsa-lib
+    jack2
+    libpulseaudio
+    sndio
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_TESTS" true)
@@ -115,14 +126,16 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   qtWrapperArgs =
     let
-      libPath = lib.makeLibraryPath (
-        [
-          sources.shaderc-patched
-          sources.spirv-cross-patched
-          vulkan-loader
-        ]
-        ++ cubeb.passthru.backendLibs
-      );
+      libPath = lib.makeLibraryPath ([
+        sources.shaderc-patched
+        sources.spirv-cross-patched
+        vulkan-loader
+
+        alsa-lib
+        jack2
+        libpulseaudio
+        sndio
+      ]);
     in
     [
       "--prefix LD_LIBRARY_PATH : ${libPath}"
