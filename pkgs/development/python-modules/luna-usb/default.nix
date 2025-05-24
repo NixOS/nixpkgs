@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -21,15 +20,14 @@
 }:
 buildPythonPackage rec {
   pname = "luna-usb";
-  version = "0.1.3";
+  version = "0.2.0";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "luna";
     tag = version;
-    hash = "sha256-BKFfEkhgOH0lYfkAE94h27pb+T/uJxKFmMeVJI9I3qg=";
+    hash = "sha256-SVpAPq77IH2/2WZrc25j7q6qTMW2ToPY5lYQcYUlJfs=";
   };
 
   postPatch = ''
@@ -70,6 +68,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/greatscottgadgets/luna";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ carlossless ];
-    broken = lib.versionAtLeast amaranth.version "0.5";
   };
 }
