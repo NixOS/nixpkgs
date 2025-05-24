@@ -717,6 +717,13 @@ rec {
       abi = "n32";
     };
 
+    gnux32 = {
+      abi = "x32";
+    };
+    muslx32 = {
+      abi = "x32";
+    };
+
     gnuabielfv2 = {
       abi = "elfv2";
     };
