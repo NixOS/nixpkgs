@@ -4,12 +4,12 @@
   bundlerUpdateScript,
 }:
 
-bundlerApp {
+bundlerApp rec {
   pname = "xcode-install";
   gemdir = ./.;
   exes = [ "xcversion" ];
 
-  passthru.updateScript = bundlerUpdateScript "xcode-install";
+  passthru.updateScript = bundlerUpdateScript pname;
 
   meta = with lib; {
     description = "Install and update your Xcodes automatically";
