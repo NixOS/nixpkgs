@@ -1,26 +1,23 @@
 {
   lib,
   stdenv,
-  mkDerivation,
   fetchFromGitHub,
   cmake,
-  fuse,
+  fuse3,
   readline,
   pkg-config,
-  qtbase,
-  qttools,
-  wrapQtAppsHook,
+  qt6,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "android-file-transfer";
-  version = "4.4";
+  version = "4.5";
 
   src = fetchFromGitHub {
     owner = "whoozle";
     repo = "android-file-transfer-linux";
     rev = "v${version}";
-    sha256 = "sha256-1euoWM9KMauOkAp7g1FvY4olMiOg+La/Uk1QlQ3mKi8=";
+    sha256 = "sha256-G+ErwZ/F8Cl8WLSzC+5LrEWWqNZL3xDMBvx/gjkgAXk=";
   };
 
   patches = [ ./darwin-dont-vendor-dependencies.patch ];
@@ -29,12 +26,12 @@ mkDerivation rec {
     cmake
     readline
     pkg-config
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
   buildInputs = [
-    fuse
-    qtbase
-    qttools
+    fuse3
+    qt6.qtbase
+    qt6.qttools
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
