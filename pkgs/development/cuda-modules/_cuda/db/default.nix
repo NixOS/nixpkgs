@@ -43,7 +43,11 @@ let
 in
 {
   manifests ? intreeManifests, # :: List Path
-  extraModules ? [ ],
+  extraModules ? [
+    (lib.importJSON ./generated/blobs.json)
+    (lib.importJSON ./generated/packages.json)
+    (lib.importJSON ./generated/outputs.json)
+  ],
   _includeReleaseFiles ? true,
 }:
 let
