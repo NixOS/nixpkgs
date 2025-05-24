@@ -1448,6 +1448,7 @@ in
   vm-variant = handleTest ./vm-variant.nix { };
   vscode-remote-ssh = handleTestOn [ "x86_64-linux" ] ./vscode-remote-ssh.nix { };
   vscodium = discoverTests (import ./vscodium.nix);
+  void-editor = discoverTests (import ./void-editor.nix);
   vsftpd = handleTest ./vsftpd.nix { };
   waagent = handleTest ./waagent.nix { };
   wakapi = runTest ./wakapi.nix;
