@@ -7,11 +7,12 @@
   makeWrapper,
   removeReferencesTo,
   python3,
-  nodejs,
+  nodejs_20,
   matrix-sdk-crypto-nodejs,
 }:
 
 let
+  nodejs = nodejs_20; # only supports nodejs v18.X - v20.X
   pin = lib.importJSON ./pin.json;
   nodeSources = srcOnly nodejs;
 
@@ -19,6 +20,7 @@ in
 mkYarnPackage rec {
   pname = "matrix-appservice-discord";
   inherit (pin) version;
+  inherit nodejs;
 
   src = fetchFromGitHub {
     owner = "matrix-org";
