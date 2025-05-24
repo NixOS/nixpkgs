@@ -122,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     # `-DTVNC_ZLIBNG=0`, the above logic seems to imply that it looks
     # for normal zlib as well, and the `./configure` output prints
     #     -- zlib-ng disabled (TVNC_ZLIBNG = 0)
-    #     -- Found ZLIB: /nix/store/srby6wmvg7dp454pwb6qvaxdiri38sc1-zlib-1.3.1/lib/libz.so (found version "1.3.1")
+    #     -- Found ZLIB: /nix/store/<...>/lib/libz.so (found version "1.3.1")
     # so that seems to use normal `zlib`, even though it's not declared
     # as a dependency here (probably it's part of `stdenv`).
     # So for now, we use TruboVNC's in-tree `zlib-ng`.
