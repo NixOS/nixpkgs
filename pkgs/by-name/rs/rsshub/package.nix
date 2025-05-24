@@ -7,6 +7,9 @@
   replaceVars,
   stdenv,
 }:
+let
+  pnpm = pnpm_9;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rsshub";
   version = "0-unstable-2025-05-31";
@@ -25,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./0002-fix-network-call.patch
   ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
     hash = "sha256-7qh6YZbIH/kHVssDZxHY7X8bytrnMcUq0MiJzWZYItc=";
   };
@@ -33,23 +36,19 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeBinaryWrapper
     nodejs
-    pnpm_9.configHook
+    pnpm.configHook
   ];
 
   buildPhase = ''
     runHook preBuild
-
     pnpm build
-
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-
     mkdir -p $out/bin $out/lib/rsshub
     cp -r lib node_modules assets api package.json tsconfig.json $out/lib/rsshub
-
     runHook postInstall
   '';
 
