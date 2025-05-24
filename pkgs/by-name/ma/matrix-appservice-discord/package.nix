@@ -103,7 +103,7 @@ mkYarnPackage rec {
 
   meta = {
     description = "Bridge between Matrix and Discord";
-    homepage = "https://github.com/Half-Shot/matrix-appservice-discord";
+    homepage = "https://github.com/matrix-org/matrix-appservice-discord";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ euxane ];
     platforms = lib.platforms.linux;
