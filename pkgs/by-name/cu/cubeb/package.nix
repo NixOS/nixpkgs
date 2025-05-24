@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  unstableGitUpdater,
   cmake,
   pkg-config,
   alsa-lib,
@@ -60,6 +61,7 @@ stdenv.mkDerivation {
   passthru = {
     # For downstream users when lazyLoad is true
     backendLibs = lib.optionals lazyLoad backendLibs;
+    updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
   };
 
   postInstall = ''
