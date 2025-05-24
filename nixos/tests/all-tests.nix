@@ -1151,6 +1151,7 @@ in
   ragnarwm = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./ragnarwm.nix;
   rasdaemon = handleTest ./rasdaemon.nix { };
   rathole = runTest ./rathole.nix;
+  rdt-client = runTest ./rdt-client.nix;
   readarr = handleTest ./readarr.nix { };
   realm = handleTest ./realm.nix { };
   readeck = runTest ./readeck.nix;

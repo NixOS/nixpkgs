@@ -6461,6 +6461,12 @@
     githubId = 997543;
     name = "Dmitry Malikov";
   };
+  dmilligan = {
+    email = "derrik.miligan.dev+nixpkgs@gmail.com";
+    github = "DerrikMilligan";
+    githubId = 37845846;
+    name = "Derrik Miligan";
+  };
   DMills27 = {
     github = "DMills27";
     githubId = 5251658;
