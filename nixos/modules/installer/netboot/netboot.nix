@@ -115,7 +115,7 @@ with lib;
       boot
     '';
 
-    # A script invoking kexec on ./bzImage and ./initrd.gz.
+    # A script invoking kexec on ./kernel and ./initrd.
     # Usually used through system.build.kexecTree, but exposed here for composability.
     system.build.kexecScript = pkgs.writeScript "kexec-boot" ''
       #!/usr/bin/env bash
@@ -124,20 +124,20 @@ with lib;
         exit 1
       fi
       SCRIPT_DIR=$( cd -- "$( dirname -- "''${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-      kexec --load ''${SCRIPT_DIR}/bzImage \
-        --initrd=''${SCRIPT_DIR}/initrd.gz \
+      kexec --load ''${SCRIPT_DIR}/kernel \
+        --initrd=''${SCRIPT_DIR}/initrd \
         --command-line "init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}"
       kexec -e
     '';
 
-    # A tree containing initrd.gz, bzImage and a kexec-boot script.
+    # A tree containing initrd, kernel and a kexec-boot script.
     system.build.kexecTree = pkgs.linkFarm "kexec-tree" [
       {
-        name = "initrd.gz";
+        name = "initrd";
         path = "${config.system.build.netbootRamdisk}/initrd";
       }
       {
-        name = "bzImage";
+        name = "kernel";
         path = "${config.system.build.kernel}/${config.system.boot.loader.kernelFile}";
       }
       {
@@ -146,22 +146,22 @@ with lib;
       }
     ];
 
-    image.extension = "tar.xz";
+    image.extension = "tar";
     image.filePath = "tarball/${config.image.fileName}";
     system.nixos.tags = [ "kexec" ];
     system.build.image = config.system.build.kexecTarball;
     system.build.kexecTarball =
-      pkgs.callPackage "${toString modulesPath}/../lib/make-system-tarball.nix"
-        {
-          fileName = config.image.baseName;
-          storeContents = [
-            {
-              object = config.system.build.kexecScript;
-              symlink = "/kexec_nixos";
-            }
-          ];
-          contents = [ ];
-        };
+      # No need to use compression here. All contents are already compressed
+      pkgs.runCommand "nixos-kexec-tarball" { } ''
+        mkdir contents
+        cd contents
+        cp ${config.system.build.netbootRamdisk}/initrd ./initrd
+        cp ${config.system.build.kernel}/${config.system.boot.loader.kernelFile} ./kernel
+        cp ${config.system.build.kexecScript} ./kexec-boot
+        mkdir -p $(dirname "$out/${config.image.filePath}")
+        tar --sort=name --mtime='@1' --owner=0 --group=0 --numeric-owner -c . \
+          -f $out/${config.image.filePath}
+      '';
 
     boot.loader.timeout = 10;
 
