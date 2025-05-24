@@ -61,6 +61,8 @@ self: super: with self; {
 
   acunetix = callPackage ../development/python-modules/acunetix { };
 
+  acvl-utils = callPackage ../development/python-modules/acvl-utils { };
+
   adafruit-board-toolkit = callPackage ../development/python-modules/adafruit-board-toolkit { };
 
   adafruit-io = callPackage ../development/python-modules/adafruit-io { };
@@ -4318,6 +4320,10 @@ self: super: with self; {
   dynalite-devices = callPackage ../development/python-modules/dynalite-devices { };
 
   dynalite-panel = callPackage ../development/python-modules/dynalite-panel { };
+
+  dynamic-network-architectures =
+    callPackage ../development/python-modules/dynamic-network-architectures
+      { };
 
   dynd = callPackage ../development/python-modules/dynd { };
 
@@ -10064,6 +10070,8 @@ self: super: with self; {
   nmapthon2 = callPackage ../development/python-modules/nmapthon2 { };
 
   nnpdf = toPythonModule (pkgs.nnpdf.override { python3 = python; });
+
+  nnunetv2 = callPackage ../development/python-modules/nnunetv2 { };
 
   nocasedict = callPackage ../development/python-modules/nocasedict { };
 
