@@ -10,7 +10,7 @@ let
     expected = lib.sort lib.lessThan y;
   };
 
-  /*
+  /**
     Try to convert an elaborated system back to a simple string. If not possible,
     return null. So we have the property:
 
@@ -19,6 +19,13 @@ let
 
     NOTE: This property is not guaranteed when `sys` was elaborated by a different
           version of Nixpkgs.
+
+
+    # Inputs
+
+    `sys`
+
+    : 1\. Function argument
   */
   toLosslessStringMaybe =
     sys:
