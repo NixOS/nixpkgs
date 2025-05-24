@@ -74,6 +74,8 @@
 
   obs-tuna = qt6Packages.callPackage ./obs-tuna { };
 
+  obs-urlsource = qt6Packages.callPackage ./obs-urlsource.nix { };
+
   obs-vaapi = callPackage ./obs-vaapi { };
 
   obs-vertical-canvas = qt6Packages.callPackage ./obs-vertical-canvas.nix { };
