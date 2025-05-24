@@ -13579,8 +13579,6 @@ self: super: with self; {
 
   pypytools = callPackage ../development/python-modules/pypytools { };
 
-  pyqldb = callPackage ../development/python-modules/pyqldb { };
-
   pyqrcode = callPackage ../development/python-modules/pyqrcode { };
 
   pyqt-builder = callPackage ../development/python-modules/pyqt-builder { };
