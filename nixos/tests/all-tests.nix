@@ -727,6 +727,7 @@ in
   libvirtd = handleTest ./libvirtd.nix { };
   lidarr = handleTest ./lidarr.nix { };
   lightdm = handleTest ./lightdm.nix { };
+  lightdm-sway = runTest ./lightdm-sway.nix;
   lighttpd = runTest ./lighttpd.nix;
   livekit = runTest ./networking/livekit.nix;
   limesurvey = handleTest ./limesurvey.nix { };
