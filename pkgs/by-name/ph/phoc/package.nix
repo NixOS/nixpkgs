@@ -19,7 +19,7 @@
   wayland,
   libdrm,
   libxkbcommon,
-  wlroots_0_17,
+  wlroots_0_18,
   xorg,
   directoryListingUpdater,
   nixosTests,
@@ -29,7 +29,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "phoc";
-  version = "0.44.1";
+  version = "0.47.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Phosh";
     repo = "phoc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Whke7wTRp5NaRauiiQZLjs0pSD1uAyr0aAhlK5e1+Hw=";
+    hash = "sha256-CNTMuu7sZNY+pnAIHty6VxDGBWnmzu6WJiE4/SrtiaI=";
   };
 
   nativeBuildInputs = [
@@ -68,12 +68,28 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [ "-Dembed-wlroots=disabled" ];
 
-  # Patch wlroots to remove a check which crashes Phosh.
-  # This patch can be found within the phoc source tree.
-  wlroots = wlroots_0_17.overrideAttrs (old: {
+  # Apply vendored patches for wlroots
+
+  wlroots = wlroots_0_18.overrideAttrs (old: {
     patches = (old.patches or [ ]) ++ [
       (stdenvNoCC.mkDerivation {
         name = "0001-Revert-layer-shell-error-on-0-dimension-without-anch.patch";
+        inherit (finalAttrs) src;
+        preferLocalBuild = true;
+        allowSubstitutes = false;
+        installPhase = "cp subprojects/packagefiles/wlroots/$name $out";
+      })
+
+      (stdenvNoCC.mkDerivation {
+        name = "0001-seat-Don-t-forget-to-destroy-touch-points-on-touch-u.patch";
+        inherit (finalAttrs) src;
+        preferLocalBuild = true;
+        allowSubstitutes = false;
+        installPhase = "cp subprojects/packagefiles/wlroots/$name $out";
+      })
+
+      (stdenvNoCC.mkDerivation {
+        name = "0001-xwm-Handle-NET_WM_WINDOW_OPACITY.patch";
         inherit (finalAttrs) src;
         preferLocalBuild = true;
         allowSubstitutes = false;
