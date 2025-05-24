@@ -9,7 +9,7 @@
 }:
 mkHyprlandPlugin hyprland rec {
   pluginName = "hyprsplit";
-  version = "0.48.1-unstable-2025-05-03";
+  version = "0.49.0";
 
   src = fetchFromGitHub {
     owner = "shezdy";
