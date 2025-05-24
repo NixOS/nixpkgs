@@ -19,8 +19,7 @@ permissions: {}
 jobs:
   check:
     name: nixpkgs-vet
-    # This needs to be x86_64-linux, because we depend on the tooling being pre-built in the GitHub releases.
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04-arm
     # This should take 1 minute at most, but let's be generous. The default of 6 hours is definitely too long.
     timeout-minutes: 10
     steps:
@@ -44,25 +43,12 @@ jobs:
 
       - uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
 
-      - name: Fetching the pinned tool
-        # Update the pinned version using ci/nixpkgs-vet/update-pinned-tool.sh
-        run: |
-          # The pinned version of the tooling to use.
-          toolVersion=$(<untrusted/ci/nixpkgs-vet/pinned-version.txt)
-
-          # Fetch the x86_64-linux-specific release artifact containing the gzipped NAR of the pre-built tool.
-          toolPath=$(curl -sSfL https://github.com/NixOS/nixpkgs-vet/releases/download/"$toolVersion"/x86_64-linux.nar.gz \
-            | gzip -cd | nix-store --import | tail -1)
-
-          # Adds a result symlink as a GC root.
-          nix-store --realise "$toolPath" --add-root result
-
       - name: Running nixpkgs-vet
         env:
           # Force terminal colors to be enabled. The library that `nixpkgs-vet` uses respects https://bixense.com/clicolors/
           CLICOLOR_FORCE: 1
         run: |
-          if result/bin/nixpkgs-vet --base trusted untrusted; then
+          if nix-build untrusted/ci -A nixpkgs-vet --arg base "./trusted" --arg head "./untrusted"; then
             exit 0
           else
             exitCode=$?
