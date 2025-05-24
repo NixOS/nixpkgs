@@ -123,6 +123,9 @@ stdenv.mkDerivation rec {
     ))
   ];
 
+  # 23k objects, >4h on a normal build slot
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = {
     homepage = "https://www.paraview.org";
     description = "3D Data analysis and visualization application";
