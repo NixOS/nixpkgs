@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc13Stdenv,
   openblas,
   blas,
   lapack,
@@ -15,6 +15,10 @@
   unstableGitUpdater,
   writeShellScript,
 }:
+
+let
+  stdenv = gcc13Stdenv;
+in
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 stdenv.mkDerivation (finalAttrs: {
@@ -46,6 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
   ];
+
+  dontCheckForBrokenSymlinks = true;
 
   preConfigure = ''
     cmakeFlagsArray+=(
