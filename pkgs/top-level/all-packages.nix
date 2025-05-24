@@ -274,6 +274,8 @@ with pkgs;
         ''
       );
 
+  alacritty-graphics = callPackage ../by-name/al/alacritty/package.nix { withGraphics = true; };
+
   # addDriverRunpath is the preferred package name, as this enables
   # many more scenarios than just opengl now.
   aocd = with python3Packages; toPythonApplication aocd;
