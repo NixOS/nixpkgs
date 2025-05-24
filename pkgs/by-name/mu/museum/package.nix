@@ -38,6 +38,7 @@ buildGoModule rec {
     cp -R configurations \
       migrations \
       mail-templates \
+      web-templates \
       $out/share/museum
   '';
 
