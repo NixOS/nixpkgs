@@ -9,6 +9,7 @@
   bison,
   bc,
   opensnitch,
+  removeReferencesTo,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,6 +28,7 @@ stdenv.mkDerivation rec {
     elfutils
     flex
     libllvm
+    removeReferencesTo
   ];
 
   # We set -fno-stack-protector here to work around a clang regression.
@@ -43,9 +45,14 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
+
     for file in opensnitch*.o; do
       install -Dm644 "$file" "$out/etc/opensnitchd/$file"
     done
+
+    # reduces closure size significantly (fixes https://github.com/NixOS/nixpkgs/issues/391351)
+    find "$out" -type f -exec remove-references-to -t ${kernel.dev}/lib/modules/${kernel.modDirVersion}/ '{}' +
+
     runHook postInstall
   '';
 
