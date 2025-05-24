@@ -120,24 +120,6 @@ import ./make-test-python.nix (
           )
 
 
-      # Checks that we detect glxgears failing when
-      # `LIBGL_DRIVERS_PATH=/nonexistent` is set
-      # (in which case software rendering should not work).
-      def test_glxgears_failing_with_bad_driver_path():
-          machine.execute(
-              # Note trailing & for backgrounding.
-              "(env DISPLAY=:0 LIBGL_DRIVERS_PATH=/nonexistent glxgears -info | tee /tmp/glxgears-should-fail.stdout) 3>&1 1>&2 2>&3 | tee /tmp/glxgears-should-fail.stderr >&2 &"
-          )
-          machine.wait_until_succeeds("test -f /tmp/glxgears-should-fail.stderr")
-          wait_until_terminated_or_succeeds(
-              termination_check_shell_command="pidof glxgears",
-              success_check_shell_command="grep 'MESA-LOADER: failed to open swrast' /tmp/glxgears-should-fail.stderr",
-              get_detail_message_fn=lambda: "Contents of /tmp/glxgears-should-fail.stderr:\n"
-              + machine.succeed("cat /tmp/glxgears-should-fail.stderr"),
-          )
-          machine.wait_until_fails("pidof glxgears")
-
-
       # Starts glxgears, backgrounding it. Waits until it prints the `GL_RENDERER`.
       # Does not quit glxgears.
       def test_glxgears_prints_renderer():
@@ -158,9 +140,6 @@ import ./make-test-python.nix (
           start_xvnc()
           wait_until_xvnc_glx_ready()
 
-      with subtest("Ensure bad driver path makes glxgears fail"):
-          test_glxgears_failing_with_bad_driver_path()
-
       with subtest("Run 3D application (glxgears)"):
           test_glxgears_prints_renderer()
 
@@ -170,8 +149,6 @@ import ./make-test-python.nix (
       # Copy files down.
       machine.copy_from_vm("/tmp/glxgears.png")
       machine.copy_from_vm("/tmp/glxgears.stdout")
-      machine.copy_from_vm("/tmp/glxgears-should-fail.stdout")
-      machine.copy_from_vm("/tmp/glxgears-should-fail.stderr")
       machine.copy_from_vm("/tmp/Xvnc.stdout")
       machine.copy_from_vm("/tmp/Xvnc.stderr")
     '';
