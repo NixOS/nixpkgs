@@ -1,0 +1,31 @@
+commit c3d5a489b0ce789bbcc09b2a16c7bd0c8fed1ef8 (HEAD -> fix-include-utility, origin/fix-include-utility)
+Author: Petr Hodina <phodina@luxonis.com>
+Date:   Wed May 21 09:24:39 2025 +0200
+
+    fix include directory for tests
+
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 8f49cee33..f1707b1e4 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -21,6 +21,8 @@ set(test_env
+ 
+ include(CMakeParseArguments)
+ 
++include_directories(${CMAKE_SOURCE_DIR}/src)
++
+ # Function for adding new tests
+ function(dai_add_test test_name test_src)
+     # Parse arguments
+diff --git a/tests/src/onhost_tests/naming_test.cpp b/tests/src/onhost_tests/naming_test.cpp
+index d4ab66f33..3b9ac2d03 100644
+--- a/tests/src/onhost_tests/naming_test.cpp
++++ b/tests/src/onhost_tests/naming_test.cpp
+@@ -1,6 +1,6 @@
+ #include <catch2/catch_all.hpp>
+ 
+-#include "../../src/utility/EepromDataParser.hpp"
++#include <utility/EepromDataParser.hpp>
+ 
+ struct ProductDevice {
+     std::string oldProductName, productName, deviceName;

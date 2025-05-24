@@ -1,0 +1,24 @@
+From 84f39be26d955fc7b15efdbe5237fc073f8dd5d9 Mon Sep 17 00:00:00 2001
+From: Petr Hodina <phodina@luxonis.com>
+Date: Wed, 21 May 2025 08:40:06 +0200
+Subject: [PATCH 4/4] use external nanorpc
+
+
+diff --git a/src/device/DeviceBase.cpp b/src/device/DeviceBase.cpp
+index db40d77b1..6fd52b375 100644
+--- a/src/device/DeviceBase.cpp
++++ b/src/device/DeviceBase.cpp
+@@ -40,8 +40,8 @@
+ // libraries
+ #include "XLink/XLink.h"
+ #include "XLink/XLinkTime.h"
+-#include "nanorpc/core/client.h"
+-#include "nanorpc/packer/nlohmann_msgpack.h"
++#include <nanorpc/core/client.h>
++#include <nanorpc/packer/nlohmann_msgpack.h>
+ #include "spdlog/details/os.h"
+ #include "spdlog/fmt/bin_to_hex.h"
+ #include "spdlog/fmt/chrono.h"
+-- 
+2.47.2
+

@@ -1,0 +1,157 @@
+From c77f3fca85479b6ffb1b9fba9ef9d805adfcadbf Mon Sep 17 00:00:00 2001
+From: Petr Hodina <phodina@luxonis.com>
+Date: Tue, 20 May 2025 19:09:54 +0200
+Subject: [PATCH 3/4] Allow offline build
+
+
+diff --git a/cmake/DepthaiDeviceKbDownloader.cmake b/cmake/DepthaiDeviceKbDownloader.cmake
+index 2cd26d535..a22d02d78 100644
+--- a/cmake/DepthaiDeviceKbDownloader.cmake
++++ b/cmake/DepthaiDeviceKbDownloader.cmake
+@@ -126,19 +126,19 @@ function(DepthaiDeviceDownloader)
+     endif()
+ 
+     # Download firmware package
+-    message(STATUS "Downloading and checking ${device_type}-fwp.tar.xz")
+-    message(STATUS "Download URL: ${_download_directory_url}/${device_type}-fwp-${_version_commit_identifier}.tar.xz")
+-    DownloadAndChecksum(
+-        "${_download_directory_url}/${device_type}-fwp-${_version_commit_identifier}.tar.xz" # File
+-        "${_download_directory_url}/${device_type}-fwp-${_version_commit_identifier}.tar.xz.sha256" # File checksum
+-        "${folder}/${device_type}-fwp-${_version_commit_identifier}.tar.xz"
+-        status
+-    )
+-    if(${status})
+-        message(STATUS "\nCouldn't download ${device_type}-fwp.tar.xz\n")
+-        PrintErrorMessage(${status})
+-        message(FATAL_ERROR "Aborting.\n")
+-    endif()
++    #    message(STATUS "Downloading and checking ${device_type}-fwp.tar.xz")
++    #    message(STATUS "Download URL: ${_download_directory_url}/${device_type}-fwp-${_version_commit_identifier}.tar.xz")
++    #    DownloadAndChecksum(
++    #        "${_download_directory_url}/${device_type}-fwp-${_version_commit_identifier}.tar.xz" # File
++    #        "${_download_directory_url}/${device_type}-fwp-${_version_commit_identifier}.tar.xz.sha256" # File checksum
++    #        "${folder}/${device_type}-fwp-${_version_commit_identifier}.tar.xz"
++    #        status
++    #    )
++    #    if(${status})
++    #        message(STATUS "\nCouldn't download ${device_type}-fwp.tar.xz\n")
++    #        PrintErrorMessage(${status})
++    #        message(FATAL_ERROR "Aborting.\n")
++    #    endif()
+     # add depthai-device-kb-fwp.tar.xz to list
+     list(APPEND "${output_list_var}" "${folder}/${device_type}-fwp-${_version_commit_identifier}.tar.xz")
+ 
+diff --git a/cmake/DepthaiDownloader.cmake b/cmake/DepthaiDownloader.cmake
+index 66d555e5c..77563d279 100644
+--- a/cmake/DepthaiDownloader.cmake
++++ b/cmake/DepthaiDownloader.cmake
+@@ -142,18 +142,18 @@ function(DepthaiDownload)
+ 
+ 
+     # Download depthai-device firmware package
+-    message(STATUS "Downloading and checking depthai-device-fwp.tar.xz")
+-    DownloadAndChecksum(
+-        "${_download_directory_url}/depthai-device-fwp-${_version_commit_identifier}.tar.xz" # File
+-        "${_download_directory_url}/depthai-device-fwp-${_version_commit_identifier}.tar.xz.sha256" # File checksum
+-        "${folder}/depthai-device-fwp-${_version_commit_identifier}.tar.xz"
+-        status
+-    )
+-    if(${status})
+-        message(STATUS "\nCouldn't download depthai-device-fwp.tar.xz\n")
+-        PrintErrorMessage(${status})
+-        message(FATAL_ERROR "Aborting.\n")
+-    endif()
++    #    message(STATUS "Downloading and checking depthai-device-fwp.tar.xz")
++    #    DownloadAndChecksum(
++    #        "${_download_directory_url}/depthai-device-fwp-${_version_commit_identifier}.tar.xz" # File
++    #        "${_download_directory_url}/depthai-device-fwp-${_version_commit_identifier}.tar.xz.sha256" # File checksum
++    #        "${folder}/depthai-device-fwp-${_version_commit_identifier}.tar.xz"
++    #        status
++    #    )
++    #    if(${status})
++    #        message(STATUS "\nCouldn't download depthai-device-fwp.tar.xz\n")
++    #        PrintErrorMessage(${status})
++    #        message(FATAL_ERROR "Aborting.\n")
++    #    endif()
+     # add depthai-device-fwp.tar.xz to list
+     list(APPEND "${output_list_var}" "${folder}/depthai-device-fwp-${_version_commit_identifier}.tar.xz")
+     
+@@ -252,4 +252,4 @@ function(DepthaiLocal patch_only patch_only_on_off output_dir output_list_var pa
+ 
+     set("${output_list_var}" "${_resource_list}" PARENT_SCOPE)
+ 
+-endfunction()
+\ No newline at end of file
++endfunction()
+diff --git a/cmake/DepthaiVisualizerDownloader.cmake b/cmake/DepthaiVisualizerDownloader.cmake
+index b8300968a..e747bb729 100644
+--- a/cmake/DepthaiVisualizerDownloader.cmake
++++ b/cmake/DepthaiVisualizerDownloader.cmake
+@@ -37,18 +37,18 @@ function(DepthaiVisualizerDownloader)
+ 
+ 
+     # Download firmware package
+-    message(STATUS "Downloading and checking ${device_type}-fwp.tar.xz")
+-    DownloadAndChecksum(
+-        "${_download_directory_url}/${visualizer_hash}/depthai-visualizer-${visualizer_hash}.tar.xz" # File
+-        "${_download_directory_url}/${visualizer_hash}/depthai-visualizer-${visualizer_hash}.tar.xz.sha256" # File checksum
+-        "${folder}/depthai-visualizer-${visualizer_hash}.tar.xz"
+-        status
+-    )
+-    if(${status})
+-        message(STATUS "\nCouldn't download depthai-visualizer static files\n")
+-        PrintErrorMessage(${status})
+-        message(FATAL_ERROR "Aborting.\n")
+-    endif()
++    #message(STATUS "Downloading and checking ${device_type}-fwp.tar.xz")
++    #DownloadAndChecksum(
++    #    "${_download_directory_url}/${visualizer_hash}/depthai-visualizer-${visualizer_hash}.tar.xz" # File
++    #    "${_download_directory_url}/${visualizer_hash}/depthai-visualizer-${visualizer_hash}.tar.xz.sha256" # File checksum
++    #    "${folder}/depthai-visualizer-${visualizer_hash}.tar.xz"
++    #    status
++    #)
++    #if(${status})
++    #    message(STATUS "\nCouldn't download depthai-visualizer static files\n")
++    #    PrintErrorMessage(${status})
++    #    message(FATAL_ERROR "Aborting.\n")
++    #endif()
+     # add depthai-device-kb-fwp.tar.xz to list
+     list(APPEND "${output_list_var}" "${folder}/depthai-visualizer-${visualizer_hash}.tar.xz")
+ 
+diff --git a/cmake/depthaiDependencies.cmake b/cmake/depthaiDependencies.cmake
+index e9b82e262..b224fdd29 100644
+--- a/cmake/depthaiDependencies.cmake
++++ b/cmake/depthaiDependencies.cmake
+@@ -174,19 +174,20 @@ endif()
+ if(DEPTHAI_XLINK_LOCAL AND (NOT CONFIG_MODE))
+     add_subdirectory("${DEPTHAI_XLINK_LOCAL}" ${CMAKE_CURRENT_BINARY_DIR}/XLink)
+ else()
+-    FetchContent_Declare(
+-        XLink
+-        GIT_REPOSITORY https://github.com/luxonis/XLink.git
+-        GIT_TAG        87785828fabdb1718760bb0a044405d5bbfbb3a2
+-    )
+ 
+-    FetchContent_MakeAvailable(
+-        XLink
+-    )
++#    FetchContent_Declare(
++#        XLink
++#        GIT_REPOSITORY https://github.com/luxonis/XLink.git
++#        GIT_TAG        87785828fabdb1718760bb0a044405d5bbfbb3a2
++#    )
++#
++#    FetchContent_MakeAvailable(
++#        XLink
++#    )
+ endif()
+ set(BUILD_SHARED_LIBS "${_BUILD_SHARED_LIBS_SAVED}")
+ unset(_BUILD_SHARED_LIBS_SAVED)
+-list(APPEND targets_to_export XLinkPublic)
++#list(APPEND targets_to_export XLinkPublic)
+ 
+ # OpenCV 4 - (optional)
+ message("DEPTHAI_OPENCV_SUPPORT: ${DEPTHAI_OPENCV_SUPPORT}")
+-- 
+2.47.2
+

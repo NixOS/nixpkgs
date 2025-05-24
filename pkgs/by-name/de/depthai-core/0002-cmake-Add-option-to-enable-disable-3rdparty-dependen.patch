@@ -1,0 +1,53 @@
+From af22d8f1177b5baaa01df32dcf7b68dd9fb43a66 Mon Sep 17 00:00:00 2001
+From: Petr Hodina <phodina@luxonis.com>
+Date: Tue, 20 May 2025 17:05:29 +0200
+Subject: [PATCH 2/4] cmake: Add option to enable/disable 3rdparty dependencies
+
+- Introduced `DEPTHAI_3RDPARTY_ENABLE` CMake option to control inclusion of 3rdparty components.
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f03209fa2..42613b722 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -162,9 +162,12 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
+ 
+ 
+ # TODO Remove shared naming
++if(DEPTHAI_3RDPARTY_ENABLE)
+ set(DEPTHAI_SHARED_3RDPARTY_INCLUDE
+     ${CMAKE_CURRENT_LIST_DIR}/include/3rdparty/
+ )
++endif()
++
+ # Add depthai-bootloader-shared
+ include(${CMAKE_CURRENT_LIST_DIR}/shared/depthai-bootloader-shared.cmake)
+ 
+diff --git a/cmake/depthaiDependencies.cmake b/cmake/depthaiDependencies.cmake
+index 7abbfa57c..e9b82e262 100644
+--- a/cmake/depthaiDependencies.cmake
++++ b/cmake/depthaiDependencies.cmake
+@@ -106,7 +106,9 @@ endif()
+ 
+ if(DEPTHAI_ENABLE_REMOTE_CONNECTION)
+     get_filename_component(PARENT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/.. ABSOLUTE)
++    if(DEPTHAI_3RDPARTY_ENABLE)
+     add_subdirectory("${PARENT_DIRECTORY}/3rdparty/foxglove/ws-protocol/cpp/foxglove-websocket" foxglove-websocket)
++    endif()
+ endif()
+ 
+ # Add threads (c++)
+diff --git a/cmake/depthaiOptions.cmake b/cmake/depthaiOptions.cmake
+index 61999df16..072fb96b1 100644
+--- a/cmake/depthaiOptions.cmake
++++ b/cmake/depthaiOptions.cmake
+@@ -14,6 +14,7 @@ endif()
+ # ---------- Core Feature Toggles (private) -------------
+ option(DEPTHAI_ENABLE_LIBUSB "Enable usage of libusb and interaction with USB devices" ON)
+ option(DEPTHAI_FETCH_ARTIFACTS "Enable fetching artifacts from remote repository" ON)
++option(DEPTHAI_3RDPARTY_ENABLE "Build 3rdparty dependencies" ON)
+ option(DEPTHAI_ENABLE_APRIL_TAG "Enable AprilTag node (not available for Windows)" ON)
+ option(DEPTHAI_ENABLE_PROTOBUF "Enable Protobuf support" ON)
+ option(DEPTHAI_ENABLE_CURL "Enable CURL support" ${DEPTHAI_DEFAULT_CURL_SUPPORT})
+-- 
+2.47.2
+

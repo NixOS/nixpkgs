@@ -1,0 +1,24 @@
+diff --git a/cmake/Depthai/DepthaiDeviceRVC4Config.cmake b/cmake/Depthai/DepthaiDeviceRVC4Config.cmake
+index 34f75e42c..b720b2403 100644
+--- a/cmake/Depthai/DepthaiDeviceRVC4Config.cmake
++++ b/cmake/Depthai/DepthaiDeviceRVC4Config.cmake
+@@ -4,4 +4,4 @@ set(DEPTHAI_DEVICE_RVC4_MATURITY "snapshot")
+ 
+ # "version if applicable"
+ # set(DEPTHAI_DEVICE_RVC4_VERSION "0.0.1+93f7b75a885aa32f44c5e9f53b74470c49d2b1af")
+-set(DEPTHAI_DEVICE_RVC4_VERSION "0.0.1+8cef4c0d8e3434775e4cd1d537acf671858eaab6")
++set(DEPTHAI_DEVICE_RVC4_VERSION "0.0.1+0a931e4f3a72bb57abc18b89f17658d6a3610eb0")
+diff --git a/cmake/Depthai/DepthaiDeviceSideConfig.cmake b/cmake/Depthai/DepthaiDeviceSideConfig.cmake
+index 4f24d95d0..0b0f1a185 100644
+--- a/cmake/Depthai/DepthaiDeviceSideConfig.cmake
++++ b/cmake/Depthai/DepthaiDeviceSideConfig.cmake
+@@ -2,7 +2,7 @@
+ set(DEPTHAI_DEVICE_SIDE_MATURITY "snapshot")
+ 
+ # "full commit hash of device side binary"
+-set(DEPTHAI_DEVICE_SIDE_COMMIT "c5fce2452ec689a72d5eb22181a967c7e66a02bd")
++set(DEPTHAI_DEVICE_SIDE_COMMIT "98dbf353593ebf4c61679acf3365596d6eca7a01")
+ 
+ # "version if applicable"
+ set(DEPTHAI_DEVICE_SIDE_VERSION "")
+
