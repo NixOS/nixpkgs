@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  godot_4_3,
+  godot_4,
   nix-update-script,
 }:
 
@@ -16,7 +16,7 @@ let
     presets.${stdenv.hostPlatform.system}
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  godot = godot_4_3;
+  godot = godot_4;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pixelorama";
