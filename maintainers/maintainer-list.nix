@@ -3059,6 +3059,12 @@
     github = "benhiemer";
     githubId = 16649926;
   };
+  benjajaja = {
+    name = "Benjamin Große";
+    email = "ste3ls@gmail.com";
+    github = "benjajaja";
+    githubId = 310215;
+  };
   benjaminedwardwebb = {
     name = "Ben Webb";
     email = "benjaminedwardwebb@gmail.com";
@@ -18716,6 +18722,12 @@
     githubId = 13933258;
     name = "Philipp Rintz";
     matrix = "@philipp:srv.icu";
+  };
+  p0lyw0lf = {
+    email = "p0lyw0lf@protonmail.com";
+    name = "PolyWolf";
+    github = "p0lyw0lf";
+    githubId = 31190026;
   };
   p3psi = {
     name = "Elliot Boo";
