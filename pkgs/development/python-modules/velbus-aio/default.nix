@@ -50,7 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to support the Velbus home automation system";
     homepage = "https://github.com/Cereal2nd/velbus-aio";
-    changelog = "https://github.com/Cereal2nd/velbus-aio/releases/tag/${version}";
+    changelog = "https://github.com/Cereal2nd/velbus-aio/releases/tag/${src.tag}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "cdncheck";
-  version = "1.1.18";
+  version = "1.1.19";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
