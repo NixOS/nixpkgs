@@ -22,19 +22,19 @@ let
   opentelemetry-proto = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-proto";
-    rev = "v1.3.2";
-    hash = "sha256-bkVqPSVhyMHrmFvlI9DTAloZzDozj3sefIEwfW7OVrI=";
+    rev = "v1.5.0";
+    hash = "sha256-PkG0npG3nKQwq6SxWdIliIQ/wrYAOG9qVb26IeVkBfc=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "opentelemetry-cpp";
-  version = "1.16.1";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-cpp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-31zwIZ4oehhfn+oCyg8VQTurPOmdgp72plH1Pf/9UKQ=";
+    hash = "sha256-ibLuHIg01wGYPhLRz+LVYA34WaWzlUlNtg7DSONLe9g=";
   };
 
   patches = [
@@ -49,8 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs =
-    [ abseil-cpp ]
-    ++ lib.optionals enableGrpc [
+    lib.optionals enableGrpc [
       protobuf
       grpc
     ]
@@ -88,8 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    substituteInPlace $out/lib/cmake/opentelemetry-cpp/opentelemetry-cpp-target.cmake \
-      --replace-fail "\''${_IMPORT_PREFIX}/include" "$dev/include"
+    substituteInPlace $out/lib/cmake/opentelemetry-cpp/opentelemetry-cpp*-target.cmake \
+      --replace-quiet "\''${_IMPORT_PREFIX}/include" "$dev/include"
   '';
 
   passthru.updateScript = nix-update-script { };
