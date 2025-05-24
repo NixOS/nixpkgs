@@ -6,8 +6,6 @@
   gitMinimal,
   portaudio,
   playwright-driver,
-  symlinkJoin,
-  nltk-data,
   pythonOlder,
   pythonAtLeast,
   setuptools-scm,
@@ -122,13 +120,10 @@
 }:
 
 let
-  aider-nltk-data = symlinkJoin {
-    name = "aider-nltk-data";
-    paths = [
-      nltk-data.punkt-tab
-      nltk-data.stopwords
-    ];
-  };
+  aider-nltk-data = nltk.dataDir (d: [
+    d.punkt-tab
+    d.stopwords
+  ]);
 
   version = "0.83.1";
   aider-chat = buildPythonPackage {
