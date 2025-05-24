@@ -137,14 +137,14 @@ if __name__ == "__main__":
     before_stats = Path(before_dir) / "stats"
     after_stats = Path(after_dir) / "stats"
 
-    # This may happen if the pull request target does not include PR#399720 yet.
+    # This may happen if the pull request target does not include #399720 or #404731 yet.
     if not before_stats.exists():
-        print("⚠️  Skipping comparison: stats directory is missing in the target commit.")
+        print("⚠️  Skipping comparison: stats directory is missing in the target commit. Re-run the evaluation.")
         exit(0)
 
-    # This should never happen, but we're exiting gracefully anyways
+    # This may happen if the pull request commit does not include #399720 or #404731 yet.
     if not after_stats.exists():
-        print("⚠️  Skipping comparison: stats directory missing in current PR evaluation.")
+        print("⚠️  Skipping comparison: stats directory missing in current PR evaluation. Please make sure to rebase your PR after #404731.")
         exit(0)
 
     before_metrics = load_all_metrics(before_stats)
