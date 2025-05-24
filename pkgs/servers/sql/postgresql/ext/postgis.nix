@@ -104,8 +104,10 @@ postgresqlBuildExtension (finalAttrs: {
   configureFlags = [
     "--with-pgconfig=${postgresql.pg_config}/bin/pg_config"
     "--with-gdalconfig=${gdal}/bin/gdal-config"
-    "--with-jsondir=${json_c.dev}"
+    #"--with-jsondir=${json_c.dev}"
     "--disable-extension-upgrades-install"
+    "--with-xml2config=${lib.getExe' (lib.getDev libxml2) "xml2-config"}"
+    "--without-json"
   ] ++ lib.optional withSfcgal "--with-sfcgal=${sfcgal}/bin/sfcgal-config";
 
   makeFlags = [
