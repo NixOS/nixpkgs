@@ -19437,6 +19437,12 @@
     githubId = 7536431;
     name = "Jonas Fierlings";
   };
+  pilz = {
+    name = "Pilz";
+    email = "nix@pilz.foo";
+    github = "pilz0";
+    githubId = 48645439;
+  };
   pimeys = {
     email = "julius@nauk.io";
     github = "pimeys";
