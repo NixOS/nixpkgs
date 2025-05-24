@@ -7,6 +7,7 @@
 let
   cfg = config.services.prowlarr;
   servarr = import ./settings-options.nix { inherit lib pkgs; };
+  isCustomDataDir = cfg.dataDir != "/var/lib/prowlarr";
 in
 {
   options = {
@@ -16,7 +17,12 @@ in
       dataDir = lib.mkOption {
         type = lib.types.str;
         default = "/var/lib/prowlarr";
-        description = "The directory where Prowlarr stores its data files.";
+        description = ''
+          The directory where Prowlarr stores its data files.
+
+          Note: A bind mount will be used to mount the directory at the expected location
+          if a different value than `/var/lib/prowlarr` is used.
+        '';
       };
 
       package = lib.mkPackageOption pkgs "prowlarr" { };
@@ -30,22 +36,6 @@ in
       settings = servarr.mkServarrSettingsOptions "prowlarr" 9696;
 
       environmentFiles = servarr.mkServarrEnvironmentFiles "prowlarr";
-
-      user = lib.mkOption {
-        type = lib.types.str;
-        default = "prowlarr";
-        description = ''
-          User account under which Prowlarr runs.
-        '';
-      };
-
-      group = lib.mkOption {
-        type = lib.types.str;
-        default = "prowlarr";
-        description = ''
-          Group under which Prowlarr runs.
-        '';
-      };
     };
   };
 
@@ -55,38 +45,36 @@ in
         description = "Prowlarr";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        environment = servarr.mkServarrSettingsEnvVars "PROWLARR" cfg.settings;
+        environment = servarr.mkServarrSettingsEnvVars "PROWLARR" cfg.settings // {
+          HOME = "/var/empty";
+        };
 
         serviceConfig = {
           Type = "simple";
-          User = cfg.user;
-          Group = cfg.group;
+          DynamicUser = true;
+          StateDirectory = "prowlarr";
           EnvironmentFile = cfg.environmentFiles;
-          ExecStart = "${lib.getExe cfg.package} -nobrowser -data='${cfg.dataDir}'";
+          ExecStart = "${lib.getExe cfg.package} -nobrowser -data=/var/lib/prowlarr";
           Restart = "on-failure";
         };
       };
 
-      tmpfiles.settings."10-prowlarr".${cfg.dataDir}.d = {
-        inherit (cfg) user group;
+      tmpfiles.settings."10-prowlarr".${cfg.dataDir}.d = lib.mkIf isCustomDataDir {
+        user = "root";
+        group = "root";
         mode = "0700";
+      };
+
+      mounts = lib.optional isCustomDataDir {
+        what = cfg.dataDir;
+        where = "/var/lib/private/prowlarr";
+        options = "bind";
+        wantedBy = [ "local-fs.target" ];
       };
     };
 
     networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.settings.server.port ];
-    };
-
-    users.users = lib.mkIf (cfg.user == "prowlarr") {
-      prowlarr = {
-        isSystemUser = true;
-        group = cfg.group;
-        home = cfg.dataDir;
-      };
-    };
-
-    users.groups = lib.mkIf (cfg.group == "prowlarr") {
-      prowlarr = { };
     };
   };
 }
