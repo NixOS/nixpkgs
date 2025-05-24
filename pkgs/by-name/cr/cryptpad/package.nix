@@ -120,6 +120,8 @@ buildNpmPackage {
     # Move to install directory manually.
     npm run install:components
     mv www/components "$out_cryptpad/www/"
+    # and fix absolute symlink to /build...
+    ln -Tfs ../../src/tweetnacl "$out_cryptpad/www/components/tweetnacl"
 
     # install OnlyOffice (install-onlyoffice.sh without network)
     mkdir -p "$out_cryptpad/www/common/onlyoffice/dist"
