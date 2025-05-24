@@ -158,8 +158,7 @@ in
     (fmapPackages (
       otherAttrs: pname: systemNv: _: rawPackage: [
         {
-          package.name.${pname} =
-            if otherAttrs ? name then otherAttrs.name else lib.mkDefault pname;
+          package.name.${pname} = if otherAttrs ? name then otherAttrs.name else lib.mkDefault pname;
         }
       ]
     ))
@@ -238,7 +237,9 @@ in
                   shortName = licenseOf pname otherAttrs;
                   defined = distribution_path != null && otherAttrs.license_path or null != null;
                   proposal = "${config.base_url}${distribution_path}${otherAttrs.license_path}";
-                  needsOverride = assert builtins.isString shortName; proposal != config.license.compiled.${shortName}.url or null;
+                  needsOverride =
+                    assert builtins.isString shortName;
+                    proposal != config.license.compiled.${shortName}.url or null;
                 in
                 lib.optionals (defined && needsOverride) [
                   {

@@ -53,9 +53,8 @@ let
     name: version: selectQuantized db.package.version.${name} version == null
   ) pinPackages;
 
-  formatPins = pins: lib.concatStringsSep ", " (
-    lib.mapAttrsToList (name: version: "${name}:${version}") pins
-  );
+  formatPins =
+    pins: lib.concatStringsSep ", " (lib.mapAttrsToList (name: version: "${name}:${version}") pins);
   formatUnrecognized = kind: errors: ''
     Requested ${kind} are not in `_cuda.db`: ${formatPins errors}
   '';
