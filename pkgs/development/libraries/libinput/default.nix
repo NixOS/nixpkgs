@@ -24,6 +24,7 @@
   python3,
   nixosTests,
   wayland-scanner,
+  udevCheckHook,
 }:
 
 let
@@ -74,6 +75,7 @@ stdenv.mkDerivation rec {
       pkg-config
       meson
       ninja
+      udevCheckHook
     ]
     ++ lib.optionals documentationSupport [
       doxygen
@@ -121,6 +123,8 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = testsSupport && stdenv.hostPlatform == stdenv.buildPlatform;
+
+  doInstallCheck = true;
 
   postPatch = ''
     patchShebangs \

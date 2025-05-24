@@ -30,6 +30,8 @@ stdenv.mkDerivation {
     "makedpfw"
   ];
 
+  doInstallCheck = true;
+
   installPhase = ''
     runHook preInstall
     install -Dm755 em100 $out/bin/em100

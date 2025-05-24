@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation {
@@ -25,6 +26,12 @@ stdenv.mkDerivation {
       hash = "sha256-ubdCwXFVljvOCzYrWVJgU6PY1j6Ei6aaclhXaGwZT2w=";
     })
   ];
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   installPhase = ''
     install -Dm755 m33-linux $out/bin/m33-linux

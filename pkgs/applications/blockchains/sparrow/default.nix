@@ -20,6 +20,7 @@
   imagemagick,
   gzip,
   gnupg,
+  udevCheckHook,
 }:
 
 let
@@ -214,6 +215,7 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
+    udevCheckHook
   ];
 
   desktopItems = [
@@ -269,6 +271,8 @@ stdenvNoCC.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Modern desktop Bitcoin wallet application supporting most hardware wallets and built on common standards such as PSBT, with an emphasis on transparency and usability";

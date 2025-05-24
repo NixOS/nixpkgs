@@ -14,6 +14,7 @@
   pixman,
   pkg-config,
   udev,
+  udevCheckHook,
   utilmacros,
   xorgserver,
 }:
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -48,6 +50,8 @@ stdenv.mkDerivation rec {
     xorgproto
     xorgserver
   ];
+
+  doInstallCheck = true;
 
   configureFlags = [
     "--with-xorg-module-dir=${placeholder "out"}/lib/xorg/modules"

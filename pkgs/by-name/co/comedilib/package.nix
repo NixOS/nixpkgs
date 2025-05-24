@@ -11,6 +11,7 @@
   swig,
   perl,
   python3,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xsl
     python3
     perl
+    udevCheckHook
   ];
 
   preConfigure = ''
@@ -44,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-udev-hotplug=${placeholder "out"}/lib"
     "--sysconfdir=${placeholder "out"}/etc"
   ];
+
+  doInstallCheck = true;
 
   outputs = [
     "out"

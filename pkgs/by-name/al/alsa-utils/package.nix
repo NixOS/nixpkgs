@@ -16,6 +16,7 @@
   pipewire,
   withPipewireLib ? true,
   symlinkJoin,
+  udevCheckHook,
 }:
 
 let
@@ -40,6 +41,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     gettext
     makeWrapper
+    udevCheckHook
   ];
   buildInputs = [
     alsa-lib
@@ -66,6 +68,8 @@ stdenv.mkDerivation rec {
     }"
     wrapProgram $out/bin/aplay --set-default ALSA_PLUGIN_DIR ${plugin-dir}
   '';
+
+  doInstallCheck = true;
 
   passthru.updateScript = directoryListingUpdater {
     url = "https://www.alsa-project.org/files/pub/utils/";

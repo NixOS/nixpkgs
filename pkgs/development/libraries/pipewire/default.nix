@@ -244,6 +244,7 @@ stdenv.mkDerivation (finalAttrs: {
   FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
   doCheck = true;
+  doInstallCheck = true;
 
   postUnpack = ''
     patchShebangs ${finalAttrs.src.name}/doc/*.py

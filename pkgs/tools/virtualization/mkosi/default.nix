@@ -14,6 +14,7 @@
   btrfs-progs,
   libseccomp,
   replaceVars,
+  udevCheckHook,
 
   # Python packages
   setuptools,
@@ -110,6 +111,7 @@ buildPythonApplication rec {
     setuptools
     setuptools-scm
     wheel
+    udevCheckHook
   ];
 
   dependencies = deps;

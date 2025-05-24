@@ -59,6 +59,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional avahiSupport avahi
     ++ lib.optional stdenv.hostPlatform.isLinux libaio;
 
+  doInstallCheck = true;
+
   cmakeFlags =
     [
       "-DUDEV_RULES_INSTALL_DIR=${placeholder "out"}/lib/udev/rules.d"

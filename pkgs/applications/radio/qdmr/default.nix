@@ -62,6 +62,8 @@ stdenv.mkDerivation rec {
     cp ${src}/dist/99-qdmr.rules $out/etc/udev/rules.d/
   '';
 
+  doInstallCheck = true;
+
   meta = {
     description = "GUI application and command line tool for programming DMR radios";
     homepage = "https://dm3mat.darc.de/qdmr/";

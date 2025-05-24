@@ -14,6 +14,7 @@
   seatd,
   wayland,
   glibc,
+  udevCheckHook,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "asusctl";
@@ -61,6 +62,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -85,6 +87,7 @@ rustPlatform.buildRustPackage rec {
 
   # upstream has minimal tests, so don't rebuild twice
   doCheck = false;
+  doInstallCheck = true;
 
   postInstall = ''
     make prefix=$out install-data

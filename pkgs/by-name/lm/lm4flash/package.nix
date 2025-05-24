@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
+  doInstallCheck = true;
+
   postInstall = ''
     install -Dm644 "${stellaris-udev-rules}" "$out/etc/udev/rules.d/61.stellpad.rules"
   '';

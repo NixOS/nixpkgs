@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  udevCheckHook,
 }:
 
 ## Usage
@@ -19,6 +20,12 @@ stdenv.mkDerivation rec {
   };
 
   dontBuild = true;
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   installPhase = ''
     runHook preInstall

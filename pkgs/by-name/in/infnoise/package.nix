@@ -5,6 +5,7 @@
   fetchpatch,
   libftdi,
   testers,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,6 +32,12 @@ stdenv.mkDerivation (finalAttrs: {
   GIT_DATE = "2023-02-14";
 
   buildInputs = [ libftdi ];
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   makefile = "Makefile.linux";
   makeFlags = [ "PREFIX=$(out)" ];

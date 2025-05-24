@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   hidapi,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation {
@@ -17,7 +18,10 @@ stdenv.mkDerivation {
     hash = "sha256-vwjeWjIXQiFJ0o/wgEBrKP3hQi8Xa/azVS1IE/Q/MyY=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    udevCheckHook
+  ];
   buildInputs = [ hidapi ];
 
   postPatch = ''
@@ -30,6 +34,8 @@ stdenv.mkDerivation {
   preInstall = ''
     mkdir -p $out/bin $out/lib/udev/rules.d
   '';
+
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Command line utlities for programming PCsensor and Scythe foot switches";

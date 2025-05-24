@@ -33,6 +33,8 @@ stdenv.mkDerivation {
       --replace 'MODE="0666"' 'MODE="0660", GROUP="plugdev", TAG+="uaccess"'
   '';
 
+  doInstallCheck = true;
+
   postInstall = ''
     install -D udev/90-cc-debugger.rules $out/lib/udev/rules.d/90-cc-debugger.rules
   '';

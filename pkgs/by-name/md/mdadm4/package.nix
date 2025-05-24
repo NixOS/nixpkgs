@@ -7,6 +7,7 @@
   groff,
   system-sendmail,
   udev,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -57,7 +58,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ udev ];
 
-  nativeBuildInputs = [ groff ];
+  nativeBuildInputs = [
+    groff
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   postPatch = ''
     sed -e 's@/lib/udev@''${out}/lib/udev@' \

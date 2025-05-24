@@ -9,6 +9,7 @@
   copyDesktopItems,
   makeDesktopItem,
   nix-update-script,
+  udevCheckHook,
 }:
 
 python3Packages.buildPythonPackage rec {
@@ -41,6 +42,7 @@ python3Packages.buildPythonPackage rec {
     copyDesktopItems
     wrapGAppsHook4
     gobject-introspection
+    udevCheckHook
   ];
 
   postPatch = ''

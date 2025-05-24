@@ -8,6 +8,7 @@
   libcbor,
   openssl,
   udev,
+  udevCheckHook,
   zlib,
   withPcsclite ? true,
   pcsclite,
@@ -26,6 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    udevCheckHook
   ];
 
   buildInputs =
@@ -44,6 +46,8 @@ stdenv.mkDerivation rec {
     "dev"
     "man"
   ];
+
+  doInstallCheck = true;
 
   cmakeFlags =
     [

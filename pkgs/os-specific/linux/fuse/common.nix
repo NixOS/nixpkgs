@@ -14,6 +14,7 @@
   pkg-config,
   autoreconfHook,
   runtimeShell,
+  udevCheckHook,
 }:
 
 let
@@ -60,6 +61,7 @@ stdenv.mkDerivation rec {
         meson
         ninja
         pkg-config
+        udevCheckHook
       ]
     else
       [
@@ -111,6 +113,7 @@ stdenv.mkDerivation rec {
 
   # v2: no tests, v3: all tests get skipped in a sandbox
   doCheck = false;
+  doInstallCheck = true;
 
   # Drop `/etc/fuse.conf` because it is a no-op config and
   # would conflict with our fuse module.

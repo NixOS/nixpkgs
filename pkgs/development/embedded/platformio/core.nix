@@ -8,6 +8,7 @@
   spdx-license-list-data,
   replaceVars,
   writableTmpDirAsHomeHook,
+  udevCheckHook,
 }:
 
 with python3Packages;
@@ -57,6 +58,7 @@ buildPythonApplication rec {
   nativeBuildInputs = [
     installShellFiles
     setuptools
+    udevCheckHook
   ];
 
   pythonRelaxDeps = true;

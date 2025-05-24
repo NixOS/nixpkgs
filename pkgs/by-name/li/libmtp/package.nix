@@ -58,6 +58,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doInstallCheck = true;
+
   meta = with lib; {
     homepage = "https://github.com/libmtp/libmtp";
     description = "Implementation of Microsoft's Media Transfer Protocol";

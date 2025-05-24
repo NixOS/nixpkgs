@@ -6,6 +6,7 @@
   util-linux,
   bash,
   replaceVars,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,8 +20,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-6gy0ymecMgEHXbwp/nXHlrUEeDFnmFXWZZPlzP292g4=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    udevCheckHook
+  ];
   buildInputs = [ util-linux ];
+
+  doInstallCheck = true;
 
   # * Remove broken install rules (they ignore $PREFIX) for stuff we don't need
   #   anyway (it's distro specific stuff).
