@@ -25,11 +25,11 @@ in
 # we need to use stdenv.mkDerivation in order not to pollute the libv4l’s closure with Qt
 stdenv.mkDerivation rec {
   pname = "v4l-utils";
-  version = "1.24.1";
+  version = "1.30.0";
 
   src = fetchurl {
-    url = "https://linuxtv.org/downloads/${pname}/${pname}-${version}.tar.bz2";
-    hash = "sha256-y7f+imMH9c5TOgXN7XC7k8O6BjlaubbQB+tTt12AX1s=";
+    url = "https://linuxtv.org/downloads/${pname}/${pname}-${version}.tar.xz";
+    hash = "sha256-uEV8hckt09kZXfatGBWTDfWplwBJSouCHFzclRY2kwY=";
   };
 
   outputs = [ "out" ] ++ lib.optional withUtils "lib" ++ [ "dev" ];
