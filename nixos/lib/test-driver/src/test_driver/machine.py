@@ -1230,9 +1230,17 @@ class Machine:
             retry(check_x, timeout)
 
     def get_window_names(self) -> list[str]:
-        return self.succeed(
+        command = (
             r"xwininfo -root -tree | sed 's/.*0x[0-9a-f]* \"\([^\"]*\)\".*/\1/; t; d'"
-        ).splitlines()
+        )
+        output = ""
+        with self.nested(f"trying: {command}"):
+            (status, out) = self.execute(command)
+            if status != 0:
+                self.log(f"command failed (exit code {status}), output: {out}")
+            else:
+                output += out
+        return output.splitlines()
 
     def wait_for_window(self, regexp: str, timeout: int = 900) -> None:
         """
