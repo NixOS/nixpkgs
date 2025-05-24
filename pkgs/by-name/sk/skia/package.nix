@@ -30,13 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
   # Version from https://skia.googlesource.com/skia/+/refs/heads/main/RELEASE_NOTES.md
   # or https://chromiumdash.appspot.com/releases
   # plus date of the tip of the corresponding chrome/m$version branch
-  version = "129-unstable-2024-09-18";
+  version = "134-unstable-2025-04-25";
 
   src = fetchgit {
     url = "https://skia.googlesource.com/skia.git";
     # Tip of the chrome/m$version branch
-    rev = "dda581d538cb6532cda841444e7b4ceacde01ec9";
-    hash = "sha256-NZiZFsABebugszpYsBusVlTYnYda+xDIpT05cZ8Jals=";
+    rev = "1b5d2171f74cb88d877d818c207daf6041d5d0a6";
+    hash = "sha256-B/m8PK2mAgk46Xv8T0WM1eb4On1wUtEGFB8tVTyWuT8=";
   };
 
   postPatch = ''
