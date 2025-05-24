@@ -6189,7 +6189,6 @@ with pkgs;
     );
 
   # prolog
-  yosys = callPackage ../development/compilers/yosys { };
   yosys-bluespec = callPackage ../development/compilers/yosys/plugins/bluespec.nix { };
   yosys-ghdl = callPackage ../development/compilers/yosys/plugins/ghdl.nix { };
   yosys-synlig = callPackage ../development/compilers/yosys/plugins/synlig.nix { };
