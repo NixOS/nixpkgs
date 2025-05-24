@@ -181,6 +181,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       cafkafk
       foo-dogsquared
+      hpfr
     ];
     platforms = platforms.linux;
   };
