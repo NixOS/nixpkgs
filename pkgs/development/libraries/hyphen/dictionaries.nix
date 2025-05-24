@@ -39,8 +39,15 @@ let
         install -dm755 "$out/share/hyphen"
         install -m644 "hyph_${dictFileName}.dic" "$out/share/hyphen"
         # docs
-        install -dm755 "$out/share/doc/"
-        install -m644 "README_hyph_${readmeFileName}.txt" "$out/share/doc/${pname}.txt"
+        ${
+          if readmeFileName != "" then
+            ''
+              install -dm755 "$out/share/doc/"
+              install -m644 "README_hyph_${readmeFileName}.txt" "$out/share/doc/${pname}.txt"
+            ''
+          else
+            ""
+        }
         runHook postInstall
       '';
     };
@@ -99,5 +106,15 @@ rec {
     shortDescription = "German (Switzerland)";
     dictFileName = "de_CH";
     readmeFileName = "de";
+  };
+
+  # Russian
+  ru_RU = ru-ru;
+  ru-ru = mkDictFromLibreofficeGit {
+    subdir = "ru_RU";
+    shortName = "ru-ru";
+    shortDescription = "Russian (Russia)";
+    dictFileName = "ru_RU";
+    readmeFileName = "";
   };
 }
