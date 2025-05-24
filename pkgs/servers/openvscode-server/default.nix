@@ -206,16 +206,27 @@ stdenv.mkDerivation (finalAttrs: {
         fi
         exit 0
       ' \;
+    ''
+    + ''
+      runHook postConfigure
     '';
 
   buildPhase = ''
+    runHook preBuild
+
     npm run gulp vscode-reh-web-${vsBuildTarget}-min
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -R -T ../vscode-reh-web-${vsBuildTarget} $out
     ln -sf ${nodejs}/bin/node $out
+
+    runHook postInstall
   '';
 
   passthru.tests = {
