@@ -36,7 +36,6 @@
   pkgs,
   stdenv,
   callPackage,
-  hostPlatform,
   _cuda,
 }:
 let
@@ -73,7 +72,7 @@ let
     solveGreedy' (
       args
       // {
-        hostPlatform = hostPlatform // {
+        hostPlatform = stdenv.hostPlatform // {
           isJetson = flags.isJetsonBuild;
         };
       }
