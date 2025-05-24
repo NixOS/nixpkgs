@@ -299,7 +299,8 @@ in
           ];
           SystemCallArchitectures = "native";
           MemoryDenyWriteExecute = true;
-
+          AmbientCapabilities = "";
+          PrivateMounts = true;
           PrivateUsers = true;
           PrivateTmp = true;
           PrivateDevices = true;
@@ -313,6 +314,7 @@ in
           ProtectSystem = "strict";
           ProtectControlGroups = "strict";
           LockPersonality = true;
+          RemoveIPC = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           RestrictNamespaces = true;
