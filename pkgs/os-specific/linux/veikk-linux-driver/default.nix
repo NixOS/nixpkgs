@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "11mg74ds58jwvdmi3i7c4chxs6v9g09r9ll22pc2kbxjdnrp8zrn";
   };
 
+  patches = [ ./fix-6.12-build.patch ];
+
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   buildInputs = [ kernel ];
