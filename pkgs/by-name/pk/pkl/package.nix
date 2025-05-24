@@ -3,16 +3,32 @@
   lib,
   fetchFromGitHub,
   gradle,
-  temurin-bin-21,
+  openjdk,
   kotlin,
   nix-update-script,
   replaceVars,
   makeWrapper,
+  graalvmPackages,
+  buildNative ? true,
 }:
 let
-  jdk = temurin-bin-21;
+  jdk = openjdk;
+  sourceJdkVersion = "21";
+  targetJdkVersion = lib.versions.major jdk.version;
+  graalvmDir = graalvmPackages.graalvm-oracle_23;
   gradleOverlay = gradle.override { java = jdk; };
   kotlinOverlay = kotlin.override { jre = jdk; };
+  binaries = {
+    aarch64-darwin = "pkl-macos-aarch64";
+    aarch64-linux = "pkl-linux-aarch64";
+    x86_64-darwin = "pkl-macos-amd64";
+    x86_64-linux = "pkl-linux-amd64";
+    java = "jpkl";
+  };
+  inherit (stdenv.hostPlatform) system;
+  nativeBuild = (builtins.hasAttr system binaries) && buildNative;
+  binary = if nativeBuild then binaries.${system} else binaries.java;
+  binaryPath = "./pkl-cli/build/executable/" + binary;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pkl";
@@ -32,11 +48,33 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  patches = [
-    (replaceVars ./fix_kotlin_classpath.patch { gradle = gradle.unwrapped; })
-    ./disable_gradle_codegen_tests.patch
-    ./disable_bad_tests.patch
-  ];
+  patches =
+    [
+      (replaceVars ./fix_kotlin_classpath.patch { gradle = gradle.unwrapped; })
+      ./disable_gradle_codegen_tests.patch
+      ./disable_bad_tests.patch
+    ]
+    ++ (
+      if nativeBuild then
+        [
+          (replaceVars ./use_nix_graalvm_instead_of_download.patch { inherit graalvmDir; })
+        ]
+      else
+        [ ]
+    );
+
+  postPatch = ''
+    substituteInPlace buildSrc/build.gradle.kts \
+      --replace-fail "vendor = JvmVendorSpec.ADOPTIUM" "" \
+      --replace-fail "toolchainVersion = ${sourceJdkVersion}" \
+      "toolchainVersion = ${targetJdkVersion}"
+
+    substituteInPlace buildSrc/src/main/kotlin/pklJavaLibrary.gradle.kts \
+      --replace-fail "vendor = info.jdkVendor" ""
+
+    substituteInPlace buildSrc/src/main/kotlin/BuildInfo.kt \
+      --replace-fail "vendor.set(jdkVendor)" ""
+  '';
 
   nativeBuildInputs = [
     gradleOverlay
@@ -52,7 +90,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = !(stdenv.hostPlatform.isDarwin);
 
+  gradleCheckTask = if nativeBuild then "testNative" else "test";
+
+  gradleBuildTask = if nativeBuild then "assembleNative" else "assemble";
+
   gradleFlags = [
+    "-s"
     "-x"
     "spotlessCheck"
     "-DreleaseBuild=true"
@@ -77,9 +120,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p "$out/bin" "$out/opt/pkl"
-    cp ./pkl-cli/build/executable/jpkl "$out/opt/pkl/jpkl.jar"
-
-    makeWrapper ${lib.getExe jdk} $out/bin/pkl --add-flags "-jar $out/opt/pkl/jpkl.jar"
+    if [ ${builtins.toString nativeBuild} ]; then
+      install -Dm755 ${binaryPath} "$out/bin/pkl"
+    else
+      cp ${binaryPath} "$out/opt/pkl/jpkl.jar"
+      makeWrapper ${lib.getExe jdk} $out/bin/pkl --add-flags "-jar $out/opt/pkl/jpkl.jar"
+    fi
 
     runHook postInstall
   '';
