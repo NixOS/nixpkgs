@@ -116,7 +116,7 @@ let
       (
         ''
           if ${lib.optionalString (!expectFailure) "!"} {
-            hardening-check --nocfprotection \
+            hardening-check --nocfprotection --nobranchprotection \
               ${lib.optionalString ignoreBindNow "--nobindnow"} \
               ${lib.optionalString ignoreFortify "--nofortify"} \
               ${lib.optionalString ignorePie "--nopie"} \
