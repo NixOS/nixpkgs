@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "ldk-node-go";
-  version = "v0.0.0-20250212151221-c0e4ece4712d";
+  version = "v0.0.0-20250521134242-ca26307fa2d8";
 
   src = fetchFromGitHub {
     owner = "getAlby";
     repo = "ldk-node-go";
-    rev = version;
-    hash = "sha256-vjXpvjPZlxOiTrcEbQW8YTnpQx7XbmPqYda+8UYyUvE=";
+    rev = "v0.0.0-20250521134242-ca26307fa2d8";
+    hash = lib.fakeHash;
   };
 
   vendorHash = null;
@@ -32,7 +32,7 @@ buildGoModule rec {
   meta = {
     description = "Experimental Go bindings for LDK-node";
     homepage = "https://github.com/getAlby/ldk-node-go";
-    license = lib.licenses.unfree; # https://github.com/getAlby/ldk-node-go/issues/27
+    license = lib.licenses.asl20;
     platforms = lib.platforms.x86_64 ++ lib.platforms.aarch64;
     maintainers = with lib.maintainers; [ bleetube ];
   };

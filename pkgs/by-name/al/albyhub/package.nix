@@ -10,6 +10,7 @@
   stdenv,
   makeWrapper,
   callPackage,
+  go,
 }:
 
 let
@@ -17,24 +18,20 @@ let
   ldkNodeGo = callPackage ./ldk-node-go {
     inherit ldkNode;
   };
-
-  # These are set to removed in 1.16 https://github.com/getAlby/hub/issues/667
-  glalbyGo = callPackage ./glalby-go { };
-  breezSdkGo = callPackage ./breez-sdk-go { };
 in
 
 buildGoModule rec {
   pname = "albyhub";
-  version = "1.14.3";
+  version = "v1.17.1";
 
   src = fetchFromGitHub {
     owner = "getAlby";
     repo = "hub";
-    rev = "v${version}";
-    hash = "sha256-fvmN2moxXIcd1meQq/zSGKOVEV07arM0Ct8hjOa1mD4=";
+    rev = "v1.17.1";
+    hash = "sha256-ZDTCA3nMJEA8I7PeSgwQAe+wU8Wk0GaH3ItQLzPhOBQ=";
   };
 
-  vendorHash = "sha256-Kc8R4SIb+XiWS01sHvISzL0b5tM2t0cJgae1ZnoNsIo=";
+  vendorHash = lib.fakeHash;
 
   nativeBuildInputs = [
     fixup-yarn-lock
@@ -45,14 +42,12 @@ buildGoModule rec {
 
   buildInputs = [
     ldkNodeGo
-    glalbyGo
-    breezSdkGo
     (lib.getLib stdenv.cc.cc)
   ];
 
   frontendYarnOfflineCache = fetchYarnDeps {
     yarnLock = src + "/frontend/yarn.lock";
-    hash = "sha256-QFhIpJkd426c3GaDSpI36CxlNGVKQoSN8wDgAVh9Ee4=";
+    hash = lib.fakeHash;
   };
 
   preBuild = ''
@@ -79,19 +74,11 @@ buildGoModule rec {
 
   postInstall = ''
     mv $out/bin/http $out/bin/albyhub
-    patchelf --set-rpath "${
-      lib.makeLibraryPath [
-        glalbyGo
-        breezSdkGo
-      ]
-    }" $out/bin/albyhub
   '';
 
   postFixup = ''
     wrapProgram $out/bin/albyhub --prefix LD_LIBRARY_PATH : ${
       lib.makeLibraryPath [
-        glalbyGo
-        breezSdkGo
         ldkNode
         ldkNodeGo
         (lib.getLib stdenv.cc.cc)
