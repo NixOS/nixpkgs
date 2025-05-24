@@ -12,6 +12,7 @@ import ./make-test-python.nix (
     nodes.machine = {
       services.syncthing = {
         enable = true;
+        apiKeyFile = "${pkgs.writeText "syncthing-init-test-apiKeyFile" "theNewCustomApiKey"}";
         settings.devices.testDevice = {
           id = testId;
         };
@@ -30,6 +31,7 @@ import ./make-test-python.nix (
       assert "testFolder" in config
       assert "${testId}" in config
       assert "guiUser" in config
+      assert "theNewCustomApiKey" in config
     '';
   }
 )
