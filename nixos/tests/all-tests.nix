@@ -291,11 +291,12 @@ in
   calibre-web = runTest ./calibre-web.nix;
   calibre-server = import ./calibre-server.nix { inherit pkgs runTest; };
   canaille = runTest ./canaille.nix;
-  castopod = runTest ./castopod.nix;
   cassandra = runTest {
     imports = [ ./cassandra.nix ];
     _module.args.getPackage = pkgs: pkgs.cassandra;
   };
+  castopod = runTest ./castopod.nix;
+  catnap = runTest ./catnap.nix;
   centrifugo = runTest ./centrifugo.nix;
   ceph-multi-node = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./ceph-multi-node.nix;
   ceph-single-node = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./ceph-single-node.nix;
