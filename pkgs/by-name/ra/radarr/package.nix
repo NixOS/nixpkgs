@@ -21,42 +21,41 @@
   applyPatches,
 }:
 let
-  version = "4.0.14.2939";
+  version = "5.22.4.9896";
   # The dotnet8 compatibility patches also change `yarn.lock`, so we must pass
   # the already patched lockfile to `fetchYarnDeps`.
   src = applyPatches {
     src = fetchFromGitHub {
-      owner = "Sonarr";
-      repo = "Sonarr";
+      owner = "Radarr";
+      repo = "Radarr";
       tag = "v${version}";
-      hash = "sha256-gtEDrAosI0Kyk712Kf8QDuloUBq9AArKdukX/PKAo8M=";
+      hash = "sha256-0JueDbkGokQLXzdNozepUoqBUCtHPdeObXh7wwstuXw=";
     };
     patches =
       [
         ./nuget-config.patch
       ]
-      ++ lib.optionals (lib.versionOlder version "5.0") [
-        # See https://github.com/Sonarr/Sonarr/issues/7442 and
-        # https://github.com/Sonarr/Sonarr/pull/7443.
-        # Unfortunately, the .NET 8 upgrade was only merged into the v5 branch,
+      ++ lib.optionals (lib.versionOlder version "6.0") [
+        # See https://github.com/Radarr/Radarr/pull/11064
+        # Unfortunately, the .NET 8 upgrade will be merged into the v6 branch,
         # and it may take some time for that to become stable.
-        # However, the patches cleanly apply to v4 as well.
+        # However, the patches cleanly apply to v5 as well.
         (fetchpatch {
           name = "dotnet8-compatibility";
-          url = "https://github.com/Sonarr/Sonarr/commit/518f1799dca96a7481004ceefe39be465de3d72d.patch";
-          hash = "sha256-e+/rKZrTf6lWq9bmCAwnZrbEPRkqVmI7qNavpLjfpUE=";
+          url = "https://github.com/Radarr/Radarr/commit/2799a475eee8b5ee7b2465f4bc41fd343456c9d8.patch";
+          hash = "sha256-voAKxDoKyWtkdwi5i4TlsQW8t2XzloRPF1PqcKOxgpw=";
         })
         (fetchpatch {
           name = "dotnet8-darwin-compatibility";
-          url = "https://github.com/Sonarr/Sonarr/commit/1a5fa185d11d2548f45fefb8a0facd3731a946d0.patch";
-          hash = "sha256-6Lzo4ph1StA05+B1xYhWH+BBegLd6DxHiEiaRxGXn7k=";
+          url = "https://github.com/Radarr/Radarr/commit/539f318884106c6faccfe1701fe06865d293cf95.patch";
+          hash = "sha256-SAMUHqlSj8FPq20wY8NWbRytVZXTPtMXMfM3CoM8kSA=";
         })
       ];
   };
   rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system;
 in
 buildDotnetModule {
-  pname = "sonarr";
+  pname = "radarr";
   inherit version src;
 
   strictDeps = true;
@@ -69,7 +68,7 @@ buildDotnetModule {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-YkBFvv+g4p22HdM/GQAHVGGW1yLYGWpNtRq7+QJiLIw=";
+    hash = "sha256-lxOmheBRqVI39I6fOoXWpGhb1fseHC8Mo/KhbRRYHI8=";
   };
 
   ffprobe = lib.optionalDrvAttr withFFmpeg (lib.getExe' servarr-ffmpeg "ffprobe");
@@ -85,16 +84,12 @@ buildDotnetModule {
   '';
   postInstall =
     lib.optionalString withFFmpeg ''
-      rm -- "$out/lib/sonarr/ffprobe"
-      ln -s -- "$ffprobe" "$out/lib/sonarr/ffprobe"
+      rm -- "$out/lib/radarr/ffprobe"
+      ln -s -- "$ffprobe" "$out/lib/radarr/ffprobe"
     ''
     + ''
-      cp -a -- _output/UI "$out/lib/sonarr/UI"
+      cp -a -- _output/UI "$out/lib/radarr/UI"
     '';
-  # Add an alias for compatibility with Sonarr v3 package.
-  postFixup = ''
-    ln -s -- Sonarr "$out/bin/NzbDrone"
-  '';
 
   nugetDeps = ./deps.json;
 
@@ -109,28 +104,28 @@ buildDotnetModule {
 
   __structuredAttrs = true; # for Copyright property that contains spaces
 
-  executables = [ "Sonarr" ];
+  executables = [ "Radarr" ];
 
   projectFile = [
-    "src/NzbDrone.Console/Sonarr.Console.csproj"
-    "src/NzbDrone.Mono/Sonarr.Mono.csproj"
+    "src/NzbDrone.Console/Radarr.Console.csproj"
+    "src/NzbDrone.Mono/Radarr.Mono.csproj"
   ];
 
   testProjectFile = [
-    "src/NzbDrone.Api.Test/Sonarr.Api.Test.csproj"
-    "src/NzbDrone.Common.Test/Sonarr.Common.Test.csproj"
-    "src/NzbDrone.Core.Test/Sonarr.Core.Test.csproj"
-    "src/NzbDrone.Host.Test/Sonarr.Host.Test.csproj"
-    "src/NzbDrone.Libraries.Test/Sonarr.Libraries.Test.csproj"
-    "src/NzbDrone.Mono.Test/Sonarr.Mono.Test.csproj"
-    "src/NzbDrone.Test.Common/Sonarr.Test.Common.csproj"
+    "src/NzbDrone.Api.Test/Radarr.Api.Test.csproj"
+    "src/NzbDrone.Common.Test/Radarr.Common.Test.csproj"
+    "src/NzbDrone.Core.Test/Radarr.Core.Test.csproj"
+    "src/NzbDrone.Host.Test/Radarr.Host.Test.csproj"
+    "src/NzbDrone.Libraries.Test/Radarr.Libraries.Test.csproj"
+    "src/NzbDrone.Mono.Test/Radarr.Mono.Test.csproj"
+    "src/NzbDrone.Test.Common/Radarr.Test.Common.csproj"
   ];
 
   dotnetFlags = [
     "--property:TargetFramework=net8.0"
     "--property:EnableAnalyzers=false"
     # Override defaults in src/Directory.Build.props that use current time.
-    "--property:Copyright=Copyright 2014-2025 sonarr.tv (GNU General Public v3)"
+    "--property:Copyright=Copyright 2014-2025 radarr.video (GNU General Public v3)"
     "--property:AssemblyVersion=${version}"
     "--property:AssemblyConfiguration=main"
     "--property:RuntimeIdentifier=${rid}"
@@ -156,17 +151,19 @@ buildDotnetModule {
           "FullyQualifiedName!=NzbDrone.Mono.Test.EnvironmentInfo.ReleaseFileVersionAdapterFixture.should_get_version_info"
 
           # fails to start test dummy because it cannot locate .NET runtime for some reason
-          "FullyQualifiedName!=NzbDrone.Common.Test.ProcessProviderFixture.Should_be_able_to_start_process"
+          "FullyQualifiedName!=NzbDrone.Common.Test.ProcessProviderFixture.should_be_able_to_start_process"
+          "FullyQualifiedName!=NzbDrone.Common.Test.ProcessProviderFixture.exists_should_find_running_process"
           "FullyQualifiedName!=NzbDrone.Common.Test.ProcessProviderFixture.kill_all_should_kill_all_process_with_name"
 
           # makes real HTTP requests
           "FullyQualifiedName!~NzbDrone.Core.Test.TvTests.RefreshEpisodeServiceFixture"
           "FullyQualifiedName!~NzbDrone.Core.Test.UpdateTests.UpdatePackageProviderFixture"
+
+          "FullyQualifiedName!=NzbDrone.Common.Test.ServiceFactoryFixture.event_handlers_should_be_unique"
         ]
         ++ lib.optionals stdenvNoCC.buildPlatform.isDarwin [
           # fails on macOS
           "FullyQualifiedName!~NzbDrone.Core.Test.Http.HttpProxySettingsProviderFixture"
-          "FullyQualifiedName!=NzbDrone.Common.Test.ServiceFactoryFixture.event_handlers_should_be_unique"
         ]
       )
     }"
@@ -174,10 +171,10 @@ buildDotnetModule {
 
   passthru = {
     tests = {
-      inherit (nixosTests) sonarr;
+      inherit (nixosTests) radarr;
     };
 
-    updateScript = writers.writePython3 "sonarr-updater" {
+    updateScript = writers.writePython3 "radarr-updater" {
       libraries = with python3Packages; [ requests ];
       makeWrapperArgs = [
         "--prefix"
@@ -192,16 +189,15 @@ buildDotnetModule {
   };
 
   meta = {
-    description = "Smart PVR for newsgroup and bittorrent users";
-    homepage = "https://sonarr.tv";
+    description = "Usenet/BitTorrent movie downloader";
+    homepage = "https://radarr.video";
+    changelog = "https://github.com/Radarr/Radarr/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      fadenb
+      edwtjo
       purcell
-      tie
-      niklaskorz
     ];
-    mainProgram = "Sonarr";
+    mainProgram = "Radarr";
     # platforms inherited from dotnet-sdk.
   };
 }
