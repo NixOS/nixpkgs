@@ -1,3 +1,9 @@
-{ mkDerivation }:
+{
+  lib,
+  mkDerivation,
+}:
 
-mkDerivation { path = "sbin/mknod"; }
+mkDerivation {
+  path = "sbin/mknod";
+  meta.platforms = lib.platforms.unix;
+}

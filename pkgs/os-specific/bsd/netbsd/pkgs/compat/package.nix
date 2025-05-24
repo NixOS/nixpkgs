@@ -137,5 +137,7 @@ mkDerivation (
       "external/bsd/flex"
       "sys/sys"
     ];
+
+    meta.platforms = lib.platforms.unix;
   }
 )
