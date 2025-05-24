@@ -1,0 +1,13 @@
+diff --git a/src/engine/client/client.cpp.orig b/src/engine/client/client.cpp
+index ab70b3c..9e25353 100644
+--- a/src/engine/client/client.cpp.orig
++++ b/src/engine/client/client.cpp
+@@ -4933,7 +4933,7 @@ int main(int argc, const char **argv)
+ 		{
+ 			char aError[2048];
+ 			snprintf(aError, sizeof(aError), "Failed to load config from '%s'.", s_aConfigDomains[ConfigDomain].m_aConfigPath);
+-			log_error("client", aError);
++			log_error("client", "%s", aError);
+ 			pClient->ShowMessageBox("Config File Error", aError);
+ 			PerformAllCleanup();
+ 			return -1;
