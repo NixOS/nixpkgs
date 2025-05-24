@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/uint23/sxwm";
     changelog = "https://github.com/uint23/sxwm/releases/tag/v${finalAttrs.version}";
     description = "Minimal. Fast. Configurable. Tiling Window Manager for X11";
