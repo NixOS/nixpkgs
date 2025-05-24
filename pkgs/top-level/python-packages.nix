@@ -14588,6 +14588,8 @@ self: super: with self; {
 
   pyvips = callPackage ../development/python-modules/pyvips { inherit (pkgs) vips glib; };
 
+  pyvirtualcam = callPackage ../development/python-modules/pyvirtualcam { };
+
   pyvirtualdisplay = callPackage ../development/python-modules/pyvirtualdisplay { };
 
   pyvis = callPackage ../development/python-modules/pyvis { };
