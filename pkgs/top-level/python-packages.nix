@@ -11114,6 +11114,8 @@ self: super: with self; {
 
   phe = callPackage ../development/python-modules/phe { };
 
+  phidget22 = callPackage ../development/python-modules/phidget22 { };
+
   phik = callPackage ../development/python-modules/phik { };
 
   philipstv = callPackage ../development/python-modules/philipstv { };
@@ -19371,6 +19373,8 @@ self: super: with self; {
   yeelight = callPackage ../development/python-modules/yeelight { };
 
   yfinance = callPackage ../development/python-modules/yfinance { };
+
+  yoctopuce = callPackage ../development/python-modules/yoctopuce { };
 
   yoda = toPythonModule (pkgs.yoda.override { python3 = python; });
 
