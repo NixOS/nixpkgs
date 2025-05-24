@@ -41,6 +41,12 @@ stdenv.mkDerivation {
     hash = "sha256-3IP++tdiJUwXR6t5mf/MkPd524K/LYESNMkQ8vy10jo=";
   };
 
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -51,6 +57,9 @@ stdenv.mkDerivation {
   patches = [
     # https://github.com/mozilla/cubeb/pull/813
     ./0001-cmake-add-pkg-config-file-generation.patch
+
+    # https://github.com/mozilla/cubeb/pull/814
+    ./0001-cmake-don-t-hardcode-include-as-the-includedir.patch
   ];
 
   cmakeFlags = [
