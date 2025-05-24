@@ -1386,7 +1386,7 @@ in
   trezord = handleTest ./trezord.nix { };
   trickster = handleTest ./trickster.nix { };
   trilium-server = handleTestOn [ "x86_64-linux" ] ./trilium-server.nix { };
-  tsm-client-gui = handleTest ./tsm-client-gui.nix { };
+  tsm-client-gui = runTest ./tsm-client-gui.nix;
   ttyd = handleTest ./web-servers/ttyd.nix { };
   tt-rss = handleTest ./web-apps/tt-rss.nix { };
   txredisapi = handleTest ./txredisapi.nix { };
