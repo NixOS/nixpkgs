@@ -3248,6 +3248,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  contextfiles-nvim = buildVimPlugin {
+    pname = "contextfiles.nvim";
+    version = "2025-05-07";
+    src = fetchFromGitHub {
+      owner = "banjo";
+      repo = "contextfiles.nvim";
+      rev = "d9541105d60c708e2ec6641109f5f2a6179c2a80";
+      sha256 = "1n8nkpy53mqr0hn26lqzcxmp8l6r2873yrsqxrj5cpis0f52qc45";
+    };
+    meta.homepage = "https://github.com/banjo/contextfiles.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   copilot-cmp = buildVimPlugin {
     pname = "copilot-cmp";
     version = "2024-12-11";
