@@ -223,6 +223,7 @@ in
             "char-nvidia-uvm"
             # ROCm
             "char-drm"
+            "char-fb"
             "char-kfd"
           ];
           DevicePolicy = "closed";
