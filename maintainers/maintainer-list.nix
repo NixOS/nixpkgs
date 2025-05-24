@@ -3059,6 +3059,12 @@
     github = "benhiemer";
     githubId = 16649926;
   };
+  benjajaja = {
+    name = "Benjamin Große";
+    email = "ste3ls@gmail.com";
+    github = "benjajaja";
+    githubId = 310215;
+  };
   benjaminedwardwebb = {
     name = "Ben Webb";
     email = "benjaminedwardwebb@gmail.com";
