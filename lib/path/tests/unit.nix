@@ -30,7 +30,7 @@ let
       expected = /foo/bar;
     };
     testAppendExample4 = {
-      expr = (builtins.tryEval (append "/foo" "bar")).success;
+      expr = (builtins.tryEval (append { } "bar")).success;
       expected = false;
     };
     testAppendExample5 = {
@@ -323,6 +323,10 @@ let
     testSubpathComponentsExample3 = {
       expr = (builtins.tryEval (subpath.components "/foo")).success;
       expected = false;
+    };
+    testAppendString = {
+      expr = append "/puppy" "doggy";
+      expected = "/puppy/doggy";
     };
   };
 in

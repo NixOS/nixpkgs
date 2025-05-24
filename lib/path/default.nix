@@ -175,7 +175,7 @@ in
     Append a subpath string to a path.
 
     Like `path + ("/" + string)` but safer, because it errors instead of returning potentially surprising results.
-    More specifically, it checks that the first argument is a [path value type](https://nixos.org/manual/nix/stable/language/values.html#type-path"),
+    More specifically, it checks that the first argument is a [path value type](https://nixos.org/manual/nix/stable/language/values.html#type-path") or a string,
     and that the second argument is a [valid subpath string](#function-library-lib.path.subpath.isValid).
 
     Laws:
@@ -217,7 +217,7 @@ in
     => /foo/bar
 
     # first argument needs to be a path value type
-    append "/foo" "bar"
+    append 0 "bar"
     => <error>
 
     # second argument needs to be a valid subpath string
@@ -238,8 +238,12 @@ in
     path:
     # The subpath string to append
     subpath:
-    assert assertMsg (isPath path)
-      ''lib.path.append: The first argument is of type ${builtins.typeOf path}, but a path was expected'';
+    # Note: strings are paths in Nix:
+    # - `outPath` on derivations and Flake inputs is a string, not a path.
+    # - `builtins.path`, bizarrely, returns a string instead of a path (not
+    #   that the documentation makes this clear).
+    assert assertMsg (isPath path || isString path)
+      ''lib.path.append: The first argument is of type ${builtins.typeOf path}, but a path or string was expected'';
     assert assertMsg (isValid subpath) ''
       lib.path.append: Second argument is not a valid subpath string:
           ${subpathInvalidReason subpath}'';
