@@ -9505,6 +9505,17 @@ with pkgs;
     jvm = jre8;
   };
 
+  rocksdb_9_10 = rocksdb.overrideAttrs rec {
+    pname = "rocksdb";
+    version = "9.10.0";
+    src = fetchFromGitHub {
+      owner = "facebook";
+      repo = pname;
+      rev = "v${version}";
+      hash = "sha256-G+DlQwEUyd7JOCjS1Hg1cKWmA/qAiK8UpUIKcP+riGQ=";
+    };
+  };
+
   rocksdb_8_11 = rocksdb.overrideAttrs rec {
     pname = "rocksdb";
     version = "8.11.4";
