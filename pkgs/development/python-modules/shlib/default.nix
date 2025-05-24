@@ -38,7 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "shell library";
     homepage = "https://github.com/KenKundert/shlib";
-    changelog = "https://github.com/KenKundert/shlib/releases/tag/v${version}";
+    changelog = "https://github.com/KenKundert/shlib/releases/tag/${src.tag}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jpetrucciani ];
   };

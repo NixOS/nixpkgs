@@ -3752,6 +3752,8 @@ let
         };
       };
 
+      nhoizey.gremlins = callPackage ./nhoizey.gremlins { };
+
       nimlang.nimlang = callPackage ./nimlang.nimlang { };
 
       njpwerner.autodocstring = buildVscodeMarketplaceExtension {
