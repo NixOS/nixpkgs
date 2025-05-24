@@ -152,7 +152,7 @@ let
 
     paths = [
       nltk-data.punkt
-      nltk-data.averaged_perceptron_tagger
+      nltk-data.averaged-perceptron-tagger
     ];
   };
 in
