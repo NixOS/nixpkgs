@@ -36,12 +36,11 @@ jobs:
           ref: ${{ steps.get-merge-commit.outputs.mergedSha }}
           # Fetches the merge commit and its parents
           fetch-depth: 2
+          path: untrusted
 
       - name: Checking out target branch
         run: |
-          target=$(mktemp -d)
-          git worktree add "$target" "$(git rev-parse HEAD^1)"
-          echo "target=$target" >> "$GITHUB_ENV"
+          git -C untrusted worktree add ../trusted ${{ steps.get-merge-commit.outputs.targetSha }}
 
       - uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
 
@@ -49,7 +48,7 @@ jobs:
         # Update the pinned version using ci/nixpkgs-vet/update-pinned-tool.sh
         run: |
           # The pinned version of the tooling to use.
-          toolVersion=$(<ci/nixpkgs-vet/pinned-version.txt)
+          toolVersion=$(<untrusted/ci/nixpkgs-vet/pinned-version.txt)
 
           # Fetch the x86_64-linux-specific release artifact containing the gzipped NAR of the pre-built tool.
           toolPath=$(curl -sSfL https://github.com/NixOS/nixpkgs-vet/releases/download/"$toolVersion"/x86_64-linux.nar.gz \
@@ -63,7 +62,7 @@ jobs:
           # Force terminal colors to be enabled. The library that `nixpkgs-vet` uses respects https://bixense.com/clicolors/
           CLICOLOR_FORCE: 1
         run: |
-          if result/bin/nixpkgs-vet --base "$target" .; then
+          if result/bin/nixpkgs-vet --base trusted untrusted; then
             exit 0
           else
             exitCode=$?

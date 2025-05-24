@@ -63,10 +63,11 @@ jobs:
       # so it's important this is not the PRs code.
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          path: base
+          ref: ${{ steps.get-merge-commit.outputs.targetSha }}
+          path: trusted
 
       - name: Build codeowners validator
-        run: nix-build base/ci -A codeownersValidator
+        run: nix-build trusted/ci -A codeownersValidator
 
       - uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
         if: vars.OWNER_RO_APP_ID
@@ -80,14 +81,14 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           ref: ${{ steps.get-merge-commit.outputs.mergedSha }}
-          path: pr
+          path: untrusted
 
       - name: Validate codeowners
         if: steps.app-token.outputs.token
         env:
-          OWNERS_FILE: pr/${{ env.OWNERS_FILE }}
+          OWNERS_FILE: untrusted/${{ env.OWNERS_FILE }}
           GITHUB_ACCESS_TOKEN: ${{ steps.app-token.outputs.token }}
-          REPOSITORY_PATH: pr
+          REPOSITORY_PATH: untrusted
           OWNER_CHECKER_REPOSITORY: ${{ github.repository }}
           # Set this to "notowned,avoid-shadowing" to check that all files are owned by somebody
           EXPERIMENTAL_CHECKS: "avoid-shadowing"
@@ -104,6 +105,8 @@ jobs:
       # Important: Because we use pull_request_target, this checks out the base branch of the PR, not the PR head.
       # This is intentional, because we need to request the review of owners as declared in the base branch.
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          path: trusted
 
       - uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
         if: vars.OWNER_APP_ID
@@ -116,7 +119,7 @@ jobs:
           permission-pull-requests: write
 
       - name: Build review request package
-        run: nix-build ci -A requestReviews
+        run: nix-build trusted/ci -A requestReviews
 
       - name: Request reviews
         if: steps.app-token.outputs.token
