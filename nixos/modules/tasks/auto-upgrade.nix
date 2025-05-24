@@ -290,6 +290,7 @@ in
           If you need to overlay your desyncs, you can use the `desync.*.overlays` option.
 
           ::: {.example}
+          #### `desync` usage example
 
           For example, you can use this module this way, in order to get your system to
           auto-upgrade even if `matrix-synapse` does not build on the latest channel:
