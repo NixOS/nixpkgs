@@ -94,11 +94,10 @@ let
 
       preRequisitePackages = [
         kdePackages.kwindowsystem # provides some QT plugins needed by lxqt-panel
-        kdePackages.libkscreen # provides plugins for screen management software
-        pkgs.libfm
-        pkgs.libfm-extra
-        pkgs.menu-cache
-        pkgs.openbox # default window manager
+        ###!kdePackages.libkscreen # provides plugins for screen management software
+        pkgs.libfm # has bin/libfm-pref-apps and bin/lxshortcut
+        ###!pkgs.libfm-extra # has only include and lib
+        pkgs.menu-cache # has libexec/menu-cache
         kdePackages.qtsvg # provides QT plugins for svg icons
       ];
 
@@ -115,7 +114,7 @@ let
         lxqt-about
         lxqt-admin
         lxqt-config
-        lxqt-globalkeys
+        lxqt-globalkeys # x11 only
         lxqt-menu-data
         lxqt-notificationd
         lxqt-openssh-askpass
@@ -125,7 +124,7 @@ let
         lxqt-session
         lxqt-sudo
         lxqt-themes
-        lxqt-wayland-session
+        lxqt-wayland-session # wayland only
         pavucontrol-qt
 
         ### CORE 2
@@ -136,22 +135,12 @@ let
 
       optionalPackages = [
         ### LXQt project
-        qterminal
-        obconf-qt
         lximage-qt
         lxqt-archiver
-
-        ### QtDesktop project
         qps
-        screengrab
-
-        ### Default icon theme
-        kdePackages.breeze-icons
-
-        ### Screen saver
-        pkgs.xscreensaver
+        qterminal
+        screengrab # x11 only
       ];
-
     };
 in
 makeScope kdePackages.newScope packages
