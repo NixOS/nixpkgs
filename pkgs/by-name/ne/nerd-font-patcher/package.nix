@@ -18,13 +18,9 @@ python3Packages.buildPythonApplication rec {
 
   format = "other";
 
-  postPatch = ''
-    sed -i font-patcher \
-      -e 's,__dir__ + "/src,"'$out'/share/,'
-    sed -i font-patcher \
-      -e  's,/bin/scripts/name_parser,/../lib/name_parser,'
-  '';
-  # Note: we cannot use $out for second substitution
+  patches = [
+    ./use-nix-paths.patch
+  ];
 
   dontBuild = true;
 
