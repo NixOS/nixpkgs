@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pixelorama";
-  version = "1.1";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "Orama-Interactive";
     repo = "Pixelorama";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UJ9sQ9igB2YAtkeHRUPvA60lbR2OXd4tqBDFxf9YTnI=";
+    hash = "sha256-HXCfZ/ePqEMnaEN+fxGVoaFWsO1isTAyYoRpLY6opRg=";
   };
 
   strictDeps = true;
