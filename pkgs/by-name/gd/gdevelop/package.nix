@@ -5,7 +5,7 @@
   ...
 }:
 let
-  version = "5.5.229";
+  version = "5.5.231";
   pname = "gdevelop";
   meta = {
     description = "Graphical Game Development Studio";
@@ -20,6 +20,7 @@ let
     mainProgram = "gdevelop";
     platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
   };
+  passthru.updateScript = ./update.sh;
 in
 if stdenv.hostPlatform.isDarwin then
   callPackage ./darwin.nix {
@@ -27,6 +28,7 @@ if stdenv.hostPlatform.isDarwin then
       pname
       version
       meta
+      passthru
       ;
   }
 else
@@ -35,5 +37,6 @@ else
       pname
       version
       meta
+      passthru
       ;
   }
