@@ -8766,6 +8766,8 @@ self: super: with self; {
 
   mbstrdecoder = callPackage ../development/python-modules/mbstrdecoder { };
 
+  mbzero = callPackage ../development/python-modules/mbzero { };
+
   mccabe = callPackage ../development/python-modules/mccabe { };
 
   mcdreforged = callPackage ../development/python-modules/mcdreforged { };
