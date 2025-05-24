@@ -8,6 +8,7 @@
   dbip-country-lite,
   glib,
   libayatana-appindicator,
+  nix-update-script,
   openssl,
   pkg-config,
   rustPlatform,
@@ -93,6 +94,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildAndTestSubdir = "src-tauri";
 
   passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "-s"
+        "frontend"
+      ];
+    };
     inherit frontend;
   };
 
