@@ -9,7 +9,9 @@ let
   cfg = config.system.autoUpgrade;
   nixpkgs-cfg = config.nixpkgs;
   nixos-rebuild = lib.getExe config.system.build.nixos-rebuild;
-  upgradeFlag = lib.optional (cfg.channel == null && cfg.upgrade) (if cfg.upgradeAll then "--upgrade-all" else "--upgrade");
+  upgradeFlag = lib.optional (cfg.channel == null && cfg.upgrade) (
+    if cfg.upgradeAll then "--upgrade-all" else "--upgrade"
+  );
   upgradeScript =
     flags:
     pkgs.writeShellScript "upgrade-channels" ''
