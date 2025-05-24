@@ -710,6 +710,7 @@ in
   ladybird = handleTest ./ladybird.nix { };
   languagetool = handleTest ./languagetool.nix { };
   lanraragi = handleTest ./lanraragi.nix { };
+  lasuite-meet = runTest ./web-apps/lasuite-meet.nix;
   latestKernel.login = handleTest ./login.nix { latestKernel = true; };
   lavalink = runTest ./lavalink.nix;
   leaps = handleTest ./leaps.nix { };
