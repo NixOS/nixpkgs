@@ -14662,8 +14662,6 @@ with pkgs;
     SDL_image = SDL_image.override { SDL = SDL_sixel; };
   };
 
-  zotero_7 = pkgs.zotero;
-
   zsteg = callPackage ../tools/security/zsteg { };
 
   zynaddsubfx = callPackage ../applications/audio/zynaddsubfx {
