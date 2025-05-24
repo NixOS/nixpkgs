@@ -13,6 +13,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "kohighlights";
   version = "2.3.1.0";
+  pyproject = false; # manual install
 
   src = fetchFromGitHub {
     owner = "noembryo";
@@ -23,7 +24,6 @@ python3Packages.buildPythonApplication rec {
 
   dontWrapPythonPrograms = true;
   dontBuild = true;
-  format = "other";
 
   buildInputs =
     [
@@ -57,6 +57,8 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
+  dontWrapQtApps = true;
+
   installPhase = ''
     runHook preInstall
 
@@ -65,7 +67,8 @@ python3Packages.buildPythonApplication rec {
     cp -r * $out/share/KoHighlights
     makeWrapper ${python3.interpreter} $out/bin/KoHighlights \
       --add-flags "$out/share/KoHighlights/main.py" \
-      --set PYTHONPATH "${python3Packages.makePythonPath dependencies}"
+      --set PYTHONPATH "${python3Packages.makePythonPath dependencies}" \
+      ''${qtWrapperArgs[@]}
 
     runHook postInstall
   '';
