@@ -266,6 +266,8 @@ in
 
         Can also be set to a hashed super user password to allow
         authenticated access to the emergency mode.
+
+        For emergency access after initrd, use `${options.systemd.enableEmergencyMode}` instead.
       '';
       default = false;
     };

@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  options,
+  ...
+}:
 {
 
   ###### interface
@@ -15,6 +20,8 @@
         instances) have no console of any kind, emergency mode doesn't
         make sense, and it's better to continue with the boot insofar
         as possible.
+
+        For initrd emergency access, use ${options.boot.initrd.systemd.emergencyAccess} instead.
       '';
     };
 
