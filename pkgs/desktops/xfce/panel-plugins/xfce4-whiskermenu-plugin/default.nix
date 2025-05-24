@@ -1,11 +1,15 @@
 {
-  mkXfceDerivation,
+  stdenv,
   lib,
-  cmake,
+  fetchFromGitLab,
+  gettext,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook3,
   accountsservice,
   exo,
   garcon,
-  gettext,
   glib,
   gtk-layer-shell,
   gtk3,
@@ -13,25 +17,35 @@
   libxfce4util,
   xfce4-panel,
   xfconf,
+  gitUpdater,
 }:
 
-mkXfceDerivation {
-  category = "panel-plugins";
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-whiskermenu-plugin";
-  version = "2.9.2";
-  rev-prefix = "v";
-  odd-unstable = false;
-  sha256 = "sha256-M9eraJwArCrASrLz+URUOmYtulWPNxR39Sn+alfWoy4=";
+  version = "2.10.0";
+
+  src = fetchFromGitLab {
+    domain = "gitlab.xfce.org";
+    owner = "panel-plugins";
+    repo = "xfce4-whiskermenu-plugin";
+    tag = "xfce4-whiskermenu-plugin-${finalAttrs.version}";
+    hash = "sha256-2FACsP6mKx0k91xG3DaVS6hdvdLrjLu9Y9rVOW6PZ3M=";
+  };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
-    cmake
+    gettext
+    meson
+    ninja
+    pkg-config
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     accountsservice
     exo
     garcon
-    gettext
     glib
     gtk-layer-shell
     gtk3
@@ -41,9 +55,14 @@ mkXfceDerivation {
     xfconf
   ];
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater { rev-prefix = "xfce4-whiskermenu-plugin-"; };
+
+  meta = {
     description = "Alternate application launcher for Xfce";
     mainProgram = "xfce4-popup-whiskermenu";
-    teams = [ teams.xfce ];
+    homepage = "https://gitlab.xfce.org/panel-plugins/xfce4-whiskermenu-plugin";
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.xfce ];
+    platforms = lib.platforms.linux;
   };
-}
+})
