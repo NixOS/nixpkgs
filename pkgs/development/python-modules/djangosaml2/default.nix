@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "djangosaml2";
-  version = "1.10.1";
+  version = "1.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "IdentityPython";
     repo = "djangosaml2";
     tag = "v${version}";
-    hash = "sha256-5o89tqGlklVS6WwxPUG+3rXBFVSqv8QXmoGVonBucK4=";
+    hash = "sha256-AkyXxWcckBVWUZAhjuUru2b1/t4iwoCKxmTvvqSziV0=";
   };
 
   build-system = [ setuptools ];
