@@ -1,0 +1,66 @@
+name: Get merge commit
+
+description: 'Checks whether the Pull Request is mergeable and returns two commit hashes: The result of a temporary merge of the head branch into the target branch ("merged"), and the parent of that commit on the target branch ("target"). Handles push events and merge conflicts gracefully.'
+
+outputs:
+  mergedSha:
+    description: "The merge commit SHA"
+    value: ${{ fromJSON(steps.merged.outputs.result).mergedSha }}
+  targetSha:
+    description: "The target commit SHA"
+    value: ${{ fromJSON(steps.merged.outputs.result).targetSha }}
+
+runs:
+  using: composite
+  steps:
+    - id: merged
+      uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      with:
+        script: |
+          if (context.eventName == 'push') return { mergedSha: context.sha }
+
+          for (const retryInterval of [5, 10, 20, 40, 80]) {
+            console.log("Checking whether the pull request can be merged...")
+            const prInfo = (await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number
+            })).data
+
+            if (prInfo.state != 'open') throw new Error ("PR is not open anymore.")
+
+            if (prInfo.mergeable == null) {
+              console.log(`GitHub is still computing whether this PR can be merged, waiting ${retryInterval} seconds before trying again...`)
+              await new Promise(resolve => setTimeout(resolve, retryInterval * 1000))
+              continue
+            }
+
+            if (prInfo.mergeable) {
+              console.log("The PR can be merged.")
+
+              const mergedSha = prInfo.merge_commit_sha
+              const targetSha = (await github.rest.repos.getCommit({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: prInfo.merge_commit_sha
+              })).data.parents[0].sha
+
+              console.log(`Checking the commits:\nmerged:${mergedSha}\ntarget:${targetSha}`)
+
+              return { mergedSha, targetSha }
+            } else {
+              console.log("The PR has a merge conflict.")
+
+              const mergedSha = prInfo.head.sha
+              const targetSha = (await github.rest.repos.compareCommitsWithBasehead({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                basehead: `${prInfo.base.sha}...${prInfo.head.sha}`
+              })).data.merge_base_commit.sha
+
+              console.log(`Checking the commits:\nmerged:${mergedSha}\ntarget:${targetSha}`)
+
+              return { mergedSha, targetSha }
+            }
+          }
+          throw new Error("Not retrying anymore. It's likely that GitHub is having internal issues: check https://www.githubstatus.com.")
