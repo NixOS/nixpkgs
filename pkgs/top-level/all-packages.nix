@@ -2757,7 +2757,7 @@ with pkgs;
   };
   cudaPackages_11_8 = callPackage ./cuda-packages.nix {
     pinProducts.cuda = "11.8";
-    pinProducts.cudnn = if hostPlatform.isAarch64 then "8.6" else "8.9";
+    pinProducts.cudnn = if stdenv.hostPlatform.isAarch64 then "8.6" else "8.9";
   };
   cudaPackages_11 = recurseIntoAttrs cudaPackages_11_8;
 
