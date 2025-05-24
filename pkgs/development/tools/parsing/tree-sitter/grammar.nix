@@ -2,6 +2,7 @@
   stdenv,
   nodejs,
   tree-sitter,
+  writableTmpDirAsHomeHook,
   lib,
 }:
 
@@ -14,6 +15,7 @@
   src,
   location ? null,
   generate ? false,
+  broken ? false,
   ...
 }@args:
 
@@ -47,6 +49,21 @@ stdenv.mkDerivation (
         tree-sitter generate
       '';
 
+    doCheck = !broken;
+
+    nativeCheckInputs = [
+      # tree-sitter needs a writable home folder for the checkPhase
+      writableTmpDirAsHomeHook
+    ];
+
+    checkPhase = ''
+      runHook preCheck
+
+      ${lib.getExe tree-sitter} test
+
+      runHook postCheck
+    '';
+
     # When both scanner.{c,cc} exist, we should not link both since they may be the same but in
     # different languages. Just randomly prefer C++ if that happens.
     buildPhase = ''
@@ -71,6 +88,9 @@ stdenv.mkDerivation (
       fi
       runHook postInstall
     '';
+    meta = {
+      inherit broken;
+    };
   }
   // removeAttrs args [
     "language"
