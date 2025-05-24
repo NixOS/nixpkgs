@@ -16,8 +16,8 @@ import ./make-test-python.nix (
       system.nixos-generate-config.desktopConfiguration = [
         ''
           # DESKTOP
-          services.xserver.displayManager.gdm.enable = true;
-          services.xserver.desktopManager.gnome.enable = true;
+          services.displayManager.gdm.enable = true;
+          services.desktopManager.gnome.enable = true;
         ''
       ];
     };
@@ -41,7 +41,7 @@ import ./make-test-python.nix (
 
       # Test if the Perl variable $desktopConfiguration is spliced correctly
       machine.succeed(
-          "grep 'services\\.xserver\\.desktopManager\\.gnome\\.enable = true;' /etc/nixos/configuration.nix"
+          "grep 'services\\.desktopManager\\.gnome\\.enable = true;' /etc/nixos/configuration.nix"
       )
 
       machine.succeed("rm -rf /etc/nixos")

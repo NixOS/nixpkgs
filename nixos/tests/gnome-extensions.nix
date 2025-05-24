@@ -21,8 +21,8 @@ import ./make-test-python.nix (
         nixpkgs.config.allowAliases = false;
 
         # Configure GDM
-        services.xserver.enable = true;
-        services.xserver.displayManager = {
+        services.enable = true;
+        services.displayManager = {
           gdm = {
             enable = true;
             debug = true;
@@ -35,8 +35,8 @@ import ./make-test-python.nix (
         };
 
         # Configure Gnome
-        services.xserver.desktopManager.gnome.enable = true;
-        services.xserver.desktopManager.gnome.debug = true;
+        services.desktopManager.gnome.enable = true;
+        services.desktopManager.gnome.debug = true;
 
         systemd.user.services = {
           "org.gnome.Shell@wayland" = {
