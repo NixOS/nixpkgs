@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "blessed";
-  version = "1.20.0";
+  version = "1.21.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LN1n+HRuBI8A30eiiA9NasvNs5kDG2BONLqPcdV4doA=";
+    hash = "sha256-7Oi7xHWKuRdkUvTjpxnXAIjrVzl5jNVYLJ4F8qKDN+w=";
   };
 
   nativeCheckInputs = [
