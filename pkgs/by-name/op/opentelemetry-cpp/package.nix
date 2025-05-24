@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  abseil-cpp,
   cmake,
   gtest,
   protobuf,
@@ -10,25 +11,29 @@
   prometheus-cpp,
   nlohmann_json,
   nix-update-script,
+  cxxStandard ? null,
+  enableGrpc ? false,
+  enablePrometheus ? false,
+  enableElasticSearch ? false,
+  enableZipkin ? false,
 }:
-
 let
   opentelemetry-proto = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-proto";
-    rev = "v1.3.2";
-    hash = "sha256-bkVqPSVhyMHrmFvlI9DTAloZzDozj3sefIEwfW7OVrI=";
+    rev = "v1.5.0";
+    hash = "sha256-PkG0npG3nKQwq6SxWdIliIQ/wrYAOG9qVb26IeVkBfc=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "opentelemetry-cpp";
-  version = "1.16.1";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-cpp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-31zwIZ4oehhfn+oCyg8VQTurPOmdgp72plH1Pf/9UKQ=";
+    hash = "sha256-MzY2n1/DQfgNvDcGJ3QPnDWCMJ2s7pRrZRESVAr+CGE";
   };
 
   patches = [
@@ -39,11 +44,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     curl
-    grpc
     nlohmann_json
-    prometheus-cpp
-    protobuf
   ];
+
+  propagatedBuildInputs =
+    [
+      abseil-cpp
+      protobuf
+    ]
+    ++ lib.optionals enableGrpc [
+      grpc
+    ]
+    ++ lib.optionals enablePrometheus [
+      prometheus-cpp
+    ];
 
   doCheck = true;
 
@@ -53,17 +67,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DWITH_OTLP_HTTP=ON"
-    "-DWITH_OTLP_GRPC=ON"
-    "-DWITH_ABSEIL=ON"
-    "-DWITH_PROMETHEUS=ON"
-    "-DWITH_ELASTICSEARCH=ON"
-    "-DWITH_ZIPKIN=ON"
-    "-DWITH_BENCHMARK=OFF"
-    "-DOTELCPP_PROTO_PATH=${opentelemetry-proto}"
-  ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+      (lib.cmakeBool "WITH_ABSEIL" true)
+      (lib.cmakeBool "WITH_BENCHMARK" false)
+      (lib.cmakeBool "WITH_OTLP_HTTP" true)
+      (lib.cmakeBool "WITH_OTLP_GRPC" enableGrpc)
+      (lib.cmakeBool "WITH_PROMETHEUS" enablePrometheus)
+      (lib.cmakeBool "WITH_ELASTICSEARCH" enableElasticSearch)
+      (lib.cmakeBool "WITH_ZIPKIN" enableZipkin)
+      (lib.cmakeFeature "OTELCPP_PROTO_PATH" "${opentelemetry-proto}")
+    ]
+    ++ lib.optionals (cxxStandard != null) [
+      (lib.cmakeFeature "CMAKE_CXX_STANDARD" cxxStandard)
+      (lib.cmakeFeature "WITH_STL" "CXX${cxxStandard}")
+    ];
 
   outputs = [
     "out"
