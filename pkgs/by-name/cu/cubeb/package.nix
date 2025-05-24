@@ -67,8 +67,6 @@ stdenv.mkDerivation {
   ];
 
   passthru = {
-    # For downstream users when lazyLoad is true
-    backendLibs = [ ];
     updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
   };
 
