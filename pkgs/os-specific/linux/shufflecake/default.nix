@@ -27,6 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
+  # GCC 14 makes this an error by default, remove when fixed upstream
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   outputs = [
     "out"
     "bin"
