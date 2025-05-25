@@ -28,7 +28,7 @@ buildPythonPackage rec {
   # no tests in PyPI dist
   src = fetchFromGitHub {
     owner = "icometrix";
-    repo = pname;
+    repo = "dicom2nifti";
     tag = version;
     hash = "sha256-lPaBKqYO8B138fCgeKH6vpwGQhN3JCOnDj5PgaYfRPA=";
   };

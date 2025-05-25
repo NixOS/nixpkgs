@@ -6,7 +6,7 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "aiodocker";
   # unstable includes support for python 3.10+
   version = "unstable-2022-01-20";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "aio-libs";
-    repo = pname;
+    repo = "aiodocker";
     rev = "f1dbdc3d42147f4c2ab5e6802acf6f7d0f885be4";
     sha256 = "RL5Ck4wsBZO88afmoojeFKbdIeCjDo/SwNqUcERH6Ls=";
   };
