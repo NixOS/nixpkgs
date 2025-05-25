@@ -69,7 +69,7 @@
   bluraySupport ? true,
   bs2bSupport ? true,
   cacaSupport ? true,
-  cddaSupport ? false,
+  cddaSupport ? !stdenv.hostPlatform.isDarwin,
   cmsSupport ? true,
   drmSupport ? stdenv.hostPlatform.isLinux,
   dvbinSupport ? stdenv.hostPlatform.isLinux,
