@@ -11,7 +11,12 @@
   sndio,
   speexdsp,
   validatePkgConfig,
+
+  # passthru.tests
   testers,
+  pcsx2,
+  duckstation,
+
   alsaSupport ? !stdenv.hostPlatform.isDarwin,
   pulseSupport ? !stdenv.hostPlatform.isDarwin,
   jackSupport ? !stdenv.hostPlatform.isDarwin,
@@ -71,7 +76,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+    tests = {
+      # These packages depend on a patched version of cubeb
+      inherit pcsx2 duckstation;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
   };
 
   meta = {
