@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "HTML to Markdown converter";
     homepage = "https://github.com/matthewwithanm/python-markdownify";
-    changelog = "https://github.com/matthewwithanm/python-markdownify/releases/tag/${version}";
+    changelog = "https://github.com/matthewwithanm/python-markdownify/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ McSinyx ];
     mainProgram = "markdownify";
