@@ -9,7 +9,6 @@ let
   inherit (lib)
     mkBefore
     mkDefault
-    mkEnableOption
     mkPackageOption
     mkIf
     mkOption
@@ -91,7 +90,7 @@ in
   # interface
   options = {
     services.redmine = {
-      enable = mkEnableOption "Redmine, a project management web application";
+      enable = lib.mkEnableOption "Redmine, a project management web application";
 
       package = mkPackageOption pkgs "redmine" {
         example = "redmine.override { ruby = pkgs.ruby_3_2; }";
