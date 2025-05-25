@@ -98,6 +98,8 @@ mkDerivation {
     done
   '';
 
+  qtWrapperArgs = [ "--inherit-argv0" ];
+
   # fix wrong symlink of infocenter pointing to a 'systemsettings5' binary in
   # the same directory, while it is actually located in a completely different
   # store path
