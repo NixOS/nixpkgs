@@ -245,7 +245,6 @@ stdenv.mkDerivation (finalAttrs: {
       dguenther
       ghuntley
       emilytrau
-      bendlas
     ];
     platforms = [
       "x86_64-linux"
