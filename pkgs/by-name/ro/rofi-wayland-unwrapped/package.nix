@@ -1,5 +1,4 @@
 {
-  lib,
   fetchFromGitHub,
   rofi-unwrapped,
   wayland-scanner,
@@ -8,25 +7,29 @@
   wayland,
 }:
 
-rofi-unwrapped.overrideAttrs (oldAttrs: rec {
-  pname = "rofi-wayland-unwrapped";
-  version = "1.7.8+wayland1";
+rofi-unwrapped.overrideAttrs (
+  final: prev: {
+    pname = "rofi-wayland-unwrapped";
+    version = "1.7.8+wayland1";
 
-  src = fetchFromGitHub {
-    owner = "lbonn";
-    repo = "rofi";
-    rev = version;
-    fetchSubmodules = true;
-    hash = "sha256-6hQfy0c73z1Oi2mGjuhKLZQIBpG1u06v40dmlc5fL/w=";
-  };
+    src = fetchFromGitHub {
+      owner = "lbonn";
+      repo = "rofi";
+      tag = final.version;
+      fetchSubmodules = true;
+      hash = "sha256-6hQfy0c73z1Oi2mGjuhKLZQIBpG1u06v40dmlc5fL/w=";
+    };
 
-  depsBuildBuild = oldAttrs.depsBuildBuild ++ [ pkg-config ];
-  nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [
-    wayland-protocols
-    wayland-scanner
-  ];
-  buildInputs = oldAttrs.buildInputs ++ [
-    wayland
-    wayland-protocols
-  ];
-})
+    depsBuildBuild = prev.depsBuildBuild ++ [
+      pkg-config
+    ];
+    nativeBuildInputs = prev.nativeBuildInputs ++ [
+      wayland-protocols
+      wayland-scanner
+    ];
+    buildInputs = prev.buildInputs ++ [
+      wayland
+      wayland-protocols
+    ];
+  }
+)
