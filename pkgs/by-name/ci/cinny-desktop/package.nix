@@ -15,29 +15,29 @@
   moreutils,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cinny-desktop";
   # We have to be using the same version as cinny-web or this isn't going to work.
-  version = "4.6.0";
+  version = "4.8.0";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny-desktop";
-    tag = "v${version}";
-    hash = "sha256-tSZ7qSEoLNUnMICT1oVccMY9J6uVZu8QJGJA9NK8JwU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cixpsn0jMufd6VrBCsCH9t3bpkKdgi1i0qnkBlLgLG0=";
   };
 
-  sourceRoot = "${src.name}/src-tauri";
+  sourceRoot = "${finalAttrs.src.name}/src-tauri";
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-5rIbVYxSsjv+MvmZxviMhcfYN+jOFndvZa7PDO5DLn8=";
+  cargoHash = "sha256-twfRuoA4z+Xgyyn7aIRy6MV1ozN2+qhSLh8i+qOTa2Q=";
 
   postPatch =
     let
       cinny' =
         assert lib.assertMsg (
-          cinny.version == version
-        ) "cinny.version (${cinny.version}) != cinny-desktop.version (${version})";
+          cinny.version == finalAttrs.version
+        ) "cinny.version (${cinny.version}) != cinny-desktop.version (${finalAttrs.version})";
         cinny.override {
           conf = {
             hashRouter.enabled = true;
@@ -95,4 +95,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "cinny";
   };
-}
+})
