@@ -281,10 +281,10 @@ in
           If they build fine then they will be upgraded, if not they will be left at their
           current setting.
 
-          Using [`maxDesyncAge`](#opt-system.autoUpgrade.desync._.maxDesyncAge), you can
+          Using [`maxDesyncAge`](#opt-system.autoUpgrade.desync.maxDesyncAge), you can
           limit the number of rebuilds that one nixpkgs version is allowed to span.
           For example, if you have [`system.autoUpgrade`](#opt-system.autoUpgrade) set to
-          upgrade once a day, and [`maxDesyncAge`](#opt-system.autoUpgrade.desync._.maxDesyncAge)
+          upgrade once a day, and [`maxDesyncAge`](#opt-system.autoUpgrade.desync.maxDesyncAge)
           set to `14` (the default), then your packages will always be on a version of `nixpkgs`
           that is at most two weeks old.
           If no such version has a passing build for two weeks, then the `mixos-rebuild`
@@ -293,7 +293,7 @@ in
           Finally, note that overlays are not taken into account inside desyncs. This is
           because, otherwise, evaluation would enter infinite loops.
           If you need to overlay your desyncs, you can use the
-          [`desync.*.overlays`](#opt-system.autoUpgrade.desync._.overlays) option.
+          [`desync.*.overlays`](#opt-system.autoUpgrade.desync.overlays) option.
 
           For example, you can use this module this way, in order to get your system to
           auto-upgrade even if `matrix-synapse` does not build on the latest channel:
@@ -408,7 +408,7 @@ in
                 readOnly = true;
                 description = ''
                   The path to the last known-working version of nixpkgs that passes all
-                  [`requireBuilds`](#opt-system.autoUpgrade.desync._.requireBuilds).
+                  [`requireBuilds`](#opt-system.autoUpgrade.desync.requireBuilds).
 
                   This option is read-only, and is the result of this package.
                 '';
@@ -419,7 +419,7 @@ in
                 readOnly = true;
                 description = ''
                   The last known-working version of nixpkgs that passes all
-                  [`requireBuilds`](#opt-system.autoUpgrade.desync._.requireBuilds).
+                  [`requireBuilds`](#opt-system.autoUpgrade.desync.requireBuilds).
 
                   This option is read-only, and is the result of this package.
                 '';
