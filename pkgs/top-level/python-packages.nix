@@ -17288,8 +17288,6 @@ self: super: with self; {
 
   testing-common-database = callPackage ../development/python-modules/testing-common-database { };
 
-  testing-postgresql = callPackage ../development/python-modules/testing-postgresql { };
-
   testpath = callPackage ../development/python-modules/testpath { };
 
   testrail-api = callPackage ../development/python-modules/testrail-api { };
