@@ -9,39 +9,50 @@ Importantly, `buildIdris` does not create a single derivation but rather an attr
 A simple example of a fully packaged library would be the [`LSP-lib`](https://github.com/idris-community/LSP-lib) found in the `idris-community` GitHub organization.
 ```nix
 { fetchFromGitHub, idris2Packages }:
-let lspLibPkg = idris2Packages.buildIdris {
-  ipkgName = "lsp-lib";
-  src = fetchFromGitHub {
-   owner = "idris-community";
-   repo = "LSP-lib";
-   rev = "main";
-   hash = "sha256-EvSyMCVyiy9jDZMkXQmtwwMoLaem1GsKVFqSGNNHHmY=";
+let
+  lspLibPkg = idris2Packages.buildIdris {
+    ipkgName = "lsp-lib";
+    src = fetchFromGitHub {
+      owner = "idris-community";
+      repo = "LSP-lib";
+      rev = "main";
+      hash = "sha256-EvSyMCVyiy9jDZMkXQmtwwMoLaem1GsKVFqSGNNHHmY=";
+    };
+    idrisLibraries = [ ];
   };
-  idrisLibraries = [ ];
-};
-in lspLibPkg.library { withSource = true; }
+in
+lspLibPkg.library { withSource = true; }
 ```
 
 The above results in a derivation with the installed library results (with sourcecode).
 
 A slightly more involved example of a fully packaged executable would be the [`idris2-lsp`](https://github.com/idris-community/idris2-lsp) which is an Idris2 language server that uses the `LSP-lib` found above.
 ```nix
-{ callPackage, fetchFromGitHub, idris2Packages }:
+{
+  callPackage,
+  fetchFromGitHub,
+  idris2Packages,
+}:
 
 # Assuming the previous example lives in `lsp-lib.nix`:
-let lspLib = callPackage ./lsp-lib.nix { };
-    inherit (idris2Packages) idris2Api;
-    lspPkg = idris2Packages.buildIdris {
-      ipkgName = "idris2-lsp";
-      src = fetchFromGitHub {
-         owner = "idris-community";
-         repo = "idris2-lsp";
-         rev = "main";
-         hash = "sha256-vQTzEltkx7uelDtXOHc6QRWZ4cSlhhm5ziOqWA+aujk=";
-      };
-      idrisLibraries = [idris2Api lspLib];
+let
+  lspLib = callPackage ./lsp-lib.nix { };
+  inherit (idris2Packages) idris2Api;
+  lspPkg = idris2Packages.buildIdris {
+    ipkgName = "idris2-lsp";
+    src = fetchFromGitHub {
+      owner = "idris-community";
+      repo = "idris2-lsp";
+      rev = "main";
+      hash = "sha256-vQTzEltkx7uelDtXOHc6QRWZ4cSlhhm5ziOqWA+aujk=";
     };
-in lspPkg.executable
+    idrisLibraries = [
+      idris2Api
+      lspLib
+    ];
+  };
+in
+lspPkg.executable
 ```
 
 The above uses the default value of `withSource = false` for the `idris2Api` but could be modified to include that library's source by passing `(idris2Api { withSource = true; })` to `idrisLibraries` instead. `idris2Api` in the above derivation comes built in with `idris2Packages`. This library exposes many of the otherwise internal APIs of the Idris2 compiler.

@@ -6,7 +6,6 @@
   openssl,
   pkg-config,
   libiconv,
-  darwin,
   protobuf,
 }:
 
@@ -27,8 +26,6 @@ rustPlatform.buildRustPackage rec {
     [ openssl.dev ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
     ];
 
   nativeBuildInputs = [

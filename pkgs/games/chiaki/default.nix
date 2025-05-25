@@ -4,8 +4,6 @@
   fetchgit,
   cmake,
   pkg-config,
-  protobuf,
-  python3Packages,
   ffmpeg,
   libopus,
   mkDerivation,
@@ -16,6 +14,7 @@
   libevdev,
   udev,
   qtmacextras,
+  nanopb,
 }:
 
 mkDerivation rec {
@@ -32,10 +31,6 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    protobuf
-    python3Packages.protobuf
-    python3Packages.python
-    python3Packages.setuptools
   ];
 
   buildInputs =
@@ -45,8 +40,8 @@ mkDerivation rec {
       qtbase
       qtmultimedia
       qtsvg
-      protobuf
       SDL2
+      nanopb
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libevdev

@@ -30,7 +30,7 @@ buildGoModule rec {
       "delete-objects"
       "list-deduplicated-blocks"
       "listblocks"
-      "markblocks"
+      "mark-blocks"
       "undelete-blocks"
     ]);
 
@@ -51,7 +51,6 @@ buildGoModule rec {
       t = "github.com/grafana/mimir/pkg/util/version";
     in
     [
-      ''-extldflags "-static"''
       "-s"
       "-w"
       "-X ${t}.Version=${version}"

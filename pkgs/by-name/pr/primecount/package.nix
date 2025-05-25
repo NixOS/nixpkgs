@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "primecount";
-  version = "7.15";
+  version = "7.18";
 
   src = fetchFromGitHub {
     owner = "kimwalisch";
     repo = "primecount";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UE+BEYynZGMBi3hjNX51I9cD/I1bbmfj9bO9r8UwwD0=";
+    hash = "sha256-iVRkgVeNO0AxwfyM9Dw5B0GoAf4GlrTtC+1npKlaV3E=";
   };
 
   outputs = [
@@ -66,6 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/kimwalisch/primecount/blob/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.bsd2;
     mainProgram = "primecount";
-    inherit (primesieve.meta) maintainers platforms;
+    inherit (primesieve.meta) teams platforms;
   };
 })

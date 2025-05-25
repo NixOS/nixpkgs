@@ -10,12 +10,12 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "homer";
-  version = "25.02.1";
+  version = "25.04.1";
   src = fetchFromGitHub {
     owner = "bastienwirtz";
     repo = "homer";
     rev = "v${version}";
-    hash = "sha256-Fh6qV2eU7VRskbPun7OcJmqgjILVE8w5lV70xH6znmc=";
+    hash = "sha256-hvDrFGv6Mht9whA2lJbDLQnP2LkOiCo3NtjMpWr/q6A=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation rec {
       src
       patches
       ;
-    hash = "sha256-qeMmPI2B5FW82qLVtbREDjQh76THMCOZRQCM0DgvCqI=";
+    hash = "sha256-y1R+rlaOtFOHHAgEHPBl40536U10Ft0iUSfGcfXS08Y=";
   };
 
   # Enables specifying a custom Sass compiler binary path via `SASS_EMBEDDED_BIN_PATH` environment variable.

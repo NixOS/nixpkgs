@@ -1,18 +1,20 @@
 {
   lib,
   buildGoModule,
+  stdenv,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule rec {
   pname = "pdfcpu";
-  version = "0.9.1";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "pdfcpu";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-PJTEaWU/erqVJakvxfB0aYRsi/tcGxYYZjCdEvThmzM=";
+    hash = "sha256-vfU0mFfOW9K3rgVNdfN2RBiKJLbijoVMtuywsoclEgE=";
     # Apparently upstream requires that the compiled executable will know the
     # commit hash and the date of the commit. This information is also presented
     # in the output of `pdfcpu version` which we use as a sanity check in the
@@ -35,7 +37,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-x5EXv2LkJg2LAdml+1I4MzgTvNo6Gl+6e6UHVQ+Z9rU=";
+  vendorHash = "sha256-27YTR/vYuNggjUIbpKs3/yEJheUXMaLZk8quGPwgNNk=";
 
   ldflags = [
     "-s"
@@ -52,12 +54,24 @@ buildGoModule rec {
   # No tests
   doCheck = false;
   doInstallCheck = true;
+  installCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
+  # NOTE: Can't use `versionCheckHook` since a writeable $HOME is required and
+  # `versionCheckHook` uses --ignore-environment
   installCheckPhase = ''
-    export HOME=$(mktemp -d)
     echo checking the version print of pdfcpu
-    $out/bin/pdfcpu version | grep ${version}
-    $out/bin/pdfcpu version | grep $(cat COMMIT | cut -c1-8)
-    $out/bin/pdfcpu version | grep $(cat SOURCE_DATE)
+    mkdir -p $HOME/"${
+      if stdenv.hostPlatform.isDarwin then "Library/Application Support" else ".config"
+    }"/pdfcpu
+    versionOutput="$($out/bin/pdfcpu version)"
+    for part in ${version} $(cat COMMIT | cut -c1-8) $(cat SOURCE_DATE); do
+      if [[ ! "$versionOutput" =~ "$part" ]]; then
+          echo version output did not contain expected part $part . Output was:
+          echo "$versionOutput"
+          exit 3
+      fi
+    done
   '';
 
   subPackages = [ "cmd/pdfcpu" ];

@@ -1,9 +1,9 @@
 {
   buildPythonPackage,
   installShellFiles,
-  pkg-config,
   rustPlatform,
   pkgs,
+  versionCheckHook,
 }:
 
 buildPythonPackage {
@@ -12,7 +12,6 @@ buildPythonPackage {
     version
     src
     cargoDeps
-    dontUseCmakeConfigure
     meta
     cargoBuildFlags
     postInstall
@@ -25,12 +24,12 @@ buildPythonPackage {
   '';
 
   nativeBuildInputs = [
-    pkgs.cmake
     installShellFiles
-    pkg-config
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
+
+  nativeCheckInputs = [ versionCheckHook ];
 
   pyproject = true;
   pythonImportsCheck = [ "uv" ];

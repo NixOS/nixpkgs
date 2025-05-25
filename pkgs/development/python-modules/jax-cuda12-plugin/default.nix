@@ -13,7 +13,7 @@
 }:
 let
   inherit (jaxlib) version;
-  inherit (cudaPackages) cudaVersion;
+  inherit (cudaPackages) cudaAtLeast;
   inherit (jax-cuda12-pjrt) cudaLibPath;
 
   getSrcFromPypi =
@@ -40,42 +40,42 @@ let
     "3.10-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux2014_x86_64";
       dist = "cp310";
-      hash = "sha256-uiVVln+bbDgci075+wPQW8Vewl7P7lz+RcWs4099QVI=";
+      hash = "sha256-t3gE4OTZI605kJCV/3wbcj6sbz7l+f/LgFl7qGe1crg=";
     };
     "3.10-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux2014_aarch64";
       dist = "cp310";
-      hash = "sha256-YXGu0vSzvdX8E3gt4QcsamNPzhNzG3XQywpquPTm5lA=";
+      hash = "sha256-2p99ySQ+wo4DwOOjmFK0JG+pz8Pc1R5Chtggl/XGlcA=";
     };
     "3.11-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux2014_x86_64";
       dist = "cp311";
-      hash = "sha256-qqcEpe9UdZXQItscHkh4oGdxFkEqk2DBFdZ/9LZOFZY=";
+      hash = "sha256-H7+NS0JFVEOgia/RqI+xBqUboQdfxohLM53JZXHFthc=";
     };
     "3.11-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux2014_aarch64";
       dist = "cp311";
-      hash = "sha256-KY0tdo8QKbdKCx0BJw5Uk0nSw33Adlh5ZULNqWfre9M=";
+      hash = "sha256-QlzPE8vdRnixEJ+EOYgVelnk9Nm8KYIFrLFt8EijHDg=";
     };
     "3.12-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux2014_x86_64";
       dist = "cp312";
-      hash = "sha256-IDDPEgjOTqcO5WysYd3SOfl5hpX8Obt3OcUKJdbp2kQ=";
+      hash = "sha256-GIXxW+OPrszPvySxhP/cHQ02Nxfq3SU01XWcDT0K9SM=";
     };
     "3.12-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux2014_aarch64";
       dist = "cp312";
-      hash = "sha256-wlF6fCGG+HCIlGluJs+W69YLeHnOyjmLLEarso0slsg=";
+      hash = "sha256-u2SgyAH5OnGKZU38aXQvL9YKJgdDEiBOvfT+QD2eK8Q=";
     };
     "3.13-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux2014_x86_64";
       dist = "cp313";
-      hash = "sha256-GGJZWyttgVZ50R4OiJ5SMYXuVKRtRuAiaJ9w/EVU3ZE=";
+      hash = "sha256-KjV43At9RMwbAjOw/nrXZCZTgQldfqxkxWvQGzS+dvI=";
     };
     "3.13-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux2014_aarch64";
       dist = "cp313";
-      hash = "sha256-If7BtWyYeD6gVpt0elZ1Hx+f8hh7SKzBHHANO/xeGjE=";
+      hash = "sha256-uL/3pfx6QWcX4dWdqXKKH3qtB6i2WvoPhpYtQ+0OZU8=";
     };
   };
 in
@@ -133,7 +133,6 @@ buildPythonPackage {
     platforms = lib.platforms.linux;
     # see CUDA compatibility matrix
     # https://jax.readthedocs.io/en/latest/installation.html#pip-installation-nvidia-gpu-cuda-installed-locally-harder
-    broken =
-      !(lib.versionAtLeast cudaVersion "12.1") || !(lib.versionAtLeast cudaPackages.cudnn.version "9.1");
+    broken = !(cudaAtLeast "12.1") || !(lib.versionAtLeast cudaPackages.cudnn.version "9.1");
   };
 }

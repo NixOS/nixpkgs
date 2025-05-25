@@ -2,7 +2,7 @@
   pkgs,
   lib,
   glibcLocales,
-  python,
+  python3,
   fetchpatch,
   fetchFromGitHub,
   # Usage: bumblebee-status.override { plugins = p: [p.arandr p.bluetooth2]; };
@@ -13,13 +13,13 @@ let
 
   # { <name> = { name = "..."; propagatedBuildInputs = [ ... ]; buildInputs = [ ... ]; } }
   allPlugins = lib.mapAttrs (name: value: value // { inherit name; }) (
-    import ./plugins.nix { inherit pkgs python; }
+    import ./plugins.nix { inherit pkgs python3; }
   );
 
   # [ { name = "..."; propagatedBuildInputs = [ ... ]; buildInputs = [ ... ]; } ]
   selectedPlugins = plugins allPlugins;
 in
-python.pkgs.buildPythonPackage {
+python3.pkgs.buildPythonPackage {
   pname = "bumblebee-status";
   inherit version;
 
@@ -42,7 +42,7 @@ python.pkgs.buildPythonPackage {
   buildInputs = lib.concatMap (p: p.buildInputs or [ ]) selectedPlugins;
   propagatedBuildInputs = lib.concatMap (p: p.propagatedBuildInputs or [ ]) selectedPlugins;
 
-  checkInputs = with python.pkgs; [
+  checkInputs = with python3.pkgs; [
     freezegun
     netifaces
     psutil
@@ -60,7 +60,7 @@ python.pkgs.buildPythonPackage {
     # FIXME: We skip the `dunst` module tests, some of which fail with
     # `RuntimeError: killall -s SIGUSR2 dunst not found`.
     # This is not solved by adding `pkgs.killall` to `checkInputs`.
-    ${python.interpreter} -m pytest -k 'not test_dunst.py'
+    ${python3.interpreter} -m pytest -k 'not test_dunst.py'
 
     runHook postCheck
   '';
@@ -70,7 +70,7 @@ python.pkgs.buildPythonPackage {
     find $out -name "__pycache__" -type d | xargs rm -rv
 
     # Make themes available for bumblebee-status to detect them
-    cp -r ./themes $out/${python.sitePackages}
+    cp -r ./themes $out/${python3.sitePackages}
   '';
 
   meta = with lib; {

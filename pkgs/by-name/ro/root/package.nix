@@ -29,7 +29,7 @@
   xz,
   man,
   openssl,
-  pcre,
+  pcre2,
   nlohmann_json,
   pkg-config,
   procps,
@@ -51,7 +51,7 @@
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.34.06";
+  version = "6.34.08";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-p5nWMtrlux7Ifq5uvARqEiaMaEnyqIN5IcEY/FG2z/M=";
+    hash = "sha256-gGBFsVbeA/6PVmGmcOq4d/Lk0tpsI03D4x6Y4tfZb+g=";
   };
 
   clad_src = fetchgit {
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
       patchRcPathCsh
       patchRcPathFish
       patchRcPathPosix
-      pcre
+      pcre2
       python3.pkgs.numpy
       tbb
       xrootd
@@ -137,9 +137,6 @@ stdenv.mkDerivation rec {
       # Eliminate impure reference to /System/Library/PrivateFrameworks
       substituteInPlace core/macosx/CMakeLists.txt \
         --replace-fail "-F/System/Library/PrivateFrameworks " ""
-      # Just like in libpng/12.nix to build the builtin libpng on macOS
-      substituteInPlace graf2d/asimage/src/libAfterImage/libpng/pngpriv.h \
-        --replace-fail '<fp.h>' '<math.h>'
     ''
     +
       lib.optionalString

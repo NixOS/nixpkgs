@@ -4,9 +4,11 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
+  libGL,
   libpng,
   libtiff,
   libjpeg,
+  libX11,
   SDL2,
   gdal,
   octave,
@@ -39,9 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    libGL
     libpng
     libtiff
     libjpeg
+    libX11
     SDL2
     gdal
     octave

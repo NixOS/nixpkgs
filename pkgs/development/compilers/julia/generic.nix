@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  env = lib.optionalAttrs (lib.versionOlder version "1.11") {
+  env = lib.optionalAttrs (lib.versionOlder version "1.11" || stdenv.hostPlatform.isAarch64) {
     NIX_CFLAGS_COMPILE = toString [
       "-Wno-error=implicit-function-declaration"
       "-Wno-error=incompatible-pointer-types"

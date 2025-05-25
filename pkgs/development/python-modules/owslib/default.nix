@@ -70,6 +70,6 @@ buildPythonPackage rec {
     homepage = "https://www.osgeo.org/projects/owslib/";
     changelog = "https://github.com/geopython/OWSLib/releases/tag/${src.tag}";
     license = licenses.bsd3;
-    maintainers = teams.geospatial.members;
+    teams = [ teams.geospatial ];
   };
 }

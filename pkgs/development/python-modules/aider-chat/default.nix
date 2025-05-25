@@ -6,8 +6,6 @@
   gitMinimal,
   portaudio,
   playwright-driver,
-  symlinkJoin,
-  nltk-data,
   pythonOlder,
   pythonAtLeast,
   setuptools-scm,
@@ -19,6 +17,7 @@
   attrs,
   backoff,
   beautifulsoup4,
+  cachetools,
   certifi,
   cffi,
   charset-normalizer,
@@ -33,8 +32,11 @@
   fsspec,
   gitdb,
   gitpython,
+  google-ai-generativelanguage,
+  google-generativeai,
   grep-ast,
   h11,
+  hf-xet,
   httpcore,
   httpx,
   huggingface-hub,
@@ -54,6 +56,7 @@
   networkx,
   numpy,
   openai,
+  oslex,
   packaging,
   pathspec,
   pexpect,
@@ -78,6 +81,7 @@
   rich,
   rpds-py,
   scipy,
+  shtab,
   smmap,
   sniffio,
   sounddevice,
@@ -116,28 +120,25 @@
 }:
 
 let
-  aider-nltk-data = symlinkJoin {
-    name = "aider-nltk-data";
-    paths = [
-      nltk-data.punkt_tab
-      nltk-data.stopwords
-    ];
-  };
+  aider-nltk-data = nltk.dataDir (d: [
+    d.punkt-tab
+    d.stopwords
+  ]);
 
-  version = "0.81.1";
+  version = "0.83.1";
   aider-chat = buildPythonPackage {
     pname = "aider-chat";
     inherit version;
     pyproject = true;
 
-    # needs exactly Python 3.12
-    disabled = pythonOlder "3.12" || pythonAtLeast "3.13";
+    # dont support python 3.13 (Aider-AI/aider#3037)
+    disabled = pythonOlder "3.10" || pythonAtLeast "3.13";
 
     src = fetchFromGitHub {
       owner = "Aider-AI";
       repo = "aider";
       tag = "v${version}";
-      hash = "sha256-TNSdsJBmF/9OCkFe1dZV0y7X2FSTjgp3YV4HGlA9GMc=";
+      hash = "sha256-2OHPqsS1znl7G4Z8mu8oKHNPdDr4YmSfGzXLylTgooE=";
     };
 
     pythonRelaxDeps = true;
@@ -153,6 +154,7 @@ let
       attrs
       backoff
       beautifulsoup4
+      cachetools
       certifi
       cffi
       charset-normalizer
@@ -167,8 +169,11 @@ let
       fsspec
       gitdb
       gitpython
+      google-ai-generativelanguage
+      google-generativeai
       grep-ast
       h11
+      hf-xet
       httpcore
       httpx
       huggingface-hub
@@ -188,6 +193,7 @@ let
       networkx
       numpy
       openai
+      oslex
       packaging
       pathspec
       pexpect
@@ -212,6 +218,7 @@ let
       rich
       rpds-py
       scipy
+      shtab
       smmap
       sniffio
       sounddevice
@@ -378,7 +385,10 @@ let
       homepage = "https://github.com/paul-gauthier/aider";
       changelog = "https://github.com/paul-gauthier/aider/blob/v${version}/HISTORY.md";
       license = lib.licenses.asl20;
-      maintainers = with lib.maintainers; [ happysalada ];
+      maintainers = with lib.maintainers; [
+        happysalada
+        yzx9
+      ];
       mainProgram = "aider";
     };
   };

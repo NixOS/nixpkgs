@@ -83,7 +83,7 @@ in
 
   # Use a priority just below mkOptionDefault (1500) instead of lib.mkDefault
   # to avoid breaking existing configs using that.
-  config.virtualisation.diskSize = lib.mkOverride 1490 (3 * 1024);
+  config.virtualisation.diskSize = lib.mkOverride 1490 (4 * 1024);
   config.virtualisation.diskSizeAutoSupported = !config.ec2.zfs.enable;
 
   config.system.nixos.tags = [ "amazon" ];
@@ -140,7 +140,7 @@ in
            echo "file ${cfg.format} $rootDisk" >> $out/nix-support/hydra-build-products
 
           ${pkgs.jq}/bin/jq -n \
-            --arg system_label ${lib.escapeShellArg config.system.nixos.label} \
+            --arg system_version ${lib.escapeShellArg config.system.nixos.version} \
             --arg system ${lib.escapeShellArg pkgs.stdenv.hostPlatform.system} \
             --arg root_logical_bytes "$(${pkgs.qemu_kvm}/bin/qemu-img info --output json "$rootDisk" | ${pkgs.jq}/bin/jq '."virtual-size"')" \
             --arg boot_logical_bytes "$(${pkgs.qemu_kvm}/bin/qemu-img info --output json "$bootDisk" | ${pkgs.jq}/bin/jq '."virtual-size"')" \
@@ -148,7 +148,7 @@ in
             --arg root "$rootDisk" \
             --arg boot "$bootDisk" \
            '{}
-             | .label = $system_label
+             | .label = $system_version
              | .boot_mode = $boot_mode
              | .system = $system
              | .disks.boot.logical_bytes = $boot_logical_bytes
@@ -181,13 +181,13 @@ in
            echo "file ${cfg.format} $diskImage" >> $out/nix-support/hydra-build-products
 
           ${pkgs.jq}/bin/jq -n \
-            --arg system_label ${lib.escapeShellArg config.system.nixos.label} \
+            --arg system_version ${lib.escapeShellArg config.system.nixos.version} \
             --arg system ${lib.escapeShellArg pkgs.stdenv.hostPlatform.system} \
             --arg logical_bytes "$(${pkgs.qemu_kvm}/bin/qemu-img info --output json "$diskImage" | ${pkgs.jq}/bin/jq '."virtual-size"')" \
             --arg boot_mode "${amiBootMode}" \
             --arg file "$diskImage" \
              '{}
-             | .label = $system_label
+             | .label = $system_version
              | .boot_mode = $boot_mode
              | .system = $system
              | .logical_bytes = $logical_bytes

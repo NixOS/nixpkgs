@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "aioairzone";
-  version = "0.9.9";
+  version = "1.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "Noltari";
     repo = "aioairzone";
     tag = version;
-    hash = "sha256-K/QzoN08keaD5+o5HrKOwrNfIugg1GONdwT7RycOM18=";
+    hash = "sha256-/ZzswdGGA4IGc7djTuSIzLtBLA9oRhJBQHMBUlPci7o=";
   };
 
   build-system = [ setuptools ];

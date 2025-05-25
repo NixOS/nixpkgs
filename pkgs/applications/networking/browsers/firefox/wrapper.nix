@@ -487,7 +487,7 @@ let
               done
           fi
 
-          install -D -t $out/share/applications $desktopItem/share/applications/*
+          install -m 644 -D -t $out/share/applications $desktopItem/share/applications/*
 
         ''
         + lib.optionalString hasMozSystemDirPatch ''

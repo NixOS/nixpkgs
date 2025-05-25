@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
     [
       "--with-crypto_backend=openssl"
       "--disable-ssh-token"
+      "--with-tmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
     ]
     ++ lib.optionals (!rebuildMan) [
       "--disable-asciidoc"

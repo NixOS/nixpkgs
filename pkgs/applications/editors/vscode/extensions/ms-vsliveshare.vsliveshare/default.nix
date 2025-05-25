@@ -8,12 +8,12 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "vsliveshare";
     publisher = "ms-vsliveshare";
-    version = "1.0.5918";
-    hash = "sha256-Tk0mKydUF8M7l7NC9wEA7t2rzJWy/mq4/HvIHI2/ldQ=";
+    version = "1.0.5948";
+    hash = "sha256-KOu9zF5l6MTLU8z/l4xBwRl2X3uIE15YgHEZJrKSHGY=";
   };
 
   postPatch = ''
-    substituteInPlace extension.js \
+    substituteInPlace vendor.js \
       --replace-fail '"xsel"' '"${xsel}/bin/xsel"'
   '';
 

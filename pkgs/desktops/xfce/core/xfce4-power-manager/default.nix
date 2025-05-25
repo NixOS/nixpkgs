@@ -48,6 +48,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Power manager for the Xfce Desktop Environment";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

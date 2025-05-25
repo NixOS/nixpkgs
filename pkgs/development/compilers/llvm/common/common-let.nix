@@ -20,7 +20,7 @@ rec {
           asl20
           llvm-exception
         ];
-    maintainers = lib.teams.llvm.members;
+    teams = [ lib.teams.llvm ];
 
     # See llvm/cmake/config-ix.cmake.
     platforms =

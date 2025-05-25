@@ -4,8 +4,6 @@
   fetchFromGitHub,
   cmake,
   zlib,
-  stdenv,
-  darwin,
   testers,
   cargo-semver-checks,
   nix-update-script,
@@ -13,29 +11,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-semver-checks";
-  version = "0.40.0";
+  version = "0.41.0";
 
   src = fetchFromGitHub {
     owner = "obi1kenobi";
     repo = "cargo-semver-checks";
     tag = "v${version}";
-    hash = "sha256-bit8/o5MqlIL4vvCS9fGR2rNtD/Dn58aFqsmyhKueUI=";
+    hash = "sha256-84tRzqJqvm+ermtWMCkOIUmNeH/RLf8IUTIsEVPbGQk=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-/8Juz8F5vJ/JLDYZUG9tyxkLSN7YPh5yAKJflpuSZ0w=";
+  cargoHash = "sha256-8VtSQZHR8L6nijcN71ey9nW5nrAsPK6qyqJSWQDz8uw=";
 
   nativeBuildInputs = [
     cmake
   ];
 
-  buildInputs =
-    [
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    zlib
+  ];
 
   checkFlags = [
     # requires internet access

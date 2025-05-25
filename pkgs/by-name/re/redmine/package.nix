@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "6.0.4";
+  version = "6.0.5";
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
@@ -25,13 +25,13 @@ let
     ];
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "redmine";
   inherit version;
 
   src = fetchurl {
-    url = "https://www.redmine.org/releases/redmine-${version}.tar.gz";
-    hash = "sha256-vr+Ky0/RhD+I5fQoX/C0l/q0MyDDPngKXDThEkxeF3o=";
+    url = "https://www.redmine.org/releases/redmine-${finalAttrs.version}.tar.gz";
+    hash = "sha256-lNzFMRXgWBrEbmDD7ZMY8ZJs5GS6u7OF5SNiF9Hmpk4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
     ];
     license = licenses.gpl2;
   };
-}
+})

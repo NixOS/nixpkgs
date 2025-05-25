@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "PLAtform NEutral Transpiler";
     homepage = "https://github.com/oriansj/M2-Planet";
     license = licenses.gpl3Only;
-    maintainers = teams.minimal-bootstrap.members;
+    teams = [ teams.minimal-bootstrap ];
     inherit (m2libc.meta) platforms;
     mainProgram = "M2-Planet";
   };

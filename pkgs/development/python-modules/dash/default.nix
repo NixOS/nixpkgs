@@ -36,14 +36,14 @@
 
 buildPythonPackage rec {
   pname = "dash";
-  version = "3.0.2";
+  version = "3.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "dash";
     tag = "v${version}";
-    hash = "sha256-cBFSqp4GWnWJQtaCWdfbLj+C7fT8XSA0SpxK8MU5LT0=";
+    hash = "sha256-KCGVdD1L+U2KbktU2GU19BQ6wRcmEeYtC/v8UrFTyto=";
   };
 
   nativeBuildInputs = [
@@ -122,7 +122,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "dash" ];
 
   meta = {
-    changelog = "https://github.com/plotly/dash/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/plotly/dash/blob/${src.tag}/CHANGELOG.md";
     description = "Python framework for building analytical web applications";
     homepage = "https://dash.plot.ly/";
     license = lib.licenses.mit;

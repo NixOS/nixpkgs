@@ -37,7 +37,7 @@
     meta = with lib; {
       homepage = "https://buildbot.net/";
       description = "Buildbot UI";
-      maintainers = teams.buildbot.members;
+      teams = [ teams.buildbot ];
       license = licenses.gpl2;
     };
   };
@@ -59,7 +59,7 @@
     meta = with lib; {
       homepage = "https://buildbot.net/";
       description = "Buildbot Console View Plugin";
-      maintainers = teams.buildbot.members;
+      teams = [ teams.buildbot ];
       license = licenses.gpl2;
     };
   };
@@ -81,7 +81,7 @@
     meta = with lib; {
       homepage = "https://buildbot.net/";
       description = "Buildbot Waterfall View Plugin";
-      maintainers = teams.buildbot.members;
+      teams = [ teams.buildbot ];
       license = licenses.gpl2;
     };
   };
@@ -103,7 +103,7 @@
     meta = with lib; {
       homepage = "https://buildbot.net/";
       description = "Buildbot Grid View Plugin";
-      maintainers = teams.buildbot.members;
+      teams = [ teams.buildbot ];
       license = licenses.gpl2;
     };
   };
@@ -125,7 +125,7 @@
     meta = with lib; {
       homepage = "https://buildbot.net/";
       description = "Buildbot WSGI dashboards Plugin";
-      maintainers = teams.buildbot.members;
+      teams = [ teams.buildbot ];
       license = licenses.gpl2;
     };
   };
@@ -152,7 +152,8 @@
     meta = with lib; {
       homepage = "https://buildbot.net/";
       description = "Buildbot Badges Plugin";
-      maintainers = teams.buildbot.members ++ [ maintainers.julienmalka ];
+      maintainers = [ maintainers.julienmalka ];
+      teams = [ teams.buildbot ];
       license = licenses.gpl2;
     };
   };

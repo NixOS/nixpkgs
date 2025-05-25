@@ -106,6 +106,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/gabmus/envision";
     license = lib.licenses.agpl3Only;
     mainProgram = "envision";
+    # More maintainers needed!
+    # envision (wrapped) requires frequent updates to the dependency list;
+    # the more people that can help with this, the better.
     maintainers = with lib.maintainers; [
       pandapip1
       Scrumplex

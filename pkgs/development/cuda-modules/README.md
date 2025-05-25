@@ -27,6 +27,12 @@ scope. These are typically required for the creation of the finalized
     to `cudaPackages` scope.
 - `cudnn`: NVIDIA cuDNN library.
 - `cutensor`: NVIDIA cuTENSOR library.
+- `fixups`: Each file or directory (excluding `default.nix`) should contain a
+    `callPackage`-able expression to be provided to the `overrideAttrs` attribute
+    of a package produced by the generic manifest builder.
+    These fixups are applied by `pname`, so packages with multiple versions
+    (e.g., `cudnn`, `cudnn_8_9`, etc.) all share a single fixup function
+    (i.e., `fixups/cudnn.nix`).
 - `generic-builders`:
   - Contains a builder `manifest.nix` which operates on the `Manifest` type
       defined in `modules/generic/manifests`. Most packages are built using this

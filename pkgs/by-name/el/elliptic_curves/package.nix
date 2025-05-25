@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
   };
 }

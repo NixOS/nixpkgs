@@ -151,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Thin layer of graphic data types";
     homepage = "https://github.com/ebassi/graphene";
     license = licenses.mit;
-    maintainers = teams.gnome.members ++ (with maintainers; [ ]);
+    teams = [ teams.gnome ];
     platforms = platforms.unix;
     pkgConfigModules = [
       "graphene-1.0"

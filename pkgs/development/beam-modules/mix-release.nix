@@ -31,6 +31,9 @@
   # Build a particular named release.
   # see https://hexdocs.pm/mix/1.12/Mix.Tasks.Release.html#content
   mixReleaseName ? "",
+  # If set, the given escript binary will be copied to the output
+  # instead of the release
+  escriptBinName ? null,
 
   # Options to be passed to the Erlang compiler. As documented in the reference
   # manual, these must be valid Erlang terms. They will be turned into an
@@ -90,6 +93,7 @@ let
 in
 assert mixNixDeps != { } -> mixFodDeps == null;
 assert stripDebug -> !enableDebugInfo;
+assert escriptBinName != null -> mixReleaseName == "";
 
 stdenv.mkDerivation (
   overridable
@@ -116,7 +120,7 @@ stdenv.mkDerivation (
           makeWrapper
         ];
 
-    buildInputs = buildInputs;
+    buildInputs = buildInputs ++ lib.optionals (escriptBinName != null) [ erlang ];
 
     MIX_ENV = mixEnv;
     MIX_DEBUG = if enableDebugInfo then 1 else 0;
@@ -199,6 +203,10 @@ stdenv.mkDerivation (
 
         mix compile --no-deps-check ${lib.concatStringsSep " " compileFlags}
 
+        ${lib.optionalString (escriptBinName != null) ''
+          mix escript.build --no-deps-check
+        ''}
+
         runHook postBuild
       '';
 
@@ -206,7 +214,17 @@ stdenv.mkDerivation (
       attrs.installPhase or ''
         runHook preInstall
 
-        mix release ${mixReleaseName} --no-deps-check --path "$out"
+        ${
+          if (escriptBinName != null) then
+            ''
+              mkdir -p $out/bin
+              cp ${escriptBinName} $out/bin
+            ''
+          else
+            ''
+              mix release ${mixReleaseName} --no-deps-check --path "$out"
+            ''
+        }
 
         runHook postInstall
       '';

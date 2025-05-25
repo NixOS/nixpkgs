@@ -18,13 +18,13 @@
 
 buildGoModule rec {
   pname = "buildah";
-  version = "1.39.4";
+  version = "1.40.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "buildah";
     rev = "v${version}";
-    hash = "sha256-k7nlBvoAVUTsh98XurTSRuk+yzEKbJh2HFSU1IvX1g0=";
+    hash = "sha256-4gn8bbzI+NerU8Bdi6FxLB/Kg1JaDBiZkR98zMRvTkw=";
   };
 
   outputs = [
@@ -87,6 +87,6 @@ buildGoModule rec {
     homepage = "https://buildah.io/";
     changelog = "https://github.com/containers/buildah/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ] ++ teams.podman.members;
+    teams = [ teams.podman ];
   };
 }

@@ -3,17 +3,16 @@
   lib,
   postgresql,
   postgresqlBuildExtension,
-  stdenv,
 }:
 
-postgresqlBuildExtension rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pg_auto_failover";
   version = "2.2";
 
   src = fetchFromGitHub {
     owner = "citusdata";
     repo = "pg_auto_failover";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lsnVry+5n08kLOun8u0B7XFvI5ijTKJtFJ84fixMHe4=";
   };
 
@@ -23,9 +22,9 @@ postgresqlBuildExtension rec {
     description = "PostgreSQL extension and service for automated failover and high-availability";
     mainProgram = "pg_autoctl";
     homepage = "https://github.com/citusdata/pg_auto_failover";
-    changelog = "https://github.com/citusdata/pg_auto_failover/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/citusdata/pg_auto_failover/blob/v${finalAttrs.version}/CHANGELOG.md";
     maintainers = [ ];
     platforms = postgresql.meta.platforms;
     license = lib.licenses.postgresql;
   };
-}
+})

@@ -172,7 +172,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://linuxcontainers.org/incus";
     changelog = "https://github.com/lxc/incus/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.lxc.members;
+    teams = [ lib.teams.lxc ];
     platforms = lib.platforms.linux;
     mainProgram = "incus";
   };

@@ -1,38 +1,59 @@
 {
   lib,
   buildNpmPackage,
-  fetchurl,
+  fetchFromGitHub,
+  fetchpatch,
+  libmongocrypt,
+  krb5,
   testers,
-  mongosh,
+  nix-update-script,
 }:
 
-let
-  source = lib.importJSON ./source.json;
-in
-buildNpmPackage {
+buildNpmPackage (finalAttrs: {
   pname = "mongosh";
-  inherit (source) version;
+  version = "2.5.1";
 
-  src = fetchurl {
-    url = "https://registry.npmjs.org/mongosh/-/${source.filename}";
-    hash = source.integrity;
+  src = fetchFromGitHub {
+    owner = "mongodb-js";
+    repo = "mongosh";
+
+    # Tracking a few commits ahead of 2.5.1 to ensure the package-lock.json patch below applies
+    #tag = "v${finalAttrs.version}";
+    rev = "2163e8b10a77af18e0cedfa164526506c051593e";
+
+    hash = "sha256-DYX8NqAISwzBpdilcv3YVrL72byXMeC4z/nLqd2nf2c=";
   };
 
-  postPatch = ''
-    ln -s ${./package-lock.json} package-lock.json
+  patches = [
+    # https://github.com/mongodb-js/mongosh/pull/2452
+    (fetchpatch {
+      url = "https://github.com/mongodb-js/mongosh/commit/30f66260fce3e1744298d086bd2b54b2d2bfffbb.patch";
+      hash = "sha256-c2QM/toeoagfhvuh4r+/5j7ZyV6DEr9brA9mXpEy1kM=";
+    })
+
+    ./disable-telemetry.patch
+  ];
+
+  npmDepsHash = "sha256-6uXEKAAGXxaODjXIszYml5Af4zSuEzy/QKdMgSzLD84=";
+  npmFlags = [
+    "--omit=optional"
+    "--ignore-scripts"
+  ];
+  npmBuildScript = "compile";
+  dontNpmInstall = true;
+  installPhase = ''
+    runHook preInstall
+    npmWorkspace=packages/mongosh npmInstallHook
+    cp -r packages configs $out/lib/node_modules/mongosh/
+    rm $out/lib/node_modules/mongosh/node_modules/@mongosh/docker-build-scripts # dangling symlink
+    runHook postInstall
   '';
-
-  npmDepsHash = source.deps;
-
-  makeCacheWritable = true;
-  dontNpmBuild = true;
-  npmFlags = [ "--omit=optional" ];
 
   passthru = {
     tests.version = testers.testVersion {
-      package = mongosh;
+      package = finalAttrs.finalPackage;
     };
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -42,4 +63,4 @@ buildNpmPackage {
     license = lib.licenses.asl20;
     mainProgram = "mongosh";
   };
-}
+})

@@ -5,6 +5,7 @@
   bleak,
   buildPythonPackage,
   fetchFromGitHub,
+  mashumaro,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
@@ -14,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "pylamarzocco";
-  version = "1.4.9";
+  version = "2.0.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "zweckj";
     repo = "pylamarzocco";
     tag = "v${version}";
-    hash = "sha256-rEN1z+gkQjWjDkISdnn0KsxVzzPSKGPI/+VeYclIvkI=";
+    hash = "sha256-ING00Xz+ipEnwX+u4M6upN5aYX2JrKZS/ho6b72QyFw=";
   };
 
   build-system = [ setuptools ];
@@ -31,6 +32,7 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     bleak
+    mashumaro
   ];
 
   nativeCheckInputs = [

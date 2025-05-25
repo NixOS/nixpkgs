@@ -102,6 +102,10 @@ in
       "services"
       "chronos"
     ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "services"
+      "clamsmtp"
+    ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "confluence" ]
       "Atlassian software has been removed, as support for the Atlassian Server products ended in February 2024 and there was insufficient interest in maintaining the Atlassian Data Center replacements"
     )
@@ -192,6 +196,9 @@ in
     (mkRemovedOptionModule [ "services" "mwlib" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "pantheon" "files" ] ''
       This module was removed, please add pkgs.pantheon.elementary-files to environment.systemPackages directly.
+    '')
+    (mkRemovedOptionModule [ "services" "polipo" ] ''
+      The polipo project is unmaintained and archived upstream.
     '')
     (mkRemovedOptionModule [ "services" "prey" ] ''
       prey-bash-client is deprecated upstream
@@ -299,6 +306,9 @@ in
       See https://www.isc.org/blogs/isc-dhcp-eol/ for details.
       Please switch to a different implementation like kea or dnsmasq.
     '')
+    (mkRemovedOptionModule [ "services" "gsignond" ] ''
+      The corresponding package was unmaintained, abandoned upstream, used outdated library and thus removed from nixpkgs.
+    '')
     (mkRemovedOptionModule [ "services" "haka" ] ''
       The corresponding package was broken and removed from nixpkgs.
     '')
@@ -310,6 +320,14 @@ in
     '')
     (mkRemovedOptionModule [ "services" "rippleDataApi" ] ''
       The corresponding package was broken, abandoned upstream and thus removed from nixpkgs.
+    '')
+    (mkRemovedOptionModule [ "services" "conduwuit" ] ''
+      The conduwuit project has been discontinued by upstream.
+      See https://github.com/NixOS/nixpkgs/pull/397902 for more information.
+    '')
+    (mkRemovedOptionModule [ "services" "signald" ] ''
+      The signald project is unmaintained and has long been incompatible with the
+      official Signal servers.
     '')
 
     # Do NOT add any option renames here, see top of the file

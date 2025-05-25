@@ -2,7 +2,7 @@
   lib,
   mkCoqDerivation,
   coq,
-  mathcomp-ssreflect,
+  mathcomp-boot,
   stdlib,
   version ? null,
 }:
@@ -35,7 +35,7 @@ mkCoqDerivation {
     ] null;
 
   propagatedBuildInputs = [
-    mathcomp-ssreflect
+    mathcomp-boot
     stdlib
   ];
 

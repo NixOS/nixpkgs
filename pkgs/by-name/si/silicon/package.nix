@@ -10,7 +10,6 @@
   libxcb,
   python3,
   libiconv,
-  darwin,
   fira-code,
   fontconfig,
   harfbuzz,
@@ -39,15 +38,9 @@ rustPlatform.buildRustPackage rec {
       harfbuzz
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ libxcb ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        libiconv
-        AppKit
-        CoreText
-        Security
-      ]
-    );
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ];
 
   nativeBuildInputs = [
     cmake

@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "widevine-cdm";
-  version = "4.10.2830.0";
+  version = "4.10.2891.0";
 
   src = fetchzip {
     url = "https://dl.google.com/widevine-cdm/${finalAttrs.version}-linux-x64.zip";
-    hash = "sha256-XDnsan1ulnIK87Owedb2s9XWLzk1K2viGGQe9LN/kcE=";
+    hash = "sha256-ZO6FmqJUnB9VEJ7caJt58ym8eB3/fDATri3iOWCULRI=";
     stripRoot = false;
   };
 

@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "m17n-db";
-  version = "1.8.9";
+  version = "1.8.10";
 
   src = fetchurl {
     url = "mirror://savannah/m17n/${pname}-${version}.tar.gz";
-    hash = "sha256-SBJUo4CqnGbX9Ow6o3Kn4dL+R/w53252BEvUQBfEJKQ=";
+    hash = "sha256-MQJOBRNTNEi5sx6jKU01pkJuZpDrRGKGgHMaqVXAwWw=";
   };
 
   nativeBuildInputs = [ gettext ];

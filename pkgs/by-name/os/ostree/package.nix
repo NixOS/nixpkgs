@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchurl,
-  fetchpatch,
   pkg-config,
   gtk-doc,
   nixosTests,
@@ -11,8 +10,7 @@
   glib,
   xz,
   e2fsprogs,
-  libsoup_2_4,
-  wrapGAppsNoGuiHook,
+  libsoup_3,
   gpgme,
   which,
   makeWrapper,
@@ -36,14 +34,15 @@
   composefs,
   withGjs ? lib.meta.availableOn stdenv.hostPlatform gjs,
   gjs,
-  withGlibNetworking ? lib.meta.availableOn stdenv.hostPlatform glib-networking,
-  glib-networking,
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   gobject-introspection,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
+  replaceVars,
+  openssl,
+  ostree-full,
 }:
 
 let
@@ -53,9 +52,9 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ostree";
-  version = "2024.10";
+  version = "2025.2";
 
   outputs = [
     "out"
@@ -65,15 +64,19 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://github.com/ostreedev/ostree/releases/download/v${version}/libostree-${version}.tar.xz";
-    sha256 = "sha256-VOM4fe4f8WAxoGeayitg2pCrf0omwhGCIzPH8jAAq+4=";
+    url = "https://github.com/ostreedev/ostree/releases/download/v${finalAttrs.version}/libostree-${finalAttrs.version}.tar.xz";
+    hash = "sha256-8kSkCMkJmYp3jhJ/zCLBtQK00BPxXyaUj0fMcv/i7vQ=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "static-pkg-config.patch";
-      url = "https://github.com/ostreedev/ostree/pull/3382.patch";
-      hash = "sha256-VCQLq4OqmojtB7WFHNNV82asgXPGq5tKoJun66eUntY=";
+    # Workarounds for installed tests failing in pseudoterminal
+    # https://github.com/ostreedev/ostree/issues/1592
+    ./fix-1592.patch
+
+    # Hard-code paths in installed tests
+    (replaceVars ./fix-test-paths.patch {
+      python3 = testPython.interpreter;
+      openssl = "${openssl}/bin/openssl";
     })
   ];
 
@@ -91,7 +94,6 @@ stdenv.mkDerivation rec {
       libxslt
       docbook-xsl-nons
       docbook_xml_dtd_42
-      wrapGAppsNoGuiHook
     ]
     ++ lib.optionals withIntrospection [
       gobject-introspection
@@ -102,7 +104,7 @@ stdenv.mkDerivation rec {
       curl
       glib
       e2fsprogs
-      libsoup_2_4
+      libsoup_3 # for trivial-httpd for tests
       gpgme
       fuse3
       libselinux
@@ -121,9 +123,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals withGjs [
       gjs
-    ]
-    ++ lib.optionals withGlibNetworking [
-      glib-networking
     ]
     ++ lib.optionals withSystemd [
       systemd
@@ -160,7 +159,7 @@ stdenv.mkDerivation rec {
     let
       typelibPath = lib.makeSearchPath "/lib/girepository-1.0" [
         (placeholder "out")
-        gobject-introspection
+        glib.out
       ];
     in
     lib.optionalString withIntrospection ''
@@ -173,6 +172,7 @@ stdenv.mkDerivation rec {
     tests = {
       musl = pkgsCross.musl64.ostree;
       installedTests = nixosTests.installed-tests.ostree;
+      inherit ostree-full;
     };
   };
 
@@ -181,6 +181,6 @@ stdenv.mkDerivation rec {
     homepage = "https://ostreedev.github.io/ostree/";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ copumpkin ];
+    maintainers = [ ];
   };
-}
+})

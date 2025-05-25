@@ -8,7 +8,7 @@
   makeDesktopItem,
   glib,
   libsecret,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
 }:
 
 stdenv.mkDerivation rec {
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
         --prefix LD_LIBRARY_PATH : ${
           lib.makeLibraryPath [
             glib
-            webkitgtk_4_0
+            webkitgtk_4_1
           ]
         } \
         --run "mkdir -p /tmp/SWT-GDBusServer"

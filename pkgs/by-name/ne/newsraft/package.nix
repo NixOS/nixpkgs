@@ -8,20 +8,19 @@
   gumbo,
   ncurses,
   sqlite,
-  yajl,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "newsraft";
-  version = "0.29";
+  version = "0.30";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "newsraft";
     repo = "newsraft";
     rev = "newsraft-${finalAttrs.version}";
-    hash = "sha256-6rDnGVOApSURuXom+XxPPOG7lxMbHGTL+4Oqrx+Jq2w=";
+    hash = "sha256-h9gjw2EjWWNdyQT2p4wgWlz4TNitDBX5fPbNNH9/th4=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -31,10 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
     gumbo
     ncurses
     sqlite
-    yajl
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    install -Dm444 doc/newsraft.desktop -t $out/share/applications
+  '';
 
   passthru.updateScript = nix-update-script { };
 

@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "touchegg";
-  version = "2.0.17";
+  version = "2.0.18";
 
   src = fetchFromGitHub {
     owner = "JoseExposito";
     repo = "touchegg";
     rev = version;
-    sha256 = "sha256-he6ERl6ZNWuD5StUqQWsUjeJ35nD0b8KddIAvntqlOI=";
+    sha256 = "sha256-7LJ5gD2e6e4edKDabqmsiXTdNKJ39557Q4sEGWF8H1U=";
   };
 
   patches = lib.optionals withPantheon [
@@ -80,6 +80,6 @@ stdenv.mkDerivation rec {
     mainProgram = "touchegg";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }

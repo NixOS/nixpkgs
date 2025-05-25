@@ -4,6 +4,7 @@
   lib,
   buildGoModule,
   installShellFiles,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -29,6 +30,8 @@ buildGoModule rec {
       --fish <($out/bin/mongocli completion fish) \
       --zsh <($out/bin/mongocli completion zsh)
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "MongoDB CLI enable you to manage your MongoDB via ops manager and cloud manager";

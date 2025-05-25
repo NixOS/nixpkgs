@@ -14,6 +14,10 @@ let
     with lib.versions;
     lib.switch coq.coq-version [
       {
+        case = isEq "9.0";
+        out = "2.2.5";
+      }
+      {
         case = range "8.18" "8.20";
         out = "2.2.1";
       }
@@ -42,6 +46,8 @@ let
     release."2.1.7".sha256 = "sha256-HsLv2ziPIUK6Q5/xz8ZvaGWggUCK1AKv47U5M7SCcKU=";
     release."2.2.1".rev = "v2.2.1";
     release."2.2.1".sha256 = "sha256-miIVAv/8jlP1pXnoK1MWz4O6nlmb309a8UjcCivbiB4=";
+    release."2.2.5".rev = "v2.2.5";
+    release."2.2.5".sha256 = "sha256-XyIjwem/yS7UIpQATNixgKkrMOHHs74nkAOvpU5WG1k=";
     inherit location;
   });
   fetched = fetch (if version != null then version else defaultVersion);

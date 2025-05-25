@@ -18,9 +18,7 @@ let
 
   cfgUpdate = pkgs.writeText "octoprint-config.yaml" (builtins.toJSON fullConfig);
 
-  pluginsEnv = package.python.withPackages (ps: [ ps.octoprint ] ++ (cfg.plugins ps));
-
-  package = pkgs.octoprint;
+  pluginsEnv = cfg.package.python.withPackages (ps: [ ps.octoprint ] ++ (cfg.plugins ps));
 
 in
 {
@@ -29,6 +27,8 @@ in
   options = {
 
     services.octoprint = {
+
+      package = lib.mkPackageOption pkgs "octoprint" { };
 
       enable = lib.mkEnableOption "OctoPrint, web interface for 3D printers";
 

@@ -6,16 +6,15 @@
 
   # build-system
   setuptools,
+  setuptools-scm,
 
   # dependencies
-  multimethod,
   numpy,
   packaging,
   pandas,
   pydantic,
   typeguard,
   typing-inspect,
-  wrapt,
 
   # optional-dependencies
   black,
@@ -39,27 +38,30 @@
 
 buildPythonPackage rec {
   pname = "pandera";
-  version = "0.22.1";
+  version = "0.23.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "unionai-oss";
     repo = "pandera";
     tag = "v${version}";
-    hash = "sha256-QOks3L/ZebkoWXWbHMn/tV9SmYSbR+gZ8wpqWoydkPM=";
+    hash = "sha256-aKyuOA/N5QPv6NoN6OFNSFMuN4+8XMpglVtoDFDJZBs=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   dependencies = [
-    multimethod
     numpy
     packaging
     pandas
     pydantic
     typeguard
     typing-inspect
-    wrapt
   ];
 
   optional-dependencies =

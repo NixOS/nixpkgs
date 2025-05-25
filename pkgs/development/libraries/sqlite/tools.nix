@@ -5,7 +5,6 @@
   unzip,
   sqlite,
   tcl,
-  Foundation,
 }:
 
 let
@@ -31,7 +30,7 @@ let
         };
 
       nativeBuildInputs = [ unzip ];
-      buildInputs = [ tcl ] ++ lib.optional stdenv.hostPlatform.isDarwin Foundation;
+      buildInputs = [ tcl ];
 
       makeFlags = [ makeTarget ];
 

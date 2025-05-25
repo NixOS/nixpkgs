@@ -8,38 +8,38 @@
   "fetchurlAttrSet": {
     "docker-credential-up": {
       "aarch64-darwin": {
-        "hash": "sha256-hQpZdqE27jCXIGp+Y7fdVocBPM6PJ50Z9/ly0QvFsok=",
-        "url": "https://cli.upbound.io/stable/v0.38.4/bundle/docker-credential-up/darwin_arm64.tar.gz"
+        "hash": "sha256-mBL2ytAXOtGwkitBzk1VB4SHS1oZ/9wcyZbCbfxyFko=",
+        "url": "https://cli.upbound.io/stable/v0.39.0/bundle/docker-credential-up/darwin_arm64.tar.gz"
       },
       "aarch64-linux": {
-        "hash": "sha256-SHjYjf4wC8G6KpF+W86ULI1CwVH93bgKLTof5M9wvZ4=",
-        "url": "https://cli.upbound.io/stable/v0.38.4/bundle/docker-credential-up/linux_arm64.tar.gz"
+        "hash": "sha256-7BZ9MuszhhWfK6OaDhij8Q6qPXBm58sWLcPN/XjF/QY=",
+        "url": "https://cli.upbound.io/stable/v0.39.0/bundle/docker-credential-up/linux_arm64.tar.gz"
       },
       "x86_64-darwin": {
-        "hash": "sha256-XiiyEMVb8bhjmJrofE2T/Vgg+pNBNxUv0yKKm9rIx+4=",
-        "url": "https://cli.upbound.io/stable/v0.38.4/bundle/docker-credential-up/darwin_amd64.tar.gz"
+        "hash": "sha256-wH3KGhRcdDj3bAwTbRZDiKSNyKgsxzfFRtmZKmFCc8A=",
+        "url": "https://cli.upbound.io/stable/v0.39.0/bundle/docker-credential-up/darwin_amd64.tar.gz"
       },
       "x86_64-linux": {
-        "hash": "sha256-R3pgYboerb8gVc1sDmZVHY541yO0A3hIYeIiZ1wrTzg=",
-        "url": "https://cli.upbound.io/stable/v0.38.4/bundle/docker-credential-up/linux_amd64.tar.gz"
+        "hash": "sha256-VChdnWUJgS2meK0POrF3HoPFVskgHTQgUkJaj/yAIFA=",
+        "url": "https://cli.upbound.io/stable/v0.39.0/bundle/docker-credential-up/linux_amd64.tar.gz"
       }
     },
     "up": {
       "aarch64-darwin": {
-        "hash": "sha256-6DTIUGeT4LGRVyfUl463y9b2zGJawWzXp/Y0aNWoYPI=",
-        "url": "https://cli.upbound.io/stable/v0.38.4/bundle/up/darwin_arm64.tar.gz"
+        "hash": "sha256-NL0erDPBa35mQoxGscLEYOZEf4QPWIrtEi20v0kkjD4=",
+        "url": "https://cli.upbound.io/stable/v0.39.0/bundle/up/darwin_arm64.tar.gz"
       },
       "aarch64-linux": {
-        "hash": "sha256-bgR9OSHRWFQG50TWt7b8r9Gdb/xE0ps5yu33C58k31I=",
-        "url": "https://cli.upbound.io/stable/v0.38.4/bundle/up/linux_arm64.tar.gz"
+        "hash": "sha256-kZeD9NyUpXJCjEP+KdCy9JnyEBEMNvUJ0DxkKtL/5HI=",
+        "url": "https://cli.upbound.io/stable/v0.39.0/bundle/up/linux_arm64.tar.gz"
       },
       "x86_64-darwin": {
-        "hash": "sha256-zMpYwYncghWCr+sNbXvjcwWcimv4ouc8EsKmK50i9zU=",
-        "url": "https://cli.upbound.io/stable/v0.38.4/bundle/up/darwin_amd64.tar.gz"
+        "hash": "sha256-0bIC7h4Eor9wFCzxiJaSv3OlDONmiDxLM7aApCcG7bY=",
+        "url": "https://cli.upbound.io/stable/v0.39.0/bundle/up/darwin_amd64.tar.gz"
       },
       "x86_64-linux": {
-        "hash": "sha256-f6ggEUV9CRWVcG/RkYzmwaOUljxnJeoVshwkOZL3Toc=",
-        "url": "https://cli.upbound.io/stable/v0.38.4/bundle/up/linux_amd64.tar.gz"
+        "hash": "sha256-ihjjtkhfXsUPnkeEfCaMTjkX4J+hbyrfpjnMY4kGuSQ=",
+        "url": "https://cli.upbound.io/stable/v0.39.0/bundle/up/linux_amd64.tar.gz"
       }
     }
   },
@@ -49,5 +49,5 @@
     "x86_64-darwin",
     "x86_64-linux"
   ],
-  "version": "0.38.4"
+  "version": "0.39.0"
 }

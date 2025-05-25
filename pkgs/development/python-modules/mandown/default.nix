@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "mandown";
-  version = "1.11.2";
+  version = "1.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "potatoeggy";
     repo = "mandown";
     tag = "v${version}";
-    hash = "sha256-dKo/sFCdk5nRQ5OrUjTCl5cswfVgEPb/nTnloCeuIRA=";
+    hash = "sha256-dx92a1YI1BW90E2u+v9fggWzrg0mqsV+INNq+2aLmFI=";
   };
 
   build-system = [
@@ -47,6 +47,8 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+    "beautifulsoup4"
+    "lxml"
     "pillow"
     "typer"
   ];

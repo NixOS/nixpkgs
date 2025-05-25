@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -22,6 +23,8 @@ buildGoModule rec {
   postInstall = ''
     mv $out/bin/server $out/bin/livekit-server
   '';
+
+  passthru.tests = nixosTests.livekit;
 
   meta = with lib; {
     description = "End-to-end stack for WebRTC. SFU media server and SDKs";

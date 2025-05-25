@@ -13,16 +13,17 @@
   tl-expected,
   libmamba,
   python3,
+  versionCheckHook,
 }:
 stdenv.mkDerivation rec {
   pname = "mamba-cpp";
-  version = "2.0.5";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "mamba-org";
     repo = "mamba";
-    rev = "micromamba-${version}";
-    hash = "sha256-o5shAmsplJS2WZ4HhAt1U27KqUheVxZTkjlyxR7EYxI=";
+    tag = version;
+    hash = "sha256-JBwdfYM7J5R7HZyw5kVXwu4FlZUd2QPrsTaGuXnyAJI=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -45,6 +46,8 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "BUILD_SHARED" true)
     (lib.cmakeBool "BUILD_LIBMAMBA" false)
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = with lib; {
     description = "Reimplementation of the conda package manager";

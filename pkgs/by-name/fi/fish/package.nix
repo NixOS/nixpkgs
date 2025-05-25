@@ -152,13 +152,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fish";
-  version = "4.0.1";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "fish-shell";
     repo = "fish-shell";
     tag = finalAttrs.version;
-    hash = "sha256-Mj4v2ubYr4ufs7aU/1AdY239byiCJHKXam64af/VO3U=";
+    hash = "sha256-UpoZPipXZbzLWCOXzDjfyTDrsKyXGbh3Rkwj5IeWeY4=";
   };
 
   env = {
@@ -169,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-4kqBrpeneCpF0WohP1ZArKrV3duHAE01XA5+GT9f56w=";
+    hash = "sha256-FkJB33vVVz7Kh23kfmjQDn61X2VkKLG9mUt8f3TrCHg=";
   };
 
   patches = [
@@ -188,10 +188,6 @@ stdenv.mkDerivation (finalAttrs: {
     # * <https://github.com/LnL7/nix-darwin/issues/122>
     # * <https://github.com/fish-shell/fish-shell/issues/7142>
     ./nix-darwin-path.patch
-
-    # remove 4.0.2
-    # https://github.com/fish-shell/fish-shell/issues/11254
-    ./1d78c8bd4295262a3118f478e6b3a7c7536fa282.patch
   ];
 
   # Fix FHS paths in tests

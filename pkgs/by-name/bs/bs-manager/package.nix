@@ -1,87 +1,143 @@
 {
-  asar,
-  autoPatchelfHook,
-  dpkg,
-  electron,
-  fetchurl,
   lib,
-  makeWrapper,
-  nix-update-script,
-  openssl,
   stdenv,
-  zlib,
+  callPackage,
+  nix-update-script,
+
+  buildNpmPackage,
+  fetchNpmDeps,
+  fetchFromGitHub,
+  makeDesktopItem,
+
+  autoPatchelfHook,
+  copyDesktopItems,
+  makeWrapper,
+
+  electron,
+  steam-run-free,
 }:
-stdenv.mkDerivation (finalAttrs: {
+
+buildNpmPackage (finalAttrs: {
   pname = "bs-manager";
-  version = "1.5.2";
+  version = "1.5.3";
 
-  src =
-    if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        url = "https://github.com/Zagrios/bs-manager/releases/download/v1.5.2/bs-manager_1.5.2_amd64.deb";
-        hash = "sha256-rNqnEez56t4TPIKhljC0HEams2xhj6nB3CGW0CuQBKQ=";
-      }
-    else
-      throw "BSManager is not available for your platform";
+  src = fetchFromGitHub {
+    owner = "Zagrios";
+    repo = "bs-manager";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-thqz6sFmov5py7mUBYUC6ANBgjnNFC1hfLEsaxJVYu8=";
+  };
 
-  # TODO: Package BSManager's fork of DepotDownloader and replace vendored binary at $out/opt/BSManager/resources/assets/scripts/DepotDownloader
-  # See https://github.com/Iluhadesu/DepotDownloader
+  patches = [
+    # https://github.com/Zagrios/bs-manager/pull/870
+    ./use-steam-run-for-wine.patch
+  ];
+
+  postPatch = ''
+    # don't search for resources in electron's resource directory, but our own
+    substituteInPlace src/main/services/utils.service.ts \
+      --replace-fail "process.resourcesPath" "'$out/share/bs-manager/resources'"
+
+    # replace vendored DepotDownloader with our own
+    rm assets/scripts/DepotDownloader
+    ln -s ${finalAttrs.passthru.depotdownloader}/bin/DepotDownloader assets/scripts/DepotDownloader
+  '';
+
+  npmDepsHash = "sha256-VsCbz7ImDnJ0tonVhA4lOPA0w//tqF4hLhrReLUqYI8=";
+
+  extraNpmDeps = fetchNpmDeps {
+    name = "bs-manager-${finalAttrs.version}-extra-npm-deps";
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/release/app";
+    hash = "sha256-JqDsv9kvYnbJdNwXN1EbppSrFVqr2cSnVhV2+8uw54g=";
+  };
+
+  makeCacheWritable = true;
+
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+
+  npmRebuildFlags = [ "--ignore-scripts" ];
 
   nativeBuildInputs = [
-    asar
-    autoPatchelfHook # for vendored DepotDownloader
-    dpkg
+    autoPatchelfHook # for some prebuilt node deps: query-process @resvg/resvg-js
+    copyDesktopItems
     makeWrapper
   ];
 
   buildInputs = [
     stdenv.cc.cc
-    zlib
   ];
 
-  # DepotDownloader dlopen()s libssl
-  runtimeDependencies = [
-    (lib.getLib openssl)
-  ];
+  preBuild = ''
+    pushd release/app
 
-  dontConfigure = true;
-  dontBuild = true;
+    rm -r "$npm_config_cache"
+    npmDeps="$extraNpmDeps" npmConfigHook
+    npm run postinstall
+
+    popd
+  '';
+
+  postBuild = ''
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
+
+    npm exec electron-builder -- \
+      --dir \
+      --config=electron-builder.config.js \
+      -c.electronDist=electron-dist \
+      -c.electronVersion=${electron.version}
+  '';
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/opt/BSManager
-    cp -r opt/BSManager/{locales,resources} $out/opt/BSManager
-    cp -Tr usr/ $out
+    for icon in build/icons/png/*.png; do
+      install -Dm644 $icon $out/share/icons/hicolor/$(basename $icon .png)/apps/bs-manager.png
+    done
 
-    # Some assets aren't included in the asar bundle. BSManager relies on
-    # process.resourcesPath to load some of these assets which we have to patch later
-    asar extract $out/opt/BSManager/resources/app.asar $out/opt/BSManager/resources
-    rm $out/opt/BSManager/resources/app.asar
+    mkdir -p $out/share/bs-manager
+    cp -r release/build/*-unpacked/{locales,resources{,.pak}} $out/share/bs-manager
 
-    # Update desktop Exec entry
-    substituteInPlace $out/share/applications/bs-manager.desktop \
-      --replace-fail Exec=/opt/BSManager/bs-manager Exec=bs-manager
-
-    mkdir -p $out/bin
     makeWrapper ${lib.getExe electron} $out/bin/bs-manager \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
-      --add-flags $out/opt/BSManager/resources \
+      --add-flags $out/share/bs-manager/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --prefix PATH : ${lib.makeBinPath [ steam-run-free ]} \
       --inherit-argv0
 
     runHook postInstall
   '';
 
-  preFixup = ''
-    substituteInPlace "$out/opt/BSManager/resources/dist/main/main.js" \
-      --replace-fail "process.resourcesPath" "'$out/opt/BSManager/resources'"
-  '';
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "BSManager";
+      name = "BSManager";
+      exec = "bs-manager";
+      terminal = false;
+      type = "Application";
+      icon = "bs-manager";
+      mimeTypes = [
+        "x-scheme-handler/bsmanager"
+        "x-scheme-handler/beatsaver"
+        "x-scheme-handler/bsplaylist"
+        "x-scheme-handler/modelsaber"
+        "x-scheme-handler/web+bsmap"
+      ];
+      categories = [
+        "Utility"
+        "Game"
+      ];
+    })
+  ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    depotdownloader = callPackage ./depotdownloader { };
+  };
 
   meta = {
-    changelog = "https://github.com/Zagrios/bs-manager/blob/master/CHANGELOG.md";
+    changelog = "https://github.com/Zagrios/bs-manager/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Your Beat Saber Assistant";
     homepage = "https://github.com/Zagrios/bs-manager";
     license = lib.licenses.gpl3Only;
@@ -89,8 +145,12 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       mistyttm
       Scrumplex
+      ImSapphire
+      tomasajt
     ];
-    platforms = [ "x86_64-linux" ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    platforms = lib.platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [
+      binaryNativeCode # prebuilt node deps
+    ];
   };
 })

@@ -45,7 +45,6 @@ postgresqlBuildExtension (finalAttrs: {
       SELECT * FROM finish();
       ROLLBACK;
     '';
-    failureHook = "postgresqlStop";
     checkPhase = ''
       runHook preCheck
       psql -a -v ON_ERROR_STOP=1 -f $sqlPath

@@ -138,7 +138,6 @@
 , "purs-tidy"
 , "purty"
 , "rimraf"
-, "rollup"
 , "sass"
 , "semver"
 , "serve"

@@ -1,6 +1,6 @@
 {
   buildPackages,
-  db,
+  gdbm,
   fetchurl,
   groff,
   gzip,
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     libpipeline
-    db
+    gdbm
     groff
     libiconv'
   ]; # (Yes, 'groff' is both native and build input)

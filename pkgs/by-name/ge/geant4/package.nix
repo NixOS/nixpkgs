@@ -38,12 +38,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "11.3.1";
+  version = "11.3.2";
   pname = "geant4";
 
   src = fetchurl {
     url = "https://cern.ch/geant4-data/releases/geant4-v${version}.tar.gz";
-    hash = "sha256-yTyplvbzWqQ/lI/8q6lgNGjfAd7rYvYcM7p2kifDGf4=";
+    hash = "sha256-iSrt10JSYqUKw9PHEX2BwMDaS0CMaIDbr1R4uTAeSIw=";
   };
 
   # Fix broken paths in a .pc
@@ -141,7 +141,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Toolkit for the simulation of the passage of particles through matter";
     longDescription = ''
       Geant4 is a toolkit for the simulation of the passage of particles through matter.

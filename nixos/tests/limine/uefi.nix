@@ -1,16 +1,10 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 {
   name = "uefi";
-  meta.maintainers = with lib.maintainers; [
-    lzcunt
-    phip1611
-    programmerlexi
-  ];
-  meta.platforms = [
-    "aarch64-linux"
-    "i686-linux"
-    "x86_64-linux"
-  ];
+  meta = {
+    inherit (pkgs.limine.meta) maintainers;
+  };
+
   nodes.machine =
     { ... }:
     {

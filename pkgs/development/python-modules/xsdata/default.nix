@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   replaceVars,
   ruff,
@@ -19,16 +18,14 @@
 
 buildPythonPackage rec {
   pname = "xsdata";
-  version = "24.12";
+  version = "25.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "tefra";
     repo = "xsdata";
     tag = "v${version}";
-    hash = "sha256-ARq7QNwEtnXo0Q04CNWf3bAwyjl92YnFUp/Y51sgsLU=";
+    hash = "sha256-2sHHDFv2p+O5ru9ajnmbk6ULm40h0hMyYiIAFh3PC8I=";
   };
 
   patches = [

@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,10 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-+VVkrXvsqtizeVhfuO0U8ADfSkmovpT7DVwrz7QljU0=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-  ];
 
   meta = with lib; {
     description = "MDBook preprocessor for converting emojicodes (e.g. `: cat :`) into emojis 🐱";

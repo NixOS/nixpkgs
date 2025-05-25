@@ -2,10 +2,8 @@
   lib,
   stdenv,
   buildPythonPackage,
-  CoreFoundation,
   fetchPypi,
   setuptools,
-  IOKit,
   pytestCheckHook,
   python,
   pythonOlder,
@@ -34,11 +32,6 @@ buildPythonPackage rec {
   '';
 
   build-system = [ setuptools ];
-
-  buildInputs =
-    # workaround for https://github.com/NixOS/nixpkgs/issues/146760
-    lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [ CoreFoundation ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

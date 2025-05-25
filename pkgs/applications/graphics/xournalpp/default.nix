@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xournalpp";
-  version = "1.2.6";
+  version = "1.2.7";
 
   src = fetchFromGitHub {
     owner = "xournalpp";
     repo = "xournalpp";
     rev = "v${version}";
-    hash = "sha256-VS5f+9daEQpPu5vam8DWhRqU0AWMmJab8KaRzTnRU/M=";
+    hash = "sha256-Jum9DEbwTtiT0mlrBCBJ0XHhH+DnhXf/AnthZ+qKSZg=";
   };
 
   postPatch = ''

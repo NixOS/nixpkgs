@@ -4,7 +4,6 @@
   version,
   src,
   patches ? [ ],
-  maintainers ? lib.teams.lix.members,
 }@args:
 
 {
@@ -12,6 +11,7 @@
   lib,
   lix,
   boost,
+  capnproto,
   nlohmann_json,
   meson,
   pkg-config,
@@ -24,11 +24,16 @@ stdenv.mkDerivation {
   pname = "nix-eval-jobs";
   version = "${version}${suffix}";
   inherit src patches;
-  buildInputs = [
-    nlohmann_json
-    lix
-    boost
-  ];
+  sourceRoot = if lib.versionAtLeast version "2.93" then "source/subprojects/nix-eval-jobs" else null;
+  buildInputs =
+    [
+      nlohmann_json
+      lix
+      boost
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "2.93") [
+      capnproto
+    ];
   nativeBuildInputs = [
     meson
     pkg-config
@@ -40,6 +45,14 @@ stdenv.mkDerivation {
   # point 'nix edit' and ofborg at the file that defines the attribute,
   # not this common file.
   pos = builtins.unsafeGetAttrPos "version" args;
+
+  # Since this package is intimately tied to a specific Nix release, we
+  # propagate the Nix used for building it to make it easier for users
+  # downstream to reference it.
+  passthru = {
+    nix = lix;
+  };
+
   meta = {
     description = "Hydra's builtin `hydra-eval-jobs` as a standalone tool";
     mainProgram = "nix-eval-jobs";
@@ -50,7 +63,7 @@ stdenv.mkDerivation {
       else
         "https://git.lix.systems/lix-project/nix-eval-jobs";
     license = lib.licenses.gpl3;
-    inherit maintainers;
+    teams = [ lib.teams.lix ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isStatic;
   };

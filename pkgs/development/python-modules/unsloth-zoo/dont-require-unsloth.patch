@@ -1,0 +1,18 @@
+diff --git a/unsloth_zoo/__init__.py b/unsloth_zoo/__init__.py
+--- a/unsloth_zoo/__init__.py
++++ b/unsloth_zoo/__init__.py
+@@ -17,14 +17,10 @@
+ __version__ = "2025.3.17"
+ 
+ from importlib.util import find_spec
+-if find_spec("unsloth") is None:
+-    raise ImportError("Please install Unsloth via `pip install unsloth`!")
+ pass
+ del find_spec
+ 
+ import os
+-if not ("UNSLOTH_IS_PRESENT" in os.environ):
+-    raise ImportError("Please install Unsloth via `pip install unsloth`!")
+ pass
+ 
+ try:

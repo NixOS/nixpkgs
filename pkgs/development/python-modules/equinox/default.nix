@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "equinox";
-  version = "0.12.1";
+  version = "0.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "equinox";
     tag = "v${version}";
-    hash = "sha256-mw2fk+527b6Rx6FGe6QJf3ZbxZ3rjYFXKleX2g6AryU=";
+    hash = "sha256-q/5gNXA8TnHwtm+krVBulHH3QMj9E2JVQgXJk6QYjUI=";
   };
 
   # Relax speed constraints on tests that can fail on busy builders

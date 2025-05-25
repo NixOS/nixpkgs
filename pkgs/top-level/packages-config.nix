@@ -13,7 +13,6 @@
       inherit (super)
         agdaPackages
         apacheHttpdPackages
-        fdbPackages
         fusePackages
         gns3Packages
         haskellPackages
@@ -24,7 +23,6 @@
         rPackages
         roundcubePlugins
         sourceHanPackages
-        zabbix50
         zabbix60
         ;
 

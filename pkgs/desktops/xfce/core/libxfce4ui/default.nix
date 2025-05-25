@@ -62,6 +62,6 @@ mkXfceDerivation {
       lgpl2Plus
       lgpl21Plus
     ];
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

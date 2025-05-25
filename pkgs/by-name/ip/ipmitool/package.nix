@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitHub,
+  fetchFromGitea,
   autoreconfHook,
   pkg-config,
   openssl,
@@ -17,13 +17,14 @@ let
 in
 stdenv.mkDerivation {
   pname = "ipmitool";
-  version = "1.8.19-unstable-2023-01-12";
+  version = "1.8.19-unstable-2025-02-18";
 
-  src = fetchFromGitHub {
-    owner = "ipmitool";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "IPMITool";
     repo = "ipmitool";
-    rev = "be11d948f89b10be094e28d8a0a5e8fb532c7b60";
-    hash = "sha256-5s0F2cTZdmRb/I0rPqX/8KgK/7b5VCl3Hj/ALKpGbMQ=";
+    rev = "3c91e6d91ec6090fe548c55ef301c33ff20c8ed8";
+    hash = "sha256-7R3jmPPd8+yKs7Q1vlU/ZaZusZVB0s+xc1HGeLyLdk0=";
   };
 
   nativeBuildInputs = [
@@ -36,21 +37,18 @@ stdenv.mkDerivation {
     readline
   ];
 
-  postPatch = ''
-    # Fixes `ipmi_fru.c:1556:41: error: initialization of 'struct fru_multirec_mgmt *' from incompatible pointer type 'struct fru_multirect_mgmt *' []`
-    # Probably fine before GCC14, but this is an error now.
-    substituteInPlace lib/ipmi_fru.c \
-      --replace-fail fru_multirect_mgmt fru_multirec_mgmt
-    cp ${iana-enterprise-numbers} enterprise-numbers
-  '';
-
   configureFlags = [ "--disable-registry-download" ];
+
+  postInstall = ''
+    # Install to path reported in configure as "Set IANA PEN dictionary search path to ..."
+    install -Dm444 ${iana-enterprise-numbers} $out/share/misc/enterprise-numbers
+  '';
 
   meta = {
     description = "Command-line interface to IPMI-enabled devices";
     mainProgram = "ipmitool";
     license = lib.licenses.bsd3;
-    homepage = "https://github.com/ipmitool/ipmitool";
+    homepage = "https://codeberg.org/IPMITool/ipmitool";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fpletz ];
   };

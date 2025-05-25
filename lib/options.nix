@@ -30,6 +30,7 @@ let
   inherit (lib.attrsets)
     attrByPath
     optionalAttrs
+    showAttrPath
     ;
   inherit (lib.strings)
     concatMapStrings
@@ -40,6 +41,7 @@ let
     ;
   inherit (lib.lists)
     last
+    toList
     ;
   prioritySuggestion = ''
     Use `lib.mkForce value` or `lib.mkDefault value` to change the priority on any of these definitions.
@@ -310,14 +312,14 @@ rec {
     }:
     let
       name' = if isList name then last name else name;
-      default' = if isList default then default else [ default ];
-      defaultText = concatStringsSep "." default';
+      default' = toList default;
+      defaultText = showAttrPath default';
       defaultValue = attrByPath default' (throw "${defaultText} cannot be found in ${pkgsText}") pkgs;
       defaults =
         if default != null then
           {
             default = defaultValue;
-            defaultText = literalExpression ("${pkgsText}." + defaultText);
+            defaultText = literalExpression "${pkgsText}.${defaultText}";
           }
         else
           optionalAttrs nullable {
@@ -333,7 +335,7 @@ rec {
       }
       // optionalAttrs (example != null) {
         example = literalExpression (
-          if isList example then "${pkgsText}." + concatStringsSep "." example else example
+          if isList example then "${pkgsText}.${showAttrPath example}" else example
         );
       }
     );

@@ -9,6 +9,7 @@
   libtool,
   python3,
   wxGTK32,
+  wrapGAppsHook3,
   llvmPackages,
 }:
 
@@ -52,6 +53,7 @@ stdenv.mkDerivation rec {
     libtool
     python3
     wxGTK32
+    wrapGAppsHook3
   ];
 
   buildInputs = lib.optionals stdenv.cc.isClang [

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   stdenv,
   wxGTK31,
-  darwin,
   withGui ? true,
 }:
 
@@ -21,9 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ] ++ lib.optional withGui wxGTK31;
 
-  buildInputs =
-    lib.optional withGui wxGTK31
-    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Cocoa;
+  buildInputs = lib.optional withGui wxGTK31;
 
   strictDeps = true;
 

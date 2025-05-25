@@ -56,7 +56,7 @@
   withBzlib ? withHeadlessDeps,
   withCaca ? withFullDeps, # Textual display (ASCII art)
   withCdio ? withFullDeps && withGPL, # Audio CD grabbing
-  withCelt ? withHeadlessDeps, # CELT decoder
+  withCelt ? withFullDeps, # CELT decoder
   withChromaprint ? withFullDeps, # Audio fingerprinting
   withCodec2 ? withFullDeps, # codec2 en/decoding
   withCuda ? withFullDeps && withNvcodec,
@@ -72,7 +72,12 @@
   withNvcodec ?
     withHeadlessDeps
     && (
-      with stdenv; !isDarwin && !isAarch32 && !hostPlatform.isRiscV && hostPlatform == buildPlatform
+      with stdenv;
+      !isDarwin
+      && !isAarch32
+      && !hostPlatform.isLoongArch64
+      && !hostPlatform.isRiscV
+      && hostPlatform == buildPlatform
     ), # dynamically linked Nvidia code
   withFlite ? withFullDeps, # Voice Synthesis
   withFontconfig ? withHeadlessDeps, # Needed for drawtext filter
@@ -424,6 +429,13 @@ stdenv.mkDerivation (
 
     patches =
       [ ]
+      ++ optionals (lib.versionOlder version "5") [
+        (fetchpatch2 {
+          name = "rename_iszero";
+          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/b27ae2c0b704e83f950980102bc3f12f9ec17cb0";
+          hash = "sha256-l1t4LcUDSW757diNu69NzvjenW5Mxb5aYtXz64Yl9gs=";
+        })
+      ]
       ++ optionals (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2") [
         (fetchpatch2 {
           # this can be removed post 6.1
@@ -460,6 +472,20 @@ stdenv.mkDerivation (
           name = "CVE-2023-50008.patch";
           url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/5f87a68cf70dafeab2fb89b42e41a4c29053b89b";
           hash = "sha256-sqUUSOPTPLwu2h8GbAw4SfEf+0oWioz52BcpW1n4v3Y=";
+        })
+      ]
+      ++ optionals (lib.versionOlder version "7.1.1") [
+        (fetchpatch2 {
+          name = "texinfo-7.1.patch";
+          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/4d9cdf82ee36a7da4f065821c86165fe565aeac2";
+          hash = "sha256-BZsq1WI6OgtkCQE8koQu0CNcb5c8WgTu/LzQzu6ZLuo=";
+        })
+      ]
+      ++ optionals (lib.versionOlder version "7" && stdenv.hostPlatform.isAarch32) [
+        (fetchpatch2 {
+          name = "binutils-2-43-compat.patch";
+          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/654bd47716c4f36719fb0f3f7fd8386d5ed0b916";
+          hash = "sha256-OLiQHKBNp2p63ZmzBBI4GEGz3WSSP+rMd8ITfZSVRgY=";
         })
       ]
       ++ optionals (lib.versionAtLeast version "7.1" && lib.versionOlder version "7.1.1") [
@@ -1012,6 +1038,10 @@ stdenv.mkDerivation (
   }
   // lib.optionalAttrs withCudaLLVM {
     # remove once https://github.com/NixOS/nixpkgs/issues/318674 is addressed properly
-    hardeningDisable = [ "zerocallusedregs" ];
+    hardeningDisable = [
+      "pacret"
+      "shadowstack"
+      "zerocallusedregs"
+    ];
   }
 )

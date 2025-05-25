@@ -6,6 +6,7 @@
 
   nix-util,
   nix-store,
+  nix-expr,
 
   # Configuration Options
 
@@ -18,11 +19,15 @@ mkMesonLibrary (finalAttrs: {
 
   workDir = ./.;
 
-  propagatedBuildInputs = [
-    nix-util
-    nix-store
-    openssl
-  ];
+  propagatedBuildInputs =
+    lib.optionals (lib.versionAtLeast version "2.28") [
+      nix-expr
+    ]
+    ++ [
+      nix-util
+      nix-store
+      openssl
+    ];
 
   meta = {
     platforms = lib.platforms.unix ++ lib.platforms.windows;

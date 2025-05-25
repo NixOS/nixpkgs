@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "quil";
-  version = "0.15.3";
+  version = "0.16.0";
   pyproject = true;
 
   # error: the configured Python interpreter version (3.13) is newer than PyO3's maximum supported version (3.12)
@@ -21,12 +21,12 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = "quil-rs";
     tag = "quil-py/v${version}";
-    hash = "sha256-55NfQlpeqp0je9MpTeQdVyhZ8C16lZJKM43PTsQY5nc=";
+    hash = "sha256-sj+JjE6y+toIjHO1J2g+3gzQMcfSa6zzQeOySATU48w=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-hMvbbJulJaR5Qy7LS4H9CyiAoQWoPMNxxVzmwD9aYTQ=";
+    hash = "sha256-0KZikbCJgg4prR9XxfCJcZOTiV2Hcob2zLurxqCkH6I=";
   };
 
   buildAndTestSubdir = "quil-py";

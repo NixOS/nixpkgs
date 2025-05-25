@@ -28,6 +28,6 @@ buildKodiAddon rec {
     homepage = "https://github.com/zach-morris/script.module.archive_tool";
     description = "Set of common python functions to work with the Kodi archive virtual file system (vfs) binary addons";
     license = licenses.gpl3Plus;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

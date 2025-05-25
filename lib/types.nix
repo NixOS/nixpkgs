@@ -290,6 +290,15 @@ let
       unparenthesize: t:
       if unparenthesize (t.descriptionClass or null) then t.description else "(${t.description})";
 
+    noCheckForDocsModule = {
+      # When generating documentation, our goal isn't to check anything.
+      # Quite the opposite in fact. Generating docs is somewhat of a
+      # challenge, evaluating modules in a *lacking* context. Anything
+      # that makes the docs avoid an error is a win.
+      config._module.check = lib.mkForce false;
+      _file = "<built-in module that disables checks for the purpose of documentation generation>";
+    };
+
     # When adding new types don't forget to document them in
     # nixos/doc/manual/development/option-types.section.md!
     types = rec {
@@ -669,7 +678,14 @@ let
             check =
               x:
               let
-                isInStore = builtins.match "${builtins.storeDir}/[^.].*" (toString x) != null;
+                isInStore = lib.path.hasStorePathPrefix (
+                  if builtins.isPath x then
+                    x
+                  # Discarding string context is necessary to convert the value to
+                  # a path and safe as the result is never used in any derivation.
+                  else
+                    /. + builtins.unsafeDiscardStringContext x
+                );
                 isAbsolute = builtins.substring 0 1 (toString x) == "/";
                 isExpectedType = (
                   if inStore == null || inStore then isStringLike x else isString x # Do not allow a true path, which could be copied to the store later on.
@@ -1209,7 +1225,14 @@ let
         in
         mkOptionType {
           inherit name;
-          description = if description != null then description else freeformType.description or name;
+          description =
+            if description != null then
+              description
+            else
+              let
+                docsEval = base.extendModules { modules = [ noCheckForDocsModule ]; };
+              in
+              docsEval._module.freeformType.description or name;
           check = x: isAttrs x || isFunction x || path.check x;
           merge =
             loc: defs:
@@ -1222,7 +1245,18 @@ let
           };
           getSubOptions =
             prefix:
-            (base.extendModules { inherit prefix; }).options
+            let
+              docsEval = (
+                base.extendModules {
+                  inherit prefix;
+                  modules = [ noCheckForDocsModule ];
+                }
+              );
+              # Intentionally shadow the freeformType from the possibly *checked*
+              # configuration. See `noCheckForDocsModule` comment.
+              inherit (docsEval._module) freeformType;
+            in
+            docsEval.options
             // optionalAttrs (freeformType != null) {
               # Expose the sub options of the freeform type. Note that the option
               # discovery doesn't care about the attribute name used here, so this

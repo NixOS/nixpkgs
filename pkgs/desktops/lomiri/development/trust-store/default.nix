@@ -139,7 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Common implementation of a trust store to be used by trusted helpers";
     homepage = "https://gitlab.com/ubports/development/core/trust-store";
     license = licenses.lgpl3Only;
-    maintainers = teams.lomiri.members;
+    teams = [ teams.lomiri ];
     platforms = platforms.linux;
     pkgConfigModules = [
       "trust-store"

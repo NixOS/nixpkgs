@@ -189,6 +189,7 @@ runCommand drvName
       # source-code itself).
       platforms = [ "x86_64-linux" ];
       maintainers = with maintainers; [ robbins ];
+      teams = [ teams.android ];
       mainProgram = pname;
     };
   }

@@ -47,9 +47,9 @@ selectPackages:
 let
   inherit (haskellPackages) llvmPackages ghc;
 
-  packages =
-    selectPackages haskellPackages
-    ++ lib.optional withHoogle (hoogleWithPackages selectPackages);
+  hoogleWithPackages' = if withHoogle then hoogleWithPackages selectPackages else null;
+
+  packages = selectPackages haskellPackages ++ [ hoogleWithPackages' ];
 
   isGhcjs = ghc.isGhcjs or false;
   isHaLVM = ghc.isHaLVM or false;
@@ -201,6 +201,8 @@ else
     preferLocalBuild = true;
     passthru = {
       inherit (ghc) version meta;
+
+      hoogle = hoogleWithPackages';
 
       # Inform users about backwards incompatibilities with <= 21.05
       override =

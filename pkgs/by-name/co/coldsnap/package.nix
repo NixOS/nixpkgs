@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     description = "Command line interface for Amazon EBS snapshots";
     changelog = "https://github.com/awslabs/coldsnap/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    teams = [ teams.determinatesystems ];
     mainProgram = "coldsnap";
   };
 }

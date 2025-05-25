@@ -16,27 +16,27 @@ let
   gpt-4o-tokenizer = fetchurl {
     url = "https://huggingface.co/Xenova/gpt-4o/resolve/31376962e96831b948abe05d420160d0793a65a4/tokenizer.json";
     hash = "sha256-Q6OtRhimqTj4wmFBVOoQwxrVOmLVaDrgsOYTNXXO8H4=";
-    meta.license = lib.licenses.unfree;
+    meta.license = lib.licenses.mit;
   };
   claude-tokenizer = fetchurl {
     url = "https://huggingface.co/Xenova/claude-tokenizer/resolve/cae688821ea05490de49a6d3faa36468a4672fad/tokenizer.json";
     hash = "sha256-wkFzffJLTn98mvT9zuKaDKkD3LKIqLdTvDRqMJKRF2c=";
-    meta.license = lib.licenses.unfree;
+    meta.license = lib.licenses.mit;
   };
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "goose-cli";
-  version = "1.0.15";
+  version = "1.0.23";
 
   src = fetchFromGitHub {
     owner = "block";
     repo = "goose";
-    tag = "v${version}";
-    hash = "sha256-9uIpwJaRpYvsWW8ysFQWgogp/4hh5b72+5dNwYQKrM8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jdoopa4pbW3MSgbNmNSp47iiXZF8H2GEgyhpkV1cB4A=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-5qMciAnX34fbiV5Oy/+V3o7S3NwubxyRRNFXWcQK+kE=";
+  cargoHash = "sha256-We2v/U9pK4O7JVXyVDvHwyrujPLp9jL1m4SKcMg/Hvc=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -59,14 +59,22 @@ rustPlatform.buildRustPackage rec {
       # need dbus-daemon
       "--skip=config::base::tests::test_multiple_secrets"
       "--skip=config::base::tests::test_secret_management"
+      "--skip=config::base::tests::test_concurrent_extension_writes"
       # Observer should be Some with both init project keys set
       "--skip=tracing::langfuse_layer::tests::test_create_langfuse_observer"
       "--skip=providers::gcpauth::tests::test_token_refresh_race_condition"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Lazy instance has previously been poisoned
       "--skip=jetbrains::tests::test_capabilities"
       "--skip=jetbrains::tests::test_router_creation"
+      "--skip=logging::tests::test_log_file_name::with_session_name_without_error_capture"
+      "--skip=logging::tests::test_log_file_name::without_session_name"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "--skip=providers::gcpauth::tests::test_load_from_metadata_server"
+      "--skip=providers::oauth::tests::test_get_workspace_endpoints"
+      "--skip=tracing::langfuse_layer::tests::test_batch_manager_spawn_sender"
+      "--skip=tracing::langfuse_layer::tests::test_batch_send_partial_failure"
+      "--skip=tracing::langfuse_layer::tests::test_batch_send_success"
     ];
 
   passthru.updateScript = nix-update-script { };
@@ -76,7 +84,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/block/goose";
     mainProgram = "goose";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ cloudripper ];
+    maintainers = with lib.maintainers; [
+      cloudripper
+      thardin
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

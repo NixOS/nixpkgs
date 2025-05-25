@@ -50,7 +50,7 @@ import ./versions.nix (
     nativeBuildInputs = [
       autoreconfHook
       pkg-config
-    ];
+    ] ++ optional postgresqlSupport libpq.pg_config;
     buildInputs =
       [
         curl
@@ -90,10 +90,6 @@ import ./versions.nix (
       ++ optional mysqlSupport "--with-mysql"
       ++ optional postgresqlSupport "--with-postgresql"
       ++ optional ipmiSupport "--with-openipmi=${openipmi.dev}";
-
-    env.NIX_CFLAGS_COMPILE = lib.optionalString (
-      lib.versions.major version <= "5"
-    ) "-Wno-error=incompatible-pointer-types";
 
     prePatch = ''
       find database -name data.sql -exec sed -i 's|/usr/bin/||g' {} +

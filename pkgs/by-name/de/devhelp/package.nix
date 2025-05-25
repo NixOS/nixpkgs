@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     homepage = "https://apps.gnome.org/Devhelp/";
     changelog = "https://gitlab.gnome.org/GNOME/devhelp/-/blob/${version}/NEWS?ref_type=tags";
     license = licenses.gpl3Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.linux;
   };
 }

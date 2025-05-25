@@ -7,7 +7,7 @@
   ninja,
   python3,
   nix-update-script,
-  abseil-cpp,
+  abseil-cpp_202401,
   curl,
   gtest,
   nlohmann_json,
@@ -16,7 +16,7 @@
   libwebm,
   mbedtls,
   mimalloc,
-  protobuf,
+  protobuf_29,
   zlib,
 }:
 
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
       # pssh_box.py.
       ps.protobuf
     ]))
-    abseil-cpp
+    abseil-cpp_202401
     curl
     gtest
     nlohmann_json
@@ -69,9 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
     libwebm
     mbedtls
     mimalloc
-    (protobuf.override {
+    (protobuf_29.override {
       # must be the same version as for shaka-packager
-      inherit abseil-cpp;
+      abseil-cpp = abseil-cpp_202401;
     })
     zlib
   ];

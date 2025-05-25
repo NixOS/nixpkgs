@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "github-mcp-server";
-  version = "0.1.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "github";
     repo = "github-mcp-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LpD4zLAeLFod7sCNvBW8u9Wk0lL75OmlRXZqpQsQMOs=";
+    hash = "sha256-7bxphEQOewy7RZIfKp6aEIPvhgvq4AsU8FozsDsGVgM=";
   };
 
-  vendorHash = "sha256-YqjcPP4elzdwEVvYUcFBoPYWlFzeT+q2+pxNzgj1X0Q=";
+  vendorHash = "sha256-yUg+4Z8e9j4wpDD+5XG7pZFnxibGiI5Gks1CEQT2E3g=";
 
   ldflags = [
     "-s"
@@ -25,6 +25,8 @@ buildGoModule (finalAttrs: {
     "-X=main.commit=${finalAttrs.src.rev}"
     "-X=main.date=1970-01-01T00:00:00Z"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

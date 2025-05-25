@@ -3,7 +3,6 @@
   rustPlatform,
   fetchFromGitHub,
   stdenv,
-  darwin,
   rust-jemalloc-sys,
   nix-update-script,
   versionCheckHook,
@@ -24,7 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     rust-jemalloc-sys
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
+  ];
 
   # Patch the tests to find the binary
   postPatch = ''

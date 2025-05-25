@@ -61,14 +61,14 @@ let
 in
 buildPythonPackage rec {
   pname = "gftools";
-  version = "0.9.79";
+  version = "0.9.85";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "gftools";
     tag = "v${version}";
-    hash = "sha256-u1GnV+2Mg/I7plD6v2uk2pc44JHKzB3sHn9YjhrmIeo=";
+    hash = "sha256-D7s4msdJFiBlIvREiOqLACDwciNi9Di0dRB+qLpfhFY=";
   };
 
   postPatch = ''

@@ -15,11 +15,12 @@
   pkg-config,
   gtk-doc,
   docbook-xsl-nons,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libgedit-tepl";
-  version = "6.12.0";
+  version = "6.13.0";
 
   outputs = [
     "out"
@@ -32,8 +33,8 @@ stdenv.mkDerivation rec {
     group = "World";
     owner = "gedit";
     repo = "libgedit-tepl";
-    rev = version;
-    hash = "sha256-s3b7wj6b2SM0+i0vXUDDhnspgPcsRAsA5kLblh0orJE=";
+    tag = version;
+    hash = "sha256-YWONsw5+gq5Uew6xB76pKsGTJmI83zAssO5WX6aP7ZM=";
   };
 
   strictDeps = true;
@@ -61,6 +62,8 @@ stdenv.mkDerivation rec {
     libgedit-gfls
     libgedit-gtksourceview
   ];
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/gedit/libgedit-tepl";

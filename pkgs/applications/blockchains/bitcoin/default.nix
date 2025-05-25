@@ -2,21 +2,19 @@
   lib,
   stdenv,
   fetchurl,
-  autoreconfHook,
+  cmake,
   pkg-config,
   installShellFiles,
-  util-linux,
-  hexdump,
   autoSignDarwinBinariesHook,
   wrapQtAppsHook ? null,
   boost,
   libevent,
-  miniupnpc,
   zeromq,
   zlib,
   db48,
   sqlite,
   qrencode,
+  libsystemtap,
   qtbase ? null,
   qttools ? null,
   python3,
@@ -24,6 +22,7 @@
   nixosTests,
   withGui,
   withWallet ? true,
+  enableTracing ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic,
 }:
 
 let
@@ -35,24 +34,22 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = if withGui then "bitcoin" else "bitcoind";
-  version = "28.1";
+  version = "29.0";
 
   src = fetchurl {
     urls = [
       "https://bitcoincore.org/bin/bitcoin-core-${finalAttrs.version}/bitcoin-${finalAttrs.version}.tar.gz"
     ];
     # hash retrieved from signed SHA256SUMS
-    sha256 = "c5ae2dd041c7f9d9b7c722490ba5a9d624f7e9a089c67090615e1ba4ad0883ba";
+    sha256 = "882c782c34a3bf2eacd1fae5cdc58b35b869883512f197f7d6dc8f195decfdaa";
   };
 
   nativeBuildInputs =
     [
-      autoreconfHook
+      cmake
       pkg-config
       installShellFiles
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linux ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ hexdump ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       autoSignDarwinBinariesHook
     ]
@@ -62,10 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
     [
       boost
       libevent
-      miniupnpc
       zeromq
       zlib
     ]
+    ++ lib.optionals enableTracing [ libsystemtap ]
     ++ lib.optionals withWallet [ sqlite ]
     # building with db48 (for legacy descriptor wallet support) is broken on Darwin
     ++ lib.optionals (withWallet && !stdenv.hostPlatform.isDarwin) [ db48 ]
@@ -77,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall =
     ''
+      cd ..
       installShellCompletion --bash contrib/completions/bash/bitcoin-cli.bash
       installShellCompletion --bash contrib/completions/bash/bitcoind.bash
       installShellCompletion --bash contrib/completions/bash/bitcoin-tx.bash
@@ -95,22 +93,29 @@ stdenv.mkDerivation (finalAttrs: {
       install -Dm644 share/pixmaps/bitcoin256.png $out/share/pixmaps/bitcoin.png
     '';
 
-  configureFlags =
+  cmakeFlags =
     [
-      "--with-boost-libdir=${boost.out}/lib"
-      "--disable-bench"
+      (lib.cmakeBool "BUILD_BENCH" false)
+      (lib.cmakeBool "WITH_ZMQ" true)
+      # building with db48 (for legacy wallet support) is broken on Darwin
+      (lib.cmakeBool "WITH_BDB" (withWallet && !stdenv.hostPlatform.isDarwin))
+      (lib.cmakeBool "WITH_USDT" enableTracing)
     ]
     ++ lib.optionals (!finalAttrs.doCheck) [
-      "--disable-tests"
-      "--disable-gui-tests"
+      (lib.cmakeBool "BUILD_TESTS" false)
+      (lib.cmakeBool "BUILD_FUZZ_BINARY" false)
+      (lib.cmakeBool "BUILD_GUI_TESTS" false)
     ]
     ++ lib.optionals (!withWallet) [
-      "--disable-wallet"
+      (lib.cmakeBool "ENABLE_WALLET" false)
     ]
     ++ lib.optionals withGui [
-      "--with-gui=qt5"
-      "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
+      (lib.cmakeBool "BUILD_GUI" true)
     ];
+
+  NIX_LDFLAGS = lib.optionals (
+    stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic
+  ) "-levent_core";
 
   nativeCheckInputs = [ python3 ];
 

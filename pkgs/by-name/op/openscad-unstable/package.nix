@@ -41,6 +41,7 @@
   xorg,
   mimalloc,
   opencsg,
+  ctestCheckHook,
 }:
 # clang consume much less RAM than GCC
 clangStdenv.mkDerivation rec {
@@ -142,12 +143,16 @@ clangStdenv.mkDerivation rec {
 
   nativeCheckInputs = [
     mesa.llvmpipeHook
+    ctestCheckHook
   ];
 
-  checkPhase = ''
+  dontUseNinjaCheck = true;
+  checkFlags = [
+    "-E"
     # some fontconfig issues cause pdf output to have wrong font
-    ctest -j$NIX_BUILD_CORES -E pdfexporttest.\*
-  '';
+    "pdfexporttest"
+  ];
+
   meta = with lib; {
     description = "3D parametric model compiler (unstable)";
     longDescription = ''

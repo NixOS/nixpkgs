@@ -14,7 +14,6 @@
   cudaSupport ? config.cudaSupport,
   cudaPackages,
   openclSupport ? !cudaSupport,
-  darwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals cudaSupport [
       cudaPackages.cuda_nvcc
     ];
+
   buildInputs =
     lib.optionals stdenv.hostPlatform.isUnix [
       libGLU
@@ -56,29 +56,24 @@ stdenv.mkDerivation (finalAttrs: {
       xorg.libXinerama
       xorg.libXi
     ]
-    ++ lib.optionals (openclSupport && stdenv.hostPlatform.isLinux) [ ocl-icd ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        OpenCL
-        Cocoa
-        CoreVideo
-        IOKit
-        AppKit
-        AGL
-        MetalKit
-      ]
-    )
+    ++ lib.optionals (openclSupport && stdenv.hostPlatform.isLinux) [
+      ocl-icd
+    ]
     ++ lib.optionals cudaSupport [
       cudaPackages.cuda_cudart
     ];
+
+  patches = [
+    # Prevent CMake from generating a redundant nested path like /nix/store/.../nix/store/...
+    ./cmake-config.patch
+  ];
 
   # It's important to set OSD_CUDA_NVCC_FLAGS,
   # because otherwise OSD might piggyback unwanted architectures:
   # https://github.com/PixarAnimationStudios/OpenSubdiv/blob/7d0ab5530feef693ac0a920585b5c663b80773b3/CMakeLists.txt#L602
   preConfigure = lib.optionalString cudaSupport ''
     cmakeFlagsArray+=(
-      -DOSD_CUDA_NVCC_FLAGS="${lib.concatStringsSep " " cudaPackages.cudaFlags.gencode}"
+      -DOSD_CUDA_NVCC_FLAGS="${lib.concatStringsSep " " cudaPackages.flags.gencode}"
     )
   '';
 
@@ -117,8 +112,14 @@ stdenv.mkDerivation (finalAttrs: {
       ''
     else
       ''
-        moveToOutput "lib/*.a" $static
+        moveToOutput "lib/libosd*.a" $static
       '';
+
+  postFixup = ''
+    # Adjust static library path to reflect relocation to $static
+    sed -i -E "s|\\\$\{_IMPORT_PREFIX\}/lib/(libosd.*\.a)|$static/lib/\1|" \
+      $dev/lib/cmake/OpenSubdiv/OpenSubdivTargets-release.cmake
+  '';
 
   meta = {
     description = "Open-Source subdivision surface library";

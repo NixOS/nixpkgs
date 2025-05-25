@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lalrpop";
-  version = "0.20.2";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "lalrpop";
     repo = "lalrpop";
     rev = version;
-    hash = "sha256-cFwBck+bdOjhF6rQQj03MOO+XCsrII5c4Xvhsw12ETA=";
+    hash = "sha256-RvKJ3PKOKJbY0/WBpUwbau9LyCzb/peD73Ey9stECeg=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-c0xota0APLm/xQSH2Orn0PgCKuhUVhXEtzNge/GeYo0=";
+  cargoHash = "sha256-KqG8AqYK1sslZyqCMKesxuyy9+IenXW56edoxygKj4k=";
 
   patches = [
     (replaceVars ./use-correct-binary-path-in-tests.patch {

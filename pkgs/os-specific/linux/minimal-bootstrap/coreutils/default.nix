@@ -85,7 +85,7 @@ kaem.runCommand "${pname}-${version}"
       description = "GNU Core Utilities";
       homepage = "https://www.gnu.org/software/coreutils";
       license = licenses.gpl3Plus;
-      maintainers = teams.minimal-bootstrap.members;
+      teams = [ teams.minimal-bootstrap ];
       platforms = platforms.unix;
     };
   }

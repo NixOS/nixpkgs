@@ -38,6 +38,6 @@ python3.pkgs.buildPythonApplication rec {
     '';
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    teams = [ teams.cinnamon ];
   };
 }

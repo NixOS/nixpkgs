@@ -125,7 +125,7 @@ in
     networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.port ];
     };
-
-    meta.maintainers = [ lib.maintainers.cafkafk ];
   };
+
+  meta.maintainers = [ lib.maintainers.cafkafk ];
 }

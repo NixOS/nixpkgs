@@ -121,8 +121,7 @@ and checks that the output is more-or-less correct:
 ```py
 machine.start()
 machine.wait_for_unit("default.target")
-if not "Linux" in machine.succeed("uname"):
-  raise Exception("Wrong OS")
+t.assertIn("Linux", machine.succeed("uname"), "Wrong OS")
 ```
 
 The first line is technically unnecessary; machines are implicitly started
@@ -133,6 +132,8 @@ starting them in parallel:
 ```py
 start_all()
 ```
+
+Under the variable `t`, all assertions from [`unittest.TestCase`](https://docs.python.org/3/library/unittest.html) are available.
 
 If the hostname of a node contains characters that can't be used in a
 Python variable name, those characters will be replaced with

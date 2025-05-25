@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-ssvWpi7HuuRRAkpqqrX3ijLuBqM3QsrmrG+t7/m6fZA=";
   };
 
+  patches = [
+    ./gcc14.patch
+  ];
+
   buildInputs = [
     gcc
     python3

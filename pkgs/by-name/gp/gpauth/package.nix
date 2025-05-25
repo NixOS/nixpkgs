@@ -2,7 +2,6 @@
   rustPlatform,
   lib,
   fetchFromGitHub,
-  libsoup_2_4,
   openssl,
   pkg-config,
   perl,
@@ -29,7 +28,6 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
   buildInputs = [
-    libsoup_2_4
     openssl
     webkitgtk_4_1
   ];

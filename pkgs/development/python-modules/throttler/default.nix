@@ -33,6 +33,11 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests/" ];
 
+  disabledTestPaths = [
+    # time sensitive tests
+    "tests/test_execution_timer.py"
+  ];
+
   meta = with lib; {
     description = "Zero-dependency Python package for easy throttling with asyncio support";
     homepage = "https://github.com/uburuntu/throttler";

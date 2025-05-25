@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
       hash = "sha256-bjbW4pr04pP0TCuSdzPcV8h6LbLWMvdGSf61RL9Ju6E=";
     })
     ./4.4.1-newer-spdlog-fmt-compat.patch
+    ./resynthesis-fix-narrowing-conversion.patch
   ];
 
   # make sure bundled dependencies don't get in the way - install also otherwise

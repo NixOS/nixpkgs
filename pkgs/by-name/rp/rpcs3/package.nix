@@ -21,12 +21,14 @@
   python3,
   pugixml,
   flatbuffers,
-  llvm_16,
+  llvm_18,
   cubeb,
+  opencv,
   enableDiscordRpc ? false,
   faudioSupport ? true,
   faudio,
   SDL2,
+  sdl3,
   waylandSupport ? true,
   wayland,
   wrapGAppsHook3,
@@ -34,10 +36,10 @@
 
 let
   # Keep these separate so the update script can regex them
-  rpcs3GitVersion = "17323-92d070729";
-  rpcs3Version = "0.0.34-17323-92d070729";
-  rpcs3Revision = "92d07072915b99917892dd7833c06eb44a09e234";
-  rpcs3Hash = "sha256-GH2sXw1AYdqwzxucXFhVS0nM0eRhC+XDHS6RTZY8pYY=";
+  rpcs3GitVersion = "17736-c86a25079";
+  rpcs3Version = "0.0.36-17736-c86a25079";
+  rpcs3Revision = "c86a25079518032d73395a79979970acb2581a91";
+  rpcs3Hash = "sha256-e+mT3qn1oz1fh2bqu5YM+m774Can34If57Kd1T1EGbk=";
 
   inherit (qt6Packages)
     qtbase
@@ -58,6 +60,11 @@ stdenv.mkDerivation {
     hash = rpcs3Hash;
   };
 
+  patches = [
+    # Modified from https://github.com/RPCS3/rpcs3/pull/17009; doesn't apply cleanly due to intermediate commits
+    ./fix-qt6.9-compilation.patch
+  ];
+
   passthru.updateScript = ./update.sh;
 
   preConfigure = ''
@@ -77,9 +84,11 @@ stdenv.mkDerivation {
     (lib.cmakeBool "USE_SYSTEM_CURL" true)
     (lib.cmakeBool "USE_SYSTEM_WOLFSSL" true)
     (lib.cmakeBool "USE_SYSTEM_FAUDIO" true)
+    (lib.cmakeBool "USE_SYSTEM_OPENAL" true)
     (lib.cmakeBool "USE_SYSTEM_PUGIXML" true)
     (lib.cmakeBool "USE_SYSTEM_FLATBUFFERS" true)
     (lib.cmakeBool "USE_SYSTEM_SDL" true)
+    (lib.cmakeBool "USE_SYSTEM_OPENCV" true)
     (lib.cmakeBool "USE_SDL" true)
     (lib.cmakeBool "WITH_LLVM" true)
     (lib.cmakeBool "BUILD_LLVM" false)
@@ -115,10 +124,12 @@ stdenv.mkDerivation {
       wolfssl
       python3
       pugixml
-      SDL2
+      SDL2 # Still needed by FAudio's CMake
+      sdl3
       flatbuffers
-      llvm_16
+      llvm_18
       libSM
+      opencv
     ]
     ++ cubeb.passthru.backendLibs
     ++ lib.optional faudioSupport faudio

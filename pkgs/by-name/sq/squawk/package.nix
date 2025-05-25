@@ -1,5 +1,4 @@
 {
-  darwin,
   fetchFromGitHub,
   lib,
   libiconv,
@@ -29,18 +28,10 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libiconv
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        CoreFoundation
-        Security
-      ]
-    );
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libiconv
+    openssl
+  ];
 
   OPENSSL_NO_VENDOR = 1;
 

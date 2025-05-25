@@ -31,6 +31,6 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://phpmd.org/";
     license = lib.licenses.bsd3;
     mainProgram = "phpmd";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

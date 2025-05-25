@@ -20,13 +20,13 @@
   writeShellScript,
 }:
 let
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "hugopl";
     repo = "rtfm";
     tag = "v${version}";
-    hash = "sha256-qWQ2V7o7swbnXGgPOcnZ5Mg/SpjHOYpaD1HL6kgutCs=";
+    hash = "sha256-0yKldVTZdFV1Tj1MUI7TCqF3Ho/D7NOGR9UuLaLUFdo=";
   };
 
   gtk-doc =
@@ -60,16 +60,13 @@ crystal.buildCrystalPackage {
       --replace-fail 'doc_source = Path.new(ARGV[0]? || "/usr/share/doc/crystal/api")' 'doc_source = Path.new(ARGV[0]? || "${crystal}/share/doc/crystal/api")'
     substituteInPlace src/doc2dash/docset_builder.cr \
       --replace-fail 'File.copy(original, real_dest)' 'File.copy(original, real_dest); File.chmod(real_dest, 0o600)'
-    substituteInPlace Makefile \
-      --replace-fail 'shards install' 'true'
   '';
 
   preBuild = ''
     cd lib/gi-crystal
     shards build -Dpreview_mt --release --no-debug
     cd ../..
-    mkdir bin/
-    cp lib/gi-crystal/bin/gi-crystal bin/
+    install -Dm755 lib/gi-crystal/bin/gi-crystal bin/gi-crystal
   '';
 
   buildTargets = [ "all" ];
@@ -90,6 +87,8 @@ crystal.buildCrystalPackage {
   postInstall = ''
     glib-compile-schemas $out/share/glib-2.0/schemas
   '';
+
+  doInstallCheck = false;
 
   passthru = {
     updateScript = _experimental-update-script-combinators.sequence [

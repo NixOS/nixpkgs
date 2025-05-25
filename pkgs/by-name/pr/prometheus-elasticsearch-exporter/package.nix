@@ -21,6 +21,6 @@ buildGoModule rec {
     mainProgram = "elasticsearch_exporter";
     homepage = "https://github.com/prometheus-community/elasticsearch_exporter";
     license = licenses.asl20;
-    maintainers = teams.deshaw.members;
+    teams = [ teams.deshaw ];
   };
 }

@@ -10,8 +10,6 @@
   publicsuffix-list,
   pythonOlder,
   libiconv,
-  CoreFoundation,
-  Security,
   pytestCheckHook,
   toml,
 }:
@@ -62,8 +60,6 @@ buildPythonPackage rec {
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
-      CoreFoundation
-      Security
     ];
 
   PSL_PATH = "${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat";

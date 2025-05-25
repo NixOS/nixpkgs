@@ -1,5 +1,5 @@
 # This is a compatibility shim with `overrideSDK`.
-# Note: `overrideSDK` is deprecated. It will be added to `aliases.nix` after in-tree usage has been cleaned up.
+# Note: `overrideSDK` is deprecated. It will be removed in 25.11.
 {
   lib,
   stdenvNoCC,
@@ -19,6 +19,9 @@ assert lib.assertMsg (darwinSdkVersion == "11.0" || darwinSdkVersion == "12.3") 
 
   See the stdenv documentation for how to use `apple-sdk`.
 '';
+assert lib.warn
+  "overrideSDK: this mechanism is deprecated and will be removed in 25.11, use `apple-sdk_*` or `darwinMinVersionHook` in build inputs instead; see <https://nixos.org/manual/nixpkgs/stable/#sec-darwin> for documentation"
+  true;
 stdenv.override (old: {
   mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
     buildInputs =

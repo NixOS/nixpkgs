@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
     pygls
     lsprotocol
     language-tool-python
-    tree-sitter_0_21
+    tree-sitter
     gitpython
     appdirs
     openai

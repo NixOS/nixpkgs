@@ -8,11 +8,9 @@
   boost,
   opencl-clhpp,
   ocl-icd,
-  darwin,
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) OpenCL;
   stdenv = gccStdenv;
 in
 stdenv.mkDerivation rec {
@@ -43,8 +41,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       opencl-clhpp
       ocl-icd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ OpenCL ];
+    ];
 
   # https://github.com/clMathLibraries/clFFT/issues/237
   CXXFLAGS = "-std=c++98";

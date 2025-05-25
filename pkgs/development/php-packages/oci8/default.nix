@@ -39,6 +39,6 @@ buildPecl {
     description = "Extension for Oracle Database";
     license = licenses.php301;
     homepage = "https://pecl.php.net/package/oci8";
-    maintainers = teams.php.members;
+    teams = [ teams.php ];
   };
 }

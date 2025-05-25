@@ -13,7 +13,6 @@
   protobuf,
   speex,
   libcap,
-  utf8proc,
   alsa-lib,
   python3,
   rnnoise,
@@ -63,6 +62,7 @@ let
         cmakeFlags = [
           "-D g15=OFF"
           "-D CMAKE_CXX_STANDARD=17" # protobuf >22 requires C++ 17
+          "-D BUILD_NUMBER=${lib.versions.patch source.version}"
         ] ++ (overrides.configureFlags or [ ]);
 
         preConfigure = ''
@@ -100,7 +100,6 @@ let
           qt5.qtsvg
           rnnoise
           speex
-          utf8proc
         ]
         ++ lib.optional (!jackSupport) alsa-lib
         ++ lib.optional jackSupport libjack2

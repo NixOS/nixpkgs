@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       "--localstatedir=/var"
       "--with-openssl=${lib.getDev openssl}"
     ]
-    ++ lib.optional withPostgres "--with-pgsql=${lib.getDev libpq}/bin/pg_config"
+    ++ lib.optional withPostgres "--with-pgsql=${libpq.pg_config}/bin/pg_config"
     ++ lib.optional withMysql "--with-mysql=${lib.getDev libmysqlclient}/bin/mysql_config";
 
   postConfigure = ''
@@ -100,6 +100,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    # error: implicit instantiation of undefined template 'std::char_traits<unsigned char>'
+    broken = stdenv.hostPlatform.isDarwin;
     changelog = "https://downloads.isc.org/isc/kea/${version}/Kea-${version}-ReleaseNotes.txt";
     homepage = "https://kea.isc.org/";
     description = "High-performance, extensible DHCP server by ISC";

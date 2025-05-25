@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   cmake,
+  desktopToDarwinBundle,
   pkg-config,
   qtbase,
   qtsvg,
@@ -45,7 +46,8 @@ gnuradioMinimal.pkgs.mkDerivation rec {
     pkg-config
     wrapQtAppsHook
     wrapGAppsHook3
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+
   buildInputs =
     [
       gnuradioMinimal.unwrapped.logLib

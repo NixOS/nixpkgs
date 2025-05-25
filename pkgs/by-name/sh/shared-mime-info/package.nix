@@ -52,7 +52,8 @@ stdenv.mkDerivation rec {
     homepage = "http://freedesktop.org/wiki/Software/shared-mime-info";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = teams.freedesktop.members ++ [ maintainers.mimame ];
+    maintainers = [ maintainers.mimame ];
+    teams = [ teams.freedesktop ];
     mainProgram = "update-mime-database";
   };
 }

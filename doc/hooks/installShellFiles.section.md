@@ -99,17 +99,12 @@ failure. To prevent this, guard the completion generation commands.
 ```nix
 {
   nativeBuildInputs = [ installShellFiles ];
-  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
-    let
-      emulator = stdenv.hostPlatform.emulator buildPackages;
-    in
-    ''
-      # using named fd
-      installShellCompletion --cmd foobar \
-        --bash <(${emulator} $out/bin/foobar --bash-completion) \
-        --fish <(${emulator} $out/bin/foobar --fish-completion) \
-        --zsh <(${emulator} $out/bin/foobar --zsh-completion)
-    ''
-  );
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    # using named fd
+    installShellCompletion --cmd foobar \
+      --bash <($out/bin/foobar --bash-completion) \
+      --fish <($out/bin/foobar --fish-completion) \
+      --zsh <($out/bin/foobar --zsh-completion)
+  '';
 }
 ```

@@ -6,17 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "clock-rs";
-  version = "0.1.214";
+  version = "0.1.215";
 
   src = fetchFromGitHub {
     owner = "Oughie";
     repo = "clock-rs";
     tag = "v${version}";
-    sha256 = "sha256-D0Wywl20TFIy8aQ9UkcI6T+5huyRuCCPc+jTeXsZd8g=";
+    sha256 = "sha256-uDEvJqaaBNRxohYqHE6qfqUF07ynRvGwJKWbYfgPEvg=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-W4m4JffqNwebGWYNsMF6U0bDroqXJAixmcmqcqYjyzw=";
+  cargoHash = "sha256-Zry6mkOUdEgC95Y3U3RCXPJUsmaSoRPlHvUThI92GQU=";
 
   meta = {
     description = "Modern, digital clock that effortlessly runs in your terminal";
