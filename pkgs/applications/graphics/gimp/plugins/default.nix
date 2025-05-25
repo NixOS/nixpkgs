@@ -240,6 +240,36 @@ lib.makeScope pkgs.newScope (
       };
     };
 
+    resynthesizer3 = pluginDerivation rec {
+      /*
+        menu:
+        Edit/Fill with pattern seamless...
+        Filters/Enhance/Heal selection...
+        Filters/Enhance/Heal transparency...
+        Filters/Enhance/Sharpen by synthesis...
+        Filters/Enhance/Uncrop...
+        Filters/Map/Style...
+        Filters/Render/Texture...
+      */
+      pname = "resynthesizer";
+      version = "3.0";
+      nativeBuildInputs = with pkgs; [
+        meson
+        ninja
+        pkg-config
+      ];
+      src = fetchFromGitHub {
+        owner = "bootchk";
+        repo = "resynthesizer";
+        rev = "v${version}";
+        hash = "sha256-/Py5R1RxiftTR0z++mQzgTn/J9v4p8efuGZSfhe6FfA=";
+      };
+
+      meta = {
+        broken = gimp.majorVersion != "3.0";
+      };
+    };
+
     texturize = pluginDerivation {
       pname = "texturize";
       version = "2.2+unstable=2021-12-03";
