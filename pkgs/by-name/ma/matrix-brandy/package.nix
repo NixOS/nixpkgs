@@ -18,6 +18,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-sMgYgV4/vV1x5xSICXRpW6K8uCdVlJrS7iEg6XzQRo8=";
   };
 
+  patches = lib.optionals stdenv.isDarwin [ ./no-lrt.patch ];
+
+  makeFlags = lib.optionals stdenv.isDarwin [
+    "CC=cc"
+    "LD=clang"
+  ];
+
   buildInputs = [
     libX11
     SDL
@@ -35,7 +42,7 @@ stdenv.mkDerivation rec {
     description = "Matrix Brandy BASIC VI for Linux, Windows, MacOSX";
     mainProgram = "brandy";
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ fiq ];
   };
 }
