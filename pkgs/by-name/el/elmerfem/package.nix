@@ -14,19 +14,20 @@
   libsForQt5,
   tbb,
   vtkWithQt5,
+  llvmPackages,
 }:
 let
   opencascade-occt = opencascade-occt_7_6;
 in
 stdenv.mkDerivation rec {
   pname = "elmerfem";
-  version = "unstable-2023-09-18";
+  version = "unstable-2025-05-19";
 
   src = fetchFromGitHub {
     owner = "elmercsc";
     repo = "elmerfem";
-    rev = "0fcced06f91c93f44557efd6a5f10b2da5c7066c";
-    hash = "sha256-UuARDYW7D3a4dB6I86s2Ed5ecQxc+Y/es3YIeF2VyTc=";
+    rev = "6233dbe0f2ecc9fdda1b6ba88246f2023101f7d8";
+    hash = "sha256-cHGhKIcsAzEZ2c7m60eP2pBRDYJf9qafRNPAzcmyH3o=";
   };
 
   hardeningDisable = [ "format" ];
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
     opencascade-occt
     tbb
     vtkWithQt5
-  ];
+  ] ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   preConfigure = ''
     patchShebangs ./
@@ -71,6 +72,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_OpenGL_GL_PREFERENCE=GLVND"
+    "-DUSE_MACOS_PACKAGE_MANAGER=False"
   ];
 
   meta = with lib; {

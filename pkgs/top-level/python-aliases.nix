@@ -234,6 +234,7 @@ mapAliases ({
   ev3dev2 = python-ev3dev2; # added 2023-06-19
   evernote = throw "evernote is intended for use with Python 2.X";
   eyeD3 = eyed3; # added 2024-01-03
+  f3d_egl = throw "f3d is now by default built with EGL enabled VTK, use f3d instead"; # added 2025-05-20
   Fabric = fabric; # addedd 2023-02-19
   face_recognition = face-recognition; # added 2022-10-15
   face_recognition_models = face-recognition-models; # added 2022-10-15

@@ -4731,13 +4731,6 @@ self: super: with self; {
     }
   );
 
-  f3d_egl = toPythonModule (
-    pkgs.f3d_egl.override {
-      withPythonBinding = true;
-      python3Packages = self;
-    }
-  );
-
   f5-icontrol-rest = callPackage ../development/python-modules/f5-icontrol-rest { };
 
   f5-sdk = callPackage ../development/python-modules/f5-sdk { };
@@ -8623,12 +8616,10 @@ self: super: with self; {
 
   mayavi = pkgs.libsForQt5.callPackage ../development/python-modules/mayavi {
     inherit buildPythonPackage pythonOlder pythonAtLeast;
-    # when next release contains numpy2 support unpin
-    # https://github.com/enthought/mayavi/pull/1315
     inherit (self)
       pyface
       pygments
-      numpy_1
+      numpy
       packaging
       vtk
       traitsui
@@ -18824,8 +18815,8 @@ self: super: with self; {
   vtjp = callPackage ../development/python-modules/vtjp { };
 
   vtk = toPythonModule (
-    pkgs.vtk_9.override {
-      inherit python;
+    pkgs.vtk.override {
+      python3Packages = self;
       enablePython = true;
     }
   );
@@ -19145,6 +19136,8 @@ self: super: with self; {
   wsgiproxy2 = callPackage ../development/python-modules/wsgiproxy2 { };
 
   wsgitools = callPackage ../development/python-modules/wsgitools { };
+
+  wslink = callPackage ../development/python-modules/wslink { };
 
   wsme = callPackage ../development/python-modules/wsme { };
 
