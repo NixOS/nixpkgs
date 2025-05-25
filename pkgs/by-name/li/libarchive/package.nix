@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   acl,
   attr,
   autoreconfHook,
@@ -40,6 +41,21 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-nL2p2h+U25fhQQjbj16yhxhU8xEEuhNynIx7SNzl6Mo=";
   };
+
+  patches = [
+    # Remove in next release
+    #
+    # Fixes macOS metadata file handling when reading certain tarballs
+    # (e.g, bsdtar-produced tar containing a file with xattrs whose name is exactly 99 bytes long)
+    # <https://github.com/libarchive/libarchive/pull/2636>
+    #
+    # This also fixes test_copy in the test suite.
+    (fetchpatch {
+      name = "reset-header-state-after-mac-metadata.patch";
+      url = "https://github.com/libarchive/libarchive/commit/5bb36db5e19aecabccec8f351ec22f8c3a8695f0.patch";
+      hash = "sha256-eNGSunYZ5b0TrkBUtOO7MYGXc+SEn1Sxm8MYyI+4JsQ=";
+    })
+  ];
 
   outputs = [
     "out"
