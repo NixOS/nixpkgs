@@ -5669,6 +5669,12 @@
     githubId = 4971975;
     name = "Janne Heß";
   };
+  dashietm = {
+    email = "fabio.lenherr@gmail.com";
+    github = "DashieTM";
+    githubId = 72016555;
+    name = "Fabio Lenherr";
+  };
   dasisdormax = {
     email = "dasisdormax@mailbox.org";
     github = "dasisdormax";
