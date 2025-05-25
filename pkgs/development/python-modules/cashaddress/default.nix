@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "cashaddress";
-  version = "1.0.6-unstable-2015-05-19";
+  version = "1.0.6-unstable-2019-05-15";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
