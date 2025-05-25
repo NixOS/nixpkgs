@@ -17,7 +17,7 @@ maven.buildMavenPackage {
 
   src = fetchFromGitHub {
     owner = "gaul";
-    repo = pname;
+    repo = "s3proxy";
     rev = "s3proxy-${version}";
     hash = "sha256-GhZPvo8wlXInHwg8rSmpwMMkZVw5SMpnZyKqFUYLbrE=";
   };
