@@ -12369,8 +12369,6 @@ self: super: with self; {
 
   pyfakewebcam = callPackage ../development/python-modules/pyfakewebcam { };
 
-  pyfantom = callPackage ../development/python-modules/pyfantom { };
-
   pyfatfs = callPackage ../development/python-modules/pyfatfs { };
 
   pyfcm = callPackage ../development/python-modules/pyfcm { };
