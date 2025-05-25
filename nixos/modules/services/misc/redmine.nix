@@ -7,7 +7,6 @@
 
 let
   inherit (lib)
-    mkOption
     types
     ;
   inherit (lib) concatStringsSep literalExpression mapAttrsToList;
@@ -91,37 +90,37 @@ in
         example = "redmine.override { ruby = pkgs.ruby_3_2; }";
       };
 
-      user = mkOption {
+      user = lib.mkOption {
         type = types.str;
         default = "redmine";
         description = "User under which Redmine is ran.";
       };
 
-      group = mkOption {
+      group = lib.mkOption {
         type = types.str;
         default = "redmine";
         description = "Group under which Redmine is ran.";
       };
 
-      address = mkOption {
+      address = lib.mkOption {
         type = types.str;
         default = "0.0.0.0";
         description = "IP address Redmine should bind to.";
       };
 
-      port = mkOption {
+      port = lib.mkOption {
         type = types.port;
         default = 3000;
         description = "Port on which Redmine is ran.";
       };
 
-      stateDir = mkOption {
+      stateDir = lib.mkOption {
         type = types.path;
         default = "/var/lib/redmine";
         description = "The state directory, logs and plugins are stored here.";
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = format.type;
         default = { };
         description = ''
@@ -142,7 +141,7 @@ in
         '';
       };
 
-      extraEnv = mkOption {
+      extraEnv = lib.mkOption {
         type = types.lines;
         default = "";
         description = ''
@@ -156,7 +155,7 @@ in
         '';
       };
 
-      themes = mkOption {
+      themes = lib.mkOption {
         type = types.attrsOf types.path;
         default = { };
         description = "Set of themes.";
@@ -170,7 +169,7 @@ in
         '';
       };
 
-      plugins = mkOption {
+      plugins = lib.mkOption {
         type = types.attrsOf types.path;
         default = { };
         description = "Set of plugins.";
@@ -185,7 +184,7 @@ in
       };
 
       database = {
-        type = mkOption {
+        type = lib.mkOption {
           type = types.enum [
             "mysql2"
             "postgresql"
@@ -196,32 +195,32 @@ in
           description = "Database engine to use.";
         };
 
-        host = mkOption {
+        host = lib.mkOption {
           type = types.str;
           default = "localhost";
           description = "Database host address.";
         };
 
-        port = mkOption {
+        port = lib.mkOption {
           type = types.port;
           default = if cfg.database.type == "postgresql" then 5432 else 3306;
           defaultText = literalExpression "3306";
           description = "Database host port.";
         };
 
-        name = mkOption {
+        name = lib.mkOption {
           type = types.str;
           default = "redmine";
           description = "Database name.";
         };
 
-        user = mkOption {
+        user = lib.mkOption {
           type = types.str;
           default = "redmine";
           description = "Database user.";
         };
 
-        passwordFile = mkOption {
+        passwordFile = lib.mkOption {
           type = types.nullOr types.path;
           default = null;
           example = "/run/keys/redmine-dbpassword";
@@ -231,7 +230,7 @@ in
           '';
         };
 
-        socket = mkOption {
+        socket = lib.mkOption {
           type = types.nullOr types.path;
           default =
             if mysqlLocal then
@@ -245,7 +244,7 @@ in
           description = "Path to the unix socket file to use for authentication.";
         };
 
-        createLocally = mkOption {
+        createLocally = lib.mkOption {
           type = types.bool;
           default = true;
           description = "Create the database and database user locally.";
@@ -267,7 +266,7 @@ in
 
         ghostscript = lib.mkEnableOption "exporting Gant diagrams as PDF.";
 
-        minimagick_font_path = mkOption {
+        minimagick_font_path = lib.mkOption {
           type = types.str;
           default = "";
           description = "MiniMagick font path";
