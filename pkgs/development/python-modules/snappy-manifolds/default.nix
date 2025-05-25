@@ -1,20 +1,22 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "snappy-manifolds";
   version = "1.2.1";
 
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "snappy_manifolds";
-    inherit version;
-    sha256 = "sha256-+/Gv8LX0nL2Q/6CAgzQYIpwJDHG5Z36ioaPt/UQyzQE=";
+  src = fetchFromGitHub {
+    owner = "3-manifolds";
+    repo = "snappy_manifolds";
+    # release of version 1.2.1
+    rev = "f63ac1535344d9a8f73b6e5f9269703bde4c6af3";
+    sha256 = "sha256-vxG3z6zWzG4S11fBxYGn4/c2f2sWOCIrzT+R27TR144=";
   };
 
   build-system = [ setuptools ];
@@ -22,7 +24,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "snappy_manifolds" ];
 
   meta = with lib; {
-
     description = "Database of snappy manifolds";
     homepage = "https://snappy.computop.org";
     license = licenses.gpl2;
