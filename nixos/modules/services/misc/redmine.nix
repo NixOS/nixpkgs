@@ -272,7 +272,6 @@ in
 
   # implementation
   config = lib.mkIf cfg.enable {
-
     assertions = [
       {
         assertion =
@@ -486,7 +485,6 @@ in
         SystemCallArchitectures = "native";
         UMask = 27;
       };
-
     };
 
     users.users = lib.optionalAttrs (cfg.user == "redmine") {
@@ -500,7 +498,6 @@ in
     users.groups = lib.optionalAttrs (cfg.group == "redmine") {
       redmine.gid = config.ids.gids.redmine;
     };
-
   };
 
   meta.maintainers = with lib.maintainers; [ felixsinger ];
