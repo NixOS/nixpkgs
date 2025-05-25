@@ -27,6 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
     "format"
   ];
 
+  patches = [
+    # https://github.com/lwfinger/rtl8852au/pull/115
+    ./fix-build-for-kernels-6.13-6.14.patch
+  ];
+
   postPatch = ''
     substituteInPlace ./Makefile \
       --replace-fail /sbin/depmod \# \
