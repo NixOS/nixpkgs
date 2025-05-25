@@ -496,7 +496,7 @@ def execute(argv: list[str]) -> None:
             # Print only the result to stdout to make it easier to script
             def print_result(msg: str, result: str | Path) -> None:
                 print(msg, end=" ", file=sys.stderr, flush=True)
-                print(result, flush=True)
+                print(result, file=sys.stderr, flush=True)
 
             match action:
                 case Action.SWITCH | Action.BOOT | Action.TEST | Action.DRY_ACTIVATE:
