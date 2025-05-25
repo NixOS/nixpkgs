@@ -7,7 +7,6 @@
 
 let
   inherit (lib) concatStringsSep literalExpression mapAttrsToList;
-  inherit (lib) optionalString;
 
   cfg = config.services.redmine;
   format = pkgs.formats.yaml { };
@@ -307,13 +306,13 @@ in
 
     services.redmine.settings = {
       production = {
-        scm_subversion_command = optionalString cfg.components.subversion "${pkgs.subversion}/bin/svn";
-        scm_mercurial_command = optionalString cfg.components.mercurial "${pkgs.mercurial}/bin/hg";
-        scm_git_command = optionalString cfg.components.git "${pkgs.git}/bin/git";
-        scm_cvs_command = optionalString cfg.components.cvs "${pkgs.cvs}/bin/cvs";
-        scm_bazaar_command = optionalString cfg.components.breezy "${pkgs.breezy}/bin/bzr";
-        imagemagick_convert_command = optionalString cfg.components.imagemagick "${pkgs.imagemagick}/bin/convert";
-        gs_command = optionalString cfg.components.ghostscript "${pkgs.ghostscript}/bin/gs";
+        scm_subversion_command = lib.optionalString cfg.components.subversion "${pkgs.subversion}/bin/svn";
+        scm_mercurial_command = lib.optionalString cfg.components.mercurial "${pkgs.mercurial}/bin/hg";
+        scm_git_command = lib.optionalString cfg.components.git "${pkgs.git}/bin/git";
+        scm_cvs_command = lib.optionalString cfg.components.cvs "${pkgs.cvs}/bin/cvs";
+        scm_bazaar_command = lib.optionalString cfg.components.breezy "${pkgs.breezy}/bin/bzr";
+        imagemagick_convert_command = lib.optionalString cfg.components.imagemagick "${pkgs.imagemagick}/bin/convert";
+        gs_command = lib.optionalString cfg.components.ghostscript "${pkgs.ghostscript}/bin/gs";
         minimagick_font_path = "${cfg.components.minimagick_font_path}";
       };
     };
@@ -432,7 +431,7 @@ in
         # handle database.passwordFile & permissions
         cp -f ${databaseYml} "${cfg.stateDir}/config/database.yml"
 
-        ${optionalString ((cfg.database.type != "sqlite3") && (cfg.database.passwordFile != null)) ''
+        ${lib.optionalString ((cfg.database.type != "sqlite3") && (cfg.database.passwordFile != null)) ''
           DBPASS="$(head -n1 ${cfg.database.passwordFile})"
           sed -e "s,#dbpass#,$DBPASS,g" -i "${cfg.stateDir}/config/database.yml"
         ''}
