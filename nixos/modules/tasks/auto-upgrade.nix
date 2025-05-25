@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  modulesPath,
   pkgs,
   ...
 }:
@@ -9,6 +8,7 @@ let
   cfg = config.system.autoUpgrade;
   nixpkgs-cfg = config.nixpkgs;
   nixos-rebuild = lib.getExe config.system.build.nixos-rebuild;
+  outerNixpkgsPath = pkgs.path;
   upgradeFlag = lib.optional (cfg.channel == null && cfg.upgrade) (
     if cfg.upgradeAll then "--upgrade-all" else "--upgrade"
   );
@@ -332,7 +332,7 @@ in
             {
               # Options for the end-user for configuring
               options.defaultPath = lib.mkOption {
-                default = modulesPath + "/../..";
+                default = outerNixpkgsPath;
                 defaultText = lib.literalMD "Path of the nixpkgs evaluation the auto-upgrade module is part of";
                 description = "Default path to use for the nixpkgs";
                 type = lib.types.path;
