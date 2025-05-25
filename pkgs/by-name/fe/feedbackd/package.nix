@@ -111,6 +111,8 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
+  strictDeps = true;
+
   meta = with lib; {
     description = "Daemon to provide haptic (and later more) feedback on events";
     homepage = "https://source.puri.sm/Librem5/feedbackd";
