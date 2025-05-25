@@ -283,10 +283,10 @@ in
 
           Using [`maxDesyncAge`](#opt-system.autoUpgrade.desync._name_.maxDesyncAge), you can
           limit the number of rebuilds that one nixpkgs version is allowed to span.
-          For example, if you have [`system.autoUpgrade`](#opt-system.autoUpgrade) set to
-          upgrade once a day, and [`maxDesyncAge`](#opt-system.autoUpgrade.desync._name_.maxDesyncAge)
-          set to `14` (the default), then your packages will always be on a version of `nixpkgs`
-          that is at most two weeks old.
+          For example, if you have `system.autoUpgrade` set to upgrade once a day, and
+          [`maxDesyncAge`](#opt-system.autoUpgrade.desync._name_.maxDesyncAge) set to `14`
+          (the default), then your packages will always be on a version of `nixpkgs` that is
+          at most two weeks old.
           If no such version has a passing build for two weeks, then the `mixos-rebuild`
           service will still fail.
 
