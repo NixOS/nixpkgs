@@ -6,7 +6,7 @@
 }:
 
 let
-  inherit (lib) concatStringsSep literalExpression mapAttrsToList;
+  inherit (lib) literalExpression mapAttrsToList;
 
   cfg = config.services.redmine;
   format = pkgs.formats.yaml { };
@@ -414,7 +414,7 @@ in
 
 
         # link in all user specified themes
-        for theme in ${concatStringsSep " " (mapAttrsToList unpackTheme cfg.themes)}; do
+        for theme in ${lib.concatStringsSep " " (mapAttrsToList unpackTheme cfg.themes)}; do
           ln -fs $theme/* "${cfg.stateDir}/themes"
         done
 
@@ -423,7 +423,7 @@ in
 
 
         # link in all user specified plugins
-        for plugin in ${concatStringsSep " " (mapAttrsToList unpackPlugin cfg.plugins)}; do
+        for plugin in ${lib.concatStringsSep " " (mapAttrsToList unpackPlugin cfg.plugins)}; do
           ln -fs $plugin/* "${cfg.stateDir}/plugins/''${plugin##*-redmine-plugin-}"
         done
 
