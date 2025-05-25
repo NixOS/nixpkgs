@@ -50,7 +50,7 @@ buildGoModule rec {
     sed -i 's|-lmupdf[^ ]* |-lmupdf |g' vendor/github.com/richardwilkes/pdf/pdf.go
   '';
 
-  vendorHash = "sha256-YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY=";
+  vendorHash = "sha256-EI2jbIYkjhINTY0FcFHsN1mQM6VlkvZeekDSzAXbG3c";
 
   # frontend = buildNpmPackage {
   #   name = "${pname}-${version}-frontend";
