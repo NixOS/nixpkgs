@@ -2366,6 +2366,8 @@ self: super: with self; {
 
   cfgv = callPackage ../development/python-modules/cfgv { };
 
+  cflib = callPackage ../development/python-modules/cflib { };
+
   cfn-flip = callPackage ../development/python-modules/cfn-flip { };
 
   cfn-lint = callPackage ../development/python-modules/cfn-lint { };
