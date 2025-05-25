@@ -2,10 +2,7 @@
   lib,
   stdenv,
   buildGoModule,
-  buildNpmPackage,
   fetchFromGitHub,
-  cacert,
-  unzip,
   pkg-config,
   libGL,
   libX11,
@@ -17,32 +14,19 @@
   mupdf,
   fontconfig,
   freetype,
+  makeDesktopItem,
 }:
 
 buildGoModule rec {
   pname = "gcs";
-  version = "5.28.1";
+  version = "5.35.0";
 
   src = fetchFromGitHub {
     owner = "richardwilkes";
     repo = "gcs";
     tag = "v${version}";
 
-    nativeBuildInputs = [
-      cacert
-      unzip
-    ];
-
-    # also fetch pdf.js files
-    # note: the version is locked in the file
-    postFetch = ''
-      cd $out/server/pdf
-      substituteInPlace refresh-pdf.js.sh \
-          --replace-fail '/bin/rm' 'rm'
-      . refresh-pdf.js.sh
-    '';
-
-    hash = "sha256-ArJ+GveG2Y1PYeCuIFJoQ3eVyqvAi4HEeAEd4X03yu4=";
+    hash = "sha256-qS0j838sjzdxRtvnah2nQ6tJzd7SVl5Fwfkcc6VP+/8=";
   };
 
   modPostBuild = ''
@@ -50,28 +34,9 @@ buildGoModule rec {
     sed -i 's|-lmupdf[^ ]* |-lmupdf |g' vendor/github.com/richardwilkes/pdf/pdf.go
   '';
 
-  vendorHash = "sha256-EmAGkQ+GHzVbSq/nPu0awL79jRmZuMHheBWwanfEgGI=";
+  vendorHash = "sha256-EI2jbIYkjhINTY0FcFHsN1mQM6VlkvZeekDSzAXbG3c";
 
-  frontend = buildNpmPackage {
-    name = "${pname}-${version}-frontend";
-
-    inherit src;
-    sourceRoot = "${src.name}/server/frontend";
-    npmDepsHash = "sha256-LqOH3jhp4Mx7JGYSjF29kVUny3xNn7oX0qCYi79SH4w=";
-
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out
-      cp -r dist $out/dist
-      runHook postInstall
-    '';
-  };
-
-  postPatch = ''
-    cp -r ${frontend}/dist server/frontend/dist
-  '';
-
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config makeDesktopItem ];
 
   buildInputs =
     [
@@ -100,6 +65,18 @@ buildGoModule rec {
   installPhase = ''
     runHook preInstall
     install -Dm755 $GOPATH/bin/gcs -t $out/bin
+
+    # if linux make desktop item
+    ${lib.optionalString stdenv.isLinux ''
+      mkdir -p $out/share/applications
+      makeDesktopItem \
+        --name "GURPS Character Sheet" \
+        --exec "gcs" \
+        --comment "${meta.description}" \
+        --desktop-file $out/share/applications/gcs.desktop \
+        --categories "Game;Roleplaying;"
+    ''}
+
     runHook postInstall
   '';
 
