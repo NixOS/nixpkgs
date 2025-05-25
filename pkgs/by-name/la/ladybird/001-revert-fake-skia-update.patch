@@ -1,0 +1,13 @@
+diff --git a/vcpkg.json b/vcpkg.json
+index 5a824884b2..e4193aa45f 100644
+--- a/vcpkg.json
++++ b/vcpkg.json
+@@ -199,7 +199,7 @@
+     },
+     {
+       "name": "skia",
+-      "version": "134#2"
++      "version": "129#0"
+     },
+     {
+       "name": "sqlite3",

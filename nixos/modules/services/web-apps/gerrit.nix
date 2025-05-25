@@ -68,7 +68,7 @@ in
 
       package = mkPackageOption pkgs "gerrit" { };
 
-      jvmPackage = mkPackageOption pkgs "jre_headless" { };
+      jvmPackage = mkPackageOption pkgs "jdk21_headless" { };
 
       jvmOpts = mkOption {
         type = types.listOf types.str;
