@@ -21,7 +21,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-unwrapped";
-  version = "2.16.1";
+  version = "2.17.0";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
