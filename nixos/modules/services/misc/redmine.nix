@@ -7,7 +7,6 @@
 
 let
   inherit (lib)
-    mkBefore
     mkDefault
     mkIf
     mkOption
@@ -325,7 +324,7 @@ in
       };
     };
 
-    services.redmine.extraEnv = mkBefore ''
+    services.redmine.extraEnv = lib.mkBefore ''
       config.logger = Logger.new("${cfg.stateDir}/log/production.log", 14, 1048576)
       config.logger.level = Logger::INFO
     '';
