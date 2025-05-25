@@ -12,13 +12,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pocket-id";
-  version = "0.53.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3lW4jPh9YElgpBcIooGQ2zZbNwC/rz7CABsp7ScTxyQ=";
+    hash = "sha256-cHPG4KZgfLuEDzLJ9dV4PRUlqWjd7Ji3480lrFwK6Ds=";
   };
 
   backend = buildGoModule {
@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     sourceRoot = "${finalAttrs.src.name}/backend";
 
-    vendorHash = "sha256-wOrYIhOrUxz22Ay2A26FTrPJA8YRgdRihP78Ls8VgNM=";
+    vendorHash = "sha256-82kdx9ihJgqMCiUjZTONGa1nCZoxKltw8mpF0KoOdT8=";
 
     preFixup = ''
       mv $out/bin/cmd $out/bin/pocket-id-backend
@@ -40,7 +40,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     sourceRoot = "${finalAttrs.src.name}/frontend";
 
-    npmDepsHash = "sha256-UjYAndueuJU07unbNFoTQHqRFkdyaBKHyT4k3Ex4pg0=";
+    npmDepsHash = "sha256-ykoyJtnqFK1fK60SbzrL7nhRcKYa3qYdHf9kFOC3EwE=";
     npmFlags = [ "--legacy-peer-deps" ];
 
     nativeBuildInputs = [
