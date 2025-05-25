@@ -1,5 +1,3 @@
-diff --git a/src/validate-icon.c b/src/validate-icon.c
-index c42265b..320f028 100644
 --- a/src/validate-icon.c
 +++ b/src/validate-icon.c
 @@ -254,7 +254,7 @@ flatpak_get_bwrap (void)
@@ -12,9 +10,9 @@ index c42265b..320f028 100644
    g_autofree char* arg_input_fd = NULL;
    char validate_icon[PATH_MAX + 1];
 @@ -276,8 +276,7 @@ rerun_in_sandbox (int input_fd)
-             "--unshare-ipc",
-             "--unshare-net",
-             "--unshare-pid",
+             "--tmpfs", "/tmp",
+             "--proc", "/proc",
+             "--dev", "/dev",
 -            "--ro-bind", "/usr", "/usr",
 -            "--ro-bind-try", "/etc/ld.so.cache", "/etc/ld.so.cache",
 +            "--ro-bind", "@storeDir@", "@storeDir@",
