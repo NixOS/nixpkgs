@@ -74,6 +74,15 @@ buildPythonPackage rec {
     })
   ];
 
+  # Target OpenGL/X11 is required when MATERIALX_SUPPORT is enabled.
+  postPatch = ''
+    sed -i '/find_dependency(MaterialX)/a\
+    find_dependency(OpenGL)\
+    \
+    find_dependency(X11)
+    ' pxr/pxrConfig.cmake.in
+  '';
+
   env.OSL_LOCATION = "${osl}";
 
   cmakeFlags = [
@@ -124,11 +133,6 @@ buildPythonPackage rec {
       ptex
       tbb
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libGL
-      libX11
-      libXt
-    ]
     ++ lib.optionals withOsl [ osl ]
     ++ lib.optionals withUsdView [ qt6.qtbase ]
     ++ lib.optionals (withUsdView && stdenv.hostPlatform.isLinux) [ qt6.qtwayland ];
@@ -141,6 +145,11 @@ buildPythonPackage rec {
       opensubdiv
       pyopengl
       distutils
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libGL
+      libX11
+      libXt
     ]
     ++ lib.optionals (withTools || withUsdView) [
       pyside-tools-uic
