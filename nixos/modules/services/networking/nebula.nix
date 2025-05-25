@@ -36,6 +36,11 @@ in
                 default = true;
                 description = "Enable or disable this network.";
               };
+              enableReload = lib.mkOption {
+                type = lib.types.bool;
+                default = true;
+                description = "Reload nebula instance when configuration file changes (instead of restart)";
+              };
 
               package = lib.mkPackageOption pkgs "nebula" { };
 
@@ -278,6 +283,8 @@ in
             ];
             before = [ "sshd.service" ];
             wantedBy = [ "multi-user.target" ];
+            reload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+            reloadTriggers = lib.lists.optional netCfg.enableReload configFile;
             serviceConfig = {
               Type = "notify";
               Restart = "always";
