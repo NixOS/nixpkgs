@@ -16,7 +16,7 @@ buildPythonPackage rec {
   disabled = isPyPy;
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "pyparted";
     owner = "dcantrell";
     tag = "v${version}";
     hash = "sha256-AiUCCrEbDD0OxrvXs1YN3/1IE7SuVasC2YCirIG58iU=";

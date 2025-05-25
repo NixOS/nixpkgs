@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "tarpas";
-    repo = pname;
+    repo = "pytest-testmon";
     tag = "v${version}";
     hash = "sha256-LSp3GkvyZ8wX6qelGy4PdCliGIzXo2nJNrYqxdSo/wM=";
   };
