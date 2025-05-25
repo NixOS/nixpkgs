@@ -9,15 +9,15 @@
   qttools,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pageedit";
-  version = "2.0.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "Sigil-Ebook";
-    repo = pname;
-    rev = version;
-    hash = "sha256-zwOSt1eyvuuqfQ1G2bCB4yj6GgixFRc2FLOgcCrdg3Q=";
+    repo = "pageedit";
+    tag = finalAttrs.version;
+    hash = "sha256-BsK+agn8O2WeftiEHfT5B1hzsP5Av4DkIZqVKoQxb70=";
   };
 
   nativeBuildInputs = [
@@ -25,10 +25,12 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
     qttools
   ];
+
   propagatedBuildInputs = [
     qtsvg
     qtwebengine
   ];
+
   cmakeFlags = [ "-DINSTALL_BUNDLED_DICTS=0" ];
 
   installPhase =
@@ -45,12 +47,12 @@ stdenv.mkDerivation rec {
     else
       null;
 
-  meta = with lib; {
+  meta = {
     description = "ePub XHTML Visual Editor";
     mainProgram = "pageedit";
     homepage = "https://sigil-ebook.com/pageedit/";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.pasqui23 ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.pasqui23 ];
+    platforms = lib.platforms.all;
   };
-}
+})
