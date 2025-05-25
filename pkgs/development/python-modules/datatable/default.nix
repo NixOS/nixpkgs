@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "h2oai";
-    repo = pname;
+    repo = "datatable";
     rev = "9522f0833d3e965656396de4fffebd882d39c25d";
     hash = "sha256-lEXQwhx2msnJkkRrTkAwYttlYTISyH/Z7dSalqRrOhI=";
   };

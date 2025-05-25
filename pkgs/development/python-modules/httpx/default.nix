@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "encode";
-    repo = pname;
+    repo = "httpx";
     tag = version;
     hash = "sha256-tB8uZm0kPRnmeOvsDdrkrHcMVIYfGanB4l/xHsTKpgE=";
   };

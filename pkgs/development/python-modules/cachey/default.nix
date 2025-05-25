@@ -14,7 +14,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.6";
   src = fetchFromGitHub {
     owner = "dask";
-    repo = pname;
+    repo = "cachey";
     rev = version;
     hash = "sha256-5USmuufrrWtmgibpfkjo9NtgN30hdl8plJfythmxM4s=";
   };
