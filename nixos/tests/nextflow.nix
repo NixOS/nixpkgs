@@ -1,9 +1,11 @@
 { pkgs, ... }:
 let
+  # This is the default image used by Nextflow if docker.enabled=true and no
+  # process.container is defined.
   bash = pkgs.dockerTools.pullImage {
     imageName = "quay.io/nextflow/bash";
     imageDigest = "sha256:bea0e244b7c5367b2b0de687e7d28f692013aa18970941c7dd184450125163ac";
-    sha256 = "161s9f24njjx87qrwq0c9nmnwvyc6iblcxka7hirw78lm7i9x4w5";
+    sha256 = "sha256-hZOe4qkUHZ4jPGp2Rlc0zG9uq00MYJ7xQV1KS4RLOpg="; # depends on $system!
     finalImageName = "quay.io/nextflow/bash";
   };
 
@@ -21,13 +23,16 @@ let
   };
   run-nextflow-pipeline = pkgs.writeShellApplication {
     name = "run-nextflow-pipeline";
-    runtimeInputs = [ pkgs.nextflow ];
     text = ''
       export NXF_OFFLINE=true
-      for b in false true; do
-        echo "docker.enabled = $b" > nextflow.config
-        cat nextflow.config
-        nextflow run -ansi-log false ${hello}
+      for d in true false; do
+        for t in true false; do
+          rm -f nextflow.config; touch nextflow.config
+          echo "docker.enabled = $d" >> nextflow.config
+          echo "trace.enabled = $t" >> nextflow.config
+          cat nextflow.config
+          nextflow run -ansi-log false ${hello}
+        done
       done
     '';
   };
@@ -40,8 +45,8 @@ in
     {
       environment.systemPackages = [
         run-nextflow-pipeline
-        pkgs.nextflow
       ];
+      programs.nextflow.enable = true;
       virtualisation = {
         docker.enable = true;
       };
