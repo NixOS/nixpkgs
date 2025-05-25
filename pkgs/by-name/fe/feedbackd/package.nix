@@ -20,18 +20,10 @@
   dbus,
   gmobile,
   umockdev,
+  feedbackd-device-themes,
   nix-update-script,
 }:
 
-let
-  themes = fetchFromGitLab {
-    domain = "gitlab.freedesktop.org";
-    owner = "agx";
-    repo = "feedbackd-device-themes";
-    rev = "v0.8.3";
-    hash = "sha256-z+A2G1g2gNfC0cVWUO/LT3QVvXeotcBd+5UEpEtcPfY=";
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "feedbackd";
   version = "0.8.2";
@@ -93,7 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mkdir -p $out/lib/udev/rules.d
     sed "s|/usr/libexec/|$out/libexec/|" < $src/data/90-feedbackd.rules > $out/lib/udev/rules.d/90-feedbackd.rules
-    cp ${themes}/data/* $out/share/feedbackd/themes/
   '';
 
   postFixup = ''
