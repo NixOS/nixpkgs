@@ -9,7 +9,6 @@ let
   inherit (lib)
     mkBefore
     mkDefault
-    mkPackageOption
     mkIf
     mkOption
     mkRemovedOptionModule
@@ -92,7 +91,7 @@ in
     services.redmine = {
       enable = lib.mkEnableOption "Redmine, a project management web application";
 
-      package = mkPackageOption pkgs "redmine" {
+      package = lib.mkPackageOption pkgs "redmine" {
         example = "redmine.override { ruby = pkgs.ruby_3_2; }";
       };
 
