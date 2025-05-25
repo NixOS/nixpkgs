@@ -6,9 +6,6 @@
 }:
 
 let
-  inherit (lib)
-    types
-    ;
   inherit (lib) concatStringsSep literalExpression mapAttrsToList;
   inherit (lib) optional optionalAttrs optionalString;
 
@@ -91,31 +88,31 @@ in
       };
 
       user = lib.mkOption {
-        type = types.str;
+        type = lib.types.str;
         default = "redmine";
         description = "User under which Redmine is ran.";
       };
 
       group = lib.mkOption {
-        type = types.str;
+        type = lib.types.str;
         default = "redmine";
         description = "Group under which Redmine is ran.";
       };
 
       address = lib.mkOption {
-        type = types.str;
+        type = lib.types.str;
         default = "0.0.0.0";
         description = "IP address Redmine should bind to.";
       };
 
       port = lib.mkOption {
-        type = types.port;
+        type = lib.types.port;
         default = 3000;
         description = "Port on which Redmine is ran.";
       };
 
       stateDir = lib.mkOption {
-        type = types.path;
+        type = lib.types.path;
         default = "/var/lib/redmine";
         description = "The state directory, logs and plugins are stored here.";
       };
@@ -142,7 +139,7 @@ in
       };
 
       extraEnv = lib.mkOption {
-        type = types.lines;
+        type = lib.types.lines;
         default = "";
         description = ''
           Extra configuration in additional_environment.rb.
@@ -156,7 +153,7 @@ in
       };
 
       themes = lib.mkOption {
-        type = types.attrsOf types.path;
+        type = lib.types.attrsOf lib.types.path;
         default = { };
         description = "Set of themes.";
         example = literalExpression ''
@@ -170,7 +167,7 @@ in
       };
 
       plugins = lib.mkOption {
-        type = types.attrsOf types.path;
+        type = lib.types.attrsOf lib.types.path;
         default = { };
         description = "Set of plugins.";
         example = literalExpression ''
@@ -185,7 +182,7 @@ in
 
       database = {
         type = lib.mkOption {
-          type = types.enum [
+          type = lib.types.enum [
             "mysql2"
             "postgresql"
             "sqlite3"
@@ -196,32 +193,32 @@ in
         };
 
         host = lib.mkOption {
-          type = types.str;
+          type = lib.types.str;
           default = "localhost";
           description = "Database host address.";
         };
 
         port = lib.mkOption {
-          type = types.port;
+          type = lib.types.port;
           default = if cfg.database.type == "postgresql" then 5432 else 3306;
           defaultText = literalExpression "3306";
           description = "Database host port.";
         };
 
         name = lib.mkOption {
-          type = types.str;
+          type = lib.types.str;
           default = "redmine";
           description = "Database name.";
         };
 
         user = lib.mkOption {
-          type = types.str;
+          type = lib.types.str;
           default = "redmine";
           description = "Database user.";
         };
 
         passwordFile = lib.mkOption {
-          type = types.nullOr types.path;
+          type = lib.types.nullOr lib.types.path;
           default = null;
           example = "/run/keys/redmine-dbpassword";
           description = ''
@@ -231,7 +228,7 @@ in
         };
 
         socket = lib.mkOption {
-          type = types.nullOr types.path;
+          type = lib.types.nullOr lib.types.path;
           default =
             if mysqlLocal then
               "/run/mysqld/mysqld.sock"
@@ -245,7 +242,7 @@ in
         };
 
         createLocally = lib.mkOption {
-          type = types.bool;
+          type = lib.types.bool;
           default = true;
           description = "Create the database and database user locally.";
         };
@@ -267,7 +264,7 @@ in
         ghostscript = lib.mkEnableOption "exporting Gant diagrams as PDF.";
 
         minimagick_font_path = lib.mkOption {
-          type = types.str;
+          type = lib.types.str;
           default = "";
           description = "MiniMagick font path";
           example = "/run/current-system/sw/share/X11/fonts/LiberationSans-Regular.ttf";
