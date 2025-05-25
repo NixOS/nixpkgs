@@ -1201,6 +1201,7 @@ in
   sdl3 = handleTest ./sdl3.nix { };
   seafile = handleTest ./seafile.nix { };
   searx = runTest ./searx.nix;
+  seasonpackarr = runTest ./seasonpackarr.nix;
   seatd = handleTest ./seatd.nix { };
   send = runTest ./send.nix;
   service-runner = handleTest ./service-runner.nix { };
