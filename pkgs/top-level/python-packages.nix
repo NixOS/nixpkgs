@@ -10123,8 +10123,6 @@ self: super: with self; {
 
   notobuilder = callPackage ../development/python-modules/notobuilder { };
 
-  nototools = callPackage ../development/python-modules/nototools { };
-
   notus-scanner = callPackage ../development/python-modules/notus-scanner { };
 
   nox = callPackage ../development/python-modules/nox { };
@@ -12370,8 +12368,6 @@ self: super: with self; {
   pyfakefs = callPackage ../development/python-modules/pyfakefs { };
 
   pyfakewebcam = callPackage ../development/python-modules/pyfakewebcam { };
-
-  pyfantom = callPackage ../development/python-modules/pyfantom { };
 
   pyfatfs = callPackage ../development/python-modules/pyfatfs { };
 
@@ -17911,8 +17907,6 @@ self: super: with self; {
     inherit (pkgs) file zlib;
   };
 
-  typed-ast = callPackage ../development/python-modules/typed-ast { };
-
   typed-settings = callPackage ../development/python-modules/typed-settings { };
 
   typedunits = callPackage ../development/python-modules/typedunits { };
@@ -18356,8 +18350,6 @@ self: super: with self; {
   types-toml = callPackage ../development/python-modules/types-toml { };
 
   types-tqdm = callPackage ../development/python-modules/types-tqdm { };
-
-  types-typed-ast = callPackage ../development/python-modules/types-typed-ast { };
 
   types-ujson = callPackage ../development/python-modules/types-ujson { };
 
