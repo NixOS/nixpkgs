@@ -36,6 +36,15 @@ stdenv.mkDerivation rec {
       url = "https://github.com/gyunaev/kchmviewer/commit/99a6d94bdfce9c4578cce82707e71863a71d1453.patch";
       sha256 = "sha256-o8JkaMmcJObmMt+o/6ooCAPCi+yRAWDAgxV+tR5eHfY=";
     })
+    # Fix build on macOS
+    (fetchpatch {
+      url = "https://github.com/gyunaev/kchmviewer/pull/35/commits/b68ed6fe72eaf9ee4e7e42925f5071fbd02dc6b3.patch";
+      hash = "sha256-sJA0RE0Z83tYv0S42yQYWKKeLhW+YDsrxLkY5aMKKT4=";
+    })
+    (fetchpatch {
+      url = "https://github.com/gyunaev/kchmviewer/pull/35/commits/d307e4e829c5a6f57ab0040f786c3da7fd2f0a99.patch";
+      hash = "sha256-FWYfqG8heL6AnhevueCWHQc+c6Yj4+DuIdjIwXVZ+O4=";
+    })
   ];
 
   buildInputs = [
@@ -49,11 +58,19 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  postInstall = ''
-    install -Dm755 bin/kchmviewer -t $out/bin
-    install -Dm644 packages/kchmviewer.png -t $out/share/pixmaps
-    install -Dm644 packages/kchmviewer.desktop -t $out/share/applications
-  '';
+  postInstall =
+    if stdenv.hostPlatform.isDarwin then
+      ''
+        mkdir -p $out/{Applications,bin}
+        mv bin/kchmviewer.app $out/Applications
+        ln -s $out/Applications/kchmviewer.app/Contents/MacOS/kchmviewer $out/bin/kchmviewer
+      ''
+    else
+      ''
+        install -Dm755 bin/kchmviewer -t $out/bin
+        install -Dm644 packages/kchmviewer.png -t $out/share/pixmaps
+        install -Dm644 packages/kchmviewer.desktop -t $out/share/applications
+      '';
 
   meta = with lib; {
     description = "CHM (Winhelp) files viewer";
@@ -61,6 +78,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.ulduzsoft.com/linux/kchmviewer/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
