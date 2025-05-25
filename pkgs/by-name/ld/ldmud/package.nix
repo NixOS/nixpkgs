@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   version = "3.6.7";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "ldmud";
+    repo = "ldmud";
     rev = version;
     sha256 = "sha256-PkrjP7tSZMaj61Hsn++7+CumhqFPLbf0+eAI6afP9HA=";
   };

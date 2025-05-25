@@ -13,7 +13,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "sosedoff";
-    repo = pname;
+    repo = "pgweb";
     rev = "v${version}";
     hash = "sha256-gZK8+H3dBMzSVyE96E7byihKMR4+1YlVFZJtCTGUZwI=";
   };

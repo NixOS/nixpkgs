@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitLab {
     owner = "veilid";
-    repo = pname;
+    repo = "veilid";
     rev = "v${version}";
     hash = "sha256-bKll7VB6LjkmmhN5lmjcSeP2zZbyWnl4XiZbZe3tKgg=";
   };

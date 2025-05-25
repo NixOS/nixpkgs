@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "jeertmans";
-    repo = pname;
+    repo = "languagetool-rust";
     rev = "v${version}";
     hash = "sha256-8YgSxAF4DA1r7ylj6rx+fGubvT7MeiRQeowuiu0GWwQ=";
   };

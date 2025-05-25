@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "CircleCI-Public";
-    repo = pname;
+    repo = "circleci-cli";
     rev = "v${version}";
     sha256 = "sha256-0D0jCBE027zEQI/3iX4nF5ut8PS+nKuKhNf5+buazb8=";
   };

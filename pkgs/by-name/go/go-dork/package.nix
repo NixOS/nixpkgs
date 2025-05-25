@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "dwisiswant0";
-    repo = pname;
+    repo = "go-dork";
     tag = "v${version}";
     hash = "sha256-Q7ECwXH9q6qWba2URh3LjMx8g6vPF1DWfKnmXej7ht4=";
   };

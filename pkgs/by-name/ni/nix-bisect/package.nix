@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchFromGitHub {
     owner = "timokau";
-    repo = pname;
+    repo = "nix-bisect";
     rev = "4f26082fec0817acbfa8cc6ca4c25caaf77ddcd2";
     hash = "sha256-zyeE1jYo/9NEG8fB4gQBAR01siP4tyLvjjHN1yUS4Ug=";
   };

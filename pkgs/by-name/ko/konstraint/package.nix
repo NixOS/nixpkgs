@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "plexsystems";
-    repo = pname;
+    repo = "konstraint";
     rev = "v${version}";
     sha256 = "sha256-DwfBevCGDndMfQiwiuV+J95prhbxT20siMrEY2T7h1w=";
   };

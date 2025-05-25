@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "tilt-dev";
-    repo = pname;
+    repo = "ctlptl";
     rev = "v${version}";
     hash = "sha256-PjTgXjA3lP4tzkcnWt711DJtu5/2zR+a2yyYmzf5WvE=";
   };

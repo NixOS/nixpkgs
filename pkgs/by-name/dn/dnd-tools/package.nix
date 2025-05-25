@@ -5,13 +5,13 @@
   lib,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "dnd-tools";
   version = "unstable-2021-02-18";
 
   src = fetchFromGitHub {
     owner = "savagezen";
-    repo = pname;
+    repo = "dnd-tools";
     rev = "baefb9e4b4b8279be89ec63d256dde9704dee078";
     sha256 = "1rils3gzbfmwvgy51ah77qihwwbvx50q82lkc1kwcb55b3yinnmj";
   };

@@ -9,7 +9,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "yoheimuta";
-    repo = pname;
+    repo = "protolint";
     rev = "v${version}";
     hash = "sha256-uim4M1C51VVCOhcE/dyCLzx/Bks0h50+haw5mbAfiN8=";
   };

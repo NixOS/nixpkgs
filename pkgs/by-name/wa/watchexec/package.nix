@@ -11,8 +11,8 @@ rustPlatform.buildRustPackage rec {
   version = "2.3.1";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "watchexec";
+    repo = "watchexec";
     rev = "v${version}";
     hash = "sha256-ldxB1/WgOe1uGfKXkMEtGHIlWiKJgnZz6j/7eCOGD8s=";
   };

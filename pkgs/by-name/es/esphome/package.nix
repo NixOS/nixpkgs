@@ -37,8 +37,8 @@ python.pkgs.buildPythonApplication rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "esphome";
+    repo = "esphome";
     tag = version;
     hash = "sha256-BcPdgAvRR7zataL4KOhLAvQaQnS60z8UZ9xdIK7ydz4=";
   };

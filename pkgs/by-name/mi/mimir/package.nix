@@ -10,9 +10,9 @@ buildGoModule rec {
   version = "2.16.0";
 
   src = fetchFromGitHub {
-    rev = "${pname}-${version}";
+    rev = "mimir-${version}";
     owner = "grafana";
-    repo = pname;
+    repo = "mimir";
     hash = "sha256-75KHS+jIPEvcB7SHBBcBi5uycwY7XR4RNc1khNYVZFE=";
   };
 

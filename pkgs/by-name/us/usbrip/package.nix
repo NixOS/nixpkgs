@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "usbrip";
   version = "unstable-2021-07-02";
 
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "snovvcrash";
-    repo = pname;
+    repo = "usbrip";
     rev = "0f3701607ba13212ebefb4bbd9e68ec0e22d76ac";
     sha256 = "1vws8ybhv7szpqvlbmv0hrkys2fhhaa5bj9dywv3q2y1xmljl0py";
   };

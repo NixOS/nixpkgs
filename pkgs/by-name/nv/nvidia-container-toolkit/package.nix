@@ -31,7 +31,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
-    repo = pname;
+    repo = "nvidia-container-toolkit";
     rev = "v${version}";
     hash = "sha256-MQQTQ6AaoA4VIAT7YPo3z6UbZuKHjOvu9sW2975TveM=";
 

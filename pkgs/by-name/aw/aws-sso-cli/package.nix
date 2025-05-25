@@ -13,7 +13,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "synfinatic";
-    repo = pname;
+    repo = "aws-sso-cli";
     rev = "v${version}";
     hash = "sha256-hzX5gqr8tJk9EtP3ophbJ5m3rb92ZOs9UuDVTvxFcpI=";
   };

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
+    repo = "xapp";
     rev = version;
     hash = "sha256-ub5OwtB+LR86gt17342cmgvoWJu2kYzkWhl9V1QVCzQ=";
   };
