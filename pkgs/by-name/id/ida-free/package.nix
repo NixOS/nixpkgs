@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ida-free";
-  version = "9.0sp1";
+  version = "9.1";
 
   src = fetchurl {
     url = "https://archive.org/download/ida-free-pc_90sp1_x64linux/ida-free-pc_90sp1_x64linux.run";
