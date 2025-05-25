@@ -9,6 +9,9 @@ let
   version = "11.46.6";
   meta = with lib; {
     homepage = "https://www.getpostman.com";
+    changelog = "https://www.postman.com/release-notes/postman-app/#${
+      replaceStrings [ "." ] [ "-" ] version
+    }";
     description = "API Development Environment";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.postman;
