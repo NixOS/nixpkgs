@@ -11,7 +11,6 @@ let
     mkDefault
     mkIf
     mkOption
-    mkRemovedOptionModule
     types
     ;
   inherit (lib) concatStringsSep literalExpression mapAttrsToList;
@@ -73,12 +72,12 @@ let
 in
 {
   imports = [
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "redmine"
       "extraConfig"
     ] "Use services.redmine.settings instead.")
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "redmine"
       "database"
