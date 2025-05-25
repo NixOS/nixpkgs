@@ -4086,6 +4086,13 @@ with pkgs;
 
   graylog-6_0 = callPackage ../tools/misc/graylog/6.0.nix { };
 
+  inherit
+    ({
+      graylog-6_1 = callPackage ../tools/misc/graylog/6.1.nix { };
+    })
+    graylog-6_1
+    ;
+
   graylogPlugins = recurseIntoAttrs (callPackage ../tools/misc/graylog/plugins.nix { });
 
   graphviz = callPackage ../tools/graphics/graphviz {
