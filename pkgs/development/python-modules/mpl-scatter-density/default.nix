@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "astrofrog";
-    repo = pname;
+    repo = "mpl-scatter-density";
     tag = "v${version}";
     hash = "sha256-pDiKJAN/4WFf5icNU/ZGOvw0jqN3eGZHgilm2oolpbE=";
   };

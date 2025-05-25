@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "openstack";
-    repo = pname;
+    repo = "python-ironicclient";
     tag = version;
     hash = "sha256-HqsOMvJ8SK8IEZgeClLd0TnQLBweBEru0Bw4WRSDG7s=";
   };

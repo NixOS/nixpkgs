@@ -12,7 +12,7 @@ let
   version = "0.2.21";
   src = fetchFromGitHub {
     owner = "messense";
-    repo = pname;
+    repo = "nh3";
     rev = "v${version}";
     hash = "sha256-DskjcKjdz1HmKzmA568zRCjh4UK1/LBD5cSIu7Rfwok=";
   };

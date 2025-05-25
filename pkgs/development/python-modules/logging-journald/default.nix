@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "mosquito";
-    repo = pname;
+    repo = "logging-journald";
     tag = version;
     hash = "sha256-RQ9opkAOZfhYuqOXJ2Mtnig8soL+lCveYH2YdXL1AGM=";
   };

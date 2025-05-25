@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "randy3k";
-    repo = pname;
+    repo = "rchitect";
     tag = "v${version}";
     hash = "sha256-M7OWDo3mEEOYtjIpzPIpzPMBtv2TZJKJkSfHczZYS8Y=";
   };

@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "joerick";
-    repo = pname;
+    repo = "pyinstrument";
     tag = "v${version}";
     hash = "sha256-uJ9KRgSETuxpeEIpBKFz66+Qci86jy36lKkUKpvmKIg=";
   };
