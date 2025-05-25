@@ -29,14 +29,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "0-unstable-2025-02-23";
+  version = "0-unstable-2025-05-18";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = "wezterm";
-    rev = "4ff581a8aa3460d04f859fdadb50f29b3c507763";
+    rev = "5663e749948df3ed3c2d8ee0bfea6c85226310d9";
     fetchSubmodules = true;
-    hash = "sha256-KKfGB1vM8ytpNieWD6CHD5zVyUe17tFAegZFzLx7QfE=";
+    hash = "sha256-SQ1H16jy6GVjM8tEKZZC7AGIADLR1NyGfOT/6pFcFA0=";
   };
 
   postPatch =
@@ -55,7 +55,10 @@ rustPlatform.buildRustPackage rec {
       rm -r wezterm-ssh/tests
     '';
 
-  cargoHash = "sha256-WyQYmRNlabJaCTJm7Cn9nkXfOGAcOHwhoD9vmEggrDw=";
+  # https://github.com/wezterm/wezterm/pull/6960/commits/cb409f1213be314bb16e59b7147da8da16d12769#diff-c6652db0a7201b6411f7af58e81a051211a22b544efededd8e514ce8bf1c4646R134
+  auditable = false;
+
+  cargoHash = "sha256-9pdkXpkIbe5HeVGvgusRaI4A6ZjDGssO5k0ULVnO6k8=";
   useFetchCargoVendor = true;
 
   nativeBuildInputs = [
