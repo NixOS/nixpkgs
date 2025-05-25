@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "uqfoundation";
-    repo = pname;
+    repo = "dill";
     tag = version;
     hash = "sha256-RIyWTeIkK5cS4Fh3TK48XLa/EU9Iwlvcml0CTs5+Uh8=";
   };

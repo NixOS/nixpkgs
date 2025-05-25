@@ -1,44 +1,13 @@
 {
   fetchFromGitHub,
   lib,
-  buildPythonPackage,
-  pythonOlder,
-  afdko,
-  appdirs,
-  attrs,
-  booleanoperations,
-  brotlipy,
-  click,
-  defcon,
-  fontmath,
-  fontparts,
-  fontpens,
-  fonttools,
-  lxml,
-  mutatormath,
-  pathspec,
-  psautohint,
-  pyclipper,
-  pytz,
-  regex,
-  scour,
-  toml,
-  typed-ast,
-  ufonormalizer,
-  ufoprocessor,
-  unicodedata2,
-  zopfli,
-  pillow,
-  six,
   bash,
-  setuptools-scm,
+  python3Packages,
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "nototools";
   version = "0.2.20";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "googlefonts";
@@ -51,9 +20,14 @@ buildPythonPackage rec {
     sed -i 's/use_scm_version=.*,/version="${version}",/' setup.py
   '';
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = with python3Packages; [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  pythonRemoveDeps = [
+    # https://github.com/notofonts/nototools/pull/901
+    "typed-ast"
+  ];
+
+  dependencies = with python3Packages; [
     afdko
     appdirs
     attrs
@@ -74,7 +48,6 @@ buildPythonPackage rec {
     regex
     scour
     toml
-    typed-ast
     ufonormalizer
     ufoprocessor
     unicodedata2
@@ -82,8 +55,8 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pillow
-    six
+    python3Packages.pillow
+    python3Packages.six
     bash
   ];
 
