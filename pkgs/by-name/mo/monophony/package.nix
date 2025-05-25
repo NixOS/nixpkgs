@@ -70,13 +70,13 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
-    homepage = "https://gitlab.com/zehkira/monophony";
+  meta = {
     description = "Linux app for streaming music from YouTube";
     longDescription = "Monophony is a free and open source Linux app for streaming music from YouTube. It has no ads and does not require an account.";
-    license = licenses.agpl3Plus;
+    homepage = "https://gitlab.com/zehkira/monophony";
+    license = lib.licenses.agpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ quadradical ];
     mainProgram = "monophony";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ quadradical ];
   };
 }
