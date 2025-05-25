@@ -4084,7 +4084,7 @@ with pkgs;
 
   padthv1 = libsForQt5.callPackage ../applications/audio/padthv1 { };
 
-  pageedit = libsForQt5.callPackage ../applications/office/PageEdit { };
+  pageedit = qt6Packages.callPackage ../applications/office/PageEdit { };
 
   pagefind = libsForQt5.callPackage ../applications/misc/pagefind { };
 
