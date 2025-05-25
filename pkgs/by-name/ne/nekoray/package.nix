@@ -60,6 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
     # we already package those two files in nixpkgs
     # we can't place file at that location using our builder so we must change the search directory to be relative to the built executable
     ./search-for-geodata-in-install-location.patch
+
+    # disable suid request as it cannot be applied to nekobox_core in nix store
+    # and prompt users to use NixOS module instead. And use nekobox_core from PATH
+    # to make use of security wrappers
+    ./nixos-disable-setuid-request.patch
   ];
 
   installPhase = ''
@@ -98,6 +103,11 @@ stdenv.mkDerivation (finalAttrs: {
     pname = "nekobox-core";
     inherit (finalAttrs) version src;
     sourceRoot = "${finalAttrs.src.name}/core/server";
+
+    patches = [
+      # also check cap_net_admin so we don't have to set suid
+      ./core-also-check-capabilities.patch
+    ];
 
     vendorHash = "sha256-CTI9wDPJ9dYpUwvszY2nRfi+NW0nO8imt9lsQ7Nd1Q8=";
 
