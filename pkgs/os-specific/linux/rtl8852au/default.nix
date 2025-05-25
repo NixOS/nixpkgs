@@ -5,6 +5,7 @@
   kernel,
   bc,
   nukeReferences,
+  fetchpatch2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,6 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [
     "pic"
     "format"
+  ];
+
+  patches = [
+    # fix builds for kernels >= 6.13 and 6.14
+    (fetchpatch2 {
+      url = "https://patch-diff.githubusercontent.com/raw/lwfinger/rtl8852au/pull/115.patch";
+      hash = "sha256-+QV/PGNOSRuMGJ6vPQZwHsAhHzGOcFVdL/WQPIzXGwM=";
+    })
   ];
 
   postPatch = ''
