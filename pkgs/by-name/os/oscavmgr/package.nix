@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   doInstallCheck = true;
 
   postPatch = ''
-    alvr_session=$(echo $cargoDepsCopy/alvr_session-*/)
+    alvr_session=$(echo $cargoDepsCopy/*/alvr_session-*/)
     substituteInPlace "$alvr_session/build.rs" \
       --replace-fail \
         'alvr_filesystem::workspace_dir().join("openvr/headers/openvr_driver.h")' \
