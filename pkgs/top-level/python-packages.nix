@@ -9212,6 +9212,8 @@ self: super: with self; {
 
   mplleaflet = callPackage ../development/python-modules/mplleaflet { };
 
+  mpltoolbox = callPackage ../development/python-modules/mpltoolbox { };
+
   mpmath = callPackage ../development/python-modules/mpmath { };
 
   mpris-server = callPackage ../development/python-modules/mpris-server { };
@@ -11336,6 +11338,8 @@ self: super: with self; {
   ploomber-core = callPackage ../development/python-modules/ploomber-core { };
 
   ploomber-extension = callPackage ../development/python-modules/ploomber-extension { };
+
+  plopp = callPackage ../development/python-modules/plopp { };
 
   plotext = callPackage ../development/python-modules/plotext { };
 
@@ -15619,6 +15623,8 @@ self: super: with self; {
 
   scim2-tester = callPackage ../development/python-modules/scim2-tester { };
 
+  scipp = callPackage ../development/python-modules/scipp { };
+
   scipy = callPackage ../development/python-modules/scipy { };
 
   scmrepo = callPackage ../development/python-modules/scmrepo { };
@@ -18520,6 +18526,10 @@ self: super: with self; {
   unify = callPackage ../development/python-modules/unify { };
 
   unique-log-filter = callPackage ../development/python-modules/unique-log-filter { };
+
+  units-llnl = callPackage ../development/python-modules/units-llnl {
+    inherit (pkgs) units-llnl;
+  };
 
   unittest-data-provider = callPackage ../development/python-modules/unittest-data-provider { };
 
