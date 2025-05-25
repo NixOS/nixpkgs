@@ -9,7 +9,7 @@ let
   nixpkgs-cfg = config.nixpkgs;
   nixos-rebuild = lib.getExe config.system.build.nixos-rebuild;
   outerNixpkgsPath = pkgs.path;
-  upgradeFlag = lib.optional (cfg.channel == null && cfg.upgrade) (
+  upgradeFlag = lib.optionalString (cfg.channel == null && cfg.upgrade) (
     if cfg.upgradeAll then "--upgrade-all" else "--upgrade"
   );
   upgradeScript =
