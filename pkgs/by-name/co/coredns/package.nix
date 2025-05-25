@@ -47,9 +47,21 @@ buildGoModule rec {
         else if position == "start-of-file" then
           "sed -i '1i ${formatPlugin plugin}' plugin.cfg"
         else if lib.hasAttrByPath [ "before" ] position then
-          "sed -i '/^${position.before}:/i ${formatPlugin plugin}' plugin.cfg"
+          ''
+            if ! grep -q '^${position.before}:' plugin.cfg; then
+              echo 'Failed to insert ${plugin.name} before ${position.before} in plugin.cfg: ${position.before} is not in plugin.cfg'
+              exit 1
+            fi
+            sed -i '/^${position.before}:/i ${formatPlugin plugin}' plugin.cfg
+          ''
         else if lib.hasAttrByPath [ "after" ] position then
-          "sed -i '/^${position.after}:/a ${formatPlugin plugin}' plugin.cfg"
+          ''
+            if ! grep -q '^${position.after}:' plugin.cfg; then
+              echo 'Failed to insert ${plugin.name} after ${position.after} in plugin.cfg: ${position.after} is not in plugin.cfg'
+              exit 1
+            fi
+            sed -i '/^${position.after}:/a ${formatPlugin plugin}' plugin.cfg
+          ''
         else
           throw ''
             Unsupported position value in externalPlugin:
