@@ -55,7 +55,7 @@ import ../make-test-python.nix (
             };
           };
 
-          services.vmalert = {
+          services.vmalert.instances."" = {
             enable = true;
             settings = {
               "datasource.url" = "http://localhost:8428"; # victoriametrics' api
