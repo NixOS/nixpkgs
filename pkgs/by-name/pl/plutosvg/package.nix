@@ -1,0 +1,51 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  cmake,
+  ninja,
+  plutovg,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+}:
+stdenv.mkDerivation (finalAttrs: {
+  pname = "plutosvg";
+  version = "0.0.7";
+
+  src = fetchFromGitHub {
+    owner = "sammycage";
+    repo = "plutosvg";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4JLk4+O9Tf8CGxMP0aDN70ak/8teZH3GWBWlrIkPQm4=";
+  };
+
+  outputs = [
+    "out"
+    "dev"
+  ];
+
+  patches = [
+    # https://github.com/sammycage/plutosvg/pull/29
+    ./0001-Emit-correct-pkg-config-file-if-paths-are-absolute.patch
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
+  propagatedBuildInputs = [
+    plutovg
+  ];
+
+  cmakeFlags = [ (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared) ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    homepage = "https://github.com/sammycage/plutosvg";
+    changelog = "https://github.com/sammycage/plutosvg/releases/tag/${finalAttrs.src.tag}";
+    description = "Tiny SVG rendering library in C";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ marcin-serwin ];
+  };
+})
