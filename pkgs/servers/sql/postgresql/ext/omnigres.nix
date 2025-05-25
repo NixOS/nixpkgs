@@ -19,13 +19,13 @@ let
 in
 postgresqlBuildExtension (finalAttrs: {
   pname = "omnigres";
-  version = "0-unstable-2025-05-16";
+  version = "pg_yregress/v0.3.0-unstable-2025-05-21";
 
   src = fetchFromGitHub {
     owner = "omnigres";
     repo = "omnigres";
-    rev = "84f14792d80fb6fd60b680b7825245a8e7c5583e";
-    hash = "sha256-jOlHXl7ANhMwOPizd5KH+wYZmBNNkkIa9jbXZR8Xu28=";
+    rev = "91c1075fea15b76f0e3ba7b57e5261323fb7c872";
+    hash = "sha256-DNWlJsU6pg5F2ORQgiQMPjEgmpIl6uZarn3rmotKg2w=";
   };
 
   strictDeps = true;
