@@ -11839,19 +11839,6 @@ with pkgs;
 
   rofi-emoji = (callPackage ../applications/misc/rofi-emoji { }).v3;
 
-  rofi-rbw = python3Packages.callPackage ../applications/misc/rofi-rbw {
-    waylandSupport = false;
-    x11Support = false;
-  };
-
-  rofi-rbw-wayland = python3Packages.callPackage ../applications/misc/rofi-rbw {
-    waylandSupport = true;
-  };
-
-  rofi-rbw-x11 = python3Packages.callPackage ../applications/misc/rofi-rbw {
-    x11Support = true;
-  };
-
   # a somewhat more maintained fork of ympd
   memento = qt6Packages.callPackage ../applications/video/memento { };
 
