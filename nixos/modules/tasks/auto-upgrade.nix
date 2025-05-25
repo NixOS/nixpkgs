@@ -456,8 +456,8 @@ in
               config =
                 let
                   desync =
-                    if builtins.pathExists /var/lib/nixos/desyncs/${name}.nix then
-                      import /var/lib/nixos/desyncs/${name}.nix
+                    if builtins.pathExists /var/lib/nixos/desyncs + "${name}.nix" then
+                      import /var/lib/nixos/desyncs + "${name}.nix"
                     else
                       {
                         # If we have no desync saved, it means that any configuration that builds
