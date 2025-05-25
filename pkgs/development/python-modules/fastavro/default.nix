@@ -24,8 +24,8 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "fastavro";
+    repo = "fastavro";
     tag = version;
     hash = "sha256-I8Te1Ae20UrE5qI2nwktU0Ubip7Jx4/NWteSKsSz7tg=";
   };
