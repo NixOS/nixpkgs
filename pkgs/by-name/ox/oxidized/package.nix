@@ -5,7 +5,7 @@
   bundlerUpdateScript,
 }:
 
-bundlerApp {
+bundlerApp rec {
   pname = "oxidized";
   gemdir = ./.;
 
@@ -16,7 +16,7 @@ bundlerApp {
     "oxs"
   ];
 
-  passthru.updateScript = bundlerUpdateScript "oxidized";
+  passthru.updateScript = bundlerUpdateScript pname;
 
   meta = with lib; {
     description = "Network device configuration backup tool. It's a RANCID replacement";
