@@ -131,6 +131,17 @@ software floating point emulation.  `libgcc` would be a "target→ *" dependency
 
 Some frequently encountered problems when packaging for cross-compilation should be answered here. Ideally, the information above is exhaustive, so this section cannot provide any new information, but it is ludicrous and cruel to expect everyone to spend effort working through the interaction of many features just to figure out the same answer to the same common problem. Feel free to add to this list!
 
+#### How do I cross compile in nixpkgs? {#cross-qa-cross-compile-in-nixpkgs}
+Since NixOS 25.05, package sets such as `pkgsLLVM`, `pkgsMusl`, and `pkgsCross` have been moved into being labeled as variants. Future NixOS releases will disable the use of variants in nixpkgs. This is due to the increased evaluation since variants create a new nixpkgs instance atop the existing one. NixOS 24.11 introduces a feature called `crossStdenv`, this is a set of stdenv's for cross compiling without instantiating a new nixpkgs instance. `crossStdenv` contains a recursive attribute set called `predicated` and provides boolean options to a platform attribute set. It also contains `libcs` which is an attribute set of libc's that can be utilized. Finally, the recursive attribute set contains `configs` and `native`. `configs` is a set of attribute sets which contains stdenv's for each platform target that is supported for cross compiling. An example of the new pattern for something like `pkgsCross.wasi32.hello` would be:
+
+```nix
+hello.override {
+  stdenv = crossStdenv.predicated.useLLVM.configs.wasi32-unknown-wasi;
+}
+```
+
+Note that the `stdenv` is overridden to provide the `wasi32-unknown-wasi` stdenv with the `useLLVM` predicate enabled. It is important to override all runtime dependencies to ensure the package properly cross compiles.
+
 #### My package fails to find a binutils command (`cc`/`ar`/`ld` etc.) {#cross-qa-fails-to-find-binutils}
 Many packages assume that an unprefixed binutils (`cc`/`ar`/`ld` etc.) is available, but Nix doesn't provide one. It only provides a prefixed one, just as it only does for all the other binutils programs. It may be necessary to patch the package to fix the build system to use a prefix. For instance, instead of `cc`, use `${stdenv.cc.targetPrefix}cc`.
 
