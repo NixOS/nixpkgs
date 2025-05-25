@@ -14,19 +14,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uutils-coreutils";
-  version = "0.0.30";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "coreutils";
     tag = finalAttrs.version;
-    hash = "sha256-OZ9AsCJmQmn271OzEmqSZtt1OPn7zHTScQiiqvPhqB0=";
+    hash = "sha256-nKKjc6Bui7k50SR7BY09dRGt3Za1Ch/E+3KiCO5KtOg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "uutils-coreutils-${finalAttrs.version}";
-    hash = "sha256-DsVLp2Y15k+KQI7S6A4hylOhJN016MEdEWx9VQIQEgQ=";
+    hash = "sha256-PTIypl9uqFkp6GrF7Pp40AItbWFlXT2V2x/C8L2J8S0=";
   };
 
   nativeBuildInputs = [
