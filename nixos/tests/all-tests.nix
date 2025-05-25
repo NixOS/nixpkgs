@@ -1235,6 +1235,7 @@ in
   spacecookie = handleTest ./spacecookie.nix { };
   spark = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./spark { };
   spiped = runTest ./spiped.nix;
+  spliit = runTest ./spliit.nix;
   sqlite3-to-mysql = handleTest ./sqlite3-to-mysql.nix { };
   squid = handleTest ./squid.nix { };
   sslh = handleTest ./sslh.nix { };
