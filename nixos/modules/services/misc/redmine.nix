@@ -308,6 +308,18 @@ in
           example = "/run/current-system/sw/share/X11/fonts/LiberationSans-Regular.ttf";
         };
       };
+
+      queueAdapter = {
+        type = mkOption {
+          type = types.enum [
+            "internal"
+            "sidekiq"
+          ];
+          example = "sidekiq";
+          default = "internal";
+          description = "Queue adapter to use.";
+        };
+      };
     };
   };
 
@@ -528,6 +540,23 @@ in
         UMask = 27;
       };
 
+    };
+
+    systemd.services.redmine-sidekiq = {
+      after = [
+        "network.target"
+      ];
+      environment = null;
+      path = [ ];
+      serviceConfig = {
+        Type = "simple";
+        User = cfg.user;
+        Group = cfg.group;
+        TimeoutSec = "300";
+        Restart = "always";
+        WorkingDirectory = "${cfg.package}/share/redmine";
+        ExecStart = "{bundle} exec sidekiq --concurrency 1 --environment production --require ${cfg.package}/share/redmine";
+      };
     };
 
     users.users = optionalAttrs (cfg.user == "redmine") {
