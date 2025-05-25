@@ -10,6 +10,8 @@
   libpulseaudio,
   sndio,
   speexdsp,
+  validatePkgConfig,
+  testers,
   alsaSupport ? !stdenv.hostPlatform.isDarwin,
   pulseSupport ? !stdenv.hostPlatform.isDarwin,
   jackSupport ? !stdenv.hostPlatform.isDarwin,
@@ -17,7 +19,7 @@
   buildSharedLibs ? true,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cubeb";
   version = "0-unstable-2025-04-02";
 
@@ -37,6 +39,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
     pkg-config
+    validatePkgConfig
   ];
 
   buildInputs =
@@ -68,6 +71,7 @@ stdenv.mkDerivation {
 
   passthru = {
     updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   meta = {
@@ -80,5 +84,6 @@ stdenv.mkDerivation {
       zhaofengli
       marcin-serwin
     ];
+    pkgConfigModules = [ "libcubeb" ];
   };
-}
+})
