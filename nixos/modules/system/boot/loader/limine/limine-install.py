@@ -168,29 +168,14 @@ def config_entry(levels: int, bootspec: BootSpec, label: str, time: str) -> str:
     return entry
 
 
-def generate_config_entry(profile: str, gen: str, special: bool) -> str:
+def generate_config_entry(profile: str, gen: str) -> str:
     time = datetime.datetime.fromtimestamp(os.stat(get_system_path(profile,gen), follow_symlinks=False).st_mtime).strftime("%F %H:%M:%S")
     boot_json = json.load(open(os.path.join(get_system_path(profile, gen), 'boot.json'), 'r'))
     boot_spec = bootjson_to_bootspec(boot_json)
 
-    specialisation_list = boot_spec.specialisations.items()
-    depth = 2
-    entry = ""
-
-    if len(specialisation_list) > 0:
-        depth += 1
-        entry += '/' * (depth-1)
-
-        if special:
-            entry += '+'
-
-        entry += f'Generation {gen}' + '\n'
-        entry += config_entry(depth, boot_spec, f'Default', str(time))
-    else:
-        entry += config_entry(depth, boot_spec, f'Generation {gen}', str(time))
-
-    for spec, spec_boot_spec in specialisation_list:
-        entry += config_entry(depth, spec_boot_spec, f'{spec}', str(time))
+    entry = config_entry(2, boot_spec, f'Generation {gen}', time)
+    for spec, spec_boot_spec in boot_spec.specialisations.items():
+        entry += config_entry(2, spec_boot_spec, f'Generation {gen}, Specialisation {spec}', str(time))
     return entry
 
 
@@ -284,17 +269,13 @@ def main():
     editor_enabled = 'yes' if config('enableEditor') else 'no'
     hash_mismatch_panic = 'yes' if config('panicOnChecksumMismatch') else 'no'
 
-    last_gen = get_gens()[-1]
-    last_gen_json = json.load(open(os.path.join(get_system_path('system', last_gen), 'boot.json'), 'r'))
-    last_gen_boot_spec = bootjson_to_bootspec(last_gen_json)
-
     config_file = config('extraConfig') + '\n'
     config_file += textwrap.dedent(f'''
         timeout: {timeout}
         editor_enabled: {editor_enabled}
         hash_mismatch_panic: {hash_mismatch_panic}
         graphics: yes
-        default_entry: {3 if len(last_gen_boot_spec.specialisations.items()) > 0 else 2}
+        default_entry: 2
     ''')
 
     for wallpaper in config('style', 'wallpapers'):
@@ -326,11 +307,8 @@ def main():
         group_name = 'default profile' if profile == 'system' else f"profile '{profile}'"
         config_file += f'/+NixOS {group_name}\n'
 
-        isFirst = True
-
         for gen in sorted(gens, key=lambda x: x, reverse=True):
-            config_file += generate_config_entry(profile, gen, isFirst)
-            isFirst = False
+            config_file += generate_config_entry(profile, gen)
 
     config_file_path = os.path.join(limine_dir, 'limine.conf')
     config_file += '\n# NixOS boot entries end here\n\n'
@@ -410,16 +388,9 @@ def main():
                 efibootmgr = os.path.join(config('efiBootMgrPath'), 'bin', 'efibootmgr')
                 efi_partition = find_mounted_device(config('efiMountPoint'))
                 efi_disk = find_disk_device(efi_partition)
-
-                efibootmgr_output = subprocess.check_output([efibootmgr], stderr=subprocess.STDOUT, universal_newlines=True)
-                create_flag = '-c'
-                # Check the output of `efibootmgr` to find if limine is already installed and present in the boot record
-                if matches := re.findall(r'Boot[0-9a-fA-F]{4}\*? Limine', efibootmgr_output):
-                    create_flag = '-C' # if present, keep the same boot order
-
                 efibootmgr_output = subprocess.check_output([
                     efibootmgr,
-                    create_flag,
+                    '-c',
                     '-d', efi_disk,
                     '-p', efi_partition.removeprefix(efi_disk).removeprefix('p'),
                     '-l', f'\\efi\\limine\\{boot_file}',
