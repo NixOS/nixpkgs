@@ -56,7 +56,7 @@ in
         freeformType = format.type;
 
         options = {
-          PUBLIC_APP_URL = mkOption {
+          APP_URL = mkOption {
             type = str;
             description = ''
               The URL where you will access the app.
