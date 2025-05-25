@@ -43,7 +43,7 @@ buildGoModule rec {
           formatPlugin = { name, repo, ... }: "${name}:${repo}";
         in
         if position == "end-of-file" then
-          "echo ${formatPlugin plugin} >> plugin.cfg"
+          "echo '${formatPlugin plugin}' >> plugin.cfg"
         else if position == "start-of-file" then
           "sed -i '1i ${formatPlugin plugin}' plugin.cfg"
         else if lib.hasAttrByPath [ "before" ] position then
