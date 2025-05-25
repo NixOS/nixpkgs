@@ -28,19 +28,19 @@ buildGoModule rec {
     repo = "gcs";
     tag = "v${version}";
 
-    nativeBuildInputs = [
-      cacert
-      unzip
-    ];
+    # nativeBuildInputs = [
+    #   cacert
+    #   unzip
+    # ];
 
-    # also fetch pdf.js files
-    # note: the version is locked in the file
-    postFetch = ''
-      cd $out/server/pdf
-      substituteInPlace refresh-pdf.js.sh \
-          --replace-fail '/bin/rm' 'rm'
-      . refresh-pdf.js.sh
-    '';
+    # # also fetch pdf.js files
+    # # note: the version is locked in the file
+    # postFetch = ''
+    #   cd $out/server/pdf
+    #   substituteInPlace refresh-pdf.js.sh \
+    #       --replace-fail '/bin/rm' 'rm'
+    #   . refresh-pdf.js.sh
+    # '';
 
     hash = "sha256-YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY=";
   };
@@ -52,24 +52,24 @@ buildGoModule rec {
 
   vendorHash = "sha256-YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY=";
 
-  frontend = buildNpmPackage {
-    name = "${pname}-${version}-frontend";
+  # frontend = buildNpmPackage {
+  #   name = "${pname}-${version}-frontend";
+  #
+  #   inherit src;
+  #   sourceRoot = "${src.name}/server/frontend";
+  #   npmDepsHash = "sha256-YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY=";
+  #
+  #   installPhase = ''
+  #     runHook preInstall
+  #     mkdir -p $out
+  #     cp -r dist $out/dist
+  #     runHook postInstall
+  #   '';
+  # };
 
-    inherit src;
-    sourceRoot = "${src.name}/server/frontend";
-    npmDepsHash = "sha256-YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY=";
-
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out
-      cp -r dist $out/dist
-      runHook postInstall
-    '';
-  };
-
-  postPatch = ''
-    cp -r ${frontend}/dist server/frontend/dist
-  '';
+  # postPatch = ''
+  #   cp -r ${frontend}/dist server/frontend/dist
+  # '';
 
   nativeBuildInputs = [ pkg-config ];
 
