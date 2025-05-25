@@ -13,7 +13,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "pb33f";
-    repo = pname;
+    repo = "openapi-changes";
     rev = "v${version}";
     hash = "sha256-Ct4VyYFqdMmROg9SE/pFNOJozSkQtKpgktJVgvtW/HA=";
   };

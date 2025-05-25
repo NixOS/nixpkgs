@@ -17,8 +17,8 @@ python311Packages.buildPythonApplication rec {
   format = "other";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "gpodder";
+    repo = "gpodder";
     rev = version;
     sha256 = "kEhyV1o8VSQW9qMx6m5avj6LnJuVTONDd6msRuc8t/4=";
   };

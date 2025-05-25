@@ -26,7 +26,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "divVerent";
-    repo = pname;
+    repo = "aaaaxy";
     rev = "v${version}";
     hash = "sha256-4iL3+GeyOZoZN8IXo0jjSq3hYHKBTpytk8owXMdfACo=";
     fetchSubmodules = true;

@@ -14,7 +14,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "F1bonacc1";
-    repo = pname;
+    repo = "process-compose";
     rev = "v${version}";
     hash = "sha256-qv/fVfuQD7Nan5Nn1RkwXoGZuPYSRWQaojEn6MCF9BQ=";
     # populate values that require us to use git. By doing this in postFetch we

@@ -12,8 +12,8 @@ python3.pkgs.buildPythonApplication rec {
   version = "1.8.3";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "peering-manager";
+    repo = "peering-manager";
     tag = "v${version}";
     sha256 = "sha256-UV1zSX9C9y5faOBUQ7bfj2DT6ffhMW28MIT7SaYjMgw=";
   };

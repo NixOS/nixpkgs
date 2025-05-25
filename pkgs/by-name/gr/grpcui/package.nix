@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "fullstorydev";
-    repo = pname;
+    repo = "grpcui";
     rev = "v${version}";
     sha256 = "sha256-Tmema+cMPDGuX6Y8atow58GdGMj7croHyj8oiDXSEYk=";
   };

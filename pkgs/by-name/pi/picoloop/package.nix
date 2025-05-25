@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
   version = "0.77e";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "picoloop";
     owner = "yoyz";
-    rev = "${pname}-${version}";
+    rev = "picoloop-${version}";
     sha256 = "0i8j8rgyha3ara6d4iis3wcimszf2csxdwrm5yq0wyhg74g7cvjd";
   };
 

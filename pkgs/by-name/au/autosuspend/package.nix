@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "languitar";
-    repo = pname;
+    repo = "autosuspend";
     tag = "v${version}";
     hash = "sha256-of2b5K4ccONPGZfUwEIoFs86xLM2aLCV8tVGxVqykiQ=";
   };

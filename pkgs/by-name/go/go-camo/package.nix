@@ -12,7 +12,7 @@ buildGo124Module rec {
 
   src = fetchFromGitHub {
     owner = "cactus";
-    repo = pname;
+    repo = "go-camo";
     rev = "v${version}";
     hash = "sha256-uf/r+QDukuFbbsFQal0mfZaGHZYk1fGn8Kt1ipFD/vI=";
   };

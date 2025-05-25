@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "cirruslabs";
-    repo = pname;
+    repo = "orchard";
     rev = version;
     hash = "sha256-yiCMnP73C5MJLYjnZfqcKtdSzPyL/9WlAtylMXDl4E8=";
     # populate values that require us to use git. By doing this in postFetch we

@@ -34,7 +34,7 @@ lib.checkListOfEnum "${pname}: available color variants"
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
-      repo = pname;
+      repo = "Fluent-icon-theme";
       tag = version;
       hash = "sha256-nL9hk+H2ees2grBvVULvJs54FlFTXrA7o1STbDDJGhQ=";
     };
