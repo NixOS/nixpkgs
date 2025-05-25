@@ -14,20 +14,20 @@
 }:
 
 let
-  version = "2.7.6";
-  ui_version = "OSS-v2.7.1";
-  libflux_version = "0.194.5";
+  version = "2.7.11";
+  ui_version = "OSS-v2.7.10";
+  libflux_version = "0.195.2";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb";
     rev = "v${version}";
-    hash = "sha256-0gqFUIV0ETdVuVmC+SwoKsO6OkoT/s+qKO1f8fkaZj4=";
+    hash = "sha256-vqlIPYNP1Rta0aKhazflxr9BvyD1vLixJvRVJwwTPQ8=";
   };
 
   ui = fetchurl {
     url = "https://github.com/influxdata/ui/releases/download/${ui_version}/build.tar.gz";
-    hash = "sha256-0k59SKvt9pFt3WSd5PRUThbfbctt2RYtaxaxoyLICm8=";
+    hash = "sha256-dnzYWr68O977jZ3YHlX4ywODzLbnOID743rH2IxP+IQ=";
   };
 
   flux = rustPlatform.buildRustPackage {
@@ -37,21 +37,19 @@ let
       owner = "influxdata";
       repo = "flux";
       rev = "v${libflux_version}";
-      hash = "sha256-XHT/+JMu5q1cPjZT2x/OKEPgxFJcnjrQKqn8w9/Mb3s=";
+      hash = "sha256-PNI3FpaDjkNEfGX78LRXBR+YUvr62icLMvjUux1XVOY=";
     };
     patches = [
-      # Fix build on Rust 1.78 (included after v0.195.0)
       (fetchpatch {
-        name = "fix-build-on-rust-1.78.patch";
-        url = "https://github.com/influxdata/flux/commit/68c831c40b396f0274f6a9f97d77707c39970b02.patch";
+        name = "fix: add missing explicit lifetime for rust 1.83 build";
+        url = "https://github.com/influxdata/flux/commit/8e8f0936bb800f67b4fc406fd69b123aeb2e5fe2.patch";
         stripLen = 2;
         extraPrefix = "";
-        excludes = [ ];
-        hash = "sha256-6LOTgbOCfETNTmshyXgtDZf9y4t/2iqRuVPkz9dYPHc=";
+        excludes = [
+          "go/libflux/buildinfo.gen.go"
+        ];
+        hash = "sha256-KCzJvz91EvfaihrbQPHKd2rikL7wIxxJrjSR+BrcH38=";
       })
-      ./fix-unsigned-char.patch
-      # https://github.com/influxdata/flux/pull/5516
-      ./rust_lifetime.patch
     ];
     # Don't fail on missing code documentation
     postPatch = ''
@@ -94,7 +92,7 @@ buildGoModule {
     perl
   ];
 
-  vendorHash = "sha256-3Vf8BCrOwliXrH+gmZ4RJ1YBEbqL0Szx2prW3ie9CNg=";
+  vendorHash = "sha256-BfwJu0IVQdhd2yFZxtou3lUavTxZ2sJuhK5IxryXwRc=";
   subPackages = [
     "cmd/influxd"
     "cmd/telemetryd"
