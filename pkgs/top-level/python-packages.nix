@@ -3110,6 +3110,8 @@ self: super: with self; {
 
   cynthion = callPackage ../development/python-modules/cynthion { };
 
+  cypari = callPackage ../development/python-modules/cypari { };
+
   cypari2 = callPackage ../development/python-modules/cypari2 { };
 
   cypherpunkpay = callPackage ../development/python-modules/cypherpunkpay { };
@@ -5402,6 +5404,8 @@ self: super: with self; {
 
   fx2 = callPackage ../development/python-modules/fx2 { };
 
+  fxrays = callPackage ../development/python-modules/fxrays { };
+
   fyta-cli = callPackage ../development/python-modules/fyta-cli { };
 
   g2pkk = callPackage ../development/python-modules/g2pkk { };
@@ -7542,6 +7546,8 @@ self: super: with self; {
 
   knocki = callPackage ../development/python-modules/knocki { };
 
+  knot-floer-homology = callPackage ../development/python-modules/knot-floer-homology { };
+
   knx-frontend = callPackage ../development/python-modules/knx-frontend { };
 
   kombu = callPackage ../development/python-modules/kombu { };
@@ -8360,6 +8366,8 @@ self: super: with self; {
   losant-rest = callPackage ../development/python-modules/losant-rest { };
 
   lottie = callPackage ../development/python-modules/lottie { };
+
+  low-index = callPackage ../development/python-modules/low-index { };
 
   lox = callPackage ../development/python-modules/lox { };
 
@@ -11330,6 +11338,8 @@ self: super: with self; {
   plexwebsocket = callPackage ../development/python-modules/plexwebsocket { };
 
   plfit = toPythonModule (pkgs.plfit.override { inherit (self) python; });
+
+  plink = callPackage ../development/python-modules/plink { };
 
   plone-testing = callPackage ../development/python-modules/plone-testing { };
 
@@ -16186,6 +16196,12 @@ self: super: with self; {
 
   snapcast = callPackage ../development/python-modules/snapcast { };
 
+  snappy = callPackage ../development/python-modules/snappy { };
+
+  snappy-15-knots = callPackage ../development/python-modules/snappy-15-knots { };
+
+  snappy-manifolds = callPackage ../development/python-modules/snappy-manifolds { };
+
   snapshottest = callPackage ../development/python-modules/snapshottest { };
 
   snaptime = callPackage ../development/python-modules/snaptime { };
@@ -16351,6 +16367,8 @@ self: super: with self; {
   speg = callPackage ../development/python-modules/speg { };
 
   spglib = callPackage ../development/python-modules/spglib { };
+
+  spherogram = callPackage ../development/python-modules/spherogram { };
 
   sphfile = callPackage ../development/python-modules/sphfile { };
 
@@ -17489,6 +17507,8 @@ self: super: with self; {
   tkinter = callPackage ../development/python-modules/tkinter {
     py = python.override (lib.optionalAttrs (!python.isPyPy) { x11Support = true; });
   };
+
+  tkinter-gl = callPackage ../development/python-modules/tkinter-gl { };
 
   tld = callPackage ../development/python-modules/tld { };
 
