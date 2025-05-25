@@ -121,24 +121,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./0001-linux-linker.patch
   ];
 
-  cargoPatches = [
-    ./0002-fix-duplicate-reqwest.patch
-  ];
-
   postPatch =
     # Dynamically link WebRTC instead of static
     ''
       substituteInPlace $cargoDepsCopy/*/webrtc-sys-*/build.rs \
         --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc"
-
-      # Zed team renamed the function but forgot to update its usage in this file
-      # We rename it ourselves for now, until upstream fixes the issue
-      substituteInPlace $cargoDepsCopy/reqwest-0.12*/src/blocking/client.rs \
-        --replace-fail "inner.redirect(policy)" "inner.redirect_policy(policy)"
     '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-wTdsXNw9wPikpRIRMR19x8DrHJD4mxIKdAz/L/HMCII=";
+  cargoHash = "sha256-782W38MM5iSvM+4l52b3mv5J074bzwHNqBe/33DlCn4=";
 
   nativeBuildInputs =
     [
