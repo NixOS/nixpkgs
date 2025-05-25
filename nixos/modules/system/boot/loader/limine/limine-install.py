@@ -411,28 +411,15 @@ def main():
                 efi_partition = find_mounted_device(config('efiMountPoint'))
                 efi_disk = find_disk_device(efi_partition)
 
-                efibootmgr_output = subprocess.check_output([efibootmgr], stderr=subprocess.STDOUT, universal_newlines=True)
-                create_flag = '-c'
-                # Check the output of `efibootmgr` to find if limine is already installed and present in the boot record
-                if matches := re.findall(r'Boot[0-9a-fA-F]{4}\*? Limine', efibootmgr_output):
-                    create_flag = '-C' # if present, keep the same boot order
-
                 efibootmgr_output = subprocess.check_output([
                     efibootmgr,
-                    create_flag,
+                    '-c'
                     '-d', efi_disk,
                     '-p', efi_partition.removeprefix(efi_disk).removeprefix('p'),
                     '-l', f'\\efi\\limine\\{boot_file}',
                     '-L', 'Limine',
+                    '-D'
                 ], stderr=subprocess.STDOUT, universal_newlines=True)
-
-                for line in efibootmgr_output.split('\n'):
-                    if matches := re.findall(r'Boot([0-9a-fA-F]{4}) has same label Limine', line):
-                        subprocess.run(
-                            [efibootmgr, '-b', matches[0], '-B'],
-                            stdout=subprocess.DEVNULL,
-                            stderr=subprocess.DEVNULL,
-                        )
     if config('biosSupport'):
         if cpu_family != 'x86':
             raise Exception(f'Unsupported CPU family for BIOS install: {cpu_family}')
