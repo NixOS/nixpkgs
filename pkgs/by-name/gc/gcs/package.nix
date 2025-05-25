@@ -14,6 +14,7 @@
   mupdf,
   fontconfig,
   freetype,
+  makeDesktopItem,
 }:
 
 buildGoModule rec {
@@ -35,7 +36,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-EI2jbIYkjhINTY0FcFHsN1mQM6VlkvZeekDSzAXbG3c";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config makeDesktopItem ];
 
   buildInputs =
     [
@@ -64,6 +65,18 @@ buildGoModule rec {
   installPhase = ''
     runHook preInstall
     install -Dm755 $GOPATH/bin/gcs -t $out/bin
+
+    # if linux make desktop item
+    ${lib.optionalString stdenv.isLinux ''
+      mkdir -p $out/share/applications
+      makeDesktopItem \
+        --name "GURPS Character Sheet" \
+        --exec "gcs" \
+        --comment "${meta.description}" \
+        --desktop-file $out/share/applications/gcs.desktop \
+        --categories "Game;Roleplaying;"
+    ''}
+
     runHook postInstall
   '';
 
