@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "RedTeamPentesting";
-    repo = pname;
+    repo = "pretender";
     tag = "v${version}";
     hash = "sha256-c8uXN7UMj6UZPVt2aNSg6mRex8w+u7J5I7TAB7MzEWg=";
   };

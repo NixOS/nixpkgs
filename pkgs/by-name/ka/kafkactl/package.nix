@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "deviceinsight";
-    repo = pname;
+    repo = "kafkactl";
     tag = "v${version}";
     hash = "sha256-e21q4nXN3aI21PbNltRb6mzj67WmLsvJc8J0s7rrQBo=";
   };

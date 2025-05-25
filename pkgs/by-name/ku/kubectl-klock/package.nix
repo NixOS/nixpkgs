@@ -13,7 +13,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "applejag";
-    repo = pname;
+    repo = "kubectl-klock";
     rev = "v${version}";
     hash = "sha256-S7cpVRVboLkU+GgvwozJmfFAO29tKpPlk+r9mbVLxF8=";
   };

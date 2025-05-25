@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "pdfcpu";
-    repo = pname;
+    repo = "pdfcpu";
     rev = "v${version}";
     hash = "sha256-vfU0mFfOW9K3rgVNdfN2RBiKJLbijoVMtuywsoclEgE=";
     # Apparently upstream requires that the compiled executable will know the
