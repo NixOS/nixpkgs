@@ -1,10 +1,11 @@
 {
-  argcomplete,
   lib,
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   installShellFiles,
+  argcomplete,
   pytestCheckHook,
   p7zip,
   cabextract,
@@ -40,25 +41,20 @@ let
 in
 buildPythonPackage rec {
   pname = "patool";
-  version = "3.1.0";
+  version = "4.0.1";
   format = "setuptools";
 
   #pypi doesn't have test data
   src = fetchFromGitHub {
     owner = "wummel";
-    repo = pname;
+    repo = "patool";
     tag = version;
-    hash = "sha256-mt/GUIRJHB2/Rritc+uNkolZzguYy2G/NKnSKNxKsLk=";
+    hash = "sha256-KAOJi8vUP9kPa++dLEXf3mwrv1kmV7uDZmtvngPxQ90=";
   };
-
-  patches = [
-    # https://github.com/wummel/patool/pull/173
-    ./fix-rar-detection.patch
-  ];
 
   postPatch = ''
     substituteInPlace patoolib/util.py \
-      --replace "path = None" 'path = os.environ["PATH"] + ":${lib.makeBinPath compression-utilities}"'
+      --replace-fail 'path = os.environ.get("PATH", os.defpath)' 'path = os.environ.get("PATH", os.defpath) + ":${lib.makeBinPath compression-utilities}"'
   '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -68,9 +64,7 @@ buildPythonPackage rec {
       --zsh <(${argcomplete}/bin/register-python-argcomplete -s zsh $out/bin/patool)
   '';
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   nativeCheckInputs = [ pytestCheckHook ] ++ compression-utilities;
 
@@ -85,11 +79,11 @@ buildPythonPackage rec {
     "test_p7azip"
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_ar" ];
 
-  meta = with lib; {
+  meta = {
     description = "portable archive file manager";
     mainProgram = "patool";
     homepage = "https://wummel.github.io/patool/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ marius851000 ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
 }
