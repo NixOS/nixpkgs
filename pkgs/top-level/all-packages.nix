@@ -1368,7 +1368,10 @@ with pkgs;
   };
 
   box64 = callPackage ../applications/emulators/box64 {
-    hello-x86_64 = if stdenv.hostPlatform.isx86_64 then hello else pkgsCross.gnu64.hello;
+    hello-x86_64 = hello.override {
+      stdenv =
+        if stdenv.hostPlatform.isx86_64 then stdenv else crossStdenv.configs.x86_64-unknown-linux-gnu;
+    };
   };
 
   box86 =
