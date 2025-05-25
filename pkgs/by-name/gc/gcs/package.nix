@@ -42,7 +42,7 @@ buildGoModule rec {
     #   . refresh-pdf.js.sh
     # '';
 
-    hash = "sha256-YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY=";
+    hash = "sha256-qS0j838sjzdxRtvnah2nQ6tJzd7SVl5Fwfkcc6VP+/8=";
   };
 
   modPostBuild = ''
