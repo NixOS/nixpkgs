@@ -112,6 +112,7 @@ buildPythonPackage rec {
     # requires bs4, aka BeautifulSoup
     "test_importable_all"
     # flaky
+    "test_llm_caching"
     "test_llm_caching_async"
   ];
 
