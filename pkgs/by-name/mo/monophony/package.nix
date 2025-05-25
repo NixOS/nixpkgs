@@ -12,18 +12,19 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "monophony";
-  version = "2.15.0";
-  pyproject = false;
+  version = "3.3.3";
+  pyproject = true;
 
-  sourceRoot = "${src.name}/source";
   src = fetchFromGitLab {
     owner = "zehkira";
     repo = "monophony";
     rev = "v${version}";
-    hash = "sha256-fC+XXOGBpG5pIQW1tCNtQaptBCyLM+YGgsZLjWrMoDA=";
+    hash = "sha256-ET0cygX/r/YXGWpPU01FnBoLRtjo1ddXEiVIva71aE8=";
   };
 
-  pythonPath = with python3Packages; [
+  sourceRoot = "${src.name}/source";
+
+  dependencies = with python3Packages; [
     mpris-server
     pygobject3
     ytmusicapi
@@ -52,10 +53,11 @@ python3Packages.buildPythonApplication rec {
       gstreamer
     ]);
 
-  # Makefile only contains `install`
-  dontBuild = true;
+  pythonRelaxDeps = [ "mpris_server" ];
 
-  installFlags = [ "prefix=$(out)" ];
+  postInstall = ''
+    make install prefix=$out
+  '';
 
   dontWrapGApps = true;
 
