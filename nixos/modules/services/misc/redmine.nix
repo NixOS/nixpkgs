@@ -7,7 +7,7 @@
 
 let
   inherit (lib) concatStringsSep literalExpression mapAttrsToList;
-  inherit (lib) optionalAttrs optionalString;
+  inherit (lib) optionalString;
 
   cfg = config.services.redmine;
   format = pkgs.formats.yaml { };
@@ -20,7 +20,7 @@ let
         database =
           if cfg.database.type == "sqlite3" then "${cfg.stateDir}/database.sqlite3" else cfg.database.name;
       }
-      // optionalAttrs (cfg.database.type != "sqlite3") {
+      // lib.optionalAttrs (cfg.database.type != "sqlite3") {
         host =
           if (cfg.database.type == "postgresql" && cfg.database.socket != null) then
             cfg.database.socket
@@ -29,10 +29,10 @@ let
         port = cfg.database.port;
         username = cfg.database.user;
       }
-      // optionalAttrs (cfg.database.type != "sqlite3" && cfg.database.passwordFile != null) {
+      // lib.optionalAttrs (cfg.database.type != "sqlite3" && cfg.database.passwordFile != null) {
         password = "#dbpass#";
       }
-      // optionalAttrs (cfg.database.type == "mysql2" && cfg.database.socket != null) {
+      // lib.optionalAttrs (cfg.database.type == "mysql2" && cfg.database.socket != null) {
         socket = cfg.database.socket;
       };
   };
@@ -492,7 +492,7 @@ in
 
     };
 
-    users.users = optionalAttrs (cfg.user == "redmine") {
+    users.users = lib.optionalAttrs (cfg.user == "redmine") {
       redmine = {
         group = cfg.group;
         home = cfg.stateDir;
@@ -500,7 +500,7 @@ in
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == "redmine") {
+    users.groups = lib.optionalAttrs (cfg.group == "redmine") {
       redmine.gid = config.ids.gids.redmine;
     };
 
