@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   cython,
   networkx,
@@ -18,9 +18,12 @@ buildPythonPackage rec {
 
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-NlvRsy8C/Nem+iGcoxTE1BzjRKsNLvO17YBzVQmNZ9o=";
+  src = fetchFromGitHub {
+    owner = "3-manifolds";
+    repo = pname;
+    # release of version 2.3
+    rev = "8355b4087dfd211612d900ec990c28724115f124";
+    sha256 = "sha256-uqc+3xS4xulXR0tZlNuyC5Zz5OztR6c4PZWpsvU+4Pw=";
   };
 
   build-system = [ setuptools ];
@@ -39,7 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Spherical diagrams for 3-manifold topology";
     homepage = "https://snappy.computop.org/spherogram.html";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ noiioiu ];
   };
 }
