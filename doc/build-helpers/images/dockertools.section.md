@@ -1,6 +1,6 @@
 # pkgs.dockerTools {#sec-pkgs-dockerTools}
 
-`pkgs.dockerTools` is a set of functions for creating and manipulating Docker images according to the [Docker Image Specification v1.3.0](https://github.com/moby/moby/blob/46f7ab808b9504d735d600e259ca0723f76fb164/image/spec/spec.md#image-json-field-descriptions).
+`pkgs.dockerTools` is a set of functions for creating and manipulating Docker images according to the [Docker Image Specification v1.3.0](https://github.com/moby/docker-image-spec/blob/v1.3.1/spec.md).
 Docker itself is not used to perform any of the operations done by these functions.
 
 ## buildImage {#ssec-pkgs-dockerTools-buildImage}
@@ -130,7 +130,7 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
 `config` (Attribute Set or Null; _optional_)
 
 : Used to specify the configuration of the containers that will be started off the generated image.
-  Must be an attribute set, with each attribute as listed in the [Docker Image Specification v1.3.0](https://github.com/moby/moby/blob/46f7ab808b9504d735d600e259ca0723f76fb164/image/spec/spec.md#image-json-field-descriptions).
+  Must be an attribute set, with each attribute as listed in the [Docker Image Specification v1.3.0](https://github.com/moby/docker-image-spec/blob/v1.3.1/spec.md#image-json-field-descriptions).
 
   _Default value:_ `null`.
 
@@ -138,7 +138,7 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
 
 : Used to specify the image architecture.
   This is useful for multi-architecture builds that don't need cross compiling.
-  If specified, its value should follow the [OCI Image Configuration Specification](https://github.com/opencontainers/image-spec/blob/main/config.md#properties), which should still be compatible with Docker.
+  If specified, its value should follow the [OCI Image Configuration Specification](https://github.com/opencontainers/image-spec/blob/v1.1.1/config.md#properties), which should still be compatible with Docker.
   According to the linked specification, all possible values for `$GOARCH` in [the Go docs](https://go.dev/doc/install/source#environment) should be valid, but will commonly be one of `386`, `amd64`, `arm`, or `arm64`.
 
   _Default value:_ the same value from `pkgs.go.GOARCH`.
@@ -395,6 +395,10 @@ hello        latest   de2bf4786de6   About a minute ago   25.2MB
 :::
 
 ## buildLayeredImage {#ssec-pkgs-dockerTools-buildLayeredImage}
+
+::: {.warning}
+Deprecated in favor of [`streamLayeredImage`](#ssec-pkgs-dockerTools-streamLayeredImage) + [`writeImageStream`](#ssec-pkgs-dockerTools-writeImageStream).
+:::
 
 `buildLayeredImage` uses [`streamLayeredImage`](#ssec-pkgs-dockerTools-streamLayeredImage) underneath to build a compressed Docker-compatible repository tarball.
 Basically, `buildLayeredImage` runs the script created by `streamLayeredImage` to save the compressed image in the Nix store.
@@ -1186,7 +1190,7 @@ This is currently implemented by linking to the `env` binary from the `coreutils
 
 ### binSh {#sssec-pkgs-dockerTools-helpers-binSh}
 
-This provides a `/bin/sh` link to the `bash` binary from the `bashInteractive` package.
+This provides a `/bin/sh` link to the `bash` binary from the `bash` package.
 Because of this, it supports cases such as running a command interactively in a container (for example by running `docker container run -it <image_name>`).
 
 ### caCertificates {#sssec-pkgs-dockerTools-helpers-caCertificates}
@@ -1368,6 +1372,10 @@ dockerTools.buildLayeredImage {
 []{#ssec-pkgs-dockerTools-buildNixShellImage-arguments}
 ## buildNixShellImage {#ssec-pkgs-dockerTools-buildNixShellImage}
 
+::: {.warning}
+Deprecated in favor of [`streamNixShellImage`](#ssec-pkgs-dockerTools-streamNixShellImage) + [`writeImageStream`](#ssec-pkgs-dockerTools-writeImageStream).
+:::
+
 `buildNixShellImage` uses [`streamNixShellImage`](#ssec-pkgs-dockerTools-streamNixShellImage) underneath to build a compressed Docker-compatible repository tarball of an image that sets up an environment similar to that of running `nix-shell` on a derivation.
 Basically, `buildNixShellImage` runs the script created by `streamNixShellImage` to save the compressed image in the Nix store.
 
@@ -1490,7 +1498,7 @@ The environment in the image doesn't match `nix-shell` or `nix-build` exactly, a
   This shell is started when running the image.
   This can be seen as an equivalent of the `NIX_BUILD_SHELL` [environment variable](https://nixos.org/manual/nix/stable/command-ref/nix-shell.html#environment-variables) for {manpage}`nix-shell(1)`.
 
-  _Default value:_ the `bash` binary from the `bashInteractive` package.
+  _Default value:_ the `bash` binary from the `bash` package.
 
 `command` (String or Null; _optional_)
 
@@ -1507,6 +1515,105 @@ The environment in the image doesn't match `nix-shell` or `nix-build` exactly, a
   This can be seen as an equivalent of the `--run` option in {manpage}`nix-shell(1)`.
 
   _Default value:_ `null`.
+
+`includeBuildDerivation` (Boolean; _optional_)
+
+: Whether to include a `buildDerivation` binary which builds the derivation.
+
+  _Default value:_ `true`.
+
+`extraContents` (Path or List of Paths or Null; _optional_)
+
+: Extra directories whose contents will be added to the generated image.
+  Things that coerce to paths (e.g. a derivation) can also be used.
+  This can be seen as an equivalent of `ADD extraContents/ /` in a `Dockerfile`.
+
+  All the contents specified by `extraContents` along with the base contents from this helper will be added as a final layer in the generated image.
+  They will be added as links to the actual files (e.g. links to the store paths). The actual files will be added in previous layers.
+
+  If not specified, some convenience extra contents are included by default:
+
+  - `/bin/sh`
+    - Symlink to `${bash}/bin/bash`.
+  - `/usr/bin/env`
+    - Symlink to `${coreutils}/bin/env`.
+
+  _Default value:_ `[ "{`/bin/sh` derivation}" "{`/usr/bin/env` derivation}" ]`.
+
+## writeImageStream {#ssec-pkgs-dockerTools-writeImageStream}
+
+`writeImageStream` takes an executable that outputs an image stream (e.g. `streamLayeredImage`, `streamNixShellImage`) and writes a Docker-compatible repository tarball with optional compression.
+
+This is preferred over helpers that create an image stream internally and return its compressor derivation (e.g. `buildLayeredImage`, `buildNixShellImage`) because streams can be composed with overrides.
+
+### Inputs {#ssec-pkgs-dockerTools-writeImageStream-inputs}
+
+`stream` (Path)
+
+: Path to the executable that outputs an image stream.
+
+`compressor` (String; _optional_)
+
+: Selects the algorithm used to compress the image.
+
+  _Default value:_ `"gz"`.\
+  _Possible values:_ `"none"`, `"gz"`, `"zstd"`.
+
+### Passthru outputs {#ssec-pkgs-dockerTools-writeImageStream-passthru-outputs}
+
+`writeImageStream` also defines its own [`passthru`](#chap-passthru) attributes:
+
+`stream` (Derivation)
+
+: Path to the executable that outputs an image stream.
+
+`imageTag` (String)
+
+: The tag of the generated image from the input image stream.
+  This is useful if no tag was specified in the attributes of the argument to the function, because an automatic tag will be used instead.
+  `imageTag` allows you to retrieve the value of the tag used in this case.
+
+### Examples {#ssec-pkgs-dockerTools-writeImageStream-examples}
+
+:::{.example #ex-dockerTools-writeImageStream-streamNixShellImage}
+# Writing a Nix shell image stream
+
+Without image stream attribute overrides.
+
+```nix
+{
+  dockerTools,
+  hello,
+}:
+dockerTools.writeImageStream {
+  stream = dockerTools.streamNixShellImage {
+    drv = hello;
+  };
+}
+```
+
+With image stream attribute overrides.
+
+```nix
+{
+  lib,
+  stdenv,
+  dockerTools,
+  hello,
+}:
+dockerTools.writeImageStream {
+  stream =
+    (dockerTools.streamNixShellImage {
+      drv = hello;
+    }).override
+      (prev: {
+        config = prev.config // {
+          Env = prev.config.Env ++ [ "LD_LIBRARY_PATH=${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}" ];
+        };
+      });
+}
+```
+:::
 
 ### Examples {#ssec-pkgs-dockerTools-streamNixShellImage-examples}
 
