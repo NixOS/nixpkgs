@@ -7,7 +7,6 @@
 
 let
   inherit (lib)
-    mkIf
     mkOption
     types
     ;
@@ -279,7 +278,7 @@ in
   };
 
   # implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       {
@@ -328,7 +327,7 @@ in
       config.logger.level = Logger::INFO
     '';
 
-    services.mysql = mkIf mysqlLocal {
+    services.mysql = lib.mkIf mysqlLocal {
       enable = true;
       package = lib.mkDefault pkgs.mariadb;
       ensureDatabases = [ cfg.database.name ];
@@ -342,7 +341,7 @@ in
       ];
     };
 
-    services.postgresql = mkIf pgsqlLocal {
+    services.postgresql = lib.mkIf pgsqlLocal {
       enable = true;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
