@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pythonAtLeast,
   pythonOlder,
   substituteAll,
@@ -44,7 +45,7 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "4.2.19";
+  version = "4.2.21";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -53,7 +54,7 @@ buildPythonPackage rec {
     owner = "django";
     repo = "django";
     rev = "refs/tags/${version}";
-    hash = "sha256-aSTrtZs8WyZ/wr01N7Mi7M3A8MlZ6rB9fBuMdCkKkok=";
+    hash = "sha256-GiOPIuYJAkMPW8JccJvFEoQi36rCmySHeLB7mAmg6CM=";
   };
 
   patches =
@@ -65,6 +66,21 @@ buildPythonPackage rec {
       # make sure the tests don't remove packages from our pythonpath
       # and disable failing tests
       ./django_4_tests.patch
+
+      # fix filename length limit tests on bcachefs
+      # FIXME: remove if ever backported
+      (fetchpatch {
+        url = "https://github.com/django/django/commit/12f4f95405c7857cbf2f4bf4d0261154aac31676.patch";
+        hash = "sha256-+K20/V8sh036Ox9U7CSPgfxue7f28Sdhr3MsB7erVOk=";
+      })
+
+      # backport fix for https://code.djangoproject.com/ticket/36056
+      # FIXME: remove if ever backported upstream
+      (fetchpatch {
+        url = "https://github.com/django/django/commit/ec0e784f91b551c654f0962431cc31091926792d.patch";
+        includes = [ "django/*" ]; # tests don't apply
+        hash = "sha256-8YwdOBNJq6+GNoxzdLyN9HEEIWRXGQk9YbyfPwYVkwU=";
+      })
     ]
     ++ lib.optionals withGdal [
       (substituteAll {
@@ -77,6 +93,9 @@ buildPythonPackage rec {
 
   postPatch =
     ''
+      substituteInPlace pyproject.toml \
+        --replace-fail "setuptools>=75.8.1" setuptools
+
       substituteInPlace tests/utils_tests/test_autoreload.py \
         --replace "/usr/bin/python" "${python.interpreter}"
     ''

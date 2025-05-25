@@ -78,7 +78,7 @@ mkAppleDerivation (finalAttrs: {
   # Can’t use `mesonCheckPhase` because it runs the wrong hooks for `installCheckPhase`.
   installCheckPhase = ''
     runHook preInstallCheck
-    meson test --no-rebuild
+    meson test --no-rebuild --print-errorlogs --timeout-multiplier=0
     runHook postInstallCheck
   '';
 
