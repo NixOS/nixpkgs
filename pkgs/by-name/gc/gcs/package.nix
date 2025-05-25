@@ -28,20 +28,6 @@ buildGoModule rec {
     repo = "gcs";
     tag = "v${version}";
 
-    # nativeBuildInputs = [
-    #   cacert
-    #   unzip
-    # ];
-
-    # # also fetch pdf.js files
-    # # note: the version is locked in the file
-    # postFetch = ''
-    #   cd $out/server/pdf
-    #   substituteInPlace refresh-pdf.js.sh \
-    #       --replace-fail '/bin/rm' 'rm'
-    #   . refresh-pdf.js.sh
-    # '';
-
     hash = "sha256-qS0j838sjzdxRtvnah2nQ6tJzd7SVl5Fwfkcc6VP+/8=";
   };
 
@@ -51,25 +37,6 @@ buildGoModule rec {
   '';
 
   vendorHash = "sha256-EI2jbIYkjhINTY0FcFHsN1mQM6VlkvZeekDSzAXbG3c";
-
-  # frontend = buildNpmPackage {
-  #   name = "${pname}-${version}-frontend";
-  #
-  #   inherit src;
-  #   sourceRoot = "${src.name}/server/frontend";
-  #   npmDepsHash = "sha256-YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY=";
-  #
-  #   installPhase = ''
-  #     runHook preInstall
-  #     mkdir -p $out
-  #     cp -r dist $out/dist
-  #     runHook postInstall
-  #   '';
-  # };
-
-  # postPatch = ''
-  #   cp -r ${frontend}/dist server/frontend/dist
-  # '';
 
   nativeBuildInputs = [ pkg-config ];
 
