@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2025.3.0";
+  version = "2025.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask";
     tag = version;
-    hash = "sha256-j25+DfWReonXKqxkX9OVHjKo+Indh13rlBE5PyGe69c=";
+    hash = "sha256-fQT+J4hgI1V4qWTjlkVba6ei8icsmCklBXq1dpSrgJw=";
   };
 
   postPatch = ''
@@ -117,11 +117,6 @@ buildPythonPackage rec {
     "--reruns 3"
     # Don't run tests that require network access
     "-m 'not network'"
-  ];
-
-  disabledTests = [
-    # UserWarning: Insufficient elements for `head`. 10 elements requested, only 5 elements available. Try passing larger `npartitions` to `head`.
-    "test_set_index_head_nlargest_string"
   ];
 
   __darwinAllowLocalNetworking = true;
