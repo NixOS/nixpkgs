@@ -81,7 +81,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitLab {
     owner = "gpaw";
-    repo = pname;
+    repo = "gpaw";
     rev = version;
     hash = "sha256-tdS383qT6hBr5hOqjoFS36nRSS2vdVkUR7sExwjWhng=";
   };
