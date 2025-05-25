@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -98,5 +99,11 @@ buildPythonPackage rec {
     homepage = "https://scipp.github.io";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
+    # Got:
+    #
+    #   error: a template argument list is expected after a name prefixed by the template keyword [-Wmissing-template-arg-list-after-template-kw]
+    #
+    # Needs debugging along with upstream.
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
