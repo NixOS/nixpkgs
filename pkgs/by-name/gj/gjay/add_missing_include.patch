@@ -1,0 +1,24 @@
+diff --git a/ui_playlist_view.c b/ui_playlist_view.c
+index 862f350..f941f10 100644
+--- a/ui_playlist_view.c
++++ b/ui_playlist_view.c
+@@ -27,6 +27,7 @@
+ #include "gjay.h"
+ #include "ui.h"
+ #include "playlist.h"
++#include "play_common.h"
+ 
+ enum {
+    ARTIST_COLUMN,
+diff --git a/ui_selection_view.c b/ui_selection_view.c
+index d7e7b12..9d04afc 100644
+--- a/ui_selection_view.c
++++ b/ui_selection_view.c
+@@ -28,6 +28,7 @@
+ #include "gjay.h"
+ #include "ui.h"
+ #include "rgbhsv.h"
++#include "play_common.h"
+ 
+ enum {
+    ARTIST_COLUMN,

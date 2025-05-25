@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   hardeningDisable = [ "format" ];
+  patches = [ ./add_missing_include.patch ];
 
   meta = with lib; {
     description = "Generates playlists such that each song sounds good following the previous song";
