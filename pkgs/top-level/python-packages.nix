@@ -9320,8 +9320,6 @@ self: super: with self; {
 
   musicbrainzngs = callPackage ../development/python-modules/musicbrainzngs { };
 
-  mutag = callPackage ../development/python-modules/mutag { };
-
   mutagen = callPackage ../development/python-modules/mutagen { };
 
   mutatormath = callPackage ../development/python-modules/mutatormath { };
