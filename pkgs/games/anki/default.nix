@@ -10,6 +10,7 @@
   lame,
   mpv-unwrapped,
   ninja,
+  callPackage,
   nixosTests,
   nodejs,
   nodejs-slim,
@@ -129,6 +130,8 @@ python3.pkgs.buildPythonApplication {
     ./patches/disable-auto-update.patch
     ./patches/remove-the-gl-library-workaround.patch
     ./patches/skip-formatting-python-code.patch
+    # Used in with-addons.nix
+    ./patches/allow-setting-addons-folder.patch
   ];
 
   inherit cargoDeps yarnOfflineCache;
@@ -301,6 +304,7 @@ python3.pkgs.buildPythonApplication {
   '';
 
   passthru = {
+    withAddons = ankiAddons: callPackage ./with-addons.nix { inherit ankiAddons; };
     tests.anki-sync-server = nixosTests.anki-sync-server;
   };
 
@@ -324,6 +328,7 @@ python3.pkgs.buildPythonApplication {
     inherit (mesa.meta) platforms;
     maintainers = with maintainers; [
       euank
+      junestepp
       oxij
     ];
     # Reported to crash at launch on darwin (as of 2.1.65)
