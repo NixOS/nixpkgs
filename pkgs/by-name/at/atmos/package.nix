@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "atmos";
-  version = "1.174.0";
+  version = "1.176.0";
 
   src = fetchFromGitHub {
     owner = "cloudposse";
     repo = "atmos";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lkU4g+CMT3Dob7dG5iaX82FZ6oWIEkCnL+RrZ+JRmFM=";
+    hash = "sha256-dqCjbaGDIbJyi44OFz4Xuu5fy0jJp1URidO2EV6pD4U=";
   };
 
-  vendorHash = "sha256-0VtuRtvof360vH3SK3TzV4S44owSqn7n2J/aV7/KIJI=";
+  vendorHash = "sha256-fk74wLJuRVtw/mOyI2GIyXcX/cC/VX6Bx1rDRFsz95M=";
 
   ldflags = [
     "-s"
