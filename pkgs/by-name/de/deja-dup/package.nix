@@ -27,14 +27,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deja-dup";
-  version = "48.1";
+  version = "48.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "deja-dup";
     rev = finalAttrs.version;
-    hash = "sha256-pB5J+ElSnAE7rX74mgQBgnbOTVFJk/zOUBsJmnVETUE=";
+    hash = "sha256-g6bGOlpiEMJ9d+xe2GJyTBWAuGlY9EZTlJaYhB/5Ldw=";
   };
 
   patches = [
