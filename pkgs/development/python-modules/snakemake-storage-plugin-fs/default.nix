@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "snakemake";
-    repo = pname;
+    repo = "snakemake-storage-plugin-fs";
     tag = "v${version}";
     hash = "sha256-Y+Fofz4D/CWgdG3lOneadRu/VfJ23D4Dz751j9rUKNo=";
   };
