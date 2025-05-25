@@ -7,7 +7,7 @@
 
 let
   inherit (lib) concatStringsSep literalExpression mapAttrsToList;
-  inherit (lib) optional optionalAttrs optionalString;
+  inherit (lib) optionalAttrs optionalString;
 
   cfg = config.services.redmine;
   format = pkgs.formats.yaml { };
@@ -377,8 +377,8 @@ in
     systemd.services.redmine = {
       after =
         [ "network.target" ]
-        ++ optional mysqlLocal "mysql.service"
-        ++ optional pgsqlLocal "postgresql.service";
+        ++ lib.optional mysqlLocal "mysql.service"
+        ++ lib.optional pgsqlLocal "postgresql.service";
       wantedBy = [ "multi-user.target" ];
       environment.RAILS_ENV = "production";
       environment.RAILS_CACHE = "${cfg.stateDir}/cache";
@@ -388,13 +388,13 @@ in
         with pkgs;
         [
         ]
-        ++ optional cfg.components.subversion subversion
-        ++ optional cfg.components.mercurial mercurial
-        ++ optional cfg.components.git git
-        ++ optional cfg.components.cvs cvs
-        ++ optional cfg.components.breezy breezy
-        ++ optional cfg.components.imagemagick imagemagick
-        ++ optional cfg.components.ghostscript ghostscript;
+        ++ lib.optional cfg.components.subversion subversion
+        ++ lib.optional cfg.components.mercurial mercurial
+        ++ lib.optional cfg.components.git git
+        ++ lib.optional cfg.components.cvs cvs
+        ++ lib.optional cfg.components.breezy breezy
+        ++ lib.optional cfg.components.imagemagick imagemagick
+        ++ lib.optional cfg.components.ghostscript ghostscript;
 
       preStart = ''
         rm -rf "${cfg.stateDir}/plugins/"*
