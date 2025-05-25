@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-YKs/XYJ8UItOtSinl28/G9XFVzobFd4ZDKtClQDLXFk=";
   };
 
+  hardeningDisable = [ "strictflexarrays3" ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config

@@ -32,10 +32,16 @@ stdenv.mkDerivation rec {
     "out"
   ];
 
-  # The CPU Jitter random number generator must not be compiled with
-  # optimizations and the optimize -O0 pragma only works for gcc.
-  # The build enables -O2 by default for everything else.
-  hardeningDisable = lib.optional stdenv.cc.isClang "fortify";
+  hardeningDisable =
+    [
+      "strictflexarrays3"
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      # The CPU Jitter random number generator must not be compiled with
+      # optimizations and the optimize -O0 pragma only works for gcc.
+      # The build enables -O2 by default for everything else.
+      "fortify"
+    ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 

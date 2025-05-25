@@ -64,6 +64,7 @@ in
       "fortify"
       "pie"
       "stackprotector"
+      "strictflexarrays3"
     ];
 
     env = (previousAttrs.env or { }) // {
