@@ -103,7 +103,16 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests.vm = nixosTests.lomiri-gallery-app;
+    tests = {
+      inherit (nixosTests.lomiri-gallery-app)
+        basic
+        format-mp4
+        format-gif
+        format-bmp
+        format-jpg
+        format-png
+        ;
+    };
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
