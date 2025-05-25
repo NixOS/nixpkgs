@@ -1,20 +1,22 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools-scm,
   tkinter,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "tkinter-gl";
   version = "1.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "tkinter_gl";
-    sha256 = "sha256-gZgR9ABiMMxOm7mtDZRXV1WyFMS1DrNCel91QcdJgrs=";
+  src = fetchFromGitHub {
+    owner = "3-manifolds";
+    repo = "tkinter_gl";
+    # release of version 1.0
+    rev = "6a8cd3af321738ed11bc067965a8e519bfc9dd41";
+    sha256 = "sha256-ObI8EEQ7mAOAuV6f+Ld4HH0xkFzqiAZqHDvzjwPA/wM=";
   };
 
   build-system = [ setuptools-scm ];
