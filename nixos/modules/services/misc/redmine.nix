@@ -6,7 +6,7 @@
 }:
 
 let
-  inherit (lib) literalExpression mapAttrsToList;
+  inherit (lib) mapAttrsToList;
 
   cfg = config.services.redmine;
   format = pkgs.formats.yaml { };
@@ -124,7 +124,7 @@ in
           <https://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration>
           for details.
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             email_delivery = {
               delivery_method = "smtp";
@@ -155,7 +155,7 @@ in
         type = lib.types.attrsOf lib.types.path;
         default = { };
         description = "Set of themes.";
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             dkuk-redmine_alex_skin = builtins.fetchurl {
               url = "https://bitbucket.org/dkuk/redmine_alex_skin/get/1842ef675ef3.zip";
@@ -169,7 +169,7 @@ in
         type = lib.types.attrsOf lib.types.path;
         default = { };
         description = "Set of plugins.";
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             redmine_env_auth = builtins.fetchurl {
               url = "https://github.com/Intera/redmine_env_auth/archive/0.6.zip";
@@ -200,7 +200,7 @@ in
         port = lib.mkOption {
           type = lib.types.port;
           default = if cfg.database.type == "postgresql" then 5432 else 3306;
-          defaultText = literalExpression "3306";
+          defaultText = lib.literalExpression "3306";
           description = "Database host port.";
         };
 
@@ -235,7 +235,7 @@ in
               "/run/postgresql"
             else
               null;
-          defaultText = literalExpression "/run/mysqld/mysqld.sock";
+          defaultText = lib.literalExpression "/run/mysqld/mysqld.sock";
           example = "/run/mysqld/mysqld.sock";
           description = "Path to the unix socket file to use for authentication.";
         };
