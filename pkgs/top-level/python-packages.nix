@@ -11694,8 +11694,6 @@ self: super: with self; {
 
   psygnal = callPackage ../development/python-modules/psygnal { };
 
-  ptable = callPackage ../development/python-modules/ptable { };
-
   ptest = callPackage ../development/python-modules/ptest { };
 
   ptpython = callPackage ../development/python-modules/ptpython { };
