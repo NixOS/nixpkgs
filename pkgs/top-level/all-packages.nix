@@ -4711,6 +4711,8 @@ with pkgs;
 
   td = callPackage ../tools/misc/td { };
 
+  tde2e = callPackage ../by-name/td/tdlib/package.nix { tde2eOnly = true; };
+
   tweet-hs = haskell.lib.compose.justStaticExecutables haskellPackages.tweet-hs;
 
   tremor-rs = callPackage ../tools/misc/tremor-rs { };
