@@ -21,6 +21,7 @@
   tagPrefix ? null, # strip this prefix from a tag name
   tagConverter ? null, # A command to convert more complex tag formats. It receives the git tag via stdin and should convert it into x.y.z format to stdout
   shallowClone ? true,
+  versionKey ? "",
 }:
 
 assert lib.asserts.assertMsg (
@@ -46,6 +47,7 @@ let
       tag_prefix=""
       tag_converter=""
       shallow_clone=""
+      version_key=""
       : "''${systemArg:=}"
 
       while (( $# > 0 )); do
@@ -72,6 +74,9 @@ let
               ;;
             --shallow-clone)
               shallow_clone=1
+              ;;
+            --version-key=*)
+              version_key="''${flag#*=}"
               ;;
             *)
               echo "$0: unknown option ‘''${flag}’"
@@ -157,7 +162,8 @@ let
       update-source-version \
           "$UPDATE_NIX_ATTR_PATH" \
           "$new_version" \
-          --rev="$commit_sha"
+          --rev="$commit_sha" \
+          --version-key="$version_key"
     '';
   };
 
@@ -167,18 +173,9 @@ in
   "--url=${builtins.toString url}"
   "--tag-format=${tagFormat}"
 ]
-++ lib.optionals (branch != null) [
-  "--branch=${branch}"
-]
-++ lib.optionals (tagPrefix != null) [
-  "--tag-prefix=${tagPrefix}"
-]
-++ lib.optionals (tagConverter != null) [
-  "--tag-converter=${tagConverter}"
-]
-++ lib.optionals hardcodeZeroVersion [
-  "--hardcode-zero-version"
-]
-++ lib.optionals shallowClone [
-  "--shallow-clone"
-]
+++ lib.optionals (branch != null) [ "--branch=${branch}" ]
+++ lib.optionals (tagPrefix != null) [ "--tag-prefix=${tagPrefix}" ]
+++ lib.optionals (tagConverter != null) [ "--tag-converter=${tagConverter}" ]
+++ lib.optionals hardcodeZeroVersion [ "--hardcode-zero-version" ]
+++ lib.optionals shallowClone [ "--shallow-clone" ]
+++ lib.optionals (versionKey != null) [ "--version-key=${versionKey}" ]

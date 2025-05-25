@@ -21,6 +21,7 @@
   rev-suffix ? "",
   odd-unstable ? false,
   patchlevel-unstable ? false,
+  versionKey ? "",
 }:
 
 let
@@ -47,6 +48,7 @@ let
     rev_suffix="$9"
     odd_unstable="''${10}"
     patchlevel_unstable="''${11}"
+    version_key="''${12}"
 
     [[ -n "$name" ]] || name="$UPDATE_NIX_NAME"
     [[ -n "$pname" ]] || pname="$UPDATE_NIX_PNAME"
@@ -130,7 +132,8 @@ let
       fi
 
       # update the nix expression
-      ${common-updater-scripts}/bin/update-source-version --print-changes "$attr_path" "$latest_tag"
+      ${common-updater-scripts}/bin/update-source-version --print-changes "$attr_path" "$latest_tag" \
+        --version-key=$version_key
     else
       # No changes for commit protocol.
       echo "[]"
@@ -155,6 +158,7 @@ in
     rev-suffix
     odd-unstable
     patchlevel-unstable
+    versionKey
   ];
   supportedFeatures = [
     # Stdout must contain output according to the updateScript commit protocol when the update script finishes with a non-zero exit code.

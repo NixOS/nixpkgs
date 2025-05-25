@@ -13,18 +13,58 @@
   improvedEncodingDetection ? true,
   rightToLeftTextSupport ? false,
   gitUpdater,
+  unstableGitUpdater,
+  rangerVersion ? "stable",
+  videoThumbnailSupport ? false, # you have to have rangerVersion set to 'unstable'
+  ffmpegthumbnailer,
 }:
 
-python3Packages.buildPythonApplication rec {
-  pname = "ranger";
-  version = "1.9.4";
+let
+  # stable
+  stableVersion = "1.9.4";
+  stableHash = "sha256-9ehxMXwQj7oVhlotTc3mzCKCkoMSbB9cliPg/NMEoWM=";
 
-  src = fetchFromGitHub {
-    owner = "ranger";
-    repo = "ranger";
-    tag = "v${version}";
-    hash = "sha256-9ehxMXwQj7oVhlotTc3mzCKCkoMSbB9cliPg/NMEoWM=";
-  };
+  # unstable
+  unstableVersion = "1.9.3-unstable-2025-05-23";
+  unstableHash = "sha256-uMvo+5I5WCJGT5+XRS/NFClDGH4F59ogQJb+RYuraX4=";
+
+  versionInfo =
+    {
+      "stable" = {
+        version = stableVersion;
+        src = {
+          hash = stableHash;
+          tag = "v${stableVersion}";
+        };
+        updateScript = gitUpdater {
+          rev-prefix = "v";
+          versionKey = "stableVersion";
+        };
+      };
+      "unstable" = {
+        version = unstableVersion;
+        src = {
+          hash = unstableHash;
+          rev = "b00f923911090204139c9e19ba42e9d80aa0889f";
+        };
+        updateScript = unstableGitUpdater {
+          tagPrefix = "v";
+          versionKey = "unstableVersion";
+        };
+      };
+    }
+    .${rangerVersion};
+in
+python3Packages.buildPythonApplication {
+  pname = "ranger";
+  inherit (versionInfo) version;
+  src = fetchFromGitHub (
+    {
+      owner = "ranger";
+      repo = "ranger";
+    }
+    // versionInfo.src
+  );
 
   LC_ALL = "en_US.UTF-8";
 
@@ -42,7 +82,8 @@ python3Packages.buildPythonApplication rec {
     ++ lib.optionals sixelPreviewSupport [ imagemagick ]
     ++ lib.optionals neoVimSupport [ python3Packages.pynvim ]
     ++ lib.optionals improvedEncodingDetection [ python3Packages.chardet ]
-    ++ lib.optionals rightToLeftTextSupport [ python3Packages.python-bidi ];
+    ++ lib.optionals rightToLeftTextSupport [ python3Packages.python-bidi ]
+    ++ lib.optionals videoThumbnailSupport [ ffmpegthumbnailer ];
 
   preConfigure =
     ''
@@ -66,9 +107,17 @@ python3Packages.buildPythonApplication rec {
       # give image previews out of the box when building with w3m
       substituteInPlace ranger/config/rc.conf \
         --replace "set preview_images false" "set preview_images true"
+    ''
+    + lib.optionalString videoThumbnailSupport ''
+      substituteInPlace ranger/data/scope.sh \
+        --replace-fail "# video/*)" "video/*)" \
+        --replace-fail "#     # Get frame 10% into video" "    # Get frame 10% into video" \
+        --replace-fail "#     ffmpegthumbnailer -i \"\''${FILE_PATH}\" -o \"\''${IMAGE_CACHE_PATH}\" -s 0 && exit 6" \
+            '    ffmpegthumbnailer -i "''${FILE_PATH}" -o "''${IMAGE_CACHE_PATH}" -s 0 && exit 6
+                  exit 1;;'
     '';
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  passthru.updateScript = versionInfo.updateScript;
 
   meta = {
     description = "File manager with minimalistic curses interface";
