@@ -11,6 +11,7 @@
   lomiri-content-hub,
   lomiri-thumbnailer,
   lomiri-ui-toolkit,
+  mediascanner2,
   qtbase,
   qtdeclarative,
   qtmultimedia,
@@ -56,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
       lomiri-content-hub
       lomiri-thumbnailer
       lomiri-ui-toolkit
+      mediascanner2
       qtmultimedia
       qtsystems
     ]
