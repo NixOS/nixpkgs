@@ -2,15 +2,26 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch,
-  chardet,
+
+  # build-system
   hatchling,
+
+  # docs
+  sphinxHook,
+
+  # dependencies
+  soupsieve,
+  typing-extensions,
+
+  # optional-dependencies
+  chardet,
+  charset-normalizer,
+  faust-cchardet,
   html5lib,
   lxml,
+
+  # tests
   pytestCheckHook,
-  pythonOlder,
-  soupsieve,
-  sphinxHook,
 
   # for passthru.tests
   html-sanitizer,
@@ -23,7 +34,7 @@
 
 buildPythonPackage rec {
   pname = "beautifulsoup4";
-  version = "4.12.3";
+  version = "4.13.4";
   pyproject = true;
 
   outputs = [
@@ -31,39 +42,31 @@ buildPythonPackage rec {
     "doc"
   ];
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dOPRko7cBw0hdIGFxG4/szSQ8i9So63e6a7g9Pd4EFE=";
+    hash = "sha256-27PE4c6uau/r2vJCMkcmDNBiQwpBDjjGbyuqUKhDcZU=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "tests.patch";
-      url = "https://git.launchpad.net/beautifulsoup/patch/?id=9786a62726de5a8caba10021c4d4a58c8a3e9e3f";
-      hash = "sha256-FOMoJjT0RgqKjbTLN/qCuc0HjhKeenMcgwb9Fp8atAY=";
-    })
-  ];
+  build-system = [ hatchling ];
 
-  nativeBuildInputs = [
-    hatchling
-    sphinxHook
-  ];
+  nativeBuildInputs = [ sphinxHook ];
 
-  propagatedBuildInputs = [
-    chardet
+  dependencies = [
     soupsieve
+    typing-extensions
   ];
 
   optional-dependencies = {
+    chardet = [ chardet ];
+    cchardet = [ faust-cchardet ];
+    charset-normalizer = [ charset-normalizer ];
     html5lib = [ html5lib ];
     lxml = [ lxml ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "bs4" ];
 
