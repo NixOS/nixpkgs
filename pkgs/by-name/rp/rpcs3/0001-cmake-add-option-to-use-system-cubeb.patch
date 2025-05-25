@@ -1,0 +1,46 @@
+From 5af2b630da7a6a450ec6bc4f07fc7ad9a825361d Mon Sep 17 00:00:00 2001
+From: Marcin Serwin <marcin@serwin.dev>
+Date: Sat, 24 May 2025 18:51:09 +0200
+Subject: [PATCH] cmake: add option to use system cubeb
+
+Signed-off-by: Marcin Serwin <marcin@serwin.dev>
+---
+ 3rdparty/CMakeLists.txt | 9 ++++++++-
+ CMakeLists.txt          | 1 +
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/3rdparty/CMakeLists.txt b/3rdparty/CMakeLists.txt
+index 044fd464e..6c49a889b 100644
+--- a/3rdparty/CMakeLists.txt
++++ b/3rdparty/CMakeLists.txt
+@@ -131,7 +131,14 @@ add_subdirectory(stblib)
+ add_subdirectory(discord-rpc)
+ 
+ # Cubeb
+-add_subdirectory(cubeb EXCLUDE_FROM_ALL)
++if(USE_SYSTEM_CUBEB)
++	find_package(cubeb REQUIRED GLOBAL)
++	message(STATUS "Using system cubeb version '${cubeb_VERSION}'")
++	add_library(3rdparty::cubeb ALIAS cubeb::cubeb)
++else()
++	message(STATUS "Using static cubeb from 3rdparty")
++	add_subdirectory(cubeb EXCLUDE_FROM_ALL)
++endif()
+ 
+ # SoundTouch
+ add_subdirectory(SoundTouch EXCLUDE_FROM_ALL)
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 9d2edd836..39aa150c2 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -31,6 +31,7 @@ option(USE_SYSTEM_FFMPEG "Prefer system ffmpeg instead of the prebuild one" OFF)
+ option(USE_SYSTEM_OPENAL "Prefer system OpenAL instead of the prebuild one" ON)
+ option(USE_SYSTEM_CURL "Prefer system Curl instead of the prebuild one" ON)
+ option(USE_SYSTEM_OPENCV "Prefer system OpenCV instead of the builtin one" ON)
++option(USE_SYSTEM_CUBEB "Prefer system cubeb instead of the builtin one" OFF)
+ option(HAS_MEMORY_BREAKPOINTS "Add support for memory breakpoints to the interpreter" OFF)
+ option(USE_LTO "Use LTO for building" ON)
+ option(BUILD_RPCS3_TESTS "Build RPCS3 unit tests." OFF)
+-- 
+2.49.0
+
