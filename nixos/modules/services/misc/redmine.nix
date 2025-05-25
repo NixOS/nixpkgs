@@ -7,7 +7,6 @@
 
 let
   inherit (lib)
-    mkDefault
     mkIf
     mkOption
     types
@@ -331,7 +330,7 @@ in
 
     services.mysql = mkIf mysqlLocal {
       enable = true;
-      package = mkDefault pkgs.mariadb;
+      package = lib.mkDefault pkgs.mariadb;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
         {
