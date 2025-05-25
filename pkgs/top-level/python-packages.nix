@@ -3142,6 +3142,16 @@ self: super: with self; {
 
   cython_0 = callPackage ../development/python-modules/cython/0.nix { };
 
+  cython_3_1 = cython.overridePythonAttrs rec {
+    version = "3.1.1";
+    src = pkgs.fetchFromGitHub {
+      owner = "cython";
+      repo = "cython";
+      tag = version;
+      hash = "sha256-KdRYPH3Do3KntgqLGIUSeD6DjmXNdFjI2ZSszzMjF6k=";
+    };
+  };
+
   cytoolz = callPackage ../development/python-modules/cytoolz { };
 
   dacite = callPackage ../development/python-modules/dacite { };
