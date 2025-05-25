@@ -404,6 +404,8 @@ builtins.intersectAttrs super {
   # The curl executable is required for withApplication tests.
   warp = addTestToolDepend pkgs.curl super.warp;
 
+  lz4-frame-conduit = addTestToolDepends [ pkgs.lz4 ] super.lz4-frame-conduit;
+
   safe-exceptions = overrideCabal (drv: {
     # Fix strictDeps build error "could not execute: hspec-discover"
     testToolDepends = drv.testToolDepends or [ ] ++ [ self.hspec-discover ];
