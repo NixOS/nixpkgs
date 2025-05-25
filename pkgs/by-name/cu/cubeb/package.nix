@@ -21,7 +21,7 @@
   pulseSupport ? !stdenv.hostPlatform.isDarwin,
   jackSupport ? !stdenv.hostPlatform.isDarwin,
   sndioSupport ? !stdenv.hostPlatform.isDarwin,
-  buildSharedLibs ? true,
+  enableShared ? !stdenv.hostPlatform.isStatic,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "BUILD_SHARED_LIBS" buildSharedLibs)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)
     (lib.cmakeBool "BUILD_TESTS" false) # tests require an audio server
     (lib.cmakeBool "BUNDLE_SPEEX" false)
     (lib.cmakeBool "USE_SANITIZERS" false)

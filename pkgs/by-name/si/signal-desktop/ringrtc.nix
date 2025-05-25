@@ -14,7 +14,7 @@ let
     pulseSupport = true;
     jackSupport = false;
     sndioSupport = false;
-    buildSharedLibs = false;
+    enableShared = false;
   };
 in
 rustPlatform.buildRustPackage (finalAttrs: {
