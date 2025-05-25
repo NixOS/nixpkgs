@@ -134,7 +134,7 @@ stdenv'.mkDerivation (finalAttrs: {
                   '${lib.getLib brotli}/lib/libbrotlidec.dylib'
     '')
     + (lib.optionalString hipSupport ''
-      substituteInPlace extern/hipew/src/hipew.c --replace '"/opt/rocm/hip/lib/libamdhip64.so"' '"${rocmPackages.clr}/lib/libamdhip64.so"'
+      substituteInPlace extern/hipew/src/hipew.c --replace '"/opt/rocm/hip/lib/libamdhip64.so.6"' '"${rocmPackages.clr}/lib/libamdhip64.so"'
       substituteInPlace extern/hipew/src/hipew.c --replace '"opt/rocm/hip/bin"' '"${rocmPackages.clr}/bin"'
     '');
 
