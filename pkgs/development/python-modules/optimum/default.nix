@@ -17,7 +17,6 @@
 
   # optional-dependencies
   diffusers,
-  evaluate,
   h5py,
   onnx,
   onnxruntime,
@@ -56,24 +55,25 @@ buildPythonPackage rec {
   optional-dependencies = {
     onnxruntime = [
       onnx
-      onnxruntime
       datasets
-      evaluate
       protobuf
+      onnxruntime
     ];
     exporters = [
       onnx
-      onnxruntime
       timm
+      onnxruntime
+      protobuf
     ];
     exporters-tf = [
-      tensorflow
-      tf2onnx
       onnx
-      onnxruntime
       timm
       h5py
+      tf2onnx
+      onnxruntime
       numpy
+      datasets
+      tensorflow
     ];
     diffusers = [ diffusers ];
     intel = [
