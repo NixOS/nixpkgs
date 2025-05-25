@@ -13351,16 +13351,11 @@ with pkgs;
       rofi-unwrapped = rofi-wayland-unwrapped;
     }).v4;
 
-  rofi-rbw = python3Packages.callPackage ../applications/misc/rofi-rbw {
-    waylandSupport = false;
-    x11Support = false;
-  };
-
-  rofi-rbw-wayland = python3Packages.callPackage ../applications/misc/rofi-rbw {
+  rofi-rbw-wayland = rofi-rbw.override {
     waylandSupport = true;
   };
 
-  rofi-rbw-x11 = python3Packages.callPackage ../applications/misc/rofi-rbw {
+  rofi-rbw-x11 = rofi-rbw.override {
     x11Support = true;
   };
 
