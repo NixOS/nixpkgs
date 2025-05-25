@@ -8,20 +8,31 @@
 }:
 let
   pname = "matrix-media-repo";
-  version = "1.3.7";
+  version = "1.3.8";
 
   src = fetchFromGitHub {
     owner = "t2bot";
     repo = "matrix-media-repo";
     rev = "v${version}";
-    hash = "sha256-trVn+Mn98aJLQCpQX1+qps/uuA5+8zeDoM94eauxHO8=";
+    hash = "sha256-KP1ZyHqeATxk1PCLuM6lPk+GB4Rd0f7ppKVETIURx28=";
   };
 
-  vendorHash = "sha256-fKDdL7C3L33caoXxlutzoND2izB5GH+5qTeojTskIUg=";
+  patches = [
+    # matrix-media-repo 1.3.8+ uses a Go wrapper expecting libheif 1.19+
+    # which NixOS 24.11 does not have
+    ./downgrade-libheif-wrapper.diff
+  ];
+
+  vendorHash = "sha256-3cmjdhL4U7tq429vUPElM5Kp203SWgZeoHM/i6Vuf7Q=";
 
   asset-compiler = buildGoModule {
     pname = "${pname}-compile_assets";
-    inherit version src vendorHash;
+    inherit
+      version
+      src
+      patches
+      vendorHash
+      ;
 
     subPackages = [
       "cmd/utilities/compile_assets"
@@ -34,6 +45,7 @@ buildGoModule {
     pname
     version
     src
+    patches
     vendorHash
     ;
 
