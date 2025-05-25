@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
       "out"
       "dev"
     ]
-    ++ lib.optionals enableDocumentation [
+    ++ lib.optionals (enableDocumentation && !enableStatic) [
       "man"
       "doc"
     ];
@@ -137,7 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
       boost
       brotli
       bzip2
-      curl
+      (if enableStatic then curl.override { pslSupport = false; } else curl)
       editline
       libgit2
       libsodium
@@ -192,16 +192,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags =
     [
-      (lib.mesonBool "unit-tests" (stdenv.buildPlatform.canExecute stdenv.hostPlatform))
+      (lib.mesonBool "unit-tests" (stdenv.buildPlatform.canExecute stdenv.hostPlatform && !enableStatic))
       (lib.mesonBool "bindings" false)
       (lib.mesonOption "libstore:store-dir" storeDir)
       (lib.mesonOption "libstore:localstatedir" stateDir)
       (lib.mesonOption "libstore:sysconfdir" confDir)
       (lib.mesonEnable "libutil:cpuid" stdenv.hostPlatform.isx86_64)
       (lib.mesonEnable "libstore:seccomp-sandboxing" withLibseccomp)
-      (lib.mesonBool "libstore:embedded-sandbox-shell" (
-        stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic
-      ))
+      (lib.mesonBool "libstore:embedded-sandbox-shell" (stdenv.hostPlatform.isLinux && enableStatic))
       (lib.mesonBool "doc-gen" enableDocumentation)
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -226,7 +224,7 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     + ''
       # nixStatic otherwise does not find its man pages in tests.
-      export MANPATH=$man/share/man:$MANPATH
+      export MANPATH=${if enableStatic then "$out" else "$man"}/share/man:$MANPATH
     '';
 
   separateDebugInfo = stdenv.hostPlatform.isLinux && enableStatic;
@@ -274,7 +272,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.lgpl21Plus;
     inherit maintainers teams;
     platforms = platforms.unix;
-    outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
+    outputsToInstall = [ "out" ] ++ optional (enableDocumentation && !enableStatic) "man";
     mainProgram = "nix";
   };
 })
