@@ -568,6 +568,7 @@ in
   gotenberg = handleTest ./gotenberg.nix { };
   gotify-server = handleTest ./gotify-server.nix { };
   gotosocial = runTest ./web-apps/gotosocial.nix;
+  gowitness = runTest ./gowitness.nix;
   grafana = handleTest ./grafana { };
   graphite = handleTest ./graphite.nix { };
   grav = runTest ./web-apps/grav.nix;
