@@ -40,7 +40,7 @@ let
       in
       ''
 
-        echo "Trying to upgrade ${file}"
+        echo "Trying to upgrade "${file}
         # There is no overlay nor configuration in the imports below.
         # This is expected, as it evaluates the nixos configuration in exactly
         # the same way as `nixos-rebuild` would have.
