@@ -1,9 +1,10 @@
 {
+  callPackage,
   lib,
   runCommand,
   writeShellScript,
   writeText,
-  linkFarm,
+  symlinkJoin,
   time,
   procps,
   nixVersions,
@@ -95,7 +96,7 @@ let
           --option restrict-eval true \
           --option allow-import-from-derivation false \
           --query --available \
-          --no-name --attr-path --out-path \
+          --out-path --json \
           --show-trace \
           --arg chunkSize "$chunkSize" \
           --arg myChunk "$myChunk" \
@@ -147,7 +148,7 @@ let
         chunkCount=$(( (attrCount - 1) / chunkSize + 1 ))
         echo "Chunk count: $chunkCount"
 
-        mkdir $out
+        mkdir -p $out/${evalSystem}
 
         # Record and print stats on free memory and swap in the background
         (
@@ -156,11 +157,11 @@ let
             freeSwap=$(free -b | grep Swap | awk '{print $4}')
             echo "Available memory: $(( availMemory / 1024 / 1024 )) MiB, free swap: $(( freeSwap / 1024 / 1024 )) MiB"
 
-            if [[ ! -f "$out/min-avail-memory" ]] || (( availMemory < $(<$out/min-avail-memory) )); then
-              echo "$availMemory" > $out/min-avail-memory
+            if [[ ! -f "$out/${evalSystem}/min-avail-memory" ]] || (( availMemory < $(<$out/${evalSystem}/min-avail-memory) )); then
+              echo "$availMemory" > $out/${evalSystem}/min-avail-memory
             fi
-            if [[ ! -f $out/min-free-swap ]] || (( availMemory < $(<$out/min-free-swap) )); then
-              echo "$freeSwap" > $out/min-free-swap
+            if [[ ! -f $out/${evalSystem}/min-free-swap ]] || (( availMemory < $(<$out/${evalSystem}/min-free-swap) )); then
+              echo "$freeSwap" > $out/${evalSystem}/min-free-swap
             fi
             sleep 4
           done
@@ -176,18 +177,18 @@ let
         mkdir "$chunkOutputDir"/{result,stats,timestats,stderr}
 
         seq -w 0 "$seq_end" |
-          command time -f "%e" -o "$out/total-time" \
+          command time -f "%e" -o "$out/${evalSystem}/total-time" \
           xargs -I{} -P"$cores" \
           ${singleChunk} "$chunkSize" {} "$evalSystem" "$chunkOutputDir"
 
-        cp -r "$chunkOutputDir"/stats $out/stats-by-chunk
+        cp -r "$chunkOutputDir"/stats $out/${evalSystem}/stats-by-chunk
 
         if (( chunkSize * chunkCount != attrCount )); then
           # A final incomplete chunk would mess up the stats, don't include it
           rm "$chunkOutputDir"/stats/"$seq_end"
         fi
 
-        cat "$chunkOutputDir"/result/* > $out/paths
+        cat "$chunkOutputDir"/result/* | jq -s 'add | map_values(.outputs)' > $out/${evalSystem}/paths.json
       '';
 
   combine =
@@ -203,22 +204,8 @@ let
       ''
         mkdir -p $out
 
-        # Transform output paths to JSON
-        cat ${resultsDir}/*/paths |
-          jq --sort-keys --raw-input --slurp '
-            split("\n") |
-            map(select(. != "") | split(" ") | map(select(. != ""))) |
-            map(
-              {
-                key: .[0],
-                value: .[1] | split(";") | map(split("=") |
-                  if length == 1 then
-                    { key: "out", value: .[0] }
-                  else
-                    { key: .[0], value: .[1] }
-                  end) | from_entries}
-            ) | from_entries
-          ' > $out/outpaths.json
+        # Combine output paths from all systems
+        cat ${resultsDir}/*/paths.json | jq -s add > $out/outpaths.json
 
         mkdir -p $out/stats
 
@@ -227,16 +214,7 @@ let
         done
       '';
 
-  compare = import ./compare {
-    inherit
-      lib
-      jq
-      runCommand
-      writeText
-      supportedSystems
-      python3
-      ;
-  };
+  compare = callPackage ./compare { };
 
   full =
     {
@@ -247,14 +225,15 @@ let
       quickTest ? false,
     }:
     let
-      results = linkFarm "results" (
-        map (evalSystem: {
-          name = evalSystem;
-          path = singleSystem {
+      results = symlinkJoin {
+        name = "results";
+        paths = map (
+          evalSystem:
+          singleSystem {
             inherit quickTest evalSystem chunkSize;
-          };
-        }) evalSystems
-      );
+          }
+        ) evalSystems;
+      };
     in
     combine {
       resultsDir = results;

@@ -15,6 +15,7 @@
 
 # CI
 /.github/*_TEMPLATE*                    @SigmaSquadron
+/.github/actions                        @NixOS/Security @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther
 /.github/workflows                      @NixOS/Security @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther
 /.github/workflows/check-format.yml     @infinisil @wolfgangwalther
 /.github/workflows/codeowners-v2.yml    @infinisil @wolfgangwalther
@@ -240,7 +241,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/applications/editors/jetbrains @edwtjo @leona-ya @theCapypara
 
 # Licenses
-/lib/licenses.nix @alyssais
+/lib/licenses.nix @alyssais @emilazy
 
 # Qt
 /pkgs/development/libraries/qt-5 @K900 @NickCao @SuperSandro2000 @ttuegel

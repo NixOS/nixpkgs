@@ -163,7 +163,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # fix .desktop Exec field
     substituteInPlace src/node/desktop/resources/freedesktop/rstudio.desktop.in \
-      --replace-fail "''${CMAKE_INSTALL_PREFIX}/rstudio" "rstudio"
+      --replace-fail "\''${CMAKE_INSTALL_PREFIX}/rstudio" "rstudio"
 
     # set install path of freedesktop files
     substituteInPlace src/node/desktop/CMakeLists.txt \
