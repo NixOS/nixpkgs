@@ -16,8 +16,6 @@ import ./make-test-python.nix (
             enable = true;
             settings = {
               PORT = 10001;
-              INTERNAL_BACKEND_URL = "http://localhost:10002";
-              BACKEND_PORT = 10002;
             };
           };
         };
@@ -35,7 +33,7 @@ import ./make-test-python.nix (
         machine.wait_for_unit("pocket-id-frontend.service")
         machine.wait_for_open_port(${toString settings.PORT})
 
-        backend_status = machine.succeed("curl -L -o /tmp/backend-output -w '%{http_code}' http://localhost:${toString settings.BACKEND_PORT}/api/users/me")
+        backend_status = machine.succeed("curl -L -o /tmp/backend-output -w '%{http_code}' http://localhost:${toString settings.PORT}/api/users/me")
         assert backend_status == "401"
         machine.succeed("grep 'You are not signed in' /tmp/backend-output")
 
