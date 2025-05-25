@@ -117,7 +117,7 @@ in
         example = "github:kloenk/nix";
         description = ''
           The Flake URI of the NixOS configuration to build.
-          Disables the option {option}`system.autoUpgrade.channel`.
+          Disables the option [{option}`system.autoUpgrade.channel`](#opt-system.autoUpgrade.channel).
         '';
       };
 
@@ -148,7 +148,7 @@ in
         default = false;
         description = ''
           Whether to pass `--upgrade-all` or `--upgrade` to `nixos-rebuild` when
-          upgrading the channels. Has no impact unless `upgrade` is set to `true`.
+          upgrading the channels. Has no impact unless [`upgrade`](#opt-system.autoUpgrade.upgrade) is set to `true`.
         '';
       };
 
@@ -191,7 +191,8 @@ in
           Reboot the system into the new generation instead of a switch
           if the new generation uses a different kernel, kernel modules
           or initrd than the booted system.
-          See {option}`rebootWindow` for configuring the times at which a reboot is allowed.
+          See [{option}`rebootWindow`](#opt-system.autoUpgrade.rebootWindow)
+          for configuring the times at which a reboot is allowed.
         '';
       };
 
@@ -214,7 +215,8 @@ in
         description = ''
           Make the randomized delay consistent between runs.
           This reduces the jitter between automatic upgrades.
-          See {option}`randomizedDelaySec` for configuring the randomized delay.
+          See [{option}`randomizedDelaySec`](#opt-system.autoUpgrade.randomizedDelaySec)
+          for configuring the randomized delay.
         '';
       };
 
@@ -222,7 +224,7 @@ in
         description = ''
           Define a lower and upper time value (in HH:MM format) which
           constitute a time window during which reboots are allowed after an upgrade.
-          This option only has an effect when {option}`allowReboot` is enabled.
+          This option only has an effect when [{option}`allowReboot`](#opt-system.autoUpgrade.allowReboot) is enabled.
           The default value of `null` means that reboots are allowed at any time.
         '';
         default = null;
@@ -259,7 +261,7 @@ in
           activated, the service unit is triggered immediately if it
           would have been triggered at least once during the time when
           the timer was inactive. Such triggering is nonetheless
-          subject to the delay imposed by RandomizedDelaySec=. This is
+          subject to the delay imposed by `RandomizedDelaySec=`. This is
           useful to catch up on missed runs of the service when the
           system was powered down.
         '';
@@ -279,17 +281,19 @@ in
           If they build fine then they will be upgraded, if not they will be left at their
           current setting.
 
-          Using `maxDesyncAge`, you can limit the number of rebuilds that one nixpkgs
-          version is allowed to span.
-          For example, if you have `system.autoUpgrade` set to upgrade once a day, and
-          `maxDesyncAge` set to `14` (the default), then your packages will always be on
-          a version of `nixpkgs` that is at most two weeks old.
-          If no such version has a passing build for one week, then the `mixos-rebuild`
+          Using [`maxDesyncAge`](#opt-system.autoUpgrade.desync._.maxDesyncAge), you can
+          limit the number of rebuilds that one nixpkgs version is allowed to span.
+          For example, if you have [`system.autoUpgrade`](#opt-system.autoUpgrade) set to
+          upgrade once a day, and [`maxDesyncAge`](#opt-system.autoUpgrade.desync._.maxDesyncAge)
+          set to `14` (the default), then your packages will always be on a version of `nixpkgs`
+          that is at most two weeks old.
+          If no such version has a passing build for two weeks, then the `mixos-rebuild`
           service will still fail.
 
           Finally, note that overlays are not taken into account inside desyncs. This is
           because, otherwise, evaluation would enter infinite loops.
-          If you need to overlay your desyncs, you can use the `desync.*.overlays` option.
+          If you need to overlay your desyncs, you can use the
+          [`desync.*.overlays`](#opt-system.autoUpgrade.desync._.overlays) option.
 
           For example, you can use this module this way, in order to get your system to
           auto-upgrade even if `matrix-synapse` does not build on the latest channel:
@@ -404,7 +408,7 @@ in
                 readOnly = true;
                 description = ''
                   The path to the last known-working version of nixpkgs that passes all
-                  `requireBuilds`.
+                  [`requireBuilds`](#opt-system.autoUpgrade.desync._.requireBuilds).
 
                   This option is read-only, and is the result of this package.
                 '';
@@ -414,7 +418,8 @@ in
               options.pkgs = lib.mkOption {
                 readOnly = true;
                 description = ''
-                  The last known-working version of nixpkgs that passes all `requireBuilds`.
+                  The last known-working version of nixpkgs that passes all
+                  [`requireBuilds`](#opt-system.autoUpgrade.desync._.requireBuilds).
 
                   This option is read-only, and is the result of this package.
                 '';
@@ -524,7 +529,8 @@ in
       {
         assertion = !((cfg.channel != null) && (cfg.flake != null));
         message = ''
-          The options 'system.autoUpgrade.channel' and 'system.autoUpgrade.flake' cannot both be set.
+          The options ['system.autoUpgrade.channel'](#opt-system.autoUpgrade.channel)
+          and ['system.autoUpgrade.flake'](#opt-system.autoUpgrade.flake) cannot both be set.
         '';
       }
     ];
