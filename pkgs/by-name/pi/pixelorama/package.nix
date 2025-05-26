@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  godot_4,
+  godot_4_4,
   nix-update-script,
 }:
 
@@ -16,7 +16,7 @@ let
     presets.${stdenv.hostPlatform.system}
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  godot = godot_4;
+  godot = godot_4_4;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pixelorama";
@@ -34,6 +34,17 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     godot
   ];
+
+  # Pixelorama is tightly coupled to the version of Godot that it is meant to be built with,
+  # and Godot does not follow semver, they break things in minor releases.
+  preConfigure = ''
+    godot_ver="${lib.versions.majorMinor godot.version}"
+    godot_expected=$(sed -n -E 's@config/features=PackedStringArray\("([0-9]+\.[0-9]+)"\)@\1@p' project.godot)
+    [ "$godot_ver" == "$godot_expected" ] || {
+      echo "Expected Godot version: $godot_expected; found: $godot_ver" >&2
+      exit 1
+    }
+  '';
 
   buildPhase = ''
     runHook preBuild
