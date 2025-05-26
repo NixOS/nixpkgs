@@ -159,6 +159,7 @@ jobs:
     needs: [ prepare, outpaths ]
     if: needs.prepare.outputs.targetSha
     permissions:
+      issues: write # needed to create *new* labels
       pull-requests: write
       statuses: write
     steps:
@@ -213,7 +214,7 @@ jobs:
         run: nix-build trusted/ci -A requestReviews
 
       - name: Labelling pull request
-        if: ${{ github.event_name == 'pull_request_target' && github.repository_owner == 'NixOS' }}
+        if: ${{ github.event_name == 'pull_request_target' }}
         env:
           GH_TOKEN: ${{ github.token }}
           REPOSITORY: ${{ github.repository }}
@@ -247,7 +248,7 @@ jobs:
           done < <(comm -13 before after)
 
       - name: Add eval summary to commit statuses
-        if: ${{ github.event_name == 'pull_request_target' && github.repository_owner == 'NixOS' }}
+        if: ${{ github.event_name == 'pull_request_target' }}
         env:
           GH_TOKEN: ${{ github.token }}
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
@@ -279,7 +280,7 @@ jobs:
           permission-pull-requests: write
 
       - name: Requesting maintainer reviews
-        if: ${{ steps.app-token.outputs.token && github.repository_owner == 'NixOS' }}
+        if: ${{ steps.app-token.outputs.token }}
         env:
           GH_TOKEN: ${{ github.token }}
           REPOSITORY: ${{ github.repository }}
