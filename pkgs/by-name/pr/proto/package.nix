@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "proto";
-  version = "0.49.1";
+  version = "0.49.3";
 
   src = fetchFromGitHub {
     owner = "moonrepo";
     repo = "proto";
     rev = "v${version}";
-    hash = "sha256-VtU59YvNqpHvZ1WRj87Heo8RDyCOzleB+odE4DOQYag=";
+    hash = "sha256-NqAgZkDJk2DmWsuiqQX2xQTnEX//iuIRpM98ZShI6pE=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-wPB4YBNzDg9eoVCY4bbbvKu171Qdh7JJZIT9rD5hVdI=";
+  cargoHash = "sha256-2LbGPN5slZ9uvN2KLrk89/ECWko42FKvJhG8mAF3bS0=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
