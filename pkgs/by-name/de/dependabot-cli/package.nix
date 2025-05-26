@@ -1,10 +1,11 @@
 {
+  lib,
+  stdenv,
   buildGoModule,
   dependabot-cli,
   dockerTools,
   fetchFromGitHub,
   installShellFiles,
-  lib,
   makeWrapper,
   symlinkJoin,
   testers,
@@ -49,7 +50,7 @@ buildGoModule {
     installShellFiles
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd dependabot \
       --bash <($out/bin/dependabot completion bash) \
       --fish <($out/bin/dependabot completion fish) \
