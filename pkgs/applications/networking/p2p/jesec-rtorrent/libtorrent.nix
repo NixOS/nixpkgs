@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jesec-libtorrent";
-  version = "0.13.8-r4";
+  version = "0.13.8-r4-unstable-2023-07-04";
 
   src = fetchFromGitHub {
     owner = "jesec";
     repo = "libtorrent";
-    rev = "v${version}";
-    hash = "sha256-jC/hgGSi2qy+ToZgdxl1PhASLYbUL0O8trX0th2v5H0=";
+    rev = "35d844d4d78a671f8840fe6ae973ebb39a0e8f34";
+    hash = "sha256-H2oUW9iC2pIUSmP9j0U4RfzO1uiIEWVmeZAfF3Ca48k=";
   };
 
   nativeBuildInputs = [
