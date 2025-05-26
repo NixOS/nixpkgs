@@ -22,6 +22,12 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-82kdx9ihJgqMCiUjZTONGa1nCZoxKltw8mpF0KoOdT8=";
 
+  env.CGO_ENABLED = 0;
+  ldflags = [
+    "-X github.com/pocket-id/pocket-id/backend/internal/common.Version=${finalAttrs.version}"
+    "-buildid=${finalAttrs.version}"
+  ];
+
   preBuild = ''
     cp -r ${finalAttrs.frontend}/lib/pocket-id-frontend/dist frontend/dist
   '';
