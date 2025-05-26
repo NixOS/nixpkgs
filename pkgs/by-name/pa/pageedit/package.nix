@@ -3,10 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  qtsvg,
-  qtwebengine,
-  wrapQtAppsHook,
-  qttools,
+  qt6Packages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,13 +17,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Tkc8iOH+HG3ULrdUvVdeOzAl0i1R3QFaZ1U/vjCKGjo=";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with qt6Packages; [
     cmake
     wrapQtAppsHook
     qttools
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with qt6Packages; [
     qtsvg
     qtwebengine
   ];
