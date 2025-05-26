@@ -58,13 +58,11 @@
   enableJavaFX ? false,
   openjfx17,
   openjfx21,
-  openjfx23,
   openjfx24,
   openjfx_jdk ?
     {
       "17" = openjfx17;
       "21" = openjfx21;
-      "23" = openjfx23;
       "24" = openjfx24;
     }
     .${featureVersion} or (throw "JavaFX is not supported on OpenJDK ${featureVersion}"),
@@ -78,7 +76,6 @@
   temurin-bin-11,
   temurin-bin-17,
   temurin-bin-21,
-  temurin-bin-23,
   temurin-bin-24,
   jdk-bootstrap ?
     {
@@ -86,7 +83,6 @@
       "11" = temurin-bin-11.__spliced.buildBuild or temurin-bin-11;
       "17" = temurin-bin-17.__spliced.buildBuild or temurin-bin-17;
       "21" = temurin-bin-21.__spliced.buildBuild or temurin-bin-21;
-      "23" = temurin-bin-23.__spliced.buildBuild or temurin-bin-23;
       "24" = temurin-bin-24.__spliced.buildBuild or temurin-bin-24;
     }
     .${featureVersion},

@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchurl,
   makeWrapper,
-  jdk23_headless,
+  jdk24_headless,
   nixosTests,
 }:
 
@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   buildCommand = ''
-    makeWrapper ${jdk23_headless}/bin/java $out/bin/komga --add-flags "-jar $src"
+    makeWrapper ${jdk24_headless}/bin/java $out/bin/komga --add-flags "-jar $src"
   '';
 
   passthru.tests = {
@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation rec {
     description = "Free and open source comics/mangas server";
     homepage = "https://komga.org/";
     license = lib.licenses.mit;
-    platforms = jdk23_headless.meta.platforms;
+    platforms = jdk24_headless.meta.platforms;
     maintainers = with lib.maintainers; [
       tebriel
       govanify

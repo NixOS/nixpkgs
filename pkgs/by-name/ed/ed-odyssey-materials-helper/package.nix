@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   gradle,
-  jdk23,
+  jdk24,
   makeWrapper,
   wrapGAppsHook3,
   libXxf86vm,
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     data = ./deps.json;
   };
 
-  gradleFlags = [ "-Dorg.gradle.java.home=${jdk23}" ];
+  gradleFlags = [ "-Dorg.gradle.java.home=${jdk24}" ];
 
   gradleBuildTask = "application:jpackage";
 
