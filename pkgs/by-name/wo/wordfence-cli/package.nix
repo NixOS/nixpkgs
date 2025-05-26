@@ -13,6 +13,7 @@ let
   self = python3Packages.buildPythonApplication rec {
     pname = "wordfence-cli";
     version = "5.0.1";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "wordfence";
@@ -45,7 +46,6 @@ let
         --replace '@HS_OUT@'  "${hyperscan.out}"
     '';
 
-    format = "pyproject";
     doCheck = false;
 
     passthru.tests = {
