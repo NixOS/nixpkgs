@@ -76,14 +76,12 @@ let
           '';
     };
 
-    meta = with lib; {
+    meta = {
       description = "Wordfence malware and vulnerability scanner command line utility";
       homepage = "https://github.com/wordfence/wordfence-cli";
       changelog = "https://github.com/wordfence/wordfence-cli/releases";
-      license = licenses.gpl3;
-      maintainers = with maintainers; [
-        am-on
-      ];
+      license = lib.licenses.gpl3;
+      maintainers = [ lib.maintainers.am-on ];
       platforms = [
         "x86_64-linux"
       ];
