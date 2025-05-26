@@ -18,7 +18,6 @@
   pkg-config,
   doxygen,
   graphviz,
-  pcre,
   libpthreadstubs,
   libXdmcp,
   unixODBC,
@@ -171,7 +170,6 @@ stdenv.mkDerivation rec {
       libX11
       wxGTK
       gtk3
-      pcre
       libXdmcp
       gettext
       glew
