@@ -4,6 +4,11 @@
 name: Reviewers
 
 on:
+  pull_request:
+    paths:
+      - .github/workflows/reviewers.yml
+  pull_request_target:
+    types: [ready_for_review]
   workflow_call:
 
 permissions: {}
@@ -39,16 +44,29 @@ jobs:
           permission-members: read
           permission-pull-requests: write
 
+
+      # In the regular case, this workflow is called via workflow_call from the eval workflow directly.
+      # In the more special case, when a PR is undrafted an eval run will have started already.
       - name: Wait for comparison to be done
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         with:
           script: |
-            // Waiting 24 * 5 sec = 2 min. max.
-            for (let i = 0; i < 24; i++) {
+            const run_id = (await github.rest.actions.listWorkflowRuns({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'eval.yml',
+              event: context.eventName,
+              head_sha: context.payload.pull_request.head.sha
+            })).data.workflow_runs[0].id
+
+            // Waiting 120 * 5 sec = 10 min. max.
+            // The extreme case is an Eval run that just started when the PR is undrafted.
+            // Eval takes max 5-6 minutes, normally.
+            for (let i = 0; i < 120; i++) {
               const result = await github.rest.actions.listWorkflowRunArtifacts({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                run_id: context.runId,
+                run_id,
                 name: 'comparison'
               })
               if (result.data.total_count > 0) return
