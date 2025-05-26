@@ -26232,6 +26232,19 @@
     githubId = 10956211;
     name = "Valerio Besozzi";
   };
+  valentinegb = {
+    name = "Valentine Briese";
+
+    email = "valentinegb@icloud.com";
+    github = "valentinegb";
+    githubId = 35977727;
+
+    keys = [
+      {
+        fingerprint = "5F94 504D C611 FC4E 40AB  E6DE 9538 CFC6 8507 210B";
+      }
+    ];
+  };
   valeriangalliat = {
     email = "val@codejam.info";
     github = "valeriangalliat";
