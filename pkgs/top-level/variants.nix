@@ -104,6 +104,7 @@ self: super: {
           stdenv = super'.withDefaultHardeningFlags (
             super'.stdenv.cc.defaultHardeningFlags
             ++ [
+              "strictflexarrays1"
               "shadowstack"
               "nostrictaliasing"
               "pacret"
