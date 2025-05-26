@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rwalk";
-  version = "0.9.0";
+  version = "0.10.4-dev";
 
   src = fetchFromGitHub {
     owner = "cestef";
     repo = "rwalk";
     tag = "v${version}";
-    hash = "sha256-W42b3fUezMpOPaNmTogUbgn67nCiKteCkkYUAux9Ng4=";
+    hash = "sha256-u+mD4L+Vyram1xiaE0Pimj6ZrgME5WRb7sFAQ80zaAk=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-9zZLHjDpnxL3aR8zX4eNU1mpMDzMqzMC+Wr+DWVimUo=";
+  cargoHash = "sha256-ghdkGJDLdS0331y3yY0vbW59CHaPDGO/YTKZLr5zYn8=";
 
   nativeBuildInputs = [
     pkg-config
