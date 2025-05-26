@@ -17,14 +17,14 @@
   autoAddDriverRunpath,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lact";
   version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "ilya-zlobintsev";
     repo = "LACT";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-R8VEAk+CzJCxPzJohsbL/XXH1GMzGI2W92sVJ2evqXs=";
   };
 
@@ -118,8 +118,9 @@ rustPlatform.buildRustPackage rec {
       figsoda
       atemu
       cything
+      johnrtitor
     ];
     platforms = lib.platforms.linux;
     mainProgram = "lact";
   };
-}
+})
