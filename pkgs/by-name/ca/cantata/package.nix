@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  qt5,
+  qt6,
   perl,
 
   # Cantata doesn't build with cdparanoia enabled so we disable that
@@ -22,6 +22,7 @@
   taglib_1,
   taglib_extras,
   withHttpStream ? true,
+  gst_all_1,
   withReplaygain ? true,
   ffmpeg,
   speex,
@@ -33,7 +34,7 @@
   udisks2,
   withDynamic ? true,
   withHttpServer ? true,
-  withLibVlc ? false,
+  withLibVlc ? true,
   libvlc,
   withStreams ? true,
 }:
@@ -52,6 +53,14 @@ let
   fstat = x: fn: "-DENABLE_${fn}=${if x then "ON" else "OFF"}";
 
   withUdisks = (withTaglib && withDevices && stdenv.hostPlatform.isLinux);
+
+  gst = with gst_all_1; [
+    gstreamer
+    gst-libav
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+  ];
 
   options = [
     {
@@ -100,7 +109,7 @@ let
     {
       names = [ "HTTP_STREAM_PLAYBACK" ];
       enable = withHttpStream;
-      pkgs = [ qt5.qtmultimedia ];
+      pkgs = [ qt6.qtmultimedia ];
     }
     {
       names = [ "LAME" ];
@@ -153,13 +162,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cantata";
-  version = "2.5.0";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
-    owner = "CDrummond";
+    owner = "nullobsi";
     repo = "cantata";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UaZEKZvCA50WsdQSSJQQ11KTK6rM4ouCHDX7pn3NlQw=";
+    hash = "sha256-4lkfY+87lEE2A863JogG5PtO5SyGn7Hb8shQljSqq3Q=";
   };
 
   patches = [
@@ -174,24 +183,29 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs = [
-    qt5.qtbase
-    qt5.qtsvg
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qtwayland
     (perl.withPackages (ppkgs: with ppkgs; [ URI ]))
   ] ++ lib.flatten (builtins.catAttrs "pkgs" (builtins.filter (e: e.enable) options));
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    qt5.qttools
-    qt5.wrapQtAppsHook
+    qt6.qttools
+    qt6.wrapQtAppsHook
   ];
 
   cmakeFlags = lib.flatten (map (e: map (f: fstat e.enable f) e.names) options);
 
+  qtWrapperArgs = lib.optionals (withHttpStream && !withLibVlc) [
+    "--prefix GST_PLUGIN_PATH : ${lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" gst}"
+  ];
+
   meta = {
     description = "Graphical client for MPD";
     mainProgram = "cantata";
-    homepage = "https://github.com/cdrummond/cantata";
+    homepage = "https://github.com/nullobsi/cantata";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ peterhoeg ];
     # Technically, Cantata should run on Darwin/Windows so if someone wants to
