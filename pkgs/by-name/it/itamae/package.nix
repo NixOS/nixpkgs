@@ -4,12 +4,12 @@
   bundlerUpdateScript,
 }:
 
-bundlerApp {
+bundlerApp rec {
   pname = "itamae";
   gemdir = ./.;
   exes = [ "itamae" ];
 
-  passthru.updateScript = bundlerUpdateScript "itamae";
+  passthru.updateScript = bundlerUpdateScript pname;
 
   meta = with lib; {
     description = "Simple and lightweight configuration management tool inspired by Chef";
@@ -17,6 +17,6 @@ bundlerApp {
     license = with licenses; mit;
     maintainers = with maintainers; [ refi64 ];
     platforms = platforms.unix;
-    mainProgram = "itamae";
+    mainProgram = pname;
   };
 }
