@@ -27,6 +27,7 @@ python3Packages.buildPythonApplication rec {
     })
   ];
   propagatedBuildInputs = with python3Packages; [
+    distutils
     pyqt5
     lxml
   ];
