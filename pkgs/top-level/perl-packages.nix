@@ -456,6 +456,10 @@ with self;
       url = "mirror://cpan/authors/id/R/RU/RUZ/Alien-LibGumbo-0.05.tar.gz";
       hash = "sha256-D76RarEfaA5cKM0ayAA3IyPioOBq/8bIs2J5/GTXZRc=";
     };
+    # Fix linker detection broken by exported LD (see nixpkgs#9f2a89f)
+    preBuild = ''
+      export LD="${lib.getExe' stdenv.cc.bintools "${stdenv.cc.bintools.targetPrefix}ld"}"
+    '';
     buildInputs = [ AlienBaseModuleBuild ];
     propagatedBuildInputs = [
       AlienBuild
@@ -468,7 +472,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      broken = stdenv.hostPlatform.isLinux; # Fails with: cannot find ./.libs/libgumbo.so
+      broken = stdenv.hostPlatform.isDarwin; # Fails with: ld: unknown option
     };
   };
 
