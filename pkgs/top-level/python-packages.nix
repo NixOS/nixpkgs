@@ -3831,6 +3831,10 @@ self: super: with self; {
 
   django-ninja = callPackage ../development/python-modules/django-ninja { };
 
+  django-ninja-cursor-pagination =
+    callPackage ../development/python-modules/django-ninja-cursor-pagination
+      { };
+
   django-oauth-toolkit = callPackage ../development/python-modules/django-oauth-toolkit { };
 
   django-organizations = callPackage ../development/python-modules/django-organizations { };
@@ -3858,6 +3862,8 @@ self: super: with self; {
   django-picklefield = callPackage ../development/python-modules/django-picklefield { };
 
   django-polymorphic = callPackage ../development/python-modules/django-polymorphic { };
+
+  django-postgres-partition = callPackage ../development/python-modules/django-postgres-partition { };
 
   django-postgresql-netfields =
     callPackage ../development/python-modules/django-postgresql-netfields
