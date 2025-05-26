@@ -589,6 +589,9 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
       overrides = self: super: {
         inherit (prevStage) ccWrapperStdenv cctools ld64;
 
+        # TODO: change this when CC is no longer provided by the stdenv
+        inherit (self.stdenv) cc;
+
         binutils-unwrapped = builtins.throw "nothing in the Darwin bootstrap should depend on GNU binutils";
         curl = builtins.throw "nothing in the Darwin bootstrap can depend on curl";
 
@@ -730,6 +733,9 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           {
             inherit (prevStage) ccWrapperStdenv;
 
+            # TODO: change this when CC is no longer provided by the stdenv
+            inherit (self.stdenv) cc;
+
             # Disable ld64’s install check phase because the required LTO libraries are not built yet.
             ld64 = super.ld64.overrideAttrs { doInstallCheck = false; };
 
@@ -794,6 +800,9 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           (llvmToolsDeps prevStage)
           {
             inherit (prevStage) ccWrapperStdenv;
+
+            # TODO: change this when CC is no longer provided by the stdenv
+            inherit (self.stdenv) cc;
 
             # Avoid an infinite recursion due to the SDK’s including ncurses, which depends on bash in its `dev` output.
             bashNonInteractive = super.bashNonInteractive.override { stdenv = self.darwin.bootstrapStdenv; };
@@ -879,6 +888,9 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           {
             inherit (prevStage) ccWrapperStdenv;
 
+            # TODO: change this when CC is no longer provided by the stdenv
+            inherit (self.stdenv) cc;
+
             # Disable tests because they use dejagnu, which fails to run.
             libffi = super.libffi.override { doCheck = false; };
 
@@ -959,6 +971,9 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           (sdkPackagesNoCC prevStage)
           {
             inherit (prevStage) ccWrapperStdenv;
+
+            # TODO: change this when CC is no longer provided by the stdenv
+            inherit (self.stdenv) cc;
 
             # Rebuild locales and sigtool with the new clang.
             darwin = super.darwin.overrideScope (
@@ -1198,6 +1213,8 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                 gzip
                 patch
                 ;
+
+              inherit cc;
 
               "apple-sdk_${sdkMajorVersion}" = self.apple-sdk;
 
