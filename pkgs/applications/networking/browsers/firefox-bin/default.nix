@@ -110,6 +110,9 @@ stdenv.mkDerivation {
   # Firefox uses "relrhack" to manually process relocations from a fixed offset
   patchelfFlags = [ "--no-clobber-old-sections" ];
 
+  # don't break code signing
+  dontFixup = stdenv.hostPlatform.isDarwin;
+
   installPhase =
     if stdenv.hostPlatform.isDarwin then
       ''
