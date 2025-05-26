@@ -217,7 +217,7 @@ in
           # /etc/default/useradd: configuration for useradd.
           "default/useradd".source = pkgs.writeText "useradd" ''
             GROUP=100
-            HOME=/home
+            HOME=${config.users.defaultUserHome}
             SHELL=${utils.toShellPath config.users.defaultUserShell}
           '';
         };

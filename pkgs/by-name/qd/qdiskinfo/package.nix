@@ -36,13 +36,13 @@ assert
 
 stdenv.mkDerivation {
   pname = "qdiskinfo";
-  version = "0.3-unstable-2025-05-08";
+  version = "0.3-unstable-2025-05-22";
 
   src = fetchFromGitHub {
     owner = "edisionnano";
     repo = "QDiskInfo";
-    rev = "3416cc7ac19b25bb78eab135cf5e0b281e506de0";
-    hash = "sha256-loL6fzOSoZyCmrs7joHQCsCStLGgKxmMuqFmtADWTW0=";
+    rev = "9b7f4fb44e888dde7c9d0e82300d275e8671769d";
+    hash = "sha256-GqHDTEeZ+dEmCeyFehaNKB8af5PN8ZTSKxm00mkqouk=";
   };
 
   nativeBuildInputs = [
