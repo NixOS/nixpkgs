@@ -55,7 +55,9 @@ rustPlatform.buildRustPackage rec {
       rm -r wezterm-ssh/tests
     '';
 
-  # https://github.com/wezterm/wezterm/pull/6960/commits/cb409f1213be314bb16e59b7147da8da16d12769#diff-c6652db0a7201b6411f7af58e81a051211a22b544efededd8e514ce8bf1c4646R134
+  # dep: syntax causes build failures in rare cases
+  # https://github.com/rust-secure-code/cargo-auditable/issues/124
+  # https://github.com/wezterm/wezterm/blob/main/nix/flake.nix#L134
   auditable = false;
 
   cargoHash = "sha256-9pdkXpkIbe5HeVGvgusRaI4A6ZjDGssO5k0ULVnO6k8=";
