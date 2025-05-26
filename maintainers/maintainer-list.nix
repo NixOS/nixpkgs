@@ -4814,6 +4814,12 @@
     github = "CnTeng";
     githubId = 56501688;
   };
+  coastalwhite = {
+    email = "me@gburghoorn.com";
+    name = "Gijs Burghoorn";
+    github = "coastalwhite";
+    githubId = 6944009;
+  };
   coat = {
     email = "kentsmith@gmail.com";
     name = "Kent Smith";
