@@ -87,6 +87,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ++ lib.optional enableLiburing "io_uring";
 
   passthru = {
+    rocksdb = rocksdb'; # make used rocksdb version available (e.g., for backup scripts)
     updateScript = nix-update-script { };
     tests =
       {
