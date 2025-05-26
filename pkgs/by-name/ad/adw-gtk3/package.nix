@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Theme from libadwaita ported to GTK-3";
+    description = "Unofficial GTK 3 port of libadwaita";
     homepage = "https://github.com/lassekongo83/adw-gtk3";
     license = lib.licenses.lgpl21Only;
     platforms = lib.platforms.unix;
