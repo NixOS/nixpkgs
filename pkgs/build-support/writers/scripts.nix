@@ -1105,6 +1105,45 @@ rec {
       '';
 
   /**
+    writeProcessComposeConfig takes a process-compose config expressed as a Nix
+    attribute set, pretty prints it to a JSON file, and statically checks it
+    with `process-compose --dry-run`.
+
+    # Example
+
+    ```
+    writeProcessComposeConfig "pc-config.json" {
+      processes = {
+        sshd = {
+          command = "${pkgs.openssh}/bin/sshd -D -e -f ${sshdConfig}";
+          availability.restart = "always";
+        };
+      };
+    }
+    ```
+
+    # Note
+
+    process-compose uses YAML for its config format but JSON will be parsed
+    as YAML just fine, and is more convenient to work with in a Nix context.
+  */
+  writeProcessComposeConfig =
+    name: value:
+    pkgs.runCommand name
+      {
+        passAsFile = [ "text" ];
+        text = builtins.toJSON value;
+        nativeBuildInputs = with pkgs; [
+          jq
+          process-compose
+        ];
+      } # sh
+      ''
+        jq . < "$textPath" > "$out"
+        process-compose --config "$out" --dry-run
+      '';
+
+  /**
     writePerl takes a name an attributeset with libraries and some perl sourcecode and
     returns an executable
 
