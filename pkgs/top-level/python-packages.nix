@@ -2827,6 +2827,8 @@ self: super: with self; {
     callPackage ../development/python-modules/colcon-package-information
       { };
 
+  colcon-package-selection = callPackage ../development/python-modules/colcon-package-selection { };
+
   colcon-parallel-executor = callPackage ../development/python-modules/colcon-parallel-executor { };
 
   colcon-recursive-crawl = callPackage ../development/python-modules/colcon-recursive-crawl { };
