@@ -1,15 +1,7 @@
 import ./make-test-python.nix (
   { pkgs, lib, ... }:
   let
-    tls-cert = pkgs.runCommand "selfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''
-      openssl req \
-        -x509 -newkey rsa:4096 -sha256 -days 365 \
-        -nodes -out cert.pem -keyout key.pem \
-        -subj '/CN=headscale' -addext "subjectAltName=DNS:headscale"
-
-      mkdir -p $out
-      cp key.pem cert.pem $out
-    '';
+    certs = import ./common/acme/server/snakeoil-certs.nix;
   in
   {
     name = "headscale";
@@ -23,8 +15,9 @@ import ./make-test-python.nix (
         headscalePort = 8080;
         stunPort = 3478;
         peer = {
+          networking.hosts."192.168.1.1" = [ certs.domain ];
           services.tailscale.enable = true;
-          security.pki.certificateFiles = [ "${tls-cert}/cert.pem" ];
+          security.pki.certificateFiles = [ certs.${certs.domain}.cert ];
         };
       in
       {
@@ -37,7 +30,7 @@ import ./make-test-python.nix (
               enable = true;
               port = headscalePort;
               settings = {
-                server_url = "https://headscale";
+                server_url = "https://${certs.domain}";
                 ip_prefixes = [ "100.64.0.0/10" ];
                 derp.server = {
                   enabled = true;
@@ -49,10 +42,10 @@ import ./make-test-python.nix (
             };
             nginx = {
               enable = true;
-              virtualHosts.headscale = {
+              virtualHosts.${certs.domain} = {
                 addSSL = true;
-                sslCertificate = "${tls-cert}/cert.pem";
-                sslCertificateKey = "${tls-cert}/key.pem";
+                sslCertificate = certs.${certs.domain}.cert;
+                sslCertificateKey = certs.${certs.domain}.key;
                 locations."/" = {
                   proxyPass = "http://127.0.0.1:${toString headscalePort}";
                   proxyWebsockets = true;
@@ -81,7 +74,7 @@ import ./make-test-python.nix (
       authkey = headscale.succeed("headscale preauthkeys -u test create --reusable")
 
       # Connect peers
-      up_cmd = f"tailscale up --login-server 'https://headscale' --auth-key {authkey}"
+      up_cmd = f"tailscale up --login-server 'https://${certs.domain}' --auth-key {authkey}"
       peer1.execute(up_cmd)
       peer2.execute(up_cmd)
 
