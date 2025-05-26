@@ -8162,6 +8162,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  mini-keymap = buildVimPlugin {
+    pname = "mini.keymap";
+    version = "2025-05-20";
+    src = fetchFromGitHub {
+      owner = "echasnovski";
+      repo = "mini.keymap";
+      rev = "2aa0a66d6cbf15c9cea331d976ac4d4b9f01621e";
+      sha256 = "18samb1yjvmw2yjl0l4csl484aqah71qr19zspx46z5dk3jib908";
+    };
+    meta.homepage = "https://github.com/echasnovski/mini.keymap/";
+    meta.hydraPlatforms = [ ];
+  };
+
   mini-map = buildVimPlugin {
     pname = "mini.map";
     version = "2025-04-01";
