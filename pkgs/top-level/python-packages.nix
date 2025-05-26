@@ -5123,8 +5123,6 @@ self: super: with self; {
 
   flask-session-captcha = callPackage ../development/python-modules/flask-session-captcha { };
 
-  flask-silk = callPackage ../development/python-modules/flask-silk { };
-
   flask-simpleldap = callPackage ../development/python-modules/flask-simpleldap { };
 
   flask-sock = callPackage ../development/python-modules/flask-sock { };
@@ -17279,8 +17277,6 @@ self: super: with self; {
   testfixtures = callPackage ../development/python-modules/testfixtures { };
 
   testing-common-database = callPackage ../development/python-modules/testing-common-database { };
-
-  testing-postgresql = callPackage ../development/python-modules/testing-postgresql { };
 
   testpath = callPackage ../development/python-modules/testpath { };
 
