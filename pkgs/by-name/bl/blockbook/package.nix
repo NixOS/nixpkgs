@@ -82,7 +82,6 @@ buildGoModule rec {
     license = licenses.agpl3Only;
     maintainers = with maintainers; [
       mmahut
-      _1000101
     ];
     platforms = platforms.unix;
     mainProgram = "blockbook";
