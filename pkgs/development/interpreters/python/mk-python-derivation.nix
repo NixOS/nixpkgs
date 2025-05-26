@@ -472,11 +472,21 @@ let
   # This derivation transformation function must be independent to `attrs`
   # for fixed-point arguments support in the future.
   transformDrv =
-    drv:
-    extendDerivation (
-      drv.disabled
-      -> throw "${removePrefix namePrefix drv.name} not supported for interpreter ${python.executable}"
-    ) { } (toPythonModule drv);
+    let
+      # Workaround to make the `lib.extendDerivation`-based disabled functionality
+      # respect `<pkg>.overrideAttrs`
+      # It doesn't cover `<pkg>.<output>.overrideAttrs`.
+      disablePythonPackage =
+        drv:
+        extendDerivation (
+          drv.disabled
+          -> throw "${removePrefix namePrefix drv.name} not supported for interpreter ${python.executable}"
+        ) { } drv
+        // {
+          overrideAttrs = fdrv: disablePythonPackage (drv.overrideAttrs fdrv);
+        };
+    in
+    drv: disablePythonPackage (toPythonModule drv);
 
 in
 transformDrv self
