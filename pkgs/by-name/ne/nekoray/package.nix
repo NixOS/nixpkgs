@@ -66,6 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm755 nekoray "$out/share/nekoray/nekoray"
+
+    install -Dm644 "$src/res/public/nekobox.png" "$out/share/pixmaps/nekoray.png"
+
     mkdir -p "$out/bin"
     ln -s "$out/share/nekoray/nekoray" "$out/bin"
 
