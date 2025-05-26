@@ -1,42 +1,59 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitLab,
+  fetchFromGitHub,
+  replaceVars,
   cmake,
+  ninja,
   luajit,
   SDL2,
   SDL2_image,
   SDL2_ttf,
   physfs,
-  fetchpatch,
   openal,
   libmodplug,
   libvorbis,
   solarus,
-  qtbase,
-  qttools,
   glm,
+  qt6Packages,
 }:
 
-mkDerivation rec {
+let
+  qlementine-src = fetchFromGitHub {
+    owner = "oclero";
+    repo = "qlementine";
+    tag = "v1.2.0";
+    hash = "sha256-25PKOpQl3IkBXX14gt8KKYXXJKeutQ75O7BftEqCAxk=";
+  };
+
+  inherit (qt6Packages)
+    qtbase
+    qttools
+    wrapQtAppsHook
+    ;
+in
+stdenv.mkDerivation rec {
   pname = "solarus-quest-editor";
-  version = "1.6.4";
+  version = "2.0.0";
 
   src = fetchFromGitLab {
     owner = "solarus-games";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1qbc2j9kalk7xqk9j27s7wnm5zawiyjs47xqkqphw683idmzmjzn";
+    hash = "sha256-GTslxValldReWGb3x67zRPrvQUuCO/HQSXOEQlJfAmw=";
   };
 
   patches = [
-    (fetchpatch {
-      url = "https://gitlab.com/solarus-games/solarus-quest-editor/-/commit/81d5c7f1602cf355684d70a5e3449fefccfc44b8.patch";
-      sha256 = "tVUxkkDp2PcOHGy4dGvUcYj9gF7k4LN21VuxohCw9NE=";
-    })
+    (replaceVars ./qlementine-src.patch { inherit qlementine-src; })
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    qttools
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
     luajit
@@ -49,13 +66,12 @@ mkDerivation rec {
     libvorbis
     solarus
     qtbase
-    qttools
     glm
   ];
 
   meta = with lib; {
     description = "Editor for the Zelda-like ARPG game engine, Solarus";
-    mainProgram = "solarus-quest-editor";
+    mainProgram = "solarus-editor";
     longDescription = ''
       Solarus is a game engine for Zelda-like ARPG games written in lua.
       Many full-fledged games have been writen for the engine.
