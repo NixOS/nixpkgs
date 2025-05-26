@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "NanoComp";
-    repo = pname;
+    repo = "meep";
     tag = "v${version}";
     hash = "sha256-9cQHvwUAeop5dRMVvedph+KQvTcmnkHdfqPQlSY280c=";
   };

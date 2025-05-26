@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "snakemake";
-    repo = pname;
+    repo = "snakemake-interface-storage-plugins";
     tag = "v${version}";
     hash = "sha256-mGpKmKWWL4ue9Dddjs4fXCaITrC97yHC58Jh2vclXAY=";
   };
