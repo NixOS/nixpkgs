@@ -117,7 +117,7 @@ in
 
         includeChannel = true;
 
-        bootSize = 1000; # 1G is the minimum EBS volume
+        bootSize = 1000; # 1000 MiB is the minimum EBS volume
 
         rootSize = config.virtualisation.diskSize;
         rootPoolProperties = {
