@@ -3486,6 +3486,11 @@
     githubId = 50839;
     name = "Brian Jones";
   };
+  bokicoder = {
+    github = "bokicoder";
+    githubId = 193465580;
+    name = "bokicoder";
+  };
   boldikoller = {
     email = "boldi.koller@wtss.eu";
     github = "boldikoller";
@@ -5668,6 +5673,12 @@
     github = "dasJ";
     githubId = 4971975;
     name = "Janne Heß";
+  };
+  dashietm = {
+    email = "fabio.lenherr@gmail.com";
+    github = "DashieTM";
+    githubId = 72016555;
+    name = "Fabio Lenherr";
   };
   dasisdormax = {
     email = "dasisdormax@mailbox.org";
