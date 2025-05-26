@@ -17723,11 +17723,11 @@ with self;
     };
   };
 
-  IOTty = buildPerlPackage {
+  IOTty = buildPerlPackage rec {
     pname = "IO-Tty";
     version = "1.20";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TODDR/IO-Tty-1.20.tar.gz";
+      url = "mirror://cpan/authors/id/T/TO/TODDR/IO-Tty-${version}.tar.gz";
       hash = "sha256-sVMJ/IViOJMonLmyuI36ntHmkVa3XymThVOkW+bXMK8=";
     };
     doCheck = !stdenv.hostPlatform.isDarwin; # openpty fails in the sandbox
