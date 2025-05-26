@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   fetchurl,
 
   libiconvReal,
@@ -50,13 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
       circumvent this error.
     */
     ./patches/force-remove-codesign-then-add.patch
-
-    (fetchpatch {
-      name = "darwin-cs-preprocess.patch";
-      url = "https://github.com/racket/racket/commit/ee9fb20a10a1a8e36650681afcafe99f0b044423.patch";
-      hash = "sha256-9aTRzfd3dwznfJg0fwsjhN4SYgXncrGyBCbcmKlxlio=";
-      stripLen = 1;
-    })
   ];
 
   preConfigure =
