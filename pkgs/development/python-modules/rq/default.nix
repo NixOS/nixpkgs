@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   buildPythonPackage,
+  fetchpatch,
 
   # build-system
   hatchling,
@@ -31,6 +32,13 @@ buildPythonPackage rec {
     hash = "sha256-NUs544J/pC2QNyR2aIlac2P06so7JmB2P6FB/gmR7wI=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/rq/rq/commit/18c0f30c6aa0de2c55fba64105b1cb0495d728cf.patch";
+      hash = "sha256-woWW8SkKXrMyDW+tY+ItxO/tuHHuuZhW+OJxwTTZucI=";
+    })
+  ];
+
   build-system = [ hatchling ];
 
   dependencies = [
@@ -49,16 +57,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  disabledTests =
-    [
-      # https://github.com/rq/rq/issues/2248
-      "test_work_and_quit"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # PermissionError: [Errno 13] Permission denied: '/tmp/rq-tests.txt'
-      "test_deleted_jobs_arent_executed"
-      "test_suspend_worker_execution"
-    ];
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # PermissionError: [Errno 13] Permission denied: '/tmp/rq-tests.txt'
+    "test_deleted_jobs_arent_executed"
+    "test_suspend_worker_execution"
+  ];
 
   pythonImportsCheck = [ "rq" ];
 
