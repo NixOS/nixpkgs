@@ -42,8 +42,8 @@ let
 
     postPatch = ''
       substituteInPlace wordfence/util/library.py \
-        --replace '@PCRE_OUT@' "${pcre.out}" \
-        --replace '@HS_OUT@'  "${hyperscan.out}"
+        --replace-fail '@PCRE_OUT@' "${pcre.out}" \
+        --replace-fail '@HS_OUT@'  "${hyperscan.out}"
     '';
 
     doCheck = false;
