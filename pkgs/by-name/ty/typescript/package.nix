@@ -2,8 +2,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  testers,
-  typescript,
+  versionCheckHook,
 }:
 
 buildNpmPackage rec {
@@ -23,11 +22,12 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-ytdkxIjAd3UsU90o9IFZa5lGEv39zblBmgTTseVRGKQ=";
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = typescript;
-    };
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/tsc";
+  versionCheckProgramArg = "--version";
 
   meta = with lib; {
     description = "Superset of JavaScript that compiles to clean JavaScript output";
