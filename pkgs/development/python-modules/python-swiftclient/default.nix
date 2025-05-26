@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "4.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
     pname = "python_swiftclient";
     inherit version;
