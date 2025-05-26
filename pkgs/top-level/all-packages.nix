@@ -12346,6 +12346,14 @@ with pkgs;
   geany = callPackage ../applications/editors/geany { };
   geany-with-vte = callPackage ../applications/editors/geany/with-vte.nix { };
 
+  gimagereader-gtk = callPackage ../by-name/gi/gImageReader/package.nix {
+    withQt6 = false;
+  };
+
+  gimagereader-qt = qt6Packages.callPackage ../by-name/gi/gImageReader/package.nix {
+    withQt6 = true;
+  };
+
   gnuradio = callPackage ../applications/radio/gnuradio/wrapper.nix {
     unwrapped = callPackage ../applications/radio/gnuradio {
       python = python311;
