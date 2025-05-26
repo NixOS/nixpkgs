@@ -9331,7 +9331,7 @@ with pkgs;
     physfs
     ;
 
-  pingvin-share = callPackage ../servers/pingvin-share { };
+  pingvin-share = callPackage ../servers/web-apps/pingvin-share { };
 
   pipelight = callPackage ../tools/misc/pipelight {
     stdenv = stdenv_32bit;
