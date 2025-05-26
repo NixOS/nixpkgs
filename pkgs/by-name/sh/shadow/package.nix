@@ -14,7 +14,7 @@
   libxslt,
   libxcrypt,
   pkg-config,
-  glibcCross ? null,
+  glibc ? null,
   pam ? null,
   withLibbsd ? lib.meta.availableOn stdenv.hostPlatform libbsd,
   libbsd,
@@ -24,7 +24,7 @@
 let
   glibc =
     if stdenv.hostPlatform != stdenv.buildPlatform then
-      glibcCross
+      glibc
     else
       assert stdenv.hostPlatform.libc == "glibc";
       stdenv.cc.libc;
