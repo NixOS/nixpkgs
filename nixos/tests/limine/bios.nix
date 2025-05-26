@@ -14,7 +14,7 @@
     { ... }:
     {
       virtualisation.useBootLoader = true;
-      virtualisation.useBootPartition = true;
+      virtualisation.useBIOSBoot = true;
       boot.loader.limine.enable = true;
       boot.loader.limine.efiSupport = false;
       boot.loader.timeout = 0;
