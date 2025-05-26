@@ -48,7 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://codeberg.org/adnano/wmenu";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ eken ];
+    maintainers = with maintainers; [
+      eken
+      sweiglbosker
+    ];
     mainProgram = "wmenu";
   };
 })
