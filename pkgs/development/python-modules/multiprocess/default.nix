@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "uqfoundation";
-    repo = pname;
+    repo = "multiprocess";
     tag = version;
     hash = "sha256-VDlbo+rXyOxY73JJz5SWEuq3lZLKWYKk9DKbHzpQesU=";
   };

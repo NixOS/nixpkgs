@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "virtuald";
-    repo = pname;
+    repo = "pyhcl";
     rev = version;
     sha256 = "sha256-vF40xEahs98G0lIC6XIl3eJHIuai2xTAeshUjiKN/BY=";
   };
