@@ -2,13 +2,12 @@
   config,
   lib,
   pkgs,
-  options,
   ...
 }:
 
 let
   cfg = config.services.prometheus.exporters.bitcoin;
-  inherit (lib) mkOption types concatStringsSep;
+  inherit (lib) mkOption types;
 in
 {
   port = 9332;
