@@ -80,7 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
     maintainers = with maintainers; [
-      coconnor
       earldouglas
       nequissimus
     ];
