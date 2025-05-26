@@ -16170,8 +16170,6 @@ with pkgs;
 
   ### MISC
 
-  android-file-transfer = callPackage ../tools/filesystems/android-file-transfer { };
-
   antimicrox = libsForQt5.callPackage ../tools/misc/antimicrox { };
 
   autotiling = python3Packages.callPackage ../misc/autotiling { };
