@@ -53869,6 +53869,24 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
+  git-jump = nodeEnv.buildNodePackage {
+    name = "git-jump";
+    packageName = "git-jump";
+    version = "0.3.1";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/git-jump/-/git-jump-0.3.1.tgz";
+      sha512 = "qA9234x6hrWIMwUAyhGx21/aA/FH+O1qBuz4B75z/YEmiByJFy6pzbh72jv23Q+APVOXAJb877uaMBVcwVMc+Q==";
+    };
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Git Branches Helper";
+      homepage = "https://github.com/mykolaharmash/git-jump";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
   grunt-cli = nodeEnv.buildNodePackage {
     name = "grunt-cli";
     packageName = "grunt-cli";
