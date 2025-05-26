@@ -7,7 +7,6 @@
   libxslt,
   perl,
   curl,
-  pcre,
   libxml2,
   librdf_rasqal,
   gmp,
@@ -40,7 +39,6 @@ stdenv.mkDerivation rec {
       openssl
       libxslt
       curl
-      pcre
       libxml2
       gmp
     ]
