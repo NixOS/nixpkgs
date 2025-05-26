@@ -7,8 +7,7 @@
   python3,
 }:
 {
-  beforeResultDir,
-  afterResultDir,
+  combinedDir,
   touchedFilesJson,
   githubAuthorId,
   byName ? false,
@@ -20,7 +19,7 @@ let
 
     ---
     Inputs:
-    - beforeResultDir, afterResultDir: The evaluation result from before and after the change.
+    - beforeDir, afterDir: The evaluation result from before and after the change.
       They can be obtained by running `nix-build -A ci.eval.full` on both revisions.
 
     ---
@@ -66,7 +65,6 @@ let
       Example: { name = "python312Packages.numpy"; platform = "x86_64-linux"; }
   */
   inherit (import ./utils.nix { inherit lib; })
-    diff
     groupByKernel
     convertToPackagePlatformAttrs
     groupByPlatform
@@ -74,22 +72,10 @@ let
     getLabels
     ;
 
-  getAttrs =
-    dir:
-    let
-      raw = builtins.readFile "${dir}/outpaths.json";
-      # The file contains Nix paths; we need to ignore them for evaluation purposes,
-      # else there will be a "is not allowed to refer to a store path" error.
-      data = builtins.unsafeDiscardStringContext raw;
-    in
-    builtins.fromJSON data;
-  beforeAttrs = getAttrs beforeResultDir;
-  afterAttrs = getAttrs afterResultDir;
-
   # Attrs
   # - keys: "added", "changed" and "removed"
   # - values: lists of `packagePlatformPath`s
-  diffAttrs = diff beforeAttrs afterAttrs;
+  diffAttrs = builtins.fromJSON (builtins.readFile "${combinedDir}/combined-diff.json");
 
   rebuilds = diffAttrs.added ++ diffAttrs.changed;
   rebuildsPackagePlatformAttrs = convertToPackagePlatformAttrs rebuilds;
@@ -149,8 +135,8 @@ runCommand "compare"
     maintainers = builtins.toJSON maintainers;
     passAsFile = [ "maintainers" ];
     env = {
-      BEFORE_DIR = "${beforeResultDir}";
-      AFTER_DIR = "${afterResultDir}";
+      BEFORE_DIR = "${combinedDir}/before";
+      AFTER_DIR = "${combinedDir}/after";
     };
   }
   ''
