@@ -65,12 +65,12 @@ let
     {
       useEFIBoot,
       useDefaultFilesystems,
-      useBootPartition,
+      useBIOSBoot,
     }:
     if useDefaultFilesystems then
       if useEFIBoot then
         "efi"
-      else if useBootPartition then
+      else if useBIOSBoot then
         "legacy+boot"
       else
         "legacy"
@@ -350,7 +350,7 @@ let
     onlyNixStore = false;
     label = rootFilesystemLabel;
     partitionTableType = selectPartitionTableLayout {
-      inherit (cfg) useBootPartition useDefaultFilesystems useEFIBoot;
+      inherit (cfg) useBIOSBoot useDefaultFilesystems useEFIBoot;
     };
     installBootLoader = cfg.installBootLoader;
     touchEFIVars = cfg.useEFIBoot;
@@ -448,13 +448,13 @@ in
       default =
         if cfg.useEFIBoot then
           "/dev/disk/by-label/${espFilesystemLabel}"
-        else if cfg.useBootPartition then
+        else if cfg.useBIOSBoot then
           "/dev/disk/by-label/BOOT"
         else
           null;
       defaultText = literalExpression ''
         if cfg.useEFIBoot then "/dev/disk/by-label/${espFilesystemLabel}"
-        else if cfg.useBootPartition then "/dev/disk/by-label/BOOT"
+        else if cfg.useBIOSBoot then "/dev/disk/by-label/BOOT"
         else null'';
       example = "/dev/disk/by-label/esp";
       description = ''
@@ -952,11 +952,11 @@ in
       '';
     };
 
-    virtualisation.useBootPartition = mkEnableOption null // {
+    virtualisation.useBIOSBoot = mkEnableOption null // {
       description = ''
         If enabled for legacy MBR VMs, the VM image will have a separate boot
         partition mounted at /boot.
-        useBootPartition is ignored if useEFIBoot == true.
+        useBIOSBoot is ignored if useEFIBoot == true.
       '';
     };
 
