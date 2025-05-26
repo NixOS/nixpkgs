@@ -14,7 +14,7 @@
 
 rustPlatform.buildRustPackage (rec {
   pname = "headphones-toolbox";
-  version = "0.0.7";
+  version = "test-tauri-v2";
   tag = "test-tauri-v2-2";
 
   src = fetchFromGitHub {
