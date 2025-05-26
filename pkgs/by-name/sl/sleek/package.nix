@@ -6,17 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sleek";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "nrempel";
     repo = "sleek";
     rev = "v${version}";
-    hash = "sha256-VQ0LmKhFsC12qoXCFHxtV5E+J7eRvZMVH0j+5r8pDk8=";
+    hash = "sha256-U1ujR+6wW3SKUnjqs/+DrEhu0XRBB8hxGC2pxe3LVbw=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-vq4e/2+YfMw2n8ZMYPa/3HtNk9pCtXWN/u1MzhBkZJQ=";
+  cargoHash = "sha256-2P47kVNQPksKyWPtk1XEpVEjFfz7cEvWX0VvlT3nKOc=";
 
   meta = with lib; {
     description = "CLI tool for formatting SQL";

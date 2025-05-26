@@ -20858,6 +20858,12 @@
     githubId = 3302;
     name = "Renzo Carbonara";
   };
+  repparw = {
+    email = "ubritos@gmail.com";
+    github = "repparw";
+    githubId = 45952970;
+    name = "repparw";
+  };
   reputable2772 = {
     name = "Reputable2772";
     github = "Reputable2772";

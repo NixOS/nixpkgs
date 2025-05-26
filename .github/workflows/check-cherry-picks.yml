@@ -21,10 +21,11 @@ jobs:
         with:
           fetch-depth: 0
           filter: blob:none
+          path: trusted
 
       - name: Check cherry-picks
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          ./maintainers/scripts/check-cherry-picks.sh "$BASE_SHA" "$HEAD_SHA"
+          ./trusted/maintainers/scripts/check-cherry-picks.sh "$BASE_SHA" "$HEAD_SHA"
