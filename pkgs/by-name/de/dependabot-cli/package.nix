@@ -104,14 +104,15 @@ buildGoModule {
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/dependabot/cli/releases/tag/v${version}";
     description = "Tool for testing and debugging Dependabot update jobs";
     mainProgram = "dependabot";
     homepage = "https://github.com/dependabot/cli";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       infinisil
+      philiptaron
     ];
   };
 }
