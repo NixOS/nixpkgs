@@ -3,16 +3,17 @@
   buildNpmPackage,
   fetchFromGitHub,
   versionCheckHook,
+  nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "typescript";
   version = "5.8.2";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "TypeScript";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fOA5IblxUd+C9ST3oI8IUmTTRL3exC63MPqW5hoWN0M=";
   };
 
@@ -29,12 +30,20 @@ buildNpmPackage rec {
   versionCheckProgram = "${placeholder "out"}/bin/tsc";
   versionCheckProgramArg = "--version";
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex=^v([\\d.]+)$"
+      ];
+    };
+  };
+
+  meta = {
     description = "Superset of JavaScript that compiles to clean JavaScript output";
     homepage = "https://www.typescriptlang.org/";
-    changelog = "https://github.com/microsoft/TypeScript/releases/tag/v${version}";
-    license = licenses.asl20;
+    changelog = "https://github.com/microsoft/TypeScript/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "tsc";
   };
-}
+})
