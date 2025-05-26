@@ -1,0 +1,31 @@
+diff --git a/configure.in b/configure.in
+index 98055b7..fff401f 100644
+--- a/configure.in
++++ b/configure.in
+@@ -249,6 +249,11 @@ for pilot_libs in $pilot_prefix/lib /usr/lib /usr/local/lib/ /usr/local/lib64 \
+       PILOT_LIBS="-L$pilot_libs $PILOT_LIBS"
+       break
+    fi
++   if test -r "$pilot_libs/libpisock.dylib" ; then
++      pilotlibs=yes
++      PILOT_LIBS="-L$pilot_libs $PILOT_LIBS"
++      break
++   fi
+ done
+ fi
+
+diff --git a/libsqlite.c b/libsqlite.c
+index 9557956..cf0b5ed 100644
+--- a/libsqlite.c
++++ b/libsqlite.c
+@@ -3,10 +3,10 @@
+    Elmar Klausmeier, 20-Sep-2022: Initial revision
+ */
+
++#define _GNU_SOURCE
+ #include <stdio.h>
+ #include <string.h>
+ #include <time.h>
+-extern char *strptime (const char *__restrict __s, const char *__restrict __fmt, struct tm *__tp) __THROW;
+ #include <sys/stat.h>
+ #include <sqlite3.h>

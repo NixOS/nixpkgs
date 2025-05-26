@@ -1,0 +1,94 @@
+diff --git a/bottles/frontend/meson.build b/bottles/frontend/meson.build
+index 6ff7c011..c26ea0b9 100644
+--- a/bottles/frontend/meson.build
++++ b/bottles/frontend/meson.build
+@@ -23,12 +23,6 @@ params_file = configure_file(
+     configuration: conf
+ )
+ 
+-fs = import('fs')
+-
+-if not fs.is_file('/' + '.flatpak-info')
+-  error('file does not exist')
+-endif
+-
+ bottles_sources = [
+   '__init__.py',
+   'main.py',
+diff --git a/bottles/frontend/views/bottle_details.py b/bottles/frontend/views/bottle_details.py
+index 65667ea9..7ae1eb19 100644
+--- a/bottles/frontend/views/bottle_details.py
++++ b/bottles/frontend/views/bottle_details.py
+@@ -436,20 +436,19 @@ class BottleView(Adw.PreferencesPage):
+             dialog.connect("response", execute)
+             dialog.show()
+ 
+-        if Xdp.Portal.running_under_sandbox():
+-            if self.window.settings.get_boolean("show-sandbox-warning"):
+-                dialog = Adw.MessageDialog.new(
+-                    self.window,
+-                    _("Be Aware of Sandbox"),
+-                    _(
+-                        "Bottles is running in a sandbox, a restricted permission environment needed to keep you safe. If the program won't run, consider moving inside the bottle (3 dots icon on the top), then launch from there."
+-                    ),
+-                )
+-                dialog.add_response("dismiss", _("_Dismiss"))
+-                dialog.connect("response", show_chooser)
+-                dialog.present()
+-            else:
+-                show_chooser()
++        if self.window.settings.get_boolean("show-sandbox-warning"):
++            dialog = Adw.MessageDialog.new(
++                self.window,
++                _("Be Aware of Sandbox"),
++                _(
++                    "Bottles is running in a sandbox, a restricted permission environment needed to keep you safe. If the program won't run, consider moving inside the bottle (3 dots icon on the top), then launch from there."
++                ),
++            )
++            dialog.add_response("dismiss", _("_Dismiss"))
++            dialog.connect("response", show_chooser)
++            dialog.present()
++        else:
++            show_chooser()
+ 
+     def __backup(self, widget, backup_type):
+         """
+diff --git a/bottles/frontend/views/bottle_preferences.py b/bottles/frontend/views/bottle_preferences.py
+index 288e693b..b8b57618 100644
+--- a/bottles/frontend/views/bottle_preferences.py
++++ b/bottles/frontend/views/bottle_preferences.py
+@@ -139,7 +139,7 @@ class PreferencesView(Adw.PreferencesPage):
+         self.queue = details.queue
+         self.details = details
+ 
+-        if not gamemode_available or not Xdp.Portal.running_under_sandbox():
++        if not gamemode_available:
+             return
+ 
+         _not_available = _("This feature is unavailable on your system.")
+diff --git a/bottles/frontend/views/list.py b/bottles/frontend/views/list.py
+index 43ab9c22..a283b178 100644
+--- a/bottles/frontend/views/list.py
++++ b/bottles/frontend/views/list.py
+@@ -82,8 +82,6 @@ class BottlesBottleRow(Adw.ActionRow):
+ 
+     def run_executable(self, *_args):
+         """Display file dialog for executable"""
+-        if not Xdp.Portal.running_under_sandbox():
+-            return
+ 
+         def set_path(_dialog, response):
+             if response != Gtk.ResponseType.ACCEPT:
+diff --git a/bottles/frontend/views/new_bottle_dialog.py b/bottles/frontend/views/new_bottle_dialog.py
+index a8b007d4..c6f0a156 100644
+--- a/bottles/frontend/views/new_bottle_dialog.py
++++ b/bottles/frontend/views/new_bottle_dialog.py
+@@ -80,7 +80,7 @@ class BottlesNewBottleDialog(Adw.Dialog):
+         super().__init__(**kwargs)
+         # common variables and references
+         self.window = GtkUtils.get_parent_window()
+-        if not self.window or not Xdp.Portal.running_under_sandbox():
++        if not self.window:
+             return
+ 
+         self.app = self.window.get_application()

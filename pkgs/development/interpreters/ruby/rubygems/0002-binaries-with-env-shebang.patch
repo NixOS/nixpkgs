@@ -1,0 +1,28 @@
+From 2e1328bcdddd35e557eabdff83ac07f3591dc693 Mon Sep 17 00:00:00 2001
+From: zimbatm <zimbatm@zimbatm.com>
+Date: Wed, 21 Sep 2016 19:37:05 +0100
+Subject: [PATCH 2/3] binaries with env shebang
+
+By default, don't point to the absolute ruby derivation path. As a user
+installing a gem in the home, it would freeze the selected ruby version
+to the currently-installed ruby derivation.
+---
+ lib/rubygems/dependency_installer.rb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/rubygems/dependency_installer.rb b/lib/rubygems/dependency_installer.rb
+index 34620860..00ab31d9 100644
+--- a/lib/rubygems/dependency_installer.rb
++++ b/lib/rubygems/dependency_installer.rb
+@@ -17,7 +17,7 @@ class Gem::DependencyInstaller
+   extend Gem::Deprecate
+ 
+   DEFAULT_OPTIONS = { # :nodoc:
+-    env_shebang: false,
++    env_shebang: true,
+     document: %w[ri],
+     domain: :both, # HACK: dup
+     force: false,
+-- 
+2.21.0
+

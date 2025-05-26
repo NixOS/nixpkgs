@@ -1,0 +1,98 @@
+From c12adfdefd8a091e1fa870305a3cc61de6426914 Mon Sep 17 00:00:00 2001
+From: Paul Meyer <49727155+katexochen@users.noreply.github.com>
+Date: Thu, 14 Dec 2023 21:16:20 +0100
+Subject: [PATCH] optional immutable configuration dir
+
+Adding the possibility to configure an immutable configuration dir via
+env variable `AZURE_IMMUTABLE_DIR`. This path is used for the files
+that configure the dynamic behavior of the CLI code.
+An immutable session is used for these files to ensure we don't try to
+write to them.
+
+Signed-off-by: Paul Meyer <49727155+katexochen@users.noreply.github.com>
+---
+ azure/cli/core/__init__.py |  5 +++--
+ azure/cli/core/_session.py | 19 ++++++++++++++++---
+ .../cli/core/extension/dynamic_install.py     |  3 ++-
+ 3 files changed, 21 insertions(+), 6 deletions(-)
+
+diff --git a/azure/cli/core/__init__.py b/azure/cli/core/__init__.py
+index d112633ec..20b6d045b 100644
+--- a/azure/cli/core/__init__.py
++++ b/azure/cli/core/__init__.py
+@@ -75,12 +75,13 @@ class AzCli(CLI):
+         self.data['query_active'] = False
+
+         azure_folder = self.config.config_dir
++        azure_immutable_folder = os.environ.get('AZURE_IMMUTABLE_DIR', azure_folder)
+         ensure_dir(azure_folder)
+         ACCOUNT.load(os.path.join(azure_folder, 'azureProfile.json'))
+         CONFIG.load(os.path.join(azure_folder, 'az.json'))
+         SESSION.load(os.path.join(azure_folder, 'az.sess'), max_age=3600)
+-        INDEX.load(os.path.join(azure_folder, 'commandIndex.json'))
+-        VERSIONS.load(os.path.join(azure_folder, 'versionCheck.json'))
++        INDEX.load(os.path.join(azure_immutable_folder, 'commandIndex.json'))
++        VERSIONS.load(os.path.join(azure_immutable_folder, 'versionCheck.json'))
+         handle_version_update()
+
+         self.cloud = get_active_cloud(self)
+diff --git a/azure/cli/core/_session.py b/azure/cli/core/_session.py
+index 471a0344c..acaef6fb8 100644
+--- a/azure/cli/core/_session.py
++++ b/azure/cli/core/_session.py
+@@ -85,6 +85,19 @@ class Session(MutableMapping):
+         return len(self.data)
+
+
++class ImmutableSession(Session):
++    """
++    A session that is backed by an immutable JSON file. This session is read-only.
++    """
++    def save(self):
++        if os.getenv('AZURE_IMMUTABLE_DIR'):
++            get_logger(__name__).log(logging.DEBUG,
++                                     "Skipping update of file %s due to immutable directory.",
++                                     self.filename)
++            return
++        super().save()
++
++
+ # ACCOUNT contains subscriptions information
+ ACCOUNT = Session()
+
+@@ -95,16 +108,16 @@ CONFIG = Session()
+ SESSION = Session()
+
+ # INDEX contains {top-level command: [command_modules and extensions]} mapping index
+-INDEX = Session()
++INDEX = ImmutableSession()
+
+ # VERSIONS provides local versions and pypi versions.
+ # DO NOT USE it to get the current version of azure-cli,
+ # it could be lagged behind and can be used to check whether
+ # an upgrade of azure-cli happens
+-VERSIONS = Session()
++VERSIONS = ImmutableSession()
+
+ # EXT_CMD_TREE provides command to extension name mapping
+-EXT_CMD_TREE = Session()
++EXT_CMD_TREE = ImmutableSession()
+
+ # CLOUD_ENDPOINTS provides endpoints/suffixes of clouds
+ CLOUD_ENDPOINTS = Session()
+diff --git a/azure/cli/core/extension/dynamic_install.py b/azure/cli/core/extension/dynamic_install.py
+index cb03980a0..29279be2b 100644
+--- a/azure/cli/core/extension/dynamic_install.py
++++ b/azure/cli/core/extension/dynamic_install.py
+@@ -17,7 +17,8 @@ def _get_extension_command_tree(cli_ctx):
+     VALID_SECOND = 3600 * 24 * 10
+     if not cli_ctx:
+         return None
+-    EXT_CMD_TREE.load(os.path.join(cli_ctx.config.config_dir, 'extensionCommandTree.json'), VALID_SECOND)
++    azure_immutable_folder = os.environ.get('AZURE_IMMUTABLE_DIR', cli_ctx.config.config_dir)
++    EXT_CMD_TREE.load(os.path.join(azure_immutable_folder, 'extensionCommandTree.json'), VALID_SECOND)
+     if not EXT_CMD_TREE.data:
+         import posixpath
+         import requests
+--
+2.42.0

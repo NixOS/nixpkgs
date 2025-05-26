@@ -1,0 +1,20 @@
+--- ./apps/zxtune-qt/ui/desktop/mainwindow.cpp.orig	2023-11-03 10:58:54.073651511 -0700
++++ ./apps/zxtune-qt/ui/desktop/mainwindow.cpp	2023-11-03 10:59:08.900608850 -0700
+@@ -106,14 +106,9 @@
+       Require(connect(actionReportBug, &QAction::triggered, this, &DesktopMainWindowImpl::ReportIssue));
+       Require(connect(actionAboutQt, &QAction::triggered, this, &DesktopMainWindowImpl::ShowAboutQt));
+       Require(connect(actionPreferences, &QAction::triggered, this, &DesktopMainWindowImpl::ShowPreferences));
+-      if (Update::CheckOperation* op = Update::CheckOperation::Create(*this))
+-      {
+-        Require(connect(actionCheckUpdates, &QAction::triggered, op, &Update::CheckOperation::Execute));
+-      }
+-      else
+-      {
+-        actionCheckUpdates->setEnabled(false);
+-      }
++
++      // Nix: disable update checks completely
++      actionCheckUpdates->setEnabled(false);
+ 
+       Require(connect(Controls, &PlaybackControls::OnPrevious, MultiPlaylist, &Playlist::UI::ContainerView::Prev));
+       Require(connect(Controls, &PlaybackControls::OnNext, MultiPlaylist, &Playlist::UI::ContainerView::Next));

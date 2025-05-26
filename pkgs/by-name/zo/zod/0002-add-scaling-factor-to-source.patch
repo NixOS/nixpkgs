@@ -1,0 +1,161 @@
+Date: Mon, 17 May 2021 18:28:54 +0200
+Subject: [PATCH 2/2] add scaling factor to source
+
+---
+ zod_launcher_src/zod_launcherFrm.cpp | 84 ++++++++++++++--------------
+ 1 file changed, 42 insertions(+), 42 deletions(-)
+
+diff --git a/zod_launcher_src/zod_launcherFrm.cpp b/zod_launcher_src/zod_launcherFrm.cpp
+index 54bb9aa..de268f2 100644
+--- a/zod_launcher_src/zod_launcherFrm.cpp
++++ b/zod_launcher_src/zod_launcherFrm.cpp
+@@ -83,15 +83,15 @@ void zod_launcherFrm::CreateGUIControls()
+ 	//Add the custom code before or after the blocks
+ 	////GUI Items Creation Start
+ 
+-	WxButton4 = new wxButton(this, ID_WXBUTTON4, wxT("Previous Settings"), wxPoint(280, 16), wxSize(249, 25), 0, wxDefaultValidator, wxT("WxButton4"));
++	WxButton4 = new wxButton(this, ID_WXBUTTON4, wxT("Previous Settings"), wxPoint(@scalingFactor@*280,@scalingFactor@*16), wxSize(@scalingFactor@*249,@scalingFactor@*25), 0, wxDefaultValidator, wxT("WxButton4"));
+ 
+-	WxStaticText11 = new wxStaticText(this, ID_WXSTATICTEXT11, wxT("Login Password::"), wxPoint(280, 120), wxDefaultSize, 0, wxT("WxStaticText11"));
++	WxStaticText11 = new wxStaticText(this, ID_WXSTATICTEXT11, wxT("Login Password::"), wxPoint(@scalingFactor@*280,@scalingFactor@*120), wxDefaultSize, 0, wxT("WxStaticText11"));
+ 
+-	WxStaticText10 = new wxStaticText(this, ID_WXSTATICTEXT10, wxT("Login Name::"), wxPoint(280, 96), wxDefaultSize, 0, wxT("WxStaticText10"));
++	WxStaticText10 = new wxStaticText(this, ID_WXSTATICTEXT10, wxT("Login Name::"), wxPoint(@scalingFactor@*280,@scalingFactor@*96), wxDefaultSize, 0, wxT("WxStaticText10"));
+ 
+-	WxEdit9 = new wxTextCtrl(this, ID_WXEDIT9, wxT(""), wxPoint(384, 120), wxSize(145, 17), 0, wxDefaultValidator, wxT("WxEdit9"));
++	WxEdit9 = new wxTextCtrl(this, ID_WXEDIT9, wxT(""), wxPoint(@scalingFactor@*384,@scalingFactor@*120), wxSize(@scalingFactor@*145,@scalingFactor@*17), 0, wxDefaultValidator, wxT("WxEdit9"));
+ 
+-	WxEdit8 = new wxTextCtrl(this, ID_WXEDIT8, wxT(""), wxPoint(384, 96), wxSize(145, 17), 0, wxDefaultValidator, wxT("WxEdit8"));
++	WxEdit8 = new wxTextCtrl(this, ID_WXEDIT8, wxT(""), wxPoint(@scalingFactor@*384,@scalingFactor@*96), wxSize(@scalingFactor@*145,@scalingFactor@*17), 0, wxDefaultValidator, wxT("WxEdit8"));
+ 
+ 	WxMenuBar1 = new wxMenuBar();
+ 	wxMenu *ID_MNU_FILE_1001_Mnu_Obj = new wxMenu(0);
+@@ -103,45 +103,45 @@ void zod_launcherFrm::CreateGUIControls()
+ 	WxMenuBar1->Append(ID_MNU_ABOUT_1003_Mnu_Obj, wxT("About"));
+ 	SetMenuBar(WxMenuBar1);
+ 
+-	WxCheckBox11 = new wxCheckBox(this, ID_WXCHECKBOX11, wxT("yellow"), wxPoint(152, 208), wxSize(49, 17), 0, wxDefaultValidator, wxT("WxCheckBox11"));
++	WxCheckBox11 = new wxCheckBox(this, ID_WXCHECKBOX11, wxT("yellow"), wxPoint(@scalingFactor@*152,@scalingFactor@*208), wxSize(@scalingFactor@*49,@scalingFactor@*17), 0, wxDefaultValidator, wxT("WxCheckBox11"));
+ 
+-	WxCheckBox10 = new wxCheckBox(this, ID_WXCHECKBOX10, wxT("green"), wxPoint(104, 208), wxSize(49, 17), 0, wxDefaultValidator, wxT("WxCheckBox10"));
++	WxCheckBox10 = new wxCheckBox(this, ID_WXCHECKBOX10, wxT("green"), wxPoint(@scalingFactor@*104,@scalingFactor@*208), wxSize(@scalingFactor@*49,@scalingFactor@*17), 0, wxDefaultValidator, wxT("WxCheckBox10"));
+ 
+-	WxCheckBox9 = new wxCheckBox(this, ID_WXCHECKBOX9, wxT("blue"), wxPoint(56, 208), wxSize(41, 17), 0, wxDefaultValidator, wxT("WxCheckBox9"));
++	WxCheckBox9 = new wxCheckBox(this, ID_WXCHECKBOX9, wxT("blue"), wxPoint(@scalingFactor@*56,@scalingFactor@*208), wxSize(@scalingFactor@*41,@scalingFactor@*17), 0, wxDefaultValidator, wxT("WxCheckBox9"));
+ 
+-	WxCheckBox8 = new wxCheckBox(this, ID_WXCHECKBOX8, wxT("red"), wxPoint(8, 208), wxSize(41, 17), 0, wxDefaultValidator, wxT("WxCheckBox8"));
++	WxCheckBox8 = new wxCheckBox(this, ID_WXCHECKBOX8, wxT("red"), wxPoint(@scalingFactor@*8,@scalingFactor@*208), wxSize(@scalingFactor@*41,@scalingFactor@*17), 0, wxDefaultValidator, wxT("WxCheckBox8"));
+ 
+-	WxStaticBox5 = new wxStaticBox(this, ID_WXSTATICBOX5, wxT("AI Players"), wxPoint(0, 192), wxSize(265, 49));
++	WxStaticBox5 = new wxStaticBox(this, ID_WXSTATICBOX5, wxT("AI Players"), wxPoint(@scalingFactor@*0,@scalingFactor@*192), wxSize(@scalingFactor@*265,@scalingFactor@*49));
+ 
+-	WxCheckBox7 = new wxCheckBox(this, ID_WXCHECKBOX7, wxT("No Music"), wxPoint(376, 192), wxSize(65, 17), 0, wxDefaultValidator, wxT("WxCheckBox7"));
++	WxCheckBox7 = new wxCheckBox(this, ID_WXCHECKBOX7, wxT("No Music"), wxPoint(@scalingFactor@*376,@scalingFactor@*192), wxSize(@scalingFactor@*65,@scalingFactor@*17), 0, wxDefaultValidator, wxT("WxCheckBox7"));
+ 
+-	WxCheckBox6 = new wxCheckBox(this, ID_WXCHECKBOX6, wxT("No OpenGL"), wxPoint(280, 208), wxSize(81, 17), 0, wxDefaultValidator, wxT("WxCheckBox6"));
++	WxCheckBox6 = new wxCheckBox(this, ID_WXCHECKBOX6, wxT("No OpenGL"), wxPoint(@scalingFactor@*280,@scalingFactor@*208), wxSize(@scalingFactor@*81,@scalingFactor@*17), 0, wxDefaultValidator, wxT("WxCheckBox6"));
+ 
+-	WxEdit7 = new wxTextCtrl(this, ID_WXEDIT7, wxT(""), wxPoint(112, 160), wxSize(145, 17), 0, wxDefaultValidator, wxT("WxEdit7"));
++	WxEdit7 = new wxTextCtrl(this, ID_WXEDIT7, wxT(""), wxPoint(@scalingFactor@*112,@scalingFactor@*160), wxSize(@scalingFactor@*145,@scalingFactor@*17), 0, wxDefaultValidator, wxT("WxEdit7"));
+ 
+-	WxStaticText9 = new wxStaticText(this, ID_WXSTATICTEXT9, wxT("Settings Filename::"), wxPoint(8, 160), wxDefaultSize, 0, wxT("WxStaticText9"));
++	WxStaticText9 = new wxStaticText(this, ID_WXSTATICTEXT9, wxT("Settings Filename::"), wxPoint(@scalingFactor@*8,@scalingFactor@*160), wxDefaultSize, 0, wxT("WxStaticText9"));
+ 
+-	WxButton3 = new wxButton(this, ID_WXBUTTON3, wxT("Launch Zod Engine"), wxPoint(208, 304), wxSize(121, 17), 0, wxDefaultValidator, wxT("WxButton3"));
++	WxButton3 = new wxButton(this, ID_WXBUTTON3, wxT("Launch Zod Engine"), wxPoint(@scalingFactor@*208,@scalingFactor@*304), wxSize(@scalingFactor@*121,@scalingFactor@*17), 0, wxDefaultValidator, wxT("WxButton3"));
+ 
+-	WxStaticText8 = new wxStaticText(this, ID_WXSTATICTEXT8, wxT("--- Command Arguments ---"), wxPoint(8, 264), wxSize(520, 17), wxALIGN_CENTRE | wxST_NO_AUTORESIZE, wxT("WxStaticText8"));
++	WxStaticText8 = new wxStaticText(this, ID_WXSTATICTEXT8, wxT("--- Command Arguments ---"), wxPoint(@scalingFactor@*8,@scalingFactor@*264), wxSize(@scalingFactor@*520,@scalingFactor@*17), wxALIGN_CENTRE | wxST_NO_AUTORESIZE, wxT("WxStaticText8"));
+ 
+-	WxEdit6 = new wxTextCtrl(this, ID_WXEDIT6, wxT(""), wxPoint(8, 280), wxSize(521, 17), 0, wxDefaultValidator, wxT("WxEdit6"));
++	WxEdit6 = new wxTextCtrl(this, ID_WXEDIT6, wxT(""), wxPoint(@scalingFactor@*8,@scalingFactor@*280), wxSize(@scalingFactor@*521,@scalingFactor@*17), 0, wxDefaultValidator, wxT("WxEdit6"));
+ 
+-	WxStaticBox4 = new wxStaticBox(this, ID_WXSTATICBOX4, wxT("Launch Game"), wxPoint(0, 248), wxSize(537, 81));
++	WxStaticBox4 = new wxStaticBox(this, ID_WXSTATICBOX4, wxT("Launch Game"), wxPoint(@scalingFactor@*0,@scalingFactor@*248), wxSize(@scalingFactor@*537,@scalingFactor@*81));
+ 
+-	WxCheckBox5 = new wxCheckBox(this, ID_WXCHECKBOX5, wxT("Bland Cursor"), wxPoint(448, 208), wxSize(81, 17), 0, wxDefaultValidator, wxT("WxCheckBox5"));
++	WxCheckBox5 = new wxCheckBox(this, ID_WXCHECKBOX5, wxT("Bland Cursor"), wxPoint(@scalingFactor@*448,@scalingFactor@*208), wxSize(@scalingFactor@*81,@scalingFactor@*17), 0, wxDefaultValidator, wxT("WxCheckBox5"));
+ 
+-	WxCheckBox4 = new wxCheckBox(this, ID_WXCHECKBOX4, wxT("No Sound"), wxPoint(448, 192), wxSize(73, 17), 0, wxDefaultValidator, wxT("WxCheckBox4"));
++	WxCheckBox4 = new wxCheckBox(this, ID_WXCHECKBOX4, wxT("No Sound"), wxPoint(@scalingFactor@*448,@scalingFactor@*192), wxSize(@scalingFactor@*73,@scalingFactor@*17), 0, wxDefaultValidator, wxT("WxCheckBox4"));
+ 
+-	WxCheckBox3 = new wxCheckBox(this, ID_WXCHECKBOX3, wxT("Is Windowed"), wxPoint(280, 192), wxSize(89, 17), 0, wxDefaultValidator, wxT("WxCheckBox3"));
++	WxCheckBox3 = new wxCheckBox(this, ID_WXCHECKBOX3, wxT("Is Windowed"), wxPoint(@scalingFactor@*280,@scalingFactor@*192), wxSize(@scalingFactor@*89,@scalingFactor@*17), 0, wxDefaultValidator, wxT("WxCheckBox3"));
+ 
+-	WxStaticText7 = new wxStaticText(this, ID_WXSTATICTEXT7, wxT("x"), wxPoint(448, 168), wxSize(18, 17), wxALIGN_CENTRE | wxST_NO_AUTORESIZE, wxT("WxStaticText7"));
++	WxStaticText7 = new wxStaticText(this, ID_WXSTATICTEXT7, wxT("x"), wxPoint(@scalingFactor@*448,@scalingFactor@*168), wxSize(@scalingFactor@*18,@scalingFactor@*17), wxALIGN_CENTRE | wxST_NO_AUTORESIZE, wxT("WxStaticText7"));
+ 
+-	WxEdit5 = new wxTextCtrl(this, ID_WXEDIT5, wxT("484"), wxPoint(472, 168), wxSize(57, 17), 0, wxDefaultValidator, wxT("WxEdit5"));
++	WxEdit5 = new wxTextCtrl(this, ID_WXEDIT5, wxT("484"), wxPoint(@scalingFactor@*472,@scalingFactor@*168), wxSize(@scalingFactor@*57,@scalingFactor@*17), 0, wxDefaultValidator, wxT("WxEdit5"));
+ 
+-	WxEdit4 = new wxTextCtrl(this, ID_WXEDIT4, wxT("800"), wxPoint(384, 168), wxSize(57, 17), 0, wxDefaultValidator, wxT("WxEdit4"));
++	WxEdit4 = new wxTextCtrl(this, ID_WXEDIT4, wxT("800"), wxPoint(@scalingFactor@*384,@scalingFactor@*168), wxSize(@scalingFactor@*57,@scalingFactor@*17), 0, wxDefaultValidator, wxT("WxEdit4"));
+ 
+-	WxStaticText6 = new wxStaticText(this, ID_WXSTATICTEXT6, wxT("Resolution::"), wxPoint(280, 168), wxDefaultSize, 0, wxT("WxStaticText6"));
++	WxStaticText6 = new wxStaticText(this, ID_WXSTATICTEXT6, wxT("Resolution::"), wxPoint(@scalingFactor@*280,@scalingFactor@*168), wxDefaultSize, 0, wxT("WxStaticText6"));
+ 
+ 	wxArrayString arrayStringFor_WxChoice1;
+ 	arrayStringFor_WxChoice1.Add(wxT("null"));
+@@ -149,42 +149,42 @@ void zod_launcherFrm::CreateGUIControls()
+ 	arrayStringFor_WxChoice1.Add(wxT("blue"));
+ 	arrayStringFor_WxChoice1.Add(wxT("green"));
+ 	arrayStringFor_WxChoice1.Add(wxT("yellow"));
+-	WxChoice1 = new wxChoice(this, ID_WXCHOICE1, wxPoint(384, 144), wxSize(145, 21), arrayStringFor_WxChoice1, 0, wxDefaultValidator, wxT("WxChoice1"));
++	WxChoice1 = new wxChoice(this, ID_WXCHOICE1, wxPoint(@scalingFactor@*384,@scalingFactor@*144), wxSize(@scalingFactor@*145,@scalingFactor@*21), arrayStringFor_WxChoice1, 0, wxDefaultValidator, wxT("WxChoice1"));
+ 	WxChoice1->SetSelection(1);
+ 
+-	WxStaticText5 = new wxStaticText(this, ID_WXSTATICTEXT5, wxT("Player Team::"), wxPoint(280, 144), wxDefaultSize, 0, wxT("WxStaticText5"));
++	WxStaticText5 = new wxStaticText(this, ID_WXSTATICTEXT5, wxT("Player Team::"), wxPoint(@scalingFactor@*280,@scalingFactor@*144), wxDefaultSize, 0, wxT("WxStaticText5"));
+ 
+-	WxEdit3 = new wxTextCtrl(this, ID_WXEDIT3, wxT(""), wxPoint(384, 72), wxSize(145, 17), 0, wxDefaultValidator, wxT("WxEdit3"));
++	WxEdit3 = new wxTextCtrl(this, ID_WXEDIT3, wxT(""), wxPoint(@scalingFactor@*384,@scalingFactor@*72), wxSize(@scalingFactor@*145,@scalingFactor@*17), 0, wxDefaultValidator, wxT("WxEdit3"));
+ 
+-	WxStaticText4 = new wxStaticText(this, ID_WXSTATICTEXT4, wxT("Player Name::"), wxPoint(280, 72), wxDefaultSize, 0, wxT("WxStaticText4"));
++	WxStaticText4 = new wxStaticText(this, ID_WXSTATICTEXT4, wxT("Player Name::"), wxPoint(@scalingFactor@*280,@scalingFactor@*72), wxDefaultSize, 0, wxT("WxStaticText4"));
+ 
+-	WxStaticBox3 = new wxStaticBox(this, ID_WXSTATICBOX3, wxT("Engine Settings"), wxPoint(272, 56), wxSize(265, 185));
++	WxStaticBox3 = new wxStaticBox(this, ID_WXSTATICBOX3, wxT("Engine Settings"), wxPoint(@scalingFactor@*272,@scalingFactor@*56), wxSize(@scalingFactor@*265,@scalingFactor@*185));
+ 
+-	WxEdit2 = new wxTextCtrl(this, ID_WXEDIT2, wxT(""), wxPoint(112, 136), wxSize(145, 17), 0, wxDefaultValidator, wxT("WxEdit2"));
++	WxEdit2 = new wxTextCtrl(this, ID_WXEDIT2, wxT(""), wxPoint(@scalingFactor@*112,@scalingFactor@*136), wxSize(@scalingFactor@*145,@scalingFactor@*17), 0, wxDefaultValidator, wxT("WxEdit2"));
+ 
+-	WxStaticText3 = new wxStaticText(this, ID_WXSTATICTEXT3, wxT("Map Filename::"), wxPoint(8, 136), wxDefaultSize, 0, wxT("WxStaticText3"));
++	WxStaticText3 = new wxStaticText(this, ID_WXSTATICTEXT3, wxT("Map Filename::"), wxPoint(@scalingFactor@*8,@scalingFactor@*136), wxDefaultSize, 0, wxT("WxStaticText3"));
+ 
+-	WxCheckBox2 = new wxCheckBox(this, ID_WXCHECKBOX2, wxT("Filename is a Maplist"), wxPoint(96, 112), wxSize(121, 17), 0, wxDefaultValidator, wxT("WxCheckBox2"));
++	WxCheckBox2 = new wxCheckBox(this, ID_WXCHECKBOX2, wxT("Filename is a Maplist"), wxPoint(@scalingFactor@*96,@scalingFactor@*112), wxSize(@scalingFactor@*121,@scalingFactor@*17), 0, wxDefaultValidator, wxT("WxCheckBox2"));
+ 
+-	WxCheckBox1 = new wxCheckBox(this, ID_WXCHECKBOX1, wxT("Is Dedicated"), wxPoint(8, 112), wxSize(89, 17), 0, wxDefaultValidator, wxT("WxCheckBox1"));
++	WxCheckBox1 = new wxCheckBox(this, ID_WXCHECKBOX1, wxT("Is Dedicated"), wxPoint(@scalingFactor@*8,@scalingFactor@*112), wxSize(@scalingFactor@*89,@scalingFactor@*17), 0, wxDefaultValidator, wxT("WxCheckBox1"));
+ 
+-	WxStaticText2 = new wxStaticText(this, ID_WXSTATICTEXT2, wxT("----- OR -----"), wxPoint(8, 96), wxSize(249, 17), wxALIGN_CENTRE | wxST_NO_AUTORESIZE, wxT("WxStaticText2"));
++	WxStaticText2 = new wxStaticText(this, ID_WXSTATICTEXT2, wxT("----- OR -----"), wxPoint(@scalingFactor@*8,@scalingFactor@*96), wxSize(@scalingFactor@*249,@scalingFactor@*17), wxALIGN_CENTRE | wxST_NO_AUTORESIZE, wxT("WxStaticText2"));
+ 
+-	WxStaticText1 = new wxStaticText(this, ID_WXSTATICTEXT1, wxT("Connect Address::"), wxPoint(8, 72), wxDefaultSize, 0, wxT("WxStaticText1"));
++	WxStaticText1 = new wxStaticText(this, ID_WXSTATICTEXT1, wxT("Connect Address::"), wxPoint(@scalingFactor@*8,@scalingFactor@*72), wxDefaultSize, 0, wxT("WxStaticText1"));
+ 
+-	WxEdit1 = new wxTextCtrl(this, ID_WXEDIT1, wxT(""), wxPoint(112, 72), wxSize(145, 17), 0, wxDefaultValidator, wxT("WxEdit1"));
++	WxEdit1 = new wxTextCtrl(this, ID_WXEDIT1, wxT(""), wxPoint(@scalingFactor@*112,@scalingFactor@*72), wxSize(@scalingFactor@*145,@scalingFactor@*17), 0, wxDefaultValidator, wxT("WxEdit1"));
+ 
+-	WxButton2 = new wxButton(this, ID_WXBUTTON2, wxT("Nighsoft Server"), wxPoint(136, 16), wxSize(121, 25), 0, wxDefaultValidator, wxT("WxButton2"));
++	WxButton2 = new wxButton(this, ID_WXBUTTON2, wxT("Nighsoft Server"), wxPoint(@scalingFactor@*136,@scalingFactor@*16), wxSize(@scalingFactor@*121,@scalingFactor@*25), 0, wxDefaultValidator, wxT("WxButton2"));
+ 
+-	WxButton1 = new wxButton(this, ID_WXBUTTON1, wxT("Local Game"), wxPoint(8, 16), wxSize(121, 25), 0, wxDefaultValidator, wxT("WxButton1"));
++	WxButton1 = new wxButton(this, ID_WXBUTTON1, wxT("Local Game"), wxPoint(@scalingFactor@*8,@scalingFactor@*16), wxSize(@scalingFactor@*121,@scalingFactor@*25), 0, wxDefaultValidator, wxT("WxButton1"));
+ 
+-	WxStaticBox2 = new wxStaticBox(this, ID_WXSTATICBOX2, wxT("Connection Settings"), wxPoint(0, 56), wxSize(265, 129));
++	WxStaticBox2 = new wxStaticBox(this, ID_WXSTATICBOX2, wxT("Connection Settings"), wxPoint(@scalingFactor@*0,@scalingFactor@*56), wxSize(@scalingFactor@*265,@scalingFactor@*129));
+ 
+-	WxStaticBox1 = new wxStaticBox(this, ID_WXSTATICBOX1, wxT("Preset Settings"), wxPoint(0, 0), wxSize(537, 49));
++	WxStaticBox1 = new wxStaticBox(this, ID_WXSTATICBOX1, wxT("Preset Settings"), wxPoint(@scalingFactor@*0,@scalingFactor@*0), wxSize(@scalingFactor@*537,@scalingFactor@*49));
+ 
+ 	SetTitle(wxT("The Zod Launcher"));
+ 	SetIcon(wxNullIcon);
+-	SetSize(8,8,545,376);
++	SetSize(8,8,@scalingFactor@*545,@scalingFactor@*376);
+ 	Center();
+ 	
+ 	////GUI Items Creation End
+-- 
+2.29.3
+

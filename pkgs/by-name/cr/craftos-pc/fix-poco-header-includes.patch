@@ -1,0 +1,37 @@
+diff --git a/src/configuration.cpp b/src/configuration.cpp
+index 2196121..0c5cf27 100644
+--- a/src/configuration.cpp
++++ b/src/configuration.cpp
+@@ -11,6 +11,7 @@
+ #include <fstream>
+ #include <unordered_map>
+ #include <configuration.hpp>
++#include <Poco/JSON/JSONException.h>
+ #include "platform.hpp"
+ #include "runtime.hpp"
+ #include "terminal/SDLTerminal.hpp"
+diff --git a/src/main.cpp b/src/main.cpp
+index 9ab0814..38976a2 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -34,6 +34,7 @@ static void* releaseNotesThread(void* data);
+ #include <Poco/URI.h>
+ #include <Poco/Checksum.h>
+ #include <Poco/JSON/Parser.h>
++#include <Poco/JSON/JSONException.h>
+ #ifndef __EMSCRIPTEN__
+ #include <Poco/Net/HTTPSClientSession.h>
+ #include <Poco/Net/HTTPRequest.h>
+diff --git a/src/util.hpp b/src/util.hpp
+index b8ab2d1..c643b96 100644
+--- a/src/util.hpp
++++ b/src/util.hpp
+@@ -21,6 +21,8 @@ extern "C" {
+ #include <string>
+ #include <vector>
+ #include <Poco/JSON/JSON.h>
++#include <Poco/JSON/Object.h>
++#include <Poco/JSON/Array.h>
+ #include <Poco/JSON/Parser.h>
+ #include <Poco/Net/HTTPResponse.h>
+ #include <Computer.hpp>

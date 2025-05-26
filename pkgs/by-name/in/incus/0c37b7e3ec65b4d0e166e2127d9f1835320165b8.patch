@@ -1,0 +1,29 @@
+From 0c37b7e3ec65b4d0e166e2127d9f1835320165b8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?St=C3=A9phane=20Graber?= <stgraber@stgraber.org>
+Date: Fri, 6 Sep 2024 17:07:11 -0400
+Subject: [PATCH] incusd/instance/qemu: Make O_DIRECT conditional on
+ directCache
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Stéphane Graber <stgraber@stgraber.org>
+---
+ internal/server/instance/drivers/driver_qemu.go | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/internal/server/instance/drivers/driver_qemu.go b/internal/server/instance/drivers/driver_qemu.go
+index 5a94c9db43..9609b73c1b 100644
+--- a/internal/server/instance/drivers/driver_qemu.go
++++ b/internal/server/instance/drivers/driver_qemu.go
+@@ -4276,7 +4276,9 @@ func (d *qemu) addDriveConfig(qemuDev map[string]string, bootIndexes map[string]
+ 				permissions = unix.O_RDONLY
+ 			}
+ 
+-			permissions |= unix.O_DIRECT
++			if directCache {
++				permissions |= unix.O_DIRECT
++			}
+ 
+ 			f, err := os.OpenFile(driveConf.DevPath, permissions, 0)
+ 			if err != nil {

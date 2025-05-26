@@ -1,0 +1,19 @@
+diff --git a/build.rs b/build.rs
+index 0b20db2..d904e63 100644
+--- a/build.rs
++++ b/build.rs
+@@ -163,13 +163,7 @@ fn main() {
+         simd_build.compile("simd");
+     }
+ 
+-    let git_output = std::process::Command::new("git")
+-        .args(["rev-parse", "HEAD"])
+-        .output()
+-        .unwrap();
+-
+-    let git_hash = String::from_utf8(git_output.stdout).unwrap();
+-    println!("cargo:rustc-env=GIT_HASH={}", git_hash);
++    println!("cargo:rustc-env=GIT_HASH={}", "@GIT_REV@");
+ 
+     println!("cargo:rustc-env=N64_STACK_SIZE={}", 8 * 1024 * 1024);
+ }
