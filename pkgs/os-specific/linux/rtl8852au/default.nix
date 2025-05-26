@@ -60,13 +60,18 @@ stdenv.mkDerivation (finalAttrs: {
     nuke-refs $out/lib/modules/*/kernel/net/wireless/*.ko
   '';
 
+  # GCC 14 makes this an error by default
+  env.NIX_CFLAGS_COMPILE = "-Wno-designated-init";
+
   enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Driver for Realtek 802.11ac, rtl8852au, provides the 8852au mod";
     homepage = "https://github.com/lwfinger/rtl8852au";
     license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
+    # FIX: error: invalid initializer
+    broken = kernel.kernelOlder "6" && kernel.isHardened;
     maintainers = with maintainers; [ lonyelon ];
   };
 })
