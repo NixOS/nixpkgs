@@ -7,13 +7,16 @@
 
 let
   inherit (lib)
+    concatMap
+    concatStringsSep
+    getExe
+    maintainers
     mkEnableOption
     mkIf
     mkOption
-    optionalAttrs
-    optional
     mkPackageOption
-    concatMap
+    optional
+    optionalAttrs
     ;
   inherit (lib.types)
     bool
@@ -28,7 +31,7 @@ let
   settingsFile = format.generate "pocket-id-env-vars" cfg.settings;
 in
 {
-  meta.maintainers = with lib.maintainers; [
+  meta.maintainers = with maintainers; [
     gepbird
     ymstnt
   ];
@@ -149,7 +152,7 @@ in
           User = cfg.user;
           Group = cfg.group;
           WorkingDirectory = cfg.dataDir;
-          ExecStart = "${cfg.package}/bin/pocket-id";
+          ExecStart = getExe cfg.package;
           Restart = "always";
           EnvironmentFile = [
             cfg.environmentFile
@@ -188,7 +191,7 @@ in
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           SystemCallArchitectures = "native";
-          SystemCallFilter = lib.concatStringsSep " " [
+          SystemCallFilter = concatStringsSep " " [
             "~"
             "@clock"
             "@cpu-emulation"
