@@ -4,20 +4,21 @@
   rustPlatform,
   protobuf,
   versionCheckHook,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clash-rs";
-  version = "0.7.7";
+  version = "0.7.8";
 
   src = fetchFromGitHub {
     owner = "Watfaq";
     repo = "clash-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-x89sFBQ6bAIHvaRTCxqKKgFKo7PpquVze0R6VicwrJw=";
+    hash = "sha256-H7eHA7FNdpHkwa+1Uziy5bgGUn4ZHeqHjbSppmzFDgA=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-jfc0Rmt9eEN3ds5Rakj+IcJcUa28CbhiSu4AfqHurf0=";
+  cargoHash = "sha256-5PpJdlTKbm1cDZlH3kApg6exzpKP6ROjU4AisXa/d40=";
 
   patches = [
     ./unbounded-shifts.patch
@@ -48,6 +49,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
   versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "v(.*)"
+    ];
+  };
 
   meta = {
     description = "Custom protocol, rule based network proxy software";
