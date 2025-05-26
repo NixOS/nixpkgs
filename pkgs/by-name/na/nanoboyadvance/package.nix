@@ -22,27 +22,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nanoboyadvance";
-  version = "1.8.1";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "nba-emu";
     repo = "NanoBoyAdvance";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-du3dPTg3OxNTWXDQo2m9W0rJxtrkn+lQSh/XGiu/eGg=";
+    hash = "sha256-IH2X0B3HwEG0/wvKacLVPBQad14W0HBy5VFHjk8vgJk=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "add-missing-gcc14-include.patch";
-      url = "https://github.com/nba-emu/NanoBoyAdvance/commit/f5551cc1aa6a12b3d65dd56d186c73a67f3d9dd6.patch";
-      hash = "sha256-TCyN0qz7o7BDhVZtaTsWCZAcKThi5oVqUM0NGmj44FI=";
-    })
-    (fetchpatch {
-      name = "fix-darwin-bundle-install-path.patch";
-      url = "https://github.com/nba-emu/NanoBoyAdvance/commit/bd07a261141cd1f67b828d20f6d01a97adf91c16.patch";
-      hash = "sha256-Nqz35PGfPBZ3Lg6szez4k3R/NkgObNndvbxY8JCY40Y";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
