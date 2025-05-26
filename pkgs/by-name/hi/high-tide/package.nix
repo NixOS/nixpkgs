@@ -62,6 +62,7 @@ python3Packages.buildPythonApplication {
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "HighTide";
     maintainers = with lib.maintainers; [
+      nilathedragon
       nyabinary
       griffi-gh
     ];
