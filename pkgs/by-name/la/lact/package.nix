@@ -8,9 +8,11 @@
   gdk-pixbuf,
   gtk4,
   libdrm,
+  ocl-icd,
   vulkan-loader,
   vulkan-tools,
   coreutils,
+  systemdMinimal,
   nix-update-script,
   hwdata,
   fuse3,
@@ -19,17 +21,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lact";
-  version = "0.7.3";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "ilya-zlobintsev";
     repo = "LACT";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-R8VEAk+CzJCxPzJohsbL/XXH1GMzGI2W92sVJ2evqXs=";
+    hash = "sha256-zOvFWl78INlpCcEHiB3qZdxPNHXfUeKxfHyrO+wVNN0=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-SH7jmXDvGYO9S5ogYEYB8dYCF3iz9GWDYGcZUaKpWDQ=";
+  cargoHash = "sha256-10FdXUpLL+8xN818toShccgB5NfpzrOLfEeDAX5oMFw=";
 
   nativeBuildInputs = [
     pkg-config
@@ -42,6 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gdk-pixbuf
     gtk4
     libdrm
+    ocl-icd
     vulkan-loader
     vulkan-tools
     hwdata
@@ -62,14 +65,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ]
   );
 
-  checkFlags = [
-    # tries and fails to initialize gtk
-    "--skip=app::pages::thermals_page::fan_curve_frame::tests::set_get_curve"
-  ];
-
   postPatch = ''
     substituteInPlace lact-daemon/src/server/system.rs \
       --replace-fail 'Command::new("uname")' 'Command::new("${coreutils}/bin/uname")'
+    substituteInPlace lact-daemon/src/server/profiles.rs \
+      --replace-fail 'Command::new("uname")' 'Command::new("${coreutils}/bin/uname")'
+
+    substituteInPlace lact-daemon/src/server/handler.rs \
+      --replace-fail 'Command::new("journalctl")' 'Command::new("${systemdMinimal}/bin/journalctl")'
+
+    substituteInPlace lact-daemon/src/server/vulkan.rs \
+      --replace-fail 'Command::new("vulkaninfo")' 'Command::new("${vulkan-tools}/bin/vulkaninfo")'
 
     substituteInPlace res/lactd.service \
       --replace-fail ExecStart={lact,$out/bin/lact}
@@ -78,9 +84,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail Exec={lact,$out/bin/lact}
 
     # read() looks for the database in /usr/share so we use read_from_file() instead
-    substituteInPlace \
-      lact-daemon/src/server/handler.rs \
-      lact-daemon/src/tests/mod.rs \
+    substituteInPlace lact-daemon/src/server/handler.rs \
       --replace-fail 'Database::read()' 'Database::read_from_file("${hwdata}/share/hwdata/pci.ids")'
   '';
 
