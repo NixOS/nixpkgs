@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
   pname = "labelImg";
   version = "1.8.6";
   src = fetchFromGitHub {
-    owner = "tzutalin";
+    owner = "HumanSignal";
     repo = "labelImg";
     rev = "v${version}";
     hash = "sha256-RJxCtiDOePajlrjy9cpKETSKsWlH/Dlu1iFMj2aO4XU=";
@@ -44,9 +44,9 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "Graphical image annotation tool and label object bounding boxes in images";
     mainProgram = "labelImg";
-    homepage = "https://github.com/tzutalin/labelImg";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = [ maintainers.cmcdragonkai ];
+    homepage = "https://github.com/HumanSignal/labelImg";
   };
 }
