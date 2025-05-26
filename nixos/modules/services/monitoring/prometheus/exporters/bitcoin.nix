@@ -75,7 +75,8 @@ in
   };
   serviceOpts = {
     script = ''
-      export BITCOIN_RPC_PASSWORD=$(cat ${cfg.rpcPasswordFile})
+      BITCOIN_RPC_PASSWORD=$(cat ${cfg.rpcPasswordFile})
+      export BITCOIN_RPC_PASSWORD
       exec ${cfg.package}/bin/bitcoind-monitor.py
     '';
 
