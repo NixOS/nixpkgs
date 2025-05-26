@@ -79,6 +79,8 @@ buildGoModule {
     $out/bin/dependabot --help
   '';
 
+  passthru.updateScript = ./update.sh;
+
   passthru.withDockerImages = symlinkJoin {
     name = "dependabot-cli-with-docker-images";
     paths = [ dependabot-cli ];
