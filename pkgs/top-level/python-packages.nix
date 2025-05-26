@@ -7511,8 +7511,6 @@ self: super: with self; {
 
   kivy-garden = callPackage ../development/python-modules/kivy-garden { };
 
-  kivy-garden-modernmenu = callPackage ../development/python-modules/kivy-garden-modernmenu { };
-
   kiwiki-client = callPackage ../development/python-modules/kiwiki-client { };
 
   kiwisolver = callPackage ../development/python-modules/kiwisolver { };
@@ -9320,8 +9318,6 @@ self: super: with self; {
 
   musicbrainzngs = callPackage ../development/python-modules/musicbrainzngs { };
 
-  mutag = callPackage ../development/python-modules/mutag { };
-
   mutagen = callPackage ../development/python-modules/mutagen { };
 
   mutatormath = callPackage ../development/python-modules/mutatormath { };
@@ -10122,8 +10118,6 @@ self: super: with self; {
   notmuch2 = callPackage ../development/python-modules/notmuch2 { inherit (pkgs) notmuch; };
 
   notobuilder = callPackage ../development/python-modules/notobuilder { };
-
-  nototools = callPackage ../development/python-modules/nototools { };
 
   notus-scanner = callPackage ../development/python-modules/notus-scanner { };
 
@@ -11696,8 +11690,6 @@ self: super: with self; {
 
   psygnal = callPackage ../development/python-modules/psygnal { };
 
-  ptable = callPackage ../development/python-modules/ptable { };
-
   ptest = callPackage ../development/python-modules/ptest { };
 
   ptpython = callPackage ../development/python-modules/ptpython { };
@@ -12370,8 +12362,6 @@ self: super: with self; {
   pyfakefs = callPackage ../development/python-modules/pyfakefs { };
 
   pyfakewebcam = callPackage ../development/python-modules/pyfakewebcam { };
-
-  pyfantom = callPackage ../development/python-modules/pyfantom { };
 
   pyfatfs = callPackage ../development/python-modules/pyfatfs { };
 
@@ -17911,8 +17901,6 @@ self: super: with self; {
     inherit (pkgs) file zlib;
   };
 
-  typed-ast = callPackage ../development/python-modules/typed-ast { };
-
   typed-settings = callPackage ../development/python-modules/typed-settings { };
 
   typedunits = callPackage ../development/python-modules/typedunits { };
@@ -18356,8 +18344,6 @@ self: super: with self; {
   types-toml = callPackage ../development/python-modules/types-toml { };
 
   types-tqdm = callPackage ../development/python-modules/types-tqdm { };
-
-  types-typed-ast = callPackage ../development/python-modules/types-typed-ast { };
 
   types-ujson = callPackage ../development/python-modules/types-ujson { };
 

@@ -367,6 +367,7 @@ mapAliases ({
   keras-applications = throw "keras-applications has been removed because it's abandoned since 2022"; # added 2025-01-12
   keras-preprocessing = throw "keras-preprocessing has been removed because it's abandoned since 2024"; # added 2025-01-12
   keyring_24 = throw "keyring_24 has been removed, use keyring instead"; # added 2025-01-01
+  kivy-garden-modernmenu = throw "kivy-garden-modernmenu has been removed as it's abandoned since 2019"; # added 2505-05-25
   ldap = python-ldap; # added 2022-09-16
   lammps-cython = throw "lammps-cython no longer builds and is unmaintained"; # added 2021-07-04
   langchain-standard-tests = langchain-tests; # added 2025-01-22
@@ -423,6 +424,7 @@ mapAliases ({
   mox3 = throw "mox3 was removed because it is unmaintained"; # added 2024-08-30
   mrkd = throw "mrkd has been promoted to a top-level attribute name: `pkgs.mrkd`"; # added 2023-08-01
   multi_key_dict = multi-key-dict; # added 2023-11-05
+  mutag = throw "mutag has been removed because it is unmaintained since 2018"; # added 2025-05-25
   mutmut = throw "mutmut has been promoted to a top-level attribute name: `pkgs.mutmut`"; # added 2022-10-02
   n3fit = throw "n3fit has been removed since it relies on a dependency that was removed"; # added 2024-08-24
   nbmerge = throw "nbmerge has moved to pkgs.nbmerge"; # added 2024-07-05
@@ -510,6 +512,7 @@ mapAliases ({
   proton-vpn-network-manager-wireguard = throw "proton-vpn-network-manager-wireguard functionality was integrated in the proton-vpn-network-manager module"; # added 2024-10-16
   proton-vpn-session = throw "proton-vpn-session functionality was integrated in the proton-vpn-api-core module"; # added 2024-10-16
   proxy_tools = proxy-tools; # added 2023-11-05
+  ptable = throw "ptable has been removed, as it is unmaintained and broken"; # added 2025-05-25
   pur = throw "pur has been renamed to pkgs.pur"; # added 2021-11-08
   pushbullet = pushbullet-py; # Added 2022-10-15
   push-receiver = throw "push-receiver has been removed since it is unmaintained for 3 years"; # added 2025-05-17
@@ -538,6 +541,7 @@ mapAliases ({
   pychef = throw "pychef has been removed because it's been archived upstream and abandoned since 2017."; # added 2022-11-14
   PyChromecast = pychromecast; # added 2023-02-19
   pycryptodome-test-vectors = throw "pycryptodome-test-vectors has been removed because it is an internal package to pycryptodome"; # added 2022-05-28
+  pyfantom = throw "pyfantom has been removed because it does not work with python3 and has not been updated for 12 years"; # added 2025-03-25
   pyfftw = throw "pyfftw has been removed because it is unmaintained and broken."; # Added 2024-06-17
   pyflunearyou = pyoutbreaksnearme; # added 2023-02-11
   pyialarmxr = pyialarmxr-homeassistant; # added 2022-06-07
@@ -777,9 +781,11 @@ mapAliases ({
   twitter-common-lang = throw "twitter-common-lang has been removed because it is abandoned and unmaintained"; # added 2024-07-14
   twitter-common-log = throw "twitter-common-log has been removed because it is abandoned and unmaintained"; # added 2024-07-14
   twitter-common-options = throw "twitter-common-options has been removed because it is abandoned and unmaintained"; # added 2024-07-14
+  typed-ast = throw "typed-ast was removed because it went end of life in July 2023"; # added 2025-05-24
   types-cryptography = throw "types-cryptography has been removed because it is obsolete since cryptography version 3.4.4."; # added 2022-05-30
   types-enum34 = throw "types-enum34 is obselete since Python 3.4"; # added 2025-02-15
   types-paramiko = throw "types-paramiko has been removed because it was unused."; # added 2022-05-30
+  types-typed-ast = throw "types-typed-ast was removed because so was typed-ast"; # added 2025-05-24
   ufoLib2 = ufolib2; # added 2024-01-07
   ukrainealarm = throw "ukrainealarm has been removed, as it has been replaced as a home-assistant dependency by uasiren."; # added 2024-01-05
   unblob-native = throw "unblob-native has been removed because its functionality is merged into unblob 25.4.14."; # Added 2025-05-02

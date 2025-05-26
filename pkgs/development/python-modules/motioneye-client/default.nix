@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "dermotduffy";
-    repo = pname;
+    repo = "motioneye-client";
     rev = "v${version}";
     hash = "sha256-kgFSd5RjO+OtnPeAOimPTDVEfJ47rXh2Ku5xEYStHv8=";
   };
