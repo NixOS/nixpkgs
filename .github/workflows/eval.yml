@@ -4,8 +4,8 @@ on:
   pull_request:
     paths:
       - .github/workflows/eval.yml
+      - .github/workflows/reviews.yml # needs eval results from the same event type
   pull_request_target:
-    types: [opened, ready_for_review, synchronize, reopened]
   push:
     # Keep this synced with ci/request-reviews/dev-branches.txt
     branches:
