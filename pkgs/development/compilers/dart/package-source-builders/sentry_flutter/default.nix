@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   fetchFromGitHub,
 }:
@@ -18,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   inherit version src;
   inherit (src) passthru;
 
-  postPatch = ''
+  postPatch = lib.optionalString (lib.versionAtLeast version "8.10.0") ''
     sed -i "s|GIT_REPOSITORY.*|SOURCE_DIR "${sentry-native}"|" sentry-native/sentry-native.cmake
     sed -i '/GIT_TAG/d' sentry-native/sentry-native.cmake
   '';
