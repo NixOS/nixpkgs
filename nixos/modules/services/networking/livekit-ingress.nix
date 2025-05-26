@@ -8,6 +8,9 @@
 let
   cfg = config.services.livekit.ingress;
   format = pkgs.formats.yaml { };
+  settings = lib.filterAttrsRecursive (_: v: v != null) cfg.settings;
+
+  isLocallyDistributed = config.services.livekit.enable;
 in
 {
   meta.maintainers = with lib.maintainers; [ k900 ];
@@ -49,6 +52,21 @@ in
             type = lib.types.port;
             default = 8080;
             description = "TCP port for WHIP connections";
+          };
+
+          redis = {
+            address = lib.mkOption {
+              type = with lib.types; nullOr str;
+              default =
+                if isLocallyDistributed then
+                  "${config.services.livekit.redis.host}:${toString config.services.livekit.redis.port}"
+                else
+                  null;
+              example = "redis.example.com:6379";
+              defaultText = "Host and port of the local livekit redis instance, if enabled, or null";
+              description = "Address or hostname and port for redis connection";
+            };
+
           };
 
           rtc_config = {
@@ -125,7 +143,7 @@ in
       serviceConfig = {
         ExecStart = utils.escapeSystemdExecArgs [
           (lib.getExe cfg.package)
-          "--config=${format.generate "ingress.yaml" cfg.settings}"
+          "--config=${format.generate "ingress.yaml" settings}"
         ];
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         DynamicUser = true;
