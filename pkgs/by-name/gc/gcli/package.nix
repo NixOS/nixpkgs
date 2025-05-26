@@ -6,6 +6,7 @@
   pkg-config,
   byacc,
   flex,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,6 +19,15 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-N5dzGhyXPDWcm/cNUSUQt4rR+PzaD1OUssRO3Sdfmoo=";
   };
+
+  patches = [
+    # Darwin builds are fixed in master, but the change is unreleased.
+    (fetchpatch {
+      name = "darwin-build-fix.patch";
+      url = "https://github.com/herrhotzenplotz/gcli/commit/720e372250fd363bdd90e9452907508563e30f93.patch";
+      hash = "sha256-TpjIisje20YObN2wf8iQlwHlY5kg0S7xTkUWxAmK+po=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
