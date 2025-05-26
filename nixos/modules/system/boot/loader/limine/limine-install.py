@@ -386,27 +386,42 @@ def main():
                 efi_disk = find_disk_device(efi_partition)
 
                 efibootmgr_output = subprocess.check_output([efibootmgr], stderr=subprocess.STDOUT, universal_newlines=True)
-                create_flag = '-c'
+
                 # Check the output of `efibootmgr` to find if limine is already installed and present in the boot record
-                if matches := re.findall(r'Boot[0-9a-fA-F]{4}\*? Limine', efibootmgr_output):
-                    create_flag = '-C' # if present, keep the same boot order
+                limine_boot_entry = None
+                if matches := re.findall(r'Boot([0-9a-fA-F]{4})\*? Limine', efibootmgr_output):
+                    limine_boot_entry = matches[0]
 
-                efibootmgr_output = subprocess.check_output([
-                    efibootmgr,
-                    create_flag,
-                    '-d', efi_disk,
-                    '-p', efi_partition.removeprefix(efi_disk).removeprefix('p'),
-                    '-l', f'\\efi\\limine\\{boot_file}',
-                    '-L', 'Limine',
-                ], stderr=subprocess.STDOUT, universal_newlines=True)
+                # If there's already a Limine entry, replace it
+                if limine_boot_entry:
+                    boot_order = re.findall(r'BootOrder: ((?:[0-9a-fA-F]{4},?)*)', efibootmgr_output)[0]
 
-                for line in efibootmgr_output.split('\n'):
-                    if matches := re.findall(r'Boot([0-9a-fA-F]{4}) has same label Limine', line):
-                        subprocess.run(
-                            [efibootmgr, '-b', matches[0], '-B'],
-                            stdout=subprocess.DEVNULL,
-                            stderr=subprocess.DEVNULL,
-                        )
+                    efibootmgr_output = subprocess.check_output([
+                        efibootmgr,
+                        '-b', limine_boot_entry,
+                        '-B',
+                    ], stderr=subprocess.STDOUT, universal_newlines=True)
+
+                    efibootmgr_output = subprocess.check_output([
+                        efibootmgr,
+                        '-c',
+                        '-b', limine_boot_entry,
+                        '-d', efi_disk,
+                        '-p', efi_partition.removeprefix(efi_disk).removeprefix('p'),
+                        '-l', f'\\efi\\limine\\{boot_file}',
+                        '-L', 'Limine',
+                        '-o', boot_order,
+                    ], stderr=subprocess.STDOUT, universal_newlines=True)
+                else:
+                    efibootmgr_output = subprocess.check_output([
+                        efibootmgr,
+                        '-c',
+                        '-d', efi_disk,
+                        '-p', efi_partition.removeprefix(efi_disk).removeprefix('p'),
+                        '-l', f'\\efi\\limine\\{boot_file}',
+                        '-L', 'Limine',
+                    ], stderr=subprocess.STDOUT, universal_newlines=True)
+
     if config('biosSupport'):
         if cpu_family != 'x86':
             raise Exception(f'Unsupported CPU family for BIOS install: {cpu_family}')
