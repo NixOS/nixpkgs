@@ -116,6 +116,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       siraben
       tomodachi94
+      viluon
     ];
     mainProgram = "craftos";
   };
