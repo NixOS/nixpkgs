@@ -4085,8 +4085,6 @@ with pkgs;
 
   padthv1 = libsForQt5.callPackage ../applications/audio/padthv1 { };
 
-  pageedit = qt6Packages.callPackage ../applications/office/PageEdit { };
-
   pagefind = libsForQt5.callPackage ../applications/misc/pagefind { };
 
   pakcs = callPackage ../development/compilers/pakcs { };
@@ -16152,8 +16150,6 @@ with pkgs;
   apmplanner2 = libsForQt5.callPackage ../applications/science/robotics/apmplanner2 { };
 
   ### MISC
-
-  android-file-transfer = libsForQt5.callPackage ../tools/filesystems/android-file-transfer { };
 
   antimicrox = libsForQt5.callPackage ../tools/misc/antimicrox { };
 
