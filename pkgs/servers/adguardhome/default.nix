@@ -49,6 +49,7 @@ buildGoModule rec {
       numkem
       iagoq
       rhoriguchi
+      baksa
     ];
     license = licenses.gpl3Only;
     mainProgram = "AdGuardHome";
