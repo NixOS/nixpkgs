@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libadwaita";
-  version = "1.7.2";
+  version = "1.7.3";
 
   outputs = [
     "out"
@@ -36,8 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "libadwaita";
-    rev = finalAttrs.version;
-    hash = "sha256-3QrFoUaQe2uIUTV/D4Da31o9Ee2d39/9mz1Is1/x3As=";
+    tag = finalAttrs.version;
+    hash = "sha256-zVmVh1iljidcXU+c7DAGBPkYyJkA11SvXtuCosB/Foc=";
   };
 
   depsBuildBuild = [
@@ -130,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    changelog = "https://gitlab.gnome.org/GNOME/libadwaita/-/blob/${finalAttrs.src.rev}/NEWS";
+    changelog = "https://gitlab.gnome.org/GNOME/libadwaita/-/blob/${finalAttrs.src.tag}/NEWS";
     description = "Library to help with developing UI for mobile devices using GTK/GNOME";
     mainProgram = "adwaita-1-demo";
     homepage = "https://gitlab.gnome.org/GNOME/libadwaita";
