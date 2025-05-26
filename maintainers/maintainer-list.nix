@@ -15268,6 +15268,12 @@
     githubId = 1729331;
     name = "Dominique Martinet";
   };
+  martinhrvn = {
+    email = "martinhrvn@gmail.com";
+    github = "martinhrvn";
+    githubId = 19916;
+    name = "Martin Harvan";
+  };
   martinjlowm = {
     email = "martin@martinjlowm.dk";
     github = "martinjlowm";
