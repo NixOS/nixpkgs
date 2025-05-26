@@ -36,8 +36,8 @@ import ./make-test-python.nix (
         node.succeed("curl --fail http://localhost:9001")
 
       test_mealie(sqlite)
-      simple.send_monitor_command("quit")
-      simple.wait_for_shutdown()
+      sqlite.send_monitor_command("quit")
+      sqlite.wait_for_shutdown()
       test_mealie(postgres)
     '';
   }
