@@ -7,7 +7,6 @@
   npmHooks,
   fetchNpmDeps,
   dotnetCorePackages,
-  nix-update-script,
 }:
 
 buildDotnetModule (finalAttrs: {
@@ -48,9 +47,7 @@ buildDotnetModule (finalAttrs: {
     mv $out/bin/Rnwood.Smtp4dev $out/bin/smtp4dev
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex=^(\\d+\\.\\d+\\.\\d+)$" ];
-  };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Fake smtp email server for development and testing";
