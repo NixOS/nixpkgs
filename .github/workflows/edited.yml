@@ -34,16 +34,17 @@ jobs:
           private-key: ${{ secrets.NIXPKGS_CI_APP_PRIVATE_KEY }}
           permission-pull-requests: write
 
-      - env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-          REPOSITORY: ${{ github.repository }}
-          NUMBER: ${{ github.event.number }}
-        run: |
-          gh api \
-            --method PATCH \
-            /repos/"$REPOSITORY"/pulls/"$NUMBER" \
-            -f "state=closed"
-          gh api \
-            --method PATCH \
-            /repos/"$REPOSITORY"/pulls/"$NUMBER" \
-            -f "state=open"
+      - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          github-token: ${{ steps.app-token.outputs.token }}
+          script: |
+            function changeState(state) {
+              return github.rest.pulls.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.payload.pull_request.number,
+                state
+              })
+            }
+            await changeState('closed')
+            await changeState('open')
