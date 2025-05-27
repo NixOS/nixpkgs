@@ -15,9 +15,8 @@ stdenv.mkDerivation rec {
   version = "0.8.2";
 
   src = fetchzip {
-    url = "https://indefero.soutade.fr/p/libgourou/source/download/v${version}/";
     sha256 = "sha256-adkrvBCgN07Ir+J3JFCy+X9p9609lj1w8nElrlHXTxc";
-    extension = "zip";
+    url = "https://forge.soutade.fr/soutade/libgourou/archive/v${version}.tar.gz";
   };
 
   postPatch = ''
