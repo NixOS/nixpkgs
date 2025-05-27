@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "parca-agent";
-  version = "0.38.2";
+  version = "0.39.0";
 
   src = fetchFromGitHub {
     owner = "parca-dev";
     repo = "parca-agent";
     tag = "v${version}";
-    hash = "sha256-6TjO5Fb6+zCrVz/Edq41H3tTbJLtYD1k/OKt01ms2dY=";
+    hash = "sha256-ZdMQ0cyLihMhqXVN98t0Bhg2I4NUxBPcSl2KJU5P0vQ=";
     fetchSubmodules = true;
   };
 
