@@ -16,14 +16,14 @@
   libvorbis,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "solarus";
   version = "2.0.0";
 
   src = fetchFromGitLab {
     owner = "solarus-games";
-    repo = pname;
-    rev = "v${version}";
+    repo = "solarus";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Kfg4pFZrEhsIU4RQlOox3hMpk2PXbOzrkwDElPGnDjA=";
   };
 
@@ -73,5 +73,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-
-}
+})
