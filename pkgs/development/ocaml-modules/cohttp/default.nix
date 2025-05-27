@@ -5,23 +5,31 @@
   ppx_sexp_conv,
   base64,
   jsonm,
+  http,
+  logs,
   re,
   stringext,
+  ipaddr,
   uri-sexp,
   fmt,
   alcotest,
   crowbar,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "cohttp";
-  version = "5.3.1";
+  version = "6.2.0";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-cohttp/releases/download/v${version}/cohttp-${version}.tbz";
-    hash = "sha256-9eJz08Lyn/R71+Ftsj4fPWzQGkC+ACCJhbxDTIjUV2s=";
+    url = "https://github.com/mirage/ocaml-cohttp/releases/download/v${finalAttrs.version}/cohttp-${finalAttrs.version}.tbz";
+    hash =
+      {
+        "6.2.0" = "sha256-bwV1TK8z1rdeii4aISDKe1Ag4TiLwgJIRC0TOZNt3zs=";
+        "5.3.1" = "sha256-9eJz08Lyn/R71+Ftsj4fPWzQGkC+ACCJhbxDTIjUV2s=";
+      }
+      ."${finalAttrs.version}";
   };
 
   postPatch = ''
@@ -29,8 +37,10 @@ buildDunePackage rec {
   '';
 
   buildInputs = [
-    jsonm
     ppx_sexp_conv
+  ]
+  ++ lib.optionals (lib.versionOlder finalAttrs.version "6.0.0") [
+    jsonm
   ];
 
   propagatedBuildInputs = [
@@ -38,12 +48,19 @@ buildDunePackage rec {
     re
     stringext
     uri-sexp
+  ]
+  ++ lib.optionals (lib.versionAtLeast finalAttrs.version "6.0.0") [
+    http
+    ipaddr
+    logs
   ];
 
   doCheck = true;
   checkInputs = [
     fmt
     alcotest
+  ]
+  ++ lib.optionals (lib.versionOlder finalAttrs.version "6.0.0") [
     crowbar
   ];
 
@@ -53,4 +70,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
     homepage = "https://github.com/mirage/ocaml-cohttp";
   };
-}
+})
