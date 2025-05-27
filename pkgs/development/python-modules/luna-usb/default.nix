@@ -21,7 +21,7 @@
 }:
 buildPythonPackage rec {
   pname = "luna-usb";
-  version = "0.1.3";
+  version = "0.2.0";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "greatscottgadgets";
     repo = "luna";
     tag = version;
-    hash = "sha256-BKFfEkhgOH0lYfkAE94h27pb+T/uJxKFmMeVJI9I3qg=";
+    hash = "sha256-SVpAPq77IH2/2WZrc25j7q6qTMW2ToPY5lYQcYUlJfs=";
   };
 
   postPatch = ''
