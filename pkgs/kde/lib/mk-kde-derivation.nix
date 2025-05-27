@@ -6,6 +6,7 @@ self:
   cmake,
   ninja,
   qt6,
+  jq,
 }:
 let
   dependencies = (lib.importJSON ../generated/dependencies.json).dependencies;
@@ -73,6 +74,14 @@ let
       None = null;
     };
 
+  qmllintHook = makeSetupHook {
+    name = "qmllint-validate-hook";
+    substitutions = {
+      qmllint = "${qt6.qtdeclarative}/bin/qmllint";
+      jq = lib.getExe jq;
+    };
+  } ./qmllint-hook.sh;
+
   moveDevHook = makeSetupHook { name = "kf6-move-dev-hook"; } ./move-dev-hook.sh;
 in
 {
@@ -125,6 +134,7 @@ let
       cmake
       ninja
       qt6.wrapQtAppsHook
+      qmllintHook
       moveDevHook
     ] ++ extraNativeBuildInputs;
     buildInputs = [ qt6.qtbase ] ++ extraBuildInputs;
