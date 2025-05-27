@@ -41,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+  strictDeps = true;
   nativeBuildInputs = [
     cmake
     ninja
