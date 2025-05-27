@@ -15,6 +15,7 @@
   dnsutils,
   iproute2,
   wirelesstools,
+  nix-update-script,
 }:
 
 let
@@ -58,6 +59,8 @@ rustPlatform.buildRustPackage rec {
   postInstall = lib.optionalString (bins != [ ]) ''
     wrapProgram $out/bin/dwm-status --prefix "PATH" : "${lib.makeBinPath bins}"
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Highly performant and configurable DWM status service";
