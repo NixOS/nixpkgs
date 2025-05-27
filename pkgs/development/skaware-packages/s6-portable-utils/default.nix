@@ -11,8 +11,8 @@ skawarePackages.buildPackage {
 
   manpages = skawarePackages.buildManPages {
     pname = "s6-portable-utils-man-pages";
-    version = "2.3.0.2.2";
-    sha256 = "0zbxr6jqrx53z1gzfr31nm78wjfmyjvjx7216l527nxl9zn8nnv1";
+    version = "2.3.0.4.1";
+    sha256 = "sha256-LbXa+fecxYyFdVmEHT8ch4Y8Pf1YIyd9Gia3zujxUgs=";
     description = "Port of the documentation for the s6-portable-utils suite to mdoc";
     maintainers = [ lib.maintainers.somasis ];
   };
