@@ -4,6 +4,7 @@
   fetchurl,
   fetchpatch,
   removeReferencesTo,
+  pkg-config,
   gfortran,
   perl,
   libnl,
@@ -117,6 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs =
     [
       perl
+      pkg-config
       removeReferencesTo
       makeWrapper
     ]
@@ -127,8 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature cudaSupport "mca-dso")
     (lib.enableFeature fortranSupport "mpi-fortran")
     (lib.withFeatureAs stdenv.hostPlatform.isLinux "libnl" (lib.getDev libnl))
-    "--with-pmix=${lib.getDev pmix}"
-    "--with-pmix-libdir=${lib.getLib pmix}/lib"
     # Puts a "default OMPI_PRTERUN" value to mpirun / mpiexec executables
     (lib.withFeatureAs true "prrte" (lib.getBin prrte))
     (lib.withFeature enableSGE "sge")
