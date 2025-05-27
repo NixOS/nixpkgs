@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   name = "ruqola";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "network";
     repo = "ruqola";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gcdu/+JTutY7gvokHNVbWH5D82HhtLXkL6PLZN81ano=";
+    hash = "sha256-Oeea+IX2H9UvLZnq6X4AjwH5O4VPCg/RHRwohidPalo=";
   };
 
   nativeBuildInputs = [

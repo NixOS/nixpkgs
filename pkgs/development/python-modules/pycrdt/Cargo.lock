@@ -245,7 +245,7 @@ dependencies = [
 
 [[package]]
 name = "pycrdt"
-version = "0.12.18"
+version = "0.12.20"
 dependencies = [
  "pyo3",
  "yrs",
@@ -568,9 +568,9 @@ checksum = "589f6da84c646204747d1270a2a5661ea66ed1cced2631d546fdfb155959f9ec"
 
 [[package]]
 name = "yrs"
-version = "0.23.2"
+version = "0.23.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "38f76003877bef9c609585bad08e81438161c472c15d5e8116c8f87648866c6b"
+checksum = "bb1d740a98b12112352f05ddfc06c1505b66fca116601f9388b84be45d21f84d"
 dependencies = [
  "arc-swap",
  "async-lock",
