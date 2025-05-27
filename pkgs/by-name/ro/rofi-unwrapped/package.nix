@@ -27,14 +27,14 @@
   pandoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rofi-unwrapped";
   version = "1.7.9";
 
   src = fetchFromGitHub {
     owner = "davatorium";
     repo = "rofi";
-    rev = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-YI6ShRRBJ9ExkzDnI31YjtI1mWRWPzVRYQvpTAtLTeI=";
   };
@@ -80,12 +80,14 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Window switcher, run dialog and dmenu replacement";
     homepage = "https://github.com/davatorium/rofi";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bew ];
-    platforms = with platforms; linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      bew
+    ];
+    platforms = lib.platforms.linux;
     mainProgram = "rofi";
   };
-}
+})

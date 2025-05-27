@@ -1,10 +1,7 @@
 {
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchFromGitHub,
-  configargparse,
-  setuptools,
-  poetry-core,
   rbw,
 
   waylandSupport ? false,
@@ -16,7 +13,7 @@
   xdotool,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "rofi-rbw";
   version = "1.4.2";
   format = "pyproject";
@@ -28,7 +25,7 @@ buildPythonApplication rec {
     hash = "sha256-wUb89GkNB2lEfb42hMvcxpbjc1O+wx8AkFjq7aJwAko=";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3Packages; [
     setuptools
     poetry-core
   ];
@@ -46,7 +43,7 @@ buildPythonApplication rec {
       xdotool
     ];
 
-  propagatedBuildInputs = [ configargparse ];
+  propagatedBuildInputs = [ python3Packages.configargparse ];
 
   pythonImportsCheck = [ "rofi_rbw" ];
 
