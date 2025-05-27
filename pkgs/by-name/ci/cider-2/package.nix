@@ -1,21 +1,34 @@
-{
-  appimageTools,
-  lib,
-  requireFile,
-  makeWrapper,
+{ appimageTools
+, lib
+, stdenv
+, stdenvNoCC
+, requireFile
+, makeWrapper
+, undmg
 }:
-
-appimageTools.wrapType2 rec {
+let
+  arch = if stdenv.hostPlatform.isAarch64 then "arm64" else "x64";
+  platform = if stdenv.hostPlatform.isDarwin then "macos" else "linux";
+  ext = if stdenv.hostPlatform.isDarwin then "dmg" else "AppImage";
+  mkCider = if stdenv.hostPlatform.isDarwin then stdenv.mkDerivation else appimageTools.wrapType2;
+in
+mkCider rec {
   pname = "cider-2";
   version = "3.0.2";
 
   src = requireFile {
-    name = "cider-linux-x64.AppImage";
-    url = "https://cidercollective.itch.io/cider";
-    sha256 = "1rfraf1r1zmp163kn8qg833qxrxmx1m1hycw8q9hc94d0hr62l2x";
+    name = "cider-v${version}-${platform}-${arch}.${ext}";
+    sha256 = {
+      aarch64-darwin = "0mg593wc49hng6r3c24ydws9k7ysg8zp1hiwzrckqx1c516cw0d0";
+      x86_64-darwin = "1d559zwzv1f6xlq1v3f2ss7g3vshks837ianh81cl0w35q1hyy97";
+      x86_64-linux = "1rfraf1r1zmp163kn8qg833qxrxmx1m1hycw8q9hc94d0hr62l2x";
+    }.${stdenv.hostPlatform.system};
+
+    url = "https://taproom.cider.sh/downloads";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  sourceRoot = lib.optionalString stdenv.hostPlatform.isDarwin "Cider.app";
+  nativeBuildInputs = if stdenv.hostPlatform.isDarwin then [ undmg ] else [ makeWrapper ];
 
   extraInstallCommands =
     let
@@ -25,16 +38,35 @@ appimageTools.wrapType2 rec {
         pname = "Cider";
       };
     in
-    ''
+    lib.optionalDrvAttr (!stdenv.hostPlatform.isDarwin) ''
       wrapProgram $out/bin/${pname} \
-         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-         --add-flags "--no-sandbox --disable-gpu-sandbox" # Cider 2 does not start up properly without these from my preliminary testing
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+        --add-flags "--no-sandbox --disable-gpu-sandbox" # Cider 2 does not start up properly without these from my preliminary testing
 
-      install -m 444 -D ${contents}/Cider.desktop $out/share/applications/${pname}.desktop
-      substituteInPlace $out/share/applications/${pname}.desktop \
-        --replace-warn 'Exec=Cider' 'Exec=${pname}'
-      install -Dm444 ${contents}/usr/share/icons/hicolor/256x256/cider.png \
-                     $out/share/icons/hicolor/256x256/apps/cider.png
+        install -Dm444 ${contents}/Cider.desktop $out/share/applications/${pname}.desktop
+        substituteInPlace $out/share/applications/${pname}.desktop \
+          --replace-warn 'Exec=Cider' 'Exec=${pname}'
+        install -Dm444 ${contents}/usr/share/icons/hicolor/256x256/cider.png \
+                      $out/share/icons/hicolor/256x256/apps/cider.png
+    '';
+
+  installPhase =
+    let
+      appPath = "$out/Applications/Cider.app";
+    in
+    lib.optionalDrvAttr stdenv.hostPlatform.isDarwin ''
+      runHook preInstall
+
+      mkdir -p $out/bin ${appPath}
+      cp -r Contents ${appPath}/
+
+      cat > $out/bin/${pname} << EOF
+      #!${stdenvNoCC.shell}
+      open -na ${appPath} --args "\$@"
+      EOF
+      chmod +x $out/bin/${pname}
+
+      runHook postInstall
     '';
 
   meta = {
@@ -47,6 +79,6 @@ appimageTools.wrapType2 rec {
       l0r3v
       ejstrunz
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }
