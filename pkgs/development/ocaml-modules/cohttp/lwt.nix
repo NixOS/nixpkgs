@@ -1,6 +1,7 @@
 {
   buildDunePackage,
   cohttp,
+  ipaddr,
   lwt,
   uri,
   ppx_sexp_conv,
@@ -21,6 +22,7 @@ buildDunePackage {
 
   propagatedBuildInputs = [
     cohttp
+    ipaddr
     lwt
     logs
     sexplib0
