@@ -27,32 +27,33 @@ let
   );
 
   args =
-    if cfg.domainConfigs != { } then
-      [
-        "-f"
-        "-l"
-        "-p"
-        cfg.socket
-        "-x"
-        configFile
-      ]
-    else
-      [
-        "-f"
-        "-l"
-        "-p"
-        cfg.socket
-        "-d"
-        cfg.domains
-        "-k"
-        "${cfg.keyPath}/${cfg.selector}.private"
-        "-s"
-        cfg.selector
-      ]
-      ++ lib.optionals (cfg.configFile != null) [
-        "-x"
-        cfg.configFile
-      ];
+    [
+      "-f"
+      "-l"
+      "-p"
+      cfg.socket
+    ]
+    ++ (
+      if cfg.domainConfigs != { } then
+        [
+          "-x"
+          configFile
+        ]
+      else
+        [
+          "-d"
+          cfg.domains
+          "-k"
+          "${cfg.keyPath}/${cfg.selector}.private"
+          "-s"
+          cfg.selector
+        ]
+        ++ lib.optionals (cfg.configFile != null) [
+          "-x"
+          cfg.configFile
+        ]
+    );
+
 in
 {
   imports = [
