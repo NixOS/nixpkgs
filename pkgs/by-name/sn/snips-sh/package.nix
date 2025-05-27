@@ -27,7 +27,10 @@ buildGoModule rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     homepage = "https://snips.sh";
-    maintainers = with lib.maintainers; [ jeremiahs ];
+    maintainers = with lib.maintainers; [
+      jeremiahs
+      matthiasbeyer
+    ];
     mainProgram = "snips.sh";
   };
 }
