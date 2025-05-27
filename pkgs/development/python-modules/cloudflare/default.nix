@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = {
     description = "Official Python library for the Cloudflare API";
     homepage = "https://github.com/cloudflare/cloudflare-python";
-    changelog = "https://github.com/cloudflare/cloudflare-python/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/cloudflare/cloudflare-python/blob/v${version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [
       marie
       jemand771
