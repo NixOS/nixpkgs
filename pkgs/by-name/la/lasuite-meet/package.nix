@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
+  nixosTests,
 }:
 let
   python = python3.override {
@@ -98,6 +99,10 @@ python.pkgs.buildPythonApplication rec {
       makeWrapper ${lib.getExe python.pkgs.gunicorn} $out/bin/gunicorn \
         --prefix PYTHONPATH : "${pythonPath}:$out/${python.sitePackages}"
     '';
+
+  passthru.tests = {
+    login-and-create-room = nixosTests.lasuite-meet;
+  };
 
   meta = {
     description = "Open source alternative to Google Meet and Zoom powered by LiveKit: HD video calls, screen sharing, and chat features. Built with Django and React";
