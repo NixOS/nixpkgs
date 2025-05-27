@@ -69,7 +69,7 @@ in
       wantedBy = [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
 
-      serviceConfig.ExecStart = "${cfg.package}/bin/dwm-status ${configFile}";
+      serviceConfig.ExecStart = "${cfg.package}/bin/dwm-status ${configFile} --quiet";
     };
 
   };
