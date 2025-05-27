@@ -86,6 +86,9 @@
   "sec-contributing-development-env": [
     "index.html#sec-contributing-development-env"
   ],
+  "sec-contributing-devmode": [
+    "index.html#sec-contributing-devmode"
+  ],
   "sec-mattermost": [
     "index.html#sec-mattermost"
   ],
