@@ -8,6 +8,9 @@ if [ $# != "2" ] ; then
   exit 2
 fi
 
+# Make sure we are inside the nixpkgs repo, even when called from outside
+cd "$(dirname "${BASH_SOURCE[0]}")"
+
 PICKABLE_BRANCHES=${PICKABLE_BRANCHES:-master staging release-??.?? staging-??.??}
 problem=0
 
