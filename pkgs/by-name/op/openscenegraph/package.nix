@@ -88,7 +88,6 @@ stdenv.mkDerivation rec {
     ++ [
       glib
       libxml2
-      pcre
       zlib
     ]
     ++ lib.optional jpegSupport libjpeg
@@ -98,7 +97,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional tiffSupport libtiff
     ++ lib.optional gdalSupport gdal
     ++ lib.optional curlSupport curl
-    ++ lib.optional colladaSupport opencollada
+    ++ lib.optionals colladaSupport [
+      opencollada
+      pcre
+    ]
     ++ lib.optional opencascadeSupport opencascade-occt
     ++ lib.optional ffmpegSupport ffmpeg
     ++ lib.optional nvttSupport nvidia-texture-tools
