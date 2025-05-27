@@ -71,6 +71,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildFeatures =
     [
       "brotli_compression"
+      "direct_tls"
       "element_hacks"
       "gzip_compression"
       "media_thumbnail"
