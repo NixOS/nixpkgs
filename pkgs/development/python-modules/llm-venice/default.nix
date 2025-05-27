@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "llm-venice";
-  version = "0.6.0";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ar-jan";
     repo = "llm-venice";
     tag = version;
-    hash = "sha256-fHCAERIFhuovo1f+jTG6L4C/Rql8tdHZG/7p5fBLkH0=";
+    hash = "sha256-vsb3oXGr+2FDJnTwYomICfald1ptben28hAJ8ypKiBI=";
   };
 
   build-system = [
