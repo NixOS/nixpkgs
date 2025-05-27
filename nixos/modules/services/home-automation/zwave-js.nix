@@ -108,8 +108,9 @@ in
         description = "Z-Wave JS Server";
         serviceConfig = {
           ExecStartPre = ''
-            /bin/sh -c "${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${configFile} ${cfg.secretsConfigFile} > ${mergedConfigFile}"
+            /bin/sh -c "${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${configFile} %d/secrets.json > ${mergedConfigFile}"
           '';
+          LoadCredential = "secrets.json:${cfg.secretsConfigFile}";
           ExecStart = lib.concatStringsSep " " [
             "${cfg.package}/bin/zwave-server"
             "--config ${mergedConfigFile}"
