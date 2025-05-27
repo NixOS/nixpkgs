@@ -70,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
       Many full-fledged games have been writen for the engine.
     '';
     homepage = "https://www.solarus-games.org";
+    mainProgram = "solarus-run";
     license = lib.licenses.gpl3;
     maintainers = [ ];
     platforms = lib.platforms.linux;
