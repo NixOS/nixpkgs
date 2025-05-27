@@ -731,6 +731,8 @@ let
 
         hpack = callPackage ../development/ocaml-modules/hpack { };
 
+        http = callPackage ../development/ocaml-modules/cohttp/http.nix { };
+
         http-mirage-client = callPackage ../development/ocaml-modules/http-mirage-client { };
 
         httpaf = callPackage ../development/ocaml-modules/httpaf { };
