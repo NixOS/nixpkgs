@@ -53,6 +53,8 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [ perl ];
 
+  doCheck = true;
+
   meta = with lib; {
     description = "Report faked system time to programs without having to change the system-wide time";
     homepage = "https://github.com/wolfcw/libfaketime/";
