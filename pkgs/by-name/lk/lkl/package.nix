@@ -112,7 +112,7 @@ stdenv.mkDerivation {
     platforms = platforms.linux; # Darwin probably works too but I haven't tested it
     license = licenses.gpl2;
     maintainers = with maintainers; [
-      raitobezarius
+      timschumi
     ];
   };
 }
