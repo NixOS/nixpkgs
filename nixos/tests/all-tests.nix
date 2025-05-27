@@ -710,7 +710,10 @@ in
   ladybird = runTest ./ladybird.nix;
   languagetool = runTest ./languagetool.nix;
   lanraragi = runTest ./lanraragi.nix;
-  latestKernel.login = handleTest ./login.nix { latestKernel = true; };
+  latestKernel.login = runTest {
+    imports = [ ./login.nix ];
+    _module.args.latestKernel = true;
+  };
   lasuite-docs = runTest ./web-apps/lasuite-docs.nix;
   lavalink = runTest ./lavalink.nix;
   leaps = runTest ./leaps.nix;
