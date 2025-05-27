@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "s7";
-  version = "11.2-unstable-2024-12-19";
+  version = "11.4-unstable-2025-05-18";
 
   src = fetchFromGitLab {
     domain = "cm-gitlab.stanford.edu";
     owner = "bil";
     repo = "s7";
-    rev = "a5515d455f5aca49d5275a5a35ac88935f3ad401";
-    hash = "sha256-Ik3edzpO9hIhJBZHyzL/CsTVKGbDdGVfE9pNrBeSjp8=";
+    rev = "d58f091d7c7de5302a901b57691f00228b07a2d7";
+    hash = "sha256-CLN+lvlfdVtPDc08HLSMMFU+CmyLY/22dWg0D29t1to=";
   };
 
   buildInputs = [
@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail libc_s7.so $out/lib/libc_s7.so
   '';
 
+  # FIXME: fail to build nrepl due to implicit declaration of function "wcwidth" and "wcswidth".
   buildPhase = ''
     runHook preBuild
 
@@ -56,13 +57,13 @@ stdenv.mkDerivation (finalAttrs: {
         -DS7_LOAD_PATH=\"$out/share/s7/scm\"
 
     # The newer REPL powered by Notcurses
-    cc s7.c -o s7-nrepl \
-        -O2 -I. \
-        -Wl,-export-dynamic \
-        -lm -ldl \
-        -DWITH_MAIN \
-        -DWITH_NOTCURSES -lnotcurses-core \
-        -DS7_LOAD_PATH=\"$out/share/s7/scm\"
+    # cc s7.c -o s7-nrepl \
+    #     -O2 -I. \
+    #     -Wl,-export-dynamic \
+    #     -lm -ldl \
+    #     -DWITH_MAIN \
+    #     -DWITH_NOTCURSES -lnotcurses-core \
+    #     -DS7_LOAD_PATH=\"$out/share/s7/scm\"
 
     cc libarb_s7.c -o libarb_s7.so \
         -O2 -I. \
@@ -70,11 +71,11 @@ stdenv.mkDerivation (finalAttrs: {
         -lflint -lmpc \
         -fPIC
 
-    cc notcurses_s7.c -o libnotcurses_s7.so \
-        -O2 -I. \
-        -shared \
-        -lnotcurses-core \
-        -fPIC
+    # cc notcurses_s7.c -o libnotcurses_s7.so \
+    #     -O2 -I. \
+    #     -shared \
+    #     -lnotcurses-core \
+    #     -fPIC
 
     cc s7.c -c -o s7.o \
         -O2 -I. \
@@ -96,9 +97,9 @@ stdenv.mkDerivation (finalAttrs: {
     dst_doc=$out/share/doc/s7
     mkdir -p $dst_bin $dst_lib $dst_inc $dst_share $dst_scm $dst_doc
 
-    mv -t $dst_bin s7-repl s7-nrepl
-    ln -s s7-nrepl $dst_bin/s7
-    mv -t $dst_lib libarb_s7.so libnotcurses_s7.so libc_s7.so
+    mv -t $dst_bin s7-repl # and s7-nrepl
+    ln -s s7-repl $dst_bin/s7 # target should be s7-nrepl
+    mv -t $dst_lib libarb_s7.so libc_s7.so # and libnotcurses_s7.so
     cp -pr -t $dst_share s7.c
     cp -pr -t $dst_inc s7.h
     cp -pr -t $dst_scm *.scm
