@@ -67,6 +67,10 @@ in
   [ (if atLeast12 then ./gcc-12-no-sys-dirs.patch else ./no-sys-dirs.patch) ]
   ++ (
     {
+      "15" = [
+        ./13/no-sys-dirs-riscv.patch
+        ./13/mangle-NIX_STORE-in-__FILE__.patch
+      ];
       "14" = [
         ./13/no-sys-dirs-riscv.patch
         ./13/mangle-NIX_STORE-in-__FILE__.patch
