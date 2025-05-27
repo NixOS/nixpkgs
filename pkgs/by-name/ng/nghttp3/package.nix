@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nghttp3";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-CTra8vmpIig8LX7RWqRzhWhX9yn0RnFrnV/kYPgZgJk=";
+    hash = "sha256-LDIopuoILRrUSrui+n/9Uuc1bDzDfNGU7la+lENt1CU=";
     fetchSubmodules = true;
   };
 
