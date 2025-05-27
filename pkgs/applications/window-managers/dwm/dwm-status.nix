@@ -38,8 +38,8 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Gerschtli";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-982JFYZroskKppAOZjBWOFt624FfRjhXpYN57s/cM50=";
+    tag = version;
+    hash = "sha256-982JFYZroskKppAOZjBWOFt624FfRjhXpYN57s/cM50=";
   };
 
   nativeBuildInputs = [
@@ -62,13 +62,13 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Highly performant and configurable DWM status service";
     homepage = "https://github.com/Gerschtli/dwm-status";
-    changelog = "https://github.com/Gerschtli/dwm-status/blob/master/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ gerschtli ];
+    changelog = "https://github.com/Gerschtli/dwm-status/blob/${src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gerschtli ];
     mainProgram = "dwm-status";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }
