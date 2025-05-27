@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libgourou";
-  version = "0.8.2";
+  version = "0.8.7";
 
   src = fetchzip {
-    sha256 = "sha256-adkrvBCgN07Ir+J3JFCy+X9p9609lj1w8nElrlHXTxc";
     url = "https://forge.soutade.fr/soutade/libgourou/archive/v${version}.tar.gz";
+    hash = "sha256-Tkft/pe3lH07pmyVibTEutIIvconUWDH1ZVN3qV4sSY=";
   };
 
   postPatch = ''
