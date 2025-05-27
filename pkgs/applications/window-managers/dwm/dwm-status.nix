@@ -67,7 +67,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Gerschtli/dwm-status";
     changelog = "https://github.com/Gerschtli/dwm-status/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gerschtli ];
+    maintainers = with lib.maintainers; [
+      gepbird
+      gerschtli
+    ];
     mainProgram = "dwm-status";
     platforms = lib.platforms.linux;
   };
