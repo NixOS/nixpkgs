@@ -41,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     homepage = "https://dev.yorhel.nl/ncdu";
     description = "Disk usage analyzer with an ncurses interface";
