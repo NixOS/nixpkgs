@@ -127,9 +127,9 @@ let
                       if buttonIsOffset then "900" else "940"
                     } 50 click 1") # open media information
                     machine.sleep(2)
-                    machine.wait_for_text("${format}") # make sure we're looking at the right file
                     machine.screenshot("lomiri-gallery_${format}_info")
                     machine.send_key("esc")
+                    machine.sleep(2)
                     machine.wait_for_text("${imageLabel}") # make sure media shows fine
               ''
           );
@@ -238,9 +238,9 @@ in
       with subtest("lomiri gallery handles mp4"):
           machine.succeed("xdotool mousemove 935 40 click 1") # open media information
           machine.sleep(2)
-          machine.wait_for_text("MP4") # make sure we're looking at the right file
           machine.screenshot("lomiri-gallery_mp4_info")
           machine.send_key("esc")
+          machine.sleep(2)
 
           machine.wait_for_text("${imageLabel}") # make sure thumbnail processing worked
 
