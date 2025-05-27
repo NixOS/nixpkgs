@@ -9,7 +9,6 @@
   sqlite,
   foundationdb,
   zstd,
-  rust-jemalloc-sys,
   stdenv,
   nix-update-script,
   nixosTests,
@@ -44,7 +43,6 @@ rustPlatform.buildRustPackage rec {
     openssl
     sqlite
     zstd
-    rust-jemalloc-sys
   ] ++ lib.optionals (stdenv.hostPlatform.isLinux && withFoundationdb) [ foundationdb ];
 
   # Issue: https://github.com/stalwartlabs/mail-server/issues/1104

@@ -725,7 +725,7 @@ mapAliases {
   gfortran8 = throw "gfortran8 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-11-20
   gg = go-graft; # Added 2025-03-07
   ghostwriter = makePlasma5Throw "ghostwriter"; # Added 2023-03-18
-  git-annex-utils = throw "'git-annex-utiks' has been removed as it is unmaintained"; # Added 2025-05-18
+  git-annex-utils = throw "'git-annex-utils' has been removed as it is unmaintained"; # Added 2025-05-18
   git-codeowners = throw "'git-codeowners' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   gmni = throw "gmni has been removed as it is no longer maintained upstream"; # Added 2025-05-02
   gmp5 = throw "'gmp5' has been removed as it is unmaintained. Consider using 'gmp' instead"; # Added 2024-10-28
@@ -1057,6 +1057,7 @@ mapAliases {
   linuxPackages_6_12 = linuxKernel.packages.linux_6_12;
   linuxPackages_6_13 = linuxKernel.packages.linux_6_13;
   linuxPackages_6_14 = linuxKernel.packages.linux_6_14;
+  linuxPackages_6_15 = linuxKernel.packages.linux_6_15;
   linuxPackages_rpi0 = linuxKernel.packages.linux_rpi1;
   linuxPackages_rpi02w = linuxKernel.packages.linux_rpi3;
   linuxPackages_rpi1 = linuxKernel.packages.linux_rpi1;
@@ -1079,6 +1080,7 @@ mapAliases {
   linux_6_12 = linuxKernel.kernels.linux_6_12;
   linux_6_13 = linuxKernel.kernels.linux_6_13;
   linux_6_14 = linuxKernel.kernels.linux_6_14;
+  linux_6_15 = linuxKernel.kernels.linux_6_15;
   linux_rpi0 = linuxKernel.kernels.linux_rpi1;
   linux_rpi02w = linuxKernel.kernels.linux_rpi3;
   linux_rpi1 = linuxKernel.kernels.linux_rpi1;
