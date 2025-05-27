@@ -145,13 +145,12 @@ let
               # Create a writable qcow2 image using the systemImage as a backing
               # image.
 
-              # CoW prevent size to be attributed to an image.
-              # FIXME: raise this issue to upstream.
               ${qemu}/bin/qemu-img create \
                 -f qcow2 \
                 -b ${systemImage}/nixos.qcow2 \
                 -F qcow2 \
-                "$NIX_DISK_IMAGE"
+                "$NIX_DISK_IMAGE" \
+                "${toString cfg.diskSize}M"
             ''
           else if cfg.useDefaultFilesystems then
             ''
