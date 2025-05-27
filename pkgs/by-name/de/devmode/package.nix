@@ -1,123 +1,84 @@
 {
-  lib,
-  findutils,
-  nodejs_latest,
+  live-server,
   parallel,
-  rsync,
   watchexec,
-  writeShellScriptBin,
+  writeShellApplication,
   # arguments to `nix-build`, e.g. `"foo.nix -A bar"`
   buildArgs ? "",
   # what path to open a browser at
   open ? "/index.html",
 }:
 let
-  inherit (nodejs_latest.pkgs) live-server;
+  build-and-link = writeShellApplication {
+    name = "build-and-link";
+    text = ''
+      set -euxo pipefail
 
-  error-page = writeShellScriptBin "error-page" ''
-    cat << EOF
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <style>
-        @media (prefers-color-scheme: dark) {
-          :root { filter: invert(100%); }
-        }
-      </style>
-    </head>
-    <body><pre>$1</pre></body>
-    </html>
-    EOF
-  '';
-
-  # The following would have been simpler:
-  # 1. serve from `$serve`
-  # 2. pass each build a `--out-link $serve/result`
-  # But that way live-server does not seem to detect changes and therefore no
-  # auto-reloads occur.
-  # Instead, we copy the contents of each build to the `$serve` directory.
-  # Using rsync here, instead of `cp`, to get as close to an atomic
-  # directory copy operation as possible. `--delay-updates` should
-  # also go towards that.
-  build-and-copy = writeShellScriptBin "build-and-copy" ''
-    set -euxo pipefail
-
-    set +e
-    stderr=$(2>&1 nix-build --out-link $out_link ${buildArgs})
-    exit_status=$?
-    set -e
-
-    if [ $exit_status -eq 0 ];
-    then
-      # setting permissions to be able to clean up
-      ${lib.getExe rsync} \
-        --recursive \
-        --chmod=u=rwX \
-        --delete-before \
-        --delay-updates \
-        --links \
-        $out_link/ \
-        $serve/
-    else
-      set +x
-      ${lib.getExe error-page} "$stderr" > $error_page_absolute
-      set -x
-
-      ${lib.getExe findutils} $serve \
-        -type f \
-        ! -name $error_page_relative \
-        -delete
-    fi
-  '';
+      out_link="$(nix-build --no-out-link ${buildArgs})"
+      rm -rf "''${serve:?}"
+      ln -sf "''${out_link:?}" "''${serve:?}"
+    '';
+  };
 
   # https://watchexec.github.io/
-  watcher = writeShellScriptBin "watcher" ''
-    set -euxo pipefail
+  watcher = writeShellApplication {
+    name = "watcher";
+    runtimeInputs = [
+      watchexec
+      build-and-link
+    ];
+    text = ''
+      set -euxo pipefail
 
-    ${lib.getExe watchexec} \
-      --shell=none \
-      --restart \
-      --print-events \
-      ${lib.getExe build-and-copy}
-  '';
+      watchexec \
+        --shell=none \
+        --restart \
+        --print-events \
+        build-and-link
+    '';
+  };
 
-  # A Rust alternative to live-server exists, but it fails to open the temporary directory.
-  # `--no-css-inject`: without this it seems that only CSS is auto-reloaded.
-  # https://www.npmjs.com/package/live-server
-  server = writeShellScriptBin "server" ''
-    set -euxo pipefail
+  # https://crates.io/crates/live-server
+  server = writeShellApplication {
+    name = "server";
+    runtimeInputs = [ live-server ];
+    text = ''
+      set -euxo pipefail
 
-    ${lib.getExe' live-server "live-server"} \
-      --host=127.0.0.1 \
-      --verbose \
-      --no-css-inject \
-      --entry-file=$error_page_relative \
-      --open=${open} \
-      $serve
-  '';
+      live-server \
+        --host=127.0.0.1 \
+        --open=${open} \
+        "''${serve:?}"
+    '';
+  };
 in
-writeShellScriptBin "devmode" ''
-  set -euxo pipefail
+writeShellApplication {
+  name = "devmode";
+  runtimeInputs = [
+    parallel
+    watcher
+    server
+  ];
+  text = ''
+    set -euxo pipefail
 
-  function handle_exit {
-    rm -rf "$tmpdir"
-  }
+    function handle_exit {
+      rm -rf "$tmpdir"
+    }
 
-  tmpdir=$(mktemp -d)
-  trap handle_exit EXIT
+    tmpdir="$(mktemp -d)"
+    trap handle_exit EXIT
 
-  export out_link="$tmpdir/result"
-  export serve="$tmpdir/serve"
-  mkdir $serve
-  export error_page_relative=error.html
-  export error_page_absolute=$serve/$error_page_relative
-  ${lib.getExe error-page} "building …" > $error_page_absolute
+    export serve="$tmpdir/serve"
 
-  ${lib.getExe parallel} \
-    --will-cite \
-    --line-buffer \
-    --tagstr '{/}' \
-    ::: \
-    "${lib.getExe watcher}" \
-    "${lib.getExe server}"
-''
+    mkdir "$serve"
+
+    parallel \
+      --will-cite \
+      --line-buffer \
+      --tagstr '{/}' \
+      ::: \
+      watcher \
+      server
+  '';
+}
