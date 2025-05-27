@@ -15290,7 +15290,6 @@ with pkgs;
   };
 
   # solarus and solarus-quest-editor must use the same version of Qt.
-  solarus = callPackage ../games/solarus { };
   solarus-quest-editor = callPackage ../development/tools/solarus-quest-editor { };
 
   # You still can override by passing more arguments.
