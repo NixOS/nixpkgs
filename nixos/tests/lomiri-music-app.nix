@@ -1,7 +1,8 @@
 { lib, ... }:
 let
   ocrContent = "Music Test";
-  musicFile = "test.mp3";
+  musicFileName = "Example";
+  musicFile = "${musicFileName}.mp3";
 
   ocrPauseColor = "#FF00FF";
   ocrStartColor = "#00FFFF";
@@ -136,6 +137,7 @@ in
 
     with subtest("lomiri music launches"):
         machine.succeed("lomiri-music-app >&2 &")
+        machine.wait_for_console_text("Queue is empty")
         machine.sleep(10)
         machine.send_key("alt-f10")
         machine.sleep(2)
@@ -144,11 +146,14 @@ in
 
     with subtest("lomiri music plays music"):
         machine.succeed("xdotool mousemove 30 720 click 1") # Skip intro
+        machine.sleep(2)
         machine.wait_for_text("Albums")
         machine.succeed("xdotool mousemove 25 45 click 1") # Open categories
+        machine.sleep(2)
         machine.wait_for_text("Tracks")
         machine.succeed("xdotool mousemove 25 240 click 1") # Switch to Tracks category
-        machine.wait_for_text("test") # the test file
+        machine.sleep(2)
+        machine.wait_for_text("${musicFileName}") # the test file
         machine.screenshot("lomiri-music_listing")
 
         # Ensure pause colours isn't present already
@@ -185,6 +190,7 @@ in
 
     with subtest("lomiri music localisation works"):
         machine.succeed("env LANG=de_DE.UTF-8 lomiri-music-app .mp4 >&2 &")
+        machine.wait_for_console_text("Restoring library queue")
         machine.sleep(10)
         machine.send_key("alt-f10")
         machine.sleep(2)
