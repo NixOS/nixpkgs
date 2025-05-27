@@ -1,11 +1,12 @@
-{ appimageTools
-, dbus
-, lib
-, stdenv
-, stdenvNoCC
-, requireFile
-, makeWrapper
-, undmg
+{
+  appimageTools,
+  dbus,
+  lib,
+  stdenv,
+  stdenvNoCC,
+  requireFile,
+  makeWrapper,
+  undmg,
 }:
 let
   arch = if stdenv.hostPlatform.isAarch64 then "arm64" else "x64";
@@ -19,11 +20,13 @@ mkCider rec {
 
   src = requireFile {
     name = "cider-v${version}-${platform}-${arch}.${ext}";
-    sha256 = {
-      aarch64-darwin = "0mg593wc49hng6r3c24ydws9k7ysg8zp1hiwzrckqx1c516cw0d0";
-      x86_64-darwin = "1d559zwzv1f6xlq1v3f2ss7g3vshks837ianh81cl0w35q1hyy97";
-      x86_64-linux = "1rfraf1r1zmp163kn8qg833qxrxmx1m1hycw8q9hc94d0hr62l2x";
-    }.${stdenv.hostPlatform.system};
+    sha256 =
+      {
+        aarch64-darwin = "0mg593wc49hng6r3c24ydws9k7ysg8zp1hiwzrckqx1c516cw0d0";
+        x86_64-darwin = "1d559zwzv1f6xlq1v3f2ss7g3vshks837ianh81cl0w35q1hyy97";
+        x86_64-linux = "1rfraf1r1zmp163kn8qg833qxrxmx1m1hycw8q9hc94d0hr62l2x";
+      }
+      .${stdenv.hostPlatform.system};
 
     url = "https://taproom.cider.sh/downloads";
   };
@@ -81,6 +84,10 @@ mkCider rec {
       l0r3v
       ejstrunz
     ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 }
