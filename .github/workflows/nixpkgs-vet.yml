@@ -11,6 +11,10 @@ on:
       - .github/workflows/nixpkgs-vet.yml
   pull_request_target:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 permissions: {}
 
 # We don't use a concurrency group here, because the action is triggered quite often (due to the PR edit trigger), and contributors would get notified on any canceled run.

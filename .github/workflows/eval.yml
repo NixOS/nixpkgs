@@ -16,6 +16,10 @@ on:
       - haskell-updates
       - python-updates
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 permissions: {}
 
 jobs:
@@ -290,3 +294,5 @@ jobs:
     if: needs.prepare.outputs.targetSha
     uses: ./.github/workflows/reviewers.yml
     secrets: inherit
+    with:
+      caller: ${{ github.workflow }}

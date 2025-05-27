@@ -18,6 +18,10 @@ on:
       # Since the lib functions are used to 'massage' the options before producing the manual
       - "lib/**"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 permissions: {}
 
 jobs:
