@@ -25,7 +25,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/e-dant/watcher";
     changelog = "https://github.com/e-dant/watcher/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gaelreyrol ];
+    maintainers = with lib.maintainers; [
+      gaelreyrol
+      matthiasbeyer
+    ];
     mainProgram = "tw";
     platforms = lib.platforms.all;
   };
