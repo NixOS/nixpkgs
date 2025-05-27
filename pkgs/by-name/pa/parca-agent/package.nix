@@ -3,6 +3,7 @@
   fetchFromGitHub,
   lib,
   stdenv,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -34,6 +35,8 @@ buildGoModule rec {
     "osusergo"
     "netgo"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "eBPF based, always-on profiling agent";
