@@ -38,9 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     installManPage ncdu.1
   '';
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.tests.version = testers.testVersion {
