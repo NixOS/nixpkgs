@@ -71,7 +71,13 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.solarus-games.org";
     mainProgram = "solarus-run";
-    license = lib.licenses.gpl3;
+    license = with lib.licenses; [
+      # code
+      gpl3Plus
+      # assets
+      cc-by-sa-30
+      cc-by-sa-40
+    ];
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
