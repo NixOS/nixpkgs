@@ -23,6 +23,7 @@ let
     # Binary GHCs
     "ghc865Binary"
     "ghc8107Binary"
+    "ghc902Binary"
     "ghc924Binary"
     "ghc963Binary"
     "ghc984Binary"
@@ -88,6 +89,10 @@ in
       };
 
       ghc8107Binary = callPackage ../development/compilers/ghc/8.10.7-binary.nix {
+        llvmPackages = pkgs.llvmPackages_12;
+      };
+
+      ghc902Binary = callPackage ../development/compilers/ghc/9.0.2-binary.nix {
         llvmPackages = pkgs.llvmPackages_12;
       };
 
@@ -519,6 +524,12 @@ in
         buildHaskellPackages = bh.packages.ghc8107Binary;
         ghc = bh.compiler.ghc8107Binary;
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
+        packageSetConfig = bootstrapPackageSet;
+      };
+      ghc902Binary = callPackage ../development/haskell-modules {
+        buildHaskellPackages = bh.packages.ghc902Binary;
+        ghc = bh.compiler.ghc902Binary;
+        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.0.x.nix { };
         packageSetConfig = bootstrapPackageSet;
       };
       ghc924Binary = callPackage ../development/haskell-modules {
