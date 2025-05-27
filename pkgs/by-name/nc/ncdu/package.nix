@@ -51,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       pSub
       rodrgz
+      defelo
     ];
     inherit (zig_0_14.meta) platforms;
     mainProgram = "ncdu";
