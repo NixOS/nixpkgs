@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dokuwiki";
-  version = "2024-02-06b";
+  version = "2025-05-14";
 
   src = fetchFromGitHub {
     owner = "dokuwiki";
     repo = pname;
     rev = "release-${version}";
-    sha256 = "sha256-jrxsVBStvRxHCAOGVUkqtzE75wRBiVR+KxSCNuI2vnk=";
+    sha256 = "sha256-mrqSyZeU42wVvlOrJsWBAj30GjefHgIXwx1QbkCPT9M=";
   };
 
   preload = writeText "preload.php" ''
