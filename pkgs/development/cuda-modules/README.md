@@ -29,8 +29,6 @@ package set by [cuda-packages.nix](../../top-level/cuda-packages.nix).
       short, the Multiplex builder adds multiple versions of a single package to
       single instance of the CUDA Packages package set. It is used primarily for
       packages like `cudnn` and `cutensor`.
-- `lib`: A library of functions and data used by and for the CUDA package set.
-    This library is exposed at the top-level as `pkgs.cudaLib`.
 - `modules`: Nixpkgs modules to check the shape and content of CUDA
     redistributable and feature manifests. These modules additionally use shims
     provided by some CUDA packages to allow them to re-use the
