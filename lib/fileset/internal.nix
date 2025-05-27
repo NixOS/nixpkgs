@@ -112,7 +112,7 @@ rec {
       filesetV2:
       filesetV2
       // {
-        # All v1 file sets are not the new empty file set
+        # All v2 file sets are not the new empty file set
         _internalIsEmptyWithoutBase = false;
         _internalVersion = 3;
       }
@@ -291,7 +291,7 @@ rec {
       mapAttrs (name: value: null) (readDir path) // value;
 
   /**
-    A normalisation of a filesetTree suitable filtering with `builtins.path`:
+    A normalisation of a filesetTree suitable for filtering with `builtins.path`:
     - Replace all directories that have no files with `null`.
       This removes directories that would be empty
     - Replace all directories with all files with `"directory"`.
