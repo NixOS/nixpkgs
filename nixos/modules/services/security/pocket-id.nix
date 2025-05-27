@@ -13,6 +13,7 @@ let
     optionalAttrs
     optional
     mkPackageOption
+    concatMap
     ;
   inherit (lib.types)
     bool
@@ -56,7 +57,7 @@ in
         freeformType = format.type;
 
         options = {
-          PUBLIC_APP_URL = mkOption {
+          APP_URL = mkOption {
             type = str;
             description = ''
               The URL where you will access the app.
@@ -105,10 +106,28 @@ in
   };
 
   config = mkIf cfg.enable {
-    warnings = (
+    warnings =
       optional (cfg.settings ? MAXMIND_LICENSE_KEY)
         "config.services.pocket-id.settings.MAXMIND_LICENSE_KEY will be stored as plaintext in the Nix store. Use config.services.pocket-id.environmentFile instead."
-    );
+      ++ concatMap
+        (
+          # Added 2025-05-27
+          setting:
+          optional (cfg.settings ? "${setting}") ''
+            config.services.pocket-id.settings.${setting} is deprecated.
+            See https://pocket-id.org/docs/setup/migrate-to-v1/ for migration instructions.
+          ''
+        )
+        [
+          "PUBLIC_APP_URL"
+          "PUBLIC_UI_CONFIG_DISABLED"
+          "CADDY_DISABLED"
+          "CADDY_PORT"
+          "BACKEND_PORT"
+          "POSTGRES_CONNECTION_STRING"
+          "SQLITE_DB_PATH"
+          "INTERNAL_BACKEND_URL"
+        ];
 
     systemd.tmpfiles.rules = [
       "d ${cfg.dataDir} 0755 ${cfg.user} ${cfg.group}"
@@ -181,80 +200,6 @@ in
             "@raw-io"
             "@reboot"
             #"@resources" # vm test segfaults
-            "@swap"
-          ];
-          UMask = "0077";
-        };
-      };
-
-      pocket-id-frontend = {
-        description = "Pocket ID frontend";
-        after = [
-          "network.target"
-          "pocket-id-backend.service"
-        ];
-        wantedBy = [ "multi-user.target" ];
-        restartTriggers = [
-          cfg.package
-          cfg.environmentFile
-          settingsFile
-        ];
-
-        serviceConfig = {
-          Type = "simple";
-          User = cfg.user;
-          Group = cfg.group;
-          ExecStart = "${cfg.package}/bin/pocket-id-frontend";
-          Restart = "always";
-          EnvironmentFile = [
-            cfg.environmentFile
-            settingsFile
-          ];
-
-          # Hardening
-          AmbientCapabilities = "";
-          CapabilityBoundingSet = "";
-          DeviceAllow = "";
-          DevicePolicy = "closed";
-          #IPAddressDeny = "any"; # communicates with the backend and client
-          LockPersonality = true;
-          MemoryDenyWriteExecute = false; # V8_Fatal segfault
-          NoNewPrivileges = true;
-          PrivateDevices = true;
-          PrivateNetwork = false; # communicates with the backend and client
-          PrivateTmp = true;
-          PrivateUsers = true;
-          ProcSubset = "pid";
-          ProtectClock = true;
-          ProtectControlGroups = true;
-          ProtectHome = true;
-          ProtectHostname = true;
-          ProtectKernelLogs = true;
-          ProtectKernelModules = true;
-          ProtectKernelTunables = true;
-          ProtectProc = "invisible";
-          ProtectSystem = "strict";
-          RemoveIPC = true;
-          RestrictAddressFamilies = [
-            "AF_INET"
-            "AF_INET6"
-          ];
-          RestrictNamespaces = true;
-          RestrictRealtime = true;
-          RestrictSUIDSGID = true;
-          SystemCallArchitectures = "native";
-          SystemCallFilter = lib.concatStringsSep " " [
-            "~"
-            "@clock"
-            "@cpu-emulation"
-            "@debug"
-            "@module"
-            "@mount"
-            "@obsolete"
-            "@privileged"
-            "@raw-io"
-            "@reboot"
-            "@resources"
             "@swap"
           ];
           UMask = "0077";
