@@ -137,7 +137,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Mahdi-zarei/nekoray";
     license = lib.licenses.gpl3Plus;
     mainProgram = "nekoray";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with lib.maintainers; [
+      tomasajt
+      aleksana
+    ];
     platforms = lib.platforms.linux;
   };
 })
