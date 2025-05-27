@@ -13,7 +13,7 @@ let
   mkCider = if stdenv.hostPlatform.isDarwin then stdenv.mkDerivation else appimageTools.wrapType2;
 in
 mkCider rec {
-  pname = "cider-2";
+  pname = "cider-3";
   version = "3.0.2";
 
   src = requireFile {
@@ -34,7 +34,7 @@ mkCider rec {
     let
       contents = appimageTools.extract {
         inherit version src;
-        # HACK: this looks for a ${pname}.desktop, where `cider-2.desktop` doesn't exist
+        # HACK: this looks for a ${pname}.desktop, where `cider-3.desktop` doesn't exist
         pname = "Cider";
       };
     in
@@ -73,7 +73,7 @@ mkCider rec {
     description = "Powerful music player that allows you listen to your favorite tracks with style";
     homepage = "https://cider.sh";
     license = lib.licenses.unfree;
-    mainProgram = "cider-2";
+    mainProgram = "cider-3";
     maintainers = with lib.maintainers; [
       itsvic-dev
       l0r3v
