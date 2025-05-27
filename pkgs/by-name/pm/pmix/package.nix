@@ -6,6 +6,7 @@
   autoconf,
   automake,
   removeReferencesTo,
+  testers,
   libtool,
   python3,
   flex,
@@ -20,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pmix";
-  version = "5.0.8";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     repo = "openpmix";
     owner = "openpmix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oYqDFXycNCYv0YK4VbkW5SQWLq+FTJEyY9rvH50nbYI=";
+    hash = "sha256-vnYHReG9LY2VCXUP1XS4P/yiogVKT+1QWwxMR/sSlU0=";
     fetchSubmodules = true;
   };
 
@@ -35,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs ./autogen.pl
     patchShebangs ./config
+    patchShebangs ./contrib
+    patchShebangs ./src/util/convert-help.py
   '';
 
   nativeBuildInputs = [
@@ -101,6 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = {
     description = "Process Management Interface for HPC environments";
     homepage = "https://openpmix.github.io/";
@@ -109,5 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
       markuskowa
       doronbehar
     ];
+    pkgConfigModules = [ "pmix" ];
   };
 })
