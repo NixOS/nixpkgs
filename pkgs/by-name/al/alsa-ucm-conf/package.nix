@@ -1,19 +1,22 @@
 {
-  directoryListingUpdater,
-  fetchurl,
+  nix-update-script,
+  fetchFromGitHub,
   lib,
-  stdenv,
+  stdenvNoCC,
   coreutils,
   kmod,
+  alsa-lib,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "alsa-ucm-conf";
-  version = "1.2.12";
+  version = "1.2.13-unstable-2025-03-21";
 
-  src = fetchurl {
-    url = "mirror://alsa/lib/alsa-ucm-conf-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-Fo58BUm3v4mRCS+iv7kDYx33edxMQ+6PQnf8t3LYwDU=";
+  src = fetchFromGitHub {
+    owner = "alsa-project";
+    repo = "alsa-ucm-conf";
+    rev = "28c5875e564a80b778ba375efddfef2b58d724a3";
+    hash = "sha256-NPdrSKJNP90sFQ/UAvJgXoDMnrWXcyq3qYfd1Tqgqko=";
   };
 
   dontBuild = true;
@@ -25,21 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace ucm2/lib/card-init.conf \
         --replace-fail "/bin/rm" "${coreutils}/bin/rm" \
         --replace-fail "/bin/mkdir" "${coreutils}/bin/mkdir"
-
-      files=(
-          "ucm2/HDA/HDA.conf"
-          "ucm2/codecs/rt715/init.conf"
-          "ucm2/codecs/rt715-sdca/init.conf"
-          "ucm2/Intel/cht-bsw-rt5672/cht-bsw-rt5672.conf"
-          "ucm2/Intel/bytcr-rt5640/bytcr-rt5640.conf"
-      )
-
     ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      for file in "''${files[@]}"; do
-          substituteInPlace "$file" \
-              --replace-fail '/sbin/modprobe' '${kmod}/bin/modprobe'
-      done
+    + lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
+      substituteInPlace ucm2/common/ctl/led.conf \
+          --replace-fail '/sbin/modprobe' '${kmod}/bin/modprobe'
     ''
     + ''
 
@@ -49,8 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postInstall
     '';
 
-  passthru.updateScript = directoryListingUpdater {
-    url = "https://www.alsa-project.org/files/pub/lib/";
+  passthru = {
+    tests = { inherit alsa-lib; };
+    updateScript = nix-update-script {
+      extraArgs = [ "--version=branch" ];
+    };
   };
 
   meta = {
