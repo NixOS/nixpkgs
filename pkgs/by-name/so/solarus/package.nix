@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
       cc-by-sa-30
       cc-by-sa-40
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ marcin-serwin ];
     platforms = lib.platforms.linux;
   };
 })
