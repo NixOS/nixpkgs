@@ -12,13 +12,15 @@ class RedirectsError(Exception):
         divergent_redirects: set[str] = None,
         identifiers_missing_current_outpath: set[str] = None,
         identifiers_without_redirects: set[str] = None,
-        orphan_identifiers: set[str] = None
+        orphan_identifiers: set[str] = None,
+        pipe_missing_outpath: bool = False
     ):
         self.conflicting_anchors = conflicting_anchors or set()
         self.divergent_redirects = divergent_redirects or set()
         self.identifiers_missing_current_outpath = identifiers_missing_current_outpath or set()
         self.identifiers_without_redirects = identifiers_without_redirects or set()
         self.orphan_identifiers = orphan_identifiers or set()
+        self.pipe_missing_outpath = pipe_missing_outpath
 
     def __str__(self):
         error_messages = []
@@ -48,6 +50,9 @@ The first element of an identifier's redirects list must denote its current loca
     If you moved content, add its new location as the first element of the redirects mapping.
     Please update doc/redirects.json or nixos/doc/manual/redirects.json!
 """)
+            if self.pipe_missing_outpath:
+                # grep-able output
+                error_messages.append(f"NRD_E_OUTPATH:{json.dumps(list(self.identifiers_missing_current_outpath))}")
         if self.identifiers_without_redirects:
             error_messages.append(f"""
 Identifiers present in the source must have a mapping in the redirects file.
@@ -99,6 +104,7 @@ Keys of the redirects mapping must correspond to some identifier in the source.
 class Redirects:
     _raw_redirects: dict[str, list[str]]
     _redirects_script: str
+    _pipe_missing_outpath: bool = False
 
     _xref_targets: dict[str, XrefTarget] = field(default_factory=dict)
 
@@ -169,7 +175,8 @@ class Redirects:
                 divergent_redirects=divergent_redirects,
                 identifiers_missing_current_outpath=identifiers_missing_current_outpath,
                 identifiers_without_redirects=identifiers_without_redirects,
-                orphan_identifiers=orphan_identifiers
+                orphan_identifiers=orphan_identifiers,
+                pipe_missing_outpath=self._pipe_missing_outpath
             )
 
         self._xref_targets = xref_targets

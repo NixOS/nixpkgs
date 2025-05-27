@@ -703,6 +703,7 @@ def _build_cli_html(p: argparse.ArgumentParser) -> None:
     p.add_argument('--section-toc-depth', default=0, type=int)
     p.add_argument('--media-dir', default="media", type=Path)
     p.add_argument('--redirects', type=Path)
+    p.add_argument('--redirects-pipe-missing-outpath', default=True)
     p.add_argument('infile', type=Path)
     p.add_argument('outfile', type=Path)
 
@@ -711,13 +712,14 @@ def _run_cli_html(args: argparse.Namespace) -> None:
         redirects = None
         if args.redirects:
             with open(args.redirects) as raw_redirects:
-                redirects = Redirects(json.load(raw_redirects), redirects_script.read())
+                redirects = Redirects(json.load(raw_redirects), redirects_script.read(), 
+                                      args.redirects_pipe_missing_outpath)
 
         md = HTMLConverter(
             args.revision,
             HTMLParameters(args.generator, args.stylesheet, args.script, args.toc_depth,
                            args.chunk_toc_depth, args.section_toc_depth, args.media_dir),
-            json.load(manpage_urls), redirects)
+                           json.load(manpage_urls), redirects)
         md.convert(args.infile, args.outfile)
 
 def build_cli(p: argparse.ArgumentParser) -> None:
