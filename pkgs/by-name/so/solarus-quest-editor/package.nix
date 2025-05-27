@@ -17,6 +17,7 @@
   solarus,
   glm,
   qt6Packages,
+  kdePackages,
 }:
 
 let
@@ -48,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./qlementine-src.patch { inherit qlementine-src; })
   ];
 
+  strictDeps = true;
   nativeBuildInputs = [
     cmake
     ninja
@@ -66,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     libvorbis
     solarus
     qtbase
+    kdePackages.qtsvg
     glm
   ];
 
