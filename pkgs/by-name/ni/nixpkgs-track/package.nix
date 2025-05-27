@@ -39,6 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       isabelroses
       uncenter
+      matthiasbeyer
     ];
   };
 })
