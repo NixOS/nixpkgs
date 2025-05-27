@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "llm-fragments-github";
-  version = "0.3";
+  version = "0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-fragments-github";
     tag = version;
-    hash = "sha256-+MNFj7auB/dUSIBDXOBaKjIYIW18GLDB55l66S37U1A=";
+    hash = "sha256-7i1WRix5AAEG5EXJqtaU+QY56aL0SePdqz84z+C+iYM=";
   };
 
   build-system = [
