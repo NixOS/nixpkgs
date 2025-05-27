@@ -45,6 +45,7 @@ appimageTools.wrapType2 rec {
     maintainers = with lib.maintainers; [
       itsvic-dev
       l0r3v
+      ejstrunz
     ];
     platforms = [ "x86_64-linux" ];
   };
