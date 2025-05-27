@@ -10596,6 +10596,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  nvim-k8s-crd = buildVimPlugin {
+    pname = "nvim-k8s-crd";
+    version = "2025-05-26";
+    src = fetchFromGitHub {
+      owner = "anasinnyk";
+      repo = "nvim-k8s-crd";
+      rev = "d57f9c6b0ad1e8ab894f2afd6db90c948ca51a8c";
+      sha256 = "1gx80lclc8jh2k288hswz8b03zlamkb5z8zdl03nchxrm6xr5x05";
+    };
+    meta.homepage = "https://github.com/anasinnyk/nvim-k8s-crd/";
+    meta.hydraPlatforms = [ ];
+  };
+
   nvim-lastplace = buildVimPlugin {
     pname = "nvim-lastplace";
     version = "2023-07-27";
