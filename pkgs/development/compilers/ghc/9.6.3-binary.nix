@@ -297,12 +297,17 @@ stdenv.mkDerivation {
                     -i {} \;
     ''
     +
-      # aarch64 does HAVE_NUMA so -lnuma requires it in library-dirs in rts/package.conf.in
+      # Some platforms do HAVE_NUMA so -lnuma requires it in library-dirs in rts/package.conf.in
       # FFI_LIB_DIR is a good indication of places it must be needed.
-      lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) ''
-        find . -name package.conf.in \
-            -exec sed -i "s@FFI_LIB_DIR@FFI_LIB_DIR ${numactl.out}/lib@g" {} \;
-      ''
+      lib.optionalString
+        (
+          lib.meta.availableOn stdenv.hostPlatform numactl
+          && builtins.any ({ nixPackage, ... }: nixPackage == numactl) binDistUsed.archSpecificLibraries
+        )
+        ''
+          find . -name package.conf.in \
+              -exec sed -i "s@FFI_LIB_DIR@FFI_LIB_DIR ${numactl.out}/lib@g" {} \;
+        ''
     +
       # Rename needed libraries and binaries, fix interpreter
       lib.optionalString stdenv.hostPlatform.isLinux ''
