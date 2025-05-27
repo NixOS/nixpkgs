@@ -10,14 +10,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "coqui-tts";
-  version = "0.26.0";
+  version = "0.26.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "idiap";
     repo = "coqui-ai-TTS";
     tag = "v${version}";
-    hash = "sha256-tLTurOwSzKvejb31yijmH3LFZGJHYp0OW0ckS7Ds5ig=";
+    hash = "sha256-U/U3aXFvqnaV/Msy5wyzAKCUw9XUNplugig6nv5nfZY=";
   };
 
   postPatch =
@@ -185,7 +185,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/idiap/coqui-ai-TTS";
-    changelog = "https://github.com/idiap/coqui-ai-TTS/releases/tag/v${version}";
+    changelog = "https://github.com/idiap/coqui-ai-TTS/releases/tag/${src.tag}";
     description = "Deep learning toolkit for Text-to-Speech, battle-tested in research and production";
     license = licenses.mpl20;
     teams = [ teams.tts ];

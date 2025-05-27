@@ -4444,12 +4444,7 @@ with pkgs;
 
   soundkonverter = libsForQt5.soundkonverter;
 
-  sparrow-unwrapped = callPackage ../applications/blockchains/sparrow {
-    openimajgrabber = callPackage ../applications/blockchains/sparrow/openimajgrabber.nix { };
-    openjdk = jdk23.override { enableJavaFX = true; };
-  };
-
-  sparrow = callPackage ../applications/blockchains/sparrow/fhsenv.nix { };
+  sparrow = callPackage ../applications/blockchains/sparrow { };
 
   steck = callPackage ../servers/pinnwand/steck.nix { };
 
@@ -9236,9 +9231,7 @@ with pkgs;
     };
   };
 
-  opencsg = callPackage ../development/libraries/opencsg {
-    inherit (qt5) qmake;
-  };
+  opencsg = callPackage ../development/libraries/opencsg { };
 
   opencv4 = callPackage ../development/libraries/opencv/4.x.nix {
     pythonPackages = python3Packages;
