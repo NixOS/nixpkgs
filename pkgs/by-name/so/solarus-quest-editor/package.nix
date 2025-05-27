@@ -48,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./qlementine-src.patch { inherit qlementine-src; })
   ];
 
+  strictDeps = true;
   nativeBuildInputs = [
     cmake
     ninja
