@@ -3,12 +3,11 @@
   fetchFromGitHub,
   buildGoModule,
   buildNpmPackage,
-  stdenvNoCC,
   nixosTests,
   nix-update-script,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "pocket-id";
   version = "1.0.0";
 
@@ -19,22 +18,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-cHPG4KZgfLuEDzLJ9dV4PRUlqWjd7Ji3480lrFwK6Ds=";
   };
 
-  backend = buildGoModule {
-    pname = "pocket-id-backend";
-    inherit (finalAttrs) version src;
+  sourceRoot = "${finalAttrs.src.name}/backend";
 
-    sourceRoot = "${finalAttrs.src.name}/backend";
+  vendorHash = "sha256-82kdx9ihJgqMCiUjZTONGa1nCZoxKltw8mpF0KoOdT8=";
 
-    vendorHash = "sha256-82kdx9ihJgqMCiUjZTONGa1nCZoxKltw8mpF0KoOdT8=";
+  preBuild = ''
+    cp -r ${finalAttrs.frontend}/lib/pocket-id-frontend/dist frontend/dist
+  '';
 
-    preBuild = ''
-      cp -r ${finalAttrs.frontend}/lib/pocket-id-frontend/dist frontend/dist
-    '';
-
-    preFixup = ''
-      mv $out/bin/cmd $out/bin/pocket-id-backend
-    '';
-  };
+  preFixup = ''
+    mv $out/bin/cmd $out/bin/pocket-id
+  '';
 
   frontend = buildNpmPackage {
     pname = "pocket-id-frontend";
@@ -57,25 +51,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
   };
 
-  dontUnpack = true;
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/bin
-    ln -s ${finalAttrs.backend}/bin/pocket-id-backend $out/bin/pocket-id-backend
-
-    runHook postInstall
-  '';
-
   passthru = {
     tests = {
       inherit (nixosTests) pocket-id;
     };
     updateScript = nix-update-script {
       extraArgs = [
-        "--subpackage"
-        "backend"
         "--subpackage"
         "frontend"
       ];
@@ -87,6 +68,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://pocket-id.org";
     changelog = "https://github.com/pocket-id/pocket-id/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
+    mainProgram = "pocket-id";
     maintainers = with lib.maintainers; [
       gepbird
       marcusramberg
