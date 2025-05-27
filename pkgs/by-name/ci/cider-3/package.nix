@@ -1,4 +1,5 @@
 { appimageTools
+, dbus
 , lib
 , stdenv
 , stdenvNoCC
@@ -43,11 +44,12 @@ mkCider rec {
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --add-flags "--no-sandbox --disable-gpu-sandbox" # Cider 2 does not start up properly without these from my preliminary testing
 
-        install -Dm444 ${contents}/Cider.desktop $out/share/applications/${pname}.desktop
-        substituteInPlace $out/share/applications/${pname}.desktop \
-          --replace-warn 'Exec=Cider' 'Exec=${pname}'
-        install -Dm444 ${contents}/usr/share/icons/hicolor/256x256/cider.png \
-                      $out/share/icons/hicolor/256x256/apps/cider.png
+      install -Dm444 ${contents}/Cider.desktop $out/share/applications/${pname}.desktop
+      substituteInPlace $out/share/applications/${pname}.desktop \
+        --replace-warn 'Exec=Cider' 'Exec='$out'/bin/${pname}' \
+        --replace-warn 'Exec=dbus-send' 'Exec=${lib.getExe' dbus "dbus-send"}'
+      install -Dm444 ${contents}/usr/share/icons/hicolor/256x256/cider.png \
+                    $out/share/icons/hicolor/256x256/apps/cider.png
     '';
 
   installPhase =
