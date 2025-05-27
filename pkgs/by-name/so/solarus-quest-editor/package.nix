@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.solarus-games.org";
     license = lib.licenses.gpl3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ marcin-serwin ];
     platforms = lib.platforms.linux;
   };
 })
