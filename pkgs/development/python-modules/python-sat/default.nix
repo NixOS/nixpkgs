@@ -6,17 +6,16 @@
   pypblib,
   pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "python-sat";
-  version = "0.1.7.dev1";
+  version = "0.1.8.dev16";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pysathq";
     repo = "pysat";
-    rev = version;
-    hash = "sha256-zGdgD+SgoMB7/zDQI/trmV70l91TB7OkDxaJ30W3dkI=";
+    rev = "e6a6a2bf78aa7ad806f47a84aecd1b7bfd5b3b89"; # upstream does not tag releases
+    hash = "sha256-6RX57eAyWypbJFCXxTWJNmjIXwbB7ruJtksDOXzSWo0=";
   };
 
   propagatedBuildInputs = [
@@ -26,23 +25,16 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # https://github.com/pysathq/pysat/pull/102
-  postPatch = ''
-        # Fix for case-insensitive filesystem
-        cat >>solvers/patches/cadical.patch <<EOF
-    diff --git solvers/cadical/VERSION solvers/cdc/VERSION
-    deleted file mode 100644
-    --- solvers/cadical/VERSION
-    +++ /dev/null
-    @@ -1 +0,0 @@
-    -1.0.3
-    EOF
-  '';
+  disabledTestPaths = [ "tests/test_unique_mus.py" ];
 
   meta = with lib; {
     description = "Toolkit to provide interface for various SAT (without optional dependancy py-aiger-cnf)";
     homepage = "https://github.com/pysathq/pysat";
+    changelog = "https://pysathq.github.io/updates/";
     license = licenses.mit;
-    maintainers = [ maintainers.marius851000 ];
+    maintainers = [
+      maintainers.marius851000
+      maintainers.chrjabs
+    ];
   };
 }
