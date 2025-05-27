@@ -69,7 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/uutils/coreutils";
     changelog = "https://github.com/uutils/coreutils/releases/tag/${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ siraben ];
+    maintainers = with lib.maintainers; [
+      siraben
+      matthiasbeyer
+    ];
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };
