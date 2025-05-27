@@ -27,7 +27,7 @@
       inherit (builtins) toString;
     in
     ''
-      machine.wait_for_unit("pocket-id-backend.service")
+      machine.wait_for_unit("pocket-id.service")
       machine.wait_for_open_port(${toString settings.PORT})
 
       backend_status = machine.succeed("curl -L -o /tmp/backend-output -w '%{http_code}' http://localhost:${toString settings.PORT}/api/users/me")

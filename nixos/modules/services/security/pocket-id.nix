@@ -134,8 +134,8 @@ in
     ];
 
     systemd.services = {
-      pocket-id-backend = {
-        description = "Pocket ID backend";
+      pocket-id = {
+        description = "Pocket ID";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         restartTriggers = [
@@ -149,7 +149,7 @@ in
           User = cfg.user;
           Group = cfg.group;
           WorkingDirectory = cfg.dataDir;
-          ExecStart = "${cfg.package}/bin/pocket-id-backend";
+          ExecStart = "${cfg.package}/bin/pocket-id";
           Restart = "always";
           EnvironmentFile = [
             cfg.environmentFile
