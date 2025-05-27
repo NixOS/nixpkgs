@@ -38,7 +38,7 @@ let
       ))
     else
       cudaCapability;
-  cudaCapability' = lib.toInt (cudaPackages.flags.dropDot cudaCapabilityString);
+  cudaCapability' = lib.toInt (cudaPackages.flags.dropDots cudaCapabilityString);
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "moshi";
