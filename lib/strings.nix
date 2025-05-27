@@ -333,6 +333,41 @@ rec {
   concatLines = concatMapStrings (s: s + "\n");
 
   /**
+    Given string `s`, replace every occurrence of the string `from` with the string `to`.
+
+    # Inputs
+
+    `from`
+    : The string to be replaced
+
+    `to`
+    : The string to replace with
+
+    `s`
+    : The original string where replacements will be made
+
+    # Type
+
+    ```
+    replaceString :: string -> string -> string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.replaceString` usage example
+
+    ```nix
+    replaceString "world" "Nix" "Hello, world!"
+    => "Hello, Nix!"
+    replaceString "." "_" "v1.2.3"
+    => "v1_2_3"
+    ```
+
+    :::
+  */
+  replaceString = from: to: replaceStrings [ from ] [ to ];
+
+  /**
     Repeat a string `n` times,
     and concatenate the parts into a new string.
 
