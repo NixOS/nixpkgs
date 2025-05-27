@@ -8,7 +8,6 @@
   zstd,
   installShellFiles,
   versionCheckHook,
-  testers,
   pie ? stdenv.hostPlatform.isDarwin,
 }:
 
@@ -41,10 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
-
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-  };
 
   meta = {
     homepage = "https://dev.yorhel.nl/ncdu";
