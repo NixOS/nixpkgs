@@ -1,10 +1,12 @@
 {
+  lib,
   pkgs,
-  latestKernel ? false,
+  latestKernel,
   ...
 }:
 
 {
+  _module.args.latestKernel = lib.mkDefault false;
   name = "login";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ ];
