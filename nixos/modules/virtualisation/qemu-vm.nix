@@ -1146,10 +1146,10 @@ in
           '';
         }
         {
-          assertion = cfg.installBootLoader -> config.system.switch.enable;
+          assertion = cfg.installBootLoader -> config.system.switch.enable || config.system.switch.enableNg;
           message = ''
-            `system.switch.enable` must be enabled for `virtualisation.installBootLoader` to work.
-            Please enable it in your configuration.
+            Either `system.switch.enable` or `system.switch.enableNg` must be enabled for `virtualisation.installBootLoader` to work.
+            Please enable one in your configuration.
           '';
         }
       ];
