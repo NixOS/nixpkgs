@@ -23,8 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "solarus-games";
     repo = "solarus";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Kfg4pFZrEhsIU4RQlOox3hMpk2PXbOzrkwDElPGnDjA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Kfg4pFZrEhsIU4RQlOox3hMpk2PXbOzrkwDElPGnDjA=";
   };
 
   patches = [
