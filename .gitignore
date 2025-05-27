@@ -8,6 +8,7 @@
 .nixos-test-history
 .vscode/
 .helix/
+*.vim
 outputs/
 result-*
 result
