@@ -59,6 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
     ./clang.patch
     # Replace hardcoded cpp with GAG_CPP (see below).
     ./cpp-darwin.patch
+    # Fix the numpy header detection with numpy > 2.0.0
+    # Patch submitted upstream, it will be included in the next release.
+    ./numpy-header.patch
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
