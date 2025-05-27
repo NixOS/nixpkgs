@@ -10,9 +10,8 @@ stdenv.mkDerivation rec {
   rev = "c5ce75b9eea8ebb2746b13eeb0f335813c615115";
 
   src = fetchzip {
-    url = "https://indefero.soutade.fr/p/updfparser/source/download/${rev}/";
     hash = "sha256-RT7mvu43Izp0rHhKq4wR4kt0TDfzHvB2NGMR+fxO5UM=";
-    extension = "zip";
+    url = "https://forge.soutade.fr/soutade/updfparser/archive/${rev}.tar.gz";
   };
 
   makeFlags = [
