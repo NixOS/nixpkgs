@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "solarus-games";
     repo = "solarus-quest-editor";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GTslxValldReWGb3x67zRPrvQUuCO/HQSXOEQlJfAmw=";
   };
 
