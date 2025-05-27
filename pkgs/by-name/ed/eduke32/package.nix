@@ -9,12 +9,12 @@
   copyDesktopItems,
   alsa-lib,
   flac,
-  gtk2,
   libvorbis,
   libvpx,
   libGL,
   SDL2,
   SDL2_mixer,
+  xorg,
   graphicsmagick,
   unstableGitUpdater,
 }:
@@ -60,8 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
-      gtk2
       libGL
+      xorg.libX11
     ];
 
   nativeBuildInputs =
@@ -93,6 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     "SDLCONFIG=${SDL2}/bin/sdl2-config"
     "VC_HASH=${lib.substring 0 9 finalAttrs.src.rev}"
     "VC_BRANCH=master"
+    "HAVE_GTK2=0"
   ];
 
   buildFlags = [
