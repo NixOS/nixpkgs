@@ -32,7 +32,7 @@
         let
           emptyContainer = import ../lib/eval-config.nix {
             modules = lib.singleton {
-              nixpkgs = { inherit (config.nixpkgs) localSystem; };
+              nixpkgs.hostPlatform = { inherit (pkgs.stdenv.hostPlatform) system; };
 
               containers.foo.config = { };
             };
