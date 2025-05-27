@@ -48,6 +48,9 @@ stdenv.mkDerivation rec {
       downloaded and the java code runs.
     '';
     homepage = "https://www.jbang.dev";
+    sourceProvenance = with lib.sourceTypes; [
+      binaryBytecode
+    ];
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ moaxcp ];
