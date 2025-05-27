@@ -15,13 +15,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "legcord";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "Legcord";
     repo = "Legcord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e2ylcK4hjQNUGFn6AefwG+yJOiWiDOKEGeMSwOXBY6I=";
+    hash = "sha256-6egqI1JhnRc8YwzAvyy4Xg9Z9dEfG7wIbMfUgQ+4IBA=";
   };
 
   nativeBuildInputs = [
