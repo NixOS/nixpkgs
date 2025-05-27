@@ -14,7 +14,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "VictoriaMetrics";
-  version = "1.118.0";
+  version = "1.117.1";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
