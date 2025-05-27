@@ -15,10 +15,9 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-    mkdir -p $out
     mkdir -p $out/include
     cp -r $src/* $out/
-    cp -r $src/miniaudio.h $out/include/
+    mv $out/miniaudio.h $out/include/
   '';
 
   meta = with lib; {
