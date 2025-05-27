@@ -2,7 +2,6 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  fetchpatch2,
   python3Packages,
   nixosTests,
   fetchurl,
@@ -10,27 +9,18 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.10";
+  version = "0.6.11";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-OZPZlF6tXzfuFU8/ZavE67E8+XdRu+7oCA1eD0EA9fg=";
+    hash = "sha256-G5rbSClztrphQwVYoBvfFTZ/dPHCuxL1PdZZhSy2RbQ=";
   };
 
   frontend = buildNpmPackage rec {
     pname = "open-webui-frontend";
     inherit version src;
-
-    patches = [
-      # Git is not available in the sandbox
-      # Remove this patch at the next release
-      (fetchpatch2 {
-        url = "https://github.com/open-webui/open-webui/commit/ed0659aca60eedadadba4362b309015b4a8368c6.patch";
-        hash = "sha256-lTzCdAk9gagIfN5Ld1tCS3gp/oVm4+CRy/lD42702WM=";
-      })
-    ];
 
     # the backend for run-on-client-browser python execution
     # must match lock file in open-webui
@@ -42,7 +32,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-F/xum76SHFwX/77kPHTFayJ00wv6ZWE09hw8taUbMMQ=";
+    npmDepsHash = "sha256-qQzAehIXMWyXmz7jT0aU6zsSXi3WVcOjchcA+3M7tAU=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
@@ -197,6 +187,7 @@ python3Packages.buildPythonApplication rec {
       sentence-transformers
       sentencepiece
       soundfile
+      starlette-compress
       tencentcloud-sdk-python
       tiktoken
       transformers
