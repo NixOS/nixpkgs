@@ -276,11 +276,11 @@ let
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "136.0.7103.114";
+    version = "137.0.7151.41";
 
     src = fetchurl {
-      url = "http://dl.google.com/release2/chrome/iwktnyywqpn7dye3zjzgosvevq_136.0.7103.114/GoogleChrome-136.0.7103.114.dmg";
-      hash = "sha256-myJawlgVBQlLtgBfSfCL5XfdnH8d7xd+j8JV2+2MZ/s=";
+      url = "http://dl.google.com/release2/chrome/acracoudzvaateoc4hi5umv6pobq_137.0.7151.41/GoogleChrome-137.0.7151.41.dmg";
+      hash = "sha256-egOl4mjsIxjWxYTLI38U2LqrIs85+cmZG9oEXe/bF7Q=";
     };
 
     dontPatch = true;
