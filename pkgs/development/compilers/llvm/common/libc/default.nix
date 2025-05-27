@@ -79,12 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeFeature "LLVM_ENABLE_RUNTIMES" "libc;compiler-rt")
       # Tests requires the host to have a libc.
       (lib.cmakeBool "LLVM_INCLUDE_TESTS" (stdenv.cc.libc != null))
-      (lib.cmakeBool "LLVM_LIBC_INCLUDE_SCUDO" true)
-      (lib.cmakeBool "COMPILER_RT_BUILD_SCUDO_STANDALONE_WITH_LLVM_LIBC" true)
-      (lib.cmakeBool "COMPILER_RT_BUILD_GWP_ASAN" false)
-      (lib.cmakeBool "COMPILER_RT_SCUDO_STANDALONE_BUILD_SHARED" false)
     ]
-    ++ lib.optional (isFullBuild && stdenv.cc.libc == null) [
+    ++ lib.optionals (isFullBuild && stdenv.cc.libc == null) [
       # CMake runs a check to see if the compiler works.
       # This includes including headers which requires a libc.
       # Skip these checks because a libc cannot be used when one doesn't exist.

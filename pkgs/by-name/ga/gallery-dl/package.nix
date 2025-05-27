@@ -25,6 +25,7 @@ python3Packages.buildPythonApplication {
 
   dependencies = [
     python3Packages.requests
+    python3Packages.pysocks
     yt-dlp
   ];
 

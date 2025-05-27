@@ -11,7 +11,6 @@ import ./make-test-python.nix (
     meta = with pkgs.lib.maintainers; {
       maintainers = [
         bjornfor
-        coconnor
         domenkozar
       ];
     };
