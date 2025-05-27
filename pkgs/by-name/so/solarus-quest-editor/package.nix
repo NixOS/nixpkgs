@@ -33,14 +33,14 @@ let
     wrapQtAppsHook
     ;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "solarus-quest-editor";
   version = "2.0.0";
 
   src = fetchFromGitLab {
     owner = "solarus-games";
-    repo = pname;
-    rev = "v${version}";
+    repo = "solarus-quest-editor";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-GTslxValldReWGb3x67zRPrvQUuCO/HQSXOEQlJfAmw=";
   };
 
@@ -82,5 +82,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-
-}
+})
