@@ -15289,9 +15289,6 @@ with pkgs;
     lua = lua5_1;
   };
 
-  # solarus and solarus-quest-editor must use the same version of Qt.
-  solarus-quest-editor = callPackage ../development/tools/solarus-quest-editor { };
-
   # You still can override by passing more arguments.
   spring = callPackage ../games/spring { asciidoc = asciidoc-full; };
 
