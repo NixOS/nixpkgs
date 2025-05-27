@@ -49,6 +49,7 @@ rustPlatform.buildRustPackage rec {
       ysndr
       cole-h
       SuperSandro2000
+      matthiasbeyer
     ];
     mainProgram = "zoxide";
   };
