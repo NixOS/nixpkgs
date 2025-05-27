@@ -1218,6 +1218,8 @@ let
 
         melange = callPackage ../development/tools/ocaml/melange { };
 
+        melange-json = callPackage ../development/ocaml-modules/melange-json { };
+
         memprof-limits = callPackage ../development/ocaml-modules/memprof-limits { };
 
         memtrace = callPackage ../development/ocaml-modules/memtrace { };
