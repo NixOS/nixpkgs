@@ -2,6 +2,8 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  replaceVars,
+  marisa-cpp,
   cython,
   setuptools,
   pytestCheckHook,
@@ -23,9 +25,19 @@ buildPythonPackage rec {
     hash = "sha256-OifECOKu/APg8dJbL/KvuFqsNWj2+iripTtXouh84p0=";
   };
 
+  patches = [
+    (replaceVars ./unvendor-marisa.patch {
+      marisa = lib.getDev marisa-cpp;
+    })
+  ];
+
   build-system = [
     cython
     setuptools
+  ];
+
+  buildInputs = [
+    marisa-cpp
   ];
 
   nativeCheckInputs = [
@@ -33,11 +45,6 @@ buildPythonPackage rec {
     readme-renderer
     hypothesis
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "hypothesis==" "hypothesis>="
-  '';
 
   preBuild = ''
     ./update_cpp.sh
