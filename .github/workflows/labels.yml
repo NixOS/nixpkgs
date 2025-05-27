@@ -8,6 +8,10 @@ name: "Label PR"
 on:
   pull_request_target:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
   issues: write # needed to create *new* labels
