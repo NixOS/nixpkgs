@@ -14,6 +14,10 @@
   openal,
   libmodplug,
   libvorbis,
+
+  # tests
+  solarus-quest-editor,
+  solarus-launcher,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -62,6 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-DGLM_ENABLE_EXPERIMENTAL")
     (lib.cmakeFeature "CMAKE_INSTALL_DATADIR" "${placeholder "lib"}/share")
   ];
+
+  passthru.tests = {
+    inherit solarus-quest-editor solarus-launcher;
+  };
 
   meta = {
     description = "Zelda-like ARPG game engine";
