@@ -50,13 +50,13 @@ jobs:
 
       - name: "Add 'has: port to stable' label"
         if: steps.backport.outputs.created_pull_numbers != ''
-        env:
-          # Not the app on purpose to avoid triggering another workflow run after adding this label
-          GH_TOKEN: ${{ github.token }}
-          REPOSITORY: ${{ github.repository }}
-          NUMBER: ${{ github.event.number }}
-        run: |
-          gh api \
-            --method POST \
-            /repos/"$REPOSITORY"/issues/"$NUMBER"/labels \
-            -f "labels[]=8.has: port to stable"
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          # Not using the app on purpose to avoid triggering another workflow run after adding this label.
+          script: |
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              labels: [ '8.has: port to stable' ]
+            })
