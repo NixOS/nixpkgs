@@ -3,6 +3,7 @@ use warnings;
 use File::Path qw(make_path);
 use File::Slurp;
 use Getopt::Long;
+use IPC::Open3 qw(open3);
 use JSON;
 use Time::Piece;
 
@@ -12,6 +13,8 @@ my $uidMap = -e $uidMapFile ? decode_json(read_file($uidMapFile)) : {};
 
 my $gidMapFile = "/var/lib/nixos/gid-map";
 my $gidMap = -e $gidMapFile ? decode_json(read_file($gidMapFile)) : {};
+
+my $systemd = "@systemd@";
 
 my $is_dry = ($ENV{'NIXOS_ACTION'} // "") eq "dry-activate";
 GetOptions("dry-activate" => \$is_dry);
@@ -89,6 +92,67 @@ sub allocUid {
         return $prevUid;
     }
     return allocId(\%uidsUsed, \%uidsPrevUsed, $min, $max, $delta, sub { my ($uid) = @_; getpwuid($uid) });
+}
+
+sub loginctl {
+    system("${systemd}/bin/loginctl", "--no-legend", "--no-pager", @_);
+}
+
+sub loginctlSilent {
+    my $pid = open3(my $stdin, my $stdout, undef, "${systemd}/bin/loginctl", "--no-legend", "--no-pager", @_);
+    waitpid($pid, 0);
+    return $?;
+};
+
+# `loginctl show-session`, when called without any session names, "[shows]
+# properties [of] the manager itself" (`man 1 loginctl`), where "the manager"
+# is the systemd login manager.  If this command completes successfully, we can
+# be confident that the login manager is up and running.
+if (loginctlSilent("show-session") == 0) {
+    *doDisableLinger = sub { loginctl("disable-linger", @_); };
+    *doEnableLinger = sub { loginctl("enable-linger", @_); };
+} else {
+    require Errno; # For magic `%!' in `doDisableLinger`
+
+    my $lingering_dir = "/var/lib/systemd/linger";
+
+    *doDisableLinger = sub {
+        foreach my $name (@_) {
+            my $file = "${lingering_dir}/${name}";
+            unlink $file or do {
+                # Don't bother warning about files that are already absent.
+                warn "failed to unlink '$file': $!" unless $!{ENOENT};
+            };
+        }
+    };
+
+    *doEnableLinger = sub {
+        make_path($lingering_dir);
+
+        foreach my $name (@_) {
+            my $file = "${lingering_dir}/${name}";
+            open my $fh, ">>", $file or warn "failed to touch '$file': $!";
+            close $fh;
+        }
+    };
+}
+
+sub disableLingerRemoved {
+    return unless scalar @_;
+    dry_print("disabling", "would disable", "lingering for removed user(s) '$_'") foreach @_;
+    doDisableLinger(@_) unless $is_dry;
+}
+
+sub disableLinger {
+    return unless scalar @_;
+    dry_print("disabling", "would disable", "lingering for user(s) '$_'") foreach @_;
+    doDisableLinger(@_) unless $is_dry;
+}
+
+sub enableLinger {
+    return unless scalar @_;
+    dry_print("enabling", "would enable", "lingering for user(s) '$_'") foreach @_;
+    doEnableLinger(@_) unless $is_dry;
 }
 
 # Read the declared users/groups
@@ -219,6 +283,13 @@ foreach my $u (@{$spec->{users}}) {
             dry_print("warning: not applying", "warning: would not apply", "UID change of user ‘$name’ ($existing->{uid} -> $u->{uid}) in /etc/passwd");
             $u->{uid} = $existing->{uid};
         }
+
+        # When `mutableUsers` is in effect, only apply the specified lingering
+        # setting when creating the user account.
+        if ($spec->{mutableUsers}) {
+            dry_print("warning: not applying", "warning: would not apply", "lingering setting of mutable user '$name'") if defined $u->{linger};
+            delete $u->{linger};
+        }
     } else {
         $u->{uid} = allocUid($name, $u->{isSystemUser}) if !defined $u->{uid};
 
@@ -267,16 +338,25 @@ foreach my $u (@{$spec->{users}}) {
 # Update the persistent list of declarative users.
 updateFile($declUsersFile, join(" ", sort(keys %usersOut)));
 
-# Merge in the existing /etc/passwd.
+# Merge in the existing /etc/passwd and gather the names of users whose
+# lingering should be disabled.
+my @disableLingerRemoved;
 foreach my $name (keys %usersCur) {
     my $u = $usersCur{$name};
     next if defined $usersOut{$name};
     if (!$spec->{mutableUsers} || defined $declUsers{$name}) {
         dry_print("removing user", "would remove user", "‘$name’");
+        push @disableLingerRemoved, $name;
     } else {
         $usersOut{$name} = $u;
     }
 }
+
+# Remove these lingering settings before updating the user DB, as otherwise
+# `loginctl disable-linger my-deleted-user` is liable to complain "Failed to
+# look up user my-deleted-user: No such process" and fail to remove
+# /var/lib/systemd/linger/my-deleted-user.
+disableLingerRemoved(@disableLingerRemoved);
 
 # Rewrite /etc/passwd. FIXME: acquire lock.
 @lines = map { join(":", $_->{name}, $_->{fakePassword}, $_->{uid}, $_->{gid}, $_->{description}, $_->{home}, $_->{shell}) . "\n" }
@@ -347,6 +427,8 @@ sub allocSubUid {
 
 my @subGids;
 my @subUids;
+my @disableLinger;
+my @enableLinger;
 foreach my $u (values %usersOut) {
     my $name = $u->{name};
 
@@ -375,8 +457,12 @@ foreach my $u (values %usersOut) {
         push @subUids, $value;
         push @subGids, $value;
     }
+
+    push @{$u->{linger} ? \@enableLinger : \@disableLinger}, $name if defined $u->{linger};
 }
 
 updateFile("/etc/subuid", join("\n", @subUids) . "\n");
 updateFile("/etc/subgid", join("\n", @subGids) . "\n");
 updateFile($subUidMapFile, to_json($subUidMap) . "\n");
+disableLinger(@disableLinger);
+enableLinger(@enableLinger);

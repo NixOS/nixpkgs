@@ -25142,6 +25142,12 @@
     githubId = 2027925;
     name = "Thomas Gebert";
   };
+  tomeon = {
+    email = "tomeon@dogea.red";
+    github = "tomeon";
+    githubId = 1287639;
+    name = "Matt Schreiber";
+  };
   tomfitzhenry = {
     email = "tom@tom-fitzhenry.me.uk";
     github = "tomfitzhenry";
