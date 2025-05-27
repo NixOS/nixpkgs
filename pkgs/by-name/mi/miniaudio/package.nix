@@ -16,8 +16,19 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/include
-    cp -r $src/* $out/
-    mv $out/miniaudio.h $out/include/
+    mkdir -p $out/lib/pkgconfig
+
+    cp $src/miniaudio.h $out/include/
+
+    echo "prefix=$out
+      includedir=$out/include
+
+      Name: miniaudio
+      Description: An audio playback and capture library in a single source file.
+      Version: ${version}
+      Cflags: -I$out/include
+      Libs: -lm -lpthread -latomic
+    " > $out/lib/pkgconfig/miniaudio.pc
   '';
 
   meta = with lib; {
