@@ -23436,6 +23436,13 @@
     githubId = 16364318;
     name = "Jeffrey Harmon";
   };
+  squat = {
+    matrix = "@squat:beeper.com";
+    name = "squat";
+    github = "squat";
+    githubId = 20484159;
+    keys = [ { fingerprint = "F246 425A 7650 6F37 0552  BA8D DEA9 C405 09D9 65F5"; } ];
+  };
   srghma = {
     email = "srghma@gmail.com";
     github = "srghma";
