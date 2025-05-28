@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Find alleged cherry-picks
 
-set -eo pipefail
+set -euo pipefail
 
 if [ $# != "2" ] ; then
   echo "usage: check-cherry-picks.sh base_rev head_rev"
@@ -20,7 +20,7 @@ remote="$(git remote -v | grep -i 'NixOS/nixpkgs' | head -n1 | cut -f1 || true)"
 commits="$(git rev-list --reverse "$1..$2")"
 
 while read -r new_commit_sha ; do
-  if [ "$GITHUB_ACTIONS" = 'true' ] ; then
+  if [ -v GITHUB_ACTIONS ] ; then
     echo "::group::Commit $new_commit_sha"
   else
     echo "================================================="
@@ -34,7 +34,7 @@ while read -r new_commit_sha ; do
     | grep -Eoi -m1 '[0-9a-f]{40}' || true
   )
   if [ -z "$original_commit_sha" ] ; then
-    if [ "$GITHUB_ACTIONS" = 'true' ] ; then
+    if [ -v GITHUB_ACTIONS ] ; then
       echo ::endgroup::
       echo -n "::error ::"
     else
@@ -72,7 +72,7 @@ while read -r new_commit_sha ; do
         '
 
         if $range_diff_common --no-color 2> /dev/null | grep -E '^ {4}[+-]{2}' > /dev/null ; then
-          if [ "$GITHUB_ACTIONS" = 'true' ] ; then
+          if [ -v GITHUB_ACTIONS ] ; then
             echo ::endgroup::
             echo -n "::warning ::"
           else
@@ -88,7 +88,7 @@ while read -r new_commit_sha ; do
         else
           echo "  ✔ $original_commit_sha highly similar to $new_commit_sha"
           $range_diff_common --color
-          [ "$GITHUB_ACTIONS" = 'true' ] && echo ::endgroup::
+          [ -v GITHUB_ACTIONS ] && echo ::endgroup::
         fi
 
         # move on to next commit
@@ -97,7 +97,7 @@ while read -r new_commit_sha ; do
     done <<< "$branches"
   done
 
-  if [ "$GITHUB_ACTIONS" = 'true' ] ; then
+  if [ -v GITHUB_ACTIONS ] ; then
     echo ::endgroup::
     echo -n "::error ::"
   else
