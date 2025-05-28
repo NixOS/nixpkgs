@@ -83,6 +83,7 @@ rustPlatform.buildRustPackage {
       # Skip tests that return the wrong datetime in CI.
       "--skip test_stats::stats_cache_negative_threshold"
       "--skip test_stats::stats_cache_negative_threshold_five"
+      "--skip test_datefmt::datefmt_input_tz"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # uses X11 based clipboard library
