@@ -34,7 +34,7 @@ let
     print_info() {
       info title
       info underline
-      ${lib.concatStringsSep "\n  " configLines}
+      ${lib.concatStrings configLines}
       ${cfg.extraPrintInfoFields}
       info cols
     }
