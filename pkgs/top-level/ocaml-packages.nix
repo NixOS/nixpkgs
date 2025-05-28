@@ -1147,6 +1147,8 @@ let
 
         lwt-dllist = callPackage ../development/ocaml-modules/lwt-dllist { };
 
+        lwt_eio = callPackage ../development/ocaml-modules/lwt_eio { };
+
         lwt-exit = callPackage ../development/ocaml-modules/lwt-exit { };
 
         lwt_log = callPackage ../development/ocaml-modules/lwt_log { };

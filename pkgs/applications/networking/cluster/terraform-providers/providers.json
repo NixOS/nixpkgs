@@ -317,13 +317,13 @@
     "vendorHash": "sha256-ZCMSmOCPEMxCSpl3DjIUGPj1W/KNJgyjtHpmQ19JquA="
   },
   "datadog": {
-    "hash": "sha256-exndOGDZQqvh6m8sJg9/dIGup5SQruwE7qK9T0s/FJ8=",
+    "hash": "sha256-+C+pvw3ghriw3mR/lvpsSH0inTMPNwc6QAEtt6nXINw=",
     "homepage": "https://registry.terraform.io/providers/DataDog/datadog",
     "owner": "DataDog",
     "repo": "terraform-provider-datadog",
-    "rev": "v3.62.0",
+    "rev": "v3.63.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-uLNBbgW4oA8Cq0mjjMQFh7g37V+Ea9ek+ugBYJww88I="
+    "vendorHash": "sha256-FmNeAwJ/lZZEIGt5QlYm9Cqu2cgkXVa1B/ej+5/G7wg="
   },
   "deno": {
     "hash": "sha256-7IvJrhXMeAmf8e21QBdYNSJyVMEzLpat4Tm4zHWglW8=",
@@ -1111,13 +1111,13 @@
     "vendorHash": "sha256-KezwDRmQQj0MnmsVlrX1OhNG6oMgw8fCxX5VFGdUynw="
   },
   "routeros": {
-    "hash": "sha256-/tTd8EzA1/Js7S3eGg3L9AY9dyoIA3lFSU6VlT6p4us=",
+    "hash": "sha256-vL1ijiP+WDe8nqtSudOuOTPohHe8JRU6wF4el5P/pWg=",
     "homepage": "https://registry.terraform.io/providers/terraform-routeros/routeros",
     "owner": "terraform-routeros",
     "repo": "terraform-provider-routeros",
-    "rev": "v1.85.0",
+    "rev": "v1.85.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-DDmJ/mEOd94E7DqLKjT6Y4XkpVdXyKeAaE/Wj6M3vuw="
+    "vendorHash": "sha256-ysmNy+xojcHPSs++HofOxBKg1AlUO7taYVIcsmW/2kM="
   },
   "rundeck": {
     "hash": "sha256-cf+0qXpgxIsc/JbB7+u3MpmWFwUmpsinp1uARRhuBw0=",
@@ -1391,13 +1391,13 @@
     "vendorHash": null
   },
   "utils": {
-    "hash": "sha256-BnC5ihbOnua4ddTzM8mvWbKz5L13R2NT9c68teVLWo0=",
+    "hash": "sha256-vCdPG8cZUdFhs1OmqDlgCDqBdyFiL99p6I8JhL8C6lY=",
     "homepage": "https://registry.terraform.io/providers/cloudposse/utils",
     "owner": "cloudposse",
     "repo": "terraform-provider-utils",
-    "rev": "v1.29.0",
+    "rev": "v1.30.0",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-rHJabyfgu3wU79h3DHHYQauFmcR/SDuikauBF+CybZA="
+    "vendorHash": "sha256-giqZi1CmuyANNwzW+y9BUUUEfBhFZKkVGAvIPVvZnzE="
   },
   "vault": {
     "hash": "sha256-6gCpXzvF4p2otwo3dJ8c+EvzbsMZfzVZymb41+hEZoM=",
