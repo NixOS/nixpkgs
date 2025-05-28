@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
           libcryptui
         ];
 
-        services.xserver.desktopManager.gnome.extraGSettingsOverridePackages = with pkgs; [
+        services.desktopManager.gnome.extraGSettingsOverridePackages = with pkgs; [
           nemo
           gcr
           libcryptui
