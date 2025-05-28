@@ -46,7 +46,14 @@ while read -r new_commit_sha ; do
   for pattern in $PICKABLE_BRANCHES ; do
     set +f # re-enable pathname expansion
 
-    branches="$(git for-each-ref --format="%(refname)" "refs/remotes/${remote:-origin}/$pattern")"
+    # Reverse sorting by refname and taking one match only means we can only backport
+    # from unstable and the latest stable. That makes sense, because even right after
+    # branch-off, when we have two supported stable branches, we only ever want to cherry-pick
+    # **to** the older one, but never **from** it.
+    # This makes the job significantly faster in the case when commits can't be found,
+    # because it doesn't need to iterate through 20+ branches, which all need to be fetched.
+    branches="$(git for-each-ref --sort=-refname --format="%(refname)" \
+      "refs/remotes/${remote:-origin}/$pattern" | head -n1)"
 
     while read -r picked_branch ; do
       if git merge-base --is-ancestor "$original_commit_sha" "$picked_branch" ; then
