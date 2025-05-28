@@ -1,0 +1,32 @@
+From 38bf6f3036d1baddbe4618a219aaf17d460091d9 Mon Sep 17 00:00:00 2001
+From: Matt Caswell <matt@openssl.org>
+Date: Mon, 7 Apr 2025 09:58:30 +0100
+Subject: [PATCH] Fix SSL_accept()
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+If you have a QUIC server SSL connection object, you should be able to
+call SSL_accept() on it.
+
+Fixes #27282
+
+Reviewed-by: Neil Horman <nhorman@openssl.org>
+Reviewed-by: Saša Nedvědický <sashan@openssl.org>
+(Merged from https://github.com/openssl/openssl/pull/27283)
+---
+ ssl/quic/quic_method.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/ssl/quic/quic_method.c b/ssl/quic/quic_method.c
+index 0de2bca47e6bb..8092855efc61a 100644
+--- a/ssl/quic/quic_method.c
++++ b/ssl/quic/quic_method.c
+@@ -23,5 +23,5 @@ IMPLEMENT_quic_meth_func(OSSL_QUIC_ANY_VERSION,
+ 
+ IMPLEMENT_quic_meth_func(OSSL_QUIC_ANY_VERSION,
+                          OSSL_QUIC_server_method,
+-                         ssl_undefined_function,
+-                         ossl_quic_connect, ssl3_undef_enc_method)
++                         ossl_quic_accept,
++                         ssl_undefined_function, ssl3_undef_enc_method)
