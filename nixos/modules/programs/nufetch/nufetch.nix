@@ -122,5 +122,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ gignsky ];
+  meta.maintainers = with lib.maintainers; [ gignsky ];
 }
