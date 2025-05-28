@@ -162,7 +162,7 @@
       - any-glob-to-any-file:
         - doc/languages-frameworks/gnome.section.md
         - nixos/modules/services/desktops/gnome/**/*
-        - nixos/modules/services/x11/desktop-managers/gnome.nix
+        - nixos/modules/services/desktop-managers/gnome.nix
         - nixos/tests/gnome-xorg.nix
         - nixos/tests/gnome.nix
         - pkgs/desktops/gnome/**/*

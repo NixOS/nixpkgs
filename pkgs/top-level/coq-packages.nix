@@ -187,6 +187,7 @@ let
       paco = callPackage ../development/coq-modules/paco { };
       paramcoq = callPackage ../development/coq-modules/paramcoq { };
       parsec = callPackage ../development/coq-modules/parsec { };
+      parseque = callPackage ../development/coq-modules/parseque { };
       pocklington = callPackage ../development/coq-modules/pocklington { };
       QuickChick = callPackage ../development/coq-modules/QuickChick { };
       reglang = callPackage ../development/coq-modules/reglang { };
