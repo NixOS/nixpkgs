@@ -4,12 +4,12 @@
   bundlerUpdateScript,
 }:
 
-bundlerApp rec {
+bundlerApp {
   pname = "cucumber";
   gemdir = ./.;
   exes = [ "cucumber" ];
 
-  passthru.updateScript = bundlerUpdateScript pname;
+  passthru.updateScript = bundlerUpdateScript "cucumber";
 
   meta = with lib; {
     description = "Tool for executable specifications";
