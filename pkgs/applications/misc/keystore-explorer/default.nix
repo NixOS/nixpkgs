@@ -9,13 +9,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.5.3";
+  version = "5.6.0";
   pname = "keystore-explorer";
   src = fetchzip {
     url = "https://github.com/kaikramer/keystore-explorer/releases/download/v${version}/kse-${
       lib.replaceStrings [ "." ] [ "" ] version
     }.zip";
-    sha256 = "sha256-oShVfmien4HMpAfSa9rPr18wLu7RN8ZWEZEUtiBHyBs=";
+    sha256 = "sha256-+ZgALJaZodLmAtdCIE1SG6D0lzlETg4mMPXheXmGhPc=";
   };
 
   # glib is necessary so file dialogs don't hang.
