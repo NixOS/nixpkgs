@@ -3,17 +3,16 @@
   fetchFromGitHub,
   lib,
   nix-update-script,
-  stdenv,
 }:
 
-buildGo123Module rec {
+buildGo123Module (finalAttrs: {
   pname = "avalanchego";
   version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "ava-labs";
     repo = "avalanchego";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-elbY0KNsOmKSTX61nps2tjIFTJH5Nnqmwq6mWwd88aE=";
   };
 
@@ -27,11 +26,11 @@ buildGo123Module rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/ava-labs/avalanchego/version.GitCommit=${version}"
+    "-X github.com/ava-labs/avalanchego/version.GitCommit=${finalAttrs.version}"
   ];
 
   postInstall = ''
-    mv $out/bin/{main,${pname}}
+    mv $out/bin/{main,avalanchego}
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -39,7 +38,7 @@ buildGo123Module rec {
   meta = {
     description = "Go implementation of an Avalanche node";
     homepage = "https://github.com/ava-labs/avalanchego";
-    changelog = "https://github.com/ava-labs/avalanchego/releases/tag/v${version}";
+    changelog = "https://github.com/ava-labs/avalanchego/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       urandom
@@ -47,4 +46,4 @@ buildGo123Module rec {
     ];
     mainProgram = "avalanchego";
   };
-}
+})
