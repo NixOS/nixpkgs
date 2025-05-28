@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "sparse";
-  version = "0.16.0";
+  version = "0.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydata";
     repo = "sparse";
     tag = version;
-    hash = "sha256-ChSEb+IwzutDgYBJxhlunRaF8VvkLHW/ae5RdrljWj0=";
+    hash = "sha256-LYJ7YnR7WtzamK6py1NRPBe+h28L7JT+52wmourAc/c=";
   };
 
   build-system = [
