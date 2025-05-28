@@ -15900,6 +15900,7 @@ with pkgs;
     polyml = polyml.overrideAttrs {
       pname = "polyml-for-isabelle";
       version = "2025";
+      __intentionallyOverridingVersion = true; # avoid a warning, no src override
       configureFlags = [
         "--enable-intinf-as-int"
         "--with-gmp"
