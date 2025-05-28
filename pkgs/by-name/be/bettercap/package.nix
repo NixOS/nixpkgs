@@ -15,8 +15,8 @@ buildGoModule rec {
   version = "2.41.0";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "bettercap";
+    repo = "bettercap";
     rev = "v${version}";
     sha256 = "sha256-qQNsdKUiTSXkvfIguR1Rjs3A1WW4G1ernqRWTKBjIVI=";
   };
