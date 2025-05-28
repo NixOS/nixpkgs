@@ -24,24 +24,16 @@
   unittestCheckHook,
 }:
 
-let
-  functionDependencies = [
-    grpcio
-    prometheus-client
-    protobuf
-    ratelimit
-  ];
-in
 buildPythonPackage rec {
   pname = "pulsar-client";
-  version = "3.6.1";
+  version = "3.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "pulsar-client-python";
     tag = "v${version}";
-    hash = "sha256-KdPLp0BmZnobU4F6tuMj2DY/ya4QHeGcM/eEAivoXNI=";
+    hash = "sha256-M8Y72VgtPdM80AO9jRyyyOFW6wQ7dbKH33alLWcTLV8=";
   };
 
   build-system = [
@@ -66,20 +58,21 @@ buildPythonPackage rec {
 
   dependencies = [ certifi ];
 
-  pythonRemoveDeps = [
-    # not avalilable in nixpkgs
-    "apache-bookkeeper-client"
-  ];
-
   optional-dependencies = {
-    functions = functionDependencies;
+    functions = [
+      # apache-bookkeeper-client
+      grpcio
+      prometheus-client
+      protobuf
+      ratelimit
+    ];
     avro = [ fastavro ];
-    all = functionDependencies ++ [ fastavro ];
+    all = lib.flatten (lib.attrValues (lib.filterAttrs (n: v: n != "all") optional-dependencies));
   };
 
   nativeCheckInputs = [
     unittestCheckHook
-  ] ++ lib.flatten (lib.attrValues (lib.filterAttrs (n: v: n != "all") optional-dependencies));
+  ] ++ optional-dependencies.all;
 
   unittestFlagsArray = [
     "-s"
