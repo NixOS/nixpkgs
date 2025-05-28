@@ -32,22 +32,27 @@ in
       defaultText = "pkgs.nufetch-for-nixos-module";
       description = "Set version of nufetch package to use.";
     };
-    os = lib.mkEnableOption // { default = true; } {
+    os = lib.mkEnableOption {
+      default = true;
       description = "Enable Neofetch OS information display.";
     };
-    host = lib.mkEnableOption // { default = true; } {
+    host = lib.mkEnableOption {
+      default = true;
       description = "Enable Neofetch Host information display.";
     };
-    kernel = lib.mkEnableOption // { default = true; } {
+    kernel = lib.mkEnableOption {
+      default = true;
       description = "Enable Neofetch Kernel information display.";
     };
-    uptime = lib.mkEnableOption // { default = true; } {
+    uptime = lib.mkEnableOption {
+      default = true;
       description = "Enable Neofetch Uptime information display.";
     };
     packages = lib.mkEnableOption {
       description = "Enable Neofetch Packages information display.";
     };
-    shell = lib.mkEnableOption // { default = true; } {
+    shell = lib.mkEnableOption {
+      default = true;
       description = "Enable Neofetch Shell information display.";
     };
     resolution = lib.mkEnableOption {
@@ -56,7 +61,8 @@ in
     de = lib.mkEnableOption {
       description = "Enable Neofetch Desktop Environment information display.";
     };
-    wm = lib.mkEnableOption // { default = true; } {
+    wm = lib.mkEnableOption {
+      default = true;
       description = "Enable Neofetch Window Manager information display.";
     };
     wm_theme = lib.mkEnableOption {
@@ -68,28 +74,34 @@ in
     icons = lib.mkEnableOption {
       description = "Enable Neofetch Icons display.";
     };
-    terminal = lib.mkEnableOption // { default = true; } {
+    terminal = lib.mkEnableOption {
+      default = true;
       description = "Enable Neofetch Terminal information display.";
     };
     terminal_font = lib.mkEnableOption {
       description = "Enable Neofetch Terminal information display.";
     };
-    cpu = lib.mkEnableOption // { default = true; } {
+    cpu = lib.mkEnableOption {
+      default = true;
       description = "Enable Neofetch CPU information display.";
     };
-    gpu = lib.mkEnableOption // { default = true; } {
+    gpu = lib.mkEnableOption {
+      default = true;
       description = "Enable Neofetch GPU information display.";
     };
-    memory = lib.mkEnableOption // { default = true; } {
+    memory = lib.mkEnableOption {
+      default = true;
       description = "Enable Neofetch Memory information display.";
     };
     cpu_usage = lib.mkEnableOption {
       description = "Enable Neofetch CPU Usage information display.";
     };
-    disk = lib.mkEnableOption // { default = true; } {
+    disk = lib.mkEnableOption {
+      default = true;
       description = "Enable Neofetch Disk information display.";
     };
-    battery = lib.mkEnableOption // { default = true; } {
+    battery = lib.mkEnableOption {
+      default = true;
       description = "Enable Neofetch Battery information display.";
     };
     font = lib.mkEnableOption {
@@ -98,7 +110,8 @@ in
     song = lib.mkEnableOption {
       description = "Enable Neofetch Song information display.";
     };
-    local_ip = lib.mkEnableOption // { default = true; } {
+    local_ip = lib.mkEnableOption {
+      default = true;
       description = "Enable Neofetch Local IP information display.";
     };
     public_ip = lib.mkEnableOption {
@@ -111,12 +124,12 @@ in
       description = "Enable Neofetch Birthday information display.";
     };
     extraPrintInfoFields = lib.mkOption {
-      type = types.str;
+      type = lib.types.str;
       default = "";
       description = "Extra config lines to append to the generated Neofetch config. Use a long string (e.g. '''') for multi-line content.";
     };
     extraGenericFields = lib.mkOption {
-      type = types.str;
+      type = lib.types.str;
       default = "";
       description = "Extra config lines to append to the generated Neofetch config. Use a long string (e.g. '''') for multi-line content.";
     };
