@@ -1,11 +1,17 @@
-{ lib, bundlerApp }:
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
+}:
 
-bundlerApp {
+bundlerApp rec {
   pname = "zsteg";
 
   gemdir = ./.;
 
   exes = [ "zsteg" ];
+
+  passthru.updateScript = bundlerUpdateScript pname;
 
   meta = with lib; {
     description = "Detect stegano-hidden data in PNG & BMP";
