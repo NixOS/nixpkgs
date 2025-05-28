@@ -10,7 +10,7 @@
   libusb1,
 }:
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "bettercap";
   version = "2.41.0";
 
