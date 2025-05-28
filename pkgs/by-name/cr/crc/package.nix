@@ -47,12 +47,12 @@ buildGoModule (finalAttrs: {
   ];
 
   doInstallCheck = true;
-  nativeCheckInputs = [
+  nativeInstallCheckInputs = [
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
   versionCheckProgramArg = "version";
-  versionCheckDontIgnoreEnvironment = true;
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru.updateScript = ./update.sh;
 
