@@ -5,15 +5,15 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "new-lg4ff";
-  version = "0-unstable-2024-11-25";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "berarma";
     repo = "new-lg4ff";
-    rev = "6100a34c182536c607af80e119d54a66c6fb2a23";
-    sha256 = "sha256-90PnQDGwp94ELvWx6p8QiZucYmTbH3N0GiZbj3fo25g=";
+    tag = "v${version}";
+    sha256 = "sha256-nh5J89S3z0odzh2fDsAVVY1X6lr4ZUwoyu3UVOYQiq8=";
   };
 
   preBuild = ''
@@ -28,10 +28,19 @@ stdenv.mkDerivation {
   makeFlags = [
     "KVERSION=${kernel.modDirVersion}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    # Fake the CONFIG_LOGIWHEELS_FF config option, so it builds for 6.15
+    "KCFLAGS=-DCONFIG_LOGIWHEELS_FF"
   ];
 
   meta = with lib; {
-    description = "Experimental Logitech force feedback module for Linux";
+    description = ''
+      Experimental Logitech force feedback module for Linux.
+
+      NOTE: This package is intended to be used via the NixOS option
+      `hardware.new-lg4ff.enable`. Directly adding this package to
+      `boot.extraModulePackages` or `environment.systemPackages` is
+      discouraged and may result in improper configuration.
+    '';
     homepage = "https://github.com/berarma/new-lg4ff";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ matthiasbenaets ];
