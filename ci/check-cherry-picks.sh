@@ -17,7 +17,7 @@ problem=0
 # Not everyone calls their remote "origin"
 remote="$(git remote -v | grep -i 'NixOS/nixpkgs' | head -n1 | cut -f1 || true)"
 
-commits="$(git rev-list -E -i --grep="cherry.*[0-9a-f]{40}" --reverse "$1..$2")"
+commits="$(git rev-list --reverse "$1..$2")"
 
 while read -r new_commit_sha ; do
   if [ -z "$new_commit_sha" ] ; then
@@ -34,11 +34,19 @@ while read -r new_commit_sha ; do
   original_commit_sha=$(
     git rev-list --max-count=1 --format=format:%B "$new_commit_sha" \
     | grep -Ei -m1 "cherry.*[0-9a-f]{40}" \
-    | grep -Eoi -m1 '[0-9a-f]{40}'
+    | grep -Eoi -m1 '[0-9a-f]{40}' || true
   )
   if [ -z "$original_commit_sha" ] ; then
-    echo "  ? Couldn't locate original commit hash in message"
-    [ "$GITHUB_ACTIONS" = 'true' ] && echo ::endgroup::
+    if [ "$GITHUB_ACTIONS" = 'true' ] ; then
+      echo ::endgroup::
+      echo -n "::error ::"
+    else
+      echo -n "  ✘ "
+    fi
+    echo "Couldn't locate original commit hash in message"
+    echo "Note this should not necessarily be treated as a hard fail, but a reviewer's attention should" \
+      "be drawn to it and github actions have no way of doing that but to raise a 'failure'"
+    problem=1
     continue
   fi
 
