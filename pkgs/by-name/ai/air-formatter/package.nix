@@ -16,11 +16,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-32/wdz4CFYM/PFVSQiqYErXGHHn2KJyreiQq48vQryY=";
   };
 
-  # Remove duplicate entries from cargo lock
-  cargoPatches = [ ./cargo-lock.patch ];
-
   useFetchCargoVendor = true;
-  cargoHash = "sha256-zPT47K8OGtprxQt3ZOF2xmf6IRV5rsKWXeaXlyBdVlE=";
+  cargoHash = "sha256-iUJsqoNYj6P5LmaEiL2NjO3jWdIRcfxRILcgSi3v53s=";
 
   useNextest = true;
 
