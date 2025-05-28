@@ -14,6 +14,9 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 PICKABLE_BRANCHES=${PICKABLE_BRANCHES:-master staging release-??.?? staging-??.??}
 problem=0
 
+# Not everyone calls their remote "origin"
+remote="$(git remote -v | grep -i 'NixOS/nixpkgs' | head -n1 | cut -f1 || true)"
+
 commits="$(git rev-list -E -i --grep="cherry.*[0-9a-f]{40}" --reverse "$1..$2")"
 
 while read -r new_commit_sha ; do
@@ -40,10 +43,10 @@ while read -r new_commit_sha ; do
   fi
 
   set -f # prevent pathname expansion of patterns
-  for branch_pattern in $PICKABLE_BRANCHES ; do
+  for pattern in $PICKABLE_BRANCHES ; do
     set +f # re-enable pathname expansion
 
-    branches="$(git for-each-ref --format="%(refname)" "refs/remotes/origin/$branch_pattern")"
+    branches="$(git for-each-ref --format="%(refname)" "refs/remotes/${remote:-origin}/$pattern")"
 
     while read -r picked_branch ; do
       if git merge-base --is-ancestor "$original_commit_sha" "$picked_branch" ; then
