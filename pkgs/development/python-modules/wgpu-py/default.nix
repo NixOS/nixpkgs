@@ -38,25 +38,32 @@
 }:
 buildPythonPackage rec {
   pname = "wgpu-py";
-  version = "0.22.1";
+  version = "0.22.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pygfx";
     repo = "wgpu-py";
     tag = "v${version}";
-    hash = "sha256-sjpTTOYv5FXMieUJvCQ2nJ1I0zaguyd7//vdLlt8Bmk=";
+    hash = "sha256-HGpOEsTj4t57z38qKF6i1oUj7R7aFl8Xgk5y0TtgyMg=";
   };
 
-  # `requests` is only used to fetch a copy of `wgpu-native` via `tools/hatch_build.py`.
-  # As we retrieve `wgpu-native` from nixpkgs instead, none of this is needed, and
-  # remove an extra dependency.
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'requires = ["requests", "hatchling"]' 'requires = ["hatchling"]' \
-      --replace-fail '[tool.hatch.build.targets.wheel.hooks.custom]' "" \
-      --replace-fail 'path = "tools/hatch_build.py"' ""
-  '';
+  postPatch =
+    # `requests` is only used to fetch a copy of `wgpu-native` via `tools/hatch_build.py`.
+    # As we retrieve `wgpu-native` from nixpkgs instead, none of this is needed, and
+    # remove an extra dependency.
+    ''
+      substituteInPlace pyproject.toml \
+        --replace-fail 'requires = ["requests", "hatchling"]' 'requires = ["hatchling"]' \
+        --replace-fail '[tool.hatch.build.targets.wheel.hooks.custom]' "" \
+        --replace-fail 'path = "tools/hatch_build.py"' ""
+    ''
+    # Skip the compute_textures / astronauts example during testing, as it uses `imageio` to
+    # retrieve an image of an astronaut, which touches the network.
+    + ''
+      substituteInPlace examples/compute_textures.py \
+        --replace-fail 'import wgpu' 'import wgpu # run_example = false'
+    '';
 
   # wgpu-py expects to have an appropriately named wgpu-native library in wgpu/resources
   preBuild = ''
