@@ -34,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "smolagents";
-  version = "1.16.1";
+  version = "1.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "smolagents";
     tag = "v${version}";
-    hash = "sha256-4G55fASE8D4UfqO7/j+2VjqdQ8FxFPLkYO2pl5sSlxw=";
+    hash = "sha256-BMyLN8eNGBhywpN/EEE8hFf4Wb5EDpZvqBbX0ojRYec=";
   };
 
   build-system = [ setuptools ];
