@@ -909,7 +909,7 @@ rec {
         nativeBuildInputs = [
           buildPackages.perl
           buildPackages.dpkg
-          pkgs.nixfmt-rfc-style
+          buildPackages.nixfmt-rfc-style
         ];
       }
       ''
