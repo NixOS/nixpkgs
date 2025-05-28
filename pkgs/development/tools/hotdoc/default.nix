@@ -3,10 +3,12 @@
   stdenv,
   buildPythonApplication,
   fetchPypi,
+  replaceVars,
+  clang,
+  libclang,
   pytestCheckHook,
   pkg-config,
   cmake,
-  clang,
   flex,
   glib,
   json-glib,
@@ -38,6 +40,13 @@ buildPythonApplication rec {
     hash = "sha256-xNXf9kfwOqh6HS0GA10oGe3QmbkWNeOy7jkIKTV66fw=";
   };
 
+  patches = [
+    (replaceVars ./clang.patch {
+      clang = lib.getExe clang;
+      libclang = "${lib.getLib libclang}/lib/libclang${stdenv.hostPlatform.extensions.sharedLibrary}";
+    })
+  ];
+
   build-system = [ setuptools ];
 
   nativeBuildInputs = [
@@ -68,10 +77,7 @@ buildPythonApplication rec {
     wheezy-template
   ];
 
-  nativeCheckInputs = [
-    clang
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # CMake is used to build CMARK, but the build system is still python
   dontUseCmakeConfigure = true;
