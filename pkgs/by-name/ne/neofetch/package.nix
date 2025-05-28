@@ -70,7 +70,10 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/dylanaraps/neofetch";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ konimex ];
+    maintainers = with maintainers; [
+      konimex
+      gignsky
+    ];
     mainProgram = "neofetch";
   };
 }
