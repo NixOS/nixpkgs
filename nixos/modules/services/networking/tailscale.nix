@@ -78,6 +78,9 @@ in
       description = ''
         A file containing the auth key.
         Tailscale will be automatically started if provided.
+
+        Services that bind to Tailscale IPs should order using
+        {option}`systemd.services.<name>.after` `tailscaled-autoconnect.service`.
       '';
     };
 
@@ -110,7 +113,7 @@ in
 
     extraUpFlags = mkOption {
       description = ''
-        Extra flags to pass to {command}`tailscale up`. Only applied if `authKeyFile` is specified.";
+        Extra flags to pass to {command}`tailscale up`. Only applied if {option}`services.tailscale.authKeyFile` is specified.
       '';
       type = types.listOf types.str;
       default = [ ];
@@ -171,15 +174,20 @@ in
 
     systemd.services.tailscaled-autoconnect = mkIf (cfg.authKeyFile != null) {
       after = [ "tailscaled.service" ];
-      wants = [ "tailscaled.service" ];
       wantedBy = [ "multi-user.target" ];
+      wants = [ "tailscaled.service" ];
+
+      enableStrictShellChecks = true;
       serviceConfig = {
-        Type = "oneshot";
+        Type = "notify";
       };
-      # https://github.com/tailscale/tailscale/blob/v1.72.1/ipn/backend.go#L24-L32
+      path = [
+        cfg.package
+        pkgs.iproute2 # ip
+        pkgs.jq
+      ];
       script =
         let
-          statusCommand = "${lib.getExe cfg.package} status --json --peers=false | ${lib.getExe pkgs.jq} -r '.BackendState'";
           paramToString = v: if (builtins.isBool v) then (lib.boolToString v) else (toString v);
           params = lib.pipe cfg.authKeyParameters [
             (lib.filterAttrs (_: v: v != null))
@@ -188,14 +196,49 @@ in
             (params: if params != "" then "?${params}" else "")
           ];
         in
+        # bash
         ''
-          while [[ "$(${statusCommand})" == "NoState" ]]; do
+          getState() {
+            tailscale status --json --peers=false | jq -r '.BackendState'
+          }
+
+          while true; do
+            status="$(getState)"
+            # https://github.com/tailscale/tailscale/blob/v1.72.1/ipn/backend.go#L24-L32
+            case "$status" in
+              NoState)
+                echo "Daemon is in NoState, waiting for it to initialize."
+                sleep 0.5
+                ;;
+              NeedsLogin | NeedsMachineAuth)
+                echo "Server needs authentication ($status), sending auth key."
+                tailscale up --auth-key "$(cat ${cfg.authKeyFile})${params}" ${escapeShellArgs cfg.extraUpFlags}
+                ;;
+              Running)
+                echo "Tailscale is running."
+                break
+                ;;
+              *)
+                echo "Tailscale is in state ($status). Waiting for desired state."
+                sleep 1
+                ;;
+            esac
+          done
+
+          addrsUp() {
+            out="$(ip -oneline -json address show ${cfg.interfaceName})"
+            echo "$out" | jq --exit-status '.[].addr_info
+              | any(.family == "inet" and .scope == "global")
+                and any(.family == "inet6" and .scope == "global")' >/dev/null
+          }
+
+          until addrsUp; do
+            echo "Waiting for Tailscale interface IPs to be configured."
             sleep 0.5
           done
-          status=$(${statusCommand})
-          if [[ "$status" == "NeedsLogin" || "$status" == "NeedsMachineAuth" ]]; then
-            ${lib.getExe cfg.package} up --auth-key "$(cat ${cfg.authKeyFile})${params}" ${escapeShellArgs cfg.extraUpFlags}
-          fi
+          echo "Tailscale IPs configured."
+
+          systemd-notify --ready
         '';
     };
 
@@ -228,10 +271,7 @@ in
       matchConfig = {
         Name = cfg.interfaceName;
       };
-      linkConfig = {
-        Unmanaged = true;
-        ActivationPolicy = "manual";
-      };
+      linkConfig.Unmanaged = true;
     };
   };
 }
