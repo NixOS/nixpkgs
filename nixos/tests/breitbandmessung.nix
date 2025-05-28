@@ -3,6 +3,8 @@
   name = "breitbandmessung";
   meta.maintainers = with lib.maintainers; [ b4dm4n ];
 
+  node.pkgsReadOnly = false;
+
   nodes.machine =
     { pkgs, ... }:
     {

@@ -43,9 +43,9 @@ let
 in
 {
   name = "squid";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ cobalt ];
-  };
+  meta.maintainers = with lib.maintainers; [ cobalt ];
+
+  node.pkgsReadOnly = false;
 
   nodes = {
     client =
