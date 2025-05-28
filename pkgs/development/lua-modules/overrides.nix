@@ -977,6 +977,18 @@ in
     '';
   });
 
+  sofa = prev.sofa.overrideAttrs (oa: {
+    nativeBuildInputs = oa.nativeBuildInputs ++ [
+      installShellFiles
+    ];
+    postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd sofa \
+        --bash <($out/bin/sofa --completion bash) \
+        --fish <($out/bin/sofa --completion fish) \
+        --zsh <($out/bin/sofa --completion zsh)
+    '';
+  });
+
   sqlite = prev.sqlite.overrideAttrs (drv: {
     doCheck = stdenv.hostPlatform.isLinux;
     nativeCheckInputs = [
