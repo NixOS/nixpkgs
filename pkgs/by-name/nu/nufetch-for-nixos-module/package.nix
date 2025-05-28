@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , pkgs
+, nixosTests
 }:
 
 let
@@ -26,5 +27,8 @@ realPkg.overrideAttrs (old: {
     homepage = "https://github.com/gignsky/nufetch";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ gignsky ];
+  };
+  passthru.tests = {
+    nufetch = nixosTests.nufetch;
   };
 })
