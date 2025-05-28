@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -21,6 +22,15 @@ buildGoModule rec {
 
   preCheck = ''
     export NO_COLOR=true
+  '';
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd zed \
+      --bash <($out/bin/zed completion bash) \
+      --fish <($out/bin/zed completion fish) \
+      --zsh <($out/bin/zed completion zsh)
   '';
 
   meta = with lib; {
