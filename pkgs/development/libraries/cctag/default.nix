@@ -17,9 +17,8 @@ stdenv.mkDerivation rec {
   version = "1.0.4";
 
   outputs = [
-    "lib"
-    "dev"
     "out"
+    "dev"
   ];
 
   src = fetchFromGitHub {
@@ -41,7 +40,14 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./cmake-install-include-dir.patch
+    ./cmake-no-apple-rpath.patch
   ];
+
+  # darwin boost doesn't have math_c99 libraries
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace CMakeLists.txt --replace-warn ";math_c99" ""
+    substituteInPlace src/CMakeLists.txt --replace-warn "Boost::math_c99" ""
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -57,8 +63,7 @@ stdenv.mkDerivation rec {
     opencv.cxxdev
   ];
 
-  # Tests are broken on Darwin (linking issue)
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  doCheck = true;
 
   meta = with lib; {
     description = "Detection of CCTag markers made up of concentric circles";
