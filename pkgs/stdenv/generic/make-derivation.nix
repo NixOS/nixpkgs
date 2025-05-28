@@ -64,10 +64,12 @@ let
   */
   mkDerivation =
     fnOrAttrs:
-    if isFunction fnOrAttrs then
-      makeDerivationExtensible fnOrAttrs
-    else
-      makeDerivationExtensible (_: fnOrAttrs);
+    makeDerivationExtensible (
+      if isFunction fnOrAttrs then
+        fnOrAttrs
+      else
+        (_: fnOrAttrs)
+    );
 
   checkMeta = import ./check-meta.nix {
     inherit lib config;
