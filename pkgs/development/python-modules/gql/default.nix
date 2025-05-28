@@ -109,6 +109,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gql" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "GraphQL client in Python";
     homepage = "https://github.com/graphql-python/gql";
