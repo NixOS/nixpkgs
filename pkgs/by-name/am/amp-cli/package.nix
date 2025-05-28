@@ -8,11 +8,11 @@
 
 buildNpmPackage rec {
   pname = "amp-cli";
-  version = "0.0.1748347293-g7a57b5";
+  version = "0.0.1748404992-ga3f78f";
 
   src = fetchzip {
     url = "https://registry.npmjs.org/@sourcegraph/amp/-/amp-${version}.tgz";
-    hash = "sha256-15R7RojQgF9B5voQfsB0aLNIBR2M7qqLNpMa950pAKM=";
+    hash = "sha256-axd5VP7afa4ptAl/y8CEVguqoRKVRhWfRDSI0sgyXqA=";
   };
 
   postPatch = ''
@@ -44,7 +44,7 @@ buildNpmPackage rec {
     chmod +x bin/amp-wrapper.js
   '';
 
-  npmDepsHash = "sha256-4CSXRNCKgRunMZvFM2w6wrAcTb03iPjPprTm67fHZ9Q=";
+  npmDepsHash = "sha256-05+hBr+eX3I92U9TsqPQrYcJCmKXTvz3n6ZTxR1XvC8=";
 
   propagatedBuildInputs = [
     ripgrep
@@ -71,7 +71,7 @@ buildNpmPackage rec {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    description = "Amp is an AI coding agent, in research preview from Sourcegraph. This is the CLI for Amp.";
+    description = "CLI for Amp, an agentic coding agent in research preview from Sourcegraph";
     homepage = "https://ampcode.com/";
     downloadPage = "https://www.npmjs.com/package/@sourcegraph/amp";
     license = lib.licenses.unfree;
