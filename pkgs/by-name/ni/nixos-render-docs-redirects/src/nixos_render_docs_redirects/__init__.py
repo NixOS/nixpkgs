@@ -26,6 +26,27 @@ def move_content(redirects: dict[str, list[str]], identifier: str, path: str) ->
     redirects[identifier].insert(0, f"{path}#{identifier}")
     return redirects
 
+def mass_move_content(redirects: dict[str, list[str]], path: str) -> dict[str, list[str]]:
+    identifiers=None
+
+    try:
+        print("Reading from stdin, waiting for pipe-able output:")
+        for line in sys.stdin:
+            if "NRD_E_OUTPATH" in line:
+                l=line.split(":")
+                identifiers=json.loads(l[-1])
+                break
+    except KeyboardInterrupt:
+        print(" Exiting mass move utility")
+        return redirects, 0
+
+    if identifiers:
+        for identifier in identifiers:
+            redirects = move_content(redirects, identifier, path)
+    else:
+        identifiers=[]
+
+    return redirects, len(identifiers)
 
 def rename_identifier(
     redirects: dict[str, list[str]],
@@ -77,6 +98,9 @@ def main():
     move_content_cmd.add_argument("identifier", type=str)
     move_content_cmd.add_argument("path", type=str)
 
+    move_content_cmd = commands.add_parser("mass-move-content")
+    move_content_cmd.add_argument("path", type=str)
+
     rename_id_cmd = commands.add_parser("rename-identifier")
     rename_id_cmd.add_argument("old_identifier", type=str)
     rename_id_cmd.add_argument("new_identifier", type=str)
@@ -98,6 +122,10 @@ def main():
         elif args.command == "move-content":
             redirects = move_content(redirects, args.identifier, args.path)
             print(f"Moved '{args.identifier}' to the new path: {args.path}")
+
+        elif args.command == "mass-move-content":
+            redirects, count = mass_move_content(redirects, args.path)
+            print(f"Moved {count} identifiers to the new path: {args.path}")
 
         elif args.command == "rename-identifier":
             redirects = rename_identifier(redirects, args.old_identifier, args.new_identifier)
