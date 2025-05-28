@@ -95,6 +95,7 @@ let
                 thisOverlay = overlay final prev;
                 warnForBadVersionOverride = (
                   thisOverlay ? version
+                  && prev ? version
                   && !(thisOverlay ? src)
                   && !(thisOverlay.__intentionallyOverridingVersion or false)
                 );
