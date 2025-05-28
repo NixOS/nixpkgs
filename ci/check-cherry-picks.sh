@@ -59,7 +59,7 @@ while read -r new_commit_sha ; do
           '"$new_commit_sha~..$new_commit_sha"'
         '
 
-        if $range_diff_common --no-color | grep -E '^ {4}[+-]{2}' > /dev/null ; then
+        if $range_diff_common --no-color 2> /dev/null | grep -E '^ {4}[+-]{2}' > /dev/null ; then
           if [ "$GITHUB_ACTIONS" = 'true' ] ; then
             echo ::endgroup::
             echo -n "::warning ::"
