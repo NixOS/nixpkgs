@@ -9,7 +9,12 @@
 
 let
   nufetchForNixosModule = import ./package.nix {
-    inherit lib stdenv pkgs nixosTests;
+    inherit
+      lib
+      stdenv
+      pkgs
+      nixosTests
+      ;
   };
   cfg = config.programs.nufetch;
   configFile = pkgs.writeText "nufetch.conf" (import ./lib/config-maker.nix { inherit cfg lib; });
