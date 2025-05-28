@@ -11865,7 +11865,7 @@ with pkgs;
 
   whitesur-kde = kdePackages.callPackage ../data/themes/whitesur-kde { };
 
-  xkeyboard_config = xorg.xkeyboardconfig;
+  xkeyboard_config = xkeyboard-config;
 
   xlsx2csv = with python3Packages; toPythonApplication xlsx2csv;
 
