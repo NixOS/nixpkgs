@@ -52,7 +52,7 @@ while read -r new_commit_sha ; do
       if git merge-base --is-ancestor "$original_commit_sha" "$picked_branch" ; then
         echo "  ✔ $original_commit_sha present in branch $picked_branch"
 
-        range_diff_common='git range-diff
+        range_diff_common='git --no-pager range-diff
           --no-notes
           --creation-factor=100
           '"$original_commit_sha~..$original_commit_sha"'
