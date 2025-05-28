@@ -10,20 +10,23 @@ let
       (lib.take 2)
       (lib.concatStringsSep ".")
     ];
-  oldApiVersion = apiVersion pkgs."${oldNetbox}".version;
-  newApiVersion = apiVersion pkgs."${newNetbox}".version;
+  oldApiVersion = apiVersion pkgs.${oldNetbox}.version;
+  newApiVersion = apiVersion pkgs.${newNetbox}.version;
 in
 {
   name = "netbox-upgrade";
 
-  meta = with lib.maintainers; {
-    maintainers = [
-      minijackson
-      raitobezarius
-    ];
-  };
+  meta.maintainers = with lib.maintainers; [
+    minijackson
+    raitobezarius
+  ];
+
+  node.pkgsReadOnly = false;
 
   nodes.machine =
+    let
+      pkgs' = pkgs;
+    in
     { config, pkgs, ... }:
     {
       virtualisation.memorySize = 2048;
@@ -31,7 +34,7 @@ in
         enable = true;
         # Pick the NetBox package from this config's "pkgs" argument,
         # so that `nixpkgs.config.permittedInsecurePackages` works
-        package = pkgs."${oldNetbox}";
+        package = pkgs.${oldNetbox};
         secretKeyFile = pkgs.writeText "secret" ''
           abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
         '';
@@ -53,9 +56,9 @@ in
 
       networking.firewall.allowedTCPPorts = [ 80 ];
 
-      nixpkgs.config.permittedInsecurePackages = [ pkgs."${oldNetbox}".name ];
+      nixpkgs.config.permittedInsecurePackages = [ pkgs'.${oldNetbox}.name ];
 
-      specialisation.upgrade.configuration.services.netbox.package = lib.mkForce pkgs."${newNetbox}";
+      specialisation.upgrade.configuration.services.netbox.package = lib.mkForce pkgs.${newNetbox};
     };
 
   testScript =
