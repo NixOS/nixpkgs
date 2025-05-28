@@ -1,15 +1,22 @@
 #!/usr/bin/env bash
 # Find alleged cherry-picks
 
-set -e
+set -eo pipefail
 
 if [ $# != "2" ] ; then
   echo "usage: check-cherry-picks.sh base_rev head_rev"
   exit 2
 fi
 
+# Make sure we are inside the nixpkgs repo, even when called from outside
+cd "$(dirname "${BASH_SOURCE[0]}")"
+
 PICKABLE_BRANCHES=${PICKABLE_BRANCHES:-master staging release-??.?? staging-??.??}
 problem=0
+
+commits="$(git rev-list \
+  -E -i --grep="cherry.*[0-9a-f]{40}" --reverse \
+  "$1..$2")"
 
 while read new_commit_sha ; do
   if [ -z "$new_commit_sha" ] ; then
@@ -88,10 +95,6 @@ while read new_commit_sha ; do
   echo "$original_commit_sha not found in any pickable branch"
 
   problem=1
-done <<< "$(
-  git rev-list \
-    -E -i --grep="cherry.*[0-9a-f]{40}" --reverse \
-    "$1..$2"
-)"
+done <<< "$commits"
 
 exit $problem
