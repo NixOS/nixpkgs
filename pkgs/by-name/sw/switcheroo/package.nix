@@ -20,19 +20,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "switcheroo";
-  version = "2.2.0";
+  version = "2.4.0";
 
   src = fetchFromGitLab {
     owner = "adhami3310";
     repo = "Switcheroo";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-AwecOA8HWGimhQyCEG3Z3hhwa9RVWssykUXsdvqqs9U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wzMN5oHc9xRrFVT+Y8sXcctSYAfJhGE7B07oOc6VUZM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    src = finalAttrs.src;
-    name = "switcheroo-${finalAttrs.version}";
-    hash = "sha256-Ose1gx6vwKZCdtMDkyM9Y+f6wt7VDKTI3Wc7kep1428=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-v7cl4SbQut6ZGmsHDbfV6ccE0A31TCej203S13q9Rco=";
   };
 
   nativeBuildInputs = [
