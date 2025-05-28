@@ -26,17 +26,17 @@ let
   inherit (python3Packages) buildPythonApplication pythonOlder;
 in
 buildPythonApplication rec {
-  version = "5.2.4";
+  version = "6.0.1";
   pname = "gramps";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "gramps-project";
     repo = "gramps";
     tag = "v${version}";
-    hash = "sha256-Jue5V4pzfd1MaZwEhkGam+MhNjaisio7byMBPgGmiFg=";
+    hash = "sha256-EKiC7zFIAXwKXun8jixanVmBI5XyQlxBcN5rxbqdq9k=";
   };
 
   patches = [
@@ -85,6 +85,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     berkeleydb
+    orjson
     pyicu
     pygobject3
     pycairo
