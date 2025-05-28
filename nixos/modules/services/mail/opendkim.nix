@@ -169,6 +169,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = !(cfg.domainConfigs != { } && cfg.configFile != null);
+        message = "services.opendkim: Cannot use both 'domainConfigs' and 'configFile' options simultaneously. Please use either one or the other.";
+      }
+    ];
+
     users.users = lib.optionalAttrs (cfg.user == "opendkim") {
       opendkim = {
         group = cfg.group;
