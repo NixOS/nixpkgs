@@ -473,7 +473,9 @@ in
             }
           '';
 
-          "/lib".source = "${modulesClosure}/lib";
+          "/lib" = lib.mkIf (config.system.build.kernel.config.isYes "MODULES") {
+            source = "${modulesClosure}/lib";
+          };
 
           "/etc/modules-load.d/nixos.conf".text = concatStringsSep "\n" config.boot.initrd.kernelModules;
 
