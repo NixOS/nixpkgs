@@ -46,7 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     [
       expected-lite
       fmt
-      llhttp
       openssl
       pcre2
       zlib
@@ -64,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     catch2_3
+    llhttp
   ];
 
   cmakeDir = "../dev";
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DRESTINIO_ASIO_SOURCE=${if with_boost_asio then "boost" else "standalone"}"
     "-DRESTINIO_DEP_EXPECTED_LITE=find"
     "-DRESTINIO_DEP_FMT=find"
-    "-DRESTINIO_DEP_LLHTTP=find"
+    "-DRESTINIO_DEP_LLHTTP=system"
     "-DRESTINIO_DEP_CATCH2=find"
   ];
 
