@@ -8,11 +8,6 @@
 pkgs.neofetch.overrideAttrs (old: {
   pname = "nufetch-for-nixos-module";
   patches = (old.patches or [ ]) ++ [ ./patches/neofetch-nixos-module.patch ];
-  postPatch =
-    (old.postPatch or "")
-    + ''
-      echo ">>> neofetch-nixos-module.patch applied"
-    '';
   meta = old.meta // {
     description = "A patched version of neofetch for the nufetch NixOS module";
     homepage = "https://github.com/gignsky/nufetch";
