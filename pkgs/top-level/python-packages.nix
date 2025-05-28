@@ -4201,6 +4201,8 @@ self: super: with self; {
 
   drf-extra-fields = callPackage ../development/python-modules/drf-extra-fields { };
 
+  drf-flex-fields = callPackage ../development/python-modules/drf-flex-fields { };
+
   drf-jwt = callPackage ../development/python-modules/drf-jwt { };
 
   drf-nested-routers = callPackage ../development/python-modules/drf-nested-routers { };
