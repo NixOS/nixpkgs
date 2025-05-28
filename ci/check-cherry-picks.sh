@@ -92,7 +92,8 @@ while read -r new_commit_sha ; do
           endgroup
           log warning "Difference between $new_commit_sha and original $original_commit_sha may warrant inspection:"
 
-          $range_diff_common --color
+          # First line contains commit SHAs, which we already printed.
+          $range_diff_common --color | tail -n +2
 
           echo "Note this should not necessarily be treated as a hard fail, but a reviewer's attention should" \
             "be drawn to it and github actions have no way of doing that but to raise a 'failure'"
