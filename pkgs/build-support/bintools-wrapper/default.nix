@@ -141,6 +141,8 @@ let
       "${sharedLibraryLoader}/libexec/ld.elf_so"
     else if targetPlatform.system == "i686-linux" then
       "${sharedLibraryLoader}/lib/ld-linux.so.2"
+    else if targetPlatform.isX32 then
+      "${sharedLibraryLoader}/lib/ld-linux-x32.so.2"
     else if targetPlatform.system == "x86_64-linux" then
       "${sharedLibraryLoader}/lib/ld-linux-x86-64.so.2"
     else if targetPlatform.system == "s390x-linux" then
