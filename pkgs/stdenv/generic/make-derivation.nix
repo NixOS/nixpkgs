@@ -136,24 +136,7 @@ let
     in
     finalPackage;
 
-  #makeDerivationExtensibleConst = attrs: makeDerivationExtensible (_: attrs);
-  # but pre-evaluated for a slight improvement in performance.
-  makeDerivationExtensibleConst =
-    attrs:
-    mkDerivationSimple (
-      f0:
-      let
-        f =
-          self: super:
-          let
-            x = f0 super;
-          in
-          if builtins.isFunction x then f0 self super else x;
-      in
-      makeDerivationExtensible (
-        self: attrs // (if builtins.isFunction f0 || f0 ? __functor then f self attrs else f0)
-      )
-    ) attrs;
+  makeDerivationExtensibleConst = attrs: makeDerivationExtensible (_: attrs);
 
   knownHardeningFlags = [
     "bindnow"
