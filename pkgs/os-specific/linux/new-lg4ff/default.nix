@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation {
   pname = "new-lg4ff";
-  version = "0-unstable-2024-11-25";
+  version = "0-unstable-2025-05-28";
 
   src = fetchFromGitHub {
     owner = "berarma";
     repo = "new-lg4ff";
-    rev = "6100a34c182536c607af80e119d54a66c6fb2a23";
-    sha256 = "sha256-90PnQDGwp94ELvWx6p8QiZucYmTbH3N0GiZbj3fo25g=";
+    rev = "2092db19f7b40854e0427a1b2e39eda9f8d0c3cd";
+    sha256 = "sha256-nh5J89S3z0odzh2fDsAVVY1X6lr4ZUwoyu3UVOYQiq8=";
   };
 
   preBuild = ''
@@ -21,6 +21,10 @@ stdenv.mkDerivation {
     sed -i '/depmod/d' Makefile
     sed -i "10i\\\trmmod hid-logitech 2> /dev/null || true" Makefile
     sed -i "11i\\\trmmod hid-logitech-new 2> /dev/null || true" Makefile
+
+    # Fake the CONFIG_LOGIWHEELS_FF config option, so it builds for 6.15
+    sed -i '1i\#ifndef CONFIG_LOGIWHEELS_FF\n#define CONFIG_LOGIWHEELS_FF 1\n#endif' hid-lg4ff.c
+    sed -i '1i\#ifndef CONFIG_LOGIWHEELS_FF\n#define CONFIG_LOGIWHEELS_FF 1\n#endif' hid-lg.c
   '';
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
