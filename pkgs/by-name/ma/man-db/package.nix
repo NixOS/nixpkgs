@@ -22,11 +22,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "man-db";
-  version = "2.13.0";
+  version = "2.13.1";
 
   src = fetchurl {
     url = "mirror://savannah/man-db/man-db-${version}.tar.xz";
-    hash = "sha256-gvBzn09hqrXrk30jTeOwFOd3tVOKKMvTFDPEWuCa77k=";
+    hash = "sha256-iv67b362u4VCkpRYhB9cfm8kDjDIY1jB+8776gdsh9k=";
   };
 
   outputs = [
