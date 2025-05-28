@@ -25,14 +25,14 @@ with py.pkgs;
 
 python3.pkgs.buildPythonApplication rec {
   pname = "checkov";
-  version = "3.2.433";
+  version = "3.2.435";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "checkov";
     tag = version;
-    hash = "sha256-c9I3VDiKzk9Bybian3bX4OU3WUvHEHyQyGrO4//azqM=";
+    hash = "sha256-zV430pGFkfyf0oznXe69lTsMkGUrrA5TTyGobE4AK9I=";
   };
 
   pythonRelaxDeps = [

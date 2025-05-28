@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   nixosTests,
   cmake,
@@ -12,6 +11,7 @@
   lomiri-content-hub,
   lomiri-thumbnailer,
   lomiri-ui-toolkit,
+  mediascanner2,
   qtbase,
   qtdeclarative,
   qtmultimedia,
@@ -22,30 +22,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-music-app";
-  version = "3.2.2";
+  version = "3.3.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/apps/lomiri-music-app";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-tHCbZF+7i/gYs8WqM5jDBhhKmM4ZeUbG3DYBdQAiUT8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lCpRt0SeNszlCsmJOZvnzoDmHV7xCGKdmIZBJTlBQDo=";
   };
-
-  patches = [
-    # Remove when version > 3.2.2
-    (fetchpatch {
-      name = "0001-lomiri-music-app-Fix-GNUInstallDirs-usage.patch";
-      url = "https://gitlab.com/ubports/development/apps/lomiri-music-app/-/commit/32591f2332aa204b9ee2857992e50594db0e6ff2.patch";
-      hash = "sha256-SXn+7jItzi1Q0xK0iK57+W3SpEdSCx1dKSfeghOCePg=";
-    })
-
-    # Remove when version > 3.2.2
-    (fetchpatch {
-      name = "0002-lomiri-music-app-bindtextdomain.patch";
-      url = "https://gitlab.com/ubports/development/apps/lomiri-music-app/-/commit/4e950521a67e201f3d02b3b71c6bb1ddce8ef2b2.patch";
-      hash = "sha256-HgGKk44FU+IXRVx2NK3iGSo/wPJce1T2k/vP8nZtewQ=";
-    })
-  ];
 
   postPatch = ''
     # We don't want absolute paths in desktop files
@@ -73,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
       lomiri-content-hub
       lomiri-thumbnailer
       lomiri-ui-toolkit
+      mediascanner2
       qtmultimedia
       qtsystems
     ]
@@ -113,7 +98,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Default Music application for Ubuntu devices";
     homepage = "https://gitlab.com/ubports/development/apps/lomiri-music-app";
-    changelog = "https://gitlab.com/ubports/development/apps/lomiri-music-app/-/blob/v${finalAttrs.version}/ChangeLog";
+    changelog = "https://gitlab.com/ubports/development/apps/lomiri-music-app/-/blob/${
+      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+    }/ChangeLog";
     license = with lib.licenses; [
       gpl3Only
     ];
