@@ -9091,11 +9091,11 @@
     keys = [ { fingerprint = "21DF 8034 B212 EDFF 9F19  9C19 F65B 7583 7ABF D019"; } ];
   };
   gignsky = {
-     name = "Maxwell Rupp";
-     email = "gig@gignsky.com";
-     github = "gignsky";
-     githubId = 13265812;
-   };
+    name = "Maxwell Rupp";
+    email = "gig@gignsky.com";
+    github = "gignsky";
+    githubId = 13265812;
+  };
   gila = {
     email = "jeffry.molanus@gmail.com";
     github = "gila";

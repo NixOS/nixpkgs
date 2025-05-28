@@ -1,7 +1,7 @@
 { cfg, lib, ... }:
 let
-  configLines =
-    (lib.filter (x: x != null) [
+  configLines = (
+    lib.filter (x: x != null) [
       (if cfg.os then ''info "OS" distro'' else null)
       (if cfg.host then ''info "Host" model'' else null)
       (if cfg.kernel then ''info "Kernel" kernel'' else null)
@@ -28,7 +28,8 @@ let
       (if cfg.public_ip then ''info "Public IP" public_ip'' else null)
       (if cfg.users then ''info "Users" users'' else null)
       (if cfg.birthday then ''info "Birthday" birthday'' else null)
-    ]);
+    ]
+  );
   configConf = ''
     print_info() {
       info title

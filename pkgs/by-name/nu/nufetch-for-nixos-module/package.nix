@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkgs
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkgs,
+  nixosTests,
 }:
 
 let
@@ -16,7 +17,7 @@ let
   overlay = import "${src}/nix/overlays/neofetch-patch-nixos-module.nix";
   patchedPkgs = import pkgs.path {
     inherit (pkgs) system config;
-    overlays = pkgs.overlays or [] ++ [ overlay ];
+    overlays = pkgs.overlays or [ ] ++ [ overlay ];
   };
 
   realPkg = import "${src}/default.nix" { pkgs = patchedPkgs; };
