@@ -68,9 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  # strictDeps breaks zig when clang is being used.
-  # https://github.com/NixOS/nixpkgs/issues/317055#issuecomment-2148438395
-  strictDeps = !stdenv.cc.isClang;
+  strictDeps = true;
 
   # On Darwin, Zig calls std.zig.system.darwin.macos.detect during the build,
   # which parses /System/Library/CoreServices/SystemVersion.plist and
@@ -79,7 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
   # OSVersionDetectionFail when the sandbox is enabled.
   __impureHostDeps = lib.optionals stdenv.hostPlatform.isDarwin [
     "/System/Library/CoreServices/.SystemVersionPlatform.plist"
-    "/System/Library/CoreServices/SystemVersion.plist"
   ];
 
   preBuild = ''
