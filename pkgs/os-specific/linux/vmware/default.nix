@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   kernel,
   kmod,
   gnugrep,
@@ -14,8 +15,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "philipl";
     repo = "vmware-host-modules";
-    tag = "w17.6.3";
-    hash = "sha256-n9aLpHcO7m51eRtcWWBfTpze0JIWvne+UcYACoA5afc=";
+    rev = "93d8bf38d7e705a862dcbfa721884638a817d476";
+    hash = "sha256-i2E3QAy5P3U+EqSaFaCQGuiU4vt/yYKv3oJBP1qK9Og=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -23,6 +24,14 @@ stdenv.mkDerivation {
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   enableParallelBuilding = true;
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/philipl/vmware-host-modules/pull/1
+      url = "https://github.com/amadejkastelic/vmware-host-modules/commit/926cfc50c017a099c796662c8e2820d12f94d0bb.patch";
+      hash = "sha256-9XLhypr77Qy9Ty54Pm48DYYh3HT1WAmiwGOmBk3AfyI=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace Makefile \
