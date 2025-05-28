@@ -13,6 +13,8 @@
   cairo,
   pango,
   npm-lockfile-fix,
+  jq,
+  moreutils,
 }:
 
 buildNpmPackage rec {
@@ -36,6 +38,8 @@ buildNpmPackage rec {
   nativeBuildInputs =
     [
       pkg-config
+      jq
+      moreutils
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       makeWrapper
@@ -67,6 +71,10 @@ buildNpmPackage rec {
     # disable telemetry
     substituteInPlace packages/bruno-app/src/providers/App/index.js \
       --replace-fail "useTelemetry({ version });" ""
+
+    # fix version reported in sidebar and about page
+    jq '.version |= "${version}"' packages/bruno-electron/package.json | sponge packages/bruno-electron/package.json
+    jq '.version |= "${version}"' packages/bruno-app/package.json | sponge packages/bruno-app/package.json
   '';
 
   postConfigure = ''
