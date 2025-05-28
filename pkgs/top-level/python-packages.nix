@@ -3016,6 +3016,8 @@ self: super: with self; {
 
   colcon-devtools = callPackage ../development/python-modules/colcon-devtools { };
 
+  colcon-ed = callPackage ../development/python-modules/colcon-ed { };
+
   colcon-hardware-acceleration =
     callPackage ../development/python-modules/colcon-hardware-acceleration
       { };
