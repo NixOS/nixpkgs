@@ -466,6 +466,7 @@ in
   ferretdb = handleTest ./ferretdb.nix { };
   fider = runTest ./fider.nix;
   filesender = runTest ./filesender.nix;
+  filebrowser = runTest ./filebrowser.nix;
   filesystems-overlayfs = runTest ./filesystems-overlayfs.nix;
   firefly-iii = runTest ./firefly-iii.nix;
   firefly-iii-data-importer = runTest ./firefly-iii-data-importer.nix;
