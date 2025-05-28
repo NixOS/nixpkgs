@@ -32,95 +32,134 @@ in
       defaultText = "pkgs.nufetch-for-nixos-module";
       description = "Set version of nufetch package to use.";
     };
-    os = lib.mkEnableOption {
+    os = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = "Enable Neofetch OS information display.";
     };
-    host = lib.mkEnableOption {
+    host = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = "Enable Neofetch Host information display.";
     };
-    kernel = lib.mkEnableOption {
+    kernel = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = "Enable Neofetch Kernel information display.";
     };
-    uptime = lib.mkEnableOption {
+    uptime = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = "Enable Neofetch Uptime information display.";
     };
-    packages = lib.mkEnableOption {
+    packages = lib.mkOption {
+      default = false;
+      type = lib.types.bool;
       description = "Enable Neofetch Packages information display.";
     };
-    shell = lib.mkEnableOption {
+    shell = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = "Enable Neofetch Shell information display.";
     };
-    resolution = lib.mkEnableOption {
+    resolution = lib.mkOption {
+      default = false;
+      type = lib.types.bool;
       description = "Enable Neofetch Resolution information display.";
     };
-    de = lib.mkEnableOption {
+    de = lib.mkOption {
+      default = false;
+      type = lib.types.bool;
       description = "Enable Neofetch Desktop Environment information display.";
     };
-    wm = lib.mkEnableOption {
+    wm = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = "Enable Neofetch Window Manager information display.";
     };
-    wm_theme = lib.mkEnableOption {
+    wm_theme = lib.mkOption {
+      default = false;
+      type = lib.types.bool;
       description = "Enable Neofetch Window Manager Theme information display.";
     };
-    theme = lib.mkEnableOption {
+    theme = lib.mkOption {
+      default = false;
+      type = lib.types.bool;
       description = "Enable Neofetch Theme information display.";
     };
-    icons = lib.mkEnableOption {
+    icons = lib.mkOption {
+      default = false;
+      type = lib.types.bool;
       description = "Enable Neofetch Icons display.";
     };
-    terminal = lib.mkEnableOption {
+    terminal = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = "Enable Neofetch Terminal information display.";
     };
-    terminal_font = lib.mkEnableOption {
+    terminal_font = lib.mkOption {
+      default = false;
+      type = lib.types.bool;
       description = "Enable Neofetch Terminal information display.";
     };
-    cpu = lib.mkEnableOption {
+    cpu = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = "Enable Neofetch CPU information display.";
     };
-    gpu = lib.mkEnableOption {
+    gpu = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = "Enable Neofetch GPU information display.";
     };
-    memory = lib.mkEnableOption {
+    memory = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = "Enable Neofetch Memory information display.";
     };
-    cpu_usage = lib.mkEnableOption {
+    cpu_usage = lib.mkOption {
+      default = false;
+      type = lib.types.bool;
       description = "Enable Neofetch CPU Usage information display.";
     };
-    disk = lib.mkEnableOption {
+    disk = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = "Enable Neofetch Disk information display.";
     };
-    battery = lib.mkEnableOption {
+    battery = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = "Enable Neofetch Battery information display.";
     };
-    font = lib.mkEnableOption {
+    font = lib.mkOption {
+      default = false;
+      type = lib.types.bool;
       description = "Enable Neofetch Font information display.";
     };
-    song = lib.mkEnableOption {
+    song = lib.mkOption {
+      default = false;
+      type = lib.types.bool;
       description = "Enable Neofetch Song information display.";
     };
-    local_ip = lib.mkEnableOption {
+    local_ip = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = "Enable Neofetch Local IP information display.";
     };
-    public_ip = lib.mkEnableOption {
+    public_ip = lib.mkOption {
+      default = false;
+      type = lib.types.bool;
       description = "Enable Neofetch Public IP information display.";
     };
-    users = lib.mkEnableOption {
+    users = lib.mkOption {
+      default = false;
+      type = lib.types.bool;
       description = "Enable Neofetch Users information display.";
     };
-    birthday = lib.mkEnableOption {
+    birthday = lib.mkOption {
+      default = false;
+      type = lib.types.bool;
       description = "Enable Neofetch Birthday information display.";
     };
     extraPrintInfoFields = lib.mkOption {
