@@ -10,8 +10,8 @@ let
   src = fetchFromGitHub {
     owner = "gignsky";
     repo = "nufetch";
-    rev = "feature/add-non-flake-files";
-    sha256 = "onoGbqhqSGTHosaVFwFqJEaFPgkgAgtvFhiIjfsw3pQ=";
+    rev = "main";
+    sha256 = "DVxDyHIrOoSn9p2OVvBw1wqTHkOrU2XNFhTOwgvMK2s=";
   };
 
   overlay = import "${src}/nix/overlays/neofetch-patch-nixos-module.nix";
