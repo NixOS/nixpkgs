@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  nixosTests,
   bash,
   cairo,
   cctools,
@@ -148,6 +149,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postFixup
   '';
+
+  passthru.tests.sharkey = nixosTests.sharkey;
 
   meta = with lib; {
     description = "🌎 A Sharkish microblogging platform 🚀";
