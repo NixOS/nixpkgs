@@ -189,7 +189,22 @@ let
     in
     res;
 
-  aliases = self: super: lib.optionalAttrs config.allowAliases (import ./aliases.nix lib self super);
+  aliases = self: super:
+    if config.allowAliases
+      then
+        let aliases = import ./aliases.nix lib self super;
+        in aliases // {
+
+          /* Allow generic dependency injection code to avoid aliases, e.g.
+
+              getPkg = name:
+                if ! pkgs?allAliases.${name}
+                then pkgs.${name}
+                else ...
+           */
+          allAliases = lib.mapAttrs (k: v: null) aliases;
+        }
+      else { allAliases = {}; };
 
   variants = import ./variants.nix {
     inherit
