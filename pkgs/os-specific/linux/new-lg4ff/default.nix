@@ -25,14 +25,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = [
-    "KVERSION=${kernel.modDirVersion}"
-    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    # Fake the CONFIG_LOGIWHEELS_FF config option, so it builds for 6.15
-    "KCFLAGS=-DCONFIG_LOGIWHEELS_FF"
-  ];
+  preConfigure = ''
+    makeFlagsArray+=(
+      KVERSION="${kernel.modDirVersion}"
+      KDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+      KCFLAGS="-DCONFIG_LOGIWHEELS_FF -DCONFIG_LEDS_CLASS"
+    )
+  '';
 
-  meta = with lib; {
+  meta = {
     description = ''
       Experimental Logitech force feedback module for Linux.
 
@@ -42,9 +43,9 @@ stdenv.mkDerivation rec {
       discouraged and may result in improper configuration.
     '';
     homepage = "https://github.com/berarma/new-lg4ff";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ matthiasbenaets ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ matthiasbenaets ];
+    platforms = lib.platforms.linux;
     broken = stdenv.hostPlatform.isAarch64;
   };
 }
