@@ -32,7 +32,8 @@
   debug ? false,
   sanitizeAddress ? false,
   sanitizeThreads ? false,
-  with3d ? true,
+  with3dCompressed ? true, # Convert .step files to .stpZ
+  with3d ? false, # 3d files without compression, keep as .step
   withI18n ? true,
   srcs ? { },
 }:
@@ -175,7 +176,11 @@ in
 stdenv.mkDerivation rec {
 
   # Common libraries, referenced during runtime, via the wrapper.
-  passthru.libraries = callPackages ./libraries.nix { inherit libSrc; };
+  passthru.libraries = callPackages ./libraries.nix {
+    inherit libSrc;
+    inherit with3dCompressed;
+    inherit with3d;
+  };
   passthru.callPackage = newScope { inherit addonPath python3; };
   base = callPackage ./base.nix {
     inherit stable testing baseName;
@@ -245,7 +250,7 @@ stdenv.mkDerivation rec {
       in
       [ "--set-default NIX_KICAD9_STOCK_DATA_PATH ${stockDataPath}" ]
     )
-    ++ optionals (with3d) [
+    ++ optionals (with3d || with3dCompressed) [
       "--set-default KICAD9_3DMODEL_DIR ${packages3d}/share/kicad/3dmodels"
     ]
     ++ optionals (withNgspice) [ "--prefix LD_LIBRARY_PATH : ${libngspice}/lib" ]
@@ -319,7 +324,7 @@ stdenv.mkDerivation rec {
         else
           "Open Source EDA suite, latest on master branch"
       )
-      + (lib.optionalString (!with3d) ", without 3D models");
+      + (lib.optionalString (!(with3d || with3dCompressed)) ", without 3D models");
     homepage = "https://www.kicad.org/";
     longDescription = ''
       KiCad is an open source software suite for Electronic Design Automation.
