@@ -20,9 +20,6 @@ remote="$(git remote -v | grep -i 'NixOS/nixpkgs' | head -n1 | cut -f1 || true)"
 commits="$(git rev-list --reverse "$1..$2")"
 
 while read -r new_commit_sha ; do
-  if [ -z "$new_commit_sha" ] ; then
-    continue  # skip empty lines
-  fi
   if [ "$GITHUB_ACTIONS" = 'true' ] ; then
     echo "::group::Commit $new_commit_sha"
   else
