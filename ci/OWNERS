@@ -165,6 +165,13 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 ## common-updater-scripts
 /pkgs/common-updater/scripts/update-source-version    @jtojnar
 
+# Android tools, libraries, and environments
+/pkgs/development/android*                    @NixOS/android
+/pkgs/development/mobile/android*             @NixOS/android
+/pkgs/applications/editors/android-studio*    @NixOS/android
+/doc/languages-frameworks/android*            @NixOS/android
+/pkgs/by-name/an/android*                     @NixOS/android
+
 # Python-related code and docs
 /doc/languages-frameworks/python.section.md   @mweinelt @natsukium
 /maintainers/scripts/update-python-libraries  @mweinelt @natsukium
