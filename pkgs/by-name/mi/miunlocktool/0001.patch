@@ -1,0 +1,14 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 62cb46b..89c8c67 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -5,8 +5,8 @@ description = "Unlock the bootloader on Xiaomi devices"
+ readme = "README.md"
+ requires-python = ">=3.7"
+ dependencies = [
+-    "colorama"
+-    "pycryptodomex"
++    "colorama",
++    "pycryptodomex",
+     "requests"
+ ]
