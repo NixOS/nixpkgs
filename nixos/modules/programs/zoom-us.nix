@@ -33,7 +33,7 @@
 
         # Support GNOME desktop environment if it's enabled on the system.
         gnomeXdgDesktopPortalSupport =
-          prev.gnomeXdgDesktopPortalSupport or config.services.xserver.desktopManager.gnome.enable;
+          prev.gnomeXdgDesktopPortalSupport or config.services.desktopManager.gnome.enable;
 
         # Support Hyprland desktop for Wayland if it's enabled on the system.
         hyprlandXdgDesktopPortalSupport =
