@@ -68,6 +68,7 @@ buildGoModule rec {
     description = "Tools for interacting with remote images and registries including crane and gcrane";
     homepage = "https://github.com/google/go-containerregistry";
     license = licenses.asl20;
+    mainProgram = "crane";
     maintainers = with maintainers; [ yurrriq ];
   };
 }
