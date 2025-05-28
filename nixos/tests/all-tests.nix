@@ -970,6 +970,7 @@ in
   ntfy-sh-migration = handleTest ./ntfy-sh-migration.nix { };
   ntpd = runTest ./ntpd.nix;
   ntpd-rs = runTest ./ntpd-rs.nix;
+  nufetch = runTest ./nufetch.nix;
   nvidia-container-toolkit = runTest ./nvidia-container-toolkit.nix;
   nvmetcfg = runTest ./nvmetcfg.nix;
   nzbget = runTest ./nzbget.nix;
