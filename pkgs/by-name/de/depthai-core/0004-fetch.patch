@@ -1,0 +1,13 @@
+diff --git a/examples/cpp/CMakeLists.txt b/examples/cpp/CMakeLists.txt
+index 19908e4b3..27821cc0b 100644
+--- a/examples/cpp/CMakeLists.txt
++++ b/examples/cpp/CMakeLists.txt
+@@ -136,6 +136,7 @@ add_subdirectory(SpatialLocationCalculator)
+ add_subdirectory(Sync)
+ add_subdirectory(VideoEncoder)
+ add_subdirectory(Visualizer)
+-add_subdirectory(RGBD)
++# NOTE: Skip as it fails due to rerun header
++# add_subdirectory(RGBD)
+ add_subdirectory(Warp)
+ add_subdirectory(ImageAlign)
