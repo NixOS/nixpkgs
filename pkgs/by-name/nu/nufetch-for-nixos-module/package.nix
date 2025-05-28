@@ -1,28 +1,18 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
   pkgs,
   nixosTests,
 }:
 
-let
-  src = fetchFromGitHub {
-    owner = "gignsky";
-    repo = "nufetch";
-    rev = "main";
-    sha256 = "DVxDyHIrOoSn9p2OVvBw1wqTHkOrU2XNFhTOwgvMK2s=";
-  };
-
-  overlay = import "${src}/nix/overlays/neofetch-patch-nixos-module.nix";
-  patchedPkgs = import pkgs.path {
-    inherit (pkgs) system config;
-    overlays = pkgs.overlays or [ ] ++ [ overlay ];
-  };
-
-  realPkg = import "${src}/default.nix" { pkgs = patchedPkgs; };
-in
-realPkg.overrideAttrs (old: {
+pkgs.neofetch.overrideAttrs (old: {
+  pname = "nufetch-for-nixos-module";
+  patches = (old.patches or [ ]) ++ [ ./patches/neofetch-nixos-module.patch ];
+  postPatch =
+    (old.postPatch or "")
+    + ''
+      echo ">>> neofetch-nixos-module.patch applied"
+    '';
   meta = old.meta // {
     description = "A patched version of neofetch for the nufetch NixOS module";
     homepage = "https://github.com/gignsky/nufetch";
