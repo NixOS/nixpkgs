@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  nixosTests,
   bash,
   cairo,
   cctools,
@@ -136,6 +137,8 @@ stdenv.mkDerivation (finalAttrs: {
     # remove packageManager line from package.json; tries to download a different pnpm version into $HOME otherwise
     sed -i -e '9d' $out/sharkey/package.json
   '';
+
+  passthru.tests.sharkey = nixosTests.sharkey;
 
   meta = with lib; {
     description = "🌎 A Sharkish microblogging platform 🚀";
