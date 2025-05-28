@@ -188,6 +188,7 @@ mapAliases {
   remod-cli = pkgs.remod; # added 2024-12-04
   "reveal.js" = throw "reveal.js was removed because it provides no executable"; # added 2025-03-23
   reveal-md = pkgs.reveal-md; # added 2023-07-31
+  rimraf = throw "rimraf was removed because it is a library, and your project should lock it instead."; # added 2025-05-28
   rollup = throw "rollup has been removed because it was broken"; # added 2025-04-28
   inherit (pkgs) rtlcss; # added 2023-08-29
   s3http = throw "s3http was removed because it was abandoned upstream"; # added 2023-08-18

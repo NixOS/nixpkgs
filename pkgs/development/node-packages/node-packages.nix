@@ -19734,15 +19734,6 @@ let
         sha512 = "7Bv8RF0k6xjo7d4A/PxYLbUCfb6c+Vpd2/mB2yRDlew7Jb5hEXiCD9ibfO7wpk8i4sevK6DFny9h7EYbM3/sHg==";
       };
     };
-    "glob-11.0.1" = {
-      name = "glob";
-      packageName = "glob";
-      version = "11.0.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/glob/-/glob-11.0.1.tgz";
-        sha512 = "zrQDm8XPnYEKawJScsnM0QzobJxlT/kHOOlRTio8IH/GrmxRE5fjllkzdaHclIuNjUQTJYH2xHNIGfdpJkDJUw==";
-      };
-    };
     "glob-6.0.4" = {
       name = "glob";
       packageName = "glob";
@@ -23532,15 +23523,6 @@ let
         sha512 = "OGlZQpz2yfahA/Rd1Y8Cd9SIEsqvXkLVoSw/cgwhnhFMDbsQFeZYoJJ7bIZBS9BcamUW96asq/npPWugM+RQBw==";
       };
     };
-    "jackspeak-4.1.0" = {
-      name = "jackspeak";
-      packageName = "jackspeak";
-      version = "4.1.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/jackspeak/-/jackspeak-4.1.0.tgz";
-        sha512 = "9DDdhb5j6cpeitCbvLO7n7J4IxnbM6hoF6O1g4HQ5TfhvvKN8ywDM7668ZhMHRqVmxqhps/F6syWK2KcPxYlkw==";
-      };
-    };
     "jade-0.27.0" = {
       name = "jade";
       packageName = "jade";
@@ -25953,15 +25935,6 @@ let
         sha512 = "JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==";
       };
     };
-    "lru-cache-11.0.2" = {
-      name = "lru-cache";
-      packageName = "lru-cache";
-      version = "11.0.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/lru-cache/-/lru-cache-11.0.2.tgz";
-        sha512 = "123qHRfJBmo2jXDbo/a5YOQrJoHF/GNQTLzQ5+IdK5pWpceK17yRc6ozlWd25FxvGKQbIUs91fDFkXmDHTKcyA==";
-      };
-    };
     "lru-cache-2.2.0" = {
       name = "lru-cache";
       packageName = "lru-cache";
@@ -27806,15 +27779,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/minimalistic-crypto-utils/-/minimalistic-crypto-utils-1.0.1.tgz";
         sha512 = "JIYlbt6g8i5jKfJ3xz7rF0LXmv2TkDxBLUkiBeZ7bAx4GnnNMr8xFpGnOxn6GhTEHx3SjRrZEoU+j04prX1ktg==";
-      };
-    };
-    "minimatch-10.0.1" = {
-      name = "minimatch";
-      packageName = "minimatch";
-      version = "10.0.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/minimatch/-/minimatch-10.0.1.tgz";
-        sha512 = "ethXTt3SGGR+95gudmqJ1eNhRO7eGEGIgYA9vnPatK4/etz2MEVDno5GMCibdMTuBMyElzIlgxMna3K94XDIDQ==";
       };
     };
     "minimatch-3.0.8" = {
@@ -31173,15 +31137,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/path-scurry/-/path-scurry-1.11.1.tgz";
         sha512 = "Xa4Nw17FS9ApQFJ9umLiJS4orGjm7ZzwUrwamcGQuHSzDyth9boKDaycYdDcZDuqYATXw4HFXgaqWTctW/v1HA==";
-      };
-    };
-    "path-scurry-2.0.0" = {
-      name = "path-scurry";
-      packageName = "path-scurry";
-      version = "2.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/path-scurry/-/path-scurry-2.0.0.tgz";
-        sha512 = "ypGJsmGtdXUOeM5u93TyeIEfEhM6s+ljAhrk5vAvSx8uyY/02OvrZnA0YNGUrPXfpJMgI1ODd3nwz8Npx4O4cg==";
       };
     };
     "path-to-regexp-0.1.12" = {
@@ -61969,82 +61924,6 @@ in
       description = "PureScript pretty printer";
       homepage = "https://gitlab.com/joneshf/purty#README";
       license = "BSD-3-Clause";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  rimraf = nodeEnv.buildNodePackage {
-    name = "rimraf";
-    packageName = "rimraf";
-    version = "6.0.1";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/rimraf/-/rimraf-6.0.1.tgz";
-      sha512 = "9dkvaxAsk/xNXSJzMgFqqMCuFgt2+KsOFek3TMLfo8NCPfWpBmqwyNn5Y+NX56QUYfCtsyhF3ayiboEoUmJk/A==";
-    };
-    dependencies = [
-      sources."@isaacs/cliui-8.0.2"
-      sources."ansi-regex-5.0.1"
-      sources."ansi-styles-6.2.1"
-      sources."balanced-match-1.0.2"
-      sources."brace-expansion-2.0.1"
-      sources."color-convert-2.0.1"
-      sources."color-name-1.1.4"
-      sources."cross-spawn-7.0.6"
-      sources."eastasianwidth-0.2.0"
-      sources."emoji-regex-9.2.2"
-      sources."foreground-child-3.3.1"
-      sources."glob-11.0.1"
-      sources."is-fullwidth-code-point-3.0.0"
-      sources."isexe-2.0.0"
-      sources."jackspeak-4.1.0"
-      sources."lru-cache-11.0.2"
-      sources."minimatch-10.0.1"
-      sources."minipass-7.1.2"
-      sources."package-json-from-dist-1.0.1"
-      sources."path-key-3.1.1"
-      sources."path-scurry-2.0.0"
-      sources."shebang-command-2.0.0"
-      sources."shebang-regex-3.0.0"
-      sources."signal-exit-4.1.0"
-      sources."string-width-5.1.2"
-      (
-        sources."string-width-cjs-4.2.3"
-        // {
-          dependencies = [
-            sources."emoji-regex-8.0.0"
-            sources."strip-ansi-6.0.1"
-          ];
-        }
-      )
-      (
-        sources."strip-ansi-7.1.0"
-        // {
-          dependencies = [
-            sources."ansi-regex-6.1.0"
-          ];
-        }
-      )
-      sources."strip-ansi-cjs-6.0.1"
-      sources."which-2.0.2"
-      sources."wrap-ansi-8.1.0"
-      (
-        sources."wrap-ansi-cjs-7.0.0"
-        // {
-          dependencies = [
-            sources."ansi-styles-4.3.0"
-            sources."emoji-regex-8.0.0"
-            sources."string-width-4.2.3"
-            sources."strip-ansi-6.0.1"
-          ];
-        }
-      )
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "A deep deletion module for node (like `rm -rf`)";
-      homepage = "https://github.com/isaacs/rimraf#readme";
-      license = "ISC";
     };
     production = true;
     bypassCache = true;
