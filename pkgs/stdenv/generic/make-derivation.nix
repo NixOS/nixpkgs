@@ -24,6 +24,7 @@ let
     isAttrs
     isBool
     isDerivation
+    isFunction
     isInt
     isList
     isString
@@ -63,7 +64,7 @@ let
   */
   mkDerivation =
     fnOrAttrs:
-    if builtins.isFunction fnOrAttrs then
+    if isFunction fnOrAttrs then
       makeDerivationExtensible fnOrAttrs
     else
       makeDerivationExtensibleConst fnOrAttrs;
