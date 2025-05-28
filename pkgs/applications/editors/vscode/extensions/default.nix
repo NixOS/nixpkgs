@@ -3141,8 +3141,8 @@ let
         mktplcRef = {
           publisher = "maximedenes";
           name = "vscoq";
-          version = "2.2.5";
-          hash = "sha256-ctaeTgdK1JijSI3YD54iWEBNVrbaad408wD43fH78h4=";
+          version = "2.2.6";
+          hash = "sha256-QBUTOFhdksHGkpYqgQIF2u+WodYH5PmMMvGFHwEEEIk=";
         };
         meta = {
           description = "VsCoq is an extension for Visual Studio Code (VS Code) and VSCodium with support for the Coq Proof Assistant";
