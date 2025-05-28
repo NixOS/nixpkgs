@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "vmware-modules";
-  version = "workstation-17.6.3-${kernel.version}";
+  version = "workstation-17.6.3-20250608-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "philipl";
     repo = "vmware-host-modules";
-    tag = "w17.6.3";
-    hash = "sha256-n9aLpHcO7m51eRtcWWBfTpze0JIWvne+UcYACoA5afc=";
+    rev = "e08764f84df3bd14407291e02346b7c5c54d0bf6";
+    hash = "sha256-RDVKropC+VOv1uJijOGlLt6iqZI8Cm9aWlbmvZj2CSk=";
   };
 
   hardeningDisable = [ "pic" ];
