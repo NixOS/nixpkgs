@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     replaceVars ./jam-cross.patch {
       emulator = stdenv.hostPlatform.emulator buildPackages;
     }
-  );
+  ) ++ [ ./udev.patch ];
 
   postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     substituteInPlace Jambase \
