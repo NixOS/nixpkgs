@@ -142,10 +142,14 @@ in
       ghc90 = compiler.ghc902;
       ghc928 = callPackage ../development/compilers/ghc/9.2.8.nix {
         bootPkgs =
-          if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
-            bb.packages.ghc810
+          # GHC >= 9.0 removed the armv7l bindist
+          if stdenv.buildPlatform.isAarch32 then
+            bb.packages.ghc8107Binary
+          # No suitable bindists for powerpc64le
+          else if stdenv.buildPlatform.isPower64 && stdenv.buildPlatform.isLittleEndian then
+            bb.packages.ghc902
           else
-            bb.packages.ghc8107Binary;
+            bb.packages.ghc902Binary;
         inherit (buildPackages.python311Packages) sphinx; # a distutils issue with 3.12
         python3 = buildPackages.python311; # so that we don't have two of them
         # Need to use apple's patched xattr until
