@@ -14,10 +14,10 @@ in
   config = lib.mkIf config.programs.nufetch.enable {
     environment.systemPackages = [
       (pkgs.writeShellScriptBin "neofetch" ''
-        exec ${pkgs.nufetch-for-nixos-module}/bin/neofetch --config /etc/nufetch.conf "$@"
+        exec ${lib.getExe pkgs.nufetch-for-nixos-module} --config /etc/nufetch.conf "$@"
       '')
       (pkgs.writeShellScriptBin "nufetch" ''
-        exec ${pkgs.nufetch-for-nixos-module}/bin/neofetch --config /etc/nufetch.conf "$@"
+        exec ${lib.getExe pkgs.nufetch-for-nixos-module} --config /etc/nufetch.conf "$@"
       '')
       pkgs.nufetch-for-nixos-module
     ];
