@@ -29,11 +29,11 @@
 # TODO: Look at the hardcoded paths to kernel, modules etc.
 stdenv.mkDerivation rec {
   pname = "elfutils";
-  version = "0.192";
+  version = "0.193";
 
   src = fetchurl {
     url = "https://sourceware.org/elfutils/ftp/${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-YWCZvq4kq6Efm2PYbKbMjVZtlouAI5EzTJHfVOq0FrQ=";
+    hash = "sha256-eFf0S2JPTY1CHfhRqq57FALP5rzdLYBJ8V/AfT3edjU=";
   };
 
   patches =
