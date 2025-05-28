@@ -1226,7 +1226,6 @@ mapAliases {
   microcodeAmd = microcode-amd; # Added 2024-09-08
   microcodeIntel = microcode-intel; # Added 2024-09-08
   micropad = throw "micropad has been removed, since it was unmaintained and blocked the Electron 27 removal."; # Added 2025-02-24
-  microsoft-edge = throw "microsoft-edge has been removed due to lack of maintenance in nixpkgs"; # Added 2025-05-19
   microsoft_gsl = microsoft-gsl; # Added 2023-05-26
   midori = throw "'midori' original project has been abandonned upstream and the package was broken for a while in nixpkgs"; # Added 2025-05-19
   midori-unwrapped = midori; # Added 2025-05-19
