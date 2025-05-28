@@ -27,7 +27,7 @@ in
   options.programs.nufetch = {
     enable = lib.mkEnableOption "Enable Neofetch with custom options, a command-line utility to display system information.";
     package = lib.mkOption {
-      type = types.package;
+      type = lib.types.package;
       default = pkgs.nufetch-for-nixos-module;
       defaultText = "pkgs.nufetch-for-nixos-module";
       description = "Set version of nufetch package to use.";
