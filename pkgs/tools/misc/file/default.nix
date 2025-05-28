@@ -26,6 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ycx3x8VgxUMTXtxVWvYJ1WGdvvARmX6YjOQKPXXYYIg=";
   };
 
+  patches = [
+    # https://github.com/file/file/commit/FILE5_46-7-gb3384a1f
+    # https://bugs.astron.com/view.php?id=638
+    ./FILE5_46-7-gb3384a1f-PR-579-net147-Fix-stack-overrun.patch
+  ];
+
   outputs = [
     "out"
     "dev"

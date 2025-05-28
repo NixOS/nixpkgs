@@ -1,0 +1,31 @@
+From b3384a1fbfa1fee99986e5750ab8e700de4f24ad Mon Sep 17 00:00:00 2001
+From: Christos Zoulas <christos@zoulas.com>
+Date: Thu, 5 Dec 2024 18:35:40 +0000
+Subject: [PATCH] PR/579: net147: Fix stack overrun.
+
+---
+ src/readelf.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/readelf.c b/src/readelf.c
+index fe4cf54138..d209d86dfb 100644
+--- a/src/readelf.c
++++ b/src/readelf.c
+@@ -27,7 +27,7 @@
+ #include "file.h"
+ 
+ #ifndef lint
+-FILE_RCSID("@(#)$File: readelf.c,v 1.196 2024/11/11 15:49:11 christos Exp $")
++FILE_RCSID("@(#)$File: readelf.c,v 1.197 2024/12/05 18:35:40 christos Exp $")
+ #endif
+ 
+ #ifdef BUILTIN_ELF
+@@ -1726,7 +1726,7 @@ dophn_exec(struct magic_set *ms, int clazz, int swap, int fd, off_t off,
+ 	Elf64_Phdr ph64;
+ 	const char *linking_style;
+ 	unsigned char nbuf[NBUFSIZE];
+-	char interp[128];
++	char interp[NBUFSIZE];
+ 	ssize_t bufsize;
+ 	size_t offset, align, need = 0;
+ 	int pie = 0, dynamic = 0;
