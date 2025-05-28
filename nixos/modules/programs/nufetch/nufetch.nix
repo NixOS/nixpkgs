@@ -2,10 +2,15 @@
   pkgs,
   lib,
   config,
+  stdenv,
+  nixosTests,
   ...
 }:
 
 let
+  nufetchForNixosModule = import ./package.nix {
+    inherit lib stdenv pkgs nixosTests;
+  };
   cfg = config.programs.nufetch;
   configFile = pkgs.writeText "nufetch.conf" (import ./lib/config-maker.nix { inherit cfg lib; });
 in
@@ -14,12 +19,11 @@ in
   config = lib.mkIf config.programs.nufetch.enable {
     environment.systemPackages = [
       (pkgs.writeShellScriptBin "neofetch" ''
-        exec ${lib.getExe pkgs.nufetch-for-nixos-module} --config /etc/nufetch.conf "$@"
+        exec ${lib.getExe nufetchForNixosModule} --config /etc/nufetch.conf "$@"
       '')
       (pkgs.writeShellScriptBin "nufetch" ''
-        exec ${lib.getExe pkgs.nufetch-for-nixos-module} --config /etc/nufetch.conf "$@"
+        exec ${lib.getExe nufetchForNixosModule} --config /etc/nufetch.conf "$@"
       '')
-      pkgs.nufetch-for-nixos-module
     ];
     environment.etc."nufetch.conf".source = configFile;
   };
@@ -28,8 +32,8 @@ in
     enable = lib.mkEnableOption "Enable Neofetch with custom options, a command-line utility to display system information.";
     package = lib.mkOption {
       type = lib.types.package;
-      default = pkgs.nufetch-for-nixos-module;
-      defaultText = "pkgs.nufetch-for-nixos-module";
+      default = nufetchForNixosModule;
+      defaultText = "./package.nix";
       description = "Set version of nufetch package to use.";
     };
     os = lib.mkOption {
