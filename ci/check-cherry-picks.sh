@@ -19,6 +19,29 @@ remote="$(git remote -v | grep -i 'NixOS/nixpkgs' | head -n1 | cut -f1 || true)"
 
 commits="$(git rev-list --reverse "$1..$2")"
 
+log() {
+  type="$1"
+  shift 1
+
+  local -A prefix
+  prefix[success]="  ✔ "
+  if [ -v GITHUB_ACTIONS ]; then
+    prefix[warning]="::warning::"
+    prefix[error]="::error::"
+  else
+    prefix[warning]="  ⚠ "
+    prefix[error]="  ✘ "
+  fi
+
+  echo "${prefix[$type]}$@"
+}
+
+endgroup() {
+  if [ -v GITHUB_ACTIONS ] ; then
+    echo ::endgroup::
+  fi
+}
+
 while read -r new_commit_sha ; do
   if [ -v GITHUB_ACTIONS ] ; then
     echo "::group::Commit $new_commit_sha"
@@ -34,13 +57,8 @@ while read -r new_commit_sha ; do
     | grep -Eoi -m1 '[0-9a-f]{40}' || true
   )
   if [ -z "$original_commit_sha" ] ; then
-    if [ -v GITHUB_ACTIONS ] ; then
-      echo ::endgroup::
-      echo -n "::error ::"
-    else
-      echo -n "  ✘ "
-    fi
-    echo "Couldn't locate original commit hash in message"
+    endgroup
+    log error "Couldn't locate original commit hash in message"
     echo "Note this should not necessarily be treated as a hard fail, but a reviewer's attention should" \
       "be drawn to it and github actions have no way of doing that but to raise a 'failure'"
     problem=1
@@ -62,8 +80,6 @@ while read -r new_commit_sha ; do
 
     while read -r picked_branch ; do
       if git merge-base --is-ancestor "$original_commit_sha" "$picked_branch" ; then
-        echo "  ✔ $original_commit_sha present in branch $picked_branch"
-
         range_diff_common='git --no-pager range-diff
           --no-notes
           --creation-factor=100
@@ -72,13 +88,9 @@ while read -r new_commit_sha ; do
         '
 
         if $range_diff_common --no-color 2> /dev/null | grep -E '^ {4}[+-]{2}' > /dev/null ; then
-          if [ -v GITHUB_ACTIONS ] ; then
-            echo ::endgroup::
-            echo -n "::warning ::"
-          else
-            echo -n "  ⚠ "
-          fi
-          echo "Difference between $new_commit_sha and original $original_commit_sha may warrant inspection:"
+          log success "$original_commit_sha present in branch $picked_branch"
+          endgroup
+          log warning "Difference between $new_commit_sha and original $original_commit_sha may warrant inspection:"
 
           $range_diff_common --color
 
@@ -86,9 +98,10 @@ while read -r new_commit_sha ; do
             "be drawn to it and github actions have no way of doing that but to raise a 'failure'"
           problem=1
         else
-          echo "  ✔ $original_commit_sha highly similar to $new_commit_sha"
+          log success "$original_commit_sha present in branch $picked_branch"
+          log success "$original_commit_sha highly similar to $new_commit_sha"
           $range_diff_common --color
-          [ -v GITHUB_ACTIONS ] && echo ::endgroup::
+          endgroup
         fi
 
         # move on to next commit
@@ -97,13 +110,8 @@ while read -r new_commit_sha ; do
     done <<< "$branches"
   done
 
-  if [ -v GITHUB_ACTIONS ] ; then
-    echo ::endgroup::
-    echo -n "::error ::"
-  else
-    echo -n "  ✘ "
-  fi
-  echo "$original_commit_sha not found in any pickable branch"
+  endgroup
+  log error "$original_commit_sha not found in any pickable branch"
 
   problem=1
 done <<< "$commits"
