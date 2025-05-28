@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
       "-DMYSQL_LIB=${mariadb-connector-c.out}/lib/mariadb/libmysqlclient.a"
       "-DICINGA2_PLUGINDIR=bin"
       "-DICINGA2_LTO_BUILD=yes"
+      "-DICINGA2_UNITY_BUILD=OFF"
       # Features
       (mkFeatureFlag "MYSQL" withMysql)
       (mkFeatureFlag "PGSQL" withPostgresql)
