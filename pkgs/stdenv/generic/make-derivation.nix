@@ -96,6 +96,9 @@ let
                 warnForBadVersionOverride = (
                   thisOverlay ? version
                   && prev ? version
+                  # We could check that the version is actually distinct, but that
+                  # would probably just delay the inevitable, or preserve tech debt.
+                  # && prev.version != thisOverlay.version
                   && !(thisOverlay ? src)
                   && !(thisOverlay.__intentionallyOverridingVersion or false)
                 );
