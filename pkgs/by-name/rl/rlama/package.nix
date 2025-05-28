@@ -15,13 +15,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "rlama";
-  version = "0.1.36";
+  version = "0.1.39";
 
   src = fetchFromGitHub {
     owner = "dontizi";
     repo = "rlama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SzrnpAkh+SMzF9xOAxZXondRulwPRUZYHrhe3rf06bA=";
+    hash = "sha256-9qm9QSMko+ZHfKMMaTesA26X4OuemyB/w1w+0QOEpyE=";
   };
 
   vendorHash = "sha256-GHmLCgL79BdGw/5zz50Y1kR/6JYNalvOj2zjIHQ9IF0=";
