@@ -265,12 +265,24 @@ in
 
   config =
     let
+      commonEnvironment = {
+        KEA_CONTROL_SOCKET_DIR = "/run/kea";
+        KEA_LOCKFILE_DIR = "/run/kea";
+        KEA_PIDFILE_DIR = "/run/kea";
+      };
+
       commonServiceConfig = {
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        ExecReload = toString [
+          (lib.getExe' pkgs.coreutils "kill")
+          "-HUP"
+          "$MAINPID"
+        ];
         DynamicUser = true;
         User = "kea";
         ConfigurationDirectory = "kea";
+        Restart = "on-failure";
         RuntimeDirectory = "kea";
+        RuntimeDirectoryMode = "0750";
         RuntimeDirectoryPreserve = true;
         StateDirectory = "kea";
         UMask = "0077";
@@ -280,6 +292,12 @@ in
       lib.mkMerge [
         {
           environment.systemPackages = [ package ];
+
+          users.users.kea = {
+            isSystemUser = true;
+            group = "kea";
+          };
+          users.groups.kea = { };
         }
 
         (lib.mkIf cfg.ctrl-agent.enable {
@@ -312,10 +330,7 @@ in
               "kea-dhcp-ddns-server.service"
             ];
 
-            environment = {
-              KEA_PIDFILE_DIR = "/run/kea";
-              KEA_LOCKFILE_DIR = "/run/kea";
-            };
+            environment = commonEnvironment;
 
             restartTriggers = [
               ctrlAgentConfig
@@ -358,10 +373,7 @@ in
               "multi-user.target"
             ];
 
-            environment = {
-              KEA_PIDFILE_DIR = "/run/kea";
-              KEA_LOCKFILE_DIR = "/run/kea";
-            };
+            environment = commonEnvironment;
 
             restartTriggers = [
               dhcp4Config
@@ -411,10 +423,7 @@ in
               "multi-user.target"
             ];
 
-            environment = {
-              KEA_PIDFILE_DIR = "/run/kea";
-              KEA_LOCKFILE_DIR = "/run/kea";
-            };
+            environment = commonEnvironment;
 
             restartTriggers = [
               dhcp6Config
@@ -460,10 +469,7 @@ in
               "multi-user.target"
             ];
 
-            environment = {
-              KEA_PIDFILE_DIR = "/run/kea";
-              KEA_LOCKFILE_DIR = "/run/kea";
-            };
+            environment = commonEnvironment;
 
             restartTriggers = [
               dhcpDdnsConfig
