@@ -14273,7 +14273,7 @@ with pkgs;
   traverso = libsForQt5.callPackage ../applications/audio/traverso { };
 
   tinywl = callPackage ../applications/window-managers/tinywl {
-    wlroots = wlroots_0_18;
+    wlroots = wlroots_0_19;
   };
 
   trojita = libsForQt5.callPackage ../applications/networking/mailreaders/trojita { };
