@@ -43,9 +43,10 @@ buildGoModule {
         paths = [ actualPlugins ];
       };
     in
-    runCommand "tflint-with-plugins"
+    runCommand "tflint-with-plugins-${version}"
       {
         nativeBuildInputs = [ makeWrapper ];
+        inherit version;
       }
       ''
         makeWrapper ${tflint}/bin/tflint $out/bin/tflint \
