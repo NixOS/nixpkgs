@@ -583,6 +583,14 @@ rec {
       # https://github.com/llvm/llvm-project/pull/132173
       cmodel = "medium";
     };
+    linux-kernel = {
+      name = "loongarch-multiplatform";
+      target = "vmlinuz.efi";
+      autoModules = true;
+      preferBuiltin = true;
+      baseConfig = "defconfig";
+      DTB = true;
+    };
   };
 
   # This function takes a minimally-valid "platform" and returns an
@@ -610,6 +618,9 @@ rec {
 
     else if platform.isAarch64 then
       if platform.isDarwin then apple-m1 else aarch64-multiplatform
+
+    else if platform.isLoongArch64 then
+      loongarch64-multiplatform
 
     else if platform.isRiscV then
       riscv-multiplatform

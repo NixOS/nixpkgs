@@ -14518,8 +14518,6 @@ self: super: with self; {
 
   pytransportnswv2 = callPackage ../development/python-modules/pytransportnswv2 { };
 
-  pytricia = callPackage ../development/python-modules/pytricia { };
-
   pytrydan = callPackage ../development/python-modules/pytrydan { };
 
   pyttsx3 = callPackage ../development/python-modules/pyttsx3 { };
@@ -16723,6 +16721,8 @@ self: super: with self; {
   starlette = callPackage ../development/python-modules/starlette { };
 
   starlette-admin = callPackage ../development/python-modules/starlette-admin { };
+
+  starlette-compress = callPackage ../development/python-modules/starlette-compress { };
 
   starlette-context = callPackage ../development/python-modules/starlette-context { };
 
