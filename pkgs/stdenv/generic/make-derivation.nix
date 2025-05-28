@@ -67,7 +67,7 @@ let
     if isFunction fnOrAttrs then
       makeDerivationExtensible fnOrAttrs
     else
-      makeDerivationExtensibleConst fnOrAttrs;
+      makeDerivationExtensible (_: fnOrAttrs);
 
   checkMeta = import ./check-meta.nix {
     inherit lib config;
@@ -135,8 +135,6 @@ let
 
     in
     finalPackage;
-
-  makeDerivationExtensibleConst = attrs: makeDerivationExtensible (_: attrs);
 
   knownHardeningFlags = [
     "bindnow"
