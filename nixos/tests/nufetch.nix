@@ -1,7 +1,7 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   name = "nufetch";
-  meta = with pkgs.lib.maintainers; {
+  meta = with lib.maintainers; {
     maintainers = [ gignsky ];
   };
   nodes.machine =
@@ -18,9 +18,6 @@
     machine.wait_for_unit("multi-user.target")
 
     nufetch_output = machine.succeed("nufetch")
-    machine.log(nufetch_output)
-
     neofetch_output = machine.succeed("neofetch")
-    machine.log(neofetch_output)
   '';
 }
