@@ -764,7 +764,7 @@ in
   lomiri = discoverTests (import ./lomiri.nix);
   lomiri-calculator-app = runTest ./lomiri-calculator-app.nix;
   lomiri-calendar-app = runTest ./lomiri-calendar-app.nix;
-  lomiri-camera-app = runTest ./lomiri-camera-app.nix;
+  lomiri-camera-app = discoverTests (import ./lomiri-camera-app.nix);
   lomiri-clock-app = runTest ./lomiri-clock-app.nix;
   lomiri-docviewer-app = runTest ./lomiri-docviewer-app.nix;
   lomiri-filemanager-app = runTest ./lomiri-filemanager-app.nix;

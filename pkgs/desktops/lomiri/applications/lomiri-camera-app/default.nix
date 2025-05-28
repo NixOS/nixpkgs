@@ -132,7 +132,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests.vm = nixosTests.lomiri-camera-app;
+    tests = {
+      inherit (nixosTests.lomiri-camera-app)
+        basic
+        v4l2-photo
+        v4l2-qr
+        ;
+    };
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
