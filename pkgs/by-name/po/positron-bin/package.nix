@@ -33,6 +33,11 @@ stdenv.mkDerivation {
         url = "https://cdn.posit.co/positron/dailies/mac/universal/Positron-${version}.dmg";
         hash = "sha256-dmRYKysQJYrNWyGvH9DsNIC0tIHYNix7QWagVtuGx1g=";
       }
+    else if stdenv.hostPlatform.system == "aarch64-linux" then
+      fetchurl {
+        url = "https://cdn.posit.co/positron/dailies/deb/arm64/Positron-${version}-arm64.deb";
+        hash = "sha256-RPSQONl6Oj9UgFD2EIqGcbiCtuNJug1I+xaKiWeOyls=";
+      }
     else
       fetchurl {
         url = "https://cdn.posit.co/positron/dailies/deb/x86_64/Positron-${version}-x64.deb";
@@ -133,6 +138,9 @@ stdenv.mkDerivation {
       detroyejr
     ];
     mainProgram = "positron";
-    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ] ++ platforms.darwin;
   };
 }
