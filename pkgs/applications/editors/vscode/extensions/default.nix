@@ -2975,8 +2975,8 @@ let
         mktplcRef = {
           name = "vscord";
           publisher = "leonardssh";
-          version = "5.2.13";
-          hash = "sha256-Jgm3ekXFLhylX7RM6tdfi+lRLrcl4UQGmRHbr27M59M=";
+          version = "5.3.2";
+          hash = "sha256-kj1D0X6Wj088nwgFlWZkPG+zaHsqb0MapycPIfRWEIk=";
         };
         meta = {
           description = "Highly customizable Discord Rich Presence extension for Visual Studio Code";
