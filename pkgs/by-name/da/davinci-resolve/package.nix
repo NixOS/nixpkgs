@@ -302,6 +302,7 @@ buildFHSEnv {
       amarshall
       jshcmpbll
       orivej
+      XBagon
     ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
