@@ -16,7 +16,7 @@ problem=0
 
 commits="$(git rev-list -E -i --grep="cherry.*[0-9a-f]{40}" --reverse "$1..$2")"
 
-while read new_commit_sha ; do
+while read -r new_commit_sha ; do
   if [ -z "$new_commit_sha" ] ; then
     continue  # skip empty lines
   fi
@@ -33,7 +33,7 @@ while read new_commit_sha ; do
     | grep -Ei -m1 "cherry.*[0-9a-f]{40}" \
     | grep -Eoi -m1 '[0-9a-f]{40}'
   )
-  if [ "$?" != "0" ] ; then
+  if [ -z "$original_commit_sha" ] ; then
     echo "  ? Couldn't locate original commit hash in message"
     [ "$GITHUB_ACTIONS" = 'true' ] && echo ::endgroup::
     continue
