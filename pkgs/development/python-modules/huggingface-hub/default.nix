@@ -25,6 +25,8 @@
   safetensors,
   # hf_transfer
   hf-transfer,
+  # hf_xet
+  hf-xet,
   # fastai
   toml,
   fastai,
@@ -93,7 +95,7 @@ buildPythonPackage rec {
       keras
     ];
     hf_xet = [
-      # hf-xet (unpackaged)
+      hf-xet
     ];
   };
 
