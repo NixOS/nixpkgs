@@ -37,11 +37,10 @@
   zenity,
   covers_url ? "https://pics.projectignis.org:2096/pics/cover/{}.jpg",
   fields_url ? "https://pics.projectignis.org:2096/pics/field/{}.png",
-  # While ygoprodeck has higher quality images, "spamming" of their api results in a ban.
-  # Thats why this link can change since it's compiled into the program, However it will
-  # download assets when needed so it is unlikely to get banned. Unless you search the
-  # card list with no filters of any kind. When testing use ProjectIgnis' website instead.
-  pics_url ? "https://images.ygoprodeck.com/images/cards/{}.jpg",
+  # While ygoprodeck has higher quality images:
+  # 1. automated downloads for sims via their API are discouraged by the owner
+  # 2. images for prerelease cards are unavailable on their service
+  pics_url ? "https://pics.projectignis.org:2096/pics/{}.jpg",
 }:
 let
   archLabel =
