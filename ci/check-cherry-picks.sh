@@ -3,10 +3,13 @@
 
 set -euo pipefail
 
-if [ $# != "2" ] ; then
-  echo "usage: check-cherry-picks.sh base_rev head_rev"
+if [[ $# != "2" && $# != "3" ]] ; then
+  echo "usage: check-cherry-picks.sh base_rev head_rev [markdown_file]"
   exit 2
 fi
+
+markdown_file="$(realpath ${3:-/dev/null})"
+[ -v 3 ] && rm -f "$markdown_file"
 
 # Make sure we are inside the nixpkgs repo, even when called from outside
 cd "$(dirname "${BASH_SOURCE[0]}")"
@@ -34,6 +37,18 @@ log() {
   fi
 
   echo "${prefix[$type]}$@"
+
+  # Only logging errors and warnings, which allows comparing the markdown file
+  # between pushes to the PR. Even if a new, proper cherry-pick, commit is added
+  # it won't change the markdown file's content and thus not trigger another comment.
+  if [ "$type" != "success" ]; then
+    local -A alert
+    alert[warning]="WARNING"
+    alert[error]="CAUTION"
+    echo >> $markdown_file
+    echo "> [!${alert[$type]}]" >> $markdown_file
+    echo "> $@" >> $markdown_file
+  fi
 }
 
 endgroup() {
@@ -58,9 +73,7 @@ while read -r new_commit_sha ; do
   )
   if [ -z "$original_commit_sha" ] ; then
     endgroup
-    log error "Couldn't locate original commit hash in message"
-    echo "Note this should not necessarily be treated as a hard fail, but a reviewer's attention should" \
-      "be drawn to it and github actions have no way of doing that but to raise a 'failure'"
+    log warning "Couldn't locate original commit hash in message of $new_commit_sha."
     problem=1
     continue
   fi
@@ -90,13 +103,19 @@ while read -r new_commit_sha ; do
         if $range_diff_common --no-color 2> /dev/null | grep -E '^ {4}[+-]{2}' > /dev/null ; then
           log success "$original_commit_sha present in branch $picked_branch"
           endgroup
-          log warning "Difference between $new_commit_sha and original $original_commit_sha may warrant inspection:"
+          log warning "Difference between $new_commit_sha and original $original_commit_sha may warrant inspection."
 
           # First line contains commit SHAs, which we already printed.
           $range_diff_common --color | tail -n +2
 
-          echo "Note this should not necessarily be treated as a hard fail, but a reviewer's attention should" \
-            "be drawn to it and github actions have no way of doing that but to raise a 'failure'"
+          echo -e "> <details><summary>Show diff</summary>\n>" >> $markdown_file
+          echo '> ```diff' >> $markdown_file
+          # The output of `git range-diff` is indented with 4 spaces, which we need to match with the
+          # code blocks indent to get proper syntax highlighting on GitHub.
+          $range_diff_common | tail -n +2 | sed -Ee 's/^ {4}/> /g' >> $markdown_file
+          echo '> ```' >> $markdown_file
+          echo "> </details>" >> $markdown_file
+
           problem=1
         else
           log success "$original_commit_sha present in branch $picked_branch"
@@ -112,7 +131,7 @@ while read -r new_commit_sha ; do
   done
 
   endgroup
-  log error "$original_commit_sha not found in any pickable branch"
+  log error "$original_commit_sha given in $new_commit_sha not found in any pickable branch."
 
   problem=1
 done <<< "$commits"
