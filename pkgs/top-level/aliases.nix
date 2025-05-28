@@ -1623,7 +1623,8 @@ mapAliases {
   qt5ct = throw "'qt5ct' has been renamed to/replaced by 'libsForQt5.qt5ct'"; # Converted to throw 2024-10-17
   qt6ct = qt6Packages.qt6ct; # Added 2023-03-07
   qtcurve = throw "'qtcurve' has been renamed to/replaced by 'libsForQt5.qtcurve'"; # Converted to throw 2024-10-17
-  qtile-unwrapped = python3.pkgs.qtile; # Added 2023-05-12
+  qtile = python3Packages.qtile; # Added 2024-11-05
+  qtile-unwrapped = throw "'qtile-unwrapped' has been removed, as Qtile now wraps extra packages by itself. Please, use 'qtile' instead"; # Converted to throw 2024-11-05
   quantum-espresso-mpi = quantum-espresso; # Added 2023-11-23
   quaternion-qt5 = throw "'quaternion-qt5' has been removed as quaternion dropped Qt5 support with v0.0.97.1"; # Added 2025-05-24
   quickbms = throw "'quickbms' has been removed due to being unmaintained for many years."; # Added 2025-05-17
