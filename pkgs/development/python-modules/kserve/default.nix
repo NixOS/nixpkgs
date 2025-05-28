@@ -54,14 +54,14 @@
 
 buildPythonPackage rec {
   pname = "kserve";
-  version = "0.15.1";
+  version = "0.15.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kserve";
     repo = "kserve";
     tag = "v${version}";
-    hash = "sha256-k+uyOhsxWPpiA82wCCEn53W2VQgSHGgSABFipEPErRk=";
+    hash = "sha256-NklR2Aoa5UdWkqNOfX+xl3R158JDSQtStXv9DkklOwM=";
   };
 
   sourceRoot = "${src.name}/python/kserve";
