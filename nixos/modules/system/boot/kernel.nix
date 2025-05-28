@@ -496,7 +496,6 @@ in
         with config.lib.kernelConfig;
         [
           # !!! Should this really be needed?
-          (isYes "MODULES")
           (isYes "BINFMT_ELF")
         ]
         ++ (optional (randstructSeed != "") (isYes "GCC_PLUGIN_RANDSTRUCT"));
