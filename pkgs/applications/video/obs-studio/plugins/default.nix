@@ -102,6 +102,8 @@
 
   obs-webkitgtk = callPackage ./obs-webkitgtk.nix { };
 
+  pixel-art = callPackage ./pixel-art.nix { };
+
   wlrobs = callPackage ./wlrobs.nix { };
 
   waveform = callPackage ./waveform { };
