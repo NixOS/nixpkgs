@@ -1,12 +1,12 @@
 {
-  buildGoModule,
+  buildGo123Module,
   fetchFromGitHub,
   lib,
   nix-update-script,
   stdenv,
 }:
 
-buildGoModule rec {
+buildGo123Module rec {
   pname = "avalanchego";
   version = "1.12.1";
 
