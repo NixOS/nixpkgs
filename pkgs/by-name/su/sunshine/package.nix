@@ -48,6 +48,7 @@
   nlohmann_json,
   config,
   coreutils,
+  udevCheckHook,
   cudaSupport ? config.cudaSupport,
   cudaPackages ? { },
 }:
@@ -92,6 +93,7 @@ stdenv'.mkDerivation rec {
       wayland-scanner
       # Avoid fighting upstream's usage of vendored ffmpeg libraries
       autoPatchelfHook
+      udevCheckHook
     ]
     ++ lib.optionals cudaSupport [
       autoAddDriverRunpath
@@ -230,6 +232,8 @@ stdenv'.mkDerivation rec {
   postInstall = ''
     install -Dm644 ../packaging/linux/${pname}.desktop $out/share/applications/${pname}.desktop
   '';
+
+  doInstallCheck = true;
 
   passthru = {
     tests.sunshine = nixosTests.sunshine;

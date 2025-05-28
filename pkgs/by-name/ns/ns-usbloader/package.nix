@@ -9,6 +9,7 @@
   gvfs,
   maven,
   jre,
+  udevCheckHook,
 }:
 let
   pkgDescription = "All-in-one tool for managing Nintendo Switch homebrew";
@@ -47,9 +48,12 @@ maven.buildMavenPackage rec {
     makeWrapper
     wrapGAppsHook3
     gvfs
+    udevCheckHook
   ];
 
   doCheck = false;
+
+  doInstallCheck = true;
 
   # Don't wrap binaries twice.
   dontWrapGApps = true;

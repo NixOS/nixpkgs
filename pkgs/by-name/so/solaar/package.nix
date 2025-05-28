@@ -8,6 +8,7 @@
   gdk-pixbuf,
   libappindicator,
   librsvg,
+  udevCheckHook,
 }:
 
 # Although we copy in the udev rules here, you probably just want to use
@@ -33,6 +34,7 @@ python3Packages.buildPythonApplication rec {
     gdk-pixbuf
     gobject-introspection
     wrapGAppsHook3
+    udevCheckHook
   ];
 
   buildInputs = [
