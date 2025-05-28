@@ -1,0 +1,481 @@
+diff --git a/src/components/bar/layout/coreWidgets.tsx b/src/components/bar/layout/coreWidgets.tsx
+index f3be40e..fb2ad03 100644
+--- a/src/components/bar/layout/coreWidgets.tsx
++++ b/src/components/bar/layout/coreWidgets.tsx
+@@ -18,7 +18,6 @@ import { Ram } from '../modules/ram';
+ import { ModuleSeparator } from '../modules/separator';
+ import { Storage } from '../modules/storage';
+ import { Submap } from '../modules/submap';
+-import { SysTray } from '../modules/systray';
+ import { Updates } from '../modules/updates';
+ import { Volume } from '../modules/volume';
+ import { Weather } from '../modules/weather';
+@@ -40,7 +39,6 @@ export function getCoreWidgets(): Record<string, WidgetFactory> {
+         network: () => WidgetContainer(Network()),
+         bluetooth: () => WidgetContainer(Bluetooth()),
+         clock: () => WidgetContainer(Clock()),
+-        systray: () => WidgetContainer(SysTray()),
+         microphone: () => WidgetContainer(Microphone()),
+         ram: () => WidgetContainer(Ram()),
+         cpu: () => WidgetContainer(Cpu()),
+diff --git a/src/components/bar/modules/systray/index.tsx b/src/components/bar/modules/systray/index.tsx
+deleted file mode 100644
+index 4c13fb0..0000000
+--- a/src/components/bar/modules/systray/index.tsx
++++ /dev/null
+@@ -1,150 +0,0 @@
+-import AstalTray from 'gi://AstalTray?version=0.1';
+-import { bind, Gio, Variable } from 'astal';
+-import { Gdk, Gtk } from 'astal/gtk3';
+-import { BarBoxChild } from 'src/components/bar/types';
+-import options from 'src/configuration';
+-import { isPrimaryClick, isSecondaryClick, isMiddleClick } from 'src/lib/events/mouse';
+-import { SystemUtilities } from 'src/core/system/SystemUtilities';
+-
+-const systemtray = AstalTray.get_default();
+-const { ignore, customIcons } = options.bar.systray;
+-
+-const createMenu = (menuModel: Gio.MenuModel, actionGroup: Gio.ActionGroup | null): Gtk.Menu => {
+-    const menu = Gtk.Menu.new_from_model(menuModel);
+-    menu.insert_action_group('dbusmenu', actionGroup);
+-
+-    return menu;
+-};
+-
+-const MenuCustomIcon = ({ iconLabel, iconColor, item }: MenuCustomIconProps): JSX.Element => {
+-    return (
+-        <label
+-            className={'systray-icon txt-icon'}
+-            label={iconLabel}
+-            css={iconColor ? `color: ${iconColor}` : ''}
+-            tooltipMarkup={bind(item, 'tooltipMarkup')}
+-        />
+-    );
+-};
+-
+-const MenuDefaultIcon = ({ item }: MenuEntryProps): JSX.Element => {
+-    return (
+-        <icon
+-            className={'systray-icon'}
+-            gicon={bind(item, 'gicon')}
+-            tooltipMarkup={bind(item, 'tooltipMarkup')}
+-        />
+-    );
+-};
+-
+-const MenuEntry = ({ item, child }: MenuEntryProps): JSX.Element => {
+-    let menu: Gtk.Menu;
+-
+-    const entryBinding = Variable.derive(
+-        [bind(item, 'menuModel'), bind(item, 'actionGroup')],
+-        (menuModel, actionGroup) => {
+-            if (menuModel === null) {
+-                return console.error(`Menu Model not found for ${item.id}`);
+-            }
+-            if (actionGroup === null) {
+-                return console.error(`Action Group not found for ${item.id}`);
+-            }
+-
+-            menu = createMenu(menuModel, actionGroup);
+-        },
+-    );
+-
+-    return (
+-        <button
+-            cursor={'pointer'}
+-            onClick={(self, event) => {
+-                if (isPrimaryClick(event)) {
+-                    item.activate(0, 0);
+-                }
+-
+-                if (isSecondaryClick(event)) {
+-                    menu?.popup_at_widget(self, Gdk.Gravity.NORTH, Gdk.Gravity.SOUTH, null);
+-                }
+-
+-                if (isMiddleClick(event)) {
+-                    SystemUtilities.notify({ summary: 'App Name', body: item.id });
+-                }
+-            }}
+-            onDestroy={() => {
+-                menu?.destroy();
+-                entryBinding.drop();
+-            }}
+-        >
+-            {child}
+-        </button>
+-    );
+-};
+-
+-const SysTray = (): BarBoxChild => {
+-    const isVis = Variable(false);
+-
+-    const componentChildren = Variable.derive(
+-        [bind(systemtray, 'items'), bind(ignore), bind(customIcons)],
+-        (items, ignored, custIcons) => {
+-            const filteredTray = items.filter(({ id }) => !ignored.includes(id) && id !== null);
+-
+-            isVis.set(filteredTray.length > 0);
+-
+-            return filteredTray.map((item) => {
+-                const matchedCustomIcon = Object.keys(custIcons).find((iconRegex) =>
+-                    item.id.match(iconRegex),
+-                );
+-
+-                if (matchedCustomIcon !== undefined) {
+-                    const iconLabel = custIcons[matchedCustomIcon].icon || '󰠫';
+-                    const iconColor = custIcons[matchedCustomIcon].color;
+-
+-                    return (
+-                        <MenuEntry item={item}>
+-                            <MenuCustomIcon iconLabel={iconLabel} iconColor={iconColor} item={item} />
+-                        </MenuEntry>
+-                    );
+-                }
+-                return (
+-                    <MenuEntry item={item}>
+-                        <MenuDefaultIcon item={item} />
+-                    </MenuEntry>
+-                );
+-            });
+-        },
+-    );
+-
+-    const component = (
+-        <box
+-            className={'systray-container'}
+-            onDestroy={() => {
+-                isVis.drop();
+-                componentChildren.drop();
+-            }}
+-        >
+-            {componentChildren()}
+-        </box>
+-    );
+-
+-    return {
+-        component,
+-        isVisible: true,
+-        boxClass: 'systray',
+-        isVis: bind(isVis),
+-        isBox: true,
+-        props: {},
+-    };
+-};
+-
+-interface MenuCustomIconProps {
+-    iconLabel: string;
+-    iconColor: string;
+-    item: AstalTray.TrayItem;
+-}
+-
+-interface MenuEntryProps {
+-    item: AstalTray.TrayItem;
+-    child?: JSX.Element;
+-}
+-
+-export { SysTray };
+diff --git a/src/components/bar/utils/monitors/index.ts b/src/components/bar/utils/monitors/index.ts
+index 462b0dd..4ccc8f0 100644
+--- a/src/components/bar/utils/monitors/index.ts
++++ b/src/components/bar/utils/monitors/index.ts
+@@ -24,7 +24,7 @@ export const getLayoutForMonitor = (monitor: number, layouts: BarLayouts): BarLa
+     return {
+         left: ['dashboard', 'workspaces', 'windowtitle'],
+         middle: ['media'],
+-        right: ['volume', 'network', 'bluetooth', 'battery', 'systray', 'clock', 'notifications'],
++        right: ['volume', 'network', 'bluetooth', 'battery', 'clock', 'notifications'],
+     };
+ };
+ 
+diff --git a/src/components/settings/pages/config/bar/index.tsx b/src/components/settings/pages/config/bar/index.tsx
+index b6377c4..d31a2e9 100644
+--- a/src/components/settings/pages/config/bar/index.tsx
++++ b/src/components/settings/pages/config/bar/index.tsx
+@@ -487,34 +487,6 @@ export const BarSettings = (): JSX.Element => {
+                 <Option opt={options.bar.battery.scrollUp} title="Scroll Up" type="string" />
+                 <Option opt={options.bar.battery.scrollDown} title="Scroll Down" type="string" />
+ 
+-                {/* System Tray Section */}
+-                <Header title="System Tray" />
+-                <Option
+-                    opt={options.theme.bar.buttons.systray.enableBorder}
+-                    title="Button Border"
+-                    type="boolean"
+-                />
+-                <Option
+-                    opt={options.bar.systray.ignore}
+-                    title="Ignore List"
+-                    subtitle={
+-                        'Apps to ignore\n' +
+-                        'Wiki: https://hyprpanel.com/configuration/panel.html#system-tray'
+-                    }
+-                    subtitleLink="https://hyprpanel.com/configuration/panel.html#system-tray"
+-                    type="object"
+-                />
+-                <Option
+-                    opt={options.bar.systray.customIcons}
+-                    title="Custom Systray Icons"
+-                    subtitle={
+-                        'Define custom icons for systray.\n' +
+-                        'Wiki: https://hyprpanel.com/configuration/panel.html#custom-systray-icons'
+-                    }
+-                    subtitleLink="https://hyprpanel.com/configuration/panel.html#custom-systray-icons"
+-                    type="object"
+-                />
+-
+                 {/* Clock Section */}
+                 <Header title="Clock" />
+                 <Option
+diff --git a/src/components/settings/pages/theme/bar/index.tsx b/src/components/settings/pages/theme/bar/index.tsx
+index 7d5c9f6..fe97506 100644
+--- a/src/components/settings/pages/theme/bar/index.tsx
++++ b/src/components/settings/pages/theme/bar/index.tsx
+@@ -218,16 +218,6 @@ export const BarTheme = (): JSX.Element => {
+                 />
+                 <Option opt={options.theme.bar.buttons.bluetooth.border} title="Border" type="color" />
+ 
+-                {/* System Tray Section */}
+-                <Header title="System Tray" />
+-                <Option opt={options.theme.bar.buttons.systray.border} title="Border" type="color" />
+-                <Option
+-                    opt={options.theme.bar.buttons.systray.customIcon}
+-                    title="Custom Icons"
+-                    type="color"
+-                />
+-                <Option opt={options.theme.bar.buttons.systray.background} title="Background" type="color" />
+-
+                 {/* Battery Section */}
+                 <Header title="Battery" />
+                 <Option opt={options.theme.bar.buttons.battery.background} title="Background" type="color" />
+diff --git a/src/components/settings/pages/theme/index.tsx b/src/components/settings/pages/theme/index.tsx
+index 08a918b..880d4d9 100644
+--- a/src/components/settings/pages/theme/index.tsx
++++ b/src/components/settings/pages/theme/index.tsx
+@@ -15,7 +15,6 @@ import { DashboardMenuTheme } from './menus/dashboard';
+ import { MediaMenuTheme } from './menus/media';
+ import { NetworkMenuTheme } from './menus/network';
+ import { NotificationsMenuTheme } from './menus/notifications';
+-import { SystrayMenuTheme } from './menus/systray';
+ import { VolumeMenuTheme } from './menus/volume';
+ import { PowerMenuTheme } from './menus/power';
+ import { CustomModuleTheme } from 'src/components/bar/settings/theme';
+@@ -75,7 +74,6 @@ export const ThemesMenu = (): JSX.Element => {
+                 <MediaMenuTheme />
+                 <NetworkMenuTheme />
+                 <NotificationsMenuTheme />
+-                <SystrayMenuTheme />
+                 <VolumeMenuTheme />
+                 <PowerMenuTheme />
+                 <CustomModuleTheme />
+diff --git a/src/components/settings/pages/theme/menus/systray.tsx b/src/components/settings/pages/theme/menus/systray.tsx
+deleted file mode 100644
+index f7e7f18..0000000
+--- a/src/components/settings/pages/theme/menus/systray.tsx
++++ /dev/null
+@@ -1,37 +0,0 @@
+-import { Option } from 'src/components/settings/shared/Option';
+-import { Header } from 'src/components/settings/shared/Header';
+-
+-import options from 'src/configuration';
+-import { Gtk } from 'astal/gtk3';
+-
+-export const SystrayMenuTheme = (): JSX.Element => {
+-    return (
+-        <scrollable
+-            name={'System Tray'}
+-            className="menu-theme-page systray paged-container"
+-            vscroll={Gtk.PolicyType.AUTOMATIC}
+-            hscroll={Gtk.PolicyType.AUTOMATIC}
+-            vexpand={true}
+-        >
+-            <box vertical>
+-                {/* Dropdown Menu Section */}
+-                <Header title="Dropdown Menu" />
+-                <Option
+-                    opt={options.theme.bar.menus.menu.systray.dropdownmenu.background}
+-                    title="Background"
+-                    type="color"
+-                />
+-                <Option
+-                    opt={options.theme.bar.menus.menu.systray.dropdownmenu.text}
+-                    title="Text"
+-                    type="color"
+-                />
+-                <Option
+-                    opt={options.theme.bar.menus.menu.systray.dropdownmenu.divider}
+-                    title="Section Divider"
+-                    type="color"
+-                />
+-            </box>
+-        </scrollable>
+-    );
+-};
+diff --git a/src/configuration/modules/config/bar/index.ts b/src/configuration/modules/config/bar/index.ts
+index 6ce587e..f1ca1cc 100644
+--- a/src/configuration/modules/config/bar/index.ts
++++ b/src/configuration/modules/config/bar/index.ts
+@@ -20,7 +20,6 @@ import power from './power';
+ import ram from './ram';
+ import storage from './storage';
+ import submap from './submap';
+-import systray from './systray';
+ import updates from './updates';
+ import volume from './volume';
+ import weather from './weather';
+@@ -39,7 +38,6 @@ export default {
+     network,
+     bluetooth,
+     battery,
+-    systray,
+     clock,
+     media,
+     notifications,
+diff --git a/src/configuration/modules/config/bar/layouts/index.ts b/src/configuration/modules/config/bar/layouts/index.ts
+index e7f03f0..2f95d37 100644
+--- a/src/configuration/modules/config/bar/layouts/index.ts
++++ b/src/configuration/modules/config/bar/layouts/index.ts
+@@ -15,6 +15,6 @@ export default opt<BarLayouts>({
+     '0': {
+         left: ['dashboard', 'workspaces', 'windowtitle'],
+         middle: ['media'],
+-        right: ['volume', 'network', 'bluetooth', 'battery', 'systray', 'clock', 'notifications'],
++        right: ['volume', 'network', 'bluetooth', 'battery', 'clock', 'notifications'],
+     },
+ });
+diff --git a/src/configuration/modules/config/bar/systray/index.ts b/src/configuration/modules/config/bar/systray/index.ts
+deleted file mode 100644
+index 2feebfd..0000000
+--- a/src/configuration/modules/config/bar/systray/index.ts
++++ /dev/null
+@@ -1,7 +0,0 @@
+-import { opt } from 'src/lib/options';
+-import { SystrayIconMap } from './types';
+-
+-export default {
+-    ignore: opt<string[]>([]),
+-    customIcons: opt<SystrayIconMap>({}),
+-};
+diff --git a/src/configuration/modules/config/bar/systray/types.ts b/src/configuration/modules/config/bar/systray/types.ts
+deleted file mode 100644
+index 66db26a..0000000
+--- a/src/configuration/modules/config/bar/systray/types.ts
++++ /dev/null
+@@ -1,6 +0,0 @@
+-export type SystrayIconMap = {
+-    [key: string]: {
+-        icon: string;
+-        color: string;
+-    };
+-};
+diff --git a/src/configuration/modules/theme/bar/buttons/index.ts b/src/configuration/modules/theme/bar/buttons/index.ts
+index d7e5b86..817016c 100644
+--- a/src/configuration/modules/theme/bar/buttons/index.ts
++++ b/src/configuration/modules/theme/bar/buttons/index.ts
+@@ -8,7 +8,6 @@ import media from './media';
+ import volume from './volume';
+ import network from './network';
+ import bluetooth from './bluetooth';
+-import systray from './systray';
+ import battery from './battery';
+ import clock from './clock';
+ import notifications from './notifications';
+@@ -56,7 +55,6 @@ export default {
+     volume: volume,
+     network: network,
+     bluetooth: bluetooth,
+-    systray: systray,
+     battery: battery,
+     clock: clock,
+     notifications: notifications,
+diff --git a/src/configuration/modules/theme/bar/menus/index.ts b/src/configuration/modules/theme/bar/menus/index.ts
+index d8172f9..c23aa0e 100644
+--- a/src/configuration/modules/theme/bar/menus/index.ts
++++ b/src/configuration/modules/theme/bar/menus/index.ts
+@@ -5,7 +5,6 @@ import media from './modules/media';
+ import volume from './modules/volume';
+ import network from './modules/network';
+ import bluetooth from './modules/bluetooth';
+-import systray from './modules/systray';
+ import battery from './modules/battery';
+ import clock from './modules/clock';
+ import dashboard from './modules/dashboard';
+@@ -31,7 +30,6 @@ export default {
+         volume,
+         network,
+         bluetooth,
+-        systray,
+         battery,
+         clock,
+         dashboard,
+diff --git a/src/lib/options/types.ts b/src/lib/options/types.ts
+index bafb6c1..ce82cb0 100644
+--- a/src/lib/options/types.ts
++++ b/src/lib/options/types.ts
+@@ -37,7 +37,6 @@ export type BarModule =
+     | 'submap'
+     | 'weather'
+     | 'power'
+-    | 'systray'
+     | 'hypridle'
+     | 'hyprsunset'
+     | 'cava';
+diff --git a/src/services/cli/commander/commands/system/index.ts b/src/services/cli/commander/commands/system/index.ts
+index aea7d18..e6f0441 100644
+--- a/src/services/cli/commander/commands/system/index.ts
++++ b/src/services/cli/commander/commands/system/index.ts
+@@ -3,7 +3,6 @@ import AstalWp from 'gi://AstalWp?version=0.1';
+ import { Command } from '../../types';
+ import { execAsync, Gio, GLib } from 'astal';
+ import { checkDependencies } from './checkDependencies';
+-import { getSystrayItems } from 'src/services/cli/helpers/systray';
+ import { idleInhibit } from 'src/lib/window/visibility';
+ import { errorHandler } from 'src/core/errors/handler';
+ import { clearNotifications } from 'src/lib/shared/notifications';
+@@ -15,20 +14,6 @@ const notifdService = AstalNotifd.get_default();
+ const audio = AstalWp.get_default();
+ 
+ export const utilityCommands: Command[] = [
+-    {
+-        name: 'systrayItems',
+-        aliases: ['sti'],
+-        description: 'Gets a list of IDs for the current applications in the system tray.',
+-        category: 'System',
+-        args: [],
+-        handler: (): string => {
+-            try {
+-                return getSystrayItems() ?? 'No items found!';
+-            } catch (error) {
+-                errorHandler(error);
+-            }
+-        },
+-    },
+     {
+         name: 'clearNotifications',
+         aliases: ['cno'],
+diff --git a/src/services/cli/helpers/systray.ts b/src/services/cli/helpers/systray.ts
+deleted file mode 100644
+index a7166fc..0000000
+--- a/src/services/cli/helpers/systray.ts
++++ /dev/null
+@@ -1,21 +0,0 @@
+-import AstalTray from 'gi://AstalTray';
+-import { errorHandler } from 'src/core/errors/handler';
+-const systemtray = AstalTray.get_default();
+-
+-/**
+- * Retrieves all system tray items and returns their IDs
+- *
+- * @returns A newline-separated string of system tray item IDs
+- */
+-export function getSystrayItems(): string {
+-    try {
+-        const items = systemtray
+-            .get_items()
+-            .map((systrayItem) => systrayItem.id)
+-            .join('\n');
+-
+-        return items;
+-    } catch (error) {
+-        errorHandler(error);
+-    }
+-}
