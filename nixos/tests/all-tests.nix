@@ -616,8 +616,14 @@ in
   pyload = runTest ./pyload.nix;
   oci-containers = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./oci-containers.nix { };
   odoo = runTest ./odoo.nix;
-  odoo17 = handleTest ./odoo.nix { package = pkgs.odoo17; };
-  odoo16 = handleTest ./odoo.nix { package = pkgs.odoo16; };
+  odoo17 = runTest {
+    imports = [ ./odoo.nix ];
+    _module.args.package = pkgs.odoo17;
+  };
+  odoo16 = runTest {
+    imports = [ ./odoo.nix ];
+    _module.args.package = pkgs.odoo16;
+  };
   oncall = runTest ./web-apps/oncall.nix;
   # 9pnet_virtio used to mount /nix partition doesn't support
   # hibernation. This test happens to work on x86_64-linux but
@@ -1297,8 +1303,9 @@ in
   systemd-initrd-btrfs-raid = runTest ./systemd-initrd-btrfs-raid.nix;
   systemd-initrd-luks-fido2 = runTest ./systemd-initrd-luks-fido2.nix;
   systemd-initrd-luks-keyfile = runTest ./systemd-initrd-luks-keyfile.nix;
-  systemd-initrd-luks-empty-passphrase = handleTest ./initrd-luks-empty-passphrase.nix {
-    systemdStage1 = true;
+  systemd-initrd-luks-empty-passphrase = runTest {
+    imports = [ ./initrd-luks-empty-passphrase.nix ];
+    _module.args.systemdStage1 = true;
   };
   systemd-initrd-luks-password = runTest ./systemd-initrd-luks-password.nix;
   systemd-initrd-luks-tpm2 = runTest ./systemd-initrd-luks-tpm2.nix;
@@ -1310,7 +1317,10 @@ in
     "x86_64-linux"
     "i686-linux"
   ] ./initrd-network-openvpn { systemdStage1 = true; };
-  systemd-initrd-shutdown = handleTest ./systemd-shutdown.nix { systemdStage1 = true; };
+  systemd-initrd-shutdown = runTest {
+    imports = [ ./systemd-shutdown.nix ];
+    _module.args.systemdStage1 = true;
+  };
   systemd-initrd-simple = runTest ./systemd-initrd-simple.nix;
   systemd-initrd-swraid = runTest ./systemd-initrd-swraid.nix;
   systemd-initrd-vconsole = runTest ./systemd-initrd-vconsole.nix;
