@@ -3,22 +3,22 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pkginfo2";
   version = "30.0.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nexB";
     repo = "pkginfo2";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-E9EyaN3ncf/34vvvhRe0rwV28VrjqJo79YFgXq2lKWU=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -31,9 +31,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Query metadatdata from sdists, bdists or installed packages";
-    mainProgram = "pkginfo2";
     homepage = "https://github.com/nexB/pkginfo2";
+    changelog = "https://github.com/aboutcode-org/pkginfo2/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "pkginfo2";
   };
 }
