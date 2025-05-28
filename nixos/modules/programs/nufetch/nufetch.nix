@@ -110,12 +110,12 @@ in
     birthday = lib.mkEnableOption {
       description = "Enable Neofetch Birthday information display.";
     };
-    extraPrintInfoFields = lib.mkEnableOption {
+    extraPrintInfoFields = lib.mkOption {
       type = types.str;
       default = "";
       description = "Extra config lines to append to the generated Neofetch config. Use a long string (e.g. '''') for multi-line content.";
     };
-    extraGenericFields = lib.mkEnableOption {
+    extraGenericFields = lib.mkOption {
       type = types.str;
       default = "";
       description = "Extra config lines to append to the generated Neofetch config. Use a long string (e.g. '''') for multi-line content.";
