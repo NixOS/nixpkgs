@@ -72,6 +72,8 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
+  doInstallCheck = true;
+
   configureFlags = [
     "--with-all"
     "--with-ssl"
