@@ -2160,6 +2160,10 @@ let
       ];
     });
 
+    CNEr = old.CNEr.overrideAttrs (attrs: {
+      patches = [ ./patches/CNEr.patch ];
+    });
+
     covidsymptom = old.covidsymptom.overrideAttrs (attrs: {
       preConfigure = "rm R/covidsymptomdata.R";
     });
