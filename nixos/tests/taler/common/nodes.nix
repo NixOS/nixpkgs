@@ -55,7 +55,12 @@ rec {
             settings = {
               taler.CURRENCY = CURRENCY;
             };
-            includes = [ ../conf/taler-accounts.conf ];
+            includes = [
+              ../conf/taler-accounts.conf
+              # The exchange requires a token from the bank, so its credentials
+              # need to be set at runtime
+              "/etc/taler/secrets/exchange-account.secret.conf"
+            ];
             exchange = {
               enable = true;
               debug = true;
