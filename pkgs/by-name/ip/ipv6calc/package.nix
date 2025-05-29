@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "pbiering";
-    repo = pname;
+    repo = "ipv6calc";
     rev = version;
     sha256 = "sha256-zQ8azAd6q7mY3Jtx58cI2OL/xNZi+aA03y5QWHWjnm4=";
   };

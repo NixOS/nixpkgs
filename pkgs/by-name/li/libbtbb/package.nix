@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
-    repo = pname;
+    repo = "libbtbb";
     rev = version;
     sha256 = "1byv8174xam7siakr1p0523x97wkh0fmwmq341sd3g70qr2g767d";
   };

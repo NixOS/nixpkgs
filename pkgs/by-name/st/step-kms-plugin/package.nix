@@ -16,7 +16,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "smallstep";
-    repo = pname;
+    repo = "step-kms-plugin";
     rev = "v${version}";
     hash = "sha256-XZRNEUMko3HMlKOyHYK3TQywkqC6K5VvdvGFTSk6V68=";
   };

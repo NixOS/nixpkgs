@@ -62,8 +62,8 @@ stdenv.mkDerivation rec {
   version = "3.9.0";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "arrayfire";
+    repo = "arrayfire";
     rev = "v3.9.0";
     hash = "sha256-80fxdkaeAQ5u0X/UGPaI/900cdkZ/vXNcOn5tkZ+C3Y=";
   };
@@ -74,25 +74,25 @@ stdenv.mkDerivation rec {
   #
   # This can be removed once ArrayFire upstream their changes.
   clfft = fetchFromGitHub {
-    owner = pname;
+    owner = "arrayfire";
     repo = "clfft";
     rev = "760096b37dcc4f18ccd1aac53f3501a83b83449c";
     sha256 = "sha256-vJo1YfC2AJIbbRj/zTfcOUmi0Oj9v64NfA9MfK8ecoY=";
   };
   glad = fetchFromGitHub {
-    owner = pname;
+    owner = "arrayfire";
     repo = "glad";
     rev = "ef8c5508e72456b714820c98e034d9a55b970650";
     sha256 = "sha256-u9Vec7XLhE3xW9vzM7uuf+b18wZsh/VMtGbB6nMVlno=";
   };
   threads = fetchFromGitHub {
-    owner = pname;
+    owner = "arrayfire";
     repo = "threads";
     rev = "4d4a4f0384d1ac2f25b2c4fc1d57b9e25f4d6818";
     sha256 = "sha256-qqsT9woJDtQvzuV323OYXm68pExygYs/+zZNmg2sN34=";
   };
   test-data = fetchFromGitHub {
-    owner = pname;
+    owner = "arrayfire";
     repo = "arrayfire-data";
     rev = "a5f533d7b864a4d8f0dd7c9aaad5ff06018c4867";
     sha256 = "sha256-AWzhsrDXyZrQN2bd0Ng/XlE8v02x7QWTiFTyaAuRXSw=";
