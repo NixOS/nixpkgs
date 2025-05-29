@@ -4,6 +4,8 @@
   fetchzip,
   ripgrep,
   makeWrapper,
+  amp-cli,
+  testers,
 }:
 
 buildNpmPackage rec {
@@ -69,6 +71,10 @@ buildNpmPackage rec {
   '';
 
   passthru.updateScript = ./update.sh;
+  passthru.tests.version = testers.testVersion {
+    package = amp-cli;
+    command = "HOME=$(mktemp -d) amp --version";
+  };
 
   meta = {
     description = "CLI for Amp, an agentic coding agent in research preview from Sourcegraph";
