@@ -92,8 +92,8 @@ let
       name = "element";
       owner = "catppuccin";
       repo = "element";
-      rev = "ddced941a2014107918484263b63e030889777fe";
-      hash = "sha256-8EP/IQW3rdtomHBfnQNIjGbiD6OapPzXPFLjziNDcmc=";
+      rev = "70b7ee121dcef28c6c8191d60df2f88b23c89084";
+      hash = "sha256-iUSPlmEvwL9akbPobkbDWPr6TTHA/LdCK2Nty7Zslls=";
     };
 
     grub = fetchFromGitHub {
@@ -254,7 +254,7 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
       ''
       + lib.optionalString (lib.elem "element" themeList) ''
         mkdir -p "$out/element"
-        cp -r "${sources.element}/themes/Catppuccin-${variant}.json" "$out/element/"
+        cp -r "${sources.element}/themes/${variant}/${accent}.json" "$out/element/"
 
       ''
       + lib.optionalString (lib.elem "grub" themeList) ''

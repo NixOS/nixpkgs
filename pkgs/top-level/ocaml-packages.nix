@@ -1147,6 +1147,8 @@ let
 
         lwt-dllist = callPackage ../development/ocaml-modules/lwt-dllist { };
 
+        lwt_eio = callPackage ../development/ocaml-modules/lwt_eio { };
+
         lwt-exit = callPackage ../development/ocaml-modules/lwt-exit { };
 
         lwt_log = callPackage ../development/ocaml-modules/lwt_log { };
@@ -1193,6 +1195,8 @@ let
         mec = callPackage ../development/ocaml-modules/mec { };
 
         melange = callPackage ../development/tools/ocaml/melange { };
+
+        melange-json = callPackage ../development/ocaml-modules/melange-json { };
 
         memprof-limits = callPackage ../development/ocaml-modules/memprof-limits { };
 
@@ -1467,7 +1471,7 @@ let
 
         ocaml-version = callPackage ../development/ocaml-modules/ocaml-version { };
 
-        ocaml-vdom = callPackage ../development/ocaml-modules/ocaml-vdom { };
+        ocaml-vdom = throw "2023-10-09: ocamlPackages.ocaml-vdom was renamed to ocamlPackages.vdom";
 
         ocamlbuild =
           if lib.versionOlder "4.03" ocaml.version then
@@ -2076,6 +2080,8 @@ let
 
         type_id = callPackage ../development/ocaml-modules/type_id { };
 
+        tyre = callPackage ../development/ocaml-modules/tyre { };
+
         tyxml = callPackage ../development/ocaml-modules/tyxml { };
 
         tyxml-lwd = callPackage ../development/ocaml-modules/lwd/tyxml-lwd.nix { };
@@ -2121,6 +2127,8 @@ let
         ### V ###
 
         vchan = callPackage ../development/ocaml-modules/vchan { };
+
+        vdom = callPackage ../development/ocaml-modules/vdom { };
 
         vector = callPackage ../development/ocaml-modules/vector { };
 

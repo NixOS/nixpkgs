@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "ICRAR";
-    repo = pname;
+    repo = "crc32c";
     tag = "v${version}";
     hash = "sha256-WBFiAbdzV719vPdZkRGei2+Y33RroMZ7FeQmWo/OfE0=";
   };

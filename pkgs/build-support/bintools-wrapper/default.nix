@@ -492,7 +492,7 @@ stdenvNoCC.mkDerivation {
         darwinMinVersionVariable
         ;
     }
-    // lib.optionalAttrs (apple-sdk != null && stdenvNoCC.targetPlatform.isDarwin) {
+    // lib.optionalAttrs (stdenvNoCC.targetPlatform.isDarwin && apple-sdk != null) {
       # Wrapped compilers should do something useful even when no SDK is provided at `DEVELOPER_DIR`.
       fallback_sdk = apple-sdk.__spliced.buildTarget or apple-sdk;
     };

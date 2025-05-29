@@ -10,7 +10,7 @@
   util-linux,
   texinfo,
   ncurses,
-  pcre,
+  pcre2,
   pkg-config,
   buildPackages,
   nixosTests,
@@ -52,6 +52,22 @@ stdenv.mkDerivation {
         hash = "sha256-oA8GC8LmuqNKGuPqGfiQVhL5nWb7ArLWGUI6wjpsIW8=";
         excludes = [ "ChangeLog" ];
       })
+      # PCRE 2.x support
+      (fetchpatch {
+        url = "https://github.com/zsh-users/zsh/commit/1b421e4978440234fb73117c8505dad1ccc68d46.patch";
+        hash = "sha256-jqTXnz56L3X21e3kXtzrT1jKEq+K7ittFjL7GdHVq94=";
+        excludes = [ "ChangeLog" ];
+      })
+      (fetchpatch {
+        url = "https://github.com/zsh-users/zsh/commit/b62e911341c8ec7446378b477c47da4256053dc0.patch";
+        hash = "sha256-MfyiLucaSNNfdCLutgv/kL/oi/EVoxZVUd1KjGzN9XI=";
+        excludes = [ "ChangeLog" ];
+      })
+      (fetchpatch {
+        url = "https://github.com/zsh-users/zsh/commit/10bdbd8b5b0b43445aff23dcd412f25cf6aa328a.patch";
+        hash = "sha256-bl1PG9Zk1wK+2mfbCBhD3OEpP8HQboqEO8sLFqX8DmA=";
+        excludes = [ "ChangeLog" ];
+      })
     ]
     ++ lib.optionals stdenv.cc.isGNU [
       # Fixes compilation with gcc >= 14.
@@ -78,8 +94,10 @@ stdenv.mkDerivation {
 
   buildInputs = [
     ncurses
-    pcre
+    pcre2
   ];
+
+  env.PCRE_CONFIG = lib.getExe' (lib.getDev pcre2) "pcre2-config";
 
   configureFlags =
     [
@@ -102,16 +120,6 @@ stdenv.mkDerivation {
       "zsh_cv_sys_dynamic_strip_exe=yes"
       "zsh_cv_sys_dynamic_strip_lib=yes"
     ];
-
-  postPatch = ''
-    substituteInPlace Src/Modules/pcre.mdd \
-      --replace 'pcre-config' 'true'
-  '';
-
-  preConfigure = ''
-    # use pkg-config instead of pcre-config
-    configureFlagsArray+=("PCRECONF=''${PKG_CONFIG} libpcre")
-  '';
 
   # the zsh/zpty module is not available on hydra
   # so skip groups Y Z

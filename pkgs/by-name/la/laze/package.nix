@@ -13,17 +13,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "laze";
-  version = "0.1.35";
+  version = "0.1.36";
 
   src = fetchFromGitHub {
     owner = "kaspar030";
     repo = "laze";
     tag = finalAttrs.version;
-    hash = "sha256-/ACHYaAR9xtC7r5+bn1mXGr1eM3kV0L68+YMRIgxAsI=";
+    hash = "sha256-516VJ6yzQOn8a1ufpxbJ8lCHcs09PVzPmXyWU7F+REk=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-xiJz+JEF5feytwYgml+mfrarmLPntKbxCAQQvBnwAkI=";
+  cargoHash = "sha256-vLlkgF8vfL4RbFH7S3pQaAgHs08glHJaIkFIBYLoAWE=";
 
   passthru.updateScript = nix-update-script { };
 

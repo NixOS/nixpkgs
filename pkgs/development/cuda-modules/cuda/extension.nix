@@ -43,7 +43,7 @@ let
   };
 
   # Generally we prefer to do things involving getting attribute names with feature_manifest instead
-  # of redistrib_manifest because the feature manifest will have *only* the redist architecture
+  # of redistrib_manifest because the feature manifest will have *only* the redist system
   # names as the keys, whereas the redistrib manifest will also have things like version, name, license,
   # and license_path.
   featureManifest = evaluatedModules.config.cuda.manifests.feature;

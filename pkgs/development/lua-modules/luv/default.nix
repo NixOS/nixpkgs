@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildLuarocksPackage,
   cmake,
@@ -28,6 +29,18 @@ buildLuarocksPackage rec {
     rm -rf deps/lua deps/luajit deps/libuv
   '';
 
+  patches =
+    [
+      # Fails with "Uncaught Error: ./tests/test-dns.lua:164: assertion failed!"
+      # and "./tests/test-tty.lua:19: bad argument #1 to 'is_readable' (Expected
+      # uv_stream userdata)"
+      ./disable-failing-tests.patch
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Fails with "Uncaught Error: ./tests/test-udp.lua:261: EHOSTUNREACH"
+      ./disable-failing-darwin-tests.patch
+    ];
+
   buildInputs = [ libuv ];
   nativeBuildInputs = [ cmake ];
 
@@ -56,10 +69,13 @@ buildLuarocksPackage rec {
     EOF
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   doInstallCheck = true;
   installCheckPhase = ''
-    rm tests/test-{dns,thread,tty}.lua
+    runHook preInstallCheck
     luarocks test
+    runHook postInstallCheck
   '';
 
   disabled = luaOlder "5.1";

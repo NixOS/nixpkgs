@@ -103,11 +103,19 @@ let
     let
       # https://discourse.nixos.org/t/handling-transitive-c-dependencies/5942/3
       deps =
-        pkg:
-        builtins.filter lib.isDerivation ((pkg.buildInputs or [ ]) ++ (pkg.propagatedBuildInputs or [ ]));
-      collect = pkg: lib.unique ([ pkg ] ++ deps pkg ++ builtins.concatMap collect (deps pkg));
+        pkg: lib.filter lib.isDerivation ((pkg.buildInputs or [ ]) ++ (pkg.propagatedBuildInputs or [ ]));
+      withKey = pkg: {
+        key = pkg.outPath;
+        val = pkg;
+      };
+      collect = pkg: lib.map withKey ([ pkg ] ++ deps pkg);
     in
-    builtins.concatMap collect appRuntimeDeps;
+    lib.map (e: e.val) (
+      lib.genericClosure {
+        startSet = lib.map withKey appRuntimeDeps;
+        operator = item: collect item.val;
+      }
+    );
 
   # Some header files and libraries are not properly located by the Flutter SDK.
   # They must be manually included.

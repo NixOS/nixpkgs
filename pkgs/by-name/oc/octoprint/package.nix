@@ -132,7 +132,7 @@ let
               zeroconf
               zipstream-ng
               class-doc
-              pydantic_1
+              pydantic
             ]
             ++ lib.optionals stdenv.hostPlatform.isDarwin [ py.pkgs.appdirs ]
             ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ octoprint-pisupport ];

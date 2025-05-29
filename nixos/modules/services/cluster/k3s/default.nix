@@ -46,8 +46,12 @@ let
       )
     );
 
-  # Replace characters that are problematic in file names
+  # Replace prefixes and characters that are problematic in file names
   cleanHelmChartName =
+    name:
+    let
+      woPrefix = lib.removePrefix "https://" (lib.removePrefix "oci://" name);
+    in
     lib.replaceStrings
       [
         "/"
@@ -56,7 +60,8 @@ let
       [
         "-"
         "-"
-      ];
+      ]
+      woPrefix;
 
   # Fetch a Helm chart from a public registry. This only supports a basic Helm pull.
   fetchHelm =
@@ -66,7 +71,12 @@ let
       version,
       hash ? lib.fakeHash,
     }:
-    pkgs.runCommand (cleanHelmChartName "${lib.removePrefix "https://" repo}-${name}-${version}.tgz")
+    let
+      isOci = lib.hasPrefix "oci://" repo;
+      pullCmd = if isOci then repo else "--repo ${repo} ${name}";
+      name' = if isOci then "${repo}-${version}" else "${repo}-${name}-${version}";
+    in
+    pkgs.runCommand (cleanHelmChartName "${name'}.tgz")
       {
         inherit (lib.fetchers.normalizeHash { } { inherit hash; }) outputHash outputHashAlgo;
         impureEnvVars = lib.fetchers.proxyImpureEnvVars;
@@ -76,9 +86,7 @@ let
         ];
       }
       ''
-        export HOME="$PWD"
-        helm repo add repository ${repo}
-        helm pull repository/${name} --version ${version}
+        helm pull ${pullCmd} --version ${version}
         mv ./*.tgz $out
       '';
 
@@ -724,7 +732,11 @@ in
               };
             };
           };
-
+          nginx = {
+            repo = "oci://registry-1.docker.io/bitnamicharts/nginx";
+            version = "20.0.0";
+            hash = "sha256-sy+tzB+i9jIl/tqOMzzuhVhTU4EZVsoSBtPznxF/36c=";
+          };
           custom-chart = {
             package = ../charts/my-chart.tgz;
             values = ../values/my-values.yaml;
