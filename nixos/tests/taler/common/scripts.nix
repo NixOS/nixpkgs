@@ -68,6 +68,20 @@ in
               + command
           )
 
+      # https://docs.taler.net/core/api-corebank.html#authentication
+      def create_token(machine, username, password):
+          """Create a read-write bank access token for a user"""
+          response = succeed(machine, [
+              "curl -X POST",
+              f"-u {username}:{password}",
+              "-H 'Content-Type: application/json'",
+              """
+              --data '{ "scope": "readwrite" }'
+              """,
+              f"-sSfL 'http://bank:8082/accounts/{username}/token'"
+          ])
+          return json.loads(response)["access_token"]
+
 
       def verify_balance(balanceWanted: str):
           """Compare Taler CLI wallet balance with expected amount"""
@@ -84,14 +98,14 @@ in
               client.succeed(f"echo Withdraw successfully made. New balance: {balanceWanted}")
 
 
-      def verify_conversion(regionalWanted: str):
+      def verify_conversion(regionalWanted: str, accessToken: str):
           """Compare converted Libeufin Nexus funds with expected regional currency"""
           # Get transaction details
           response = json.loads(
               succeed(bank, [
                   "curl -sSfL",
+                  f"-H 'Authorization: Bearer {accessToken}'",
                   # TODO: get exchange from config?
-                  "-u exchange:exchange",
                   "http://bank:8082/accounts/exchange/transactions"
               ])
           )
