@@ -33,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-spanner";
-  version = "3.54.0";
+  version = "3.55.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-spanner";
     tag = "v${version}";
-    hash = "sha256-uJKUgY7fV+AK/2HQyjQRFypcL+mPZ/M5ZtAU+f73ezM=";
+    hash = "sha256-0+mTBqgy8SaHjoYhQjCaypipVsJTrN2DdhcfPY3PxSc=";
   };
 
   build-system = [ setuptools ];
@@ -92,6 +92,8 @@ buildPythonPackage rec {
     "test_list_instance"
     # can't import mmh3
     "test_generate_client_hash"
+    # Flaky, compares to execution time
+    "test_snapshot_read_concurrent"
   ];
 
   disabledTestPaths = [
