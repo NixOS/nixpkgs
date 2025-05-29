@@ -1,33 +1,21 @@
 {
   lib,
+  repoRevToNameMaybe,
   stdenvNoCC,
   git,
   git-lfs,
   cacert,
 }:
-let
-  urlToName =
-    url: rev:
-    let
-      inherit (lib) removeSuffix splitString last;
-      base = last (splitString ":" (baseNameOf (removeSuffix "/" url)));
 
-      matched = builtins.match "(.*)\\.git" base;
-
-      short = builtins.substring 0 7 rev;
-
-      appendShort = lib.optionalString ((builtins.match "[a-f0-9]*" rev) != null) "-${short}";
-    in
-    "${if matched == null then base else builtins.head matched}${appendShort}";
-in
 lib.makeOverridable (
   lib.fetchers.withNormalizedHash { } (
     # NOTE Please document parameter additions or changes in
-    #   doc/build-helpers/fetchers.chapter.md
+    #   ../../../doc/build-helpers/fetchers.chapter.md
     {
       url,
       tag ? null,
       rev ? null,
+      name ? repoRevToNameMaybe url (lib.revOrTag rev tag) "git",
       leaveDotGit ? deepClone,
       outputHash ? lib.fakeHash,
       outputHashAlgo ? null,
@@ -36,7 +24,6 @@ lib.makeOverridable (
       branchName ? null,
       sparseCheckout ? [ ],
       nonConeMode ? false,
-      name ? null,
       nativeBuildInputs ? [ ],
       # Shell code executed before the file has been fetched.  This, in
       # particular, can do things like set NIX_PREFETCH_GIT_CHECKOUT_HOOK to
@@ -105,7 +92,7 @@ lib.makeOverridable (
         "Please provide directories/patterns for sparse checkout as a list of strings. Passing a (multi-line) string is not supported any more."
     else
       stdenvNoCC.mkDerivation {
-        name = if name != null then name else urlToName url revWithTag;
+        inherit name;
 
         builder = ./builder.sh;
         fetcher = ./nix-prefetch-git;
