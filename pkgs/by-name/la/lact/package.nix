@@ -58,10 +58,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
         lib.makeLibraryPath [
           vulkan-loader
           libdrm
+          ocl-icd
         ]
       }"
       "-C link-arg=-Wl,--add-needed,${vulkan-loader}/lib/libvulkan.so"
       "-C link-arg=-Wl,--add-needed,${libdrm}/lib/libdrm.so"
+      "-C link-arg=-Wl,--add-needed,${ocl-icd}/lib/libOpenCL.so"
     ]
   );
 
@@ -104,10 +106,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     patchelf $out/bin/.lact-wrapped \
     --add-needed libvulkan.so \
     --add-needed libdrm.so \
+    --add-needed libOpenCL.so \
     --add-rpath ${
       lib.makeLibraryPath [
         vulkan-loader
         libdrm
+        ocl-icd
       ]
     }
   '';
