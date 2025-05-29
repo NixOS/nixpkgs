@@ -1,28 +1,15 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
-}:
-{ lib, pkgs, ... }:
+{ lib, ... }:
 {
   name = "fanout";
-  meta.maintainers = [ lib.maintainers.therishidesai ];
+  meta.maintainers = with lib.maintainers; [ therishidesai ];
 
-  nodes =
-    let
-      cfg =
-        { ... }:
-        {
-          services.fanout = {
-            enable = true;
-            fanoutDevices = 2;
-            bufferSize = 8192;
-          };
-        };
-    in
-    {
-      machine = cfg;
+  nodes.machine = {
+    services.fanout = {
+      enable = true;
+      fanoutDevices = 2;
+      bufferSize = 8192;
     };
+  };
 
   testScript = ''
     start_all()
