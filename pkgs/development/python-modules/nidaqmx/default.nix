@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "nidaqmx";
-  version = "1.0.2";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ni";
     repo = "nidaqmx-python";
-    rev = "${version}";
-    hash = "sha256-rf5cGq3Iv6ucURSUFuFANQzaGeufBZ+adjKlg4B5DRY=";
+    tag = version;
+    hash = "sha256-WNr+zVrA4X2AjizsmMEau54Vv1Svey3LNsCo8Bm/W+A=";
   };
 
   disabled = pythonOlder "3.8";
@@ -76,7 +76,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "nidaqmx" ];
 
   meta = {
-    changelog = "https://github.com/ni/nidaqmx-python/releases/tag/v${version}";
+    changelog = "https://github.com/ni/nidaqmx-python/releases/tag/${src.tag}";
     description = "API for interacting with the NI-DAQmx driver";
     homepage = "https://github.com/ni/nidaqmx-python";
     license = lib.licenses.mit;
