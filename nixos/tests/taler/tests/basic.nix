@@ -76,11 +76,17 @@ import ../../make-test-python.nix (
 
 
         exchange.start()
+
+        # exchange credentials must be set at runtime because it requires a token from the bank
+        exchange.succeed("mkdir -p /etc/taler/secrets/")
+        exchange.succeed("touch /etc/taler/secrets/exchange-account.secret.conf")
+
         exchange.wait_for_open_port(8081)
 
         # Create access token for exchange
         accessTokenExchange = create_token(exchange, "exchange", "exchange")
 
+        exchange.succeed(f'echo "{create_exchange_auth(accessTokenExchange)}" > /etc/taler/secrets/exchange-account.secret.conf')
 
         with subtest("Set up exchange"):
             exchange.wait_until_succeeds("taler-exchange-offline download sign upload")
