@@ -111,5 +111,10 @@ buildPythonPackage rec {
     homepage = "https://weasyprint.org/";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.apm ];
+    badPlatforms = [
+      # Fatal Python error: Segmentation fault
+      # "...weasyprint/pdf/fonts.py", line 221 in _harfbuzz_subset
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }
