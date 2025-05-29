@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "dazl";
-  version = "8.2.1";
+  version = "8.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "digital-asset";
     repo = "dazl-client";
     tag = "v${version}";
-    hash = "sha256-JeAdg+OW3Zd275zIYDmfBaF7RWEb+sLQ7xFIl67L2R8=";
+    hash = "sha256-w0jWhOOjOVLKUcfY2zR8dgckp7r/Gko+p3cuO8IIrM4=";
   };
 
   pythonRelaxDeps = [
@@ -59,6 +59,6 @@ buildPythonPackage rec {
     description = "High-level Ledger API client for Daml ledgers";
     license = lib.licenses.asl20;
     homepage = "https://github.com/digital-asset/dazl-client";
-    changelog = "https://github.com/digital-asset/dazl-client/releases/tag/v${version}";
+    changelog = "https://github.com/digital-asset/dazl-client/releases/tag/${src.tag}";
   };
 }
