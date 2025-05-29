@@ -38,14 +38,6 @@ buildPythonPackage rec {
     # additional tests that have extra dependencies, run slowly, or produce more output than a simple pass/fail
     # https://github.com/tornadoweb/tornado/blob/v6.2.0/maint/test/README
     "maint/test"
-
-    # AttributeError: 'TestIOStreamWebMixin' object has no attribute 'io_loop'
-    "tornado/test/iostream_test.py"
-  ];
-
-  disabledTests = [
-    # Exception: did not get expected log message
-    "test_unix_socket_bad_request"
   ];
 
   pythonImportsCheck = [ "tornado" ];
