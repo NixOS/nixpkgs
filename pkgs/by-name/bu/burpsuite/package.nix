@@ -91,6 +91,8 @@ buildFHSEnv {
     cp -r ${desktopItem}/share/applications $out/share
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     inherit description;
     longDescription = ''
