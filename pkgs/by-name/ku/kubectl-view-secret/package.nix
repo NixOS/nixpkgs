@@ -20,7 +20,7 @@ buildGoModule rec {
   subPackages = [ "./cmd/" ];
 
   postInstall = ''
-    mv $out/bin/cmd $out/bin/kubectl-view-secret
+    mv $out/bin/cmd $out/bin/kubectl-view_secret
   '';
 
   meta = with lib; {
