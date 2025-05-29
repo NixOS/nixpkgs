@@ -12,6 +12,7 @@
   brotli,
   brotlicffi,
   pysocks,
+  zstandard,
 
   # tests
   pytestCheckHook,
@@ -39,6 +40,7 @@ let
     optional-dependencies = {
       brotli = if isPyPy then [ brotlicffi ] else [ brotli ];
       socks = [ pysocks ];
+      zstd = [ zstandard ];
     };
 
     nativeCheckInputs = [
