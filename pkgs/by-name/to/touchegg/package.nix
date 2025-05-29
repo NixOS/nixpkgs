@@ -10,7 +10,6 @@
   cairo,
   xorg,
   gtk3-x11,
-  pcre,
   pkg-config,
   cmake,
   pantheon,
@@ -56,7 +55,6 @@ stdenv.mkDerivation rec {
       pugixml
       cairo
       gtk3-x11
-      pcre
     ]
     ++ (with xorg; [
       libX11
