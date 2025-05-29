@@ -8314,6 +8314,8 @@ self: super: with self; {
 
   llm-fragments-reader = callPackage ../development/python-modules/llm-fragments-reader { };
 
+  llm-fragments-symbex = callPackage ../development/python-modules/llm-fragments-symbex { };
+
   llm-gemini = callPackage ../development/python-modules/llm-gemini { };
 
   llm-gguf = callPackage ../development/python-modules/llm-gguf { };
