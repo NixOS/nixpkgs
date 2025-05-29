@@ -71,6 +71,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildFeatures =
     [
       "brotli_compression"
+      "direct_tls"
       "element_hacks"
       "gzip_compression"
       "media_thumbnail"
@@ -87,6 +88,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ++ lib.optional enableLiburing "io_uring";
 
   passthru = {
+    rocksdb = rocksdb'; # make used rocksdb version available (e.g., for backup scripts)
     updateScript = nix-update-script { };
     tests =
       {
