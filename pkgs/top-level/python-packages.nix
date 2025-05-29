@@ -8320,6 +8320,8 @@ self: super: with self; {
 
   llm-jq = callPackage ../development/python-modules/llm-jq { };
 
+  llm-llama-server = callPackage ../development/python-modules/llm-llama-server { };
+
   llm-mistral = callPackage ../development/python-modules/llm-mistral { };
 
   llm-ollama = callPackage ../development/python-modules/llm-ollama { };
