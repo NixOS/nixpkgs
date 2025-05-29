@@ -277,6 +277,7 @@ in
             # avoid this race condition.
             after = [ "systemd-modules-load.service" ];
             wantedBy = [ "${realDevice'}.swap" ];
+            requiredBy = lib.optionals sw.randomEncryption.enable [ "${realDevice'}.swap" ];
             before = [
               "${realDevice'}.swap"
               "shutdown.target"
