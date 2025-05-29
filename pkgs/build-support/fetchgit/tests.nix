@@ -83,4 +83,16 @@
     rev = "v3.0.14";
     sha256 = "sha256-bd0Lx75Gd1pcBJtwz5WGki7XoYSpqhinCT3a77wpY2c=";
   };
+
+  fetchTags = testers.invalidateFetcherByDrvHash fetchgit {
+    name = "fetchgit-fetch-tags-test";
+    url = "https://github.com/NixOS/nix";
+    rev = "9d9dbe6ed05854e03811c361a3380e09183f4f4a";
+    fetchTags = true;
+    leaveDotGit = true;
+    sha256 = "sha256-2vfZnYjZlnC8ODz6B6aOqAqtb1Wbjojnn/5TmzwUrmo=";
+    postFetch = ''
+      cd $out && git describe --tags --always > describe-output.txt 2>&1 || echo "git describe failed" > describe-output.txt
+    '';
+  };
 }
