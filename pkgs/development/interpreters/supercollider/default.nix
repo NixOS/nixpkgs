@@ -12,6 +12,7 @@
   fftw,
   curl,
   gcc,
+  libsForQt5,
   libXt,
   qtbase,
   qttools,
@@ -51,6 +52,7 @@ mkDerivation rec {
     cmake
     pkg-config
     qttools
+    libsForQt5.wrapQtAppsHook
   ] ++ lib.optionals useSCEL [ emacs ];
 
   buildInputs = [
