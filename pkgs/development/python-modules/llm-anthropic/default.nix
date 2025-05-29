@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "llm-anthropic";
-  version = "0.16a2";
+  version = "0.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-anthropic";
     tag = version;
-    hash = "sha256-jb1QetMxvDu45wX/AieBUKEk1KSKUt0heCNEYyOGj6w=";
+    hash = "sha256-2fatBKZMttC5flzfC7MWCpduc3m6IOVWZiW1K2dYqis=";
   };
 
   build-system = [
