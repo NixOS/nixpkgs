@@ -8,15 +8,6 @@ on:
     branches:
       - master
       - release-*
-    paths:
-      - "nixos/**"
-      # Also build when the nixpkgs doc changed, since we take things like
-      # the release notes and some css and js files from there.
-      # See nixos/doc/manual/default.nix
-      - "doc/**"
-      # Build when something in lib changes
-      # Since the lib functions are used to 'massage' the options before producing the manual
-      - "lib/**"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.run_id }}
