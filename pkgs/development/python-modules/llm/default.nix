@@ -83,6 +83,7 @@ let
       llm-templates-fabric ? false,
       llm-templates-github ? false,
       llm-tools-quickjs ? false,
+      llm-tools-sqlite ? false,
       llm-venice ? false,
       llm-video-frames ? false,
       ...
