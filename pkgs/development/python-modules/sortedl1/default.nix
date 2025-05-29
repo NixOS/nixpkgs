@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
   pybind11,
   scikit-build-core,
@@ -17,9 +17,11 @@ buildPythonPackage rec {
   version = "1.1.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-bon1d6r18eayuqhhK8zAckFWGSilX3eUc213HSeO2dQ=";
+  src = fetchFromGitHub {
+    owner = "jolars";
+    repo = "sortedl1";
+    tag = "v${version}";
+    hash = "sha256-8zDadGeHJNO0VLMIz2lDAsOUS+c1AB2wDoWDYcbLWVY=";
   };
 
   build-system = [
