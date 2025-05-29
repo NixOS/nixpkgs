@@ -8308,6 +8308,8 @@ self: super: with self; {
 
   llm-fragments-pypi = callPackage ../development/python-modules/llm-fragments-pypi { };
 
+  llm-fragments-reader = callPackage ../development/python-modules/llm-fragments-reader { };
+
   llm-gemini = callPackage ../development/python-modules/llm-gemini { };
 
   llm-gguf = callPackage ../development/python-modules/llm-gguf { };
