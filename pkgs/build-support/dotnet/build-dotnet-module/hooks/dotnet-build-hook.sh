@@ -53,7 +53,7 @@ dotnetBuildHook() {
 
         for runtimeId in "${dotnetRuntimeIdsArray[@]}"; do
             local runtimeIdFlagsArray=()
-            if [[ $projectFile == *.csproj || -n ${dotnetSelfContainedBuild-} ]]; then
+            if [[ "$projectFile" =~ *.(cs|fs)proj || -n ${dotnetSelfContainedBuild-} || (-d "$projectFile" && -n "$(@findutils@/bin/find "$projectFile" -maxdepth 1 -type f -name "*.csproj" -o -name "*.fsproj" )" ) ]]; then
                 runtimeIdFlagsArray+=("--runtime" "$runtimeId")
             fi
 
