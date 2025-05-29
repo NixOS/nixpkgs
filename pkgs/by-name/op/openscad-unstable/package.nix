@@ -51,9 +51,7 @@ clangStdenv.mkDerivation rec {
     repo = "openscad";
     rev = "c76900f9a62fcb98c503dcc5ccce380db8ac564b";
     hash = "sha256-R2/8T5+BugVTRIUVLaz6SxKQ1YrtyAGbiE4K1Fuc6bg=";
-    # Unfortunately, we can't selectively fetch submodules. It would be good
-    # to see that we don't accidentally depend on it.
-    fetchSubmodules = true; # Only really need sanitizers-cmake and MCAD
+    fetchSubmodules = true; # Only really need sanitizers-cmake and MCAD and manifold
   };
 
   patches = [ ./test.diff ];
@@ -134,6 +132,14 @@ clangStdenv.mkDerivation rec {
 
   # tests rely on sysprof which is not available on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
+
+  # remove unused submodules, to ensure correct dependency usage
+  postUnpack = ''
+    ( cd $sourceRoot
+      for m in submodules/OpenCSG submodules/mimalloc submodules/Clipper2
+      do rm -r $m
+      done )
+  '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
