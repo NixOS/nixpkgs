@@ -18760,6 +18760,11 @@
     githubId = 17091659;
     name = "Pablo Andres Dealbera";
   };
+  pacaroha = {
+    name = "pacaroha";
+    github = "pacaroha";
+    githubId = 187338595;
+  };
   pacman99 = {
     email = "pachum99@gmail.com";
     matrix = "@pachumicchu:myrdd.info";
