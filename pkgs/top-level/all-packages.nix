@@ -5335,7 +5335,6 @@ with pkgs;
           stdenv.hostPlatform == stdenv.targetPlatform
           && stdenv.buildPlatform == stdenv.hostPlatform
           && stdenv.buildPlatform.isDarwin
-          && stdenv.buildPlatform.isx86_64
         then
           overrideCC stdenv gnat-bootstrap13
         else
@@ -5363,7 +5362,6 @@ with pkgs;
           stdenv.hostPlatform == stdenv.targetPlatform
           && stdenv.buildPlatform == stdenv.hostPlatform
           && stdenv.buildPlatform.isDarwin
-          && stdenv.buildPlatform.isx86_64
         then
           overrideCC stdenv gnat-bootstrap14
         else
