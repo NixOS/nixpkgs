@@ -7,7 +7,7 @@
 
 let
   cfgNodes = pkgs.callPackage ./nodes.nix { inherit lib; };
-  bankConfig = nodes.bank.config.environment.etc."libeufin/libeufin.conf".source;
+  bankConfig = nodes.bank.environment.etc."libeufin/libeufin.conf".source;
 
   inherit (cfgNodes) CURRENCY FIAT_CURRENCY;
 in
