@@ -35,6 +35,7 @@ import ../../make-test-python.nix (
         inherit (cfgNodes) CURRENCY FIAT_CURRENCY;
         inherit (cfgScripts) commonScripts;
 
+        configFile = nodes.exchange.environment.etc."taler/taler.conf".source;
         bankConfig = nodes.bank.environment.etc."libeufin/libeufin.conf".source;
         bankSettings = nodes.bank.services.libeufin.settings.libeufin-bank;
         nexusSettings = nodes.bank.services.libeufin.nexus.settings;
@@ -89,13 +90,15 @@ import ../../make-test-python.nix (
         exchange.succeed(f'echo "{create_exchange_auth(accessTokenExchange)}" > /etc/taler/secrets/exchange-account.secret.conf')
 
         with subtest("Set up exchange"):
-            exchange.wait_until_succeeds("taler-exchange-offline download sign upload")
-            # Enable exchange wire account
-            exchange.succeed('taler-exchange-offline upload < ${exchangeAccount}')
+            # Set up exchange keys
+            exchange.wait_until_succeeds('taler-exchange-offline -c "${configFile}" download sign upload')
 
-            # NOTE: cannot deposit coins/pay merchant if wire fees are not set up
-            exchange.succeed('taler-exchange-offline wire-fee now x-taler-bank "${CURRENCY}:0" "${CURRENCY}:0" upload')
-            exchange.succeed('taler-exchange-offline global-fee now "${CURRENCY}:0" "${CURRENCY}:0" "${CURRENCY}:0" 1h 6a 0 upload')
+            # Enable exchange wire account
+            exchange.succeed('taler-exchange-offline -c "${configFile}" upload < ${exchangeAccount}')
+
+            # Set up wire fees, needed in order to deposit coins/pay merchant
+            exchange.succeed('taler-exchange-offline -c "${configFile}" wire-fee now x-taler-bank "${CURRENCY}:0" "${CURRENCY}:0" upload')
+            exchange.succeed('taler-exchange-offline -c "${configFile}" global-fee now "${CURRENCY}:0" "${CURRENCY}:0" "${CURRENCY}:0" 1h 6a 0 upload')
 
 
         # Verify that exchange keys exist
