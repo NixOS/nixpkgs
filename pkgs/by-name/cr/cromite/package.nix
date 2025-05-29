@@ -1,8 +1,9 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   makeWrapper,
+  bintools,
   patchelf,
   copyDesktopItems,
   makeDesktopItem,
@@ -166,8 +167,12 @@ let
       qt6.qtbase
       qt6.qtwayland
     ];
+
+  rpath = lib.makeLibraryPath deps + ":" + lib.makeSearchPathOutput "lib" "lib64" deps;
+
+  binpath = lib.makeBinPath deps;
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cromite";
   version = "137.0.7151.56";
   commit = "b4f8d96284c854cbe6448d2e30ee5a30ce3f0b82";
@@ -188,23 +193,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    # needed for XDG_ICON_DIRS
-    adwaita-icon-theme
+    adwaita-icon-theme # needed for XDG_ICON_DIRS
     glib
     gtk3
     gtk4
-    # needed for GSETTINGS_SCHEMAS_PATH
-    gsettings-desktop-schemas
+    gsettings-desktop-schemas # needed for GSETTINGS_SCHEMAS_PATH
   ];
-
-  rpath = lib.makeLibraryPath deps + ":" + lib.makeSearchPathOutput "lib" "lib64" deps;
-
-  binpath = lib.makeBinPath deps;
 
   desktopItems = [
     (makeDesktopItem {
       name = "cromite";
-      exec = "cromite %U";
+      exec = "chromium %U";
       icon = "cromite";
       genericName = "Cromite";
       desktopName = "Cromite";
@@ -220,29 +219,32 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm644 product_logo_48.png $out/share/pixmaps/cromite.png
-    cp -v -a . $out/share/cromite
+    cp -a . $out/share/cromite
+
     # replace bundled vulkan-loader
-    rm -v $out/share/cromite/libvulkan.so.1
-    ln -v -s -t $out/share/cromite ${lib.getLib vulkan-loader}/lib/libvulkan.so.1
-    # "--simulate-outdated-no-au" disables auto updates and browser outdated popup
+    rm $out/share/cromite/libvulkan.so.1
+    ln -s -t $out/share/cromite ${lib.getLib vulkan-loader}/lib/libvulkan.so.1
+
     mkdir $out/bin
-    makeWrapper $out/share/cromite/chrome $out/bin/cromite \
-      --prefix QT_PLUGIN_PATH  : "${qt6.qtbase}/lib/qt-6/plugins:${qt6.qtwayland}/lib/qt-6/plugins" \
-      --prefix NIXPKGS_QT6_QML_IMPORT_PATH : "${qt6.qtwayland}/lib/qt-6/qml" \
-      --prefix LD_LIBRARY_PATH : "$rpath" \
-      --prefix PATH            : "$binpath:${lib.makeBinPath [ xdg-utils ]}" \
-      --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addDriverRunpath.driverLink}/share" \
-      --set CHROME_WRAPPER  "cromite" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
+    # "--simulate-outdated-no-au" disables auto updates and browser outdated popup
+    makeWrapper $out/share/cromite/chrome $out/bin/chromium \
+      --prefix QT_PLUGIN_PATH  : ${qt6.qtbase}/lib/qt-6/plugins:${qt6.qtwayland}/lib/qt-6/plugins \
+      --prefix NIXPKGS_QT6_QML_IMPORT_PATH : ${qt6.qtwayland}/lib/qt-6/qml \
+      --prefix LD_LIBRARY_PATH : ${rpath} \
+      --prefix PATH            : ${binpath}:${lib.makeBinPath [ xdg-utils ]} \
+      --prefix XDG_DATA_DIRS   : $XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addDriverRunpath.driverLink}/share \
+      --set CHROME_WRAPPER  chromium \
       --add-flags "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
-    # Make sure that libGL and libvulkan are found by ANGLE libGLESv2.so
-    patchelf --set-rpath $rpath $out/share/cromite/lib*GL*
+    # Make sure that libGL and libvulkan are found
+    patchelf --set-rpath ${rpath} $out/share/cromite/libEGL.so
+    patchelf --set-rpath ${rpath} $out/share/cromite/libGLESv2.so
 
     for elf in $out/share/cromite/{chrome,chrome_sandbox,chrome_crashpad_handler}; do
-      patchelf --set-rpath $rpath $elf
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $elf
+      patchelf --set-rpath ${rpath} $elf
+      patchelf --set-interpreter ${bintools.dynamicLinker} $elf
     done
 
     runHook postInstall
@@ -251,15 +253,15 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    changelog = "https://github.com/uazo/cromite/releases";
     description = "Bromite fork with ad blocking and privacy enhancements";
+    downloadPage = "https://github.com/uazo/cromite/releases";
     homepage = "https://github.com/uazo/cromite";
     license = with lib.licenses; [
       bsd3
       gpl3Plus
     ];
     maintainers = with lib.maintainers; [ emaryn ];
-    mainProgram = "cromite";
+    mainProgram = "chromium";
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
