@@ -324,7 +324,21 @@ let
       doCheck' = doCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
       doInstallCheck' = doInstallCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-      separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux;
+      separateDebugInfo' =
+        let
+          actualValue = separateDebugInfo && stdenv.hostPlatform.isLinux;
+          conflictingOption =
+            attrs ? "disallowedReferences"
+            || attrs ? "disallowedRequisites"
+            || attrs ? "allowedRequisites"
+            || attrs ? "allowedReferences";
+        in
+        if actualValue && conflictingOption && !__structuredAttrs then
+          throw "separateDebugInfo = true in ${
+            attrs.pname or "mkDerivation argument"
+          } requires __structuredAttrs if {dis,}allowedRequisites or {dis,}allowedReferences is set"
+        else
+          actualValue;
       outputs' = outputs ++ optional separateDebugInfo' "debug";
 
       noNonNativeDeps =
@@ -646,10 +660,26 @@ let
                 outputChecks = builtins.listToAttrs (
                   map (name: {
                     inherit name;
-                    value = zipAttrsWith (_: builtins.concatLists) [
-                      (makeOutputChecks attrs)
-                      (makeOutputChecks attrs.outputChecks.${name} or { })
-                    ];
+                    value =
+                      let
+                        raw = zipAttrsWith (_: builtins.concatLists) [
+                          (makeOutputChecks attrs)
+                          (makeOutputChecks attrs.outputChecks.${name} or { })
+                        ];
+                      in
+                      # separateDebugInfo = true will put all sorts of files in
+                      # the debug output which could carry references, but
+                      # that's "normal". Notably it symlinks to the source.
+                      # So disable reference checking for the debug output
+                      if separateDebugInfo' && name == "debug" then
+                        removeAttrs raw [
+                          "allowedReferences"
+                          "allowedRequisites"
+                          "disallowedReferences"
+                          "disallowedRequisites"
+                        ]
+                      else
+                        raw;
                   }) outputs
                 );
               }
