@@ -1,23 +1,23 @@
 {
-  fetchzip,
   lib,
+  fetchFromGitHub,
   rustPlatform,
   git,
+  tree-sitter,
   installShellFiles,
   versionCheckHook,
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "helix";
   version = "25.01.1";
 
-  # This release tarball includes source code for the tree-sitter grammars,
-  # which is not ordinarily part of the repository.
-  src = fetchzip {
-    url = "https://github.com/helix-editor/helix/releases/download/${version}/helix-${version}-source.tar.xz";
-    hash = "sha256-rN2eK+AoyDH+tL3yxTRQQQYHf0PoYK84FgrRwm/Wfjk=";
-    stripRoot = false;
+  src = fetchFromGitHub {
+    owner = "helix-editor";
+    repo = "helix";
+    tag = finalAttrs.version;
+    hash = "sha256-wGfX2YcD9Hyqi7sQ8FSqUbN8/Rhftp01YyHoTWYPL8U=";
   };
 
   useFetchCargoVendor = true;
@@ -28,14 +28,16 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  env.HELIX_DEFAULT_RUNTIME = "${placeholder "out"}/lib/runtime";
+  env = {
+    HELIX_DEFAULT_RUNTIME = placeholder "out" + "/lib/runtime";
+    HELIX_DISABLE_AUTO_GRAMMAR_BUILD = 1;
+  };
 
   postInstall = ''
-    # not needed at runtime
-    rm -r runtime/grammars/sources
-
     mkdir -p $out/lib
     cp -r runtime $out/lib
+    ln -s ${tree-sitter.withPlugins (_: tree-sitter.allGrammars)}/* $out/lib/runtime/grammars/
+
     installShellCompletion contrib/completion/hx.{bash,fish,zsh}
     mkdir -p $out/share/{applications,icons/hicolor/256x256/apps}
     cp contrib/Helix.desktop $out/share/applications
@@ -49,14 +51,12 @@ rustPlatform.buildRustPackage rec {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Post-modern modal text editor";
     homepage = "https://helix-editor.com";
-    changelog = "https://github.com/helix-editor/helix/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/helix-editor/helix/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     mainProgram = "hx";
     maintainers = with lib.maintainers; [
@@ -65,4 +65,4 @@ rustPlatform.buildRustPackage rec {
       zowoq
     ];
   };
-}
+})
