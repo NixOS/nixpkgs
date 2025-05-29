@@ -78,6 +78,9 @@ import ../../make-test-python.nix (
         exchange.start()
         exchange.wait_for_open_port(8081)
 
+        # Create access token for exchange
+        accessTokenExchange = create_token(exchange, "exchange", "exchange")
+
 
         with subtest("Set up exchange"):
             exchange.wait_until_succeeds("taler-exchange-offline download sign upload")
@@ -96,12 +99,14 @@ import ../../make-test-python.nix (
         merchant.start()
         merchant.wait_for_open_port(8083)
 
+        # Create access token for merchant
+        accessTokenMerchant = create_token(client, "merchant", "merchant")
 
         with subtest("Set up merchant"):
             # Create default instance (similar to admin)
             succeed(merchant, [
                 "curl -X POST",
-                "-H 'Authorization: Bearer secret-token:super_secret'",
+                f"-H 'Authorization: Bearer {accessTokenMerchant}'",
                 """
                 --data '{
                   "auth": { "method": "external" },
@@ -150,6 +155,8 @@ import ../../make-test-python.nix (
 
         client.succeed("curl -s http://exchange:8081/")
 
+        # Create access token for user
+        accessTokenUser = create_token(client, "${TUSER}", "${TPASS}")
 
         # Make a withdrawal from the CLI wallet
         with subtest("Make a withdrawal from the CLI wallet"):
@@ -164,7 +171,7 @@ import ../../make-test-python.nix (
             withdrawal = json.loads(
                 succeed(client, [
                     "curl -X POST",
-                    "-u ${TUSER}:${TPASS}",
+                    f"-H 'Authorization: Bearer {accessTokenUser}'",
                     "-H 'Content-Type: application/json'",
                     f"""--data '{{"amount": "{balanceWanted}"}}'""", # double brackets escapes them
                     "-sSfL 'http://bank:8082/accounts/${TUSER}/withdrawals'"
@@ -176,7 +183,7 @@ import ../../make-test-python.nix (
                 wallet_cli(f"withdraw accept-uri {withdrawal["taler_withdraw_uri"]} --exchange http://exchange:8081/")
                 succeed(client, [
                     "curl -X POST",
-                    "-u ${TUSER}:${TPASS}",
+                    f"-H 'Authorization: Bearer {accessTokenUser}'",
                     "-H 'Content-Type: application/json'",
                     f"-sSfL 'http://bank:8082/accounts/${TUSER}/withdrawals/{withdrawal["withdrawal_id"]}/confirm'"
                 ])
@@ -231,14 +238,17 @@ import ../../make-test-python.nix (
             with subtest("Libeufin Nexus currency conversion"):
                 regionalWanted = "20"
 
+                # Create access token
+                accessTokenAdmin = create_token(bank, "${AUSER}", "${APASS}")
+
                 # Setup Nexus ebics keys
                 systemd_run(bank, "libeufin-nexus ebics-setup -L debug -c /etc/libeufin/libeufin.conf", "libeufin-nexus")
 
                 # Set currency conversion rates (1:1)
                 succeed(bank, [
                     "curl -X POST",
+                    f"-H 'Authorization: Bearer {accessTokenAdmin}'",
                     "-H 'Content-Type: application/json'",
-                    "-u ${AUSER}:${APASS}",
                     """
                     --data '{
                       "cashin_ratio": "1",
@@ -264,7 +274,7 @@ import ../../make-test-python.nix (
                 systemd_run(bank, f"""libeufin-nexus testing fake-incoming -c ${bankConfig} --amount="${FIAT_CURRENCY}:{regionalWanted}" --subject="{reservePub}" "payto://iban/CH4740123RW4167362694" """, "libeufin-nexus")
                 wallet_cli("run-until-done")
 
-                verify_conversion(regionalWanted)
+                verify_conversion(regionalWanted, accessTokenExchange)
       '';
   }
 )
