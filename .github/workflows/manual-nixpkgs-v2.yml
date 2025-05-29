@@ -5,8 +5,6 @@ on:
     paths:
       - .github/workflows/manual-nixpkgs-v2.yml
   pull_request_target:
-    branches:
-      - master
     paths:
       - 'doc/**'
       - 'lib/**'
@@ -38,4 +36,4 @@ jobs:
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
 
       - name: Building Nixpkgs manual
-        run: NIX_PATH=nixpkgs=$(pwd)/untrusted nix-build --option restrict-eval true untrusted/ci -A manual-nixpkgs -A manual-nixpkgs-tests
+        run: nix-build untrusted/ci -A manual-nixpkgs -A manual-nixpkgs-tests
