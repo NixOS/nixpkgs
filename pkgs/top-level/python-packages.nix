@@ -6650,6 +6650,8 @@ self: super: with self; {
 
   icalevents = callPackage ../development/python-modules/icalevents { };
 
+  icdiff = callPackage ../development/python-modules/icdiff { };
+
   icecream = callPackage ../development/python-modules/icecream { };
 
   iceportal = callPackage ../development/python-modules/iceportal { };
