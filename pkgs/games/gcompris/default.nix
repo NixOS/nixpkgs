@@ -20,15 +20,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gcompris";
-  version = "25.0";
+  version = "25.0.12";
 
   src = fetchurl {
     url = "mirror://kde/stable/gcompris/qt/src/gcompris-qt-${finalAttrs.version}.tar.xz";
-    hash = "sha256-E3l+5l4rsauidl6Ik5gSWf+SGpVaAVi5X51etl1D05w=";
+    hash = "sha256-cpukK17VcHUVakTiD2zXJQ4Hmx37EGlbtPpI008+xtc=";
   };
 
   # fix concatenation of absolute paths like
-  # /nix/store/77zcv3vmndif01d4wh1rh0d1dyvyqzpy-gcompris-25.0/bin/..//nix/store/77zcv3vmndif01d4wh1rh0d1dyvyqzpy-gcompris-25.0/share/gcompris-qt/rcc/core.rcc
+  # /nix/store/77zcv3vmndif01d4wh1rh0d1dyvyqzpy-gcompris-25.0.12/bin/..//nix/store/77zcv3vmndif01d4wh1rh0d1dyvyqzpy-gcompris-25.0.12/share/gcompris-qt/rcc/core.rcc
   postPatch = ''
     substituteInPlace src/core/config.h.in  --replace-fail \
       "../@_data_dest_dir@" "../share/gcompris-qt"
