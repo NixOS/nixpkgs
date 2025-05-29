@@ -5,9 +5,6 @@ on:
     paths:
       - .github/workflows/lib-tests.yml
   pull_request_target:
-    paths:
-      - 'lib/**'
-      - 'maintainers/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.run_id }}
