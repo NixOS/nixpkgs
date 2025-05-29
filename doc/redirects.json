@@ -2429,6 +2429,9 @@
   "tetex-tex-live": [
     "index.html#tetex-tex-live"
   ],
+  "udevcheckhook": [
+    "index.html#udevcheckhook"
+  ],
   "unzip": [
     "index.html#unzip"
   ],
