@@ -8336,6 +8336,8 @@ self: super: with self; {
 
   llm-tools-quickjs = callPackage ../development/python-modules/llm-tools-quickjs { };
 
+  llm-tools-sqlite = callPackage ../development/python-modules/llm-tools-sqlite { };
+
   llm-venice = callPackage ../development/python-modules/llm-venice { };
 
   llm-video-frames = callPackage ../development/python-modules/llm-video-frames { };
