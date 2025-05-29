@@ -1,11 +1,15 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env nix-shell
+#!nix-shell -i ruby -p "ruby.withPackages (ps: with ps; [ slop curb nokogiri ])"
 
 require 'json'
 require 'rubygems'
-require 'nokogiri'
-require 'slop'
 require 'shellwords'
 require 'erb'
+require 'uri'
+require 'stringio'
+require 'slop'
+require 'curb'
+require 'nokogiri'
 
 # Returns a repo URL for a given package name.
 def repo_url value
@@ -29,6 +33,36 @@ def image_url value, dir
     "https://dl.google.com/android/repository/sys-img/#{dir}/#{value}"
   else
     nil
+  end
+end
+
+# Runs a GET with curl.
+def _curl_get url
+  curl = Curl::Easy.new(url) do |http|
+    http.headers['User-Agent'] = 'nixpkgs androidenv update bot'
+    yield http if block_given?
+  end
+  STDERR.print "GET #{url}"
+  curl.perform
+  STDERR.puts "... #{curl.response_code}"
+
+  StringIO.new(curl.body_str)
+end
+
+# Retrieves a repo from the filesystem or a URL.
+def get location
+  uri = URI.parse(location)
+  case uri.scheme
+  when 'repo'
+    _curl_get repo_url("#{uri.host}#{uri.fragment}.xml")
+  when 'image'
+    _curl_get image_url("sys-img#{uri.fragment}.xml", uri.host)
+  else
+    if File.exist?(uri.path)
+      File.open(uri.path, 'rt')
+    else
+      raise "Repository #{uri} was neither a file nor a repo URL"
+    end
   end
 end
 
@@ -438,9 +472,19 @@ def merge dest, src
 end
 
 opts = Slop.parse do |o|
-  o.array '-p', '--packages', 'packages repo XMLs to parse'
-  o.array '-i', '--images', 'system image repo XMLs to parse'
-  o.array '-a', '--addons', 'addon repo XMLs to parse'
+  o.array '-p', '--packages', 'packages repo XMLs to parse', default: %w[repo://repository#2-3]
+  o.array '-i', '--images', 'system image repo XMLs to parse', default: %w[
+    image://android#2-3
+    image://android-tv#2-3
+    image://android-wear#2-3
+    image://android-wear-cn#2-3
+    image://android-automotive#2-3
+    image://google_apis#2-3
+    image://google_apis_playstore#2-3
+  ]
+  o.array '-a', '--addons', 'addon repo XMLs to parse', default: %w[repo://addon#2-3]
+  o.string '-I', '--input', 'input JSON file for repo', default: File.join(__dir__, 'repo.json')
+  o.string '-O', '--output', 'output JSON file for repo', default: File.join(__dir__, 'repo.json')
 end
 
 result = {}
@@ -451,20 +495,20 @@ result['addons'] = {}
 result['extras'] = {}
 
 opts[:packages].each do |filename|
-  licenses, packages, extras = parse_package_xml(Nokogiri::XML(File.open(filename)) { |conf| conf.noblanks })
+  licenses, packages, extras = parse_package_xml(Nokogiri::XML(get(filename)) { |conf| conf.noblanks })
   merge result['licenses'], licenses
   merge result['packages'], packages
   merge result['extras'], extras
 end
 
 opts[:images].each do |filename|
-  licenses, images = parse_image_xml(Nokogiri::XML(File.open(filename)) { |conf| conf.noblanks })
+  licenses, images = parse_image_xml(Nokogiri::XML(get(filename)) { |conf| conf.noblanks })
   merge result['licenses'], licenses
   merge result['images'], images
 end
 
 opts[:addons].each do |filename|
-  licenses, addons, extras = parse_addon_xml(Nokogiri::XML(File.open(filename)) { |conf| conf.noblanks })
+  licenses, addons, extras = parse_addon_xml(Nokogiri::XML(get(filename)) { |conf| conf.noblanks })
   merge result['licenses'], licenses
   merge result['addons'], addons
   merge result['extras'], extras
@@ -491,7 +535,14 @@ two_years_ago = today - 2 * 365
 input = {}
 prev_latest = {}
 begin
-  input_json = (STDIN.tty?) ? "{}" : STDIN.read
+  input_json = if File.exist?(opts[:input])
+                 STDERR.puts "Reading #{opts[:input]}"
+                 File.read(opts[:input])
+               else
+                 STDERR.puts "Creating new repo"
+                 "{}"
+               end
+
   if input_json != nil && !input_json.empty?
     input = expire_records(JSON.parse(input_json), two_years_ago)
 
@@ -511,40 +562,37 @@ fixup_result = fixup(result)
 # therefore the old packages will work as long as the links are working on the Google servers.
 output = merge input, fixup_result
 
-# See if there are any changes in the latest versions.
-cur_latest = output['latest'] || {}
-
-old_versions = []
-new_versions = []
-changes = []
-changed = false
-
-cur_latest.each do |k, v|
-  prev = prev_latest[k]
-  if prev && prev != v
-    old_versions << "#{k}:#{prev}"
-    new_versions << "#{k}:#{v}"
-    changes << "#{k}: #{prev} -> #{v}"
-    changed = true
-  end
-end
-
 # Write the repository. Append a \n to keep nixpkgs Github Actions happy.
-File.write 'repo.json', (JSON.pretty_generate(sort_recursively(output)) + "\n")
+STDERR.puts "Writing #{opts[:output]}"
+File.write opts[:output], (JSON.pretty_generate(sort_recursively(output)) + "\n")
 
 # Output metadata for the nixpkgs update script.
-changed_paths = []
-if changed
-  if ENV['UPDATE_NIX_ATTR_PATH']
-    # Instantiate it.
-    test_result = `NIXPKGS_ALLOW_UNFREE=1 NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE=1 nix-build ../../../../default.nix -A #{Shellwords.join [ENV['UPDATE_NIX_ATTR_PATH']]} 2>&1`
-    test_status = $?.exitstatus
-    tests_ran = true
-  else
-    tests_ran = false
+if ENV['UPDATE_NIX_ATTR_PATH']
+  # See if there are any changes in the latest versions.
+  cur_latest = output['latest'] || {}
+
+  old_versions = []
+  new_versions = []
+  changes = []
+  changed = false
+
+  cur_latest.each do |k, v|
+    prev = prev_latest[k]
+    if prev && prev != v
+      old_versions << "#{k}:#{prev}"
+      new_versions << "#{k}:#{v}"
+      changes << "#{k}: #{prev} -> #{v}"
+      changed = true
+    end
   end
 
-  template = ERB.new(<<-EOF, trim_mode: '<>-')
+  changed_paths = []
+  if changed
+    # Instantiate it.
+    test_result = `NIXPKGS_ALLOW_UNFREE=1 NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE=1 nix-build #{Shellwords.escape(File.realpath(File.join(__dir__, '..', '..', '..', '..', 'default.nix')))} -A #{Shellwords.join [ENV['UPDATE_NIX_ATTR_PATH']]} 2>&1`
+    test_status = $?.exitstatus
+
+    template = ERB.new(<<-EOF, trim_mode: '<>-')
 androidenv: <%= changes.join('; ') %>
 
 Performed the following automatic androidenv updates:
@@ -553,7 +601,6 @@ Performed the following automatic androidenv updates:
 - <%= change -%>
 <% end %>
 
-<% if tests_ran %>
 Tests exited with status: <%= test_status -%>
 
 <% if !test_result.empty? %>
@@ -562,19 +609,19 @@ Last 100 lines of output:
 <%= test_result.lines.last(100).join -%>
 ```
 <% end %>
-<% end %>
 EOF
 
-  changed_paths << {
-    attrPath: 'androidenv.androidPkgs.androidsdk',
-    oldVersion: old_versions.join('; '),
-    newVersion: new_versions.join('; '),
-    files: [
-      File.realpath('repo.json')
-    ],
-    commitMessage: template.result(binding)
-  }
-end
+    changed_paths << {
+      attrPath: 'androidenv.androidPkgs.androidsdk',
+      oldVersion: old_versions.join('; '),
+      newVersion: new_versions.join('; '),
+      files: [
+        opts[:output]
+      ],
+      commitMessage: template.result(binding)
+    }
+  end
 
-# nix-update info is on stderr
-STDOUT.puts JSON.pretty_generate(changed_paths)
+  # nix-update info is on stdout
+  STDOUT.puts JSON.pretty_generate(changed_paths)
+end
