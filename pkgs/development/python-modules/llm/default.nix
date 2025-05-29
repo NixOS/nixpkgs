@@ -69,6 +69,7 @@ let
       llm-echo ? false,
       llm-fragments-github ? false,
       llm-fragments-pypi ? false,
+      llm-fragments-reader ? false,
       llm-gemini ? false,
       llm-gguf ? false,
       llm-grok ? false,
