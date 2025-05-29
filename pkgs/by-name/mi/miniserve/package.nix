@@ -5,6 +5,7 @@
   installShellFiles,
   stdenv,
   curl,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -44,6 +45,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   __darwinAllowLocalNetworking = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     description = "CLI tool to serve files and directories over HTTP";
