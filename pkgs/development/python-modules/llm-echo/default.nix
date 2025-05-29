@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "llm-echo";
-  version = "0.3";
+  version = "0.3a3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-echo";
     tag = version;
-    hash = "sha256-KtdsvXJQRJ3EEJ25i6ccbVxMsWlDsxa+HJ7bFzyYGNI=";
+    hash = "sha256-4345UIyaQx+mYYBAFD5AaX5YbjbnJQt8bKMD5Vl8VJc=";
   };
 
   build-system = [

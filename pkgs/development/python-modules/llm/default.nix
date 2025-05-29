@@ -23,7 +23,10 @@
   cogapp,
   pytest-asyncio,
   pytest-httpx,
+  pytest-recording,
   sqlite-utils,
+  syrupy,
+  llm-echo,
 }:
 let
   /**
@@ -142,7 +145,7 @@ let
 
   llm = buildPythonPackage rec {
     pname = "llm";
-    version = "0.25";
+    version = "0.26";
     pyproject = true;
 
     build-system = [ setuptools ];
@@ -153,7 +156,7 @@ let
       owner = "simonw";
       repo = "llm";
       tag = version;
-      hash = "sha256-iH1P0VdpwIItY1In7vlM0Sn44Db23TqFp8GZ79/GMJs=";
+      hash = "sha256-KTlNajuZrR0kBX3LatepsNM3PfRVsQn+evEfXTu6juE=";
     };
 
     patches = [ ./001-disable-install-uninstall-commands.patch ];
@@ -183,10 +186,18 @@ let
       numpy
       pytest-asyncio
       pytest-httpx
+      pytest-recording
+      syrupy
       pytestCheckHook
     ];
 
     doCheck = true;
+
+    # The tests make use of `llm_echo` but that would be a circular dependency.
+    # So we make a local copy in this derivation, as it's a super-simple package of one file.
+    preCheck = ''
+      cp ${llm-echo.src}/llm_echo.py llm_echo.py
+    '';
 
     pytestFlagsArray = [
       "-svv"
