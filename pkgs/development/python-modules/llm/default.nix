@@ -82,6 +82,7 @@ let
       llm-sentence-transformers ? false,
       llm-templates-fabric ? false,
       llm-templates-github ? false,
+      llm-tools-quickjs ? false,
       llm-venice ? false,
       llm-video-frames ? false,
       ...
@@ -162,7 +163,8 @@ let
     patches = [ ./001-disable-install-uninstall-commands.patch ];
 
     postPatch = ''
-      substituteInPlace llm/cli.py --replace-fail "@listOfPackagedPlugins@" "$(< ${listOfPackagedPlugins})"
+      substituteInPlace llm/cli.py \
+        --replace-fail "@listOfPackagedPlugins@" "$(< ${listOfPackagedPlugins})"
     '';
 
     dependencies = [
