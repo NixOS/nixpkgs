@@ -1,0 +1,18 @@
+diff --git a/setup.py b/setup.py
+index 0825241..389a59e 100755
+--- a/setup.py
++++ b/setup.py
+@@ -11,12 +11,7 @@ extension_modules = []
+ 
+ 
+ def get_boost_version(out=None):
+-    if out is None:
+-        out = subprocess.check_output(
+-            r"ldconfig -p | grep -E 'libboost_python.*\.so '", shell=True)
+-
+-    ver = os.path.splitext(out.split()[0][3:])[0].decode()
+-    return ver
++    return "@boost_version@"
+ 
+ def tests():
+     # case: python3-py3x.so

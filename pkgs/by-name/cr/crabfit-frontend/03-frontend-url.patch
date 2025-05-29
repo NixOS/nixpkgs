@@ -1,0 +1,236 @@
+diff --git a/public/robots.txt b/public/robots.txt
+index 7fb2544..6e921ba 100644
+--- a/public/robots.txt
++++ b/public/robots.txt
+@@ -15,4 +15,4 @@ Allow: /*.ico$
+ Allow: /*.svg$
+ Disallow: *
+ 
+-Sitemap: https://crab.fit/sitemap.xml
++Sitemap: https://@FRONTEND_URL@/sitemap.xml
+diff --git a/public/sitemap.xml b/public/sitemap.xml
+index 072442a..32f0e75 100644
+--- a/public/sitemap.xml
++++ b/public/sitemap.xml
+@@ -1,15 +1,15 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+   <url>
+-    <loc>https://crab.fit/</loc>
++    <loc>https://@FRONTEND_URL@/</loc>
+     <priority>1.0</priority>
+   </url>
+   <url>
+-    <loc>https://crab.fit/how-to</loc>
++    <loc>https://@FRONTEND_URL@/how-to</loc>
+     <priority>0.4</priority>
+   </url>
+   <url>
+-    <loc>https://crab.fit/privacy</loc>
++    <loc>https://@FRONTEND_URL@/privacy</loc>
+     <priority>0.2</priority>
+   </url>
+ </urlset>
+diff --git a/src/app/[id]/page.tsx b/src/app/[id]/page.tsx
+index a3af022..7d2494d 100644
+--- a/src/app/[id]/page.tsx
++++ b/src/app/[id]/page.tsx
+@@ -49,10 +49,10 @@ const Page = async ({ params }: PageProps) => {
+         >{t('common:created', { date: relativeTimeFormat(Temporal.Instant.fromEpochSeconds(event.created_at), i18n.language) })}</span>
+ 
+         <Copyable className={styles.info}>
+-          {`https://crab.fit/${event.id}`}
++          {`https://@FRONTEND_URL@/${event.id}`}
+         </Copyable>
+         <p className={makeClass(styles.info, styles.noPrint)}>
+-          <Trans i18nKey="event:nav.shareinfo" t={t} i18n={i18n}>_<a href={`mailto:?subject=${encodeURIComponent(t('event:nav.email_subject', { event_name: event.name }))}&body=${encodeURIComponent(`${t('event:nav.email_body')} https://crab.fit/${event.id}`)}`}>_</a>_</Trans>
++          <Trans i18nKey="event:nav.shareinfo" t={t} i18n={i18n}>_<a href={`mailto:?subject=${encodeURIComponent(t('event:nav.email_subject', { event_name: event.name }))}&body=${encodeURIComponent(`${t('event:nav.email_body')} https://@FRONTEND_URL@/${event.id}`)}`}>_</a>_</Trans>
+         </p>
+       </Content>
+     </Suspense>
+diff --git a/src/app/layout.tsx b/src/app/layout.tsx
+index d4c1466..3d37088 100644
+--- a/src/app/layout.tsx
++++ b/src/app/layout.tsx
+@@ -13,7 +13,7 @@ import './global.css'
+ const karla = Karla({ subsets: ['latin'] })
+ 
+ export const metadata: Metadata = {
+-  metadataBase: new URL('https://crab.fit'),
++  metadataBase: new URL('https://@FRONTEND_URL@'),
+   title: {
+     absolute: 'Crab Fit',
+     template: '%s - Crab Fit',
+diff --git a/src/components/CreateForm/components/EventInfo/EventInfo.tsx b/src/components/CreateForm/components/EventInfo/EventInfo.tsx
+index 4376001..c404233 100644
+--- a/src/components/CreateForm/components/EventInfo/EventInfo.tsx
++++ b/src/components/CreateForm/components/EventInfo/EventInfo.tsx
+@@ -16,10 +16,10 @@ const EventInfo = ({ event }: EventInfoProps) => {
+   return <div className={styles.wrapper}>
+     <h2>{event.name}</h2>
+     <Copyable className={styles.info}>
+-      {`https://crab.fit/${event.id}`}
++      {`https://@FRONTEND_URL@/${event.id}`}
+     </Copyable>
+     <p className={styles.info}>
+-      <Trans i18nKey="event:nav.shareinfo_alt" t={t} i18n={i18n}>_<a href={`mailto:?subject=${encodeURIComponent(t('nav.email_subject', { event_name: event.name }))}&body=${encodeURIComponent(`${t('nav.email_body')} https://crab.fit/${event.id}`)}`} target="_blank">_</a>_</Trans>
++      <Trans i18nKey="event:nav.shareinfo_alt" t={t} i18n={i18n}>_<a href={`mailto:?subject=${encodeURIComponent(t('nav.email_subject', { event_name: event.name }))}&body=${encodeURIComponent(`${t('nav.email_body')} https://@FRONTEND_URL@/${event.id}`)}`} target="_blank">_</a>_</Trans>
+     </p>
+   </div>
+ }
+diff --git a/src/i18n/locales/de/help.json b/src/i18n/locales/de/help.json
+index 0dbe707..564a83d 100644
+--- a/src/i18n/locales/de/help.json
++++ b/src/i18n/locales/de/help.json
+@@ -6,7 +6,7 @@
+ 
+   "s1": "Schritt 1",
+ 
+-  "p3": "Benutze das Formular auf <1>crab.fit</1>, um einen neuen Termin zu erfassen. Du brauchst nur einen groben Zeitrahmen für den Termin anzugeben, aber noch nicht deine Verfügbarkeit",
++  "p3": "Benutze das Formular auf <1>@FRONTEND_URL@</1>, um einen neuen Termin zu erfassen. Du brauchst nur einen groben Zeitrahmen für den Termin anzugeben, aber noch nicht deine Verfügbarkeit",
+   "p4": "Beispiel: \"Jennys Geburtstags-Lunch\". Jenny will den Lunch in derselben Woche haben wie ihren Geburtstag, den 15. April, aber sie weiss, dass nicht alle ihre Freunde am 15. frei sind. Sie will ihn auch nicht am Wochenende",
+   "p5": "Jenny weiss auch, dass der Lunch zwischen 11 und 5 Uhr stattfinden muss.",
+ 
+diff --git a/src/i18n/locales/en-GB/help.json b/src/i18n/locales/en-GB/help.json
+index 4d0f1c7..02f985f 100644
+--- a/src/i18n/locales/en-GB/help.json
++++ b/src/i18n/locales/en-GB/help.json
+@@ -6,7 +6,7 @@
+ 
+   "s1": "Step 1",
+ 
+-  "p3": "Use the form at <1>crab.fit</1> to make a new event. You only need to put in the rough time period for when your event occurs here, not your availability.",
++  "p3": "Use the form at <1>@FRONTEND_URL@</1> to make a new event. You only need to put in the rough time period for when your event occurs here, not your availability.",
+   "p4": "For example, we'll use \"Jenny's Birthday Lunch\". Jenny wants her birthday lunch to happen on the same week as her birthday, the 15th of April, but she knows that not all of her friends are available on the 15th. She also doesn't want to do it on the weekend.",
+   "p5": "Jenny also knows that since it's a lunch event, it can't start before 11am or go any later than 5pm.",
+ 
+diff --git a/src/i18n/locales/en/help.json b/src/i18n/locales/en/help.json
+index 4d0f1c7..02f985f 100644
+--- a/src/i18n/locales/en/help.json
++++ b/src/i18n/locales/en/help.json
+@@ -6,7 +6,7 @@
+ 
+   "s1": "Step 1",
+ 
+-  "p3": "Use the form at <1>crab.fit</1> to make a new event. You only need to put in the rough time period for when your event occurs here, not your availability.",
++  "p3": "Use the form at <1>@FRONTEND_URL@</1> to make a new event. You only need to put in the rough time period for when your event occurs here, not your availability.",
+   "p4": "For example, we'll use \"Jenny's Birthday Lunch\". Jenny wants her birthday lunch to happen on the same week as her birthday, the 15th of April, but she knows that not all of her friends are available on the 15th. She also doesn't want to do it on the weekend.",
+   "p5": "Jenny also knows that since it's a lunch event, it can't start before 11am or go any later than 5pm.",
+ 
+diff --git a/src/i18n/locales/es/help.json b/src/i18n/locales/es/help.json
+index 1bcd264..ccf4c85 100644
+--- a/src/i18n/locales/es/help.json
++++ b/src/i18n/locales/es/help.json
+@@ -6,7 +6,7 @@
+ 
+   "s1": "Paso 1",
+ 
+-  "p3": "Use the form at <1>crab.fit</1> to make a new event. You only need to put in the rough time period for when your event occurs here, not your availability.",
++  "p3": "Use the form at <1>@FRONTEND_URL@</1> to make a new event. You only need to put in the rough time period for when your event occurs here, not your availability.",
+   "p4": "For example, we'll use \"Jenny's Birthday Lunch\". Jenny wants her birthday lunch to happen on the same week as her birthday, the 15th of April, but she knows that not all of her friends are available on the 15th. She also doesn't want to do it on the weekend.",
+   "p5": "Jenny also knows that since it's a lunch event, it can't start before 11am or go any later than 5pm.",
+ 
+diff --git a/src/i18n/locales/fr/help.json b/src/i18n/locales/fr/help.json
+index 24603e1..395787f 100644
+--- a/src/i18n/locales/fr/help.json
++++ b/src/i18n/locales/fr/help.json
+@@ -6,7 +6,7 @@
+ 
+   "s1": "Étape 1",
+ 
+-  "p3": "Utilisez le formulaire sur <1>crab.fit</1> pour créer un nouvel événement. Vous devez seulement indiquer la période approximative de votre événement ici, et non vos disponibilités.",
++  "p3": "Utilisez le formulaire sur <1>@FRONTEND_URL@</1> pour créer un nouvel événement. Vous devez seulement indiquer la période approximative de votre événement ici, et non vos disponibilités.",
+   "p4": "Par exemple, nous allons utiliser « Fête d'anniversaire de Jenny ». Jenny souhaite que sa fête d'anniversaire ait lieu la même semaine que son anniversaire, le 15 avril, mais elle sait que tous·tes ses ami·e·es ne sont pas disponibles le 15. Elle ne veut pas non plus le faire le week-end.",
+   "p5": "Jenny sait également que, comme il s'agit d'un déjeuner, elle ne peut pas commencer avant 11 heures ni se terminer après 17 heures.",
+ 
+diff --git a/src/i18n/locales/hi/help.json b/src/i18n/locales/hi/help.json
+index 4d0f1c7..02f985f 100644
+--- a/src/i18n/locales/hi/help.json
++++ b/src/i18n/locales/hi/help.json
+@@ -6,7 +6,7 @@
+ 
+   "s1": "Step 1",
+ 
+-  "p3": "Use the form at <1>crab.fit</1> to make a new event. You only need to put in the rough time period for when your event occurs here, not your availability.",
++  "p3": "Use the form at <1>@FRONTEND_URL@</1> to make a new event. You only need to put in the rough time period for when your event occurs here, not your availability.",
+   "p4": "For example, we'll use \"Jenny's Birthday Lunch\". Jenny wants her birthday lunch to happen on the same week as her birthday, the 15th of April, but she knows that not all of her friends are available on the 15th. She also doesn't want to do it on the weekend.",
+   "p5": "Jenny also knows that since it's a lunch event, it can't start before 11am or go any later than 5pm.",
+ 
+diff --git a/src/i18n/locales/id/help.json b/src/i18n/locales/id/help.json
+index 4d0f1c7..02f985f 100644
+--- a/src/i18n/locales/id/help.json
++++ b/src/i18n/locales/id/help.json
+@@ -6,7 +6,7 @@
+ 
+   "s1": "Step 1",
+ 
+-  "p3": "Use the form at <1>crab.fit</1> to make a new event. You only need to put in the rough time period for when your event occurs here, not your availability.",
++  "p3": "Use the form at <1>@FRONTEND_URL@</1> to make a new event. You only need to put in the rough time period for when your event occurs here, not your availability.",
+   "p4": "For example, we'll use \"Jenny's Birthday Lunch\". Jenny wants her birthday lunch to happen on the same week as her birthday, the 15th of April, but she knows that not all of her friends are available on the 15th. She also doesn't want to do it on the weekend.",
+   "p5": "Jenny also knows that since it's a lunch event, it can't start before 11am or go any later than 5pm.",
+ 
+diff --git a/src/i18n/locales/it/help.json b/src/i18n/locales/it/help.json
+index 1df32db..7cf6673 100644
+--- a/src/i18n/locales/it/help.json
++++ b/src/i18n/locales/it/help.json
+@@ -6,7 +6,7 @@
+ 
+   "s1": "Passo 1",
+ 
+-  "p3": "Usa il modulo su <1>crab.fit</1> per creare un nuovo evento. Devi solo impostare il periodo di tempo indicativo per l'evento qui, non la tua disponibilità.",
++  "p3": "Usa il modulo su <1>@FRONTEND_URL@</1> per creare un nuovo evento. Devi solo impostare il periodo di tempo indicativo per l'evento qui, non la tua disponibilità.",
+   "p4": "Per esempio, possiamo usare \"Il pranzo di compleanno di Jenny\". Jenny vuole che il suo pranzo di compleanno sia nella stessa settimana del suo compleanno, il 15 di Aprile, ma sa che non tutti i suoi amici saranno disponibili il 15. Lei non vuole neanche organizzarlo nel fine settimana.",
+   "p5": "Jenny sa anche che, essendo un pranzo, non può iniziare prima delle 11 o continuare oltre le 15.",
+ 
+diff --git a/src/i18n/locales/ko/help.json b/src/i18n/locales/ko/help.json
+index 2f7a221..2bbd04d 100644
+--- a/src/i18n/locales/ko/help.json
++++ b/src/i18n/locales/ko/help.json
+@@ -6,7 +6,7 @@
+ 
+   "s1": "1 단계",
+ 
+-  "p3": "<1>crab.fit</1>의 양식을 사용하여 새 이벤트를 만드세요. 여기서 이벤트가 발생하는 대략적인 기간 만 입력하면됩니다.",
++  "p3": "<1>@FRONTEND_URL@</1>의 양식을 사용하여 새 이벤트를 만드세요. 여기서 이벤트가 발생하는 대략적인 기간 만 입력하면됩니다.",
+   "p4": "예를 들어 \"Jenny의 생일 점심을\" 사용합니다. Jenny는 4 월 15 일 생일과 같은 주에 생일 점심 식사를하기를 원하지만 모든 친구가 15 일에 참석할 수있는 것은 아니라는 것을 알고 있습니다. 그녀는 또한 주말에하고 싶지 않습니다.",
+   "p5": "Jenny는 점심 행사이기 때문에 오전 11시 이전에 시작하거나 오후 5시 이후에 갈 수 없다는 것도 알고 있습니다.",
+ 
+diff --git a/src/i18n/locales/pt-BR/help.json b/src/i18n/locales/pt-BR/help.json
+index fd5ef7d..e9433fd 100644
+--- a/src/i18n/locales/pt-BR/help.json
++++ b/src/i18n/locales/pt-BR/help.json
+@@ -6,7 +6,7 @@
+ 
+   "s1": "Passo 1",
+ 
+-  "p3": "Preenche os dados em <1>crab.fit</1> para criar seu evento. Escolhe um peíodo de tempo aproximado no qual o evento deve occorer, i.e. as possíveis datas e horários.  Sua disponibilidade pessoal será num outro passo.",
++  "p3": "Preenche os dados em <1>@FRONTEND_URL@</1> para criar seu evento. Escolhe um peíodo de tempo aproximado no qual o evento deve occorer, i.e. as possíveis datas e horários.  Sua disponibilidade pessoal será num outro passo.",
+   "p4": "Por exemplo \"Almoço de aniversário da Marina\". Ela quer convidar os amigos na mesma semana do seu aniversário no dia 15 de abril. Ela sabe que nem todo mundo tem tempo no dia 15 e tambêm não quer fazer no fim de semana.",
+   "p5": "Marina quer que seja no horário do almoço, então não deve começar antes das 11 da manhã e nem terminar depois das 5 da tarde.",
+ 
+diff --git a/src/i18n/locales/pt-PT/help.json b/src/i18n/locales/pt-PT/help.json
+index 5141873..a25c608 100644
+--- a/src/i18n/locales/pt-PT/help.json
++++ b/src/i18n/locales/pt-PT/help.json
+@@ -6,7 +6,7 @@
+ 
+   "s1": "Passo 1",
+ 
+-  "p3": "Usa o formulário em <1>crab.fit</1>para criares um evento novo. Aqui só precisas de inserir aproximadamente o período durante o qual o teu evento vai acontecer.",
++  "p3": "Usa o formulário em <1>@FRONTEND_URL@</1>para criares um evento novo. Aqui só precisas de inserir aproximadamente o período durante o qual o teu evento vai acontecer.",
+   "p4": "Por exemplo, vamos criar o \"Almoço de Aniversário da Jenny\". A Jenny quer que o almoço seja na mesma semana que o seu aniversário, a 15 de abril. No entanto, ela sabe que nem todos os seus amigos estarão disponíveis no dia 15. Ela também não quer que o almoço seja no fim de semana.",
+   "p5": "A Jenny também sabe que, como é um almoço, não pode começar antes das 11 da manhã nem terminar depois das 5 da tarde.",
+ 
+diff --git a/src/i18n/locales/ru/help.json b/src/i18n/locales/ru/help.json
+index 4d0f1c7..02f985f 100644
+--- a/src/i18n/locales/ru/help.json
++++ b/src/i18n/locales/ru/help.json
+@@ -6,7 +6,7 @@
+ 
+   "s1": "Step 1",
+ 
+-  "p3": "Use the form at <1>crab.fit</1> to make a new event. You only need to put in the rough time period for when your event occurs here, not your availability.",
++  "p3": "Use the form at <1>@FRONTEND_URL@</1> to make a new event. You only need to put in the rough time period for when your event occurs here, not your availability.",
+   "p4": "For example, we'll use \"Jenny's Birthday Lunch\". Jenny wants her birthday lunch to happen on the same week as her birthday, the 15th of April, but she knows that not all of her friends are available on the 15th. She also doesn't want to do it on the weekend.",
+   "p5": "Jenny also knows that since it's a lunch event, it can't start before 11am or go any later than 5pm.",
+ 

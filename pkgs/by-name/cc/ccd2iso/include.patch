@@ -1,0 +1,9 @@
+--- a/src/ccd2iso.c	2024-06-16 09:01:37
++++ b/src/ccd2iso.c	2024-06-16 09:01:49
+@@ -27,6 +27,7 @@
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <string.h>
+ 
+ #include "clonecd.h"

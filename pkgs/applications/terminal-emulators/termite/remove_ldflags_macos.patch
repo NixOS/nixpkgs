@@ -1,0 +1,25 @@
+From 1b5a6934635c55472eb7949bd87ab3f45fa1b2f3 Mon Sep 17 00:00:00 2001
+From: Michael Hoang <enzime@users.noreply.github.com>
+Date: Fri, 13 Jul 2018 19:01:51 +1000
+Subject: [PATCH] Remove --as-needed flag from ld to fix compilation on macOS.
+
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index b115f42..ab301ba 100644
+--- a/Makefile
++++ b/Makefile
+@@ -29,7 +29,7 @@ ifeq (${CXX}, clang++)
+ 	CXXFLAGS += -Wimplicit-fallthrough
+ endif
+ 
+-LDFLAGS := -s -Wl,--as-needed ${LDFLAGS}
++LDFLAGS := -s -Wl ${LDFLAGS}
+ LDLIBS := ${shell pkg-config --libs ${GTK} ${VTE}}
+ 
+ termite: termite.cc url_regex.hh util/clamp.hh util/maybe.hh util/memory.hh
+-- 
+2.17.1
+

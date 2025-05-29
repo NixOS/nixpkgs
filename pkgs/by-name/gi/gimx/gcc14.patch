@@ -1,0 +1,26 @@
+diff --git a/core/config_reader.c b/core/config_reader.c
+index 451fc48..737d27c 100644
+--- a/core/config_reader.c
++++ b/core/config_reader.c
+@@ -17,7 +17,7 @@
+ #include "../directories.h"
+ #include "macros.h"
+ #include <errno.h>
+-
++#include <stdlib.h>
+ /*
+  * These variables are used to read the configuration.
+  */
+diff --git a/core/gimx.c b/core/gimx.c
+index 700cae9..693f72f 100755
+--- a/core/gimx.c
++++ b/core/gimx.c
+@@ -8,7 +8,7 @@
+ #include <errno.h> //to print errors
+ #include <string.h> //to print errors
+ #include <limits.h> //PATH_MAX
+-
++#include <stdlib.h>
+ #ifndef WIN32
+ #include <termios.h> //to disable/enable echo
+ #include <unistd.h>

@@ -1,0 +1,74 @@
+diff -C 3 -r orig/xpdf/pdfimages.cc xpdf-3.02/xpdf/pdfimages.cc
+*** orig/xpdf/pdfimages.cc	2007-02-27 23:05:52.000000000 +0100
+--- xpdf-3.02/xpdf/pdfimages.cc	2007-10-31 20:17:22.601449943 +0100
+***************
+*** 118,130 ****
+      goto err1;
+    }
+  
+-   // check for copy permission
+-   if (!doc->okToCopy()) {
+-     error(-1, "Copying of images from this document is not allowed.");
+-     exitCode = 3;
+-     goto err1;
+-   }
+- 
+    // get page range
+    if (firstPage < 1)
+      firstPage = 1;
+--- 118,123 ----
+diff -C 3 -r orig/xpdf/pdftotext.cc xpdf-3.02/xpdf/pdftotext.cc
+*** orig/xpdf/pdftotext.cc	2007-02-27 23:05:52.000000000 +0100
+--- xpdf-3.02/xpdf/pdftotext.cc	2007-10-31 20:17:34.392224196 +0100
+***************
+*** 160,172 ****
+      goto err2;
+    }
+  
+-   // check for copy permission
+-   if (!doc->okToCopy()) {
+-     error(-1, "Copying of text from this document is not allowed.");
+-     exitCode = 3;
+-     goto err2;
+-   }
+- 
+    // construct text file name
+    if (argc == 3) {
+      textFileName = new GString(argv[2]);
+--- 160,165 ----
+diff -C 3 -r orig/xpdf/XPDFCore.cc xpdf-3.02/xpdf/XPDFCore.cc
+*** orig/xpdf/XPDFCore.cc	2007-02-27 23:05:52.000000000 +0100
+--- xpdf-3.02/xpdf/XPDFCore.cc	2007-10-31 20:18:05.370494431 +0100
+***************
+*** 384,394 ****
+  #ifndef NO_TEXT_SELECT
+        if (selectULX != selectLRX &&
+  	  selectULY != selectLRY) {
+! 	if (doc->okToCopy()) {
+! 	  copySelection();
+! 	} else {
+! 	  error(-1, "Copying of text from this document is not allowed.");
+! 	}
+        }
+  #endif
+      }
+--- 384,390 ----
+  #ifndef NO_TEXT_SELECT
+        if (selectULX != selectLRX &&
+  	  selectULY != selectLRY) {
+! 	copySelection();
+        }
+  #endif
+      }
+***************
+*** 407,415 ****
+    int pg;
+    double ulx, uly, lrx, lry;
+  
+-   if (!doc->okToCopy()) {
+-     return;
+-   }
+    if (getSelection(&pg, &ulx, &uly, &lrx, &lry)) {
+      //~ for multithreading: need a mutex here
+      if (currentSelection) {
+--- 403,408 ----

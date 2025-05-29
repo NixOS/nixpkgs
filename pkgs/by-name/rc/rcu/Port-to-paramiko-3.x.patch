@@ -1,0 +1,104 @@
+From aad61b320d65953fddec10b019a186fc67f57a5d Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Sat, 10 Feb 2024 12:20:29 +0100
+Subject: [PATCH] src/model/transport.py: Port to paramiko 3.x
+
+---
+ src/model/transport.py | 19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
+
+diff --git a/src/model/transport.py b/src/model/transport.py
+index 0c2ee16..5a2bd22 100644
+--- a/src/model/transport.py
++++ b/src/model/transport.py
+@@ -117,7 +117,6 @@ from paramiko.kex_gss import KexGSSGex, KexGSSGroup1, KexGSSGroup14
+ from paramiko.message import Message
+ from paramiko.packet import Packetizer, NeedRekeyException
+ from paramiko.primes import ModulusPack
+-from paramiko.py3compat import string_types, long, byte_ord, b, input, PY2
+ from paramiko.rsakey import RSAKey
+ from paramiko.ecdsakey import ECDSAKey
+ from paramiko.server import ServerInterface
+@@ -128,7 +127,7 @@ from paramiko.ssh_exception import (
+     ChannelException,
+     ProxyCommandFailure,
+ )
+-from paramiko.util import retry_on_signal, ClosingContextManager, clamp_value
++from paramiko.util import ClosingContextManager, clamp_value
+ 
+ 
+ # for thread cleanup
+@@ -396,7 +395,7 @@ class Transport(threading.Thread, ClosingContextManager):
+         self.active = False
+         self.hostname = None
+ 
+-        if isinstance(sock, string_types):
++        if isinstance(sock, str):
+             # convert "host:port" into (host, port)
+             hl = sock.split(":", 1)
+             self.hostname = hl[0]
+@@ -419,7 +418,7 @@ class Transport(threading.Thread, ClosingContextManager):
+                     sock = socket.socket(af, socket.SOCK_STREAM)
+                     sock.settimeout(1)
+                     try:
+-                        retry_on_signal(lambda: sock.connect((hostname, port)))
++                        sock.connect((hostname, port))
+                     except socket.error as e:
+                         reason = str(e)
+                     else:
+@@ -542,7 +541,7 @@ class Transport(threading.Thread, ClosingContextManager):
+         """
+         Returns a string representation of this object, for debugging.
+         """
+-        id_ = hex(long(id(self)) & xffffffff)
++        id_ = hex(int(id(self)) & xffffffff)
+         out = "<paramiko.Transport at {}".format(id_)
+         if not self.active:
+             out += " (unconnected)"
+@@ -1123,7 +1122,7 @@ class Transport(threading.Thread, ClosingContextManager):
+         m = Message()
+         m.add_byte(cMSG_IGNORE)
+         if byte_count is None:
+-            byte_count = (byte_ord(os.urandom(1)) % 32) + 10
++            byte_count = (os.urandom(1) % 32) + 10
+         m.add_bytes(os.urandom(byte_count))
+         self._send_user_message(m)
+ 
+@@ -1802,7 +1801,7 @@ class Transport(threading.Thread, ClosingContextManager):
+     def stop_thread(self):
+         self.active = False
+         self.packetizer.close()
+-        if PY2:
++        if False:
+             # Original join logic; #520 doesn't appear commonly present under
+             # Python 2.
+             while self.is_alive() and self is not threading.current_thread():
+@@ -1909,7 +1908,7 @@ class Transport(threading.Thread, ClosingContextManager):
+         m = Message()
+         m.add_mpint(self.K)
+         m.add_bytes(self.H)
+-        m.add_byte(b(id))
++        m.add_byte(id.encode("utf8"))
+         m.add_bytes(self.session_id)
+         # Fallback to SHA1 for kex engines that fail to specify a hex
+         # algorithm, or for e.g. transport tests that don't run kexinit.
+@@ -2037,14 +2036,14 @@ class Transport(threading.Thread, ClosingContextManager):
+ 
+         # active=True occurs before the thread is launched, to avoid a race
+         _active_threads.append(self)
+-        tid = hex(long(id(self)) & xffffffff)
++        tid = hex(int(id(self)) & xffffffff)
+         if self.server_mode:
+             self._log(DEBUG, "starting thread (server mode): {}".format(tid))
+         else:
+             self._log(DEBUG, "starting thread (client mode): {}".format(tid))
+         try:
+             try:
+-                self.packetizer.write_all(b(self.local_version + "\r\n"))
++                self.packetizer.write_all((self.local_version + "\r\n").encode("utf8"))
+                 self._log(
+                     DEBUG,
+                     "Local version/idstring: {}".format(self.local_version),
+-- 
+2.42.0
+
