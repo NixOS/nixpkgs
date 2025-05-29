@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "scim2-models";
-  version = "0.3.2";
+  version = "0.3.3";
 
   pyproject = true;
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "scim2_models";
-    hash = "sha256-CHXvg7okGvUKJ2tND/EduUPPpUAwIc97BM/nGAeDiYE=";
+    hash = "sha256-od+1KaAwmZ1slsACYRYRpy92xz5s8hcopz0LiwVJhfA=";
   };
 
   build-system = [ hatchling ];

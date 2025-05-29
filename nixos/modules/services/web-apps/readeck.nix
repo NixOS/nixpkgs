@@ -57,7 +57,8 @@ in
   config = mkIf cfg.enable {
     systemd.services.readeck = {
       description = "Readeck";
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "simple";

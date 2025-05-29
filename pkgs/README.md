@@ -113,6 +113,8 @@ Now that this is out of the way. To add a package to Nixpkgs:
 
    - Add yourself as the maintainer of the package.
 
+     - If this is your first time contributing (welcome!), [add yourself to the maintainers list](../maintainers/README.md#how-to-become-a-maintainer) in a separate commit.
+
    - All other [`meta`](https://nixos.org/manual/nixpkgs/stable/#chap-meta) attributes are optional, but it’s still a good idea to provide at least the `description`, `homepage` and [`license`](https://nixos.org/manual/nixpkgs/stable/#sec-meta-license).
 
    - The exact syntax and semantics of the Nix expression language, including the built-in functions, are [Nix language reference](https://nixos.org/manual/nix/stable/language/).

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bufisk";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = "bufisk";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pVnqvQn7jwpx6T3sS4eA29JeJdh0GrPVm0J8n2UjJTw=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "bufisk";
   };
-}
+})

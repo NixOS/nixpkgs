@@ -74,12 +74,16 @@ buildNpmPackage rec {
     shopt -u globstar
   '';
 
-  postInstall = ''
-    # The @bitwarden modules are actually npm workspaces inside the source tree, which
-    # leave dangling symlinks behind. They can be safely removed, because their source is
-    # bundled via webpack and thus not needed at run-time.
-    rm -rf $out/lib/node_modules/@bitwarden/clients/node_modules/{@bitwarden,.bin}
-  '';
+  postInstall =
+    ''
+      # The @bitwarden modules are actually npm workspaces inside the source tree, which
+      # leave dangling symlinks behind. They can be safely removed, because their source is
+      # bundled via webpack and thus not needed at run-time.
+      rm -rf $out/lib/node_modules/@bitwarden/clients/node_modules/{@bitwarden,.bin}
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd bw --zsh <($out/bin/bw completion --shell zsh)
+    '';
 
   passthru = {
     tests = {

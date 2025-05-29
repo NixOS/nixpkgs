@@ -172,9 +172,7 @@ mkDerivation (finalAttrs: {
     ++ lib.optionals withNativeCompilation [
       (replaceVars
         (
-          if lib.versionOlder finalAttrs.version "29" then
-            ./native-comp-driver-options-28.patch
-          else if lib.versionOlder finalAttrs.version "30" then
+          if lib.versionOlder finalAttrs.version "30" then
             ./native-comp-driver-options.patch
           else
             ./native-comp-driver-options-30.patch

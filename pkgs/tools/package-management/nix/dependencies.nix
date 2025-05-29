@@ -72,6 +72,7 @@ regular@{
     aws-sdk-cpp =
       (regular.aws-sdk-cpp.override {
         apis = [
+          "identity-management"
           "s3"
           "transfer"
         ];

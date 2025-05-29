@@ -37,11 +37,12 @@ stdenv.mkDerivation {
     readline
   ];
 
-  postPatch = ''
-    cp ${iana-enterprise-numbers} enterprise-numbers
-  '';
-
   configureFlags = [ "--disable-registry-download" ];
+
+  postInstall = ''
+    # Install to path reported in configure as "Set IANA PEN dictionary search path to ..."
+    install -Dm444 ${iana-enterprise-numbers} $out/share/misc/enterprise-numbers
+  '';
 
   meta = {
     description = "Command-line interface to IPMI-enabled devices";

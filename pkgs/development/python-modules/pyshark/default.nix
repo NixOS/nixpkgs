@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "KimiNewt";
-    repo = pname;
+    repo = "pyshark";
     tag = "v${version}";
     hash = "sha256-kzJDzUK6zknUyXPdKc4zMvWim4C5NQCSJSS45HI6hKM=";
   };

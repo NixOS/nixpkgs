@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "novnc";
-    repo = pname;
+    repo = "websockify";
     tag = "v${version}";
     hash = "sha256-b57L4o071zEt/gX9ZVzEpcnp0RCeo3peZrby2mccJgQ=";
   };

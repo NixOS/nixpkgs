@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -71,7 +72,12 @@ buildPythonPackage rec {
   # This has been updated on main, so we expect this clause to be removed upon the next update.
   pythonRelaxDeps = [ "faster-whisper" ];
 
-  pythonImportsCheck = [ "whisperx" ];
+  # Import check fails due on `aarch64-linux` ONLY in the sandbox due to onnxruntime
+  # not finding its default logger, which then promptly segfaults.
+  # Simply run the import check on every other platform instead.
+  pythonImportsCheck = lib.optionals (
+    !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux)
+  ) [ "whisperx" ];
 
   # No tests in repository
   doCheck = false;

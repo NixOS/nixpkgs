@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "aws";
-    repo = pname;
+    repo = "chalice";
     tag = version;
     hash = "sha256-m3pSD4fahBW6Yt/w07Co4fTZD7k6as5cPwoK5QSry6M=";
   };

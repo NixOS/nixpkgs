@@ -45,27 +45,26 @@
   makeBinaryWrapper,
   autoSignDarwinBinariesHook,
   cairo,
-  fetchpatch,
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.42.0";
+  version = "0.42.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     tag = "v${version}";
-    hash = "sha256-Y9fXSVqkvY4IY5/RYRXXnXWH5kV+9RoHSrp5wSZKZVQ=";
+    hash = "sha256-dW6WgIi+3GJE4OlwxrnY8SUMCQ37eG19UGNfAU4Ts1o=";
   };
 
   goModules =
     (buildGo124Module {
       pname = "kitty-go-modules";
       inherit src version;
-      vendorHash = "sha256-Zp5z5fzCy1q0rXeawWRKBfZkuFbd7N7XkTep94EjnrU=";
+      vendorHash = "sha256-gTzonKFXo1jhTU+bX3+4/5wvvLGDHE/ppUg1ImkVpAs=";
     }).goModules;
 
   buildInputs =

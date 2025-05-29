@@ -15,7 +15,7 @@
   plugins ? [ ],
   buildNumber,
   ...
-}:
+}@args:
 
 let
   loname = lib.toLower productShort;
@@ -29,6 +29,7 @@ stdenvNoCC.mkDerivation {
     ;
   passthru.buildNumber = buildNumber;
   passthru.product = product;
+  passthru.tests = args.passthru.tests;
   meta = meta // {
     mainProgram = loname;
   };

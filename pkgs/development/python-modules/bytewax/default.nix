@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "bytewax";
-    repo = pname;
+    repo = "bytewax";
     tag = "v${version}";
     hash = "sha256-O5q1Jd3AMUaQwfQM249CUnkjqEkXybxtM9SOISoULZk=";
   };

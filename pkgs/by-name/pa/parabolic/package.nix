@@ -40,6 +40,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-B8/e5urhy5tAgHNd/PR3HlNQd0M0CxgC56nArFGlQ9c=";
   };
 
+  # Patches desktop file/dbus service bypassing wrapped executable
+  postPatch = ''
+    substituteInPlace "resources/linux/org.nickvision.tubeconverter.desktop.in" \
+      --replace-fail "@CMAKE_INSTALL_FULL_LIBDIR@/@PROJECT_NAME@/@OUTPUT_NAME@" \
+                     "@PROJECT_NAME@"
+
+    substituteInPlace "resources/linux/org.nickvision.tubeconverter.service.in" \
+      --replace-fail "@CMAKE_INSTALL_FULL_LIBDIR@/@PROJECT_NAME@/@OUTPUT_NAME@" \
+                     "@CMAKE_INSTALL_FULL_BINDIR@/@PROJECT_NAME@"
+  '';
+
   nativeBuildInputs =
     [
       cmake

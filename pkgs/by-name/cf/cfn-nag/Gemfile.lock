@@ -1,22 +1,25 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    aws-eventstream (1.3.0)
-    aws-partitions (1.1001.0)
-    aws-sdk-core (3.211.0)
+    aws-eventstream (1.3.2)
+    aws-partitions (1.1106.0)
+    aws-sdk-core (3.224.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
       aws-sigv4 (~> 1.9)
+      base64
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-kms (1.95.0)
-      aws-sdk-core (~> 3, >= 3.210.0)
+      logger
+    aws-sdk-kms (1.101.0)
+      aws-sdk-core (~> 3, >= 3.216.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-s3 (1.169.0)
-      aws-sdk-core (~> 3, >= 3.210.0)
+    aws-sdk-s3 (1.186.1)
+      aws-sdk-core (~> 3, >= 3.216.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.5)
-    aws-sigv4 (1.10.1)
+    aws-sigv4 (1.11.0)
       aws-eventstream (~> 1, >= 1.0.2)
+    base64 (0.2.0)
     cfn-model (0.6.6)
       kwalify (= 0.7.2)
       psych (~> 3)
@@ -32,17 +35,18 @@ GEM
     kwalify (0.7.2)
     lightly (0.3.3)
     little-plugger (1.1.4)
-    logger (1.6.1)
+    logger (1.7.0)
     logging (2.2.2)
       little-plugger (~> 1.1)
       multi_json (~> 1.10)
     multi_json (1.15.0)
     netaddr (2.0.6)
     optimist (3.0.1)
-    ostruct (0.6.0)
+    ostruct (0.6.1)
     psych (3.3.4)
-    rexml (3.3.9)
-    syslog (0.1.2)
+    rexml (3.4.1)
+    syslog (0.3.0)
+      logger
 
 PLATFORMS
   ruby
@@ -54,4 +58,4 @@ DEPENDENCIES
   syslog
 
 BUNDLED WITH
-   2.3.27
+   2.6.6

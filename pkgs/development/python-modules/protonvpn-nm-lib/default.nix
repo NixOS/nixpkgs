@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
-    repo = pname;
+    repo = "protonvpn-nm-lib";
     tag = version;
     hash = "sha256-n3jfBHMYqyQZgvFFJcylNbTWZ3teuqhdelTfpNrwWuA=";
   };

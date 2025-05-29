@@ -17,10 +17,15 @@ in
         Your user needs to be in the `feedbackd` group to trigger effects
       '';
       package = lib.mkPackageOption pkgs "feedbackd" { };
+      theme-package = lib.mkPackageOption pkgs "feedbackd-device-themes" {
+        nullable = true;
+      };
     };
   };
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [
+      cfg.package
+    ] ++ (if cfg.theme-package != null then [ cfg.theme-package ] else [ ]);
 
     services.dbus.packages = [ cfg.package ];
     services.udev.packages = [ cfg.package ];

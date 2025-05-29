@@ -456,7 +456,7 @@ recurseIntoAttrs {
     );
   };
 
-  data = {
+  data = recurseIntoAttrs {
     json = expectDataEqual {
       file = writeJSON "data.json" { hello = "world"; };
       expected = ''

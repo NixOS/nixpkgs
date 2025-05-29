@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "bolsote";
-    repo = pname;
+    repo = "isoduration";
     rev = version;
     hash = "sha256-6LqsH+3V/K0s2YD1gvmelo+cCH+yCAmmyTYGhUegVdk=";
   };

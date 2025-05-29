@@ -63,7 +63,6 @@ with lib.maintainers;
     shortName = "apm employees";
     # Edits to this list should only be done by an already existing member.
     members = [
-      wolfgangwalther
       DutchGerman
     ];
   };

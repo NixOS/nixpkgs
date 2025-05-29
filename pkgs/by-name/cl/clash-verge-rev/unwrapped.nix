@@ -93,4 +93,10 @@ rustPlatform.buildRustPackage {
     openssl
     webkitgtk_4_1
   ];
+
+  # make sure the .desktop file name does not contain whitespace,
+  # so that the service can register it as an auto-start item
+  postInstall = ''
+    mv $out/share/applications/Clash\ Verge.desktop $out/share/applications/clash-verge.desktop
+  '';
 }

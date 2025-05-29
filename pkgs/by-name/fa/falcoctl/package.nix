@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "falcoctl";
-  version = "0.11.1";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "falcosecurity";
     repo = "falcoctl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3YsxshQh+LQBpKt7YG52rwOdWyjkfn+kTa6nsHpkA+A=";
+    hash = "sha256-cbrlFxRRHwrK1+mkvEktrOCbg5bhKG7GXvv+YJ6un7I=";
   };
 
-  vendorHash = "sha256-uIs3e2E8ThW7n9SXX2lu63KFmsy/QrVGQ4NgY1J+Qr0=";
+  vendorHash = "sha256-L7VXGMWs2eRQUT37CCtQsiYZnsDi/a8QSwAw/f/mydc=";
 
   ldflags = [
     "-s"

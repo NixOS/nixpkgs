@@ -82,14 +82,14 @@ let
   ];
 in
 mkDerivation rec {
-  version = "3.42.2";
+  version = "3.42.3";
   pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-kWy+FBiqPMt8GLGWSJBQp0uD5l1IE/2KmDGdxKapg78=";
+    hash = "sha256-NZLtifHcJAe0Q08i3nTu4H1fWO9gALCcqjaPwb0t8QM=";
   };
 
   passthru = {
@@ -192,6 +192,9 @@ mkDerivation rec {
         --prefix PATH : ${lib.makeBinPath [ grass ]}
     done
   '';
+
+  # >9k objects, >3h build time on a normal build slot
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
     description = "Free and Open Source Geographic Information System";

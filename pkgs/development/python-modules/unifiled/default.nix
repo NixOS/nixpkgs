@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "florisvdk";
-    repo = pname;
+    repo = "unifiled";
     rev = "v${version}";
     sha256 = "1nmqxxhwa0isxdb889nhbp7w4axj1mcrwd3pr9d8nhpw4yj9h3vq";
   };

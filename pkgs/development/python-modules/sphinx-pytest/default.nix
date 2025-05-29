@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "chrisjsewell";
-    repo = pname;
+    repo = "sphinx-pytest";
     tag = "v${version}";
     hash = "sha256-oSBBt+hSMs4mvGqibQHoYHXr2j/bpsGOnIMfwfTfWKQ=";
   };

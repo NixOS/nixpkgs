@@ -7,17 +7,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rcp";
-  version = "0.16.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "wykurz";
     repo = "rcp";
     rev = "v${version}";
-    hash = "sha256-mMSO5twpuxiA6pMG/bNMn3WJjs3ZwuoOk62M0WIrRBk=";
+    hash = "sha256-mFFMxGu/r8xtfMkpDW2Rk/oTWQcS9oK6ngoRKCc+STo=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-uVBWPxGxNgiahywA78QjN8msNx3gZ6vOyX7AkOdK2EM=";
+  cargoHash = "sha256-2S3bygSu9ouT/RYCmafFGvFHHFJXVryb5E3PMmcZs0U=";
 
   RUSTFLAGS = "--cfg tokio_unstable";
 

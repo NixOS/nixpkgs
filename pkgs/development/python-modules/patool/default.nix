@@ -46,7 +46,7 @@ buildPythonPackage rec {
   #pypi doesn't have test data
   src = fetchFromGitHub {
     owner = "wummel";
-    repo = pname;
+    repo = "patool";
     tag = version;
     hash = "sha256-mt/GUIRJHB2/Rritc+uNkolZzguYy2G/NKnSKNxKsLk=";
   };

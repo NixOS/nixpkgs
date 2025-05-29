@@ -71,6 +71,7 @@
   enableFramework ? false,
   noldconfigPatch ? ./. + "/${sourceVersion.major}.${sourceVersion.minor}/no-ldconfig.patch",
   enableGIL ? true,
+  enableDebug ? false,
 
   # pgo (not reproducible) + -fno-semantic-interposition
   # https://docs.python.org/3/using/configure.html#cmdoption-enable-optimizations
@@ -462,6 +463,9 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ optionals enableOptimizations [
       "--enable-optimizations"
+    ]
+    ++ optionals enableDebug [
+      "--with-pydebug"
     ]
     ++ optionals (sqlite != null) [
       "--enable-loadable-sqlite-extensions"

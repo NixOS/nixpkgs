@@ -1,32 +1,58 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   rustPlatform,
+  versionCheckHook,
+  nix-update-script,
+
+  # tests
+  nodejs,
+  python3,
+  php,
+  ruby,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mask";
   version = "0.11.6";
 
   src = fetchFromGitHub {
     owner = "jacobdeichert";
     repo = "mask";
-    rev = "mask/${version}";
+    tag = "mask/${finalAttrs.version}";
     hash = "sha256-xGD23pso5iS+9dmfTMNtR6YqUqKnzJTzMl+OnRGpL3g=";
   };
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-JaYr6J3NOwVIHzGO4wLkke5O/T/9WUDENPgLP5Fwyhg=";
 
-  # tests require mask to be installed
-  doCheck = false;
+  preCheck = ''
+    export PATH=$PATH:$PWD/target/${stdenv.hostPlatform.rust.rustcTarget}/$cargoBuildType
+  '';
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    nodejs
+    python3
+    php
+    ruby
+  ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=^mask/(.*)$" ]; };
+
+  meta = {
     description = "CLI task runner defined by a simple markdown file";
     mainProgram = "mask";
     homepage = "https://github.com/jacobdeichert/mask";
-    changelog = "https://github.com/jacobdeichert/mask/blob/mask/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/jacobdeichert/mask/blob/mask/${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      figsoda
+      defelo
+    ];
   };
-}
+})

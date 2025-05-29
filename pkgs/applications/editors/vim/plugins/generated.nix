@@ -3000,6 +3000,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  colorful-winsep-nvim = buildVimPlugin {
+    pname = "colorful-winsep.nvim";
+    version = "2025-04-11";
+    src = fetchFromGitHub {
+      owner = "nvim-zh";
+      repo = "colorful-winsep.nvim";
+      rev = "7bbe4e1353c0fe37c98bad2758aafc410280f6b3";
+      sha256 = "0nm3cr5wzfyanx01nw998cddq1vxww0xn6v8a7db3a2r8fjxp5fx";
+    };
+    meta.homepage = "https://github.com/nvim-zh/colorful-winsep.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   colorizer = buildVimPlugin {
     pname = "colorizer";
     version = "2022-01-03";
@@ -3245,6 +3258,19 @@ final: prev: {
       sha256 = "02z341iwj3gih3k3qyi014j5y7jddp4zl2np0671gmw43861bxcd";
     };
     meta.homepage = "https://github.com/Shougo/context_filetype.vim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  contextfiles-nvim = buildVimPlugin {
+    pname = "contextfiles.nvim";
+    version = "2025-05-07";
+    src = fetchFromGitHub {
+      owner = "banjo";
+      repo = "contextfiles.nvim";
+      rev = "d9541105d60c708e2ec6641109f5f2a6179c2a80";
+      sha256 = "1n8nkpy53mqr0hn26lqzcxmp8l6r2873yrsqxrj5cpis0f52qc45";
+    };
+    meta.homepage = "https://github.com/banjo/contextfiles.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5254,6 +5280,19 @@ final: prev: {
     };
     meta.homepage = "https://github.com/eagletmt/ghcmod-vim/";
     meta.hydraPlatforms = [ ];
+  };
+
+  gh-nvim = buildVimPlugin {
+    pname = "gh.nvim";
+    version = "0-unstable-2025-01-21";
+    src = fetchFromGitHub {
+      owner = "ldelossa";
+      repo = "gh.nvim";
+      rev = "6f367b2ab8f9d4a0a23df2b703a3f91137618387";
+      hash = "sha256-XI4FVjajin0NM+OaEN+O5vmalPpOB2RII+aOERSzjJA=";
+    };
+    meta.description = "Fully featured GitHub integration for performing code reviews in Neovim";
+    meta.homepage = "https://github.com/ldelossa/gh.nvim";
   };
 
   git-blame-nvim = buildVimPlugin {
@@ -8136,6 +8175,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  mini-keymap = buildVimPlugin {
+    pname = "mini.keymap";
+    version = "2025-05-20";
+    src = fetchFromGitHub {
+      owner = "echasnovski";
+      repo = "mini.keymap";
+      rev = "2aa0a66d6cbf15c9cea331d976ac4d4b9f01621e";
+      sha256 = "18samb1yjvmw2yjl0l4csl484aqah71qr19zspx46z5dk3jib908";
+    };
+    meta.homepage = "https://github.com/echasnovski/mini.keymap/";
+    meta.hydraPlatforms = [ ];
+  };
+
   mini-map = buildVimPlugin {
     pname = "mini.map";
     version = "2025-04-01";
@@ -10554,6 +10606,19 @@ final: prev: {
       sha256 = "0s2z4nd5anh5r3z4iv9fa4m5vnkbdl6aj7rw5ssn3cm52kplw3fq";
     };
     meta.homepage = "https://github.com/gennaro-tedesco/nvim-jqx/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  nvim-k8s-crd = buildVimPlugin {
+    pname = "nvim-k8s-crd";
+    version = "2025-05-26";
+    src = fetchFromGitHub {
+      owner = "anasinnyk";
+      repo = "nvim-k8s-crd";
+      rev = "d57f9c6b0ad1e8ab894f2afd6db90c948ca51a8c";
+      sha256 = "1gx80lclc8jh2k288hswz8b03zlamkb5z8zdl03nchxrm6xr5x05";
+    };
+    meta.homepage = "https://github.com/anasinnyk/nvim-k8s-crd/";
     meta.hydraPlatforms = [ ];
   };
 

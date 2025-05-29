@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "truenas";
-    repo = pname;
+    repo = "py-libzfs";
     rev = "TS-${version}";
     hash = "sha256-Uiu0RNE06++iNWUNcKpbZvreT2D7/EqHlFZJXKe3F4A=";
   };

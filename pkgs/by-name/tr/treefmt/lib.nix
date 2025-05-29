@@ -16,10 +16,7 @@
     # Inputs
 
     `module`
-    : A treefmt module, configuring options that include:
-      - `name`: `String` (default `"treefmt-with-config"`)
-      - `settings`: `Module` (default `{ }`)
-      - `runtimeInputs`: `[Derivation]` (default `[ ]`)
+    : A treefmt module. See [options reference](#sec-treefmt-options-reference).
   */
   evalConfig =
     module:
@@ -52,10 +49,7 @@
     # Inputs
 
     `module`
-    : A treefmt module, configuring options that include:
-      - `name`: `String` (default `"treefmt-with-config"`)
-      - `settings`: `Module` (default `{ }`)
-      - `runtimeInputs`: `[Derivation]` (default `[ ]`)
+    : A treefmt module. See [options reference](#sec-treefmt-options-reference).
   */
   withConfig =
     module:
@@ -79,7 +73,8 @@
     # Inputs
 
     `settings`
-    : A settings module, used to build a treefmt config file
+    : A settings module, used to build a treefmt config file.
+      See [`settings` option reference](#opt-treefmt-settings).
   */
   buildConfig =
     module:

@@ -186,15 +186,29 @@ lib.makeExtensible (
         self_attribute_name = "nix_2_28";
       };
 
+      nixComponents_2_29 = nixDependencies.callPackage ./modular/packages.nix rec {
+        version = "2.29.0";
+        inherit (self.nix_2_24.meta) maintainers teams;
+        otherSplices = generateSplicesForNixComponents "nixComponents_2_29";
+        src = fetchFromGitHub {
+          owner = "NixOS";
+          repo = "nix";
+          rev = version;
+          hash = "sha256-fkbE3RCIUPFjS9A6SoEJbgMW3Rs98cs0ZZV/eTtJjaU=";
+        };
+      };
+
+      nix_2_29 = addTests "nix_2_29" self.nixComponents_2_29.nix-everything;
+
       nixComponents_git = nixDependencies.callPackage ./modular/packages.nix rec {
-        version = "2.29pre20250409_${lib.substring 0 8 src.rev}";
+        version = "2.30pre20250521_${lib.substring 0 8 src.rev}";
         inherit (self.nix_2_24.meta) maintainers teams;
         otherSplices = generateSplicesForNixComponents "nixComponents_git";
         src = fetchFromGitHub {
           owner = "NixOS";
           repo = "nix";
-          rev = "e76bbe413e86e3208bb9824e339d59af25327101";
-          hash = "sha256-Aqnj5+sA7B4ZRympuyfWPPK83iomKHEHMYhlwslI8iA=";
+          rev = "76a4d4c2913a1654dddd195b034ff7e66cb3e96f";
+          hash = "sha256-OA22Ig72oV6reHN8HMlimmnrsxpNzqyzi4h6YBVzzEA=";
         };
       };
 

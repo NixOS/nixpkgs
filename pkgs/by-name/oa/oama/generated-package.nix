@@ -31,11 +31,11 @@
 }:
 mkDerivation {
   pname = "oama";
-  version = "0.19.0";
+  version = "0.20.1";
   src = fetchgit {
     url = "https://github.com/pdobsan/oama.git";
-    sha256 = "1nrgpnh76fcmkdw1j3ha5cam7bnxkgfns2plj8609qv0v0swmj4s";
-    rev = "3eef17b7e290dfced252375a13bc8dd46849adf0";
+    sha256 = "sha256-59tKAHL7rCZJyfraD7NnwFR5iP6784IcgH82hfsFHiA=";
+    rev = "99659a8567808b28885ed241abe4df03f37e92fc";
     fetchSubmodules = true;
   };
   isLibrary = true;

@@ -16,6 +16,7 @@
   libdrm,
   libgbm,
   libglvnd,
+  libpng,
   libunwind,
   libva-minimal,
   libvdpau,
@@ -45,10 +46,12 @@
 
   galliumDrivers ?
     [
+      "asahi" # Apple AGX, built on non-aarch64 for cross tools
       "d3d12" # WSL emulated GPU (aka Dozen)
       "iris" # new Intel (Broadwell+)
       "llvmpipe" # software renderer
       "nouveau" # Nvidia
+      "panfrost" # ARM Mali Midgard and up (T/G series), built on non-ARM for cross tools
       "r300" # very old AMD
       "r600" # less old AMD
       "radeonsi" # new AMD (GCN+)
@@ -61,7 +64,6 @@
       "etnaviv" # Vivante GPU designs (mostly NXP/Marvell SoCs)
       "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
       "lima" # ARM Mali 4xx
-      "panfrost" # ARM Mali Midgard and up (T/G series)
       "vc4" # Broadcom VC4 (Raspberry Pi 0-3)
     ]
     ++ lib.optionals stdenv.hostPlatform.isAarch64 [
@@ -75,6 +77,7 @@
   vulkanDrivers ?
     [
       "amd" # AMD (aka RADV)
+      "asahi" # Apple AGX, built on non-aarch64 for cross tools
       "intel" # new Intel (aka ANV)
       "microsoft-experimental" # WSL virtualized GPU (aka DZN/Dozen)
       "nouveau" # Nouveau (aka NVK)
@@ -103,8 +106,10 @@
   ],
   vulkanLayers ? [
     "device-select"
-    "overlay"
     "intel-nullhw"
+    "overlay"
+    "screenshot"
+    "vram-report-limit"
   ],
   mesa,
   mesa-gl-headers,
@@ -161,7 +166,6 @@ stdenv.mkDerivation {
 
   patches = [
     ./opencl.patch
-    ./system-gbm.patch
   ];
 
   postPatch = ''
@@ -223,7 +227,6 @@ stdenv.mkDerivation {
       (lib.mesonBool "libgbm-external" true)
 
       (lib.mesonBool "gallium-nine" false) # Direct3D9 in Wine, largely supplanted by DXVK
-      (lib.mesonBool "osmesa" false) # deprecated upstream
 
       # Only used by xf86-video-vmware, which has more features than VMWare's KMS driver,
       # so we're keeping it for now. Should be removed when that's no longer the case.
@@ -245,20 +248,26 @@ stdenv.mkDerivation {
 
       # Rusticl, new OpenCL frontend
       (lib.mesonBool "gallium-rusticl" true)
+      (lib.mesonOption "gallium-rusticl-enable-drivers" "auto")
 
       # meson auto_features enables this, but we do not want it
       (lib.mesonEnable "android-libbacktrace" false)
       (lib.mesonEnable "microsoft-clc" false) # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
 
-      # Build and install extra tools for cross
-      (lib.mesonBool "install-mesa-clc" true)
-      (lib.mesonBool "install-precomp-compiler" true)
+      # Enable more sensors in gallium-hud
+      (lib.mesonBool "gallium-extra-hud" true)
 
       # Disable valgrind on targets where it's not available
       (lib.mesonEnable "valgrind" withValgrind)
     ]
     ++ lib.optionals enablePatentEncumberedCodecs [
       (lib.mesonOption "video-codecs" "all")
+    ]
+    ++ lib.optionals (!needNativeCLC) [
+      # Build and install extra tools for cross
+      (lib.mesonOption "tools" "asahi,panfrost")
+      (lib.mesonBool "install-mesa-clc" true)
+      (lib.mesonBool "install-precomp-compiler" true)
     ]
     ++ lib.optionals needNativeCLC [
       (lib.mesonOption "mesa-clc" "system")
@@ -277,6 +286,7 @@ stdenv.mkDerivation {
       libdrm
       libgbm
       libglvnd
+      libpng
       libunwind
       libva-minimal
       libvdpau
@@ -348,9 +358,13 @@ stdenv.mkDerivation {
   doCheck = false;
 
   postInstall = ''
+    moveToOutput bin/asahi_clc $cross_tools
     moveToOutput bin/intel_clc $cross_tools
     moveToOutput bin/mesa_clc $cross_tools
-    moveToOutput bin/vtn_bindgen $cross_tools
+    moveToOutput bin/panfrost_compile $cross_tools
+    moveToOutput bin/panfrost_texfeatures $cross_tools
+    moveToOutput bin/panfrostdump $cross_tools
+    moveToOutput bin/vtn_bindgen2 $cross_tools
 
     moveToOutput "lib/lib*OpenCL*" $opencl
     # Construct our own .icd file that contains an absolute path.

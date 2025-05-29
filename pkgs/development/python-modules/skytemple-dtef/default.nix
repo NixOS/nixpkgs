@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "skytemple-dtef";
-  version = "1.6.1";
+  version = "1.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "SkyTemple";
     repo = "skytemple-dtef";
     rev = version;
-    hash = "sha256-vVh4WRjx/iFJnTZC7D/OCi0gOwKaXs/waVXUEu5Cda8=";
+    hash = "sha256-IsAHXl9HfjWDXi/n6Alndi+GnAr7pmbjz6wrBECra0Q=";
   };
 
   build-system = [ setuptools ];

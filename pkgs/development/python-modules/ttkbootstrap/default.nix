@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "israel-dryer";
-    repo = pname;
+    repo = "ttkbootstrap";
     tag = "v${version}";
     hash = "sha256-Pkp45lB1Xeu9ZoLjKS8aSW2By/k3ID1qwMig/jdYHh4=";
   };
