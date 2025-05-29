@@ -1109,6 +1109,7 @@
   ./services/networking/doh-proxy-rust.nix
   ./services/networking/doh-server.nix
   ./services/networking/ejabberd.nix
+  ./services/networking/encrypted-dns-server.nix
   ./services/networking/envoy.nix
   ./services/networking/epmd.nix
   ./services/networking/ergo.nix
