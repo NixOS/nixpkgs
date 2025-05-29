@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   pkg-config,
-  SDL,
   SDL2,
   udevCheckHook,
 }:
@@ -22,7 +21,6 @@ stdenv.mkDerivation rec {
     udevCheckHook
   ];
   buildInputs = [
-    SDL
     SDL2
   ];
 

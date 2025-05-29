@@ -516,13 +516,13 @@
     "vendorHash": "sha256-rGpnPH8ebHXasvelGoJEUU4YbeGJY4adFBbgAHJ8vSs="
   },
   "google-beta": {
-    "hash": "sha256-b79IHQxSid4LhIl3ZPd2rok8V4BdXejcYe5LBCjgvlQ=",
+    "hash": "sha256-VpfIfzIG1h5qnvEqogCK359LLLSgdgxg0DtRGvdZtLU=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/google-beta",
     "owner": "hashicorp",
     "repo": "terraform-provider-google-beta",
-    "rev": "v6.35.0",
+    "rev": "v6.37.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-Qad4Dfg65aX8dsan4gimGP/hzSaQ7Ay+WTFlr2TgUzw="
+    "vendorHash": "sha256-oz4zVv5swFokYCdcJhBE+PLrIOjwszl58Cn0e7hOKmI="
   },
   "googleworkspace": {
     "hash": "sha256-dedYnsKHizxJZibuvJOMbJoux0W6zgKaK5fxIofKqCY=",
@@ -750,13 +750,13 @@
     "vendorHash": "sha256-fP6brpY/wRI1Yjgapzi+FfOci65gxWeOZulXbGdilrE="
   },
   "linode": {
-    "hash": "sha256-LyGqcWYdwUfAKq3bTHMyZmIyJkndOUzWHkVXduESxus=",
+    "hash": "sha256-DNH+q9FSRlT/SoyW9+n+FLzy/Zi5l82sRigBZIaKabc=",
     "homepage": "https://registry.terraform.io/providers/linode/linode",
     "owner": "linode",
     "repo": "terraform-provider-linode",
-    "rev": "v2.39.0",
+    "rev": "v2.41.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-4YMqzX/vQvWj0sb46NlTADb0be9+/0lwKs+3QArBvUk="
+    "vendorHash": "sha256-j/YgQ4w89XRZPYMCGAT72ervryIeutvk0ivFPR8E1yI="
   },
   "linuxbox": {
     "hash": "sha256-svQRz1/PdVLpHoxOam1sfRTwHqgqs4ohJQs3IPMMAM4=",
@@ -858,13 +858,13 @@
     "vendorHash": null
   },
   "newrelic": {
-    "hash": "sha256-2Bmk1b84oL8DkPShff4RPQSlAu6ufwcb7sp6mJGeo84=",
+    "hash": "sha256-jmvCEJM+hcYToawCcUasWN+gMY9rw5Niw8YT28hk3aw=",
     "homepage": "https://registry.terraform.io/providers/newrelic/newrelic",
     "owner": "newrelic",
     "repo": "terraform-provider-newrelic",
-    "rev": "v3.61.0",
+    "rev": "v3.62.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-wqraBQqxpD69iIM45MZLWhgIEiyu300bok3OST+Hegs="
+    "vendorHash": "sha256-UArO7zOOAlnWzzg+t/IWWuMfRAmauvLO4M7Y/mmdz2k="
   },
   "nexus": {
     "hash": "sha256-Lm5CZ+eBDUNIL2KuK/iKc5dTif7P+E9II714vwvYuyU=",

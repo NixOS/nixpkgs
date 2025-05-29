@@ -14,7 +14,7 @@
 
 let
   lib = import ../../lib;
-  inherit (import ../development/cuda-modules/_cuda) cudaLib;
+  cudaLib = (import ../development/cuda-modules/_cuda).lib;
 in
 
 {

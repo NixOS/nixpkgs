@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ lib, ... }:
 let
   httpPort = 800;
 in
@@ -9,24 +9,19 @@ in
     bjornfor
   ];
 
-  nodes.machine =
-    {
-      config,
-      pkgs,
-      lib,
-      ...
-    }:
-    {
-      nixpkgs.config.allowUnfree = true;
-      services.deconz = {
-        enable = true;
-        inherit httpPort;
-        extraArgs = [
-          "--dbg-err=2"
-          "--dbg-info=2"
-        ];
-      };
+  node.pkgsReadOnly = false;
+
+  nodes.machine = {
+    nixpkgs.config.allowUnfree = true;
+    services.deconz = {
+      enable = true;
+      inherit httpPort;
+      extraArgs = [
+        "--dbg-err=2"
+        "--dbg-info=2"
+      ];
     };
+  };
 
   testScript = ''
     machine.wait_for_unit("deconz.service")
