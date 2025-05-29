@@ -102,6 +102,9 @@ stdenv.mkDerivation rec {
       gpl3Only
     ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nh2 ];
+    maintainers = with maintainers; [
+      nh2
+      tmarkus
+    ];
   };
 }
