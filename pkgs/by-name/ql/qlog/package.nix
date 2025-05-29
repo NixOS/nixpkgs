@@ -56,7 +56,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/foldynl/QLog";
     maintainers = with lib.maintainers; [
       oliver-koss
-      mkg20001
     ];
     platforms = with lib.platforms; unix;
   };

@@ -36,13 +36,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "tiledb";
-  version = "2.27.2";
+  version = "2.28.0";
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB";
     tag = version;
-    hash = "sha256-zk4jkXJMh6wpuEKaCvuKUDod+F8B/6W5Lw8gwelcPEM=";
+    hash = "sha256-jNKnc8IPkXDxRUY9QJ+35qt2na1nO6RPeCVWBLb7lME=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./generate_embedded_data_header.patch ];

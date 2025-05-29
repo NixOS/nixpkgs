@@ -28,7 +28,7 @@ in
         type = lib.types.lines;
         description = ''
           (Deprecated) Configuration for Spotifyd. For syntax and directives, see
-          <https://docs.spotifyd.rs/config/File.html>.
+          <https://docs.spotifyd.rs/configuration/index.html#config-file>.
         '';
       };
 
@@ -40,7 +40,7 @@ in
         };
         description = ''
           Configuration for Spotifyd. For syntax and directives, see
-          <https://docs.spotifyd.rs/config/File.html>.
+          <https://docs.spotifyd.rs/configuration/index.html#config-file>.
         '';
       };
     };

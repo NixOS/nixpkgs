@@ -53,15 +53,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # AssertionError
-    "test_serde_jsonplus"
-  ];
-
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "checkpoint==(\\d+\\.\\d+\\.\\d+)"
+      "checkpoint==([0-9.]+)"
     ];
   };
 

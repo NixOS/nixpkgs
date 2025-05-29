@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "uqfoundation";
-    repo = pname;
+    repo = "pathos";
     tag = version;
     hash = "sha256-oVqWrX40umazNw/ET/s3pKUwvh8ctgF9sS0U8WwFQkA=";
   };

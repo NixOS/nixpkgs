@@ -261,7 +261,7 @@ stdenv.mkDerivation (finalAttrs: {
     util-linux
     qemu
   ];
-  checkPhase = ''[elided]'';
+  # `checkPhase` elided
 })
 ```
 

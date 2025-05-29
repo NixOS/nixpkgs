@@ -5,7 +5,7 @@
   cmake,
 }:
 let
-  version = "9.2.4";
+  version = "9.3.1";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "source-meta-json-schema";
@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "sourcemeta";
     repo = "jsonschema";
     rev = "v${version}";
-    hash = "sha256-IQuXybTpdVdPiYVpb9BffZdUs0TxKqA1HkzxS/gi+pw=";
+    hash = "sha256-uqx2GBG4sTmFWexTr8fCP9r/o37d3vTD93giB/OEmac=";
   };
 
   nativeBuildInputs = [

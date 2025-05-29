@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "google-auth-oauthlib";
-  version = "1.2.1";
+  version = "1.2.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_auth_oauthlib";
     inherit version;
-    hash = "sha256-r9DK0JKi6qU82OgphVfW3hA0xstKdAUAtTV7ZIr5cmM=";
+    hash = "sha256-EQRvuNM0iyljAt2Tms6K8KckBC6AKcG4cth/q8n0FoQ=";
   };
 
   build-system = [ setuptools ];

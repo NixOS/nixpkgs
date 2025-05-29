@@ -12,6 +12,7 @@
   npmHooks,
   python3,
   rustc,
+  versionCheckHook,
   wasm-bindgen-cli_0_2_92,
   wasm-pack,
 }:
@@ -65,7 +66,12 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-xFVMWX3q3za1w8v58Eysk6vclPd4qpCuQMjMcwwHoh0=";
   };
 
+  env.GIT_VERSION = version;
+
   postPatch = ''
+    # Set the correct version, e.g. for `pagefind --version`
+    node .backstage/version.cjs
+
     # Tricky way to run npmConfigHook multiple times
     (
       local postPatchHooks=() # written to by npmConfigHook
@@ -162,6 +168,12 @@ rustPlatform.buildRustPackage rec {
   '';
 
   buildFeatures = [ "extended" ];
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   meta = {
     description = "Generate low-bandwidth search index for your static website";

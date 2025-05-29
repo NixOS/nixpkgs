@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/pobrn/qc71_laptop/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ aacebedo ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

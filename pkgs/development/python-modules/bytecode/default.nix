@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "vstinner";
-    repo = pname;
+    repo = "bytecode";
     tag = version;
     hash = "sha256-74qEwAYHXV4HakJQ05A9K7LuO0xP28Hub6no09KO4r4=";
   };

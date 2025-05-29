@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
-    repo = pname;
+    repo = "rtoml";
     rev = "v${version}";
     hash = "sha256-1movtKMQkQ6PEpKpSkK0Oy4AV0ee7XrS0P9m6QwZTaM=";
   };

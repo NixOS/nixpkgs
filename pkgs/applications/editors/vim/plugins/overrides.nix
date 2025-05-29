@@ -1278,6 +1278,10 @@ in
     configurePhase = "cd plugins/nvim";
   };
 
+  gh-nvim = super.gh-nvim.overrideAttrs {
+    dependencies = [ self.litee-nvim ];
+  };
+
   gitlinker-nvim = super.gitlinker-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
@@ -4082,5 +4086,12 @@ in
       substituteInPlace autoload/zoxide.vim \
         --replace-fail "'zoxide_executable', 'zoxide'" "'zoxide_executable', '${zoxide}/bin/zoxide'"
     '';
+  };
+
+  nvim-k8s-crd = super.nvim-k8s-crd.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      nvim-lspconfig
+    ];
   };
 }

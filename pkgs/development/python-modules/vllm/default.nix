@@ -235,7 +235,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "vllm-project";
-    repo = pname;
+    repo = "vllm";
     tag = "v${version}";
     hash = "sha256-LiEBkVwJTT4WoCTk9pI0ykTjmv1pDMzksmFwVktoxMY=";
   };

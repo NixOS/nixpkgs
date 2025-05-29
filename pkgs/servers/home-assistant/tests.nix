@@ -63,6 +63,10 @@ let
   };
 
   extraDisabledTests = {
+    forecast_solar = [
+      # language fixture mismatch
+      "test_enabling_disable_by_default"
+    ];
     sensor = [
       # Failed: Translation not found for sensor
       "test_validate_unit_change_convertible"
@@ -78,9 +82,9 @@ let
       # tries to retrieve file from github
       "test_non_text_stdout_capture"
     ];
-    stream = [
-      # crashes with x265>=4.0
-      "test_h265_video_is_hvc1"
+    smartthings = [
+      # outdated snapshots
+      "test_all_entities"
     ];
     websocket_api = [
       # AssertionError: assert 'unknown_error' == 'template_error'

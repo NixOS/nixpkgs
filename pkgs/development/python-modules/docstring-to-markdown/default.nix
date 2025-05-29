@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "python-lsp";
-    repo = pname;
+    repo = "docstring-to-markdown";
     tag = "v${version}";
     hash = "sha256-ykqY7LFIOTuAddYkKDzIltq8FpLVz4v2ZA3Y0cZH9ms=";
   };
