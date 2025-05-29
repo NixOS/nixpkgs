@@ -7,27 +7,23 @@
   curl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "miniserve";
   version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "miniserve";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jrQnmIYap5eHVWPqoRsXVroB0VWLKxesi3rB/WylR0U=";
   };
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-SosRbtk5gBcOVropy+HVFFmLLexu29GjchC6zFweiYw=";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  nativeCheckInputs = [
-    curl
-  ];
+  nativeCheckInputs = [ curl ];
 
   checkFlags = [
     "--skip=bind_ipv4_ipv6::case_2"
@@ -52,9 +48,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "CLI tool to serve files and directories over HTTP";
     homepage = "https://github.com/svenstaro/miniserve";
-    changelog = "https://github.com/svenstaro/miniserve/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/svenstaro/miniserve/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "miniserve";
   };
-}
+})
