@@ -1,0 +1,45 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  llm,
+  llm-echo,
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
+}:
+
+buildPythonPackage rec {
+  pname = "llm-echo";
+  version = "0.3";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "simonw";
+    repo = "llm-echo";
+    tag = version;
+    hash = "sha256-KtdsvXJQRJ3EEJ25i6ccbVxMsWlDsxa+HJ7bFzyYGNI=";
+  };
+
+  build-system = [
+    setuptools
+    llm
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  pythonImportsCheck = [ "llm_echo" ];
+
+  passthru.tests = llm.mkPluginTest llm-echo;
+
+  meta = {
+    description = "Debug plugin for LLM";
+    homepage = "https://github.com/simonw/llm-echo";
+    changelog = "https://github.com/simonw/llm-echo/releases/tag/${version}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ philiptaron ];
+  };
+}
