@@ -28,7 +28,6 @@
   vulkan-headers,
   vulkan-loader,
   webrtc-audio-processing,
-  webrtc-audio-processing_1,
   ncurses,
   readline, # meson can't find <7 as those versions don't have a .pc file
   lilv,
@@ -70,14 +69,10 @@
 }:
 
 let
-  webrtc-audio-processings = lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
-    webrtc-audio-processing_1
-    webrtc-audio-processing
-  ];
-
   modemmanagerSupport = lib.meta.availableOn stdenv.hostPlatform modemmanager;
   libcameraSupport = lib.meta.availableOn stdenv.hostPlatform libcamera;
   ldacbtSupport = lib.meta.availableOn stdenv.hostPlatform ldacbt;
+  webrtcAudioProcessingSupport = lib.meta.availableOn stdenv.hostPlatform webrtc-audio-processing;
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -156,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
       epoll-shim
       freebsd.libstdthreads
     ]
-    ++ lib.take 1 webrtc-audio-processings
+    ++ lib.optional webrtcAudioProcessingSupport webrtc-audio-processing
     ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
     ++ lib.optional ldacbtSupport ldacbt
     ++ lib.optional libcameraSupport libcamera
@@ -195,7 +190,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "installed_tests" true)
     (lib.mesonOption "installed_test_prefix" (placeholder "installedTests"))
     (lib.mesonOption "libjack-path" "${placeholder "jack"}/lib")
-    (lib.mesonEnable "echo-cancel-webrtc" (webrtc-audio-processings != [ ]))
+    (lib.mesonEnable "echo-cancel-webrtc" webrtcAudioProcessingSupport)
     (lib.mesonEnable "libcamera" (lib.meta.availableOn stdenv.hostPlatform libcamera))
     (lib.mesonEnable "libffado" ffadoSupport)
     (lib.mesonEnable "roc" rocSupport)
