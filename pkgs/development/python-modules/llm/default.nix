@@ -84,6 +84,7 @@ let
       llm-ollama ? false,
       llm-openai-plugin ? false,
       llm-openrouter ? false,
+      llm-pdf-to-images ? false,
       llm-sentence-transformers ? false,
       llm-templates-fabric ? false,
       llm-templates-github ? false,
