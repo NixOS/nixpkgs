@@ -35,13 +35,13 @@ import ../../make-test-python.nix (
         inherit (cfgNodes) CURRENCY FIAT_CURRENCY;
         inherit (cfgScripts) commonScripts;
 
-        bankConfig = nodes.bank.config.environment.etc."libeufin/libeufin.conf".source;
+        bankConfig = nodes.bank.environment.etc."libeufin/libeufin.conf".source;
         bankSettings = nodes.bank.services.libeufin.settings.libeufin-bank;
         nexusSettings = nodes.bank.services.libeufin.nexus.settings;
 
         # Bank admin account credentials
         AUSER = "admin";
-        APASS = "admin";
+        APASS = "testAdmin";
 
         TUSER = "testUser";
         TPASS = "testUser";
