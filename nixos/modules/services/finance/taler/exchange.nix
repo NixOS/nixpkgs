@@ -25,6 +25,8 @@ let
     "secmod-eddsa"
     "secmod-rsa"
   ];
+
+  configFile = config.environment.etc."taler/taler.conf".source;
 in
 
 {
@@ -140,14 +142,14 @@ in
           lib.pipe servicesDB [
             (map (name: ''
               GRANT SELECT,INSERT,UPDATE${deletePerm name} ON ALL TABLES IN SCHEMA exchange TO "taler-exchange-${name}";
-              GRANT USAGE ON SCHEMA exchange TO "taler-exchange-${name}";
+              GRANT USAGE ON ALL SEQUENCES IN SCHEMA exchange TO "taler-exchange-${name}";
             ''))
             lib.concatStrings
           ]
         );
       in
       ''
-        ${lib.getExe' cfg.package "taler-exchange-dbinit"}
+        ${lib.getExe' cfg.package "taler-exchange-dbinit"} -c ${configFile}
         psql -U taler-exchange-httpd -f ${dbScript}
       '';
   };
