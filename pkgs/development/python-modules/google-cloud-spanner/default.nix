@@ -33,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-spanner";
-  version = "3.54.0";
+  version = "3.55.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-spanner";
     tag = "v${version}";
-    hash = "sha256-uJKUgY7fV+AK/2HQyjQRFypcL+mPZ/M5ZtAU+f73ezM=";
+    hash = "sha256-0+mTBqgy8SaHjoYhQjCaypipVsJTrN2DdhcfPY3PxSc=";
   };
 
   build-system = [ setuptools ];
@@ -117,7 +117,7 @@ buildPythonPackage rec {
   meta = {
     description = "Cloud Spanner API client library";
     homepage = "https://github.com/googleapis/python-spanner";
-    changelog = "https://github.com/googleapis/python-spanner/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/python-spanner/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sarahec ];
   };
