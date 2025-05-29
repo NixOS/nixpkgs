@@ -10,6 +10,7 @@
   fetchFromGitHub,
   kconfigwidgets,
   kddockwidgets,
+  kgraphviewer,
   ki18n,
   kio,
   kitemmodels,
@@ -19,6 +20,7 @@
   kwindowsystem,
   libelf,
   linuxPackages,
+  qcustomplot,
   qtbase,
   qtsvg,
   rustc-demangle,
@@ -51,6 +53,7 @@ stdenv.mkDerivation rec {
     (elfutils.override { enableDebuginfod = true; }) # perfparser needs to find debuginfod.h
     kconfigwidgets
     kddockwidgets
+    kgraphviewer
     ki18n
     kio
     kitemmodels
@@ -59,6 +62,7 @@ stdenv.mkDerivation rec {
     kparts
     kwindowsystem
     libelf
+    qcustomplot
     qtbase
     qtsvg
     rustc-demangle
