@@ -82,6 +82,7 @@ let
       llm-sentence-transformers ? false,
       llm-templates-fabric ? false,
       llm-templates-github ? false,
+      llm-tools-datasette ? false,
       llm-tools-quickjs ? false,
       llm-tools-sqlite ? false,
       llm-venice ? false,
