@@ -8334,6 +8334,8 @@ self: super: with self; {
 
   llm-templates-github = callPackage ../development/python-modules/llm-templates-github { };
 
+  llm-tools-quickjs = callPackage ../development/python-modules/llm-tools-quickjs { };
+
   llm-venice = callPackage ../development/python-modules/llm-venice { };
 
   llm-video-frames = callPackage ../development/python-modules/llm-video-frames { };
