@@ -139,7 +139,7 @@ import ../../make-test-python.nix (
                   "credit_facade_credentials":{"type":"basic","username":"merchant","password":"merchant"}
                 }'
                 """,
-                "-sSfL 'http://merchant:8083/private/accounts'"
+                "-sSfL 'http://merchant:8083/instances/default/private/accounts'"
             ])
             # Register a new product to be ordered
             succeed(merchant, [
@@ -155,7 +155,7 @@ import ../../make-test-python.nix (
                   "next_restock": { "t_s": "never" }
                 }'
                 """,
-                "-sSfL 'http://merchant:8083/private/products'"
+                "-sSfL 'http://merchant:8083/instances/default/private/products'"
             ])
 
 
@@ -214,7 +214,7 @@ import ../../make-test-python.nix (
                       "inventory_products": [{ "product_id": "1", "quantity": 1 }]
                     }'
                     """,
-                    "-sSfL 'http://merchant:8083/private/orders'"
+                    "-sSfL 'http://merchant:8083/instances/default/private/orders'"
                 ])
             )
             order_id = response["order_id"]
@@ -224,7 +224,7 @@ import ../../make-test-python.nix (
             response = json.loads(
                 succeed(merchant, [
                     "curl -sSfL",
-                    f"http://merchant:8083/private/orders/{order_id}"
+                    f"http://merchant:8083/instances/default/private/orders/{order_id}"
                 ])
             )
             wallet_cli("run-until-done")
