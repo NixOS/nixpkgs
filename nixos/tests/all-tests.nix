@@ -714,6 +714,7 @@ in
   kthxbye = runTest ./kthxbye.nix;
   kubernetes = handleTestOn [ "x86_64-linux" ] ./kubernetes { };
   kubo = import ./kubo { inherit recurseIntoAttrs runTest; };
+  lact = runTest ./lact.nix;
   ladybird = runTest ./ladybird.nix;
   languagetool = runTest ./languagetool.nix;
   lanraragi = runTest ./lanraragi.nix;

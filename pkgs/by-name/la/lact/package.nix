@@ -14,6 +14,7 @@
   coreutils,
   systemdMinimal,
   nix-update-script,
+  nixosTests,
   hwdata,
   fuse3,
   autoAddDriverRunpath,
@@ -117,6 +118,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   passthru.updateScript = nix-update-script { };
+  passthru.tests = {
+    inherit (nixosTests) lact;
+  };
 
   meta = {
     description = "Linux GPU Configuration Tool for AMD and NVIDIA";
