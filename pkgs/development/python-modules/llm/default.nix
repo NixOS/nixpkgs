@@ -75,6 +75,7 @@ let
       llm-groq ? false,
       llm-hacker-news ? false,
       llm-jq ? false,
+      llm-llama-server ? false,
       llm-mistral ? false,
       llm-ollama ? false,
       llm-openai-plugin ? false,
