@@ -5,7 +5,7 @@
   makeBinaryWrapper,
 }:
 
-bundlerApp {
+bundlerApp rec {
   pname = "fastlane";
   gemdir = ./.;
   exes = [ "fastlane" ];
@@ -16,7 +16,7 @@ bundlerApp {
     wrapProgram $out/bin/fastlane --set FASTLANE_SKIP_UPDATE_CHECK 1
   '';
 
-  passthru.updateScript = bundlerUpdateScript "fastlane";
+  passthru.updateScript = bundlerUpdateScript pname;
 
   meta = with lib; {
     description = "Tool to automate building and releasing iOS and Android apps";
