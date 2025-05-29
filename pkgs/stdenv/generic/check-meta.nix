@@ -111,8 +111,10 @@ let
 
   hasNoMaintainers =
     attrs:
-    (attrs ? meta.maintainers && (length attrs.meta.maintainers) == 0)
-    && (attrs ? meta.teams && (length attrs.meta.teams) == 0);
+    (!attrs ? outputHash)
+    && (attrs ? meta.description)
+    && (attrs.meta.maintainers or [ ] == [ ])
+    && (attrs.meta.teams or [ ] == [ ]);
 
   isMarkedBroken = attrs: attrs.meta.broken or false;
 
