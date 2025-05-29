@@ -1302,6 +1302,7 @@ in
   systemd-escaping = runTest ./systemd-escaping.nix;
   systemd-initrd-bridge = runTest ./systemd-initrd-bridge.nix;
   systemd-initrd-btrfs-raid = runTest ./systemd-initrd-btrfs-raid.nix;
+  systemd-initrd-credentials = runTest ./systemd-initrd-credentials.nix;
   systemd-initrd-luks-fido2 = runTest ./systemd-initrd-luks-fido2.nix;
   systemd-initrd-luks-keyfile = runTest ./systemd-initrd-luks-keyfile.nix;
   systemd-initrd-luks-empty-passphrase = runTest {
