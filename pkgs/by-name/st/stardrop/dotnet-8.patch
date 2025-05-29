@@ -1,0 +1,830 @@
+diff --git a/Stardrop/App.axaml b/Stardrop/App.axaml
+index 5c386ac..d24dbb2 100644
+--- a/Stardrop/App.axaml
++++ b/Stardrop/App.axaml
+@@ -8,7 +8,6 @@
+ 	</Application.DataTemplates>
+ 
+ 	<Application.Styles>
+-		<FluentTheme Mode="Light" />
+-		<StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
++		<FluentTheme />
+ 	</Application.Styles>
+ </Application>
+diff --git a/Stardrop/App.axaml.cs b/Stardrop/App.axaml.cs
+index d8b5614..0fbc1a2 100644
+--- a/Stardrop/App.axaml.cs
++++ b/Stardrop/App.axaml.cs
+@@ -2,14 +2,16 @@ using Avalonia;
+ using Avalonia.Controls.ApplicationLifetimes;
+ using Avalonia.Markup.Xaml;
+ using Avalonia.Styling;
++using Microsoft.Extensions.DependencyInjection;
+ using Stardrop.Models.Nexus.Web;
+ using Stardrop.Utilities;
+-using Stardrop.Utilities.External;
+ using Stardrop.Views;
+ using System;
+ using System.Collections.Generic;
+ using System.IO;
+ using System.Linq;
++using Projektanker.Icons.Avalonia;
++using Projektanker.Icons.Avalonia.MaterialDesign;
+ 
+ namespace Stardrop
+ {
+@@ -17,39 +19,67 @@ namespace Stardrop
+     {
+         public override void Initialize()
+         {
++            base.Initialize();  // Ensure Avalonia's internal initialization happens
++
+             AvaloniaXamlLoader.Load(this);
+ 
+-            // Verify that the helper is instantiated, if it isn't then this code is likely reached by Avalonia's previewer and bypassed Main
++            // Initialize helper if it's null
+             if (Program.helper is null)
+             {
+                 Program.helper = new Helper();
+             }
+ 
+-            // Load in translations
++            // Load translations
+             Program.translation.LoadTranslations();
+ 
+-            // Handle adding the themes
+-            Dictionary<string, IStyle> themes = new Dictionary<string, IStyle>();
+-            foreach (string fileFullName in Directory.EnumerateFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Themes"), "*.xaml"))
++            // Load and apply themes
++            LoadThemes();
++
++            // Register MDI icons (or any other icons you may want to use)
++            IconProvider.Current.Register<MaterialDesignIconProvider>();
++    
++            // Set the selected theme, fallback to the first if the selected one is not available
++            Current.Styles.Insert(0, GetThemeForCurrentSettings());
++        }
++
++        private void LoadThemes()
++        {
++            var themeDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Themes");
++            Dictionary<string, Styles> themes = new Dictionary<string, Styles>();
++
++            foreach (string fileFullName in Directory.EnumerateFiles(themeDirectory, "*.xaml"))
+             {
+                 try
+                 {
+                     var themeName = Path.GetFileNameWithoutExtension(fileFullName);
+                     themes[themeName] = AvaloniaRuntimeXamlLoader.Parse<Styles>(File.ReadAllText(fileFullName));
+-                    Program.helper.Log($"Loaded theme {Path.GetFileNameWithoutExtension(fileFullName)}", Helper.Status.Debug);
++                    Program.helper.Log($"Loaded theme {themeName}", Helper.Status.Debug);
+                 }
+                 catch (Exception ex)
+                 {
+-                    Program.helper.Log($"Unable to load theme on {Path.GetFileNameWithoutExtension(fileFullName)}: {ex}", Helper.Status.Warning);
++                    Program.helper.Log($"Unable to load theme from {fileFullName}: {ex}", Helper.Status.Warning);
+                 }
+             }
+ 
+-            Current.Styles.Insert(0, !themes.ContainsKey(Program.settings.Theme) ? themes.Values.First() : themes[Program.settings.Theme]);
++            Current.Styles.Insert(0, themes.GetValueOrDefault(Program.settings.Theme, themes.Values.First()));
++        }
++
++        private Styles GetThemeForCurrentSettings()
++        {
++            var themeDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Themes");
++            var availableThemes = Directory.EnumerateFiles(themeDirectory, "*.xaml")
++                .ToDictionary(
++                    file => Path.GetFileNameWithoutExtension(file),
++                    file => AvaloniaRuntimeXamlLoader.Parse<Styles>(File.ReadAllText(file))
++                );
++
++            // Return the selected theme or the first available one
++            return availableThemes.GetValueOrDefault(Program.settings.Theme, availableThemes.Values.First());
+         }
+ 
+         private async void OnUrlsOpen(object? sender, UrlOpenedEventArgs e, MainWindow mainWindow)
+         {
+-            foreach (string? url in e.Urls.Where(u => String.IsNullOrEmpty(u) is false))
++            foreach (string? url in e.Urls.Where(u => !string.IsNullOrEmpty(u)))
+             {
+                 await mainWindow.ProcessNXMLink(new NXM() { Link = url, Timestamp = DateTime.Now });
+             }
+@@ -62,7 +92,7 @@ namespace Stardrop
+                 var mainWindow = new MainWindow();
+                 desktop.MainWindow = mainWindow;
+ 
+-                // Register events
++                // Register event handler for URLs
+                 this.UrlsOpened += (sender, e) => OnUrlsOpen(sender, e, mainWindow);
+             }
+ 
+diff --git a/Stardrop/Program.cs b/Stardrop/Program.cs
+index d1f6e1c..bbe9c20 100644
+--- a/Stardrop/Program.cs
++++ b/Stardrop/Program.cs
+@@ -1,6 +1,7 @@
+ using Avalonia;
+ using Avalonia.ReactiveUI;
+ using CommandLine;
++using Microsoft.Extensions.DependencyInjection;
+ using Projektanker.Icons.Avalonia;
+ using Projektanker.Icons.Avalonia.MaterialDesign;
+ using Semver;
+@@ -45,9 +46,6 @@ namespace Stardrop
+             public string? NXMLink { get; set; }
+         }
+ 
+-        // Initialization code. Don't use any Avalonia, third-party APIs or any
+-        // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
+-        // yet and stuff might break.
+         [STAThread]
+         public static void Main(string[] args)
+         {
+@@ -146,6 +144,7 @@ namespace Stardrop
+                 }
+                 translation.LoadTranslations(translation.GetLanguage(settings.Language));
+ 
++                // Start Avalonia with the DI setup
+                 BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+             }
+             catch (Exception ex)
+@@ -232,12 +231,23 @@ namespace Stardrop
+         // Avalonia configuration, don't remove; also used by visual designer.
+         public static AppBuilder BuildAvaloniaApp()
+         {
++            // Create a new service collection and configure it
++            var services = new ServiceCollection();
++            services.AddSingleton<MaterialDesignIconProvider>();
++
++            // Create the service provider
++            var serviceProvider = services.BuildServiceProvider();
++
+             return AppBuilder.Configure<App>()
+                 .UseReactiveUI()
+                 .UsePlatformDetect()
+-                .LogToTrace()
+-                .WithIcons(container => container
+-                .Register<MaterialDesignIconProvider>());
++                .AfterSetup(_ =>
++                {
++                    // At this point, you have access to the service provider
++                    // If you need to resolve services, you can do so here or in your views
++                    var iconProvider = serviceProvider.GetRequiredService<MaterialDesignIconProvider>();
++                    // You can inject the iconProvider into your app or window here as needed
++                });
+         }
+     }
+ }
+diff --git a/Stardrop/Stardrop.csproj b/Stardrop/Stardrop.csproj
+index 3eb4c3a..762ba46 100644
+--- a/Stardrop/Stardrop.csproj
++++ b/Stardrop/Stardrop.csproj
+@@ -1,7 +1,9 @@
+ ﻿<Project Sdk="Microsoft.NET.Sdk">
+ 	<PropertyGroup>
+ 		<OutputType>WinExe</OutputType>
+-		<TargetFramework>net7.0</TargetFramework>
++		<TargetFramework>net8.0</TargetFramework>
++		<WarningLevel>0</WarningLevel>
++    	<TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+ 		<Nullable>enable</Nullable>
+ 		<Version>1.2.1</Version>
+ 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+@@ -30,20 +32,24 @@
+ 		<None Remove="Themes\Solarized-Lite.xaml" />
+ 	</ItemGroup>
+ 	<ItemGroup>
+-		<PackageReference Include="Avalonia" Version="0.10.17" />
+-		<PackageReference Include="Avalonia.Controls.DataGrid" Version="0.10.17" />
+-		<PackageReference Include="Avalonia.Desktop" Version="0.10.17" />
++		<PackageReference Include="Avalonia" Version="11.2.8" />
++		<PackageReference Include="Avalonia.Controls.DataGrid" Version="11.2.8" />
++		<PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.1.5" />
++		<PackageReference Include="Avalonia.Desktop" Version="11.2.8" />
+ 		<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+-		<PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.17" />
+-		<PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="0.10.17" />
+-		<PackageReference Include="Avalonia.ReactiveUI" Version="0.10.17" />
++		<PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.2.8" />
++		<PackageReference Include="Avalonia.Markup.Xaml.Loader" Version="11.2.8" />
++		<PackageReference Include="Avalonia.ReactiveUI" Version="11.2.8" />
++		<PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.8" />
++		<PackageReference Include="Avalonia.Themes.Simple" Version="11.2.8" />
+ 		<PackageReference Include="CommandLineParser" Version="2.9.1" />
+-		<PackageReference Include="Json.More.Net" Version="2.0.1" />
++		<PackageReference Include="Json.More.Net" Version="2.1.2" />
++		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.4" />
+ 		<PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
+-		<PackageReference Include="Projektanker.Icons.Avalonia" Version="5.13.0" />
+-		<PackageReference Include="Projektanker.Icons.Avalonia.MaterialDesign" Version="5.13.0" />
+-		<PackageReference Include="semver" Version="2.3.0" />
+-		<PackageReference Include="SharpCompress" Version="0.32.1" />
++		<PackageReference Include="Projektanker.Icons.Avalonia" Version="9.6.1" />
++		<PackageReference Include="Projektanker.Icons.Avalonia.MaterialDesign" Version="9.6.1" />
++		<PackageReference Include="semver" Version="3.0.0" />
++		<PackageReference Include="SharpCompress" Version="0.39.0" />
+ 	</ItemGroup>
+ 	<ItemGroup>
+ 		<Compile Update="Views\FlexibleOptionWindow.axaml.cs">
+diff --git a/Stardrop/ViewLocator.cs b/Stardrop/ViewLocator.cs
+index 6a7d132..0e9b70a 100644
+--- a/Stardrop/ViewLocator.cs
++++ b/Stardrop/ViewLocator.cs
+@@ -7,14 +7,22 @@ namespace Stardrop
+ {
+     public class ViewLocator : IDataTemplate
+     {
+-        public IControl Build(object data)
++        public Control Build(object data)
+         {
+             var name = data.GetType().FullName!.Replace("ViewModel", "View");
+             var type = Type.GetType(name);
+ 
+             if (type != null)
+             {
+-                return (Control)Activator.CreateInstance(type)!;
++                var control = Activator.CreateInstance(type) as Control;
++                if (control != null)
++                {
++                    return control;
++                }
++                else
++                {
++                    return new TextBlock { Text = "Error: Type does not implement Control" };
++                }
+             }
+             else
+             {
+diff --git a/Stardrop/ViewModels/MainWindowViewModel.cs b/Stardrop/ViewModels/MainWindowViewModel.cs
+index f7bfa86..065437c 100644
+--- a/Stardrop/ViewModels/MainWindowViewModel.cs
++++ b/Stardrop/ViewModels/MainWindowViewModel.cs
+@@ -24,7 +24,7 @@ namespace Stardrop.ViewModels
+     public class MainWindowViewModel : ViewModelBase
+     {
+         private string ChromeHint { get; set; } = "NoChrome";
+-        private bool HasSystemDecorations { get; set; } = true;
++        private SystemDecorations SystemDecorations { get; set; } = SystemDecorations.Full;
+         private bool ShowTitle { get; set; } = true;
+         private bool ShowMainMenu { get; set; } = true;
+         private bool ShowWindowMenu { get; set; } = true;
+diff --git a/Stardrop/Views/DownloadPanel.axaml b/Stardrop/Views/DownloadPanel.axaml
+index edb9843..c67a2fe 100644
+--- a/Stardrop/Views/DownloadPanel.axaml
++++ b/Stardrop/Views/DownloadPanel.axaml
+@@ -54,7 +54,7 @@
+                        Text="{i18n:Translate ui.downloads_panel.no_downloads_label}"
+                        IsVisible="{Binding !Downloads.Count}"/>
+             <ItemsRepeater x:Name="DownloadItems" 
+-                           Items="{Binding Downloads}"
++                           ItemsSource="{Binding Downloads}"
+                            Margin="0 12 0 12"
+                            IsVisible="{Binding !!Downloads.Count}">
+                 <ItemsRepeater.Layout>
+diff --git a/Stardrop/Views/FlexibleOptionWindow.axaml b/Stardrop/Views/FlexibleOptionWindow.axaml
+index 06bbc08..7c346c7 100644
+--- a/Stardrop/Views/FlexibleOptionWindow.axaml
++++ b/Stardrop/Views/FlexibleOptionWindow.axaml
+@@ -12,7 +12,7 @@
+         Width="300"
+         Height="150"
+         Background="{DynamicResource ThemeBackgroundBrush}"
+-        HasSystemDecorations="false"
++        SystemDecorations="None"
+         Icon="/Assets/icon.ico">
+ 
+ 	<Window.Styles>
+diff --git a/Stardrop/Views/FlexibleOptionWindow.axaml.cs b/Stardrop/Views/FlexibleOptionWindow.axaml.cs
+index 4a3c747..a4022b0 100644
+--- a/Stardrop/Views/FlexibleOptionWindow.axaml.cs
++++ b/Stardrop/Views/FlexibleOptionWindow.axaml.cs
+@@ -13,15 +13,15 @@ namespace Stardrop.Views
+ 
+         public FlexibleOptionWindow()
+         {
+-            InitializeComponent();
+-
++            #if DEBUG
++                        InitializeComponent(attachDevTools: true);
++            #else
++                        InitializeComponent();
++            #endif
++            
+             // Set the main window view
+             _viewModel = new FlexibleOptionWindowViewModel();
+             DataContext = _viewModel;
+-
+-#if DEBUG
+-            this.AttachDevTools();
+-#endif
+         }
+ 
+         public FlexibleOptionWindow(string messageText, string? firstButtonText = null, string? secondButtonText = null, string? thirdButtonText = null) : this()
+@@ -70,9 +70,6 @@ namespace Stardrop.Views
+             }
+         }
+ 
+-        private void InitializeComponent()
+-        {
+-            AvaloniaXamlLoader.Load(this);
+-        }
++
+     }
+ }
+diff --git a/Stardrop/Views/MainWindow.axaml b/Stardrop/Views/MainWindow.axaml
+index 179ee4e..ddd564e 100644
+--- a/Stardrop/Views/MainWindow.axaml
++++ b/Stardrop/Views/MainWindow.axaml
+@@ -16,13 +16,12 @@
+         Width="1430"
+         Height="800"
+         Background="{DynamicResource ThemeBackgroundBrush}"
+-        HasSystemDecorations="{Binding HasSystemDecorations}"
++        SystemDecorations="{Binding SystemDecorations}"
+         ExtendClientAreaToDecorationsHint="true"
+         ExtendClientAreaChromeHints="{Binding ChromeHint}"
+         ExtendClientAreaTitleBarHeightHint="-1"
+         CanResize="True"
+         Opened="MainWindow_Opened"
+-        Closing="MainWindow_Closing"
+         WindowStartupLocation="CenterScreen"
+         Icon="/Assets/icon.ico">
+ 
+@@ -95,9 +94,7 @@
+ 										CornerRadius="{DynamicResource OverlayCornerRadius}">
+ 									<ScrollViewer Classes="menuscroller">
+ 										<ItemsPresenter Name="PART_ItemsPresenter"
+-														Items="{TemplateBinding Items}"
+ 														ItemsPanel="{TemplateBinding ItemsPanel}"
+-														ItemTemplate="{TemplateBinding ItemTemplate}"
+ 														Margin="{DynamicResource MenuFlyoutScrollerMargin}"
+ 														Grid.IsSharedSizeScope="True" />
+ 									</ScrollViewer>
+@@ -218,11 +215,14 @@
+ 										BorderThickness="1">
+ 									<ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+ 												  VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
+-										<ItemsPresenter Name="PART_ItemsPresenter"
+-														Items="{TemplateBinding Items}"
+-														ItemsPanel="{TemplateBinding ItemsPanel}"
+-														ItemTemplate="{TemplateBinding ItemTemplate}"
+-														VirtualizationMode="{TemplateBinding VirtualizationMode}" />
++													<ItemsPresenter Name="PART_ItemsPresenter"
++																	ItemsPanel="{TemplateBinding ItemsPanel}">
++														<ItemsPresenter.ItemsPanel>
++															<ItemsPanelTemplate>
++																<VirtualizingStackPanel />
++															</ItemsPanelTemplate>
++														</ItemsPresenter.ItemsPanel>
++													</ItemsPresenter>
+ 									</ScrollViewer>
+ 								</Border>
+ 							</Popup>
+@@ -411,8 +411,6 @@
+ 			<Button Name="maximizeButton" i:Attached.Icon="mdi-window-maximize" Margin="0 0 -10 0" Foreground="{DynamicResource ThemeForegroundBrush}" Background="Transparent"/>
+ 			<Button Name="exitButton" i:Attached.Icon="mdi-close" Margin="0 0 -10 0" Foreground="{DynamicResource ThemeForegroundBrush}" Background="Transparent"/>
+ 		</Menu>
+-		<!-- ToolBar -->
+-		<Separator />
+ 
+ 		<DockPanel Name="profileBar" Grid.Row="2" Grid.Column="0">
+ 			<TextBlock Text="{i18n:Translate ui.main_window.labels.profile}" Foreground="{DynamicResource ThemeForegroundBrush}" Padding="7" Focusable="False" VerticalAlignment="Center" />
+@@ -457,7 +455,7 @@
+ 		</DockPanel>
+ 
+ 		<Border Name="dragOverBorder" Margin="10" DragDrop.AllowDrop="True" Grid.Row="3" Grid.ColumnSpan="2" BorderBrush="{DynamicResource HighlightBrush}" BorderThickness="2">
+-			<DataGrid Name="modGrid" Foreground="{DynamicResource DataGridRowForeground}" Background="{DynamicResource DataGridRowBackground}" AlternatingRowBackground="{DynamicResource AlternativeDataGridRowBackground}" CanUserSortColumns="True" CanUserResizeColumns="True" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
++			<DataGrid Name="modGrid" Foreground="{DynamicResource DataGridRowForeground}" Background="{DynamicResource DataGridRowBackground}" CanUserSortColumns="True" CanUserResizeColumns="True" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+ 				<DataGrid.Resources>
+ 					<ContextMenu x:Key="GridColumnContextMenu" Name="gridColumnContextMenu" DataContext="{Binding $parent[DataGrid].DataContext}">
+ 						<MenuItem Header="{i18n:Translate ui.main_window.menu_items.context.columns.show_hide}" />
+@@ -499,6 +497,12 @@
+ 						<Setter Property="ContextMenu" Value="{StaticResource GridRowContextMenu}" />
+ 						<Setter Property="ToolTip.Tip" Value="{Binding Summary}" />
+ 					</Style>
++					<Style Selector="DataGridRow:nth-child(odd)">
++            			<Setter Property="Background" Value="{DynamicResource AlternativeDataGridRowBackground}"/>
++        			</Style>
++        			<Style Selector="DataGridRow:nth-child(even)">
++            			<Setter Property="Background" Value="{DynamicResource DataGridRowBackground}"/>
++        			</Style>
+ 				</DataGrid.Styles>
+ 				<DataGrid.Columns>
+ 					<DataGridTemplateColumn Header="{i18n:Translate ui.main_window.menu_headers.enabled}" Width="25" CanUserResize="False" CanUserSort="True" SortMemberPath="IsEnabled">
+@@ -554,7 +558,7 @@
+ 						</DataGridTemplateColumn.Header>
+ 						<DataGridTemplateColumn.CellTemplate>
+ 							<DataTemplate>
+-								<ListBox Items="{Binding HardRequirements}" Background="Transparent">
++								<ListBox ItemsSource="{Binding HardRequirements}" Background="Transparent">
+ 									<ListBox.ItemTemplate>
+ 										<DataTemplate>
+ 											<TextBlock Text="{Binding Path=Name}" Foreground="{DynamicResource DataGridRowForeground}" />
+@@ -570,7 +574,7 @@
+ 						</DataGridTemplateColumn.Header>
+ 						<DataGridTemplateColumn.CellTemplate>
+ 							<DataTemplate>
+-								<ListBox Items="{Binding MissingRequirements}" Background="Transparent">
++								<ListBox ItemsSource="{Binding MissingRequirements}" Background="Transparent">
+ 									<ListBox.ItemTemplate>
+ 										<DataTemplate>
+ 											<Button Content="{Binding Path=Name}" Classes="hyperlink" Command="{Binding $parent[DataGrid].DataContext.OpenBrowser}" CommandParameter="{Binding GenericLink}" Foreground="{DynamicResource HighlightForegroundBrush}"/>
+diff --git a/Stardrop/Views/MainWindow.axaml.cs b/Stardrop/Views/MainWindow.axaml.cs
+index 5faebc0..9b3b1e6 100644
+--- a/Stardrop/Views/MainWindow.axaml.cs
++++ b/Stardrop/Views/MainWindow.axaml.cs
+@@ -52,7 +52,11 @@ namespace Stardrop.Views
+ 
+         public MainWindow()
+         {
+-            InitializeComponent();
++            #if DEBUG
++                        InitializeComponent(attachDevTools: true);
++            #else
++                        InitializeComponent();
++            #endif
+ 
+             // Set the main window view
+             _viewModel = new MainWindowViewModel(Pathing.defaultModPath, Program.ApplicationVersion);
+@@ -63,7 +67,7 @@ namespace Stardrop.Views
+             var modGrid = this.FindControl<DataGrid>("modGrid");
+             modGrid.IsReadOnly = true;
+             modGrid.LoadingRow += (sender, e) => { e.Row.Header = e.Row.GetIndex() + 1; };
+-            modGrid.Items = _viewModel.DataView;
++            modGrid.ItemsSource = _viewModel.DataView;
+             AddHandler(DragDrop.DropEvent, Drop);
+             AddHandler(DragDrop.DragOverEvent, (sender, e) =>
+             {
+@@ -118,7 +122,7 @@ namespace Stardrop.Views
+             // Set profile list
+             _editorView = new ProfileEditorViewModel(Pathing.GetProfilesFolderPath());
+             var profileComboBox = this.FindControl<ComboBox>("profileComboBox");
+-            profileComboBox.Items = _editorView.Profiles;
++            profileComboBox.ItemsSource = _editorView.Profiles;
+             profileComboBox.SelectedIndex = 0;
+             if (_editorView.Profiles.FirstOrDefault(p => p.Name == Program.settings.LastSelectedProfileName) is Profile oldProfile && oldProfile is not null)
+             {
+@@ -172,6 +176,9 @@ namespace Stardrop.Views
+             // Handle filtering via textbox
+             this.FindControl<TextBox>("searchBox").AddHandler(KeyUpEvent, SearchBox_KeyUp);
+ 
++            // Subscribe to the Closing event
++            this.Closing += MainWindow_Closing;
++
+             // Handle filtering by searchFilterColumnBox
+             var searchFilterColumnBox = this.FindControl<ListBox>("searchFilterColumnBox");
+             searchFilterColumnBox.SelectionChanged += FilterListBox_SelectionChanged;
+@@ -195,10 +202,6 @@ namespace Stardrop.Views
+             }
+ 
+             Program.helper.Log($"Initialization complete!");
+-
+-#if DEBUG
+-            this.AttachDevTools();
+-#endif
+         }
+ 
+         private void MainWindow_KeyDown(object? sender, KeyEventArgs e)
+@@ -521,7 +524,7 @@ namespace Stardrop.Views
+             {
+                 originallySelectedModPaths.Add(selectedMod.Path);
+             }
+-            foreach (Mod mod in modGrid.Items)
++            foreach (Mod mod in modGrid.ItemsSource)
+             {
+                 if (originallySelectedModPaths.Contains(mod.Path))
+                 {
+@@ -2642,9 +2645,6 @@ namespace Stardrop.Views
+             });
+         }
+ 
+-        private void InitializeComponent()
+-        {
+-            AvaloniaXamlLoader.Load(this);
+-        }
++
+     }
+ }
+diff --git a/Stardrop/Views/MessageWindow.axaml b/Stardrop/Views/MessageWindow.axaml
+index 36f07ee..d3327a7 100644
+--- a/Stardrop/Views/MessageWindow.axaml
++++ b/Stardrop/Views/MessageWindow.axaml
+@@ -12,7 +12,7 @@
+         Width="300"
+         Height="150"
+         Background="{DynamicResource ThemeBackgroundBrush}"
+-        HasSystemDecorations="false"
++        SystemDecorations="None"
+         Icon="/Assets/icon.ico">
+ 
+ 	<Window.Styles>
+diff --git a/Stardrop/Views/MessageWindow.axaml.cs b/Stardrop/Views/MessageWindow.axaml.cs
+index 78560c6..ec67f36 100644
+--- a/Stardrop/Views/MessageWindow.axaml.cs
++++ b/Stardrop/Views/MessageWindow.axaml.cs
+@@ -12,15 +12,15 @@ namespace Stardrop.Views
+ 
+         public MessageWindow()
+         {
+-            InitializeComponent();
++            #if DEBUG
++                        InitializeComponent(attachDevTools: true);
++            #else
++                        InitializeComponent();
++            #endif
+ 
+             // Set the main window view
+             _viewModel = new MessageWindowViewModel();
+             DataContext = _viewModel;
+-
+-#if DEBUG
+-            this.AttachDevTools();
+-#endif
+         }
+ 
+         public MessageWindow(string messageText, string? positiveButtonText = null, string? negativeButtonText = null) : this()
+@@ -45,9 +45,6 @@ namespace Stardrop.Views
+             this.Close(false);
+         }
+ 
+-        private void InitializeComponent()
+-        {
+-            AvaloniaXamlLoader.Load(this);
+-        }
++
+     }
+ }
+diff --git a/Stardrop/Views/NexusInfo.axaml.cs b/Stardrop/Views/NexusInfo.axaml.cs
+index fbc497c..3e4b30f 100644
+--- a/Stardrop/Views/NexusInfo.axaml.cs
++++ b/Stardrop/Views/NexusInfo.axaml.cs
+@@ -14,10 +14,11 @@ namespace Stardrop.Views
+     {
+         public NexusInfo()
+         {
+-            InitializeComponent();
+-#if DEBUG
+-            this.AttachDevTools();
+-#endif
++            #if DEBUG
++                        InitializeComponent(attachDevTools: true);
++            #else
++                        InitializeComponent();
++            #endif
+         }
+ 
+ 
+@@ -39,9 +40,6 @@ namespace Stardrop.Views
+             this.Close(true);
+         }
+ 
+-        private void InitializeComponent()
+-        {
+-            AvaloniaXamlLoader.Load(this);
+-        }
++
+     }
+ }
+diff --git a/Stardrop/Views/NexusLogin.axaml.cs b/Stardrop/Views/NexusLogin.axaml.cs
+index 4044e1a..0f8c2a9 100644
+--- a/Stardrop/Views/NexusLogin.axaml.cs
++++ b/Stardrop/Views/NexusLogin.axaml.cs
+@@ -10,10 +10,11 @@ namespace Stardrop.Views
+     {
+         public NexusLogin()
+         {
+-            InitializeComponent();
+-#if DEBUG
+-            this.AttachDevTools();
+-#endif
++            #if DEBUG
++                        InitializeComponent(attachDevTools: true);
++            #else
++                        InitializeComponent();
++            #endif
+         }
+ 
+         public NexusLogin(MainWindowViewModel viewModel) : this()
+@@ -61,9 +62,6 @@ namespace Stardrop.Views
+             ApplyChanges();
+         }
+ 
+-        private void InitializeComponent()
+-        {
+-            AvaloniaXamlLoader.Load(this);
+-        }
++
+     }
+ }
+diff --git a/Stardrop/Views/ProfileEditor.axaml b/Stardrop/Views/ProfileEditor.axaml
+index 8e80f0a..c2913ae 100644
+--- a/Stardrop/Views/ProfileEditor.axaml
++++ b/Stardrop/Views/ProfileEditor.axaml
+@@ -13,7 +13,7 @@
+         Width="500"
+         Height="400"
+         Background="{DynamicResource ThemeBackgroundBrush}"
+-        HasSystemDecorations="true"
++        SystemDecorations="Full"
+         ExtendClientAreaToDecorationsHint="true"
+         ExtendClientAreaChromeHints="NoChrome"
+         ExtendClientAreaTitleBarHeightHint="-1"
+diff --git a/Stardrop/Views/ProfileEditor.axaml.cs b/Stardrop/Views/ProfileEditor.axaml.cs
+index 316286e..e3730c4 100644
+--- a/Stardrop/Views/ProfileEditor.axaml.cs
++++ b/Stardrop/Views/ProfileEditor.axaml.cs
+@@ -14,11 +14,11 @@ namespace Stardrop.Views
+ 
+         public ProfileEditor()
+         {
+-            InitializeComponent();
+-
+-#if DEBUG
+-            this.AttachDevTools();
+-#endif
++            #if DEBUG
++                        InitializeComponent(attachDevTools: true);
++            #else
++                        InitializeComponent();
++            #endif
+         }
+ 
+         public ProfileEditor(ProfileEditorViewModel viewModel) : this()
+@@ -27,7 +27,7 @@ namespace Stardrop.Views
+ 
+             // Load the profiles
+             var profileListBox = this.FindControl<ListBox>("profileList");
+-            profileListBox.Items = _viewModel.Profiles;
++            profileListBox.ItemsSource = _viewModel.Profiles;
+             profileListBox.SelectedIndex = 0;
+             profileListBox.SelectionChanged += ProfileListBox_SelectionChanged;
+ 
+diff --git a/Stardrop/Views/ProfileNaming.axaml.cs b/Stardrop/Views/ProfileNaming.axaml.cs
+index ca887a5..e3f708f 100644
+--- a/Stardrop/Views/ProfileNaming.axaml.cs
++++ b/Stardrop/Views/ProfileNaming.axaml.cs
+@@ -16,10 +16,11 @@ namespace Stardrop.Views
+ 
+         public ProfileNaming()
+         {
+-            InitializeComponent();
+-#if DEBUG
+-            this.AttachDevTools();
+-#endif
++            #if DEBUG
++                        InitializeComponent(attachDevTools: true);
++            #else
++                        InitializeComponent();
++            #endif
+         }
+ 
+         public ProfileNaming(ProfileEditorViewModel parentView, Profile? renameTarget = null) : this()
+@@ -89,9 +90,6 @@ namespace Stardrop.Views
+             }
+         }
+ 
+-        private void InitializeComponent()
+-        {
+-            AvaloniaXamlLoader.Load(this);
+-        }
++
+     }
+ }
+diff --git a/Stardrop/Views/SettingsWindow.axaml b/Stardrop/Views/SettingsWindow.axaml
+index 420ac1a..b07f8c6 100644
+--- a/Stardrop/Views/SettingsWindow.axaml
++++ b/Stardrop/Views/SettingsWindow.axaml
+@@ -12,7 +12,7 @@
+         MinHeight="430"
+         Width="430"
+         Background="{DynamicResource ThemeBackgroundBrush}"
+-        HasSystemDecorations="true"
++        SystemDecorations="Full"
+         ExtendClientAreaToDecorationsHint="true"
+         ExtendClientAreaChromeHints="NoChrome"
+         ExtendClientAreaTitleBarHeightHint="-1"
+@@ -113,11 +113,14 @@
+ 										BorderThickness="1">
+ 									<ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+ 												  VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
+-										<ItemsPresenter Name="PART_ItemsPresenter"
+-														Items="{TemplateBinding Items}"
+-														ItemsPanel="{TemplateBinding ItemsPanel}"
+-														ItemTemplate="{TemplateBinding ItemTemplate}"
+-														VirtualizationMode="{TemplateBinding VirtualizationMode}" />
++													<ItemsPresenter Name="PART_ItemsPresenter"
++																	ItemsPanel="{TemplateBinding ItemsPanel}">
++														<ItemsPresenter.ItemsPanel>
++															<ItemsPanelTemplate>
++																<VirtualizingStackPanel />
++															</ItemsPanelTemplate>
++														</ItemsPresenter.ItemsPanel>
++													</ItemsPresenter>
+ 									</ScrollViewer>
+ 								</Border>
+ 							</Popup>
+diff --git a/Stardrop/Views/SettingsWindow.axaml.cs b/Stardrop/Views/SettingsWindow.axaml.cs
+index d7ebed3..dbb65c6 100644
+--- a/Stardrop/Views/SettingsWindow.axaml.cs
++++ b/Stardrop/Views/SettingsWindow.axaml.cs
+@@ -62,7 +62,7 @@ namespace Stardrop.Views
+             }
+ 
+             var themeComboBox = this.FindControl<ComboBox>("themeComboBox");
+-            themeComboBox.Items = _themes.Keys;
++            themeComboBox.ItemsSource = _themes.Keys;
+             themeComboBox.SelectedItem = !_themes.ContainsKey(Program.settings.Theme) ? _themes.Keys.First() : Program.settings.Theme;
+             themeComboBox.SelectionChanged += (sender, e) =>
+             {
+@@ -82,7 +82,7 @@ namespace Stardrop.Views
+             }
+ 
+             var preferredComboBox = this.FindControl<ComboBox>("preferredServerBox");
+-            preferredComboBox.Items = descriptionToServerEnum.Keys;
++            preferredComboBox.ItemsSource = descriptionToServerEnum.Keys;
+             preferredComboBox.SelectedItem = EnumParser.GetDescription(Program.settings.PreferredNexusServer);
+             preferredComboBox.SelectionChanged += (sender, e) =>
+             {
+@@ -91,7 +91,7 @@ namespace Stardrop.Views
+ 
+             // Handle adding the languages
+             var languageComboBox = this.FindControl<ComboBox>("languageComboBox");
+-            languageComboBox.Items = Program.translation.GetAvailableTranslations();
++            languageComboBox.ItemsSource = Program.translation.GetAvailableTranslations();
+             languageComboBox.SelectedItem = String.IsNullOrEmpty(Program.settings.Language) ? Program.translation.GetAvailableTranslations().First() : Program.translation.GetLanguage(Program.settings.Language);
+             languageComboBox.SelectionChanged += (sender, e) =>
+             {
+@@ -111,7 +111,7 @@ namespace Stardrop.Views
+             }
+ 
+             var groupingComboBox = this.FindControl<ComboBox>("groupingComboBox");
+-            groupingComboBox.Items = descriptionToModGroupingEnum.Keys;
++            groupingComboBox.ItemsSource = descriptionToModGroupingEnum.Keys;
+             groupingComboBox.SelectedItem = EnumParser.GetDescription(Program.settings.ModGroupingMethod);
+             groupingComboBox.SelectionChanged += (sender, e) =>
+             {
+@@ -336,10 +336,5 @@ namespace Stardrop.Views
+             textBox.Text = text;
+             textBox.CaretIndex = text.Length - 1;
+         }
+-
+-        private void InitializeComponent()
+-        {
+-            AvaloniaXamlLoader.Load(this);
+-        }
+     }
+ }
+diff --git a/Stardrop/Views/WarningWindow.axaml b/Stardrop/Views/WarningWindow.axaml
+index c56f820..482bffa 100644
+--- a/Stardrop/Views/WarningWindow.axaml
++++ b/Stardrop/Views/WarningWindow.axaml
+@@ -12,7 +12,7 @@
+         Width="300"
+         Height="150"
+         Background="{DynamicResource ThemeBackgroundBrush}"
+-        HasSystemDecorations="false"
++        SystemDecorations="None"
+         Icon="/Assets/icon.ico">
+ 
+ 	<Window.Styles>
+diff --git a/Stardrop/Views/WarningWindow.axaml.cs b/Stardrop/Views/WarningWindow.axaml.cs
+index 9199a65..403c981 100644
+--- a/Stardrop/Views/WarningWindow.axaml.cs
++++ b/Stardrop/Views/WarningWindow.axaml.cs
+@@ -17,18 +17,18 @@ namespace Stardrop.Views
+ 
+         public WarningWindow()
+         {
+-            InitializeComponent();
+-
++            #if DEBUG
++                        InitializeComponent(attachDevTools: true);
++            #else
++                        InitializeComponent();
++            #endif
++            
+             // Set the datacontext
+             _viewModel = new WarningWindowViewModel();
+             DataContext = _viewModel;
+ 
+             this.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+             this.SizeToContent = SizeToContent.Height;
+-
+-#if DEBUG
+-            this.AttachDevTools();
+-#endif
+         }
+ 
+         public WarningWindow(string warningText, string buttonText) : this()
+@@ -106,10 +106,5 @@ namespace Stardrop.Views
+         {
+             this.Close();
+         }
+-
+-        private void InitializeComponent()
+-        {
+-            AvaloniaXamlLoader.Load(this);
+-        }
+     }
+ }
