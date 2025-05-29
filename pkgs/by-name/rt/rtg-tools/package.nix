@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rtg-tools";
-  version = "3.12.1";
+  version = "3.13";
 
   src = fetchFromGitHub {
     owner = "RealTimeGenomics";
     repo = "rtg-tools";
     rev = version;
-    hash = "sha256-fMrrjrgaGxBVxn6qMq2g0oFv6qtfhZcQlkvv1E9Os6Y=";
+    hash = "sha256-vPzKrgnX6BCQmn9aOVWWpFLC6SbPBHZhZ+oL1LCbvmo=";
   };
 
   nativeBuildInputs = [
