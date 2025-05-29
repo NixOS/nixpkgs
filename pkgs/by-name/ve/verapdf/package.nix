@@ -23,7 +23,8 @@ maven.buildMavenPackage rec {
 
   patches = [ ./stable-maven-plugins.patch ];
 
-  mvnHash = "sha256-qRd/IatxEj12wH12JcZwrWfKffaAs+KSuKFN2yhlMyI=";
+  # FIXME: this hash keeps changing over time??
+  mvnHash = "sha256-uFY92BFsIu9B6clwQV3l718DsBxvswANrKEBIFGNXN4=";
 
   nativeBuildInputs = [
     makeWrapper
