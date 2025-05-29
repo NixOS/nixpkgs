@@ -5,6 +5,7 @@
   qtsvg,
   qtwebengine,
   kconfigwidgets,
+  kitemmodels,
 }:
 mkKdeDerivation rec {
   pname = "klevernotes";
@@ -19,6 +20,7 @@ mkKdeDerivation rec {
     qtsvg
     qtwebengine
     kconfigwidgets
+    kitemmodels
   ];
 
   meta.license = with lib.licenses; [
