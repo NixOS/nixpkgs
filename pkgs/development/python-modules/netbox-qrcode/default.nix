@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "netbox-qrcode";
-  version = "0.0.17";
+  version = "0.0.18";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox-qrcode";
     tag = "v${version}";
-    hash = "sha256-uJMGO9LXvaByfvrjNaPyY89Uaf71k1ku+/bfqc4npiQ=";
+    hash = "sha256-8PPab0sByr03zoSI2d+BpxeTnLHmbN+4c+s99x+yNvA=";
   };
 
   build-system = [ setuptools ];
