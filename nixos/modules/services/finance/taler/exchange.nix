@@ -133,24 +133,8 @@ in
       after = [ "taler-exchange-httpd.service" ];
     };
 
-    # Taken from https://docs.taler.net/taler-exchange-manual.html#exchange-database-setup
-    # TODO: Why does aggregator need DELETE?
-    systemd.services."taler-${talerComponent}-dbinit".script =
-      let
-        deletePerm = name: lib.optionalString (name == "aggregator") ",DELETE";
-        dbScript = pkgs.writers.writeText "taler-exchange-db-permissions.sql" (
-          lib.pipe servicesDB [
-            (map (name: ''
-              GRANT SELECT,INSERT,UPDATE${deletePerm name} ON ALL TABLES IN SCHEMA exchange TO "taler-exchange-${name}";
-              GRANT USAGE ON ALL SEQUENCES IN SCHEMA exchange TO "taler-exchange-${name}";
-            ''))
-            lib.concatStrings
-          ]
-        );
-      in
-      ''
-        ${lib.getExe' cfg.package "taler-exchange-dbinit"} -c ${configFile}
-        psql -U taler-exchange-httpd -f ${dbScript}
-      '';
+    systemd.services."taler-${talerComponent}-dbinit".script = ''
+      ${lib.getExe' cfg.package "taler-exchange-dbinit"} -c ${configFile}
+    '';
   };
 }
