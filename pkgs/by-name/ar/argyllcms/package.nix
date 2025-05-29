@@ -39,12 +39,14 @@ stdenv.mkDerivation rec {
     unzip
   ];
 
-  patches = lib.optional (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
-    # Build process generates files by compiling and then invoking an executable.
-    replaceVars ./jam-cross.patch {
-      emulator = stdenv.hostPlatform.emulator buildPackages;
-    }
-  ) ++ [ ./udev.patch ];
+  patches =
+    lib.optional (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
+      # Build process generates files by compiling and then invoking an executable.
+      replaceVars ./jam-cross.patch {
+        emulator = stdenv.hostPlatform.emulator buildPackages;
+      }
+    )
+    ++ [ ./udev.patch ];
 
   postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     substituteInPlace Jambase \
