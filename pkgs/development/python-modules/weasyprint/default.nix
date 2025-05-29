@@ -26,6 +26,7 @@
   pytest-cov-stub,
   pytestCheckHook,
   replaceVars,
+  versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
@@ -69,8 +70,10 @@ buildPythonPackage rec {
     pkgs.ghostscript
     pytest-cov-stub
     pytestCheckHook
+    versionCheckHook
     writableTmpDirAsHomeHook
   ];
+  versionCheckProgramArg = "--version";
 
   disabledTests = [
     # needs the Ahem font (fails on macOS)
