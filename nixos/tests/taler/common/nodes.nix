@@ -103,7 +103,7 @@ rec {
                 # WIRE_TYPE = "iban";
                 X_TALER_BANK_PAYTO_HOSTNAME = "bank:8082";
                 # IBAN_PAYTO_BIC = "SANDBOXX";
-                BASE_URL = "bank:8082";
+                BASE_URL = "http://bank:8082/";
 
                 # Allow creating new accounts
                 ALLOW_REGISTRATION = "yes";
