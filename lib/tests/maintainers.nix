@@ -54,7 +54,7 @@ let
 
   missingGithubIds = lib.concatLists (lib.mapAttrsToList checkMaintainer lib.maintainers);
 
-  success = pkgs.runCommand "checked-maintainers-success" { } ">$out";
+  success = pkgs.runCommand "checked-maintainers-success" { } "mkdir $out";
 
   failure =
     pkgs.runCommand "checked-maintainers-failure"
