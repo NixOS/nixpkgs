@@ -71,6 +71,7 @@ let
       llm-fragments-github ? false,
       llm-fragments-pypi ? false,
       llm-fragments-reader ? false,
+      llm-fragments-symbex ? false,
       llm-gemini ? false,
       llm-gguf ? false,
       llm-grok ? false,
