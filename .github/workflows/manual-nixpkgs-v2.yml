@@ -5,10 +5,6 @@ on:
     paths:
       - .github/workflows/manual-nixpkgs-v2.yml
   pull_request_target:
-    paths:
-      - 'doc/**'
-      - 'lib/**'
-      - 'pkgs/by-name/ni/nixdoc/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.run_id }}
