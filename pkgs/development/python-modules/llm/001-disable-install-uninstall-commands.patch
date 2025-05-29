@@ -1,11 +1,12 @@
-diff --git i/llm/cli.py w/llm/cli.py
-index 09e4e2d..8424a5e 100644
---- i/llm/cli.py
-+++ w/llm/cli.py
-@@ -2383,18 +2383,18 @@ def display_truncated(text):
+diff --git a/llm/cli.py b/llm/cli.py
+index 5d53e74..c2b4707 100644
+--- a/llm/cli.py
++++ b/llm/cli.py
+@@ -2895,30 +2895,38 @@ def display_truncated(text):
+     help="Include pre-release and development versions",
  )
- def install(packages, upgrade, editable, force_reinstall, no_cache_dir):
-     """Install packages from PyPI into the same environment as LLM"""
+ def install(packages, upgrade, editable, force_reinstall, no_cache_dir, pre):
+-    """Install packages from PyPI into the same environment as LLM"""
 -    args = ["pip", "install"]
 -    if upgrade:
 -        args += ["--upgrade"]
@@ -15,10 +16,13 @@ index 09e4e2d..8424a5e 100644
 -        args += ["--force-reinstall"]
 -    if no_cache_dir:
 -        args += ["--no-cache-dir"]
+-    if pre:
+-        args += ["--pre"]
 -    args += list(packages)
 -    sys.argv = args
 -    run_module("pip", run_name="__main__")
-+    click.echo(
++    """Install packages from PyPI into the same environment as LLM. Disabled for nixpkgs."""
++    raise click.ClickException(
 +"""Install command has been disabled for Nix. To install extra `llm` plugins, use the `llm.withPlugins` function.
 +
 +Example:
@@ -30,16 +34,17 @@ index 09e4e2d..8424a5e 100644
 +```
 +"""
 +    )
- 
- 
+
+
  @cli.command()
-@@ -2402,8 +2402,18 @@ def install(packages, upgrade, editable, force_reinstall, no_cache_dir):
+ @click.argument("packages", nargs=-1, required=True)
  @click.option("-y", "--yes", is_flag=True, help="Don't ask for confirmation")
  def uninstall(packages, yes):
-     """Uninstall Python packages from the LLM environment"""
+-    """Uninstall Python packages from the LLM environment"""
 -    sys.argv = ["pip", "uninstall"] + list(packages) + (["-y"] if yes else [])
 -    run_module("pip", run_name="__main__")
-+    click.echo(
++    """Uninstall Python packages from the LLM environment. Disabled for nixpkgs."""
++    raise click.ClickException(
 +"""Uninstall command has been disabled for Nix. To remove `llm` plugins, use the `llm.withPlugins` function with the desired set of plugins specified.
 +
 +Example:
@@ -51,6 +56,9 @@ index 09e4e2d..8424a5e 100644
 +```
 +"""
 +    )
- 
- 
+
+
  @cli.command()
+--
+2.49.0
+
