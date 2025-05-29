@@ -8298,6 +8298,8 @@ self: super: with self; {
 
   llm-deepseek = callPackage ../development/python-modules/llm-deepseek { };
 
+  llm-docs = callPackage ../development/python-modules/llm-docs { };
+
   llm-echo = callPackage ../development/python-modules/llm-echo { };
 
   llm-fragments-github = callPackage ../development/python-modules/llm-fragments-github { };

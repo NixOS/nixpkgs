@@ -66,6 +66,7 @@ let
       llm-cmd ? false,
       llm-command-r ? false,
       llm-deepseek ? false,
+      llm-docs ? false,
       llm-echo ? false,
       llm-fragments-github ? false,
       llm-fragments-pypi ? false,
