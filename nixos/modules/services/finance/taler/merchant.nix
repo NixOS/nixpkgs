@@ -19,6 +19,8 @@ let
     "depositcheck"
     "exchange"
   ];
+
+  configFile = config.environment.etc."taler/taler.conf".source;
 in
 {
   imports = [
@@ -95,13 +97,13 @@ in
           lib.concatStrings (
             map (name: ''
               GRANT SELECT,INSERT,UPDATE,DELETE ON ALL TABLES IN SCHEMA merchant TO "taler-merchant-${name}";
-              GRANT USAGE ON SCHEMA merchant TO "taler-merchant-${name}";
+              GRANT USAGE ON ALL SEQUENCES IN SCHEMA merchant TO "taler-merchant-${name}";
             '') servicesDB
           )
         );
       in
       ''
-        ${lib.getExe' cfg.package "taler-merchant-dbinit"}
+        ${lib.getExe' cfg.package "taler-merchant-dbinit"} -c ${configFile}
         psql -U taler-${talerComponent}-httpd -f ${dbScript}
       '';
   };
