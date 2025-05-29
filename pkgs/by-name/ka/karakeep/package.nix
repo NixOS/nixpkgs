@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  nixosTests,
   fetchFromGitHub,
   nodejs,
   node-gyp,
@@ -123,6 +124,12 @@ stdenv.mkDerivation (finalAttrs: {
     # Remove broken symlinks
     find $out -type l ! -exec test -e {} \; -delete
   '';
+
+  passthru = {
+    tests = {
+      karakeep = nixosTests.karakeep;
+    };
+  };
 
   meta = {
     homepage = "https://karakeep.app/";
