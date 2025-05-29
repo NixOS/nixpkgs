@@ -30,7 +30,6 @@
   libsForQt5,
   libspnav,
   libzip,
-  manifold,
   mesa,
   mpfr,
   python3,
@@ -99,7 +98,6 @@ clangStdenv.mkDerivation rec {
       lib3mf
       libspnav
       libzip
-      manifold
       mpfr
       qscintilla
       qtbase
@@ -119,7 +117,9 @@ clangStdenv.mkDerivation rec {
     "-DEXPERIMENTAL=ON" # enable experimental options
     "-DSNAPSHOT=ON" # nightly icons
     "-DUSE_BUILTIN_OPENCSG=OFF"
-    "-DUSE_BUILTIN_MANIFOLD=OFF"
+    # use builtin manifold: 3.1.0 doesn't pass tests, builtin is 7c8fbe1, between 3.0.1 and 3.1.0
+    # FIXME revisit on version update
+    "-DUSE_BUILTIN_MANIFOLD=ON"
     "-DUSE_BUILTIN_CLIPPER2=OFF"
     "-DOPENSCAD_VERSION=\"${builtins.replaceStrings [ "-" ] [ "." ] version}\""
     "-DCMAKE_UNITY_BUILD=OFF" # broken compile with unity
