@@ -85,6 +85,7 @@ let
       llm-templates-github ? false,
       llm-tools-datasette ? false,
       llm-tools-quickjs ? false,
+      llm-tools-simpleeval ? false,
       llm-tools-sqlite ? false,
       llm-venice ? false,
       llm-video-frames ? false,
