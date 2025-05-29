@@ -8,7 +8,7 @@
   qt6,
   qdiskinfo,
   themeBundle ? null,
-  unstableGitUpdater,
+  nix-update-script,
 }:
 
 let
@@ -34,15 +34,15 @@ assert
     && themeBundle' ? rightCharacter
   );
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qdiskinfo";
-  version = "0.3-unstable-2025-05-22";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "edisionnano";
     repo = "QDiskInfo";
-    rev = "9b7f4fb44e888dde7c9d0e82300d275e8671769d";
-    hash = "sha256-GqHDTEeZ+dEmCeyFehaNKB8af5PN8ZTSKxm00mkqouk=";
+    tag = finalAttrs.version;
+    hash = "sha256-FufbF0oEqpYgXnfzUZJ3tTN2jJoIQX4UB3yURRV7y00=";
   };
 
   nativeBuildInputs = [
@@ -104,7 +104,7 @@ stdenv.mkDerivation {
         themeName: themeBundle:
         (qdiskinfo.override { inherit themeBundle; }).overrideAttrs { pname = "qdiskinfo-${themeName}"; }
       );
-      updateScript = unstableGitUpdater { };
+      updateScript = nix-update-script { };
     };
 
   meta = {
@@ -118,4 +118,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux;
     mainProgram = "QDiskInfo";
   };
-}
+})
