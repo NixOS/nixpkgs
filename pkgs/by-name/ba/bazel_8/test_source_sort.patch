@@ -1,0 +1,15 @@
+diff --git a/MODULE.bazel b/MODULE.bazel
+index 14fc32418c..a22d39233e 100644
+--- a/MODULE.bazel
++++ b/MODULE.bazel
+@@ -368,10 +368,6 @@ rbe_preconfig(
+     toolchain = "ubuntu2004",
+ )
+ 
+-list_source_repository = use_repo_rule("//src/test/shell/bazel:list_source_repository.bzl", "list_source_repository")
+-
+-list_source_repository(name = "local_bazel_source_list")
+-
+ winsdk_configure = use_repo_rule("//src/main/res:winsdk_configure.bzl", "winsdk_configure")
+ 
+ winsdk_configure(name = "local_config_winsdk")
