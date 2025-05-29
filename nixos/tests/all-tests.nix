@@ -420,7 +420,7 @@ in
   ecryptfs = runTest ./ecryptfs.nix;
   fscrypt = runTest ./fscrypt.nix;
   fastnetmon-advanced = runTest ./fastnetmon-advanced.nix;
-  eintopf = runTest ./eintopf.nix;
+  lauti = runTest ./lauti.nix;
   ejabberd = runTest ./xmpp/ejabberd.nix;
   elk = handleTestOn [ "x86_64-linux" ] ./elk.nix { };
   emacs-daemon = runTest ./emacs-daemon.nix;
@@ -466,6 +466,7 @@ in
   ferretdb = handleTest ./ferretdb.nix { };
   fider = runTest ./fider.nix;
   filesender = runTest ./filesender.nix;
+  filebrowser = runTest ./filebrowser.nix;
   filesystems-overlayfs = runTest ./filesystems-overlayfs.nix;
   firefly-iii = runTest ./firefly-iii.nix;
   firefly-iii-data-importer = runTest ./firefly-iii-data-importer.nix;
