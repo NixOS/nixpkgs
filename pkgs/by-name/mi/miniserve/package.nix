@@ -2,7 +2,10 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
   installShellFiles,
+  openssl,
+  cacert,
   stdenv,
   curl,
   versionCheckHook,
@@ -11,21 +14,29 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "miniserve";
-  version = "0.28.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "miniserve";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jrQnmIYap5eHVWPqoRsXVroB0VWLKxesi3rB/WylR0U=";
+    hash = "sha256-HHTNBqMYf7WrqJl5adPmH87xfrzV4TKJckpwTPiiw7w=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-SosRbtk5gBcOVropy+HVFFmLLexu29GjchC6zFweiYw=";
+  cargoHash = "sha256-Rjql9cyw7RS66HE50iUrjNvS5JRhR1HBaalOY9eDGH4=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
 
-  nativeCheckInputs = [ curl ];
+  buildInputs = [ openssl ];
+
+  nativeCheckInputs = [
+    curl
+    cacert
+  ];
 
   checkFlags = [
     "--skip=bind_ipv4_ipv6::case_2"
