@@ -62,6 +62,9 @@ let
         name = attrs.name or (builtins.baseNameOf (builtins.elemAt attrs.paths 0));
         src = bootstrapArchive;
         builder = "${bootstrapArchive}/bin/bash";
+        # this script will prefer to link files instead of copying them.
+        # this prevents clang in particular, but possibly others, from calling readlink(argv[0])
+        # and obtaining dependencies, ld(1) in particular, from there instead of $PATH.
         args = [ ./linkBootstrap.sh ];
         PATH = "${bootstrapArchive}/bin";
         paths = attrs.paths;
