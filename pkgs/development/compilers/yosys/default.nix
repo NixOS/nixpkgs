@@ -73,11 +73,6 @@ let
     ghdl = yosys-ghdl;
   } // (yosys-symbiflow);
 
-  boost_python = boost.override {
-    enablePython = true;
-    python = python3;
-  };
-
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "yosys";
@@ -110,17 +105,22 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     flex
   ];
-  propagatedBuildInputs = [
-    tcl
-    readline
-    libffi
-    zlib
-    (python3.withPackages (
-      pp: with pp; [
-        click
-      ]
-    ))
-  ] ++ lib.optional enablePython boost_python;
+  propagatedBuildInputs =
+    [
+      tcl
+      readline
+      libffi
+      zlib
+      (python3.withPackages (
+        pp: with pp; [
+          click
+        ]
+      ))
+    ]
+    ++ lib.optionals enablePython [
+      boost
+      (boost.pythonLib python3)
+    ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 

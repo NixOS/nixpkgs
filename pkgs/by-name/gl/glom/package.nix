@@ -13,14 +13,12 @@
   graphviz,
   makeFontsConf,
   freefont_ttf,
-  boost,
   libxmlxx3,
   libxslt,
   libgdamm,
   libarchive,
   libepc,
   python311,
-  python3,
   ncurses,
   glibmm,
   gtk3,
@@ -66,8 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  python_boost = python311.withPackages (pkgs: with pkgs; [ pygobject3 ]);
-
   sphinx-build = python311.pkgs.sphinx.overrideAttrs (super: {
     postFixup =
       super.postFixup or ""
@@ -76,11 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
         rm $out/nix-support/propagated-build-inputs
       '';
   });
-
-  boost_python = boost.override {
-    enablePython = true;
-    python = finalAttrs.python_boost;
-  };
 
   nativeBuildInputs = [
     pkg-config
@@ -101,12 +92,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    finalAttrs.boost_python
     glibmm
     gtk3
     openssl
     libxmlxx3
     libxslt
+    python311.pkgs.boost-python
     python311.pkgs.pygobject3
     finalAttrs.gda
     libarchive

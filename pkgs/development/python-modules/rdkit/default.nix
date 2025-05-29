@@ -5,7 +5,7 @@
   fetchFromGitHub,
   cmake,
   comic-neue,
-  boost,
+  boost-python,
   catch2_3,
   inchi,
   cairo,
@@ -45,7 +45,6 @@ let
       hash = "sha256-tQB4wqza9rlSoy4Uj9bA99ddawjxGyN9G7DYbcv/Qdo=";
     };
   };
-  boost' = boost.override { enableNumpy = true; };
 in
 buildPythonPackage rec {
   pname = "rdkit";
@@ -88,7 +87,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    boost'
+    boost-python
     cairo
     catch2_3
     coordgenlibs
