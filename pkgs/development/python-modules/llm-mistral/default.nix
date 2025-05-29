@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "llm-mistral";
-  version = "0.13";
+  version = "0.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-mistral";
     tag = version;
-    hash = "sha256-u7Q+WJEtetapNo8WtdbnPKLZK3Q8YBjQcpZgGrK29Ic=";
+    hash = "sha256-NuiqRA/SCjGq0hJsnHJ/vgdncIKu3oE9WqWGht7QRMc=";
   };
 
   build-system = [
