@@ -8334,6 +8334,8 @@ self: super: with self; {
 
   llm-templates-github = callPackage ../development/python-modules/llm-templates-github { };
 
+  llm-tools-datasette = callPackage ../development/python-modules/llm-tools-datasette { };
+
   llm-tools-quickjs = callPackage ../development/python-modules/llm-tools-quickjs { };
 
   llm-tools-sqlite = callPackage ../development/python-modules/llm-tools-sqlite { };
