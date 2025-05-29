@@ -74,6 +74,7 @@ let
       llm-fragments-symbex ? false,
       llm-gemini ? false,
       llm-gguf ? false,
+      llm-git ? false,
       llm-grok ? false,
       llm-groq ? false,
       llm-hacker-news ? false,
