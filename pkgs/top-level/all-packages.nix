@@ -9534,6 +9534,17 @@ with pkgs;
     jvm = jre8;
   };
 
+  rocksdb_9_10 = rocksdb.overrideAttrs rec {
+    pname = "rocksdb";
+    version = "9.10.0";
+    src = fetchFromGitHub {
+      owner = "facebook";
+      repo = pname;
+      rev = "v${version}";
+      hash = "sha256-G+DlQwEUyd7JOCjS1Hg1cKWmA/qAiK8UpUIKcP+riGQ=";
+    };
+  };
+
   rocksdb_8_11 = rocksdb.overrideAttrs rec {
     pname = "rocksdb";
     version = "8.11.4";
@@ -13608,8 +13619,6 @@ with pkgs;
   opentx = libsForQt5.callPackage ../applications/misc/opentx { };
 
   organicmaps = qt6Packages.callPackage ../applications/misc/organicmaps { };
-
-  vivaldi = callPackage ../applications/networking/browsers/vivaldi { };
 
   openrazer-daemon = python3Packages.toPythonApplication python3Packages.openrazer-daemon;
 
