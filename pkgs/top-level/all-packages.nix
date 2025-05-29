@@ -15253,9 +15253,7 @@ with pkgs;
     ncurses = ncurses5;
   };
 
-  rott = callPackage ../games/rott { SDL = SDL_compat; };
-
-  rott-shareware = rott.override {
+  rott-shareware = callPackage ../by-name/ro/rott/package.nix {
     buildShareware = true;
   };
 
