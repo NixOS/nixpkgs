@@ -3312,8 +3312,6 @@ with pkgs;
 
   hotdoc = python3Packages.callPackage ../development/tools/hotdoc { };
 
-  hotspot = callPackage ../development/tools/analysis/hotspot { };
-
   hpccm = with python3Packages; toPythonApplication hpccm;
 
   hqplayer-desktop = qt6Packages.callPackage ../applications/audio/hqplayer-desktop { };
