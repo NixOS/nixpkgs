@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   cmake,
-  python311,
+  python3,
   enableModTool ? true,
   removeReferencesTo,
   fetchpatch,
@@ -49,10 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    # This version of the project wasn't updated to use Python 3.12 which
-    # doesn't include the deprecated distutils module.
-    python311
-    python311.pkgs.mako
+    python3
+    python3.pkgs.mako
+    python3.pkgs.distutils
     removeReferencesTo
   ];
 
