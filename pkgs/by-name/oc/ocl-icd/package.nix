@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ocl-icd";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "OCL-dev";
     repo = "ocl-icd";
     rev = "v${version}";
-    sha256 = "sha256-nx9Zz5DpS29g1HRIwPAQi6i+d7Blxd53WQ7Sb1a3FHg=";
+    sha256 = "sha256-pt2ISb+xROgkBnbRvESsuaqzBIRKB1NCzAauRW15L8M=";
   };
 
   nativeBuildInputs = [
