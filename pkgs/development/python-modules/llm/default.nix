@@ -99,11 +99,19 @@ let
       # Filter to just the attributes which are set to a true value.
       setArgs = lib.filterAttrs (name: lib.id) args;
 
-      # Make a string with those names separated with a dash.
-      setArgsStr = lib.concatStringsSep "-" (lib.attrNames setArgs);
-
-      # Make the derivation name reflect what's inside it.
-      drvName = if lib.stringLength setArgsStr == 0 then "llm" else "llm-with-${setArgsStr}";
+      # Make the derivation name reflect what's inside it, up to a certain limit.
+      setArgNames = lib.attrNames setArgs;
+      drvName =
+        let
+          len = builtins.length setArgNames;
+        in
+        if len == 0 then
+          "llm-${llm.version}"
+        else if len > 20 then
+          "llm-${llm.version}-with-${toString len}-plugins"
+        else
+          # Make a string with those names separated with a dash.
+          "llm-${llm.version}-with-${lib.concatStringsSep "-" setArgNames}";
 
       # Make a python environment with just those plugins.
       python-environment = python.withPackages (
