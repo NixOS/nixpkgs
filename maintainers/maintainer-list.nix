@@ -6520,6 +6520,7 @@
     name = "DontEatOreo";
     github = "DontEatOreo";
     githubId = 57304299;
+    matrix = "@donteatoreo:matrix.org";
   };
   dopplerian = {
     name = "Dopplerian";
