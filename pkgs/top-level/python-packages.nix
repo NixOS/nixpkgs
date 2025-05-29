@@ -10895,6 +10895,8 @@ self: super: with self; {
 
   oss2 = callPackage ../development/python-modules/oss2 { };
 
+  ossapi = callPackage ../development/python-modules/ossapi { };
+
   ossfs = callPackage ../development/python-modules/ossfs { };
 
   osxphotos = callPackage ../development/python-modules/osxphotos { };
