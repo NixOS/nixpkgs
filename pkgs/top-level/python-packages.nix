@@ -10924,6 +10924,8 @@ self: super: with self; {
 
   particle = callPackage ../development/python-modules/particle { };
 
+  particlespy = callPackage ../development/python-modules/particlespy { };
+
   parts = callPackage ../development/python-modules/parts { };
 
   parver = callPackage ../development/python-modules/parver { };
