@@ -943,6 +943,9 @@ Reviewing process:
 - Ensure that the meta field information [fits the guidelines](#meta-attributes) and is correct:
   - License can change with version updates, so it should be checked to match the upstream license.
   - If the package has no maintainer, a maintainer must be set. This can be the update submitter or a community member that accepts to take maintainership of the package.
+- Verify any change of upstream.
+  - If switching from e.g. PyPi to GitHub, verify that the repo is the official one.
+  - If switching to a fork, check with external sources like other package repositories for community consensus.
 - Ensure that the code contains no typos.
 - Build the package locally.
   - Pull requests are often targeted to the master or staging branch, and building the pull request locally when it is submitted can trigger many source builds.
@@ -973,6 +976,7 @@ Sample template for a package update review is provided below.
 - [ ] package version fits guidelines
 - [ ] package builds on ARCHITECTURE
 - [ ] executables tested on ARCHITECTURE
+- [ ] any change of upstream are verified
 - [ ] all depending packages build
 - [ ] patches have a comment describing either the upstream URL or a reason why the patch wasn't upstreamed
 - [ ] patches that are remotely available are fetched rather than vendored
@@ -992,6 +996,7 @@ Review process:
 - Ensure that the package name and version [fits the guidelines](#package-naming).
 - Ensure that the package versioning [fits the guidelines](#versioning).
 - Ensure that the commit text [fits the guidelines](../CONTRIBUTING.md#commit-conventions).
+- Ensure that the source is fetched from an official location, one of our [trusted mirrors](./build-support/fetchurl/mirrors.nix), or a mirror trusted by the authors.
 - Ensure that the meta fields [fits the guidelines](#meta-attributes) and contain the correct information:
   - License must match the upstream license.
   - Platforms should be set (or the package will not get binary substitutes).
@@ -1020,6 +1025,7 @@ Sample template for a new package review is provided below.
 - [ ] `meta.maintainers` is set
 - [ ] `meta.mainProgram` is set, if applicable.
 - [ ] build time only dependencies are declared in `nativeBuildInputs`
+- [ ] source is fetched from an official or trusted location
 - [ ] source is fetched using the appropriate function
 - [ ] the list of `phases` is not overridden
 - [ ] when a phase (like `installPhase`) is overridden it starts with `runHook preInstall` and ends with `runHook postInstall`.
