@@ -1,13 +1,18 @@
 # Udisks daemon.
-{ config, lib, pkgs, ... }:
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.udisks2;
   settingsFormat = pkgs.formats.ini {
-    listToValue = concatMapStringsSep "," (generators.mkValueStringDefault {});
+    listToValue = lib.concatMapStringsSep "," (lib.generators.mkValueStringDefault { });
   };
-  configFiles = mapAttrs (name: value: (settingsFormat.generate name value)) (mapAttrs' (name: value: nameValuePair name value ) config.services.udisks2.settings);
+  configFiles = lib.mapAttrs (name: value: (settingsFormat.generate name value)) (
+    lib.mapAttrs' (name: value: lib.nameValuePair name value) config.services.udisks2.settings
+  );
 in
 
 {
@@ -18,21 +23,23 @@ in
 
     services.udisks2 = {
 
-      enable = mkEnableOption (mdDoc "udisks2, a DBus service that allows applications to query and manipulate storage devices");
+      enable = lib.mkEnableOption "udisks2, a DBus service that allows applications to query and manipulate storage devices";
 
-      mountOnMedia = mkOption {
-        type = types.bool;
+      package = lib.mkPackageOption pkgs "udisks2" { };
+
+      mountOnMedia = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = mdDoc ''
+        description = ''
           When enabled, instructs udisks2 to mount removable drives under `/media/` directory, instead of the
           default, ACL-controlled `/run/media/$USER/`. Since `/media/` is not mounted as tmpfs by default, it
           requires cleanup to get rid of stale mountpoints; enabling this option will take care of this at boot.
         '';
       };
 
-      settings = mkOption rec {
-        type = types.attrsOf settingsFormat.type;
-        apply = recursiveUpdate default;
+      settings = lib.mkOption rec {
+        type = lib.types.attrsOf settingsFormat.type;
+        apply = lib.recursiveUpdate default;
         default = {
           "udisks2.conf" = {
             udisks2 = {
@@ -44,16 +51,16 @@ in
             };
           };
         };
-        example = literalExpression ''
-        {
-          "WDC-WD10EZEX-60M2NA0-WD-WCC3F3SJ0698.conf" = {
-            ATA = {
-              StandbyTimeout = 50;
+        example = lib.literalExpression ''
+          {
+            "WDC-WD10EZEX-60M2NA0-WD-WCC3F3SJ0698.conf" = {
+              ATA = {
+                StandbyTimeout = 50;
+              };
             };
           };
-        };
         '';
-        description = mdDoc ''
+        description = ''
           Options passed to udisksd.
           See [here](http://manpages.ubuntu.com/manpages/latest/en/man5/udisks2.conf.5.html) and
           drive configuration in [here](http://manpages.ubuntu.com/manpages/latest/en/man8/udisks.8.html) for supported options.
@@ -64,38 +71,44 @@ in
 
   };
 
-
   ###### implementation
 
-  config = mkIf config.services.udisks2.enable {
+  config = lib.mkIf config.services.udisks2.enable {
 
-    environment.systemPackages = [ pkgs.udisks2 ];
+    environment.systemPackages = [ cfg.package ];
 
-    environment.etc = (mapAttrs' (name: value: nameValuePair "udisks2/${name}" { source = value; } ) configFiles) // (
-    let
-      libblockdev = pkgs.udisks2.libblockdev;
-      majorVer = versions.major libblockdev.version;
-    in {
-      # We need to make sure /etc/libblockdev/@major_ver@/conf.d is populated to avoid
-      # warnings
-      "libblockdev/${majorVer}/conf.d/00-default.cfg".source = "${libblockdev}/etc/libblockdev/${majorVer}/conf.d/00-default.cfg";
-      "libblockdev/${majorVer}/conf.d/10-lvm-dbus.cfg".source = "${libblockdev}/etc/libblockdev/${majorVer}/conf.d/10-lvm-dbus.cfg";
-    });
+    environment.etc =
+      (lib.mapAttrs' (name: value: lib.nameValuePair "udisks2/${name}" { source = value; }) configFiles)
+      // (
+        let
+          libblockdev = cfg.package.libblockdev;
+          majorVer = lib.versions.major libblockdev.version;
+        in
+        {
+          # We need to make sure /etc/libblockdev/@major_ver@/conf.d is populated to avoid
+          # warnings
+          "libblockdev/${majorVer}/conf.d/00-default.cfg".source =
+            "${libblockdev}/etc/libblockdev/${majorVer}/conf.d/00-default.cfg";
+          "libblockdev/${majorVer}/conf.d/10-lvm-dbus.cfg".source =
+            "${libblockdev}/etc/libblockdev/${majorVer}/conf.d/10-lvm-dbus.cfg";
+        }
+      );
 
     security.polkit.enable = true;
 
-    services.dbus.packages = [ pkgs.udisks2 ];
+    services.dbus.packages = [ cfg.package ];
 
-    systemd.tmpfiles.rules = [ "d /var/lib/udisks2 0755 root root -" ]
-      ++ optional cfg.mountOnMedia "D! /media 0755 root root -";
+    systemd.tmpfiles.rules = [
+      "d /var/lib/udisks2 0755 root root -"
+    ] ++ lib.optional cfg.mountOnMedia "D! /media 0755 root root -";
 
-    services.udev.packages = [ pkgs.udisks2 ];
+    services.udev.packages = [ cfg.package ];
 
-    services.udev.extraRules = optionalString cfg.mountOnMedia ''
+    services.udev.extraRules = lib.optionalString cfg.mountOnMedia ''
       ENV{ID_FS_USAGE}=="filesystem", ENV{UDISKS_FILESYSTEM_SHARED}="1"
     '';
 
-    systemd.packages = [ pkgs.udisks2 ];
+    systemd.packages = [ cfg.package ];
   };
 
 }

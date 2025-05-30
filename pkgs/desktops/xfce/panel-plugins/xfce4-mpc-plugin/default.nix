@@ -1,35 +1,40 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, intltool
-, libxfce4util
-, xfce4-panel
-, libxfce4ui
-, glib
-, gtk3
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  meson,
+  ninja,
+  pkg-config,
+  libmpd,
+  libxfce4util,
+  xfce4-panel,
+  libxfce4ui,
+  glib,
+  gtk3,
+  gitUpdater,
 }:
 
-let
-  category = "panel-plugins";
-in
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-mpc-plugin";
-  version = "0.5.3";
+  version = "0.6.0";
 
   src = fetchurl {
-    url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-BGf7TRrNmC08PguJy0EBmUaFBST/Ge0PZYqNVse3Zk0=";
+    url = "mirror://xfce/src/panel-plugins/xfce4-mpc-plugin/${lib.versions.majorMinor finalAttrs.version}/xfce4-mpc-plugin-${finalAttrs.version}.tar.xz";
+    hash = "sha256-3uW8wFZrotyVucO0yt1eizuyeYpUoqjYZScIkV/kXVA=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
+    gettext
+    meson
+    ninja
     pkg-config
-    intltool
   ];
 
   buildInputs = [
+    libmpd
     libxfce4util
     libxfce4ui
     xfce4-panel
@@ -38,15 +43,15 @@ stdenv.mkDerivation rec {
   ];
 
   passthru.updateScript = gitUpdater {
-    url = "https://gitlab.xfce.org/panel-plugins/${pname}";
-    rev-prefix = "${pname}-";
+    url = "https://gitlab.xfce.org/panel-plugins/xfce4-mpc-plugin";
+    rev-prefix = "xfce4-mpc-plugin-";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-mpc-plugin";
     description = "MPD plugin for Xfce panel";
-    platforms = platforms.linux;
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd0;
+    teams = [ lib.teams.xfce ];
   };
-}
+})

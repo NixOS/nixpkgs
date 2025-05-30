@@ -1,69 +1,95 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, numpy
-, opencv4
-, pyyaml
-, qudida
-, scikit-image
-, scipy
-, deepdiff
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  albucore,
+  numpy,
+  opencv-python,
+  pydantic,
+  pyyaml,
+  scipy,
+
+  # optional dependencies
+  huggingface-hub,
+  pillow,
+  torch,
+
+  # tests
+  deepdiff,
+  pytestCheckHook,
+  pytest-mock,
+  scikit-image,
+  scikit-learn,
+  torchvision,
 }:
 
 buildPythonPackage rec {
   pname = "albumentations";
-  version = "1.4.0";
+  version = "2.0.8";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ZJ+KFIlveIs1bsxwCDxPuRvtq0/04rOa0heoJOGJ3tA=";
+  src = fetchFromGitHub {
+    owner = "albumentations-team";
+    repo = "albumentations";
+    tag = version;
+    hash = "sha256-8vUipdkIelRtKwMw63oUBDN/GUI0gegMGQaqDyXAOTQ=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
+  patches = [
+    ./dont-check-for-updates.patch
   ];
 
-  pythonRemoveDeps = [
-    "opencv-python"
-  ];
+  pythonRelaxDeps = [ "opencv-python" ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
+    albucore
     numpy
-    opencv4
+    opencv-python
+    pydantic
     pyyaml
-    qudida
-    scikit-image
     scipy
   ];
+
+  optional-dependencies = {
+    hub = [ huggingface-hub ];
+    pytorch = [ torch ];
+    text = [ pillow ];
+  };
 
   nativeCheckInputs = [
     deepdiff
     pytestCheckHook
+    pytest-mock
+    scikit-image
+    scikit-learn
+    torch
+    torchvision
   ];
 
   disabledTests = [
-    # this test hangs up
-    "test_transforms"
+    "test_pca_inverse_transform"
+    # these tests hang
+    "test_keypoint_remap_methods"
+    "test_multiprocessing_support"
   ];
 
   pythonImportsCheck = [ "albumentations" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast image augmentation library and easy to use wrapper around other libraries";
     homepage = "https://github.com/albumentations-team/albumentations";
-    changelog = "https://github.com/albumentations-team/albumentations/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    changelog = "https://github.com/albumentations-team/albumentations/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

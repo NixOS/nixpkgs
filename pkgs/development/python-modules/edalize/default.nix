@@ -1,28 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, coreutils
-, jinja2
-, pandas
-, pyparsing
-, pytestCheckHook
-, pythonOlder
-, which
-, yosys
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  coreutils,
+  jinja2,
+  pandas,
+  pyparsing,
+  pytestCheckHook,
+  pythonOlder,
+  which,
+  yosys,
 }:
 
 buildPythonPackage rec {
   pname = "edalize";
-  version = "0.5.1";
-  format = "setuptools";
+  version = "0.6.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "olofk";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-foq1CwIe86d+s7PlhLlGpnJCwrpOyr+uf5/RMLASSJU=";
+    repo = "edalize";
+    tag = "v${version}";
+    hash = "sha256-5c3Szq0tXQdlyzFTFCla44qB/O6RK8vezVOaFOv8sw4=";
   };
 
   postPatch = ''
@@ -31,11 +34,14 @@ buildPythonPackage rec {
     patchShebangs tests/mock_commands/vsim
   '';
 
-  propagatedBuildInputs = [
-    jinja2
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  passthru.optional-dependencies = {
+  propagatedBuildInputs = [ jinja2 ];
+
+  optional-dependencies = {
     reporting = [
       pandas
       pyparsing
@@ -46,11 +52,9 @@ buildPythonPackage rec {
     pytestCheckHook
     which
     yosys
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "edalize"
-  ];
+  pythonImportsCheck = [ "edalize" ];
 
   disabledTests = [
     # disable failures related to pandas 2.1.0 apply(...,errors="ignore")
@@ -96,8 +100,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Abstraction library for interfacing EDA tools";
+    mainProgram = "el_docker";
     homepage = "https://github.com/olofk/edalize";
-    changelog = "https://github.com/olofk/edalize/releases/tag/v${version}";
+    changelog = "https://github.com/olofk/edalize/releases/tag/${src.tag}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ astro ];
   };

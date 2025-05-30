@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "dpcontracts";
   version = "unstable-2018-11-20";
   format = "setuptools";

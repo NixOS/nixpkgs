@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, iso8601
-, requests
-, pycryptodome
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  iso8601,
+  requests,
+  pycryptodome,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "filcole";
-    repo = pname;
+    repo = "pycarwings2";
     rev = "v${version}";
     hash = "sha256-kqj/NZXqgPUsOnnzMPmIlICHek7RBxksmL3reNBK+bo=";
   };
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     pycryptodome
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -46,9 +45,7 @@ buildPythonPackage rec {
     "test_bad_password"
   ];
 
-  pythonImportsCheck = [
-    "pycarwings2"
-  ];
+  pythonImportsCheck = [ "pycarwings2" ];
 
   meta = with lib; {
     description = "Python library for interacting with the NissanConnect EV";

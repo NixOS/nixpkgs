@@ -5,19 +5,24 @@
   meta.maintainers = lib.teams.c3d2.members;
 
   nodes = {
-    pretalx = {
-      networking.extraHosts = ''
-        127.0.0.1 talks.local
-      '';
+    pretalx =
+      { config, ... }:
+      {
+        networking.extraHosts = ''
+          127.0.0.1 talks.local
+        '';
 
-      services.pretalx = {
-        enable = true;
-        nginx.domain = "talks.local";
-        settings = {
-          site.url = "http://talks.local";
+        services.pretalx = {
+          enable = true;
+          plugins = with config.services.pretalx.package.plugins; [
+            pages
+          ];
+          nginx.domain = "talks.local";
+          settings = {
+            site.url = "http://talks.local";
+          };
         };
       };
-    };
   };
 
   testScript = ''
@@ -27,5 +32,9 @@
     pretalx.wait_for_unit("pretalx-worker.service")
 
     pretalx.wait_until_succeeds("curl -q --fail http://talks.local/orga/")
+
+    pretalx.succeed("pretalx-manage --help")
+
+    pretalx.log(pretalx.succeed("systemd-analyze security pretalx-web.service"))
   '';
 }

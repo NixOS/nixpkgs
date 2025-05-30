@@ -1,11 +1,37 @@
-{ lib
-, stdenv
-, fetchgit
-, acpica-tools
-, python3
-, writeText
+{
+  lib,
+  acpica-tools,
+  fetchgit,
+  python3,
+  stdenv,
+  writeText,
+  # Configurable options
+  ___build-type ? "csm",
 }:
 
+assert lib.elem ___build-type [
+  "coreboot"
+  # SeaBIOS with CSM (Compatible Support Module) support; learn more at
+  # https://www.electronicshub.org/what-is-csm-bios/
+  "csm"
+  "qemu"
+];
+let
+  biosfile =
+    {
+      "coreboot" = "bios.bin.elf";
+      "csm" = "Csm16.bin";
+      "qemu" = "bios.bin";
+    }
+    .${___build-type};
+  configuration-string =
+    {
+      "coreboot" = "CONFIG_COREBOOT";
+      "csm" = "CONFIG_CSM";
+      "qemu" = "CONFIG_QEMU";
+    }
+    .${___build-type};
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "seabios";
   version = "1.16.3";
@@ -16,7 +42,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-hWemj83cxdY8p+Jhkh5GcPvI0Sy5aKYZJCsKDjHTUUk=";
   };
 
-  outputs = [ "out" "doc" ];
+  postPatch = ''
+    echo ${finalAttrs.version} > .version
+  '';
+
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   nativeBuildInputs = [ python3 ];
 
@@ -29,30 +62,42 @@ stdenv.mkDerivation (finalAttrs: {
     "EXTRAVERSION=\"-nixpkgs\""
   ];
 
-  hardeningDisable = [ "pic" "stackprotector" "fortify" ];
+  hardeningDisable = [
+    "fortify"
+    "pic"
+    "pie" # ld: warning: creating DT_TEXTREL in a PIE (and more)
+    "stackprotector"
+  ];
 
-  postConfigure = let
-    config = writeText "config.txt" (lib.generators.toKeyValue { } {
-      # SeaBIOS with CSM (Compatible Support Module) support; learn more at
-      # https://www.electronicshub.org/what-is-csm-bios/
-      "CONFIG_CSM" = "y";
-      "CONFIG_PERMIT_UNALIGNED_PCIROM" = "y";
-      "CONFIG_QEMU_HARDWARE" = "y";
-    });
-  in ''
-    cp ${config} .config
-    make olddefconfig
-  '';
+  postConfigure =
+    let
+      config = writeText "config.txt" (
+        lib.generators.toKeyValue { } {
+          "${configuration-string}" = "y";
+          "CONFIG_PERMIT_UNALIGNED_PCIROM" = "y";
+          "CONFIG_QEMU_HARDWARE" = "y";
+        }
+      );
+    in
+    ''
+      cp ${config} .config
+      make olddefconfig
+    '';
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -pv $doc/share/doc/seabios-${finalAttrs.version}/
-    cp -v docs/* $doc/share/doc/seabios-${finalAttrs.version}/
-    install -Dm644 out/Csm16.bin -t $out/share/seabios/
+    mkdir -pv ''${!outputDoc}/share/doc/seabios-${finalAttrs.version}/
+    cp -v docs/* ''${!outputDoc}/share/doc/seabios-${finalAttrs.version}/
+    install -Dm644 out/${biosfile} -t $out/share/seabios/
 
     runHook postInstall
   '';
+
+  passthru = {
+    build-type = ___build-type;
+    firmware = "${finalAttrs.finalPackage}/share/seabios/${biosfile}";
+  };
 
   meta = {
     homepage = "https://www.seabios.org";
@@ -63,10 +108,8 @@ stdenv.mkDerivation (finalAttrs: {
       use of coreboot.
     '';
     license = with lib.licenses; [ lgpl3Plus ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.systems.inspect.patternLogicalAnd
-      lib.systems.inspect.patterns.isUnix
-      lib.systems.inspect.patterns.isx86;
+    maintainers = with lib.maintainers; [ sigmasquadron ];
+    platforms = lib.systems.inspect.patternLogicalAnd lib.systems.inspect.patterns.isUnix lib.systems.inspect.patterns.isx86;
     badPlatforms = [ lib.systems.inspect.patterns.isDarwin ];
   };
 })

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -17,7 +22,7 @@ in
     networking.tcpcrypt.enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable opportunistic TCP encryption. If the other end
         speaks Tcpcrypt, then your traffic will be encrypted; otherwise
         it will be sent in clear text. Thus, Tcpcrypt alone provides no
@@ -41,7 +46,11 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
-      path = [ pkgs.iptables pkgs.tcpcrypt pkgs.procps ];
+      path = [
+        pkgs.iptables
+        pkgs.tcpcrypt
+        pkgs.procps
+      ];
 
       preStart = ''
         mkdir -p /run/tcpcryptd

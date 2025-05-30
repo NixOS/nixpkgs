@@ -1,4 +1,9 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.esdm;
@@ -24,12 +29,12 @@ in
   ];
 
   options.services.esdm = {
-    enable = lib.mkEnableOption (lib.mdDoc "ESDM service configuration");
+    enable = lib.mkEnableOption "ESDM service configuration";
     package = lib.mkPackageOption pkgs "esdm" { };
     enableLinuxCompatServices = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Enable /dev/random, /dev/urandom and /proc/sys/kernel/random/* userspace wrapper.
       '';
     };
@@ -44,10 +49,22 @@ in
       # It is necessary to set those options for these services to be started by systemd in NixOS
       (lib.mkIf cfg.enableLinuxCompatServices {
         systemd.targets."esdm-linux-compat".wantedBy = [ "basic.target" ];
-        systemd.services."esdm-server-suspend".wantedBy = [ "sleep.target" "suspend.target" "hibernate.target" ];
-        systemd.services."esdm-server-resume".wantedBy = [ "sleep.target" "suspend.target" "hibernate.target" ];
+        systemd.services."esdm-server-suspend".wantedBy = [
+          "sleep.target"
+          "suspend.target"
+          "hibernate.target"
+        ];
+        systemd.services."esdm-server-resume".wantedBy = [
+          "sleep.target"
+          "suspend.target"
+          "hibernate.target"
+        ];
       })
-    ]);
+    ]
+  );
 
-  meta.maintainers = with lib.maintainers; [ orichter thillux ];
+  meta.maintainers = with lib.maintainers; [
+    orichter
+    thillux
+  ];
 }

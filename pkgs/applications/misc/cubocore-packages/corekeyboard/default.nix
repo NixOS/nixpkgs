@@ -1,35 +1,46 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, qtx11extras, xorg, cmake, ninja, libcprime, libcsys }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  qt6,
+  xorg,
+  cmake,
+  ninja,
+  libcprime,
+  libcsys,
+}:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "corekeyboard";
-  version = "4.5.0";
+  version = "5.0.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Hylz1x9Wsk0iVhpNBFZJChsl3gIvJDICgpITjIXDZAg=";
+    repo = "corekeyboard";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-n7QbvRPZFMeUl/P4XiGYZDglZCA8Ftf08s5uzPmSyIQ=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtx11extras
+    qt6.qtbase
     xorg.libXtst
     xorg.libX11
     libcprime
     libcsys
   ];
 
-  meta = with lib; {
-    description = "A virtual keyboard for X11 from the C Suite";
+  meta = {
+    description = "Virtual keyboard for X11 from the C Suite";
+    mainProgram = "corekeyboard";
     homepage = "https://gitlab.com/cubocore/coreapps/corekeyboard";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dan4ik605743 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ dan4ik605743 ];
+    platforms = lib.platforms.linux;
   };
-}
+})

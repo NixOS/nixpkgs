@@ -1,69 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, pythonOlder
-
-# runtime
-, importlib-metadata
-, sqlalchemy
-
-# optionals
-, babel
-, arrow
-, pendulum
-#, intervals
-, phonenumbers
-, passlib
-, colour
-, python-dateutil
-, furl
-, cryptography
-
-# tests
-, pytestCheckHook
-, pygments
-, jinja2
-, docutils
-, flexmock
-, psycopg2
-, psycopg2cffi
-, pg8000
-, pytz
-, backports-zoneinfo
-, pymysql
-, pyodbc
-
+{
+  lib,
+  buildPythonPackage,
+  arrow,
+  babel,
+  colour,
+  cryptography,
+  docutils,
+  fetchFromGitHub,
+  flexmock,
+  furl,
+  # intervals,
+  jinja2,
+  passlib,
+  pendulum,
+  pg8000,
+  phonenumbers,
+  psycopg2,
+  psycopg2cffi,
+  pygments,
+  pymysql,
+  pyodbc,
+  pytestCheckHook,
+  python-dateutil,
+  pythonAtLeast,
+  pythonOlder,
+  pytz,
+  setuptools,
+  sqlalchemy,
 }:
 
 buildPythonPackage rec {
   pname = "sqlalchemy-utils";
-  version = "0.41.1";
-  format = "setuptools";
+  version = "0.42.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "SQLAlchemy-Utils";
-    hash = "sha256-ohgb/wHuuER544Vx0sBxjrUgQvmv2MGU0NAod+hLfXQ=";
+  disabled = pythonOlder "3.10";
+
+  src = fetchFromGitHub {
+    owner = "kvesteri";
+    repo = "sqlalchemy-utils";
+    tag = version;
+    hash = "sha256-jC8onlCiuzpMlJ3EzpzCnQ128xpkLzrZEuGWQv7pvVE=";
   };
 
-  patches = [
-    ./skip-database-tests.patch
+  patches = [ ./skip-database-tests.patch ];
 
-    (fetchpatch {
-      # sqlalchemy 2.0.22+ compat; https://github.com/kvesteri/sqlalchemy-utils/pull/725
-      url = "https://github.com/kvesteri/sqlalchemy-utils/commit/712aabaefc5c8ca3680751c705cf5a5984c74af1.patch";
-      hash = "sha256-xBdiUtFWjlUhBzHgGFbaKBt3at6NDo+mv9sd8WwiPOA=";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    sqlalchemy
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs = [ sqlalchemy ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     babel = [ babel ];
     arrow = [ arrow ];
     pendulum = [ pendulum ];
@@ -76,39 +62,47 @@ buildPythonPackage rec {
     encrypted = [ cryptography ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pygments
-    jinja2
-    docutils
-    flexmock
-    psycopg2
-    pg8000
-    pytz
-    python-dateutil
-    pymysql
-    pyodbc
-  ]
-  ++ lib.flatten (builtins.attrValues passthru.optional-dependencies)
-  ++ lib.optionals (pythonOlder "3.12") [
-    # requires distutils, which were removed in 3.12
-    psycopg2cffi
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
-  ];
+  nativeCheckInputs =
+    [
+      pytestCheckHook
+      pygments
+      jinja2
+      docutils
+      flexmock
+      psycopg2
+      pg8000
+      pytz
+      python-dateutil
+      pymysql
+      pyodbc
+    ]
+    ++ lib.flatten (builtins.attrValues optional-dependencies)
+    ++ lib.optionals (pythonOlder "3.12") [
+      # requires distutils, which were removed in 3.12
+      psycopg2cffi
+    ];
+
+  disabledTests =
+    [
+      "test_create_database_twice"
+      "test_create_and_drop"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # https://github.com/kvesteri/sqlalchemy-utils/issues/764
+      "test_render_mock_ddl"
+    ];
 
   pytestFlagsArray = [
-    "--deselect tests/functions/test_database.py::TestDatabasePostgresCreateDatabaseCloseConnection::test_create_database_twice"
-    "--deselect tests/functions/test_database.py::TestDatabasePostgresPg8000::test_create_and_drop"
-    "--deselect tests/functions/test_database.py::TestDatabasePostgresPsycoPG2CFFI::test_create_and_drop"
-    "--deselect tests/functions/test_database.py::TestDatabasePostgresPsycoPG3::test_create_and_drop"
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
+  pythonImportsCheck = [ "sqlalchemy_utils" ];
+
   meta = with lib; {
-    changelog = "https://github.com/kvesteri/sqlalchemy-utils/releases/tag/${version}";
-    homepage = "https://github.com/kvesteri/sqlalchemy-utils";
     description = "Various utility functions and datatypes for SQLAlchemy";
+    homepage = "https://github.com/kvesteri/sqlalchemy-utils";
+    changelog = "https://github.com/kvesteri/sqlalchemy-utils/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ eadwu ];
   };

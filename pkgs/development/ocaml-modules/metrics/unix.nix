@@ -1,12 +1,26 @@
-{ buildDunePackage, gnuplot, lwt, metrics, metrics-lwt, mtime, uuidm }:
+{
+  buildDunePackage,
+  gnuplot,
+  lwt,
+  metrics,
+  metrics-lwt,
+  mtime,
+  uuidm,
+}:
 
-buildDunePackage rec {
+buildDunePackage {
 
   pname = "metrics-unix";
 
   inherit (metrics) version src;
 
-  propagatedBuildInputs = [ gnuplot lwt metrics mtime uuidm ];
+  propagatedBuildInputs = [
+    gnuplot
+    lwt
+    metrics
+    mtime
+    uuidm
+  ];
 
   nativeCheckInputs = [ gnuplot ];
   checkInputs = [ metrics-lwt ];

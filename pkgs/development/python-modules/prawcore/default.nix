@@ -1,16 +1,17 @@
-{ lib
-, betamax
-, betamax-matchers
-, betamax-serializers
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-toolbelt
-, testfixtures
+{
+  lib,
+  betamax,
+  betamax-matchers,
+  betamax-serializers,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-toolbelt,
+  testfixtures,
 }:
 
 buildPythonPackage rec {
@@ -23,17 +24,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "praw-dev";
     repo = "prawcore";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-tECZRx6VgyiJDKHvj4Rf1sknFqUhz3sDFEsAMOeB7/g=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   nativeCheckInputs = [
     testfixtures
@@ -50,9 +47,7 @@ buildPythonPackage rec {
     "tests/integration"
   ];
 
-  pythonImportsCheck = [
-    "prawcore"
-  ];
+  pythonImportsCheck = [ "prawcore" ];
 
   meta = with lib; {
     description = "Low-level communication layer for PRAW";

@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-# build inputs
-, tblib
-, pytest
-, py
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  # build inputs
+  tblib,
+  pytest,
+  py,
 }:
 let
   pname = "pytest-parallel";
@@ -20,8 +20,8 @@ buildPythonPackage {
 
   src = fetchFromGitHub {
     owner = "kevlened";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "pytest-parallel";
+    tag = version;
     hash = "sha256-ddpoWBTf7Zor569p6uOMjHSTx3Qa551f4mSwyTLDdBU=";
   };
 
@@ -32,7 +32,7 @@ buildPythonPackage {
   ];
 
   meta = with lib; {
-    description = "A pytest plugin for parallel and concurrent testing";
+    description = "Pytest plugin for parallel and concurrent testing";
     homepage = "https://github.com/kevlened/pytest-parallelt";
     changelog = "https://github.com/kevlened/pytest-parallel/releases/tag/${version}";
     license = licenses.mit;

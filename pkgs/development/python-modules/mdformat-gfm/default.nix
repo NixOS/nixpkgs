@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, linkify-it-py
-, markdown-it-py
-, mdformat
-, mdformat-tables
-, mdit-py-plugins
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  linkify-it-py,
+  markdown-it-py,
+  mdformat,
+  mdformat-tables,
+  mdit-py-plugins,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -21,13 +22,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hukkin";
     repo = "mdformat-gfm";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-c1jJwyTL8IgQnIAJFoPSuJ8VEYgnQ4slZyV0bHlUHLQ=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     markdown-it-py
@@ -37,23 +36,22 @@ buildPythonPackage rec {
     linkify-it-py
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     "test_default_style__api"
     "test_default_style__cli"
   ];
 
-  pythonImportsCheck = [
-    "mdformat_gfm"
-  ];
+  pythonImportsCheck = [ "mdformat_gfm" ];
 
   meta = with lib; {
     description = "Mdformat plugin for GitHub Flavored Markdown compatibility";
     homepage = "https://github.com/hukkin/mdformat-gfm";
     license = licenses.mit;
-    maintainers = with maintainers; [ aldoborrero polarmutex ];
+    maintainers = with maintainers; [
+      aldoborrero
+      polarmutex
+    ];
   };
 }

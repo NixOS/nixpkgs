@@ -1,103 +1,74 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, dask
-, bokeh
-, toolz
-, datashape
-, numba
-, numpy
-, pandas
-, pillow
-, xarray
-, colorcet
-, param
-, pyct
-, scipy
-, pytestCheckHook
-, pythonOlder
-, nbsmoke
-, fastparquet
-, nbconvert
-, pytest-xdist
-, netcdf4
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
+  colorcet,
+  multipledispatch,
+  numba,
+  numpy,
+  pandas,
+  param,
+  pyct,
+  requests,
+  scipy,
+  toolz,
+  packaging,
+  xarray,
+  pytestCheckHook,
+  pytest-xdist,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "datashader";
-  version = "0.16.0";
-  format = "setuptools";
+  version = "0.18.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-7UwRGVdXjcs/z/ly2VT3dYba/XGnNF/VzQadn7BQ0NE=";
+  src = fetchFromGitHub {
+    owner = "holoviz";
+    repo = "datashader";
+    tag = "v${version}";
+    hash = "sha256-HduEO2XDH20tovtlpg5DbF96G5Lpbo+XVmQKnWvfyL8=";
   };
 
-  propagatedBuildInputs = [
-    dask
-    bokeh
-    toolz
-    datashape
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
+
+  dependencies = [
+    colorcet
+    multipledispatch
     numba
     numpy
     pandas
-    pillow
-    xarray
-    colorcet
     param
     pyct
+    requests
     scipy
-  ] ++ dask.optional-dependencies.complete;
+    toolz
+    packaging
+    xarray
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
-    nbsmoke
-    fastparquet
-    nbconvert
-    netcdf4
+    writableTmpDirAsHomeHook
   ];
 
-  # The complete extra is for usage with conda, which we
-  # don't care about
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "dask[complete]" "dask" \
-      --replace "xarray >=0.9.6" "xarray"
-  '';
+  pythonImportsCheck = [ "datashader" ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
-  pytestFlagsArray = [
-    "datashader"
-  ];
-
-  disabledTests = [
-    # Not compatible with current version of bokeh
-    # see: https://github.com/holoviz/datashader/issues/1031
-    "test_interactive_image_update"
-    # Latest dask broken array marshalling
-    # see: https://github.com/holoviz/datashader/issues/1032
-    "test_raster_quadmesh_autorange_reversed"
-  ];
-
-  disabledTestPaths = [
-    # 31/50 tests fail with TypeErrors
-    "datashader/tests/test_datatypes.py"
-  ];
-
-  pythonImportsCheck = [
-    "datashader"
-  ];
-
-  meta = with lib;{
+  meta = {
     description = "Data visualization toolchain based on aggregating into a grid";
+    mainProgram = "datashader";
     homepage = "https://datashader.org";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

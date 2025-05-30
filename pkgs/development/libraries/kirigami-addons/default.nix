@@ -1,13 +1,14 @@
-{ lib
-, mkDerivation
-, fetchFromGitLab
+{
+  lib,
+  mkDerivation,
+  fetchFromGitLab,
 
-, cmake
-, extra-cmake-modules
+  cmake,
+  extra-cmake-modules,
 
-, ki18n
-, kirigami2
-, qtquickcontrols2
+  ki18n,
+  kirigami2,
+  qtquickcontrols2,
 }:
 
 mkDerivation rec {
@@ -38,7 +39,6 @@ mkDerivation rec {
     homepage = "https://invent.kde.org/libraries/kirigami-addons";
     # https://invent.kde.org/libraries/kirigami-addons/-/blob/b197d98fdd079b6fc651949bd198363872d1be23/src/treeview/treeviewplugin.cpp#L1-5
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ samueldr matthiasbeyer ];
+    maintainers = with maintainers; [ matthiasbeyer ];
   };
 }
-

@@ -1,31 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fonttools
-, pythonImportsCheckHook
-, uharfbuzz
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  fonttools,
+  uharfbuzz,
 }:
 
 buildPythonPackage rec {
   pname = "vharfbuzz";
-  version = "0.2.0";
-  format = "setuptools";
+  version = "0.3.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uDX2fYqxV4wmAAIMfA3dBohWmq1N0VurSTEFOjSRpmY=";
+    hash = "sha256-zFVw8Nxh7cRJNk/S7D3uiIGShBMiZ/JeuSdX4hN94kc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     fonttools
     uharfbuzz
-  ];
-  nativeBuildInputs = [
-    pythonImportsCheckHook
   ];
 
   # Package has no tests.
   doCheck = false;
+
   pythonImportsCheck = [ "vharfbuzz" ];
 
   meta = with lib; {
@@ -35,4 +40,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ danc86 ];
   };
 }
-

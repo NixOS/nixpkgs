@@ -1,52 +1,52 @@
-{ lib
-, stdenv
-, atk
-, pkg-config
-, curl
-, darwin
-, libgit2
-, gtk3
-, libssh2
-, openssl
-, sqlite
-, zlib
-, dbus
-, dbus-glib
-, gdk-pixbuf
-, cairo
-, python3
-, libsodium
-, postgresql
-, gmp
-, gobject-introspection
-, foundationdb
-, capnproto
-, nettle
-, gtk4
-, clang
-, llvmPackages
-, linux-pam
-, pango
-, cmake
-, glib
-, freetype
-, fontconfig
-, rdkafka
-, udev
-, libevdev
-, alsa-lib
-, graphene
-, protobuf
-, autoconf
-, automake
-, libtool
-, seatd # =libseat
-, ...
+{
+  lib,
+  stdenv,
+  alsa-lib,
+  atk,
+  autoconf,
+  automake,
+  cairo,
+  capnproto,
+  clang,
+  cmake,
+  curl,
+  dbus,
+  dbus-glib,
+  fontconfig,
+  foundationdb,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gmp,
+  gobject-introspection,
+  graphene,
+  gtk3,
+  gtk4,
+  libevdev,
+  libgit2,
+  libsodium,
+  libsoup_3,
+  libssh2,
+  libtool,
+  linux-pam,
+  llvmPackages,
+  nettle,
+  openssl,
+  pango,
+  pkg-config,
+  libpq,
+  protobuf,
+  python3,
+  rdkafka,
+  seatd, # =libseat
+  sqlite,
+  udev,
+  webkitgtk_4_1,
+  zlib,
+  buildPackages,
+  ...
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-in
 {
   alsa-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
@@ -60,6 +60,7 @@ in
   cairo-sys-rs = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ cairo ];
+    extraLinkFlags = [ "-L${zlib.out}/lib" ];
   };
 
   capnp-rpc = attrs: {
@@ -67,8 +68,11 @@ in
   };
 
   cargo = attrs: {
-    buildInputs = [ openssl zlib curl ]
-      ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
+    buildInputs = [
+      openssl
+      zlib
+      curl
+    ];
   };
 
   libz-sys = attrs: {
@@ -79,8 +83,14 @@ in
 
   curl-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ zlib curl ];
-    propagatedBuildInputs = [ curl zlib ];
+    buildInputs = [
+      zlib
+      curl
+    ];
+    propagatedBuildInputs = [
+      curl
+      zlib
+    ];
     extraLinkFlags = [ "-L${zlib.out}/lib" ];
   };
 
@@ -90,11 +100,16 @@ in
   };
 
   evdev-sys = attrs: {
-    nativeBuildInputs = [
-      pkg-config
-    ] ++ lib.optionals (stdenv.buildPlatform.config != stdenv.hostPlatform.config) [
-      python3 autoconf automake libtool
-    ];
+    nativeBuildInputs =
+      [
+        pkg-config
+      ]
+      ++ lib.optionals (stdenv.buildPlatform.config != stdenv.hostPlatform.config) [
+        python3
+        autoconf
+        automake
+        libtool
+      ];
     buildInputs = [ libevdev ];
 
     # This prevents libevdev's build.rs from trying to `git fetch` when HOST!=TARGET
@@ -129,22 +144,39 @@ in
   glib-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ glib ];
+    extraLinkFlags = [ "-L${zlib.out}/lib" ];
   };
 
   gobject-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ dbus-glib ];
   };
 
   gio-sys = attrs: {
-    buildInputs = [ dbus-glib ];
-  };
-
-  gdk-pixbuf-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ dbus-glib ];
   };
 
   gdk-pixbuf = attrs: {
+    buildInputs = [
+      dbus-glib
+      gdk-pixbuf
+    ];
+  };
+
+  gdk-pixbuf-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ gdk-pixbuf ];
+  };
+
+  gdk-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ gtk3 ]; # libgdk-3
+  };
+
+  gdkx11-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ gtk3 ];
   };
 
   gtk-sys = attrs: {
@@ -170,7 +202,11 @@ in
   libgit2-sys = attrs: {
     LIBGIT2_SYS_USE_PKG_CONFIG = true;
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ openssl zlib libgit2 ];
+    buildInputs = [
+      openssl
+      zlib
+      libgit2
+    ];
   };
 
   libseat-sys = attrs: {
@@ -185,7 +221,11 @@ in
 
   libssh2-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ openssl zlib libssh2 ];
+    buildInputs = [
+      openssl
+      zlib
+      libssh2
+    ];
   };
 
   libdbus-sys = attrs: {
@@ -199,14 +239,25 @@ in
   };
 
   graphene-sys = attrs: {
-    nativeBuildInputs = [ pkg-config gobject-introspection ];
+    nativeBuildInputs = [
+      pkg-config
+      gobject-introspection
+    ];
     buildInputs = [ graphene ];
+  };
+
+  javascriptcore-rs-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ webkitgtk_4_1 ];
   };
 
   nettle-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ nettle clang ];
-    LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+    buildInputs = [
+      nettle
+      clang
+    ];
+    LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
   };
 
   openssl = attrs: {
@@ -216,6 +267,10 @@ in
   openssl-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ openssl ];
+  };
+
+  opentelemetry-proto = attrs: {
+    nativeBuildInputs = [ protobuf ];
   };
 
   pam-sys = attr: {
@@ -229,10 +284,14 @@ in
 
   pq-sys = attr: {
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ postgresql ];
+    buildInputs = [ libpq ];
   };
 
   prost-build = attr: {
+    nativeBuildInputs = [ protobuf ];
+  };
+
+  prost-wkt-types = attr: {
     nativeBuildInputs = [ protobuf ];
   };
 
@@ -243,11 +302,12 @@ in
 
   rink = attrs: {
     buildInputs = [ gmp ];
-    crateBin = [{ name = "rink"; path = "src/bin/rink.rs"; }];
-  };
-
-  security-framework-sys = attr: {
-    propagatedBuildInputs = lib.optional stdenv.isDarwin Security;
+    crateBin = [
+      {
+        name = "rink";
+        path = "src/bin/rink.rs";
+      }
+    ];
   };
 
   sequoia-openpgp = attrs: {
@@ -273,30 +333,54 @@ in
 
   sequoia-store = attrs: {
     nativeBuildInputs = [ capnproto ];
-    buildInputs = [ sqlite gmp ];
+    buildInputs = [
+      sqlite
+      gmp
+    ];
   };
 
   sequoia-sq = attrs: {
-    buildInputs = [ sqlite gmp ];
+    buildInputs = [
+      sqlite
+      gmp
+    ];
   };
 
   sequoia-tool = attrs: {
     nativeBuildInputs = [ capnproto ];
-    buildInputs = [ sqlite gmp ];
-  };
-
-  serde_derive = attrs: {
-    buildInputs = lib.optional stdenv.isDarwin Security;
+    buildInputs = [
+      sqlite
+      gmp
+    ];
   };
 
   servo-fontconfig-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ freetype fontconfig ];
+    buildInputs = [
+      freetype
+      fontconfig
+    ];
+  };
+
+  soup3-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ libsoup_3 ];
+    extraLinkFlags = [ "-L${zlib.out}/lib" ];
   };
 
   thrussh-libsodium = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libsodium ];
+  };
+
+  tonic-reflection = attrs: {
+    nativeBuildInputs = [ protobuf ];
+  };
+
+  webkit2gtk-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ webkitgtk_4_1 ];
+    extraLinkFlags = [ "-L${zlib.out}/lib" ];
   };
 
   xcb = attrs: {
@@ -308,4 +392,19 @@ in
     buildInputs = [ atk ];
   };
 
+  # Assumes it can run Command::new(env::var("CARGO")).arg("locate-project")
+  # https://github.com/bkchr/proc-macro-crate/blame/master/src/lib.rs#L242
+  proc-macro-crate =
+    attrs:
+    lib.optionalAttrs (lib.versionAtLeast attrs.version "2.0") {
+      postPatch =
+        (attrs.postPatch or "")
+        + ''
+          substituteInPlace \
+            src/lib.rs \
+            --replace-fail \
+            'env::var("CARGO")' \
+            'Ok::<_, core::convert::Infallible>("${lib.getBin buildPackages.cargo}/bin/cargo")'
+        '';
+    };
 }

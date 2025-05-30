@@ -1,5 +1,12 @@
-{ lib, buildDunePackage, fetchFromGitHub
-, menhir, menhirLib, ppx_deriving_yojson, visitors, yojson
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  menhir,
+  menhirLib,
+  ppx_deriving_yojson,
+  visitors,
+  yojson,
 }:
 
 buildDunePackage rec {
@@ -28,7 +35,7 @@ buildDunePackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/colis-anr/${pname}";
-    description = "A static parser for POSIX Shell";
+    description = "Static parser for POSIX Shell";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ niols ];
   };

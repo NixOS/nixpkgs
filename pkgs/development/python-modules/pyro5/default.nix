@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, serpent
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  serpent,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,15 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-gsPfyYYLSfiXso/yT+ZxbIQWcsYAr4/kDQ46f6yaP14=";
   };
 
-  propagatedBuildInputs = [
-    serpent
-  ];
+  propagatedBuildInputs = [ serpent ];
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Ignore network related tests, which fail in sandbox
@@ -37,13 +34,11 @@ buildPythonPackage rec {
     "GetIP"
     "TestNameServer"
     "TestBCSetup"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "Socket"
-  ];
+    # time sensitive tests
+    "testTimeoutCall"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "Socket" ];
 
-  pythonImportsCheck = [
-    "Pyro5"
-  ];
+  pythonImportsCheck = [ "Pyro5" ];
 
   meta = with lib; {
     description = "Distributed object middleware for Python (RPC)";

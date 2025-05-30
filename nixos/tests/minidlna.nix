@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "minidlna";
 
   nodes = {
@@ -26,8 +27,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     client = { ... }: { };
   };
 
-  testScript =
-  ''
+  testScript = ''
     start_all()
     server.succeed("mkdir -p /tmp/stuff && chown minidlna: /tmp/stuff")
     server.wait_for_unit("minidlna")
@@ -37,4 +37,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     server.succeed("curl --fail http://$(getent ahostsv4 localhost | head -n1 | cut -f 1 -d ' '):8200/")
     client.succeed("curl --fail http://$(getent ahostsv4 server | head -n1 | cut -f 1 -d ' '):8200/")
   '';
-})
+}

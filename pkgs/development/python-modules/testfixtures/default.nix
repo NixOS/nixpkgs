@@ -1,20 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, mock
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, setuptools
-, sybil
-, twisted
-, zope-component
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch2,
+  fetchPypi,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  sybil,
+  twisted,
 }:
 
 buildPythonPackage rec {
   pname = "testfixtures";
-  version = "7.2.2";
+  version = "8.3.0";
   pyproject = true;
   # DO NOT CONTACT upstream.
   # https://github.com/simplistix/ is only concerned with internal CI process.
@@ -23,32 +22,28 @@ buildPythonPackage rec {
   # https://github.com/simplistix/testfixtures/issues/169
   # https://github.com/simplistix/testfixtures/issues/168
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gHdK7LAklFgnWreD9TCT++dXlf8rMhjSLOP/8KEsTaY=";
+    hash = "sha256-1MC4SvLyZ2EPkIAJtQ1vmDpOWK3iLGe6tnh7WkAtWcA=";
   };
 
   patches = [
-    # https://github.com/simplistix/testfixtures/pull/188
-    (fetchpatch {
-      name = "python3.12-compatibility.patch";
-      url = "https://github.com/simplistix/testfixtures/commit/2b80b195e30e12c739dc4f98e9de17dec8f3558a.patch";
-      hash = "sha256-LrC0uI4k3F6ZGTqbKi319tRbVk5557xbyzQN36Y1160=";
-     })
+    (fetchpatch2 {
+      name = "python313-compat.patch";
+      url = "https://github.com/simplistix/testfixtures/commit/a23532c7bc685589cce6a5037821a74da48959e7.patch?full_index=1";
+      hash = "sha256-k0j/WgA+6LNTYJ233GJjeRU403bJJRxbpOu+BUsMeyQ=";
+    })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     mock
     pytestCheckHook
     sybil
     twisted
-    zope-component
   ];
 
   disabledTestPaths = [
@@ -56,13 +51,9 @@ buildPythonPackage rec {
     "testfixtures/tests/test_django"
   ];
 
-  pytestFlagsArray = [
-    "testfixtures/tests"
-  ];
+  pytestFlagsArray = [ "testfixtures/tests" ];
 
-  pythonImportsCheck = [
-    "testfixtures"
-  ];
+  pythonImportsCheck = [ "testfixtures" ];
 
   meta = with lib; {
     description = "Collection of helpers and mock objects for unit tests and doc tests";

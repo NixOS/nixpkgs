@@ -1,49 +1,57 @@
-{ lib
-, stdenv
-, python
-, fetchFromGitHub
-, cmake
-, Cocoa
-, fontconfig
-, freetype
-, libGL
-, libGLU
-, libX11
-, libXext
-, libXi
-, libXmu
-, opencascade-occt
-, rapidjson
-, swig4
+{
+  lib,
+  stdenv,
+  python,
+  fetchFromGitHub,
+  cmake,
+  fontconfig,
+  freetype,
+  libGL,
+  libGLU,
+  libX11,
+  libXext,
+  libXi,
+  libXmu,
+  opencascade-occt,
+  numpy,
+  rapidjson,
+  swig,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pythonocc-core";
-  version = "7.6.2";
+  version = "7.8.1.1";
 
   src = fetchFromGitHub {
     owner = "tpaviot";
     repo = "pythonocc-core";
-    rev = "refs/tags/${version}";
-    hash = "sha256-45pqPQ07KYlpFwJSAYVHbzuqDQTbAvPpxReal52DCzU=";
+    tag = version;
+    hash = "sha256-0o2PQEN0/Z7FUPZEo2HxFFa+mN2bZnYI++HVu4ONpNA=";
   };
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-    --replace "/usr/X11R6/lib/libGL.dylib" "${libGL}/lib/libGL.dylib" \
-    --replace "/usr/X11R6/lib/libGLU.dylib" "${libGLU}/lib/libGLU.dylib"
-  '';
-
-  nativeBuildInputs = [ cmake swig4 ];
+  nativeBuildInputs = [
+    cmake
+    swig
+  ];
   buildInputs = [
-    python opencascade-occt
-    freetype libGL libGLU libX11 libXext libXmu libXi
-    fontconfig rapidjson
-  ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+    python
+    opencascade-occt
+    freetype
+    libGL
+    libGLU
+    libX11
+    libXext
+    libXmu
+    libXi
+    fontconfig
+    numpy
+    rapidjson
+  ];
 
   cmakeFlags = [
     "-Wno-dev"
     "-DPYTHONOCC_INSTALL_DIRECTORY=${placeholder "out"}/${python.sitePackages}/OCC"
+    "-DPYTHONOCC_MESHDS_NUMPY=on"
   ];
 
   passthru = {
@@ -58,6 +66,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/tpaviot/pythonocc-core/releases/tag/${version}";
     license = licenses.lgpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ ];
   };
 }

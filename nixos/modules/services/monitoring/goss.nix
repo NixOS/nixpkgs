@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.goss;
@@ -6,7 +11,8 @@ let
   settingsFormat = pkgs.formats.yaml { };
   configFile = settingsFormat.generate "goss.yaml" cfg.settings;
 
-in {
+in
+{
   meta = {
     doc = ./goss.md;
     maintainers = [ lib.maintainers.anthonyroussel ];
@@ -14,7 +20,7 @@ in {
 
   options = {
     services.goss = {
-      enable = lib.mkEnableOption (lib.mdDoc "Goss daemon");
+      enable = lib.mkEnableOption "Goss daemon";
 
       package = lib.mkPackageOption pkgs "goss" { };
 
@@ -26,7 +32,7 @@ in {
           GOSS_LOGLEVEL = "FATAL";
           GOSS_LISTEN = ":8080";
         };
-        description = lib.mdDoc ''
+        description = ''
           Environment variables to set for the goss service.
 
           See <https://github.com/goss-org/goss/blob/master/docs/manual.md>
@@ -46,7 +52,7 @@ in {
             running = true;
           };
         };
-        description = lib.mdDoc ''
+        description = ''
           The global options in `config` file in yaml format.
 
           Refer to <https://github.com/goss-org/goss/blob/master/docs/goss-json-schema.yaml> for schema.

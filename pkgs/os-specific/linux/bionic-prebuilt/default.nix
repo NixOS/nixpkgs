@@ -1,16 +1,23 @@
-{ stdenv, stdenvNoCC, lib, fetchzip, pkgs
-, enableStatic ? stdenv.hostPlatform.isStatic
-, enableShared ? !stdenv.hostPlatform.isStatic
+{
+  stdenv,
+  stdenvNoCC,
+  lib,
+  fetchzip,
+  pkgs,
+  enableStatic ? stdenv.hostPlatform.isStatic,
+  enableShared ? !stdenv.hostPlatform.isStatic,
 }:
 let
 
   choosePlatform =
-    let pname = stdenv.hostPlatform.parsed.cpu.name; in
+    let
+      pname = stdenv.hostPlatform.parsed.cpu.name;
+    in
     pset: pset.${pname} or (throw "bionic-prebuilt: unsupported platform ${pname}");
 
   prebuilt_crt = choosePlatform {
     aarch64 = fetchzip {
-      url =  "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/+archive/98dce673ad97a9640c5d90bbb1c718e75c21e071/lib/gcc/aarch64-linux-android/4.9.x.tar.gz";
+      url = "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/+archive/98dce673ad97a9640c5d90bbb1c718e75c21e071/lib/gcc/aarch64-linux-android/4.9.x.tar.gz";
       sha256 = "sha256-LLD2OJi78sNN5NulOsJZl7Ei4F1EUYItGG6eUsKWULc=";
       stripRoot = false;
     };
@@ -48,7 +55,7 @@ let
   };
 
   ndk_support_headers = fetchzip {
-    url ="https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/0e7f808fa26cce046f444c9616d9167dafbfb272/clang-r416183b/include/c++/v1/support.tar.gz";
+    url = "https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/0e7f808fa26cce046f444c9616d9167dafbfb272/clang-r416183b/include/c++/v1/support.tar.gz";
     sha256 = "sha256-NBv7Pk1CEaz8ns9moleEERr3x/rFmVmG33LgFSeO6fY=";
     stripRoot = false;
   };
@@ -90,59 +97,66 @@ stdenvNoCC.mkDerivation rec {
       "!defined(BIONIC_IOCTL_NO_SIGNEDNESS_OVERLOAD)" "0"
   '';
 
-  installPhase= ''
-    # copy the bionic headers
-    mkdir -p $out/include/support $out/include/android
-    cp -vr libc/include/* $out/include
-    # copy the kernel headers
-    cp -vr ${kernelHeaders}/include/*  $out/include/
+  installPhase =
+    ''
+      # copy the bionic headers
+      mkdir -p $out/include/support $out/include/android
+      cp -vr libc/include/* $out/include
+      # copy the kernel headers
+      cp -vr ${kernelHeaders}/include/*  $out/include/
 
-    chmod -R +w $out/include/linux
+      chmod -R +w $out/include/linux
 
-    # fix a bunch of kernel headers so that things can actually be found
-    sed -i 's,struct epoll_event {,#include <bits/epoll_event.h>\nstruct Xepoll_event {,' $out/include/linux/eventpoll.h
-    sed -i 's,struct in_addr {,typedef unsigned int in_addr_t;\nstruct in_addr {,' $out/include/linux/in.h
-    sed -i 's,struct udphdr {,struct Xudphdr {,' $out/include/linux/udp.h
-    sed -i 's,union semun {,union Xsemun {,' $out/include/linux/sem.h
-    sed -i 's,struct __kernel_sockaddr_storage,#define sockaddr_storage __kernel_sockaddr_storage\nstruct __kernel_sockaddr_storage,' $out/include/linux/socket.h
-    sed -i 's,#ifndef __UAPI_DEF_.*$,#if 1,' $out/include/linux/libc-compat.h
-    substituteInPlace $out/include/linux/in.h --replace "__be32		imr_" "struct in_addr		imr_"
-    substituteInPlace $out/include/linux/in.h --replace "__be32		imsf_" "struct in_addr		imsf_"
-    substituteInPlace $out/include/linux/sysctl.h --replace "__unused" "_unused"
+      # fix a bunch of kernel headers so that things can actually be found
+      sed -i 's,struct epoll_event {,#include <bits/epoll_event.h>\nstruct Xepoll_event {,' $out/include/linux/eventpoll.h
+      sed -i 's,struct in_addr {,typedef unsigned int in_addr_t;\nstruct in_addr {,' $out/include/linux/in.h
+      sed -i 's,struct udphdr {,struct Xudphdr {,' $out/include/linux/udp.h
+      sed -i 's,union semun {,union Xsemun {,' $out/include/linux/sem.h
+      sed -i 's,struct __kernel_sockaddr_storage,#define sockaddr_storage __kernel_sockaddr_storage\nstruct __kernel_sockaddr_storage,' $out/include/linux/socket.h
+      sed -i 's,#ifndef __UAPI_DEF_.*$,#if 1,' $out/include/linux/libc-compat.h
+      substituteInPlace $out/include/linux/in.h --replace "__be32		imr_" "struct in_addr		imr_"
+      substituteInPlace $out/include/linux/in.h --replace "__be32		imsf_" "struct in_addr		imsf_"
+      substituteInPlace $out/include/linux/sysctl.h --replace "__unused" "_unused"
 
-    # what could possibly live in <linux/compiler.h>
-    touch $out/include/linux/compiler.h
+      # what could possibly live in <linux/compiler.h>
+      touch $out/include/linux/compiler.h
 
-    # copy the support headers
-    cp -vr ${ndk_support_headers}* $out/include/support/
+      # copy the support headers
+      cp -vr ${ndk_support_headers}* $out/include/support/
 
-    mkdir $out/lib
-    cp -v ${prebuilt_crt.out}/*.o $out/lib/
-    cp -v ${prebuilt_crt.out}/libgcc.a $out/lib/
-    cp -v ${prebuilt_ndk_crt.out}/*.o $out/lib/
-  '' + lib.optionalString enableShared ''
-    for i in libc.so libm.so libdl.so liblog.so; do
-      cp -v ${prebuilt_libs.out}/$i $out/lib/
-    done
-  '' + lib.optionalString enableStatic ''
-    # no liblog.a; while it's also part of the base libraries,
-    # it's only available as shared object in the prebuilts.
-    for i in libc.a libm.a libdl.a; do
-      cp -v ${prebuilt_ndk_crt.out}/$i $out/lib/
-    done
-  '' + ''
-    mkdir -p $dev/include
-    cp -v $out/include/*.h $dev/include/
-  '';
+      mkdir $out/lib
+      cp -v ${prebuilt_crt.out}/*.o $out/lib/
+      cp -v ${prebuilt_crt.out}/libgcc.a $out/lib/
+      cp -v ${prebuilt_ndk_crt.out}/*.o $out/lib/
+    ''
+    + lib.optionalString enableShared ''
+      for i in libc.so libm.so libdl.so liblog.so; do
+        cp -v ${prebuilt_libs.out}/$i $out/lib/
+      done
+    ''
+    + lib.optionalString enableStatic ''
+      # no liblog.a; while it's also part of the base libraries,
+      # it's only available as shared object in the prebuilts.
+      for i in libc.a libm.a libdl.a; do
+        cp -v ${prebuilt_ndk_crt.out}/$i $out/lib/
+      done
+    ''
+    + ''
+      mkdir -p $dev/include
+      cp -v $out/include/*.h $dev/include/
+    '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
   passthru.linuxHeaders = kernelHeaders;
 
   meta = with lib; {
-    description = "The Android libc implementation";
-    homepage    = "https://android.googlesource.com/platform/bionic/";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
+    description = "Android libc implementation";
+    homepage = "https://android.googlesource.com/platform/bionic/";
+    license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ s1341 ];
   };
 }

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,18 +13,20 @@ in
 
 {
   options = {
-    services.xserver.windowManager.notion.enable = mkEnableOption (lib.mdDoc "notion");
+    services.xserver.windowManager.notion.enable = mkEnableOption "notion";
   };
 
   config = mkIf cfg.enable {
     services.xserver.windowManager = {
-      session = [{
-        name = "notion";
-        start = ''
-          ${pkgs.notion}/bin/notion &
-          waitPID=$!
-        '';
-      }];
+      session = [
+        {
+          name = "notion";
+          start = ''
+            ${pkgs.notion}/bin/notion &
+            waitPID=$!
+          '';
+        }
+      ];
     };
     environment.systemPackages = [ pkgs.notion ];
   };

@@ -1,27 +1,27 @@
-{ lib
-, stdenv
-, cmocka
-, darwin
-, fetchFromGitHub
-, gtk3
-, meson
-, ninja
-, pkg-config
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  cmocka,
+  fetchFromGitHub,
+  gtk3,
+  meson,
+  ninja,
+  pkg-config,
+  unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libui-ng";
-  version = "unstable-2024-02-05";
+  version = "4.1-unstable-2025-03-15";
 
   src = fetchFromGitHub {
     owner = "libui-ng";
     repo = "libui-ng";
-    rev = "4d46de31eafad84c88b939356bcd64e6c5ee3821";
-    hash = "sha256-Yb8VdJe75uBzRnsfTOVxUXstZmu6dJ9nBuOrf86KO5s=";
+    rev = "43ba1ef553c8993a43a67f1ce6e35983a2660d8c";
+    hash = "sha256-pnfrSPDIvG0tFYQoeMBONATkNRNjY/tJGp9n2I4cN/U=";
   };
 
-  postPatch = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
     substituteInPlace meson.build --replace "'-arch', 'arm64'" ""
   '';
 
@@ -32,28 +32,23 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    if stdenv.isDarwin then [
-      darwin.libobjc
-      darwin.apple_sdk_11_0.Libsystem
-      darwin.apple_sdk_11_0.frameworks.Cocoa
-      darwin.apple_sdk_11_0.frameworks.AppKit
-      darwin.apple_sdk_11_0.frameworks.CoreFoundation
-    ] else [
-      gtk3
-    ];
-
-  mesonFlags = [
-    (lib.mesonBool "examples" (!stdenv.isDarwin))
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    gtk3
   ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  mesonFlags = [
+    (lib.mesonBool "examples" (!stdenv.hostPlatform.isDarwin))
+  ];
+
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "alpha";
+  };
 
   meta = with lib; {
-    description = "A portable GUI library for C";
+    description = "Portable GUI library for C";
     homepage = "https://github.com/libui-ng/libui-ng";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

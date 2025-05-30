@@ -1,33 +1,34 @@
-{ lib
-, fetchFromGitHub
-, cmake
-, libxml2
-, libsndfile
-, file
-, readline
-, bison
-, flex
-, ucommon
-, ccrtp
-, qtbase
-, qttools
-, qtquickcontrols2
-, alsa-lib
-, speex
-, ilbc
-, mkDerivation
-, bcg729
+{
+  lib,
+  fetchFromGitHub,
+  cmake,
+  libxml2,
+  libsndfile,
+  file,
+  readline,
+  bison,
+  flex,
+  ucommon,
+  ccrtp,
+  qtbase,
+  qttools,
+  qtquickcontrols2,
+  alsa-lib,
+  speex,
+  ilbc,
+  mkDerivation,
+  bcg729,
 }:
 
 mkDerivation rec {
   pname = "twinkle";
-  version = "unstable-2023-03-25";
+  version = "unstable-2024-20-11";
 
   src = fetchFromGitHub {
     owner = "LubosD";
     repo = "twinkle";
-    rev = "355813d5640ad58c84dc063826069384470ce310";
-    hash = "sha256-u+RewFwW17Oz2+lJLlmwebaGn4ebTBquox9Av7Jh1as=";
+    rev = "e067dcba28f4e2acd7f71b875fc4168e9706aaaa";
+    hash = "sha256-3YtZwP/ugWOSfUa4uaEAEEsk9i5j93eLt5lHgAu5qqI=";
   };
 
   buildInputs = [
@@ -57,12 +58,12 @@ mkDerivation rec {
     "-DWITH_SPEEX=On"
     "-DWITH_ILBC=On"
     "-DHAVE_LIBATOMIC=atomic"
-    /* "-DWITH_DIAMONDCARD=On" seems ancient and broken */
+    # "-DWITH_DIAMONDCARD=On" seems ancient and broken
   ];
 
   meta = with lib; {
     changelog = "https://github.com/LubosD/twinkle/blob/${version}/NEWS";
-    description = "A SIP-based VoIP client";
+    description = "SIP-based VoIP client";
     homepage = "http://twinkle.dolezel.info/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.mkg20001 ];

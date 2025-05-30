@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# dependencies
-, django-compressor
-, libsass
+  # dependencies
+  django-compressor,
+  libsass,
 
-# tests
-, django
-, python
+  # tests
+  django,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "torchbox";
     repo = "django-libsass";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-54AlRVmit0rtG1jx7O+XyA1vXLHCfoNPjHkHCQaaybA=";
   };
 
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     libsass
   ];
 
-  nativeCheckInputs = [
-    django
-  ];
+  nativeCheckInputs = [ django ];
 
   checkPhase = ''
     runHook preCheck
@@ -39,7 +38,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A django-compressor filter to compile SASS files using libsass";
+    description = "Django-compressor filter to compile SASS files using libsass";
     homepage = "https://github.com/torchbox/django-libsass";
     changelog = "https://github.com/torchbox/django-libsass/blob/${src.rev}/CHANGELOG.txt";
     license = licenses.bsd3;

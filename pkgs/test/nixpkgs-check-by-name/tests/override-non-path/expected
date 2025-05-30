@@ -1,9 +1,0 @@
-- Because pkgs/by-name/fo/foo exists, the attribute `pkgs.foo` must be defined like
-
-    foo = callPackage ./pkgs/by-name/fo/foo/package.nix { /* ... */ };
-
-  However, in this PR, the first `callPackage` argument is not a path. See the definition in all-packages.nix:3:
-
-    foo = self.callPackage ({ someDrv, someFlag }: someDrv) { someFlag = true; };
-
-This PR introduces the problems listed above. Please fix them before merging, otherwise the base branch would break.

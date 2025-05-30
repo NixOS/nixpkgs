@@ -1,15 +1,16 @@
-{ lib
-, multiStdenv
-, fetchFromGitHub
-, substituteAll
-, pkgsi686Linux
-, dbus
-, meson
-, ninja
-, pkg-config
-, wine
-, libxcb
-, nix-update-script
+{
+  lib,
+  multiStdenv,
+  fetchFromGitHub,
+  replaceVars,
+  pkgsi686Linux,
+  dbus,
+  meson,
+  ninja,
+  pkg-config,
+  wine,
+  libxcb,
+  nix-update-script,
 }:
 
 let
@@ -72,32 +73,34 @@ let
 in
 multiStdenv.mkDerivation (finalAttrs: {
   pname = "yabridge";
-  version = "5.1.0";
+  version = "5.1.1";
 
   # NOTE: Also update yabridgectl's cargoHash when this is updated
   src = fetchFromGitHub {
     owner = "robbert-vdh";
     repo = "yabridge";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-vnSdGedpiit8nym26i1QFiNnATk0Bymm7e5Ha2H41/M=";
+    hash = "sha256-4eA3vQFklIWkhtbd3Nw39bnJT6gPcni79ZyQVqU4+GQ=";
   };
 
   # Unpack subproject sources
-  postUnpack = ''(
-    cd "$sourceRoot/subprojects"
-    cp -R --no-preserve=mode,ownership ${asio} asio
-    cp -R --no-preserve=mode,ownership ${bitsery} bitsery
-    cp -R --no-preserve=mode,ownership ${clap} clap
-    cp -R --no-preserve=mode,ownership ${function2} function2
-    cp -R --no-preserve=mode,ownership ${ghc_filesystem} ghc_filesystem
-    cp -R --no-preserve=mode,ownership ${tomlplusplus} tomlplusplus
-    cp -R --no-preserve=mode,ownership ${vst3} vst3
-  )'';
+  postUnpack = ''
+    (
+      cd "$sourceRoot/subprojects"
+      cp -R --no-preserve=mode,ownership ${asio} asio
+      cp -R --no-preserve=mode,ownership ${bitsery} bitsery
+      cp -R --no-preserve=mode,ownership ${clap} clap
+      cp -R --no-preserve=mode,ownership ${function2} function2
+      cp -R --no-preserve=mode,ownership ${ghc_filesystem} ghc_filesystem
+      cp -R --no-preserve=mode,ownership ${tomlplusplus} tomlplusplus
+      cp -R --no-preserve=mode,ownership ${vst3} vst3
+    )
+  '';
 
   patches = [
     # Hard code bitbridge & runtime dependencies
-    (substituteAll {
-      src = ./hardcode-dependencies.patch;
+    (replaceVars ./hardcode-dependencies.patch {
+      libdbus = dbus.lib;
       libxcb32 = pkgsi686Linux.xorg.libxcb;
       inherit wine;
     })
@@ -131,7 +134,8 @@ multiStdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    "--cross-file" "cross-wine.conf"
+    "--cross-file"
+    "cross-wine.conf"
     "-Dbitbridge=true"
 
     # Requires CMake and is unnecessary
@@ -150,14 +154,14 @@ multiStdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     for exe in "$out"/bin/*.exe; do
       substituteInPlace "$exe" \
-        --replace 'WINELOADER="wine"' 'WINELOADER="${wine}/bin/wine"'
+        --replace-fail 'WINELOADER="wine"' 'WINELOADER="${wine}/bin/wine"'
     done
   '';
 
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A modern and transparent way to use Windows VST2 and VST3 plugins on Linux";
+    description = "Modern and transparent way to use Windows VST2 and VST3 plugins on Linux";
     homepage = "https://github.com/robbert-vdh/yabridge";
     changelog = "https://github.com/robbert-vdh/yabridge/blob/${finalAttrs.version}/CHANGELOG.md";
     license = licenses.gpl3Plus;

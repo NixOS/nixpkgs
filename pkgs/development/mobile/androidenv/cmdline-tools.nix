@@ -1,10 +1,23 @@
-{deployAndroidPackage, lib, package, autoPatchelfHook, makeWrapper, os, pkgs, pkgsi686Linux, stdenv, postInstall}:
+{
+  deployAndroidPackage,
+  lib,
+  package,
+  autoPatchelfHook,
+  makeWrapper,
+  os,
+  arch,
+  pkgs,
+  stdenv,
+  postInstall,
+  meta,
+}:
 
 deployAndroidPackage {
   name = "androidsdk";
-  inherit package os;
-  nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  inherit package os arch;
+  nativeBuildInputs = [
+    makeWrapper
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   patchInstructions = ''
     ${lib.optionalString (os == "linux") ''
@@ -18,14 +31,14 @@ deployAndroidPackage {
     # Wrap all scripts that require JAVA_HOME
     find $ANDROID_SDK_ROOT/${package.path}/bin -maxdepth 1 -type f -executable | while read program; do
       if grep -q "JAVA_HOME" $program; then
-        wrapProgram $program  --prefix PATH : ${pkgs.jdk11}/bin \
+        wrapProgram $program  --prefix PATH : ${pkgs.jdk17}/bin \
           --prefix ANDROID_SDK_ROOT : $ANDROID_SDK_ROOT
       fi
     done
 
     # Wrap sdkmanager script
     wrapProgram $ANDROID_SDK_ROOT/${package.path}/bin/sdkmanager \
-      --prefix PATH : ${lib.makeBinPath [ pkgs.jdk11 ]} \
+      --prefix PATH : ${lib.makeBinPath [ pkgs.jdk17 ]} \
       --add-flags "--sdk_root=$ANDROID_SDK_ROOT"
 
     # Patch all script shebangs
@@ -35,5 +48,5 @@ deployAndroidPackage {
     ${postInstall}
   '';
 
-  meta.license = lib.licenses.unfree;
+  inherit meta;
 }

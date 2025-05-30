@@ -2,12 +2,19 @@
   mkKdeDerivation,
   qt5compat,
   gmp,
+  libmpc,
   mpfr,
   kdoctools,
 }:
 mkKdeDerivation {
   pname = "kcalc";
 
-  extraNativeBuildInputs = [kdoctools];
-  extraBuildInputs = [qt5compat gmp mpfr];
+  extraBuildInputs = [
+    qt5compat
+    gmp
+    libmpc
+    mpfr
+    kdoctools
+  ];
+  meta.mainProgram = "kcalc";
 }

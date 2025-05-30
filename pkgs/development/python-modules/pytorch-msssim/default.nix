@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, torch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
+  torch,
 }:
 
 buildPythonPackage rec {
@@ -14,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "VainF";
     repo = "pytorch-msssim";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-bghglwQhgByC7BqbDvImSvt6edKF55NLYEPjqmmSFH8=";
   };
 
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    torch
-  ];
+  propagatedBuildInputs = [ torch ];
 
   pythonImportsCheck = [ "pytorch_msssim" ];
 

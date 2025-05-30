@@ -1,4 +1,9 @@
-{ lib, stdenv, kernel, looking-glass-client }:
+{
+  lib,
+  stdenv,
+  kernel,
+  looking-glass-client,
+}:
 
 stdenv.mkDerivation {
   pname = "kvmfr";
@@ -6,10 +11,10 @@ stdenv.mkDerivation {
 
   src = looking-glass-client.src;
   sourceRoot = "${looking-glass-client.src.name}/module";
-  patches = lib.optional (kernel.kernelAtLeast "6.4") [
-    ./linux-6-4-compat.patch
+  hardeningDisable = [
+    "pic"
+    "format"
   ];
-  hardeningDisable = [ "pic" "format" ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   makeFlags = [

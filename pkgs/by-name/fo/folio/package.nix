@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, vala
-, blueprint-compiler
-, wrapGAppsHook4
-, desktop-file-utils
-, libadwaita
-, libgee
-, gtksourceview5
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  blueprint-compiler,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  libadwaita,
+  libgee,
+  gtksourceview5,
 }:
 
 stdenv.mkDerivation rec {
   pname = "folio";
-  version = "24.06";
+  version = "25.02";
 
   src = fetchFromGitHub {
     owner = "toolstack";
     repo = "Folio";
-    rev = version;
-    hash = "sha256-1vjRoGpZvUG/NJcE7YWOdiePK9lLnwuojRb37YgNunI=";
+    tag = version;
+    hash = "sha256-u7HieTsbSohCjpLNyeY/ZZdmpQWulZaCkxOV5a5QyBY=";
   };
 
   nativeBuildInputs = [
@@ -40,12 +41,12 @@ stdenv.mkDerivation rec {
     gtksourceview5
   ];
 
-  meta = with lib; {
-    description = "A beautiful markdown note-taking app for GNOME (forked from Paper)";
+  meta = {
+    description = "Beautiful markdown note-taking app for GNOME (forked from Paper)";
     homepage = "https://github.com/toolstack/Folio";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "com.toolstack.Folio";
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.unix;
   };
 }

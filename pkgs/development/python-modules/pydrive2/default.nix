@@ -1,45 +1,45 @@
-{ lib
-, appdirs
-, buildPythonPackage
-, fetchPypi
-, fsspec
-, funcy
-, google-api-python-client
-, oauth2client
-, pyopenssl
-, pythonOlder
-, pyyaml
-, setuptools
-, setuptools-scm
-, tqdm
+{
+  lib,
+  appdirs,
+  buildPythonPackage,
+  fetchPypi,
+  fsspec,
+  funcy,
+  google-api-python-client,
+  oauth2client,
+  pyopenssl,
+  pythonOlder,
+  pyyaml,
+  setuptools,
+  setuptools-scm,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "pydrive2";
-  version = "1.19.0";
+  version = "1.21.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    pname = "PyDrive2";
-    inherit version;
-    hash = "sha256-Ia6n2idjXCw/cFDgICBhkfOwMFxlUDFebo491Sb4tTE=";
+    inherit pname version;
+    hash = "sha256-ZJuE1gxje8cUZIUDlTWqjxJUrRVkI3OfB+XTJQdEfBM=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-python-client
     oauth2client
     pyopenssl
     pyyaml
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     fsspec = [
       appdirs
       fsspec
@@ -51,14 +51,16 @@ buildPythonPackage rec {
   # Tests require a account and network access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pydrive2"
-  ];
+  pythonImportsCheck = [ "pydrive2" ];
 
   meta = with lib; {
     description = "Google Drive API Python wrapper library";
     homepage = "https://github.com/iterative/PyDrive2";
     changelog = "https://github.com/iterative/PyDrive2/releases/tag/${version}";
+    # Not compatible with pyopenssl 24.3.0
+    # https://github.com/iterative/PyDrive2/issues/361
+    # TODO: re-enable it in `duplicity` when fixed
+    broken = true;
     license = licenses.asl20;
     maintainers = with maintainers; [ sei40kr ];
   };

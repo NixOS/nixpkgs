@@ -1,31 +1,34 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.fluentd;
 
-  pluginArgs = concatStringsSep " " (map (x: "-p ${x}") cfg.plugins);
-in {
+  pluginArgs = lib.concatStringsSep " " (map (x: "-p ${x}") cfg.plugins);
+in
+{
   ###### interface
 
   options = {
 
     services.fluentd = {
-      enable = mkEnableOption (lib.mdDoc "fluentd");
+      enable = lib.mkEnableOption "fluentd, a data/log collector";
 
-      config = mkOption {
-        type = types.lines;
+      config = lib.mkOption {
+        type = lib.types.lines;
         default = "";
-        description = lib.mdDoc "Fluentd config.";
+        description = "Fluentd config.";
       };
 
-      package = mkPackageOption pkgs "fluentd" { };
+      package = lib.mkPackageOption pkgs "fluentd" { };
 
-      plugins = mkOption {
-        type = types.listOf types.path;
-        default = [];
-        description = lib.mdDoc ''
+      plugins = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
+        default = [ ];
+        description = ''
           A list of plugin paths to pass into fluentd. It will make plugins defined in ruby files
           there available in your config.
         '';
@@ -33,10 +36,9 @@ in {
     };
   };
 
-
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.fluentd = with pkgs; {
       description = "Fluentd Daemon";
       wantedBy = [ "multi-user.target" ];

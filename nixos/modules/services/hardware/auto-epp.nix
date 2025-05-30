@@ -1,16 +1,22 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.auto-epp;
-  format = pkgs.formats.ini {};
+  format = pkgs.formats.ini { };
 
   inherit (lib) mkOption types;
-in {
+in
+{
   options = {
     services.auto-epp = {
-      enable = lib.mkEnableOption (lib.mdDoc "auto-epp for amd active pstate");
+      enable = lib.mkEnableOption "auto-epp for amd active pstate";
 
-      package = lib.mkPackageOptionMD pkgs "auto-epp" {};
+      package = lib.mkPackageOption pkgs "auto-epp" { };
 
       settings = mkOption {
         type = types.submodule {
@@ -20,7 +26,7 @@ in {
               epp_state_for_AC = mkOption {
                 type = types.str;
                 default = "balance_performance";
-                description = lib.mdDoc ''
+                description = ''
                   energy_performance_preference when on plugged in
 
                   ::: {.note}
@@ -33,7 +39,7 @@ in {
               epp_state_for_BAT = mkOption {
                 type = types.str;
                 default = "power";
-                description = lib.mdDoc ''
+                description = ''
                   `energy_performance_preference` when on battery
 
                   ::: {.note}
@@ -45,8 +51,8 @@ in {
             };
           };
         };
-        default = {};
-        description = lib.mdDoc ''
+        default = { };
+        description = ''
           Settings for the auto-epp application.
           See upstream example: <https://github.com/jothi-prasath/auto-epp/blob/master/sample-auto-epp.conf>
         '';
@@ -65,7 +71,7 @@ in {
 
     systemd.services.auto-epp = {
       after = [ "multi-user.target" ];
-      wantedBy  = [ "multi-user.target" ];
+      wantedBy = [ "multi-user.target" ];
       description = "auto-epp - Automatic EPP Changer for amd-pstate-epp";
       serviceConfig = {
         Type = "simple";

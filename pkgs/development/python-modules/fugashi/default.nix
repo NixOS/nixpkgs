@@ -1,14 +1,15 @@
-{ lib
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, buildPythonPackage
-, cython
-, mecab
-, setuptools-scm
-, ipadic
-, unidic
-, unidic-lite
+{
+  lib,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  buildPythonPackage,
+  cython_0,
+  mecab,
+  setuptools-scm,
+  ipadic,
+  unidic,
+  unidic-lite,
 }:
 
 buildPythonPackage rec {
@@ -20,16 +21,22 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "polm";
     repo = "fugashi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4i7Q+TtXTQNSJ1EIcS8KHrVPdCJAgZh86Y6lB8772XU=";
   };
 
-  nativeBuildInputs = [ cython mecab setuptools-scm ];
+  nativeBuildInputs = [
+    cython_0
+    mecab
+    setuptools-scm
+  ];
 
-  nativeCheckInputs = [ ipadic pytestCheckHook ]
-    ++ passthru.optional-dependencies.unidic-lite;
+  nativeCheckInputs = [
+    ipadic
+    pytestCheckHook
+  ] ++ optional-dependencies.unidic-lite;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     unidic-lite = [ unidic-lite ];
     unidic = [ unidic ];
   };
@@ -41,7 +48,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "fugashi" ];
 
   meta = with lib; {
-    description = "A Cython MeCab wrapper for fast, pythonic Japanese tokenization and morphological analysis";
+    description = "Cython MeCab wrapper for fast, pythonic Japanese tokenization and morphological analysis";
     homepage = "https://github.com/polm/fugashi";
     changelog = "https://github.com/polm/fugashi/releases/tag/${version}";
     license = licenses.mit;

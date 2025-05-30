@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
 
   ###### interface
@@ -9,25 +11,25 @@ with lib;
   options = {
 
     services.pfix-srsd = {
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
-        description = lib.mdDoc "Whether to run the postfix sender rewriting scheme daemon.";
+        type = lib.types.bool;
+        description = "Whether to run the postfix sender rewriting scheme daemon.";
       };
 
-      domain = mkOption {
-        description = lib.mdDoc "The domain for which to enable srs";
-        type = types.str;
+      domain = lib.mkOption {
+        description = "The domain for which to enable srs";
+        type = lib.types.str;
         example = "example.com";
       };
 
-      secretsFile = mkOption {
-        description = lib.mdDoc ''
+      secretsFile = lib.mkOption {
+        description = ''
           The secret data used to encode the SRS address.
           to generate, use a command like:
           `for n in $(seq 5); do dd if=/dev/urandom count=1 bs=1024 status=none | sha256sum | sed 's/  -$//' | sed 's/^/          /'; done`
         '';
-        type = types.path;
+        type = lib.types.path;
         default = "/var/lib/pfix-srsd/secrets";
       };
     };
@@ -35,7 +37,7 @@ with lib;
 
   ###### implementation
 
-  config = mkIf config.services.pfix-srsd.enable {
+  config = lib.mkIf config.services.pfix-srsd.enable {
     environment = {
       systemPackages = [ pkgs.pfixtools ];
     };

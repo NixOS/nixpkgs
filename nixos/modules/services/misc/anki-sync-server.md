@@ -16,7 +16,7 @@ unit which runs the sync server with an isolated user using the systemd
 `DynamicUser` option.
 
 This can be done by enabling the `anki-sync-server` service:
-```
+```nix
 { ... }:
 
 {
@@ -27,7 +27,7 @@ This can be done by enabling the `anki-sync-server` service:
 It is necessary to set at least one username-password pair under
 {option}`services.anki-sync-server.users`. For example
 
-```
+```nix
 {
   services.anki-sync-server.users = [
     {
@@ -42,6 +42,15 @@ Here, `passwordFile` is the path to a file containing just the password in
 plaintext. Make sure to set permissions to make this file unreadable to any
 user besides root.
 
+By default, synced data are stored in */var/lib/anki-sync-server/*ankiuser**.
+You can change the directory by using `services.anki-sync-server.baseDirectory`
+
+```nix
+{
+  services.anki-sync-server.baseDirectory = "/home/anki/data";
+}
+```
+
 By default, the server listen address {option}`services.anki-sync-server.host`
 is set to localhost, listening on port
 {option}`services.anki-sync-server.port`, and does not open the firewall. This
@@ -50,19 +59,9 @@ you want to expose the sync server directly to other computers (not recommended
 in most circumstances, because the sync server doesn't use HTTPS), then set the
 following options:
 
-```
+```nix
 {
-  services.anki-sync-server.host = "0.0.0.0";
+  services.anki-sync-server.address = "0.0.0.0";
   services.anki-sync-server.openFirewall = true;
 }
 ```
-
-
-## Alternatives {#module-services-anki-sync-server-alternatives}
-
-The [`ankisyncd` NixOS
-module](https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/misc/ankisyncd.nix)
-provides similar functionality, but using a third-party implementation,
-[`anki-sync-server-rs`](https://github.com/ankicommunity/anki-sync-server-rs/).
-According to that project's README, it is "no longer maintained", and not
-recommended for Anki 2.1.64+.

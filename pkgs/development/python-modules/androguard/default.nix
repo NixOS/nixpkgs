@@ -1,95 +1,99 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, networkx
-, pygments
-, lxml
-, colorama
-, matplotlib
-, asn1crypto
-, click
-, pydot
-, ipython
-, packaging
-, pyqt5
-, pyperclip
-, nose
-, nose-timer
-, mock
-, python-magic
-, codecov
-, coverage
-, qt5
-# This is usually used as a library, and it'd be a shame to force the GUI
-# libraries to the closure if GUI is not desired.
-, withGui ? false
-# Tests take a very long time, and currently fail, but next release' tests
-# shouldn't fail
-, doCheck ? false
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  apkinspector,
+  networkx,
+  pygments,
+  lxml,
+  colorama,
+  cryptography,
+  dataset,
+  frida-python,
+  loguru,
+  matplotlib,
+  asn1crypto,
+  click,
+  mutf8,
+  pyyaml,
+  pydot,
+  ipython,
+  oscrypto,
+  pyqt5,
+  pytestCheckHook,
+  python-magic,
+  qt5,
+  # This is usually used as a library, and it'd be a shame to force the GUI
+  # libraries to the closure if GUI is not desired.
+  withGui ? false,
+  # Deprecated in 24.11.
+  doCheck ? true,
 }:
+
+assert lib.warnIf (!doCheck) "python3Packages.androguard: doCheck is deprecated" true;
 
 buildPythonPackage rec {
   pname = "androguard";
-  version = "3.4.0a1";
-  format = "setuptools";
+  version = "4.1.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    repo = pname;
-    owner = pname;
-    rev = "v${version}";
-    sha256 = "1aparxiq11y0hbvkayp92w684nyxyyx7mi0n1x6x51g5z6c58vmy";
+    repo = "androguard";
+    owner = "androguard";
+    tag = "v${version}";
+    sha256 = "sha256-qz6x7UgYXal1DbQGzi4iKnSGEn873rKibKme/pF7tLk=";
   };
 
-  nativeBuildInputs = [
-    packaging
-  ] ++ lib.optionals withGui [
-    qt5.wrapQtAppsHook
+  build-system = [
+    poetry-core
   ];
 
-  propagatedBuildInputs = [
-    asn1crypto
-    click
-    colorama
-    future
-    ipython
-    lxml
-    matplotlib
-    networkx
-    pydot
-    pygments
-  ] ++ lib.optionals withGui [
-    pyqt5
-    pyperclip
-  ];
+  nativeBuildInputs = lib.optionals withGui [ qt5.wrapQtAppsHook ];
+
+  dependencies =
+    [
+      apkinspector
+      asn1crypto
+      click
+      colorama
+      cryptography
+      dataset
+      frida-python
+      ipython
+      loguru
+      lxml
+      matplotlib
+      mutf8
+      networkx
+      oscrypto
+      pydot
+      pygments
+      pyyaml
+    ]
+    ++ networkx.optional-dependencies.default
+    ++ networkx.optional-dependencies.extra
+    ++ lib.optionals withGui [
+      pyqt5
+    ];
 
   nativeCheckInputs = [
-    codecov
-    coverage
-    mock
-    nose
-    nose-timer
-    pyperclip
+    pytestCheckHook
     pyqt5
     python-magic
   ];
-  inherit doCheck;
 
   # If it won't be verbose, you'll see nothing going on for a long time.
-  checkPhase = ''
-    runHook preCheck
-    nosetests --verbosity=3
-    runHook postCheck
-  '';
+  pytestFlagsArray = [ "--verbose" ];
 
   preFixup = lib.optionalString withGui ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool and Python library to interact with Android Files";
     homepage = "https://github.com/androguard/androguard";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ pmiddend ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pmiddend ];
   };
 }

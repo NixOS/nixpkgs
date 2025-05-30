@@ -1,23 +1,19 @@
-{ python3Packages
-, fetchFromGitHub
-, qt5
-, lib
+{
+  python3Packages,
+  qt5,
+  lib,
+  opensnitch,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "opensnitch-ui";
-  version = "1.6.5.1";
 
-  src = fetchFromGitHub {
-    owner = "evilsocket";
-    repo = "opensnitch";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-IVrAAHzLS7A7cYhRk+IUx8/5TGKeqC7M/7iXOpPe2ZA=";
-  };
+  inherit (opensnitch) src version;
+  sourceRoot = "${opensnitch.src.name}/ui";
 
   postPatch = ''
-    substituteInPlace ui/opensnitch/utils/__init__.py \
-      --replace /usr/lib/python3/dist-packages/data ${python3Packages.pyasn}/${python3Packages.python.sitePackages}/pyasn/data
+    substituteInPlace opensnitch/utils/__init__.py \
+      --replace-fail /usr/lib/python3/dist-packages/data ${python3Packages.pyasn}/${python3Packages.python.sitePackages}/pyasn/data
   '';
 
   nativeBuildInputs = [
@@ -29,9 +25,10 @@ python3Packages.buildPythonApplication rec {
     qt5.qtwayland
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     grpcio-tools
     notify2
+    packaging
     pyasn
     pyinotify
     pyqt5
@@ -45,10 +42,6 @@ python3Packages.buildPythonApplication rec {
     # sourced from ui/Makefile
     pyrcc5 -o opensnitch/resources_rc.py opensnitch/res/resources.qrc
     sed -i 's/^import ui_pb2/from . import ui_pb2/' opensnitch/ui_pb2*
-  '';
-
-  preConfigure = ''
-    cd ui
   '';
 
   preCheck = ''
@@ -65,11 +58,15 @@ python3Packages.buildPythonApplication rec {
   # All tests are sandbox-incompatible and disabled for now
   doCheck = false;
 
-  meta = with lib; {
-    description = "An application firewall";
+  meta = {
+    description = "Application firewall";
+    mainProgram = "opensnitch-ui";
     homepage = "https://github.com/evilsocket/opensnitch/wiki";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ onny ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      onny
+      grimmauld
+    ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,4 +1,9 @@
-{ buildPecl, lib, samba, pkg-config }:
+{
+  buildPecl,
+  lib,
+  samba,
+  pkg-config,
+}:
 buildPecl {
   pname = "smbclient";
   version = "1.0.6";
@@ -14,6 +19,6 @@ buildPecl {
     description = "PHP wrapper for libsmbclient";
     license = licenses.bsd2;
     homepage = "https://github.com/eduardok/libsmbclient-php";
-    maintainers = teams.php.members;
+    teams = [ teams.php ];
   };
 }

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, packaging
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  packaging,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "vcver";
   version = "0.2.12";
   format = "setuptools";
@@ -16,9 +17,7 @@ buildPythonPackage rec {
     sha256 = "1cvgs70jf7ki78338zaglaw2dkvyndmx15ybd6k4zqwwsfgk490b";
   };
 
-  propagatedBuildInputs = [
-    packaging
-  ];
+  propagatedBuildInputs = [ packaging ];
 
   # circular dependency on test tool uranium https://pypi.org/project/uranium/
   doCheck = false;

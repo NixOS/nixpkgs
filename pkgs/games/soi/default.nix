@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, cmake
-, boost, eigen2, lua, luabind, libGLU, libGL, SDL }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  boost,
+  eigen2,
+  lua,
+  luabind,
+  libGLU,
+  libGL,
+  SDL,
+}:
 
 stdenv.mkDerivation rec {
   pname = "soi";
@@ -12,7 +23,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost lua luabind libGLU libGL SDL ];
+  buildInputs = [
+    boost
+    lua
+    luabind
+    libGLU
+    libGL
+    SDL
+  ];
 
   cmakeFlags = [
     "-DEIGEN_INCLUDE_DIR=${eigen2}/include/eigen2"
@@ -20,7 +38,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A physics-based puzzle game";
+    description = "Physics-based puzzle game";
+    mainProgram = "soi";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.free;

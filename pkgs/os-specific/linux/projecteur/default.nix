@@ -1,11 +1,12 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qtbase
-, qtgraphicaleffects
-, wrapQtAppsHook
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qtbase,
+  qtgraphicaleffects,
+  wrapQtAppsHook,
 }:
 
 mkDerivation rec {
@@ -42,11 +43,14 @@ mkDerivation rec {
   ];
 
   meta = {
-    description = "Linux/X11 application for the Logitech Spotlight device (and similar devices).";
+    description = "Linux/X11 application for the Logitech Spotlight device (and similar devices)";
     homepage = "https://github.com/jahnf/Projecteur";
     license = lib.licenses.mit;
     mainProgram = "projecteur";
-    maintainers = with lib.maintainers; [ benneti drupol ];
+    maintainers = with lib.maintainers; [
+      benneti
+      drupol
+    ];
     platforms = lib.platforms.linux;
   };
 }

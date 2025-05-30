@@ -1,12 +1,13 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, mkdocs
-, mkdocs-material
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mkdocs,
+  mkdocs-material,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Blueswen";
     repo = "mkdocs-redoc-tag";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-TOGFch+Uto3qeVMaHqK8SEy0v0cKtHofoGE8T1mnBOk=";
   };
 
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     beautifulsoup4
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     mkdocs-material
@@ -38,7 +37,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A MkDocs plugin supports for add Redoc UI in page";
+    description = "MkDocs plugin supports for add Redoc UI in page";
     homepage = "https://github.com/blueswen/mkdocs-redoc-tag";
     changelog = "https://github.com/blueswen/mkdocs-redoc-tag/blob/v${version}/CHANGELOG";
     license = licenses.mit;

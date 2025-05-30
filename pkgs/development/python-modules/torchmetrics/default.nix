@@ -1,61 +1,54 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, numpy
-, lightning-utilities
-, cloudpickle
-, scikit-learn
-, scikit-image
-, packaging
-, psutil
-, py-deprecate
-, torch
-, pytestCheckHook
-, torchmetrics
-, pytorch-lightning
-, pytest-doctestplus
-, pytest-xdist
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # dependencies
+  numpy,
+  lightning-utilities,
+  packaging,
+
+  # buildInputs
+  torch,
+
+  # tests
+  pytestCheckHook,
+  pytest-doctestplus,
+  pytest-xdist,
+  pytorch-lightning,
+  scikit-image,
+
+  # passthru
+  torchmetrics,
 }:
 
-let
+buildPythonPackage rec {
   pname = "torchmetrics";
-  version = "1.3.1";
-in
-buildPythonPackage {
-  inherit pname version;
+  version = "1.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "torchmetrics";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZFpLoF4t1ld2c3exX9H8AYG0XQM7MKmWe/I8XZmdrZw=";
+    tag = "v${version}";
+    hash = "sha256-E/ZmP0eyNdSYb0+wKNsOZM2ViEldUWcwSmSGzZEYXfw=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     lightning-utilities
     packaging
-    py-deprecate
   ];
 
   # Let the user bring their own instance
-  buildInputs = [
-    torch
-  ];
+  buildInputs = [ torch ];
 
   nativeCheckInputs = [
-    pytorch-lightning
-    scikit-learn
-    scikit-image
-    cloudpickle
-    psutil
     pytestCheckHook
     pytest-doctestplus
     pytest-xdist
+    pytorch-lightning
+    scikit-image
   ];
 
   # A cyclic dependency in: integrations/test_lightning.py
@@ -69,31 +62,31 @@ buildPythonPackage {
     dontInstall = true;
   });
 
-  disabledTests = [
-    # `IndexError: list index out of range`
-    "test_metric_lightning_log"
-  ];
-
   disabledTestPaths = [
     # These require too many "leftpad-level" dependencies
     # Also too cross-dependent
     "tests/unittests"
 
+    # AttributeError: partially initialized module 'pesq' has no attribute 'pesq' (most likely due to a circular import)
+    "examples/audio/pesq.py"
+
+    # Require internet access
+    "examples/text/bertscore.py"
+    "examples/image/clip_score.py"
+    "examples/text/perplexity.py"
+    "examples/text/rouge.py"
+
     # A trillion import path mismatch errors
     "src/torchmetrics"
   ];
 
-  pythonImportsCheck = [
-    "torchmetrics"
-  ];
+  pythonImportsCheck = [ "torchmetrics" ];
 
-  meta = with lib; {
+  meta = {
     description = "Machine learning metrics for distributed, scalable PyTorch applications (used in pytorch-lightning)";
     homepage = "https://lightning.ai/docs/torchmetrics/";
     changelog = "https://github.com/Lightning-AI/torchmetrics/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
-      SomeoneSerge
-    ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
 }

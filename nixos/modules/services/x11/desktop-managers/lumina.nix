@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -19,21 +24,18 @@ in
     services.xserver.desktopManager.lumina.enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "Enable the Lumina desktop manager";
+      description = "Enable the Lumina desktop manager";
     };
 
   };
 
-
   config = mkIf cfg.enable {
 
-    services.xserver.displayManager.sessionPackages = [
+    services.displayManager.sessionPackages = [
       pkgs.lumina.lumina
     ];
 
-    environment.systemPackages =
-      pkgs.lumina.preRequisitePackages ++
-      pkgs.lumina.corePackages;
+    environment.systemPackages = pkgs.lumina.preRequisitePackages ++ pkgs.lumina.corePackages;
 
     # Link some extra directories in /run/current-system/software/share
     environment.pathsToLink = [

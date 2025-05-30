@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitLab
+{
+  lib,
+  python3,
+  fetchFromGitLab,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -16,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.cfg --replace "--flake8 --pylint --cov=marge" ""
+    substituteInPlace setup.cfg --replace-fail "--flake8 --pylint" ""
   '';
 
   nativeBuildInputs = [
@@ -30,17 +31,31 @@ python3.pkgs.buildPythonApplication rec {
     requests
   ];
 
-  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
+  nativeCheckInputs = with python3.pkgs; [
+    pytest-cov-stub
+    pytestCheckHook
+    pendulum
+  ];
+
   disabledTests = [
     # test broken when run under Nix:
     #   "unittest.mock.InvalidSpecError: Cannot spec a Mock object."
     "test_get_mr_ci_status"
+    # broken because of an incorrect assertion:
+    #   "AttributeError: 'has_calls' is not a valid assertion."
+    "test_reapprove"
+  ];
+
+  disabledTestPaths = [
+    # test errors due to API mismatch in test setup:
+    #   "ImportError: cannot import name 'set_test_now' from 'pendulum.helpers'"
+    "tests/test_interval.py"
   ];
 
   pythonImportsCheck = [ "marge" ];
 
   meta = with lib; {
-    description = "A merge bot for GitLab";
+    description = "Merge bot for GitLab";
     homepage = "https://gitlab.com/marge-org/marge-bot";
     changelog = "https://gitlab.com/marge-org/marge-bot/-/blob/${src.rev}/CHANGELOG.md";
     license = licenses.bsd3;

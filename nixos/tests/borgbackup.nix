@@ -1,12 +1,16 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+{ pkgs, ... }:
 
 let
   passphrase = "supersecret";
   dataDir = "/ran:dom/data";
+  subDir = "not_anything_here";
+  excludedSubDirFile = "not_this_file_either";
   excludeFile = "not_this_file";
   keepFile = "important_file";
   keepFileData = "important_data";
   localRepo = "/root/back:up";
+  # a repository on a file system which is not mounted automatically
+  localRepoMount = "/noAutoMount";
   archiveName = "my_archive";
   remoteRepo = "borg@server:."; # No need to specify path
   privateKey = pkgs.writeText "id_ed25519" ''
@@ -34,107 +38,130 @@ let
     ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFpxm7PUQsZB2Ejs8Xp0YVp8IOW+HylIRzhweORbRCMv root@client
   '';
 
-in {
+in
+{
   name = "borgbackup";
   meta = with pkgs.lib; {
     maintainers = with maintainers; [ dotlambda ];
   };
 
   nodes = {
-    client = { ... }: {
-      services.borgbackup.jobs = {
+    client =
+      { ... }:
+      {
+        virtualisation.fileSystems.${localRepoMount} = {
+          device = "tmpfs";
+          fsType = "tmpfs";
+          options = [ "noauto" ];
+        };
 
-        local = {
-          paths = dataDir;
-          repo = localRepo;
-          preHook = ''
-            # Don't append a timestamp
-            archiveName="${archiveName}"
-          '';
-          encryption = {
-            mode = "repokey";
-            inherit passphrase;
+        services.borgbackup.jobs = {
+
+          local = {
+            paths = dataDir;
+            repo = localRepo;
+            preHook = ''
+              # Don't append a timestamp
+              archiveName="${archiveName}"
+            '';
+            encryption = {
+              mode = "repokey";
+              inherit passphrase;
+            };
+            compression = "auto,zlib,9";
+            prune.keep = {
+              within = "1y";
+              yearly = 5;
+            };
+            exclude = [ "*/${excludeFile}" ];
+            extraCreateArgs = [
+              "--exclude-caches"
+              "--exclude-if-present"
+              ".dont backup"
+            ];
+            postHook = "echo post";
+            startAt = [ ]; # Do not run automatically
           };
-          compression = "auto,zlib,9";
-          prune.keep = {
-            within = "1y";
-            yearly = 5;
+
+          localMount = {
+            paths = dataDir;
+            repo = localRepoMount;
+            encryption.mode = "none";
+            startAt = [ ];
           };
-          exclude = [ "*/${excludeFile}" ];
-          postHook = "echo post";
-          startAt = [ ]; # Do not run automatically
-        };
 
-        remote = {
-          paths = dataDir;
-          repo = remoteRepo;
-          encryption.mode = "none";
-          startAt = [ ];
-          environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
-        };
+          remote = {
+            paths = dataDir;
+            repo = remoteRepo;
+            encryption.mode = "none";
+            startAt = [ ];
+            environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
+          };
 
-        remoteAppendOnly = {
-          paths = dataDir;
-          repo = remoteRepo;
-          encryption.mode = "none";
-          startAt = [ ];
-          environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519.appendOnly";
-        };
+          remoteAppendOnly = {
+            paths = dataDir;
+            repo = remoteRepo;
+            encryption.mode = "none";
+            startAt = [ ];
+            environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519.appendOnly";
+          };
 
-        commandSuccess = {
-          dumpCommand = pkgs.writeScript "commandSuccess" ''
-            echo -n test
-          '';
-          repo = remoteRepo;
-          encryption.mode = "none";
-          startAt = [ ];
-          environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
-        };
+          commandSuccess = {
+            dumpCommand = pkgs.writeScript "commandSuccess" ''
+              echo -n test
+            '';
+            repo = remoteRepo;
+            encryption.mode = "none";
+            startAt = [ ];
+            environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
+          };
 
-        commandFail = {
-          dumpCommand = "${pkgs.coreutils}/bin/false";
-          repo = remoteRepo;
-          encryption.mode = "none";
-          startAt = [ ];
-          environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
-        };
+          commandFail = {
+            dumpCommand = "${pkgs.coreutils}/bin/false";
+            repo = remoteRepo;
+            encryption.mode = "none";
+            startAt = [ ];
+            environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
+          };
 
-        sleepInhibited = {
-          inhibitsSleep = true;
-          # Blocks indefinitely while "backing up" so that we can try to suspend the local system while it's hung
-          dumpCommand = pkgs.writeScript "sleepInhibited" ''
-            cat /dev/zero
-          '';
-          repo = remoteRepo;
-          encryption.mode = "none";
-          startAt = [ ];
-          environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
-        };
+          sleepInhibited = {
+            inhibitsSleep = true;
+            # Blocks indefinitely while "backing up" so that we can try to suspend the local system while it's hung
+            dumpCommand = pkgs.writeScript "sleepInhibited" ''
+              cat /dev/zero
+            '';
+            repo = remoteRepo;
+            encryption.mode = "none";
+            startAt = [ ];
+            environment.BORG_RSH = "ssh -oStrictHostKeyChecking=no -i /root/id_ed25519";
+          };
 
-      };
-    };
-
-    server = { ... }: {
-      services.openssh = {
-        enable = true;
-        settings = {
-          PasswordAuthentication = false;
-          KbdInteractiveAuthentication = false;
         };
       };
 
-      services.borgbackup.repos.repo1 = {
-        authorizedKeys = [ publicKey ];
-        path = "/data/borgbackup";
-      };
+    server =
+      { ... }:
+      {
+        services.openssh = {
+          enable = true;
+          settings = {
+            PasswordAuthentication = false;
+            KbdInteractiveAuthentication = false;
+          };
+        };
 
-      # Second repo to make sure the authorizedKeys options are merged correctly
-      services.borgbackup.repos.repo2 = {
-        authorizedKeysAppendOnly = [ publicKeyAppendOnly ];
-        path = "/data/borgbackup";
-        quota = ".5G";
+        services.borgbackup.repos.repo1 = {
+          authorizedKeys = [ publicKey ];
+          path = "/data/borgbackup";
+        };
+
+        # Second repo to make sure the authorizedKeys options are merged correctly
+        services.borgbackup.repos.repo2 = {
+          authorizedKeysAppendOnly = [ publicKeyAppendOnly ];
+          path = "/data/borgbackup";
+          quota = ".5G";
+        };
       };
-    };
   };
 
   testScript = ''
@@ -151,8 +178,10 @@ in {
     )
     client.succeed("chmod 0600 /root/id_ed25519.appendOnly")
 
-    client.succeed("mkdir -p ${dataDir}")
+    client.succeed("mkdir -p ${dataDir}/${subDir}")
     client.succeed("touch ${dataDir}/${excludeFile}")
+    client.succeed("touch '${dataDir}/${subDir}/.dont backup'")
+    client.succeed("touch ${dataDir}/${subDir}/${excludedSubDirFile}")
     client.succeed("echo '${keepFileData}' > ${dataDir}/${keepFile}")
 
     with subtest("local"):
@@ -164,6 +193,10 @@ in {
         # Make sure excludeFile has been excluded
         client.fail(
             "{} list '${localRepo}::${archiveName}' | grep -qF '${excludeFile}'".format(borg)
+        )
+        # Make sure excludedSubDirFile has been excluded
+        client.fail(
+            "{} list '${localRepo}::${archiveName}' | grep -qF '${subDir}/${excludedSubDirFile}".format(borg)
         )
         # Make sure keepFile has the correct content
         client.succeed("{} extract '${localRepo}::${archiveName}'".format(borg))
@@ -177,6 +210,17 @@ in {
         assert "${keepFileData}" in client.succeed(
             "cat /mnt/borg/${dataDir}/${keepFile}"
         )
+
+    with subtest("localMount"):
+        # the file system for the repo should not be already mounted
+        client.fail("mount | grep ${localRepoMount}")
+        # ensure trying to write to the mountpoint before the fs is mounted fails
+        client.succeed("chattr +i ${localRepoMount}")
+        borg = "borg"
+        client.systemctl("start --wait borgbackup-job-localMount")
+        client.fail("systemctl is-failed borgbackup-job-localMount")
+        # Make sure exactly one archive has been created
+        assert int(client.succeed("{} list '${localRepoMount}' | wc -l".format(borg))) > 0
 
     with subtest("remote"):
         borg = "BORG_RSH='ssh -oStrictHostKeyChecking=no -i /root/id_ed25519' borg"
@@ -227,4 +271,4 @@ in {
         client.wait_until_succeeds("systemd-inhibit --list | grep -q borgbackup")
         client.systemctl("stop borgbackup-job-sleepInhibited")
   '';
-})
+}

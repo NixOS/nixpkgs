@@ -1,8 +1,9 @@
-{ lib
-, pkgs
-, python3Packages
-, fetchPypi
-, nixosTests
+{
+  lib,
+  pkgs,
+  python3Packages,
+  fetchPypi,
+  nixosTests,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -44,7 +45,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/supakeen/steck";
     license = licenses.mit;
     description = "Client for pinnwand pastebin";
+    mainProgram = "steck";
     maintainers = with maintainers; [ hexa ];
   };
 }
-

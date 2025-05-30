@@ -1,9 +1,10 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, pyyaml
-, six
-, lxml
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  pyyaml,
+  six,
+  lxml,
 }:
 
 buildPythonPackage rec {
@@ -12,11 +13,14 @@ buildPythonPackage rec {
   format = "setuptools";
 
   propagatedBuildInputs = [ pyyaml ];
-  checkInputs = [ six lxml ];
+  checkInputs = [
+    six
+    lxml
+  ];
 
   src = fetchFromGitHub {
     owner = "olofk";
-    repo = pname;
+    repo = "ipyxact";
     rev = "v${version}";
     hash = "sha256-myD+NnqcxxaSAV7qZa8xqeciaiFqFePqIzd7sb/2GXA=";
   };
@@ -26,6 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/olofk/ipyxact";
     description = "IP-XACT parser";
+    mainProgram = "ipxact2v";
     maintainers = with maintainers; [ genericnerdyusername ];
     license = licenses.mit;
   };

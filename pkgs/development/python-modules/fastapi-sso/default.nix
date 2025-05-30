@@ -1,59 +1,54 @@
-{ lib
-, buildPythonPackage
-, email-validator
-, fastapi
-, fetchFromGitHub
-, httpx
-, oauthlib
-, poetry-core
-, pydantic
-, pylint
-, pytest-asyncio
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  email-validator,
+  fastapi,
+  fetchFromGitHub,
+  httpx,
+  oauthlib,
+  poetry-core,
+  pydantic,
+  pyjwt,
+  pytest-cov-stub,
+  pytest-asyncio,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "fastapi-sso";
-  version = "0.12.1";
+  version = "0.18.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "tomasvotava";
     repo = "fastapi-sso";
-    rev = "refs/tags/${version}";
-    hash = "sha256-/Mt0pmZYsWp/n9YHCy/bFKUPzmoRFB0cHKCNxEfxMLs=";
+    tag = version;
+    hash = "sha256-591+7Jjg3Pb0qXZsj4tEk8lHqxAzWrs5GO92jFJ4Qmo=";
   };
 
-  postPatch = ''
-    sed -i "/--cov/d" pyproject.toml
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     fastapi
     httpx
     oauthlib
     pydantic
-    pylint
-  ];
+    pyjwt
+  ] ++ pydantic.optional-dependencies.email;
 
   nativeCheckInputs = [
     email-validator
     pytest-asyncio
+    pytest-cov-stub
     pytest-xdist
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "fastapi_sso"
-  ];
+  pythonImportsCheck = [ "fastapi_sso" ];
 
   meta = with lib; {
     description = "FastAPI plugin to enable SSO to most common providers (such as Facebook login, Google login and login via Microsoft Office 365 Account";

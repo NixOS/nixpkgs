@@ -1,23 +1,24 @@
-{ lib
-, dataDir ? "/var/lib/snipe-it"
-, fetchFromGitHub
-, mariadb
-, nixosTests
-, php
+{
+  lib,
+  dataDir ? "/var/lib/snipe-it",
+  fetchFromGitHub,
+  mariadb,
+  nixosTests,
+  php84,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php84.buildComposerProject2 (finalAttrs: {
   pname = "snipe-it";
-  version = "6.3.3";
+  version = "8.1.3";
 
   src = fetchFromGitHub {
-    owner = "snipe";
+    owner = "grokability";
     repo = "snipe-it";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-ePE55mK8woopNuRXox51I0sJGBmjF6XDfjE+k+ncoJ0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SzL1api9hObdvhKRtBrzgvZNuJHAoeB2GCt2etCZ6Kw=";
   };
 
-  vendorHash = "sha256-wO+hKttiI7T7C+4oSl8G0I4pQEfZpXjYspUhoaaLrAQ=";
+  vendorHash = "sha256-KOzPzKN1HXFidjXWe8tNPwFJ8DmdrkCDKeChNhGcTDo=";
 
   postInstall = ''
     snipe_it_out="$out/share/php/snipe-it"
@@ -36,16 +37,16 @@ php.buildComposerProject (finalAttrs: {
 
     chmod +x $snipe_it_out/artisan
 
-    substituteInPlace $snipe_it_out/config/database.php --replace "env('DB_DUMP_PATH', '/usr/local/bin')" "env('DB_DUMP_PATH', '${mariadb}/bin')"
+    substituteInPlace $snipe_it_out/config/database.php --replace-fail "env('DB_DUMP_PATH', '/usr/local/bin')" "env('DB_DUMP_PATH', '${mariadb}/bin')"
   '';
 
   passthru = {
     tests = nixosTests.snipe-it;
-    phpPackage = php;
+    phpPackage = php84;
   };
 
-  meta = with lib; {
-    description = "A free open source IT asset/license management system";
+  meta = {
+    description = "Free open source IT asset/license management system";
     longDescription = ''
       Snipe-IT was made for IT asset management, to enable IT departments to track
       who has which laptop, when it was purchased, which software licenses and accessories
@@ -53,9 +54,9 @@ php.buildComposerProject (finalAttrs: {
       Details for snipe-it can be found on the official website at https://snipeitapp.com/.
     '';
     homepage = "https://snipeitapp.com/";
-    changelog = "https://github.com/snipe/snipe-it/releases/tag/v${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ yayayayaka ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/snipe/snipe-it/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ yayayayaka ];
+    platforms = lib.platforms.linux;
   };
 })

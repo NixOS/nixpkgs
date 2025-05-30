@@ -1,0 +1,22 @@
+diff --git a/efi/main.c b/efi/main.c
+index 6a748412..a914e31a 100644
+--- a/efi/main.c
++++ b/efi/main.c
+@@ -187,7 +187,7 @@ __export void local_boot(uint16_t ax)
+      * Inform the firmware that we failed to execute correctly, which
+      * will trigger the next entry in the EFI Boot Manager list.
+      */
+-    longjmp(&load_error_buf, 1);
++    longjmp(load_error_buf, 1);
+ }
+ 
+ void bios_timer_cleanup(void)
+@@ -1385,7 +1385,7 @@ EFI_STATUS efi_main(EFI_HANDLE image, EFI_SYSTEM_TABLE *table)
+		status = uefi_call_wrapper(in->ReadKeyStroke, 2, in, &key);
+ 	} while (status == EFI_SUCCESS);
+ 
+-	if (!setjmp(&load_error_buf))
++	if (!setjmp(load_error_buf))
+		load_env32(NULL);
+ 
+	/* load_env32() failed.. cancel timer and bailout */

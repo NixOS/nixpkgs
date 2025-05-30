@@ -1,105 +1,122 @@
-{ lib
-, stdenv
-, buildPythonApplication
-, fetchPypi
-, makeWrapper
-# Tie withPlugins through the fixed point here, so it will receive an
-# overridden version properly
-, buildbot
-, pythonOlder
-, python
-, twisted
-, jinja2
-, msgpack
-, zope-interface
-, sqlalchemy
-, alembic
-, python-dateutil
-, txaio
-, autobahn
-, pyjwt
-, pyyaml
-, treq
-, txrequests
-, pypugjs
-, boto3
-, moto
-, markdown
-, lz4
-, setuptools-trial
-, buildbot-worker
-, buildbot-plugins
-, buildbot-pkg
-, parameterized
-, git
-, openssh
-, setuptools
-, croniter
-, importlib-resources
-, packaging
-, unidiff
-, glibcLocales
-, nixosTests
+{
+  lib,
+  stdenv,
+  buildPythonApplication,
+  fetchFromGitHub,
+  makeWrapper,
+  # Tie withPlugins through the fixed point here, so it will receive an
+  # overridden version properly
+  buildbot,
+  pythonOlder,
+  python,
+  twisted,
+  jinja2,
+  msgpack,
+  zope-interface,
+  sqlalchemy,
+  alembic,
+  python-dateutil,
+  txaio,
+  autobahn,
+  pyjwt,
+  pyyaml,
+  treq,
+  txrequests,
+  pypugjs,
+  boto3,
+  moto,
+  markdown,
+  lz4,
+  brotli,
+  zstandard,
+  setuptools-trial,
+  buildbot-worker,
+  buildbot-plugins,
+  buildbot-pkg,
+  parameterized,
+  git,
+  openssh,
+  setuptools,
+  croniter,
+  importlib-resources,
+  packaging,
+  unidiff,
+  nixosTests,
 }:
 
 let
-  withPlugins = plugins: buildPythonApplication {
-    pname = "${buildbot.pname}-with-plugins";
-    inherit (buildbot) version;
-    format = "other";
+  withPlugins =
+    plugins:
+    buildPythonApplication {
+      pname = "${buildbot.pname}-with-plugins";
+      inherit (buildbot) version;
+      format = "other";
 
-    dontUnpack = true;
-    dontBuild = true;
-    doCheck = false;
+      dontUnpack = true;
+      dontBuild = true;
+      doCheck = false;
 
-    nativeBuildInputs = [
-      makeWrapper
-    ];
+      nativeBuildInputs = [
+        makeWrapper
+      ];
 
-    propagatedBuildInputs = plugins ++ buildbot.propagatedBuildInputs;
+      propagatedBuildInputs = plugins ++ buildbot.propagatedBuildInputs;
 
-    installPhase = ''
-      makeWrapper ${buildbot}/bin/buildbot $out/bin/buildbot \
-        --prefix PYTHONPATH : "${buildbot}/${python.sitePackages}:$PYTHONPATH"
-      ln -sfv ${buildbot}/lib $out/lib
-    '';
+      installPhase = ''
+        makeWrapper ${buildbot}/bin/buildbot $out/bin/buildbot \
+          --prefix PYTHONPATH : "${buildbot}/${python.sitePackages}:$PYTHONPATH"
+        ln -sfv ${buildbot}/lib $out/lib
+      '';
 
-    passthru = buildbot.passthru // {
-      withPlugins = morePlugins: withPlugins (morePlugins ++ plugins);
+      passthru = buildbot.passthru // {
+        withPlugins = morePlugins: withPlugins (morePlugins ++ plugins);
+      };
     };
-  };
 in
 buildPythonApplication rec {
   pname = "buildbot";
-  version = "3.11.1";
+  version = "4.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ruYW1sVoGvFMi+NS+xiNsn0Iq2RmKlax4bxHgYrj6ZY=";
+  src = fetchFromGitHub {
+    owner = "buildbot";
+    repo = "buildbot";
+    rev = "v${version}";
+    hash = "sha256-Kf8sxZE2cQDQSVSMpRTokJU4f3/M6OJq6bXzGonrRLU=";
   };
 
-  propagatedBuildInputs = [
-    # core
-    twisted
-    jinja2
-    msgpack
-    zope-interface
-    sqlalchemy
-    alembic
-    python-dateutil
-    txaio
-    autobahn
-    pyjwt
-    pyyaml
-    setuptools
-    croniter
-    importlib-resources
-    packaging
-    unidiff
-  ]
+  build-system = [
+  ];
+
+  pythonRelaxDeps = [
+    "twisted"
+  ];
+
+  propagatedBuildInputs =
+    [
+      # core
+      twisted
+      jinja2
+      msgpack
+      zope-interface
+      sqlalchemy
+      alembic
+      python-dateutil
+      txaio
+      autobahn
+      pyjwt
+      pyyaml
+      setuptools
+      croniter
+      importlib-resources
+      packaging
+      unidiff
+      treq
+      brotli
+      zstandard
+    ]
     # tls
     ++ twisted.optional-dependencies.tls;
 
@@ -118,7 +135,6 @@ buildPythonApplication rec {
     parameterized
     git
     openssh
-    glibcLocales
   ];
 
   patches = [
@@ -128,37 +144,34 @@ buildPythonApplication rec {
   ];
 
   postPatch = ''
+    cd master
+    touch buildbot/py.typed
     substituteInPlace buildbot/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
   '';
 
-  # Silence the depreciation warning from SqlAlchemy
-  SQLALCHEMY_SILENCE_UBER_WARNING = 1;
-
   # TimeoutErrors on slow machines -> aarch64
-  doCheck = !stdenv.isAarch64;
+  doCheck = !stdenv.hostPlatform.isAarch64;
 
   preCheck = ''
-    export LC_ALL="en_US.UTF-8"
     export PATH="$out/bin:$PATH"
-
-    # remove testfile which is missing configuration file from sdist
-    rm buildbot/test/integration/test_graphql.py
-    # tests in this file are flaky, see https://github.com/buildbot/buildbot/issues/6776
-    rm buildbot/test/integration/test_try_client.py
   '';
 
-  passthru = {
-    inherit withPlugins;
-    tests.buildbot = nixosTests.buildbot;
-    updateScript = ./update.sh;
-  };
+  passthru =
+    {
+      inherit withPlugins python;
+      updateScript = ./update.sh;
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      tests = {
+        inherit (nixosTests) buildbot;
+      };
+    };
 
   meta = with lib; {
-    description = "An open-source continuous integration framework for automating software build, test, and release processes";
+    description = "Open-source continuous integration framework for automating software build, test, and release processes";
     homepage = "https://buildbot.net/";
     changelog = "https://github.com/buildbot/buildbot/releases/tag/v${version}";
-    maintainers = teams.buildbot.members;
+    teams = [ teams.buildbot ];
     license = licenses.gpl2Only;
-    broken = stdenv.isDarwin;
   };
 }

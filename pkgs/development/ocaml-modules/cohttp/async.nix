@@ -1,23 +1,23 @@
-{ lib
-, buildDunePackage
-, ppx_sexp_conv
-, base
-, async
-, async_kernel
-, async_unix
-, cohttp
-, conduit-async
-, core_unix ? null
-, uri
-, uri-sexp
-, logs
-, fmt
-, sexplib0
-, ipaddr
-, magic-mime
-, ounit
-, mirage-crypto
-, core
+{
+  buildDunePackage,
+  ppx_sexp_conv,
+  base,
+  async,
+  async_kernel,
+  async_unix,
+  cohttp,
+  conduit-async,
+  core_unix ? null,
+  uri,
+  uri-sexp,
+  logs,
+  fmt,
+  sexplib0,
+  ipaddr,
+  magic-mime,
+  ounit,
+  mirage-crypto,
+  core,
 }:
 
 buildDunePackage {
@@ -28,7 +28,7 @@ buildDunePackage {
     src
     ;
 
-  duneVersion = "3";
+  minimalOCamlVersion = "4.14";
 
   buildInputs = [ ppx_sexp_conv ];
 

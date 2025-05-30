@@ -1,33 +1,32 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, flit-core
-, pytestCheckHook
-, numpy
-, xarray
-, xarray-dataclasses
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  hatchling,
+  pytestCheckHook,
+  numpy,
+  xarray,
+  xarray-dataclasses,
 }:
 
 buildPythonPackage rec {
   pname = "spatial-image";
-  version = "1.0.0";
+  version = "1.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "spatial-image";
     repo = "spatial-image";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-nCsxPhIgGmZZntYbhQ3KnzptcKdN288eNixbQDgECSQ=";
+    tag = "v${version}";
+    hash = "sha256-PGc2uey2xcfE0PcYDaCp7U0lgeGL1I6MMP3vbTN+Alk=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     xarray
     xarray-dataclasses
@@ -37,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "spatial_image" ];
 
-  meta = with lib; {
-    description = "A multi-dimensional spatial image data structure for scientific Python";
+  meta = {
+    description = "Multi-dimensional spatial image data structure for scientific Python";
     homepage = "https://github.com/spatial-image/spatial-image";
     changelog = "https://github.com/spatial-image/spatial-image/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

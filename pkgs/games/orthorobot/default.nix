@@ -1,14 +1,15 @@
-{ lib
-, copyDesktopItems
-, fetchFromGitHub
-, fetchpatch
-, fetchurl
-, love
-, makeDesktopItem
-, makeWrapper
-, stdenv
-, strip-nondeterminism
-, zip
+{
+  lib,
+  copyDesktopItems,
+  fetchFromGitHub,
+  fetchpatch,
+  fetchurl,
+  love,
+  makeDesktopItem,
+  makeWrapper,
+  stdenv,
+  strip-nondeterminism,
+  zip,
 }:
 
 stdenv.mkDerivation rec {
@@ -68,6 +69,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Recharge the robot";
+    mainProgram = "orthorobot";
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;
     license = licenses.free;

@@ -1,12 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchsvn
-, jdk
-, jre
-, ant
-, makeWrapper
-, doCheck ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchsvn,
+  jdk,
+  jre,
+  ant,
+  makeWrapper,
+  stripJavaArchivesHook,
+  doCheck ? true,
 }:
 let
   deps = import ../deps.nix { inherit fetchurl; };
@@ -14,12 +16,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "splitter";
-  version = "653";
+  version = "654";
 
   src = fetchsvn {
     url = "https://svn.mkgmap.org.uk/mkgmap/splitter/trunk";
     rev = version;
-    sha256 = "sha256-iw414ecnOfeG3FdlIaoVOPv9BXZ95uUHuPzCQGH4G+A=";
+    sha256 = "sha256-y/pl8kIQ6fiF541ho72LMgJFWJdkUBqPToQGCGmmcfg=";
   };
 
   patches = [
@@ -29,36 +31,40 @@ stdenv.mkDerivation rec {
     ./fix-failing-test.patch
   ];
 
-  postPatch = with deps; ''
-    # Fix the output jar timestamps for reproducibility
-    substituteInPlace build.xml \
-        --replace-fail '<jar ' '<jar modificationtime="0" '
+  postPatch =
+    with deps;
+    ''
+      # Manually create version properties file for reproducibility
+      mkdir -p build/classes
+      cat > build/classes/splitter-version.properties << EOF
+        svn.version=${version}
+        build.timestamp=unknown
+      EOF
 
-    # Manually create version properties file for reproducibility
-    mkdir -p build/classes
-    cat > build/classes/splitter-version.properties << EOF
-      svn.version=${version}
-      build.timestamp=unknown
-    EOF
+      # Put pre-fetched dependencies into the right place
+      mkdir -p lib/compile
+      cp ${fastutil} lib/compile/${fastutil.name}
+      cp ${osmpbf} lib/compile/${osmpbf.name}
+      cp ${protobuf} lib/compile/${protobuf.name}
+      cp ${xpp3} lib/compile/${xpp3.name}
+    ''
+    + lib.optionalString doCheck ''
+      mkdir -p lib/test
+      cp ${junit} lib/test/${junit.name}
+      cp ${hamcrest-core} lib/test/${hamcrest-core.name}
 
-    # Put pre-fetched dependencies into the right place
-    mkdir -p lib/compile
-    cp ${fastutil} lib/compile/${fastutil.name}
-    cp ${osmpbf} lib/compile/${osmpbf.name}
-    cp ${protobuf} lib/compile/${protobuf.name}
-    cp ${xpp3} lib/compile/${xpp3.name}
-  '' + lib.optionalString doCheck ''
-    mkdir -p lib/test
-    cp ${junit} lib/test/${junit.name}
-    cp ${hamcrest-core} lib/test/${hamcrest-core.name}
+      mkdir -p test/resources/in/osm
+      ${lib.concatMapStringsSep "\n" (res: ''
+        cp ${res} test/resources/in/${builtins.replaceStrings [ "__" ] [ "/" ] res.name}
+      '') testInputs}
+    '';
 
-    mkdir -p test/resources/in/osm
-    ${lib.concatMapStringsSep "\n" (res: ''
-      cp ${res} test/resources/in/${builtins.replaceStrings [ "__" ] [ "/" ] res.name}
-    '') testInputs}
-  '';
-
-  nativeBuildInputs = [ jdk ant makeWrapper ];
+  nativeBuildInputs = [
+    jdk
+    ant
+    makeWrapper
+    stripJavaArchivesHook
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -87,7 +93,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = [ ../update.sh "mkgmap-splitter" meta.downloadPage ];
+  passthru.updateScript = [
+    ../update.sh
+    "mkgmap-splitter"
+    meta.downloadPage
+  ];
 
   meta = with lib; {
     description = "Utility for splitting OpenStreetMap maps into tiles";

@@ -1,24 +1,22 @@
-{ diffutils, fetchzip, lib, makeBinaryWrapper, stdenv, tk }:
+{
+  diffutils,
+  fetchzip,
+  lib,
+  makeBinaryWrapper,
+  stdenv,
+  tk,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tkdiff";
-  version = "5.6";
+  version = "5.7";
 
   src = fetchzip {
-    url = "mirror://sourceforge/tkdiff/tkdiff-${builtins.replaceStrings ["."] ["-"] finalAttrs.version}.zip";
-    hash = "sha256-EpbIdjsejkkTaSpoZRM5AHz0r1Cio+YzRryK0BoghBk=";
+    url = "mirror://sourceforge/tkdiff/tkdiff-${
+      builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version
+    }.zip";
+    hash = "sha256-ZndpolvaXoCAzR4KF+Bu7DJrXyB/C2H2lWp5FyzOc4M=";
   };
-
-  patches = [
-    # fix regression: allow /dev/null again. eg: "tkdiff /dev/null file"
-    # svn diff --git -r188:189 https://svn.code.sf.net/p/tkdiff/code/trunk
-    ./189.patch
-
-    # fix regression: trigger redraw when inline recursive diff requested
-    # svn diff --git -r193:194 https://svn.code.sf.net/p/tkdiff/code/trunk | \
-    #   sed -e '/^@@ -4545,7/,14d' -e '/^@@ -18063,7/,$d'
-    ./194.patch
-  ];
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
@@ -27,13 +25,18 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm755 -t $out/bin tkdiff
     wrapProgram $out/bin/tkdiff \
-      --prefix PATH : ${lib.makeBinPath [ diffutils tk ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          diffutils
+          tk
+        ]
+      }
 
     runHook postInstall
   '';
 
   meta = {
-    description = "A graphical front end to the diff program";
+    description = "Graphical front end to the diff program";
     homepage = "https://tkdiff.sourceforge.io/";
     license = lib.licenses.gpl2Plus;
     longDescription = ''

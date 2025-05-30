@@ -1,75 +1,66 @@
-{ lib
-, python3
-, fetchPypi
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  python3,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  qtbase,
+  qtwayland,
+  qtsvg,
 }:
 
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      # https://github.com/nxp-mcuxpresso/spsdk/issues/64
-      cryptography = super.cryptography.overridePythonAttrs (old: rec {
-        version = "41.0.7";
-        src = fetchPypi {
-          inherit (old) pname;
-          inherit version;
-          hash = "sha256-E/k86b6oAWwlOzSvxr1qdZk+XEBnLtVAWpyDLw1KALw=";
-        };
-        cargoDeps = rustPlatform.fetchCargoTarball {
-          inherit src;
-          sourceRoot = "${old.pname}-${version}/${old.cargoRoot}";
-          name = "${old.pname}-${version}";
-          hash = "sha256-VeZhKisCPDRvmSjGNwCgJJeVj65BZ0Ge+yvXbZw86Rw=";
-        };
-        patches = [ ];
-        doCheck = false; # would require overriding cryptography-vectors
-      });
-    };
-  };
-in python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "nitrokey-app2";
-  version = "2.1.5";
+  version = "2.3.3";
   pyproject = true;
 
-  disabled = python.pythonOlder "3.9";
+  disabled = python3.pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-app2";
-    rev = "v${version}";
-    hash = "sha256-mR13zUgCdNS09EnpGLrnOnoIn3p6ZM/0fHKg0OUMWj4=";
+    tag = "v${version}";
+    hash = "sha256-BbgP4V0cIctY/oR4/1r1MprkIn+5oyHeFiOQQQ71mNU=";
   };
 
-  # https://github.com/Nitrokey/nitrokey-app2/issues/152
-  #
-  # pythonRelaxDepsHook does not work here, because it runs in postBuild and
-  # only modifies the dependencies in the built distribution.
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace 'pynitrokey = "' 'pynitrokey = ">='
-  '';
-
-  nativeBuildInputs = with python.pkgs; [
+  nativeBuildInputs = with python3.pkgs; [
     poetry-core
+    wrapQtAppsHook
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
-    pynitrokey
-    pyudev
+  buildInputs =
+    [ qtbase ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      qtwayland
+      qtsvg
+    ];
+
+  propagatedBuildInputs = with python3.pkgs; [
+    nitrokey
     pyside6
-    qt-material
+    usb-monitor
   ];
+
+  pythonRelaxDeps = [ "nitrokey" ];
 
   pythonImportsCheck = [
     "nitrokeyapp"
   ];
+
+  postInstall = ''
+    install -Dm755 meta/com.nitrokey.nitrokey-app2.desktop $out/share/applications/com.nitrokey.nitrokey-app2.desktop
+    install -Dm755 meta/nk-app2.png $out/share/icons/hicolor/128x128/apps/com.nitrokey.nitrokey-app2.png
+  '';
 
   meta = with lib; {
     description = "This application allows to manage Nitrokey 3 devices";
     homepage = "https://github.com/Nitrokey/nitrokey-app2";
     changelog = "https://github.com/Nitrokey/nitrokey-app2/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ _999eagle panicgh ];
+    maintainers = with maintainers; [
+      _999eagle
+      panicgh
+    ];
     mainProgram = "nitrokeyapp";
   };
 }

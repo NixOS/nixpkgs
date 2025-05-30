@@ -1,6 +1,9 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.lifecycled;
 
@@ -10,8 +13,12 @@ let
   # systemd.services.lifecycled.serviceConfig.Environment
   configFile = pkgs.writeText "lifecycled" ''
     LIFECYCLED_HANDLER=${cfg.handler}
-    ${lib.optionalString (cfg.cloudwatchGroup != null) "LIFECYCLED_CLOUDWATCH_GROUP=${cfg.cloudwatchGroup}"}
-    ${lib.optionalString (cfg.cloudwatchStream != null) "LIFECYCLED_CLOUDWATCH_STREAM=${cfg.cloudwatchStream}"}
+    ${lib.optionalString (
+      cfg.cloudwatchGroup != null
+    ) "LIFECYCLED_CLOUDWATCH_GROUP=${cfg.cloudwatchGroup}"}
+    ${lib.optionalString (
+      cfg.cloudwatchStream != null
+    ) "LIFECYCLED_CLOUDWATCH_STREAM=${cfg.cloudwatchStream}"}
     ${lib.optionalString cfg.debug "LIFECYCLED_DEBUG=${lib.boolToString cfg.debug}"}
     ${lib.optionalString (cfg.instanceId != null) "LIFECYCLED_INSTANCE_ID=${cfg.instanceId}"}
     ${lib.optionalString cfg.json "LIFECYCLED_JSON=${lib.boolToString cfg.json}"}
@@ -21,19 +28,22 @@ let
   '';
 in
 {
-  meta.maintainers = with maintainers; [ cole-h grahamc ];
+  meta.maintainers = with lib.maintainers; [
+    cole-h
+    grahamc
+  ];
 
   options = {
     services.lifecycled = {
-      enable = mkEnableOption (lib.mdDoc "lifecycled");
+      enable = lib.mkEnableOption "lifecycled, a daemon for responding to AWS AutoScaling Lifecycle Hooks";
 
       queueCleaner = {
-        enable = mkEnableOption (lib.mdDoc "lifecycled-queue-cleaner");
+        enable = lib.mkEnableOption "lifecycled-queue-cleaner";
 
-        frequency = mkOption {
-          type = types.str;
+        frequency = lib.mkOption {
+          type = lib.types.str;
           default = "hourly";
-          description = lib.mdDoc ''
+          description = ''
             How often to trigger the queue cleaner.
 
             NOTE: This string should be a valid value for a systemd
@@ -43,84 +53,84 @@ in
           '';
         };
 
-        parallel = mkOption {
-          type = types.ints.unsigned;
+        parallel = lib.mkOption {
+          type = lib.types.ints.unsigned;
           default = 20;
-          description = lib.mdDoc ''
+          description = ''
             The number of parallel deletes to run.
           '';
         };
       };
 
-      instanceId = mkOption {
-        type = types.nullOr types.str;
+      instanceId = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           The instance ID to listen for events for.
         '';
       };
 
-      snsTopic = mkOption {
-        type = types.nullOr types.str;
+      snsTopic = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           The SNS topic that receives events.
         '';
       };
 
-      noSpot = mkOption {
-        type = types.bool;
+      noSpot = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Disable the spot termination listener.
         '';
       };
 
-      handler = mkOption {
-        type = types.path;
-        description = lib.mdDoc ''
+      handler = lib.mkOption {
+        type = lib.types.path;
+        description = ''
           The script to invoke to handle events.
         '';
       };
 
-      json = mkOption {
-        type = types.bool;
+      json = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable JSON logging.
         '';
       };
 
-      cloudwatchGroup = mkOption {
-        type = types.nullOr types.str;
+      cloudwatchGroup = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Write logs to a specific Cloudwatch Logs group.
         '';
       };
 
-      cloudwatchStream = mkOption {
-        type = types.nullOr types.str;
+      cloudwatchStream = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Write logs to a specific Cloudwatch Logs stream. Defaults to the instance ID.
         '';
       };
 
-      debug = mkOption {
-        type = types.bool;
+      debug = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable debugging information.
         '';
       };
 
       # XXX: Can be removed if / when
       # https://github.com/buildkite/lifecycled/pull/91 is merged.
-      awsRegion = mkOption {
-        type = types.nullOr types.str;
+      awsRegion = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           The region used for accessing AWS services.
         '';
       };
@@ -129,8 +139,8 @@ in
 
   ### Implementation ###
 
-  config = mkMerge [
-    (mkIf cfg.enable {
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
       environment.etc."lifecycled".source = configFile;
 
       systemd.packages = [ pkgs.lifecycled ];
@@ -140,10 +150,10 @@ in
       };
     })
 
-    (mkIf cfg.queueCleaner.enable {
+    (lib.mkIf cfg.queueCleaner.enable {
       systemd.services.lifecycled-queue-cleaner = {
         description = "Lifecycle Daemon Queue Cleaner";
-        environment = optionalAttrs (cfg.awsRegion != null) { AWS_REGION = cfg.awsRegion; };
+        environment = lib.optionalAttrs (cfg.awsRegion != null) { AWS_REGION = cfg.awsRegion; };
         serviceConfig = {
           Type = "oneshot";
           ExecStart = "${pkgs.lifecycled}/bin/lifecycled-queue-cleaner -parallel ${toString cfg.queueCleaner.parallel}";

@@ -1,21 +1,24 @@
-{ lib, fetchPypi, python3Packages }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  setuptools,
+}:
 
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "chainstream";
-  version = "1.0.1";
+  version = "1.0.2";
 
   pyproject = true;
 
-  nativeBuildInputs = [ python3Packages.setuptools ];
+  nativeBuildInputs = [ setuptools ];
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-302P1BixEmkODm+qTLZwaWLktrlf9cEziQ/TIVfI07c=";
+    hash = "sha256-syl107PRwDClB6wpgETCj6PKMNUnq9+uKB7dUydmF7M=";
   };
 
-  pythonImportsCheck = [
-    "chainstream"
-  ];
+  pythonImportsCheck = [ "chainstream" ];
 
   meta = with lib; {
     description = "Chain I/O streams together into a single stream";

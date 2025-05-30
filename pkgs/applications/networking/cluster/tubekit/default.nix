@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -10,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "reconquest";
     repo = "tubekit";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-fUe5bMFF569A9Xdx3bfQH2DzbQDRfZ+ewlDL+gK2gWw=";
   };
 
@@ -18,6 +19,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Kubectl alternative with quick context switching";
+    mainProgram = "tubectl";
     homepage = "https://github.com/reconquest/tubekit";
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;

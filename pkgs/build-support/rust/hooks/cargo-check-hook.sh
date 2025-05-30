@@ -1,5 +1,4 @@
-declare -a checkFlags
-declare -a cargoTestFlags
+# shellcheck shell=bash disable=SC2154,SC2164
 
 cargoCheckHook() {
     echo "Executing cargoCheckHook"
@@ -10,36 +9,35 @@ cargoCheckHook() {
         pushd "${buildAndTestSubdir}"
     fi
 
-    if [[ -z ${dontUseCargoParallelTests-} ]]; then
-        threads=$NIX_BUILD_CORES
-    else
-        threads=1
+    local flagsArray=("-j" "$NIX_BUILD_CORES")
+
+    export RUST_TEST_THREADS=$NIX_BUILD_CORES
+    if [[ ! -z ${dontUseCargoParallelTests-} ]]; then
+        RUST_TEST_THREADS=1
     fi
 
     if [ "${cargoCheckType}" != "debug" ]; then
-        cargoCheckProfileFlag="--profile ${cargoCheckType}"
+        flagsArray+=("--profile" "${cargoCheckType}")
     fi
 
     if [ -n "${cargoCheckNoDefaultFeatures-}" ]; then
-        cargoCheckNoDefaultFeaturesFlag=--no-default-features
+        flagsArray+=("--no-default-features")
     fi
 
     if [ -n "${cargoCheckFeatures-}" ]; then
-        cargoCheckFeaturesFlag="--features=${cargoCheckFeatures// /,}"
+        flagsArray+=("--features=$(concatStringsSep "," cargoCheckFeatures)")
     fi
 
-    argstr="${cargoCheckProfileFlag} ${cargoCheckNoDefaultFeaturesFlag} ${cargoCheckFeaturesFlag}
-        --target @rustHostPlatformSpec@ --frozen ${cargoTestFlags}"
-
-    (
-        set -x
-        cargo test \
-              -j $NIX_BUILD_CORES \
-              ${argstr} -- \
-              --test-threads=${threads} \
-              ${checkFlags} \
-              ${checkFlagsArray+"${checkFlagsArray[@]}"}
+    flagsArray+=(
+        "--target" "@rustcTarget@"
+        "--offline"
     )
+
+    prependToVar checkFlags "--"
+    concatTo flagsArray cargoTestFlags checkFlags checkFlagsArray
+
+    echoCmd 'cargoCheckHook flags' "${flagsArray[@]}"
+    @setEnv@ cargo test "${flagsArray[@]}"
 
     if [[ -n "${buildAndTestSubdir-}" ]]; then
         popd

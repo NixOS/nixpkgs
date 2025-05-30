@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, hypothesis
-, numpy
-, pandas
-, psycopg2
-, pymysql
-, python-dateutil
-, pytz
-, pyyaml
-, six
-, sqlalchemy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  hypothesis,
+  numpy,
+  pandas,
+  psycopg2,
+  pymysql,
+  python-dateutil,
+  pytz,
+  pyyaml,
+  six,
+  sqlalchemy,
 }:
 
 buildPythonPackage rec {
@@ -25,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "machow";
     repo = "siuba";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rd/yQH3sbZqQAQ1AN44vChe30GMJuIlZj3Ccfv1m3lU=";
   };
 

@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchYarnDeps
-, makeWrapper
-, nodejs
-, prefetch-yarn-deps
-, yarn
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  makeWrapper,
+  nodejs,
+  fixup-yarn-lock,
+  yarn,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,10 +25,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-tJXJ8ePr5ArAV+0JcuJsTo/B2PUcgsXfZrSDCpna/9k=";
   };
 
-  nativeBuildInputs  = [
+  nativeBuildInputs = [
     makeWrapper
     nodejs
-    prefetch-yarn-deps
+    fixup-yarn-lock
     yarn
   ];
 
@@ -67,7 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     changelog = "https://github.com/NerdWalletOSS/shepherd/blob/${src.rev}/CHANGELOG.md";
-    description = "A utility for applying code changes across many repositories";
+    description = "Utility for applying code changes across many repositories";
     homepage = "https://github.com/NerdWalletOSS/shepherd";
     license = lib.licenses.asl20;
     mainProgram = "shepherd";

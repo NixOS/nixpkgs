@@ -1,0 +1,57 @@
+From bd0ab509f890a6638bd5033ef58526f8c74f7e4b Mon Sep 17 00:00:00 2001
+From: Andrei Horodniceanu <a.horodniceanu@proton.me>
+Date: Wed, 4 Sep 2024 12:46:44 +0300
+Subject: [PATCH] locale.c: Fix compilation on platforms with only a C locale
+
+Signed-off-by: Andrei Horodniceanu <a.horodniceanu@proton.me>
+---
+ AUTHORS  |  1 +
+ locale.c | 16 ++++++++++++++++
+ 2 files changed, 17 insertions(+)
+
+diff --git a/AUTHORS b/AUTHORS
+index b2e0bf2043a9..b196b93bda13 100644
+--- a/AUTHORS
++++ b/AUTHORS
+@@ -103,6 +103,7 @@ Andreas König                  <a.koenig@mind.de>
+ Andreas Marienborg             <andreas.marienborg@gmail.com>
+ Andreas Schwab                 <schwab@suse.de>
+ Andreas Voegele                <andreas@andreasvoegele.com>
++Andrei Horodniceanu            <a.horodniceanu@proton.me>
+ Andrei Yelistratov             <andrew@sundale.net>
+ Andrej Borsenkow               <Andrej.Borsenkow@mow.siemens.ru>
+ Andrew Bettison                <andrewb@zip.com.au>
+diff --git a/locale.c b/locale.c
+index 168b94914318..d764b4b3c11e 100644
+--- a/locale.c
++++ b/locale.c
+@@ -8963,6 +8963,7 @@ Perl_init_i18nl10n(pTHX_ int printwarn)
+      * categories into our internal indices. */
+     if (map_LC_ALL_position_to_index[0] == LC_ALL_INDEX_) {
+ 
++#    ifdef PERL_LC_ALL_CATEGORY_POSITIONS_INIT
+         /* Use this array, initialized by a config.h constant */
+         int lc_all_category_positions[] = PERL_LC_ALL_CATEGORY_POSITIONS_INIT;
+         STATIC_ASSERT_STMT(   C_ARRAY_LENGTH(lc_all_category_positions)
+@@ -8975,6 +8976,21 @@ Perl_init_i18nl10n(pTHX_ int printwarn)
+             map_LC_ALL_position_to_index[i] =
+                               get_category_index(lc_all_category_positions[i]);
+         }
++#    else
++        /* It is possible for both PERL_LC_ALL_USES_NAME_VALUE_PAIRS and
++         * PERL_LC_ALL_CATEGORY_POSITIONS_INIT not to be defined, e.g. on
++         * systems with only a C locale during ./Configure.  Assume that this
++         * can only happen as part of some sort of bootstrapping so allow
++         * compilation to succeed by ignoring correctness.
++         */
++        for (unsigned int i = 0;
++             i < C_ARRAY_LENGTH(map_LC_ALL_position_to_index);
++             i++)
++        {
++            map_LC_ALL_position_to_index[i] = 0;
++        }
++#    endif
++
+     }
+ 
+     LOCALE_UNLOCK;

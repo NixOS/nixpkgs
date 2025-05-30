@@ -1,28 +1,39 @@
-{ writeScript
-, lib
-, xidel
-, common-updater-scripts
-, coreutils
-, gnused
-, gnugrep
-, curl
-, gnupg
-, attrPath
-, runtimeShell
-, baseUrl ? "https://archive.mozilla.org/pub/firefox/releases/"
-, versionPrefix ? ""
-, versionSuffix ? ""
-, versionKey ? "version"
+{
+  writeScript,
+  lib,
+  xidel,
+  common-updater-scripts,
+  coreutils,
+  gnused,
+  gnugrep,
+  curl,
+  gnupg,
+  attrPath,
+  runtimeShell,
+  baseUrl ? "https://archive.mozilla.org/pub/firefox/releases/",
+  versionPrefix ? "",
+  versionSuffix ? "",
+  versionKey ? "version",
 }:
 
 writeScript "update-${attrPath}" ''
   #!${runtimeShell}
-  PATH=${lib.makeBinPath [ common-updater-scripts coreutils curl gnugrep gnupg gnused xidel ]}
+  PATH=${
+    lib.makeBinPath [
+      common-updater-scripts
+      coreutils
+      curl
+      gnugrep
+      gnupg
+      gnused
+      xidel
+    ]
+  }
 
   set -eux
   HOME=`mktemp -d`
   export GNUPGHOME=`mktemp -d`
-  gpg --receive-keys ADD7079479700DCADFDD5337E36D3B13F3D93274
+  curl https://keys.openpgp.org/vks/v1/by-fingerprint/09BEED63F3462A2DFFAB3B875ECB6497C1A20256 | gpg --import -
 
   url=${baseUrl}
 

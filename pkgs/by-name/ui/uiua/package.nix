@@ -1,56 +1,92 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, audioSupport ? true
-, darwin
-, alsa-lib
+{
+  uiua_versionType ? "stable",
 
-# passthru.tests.run
-, runCommand
-, uiua
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  versionCheckHook,
+
+  libffi,
+  audioSupport ? true,
+  alsa-lib,
+  webcamSupport ? false,
+  libGL,
+  libxkbcommon,
+  wayland,
+  xorg,
+  windowSupport ? false,
+
+  runCommand,
 }:
 
-rustPlatform.buildRustPackage rec {
+let
+  versionInfo =
+    {
+      "stable" = import ./stable.nix;
+      "unstable" = import ./unstable.nix;
+    }
+    .${uiua_versionType};
+in
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uiua";
-  version = "0.9.5";
+  inherit (versionInfo) version cargoHash;
+  useFetchCargoVendor = true;
 
   src = fetchFromGitHub {
     owner = "uiua-lang";
     repo = "uiua";
-    rev = version;
-    hash = "sha256-629hJLSGf0LJ+P1j1b87RV6XGgsDaWif1a6+Eo3NmMw=";
+    inherit (versionInfo) tag hash;
   };
 
-  cargoHash = "sha256-ZRiDlsSZ5jjTrOrB/bg2xOcOTsCNFdP0jY0SwZ1zwGU=";
+  nativeBuildInputs =
+    lib.optionals (webcamSupport || stdenv.hostPlatform.isDarwin) [ rustPlatform.bindgenHook ]
+    ++ lib.optionals audioSupport [ pkg-config ];
 
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [
-    rustPlatform.bindgenHook
-  ] ++ lib.optionals audioSupport [
-    pkg-config
-  ];
+  buildInputs =
+    [ libffi ] # we force dynamic linking our own libffi below
+    ++ lib.optionals (audioSupport && stdenv.hostPlatform.isLinux) [ alsa-lib ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-  ] ++ lib.optionals (audioSupport && stdenv.isDarwin) [
-    darwin.apple_sdk.frameworks.AudioUnit
-  ] ++ lib.optionals (audioSupport && stdenv.isLinux) [
-    alsa-lib
-  ];
+  buildFeatures =
+    [ "libffi/system" ] # force libffi to be linked dynamically instead of rebuilding it
+    ++ lib.optional audioSupport "audio"
+    ++ lib.optional webcamSupport "webcam"
+    ++ lib.optional windowSupport "window";
 
-  buildFeatures = lib.optional audioSupport "audio";
+  postFixup =
+    let
+      runtimeDependencies = lib.optionals windowSupport [
+        libGL
+        libxkbcommon
+        wayland
+        xorg.libX11
+        xorg.libXcursor
+        xorg.libXi
+        xorg.libXrandr
+      ];
+    in
+    lib.optionalString (runtimeDependencies != [ ] && stdenv.hostPlatform.isLinux) ''
+      patchelf --add-rpath ${lib.makeLibraryPath runtimeDependencies} $out/bin/uiua
+    '';
 
-  passthru.updateScript = ./update.sh;
-  passthru.tests.run = runCommand "uiua-test-run" { nativeBuildInputs = [ uiua ]; } ''
-    uiua init
-    diff -U3 --color=auto <(uiua run main.ua) <(echo '"Hello, World!"')
-    touch $out
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = versionInfo.updateScript;
+  passthru.tests.run =
+    runCommand "uiua-test-run" { nativeBuildInputs = [ finalAttrs.finalPackage ]; }
+      ''
+        uiua init
+        diff -U3 --color=auto <(uiua run main.ua) <(echo '"Hello, World!"')
+        touch $out
+      '';
 
   meta = {
-    changelog = "https://github.com/uiua-lang/uiua/blob/${src.rev}/changelog.md";
-    description = "A stack-oriented array programming language with a focus on simplicity, beauty, and tacit code";
+    changelog = "https://github.com/uiua-lang/uiua/blob/${finalAttrs.src.rev}/changelog.md";
+    description = "Stack-oriented array programming language with a focus on simplicity, beauty, and tacit code";
     longDescription = ''
       Uiua combines the stack-oriented and array-oriented paradigms in a single
       language. Combining these already terse paradigms results in code with a very
@@ -59,6 +95,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.uiua.org/";
     license = lib.licenses.mit;
     mainProgram = "uiua";
-    maintainers = with lib.maintainers; [ cafkafk tomasajt defelo ];
+    maintainers = with lib.maintainers; [
+      cafkafk
+      tomasajt
+      defelo
+    ];
   };
-}
+})

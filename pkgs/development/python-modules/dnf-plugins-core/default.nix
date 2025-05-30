@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
   # dependencies
-, cmake
-, python-dateutil
-, dbus-python
-, dnf4
-, gettext
-, libcomps
-, libdnf
-, python
-, rpm
-, sphinx
-, systemd
+  cmake,
+  python-dateutil,
+  dbus-python,
+  dnf4,
+  gettext,
+  libcomps,
+  libdnf,
+  python,
+  rpm,
+  sphinx,
+  systemd,
 }:
 
 let
@@ -22,29 +23,27 @@ in
 
 buildPythonPackage rec {
   pname = "dnf-plugins-core";
-  version = "4.5.0";
+  version = "4.10.1";
   format = "other";
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "dnf-plugins-core";
-    rev = "refs/tags/${version}";
-    hash = "sha256-og20X2AUzoOphwF+508EobGEp/VYLtxWY7N4k327o8o=";
+    tag = version;
+    hash = "sha256-nZyM61bQ9L4t3/fa9cP+xo9ke00e6w2Obt80OpqOG8A=";
   };
-
-  patches = [
-    ./fix-python-install-dir.patch
-  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "@PYTHON_INSTALL_DIR@" "$out/${python.sitePackages}" \
-      --replace "SYSCONFDIR /etc" "SYSCONFDIR $out/etc" \
-      --replace "SYSTEMD_DIR /usr/lib/systemd/system" "SYSTEMD_DIR $out/lib/systemd/system"
+      --replace-fail "SYSCONFDIR /etc" "SYSCONFDIR $out/etc" \
+      --replace-fail "SYSTEMD_DIR /usr/lib/systemd/system" "SYSTEMD_DIR $out/lib/systemd/system"
     substituteInPlace doc/CMakeLists.txt \
-      --replace 'SPHINX_BUILD_NAME "sphinx-build-3"' 'SPHINX_BUILD_NAME "${sphinx}/bin/sphinx-build"'
+      --replace-fail 'SPHINX_BUILD_NAME "sphinx-build-3"' 'SPHINX_BUILD_NAME "${sphinx}/bin/sphinx-build"'
   '';
 
   nativeBuildInputs = [
@@ -66,6 +65,7 @@ buildPythonPackage rec {
   cmakeFlags = [
     "-DPYTHON_DESIRED=${pyMajor}"
     "-DWITHOUT_LOCAL=0"
+    "-DPYTHON_INSTALL_DIR=${placeholder "out"}/${python.sitePackages}"
   ];
 
   postBuild = ''
@@ -108,9 +108,7 @@ buildPythonPackage rec {
     done
   '';
 
-  makeWrapperArgs = [
-    ''--add-flags "--setopt=pluginpath=$out/${python.sitePackages}/dnf-plugins"''
-  ];
+  makeWrapperArgs = [ ''--add-flags "--setopt=pluginpath=$out/${python.sitePackages}/dnf-plugins"'' ];
 
   meta = with lib; {
     description = "Core plugins to use with DNF package manager";

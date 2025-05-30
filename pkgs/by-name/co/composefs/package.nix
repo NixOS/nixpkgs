@@ -1,71 +1,88 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  go-md2man,
+  pkg-config,
+  openssl,
+  fuse3,
+  libcap,
+  python3,
+  which,
+  valgrind,
+  erofs-utils,
+  fsverity-utils,
+  nix-update-script,
+  testers,
+  nixosTests,
 
-, autoreconfHook
-, go-md2man
-, pkg-config
-, openssl
-, fuse3
-, libcap
-, libseccomp
-, python3
-, which
-, valgrind
-, erofs-utils
-, fsverity-utils
-, nix-update-script
-, testers
-, nixosTests
-
-, fuseSupport ? lib.meta.availableOn stdenv.hostPlatform fuse3
-, enableValgrindCheck ? false
-, installExperimentalTools ? false
+  fuseSupport ? lib.meta.availableOn stdenv.hostPlatform fuse3,
+  enableValgrindCheck ? false,
+  installExperimentalTools ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "composefs";
-  version = "1.0.3";
+  version = "1.0.8";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "composefs";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-YmredtZZKMjzJW/kxiTUmdgO/1iPIKzJsuJz8DeEdGM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nuQ3R/0eDS58HmN+0iXcYT5EtkY3J257EdtLir5vm4c=";
   };
 
   strictDeps = true;
-  outputs = [ "out" "lib" "dev" ];
-
-  postPatch = lib.optionalString installExperimentalTools ''
-    sed -i "s/noinst_PROGRAMS +\?=/bin_PROGRAMS +=/g" tools/Makefile.am
-  '';
-
-  configureFlags = [
-    (lib.enableFeature true "man")
-    (lib.enableFeature enableValgrindCheck "valgrind-test")
+  outputs = [
+    "out"
+    "lib"
+    "dev"
   ];
 
-  nativeBuildInputs = [ autoreconfHook go-md2man pkg-config ];
-  buildInputs = [ openssl ]
+  postPatch =
+    # 'both_libraries' as an install target always builds both versions.
+    #  This results in double disk usage for normal builds and broken static builds,
+    #  so we replace it with the regular library target.
+    ''
+      substituteInPlace libcomposefs/meson.build \
+        --replace-fail "both_libraries" "library"
+    ''
+    + lib.optionalString installExperimentalTools ''
+      substituteInPlace tools/meson.build \
+        --replace-fail "install : false" "install : true"
+    '';
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    go-md2man
+    pkg-config
+  ];
+  buildInputs =
+    [ openssl ]
     ++ lib.optional fuseSupport fuse3
-    ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) (
-    [
+    ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) ([
       libcap
-      libseccomp
-    ]
-  );
+    ]);
 
   doCheck = true;
-  nativeCheckInputs = [ python3 which ]
+  nativeCheckInputs =
+    [
+      python3
+      which
+    ]
     ++ lib.optional enableValgrindCheck valgrind
     ++ lib.optional fuseSupport fuse3
-    ++ lib.filter (lib.meta.availableOn stdenv.buildPlatform) [ erofs-utils fsverity-utils ];
+    ++ lib.filter (lib.meta.availableOn stdenv.buildPlatform) [
+      erofs-utils
+      fsverity-utils
+    ];
+
+  mesonCheckFlags = lib.optionals enableValgrindCheck "--setup=valgrind";
 
   preCheck = ''
-    patchShebangs --build tests/*dir tests/*.sh
-    substituteInPlace tests/*.sh \
-      --replace " /tmp" " $TMPDIR" \
-      --replace " /var/tmp" " $TMPDIR"
+    patchShebangs --build ../tests/*dir ../tests/*.sh
   '';
 
   passthru = {
@@ -78,10 +95,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "A file system for mounting container images";
+    description = "File system for mounting container images";
     homepage = "https://github.com/containers/composefs";
     changelog = "https://github.com/containers/composefs/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ gpl3Plus lgpl21Plus ];
+    license = with lib.licenses; [
+      gpl2Only
+      asl20
+    ];
     maintainers = with lib.maintainers; [ kiskae ];
     mainProgram = "mkcomposefs";
     pkgConfigModules = [ "composefs" ];

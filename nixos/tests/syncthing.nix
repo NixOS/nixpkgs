@@ -1,10 +1,15 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }: {
+{ lib, pkgs, ... }:
+{
   name = "syncthing";
   meta.maintainers = with pkgs.lib.maintainers; [ chkno ];
 
   nodes = rec {
     a = {
-      environment.systemPackages = with pkgs; [ curl libxml2 syncthing ];
+      environment.systemPackages = with pkgs; [
+        curl
+        libxml2
+        syncthing
+      ];
       services.syncthing = {
         enable = true;
         openDefaultPorts = true;
@@ -62,4 +67,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     a.wait_for_file("/var/lib/syncthing/foo/b2a")
     b.wait_for_file("/var/lib/syncthing/foo/a2b")
   '';
-})
+}

@@ -1,95 +1,98 @@
-{ lib
-, buildPythonPackage
-, click
-, click-completion
-, factory-boy
-, faker
-, fetchPypi
-, inquirer
-, notify-py
-, pbr
-, pendulum
-, ptable
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, twine
-, validate-email
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  pbr,
+  setuptools,
+  twine,
+
+  # dependencies
+  click,
+  click-completion,
+  inquirer,
+  notify-py,
+  pendulum,
+  prettytable,
+  requests,
+  validate-email,
+
+  # tests
+  factory-boy,
+  pytest-cov-stub,
+  pytest-mock,
+  pytestCheckHook,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "toggl-cli";
-  version = "2.4.3";
-  format = "setuptools";
+  version = "3.0.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    pname = "togglCli";
-    inherit version;
-    hash = "sha256-ncMwiMwYivaFu5jrAsm1oCuXP/PZ2ALT+M+CmV6dtFo=";
+  src = fetchFromGitHub {
+    owner = "AuHau";
+    repo = "toggl-cli";
+    tag = "v${version}";
+    hash = "sha256-x73gs0L+/m1cJPRkzZfna5KxU2KNjsqeUCyFo2JjkdE=";
   };
 
-  nativeBuildInputs = [
+  env.PBR_VERSION = version;
+
+  build-system = [
     pbr
+    setuptools
     twine
   ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = true;
+
+  dependencies = [
     click
     click-completion
     inquirer
     notify-py
     pbr
     pendulum
-    ptable
+    prettytable
     requests
+    setuptools
     validate-email
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-mock
-    faker
     factory-boy
+    pytest-cov-stub
+    pytest-mock
+    pytestCheckHook
+    versionCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "notify-py==0.3.3" "notify-py>=0.3.3" \
-      --replace "click==8.0.3" "click>=8.0.3" \
-      --replace "pbr==5.8.0" "pbr>=5.8.0" \
-      --replace "inquirer==2.9.1" "inquirer>=2.9.1"
-    substituteInPlace pytest.ini \
-      --replace ' --cov toggl -m "not premium"' ""
-  '';
-
-  preCheck = ''
-    export TOGGL_API_TOKEN=your_api_token
-    export TOGGL_PASSWORD=toggl_password
-    export TOGGL_USERNAME=user@example.com
-  '';
+  versionCheckProgram = "${placeholder "out"}/bin/toggl";
+  versionCheckProgramArg = "--version";
 
   disabledTests = [
     "integration"
     "premium"
+    "test_now"
     "test_parsing"
     "test_type_check"
-    "test_now"
   ];
 
-  pythonImportsCheck = [
-    "toggl"
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # PermissionError: [Errno 1] Operation not permitted: '/etc/localtime'
+    "tests/unit/cli/test_types.py"
   ];
 
-  # updates to a bogus tag
-  passthru.skipBulkUpdate = true;
+  pythonImportsCheck = [ "toggl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool and set of Python wrapper classes for interacting with toggl's API";
     homepage = "https://toggl.uhlir.dev/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mmahut ];
+    changelog = "https://github.com/AuHau/toggl-cli/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mmahut ];
+    mainProgram = "toggl";
   };
 }

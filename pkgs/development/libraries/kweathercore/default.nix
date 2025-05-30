@@ -1,10 +1,11 @@
-{ mkDerivation
-, lib
-, fetchFromGitLab
-, extra-cmake-modules
-, kholidays
-, ki18n
-, qtlocation
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  extra-cmake-modules,
+  kholidays,
+  ki18n,
+  qtlocation,
 }:
 
 mkDerivation rec {
@@ -29,7 +30,7 @@ mkDerivation rec {
 
   meta = with lib; {
     license = [ licenses.cc0 ];
-    maintainers = [ maintainers.samueldr ];
+    maintainers = [ ];
     description = ''
       Library to facilitate retrieval of weather information including forecasts and alerts
     '';

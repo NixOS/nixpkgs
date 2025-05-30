@@ -1,4 +1,8 @@
-{ stdenvNoCC, lib, fetchurl }:
+{
+  stdenvNoCC,
+  lib,
+  fetchurl,
+}:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "fasm-bin";
@@ -12,7 +16,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -D fasm${lib.optionalString stdenvNoCC.isx86_64 ".x64"} $out/bin/fasm
+    install -D fasm${lib.optionalString stdenvNoCC.hostPlatform.isx86_64 ".x64"} $out/bin/fasm
 
     runHook postInstall
   '';
@@ -23,6 +27,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     mainProgram = "fasm";
     maintainers = with lib.maintainers; [ orivej ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
   };
 })

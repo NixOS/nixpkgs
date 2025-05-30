@@ -1,4 +1,9 @@
-{ bundlerEnv, ruby, lib, bundlerUpdateScript }:
+{
+  bundlerEnv,
+  ruby,
+  lib,
+  bundlerUpdateScript,
+}:
 
 bundlerEnv rec {
   name = "${pname}-${version}";
@@ -11,11 +16,11 @@ bundlerEnv rec {
   passthru.updateScript = bundlerUpdateScript pname;
 
   meta = with lib; {
-    description = "A tool to validate HTML files";
-    homepage    = "https://github.com/gjtorikian/html-proofer";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms   = platforms.unix;
+    description = "Tool to validate HTML files";
+    homepage = "https://github.com/gjtorikian/html-proofer";
+    license = licenses.mit;
+    maintainers = [ ];
+    platforms = platforms.unix;
     mainProgram = "htmlproofer";
   };
 }

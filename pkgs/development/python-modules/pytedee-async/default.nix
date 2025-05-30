@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pythonOlder
-, aiohttp
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pytedee-async";
-  version = "0.2.16";
+  version = "0.2.22";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -16,21 +17,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zweckj";
     repo = "pytedee_async";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-MoAh5YYaZLF99fTFgErXunaLGT9hgInaZTjlDJcpSEw=";
+    tag = "v${version}";
+    hash = "sha256-bMIsyjXiruj8QdyDRiXwjRfgi6Oxlhk0B2vLn6jeCi0=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  dependencies = [ aiohttp ];
 
-  pythonImportsCheck = [
-    "pytedee_async"
-  ];
+  pythonImportsCheck = [ "aiotedee" ];
 
   # Module has no tests
   doCheck = false;
@@ -38,7 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to interact with Tedee locks";
     homepage = "https://github.com/zweckj/pytedee_async";
-    changelog = "https://github.com/zweckj/pytedee_async/releases/tag/v${version}";
+    changelog = "https://github.com/zweckj/pytedee_async/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

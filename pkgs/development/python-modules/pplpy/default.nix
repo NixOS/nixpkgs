@@ -1,24 +1,28 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, gmp
-, mpfr
-, libmpc
-, ppl
-, cython_3
-, cysignals
-, gmpy2
-, sphinx
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  gmp,
+  mpfr,
+  libmpc,
+  ppl,
+  cython,
+  cysignals,
+  gmpy2,
+  sphinx,
+
+  # Reverse dependency
+  sage,
 }:
 
 buildPythonPackage rec {
   pname = "pplpy";
-  version = "0.8.9";
+  version = "0.8.10";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-23o7Vx1u8FP3UTeXXpR8OhweRaMLq5Dq8hW05cwVeX4=";
+    hash = "sha256-1CohbIKRTc9NfAAN68mLsza4+D4Ca6XZUszNn4B07/0=";
   };
 
   buildInputs = [
@@ -33,12 +37,15 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    cython_3
+    cython
     cysignals
     gmpy2
   ];
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   postBuild = ''
     # Find the build result in order to put it into PYTHONPATH. The doc
@@ -54,10 +61,14 @@ buildPythonPackage rec {
     mv docs/build/html "$doc/share/doc/pplpy"
   '';
 
+  passthru.tests = {
+    inherit sage;
+  };
+
   meta = with lib; {
-    description = "A Python wrapper for ppl";
+    description = "Python wrapper for ppl";
     homepage = "https://gitlab.com/videlec/pplpy";
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
     license = licenses.gpl3;
   };
 }

@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, bash, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  bash,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "rtl_433-exporter";
@@ -19,6 +25,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Prometheus time-series DB exporter for rtl_433 433MHz radio packet decoder";
+    mainProgram = "rtl_433_prometheus";
     homepage = "https://github.com/mhansen/rtl_433_prometheus";
     license = licenses.mit;
     maintainers = with maintainers; [ zopieux ];

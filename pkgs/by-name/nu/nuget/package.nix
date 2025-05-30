@@ -1,4 +1,10 @@
-{ stdenv, fetchFromGitHub, makeWrapper, mono, lib }:
+{
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  mono,
+  lib,
+}:
 
 stdenv.mkDerivation (attrs: {
   pname = "Nuget";
@@ -8,7 +14,7 @@ stdenv.mkDerivation (attrs: {
     owner = "mono";
     repo = "linux-packaging-nuget";
     rev = "upstream/${attrs.version}.bin";
-    sha256 = "sha256-9/dSeVshHbpYIgGE/8OzrB4towrWVB3UxDi8Esmbu7Y=";
+    hash = "sha256-9/dSeVshHbpYIgGE/8OzrB4towrWVB3UxDi8Esmbu7Y=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +37,8 @@ stdenv.mkDerivation (attrs: {
   '';
 
   meta = with lib; {
-    description = "A package manager for the .NET platform";
+    description = "Package manager for the .NET platform";
+    mainProgram = "nuget";
     homepage = "https://www.mono-project.com/";
     longDescription = ''
       NuGet is the package manager for the .NET platform.

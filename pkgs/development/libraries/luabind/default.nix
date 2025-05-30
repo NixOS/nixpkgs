@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, lua, boost, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  lua,
+  boost,
+  cmake,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "luabind";
   version = "0.9.1";
 
@@ -21,11 +28,11 @@ stdenv.mkDerivation rec {
     inherit lua;
   };
 
-  patches = [./0.9.1-discover-luajit.patch];
+  patches = [ ./0.9.1-discover-luajit.patch ];
 
   meta = {
     homepage = "https://github.com/Oberon00/luabind";
-    description = "A library that helps you create bindings between C++ and Lua";
+    description = "Library that helps you create bindings between C++ and Lua";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };

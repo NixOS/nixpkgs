@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.journald.upload;
@@ -12,7 +17,7 @@ in
     settings = lib.mkOption {
       default = { };
 
-      description = lib.mdDoc ''
+      description = ''
         Configuration for journal-upload. See {manpage}`journal-upload.conf(5)`
         for available options.
       '';

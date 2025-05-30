@@ -1,4 +1,9 @@
-{ lib, bundlerEnv, ruby, bundlerUpdateScript }:
+{
+  lib,
+  bundlerEnv,
+  ruby,
+  bundlerUpdateScript,
+}:
 
 bundlerEnv {
   inherit ruby;
@@ -9,8 +14,12 @@ bundlerEnv {
 
   meta = with lib; {
     description = "CLI and Ruby client library for Travis CI";
-    homepage    = "https://github.com/travis-ci/travis.rb";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ zimbatm nicknovitski ];
+    mainProgram = "travis";
+    homepage = "https://github.com/travis-ci/travis.rb";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      zimbatm
+      nicknovitski
+    ];
   };
 }

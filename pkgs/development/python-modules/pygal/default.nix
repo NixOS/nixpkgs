@@ -1,46 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  stdenv,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, importlib-metadata
+  # dependencies
+  importlib-metadata,
 
-# optional-dependencies
-, lxml
-, cairosvg
+  # optional-dependencies
+  lxml,
+  cairosvg,
 
-# tests
-, pyquery
-, pytestCheckHook
+  # tests
+  pyquery,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pygal";
-  version = "3.0.4";
+  version = "3.0.5";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bF2jPxBB6LMMvJgPijSRDZ7cWEuDMkApj2ol32VCUok=";
+    hash = "sha256-wKDzTlvBwBl1wr+4NCrVIeKTrULlJWmd0AxNelLBS3E=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace pytest-runner ""
+      --replace-fail pytest-runner ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    importlib-metadata
-  ];
+  dependencies = [ importlib-metadata ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     lxml = [ lxml ];
     png = [ cairosvg ];
   };
@@ -48,19 +49,28 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pyquery
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.png;
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   preCheck = ''
     # necessary on darwin to pass the testsuite
     export LANG=en_US.UTF-8
   '';
 
+  # Cairo tries to load system fonts by default.
+  # It's surfaced as a Cairo "out of memory" error in tests.
+  __impureHostDeps = [ "/System/Library/Fonts" ];
+
+  postCheck = ''
+    export LANG=${if stdenv.isDarwin then "en_US.UTF-8" else "C.UTF-8"}
+  '';
+
   meta = with lib; {
+    description = "Module for dynamic SVG charting";
+    homepage = "http://www.pygal.org";
     changelog = "https://github.com/Kozea/pygal/blob/${version}/docs/changelog.rst";
     downloadPage = "https://github.com/Kozea/pygal";
-    description = "Sexy and simple python charting";
-    homepage = "http://www.pygal.org";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
+    mainProgram = "pygal_gen.py";
   };
 }

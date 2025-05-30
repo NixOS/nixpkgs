@@ -1,9 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, unittestCheckHook
- }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch2,
+  setuptools,
+  unittestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "geojson";
@@ -13,21 +15,23 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "geojson";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-OL+7ntgzpA63ALQ8whhKRePsKxcp81PLuU1bHJvxN9U=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  patches = [
+    (fetchpatch2 {
+      name = "dont-fail-with-python-313.patch";
+      url = "https://github.com/jazzband/geojson/commit/c13afff339e6b78f442785cc95f0eb66ddab3e7b.patch?full_index=1";
+      hash = "sha256-xdz96vzTA+zblJtCvXIZe5p51xJGM5eB/HAtCXgy5JA=";
+    })
   ];
 
-  pythonImportsCheck = [
-    "geojson"
-  ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  pythonImportsCheck = [ "geojson" ];
+
+  nativeCheckInputs = [ unittestCheckHook ];
 
   meta = {
     homepage = "https://github.com/jazzband/geojson";

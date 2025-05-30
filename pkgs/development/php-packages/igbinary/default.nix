@@ -7,12 +7,15 @@ buildPecl {
 
   configureFlags = [ "--enable-igbinary" ];
   makeFlags = [ "phpincludedir=$(dev)/include" ];
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   meta = {
     description = "Binary serialization for PHP";
     homepage = "https://github.com/igbinary/igbinary/";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 }

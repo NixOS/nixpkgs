@@ -1,16 +1,17 @@
-{ lib
-, anyio
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, pytestCheckHook
-, pythonOlder
-, trio
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pytestCheckHook,
+  pythonOlder,
+  trio,
 }:
 
 buildPythonPackage rec {
   pname = "asyncclick";
-  version = "8.1.7.1";
+  version = "8.1.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -18,17 +19,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-trio";
     repo = "asyncclick";
-    rev = "refs/tags/${version}";
-    hash = "sha256-gx7s/HikvjsXalc0Z73JWMKc1SlhR+kohwk2sW4o19I=";
+    tag = "${version}+async";
+    hash = "sha256-J294pYuNOSm7v2BbwDpzn3uelAnZ3ip2U1gWuchhOtA=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
-    anyio
-  ];
+  dependencies = [ anyio ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -36,7 +33,8 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "-W" "ignore::trio.TrioDeprecationWarning"
+    "-W"
+    "ignore::trio.TrioDeprecationWarning"
   ];
 
   disabledTests = [
@@ -44,15 +42,13 @@ buildPythonPackage rec {
     "test_context_pushing"
   ];
 
-  pythonImportsCheck = [
-    "asyncclick"
-  ];
+  pythonImportsCheck = [ "asyncclick" ];
 
   meta = with lib; {
     description = "Python composable command line utility";
     homepage = "https://github.com/python-trio/asyncclick";
     changelog = "https://github.com/python-trio/asyncclick/blob/${version}/CHANGES.rst";
-    license = with licenses; [ bsd3 ];
+    license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };
 }

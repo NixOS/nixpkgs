@@ -1,25 +1,35 @@
-{ lib
-, buildGoPackage
-, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "nixops-dns";
-  version = "1.0";
-
-  goDeps = ./deps.nix;
-  goPackagePath = "github.com/kamilchm/nixops-dns";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
-    owner = "kamilchm";
+    owner = "museoa";
     repo = "nixops-dns";
     rev = "v${version}";
-    sha256 = "1fyqwk2knrv40zpf71a56bjyaycr3p6fzrqq7gaan056ydy83cai";
+    hash = "sha256-d3vVm6YeQTOAE5HFSKI01L9ZqfbQKrdoLsMwHP5HulE=";
   };
 
+  vendorHash = "sha256-3DVNjvW0AAdogpTi3GMnn92FqqOUWNdQvRBityyKwcI=";
+
+  ldflags = [
+    "-s"
+    "-w"
+  ];
+
   meta = with lib; {
-    homepage = "https://github.com/kamilchm/nixops-dns/";
+    homepage = "https://github.com/museoa/nixops-dns";
     description = "DNS server for resolving NixOps machines";
+    mainProgram = "nixops-dns";
     license = licenses.mit;
-    maintainers = with maintainers; [ kamilchm sorki ];
+    maintainers = with maintainers; [
+      kamilchm
+      sorki
+    ];
   };
 }

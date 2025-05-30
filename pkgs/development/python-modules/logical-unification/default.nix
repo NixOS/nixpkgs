@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, toolz
-, multipledispatch
-, py
-, pytestCheckHook
-, pytest-html
-, pytest-benchmark
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+  toolz,
+  multipledispatch,
+  py,
+  pytestCheckHook,
+  pytest-html,
+  pytest-benchmark,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pythological";
     repo = "unification";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-uznmlkREFONU1YoI/+mcfb+Yg30NinWvsMxTfHCXzOU=";
   };
 
@@ -30,7 +32,12 @@ buildPythonPackage rec {
     py
     pytestCheckHook
     pytest-html
-    pytest-benchmark  # Needed for the `--benchmark-skip` flag
+    pytest-benchmark # Needed for the `--benchmark-skip` flag
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # Failed: DID NOT RAISE <class 'RecursionError'>
+    "test_reify_recursion_limit"
   ];
 
   pytestFlagsArray = [

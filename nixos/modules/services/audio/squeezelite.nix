@@ -1,7 +1,18 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) mkEnableOption mkIf mkOption optionalString types;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    optionalString
+    types
+    ;
 
   dataDir = "/var/lib/squeezelite";
   cfg = config.services.squeezelite;
@@ -14,26 +25,28 @@ in
   ###### interface
 
   options.services.squeezelite = {
-    enable = mkEnableOption (lib.mdDoc "Squeezelite, a software Squeezebox emulator");
+    enable = mkEnableOption "Squeezelite, a software Squeezebox emulator";
 
-    pulseAudio = mkEnableOption (lib.mdDoc "pulseaudio support");
+    pulseAudio = mkEnableOption "pulseaudio support";
 
     extraArguments = mkOption {
       default = "";
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         Additional command line arguments to pass to Squeezelite.
       '';
     };
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
     systemd.services.squeezelite = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "sound.target" ];
+      after = [
+        "network.target"
+        "sound.target"
+      ];
       description = "Software Squeezebox emulator";
       serviceConfig = {
         DynamicUser = true;

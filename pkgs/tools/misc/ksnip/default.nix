@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, cmake
-, extra-cmake-modules
-, fetchFromGitHub
-, fetchpatch
-, kcolorpicker
-, kimageannotator
-, wrapQtAppsHook
-, qtsvg
-, qttools
-, qtx11extras
+{
+  stdenv,
+  lib,
+  cmake,
+  extra-cmake-modules,
+  fetchFromGitHub,
+  fetchpatch,
+  kcolorpicker,
+  kimageannotator,
+  wrapQtAppsHook,
+  qtsvg,
+  qttools,
+  qtx11extras,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,10 +31,6 @@ stdenv.mkDerivation rec {
       hash = "sha256-JWoI974qDNZIzr/8oksI8m6g3XNWEaQRGsqSfvQrmao=";
     })
   ];
-
-  postPatch = ''
-    substituteInPlace src/CMakeLists.txt --replace-fail "kColorPicker::kColorPicker" "kColorPicker::kColorPicker-Qt5"
-  '';
 
   nativeBuildInputs = [
     cmake

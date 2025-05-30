@@ -1,4 +1,5 @@
-{ lib,
+{
+  lib,
   buildPythonApplication,
   fetchFromGitHub,
   poetry-core,
@@ -15,7 +16,7 @@
   regex,
   rich,
   tqdm,
-  yarl
+  yarl,
 }:
 buildPythonApplication {
   pname = "animdl";
@@ -29,6 +30,20 @@ buildPythonApplication {
     rev = "c7c3b79198e66695e0bbbc576f9d9b788616957f";
     hash = "sha256-kn6vCCFhJNlruxoO+PTHVIwTf1E5j1aSdBhrFuGzUq4=";
   };
+
+  pythonRemoveDeps = [
+    "comtypes" # windows only
+  ];
+  pythonRelaxDeps = [
+    "httpx"
+    "lxml"
+    "packaging"
+    "pycryptodomex"
+    "regex"
+    "rich"
+    "tqdm"
+    "yarl"
+  ];
 
   nativeBuildInputs = [
     poetry-core
@@ -53,7 +68,7 @@ buildPythonApplication {
   doCheck = true;
 
   meta = with lib; {
-    description = "A highly efficient, powerful and fast anime scraper";
+    description = "Highly efficient, powerful and fast anime scraper";
     homepage = "https://github.com/justfoolingaround/animdl";
     license = licenses.gpl3Only;
     mainProgram = "animdl";

@@ -1,32 +1,33 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, docopt
-, pytz
-, requests
-, setuptools
-, vincenty
-, xmltodict
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  docopt,
+  pytz,
+  requests,
+  setuptools,
+  vincenty,
+  xmltodict,
+  pytestCheckHook,
+  requests-mock,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "buienradar";
-  version = "1.0.5";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.4";
+  version = "1.0.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mjj4791";
     repo = "python-buienradar";
-    # https://github.com/mjj4791/python-buienradar/issues/14
-    rev = "caa66ea855dbcc7cf6ee13291d9b2ed7ac01ef98";
-    hash = "sha256:0xz03xj5qjayriaah20adh0ycvlvb8jdvgh7w5gm236n64g6krj0";
+    tag = version;
+    hash = "sha256-DTdxzBe9fBOH5fHME++oq62xMtBKnjY7BCevwjl8VZ8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     docopt
     pytz
     requests
@@ -37,6 +38,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    requests-mock
+    syrupy
   ];
 
   disabledTests = [
@@ -44,6 +47,19 @@ buildPythonPackage rec {
     "test_rain_data"
     "test_json_data"
     "test_xml_data"
+    # tests fail if run on a different day
+    "test_id_upper1"
+    "test_invalid_data"
+    "test_missing_data"
+    "test_readdata1_30"
+    "test_readdata1_60"
+    "test_readdata2_30"
+    "test_readdata2_60"
+    "test_readdata3"
+  ];
+
+  pytestFlagsArray = [
+    "--snapshot-warn-unused"
   ];
 
   pythonImportsCheck = [
@@ -52,7 +68,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/mjj4791/python-buienradar/blob/${src.tag}/CHANGLOG.rst";
     description = "Library and CLI tools for interacting with buienradar";
+    mainProgram = "buienradar";
     homepage = "https://github.com/mjj4791/python-buienradar";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

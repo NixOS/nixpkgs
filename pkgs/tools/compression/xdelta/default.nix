@@ -1,14 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook
-, lzmaSupport ? true, xz ? null
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  lzmaSupport ? true,
+  xz ? null,
 }:
 
 assert lzmaSupport -> xz != null;
 
 let
-  mkWith = flag: name: if flag
-    then "--with-${name}"
-    else "--without-${name}";
-in stdenv.mkDerivation rec {
+  mkWith = flag: name: if flag then "--with-${name}" else "--without-${name}";
+in
+stdenv.mkDerivation rec {
   pname = "xdelta";
   version = "3.1.0";
 
@@ -20,8 +24,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = []
-    ++ lib.optionals lzmaSupport [ xz ];
+  buildInputs = [ ] ++ lib.optionals lzmaSupport [ xz ];
 
   postPatch = ''
     cd xdelta3
@@ -54,7 +57,8 @@ in stdenv.mkDerivation rec {
       file differences. This is similar to diff and patch, but it is targeted
       for binary files and does not generate human readable output.
     '';
-    homepage = "http://xdelta.org/";
+    # The dedicated homepage pointed to a gambling website
+    homepage = "https://github.com/jmacd/xdelta";
     license = licenses.gpl2Plus;
     mainProgram = "xdelta3";
     platforms = platforms.unix;

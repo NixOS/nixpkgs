@@ -1,18 +1,26 @@
 src: version:
-{ lib, fetchYarnDeps, nodejs_18, prefetch-yarn-deps, stdenv }: stdenv.mkDerivation {
+{
+  lib,
+  fetchYarnDeps,
+  nodejs_20,
+  fixup-yarn-lock,
+  stdenv,
+  yarn,
+}:
+stdenv.mkDerivation {
   name = "mealie-frontend";
   inherit version;
   src = "${src}/frontend";
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/frontend/yarn.lock";
-    hash = "sha256-zQUD/PQWzp2Q6fiVmLicvSusXffu6s9q3x/aAUnCN38=";
+    hash = "sha256-a2kIOQHaMzaMWId6+SSYN+SPQM2Ipa+F1ztFZgo3R6A=";
   };
 
   nativeBuildInputs = [
-    prefetch-yarn-deps
-    nodejs_18
-    nodejs_18.pkgs.yarn
+    fixup-yarn-lock
+    nodejs_20
+    (yarn.override { nodejs = nodejs_20; })
   ];
 
   configurePhase = ''
@@ -21,7 +29,10 @@ src: version:
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror "$yarnOfflineCache"
     fixup-yarn-lock yarn.lock
-    yarn install --frozen-lockfile --offline --no-progress --non-interactive
+    # TODO: Remove --ignore-engines once upstream supports nodejs_20+
+    # https://github.com/mealie-recipes/mealie/issues/5400
+    # https://github.com/mealie-recipes/mealie/pull/5184
+    yarn install --frozen-lockfile --offline --no-progress --non-interactive --ignore-engines
     patchShebangs node_modules/
 
     runHook postConfigure

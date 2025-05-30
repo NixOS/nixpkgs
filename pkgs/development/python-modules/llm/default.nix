@@ -1,43 +1,53 @@
-{ lib
-, buildPythonApplication
-, buildPythonPackage
-, fetchFromGitHub
-, makeWrapper
-, pytestCheckHook
-, python3
-, pythonOlder
-, ruff
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  click-default-group,
+  condense-json,
+  numpy,
+  openai,
+  pip,
+  pluggy,
+  puremagic,
+  pydantic,
+  python-ulid,
+  pyyaml,
+  sqlite-migrate,
+  cogapp,
+  pytest-asyncio,
+  pytest-httpx,
+  sqlite-utils,
 }:
 let
   llm = buildPythonPackage rec {
     pname = "llm";
-    version = "0.13.1";
+    version = "0.25";
     pyproject = true;
+
+    build-system = [ setuptools ];
 
     disabled = pythonOlder "3.8";
 
     src = fetchFromGitHub {
       owner = "simonw";
       repo = "llm";
-      rev = "refs/tags/${version}";
-      hash = "sha256-Nq6pduzl8IK+nA3pctst/W4ux7+P6mBFTEHMF+vtBQw=";
+      tag = version;
+      hash = "sha256-iH1P0VdpwIItY1In7vlM0Sn44Db23TqFp8GZ79/GMJs=";
     };
 
-    patches = [
-      ./001-disable-install-uninstall-commands.patch
-    ];
+    patches = [ ./001-disable-install-uninstall-commands.patch ];
 
-    nativeBuildInputs = [
-      setuptools
-    ];
-
-    propagatedBuildInputs = with python3.pkgs; [
+    dependencies = [
       click-default-group
+      condense-json
       numpy
       openai
       pip
       pluggy
+      puremagic
       pydantic
       python-ulid
       pyyaml
@@ -46,9 +56,10 @@ let
       sqlite-utils
     ];
 
-    nativeCheckInputs = with python3.pkgs; [
+    nativeCheckInputs = [
       cogapp
       numpy
+      pytest-asyncio
       pytest-httpx
       pytestCheckHook
     ];
@@ -60,49 +71,30 @@ let
       "tests/"
     ];
 
-    pythonImportsCheck = [
-      "llm"
-    ];
+    pythonImportsCheck = [ "llm" ];
 
-    passthru = {inherit withPlugins;};
+    passthru = {
+      inherit withPlugins;
+    };
 
     meta = with lib; {
       homepage = "https://github.com/simonw/llm";
       description = "Access large language models from the command-line";
-      changelog = "https://github.com/simonw/llm/releases/tag/${version}";
+      changelog = "https://github.com/simonw/llm/releases/tag/${src.tag}";
       license = licenses.asl20;
       mainProgram = "llm";
-      maintainers = with maintainers; [aldoborrero];
+      maintainers = with maintainers; [
+        aldoborrero
+        mccartykim
+      ];
     };
   };
 
-  withPlugins = plugins: buildPythonApplication {
-    inherit (llm) pname version;
-    format = "other";
+  withPlugins = throw ''
+    llm.withPlugins was confusing to use and has been removed.
+    Please migrate to using python3.withPackages(ps: [ ps.llm ]) instead.
 
-    disabled = pythonOlder "3.8";
-
-    dontUnpack = true;
-    dontBuild = true;
-    doCheck = false;
-
-    nativeBuildInputs = [
-      makeWrapper
-    ];
-
-    installPhase = ''
-      makeWrapper ${llm}/bin/llm $out/bin/llm \
-        --prefix PYTHONPATH : "${llm}/${python3.sitePackages}:$PYTHONPATH"
-      ln -sfv ${llm}/lib $out/lib
-    '';
-
-    propagatedBuildInputs = llm.propagatedBuildInputs ++ plugins;
-
-    passthru = llm.passthru // {
-      withPlugins = morePlugins: withPlugins (morePlugins ++ plugins);
-    };
-
-    inherit (llm) meta;
-  };
+    See https://nixos.org/manual/nixpkgs/stable/#python.withpackages-function for more usage examples.
+  '';
 in
-  llm
+llm

@@ -1,18 +1,27 @@
-{ lib, buildDunePackage, fetchFromGitLab, sedlex, xtmpl }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitLab,
+  sedlex,
+  xtmpl,
+}:
 
 buildDunePackage rec {
   pname = "higlo";
-  version = "0.9";
+  version = "0.10.0";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "zoggy";
     repo = "higlo";
     rev = version;
-    hash = "sha256-SaFFzp4FCjVLdMLH6mNIv3HzJbkXJ5Ojbku258LCfLI=";
+    hash = "sha256-A5Su4+eBOq/WNdY/3EBQ3KqrRQuaCI1x25cEuoZp4Mo=";
   };
 
-  propagatedBuildInputs = [ sedlex xtmpl ];
+  propagatedBuildInputs = [
+    sedlex
+    xtmpl
+  ];
 
   meta = with lib; {
     description = "OCaml library for syntax highlighting";
@@ -21,5 +30,3 @@ buildDunePackage rec {
     maintainers = with maintainers; [ regnat ];
   };
 }
-
-

@@ -1,40 +1,41 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, appstream-glib
-, cargo
-, desktop-file-utils
-, glib
-, gst_all_1
-, pipewire
-, gtk4
-, libadwaita
-, libpulseaudio
-, librsvg
-, meson
-, ninja
-, pkg-config
-, rustPlatform
-, rustc
-, wayland
-, wrapGAppsHook4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  appstream-glib,
+  cargo,
+  desktop-file-utils,
+  glib,
+  gst_all_1,
+  pipewire,
+  gtk4,
+  libadwaita,
+  libpulseaudio,
+  librsvg,
+  meson,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wayland,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
   pname = "kooha";
-  version = "2.2.4";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "SeaDve";
     repo = "Kooha";
     rev = "v${version}";
-    hash = "sha256-D/+tsIfcXrlwwL6vSLRsiAp7wMVtIgzjNNd2uk+9bco=";
+    hash = "sha256-Z+PMSV6fipfHBrqGS24SOgGJS173Vct12sVzCGZL0IA=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-iDyhK2k2RB7CvtW+91isVzIFOl2/Loh+Bvneu4TGfn0=";
+    hash = "sha256-3LYoNQquYbyiEd9ZXRr4UPIcl3gultsBYWCWaCYshwQ=";
   };
 
   nativeBuildInputs = [

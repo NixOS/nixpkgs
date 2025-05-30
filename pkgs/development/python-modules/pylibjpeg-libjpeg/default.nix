@@ -1,54 +1,69 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, cython_3
-, poetry-core
-, setuptools
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  cython,
+  poetry-core,
+  setuptools,
+  numpy,
+  pydicom,
+  pylibjpeg-data,
+  pylibjpeg,
 }:
 
-buildPythonPackage rec {
-  pname = "pylibjpeg-libjpeg";
-  version = "2.02";
-  pyproject = true;
+let
+  self = buildPythonPackage {
+    pname = "pylibjpeg-libjpeg";
+    version = "2.3.0";
+    pyproject = true;
 
-  disabled = pythonOlder "3.7";
+    disabled = pythonOlder "3.9";
 
-  src = fetchFromGitHub {
-    owner = "pydicom";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-mGwku19Xe605fF3UU59712rYp+s/pP79lBRl79fhhTI=";
-    fetchSubmodules = true;
+    src = fetchFromGitHub {
+      owner = "pydicom";
+      repo = "pylibjpeg-libjpeg";
+      tag = "v${self.version}";
+      hash = "sha256-xqSA1cutTsH9k4l9CW96n/CURzkAyDi3PZylZeedVjA=";
+      fetchSubmodules = true;
+    };
+
+    postPatch = ''
+      substituteInPlace pyproject.toml \
+        --replace-fail 'poetry-core >=1.8,<2' 'poetry-core'
+    '';
+
+    build-system = [
+      cython
+      poetry-core
+      setuptools
+    ];
+
+    dependencies = [ numpy ];
+
+    nativeCheckInputs = [
+      pydicom
+      pylibjpeg-data
+      pylibjpeg
+      pytestCheckHook
+    ];
+
+    doCheck = false; # circular test dependency with `pylibjpeg` and `pydicom`
+
+    passthru.tests.check = self.overridePythonAttrs (_: {
+      doCheck = true;
+    });
+
+    pythonImportsCheck = [ "libjpeg" ];
+
+    meta = {
+      description = "JPEG, JPEG-LS and JPEG XT plugin for pylibjpeg";
+      homepage = "https://github.com/pydicom/pylibjpeg-libjpeg";
+      changelog = "https://github.com/pydicom/pylibjpeg-libjpeg/releases/tag/v${self.version}";
+      license = lib.licenses.gpl3Only;
+      maintainers = with lib.maintainers; [ bcdarwin ];
+    };
   };
-
-  nativeBuildInputs = [
-    cython_3
-    poetry-core
-    setuptools
-  ];
-
-  propagatedBuildInputs = [
-    numpy
-  ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  doCheck = false;  # tests try to import 'libjpeg.data', which errors
-
-  pythonImportsCheck = [
-    "libjpeg"
-  ];
-
-  meta = with lib; {
-    description = "A JPEG, JPEG-LS and JPEG XT plugin for pylibjpeg";
-    homepage = "https://github.com/pydicom/pylibjpeg-libjpeg";
-    changelog = "https://github.com/pydicom/pylibjpeg-libjpeg/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ bcdarwin ];
-  };
-}
+in
+self

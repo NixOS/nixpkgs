@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, arrow
-, buildPythonPackage
-, cloudpickle
-, cryptography
-, fetchFromGitHub
-, lz4
-, numpy
-, pytestCheckHook
-, pythonOlder
-, ruamel-yaml
-, setuptools
+{
+  lib,
+  stdenv,
+  arrow,
+  buildPythonPackage,
+  cloudpickle,
+  cryptography,
+  fetchFromGitHub,
+  lz4,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  ruamel-yaml,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -23,20 +24,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "construct";
     repo = "construct";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-5otjjIyje0+z/Y/C2ivmu08PNm0oJcSSvZkQfGxHDuQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     # Not an explicit dependency, but it's imported by an entrypoint
     lz4
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     extras = [
       arrow
       cloudpickle
@@ -48,17 +47,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "construct"
-  ];
+  pythonImportsCheck = [ "construct" ];
 
   disabledTests = [
     "test_benchmarks"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_multiprocessing"
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_multiprocessing" ];
 
   meta = with lib; {
     description = "Powerful declarative parser (and builder) for binary data";

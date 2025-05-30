@@ -1,21 +1,22 @@
-{ lib
-, buildGoModule
-, fetchurl
-, nixosTests
-, callPackage
+{
+  lib,
+  buildGoModule,
+  fetchurl,
+  nixosTests,
+  callPackage,
 }:
 
 buildGoModule rec {
   pname = "kubo";
-  version = "0.27.0"; # When updating, also check if the repo version changed and adjust repoVersion below
+  version = "0.34.1"; # When updating, also check if the repo version changed and adjust repoVersion below
   rev = "v${version}";
 
-  passthru.repoVersion = "15"; # Also update kubo-migrator when changing the repo version
+  passthru.repoVersion = "16"; # Also update kubo-migrator when changing the repo version
 
   # Kubo makes changes to its source tarball that don't match the git source.
   src = fetchurl {
     url = "https://github.com/ipfs/kubo/releases/download/${rev}/kubo-source.tar.gz";
-    hash = "sha256-xWVV2AUpogZaMb3v0w/C+DXvR2rmbOj1Bpyb3on2hfY=";
+    hash = "sha256-wrAnmPfls7LFO3gQBISSmn4ucuUVmzvYEoz+eVc/A5M=";
   };
 
   # tarball contains multiple files/directories
@@ -32,18 +33,22 @@ buildGoModule rec {
 
   passthru.tests = {
     inherit (nixosTests) kubo;
-    repoVersion = callPackage ./test-repoVersion.nix {};
+    repoVersion = callPackage ./test-repoVersion.nix { };
   };
 
   vendorHash = null;
 
-  outputs = [ "out" "systemd_unit" "systemd_unit_hardened" ];
+  outputs = [
+    "out"
+    "systemd_unit"
+    "systemd_unit_hardened"
+  ];
 
   postPatch = ''
     substituteInPlace 'misc/systemd/ipfs.service' \
-      --replace '/usr/local/bin/ipfs' "$out/bin/ipfs"
+      --replace-fail '/usr/local/bin/ipfs' "$out/bin/ipfs"
     substituteInPlace 'misc/systemd/ipfs-hardened.service' \
-      --replace '/usr/local/bin/ipfs' "$out/bin/ipfs"
+      --replace-fail '/usr/local/bin/ipfs' "$out/bin/ipfs"
   '';
 
   postInstall = ''
@@ -57,11 +62,14 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "An IPFS implementation in Go";
+    description = "IPFS implementation in Go";
     homepage = "https://ipfs.io/";
+    changelog = "https://github.com/ipfs/kubo/releases/tag/${rev}";
     license = licenses.mit;
     platforms = platforms.unix;
     mainProgram = "ipfs";
-    maintainers = with maintainers; [ Luflosi fpletz ];
+    maintainers = with maintainers; [
+      Luflosi
+    ];
   };
 }

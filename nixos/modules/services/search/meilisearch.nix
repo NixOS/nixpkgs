@@ -1,48 +1,56 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.meilisearch;
 
 in
 {
 
-  meta.maintainers = with maintainers; [ Br1ght0ne happysalada ];
+  meta.maintainers = with lib.maintainers; [
+    Br1ght0ne
+    happysalada
+  ];
   meta.doc = ./meilisearch.md;
 
   ###### interface
 
   options.services.meilisearch = {
-    enable = mkEnableOption (lib.mdDoc "MeiliSearch - a RESTful search API");
+    enable = lib.mkEnableOption "MeiliSearch - a RESTful search API";
 
-    package = mkPackageOption pkgs "meilisearch" {
+    package = lib.mkPackageOption pkgs "meilisearch" {
       extraDescription = ''
         Use this if you require specific features to be enabled. The default package has no features.
       '';
     };
 
-    listenAddress = mkOption {
-      description = lib.mdDoc "MeiliSearch listen address.";
+    listenAddress = lib.mkOption {
+      description = "MeiliSearch listen address.";
       default = "127.0.0.1";
-      type = types.str;
+      type = lib.types.str;
     };
 
-    listenPort = mkOption {
-      description = lib.mdDoc "MeiliSearch port to listen on.";
+    listenPort = lib.mkOption {
+      description = "MeiliSearch port to listen on.";
       default = 7700;
-      type = types.port;
+      type = lib.types.port;
     };
 
-    environment = mkOption {
-      description = lib.mdDoc "Defines the running environment of MeiliSearch.";
+    environment = lib.mkOption {
+      description = "Defines the running environment of MeiliSearch.";
       default = "development";
-      type = types.enum [ "development" "production" ];
+      type = lib.types.enum [
+        "development"
+        "production"
+      ];
     };
 
     # TODO change this to LoadCredentials once possible
-    masterKeyEnvironmentFile = mkOption {
-      description = lib.mdDoc ''
+    masterKeyEnvironmentFile = lib.mkOption {
+      description = ''
         Path to file which contains the master key.
         By doing so, all routes will be protected and will require a key to be accessed.
         If no master key is provided, all routes can be accessed without requiring any key.
@@ -50,22 +58,22 @@ in
         MEILI_MASTER_KEY=my_secret_key
       '';
       default = null;
-      type = with types; nullOr path;
+      type = with lib.types; nullOr path;
     };
 
-    noAnalytics = mkOption {
-      description = lib.mdDoc ''
+    noAnalytics = lib.mkOption {
+      description = ''
         Deactivates analytics.
         Analytics allow MeiliSearch to know how many users are using MeiliSearch,
         which versions and which platforms are used.
         This process is entirely anonymous.
       '';
       default = true;
-      type = types.bool;
+      type = lib.types.bool;
     };
 
-    logLevel = mkOption {
-      description = lib.mdDoc ''
+    logLevel = lib.mkOption {
+      description = ''
         Defines how much detail should be present in MeiliSearch's logs.
         MeiliSearch currently supports four log levels, listed in order of increasing verbosity:
         - 'ERROR': only log unexpected events indicating MeiliSearch is not functioning as expected
@@ -75,36 +83,71 @@ in
           Useful when diagnosing issues and debugging
       '';
       default = "INFO";
-      type = types.str;
+      type = lib.types.str;
     };
 
-    maxIndexSize = mkOption {
-      description = lib.mdDoc ''
+    maxIndexSize = lib.mkOption {
+      description = ''
         Sets the maximum size of the index.
         Value must be given in bytes or explicitly stating a base unit.
         For example, the default value can be written as 107374182400, '107.7Gb', or '107374 Mb'.
         Default is 100 GiB
       '';
       default = "107374182400";
-      type = types.str;
+      type = lib.types.str;
     };
 
-    payloadSizeLimit = mkOption {
-      description = lib.mdDoc ''
+    payloadSizeLimit = lib.mkOption {
+      description = ''
         Sets the maximum size of accepted JSON payloads.
         Value must be given in bytes or explicitly stating a base unit.
         For example, the default value can be written as 107374182400, '107.7Gb', or '107374 Mb'.
         Default is ~ 100 MB
       '';
       default = "104857600";
-      type = types.str;
+      type = lib.types.str;
+    };
+
+    # TODO: turn on by default when it stops being experimental
+    dumplessUpgrade = lib.mkOption {
+      default = false;
+      example = true;
+      description = ''
+        Whether to enable (experimental) dumpless upgrade.
+
+        Allows upgrading from Meilisearch >=v1.12 to Meilisearch >=v1.13 without manually
+        dumping and importing the database.
+
+        More information at https://www.meilisearch.com/docs/learn/update_and_migration/updating#dumpless-upgrade
+      '';
+      type = lib.types.bool;
     };
 
   };
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
+
+    warnings = lib.optional (lib.versionOlder cfg.package.version "1.12") ''
+      Meilisearch 1.11 will be removed in NixOS 25.11. As it was the last
+      version not to support dumpless upgrades, you will have to manually
+      migrate your data before that. Instructions can be found at
+      https://www.meilisearch.com/docs/learn/update_and_migration/updating#using-a-dump
+      and afterwards, you can set `services.meilisearch.package = pkgs.meilisearch;`
+      to use the latest version.
+    '';
+
+    services.meilisearch.package = lib.mkDefault (
+      if lib.versionAtLeast config.system.stateVersion "25.05" then
+        pkgs.meilisearch
+      else
+        pkgs.meilisearch_1_11
+    );
+
+    # used to restore dumps
+    environment.systemPackages = [ cfg.package ];
+
     systemd.services.meilisearch = {
       description = "MeiliSearch daemon";
       wantedBy = [ "multi-user.target" ];
@@ -112,17 +155,18 @@ in
       environment = {
         MEILI_DB_PATH = "/var/lib/meilisearch";
         MEILI_HTTP_ADDR = "${cfg.listenAddress}:${toString cfg.listenPort}";
-        MEILI_NO_ANALYTICS = toString cfg.noAnalytics;
+        MEILI_NO_ANALYTICS = lib.boolToString cfg.noAnalytics;
         MEILI_ENV = cfg.environment;
         MEILI_DUMP_DIR = "/var/lib/meilisearch/dumps";
         MEILI_LOG_LEVEL = cfg.logLevel;
         MEILI_MAX_INDEX_SIZE = cfg.maxIndexSize;
+        MEILI_EXPERIMENTAL_DUMPLESS_UPGRADE = lib.boolToString cfg.dumplessUpgrade;
       };
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/meilisearch";
         DynamicUser = true;
         StateDirectory = "meilisearch";
-        EnvironmentFile = mkIf (cfg.masterKeyEnvironmentFile != null) cfg.masterKeyEnvironmentFile;
+        EnvironmentFile = lib.mkIf (cfg.masterKeyEnvironmentFile != null) cfg.masterKeyEnvironmentFile;
       };
     };
   };

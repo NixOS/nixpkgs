@@ -1,63 +1,115 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, numpy
-, decorator
-, imageio
-, imageio-ffmpeg
-, proglog
-, requests
-, tqdm
-  # Advanced image processing (triples size of output)
-, advancedProcessing ? false
-, scikit-image
-, scikit-learn
-, scipy
-, matplotlib
-, youtube-dl
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  decorator,
+  imageio,
+  imageio-ffmpeg,
+  numpy,
+  proglog,
+  python-dotenv,
+  requests,
+  tqdm,
+
+  # optional-dependencies
+  matplotlib,
+  scikit-image,
+  scikit-learn,
+  scipy,
+  yt-dlp,
+
+  # tests
+  pytest-timeout,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "moviepy";
-  version = "1.0.3";
-  format = "setuptools";
+  version = "2.1.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.5";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "2884e35d1788077db3ff89e763c5ba7bfddbd7ae9108c9bc809e7ba58fa433f5";
+  src = fetchFromGitHub {
+    owner = "Zulko";
+    repo = "moviepy";
+    tag = "v${version}";
+    hash = "sha256-dha+rPBkcEyqQ7EfnFg81GDq0Lc2uoQ3meCTjdajaBM=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "decorator>=4.0.2,<5.0" "decorator>=4.0.2,<6.0"
-  '';
+  build-system = [ setuptools ];
 
-  # No tests, require network connection
-  doCheck = false;
+  pythonRelaxDeps = [ "pillow" ];
 
-  propagatedBuildInputs = [
-    numpy
+  dependencies = [
     decorator
     imageio
     imageio-ffmpeg
-    tqdm
-    requests
+    numpy
     proglog
-  ] ++ lib.optionals advancedProcessing [
-    scikit-image
-    scikit-learn
-    scipy
-    matplotlib
-    youtube-dl
+    python-dotenv
+    requests
+    tqdm
   ];
 
-  meta = with lib; {
+  optional-dependencies = {
+    optionals = [
+      matplotlib
+      scikit-image
+      scikit-learn
+      scipy
+      yt-dlp
+    ];
+  };
+
+  nativeCheckInputs = [
+    pytest-timeout
+    pytestCheckHook
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  # See https://github.com/NixOS/nixpkgs/issues/381908 and https://github.com/NixOS/nixpkgs/issues/385450.
+  pytestFlagsArray = [ "--timeout=600" ];
+
+  pythonImportsCheck = [ "moviepy" ];
+
+  disabledTests =
+    [
+      # stalls
+      "test_doc_examples"
+      # video orientation mismatch, 0 != 180
+      "test_PR_529"
+      # video orientation [1920, 1080] != [1080, 1920]
+      "test_ffmpeg_parse_video_rotation"
+      "test_correct_video_rotation"
+      # media duration mismatch: assert 230.0 == 30.02
+      "test_ffmpeg_parse_infos_decode_file"
+      # Failed: DID NOT RAISE <class 'OSError'>
+      "test_ffmpeg_resize"
+      "test_ffmpeg_stabilize_video"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Failed: Timeout >30.0s
+      "test_issue_1682"
+    ];
+
+  disabledTestPaths = [
+    "tests/test_compositing.py"
+    "tests/test_fx.py"
+    "tests/test_ImageSequenceClip.py"
+    "tests/test_TextClip.py"
+    "tests/test_VideoClip.py"
+    "tests/test_videotools.py"
+  ];
+
+  meta = {
     description = "Video editing with Python";
     homepage = "https://zulko.github.io/moviepy/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/Zulko/moviepy/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

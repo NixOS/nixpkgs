@@ -1,22 +1,22 @@
 { config, lib, ... }:
 
-with lib;
-
-let cfg = config.programs.systemtap;
-in {
+let
+  cfg = config.programs.systemtap;
+in
+{
 
   options = {
     programs.systemtap = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Install {command}`systemtap` along with necessary kernel options.
         '';
       };
     };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isYes "DEBUG")
     ];

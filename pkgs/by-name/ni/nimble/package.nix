@@ -1,31 +1,48 @@
-{ lib, buildNimPackage, fetchFromGitHub, nim, makeWrapper }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitHub,
+  nim,
+  openssl,
+  makeWrapper,
 
-buildNimPackage (final: prev: {
-  pname = "nimble";
-  version = "0.14.2";
+  nix-update-script,
+}:
 
-  requiredNimVersion = 1;
+buildNimPackage (
+  final: prev: {
+    pname = "nimble";
+    version = "0.18.2";
 
-  src = fetchFromGitHub {
-    owner = "nim-lang";
-    repo = "nimble";
-    rev = "v${final.version}";
-    hash = "sha256-8b5yKvEl7c7wA/8cpdaN2CSvawQJzuRce6mULj3z/mI=";
-  };
+    src = fetchFromGitHub {
+      owner = "nim-lang";
+      repo = "nimble";
+      rev = "v${final.version}";
+      hash = "sha256-wgzFhModFkwB8st8F5vSkua7dITGGC2cjoDvgkRVZMs=";
+      fetchSubmodules = true;
+    };
 
-  nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [ openssl ];
 
-  doCheck = false; # it works on their machine
+    nimFlags = [ "--define:git_revision_override=${final.src.rev}" ];
 
-  postInstall = ''
-    wrapProgram $out/bin/nimble \
-      --suffix PATH : ${lib.makeBinPath [ nim ]}
-  '';
+    doCheck = false; # it works on their machine
 
-  meta = {
-    description = "Package manager for the Nim programming language";
-    homepage = "https://github.com/nim-lang/nimble";
-    license = lib.licenses.bsd3;
-    mainProgram = "nimble";
-  };
-})
+    postInstall = ''
+      wrapProgram $out/bin/nimble \
+        --suffix PATH : ${lib.makeBinPath [ nim ]}
+    '';
+
+    passthru.updateScript = nix-update-script { };
+
+    meta = {
+      description = "Package manager for the Nim programming language";
+      homepage = "https://github.com/nim-lang/nimble";
+      changelog = "https://github.com/nim-lang/nimble/releases/tag/v${final.version}";
+      license = lib.licenses.bsd3;
+      mainProgram = "nimble";
+      maintainers = [ lib.maintainers.daylinmorgan ];
+    };
+  }
+)

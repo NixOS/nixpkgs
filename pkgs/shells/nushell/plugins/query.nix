@@ -1,22 +1,24 @@
-{ stdenv
-, lib
-, rustPlatform
-, nushell
-, IOKit
-, CoreFoundation
-, libclang
-, nix-update-script
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  nushell,
+  nix-update-script,
+  pkg-config,
+  openssl,
+  curl,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "nushell_plugin_query";
-  inherit (nushell) version src;
-  cargoHash = "sha256-u6etPrtq/q37CvJ2rkoFvVDBgu/YyVugeGOJbeHcSek=";
+  inherit (nushell) version src cargoHash;
+  useFetchCargoVendor = true;
 
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    LIBCLANG_PATH = "${libclang.lib}/lib";
-  };
-  buildInputs = lib.optionals stdenv.isDarwin [ IOKit CoreFoundation ];
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
+  buildInputs = [
+    openssl
+    curl
+  ];
   cargoBuildFlags = [ "--package nu_plugin_query" ];
 
   checkPhase = ''
@@ -28,11 +30,15 @@ rustPlatform.buildRustPackage {
     extraArgs = [ "--version=skip" ];
   };
 
-  meta = with lib; {
-    description = "A Nushell plugin to query JSON, XML, and various web data";
+  meta = {
+    description = "Nushell plugin to query JSON, XML, and various web data";
+    mainProgram = "nu_plugin_query";
     homepage = "https://github.com/nushell/nushell/tree/${version}/crates/nu_plugin_query";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ happysalada aidalgol ];
-    platforms = with platforms; all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      happysalada
+      aidalgol
+    ];
+    platforms = lib.platforms.all;
   };
 }

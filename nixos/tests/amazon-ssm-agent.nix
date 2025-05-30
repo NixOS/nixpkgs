@@ -1,8 +1,9 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }: {
+{ lib, ... }:
+{
   name = "amazon-ssm-agent";
   meta.maintainers = [ lib.maintainers.anthonyroussel ];
 
-  nodes.machine = { config, pkgs, ... }: {
+  nodes.machine = {
     services.amazon-ssm-agent.enable = true;
   };
 
@@ -14,4 +15,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
 
     machine.wait_for_unit("amazon-ssm-agent.service")
   '';
-})
+}

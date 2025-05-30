@@ -5,44 +5,35 @@
   rustPlatform,
   just,
   dbus,
-  rust,
   stdenv,
   xdg-desktop-portal-cosmic,
+  nixosTests,
 }:
-rustPlatform.buildRustPackage rec {
-  pname = "cosmic-session";
-  version = "0-unstable-2024-01-17";
 
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "cosmic-session";
+  version = "1.0.0-alpha.7";
+
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
-    rev = "8e73c0f6940288c4a24a102a7ba9f20eb6bd754f";
-    sha256 = "sha256-plglQ9i+kcG70v9ElCzwNMhO1xcuEAQiO0DeZfRjbcg=";
+    repo = "cosmic-session";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-vozm4vcXV3RB9Pk6om1UNCfGh80vIVJvSwbzwGDQw3Y=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "cosmic-notifications-util-0.1.0" = "sha256-GmTT7SFBqReBMe4GcNSym1YhsKtFQ/0hrDcwUqXkaBw=";
-      "launch-pad-0.1.0" = "sha256-tnbSJ/GP9GTnLnikJmvb9XrJSgnUnWjadABHF43L1zc=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-68budhhbt8wPY7sfDqwIs4MWB/NBXsswK6HbC2AnHqE=";
 
   postPatch = ''
-    substituteInPlace Justfile \
-        --replace '#!/usr/bin/env' "#!$(command -v env)" \
-        --replace 'target/release/cosmic-session' "target/${
-          rust.lib.toRustTargetSpecShort stdenv.hostPlatform
-        }/release/cosmic-session"
     substituteInPlace data/start-cosmic \
-        --replace '#!/bin/bash' "#!${lib.getBin bash}/bin/bash" \
-        --replace '/usr/bin/cosmic-session' "$out/bin/cosmic-session" \
-        --replace '/usr/bin/dbus-run-session' "${
-          lib.getBin dbus
-        }/bin/dbus-run-session"
-    substituteInPlace data/cosmic.desktop --replace '/usr/bin/start-cosmic' "$out/bin/start-cosmic"
+      --replace-fail '/usr/bin/cosmic-session' "${placeholder "out"}/bin/cosmic-session" \
+      --replace-fail '/usr/bin/dbus-run-session' "${lib.getBin dbus}/bin/dbus-run-session"
+    substituteInPlace data/cosmic.desktop \
+      --replace-fail '/usr/bin/start-cosmic' "${placeholder "out"}/bin/start-cosmic"
   '';
 
+  buildInputs = [ bash ];
   nativeBuildInputs = [ just ];
 
   dontUseJustBuild = true;
@@ -51,21 +42,34 @@ rustPlatform.buildRustPackage rec {
     "--set"
     "prefix"
     (placeholder "out")
+    "--set"
+    "cosmic_dconf_profile"
+    "${placeholder "out"}/etc/dconf/profile/cosmic"
+    "--set"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
-  env.XDP_COSMIC = lib.getExe xdg-desktop-portal-cosmic;
+  env.XDP_COSMIC = "${xdg-desktop-portal-cosmic}/libexec/xdg-desktop-portal-cosmic";
 
-  passthru.providedSessions = [ "cosmic" ];
+  passthru = {
+    providedSessions = [ "cosmic" ];
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
+  };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-session";
     description = "Session manager for the COSMIC desktop environment";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "cosmic-session";
-    maintainers = with maintainers; [
-      a-kenji
-      nyanbinary
-    ];
-    platforms = platforms.linux;
+    teams = [ lib.teams.cosmic ];
+    platforms = lib.platforms.linux;
   };
-}
+})

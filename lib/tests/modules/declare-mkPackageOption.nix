@@ -1,9 +1,11 @@
-{ lib, ... }: let
+{ lib, ... }:
+let
   pkgs.hello = {
     type = "derivation";
     pname = "hello";
   };
-in {
+in
+{
   options = {
     package = lib.mkPackageOption pkgs "hello" { };
 
@@ -46,8 +48,28 @@ in {
       pkgsText = "myPkgs";
     };
 
-    packageFromOtherSet = let myPkgs = {
-      hello = pkgs.hello // { pname = "hello-other"; };
-    }; in lib.mkPackageOption myPkgs "hello" { };
+    packageFromOtherSet =
+      let
+        myPkgs = {
+          hello = pkgs.hello // {
+            pname = "hello-other";
+          };
+        };
+      in
+      lib.mkPackageOption myPkgs "hello" { };
+
+    packageInvalidIdentifier =
+      let
+        myPkgs."123"."with\"quote" = { inherit (pkgs) hello; };
+      in
+      lib.mkPackageOption myPkgs [ "123" "with\"quote" "hello" ] { };
+
+    packageInvalidIdentifierExample = lib.mkPackageOption pkgs "hello" {
+      example = [
+        "123"
+        "with\"quote"
+        "hello"
+      ];
+    };
   };
 }

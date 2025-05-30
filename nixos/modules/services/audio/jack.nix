@@ -1,48 +1,54 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.jack;
 
   pcmPlugin = cfg.jackd.enable && cfg.alsa.enable;
   loopback = cfg.jackd.enable && cfg.loopback.enable;
 
-  enable32BitAlsaPlugins = cfg.alsa.support32Bit && pkgs.stdenv.isx86_64 && pkgs.pkgsi686Linux.alsa-lib != null;
+  enable32BitAlsaPlugins =
+    cfg.alsa.support32Bit && pkgs.stdenv.hostPlatform.isx86_64 && pkgs.pkgsi686Linux.alsa-lib != null;
 
-  umaskNeeded = versionOlder cfg.jackd.package.version "1.9.12";
-  bridgeNeeded = versionAtLeast cfg.jackd.package.version "1.9.12";
-in {
+  umaskNeeded = lib.versionOlder cfg.jackd.package.version "1.9.12";
+  bridgeNeeded = lib.versionAtLeast cfg.jackd.package.version "1.9.12";
+in
+{
   options = {
     services.jack = {
       jackd = {
-        enable = mkEnableOption (lib.mdDoc ''
+        enable = lib.mkEnableOption ''
           JACK Audio Connection Kit. You need to add yourself to the "jackaudio" group
-        '');
+        '';
 
-        package = mkPackageOption pkgs "jack2" {
-          example = "jack1";
-        } // {
-          # until jack1 promiscuous mode is fixed
-          internal = true;
-        };
+        package =
+          lib.mkPackageOption pkgs "jack2" {
+            example = "jack1";
+          }
+          // {
+            # until jack1 promiscuous mode is fixed
+            internal = true;
+          };
 
-        extraOptions = mkOption {
-          type = types.listOf types.str;
+        extraOptions = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           default = [
             "-dalsa"
           ];
-          example = literalExpression ''
+          example = lib.literalExpression ''
             [ "-dalsa" "--device" "hw:1" ];
           '';
-          description = lib.mdDoc ''
+          description = ''
             Specifies startup command line arguments to pass to JACK server.
           '';
         };
 
-        session = mkOption {
-          type = types.lines;
-          description = lib.mdDoc ''
+        session = lib.mkOption {
+          type = lib.types.lines;
+          description = ''
             Commands to run after JACK is started.
           '';
         };
@@ -50,66 +56,66 @@ in {
       };
 
       alsa = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = true;
-          description = lib.mdDoc ''
+          description = ''
             Route audio to/from generic ALSA-using applications using ALSA JACK PCM plugin.
           '';
         };
 
-        support32Bit = mkOption {
-          type = types.bool;
+        support32Bit = lib.mkOption {
+          type = lib.types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Whether to support sound for 32-bit ALSA applications on 64-bit system.
           '';
         };
       };
 
       loopback = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Create ALSA loopback device, instead of using PCM plugin. Has broader
             application support (things like Steam will work), but may need fine-tuning
             for concrete hardware.
           '';
         };
 
-        index = mkOption {
-          type = types.int;
+        index = lib.mkOption {
+          type = lib.types.int;
           default = 10;
-          description = lib.mdDoc ''
+          description = ''
             Index of an ALSA loopback device.
           '';
         };
 
-        config = mkOption {
-          type = types.lines;
-          description = lib.mdDoc ''
+        config = lib.mkOption {
+          type = lib.types.lines;
+          description = ''
             ALSA config for loopback device.
           '';
         };
 
-        dmixConfig = mkOption {
-          type = types.lines;
+        dmixConfig = lib.mkOption {
+          type = lib.types.lines;
           default = "";
           example = ''
             period_size 2048
             periods 2
           '';
-          description = lib.mdDoc ''
+          description = ''
             For music production software that still doesn't support JACK natively you
             would like to put buffer/period adjustments here
             to decrease dmix device latency.
           '';
         };
 
-        session = mkOption {
-          type = types.lines;
-          description = lib.mdDoc ''
+        session = lib.mkOption {
+          type = lib.types.lines;
+          description = ''
             Additional commands to run to setup loopback device.
           '';
         };
@@ -119,14 +125,13 @@ in {
 
   };
 
-  config = mkMerge [
+  config = lib.mkMerge [
 
-    (mkIf pcmPlugin {
-      sound.extraConfig = ''
+    (lib.mkIf pcmPlugin {
+      environment.etc."alsa/conf.d/98-jack.conf".text = ''
         pcm_type.jack {
           libs.native = ${pkgs.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_jack.so ;
-          ${lib.optionalString enable32BitAlsaPlugins
-          "libs.32Bit = ${pkgs.pkgsi686Linux.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_jack.so ;"}
+          ${lib.optionalString enable32BitAlsaPlugins "libs.32Bit = ${pkgs.pkgsi686Linux.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_jack.so ;"}
         }
         pcm.!default {
           @func getenv
@@ -136,13 +141,13 @@ in {
       '';
     })
 
-    (mkIf loopback {
+    (lib.mkIf loopback {
       boot.kernelModules = [ "snd-aloop" ];
       boot.kernelParams = [ "snd-aloop.index=${toString cfg.loopback.index}" ];
-      sound.extraConfig = cfg.loopback.config;
+      environment.etc."alsa/conf.d/99-jack-loopback.conf".text = cfg.loopback.config;
     })
 
-    (mkIf cfg.jackd.enable {
+    (lib.mkIf cfg.jackd.enable {
       services.jack.jackd.session = ''
         ${lib.optionalString bridgeNeeded "${pkgs.a2jmidid}/bin/a2jmidid -e &"}
       '';
@@ -222,10 +227,20 @@ in {
       };
       # https://jackaudio.org/faq/linux_rt_config.html
       security.pam.loginLimits = [
-        { domain = "@jackaudio"; type = "-"; item = "rtprio"; value = "99"; }
-        { domain = "@jackaudio"; type = "-"; item = "memlock"; value = "unlimited"; }
+        {
+          domain = "@jackaudio";
+          type = "-";
+          item = "rtprio";
+          value = "99";
+        }
+        {
+          domain = "@jackaudio";
+          type = "-";
+          item = "memlock";
+          value = "unlimited";
+        }
       ];
-      users.groups.jackaudio = {};
+      users.groups.jackaudio = { };
 
       environment = {
         systemPackages = [ cfg.jackd.package ];
@@ -239,17 +254,19 @@ in {
 
       systemd.services.jack = {
         description = "JACK Audio Connection Kit";
-        serviceConfig = {
-          User = "jackaudio";
-          SupplementaryGroups = lib.optional
-            (config.hardware.pulseaudio.enable
-            && !config.hardware.pulseaudio.systemWide) "users";
-          ExecStart = "${cfg.jackd.package}/bin/jackd ${lib.escapeShellArgs cfg.jackd.extraOptions}";
-          LimitRTPRIO = 99;
-          LimitMEMLOCK = "infinity";
-        } // optionalAttrs umaskNeeded {
-          UMask = "007";
-        };
+        serviceConfig =
+          {
+            User = "jackaudio";
+            SupplementaryGroups = lib.optional (
+              config.services.pulseaudio.enable && !config.services.pulseaudio.systemWide
+            ) "users";
+            ExecStart = "${cfg.jackd.package}/bin/jackd ${lib.escapeShellArgs cfg.jackd.extraOptions}";
+            LimitRTPRIO = 99;
+            LimitMEMLOCK = "infinity";
+          }
+          // lib.optionalAttrs umaskNeeded {
+            UMask = "007";
+          };
         path = [ cfg.jackd.package ];
         environment = {
           JACK_PROMISCUOUS_SERVER = "jackaudio";
@@ -260,7 +277,7 @@ in {
       systemd.services.jack-session = {
         description = "JACK session";
         script = ''
-          jack_wait -w
+          ${pkgs.jack-example-tools}/bin/jack_wait -w
           ${cfg.jackd.session}
           ${lib.optionalString cfg.loopback.enable cfg.loopback.session}
         '';

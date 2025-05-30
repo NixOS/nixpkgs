@@ -1,28 +1,39 @@
-{ stdenv, lib, fetchFromGitHub, kernel, kmod, patchutils, perlPackages }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  kernel,
+  kmod,
+  patchutils,
+  perlPackages,
+}:
 let
 
   media = fetchFromGitHub rec {
     name = repo;
     owner = "tbsdtv";
     repo = "linux_media";
-    rev = "d0a7e44358f28064697e0eed309db03166dcd83b";
-    hash = "sha256-BTHlnta5qv2bdPjD2bButwYGpwR/bq99/AUoZqTHHYw=";
+    rev = "3f1faba3930568fd2d472a2fe8c57af8d7084672";
+    hash = "sha256-tq92yqJVJgAYy7PTY/nk0Q6sWJ0kdSrw38JEOOhfwGQ=";
   };
 
   build = fetchFromGitHub rec {
     name = repo;
     owner = "tbsdtv";
     repo = "media_build";
-    rev = "88764363a3e3d36b3c59a0a2bf2244e262035d47";
-    hash = "sha256-LFTxYVPudflxqYTSBIDNkTrGs09MOuYBXwpGYqWfEFQ=";
+    rev = "bc02baf59046b02e3eb71653d8aa8d98e79dc4e1";
+    hash = "sha256-P0ASmWro3j3dk7LZQbUKXcGL+2c9fdjM7RgEfk0iDMs=";
   };
 
 in
 stdenv.mkDerivation {
   pname = "tbs";
-  version = "20231210-${kernel.version}";
+  version = "20250510-${kernel.version}";
 
-  srcs = [ media build ];
+  srcs = [
+    media
+    build
+  ];
   sourceRoot = build.name;
 
   # https://github.com/tbsdtv/linux_media/wiki
@@ -53,19 +64,22 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = [ patchutils kmod perlPackages.ProcProcessTable ]
-    ++ kernel.moduleBuildDependencies;
+  nativeBuildInputs = [
+    patchutils
+    kmod
+    perlPackages.ProcProcessTable
+  ] ++ kernel.moduleBuildDependencies;
 
   postInstall = ''
     find $out/lib/modules/${kernel.modDirVersion} -name "*.ko" -exec xz {} \;
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.tbsdtv.com/";
     description = "Linux driver for TBSDTV cards";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ ck3d ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ ck3d ];
     priority = -1;
-    broken = kernel.kernelOlder "4.14" || kernel.kernelAtLeast "6.6";
+    broken = kernel.kernelOlder "4.19" || kernel.kernelAtLeast "6.15";
   };
 }

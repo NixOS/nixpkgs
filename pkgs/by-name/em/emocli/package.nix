@@ -1,4 +1,9 @@
-{ lib, buildNimPackage, fetchFromGitLab, unicode-emoji }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitLab,
+  unicode-emoji,
+}:
 
 buildNimPackage (finalAttrs: {
   pname = "emocli";
@@ -15,7 +20,7 @@ buildNimPackage (finalAttrs: {
   env.EMOCLI_DATAFILE = "${unicode-emoji}/share/unicode/emoji/emoji-test.txt";
   meta = {
     homepage = "https://gitlab.com/AsbjornOlling/emocli";
-    description = "The emoji picker for your command line";
+    description = "Emoji picker for your command line";
     license = lib.licenses.eupl12;
     maintainers = with lib.maintainers; [ asbjornolling ];
     mainProgram = "emocli";

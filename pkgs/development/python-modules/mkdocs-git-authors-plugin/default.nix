@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, mkdocs
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  mkdocs,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs-git-authors-plugin";
-  version = "0.7.2";
+  version = "0.9.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "timvink";
     repo = "mkdocs-git-authors-plugin";
-    rev = "v${version}";
-    hash = "sha256-jhYwi9HO6kxOS1QmEKb1YnXGSJ4Eyo4Sm07jI4lxXnA=";
+    tag = "v${version}";
+    hash = "sha256-2ITro34lZ+tz7ev7Yuh1wJjsSNik6VUTt3dupIajmLU=";
   };
 
   propagatedBuildInputs = [ mkdocs ];

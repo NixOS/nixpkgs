@@ -1,9 +1,10 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, jax
-, jaxlib
-, lib
-, pytestCheckHook
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  jax,
+  jaxlib,
+  lib,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -13,19 +14,15 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "deepmind";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "jmp";
+    tag = "v${version}";
     hash = "sha256-+PefZU1209vvf1SfF8DXiTvKYEnZ4y8iiIr8yKikx9Y=";
   };
 
   # Wheel requires only `numpy`, but the import needs `jax`.
-  propagatedBuildInputs = [
-    jax
-  ];
+  propagatedBuildInputs = [ jax ];
 
-  pythonImportsCheck = [
-    "jmp"
-  ];
+  pythonImportsCheck = [ "jmp" ];
 
   nativeCheckInputs = [
     jaxlib
@@ -33,7 +30,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "This library implements support for mixed precision training in JAX.";
+    description = "This library implements support for mixed precision training in JAX";
     homepage = "https://github.com/deepmind/jmp";
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];

@@ -1,28 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, desktop-file-utils
-, gtk4
-, glib
-, granite7
-, libgee
-, wrapGAppsHook4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  desktop-file-utils,
+  gala,
+  gsettings-desktop-schemas,
+  gtk4,
+  glib,
+  gnome-settings-daemon,
+  granite7,
+  libgee,
+  mutter,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-shortcut-overlay";
-  version = "2.0.1";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "shortcut-overlay";
     rev = version;
-    sha256 = "sha256-YVeCO7mZmf+FEY4d8tvC76lW/HkOwQ6kw7nvmzAFEtw=";
+    sha256 = "sha256-RWFzs4rw/KC0MXkNfA178FejMbuIBh5FVox1RxmxCJA=";
   };
 
   nativeBuildInputs = [
@@ -35,10 +40,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gala # org.pantheon.desktop.gala.keybindings
+    gsettings-desktop-schemas # org.gnome.desktop.wm.keybindings
     glib
+    gnome-settings-daemon # org.gnome.settings-daemon.plugins.media-keys
     granite7
     gtk4
     libgee
+    mutter # org.gnome.mutter.keybindings
   ];
 
   passthru = {
@@ -46,11 +55,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A native OS-wide shortcut overlay to be launched by Gala";
+    description = "Native OS-wide shortcut overlay to be launched by Gala";
     homepage = "https://github.com/elementary/shortcut-overlay";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
     mainProgram = "io.elementary.shortcut-overlay";
   };
 }

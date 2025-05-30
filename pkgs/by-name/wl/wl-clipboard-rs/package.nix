@@ -1,38 +1,51 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, wayland
-, withNativeLibs ? false
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  pkg-config,
+  wayland,
+  withNativeLibs ? false,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "wl-clipboard-rs";
-  version = "0.8.0-unstable-2023-11-27";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "wl-clipboard-rs";
-    rev = "be851408e0f91edffdc2f1a76805035847f9f8a9";
-    hash = "sha256-OfLn7izG1KSUjdd2gO4aaSCDlcaWoFiFmgwwhR1hRsQ=";
+    rev = "v${version}";
+    hash = "sha256-jGTWcVR6atkEeEUunystJ4B6I3GzYiCOMs0MC6pvPfI=";
   };
 
-  cargoHash = "sha256-rYFCPyWTUhyrEcoRM8I+iX7IaY/6i1tBVjhs47m3XY8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-6HNSQ27PGhF6tt12jdu6llDUZ/tYsFwx2pCJx3mKm/E=";
 
-  cargoBuildFlags = [
-    "--package=wl-clipboard-rs"
-    "--package=wl-clipboard-rs-tools"
-  ] ++ lib.optionals withNativeLibs [
-    "--features=native_lib"
-  ];
+  cargoBuildFlags =
+    [
+      "--package=wl-clipboard-rs"
+      "--package=wl-clipboard-rs-tools"
+    ]
+    ++ lib.optionals withNativeLibs [
+      "--features=native_lib"
+    ];
 
-  nativeBuildInputs = lib.optionals withNativeLibs [
-    pkg-config
-  ];
+  nativeBuildInputs =
+    [
+      installShellFiles
+    ]
+    ++ lib.optionals withNativeLibs [
+      pkg-config
+    ];
 
-  buildInputs = lib.optionals withNativeLibs [
-    wayland
-  ];
+  buildInputs =
+    [
+      installShellFiles
+    ]
+    ++ lib.optionals withNativeLibs [
+      wayland
+    ];
 
   preCheck = ''
     export XDG_RUNTIME_DIR=$(mktemp -d)
@@ -47,14 +60,34 @@ rustPlatform.buildRustPackage {
     "--skip=tests::copy::copy_test"
   ];
 
-  meta = {
+  postInstall = ''
+    installManPage target/man/wl-copy.1
+    installManPage target/man/wl-paste.1
+
+    installShellCompletion --cmd wl-copy \
+      --bash target/completions/wl-copy.bash \
+      --fish target/completions/wl-copy.fish \
+      --zsh target/completions/_wl-copy
+
+    installShellCompletion --cmd wl-paste \
+      --bash target/completions/wl-paste.bash \
+      --fish target/completions/wl-paste.fish \
+      --zsh target/completions/_wl-paste
+  '';
+
+  meta = with lib; {
     description = "Command-line copy/paste utilities for Wayland, written in Rust";
     homepage = "https://github.com/YaLTeR/wl-clipboard-rs";
-    # TODO: add `${version}` once we switch to tagged release
-    changelog = "https://github.com/YaLTeR/wl-clipboard-rs/blob/master/CHANGELOG.md";
-    platforms = lib.platforms.linux;
-    license = with lib.licenses; [ asl20 mit ];
+    changelog = "https://github.com/YaLTeR/wl-clipboard-rs/blob/v${version}/CHANGELOG.md";
+    platforms = platforms.linux;
+    license = with licenses; [
+      asl20
+      mit
+    ];
     mainProgram = "wl-clip";
-    maintainers = with lib.maintainers; [ thiagokokada ];
+    maintainers = with maintainers; [
+      thiagokokada
+      donovanglover
+    ];
   };
 }

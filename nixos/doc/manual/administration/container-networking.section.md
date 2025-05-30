@@ -26,9 +26,11 @@ host to rewrite container traffic to use your external IP address. This
 can be accomplished using the following configuration on the host:
 
 ```nix
-networking.nat.enable = true;
-networking.nat.internalInterfaces = ["ve-+"];
-networking.nat.externalInterface = "eth0";
+{
+  networking.nat.enable = true;
+  networking.nat.internalInterfaces = ["ve-+"];
+  networking.nat.externalInterface = "eth0";
+}
 ```
 
 where `eth0` should be replaced with the desired external interface.
@@ -38,7 +40,9 @@ If you are using Network Manager, you need to explicitly prevent it from
 managing container interfaces:
 
 ```nix
-networking.networkmanager.unmanaged = [ "interface-name:ve-*" ];
+{
+  networking.networkmanager.unmanaged = [ "interface-name:ve-*" ];
+}
 ```
 
 You may need to restart your system for the changes to take effect.

@@ -1,23 +1,28 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.do-agent;
 
 in
 {
   options.services.do-agent = {
-    enable = mkEnableOption (lib.mdDoc "do-agent, the DigitalOcean droplet metrics agent");
+    enable = lib.mkEnableOption "do-agent, the DigitalOcean droplet metrics agent";
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.packages = [ pkgs.do-agent ];
 
     systemd.services.do-agent = {
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = [ "" "${pkgs.do-agent}/bin/do-agent --syslog" ];
+        ExecStart = [
+          ""
+          "${pkgs.do-agent}/bin/do-agent --syslog"
+        ];
         DynamicUser = true;
       };
     };

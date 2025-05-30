@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flake8
-, pydocstyle
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flake8,
+  pydocstyle,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -15,8 +16,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "PyCQA";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "flake8-docstrings";
+    tag = version;
     hash = "sha256-EafLWySeHB81HRcXiDs56lbUZzGvnT87WVqln0PoLCk=";
   };
 
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "flake8_docstrings"
-  ];
+  pythonImportsCheck = [ "flake8_docstrings" ];
 
   meta = with lib; {
     description = "Extension for flake8 which uses pydocstyle to check docstrings";

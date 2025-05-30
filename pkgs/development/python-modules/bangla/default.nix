@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -22,6 +23,6 @@ buildPythonPackage rec {
     description = "Bangla is a package for Bangla language users with various functionalities including Bangla date and Bangla numeric conversation";
     homepage = "https://github.com/arsho/bangla";
     license = licenses.mit;
-    maintainers = teams.tts.members;
+    teams = [ teams.tts ];
   };
 }

@@ -1,25 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ncurses
-, ninja
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ncurses,
+  ninja,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "loksh";
-  version = "7.4";
+  version = "7.7";
 
   src = fetchFromGitHub {
     owner = "dimkr";
     repo = "loksh";
     rev = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-gQK9gq6MsKVyOikOW0sW/SbIM1K/3I8pn58P/SqzKys=";
+    hash = "sha256-BxQ7SZwRP9PlD2MV7DqG7tQ2lqzlkTwmaKwbgC7NYrc=";
   };
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
 
   nativeBuildInputs = [
     meson
@@ -48,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/dimkr/loksh";
     description = "Linux port of OpenBSD's ksh";
+    mainProgram = "loksh";
     longDescription = ''
       loksh is a Linux port of OpenBSD's ksh.
 
@@ -58,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       systems.
     '';
     license = with lib.licenses; [ publicDomain ];
-    maintainers = with lib.maintainers; [ AndersonTorres cameronnemo ];
+    maintainers = with lib.maintainers; [ cameronnemo ];
     platforms = lib.platforms.linux;
   };
 })

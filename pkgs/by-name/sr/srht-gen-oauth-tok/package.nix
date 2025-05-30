@@ -1,4 +1,10 @@
-{ stdenv, pkgs, lib, fetchFromSourcehut, nixosTests }:
+{
+  stdenv,
+  pkgs,
+  lib,
+  fetchFromSourcehut,
+  nixosTests,
+}:
 
 let
   perl = pkgs.perl.withPackages (pps: [
@@ -14,10 +20,12 @@ stdenv.mkDerivation rec {
   src = fetchFromSourcehut {
     domain = "entropic.network";
     owner = "~nessdoor";
-    repo = pname;
+    repo = "srht-gen-oauth-tok";
     rev = version;
     hash = "sha256-GcqP3XbVw2sR5n4+aLUmA4fthNkuVAGnhV1h7suJYdI=";
   };
+
+  patches = [ ./fix-html-parsing.patch ];
 
   buildInputs = [ perl ];
   nativeBuildInputs = [ perl ];
@@ -27,7 +35,7 @@ stdenv.mkDerivation rec {
   passthru.tests.sourcehut = nixosTests.sourcehut;
 
   meta = {
-    description = "A script to register a new Sourcehut OAuth token for a given user";
+    description = "Script to register a new Sourcehut OAuth token for a given user";
     longDescription = ''
       srht-gen-oauth-tok is a Perl script for automating the generation of user
       OAuth tokens for Sourcehut-based code forges. This is done by emulating a

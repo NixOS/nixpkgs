@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, marshmallow
-, pytestCheckHook
-, pythonOlder
-, flit-core
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  marshmallow,
+  pytestCheckHook,
+  pythonOlder,
+  flit-core,
 }:
 
 buildPythonPackage rec {
@@ -17,25 +18,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "marshmallow-code";
     repo = "marshmallow-oneofschema";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-HXuyUxU8bT5arpUzmgv7m+X2fNT0qHY8S8Rz6klOGiA=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [
-    marshmallow
-  ];
+  propagatedBuildInputs = [ marshmallow ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "marshmallow_oneofschema"
-  ];
+  pythonImportsCheck = [ "marshmallow_oneofschema" ];
 
   meta = with lib; {
     description = "Marshmallow library extension that allows schema (de)multiplexing";

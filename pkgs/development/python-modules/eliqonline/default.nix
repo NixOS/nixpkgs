@@ -1,10 +1,11 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, docopt
-, fetchPypi
-, pythonOlder
-, pyyaml
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  docopt,
+  fetchPypi,
+  pythonOlder,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
@@ -28,12 +29,11 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "eliqonline"
-  ];
+  pythonImportsCheck = [ "eliqonline" ];
 
   meta = with lib; {
     description = "Python client to the Eliq Online API";
+    mainProgram = "eliqonline";
     homepage = "https://github.com/molobrakos/eliqonline";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ fab ];

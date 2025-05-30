@@ -1,35 +1,35 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+{
   name = "mate";
 
   meta = {
     maintainers = lib.teams.mate.members;
   };
 
-  nodes.machine = { ... }: {
-    imports = [
-      ./common/user-account.nix
-    ];
+  nodes.machine =
+    { ... }:
+    {
+      imports = [
+        ./common/user-account.nix
+      ];
 
-    services.xserver.enable = true;
+      services.xserver.enable = true;
 
-    services.xserver.displayManager = {
-      lightdm.enable = true;
-      autoLogin = {
-        enable = true;
-        user = "alice";
+      services.xserver.displayManager = {
+        lightdm.enable = true;
+        autoLogin = {
+          enable = true;
+          user = "alice";
+        };
       };
+
+      services.xserver.desktopManager.mate.enable = true;
     };
-
-    services.xserver.desktopManager.mate.enable = true;
-
-    # Silence log spam due to no sound drivers loaded:
-    # ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
-    hardware.pulseaudio.enable = true;
-  };
 
   enableOCR = true;
 
-  testScript = { nodes, ... }:
+  testScript =
+    { nodes, ... }:
     let
       user = nodes.machine.users.users.alice;
       env = "DISPLAY=:0.0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/${toString user.uid}/bus";
@@ -53,6 +53,15 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           machine.wait_for_window("Caja")
           machine.wait_for_text('(Applications|Places|System)')
           machine.wait_for_text('(Computer|Home|Trash)')
+
+      with subtest("Check if various environment variables are set"):
+          machine.succeed("xargs --null --max-args=1 echo < /proc/$(pgrep -xf marco)/environ | grep 'XDG_CURRENT_DESKTOP' | grep 'MATE'")
+          # From mate-panel-with-applets packaging
+          machine.succeed("xargs --null --max-args=1 echo < /proc/$(pgrep -xf mate-panel)/environ | grep 'MATE_PANEL_APPLETS_DIR' | grep '${pkgs.mate.mate-panel-with-applets.pname}'")
+
+      with subtest("Check if applets are built with in-process support"):
+          # This is needed for Wayland support
+          machine.fail("pgrep -fa clock-applet")
 
       with subtest("Lock the screen"):
           machine.wait_until_succeeds("su - ${user.name} -c '${env} mate-screensaver-command -q' | grep 'The screensaver is inactive'")
@@ -78,4 +87,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           machine.fail("coredumpctl --json=short | grep -E 'mate|marco|caja'")
           machine.screenshot("screen")
     '';
-})
+}

@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.u9fs;
 in
@@ -11,45 +13,43 @@ in
 
     services.u9fs = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc "Whether to run the u9fs 9P server for Unix.";
+        description = "Whether to run the u9fs 9P server for Unix.";
       };
 
-      listenStreams = mkOption {
-        type = types.listOf types.str;
+      listenStreams = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ "564" ];
         example = [ "192.168.16.1:564" ];
-        description = lib.mdDoc ''
+        description = ''
           Sockets to listen for clients on.
           See {command}`man 5 systemd.socket` for socket syntax.
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "nobody";
-        description =
-          lib.mdDoc "User to run u9fs under.";
+        description = "User to run u9fs under.";
       };
 
-      extraArgs = mkOption {
-        type = types.str;
+      extraArgs = lib.mkOption {
+        type = lib.types.str;
         default = "";
         example = "-a none";
-        description =
-          lib.mdDoc ''
-            Extra arguments to pass on invocation,
-            see {command}`man 4 u9fs`
-          '';
+        description = ''
+          Extra arguments to pass on invocation,
+          see {command}`man 4 u9fs`
+        '';
       };
 
     };
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd = {
       sockets.u9fs = {
@@ -63,13 +63,13 @@ in
         description = "9P Protocol Server";
         reloadIfChanged = true;
         requires = [ "u9fs.socket" ];
-        serviceConfig =
-          { ExecStart = "-${pkgs.u9fs}/bin/u9fs ${cfg.extraArgs}";
-            StandardInput = "socket";
-            StandardError = "journal";
-            User = cfg.user;
-            AmbientCapabilities = "cap_setuid cap_setgid";
-          };
+        serviceConfig = {
+          ExecStart = "-${pkgs.u9fs}/bin/u9fs ${cfg.extraArgs}";
+          StandardInput = "socket";
+          StandardError = "journal";
+          User = cfg.user;
+          AmbientCapabilities = "cap_setuid cap_setgid";
+        };
       };
     };
 

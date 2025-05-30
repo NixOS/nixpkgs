@@ -1,16 +1,20 @@
-{ config
-, lib
-, pkgs
-, options
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
 }:
 
 let
   inherit (lib)
-    escapeShellArgs
+    getExe
     mkOption
     optionals
     types
-  ;
+    ;
+
+  inherit (utils) escapeSystemdExecArgs;
 
   cfg = config.services.prometheus.exporters.fastly;
 in
@@ -27,28 +31,29 @@ in
       '';
     };
 
-    tokenPath = mkOption {
+    environmentFile = mkOption {
       type = path;
       description = ''
-        A run-time path to the token file, which is supposed to be provisioned
-        outside of Nix store.
+        An environment file containg at least the FASTLY_API_TOKEN= environment
+        variable.
       '';
     };
   };
   serviceOpts = {
     serviceConfig = {
-      LoadCredential = "fastly-api-token:${cfg.tokenPath}";
+      EnvironmentFile = cfg.environmentFile;
+      ExecStart = escapeSystemdExecArgs (
+        [
+          (getExe pkgs.prometheus-fastly-exporter)
+          "-listen"
+          "${cfg.listenAddress}:${toString cfg.port}"
+        ]
+        ++ optionals (cfg.configFile != null) [
+          "--config-file"
+          cfg.configFile
+        ]
+        ++ cfg.extraFlags
+      );
     };
-    script = let
-      call = escapeShellArgs ([
-        "${pkgs.prometheus-fastly-exporter}/bin/fastly-exporter"
-        "-listen" "${cfg.listenAddress}:${toString cfg.port}"
-      ] ++ optionals (cfg.configFile != null) [
-        "--config-file" cfg.configFile
-      ] ++ cfg.extraFlags);
-    in ''
-      export FASTLY_API_TOKEN="$(cat $CREDENTIALS_DIRECTORY/fastly-api-token)"
-      ${call}
-    '';
   };
 }

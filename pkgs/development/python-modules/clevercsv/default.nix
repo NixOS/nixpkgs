@@ -1,42 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# propagates
-, chardet
-, regex
-, packaging
+  # build-system
+  setuptools,
 
-# optionals
-, faust-cchardet
-, pandas
-, tabview
-# TODO: , wilderness
+  # dependencies
+  chardet,
+  regex,
+  packaging,
 
-# tests
-, python
-, pytestCheckHook
+  # optionals
+  faust-cchardet,
+  pandas,
+  tabview,
+  # TODO: , wilderness
+
+  # tests
+  python,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "clevercsv";
-  version = "0.8.2";
-  format = "setuptools";
+  version = "0.8.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alan-turing-institute";
     repo = "CleverCSV";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-yyPUNFDq9W5OW1muHtQ10QgAHhXI8w7CY77fsWhIy0k=";
+    tag = "v${version}";
+    hash = "sha256-T4eYTr3+MUr1fPWE490v1m8THdZrBUP4wODftjpvnLQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     chardet
     regex
     packaging
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     full = [
       faust-cchardet
       pandas
@@ -45,9 +51,7 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.full;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.full;
 
   pythonImportsCheck = [
     "clevercsv"
@@ -61,9 +65,7 @@ buildPythonPackage rec {
   '';
 
   # their ci only runs unit tests, there are also integration and fuzzing tests
-  pytestFlagsArray = [
-    "./tests/test_unit"
-  ];
+  pytestFlagsArray = [ "./tests/test_unit" ];
 
   disabledTestPaths = [
     # ModuleNotFoundError: No module named 'wilderness'
@@ -72,6 +74,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "CleverCSV is a Python package for handling messy CSV files";
+    mainProgram = "clevercsv";
     longDescription = ''
       CleverCSV is a Python package for handling messy CSV files. It provides
       a drop-in replacement for the builtin CSV module with improved dialect

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, ffmpeg-headless
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ffmpeg-headless,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "get-video-properties";
   version = "0.1.1";
   format = "setuptools";
@@ -35,5 +36,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ globin ];
   };
-
 }

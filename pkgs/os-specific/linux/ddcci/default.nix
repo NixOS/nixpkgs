@@ -1,16 +1,31 @@
-{ lib, stdenv, fetchFromGitLab, kernel }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  kernel,
+  kernelModuleMakeFlags,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ddcci-driver";
-  version = "0.4.4";
+  version = "0.4.5-unstable-2024-09-26";
   name = "${pname}-${kernel.version}-${version}";
 
   src = fetchFromGitLab {
     owner = "${pname}-linux";
     repo = "${pname}-linux";
-    rev = "v${version}";
-    hash = "sha256-4pCfXJcteWwU6cK8OOSph4XlhKTk289QqLxsSWY7cac=";
+    rev = "0233e1ee5eddb4b8a706464f3097bad5620b65f4";
+    hash = "sha256-Osvojt8UE+cenOuMoSY+T+sODTAAKkvY/XmBa5bQX88=";
   };
+
+  patches = [
+    # See https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux/-/merge_requests/17
+    (fetchpatch {
+      url = "https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux/-/commit/e0605c9cdff7bf3fe9587434614473ba8b7e5f63.patch";
+      hash = "sha256-sTq03HtWQBd7Wy4o1XbdmMjXQE2dG+1jajx4HtwBHjM=";
+    })
+  ];
 
   hardeningDisable = [ "pic" ];
 
@@ -25,7 +40,7 @@ stdenv.mkDerivation rec {
       --replace depmod \#
   '';
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "KVER=${kernel.modDirVersion}"
     "KERNEL_MODLIB=$(out)/lib/modules/${kernel.modDirVersion}"
@@ -36,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "Kernel module driver for DDC/CI monitors";
     homepage = "https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ kiike ];
     platforms = platforms.linux;
     broken = kernel.kernelOlder "5.1";
   };

@@ -1,48 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ply
-, roman
-, uqbar
-, pythonOlder
-, pytestCheckHook
-, lilypond
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ply,
+  roman,
+  uqbar,
+  pythonOlder,
+  pythonAtLeast,
+  pytestCheckHook,
+  lilypond,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "abjad";
-  version = "3.19";
+  version = "3.22";
   format = "setuptools";
 
-  disabled = pythonOlder "3.10";
+  # see issue upstream indicating Python 3.12 support will come
+  # with version 3.20: https://github.com/Abjad/abjad/issues/1574
+  disabled = pythonOlder "3.10" || pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-I9t3ORUKFFlMfXJsAzXhCzl1B4a9/ZNmvSX2/R44TPs=";
+    hash = "sha256-cTll4E5qPuacc7K3TFfK4IqtXGUHuiiU5J20poRuWbI=";
   };
 
   propagatedBuildInputs = [
     ply
     roman
     uqbar
+    typing-extensions
   ];
 
-  buildInputs = [
-    lilypond
-  ];
+  buildInputs = [ lilypond ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace abjad/io.py \
-      --replace 'lilypond_path = self.get_lilypond_path()' \
+      --replace-fail 'lilypond_path = self.get_lilypond_path()' \
                 'lilypond_path = "${lilypond}/bin/lilypond"'
     # general invocations of binary for IO purposes
 
     substituteInPlace abjad/configuration.py \
-      --replace '["lilypond"' '["${lilypond}/bin/lilypond"'
+      --replace-fail '["lilypond"' '["${lilypond}/bin/lilypond"'
     # get_lilypond_version_string
   '';
 

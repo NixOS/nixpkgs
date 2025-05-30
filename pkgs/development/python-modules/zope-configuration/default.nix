@@ -1,63 +1,57 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, zope-i18nmessageid
-, zope-interface
-, zope-schema
-, pytestCheckHook
-, zope-testing
-, zope-testrunner
-, manuel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  setuptools,
+  zope-i18nmessageid,
+  zope-interface,
+  zope-schema,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "zope-configuration";
-  version = "5.0";
+  version = "6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    pname = "zope.configuration";
-    inherit version;
-    hash = "sha256-I0tKGMcfazub9rzyJSZLrgFJrGjeoHsHLw9pmkzsJuc=";
+  src = fetchFromGitHub {
+    owner = "zopefoundation";
+    repo = "zope.configuration";
+    tag = version;
+    hash = "sha256-dkEVIHaXk/oP4uYYzI1hgSnPZXBMDjDu97zmOXnj9NA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools < 74" "setuptools"
+  '';
 
-  nativeCheckInputs = [
-    manuel
-    pytestCheckHook
-    zope-testing
-    zope-testrunner
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     zope-i18nmessageid
     zope-interface
     zope-schema
   ];
 
-  # Need to investigate how to run the tests with zope-testrunner
-  doCheck = false;
+  pythonImportsCheck = [ "zope.configuration" ];
 
-  pythonImportsCheck = [
-    "zope.configuration"
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
-  pythonNamespaces = [
-    "zope"
-  ];
+  preCheck = ''
+    cd $out/${python.sitePackages}/zope/
+  '';
+
+  unittestFlagsArray = [ "configuration/tests" ];
+
+  pythonNamespaces = [ "zope" ];
 
   meta = with lib; {
     description = "Zope Configuration Markup Language (ZCML)";
     homepage = "https://github.com/zopefoundation/zope.configuration";
     changelog = "https://github.com/zopefoundation/zope.configuration/blob/${version}/CHANGES.rst";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

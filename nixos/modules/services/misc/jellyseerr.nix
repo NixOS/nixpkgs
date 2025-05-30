@@ -1,41 +1,52 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.jellyseerr;
 in
 {
-  meta.maintainers = [ maintainers.camillemndn ];
+  meta.maintainers = [ lib.maintainers.camillemndn ];
 
   options.services.jellyseerr = {
-    enable = mkEnableOption (mdDoc ''Jellyseerr, a requests manager for Jellyfin'');
+    enable = lib.mkEnableOption ''Jellyseerr, a requests manager for Jellyfin'';
+    package = lib.mkPackageOption pkgs "jellyseerr" { };
 
-    openFirewall = mkOption {
-      type = types.bool;
+    openFirewall = lib.mkOption {
+      type = lib.types.bool;
       default = false;
-      description = mdDoc ''Open port in the firewall for the Jellyseerr web interface.'';
+      description = ''Open port in the firewall for the Jellyseerr web interface.'';
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 5055;
-      description = mdDoc ''The port which the Jellyseerr web UI should listen to.'';
+      description = ''The port which the Jellyseerr web UI should listen to.'';
+    };
+
+    configDir = lib.mkOption {
+      type = lib.types.path;
+      default = "/var/lib/jellyseerr/config";
+      description = "Config data directory";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.jellyseerr = {
       description = "Jellyseerr, a requests manager for Jellyfin";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      environment.PORT = toString cfg.port;
+      environment = {
+        PORT = toString cfg.port;
+        CONFIG_DIRECTORY = cfg.configDir;
+      };
       serviceConfig = {
         Type = "exec";
         StateDirectory = "jellyseerr";
-        WorkingDirectory = "${pkgs.jellyseerr}/libexec/jellyseerr/deps/jellyseerr";
         DynamicUser = true;
-        ExecStart = "${pkgs.jellyseerr}/bin/jellyseerr";
-        BindPaths = [ "/var/lib/jellyseerr/:${pkgs.jellyseerr}/libexec/jellyseerr/deps/jellyseerr/config/" ];
+        ExecStart = lib.getExe cfg.package;
         Restart = "on-failure";
         ProtectHome = true;
         ProtectSystem = "strict";
@@ -55,7 +66,7 @@ in
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.port ];
     };
   };

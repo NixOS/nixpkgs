@@ -1,45 +1,49 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.tremor-rs;
 
   loggerSettingsFormat = pkgs.formats.yaml { };
   loggerConfigFile = loggerSettingsFormat.generate "logger.yaml" cfg.loggerSettings;
-in {
+in
+{
 
   options = {
     services.tremor-rs = {
-      enable = lib.mkEnableOption (lib.mdDoc "Tremor event- or stream-processing system");
+      enable = lib.mkEnableOption "Tremor event- or stream-processing system";
 
-      troyFileList = mkOption {
-        type = types.listOf types.path;
-        default = [];
-        description = lib.mdDoc "List of troy files to load.";
+      troyFileList = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
+        default = [ ];
+        description = "List of troy files to load.";
       };
 
-      tremorLibDir = mkOption {
-        type = types.path;
+      tremorLibDir = lib.mkOption {
+        type = lib.types.path;
         default = "";
-        description = lib.mdDoc "Directory where to find /lib containing tremor script files";
+        description = "Directory where to find /lib containing tremor script files";
       };
 
-      host = mkOption {
-        type = types.str;
+      host = lib.mkOption {
+        type = lib.types.str;
         default = "127.0.0.1";
-        description = lib.mdDoc "The host tremor should be listening on";
+        description = "The host tremor should be listening on";
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 9898;
-        description = lib.mdDoc "the port tremor should be listening on";
+        description = "the port tremor should be listening on";
       };
 
-      loggerSettings = mkOption {
-        description = lib.mdDoc "Tremor logger configuration";
-        default = {};
+      loggerSettings = lib.mkOption {
+        description = "Tremor logger configuration";
+        default = { };
         type = loggerSettingsFormat.type;
 
         example = {
@@ -63,7 +67,7 @@ in {
           };
         };
 
-        defaultText = literalExpression ''
+        defaultText = lib.literalExpression ''
           {
             refresh_rate = "30 seconds";
             appenders.stdout.kind = "console";
@@ -90,9 +94,9 @@ in {
     };
   };
 
-  config = mkIf (cfg.enable) {
+  config = lib.mkIf (cfg.enable) {
 
-    environment.systemPackages = [ pkgs.tremor-rs ] ;
+    environment.systemPackages = [ pkgs.tremor-rs ];
 
     systemd.services.tremor-rs = {
       description = "Tremor event- or stream-processing system";
@@ -103,7 +107,7 @@ in {
       environment.TREMOR_PATH = "${pkgs.tremor-rs}/lib:${cfg.tremorLibDir}";
 
       serviceConfig = {
-        ExecStart = "${pkgs.tremor-rs}/bin/tremor --logger-config ${loggerConfigFile} server run ${concatStringsSep " " cfg.troyFileList} --api-host ${cfg.host}:${toString cfg.port}";
+        ExecStart = "${pkgs.tremor-rs}/bin/tremor --logger-config ${loggerConfigFile} server run ${lib.concatStringsSep " " cfg.troyFileList} --api-host ${cfg.host}:${toString cfg.port}";
         DynamicUser = true;
         Restart = "always";
         NoNewPrivileges = true;
@@ -122,7 +126,10 @@ in {
         RestrictNamespaces = true;
         LockPersonality = true;
         RemoveIPC = true;
-        SystemCallFilter = [ "@system-service" "~@privileged" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
       };
     };
   };

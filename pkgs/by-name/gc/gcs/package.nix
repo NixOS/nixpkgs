@@ -1,32 +1,48 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, pkg-config
-, moreutils
-, libGL
-, libX11
-, libXcursor
-, libXrandr
-, libXinerama
-, libXi
-, libXxf86vm
-, mupdf
-, fontconfig
-, freetype
-, stdenv
-, darwin
-, nix-update-script
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  buildNpmPackage,
+  fetchFromGitHub,
+  cacert,
+  unzip,
+  pkg-config,
+  libGL,
+  libX11,
+  libXcursor,
+  libXrandr,
+  libXinerama,
+  libXi,
+  libXxf86vm,
+  mupdf,
+  fontconfig,
+  freetype,
 }:
 
 buildGoModule rec {
   pname = "gcs";
-  version = "5.20.4";
+  version = "5.28.1";
 
   src = fetchFromGitHub {
     owner = "richardwilkes";
     repo = "gcs";
-    rev = "v${version}";
-    hash = "sha256-aoU2wRz2XB6+3e6am/dLjRbcDmWTjtDtTBwc6c4n3DE=";
+    tag = "v${version}";
+
+    nativeBuildInputs = [
+      cacert
+      unzip
+    ];
+
+    # also fetch pdf.js files
+    # note: the version is locked in the file
+    postFetch = ''
+      cd $out/server/pdf
+      substituteInPlace refresh-pdf.js.sh \
+          --replace-fail '/bin/rm' 'rm'
+      . refresh-pdf.js.sh
+    '';
+
+    hash = "sha256-ArJ+GveG2Y1PYeCuIFJoQ3eVyqvAi4HEeAEd4X03yu4=";
   };
 
   modPostBuild = ''
@@ -34,35 +50,52 @@ buildGoModule rec {
     sed -i 's|-lmupdf[^ ]* |-lmupdf |g' vendor/github.com/richardwilkes/pdf/pdf.go
   '';
 
-  vendorHash = "sha256-ee6qvwnUXtsBcovPOORfVpdndICtIUYe4GrP52V/P3k=";
+  vendorHash = "sha256-EmAGkQ+GHzVbSq/nPu0awL79jRmZuMHheBWwanfEgGI=";
 
-  nativeBuildInputs = [ pkg-config moreutils ];
+  frontend = buildNpmPackage {
+    name = "${pname}-${version}-frontend";
 
-  buildInputs = [
-    libGL
-    libX11
-    libXcursor
-    libXrandr
-    libXinerama
-    libXi
-    libXxf86vm
-    mupdf
-    fontconfig
-    freetype
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.Carbon
-    darwin.apple_sdk_11_0.frameworks.Cocoa
-    darwin.apple_sdk_11_0.frameworks.Kernel
-  ];
+    inherit src;
+    sourceRoot = "${src.name}/server/frontend";
+    npmDepsHash = "sha256-LqOH3jhp4Mx7JGYSjF29kVUny3xNn7oX0qCYi79SH4w=";
+
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out
+      cp -r dist $out/dist
+      runHook postInstall
+    '';
+  };
+
+  postPatch = ''
+    cp -r ${frontend}/dist server/frontend/dist
+  '';
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs =
+    [
+      mupdf
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libGL
+      libX11
+      libXcursor
+      libXrandr
+      libXinerama
+      libXi
+      libXxf86vm
+      fontconfig
+      freetype
+    ];
 
   # flags are based on https://github.com/richardwilkes/gcs/blob/master/build.sh
-  flags = [ "-a -trimpath" ];
-  ldflags = [ "-s" "-w" "-X github.com/richardwilkes/toolbox/cmdline.AppVersion=${version}" ];
-
-  # Workaround for https://github.com/NixOS/nixpkgs/issues/166205
-  env = lib.optionalAttrs (stdenv.cc.libcxx != null) {
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  };
+  flags = [ "-a" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/richardwilkes/toolbox/cmdline.AppVersion=${version}"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -70,17 +103,15 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
-
   meta = {
-    changelog = "https://github.com/richardwilkes/gcs/releases/tag/${src.rev}";
-    description = "A stand-alone, interactive, character sheet editor for the GURPS 4th Edition roleplaying game system";
+    changelog = "https://github.com/richardwilkes/gcs/releases/tag/v${version}";
+    description = "Stand-alone, interactive, character sheet editor for the GURPS 4th Edition roleplaying game system";
     homepage = "https://gurpscharactersheet.com/";
     license = lib.licenses.mpl20;
     mainProgram = "gcs";
     maintainers = with lib.maintainers; [ tomasajt ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     # incompatible vendor/github.com/richardwilkes/unison/internal/skia/libskia_linux.a
-    broken = stdenv.isLinux && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
 }

@@ -1,69 +1,92 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-# Python deps
-, blockfrost-python
-, cachetools
-, cbor2
-, cose
-, ecpy
-, frozendict
-, frozenlist
-, mnemonic
-, poetry-core
-, pprintpp
-, pynacl
-, setuptools
-, typeguard
-, websocket-client
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  # Python deps
+  blockfrost-python,
+  cachetools,
+  cbor2,
+  cose,
+  docker,
+  ecpy,
+  frozendict,
+  frozenlist,
+  mnemonic,
+  ogmios,
+  poetry-core,
+  pprintpp,
+  pynacl,
+  requests,
+  setuptools,
+  typeguard,
+  websocket-client,
+  websockets,
 }:
 
 let
   cose_0_9_dev8 = cose.overridePythonAttrs (old: rec {
     version = "0.9.dev8";
-    src = (old.src.override {
-      rev = "v${version}";
-      hash = "sha256-/jwq2C2nvHInsgPG4jZCr+XsvlUJdYewAkasrUPVaHM=";
-    });
+    src = (
+      old.src.override {
+        rev = "v${version}";
+        hash = "sha256-/jwq2C2nvHInsgPG4jZCr+XsvlUJdYewAkasrUPVaHM=";
+      }
+    );
     pythonImportsCheck = [ "cose" ];
   });
-
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "pycardano";
-  version = "0.10.0";
-
-  format = "pyproject";
+  version = "0.12.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Python-Cardano";
     repo = "pycardano";
-    rev = "v${version}";
-    hash = "sha256-LP/W8IC2del476fGFq10VMWwMrbAoCCcZOngA8unBM0=";
+    tag = "v${version}";
+    hash = "sha256-jxgskdQ7Us+utndUgFYK7G2IW/e5QbeXytOsxQfFiJI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     blockfrost-python
     cachetools
     cbor2
     cose_0_9_dev8
+    docker
     ecpy
     frozendict
     frozenlist
     mnemonic
+    ogmios
     poetry-core
     pprintpp
     pynacl
-    setuptools
+    requests
     typeguard
     websocket-client
+    websockets
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonRelaxDeps = [
+    "ogmios"
+    "websockets"
   ];
 
   pythonImportsCheck = [ "pycardano" ];
 
-  meta = with lib; {
-    description = "A lightweight Cardano library in Python";
+  meta = {
+    description = "Lightweight Cardano library in Python";
     homepage = "https://github.com/Python-Cardano/pycardano";
-    license = licenses.mit;
-    maintainers = with maintainers; [ t4ccer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ t4ccer ];
   };
 }

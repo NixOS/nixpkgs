@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,10 +15,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-6NWhx82BXhWhbI18k5gE3vEkw9v5gstE8ICJhtq68rM=";
   };
 
-  cargoHash = "sha256-V2eWVoRtfjHLe2AypYekUFzMnuV8RYU9Pb7Q1U3fwp4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-pZpG98lwvggBU1TBb2JuSNLev5Jx8n5QjY902dJVn0Y=";
 
   meta = with lib; {
-    description = "A configurable cd wrapper that lets you define your environment per directory";
+    description = "Configurable cd wrapper that lets you define your environment per directory";
     homepage = "https://github.com/synoet/cdwe";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

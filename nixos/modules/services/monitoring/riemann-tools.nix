@@ -1,52 +1,57 @@
-{ config, pkgs, lib, ... }:
-
-with pkgs;
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
 
   cfg = config.services.riemann-tools;
 
   riemannHost = "${cfg.riemannHost}";
 
-  healthLauncher = writeScriptBin "riemann-health" ''
+  healthLauncher = pkgs.writeScriptBin "riemann-health" ''
     #!/bin/sh
     exec ${pkgs.riemann-tools}/bin/riemann-health ${builtins.concatStringsSep " " cfg.extraArgs} --host ${riemannHost}
   '';
 
-
-in {
+in
+{
 
   options = {
 
     services.riemann-tools = {
-      enableHealth = mkOption {
-        type = types.bool;
+      enableHealth = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable the riemann-health daemon.
         '';
       };
-      riemannHost = mkOption {
-        type = types.str;
+      riemannHost = lib.mkOption {
+        type = lib.types.str;
         default = "127.0.0.1";
-        description = lib.mdDoc ''
+        description = ''
           Address of the host riemann node. Defaults to localhost.
         '';
       };
-      extraArgs = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = lib.mdDoc ''
+      extraArgs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        description = ''
           A list of commandline-switches forwarded to a riemann-tool.
           See for example `riemann-health --help` for available options.
         '';
-        example = ["-p 5555" "--timeout=30" "--attribute=myattribute=42"];
+        example = [
+          "-p 5555"
+          "--timeout=30"
+          "--attribute=myattribute=42"
+        ];
       };
     };
   };
 
-  config = mkIf cfg.enableHealth {
+  config = lib.mkIf cfg.enableHealth {
 
     users.groups.riemanntools.gid = config.ids.gids.riemanntools;
 
@@ -58,7 +63,7 @@ in {
 
     systemd.services.riemann-health = {
       wantedBy = [ "multi-user.target" ];
-      path = [ procps ];
+      path = [ pkgs.procps ];
       serviceConfig = {
         User = "riemanntools";
         ExecStart = "${healthLauncher}/bin/riemann-health";

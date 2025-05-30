@@ -1,6 +1,16 @@
-{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  installShellFiles,
+}:
 
-{ channel, version, sha256, vendorHash }:
+{
+  channel,
+  version,
+  sha256,
+  vendorHash,
+}:
 
 buildGoModule rec {
   pname = "linkerd-${channel}";
@@ -32,7 +42,8 @@ buildGoModule rec {
   ];
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/linkerd/linkerd2/pkg/version.Version=${src.rev}"
   ];
 
@@ -54,10 +65,14 @@ buildGoModule rec {
   passthru.updateScript = (./. + "/update-${channel}.sh");
 
   meta = with lib; {
-    description = "A simple Kubernetes service mesh that improves security, observability and reliability";
+    description = "Simple Kubernetes service mesh that improves security, observability and reliability";
+    mainProgram = "linkerd";
     downloadPage = "https://github.com/linkerd/linkerd2/";
     homepage = "https://linkerd.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ bryanasdev000 Gonzih ];
+    maintainers = with maintainers; [
+      bryanasdev000
+      Gonzih
+    ];
   };
 }

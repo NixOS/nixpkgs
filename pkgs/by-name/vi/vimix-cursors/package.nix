@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, stdenvNoCC
-, inkscape
-, python3Packages
-, xcursorgen
+{
+  lib,
+  fetchFromGitHub,
+  stdenvNoCC,
+  inkscape,
+  python3Packages,
+  xcursorgen,
 }:
 stdenvNoCC.mkDerivation {
   pname = "vimix-cursors";
@@ -46,7 +47,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "An X cursor theme inspired by Materia design";
+    description = "X cursor theme inspired by Materia design";
     homepage = "https://github.com/vinceliuice/Vimix-cursors";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ambroisie ];

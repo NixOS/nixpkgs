@@ -2,61 +2,48 @@
   # To test your changes in androidEnv run `nix-shell android-sdk-with-emulator-shell.nix`
 
   # If you copy this example out of nixpkgs, use these lines instead of the next.
-  # This example pins nixpkgs: https://nix.dev/tutorials/towards-reproducibility-pinning-nixpkgs.html
-  /*nixpkgsSource ? (builtins.fetchTarball {
-    name = "nixpkgs-20.09";
-    url = "https://github.com/NixOS/nixpkgs/archive/20.09.tar.gz";
-    sha256 = "1wg61h4gndm3vcprdcg7rc4s1v3jkm5xd7lw8r2f67w502y94gcy";
+  # This example pins nixpkgs: https://nix.dev/tutorials/first-steps/towards-reproducibility-pinning-nixpkgs.html
+  /*
+    nixpkgsSource ? (builtins.fetchTarball {
+      name = "nixpkgs-20.09";
+      url = "https://github.com/NixOS/nixpkgs/archive/20.09.tar.gz";
+      sha256 = "1wg61h4gndm3vcprdcg7rc4s1v3jkm5xd7lw8r2f67w502y94gcy";
     }),
     pkgs ? import nixpkgsSource {
-    config.allowUnfree = true;
+      config.allowUnfree = true;
     },
   */
 
   # If you want to use the in-tree version of nixpkgs:
   pkgs ? import ../../../../.. {
     config.allowUnfree = true;
-  }
-, config ? pkgs.config
+  },
+
+  licenseAccepted ? pkgs.callPackage ../license.nix { },
 }:
 
 # Copy this file to your Android project.
 let
-  # Declaration of versions for everything. This is useful since these
-  # versions may be used in multiple places in this Nix expression.
-  android = {
-    versions = {
-      cmdLineToolsVersion = "11.0";
-      platformTools = "34.0.5";
-      buildTools = "34.0.0";
-    };
-    platforms = [ "34" ];
-  };
-
   # If you copy this example out of nixpkgs, something like this will work:
-  /*androidEnvNixpkgs = fetchTarball {
-    name = "androidenv";
-    url = "https://github.com/NixOS/nixpkgs/archive/<fill me in from Git>.tar.gz";
-    sha256 = "<fill me in with nix-prefetch-url --unpack>";
+  /*
+    androidEnvNixpkgs = fetchTarball {
+      name = "androidenv";
+      url = "https://github.com/NixOS/nixpkgs/archive/<fill me in from Git>.tar.gz";
+      sha256 = "<fill me in with nix-prefetch-url --unpack>";
     };
 
     androidEnv = pkgs.callPackage "${androidEnvNixpkgs}/pkgs/development/mobile/androidenv" {
-    inherit config pkgs;
-    licenseAccepted = true;
-    };*/
+      inherit pkgs;
+      licenseAccepted = true;
+    };
+  */
 
   # Otherwise, just use the in-tree androidenv:
   androidEnv = pkgs.callPackage ./.. {
-    inherit config pkgs;
-    # You probably need to uncomment below line to express consent.
-    # licenseAccepted = true;
+    inherit pkgs licenseAccepted;
   };
 
   sdkArgs = {
-    cmdLineToolsVersion = android.versions.cmdLineToolsVersion;
-    platformToolsVersion = android.versions.platformTools;
-    buildToolsVersions = [ android.versions.buildTools ];
-    platformVersions = android.platforms;
     includeNDK = false;
     includeSystemImages = false;
     includeEmulator = false;
@@ -81,11 +68,16 @@ let
   androidComposition = androidEnv.composeAndroidPackages sdkArgs;
   androidSdk = androidComposition.androidsdk;
   platformTools = androidComposition.platform-tools;
+  latestSdk = pkgs.lib.foldl' pkgs.lib.max 0 androidComposition.platformVersions;
   jdk = pkgs.jdk;
 in
-pkgs.mkShell rec {
+pkgs.mkShell {
   name = "androidenv-example-without-emulator-demo";
-  packages = [ androidSdk platformTools jdk pkgs.android-studio ];
+  packages = [
+    androidSdk
+    platformTools
+    jdk
+  ];
 
   LANG = "C.UTF-8";
   LC_ALL = "C.UTF-8";
@@ -104,49 +96,58 @@ pkgs.mkShell rec {
 
   passthru.tests = {
 
-    shell-without-emulator-sdkmanager-packages-test = pkgs.runCommand "shell-without-emulator-sdkmanager-packages-test"
-      {
-        nativeBuildInputs = [ androidSdk jdk ];
-      } ''
-      output="$(sdkmanager --list)"
-      installed_packages_section=$(echo "''${output%%Available Packages*}" | awk 'NR>4 {print $1}')
-      echo "installed_packages_section: ''${installed_packages_section}"
+    shell-without-emulator-sdkmanager-packages-test =
+      pkgs.runCommand "shell-without-emulator-sdkmanager-packages-test"
+        {
+          nativeBuildInputs = [
+            androidSdk
+            jdk
+          ];
+        }
+        ''
+          output="$(sdkmanager --list)"
+          installed_packages_section=$(echo "''${output%%Available Packages*}" | awk 'NR>4 {print $1}')
+          echo "installed_packages_section: ''${installed_packages_section}"
 
-      packages=(
-        "build-tools;34.0.0" "cmdline-tools;11.0" \
-        "patcher;v4" "platform-tools" "platforms;android-34"
-      )
+          packages=(
+            "build-tools" "cmdline-tools" \
+            "platform-tools" "platforms;android-${toString latestSdk}"
+          )
 
-      for package in "''${packages[@]}"; do
-        if [[ ! $installed_packages_section =~ "$package" ]]; then
-          echo "$package package was not installed."
-          exit 1
-        fi
-      done
+          for package in "''${packages[@]}"; do
+            if [[ ! $installed_packages_section =~ "$package" ]]; then
+              echo "$package package was not installed."
+              exit 1
+            fi
+          done
 
-      touch "$out"
-    '';
+          touch "$out"
+        '';
 
-    shell-without-emulator-sdkmanager-excluded-packages-test = pkgs.runCommand "shell-without-emulator-sdkmanager-excluded-packages-test"
-      {
-        nativeBuildInputs = [ androidSdk jdk ];
-      } ''
-      output="$(sdkmanager --list)"
-      installed_packages_section=$(echo "''${output%%Available Packages*}" | awk 'NR>4 {print $1}')
+    shell-without-emulator-sdkmanager-excluded-packages-test =
+      pkgs.runCommand "shell-without-emulator-sdkmanager-excluded-packages-test"
+        {
+          nativeBuildInputs = [
+            androidSdk
+            jdk
+          ];
+        }
+        ''
+          output="$(sdkmanager --list)"
+          installed_packages_section=$(echo "''${output%%Available Packages*}" | awk 'NR>4 {print $1}')
 
-      excluded_packages=(
-        "emulator" "ndk"
-      )
+          excluded_packages=(
+            "emulator" "ndk"
+          )
 
-      for package in "''${excluded_packages[@]}"; do
-        if [[ $installed_packages_section =~ "$package" ]]; then
-          echo "$package package was installed, while it was excluded!"
-          exit 1
-        fi
-      done
+          for package in "''${excluded_packages[@]}"; do
+            if [[ $installed_packages_section =~ "$package" ]]; then
+              echo "$package package was installed, while it was excluded!"
+              exit 1
+            fi
+          done
 
-      touch "$out"
-    '';
+          touch "$out"
+        '';
   };
 }
-

@@ -1,13 +1,14 @@
-{ lib
-, fetchzip
-, makeShellWrapper
-, makeDesktopItem
-, stdenv
-, gtk3
-, libXtst
-, glib
-, zlib
-, wrapGAppsHook
+{
+  lib,
+  fetchzip,
+  makeShellWrapper,
+  makeDesktopItem,
+  stdenv,
+  gtk3,
+  libXtst,
+  glib,
+  zlib,
+  wrapGAppsHook3,
 }:
 
 let
@@ -22,7 +23,6 @@ let
     startupWMClass = "TLA+ Toolbox";
   };
 
-
 in
 stdenv.mkDerivation rec {
   pname = "tla-toolbox";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     makeShellWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   dontWrapGApps = true;
@@ -67,7 +67,14 @@ stdenv.mkDerivation rec {
     makeShellWrapper $out/toolbox/toolbox $out/bin/tla-toolbox \
       --chdir "$out/toolbox" \
       --add-flags "-data ~/.tla-toolbox" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ gtk3 libXtst glib zlib ]}"  \
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          gtk3
+          libXtst
+          glib
+          zlib
+        ]
+      }"  \
       "''${gappsWrapperArgs[@]}"
 
     echo -e "\nCreating TLA Toolbox icons..."
@@ -90,6 +97,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://research.microsoft.com/en-us/um/people/lamport/tla/toolbox.html";
     description = "IDE for the TLA+ tools";
+    mainProgram = "tla-toolbox";
     longDescription = ''
       Integrated development environment for the TLA+ tools, based on Eclipse. You can use it
       to create and edit your specs, run the PlusCal translator, view the pretty-printed

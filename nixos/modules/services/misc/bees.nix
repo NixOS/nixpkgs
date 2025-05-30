@@ -1,17 +1,28 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.beesd;
 
-  logLevels = { emerg = 0; alert = 1; crit = 2; err = 3; warning = 4; notice = 5; info = 6; debug = 7; };
+  logLevels = {
+    emerg = 0;
+    alert = 1;
+    crit = 2;
+    err = 3;
+    warning = 4;
+    notice = 5;
+    info = 6;
+    debug = 7;
+  };
 
-  fsOptions = with types; {
-    options.spec = mkOption {
+  fsOptions = with lib.types; {
+    options.spec = lib.mkOption {
       type = str;
-      description = lib.mdDoc ''
+      description = ''
         Description of how to identify the filesystem to be duplicated by this
         instance of bees. Note that deduplication crosses subvolumes; one must
         not configure multiple instances for subvolumes of the same filesystem
@@ -25,10 +36,10 @@ let
       '';
       example = "LABEL=MyBulkDataDrive";
     };
-    options.hashTableSizeMB = mkOption {
-      type = types.addCheck types.int (n: mod n 16 == 0);
+    options.hashTableSizeMB = lib.mkOption {
+      type = lib.types.addCheck lib.types.int (n: lib.mod n 16 == 0);
       default = 1024; # 1GB; default from upstream beesd script
-      description = lib.mdDoc ''
+      description = ''
         Hash table size in MB; must be a multiple of 16.
 
         A larger ratio of index size to storage size means smaller blocks of
@@ -40,27 +51,27 @@ let
         will recognize only aligned duplicate blocks of 16KB.
       '';
     };
-    options.verbosity = mkOption {
-      type = types.enum (attrNames logLevels ++ attrValues logLevels);
-      apply = v: if isString v then logLevels.${v} else v;
+    options.verbosity = lib.mkOption {
+      type = lib.types.enum (lib.attrNames logLevels ++ lib.attrValues logLevels);
+      apply = v: if lib.isString v then logLevels.${v} else v;
       default = "info";
-      description = lib.mdDoc "Log verbosity (syslog keyword/level).";
+      description = "Log verbosity (syslog keyword/level).";
     };
-    options.workDir = mkOption {
+    options.workDir = lib.mkOption {
       type = str;
       default = ".beeshome";
-      description = lib.mdDoc ''
+      description = ''
         Name (relative to the root of the filesystem) of the subvolume where
         the hash table will be stored.
       '';
     };
-    options.extraOptions = mkOption {
+    options.extraOptions = lib.mkOption {
       type = listOf str;
       default = [ ];
-      description = lib.mdDoc ''
+      description = ''
         Extra command-line options passed to the daemon. See upstream bees documentation.
       '';
-      example = literalExpression ''
+      example = lib.literalExpression ''
         [ "--thread-count" "4" ]
       '';
     };
@@ -70,13 +81,13 @@ in
 {
 
   options.services.beesd = {
-    filesystems = mkOption {
-      type = with types; attrsOf (submodule fsOptions);
-      description = lib.mdDoc "BTRFS filesystems to run block-level deduplication on.";
+    filesystems = lib.mkOption {
+      type = with lib.types; attrsOf (submodule fsOptions);
+      description = "BTRFS filesystems to run block-level deduplication on.";
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
-          root = {
+          "-" = {
             spec = "LABEL=root";
             hashTableSizeMB = 2048;
             verbosity = "crit";
@@ -86,44 +97,32 @@ in
       '';
     };
   };
-  config = {
-    systemd.services = mapAttrs'
-      (name: fs: nameValuePair "beesd@${name}" {
-        description = "Block-level BTRFS deduplication for %i";
-        after = [ "sysinit.target" ];
-
-        serviceConfig =
-          let
-            configOpts = [
-              fs.spec
-              "verbosity=${toString fs.verbosity}"
-              "idxSizeMB=${toString fs.hashTableSizeMB}"
-              "workDir=${fs.workDir}"
+  config = lib.mkIf (cfg.filesystems != { }) {
+    systemd.packages = [ pkgs.bees ];
+    systemd.services = lib.mapAttrs' (
+      name: fs:
+      lib.nameValuePair "beesd@${name}" {
+        overrideStrategy = "asDropin";
+        serviceConfig = {
+          ExecStart =
+            let
+              configOpts = [
+                fs.spec
+                "verbosity=${toString fs.verbosity}"
+                "idxSizeMB=${toString fs.hashTableSizeMB}"
+                "workDir=${fs.workDir}"
+              ];
+              configOptsStr = lib.escapeShellArgs configOpts;
+            in
+            [
+              ""
+              "${pkgs.bees}/bin/bees-service-wrapper run ${configOptsStr} -- --no-timestamps ${lib.escapeShellArgs fs.extraOptions}"
             ];
-            configOptsStr = escapeShellArgs configOpts;
-          in
-          {
-            # Values from https://github.com/Zygo/bees/blob/v0.6.5/scripts/beesd@.service.in
-            ExecStart = "${pkgs.bees}/bin/bees-service-wrapper run ${configOptsStr} -- --no-timestamps ${escapeShellArgs fs.extraOptions}";
-            ExecStopPost = "${pkgs.bees}/bin/bees-service-wrapper cleanup ${configOptsStr}";
-            CPUAccounting = true;
-            CPUSchedulingPolicy = "batch";
-            CPUWeight = 12;
-            IOSchedulingClass = "idle";
-            IOSchedulingPriority = 7;
-            IOWeight = 10;
-            KillMode = "control-group";
-            KillSignal = "SIGTERM";
-            MemoryAccounting = true;
-            Nice = 19;
-            Restart = "on-abnormal";
-            StartupCPUWeight = 25;
-            StartupIOWeight = 25;
-            SyslogIdentifier = "beesd"; # would otherwise be "bees-service-wrapper"
-          };
+          SyslogIdentifier = "beesd"; # would otherwise be "bees-service-wrapper"
+        };
         unitConfig.RequiresMountsFor = lib.mkIf (lib.hasPrefix "/" fs.spec) fs.spec;
         wantedBy = [ "multi-user.target" ];
-      })
-      cfg.filesystems;
+      }
+    ) cfg.filesystems;
   };
 }

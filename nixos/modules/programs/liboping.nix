@@ -1,24 +1,33 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.liboping;
-in {
+in
+{
   options.programs.liboping = {
-    enable = mkEnableOption (lib.mdDoc "liboping");
+    enable = lib.mkEnableOption "liboping";
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ liboping ];
-    security.wrappers = mkMerge (map (
-      exec: {
-        "${exec}" = {
-          owner = "root";
-          group = "root";
-          capabilities = "cap_net_raw+p";
-          source = "${pkgs.liboping}/bin/${exec}";
-        };
-      }
-    ) [ "oping" "noping" ]);
+    security.wrappers = lib.mkMerge (
+      builtins.map
+        (exec: {
+          "${exec}" = {
+            owner = "root";
+            group = "root";
+            capabilities = "cap_net_raw+p";
+            source = "${pkgs.liboping}/bin/${exec}";
+          };
+        })
+        [
+          "oping"
+          "noping"
+        ]
+    );
   };
 }

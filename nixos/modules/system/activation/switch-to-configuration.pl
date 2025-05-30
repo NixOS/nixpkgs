@@ -1,5 +1,10 @@
 #! @perl@/bin/perl
 
+# NOTE: This script has an alternative implementation at
+# <nixpkgs/pkgs/by-name/sw/switch-to-configuration-ng>. Any behavioral
+# modifications to this script should also be made to that implementation.
+
+
 # Issue #166838 uncovered a situation in which a configuration not suitable
 # for the target architecture caused a cryptic error message instead of
 # a clean failure. Due to this mismatch, the perl interpreter in the shebang
@@ -36,10 +41,6 @@ use Fcntl ':flock';
 my $out = "@out@";
 # System closure path to switch to
 my $toplevel = "@toplevel@";
-# Path to the directory containing systemd tools of the old system
-my $cur_systemd = abs_path("/run/current-system/sw/bin");
-# Path to the systemd store path of the new system
-my $new_systemd = "@systemd@";
 
 # To be robust against interruption, record what units need to be started etc.
 # We read these files again every time this script starts to make sure we continue
@@ -73,10 +74,11 @@ if ("@localeArchive@" ne "") {
     $ENV{LOCALE_ARCHIVE} = "@localeArchive@";
 }
 
-if (!defined($action) || ($action ne "switch" && $action ne "boot" && $action ne "test" && $action ne "dry-activate")) {
+if (!defined($action) || ($action ne "switch" && $action ne "boot" && $action ne "test" && $action ne "dry-activate" && $action ne "check")) {
     print STDERR <<"EOF";
-Usage: $0 [switch|boot|test|dry-activate]
+Usage: $0 [check|switch|boot|test|dry-activate]
 
+check:        run pre-switch checks and exit
 switch:       make the configuration the boot default and activate now
 boot:         make the configuration the boot default
 test:         activate the configuration, but don\'t make it the boot default
@@ -93,8 +95,19 @@ if (!-f "/etc/NIXOS" && (read_file("/etc/os-release", err_mode => "quiet") // ""
 
 make_path("/run/nixos", { mode => oct(755) });
 open(my $stc_lock, '>>', '/run/nixos/switch-to-configuration.lock') or die "Could not open lock - $!";
-flock($stc_lock, LOCK_EX) or die "Could not acquire lock - $!";
+flock($stc_lock, LOCK_EX|LOCK_NB) or die "Could not acquire lock - $!";
 openlog("nixos", "", LOG_USER);
+
+# run pre-switch checks
+if (($ENV{"NIXOS_NO_CHECK"} // "") ne "1") {
+    chomp(my $pre_switch_checks = <<'EOFCHECKS');
+@preSwitchCheck@
+EOFCHECKS
+    system("$pre_switch_checks $out $action") == 0 or exit 1;
+    if ($action eq "check") {
+        exit 0;
+    }
+}
 
 # Install or update the bootloader.
 if ($action eq "switch" || $action eq "boot") {
@@ -112,6 +125,12 @@ if (($ENV{"NIXOS_NO_SYNC"} // "") ne "1") {
 if ($action eq "boot") {
     exit(0);
 }
+
+# Path to the directory containing systemd tools of the old system
+# Needs to be after the "boot" action exits, as this directory will not exist when doing a NIXOS_LUSTRATE install
+my $cur_systemd = abs_path("/run/current-system/sw/bin");
+# Path to the systemd store path of the new system
+my $new_systemd = "@systemd@";
 
 # Check if we can activate the new configuration.
 my $cur_init_interface_version = read_file("/run/current-system/init-interface-version", err_mode => "quiet") // "";
@@ -472,6 +491,9 @@ sub handle_modified_unit { ## no critic(Subroutines::ProhibitManyArgs, Subroutin
             $units_to_reload->{$unit} = 1;
             record_unit($reload_list_file, $unit);
         }
+        elsif ($unit eq "dbus.service" || $unit eq "dbus-broker.service") {
+            # dbus service should only ever be reloaded, not started/stoped/restarted as that would break the system.
+        }
         elsif (!parse_systemd_bool(\%new_unit_info, "Service", "X-RestartIfChanged", 1) || parse_systemd_bool(\%new_unit_info, "Unit", "RefuseManualStop", 0) || parse_systemd_bool(\%new_unit_info, "Unit", "X-OnlyManualStart", 0)) {
             $units_to_skip->{$unit} = 1;
         } else {
@@ -520,6 +542,13 @@ sub handle_modified_unit { ## no critic(Subroutines::ProhibitManyArgs, Subroutin
                             }
                         }
                     }
+                }
+
+                if (parse_systemd_bool(\%new_unit_info, "Service", "X-NotSocketActivated", 0)) {
+                    # If the unit explicitly opts out of socket
+                    # activation, restart it as if it weren't (but do
+                    # restart its sockets, that's fine):
+                    $socket_activated = 0;
                 }
 
                 # If the unit is not socket-activated, record

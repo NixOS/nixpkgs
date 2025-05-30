@@ -1,13 +1,14 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   options = {
 
-    hardware.sane.dsseries.enable =
-      mkEnableOption (lib.mdDoc "Brother DSSeries scan backend") // {
-      description = lib.mdDoc ''
+    hardware.sane.dsseries.enable = lib.mkEnableOption "Brother DSSeries scan backend" // {
+      description = ''
         When enabled, will automatically register the "dsseries" SANE backend.
 
         This supports the Brother DSmobile scanner series, including the
@@ -16,7 +17,7 @@ with lib;
     };
   };
 
-  config = mkIf (config.hardware.sane.enable && config.hardware.sane.dsseries.enable) {
+  config = lib.mkIf (config.hardware.sane.enable && config.hardware.sane.dsseries.enable) {
 
     hardware.sane.extraBackends = [ pkgs.dsseries ];
     services.udev.packages = [ pkgs.dsseries ];

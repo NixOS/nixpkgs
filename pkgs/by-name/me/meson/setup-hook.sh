@@ -3,6 +3,8 @@
 mesonConfigurePhase() {
     runHook preConfigure
 
+    : ${mesonBuildDir:=build}
+
     local flagsArray=()
 
     if [ -z "${dontAddPrefix-}" ]; then
@@ -21,19 +23,20 @@ mesonConfigurePhase() {
         "--localedir=${!outputLib}/share/locale"
         "-Dauto_features=${mesonAutoFeatures:-enabled}"
         "-Dwrap_mode=${mesonWrapMode:-nodownload}"
-        ${crossMesonFlags}
         "--buildtype=${mesonBuildType:-plain}"
     )
 
-    flagsArray+=(
-        $mesonFlags
-        "${mesonFlagsArray[@]}"
-    )
+    # --no-undefined is universally a bad idea on freebsd because environ is in the csu
+    if [[ "@hostPlatform@" == *-freebsd ]]; then
+        flagsArray+=("-Db_lundef=false")
+    fi
+
+    concatTo flagsArray mesonFlags mesonFlagsArray
 
     echoCmd 'mesonConfigurePhase flags' "${flagsArray[@]}"
 
-    meson setup build "${flagsArray[@]}"
-    cd build || { echoCmd 'mesonConfigurePhase' "could not cd to build"; exit 1; }
+    meson setup "$mesonBuildDir" "${flagsArray[@]}"
+    cd "$mesonBuildDir" || { echoCmd 'mesonConfigurePhase' "could not cd to $mesonBuildDir"; exit 1; }
 
     if ! [[ -v enableParallelBuilding ]]; then
         enableParallelBuilding=1
@@ -53,10 +56,23 @@ mesonConfigurePhase() {
 mesonCheckPhase() {
     runHook preCheck
 
-    local flagsArray=($mesonCheckFlags "${mesonCheckFlagsArray[@]}")
+    local flagsArray=()
+    concatTo flagsArray mesonCheckFlags mesonCheckFlagsArray
+
+    if [ -z "${dontAddTimeoutMultiplier:-}" ]; then
+        flagsArray+=("--timeout-multiplier=0")
+    fi
+
+    # Parallel building is enabled by default.
+    local buildCores=1
+    if [ "${enableParallelBuilding-1}" ]; then
+        buildCores="$NIX_BUILD_CORES"
+    fi
+
+    TERM=dumb ninja -j"$buildCores" $ninjaFlags "${ninjaFlagsArray[@]}" meson-test-prereq
 
     echoCmd 'mesonCheckPhase flags' "${flagsArray[@]}"
-    meson test --no-rebuild "${flagsArray[@]}"
+    meson test --no-rebuild --print-errorlogs "${flagsArray[@]}"
 
     runHook postCheck
 }
@@ -67,12 +83,9 @@ mesonInstallPhase() {
     local flagsArray=()
 
     if [[ -n "$mesonInstallTags" ]]; then
-        flagsArray+=("--tags" "${mesonInstallTags// /,}")
+        flagsArray+=("--tags" "$(concatStringsSep "," mesonInstallTags)")
     fi
-    flagsArray+=(
-        $mesonInstallFlags
-        "${mesonInstallFlagsArray[@]}"
-    )
+    concatTo flagsArray mesonInstallFlags mesonInstallFlagsArray
 
     echoCmd 'mesonInstallPhase flags' "${flagsArray[@]}"
     meson install --no-rebuild "${flagsArray[@]}"

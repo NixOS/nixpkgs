@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, libevdev
-, kmod
-, bash
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libevdev,
+  kmod,
+  bash,
+  installShellFiles,
 }:
 let
   pname = "modprobed-db";
-  version = "2.46";
+  version = "2.48";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -18,12 +19,19 @@ stdenv.mkDerivation {
     owner = "graysky2";
     repo = "modprobed-db";
     rev = "v${version}";
-    hash = "sha256-GQME5CAZsGVHSPowKQMyUR7OjHeFZi/5YcWFUT9L/AQ=";
+    hash = "sha256-rMkPBRg0QluMmSCAWSvET7rS/A2aUL6H31KKoZ6NTEs=";
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ pkg-config installShellFiles ];
-  buildInputs = [ kmod libevdev bash ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
+  buildInputs = [
+    kmod
+    libevdev
+    bash
+  ];
 
   installFlags = [
     "PREFIX=$(out)"

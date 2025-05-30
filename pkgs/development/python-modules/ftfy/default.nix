@@ -1,39 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, poetry-core
+  # build-system
+  hatchling,
 
-# dependencies
-, wcwidth
+  # dependencies
+  wcwidth,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ftfy";
-  version = "6.1.3";
+  version = "6.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-aTJ0rq2BHP8kweh4QWWqdVzS9uRCpexTXH1pf2QipCI=";
+  src = fetchFromGitHub {
+    owner = "rspeer";
+    repo = "python-ftfy";
+    tag = "v${version}";
+    hash = "sha256-TmwDJeUDcF+uOB2X5tMmnf9liCI9rP6dYJVmJoaqszo=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
-    wcwidth
-  ];
+  dependencies = [ wcwidth ];
+
+  pythonImportsCheck = [ "ftfy" ];
 
   nativeCheckInputs = [
+    versionCheckHook
     pytestCheckHook
   ];
 
@@ -41,16 +44,12 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  disabledTestPaths = [
-    # Calls poetry and fails to match output exactly
-    "tests/test_cli.py"
-  ];
-
-
   meta = with lib; {
+    changelog = "https://github.com/rspeer/python-ftfy/blob/${src.rev}/CHANGELOG.md";
     description = "Given Unicode text, make its representation consistent and possibly less broken";
+    mainProgram = "ftfy";
     homepage = "https://github.com/LuminosoInsight/python-ftfy";
-    license = licenses.mit;
+    license = licenses.asl20;
     maintainers = with maintainers; [ aborsu ];
   };
 }

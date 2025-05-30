@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, stdenvNoCC
+{
+  lib,
+  fetchFromGitHub,
+  stdenvNoCC,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -16,15 +17,15 @@ stdenvNoCC.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/share/powersploit
-    cp -a * $out/share/powersploit
-    find $out/share -type f -exec chmod -x {} \;
+    mkdir -p $out/share/windows/powersploit
+    cp -a * $out/share/windows/powersploit
+    find $out/share/windows -type f -exec chmod -x {} \;
     runHook postInstall
   '';
 
   meta = {
     changelog = "https://github.com/PowerShellMafia/PowerSploit/releases/";
-    description = "A PowerShell Post-Exploitation Framework";
+    description = "PowerShell Post-Exploitation Framework";
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ shard7 ];
     platforms = lib.platforms.all;

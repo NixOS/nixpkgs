@@ -1,7 +1,13 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
-, pytest, tornado }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  pytest,
+  tornado,
+}:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pytest-tornasync";
   version = "0.6.0.post2";
   format = "setuptools";
@@ -9,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "eukaryote";
-    repo = pname;
+    repo = "pytest-tornasync";
     # upstream does not keep git tags in sync with pypy releases
     # https://github.com/eukaryote/pytest-tornasync/issues/9
     rev = "c5f013f1f727f1ca1fcf8cc748bba7f4a2d79e56";
@@ -18,9 +24,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    tornado
-  ];
+  propagatedBuildInputs = [ tornado ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -37,6 +41,6 @@ buildPythonPackage rec {
     description = "py.test plugin for testing Python 3.5+ Tornado code";
     homepage = "https://github.com/eukaryote/pytest-tornasync";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

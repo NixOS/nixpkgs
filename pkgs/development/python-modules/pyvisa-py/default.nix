@@ -1,17 +1,18 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, setuptools
-, setuptools-scm
-, gpib-ctypes
-, pyserial
-, pyusb
-, pyvisa
-, typing-extensions
-, psutil
-, zeroconf
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  setuptools,
+  setuptools-scm,
+  gpib-ctypes,
+  pyserial,
+  pyusb,
+  pyvisa,
+  typing-extensions,
+  psutil,
+  zeroconf,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyvisa";
     repo = "pyvisa-py";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-UFAKLrZ1ZrTmFXwVuyTCPVo3Y1YIDOvkx5krpsz71BM=";
   };
 
@@ -38,7 +39,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     gpib-ctypes = [ gpib-ctypes ];
     serial = [ pyserial ];
     usb = [ pyusb ];
@@ -47,9 +48,7 @@ buildPythonPackage rec {
     # vicp = [ pyvicp zeroconf ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Module that implements the Virtual Instrument Software Architecture";

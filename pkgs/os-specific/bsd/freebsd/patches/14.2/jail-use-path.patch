@@ -1,0 +1,112 @@
+In a NixOS-like system, it doesn't make sense to hardcode these absolute paths.
+They even already use execvp!
+
+diff --git a/usr.sbin/jail/command.c b/usr.sbin/jail/command.c
+index 9004b4729fec..669e85ed847e 100644
+--- a/usr.sbin/jail/command.c
++++ b/usr.sbin/jail/command.c
+@@ -363,7 +363,7 @@ run_command(struct cfjail *j)
+ 		}
+ 
+ 		argv = alloca((8 + argc) * sizeof(char *));
+-		argv[0] = _PATH_IFCONFIG;
++		argv[0] = "ifconfig";
+ 		if ((cs = strchr(val, '|'))) {
+ 			argv[1] = acs = alloca(cs - val + 1);
+ 			strlcpy(acs, val, cs - val + 1);
+@@ -420,7 +420,7 @@ run_command(struct cfjail *j)
+ 		}
+ 
+ 		argv = alloca((8 + argc) * sizeof(char *));
+-		argv[0] = _PATH_IFCONFIG;
++		argv[0] = "ifconfig";
+ 		if ((cs = strchr(val, '|'))) {
+ 			argv[1] = acs = alloca(cs - val + 1);
+ 			strlcpy(acs, val, cs - val + 1);
+@@ -454,7 +454,7 @@ run_command(struct cfjail *j)
+ 
+ 	case IP_VNET_INTERFACE:
+ 		argv = alloca(5 * sizeof(char *));
+-		argv[0] = _PATH_IFCONFIG;
++		argv[0] = "ifconfig";
+ 		argv[1] = comstring->s;
+ 		argv[2] = down ? "-vnet" : "vnet";
+ 		jidstr = string_param(j->intparams[KP_JID]);
+@@ -490,7 +490,7 @@ run_command(struct cfjail *j)
+ 		if (down) {
+ 			argv[4] = NULL;
+ 			argv[3] = argv[1];
+-			argv[0] = "/sbin/umount";
++			argv[0] = "umount";
+ 		} else {
+ 			if (argc == 4) {
+ 				argv[7] = NULL;
+@@ -503,7 +503,7 @@ run_command(struct cfjail *j)
+ 				argv[4] = argv[1];
+ 				argv[3] = argv[0];
+ 			}
+-			argv[0] = _PATH_MOUNT;
++			argv[0] = "mount";
+ 		}
+ 		argv[1] = "-t";
+ 		break;
+@@ -521,11 +521,11 @@ run_command(struct cfjail *j)
+ 		    down ? "devfs" : NULL) < 0)
+ 			return -1;
+ 		if (down) {
+-			argv[0] = "/sbin/umount";
++			argv[0] = "umount";
+ 			argv[1] = devpath;
+ 			argv[2] = NULL;
+ 		} else {
+-			argv[0] = _PATH_MOUNT;
++			argv[0] = "mount";
+ 			argv[1] = "-t";
+ 			argv[2] = "devfs";
+ 			ruleset = string_param(j->intparams[KP_DEVFS_RULESET]);
+@@ -552,11 +552,11 @@ run_command(struct cfjail *j)
+ 		    down ? "fdescfs" : NULL) < 0)
+ 			return -1;
+ 		if (down) {
+-			argv[0] = "/sbin/umount";
++			argv[0] = "umount";
+ 			argv[1] = devpath;
+ 			argv[2] = NULL;
+ 		} else {
+-			argv[0] = _PATH_MOUNT;
++			argv[0] = "mount";
+ 			argv[1] = "-t";
+ 			argv[2] = "fdescfs";
+ 			argv[3] = ".";
+@@ -578,11 +578,11 @@ run_command(struct cfjail *j)
+ 		    down ? "procfs" : NULL) < 0)
+ 			return -1;
+ 		if (down) {
+-			argv[0] = "/sbin/umount";
++			argv[0] = "umount";
+ 			argv[1] = devpath;
+ 			argv[2] = NULL;
+ 		} else {
+-			argv[0] = _PATH_MOUNT;
++			argv[0] = "mount";
+ 			argv[1] = "-t";
+ 			argv[2] = "procfs";
+ 			argv[3] = ".";
+@@ -610,7 +610,7 @@ run_command(struct cfjail *j)
+ 		if ((cs = strpbrk(comstring->s, "!\"$&'()*;<>?[\\]`{|}~")) &&
+ 		    !(cs[0] == '&' && cs[1] == '\0')) {
+ 			argv = alloca(4 * sizeof(char *));
+-			argv[0] = _PATH_BSHELL;
++			argv[0] = "sh";
+ 			argv[1] = "-c";
+ 			argv[2] = comstring->s;
+ 			argv[3] = NULL;
+@@ -763,7 +763,7 @@ run_command(struct cfjail *j)
+ 		setenv("USER", pwd->pw_name, 1);
+ 		setenv("HOME", pwd->pw_dir, 1);
+ 		setenv("SHELL",
+-		    *pwd->pw_shell ? pwd->pw_shell : _PATH_BSHELL, 1);
++		    *pwd->pw_shell ? pwd->pw_shell : "sh", 1);
+ 		if (clean && username && chdir(pwd->pw_dir) < 0) {
+ 			jail_warnx(j, "chdir %s: %s",
+ 			    pwd->pw_dir, strerror(errno));

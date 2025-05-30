@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{ ... }:
+{
   name = "dolibarr";
   meta.maintainers = [ ];
 
@@ -56,4 +57,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     parser.feed(machine.succeed('curl -f -X GET http://localhost/index.php?mainmenu=login&username=root'))
     machine.succeed(f'curl -f -X POST http://localhost/index.php?mainmenu=login&token={csrf_token}&username=root&password=hunter2')
   '';
-})
+}

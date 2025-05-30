@@ -1,16 +1,17 @@
-{ lib
-, fetchurl
-, appimageTools
+{
+  lib,
+  fetchurl,
+  appimageTools,
 }:
 
 appimageTools.wrapType2 rec {
   pname = "kchat";
-  version = "2.4.0";
+  version = "3.3.3";
 
   src = fetchurl {
     url = "https://download.storage5.infomaniak.com/kchat/kchat-desktop-${version}-linux-x86_64.AppImage";
     name = "kchat-${version}.AppImage";
-    hash = "sha256-8mkkHod7iBhHVAL/vQCVnmwVlPGikdHhtiEaFVIayrU=";
+    hash = "sha256-5Nk2IMGk7BDDL7fuoOBO3wEcbtJDDDnQvUiqa8Pt8yU=";
   };
 
   extraInstallCommands =
@@ -23,8 +24,9 @@ appimageTools.wrapType2 rec {
       cp -r ${contents}/{locales,resources} "$out/share/lib/kchat"
       cp -r ${contents}/usr/* "$out"
       cp "${contents}/kchat-desktop.desktop" "$out/share/applications/"
-      mv "$out/bin/kchat-${version}" "$out/bin/${meta.mainProgram}"
-      substituteInPlace $out/share/applications/kchat-desktop.desktop --replace 'Exec=AppRun' 'Exec=${meta.mainProgram}'
+      mv "$out/bin/kchat" "$out/bin/${meta.mainProgram}" || true
+      install -m 444 -D ${contents}/kchat-desktop.desktop $out/share/applications/kchat-desktop.desktop
+      substituteInPlace $out/share/applications/kchat-desktop.desktop --replace-fail 'Exec=AppRun' 'Exec=${meta.mainProgram}'
     '';
 
   meta = with lib; {

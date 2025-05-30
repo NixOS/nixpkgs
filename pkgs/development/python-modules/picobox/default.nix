@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, hatchling
-, hatch-vcs
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  hatchling,
+  hatch-vcs,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -18,8 +19,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "ikalnytskyi";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "picobox";
+    tag = version;
     hash = "sha256-JtrwUVo3b4G34OUShX4eJS2IVubl4vBmEtB/Jhk4eJI=";
   };
 
@@ -33,9 +34,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "picobox"
-  ];
+  pythonImportsCheck = [ "picobox" ];
 
   meta = with lib; {
     description = "Opinionated dependency injection framework";

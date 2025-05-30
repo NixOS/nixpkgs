@@ -1,31 +1,37 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, perl, cmake, boost }:
+{
+  boost,
+  cmake,
+  fetchFromGitHub,
+  lib,
+  perl,
+  postgresql,
+  postgresqlBuildExtension,
+}:
 
-stdenv.mkDerivation rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pgrouting";
-  version = "3.6.1";
+  version = "3.8.0";
 
-  nativeBuildInputs = [ cmake perl ];
-  buildInputs = [ postgresql boost ];
+  nativeBuildInputs = [
+    cmake
+    perl
+  ];
+  buildInputs = [ boost ];
 
   src = fetchFromGitHub {
-    owner  = "pgRouting";
-    repo   = pname;
-    rev    = "v${version}";
-    hash   = "sha256-DyrBVGBLUkg0ODuHV3mCkyod2/hEtpZfLSvnrEQObaI=";
+    owner = "pgRouting";
+    repo = "pgrouting";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Lvf7TQ3GywbzZmcd9wi3s8I5sCXIQAPeXNTRk/J46to=";
   };
 
-  installPhase = ''
-    install -D lib/*.so                        -t $out/lib
-    install -D sql/pgrouting--${version}.sql   -t $out/share/postgresql/extension
-    install -D sql/common/pgrouting.control    -t $out/share/postgresql/extension
-  '';
-
-  meta = with lib; {
-    description = "A PostgreSQL/PostGIS extension that provides geospatial routing functionality";
-    homepage    = "https://pgrouting.org/";
-    changelog   = "https://github.com/pgRouting/pgrouting/releases/tag/v${version}";
-    maintainers = with maintainers; teams.geospatial.members ++ [ steve-chavez ];
-    platforms   = postgresql.meta.platforms;
-    license     = licenses.gpl2Plus;
+  meta = {
+    description = "PostgreSQL/PostGIS extension that provides geospatial routing functionality";
+    homepage = "https://pgrouting.org/";
+    changelog = "https://github.com/pgRouting/pgrouting/releases/tag/v${finalAttrs.version}";
+    maintainers = with lib.maintainers; [ steve-chavez ];
+    teams = [ lib.teams.geospatial ];
+    platforms = postgresql.meta.platforms;
+    license = lib.licenses.gpl2Plus;
   };
-}
+})

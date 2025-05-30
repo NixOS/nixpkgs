@@ -1,4 +1,9 @@
-{ lib, google-cloud-sdk, runCommand, components }:
+{
+  lib,
+  google-cloud-sdk,
+  symlinkJoin,
+  components,
+}:
 
 comps_:
 
@@ -6,57 +11,74 @@ let
   # Remove components which are already installed by default
   filterPreInstalled =
     let
-      preInstalledComponents = with components; [ bq bq-nix core core-nix gcloud-deps gcloud gsutil gsutil-nix ];
+      preInstalledComponents = with components; [
+        bq
+        bq-nix
+        core
+        core-nix
+        gcloud-deps
+        gcloud
+        gsutil
+        gsutil-nix
+      ];
     in
     builtins.filter (drv: !(builtins.elem drv preInstalledComponents));
 
   # Recursively build a list of components with their dependencies
   # TODO this could be made faster, it checks the dependencies too many times
-  findDepsRecursive = lib.converge
-    (drvs: lib.unique (drvs ++ (builtins.concatMap (drv: drv.dependencies) drvs)));
+  findDepsRecursive = lib.converge (
+    drvs: lib.unique (drvs ++ (builtins.concatMap (drv: drv.dependencies) drvs))
+  );
 
   # Components to install by default
-  defaultComponents = with components; [ alpha beta ];
+  defaultComponents = with components; [
+    alpha
+    beta
+  ];
 
-  comps = [ google-cloud-sdk ] ++ filterPreInstalled (findDepsRecursive (defaultComponents ++ comps_));
-in
-# Components are installed by copying the `google-cloud-sdk` package, along
-# with each component, over to a new location, and then patching that location
-# with `sed` to ensure the proper paths are used.
-# For some reason, this does not work properly with a `symlinkJoin`: the
-# `gcloud` binary doesn't seem able to find the installed components.
-runCommand "google-cloud-sdk-${google-cloud-sdk.version}"
-{
-  inherit (google-cloud-sdk) meta;
-  inherit comps;
-  passAsFile = [ "comps" ];
+  comps = [
+    google-cloud-sdk
+  ] ++ filterPreInstalled (findDepsRecursive (defaultComponents ++ comps_));
 
-  doInstallCheck = true;
-  disallowedRequisites = [ google-cloud-sdk ];
-  installCheckPhase =
+  installCheck =
     let
-      compNames = builtins.map (drv: drv.name) comps_;
+      compNames = builtins.map lib.getName comps_;
     in
     ''
-      $out/bin/gcloud components list > component_list.txt
+      $out/bin/gcloud components list --only-local-state --format 'value(id)' > component_list.txt
       for comp in ${builtins.toString compNames}; do
-        if [ ! grep ... component_list.txt | grep "Not Installed" ]; then
+        snapshot_file="$out/google-cloud-sdk/.install/$comp.snapshot.json"
+
+        if ! [ -f "$snapshot_file"  ]; then
+          echo "Failed to install component '$comp'"
+          exit 1
+        fi
+
+        if grep --quiet '"is_hidden":true' "$snapshot_file"; then
+          continue
+        fi
+
+        if ! grep --quiet "^$comp$" component_list.txt; then
           echo "Failed to install component '$comp'"
           exit 1
         fi
       done
     '';
+in
+# The `gcloud` entrypoint script has some custom logic to determine the "real" cloud sdk
+# root. In order to not trip up this logic and still have the symlink joined root we copy
+# over this file. Since this file also has a Python wrapper, we need to copy that as well.
+symlinkJoin {
+  name = "google-cloud-sdk-${google-cloud-sdk.version}";
+  inherit (google-cloud-sdk) meta;
+
+  paths = [
+    google-cloud-sdk
+  ] ++ comps;
+
+  postBuild = ''
+    sed -i ';' $out/google-cloud-sdk/bin/.gcloud-wrapped
+    sed -i -e "s#${google-cloud-sdk}#$out#" "$out/google-cloud-sdk/bin/gcloud"
+    ${installCheck}
+  '';
 }
-  ''
-    mkdir -p $out
-
-    # Install each component
-    for comp in $(cat $compsPath); do
-      echo "installing component $comp"
-      cp -dRf $comp/. $out
-      find $out -type d -exec chmod 744 {} +
-    done
-
-    # Replace references to the original google-cloud-sdk with this one
-    find $out/google-cloud-sdk -type f -exec sed -i -e "s#${google-cloud-sdk}#$out#" {} \;
-  ''

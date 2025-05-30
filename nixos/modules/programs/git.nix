@@ -1,6 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.git;
@@ -9,72 +12,93 @@ in
 {
   options = {
     programs.git = {
-      enable = mkEnableOption (lib.mdDoc "git");
+      enable = lib.mkEnableOption "git, a distributed version control system";
 
-      package = mkPackageOption pkgs "git" {
+      package = lib.mkPackageOption pkgs "git" {
         example = "gitFull";
       };
 
-      config = mkOption {
+      config = lib.mkOption {
         type =
-          with types;
+          with lib.types;
           let
             gitini = attrsOf (attrsOf anything);
           in
-          either gitini (listOf gitini) // {
-            merge = loc: defs:
+          either gitini (listOf gitini)
+          // {
+            merge =
+              loc: defs:
               let
-                config = foldl'
-                  (acc: { value, ... }@x: acc // (if isList value then {
-                    ordered = acc.ordered ++ value;
-                  } else {
-                    unordered = acc.unordered ++ [ x ];
-                  }))
-                  {
-                    ordered = [ ];
-                    unordered = [ ];
-                  }
-                  defs;
+                config =
+                  builtins.foldl'
+                    (
+                      acc:
+                      { value, ... }@x:
+                      acc
+                      // (
+                        if builtins.isList value then
+                          {
+                            ordered = acc.ordered ++ value;
+                          }
+                        else
+                          {
+                            unordered = acc.unordered ++ [ x ];
+                          }
+                      )
+                    )
+                    {
+                      ordered = [ ];
+                      unordered = [ ];
+                    }
+                    defs;
               in
               [ (gitini.merge loc config.unordered) ] ++ config.ordered;
           };
         default = [ ];
         example = {
           init.defaultBranch = "main";
-          url."https://github.com/".insteadOf = [ "gh:" "github:" ];
+          url."https://github.com/".insteadOf = [
+            "gh:"
+            "github:"
+          ];
         };
-        description = lib.mdDoc ''
+        description = ''
           Configuration to write to /etc/gitconfig. A list can also be
           specified to keep the configuration in order. For example, setting
           `config` to `[ { foo.x = 42; } { bar.y = 42; }]` will put the `foo`
           section before the `bar` section unlike the default alphabetical
           order, which can be helpful for sections such as `include` and
-          `includeIf`. See the CONFIGURATION FILE section of git-config(1) for
+          `includeIf`. See the CONFIGURATION FILE section of {manpage}`git-config(1)` for
           more information.
         '';
       };
 
       prompt = {
-        enable = mkEnableOption "automatically sourcing git-prompt.sh. This does not change $PS1; it simply provides relevant utility functions";
+        enable = lib.mkEnableOption "automatically sourcing git-prompt.sh. This does not change $PS1; it simply provides relevant utility functions";
       };
 
       lfs = {
-        enable = mkEnableOption (lib.mdDoc "git-lfs");
+        enable = lib.mkEnableOption "git-lfs (Large File Storage)";
 
-        package = mkPackageOption pkgs "git-lfs" { };
+        package = lib.mkPackageOption pkgs "git-lfs" { };
+
+        enablePureSSHTransfer = lib.mkEnableOption "Enable pure SSH transfer in server side by adding git-lfs-transfer to environment.systemPackages";
       };
     };
   };
 
-  config = mkMerge [
-    (mkIf cfg.enable {
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
       environment.systemPackages = [ cfg.package ];
-      environment.etc.gitconfig = mkIf (cfg.config != [ ]) {
-        text = concatMapStringsSep "\n" generators.toGitINI cfg.config;
+      environment.etc.gitconfig = lib.mkIf (cfg.config != [ ]) {
+        text = lib.concatMapStringsSep "\n" lib.generators.toGitINI cfg.config;
       };
     })
-    (mkIf (cfg.enable && cfg.lfs.enable) {
-      environment.systemPackages = [ cfg.lfs.package ];
+    (lib.mkIf (cfg.enable && cfg.lfs.enable) {
+      environment.systemPackages = lib.mkMerge [
+        [ cfg.lfs.package ]
+        (lib.mkIf cfg.lfs.enablePureSSHTransfer [ pkgs.git-lfs-transfer ])
+      ];
       programs.git.config = {
         filter.lfs = {
           clean = "git-lfs clean -- %f";
@@ -84,12 +108,12 @@ in
         };
       };
     })
-    (mkIf (cfg.enable && cfg.prompt.enable) {
+    (lib.mkIf (cfg.enable && cfg.prompt.enable) {
       environment.interactiveShellInit = ''
         source ${cfg.package}/share/bash-completion/completions/git-prompt.sh
       '';
     })
   ];
 
-  meta.maintainers = with maintainers; [ figsoda ];
+  meta.maintainers = with lib.maintainers; [ figsoda ];
 }

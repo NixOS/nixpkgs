@@ -1,27 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchurl
-, isPy3k
-, setuptools
-, colorama
-, six
-, texttable
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  isPy3k,
+  setuptools,
+  colorama,
+  six,
+  texttable,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "rbtools";
-  version = "1.0.2";
+  version = "5.2.1";
   format = "setuptools";
 
   disabled = !isPy3k;
 
   src = fetchurl {
     url = "https://downloads.reviewboard.org/releases/RBTools/${lib.versions.majorMinor version}/RBTools-${version}.tar.gz";
-    sha256 = "577c2f8bbf88f77bda84ee95af0310b59111c156f48a5aab56ca481e2f77eaf4";
+    sha256 = "f2863515ef6ff1cfcd3905d5f409ab8c4d12878b364d6f805ba848dcaecb97f2";
   };
 
-  propagatedBuildInputs = [ six texttable tqdm colorama setuptools ];
+  propagatedBuildInputs = [
+    six
+    texttable
+    tqdm
+    colorama
+    setuptools
+  ];
 
   # The kgb test dependency is not in nixpkgs
   doCheck = false;
@@ -29,8 +36,8 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://www.reviewboard.org/docs/rbtools/dev/";
     description = "RBTools is a set of command line tools for working with Review Board and RBCommons";
+    mainProgram = "rbt";
     license = licenses.mit;
     maintainers = with maintainers; [ domenkozar ];
   };
-
 }

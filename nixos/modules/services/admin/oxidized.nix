@@ -1,39 +1,43 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.oxidized;
 in
 {
   options.services.oxidized = {
-    enable = mkEnableOption (lib.mdDoc "the oxidized configuration backup service");
+    enable = lib.mkEnableOption "the oxidized configuration backup service";
 
-    user = mkOption {
-      type = types.str;
+    package = lib.mkPackageOption pkgs "oxidized" { };
+
+    user = lib.mkOption {
+      type = lib.types.str;
       default = "oxidized";
-      description = lib.mdDoc ''
+      description = ''
         User under which the oxidized service runs.
       '';
     };
 
-    group = mkOption {
-      type = types.str;
+    group = lib.mkOption {
+      type = lib.types.str;
       default = "oxidized";
-      description = lib.mdDoc ''
+      description = ''
         Group under which the oxidized service runs.
       '';
     };
 
-    dataDir = mkOption {
-      type = types.path;
+    dataDir = lib.mkOption {
+      type = lib.types.path;
       default = "/var/lib/oxidized";
-      description = lib.mdDoc "State directory for the oxidized service.";
+      description = "State directory for the oxidized service.";
     };
 
-    configFile = mkOption {
-      type = types.path;
-      example = literalExpression ''
+    configFile = lib.mkOption {
+      type = lib.types.path;
+      example = lib.literalExpression ''
         pkgs.writeText "oxidized-config.yml" '''
           ---
           debug: true
@@ -62,27 +66,28 @@ in
           # ... additional config
         ''';
       '';
-      description = lib.mdDoc ''
+      description = ''
         Path to the oxidized configuration file.
       '';
     };
 
-    routerDB = mkOption {
-      type = types.path;
-      example = literalExpression ''
+    routerDB = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      example = lib.literalExpression ''
         pkgs.writeText "oxidized-router.db" '''
           hostname-sw1:powerconnect:username1:password2
           hostname-sw2:procurve:username2:password2
           # ... additional hosts
         '''
       '';
-      description = lib.mdDoc ''
+      description = ''
         Path to the file/database which contains the targets for oxidized.
       '';
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.groups.${cfg.group} = { };
     users.users.${cfg.user} = {
       description = "Oxidized service user";
@@ -92,23 +97,62 @@ in
       isSystemUser = true;
     };
 
+    systemd.tmpfiles.settings."10-oxidized" =
+      {
+        "${cfg.dataDir}" = {
+          d = {
+            mode = "0750";
+            user = cfg.user;
+            group = cfg.group;
+          };
+        };
+
+        "${cfg.dataDir}/.config" = {
+          d = {
+            mode = "0750";
+            user = cfg.user;
+            group = cfg.group;
+          };
+        };
+
+        "${cfg.dataDir}/.config/oxidized" = {
+          d = {
+            mode = "0750";
+            user = cfg.user;
+            group = cfg.group;
+          };
+        };
+
+        "${cfg.dataDir}/.config/oxidized/config" = {
+          "L+" = {
+            argument = "${cfg.configFile}";
+            user = cfg.user;
+            group = cfg.group;
+          };
+        };
+
+      }
+      // lib.optionalAttrs (cfg.routerDB != null) {
+        "${cfg.dataDir}/.config/oxidized/router.db" = {
+          "L+" = {
+            argument = "${cfg.routerDB}";
+            user = cfg.user;
+            group = cfg.group;
+          };
+        };
+      };
+
     systemd.services.oxidized = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
-      preStart = ''
-        mkdir -p ${cfg.dataDir}/.config/oxidized
-        ln -f -s ${cfg.routerDB} ${cfg.dataDir}/.config/oxidized/router.db
-        ln -f -s ${cfg.configFile} ${cfg.dataDir}/.config/oxidized/config
-      '';
-
       serviceConfig = {
-        ExecStart = "${pkgs.oxidized}/bin/oxidized";
+        ExecStart = lib.getExe cfg.package;
         User = cfg.user;
         Group = cfg.group;
         UMask = "0077";
         NoNewPrivileges = true;
-        Restart  = "always";
+        Restart = "always";
         WorkingDirectory = cfg.dataDir;
         KillSignal = "SIGKILL";
         PIDFile = "${cfg.dataDir}/.config/oxidized/pid";

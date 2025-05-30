@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gperf";
@@ -24,6 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Perfect hash function generator";
+    mainProgram = "gperf";
 
     longDescription = ''
       GNU gperf is a perfect hash function generator.  For a given

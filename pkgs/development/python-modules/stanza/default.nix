@@ -1,32 +1,33 @@
-{ lib
-, buildPythonPackage
-, emoji
-, fetchFromGitHub
-, networkx
-, numpy
-, peft
-, protobuf
-, pythonOlder
-, requests
-, six
-, toml
-, torch
-, tqdm
-, transformers
+{
+  lib,
+  buildPythonPackage,
+  emoji,
+  fetchFromGitHub,
+  networkx,
+  numpy,
+  peft,
+  protobuf,
+  pythonOlder,
+  requests,
+  six,
+  toml,
+  torch,
+  tqdm,
+  transformers,
 }:
 
 buildPythonPackage rec {
   pname = "stanza";
-  version = "1.8.1";
+  version = "1.10.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "stanfordnlp";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-MO9trPkemVDzlVrO6v6N27RY2SNwflj+XlUrB1NqFGc=";
+    repo = "stanza";
+    tag = "v${version}";
+    hash = "sha256-0uqEyiY+gX9P2r2H+qF4t8OUUumjikBZjk4psFf9l30=";
   };
 
   propagatedBuildInputs = [
@@ -46,9 +47,7 @@ buildPythonPackage rec {
   # Tests require network access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "stanza"
-  ];
+  pythonImportsCheck = [ "stanza" ];
 
   meta = with lib; {
     description = "Official Stanford NLP Python Library for Many Human Languages";

@@ -1,53 +1,39 @@
-# NixOS module for Freenet daemon
-
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-
   cfg = config.services.freenet;
   varDir = "/var/lib/freenet";
-
 in
-
 {
-
-  ### configuration
-
   options = {
-
     services.freenet = {
+      enable = lib.mkEnableOption "Freenet daemon";
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc "Enable the Freenet daemon";
-      };
-
-      nice = mkOption {
-        type = types.int;
+      nice = lib.mkOption {
+        type = lib.types.int;
         default = 10;
-        description = lib.mdDoc "Set the nice level for the Freenet daemon";
+        description = "Set the nice level for the Freenet daemon";
       };
-
     };
-
   };
 
-  ### implementation
-
-  config = mkIf cfg.enable {
-
+  config = lib.mkIf cfg.enable {
     systemd.services.freenet = {
       description = "Freenet daemon";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.ExecStart = "${pkgs.freenet}/bin/freenet";
-      serviceConfig.User = "freenet";
-      serviceConfig.UMask = "0007";
-      serviceConfig.WorkingDirectory = varDir;
-      serviceConfig.Nice = cfg.nice;
+      serviceConfig = {
+        ExecStart = lib.getExe pkgs.freenet;
+        User = "freenet";
+        UMask = "0007";
+        WorkingDirectory = varDir;
+        Nice = cfg.nice;
+      };
     };
 
     users.users.freenet = {
@@ -61,4 +47,5 @@ in
     users.groups.freenet.gid = config.ids.gids.freenet;
   };
 
+  meta.maintainers = with lib.maintainers; [ nagy ];
 }

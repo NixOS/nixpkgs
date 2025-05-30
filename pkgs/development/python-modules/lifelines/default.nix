@@ -1,26 +1,27 @@
-{ lib
-, autograd
-, autograd-gamma
-, buildPythonPackage
-, dill
-, fetchFromGitHub
-, flaky
-, formulaic
-, jinja2
-, matplotlib
-, numpy
-, pandas
-, psutil
-, pytestCheckHook
-, pythonOlder
-, scikit-learn
-, scipy
-, sybil
+{
+  lib,
+  autograd,
+  autograd-gamma,
+  buildPythonPackage,
+  dill,
+  fetchFromGitHub,
+  flaky,
+  formulaic,
+  jinja2,
+  matplotlib,
+  numpy,
+  pandas,
+  psutil,
+  pytestCheckHook,
+  pythonOlder,
+  scikit-learn,
+  scipy,
+  sybil,
 }:
 
 buildPythonPackage rec {
   pname = "lifelines";
-  version = "0.28.0";
+  version = "0.30.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -28,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CamDavidsonPilon";
     repo = "lifelines";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6j+RgKeBCvpcREf7j8NE2x+IUI/LaoT6jsnHny4ccVo=";
+    tag = "v${version}";
+    hash = "sha256-rbt0eON8Az5jDvj97RDn3ppWyjbrSa/xumbwhq21g6g=";
   };
 
   propagatedBuildInputs = [
@@ -52,17 +53,11 @@ buildPythonPackage rec {
     sybil
   ];
 
-  pythonImportsCheck = [
-    "lifelines"
-  ];
+  pythonImportsCheck = [ "lifelines" ];
 
-  disabledTestPaths = [
-    "lifelines/tests/test_estimation.py"
-  ];
+  disabledTestPaths = [ "lifelines/tests/test_estimation.py" ];
 
-  disabledTests = [
-    "test_datetimes_to_durations_with_different_frequencies"
-  ];
+  disabledTests = [ "test_datetimes_to_durations_with_different_frequencies" ];
 
   meta = with lib; {
     description = "Survival analysis in Python";

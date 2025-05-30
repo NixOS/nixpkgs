@@ -1,5 +1,8 @@
-{ lib, buildDunePackage, fetchurl
-, ocamlbuild
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ocamlbuild,
 }:
 
 buildDunePackage rec {
@@ -16,7 +19,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ ocamlbuild ];
 
   meta = {
-    description = "An ocamlbuild plugin to compile to JavaScript";
+    description = "Ocamlbuild plugin to compile to JavaScript";
     homepage = "https://github.com/ocsigen/js_of_ocaml-ocamlbuild";
     license = lib.licenses.lgpl2Only;
     maintainers = [ lib.maintainers.vbgl ];

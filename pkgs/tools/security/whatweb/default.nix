@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, bundlerEnv, ruby }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bundlerEnv,
+  ruby,
+}:
 
 let
   gems = bundlerEnv {
@@ -7,7 +13,8 @@ let
     gemdir = ./.;
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "whatweb";
   version = "0.5.5";
 
@@ -42,9 +49,10 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Next generation web scanner";
+    mainProgram = "whatweb";
     homepage = "https://github.com/urbanadventurer/whatweb";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

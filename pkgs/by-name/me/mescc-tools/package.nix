@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromSavannah
-, m2libc
-, which
+{
+  lib,
+  stdenv,
+  fetchFromSavannah,
+  m2libc,
+  which,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Collection of tools written for use in bootstrapping";
     homepage = "https://savannah.nongnu.org/projects/mescc-tools";
     license = licenses.gpl3Only;
-    maintainers = teams.minimal-bootstrap.members;
+    teams = [ teams.minimal-bootstrap ];
     inherit (m2libc.meta) platforms;
   };
 })

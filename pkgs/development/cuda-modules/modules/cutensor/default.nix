@@ -1,1 +1,4 @@
-{options, ...}: {options.cutensor.manifests = options.generic.manifests;}
+{ options, ... }:
+{
+  options.cutensor.manifests = options.generic.manifests;
+}

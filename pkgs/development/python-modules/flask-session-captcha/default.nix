@@ -1,66 +1,51 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, buildPythonPackage
-
-# build-system
-, setuptools
-
-# dependencies
-, captcha
-, flask
-, markupsafe
-
-# tests
-, flask-sqlalchemy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  captcha,
+  fetchFromGitHub,
+  flask,
+  flask-session,
+  flask-sqlalchemy,
+  markupsafe,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "flask-session-captcha";
-  version = "1.3.0";
+  version = "1.5.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Tethik";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-V0f3mXCfqwH2l3OtJKOHGdrlKAFxs2ynqXvNve7Amkc=";
+    repo = "flask-session-captcha";
+    tag = "v${version}";
+    hash = "sha256-2JPJx8yQIl0bbcbshONJtja7BnSiieHzHi64A6jLpc0=";
   };
 
-  patches = [
-    (fetchpatch {
-      # https://github.com/Tethik/flask-session-captcha/pull/44
-      url = "https://github.com/Tethik/flask-session-captcha/commit/3f79c22a71c60dd60e9df61b550cce641603dcb6.patch";
-      hash = "sha256-MXsoSytBNbcg3HU6IWlvf2MgNUL78T5ToxKGv4YMtZw=";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     captcha
     flask
     markupsafe
   ];
 
-  pythonImportsCheck = [
-    "flask_session_captcha"
-  ];
-
-  # RuntimeError: Working outside of application context.
-  doCheck = false;
-
   nativeCheckInputs = [
+    flask-session
     flask-sqlalchemy
     pytestCheckHook
   ];
 
+  pythonImportsCheck = [ "flask_session_captcha" ];
+
   meta = with lib; {
-    description = "A captcha implemention for flask";
+    description = "Captcha implemention for flask";
     homepage = "https://github.com/Tethik/flask-session-captcha";
+    changelog = "https://github.com/Tethik/flask-session-captcha/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ Flakebi ];
   };

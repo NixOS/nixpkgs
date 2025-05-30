@@ -1,14 +1,15 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, celery
-, django
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  celery,
+  django,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "django-celery-results";
-  version = "2.5.1";
+  version = "2.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "django_celery_results";
     inherit version;
-    hash = "sha256-PstxR/dz800DgbrGJGM3zkz4ii6nuCd07UjlGLZ7uP0=";
+    hash = "sha256-mrzYNq5rYQY3eSRNiIeoj+gLv6uhQ98208sHA0ZxJ3w=";
   };
 
   postPatch = ''
@@ -37,6 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/celery/django-celery-results";
     changelog = "https://github.com/celery/django-celery-results/blob/v{version}/Changelog";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ babariviere ];
+    maintainers = [ ];
   };
 }

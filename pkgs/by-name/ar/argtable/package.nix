@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/argtable/argtable3";
-    description = "A single-file, ANSI C command-line parsing library";
+    description = "Single-file, ANSI C command-line parsing library";
     longDescription = ''
       Argtable is an open source ANSI C library that parses GNU-style
       command-line options. It simplifies command-line parsing by defining a
@@ -38,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
       are essential but tedious to implement for a robust CLI program.
     '';
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ AndersonTorres artuuge ];
+    maintainers = with lib.maintainers; [ artuuge ];
     platforms = lib.platforms.all;
   };
 })

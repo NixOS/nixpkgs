@@ -1,15 +1,17 @@
-{ cmake
-, fpattern
-, lib
-, SDL2
-, stdenv
-, writeShellScript
+{
+  cmake,
+  fpattern,
+  lib,
+  SDL2,
+  stdenv,
+  writeShellScript,
 
-, extraBuildInputs ? [ ]
-, extraMeta
-, pname
-, version
-, src
+  extraBuildInputs ? [ ],
+  extraMeta,
+  patches,
+  pname,
+  version,
+  src,
 }:
 
 let
@@ -45,7 +47,12 @@ let
   '';
 in
 stdenv.mkDerivation {
-  inherit pname version src;
+  inherit
+    pname
+    version
+    src
+    patches
+    ;
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ SDL2 ] ++ extraBuildInputs;
@@ -69,9 +76,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    license = licenses.sustainableUse;
-    maintainers = with maintainers; [ hughobrien TheBrainScrambler ];
-    platforms = platforms.linux;
-  } // extraMeta;
+  meta =
+    with lib;
+    {
+      license = licenses.sustainableUse;
+      maintainers = with maintainers; [ hughobrien ];
+      platforms = platforms.linux;
+    }
+    // extraMeta;
 }

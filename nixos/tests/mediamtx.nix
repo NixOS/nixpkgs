@@ -1,11 +1,14 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} :
+{ pkgs, lib, ... }:
 
+let
+  rtmpUrl = "rtmp://localhost:1935/test";
+in
 {
   name = "mediamtx";
   meta.maintainers = with lib.maintainers; [ fpletz ];
 
   nodes = {
-    machine = { config, ... }: {
+    machine = {
       services.mediamtx = {
         enable = true;
         settings = {
@@ -23,8 +26,8 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
           DynamicUser = true;
           Restart = "on-failure";
           RestartSec = "1s";
-          TimeoutStartSec = "10s";
-          ExecStart = "${lib.getBin pkgs.ffmpeg-headless}/bin/ffmpeg -re -f lavfi -i smptebars=size=800x600:rate=10 -c libx264 -f flv rtmp://localhost:1935/test";
+          TimeoutStartSec = "30s";
+          ExecStart = "${lib.getBin pkgs.ffmpeg-headless}/bin/ffmpeg -re -f lavfi -i smptebars=size=800x600:rate=10 -c libx264 -f flv ${rtmpUrl}";
         };
       };
 
@@ -33,12 +36,13 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
         after = [ "rtmp-publish.service" ];
         bindsTo = [ "rtmp-publish.service" ];
         wantedBy = [ "multi-user.target" ];
+        unitConfig.StartLimitIntervalSec = 0;
         serviceConfig = {
           DynamicUser = true;
           Restart = "on-failure";
           RestartSec = "1s";
-          TimeoutStartSec = "10s";
-          ExecStart = "${lib.getBin pkgs.ffmpeg-headless}/bin/ffmpeg -y -re -i rtmp://localhost:1935/test -f flv /dev/null";
+          TimeoutStartSec = "30s";
+          ExecStart = "${lib.getBin pkgs.ffmpeg-headless}/bin/ffmpeg -y -re -i ${rtmpUrl} -f flv /dev/null";
         };
       };
     };
@@ -48,10 +52,11 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
     start_all()
 
     machine.wait_for_unit("mediamtx.service")
+
     machine.wait_for_unit("rtmp-publish.service")
+    machine.wait_until_succeeds("curl http://localhost:9998/metrics | grep '^rtmp_conns.*state=\"publish\".*1$'")
+
     machine.wait_for_unit("rtmp-receive.service")
-    machine.wait_for_open_port(9998)
-    machine.succeed("curl http://localhost:9998/metrics | grep '^rtmp_conns.*state=\"publish\".*1$'")
-    machine.succeed("curl http://localhost:9998/metrics | grep '^rtmp_conns.*state=\"read\".*1$'")
+    machine.wait_until_succeeds("curl http://localhost:9998/metrics | grep '^rtmp_conns.*state=\"read\".*1$'")
   '';
-})
+}

@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, python3
-, testers
-, cringify
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  python3,
+  testers,
+  cringify,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,7 +18,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-U0tKYFRZToMALSeItn9yia7Dl7omETDTkuRlWJ8EZEo=";
   };
 
-  cargoHash = "sha256-OQXGn6m6VdSlxaCPRonjvEo/GOpsEiZkqL12UdoLu0Q=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-VUMVul3P2GRwihTilVpcEb+A5pJaHxlzkwa3uq+pHtY=";
 
   postPatch = ''
     # Upstream doesn't set the version string itself

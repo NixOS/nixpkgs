@@ -1,21 +1,29 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "openapi-tui";
-  version = "0.4.0";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "zaghaghi";
     repo = "openapi-tui";
     rev = version;
-    hash = "sha256-7xkjlX3+/hdVN2PXoiXbouSoMLy0Qe8uMRlPHWJO5Ts=";
+    hash = "sha256-rC0lfWZpiiAAShyVDqr1gKTeWmWC+gVp4UmL96Y81mE=";
   };
 
-  cargoHash = "sha256-U8TOms8C7vV64OKKdJhMAoOha9s2lBqfBWU7pyZ0h/s=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-911ARjYvTNqLVVUWxATbtiKXOC9AqalFvDvp/qAef1Q=";
+
+  OPENSSL_NO_VENDOR = true;
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ openssl ];
 
   meta = with lib; {
     description = "Terminal UI to list, browse and run APIs defined with openapi spec";
@@ -25,4 +33,3 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "openapi-tui";
   };
 }
-

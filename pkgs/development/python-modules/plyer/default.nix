@@ -1,4 +1,12 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitHub, fetchpatch, keyring, mock, pytestCheckHook }:
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  keyring,
+  mock,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "plyer";
@@ -7,8 +15,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "kivy";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "plyer";
+    tag = version;
     sha256 = "sha256-7Icb2MVj5Uit86lRHxal6b7y9gIJ3UT2HNqpA9DYWVE=";
   };
 
@@ -25,7 +33,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ keyring ];
 
-  nativeCheckInputs = [ mock pytestCheckHook ];
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
+  ];
 
   pytestFlagsArray = [ "plyer/tests" ];
   disabledTests = [
@@ -43,7 +54,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "plyer" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Plyer is a platform-independent api to use features commonly found on various platforms";
     homepage = "https://github.com/kivy/plyer";
     license = licenses.mit;

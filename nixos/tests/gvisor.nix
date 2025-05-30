@@ -1,9 +1,10 @@
 # This test runs a container through gvisor and checks if simple container starts
 
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "gvisor";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ andrew-d ];
+    maintainers = [ ];
   };
 
   nodes = {
@@ -19,7 +20,10 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           dhcpcd.enable = false;
           defaultGateway = "192.168.1.1";
           interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
-            { address = "192.168.1.2"; prefixLength = 24; }
+            {
+              address = "192.168.1.2";
+              prefixLength = 24;
+            }
           ];
         };
       };
@@ -39,5 +43,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     gvisor.succeed("docker ps | grep sleeping")
     gvisor.succeed("docker stop sleeping")
   '';
-})
-
+}

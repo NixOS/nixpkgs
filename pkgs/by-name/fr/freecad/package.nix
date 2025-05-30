@@ -1,196 +1,254 @@
-{ lib
-, cmake
-, coin3d
-, doxygen
-, eigen
-, fetchFromGitHub
-, fmt
-, freecad  # for passthru.tests
-, gfortran
-, gts
-, hdf5
-, libGLU
-, libXmu
-, libf2c
-, libredwg
-, libsForQt5
-, libspnav
-, medfile
-, mpi
-, ninja
-, ode
-, opencascade-occt
-, pkg-config
-, python3Packages
-, runCommand  # for passthru.tests
-, spaceNavSupport ? stdenv.isLinux
-, stdenv
-, swig
-, vtk
-, wrapGAppsHook
-, xercesc
-, zlib
+{
+  lib,
+  callPackage,
+  cmake,
+  coin3d,
+  doxygen,
+  eigen,
+  fetchFromGitHub,
+  fetchpatch,
+  fmt,
+  gfortran,
+  gts,
+  hdf5,
+  libGLU,
+  libredwg,
+  libsForQt5,
+  libspnav,
+  libXmu,
+  medfile,
+  mpi,
+  ninja,
+  ode,
+  opencascade-occt_7_6,
+  opencascade-occt,
+  pkg-config,
+  python311Packages,
+  spaceNavSupport ? stdenv.hostPlatform.isLinux,
+  ifcSupport ? false,
+  stdenv,
+  swig,
+  vtk,
+  wrapGAppsHook3,
+  xercesc,
+  yaml-cpp,
+  zlib,
+  withWayland ? false,
+  qtVersion ? 5,
+  qt5,
+  qt6,
+  nix-update-script,
 }:
-
 let
-  boost = python3Packages.boost;
-  inherit (libsForQt5)
-    qtbase
-    qttools
-    qtwebengine
-    qtx11extras
-    qtxmlpatterns
-    soqt
-    wrapQtAppsHook;
-  inherit (python3Packages)
+  inherit (python311Packages)
+    boost
     gitpython
+    ifcopenshell
     matplotlib
+    opencamlib
     pivy
     ply
+    py-slvs
+    pybind11
     pycollada
     pyside2
     pyside2-tools
+    pyside6
     python
     pyyaml
     scipy
-    shiboken2;
-in
-stdenv.mkDerivation (finalAttrs: {
-  pname = "freecad";
-  version = "0.21.2";
-
-  src = fetchFromGitHub {
-    owner = "FreeCAD";
-    repo = "FreeCAD";
-    rev = finalAttrs.version;
-    hash = "sha256-OX4s9rbGsAhH7tLJkUJYyq2A2vCdkq/73iqYo9adogs=";
-  };
-
-  nativeBuildInputs = [
-    cmake
-    ninja
-    pkg-config
-    pyside2-tools
-    gfortran
-    wrapQtAppsHook
-    wrapGAppsHook
-  ];
-
-  buildInputs = [
-    gitpython # for addon manager
-    boost
-    coin3d
-    doxygen
-    eigen
-    fmt
-    gts
-    hdf5
-    libGLU
-    libXmu
-    libf2c
-    matplotlib
-    medfile
-    mpi
-    ode
-    opencascade-occt
-    pivy
-    ply # for openSCAD file support
-    pycollada
-    pyside2
-    pyside2-tools
-    python
-    pyyaml # (at least for) PyrateWorkbench
-    qtbase
-    qttools
-    qtwebengine
-    qtxmlpatterns
-    scipy
     shiboken2
-    soqt
-    swig
-    vtk
-    xercesc
-    zlib
-  ] ++ lib.optionals spaceNavSupport [
-    libspnav
-    qtx11extras
-  ];
+    shiboken6
+    ;
+  freecad-utils = callPackage ./freecad-utils.nix { };
+in
+freecad-utils.makeCustomizable (
+  stdenv.mkDerivation (finalAttrs: {
+    pname = "freecad";
+    version = "1.0.1";
 
-  patches = [
-    ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
-  ];
+    src = fetchFromGitHub {
+      owner = "FreeCAD";
+      repo = "FreeCAD";
+      rev = finalAttrs.version;
+      hash = "sha256-VFTNawXxu2ofjj2Frg4OfVhiMKFywBhm7lZunP85ZEQ=";
+      fetchSubmodules = true;
+    };
 
-  cmakeFlags = [
-    "-Wno-dev" # turns off warnings which otherwise makes it hard to see what is going on
-    "-DBUILD_FLAT_MESH:BOOL=ON"
-    "-DBUILD_QT5=ON"
-    "-DSHIBOKEN_INCLUDE_DIR=${shiboken2}/include"
-    "-DSHIBOKEN_LIBRARY=Shiboken2::libshiboken"
-    ("-DPYSIDE_INCLUDE_DIR=${pyside2}/include"
-      + ";${pyside2}/include/PySide2/QtCore"
-      + ";${pyside2}/include/PySide2/QtWidgets"
-      + ";${pyside2}/include/PySide2/QtGui"
-    )
-    "-DPYSIDE_LIBRARY=PySide2::pyside2"
-  ];
+    nativeBuildInputs =
+      [
+        cmake
+        ninja
+        pkg-config
+        gfortran
+        swig
+        doxygen
+        wrapGAppsHook3
+      ]
+      ++ lib.optionals (qtVersion == 5) [
+        pyside2-tools
+        qt5.wrapQtAppsHook
+      ]
+      ++ lib.optionals (qtVersion == 6) [ qt6.wrapQtAppsHook ];
 
-  # This should work on both x86_64, and i686 linux
-  preBuild = ''
-    export NIX_LDFLAGS="-L${gfortran.cc}/lib64 -L${gfortran.cc}/lib $NIX_LDFLAGS";
-  '';
+    buildInputs =
+      [
+        boost
+        coin3d
+        eigen
+        fmt
+        gitpython # for addon manager
+        gts
+        hdf5
+        libGLU
+        libXmu
+        matplotlib
+        medfile
+        mpi
+        ode
+        opencamlib
+        pivy
+        ply # for openSCAD file support
+        py-slvs
+        pybind11
+        pycollada
+        python
+        pyyaml # (at least for) PyrateWorkbench
+        scipy
+        vtk
+        xercesc
+        yaml-cpp
+        zlib
+      ]
+      ++ lib.optionals (qtVersion == 5) [
+        libsForQt5.soqt
+        opencascade-occt_7_6
+        pyside2
+        pyside2-tools
+        shiboken2
+        qt5.qtbase
+        qt5.qttools
+        qt5.qtwayland
+        qt5.qtwebengine
+        qt5.qtxmlpatterns
+      ]
+      ++ lib.optionals (qtVersion == 6) [
+        opencascade-occt
+        pyside6
+        shiboken6
+        qt6.qtbase
+        qt6.qtsvg
+        qt6.qttools
+        qt6.qtwayland
+        qt6.qtwebengine
+      ]
+      ++ lib.optionals ifcSupport [
+        ifcopenshell
+      ]
+      ++ lib.optionals spaceNavSupport (
+        [ libspnav ] ++ lib.optionals (qtVersion == 5) [ libsForQt5.qtx11extras ]
+      );
 
-  preConfigure = ''
-    qtWrapperArgs+=(--prefix PYTHONPATH : "$PYTHONPATH")
-  '';
+    patches = [
+      ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
+      ./0002-FreeCad-OndselSolver-pkgconfig.patch
+      (fetchpatch {
+        url = "https://github.com/FreeCAD/FreeCAD/commit/8e04c0a3dd9435df0c2dec813b17d02f7b723b19.patch?full_index=1";
+        hash = "sha256-H6WbJFTY5/IqEdoi5N+7D4A6pVAmZR4D+SqDglwS18c=";
+      })
+    ];
 
-  qtWrapperArgs = [
-    "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
-    "--prefix PATH : ${libredwg}/bin"
-    "--set QT_QPA_PLATFORM xcb"
-  ];
+    cmakeFlags =
+      [
+        "-Wno-dev" # turns off warnings which otherwise makes it hard to see what is going on
+        "-DBUILD_FLAT_MESH:BOOL=ON"
+        "-DBUILD_DRAWING=ON"
+        "-DBUILD_FLAT_MESH:BOOL=ON"
+        "-DINSTALL_TO_SITEPACKAGES=OFF"
+        "-DFREECAD_USE_PYBIND11=ON"
+      ]
+      ++ lib.optionals (qtVersion == 5) [
+        "-DBUILD_QT5=ON"
+        "-DSHIBOKEN_INCLUDE_DIR=${shiboken2}/include"
+        "-DSHIBOKEN_LIBRARY=Shiboken2::libshiboken"
+        (
+          "-DPYSIDE_INCLUDE_DIR=${pyside2}/include"
+          + ";${pyside2}/include/PySide2/QtCore"
+          + ";${pyside2}/include/PySide2/QtWidgets"
+          + ";${pyside2}/include/PySide2/QtGui"
+        )
+        "-DPYSIDE_LIBRARY=PySide2::pyside2"
+      ]
+      ++ lib.optionals (qtVersion == 6) [
+        "-DBUILD_QT5=OFF"
+        "-DBUILD_QT6=ON"
+        "-DSHIBOKEN_INCLUDE_DIR=${shiboken6}/include"
+        "-DSHIBOKEN_LIBRARY=Shiboken6::libshiboken"
+        (
+          "-DPYSIDE_INCLUDE_DIR=${pyside6}/include"
+          + ";${pyside6}/include/PySide6/QtCore"
+          + ";${pyside6}/include/PySide6/QtWidgets"
+          + ";${pyside6}/include/PySide6/QtGui"
+        )
+        "-DPYSIDE_LIBRARY=PySide6::pyside6"
+      ];
 
-  postFixup = ''
-    mv $out/share/doc $out
-    ln -s $out/bin/FreeCAD $out/bin/freecad
-    ln -s $out/bin/FreeCADCmd $out/bin/freecadcmd
-  '';
-
-  passthru.tests = {
-    # Check that things such as argument parsing still work correctly with
-    # the above PYTHONPATH patch. Previously the patch used above changed
-    # the `PyConfig_InitIsolatedConfig` to `PyConfig_InitPythonConfig`,
-    # which caused the built-in interpreter to attempt (and fail) to doubly
-    # parse argv. This should catch if that ever regresses and also ensures
-    # that PYTHONPATH is still respected enough for the FreeCAD console to
-    # successfully run and check that it was included in `sys.path`.
-    python-path = runCommand "freecad-test-console" {
-      nativeBuildInputs = [ freecad ];
-    } ''
-      HOME="$(mktemp -d)" PYTHONPATH="$(pwd)/test" FreeCADCmd --log-file $out -c "if not '$(pwd)/test' in sys.path: sys.exit(1)" </dev/null
+    # This should work on both x86_64, and i686 linux
+    preBuild = ''
+      export NIX_LDFLAGS="-L${gfortran.cc.lib}/lib64 -L${gfortran.cc.lib}/lib $NIX_LDFLAGS";
     '';
-  };
 
-  meta = {
-    homepage = "https://www.freecad.org";
-    description = "General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler";
-    longDescription = ''
-      FreeCAD is an open-source parametric 3D modeler made primarily to design
-      real-life objects of any size. Parametric modeling allows you to easily
-      modify your design by going back into your model history and changing its
-      parameters.
-
-      FreeCAD allows you to sketch geometry constrained 2D shapes and use them
-      as a base to build other objects. It contains many components to adjust
-      dimensions or extract design details from 3D models to create high quality
-      production ready drawings.
-
-      FreeCAD is designed to fit a wide range of uses including product design,
-      mechanical engineering and architecture. Whether you are a hobbyist, a
-      programmer, an experienced CAD user, a student or a teacher, you will feel
-      right at home with FreeCAD.
+    preConfigure = ''
+      qtWrapperArgs+=(--prefix PYTHONPATH : "$PYTHONPATH")
     '';
-    license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ viric gebner AndersonTorres ];
-    platforms = lib.platforms.linux;
-  };
-})
+
+    qtWrapperArgs = [
+      "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
+      "--prefix PATH : ${libredwg}/bin"
+    ] ++ lib.optionals (!withWayland) [ "--set QT_QPA_PLATFORM xcb" ];
+
+    postFixup = ''
+      mv $out/share/doc $out
+      ln -s $out/doc $out/share/doc
+      ln -s $out/bin/FreeCAD $out/bin/freecad
+      ln -s $out/bin/FreeCADCmd $out/bin/freecadcmd
+    '';
+
+    passthru = {
+      tests = callPackage ./tests { };
+      updateScript = nix-update-script {
+        extraArgs = [
+          "--version-regex"
+          "([0-9.]+)"
+        ];
+      };
+    };
+
+    meta = {
+      homepage = "https://www.freecad.org";
+      description = "General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler";
+      longDescription = ''
+        FreeCAD is an open-source parametric 3D modeler made primarily to design
+        real-life objects of any size. Parametric modeling allows you to easily
+        modify your design by going back into your model history and changing its
+        parameters.
+
+        FreeCAD allows you to sketch geometry constrained 2D shapes and use them
+        as a base to build other objects. It contains many components to adjust
+        dimensions or extract design details from 3D models to create high quality
+        production ready drawings.
+
+        FreeCAD is designed to fit a wide range of uses including product design,
+        mechanical engineering and architecture. Whether you are a hobbyist, a
+        programmer, an experienced CAD user, a student or a teacher, you will feel
+        right at home with FreeCAD.
+      '';
+      license = lib.licenses.lgpl2Plus;
+      maintainers = with lib.maintainers; [
+        srounce
+        grimmauld
+      ];
+      platforms = lib.platforms.linux;
+    };
+  })
+)

@@ -1,17 +1,23 @@
-{ fetchFromGitHub, lib, nix-update-script, rustPlatform }:
+{
+  fetchFromGitHub,
+  lib,
+  nix-update-script,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "sway-overfocus";
-  version = "0.2.3-fix";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "korreman";
-    repo = pname;
+    repo = "sway-overfocus";
     rev = "v${version}";
-    hash = "sha256-KHbYlxgrrZdNKJ7R9iVflbbP1c6qohM/NHBSYuzxEt4=";
+    hash = "sha256-trpjKA0TV8InSfViIXKnMDeZeFXZfavpiU7/R3JDQkQ=";
   };
 
-  cargoHash = "sha256-zp6PSu8P+ZUhrqi5Vxpe+z9zBaSkdVQBMGNP0FVOviQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-RtiXcUvId+bf8t74Ld2JXQGx+o094Qo3O5kt+ldm1Ag=";
 
   # Crate without tests.
   doCheck = false;
@@ -27,4 +33,3 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "sway-overfocus";
   };
 }
-

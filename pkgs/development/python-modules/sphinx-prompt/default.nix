@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, poetry-core
-, poetry-dynamic-versioning
+  # build-system
+  poetry-core,
+  poetry-dynamic-versioning,
 
-# dependencies
-, docutils
-, pygments
-, sphinx
+  # dependencies
+  docutils,
+  pygments,
+  sphinx,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sbrunner";
     repo = "sphinx-prompt";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-/XxUSsW8Bowks7P+d6iTlklyMIfTb2otXva/VtRVAkM=";
   };
 
@@ -36,7 +36,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     poetry-core
     poetry-dynamic-versioning
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -51,15 +50,13 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # versions >=1.8.0 cannot be build from source
   passthru.skipBulkUpdate = true;
 
   meta = with lib; {
-    description = "A sphinx extension for creating unselectable prompt";
+    description = "Sphinx extension for creating unselectable prompt";
     homepage = "https://github.com/sbrunner/sphinx-prompt";
     license = licenses.bsd3;
     maintainers = with maintainers; [ kaction ];

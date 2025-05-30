@@ -1,22 +1,22 @@
-{ buildPythonPackage
-, cloudpickle
-, dm-haiku
-, einops
-, fetchFromGitHub
-, flax
-, hypothesis
-, jaxlib
-, keras
-, lib
-, poetry-core
-, pytestCheckHook
-, pyyaml
-, rich
-, tensorflow
-, treeo
-, torchmetrics
-, pythonRelaxDepsHook
-, torch
+{
+  buildPythonPackage,
+  cloudpickle,
+  dm-haiku,
+  einops,
+  fetchFromGitHub,
+  flax,
+  hypothesis,
+  jaxlib,
+  keras,
+  lib,
+  poetry-core,
+  pytestCheckHook,
+  pyyaml,
+  rich,
+  tensorflow,
+  treeo,
+  torchmetrics,
+  torch,
 }:
 
 buildPythonPackage rec {
@@ -26,8 +26,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "cgarciae";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "treex";
+    tag = version;
     hash = "sha256-ObOnbtAT4SlrwOms1jtn7/XKZorGISGY6VuhQlC3DaQ=";
   };
 
@@ -43,7 +43,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   buildInputs = [ jaxlib ];

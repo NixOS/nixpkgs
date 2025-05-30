@@ -1,41 +1,48 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, alsa-lib
-, libGL
-, libX11
-, libXcursor
-, libXext
-, libXi
-, libXinerama
-, libXrandr
-, libXxf86vm
-, go-licenses
-, pkg-config
-, zip
-, advancecomp
-, makeWrapper
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  alsa-lib,
+  libGL,
+  libX11,
+  libXcursor,
+  libXext,
+  libXi,
+  libXinerama,
+  libXrandr,
+  libXxf86vm,
+  go-licenses,
+  pkg-config,
+  zip,
+  advancecomp,
+  makeWrapper,
+  nixosTests,
+  strip-nondeterminism,
 }:
 
 buildGoModule rec {
   pname = "aaaaxy";
-  version = "1.5.42";
+  version = "1.6.194";
 
   src = fetchFromGitHub {
     owner = "divVerent";
-    repo = pname;
+    repo = "aaaaxy";
     rev = "v${version}";
-    hash = "sha256-RfjEr0oOtLcrHKQj1dYbykRbHoGoi0o7D3hjVG3siIQ=";
+    hash = "sha256-4iL3+GeyOZoZN8IXo0jjSq3hYHKBTpytk8owXMdfACo=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-q/nDfh+A2eJDAaSWN4Xsgxp76AKsYIX7PNn/psBPmg0=";
+  vendorHash = "sha256-XBcrs6G3Kq9WsODegy2KxqSp+qwr+NpdLJLa3qmW9kA=";
 
   buildInputs = [
     alsa-lib
     libGL
-    libX11 libXcursor libXext libXi libXinerama libXrandr
+    libX11
+    libXcursor
+    libXext
+    libXi
+    libXinerama
+    libXrandr
     libXxf86vm
   ];
 
@@ -45,40 +52,49 @@ buildGoModule rec {
     zip
     advancecomp
     makeWrapper
+    strip-nondeterminism
   ];
 
-  outputs = [ "out" "testing_infra" ];
+  outputs = [
+    "out"
+    "testing_infra"
+  ];
 
   postPatch = ''
     # Without patching, "go run" fails with the error message:
     # package github.com/google/go-licenses: no Go files in /build/source/vendor/github.com/google/go-licenses
-    substituteInPlace scripts/build-licenses.sh --replace \
+    substituteInPlace scripts/build-licenses.sh --replace-fail \
       '$GO run ''${GO_FLAGS} github.com/google/go-licenses' 'go-licenses'
 
     patchShebangs scripts/
     substituteInPlace scripts/regression-test-demo.sh \
-      --replace 'sh scripts/run-timedemo.sh' "$testing_infra/scripts/run-timedemo.sh"
+      --replace-fail 'sh scripts/run-timedemo.sh' "$testing_infra/scripts/run-timedemo.sh"
 
-    substituteInPlace Makefile --replace \
+    substituteInPlace Makefile --replace-fail \
       'CPPFLAGS ?= -DNDEBUG' \
       'CPPFLAGS ?= -DNDEBUG -D_GLFW_GLX_LIBRARY=\"${lib.getLib libGL}/lib/libGL.so\" -D_GLFW_EGL_LIBRARY=\"${lib.getLib libGL}/lib/libEGL.so\"'
   '';
 
-  overrideModAttrs = (_: {
-    # We can't patch in the path to libGL directly because
-    # this is a fixed output derivation and when the path to libGL
-    # changes, the hash would change.
-    # To work around this, use environment variables.
-    postBuild = ''
-      substituteInPlace 'vendor/github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver/opengl/gl/procaddr_others.go' \
-        --replace \
-        '{"libGL.so", "libGL.so.2", "libGL.so.1", "libGL.so.0"}' \
-        '{os.Getenv("EBITENGINE_LIBGL")}' \
-        --replace \
-        '{"libGLESv2.so", "libGLESv2.so.2", "libGLESv2.so.1", "libGLESv2.so.0"}' \
-        '{os.Getenv("EBITENGINE_LIBGLESv2")}'
-    '';
-  });
+  overrideModAttrs = (
+    _: {
+      # We can't patch in the path to libGL directly because
+      # this is a fixed output derivation and when the path to libGL
+      # changes, the hash would change.
+      # To work around this, use environment variables.
+      postBuild = ''
+        substituteInPlace 'vendor/github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver/opengl/gl/procaddr_linbsd.go' \
+          --replace-fail \
+          'import (' \
+          'import ("os"' \
+          --replace-fail \
+          '{"libGL.so", "libGL.so.2", "libGL.so.1", "libGL.so.0"}' \
+          '{os.Getenv("EBITENGINE_LIBGL")}' \
+          --replace-fail \
+          '{"libGLESv2.so", "libGLESv2.so.2", "libGLESv2.so.1", "libGLESv2.so.0"}' \
+          '{os.Getenv("EBITENGINE_LIBGLESv2")}'
+      '';
+    }
+  );
 
   makeFlags = [
     "BUILDTYPE=release"
@@ -113,7 +129,8 @@ buildGoModule rec {
   strictDeps = true;
 
   meta = with lib; {
-    description = "A nonlinear 2D puzzle platformer taking place in impossible spaces";
+    description = "Nonlinear 2D puzzle platformer taking place in impossible spaces";
+    mainProgram = "aaaaxy";
     homepage = "https://divverent.github.io/aaaaxy/";
     license = licenses.asl20;
     maintainers = with maintainers; [ Luflosi ];

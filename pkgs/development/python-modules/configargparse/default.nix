@@ -1,10 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-, pyyaml
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  pytestCheckHook,
+  pyyaml,
+  pythonAtLeast,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,27 +19,33 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bw2";
     repo = "ConfigArgParse";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-m77MY0IZ1AJkd4/Y7ltApvdF9y17Lgn92WZPYTCU9tA=";
   };
 
-  passthru.optional-dependencies = {
-    yaml = [
-      pyyaml
-    ];
+  patches = [
+    # https://github.com/bw2/ConfigArgParse/pull/295
+    ./python3.13-compat.patch
+  ];
+
+  optional-dependencies = {
+    yaml = [ pyyaml ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
     mock
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "configargparse"
+  disabledTests = lib.optionals (pythonAtLeast "3.13") [
+    # regex mismatch
+    "testMutuallyExclusiveArgs"
   ];
 
+  pythonImportsCheck = [ "configargparse" ];
+
   meta = with lib; {
-    description = "A drop-in replacement for argparse";
+    description = "Drop-in replacement for argparse";
     homepage = "https://github.com/bw2/ConfigArgParse";
     changelog = "https://github.com/bw2/ConfigArgParse/releases/tag/${version}";
     license = licenses.mit;

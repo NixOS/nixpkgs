@@ -1,30 +1,32 @@
-{ lib
-, brotli
-, buildPythonPackage
-, cython
-, execnet
-, fetchFromGitHub
-, jinja2
-, pytestCheckHook
-, pythonOlder
-, pyzmq
-, redis
-, setuptools
-, sqlalchemy
+{
+  lib,
+  brotli,
+  buildPythonPackage,
+  cython,
+  execnet,
+  fetchFromGitHub,
+  jinja2,
+  pytestCheckHook,
+  pytest-rerunfailures,
+  pythonOlder,
+  pyzmq,
+  redis,
+  setuptools,
+  sqlalchemy,
 }:
 
 buildPythonPackage rec {
   pname = "logbook";
-  version = "1.7.0.post0";
+  version = "1.8.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "getlogbook";
     repo = "logbook";
-    rev = "refs/tags/${version}";
-    hash = "sha256-bqfFSd7CPYII/3AJCMApqmAYrAWjecOb3JA17FPFMIc=";
+    tag = version;
+    hash = "sha256-Uq5/IdbwewfTCR+lbF8UcUhQe76EHpt4CFkbi3SLGLk=";
   };
 
   nativeBuildInputs = [
@@ -32,25 +34,13 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  passthru.optional-dependencies = {
-    execnet = [
-      execnet
-    ];
-    sqlalchemy = [
-      sqlalchemy
-    ];
-    redis = [
-      redis
-    ];
-    zmq = [
-      pyzmq
-    ];
-    compression = [
-      brotli
-    ];
-    jinja = [
-      jinja2
-    ];
+  optional-dependencies = {
+    execnet = [ execnet ];
+    sqlalchemy = [ sqlalchemy ];
+    redis = [ redis ];
+    zmq = [ pyzmq ];
+    compression = [ brotli ];
+    jinja = [ jinja2 ];
     all = [
       brotli
       execnet
@@ -63,14 +53,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+    pytest-rerunfailures
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "logbook"
-  ];
+  pythonImportsCheck = [ "logbook" ];
 
   disabledTests = [
     # Test require Redis instance
@@ -78,10 +67,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A logging replacement for Python";
+    description = "Logging replacement for Python";
     homepage = "https://logbook.readthedocs.io/";
-    changelog = "https://github.com/getlogbook/logbook/blob/${version}/CHANGES";
+    changelog = "https://github.com/getlogbook/logbook/blob/${src.tag}/CHANGES";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

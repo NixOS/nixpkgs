@@ -13,17 +13,23 @@ let
     # specifies how to format a key/value pair
     mkKeyValue = generators.mkKeyValueDefault {
       # specifies the generated string for a subset of nix values
-      mkValueString = v:
-             if v == true then ''"yes"''
-        else if v == false then ''"no"''
-        else if isString v then ''"${v}"''
+      mkValueString =
+        v:
+        if v == true then
+          ''"yes"''
+        else if v == false then
+          ''"no"''
+        else if isString v then
+          ''"${v}"''
         # and delegates all other values to the default generator
-        else generators.mkValueStringDefault {} v;
+        else
+          generators.mkValueStringDefault { } v;
     } ":";
   };
 
+in
 # the INI file can now be given as plain old nix values
-in customToINI {
+customToINI {
   main = {
     pushinfo = true;
     autopush = false;
@@ -54,4 +60,4 @@ merge:"diff3"
 Nix store paths can be converted to strings by enclosing a derivation attribute like so: `"${drv}"`.
 :::
 
-Detailed documentation for each generator can be found in `lib/generators.nix`.
+Detailed documentation for each generator can be found [here](#sec-functions-library-generators)

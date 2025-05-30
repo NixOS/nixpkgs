@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "urxvt-autocomplete-all-the-things";
@@ -24,4 +28,3 @@ stdenv.mkDerivation rec {
     platforms = with platforms; unix;
   };
 }
-

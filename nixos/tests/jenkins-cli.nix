@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, ...} : rec {
+{ pkgs, ... }:
+rec {
   name = "jenkins-cli";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ pamplemousse ];
@@ -27,4 +28,4 @@ import ./make-test-python.nix ({ pkgs, ...} : rec {
         "jenkins-cli -auth admin:$(cat /var/lib/jenkins/secrets/initialAdminPassword)"
     )
   '';
-})
+}

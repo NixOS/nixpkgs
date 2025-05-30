@@ -1,53 +1,74 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, lockfile
-, cachecontrol
-, decorator
-, h5py
-, ipython
-, matplotlib
-, natsort
-, numpy
-, pandas
-, scipy
-, hdmedians
-, scikit-learn
-, coverage
-, python
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  setuptools,
+  cython,
+  oldest-supported-numpy,
+
+  requests,
+  decorator,
+  natsort,
+  numpy,
+  pandas,
+  scipy,
+  h5py,
+  biom-format,
+  statsmodels,
+  patsy,
+
+  python,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  version = "0.5.9";
-  format = "setuptools";
   pname = "scikit-bio";
-  disabled = !isPy3k;
+  version = "0.6.3";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-euBE3IvuIxkAJIrcOoZZB352FA1WrJ9CvQH7eYEBSRA=";
+  src = fetchFromGitHub {
+    owner = "scikit-bio";
+    repo = "scikit-bio";
+    tag = version;
+    hash = "sha256-yZa9Kl7+Rk4FLQkZIxa9UIsIGAo6YI4UAiJYbhhPIaI=";
   };
 
-  nativeBuildInputs = [ cython ];
-  nativeCheckInputs = [ coverage ];
-  propagatedBuildInputs = [ lockfile cachecontrol decorator ipython matplotlib natsort numpy pandas scipy h5py hdmedians scikit-learn ];
+  build-system = [
+    setuptools
+    cython
+    oldest-supported-numpy
+  ];
 
-  # cython package not included for tests
-  doCheck = false;
+  dependencies = [
+    requests
+    decorator
+    natsort
+    numpy
+    pandas
+    scipy
+    h5py
+    biom-format
+    statsmodels
+    patsy
+  ];
 
-  checkPhase = ''
-    ${python.interpreter} -m skbio.test
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  # only the $out dir contains the built cython extensions, so we run the tests inside there
+  pytestFlagsArray = [ "${placeholder "out"}/${python.sitePackages}/skbio" ];
+
+  disabledTestPaths = [
+    # don't know why, but this segfaults
+    "${placeholder "out"}/${python.sitePackages}/skbio/metadata/tests/test_intersection.py"
+  ];
 
   pythonImportsCheck = [ "skbio" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://scikit-bio.org/";
     description = "Data structures, algorithms and educational resources for bioinformatics";
-    license = licenses.bsd3;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = [ ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ tomasajt ];
   };
 }

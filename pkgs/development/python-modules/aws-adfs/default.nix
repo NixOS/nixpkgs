@@ -1,20 +1,20 @@
-{ lib
-, boto3
-, botocore
-, buildPythonPackage
-, click
-, configparser
-, fetchFromGitHub
-, fido2
-, lxml
-, poetry-core
-, pyopenssl
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, requests-kerberos
-, toml
+{
+  lib,
+  boto3,
+  botocore,
+  buildPythonPackage,
+  click,
+  configparser,
+  fetchFromGitHub,
+  fido2,
+  lxml,
+  poetry-core,
+  pyopenssl,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-kerberos,
+  toml,
 }:
 
 buildPythonPackage rec {
@@ -26,21 +26,21 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "venth";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "aws-adfs";
+    tag = "v${version}";
     hash = "sha256-ZzQ92VBa8CApd0WkfPrUZsEZICK2fhwmt45P2sx2mK0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
     "configparser"
+    "requests-kerberos"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     boto3
     botocore
     click
@@ -61,9 +61,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d);
   '';
 
-  pythonImportsCheck = [
-    "aws_adfs"
-  ];
+  pythonImportsCheck = [ "aws_adfs" ];
 
   meta = with lib; {
     description = "Command line tool to ease AWS CLI authentication against ADFS";
@@ -71,5 +69,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/venth/aws-adfs/releases/tag/v${version}";
     license = licenses.psfl;
     maintainers = with maintainers; [ bhipple ];
+    mainProgram = "aws-adfs";
   };
 }

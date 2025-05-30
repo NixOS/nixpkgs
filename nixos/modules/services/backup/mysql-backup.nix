@@ -1,26 +1,76 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
-
-  inherit (pkgs) mariadb gzip;
-
   cfg = config.services.mysqlBackup;
   defaultUser = "mysqlbackup";
+
+  # Newer mariadb versions warn of the usage of 'mysqldump' and recommend 'mariadb-dump' (https://mariadb.com/kb/en/mysqldump/)
+  dumpBinary =
+    if
+      (
+        lib.getName config.services.mysql.package == lib.getName pkgs.mariadb
+        && lib.versionAtLeast config.services.mysql.package.version "11.0.0"
+      )
+    then
+      "${config.services.mysql.package}/bin/mariadb-dump"
+    else
+      "${config.services.mysql.package}/bin/mysqldump";
+
+  compressionAlgs = {
+    gzip = rec {
+      pkg = pkgs.gzip;
+      ext = ".gz";
+      minLevel = 1;
+      maxLevel = 9;
+      cmd = compressionLevelFlag: "${pkg}/bin/gzip -c ${cfg.gzipOptions} ${compressionLevelFlag}";
+    };
+    xz = rec {
+      pkg = pkgs.xz;
+      ext = ".xz";
+      minLevel = 0;
+      maxLevel = 9;
+      cmd = compressionLevelFlag: "${pkg}/bin/xz -z -c ${compressionLevelFlag} -";
+    };
+    zstd = rec {
+      pkg = pkgs.zstd;
+      ext = ".zst";
+      minLevel = 1;
+      maxLevel = 19;
+      cmd = compressionLevelFlag: "${pkg}/bin/zstd ${compressionLevelFlag} -";
+    };
+  };
+
+  compressionLevelFlag = lib.optionalString (cfg.compressionLevel != null) (
+    "-" + toString cfg.compressionLevel
+  );
+
+  selectedAlg = compressionAlgs.${cfg.compressionAlg};
+  compressionCmd = selectedAlg.cmd compressionLevelFlag;
+
+  shouldUseSingleTransaction =
+    db:
+    if lib.isBool cfg.singleTransaction then
+      cfg.singleTransaction
+    else
+      lib.elem db cfg.singleTransaction;
 
   backupScript = ''
     set -o pipefail
     failed=""
-    ${concatMapStringsSep "\n" backupDatabaseScript cfg.databases}
+    ${lib.concatMapStringsSep "\n" backupDatabaseScript cfg.databases}
     if [ -n "$failed" ]; then
       echo "Backup of database(s) failed:$failed"
       exit 1
     fi
   '';
+
   backupDatabaseScript = db: ''
-    dest="${cfg.location}/${db}.gz"
-    if ${mariadb}/bin/mysqldump ${optionalString cfg.singleTransaction "--single-transaction"} ${db} | ${gzip}/bin/gzip -c > $dest.tmp; then
+    dest="${cfg.location}/${db}${selectedAlg.ext}"
+    if ${dumpBinary} ${lib.optionalString (shouldUseSingleTransaction db) "--single-transaction"} ${db} | ${compressionCmd} > $dest.tmp; then
       mv $dest.tmp $dest
       echo "Backed up to $dest"
     else
@@ -31,59 +81,111 @@ let
   '';
 
 in
-
 {
   options = {
-
     services.mysqlBackup = {
+      enable = lib.mkEnableOption "MySQL backups";
 
-      enable = mkEnableOption (lib.mdDoc "MySQL backups");
-
-      calendar = mkOption {
-        type = types.str;
+      calendar = lib.mkOption {
+        type = lib.types.str;
         default = "01:15:00";
-        description = lib.mdDoc ''
+        description = ''
           Configured when to run the backup service systemd unit (DayOfWeek Year-Month-Day Hour:Minute:Second).
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      compressionAlg = lib.mkOption {
+        type = lib.types.enum (lib.attrNames compressionAlgs);
+        default = "gzip";
+        description = ''
+          Compression algorithm to use for database dumps.
+        '';
+      };
+
+      compressionLevel = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
+        default = null;
+        description = ''
+          Compression level to use for ${lib.concatStringsSep ", " (lib.init (lib.attrNames compressionAlgs))} or ${lib.last (lib.attrNames compressionAlgs)}.
+          ${lib.concatStringsSep "\n" (
+            lib.mapAttrsToList (
+              name: algo: "- For ${name}: ${toString algo.minLevel}-${toString algo.maxLevel}"
+            ) compressionAlgs
+          )}
+
+          :::{.note}
+          If compression level is also specified in gzipOptions, the gzipOptions value will be overwritten
+          :::
+        '';
+      };
+
+      user = lib.mkOption {
+        type = lib.types.str;
         default = defaultUser;
-        description = lib.mdDoc ''
+        description = ''
           User to be used to perform backup.
         '';
       };
 
-      databases = mkOption {
-        default = [];
-        type = types.listOf types.str;
-        description = lib.mdDoc ''
+      databases = lib.mkOption {
+        default = [ ];
+        type = lib.types.listOf lib.types.str;
+        description = ''
           List of database names to dump.
         '';
       };
 
-      location = mkOption {
-        type = types.path;
+      location = lib.mkOption {
+        type = lib.types.path;
         default = "/var/backup/mysql";
-        description = lib.mdDoc ''
-          Location to put the gzipped MySQL database dumps.
+        description = ''
+          Location to put the compressed MySQL database dumps.
         '';
       };
 
-      singleTransaction = mkOption {
+      singleTransaction = lib.mkOption {
         default = false;
-        type = types.bool;
-        description = lib.mdDoc ''
-          Whether to create database dump in a single transaction
+        type = lib.types.oneOf [
+          lib.types.bool
+          (lib.types.listOf lib.types.str)
+        ];
+        description = ''
+          Whether to create database dump in a single transaction.
+          Can be either a boolean for all databases or a list of database names.
+        '';
+      };
+
+      gzipOptions = lib.mkOption {
+        default = "--no-name --rsyncable";
+        type = lib.types.str;
+        description = ''
+          Command line options to use when invoking `gzip`.
+          Only used when compression is set to "gzip".
+          If compression level is specified both here and in compressionLevel, the compressionLevel value will take precedence.
         '';
       };
     };
-
   };
 
-  config = mkIf cfg.enable {
-    users.users = optionalAttrs (cfg.user == defaultUser) {
+  config = lib.mkIf cfg.enable {
+    # assert config to be correct
+    assertions = [
+      {
+        assertion =
+          cfg.compressionLevel == null
+          || selectedAlg.minLevel <= cfg.compressionLevel && cfg.compressionLevel <= selectedAlg.maxLevel;
+        message = "${cfg.compressionAlg} compression level must be between ${toString selectedAlg.minLevel} and ${toString selectedAlg.maxLevel}";
+      }
+      {
+        assertion =
+          !(lib.isList cfg.singleTransaction)
+          || lib.all (db: lib.elem db cfg.databases) cfg.singleTransaction;
+        message = "All databases in singleTransaction must be included in the databases option";
+      }
+    ];
+
+    # ensure unix user to be used to perform backup exist.
+    users.users = lib.optionalAttrs (cfg.user == defaultUser) {
       ${defaultUser} = {
         isSystemUser = true;
         createHome = false;
@@ -92,15 +194,21 @@ in
       };
     };
 
-    services.mysql.ensureUsers = [{
-      name = cfg.user;
-      ensurePermissions = with lib;
-        let
-          privs = "SELECT, SHOW VIEW, TRIGGER, LOCK TABLES";
-          grant = db: nameValuePair "${db}.*" privs;
-        in
-          listToAttrs (map grant cfg.databases);
-    }];
+    # add the compression tool to the system environment.
+    environment.systemPackages = [ selectedAlg.pkg ];
+
+    # ensure database user to be used to perform backup exist.
+    services.mysql.ensureUsers = [
+      {
+        name = cfg.user;
+        ensurePermissions =
+          let
+            privs = "SELECT, SHOW VIEW, TRIGGER, LOCK TABLES";
+            grant = db: lib.nameValuePair "\\`${db}\\`.*" privs;
+          in
+          lib.listToAttrs (map grant cfg.databases);
+      }
+    ];
 
     systemd = {
       timers.mysql-backup = {
@@ -127,4 +235,5 @@ in
     };
   };
 
+  meta.maintainers = [ lib.maintainers._6543 ];
 }

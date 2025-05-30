@@ -1,40 +1,22 @@
-{ lib
-, fetchurl
-, appimageTools
+{
+  stdenv,
+  lib,
+  callPackage,
 }:
-
-appimageTools.wrapType2 rec {
+let
   pname = "miru";
-  version = "4.5.10";
-
-  src = fetchurl {
-    url = "https://github.com/ThaUnknown/miru/releases/download/v${version}/linux-Miru-${version}.AppImage";
-    name = "${pname}-${version}.AppImage";
-    sha256 = "sha256-ptaviLwr0X/MuF517YLW7i9+rtnktcpgHVqMHn+tXWg=";
-  };
-
-  extraInstallCommands =
-    let
-      contents = appimageTools.extractType2 { inherit pname version src; };
-    in
-    ''
-      mkdir -p "$out/share/applications"
-      mkdir -p "$out/share/lib/miru"
-      cp -r ${contents}/{locales,resources} "$out/share/lib/miru"
-      cp -r ${contents}/usr/* "$out"
-      cp "${contents}/${pname}.desktop" "$out/share/applications/"
-      mv "$out/bin/${pname}-${version}" "$out/bin/${pname}"
-      substituteInPlace $out/share/applications/${pname}.desktop --replace 'Exec=AppRun' 'Exec=${pname}'
-    '';
-
-  meta = with lib; {
+  version = "5.5.10";
+  meta = {
     description = "Stream anime torrents, real-time with no waiting for downloads";
-    homepage = "https://github.com/ThaUnknown/miru#readme";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.d4ilyrun ];
+    homepage = "https://miru.watch";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      d4ilyrun
+      matteopacini
+    ];
     mainProgram = "miru";
 
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
 
     longDescription = ''
@@ -50,4 +32,25 @@ appimageTools.wrapType2 rec {
       instead of flat out closing MPV.
     '';
   };
-}
+  passthru = {
+    updateScript = ./update.sh;
+  };
+in
+if stdenv.hostPlatform.isDarwin then
+  callPackage ./darwin.nix {
+    inherit
+      pname
+      version
+      meta
+      passthru
+      ;
+  }
+else
+  callPackage ./linux.nix {
+    inherit
+      pname
+      version
+      meta
+      passthru
+      ;
+  }

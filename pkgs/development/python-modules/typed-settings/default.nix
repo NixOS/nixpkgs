@@ -1,71 +1,94 @@
-{ lib
-, attrs
-, buildPythonPackage
-, cattrs
-, click
-, click-option-group
-, fetchPypi
-, hatchling
-, pytestCheckHook
-, pythonOlder
-, tomli
-, typing-extensions
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  cattrs,
+  click,
+  click-option-group,
+  fetchPypi,
+  hatch-vcs,
+  hatchling,
+  hypothesis,
+  jinja2,
+  pydantic,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  rich-click,
+  sybil,
+  tomli,
+  typing-extensions,
 }:
-
 buildPythonPackage rec {
   pname = "typed-settings";
-  version = "23.1.1";
-  format = "pyproject";
+  version = "24.6.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "typed_settings";
     inherit version;
-    hash = "sha256-0esWiZ0dVnIJ+TDSD+0+zq63I1JcKH3iVe34pFRQX9U=";
+    hash = "sha256-mlWV3jP4BFKiA44Bi8RVCP/8I4qHUvCPXAPcjnvA0eI=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
-    attrs
-    cattrs
-    click-option-group
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  dependencies = lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  passthru.optional-dependencies = {
-    click = [
+  optional-dependencies = {
+    all = [
+      attrs
+      cattrs
       click
+      click-option-group
+      jinja2
+      pydantic
     ];
+    attrs = [ attrs ];
+    cattrs = [ cattrs ];
+    click = [ click ];
+    option-groups = [
+      click
+      click-option-group
+    ];
+    jinja = [ jinja2 ];
+    pydantic = [ pydantic ];
   };
 
-  checkInputs = [
-    pytestCheckHook
-    typing-extensions
-  ] ++ passthru.optional-dependencies.click;
+  nativeBuildInputs = [ hatch-vcs ];
 
-  pytestFlagsArray = [
-    "tests"
-  ];
+  nativeCheckInputs =
+    [
+      hypothesis
+      pytest-cov-stub
+      pytestCheckHook
+      rich-click
+      sybil
+    ]
+    ++ (lib.optional (pythonOlder "3.11") typing-extensions)
+    ++ (lib.flatten (lib.attrValues optional-dependencies));
+
+  pytestFlagsArray = [ "tests" ];
 
   disabledTests = [
-    # AssertionError: assert [OptionInfo(p...
-    "test_deep_options"
+    # 1Password CLI is not available
+    "TestOnePasswordLoader"
+    "test_handle_op"
   ];
 
-  pythonImportsCheck = [
-    "typed_settings"
+  disabledTestPaths = [
+    # 1Password CLI is not available
+    "tests/test_onepassword.py"
   ];
 
-  meta = {
+  pythonImportsCheck = [ "typed_settings" ];
+
+  meta = with lib; {
     description = "Typed settings based on attrs classes";
     homepage = "https://gitlab.com/sscherfke/typed-settings";
     changelog = "https://gitlab.com/sscherfke/typed-settings/-/blob/${version}/CHANGELOG.rst";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fridh ];
+    license = licenses.mit;
+    maintainers = [ ];
   };
 }

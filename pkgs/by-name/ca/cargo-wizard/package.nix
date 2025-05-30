@@ -1,21 +1,23 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-wizard";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "kobzol";
     repo = "cargo-wizard";
     rev = "v${version}";
-    hash = "sha256-b8PFJphnTTzW0+f6p59CvQeZMnK6Szp0l/666guDbuc=";
+    hash = "sha256-oFPSgjXZ+Kq59tV/7s6WPF6FHXENoZv8D245yyT0E9E=";
   };
 
-  cargoHash = "sha256-qBqFnvmGKZQv0vWigsUKELDNqy245GqBm3Nif2hAa78=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ClulQP+1/RLvOWWB3uKTCn2Sx3+TO25qRs456DWHKu0=";
 
   preCheck = ''
     export PATH=$PATH:$PWD/target/${stdenv.hostPlatform.rust.rustcTarget}/$cargoBuildType

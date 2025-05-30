@@ -1,4 +1,9 @@
-{ mkDerivation, haskellPackages, fetchurl, lib }:
+{
+  mkDerivation,
+  haskellPackages,
+  fetchurl,
+  lib,
+}:
 
 mkDerivation rec {
   pname = "nota";
@@ -33,8 +38,9 @@ mkDerivation rec {
     time
   ];
 
-  description = "The most beautiful command line calculator";
+  description = "Most beautiful command line calculator";
   homepage = "https://kary.us/nota";
   license = lib.licenses.mpl20;
-  maintainers = with lib.maintainers; [ dtzWill ];
+  maintainers = [ ];
+  mainProgram = "nota";
 }

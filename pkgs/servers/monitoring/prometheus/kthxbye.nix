@@ -1,15 +1,16 @@
-{ pkgs
-, lib
-, buildGoModule
-, fetchFromGitHub
-, nixosTests
+{
+  pkgs,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule rec {
   pname = "kthxbye";
   version = "0.16";
 
-  src = fetchFromGitHub rec {
+  src = fetchFromGitHub {
     owner = "prymitive";
     repo = "kthxbye";
     rev = "v${version}";
@@ -32,6 +33,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Prometheus Alertmanager alert acknowledgement management daemon";
+    mainProgram = "kthxbye";
     homepage = "https://github.com/prymitive/kthxbye";
     license = licenses.asl20;
     maintainers = with maintainers; [ nukaduka ];

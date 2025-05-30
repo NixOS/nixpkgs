@@ -1,0 +1,11 @@
+--- a/sertop/sertop_loader.ml	2024-11-14 11:49:00.887576232 +0100
++++ b/sertop/sertop_loader.ml	2024-11-14 11:49:32.433659096 +0100
+@@ -51,7 +51,7 @@
+   else None
+ 
+ let plugin_handler user_handler =
+-  let loader = Option.default (Fl_dynload.load_packages ~debug:false) user_handler in
++  let loader = Option.default (Fl_dynload.load_packages ?loadfile:None ~debug:false) user_handler in
+   fun fl_pkg ->
+     try
+       let _, fl_pkg = Mltop.PluginSpec.repr fl_pkg in

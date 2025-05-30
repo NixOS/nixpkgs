@@ -1,23 +1,37 @@
-{ stdenv, lib, unzip, autoPatchelfHook
-, fetchurl, makeWrapper
-, alsa-lib, mesa, nss, nspr, systemd
-, makeDesktopItem, copyDesktopItems, wrapGAppsHook
-, metaCommon
+{
+  stdenv,
+  lib,
+  unzip,
+  autoPatchelfHook,
+  fetchurl,
+  makeWrapper,
+  alsa-lib,
+  libgbm,
+  nss,
+  nspr,
+  systemd,
+  makeDesktopItem,
+  copyDesktopItems,
+  wrapGAppsHook3,
+  metaCommon,
 }:
 
 let
   pname = "trilium-desktop";
-  version = "0.63.3";
+  version = "0.63.6";
 
   linuxSource.url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
-  linuxSource.sha256 = "1dcq7s4lcp9bc0p4ylzxyfc020xvj7scrlsddzwcnp8mqz5ckik9";
+  linuxSource.sha256 = "12kgq5x4f93hxz057zqhz0x1y0rxfxh90fv9fjjs3jrnk0by7f33";
 
   darwinSource.url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-mac-x64-${version}.zip";
-  darwinSource.sha256 = "0m9m68f9jg10nfn719q6wahwvi13lpc2hmandw7ddxfslylwq29s";
+  darwinSource.sha256 = "0ry512cn622av3nm8rnma2yvqc71rpzax639872ivvc5vm4rsc30";
 
   meta = metaCommon // {
     mainProgram = "trilium";
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
   };
 
   linux = stdenv.mkDerivation rec {
@@ -29,13 +43,13 @@ let
     nativeBuildInputs = [
       autoPatchelfHook
       makeWrapper
-      wrapGAppsHook
+      wrapGAppsHook3
       copyDesktopItems
     ];
 
     buildInputs = [
       alsa-lib
-      mesa
+      libgbm
       nss
       nspr
       stdenv.cc.cc
@@ -96,4 +110,4 @@ let
   };
 
 in
-  if stdenv.isDarwin then darwin else linux
+if stdenv.hostPlatform.isDarwin then darwin else linux

@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, ciso8601
-, fetchFromGitHub
-, msgpack
-, orjson
-, pendulum
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, setuptools
-, tomli
-, tomli-w
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  ciso8601,
+  fetchFromGitHub,
+  msgpack,
+  orjson,
+  pendulum,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  setuptools,
+  tomli,
+  tomli-w,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "mashumaro";
-  version = "3.12";
+  version = "3.15";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,33 +26,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Fatal1ty";
     repo = "mashumaro";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-sSwj/8j+vPX7M8l2h4bPs8WnjzIN2WIpyd7/NcGaExg=";
+    tag = "v${version}";
+    hash = "sha256-Zv2FijxYOLGflJ3bc3udkM3SXgHHzHIeCGHlfybyLGE=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    typing-extensions
-  ];
+  dependencies = [ typing-extensions ];
 
-  passthru.optional-dependencies = {
-    orjson = [
-      orjson
-    ];
-    msgpack = [
-      msgpack
-    ];
-    yaml = [
-      pyyaml
-    ];
-    toml = [
-      tomli-w
-    ] ++ lib.optionals (pythonOlder "3.11") [
-      tomli
-    ];
+  optional-dependencies = {
+    orjson = [ orjson ];
+    msgpack = [ msgpack ];
+    yaml = [ pyyaml ];
+    toml = [ tomli-w ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
   };
 
   nativeCheckInputs = [
@@ -59,11 +46,9 @@ buildPythonPackage rec {
     pendulum
     pytest-mock
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "mashumaro"
-  ];
+  pythonImportsCheck = [ "mashumaro" ];
 
   meta = with lib; {
     description = "Serialization library on top of dataclasses";

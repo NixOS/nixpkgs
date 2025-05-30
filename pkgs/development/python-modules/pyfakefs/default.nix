@@ -1,62 +1,57 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# tests
-, pytestCheckHook
+  # tests
+  pandas,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyfakefs";
-  version = "5.3.2";
+  version = "5.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qDd2o8EEbU0QPy9TACmqbN/18Dht/9WcFe4WkmE1STw=";
+    hash = "sha256-flRX7jzGcGnTzvbieCJ+z8gL+2HpJbwKTTsK8y0cmc4=";
   };
 
-  postPatch = ''
-    # test doesn't work in sandbox
-    substituteInPlace pyfakefs/tests/fake_filesystem_test.py \
-      --replace "test_expand_root" "notest_expand_root"
-    substituteInPlace pyfakefs/tests/fake_os_test.py \
-      --replace "test_path_links_not_resolved" "notest_path_links_not_resolved" \
-      --replace "test_append_mode_tell_linux_windows" "notest_append_mode_tell_linux_windows"
-  '' + (lib.optionalString stdenv.isDarwin ''
-    # this test fails on darwin due to case-insensitive file system
-    substituteInPlace pyfakefs/tests/fake_os_test.py \
-      --replace "test_rename_dir_to_existing_dir" "notest_rename_dir_to_existing_dir"
-  '');
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
-
-  pythonImportsCheck = [
-    "pyfakefs"
-  ];
+  pythonImportsCheck = [ "pyfakefs" ];
 
   nativeCheckInputs = [
+    pandas
     pytestCheckHook
   ];
 
-  # https://github.com/jmcgeheeiv/pyfakefs/issues/581 (OSError: [Errno 9] Bad file descriptor)
-  #disabledTests = [ "test_open_existing_pipe" ];
+  pytestFlagsArray = [
+    "pyfakefs/tests"
+  ];
 
+  disabledTests =
+    [
+      "test_expand_root"
+    ]
+    ++ (lib.optionals stdenv.hostPlatform.isDarwin [
+      # this test fails on darwin due to case-insensitive file system
+      "test_rename_dir_to_existing_dir"
+    ]);
 
   meta = with lib; {
     description = "Fake file system that mocks the Python file system modules";
-    homepage = "http://pyfakefs.org/";
+    homepage = "https://pyfakefs.org/";
     changelog = "https://github.com/jmcgeheeiv/pyfakefs/blob/v${version}/CHANGES.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ ];
   };
 }

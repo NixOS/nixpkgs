@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ... } :
+{ pkgs, lib, ... }:
 
 let
   lxd-image = import ../release.nix {
@@ -11,50 +11,56 @@ let
   lxd-image-metadata = lxd-image.lxdContainerMeta.${pkgs.stdenv.hostPlatform.system};
   lxd-image-rootfs = lxd-image.lxdContainerImage.${pkgs.stdenv.hostPlatform.system};
 
-in {
+in
+{
   name = "lxd-image-server";
 
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ mkg20001 patryk27 ];
+    maintainers = [
+      mkg20001
+      patryk27
+    ];
   };
 
-  nodes.machine = { lib, ... }: {
-    virtualisation = {
-      cores = 2;
+  nodes.machine =
+    { lib, ... }:
+    {
+      virtualisation = {
+        cores = 2;
 
-      memorySize = 2048;
-      diskSize = 4096;
+        memorySize = 2048;
+        diskSize = 4096;
 
-      lxc.lxcfs.enable = true;
-      lxd.enable = true;
-    };
+        lxc.lxcfs.enable = true;
+        lxd.enable = true;
+      };
 
-    security.pki.certificates = [
-      (builtins.readFile ./common/acme/server/ca.cert.pem)
-    ];
+      security.pki.certificates = [
+        (builtins.readFile ./common/acme/server/ca.cert.pem)
+      ];
 
-    services.nginx = {
-      enable = true;
-    };
-
-    services.lxd-image-server = {
-      enable = true;
-      nginx = {
+      services.nginx = {
         enable = true;
-        domain = "acme.test";
+      };
+
+      services.lxd-image-server = {
+        enable = true;
+        nginx = {
+          enable = true;
+          domain = "acme.test";
+        };
+      };
+
+      services.nginx.virtualHosts."acme.test" = {
+        enableACME = false;
+        sslCertificate = ./common/acme/server/acme.test.cert.pem;
+        sslCertificateKey = ./common/acme/server/acme.test.key.pem;
+      };
+
+      networking.hosts = {
+        "::1" = [ "acme.test" ];
       };
     };
-
-    services.nginx.virtualHosts."acme.test" = {
-      enableACME = false;
-      sslCertificate = ./common/acme/server/acme.test.cert.pem;
-      sslCertificateKey = ./common/acme/server/acme.test.key.pem;
-    };
-
-    networking.hosts = {
-      "::1" = [ "acme.test" ];
-    };
-  };
 
   testScript = ''
     machine.wait_for_unit("sockets.target")
@@ -91,4 +97,4 @@ in {
         machine.succeed("lxc remote add img https://acme.test --protocol=simplestreams")
         machine.succeed("lxc image list img: >&2")
   '';
-})
+}

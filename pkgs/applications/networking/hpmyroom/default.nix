@@ -1,27 +1,64 @@
-{ mkDerivation, stdenv, lib, fetchurl, rpmextract, autoPatchelfHook , libuuid
-, libXtst, libXfixes, glib, gst_all_1, alsa-lib, freetype, fontconfig , libXext
-, libGL, libpng, libXScrnSaver, libxcb, xorg, libpulseaudio, libdrm
+{
+  mkDerivation,
+  stdenv,
+  lib,
+  fetchurl,
+  rpmextract,
+  autoPatchelfHook,
+  libuuid,
+  libXtst,
+  libXfixes,
+  glib,
+  gst_all_1,
+  alsa-lib,
+  freetype,
+  fontconfig,
+  libXext,
+  libGL,
+  libpng,
+  libXScrnSaver,
+  libxcb,
+  xorg,
+  libpulseaudio,
+  libdrm,
 }:
 mkDerivation rec {
   pname = "hpmyroom";
-  version = "12.9.0.0601";
+  version = "12.13.0.0749";
 
   src = fetchurl {
     url = "https://www.myroom.hpe.com/downloadfiles/${pname}-${version}.x86_64.rpm";
-    sha256 = "sha256-1BC4EjCCLAuCIOV+jJn3pfKKW7UJI5tfC+wg0FUgB64=";
+    sha256 = "sha256-Ff3j14rC2ZHhNJLPxvKn9Sxyv351HuHbggclwOuFfX4=";
   };
 
   nativeBuildInputs = [
-    rpmextract autoPatchelfHook
+    rpmextract
+    autoPatchelfHook
   ];
 
-  buildInputs = [
-    libuuid libXtst libXScrnSaver libXfixes alsa-lib freetype fontconfig libXext
-    libGL libpng libxcb libpulseaudio libdrm
-    glib  # For libgobject
-    stdenv.cc.cc  # For libstdc++
-    xorg.libX11
-  ] ++ (with gst_all_1; [ gstreamer gst-plugins-base ]);
+  buildInputs =
+    [
+      libuuid
+      libXtst
+      libXScrnSaver
+      libXfixes
+      alsa-lib
+      freetype
+      fontconfig
+      libXext
+      libGL
+      libpng
+      libxcb
+      libpulseaudio
+      libdrm
+      glib # For libgobject
+      stdenv.cc.cc # For libstdc++
+      xorg.libX11
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+    ]);
 
   unpackPhase = ''
     rpmextract $src
@@ -56,5 +93,6 @@ mkDerivation rec {
     # TODO: A Darwin binary is available upstream
     platforms = [ "x86_64-linux" ];
     mainProgram = "hpmyroom";
+    broken = true; # requires libpng15
   };
 }

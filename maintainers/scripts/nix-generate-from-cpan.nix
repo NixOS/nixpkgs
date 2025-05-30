@@ -1,4 +1,10 @@
-{ stdenv, lib, makeWrapper, perl, perlPackages }:
+{
+  stdenv,
+  lib,
+  makeWrapper,
+  perl,
+  perlPackages,
+}:
 
 stdenv.mkDerivation {
   name = "nix-generate-from-cpan-3";
@@ -6,7 +12,11 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = with perlPackages; [
-    perl GetoptLongDescriptive CPANPLUS Readonly LogLog4perl
+    perl
+    GetoptLongDescriptive
+    CPANPLUS
+    Readonly
+    LogLog4perl
   ];
 
   dontUnpack = true;
@@ -21,6 +31,7 @@ stdenv.mkDerivation {
   meta = {
     maintainers = with lib.maintainers; [ eelco ];
     description = "Utility to generate a Nix expression for a Perl package from CPAN";
+    mainProgram = "nix-generate-from-cpan";
     platforms = lib.platforms.unix;
   };
 }

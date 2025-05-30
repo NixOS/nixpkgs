@@ -13,7 +13,7 @@
 #   server running. For this test to succeed, we only need to ensure that systemd-timesyncd
 #   resolves the IP address of the fake.ntp host.
 
-import ./make-test-python.nix ({ pkgs, ... }:
+{ pkgs, ... }:
 
 let
   ntpHostname = "fake.ntp";
@@ -21,7 +21,13 @@ let
 in
 {
   name = "systemd-timesyncd";
-  nodes.machine = { pkgs, lib, config, ... }:
+  nodes.machine =
+    {
+      pkgs,
+      lib,
+      config,
+      ...
+    }:
     let
       eth1IP = (lib.head config.networking.interfaces.eth1.ipv4.addresses).address;
     in
@@ -58,4 +64,4 @@ in
     machine.fail("resolvectl query ${ntpHostname}")
     machine.wait_until_succeeds("journalctl -u systemd-timesyncd.service --grep='Resolved address ${ntpIP}:123 for ${ntpHostname}'")
   '';
-})
+}

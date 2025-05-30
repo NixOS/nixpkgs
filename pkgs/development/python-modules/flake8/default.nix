@@ -1,48 +1,49 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, mccabe
-, pycodestyle
-, pyflakes
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  isPyPy,
+  fetchFromGitHub,
+  setuptools,
+  mccabe,
+  pycodestyle,
+  pyflakes,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "flake8";
-  version = "7.0.0";
-
-  disabled = pythonOlder "3.8";
-
+  version = "7.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "flake8";
-    rev = version;
-    hash = "sha256-2oVvchDhH3cX90RTIquYLyr+rzHxzQgYA4k4ReTxpH8=";
+    tag = version;
+    hash = "sha256-TrzGGbMY4+jvy1RvNi02HziCnknfOef+eUekppgK5ck=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     mccabe
     pycodestyle
     pyflakes
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = lib.optionals isPyPy [
+    # tests fail due to slightly different error position
+    "test_tokenization_error_is_a_syntax_error"
+    "test_tokenization_error_but_not_syntax_error"
   ];
 
-  meta = with lib; {
-    description = "The modular source code checker: pep8, pyflakes and co";
+  meta = {
+    changelog = "https://github.com/PyCQA/flake8/blob/${src.tag}/docs/source/release-notes/${version}.rst";
+    description = "Modular source code checker: pep8, pyflakes and co";
     homepage = "https://github.com/PyCQA/flake8";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
     mainProgram = "flake8";
   };
 }

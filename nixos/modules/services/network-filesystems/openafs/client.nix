@@ -1,10 +1,23 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 # openafsMod, openafsBin, mkCellServDB
 with import ./lib.nix { inherit config lib pkgs; };
 
 let
-  inherit (lib) getBin literalExpression mkOption mkIf optionalString singleton types;
+  inherit (lib)
+    getBin
+    literalExpression
+    mkOption
+    mkIf
+    optionalString
+    singleton
+    types
+    ;
 
   cfg = config.services.openafsClient;
 
@@ -13,7 +26,9 @@ let
     sha256 = "1wmjn6mmyy2r8p10nlbdzs4nrqxy8a9pjyrdciy5nmppg4053rk2";
   };
 
-  clientServDB = pkgs.writeText "client-cellServDB-${cfg.cellName}" (mkCellServDB cfg.cellName cfg.cellServDB);
+  clientServDB = pkgs.writeText "client-cellServDB-${cfg.cellName}" (
+    mkCellServDB cfg.cellName cfg.cellServDB
+  );
 
   afsConfig = pkgs.runCommand "afsconfig" { preferLocalBuild = true; } ''
     mkdir -p $out
@@ -33,33 +48,43 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc "Whether to enable the OpenAFS client.";
+        description = "Whether to enable the OpenAFS client.";
       };
 
       afsdb = mkOption {
         default = true;
         type = types.bool;
-        description = lib.mdDoc "Resolve cells via AFSDB DNS records.";
+        description = "Resolve cells via AFSDB DNS records.";
       };
 
       cellName = mkOption {
         default = "";
         type = types.str;
-        description = lib.mdDoc "Cell name.";
+        description = "Cell name.";
         example = "grand.central.org";
       };
 
       cellServDB = mkOption {
-        default = [];
-        type = with types; listOf (submodule { options = cellServDBConfig; });
-        description = lib.mdDoc ''
+        default = [ ];
+        type =
+          with types;
+          listOf (submodule {
+            options = cellServDBConfig;
+          });
+        description = ''
           This cell's database server records, added to the global
-          CellServDB. See CellServDB(5) man page for syntax. Ignored when
+          CellServDB. See {manpage}`CellServDB(5)` man page for syntax. Ignored when
           `afsdb` is set to `true`.
         '';
         example = [
-          { ip = "1.2.3.4"; dnsname = "first.afsdb.server.dns.fqdn.org"; }
-          { ip = "2.3.4.5"; dnsname = "second.afsdb.server.dns.fqdn.org"; }
+          {
+            ip = "1.2.3.4";
+            dnsname = "first.afsdb.server.dns.fqdn.org";
+          }
+          {
+            ip = "2.3.4.5";
+            dnsname = "second.afsdb.server.dns.fqdn.org";
+          }
         ];
       };
 
@@ -67,13 +92,13 @@ in
         blocks = mkOption {
           default = 100000;
           type = types.int;
-          description = lib.mdDoc "Cache size in 1KB blocks.";
+          description = "Cache size in 1KB blocks.";
         };
 
         chunksize = mkOption {
           default = 0;
           type = types.ints.between 0 30;
-          description = lib.mdDoc ''
+          description = ''
             Size of each cache chunk given in powers of
             2. `0` resets the chunk size to its default
             values (13 (8 KB) for memcache, 18-20 (256 KB to 1 MB) for
@@ -85,13 +110,13 @@ in
         directory = mkOption {
           default = "/var/cache/openafs";
           type = types.str;
-          description = lib.mdDoc "Cache directory.";
+          description = "Cache directory.";
         };
 
         diskless = mkOption {
           default = false;
           type = types.bool;
-          description = lib.mdDoc ''
+          description = ''
             Use in-memory cache for diskless machines. Has no real
             performance benefit anymore.
           '';
@@ -101,13 +126,13 @@ in
       crypt = mkOption {
         default = true;
         type = types.bool;
-        description = lib.mdDoc "Whether to enable (weak) protocol encryption.";
+        description = "Whether to enable (weak) protocol encryption.";
       };
 
       daemons = mkOption {
         default = 2;
         type = types.int;
-        description = lib.mdDoc ''
+        description = ''
           Number of daemons to serve user requests. Numbers higher than 6
           usually do no increase performance. Default is sufficient for up
           to five concurrent users.
@@ -117,7 +142,7 @@ in
       fakestat = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Return fake data on stat() calls. If `true`,
           always do so. If `false`, only do so for
           cross-cell mounts (as these are potentially expensive).
@@ -127,7 +152,7 @@ in
       inumcalc = mkOption {
         default = "compat";
         type = types.strMatching "compat|md5";
-        description = lib.mdDoc ''
+        description = ''
           Inode calculation method. `compat` is
           computationally less expensive, but `md5` greatly
           reduces the likelihood of inode collisions in larger scenarios
@@ -138,7 +163,7 @@ in
       mountPoint = mkOption {
         default = "/afs";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Mountpoint of the AFS file tree, conventionally
           `/afs`. When set to a different value, only
           cross-cells that use the same value can be accessed.
@@ -150,26 +175,26 @@ in
           default = config.boot.kernelPackages.openafs;
           defaultText = literalExpression "config.boot.kernelPackages.openafs";
           type = types.package;
-          description = lib.mdDoc "OpenAFS kernel module package. MUST match the userland package!";
+          description = "OpenAFS kernel module package. MUST match the userland package!";
         };
         programs = mkOption {
           default = getBin pkgs.openafs;
           defaultText = literalExpression "getBin pkgs.openafs";
           type = types.package;
-          description = lib.mdDoc "OpenAFS programs package. MUST match the kernel module package!";
+          description = "OpenAFS programs package. MUST match the kernel module package!";
         };
       };
 
       sparse = mkOption {
         default = true;
         type = types.bool;
-        description = lib.mdDoc "Minimal cell list in /afs.";
+        description = "Minimal cell list in /afs.";
       };
 
       startDisconnected = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Start up in disconnected mode.  You need to execute
           `fs disco online` (as root) to switch to
           connected mode. Useful for roaming devices.
@@ -179,16 +204,17 @@ in
     };
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.afsdb || cfg.cellServDB != [];
+      {
+        assertion = cfg.afsdb || cfg.cellServDB != [ ];
         message = "You should specify all cell-local database servers in config.services.openafsClient.cellServDB or set config.services.openafsClient.afsdb.";
       }
-      { assertion = cfg.cellName != "";
+      {
+        assertion = cfg.cellName != "";
         message = "You must specify the local cell name in config.services.openafsClient.cellName.";
       }
     ];
@@ -216,8 +242,10 @@ in
       description = "AFS client";
       wantedBy = [ "multi-user.target" ];
       wants = lib.optional (!cfg.startDisconnected) "network-online.target";
-      after = singleton (if cfg.startDisconnected then  "network.target" else "network-online.target");
-      serviceConfig = { RemainAfterExit = true; };
+      after = singleton (if cfg.startDisconnected then "network.target" else "network-online.target");
+      serviceConfig = {
+        RemainAfterExit = true;
+      };
       restartIfChanged = false;
 
       preStart = ''

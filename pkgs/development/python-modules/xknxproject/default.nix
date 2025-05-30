@@ -1,18 +1,17 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, pyzipper
-, setuptools
-, striprtf
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  pyzipper,
+  setuptools,
+  striprtf,
 }:
 
 buildPythonPackage rec {
   pname = "xknxproject";
-  version = "3.7.0";
+  version = "3.8.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,31 +19,23 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "XKNX";
     repo = "xknxproject";
-    rev = "refs/tags/${version}";
-    hash = "sha256-tw/hHiiW4ZGlrbQmuIihJmhyIL++Rjpg6q8AdKNsn14=";
+    tag = version;
+    hash = "sha256-EIonCsolfAAFQpHuSFUuYAAZozjtqSwJCpw86Cc2d4I=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    cryptography
+  dependencies = [
     pyzipper
     striprtf
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "xknxproject"
-  ];
+  pythonImportsCheck = [ "xknxproject" ];
 
   meta = with lib; {
-    description = "ETS project parser";
+    description = "Library to extract KNX projects and parses the underlying XML";
     homepage = "https://github.com/XKNX/xknxproject";
     changelog = "https://github.com/XKNX/xknxproject/releases/tag/${version}";
     license = licenses.gpl2Only;

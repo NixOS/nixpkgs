@@ -1,16 +1,28 @@
-{ lib, stdenv, fetchurl, desktop-file-utils
-, gtk3, libX11, cmake, imagemagick
-, pkg-config, perl, wrapGAppsHook, nixosTests, writeScript
-, isMobile ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  desktop-file-utils,
+  gtk3,
+  libX11,
+  cmake,
+  imagemagick,
+  pkg-config,
+  perl,
+  wrapGAppsHook3,
+  nixosTests,
+  writeScript,
+  halibut,
+  isMobile ? false,
 }:
 
 stdenv.mkDerivation rec {
   pname = "sgt-puzzles";
-  version = "20240302.80aac31";
+  version = "20250523.7fa0305";
 
   src = fetchurl {
     url = "http://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles-${version}.tar.gz";
-    hash = "sha256-0+bmGq4wM+0/ldQz8ieKdkuG0HHazctQr9ul/qLT0gg=";
+    hash = "sha256-knUhiDMF0pchXzCVCntKiXYVJW8HXBoAMH+a9O652bk=";
   };
 
   sgt-puzzles-menu = fetchurl {
@@ -24,12 +36,16 @@ stdenv.mkDerivation rec {
     imagemagick
     perl
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
+    halibut # For help pages
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString isMobile "-DSTYLUS_BASED";
 
-  buildInputs = [ gtk3 libX11 ];
+  buildInputs = [
+    gtk3
+    libX11
+  ];
 
   postInstall = ''
     for i in  $(basename -s $out/bin/*); do
@@ -75,7 +91,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Simon Tatham's portable puzzle collection";
     license = licenses.mit;
-    maintainers = with maintainers; [ raskin tomfitzhenry ];
+    maintainers = with maintainers; [
+      raskin
+      tomfitzhenry
+    ];
     platforms = platforms.linux;
     homepage = "https://www.chiark.greenend.org.uk/~sgtatham/puzzles/";
   };

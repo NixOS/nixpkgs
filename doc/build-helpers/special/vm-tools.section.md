@@ -31,25 +31,34 @@ If the build fails and Nix is run with the `-K/--keep-failed` option, a script `
 
 Build the derivation hello inside a VM:
 ```nix
-{ pkgs }: with pkgs; with vmTools;
-runInLinuxVM hello
+{ pkgs }: with pkgs; with vmTools; runInLinuxVM hello
 ```
 
 Build inside a VM with extra memory:
 ```nix
-{ pkgs }: with pkgs; with vmTools;
-runInLinuxVM (hello.overrideAttrs (_: { memSize = 1024; }))
+{ pkgs }:
+with pkgs;
+with vmTools;
+runInLinuxVM (
+  hello.overrideAttrs (_: {
+    memSize = 1024;
+  })
+)
 ```
 
 Use VM with a disk image (implicitly sets `diskImage`, see [`vmTools.createEmptyImage`](#vm-tools-createEmptyImage)):
 ```nix
-{ pkgs }: with pkgs; with vmTools;
-runInLinuxVM (hello.overrideAttrs (_: {
-  preVM = createEmptyImage {
-    size = 1024;
-    fullName = "vm-image";
-  };
-}))
+{ pkgs }:
+with pkgs;
+with vmTools;
+runInLinuxVM (
+  hello.overrideAttrs (_: {
+    preVM = createEmptyImage {
+      size = 1024;
+      fullName = "vm-image";
+    };
+  })
+)
 ```
 
 ## `vmTools.extractFs` {#vm-tools-extractFs}
@@ -66,8 +75,7 @@ Takes a file, such as an ISO, and extracts its contents into the store.
 
 Extract the contents of an ISO file:
 ```nix
-{ pkgs }: with pkgs; with vmTools;
-extractFs { file = ./image.iso; }
+{ pkgs }: with pkgs; with vmTools; extractFs { file = ./image.iso; }
 ```
 
 ## `vmTools.extractMTDfs` {#vm-tools-extractMTDfs}
@@ -86,14 +94,12 @@ Generate a script that can be used to run an interactive session in the given im
 
 Create a script for running a Fedora 27 VM:
 ```nix
-{ pkgs }: with pkgs; with vmTools;
-makeImageTestScript diskImages.fedora27x86_64
+{ pkgs }: with pkgs; with vmTools; makeImageTestScript diskImages.fedora27x86_64
 ```
 
 Create a script for running an Ubuntu 20.04 VM:
 ```nix
-{ pkgs }: with pkgs; with vmTools;
-makeImageTestScript diskImages.ubuntu2004x86_64
+{ pkgs }: with pkgs; with vmTools; makeImageTestScript diskImages.ubuntu2004x86_64
 ```
 
 ## `vmTools.diskImageFuns` {#vm-tools-diskImageFuns}
@@ -125,6 +131,8 @@ A set of functions that build a predefined set of minimal Linux distributions im
   * `debian10x86_64`
   * `debian11i386`
   * `debian11x86_64`
+  * `debian12i386`
+  * `debian12x86_64`
 
 ### Attributes {#vm-tools-diskImageFuns-attributes}
 
@@ -135,8 +143,13 @@ A set of functions that build a predefined set of minimal Linux distributions im
 
 8GiB image containing Firefox in addition to the default packages:
 ```nix
-{ pkgs }: with pkgs; with vmTools;
-diskImageFuns.ubuntu2004x86_64 { extraPackages = [ "firefox" ]; size = 8192; }
+{ pkgs }:
+with pkgs;
+with vmTools;
+diskImageFuns.ubuntu2004x86_64 {
+  extraPackages = [ "firefox" ];
+  size = 8192;
+}
 ```
 
 ## `vmTools.diskImageExtraFuns` {#vm-tools-diskImageExtraFuns}

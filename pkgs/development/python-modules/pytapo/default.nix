@@ -1,37 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-
-# propagates
-, pycryptodome
-, requests
-, rtp
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pycryptodome,
+  python-kasa,
+  pythonOlder,
+  requests,
+  rtp,
+  setuptools,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "pytapo";
-  version = "3.3.18";
-  format = "setuptools";
+  version = "3.3.44";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CiLZ+FUmawZaKQxkDxYCv0Qs/djFuIVSyQ0eSi41HDg=";
+    hash = "sha256-2/Wzc54a7LpphmH5qDp0M9SnmuCVGXCmhkoy4YSAZc0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pycryptodome
+    python-kasa
     requests
     rtp
     urllib3
   ];
 
-  pythonImportsCheck = [
-    "pytapo"
-  ];
+  pythonImportsCheck = [ "pytapo" ];
 
   # Tests require actual hardware
   doCheck = false;

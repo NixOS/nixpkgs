@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, libsodium
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  libsodium,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -14,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "saltstack";
-    repo = pname;
+    repo = "libnacl";
     rev = "v${version}";
     hash = "sha256-phECLGDcBfDi/r2y0eGtqgIX/hvirtBqO8UUvEJ66zo=";
   };
@@ -24,7 +25,9 @@ buildPythonPackage rec {
   buildInputs = [ libsodium ];
 
   postPatch =
-    let soext = stdenv.hostPlatform.extensions.sharedLibrary; in
+    let
+      soext = stdenv.hostPlatform.extensions.sharedLibrary;
+    in
     ''
       substituteInPlace "./libnacl/__init__.py" \
         --replace \

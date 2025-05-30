@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pytest
-, pudb
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytest,
+  pudb,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pytest-pudb";
-  version = "0.7.0";
+  version = "0.8.0";
   format = "setuptools";
 
   src = fetchFromGitHub {

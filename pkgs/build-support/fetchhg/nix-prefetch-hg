@@ -42,8 +42,9 @@ fi
 # If we don't know the hash or a path with that hash doesn't exist,
 # download the file and add it to the store.
 if [[ -z "$finalPath" ]]; then
-
-    tmpPath="$(mktemp -d "${TMPDIR:-/tmp}/hg-checkout-tmp-XXXXXXXX")"
+    # nix>=2.20 rejects adding symlinked paths to the store, so use realpath
+    # to resolve to a physical path. https://github.com/NixOS/nix/issues/11941
+    tmpPath="$(realpath "$(mktemp -d --tmpdir hg-checkout-tmp-XXXXXXXX)")"
     cleanup() { x=$?; rm -rf "$tmpPath"; exit $x; }; trap cleanup EXIT
 
     tmpArchive="$tmpPath/hg-archive"

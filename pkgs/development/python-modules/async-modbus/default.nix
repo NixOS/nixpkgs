@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, connio
-, fetchFromGitHub
-, fetchpatch
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, umodbus
+{
+  lib,
+  buildPythonPackage,
+  connio,
+  fetchFromGitHub,
+  fetchpatch,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  umodbus,
 }:
 
 buildPythonPackage rec {
   pname = "async-modbus";
-  version = "0.2.1";
+  version = "0.2.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tiagocoutinho";
     repo = "async_modbus";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-OTt/rUa3KLVSFOIUyMNHnqHvPtISxTposNFAgoixRfk=";
+    tag = "v${version}";
+    hash = "sha256-xms2OfX5bHPXswwhLhyh6HFsm1YqDwKclUirxrgL4i0=";
   };
 
   patches = [
@@ -34,14 +35,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '"--cov=async_modbus",' "" \
-      --replace '"--cov-report=html", "--cov-report=term",' "" \
       --replace '"--durations=2", "--verbose"' ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     connio
@@ -49,13 +46,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "async_modbus"
-  ];
+  pythonImportsCheck = [ "async_modbus" ];
 
   meta = with lib; {
     description = "Library for Modbus communication";

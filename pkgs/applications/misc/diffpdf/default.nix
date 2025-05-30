@@ -1,4 +1,13 @@
-{ lib, mkDerivation, fetchurl, fetchpatch, qmake, qttools, qtbase, poppler }:
+{
+  lib,
+  mkDerivation,
+  fetchurl,
+  fetchpatch,
+  qmake,
+  qttools,
+  qtbase,
+  poppler,
+}:
 
 mkDerivation rec {
   version = "2.1.3";
@@ -17,8 +26,14 @@ mkDerivation rec {
     ./fix_path_poppler_qt5.patch
   ];
 
-  nativeBuildInputs = [ qmake qttools ];
-  buildInputs = [ qtbase poppler ];
+  nativeBuildInputs = [
+    qmake
+    qttools
+  ];
+  buildInputs = [
+    qtbase
+    poppler
+  ];
 
   preConfigure = ''
     substituteInPlace diffpdf.pro --replace @@NIX_POPPLER_QT5@@ ${poppler.dev}
@@ -46,13 +61,14 @@ mkDerivation rec {
     Exec=$out/bin/diffpdf
     Terminal=false
     EOF
-    '';
+  '';
 
   meta = {
-    homepage = "http://www.qtrac.eu/diffpdfc.html";
+    homepage = "http://www.qtrac.eu/diffpdf.html";
     description = "Tool for diffing pdf files visually or textually";
+    mainProgram = "diffpdf";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
 }

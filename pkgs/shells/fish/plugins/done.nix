@@ -1,14 +1,19 @@
-{ lib, buildFishPlugin, fetchFromGitHub, fishtape }:
+{
+  lib,
+  buildFishPlugin,
+  fetchFromGitHub,
+  fishtape,
+}:
 
 buildFishPlugin rec {
   pname = "done";
-  version = "1.19.2";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "franciscolourenco";
     repo = "done";
     rev = version;
-    hash = "sha256-VSCYsGjNPSFIZSdLrkc7TU7qyPVm8UupOoav5UqXPMk=";
+    hash = "sha256-WA6DBrPBuXRIloO05UBunTJ9N01d6tO1K1uqojjO0mo=";
   };
 
   checkPlugins = [ fishtape ];

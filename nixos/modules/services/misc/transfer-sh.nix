@@ -1,26 +1,49 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.transfer-sh;
   inherit (lib)
-    mkDefault mkEnableOption mkPackageOption mkIf mkOption
-    types mapAttrs isBool getExe boolToString mdDoc optionalAttrs;
+    mkDefault
+    mkEnableOption
+    mkPackageOption
+    mkIf
+    mkOption
+    types
+    mapAttrs
+    isBool
+    getExe
+    boolToString
+    optionalAttrs
+    ;
 in
 {
   options.services.transfer-sh = {
-    enable = mkEnableOption (mdDoc "Easy and fast file sharing from the command-line");
+    enable = mkEnableOption "Easy and fast file sharing from the command-line";
 
     package = mkPackageOption pkgs "transfer-sh" { };
 
     settings = mkOption {
-      type = types.submodule { freeformType = with types; attrsOf (oneOf [ bool int str ]); };
+      type = types.submodule {
+        freeformType =
+          with types;
+          attrsOf (oneOf [
+            bool
+            int
+            str
+          ]);
+      };
       default = { };
       example = {
         LISTENER = ":8080";
         BASEDIR = "/var/lib/transfer.sh";
         TLS_LISTENER_ONLY = false;
       };
-      description = mdDoc ''
+      description = ''
         Additional configuration for transfer-sh, see
         <https://github.com/dutchcoders/transfer.sh#usage-1>
         for supported values.
@@ -30,16 +53,21 @@ in
     };
 
     provider = mkOption {
-      type = types.enum [ "local" "s3" "storj" "gdrive" ];
+      type = types.enum [
+        "local"
+        "s3"
+        "storj"
+        "gdrive"
+      ];
       default = "local";
-      description = mdDoc "Storage providers to use";
+      description = "Storage providers to use";
     };
 
     secretFile = mkOption {
       type = types.nullOr types.path;
       default = null;
       example = "/run/secrets/transfer-sh.env";
-      description = mdDoc ''
+      description = ''
         Path to file containing environment variables.
         Useful for passing down secrets.
         Some variables that can be considered secrets are:
@@ -56,20 +84,21 @@ in
       localProvider = (cfg.provider == "local");
       stateDirectory = "/var/lib/transfer.sh";
     in
-    mkIf cfg.enable
-      {
-        services.transfer-sh.settings = {
+    mkIf cfg.enable {
+      services.transfer-sh.settings =
+        {
           LISTENER = mkDefault ":8080";
-        } // optionalAttrs localProvider {
+        }
+        // optionalAttrs localProvider {
           BASEDIR = mkDefault stateDirectory;
         };
 
-        systemd.services.transfer-sh = {
-          after = [ "network.target" ];
-          wantedBy = [ "multi-user.target" ];
-          environment = mapAttrs (_: v: if isBool v then boolToString v else toString v) cfg.settings;
-          serviceConfig = {
-            CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
+      systemd.services.transfer-sh = {
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        environment = mapAttrs (_: v: if isBool v then boolToString v else toString v) cfg.settings;
+        serviceConfig =
+          {
             DevicePolicy = "closed";
             DynamicUser = true;
             ExecStart = "${getExe cfg.package} --provider ${cfg.provider}";
@@ -84,19 +113,24 @@ in
             ProtectKernelModules = true;
             ProtectKernelTunables = true;
             ProtectProc = "invisible";
-            RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+            RestrictAddressFamilies = [
+              "AF_INET"
+              "AF_INET6"
+            ];
             RestrictNamespaces = true;
             RestrictRealtime = true;
             SystemCallArchitectures = [ "native" ];
             SystemCallFilter = [ "@system-service" ];
             StateDirectory = baseNameOf stateDirectory;
-          } // optionalAttrs (cfg.secretFile != null) {
+          }
+          // optionalAttrs (cfg.secretFile != null) {
             EnvironmentFile = cfg.secretFile;
-          } // optionalAttrs localProvider {
+          }
+          // optionalAttrs localProvider {
             ReadWritePaths = cfg.settings.BASEDIR;
           };
-        };
       };
+    };
 
   meta.maintainers = with lib.maintainers; [ ocfox ];
 }

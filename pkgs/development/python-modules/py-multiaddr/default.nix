@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, varint
-, base58
-, netaddr
-, idna
-, py-cid
-, py-multicodec
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  varint,
+  base58,
+  netaddr,
+  idna,
+  py-cid,
+  py-multicodec,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "multiformats";
-    repo = pname;
+    repo = "py-multiaddr";
     rev = "v${version}";
     hash = "sha256-cGM7iYQPP+UOkbTxRhzuED0pkcydFCO8vpx9wTc0/HI=";
   };
@@ -37,16 +38,17 @@ buildPythonPackage rec {
     py-multicodec
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "multiaddr" ];
 
   meta = with lib; {
     description = "Composable and future-proof network addresses";
     homepage = "https://github.com/multiformats/py-multiaddr";
-    license = with licenses; [ mit asl20 ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
     maintainers = with maintainers; [ Luflosi ];
   };
 }

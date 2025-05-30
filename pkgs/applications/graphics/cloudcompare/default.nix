@@ -1,42 +1,43 @@
-{ lib
-, stdenv
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, boost
-, cgal
-, eigen
-, flann
-, gdal
-, gmp
-, LASzip
-, mpfr
-, pdal
-, pcl
-, qtbase
-, qtsvg
-, qttools
-, tbb
-, xercesc
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeDesktopItem,
+  copyDesktopItems,
+  cmake,
+  boost,
+  cgal,
+  eigen,
+  flann,
+  gdal,
+  gmp,
+  laszip,
+  mpfr,
+  pcl,
+  libsForQt5,
+  tbb,
+  xercesc,
+  wrapGAppsHook3,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "cloudcompare";
-  version = "2.13";
+  version = "2.13.2";
 
   src = fetchFromGitHub {
     owner = "CloudCompare";
     repo = "CloudCompare";
     rev = "v${version}";
-    hash = "sha256-tCmIdajizaTT1tvPA7YQoklfz7pYVKS0lJXrxV2fidg=";
+    hash = "sha256-a/0lf3Mt5ZpLFRM8jAoqZer8pY1ROgPRY4dPt34Bk3E=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     cmake
     eigen # header-only
-    wrapGAppsHook
+    wrapGAppsHook3
+    copyDesktopItems
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -45,13 +46,12 @@ mkDerivation rec {
     flann
     gdal
     gmp
-    LASzip
+    laszip
     mpfr
-    pdal
     pcl
-    qtbase
-    qtsvg
-    qttools
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
+    libsForQt5.qttools
     tbb
     xercesc
   ];
@@ -70,7 +70,7 @@ mkDerivation rec {
     "-DPLUGIN_IO_QCSV_MATRIX=ON"
     "-DPLUGIN_IO_QE57=ON"
     "-DPLUGIN_IO_QFBX=OFF" # Autodesk FBX SDK is gratis+proprietary; not packaged in nixpkgs
-    "-DPLUGIN_IO_QPDAL=ON" # required for .las/.laz support
+    "-DPLUGIN_IO_QLAS=ON" # required for .las/.laz support
     "-DPLUGIN_IO_QPHOTOSCAN=ON"
     "-DPLUGIN_IO_QRDB=OFF" # Riegl rdblib is proprietary; not packaged in nixpkgs
 
@@ -96,12 +96,15 @@ mkDerivation rec {
   dontWrapGApps = true;
 
   postInstall = ''
-    install -Dm444 $src/snap/gui/{ccViewer,cloudcompare}.png -t $out/share/icons/hicolor/256x256/apps
-    install -Dm444 $src/snap/gui/{ccViewer,cloudcompare}.desktop -t $out/share/applications
-    substituteInPlace $out/share/applications/{ccViewer,cloudcompare}.desktop \
-      --replace 'Exec=cloudcompare.' 'Exec=' \
-      --replace 'Icon=''${SNAP}/meta/gui/' 'Icon=' \
-      --replace '.png' ""
+    install -Dm444 $src/qCC/images/icon/cc_icon_16.png $out/share/icons/hicolor/16x16/apps/CloudCompare.png
+    install -Dm444 $src/qCC/images/icon/cc_icon_32.png $out/share/icons/hicolor/32x32/apps/CloudCompare.png
+    install -Dm444 $src/qCC/images/icon/cc_icon_64.png $out/share/icons/hicolor/64x64/apps/CloudCompare.png
+    install -Dm444 $src/qCC/images/icon/cc_icon_256.png $out/share/icons/hicolor/256x256/apps/CloudCompare.png
+
+    install -Dm444 $src/qCC/images/icon/cc_viewer_icon_16.png $out/share/icons/hicolor/16x16/apps/ccViewer.png
+    install -Dm444 $src/qCC/images/icon/cc_viewer_icon_32.png $out/share/icons/hicolor/32x32/apps/ccViewer.png
+    install -Dm444 $src/qCC/images/icon/cc_viewer_icon_64.png $out/share/icons/hicolor/64x64/apps/ccViewer.png
+    install -Dm444 $src/qCC/images/icon/cc_viewer_icon_256.png $out/share/icons/hicolor/256x256/apps/ccViewer.png
   '';
 
   # fix file dialogs crashing on non-NixOS (and avoid double wrapping)
@@ -109,11 +112,49 @@ mkDerivation rec {
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "CloudCompare";
+      desktopName = "CloudCompare";
+      comment = "3D point cloud and mesh processing software";
+      exec = "CloudCompare";
+      terminal = false;
+      categories = [
+        "Graphics"
+        "3DGraphics"
+        "Viewer"
+      ];
+      keywords = [
+        "3d"
+        "processing"
+      ];
+      icon = "CloudCompare";
+    })
+    (makeDesktopItem {
+      name = "ccViewer";
+      desktopName = "CloudCompare Viewer";
+      comment = "3D point cloud and mesh processing software";
+      exec = "ccViewer";
+      terminal = false;
+      categories = [
+        "Graphics"
+        "3DGraphics"
+        "Viewer"
+      ];
+      keywords = [
+        "3d"
+        "viewer"
+      ];
+      icon = "ccViewer";
+    })
+  ];
+
   meta = with lib; {
     description = "3D point cloud and mesh processing software";
     homepage = "https://cloudcompare.org";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ nh2 ];
+    mainProgram = "CloudCompare";
     platforms = with platforms; linux; # only tested here; might work on others
   };
 }

@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,12 +20,11 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "nclib"
-  ];
+  pythonImportsCheck = [ "nclib" ];
 
   meta = with lib; {
     description = "Python module that provides netcat features";
+    mainProgram = "serve-stdio";
     homepage = "https://nclib.readthedocs.io/";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

@@ -1,42 +1,42 @@
-{ config, lib, pkgs, ... }:
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.haproxy;
-
   haproxyCfg = pkgs.writeText "haproxy.conf" ''
     global
       # needed for hot-reload to work without dropping packets in multi-worker mode
       stats socket /run/haproxy/haproxy.sock mode 600 expose-fd listeners level user
-
     ${cfg.config}
   '';
-
 in
-with lib;
 {
   options = {
     services.haproxy = {
 
-      enable = mkEnableOption (lib.mdDoc "HAProxy, the reliable, high performance TCP/HTTP load balancer.");
+      enable = lib.mkEnableOption "HAProxy, the reliable, high performance TCP/HTTP load balancer";
 
-      package = mkPackageOption pkgs "haproxy" { };
+      package = lib.mkPackageOption pkgs "haproxy" { };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "haproxy";
-        description = lib.mdDoc "User account under which haproxy runs.";
+        description = "User account under which haproxy runs.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "haproxy";
-        description = lib.mdDoc "Group account under which haproxy runs.";
+        description = "Group account under which haproxy runs.";
       };
 
-      config = mkOption {
-        type = types.nullOr types.lines;
+      config = lib.mkOption {
+        type = lib.types.nullOr lib.types.lines;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Contents of the HAProxy configuration file,
           {file}`haproxy.conf`.
         '';
@@ -44,12 +44,14 @@ with lib;
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    assertions = [{
-      assertion = cfg.config != null;
-      message = "You must provide services.haproxy.config.";
-    }];
+    assertions = [
+      {
+        assertion = cfg.config != null;
+        message = "You must provide services.haproxy.config.";
+      }
+    ];
 
     # configuration file indirection is needed to support reloading
     environment.etc."haproxy.cfg".source = haproxyCfg;
@@ -87,21 +89,21 @@ with lib;
         ProtectKernelTunables = true;
         ProtectKernelModules = true;
         ProtectControlGroups = true;
-        SystemCallFilter= "~@cpu-emulation @keyring @module @obsolete @raw-io @reboot @swap @sync";
+        SystemCallFilter = "~@cpu-emulation @keyring @module @obsolete @raw-io @reboot @swap @sync";
         # needed in case we bind to port < 1024
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
       };
     };
 
-    users.users = optionalAttrs (cfg.user == "haproxy") {
+    users.users = lib.optionalAttrs (cfg.user == "haproxy") {
       haproxy = {
         group = cfg.group;
         isSystemUser = true;
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == "haproxy") {
-      haproxy = {};
+    users.groups = lib.optionalAttrs (cfg.group == "haproxy") {
+      haproxy = { };
     };
   };
 }

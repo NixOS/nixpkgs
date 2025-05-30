@@ -1,55 +1,63 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, openssl
-, parameterized
-, pytestCheckHook
-, pythonOlder
-, swig2
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  fetchurl,
+  openssl,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  swig,
 }:
 
 buildPythonPackage rec {
   pname = "m2crypto";
-  version = "0.40.1";
-  format = "setuptools";
+  version = "0.45.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "M2Crypto";
-    inherit version;
-    hash = "sha256-u/0RPsVXCMBYFiUqTwnkI33087v8gXHLvDMFfSV7uzA=";
+    inherit pname version;
+    hash = "sha256-/8ENTQmQFRT0CNx09gpNffIcROvJv3dslHv9xzWUIc8=";
   };
-
-  nativeBuildInputs = [
-    swig2
-    openssl
+  patches = [
+    (fetchurl {
+      url = "https://sources.debian.org/data/main/m/m2crypto/0.42.0-2.1/debian/patches/0004-swig-Workaround-for-reading-sys-select.h-ending-with.patch";
+      hash = "sha256-/Bkuqu/Od+S56AUWo0ZzpZF7FGMxP766K2GJnfKXrOI=";
+    })
   ];
 
-  buildInputs = [
-    openssl
-    parameterized
-  ];
+  build-system = [ setuptools ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin (toString [
-    "-Wno-error=implicit-function-declaration"
-    "-Wno-error=incompatible-pointer-types"
-  ]);
+  nativeBuildInputs = [ swig ];
+
+  buildInputs = [ openssl ];
+
+  env =
+    {
+      NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
+        "-Wno-error=implicit-function-declaration"
+        "-Wno-error=incompatible-pointer-types"
+      ]);
+    }
+    // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
+      CPP = "${stdenv.cc.targetPrefix}cpp";
+    };
 
   nativeCheckInputs = [
     pytestCheckHook
+    openssl
   ];
 
-  pythonImportsCheck = [
-    "M2Crypto"
-  ];
+  pythonImportsCheck = [ "M2Crypto" ];
 
   meta = with lib; {
-    description = "A Python crypto and SSL toolkit";
+    description = "Python crypto and SSL toolkit";
     homepage = "https://gitlab.com/m2crypto/m2crypto";
     changelog = "https://gitlab.com/m2crypto/m2crypto/-/blob/${version}/CHANGES";
     license = licenses.mit;
-    maintainers = with maintainers; [ andrew-d ];
+    maintainers = [ ];
   };
 }

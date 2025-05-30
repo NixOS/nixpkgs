@@ -1,36 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "stupidartnet";
-  version = "1.4.0";
+  version = "1.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "cpvalente";
     repo = "stupidArtnet";
-    rev = "refs/tags/${version}";
-    hash = "sha256-2LfK63FJcdnXfDLuUzYNlspj1jmtw00S6el49cH+RRM=";
+    tag = version;
+    hash = "sha256-prLIQn1vFp0Q8FR2WBaU1tr6eKJpEY1ul4ldd4c35ls=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "stupidArtnet"
-  ];
+  pythonImportsCheck = [ "stupidArtnet" ];
 
   meta = with lib; {
     description = "Library implementation of the Art-Net protocol";

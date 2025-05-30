@@ -1,31 +1,33 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, wrapGAppsHook4
-, gdk-pixbuf
-, glib
-, gtk4
-, libadwaita
-, libepoxy
-, libGL
-, copyDesktopItems
-, installShellFiles
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  wrapGAppsHook4,
+  gdk-pixbuf,
+  glib,
+  gtk4,
+  libadwaita,
+  libepoxy,
+  libGL,
+  copyDesktopItems,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
 
   pname = "satty";
-  version = "0.11.2";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "gabm";
     repo = "Satty";
     rev = "v${version}";
-    hash = "sha256-bUDKRAp3/ByxWRzpoD0qGInxQuEfVIeYJ/pCcAEfH14=";
+    hash = "sha256-AKzTDBKqZuZfEgPJqv8I5IuCeDkD2+fBY44aAPFaYvI=";
   };
 
-  cargoHash = "sha256-aH08BJK4uOEUrpoMfVGwGnuzncHHW6w6jjxnk4Xz5zo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-hvJOjWD5TRXlDr5KfpFlzAi44Xd6VuaFexXziXgDLCk=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -55,10 +57,13 @@ rustPlatform.buildRustPackage rec {
   desktopItems = [ "satty.desktop" ];
 
   meta = with lib; {
-    description = "A screenshot annotation tool inspired by Swappy and Flameshot";
+    description = "Screenshot annotation tool inspired by Swappy and Flameshot";
     homepage = "https://github.com/gabm/Satty";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ pinpox donovanglover ];
+    maintainers = with maintainers; [
+      pinpox
+      donovanglover
+    ];
     mainProgram = "satty";
     platforms = lib.platforms.linux;
   };

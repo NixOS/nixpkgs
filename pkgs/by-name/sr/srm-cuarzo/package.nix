@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, libdisplay-info
-, libdrm
-, libGL
-, libinput
-, mesa
-, seatd
-, udev
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  libdisplay-info,
+  libdrm,
+  libGL,
+  libinput,
+  libgbm,
+  seatd,
+  udev,
 }:
 stdenv.mkDerivation (self: {
   pname = "srm-cuarzo";
-  version = "0.5.4-1";
+  version = "0.12.0-1";
   rev = "v${self.version}";
-  hash = "sha256-nmYMhX3XtyIyv6Kxi7s+ahkOHfnuLcjpwSU58HcPNeU=";
+  hash = "sha256-baLi0Upv8VMfeusy9EfeAXVxMo0KuKNC+EYg/c+tzRY=";
 
   src = fetchFromGitHub {
     inherit (self) rev hash;
@@ -35,18 +36,15 @@ stdenv.mkDerivation (self: {
     libdrm
     libGL
     libinput
-    mesa
+    libgbm
     seatd
     udev
   ];
 
-  outputs = [ "out" "dev" ];
-
-  postPatch = ''
-    substituteInPlace src/meson.build \
-      --replace "/usr/include/drm" "${libdrm.dev}/include/drm" \
-      --replace "/usr/include/libdrm" "${libdrm.dev}/include/libdrm"
-  '';
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   preConfigure = ''
     # The root meson.build file is in src/
@@ -56,7 +54,7 @@ stdenv.mkDerivation (self: {
   meta = {
     description = "Simple Rendering Manager";
     homepage = "https://github.com/CuarzoSoftware/SRM";
-    maintainers = [ lib.maintainers.dblsaiko ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

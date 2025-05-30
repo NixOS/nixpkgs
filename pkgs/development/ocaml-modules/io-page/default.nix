@@ -1,4 +1,12 @@
-{ lib, fetchurl, buildDunePackage, pkg-config, cstruct, bigarray-compat, ounit }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  pkg-config,
+  cstruct,
+  bigarray-compat,
+  ounit,
+}:
 
 buildDunePackage rec {
   pname = "io-page";
@@ -13,7 +21,10 @@ buildDunePackage rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  propagatedBuildInputs = [ cstruct bigarray-compat ];
+  propagatedBuildInputs = [
+    cstruct
+    bigarray-compat
+  ];
   checkInputs = [ ounit ];
   doCheck = true;
 

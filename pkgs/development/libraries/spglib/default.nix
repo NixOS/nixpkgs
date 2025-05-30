@@ -1,19 +1,31 @@
-{ stdenv, lib, fetchFromGitHub, cmake, gfortran, gtest, openmp }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  gfortran,
+  gtest,
+  openmp,
+}:
 
 stdenv.mkDerivation rec {
   pname = "spglib";
-  version = "2.3.1"; # N.B: if you change this, please update: pythonPackages.spglib
+  version = "2.6.0"; # N.B: if you change this, please update: pythonPackages.spglib
 
   src = fetchFromGitHub {
     owner = "spglib";
     repo = "spglib";
     rev = "v${version}";
-    hash = "sha256-MOre1LGf7Li+tAqtzpuEvAX6q/P0ueDlMXhhmtiE+jw=";
+    hash = "sha256-rmQYFFfpyUhT9pfQZk1fN5tZWTg40wwtszhPhiZpXs4=";
   };
 
-  nativeBuildInputs = [ cmake gfortran gtest ];
+  nativeBuildInputs = [
+    cmake
+    gfortran
+    gtest
+  ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ openmp ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ openmp ];
 
   cmakeFlags = [ "-DSPGLIB_WITH_Fortran=On" ];
 

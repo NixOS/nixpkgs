@@ -1,26 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-cloud-core
-, mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  google-cloud-core,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-dns";
-  version = "0.35.0";
-  format = "setuptools";
+  version = "0.35.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-CsRNqesPoLEilRPNiIB0q9AhGZLEBCMAr9HBbUFHRVM=";
+    pname = "google_cloud_dns";
+    inherit version;
+    hash = "sha256-lU9EYV16tv/NBjJOL552D5awffH83bAkuaEJ0LMwqR8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-api-core
     google-cloud-core
   ];
@@ -36,19 +41,17 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    # requires credentials
+    # Test requires credentials
     "test_quota"
   ];
 
-  pythonImportsCheck = [
-    "google.cloud.dns"
-  ];
+  pythonImportsCheck = [ "google.cloud.dns" ];
 
   meta = with lib; {
     description = "Google Cloud DNS API client library";
     homepage = "https://github.com/googleapis/python-dns";
     changelog = "https://github.com/googleapis/python-dns/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

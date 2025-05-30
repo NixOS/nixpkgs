@@ -1,35 +1,49 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pytestCheckHook
-, libxslt
-, libxml2
-, libtool
-, pkg-config
-, xmlsec
-, pkgconfig
-, setuptools-scm
-, lxml
-, hypothesis
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hypothesis,
+  libtool,
+  libxml2,
+  libxslt,
+  lxml,
+  pkg-config,
+  pkgconfig,
+  pytestCheckHook,
+  setuptools-scm,
+  xmlsec,
 }:
 
 buildPythonPackage rec {
   pname = "xmlsec";
-  version = "1.3.13";
-  format = "pyproject";
+  version = "1.3.15";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kW9deOgEH2zZORq7plnajJSk/vcZbRJtQK8f9Bfyz4Y=";
+    hash = "sha256-uqhWuD0AEuJ45vbL7JasgSjeZnyp+pou6wLHUugW9tg=";
   };
 
-  nativeBuildInputs = [ pkg-config pkgconfig setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  buildInputs = [ xmlsec libxslt libxml2 libtool ];
+  nativeBuildInputs = [
+    pkg-config
+    pkgconfig
+  ];
+
+  buildInputs = [
+    xmlsec
+    libxslt
+    libxml2
+    libtool
+  ];
 
   propagatedBuildInputs = [ lxml ];
 
-  nativeCheckInputs = [ pytestCheckHook hypothesis ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    hypothesis
+  ];
 
   disabledTestPaths = [
     # Full git clone required for test_doc_examples
@@ -44,6 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python bindings for the XML Security Library";
     homepage = "https://github.com/mehcode/python-xmlsec";
+    changelog = "https://github.com/xmlsec/python-xmlsec/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ zhaofengli ];
   };

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -28,14 +33,14 @@ in
 {
   options = {
     services.xserver.displayManager.lightdm.greeters.slick = {
-      enable = mkEnableOption (lib.mdDoc "lightdm-slick-greeter as the lightdm greeter");
+      enable = mkEnableOption "lightdm-slick-greeter as the lightdm greeter";
 
       theme = {
         package = mkOption {
           type = types.package;
-          default = pkgs.gnome.gnome-themes-extra;
-          defaultText = literalExpression "pkgs.gnome.gnome-themes-extra";
-          description = lib.mdDoc ''
+          default = pkgs.gnome-themes-extra;
+          defaultText = literalExpression "pkgs.gnome-themes-extra";
+          description = ''
             The package path that contains the theme given in the name option.
           '';
         };
@@ -43,7 +48,7 @@ in
         name = mkOption {
           type = types.str;
           default = "Adwaita";
-          description = lib.mdDoc ''
+          description = ''
             Name of the theme to use for the lightdm-slick-greeter.
           '';
         };
@@ -52,9 +57,9 @@ in
       iconTheme = {
         package = mkOption {
           type = types.package;
-          default = pkgs.gnome.adwaita-icon-theme;
-          defaultText = literalExpression "pkgs.gnome.adwaita-icon-theme";
-          description = lib.mdDoc ''
+          default = pkgs.adwaita-icon-theme;
+          defaultText = literalExpression "pkgs.adwaita-icon-theme";
+          description = ''
             The package path that contains the icon theme given in the name option.
           '';
         };
@@ -62,7 +67,7 @@ in
         name = mkOption {
           type = types.str;
           default = "Adwaita";
-          description = lib.mdDoc ''
+          description = ''
             Name of the icon theme to use for the lightdm-slick-greeter.
           '';
         };
@@ -71,9 +76,9 @@ in
       font = {
         package = mkOption {
           type = types.package;
-          default = pkgs.ubuntu_font_family;
-          defaultText = literalExpression "pkgs.ubuntu_font_family";
-          description = lib.mdDoc ''
+          default = pkgs.ubuntu-classic;
+          defaultText = literalExpression "pkgs.ubuntu-classic";
+          description = ''
             The package path that contains the font given in the name option.
           '';
         };
@@ -81,7 +86,7 @@ in
         name = mkOption {
           type = types.str;
           default = "Ubuntu 11";
-          description = lib.mdDoc ''
+          description = ''
             Name of the font to use.
           '';
         };
@@ -90,9 +95,9 @@ in
       cursorTheme = {
         package = mkOption {
           type = types.package;
-          default = pkgs.gnome.adwaita-icon-theme;
-          defaultText = literalExpression "pkgs.gnome.adwaita-icon-theme";
-          description = lib.mdDoc ''
+          default = pkgs.adwaita-icon-theme;
+          defaultText = literalExpression "pkgs.adwaita-icon-theme";
+          description = ''
             The package path that contains the cursor theme given in the name option.
           '';
         };
@@ -100,7 +105,7 @@ in
         name = mkOption {
           type = types.str;
           default = "Adwaita";
-          description = lib.mdDoc ''
+          description = ''
             Name of the cursor theme to use for the lightdm-slick-greeter.
           '';
         };
@@ -108,18 +113,18 @@ in
         size = mkOption {
           type = types.int;
           default = 24;
-          description = lib.mdDoc ''
+          description = ''
             Size of the cursor theme to use for the lightdm-slick-greeter.
           '';
         };
       };
 
-      draw-user-backgrounds = mkEnableOption (lib.mdDoc "draw user backgrounds");
+      draw-user-backgrounds = mkEnableOption "draw user backgrounds";
 
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra configuration that should be put in the lightdm-slick-greeter.conf
           configuration file.
         '';

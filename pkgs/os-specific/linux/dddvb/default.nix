@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, kernel
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  kernel,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "DigitalDevices";
     repo = "dddvb";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-bt/vMnqRWDDChZ6R4JbCr77cz3nlSPkx6siC9KLSEqs=";
   };
 
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/DigitalDevices/dddvb";
     description = "ddbridge linux driver";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
     broken = lib.versionAtLeast kernel.version "6.2";
   };

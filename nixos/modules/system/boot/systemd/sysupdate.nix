@@ -1,35 +1,36 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 
 let
   cfg = config.systemd.sysupdate;
 
   format = pkgs.formats.ini { listToValue = toString; };
 
-  definitionsDirectory = utils.systemdUtils.lib.definitions
-    "sysupdate.d"
-    format
-    cfg.transfers;
+  definitionsDirectory = utils.systemdUtils.lib.definitions "sysupdate.d" format cfg.transfers;
 in
 {
   options.systemd.sysupdate = {
 
-    enable = lib.mkEnableOption (lib.mdDoc "systemd-sysupdate") // {
-      description = lib.mdDoc ''
+    enable = lib.mkEnableOption "systemd-sysupdate" // {
+      description = ''
         Atomically update the host OS, container images, portable service
         images or other sources.
 
         If enabled, updates are triggered in regular intervals via a
         `systemd.timer` unit.
 
-        Please see
-        <https://www.freedesktop.org/software/systemd/man/systemd-sysupdate.html>
-        for more details.
+        Please see {manpage}`systemd-sysupdate(8)` for more details.
       '';
     };
 
     timerConfig = utils.systemdUtils.unitOptions.timerOptions.options.timerConfig // {
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         The timer configuration for performing the update.
 
         By default, the upstream configuration is used:
@@ -38,8 +39,8 @@ in
     };
 
     reboot = {
-      enable = lib.mkEnableOption (lib.mdDoc "automatically rebooting after an update") // {
-        description = lib.mdDoc ''
+      enable = lib.mkEnableOption "automatically rebooting after an update" // {
+        description = ''
           Whether to automatically reboot after an update.
 
           If set to `true`, the system will automatically reboot via a
@@ -58,7 +59,7 @@ in
 
       timerConfig = utils.systemdUtils.unitOptions.timerOptions.options.timerConfig // {
         default = { };
-        description = lib.mdDoc ''
+        description = ''
           The timer configuration for rebooting after an update.
 
           By default, the upstream configuration is used:
@@ -79,7 +80,11 @@ in
           Source = {
             Type = "url-file";
             Path = "https://download.example.com/";
-            MatchPattern = [ "nixos_@v+@l-@d.efi" "nixos_@v+@l.efi" "nixos_@v.efi" ];
+            MatchPattern = [
+              "nixos_@v+@l-@d.efi"
+              "nixos_@v+@l.efi"
+              "nixos_@v.efi"
+            ];
           };
 
           Target = {
@@ -98,11 +103,10 @@ in
           };
         };
       };
-      description = lib.mdDoc ''
+      description = ''
         Specify transfers as a set of the names of the transfer files as the
         key and the configuration as its value. The configuration can use all
-        upstream options. See
-        <https://www.freedesktop.org/software/systemd/man/sysupdate.d.html>
+        upstream options. See {manpage}`sysupdate.d(5)`
         for all available options.
       '';
     };

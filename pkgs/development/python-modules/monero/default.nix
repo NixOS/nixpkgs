@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pycryptodomex
-, pysocks
-, pynacl
-, requests
-, six
-, varint
-, pytestCheckHook
-, pytest-cov
-, responses
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pycryptodomex,
+  pysocks,
+  pynacl,
+  requests,
+  six,
+  varint,
+  pytestCheckHook,
+  pytest-cov-stub,
+  responses,
 }:
 
 buildPythonPackage rec {
@@ -24,11 +25,8 @@ buildPythonPackage rec {
     hash = "sha256-WIF3pFBOLgozYTrQHLzIRgSlT3dTZTe+7sF/dVjVdTo=";
   };
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace 'pynacl~=1.4' 'pynacl>=1.4' \
-      --replace 'ipaddress' ""
-  '';
+  pythonRelaxDeps = [ "pynacl" ];
+  pythonRemoveDeps = [ "ipaddress" ];
 
   pythonImportsCheck = [ "monero" ];
 
@@ -41,7 +39,11 @@ buildPythonPackage rec {
     varint
   ];
 
-  nativeCheckInputs = [ pytestCheckHook pytest-cov responses ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+    responses
+  ];
 
   meta = with lib; {
     description = "Comprehensive Python module for handling Monero";

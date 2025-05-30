@@ -1,7 +1,18 @@
-{ qtModule, qtbase, qtdeclarative }:
+{
+  qtModule,
+  qtbase,
+  qtdeclarative,
+}:
 
 qtModule {
   pname = "qtcharts";
-  propagatedBuildInputs = [ qtbase qtdeclarative ];
-  outputs = [ "out" "dev" "bin" ];
+  propagatedBuildInputs = [
+    qtbase
+    qtdeclarative
+  ];
+  outputs = [
+    "out"
+    "dev"
+    "bin"
+  ];
 }

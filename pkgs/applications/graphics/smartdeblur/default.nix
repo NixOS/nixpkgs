@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, fftw
-, qtbase, qmake, wrapQtAppsHook }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fftw,
+  libsForQt5,
+}:
 
 stdenv.mkDerivation rec {
   pname = "smartdeblur";
@@ -14,8 +19,14 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${src.name}/src";
 
-  nativeBuildInputs = [ qmake wrapQtAppsHook ];
-  buildInputs = [ qtbase fftw ];
+  nativeBuildInputs = [
+    libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
+  ];
+  buildInputs = [
+    libsForQt5.qtbase
+    fftw
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -28,8 +39,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/Y-Vladimir/SmartDeblur";
     description = "Tool for restoring blurry and defocused images";
+    mainProgram = "SmartDeblur";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

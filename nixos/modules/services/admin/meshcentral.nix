@@ -1,14 +1,21 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.meshcentral;
-  configFormat = pkgs.formats.json {};
+  configFormat = pkgs.formats.json { };
   configFile = configFormat.generate "meshcentral-config.json" cfg.settings;
-in with lib; {
+in
+with lib;
+{
   options.services.meshcentral = with types; {
-    enable = mkEnableOption (lib.mdDoc "MeshCentral computer management server");
+    enable = mkEnableOption "MeshCentral computer management server";
     package = mkPackageOption pkgs "meshcentral" { };
     settings = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Settings for MeshCentral. Refer to upstream documentation for details:
 
         - [JSON Schema definition](https://github.com/Ylianst/MeshCentral/blob/master/meshcentral-config-schema.json)
@@ -31,9 +38,10 @@ in with lib; {
     };
   };
   config = mkIf cfg.enable {
-    services.meshcentral.settings.settings.autoBackup.backupPath = lib.mkDefault "/var/lib/meshcentral/backups";
+    services.meshcentral.settings.settings.autoBackup.backupPath =
+      lib.mkDefault "/var/lib/meshcentral/backups";
     systemd.services.meshcentral = {
-      wantedBy = ["multi-user.target"];
+      wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/meshcentral --datapath /var/lib/meshcentral --configfile ${configFile}";
         DynamicUser = true;
@@ -42,5 +50,5 @@ in with lib; {
       };
     };
   };
-  meta.maintainers = [ maintainers.lheckemann ];
+  meta.maintainers = [ ];
 }

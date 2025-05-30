@@ -7,6 +7,14 @@
 mkKdeDerivation {
   pname = "keysmith";
 
-  extraNativeBuildInputs = [pkg-config];
-  extraBuildInputs = [qtsvg libsodium];
+  patches = [
+    ./optional-runtime-dependencies.patch
+  ];
+
+  extraNativeBuildInputs = [ pkg-config ];
+  extraBuildInputs = [
+    qtsvg
+    libsodium
+  ];
+  meta.mainProgram = "keysmith";
 }

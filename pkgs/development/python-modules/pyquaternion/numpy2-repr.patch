@@ -1,0 +1,68 @@
+diff --git a/pyquaternion/test/test_quaternion.py b/pyquaternion/test/test_quaternion.py
+index f56afff..7178b52 100644
+--- a/pyquaternion/test/test_quaternion.py
++++ b/pyquaternion/test/test_quaternion.py
+@@ -50,6 +50,16 @@ ALMOST_EQUAL_TOLERANCE = 13
+ def randomElements():
+     return tuple(np.random.uniform(-1, 1, 4))
+
++# In numpy 2, repr(np.float64(0.123)) becomes "np.float64(0.123)"
++# which means it's not directly a parseable float. In numpy 1 that
++# used to be the case. This hack papers over that
++def repr_np(x):
++    has_item = hasattr(x, 'item')
++    if isinstance(x, np.generic) and has_item:
++        return repr(x.item())
++    else:
++        return repr(x)
++
+ class TestQuaternionInitialisation(unittest.TestCase):
+
+     def test_init_default(self):
+@@ -77,7 +87,7 @@ class TestQuaternionInitialisation(unittest.TestCase):
+     def test_init_from_scalar(self):
+         s = random()
+         q1 = Quaternion(s)
+-        q2 = Quaternion(repr(s))
++        q2 = Quaternion(repr_np(s))
+         self.assertIsInstance(q1, Quaternion)
+         self.assertIsInstance(q2, Quaternion)
+         self.assertEqual(q1, Quaternion(s, 0.0, 0.0, 0.0))
+@@ -90,8 +100,8 @@ class TestQuaternionInitialisation(unittest.TestCase):
+     def test_init_from_elements(self):
+         a, b, c, d = randomElements()
+         q1 = Quaternion(a, b, c, d)
+-        q2 = Quaternion(repr(a), repr(b), repr(c), repr(d))
+-        q3 = Quaternion(a, repr(b), c, d)
++        q2 = Quaternion(repr_np(a), repr_np(b), repr_np(c), repr_np(d))
++        q3 = Quaternion(a, repr_np(b), c, d)
+         self.assertIsInstance(q1, Quaternion)
+         self.assertIsInstance(q2, Quaternion)
+         self.assertIsInstance(q3, Quaternion)
+@@ -154,7 +164,7 @@ class TestQuaternionInitialisation(unittest.TestCase):
+     def test_init_from_explicit_elements(self):
+         e1, e2, e3, e4 = randomElements()
+         q1 = Quaternion(w=e1, x=e2, y=e3, z=e4)
+-        q2 = Quaternion(a=e1, b=repr(e2), c=e3, d=e4)
++        q2 = Quaternion(a=e1, b=repr_np(e2), c=e3, d=e4)
+         q3 = Quaternion(a=e1, i=e2, j=e3, k=e4)
+         q4 = Quaternion(a=e1)
+         self.assertIsInstance(q1, Quaternion)
+@@ -525,7 +535,7 @@ class TestQuaternionArithmetic(unittest.TestCase):
+             q3 = q1
+             self.assertEqual(q1 * s, q2) # post-multiply by scalar
+             self.assertEqual(s * q1, q2) # pre-multiply by scalar
+-            q3 *= repr(s)
++            q3 *= repr_np(s)
+             self.assertEqual(q3, q2)
+
+     def test_multiply_incorrect_type(self):
+@@ -595,7 +605,7 @@ class TestQuaternionArithmetic(unittest.TestCase):
+                 with self.assertRaises(ZeroDivisionError):
+                     s / q1
+
+-            q3 /= repr(s)
++            q3 /= repr_np(s)
+             self.assertEqual(q3, q2)
+
+         with self.assertRaises(ZeroDivisionError):

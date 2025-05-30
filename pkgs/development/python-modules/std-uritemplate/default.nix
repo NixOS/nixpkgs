@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, poetry-core
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "std-uritemplate";
-  version = "0.0.54";
+  version = "2.0.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -15,19 +16,15 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "std_uritemplate";
     inherit version;
-    hash = "sha256-FVKnB3v/T7eV6IQkaKQ8CFumIMc3PPlAgNOFNohQf9Q=";
+    hash = "sha256-dwOohszlnRVcIbWs8a2NSNufMyLemPp4OoOW+/NcvAY=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   # Module doesn't have unittest, only functional tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "stduritemplate"
-  ];
+  pythonImportsCheck = [ "stduritemplate" ];
 
   meta = with lib; {
     description = "Std-uritemplate implementation for Python";

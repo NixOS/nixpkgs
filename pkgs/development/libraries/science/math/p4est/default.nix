@@ -1,10 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, p4est-withMetis ? true, metis
-, p4est-sc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  p4est-withMetis ? true,
+  metis,
+  p4est-sc,
+  mpiCheckPhaseHook,
 }:
 
 let
@@ -25,7 +28,10 @@ stdenv.mkDerivation {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
   propagatedBuildInputs = [ p4est-sc ];
   buildInputs = lib.optional withMetis metis;
   inherit debugEnable mpiSupport withMetis;
@@ -41,12 +47,19 @@ stdenv.mkDerivation {
     unset CC
   '';
 
-  configureFlags = p4est-sc.configureFlags
-    ++ [ "--with-sc=${p4est-sc}" ]
-    ++ lib.optional withMetis "--with-metis"
-  ;
+  configureFlags =
+    p4est-sc.configureFlags ++ [ "--with-sc=${p4est-sc}" ] ++ lib.optional withMetis "--with-metis";
 
-  inherit (p4est-sc) makeFlags dontDisableStatic enableParallelBuilding doCheck;
+  inherit (p4est-sc)
+    makeFlags
+    dontDisableStatic
+    enableParallelBuilding
+    doCheck
+    ;
+
+  nativeCheckInputs = lib.optionals mpiSupport [
+    mpiCheckPhaseHook
+  ];
 
   meta = {
     branch = "prev3-develop";

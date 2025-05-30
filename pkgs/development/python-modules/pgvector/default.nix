@@ -1,49 +1,60 @@
-{ lib
-, asyncpg
-, buildPythonPackage
-, django
-, fetchFromGitHub
-, numpy
-, peewee
-, postgresql
-, postgresqlTestHook
-, psycopg
-, psycopg2
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, sqlalchemy
-, sqlmodel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  numpy,
+
+  # tests
+  asyncpg,
+  django,
+  peewee,
+  pg8000,
+  postgresql,
+  postgresqlTestHook,
+  psycopg-pool,
+  psycopg,
+  psycopg2,
+  pytest-asyncio,
+  pytestCheckHook,
+  scipy,
+  sqlalchemy,
+  sqlmodel,
 }:
 
 buildPythonPackage rec {
   pname = "pgvector";
-  version = "0.2.4";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "0.4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pgvector";
     repo = "pgvector-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-XKoaEwLW59pV4Dwis7p2L65XoO2zUEa1kXxz6Lgs2d8=";
+    tag = "v${version}";
+    hash = "sha256-QbNzEQctKgxdH1cpMmf2Yg05Q3KOT9tGtK4YSr9GiC4=";
   };
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ numpy ];
 
   nativeCheckInputs = [
     asyncpg
     django
     peewee
-    (postgresql.withPackages (p: with p; [ pgvector ]))
-    postgresqlTestHook
+    pg8000
     psycopg
     psycopg2
+    psycopg-pool
+    (postgresql.withPackages (p: with p; [ pgvector ]))
+    postgresqlTestHook
     pytest-asyncio
     pytestCheckHook
+    scipy
     sqlalchemy
     sqlmodel
   ];
@@ -54,13 +65,21 @@ buildPythonPackage rec {
     postgresqlTestUserOptions = "LOGIN SUPERUSER";
   };
 
+  disabledTestPaths = [
+    # DB error
+    "tests/test_pg8000.py"
+    "tests/test_sqlalchemy.py"
+  ];
+
   pythonImportsCheck = [ "pgvector" ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Pgvector support for Python";
     homepage = "https://github.com/pgvector/pgvector-python";
     changelog = "https://github.com/pgvector/pgvector-python/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

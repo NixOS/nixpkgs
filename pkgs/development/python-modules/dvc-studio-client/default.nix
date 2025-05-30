@@ -1,42 +1,39 @@
-{ lib
-, buildPythonPackage
-, dulwich
-, fetchFromGitHub
-, gitpython
-, pythonOlder
-, requests
-, setuptools-scm
-, voluptuous
+{
+  lib,
+  buildPythonPackage,
+  dulwich,
+  fetchFromGitHub,
+  gitpython,
+  pythonOlder,
+  requests,
+  setuptools-scm,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "dvc-studio-client";
-  version = "0.20.0";
-  format = "pyproject";
+  version = "0.21.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "iterative";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-JLrsbgifoUnN1Mwml9tO3/SkA6miE14AGjxrFwEcRks=";
+    repo = "dvc-studio-client";
+    tag = version;
+    hash = "sha256-SCRMBZKOt8JtDi5aGgk6TCxetvG3QU1jOv6U5/6ChTE=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dulwich
     gitpython
     requests
     voluptuous
   ];
 
-  pythonImportsCheck = [
-    "dvc_studio_client"
-  ];
+  pythonImportsCheck = [ "dvc_studio_client" ];
 
   # Tests try to access network
   doCheck = false;

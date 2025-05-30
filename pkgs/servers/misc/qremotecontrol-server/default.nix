@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchgit
-, qmake
-, wrapQtAppsHook
-, qtbase
-, xorg
+{
+  lib,
+  stdenv,
+  fetchgit,
+  qmake,
+  wrapQtAppsHook,
+  qtbase,
+  xorg,
 }:
 
 stdenv.mkDerivation {
@@ -42,6 +43,7 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ fgaz ];
     homepage = "https://sourceforge.net/projects/qrc/";
     description = "Remote control your desktop from your mobile";
+    mainProgram = "qremotecontrol-server";
     longDescription = ''
       With QRemoteControl installed on your desktop you can easily control
       your computer via WiFi from your mobile. By using the touch pad of your
@@ -55,6 +57,6 @@ stdenv.mkDerivation {
       powering on the computer via Wake On Lan is supported.
     '';
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -50,6 +50,10 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
   If specified, the layer created by `buildImage` will be appended to the layers defined in the base image, resulting in an image with at least two layers (one or more layers from the base image, and the layer created by `buildImage`).
   Otherwise, the resulting image with contain the single layer created by `buildImage`.
 
+  :::{.note}
+  Only **Env** configuration is inherited from the base image.
+  :::
+
   _Default value:_ `null`.
 
 `fromImageName` (String or Null; _optional_)
@@ -185,13 +189,26 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
   _Default value:_ `"gz"`.\
   _Possible values:_ `"none"`, `"gz"`, `"zstd"`.
 
+`includeNixDB` (Boolean; _optional_)
+
+: Populate the nix database in the image with the dependencies of `copyToRoot`.
+  The main purpose is to be able to use nix commands in the container.
+
+  :::{.caution}
+  Be careful since this doesn't work well in combination with `fromImage`. In particular, in a multi-layered image, only the Nix paths from the lower image will be in the database.
+
+  This also neglects to register the store paths that are pulled into the image as a dependency of one of the other values, but aren't a dependency of `copyToRoot`.
+  :::
+
+  _Default value:_ `false`.
+
 `contents` **DEPRECATED**
 
 : This attribute is deprecated, and users are encouraged to use `copyToRoot` instead.
 
 ### Passthru outputs {#ssec-pkgs-dockerTools-buildImage-passthru-outputs}
 
-`buildImage` defines a few [`passthru`](#var-stdenv-passthru) attributes:
+`buildImage` defines a few [`passthru`](#chap-passthru) attributes:
 
 `buildArgs` (Attribute Set)
 
@@ -218,7 +235,11 @@ The following package builds a Docker image that runs the `redis-server` executa
 The Docker image will have name `redis` and tag `latest`.
 
 ```nix
-{ dockerTools, buildEnv, redis }:
+{
+  dockerTools,
+  buildEnv,
+  redis,
+}:
 dockerTools.buildImage {
   name = "redis";
   tag = "latest";
@@ -236,7 +257,9 @@ dockerTools.buildImage {
   config = {
     Cmd = [ "/bin/redis-server" ];
     WorkingDir = "/data";
-    Volumes = { "/data" = { }; };
+    Volumes = {
+      "/data" = { };
+    };
   };
 }
 ```
@@ -269,7 +292,11 @@ It uses `runAsRoot` to create a directory and a file inside the image.
 This works the same as [](#ex-dockerTools-buildImage-extraCommands), but uses `runAsRoot` instead of `extraCommands`.
 
 ```nix
-{ dockerTools, buildEnv, hello }:
+{
+  dockerTools,
+  buildEnv,
+  hello,
+}:
 dockerTools.buildImage {
   name = "hello";
   tag = "latest";
@@ -303,7 +330,11 @@ This works the same as [](#ex-dockerTools-buildImage-runAsRoot), but uses `extra
 Note that with `extraCommands`, we can't directly reference `/` and must create files and directories as if we were already on `/`.
 
 ```nix
-{ dockerTools, buildEnv, hello }:
+{
+  dockerTools,
+  buildEnv,
+  hello,
+}:
 dockerTools.buildImage {
   name = "hello";
   tag = "latest";
@@ -333,7 +364,11 @@ dockerTools.buildImage {
 Note that using a value of `"now"` in the `created` attribute will break reproducibility.
 
 ```nix
-{ dockerTools, buildEnv, hello }:
+{
+  dockerTools,
+  buildEnv,
+  hello,
+}:
 dockerTools.buildImage {
   name = "hello";
   tag = "latest";
@@ -436,7 +471,7 @@ See [](#ex-dockerTools-streamLayeredImage-exploringlayers) to understand how the
 `streamLayeredImage` allows scripts to be run when creating the additional layer with symlinks, allowing custom behaviour to affect the final results of the image (see the documentation of the `extraCommands` and `fakeRootCommands` attributes).
 
 The resulting repository tarball will list a single image as specified by the `name` and `tag` attributes.
-By default, that image will use a static creation date (see documentation for the `created` attribute).
+By default, that image will use a static creation date (see documentation for the `created` and `mtime` attributes).
 This allows the function to produce reproducible images.
 
 ### Inputs {#ssec-pkgs-dockerTools-streamLayeredImage-inputs}
@@ -499,10 +534,23 @@ This allows the function to produce reproducible images.
 `created` (String; _optional_)
 
 : Specifies the time of creation of the generated image.
+  This date will be used for the image metadata.
   This should be either a date and time formatted according to [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) or `"now"`, in which case the current date will be used.
 
   :::{.caution}
   Using `"now"` means that the generated image will not be reproducible anymore (because the date will always change whenever it's built).
+  :::
+
+  _Default value:_ `"1970-01-01T00:00:01Z"`.
+
+`mtime` (String; _optional_)
+
+: Specifies the time used for the modification timestamp of files within the layers of the generated image.
+  This should be either a date and time formatted according to [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) or `"now"`, in which case the current date will be used.
+
+  :::{.caution}
+  Using a non-constant date will cause built layers to have a different hash each time, preventing deduplication.
+  Using `"now"` also means that the generated image will not be reproducible anymore (because the date will always change whenever it's built).
   :::
 
   _Default value:_ `"1970-01-01T00:00:01Z"`.
@@ -574,15 +622,28 @@ This allows the function to produce reproducible images.
 
   _Default value:_ `true`
 
+`includeNixDB` (Boolean; _optional_)
+
+: Populate the nix database in the image with the dependencies of `copyToRoot`.
+  The main purpose is to be able to use nix commands in the container.
+
+  :::{.caution}
+  Be careful since this doesn't work well in combination with `fromImage`. In particular, in a multi-layered image, only the Nix paths from the lower image will be in the database.
+
+  This also neglects to register the store paths that are pulled into the image as a dependency of one of the other values, but aren't a dependency of `copyToRoot`.
+  :::
+
+  _Default value:_ `false`.
+
 `passthru` (Attribute Set; _optional_)
 
-: Use this to pass any attributes as [passthru](#var-stdenv-passthru) for the resulting derivation.
+: Use this to pass any attributes as [`passthru`](#chap-passthru) for the resulting derivation.
 
   _Default value:_ `{}`
 
 ### Passthru outputs {#ssec-pkgs-dockerTools-streamLayeredImage-passthru-outputs}
 
-`streamLayeredImage` also defines its own [`passthru`](#var-stdenv-passthru) attributes:
+`streamLayeredImage` also defines its own [`passthru`](#chap-passthru) attributes:
 
 `imageTag` (String)
 
@@ -723,7 +784,11 @@ The closure of `config` is automatically included in the generated image.
 The following package shows a more compact way to create the same output generated in [](#ex-dockerTools-streamLayeredImage-hello).
 
 ```nix
-{ dockerTools, hello, lib }:
+{
+  dockerTools,
+  hello,
+  lib,
+}:
 dockerTools.streamLayeredImage {
   name = "hello";
   tag = "latest";
@@ -838,7 +903,7 @@ dockerTools.pullImage {
   imageDigest = "sha256:b8ea88f763f33dfda2317b55eeda3b1a4006692ee29e60ee54ccf6d07348c598";
   finalImageName = "nix";
   finalImageTag = "2.19.3";
-  sha256 = "zRwlQs1FiKrvHPaf8vWOR/Tlp1C5eLn1d9pE4BZg3oA=";
+  hash = "sha256-zRwlQs1FiKrvHPaf8vWOR/Tlp1C5eLn1d9pE4BZg3oA=";
 }
 ```
 :::
@@ -855,7 +920,7 @@ dockerTools.pullImage {
   imageDigest = "sha256:24a23053f29266fb2731ebea27f915bb0fb2ae1ea87d42d890fe4e44f2e27c5d";
   finalImageName = "etcd";
   finalImageTag = "v3.5.11";
-  sha256 = "Myw+85f2/EVRyMB3axECdmQ5eh9p1q77FWYKy8YpRWU=";
+  hash = "sha256-Myw+85f2/EVRyMB3axECdmQ5eh9p1q77FWYKy8YpRWU=";
 }
 ```
 :::
@@ -879,7 +944,7 @@ Writing manifest to image destination
 {
   imageName = "nixos/nix";
   imageDigest = "sha256:498fa2d7f2b5cb3891a4edf20f3a8f8496e70865099ba72540494cd3e2942634";
-  sha256 = "1q6cf2pdrasa34zz0jw7pbs6lvv52rq2aibgxccbwcagwkg2qj1q";
+  hash = "sha256-OEgs3uRPMb4Y629FJXAWZW9q9LqHS/A/GUqr3K5wzOA=";
   finalImageName = "nixos/nix";
   finalImageTag = "latest";
 }
@@ -1177,6 +1242,7 @@ dockerTools.buildImage {
     hello
     dockerTools.binSh
   ];
+}
 ```
 
 After building the image and loading it in Docker, we can create a container based on it and enter a shell inside the container.
@@ -1503,11 +1569,15 @@ The Docker image generated will have a name like `hello-<version>-env` and tag `
 This example uses [](#ex-dockerTools-streamNixShellImage-hello) as a starting point.
 
 ```nix
-{ dockerTools, cowsay, hello }:
+{
+  dockerTools,
+  cowsay,
+  hello,
+}:
 dockerTools.streamNixShellImage {
   tag = "latest";
   drv = hello.overrideAttrs (old: {
-    nativeBuildInputs = old.nativeBuildInputs or [] ++ [
+    nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
       cowsay
     ];
   });

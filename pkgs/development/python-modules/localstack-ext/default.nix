@@ -1,91 +1,72 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  dill,
+  dnslib,
+  dnspython,
+  plux,
+  pyaes,
+  pyotp,
+  python-jose,
+  requests,
+  python-dateutil,
+  tabulate,
 
-# build-system
-, setuptools
-, plux
-
-# dependencies
-, cachetools
-, click
-, cryptography
-, dill
-, dnslib
-, dnspython
-, psutil
-, python-dotenv
-, pyyaml
-, requests
-, rich
-, semver
-, stevedore
-, tailer
-
-# Sensitive downstream dependencies
-, localstack
+  # use for testing promoted localstack
+  pkgs,
 }:
 
 buildPythonPackage rec {
   pname = "localstack-ext";
-  version = "3.0.2";
+  version = "4.3.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-KNM/HjSWVwenLqtXbaRP70k7b7YXk//aKGEkBxPp1fA=";
+    pname = "localstack_ext";
+    inherit version;
+    hash = "sha256-YlKGdIteeIjqqO9L4BAfEEurOa7vrYaAmreH8gIRcPU=";
   };
 
-  postPatch = ''
-    # Avoid circular dependency
-    sed -i '/localstack>=/d' setup.cfg
-
-    # Pip is unable to resolve attr logic, so it will emit version as 0.0.0
-    substituteInPlace setup.cfg \
-      --replace "version = attr: localstack_ext.__version__" "version = ${version}"
-    cat setup.cfg
-
-    substituteInPlace setup.cfg \
-      --replace "dill==0.3.2" "dill~=0.3.0" \
-      --replace "requests>=2.20.0,<2.26" "requests~=2.20"
-  '';
-
-  nativeBuildInputs = [
-    plux
+  build-system = [
     setuptools
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    cachetools
-    click
-    cryptography
+  pythonRemoveDeps = [
+    # Avoid circular dependency
+    "localstack"
+    "build"
+  ];
+
+  dependencies = [
     dill
     dnslib
     dnspython
     plux
-    psutil
-    python-dotenv
-    pyyaml
-    rich
+    pyaes
+    pyotp
+    python-jose
     requests
-    semver
-    stevedore
-    tailer
-  ];
+    tabulate
+    python-dateutil
+  ] ++ python-jose.optional-dependencies.cryptography;
 
-  pythonImportsCheck = [ "localstack_ext" ];
+  pythonImportsCheck = [ "localstack" ];
 
   # No tests in repo
   doCheck = false;
 
   passthru.tests = {
-    inherit localstack;
+    inherit (pkgs) localstack;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Extensions for LocalStack";
     homepage = "https://github.com/localstack/localstack";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jonringer ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

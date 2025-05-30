@@ -1,6 +1,11 @@
-{ lib, buildPythonPackage, fetchFromGitHub, docopt }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  docopt,
+}:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "spoof-mac";
   version = "unstable-2018-01-27";
 

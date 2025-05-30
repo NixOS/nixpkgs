@@ -1,24 +1,31 @@
-{ lib
-, stdenv
-, buildGoModule
-, nodejs
-, python3
-, libtool
-, npmHooks
-, fetchFromGitHub
-, fetchNpmDeps
-, testers
-, mailpit
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  nodejs,
+  python3,
+  libtool,
+  npmHooks,
+  fetchFromGitHub,
+  fetchNpmDeps,
+  testers,
+  mailpit,
+  nixosTests,
 }:
 
 let
-  version = "1.13.1";
+  source = import ./source.nix;
+
+  inherit (source)
+    version
+    vendorHash
+    ;
 
   src = fetchFromGitHub {
     owner = "axllent";
     repo = "mailpit";
     rev = "v${version}";
-    hash = "sha256-50amJ4pFNVcV7WT303ObPJiCx6tNYWNks3oFnexHRoA=";
+    hash = source.hash;
   };
 
   # Separate derivation, because if we mix this in buildGoModule, the separate
@@ -30,16 +37,15 @@ let
 
     npmDeps = fetchNpmDeps {
       inherit src;
-      hash = "sha256-KleFztYmbgIPg/3acXJTg1J5uyWsVZUQ0caK+hT1uxQ=";
+      hash = source.npmDepsHash;
     };
 
-    env = lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
-      # Make sure libc++ uses `posix_memalign` instead of `aligned_alloc` on x86_64-darwin.
-      # Otherwise, nodejs would require the 11.0 SDK and macOS 10.15+.
-      NIX_CFLAGS_COMPILE = "-D__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__=101300";
-    };
-
-    nativeBuildInputs = [ nodejs python3 libtool npmHooks.npmConfigHook ];
+    nativeBuildInputs = [
+      nodejs
+      python3
+      libtool
+      npmHooks.npmConfigHook
+    ];
 
     buildPhase = ''
       npm run package
@@ -54,25 +60,35 @@ in
 
 buildGoModule {
   pname = "mailpit";
-  inherit src version;
+  inherit src version vendorHash;
 
-  vendorHash = "sha256-iNNs9vLvOKqVpLKt65wVmffgq1l/9KOtnbRPg+2kbsM=";
+  env.CGO_ENABLED = 0;
 
-  CGO_ENABLED = 0;
-
-  ldflags = [ "-s" "-w" "-X github.com/axllent/mailpit/config.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/axllent/mailpit/config.Version=${version}"
+  ];
 
   preBuild = ''
     cp -r ${ui} server/ui/dist
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = mailpit;
-    command = "mailpit version";
+  passthru.tests = {
+    inherit (nixosTests) mailpit;
+    version = testers.testVersion {
+      package = mailpit;
+      command = "mailpit version";
+    };
+  };
+
+  passthru.updateScript = {
+    supportedFeatures = [ "commit" ];
+    command = ./update.sh;
   };
 
   meta = with lib; {
-    description = "An email and SMTP testing tool with API for developers";
+    description = "Email and SMTP testing tool with API for developers";
     homepage = "https://github.com/axllent/mailpit";
     changelog = "https://github.com/axllent/mailpit/releases/tag/v${version}";
     maintainers = with maintainers; [ stephank ];

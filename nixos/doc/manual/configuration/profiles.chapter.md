@@ -8,9 +8,11 @@ is to say, expected usage is to add them to the imports list of your
 `/etc/configuration.nix` as such:
 
 ```nix
-imports = [
-  <nixpkgs/nixos/modules/profiles/profile-name.nix>
-];
+{
+  imports = [
+    <nixpkgs/nixos/modules/profiles/profile-name.nix>
+  ];
+}
 ```
 
 Even if some of these profiles seem only useful in the context of

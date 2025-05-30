@@ -1,6 +1,10 @@
-{ lib, buildDunePackage, fetchurl, ocaml }:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+}:
 
-buildDunePackage (rec {
+buildDunePackage rec {
   pname = "result";
   version = "1.5";
 
@@ -19,6 +23,4 @@ buildDunePackage (rec {
     '';
     license = lib.licenses.bsd3;
   };
-} // lib.optionalAttrs (!lib.versionAtLeast ocaml.version "4.08") {
-  duneVersion = "1";
-})
+}

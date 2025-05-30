@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-scm
-, ujson
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  ujson,
 }:
 
 buildPythonPackage rec {
@@ -17,8 +18,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "python-lsp";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "python-lsp-jsonrpc";
+    tag = "v${version}";
     hash = "sha256-5WN/31e6WCgXVzevMuQbNjyo/2jjWDF+m48nrLKS+64=";
   };
 
@@ -32,17 +33,11 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    ujson
-  ];
+  propagatedBuildInputs = [ ujson ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pylsp_jsonrpc"
-  ];
+  pythonImportsCheck = [ "pylsp_jsonrpc" ];
 
   meta = with lib; {
     description = "Python server implementation of the JSON RPC 2.0 protocol";

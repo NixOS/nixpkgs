@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.virtualisation.rosetta;
@@ -9,7 +14,7 @@ in
     virtualisation.rosetta.enable = lib.mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable [Rosetta](https://developer.apple.com/documentation/apple-silicon/about-the-rosetta-translation-environment) support.
 
         This feature requires the system to be a virtualised guest on an Apple silicon host.
@@ -23,7 +28,7 @@ in
       type = types.str;
       default = "/run/rosetta";
       internal = true;
-      description = lib.mdDoc ''
+      description = ''
         The mount point for the Rosetta runtime inside the guest system.
 
         The proprietary runtime is exposed through a VirtioFS directory share and then mounted at this directory.
@@ -33,7 +38,7 @@ in
     virtualisation.rosetta.mountTag = lib.mkOption {
       type = types.str;
       default = "rosetta";
-      description = lib.mdDoc ''
+      description = ''
         The VirtioFS mount tag for the Rosetta runtime, exposed by the host's virtualisation software.
 
         If supported, your virtualisation software should provide instructions on how register the Rosetta runtime inside Linux guests.
@@ -55,10 +60,9 @@ in
       fsType = "virtiofs";
     };
 
-
     nix.settings = {
       extra-platforms = [ "x86_64-linux" ];
-      extra-sandbox-paths =  [
+      extra-sandbox-paths = [
         "/run/binfmt"
         cfg.mountPoint
       ];

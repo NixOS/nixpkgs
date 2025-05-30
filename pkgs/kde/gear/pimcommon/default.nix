@@ -1,9 +1,11 @@
 {
   mkKdeDerivation,
   qttools,
+  libxslt,
 }:
 mkKdeDerivation {
   pname = "pimcommon";
 
-  extraBuildInputs = [qttools];
+  extraBuildInputs = [ qttools ];
+  extraNativeBuildInputs = [ libxslt ];
 }

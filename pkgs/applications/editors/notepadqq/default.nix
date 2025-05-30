@@ -1,14 +1,15 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, pkg-config
-, which
-, libuchardet
-, qtbase
-, qtsvg
-, qttools
-, qtwebengine
-, qtwebsockets
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  which,
+  libuchardet,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtwebengine,
+  qtwebsockets,
 }:
 
 mkDerivation rec {
@@ -22,6 +23,12 @@ mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-XA9Ay9kJApY+bDeOf0iPv+BWYFuTmIuqsLEPgRTCZCE=";
   };
+
+  patches = [
+    # Fix: chmod in the Makefile fails randomly
+    # Move it to preFixup instead
+    ./fix-configure.patch
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -37,6 +44,8 @@ mkDerivation rec {
     qtwebsockets
   ];
 
+  strictDeps = false; # breaks qmake
+
   preConfigure = ''
     export LRELEASE="lrelease"
   '';
@@ -44,6 +53,7 @@ mkDerivation rec {
   dontWrapQtApps = true;
 
   preFixup = ''
+    chmod +x $out/bin/notepadqq
     wrapQtApp $out/bin/notepadqq
   '';
 

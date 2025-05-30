@@ -1,53 +1,55 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.lxd-image-server;
-  format = pkgs.formats.toml {};
+  format = pkgs.formats.toml { };
 
   location = "/var/www/simplestreams";
 in
 {
   options = {
     services.lxd-image-server = {
-      enable = mkEnableOption (lib.mdDoc "lxd-image-server");
+      enable = lib.mkEnableOption "lxd-image-server";
 
-      group = mkOption {
-        type = types.str;
-        description = lib.mdDoc "Group assigned to the user and the webroot directory.";
+      group = lib.mkOption {
+        type = lib.types.str;
+        description = "Group assigned to the user and the webroot directory.";
         default = "nginx";
         example = "www-data";
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = format.type;
-        description = lib.mdDoc ''
+        description = ''
           Configuration for lxd-image-server.
 
           Example see <https://github.com/Avature/lxd-image-server/blob/master/config.toml>.
         '';
-        default = {};
+        default = { };
       };
 
       nginx = {
-        enable = mkEnableOption (lib.mdDoc "nginx");
-        domain = mkOption {
-          type = types.str;
-          description = lib.mdDoc "Domain to use for nginx virtual host.";
+        enable = lib.mkEnableOption "nginx";
+        domain = lib.mkOption {
+          type = lib.types.str;
+          description = "Domain to use for nginx virtual host.";
           example = "images.example.org";
         };
       };
     };
   };
 
-  config = mkMerge [
-    (mkIf (cfg.enable) {
+  config = lib.mkMerge [
+    (lib.mkIf (cfg.enable) {
       users.users.lxd-image-server = {
         isSystemUser = true;
         group = cfg.group;
       };
-      users.groups.${cfg.group} = {};
+      users.groups.${cfg.group} = { };
 
       environment.etc."lxd-image-server/config.toml".source = format.generate "config.toml" cfg.settings;
 
@@ -88,12 +90,12 @@ in
       };
     })
     # this is separate so it can be enabled on mirrored hosts
-    (mkIf (cfg.nginx.enable) {
+    (lib.mkIf (cfg.nginx.enable) {
       # https://github.com/Avature/lxd-image-server/blob/master/resources/nginx/includes/lxd-image-server.pkg.conf
       services.nginx.virtualHosts = {
         "${cfg.nginx.domain}" = {
           forceSSL = true;
-          enableACME = mkDefault true;
+          enableACME = lib.mkDefault true;
 
           root = location;
 
@@ -103,19 +105,19 @@ in
             };
 
             # Serve json files with content type header application/json
-            "~ \.json$" = {
+            "~ \\.json$" = {
               extraConfig = ''
                 add_header Content-Type application/json;
               '';
             };
 
-            "~ \.tar.xz$" = {
+            "~ \\.tar.xz$" = {
               extraConfig = ''
                 add_header Content-Type application/octet-stream;
               '';
             };
 
-            "~ \.tar.gz$" = {
+            "~ \\.tar.gz$" = {
               extraConfig = ''
                 add_header Content-Type application/octet-stream;
               '';

@@ -1,9 +1,10 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 
 let
   api_token = "f87f42114e44b63ad1b9e3c3d33d6fbe"; # random md5 hash
   wrong_api_token = "e68ba041fcf1eab923a7a6de3af5f726"; # another random md5 hash
-in {
+in
+{
   name = "librenms";
   meta.maintainers = lib.teams.wdz.members;
 
@@ -60,37 +61,29 @@ in {
   };
 
   nodes.snmphost = {
-    networking.firewall.allowedUDPPorts = [ 161 ];
 
-    systemd.services.snmpd = {
-      description = "snmpd";
-      after = [ "network-online.target" ];
-      wants = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        Type = "forking";
-        User = "root";
-        Group = "root";
-        ExecStart = let
-          snmpd-config = pkgs.writeText "snmpd-config" ''
-            com2sec readonly default public
+    services.snmpd = {
+      enable = true;
+      openFirewall = true;
 
-            group MyROGroup v2c        readonly
-            view all    included  .1                               80
-            access MyROGroup ""      any       noauth    exact  all    none   none
+      configText = ''
+        com2sec readonly default public
 
-            syslocation Testcity, Testcountry
-            syscontact Testi mc Test <test@example.com>
-          '';
-        in "${pkgs.net-snmp}/bin/snmpd -c ${snmpd-config} -C";
-      };
+        group MyROGroup v2c        readonly
+        view all    included  .1                               80
+        access MyROGroup ""      any       noauth    exact  all    none   none
+
+        syslocation Testcity, Testcountry
+        syscontact Testi mc Test <test@example.com>
+      '';
+
     };
   };
 
   testScript = ''
     start_all()
 
-    snmphost.wait_until_succeeds("pgrep snmpd")
+    snmphost.wait_for_unit("snmpd.service")
 
     librenms.wait_for_unit("lnms-api-init.service")
     librenms.wait_for_open_port(80)
@@ -105,4 +98,4 @@ in {
     # wait until snmphost gets polled
     librenms.wait_until_succeeds("test $(curl -H 'X-Auth-Token: ${api_token}' http://localhost/api/v0/devices/snmphost | jq -Mr .devices[0].last_polled) != 'null'")
   '';
-})
+}

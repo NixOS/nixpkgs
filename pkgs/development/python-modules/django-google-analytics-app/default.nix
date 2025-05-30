@@ -1,31 +1,37 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, celery
-, django
-, fetchFromGitHub
-, importlib-metadata
-, python
-, pythonOlder
-, requests
-, structlog
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  celery,
+  django,
+  fetchFromGitHub,
+  importlib-metadata,
+  python,
+  requests,
+  setuptools,
+  structlog,
 }:
 
 buildPythonPackage rec {
   pname = "django-google-analytics-app";
   version = "6.0.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "praekeltfoundation";
     repo = "django-google-analytics";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-0KLfGZY8qq5JGb+LJXpQRS76+qXtrf/hv6QLenm+BhQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "celery"
+    "django"
+  ];
+
+  dependencies = [
     beautifulsoup4
     celery
     django
@@ -40,15 +46,13 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "google_analytics"
-  ];
+  pythonImportsCheck = [ "google_analytics" ];
 
-  meta = with lib; {
+  meta = {
     description = "Django Google Analytics brings the power of server side/non-js Google Analytics to your Django projects";
     homepage = "https://github.com/praekeltfoundation/django-google-analytics/";
     changelog = "https://github.com/praekeltfoundation/django-google-analytics/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ derdennisop ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ derdennisop ];
   };
 }

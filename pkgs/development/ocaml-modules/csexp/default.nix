@@ -1,4 +1,9 @@
-{ lib, fetchurl, buildDunePackage, liquidsoap }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  liquidsoap,
+}:
 
 buildDunePackage rec {
   pname = "csexp";
@@ -20,6 +25,6 @@ buildDunePackage rec {
     homepage = "https://github.com/ocaml-dune/csexp";
     changelog = "https://github.com/ocaml-dune/csexp/raw/${version}/CHANGES.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = [ ];
   };
 }

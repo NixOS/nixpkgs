@@ -1,22 +1,32 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   makewhatis = "${lib.getBin cfg.package}/bin/makewhatis";
 
   cfg = config.documentation.man.mandoc;
 
-  toMandocOutput = output: (
-    lib.mapAttrsToList
-      (
-        name: value:
-          if lib.isString value || lib.isPath value then "output ${name} ${value}"
-          else if lib.isInt value then "output ${name} ${builtins.toString value}"
-          else if lib.isBool value then lib.optionalString value "output ${name}"
-          else if value == null then ""
-          else throw "Unrecognized value type ${builtins.typeOf value} of key ${name} in mandoc output settings"
-      )
-      output
-  );
+  toMandocOutput =
+    output:
+    (lib.mapAttrsToList (
+      name: value:
+      if lib.isString value || lib.isPath value then
+        "output ${name} ${value}"
+      else if lib.isInt value then
+        "output ${name} ${builtins.toString value}"
+      else if lib.isBool value then
+        lib.optionalString value "output ${name}"
+      else if value == null then
+        ""
+      else
+        throw "Unrecognized value type ${builtins.typeOf value} of key ${name} in mandoc output settings"
+    ) output);
+
+  makeLeadingSlashes = map (path: if builtins.substring 0 1 path != "/" then "/${path}" else path);
 in
 {
   meta.maintainers = [ lib.maintainers.sternenseemann ];
@@ -29,6 +39,7 @@ in
         type = with lib.types; listOf str;
         default = [ "share/man" ];
         example = lib.literalExpression "[ \"share/man\" \"share/man/fr\" ]";
+        apply = makeLeadingSlashes;
         description = ''
           Change the paths included in the MANPATH environment variable,
           i. e. the directories where {manpage}`man(1)`
@@ -38,6 +49,28 @@ in
           are a valid path from the target prefix (without including it).
           The first value given takes priority. Note that this will not
           add manpath directives to {manpage}`man.conf(5)`.
+        '';
+      };
+
+      cachePath = lib.mkOption {
+        type = with lib.types; listOf str;
+        default = cfg.manPath;
+        defaultText = lib.literalExpression "config.documentation.man.mandoc.manPath";
+        example = lib.literalExpression "[ \"share/man\" \"share/man/fr\" ]";
+        apply = makeLeadingSlashes;
+        description = ''
+          Change the paths where mandoc {manpage}`makewhatis(8)`generates the
+          manual page index caches. {option}`documentation.man.generateCaches`
+          should be enabled to allow cache generation. This list should only
+          include the paths to manpages installed in the system configuration,
+          i. e. /run/current-system/sw/share/man. {manpage}`makewhatis(8)`
+          creates a database in each directory using the files
+          `mansection/[arch/]title.section` and `catsection/[arch/]title.0`
+          in it. If a directory contains no manual pages, no database is
+          created in that directory.
+          This option only needs to be set manually if extra paths should be
+          indexed or {option}`documentation.man.manPath` contains paths that
+          can't be indexed.
         '';
       };
 
@@ -71,12 +104,17 @@ in
                 {option}`documentation.man.mandoc.manPath` to an empty list (`[]`).
               '';
             };
-            output.fragment = lib.mkEnableOption ''
-              Omit the <!DOCTYPE> declaration and the <html>, <head>, and <body>
-              elements and only emit the subtree below the <body> element in HTML
-              output of {manpage}`mandoc(1)`. The style argument will be ignored.
-              This is useful when embedding manual content within existing documents.
-            '';
+            output.fragment = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              example = true;
+              description = ''
+                Whether to omit the <!DOCTYPE> declaration and the <html>, <head>, and <body>
+                elements and only emit the subtree below the <body> element in HTML
+                output of {manpage}`mandoc(1)`. The style argument will be ignored.
+                This is useful when embedding manual content within existing documents.
+              '';
+            };
             output.includes = lib.mkOption {
               type = with lib.types; nullOr str;
               default = null;
@@ -135,9 +173,9 @@ in
               '';
             };
             output.toc = lib.mkEnableOption ''
-              In HTML output of {manpage}`mandoc(1)`, If an input file contains
-              at least two non-standard sections, print a table of contents near
-              the beginning of the output.
+              printing a table of contents near the beginning of the HTML output
+              of {manpage}`mandoc(1)` if an input file contains at least two
+              non-standard sections
             '';
             output.width = lib.mkOption {
               type = with lib.types; nullOr int;
@@ -179,18 +217,15 @@ in
       # see: https://inbox.vuxu.org/mandoc-tech/20210906171231.GF83680@athene.usta.de/T/#e85f773c1781e3fef85562b2794f9cad7b2909a3c
       extraSetup = lib.mkIf config.documentation.man.generateCaches ''
         for man_path in ${
-          lib.concatMapStringsSep " " (path:
-            "$out/" + lib.escapeShellArg path
-            ) cfg.manPath} ${lib.concatMapStringsSep " " (path:
-            lib.escapeShellArg path) cfg.settings.manpath
-          }
+          lib.concatMapStringsSep " " (path: "$out" + lib.escapeShellArg path) cfg.cachePath
+        }
         do
           [[ -d "$man_path" ]] && ${makewhatis} -T utf8 $man_path
         done
       '';
 
       # tell mandoc the paths containing man pages
-      profileRelativeSessionVariables."MANPATH" = map (path: if builtins.substring 0 1 path != "/" then "/${path}" else path) cfg.manPath;
+      profileRelativeSessionVariables."MANPATH" = lib.mkIf (cfg.manPath != [ ]) cfg.manPath;
     };
   };
 }

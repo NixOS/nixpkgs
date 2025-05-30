@@ -1,19 +1,23 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
 
   cfg = config.programs.i3lock;
 
-in {
+in
+{
 
   ###### interface
 
   options = {
     programs.i3lock = {
-      enable = mkEnableOption (mdDoc "i3lock");
-      package = mkPackageOption pkgs "i3lock" {
+      enable = lib.mkEnableOption "i3lock";
+      package = lib.mkPackageOption pkgs "i3lock" {
         example = "i3lock-color";
         extraDescription = ''
           ::: {.note}
@@ -21,11 +25,11 @@ in {
           :::
         '';
       };
-      u2fSupport = mkOption {
-        type        = types.bool;
-        default     = false;
-        example     = true;
-        description = mdDoc ''
+      u2fSupport = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        example = true;
+        description = ''
           Whether to enable U2F support in the i3lock program.
           U2F enables authentication using a hardware device, such as a security key.
           When U2F support is enabled, the i3lock program will set the setuid bit on the i3lock binary and enable the pam u2fAuth service,
@@ -36,11 +40,11 @@ in {
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ cfg.package ];
 
-    security.wrappers.i3lock = mkIf cfg.u2fSupport {
+    security.wrappers.i3lock = lib.mkIf cfg.u2fSupport {
       setuid = true;
       owner = "root";
       group = "root";

@@ -1,6 +1,11 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pyusb }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyusb,
+}:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "blinkstick";
   version = "unstable-2023-05-04";
   format = "setuptools";
@@ -20,8 +25,12 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python package to control BlinkStick USB devices";
+    mainProgram = "blinkstick";
     homepage = "https://github.com/arvydas/blinkstick-python";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ np perstark ];
+    maintainers = with lib.maintainers; [
+      np
+      perstark
+    ];
   };
 }

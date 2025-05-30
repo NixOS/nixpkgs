@@ -1,8 +1,11 @@
 # GVfs
 
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
 
@@ -13,15 +16,8 @@ in
 {
 
   meta = {
-    maintainers = teams.gnome.members;
+    maintainers = lib.teams.gnome.members;
   };
-
-  # Added 2019-08-19
-  imports = [
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "gvfs" "enable" ]
-      [ "services" "gvfs" "enable" ])
-  ];
 
   ###### interface
 
@@ -29,19 +25,18 @@ in
 
     services.gvfs = {
 
-      enable = mkEnableOption (lib.mdDoc "GVfs, a userspace virtual filesystem");
+      enable = lib.mkEnableOption "GVfs, a userspace virtual filesystem";
 
       # gvfs can be built with multiple configurations
-      package = mkPackageOption pkgs [ "gnome" "gvfs" ] { };
+      package = lib.mkPackageOption pkgs [ "gnome" "gvfs" ] { };
 
     };
 
   };
 
-
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ cfg.package ];
 

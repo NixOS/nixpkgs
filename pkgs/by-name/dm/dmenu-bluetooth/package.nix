@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, bluez
-, dmenu
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  bluez,
+  dmenu,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,7 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
     install -D --target-directory=$out/bin/ ./dmenu-bluetooth
 
     wrapProgram $out/bin/dmenu-bluetooth \
-      --prefix PATH ":" ${lib.makeBinPath [ dmenu bluez ] }
+      --prefix PATH ":" ${
+        lib.makeBinPath [
+          dmenu
+          bluez
+        ]
+      }
 
     runHook postInstall
   '';
@@ -34,7 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A script that generates a dmenu menu that uses bluetoothctl to connect to bluetooth devices and display status info";
+    description = "Script that generates a dmenu menu that uses bluetoothctl to connect to bluetooth devices and display status info";
+    mainProgram = "dmenu-bluetooth";
     homepage = "https://github.com/Layerex/dmenu-bluetooth";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ ludovicopiero ];

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.self-deploy;
@@ -9,12 +14,15 @@ let
 
   gitWithRepo = "git -C ${repositoryDirectory}";
 
-  renderNixArgs = args:
+  renderNixArgs =
+    args:
     let
-      toArg = key: value:
-        if builtins.isString value
-        then " --argstr ${lib.escapeShellArg key} ${lib.escapeShellArg value}"
-        else " --arg ${lib.escapeShellArg key} ${lib.escapeShellArg (toString value)}";
+      toArg =
+        key: value:
+        if builtins.isString value then
+          " --argstr ${lib.escapeShellArg key} ${lib.escapeShellArg value}"
+        else
+          " --arg ${lib.escapeShellArg key} ${lib.escapeShellArg (toString value)}";
     in
     lib.concatStrings (lib.mapAttrsToList toArg args);
 
@@ -23,14 +31,14 @@ let
 in
 {
   options.services.self-deploy = {
-    enable = lib.mkEnableOption (lib.mdDoc "self-deploy");
+    enable = lib.mkEnableOption "self-deploy";
 
     nixFile = lib.mkOption {
       type = lib.types.path;
 
       default = "/default.nix";
 
-      description = lib.mdDoc ''
+      description = ''
         Path to nix file in repository. Leading '/' refers to root of
         git repository.
       '';
@@ -41,7 +49,7 @@ in
 
       default = null;
 
-      description = lib.mdDoc ''
+      description = ''
         Attribute of `nixFile` that builds the current system.
       '';
     };
@@ -51,26 +59,36 @@ in
 
       default = { };
 
-      description = lib.mdDoc ''
+      description = ''
         Arguments to `nix-build` passed as `--argstr` or `--arg` depending on
         the type.
       '';
     };
 
     switchCommand = lib.mkOption {
-      type = lib.types.enum [ "boot" "switch" "dry-activate" "test" ];
+      type = lib.types.enum [
+        "boot"
+        "switch"
+        "dry-activate"
+        "test"
+      ];
 
       default = "switch";
 
-      description = lib.mdDoc ''
+      description = ''
         The `switch-to-configuration` subcommand used.
       '';
     };
 
     repository = lib.mkOption {
-      type = with lib.types; oneOf [ path str ];
+      type =
+        with lib.types;
+        oneOf [
+          path
+          str
+        ];
 
-      description = lib.mdDoc ''
+      description = ''
         The repository to fetch from. Must be properly formatted for git.
 
         If this value is set to a path (must begin with `/`) then it's
@@ -88,7 +106,7 @@ in
 
       default = null;
 
-      description = lib.mdDoc ''
+      description = ''
         Path to SSH private key used to fetch private repositories over
         SSH.
       '';
@@ -99,7 +117,7 @@ in
 
       default = "master";
 
-      description = lib.mdDoc ''
+      description = ''
         Branch to track
 
         Technically speaking any ref can be specified here, as this is
@@ -113,7 +131,7 @@ in
 
       default = "hourly";
 
-      description = lib.mdDoc ''
+      description = ''
         The schedule on which to run the `self-deploy` service. Format
         specified by `systemd.time 7`.
 
@@ -134,17 +152,21 @@ in
 
       after = requires;
 
-      environment.GIT_SSH_COMMAND = lib.mkIf (cfg.sshKeyFile != null)
-        "${pkgs.openssh}/bin/ssh -i ${lib.escapeShellArg cfg.sshKeyFile}";
+      environment.GIT_SSH_COMMAND = lib.mkIf (
+        cfg.sshKeyFile != null
+      ) "${pkgs.openssh}/bin/ssh -i ${lib.escapeShellArg cfg.sshKeyFile}";
 
       restartIfChanged = false;
 
-      path = with pkgs; [
-        git
-        gnutar
-        gzip
-        nix
-      ] ++ lib.optionals (cfg.switchCommand == "boot") [ systemd ];
+      path =
+        with pkgs;
+        [
+          git
+          gnutar
+          gzip
+          nix
+        ]
+        ++ lib.optionals (cfg.switchCommand == "boot") [ systemd ];
 
       script = ''
         if [ ! -e ${repositoryDirectory} ]; then
@@ -156,13 +178,16 @@ in
 
         ${gitWithRepo} checkout FETCH_HEAD
 
-        nix-build${renderNixArgs cfg.nixArgs} ${lib.cli.toGNUCommandLineShell { } {
-          attr = cfg.nixAttribute;
-          out-link = outPath;
-        }} ${lib.escapeShellArg "${repositoryDirectory}${cfg.nixFile}"}
+        nix-build${renderNixArgs cfg.nixArgs} ${
+          lib.cli.toGNUCommandLineShell { } {
+            attr = cfg.nixAttribute;
+            out-link = outPath;
+          }
+        } ${lib.escapeShellArg "${repositoryDirectory}${cfg.nixFile}"}
 
-        ${lib.optionalString (cfg.switchCommand != "test")
-          "nix-env --profile /nix/var/nix/profiles/system --set ${outPath}"}
+        ${lib.optionalString (
+          cfg.switchCommand != "test"
+        ) "nix-env --profile /nix/var/nix/profiles/system --set ${outPath}"}
 
         ${outPath}/bin/switch-to-configuration ${cfg.switchCommand}
 

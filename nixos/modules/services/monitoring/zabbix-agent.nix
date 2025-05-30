@@ -1,10 +1,28 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.zabbixAgent;
 
-  inherit (lib) mkDefault mkEnableOption mkPackageOption mkIf mkMerge mkOption;
-  inherit (lib) attrValues concatMapStringsSep literalExpression optionalString types;
+  inherit (lib)
+    mkDefault
+    mkEnableOption
+    mkPackageOption
+    mkIf
+    mkMerge
+    mkOption
+    ;
+  inherit (lib)
+    attrValues
+    concatMapStringsSep
+    literalExpression
+    optionalString
+    types
+    ;
   inherit (lib.generators) toKeyValue;
 
   user = "zabbix-agent";
@@ -15,13 +33,19 @@ let
     paths = attrValues cfg.modules;
   };
 
-  configFile = pkgs.writeText "zabbix_agent.conf" (toKeyValue { listsAsDuplicateKeys = true; } cfg.settings);
+  configFile = pkgs.writeText "zabbix_agent.conf" (
+    toKeyValue { listsAsDuplicateKeys = true; } cfg.settings
+  );
 
 in
 
 {
   imports = [
-    (lib.mkRemovedOptionModule [ "services" "zabbixAgent" "extraConfig" ] "Use services.zabbixAgent.settings instead.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "zabbixAgent"
+      "extraConfig"
+    ] "Use services.zabbixAgent.settings instead.")
   ];
 
   # interface
@@ -29,7 +53,7 @@ in
   options = {
 
     services.zabbixAgent = {
-      enable = mkEnableOption (lib.mdDoc "the Zabbix Agent");
+      enable = mkEnableOption "the Zabbix Agent";
 
       package = mkPackageOption pkgs [ "zabbix" "agent" ] { };
 
@@ -38,7 +62,7 @@ in
         default = with pkgs; [ nettools ];
         defaultText = literalExpression "with pkgs; [ nettools ]";
         example = literalExpression "with pkgs; [ nettools mysql ]";
-        description = lib.mdDoc ''
+        description = ''
           Packages to be added to the Zabbix {env}`PATH`.
           Typically used to add executables for scripts, but can be anything.
         '';
@@ -46,8 +70,8 @@ in
 
       modules = mkOption {
         type = types.attrsOf types.package;
-        description = lib.mdDoc "A set of modules to load.";
-        default = {};
+        description = "A set of modules to load.";
+        default = { };
         example = literalExpression ''
           {
             "dummy.so" = pkgs.stdenv.mkDerivation {
@@ -66,7 +90,7 @@ in
 
       server = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           The IP address or hostname of the Zabbix server to connect to.
         '';
       };
@@ -75,7 +99,7 @@ in
         ip = mkOption {
           type = types.str;
           default = "0.0.0.0";
-          description = lib.mdDoc ''
+          description = ''
             List of comma delimited IP addresses that the agent should listen on.
           '';
         };
@@ -83,7 +107,7 @@ in
         port = mkOption {
           type = types.port;
           default = 10050;
-          description = lib.mdDoc ''
+          description = ''
             Agent will listen on this port for connections from the server.
           '';
         };
@@ -92,15 +116,21 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Open ports in the firewall for the Zabbix Agent.
         '';
       };
 
       settings = mkOption {
-        type = with types; attrsOf (oneOf [ int str (listOf str) ]);
-        default = {};
-        description = lib.mdDoc ''
+        type =
+          with types;
+          attrsOf (oneOf [
+            int
+            str
+            (listOf str)
+          ]);
+        default = { };
+        description = ''
           Zabbix Agent configuration. Refer to
           <https://www.zabbix.com/documentation/current/manual/appendix/config/zabbix_agentd>
           for details on supported values.
@@ -125,7 +155,7 @@ in
         Server = cfg.server;
         ListenPort = cfg.listen.port;
       }
-      (mkIf (cfg.modules != {}) {
+      (mkIf (cfg.modules != { }) {
         LoadModule = builtins.attrNames cfg.modules;
         LoadModulePath = "${moduleEnv}/lib";
       })
@@ -155,7 +185,13 @@ in
       # https://www.zabbix.com/documentation/current/manual/config/items/userparameters
       # > User parameters are commands executed by Zabbix agent.
       # > /bin/sh is used as a command line interpreter under UNIX operating systems.
-      path = with pkgs; [ bash "/run/wrappers" ] ++ cfg.extraPackages;
+      path =
+        with pkgs;
+        [
+          bash
+          "/run/wrappers"
+        ]
+        ++ cfg.extraPackages;
 
       serviceConfig = {
         ExecStart = "@${cfg.package}/sbin/zabbix_agentd zabbix_agentd -f --config ${configFile}";

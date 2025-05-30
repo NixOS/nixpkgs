@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build time
-, setuptools-scm
+  # build time
+  setuptools-scm,
 
-# propagates
-, aiohttp
+  # propagates
+  aiohttp,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 let
@@ -23,22 +24,16 @@ buildPythonPackage {
 
   src = fetchFromGitHub {
     owner = "PaulAnnekov";
-    repo = pname;
+    repo = "uasiren";
     rev = "v${version}";
     hash = "sha256-NHrnG5Vhz+JZgcTJyfIgGz0Ye+3dFVv2zLCCqw2++oM=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
     "uasiren"
@@ -53,4 +48,3 @@ buildPythonPackage {
     maintainers = with maintainers; [ hexa ];
   };
 }
-

@@ -1,22 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cmake,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "tlsh";
-  version = "4.10.0";
-  format = "setuptools";
+  version = "4.12.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trendmicro";
     repo = "tlsh";
-    rev = version;
-    hash = "sha256-9Vkj7a5xU/coFyM/8i8JB0DdnbgDAEMOjmmMF8ckKuE=";
+    tag = version;
+    hash = "sha256-Ht4LkcNmxPEvzFHXeS/XhPt/xo+0sE4RBcLCn9N/zwE=";
   };
 
   nativeBuildInputs = [ cmake ];
+
+  build-system = [ setuptools ];
 
   # no test data
   doCheck = false;
@@ -25,11 +29,12 @@ buildPythonPackage rec {
     cd ../py_ext
   '';
 
+  pythonImportsCheck = [ "tlsh" ];
+
   meta = with lib; {
     description = "Trend Micro Locality Sensitive Hash";
     homepage = "https://tlsh.org/";
+    changelog = "https://github.com/trendmicro/tlsh/releases/tag/${version}";
     license = licenses.asl20;
-    platforms = platforms.unix;
   };
-
 }

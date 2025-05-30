@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ lib, ... }:
+{ lib, ... }:
 {
   name = "swap-file-btrfs";
 
@@ -47,4 +47,4 @@ import ./make-test-python.nix ({ lib, ... }:
     machine.fail("systemctl is-failed --quiet mkswap-var-swapfile.service")
     machine.succeed("swapon --show | grep /var/swapfile")
   '';
-})
+}

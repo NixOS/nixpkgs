@@ -1,25 +1,25 @@
-{ stdenv
-, cmake
-, lib
-, fetchFromGitHub
-, wrapQtAppsHook
-, qtbase
-, qtcharts
-, fftw
-, libtorch-bin
-, portaudio
-, eigen
-, xorg
-, pkg-config
-, autoPatchelfHook
-, soxr
-, freetype
-, libsamplerate
-, armadillo
-, tomlplusplus
+{
+  stdenv,
+  cmake,
+  lib,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  qtbase,
+  qtcharts,
+  fftw,
+  libtorch-bin,
+  portaudio,
+  eigen,
+  xorg,
+  pkg-config,
+  autoPatchelfHook,
+  soxr,
+  libsamplerate,
+  armadillo,
+  tomlplusplus,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "in-formant";
   version = "unstable-2022-09-15";
 
@@ -37,7 +37,12 @@ stdenv.mkDerivation rec {
     ./0001-Avoid-using-vendored-dependencies-we-have-in-nixpkgs.patch
   ];
 
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook autoPatchelfHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapQtAppsHook
+    autoPatchelfHook
+  ];
 
   buildInputs = [
     qtbase
@@ -61,11 +66,12 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A real-time pitch and formant tracking software";
+    description = "Real-time pitch and formant tracking software";
+    mainProgram = "in-formant";
     homepage = "https://github.com/in-formant/in-formant";
     license = licenses.asl20;
     # currently broken on i686-linux and aarch64-linux due to other nixpkgs dependencies
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ ckie ];
+    maintainers = [ ];
   };
 }

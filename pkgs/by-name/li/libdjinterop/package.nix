@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, boost
-, cmake
-, ninja
-, pkg-config
-, sqlite
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  cmake,
+  ninja,
+  pkg-config,
+  sqlite,
+  zlib,
 }:
 
 stdenv.mkDerivation {
@@ -17,8 +18,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "xsco";
     repo = "libdjinterop";
-    rev = "0.20.1";
-    hash = "sha256-/iXSRJVFPWqUTVz7z0BNWCq5LOqdNuTI+wx/34JAZfc=";
+    rev = "0.24.3";
+    hash = "sha256-Fp7AwEOq2JOpL60GDAXmA15ptFeLoG79nnnPXHl1Hjw=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +28,10 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   buildInputs = [
     boost

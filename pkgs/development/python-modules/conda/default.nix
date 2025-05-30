@@ -1,38 +1,91 @@
-{ lib
-, buildPythonPackage
-, pythonAtLeast
-, fetchPypi
-, pycosat
-, requests
-, ruamel-yaml
-, isPy3k
-, enum34
+{
+  lib,
+  buildPythonPackage,
+  stdenv,
+  fetchFromGitHub,
+  # build dependencies
+  hatchling,
+  hatch-vcs,
+  # runtime dependencies
+  archspec,
+  conda-libmamba-solver,
+  conda-package-handling,
+  distro,
+  frozendict,
+  jsonpatch,
+  packaging,
+  platformdirs,
+  pluggy,
+  pycosat,
+  requests,
+  ruamel-yaml,
+  tqdm,
+  truststore,
+  # runtime options
+  defaultEnvPath ? "~/.conda/envs", # default path to store conda environments
+  defaultPkgPath ? "~/.conda/pkgs", # default path to store download conda packages
 }:
-
-# Note: this installs conda as a library. The application cannot be used.
-# This is likely therefore NOT what you're looking for.
-
 buildPythonPackage rec {
+  __structuredAttrs = true;
   pname = "conda";
-  version = "4.3.16";
-  format = "setuptools";
+  version = "25.1.0";
+  pyproject = true;
 
-  # this is a very outdated version of conda that isn't compatible with python 3.10+
-  disabled = pythonAtLeast "3.10";
-
-  src = fetchPypi {
+  src = fetchFromGitHub {
     inherit pname version;
-    sha256 = "a91ef821343dea3ba9670f3d10b36c1ace4f4c36d70c175d8fc8886e94285953";
+    owner = "conda";
+    repo = "conda";
+    tag = version;
+    hash = "sha256-dFj9ob9RRmeaaVDJeDOVLe06fBkCGEWhavLFKytJ8Mo=";
   };
 
-  propagatedBuildInputs = [ pycosat requests ruamel-yaml ] ++ lib.optional (!isPy3k) enum34;
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
-  # No tests
-  doCheck = false;
+  dependencies = [
+    archspec
+    conda-libmamba-solver
+    conda-package-handling
+    distro
+    frozendict
+    jsonpatch
+    packaging
+    platformdirs
+    pluggy
+    pycosat
+    requests
+    ruamel-yaml
+    tqdm
+    truststore
+  ];
+
+  patches = [ ./0001-conda_exe.patch ];
+
+  makeWrapperArgs = [
+    "--set"
+    "CONDA_EXE"
+    "${placeholder "out"}/bin/conda"
+
+    "--set-default"
+    "CONDA_ENVS_PATH"
+    defaultEnvPath
+
+    "--set-default"
+    "CONDA_PKGS_DIRS"
+    defaultPkgPath
+  ];
+
+  pythonImportsCheck = [ "conda" ];
+
+  # menuinst is currently not packaged
+  pythonRemoveDeps = lib.optionals (!stdenv.hostPlatform.isWindows) [ "menuinst" ];
 
   meta = {
     description = "OS-agnostic, system-level binary package manager";
     homepage = "https://github.com/conda/conda";
     license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.ericthemagician ];
   };
 }

@@ -1,22 +1,21 @@
-{ runCommand
-, fontbakery
+{
+  fontbakery,
+  lib,
+  runCommand,
 }:
 
 let
-  inherit (fontbakery) pname version src;
+  inherit (fontbakery) version src;
 in
 
-runCommand "${pname}-tests" { meta.timeout = 5; } ''
+runCommand "fontbakery-tests" { meta.timeout = 5; } ''
   # Check the version matches what we packaged.
-  ${fontbakery}/bin/fontbakery --version | grep -q "${version}"
-
-  # Can it list its own subcommands?
-  ${fontbakery}/bin/fontbakery --list-subcommands >>$out
+  ${lib.getExe fontbakery} --version | grep -q "${version}"
 
   # Unpack src to get some test fonts.
-  tar -xzf ${src} --strip-components=1 ${pname}-${version}/data/test
+  tar -xzf ${src} --strip-components=1 fontbakery-${version}/data/test
 
   # Run some font checks.
-  ${fontbakery}/bin/fontbakery check-ufo-sources --no-progress --no-colors data/test/test.ufo >>$out
+  ${lib.getExe fontbakery} check-ufo --no-progress --no-colors data/test/test.ufo >>$out
   # TODO add more
 ''

@@ -1,17 +1,20 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{ lib, ... }:
+{
   name = "sabnzbd";
-  meta = with pkgs.lib; {
-    maintainers = with maintainers; [ jojosch ];
-  };
+  meta.maintainers = with lib.maintainers; [ jojosch ];
 
-  nodes.machine = { pkgs, ... }: {
-    services.sabnzbd = {
-      enable = true;
+  node.pkgsReadOnly = false;
+
+  nodes.machine =
+    { lib, ... }:
+    {
+      services.sabnzbd = {
+        enable = true;
+      };
+
+      # unrar is unfree
+      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ "unrar" ];
     };
-
-    # unrar is unfree
-    nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ "unrar" ];
-  };
 
   testScript = ''
     machine.wait_for_unit("sabnzbd.service")
@@ -22,4 +25,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     machine.log(out)
     machine.fail("grep 'SABCTools disabled: no correct version found!' /var/lib/sabnzbd/logs/sabnzbd.log")
   '';
-})
+}

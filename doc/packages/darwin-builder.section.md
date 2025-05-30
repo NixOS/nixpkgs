@@ -81,7 +81,7 @@ $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
 
 ## Example flake usage {#sec-darwin-builder-example-flake}
 
-```
+```nix
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-22.11-darwin";
@@ -89,58 +89,72 @@ $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
     darwin.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, darwin, nixpkgs, ... }@inputs:
-  let
+  outputs =
+    {
+      self,
+      darwin,
+      nixpkgs,
+      ...
+    }@inputs:
+    let
 
-    inherit (darwin.lib) darwinSystem;
-    system = "aarch64-darwin";
-    pkgs = nixpkgs.legacyPackages."${system}";
-    linuxSystem = builtins.replaceStrings [ "darwin" ] [ "linux" ] system;
+      inherit (darwin.lib) darwinSystem;
+      system = "aarch64-darwin";
+      pkgs = nixpkgs.legacyPackages."${system}";
+      linuxSystem = builtins.replaceStrings [ "darwin" ] [ "linux" ] system;
 
-    darwin-builder = nixpkgs.lib.nixosSystem {
-      system = linuxSystem;
-      modules = [
-        "${nixpkgs}/nixos/modules/profiles/macos-builder.nix"
-        { virtualisation = {
-            host.pkgs = pkgs;
-            darwin-builder.workingDirectory = "/var/lib/darwin-builder";
-            darwin-builder.hostPort = 22;
-          };
-        }
-      ];
-    };
-  in {
-
-    darwinConfigurations = {
-      machine1 = darwinSystem {
-        inherit system;
+      darwin-builder = nixpkgs.lib.nixosSystem {
+        system = linuxSystem;
         modules = [
+          "${nixpkgs}/nixos/modules/profiles/nix-builder-vm.nix"
           {
-            nix.distributedBuilds = true;
-            nix.buildMachines = [{
-              hostName = "localhost";
-              sshUser = "builder";
-              sshKey = "/etc/nix/builder_ed25519";
-              system = linuxSystem;
-              maxJobs = 4;
-              supportedFeatures = [ "kvm" "benchmark" "big-parallel" ];
-            }];
-
-            launchd.daemons.darwin-builder = {
-              command = "${darwin-builder.config.system.build.macos-builder-installer}/bin/create-builder";
-              serviceConfig = {
-                KeepAlive = true;
-                RunAtLoad = true;
-                StandardOutPath = "/var/log/darwin-builder.log";
-                StandardErrorPath = "/var/log/darwin-builder.log";
-              };
+            virtualisation = {
+              host.pkgs = pkgs;
+              darwin-builder.workingDirectory = "/var/lib/darwin-builder";
+              darwin-builder.hostPort = 22;
             };
           }
         ];
       };
-    };
+    in
+    {
 
-  };
+      darwinConfigurations = {
+        machine1 = darwinSystem {
+          inherit system;
+          modules = [
+            {
+              nix.distributedBuilds = true;
+              nix.buildMachines = [
+                {
+                  hostName = "localhost";
+                  sshUser = "builder";
+                  sshKey = "/etc/nix/builder_ed25519";
+                  system = linuxSystem;
+                  maxJobs = 4;
+                  supportedFeatures = [
+                    "kvm"
+                    "benchmark"
+                    "big-parallel"
+                  ];
+                }
+              ];
+
+              launchd.daemons.darwin-builder = {
+                command = "${darwin-builder.config.system.build.macos-builder-installer}/bin/create-builder";
+                serviceConfig = {
+                  KeepAlive = true;
+                  RunAtLoad = true;
+                  StandardOutPath = "/var/log/darwin-builder.log";
+                  StandardErrorPath = "/var/log/darwin-builder.log";
+                };
+              };
+            }
+          ];
+        };
+      };
+
+    };
 }
 ```
 
@@ -153,19 +167,22 @@ you may use it to build a modified remote builder with additional storage or mem
 To do this, you just need to set the `virtualisation.darwin-builder.*` parameters as
 in the example below and rebuild.
 
-```
-    darwin-builder = nixpkgs.lib.nixosSystem {
-      system = linuxSystem;
-      modules = [
-        "${nixpkgs}/nixos/modules/profiles/macos-builder.nix"
-        {
-          virtualisation.host.pkgs = pkgs;
-          virtualisation.darwin-builder.diskSize = 5120;
-          virtualisation.darwin-builder.memorySize = 1024;
-          virtualisation.darwin-builder.hostPort = 33022;
-          virtualisation.darwin-builder.workingDirectory = "/var/lib/darwin-builder";
-        }
-      ];
+```nix
+{
+  darwin-builder = nixpkgs.lib.nixosSystem {
+    system = linuxSystem;
+    modules = [
+      "${nixpkgs}/nixos/modules/profiles/nix-builder-vm.nix"
+      {
+        virtualisation.host.pkgs = pkgs;
+        virtualisation.darwin-builder.diskSize = 5120;
+        virtualisation.darwin-builder.memorySize = 1024;
+        virtualisation.darwin-builder.hostPort = 33022;
+        virtualisation.darwin-builder.workingDirectory = "/var/lib/darwin-builder";
+      }
+    ];
+  };
+}
 ```
 
 You may make any other changes to your VM in this attribute set. For example,
@@ -182,6 +199,6 @@ nix-repl> darwin.linux-builder.nixosConfig.nix.package
 «derivation /nix/store/...-nix-2.17.0.drv»
 
 nix-repl> :p darwin.linux-builder.nixosOptions.virtualisation.memorySize.definitionsWithLocations
-[ { file = "/home/user/src/nixpkgs/nixos/modules/profiles/macos-builder.nix"; value = 3072; } ]
+[ { file = "/home/user/src/nixpkgs/nixos/modules/profiles/nix-builder-vm.nix"; value = 3072; } ]
 
 ```

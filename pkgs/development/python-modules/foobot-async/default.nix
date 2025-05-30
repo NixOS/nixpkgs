@@ -1,27 +1,37 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, aiohttp
-, async-timeout
-, aioresponses
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  aiohttp,
+  async-timeout,
+  aioresponses,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "foobot-async";
-  version = "1.0.0";
-  format = "setuptools";
+  version = "1.0.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "foobot_async";
     inherit version;
-    sha256 = "fa557a22de925139cb4a21034ffdbcd01d28bf166c0e680eaf84a99206327f40";
+    hash = "sha256-QQjysk2m8QkOpLBdC8kfuoA9PcljgEwzKyrIAhxHB4c=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    # https://github.com/reefab/foobot_async/issues/7
+    substituteInPlace foobot_async/__init__.py \
+      --replace-fail "with async_timeout.timeout" "async with async_timeout.timeout"
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     async-timeout
   ];

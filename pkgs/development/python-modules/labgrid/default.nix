@@ -1,56 +1,50 @@
-{ ansicolors
-, attrs
-, autobahn
-, buildPythonPackage
-, fetchFromGitHub
-, jinja2
-, lib
-, mock
-, openssh
-, packaging
-, pexpect
-, psutil
-, pyserial
-, pytestCheckHook
-, pytest-dependency
-, pytest-mock
-, pythonRelaxDepsHook
-, pyudev
-, pyusb
-, pyyaml
-, requests
-, setuptools
-, setuptools-scm
-, wheel
-, xmodem
+{
+  ansicolors,
+  attrs,
+  autobahn,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  lib,
+  mock,
+  openssh,
+  pexpect,
+  psutil,
+  pyserial,
+  pytestCheckHook,
+  pytest-dependency,
+  pytest-mock,
+  pyudev,
+  pyusb,
+  pyyaml,
+  requests,
+  setuptools,
+  setuptools-scm,
+  xmodem,
 }:
 
 buildPythonPackage rec {
   pname = "labgrid";
-  version = "23.0.5";
+  version = "24.0.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "labgrid-project";
     repo = "labgrid";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-jrapbSrybuLT3V11rvV342tOr7/sRwBMgAdNWDG5obA=";
+    tag = "v${version}";
+    hash = "sha256-rW9peT4zoPzVR6Kl/E8G4qBig/x/lvxpCtvNtwIIL+U=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
-  pyproject = true;
-
-  propagatedBuildInputs = [
+  dependencies = [
     ansicolors
     attrs
     autobahn
     jinja2
-    packaging
     pexpect
     pyserial
     pyudev
@@ -60,21 +54,9 @@ buildPythonPackage rec {
     xmodem
   ];
 
-  pythonRelaxDeps = [
-    "attrs"
-    "autobahn"
-    "jinja2"
-    "packaging"
-    "pexpect"
-    "pytest"
-    "pyudev"
-    "requests"
-    "xmodem"
-  ];
+  pythonRemoveDeps = [ "pyserial-labgrid" ];
 
-  pythonRemoveDeps = [
-    "pyserial-labgrid"
-  ];
+  pythonImportsCheck = [ "labgrid" ];
 
   nativeCheckInputs = [
     mock
@@ -85,9 +67,14 @@ buildPythonPackage rec {
     pytest-dependency
   ];
 
+  disabledtests = [
+    # flaky, timing sensitive
+    "test_timing"
+  ];
+
   meta = with lib; {
     description = "Embedded control & testing library";
-    homepage = "https://labgrid.org";
+    homepage = "https://github.com/labgrid-project/labgrid";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ emantor ];
     platforms = with platforms; linux;

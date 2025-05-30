@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromBitbucket
-, wrapQtAppsHook
-, pkg-config
-, hamlib
-, libusb1
-, cmake
-, gfortran
-, fftw
-, fftwFloat
-, qtbase
-, qtmultimedia
-, qtserialport
+{
+  lib,
+  stdenv,
+  fetchFromBitbucket,
+  wrapQtAppsHook,
+  pkg-config,
+  hamlib,
+  libusb1,
+  cmake,
+  gfortran,
+  fftw,
+  fftwFloat,
+  qtbase,
+  qtmultimedia,
+  qtserialport,
 }:
 
 stdenv.mkDerivation rec {

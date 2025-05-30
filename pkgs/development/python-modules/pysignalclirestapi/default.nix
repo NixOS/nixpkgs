@@ -1,27 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, requests
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  requests,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "pysignalclirestapi";
-  version = "0.3.23";
+  version = "0.3.24";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bbernhard";
     repo = "pysignalclirestapi";
-    rev = "refs/tags/${version}";
-    hash = "sha256-DI6dPh8TJElDSk2ExMk4w32ROYgc33cwWNmc3pIBADM=";
+    tag = version;
+    hash = "sha256-LGP/Oo4FCvOq3LuUZRYFkK2JV1kEu3MeCDgnYo+91o4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     requests

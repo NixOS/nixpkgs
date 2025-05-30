@@ -1,8 +1,9 @@
-{ buildPythonPackage
-, cliff
-, docutils
-, stestr
-, testscenarios
+{
+  buildPythonPackage,
+  cliff,
+  sphinx,
+  stestr,
+  testscenarios,
 }:
 
 buildPythonPackage {
@@ -21,7 +22,7 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     cliff
-    docutils
+    sphinx
     stestr
     testscenarios
   ];

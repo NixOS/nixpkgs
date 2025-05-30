@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, requests
-, six
-, tqdm
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  requests,
+  six,
+  tqdm,
 }:
 
 buildPythonPackage {
@@ -23,15 +24,13 @@ buildPythonPackage {
     tqdm
   ];
 
-  pythonImportsCheck = [
-    "mediafire_dl"
-  ];
+  pythonImportsCheck = [ "mediafire_dl" ];
 
   meta = with lib; {
     description = "Simple command-line script to download files from mediafire based on gdown";
     homepage = "https://github.com/Juvenal-Yescas/mediafire-dl";
     license = licenses.mit;
-    maintainers = with maintainers; [ pacien ];
+    maintainers = with maintainers; [ euxane ];
     mainProgram = "mediafire-dl";
   };
 }

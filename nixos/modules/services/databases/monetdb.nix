@@ -1,58 +1,61 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.monetdb;
 
-in {
-  meta.maintainers = with maintainers; [ StillerHarpo primeos ];
+in
+{
+  meta.maintainers = with lib.maintainers; [ StillerHarpo ];
 
   ###### interface
   options = {
     services.monetdb = {
 
-      enable = mkEnableOption (lib.mdDoc "the MonetDB database server");
+      enable = lib.mkEnableOption "the MonetDB database server";
 
-      package = mkPackageOption pkgs "monetdb" { };
+      package = lib.mkPackageOption pkgs "monetdb" { };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "monetdb";
-        description = lib.mdDoc "User account under which MonetDB runs.";
+        description = "User account under which MonetDB runs.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "monetdb";
-        description = lib.mdDoc "Group under which MonetDB runs.";
+        description = "Group under which MonetDB runs.";
       };
 
-      dataDir = mkOption {
-        type = types.path;
+      dataDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/monetdb";
-        description = lib.mdDoc "Data directory for the dbfarm.";
+        description = "Data directory for the dbfarm.";
       };
 
-      port = mkOption {
-        type = types.ints.u16;
+      port = lib.mkOption {
+        type = lib.types.ints.u16;
         default = 50000;
-        description = lib.mdDoc "Port to listen on.";
+        description = "Port to listen on.";
       };
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = "127.0.0.1";
         example = "0.0.0.0";
-        description = lib.mdDoc "Address to listen on.";
+        description = "Address to listen on.";
       };
     };
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    users.users.monetdb = mkIf (cfg.user == "monetdb") {
+    users.users.monetdb = lib.mkIf (cfg.user == "monetdb") {
       uid = config.ids.uids.monetdb;
       group = cfg.group;
       description = "MonetDB user";
@@ -60,7 +63,7 @@ in {
       createHome = true;
     };
 
-    users.groups.monetdb = mkIf (cfg.group == "monetdb") {
+    users.groups.monetdb = lib.mkIf (cfg.group == "monetdb") {
       gid = config.ids.gids.monetdb;
       members = [ cfg.user ];
     };

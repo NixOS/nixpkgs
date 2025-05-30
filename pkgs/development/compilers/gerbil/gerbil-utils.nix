@@ -18,9 +18,9 @@
 
   meta = with lib; {
     description = "Gerbil Clan: Community curated Collection of Common Utilities";
-    homepage    = "https://github.com/fare/gerbil-utils";
-    license     = licenses.lgpl21;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/fare/gerbil-utils";
+    license = licenses.lgpl21;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ fare ];
   };
 }

@@ -1,56 +1,66 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch2,
+  pythonOlder,
 
-# build
-, hatchling
+  # build
+  hatchling,
 
-# runtime
-, jsonschema
-, python-json-logger
-, pyyaml
-, referencing
-, traitlets
+  # runtime
+  jsonschema,
+  python-json-logger,
+  pyyaml,
+  referencing,
+  rfc3339-validator,
+  rfc3986-validator,
+  traitlets,
 
-# optionals
-, click
-, rich
+  # optionals
+  click,
+  rich,
 
-# tests
-, pytest-asyncio
-, pytest-console-scripts
-, pytestCheckHook
+  # tests
+  pytest-asyncio,
+  pytest-console-scripts,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-events";
-  version = "0.9.0";
+  version = "0.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "jupyter_events";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-LDj6dTtq3npJxLKBQEEwGQFeDPvWF2adHeJhOai2MRU=";
+    tag = "v${version}";
+    hash = "sha256-e+BxJc/i5lpljvv6Uwqwrog+nLJ4NOBSqd47Q7DELOE=";
   };
 
-  nativeBuildInputs = [
-    hatchling
+  patches = [
+    # https://github.com/jupyter/jupyter_events/pull/110
+    (fetchpatch2 {
+      name = "python-json-logger-compatibility.patch";
+      url = "https://github.com/jupyter/jupyter_events/commit/6704ea630522f44542d83608f750da0068e41443.patch";
+      hash = "sha256-PfmOlbXRFdQxhM3SngjjUNsiueuUfCO7xlyLDGSnzj4=";
+    })
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = [
     jsonschema
     python-json-logger
     pyyaml
     referencing
+    rfc3339-validator
+    rfc3986-validator
     traitlets
-  ]
-  ++ jsonschema.optional-dependencies.format-nongpl;
+  ] ++ jsonschema.optional-dependencies.format-nongpl;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cli = [
       click
       rich
@@ -61,21 +71,20 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-console-scripts
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export PATH="$out/bin:$PATH"
   '';
 
-  pythonImportsCheck = [
-    "jupyter_events"
-  ];
+  pythonImportsCheck = [ "jupyter_events" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/jupyter/jupyter_events/releases/tag/v${version}";
     description = "Configurable event system for Jupyter applications and extensions";
+    mainProgram = "jupyter-events";
     homepage = "https://github.com/jupyter/jupyter_events";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.jupyter ];
   };
 }

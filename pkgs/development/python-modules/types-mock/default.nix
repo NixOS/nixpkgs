@@ -1,22 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "types-mock";
-  version = "5.1.0.20240311";
+  version = "5.2.0.20250306";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-dHJ5eYbYMBb5b95/c1d9EpsM2KjQt4NIenvjMNV7pDE=";
+    pname = "types_mock";
+    inherit version;
+    hash = "sha256-FYgstc+ZgFh6dgfjGJCAEiOAHXmX9VloaAXOCbZTYIc=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   # Module has no tests
   doCheck = false;
@@ -25,6 +25,6 @@ buildPythonPackage rec {
     description = "Type stub package for the mock package";
     homepage = "https://pypi.org/project/types-mock";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

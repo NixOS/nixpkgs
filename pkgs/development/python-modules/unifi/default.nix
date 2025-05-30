@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage
-, fetchPypi, urllib3 }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  urllib3,
+}:
 
 buildPythonPackage rec {
   pname = "unifi";
@@ -17,9 +21,9 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "An API towards the Ubiquity Networks UniFi controller";
-    homepage    = "https://pypi.python.org/pypi/unifi/";
-    license     = licenses.mit;
+    description = "API towards the Ubiquity Networks UniFi controller";
+    homepage = "https://pypi.python.org/pypi/unifi/";
+    license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
   };
 }

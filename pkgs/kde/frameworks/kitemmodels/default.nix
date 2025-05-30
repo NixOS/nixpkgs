@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "kitemmodels";
 
-  extraBuildInputs = [qtdeclarative];
+  extraBuildInputs = [ qtdeclarative ];
 }

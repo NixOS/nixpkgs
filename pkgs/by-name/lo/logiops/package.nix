@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (oldAttrs: {
   pname = "logiops";
-  version = "0.3.3";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "PixlOne";
     repo = "logiops";
     rev = "v${oldAttrs.version}";
-    sha256 = "sha256-9nFTud5szQN8jpG0e/Bkp+I9ELldfo66SdfVCUTuekg=";
+    hash = "sha256-GAnlPqjIFGyOWwYFs7gth2m9ITc1jyiaW0sWwQ2zFOs=";
     # In v0.3.0, the `ipcgull` submodule was added as a dependency
     # https://github.com/PixlOne/logiops/releases/tag/v0.3.0
     fetchSubmodules = true;
@@ -48,9 +48,10 @@ stdenv.mkDerivation (oldAttrs: {
 
   meta = with lib; {
     description = "Unofficial userspace driver for HID++ Logitech devices";
+    mainProgram = "logid";
     homepage = "https://github.com/PixlOne/logiops";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ckie ];
+    maintainers = [ ];
     platforms = with platforms; linux;
   };
 })

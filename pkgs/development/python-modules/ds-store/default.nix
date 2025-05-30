@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mac-alias
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mac-alias,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -17,29 +18,22 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "al45tair";
     repo = "ds_store";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-45lmkE61uXVCBUMyVVzowTJoALY1m9JI68s7Yb0vCks=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    mac-alias
-  ];
+  propagatedBuildInputs = [ mac-alias ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "ds_store"
-  ];
+  pythonImportsCheck = [ "ds_store" ];
 
   meta = with lib; {
     homepage = "https://github.com/al45tair/ds_store";
     description = "Manipulate Finder .DS_Store files from Python";
+    mainProgram = "ds_store";
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];
   };

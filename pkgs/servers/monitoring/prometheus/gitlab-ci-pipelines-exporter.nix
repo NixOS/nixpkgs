@@ -1,14 +1,18 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "gitlab-ci-pipelines-exporter";
-  version = "0.5.6";
+  version = "0.5.10";
 
   src = fetchFromGitHub {
     owner = "mvisonneau";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SbFaB808Xa7XvHR8ruu9wADVPUVwe5ogA+L+PSYb7kQ=";
+    sha256 = "sha256-G298u9bitEst8QzZd1/B6PTCNpGqq88Z8W8w67/cVkQ=";
   };
 
   subPackages = [ "cmd/${pname}" ];
@@ -17,13 +21,17 @@ buildGoModule rec {
     "-X main.version=v${version}"
   ];
 
-  vendorHash = "sha256-qZ9Ph8YZBBGS3dFlk3zTynU9WuRUHl2fVSPtd7hUB8E=";
+  vendorHash = "sha256-LPS0paXtzNAOFW8FUAFbcEcVTtp3WFh6N/f6tuFPT50=";
   doCheck = true;
 
   meta = with lib; {
     description = "Prometheus / OpenMetrics exporter for GitLab CI pipelines insights";
+    mainProgram = "gitlab-ci-pipelines-exporter";
     homepage = "https://github.com/mvisonneau/gitlab-ci-pipelines-exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ mmahut mvisonneau ];
+    maintainers = with maintainers; [
+      mmahut
+      mvisonneau
+    ];
   };
 }

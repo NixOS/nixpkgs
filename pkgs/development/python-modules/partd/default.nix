@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch2
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch2,
+  pythonOlder,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, locket
-, toolz
+  # dependencies
+  locket,
+  toolz,
 
-# optional-dependencies
-, blosc2
-, numpy
-, pandas
-, pyzmq
+  # optional-dependencies
+  blosc2,
+  numpy,
+  pandas,
+  pyzmq,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -31,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dask";
     repo = "partd";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-EK+HNSPh2b7jwpc6jwH/n+6HDgHhRfBeaRuiDIWVG28=";
   };
 
@@ -43,16 +44,14 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     locket
     toolz
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     complete = [
       blosc2
       numpy
@@ -61,9 +60,7 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Appendable key-value storage";

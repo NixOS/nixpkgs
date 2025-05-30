@@ -1,6 +1,6 @@
-From 7e3c8ba66b86a21fe8e5bd9a595dd6fc03fa26d4 Mon Sep 17 00:00:00 2001
-From: Pascal Bach <pascal.bach@nextrem.ch>
-Date: Wed, 22 Sep 2021 09:42:42 +0200
+From 48f7e6d66e2850088b8922024641173776222242 Mon Sep 17 00:00:00 2001
+From: Nick Cao <nickcao@nichi.co>
+Date: Thu, 21 Nov 2024 15:30:00 -0500
 Subject: [PATCH] build: find pre-built heimdal build tools in case of embedded
  heimdal
 
@@ -40,13 +40,13 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 11 insertions(+)
 
 diff --git a/wscript_configure_embedded_heimdal b/wscript_configure_embedded_heimdal
-index 6066f2b39d7..e92cabad65f 100644
+index 45f47721de..6c5a4bcf01 100644
 --- a/wscript_configure_embedded_heimdal
 +++ b/wscript_configure_embedded_heimdal
-@@ -6,3 +6,14 @@ if not conf.env['BISON']:
- 
- conf.define('USING_EMBEDDED_HEIMDAL', 1)
- conf.RECURSE('third_party/heimdal_build')
+@@ -13,3 +13,14 @@ conf.RECURSE('third_party/heimdal_build')
+ # when this will be available also in
+ # system libraries...
+ conf.define('HAVE_CLIENT_GSS_C_CHANNEL_BOUND_FLAG', 1)
 +
 +def check_system_heimdal_binary(name):
 +    if conf.LIB_MAY_BE_BUNDLED(name):
@@ -59,5 +59,5 @@ index 6066f2b39d7..e92cabad65f 100644
 +check_system_heimdal_binary("compile_et")
 +check_system_heimdal_binary("asn1_compile")
 -- 
-2.41.0
+2.47.0
 

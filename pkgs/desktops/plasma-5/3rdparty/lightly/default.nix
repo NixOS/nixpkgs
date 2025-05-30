@@ -1,18 +1,19 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, kdecoration
-, kcoreaddons
-, kguiaddons
-, kconfigwidgets
-, kwindowsystem
-, kiconthemes
-, qtx11extras
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  kdecoration,
+  kcoreaddons,
+  kguiaddons,
+  kconfigwidgets,
+  kwindowsystem,
+  kiconthemes,
+  qtx11extras,
 }:
 
-mkDerivation rec{
+mkDerivation rec {
   pname = "lightly";
   version = "0.4.1";
   src = fetchFromGitHub {
@@ -24,7 +25,10 @@ mkDerivation rec{
 
   extraCmakeFlags = [ "-DBUILD_TESTING=OFF" ];
 
-  nativeBuildInputs = [ cmake extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
 
   buildInputs = [
     kcoreaddons
@@ -37,7 +41,7 @@ mkDerivation rec{
   ];
 
   meta = with lib; {
-    description = "A modern style for qt applications";
+    description = "Modern style for qt applications";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ pasqui23 ];
     homepage = "https://github.com/Luwx/Lightly/";

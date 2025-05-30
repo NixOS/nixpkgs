@@ -14,7 +14,7 @@
 mkKdeDerivation {
   pname = "okular";
 
-  extraNativeBuildInputs = [pkg-config];
+  extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
     qtspeech
     qtsvg
@@ -27,4 +27,5 @@ mkKdeDerivation {
     ebook_tools
     discount
   ];
+  meta.mainProgram = "okular";
 }

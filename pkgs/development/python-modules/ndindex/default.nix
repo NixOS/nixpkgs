@@ -1,64 +1,83 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
 
-# build-system
-, cython
+  # build-system
+  cython,
+  setuptools,
 
-# optional
-, numpy
+  # optional
+  numpy,
 
-# tests
-, hypothesis
-, pytest-cov
-, pytestCheckHook
+  # tests
+  hypothesis,
+  pytest-cov-stub,
+  pytestCheckHook,
+  sympy,
 }:
 
 buildPythonPackage rec {
   pname = "ndindex";
-  version = "1.7";
-  format = "setuptools";
+  version = "1.9.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Quansight-Labs";
     repo = "ndindex";
-    rev = "refs/tags/${version}";
-    hash = "sha256-JP0cEuxXfPTWc1EIUtMsy5Hx6eIo9vDzD0IUXm1lFME=";
+    tag = version;
+    hash = "sha256-5S4HN5MFLgURImwFsyyTOxDhrZJ5Oe+Ln/TA/bsCsek=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cython
+    setuptools
   ];
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace "--cov=ndindex/ --cov-report=term-missing --flakes" ""
+      --replace-fail "--flakes" ""
   '';
 
-  passthru.optional-dependencies.arrays = [
-    numpy
-  ];
+  optional-dependencies.arrays = [ numpy ];
 
-  pythonImportsCheck = [
-    "ndindex"
-  ];
+  pythonImportsCheck = [ "ndindex" ];
+
+  # fix Hypothesis timeouts
+  preCheck = ''
+    cd $out
+
+    echo > ${python.sitePackages}/ndindex/tests/conftest.py <<EOF
+
+    import hypothesis
+
+    hypothesis.settings.register_profile(
+      "ci",
+      deadline=None,
+      print_blob=True,
+      derandomize=True,
+    )
+    EOF
+  '';
 
   nativeCheckInputs = [
     hypothesis
-    pytest-cov # uses cov markers
+    pytest-cov-stub
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.arrays;
+    sympy
+  ] ++ optional-dependencies.arrays;
 
   pytestFlagsArray = [
-    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
-    "--deselect=ndindex/tests/test_ndindex.py::test_ndindex_invalid"
+    "--hypothesis-profile"
+    "ci"
   ];
 
   meta = with lib; {
-    description = "";
+    description = "Python library for manipulating indices of ndarrays";
     homepage = "https://github.com/Quansight-Labs/ndindex";
     changelog = "https://github.com/Quansight-Labs/ndindex/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, breeze-icons
-, kdeclarative
-, kirigami2
-, plasma-framework
-, plasma-workspace
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  breeze-icons,
+  kdeclarative,
+  kirigami,
+  plasma-framework,
+  plasma-workspace,
 }:
 
 stdenv.mkDerivation rec {
   pname = "utterly-nord-plasma";
-  version = "2.1";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner = "HimDek";
     repo = pname;
-    rev = "6d9ffe008f0bee47c8346c9a7ec71f206d999fd0";
-    hash = "sha256-B5pIwV0BHxDluKWKTy+xuBPaE3N6UOHXip1SIAm2kM8=";
+    rev = "e513b4dfeddd587a34bfdd9ba6b1d1eac8ecadf5";
+    hash = "sha256-moLgBFR+BgoiEBzV3y/LA6JZfLHrG1weL1+h8LN9ztA=";
   };
 
   propagatedUserEnvPkgs = [
     breeze-icons
-    kdeclarative.bin
-    kirigami2
-    plasma-framework.bin
+    kdeclarative
+    kirigami
+    plasma-framework
     plasma-workspace
   ];
 
@@ -33,9 +34,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/{color-schemes,Kvantum,plasma/look-and-feel,sddm/themes,wallpapers,konsole}
 
     cp -a look-and-feel $out/share/plasma/look-and-feel/Utterly-Nord
-    cp -a look-and-feel-solid $out/share/plasma/look-and-feel/Utterly-Nord-solid
-    cp -a look-and-feel-light $out/share/plasma/look-and-feel/Utterly-Nord-light
-    cp -a look-and-feel-light-solid $out/share/plasma/look-and-feel/Utterly-Nord-light-solid
+    cp -a look-and-feel-solid $out/share/plasma/look-and-feel/Utterly-Nord-Solid
+    cp -a look-and-feel-light $out/share/plasma/look-and-feel/Utterly-Nord-Light
+    cp -a look-and-feel-light-solid $out/share/plasma/look-and-feel/Utterly-Nord-Light-Solid
 
     cp -a *.colors $out/share/color-schemes/
 
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Plasma theme with Nordic Colors, transparency, blur and round edges for UI elements";
+    description = "Plasma theme with Nordic Colors, transparency, blur and round edges for UI elements";
     homepage = "https://himdek.com/Utterly-Nord-Plasma/";
     license = licenses.gpl2Plus;
     platforms = platforms.all;

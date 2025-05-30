@@ -1,9 +1,20 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.mikrotik;
+  inherit (lib)
+    mkOption
+    types
+    literalExpression
+    concatStringsSep
+    escapeShellArg
+    ;
 in
 {
   port = 9436;
@@ -11,7 +22,7 @@ in
     configFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Path to a mikrotik exporter configuration file. Mutually exclusive with
         {option}`configuration` option.
       '';
@@ -21,7 +32,7 @@ in
     configuration = mkOption {
       type = types.nullOr types.attrs;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Mikrotik exporter configuration as nix attribute set. Mutually exclusive with
         {option}`configFile` option.
 
@@ -48,19 +59,23 @@ in
       '';
     };
   };
-  serviceOpts = let
-    configFile = if cfg.configFile != null
-                 then cfg.configFile
-                 else "${pkgs.writeText "mikrotik-exporter.yml" (builtins.toJSON cfg.configuration)}";
-    in {
-    serviceConfig = {
-      # -port is misleading name, it actually accepts address too
-      ExecStart = ''
-        ${pkgs.prometheus-mikrotik-exporter}/bin/mikrotik-exporter \
-          -config-file=${escapeShellArg configFile} \
-          -port=${cfg.listenAddress}:${toString cfg.port} \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
-      '';
+  serviceOpts =
+    let
+      configFile =
+        if cfg.configFile != null then
+          cfg.configFile
+        else
+          "${pkgs.writeText "mikrotik-exporter.yml" (builtins.toJSON cfg.configuration)}";
+    in
+    {
+      serviceConfig = {
+        # -port is misleading name, it actually accepts address too
+        ExecStart = ''
+          ${pkgs.prometheus-mikrotik-exporter}/bin/mikrotik-exporter \
+            -config-file=${escapeShellArg configFile} \
+            -port=${cfg.listenAddress}:${toString cfg.port} \
+            ${concatStringsSep " \\\n  " cfg.extraFlags}
+        '';
+      };
     };
-  };
 }

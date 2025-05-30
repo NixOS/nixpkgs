@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.zram-generator;
   settingsFormat = pkgs.formats.ini { };
@@ -9,7 +14,7 @@ in
   };
 
   options.services.zram-generator = {
-    enable = lib.mkEnableOption (lib.mdDoc "Systemd unit generator for zram devices");
+    enable = lib.mkEnableOption "Systemd unit generator for zram devices";
 
     package = lib.mkPackageOption pkgs "zram-generator" { };
 
@@ -18,7 +23,7 @@ in
         freeformType = settingsFormat.type;
       };
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Configuration for zram-generator,
         see https://github.com/systemd/zram-generator for documentation.
       '';
@@ -33,6 +38,7 @@ in
     systemd.packages = [ cfg.package ];
     systemd.services."systemd-zram-setup@".path = [ pkgs.util-linux ]; # for mkswap
 
-    environment.etc."systemd/zram-generator.conf".source = settingsFormat.generate "zram-generator.conf" cfg.settings;
+    environment.etc."systemd/zram-generator.conf".source =
+      settingsFormat.generate "zram-generator.conf" cfg.settings;
   };
 }

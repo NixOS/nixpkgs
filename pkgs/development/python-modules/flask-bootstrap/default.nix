@@ -1,20 +1,53 @@
-{ lib, buildPythonPackage, fetchPypi, flask, visitor, dominate }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  flask,
+  visitor,
+  dominate,
+  pytestCheckHook,
+  requests,
+}:
 
 buildPythonPackage rec {
-  pname = "Flask-Bootstrap";
+  pname = "flask-bootstrap";
   version = "3.3.7.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1j1s2bplaifsnmr8vfxa3czca4rz78xyhrg4chx39xl306afs26b";
+  src = fetchFromGitHub {
+    owner = "mbr";
+    repo = "flask-bootstrap";
+    tag = version;
+    hash = "sha256-TsRSNhrI1jZU/beX3G7LM64IrFagD6AYiluoGzy12jE=";
   };
 
-  propagatedBuildInputs = [ flask visitor dominate ];
+  build-system = [ setuptools ];
 
-  meta = with lib; {
+  dependencies = [
+    flask
+    visitor
+    dominate
+  ];
+
+  pythonImportsCheck = [ "flask_bootstrap" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    requests
+  ];
+
+  disabledTests = [
+    # requires network access
+    "test_bootstrap_version_matches"
+    # requires flask-appconfig
+    "test_index"
+  ];
+
+  meta = {
     homepage = "https://github.com/mbr/flask-bootstrap";
-    description = "Ready-to-use Twitter-bootstrap for use in Flask.";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    description = "Ready-to-use Twitter-bootstrap for use in Flask";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

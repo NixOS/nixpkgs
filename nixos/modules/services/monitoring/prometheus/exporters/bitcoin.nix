@@ -1,32 +1,42 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.bitcoin;
+  inherit (lib) mkOption types concatStringsSep;
 in
 {
   port = 9332;
   extraOpts = {
+    package = lib.mkPackageOption pkgs "prometheus-bitcoin-exporter" { };
+
     rpcUser = mkOption {
       type = types.str;
       default = "bitcoinrpc";
-      description = lib.mdDoc ''
+      description = ''
         RPC user name.
       '';
     };
 
     rpcPasswordFile = mkOption {
       type = types.path;
-      description = lib.mdDoc ''
+      description = ''
         File containing RPC password.
       '';
     };
 
     rpcScheme = mkOption {
-      type = types.enum [ "http" "https" ];
+      type = types.enum [
+        "http"
+        "https"
+      ];
       default = "http";
-      description = lib.mdDoc ''
+      description = ''
         Whether to connect to bitcoind over http or https.
       '';
     };
@@ -34,7 +44,7 @@ in
     rpcHost = mkOption {
       type = types.str;
       default = "localhost";
-      description = lib.mdDoc ''
+      description = ''
         RPC host.
       '';
     };
@@ -42,7 +52,7 @@ in
     rpcPort = mkOption {
       type = types.port;
       default = 8332;
-      description = lib.mdDoc ''
+      description = ''
         RPC port number.
       '';
     };
@@ -50,15 +60,15 @@ in
     refreshSeconds = mkOption {
       type = types.ints.unsigned;
       default = 300;
-      description = lib.mdDoc ''
+      description = ''
         How often to ask bitcoind for metrics.
       '';
     };
 
     extraEnv = mkOption {
       type = types.attrsOf types.str;
-      default = {};
-      description = lib.mdDoc ''
+      default = { };
+      description = ''
         Extra environment variables for the exporter.
       '';
     };
@@ -66,7 +76,7 @@ in
   serviceOpts = {
     script = ''
       export BITCOIN_RPC_PASSWORD=$(cat ${cfg.rpcPasswordFile})
-      exec ${pkgs.prometheus-bitcoin-exporter}/bin/bitcoind-monitor.py
+      exec ${cfg.package}/bin/bitcoind-monitor.py
     '';
 
     environment = {

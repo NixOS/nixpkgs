@@ -1,56 +1,46 @@
-{ lib
-, buildPythonPackage
-, bx-py-utils
-, colorlog
-, fetchFromGitHub
-, importlib-resources
-, jaraco-classes
-, jaraco-collections
-, jaraco-itertools
-, jaraco-context
-, jaraco-net
-, keyring
-, lomond
-, more-itertools
-, platformdirs
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
-, requests-toolbelt
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  bx-py-utils,
+  colorlog,
+  fetchFromGitHub,
+  importlib-resources,
+  jaraco-classes,
+  jaraco-collections,
+  jaraco-itertools,
+  jaraco-context,
+  jaraco-functools,
+  jaraco-net,
+  keyring,
+  lomond,
+  more-itertools,
+  platformdirs,
+  pytest-responses,
+  pytestCheckHook,
+  requests,
+  requests-toolbelt,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "jaraco-abode";
-  version = "5.1.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "6.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.abode";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-guLgmhjFgYLRZsQ0j92NXkktZ80bwVvMUJLZeg3dgxE=";
+    tag = "v${version}";
+    hash = "sha256-AqnyQdLkg2vobVJ84X15AB0Yyj3gZf4rP3pEdk3MqZ4=";
   };
 
-  postPatch = ''
-    # https://github.com/jaraco/jaraco.abode/issues/19
-    echo "graft jaraco" > MANIFEST.in
-
-    # https://github.com/jaraco/jaraco.abode/commit/9e3e789efc96cddcaa15f920686bbeb79a7469e0
-    substituteInPlace jaraco/abode/helpers/timeline.py \
-      --replace "call_aside" "invoke"
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
     lomond
     colorlog
@@ -65,16 +55,15 @@ buildPythonPackage rec {
     bx-py-utils
     platformdirs
     jaraco-itertools
+    jaraco-functools
   ];
 
   nativeCheckInputs = [
+    pytest-responses
     pytestCheckHook
-    requests-mock
   ];
 
-  pythonImportsCheck = [
-    "jaraco.abode"
-  ];
+  pythonImportsCheck = [ "jaraco.abode" ];
 
   preCheck = ''
     export HOME=$TEMP
@@ -89,11 +78,14 @@ buildPythonPackage rec {
     "test_camera_capture_no_control_URLs"
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/jaraco/jaraco.abode/blob/${version}/CHANGES.rst";
+  meta = {
+    changelog = "https://github.com/jaraco/jaraco.abode/blob/${src.tag}/NEWS.rst";
     homepage = "https://github.com/jaraco/jaraco.abode";
     description = "Library interfacing to the Abode home security system";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jamiemagee dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      jamiemagee
+      dotlambda
+    ];
   };
 }

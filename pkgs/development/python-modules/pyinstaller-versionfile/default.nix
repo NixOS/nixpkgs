@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, packaging
-, jinja2
-, pyyaml
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  packaging,
+  jinja2,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
@@ -14,17 +15,22 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "DudeNr33";
-    repo = pname;
+    repo = "pyinstaller-versionfile";
     rev = "v${version}";
     hash = "sha256-lz1GuiXU+r8sMld5SsG3qS+FOsWfbvkQmO2bxAR3XcY=";
   };
 
-  propagatedBuildInputs = [ packaging jinja2 pyyaml ];
+  propagatedBuildInputs = [
+    packaging
+    jinja2
+    pyyaml
+  ];
 
   meta = {
-    description = "Create a windows version-file from a simple YAML file that can be used by PyInstaller.";
+    description = "Create a windows version-file from a simple YAML file that can be used by PyInstaller";
+    mainProgram = "create-version-file";
     homepage = "https://pypi.org/project/pyinstaller-versionfile/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

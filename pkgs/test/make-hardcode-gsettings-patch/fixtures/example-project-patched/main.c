@@ -73,6 +73,47 @@ void schema_id_with_path() {
   g_object_unref(settings);
 }
 
+void exists_fn_guard() {
+  if (!e_ews_common_utils_gsettings_schema_exists("org.gnome.evolution.calendar")) {
+    return;
+  }
+
+  g_autoptr(GSettings) settings = NULL;
+  {
+    g_autoptr(GSettingsSchemaSource) schema_source;
+    g_autoptr(GSettingsSchema) schema;
+    schema_source = g_settings_schema_source_new_from_directory("@EVO@", g_settings_schema_source_get_default(), TRUE, NULL);
+    schema = g_settings_schema_source_lookup(schema_source, "org.gnome.evolution.calendar", FALSE);
+    settings = g_settings_new_full(schema, NULL, NULL);
+  }
+}
+
+void exists_fn_nested() {
+  if (e_ews_common_utils_gsettings_schema_exists("org.gnome.evolution.calendar")) {
+    g_autoptr(GSettings) settings = NULL;
+    {
+      g_autoptr(GSettingsSchemaSource) schema_source;
+      g_autoptr(GSettingsSchema) schema;
+      schema_source = g_settings_schema_source_new_from_directory("@EVO@", g_settings_schema_source_get_default(), TRUE, NULL);
+      schema = g_settings_schema_source_lookup(schema_source, "org.gnome.evolution.calendar", FALSE);
+      settings = g_settings_new_full(schema, NULL, NULL);
+    }
+  }
+}
+
+void exists_fn_unknown() {
+  if (e_ews_common_utils_gsettings_schema_exists("org.gnome.foo")) {
+    g_autoptr(GSettings) settings = NULL;
+    {
+      g_autoptr(GSettingsSchemaSource) schema_source;
+      g_autoptr(GSettingsSchema) schema;
+      schema_source = g_settings_schema_source_new_from_directory("@EVO@", g_settings_schema_source_get_default(), TRUE, NULL);
+      schema = g_settings_schema_source_lookup(schema_source, "org.gnome.evolution.calendar", FALSE);
+      settings = g_settings_new_full(schema, NULL, NULL);
+    }
+  }
+}
+
 int main() {
   schema_id_literal();
   schema_id_from_constant();
@@ -80,6 +121,9 @@ int main() {
   schema_id_with_backend();
   schema_id_with_backend_and_path();
   schema_id_with_path();
+  exists_fn_guard();
+  exists_fn_nested();
+  exists_fn_unknown();
 
   return 0;
 }

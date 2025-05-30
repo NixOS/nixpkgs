@@ -1,32 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, ibm-cloud-sdk-core
-, pytest-rerunfailures
-, pytestCheckHook
-, python-dateutil
-, python-dotenv
-, pythonOlder
-, requests
-, responses
-, websocket-client
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ibm-cloud-sdk-core,
+  pytest-rerunfailures,
+  pytestCheckHook,
+  python-dateutil,
+  python-dotenv,
+  pythonOlder,
+  requests,
+  setuptools,
+  responses,
+  websocket-client,
 }:
 
 buildPythonPackage rec {
   pname = "ibm-watson";
-  version = "8.0.0";
-  format = "setuptools";
+  version = "9.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "watson-developer-cloud";
     repo = "python-sdk";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-p2LyR7Fxd0Ny6QCypAWIusnINuhWAhWOnRfZ14FKvro=";
+    tag = "v${version}";
+    hash = "sha256-JZriBvdeDAZ+NOnWCsjI2m5JlLe/oLlbtFkdFeuL8TI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     ibm-cloud-sdk-core
     python-dateutil
     requests
@@ -40,14 +44,12 @@ buildPythonPackage rec {
     responses
   ];
 
-  pythonImportsCheck = [
-    "ibm_watson"
-  ];
+  pythonImportsCheck = [ "ibm_watson" ];
 
   meta = with lib; {
     description = "Client library to use the IBM Watson Services";
     homepage = "https://github.com/watson-developer-cloud/python-sdk";
-    changelog = "https://github.com/watson-developer-cloud/python-sdk/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/watson-developer-cloud/python-sdk/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ globin ];
   };

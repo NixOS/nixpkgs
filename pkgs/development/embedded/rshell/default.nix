@@ -1,20 +1,18 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, pyserial
-, pyudev
-, pythonOlder
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  pyserial,
+  pyudev,
 }:
 
 buildPythonApplication rec {
   pname = "rshell";
-  version = "0.0.32";
-
-  disabled = pythonOlder "3.4";
+  version = "0.0.36";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-frIwZ21JzVgxRS+KouBjDShHCP1lCoUwwySy2oFGcJ8=";
+    hash = "sha256-SmbYNSB0eVUOWdDdPoMAPQTE7KeKTkklD4h+0t1LC/U=";
   };
 
   propagatedBuildInputs = [

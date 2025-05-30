@@ -1,17 +1,13 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, qmake
-, qttools
-, pkg-config
-, wrapQtAppsHook
-, qtbase
-, qtx11extras
-, qtdeclarative
-, dtkwidget
-, dde-qt-dbus-factory
-, xorg
-, xscreensaver
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  libsForQt5,
+  dtkwidget,
+  dde-qt-dbus-factory,
+  xorg,
+  xscreensaver,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,16 +34,16 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    qmake
-    qttools
+    libsForQt5.qmake
+    libsForQt5.qttools
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtx11extras
-    qtdeclarative
+    libsForQt5.qtbase
+    libsForQt5.qtx11extras
+    libsForQt5.qtdeclarative
     dtkwidget
     dde-qt-dbus-factory
     xorg.libXScrnSaver
@@ -59,11 +55,11 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A screensaver service developed by deepin";
+    description = "Screensaver service developed by deepin";
+    mainProgram = "deepin-screensaver";
     homepage = "https://github.com/linuxdeepin/deepin-screensaver";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }
-

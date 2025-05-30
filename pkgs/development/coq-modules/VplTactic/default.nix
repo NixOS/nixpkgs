@@ -1,4 +1,10 @@
-{ lib, mkCoqDerivation, coq, Vpl, version ? null }:
+{
+  lib,
+  mkCoqDerivation,
+  coq,
+  Vpl,
+  version ? null,
+}:
 
 mkCoqDerivation {
   pname = "VplTactic";
@@ -13,6 +19,6 @@ mkCoqDerivation {
   mlPlugin = true;
 
   meta = Vpl.meta // {
-    description = "A Coq Tactic for Arithmetic (based on VPL)";
+    description = "Coq Tactic for Arithmetic (based on VPL)";
   };
 }

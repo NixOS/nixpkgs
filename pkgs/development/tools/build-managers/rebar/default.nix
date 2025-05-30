@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, erlang }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  erlang,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rebar";
@@ -22,6 +27,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/rebar/rebar";
     description = "Erlang build tool that makes it easy to compile and test Erlang applications, port drivers and releases";
+    mainProgram = "rebar";
 
     longDescription = ''
       rebar is a self-contained Erlang script, so it's easy to
@@ -35,6 +41,6 @@ stdenv.mkDerivation rec {
 
     platforms = lib.platforms.unix;
     license = lib.licenses.asl20;
-    maintainers = lib.teams.beam.members;
+    teams = [ lib.teams.beam ];
   };
 }

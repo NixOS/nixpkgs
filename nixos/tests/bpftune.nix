@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }: {
+{ lib, pkgs, ... }:
+{
 
   name = "bpftune";
 
@@ -7,9 +8,11 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
   };
 
   nodes = {
-    machine = { pkgs, ... }: {
-      services.bpftune.enable = true;
-    };
+    machine =
+      { pkgs, ... }:
+      {
+        services.bpftune.enable = true;
+      };
   };
 
   testScript = ''
@@ -17,4 +20,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     machine.wait_for_console_text("bpftune works")
   '';
 
-})
+}

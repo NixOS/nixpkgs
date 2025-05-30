@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, datasette
-, fetchFromGitHub
-, pytest-asyncio
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  datasette,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -15,21 +15,17 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "simonw";
-    repo = pname;
+    repo = "datasette-template-sql";
     rev = version;
     hash = "sha256-VmdIEDk3iCBFrTPMm6ud00Z5CWqO0Wk707IQ4oVx5ak=";
   };
 
-  propagatedBuildInputs = [
-    datasette
-  ];
+  propagatedBuildInputs = [ datasette ];
 
   # Tests require a running datasette instance
   doCheck = false;
 
-  pythonImportsCheck = [
-    "datasette_template_sql"
-  ];
+  pythonImportsCheck = [ "datasette_template_sql" ];
 
   meta = with lib; {
     description = "Datasette plugin for executing SQL queries from templates";

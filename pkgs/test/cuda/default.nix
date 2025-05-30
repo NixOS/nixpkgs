@@ -3,12 +3,6 @@
   recurseIntoAttrs,
 
   cudaPackages,
-  cudaPackagesGoogle,
-
-  cudaPackages_10_0,
-  cudaPackages_10_1,
-  cudaPackages_10_2,
-  cudaPackages_10,
 
   cudaPackages_11_0,
   cudaPackages_11_1,
@@ -25,6 +19,10 @@
   cudaPackages_12_1,
   cudaPackages_12_2,
   cudaPackages_12_3,
+  cudaPackages_12_4,
+  cudaPackages_12_5,
+  cudaPackages_12_6,
+  cudaPackages_12_8,
   cudaPackages_12,
 }@args:
 
@@ -43,7 +41,6 @@ in
     _: ps:
     lib.pipe ps [
       (lib.filterAttrs isTest)
-      (as: as // { __attrsFailEvaluation = true; })
       recurseIntoAttrs
     ]
   ))

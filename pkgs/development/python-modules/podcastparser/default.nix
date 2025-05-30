@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gpodder";
     repo = "podcastparser";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-P9wVyxTO0nz/DfuBhCE+VjhH1uYx4jBd30Ca26yBzbo=";
   };
 
@@ -24,13 +25,9 @@ buildPythonPackage rec {
       --replace "--cov=podcastparser --cov-report html --doctest-modules" ""
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "podcastparser"
-  ];
+  pythonImportsCheck = [ "podcastparser" ];
 
   meta = with lib; {
     description = "Module to parse podcasts";

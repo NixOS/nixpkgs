@@ -1,18 +1,28 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.mchprs;
   settingsFormat = pkgs.formats.toml { };
 
-  whitelistFile = pkgs.writeText "whitelist.json"
-    (builtins.toJSON
-      (mapAttrsToList (n: v: { name = n; uuid = v; }) cfg.whitelist.list));
+  whitelistFile = pkgs.writeText "whitelist.json" (
+    builtins.toJSON (
+      lib.mapAttrsToList (n: v: {
+        name = n;
+        uuid = v;
+      }) cfg.whitelist.list
+    )
+  );
 
   configToml =
-    (removeAttrs cfg.settings [ "address" "port" ]) //
-    {
+    (removeAttrs cfg.settings [
+      "address"
+      "port"
+    ])
+    // {
       bind_address = cfg.settings.address + ":" + toString cfg.settings.port;
       whitelist = cfg.whitelist.enable;
     };
@@ -22,78 +32,78 @@ in
 {
   options = {
     services.mchprs = {
-      enable = mkEnableOption "MCHPRS";
+      enable = lib.mkEnableOption "MCHPRS, a Minecraft server";
 
-      declarativeSettings = mkOption {
-        type = types.bool;
+      declarativeSettings = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = mdDoc ''
+        description = ''
           Whether to use a declarative configuration for MCHPRS.
         '';
       };
 
-      declarativeWhitelist = mkOption {
-        type = types.bool;
+      declarativeWhitelist = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = mdDoc ''
+        description = ''
           Whether to use a declarative whitelist.
           The options {option}`services.mchprs.whitelist.list`
           will be applied if and only if set to `true`.
         '';
       };
 
-      dataDir = mkOption {
-        type = types.path;
+      dataDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/mchprs";
-        description = mdDoc ''
+        description = ''
           Directory to store MCHPRS database and other state/data files.
         '';
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = mdDoc ''
+        description = ''
           Whether to open ports in the firewall for the server.
           Only has effect when
           {option}`services.mchprs.declarativeSettings` is `true`.
         '';
       };
 
-      maxRuntime = mkOption {
-        type = types.str;
+      maxRuntime = lib.mkOption {
+        type = lib.types.str;
         default = "infinity";
         example = "7d";
-        description = mdDoc ''
+        description = ''
           Automatically restart the server after
           {option}`services.mchprs.maxRuntime`.
-          The time span format is described here:
-          https://www.freedesktop.org/software/systemd/man/systemd.time.html#Parsing%20Time%20Spans.
+          The {manpage}`systemd.time(7)` time span format is described here:
+          <https://www.freedesktop.org/software/systemd/man/systemd.time.html#Parsing%20Time%20Spans>.
           If `null`, then the server is not restarted automatically.
         '';
       };
 
-      package = mkPackageOption pkgs "mchprs" { };
+      package = lib.mkPackageOption pkgs "mchprs" { };
 
-      settings = mkOption {
-        type = types.submodule {
+      settings = lib.mkOption {
+        type = lib.types.submodule {
           freeformType = settingsFormat.type;
 
           options = {
-            port = mkOption {
-              type = types.port;
+            port = lib.mkOption {
+              type = lib.types.port;
               default = 25565;
-              description = mdDoc ''
+              description = ''
                 Port for the server.
                 Only has effect when
                 {option}`services.mchprs.declarativeSettings` is `true`.
               '';
             };
 
-            address = mkOption {
-              type = types.str;
+            address = lib.mkOption {
+              type = lib.types.str;
               default = "0.0.0.0";
-              description = mdDoc ''
+              description = ''
                 Address for the server.
                 Please use enclosing square brackets when using ipv6.
                 Only has effect when
@@ -101,20 +111,20 @@ in
               '';
             };
 
-            motd = mkOption {
-              type = types.str;
+            motd = lib.mkOption {
+              type = lib.types.str;
               default = "Minecraft High Performance Redstone Server";
-              description = mdDoc ''
+              description = ''
                 Message of the day.
                 Only has effect when
                 {option}`services.mchprs.declarativeSettings` is `true`.
               '';
             };
 
-            chat_format = mkOption {
-              type = types.str;
+            chat_format = lib.mkOption {
+              type = lib.types.str;
               default = "<{username}> {message}";
-              description = mdDoc ''
+              description = ''
                 How to format chat message interpolating `username`
                 and `message` with curly braces.
                 Only has effect when
@@ -122,30 +132,30 @@ in
               '';
             };
 
-            max_players = mkOption {
-              type = types.ints.positive;
+            max_players = lib.mkOption {
+              type = lib.types.ints.positive;
               default = 99999;
-              description = mdDoc ''
+              description = ''
                 Maximum number of simultaneous players.
                 Only has effect when
                 {option}`services.mchprs.declarativeSettings` is `true`.
               '';
             };
 
-            view_distance = mkOption {
-              type = types.ints.positive;
+            view_distance = lib.mkOption {
+              type = lib.types.ints.positive;
               default = 8;
-              description = mdDoc ''
+              description = ''
                 Maximal distance (in chunks) between players and loaded chunks.
                 Only has effect when
                 {option}`services.mchprs.declarativeSettings` is `true`.
               '';
             };
 
-            bungeecord = mkOption {
-              type = types.bool;
+            bungeecord = lib.mkOption {
+              type = lib.types.bool;
               default = false;
-              description = mdDoc ''
+              description = ''
                 Enable compatibility with
                 [BungeeCord](https://github.com/SpigotMC/BungeeCord).
                 Only has effect when
@@ -153,10 +163,10 @@ in
               '';
             };
 
-            schemati = mkOption {
-              type = types.bool;
+            schemati = lib.mkOption {
+              type = lib.types.bool;
               default = false;
-              description = mdDoc ''
+              description = ''
                 Mimic the verification and directory layout used by the
                 Open Redstone Engineers
                 [Schemati plugin](https://github.com/OpenRedstoneEngineers/Schemati).
@@ -165,10 +175,10 @@ in
               '';
             };
 
-            block_in_hitbox = mkOption {
-              type = types.bool;
+            block_in_hitbox = lib.mkOption {
+              type = lib.types.bool;
               default = true;
-              description = mdDoc ''
+              description = ''
                 Allow placing blocks inside of players
                 (hitbox logic is simplified).
                 Only has effect when
@@ -176,10 +186,10 @@ in
               '';
             };
 
-            auto_redpiler = mkOption {
-              type = types.bool;
+            auto_redpiler = lib.mkOption {
+              type = lib.types.bool;
               default = true;
-              description = mdDoc ''
+              description = ''
                 Use redpiler automatically.
                 Only has effect when
                 {option}`services.mchprs.declarativeSettings` is `true`.
@@ -189,39 +199,40 @@ in
         };
         default = { };
 
-        description = mdDoc ''
+        description = ''
           Configuration for MCHPRS via `Config.toml`.
           See https://github.com/MCHPR/MCHPRS/blob/master/README.md for documentation.
         '';
       };
 
       whitelist = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = false;
-          description = mdDoc ''
+          description = ''
             Whether or not the whitelist (in `whitelist.json`) shoud be enabled.
             Only has effect when {option}`services.mchprs.declarativeSettings` is `true`.
           '';
         };
 
-        list = mkOption {
+        list = lib.mkOption {
           type =
             let
-              minecraftUUID = types.strMatching
-                "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}" // {
-                description = "Minecraft UUID";
-              };
+              minecraftUUID =
+                lib.types.strMatching "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+                // {
+                  description = "Minecraft UUID";
+                };
             in
-            types.attrsOf minecraftUUID;
+            lib.types.attrsOf minecraftUUID;
           default = { };
-          example = literalExpression ''
+          example = lib.literalExpression ''
             {
               username1 = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
               username2 = "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy";
             };
           '';
-          description = mdDoc ''
+          description = ''
             Whitelisted players, only has an effect when
             {option}`services.mchprs.declarativeWhitelist` is
             `true` and the whitelist is enabled
@@ -235,7 +246,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.users.mchprs = {
       description = "MCHPRS service user";
       home = cfg.dataDir;
@@ -276,7 +287,10 @@ in
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
@@ -285,52 +299,63 @@ in
       };
 
       preStart =
-        (if cfg.declarativeSettings then ''
-          if [ -e .declarativeSettings ]; then
+        (
+          if cfg.declarativeSettings then
+            ''
+              if [ -e .declarativeSettings ]; then
 
-            # Settings were declarative before, no need to back up anything
-            cp -f ${configTomlFile} Config.toml
+                # Settings were declarative before, no need to back up anything
+                cp -f ${configTomlFile} Config.toml
 
+              else
+
+                # Declarative settings for the first time, backup stateful files
+                cp -b --suffix=.stateful ${configTomlFile} Config.toml
+
+                echo "Autogenerated file that implies that this server configuration is managed declaratively by NixOS" \
+                  > .declarativeSettings
+
+              fi
+            ''
           else
+            ''
+              if [ -e .declarativeSettings ]; then
+                rm .declarativeSettings
+              fi
+            ''
+        )
+        + (
+          if cfg.declarativeWhitelist then
+            ''
+              if [ -e .declarativeWhitelist ]; then
 
-            # Declarative settings for the first time, backup stateful files
-            cp -b --suffix=.stateful ${configTomlFile} Config.toml
+                # Whitelist was declarative before, no need to back up anything
+                ln -sf ${whitelistFile} whitelist.json
 
-            echo "Autogenerated file that implies that this server configuration is managed declaratively by NixOS" \
-              > .declarativeSettings
+              else
 
-          fi
-        '' else ''
-          if [ -e .declarativeSettings ]; then
-            rm .declarativeSettings
-          fi
-        '') + (if cfg.declarativeWhitelist then ''
-          if [ -e .declarativeWhitelist ]; then
+                # Declarative whitelist for the first time, backup stateful files
+                ln -sb --suffix=.stateful ${whitelistFile} whitelist.json
 
-            # Whitelist was declarative before, no need to back up anything
-            ln -sf ${whitelistFile} whitelist.json
+                echo "Autogenerated file that implies that this server's whitelist is managed declaratively by NixOS" \
+                  > .declarativeWhitelist
 
+              fi
+            ''
           else
-
-            # Declarative whitelist for the first time, backup stateful files
-            ln -sb --suffix=.stateful ${whitelistFile} whitelist.json
-
-            echo "Autogenerated file that implies that this server's whitelist is managed declaratively by NixOS" \
-              > .declarativeWhitelist
-
-          fi
-        '' else ''
-          if [ -e .declarativeWhitelist ]; then
-            rm .declarativeWhitelist
-          fi
-        '');
+            ''
+              if [ -e .declarativeWhitelist ]; then
+                rm .declarativeWhitelist
+              fi
+            ''
+        );
     };
 
-    networking.firewall = mkIf (cfg.declarativeSettings && cfg.openFirewall) {
+    networking.firewall = lib.mkIf (cfg.declarativeSettings && cfg.openFirewall) {
       allowedUDPPorts = [ cfg.settings.port ];
       allowedTCPPorts = [ cfg.settings.port ];
     };
   };
 
-  meta.maintainers = with maintainers; [ gdd ];
+  meta.maintainers = with lib.maintainers; [ gdd ];
 }

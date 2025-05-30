@@ -1,6 +1,11 @@
 # NixOS module for lighttpd web server
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -53,71 +58,73 @@ let
     "mod_geoip"
     "mod_magnet"
     "mod_mysql_vhost"
-    "mod_openssl"  # since v1.4.46
+    "mod_openssl" # since v1.4.46
     "mod_scgi"
     "mod_setenv"
     "mod_trigger_b4_dl"
     "mod_uploadprogress"
-    "mod_vhostdb"  # since v1.4.46
+    "mod_vhostdb" # since v1.4.46
     "mod_webdav"
-    "mod_wstunnel"  # since v1.4.46
+    "mod_wstunnel" # since v1.4.46
   ];
 
-  maybeModuleString = moduleName:
-    optionalString (elem moduleName cfg.enableModules) ''"${moduleName}"'';
+  maybeModuleString =
+    moduleName: optionalString (elem moduleName cfg.enableModules) ''"${moduleName}"'';
 
-  modulesIncludeString = concatStringsSep ",\n"
-    (filter (x: x != "") (map maybeModuleString allKnownModules));
+  modulesIncludeString = concatStringsSep ",\n" (
+    filter (x: x != "") (map maybeModuleString allKnownModules)
+  );
 
-  configFile = if cfg.configText != "" then
-    pkgs.writeText "lighttpd.conf" ''
-      ${cfg.configText}
-    ''
+  configFile =
+    if cfg.configText != "" then
+      pkgs.writeText "lighttpd.conf" ''
+        ${cfg.configText}
+      ''
     else
-    pkgs.writeText "lighttpd.conf" ''
-      server.document-root = "${cfg.document-root}"
-      server.port = ${toString cfg.port}
-      server.username = "lighttpd"
-      server.groupname = "lighttpd"
+      pkgs.writeText "lighttpd.conf" ''
+        server.document-root = "${cfg.document-root}"
+        server.port = ${toString cfg.port}
+        server.username = "lighttpd"
+        server.groupname = "lighttpd"
 
-      # As for why all modules are loaded here, instead of having small
-      # server.modules += () entries in each sub-service extraConfig snippet,
-      # read this:
-      #
-      #   https://redmine.lighttpd.net/projects/1/wiki/Server_modulesDetails
-      #   https://redmine.lighttpd.net/issues/2337
-      #
-      # Basically, lighttpd doesn't want to load (or even silently ignore) a
-      # module for a second time, and there is no way to check if a module has
-      # been loaded already. So if two services were to put the same module in
-      # server.modules += (), that would break the lighttpd configuration.
-      server.modules = (
-          ${modulesIncludeString}
-      )
+        # As for why all modules are loaded here, instead of having small
+        # server.modules += () entries in each sub-service extraConfig snippet,
+        # read this:
+        #
+        #   https://redmine.lighttpd.net/projects/1/wiki/Server_modulesDetails
+        #   https://redmine.lighttpd.net/issues/2337
+        #
+        # Basically, lighttpd doesn't want to load (or even silently ignore) a
+        # module for a second time, and there is no way to check if a module has
+        # been loaded already. So if two services were to put the same module in
+        # server.modules += (), that would break the lighttpd configuration.
+        server.modules = (
+            ${modulesIncludeString}
+        )
 
-      # Logging (logs end up in systemd journal)
-      accesslog.use-syslog = "enable"
-      server.errorlog-use-syslog = "enable"
+        # Logging (logs end up in systemd journal)
+        accesslog.use-syslog = "enable"
+        server.errorlog-use-syslog = "enable"
 
-      ${lib.optionalString cfg.enableUpstreamMimeTypes ''
-      include "${pkgs.lighttpd}/share/lighttpd/doc/config/conf.d/mime.conf"
-      ''}
+        ${lib.optionalString cfg.enableUpstreamMimeTypes ''
+          include "${pkgs.lighttpd}/share/lighttpd/doc/config/conf.d/mime.conf"
+        ''}
 
-      static-file.exclude-extensions = ( ".fcgi", ".php", ".rb", "~", ".inc" )
-      index-file.names = ( "index.html" )
+        static-file.exclude-extensions = ( ".fcgi", ".php", ".rb", "~", ".inc" )
+        index-file.names = ( "index.html" )
 
-      ${optionalString cfg.mod_userdir ''
-        userdir.path = "public_html"
-      ''}
+        ${optionalString cfg.mod_userdir ''
+          userdir.path = "public_html"
+        ''}
 
-      ${optionalString cfg.mod_status ''
-        status.status-url = "/server-status"
-        status.statistics-url = "/server-statistics"
-        status.config-url = "/server-config"
-      ''}
+        ${optionalString cfg.mod_status ''
+          status.status-url = "/server-status"
+          status.statistics-url = "/server-statistics"
+          status.config-url = "/server-config"
+        ''}
 
-      ${cfg.extraConfig}
-    '';
+        ${cfg.extraConfig}
+      '';
 
 in
 
@@ -130,7 +137,7 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Enable the lighttpd web server.
         '';
       };
@@ -140,7 +147,7 @@ in
       port = mkOption {
         default = 80;
         type = types.port;
-        description = lib.mdDoc ''
+        description = ''
           TCP port number for lighttpd to bind to.
         '';
       };
@@ -148,7 +155,7 @@ in
       document-root = mkOption {
         default = "/srv/www";
         type = types.path;
-        description = lib.mdDoc ''
+        description = ''
           Document-root of the web server. Must be readable by the "lighttpd" user.
         '';
       };
@@ -156,7 +163,7 @@ in
       mod_userdir = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           If true, requests in the form /~user/page.html are rewritten to take
           the file public_html/page.html from the home directory of the user.
         '';
@@ -165,8 +172,11 @@ in
       enableModules = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        example = [ "mod_cgi" "mod_status" ];
-        description = lib.mdDoc ''
+        example = [
+          "mod_cgi"
+          "mod_status"
+        ];
+        description = ''
           List of lighttpd modules to enable. Sub-services take care of
           enabling modules as needed, so this option is mainly for when you
           want to add custom stuff to
@@ -178,7 +188,7 @@ in
       enableUpstreamMimeTypes = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to include the list of mime types bundled with lighttpd
           (upstream). If you disable this, no mime types will be added by
           NixOS and you will have to add your own mime types in
@@ -189,7 +199,7 @@ in
       mod_status = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Show server status overview at /server-status, statistics at
           /server-statistics and list of loaded modules at /server-config.
         '';
@@ -199,7 +209,7 @@ in
         default = "";
         type = types.lines;
         example = "...verbatim config file contents...";
-        description = lib.mdDoc ''
+        description = ''
           Overridable config file contents to use for lighttpd. By default, use
           the contents automatically generated by NixOS.
         '';
@@ -208,7 +218,7 @@ in
       extraConfig = mkOption {
         default = "";
         type = types.lines;
-        description = lib.mdDoc ''
+        description = ''
           These configuration lines will be appended to the generated lighttpd
           config file. Note that this mechanism does not work when the manual
           {option}`configText` option is used.
@@ -222,7 +232,8 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = all (x: elem x allKnownModules) cfg.enableModules;
+      {
+        assertion = all (x: elem x allKnownModules) cfg.enableModules;
         message = ''
           One (or more) modules in services.lighttpd.enableModules are
           unrecognized.
@@ -234,12 +245,12 @@ in
       }
     ];
 
-    services.lighttpd.enableModules = mkMerge
-      [ (mkIf cfg.mod_status [ "mod_status" ])
-        (mkIf cfg.mod_userdir [ "mod_userdir" ])
-        # always load mod_accesslog so that we can log to the journal
-        [ "mod_accesslog" ]
-      ];
+    services.lighttpd.enableModules = mkMerge [
+      (mkIf cfg.mod_status [ "mod_status" ])
+      (mkIf cfg.mod_userdir [ "mod_userdir" ])
+      # always load mod_accesslog so that we can log to the journal
+      [ "mod_accesslog" ]
+    ];
 
     systemd.services.lighttpd = {
       description = "Lighttpd Web Server";

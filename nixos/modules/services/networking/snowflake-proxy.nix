@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,28 +13,28 @@ in
 {
   options = {
     services.snowflake-proxy = {
-      enable = mkEnableOption (lib.mdDoc "snowflake-proxy, a system to defeat internet censorship");
+      enable = mkEnableOption "snowflake-proxy, a system to defeat internet censorship";
 
       broker = mkOption {
-        description = lib.mdDoc "Broker URL (default \"https://snowflake-broker.torproject.net/\")";
+        description = "Broker URL (default \"https://snowflake-broker.torproject.net/\")";
         type = with types; nullOr str;
         default = null;
       };
 
       capacity = mkOption {
-        description = lib.mdDoc "Limits the amount of maximum concurrent clients allowed.";
+        description = "Limits the amount of maximum concurrent clients allowed.";
         type = with types; nullOr int;
         default = null;
       };
 
       relay = mkOption {
-        description = lib.mdDoc "websocket relay URL (default \"wss://snowflake.bamsoftware.com/\")";
+        description = "websocket relay URL (default \"wss://snowflake.bamsoftware.com/\")";
         type = with types; nullOr str;
         default = null;
       };
 
       stun = mkOption {
-        description = lib.mdDoc "STUN broker URL (default \"stun:stun.stunprotocol.org:3478\")";
+        description = "STUN broker URL (default \"stun:stun.stunprotocol.org:3478\")";
         type = with types; nullOr str;
         default = null;
       };
@@ -41,7 +46,8 @@ in
       wantedBy = [ "network-online.target" ];
       serviceConfig = {
         ExecStart =
-          "${pkgs.snowflake}/bin/proxy " + concatStringsSep " " (
+          "${pkgs.snowflake}/bin/proxy "
+          + concatStringsSep " " (
             optional (cfg.broker != null) "-broker ${cfg.broker}"
             ++ optional (cfg.capacity != null) "-capacity ${builtins.toString cfg.capacity}"
             ++ optional (cfg.relay != null) "-relay ${cfg.relay}"
@@ -67,11 +73,18 @@ in
         ProtectProc = "invisible";
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
         UMask = "0077";
       };
     };

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, pynose
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -11,26 +12,26 @@ buildPythonPackage rec {
   version = "4.0.1";
   format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-mXY9qBv+qNr2s9ItEarMsBqND1LqUh2qs351ikyn0Sg=";
+  src = fetchFromGitHub {
+    owner = "jsocol";
+    repo = "pystatsd";
+    tag = "v${version}";
+    hash = "sha256-g830TjFERKUguFKlZeaOhCTlaUs0wcDg4bMdRDr3smw=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  nativeBuildInputs = [ setuptools ];
+
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
   ];
 
-  nativeCheckInputs = [ pynose mock ];
-
-  checkPhase = ''
-    nosetests -sv
-  '';
+  pytestFlagsArray = [ "statsd/tests.py" ];
 
   meta = with lib; {
     maintainers = with maintainers; [ domenkozar ];
-    description = "A simple statsd client";
+    description = "Simple statsd client";
     license = licenses.mit;
     homepage = "https://github.com/jsocol/pystatsd";
   };
-
 }

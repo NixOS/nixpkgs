@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitLab
-, buildDunePackage
-, zarith
-, ff-sig
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  zarith,
+  ff-sig,
 }:
 
 buildDunePackage rec {
@@ -14,10 +15,13 @@ buildDunePackage rec {
     owner = "nomadic-labs";
     repo = "cryptography/ocaml-polynomial";
     rev = version;
-    sha256 = "sha256-is/PrYLCwStHiQsNq5OVRCwHdXjO2K2Z7FrXgytRfAU=";
+    hash = "sha256-is/PrYLCwStHiQsNq5OVRCwHdXjO2K2Z7FrXgytRfAU=";
   };
 
-  propagatedBuildInputs = [ zarith ff-sig ];
+  propagatedBuildInputs = [
+    zarith
+    ff-sig
+  ];
 
   doCheck = false; # circular dependencies
 

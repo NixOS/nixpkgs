@@ -1,64 +1,69 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.cachix-watch-store;
 in
 {
-  meta.maintainers = [ lib.maintainers.jfroche lib.maintainers.domenkozar ];
+  meta.maintainers = [
+    lib.maintainers.jfroche
+    lib.maintainers.domenkozar
+  ];
 
   options.services.cachix-watch-store = {
-    enable = mkEnableOption (lib.mdDoc "Cachix Watch Store: https://docs.cachix.org");
+    enable = lib.mkEnableOption "Cachix Watch Store: https://docs.cachix.org";
 
-    cacheName = mkOption {
-      type = types.str;
-      description = lib.mdDoc "Cachix binary cache name";
+    cacheName = lib.mkOption {
+      type = lib.types.str;
+      description = "Cachix binary cache name";
     };
 
-    cachixTokenFile = mkOption {
-      type = types.path;
-      description = lib.mdDoc ''
+    cachixTokenFile = lib.mkOption {
+      type = lib.types.path;
+      description = ''
         Required file that needs to contain the cachix auth token.
       '';
     };
 
-    signingKeyFile = mkOption {
-      type = types.nullOr types.path;
-      description = lib.mdDoc ''
+    signingKeyFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      description = ''
         Optional file containing a self-managed signing key to sign uploaded store paths.
       '';
       default = null;
     };
 
-    compressionLevel = mkOption {
-      type = types.nullOr types.int;
-      description = lib.mdDoc "The compression level for ZSTD compression (between 0 and 16)";
+    compressionLevel = lib.mkOption {
+      type = lib.types.nullOr lib.types.int;
+      description = "The compression level for ZSTD compression (between 0 and 16)";
       default = null;
     };
 
-    jobs = mkOption {
-      type = types.nullOr types.int;
-      description = lib.mdDoc "Number of threads used for pushing store paths";
+    jobs = lib.mkOption {
+      type = lib.types.nullOr lib.types.int;
+      description = "Number of threads used for pushing store paths";
       default = null;
     };
 
-    host = mkOption {
-      type = types.nullOr types.str;
+    host = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
-      description = lib.mdDoc "Cachix host to connect to";
+      description = "Cachix host to connect to";
     };
 
-    verbose = mkOption {
-      type = types.bool;
-      description = lib.mdDoc "Enable verbose output";
+    verbose = lib.mkOption {
+      type = lib.types.bool;
+      description = "Enable verbose output";
       default = false;
     };
 
-    package = mkPackageOption pkgs "cachix" { };
+    package = lib.mkPackageOption pkgs "cachix" { };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.cachix-watch-store-agent = {
       description = "Cachix watch store Agent";
       wants = [ "network-online.target" ];
@@ -78,19 +83,33 @@ in
         DynamicUser = true;
         LoadCredential = [
           "cachix-token:${toString cfg.cachixTokenFile}"
-        ]
-        ++ lib.optional (cfg.signingKeyFile != null) "signing-key:${toString cfg.signingKeyFile}";
+        ] ++ lib.optional (cfg.signingKeyFile != null) "signing-key:${toString cfg.signingKeyFile}";
       };
       script =
         let
-          command = [ "${cfg.package}/bin/cachix" ]
-            ++ (lib.optional cfg.verbose "--verbose") ++ (lib.optionals (cfg.host != null) [ "--host" cfg.host ])
-            ++ [ "watch-store" ] ++ (lib.optionals (cfg.compressionLevel != null) [ "--compression-level" (toString cfg.compressionLevel) ])
-            ++ (lib.optionals (cfg.jobs != null) [ "--jobs" (toString cfg.jobs) ]) ++ [ cfg.cacheName ];
+          command =
+            [ "${cfg.package}/bin/cachix" ]
+            ++ (lib.optional cfg.verbose "--verbose")
+            ++ (lib.optionals (cfg.host != null) [
+              "--host"
+              cfg.host
+            ])
+            ++ [ "watch-store" ]
+            ++ (lib.optionals (cfg.compressionLevel != null) [
+              "--compression-level"
+              (toString cfg.compressionLevel)
+            ])
+            ++ (lib.optionals (cfg.jobs != null) [
+              "--jobs"
+              (toString cfg.jobs)
+            ])
+            ++ [ cfg.cacheName ];
         in
         ''
           export CACHIX_AUTH_TOKEN="$(<"$CREDENTIALS_DIRECTORY/cachix-token")"
-          ${lib.optionalString (cfg.signingKeyFile != null) ''export CACHIX_SIGNING_KEY="$(<"$CREDENTIALS_DIRECTORY/signing-key")"''}
+          ${lib.optionalString (
+            cfg.signingKeyFile != null
+          ) ''export CACHIX_SIGNING_KEY="$(<"$CREDENTIALS_DIRECTORY/signing-key")"''}
           ${lib.escapeShellArgs command}
         '';
     };

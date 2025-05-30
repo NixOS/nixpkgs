@@ -22,6 +22,7 @@ subversion.chapter.md
 
 ```{=include=} chapters
 profiles.chapter.md
+mattermost.chapter.md
 kubernetes.chapter.md
 ```
 <!-- Apache; libvirtd virtualisation -->

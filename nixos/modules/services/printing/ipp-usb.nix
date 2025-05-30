@@ -1,13 +1,22 @@
-{ config, lib, pkgs, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+{
   options = {
     services.ipp-usb = {
-      enable = lib.mkEnableOption (lib.mdDoc "ipp-usb, a daemon to turn an USB printer/scanner supporting IPP everywhere (aka AirPrint, WSD, AirScan) into a locally accessible network printer/scanner");
+      enable = lib.mkEnableOption "ipp-usb, a daemon to turn an USB printer/scanner supporting IPP everywhere (aka AirPrint, WSD, AirScan) into a locally accessible network printer/scanner";
     };
   };
   config = lib.mkIf config.services.ipp-usb.enable {
     systemd.services.ipp-usb = {
       description = "Daemon for IPP over USB printer support";
-      after = [ "cups.service" "avahi-daemon.service" ];
+      after = [
+        "cups.service"
+        "avahi-daemon.service"
+      ];
       wants = [ "avahi-daemon.service" ];
       serviceConfig = {
         ExecStart = [ "${pkgs.ipp-usb}/bin/ipp-usb" ];
@@ -38,7 +47,12 @@
         AmbientCapabilities = "";
         CapabilityBoundingSet = "";
         NoNewPrivileges = true;
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_NETLINK" "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_NETLINK"
+          "AF_INET"
+          "AF_INET6"
+        ];
         ProtectProc = "noaccess";
       };
     };
@@ -59,5 +73,3 @@
     hardware.sane.extraBackends = [ pkgs.sane-airscan ];
   };
 }
-
-

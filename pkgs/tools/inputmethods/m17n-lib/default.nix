@@ -1,24 +1,26 @@
-{ lib
-, stdenv
-, fetchurl
-, m17n_db
-, autoreconfHook
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  m17n_db,
+  autoreconfHook,
+  pkg-config,
 }:
 stdenv.mkDerivation rec {
   pname = "m17n-lib";
-  version = "1.8.4";
+  version = "1.8.5";
 
   src = fetchurl {
-    url = "https://download.savannah.gnu.org/releases/m17n/m17n-lib-${version}.tar.gz";
-    hash = "sha256-xqJYLG5PKowueihE+lx+s2Oq0lOLBS8gPHEGSd1CHMg=";
+    url = "mirror://savannah/m17n/${pname}-${version}.tar.gz";
+    hash = "sha256-e2xCX3ktBtFOT1sXIE02J+LI67Qj69rpLAxkZxDT1sc=";
   };
 
   strictDeps = true;
 
-  # reconf needed to sucesfully cross-compile
+  # reconf needed to successfully cross-compile
   nativeBuildInputs = [
-    autoreconfHook pkg-config
+    autoreconfHook
+    pkg-config
     # requires m17n-db tool at build time
     m17n_db
   ];

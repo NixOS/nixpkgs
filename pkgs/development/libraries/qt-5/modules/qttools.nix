@@ -1,17 +1,42 @@
-{ qtModule, stdenv, lib, qtbase, qtdeclarative }:
+{
+  qtModule,
+  stdenv,
+  lib,
+  qtbase,
+  qtdeclarative,
+  replaceVars,
+  llvmPackages,
+}:
 
 qtModule {
   pname = "qttools";
-  propagatedBuildInputs = [ qtbase qtdeclarative ];
-  outputs = [ "out" "dev" "bin" ];
 
-  # fixQtBuiltinPaths overwrites a builtin path we should keep
-  postPatch = ''
-    sed -i "src/linguist/linguist.pro" \
-        -e '/^cmake_linguist_config_version_file.input =/ s|$$\[QT_HOST_DATA.*\]|${lib.getDev qtbase}|'
-    sed -i "src/qtattributionsscanner/qtattributionsscanner.pro" \
-        -e '/^cmake_qattributionsscanner_config_version_file.input =/ s|$$\[QT_HOST_DATA.*\]|${lib.getDev qtbase}|'
-  '';
+  outputs = [
+    "out"
+    "dev"
+    "bin"
+  ];
+
+  buildInputs = with llvmPackages; [
+    libclang
+    libllvm
+  ];
+
+  propagatedBuildInputs = [
+    qtbase
+    qtdeclarative
+  ];
+
+  patches = [
+    # fixQtBuiltinPaths overwrites builtin paths we should keep
+    (replaceVars ./qttools-QT_HOST_DATA-refs.patch {
+      qtbaseDev = lib.getDev qtbase;
+    })
+
+    (replaceVars ./qttools-libclang-main-header.patch {
+      libclangDev = lib.getDev llvmPackages.libclang;
+    })
+  ];
 
   devTools = [
     "bin/qcollectiongenerator"
@@ -32,11 +57,11 @@ qtModule {
     "bin/qthelpconverter"
     "bin/lprodump"
     "bin/qdistancefieldgenerator"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "bin/macdeployqt"
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "bin/macdeployqt" ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin && qtdeclarative != null) ''-DNIXPKGS_QMLIMPORTSCANNER="${qtdeclarative.dev}/bin/qmlimportscanner"'';
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (
+    stdenv.hostPlatform.isDarwin && qtdeclarative != null
+  ) ''-DNIXPKGS_QMLIMPORTSCANNER="${qtdeclarative.dev}/bin/qmlimportscanner"'';
 
   setupHook = ../hooks/qttools-setup-hook.sh;
 }

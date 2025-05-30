@@ -1,36 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, packaging
-, tomli
-, pytestCheckHook
-, pip
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  packaging,
+  tomli,
+  pytestCheckHook,
+  pip,
 }:
 
 buildPythonPackage rec {
   pname = "argparse-manpage";
-  version = "4.5";
+  version = "4.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "praiskup";
     repo = "argparse-manpage";
-    rev = "v${version}";
-    hash = "sha256-9lriW+Yx/6ysoumloQglDm5JEcKNUWm422B3P6IE/EE=";
+    tag = "v${version}";
+    hash = "sha256-2GJDFLCaPTb8sQCAv9qZ+pIysFE7IaKh9co3Mb8Dutc=";
   };
 
   nativeBuildInputs = [
     setuptools
     packaging
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -43,11 +40,9 @@ buildPythonPackage rec {
     "test_old_example_file_name"
   ];
 
-  pythonImportsCheck = [
-    "argparse_manpage"
-  ];
+  pythonImportsCheck = [ "argparse_manpage" ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     setuptools = [ setuptools ];
   };
 

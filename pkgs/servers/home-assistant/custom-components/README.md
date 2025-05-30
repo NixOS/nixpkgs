@@ -8,10 +8,10 @@ It builds upon `buildPythonPackage` but uses a custom install and check
 phase.
 
 Python runtime dependencies can be directly consumed as unqualified
-function arguments. Pass them into `propagatedBuildInputs`, for them to
+function arguments. Pass them into `dependencies`, for them to
 be available to Home Assistant.
 
-Out-of-tree components need to use python packages from
+Out-of-tree components need to use Python packages from
 `home-assistant.python.pkgs` as to not introduce conflicting package
 versions into the Python environment.
 
@@ -20,7 +20,7 @@ versions into the Python environment.
 
 ```nix
 { lib
-, buildHomeAssistantcomponent
+, buildHomeAssistantComponent
 , fetchFromGitHub
 }:
 
@@ -31,13 +31,13 @@ buildHomeAssistantComponent {
     # owner, repo, rev, hash
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     # python requirements, as specified in manifest.json
   ];
 
   meta = with lib; {
     # changelog, description, homepage, license, maintainers
-  }
+  };
 }
 ```
 
@@ -58,7 +58,7 @@ domain in the `manifest.json` as well as the module name are
 
 The `pname` attribute is a composition of both `owner` and `domain`.
 
-Don't set `pname`, set `owner and `domain` instead.
+Don't set `pname`, set `owner` and `domain` instead.
 
 Exposing the `domain` attribute separately allows checking for
 conflicting components at eval time.
@@ -72,3 +72,21 @@ and manifest agree about the domain name.
 
 There shouldn't be a need to disable this hook, but you can set
 `dontCheckManifest` to `true` in the derivation to achieve that.
+
+### Too narrow version constraints
+
+Every once in a while a dependency constraint is more narrow than it
+needs to be. Instead of applying brittle substitutions the version constraint
+can be ignored on a per requirement basis.
+
+```nix
+  dependencies = [
+    pyemvue
+  ];
+
+  # don't check the version constraint of pyemvue
+  ignoreVersionRequirement = [
+    "pyemvue"
+  ];
+```
+`

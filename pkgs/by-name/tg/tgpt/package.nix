@@ -1,38 +1,39 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "tgpt";
-  version = "2.7.1";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "aandrew-me";
     repo = "tgpt";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-XuTDEcs1wIrAe7Oaok4aFP01jDcyWB01R3HNrx6UEpo=";
+    tag = "v${version}";
+    hash = "sha256-q7dod5kKvKny4Zht6KpHpRa7N9Je+tmKVyn9PEde/+c=";
   };
 
-  vendorHash = "sha256-docq/r6yyMPsuUyFbtCMaYfEVL0gLmyTy4PbrAemR00=";
+  vendorHash = "sha256-hPbvzhYHOxytQs3NkSVaZhFH0TbOlr4U/QiH+vemTrc=";
 
   ldflags = [
     "-s"
     "-w"
   ];
 
-  # test tries to access the network
-  doCheck = false;
+  preCheck = ''
+    # Remove test which need network access
+    rm src/providers/koboldai/koboldai_test.go
+    rm src/providers/phind/phind_test.go
+  '';
 
-  passthru.updateScript = nix-update-script { };
-
-  meta = with lib; {
+  meta = {
     description = "ChatGPT in terminal without needing API keys";
     homepage = "https://github.com/aandrew-me/tgpt";
     changelog = "https://github.com/aandrew-me/tgpt/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "tgpt";
   };
 }

@@ -1,5 +1,6 @@
-{ buildDunePackage
-, qcheck-multicoretests-util
+{
+  buildDunePackage,
+  qcheck-multicoretests-util,
 }:
 
 buildDunePackage {
@@ -12,6 +13,6 @@ buildDunePackage {
   doCheck = true;
 
   meta = qcheck-multicoretests-util.meta // {
-    description = "A multicore testing library for OCaml";
+    description = "Multicore testing library for OCaml";
   };
 }

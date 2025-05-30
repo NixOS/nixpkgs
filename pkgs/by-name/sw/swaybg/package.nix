@@ -1,27 +1,53 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, scdoc
-, wayland, wayland-protocols, cairo, gdk-pixbuf
-, wayland-scanner
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  wayland,
+  wayland-protocols,
+  cairo,
+  gdk-pixbuf,
+  wayland-scanner,
+  wrapGAppsNoGuiHook,
+  librsvg,
 }:
 
 stdenv.mkDerivation rec {
   pname = "swaybg";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "swaybg";
-    rev = "v${version}";
-    hash = "sha256-Qk5iGALlSVSzgBJzYzyLdLHhj/Zq1R4nFseACBmIBuA=";
+    tag = "v${version}";
+    hash = "sha256-IJcPSBJErf8Dy9YhYAc9eg/llgaaLZCQSB0Brof+kpg=";
   };
 
   strictDeps = true;
   depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
-  buildInputs = [ wayland wayland-protocols cairo gdk-pixbuf ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    scdoc
+    wayland-scanner
+    wrapGAppsNoGuiHook
+    gdk-pixbuf
+  ];
+  buildInputs = [
+    wayland
+    wayland-protocols
+    cairo
+    gdk-pixbuf
+    librsvg
+  ];
 
   mesonFlags = [
-    "-Dgdk-pixbuf=enabled" "-Dman-pages=enabled"
+    "-Dgdk-pixbuf=enabled"
+    "-Dman-pages=enabled"
   ];
 
   meta = with lib; {

@@ -1,12 +1,12 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, qttools
-, qtwebkit
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libsForQt5,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "fontmatrix";
   version = "0.9.100";
 
@@ -17,9 +17,15 @@ mkDerivation rec {
     sha256 = "sha256-DtajGhx79DiecglXHja9q/TKVq8Jl2faQdA5Ib/yT88=";
   };
 
-  buildInputs = [ qttools qtwebkit ];
+  buildInputs = [
+    libsForQt5.qttools
+    libsForQt5.qtwebkit
+  ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    libsForQt5.wrapQtAppsHook
+  ];
 
   meta = with lib; {
     description = "Fontmatrix is a free/libre font explorer for Linux, Windows and Mac";

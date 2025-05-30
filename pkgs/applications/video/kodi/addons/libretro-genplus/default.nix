@@ -1,4 +1,10 @@
-{ lib, buildKodiBinaryAddon, fetchFromGitHub, libretro, genesis-plus-gx }:
+{
+  lib,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  libretro,
+  genesis-plus-gx,
+}:
 
 buildKodiBinaryAddon rec {
   pname = "kodi-libretro-genplus";
@@ -26,6 +32,6 @@ buildKodiBinaryAddon rec {
     description = "Genesis Plus GX GameClient for Kodi";
     platforms = platforms.all;
     license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

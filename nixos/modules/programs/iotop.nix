@@ -1,19 +1,26 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.programs.iotop;
-in {
+in
+{
   options = {
-    programs.iotop.enable = mkEnableOption (lib.mdDoc "iotop + setcap wrapper");
+    programs.iotop = {
+      enable = lib.mkEnableOption "iotop + setcap wrapper";
+      package = lib.mkPackageOption pkgs "iotop" { example = "iotop-c"; };
+    };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     security.wrappers.iotop = {
       owner = "root";
       group = "root";
       capabilities = "cap_net_admin+p";
-      source = "${pkgs.iotop}/bin/iotop";
+      source = lib.getExe cfg.package;
     };
   };
 }

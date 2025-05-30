@@ -1,19 +1,20 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, bash
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  bash,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "marcel";
-  version = "0.22.2";
+  version = "0.30.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "geophile";
     repo = "marcel";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-CiAIY4qXv5V2VOsi+vat7OvFcmeFpIrmHCfqlY+JRXc=";
+    tag = "v${version}";
+    hash = "sha256-ER1Hr+sC55Qnp21qjCwc70Nho2VQ3FztzsLLlx3EtA8=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -36,10 +37,10 @@ python3Packages.buildPythonApplication rec {
     wrapProgram $out/bin/marcel \
       --prefix PATH : "$program_PATH:${lib.getBin bash}/bin" \
       --prefix PYTHONPATH : "$program_PYTHONPATH"
-    '';
+  '';
 
   meta = with lib; {
-    description = "A modern shell";
+    description = "Modern shell";
     homepage = "https://github.com/geophile/marcel";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ kud ];

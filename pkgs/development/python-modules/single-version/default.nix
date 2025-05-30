@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, poetry-core
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -13,8 +13,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "hongquan";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "single-version";
+    tag = "v${version}";
     hash = "sha256-dUmJhNCPuq/7WGzFQXLjb8JrQgQn7qyBqzPWaKzD9hc=";
   };
 
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Utility to let you have a single source of version in your code base";
     homepage = "https://github.com/hongquan/single-version";
     license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

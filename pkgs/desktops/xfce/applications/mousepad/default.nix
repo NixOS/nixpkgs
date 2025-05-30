@@ -1,38 +1,68 @@
-{ lib
-, mkXfceDerivation
-, gobject-introspection
-, glib
-, gtk3
-, gtksourceview4
-, gspell
-, enablePolkit ? true
-, polkit
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  glib,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook3,
+  gspell,
+  gtk3,
+  gtksourceview4,
+  libxfce4ui,
+  xfconf,
+  enablePolkit ? true,
+  polkit,
+  gitUpdater,
 }:
 
-mkXfceDerivation {
-  category = "apps";
+stdenv.mkDerivation (finalAttrs: {
   pname = "mousepad";
-  version = "0.6.2";
-  odd-unstable = false;
+  version = "0.6.5";
 
-  sha256 = "sha256-A4siNxbTf9ObJJg8inPuH7Lo4dckLbFljV6aPFQxRto=";
+  src = fetchFromGitLab {
+    domain = "gitlab.xfce.org";
+    owner = "apps";
+    repo = "mousepad";
+    tag = "mousepad-${finalAttrs.version}";
+    hash = "sha256-5ywpQY4KUnjFCLSAXQo3huzZf94YHK9SLmkkNtfx4Ho=";
+  };
 
-  nativeBuildInputs = [ gobject-introspection ];
+  strictDeps = true;
 
-  buildInputs = [
-    glib
-    gtk3
-    gtksourceview4
-    gspell
-  ] ++ lib.optionals enablePolkit [
-    polkit
+  nativeBuildInputs = [
+    glib # glib-compile-schemas
+    meson
+    ninja
+    pkg-config
+    wrapGAppsHook3
   ];
 
-  # Use the GSettings keyfile backend rather than DConf
-  configureFlags = [ "--enable-keyfile-settings" ];
+  buildInputs =
+    [
+      glib
+      gspell
+      gtk3
+      gtksourceview4
+      libxfce4ui # for shortcut plugin
+      xfconf # required by libxfce4kbd-private-3
+    ]
+    ++ lib.optionals enablePolkit [
+      polkit
+    ];
 
-  meta = with lib; {
+  # Use the GSettings keyfile backend rather than the default
+  mesonFlags = [ "-Dkeyfile-settings=true" ];
+
+  passthru.updateScript = gitUpdater { rev-prefix = "mousepad-"; };
+
+  meta = {
     description = "Simple text editor for Xfce";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    homepage = "https://gitlab.xfce.org/apps/mousepad";
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "mousepad";
+    teams = [ lib.teams.xfce ];
+    platforms = lib.platforms.linux;
   };
-}
+})

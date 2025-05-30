@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 # TODO: This may file may need additional review, eg which configurations to
 # expose to the user.
@@ -18,9 +23,6 @@
 # however there are no strong reasons to prefer this or the other one AFAIK
 # Eg superserver is said to be most efficiently using resources according to
 # https://www.firebirdsql.org/manual/qsg25-classic-or-super.html
-
-with lib;
-
 let
 
   cfg = config.services.firebird;
@@ -40,35 +42,35 @@ in
 
     services.firebird = {
 
-      enable = mkEnableOption (lib.mdDoc "the Firebird super server");
+      enable = lib.mkEnableOption "the Firebird super server";
 
-      package = mkPackageOption pkgs "firebird" {
+      package = lib.mkPackageOption pkgs "firebird" {
         example = "firebird_3";
         extraDescription = ''
           For SuperServer use override: `pkgs.firebird_3.override { superServer = true; };`
         '';
       };
 
-      port = mkOption {
+      port = lib.mkOption {
         default = 3050;
-        type = types.port;
-        description = lib.mdDoc ''
+        type = lib.types.port;
+        description = ''
           Port Firebird uses.
         '';
       };
 
-      user = mkOption {
+      user = lib.mkOption {
         default = "firebird";
-        type = types.str;
-        description = lib.mdDoc ''
+        type = lib.types.str;
+        description = ''
           User account under which firebird runs.
         '';
       };
 
-      baseDir = mkOption {
+      baseDir = lib.mkOption {
         default = "/var/lib/firebird";
-        type = types.str;
-        description = lib.mdDoc ''
+        type = lib.types.str;
+        description = ''
           Location containing data/ and system/ directories.
           data/ stores the databases, system/ stores the password database security2.fdb.
         '';
@@ -78,49 +80,47 @@ in
 
   };
 
-
   ###### implementation
 
-  config = mkIf config.services.firebird.enable {
+  config = lib.mkIf config.services.firebird.enable {
 
-    environment.systemPackages = [cfg.package];
+    environment.systemPackages = [ cfg.package ];
 
     systemd.tmpfiles.rules = [
       "d '${dataDir}' 0700 ${cfg.user} - - -"
       "d '${systemDir}' 0700 ${cfg.user} - - -"
     ];
 
-    systemd.services.firebird =
-      { description = "Firebird Super-Server";
+    systemd.services.firebird = {
+      description = "Firebird Super-Server";
 
-        wantedBy = [ "multi-user.target" ];
+      wantedBy = [ "multi-user.target" ];
 
-        # TODO: moving security2.fdb into the data directory works, maybe there
-        # is a better way
-        preStart =
-          ''
-            if ! test -e "${systemDir}/security2.fdb"; then
-                cp ${firebird}/security2.fdb "${systemDir}"
-            fi
+      # TODO: moving security2.fdb into the data directory works, maybe there
+      # is a better way
+      preStart = ''
+        if ! test -e "${systemDir}/security2.fdb"; then
+            cp ${firebird}/security2.fdb "${systemDir}"
+        fi
 
-            if ! test -e "${systemDir}/security3.fdb"; then
-                cp ${firebird}/security3.fdb "${systemDir}"
-            fi
+        if ! test -e "${systemDir}/security3.fdb"; then
+            cp ${firebird}/security3.fdb "${systemDir}"
+        fi
 
-            if ! test -e "${systemDir}/security4.fdb"; then
-                cp ${firebird}/security4.fdb "${systemDir}"
-            fi
+        if ! test -e "${systemDir}/security4.fdb"; then
+            cp ${firebird}/security4.fdb "${systemDir}"
+        fi
 
-            chmod -R 700         "${dataDir}" "${systemDir}" /var/log/firebird
-          '';
+        chmod -R 700         "${dataDir}" "${systemDir}" /var/log/firebird
+      '';
 
-        serviceConfig.User = cfg.user;
-        serviceConfig.LogsDirectory = "firebird";
-        serviceConfig.LogsDirectoryMode = "0700";
-        serviceConfig.ExecStart = "${firebird}/bin/fbserver -d";
+      serviceConfig.User = cfg.user;
+      serviceConfig.LogsDirectory = "firebird";
+      serviceConfig.LogsDirectoryMode = "0700";
+      serviceConfig.ExecStart = "${firebird}/bin/fbserver -d";
 
-        # TODO think about shutdown
-      };
+      # TODO think about shutdown
+    };
 
     environment.etc."firebird/firebird.msg".source = "${firebird}/firebird.msg";
 

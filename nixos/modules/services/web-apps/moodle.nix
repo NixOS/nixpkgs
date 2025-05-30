@@ -1,8 +1,28 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) mkDefault mkEnableOption mkPackageOption mkForce mkIf mkMerge mkOption types;
-  inherit (lib) concatStringsSep literalExpression mapAttrsToList optional optionalString;
+  inherit (lib)
+    mkDefault
+    mkEnableOption
+    mkPackageOption
+    mkForce
+    mkIf
+    mkMerge
+    mkOption
+    types
+    ;
+  inherit (lib)
+    concatStringsSep
+    literalExpression
+    mapAttrsToList
+    optional
+    optionalString
+    ;
 
   cfg = config.services.moodle;
   fpm = config.services.phpfpm.pools.moodle;
@@ -12,66 +32,111 @@ let
   stateDir = "/var/lib/moodle";
 
   moodleConfig = pkgs.writeText "config.php" ''
-  <?php  // Moodle configuration file
+    <?php  // Moodle configuration file
 
-  unset($CFG);
-  global $CFG;
-  $CFG = new stdClass();
+    unset($CFG);
+    global $CFG;
+    $CFG = new stdClass();
 
-  $CFG->dbtype    = '${ { mysql = "mariadb"; pgsql = "pgsql"; }.${cfg.database.type} }';
-  $CFG->dblibrary = 'native';
-  $CFG->dbhost    = '${cfg.database.host}';
-  $CFG->dbname    = '${cfg.database.name}';
-  $CFG->dbuser    = '${cfg.database.user}';
-  ${optionalString (cfg.database.passwordFile != null) "$CFG->dbpass = file_get_contents('${cfg.database.passwordFile}');"}
-  $CFG->prefix    = 'mdl_';
-  $CFG->dboptions = array (
-    'dbpersist' => 0,
-    'dbport' => '${toString cfg.database.port}',
-    ${optionalString (cfg.database.socket != null) "'dbsocket' => '${cfg.database.socket}',"}
-    'dbcollation' => 'utf8mb4_unicode_ci',
-  );
+    $CFG->dbtype    = '${
+      {
+        mysql = "mariadb";
+        pgsql = "pgsql";
+      }
+      .${cfg.database.type}
+    }';
+    $CFG->dblibrary = 'native';
+    $CFG->dbhost    = '${cfg.database.host}';
+    $CFG->dbname    = '${cfg.database.name}';
+    $CFG->dbuser    = '${cfg.database.user}';
+    ${optionalString (
+      cfg.database.passwordFile != null
+    ) "$CFG->dbpass = file_get_contents('${cfg.database.passwordFile}');"}
+    $CFG->prefix    = 'mdl_';
+    $CFG->dboptions = array (
+      'dbpersist' => 0,
+      'dbport' => '${toString cfg.database.port}',
+      ${optionalString (cfg.database.socket != null) "'dbsocket' => '${cfg.database.socket}',"}
+      'dbcollation' => 'utf8mb4_unicode_ci',
+    );
 
-  $CFG->wwwroot   = '${if cfg.virtualHost.addSSL || cfg.virtualHost.forceSSL || cfg.virtualHost.onlySSL then "https" else "http"}://${cfg.virtualHost.hostName}';
-  $CFG->dataroot  = '${stateDir}';
-  $CFG->admin     = 'admin';
+    $CFG->wwwroot   = '${
+      if cfg.virtualHost.addSSL || cfg.virtualHost.forceSSL || cfg.virtualHost.onlySSL then
+        "https"
+      else
+        "http"
+    }://${cfg.virtualHost.hostName}';
+    $CFG->dataroot  = '${stateDir}';
+    $CFG->admin     = 'admin';
 
-  $CFG->directorypermissions = 02777;
-  $CFG->disableupdateautodeploy = true;
+    $CFG->directorypermissions = 02777;
+    $CFG->disableupdateautodeploy = true;
 
-  $CFG->pathtogs = '${pkgs.ghostscript}/bin/gs';
-  $CFG->pathtophp = '${phpExt}/bin/php';
-  $CFG->pathtodu = '${pkgs.coreutils}/bin/du';
-  $CFG->aspellpath = '${pkgs.aspell}/bin/aspell';
-  $CFG->pathtodot = '${pkgs.graphviz}/bin/dot';
+    $CFG->pathtogs = '${pkgs.ghostscript}/bin/gs';
+    $CFG->pathtophp = '${phpExt}/bin/php';
+    $CFG->pathtodu = '${pkgs.coreutils}/bin/du';
+    $CFG->aspellpath = '${pkgs.aspell}/bin/aspell';
+    $CFG->pathtodot = '${pkgs.graphviz}/bin/dot';
 
-  ${cfg.extraConfig}
+    ${cfg.extraConfig}
 
-  require_once('${cfg.package}/share/moodle/lib/setup.php');
+    require_once('${cfg.package}/share/moodle/lib/setup.php');
 
-  // There is no php closing tag in this file,
-  // it is intentional because it prevents trailing whitespace problems!
+    // There is no php closing tag in this file,
+    // it is intentional because it prevents trailing whitespace problems!
   '';
 
   mysqlLocal = cfg.database.createLocally && cfg.database.type == "mysql";
   pgsqlLocal = cfg.database.createLocally && cfg.database.type == "pgsql";
 
-  phpExt = pkgs.php81.buildEnv {
-    extensions = { all, ... }: with all; [ iconv mbstring curl openssl tokenizer soap ctype zip gd simplexml dom intl sqlite3 pgsql pdo_sqlite pdo_pgsql pdo_odbc pdo_mysql pdo mysqli session zlib xmlreader fileinfo filter opcache exif sodium ];
+  phpExt = pkgs.php83.buildEnv {
+    extensions =
+      { all, ... }:
+      with all;
+      [
+        iconv
+        mbstring
+        curl
+        openssl
+        tokenizer
+        soap
+        ctype
+        zip
+        gd
+        simplexml
+        dom
+        intl
+        sqlite3
+        pgsql
+        pdo_sqlite
+        pdo_pgsql
+        pdo_odbc
+        pdo_mysql
+        pdo
+        mysqli
+        session
+        zlib
+        xmlreader
+        fileinfo
+        filter
+        opcache
+        exif
+        sodium
+      ];
     extraConfig = "max_input_vars = 5000";
   };
 in
 {
   # interface
   options.services.moodle = {
-    enable = mkEnableOption (lib.mdDoc "Moodle web application");
+    enable = mkEnableOption "Moodle web application";
 
     package = mkPackageOption pkgs "moodle" { };
 
     initialPassword = mkOption {
       type = types.str;
       example = "correcthorsebatterystaple";
-      description = lib.mdDoc ''
+      description = ''
         Specifies the initial password for the admin, i.e. the password assigned if the user does not already exist.
         The password specified here is world-readable in the Nix store, so it should be changed promptly.
       '';
@@ -79,44 +144,49 @@ in
 
     database = {
       type = mkOption {
-        type = types.enum [ "mysql" "pgsql" ];
+        type = types.enum [
+          "mysql"
+          "pgsql"
+        ];
         default = "mysql";
-        description = lib.mdDoc "Database engine to use.";
+        description = "Database engine to use.";
       };
 
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = lib.mdDoc "Database host address.";
+        description = "Database host address.";
       };
 
       port = mkOption {
         type = types.port;
-        description = lib.mdDoc "Database host port.";
-        default = {
-          mysql = 3306;
-          pgsql = 5432;
-        }.${cfg.database.type};
+        description = "Database host port.";
+        default =
+          {
+            mysql = 3306;
+            pgsql = 5432;
+          }
+          .${cfg.database.type};
         defaultText = literalExpression "3306";
       };
 
       name = mkOption {
         type = types.str;
         default = "moodle";
-        description = lib.mdDoc "Database name.";
+        description = "Database name.";
       };
 
       user = mkOption {
         type = types.str;
         default = "moodle";
-        description = lib.mdDoc "Database user.";
+        description = "Database user.";
       };
 
       passwordFile = mkOption {
         type = types.nullOr types.path;
         default = null;
         example = "/run/keys/moodle-dbpassword";
-        description = lib.mdDoc ''
+        description = ''
           A file containing the password corresponding to
           {option}`database.user`.
         '';
@@ -125,17 +195,20 @@ in
       socket = mkOption {
         type = types.nullOr types.path;
         default =
-          if mysqlLocal then "/run/mysqld/mysqld.sock"
-          else if pgsqlLocal then "/run/postgresql"
-          else null;
+          if mysqlLocal then
+            "/run/mysqld/mysqld.sock"
+          else if pgsqlLocal then
+            "/run/postgresql"
+          else
+            null;
         defaultText = literalExpression "/run/mysqld/mysqld.sock";
-        description = lib.mdDoc "Path to the unix socket file to use for authentication.";
+        description = "Path to the unix socket file to use for authentication.";
       };
 
       createLocally = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Create the database and database user locally.";
+        description = "Create the database and database user locally.";
       };
     };
 
@@ -149,14 +222,20 @@ in
           enableACME = true;
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Apache configuration can be done by adapting {option}`services.httpd.virtualHosts`.
         See [](#opt-services.httpd.virtualHosts) for further information.
       '';
     };
 
     poolConfig = mkOption {
-      type = with types; attrsOf (oneOf [ str int bool ]);
+      type =
+        with types;
+        attrsOf (oneOf [
+          str
+          int
+          bool
+        ]);
       default = {
         "pm" = "dynamic";
         "pm.max_children" = 32;
@@ -165,7 +244,7 @@ in
         "pm.max_spare_servers" = 4;
         "pm.max_requests" = 500;
       };
-      description = lib.mdDoc ''
+      description = ''
         Options for the Moodle PHP pool. See the documentation on `php-fpm.conf`
         for details on configuration directives.
       '';
@@ -174,7 +253,7 @@ in
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         Any additional text to be appended to the config.php
         configuration file. This is a PHP script. For configuration
         details, see <https://docs.moodle.org/37/en/Configuration_file>.
@@ -189,10 +268,13 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.database.createLocally -> cfg.database.user == user && cfg.database.user == cfg.database.name;
+      {
+        assertion =
+          cfg.database.createLocally -> cfg.database.user == user && cfg.database.user == cfg.database.name;
         message = "services.moodle.database.user must be set to ${user} if services.moodle.database.createLocally is set true";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
+      {
+        assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
         message = "a password cannot be specified if services.moodle.database.createLocally is set to true";
       }
     ];
@@ -202,9 +284,11 @@ in
       package = mkDefault pkgs.mariadb;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
-        { name = cfg.database.user;
+        {
+          name = cfg.database.user;
           ensurePermissions = {
-            "${cfg.database.name}.*" = "SELECT, INSERT, UPDATE, DELETE, CREATE, CREATE TEMPORARY TABLES, DROP, INDEX, ALTER";
+            "${cfg.database.name}.*" =
+              "SELECT, INSERT, UPDATE, DELETE, CREATE, CREATE TEMPORARY TABLES, DROP, INDEX, ALTER";
           };
         }
       ];
@@ -214,7 +298,8 @@ in
       enable = true;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
-        { name = cfg.database.user;
+        {
+          name = cfg.database.user;
           ensureDBOwnership = true;
         }
       ];
@@ -239,20 +324,23 @@ in
       enable = true;
       adminAddr = mkDefault cfg.virtualHost.adminAddr;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [ cfg.virtualHost {
-        documentRoot = mkForce "${cfg.package}/share/moodle";
-        extraConfig = ''
-          <Directory "${cfg.package}/share/moodle">
-            <FilesMatch "\.php$">
-              <If "-f %{REQUEST_FILENAME}">
-                SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
-              </If>
-            </FilesMatch>
-            Options -Indexes
-            DirectoryIndex index.php
-          </Directory>
-        '';
-      } ];
+      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [
+        cfg.virtualHost
+        {
+          documentRoot = mkForce "${cfg.package}/share/moodle";
+          extraConfig = ''
+            <Directory "${cfg.package}/share/moodle">
+              <FilesMatch "\.php$">
+                <If "-f %{REQUEST_FILENAME}">
+                  SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
+                </If>
+              </FilesMatch>
+              Options -Indexes
+              DirectoryIndex index.php
+            </Directory>
+          '';
+        }
+      ];
     };
 
     systemd.tmpfiles.settings."10-moodle".${stateDir}.d = {
@@ -304,7 +392,9 @@ in
       };
     };
 
-    systemd.services.httpd.after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
+    systemd.services.httpd.after =
+      optional mysqlLocal "mysql.service"
+      ++ optional pgsqlLocal "postgresql.service";
 
     users.users.${user} = {
       group = group;

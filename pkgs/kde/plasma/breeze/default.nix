@@ -1,12 +1,19 @@
 {
   mkKdeDerivation,
   qtbase,
+  qtsvg,
   libsForQt5,
 }:
 mkKdeDerivation {
   pname = "breeze";
 
-  outputs = ["out" "dev" "qt5"];
+  outputs = [
+    "out"
+    "dev"
+    "qt5"
+  ];
+
+  extraBuildInputs = [ qtsvg ];
 
   # We can't add qt5 stuff to dependencies or the hooks blow up,
   # so manually point everything to everything. Oof.
@@ -41,4 +48,5 @@ mkKdeDerivation {
     mkdir -p $qt5/${libsForQt5.qtbase.qtPluginPrefix}/styles
     mv $out/${qtbase.qtPluginPrefix}/styles/breeze5.so $qt5/${libsForQt5.qtbase.qtPluginPrefix}/styles
   '';
+  meta.mainProgram = "breeze-settings6";
 }

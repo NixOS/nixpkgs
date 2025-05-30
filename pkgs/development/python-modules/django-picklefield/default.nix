@@ -1,23 +1,27 @@
-{ lib, buildPythonPackage, fetchFromGitHub, django, pytest, pytest-django, python }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
+  python,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "django-picklefield";
-  version = "3.0.1";
-  format = "setuptools";
+  version = "3.3.0";
+  pyproject = true;
 
-  # The PyPi source doesn't contain tests
   src = fetchFromGitHub {
     owner = "gintas";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0ni7bc86k0ra4pc8zv451pzlpkhs1nyil1sq9jdb4m2mib87b5fk";
+    repo = "django-picklefield";
+    tag = "v${version}";
+    hash = "sha256-/H6spsf2fmJdg5RphD8a4YADggr+5d+twuLoFMfyEac=";
   };
 
-  propagatedBuildInputs = [ django ];
+  build-system = [ setuptools ];
 
-  # Tests are failing with Django 3.2
-  # https://github.com/gintas/django-picklefield/issues/58
-  doCheck = false;
+  dependencies = [ django ];
 
   checkPhase = ''
     runHook preCheck
@@ -25,10 +29,13 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+  pythonImportsCheck = [ "picklefield" ];
+
   meta = with lib; {
-    description = "A pickled object field for Django";
+    description = "Pickled object field for Django";
     homepage = "https://github.com/gintas/django-picklefield";
+    changelog = "https://github.com/gintas/django-picklefield/releases/tag/${src.tag}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

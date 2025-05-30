@@ -1,4 +1,10 @@
-{ config, lib, pkgs, ... }: with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib;
 let
   cfg = config.boot.iscsi-initiator;
 in
@@ -19,7 +25,7 @@ in
   # machines to be up.
   options.boot.iscsi-initiator = with types; {
     name = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Name of the iSCSI initiator to boot from. Note, booting from iscsi
         requires networkd based networking.
       '';
@@ -29,7 +35,7 @@ in
     };
 
     discoverPortal = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         iSCSI portal to boot from.
       '';
       default = null;
@@ -38,7 +44,7 @@ in
     };
 
     target = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Name of the iSCSI target to boot from.
       '';
       default = null;
@@ -47,7 +53,7 @@ in
     };
 
     logLevel = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Higher numbers elicits more logs.
       '';
       default = 1;
@@ -56,7 +62,7 @@ in
     };
 
     loginAll = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Do not log into a specific target on the portal, but to all that we discover.
         This overrides setting target.
       '';
@@ -65,19 +71,19 @@ in
     };
 
     extraIscsiCommands = mkOption {
-      description = lib.mdDoc "Extra iscsi commands to run in the initrd.";
+      description = "Extra iscsi commands to run in the initrd.";
       default = "";
       type = lines;
     };
 
     extraConfig = mkOption {
-      description = lib.mdDoc "Extra lines to append to /etc/iscsid.conf";
+      description = "Extra lines to append to /etc/iscsid.conf";
       default = null;
       type = nullOr lines;
     };
 
     extraConfigFile = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Append an additional file's contents to `/etc/iscsid.conf`. Use a non-store path
         and store passwords in this file. Note: the file specified here must be available
         in the initrd, see: `boot.initrd.secrets`.
@@ -113,7 +119,9 @@ in
       extraUtilsCommands = ''
         copy_bin_and_libs ${pkgs.openiscsi}/bin/iscsid
         copy_bin_and_libs ${pkgs.openiscsi}/bin/iscsiadm
-        ${optionalString (!config.boot.initrd.network.ssh.enable) "cp -pv ${pkgs.glibc.out}/lib/libnss_files.so.* $out/lib"}
+        ${optionalString (
+          !config.boot.initrd.network.ssh.enable
+        ) "cp -pv ${pkgs.glibc.out}/lib/libnss_files.so.* $out/lib"}
 
         mkdir -p $out/etc/iscsi
         cp ${config.environment.etc.hosts.source} $out/etc/hosts
@@ -128,51 +136,58 @@ in
         $out/bin/iscsiadm --version
       '';
 
-      preLVMCommands = let
-        extraCfgDumper = optionalString (cfg.extraConfigFile != null) ''
-          if [ -f "${cfg.extraConfigFile}" ]; then
-            printf "\n# The following is from ${cfg.extraConfigFile}:\n"
-            cat "${cfg.extraConfigFile}"
-          else
-            echo "Warning: boot.iscsi-initiator.extraConfigFile ${cfg.extraConfigFile} does not exist!" >&2
-          fi
+      preLVMCommands =
+        let
+          extraCfgDumper = optionalString (cfg.extraConfigFile != null) ''
+            if [ -f "${cfg.extraConfigFile}" ]; then
+              printf "\n# The following is from ${cfg.extraConfigFile}:\n"
+              cat "${cfg.extraConfigFile}"
+            else
+              echo "Warning: boot.iscsi-initiator.extraConfigFile ${cfg.extraConfigFile} does not exist!" >&2
+            fi
+          '';
+        in
+        ''
+          ${optionalString (!config.boot.initrd.network.ssh.enable) ''
+            # stolen from initrd-ssh.nix
+            echo 'root:x:0:0:root:/root:/bin/ash' > /etc/passwd
+            echo 'passwd: files' > /etc/nsswitch.conf
+          ''}
+
+          cp -f $extraUtils/etc/hosts /etc/hosts
+
+          mkdir -p /etc/iscsi /run/lock/iscsi
+          echo "InitiatorName=${cfg.name}" > /etc/iscsi/initiatorname.iscsi
+
+          (
+            cat "$extraUtils/etc/iscsi/iscsid.fragment.conf"
+            printf "\n"
+            ${optionalString cfg.loginAll ''echo "node.startup = automatic"''}
+            ${extraCfgDumper}
+          ) > /etc/iscsi/iscsid.conf
+
+          iscsid --foreground --no-pid-file --debug ${toString cfg.logLevel} &
+          iscsiadm --mode discoverydb \
+            --type sendtargets \
+            --discover \
+            --portal ${escapeShellArg cfg.discoverPortal} \
+            --debug ${toString cfg.logLevel}
+
+          ${
+            if cfg.loginAll then
+              ''
+                iscsiadm --mode node --loginall all
+              ''
+            else
+              ''
+                iscsiadm --mode node --targetname ${escapeShellArg cfg.target} --login
+              ''
+          }
+
+          ${cfg.extraIscsiCommands}
+
+          pkill -9 iscsid
         '';
-      in ''
-        ${optionalString (!config.boot.initrd.network.ssh.enable) ''
-        # stolen from initrd-ssh.nix
-        echo 'root:x:0:0:root:/root:/bin/ash' > /etc/passwd
-        echo 'passwd: files' > /etc/nsswitch.conf
-      ''}
-
-        cp -f $extraUtils/etc/hosts /etc/hosts
-
-        mkdir -p /etc/iscsi /run/lock/iscsi
-        echo "InitiatorName=${cfg.name}" > /etc/iscsi/initiatorname.iscsi
-
-        (
-          cat "$extraUtils/etc/iscsi/iscsid.fragment.conf"
-          printf "\n"
-          ${optionalString cfg.loginAll ''echo "node.startup = automatic"''}
-          ${extraCfgDumper}
-        ) > /etc/iscsi/iscsid.conf
-
-        iscsid --foreground --no-pid-file --debug ${toString cfg.logLevel} &
-        iscsiadm --mode discoverydb \
-          --type sendtargets \
-          --discover \
-          --portal ${escapeShellArg cfg.discoverPortal} \
-          --debug ${toString cfg.logLevel}
-
-        ${if cfg.loginAll then ''
-        iscsiadm --mode node --loginall all
-      '' else ''
-        iscsiadm --mode node --targetname ${escapeShellArg cfg.target} --login
-      ''}
-
-        ${cfg.extraIscsiCommands}
-
-        pkill -9 iscsid
-      '';
     };
 
     services.openiscsi = {

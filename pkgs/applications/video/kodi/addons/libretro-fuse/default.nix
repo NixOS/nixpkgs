@@ -1,4 +1,10 @@
-{ lib, buildKodiBinaryAddon, fetchFromGitHub, libretro, fuse }:
+{
+  lib,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  libretro,
+  fuse,
+}:
 
 buildKodiBinaryAddon rec {
   pname = "libretro-fuse";
@@ -26,6 +32,7 @@ buildKodiBinaryAddon rec {
     description = "Sinclair - ZX Spectrum (Fuse) GameClient for Kodi";
     platforms = platforms.all;
     license = licenses.gpl3Only;
-    maintainers = with maintainers; teams.kodi.members ++ [ kazenyuk ];
+    maintainers = with maintainers; [ kazenyuk ];
+    teams = [ teams.kodi ];
   };
 }

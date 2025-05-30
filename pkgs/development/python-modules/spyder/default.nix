@@ -1,71 +1,93 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, atomicwrites
-, chardet
-, cloudpickle
-, cookiecutter
-, diff-match-patch
-, intervaltree
-, jedi
-, jellyfish
-, keyring
-, matplotlib
-, nbconvert
-, numpy
-, numpydoc
-, psutil
-, pygments
-, pylint-venv
-, pyls-spyder
-, pyopengl
-, pyqtwebengine
-, python-lsp-black
-, python-lsp-server
-, pyxdg
-, pyzmq
-, qdarkstyle
-, qstylizer
-, qtawesome
-, qtconsole
-, qtpy
-, rope
-, rtree
-, scipy
-, spyder-kernels
-, textdistance
-, three-merge
-, watchdog
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+
+  # nativeBuildInputs
+  pyqtwebengine,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  aiohttp,
+  asyncssh,
+  atomicwrites,
+  bcrypt,
+  chardet,
+  cloudpickle,
+  cookiecutter,
+  diff-match-patch,
+  fzf,
+  intervaltree,
+  ipython-pygments-lexers,
+  jedi,
+  jellyfish,
+  keyring,
+  matplotlib,
+  nbconvert,
+  numpy,
+  numpydoc,
+  packaging,
+  pickleshare,
+  psutil,
+  pygithub,
+  pygments,
+  pylint-venv,
+  pyls-spyder,
+  pyopengl,
+  python-lsp-black,
+  python-lsp-server,
+  pyuca,
+  pyzmq,
+  qdarkstyle,
+  qstylizer,
+  qtawesome,
+  qtconsole,
+  qtpy,
+  rope,
+  rtree,
+  scipy,
+  spyder-kernels,
+  superqt,
+  textdistance,
+  three-merge,
+  watchdog,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "5.5.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "6.1.0a2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+z8Jj0eA/mYH1r8ZQUyYUFMk7h1mBxjoTD5YZk0cH0k=";
+    hash = "sha256-KbGfG9T3XkYXntIQx325mYb0Bh8c0idb+25awFlWD9s=";
   };
 
-  patches = [
-    ./dont-clear-pythonpath.patch
+  patches = [ ./dont-clear-pythonpath.patch ];
+
+  nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
+
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "ipython"
   ];
 
-  nativeBuildInputs = [
-    pyqtwebengine.wrapQtAppsHook
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
+    aiohttp
+    asyncssh
     atomicwrites
+    bcrypt
     chardet
     cloudpickle
     cookiecutter
     diff-match-patch
+    fzf
     intervaltree
+    ipython-pygments-lexers
     jedi
     jellyfish
     keyring
@@ -73,7 +95,10 @@ buildPythonPackage rec {
     nbconvert
     numpy
     numpydoc
+    packaging
+    pickleshare
     psutil
+    pygithub
     pygments
     pylint-venv
     pyls-spyder
@@ -81,7 +106,7 @@ buildPythonPackage rec {
     pyqtwebengine
     python-lsp-black
     python-lsp-server
-    pyxdg
+    pyuca
     pyzmq
     qdarkstyle
     qstylizer
@@ -92,22 +117,15 @@ buildPythonPackage rec {
     rtree
     scipy
     spyder-kernels
+    superqt
     textdistance
     three-merge
     watchdog
+    yarl
   ] ++ python-lsp-server.optional-dependencies.all;
 
   # There is no test for spyder
   doCheck = false;
-
-  postPatch = ''
-    # Remove dependency on pyqtwebengine
-    # This is still part of the pyqt 5.11 version we have in nixpkgs
-    sed -i /pyqtwebengine/d setup.py
-    substituteInPlace setup.py \
-      --replace "qdarkstyle>=3.0.2,<3.1.0" "qdarkstyle" \
-      --replace "ipython>=7.31.1,<8.0.0" "ipython"
-  '';
 
   postInstall = ''
     # Add Python libs to env so Spyder subprocesses
@@ -121,8 +139,9 @@ buildPythonPackage rec {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Scientific python development environment";
+    mainProgram = "spyder";
     longDescription = ''
       Spyder (previously known as Pydee) is a powerful interactive development
       environment for the Python language with advanced editing, interactive
@@ -130,9 +149,9 @@ buildPythonPackage rec {
     '';
     homepage = "https://www.spyder-ide.org/";
     downloadPage = "https://github.com/spyder-ide/spyder/releases";
-    changelog = "https://github.com/spyder-ide/spyder/blob/master/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gebner ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/spyder-ide/spyder/blob/v${version}/changelogs/Spyder-6.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
   };
 }

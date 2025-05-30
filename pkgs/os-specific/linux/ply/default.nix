@@ -1,10 +1,26 @@
-{ lib, stdenv, kernel, fetchFromGitHub, autoreconfHook, bison, flex, p7zip, rsync }:
+{
+  lib,
+  stdenv,
+  kernel,
+  fetchFromGitHub,
+  autoreconfHook,
+  bison,
+  flex,
+  p7zip,
+  rsync,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ply";
   version = "2.1.1-${lib.substring 0 7 src.rev}";
 
-  nativeBuildInputs = [ autoreconfHook flex bison p7zip rsync ];
+  nativeBuildInputs = [
+    autoreconfHook
+    flex
+    bison
+    p7zip
+    rsync
+  ];
 
   src = fetchFromGitHub {
     owner = "iovisor";
@@ -32,8 +48,12 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Dynamic tracing in Linux";
+    mainProgram = "ply";
     homepage = "https://wkz.github.io/ply/";
     license = [ licenses.gpl2Only ];
-    maintainers = with maintainers; [ mic92 mbbx6spp ];
+    maintainers = with maintainers; [
+      mic92
+      mbbx6spp
+    ];
   };
 }

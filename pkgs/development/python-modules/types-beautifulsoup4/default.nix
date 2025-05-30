@@ -1,34 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, types-html5lib
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  types-html5lib,
 }:
 
 buildPythonPackage rec {
   pname = "types-beautifulsoup4";
-  version = "4.12.0.20240229";
-  format = "setuptools";
+  version = "4.12.0.20250516";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-435M+hGwOwF3VzLlbSwBDLJO4Qd4Yne65rwPo+MFtoY=";
+    pname = "types_beautifulsoup4";
+    inherit version;
+    hash = "sha256-qhndc7M7cNYpat+S2oq4oMlFxQfm+31dtVNBXMd7QX4=";
   };
 
-  propagatedBuildInputs = [
-    types-html5lib
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ types-html5lib ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "bs4-stubs"
-  ];
+  pythonImportsCheck = [ "bs4-stubs" ];
 
   meta = with lib; {
     description = "Typing stubs for beautifulsoup4";
     homepage = "https://pypi.org/project/types-beautifulsoup4/";
-    license = with licenses; [ asl20 ];
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }

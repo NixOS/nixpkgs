@@ -1,279 +1,235 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python -p python3.pkgs.joblib python3.pkgs.click python3.pkgs.click-log nix nix-prefetch-git nix-universal-prefetch prefetch-yarn-deps prefetch-npm-deps
+#! nix-shell -i python -p python3.pkgs.joblib python3.pkgs.click python3.pkgs.click-log nix nix-prefetch-git prefetch-yarn-deps prefetch-npm-deps gclient2nix
+"""
+electron updater
 
-import logging
-import click_log
-import click
-import random
-import traceback
-import csv
+A script for updating electron source hashes.
+
+It supports the following modes:
+
+| Mode         | Description                                     |
+|------------- | ----------------------------------------------- |
+| `update`     | for updating a specific Electron release        |
+| `update-all` | for updating all electron releases at once      |
+
+The `update` commands requires a `--version` flag
+to specify the major release to be updated.
+The `update-all command updates all non-eol major releases.
+
+The `update` and `update-all` commands accept an optional `--commit`
+flag to automatically commit the changes for you.
+"""
 import base64
-import os
-import re
-import tempfile
-import subprocess
 import json
+import logging
+import os
+import random
+import re
+import subprocess
 import sys
-from joblib import Parallel, delayed, Memory
-from codecs import iterdecode
+import tempfile
+import urllib.request
+import click
+import click_log
+
 from datetime import datetime
+from typing import Iterable, Tuple
 from urllib.request import urlopen
+from joblib import Parallel, delayed, Memory
+from update_util import *
+
+
+# Relative path to the electron-source info.json
+SOURCE_INFO_JSON = "info.json"
 
 os.chdir(os.path.dirname(__file__))
 
-depot_tools_checkout = tempfile.TemporaryDirectory()
-subprocess.check_call([
-    "nix-prefetch-git",
-    "--builder", "--quiet",
-    "--url", "https://chromium.googlesource.com/chromium/tools/depot_tools",
-    "--out", depot_tools_checkout.name,
-    "--rev", "7a69b031d58081d51c9e8e89557b343bba8518b1"])
-sys.path.append(depot_tools_checkout.name)
+memory: Memory = Memory("cache", verbose=0)
 
-import gclient_eval
-import gclient_utils
+logger = logging.getLogger(__name__)
+click_log.basic_config(logger)
 
-memory = Memory("cache", verbose=0)
+
+def get_gclient_data(rev: str) -> any:
+    output = subprocess.check_output(
+        ["gclient2nix", "generate",
+         f"https://github.com/electron/electron@{rev}",
+         "--root", "src/electron"]
+    )
+
+    return json.loads(output)
+
+
+def get_chromium_file(chromium_tag: str, filepath: str) -> str:
+    return base64.b64decode(
+        urlopen(
+            f"https://chromium.googlesource.com/chromium/src.git/+/{chromium_tag}/{filepath}?format=TEXT"
+        ).read()
+        ).decode("utf-8")
+
+
+def get_electron_file(electron_tag: str, filepath: str) -> str:
+    return (
+        urlopen(
+            f"https://raw.githubusercontent.com/electron/electron/{electron_tag}/{filepath}"
+        )
+        .read()
+        .decode("utf-8")
+    )
+
 
 @memory.cache
-def get_repo_hash(fetcher, args):
-    cmd = ['nix-universal-prefetch', fetcher]
-    for arg_name, arg in args.items():
-        cmd.append(f'--{arg_name}')
-        cmd.append(arg)
-
-    print(" ".join(cmd), file=sys.stderr)
-    out = subprocess.check_output(cmd)
-    return out.decode('utf-8').strip()
-
-@memory.cache
-def _get_yarn_hash(file):
-    print(f'prefetch-yarn-deps', file=sys.stderr)
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        with open(tmp_dir + '/yarn.lock', 'w') as f:
-            f.write(file)
-        return subprocess.check_output(['prefetch-yarn-deps', tmp_dir + '/yarn.lock']).decode('utf-8').strip()
-def get_yarn_hash(repo, yarn_lock_path = 'yarn.lock'):
-    return _get_yarn_hash(repo.get_file(yarn_lock_path))
-
-@memory.cache
-def _get_npm_hash(file):
-    print(f'prefetch-npm-deps', file=sys.stderr)
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        with open(tmp_dir + '/package-lock.json', 'w') as f:
-            f.write(file)
-        return subprocess.check_output(['prefetch-npm-deps', tmp_dir + '/package-lock.json']).decode('utf-8').strip()
-def get_npm_hash(repo, package_lock_path = 'package-lock.json'):
-    return _get_npm_hash(repo.get_file(package_lock_path))
-
-class Repo:
-    def __init__(self):
-        self.deps = {}
-        self.hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
-
-    def get_deps(self, repo_vars, path):
-        print("evaluating " + json.dumps(self, default = vars), file=sys.stderr)
-
-        deps_file = self.get_file("DEPS")
-        evaluated = gclient_eval.Parse(deps_file, filename='DEPS')
-
-        repo_vars = dict(evaluated["vars"]) | repo_vars
-
-        prefix = f"{path}/" if evaluated.get("use_relative_paths", False) else ""
-
-        self.deps = {
-            prefix + dep_name: repo_from_dep(dep)
-            for dep_name, dep in evaluated["deps"].items()
-            if (gclient_eval.EvaluateCondition(dep["condition"], repo_vars) if "condition" in dep else True) and repo_from_dep(dep) != None
-        }
-
-        for key in evaluated.get("recursedeps", []):
-            dep_path = prefix + key
-            if dep_path in self.deps and dep_path != "src/third_party/squirrel.mac":
-                self.deps[dep_path].get_deps(repo_vars, dep_path)
-
-    def prefetch(self):
-        self.hash = get_repo_hash(self.fetcher, self.args)
-
-    def prefetch_all(self):
-        return sum([dep.prefetch_all() for [_, dep] in self.deps.items()], [delayed(self.prefetch)()])
-
-    def flatten_repr(self):
-        return {
-            "fetcher": self.fetcher,
-            "hash": self.hash,
-            **self.args
-        }
-
-    def flatten(self, path):
-        out = {
-            path: self.flatten_repr()
-        }
-        for dep_path, dep in self.deps.items():
-            out |= dep.flatten(dep_path)
-        return out
-
-class GitRepo(Repo):
-    def __init__(self, url, rev):
-        super().__init__()
-        self.fetcher = 'fetchgit'
-        self.args = {
-            "url": url,
-            "rev": rev,
-        }
-
-class GitHubRepo(Repo):
-    def __init__(self, owner, repo, rev):
-        super().__init__()
-        self.fetcher = 'fetchFromGitHub'
-        self.args = {
-            "owner": owner,
-            "repo": repo,
-            "rev": rev,
-        }
-
-    def get_file(self, filepath):
-        return urlopen(f"https://raw.githubusercontent.com/{self.args['owner']}/{self.args['repo']}/{self.args['rev']}/{filepath}").read().decode('utf-8')
-
-class GitilesRepo(Repo):
-    def __init__(self, url, rev):
-        super().__init__()
-        self.fetcher = 'fetchFromGitiles'
-        #self.fetcher = 'fetchgit'
-        self.args = {
-            "url": url,
-            "rev": rev,
-            #"fetchSubmodules": "false",
-        }
-
-        if url == "https://chromium.googlesource.com/chromium/src.git":
-            self.args['postFetch'] = "rm -r $out/third_party/blink/web_tests; "
-            self.args['postFetch'] += "rm -r $out/third_party/hunspell/tests; "
-            self.args['postFetch'] += "rm -r $out/content/test/data; "
-            self.args['postFetch'] += "rm -r $out/courgette/testdata; "
-            self.args['postFetch'] += "rm -r $out/extensions/test/data; "
-            self.args['postFetch'] += "rm -r $out/media/test/data; "
-
-    def get_file(self, filepath):
-        return base64.b64decode(urlopen(f"{self.args['url']}/+/{self.args['rev']}/{filepath}?format=TEXT").read()).decode('utf-8')
-
-def repo_from_dep(dep):
-    if "url" in dep:
-        url, rev = gclient_utils.SplitUrlRevision(dep["url"])
-
-        search_object = re.search(r'https://github.com/(.+)/(.+?)(\.git)?$', url)
-        if search_object:
-            return GitHubRepo(search_object.group(1), search_object.group(2), rev)
-
-        if re.match(r'https://.+.googlesource.com', url):
-            return GitilesRepo(url, rev)
-
-        return GitRepo(url, rev)
-    else:
-        # Not a git dependency; skip
-        return None
-
-def get_gn_source(repo):
+def get_chromium_gn_source(chromium_tag: str) -> dict:
     gn_pattern = r"'gn_version': 'git_revision:([0-9a-f]{40})'"
-    gn_commit = re.search(gn_pattern, repo.get_file("DEPS")).group(1)
-    gn = subprocess.check_output([
-        "nix-prefetch-git",
-        "--quiet",
-        "https://gn.googlesource.com/gn",
-        "--rev", gn_commit
-        ])
-    gn = json.loads(gn)
+    gn_commit = re.search(gn_pattern, get_chromium_file(chromium_tag, "DEPS")).group(1)
+    gn_prefetch: bytes = subprocess.check_output(
+        [
+            "nix-prefetch-git",
+            "--quiet",
+            "https://gn.googlesource.com/gn",
+            "--rev",
+            gn_commit,
+        ]
+    )
+    gn: dict = json.loads(gn_prefetch)
     return {
         "gn": {
             "version": datetime.fromisoformat(gn["date"]).date().isoformat(),
             "url": gn["url"],
             "rev": gn["rev"],
-            "hash": gn["hash"]
+            "hash": gn["hash"],
         }
     }
 
-def get_electron_info(major_version):
-    electron_releases = json.loads(urlopen("https://releases.electronjs.org/releases.json").read())
-    major_version_releases = filter(lambda item: item["version"].startswith(f"{major_version}."), electron_releases)
-    m = max(major_version_releases, key=lambda item: item["date"])
+@memory.cache
+def get_electron_yarn_hash(electron_tag: str) -> str:
+    print(f"prefetch-yarn-deps", file=sys.stderr)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        with open(tmp_dir + "/yarn.lock", "w") as f:
+            f.write(get_electron_file(electron_tag, "yarn.lock"))
+        return (
+            subprocess.check_output(["prefetch-yarn-deps", tmp_dir + "/yarn.lock"])
+            .decode("utf-8")
+            .strip()
+        )
 
-    rev=f"v{m['version']}"
+@memory.cache
+def get_chromium_npm_hash(chromium_tag: str) -> str:
+    print(f"prefetch-npm-deps", file=sys.stderr)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        with open(tmp_dir + "/package-lock.json", "w") as f:
+            f.write(get_chromium_file(chromium_tag, "third_party/node/package-lock.json"))
+        return (
+            subprocess.check_output(
+                ["prefetch-npm-deps", tmp_dir + "/package-lock.json"]
+            )
+            .decode("utf-8")
+            .strip()
+        )
 
-    electron_repo = GitHubRepo("electron", "electron", rev)
-    electron_repo.recurse = True
 
-    electron_repo.get_deps({
-        f"checkout_{platform}": platform == "linux"
-        for platform in ["ios", "chromeos", "android", "mac", "win", "linux"]
-    }, "src/electron")
+def get_update(major_version: str, m: str, gclient_data: any) -> Tuple[str, dict]:
 
-    return (major_version, m, electron_repo)
-
-logger = logging.getLogger(__name__)
-click_log.basic_config(logger)
-
-@click.group()
-def cli():
-    pass
-
-@cli.command("eval")
-@click.option("--version", help="The major version, e.g. '23'")
-def eval(version):
-    (_, _, repo) = electron_repo = get_electron_info(version)
-    tree = electron_repo.flatten("src/electron")
-    print(json.dumps(tree, indent=4, default = vars))
-
-def get_update(repo):
-    (major_version, m, electron_repo) = repo
-
-    tasks = electron_repo.prefetch_all()
-    a = lambda: (
-        ("electron_yarn_hash", get_yarn_hash(electron_repo))
-    )
+    tasks = []
+    a = lambda: (("electron_yarn_hash", get_electron_yarn_hash(gclient_data["src/electron"]["args"]["tag"])))
     tasks.append(delayed(a)())
     a = lambda: (
-        ("chromium_npm_hash", get_npm_hash(electron_repo.deps["src"], "third_party/node/package-lock.json"))
+        (
+            "chromium_npm_hash",
+            get_chromium_npm_hash(gclient_data["src"]["args"]["tag"]),
+        )
     )
     tasks.append(delayed(a)())
     random.shuffle(tasks)
 
-    task_results = {n[0]: n[1] for n in Parallel(n_jobs=3, require='sharedmem', return_as="generator")(tasks) if n != None}
+    task_results = {
+        n[0]: n[1]
+        for n in Parallel(n_jobs=3, require="sharedmem", return_as="generator")(tasks)
+        if n != None
+    }
 
-    tree = electron_repo.flatten("src/electron")
+    return (
+        f"{major_version}",
+        {
+            "deps": gclient_data,
+            **{key: m[key] for key in ["version", "modules", "chrome", "node"]},
+            "chromium": {
+                "version": m["chrome"],
+                "deps": get_chromium_gn_source(gclient_data["src"]["args"]["tag"]),
+            },
+            **task_results,
+        },
+    )
 
-    return (f"{major_version}", {
-      "deps": tree,
-      **{key: m[key] for key in ["version", "modules", "chrome", "node"]},
-      "chromium": {
-          "version": m['chrome'],
-          "deps": get_gn_source(electron_repo.deps["src"])
-      },
-      **task_results
-    })
 
-@cli.command("update")
-@click.option("--version", help="The major version, e.g. '23'")
-def update(version):
-    try:
-        with open('info.json', 'r') as f:
-            old_info = json.loads(f.read())
-    except:
-        old_info = {}
-    repo = get_electron_info(version)
-    update = get_update(repo)
-    out = old_info | { update[0]: update[1] }
-    with open('info.json', 'w') as f:
-        f.write(json.dumps(out, indent=4, default = vars))
-        f.write('\n')
+def non_eol_releases(releases: Iterable[int]) -> Iterable[int]:
+    """Returns a list of releases that have not reached end-of-life yet."""
+    return tuple(filter(lambda x: x in supported_version_range(), releases))
 
-@cli.command("update-all")
-def update_all():
-    repos = Parallel(n_jobs=2, require='sharedmem')(delayed(get_electron_info)(major_version) for major_version in range(28, 24, -1))
-    out = {n[0]: n[1] for n in Parallel(n_jobs=2, require='sharedmem')(delayed(get_update)(repo) for repo in repos)}
 
-    with open('info.json', 'w') as f:
-        f.write(json.dumps(out, indent=4, default = vars))
-        f.write('\n')
+def update_source(version: str, commit: bool) -> None:
+    """Update a given electron-source release
+
+    Args:
+        version: The major version number, e.g. '27'
+        commit: Whether the updater should commit the result
+    """
+    major_version = version
+
+    package_name = f"electron-source.electron_{major_version}"
+    print(f"Updating electron-source.electron_{major_version}")
+
+    old_info = load_info_json(SOURCE_INFO_JSON)
+    old_version = (
+        old_info[major_version]["version"]
+        if major_version in old_info
+        else None
+    )
+
+    m, rev = get_latest_version(major_version)
+    if old_version == m["version"]:
+        print(f"{package_name} is up-to-date")
+        return
+
+    gclient_data = get_gclient_data(rev)
+    new_info = get_update(major_version, m, gclient_data)
+    out = old_info | {new_info[0]: new_info[1]}
+
+    save_info_json(SOURCE_INFO_JSON, out)
+
+    new_version = new_info[1]["version"]
+    if commit:
+        commit_result(package_name, old_version, new_version, SOURCE_INFO_JSON)
+
+
+@click.group()
+def cli() -> None:
+    """A script for updating electron-source hashes"""
+    pass
+
+
+@cli.command("update", help="Update a single major release")
+@click.option("-v", "--version", required=True, type=str, help="The major version, e.g. '23'")
+@click.option("-c", "--commit", is_flag=True, default=False, help="Commit the result")
+def update(version: str, commit: bool) -> None:
+    update_source(version, commit)
+
+
+@cli.command("update-all", help="Update all releases at once")
+@click.option("-c", "--commit", is_flag=True, default=False, help="Commit the result")
+def update_all(commit: bool) -> None:
+    """Update all eletron-source releases at once
+
+    Args:
+        commit: Whether to commit the result
+    """
+    old_info = load_info_json(SOURCE_INFO_JSON)
+
+    filtered_releases = non_eol_releases(tuple(map(lambda x: int(x), old_info.keys())))
+
+    for major_version in filtered_releases:
+        update_source(str(major_version), commit)
+
 
 if __name__ == "__main__":
     cli()

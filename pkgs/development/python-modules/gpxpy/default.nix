@@ -1,4 +1,11 @@
-{ lib, fetchFromGitHub, buildPythonPackage, python, lxml, pythonOlder }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  python,
+  lxml,
+  pythonOlder,
+}:
 
 buildPythonPackage rec {
   pname = "gpxpy";
@@ -8,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "tkrajina";
-    repo = pname;
+    repo = "gpxpy";
     rev = "v${version}";
     hash = "sha256-s65k0u4LIwHX9RJMJIYMkNS4/Z0wstzqYVPAjydo2iI=";
   };
@@ -21,6 +28,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python GPX (GPS eXchange format) parser";
+    mainProgram = "gpxinfo";
     homepage = "https://github.com/tkrajina/gpxpy";
     license = licenses.asl20;
     platforms = platforms.unix;

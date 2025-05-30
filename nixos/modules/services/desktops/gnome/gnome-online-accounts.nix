@@ -1,22 +1,17 @@
 # GNOME Online Accounts daemon.
 
-{ config, pkgs, lib, ... }:
-
-with lib;
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
 
   meta = {
-    maintainers = teams.gnome.members;
+    maintainers = lib.teams.gnome.members;
   };
-
-  # Added 2021-05-07
-  imports = [
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "gnome-online-accounts" "enable" ]
-      [ "services" "gnome" "gnome-online-accounts" "enable" ]
-    )
-  ];
 
   ###### interface
 
@@ -24,10 +19,10 @@ with lib;
 
     services.gnome.gnome-online-accounts = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable GNOME Online Accounts daemon, a service that provides
           a single sign-on framework for the GNOME desktop.
         '';
@@ -37,10 +32,9 @@ with lib;
 
   };
 
-
   ###### implementation
 
-  config = mkIf config.services.gnome.gnome-online-accounts.enable {
+  config = lib.mkIf config.services.gnome.gnome-online-accounts.enable {
 
     environment.systemPackages = [ pkgs.gnome-online-accounts ];
 

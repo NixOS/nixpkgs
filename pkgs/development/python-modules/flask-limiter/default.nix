@@ -1,57 +1,71 @@
-{ lib
-, asgiref
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, hiro
-, limits
-, ordered-set
-, pymemcache
-, pymongo
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, redis
-, rich
-, setuptools
-, typing-extensions
+{
+  lib,
+  asgiref,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  flask,
+  hiro,
+  limits,
+  ordered-set,
+  pymemcache,
+  pymongo,
+  pytest-cov-stub,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  rich,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "flask-limiter";
-  version = "3.5.1";
+  version = "3.12";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "alisaifee";
     repo = "flask-limiter";
-    rev = "refs/tags/${version}";
-    hash = "sha256-U7qgl8yg0ddKDPXqYE2Vqyc2ofxSP+6liWs5j4qD6fM=";
+    tag = version;
+    hash = "sha256-3GFbLQExd4c3Cyr7UDX/zOAfedOluXMwCbBhOgoKfn0=";
   };
 
-  postPatch = ''
-    sed -i "/--cov/d" pytest.ini
-
-    # flask-restful is unmaintained and breaks regularly, don't depend on it
-    sed -i "/import flask_restful/d" tests/test_views.py
-  '';
-
-  nativeBuildInputs = [
-    setuptools
+  patches = [
+    # permit use of rich < 15 -- remove when updating past 3.12
+    (fetchpatch {
+      url = "https://github.com/alisaifee/flask-limiter/commit/008a5c89f249e18e5375f16d79efc3ac518e9bcc.patch";
+      hash = "sha256-dvTPVnuPs7xCRfUBBA1bgeWGuevFUZ+Kgl9MBHdgfKU=";
+    })
   ];
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    # flask-restful is unmaintained and breaks regularly, don't depend on it
+    substituteInPlace tests/test_views.py \
+      --replace-fail "import flask_restful" ""
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     flask
     limits
     ordered-set
     rich
-    typing-extensions
   ];
+
+  optional-dependencies = {
+    redis = limits.optional-dependencies.redis;
+    memcached = limits.optional-dependencies.memcached;
+    mongodb = limits.optional-dependencies.mongodb;
+  };
 
   nativeCheckInputs = [
     asgiref
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
     hiro
@@ -85,15 +99,13 @@ buildPythonPackage rec {
     "tests/test_storage.py"
   ];
 
-  pythonImportsCheck = [
-    "flask_limiter"
-  ];
+  pythonImportsCheck = [ "flask_limiter" ];
 
   meta = with lib; {
     description = "Rate limiting for flask applications";
     homepage = "https://flask-limiter.readthedocs.org/";
-    changelog = "https://github.com/alisaifee/flask-limiter/blob/${version}/HISTORY.rst";
+    changelog = "https://github.com/alisaifee/flask-limiter/blob/${src.tag}/HISTORY.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

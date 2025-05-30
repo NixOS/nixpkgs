@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, qmake, qtbase, wrapQtAppsHook }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  qmake,
+  qtbase,
+  wrapQtAppsHook,
+}:
 
 stdenv.mkDerivation {
   pname = "selectdefaultapplication";
@@ -11,7 +18,10 @@ stdenv.mkDerivation {
     sha256 = "C/70xpt6RoQNIlAjSJhOCyheolK4Xp6RiSZmeqMP4fw=";
   };
 
-  nativeBuildInputs = [ qmake wrapQtAppsHook ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
   buildInputs = [ qtbase ];
 
   installPhase = ''
@@ -27,7 +37,8 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A very simple application that lets you define default applications on Linux in a sane way";
+    description = "Very simple application that lets you define default applications on Linux in a sane way";
+    mainProgram = "selectdefaultapplication";
     homepage = "https://github.com/sandsmark/selectdefaultapplication";
     maintainers = with maintainers; [ nsnelson ];
     license = licenses.gpl2;

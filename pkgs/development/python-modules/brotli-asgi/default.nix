@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-# build inputs
-, starlette
-, brotli
-# check inputs
-, httpx
-, requests
-, mypy
-, brotlipy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  # build inputs
+  starlette,
+  brotli,
+  # check inputs
+  httpx,
+  requests,
+  mypy,
+  brotlipy,
 }:
 let
   pname = "brotli-asgi";
@@ -23,7 +24,7 @@ buildPythonPackage {
 
   src = fetchFromGitHub {
     owner = "fullonic";
-    repo = pname;
+    repo = "brotli-asgi";
     rev = "v${version}";
     hash = "sha256-hQ6CSXnAoUSaKUSmE+2GHZemkFqd8Dc5+OvcUD7/r5Y=";
   };
@@ -43,7 +44,7 @@ buildPythonPackage {
   ];
 
   meta = with lib; {
-    description = "A compression AGSI middleware using brotli";
+    description = "Compression AGSI middleware using brotli";
     homepage = "https://github.com/fullonic/brotli-asgi";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];

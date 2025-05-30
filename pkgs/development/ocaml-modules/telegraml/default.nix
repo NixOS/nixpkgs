@@ -1,13 +1,14 @@
-{ batteries
-, buildDunePackage
-, cohttp-lwt-unix
-, fetchFromGitHub
-, lib
-, logs
-, yojson
+{
+  batteries,
+  buildDunePackage,
+  cohttp-lwt-unix,
+  fetchFromGitHub,
+  lib,
+  logs,
+  yojson,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "telegraml";
   version = "unstable-2021-06-17";
 
@@ -30,9 +31,9 @@ buildDunePackage rec {
   ];
 
   meta = with lib; {
-    description = "An OCaml library implementing the Telegram bot API";
+    description = "OCaml library implementing the Telegram bot API";
     homepage = "https://github.com/nv-vn/TelegraML/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

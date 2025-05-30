@@ -1,11 +1,22 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.usbguard;
 
   # valid policy options
-  policy = (types.enum [ "allow" "block" "reject" "keep" "apply-policy" ]);
+  policy = (
+    lib.types.enum [
+      "allow"
+      "block"
+      "reject"
+      "keep"
+      "apply-policy"
+    ]
+  );
 
   # decide what file to use for rules
   ruleFile = if cfg.rules != null then pkgs.writeText "usbguard-rules" cfg.rules else cfg.ruleFile;
@@ -17,13 +28,13 @@ let
     PresentDevicePolicy=${cfg.presentDevicePolicy}
     PresentControllerPolicy=${cfg.presentControllerPolicy}
     InsertedDevicePolicy=${cfg.insertedDevicePolicy}
-    RestoreControllerDeviceState=${boolToString cfg.restoreControllerDeviceState}
+    RestoreControllerDeviceState=${lib.boolToString cfg.restoreControllerDeviceState}
     # this does not seem useful for endusers to change
     DeviceManagerBackend=uevent
-    IPCAllowedUsers=${concatStringsSep " " cfg.IPCAllowedUsers}
-    IPCAllowedGroups=${concatStringsSep " " cfg.IPCAllowedGroups}
+    IPCAllowedUsers=${lib.concatStringsSep " " cfg.IPCAllowedUsers}
+    IPCAllowedGroups=${lib.concatStringsSep " " cfg.IPCAllowedGroups}
     IPCAccessControlFiles=/var/lib/usbguard/IPCAccessControl.d/
-    DeviceRulesWithPort=${boolToString cfg.deviceRulesWithPort}
+    DeviceRulesWithPort=${lib.boolToString cfg.deviceRulesWithPort}
     # HACK: that way audit logs still land in the journal
     AuditFilePath=/dev/null
   '';
@@ -37,19 +48,19 @@ in
 
   options = {
     services.usbguard = {
-      enable = mkEnableOption (lib.mdDoc "USBGuard daemon");
+      enable = lib.mkEnableOption "USBGuard daemon";
 
-      package = mkPackageOption pkgs "usbguard" {
+      package = lib.mkPackageOption pkgs "usbguard" {
         extraDescription = ''
           If you do not need the Qt GUI, use `pkgs.usbguard-nox` to save disk space.
         '';
       };
 
-      ruleFile = mkOption {
-        type = types.nullOr types.path;
+      ruleFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = "/var/lib/usbguard/rules.conf";
         example = "/run/secrets/usbguard-rules";
-        description = lib.mdDoc ''
+        description = ''
           This tells the USBGuard daemon which file to load as policy rule set.
 
           The file can be changed manually or via the IPC interface assuming it has the right file permissions.
@@ -58,13 +69,13 @@ in
         '';
 
       };
-      rules = mkOption {
-        type = types.nullOr types.lines;
+      rules = lib.mkOption {
+        type = lib.types.nullOr lib.types.lines;
         default = null;
         example = ''
           allow with-interface equals { 08:*:* }
         '';
-        description = lib.mdDoc ''
+        description = ''
           The USBGuard daemon will load this as the policy rule set.
           As these rules are NixOS managed they are immutable and can't
           be changed by the IPC interface.
@@ -79,20 +90,24 @@ in
         '';
       };
 
-      implicitPolicyTarget = mkOption {
-        type = policy;
+      implicitPolicyTarget = lib.mkOption {
+        type = lib.types.enum [
+          "allow"
+          "block"
+          "reject"
+        ];
         default = "block";
-        description = lib.mdDoc ''
+        description = ''
           How to treat USB devices that don't match any rule in the policy.
           Target should be one of allow, block or reject (logically remove the
           device node from the system).
         '';
       };
 
-      presentDevicePolicy = mkOption {
+      presentDevicePolicy = lib.mkOption {
         type = policy;
         default = "apply-policy";
-        description = lib.mdDoc ''
+        description = ''
           How to treat USB devices that are already connected when the daemon
           starts. Policy should be one of allow, block, reject, keep (keep
           whatever state the device is currently in) or apply-policy (evaluate
@@ -100,28 +115,32 @@ in
         '';
       };
 
-      presentControllerPolicy = mkOption {
+      presentControllerPolicy = lib.mkOption {
         type = policy;
         default = "keep";
-        description = lib.mdDoc ''
+        description = ''
           How to treat USB controller devices that are already connected when
           the daemon starts. One of allow, block, reject, keep or apply-policy.
         '';
       };
 
-      insertedDevicePolicy = mkOption {
-        type = policy;
+      insertedDevicePolicy = lib.mkOption {
+        type = lib.types.enum [
+          "block"
+          "reject"
+          "apply-policy"
+        ];
         default = "apply-policy";
-        description = lib.mdDoc ''
+        description = ''
           How to treat USB devices that are already connected after the daemon
           starts. One of block, reject, apply-policy.
         '';
       };
 
-      restoreControllerDeviceState = mkOption {
-        type = types.bool;
+      restoreControllerDeviceState = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           The  USBGuard  daemon  modifies  some attributes of controller
           devices like the default authorization state of new child device
           instances. Using this setting, you can control whether the daemon
@@ -130,41 +149,43 @@ in
         '';
       };
 
-      IPCAllowedUsers = mkOption {
-        type = types.listOf types.str;
+      IPCAllowedUsers = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ "root" ];
-        example = [ "root" "yourusername" ];
-        description = lib.mdDoc ''
+        example = [
+          "root"
+          "yourusername"
+        ];
+        description = ''
           A list of usernames that the daemon will accept IPC connections from.
         '';
       };
 
-      IPCAllowedGroups = mkOption {
-        type = types.listOf types.str;
+      IPCAllowedGroups = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         example = [ "wheel" ];
-        description = lib.mdDoc ''
+        description = ''
           A list of groupnames that the daemon will accept IPC connections
           from.
         '';
       };
 
-      deviceRulesWithPort = mkOption {
-        type = types.bool;
+      deviceRulesWithPort = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Generate device specific rules including the "via-port" attribute.
         '';
       };
 
-      dbus.enable = mkEnableOption (lib.mdDoc "USBGuard dbus daemon");
+      dbus.enable = lib.mkEnableOption "USBGuard dbus daemon";
     };
   };
 
-
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ cfg.package ];
 
@@ -204,7 +225,10 @@ in
           ProtectSystem = true;
           ReadOnlyPaths = "-/";
           ReadWritePaths = "-/dev/shm -/tmp";
-          RestrictAddressFamilies = [ "AF_UNIX" "AF_NETLINK" ];
+          RestrictAddressFamilies = [
+            "AF_UNIX"
+            "AF_NETLINK"
+          ];
           RestrictNamespaces = true;
           RestrictRealtime = true;
           SystemCallArchitectures = "native";
@@ -213,7 +237,7 @@ in
         };
       };
 
-      usbguard-dbus = mkIf cfg.dbus.enable {
+      usbguard-dbus = lib.mkIf cfg.dbus.enable {
         description = "USBGuard D-Bus Service";
 
         wantedBy = [ "multi-user.target" ];
@@ -232,12 +256,10 @@ in
 
     security.polkit.extraConfig =
       let
-        groupCheck = (lib.concatStrings (map
-          (g: "subject.isInGroup(\"${g}\") || ")
-          cfg.IPCAllowedGroups))
-        + "false";
+        groupCheck =
+          (lib.concatStrings (map (g: "subject.isInGroup(\"${g}\") || ") cfg.IPCAllowedGroups)) + "false";
       in
-      optionalString cfg.dbus.enable ''
+      lib.optionalString cfg.dbus.enable ''
         polkit.addRule(function(action, subject) {
             if ((action.id == "org.usbguard.Policy1.listRules" ||
                  action.id == "org.usbguard.Policy1.appendRule" ||
@@ -254,8 +276,17 @@ in
       '';
   };
   imports = [
-    (mkRemovedOptionModule [ "services" "usbguard" "IPCAccessControlFiles" ] "The usbguard module now hardcodes IPCAccessControlFiles to /var/lib/usbguard/IPCAccessControl.d.")
-    (mkRemovedOptionModule [ "services" "usbguard" "auditFilePath" ] "Removed usbguard module audit log files. Audit logs can be found in the systemd journal.")
-    (mkRenamedOptionModule [ "services" "usbguard" "implictPolicyTarget" ] [ "services" "usbguard" "implicitPolicyTarget" ])
+    (lib.mkRemovedOptionModule [ "services" "usbguard" "IPCAccessControlFiles" ]
+      "The usbguard module now hardcodes IPCAccessControlFiles to /var/lib/usbguard/IPCAccessControl.d."
+    )
+    (lib.mkRemovedOptionModule [
+      "services"
+      "usbguard"
+      "auditFilePath"
+    ] "Removed usbguard module audit log files. Audit logs can be found in the systemd journal.")
+    (lib.mkRenamedOptionModule
+      [ "services" "usbguard" "implictPolicyTarget" ]
+      [ "services" "usbguard" "implicitPolicyTarget" ]
+    )
   ];
 }

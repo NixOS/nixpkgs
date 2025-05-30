@@ -1,52 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, imageio
-, ipykernel
-, ipython
-, napari-plugin-engine
-, pythonOlder
-, qtconsole
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  ipykernel,
+  ipython,
+  qtconsole,
+  qtpy,
 }:
 
 buildPythonPackage rec {
   pname = "napari-console";
-  version = "0.0.7";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "0.1.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "napari";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-vHLCVMgrcs54pGb48wQpc0h7QBIfE6r7hCSoDNI3QvA=";
+    repo = "napari-console";
+    tag = "v${version}";
+    hash = "sha256-Hvo9YMDf7CjeGn1kT7m9Y5klH0cD/SWxDQOHkYspGpQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    imageio
+  dependencies = [
     ipykernel
     ipython
-    napari-plugin-engine
     qtconsole
+    qtpy
   ];
 
   # Circular dependency: napari
   doCheck = false;
 
-  pythonImportsCheck = [
-    "napari_console"
-  ];
-
-  meta = with lib; {
-    description = "A plugin that adds a console to napari";
+  meta = {
+    description = "Plugin that adds a console to napari";
     homepage = "https://github.com/napari/napari-console";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
 }

@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, cython
-, zlib
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  cython,
+  zlib,
 }:
 
 buildPythonPackage rec {
   pname = "indexed_gzip";
   version = "1.8.7";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -18,7 +20,10 @@ buildPythonPackage rec {
     hash = "sha256-dryq1LLC+lVHj/i+m60ubGGItlX5/clCnwNGrexI92I=";
   };
 
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [
+    cython
+    setuptools
+  ];
 
   buildInputs = [ zlib ];
 
@@ -32,6 +37,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/pauldmccarthy/indexed_gzip";
     license = licenses.zlib;
     maintainers = with lib.maintainers; [ mxmlnkn ];
-    platforms = platforms.all;
   };
 }

@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ lib, ...} :
+{ lib, ... }:
 
 {
   name = "ksm";
@@ -6,17 +6,18 @@ import ./make-test-python.nix ({ lib, ...} :
     maintainers = [ rnhmjoj ];
   };
 
-  nodes.machine = { ... }: {
-    imports = [ ../modules/profiles/minimal.nix ];
+  nodes.machine =
+    { ... }:
+    {
+      imports = [ ../modules/profiles/minimal.nix ];
 
-    hardware.ksm.enable = true;
-    hardware.ksm.sleep = 300;
-  };
+      hardware.ksm.enable = true;
+      hardware.ksm.sleep = 300;
+    };
 
-  testScript =
-    ''
-      machine.start()
-      machine.wait_until_succeeds("test $(</sys/kernel/mm/ksm/run) -eq 1")
-      machine.wait_until_succeeds("test $(</sys/kernel/mm/ksm/sleep_millisecs) -eq 300")
-    '';
-})
+  testScript = ''
+    machine.start()
+    machine.wait_until_succeeds("test $(</sys/kernel/mm/ksm/run) -eq 1")
+    machine.wait_until_succeeds("test $(</sys/kernel/mm/ksm/sleep_millisecs) -eq 300")
+  '';
+}

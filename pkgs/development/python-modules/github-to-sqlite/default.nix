@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, pytestCheckHook
-, pyyaml
-, requests
-, requests-mock
-, sqlite-utils
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy3k,
+  pytestCheckHook,
+  pyyaml,
+  requests,
+  requests-mock,
+  sqlite-utils,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "dogsheep";
-    repo = pname;
+    repo = "github-to-sqlite";
     rev = version;
     hash = "sha256-KwLaaZxBBzRhiBv4p8Imb5XI1hyka9rmr/rxA6wDc7Q=";
   };
@@ -33,12 +34,11 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  disabledTests = [
-    "test_scrape_dependents"
-  ];
+  disabledTests = [ "test_scrape_dependents" ];
 
   meta = with lib; {
     description = "Save data from GitHub to a SQLite database";
+    mainProgram = "github-to-sqlite";
     homepage = "https://github.com/dogsheep/github-to-sqlite";
     license = licenses.asl20;
     maintainers = with maintainers; [ sarcasticadmin ];

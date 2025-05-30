@@ -1,13 +1,16 @@
-{ config
-, lib
-, pkgs
-, generateSplicesForMkScope
-, makeScopeWithSplicing'
+{
+  config,
+  lib,
+  linuxPackages,
+  pkgs,
+  generateSplicesForMkScope,
+  makeScopeWithSplicing',
 }:
 
 makeScopeWithSplicing' {
   otherSplices = generateSplicesForMkScope "xfce";
-  f = (self:
+  f = (
+    self:
     let
       inherit (self) callPackage;
     in
@@ -17,10 +20,6 @@ makeScopeWithSplicing' {
       genericUpdater = pkgs.genericUpdater;
 
       mkXfceDerivation = callPackage ./mkXfceDerivation.nix { };
-
-      automakeAddFlags = pkgs.makeSetupHook {
-        name = "xfce-automake-add-flags-hook";
-      } ./automakeAddFlags.sh;
 
       #### CORE
 
@@ -46,6 +45,8 @@ makeScopeWithSplicing' {
 
       thunar-media-tags-plugin = callPackage ./thunar-plugins/media-tags { };
 
+      thunar-vcs-plugin = callPackage ./thunar-plugins/vcs { };
+
       tumbler = callPackage ./core/tumbler { };
 
       xfce4-panel = callPackage ./core/xfce4-panel { };
@@ -64,11 +65,7 @@ makeScopeWithSplicing' {
 
       xfce4-appfinder = callPackage ./core/xfce4-appfinder { };
 
-      xfce4-dev-tools = callPackage ./core/xfce4-dev-tools {
-        mkXfceDerivation = self.mkXfceDerivation.override {
-          xfce4-dev-tools = null;
-        };
-      };
+      xfce4-dev-tools = callPackage ./core/xfce4-dev-tools { };
 
       #### APPLICATIONS
 
@@ -83,6 +80,8 @@ makeScopeWithSplicing' {
       parole = callPackage ./applications/parole { };
 
       ristretto = callPackage ./applications/ristretto { };
+
+      xfmpc = callPackage ./applications/xfmpc { };
 
       xfce4-taskmanager = callPackage ./applications/xfce4-taskmanager { };
 
@@ -120,13 +119,9 @@ makeScopeWithSplicing' {
 
       xfce4-cpugraph-plugin = callPackage ./panel-plugins/xfce4-cpugraph-plugin { };
 
-      xfce4-datetime-plugin = callPackage ./panel-plugins/xfce4-datetime-plugin { };
-
       xfce4-dockbarx-plugin = callPackage ./panel-plugins/xfce4-dockbarx-plugin { };
 
       xfce4-docklike-plugin = callPackage ./panel-plugins/xfce4-docklike-plugin { };
-
-      xfce4-embed-plugin = callPackage ./panel-plugins/xfce4-embed-plugin { };
 
       xfce4-eyes-plugin = callPackage ./panel-plugins/xfce4-eyes-plugin { };
 
@@ -136,8 +131,6 @@ makeScopeWithSplicing' {
 
       xfce4-i3-workspaces-plugin = callPackage ./panel-plugins/xfce4-i3-workspaces-plugin { };
 
-      xfce4-namebar-plugin = callPackage ./panel-plugins/xfce4-namebar-plugin { };
-
       xfce4-netload-plugin = callPackage ./panel-plugins/xfce4-netload-plugin { };
 
       xfce4-notes-plugin = callPackage ./panel-plugins/xfce4-notes-plugin { };
@@ -146,7 +139,9 @@ makeScopeWithSplicing' {
 
       xfce4-mpc-plugin = callPackage ./panel-plugins/xfce4-mpc-plugin { };
 
-      xfce4-sensors-plugin = callPackage ./panel-plugins/xfce4-sensors-plugin { };
+      xfce4-sensors-plugin = callPackage ./panel-plugins/xfce4-sensors-plugin {
+        libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
+      };
 
       xfce4-systemload-plugin = callPackage ./panel-plugins/xfce4-systemload-plugin { };
 
@@ -166,13 +161,25 @@ makeScopeWithSplicing' {
 
       xfce4-pulseaudio-plugin = callPackage ./panel-plugins/xfce4-pulseaudio-plugin { };
 
-    } // lib.optionalAttrs config.allowAliases {
+    }
+    // lib.optionalAttrs config.allowAliases {
       #### ALIASES
+
+      automakeAddFlags = throw "xfce.automakeAddFlags has been removed: this setup-hook is no longer used in Nixpkgs"; # added 2024-03-24
 
       xinitrc = self.xfce4-session.xinitrc; # added 2019-11-04
 
       thunar-bare = self.thunar.override { thunarPlugins = [ ]; }; # added 2019-11-04
 
+      xfce4-datetime-plugin = throw ''
+        xfce4-datetime-plugin has been removed: this plugin has been merged into the xfce4-panel's built-in clock
+        plugin and thus no longer maintained upstream, see https://gitlab.xfce.org/xfce/xfce4-panel/-/issues/563.
+      ''; # Added 2025-05-20
+
+      xfce4-embed-plugin = throw "xfce4-embed-plugin has been removed, as it was broken"; # Added 2024-07-15
+
       xfce4-hardware-monitor-plugin = throw "xfce.xfce4-hardware-monitor-plugin has been removed: abandoned by upstream and does not build"; # added 2023-01-15
-    });
+      xfce4-namebar-plugin = throw "xfce.xfce4-namebar-plugin has been removed: abandoned by upstream and does not build"; # added 2024-05-08
+    }
+  );
 }

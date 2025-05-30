@@ -1,0 +1,12 @@
+--- a/bin/schroot/CMakeLists.txt
++++ b/bin/schroot/CMakeLists.txt
+@@ -40,8 +40,7 @@ install(TARGETS schroot RUNTIME
+         DESTINATION ${CMAKE_INSTALL_FULL_BINDIR}
+         PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
+                     GROUP_READ GROUP_EXECUTE
+-                    WORLD_READ WORLD_EXECUTE
+-                    SETUID)
++                    WORLD_READ WORLD_EXECUTE)
+ 
+ set(installdirs
+     ${SCHROOT_CONF_CHROOT_D}

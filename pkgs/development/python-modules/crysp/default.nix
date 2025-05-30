@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, grandalf
-, matplotlib
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  grandalf,
+  matplotlib,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -16,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "bdcht";
-    repo = pname;
+    repo = "crysp";
     rev = "v${version}";
     hash = "sha256-51SKS6OOXIFT1L3YICR6a4QGSz/rbB8V+Z0u0jMO474=";
   };
@@ -26,18 +27,14 @@ buildPythonPackage rec {
     matplotlib
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "'pytest-runner'," ""
   '';
 
-  pythonImportsCheck = [
-    "crysp"
-  ];
+  pythonImportsCheck = [ "crysp" ];
 
   meta = with lib; {
     description = "Module that provides crypto-related facilities";

@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, python3 }:
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fypp";
@@ -7,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "aradi";
-    repo = pname;
+    repo = "fypp";
     rev = version;
     hash = "sha256-MgGVlOqOIrIVoDfBMVpFLT26mhYndxans2hfo/+jdoA=";
   };
@@ -16,6 +20,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Python powered Fortran preprocessor";
+    mainProgram = "fypp";
     homepage = "https://github.com/aradi/fypp";
     license = licenses.gpl3Only;
     maintainers = [ maintainers.sheepforce ];

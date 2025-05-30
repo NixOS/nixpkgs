@@ -1,85 +1,91 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, rPackages
-, buildPythonPackage
-, biopython
-, numpy
-, scipy
-, scikit-learn
-, pandas
-, matplotlib
-, reportlab
-, pysam
-, future
-, pillow
-, pomegranate
-, pyfaidx
-, python
-, pythonOlder
-, R
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+
+  # dependencies
+  R,
+  biopython,
+  matplotlib,
+  numpy,
+  pandas,
+  pomegranate,
+  pyfaidx,
+  pysam,
+  rPackages,
+  reportlab,
+  scikit-learn,
+  scipy,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "cnvkit";
-  version = "0.9.10";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.9.12";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "etal";
     repo = "cnvkit";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-mCQXo3abwC06x/g51UBshqUk3dpqEVNUvx+cJ/EdYGQ=";
+    tag = "v${version}";
+    hash = "sha256-ZdE3EUNZpEXRHTRKwVhuj3BWQWczpdFbg4pVr0+AHiQ=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "fix-numpy2-compat";
+      url = "https://github.com/etal/cnvkit/commit/5cb6aeaf40ea5572063cf9914c456c307b7ddf7a.patch";
+      hash = "sha256-VwGAMGKuX2Kx9xL9GX/PB94/7LkT0dSLbWIfVO8F9NI=";
+    })
+  ];
+
+  pythonRelaxDeps = [
+    # https://github.com/etal/cnvkit/issues/815
+    "pomegranate"
+  ];
+
+  # Numpy 2 compatibility
   postPatch = ''
-    # see https://github.com/etal/cnvkit/issues/589
-    substituteInPlace setup.py \
-      --replace 'joblib < 1.0' 'joblib'
-    # see https://github.com/etal/cnvkit/issues/680
-    substituteInPlace test/test_io.py \
-      --replace 'test_read_vcf' 'dont_test_read_vcf'
+    substituteInPlace skgenome/intersect.py \
+      --replace-fail "np.string_" "np.bytes_"
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     biopython
-    numpy
-    scipy
-    scikit-learn
-    pandas
     matplotlib
-    reportlab
+    numpy
+    pandas
+    pomegranate
     pyfaidx
     pysam
-    future
-    pillow
-    pomegranate
     rPackages.DNAcopy
+    reportlab
+    scikit-learn
+    scipy
   ];
 
-  nativeCheckInputs = [ R ];
+  pythonImportsCheck = [ "cnvlib" ];
 
-  checkPhase = ''
-    pushd test/
-    ${python.interpreter} test_io.py
-    ${python.interpreter} test_genome.py
-    ${python.interpreter} test_cnvlib.py
-    ${python.interpreter} test_commands.py
-    ${python.interpreter} test_r.py
-    popd # test/
-  '';
-
-  pythonImportsCheck = [
-    "cnvlib"
+  nativeCheckInputs = [
+    pytestCheckHook
+    R
   ];
 
-  meta = with lib; {
+  disabledTests = [
+    # AttributeError: module 'pomegranate' has no attribute 'NormalDistribution'
+    # https://github.com/etal/cnvkit/issues/815
+    "test_batch"
+    "test_segment_hmm"
+  ];
+
+  meta = {
     homepage = "https://cnvkit.readthedocs.io";
-    description = "A Python library and command-line software toolkit to infer and visualize copy number from high-throughput DNA sequencing data";
+    description = "Python library and command-line software toolkit to infer and visualize copy number from high-throughput DNA sequencing data";
     changelog = "https://github.com/etal/cnvkit/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = [ maintainers.jbedo ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.jbedo ];
   };
 }

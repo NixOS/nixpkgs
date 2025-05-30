@@ -1,43 +1,39 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, pyparsing
-, matplotlib
-, latex2mathml
-, ziafont
-, ziamath
-, pytestCheckHook
-, nbval
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  pyparsing,
+  matplotlib,
+  latex2mathml,
+  ziafont,
+  ziamath,
+  pytestCheckHook,
+  nbval,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "schemdraw";
-  version = "0.18";
-  format = "pyproject";
+  version = "0.20";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "cdelker";
-    repo = pname;
-    rev = version;
-    hash = "sha256-JJc3LA+fqB+2g7pPIZ8YMV921EyYpLZrHSJCYyYThZg=";
+    repo = "schemdraw";
+    tag = version;
+    hash = "sha256-mt1XTrUH570zrJpCFo0jORAE/jo7H2T7sKpIskYw8bk=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    pyparsing
-  ];
+  dependencies = [ pyparsing ];
 
-  passthru.optional-dependencies = {
-    matplotlib = [
-      matplotlib
-    ];
+  optional-dependencies = {
+    matplotlib = [ matplotlib ];
     svgmath = [
       latex2mathml
       ziafont
@@ -52,19 +48,22 @@ buildPythonPackage rec {
     latex2mathml
     ziafont
     ziamath
+    writableTmpDirAsHomeHook
   ];
 
   # Strip out references to unfree fonts from the test suite
   postPatch = ''
-    substituteInPlace test/test_styles.ipynb --replace "font='Times', " ""
+    substituteInPlace test/test_backend.ipynb --replace-fail "(font='Times')" "()"
   '';
+
+  preCheck = "rm test/test_pictorial.ipynb"; # Tries to download files
 
   pytestFlagsArray = [ "--nbval-lax" ];
 
   pythonImportsCheck = [ "schemdraw" ];
 
   meta = with lib; {
-    description = "A package for producing high-quality electrical circuit schematic diagrams";
+    description = "Package for producing high-quality electrical circuit schematic diagrams";
     homepage = "https://schemdraw.readthedocs.io/en/latest/";
     changelog = "https://schemdraw.readthedocs.io/en/latest/changes.html";
     license = licenses.mit;

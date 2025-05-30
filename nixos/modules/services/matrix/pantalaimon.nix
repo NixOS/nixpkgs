@@ -1,34 +1,39 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.pantalaimon-headless;
 
   iniFmt = pkgs.formats.ini { };
 
-  mkConfigFile = name: instanceConfig: iniFmt.generate "pantalaimon.conf" {
-    Default = {
-      LogLevel = instanceConfig.logLevel;
-      Notifications = false;
+  mkConfigFile =
+    name: instanceConfig:
+    iniFmt.generate "pantalaimon.conf" {
+      Default = {
+        LogLevel = instanceConfig.logLevel;
+        Notifications = false;
+      };
+
+      ${name} = (
+        lib.recursiveUpdate {
+          Homeserver = instanceConfig.homeserver;
+          ListenAddress = instanceConfig.listenAddress;
+          ListenPort = instanceConfig.listenPort;
+          SSL = instanceConfig.ssl;
+
+          # Set some settings to prevent user interaction for headless operation
+          IgnoreVerification = true;
+          UseKeyring = false;
+        } instanceConfig.extraSettings
+      );
     };
 
-    ${name} = (recursiveUpdate
-      {
-        Homeserver = instanceConfig.homeserver;
-        ListenAddress = instanceConfig.listenAddress;
-        ListenPort = instanceConfig.listenPort;
-        SSL = instanceConfig.ssl;
-
-        # Set some settings to prevent user interaction for headless operation
-        IgnoreVerification = true;
-        UseKeyring = false;
-      }
-      instanceConfig.extraSettings
-    );
-  };
-
-  mkPantalaimonService = name: instanceConfig:
-    nameValuePair "pantalaimon-${name}" {
+  mkPantalaimonService =
+    name: instanceConfig:
+    lib.nameValuePair "pantalaimon-${name}" {
       description = "pantalaimon instance ${name} - E2EE aware proxy daemon for matrix clients";
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
@@ -48,10 +53,10 @@ let
     };
 in
 {
-  options.services.pantalaimon-headless.instances = mkOption {
+  options.services.pantalaimon-headless.instances = lib.mkOption {
     default = { };
-    type = types.attrsOf (types.submodule (import ./pantalaimon-options.nix));
-    description = lib.mdDoc ''
+    type = lib.types.attrsOf (lib.types.submodule (import ./pantalaimon-options.nix));
+    description = ''
       Declarative instance config.
 
       Note: to use pantalaimon interactively, e.g. for a Matrix client which does not
@@ -59,12 +64,11 @@ in
     '';
   };
 
-  config = mkIf (config.services.pantalaimon-headless.instances != { })
-    {
-      systemd.services = mapAttrs' mkPantalaimonService config.services.pantalaimon-headless.instances;
-    };
+  config = lib.mkIf (config.services.pantalaimon-headless.instances != { }) {
+    systemd.services = lib.mapAttrs' mkPantalaimonService config.services.pantalaimon-headless.instances;
+  };
 
   meta = {
-    maintainers = with maintainers; [ jojosch ];
+    maintainers = with lib.maintainers; [ jojosch ];
   };
 }

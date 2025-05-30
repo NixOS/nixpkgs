@@ -1,7 +1,8 @@
-{ config
-, pkgs
-, lib
-, ...
+{
+  config,
+  pkgs,
+  lib,
+  ...
 }:
 let
   cfg = config.services.systemd-lock-handler;
@@ -9,7 +10,7 @@ let
 in
 {
   options.services.systemd-lock-handler = {
-    enable = mkEnableOption (lib.mdDoc "systemd-lock-handler");
+    enable = mkEnableOption "systemd-lock-handler";
     package = mkPackageOption pkgs "systemd-lock-handler" { };
   };
 

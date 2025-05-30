@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -7,16 +12,20 @@ let
 in
 {
   meta = {
-    maintainers = with maintainers; [ cole-h grahamc raitobezarius ];
+    maintainers = with maintainers; [
+      cole-h
+      grahamc
+      raitobezarius
+    ];
     doc = ./external.md;
   };
 
   options.boot.loader.external = {
-    enable = mkEnableOption (lib.mdDoc "using an external tool to install your bootloader");
+    enable = mkEnableOption "using an external tool to install your bootloader";
 
     installHook = mkOption {
       type = with types; path;
-      description = lib.mdDoc ''
+      description = ''
         The full path to a program of your choosing which performs the bootloader installation process.
 
         The program will be called with an argument pointing to the output of the system's toplevel.

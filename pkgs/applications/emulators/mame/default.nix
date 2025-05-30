@@ -1,54 +1,56 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alsa-lib
-, SDL2
-, SDL2_ttf
-, copyDesktopItems
-, expat
-, flac
-, fontconfig
-, glm
-, installShellFiles
-, libXi
-, libXinerama
-, libjpeg
-, libpcap
-, libpulseaudio
-, makeDesktopItem
-, makeWrapper
-, papirus-icon-theme
-, pkg-config
-, portaudio
-, portmidi
-, pugixml
-, python3
-, qtbase
-, rapidjson
-, sqlite
-, utf8proc
-, which
-, writeScript
-, zlib
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  SDL2,
+  SDL2_ttf,
+  copyDesktopItems,
+  expat,
+  fetchurl,
+  flac,
+  fontconfig,
+  glm,
+  installShellFiles,
+  libXi,
+  libXinerama,
+  libjpeg,
+  libpcap,
+  libpulseaudio,
+  makeDesktopItem,
+  makeWrapper,
+  pkg-config,
+  portaudio,
+  portmidi,
+  pugixml,
+  python3,
+  qtbase,
+  rapidjson,
+  sqlite,
+  utf8proc,
+  versionCheckHook,
+  which,
+  wrapQtAppsHook,
+  writeScript,
+  zlib,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) CoreAudioKit ForceFeedback;
-in
 stdenv.mkDerivation rec {
   pname = "mame";
-  version = "0.263";
+  version = "0.277";
   srcVersion = builtins.replaceStrings [ "." ] [ "" ] version;
 
   src = fetchFromGitHub {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${srcVersion}";
-    hash = "sha256-6MH4dMGOekiiq4yE68dIAiWWfvQvFcvqKtT/Z1SQ1aY=";
+    hash = "sha256-mGKTZ8/gvGQv9oXK4pgbJk580GAAXUS16hRQu4uHhdA=";
   };
 
-  outputs = [ "out" "tools" ];
+  outputs = [
+    "out"
+    "tools"
+  ];
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
@@ -71,27 +73,34 @@ stdenv.mkDerivation rec {
     "USE_SYSTEM_LIB_ZLIB=1"
   ];
 
-  dontWrapQtApps = true;
-
   # https://docs.mamedev.org/initialsetup/compilingmame.html
-  buildInputs = [
-    expat
-    zlib
-    flac
-    portmidi
-    portaudio
-    utf8proc
-    libjpeg
-    rapidjson
-    pugixml
-    glm
-    SDL2
-    SDL2_ttf
-    sqlite
-    qtbase
-  ]
-  ++ lib.optionals stdenv.isLinux [ alsa-lib libpulseaudio libXinerama libXi fontconfig ]
-  ++ lib.optionals stdenv.isDarwin [ libpcap CoreAudioKit ForceFeedback ];
+  buildInputs =
+    [
+      expat
+      zlib
+      flac
+      portmidi
+      portaudio
+      utf8proc
+      libjpeg
+      rapidjson
+      pugixml
+      glm
+      SDL2
+      SDL2_ttf
+      sqlite
+      qtbase
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      libpulseaudio
+      libXinerama
+      libXi
+      fontconfig
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libpcap
+    ];
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -100,6 +109,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     which
+    wrapQtAppsHook
   ];
 
   patches = [
@@ -111,10 +121,27 @@ stdenv.mkDerivation rec {
 
   # Since the bug described in https://github.com/NixOS/nixpkgs/issues/135438,
   # it is not possible to use substituteAll
-  postPatch = ''
-    substituteInPlace src/emu/emuopts.cpp \
-      --subst-var-by mamePath "$out/opt/mame"
-  '';
+  postPatch =
+    ''
+      substituteInPlace src/emu/emuopts.cpp \
+        --subst-var-by mamePath "$out/opt/mame"
+    ''
+    # MAME's build system uses `sw_vers` to test whether it needs to link with
+    # the Metal framework or not. However:
+    # a) that would return the build system's version, not the target's, and
+    # b) it can't actually find `sw_vers` in $PATH, so it thinks it's on macOS
+    #    version 0, and doesn't link with Metal - causing missing symbol errors
+    #    when it gets to the link step, because other parts of the build system
+    #    _do_ use the correct target version number.
+    # This replaces the `sw_vers` call with the macOS version actually being
+    # targeted, so everything gets linked correctly.
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      for file in scripts/src/osd/{mac,sdl}.lua; do
+        substituteInPlace "$file" --replace-fail \
+          'backtick("sw_vers -productVersion")' \
+          "os.getenv('MACOSX_DEPLOYMENT_TARGET') or '$darwinMinVersion'"
+        done
+    '';
 
   desktopItems = [
     (makeDesktopItem {
@@ -125,36 +152,48 @@ stdenv.mkDerivation rec {
       type = "Application";
       genericName = "MAME is a multi-purpose emulation framework";
       comment = "Play vintage games using the MAME emulator";
-      categories = [ "Game" "Emulator" ];
-      keywords = [ "Game" "Emulator" "Arcade" ];
+      categories = [
+        "Game"
+        "Emulator"
+      ];
+      keywords = [
+        "Game"
+        "Emulator"
+        "Arcade"
+      ];
     })
   ];
 
   # TODO: copy shaders from src/osd/modules/opengl/shader/glsl*.*h
   # to the final package after we figure out how they work
-  installPhase = let
-    icon = "${papirus-icon-theme}/share/icons/Papirus/32x32/apps/mame.svg";
-  in ''
-    runHook preInstall
+  installPhase =
+    let
+      icon = fetchurl {
+        url = "https://raw.githubusercontent.com/PapirusDevelopmentTeam/papirus-icon-theme/refs/heads/master/Papirus/32x32/apps/mame.svg";
+        hash = "sha256-s44Xl9UGizmddd/ugwABovM8w35P0lW9ByB69MIpG+E=";
+      };
+    in
+    ''
+      runHook preInstall
 
-    # mame
-    mkdir -p $out/opt/mame
+      # mame
+      mkdir -p $out/opt/mame
 
-    install -Dm755 mame -t $out/bin
-    install -Dm644 ${icon} $out/share/icons/hicolor/scalable/apps/mame.svg
-    installManPage docs/man/*.1 docs/man/*.6
-    cp -ar {artwork,bgfx,plugins,language,ctrlr,keymaps,hash} $out/opt/mame
+      install -Dm755 mame -t $out/bin
+      install -Dm644 ${icon} $out/share/icons/hicolor/scalable/apps/mame.svg
+      installManPage docs/man/*.1 docs/man/*.6
+      cp -ar {artwork,bgfx,plugins,language,ctrlr,keymaps,hash} $out/opt/mame
 
-    # mame-tools
-    for _tool in castool chdman floptool imgtool jedutil ldresample ldverify \
-                 nltool nlwav pngcmp regrep romcmp split srcclean testkeys \
-                 unidasm; do
-       install -Dm755 $_tool -t $tools/bin
-    done
-    mv $tools/bin/{,mame-}split
+      # mame-tools
+      for _tool in castool chdman floptool imgtool jedutil ldresample ldverify \
+                   nltool nlwav pngcmp regrep romcmp split srcclean testkeys \
+                   unidasm; do
+         install -Dm755 $_tool -t $tools/bin
+      done
+      mv $tools/bin/{,mame-}split
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   # man1 is the tools documentation, man6 is the emulator documentation
   # Need to be done in postFixup otherwise multi-output hook will move it back to $out
@@ -163,6 +202,10 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-h";
 
   passthru.updateScript = writeScript "mame-update-script" ''
     #!/usr/bin/env nix-shell
@@ -174,9 +217,9 @@ stdenv.mkDerivation rec {
     update-source-version mame "''${latest_version/mame0/0.}"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.mamedev.org/";
-    description = "A multi-purpose emulation framework";
+    description = "Multi-purpose emulation framework";
     longDescription = ''
       MAME's purpose is to preserve decades of software history. As electronic
       technology continues to rush forward, MAME prevents this important
@@ -192,10 +235,15 @@ stdenv.mkDerivation rec {
       focus.
     '';
     changelog = "https://github.com/mamedev/mame/releases/download/mame${srcVersion}/whatsnew_${srcVersion}.txt";
-    license = with licenses; [ bsd3 gpl2Plus ];
-    maintainers = with maintainers; [ thiagokokada ];
-    platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    license = with lib.licenses; [
+      bsd3
+      gpl2Plus
+    ];
+    maintainers = with lib.maintainers; [
+      thiagokokada
+      DimitarNestorov
+    ];
+    platforms = lib.platforms.unix;
     mainProgram = "mame";
   };
 }

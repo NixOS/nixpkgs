@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, matplotlib
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  matplotlib,
+  pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "showit";
   version = "1.1.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "freeman-lab";
-    repo = pname;
+    repo = "showit";
     rev = "ef76425797c71fbe3795b4302c49ab5be6b0bacb"; # no tags in repo
     sha256 = "0xd8isrlwwxlgji90lly1sq4l2a37rqvhsmyhv7bd3aj1dyjmdr6";
   };
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     matplotlib
   ];
 
-  nativeCheckInputs = [
-    pytest
-  ];
+  nativeCheckInputs = [ pytest ];
 
   checkPhase = ''
     pytest test

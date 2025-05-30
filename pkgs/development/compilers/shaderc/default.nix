@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, python3, autoSignDarwinBinariesHook, cctools }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python3,
+  autoSignDarwinBinariesHook,
+  cctools,
+}:
 # Like many google projects, shaderc doesn't gracefully support separately compiled dependencies, so we can't easily use
 # the versions of glslang and spirv-tools used by vulkan-loader. Exact revisions are taken from
 # https://github.com/google/shaderc/blob/known-good/known_good.json
@@ -8,45 +16,57 @@ let
   glslang = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = "a91631b260cba3f22858d6c6827511e636c2458a";
-    hash = "sha256-7kIIU45pe+IF7lGltpIKSvQBmcXR+TWFvmx7ztMNrpc=";
+    rev = "6be56e45e574b375d759b89dad35f780bbd4792f";
+    hash = "sha256-tktdsj4sxwQHBavHzu1x8H28RrIqSQs/fp2TQcVCm2g=";
   };
   spirv-tools = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "f0cc85efdbbe3a46eae90e0f915dc1509836d0fc";
-    hash = "sha256-RzGvoDt1Qc+f6mZsfs99MxX4YB3yFc5FP92Yx/WGrsI=";
+    rev = "360d469b9eac54d6c6e20f609f9ec35e3a5380ad";
+    hash = "sha256-Bned5Pa6zCFByfNvqD0M5t3l4uAJYkDlpe6wu8e7a3U=";
   };
   spirv-headers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "1c6bb2743599e6eb6f37b2969acc0aef812e32e3";
-    hash = "sha256-/I9dJlBE0kvFvqooKuqMETtOE72Jmva3zIGnq0o4+aE=";
+    rev = "4183b260f4cccae52a89efdfcdd43c4897989f42";
+    hash = "sha256-RKjw3H1z02bl6730xsbo38yjMaOCsHZP9xJOQbmWpnw=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "shaderc";
-  version = "2023.8";
+  version = "2024.0";
 
-  outputs = [ "out" "lib" "bin" "dev" "static" ];
+  outputs = [
+    "out"
+    "lib"
+    "bin"
+    "dev"
+    "static"
+  ];
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "shaderc";
     rev = "v${version}";
-    hash = "sha256-c8mJ361DY2VlSFZ4/RCrV+nqB9HblbOdfMkI4cM1QzM=";
+    hash = "sha256-Cwp7WbaKWw/wL9m70wfYu47xoUGQW+QGeoYhbyyzstQ=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     cp -r --no-preserve=mode ${glslang} third_party/glslang
     cp -r --no-preserve=mode ${spirv-tools} third_party/spirv-tools
     ln -s ${spirv-headers} third_party/spirv-tools/external/spirv-headers
     patchShebangs --build utils/
   '';
 
-  nativeBuildInputs = [ cmake python3 ]
-    ++ lib.optionals stdenv.isDarwin [ cctools ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ];
+  nativeBuildInputs =
+    [
+      cmake
+      python3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      autoSignDarwinBinariesHook
+    ];
 
   postInstall = ''
     moveToOutput "lib/*.a" $static
@@ -63,7 +83,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "A collection of tools, libraries and tests for shader compilation";
+    description = "Collection of tools, libraries and tests for shader compilation";
     platforms = platforms.all;
     license = [ licenses.asl20 ];
   };

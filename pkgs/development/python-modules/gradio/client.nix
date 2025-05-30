@@ -1,48 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pythonRelaxDepsHook
-# pyproject
-, hatchling
-, hatch-requirements-txt
-, hatch-fancy-pypi-readme
-# runtime
-, setuptools
-, fsspec
-, httpx
-, huggingface-hub
-, packaging
-, requests
-, typing-extensions
-, websockets
-# checkInputs
-, pytestCheckHook
-, pytest-asyncio
-, pydub
-, rich
-, tomlkit
-, gradio
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nix-update-script,
+
+  # build-system
+  hatchling,
+  hatch-requirements-txt,
+  hatch-fancy-pypi-readme,
+
+  # dependencies
+  fsspec,
+  httpx,
+  huggingface-hub,
+  packaging,
+  typing-extensions,
+  websockets,
+
+  # tests
+  gradio,
+  pydub,
+  pytest-asyncio,
+  pytestCheckHook,
+  rich,
+  safehttpx,
+  tomlkit,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "gradio-client";
-  version = "0.10.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "1.10.1";
+  pyproject = true;
 
   # no tests on pypi
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
-    rev = "refs/tags/gradio_client@${version}";
+    # not to be confused with @gradio/client@${version}
+    tag = "gradio_client@${version}";
     sparseCheckout = [ "client/python" ];
-    hash = "sha256-cRsYqNMmzuybJI823lpUOmNcTdcTO8dJkp3cpjATZQU=";
+    hash = "sha256-jIJkJvXy4mKQN0gVb4nm3hCzgk9qofBrXc3Tws2n2qw=";
   };
-  prePatch = ''
-    cd client/python
-  '';
+
+  sourceRoot = "${src.name}/client/python";
 
   # upstream adds upper constraints because they can, not because the need to
   # https://github.com/gradio-app/gradio/pull/4885
@@ -51,15 +53,13 @@ buildPythonPackage rec {
     "websockets"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-requirements-txt
     hatch-fancy-pypi-readme
-    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
-    setuptools # needed for 'pkg_resources'
+  dependencies = [
     fsspec
     httpx
     huggingface-hub
@@ -69,19 +69,20 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-asyncio
-    pydub
-    rich
-    tomlkit
     gradio.sans-reverse-dependencies
+    pydub
+    pytest-asyncio
+    pytestCheckHook
+    rich
+    safehttpx
+    tomlkit
+    writableTmpDirAsHomeHook
   ];
   # ensuring we don't propagate this intermediate build
   disallowedReferences = [ gradio.sans-reverse-dependencies ];
 
   # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
   preCheck = ''
-    export HOME=$TMPDIR
     cat ${./conftest-skip-network-errors.py} >> test/conftest.py
   '';
 
@@ -91,14 +92,30 @@ buildPythonPackage rec {
     #"-x" "-W" "ignore" # uncomment for debugging help
   ];
 
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # flaky: OSError: Cannot find empty port in range: 7860-7959
+    "test_layout_components_in_output"
+    "test_layout_and_state_components_in_output"
+    "test_upstream_exceptions"
+    "test_httpx_kwargs"
+  ];
+
   pythonImportsCheck = [ "gradio_client" ];
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "gradio_client@(.*)"
+    ];
+  };
+
+  meta = {
     homepage = "https://www.gradio.app/";
+    changelog = "https://github.com/gradio-app/gradio/releases/tag/gradio_client@${version}";
     description = "Lightweight library to use any Gradio app as an API";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

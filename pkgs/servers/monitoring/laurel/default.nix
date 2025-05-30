@@ -1,41 +1,46 @@
-{ acl
-, fetchFromGitHub
-, fetchpatch
-, lib
-, rustPlatform
+{
+  acl,
+  fetchFromGitHub,
+  lib,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "laurel";
-  version = "0.6.0";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "threathunters-io";
     repo = "laurel";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-lWVrp0ytomrQBSDuQCMFJpSuAuwjSYPwoE4yh/WO2ls=";
+    tag = "v${version}";
+    hash = "sha256-rOf7UtkMoYpReZr/2135QcpMEfYD80IY4zF0TwAWr4I=";
   };
 
-  cargoHash = "sha256-GY7vpst+Epsy/x/ths6pwtGQgM6Bx0KI+NsCMFCBujE=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Pfs4Bg6VZIiiXQu0ZKcDi9zeEYl08kOnWi3R2iaQG24=";
 
-  cargoPatches = [
-    # Upstream forgot to bump the Cargo.lock before tagging the release.
-    # This patch is the first commit immediately after the tag fixing this mistake.
-    # Needs to be removed next release.
-    (fetchpatch {
-      name = "Cargo-lock-version-bump.patch";
-      url = "https://github.com/threathunters-io/laurel/commit/f38393d1098e8f75394f83ad3da5c1160fb96652.patch";
-      hash = "sha256-x+7p21X38KYqLclFtGnLO5nOHz819+XTaSPMvDbSo/I=";
-    })
-  ];
+  postPatch = ''
+    # Upstream started to redirect aarch64-unknown-linux-gnu to aarch64-linux-gnu-gcc
+    # for their CI which breaks compiling on aarch64 in nixpkgs:
+    #  error: linker `aarch64-linux-gnu-gcc` not found
+    rm .cargo/config.toml
+  '';
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
   buildInputs = [ acl ];
 
+  checkFlags = [
+    # Nix' build sandbox does not allow setting ACLs:
+    # https://github.com/NixOS/nix/blob/2.28.3/src/libstore/unix/build/local-derivation-goal.cc#L1760-L1769
+    # Skip the tests that are failing with "Operation not supported (os error 95)" because of this:
+    "--skip=rotate::test::existing"
+    "--skip=rotate::test::fresh_file"
+  ];
+
   meta = with lib; {
     description = "Transform Linux Audit logs for SIEM usage";
     homepage = "https://github.com/threathunters-io/laurel";
-    changelog = "https://github.com/threathunters-io/laurel/releases/tag/v${version}";
+    changelog = "https://github.com/threathunters-io/laurel/releases/tag/${src.tag}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ emilylange ];
     platforms = platforms.linux;

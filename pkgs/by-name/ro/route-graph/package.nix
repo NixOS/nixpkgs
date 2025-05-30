@@ -1,37 +1,40 @@
-{ lib
-, fetchFromGitHub
-, graphviz
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  graphviz,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "route-graph";
-  version = "0.2.1";
+  version = "0.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "audiusGmbH";
     repo = "route-graph";
-    rev = "refs/tags/${version}";
-    hash = "sha256-OOXLmHxWre5t4tysDXV23PTkyUG6Zcpanw0fVCOLFTM=";
+    tag = version;
+    hash = "sha256-HmfmUeT5vt0yWVs7GhIPVt4NZtTfe7HYPLRqfQE/tZM=";
   };
 
   pythonRelaxDeps = [
+    "typer"
     "typing-extensions"
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
-    graphviz
-  ] ++ (with python3.pkgs; [
-    scapy
-    typer
-    typing-extensions
-  ] ++ typer.optional-dependencies.all);
+  propagatedBuildInputs =
+    [
+      graphviz
+    ]
+    ++ (with python3.pkgs; [
+      scapy
+      typer
+      typing-extensions
+    ]);
 
   # Project has no tests
   doCheck = false;

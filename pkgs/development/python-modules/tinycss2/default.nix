@@ -1,39 +1,38 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, webencodings
-, pytestCheckHook
-, flit-core
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  flit-core,
+  webencodings,
+  pytest-cov-stub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "tinycss2";
-  version = "1.2.1";
-  format = "pyproject";
+  version = "1.4.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "kozea";
     repo = "tinycss2";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     # for tests
     fetchSubmodules = true;
-    hash = "sha256-rJtxMmW30NK+E+Dhh/fu6FPrEojWWdoEWNt0raYEubs=";
+    hash = "sha256-GVymUobWAE0YS65lti9dXRIIGpx0YkwF/vSb3y7cpYY=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "'pytest-cov', 'pytest-flake8', 'pytest-isort', 'coverage[toml]'" "" \
-      --replace "--isort --flake8 --cov --no-cov-on-fail" ""
-  '';
+  build-system = [ flit-core ];
 
-  nativeBuildInputs = [ flit-core ];
+  dependencies = [ webencodings ];
 
-  propagatedBuildInputs = [ webencodings ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Low-level CSS parser for Python";

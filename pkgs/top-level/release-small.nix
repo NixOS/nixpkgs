@@ -1,10 +1,27 @@
-/* A small release file, with few packages to be built.  The aim is to reduce
-   the load on Hydra when testing the `stdenv-updates' branch. */
+/*
+  A small release file, with few packages to be built.  The aim is to reduce
+  the load on Hydra when testing the `stdenv-updates' branch.
+*/
 
-{ nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
-, supportedSystems ? [ "x86_64-linux" "x86_64-darwin" ]
-, # Attributes passed to nixpkgs. Don't build packages marked as unfree.
-  nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
+{
+  nixpkgs ? {
+    outPath = (import ../../lib).cleanSource ../..;
+    revCount = 1234;
+    shortRev = "abcdef";
+  },
+  supportedSystems ? [
+    "x86_64-linux"
+    "x86_64-darwin"
+  ],
+  # Attributes passed to nixpkgs. Don't build packages marked as unfree.
+  nixpkgsArgs ? {
+    config = {
+      allowUnfree = false;
+      inHydra = true;
+    };
+
+    __allowFileset = false;
+  },
 }:
 
 let
@@ -12,17 +29,24 @@ let
     inherit supportedSystems nixpkgsArgs;
   };
 
-  inherit (release-lib) all linux darwin mapTestOn unix;
+  inherit (release-lib)
+    all
+    linux
+    darwin
+    mapTestOn
+    unix
+    ;
 in
 
 {
 
   tarball = import ./make-tarball.nix {
-    inherit nixpkgs supportedSystems;
+    inherit nixpkgs;
     officialRelease = false;
   };
 
-} // (mapTestOn ({
+}
+// (mapTestOn ({
 
   aspell = all;
   at = linux;
@@ -61,7 +85,7 @@ in
   gnutar = all;
   gnutls = linux;
   grub2 = linux;
-  guile = linux;  # tests fail on Cygwin
+  guile = linux; # tests fail on Cygwin
   gzip = all;
   hddtemp = linux;
   hdparm = linux;
@@ -82,7 +106,6 @@ in
   libxml2 = all;
   libxslt = all;
   lout = linux;
-  lsh = linux;
   lsof = linux;
   ltrace = linux;
   lvm2 = linux;
@@ -132,7 +155,7 @@ in
   su = linux;
   sudo = linux;
   sysklogd = linux;
-  syslinux = ["i686-linux"];
+  syslinux = [ "i686-linux" ];
   tcl = linux;
   tcpdump = linux;
   texinfo = all;
@@ -144,7 +167,7 @@ in
   util-linux = linux;
   util-linuxMinimal = linux;
   w3m = all;
-  webkitgtk = linux;
+  webkitgtk_4_0 = linux;
   wget = all;
   which = all;
   wirelesstools = linux;
@@ -153,4 +176,4 @@ in
   xkeyboard_config = linux;
   zip = all;
   tests-stdenv-gcc-stageCompare = all;
-} ))
+}))

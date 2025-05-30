@@ -1,4 +1,10 @@
-{ lib, fetchCrate, rustPlatform, testers, toml-cli }:
+{
+  lib,
+  fetchCrate,
+  rustPlatform,
+  testers,
+  toml-cli,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "toml-cli";
@@ -10,7 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-V/yMk/Zt3yvEx10nzRhY/7GYnQninGg9h63NSaQChSA=";
   };
 
-  cargoHash = "sha256-v+GBn9mmiWcWnxmpH6JRPVz1fOSrsjWoY+l+bdzKtT4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-PoqVMTCRmSTt7UhCpMF3ixmAfVtpkaOfaTTmDNhrpLA=";
 
   cargoTestFlags = [
     "--bin=toml"
@@ -24,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "A simple CLI for editing and querying TOML files";
+    description = "Simple CLI for editing and querying TOML files";
     homepage = "https://github.com/gnprice/toml-cli";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ phlip9 ];

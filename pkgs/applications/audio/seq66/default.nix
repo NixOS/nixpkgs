@@ -1,30 +1,48 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, qttools, which
-, alsa-lib, libjack2, liblo, qtbase, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  qttools,
+  which,
+  alsa-lib,
+  libjack2,
+  liblo,
+  qtbase,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "seq66";
-  version = "0.90.5";
+  version = "0.99.19";
 
   src = fetchFromGitHub {
     owner = "ahlstromcj";
-    repo = pname;
+    repo = "seq66";
     rev = version;
-    sha256 = "1jvra1wzlycfpvffnqidk264zw6fyl4fsghkw5256ldk22aalmq9";
+    hash = "sha256-9cEvwJTH6Iwi4aZQHTjQ/DhUtKYw2QC1Oq+D1/tpE90=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config qttools which wrapQtAppsHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    qttools
+    which
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ alsa-lib libjack2 liblo qtbase ];
+  buildInputs = [
+    alsa-lib
+    libjack2
+    liblo
+    qtbase
+  ];
 
   postPatch = ''
-    for d in libseq66/include libseq66/src libsessions/include libsessions/src seq_qt5/src seq_rtmidi/include seq_rtmidi/src Seqtool/src; do
-      substituteInPlace "$d/Makefile.am" --replace '$(git_info)' '${version}'
+    for d in libseq66/src libsessions/include libsessions/src seq_qt5/src seq_rtmidi/src; do
+      substituteInPlace "$d/Makefile.am" --replace-fail '$(git_info)' '${version}'
     done
-
-    # gcc-13 headers compatibilty. TODO: try to remove with next version
-    # update
-    sed -e '1i #include <cstdint>' -i libseq66/src/os/daemonize.cpp
   '';
 
   enableParallelBuilding = true;

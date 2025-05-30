@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, justbases
-, unittestCheckHook
-, hypothesis
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  justbases,
+  unittestCheckHook,
+  hypothesis,
 }:
 
 buildPythonPackage rec {
@@ -13,13 +14,16 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "mulkieran";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "justbytes";
+    tag = "v${version}";
     hash = "sha256-+jwIK1ZU+j58VoOfZAm7GdFy7KHU28khwzxhYhcws74=";
   };
 
   propagatedBuildInputs = [ justbases ];
-  nativeCheckInputs = [ unittestCheckHook hypothesis ];
+  nativeCheckInputs = [
+    unittestCheckHook
+    hypothesis
+  ];
 
   meta = with lib; {
     description = "computing with and displaying bytes";

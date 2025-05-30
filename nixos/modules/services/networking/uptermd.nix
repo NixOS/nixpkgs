@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,12 +13,12 @@ in
 {
   options = {
     services.uptermd = {
-      enable = mkEnableOption (lib.mdDoc "uptermd");
+      enable = mkEnableOption "uptermd";
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to open the firewall for the port in {option}`services.uptermd.port`.
         '';
       };
@@ -21,7 +26,7 @@ in
       port = mkOption {
         type = types.port;
         default = 2222;
-        description = lib.mdDoc ''
+        description = ''
           Port the server will listen on.
         '';
       };
@@ -30,7 +35,7 @@ in
         type = types.str;
         default = "[::]";
         example = "127.0.0.1";
-        description = lib.mdDoc ''
+        description = ''
           Address the server will listen on.
         '';
       };
@@ -39,16 +44,16 @@ in
         type = types.nullOr types.path;
         default = null;
         example = "/run/keys/upterm_host_ed25519_key";
-        description = lib.mdDoc ''
+        description = ''
           Path to SSH host key. If not defined, an ed25519 keypair is generated automatically.
         '';
       };
 
       extraFlags = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "--debug" ];
-        description = lib.mdDoc ''
+        description = ''
           Extra flags passed to the uptermd command.
         '';
       };
@@ -79,7 +84,9 @@ in
       serviceConfig = {
         StateDirectory = "uptermd";
         WorkingDirectory = "/var/lib/uptermd";
-        ExecStart = "${pkgs.upterm}/bin/uptermd --ssh-addr ${cfg.listenAddress}:${toString cfg.port} --private-key ${if cfg.hostKey == null then "ssh_host_ed25519_key" else cfg.hostKey} ${concatStringsSep " " cfg.extraFlags}";
+        ExecStart = "${pkgs.upterm}/bin/uptermd --ssh-addr ${cfg.listenAddress}:${toString cfg.port} --private-key ${
+          if cfg.hostKey == null then "ssh_host_ed25519_key" else cfg.hostKey
+        } ${concatStringsSep " " cfg.extraFlags}";
 
         # Hardening
         AmbientCapabilities = mkIf (cfg.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
@@ -98,7 +105,11 @@ in
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
         # AF_UNIX is for ssh-keygen, which relies on nscd to resolve the uid to a user
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         SystemCallArchitectures = "native";

@@ -1,6 +1,7 @@
-with import ../../.. {};
+with import ../../.. { };
 
-runCommand "gen-keys" {
+runCommand "gen-keys"
+  {
     buildInputs = [ openssh ];
   }
   ''

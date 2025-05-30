@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ramonhagenaars";
     repo = "typish";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LnOg1dVs6lXgPTwRYg7uJ3LCdExYrCxS47UEJxKHhVU=";
   };
 
@@ -37,9 +38,7 @@ buildPythonPackage rec {
     "test_get_origin"
   ];
 
-  pythonImportsCheck = [
-    "typish"
-  ];
+  pythonImportsCheck = [ "typish" ];
 
   meta = with lib; {
     description = "Python module for checking types of objects";

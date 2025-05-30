@@ -12,6 +12,11 @@
 
   # Use IceWM as the window manager.
   # Don't use a desktop manager.
-  services.xserver.displayManager.defaultSession = lib.mkDefault "none+icewm";
+  services.displayManager.defaultSession = lib.mkDefault "none+icewm";
   services.xserver.windowManager.icewm.enable = true;
+
+  # Help with OCR
+  environment.etc."icewm/theme".text = ''
+    Theme="gtk2/default.theme"
+  '';
 }

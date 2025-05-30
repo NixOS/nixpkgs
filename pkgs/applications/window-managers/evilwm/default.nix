@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchurl
-, libX11
-, libXext
-, libXrandr
-, libXrender
-, xorgproto
-, patches ? [ ]
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+  libXext,
+  libXrandr,
+  libXrender,
+  xorgproto,
+  patches ? [ ],
 }:
 
 stdenv.mkDerivation rec {
   pname = "evilwm";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchurl {
     url = "http://www.6809.org.uk/evilwm/evilwm-${version}.tar.gz";
-    sha256 = "sha256-QhLW2QywBbLMiIFLyFN3NrSVCrWCZLu2W4gHrGO9xLk=";
+    sha256 = "sha256-1ZRbILEskdskEvrA29o/ucPsjeu44bEJg4mSsrG75dQ=";
   };
 
   buildInputs = [

@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.eternal-terminal;
@@ -16,38 +18,38 @@ in
 
     services.eternal-terminal = {
 
-      enable = mkEnableOption (lib.mdDoc "Eternal Terminal server");
+      enable = lib.mkEnableOption "Eternal Terminal server";
 
-      port = mkOption {
+      port = lib.mkOption {
         default = 2022;
-        type = types.port;
-        description = lib.mdDoc ''
+        type = lib.types.port;
+        description = ''
           The port the server should listen on. Will use the server's default (2022) if not specified.
 
           Make sure to open this port in the firewall if necessary.
         '';
       };
 
-      verbosity = mkOption {
+      verbosity = lib.mkOption {
         default = 0;
-        type = types.enum (lib.range 0 9);
-        description = lib.mdDoc ''
+        type = lib.types.enum (lib.range 0 9);
+        description = ''
           The verbosity level (0-9).
         '';
       };
 
-      silent = mkOption {
+      silent = lib.mkOption {
         default = false;
-        type = types.bool;
-        description = lib.mdDoc ''
+        type = lib.types.bool;
+        description = ''
           If enabled, disables all logging.
         '';
       };
 
-      logSize = mkOption {
+      logSize = lib.mkOption {
         default = 20971520;
-        type = types.int;
-        description = lib.mdDoc ''
+        type = lib.types.int;
+        description = ''
           The maximum log size.
         '';
       };
@@ -56,7 +58,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     # We need to ensure the et package is fully installed because
     # the (remote) et client runs the `etterminal` binary when it
@@ -90,6 +92,6 @@ in
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

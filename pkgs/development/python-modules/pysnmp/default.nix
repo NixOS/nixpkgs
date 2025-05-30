@@ -1,32 +1,90 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyasn1
-, pycryptodomex
-, pysmi
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  pyasn1,
+  pysmi,
+  pysnmpcrypto,
+
+  # tests
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "pysnmp";
-  version = "4.4.12";
-  format = "setuptools";
+  version = "7.1.16";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1acbfvpbr45i137s00mbhh21p71ywjfw3r8z0ybcmjjqz7rbwg8c";
+  src = fetchFromGitHub {
+    owner = "lextudio";
+    repo = "pysnmp";
+    tag = "v${version}";
+    hash = "sha256-HGIbxvq4twyZavtjkf2Uu9SEFIXzPCT34lAJEeprwXU=";
   };
 
-  patches = [ ./setup.py-Fix-the-setuptools-version-check.patch ];
+  build-system = [ poetry-core ];
 
-  # NameError: name 'mibBuilder' is not defined
-  doCheck = false;
+  dependencies = [
+    pyasn1
+    pysmi
+    pysnmpcrypto
+  ];
 
-  propagatedBuildInputs = [ pyasn1 pycryptodomex pysmi ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+    pytest-cov-stub
+  ];
+
+  disabledTests = [
+    # Temporary failure in name resolution
+    "test_custom_asn1_mib_search_path"
+    "test_send_notification"
+    "test_send_trap"
+    "test_send_v3_inform_notification"
+    "test_send_v3_inform_sync"
+    "test_usm_sha_aes128"
+    "test_v1_get"
+    "test_v1_next"
+    "test_v1_set"
+    #  pysnmp.error.PySnmpError: Bad IPv4/UDP transport address demo.pysnmp.com@161: [Errno -3] Temporary failure in name resolution
+    "test_v2c_bulk"
+    "test_v2c_get_table_bulk"
+    "test_v2c_get_table_bulk_0_7"
+    "test_v2c_get_table_bulk_0_8"
+    "test_v2c_get_table_bulk_0_31"
+    "test_v2c_get_table_bulk_0_60"
+    "test_v2c_get_table_bulk_0_5_subtree"
+    "test_v2c_get_table_bulk_0_6_subtree"
+    # pysnmp.smi.error.MibNotFoundError
+    "test_send_v3_trap_notification"
+    "test_addAsn1MibSource"
+    "test_v1_walk"
+    "test_v2_walk"
+    "test_syntax_integer"
+    "test_syntax_unsigned"
+    "test_add_asn1_mib_source"
+  ];
+
+  disabledTestPaths = [
+    # MIB file "CISCO-ENHANCED-IPSEC-FLOW-MIB.py[co]" not found in search path
+    "tests/smi/manager/test_mib-tree-inspection.py"
+  ];
+
+  pythonImportsCheck = [ "pysnmp" ];
 
   meta = with lib; {
-    homepage = "http://snmplabs.com/pysnmp/index.html";
-    description = "A pure-Python SNMPv1/v2c/v3 library";
+    description = "Python SNMP library";
+    homepage = "https://github.com/lextudio/pysnmp";
+    changelog = "https://github.com/lextudio/pysnmp/blob/${src.rev}/CHANGES.rst";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ primeos koral ];
+    maintainers = with maintainers; [ hexa ];
   };
 }

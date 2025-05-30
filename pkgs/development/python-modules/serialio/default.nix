@@ -1,11 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pyserial
-, sockio
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pyserial,
+  sockio,
 }:
 
 buildPythonPackage rec {
@@ -17,8 +16,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "tiagocoutinho";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "serialio";
+    tag = "v${version}";
     hash = "sha256-9TRGT0wpoRRcHqnH1XzlMBh0IcVzdEcOzN7hkeYnoW4=";
   };
 
@@ -30,9 +29,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "serialio"
-  ];
+  pythonImportsCheck = [ "serialio" ];
 
   meta = with lib; {
     description = "Library for concurrency agnostic serial communication";

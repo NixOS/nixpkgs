@@ -1,0 +1,24 @@
+commit 3048885aa749774b5677ab8df8f1a3eeff125d7a
+Author: rnhmjoj <rnhmjoj@inventati.org>
+Date:   Tue Aug 6 08:36:38 2024 +0200
+
+    Fix assets path on NixOS
+
+diff --git a/common/assets/src/lib.rs b/common/assets/src/lib.rs
+index 03746dc4..c69d607b 100644
+--- a/common/assets/src/lib.rs
++++ b/common/assets/src/lib.rs
+@@ -400,6 +400,13 @@ lazy_static! {
+             }
+         }
+ 
++        // 5. NixOS path
++        if let Some(executable) = std::env::args().nth(0).map(PathBuf::from) {
++            if let Some(package) = executable.ancestors().nth(2) {
++                paths.push(package.join("share/veloren"));
++            }
++        }
++
+         tracing::trace!("Possible asset locations paths={:?}", paths);
+ 
+         for mut path in paths.clone() {

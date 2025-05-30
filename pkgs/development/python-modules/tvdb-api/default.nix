@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests-cache
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests-cache,
+  pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "tvdb-api";
   version = "3.2.0-beta";
   format = "setuptools";

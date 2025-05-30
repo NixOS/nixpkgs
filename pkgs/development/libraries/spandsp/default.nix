@@ -1,15 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, audiofile
-, libtiff
-, buildPackages
-, fetchpatch
-, autoreconfHook
-, callPackage
+{
+  fetchurl,
+  callPackage,
 }:
 
-(callPackage ./common.nix {}).overrideAttrs(_: rec {
+(callPackage ./common.nix { }).overrideAttrs (_: rec {
   version = "0.0.6";
   src = fetchurl {
     url = "https://www.soft-switch.org/downloads/spandsp/spandsp-${version}.tar.gz";

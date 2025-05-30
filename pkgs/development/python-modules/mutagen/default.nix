@@ -1,19 +1,21 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  fetchpatch,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# docs
-, python
-, sphinx
-, sphinx-rtd-theme
+  # docs
+  python,
+  sphinx,
+  sphinx-rtd-theme,
 
-# tests
-, hypothesis
-, pytestCheckHook
+  # tests
+  hypothesis,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -27,6 +29,15 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-cZ+t7wqXjDG0zzyVYmGzxYtpSLMgIweKIRex3gnw/Jk=";
   };
+
+  patches = [
+    # fix compatibility with hypothesis CI profile
+    # (remove on next release)
+    (fetchpatch {
+      url = "https://github.com/quodlibet/mutagen/commit/967212631719de1aeccbd6855c5b6d03f271fdfe.patch";
+      hash = "sha256-jfCz8qTGZpnP6ICMB9K/Dgyp9TQeMuDq+V6kPFA3Q44=";
+    })
+  ];
 
   outputs = [
     "out"
@@ -56,9 +67,7 @@ buildPythonPackage rec {
     "test_mock_fileobj"
   ];
 
-  pythonImportsCheck = [
-    "mutagen"
-  ];
+  pythonImportsCheck = [ "mutagen" ];
 
   meta = with lib; {
     description = "Python module for handling audio metadata";
@@ -73,8 +82,10 @@ buildPythonPackage rec {
       manipulate Ogg streams on an individual packet/page level.
     '';
     homepage = "https://mutagen.readthedocs.io";
-    changelog = "https://mutagen.readthedocs.io/en/latest/changelog.html#release-${lib.replaceStrings [ "." ] [ "-" ] version}";
+    changelog = "https://mutagen.readthedocs.io/en/latest/changelog.html#release-${
+      lib.replaceStrings [ "." ] [ "-" ] version
+    }";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

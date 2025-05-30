@@ -1,12 +1,13 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, yarl
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
+  yarl,
 }:
 
 buildPythonPackage rec {
@@ -18,8 +19,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "dennisschroer";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "energyflip-client";
+    tag = "v${version}";
     hash = "sha256-neuZ6pZWW/Rgexu/iCEymjnxi5l/IuLKPFn6S9U4DgU=";
   };
 
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "energyflip"
-  ];
+  pythonImportsCheck = [ "energyflip" ];
 
   meta = with lib; {
     description = "Library to communicate with the API behind EnergyFlip";

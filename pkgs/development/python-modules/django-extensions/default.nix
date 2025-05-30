@@ -1,36 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django
-, factory-boy
-, mock
-, pip
-, pygments
-, pytest-django
-, pytestCheckHook
-, shortuuid
-, vobject
-, werkzeug
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  aiosmtpd,
+  django,
+
+  # tests
+  factory-boy,
+  mock,
+  pip,
+  postgresql,
+  postgresqlTestHook,
+  pygments,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pytest-django,
+  shortuuid,
+  vobject,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "django-extensions";
-  version = "3.2.3";
-  format = "setuptools";
+  version = "4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-A2+5FBv0IhTJPkwgd7je+B9Ac64UHJEa3HRBbWr2FxM=";
+    owner = "django-extensions";
+    repo = "django-extensions";
+    tag = version;
+    hash = "sha256-WgO/bDe4anQCc1q2Gdq3W70yDqDgmsvn39Qf9ZNVXuE=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=django_extensions --cov-report html --cov-report term" ""
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    aiosmtpd
     django
   ];
 
@@ -40,7 +50,10 @@ buildPythonPackage rec {
     factory-boy
     mock
     pip
+    postgresql
+    postgresqlTestHook
     pygments # not explicitly declared in setup.py, but some tests require it
+    pytest-cov-stub
     pytest-django
     pytestCheckHook
     shortuuid
@@ -48,13 +61,21 @@ buildPythonPackage rec {
     werkzeug
   ];
 
+  env = {
+    postgresqlEnableTCP = 1;
+    PGUSER = "postgres";
+    PGPASSWORD = "postgres";
+    PGDATABASE = "django_extensions_test";
+  };
+
   disabledTestPaths = [
-    # requires network access
-    "tests/management/commands/test_pipchecker.py"
+    # https://github.com/django-extensions/django-extensions/issues/1871
+    "tests/test_dumpscript.py"
   ];
 
   meta = with lib; {
-    description = "A collection of custom extensions for the Django Framework";
+    changelog = "https://github.com/django-extensions/django-extensions/releases/tag/${src.tag}";
+    description = "Collection of custom extensions for the Django Framework";
     homepage = "https://github.com/django-extensions/django-extensions";
     license = licenses.mit;
   };

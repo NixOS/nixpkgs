@@ -1,6 +1,7 @@
 # This test checks charliecloud image construction and run
 
-import ./make-test-python.nix ({ pkgs, ...} : let
+{ pkgs, ... }:
+let
 
   dockerfile = pkgs.writeText "Dockerfile" ''
     FROM nix
@@ -9,21 +10,24 @@ import ./make-test-python.nix ({ pkgs, ...} : let
     CMD ["true"]
   '';
 
-in {
+in
+{
   name = "charliecloud";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ bzizou ];
   };
 
   nodes = {
-    host = { ... }: {
-      environment.systemPackages = [ pkgs.charliecloud ];
-      virtualisation.docker.enable = true;
-      users.users.alice = {
-        isNormalUser = true;
-        extraGroups = [ "docker" ];
+    host =
+      { ... }:
+      {
+        environment.systemPackages = [ pkgs.charliecloud ];
+        virtualisation.docker.enable = true;
+        users.users.alice = {
+          isNormalUser = true;
+          extraGroups = [ "docker" ];
+        };
       };
-    };
   };
 
   testScript = ''
@@ -40,4 +44,4 @@ in {
     host.succeed('su - alice -c "ch-tar2dir /var/tmp/hello.tar.gz /var/tmp"')
     host.succeed('su - alice -c "ch-run /var/tmp/hello -- echo Running_From_Container_OK"')
   '';
-})
+}

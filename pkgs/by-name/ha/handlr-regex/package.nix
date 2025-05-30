@@ -1,33 +1,49 @@
-{ lib, rustPlatform, fetchFromGitHub, shared-mime-info, libiconv, installShellFiles }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  shared-mime-info,
+  libiconv,
+  installShellFiles,
+  nix-update-script,
+  stdenv,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "handlr-regex";
-  version = "0.9.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "Anomalocaridid";
-    repo = pname;
+    repo = "handlr-regex";
     rev = "v${version}";
-    hash = "sha256-ndFe5GlSWVUPdGRRWuImcLtcuOMoMXMyGGIa+CXfCug=";
+    hash = "sha256-ZQAUqR0u+2kBLGyeT7qTcfwF87LY2qRClZ0T3WH78+w=";
   };
 
-  cargoHash = "sha256-lCClE8U4188q5rWEEkUt0peLEmYvLoE7vJ6Q9uB5HWg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-mTb4K2/JNoo1A7AyYapgOhz4oOgJrWftdyDnWh4Bgto=";
 
-  nativeBuildInputs = [ installShellFiles shared-mime-info ];
+  nativeBuildInputs = [
+    installShellFiles
+    shared-mime-info
+  ];
+
   buildInputs = [ libiconv ];
 
   preCheck = ''
     export HOME=$TEMPDIR
   '';
 
-  postInstall = ''
-    installShellCompletion \
-      --zsh assets/completions/_handlr \
-      --bash assets/completions/handlr \
-      --fish assets/completions/handlr.fish
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd handlr \
+      --zsh <(COMPLETE=zsh $out/bin/handlr) \
+      --bash <(COMPLETE=bash $out/bin/handlr) \
+      --fish <(COMPLETE=fish $out/bin/handlr)
 
-    installManPage assets/manual/man1/*
+    installManPage target/release-tmp/build/handlr-regex-*/out/manual/man1/*
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Fork of handlr with support for regex";

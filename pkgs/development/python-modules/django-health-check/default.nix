@@ -1,40 +1,46 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, sphinx
-, setuptools-scm
-, django
-, redis
-, celery
-, pytest-django
-, pytestCheckHook
-, mock
-, gitMinimal }:
+{
+  lib,
+  boto3,
+  buildPythonPackage,
+  celery,
+  django-storages,
+  django,
+  fetchFromGitHub,
+  gitMinimal,
+  mock,
+  pytest-cov-stub,
+  pytest-django,
+  pytestCheckHook,
+  redis,
+  setuptools-scm,
+  sphinx,
+}:
 
 buildPythonPackage rec {
   pname = "django-health-check";
-  version = "3.17.0";
-  format = "setuptools";
+  version = "3.18.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KristianOellegaard";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-f87dgB2pDc+A0h41FX13qTj6Zzw5I4QwsDoC6yPkvAE=";
-    leaveDotGit = true;
+    repo = "django-health-check";
+    tag = version;
+    hash = "sha256-+6+YxB/x4JdKUCwxxe+YIc+r1YAzngFUHiS6atupWM8=";
   };
+
+  build-system = [ setuptools-scm ];
 
   buildInputs = [
     sphinx
     django
   ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-    gitMinimal
-  ];
+  nativeBuildInputs = [ gitMinimal ];
 
   nativeCheckInputs = [
+    boto3
+    django-storages
+    pytest-cov-stub
     pytest-django
     pytestCheckHook
     mock
@@ -42,20 +48,17 @@ buildPythonPackage rec {
     redis
   ];
 
-  postPatch = ''
-    # We don't want to generate coverage
-    substituteInPlace setup.cfg \
-      --replace "pytest-runner" "" \
-      --replace "--cov=health_check" "" \
-      --replace "--cov-report=term" "" \
-      --replace "--cov-report=xml" ""
-  '';
+  disabledTests = [
+    # commandline output mismatch
+    "test_command_with_non_existence_subset"
+  ];
 
   pythonImportsCheck = [ "health_check" ];
 
   meta = with lib; {
     description = "Pluggable app that runs a full check on the deployment";
     homepage = "https://github.com/KristianOellegaard/django-health-check";
+    changelog = "https://github.com/revsys/django-health-check/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];
   };

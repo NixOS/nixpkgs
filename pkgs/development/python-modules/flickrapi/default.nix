@@ -1,30 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, requests-toolbelt
-, requests-oauthlib
-, six
-, pytestCheckHook
-, responses
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  requests-toolbelt,
+  requests-oauthlib,
+  six,
+  pytestCheckHook,
+  responses,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "flickrapi";
   version = "2.4";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sybrenstuvel";
-    repo = pname;
+    repo = "flickrapi";
     rev = "version-${version}";
     hash = "sha256-vRZrlXKI0UDdmDevh3XUngH4X8G3VlOCSP0z/rxhIgw=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace tests/test_tokencache.py \
+      --replace-fail "assertEquals" "assertEqual" \
+      --replace-fail "assertNotEquals" "assertNotEqual"
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
     requests-toolbelt
     requests-oauthlib
@@ -55,13 +65,12 @@ buildPythonPackage rec {
     "test_xmlnode_format_error"
   ];
 
-  pythonImportsCheck = [
-    "flickrapi"
-  ];
+  pythonImportsCheck = [ "flickrapi" ];
 
   meta = with lib; {
-    description = "A Python interface to the Flickr API";
+    description = "Python interface to the Flickr API";
     homepage = "https://stuvel.eu/flickrapi";
+    changelog = "https://github.com/sybrenstuvel/flickrapi/blob/version-${version}/CHANGELOG.md";
     license = licenses.psfl;
     maintainers = with maintainers; [ obadz ];
   };

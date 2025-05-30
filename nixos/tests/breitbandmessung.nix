@@ -1,24 +1,32 @@
-import ./make-test-python.nix ({ lib, ... }: {
+{ lib, ... }:
+{
   name = "breitbandmessung";
   meta.maintainers = with lib.maintainers; [ b4dm4n ];
 
-  nodes.machine = { pkgs, ... }: {
-    imports = [
-      ./common/user-account.nix
-      ./common/x11.nix
-    ];
+  node.pkgsReadOnly = false;
 
-    # increase screen size to make the whole program visible
-    virtualisation.resolution = { x = 1280; y = 1024; };
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      imports = [
+        ./common/user-account.nix
+        ./common/x11.nix
+      ];
 
-    test-support.displayManager.auto.user = "alice";
+      # increase screen size to make the whole program visible
+      virtualisation.resolution = {
+        x = 1280;
+        y = 1024;
+      };
 
-    environment.systemPackages = with pkgs; [ breitbandmessung ];
-    environment.variables.XAUTHORITY = "/home/alice/.Xauthority";
+      test-support.displayManager.auto.user = "alice";
 
-    # breitbandmessung is unfree
-    nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ "breitbandmessung" ];
-  };
+      environment.systemPackages = with pkgs; [ breitbandmessung ];
+      environment.variables.XAUTHORITY = "/home/alice/.Xauthority";
+
+      # breitbandmessung is unfree
+      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ "breitbandmessung" ];
+    };
 
   enableOCR = true;
 
@@ -30,4 +38,4 @@ import ./make-test-python.nix ({ lib, ... }: {
     machine.wait_for_text("Datenschutz")
     machine.screenshot("breitbandmessung")
   '';
-})
+}

@@ -1,24 +1,39 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-let cfg = config.services.espanso;
-in {
-  meta = { maintainers = with lib.maintainers; [ numkem ]; };
-
-  options = {
-    services.espanso = { enable = options.mkEnableOption (lib.mdDoc "Espanso"); };
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  cfg = config.services.espanso;
+in
+{
+  meta = {
+    maintainers = with lib.maintainers; [
+      n8henrie
+      numkem
+    ];
   };
 
-  config = mkIf cfg.enable {
+  options = {
+    services.espanso = {
+      enable = lib.mkEnableOption "Espanso";
+      package = lib.mkPackageOption pkgs "espanso" {
+        example = "pkgs.espanso-wayland";
+      };
+    };
+  };
+
+  config = lib.mkIf cfg.enable {
     systemd.user.services.espanso = {
       description = "Espanso daemon";
       serviceConfig = {
-        ExecStart = "${pkgs.espanso}/bin/espanso daemon";
+        ExecStart = "${lib.getExe cfg.package} daemon";
         Restart = "on-failure";
       };
       wantedBy = [ "default.target" ];
     };
 
-    environment.systemPackages = [ pkgs.espanso ];
+    environment.systemPackages = [ cfg.package ];
   };
 }

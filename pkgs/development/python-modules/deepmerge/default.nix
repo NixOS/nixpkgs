@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, setuptools
-, setuptools-scm
+  # build-system
+  setuptools,
+  setuptools-scm,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "deepmerge";
-  version = "1.1.1";
+  version = "2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-U6SJ3JRJY25ICnhDWa4qqzGRdIySBklVHI43hiLw7KQ=";
+    hash = "sha256-XD2GCB++vQTdXeA2JqBge4CamPtsy6V3C2JGb+lA/yA=";
   };
 
   nativeBuildInputs = [
@@ -25,17 +26,13 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "deepmerge"
-  ];
+  pythonImportsCheck = [ "deepmerge" ];
 
   meta = with lib; {
     changelog = "https://github.com/toumorokoshi/deepmerge/releases/tag/v${version}";
-    description = "A toolset to deeply merge python dictionaries.";
+    description = "Toolset to deeply merge python dictionaries";
     downloadPage = "https://github.com/toumorokoshi/deepmerge";
     homepage = "http://deepmerge.readthedocs.io/en/latest/";
     license = licenses.mit;

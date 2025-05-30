@@ -26,8 +26,10 @@ OK_MISSING_BY_PACKAGE = {
         "Python3",  # only used for license checks
     },
     "discover": {
+        "ApkQt",  # we don't have APK (duh)
         "rpm-ostree-1",  # we don't have rpm-ostree (duh)
         "Snapd",  # we don't have snaps and probably never will
+        "packagekitqt6",  # intentionally disabled
     },
     "elisa": {
         "UPNPQT",  # upstream says it's broken
@@ -35,6 +37,9 @@ OK_MISSING_BY_PACKAGE = {
     "extra-cmake-modules": {
         "Sphinx",  # only used for docs, bloats closure size
         "QCollectionGenerator"
+    },
+    "gwenview": {
+        "Tiff",  # duplicate?
     },
     "kio-extras-kf5": {
         "KDSoapWSDiscoveryClient",  # actually vendored on KF5 version
@@ -68,6 +73,10 @@ OK_MISSING_BY_PACKAGE = {
     },
     "kwin": {
         "display-info",  # newer versions identify as libdisplay-info
+        "Libcap",  # used to call setcap at build time and nothing else
+    },
+    "libksysguard": {
+        "Libcap",  # used to call setcap at build time and nothing else
     },
     "mlt": {
         "Qt5",  # intentionally disabled
@@ -76,12 +85,24 @@ OK_MISSING_BY_PACKAGE = {
     "plasma-desktop": {
         "scim",  # upstream is dead, not packaged in Nixpkgs
     },
+    "poppler-qt6": {
+        "gobject-introspection-1.0",  # we don't actually want to build the GTK variant
+        "gdk-pixbuf-2.0",
+        "gtk+-3.0",
+    },
     "powerdevil": {
         "DDCUtil",  # cursed, intentionally disabled
+        "Libcap",  # used to call setcap at build time and nothing else
+    },
+    "print-manager": {
+        "PackageKitQt6",  # used for auto-installing drivers which does not work for obvious reasons
     },
     "pulseaudio-qt": {
         "Qt6Qml",  # tests only
         "Qt6Quick",
+    },
+    "skladnik": {
+        "POVRay",  # too expensive to rerender all the assets
     },
     "syntax-highlighting": {
         "XercesC",  # only used for extra validation at build time

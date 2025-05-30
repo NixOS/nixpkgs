@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+{
   name = "gns3-server";
   meta.maintainers = [ lib.maintainers.anthonyroussel ];
 
@@ -10,7 +11,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           -subj '/CN=localhost'
         install -D -t $out key.pem cert.pem
       '';
-    in {
+    in
+    {
       services.gns3-server = {
         enable = true;
         auth = {
@@ -31,25 +33,28 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       security.pki.certificateFiles = [ "${tls-cert}/cert.pem" ];
     };
 
-  testScript = let
-    createProject = pkgs.writeText "createProject.json" (builtins.toJSON {
-      name = "test_project";
-    });
-  in
-  ''
-    start_all()
+  testScript =
+    let
+      createProject = pkgs.writeText "createProject.json" (
+        builtins.toJSON {
+          name = "test_project";
+        }
+      );
+    in
+    ''
+      start_all()
 
-    machine.wait_for_unit("gns3-server.service")
-    machine.wait_for_open_port(3080)
+      machine.wait_for_unit("gns3-server.service")
+      machine.wait_for_open_port(3080)
 
-    with subtest("server is listening"):
-      machine.succeed("curl -sSfL -u user:password https://localhost:3080/v2/version")
+      with subtest("server is listening"):
+        machine.succeed("curl -sSfL -u user:password https://localhost:3080/v2/version")
 
-    with subtest("create dummy project"):
-      machine.succeed("curl -sSfL -u user:password https://localhost:3080/v2/projects -d @${createProject}")
+      with subtest("create dummy project"):
+        machine.succeed("curl -sSfL -u user:password https://localhost:3080/v2/projects -d @${createProject}")
 
-    with subtest("logging works"):
-      log_path = "/var/log/gns3/server.log"
-      machine.wait_for_file(log_path)
-  '';
-})
+      with subtest("logging works"):
+        log_path = "/var/log/gns3/server.log"
+        machine.wait_for_file(log_path)
+    '';
+}

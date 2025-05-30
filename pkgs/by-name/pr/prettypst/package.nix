@@ -1,27 +1,25 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "prettypst";
-  version = "unstable-2023-11-27";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "antonWetzel";
     repo = "prettypst";
-    rev = "0bf6aa013efa2b059d8c7dcae3441a6004b02fa1";
-    hash = "sha256-8rAF7tzs+0qGphmanTvx6MXhYOSG6igAMY4ZLkljRp8=";
+    rev = "2.0.0";
+    hash = "sha256-fGm3HDMJ12HlVOjLtaS2hcAzVl/jl4nqMYly0aBVRxw=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "typst-syntax-0.9.0" = "sha256-LwRB/AQE8TZZyHEQ7kKB10itzEgYjg4R/k+YFqmutDc=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-zfx6SDtvn5waKWZB1gVxcvCzP+Rp7+J+txaRHoRfaBM=";
 
   meta = {
+    changelog = "https://github.com/antonWetzel/prettypst/blob/${src.rev}/changelog.md";
     description = "Formatter for Typst";
     homepage = "https://github.com/antonWetzel/prettypst";
     license = lib.licenses.mit;

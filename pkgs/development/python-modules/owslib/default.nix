@@ -1,79 +1,75 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, lxml
-, pyproj
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pytz
-, pyyaml
-, requests
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lxml,
+  pytest-cov-stub,
+  pytest-httpserver,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pyyaml,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "owslib";
-  version = "0.30.0";
-  format = "setuptools";
+  version = "0.33.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "geopython";
     repo = "OWSLib";
-    rev = "refs/tags/${version}";
-    hash = "sha256-miKAgZBiqZ6+0qDvlf8+VZ6omH5hlImO0E7AVK7FuD0=";
+    tag = version;
+    hash = "sha256-Qp8Ow39r6u/6h9+2Qa7WMzrs6Lyek07tWYtxtvVgM/Y=";
   };
 
   postPatch = ''
     substituteInPlace tox.ini \
-      --replace " --doctest-modules --doctest-glob 'tests/**/*.txt' --cov-report term-missing --cov owslib" ""
+      --replace-fail "--doctest-modules" "" \
+      --replace-fail "--doctest-glob='tests/**/*.txt'" ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     lxml
-    pyproj
     python-dateutil
-    pytz
     pyyaml
     requests
   ];
 
   nativeCheckInputs = [
+    pytest-cov-stub
+    pytest-httpserver
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "owslib"
-  ];
+  pythonImportsCheck = [ "owslib" ];
 
   preCheck = ''
     # _pytest.pathlib.ImportPathMismatchError: ('owslib.swe.sensor.sml', '/build/source/build/...
     export PY_IGNORE_IMPORTMISMATCH=1
   '';
 
-  disabledTests = [
-    # Tests require network access
-    "test_ows_interfaces_wcs"
-    "test_wfs_110_remotemd"
-    "test_wfs_200_remotemd"
-    "test_wms_130_remotemd"
-    "test_wmts_example_informatievlaanderen"
-    "test_opensearch_creodias"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_ogcapi_processes_pygeoapi"
-    "test_ogcapi_records_pycsw"
-    "test_ogcapi_records_pygeoapi"
-    "test_wms_getfeatureinfo_130"
+  pytestFlagsArray = [
+    # Disable tests which require network access
+    "-m 'not online'"
+  ];
+
+  disabledTestPaths = [
+    # Tests requires network access
+    "tests/test_ogcapi_connectedsystems_osh.py"
   ];
 
   meta = with lib; {
     description = "Client for Open Geospatial Consortium web service interface standards";
     homepage = "https://www.osgeo.org/projects/owslib/";
-    changelog = "https://github.com/geopython/OWSLib/releases/tag/${version}";
+    changelog = "https://github.com/geopython/OWSLib/releases/tag/${src.tag}";
     license = licenses.bsd3;
-    maintainers = teams.geospatial.members;
+    teams = [ teams.geospatial ];
   };
 }

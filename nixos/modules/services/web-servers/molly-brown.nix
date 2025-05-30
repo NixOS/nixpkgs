@@ -1,21 +1,27 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.molly-brown;
   settingsFormat = pkgs.formats.toml { };
- configFile = settingsFormat.generate "molly-brown.toml" cfg.settings;
-in {
+  configFile = settingsFormat.generate "molly-brown.toml" cfg.settings;
+in
+{
 
   options.services.molly-brown = {
 
-    enable = mkEnableOption (lib.mdDoc "Molly-Brown Gemini server");
+    enable = mkEnableOption "Molly-Brown Gemini server";
 
     port = mkOption {
       default = 1965;
       type = types.port;
-      description = lib.mdDoc ''
+      description = ''
         TCP port for molly-brown to bind to.
       '';
     };
@@ -24,7 +30,7 @@ in {
       type = types.str;
       default = config.networking.hostName;
       defaultText = literalExpression "config.networking.hostName";
-      description = lib.mdDoc ''
+      description = ''
         The hostname to respond to requests for. Requests for URLs with
         other hosts will result in a status 53 (PROXY REQUEST REFUSED)
         response.
@@ -34,7 +40,7 @@ in {
     certPath = mkOption {
       type = types.path;
       example = "/var/lib/acme/example.com/cert.pem";
-      description = lib.mdDoc ''
+      description = ''
         Path to TLS certificate. An ACME certificate and key may be
         shared with an HTTP server, but only if molly-brown has
         permissions allowing it to read such keys.
@@ -50,19 +56,19 @@ in {
     keyPath = mkOption {
       type = types.path;
       example = "/var/lib/acme/example.com/key.pem";
-      description = lib.mdDoc "Path to TLS key. See {option}`CertPath`.";
+      description = "Path to TLS key. See {option}`CertPath`.";
     };
 
     docBase = mkOption {
       type = types.path;
       example = "/var/lib/molly-brown";
-      description = lib.mdDoc "Base directory for Gemini content.";
+      description = "Base directory for Gemini content.";
     };
 
     settings = mkOption {
       inherit (settingsFormat) type;
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         molly-brown configuration. Refer to
         <https://tildegit.org/solderpunk/molly-brown/src/branch/master/example.conf>
         for details on supported values.
@@ -73,16 +79,19 @@ in {
 
   config = mkIf cfg.enable {
 
-    services.molly-brown.settings = let logDir = "/var/log/molly-brown";
-    in {
-      Port = cfg.port;
-      Hostname = cfg.hostName;
-      CertPath = cfg.certPath;
-      KeyPath = cfg.keyPath;
-      DocBase = cfg.docBase;
-      AccessLog = "${logDir}/access.log";
-      ErrorLog = "${logDir}/error.log";
-    };
+    services.molly-brown.settings =
+      let
+        logDir = "/var/log/molly-brown";
+      in
+      {
+        Port = cfg.port;
+        Hostname = cfg.hostName;
+        CertPath = cfg.certPath;
+        KeyPath = cfg.keyPath;
+        DocBase = cfg.docBase;
+        AccessLog = "${logDir}/access.log";
+        ErrorLog = "${logDir}/error.log";
+      };
 
     systemd.services.molly-brown = {
       description = "Molly Brown gemini server";

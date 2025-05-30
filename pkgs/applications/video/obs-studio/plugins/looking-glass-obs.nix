@@ -1,5 +1,13 @@
-{ lib, stdenv, cmake, libbfd, SDL2, obs-studio
-, looking-glass-client }:
+{
+  lib,
+  stdenv,
+  cmake,
+  libbfd,
+  SDL2,
+  libGL,
+  obs-studio,
+  looking-glass-client,
+}:
 
 stdenv.mkDerivation {
   pname = "looking-glass-obs";
@@ -10,7 +18,12 @@ stdenv.mkDerivation {
   sourceRoot = "${looking-glass-client.src.name}/obs";
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ obs-studio libbfd SDL2 ];
+  buildInputs = [
+    obs-studio
+    libbfd
+    SDL2
+    libGL
+  ];
 
   env.NIX_CFLAGS_COMPILE = "-mavx";
 

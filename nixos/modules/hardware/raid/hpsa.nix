@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   hpssacli = pkgs.stdenv.mkDerivation rec {
     pname = "hpssacli";
@@ -40,23 +42,24 @@ let
       homepage = "https://downloads.linux.hpe.com/SDR/downloads/MCP/Ubuntu/pool/non-free/";
       license = licenses.unfreeRedistributable;
       platforms = [ "x86_64-linux" ];
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
-in {
+in
+{
   ###### interface
 
   options = {
     hardware.raid.HPSmartArray = {
-      enable = mkEnableOption (lib.mdDoc "HP Smart Array kernel modules and CLI utility");
+      enable = lib.mkEnableOption "HP Smart Array kernel modules and CLI utility";
     };
   };
 
   ###### implementation
 
-  config = mkIf config.hardware.raid.HPSmartArray.enable {
+  config = lib.mkIf config.hardware.raid.HPSmartArray.enable {
 
-    boot.initrd.kernelModules = [ "sg" ]; /* hpssacli wants it */
+    boot.initrd.kernelModules = [ "sg" ]; # hpssacli wants it
     boot.initrd.availableKernelModules = [ "hpsa" ];
 
     environment.systemPackages = [ hpssacli ];

@@ -1,18 +1,19 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
-python3.pkgs.buildPythonPackage rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "zigpy-cli";
-  version = "1.0.4";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-cli";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-OxVSEBo+wFEBZnWpmQ4aUZWppCh0oavxlQvwDXiWiG8=";
+    tag = "v${version}";
+    hash = "sha256-X4sH2UOF0xHzjT1enohg7JKi+5lQ6wnJBIn09jK5Db8=";
   };
 
   postPatch = ''
@@ -21,11 +22,11 @@ python3.pkgs.buildPythonPackage rec {
       --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     setuptools
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     bellows
     click
     coloredlogs
@@ -33,7 +34,7 @@ python3.pkgs.buildPythonPackage rec {
     zigpy
     zigpy-deconz
     zigpy-xbee
-    # zigpy-zboss # not packaged
+    zigpy-zboss
     zigpy-zigate
     zigpy-znp
   ];
@@ -51,8 +52,9 @@ python3.pkgs.buildPythonPackage rec {
 
   meta = with lib; {
     description = "Command line interface for zigpy";
+    mainProgram = "zigpy";
     homepage = "https://github.com/zigpy/zigpy-cli";
-    changelog = "https://github.com/zigpy/zigpy/releases/tag/v${version}";
+    changelog = "https://github.com/zigpy/zigpy-cli/releases/tag/${src.tag}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ SuperSandro2000 ];
     platforms = platforms.linux;

@@ -1,4 +1,11 @@
-{ buildPecl, lib, fetchFromGitHub, php, zlib, pkg-config }:
+{
+  buildPecl,
+  lib,
+  fetchFromGitHub,
+  php,
+  zlib,
+  pkg-config,
+}:
 
 buildPecl rec {
   pname = "memcache";
@@ -11,13 +18,9 @@ buildPecl rec {
     hash = "sha256-77GvQ59XUpIZmdYZP6IhtjdkYwXKuNBSG+LBScz2BtI=";
   };
 
-  internalDeps = [
-    php.extensions.session
-  ];
+  internalDeps = [ php.extensions.session ];
 
-  configureFlags = [
-    "--with-zlib-dir=${zlib.dev}"
-  ];
+  configureFlags = [ "--with-zlib-dir=${zlib.dev}" ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ zlib ];
@@ -26,6 +29,7 @@ buildPecl rec {
     description = "PHP extension for interfacing with memcached";
     license = licenses.php301;
     homepage = "https://github.com/websupport-sk/pecl-memcache";
-    maintainers = teams.php.members ++ [ maintainers.krzaczek ];
+    maintainers = [ maintainers.krzaczek ];
+    teams = [ teams.php ];
   };
 }

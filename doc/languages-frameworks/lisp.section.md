@@ -45,20 +45,27 @@ $ sbcl
 
 Also one can create a `pkgs.mkShell` environment in `shell.nix`/`flake.nix`:
 
-```
+```nix
 let
   sbcl' = sbcl.withPackages (ps: [ ps.alexandria ]);
-in mkShell {
+in
+mkShell {
   packages = [ sbcl' ];
 }
 ```
 
 Such a Lisp can be now used e.g. to compile your sources:
 
-```
-buildPhase = ''
-  ${sbcl'}/bin/sbcl --load my-build-file.lisp
-''
+```nix
+{
+  buildPhase = ''
+    runHook preBuild
+
+    ${sbcl'}/bin/sbcl --load my-build-file.lisp
+
+    runHook postBuild
+  '';
+}
 ```
 
 ## Importing packages from Quicklisp {#lisp-importing-packages-from-quicklisp}
@@ -132,7 +139,6 @@ During Quicklisp import:
 - names starting with a number have a `_` prepended (`3d-vectors`->`_3d-vectors`)
 - `_` in names is converted to `__` for reversibility
 
-
 ## Defining packages manually inside Nixpkgs {#lisp-defining-packages-inside}
 
 Packages that for some reason are not in Quicklisp, and so cannot be
@@ -173,7 +179,7 @@ into the package scope with `withOverrides`.
 A package defined outside Nixpkgs using `buildASDFSystem` can be woven into the
 Nixpkgs-provided scope like this:
 
-```
+```nix
 let
   alexandria = sbcl.buildASDFSystem rec {
     pname = "alexandria";
@@ -182,14 +188,17 @@ let
       domain = "gitlab.common-lisp.net";
       owner = "alexandria";
       repo = "alexandria";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-1Hzxt65dZvgOFIljjjlSGgKYkj+YBLwJCACi5DZsKmQ=";
     };
   };
-  sbcl' = sbcl.withOverrides (self: super: {
-    inherit alexandria;
-  });
-in sbcl'.pkgs.alexandria
+  sbcl' = sbcl.withOverrides (
+    self: super: {
+      inherit alexandria;
+    }
+  );
+in
+sbcl'.pkgs.alexandria
 ```
 
 ## Overriding package attributes {#lisp-overriding-package-attributes}
@@ -199,14 +208,14 @@ new package with different parameters.
 
 Example of overriding `alexandria`:
 
-```
+```nix
 sbcl.pkgs.alexandria.overrideLispAttrs (oldAttrs: rec {
   version = "1.4";
   src = fetchFromGitLab {
     domain = "gitlab.common-lisp.net";
     owner = "alexandria";
     repo = "alexandria";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-1Hzxt65dZvgOFIljjjlSGgKYkj+YBLwJCACi5DZsKmQ=";
   };
 })
@@ -225,7 +234,7 @@ vice versa.
 
 To package slashy systems, use `overrideLispAttrs`, like so:
 
-```
+```nix
 ecl.pkgs.alexandria.overrideLispAttrs (oldAttrs: {
   systems = oldAttrs.systems ++ [ "alexandria/tests" ];
   lispLibs = oldAttrs.lispLibs ++ [ ecl.pkgs.rt ];
@@ -290,10 +299,13 @@ derivation.
 
 This example wraps CLISP:
 
-```
+```nix
 wrapLisp {
   pkg = clisp;
   faslExt = "fas";
-  flags = ["-E" "UTF8"];
+  flags = [
+    "-E"
+    "UTF8"
+  ];
 }
 ```

@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, orc, pkg-config, fetchpatch, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  orc,
+  pkg-config,
+  fetchpatch,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "schroedinger";
@@ -9,12 +17,19 @@ stdenv.mkDerivation rec {
     sha256 = "04prr667l4sn4zx256v1z36a0nnkxfdqyln48rbwlamr6l3jlmqy";
   };
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
   buildInputs = [ orc ];
 
-  doCheck = (!stdenv.isDarwin);
+  doCheck = (!stdenv.hostPlatform.isDarwin);
 
   patchFlags = [ "-p0" ];
   patches = [
@@ -25,10 +40,14 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An implementation of the Dirac video codec in ANSI C";
+    description = "Implementation of the Dirac video codec in ANSI C";
     homepage = "https://sourceforge.net/projects/schrodinger/";
     maintainers = [ ];
-    license = [ licenses.mpl11 licenses.lgpl2 licenses.mit ];
+    license = [
+      licenses.mpl11
+      licenses.lgpl2
+      licenses.mit
+    ];
     platforms = platforms.unix;
   };
 }

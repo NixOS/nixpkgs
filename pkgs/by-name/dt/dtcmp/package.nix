@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, mpi, lwgrp }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  mpi,
+  lwgrp,
+}:
 
 stdenv.mkDerivation rec {
   pname = "dtcmp";
@@ -11,9 +19,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-Dc+c8JCc5D23CtpwiWkHCqngywEZXw7cYsRiSYiQdWk=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
   buildInputs = [ lwgrp ];
 
   configureFlags = [ "--with-lwgrp=${lib.getDev lwgrp}" ];

@@ -1,27 +1,26 @@
-{ lib
-, clang-tools
-, llvmPackages
-, boost179
-, protobuf
-, python3Support ? false
-, python3
-, log4cxxSupport ? false
-, log4cxx
-, snappySupport ? false
-, snappy
-, zlibSupport ? true
-, zlib
-, zstdSupport ? true
-, zstd
-, gtest
-, gtestSupport ? false
-, cmake
-, curl
-, fetchurl
-, jsoncpp
-, openssl
-, pkg-config
-, stdenv
+{
+  lib,
+  asioSupport ? true,
+  asio,
+  boost,
+  log4cxxSupport ? false,
+  log4cxx,
+  snappySupport ? false,
+  snappy,
+  zlibSupport ? true,
+  zlib,
+  zstdSupport ? true,
+  zstd,
+  gtest,
+  gtestSupport ? false,
+  cmake,
+  curl,
+  fetchFromGitHub,
+  protobuf,
+  jsoncpp,
+  openssl,
+  pkg-config,
+  stdenv,
 }:
 
 let
@@ -37,48 +36,47 @@ let
   */
   enableCmakeFeature = p: if (p == null || p == false) then "OFF" else "ON";
 
-  # Not really sure why I need to do this.. If I call clang-tools without the override it defaults to a different version and fails
-  clangTools = clang-tools.override { inherit stdenv llvmPackages; };
-  # If boost has python enabled, then boost-python package will be installed which is used by libpulsars python wrapper
-  boost = if python3Support then boost179.override { inherit stdenv; enablePython = python3Support; python = python3; } else boost179;
-  defaultOptionals = [ boost protobuf ]
-    ++ lib.optional python3Support python3
+  defaultOptionals =
+    [ protobuf ]
     ++ lib.optional snappySupport snappy.dev
     ++ lib.optional zlibSupport zlib
     ++ lib.optional zstdSupport zstd
-    ++ lib.optional log4cxxSupport log4cxx;
+    ++ lib.optional log4cxxSupport log4cxx
+    ++ lib.optional asioSupport asio
+    ++ lib.optional (!asioSupport) boost;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "libpulsar";
-  version = "2.10.2";
+  version = "3.7.1";
 
-  src = fetchurl {
-    hash = "sha256-IONnsSDbnX2qz+Xya0taHYSViTOiRI36AfcxmY3dNpo=";
-    url = "mirror://apache/pulsar/pulsar-${version}/apache-pulsar-${version}-src.tar.gz";
+  src = fetchFromGitHub {
+    owner = "apache";
+    repo = "pulsar-client-cpp";
+    rev = "v${version}";
+    hash = "sha256-RHWi0KCq7U7Dr3Ic7kduc8P64VpAThTQ3lDxLLEqzIU=";
   };
 
-  sourceRoot = "apache-pulsar-${version}-src/pulsar-client-cpp";
-
-  # clang-tools needed for clang-format
-  nativeBuildInputs = [ cmake pkg-config clangTools ]
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+    ]
     ++ defaultOptionals
     ++ lib.optional gtestSupport gtest.dev;
 
-  buildInputs = [ jsoncpp openssl curl ]
-    ++ defaultOptionals;
-
-  # Needed for GCC on Linux
-  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=return-type" ];
+  buildInputs = [
+    jsoncpp
+    openssl
+    curl
+  ] ++ defaultOptionals;
 
   cmakeFlags = [
     "-DBUILD_TESTS=${enableCmakeFeature gtestSupport}"
-    "-DBUILD_PYTHON_WRAPPER=${enableCmakeFeature python3Support}"
     "-DUSE_LOG4CXX=${enableCmakeFeature log4cxxSupport}"
-    "-DClangTools_PATH=${clangTools}/bin"
+    "-DUSE_ASIO=${enableCmakeFeature asioSupport}"
   ];
 
-  enableParallelBuilding = true;
   doInstallCheck = true;
   installCheckPhase = ''
     echo ${lib.escapeShellArg ''
@@ -92,11 +90,14 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://pulsar.apache.org/docs/en/client-libraries-cpp";
+    homepage = "https://pulsar.apache.org/docs/next/client-libraries-cpp/";
     description = "Apache Pulsar C++ library";
-
+    changelog = "https://github.com/apache/pulsar-client-cpp/releases/tag/v${version}";
     platforms = platforms.all;
     license = licenses.asl20;
-    maintainers = [ maintainers.corbanr ];
+    maintainers = with maintainers; [
+      corbanr
+      gaelreyrol
+    ];
   };
-}
+})

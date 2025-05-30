@@ -1,11 +1,27 @@
-{ lib, stdenv, fetchurl, ocaml, zlib, which, eprover, makeWrapper, coq }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocaml,
+  zlib,
+  which,
+  eprover,
+  makeWrapper,
+  coq,
+}:
 stdenv.mkDerivation rec {
   pname = "satallax";
   version = "2.7";
 
   strictDeps = true;
 
-  nativeBuildInputs = [ makeWrapper ocaml which eprover coq ];
+  nativeBuildInputs = [
+    makeWrapper
+    ocaml
+    which
+    eprover
+    coq
+  ];
   buildInputs = [ zlib ];
 
   src = fetchurl {
@@ -49,13 +65,18 @@ stdenv.mkDerivation rec {
   '';
 
   # error: invalid suffix on literal; C++11 requires a space between literal and identifier
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-reserved-user-defined-literal";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-reserved-user-defined-literal";
 
   installPhase = ''
     mkdir -p "$out/share/doc/satallax" "$out/bin" "$out/lib" "$out/lib/satallax"
     cp bin/satallax.opt "$out/bin/satallax"
     wrapProgram "$out/bin/satallax" \
-      --suffix PATH : "${lib.makeBinPath [ coq eprover ]}:$out/libexec/satallax" \
+      --suffix PATH : "${
+        lib.makeBinPath [
+          coq
+          eprover
+        ]
+      }:$out/libexec/satallax" \
       --add-flags "-M" --add-flags "$out/lib/satallax/modes"
 
     cp LICENSE README "$out/share/doc/satallax"
@@ -67,7 +88,7 @@ stdenv.mkDerivation rec {
     cp -r coq* "$out/lib/satallax/"
   '';
 
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
 
   checkPhase = ''
     runHook preCheck
@@ -80,6 +101,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Automated theorem prover for higher-order logic";
+    mainProgram = "satallax";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;

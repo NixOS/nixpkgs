@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, cfitsio
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cfitsio,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "FITS File Format-Verification Tool";
+    mainProgram = "fitsverify";
     longDescription = ''
       Fitsverify is a computer program that rigorously checks whether a FITS
       (Flexible Image Transport System) data file conforms to all the

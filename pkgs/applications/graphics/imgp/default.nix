@@ -1,9 +1,13 @@
-{ lib, fetchFromGitHub, buildPythonApplication, pythonOlder, pillow }:
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+}:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "imgp";
   version = "2.9";
-  disabled = pythonOlder "3.8";
+  disabled = python3Packages.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jarun";
@@ -12,7 +16,7 @@ buildPythonApplication rec {
     hash = "sha256-yQ2BzOBn6Bl9ieZkREKsj1zLnoPcf0hZhZ90Za5kiKA=";
   };
 
-  propagatedBuildInputs = [ pillow ];
+  propagatedBuildInputs = [ python3Packages.pillow ];
 
   installFlags = [
     "DESTDIR=$(out)"
@@ -31,6 +35,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "High-performance CLI batch image resizer & rotator";
+    mainProgram = "imgp";
     homepage = "https://github.com/jarun/imgp";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

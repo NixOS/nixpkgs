@@ -1,46 +1,61 @@
-{ pkgs, lib, config, ... }:
-
-with lib;
-
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 let
   cfg = config.services.hardware.openrgb;
-in {
+in
+{
   options.services.hardware.openrgb = {
-    enable = mkEnableOption (lib.mdDoc "OpenRGB server");
+    enable = lib.mkEnableOption "OpenRGB server, for RGB lighting control";
 
-    package = mkPackageOption pkgs "openrgb" { };
+    package = lib.mkPackageOption pkgs "openrgb" { };
 
-    motherboard = mkOption {
-      type = types.nullOr (types.enum [ "amd" "intel" ]);
-      default = if config.hardware.cpu.intel.updateMicrocode then "intel"
-        else if config.hardware.cpu.amd.updateMicrocode then "amd"
-        else null;
-      defaultText = literalMD ''
+    motherboard = lib.mkOption {
+      type = lib.types.nullOr (
+        lib.types.enum [
+          "amd"
+          "intel"
+        ]
+      );
+      default =
+        if config.hardware.cpu.intel.updateMicrocode then
+          "intel"
+        else if config.hardware.cpu.amd.updateMicrocode then
+          "amd"
+        else
+          null;
+      defaultText = lib.literalMD ''
         if config.hardware.cpu.intel.updateMicrocode then "intel"
         else if config.hardware.cpu.amd.updateMicrocode then "amd"
         else null;
       '';
-      description = lib.mdDoc "CPU family of motherboard. Allows for addition motherboard i2c support.";
+      description = "CPU family of motherboard. Allows for addition motherboard i2c support.";
     };
 
-    server.port = mkOption {
-      type = types.port;
+    server.port = lib.mkOption {
+      type = lib.types.port;
       default = 6742;
-      description = lib.mdDoc "Set server port of openrgb.";
+      description = "Set server port of openrgb.";
     };
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     services.udev.packages = [ cfg.package ];
 
-    boot.kernelModules = [ "i2c-dev" ]
-     ++ lib.optionals (cfg.motherboard == "amd") [ "i2c-piix4" ]
-     ++ lib.optionals (cfg.motherboard == "intel") [ "i2c-i801" ];
+    boot.kernelModules =
+      [ "i2c-dev" ]
+      ++ lib.optionals (cfg.motherboard == "amd") [ "i2c-piix4" ]
+      ++ lib.optionals (cfg.motherboard == "intel") [ "i2c-i801" ];
 
     systemd.services.openrgb = {
       description = "OpenRGB server daemon";
+      after = [ "network.target" ];
+      wants = [ "dev-usb.device" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         StateDirectory = "OpenRGB";
@@ -51,5 +66,5 @@ in {
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ jonringer ];
+  meta.maintainers = [ ];
 }

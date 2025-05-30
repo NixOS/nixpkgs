@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "spython";
-  version = "0.3.12";
+  version = "0.3.14";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -16,26 +17,20 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "singularityhub";
     repo = "singularity-cli";
-    rev = "refs/tags/${version}";
-    hash = "sha256-fRtqOpDgVMYlVDwbPkrnpd7PT4fV+2WS6RmpJoxaKdQ=";
+    tag = version;
+    hash = "sha256-PNMzqnKb691wcd8aGSleqHOcsUrahl8e0r5s5ek5GmQ=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace '"pytest-runner"' ""
+      --replace-fail '"pytest-runner"' ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "spython"
-  ];
+  pythonImportsCheck = [ "spython" ];
 
   disabledTests = [
     # Assertion errors
@@ -55,5 +50,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/singularityhub/singularity-cli/blob/${version}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "spython";
   };
 }

@@ -1,49 +1,52 @@
-{ config, lib, pkgs, ... }:
-
-with pkgs;
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.activemq;
 
-  activemqBroker = runCommand "activemq-broker"
-    {
-      nativeBuildInputs = [ jdk ];
-    } ''
-    mkdir -p $out/lib
-    source ${activemq}/lib/classpath.env
-    export CLASSPATH
-    ln -s "${./ActiveMQBroker.java}" ActiveMQBroker.java
-    javac -d $out/lib ActiveMQBroker.java
-  '';
+  activemqBroker =
+    pkgs.runCommand "activemq-broker"
+      {
+        nativeBuildInputs = [ pkgs.jdk ];
+      }
+      ''
+        mkdir -p $out/lib
+        source ${pkgs.activemq}/lib/classpath.env
+        export CLASSPATH
+        ln -s "${./ActiveMQBroker.java}" ActiveMQBroker.java
+        javac -d $out/lib ActiveMQBroker.java
+      '';
 
 in
 {
 
   options = {
     services.activemq = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable the Apache ActiveMQ message broker service.
         '';
       };
-      configurationDir = mkOption {
-        default = "${activemq}/conf";
-        defaultText = literalExpression ''"''${pkgs.activemq}/conf"'';
-        type = types.str;
-        description = lib.mdDoc ''
+      configurationDir = lib.mkOption {
+        default = "${pkgs.activemq}/conf";
+        defaultText = lib.literalExpression ''"''${pkgs.activemq}/conf"'';
+        type = lib.types.str;
+        description = ''
           The base directory for ActiveMQ's configuration.
           By default, this directory is searched for a file named activemq.xml,
           which should contain the configuration for the broker service.
         '';
       };
-      configurationURI = mkOption {
-        type = types.str;
+      configurationURI = lib.mkOption {
+        type = lib.types.str;
         default = "xbean:activemq.xml";
-        description = lib.mdDoc ''
+        description = ''
           The URI that is passed along to the BrokerFactory to
           set up the configuration of the ActiveMQ broker service.
           You should not need to change this. For custom configuration,
@@ -51,31 +54,34 @@ in
           an activemq.xml configuration file in it.
         '';
       };
-      baseDir = mkOption {
-        type = types.str;
+      baseDir = lib.mkOption {
+        type = lib.types.str;
         default = "/var/activemq";
-        description = lib.mdDoc ''
+        description = ''
           The base directory where ActiveMQ stores its persistent data and logs.
           This will be overridden if you set "activemq.base" and "activemq.data"
           in the `javaProperties` option. You can also override
           this in activemq.xml.
         '';
       };
-      javaProperties = mkOption {
-        type = types.attrs;
+      javaProperties = lib.mkOption {
+        type = lib.types.attrs;
         default = { };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             "java.net.preferIPv4Stack" = "true";
           }
         '';
-        apply = attrs: {
-          "activemq.base" = "${cfg.baseDir}";
-          "activemq.data" = "${cfg.baseDir}/data";
-          "activemq.conf" = "${cfg.configurationDir}";
-          "activemq.home" = "${activemq}";
-        } // attrs;
-        description = lib.mdDoc ''
+        apply =
+          attrs:
+          {
+            "activemq.base" = "${cfg.baseDir}";
+            "activemq.data" = "${cfg.baseDir}/data";
+            "activemq.conf" = "${cfg.configurationDir}";
+            "activemq.home" = "${pkgs.activemq}";
+          }
+          // attrs;
+        description = ''
           Specifies Java properties that are sent to the ActiveMQ
           broker service with the "-D" option. You can set properties
           here to change the behaviour and configuration of the broker.
@@ -83,11 +89,11 @@ in
           given reasonable defaults.
         '';
       };
-      extraJavaOptions = mkOption {
-        type = types.separatedString " ";
+      extraJavaOptions = lib.mkOption {
+        type = lib.types.separatedString " ";
         default = "";
         example = "-Xmx2G -Xms2G -XX:MaxPermSize=512M";
-        description = lib.mdDoc ''
+        description = ''
           Add extra options here that you want to be sent to the
           Java runtime when the broker service is started.
         '';
@@ -95,7 +101,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.users.activemq = {
       description = "ActiveMQ server user";
       group = "activemq";
@@ -118,13 +124,17 @@ in
     systemd.services.activemq = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      path = [ jre ];
+      path = [ pkgs.jre ];
       serviceConfig.User = "activemq";
       script = ''
-        source ${activemq}/lib/classpath.env
+        source ${pkgs.activemq}/lib/classpath.env
         export CLASSPATH=${activemqBroker}/lib:${cfg.configurationDir}:$CLASSPATH
         exec java \
-          ${concatStringsSep " \\\n" (mapAttrsToList (name: value: "-D${name}=${value}") cfg.javaProperties)} \
+          ${
+            lib.concatStringsSep " \\\n" (
+              lib.mapAttrsToList (name: value: "-D${name}=${value}") cfg.javaProperties
+            )
+          } \
           ${cfg.extraJavaOptions} ActiveMQBroker "${cfg.configurationURI}"
       '';
     };

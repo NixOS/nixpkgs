@@ -1,7 +1,8 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, fetchpatch2
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  fetchpatch2,
 }:
 
 buildNpmPackage rec {
@@ -29,10 +30,10 @@ buildNpmPackage rec {
   dontNpmBuild = true;
 
   meta = {
-    description = "A simple zero-configuration command-line http server";
+    description = "Simple zero-configuration command-line http server";
     homepage = "https://github.com/http-party/http-server";
     license = lib.licenses.mit;
     mainProgram = "http-server";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

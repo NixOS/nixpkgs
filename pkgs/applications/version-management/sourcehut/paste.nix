@@ -1,49 +1,53 @@
-{ lib
-, fetchFromSourcehut
-, buildGoModule
-, buildPythonPackage
-, srht
-, pip
-, pyyaml
-, python
-, pythonOlder
-, setuptools
-, unzip
+{
+  lib,
+  fetchFromSourcehut,
+  buildGoModule,
+  buildPythonPackage,
+  srht,
+  pip,
+  pyyaml,
+  python,
+  pythonOlder,
+  setuptools-scm,
+  unzip,
 }:
 
 let
-  version = "0.15.2";
-  gqlgen = import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.20"; };
+  version = "0.16.1";
+  gqlgen = import ./fix-gqlgen-trimpath.nix {
+    inherit unzip;
+    gqlgenVersion = "0.17.64";
+  };
+
+  patches = [ ./patches/core-go-update/paste/patch-deps.patch ];
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "paste.sr.ht";
     rev = version;
-    hash = "sha256-ZZzcd14Jbo1MfET7B56X/fl9xWXpCJ8TuKrGVgJwZfQ=";
+    hash = "sha256-SWtkE2/sTTJo0zAVFRfsA7fVF359OvgiHOT+yRaiads=";
   };
 
-  pastesrht-api = buildGoModule ({
-    inherit src version;
-    pname = "pastesrht-api";
-    modRoot = "api";
-    vendorHash = "sha256-jiE73PUPSHxtWp7XBdH4mJw95pXmZjCl4tk2wQUf2M4=";
-  } // gqlgen);
+  pastesrht-api = buildGoModule (
+    {
+      inherit src version patches;
+      pname = "pastesrht-api";
+      modRoot = "api";
+      vendorHash = "sha256-uVqxPa1YggPgdSzGzXxVNdf4dM2DPGDXajkSXz4NhFM=";
+    }
+    // gqlgen
+  );
 in
 buildPythonPackage rec {
-  inherit src version;
+  inherit src version patches;
   pname = "pastesrht";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace "all: api" ""
-  '';
-
   nativeBuildInputs = [
     pip
-    setuptools
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
@@ -51,14 +55,20 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  preBuild = ''
-    export PKGVER=${version}
-    export SRHT_PATH=${srht}/${python.sitePackages}/srht
+  env = {
+    PKGVER = version;
+    SRHT_PATH = "${srht}/${python.sitePackages}/srht";
+    PREFIX = placeholder "out";
+  };
+
+  postBuild = ''
+    make SASSC_INCLUDE=-I${srht}/share/sourcehut/scss/ all-share
   '';
 
   postInstall = ''
     mkdir -p $out/bin
-    ln -s ${pastesrht-api}/bin/api $out/bin/pastesrht-api
+    ln -s ${pastesrht-api}/bin/api $out/bin/paste.sr.ht-api
+    make install-share
   '';
 
   pythonImportsCheck = [ "pastesrht" ];
@@ -67,6 +77,10 @@ buildPythonPackage rec {
     homepage = "https://git.sr.ht/~sircmpwn/paste.sr.ht";
     description = "Ad-hoc text file hosting service for the sr.ht network";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ eadwu nessdoor christoph-heiss ];
+    maintainers = with maintainers; [
+      eadwu
+      nessdoor
+      christoph-heiss
+    ];
   };
 }

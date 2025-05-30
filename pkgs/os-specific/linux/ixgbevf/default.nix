@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, kernel, kmod }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  kernel,
+  kmod,
+}:
 
 stdenv.mkDerivation rec {
   name = "ixgbevf-${version}-${kernel.version}";
@@ -26,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Intel 82599 Virtual Function Driver";
     homepage = "https://sourceforge.net/projects/e1000/files/ixgbevf%20stable/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     priority = 20;
     # kernels ship ixgbevf driver for a long time already, maybe switch to a newest kernel?
     broken = versionAtLeast kernel.version "5.2";

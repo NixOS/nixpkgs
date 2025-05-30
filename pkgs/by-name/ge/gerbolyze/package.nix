@@ -1,17 +1,19 @@
-{ lib
-, stdenv
-, python3Packages
-, fetchFromGitHub
-, resvg
+{
+  lib,
+  stdenv,
+  python3Packages,
+  fetchFromGitHub,
+  gitUpdater,
+  resvg,
 }:
 
 let
-  version = "3.1.7";
+  version = "3.1.9";
   src = fetchFromGitHub {
     owner = "jaseg";
     repo = "gerbolyze";
     rev = "v${version}";
-    hash = "sha256-0iTelSlUJUafclRowwsUAoO44nc/AXaOKXnZKfKOIaE=";
+    hash = "sha256-bisLln3Y239HuJt0MkrCU+6vLLbEDxfTjEJMkcbE/wE=";
     fetchSubmodules = true;
   };
 
@@ -37,13 +39,14 @@ let
     meta = with lib; {
       description = "svg-flatten SVG downconverter";
       homepage = "https://github.com/jaseg/gerbolyze";
-      license = with licenses; [ agpl3 ];
+      license = with licenses; [ agpl3Plus ];
       maintainers = with maintainers; [ wulfsta ];
       mainProgram = "svg-flatten";
       platforms = platforms.linux;
     };
   };
-in python3Packages.buildPythonApplication rec {
+in
+python3Packages.buildPythonApplication rec {
   inherit version src;
   pname = "gerbolyze";
 
@@ -79,12 +82,20 @@ in python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "gerbolyze" ];
 
-  nativeCheckInputs = [ python3Packages.pytestCheckHook resvg svg-flatten ];
+  nativeCheckInputs = [
+    python3Packages.pytestCheckHook
+    resvg
+    svg-flatten
+  ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     description = "Directly render SVG overlays into Gerber and Excellon files";
     homepage = "https://github.com/jaseg/gerbolyze";
-    license = with licenses; [ agpl3 ];
+    license = with licenses; [ agpl3Plus ];
     maintainers = with maintainers; [ wulfsta ];
     mainProgram = "gerbolyze";
     platforms = platforms.linux;

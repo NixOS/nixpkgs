@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, writeShellScriptBin
-, fetchurl
-, ant
-, jdk
-, jre
-, makeWrapper
-, canonicalize-jars-hook
+{
+  lib,
+  stdenv,
+  writeShellScriptBin,
+  fetchurl,
+  ant,
+  jdk,
+  makeWrapper,
+  stripJavaArchivesHook,
 }:
 
 let
@@ -16,11 +16,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "abcl";
-  version = "1.9.2";
+  version = "1.9.3";
 
   src = fetchurl {
     url = "https://common-lisp.net/project/armedbear/releases/${finalAttrs.version}/abcl-src-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Ti9Lj4Xi2V2V5b282foXrWExoX4vzxK8Gf+5e0i8HTg=";
+    hash = "sha256-uwShIj06mGCS4BD/2tE69QQp1VwagYdL8wIvlDa/sv8=";
   };
 
   # note for the future:
@@ -30,13 +30,15 @@ stdenv.mkDerivation (finalAttrs: {
     jdk
     fakeHostname
     makeWrapper
-    canonicalize-jars-hook
+    stripJavaArchivesHook
   ];
 
   buildPhase = ''
     runHook preBuild
 
-    ant
+    ant \
+      -Dabcl.runtime.jar.path="$out/lib/abcl/abcl.jar" \
+      -Dadditional.jars="$out/lib/abcl/abcl-contrib.jar"
 
     runHook postBuild
   '';
@@ -47,14 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out"/{share/doc/abcl,lib/abcl}
     cp -r README COPYING CHANGES examples/  "$out/share/doc/abcl/"
     cp -r dist/*.jar contrib/ "$out/lib/abcl/"
-
-    makeWrapper ${jre}/bin/java $out/bin/abcl \
-      --add-flags "-classpath $out/lib/abcl/\*" \
-      ${lib.optionalString (lib.versionAtLeast jre.version "17")
-        # Fix for https://github.com/armedbear/abcl/issues/484
-        "--add-flags --add-opens=java.base/java.util.jar=ALL-UNNAMED \\"
-      }
-      --add-flags org.armedbear.lisp.Main
+    install -Dm555 abcl -t $out/bin
 
     runHook postInstall
   '';
@@ -62,11 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    description = "A JVM-based Common Lisp implementation";
+    description = "JVM-based Common Lisp implementation";
     homepage = "https://common-lisp.net/project/armedbear/";
     license = lib.licenses.gpl2Classpath;
     mainProgram = "abcl";
-    maintainers = lib.teams.lisp.members;
+    teams = [ lib.teams.lisp ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
 })

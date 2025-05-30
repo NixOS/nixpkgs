@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk2, SDL, nasm, zlib, libpng, libGLU, libGL }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gtk2,
+  SDL,
+  nasm,
+  zlib,
+  libpng,
+  libGLU,
+  libGL,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gens-gs";
@@ -10,7 +22,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk2 SDL nasm zlib libpng libGLU libGL ];
+  buildInputs = [
+    gtk2
+    SDL
+    nasm
+    zlib
+    libpng
+    libGLU
+    libGL
+  ];
 
   # Work around build failures on recent GTK.
   # See http://ubuntuforums.org/showthread.php?p=10535837
@@ -18,9 +38,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://segaretro.org/Gens/GS";
-    description = "A Genesis/Mega Drive emulator";
+    description = "Genesis/Mega Drive emulator";
     platforms = [ "i686-linux" ];
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.eelco ];
+    maintainers = [ ];
   };
 }

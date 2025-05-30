@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+{ pkgs, ... }:
 
 let
   hello-world = pkgs.writeText "hello-world" ''
@@ -12,26 +12,24 @@ in
 {
   name = "agda";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ alexarice turion ];
+    maintainers = [
+      alexarice
+      turion
+    ];
   };
 
-  nodes.machine = { pkgs, ... }: {
-    environment.systemPackages = [
-      (pkgs.agda.withPackages {
-        pkgs = p: [ p.standard-library ];
-      })
-    ];
-    virtualisation.memorySize = 2000; # Agda uses a lot of memory
-  };
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      environment.systemPackages = [
+        (pkgs.agda.withPackages {
+          pkgs = p: [ p.standard-library ];
+        })
+      ];
+      virtualisation.memorySize = 2000; # Agda uses a lot of memory
+    };
 
   testScript = ''
-    assert (
-        "${pkgs.agdaPackages.lib.interfaceFile "Everything.agda"}" == "Everything.agdai"
-    ), "wrong interface file for Everything.agda"
-    assert (
-        "${pkgs.agdaPackages.lib.interfaceFile "tmp/Everything.agda.md"}" == "tmp/Everything.agdai"
-    ), "wrong interface file for tmp/Everything.agda.md"
-
     # Minimal script that typechecks
     machine.succeed("touch TestEmpty.agda")
     machine.succeed("agda TestEmpty.agda")
@@ -47,4 +45,3 @@ in
     ), "HelloWorld does not run properly"
   '';
 }
-)

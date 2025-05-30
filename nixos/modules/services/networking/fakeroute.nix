@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.fakeroute;
@@ -14,27 +19,26 @@ in
 
     services.fakeroute = {
 
-      enable = lib.mkEnableOption (lib.mdDoc "the fakeroute service");
+      enable = lib.mkEnableOption "the fakeroute service";
 
       route = lib.mkOption {
         type = with lib.types; listOf str;
-        default = [];
+        default = [ ];
         example = [
           "216.102.187.130"
           "4.0.1.122"
           "198.116.142.34"
           "63.199.8.242"
         ];
-        description = lib.mdDoc ''
-         Fake route that will appear after the real
-         one to any host running a traceroute.
+        description = ''
+          Fake route that will appear after the real
+          one to any host running a traceroute.
         '';
       };
 
     };
 
   };
-
 
   ###### implementation
 

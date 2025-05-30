@@ -1,10 +1,18 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "kustomize";
-  version = "5.3.0";
+  version = "5.6.0";
 
-  ldflags = let t = "sigs.k8s.io/kustomize/api/provenance"; in
+  ldflags =
+    let
+      t = "sigs.k8s.io/kustomize/api/provenance";
+    in
     [
       "-s"
       "-X ${t}.version=${version}"
@@ -15,13 +23,13 @@ buildGoModule rec {
     owner = "kubernetes-sigs";
     repo = pname;
     rev = "kustomize/v${version}";
-    hash = "sha256-TleO28Q6JaOz1OAJKbvLhN99a841FEhHL15NTMhS1Oc=";
+    hash = "sha256-KsdOosKDT+wWWLzeph5NfCOx96D7GncM0qDSBJxAzJ8=";
   };
 
   # avoid finding test and development commands
   modRoot = "kustomize";
   proxyVendor = true;
-  vendorHash = "sha256-6+8cwRH37lkQvnHBUlSqyNrZMfDpKbeUNJS4YMflBq0=";
+  vendorHash = "sha256-ZYDrYhEWUEJFxFWj/LLrW8epLX2hJNqQ1CteShEbQ+M=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -34,6 +42,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Customization of kubernetes YAML configurations";
+    mainProgram = "kustomize";
     longDescription = ''
       kustomize lets you customize raw, template-free YAML files for
       multiple purposes, leaving the original YAML untouched and usable
@@ -41,6 +50,13 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/kubernetes-sigs/kustomize";
     license = licenses.asl20;
-    maintainers = with maintainers; [ carlosdagos vdemeester periklis zaninime Chili-Man saschagrunert ];
+    maintainers = with maintainers; [
+      carlosdagos
+      vdemeester
+      periklis
+      zaninime
+      Chili-Man
+      saschagrunert
+    ];
   };
 }

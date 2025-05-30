@@ -1,7 +1,18 @@
-{ lib, fetchFromGitHub, mkDerivation, cmake, sqlite
-, qtbase, qtsvg, qttools, wrapQtAppsHook
-, icoutils # build and runtime deps.
-, wget, fuseiso, wine, sudo, which # runtime deps.
+{
+  lib,
+  fetchFromGitHub,
+  mkDerivation,
+  cmake,
+  sqlite,
+  qtbase,
+  qtsvg,
+  qttools,
+  wrapQtAppsHook,
+  icoutils, # build and runtime deps.
+  wget,
+  fuseiso,
+  wine,
+  which, # runtime deps.
 }:
 
 mkDerivation rec {
@@ -16,20 +27,35 @@ mkDerivation rec {
   };
 
   buildInputs = [
-     sqlite icoutils qtbase qtsvg qttools
+    sqlite
+    icoutils
+    qtbase
+    qtsvg
+    qttools
   ];
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+  ];
 
   # Add runtime deps.
   postInstall = ''
     wrapProgram $out/bin/q4wine \
-      --prefix PATH : ${lib.makeBinPath [ icoutils wget fuseiso wine which ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          icoutils
+          wget
+          fuseiso
+          wine
+          which
+        ]
+      }
   '';
 
   meta = with lib; {
     homepage = "https://q4wine.brezblock.org.ua/";
-    description = "A Qt GUI for Wine to manage prefixes and applications";
+    description = "Qt GUI for Wine to manage prefixes and applications";
     license = licenses.gpl3;
     maintainers = with maintainers; [ rkitover ];
     platforms = platforms.unix;

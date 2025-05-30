@@ -1,7 +1,30 @@
-{ stdenv, lib, fetchFromGitHub, copyDesktopItems, makeDesktopItem, qmake
-, qtbase, qtxmlpatterns, qttools, qtwebengine, libGL, fontconfig, openssl, poppler, wrapQtAppsHook
-, ffmpeg, libva, alsa-lib, SDL, x264, libvpx, libvorbis, libtheora, libogg
-, libopus, lame, fdk_aac, libass, quazip, libXext, libXfixes }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libsForQt5,
+  libGL,
+  fontconfig,
+  openssl,
+  poppler,
+  ffmpeg,
+  libva,
+  alsa-lib,
+  SDL,
+  x264,
+  libvpx,
+  libvorbis,
+  libtheora,
+  libogg,
+  libopus,
+  lame,
+  fdk_aac,
+  libass,
+  libXext,
+  libXfixes,
+}:
 
 let
   importer = stdenv.mkDerivation {
@@ -15,39 +38,52 @@ let
       sha256 = "19zhgsimy0f070caikc4vrrqyc8kv2h6rl37sy3iggks8z0g98gf";
     };
 
-    nativeBuildInputs = [ qmake ];
-    buildInputs = [ qtbase ];
+    nativeBuildInputs = [
+      libsForQt5.qmake
+      libsForQt5.wrapQtAppsHook
+    ];
+    buildInputs = [ libsForQt5.qtbase ];
     dontWrapQtApps = true;
 
     installPhase = ''
       install -Dm755 OpenBoardImporter $out/bin/OpenBoardImporter
     '';
   };
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "openboard";
-  version = "1.7.0";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "OpenBoard-org";
     repo = "OpenBoard";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OSAogtZoMisyRziv63ag9w8HQaaRdz0J28jQZR7cTMM=";
+    hash = "sha256-Igp5WSVQ9FrzS2AhDDPwVBo76SaFw9xP6lqgW7S/KIE=";
   };
 
   postPatch = ''
-    substituteInPlace OpenBoard.pro \
-      --replace '/usr/include/quazip5' '${lib.getDev quazip}/include/QuaZip-Qt5-${quazip.version}/quazip' \
-      --replace '-lquazip5' '-lquazip1-qt5' \
-      --replace '/usr/include/poppler' '${lib.getDev poppler}/include/poppler'
+    substituteInPlace resources/etc/OpenBoard.config \
+      --replace-fail 'EnableAutomaticSoftwareUpdates=true' 'EnableAutomaticSoftwareUpdates=false' \
+      --replace-fail 'EnableSoftwareUpdates=true' 'EnableAutomaticSoftwareUpdates=false' \
+      --replace-fail 'HideCheckForSoftwareUpdate=false' 'HideCheckForSoftwareUpdate=true'
   '';
 
-  nativeBuildInputs = [ qmake copyDesktopItems wrapQtAppsHook ];
+  # Required by Poppler
+  cmakeFlags = [
+    "-DCMAKE_CXX_STANDARD=20"
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    libsForQt5.wrapQtAppsHook
+  ];
 
   buildInputs = [
-    qtbase
-    qtxmlpatterns
-    qttools
-    qtwebengine
+    libsForQt5.qtbase
+    libsForQt5.qtxmlpatterns
+    libsForQt5.qttools
+    libsForQt5.qtwebengine
     libGL
     fontconfig
     openssl
@@ -65,55 +101,22 @@ in stdenv.mkDerivation (finalAttrs: {
     lame
     fdk_aac
     libass
-    quazip
+    libsForQt5.quazip
     libXext
     libXfixes
   ];
 
   propagatedBuildInputs = [ importer ];
 
-  makeFlags = [ "release-install" ];
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "OpenBoard";
-      exec = "OpenBoard %f";
-      icon = "OpenBoard";
-      comment = "OpenBoard, an interactive white board application";
-      desktopName = "OpenBoard";
-      mimeTypes = [ "application/ubz" ];
-      categories = [ "Education" ];
-      startupNotify = true;
-    })
-  ];
-
-  installPhase = ''
-    runHook preInstall
-
-    lrelease OpenBoard.pro
-
-    # Replicated release_scripts/linux/package.sh
-    mkdir -p $out/opt/openboard/i18n
-    cp -R resources/customizations build/linux/release/product/* $out/opt/openboard/
-    cp resources/i18n/*.qm $out/opt/openboard/i18n/
-    install -m644 resources/linux/openboard-ubz.xml $out/opt/openboard/etc/
-    install -Dm644 resources/images/OpenBoard.png $out/share/icons/hicolor/64x64/apps/OpenBoard.png
-
-    runHook postInstall
-  '';
-
-  dontWrapQtApps = true;
-
-  postFixup = ''
-    makeWrapper $out/opt/openboard/OpenBoard $out/bin/OpenBoard \
-      "''${qtWrapperArgs[@]}"
-  '';
-
   meta = with lib; {
     description = "Interactive whiteboard application";
+    homepage = "https://openboard.ch/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fufexan ];
+    maintainers = with maintainers; [
+      atinba
+      fufexan
+    ];
     platforms = platforms.linux;
-    mainProgram = "OpenBoard";
+    mainProgram = "openboard";
   };
 })

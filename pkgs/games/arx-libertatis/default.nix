@@ -1,14 +1,36 @@
-{ lib, stdenv, fetchFromGitHub, cmake, zlib, boost
-, openal, glm, freetype, libGLU, SDL2, libepoxy
-, dejavu_fonts, inkscape, optipng, imagemagick
-, withCrashReporter ? !stdenv.isDarwin
-,   qtbase ? null
-,   wrapQtAppsHook ? null
-,   curl ? null
-,   gdb  ? null
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  zlib,
+  boost,
+  openal,
+  glm,
+  freetype,
+  libGLU,
+  SDL2,
+  libepoxy,
+  dejavu_fonts,
+  inkscape,
+  optipng,
+  imagemagick,
+  withCrashReporter ? !stdenv.hostPlatform.isDarwin,
+  qtbase ? null,
+  wrapQtAppsHook ? null,
+  curl ? null,
+  gdb ? null,
 }:
 
-with lib;
+let
+  inherit (lib)
+    licenses
+    maintainers
+    optionals
+    optionalString
+    platforms
+    ;
+in
 
 stdenv.mkDerivation rec {
   pname = "arx-libertatis";
@@ -22,14 +44,28 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake inkscape imagemagick optipng
+    cmake
+    inkscape
+    imagemagick
+    optipng
   ] ++ optionals withCrashReporter [ wrapQtAppsHook ];
 
-  buildInputs = [
-    zlib boost openal glm
-    freetype libGLU SDL2 libepoxy
-  ] ++ optionals withCrashReporter [ qtbase curl ]
-    ++ optionals stdenv.isLinux    [ gdb ];
+  buildInputs =
+    [
+      zlib
+      boost
+      openal
+      glm
+      freetype
+      libGLU
+      SDL2
+      libepoxy
+    ]
+    ++ optionals withCrashReporter [
+      qtbase
+      curl
+    ]
+    ++ optionals stdenv.hostPlatform.isLinux [ gdb ];
 
   cmakeFlags = [
     "-DDATA_DIR_PREFIXES=$out/share"
@@ -39,13 +75,15 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  postInstall = ''
-    ln -sf \
-      ${dejavu_fonts}/share/fonts/truetype/DejaVuSansMono.ttf \
-      $out/share/games/arx/misc/dejavusansmono.ttf
-  '' + optionalString withCrashReporter ''
-    wrapQtApp "$out/libexec/arxcrashreporter"
-  '';
+  postInstall =
+    ''
+      ln -sf \
+        ${dejavu_fonts}/share/fonts/truetype/DejaVuSansMono.ttf \
+        $out/share/games/arx/misc/dejavusansmono.ttf
+    ''
+    + optionalString withCrashReporter ''
+      wrapQtApp "$out/libexec/arxcrashreporter"
+    '';
 
   meta = {
     description = ''

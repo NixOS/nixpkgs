@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, dataclasses-json
-, fetchFromGitHub
-, fetchpatch
-, limiter
-, pythonOlder
-, requests
-, responses
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  dataclasses-json,
+  fetchFromGitHub,
+  fetchpatch,
+  limiter,
+  pythonOlder,
+  requests,
+  responses,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "spyse-com";
     repo = "spyse-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-c7BAJOplWNcd9v7FrEZuMHHdMpqtHljF7YpbdQYAMxA=";
   };
 
@@ -33,20 +34,19 @@ buildPythonPackage rec {
     })
   ];
 
+  pythonRemoveDeps = [ "dataclasses" ];
+
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'dataclasses~=0.6'," "" \
-      --replace "dataclasses-json~=0.5.4" "dataclasses-json>=0.5.4" \
-      --replace "responses~=0.13.3" "responses>=0.13.3" \
-      --replace "limiter~=0.1.2" "limiter>=0.1.2" \
-      --replace "requests~=2.26.0" "requests>=2.26.0"
+      --replace-fail "dataclasses-json~=0.5.4" "dataclasses-json>=0.5.4" \
+      --replace-fail "responses~=0.13.3" "responses>=0.13.3" \
+      --replace-fail "limiter~=0.1.2" "limiter>=0.1.2" \
+      --replace-fail "requests~=2.26.0" "requests>=2.26.0"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
     dataclasses-json
     responses
@@ -56,9 +56,7 @@ buildPythonPackage rec {
   # Tests requires an API token
   doCheck = false;
 
-  pythonImportsCheck = [
-    "spyse"
-  ];
+  pythonImportsCheck = [ "spyse" ];
 
   meta = with lib; {
     description = "Python module for spyse.com API";

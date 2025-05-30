@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, drawille
-, matplotlib
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  drawille,
+  matplotlib,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     matplotlib
   ];
 
-  pythonImportsCheck = [
-    "drawilleplot"
-  ];
+  pythonImportsCheck = [ "drawilleplot" ];
 
   meta = with lib; {
     description = "matplotlib backend for graph output in unicode terminals using drawille";

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,7 +13,7 @@ in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.sawfish.enable = mkEnableOption (lib.mdDoc "sawfish");
+    services.xserver.windowManager.sawfish.enable = mkEnableOption "sawfish";
   };
 
   ###### implementation

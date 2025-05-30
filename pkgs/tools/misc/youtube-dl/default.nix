@@ -1,15 +1,26 @@
-{ lib, fetchurl, fetchpatch, buildPythonPackage
-, zip, ffmpeg, rtmpdump, atomicparsley, pycryptodome, pandoc
-# Pandoc is required to build the package's man page. Release tarballs contain a
-# formatted man page already, though, it will still be installed. We keep the
-# manpage argument in place in case someone wants to use this derivation to
-# build a Git version of the tool that doesn't have the formatted man page
-# included.
-, generateManPage ? false
-, ffmpegSupport ? true
-, rtmpSupport ? true
-, hlsEncryptedSupport ? true
-, installShellFiles, makeWrapper }:
+{
+  lib,
+  fetchurl,
+  fetchpatch,
+  buildPythonPackage,
+  zip,
+  ffmpeg,
+  rtmpdump,
+  atomicparsley,
+  pycryptodome,
+  pandoc,
+  # Pandoc is required to build the package's man page. Release tarballs contain a
+  # formatted man page already, though, it will still be installed. We keep the
+  # manpage argument in place in case someone wants to use this derivation to
+  # build a Git version of the tool that doesn't have the formatted man page
+  # included.
+  generateManPage ? false,
+  ffmpegSupport ? true,
+  rtmpSupport ? true,
+  hlsEncryptedSupport ? true,
+  installShellFiles,
+  makeWrapper,
+}:
 
 buildPythonPackage rec {
 
@@ -53,7 +64,10 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
   buildInputs = [ zip ] ++ lib.optional generateManPage pandoc;
   propagatedBuildInputs = lib.optional hlsEncryptedSupport pycryptodome;
 
@@ -61,12 +75,12 @@ buildPythonPackage rec {
   # - ffmpeg: post-processing & transcoding support
   # - rtmpdump: download files over RTMP
   # - atomicparsley: embedding thumbnails
-  makeWrapperArgs = let
+  makeWrapperArgs =
+    let
       packagesToBinPath =
-        [ atomicparsley ]
-        ++ lib.optional ffmpegSupport ffmpeg
-        ++ lib.optional rtmpSupport rtmpdump;
-    in [ ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"'' ];
+        [ atomicparsley ] ++ lib.optional ffmpegSupport ffmpeg ++ lib.optional rtmpSupport rtmpdump;
+    in
+    [ ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"'' ];
 
   setupPyBuildFlags = [
     "build_lazy_extractors"
@@ -89,8 +103,14 @@ buildPythonPackage rec {
       it however you like.
     '';
     license = licenses.publicDomain;
-    maintainers = with maintainers; [ bluescreen303 fpletz ];
+    maintainers = with maintainers; [
+      bluescreen303
+      fpletz
+    ];
     platforms = with platforms; linux ++ darwin;
     mainProgram = "youtube-dl";
+    knownVulnerabilities = [
+      "youtube-dl is unmaintained, migrate to yt-dlp, if possible"
+    ];
   };
 }

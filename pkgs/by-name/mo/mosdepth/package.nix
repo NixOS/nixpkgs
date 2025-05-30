@@ -1,8 +1,13 @@
-{ lib, buildNimPackage, fetchFromGitHub, pcre, testers }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitHub,
+  versionCheckHook,
+}:
 
 buildNimPackage (finalAttrs: {
   pname = "mosdepth";
-  version = "0.3.6";
+  version = "0.3.11";
 
   requiredNimVersion = 1;
 
@@ -10,24 +15,26 @@ buildNimPackage (finalAttrs: {
     owner = "brentp";
     repo = "mosdepth";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-7N42S3xfQRkrBmoLf0DsbLMpVULAFpHm5JugDMDzAgU=";
+    hash = "sha256-EzzDuzPAyNkL2tFWre86U+kx3SvLPbWto2/vfLdwHGI=";
   };
 
   lockFile = ./lock.json;
 
-  buildInputs = [ pcre ];
+  nativeBuildInputs = [ versionCheckHook ];
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
-  };
+  nimFlags = [ ''--passC:"-Wno-incompatible-pointer-types"'' ];
+
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "fast BAM/CRAM depth calculation for WGS, exome, or targeted sequencing";
+    mainProgram = "mosdepth";
     license = licenses.mit;
     homepage = "https://github.com/brentp/mosdepth";
-    maintainers = with maintainers; [ jbedo ];
+    maintainers = with maintainers; [
+      jbedo
+      ehmry
+    ];
     platforms = platforms.linux;
   };
 })

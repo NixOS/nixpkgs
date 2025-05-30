@@ -1,10 +1,10 @@
-{ lib
-, buildDunePackage
-, dyn
-, fetchurl
-, ocaml
-, ppx_expect
-, stdune
+{
+  lib,
+  buildDunePackage,
+  dyn,
+  fetchurl,
+  ppx_expect,
+  stdune,
 }:
 
 buildDunePackage rec {
@@ -16,7 +16,10 @@ buildDunePackage rec {
     hash = "sha256-hkihWuk/5pQpmc42iHQpo5E7YoKcRxTlIMwOehw7loI=";
   };
 
-  buildInputs = [ stdune dyn ];
+  buildInputs = [
+    stdune
+    dyn
+  ];
 
   checkInputs = [ ppx_expect ];
 
@@ -27,7 +30,7 @@ buildDunePackage rec {
   meta = with lib; {
     description = "Structured concurrency library";
     homepage = "https://github.com/ocaml-dune/fiber";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

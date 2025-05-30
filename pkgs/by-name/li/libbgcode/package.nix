@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, heatshrink
-, zlib
-, boost
-, catch2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  heatshrink,
+  zlib,
+  boost,
+  catch2,
 }:
 stdenv.mkDerivation {
   pname = "libbgcode";
@@ -34,6 +35,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://github.com/prusa3d/libbgcode";
     description = "Prusa Block & Binary G-code reader / writer / converter";
+    mainProgram = "bgcode";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ lach ];
     platforms = platforms.unix;

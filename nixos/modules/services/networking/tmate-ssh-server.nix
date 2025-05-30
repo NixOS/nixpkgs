@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 let
   cfg = config.services.tmate-ssh-server;
@@ -7,50 +12,43 @@ let
   edKey = "${defaultKeysDir}/ssh_host_ed25519_key";
   rsaKey = "${defaultKeysDir}/ssh_host_rsa_key";
 
-  keysDir =
-    if cfg.keysDir == null
-    then defaultKeysDir
-    else cfg.keysDir;
+  keysDir = if cfg.keysDir == null then defaultKeysDir else cfg.keysDir;
 
   domain = config.networking.domain;
 in
 {
   options.services.tmate-ssh-server = {
-    enable = mkEnableOption (mdDoc "tmate ssh server");
+    enable = mkEnableOption "tmate ssh server";
 
     package = mkPackageOption pkgs "tmate-ssh-server" { };
 
     host = mkOption {
       type = types.str;
-      description = mdDoc "External host name";
+      description = "External host name";
       defaultText = lib.literalExpression "config.networking.domain or config.networking.hostName";
-      default =
-        if domain == null then
-          config.networking.hostName
-        else
-          domain;
+      default = if domain == null then config.networking.hostName else domain;
     };
 
     port = mkOption {
       type = types.port;
-      description = mdDoc "Listen port for the ssh server";
+      description = "Listen port for the ssh server";
       default = 2222;
     };
 
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = mdDoc "Whether to automatically open the specified ports in the firewall.";
+      description = "Whether to automatically open the specified ports in the firewall.";
     };
 
     advertisedPort = mkOption {
       type = types.port;
-      description = mdDoc "External port advertised to clients";
+      description = "External port advertised to clients";
     };
 
     keysDir = mkOption {
       type = with types; nullOr str;
-      description = mdDoc "Directory containing ssh keys, defaulting to auto-generation";
+      description = "Directory containing ssh keys, defaulting to auto-generation";
       default = null;
     };
   };
@@ -65,18 +63,20 @@ in
 
     environment.systemPackages =
       let
-        tmate-config = pkgs.writeText "tmate.conf"
-          ''
-            set -g tmate-server-host "${cfg.host}"
-            set -g tmate-server-port ${toString cfg.port}
-            set -g tmate-server-ed25519-fingerprint "@ed25519_fingerprint@"
-            set -g tmate-server-rsa-fingerprint "@rsa_fingerprint@"
-          '';
+        tmate-config = pkgs.writeText "tmate.conf" ''
+          set -g tmate-server-host "${cfg.host}"
+          set -g tmate-server-port ${toString cfg.port}
+          set -g tmate-server-ed25519-fingerprint "@ed25519_fingerprint@"
+          set -g tmate-server-rsa-fingerprint "@rsa_fingerprint@"
+        '';
       in
       [
         (pkgs.writeShellApplication {
           name = "tmate-client-config";
-          runtimeInputs = with pkgs;[ openssh coreutils ];
+          runtimeInputs = with pkgs; [
+            openssh
+            coreutils
+          ];
           text = ''
             RSA_SIG="$(ssh-keygen -l -E SHA256 -f "${keysDir}/ssh_host_rsa_key.pub" | cut -d ' ' -f 2)"
             ED25519_SIG="$(ssh-keygen -l -E SHA256 -f "${keysDir}/ssh_host_ed25519_key.pub" | cut -d ' ' -f 2)"

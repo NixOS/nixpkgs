@@ -1,22 +1,23 @@
-{ lib
-, mkDerivation
+{
+  lib,
+  mkDerivation,
 
-, cmake
-, extra-cmake-modules
+  cmake,
+  extra-cmake-modules,
 
-, kconfig
-, kcontacts
-, kcoreaddons
-, ki18n
-, kirigami-addons
-, kirigami2
-, kitemmodels
-, kpublictransport
-, qqc2-desktop-style
-, qtquickcontrols2
+  kconfig,
+  kcontacts,
+  kcoreaddons,
+  ki18n,
+  kirigami-addons,
+  kirigami2,
+  kitemmodels,
+  kpublictransport,
+  qqc2-desktop-style,
+  qtquickcontrols2,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "ktrip";
 
   nativeBuildInputs = [
@@ -39,9 +40,10 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Public transport trip planner";
+    mainProgram = "ktrip";
     homepage = "https://apps.kde.org/ktrip/";
     # GPL-2.0-or-later
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ samueldr ];
+    maintainers = [ ];
   };
 }

@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, sphinx }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  sphinx,
+}:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-log-cabinet";
@@ -8,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "davidism";
     repo = "sphinxcontrib-log-cabinet";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "03cxspgqsap9q74sqkdx6r6b4gs4hq6dpvx4j58hm50yfhs06wn1";
   };
 

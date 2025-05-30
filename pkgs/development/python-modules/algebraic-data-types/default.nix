@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, hypothesis
-, mypy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  hypothesis,
+  mypy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     "tests/test_mypy_plugin.py"
   ];
 
-  pythonImportsCheck = [
-    "adt"
-  ];
+  pythonImportsCheck = [ "adt" ];
 
   meta = with lib; {
     description = "Algebraic data types for Python";

@@ -1,10 +1,11 @@
-{ lib
-, gawk
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  gawk,
+  stdenv,
+  fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lukesmithxyz-bible-kjv";
   version = "unstable-2022-06-01";
 
@@ -21,6 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Read the Word of God from your terminal + Apocrypha";
+    mainProgram = "kjv";
     homepage = "https://lukesmith.xyz/articles/command-line-bibles";
     license = licenses.unlicense;
     platforms = platforms.unix;

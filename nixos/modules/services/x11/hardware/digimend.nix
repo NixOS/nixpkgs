@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -16,12 +21,11 @@ in
 
     services.xserver.digimend = {
 
-      enable = mkEnableOption (lib.mdDoc "the digimend drivers for Huion/XP-Pen/etc. tablets");
+      enable = mkEnableOption "the digimend drivers for Huion/XP-Pen/etc. tablets";
 
     };
 
   };
-
 
   config = mkIf cfg.enable {
 

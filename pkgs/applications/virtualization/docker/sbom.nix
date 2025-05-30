@@ -1,7 +1,8 @@
-{ buildGoModule
-, fetchFromGitHub
-, docker
-, lib
+{
+  buildGoModule,
+  fetchFromGitHub,
+  docker,
+  lib,
 }:
 
 buildGoModule rec {
@@ -36,6 +37,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Plugin for Docker CLI to support SBOM creation using Syft";
+    mainProgram = "docker-sbom";
     homepage = "https://github.com/docker/sbom-cli-plugin";
     license = licenses.asl20;
     maintainers = with maintainers; [ raboof ];

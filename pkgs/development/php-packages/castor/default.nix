@@ -1,54 +1,45 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, installShellFiles
-, php
-, nix-update-script
-, testers
+{
+  lib,
+  fetchFromGitHub,
+  installShellFiles,
+  php,
+  nix-update-script,
+  versionCheckHook,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "castor";
-  version = "0.14.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "jolicode";
     repo = "castor";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-sSIkXNW6RR1mx15dKouQLMaHBr5FEkTTc/0QIkWV8sg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-m+ef1I7x05IdCeLqN24MB5ldcOWDoNNoYWyLKiMgxAY=";
   };
 
-  patches = [
-    # Upstream lock is invalid. https://github.com/jolicode/castor/issues/319
-    (fetchpatch {
-      name = "fix-invalid-lock.patch";
-      url = "https://github.com/jolicode/castor/commit/5ff0c3ecbdddad20146adbc2f055b83f5aadba0f.patch";
-      hash = "sha256-1a3Dpk/UXp92Ugw9zSoLPsbWOJEuP2FBWc/pQ/EKwaM=";
-    })
-  ];
-
-  vendorHash = "sha256-HfEjwlkozeuT4LDnYwiCu7T0spcf4GLhkd7Kc1VRnro=";
+  vendorHash = "sha256-gwXEQX0Go7OCm32WRJUt4QXhT4VTHGbVo3su1FcT8RE=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   # install shell completions
   postInstall = ''
     installShellCompletion --cmd castor \
-      --bash <($out/bin/castor completion bash) \
-      --fish <($out/bin/castor completion fish) \
-      --zsh <($out/bin/castor completion zsh)
+      --bash <(php $out/bin/castor completion bash) \
+      --fish <(php $out/bin/castor completion fish) \
+      --zsh <(php $out/bin/castor completion zsh)
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      command = "castor --version";
-      package = php.packages.castor;
-      version = "v${finalAttrs.version}";
-    };
   };
 
   meta = {
+    broken = lib.versionOlder php.version "8.2";
     changelog = "https://github.com/jolicode/castor/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "DX oriented task runner and command launcher built with PHP";
     homepage = "https://github.com/jolicode/castor";

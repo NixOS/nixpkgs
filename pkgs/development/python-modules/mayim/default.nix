@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
 
-, psycopg
-, aiosqlite
-, asyncmy
+  psycopg,
+  aiosqlite,
+  asyncmy,
 
-# test
-, pytest-asyncio
+  # test
+  pytest-asyncio,
+  pytest-cov-stub,
 
-, pytestCheckHook
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,40 +24,34 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ahopkins";
     repo = "mayim";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nb0E9kMEJUihaCp8RnqGh0nSyDQo50eL1C4K5lBPlPQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     wheel
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov=src --cov-append --cov-report term-missing" ""
-  '';
-
-  passthru.optional-dependencies = {
-    postgres = [
-      psycopg
-    ] ++ psycopg.optional-dependencies.pool;
-    mysql = [
-      asyncmy
-    ];
-    sqlite = [
-      aiosqlite
-    ];
+  optional-dependencies = {
+    postgres = [ psycopg ] ++ psycopg.optional-dependencies.pool;
+    mysql = [ asyncmy ];
+    sqlite = [ aiosqlite ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-asyncio
-  ] ++ (with passthru.optional-dependencies; [postgres mysql sqlite]);
+  nativeCheckInputs =
+    [
+      pytestCheckHook
+      pytest-asyncio
+      pytest-cov-stub
+    ]
+    ++ (with optional-dependencies; [
+      postgres
+      mysql
+      sqlite
+    ]);
 
-  pythonImportsCheck = [
-    "mayim"
-  ];
+  pythonImportsCheck = [ "mayim" ];
 
   meta = with lib; {
     description = "Asynchronous SQL hydrator";

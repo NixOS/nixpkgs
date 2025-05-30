@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -15,21 +16,22 @@ buildPythonPackage rec {
   # PyPI distribution does not include tests
   src = fetchFromGitHub {
     owner = "csingley";
-    repo = pname;
+    repo = "ofxtools";
     rev = version;
     hash = "sha256-NsImnD+erhpakQnl1neuHfSKiV6ipNBMPGKMDM0gwWc=";
   };
 
-  nativeCheckInputs = [ nose ];
+  nativeCheckInputs = [ pytestCheckHook ];
   # override $HOME directory:
   #   error: [Errno 13] Permission denied: '/homeless-shelter'
-  checkPhase = ''
-    HOME=$TMPDIR nosetests tests/*.py
+  preCheck = ''
+    export HOME=$(mktemp -d)
   '';
 
   meta = with lib; {
     homepage = "https://github.com/csingley/ofxtools";
     description = "Library for working with Open Financial Exchange (OFX) formatted data used by financial institutions";
+    mainProgram = "ofxget";
     license = licenses.mit;
   };
 }

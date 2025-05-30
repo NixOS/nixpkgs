@@ -1,10 +1,17 @@
-{ lib, mkDerivation, fetchurl, cmake, extra-cmake-modules, pkg-config, wrapGAppsHook
-, kconfig, kinit, kdoctools, kio, kparts, kwidgetsaddons
-, qtbase, qtsvg
-, boost, graphviz
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  extra-cmake-modules,
+  pkg-config,
+  wrapGAppsHook3,
+  libsForQt5,
+  boost,
+  graphviz,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "kgraphviewer";
   version = "2.4.3";
 
@@ -14,23 +21,34 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    qtbase qtsvg
-    boost graphviz
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
+    boost
+    graphviz
   ];
 
   nativeBuildInputs = [
-    cmake extra-cmake-modules pkg-config wrapGAppsHook
-    kdoctools
+    cmake
+    extra-cmake-modules
+    pkg-config
+    wrapGAppsHook3
+    libsForQt5.kdoctools
+    libsForQt5.wrapQtAppsHook
   ];
 
-  propagatedBuildInputs = [
-    kconfig kinit kio kparts kwidgetsaddons
+  propagatedBuildInputs = with libsForQt5; [
+    kconfig
+    kinit
+    kio
+    kparts
+    kwidgetsaddons
   ];
 
   meta = with lib; {
-    description = "A Graphviz dot graph viewer for KDE";
-    license     = licenses.gpl2;
-    maintainers = with maintainers; [ ];
-    platforms   = platforms.linux;
+    description = "Graphviz dot graph viewer for KDE";
+    mainProgram = "kgraphviewer";
+    license = licenses.gpl2;
+    maintainers = [ ];
+    platforms = platforms.linux;
   };
 }

@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  ocaml,
+}:
 
 buildDunePackage rec {
   pname = "bigstring";

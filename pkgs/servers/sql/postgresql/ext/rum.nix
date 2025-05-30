@@ -1,31 +1,38 @@
-{ lib, stdenv, fetchFromGitHub, postgresql }:
+{
+  fetchFromGitHub,
+  lib,
+  postgresql,
+  postgresqlBuildExtension,
+  postgresqlTestExtension,
+}:
 
-stdenv.mkDerivation rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "rum";
-  version = "1.3.13";
+  version = "1.3.14";
 
   src = fetchFromGitHub {
     owner = "postgrespro";
     repo = "rum";
-    rev = version;
-    hash = "sha256-yy2xeDnk3fENN+En0st4mv60nZlqPafIzwf68jwJ5fE=";
+    tag = finalAttrs.version;
+    hash = "sha256-VsfpxQqRBu9bIAP+TfMRXd+B3hSjuhU2NsutocNiCt8=";
   };
-
-  buildInputs = [ postgresql ];
 
   makeFlags = [ "USE_PGXS=1" ];
 
-  installPhase = ''
-    install -D -t $out/lib *${postgresql.dlSuffix}
-    install -D -t $out/share/postgresql/extension *.control
-    install -D -t $out/share/postgresql/extension *.sql
-  '';
+  passthru.tests.extension = postgresqlTestExtension {
+    inherit (finalAttrs) finalPackage;
+    sql = ''
+      CREATE EXTENSION rum;
+      CREATE TABLE test_table (t text, v tsvector);
+      CREATE INDEX test_table_rumindex ON test_table USING rum (v rum_tsvector_ops);
+    '';
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Full text search index method for PostgreSQL";
     homepage = "https://github.com/postgrespro/rum";
-    license = licenses.postgresql;
+    license = lib.licenses.postgresql;
     platforms = postgresql.meta.platforms;
-    maintainers = with maintainers; [ DeeUnderscore ];
+    maintainers = with lib.maintainers; [ DeeUnderscore ];
   };
-}
+})

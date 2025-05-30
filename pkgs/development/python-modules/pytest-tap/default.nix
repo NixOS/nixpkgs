@@ -1,46 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytest
-, tappy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  hatchling,
+  pythonOlder,
+  pytest,
+  tappy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-tap";
-  version = "3.3";
-  format = "setuptools";
+  version = "3.5";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "python-tap";
     repo = "pytest-tap";
     rev = "v${version}";
-    sha256 = "R0RSdKTyJYGq+x0+ut4pJEywTGNgGp/ps36ZaH5dyY4=";
+    hash = "sha256-IuVtH1hrynbFDmz7IZ6vef9bAwl8L1eqR9WYQVL6CCA=";
   };
 
-  buildInputs = [
-    pytest
+  patches = [
+    (fetchpatch {
+      # see https://github.com/python-tap/pytest-tap/pull/105
+      name = "missing-package-in-wheel.patch";
+      url = "https://github.com/python-tap/pytest-tap/commit/056a44a632b1af19d9ba4b5044768bde3dd6a764.patch";
+      hash = "sha256-P52NqgXtnO2SthDwVbT+NVPeBNhjGS/8Vsbe/WLCc3A=";
+    })
   ];
 
-  propagatedBuildInputs = [
-    tappy
-  ];
+  build-system = [ hatchling ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  buildInputs = [ pytest ];
 
-  disabledTests = [
-    # Fixed in 4ed0138bf659c348b6dfb8bb701ae1989625d3d8 and hopefully in next release
-    "test_unittest_expected_failure"
-  ];
+  propagatedBuildInputs = [ tappy ];
 
-  pythonImportsCheck = [
-    "pytest_tap"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "pytest_tap" ];
 
   meta = with lib; {
     description = "Test Anything Protocol (TAP) reporting plugin for pytest";

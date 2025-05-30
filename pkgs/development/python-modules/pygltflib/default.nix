@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, dataclasses-json
-, deprecated
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  dataclasses-json,
+  deprecated,
+  pytestCheckHook,
 }:
 
 let
@@ -28,22 +29,18 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "dodgyville";
     repo = "pygltflib";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rUAg05M5biVsdG2yEH0Olng/0jH1R/Jo5/+j4ToKkTI=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     dataclasses-json
     deprecated
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
   preCheck = ''
     ln -s ${gltf-sample-models} glTF-Sample-Models
   '';

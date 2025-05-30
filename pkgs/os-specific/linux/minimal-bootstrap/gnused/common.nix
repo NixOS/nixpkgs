@@ -5,7 +5,7 @@
     description = "GNU sed, a batch stream editor";
     homepage = "https://www.gnu.org/software/sed";
     license = licenses.gpl3Plus;
-    maintainers = teams.minimal-bootstrap.members;
+    teams = [ teams.minimal-bootstrap ];
     mainProgram = "sed";
     platforms = platforms.unix;
   };

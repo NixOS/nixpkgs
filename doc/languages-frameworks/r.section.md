@@ -7,18 +7,22 @@ use by adding the following snippet to your $HOME/.config/nixpkgs/config.nix fil
 
 ```nix
 {
-    packageOverrides = super: let self = super.pkgs; in
+  packageOverrides =
+    super:
+    let
+      self = super.pkgs;
+    in
     {
 
-        rEnv = super.rWrapper.override {
-            packages = with self.rPackages; [
-                devtools
-                ggplot2
-                reshape2
-                yaml
-                optparse
-                ];
-        };
+      rEnv = super.rWrapper.override {
+        packages = with self.rPackages; [
+          devtools
+          ggplot2
+          reshape2
+          yaml
+          optparse
+        ];
+      };
     };
 }
 ```
@@ -33,7 +37,7 @@ environment available for other contributors, you can create a `default.nix`
 file like so:
 
 ```nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 {
   myProject = stdenv.mkDerivation {
     name = "myProject";
@@ -60,16 +64,20 @@ environment, see `rstudioWrapper`, which functions similarly to
 
 ```nix
 {
-    packageOverrides = super: let self = super.pkgs; in
+  packageOverrides =
+    super:
+    let
+      self = super.pkgs;
+    in
     {
 
-        rstudioEnv = super.rstudioWrapper.override {
-            packages = with self.rPackages; [
-                dplyr
-                ggplot2
-                reshape2
-                ];
-        };
+      rstudioEnv = super.rstudioWrapper.override {
+        packages = with self.rPackages; [
+          dplyr
+          ggplot2
+          reshape2
+        ];
+      };
     };
 }
 ```
@@ -81,13 +89,17 @@ Alternatively, you can create a self-contained `shell.nix` without the need to
 modify any configuration files:
 
 ```nix
-{ pkgs ? import <nixpkgs> {}
+{
+  pkgs ? import <nixpkgs> { },
 }:
 
 pkgs.rstudioWrapper.override {
-  packages = with pkgs.rPackages; [ dplyr ggplot2 reshape2 ];
+  packages = with pkgs.rPackages; [
+    dplyr
+    ggplot2
+    reshape2
+  ];
 }
-
 ```
 
 Executing `nix-shell` will then drop you into an environment equivalent to the
@@ -104,24 +116,27 @@ directory and executed as follows:
 ```bash
 nix-shell generate-shell.nix
 
-Rscript generate-r-packages.R cran  > cran-packages.nix.new
-mv cran-packages.nix.new cran-packages.nix
+Rscript generate-r-packages.R cran  > cran-packages.json.new
+mv cran-packages.json.new cran-packages.json
 
-Rscript generate-r-packages.R bioc  > bioc-packages.nix.new
-mv bioc-packages.nix.new bioc-packages.nix
+Rscript generate-r-packages.R bioc  > bioc-packages.json.new
+mv bioc-packages.json.new bioc-packages.json
 
-Rscript generate-r-packages.R bioc-annotation > bioc-annotation-packages.nix.new
-mv bioc-annotation-packages.nix.new bioc-annotation-packages.nix
+Rscript generate-r-packages.R bioc-annotation > bioc-annotation-packages.json.new
+mv bioc-annotation-packages.json.new bioc-annotation-packages.json
 
-Rscript generate-r-packages.R bioc-experiment > bioc-experiment-packages.nix.new
-mv bioc-experiment-packages.nix.new bioc-experiment-packages.nix
+Rscript generate-r-packages.R bioc-experiment > bioc-experiment-packages.json.new
+mv bioc-experiment-packages.json.new bioc-experiment-packages.json
 ```
 
-`generate-r-packages.R <repo>` reads  `<repo>-packages.nix`, therefore
+`generate-r-packages.R <repo>` reads  `<repo>-packages.json`, therefore
 the renaming.
+
+The contents of a generated `*-packages.json` file will be used to
+create a package derivation for each R package listed in the file.
 
 Some packages require overrides to specify external dependencies or other
 patches and special requirements. These overrides are specified in the
-`pkgs/development/r-modules/default.nix` file. As the `*-packages.nix`
+`pkgs/development/r-modules/default.nix` file. As the `*-packages.json`
 contents are automatically generated it should not be edited and broken
 builds should be addressed using overrides.

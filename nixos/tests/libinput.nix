@@ -1,9 +1,10 @@
-import ./make-test-python.nix ({ ... }:
+{ ... }:
 
 {
   name = "libinput";
 
-  nodes.machine = { ... }:
+  nodes.machine =
+    { ... }:
     {
       imports = [
         ./common/x11.nix
@@ -12,7 +13,7 @@ import ./make-test-python.nix ({ ... }:
 
       test-support.displayManager.auto.user = "alice";
 
-      services.xserver.libinput = {
+      services.libinput = {
         enable = true;
         mouse = {
           naturalScrolling = true;
@@ -35,4 +36,4 @@ import ./make-test-python.nix ({ ... }:
     expect_xserver_option("MiddleEmulation", "off")
     expect_xserver_option("HorizontalScrolling", "off")
   '';
-})
+}

@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, pytest }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+}:
 
 buildPythonPackage rec {
   pname = "ansicolors";
@@ -21,6 +26,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/verigak/colors/";
     description = "ANSI colors for Python";
     license = licenses.isc;
-    maintainers = with maintainers; [ copumpkin ];
+    maintainers = [ ];
   };
 }

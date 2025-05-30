@@ -15,18 +15,19 @@ in
       automatic = lib.mkOption {
         default = false;
         type = lib.types.bool;
-        description = lib.mdDoc "Automatically run the garbage collector at a specific time.";
+        description = "Automatically run the garbage collector at a specific time.";
       };
 
       dates = lib.mkOption {
-        type = lib.types.singleLineStr;
-        default = "03:15";
+        type = with lib.types; either singleLineStr (listOf str);
+        apply = lib.toList;
+        default = [ "03:15" ];
         example = "weekly";
-        description = lib.mdDoc ''
+        description = ''
           How often or when garbage collection is performed. For most desktop and server systems
           a sufficient garbage collection is once a week.
 
-          The format is described in
+          This value must be a calendar event in the format specified by
           {manpage}`systemd.time(7)`.
         '';
       };
@@ -35,7 +36,7 @@ in
         default = "0";
         type = lib.types.singleLineStr;
         example = "45min";
-        description = lib.mdDoc ''
+        description = ''
           Add a randomized delay before each garbage collection.
           The delay will be chosen between zero and this value.
           This value must be a time span in the format specified by
@@ -47,7 +48,7 @@ in
         default = true;
         type = lib.types.bool;
         example = false;
-        description = lib.mdDoc ''
+        description = ''
           Takes a boolean argument. If true, the time when the service
           unit was last triggered is stored on disk. When the timer is
           activated, the service unit is triggered immediately if it
@@ -63,7 +64,7 @@ in
         default = "";
         example = "--max-freed $((64 * 1024**3))";
         type = lib.types.singleLineStr;
-        description = lib.mdDoc ''
+        description = ''
           Options given to [`nix-collect-garbage`](https://nixos.org/manual/nix/stable/command-ref/nix-collect-garbage) when the garbage collector is run automatically.
         '';
       };
@@ -71,7 +72,6 @@ in
     };
 
   };
-
 
   ###### implementation
 
@@ -87,7 +87,7 @@ in
       description = "Nix Garbage Collector";
       script = "exec ${config.nix.package.out}/bin/nix-collect-garbage ${cfg.options}";
       serviceConfig.Type = "oneshot";
-      startAt = lib.optional cfg.automatic cfg.dates;
+      startAt = lib.optionals cfg.automatic cfg.dates;
     };
 
     systemd.timers.nix-gc = lib.mkIf cfg.automatic {

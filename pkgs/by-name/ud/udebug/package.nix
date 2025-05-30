@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, cmake
-, fetchgit
-, pkg-config
-, ubus
-, libubox
-, ucode
-, json_c
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchgit,
+  pkg-config,
+  ubus,
+  libubox,
+  ucode,
+  json_c,
 }:
 
 stdenv.mkDerivation {
@@ -33,6 +34,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "OpenWrt debugging helper library/service";
+    mainProgram = "udebugd";
     homepage = "https://git.openwrt.org/?p=project/udebug.git;a=summary";
     license = licenses.free;
     platforms = platforms.linux;

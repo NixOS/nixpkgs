@@ -1,27 +1,71 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, ispc, tbb, glfw,
-openimageio, libjpeg, libpng, libpthreadstubs, libX11
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  ispc,
+  tbb_2020_3,
+  glfw,
+  openimageio_2,
+  libjpeg,
+  libpng,
+  libpthreadstubs,
+  libX11,
+  python3Packages,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "embree";
-  version = "2.17.4";
+  version = "2.17.7";
 
   src = fetchFromGitHub {
     owner = "embree";
     repo = "embree";
-    rev = "v2.17.4";
-    sha256 = "0q3r724r58j4b6cbyy657fsb78z7a2c7d5mwdp7552skynsn2mn9";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FD/ITZBJnYy1F+x4jLTVTsGsNKy/mS7OYWP06NoHZqc=";
   };
 
   cmakeFlags = [ "-DEMBREE_TUTORIALS=OFF" ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ ispc tbb glfw openimageio libjpeg libpng libX11 libpthreadstubs ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    ispc
+    # tbb_2021_0 is not backward compatible
+    tbb_2020_3
+    glfw
+    openimageio_2
+    libjpeg
+    libpng
+    libX11
+    libpthreadstubs
+  ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "v(2.*)"
+      ];
+    };
+    tbb = tbb_2020_3;
+    tests = {
+      inherit (python3Packages) embreex;
+    };
+  };
+
   meta = with lib; {
     description = "High performance ray tracing kernels from Intel";
     homepage = "https://embree.github.io/";
-    maintainers = with maintainers; [ hodapp ];
+    maintainers = with maintainers; [
+      hodapp
+      pbsds
+    ];
     license = licenses.asl20;
     platforms = [ "x86_64-linux" ];
   };
-}
+})

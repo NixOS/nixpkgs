@@ -1,24 +1,26 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, fetchurl
-, librosa
-, matplotlib
-, mido
-, torch
-, torchlibrosa
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  fetchurl,
+  librosa,
+  matplotlib,
+  mido,
+  setuptools,
+  torch,
+  torchlibrosa,
 }:
 
 buildPythonPackage rec {
   pname = "piano-transcription-inference";
-  version = "0.0.5";
-  format = "setuptools";
+  version = "0.0.6";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-nbhuSkXuWrekFxwdNHaspuag+3K1cKwq90IpATBpWPY=";
+    pname = "piano_transcription_inference";
+    inherit version;
+    hash = "sha256-tt0A+bS8rLYUByXwO0E5peD0rNNaaeSSpdH3NOz70jE=";
   };
 
   checkpoint = fetchurl {
@@ -29,7 +31,9 @@ buildPythonPackage rec {
     hash = "sha256-w/qXMHJb9Kdi8cFLyAzVmG6s2gGwJvWkolJc1geHYUE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     librosa
     matplotlib
     mido
@@ -71,7 +75,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "piano_transcription_inference" ];
 
   meta = with lib; {
-    description = "A piano transcription inference package";
+    description = "Piano transcription inference package";
     homepage = "https://github.com/qiuqiangkong/piano_transcription_inference";
     license = licenses.mit;
     maintainers = with maintainers; [ azuwis ];

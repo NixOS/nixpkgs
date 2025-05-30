@@ -1,38 +1,46 @@
-import ../make-test-python.nix ({pkgs, ...}:
+{ pkgs, ... }:
 let
   testdir = pkgs.writeTextDir "www/info.php" "<?php phpinfo();";
 
-in {
+in
+{
   name = "unit-php-test";
   meta.maintainers = with pkgs.lib.maintainers; [ izorkin ];
 
-  nodes.machine = { config, lib, pkgs, ... }: {
-    services.unit = {
-      enable = true;
-      config = pkgs.lib.strings.toJSON {
-        listeners."*:9081".application = "php_81";
-        applications.php_81 = {
-          type = "php 8.1";
-          processes = 1;
-          user = "testuser";
+  nodes.machine =
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
+    {
+      services.unit = {
+        enable = true;
+        config = pkgs.lib.strings.toJSON {
+          listeners."*:9081".application = "php_81";
+          applications.php_81 = {
+            type = "php 8.1";
+            processes = 1;
+            user = "testuser";
+            group = "testgroup";
+            root = "${testdir}/www";
+            index = "info.php";
+            options.file = "${pkgs.unit.usedPhp81}/lib/php.ini";
+          };
+        };
+      };
+      users = {
+        users.testuser = {
+          isSystemUser = true;
+          uid = 1080;
           group = "testgroup";
-          root = "${testdir}/www";
-          index = "info.php";
-          options.file = "${pkgs.unit.usedPhp81}/lib/php.ini";
+        };
+        groups.testgroup = {
+          gid = 1080;
         };
       };
     };
-    users = {
-      users.testuser = {
-        isSystemUser = true;
-        uid = 1080;
-        group = "testgroup";
-      };
-      groups.testgroup = {
-        gid = 1080;
-      };
-    };
-  };
   testScript = ''
     machine.start()
 
@@ -49,4 +57,4 @@ in {
 
     machine.shutdown()
   '';
-})
+}

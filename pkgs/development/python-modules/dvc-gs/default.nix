@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, dvc-objects
-, fetchPypi
-, gcsfs
-, pythonRelaxDepsHook
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  dvc-objects,
+  fetchPypi,
+  gcsfs,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -18,16 +18,11 @@ buildPythonPackage rec {
   };
 
   # Prevent circular dependency
-  pythonRemoveDeps = [
-    "dvc"
-  ];
+  pythonRemoveDeps = [ "dvc" ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-    pythonRelaxDepsHook
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     gcsfs
     dvc-objects
   ];

@@ -1,4 +1,10 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 
 with lib;
 
@@ -7,28 +13,28 @@ let
   cfg = config.services.xserver.desktopManager.cinnamon;
   serviceCfg = config.services.cinnamon;
 
-  nixos-gsettings-overrides = pkgs.cinnamon.cinnamon-gsettings-overrides.override {
+  nixos-gsettings-overrides = pkgs.cinnamon-gsettings-overrides.override {
     extraGSettingsOverridePackages = cfg.extraGSettingsOverridePackages;
     extraGSettingsOverrides = cfg.extraGSettingsOverrides;
   };
 
-  notExcluded = pkg: (!(lib.elem pkg config.environment.cinnamon.excludePackages));
+  notExcluded = pkg: utils.disablePackageByName pkg config.environment.cinnamon.excludePackages;
 in
 
 {
   options = {
     services.cinnamon = {
-      apps.enable = mkEnableOption (lib.mdDoc "Cinnamon default applications");
+      apps.enable = mkEnableOption "Cinnamon default applications";
     };
 
     services.xserver.desktopManager.cinnamon = {
-      enable = mkEnableOption (lib.mdDoc "the cinnamon desktop manager");
+      enable = mkEnableOption "the cinnamon desktop manager";
 
       sessionPath = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.package;
-        example = literalExpression "[ pkgs.gnome.gpaste ]";
-        description = lib.mdDoc ''
+        example = literalExpression "[ pkgs.gpaste ]";
+        description = ''
           Additional list of packages to be added to the session search path.
           Useful for GSettings-conditional autostart.
 
@@ -39,44 +45,44 @@ in
       extraGSettingsOverrides = mkOption {
         default = "";
         type = types.lines;
-        description = lib.mdDoc "Additional gsettings overrides.";
+        description = "Additional gsettings overrides.";
       };
 
       extraGSettingsOverridePackages = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.path;
-        description = lib.mdDoc "List of packages for which gsettings are overridden.";
+        description = "List of packages for which gsettings are overridden.";
       };
     };
 
     environment.cinnamon.excludePackages = mkOption {
-      default = [];
-      example = literalExpression "[ pkgs.cinnamon.blueberry ]";
+      default = [ ];
+      example = literalExpression "[ pkgs.blueman ]";
       type = types.listOf types.package;
-      description = lib.mdDoc "Which packages cinnamon should exclude from the default environment";
+      description = "Which packages cinnamon should exclude from the default environment";
     };
 
   };
 
   config = mkMerge [
     (mkIf cfg.enable {
-      services.xserver.displayManager.sessionPackages = [ pkgs.cinnamon.cinnamon-common ];
+      services.displayManager.sessionPackages = [ pkgs.cinnamon-common ];
 
       services.xserver.displayManager.lightdm.greeters.slick = {
         enable = mkDefault true;
 
         # Taken from mint-artwork.gschema.override
-        theme = mkIf (notExcluded pkgs.cinnamon.mint-themes) {
+        theme = mkIf (notExcluded pkgs.mint-themes) {
           name = mkDefault "Mint-Y-Aqua";
-          package = mkDefault pkgs.cinnamon.mint-themes;
+          package = mkDefault pkgs.mint-themes;
         };
-        iconTheme = mkIf (notExcluded pkgs.cinnamon.mint-y-icons) {
+        iconTheme = mkIf (notExcluded pkgs.mint-y-icons) {
           name = mkDefault "Mint-Y-Sand";
-          package = mkDefault pkgs.cinnamon.mint-y-icons;
+          package = mkDefault pkgs.mint-y-icons;
         };
-        cursorTheme = mkIf (notExcluded pkgs.cinnamon.mint-cursor-themes) {
+        cursorTheme = mkIf (notExcluded pkgs.mint-cursor-themes) {
           name = mkDefault "Bibata-Modern-Classic";
-          package = mkDefault pkgs.cinnamon.mint-cursor-themes;
+          package = mkDefault pkgs.mint-cursor-themes;
         };
       };
 
@@ -95,13 +101,12 @@ in
       '';
 
       # Default services
-      services.blueman.enable = mkDefault true;
+      services.blueman.enable = mkDefault (notExcluded pkgs.blueman);
       hardware.bluetooth.enable = mkDefault true;
-      hardware.pulseaudio.enable = mkDefault true;
       security.polkit.enable = true;
       services.accounts-daemon.enable = true;
       services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
-      services.dbus.packages = with pkgs.cinnamon; [
+      services.dbus.packages = with pkgs; [
         cinnamon-common
         cinnamon-screensaver
         nemo-with-extensions
@@ -112,11 +117,12 @@ in
       services.gnome.glib-networking.enable = true;
       services.gnome.gnome-keyring.enable = true;
       services.gvfs.enable = true;
+      services.power-profiles-daemon.enable = mkDefault true;
       services.switcherooControl.enable = mkDefault true; # xapp-gpu-offload-helper
       services.touchegg.enable = mkDefault true;
       services.udisks2.enable = true;
       services.upower.enable = mkDefault config.powerManagement.enable;
-      services.xserver.libinput.enable = mkDefault true;
+      services.libinput.enable = mkDefault true;
       services.xserver.updateDbusEnvironment = true;
       networking.networkmanager.enable = mkDefault true;
 
@@ -131,61 +137,74 @@ in
 
       # Fix lockscreen
       security.pam.services = {
-        cinnamon-screensaver = {};
+        cinnamon-screensaver = { };
       };
 
-      environment.systemPackages = with pkgs.cinnamon // pkgs; ([
-        desktop-file-utils
+      environment.systemPackages =
+        with pkgs;
+        (
+          [
+            # Teach nemo-desktop how to launch file browser.
+            # https://github.com/linuxmint/nemo/blob/6.4.0/src/nemo-desktop-application.c#L398
+            (writeTextFile {
+              name = "x-cinnamon-mimeapps";
+              destination = "/share/applications/x-cinnamon-mimeapps.list";
+              text = ''
+                [Default Applications]
+                inode/directory=nemo.desktop
+              '';
+            })
 
-        # common-files
-        cinnamon-common
-        cinnamon-session
-        cinnamon-desktop
-        cinnamon-menus
-        cinnamon-translations
+            desktop-file-utils
 
-        # utils needed by some scripts
-        killall
+            # common-files
+            cinnamon-common
+            cinnamon-session
+            cinnamon-desktop
+            cinnamon-menus
+            cinnamon-translations
 
-        # session requirements
-        cinnamon-screensaver
-        # cinnamon-killer-daemon: provided by cinnamon-common
-        networkmanagerapplet # session requirement - also nm-applet not needed
+            # utils needed by some scripts
+            killall
 
-        # For a polkit authentication agent
-        polkit_gnome
+            # session requirements
+            cinnamon-screensaver
+            # cinnamon-killer-daemon: provided by cinnamon-common
+            networkmanagerapplet # session requirement - also nm-applet not needed
 
-        # packages
-        nemo-with-extensions
-        cinnamon-control-center
-        cinnamon-settings-daemon
-        libgnomekbd
+            # packages
+            nemo-with-extensions
+            gnome-online-accounts-gtk
+            cinnamon-control-center
+            cinnamon-settings-daemon
+            libgnomekbd
 
-        # theme
-        gnome.adwaita-icon-theme
-        gnome.gnome-themes-extra
-        gtk3.out
+            # theme
+            adwaita-icon-theme
+            gnome-themes-extra
+            gtk3.out
 
-        # other
-        glib # for gsettings
-        xdg-user-dirs
-      ] ++ utils.removePackagesByName [
-        # accessibility
-        onboard
-        orca
+            # other
+            glib # for gsettings
+            xdg-user-dirs
+          ]
+          ++ utils.removePackagesByName [
+            # accessibility
+            onboard
 
-        # theme
-        sound-theme-freedesktop
-        nixos-artwork.wallpapers.simple-dark-gray
-        mint-artwork
-        mint-cursor-themes
-        mint-l-icons
-        mint-l-theme
-        mint-themes
-        mint-x-icons
-        mint-y-icons
-        xapp # provides some xapp-* icons
-      ] config.environment.cinnamon.excludePackages);
+            # theme
+            sound-theme-freedesktop
+            nixos-artwork.wallpapers.simple-dark-gray
+            mint-artwork
+            mint-cursor-themes
+            mint-l-icons
+            mint-l-theme
+            mint-themes
+            mint-x-icons
+            mint-y-icons
+            xapp # provides some xapp-* icons
+          ] config.environment.cinnamon.excludePackages
+        );
 
       xdg.mime.enable = true;
       xdg.icons.enable = true;
@@ -193,13 +212,12 @@ in
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [
         pkgs.xdg-desktop-portal-xapp
-        (pkgs.xdg-desktop-portal-gtk.override {
-          # Do not build portals that we already have.
-          buildPortalsInGnome = false;
-        })
+        pkgs.xdg-desktop-portal-gtk
       ];
 
-      xdg.portal.configPackages = mkDefault [ pkgs.cinnamon.cinnamon-common ];
+      services.orca.enable = mkDefault (notExcluded pkgs.orca);
+
+      xdg.portal.configPackages = mkDefault [ pkgs.cinnamon-common ];
 
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
@@ -213,44 +231,37 @@ in
       programs.bash.vteIntegration = mkDefault true;
       programs.zsh.vteIntegration = mkDefault true;
 
-      # Qt application style
-      qt = {
-        enable = mkDefault true;
-        style = mkDefault "gtk2";
-        platformTheme = mkDefault "gtk2";
-      };
-
       # Default Fonts
       fonts.packages = with pkgs; [
         dejavu_fonts # Default monospace font in LMDE 6+
-        ubuntu_font_family # required for default theme
+        ubuntu-classic # required for default theme
       ];
     })
 
     (mkIf serviceCfg.apps.enable {
-      programs.geary.enable = mkDefault true;
-      programs.gnome-disks.enable = mkDefault true;
-      programs.gnome-terminal.enable = mkDefault true;
-      programs.file-roller.enable = mkDefault true;
+      programs.gnome-disks.enable = mkDefault (notExcluded pkgs.gnome-disk-utility);
+      programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome-terminal);
+      programs.file-roller.enable = mkDefault (notExcluded pkgs.file-roller);
 
-      environment.systemPackages = with pkgs // pkgs.gnome // pkgs.cinnamon; utils.removePackagesByName [
-        # cinnamon team apps
-        bulky
-        warpinator
+      environment.systemPackages =
+        with pkgs;
+        utils.removePackagesByName [
+          # cinnamon team apps
+          bulky
+          warpinator
 
-        # cinnamon xapp
-        xviewer
-        xreader
-        xed-editor
-        xplayer
-        pix
+          # cinnamon xapp
+          xviewer
+          xreader
+          xed-editor
+          pix
 
-        # external apps shipped with linux-mint
-        hexchat
-        gnome-calculator
-        gnome-calendar
-        gnome-screenshot
-      ] config.environment.cinnamon.excludePackages;
+          # external apps shipped with linux-mint
+          celluloid
+          gnome-calculator
+          gnome-calendar
+          gnome-screenshot
+        ] config.environment.cinnamon.excludePackages;
     })
   ];
 }

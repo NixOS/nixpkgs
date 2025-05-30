@@ -5,16 +5,19 @@
   fetchFromGitHub,
   buildNpmPackage,
   makeWrapper,
-  ffmpeg_5,
+  ffmpeg,
   git,
   pkg-config,
   sqlite,
   libvaSupport ? stdenv.hostPlatform.isLinux,
   libva,
+  fetchpatch,
 }:
-rustPlatform.buildRustPackage rec {
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dim";
   version = "0-unstable-2023-12-29";
+
   src = fetchFromGitHub {
     owner = "Dusk-Labs";
     repo = "dim";
@@ -24,8 +27,8 @@ rustPlatform.buildRustPackage rec {
 
   frontend = buildNpmPackage {
     pname = "dim-ui";
-    inherit version;
-    src = "${src}/ui";
+    inherit (finalAttrs) version;
+    src = "${finalAttrs.src}/ui";
 
     postPatch = ''
       ln -s ${./package-lock.json} package-lock.json
@@ -35,17 +38,47 @@ rustPlatform.buildRustPackage rec {
 
     installPhase = ''
       runHook preInstall
+
       cp -r build $out
+
       runHook postInstall
     '';
   };
 
-  patches = [
+  cargoPatches = [
     # Upstream uses a 'ffpath' function to look for config directory and
     # (ffmpeg) binaries in the same directory as the binary. Patch it to use
     # the working dir and PATH instead.
     ./relative-paths.diff
+
+    # Bump the first‐party nightfall dependency to the latest Git
+    # revision for FFmpeg >= 6 support.
+    ./bump-nightfall.patch
+
+    # Bump the time dependency to fix build failure with rust 1.80+
+    # https://github.com/Dusk-Labs/dim/pull/614
+    ./bump-time.patch
+
+    # Upstream has some unused imports that prevent things from compiling...
+    # Remove for next release.
+    (fetchpatch {
+      name = "remove-unused-imports.patch";
+      url = "https://github.com/Dusk-Labs/dim/commit/f62de1d38e6e52f27b1176f0dabbbc51622274cb.patch";
+      hash = "sha256-Gk+RHWtCKN7McfFB3siIOOhwi3+k17MCQr4Ya4RCKjc=";
+    })
   ];
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-T0v7pajg3UfRnVOx3ie6rOf+vJSW2l7yoCsJrtxIwcg=";
+
+  postPatch = ''
+    substituteInPlace dim-core/src/lib.rs \
+      --replace-fail "#![deny(warnings)]" "#![warn(warnings)]"
+    substituteInPlace dim-events/src/lib.rs \
+      --replace-fail "#![deny(warnings)]" "#![warn(warnings)]"
+    substituteInPlace dim-database/src/lib.rs \
+      --replace-fail "#![deny(warnings)]" "#![warn(warnings)]"
+  '';
 
   postConfigure = ''
     ln -ns $frontend ui/build
@@ -57,19 +90,9 @@ rustPlatform.buildRustPackage rec {
     git
   ];
 
-  buildInputs = [
-    sqlite
-  ] ++ lib.optional libvaSupport libva;
+  buildInputs = [ sqlite ] ++ lib.optional libvaSupport libva;
 
   buildFeatures = lib.optional libvaSupport "vaapi";
-
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "mp4-0.8.2" = "sha256-OtVRtOTU/yoxxoRukpUghpfiEgkKoJZNflMQ3L26Cno=";
-      "nightfall-0.3.12-rc4" = "sha256-DtSXdIDg7XBgzEYzHdzjrHdM1ESKTQdgByeerH5TWwU=";
-    };
-  };
 
   checkFlags = [
     # Requires network
@@ -86,7 +109,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/dim \
-      --prefix PATH : ${lib.makeBinPath [ffmpeg_5]}
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
   '';
 
   meta = {
@@ -97,4 +120,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.misterio77 ];
     platforms = lib.platforms.unix;
   };
-}
+})

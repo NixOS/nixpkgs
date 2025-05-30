@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -16,22 +16,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "psychrometrics";
     repo = "psychrolib";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-OkjoYIakF7NXluNTaJnUHk5cI5t8GnpqrbqHYwnLOts=";
   };
 
   sourceRoot = "${src.name}/src/python";
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "psychrolib"
-  ];
+  pythonImportsCheck = [ "psychrolib" ];
 
   meta = with lib; {
     description = "Library of psychrometric functions to calculate thermodynamic properties";

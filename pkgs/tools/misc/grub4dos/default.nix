@@ -1,10 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, nasm }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nasm,
+}:
 
-let arch =
-  if stdenv.isi686 then "i386"
-  else if stdenv.isx86_64 then "x86_64"
-  else throw "Unknown architecture";
-in stdenv.mkDerivation {
+let
+  arch =
+    if stdenv.hostPlatform.isi686 then
+      "i386"
+    else if stdenv.hostPlatform.isx86_64 then
+      "x86_64"
+    else
+      throw "Unknown architecture";
+in
+stdenv.mkDerivation {
   pname = "grub4dos";
   version = "0.4.6a-2019-05-12";
 
@@ -38,7 +48,7 @@ in stdenv.mkDerivation {
     description = "GRUB for DOS is the dos extension of GRUB";
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     # Needs a port to modern binutils:
     #   https://github.com/chenall/grub4dos/issues/160
     broken = true;

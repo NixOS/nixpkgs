@@ -1,40 +1,54 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pytestCheckHook
-, stdenv
-, darwin
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  setuptools,
+  numpy,
+  pytestCheckHook,
+  stdenv,
+  darwin,
 }:
 
 buildPythonPackage rec {
   pname = "aubio";
   version = "0.4.9";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "aubio";
+    repo = "aubio";
     rev = version;
-    sha256 = "0fhxikvlr010nbh02g455d5y8bq6j5yw180cdh4gsd0hb43y3z26";
+    hash = "sha256-RvzhB1kQNP0IbAygwH2RBi/kSyuFPAHgsiCATPeMHTo=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Accelerate AudioToolbox CoreVideo CoreGraphics ]);
-
-  propagatedBuildInputs = [
-    numpy
+  patches = [
+    (fetchpatch {
+      # fix "incompatible function pointer types initializing 'PyUFuncGenericFunction'"
+      name = "const-function-signature.patch";
+      url = "https://github.com/aubio/aubio/commit/95ff046c698156f21e2ca0d1d8a02c23ab76969f.patch";
+      hash = "sha256-qKcIPjpcZUizSN/t96WOiOn+IlsrlC0+g7gW77KejH0=";
+    })
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ numpy ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "aubio" ];
 
+  disabledTests = [
+    # https://github.com/aubio/aubio/issues/413
+    "test_assign_cvec_phas_slice"
+  ];
+
   meta = with lib; {
-    description = "a library for audio and music analysis";
+    description = "Library for audio and music analysis";
     homepage = "https://aubio.org";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/aubio/aubio/blob/${version}/ChangeLog";
+    license = licenses.gpl3Plus;
+    maintainers = [ ];
   };
 }

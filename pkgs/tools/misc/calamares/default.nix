@@ -1,55 +1,90 @@
-{ lib, fetchurl, boost, cmake, extra-cmake-modules, kparts, kpmcore, kirigami2
-, kservice, libatasmart, libxcb, yaml-cpp, libpwquality, parted, polkit-qt, python
-, qtbase, qtquickcontrols, qtsvg, qttools, qtwebengine, util-linux, tzdata
-, ckbcomp, xkeyboard_config, mkDerivation
-, nixos-extensions ? false
+{
+  lib,
+  fetchurl,
+  boost,
+  cmake,
+  extra-cmake-modules,
+  kparts,
+  kpmcore,
+  kirigami2,
+  kservice,
+  libatasmart,
+  libxcb,
+  yaml-cpp,
+  libpwquality,
+  parted,
+  polkit-qt,
+  python3,
+  qtbase,
+  qtquickcontrols,
+  qtsvg,
+  qttools,
+  qtwebengine,
+  util-linux,
+  tzdata,
+  ckbcomp,
+  xkeyboard_config,
+  mkDerivation,
+  nixos-extensions ? false,
+  # passthru.tests
+  calamares-nixos,
 }:
 
 mkDerivation rec {
   pname = "calamares";
-  version = "3.2.62";
+  version = "3.3.13";
 
   # release including submodule
   src = fetchurl {
-    url = "https://github.com/calamares/calamares/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-oPvOwqQ4aTdT/BdCIDVhGa1624orGcMXUYqhywJdbdA=";
+    url = "https://github.com/calamares/calamares/releases/download/v${version}/calamares-${version}.tar.gz";
+    sha256 = "sha256-5Jz32JTgK6BImM0HcMtXi04k39CAirdmC/lbskVmSNQ=";
   };
 
+  # On major changes, or when otherwise required, you *must* :
+  # 1. reformat the patches,
+  # 2. `git am path/to/00*.patch` them into a calamares worktree,
+  # 3. rebase to the more recent calamares version,
+  # 4. and export the patches again via
+  #   `git -c format.signoff=false format-patch v${version} --no-numbered --zero-commit --no-signature`.
   patches = lib.optionals nixos-extensions [
-    # Modifies the users module to only set passwords of user and root
-    # as the users will have already been created in the configuration.nix file
-    ./userjob.patch
-    # Makes calamares search /run/current-system/sw/share/calamares/ for extra configuration files
-    # as by default it only searches /usr/share/calamares/ and /nix/store/<hash>-calamares-<version>/share/calamares/
-    # but calamares-nixos-extensions is not in either of these locations
-    ./nixos-extensions-paths.patch
-    # Uses pkexec within modules in order to run calamares without root permissions as a whole
-    # Also fixes storage check in the welcome module
-    ./nonroot.patch
-    # Adds unfree qml to packagechooserq
-    ./unfreeq.patch
-    # Modifies finished module to add some NixOS resources
-    # Modifies packagechooser module to change the UI
-    ./uimod.patch
-    # Remove options for unsupported partition types
-    ./partitions.patch
-    # Fix setting the kayboard layout on GNOME wayland
-    # By default the module uses the setxkbmap, which will not change the keyboard
-    ./waylandkbd.patch
-    # Change default location where calamares searches for locales
-    ./supportedlocale.patch
+    ./0001-Modifies-the-users-module-to-only-set-passwords-of-u.patch
+    ./0002-Makes-calamares-search-run-current-system-sw-share-c.patch
+    ./0003-Uses-pkexec-within-modules-in-order-to-run-calamares.patch
+    ./0004-Adds-unfree-qml-to-packagechooserq.patch
+    ./0005-Modifies-finished-module-to-add-some-NixOS-resources.patch
+    ./0006-Remove-options-for-unsupported-partition-types.patch
+    ./0007-Fix-setting-the-kayboard-layout-on-GNOME-wayland.patch
+    ./0008-Change-default-location-where-calamares-searches-for.patch
   ];
 
-  nativeBuildInputs = [ cmake extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
   buildInputs = [
-    boost kparts.dev kpmcore.out kservice.dev kirigami2
-    libatasmart libxcb yaml-cpp libpwquality parted polkit-qt python
-    qtbase qtquickcontrols qtsvg qttools qtwebengine.dev util-linux
+    boost
+    kparts.dev
+    kpmcore.out
+    kservice.dev
+    kirigami2
+    libatasmart
+    libxcb
+    yaml-cpp
+    libpwquality
+    parted
+    polkit-qt
+    python3
+    qtbase
+    qtquickcontrols
+    qtsvg
+    qttools
+    qtwebengine.dev
+    util-linux
   ];
 
   cmakeFlags = [
-    "-DPYTHON_LIBRARY=${python}/lib/lib${python.libPrefix}.so"
-    "-DPYTHON_INCLUDE_DIR=${python}/include/${python.libPrefix}"
+    "-DPYTHON_LIBRARY=${python3}/lib/lib${python3.libPrefix}.so"
+    "-DPYTHON_INCLUDE_DIR=${python3}/include/${python3.libPrefix}"
     "-DCMAKE_VERBOSE_MAKEFILE=True"
     "-DWITH_PYTHONQT:BOOL=ON"
   ];
@@ -87,11 +122,22 @@ mkDerivation rec {
         -i CMakeLists.txt
   '';
 
+  passthru.tests = {
+    inherit calamares-nixos;
+  };
+
   meta = with lib; {
     description = "Distribution-independent installer framework";
     homepage = "https://calamares.io/";
-    license = with licenses; [ gpl3Plus bsd2 cc0 ];
-    maintainers = with maintainers; [ manveru vlinkz ];
+    license = with licenses; [
+      gpl3Plus
+      bsd2
+      cc0
+    ];
+    maintainers = with maintainers; [
+      manveru
+      vlinkz
+    ];
     platforms = platforms.linux;
     mainProgram = "calamares";
   };

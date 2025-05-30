@@ -1,65 +1,87 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, deprecated
-, humanize
-, matplotlib
-, nibabel
-, numpy
-, parameterized
-, scipy
-, simpleitk
-, torch
-, tqdm
-, typer
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  deprecated,
+  matplotlib,
+  nibabel,
+  numpy,
+  packaging,
+  rich,
+  scipy,
+  simpleitk,
+  torch,
+  tqdm,
+  typer,
+
+  # tests
+  humanize,
+  parameterized,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "torchio";
-  version = "0.19.5";
+  version = "0.20.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
-    owner = "fepegar";
+    owner = "TorchIO-project";
     repo = "torchio";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-RqKJStUZhnSmsifn3WjYLfmRkkme+GOe6dp0E0MW9tE=";
+    tag = "v${version}";
+    hash = "sha256-240MM9w0AdhaUp70JrkmKGQI1abrFrbfybCF4wYX8fg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    hatchling
+  ];
+
+  dependencies = [
     deprecated
     humanize
     nibabel
     numpy
+    packaging
+    rich
     scipy
     simpleitk
     torch
     tqdm
     typer
-  ] ++ typer.passthru.optional-dependencies.all;
-
-  nativeCheckInputs = [ pytestCheckHook matplotlib parameterized ];
-  disabledTests = [
-    # tries to download models:
-    "test_load_all"
-  ] ++ lib.optionals stdenv.isAarch64 [
-    # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
-    "test_queue_multiprocessing"
   ];
+
+  nativeCheckInputs = [
+    matplotlib
+    parameterized
+    pytestCheckHook
+  ];
+
+  disabledTests =
+    [
+      # tries to download models:
+      "test_load_all"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+      # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
+      "test_queue_multiprocessing"
+    ];
+
   pythonImportsCheck = [
     "torchio"
     "torchio.data"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Medical imaging toolkit for deep learning";
     homepage = "https://torchio.readthedocs.io";
-    license = licenses.asl20;
-    maintainers = [ maintainers.bcdarwin ];
+    changelog = "https://github.com/TorchIO-project/torchio/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.bcdarwin ];
   };
 }

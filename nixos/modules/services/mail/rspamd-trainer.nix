@@ -1,27 +1,30 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.rspamd-trainer;
   format = pkgs.formats.toml { };
 
-in {
+in
+{
   options.services.rspamd-trainer = {
 
-    enable = mkEnableOption (mdDoc "Spam/ham trainer for rspamd");
+    enable = lib.mkEnableOption "Spam/ham trainer for rspamd";
 
-    settings = mkOption {
+    settings = lib.mkOption {
       default = { };
-      description = mdDoc ''
+      description = ''
         IMAP authentication configuration for rspamd-trainer. For supplying
         the IMAP password, use the `secrets` option.
       '';
-      type = types.submodule {
+      type = lib.types.submodule {
         freeformType = format.type;
       };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           HOST = "localhost";
           USERNAME = "spam@example.com";
@@ -31,8 +34,8 @@ in {
     };
 
     secrets = lib.mkOption {
-      type = with types; listOf path;
-      description = lib.mdDoc ''
+      type = with lib.types; listOf path;
+      description = ''
         A list of files containing the various secrets. Should be in the
         format expected by systemd's `EnvironmentFile` directory. For the
         IMAP account password use `PASSWORD = mypassword`.
@@ -42,7 +45,7 @@ in {
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd = {
       services.rspamd-trainer = {
@@ -54,7 +57,7 @@ in {
           Type = "oneshot";
           DynamicUser = true;
           EnvironmentFile = [
-            ( format.generate "rspamd-trainer-env" cfg.settings )
+            (format.generate "rspamd-trainer-env" cfg.settings)
             cfg.secrets
           ];
         };

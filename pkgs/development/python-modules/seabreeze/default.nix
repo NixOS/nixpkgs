@@ -1,24 +1,26 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
 
-# build-system
-, cython_3
-, git
-, pkgconfig
-, setuptools
-, setuptools-scm
+  # build-system
+  cython,
+  git,
+  pkgconfig,
+  setuptools,
+  setuptools-scm,
 
-# dependneices
-, numpy
+  # dependneices
+  numpy,
+  libusb-compat-0_1,
 
-# optional-dependenices
-, pyusb
+  # optional-dependencies
+  pyusb,
 
-# tests
-, mock
-, pytestCheckHook
-, zipp
+  # tests
+  mock,
+  pytestCheckHook,
+  zipp,
 }:
 
 ## Usage
@@ -28,19 +30,28 @@
 
 buildPythonPackage rec {
   pname = "seabreeze";
-  version = "2.5.0";
+  version = "2.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ap--";
     repo = "python-seabreeze";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-25rFGpfwJKj9lLDO/ZsqJ2NfCsgSSJghLZxffjX/+7w=";
+    tag = "v${version}";
+    hash = "sha256-q4qBblebCb5z67KgWBIzsvCWNZf146I7LHPCyAabDUM=";
     leaveDotGit = true;
   };
 
+  enableParallelBuilding = true;
+
+  postPatch = ''
+    # pkgconfig cant find libusb, doing it manually
+    substituteInPlace setup.py \
+      --replace-fail 'pkgconfig.parse("libusb")' \
+        "{'include_dirs': ['${libusb-compat-0_1}/include'], 'library_dirs': ['${libusb-compat-0_1}/lib'], 'libraries': ['usb']}"
+  '';
+
   nativeBuildInputs = [
-    cython_3
+    cython
     git
     pkgconfig
     setuptools
@@ -49,12 +60,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy
+    libusb-compat-0_1
   ];
 
-  passthru.optional-dependencies = {
-    pyseabreeze = [
-      pyusb
-    ];
+  optional-dependencies = {
+    pyseabreeze = [ pyusb ];
   };
 
   postInstall = ''
@@ -67,14 +77,16 @@ buildPythonPackage rec {
     pytestCheckHook
     mock
     zipp
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  disabledTests = [ "TestHardware" ];
 
   setupPyBuildFlags = [ "--without-cseabreeze" ];
 
   meta = with lib; {
     homepage = "https://github.com/ap--/python-seabreeze";
-    description = "A python library to access Ocean Optics spectrometers";
-    maintainers = [];
+    description = "Python library to access Ocean Optics spectrometers";
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

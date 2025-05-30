@@ -1,33 +1,33 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  types-requests,
 }:
 
 buildPythonPackage rec {
   pname = "types-tqdm";
-  version = "4.66.0.20240106";
+  version = "4.67.0.20250516";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-es9KreW6097XbrgpeD+ZYbHCGHlI6qbdGuhkTf+VqTg=";
+    pname = "types_tqdm";
+    inherit version;
+    hash = "sha256-IwzKuKMy008ZP8AH6xMqbvVLRRJFLnGL8hrgp8rrWms=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ types-requests ];
 
   # This package does not have tests.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for tqdm";
     homepage = "https://pypi.org/project/types-tqdm/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

@@ -1,30 +1,32 @@
-{ lib
-, nixosTests
-, buildPythonApplication
-, cloud-utils
-, dmidecode
-, fetchFromGitHub
-, iproute2
-, openssh
-, python3
-, shadow
-, systemd
-, coreutils
-, gitUpdater
-, busybox
-, procps
+{
+  lib,
+  nixosTests,
+  cloud-utils,
+  dmidecode,
+  fetchFromGitHub,
+  iproute2,
+  openssh,
+  python3,
+  shadow,
+  systemd,
+  coreutils,
+  gitUpdater,
+  busybox,
+  procps,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cloud-init";
-  version = "23.4.4";
+  version = "24.2";
+  pyproject = true;
+
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "cloud-init";
-    rev = "refs/tags/${version}";
-    hash = "sha256-imA3C2895W4vbBT9TsELT1H9QfNIxntNQLsniv+/FGg=";
+    tag = version;
+    hash = "sha256-BhTcOeSKZ1XRIx+xJQkqkSw9M8ilr+BRKXDy5MUXB6E=";
   };
 
   patches = [
@@ -53,6 +55,10 @@ python3.pkgs.buildPythonApplication rec {
     done
   '';
 
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
   propagatedBuildInputs = with python3.pkgs; [
     configobj
     jinja2
@@ -66,7 +72,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
+    pytest7CheckHook
     httpretty
     dmidecode
     # needed for tests; at runtime we rather want the setuid wrapper
@@ -79,7 +85,13 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ dmidecode cloud-utils.guest busybox ]}/bin"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        dmidecode
+        cloud-utils.guest
+        busybox
+      ]
+    }/bin"
   ];
 
   disabledTests = [
@@ -88,8 +100,6 @@ python3.pkgs.buildPythonApplication rec {
     "test_dhcp_client_failover"
     # clears path and fails because mkdir is not found
     "test_path_env_gets_set_from_main"
-    # fails to find cat
-    "test_subp_combined_stderr_stdout"
     # tries to read from /etc/ca-certificates.conf while inside the sandbox
     "test_handler_ca_certs"
     "TestRemoveDefaultCaCerts"
@@ -100,8 +110,6 @@ python3.pkgs.buildPythonApplication rec {
     "TestConsumeUserDataHttp"
     # Chef Omnibus
     "TestInstallChefOmnibus"
-    # https://github.com/canonical/cloud-init/pull/893
-    "TestGetPackageMirrorInfo"
     # Disable failing VMware and PuppetAio tests
     "test_get_data_iso9660_with_network_config"
     "test_get_data_vmware_guestinfo_with_network_config"
@@ -112,6 +120,8 @@ python3.pkgs.buildPythonApplication rec {
     "test_install_with_default_arguments"
     "test_install_with_no_cleanup"
     "test_install_with_version"
+    # https://github.com/canonical/cloud-init/issues/5002
+    "test_found_via_userdata"
   ];
 
   preCheck = ''
@@ -132,8 +142,14 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/canonical/cloud-init";
     description = "Provides configuration and customization of cloud instance";
     changelog = "https://github.com/canonical/cloud-init/raw/${version}/ChangeLog";
-    license = with licenses; [ asl20 gpl3Plus ];
-    maintainers = with maintainers; [ illustris jfroche ];
+    license = with licenses; [
+      asl20
+      gpl3Plus
+    ];
+    maintainers = with maintainers; [
+      illustris
+      jfroche
+    ];
     platforms = platforms.all;
   };
 }

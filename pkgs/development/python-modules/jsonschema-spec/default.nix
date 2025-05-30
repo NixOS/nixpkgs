@@ -1,35 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build
-, poetry-core
+  # build
+  poetry-core,
 
-# propagates
-, pathable
-, pyyaml
-, referencing
-, requests
+  # propagates
+  pathable,
+  pyyaml,
+  referencing,
+  requests,
 
-# tests
-, pytestCheckHook
-, responses
+  # tests
+  pytestCheckHook,
+  responses,
 }:
 
 buildPythonPackage rec {
   pname = "jsonschema-spec";
-  version = "0.2.4";
+  version = "0.3.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "p1c2u";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-1Flb3XQCGhrAYzTvriSVhHDb/Z/uvCyZdbav2u7f3sg=";
+    repo = "jsonschema-spec";
+    tag = version;
+    hash = "sha256-rCepDnVAOEsokKjWCuqDYbGIq6/wn4rsQRx5dXTUsYo=";
   };
 
   postPatch = ''
@@ -41,12 +41,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "referencing"
-  ];
+  pythonRelaxDeps = [ "referencing" ];
 
   propagatedBuildInputs = [
     pathable
@@ -59,6 +56,8 @@ buildPythonPackage rec {
     pytestCheckHook
     responses
   ];
+
+  passthru.skipBulkUpdate = true; # newer versions under the jsonschema-path name
 
   meta = with lib; {
     changelog = "https://github.com/p1c2u/jsonschema-spec/releases/tag/${version}";

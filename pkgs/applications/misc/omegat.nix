@@ -1,17 +1,28 @@
-{ lib, stdenv, fetchurl, unzip, jdk, makeWrapper}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  jdk,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation {
-  version = "6.0.0";
+  version = "6.0.1";
   pname = "omegat";
 
-  src = fetchurl {  # their zip has repeated files or something, so no fetchzip
-    url = "mirror://sourceforge/project/omegat/OmegaT%20-%20Standard/OmegaT%206.0.0/OmegaT_6.0.0_Without_JRE.zip";
-    sha256 = "sha256-dsbT5iuZBudUL4Kw4rdvi4y98mcvnYNj9jRvC5wJoYI=";
+  src = fetchurl {
+    # their zip has repeated files or something, so no fetchzip
+    url = "mirror://sourceforge/project/omegat/OmegaT%20-%20Standard/OmegaT%206.0.1/OmegaT_6.0.1_Without_JRE.zip";
+    sha256 = "sha256-Rj50bzT8k7+GWb0p/ma+zy+PzkF7tB6iV4F4UVAImJg=";
   };
 
-  nativeBuildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+  ];
 
-  unpackCmd = "unzip -o $curSrc";  # tries to go interactive without -o
+  unpackCmd = "unzip -o $curSrc"; # tries to go interactive without -o
 
   installPhase = ''
     mkdir -p $out/bin
@@ -26,7 +37,8 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "The free computer aided translation (CAT) tool for professionals";
+    description = "Free computer aided translation (CAT) tool for professionals";
+    mainProgram = "omegat";
     longDescription = ''
       OmegaT is a free and open source multiplatform Computer Assisted Translation
       tool with fuzzy matching, translation memory, keyword search, glossaries, and
@@ -36,6 +48,9 @@ stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ t184256 ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
   };
 }

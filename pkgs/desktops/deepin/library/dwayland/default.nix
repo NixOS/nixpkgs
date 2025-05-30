@@ -1,14 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, qtbase
-, qtwayland
-, wayland
-, wayland-protocols
-, extra-cmake-modules
-, deepin-wayland-protocols
-, qttools
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  libsForQt5,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  extra-cmake-modules,
+  deepin-wayland-protocols,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,12 +25,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
-    qttools
+    libsForQt5.qttools
+    wayland-scanner
   ];
 
   buildInputs = [
-    qtbase
-    qtwayland
+    libsForQt5.qtbase
+    libsForQt5.qtwayland
     wayland
     wayland-protocols
     deepin-wayland-protocols
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
 
   # cmake requires that the kf5 directory must not empty
   postInstall = ''
-     mkdir $out/include/KF5
+    mkdir $out/include/KF5
   '';
 
   meta = with lib; {
@@ -48,6 +49,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/dwayland";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }

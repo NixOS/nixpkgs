@@ -1,7 +1,9 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 {
 
   ###### interface
@@ -10,16 +12,15 @@ with lib;
 
     services.system-config-printer = {
 
-      enable = mkEnableOption (lib.mdDoc "system-config-printer, a service for CUPS administration used by printing interfaces");
+      enable = lib.mkEnableOption "system-config-printer, a service for CUPS administration used by printing interfaces";
 
     };
 
   };
 
-
   ###### implementation
 
-  config = mkIf config.services.system-config-printer.enable {
+  config = lib.mkIf config.services.system-config-printer.enable {
 
     services.dbus.packages = [
       pkgs.system-config-printer

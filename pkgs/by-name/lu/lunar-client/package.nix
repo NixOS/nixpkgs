@@ -1,40 +1,45 @@
-{ appimageTools
-, fetchurl
-, lib
-, makeWrapper
+{
+  appimageTools,
+  fetchurl,
+  lib,
+  makeWrapper,
 }:
 
 appimageTools.wrapType2 rec {
-  pname = "lunar-client";
-  version = "3.2.3";
+  pname = "lunarclient";
+  version = "3.3.8";
 
   src = fetchurl {
     url = "https://launcherupdates.lunarclientcdn.com/Lunar%20Client-${version}.AppImage";
-    hash = "sha512-2zuVURKDw+Z/8I1AO8G5KPVOlPIZC/Mbt9jK5gn9CV1zmRiWKL+m1/Bw9/h7fanBdm0fhfLklplmlTTabPm7dg==";
+    hash = "sha512-H4v2fpOvjU8Cxxf0kxHf2CB/NwjarMp8EjjfGb2IbrVM0aXQQyvW+cHRwfsLnkyOxNYLWNC50Px0Ur/0rpj4bg==";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
+
   extraInstallCommands =
-    let contents = appimageTools.extract { inherit pname version src; };
-    in ''
-      mv $out/bin/{lunar-client-*,lunar-client}
-      source "${makeWrapper}/nix-support/setup-hook"
-      wrapProgram $out/bin/lunar-client \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
-      install -Dm444 ${contents}/launcher.desktop $out/share/applications/lunar-client.desktop
-      install -Dm444 ${contents}/launcher.png $out/share/pixmaps/lunar-client.png
-      substituteInPlace $out/share/applications/lunar-client.desktop \
-        --replace 'Exec=AppRun --no-sandbox %U' 'Exec=lunar-client' \
-        --replace 'Icon=launcher' 'Icon=lunar-client'
+    let
+      contents = appimageTools.extract { inherit pname version src; };
+    in
+    ''
+      wrapProgram $out/bin/lunarclient \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+      install -Dm444 ${contents}/lunarclient.desktop -t $out/share/applications/
+      install -Dm444 ${contents}/lunarclient.png -t $out/share/pixmaps/
+      substituteInPlace $out/share/applications/lunarclient.desktop \
+        --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=lunarclient' \
     '';
 
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "Free Minecraft client with mods, cosmetics, and performance boost.";
+    description = "Free Minecraft client with mods, cosmetics, and performance boost";
     homepage = "https://www.lunarclient.com/";
     license = with licenses; [ unfree ];
-    mainProgram = "lunar-client";
-    maintainers = with maintainers; [ zyansheep Technical27 surfaceflinger ];
+    mainProgram = "lunarclient";
+    maintainers = with maintainers; [
+      Technical27
+      surfaceflinger
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -1,0 +1,26 @@
+From 3fc7e2ab65ad6a8af360fafa84b97f551fa1b619 Mon Sep 17 00:00:00 2001
+From: Christoph Heiss <christoph@c8h4.io>
+Date: Tue, 24 Dec 2024 17:35:40 +0100
+Subject: [PATCH 3/3] cargo: use local patched h2 dependency
+
+Signed-off-by: Christoph Heiss <christoph@c8h4.io>
+---
+ Cargo.toml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Cargo.toml b/Cargo.toml
+index d2014429..54f951c8 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -201,6 +201,8 @@ proxmox-worker-task = { path = "../proxmox/proxmox-worker-task" }
+ pathpatterns = {path = "../pathpatterns" }
+ pxar = { path = "../pxar" }
+ 
++h2 = { path = "./h2" }
++
+ [features]
+ default = []
+ #valgrind = ["valgrind_request"]
+-- 
+2.47.0
+

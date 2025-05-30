@@ -1,7 +1,8 @@
-{ config
-, lib
-, pkgs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  ...
 }:
 
 let
@@ -13,7 +14,7 @@ in
 
   options = {
     services.ddccontrol = {
-      enable = lib.mkEnableOption (lib.mdDoc "ddccontrol for controlling displays");
+      enable = lib.mkEnableOption "ddccontrol for controlling displays";
     };
   };
 

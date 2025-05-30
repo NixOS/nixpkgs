@@ -1,11 +1,12 @@
-{ lib
-, qt5
-, stdenv
-, git
-, fetchFromGitHub
-, cmake
-, alsa-lib
-, qttools
+{
+  lib,
+  qt5,
+  stdenv,
+  gitMinimal,
+  fetchFromGitHub,
+  cmake,
+  alsa-lib,
+  qttools,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,12 +27,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    git
+    gitMinimal
     qt5.wrapQtAppsHook
   ];
 
   meta = with lib; {
-    description = "A linux editor for the Akai LPD8";
+    description = "Linux editor for the Akai LPD8";
     homepage = "https://github.com/charlesfleche/lpd8editor";
     license = licenses.mit;
     maintainers = with maintainers; [ pinpox ];

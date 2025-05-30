@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, cmake, stdenv, nix-update-script }:
+{
+  lib,
+  fetchFromGitHub,
+  cmake,
+  stdenv,
+  nix-update-script,
+}:
 stdenv.mkDerivation rec {
   pname = "espresso";
   version = "2.4";
@@ -13,11 +19,14 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib;{
+  meta = with lib; {
     description = "Multi-valued PLA minimization";
     # from manual
     longDescription = ''
@@ -28,7 +37,7 @@ stdenv.mkDerivation rec {
       heuristic Boolean minimization.
     '';
     homepage = "https://github.com/chipsalliance/espresso";
-    maintainers = with maintainers;[ pineapplehunter ];
+    maintainers = with maintainers; [ pineapplehunter ];
     mainProgram = "espresso";
     platforms = lib.platforms.all;
 

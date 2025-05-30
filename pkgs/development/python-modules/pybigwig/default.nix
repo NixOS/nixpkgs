@@ -1,45 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pytestCheckHook
-, pythonOlder
-, zlib
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  zlib,
 }:
 
 buildPythonPackage rec {
   pname = "pybigwig";
-  version = "0.3.22";
+  version = "0.3.24";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "deeptools";
     repo = "pyBigWig";
-    rev = "refs/tags/${version}";
-    hash = "sha256-wJC5eXIC9PNlbCtmq671WuoIJVkh3aX7K6WArJWjyFg=";
+    tag = version;
+    hash = "sha256-gK3cOwbvQtf+g1H/4x69swqCFdkBwpV7ZOrbE0eANh0=";
   };
 
-  buildInputs = [
-    zlib
-  ];
+  buildInputs = [ zlib ];
 
   nativeCheckInputs = [
     numpy
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pyBigWig"
-  ];
+  pythonImportsCheck = [ "pyBigWig" ];
 
-  pytestFlagsArray = [
-    "pyBigWigTest/test*.py"
-  ];
+  pytestFlagsArray = [ "pyBigWigTest/test*.py" ];
 
   disabledTests = [
-    # Test file is donwloaded from GitHub
+    # Test file is downloaded from GitHub
     "testAll"
     "testBigBed"
     "testFoo"
@@ -54,7 +49,7 @@ buildPythonPackage rec {
       libBigWig for local and remote file access.
     '';
     homepage = "https://github.com/deeptools/pyBigWig";
-    changelog = "https://github.com/deeptools/pyBigWig/releases/tag/${version}";
+    changelog = "https://github.com/deeptools/pyBigWig/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ scalavision ];
   };

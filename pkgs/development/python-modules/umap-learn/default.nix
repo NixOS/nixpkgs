@@ -1,42 +1,52 @@
-{ lib
-, bokeh
-, buildPythonPackage
-, colorcet
-, datashader
-, fetchFromGitHub
-, holoviews
-, matplotlib
-, numba
-, numpy
-, pandas
-, pynndescent
-, pytestCheckHook
-, pythonOlder
-, scikit-image
-, scikit-learn
-, scipy
-, seaborn
-, tbb
-, tensorflow
-, tensorflow-probability
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  numba,
+  numpy,
+  pynndescent,
+  scikit-learn,
+  scipy,
+  tqdm,
+
+  # optional-dependencies
+  bokeh,
+  colorcet,
+  dask,
+  datashader,
+  holoviews,
+  matplotlib,
+  pandas,
+  scikit-image,
+  seaborn,
+  tensorflow,
+  tensorflow-probability,
+
+  # tests
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "umap-learn";
-  version = "0.5.5";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "0.5.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lmcinnes";
     repo = "umap";
-    rev = "refs/tags/release-${version}";
-    hash = "sha256-bXAQjq7xBYn34tIZF96Sr5jDUii3s4FGkNx65rGKXkY=";
+    tag = "release-${version}";
+    hash = "sha256-VR+qBZyFtpW/xuFXI8pxDkkwJKt9qajnUtvuZLFZtF0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     numba
     numpy
     pynndescent
@@ -45,10 +55,11 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  passthru.optional-dependencies = rec {
+  optional-dependencies = rec {
     plot = [
       bokeh
       colorcet
+      dask
       datashader
       holoviews
       matplotlib
@@ -62,20 +73,15 @@ buildPythonPackage rec {
       tensorflow-probability
     ];
 
-    tbb = [
-      tbb
-    ];
+    tbb = [ tbb ];
 
     all = plot ++ parametric_umap ++ tbb;
   };
 
   nativeCheckInputs = [
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   disabledTests = [
     # Plot functionality requires additional packages.
@@ -92,10 +98,11 @@ buildPythonPackage rec {
     "test_save_load"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Uniform Manifold Approximation and Projection";
     homepage = "https://github.com/lmcinnes/umap";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/lmcinnes/umap/releases/tag/release-${version}";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

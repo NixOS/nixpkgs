@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -14,18 +15,14 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "joeblackwaslike";
-    repo = pname;
+    repo = "base58check";
     rev = "v${version}";
     hash = "sha256-Tig6beLRDsXC//x4+t/z2BGaJQWzcP0J+QEKx3D0rhs=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "base58check"
-  ];
+  pythonImportsCheck = [ "base58check" ];
 
   meta = with lib; {
     description = "Implementation of the Base58Check encoding scheme";

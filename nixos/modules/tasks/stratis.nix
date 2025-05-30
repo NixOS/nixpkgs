@@ -1,11 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.stratis;
 in
 {
   options.services.stratis = {
-    enable = lib.mkEnableOption (lib.mdDoc "Stratis Storage - Easy to use local storage management for Linux");
+    enable = lib.mkEnableOption "Stratis Storage - Easy to use local storage management for Linux";
   };
 
   config = lib.mkIf cfg.enable {

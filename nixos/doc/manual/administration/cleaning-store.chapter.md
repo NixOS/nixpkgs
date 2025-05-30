@@ -21,8 +21,10 @@ You can tell NixOS in `configuration.nix` to run this unit automatically
 at certain points in time, for instance, every night at 03:15:
 
 ```nix
-nix.gc.automatic = true;
-nix.gc.dates = "03:15";
+{
+  nix.gc.automatic = true;
+  nix.gc.dates = "03:15";
+}
 ```
 
 The commands above do not remove garbage collector roots, such as old

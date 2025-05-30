@@ -1,20 +1,42 @@
-{ lib, stdenv, fetchurl, mono, libmediainfo, sqlite, curl, chromaprint, makeWrapper, icu, dotnet-runtime, openssl, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  mono,
+  libmediainfo,
+  sqlite,
+  curl,
+  chromaprint,
+  makeWrapper,
+  icu,
+  dotnet-runtime,
+  openssl,
+  nixosTests,
+  zlib,
+}:
 
 let
-  os = if stdenv.isDarwin then "osx" else "linux";
-  arch = {
-    x86_64-linux = "x64";
-    aarch64-linux = "arm64";
-    x86_64-darwin = "x64";
-  }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-  hash = {
-    x64-linux_hash = "sha256-njTaQIi15k0+8tnuIO+waRmSE+BAG46ln+qzesFfI0E=";
-    arm64-linux_hash = "sha256-dgX/G3eyWjtVmwptv0+Fbmt7/SjR26N5Ug+YXeC9fgU=";
-    x64-osx_hash = "sha256-kFliWQB1eQK1AoeWIZ3XaYj5mwSwRJWL2G8OwaLTFN4=";
-  }."${arch}-${os}_hash";
-in stdenv.mkDerivation rec {
+  os = if stdenv.hostPlatform.isDarwin then "osx" else "linux";
+  arch =
+    {
+      x86_64-linux = "x64";
+      aarch64-linux = "arm64";
+      x86_64-darwin = "x64";
+      aarch64-darwin = "arm64";
+    }
+    ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  hash =
+    {
+      x64-linux_hash = "sha256-PwHIUbXxk9VOKd+I7EcrTEYlikfw2NUdO6IQdiQWhWs=";
+      arm64-linux_hash = "sha256-uu7iVexyss29Q7mZ280KeDLZWp6wwCh+TJj9XeZc/lQ=";
+      x64-osx_hash = "sha256-POjIY2iPoYOQQci6AV/7X8t7GGbxVqROjlMzwERH/3c=";
+      arm64-osx_hash = "sha256-JSdiyA0opa4dy5/RTSn/QvnKJ9VCWJcGhTkH5YIi5lg=";
+    }
+    ."${arch}-${os}_hash";
+in
+stdenv.mkDerivation rec {
   pname = "lidarr";
-  version = "2.1.7.4030";
+  version = "2.10.3.4602";
 
   src = fetchurl {
     url = "https://github.com/lidarr/Lidarr/releases/download/v${version}/Lidarr.master.${version}.${os}-core-${arch}.tar.gz";
@@ -30,12 +52,19 @@ in stdenv.mkDerivation rec {
     cp -r * $out/share/${pname}-${version}/.
     makeWrapper "${dotnet-runtime}/bin/dotnet" $out/bin/Lidarr \
       --add-flags "$out/share/${pname}-${version}/Lidarr.dll" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
-        curl sqlite libmediainfo icu  openssl ]}
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          curl
+          sqlite
+          libmediainfo
+          icu
+          openssl
+          zlib
+        ]
+      }
 
     runHook postInstall
   '';
-
 
   passthru = {
     updateScript = ./update.sh;
@@ -43,11 +72,16 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A Usenet/BitTorrent music downloader";
+    description = "Usenet/BitTorrent music downloader";
     homepage = "https://lidarr.audio/";
     license = licenses.gpl3;
     maintainers = [ maintainers.etu ];
     mainProgram = "Lidarr";
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 }

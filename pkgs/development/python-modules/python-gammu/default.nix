@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
   #, pytestCheckHook
-, pythonOlder
-, pkg-config
-, gammu
+  pythonOlder,
+  pkg-config,
+  gammu,
 }:
 
 buildPythonPackage rec {
@@ -16,27 +17,21 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "gammu";
-    repo = pname;
+    repo = "python-gammu";
     rev = version;
     hash = "sha256-lFQBrKWwdvUScwsBva08izZVeVDn1u+ldzixtL9YTpA=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    gammu
-  ];
+  buildInputs = [ gammu ];
 
   # Check with the next release if tests could be run with pytest
   # nativeCheckInputs = [ pytestCheckHook ];
   # Don't run tests for now
   doCheck = false;
 
-  pythonImportsCheck = [
-    "gammu"
-  ];
+  pythonImportsCheck = [ "gammu" ];
 
   meta = with lib; {
     description = "Python bindings for Gammu";

@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, glibcLocales, python, isPy3k }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  isPy3k,
+}:
 
 buildPythonPackage rec {
   pname = "jieba";
@@ -8,12 +14,10 @@ buildPythonPackage rec {
   # no tests in PyPI tarball
   src = fetchFromGitHub {
     owner = "fxsjy";
-    repo = pname;
+    repo = "jieba";
     rev = "v${version}";
     sha256 = "028vmd6sj6wn9l1ilw7qfmlpyiysnlzdgdlhwxs6j4fvq0gyrwxk";
   };
-
-  nativeCheckInputs = [ glibcLocales ];
 
   # UnicodeEncodeError
   doCheck = isPy3k;
@@ -21,7 +25,6 @@ buildPythonPackage rec {
   # Citing https://github.com/fxsjy/jieba/issues/384: "testcases is in a mess"
   # So just picking random ones that currently work
   checkPhase = ''
-    export LC_ALL=en_US.UTF-8
     ${python.interpreter} test/test.py
     ${python.interpreter} test/test_tokenize.py
   '';
@@ -30,6 +33,6 @@ buildPythonPackage rec {
     description = "Chinese Words Segementation Utilities";
     homepage = "https://github.com/fxsjy/jieba";
     license = licenses.mit;
-    maintainers = teams.tts.members;
+    teams = [ teams.tts ];
   };
 }

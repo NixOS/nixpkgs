@@ -1,37 +1,35 @@
-{ stdenv
-, lib
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  pythonOlder,
+  buildPythonPackage,
+  fetchFromGitHub,
   # C Inputs
-, blas
-, catch2
-, cmake
-, cython
-, fmt
-, muparserx
-, ninja
-, nlohmann_json
-, spdlog
+  blas,
+  catch2,
+  cmake,
+  cython,
+  fmt,
+  muparserx,
+  ninja,
+  nlohmann_json,
+  spdlog,
   # Python Inputs
-, cvxpy
-, numpy
-, pybind11
-, scikit-build
+  cvxpy,
+  numpy,
+  pybind11,
+  scikit-build,
   # Check Inputs
-, pytestCheckHook
-, ddt
-, fixtures
-, pytest-timeout
-, qiskit-terra
-, setuptools
-, testtools
+  pytestCheckHook,
+  ddt,
+  fixtures,
+  pytest-timeout,
+  qiskit-terra,
+  testtools,
 }:
 
 buildPythonPackage rec {
   pname = "qiskit-aer";
-  version = "0.13.1";
+  version = "0.16.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -39,8 +37,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = "qiskit-aer";
-    rev = "refs/tags/${version}";
-    hash = "sha256-GxQgqCUDwalgM9m+XeRiZCRL93KrCSUPoLvDgHJJGCQ=";
+    tag = version;
+    hash = "sha256-YF5X//X0fvJyALEB4gqsKRNWSoEsOrZFLVQUgHOA+0A=";
   };
 
   postPatch = ''
@@ -69,7 +67,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cvxpy
-    cython  # generates some cython files at runtime that need to be cython-ized
+    cython # generates some cython files at runtime that need to be cython-ized
     numpy
     pybind11
   ];

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyheck
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyheck,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -16,21 +17,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rnag";
     repo = "dotwiz";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ABmkwpJ40JceNJieW5bhg0gqWNrR6Wxj84nLCjKU11A=";
   };
 
-  propagatedBuildInputs = [
-    pyheck
-  ];
+  propagatedBuildInputs = [ pyheck ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dotwiz"
-  ];
+  pythonImportsCheck = [ "dotwiz" ];
 
   pytestFlagsArray = [
     "--ignore=benchmarks"

@@ -1,32 +1,46 @@
-{ config, lib, pkgs, ... }:
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.below;
-  cfgContents = concatStringsSep "\n" (
-    mapAttrsToList (n: v: ''${n} = "${v}"'') (filterAttrs (_k: v: v != null) {
-      log_dir = cfg.dirs.log;
-      store_dir = cfg.dirs.store;
-      cgroup_filter_out = cfg.cgroupFilterOut;
-    })
+  cfgContents = lib.concatStringsSep "\n" (
+    lib.mapAttrsToList (n: v: ''${n} = "${v}"'') (
+      lib.filterAttrs (_k: v: v != null) {
+        log_dir = cfg.dirs.log;
+        store_dir = cfg.dirs.store;
+        cgroup_filter_out = cfg.cgroupFilterOut;
+      }
+    )
   );
 
-  mkDisableOption = n: mkOption {
-    type = types.bool;
-    default = true;
-    description = mdDoc "Whether to enable ${n}.";
-  };
-  optionalType = ty: x: mkOption (x // {
-    description = mdDoc x.description;
-    type = (types.nullOr ty);
-    default = null;
-  });
-  optionalPath = optionalType types.path;
-  optionalStr = optionalType types.str;
-  optionalInt = optionalType types.int;
-in {
+  mkDisableOption =
+    n:
+    lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Whether to enable ${n}.";
+    };
+  optionalType =
+    ty: x:
+    lib.mkOption (
+      x
+      // {
+        description = x.description;
+        type = (lib.types.nullOr ty);
+        default = null;
+      }
+    );
+  optionalPath = optionalType lib.types.path;
+  optionalStr = optionalType lib.types.str;
+  optionalInt = optionalType lib.types.int;
+in
+{
   options = {
     services.below = {
-      enable = mkEnableOption (mdDoc "'below' resource monitor");
+      enable = lib.mkEnableOption "'below' resource monitor";
 
       cgroupFilterOut = optionalStr {
         description = "A regexp matching the full paths of cgroups whose data shouldn't be collected";
@@ -34,10 +48,10 @@ in {
       };
       collect = {
         diskStats = mkDisableOption "dist_stat collection";
-        ioStats   = mkEnableOption (mdDoc "io.stat collection for cgroups");
+        ioStats = lib.mkEnableOption "io.stat collection for cgroups";
         exitStats = mkDisableOption "eBPF-based exitstats";
       };
-      compression.enable = mkEnableOption (mdDoc "data compression");
+      compression.enable = lib.mkEnableOption "data compression";
       retention = {
         size = optionalInt {
           description = ''
@@ -75,7 +89,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.below ];
     # /etc/below.conf is also refered to by the `below` CLI tool,
     #  so this can't be a store-only file whose path is passed to the service
@@ -90,15 +104,19 @@ in {
 
         serviceConfig.ExecStart = [
           ""
-          ("${lib.getExe pkgs.below} record " + (concatStringsSep " " (
-            optional (!cfg.collect.diskStats) "--disable-disk-stat" ++
-            optional   cfg.collect.ioStats    "--collect-io-stat"   ++
-            optional (!cfg.collect.exitStats) "--disable-exitstats" ++
-            optional   cfg.compression.enable "--compress"          ++
+          (
+            "${lib.getExe pkgs.below} record "
+            + (lib.concatStringsSep " " (
+              lib.optional (!cfg.collect.diskStats) "--disable-disk-stat"
+              ++ lib.optional cfg.collect.ioStats "--collect-io-stat"
+              ++ lib.optional (!cfg.collect.exitStats) "--disable-exitstats"
+              ++ lib.optional cfg.compression.enable "--compress"
+              ++
 
-            optional (cfg.retention.size != null) "--store-size-limit ${toString cfg.retention.size}" ++
-            optional (cfg.retention.time != null) "--retain-for-s ${toString cfg.retention.time}"
-          )))
+                lib.optional (cfg.retention.size != null) "--store-size-limit ${toString cfg.retention.size}"
+              ++ lib.optional (cfg.retention.time != null) "--retain-for-s ${toString cfg.retention.time}"
+            ))
+          )
         ];
       };
     };

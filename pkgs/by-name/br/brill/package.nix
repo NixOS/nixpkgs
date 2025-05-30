@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "brill";
@@ -14,14 +18,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm644 *.ttf          -t $out/share/fonts/truetype
-    install -Dm644 *agreement.pdf -t $out/share/licenses/${pname}
-    install -Dm644 *use.pdf       -t $out/share/doc/${pname}
+    install -Dm644 *agreement.pdf -t $out/share/licenses/brill
+    install -Dm644 *use.pdf       -t $out/share/doc/brill
 
     runHook postInstall
   '';
 
   meta = with lib; {
-    description = "The in-house serif typeface for the publishing house Brill, designed by John Hudson; free for non-commercial use";
+    description = "In-house serif typeface for the publishing house Brill, designed by John Hudson; free for non-commercial use";
     longDescription = ''
       Brill has “a neo-classical design geared towards optimum legibility”.
 

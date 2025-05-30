@@ -1,47 +1,49 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, langcodes
-, pytestCheckHook
-, tld
-, urllib3
-, pythonOlder
+{
+  lib,
+  babel,
+  buildPythonPackage,
+  fetchPypi,
+  langcodes,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  tld,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "courlan";
-  version = "1.0.0";
-  format = "setuptools";
+  version = "1.3.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PDVRHDZSXLL5Qc1nCbejp0LtlfC55WyX7sDBb9wDUYM=";
+    hash = "sha256-C2b02zqcOabiLdJHxyz6pX1o6mYOlLsshOx9uHEq8ZA=";
   };
 
-  propagatedBuildInputs = [
+  # Tests try to write to /tmp directly. use $TMPDIR instead.
+  postPatch = ''
+    substituteInPlace tests/unit_tests.py \
+      --replace-fail "\"courlan --help\"" "\"$out/bin/courlan --help\"" \
+      --replace-fail "courlan_bin = \"courlan\"" "courlan_bin = \"$out/bin/courlan\"" \
+      --replace-fail "/tmp" "$TMPDIR"
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    babel
     langcodes
     tld
     urllib3
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # disable tests that require an internet connection
-  disabledTests = [
-    "test_urlcheck"
-  ];
-
-  # tests try to write to /tmp directly. use $TMPDIR instead.
-  postPatch = ''
-    substituteInPlace tests/unit_tests.py \
-      --replace "\"courlan --help\"" "\"$out/bin/courlan --help\"" \
-      --replace "courlan_bin = \"courlan\"" "courlan_bin = \"$out/bin/courlan\"" \
-      --replace "/tmp" "$TMPDIR"
-  '';
+  disabledTests = [ "test_urlcheck" ];
 
   pythonImportsCheck = [ "courlan" ];
 
@@ -51,5 +53,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/adbar/courlan/blob/v${version}/HISTORY.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ jokatzke ];
+    mainProgram = "courlan";
   };
 }

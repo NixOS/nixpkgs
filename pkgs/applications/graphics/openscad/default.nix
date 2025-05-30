@@ -1,40 +1,40 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, qtbase
-, qtmultimedia
-, qscintilla
-, bison
-, flex
-, eigen
-, boost
-, libGLU, libGL
-, glew
-, opencsg
-, cgal_4
-, mpfr
-, gmp
-, glib
-, pkg-config
-, harfbuzz
-, gettext
-, freetype
-, fontconfig
-, double-conversion
-, lib3mf
-, libzip
-, mkDerivation
-, qtmacextras
-, qmake
-, spacenavSupport ? stdenv.isLinux, libspnav
-, wayland
-, wayland-protocols
-, wrapGAppsHook
-, qtwayland
-, cairo
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  libsForQt5,
+  bison,
+  flex,
+  eigen,
+  boost,
+  libGLU,
+  libGL,
+  glew,
+  opencsg,
+  cgal,
+  mpfr,
+  gmp,
+  glib,
+  pkg-config,
+  harfbuzz,
+  gettext,
+  freetype,
+  fontconfig,
+  double-conversion,
+  lib3mf,
+  libzip,
+  spacenavSupport ? stdenv.hostPlatform.isLinux,
+  libspnav,
+  wayland,
+  wayland-protocols,
+  wrapGAppsHook3,
+  cairo,
+  openscad,
+  runCommand,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "openscad";
   version = "2021.01";
 
@@ -56,21 +56,82 @@ mkDerivation rec {
       url = "https://github.com/openscad/openscad/commit/84addf3c1efbd51d8ff424b7da276400bbfa1a4b.patch";
       sha256 = "sha256-KNEVu10E2d4G2x+FJcuHo2tjD8ygMRuhUcW9NbN98bM=";
     })
+    (fetchpatch {
+      # needed for cgal_5
+      name = "cgalutils-tess.cc-cgal-5.patch";
+      url = "https://github.com/openscad/openscad/commit/3a81c1fb9b663ebbedd6eb044e7276357b1f30a1.patch";
+      hash = "sha256-JdBznXkewx5ybY92Ss0h7UnMZ7d3IQbFRaDCDjb1bRA=";
+    })
+    (fetchpatch {
+      # needed for cgal_5
+      name = "cgalutils-tess.cc-cgal-5_4.patch";
+      url = "https://github.com/openscad/openscad/commit/71f2831c0484c3f35cbf44e1d1dc2c857384100b.patch";
+      hash = "sha256-Fu8dnjNIwZKCI6ukOeHYK8NiJwoA0XtqT8dg8sVevG8=";
+    })
+    (fetchpatch {
+      # needed for cgal_5. Removes dead code
+      name = "cgalutils-polyhedron.cc-cgal-5_3.patch";
+      url = "https://github.com/openscad/openscad/commit/cc49ad8dac24309f5452d5dea9abd406615a52d9.patch";
+      hash = "sha256-B3i+o6lR5osRcVXTimDZUFQmm12JhmbFgG9UwOPebF4=";
+    })
   ];
 
-  nativeBuildInputs = [ bison flex pkg-config gettext qmake wrapGAppsHook];
+  postPatch = ''
+    substituteInPlace src/FileModule.cc \
+      --replace-fail 'fs::is_regular' 'fs::is_regular_file'
 
-  buildInputs = [
-    eigen boost glew opencsg cgal_4 mpfr gmp glib
-    harfbuzz lib3mf libzip double-conversion freetype fontconfig
-    qtbase qtmultimedia qscintilla cairo
-  ] ++ lib.optionals stdenv.isLinux [ libGLU libGL wayland wayland-protocols qtwayland ]
-    ++ lib.optional stdenv.isDarwin qtmacextras
-    ++ lib.optional spacenavSupport libspnav
-  ;
+    substituteInPlace src/openscad.cc \
+      --replace-fail 'boost::join' 'boost::algorithm::join'
+  '';
 
-  qmakeFlags = [ "VERSION=${version}" ] ++
-    lib.optionals spacenavSupport [
+  nativeBuildInputs = [
+    bison
+    flex
+    pkg-config
+    gettext
+    libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
+    wrapGAppsHook3
+  ];
+
+  buildInputs =
+    [
+      eigen
+      boost
+      glew
+      opencsg
+      cgal
+      mpfr
+      gmp
+      glib
+      harfbuzz
+      lib3mf
+      libzip
+      double-conversion
+      freetype
+      fontconfig
+      libsForQt5.qtbase
+      libsForQt5.qtmultimedia
+      libsForQt5.qscintilla
+      cairo
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libGLU
+      libGL
+      wayland
+      wayland-protocols
+      libsForQt5.qtwayland
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin libsForQt5.qtmacextras
+    ++ lib.optional spacenavSupport libspnav;
+
+  qmakeFlags =
+    [
+      "VERSION=${version}"
+      "LIB3MF_INCLUDEPATH=${lib3mf.dev}/include/lib3mf/Bindings/Cpp"
+      "LIB3MF_LIBPATH=${lib3mf}/lib"
+    ]
+    ++ lib.optionals spacenavSupport [
       "ENABLE_SPNAV=1"
       "SPNAV_INCLUDEPATH=${libspnav}/include"
       "SPNAV_LIBPATH=${libspnav}/lib"
@@ -82,7 +143,7 @@ mkDerivation rec {
     make objects/parser.cxx
   '';
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
     mv $out/bin/*.app $out/Applications
     rmdir $out/bin || true
@@ -109,7 +170,23 @@ mkDerivation rec {
     homepage = "https://openscad.org/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ bjornfor raskin gebner ];
+    maintainers = with lib.maintainers; [
+      bjornfor
+      raskin
+    ];
     mainProgram = "openscad";
+  };
+
+  passthru.tests = {
+    lib3mf_support =
+      runCommand "${pname}-lib3mf-support-test"
+        {
+          nativeBuildInputs = [ openscad ];
+        }
+        ''
+          echo "cube([1, 1, 1]);" | openscad -o cube.3mf -
+          echo "import(\"cube.3mf\");" | openscad -o cube-import.3mf -
+          mv cube-import.3mf $out
+        '';
   };
 }

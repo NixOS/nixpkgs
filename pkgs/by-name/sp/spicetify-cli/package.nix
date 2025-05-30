@@ -1,46 +1,64 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, spicetify-cli }:
-
-buildGoModule rec {
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  replaceVars,
+  spicetify-cli,
+}:
+buildGoModule (finalAttrs: {
   pname = "spicetify-cli";
-  version = "2.34.0";
+  version = "2.40.9";
 
   src = fetchFromGitHub {
     owner = "spicetify";
-    repo = "spicetify-cli";
-    rev = "v${version}";
-    hash = "sha256-37bR6Tf6vOrrILb9liyyCYiH6VNnGpQ3yUnQcXA8o14=";
+    repo = "cli";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-x3M6AbFiVCk1LM3k+D+NAnOclu90LAuBgYI/cBLpH3A=";
   };
 
-  vendorHash = "sha256-axE1SY+UW5oddyhOiktq+vNfhw2/SFX4ut4Hivg6TYQ=";
+  vendorHash = "sha256-901njlGcAxr12F9w6yQ+ESsptlwsZsMvKPUmlHxehmA=";
 
   ldflags = [
     "-s -w"
-    "-X 'main.version=${version}'"
+    "-X 'main.version=${finalAttrs.version}'"
   ];
 
-  # used at runtime, but not installed by default
-  postInstall = ''
-    cp -r ${src}/jsHelper $out/bin/jsHelper
-    cp -r ${src}/CustomApps $out/bin/CustomApps
-    cp -r ${src}/Extensions $out/bin/Extensions
-    cp -r ${src}/Themes $out/bin/Themes
-  '';
+  patches = [
+    # Stops spicetify from attempting to fetch a newer css-map.json
+    (replaceVars ./version.patch {
+      inherit (finalAttrs) version;
+    })
+  ];
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/spicetify-cli --help > /dev/null
-  '';
+  postInstall =
+    /*
+      jsHelper and css-map.json are required at runtime
+      and are looked for in the directory of the spicetify binary
+      so here we move spicetify to /share/spicetify
+      so that css-map.json and jsHelper don't pollute PATH
+    */
+    ''
+      mkdir -p $out/share/spicetify
 
-  passthru.tests.version = testers.testVersion {
-    package = spicetify-cli;
-    command = "spicetify-cli -v";
-  };
+      cp -r $src/jsHelper $out/share/spicetify/jsHelper
+      cp $src/css-map.json $out/share/spicetify/css-map.json
 
-  meta = with lib; {
+      mv $out/bin/cli $out/share/spicetify/spicetify
+
+      ln -s $out/share/spicetify/spicetify $out/bin/spicetify
+    '';
+
+  passthru.tests.version = testers.testVersion { package = spicetify-cli; };
+
+  meta = {
     description = "Command-line tool to customize Spotify client";
-    homepage = "https://github.com/spicetify/spicetify-cli/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jonringer mdarocha ];
-    mainProgram = "spicetify-cli";
+    homepage = "https://github.com/spicetify/cli";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      mdarocha
+      gerg-l
+    ];
+    mainProgram = "spicetify";
   };
-}
+})

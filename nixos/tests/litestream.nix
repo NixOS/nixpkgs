@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+{ pkgs, ... }:
+{
   name = "litestream";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ jwygoda ];
@@ -6,41 +7,51 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
   nodes.machine =
     { pkgs, ... }:
-    { services.litestream = {
+    {
+      services.litestream = {
         enable = true;
         settings = {
           dbs = [
             {
               path = "/var/lib/grafana/data/grafana.db";
-              replicas = [{
-                url = "sftp://foo:bar@127.0.0.1:22/home/foo/grafana";
-              }];
+              replicas = [
+                {
+                  url = "sftp://foo:bar@127.0.0.1:22/home/foo/grafana";
+                }
+              ];
             }
           ];
         };
       };
-      systemd.services.grafana.serviceConfig.ExecStartPost = "+" + pkgs.writeShellScript "grant-grafana-permissions" ''
-        timeout=10
+      systemd.services.grafana.serviceConfig.ExecStartPost =
+        "+"
+        + pkgs.writeShellScript "grant-grafana-permissions" ''
+          timeout=10
 
-        while [ ! -f /var/lib/grafana/data/grafana.db ];
-        do
-          if [ "$timeout" == 0 ]; then
-            echo "ERROR: Timeout while waiting for /var/lib/grafana/data/grafana.db."
-            exit 1
-          fi
+          while [ ! -f /var/lib/grafana/data/grafana.db ];
+          do
+            if [ "$timeout" == 0 ]; then
+              echo "ERROR: Timeout while waiting for /var/lib/grafana/data/grafana.db."
+              exit 1
+            fi
 
-          sleep 1
+            sleep 1
 
-          ((timeout--))
-        done
+            ((timeout--))
+          done
 
-        find /var/lib/grafana -type d -exec chmod -v 775 {} \;
-        find /var/lib/grafana -type f -exec chmod -v 660 {} \;
-      '';
+          find /var/lib/grafana -type d -exec chmod -v 775 {} \;
+          find /var/lib/grafana -type f -exec chmod -v 660 {} \;
+        '';
       services.openssh = {
         enable = true;
         allowSFTP = true;
-        listenAddresses = [ { addr = "127.0.0.1"; port = 22; } ];
+        listenAddresses = [
+          {
+            addr = "127.0.0.1";
+            port = 22;
+          }
+        ];
       };
       services.grafana = {
         enable = true;
@@ -98,4 +109,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         "curl -sSfN -u admin:newpass http://127.0.0.1:3000/api/org/users | grep admin\@localhost"
     )
   '';
-})
+}

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,14 +13,14 @@ in
 {
   options = {
     services.agate = {
-      enable = mkEnableOption (lib.mdDoc "Agate Server");
+      enable = mkEnableOption "Agate Server";
 
       package = mkPackageOption pkgs "agate" { };
 
       addresses = mkOption {
         type = types.listOf types.str;
         default = [ "0.0.0.0:1965" ];
-        description = lib.mdDoc ''
+        description = ''
           Addresses to listen on, IP:PORT, if you haven't disabled forwarding
           only set IPv4.
         '';
@@ -24,19 +29,19 @@ in
       contentDir = mkOption {
         default = "/var/lib/agate/content";
         type = types.path;
-        description = lib.mdDoc "Root of the content directory.";
+        description = "Root of the content directory.";
       };
 
       certificatesDir = mkOption {
         default = "/var/lib/agate/certificates";
         type = types.path;
-        description = lib.mdDoc "Root of the certificate directory.";
+        description = "Root of the certificate directory.";
       };
 
       hostnames = mkOption {
         default = [ ];
         type = types.listOf types.str;
-        description = lib.mdDoc ''
+        description = ''
           Domain name of this Gemini server, enables checking hostname and port
           in requests. (multiple occurrences means basic vhosts)
         '';
@@ -45,20 +50,20 @@ in
       language = mkOption {
         default = null;
         type = types.nullOr types.str;
-        description = lib.mdDoc "RFC 4646 Language code for text/gemini documents.";
+        description = "RFC 4646 Language code for text/gemini documents.";
       };
 
       onlyTls_1_3 = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc "Only use TLSv1.3 (default also allows TLSv1.2).";
+        description = "Only use TLSv1.3 (default also allows TLSv1.2).";
       };
 
       extraArgs = mkOption {
         type = types.listOf types.str;
         default = [ "" ];
         example = [ "--log-ip" ];
-        description = lib.mdDoc "Extra arguments to use running agate.";
+        description = "Extra arguments to use running agate.";
       };
     };
   };
@@ -72,11 +77,19 @@ in
       description = "Agate";
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
-      after = [ "network.target" "network-online.target" ];
+      after = [
+        "network.target"
+        "network-online.target"
+      ];
 
       script =
         let
-          prefixKeyList = key: list: concatMap (v: [ key v ]) list;
+          prefixKeyList =
+            key: list:
+            concatMap (v: [
+              key
+              v
+            ]) list;
           addresses = prefixKeyList "--addr" cfg.addresses;
           hostnames = prefixKeyList "--hostname" cfg.hostnames;
         in
@@ -84,14 +97,19 @@ in
           exec ${cfg.package}/bin/agate ${
             escapeShellArgs (
               [
-                "--content" "${cfg.contentDir}"
-                "--certs" "${cfg.certificatesDir}"
-              ] ++
-              addresses ++
-              (optionals (cfg.hostnames != []) hostnames) ++
-              (optionals (cfg.language != null) [ "--lang" cfg.language ]) ++
-              (optionals cfg.onlyTls_1_3 [ "--only-tls13" ]) ++
-              (optionals (cfg.extraArgs != []) cfg.extraArgs)
+                "--content"
+                "${cfg.contentDir}"
+                "--certs"
+                "${cfg.certificatesDir}"
+              ]
+              ++ addresses
+              ++ (optionals (cfg.hostnames != [ ]) hostnames)
+              ++ (optionals (cfg.language != null) [
+                "--lang"
+                cfg.language
+              ])
+              ++ (optionals cfg.onlyTls_1_3 [ "--only-tls13" ])
+              ++ (optionals (cfg.extraArgs != [ ]) cfg.extraArgs)
             )
           }
         '';
@@ -123,7 +141,10 @@ in
         ProtectKernelTunables = true;
 
         RestrictNamespaces = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictRealtime = true;
 
         SystemCallArchitectures = "native";

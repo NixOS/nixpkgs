@@ -1,22 +1,24 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, dbus
-, pkg-config
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  dbus,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ianny";
-  version = "1.0.0beta.1";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "zefr0x";
     repo = "ianny";
     rev = "v${version}";
-    hash = "sha256-Bnr+wtusvTM690IISBs0wKj0ChBoIrMHyVZ8wdGgK08=";
+    hash = "sha256-XwwfBOx+5l5KjthL69nLpIVc7ilA4rKGBeRvE9BEQPU=";
   };
 
-  cargoHash = "sha256-/8C+hDq/z+h1uxO9prLbKHgyfMGrMODAs5/yUrutaAM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-A5ZInR6gXvDPpa2azF1ZmVANzm3v1YAvxJjJ7h32J2A=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus.dev ];
@@ -33,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Desktop utility that helps preventing repetitive strain injuries by keeping track of usage patterns and periodically informing the user to take breaks.";
+    description = "Desktop utility that helps preventing repetitive strain injuries by keeping track of usage patterns and periodically informing the user to take breaks";
     homepage = "https://github.com/zefr0x/ianny";
     license = licenses.gpl3;
     mainProgram = "ianny";

@@ -1,64 +1,72 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, aiocontextvars
-, boltons
-, hypothesis
-, pyrsistent
-, pytestCheckHook
-, setuptools
-, six
-, testtools
-, zope-interface
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  boltons,
+  orjson,
+  pyrsistent,
+  zope-interface,
+
+  # tests
+  addBinToPathHook,
+  dask,
+  distributed,
+  hypothesis,
+  pandas,
+  pytestCheckHook,
+  testtools,
+  twisted,
+  daemontools,
 }:
 
 buildPythonPackage rec {
   pname = "eliot";
-  version = "1.14.0";
-  format = "setuptools";
+  version = "1.17.5";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-wvCZo+jV7PwidFdm58xmSkjbZLa4nZht/ycEkdhoMUk=";
+  src = fetchFromGitHub {
+    owner = "itamarst";
+    repo = "eliot";
+    tag = version;
+    hash = "sha256-x6zonKL6Ys1fyUjyOgVgucAN64Dt6dCzdBrxRZa+VDQ=";
   };
 
-  propagatedBuildInputs = [
-    aiocontextvars
+  build-system = [ setuptools ];
+
+  dependencies = [
     boltons
+    orjson
     pyrsistent
-    setuptools
-    six
     zope-interface
   ];
 
   nativeCheckInputs = [
+    addBinToPathHook
+    dask
+    distributed
     hypothesis
+    pandas
     pytestCheckHook
     testtools
-  ];
+    twisted
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ daemontools ];
 
-  pythonImportsCheck = [
-    "eliot"
-  ];
+  __darwinAllowLocalNetworking = true;
 
-  # Tests run eliot-prettyprint in out/bin.
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
+  pythonImportsCheck = [ "eliot" ];
 
-  disabledTests = [
-    "test_parse_stream"
-    # AttributeError: module 'inspect' has no attribute 'getargspec'
-    "test_default"
-  ];
-
-  meta = with lib; {
-    homepage = "https://eliot.readthedocs.io";
+  meta = {
     description = "Logging library that tells you why it happened";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dpausp ];
+    homepage = "https://eliot.readthedocs.io";
+    changelog = "https://github.com/itamarst/eliot/blob/${version}/docs/source/news.rst";
+    mainProgram = "eliot-prettyprint";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dpausp ];
   };
 }

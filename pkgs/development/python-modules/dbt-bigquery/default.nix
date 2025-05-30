@@ -1,66 +1,66 @@
-{ lib
-, agate
-, buildPythonPackage
-, dbt-core
-, fetchFromGitHub
-, google-cloud-bigquery
-, google-cloud-dataproc
-, google-cloud-storage
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, setuptools
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  agate,
+  dbt-adapters,
+  dbt-common,
+  dbt-core,
+  google-cloud-bigquery,
+  google-cloud-dataproc,
+  google-cloud-storage,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "dbt-bigquery";
-  version = "1.7.6";
+  version = "1.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-bigquery";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-bF2++Bs4pvqA3GW2xJkRNa1HkqnHBbMnKHHjo1TWboM=";
+    tag = "v${version}";
+    hash = "sha256-YZA8lcUGoq5jMNS1GlbBd036X2F3khsZWr5Pv65zpPI=";
   };
-
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools
-  ];
 
   pythonRelaxDeps = [
     "agate"
+    "google-cloud-storage"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     agate
+    dbt-adapters
+    dbt-common
     dbt-core
     google-cloud-bigquery
-    google-cloud-storage
     google-cloud-dataproc
+    google-cloud-storage
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "tests/unit"
-  ];
+  pytestFlagsArray = [ "tests/unit" ];
 
-  pythonImportsCheck = [
-    "dbt.adapters.bigquery"
-  ];
+  pythonImportsCheck = [ "dbt.adapters.bigquery" ];
 
-  meta = with lib; {
+  meta = {
     description = "Plugin enabling dbt to operate on a BigQuery database";
     homepage = "https://github.com/dbt-labs/dbt-bigquery";
     changelog = "https://github.com/dbt-labs/dbt-bigquery/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ tjni ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ tjni ];
   };
 }

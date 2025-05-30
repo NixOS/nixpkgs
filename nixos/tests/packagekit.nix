@@ -1,15 +1,18 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "packagekit";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ peterhoeg ];
   };
 
-  nodes.machine = { ... }: {
-    environment.systemPackages = with pkgs; [ dbus ];
-    services.packagekit = {
-      enable = true;
+  nodes.machine =
+    { ... }:
+    {
+      environment.systemPackages = with pkgs; [ dbus ];
+      services.packagekit = {
+        enable = true;
+      };
     };
-  };
 
   testScript = ''
     start_all()
@@ -22,4 +25,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     # so now it should be running
     machine.wait_for_unit("packagekit.service")
   '';
-})
+}

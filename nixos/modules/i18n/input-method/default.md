@@ -22,11 +22,14 @@ friendly input method user interface.
 
 The following snippet can be used to configure IBus:
 
-```
-i18n.inputMethod = {
-  enabled = "ibus";
-  ibus.engines = with pkgs.ibus-engines; [ anthy hangul mozc ];
-};
+```nix
+{
+  i18n.inputMethod = {
+    enable = true;
+    type = "ibus";
+    ibus.engines = with pkgs.ibus-engines; [ anthy hangul mozc ];
+  };
+}
 ```
 
 `i18n.inputMethod.ibus.engines` is optional and can be used
@@ -37,6 +40,7 @@ Available extra IBus engines are:
   - Anthy (`ibus-engines.anthy`): Anthy is a system for
     Japanese input method. It converts Hiragana text to Kana Kanji mixed text.
   - Hangul (`ibus-engines.hangul`): Korean input method.
+  - libpinyin (`ibus-engines.libpinyin`): A Chinese input method.
   - m17n (`ibus-engines.m17n`): m17n is an input method that
     uses input methods and corresponding icons in the m17n database.
   - mozc (`ibus-engines.mozc`): A Japanese input method from
@@ -48,8 +52,10 @@ Available extra IBus engines are:
     methods, it must appear in the list of engines along with
     `table`. For example:
 
-    ```
-    ibus.engines = with pkgs.ibus-engines; [ table table-others ];
+    ```nix
+    {
+      ibus.engines = with pkgs.ibus-engines; [ table table-others ];
+    }
     ```
 
 To use any input method, the package must be added in the configuration, as
@@ -74,11 +80,14 @@ built-in Input Method Engine, Pinyin, QuWei and Table-based input methods.
 
 The following snippet can be used to configure Fcitx:
 
-```
-i18n.inputMethod = {
-  enabled = "fcitx5";
-  fcitx5.addons = with pkgs; [ fcitx5-mozc fcitx5-hangul fcitx5-m17n ];
-};
+```nix
+{
+  i18n.inputMethod = {
+    enable = true;
+    type = "fcitx5";
+    fcitx5.addons = with pkgs; [ fcitx5-mozc fcitx5-hangul fcitx5-m17n ];
+  };
+}
 ```
 
 `i18n.inputMethod.fcitx5.addons` is optional and can be
@@ -110,10 +119,13 @@ phonetic Korean characters (hangul) and pictographic Korean characters
 
 The following snippet can be used to configure Nabi:
 
-```
-i18n.inputMethod = {
-  enabled = "nabi";
-};
+```nix
+{
+  i18n.inputMethod = {
+    enable = true;
+    type = "nabi";
+  };
+}
 ```
 
 ## Uim {#module-services-input-methods-uim}
@@ -123,10 +135,13 @@ framework. Applications can use it through so-called bridges.
 
 The following snippet can be used to configure uim:
 
-```
-i18n.inputMethod = {
-  enabled = "uim";
-};
+```nix
+{
+  i18n.inputMethod = {
+    enable = true;
+    type = "uim";
+  };
+}
 ```
 
 Note: The [](#opt-i18n.inputMethod.uim.toolbar) option can be
@@ -141,10 +156,13 @@ etc...
 
 The following snippet can be used to configure Hime:
 
-```
-i18n.inputMethod = {
-  enabled = "hime";
-};
+```nix
+{
+  i18n.inputMethod = {
+    enable = true;
+    type = "hime";
+  };
+}
 ```
 
 ## Kime {#module-services-input-methods-kime}
@@ -153,8 +171,11 @@ Kime is Korean IME. it's built with Rust language and let you get simple, safe, 
 
 The following snippet can be used to configure Kime:
 
-```
-i18n.inputMethod = {
-  enabled = "kime";
-};
+```nix
+{
+  i18n.inputMethod = {
+    enable = true;
+    type = "kime";
+  };
+}
 ```

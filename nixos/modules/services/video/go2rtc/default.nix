@@ -1,14 +1,14 @@
-{ lib
-, config
-, options
-, pkgs
-, ...
+{
+  lib,
+  config,
+  options,
+  pkgs,
+  ...
 }:
 
 let
   inherit (lib)
     literalExpression
-    mdDoc
     mkEnableOption
     mkOption
     mkPackageOption
@@ -18,7 +18,7 @@ let
   cfg = config.services.go2rtc;
   opt = options.services.go2rtc;
 
-  format = pkgs.formats.yaml {};
+  format = pkgs.formats.yaml { };
   configFile = format.generate "go2rtc.yaml" cfg.settings;
 in
 
@@ -26,13 +26,13 @@ in
   meta.buildDocsInSandbox = false;
 
   options.services.go2rtc = with types; {
-    enable = mkEnableOption (mdDoc "go2rtc streaming server");
+    enable = mkEnableOption "go2rtc streaming server";
 
     package = mkPackageOption pkgs "go2rtc" { };
 
     settings = mkOption {
-      default = {};
-      description = mdDoc ''
+      default = { };
+      description = ''
         go2rtc configuration as a Nix attribute set.
 
         See the [wiki](https://github.com/AlexxIT/go2rtc/wiki/Configuration) for possible configuration options.
@@ -46,7 +46,7 @@ in
               type = str;
               default = ":1984";
               example = "127.0.0.1:1984";
-              description = mdDoc ''
+              description = ''
                 API listen address, conforming to a Go address string.
               '';
             };
@@ -56,9 +56,9 @@ in
           ffmpeg = {
             bin = mkOption {
               type = path;
-              default = "${lib.getBin pkgs.ffmpeg_6-headless}/bin/ffmpeg";
-              defaultText = literalExpression "\${lib.getBin pkgs.ffmpeg_6-headless}/bin/ffmpeg";
-              description = mdDoc ''
+              default = lib.getExe pkgs.ffmpeg-headless;
+              defaultText = literalExpression "lib.getExe pkgs.ffmpeg-headless";
+              description = ''
                 The ffmpeg package to use for transcoding.
               '';
             };
@@ -70,14 +70,14 @@ in
 
           streams = mkOption {
             type = attrsOf (either str (listOf str));
-            default = {};
+            default = { };
             example = literalExpression ''
               {
                 cam1 = "onvif://admin:password@192.168.1.123:2020";
                 cam2 = "tcp://192.168.1.123:12345";
               }
             '';
-            description = mdDoc ''
+            description = ''
               Stream source configuration. Multiple source types are supported.
 
               Check the [configuration reference](https://github.com/AlexxIT/go2rtc/blob/v${cfg.package.version}/README.md#module-streams) for possible options.

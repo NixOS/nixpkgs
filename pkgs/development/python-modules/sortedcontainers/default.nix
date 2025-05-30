@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 let
@@ -19,21 +20,21 @@ let
 
     doCheck = false;
 
-    nativeCheckInputs = [
-      pytestCheckHook
-    ];
+    nativeCheckInputs = [ pytestCheckHook ];
 
     pythonImportsCheck = [ "sortedcontainers" ];
 
     passthru.tests = {
-      pytest = sortedcontainers.overridePythonAttrs (_: { doCheck = true; });
+      pytest = sortedcontainers.overridePythonAttrs (_: {
+        doCheck = true;
+      });
     };
 
     meta = with lib; {
       description = "Python Sorted Container Types: SortedList, SortedDict, and SortedSet";
       homepage = "https://grantjenks.com/docs/sortedcontainers/";
       license = licenses.asl20;
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 in

@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, bash }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  bash,
+}:
 
 buildGoModule rec {
   pname = "kubectl-neat";
@@ -21,6 +26,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Clean up Kubernetes yaml and json output to make it readable";
+    mainProgram = "kubectl-neat";
     homepage = "https://github.com/itaysk/kubectl-neat";
     changelog = "https://github.com/itaysk/kubectl-neat/releases/tag/v${version}";
     license = licenses.asl20;

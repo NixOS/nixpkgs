@@ -1,48 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pint
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, toml
-, tomli
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pint,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  toml,
+  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "vulture";
-  version = "2.11";
+  version = "2.14";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8Pu2C85lEarYfuBzbFAkVnN0kKgtkZpE5tkiYss18cI=";
+    hash = "sha256-y4J3kCoRON7qt5bsW+9wdqbgJIyjYHo/Pe4LbZ6bhBU=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov vulture --cov-report=html --cov-report=term --cov-report=xml --cov-append" ""
-  '';
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  dependencies = lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
     pint
+    pytest-cov-stub
     pytestCheckHook
     toml
   ];
 
-  pythonImportsCheck = [
-    "vulture"
+  disabledTestPaths = [
+    # missing pytype package/executable
+    "tests/test_pytype.py"
   ];
+
+  pythonImportsCheck = [ "vulture" ];
 
   meta = with lib; {
     description = "Finds unused code in Python programs";
@@ -50,5 +47,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/jendrikseipp/vulture/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ mcwitt ];
+    mainProgram = "vulture";
   };
 }

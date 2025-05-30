@@ -1,21 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-, cmake
-, boost179
-, eigen
-, opencv
-, tbb
+  cmake,
+  boost179,
+  eigen,
+  opencv,
+  tbb,
 
-, avx2Support ? stdenv.hostPlatform.avx2Support
+  avx2Support ? stdenv.hostPlatform.avx2Support,
 }:
 
 stdenv.mkDerivation rec {
   pname = "cctag";
   version = "1.0.3";
 
-  outputs = [ "lib" "dev" "out" ];
+  outputs = [
+    "lib"
+    "dev"
+    "out"
+  ];
 
   src = fetchFromGitHub {
     owner = "alicevision";
@@ -53,7 +58,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Tests are broken on Darwin (linking issue)
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Detection of CCTag markers made up of concentric circles";

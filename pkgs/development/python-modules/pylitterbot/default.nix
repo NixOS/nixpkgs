@@ -1,40 +1,45 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, poetry-dynamic-versioning
-, pyjwt
-, pytest-aiohttp
-, pytest-freezegun
-, pytestCheckHook
-, pythonOlder
-, deepdiff
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  deepdiff,
+  fetchFromGitHub,
+  poetry-core,
+  poetry-dynamic-versioning,
+  pycognito,
+  pyjwt,
+  pytest-aiohttp,
+  pytest-freezegun,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pylitterbot";
-  version = "2023.4.9";
-  format = "pyproject";
+  version = "2024.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "natekspencer";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-QsxzwmAdhx0diPJ/bT+DgJSs70YQ77M76rq2opMq/Ew=";
+    repo = "pylitterbot";
+    tag = "v${version}";
+    hash = "sha256-9ipFayi9y/eND2q3Sz8J9B0OogkMDg73Q2+Pm3ujQ1w=";
   };
 
-  nativeBuildInputs = [
+  pythonRelaxDeps = [ "deepdiff" ];
+
+  build-system = [
     poetry-core
     poetry-dynamic-versioning
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     deepdiff
+    pycognito
     pyjwt
   ];
 
@@ -45,14 +50,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pylitterbot"
-  ];
+  pythonImportsCheck = [ "pylitterbot" ];
 
   meta = with lib; {
     description = "Modulefor controlling a Litter-Robot";
     homepage = "https://github.com/natekspencer/pylitterbot";
-    changelog = "https://github.com/natekspencer/pylitterbot/releases/tag/v${version}";
+    changelog = "https://github.com/natekspencer/pylitterbot/releases/tag/${src.tag}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

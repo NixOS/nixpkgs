@@ -1,35 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
-, libgit2
-, git
-, pkg-config
-, zlib
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  libgit2,
+  git,
+  pkg-config,
+  zlib,
 }:
 
 rustPlatform.buildRustPackage {
   pname = "git-agecrypt";
-  version = "unstable-2023-07-14";
+  version = "unstable-2024-03-11";
 
   src = fetchFromGitHub {
     owner = "vlaci";
     repo = "git-agecrypt";
-    rev = "945b80556d8848f6e85a8cc0053f9020bdc8b359";
-    hash = "sha256-6FjyJRYGyZt+uvYjXWvXI7DGq/+BNZHSSAT/DhOsF/E=";
+    rev = "126be86c515466c5878a60561f754a9ab4af6ee8";
+    hash = "sha256-cmnBW/691mmLHq8tWpD3+zwCf7Wph5fcVdSxQGxqd1k=";
   };
 
-  cargoHash = "sha256-QCV0DT0kcDRMzVc+9uTn9FYPpf+xvKJbakP6CHRcibo=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-71puTOjuV3egkip8pbiYbKxfhoZYtnirp4NrgiXR13I=";
 
-  nativeBuildInputs = [ pkg-config git ];
+  nativeBuildInputs = [
+    pkg-config
+    git
+  ];
 
-  buildInputs = [ libgit2 zlib ]
-    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
-
+  buildInputs = [
+    libgit2
+    zlib
+  ];
 
   meta = with lib; {
-    description = "Alternative to git-crypt using age instead of GPG.";
+    description = "Alternative to git-crypt using age instead of GPG";
     homepage = "https://github.com/vlaci/git-agecrypt";
     license = licenses.mpl20;
     maintainers = with maintainers; [ kuznetsss ];

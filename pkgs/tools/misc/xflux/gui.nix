@@ -1,6 +1,19 @@
-{ lib, fetchFromGitHub, buildPythonApplication, python3Packages, wrapGAppsHook
-, xflux, gtk3, gobject-introspection, pango, gdk-pixbuf, atk
-, pexpect, pygobject3, pyxdg, libappindicator-gtk3
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonApplication,
+  python,
+  wrapGAppsHook3,
+  xflux,
+  gtk3,
+  gobject-introspection,
+  pango,
+  gdk-pixbuf,
+  atk,
+  pexpect,
+  pygobject3,
+  pyxdg,
+  libappindicator-gtk3,
 }:
 buildPythonApplication rec {
   pname = "xflux-gui";
@@ -20,23 +33,28 @@ buildPythonApplication rec {
   ];
 
   buildInputs = [
-    xflux gtk3
+    xflux
+    gtk3
   ];
 
   nativeBuildInputs = [
-    wrapGAppsHook gobject-introspection
-    pango gdk-pixbuf atk libappindicator-gtk3
+    wrapGAppsHook3
+    gobject-introspection
+    pango
+    gdk-pixbuf
+    atk
+    libappindicator-gtk3
   ];
 
   postPatch = ''
-     substituteInPlace src/fluxgui/xfluxcontroller.py \
-       --replace "pexpect.spawn(\"xflux\"" "pexpect.spawn(\"${xflux}/bin/xflux\""
+    substituteInPlace src/fluxgui/xfluxcontroller.py \
+      --replace "pexpect.spawn(\"xflux\"" "pexpect.spawn(\"${xflux}/bin/xflux\""
   '';
 
   postFixup = ''
     wrapGAppsHook
     wrapPythonPrograms
-    patchPythonScript $out/${python3Packages.python.sitePackages}/fluxgui/fluxapp.py
+    patchPythonScript $out/${python.sitePackages}/fluxgui/fluxapp.py
   '';
 
   meta = {

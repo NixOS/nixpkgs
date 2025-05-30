@@ -1,24 +1,25 @@
-{ lib
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  pythonOlder,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
   # Python Inputs
-, qiskit-aer
-, qiskit-ibmq-provider
-, qiskit-ignis
-, qiskit-terra
+  qiskit-aer,
+  qiskit-ibmq-provider,
+  qiskit-ignis,
+  qiskit-terra,
   # Optional inputs
-, withOptionalPackages ? true
-, qiskit-finance
-, qiskit-machine-learning
-, qiskit-nature
-, qiskit-optimization
+  withOptionalPackages ? true,
+  qiskit-finance,
+  qiskit-machine-learning,
+  qiskit-nature,
+  qiskit-optimization,
   # Check Inputs
-, pytestCheckHook
+  pytestCheckHook,
 }:
 
 let
@@ -32,7 +33,7 @@ in
 buildPythonPackage rec {
   pname = "qiskit";
   # NOTE: This version denotes a specific set of subpackages. See https://qiskit.org/documentation/release_notes.html#version-history
-  version = "0.45.1";
+  version = "1.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -40,13 +41,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = "qiskit";
-    rev = "refs/tags/${version}";
-    hash = "sha256-XAAQc6oX9zy9MFze1UQbalUBfhbkY5u/0xOmc5J66kM=";
+    tag = version;
+    hash = "sha256-Dqd8ywnACfvrfY7Fzw5zYwhlsDvHZErPGvxBPs2pS04=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     qiskit-aer
@@ -71,6 +70,9 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/QISKit/qiskit/releases";
     changelog = "https://qiskit.org/documentation/release_notes.html";
     license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger pandaman ];
+    maintainers = with maintainers; [
+      drewrisinger
+      pandaman
+    ];
   };
 }

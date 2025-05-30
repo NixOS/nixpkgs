@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, case
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,13 +19,15 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    case
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "vine"
+  disabledTestPaths = [
+    # https://github.com/celery/vine/issues/106
+    "t/unit/test_synchronization.py"
   ];
+
+  pythonImportsCheck = [ "vine" ];
 
   meta = with lib; {
     description = "Python promises";

@@ -1,6 +1,7 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
 }:
 
 buildNpmPackage rec {
@@ -28,6 +29,6 @@ buildNpmPackage rec {
     homepage = "https://serverless.com";
     license = lib.licenses.mit;
     mainProgram = "serverless";
-    maintainers = with lib.maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

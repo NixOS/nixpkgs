@@ -1,6 +1,6 @@
 #!@runtimeShell@
 
 @fish@/bin/fish \
-    @OMF@/share/oh-my-fish/bin/install \
+    @omf@/share/oh-my-fish/bin/install \
     --noninteractive \
-    --offline=@OMF@/share/oh-my-fish
+    --offline=@omf@/share/oh-my-fish

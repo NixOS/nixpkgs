@@ -1,27 +1,54 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, numpy }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pdm-backend,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "jsonconversion";
-  version = "0.2.13";
-  format = "setuptools";
+  version = "1.1.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-4hMY0N/Px+g5zn3YzNfDWPyi8Pglvd/c2N9SeC4JoZ0=";
+  disabled = pythonOlder "3.11";
+
+  src = fetchFromGitHub {
+    owner = "DLR-RM";
+    repo = "python-jsonconversion";
+    tag = version;
+    hash = "sha256-FGgvSDweZM1xrdrDLFiGmdAtgxoFjglUlMV+fgo7/ls=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py --replace "'pytest-runner'" ""
-  '';
+  build-system = [ pdm-backend ];
 
-  nativeCheckInputs = [ pytestCheckHook numpy ];
+  pythonRemoveDeps = [
+    "pytest-runner"
+    "pytest"
+  ];
+
+  pythonRelaxDeps = [ "numpy" ];
+
+  dependencies = [
+    numpy
+    setuptools
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "jsonconversion" ];
 
+  disabledTests = lib.optionals (pythonAtLeast "3.13") [ "test_dict" ];
+
   meta = with lib; {
     description = "This python module helps converting arbitrary Python objects into JSON strings and back";
-    homepage = "https://pypi.org/project/jsonconversion/";
+    homepage = "https://github.com/DLR-RM/python-jsonconversion";
+    changelog = "https://github.com/DLR-RM/python-jsonconversion/releases/tag/${version}";
     license = licenses.bsd2;
-    maintainers = [ maintainers.terlar ];
+    maintainers = with maintainers; [ terlar ];
   };
 }

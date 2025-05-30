@@ -1,78 +1,60 @@
-{ lib
-, stdenv
-, Accelerate
-, blis
-, buildPythonPackage
-, catalogue
-, confection
-, CoreFoundation
-, CoreGraphics
-, CoreVideo
-, cymem
-, cython
-, fetchPypi
-, hypothesis
-, mock
-, murmurhash
-, numpy
-, plac
-, preshed
-, pydantic
-, pytestCheckHook
-, python
-, pythonOlder
-, setuptools
-, srsly
-, tqdm
-, typing-extensions
-, wasabi
+{
+  lib,
+  blas,
+  blis,
+  buildPythonPackage,
+  catalogue,
+  confection,
+  cymem,
+  cython,
+  fetchPypi,
+  hypothesis,
+  mock,
+  murmurhash,
+  numpy,
+  preshed,
+  pydantic,
+  pytestCheckHook,
+  setuptools,
+  srsly,
+  wasabi,
 }:
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "8.2.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "8.3.6";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-boW5RGcsD5UkGnH2f5iC4asxnESaR3QLDRWfTPhtFYc=";
+    hash = "sha256-SZg/m33cQ0OpUyaUqRGN0hbXpgBSCiGEmkO2wmjsbK0=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "preshed>=3.0.2,<3.1.0" "preshed"
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
+    blis
+    cymem
+    cython
+    murmurhash
+    numpy
+    preshed
     setuptools
   ];
 
   buildInputs = [
-    cython
-  ] ++ lib.optionals stdenv.isDarwin [
-    Accelerate
-    CoreFoundation
-    CoreGraphics
-    CoreVideo
+    blas
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     blis
     catalogue
     confection
     cymem
     murmurhash
     numpy
-    plac
     preshed
     pydantic
     srsly
-    tqdm
     wasabi
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
   ];
 
   nativeCheckInputs = [
@@ -81,24 +63,19 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Add native extensions.
   preCheck = ''
-    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
-
     # avoid local paths, relative imports wont resolve correctly
     mv thinc/tests tests
     rm -r thinc
   '';
 
-  pythonImportsCheck = [
-    "thinc"
-  ];
+  pythonImportsCheck = [ "thinc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for NLP machine learning";
     homepage = "https://github.com/explosion/thinc";
     changelog = "https://github.com/explosion/thinc/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aborsu ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aborsu ];
   };
 }

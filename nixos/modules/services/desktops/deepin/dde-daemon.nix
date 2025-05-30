@@ -1,11 +1,13 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 {
 
   meta = {
-    maintainers = teams.deepin.members;
+    maintainers = lib.teams.deepin.members;
   };
 
   ###### interface
@@ -14,16 +16,15 @@ with lib;
 
     services.deepin.dde-daemon = {
 
-      enable = mkEnableOption (lib.mdDoc "daemon for handling the deepin session settings");
+      enable = lib.mkEnableOption "daemon for handling the deepin session settings";
 
     };
 
   };
 
-
   ###### implementation
 
-  config = mkIf config.services.deepin.dde-daemon.enable {
+  config = lib.mkIf config.services.deepin.dde-daemon.enable {
 
     environment.systemPackages = [ pkgs.deepin.dde-daemon ];
 

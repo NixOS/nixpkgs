@@ -1,14 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, antlr4
-, capnproto
-, readline
-, surelog
-, uhdm
-, yosys
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  antlr4,
+  capnproto,
+  readline,
+  surelog,
+  uhdm,
+  yosys,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,28 +16,18 @@ stdenv.mkDerivation (finalAttrs: {
   plugin = "synlig";
 
   # The module has automatic regular releases, with date + short git hash
-  GIT_VERSION = "2023-11-28-b8ed72d";
+  GIT_VERSION = "2024-12-10-2d838ed";
 
   # Derive our package version from GIT_VERSION, remove hash, just keep date.
-  version = builtins.concatStringsSep "-" (
-    lib.take 3 (builtins.splitVersion finalAttrs.GIT_VERSION));
+  version = builtins.concatStringsSep "-" (lib.take 3 (builtins.splitVersion finalAttrs.GIT_VERSION));
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
-    repo  = "synlig";
-    rev   = "${finalAttrs.GIT_VERSION}";
-    hash  = "sha256-jdA3PBodecqriGWU/BzWtQ5gyu62pZHv+1NvFrwsTTk=";
-    fetchSubmodules = false;  # we use all dependencies from nix
+    repo = "synlig";
+    rev = "${finalAttrs.GIT_VERSION}";
+    hash = "sha256-MsnRraAqsIkJ2PjBfoSrvUX/RHtL+FV2+iB3i7galLI=";
+    fetchSubmodules = false; # we use all dependencies from nix
   };
-
-  patches = [
-    (fetchpatch {
-      # Fixes https://github.com/chipsalliance/synlig/issues/2299
-      name = "make-compile-for-yosys-0.37.patch";
-      url = "https://github.com/chipsalliance/synlig/commit/3dd46d4769c20b6dd1163310f8e56560b351a211.patch";
-      hash = "sha256-OP/2HA/Ukt6o5aKgoBk19P6T/33btU/x6VnoIVXct1g=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -76,11 +66,11 @@ stdenv.mkDerivation (finalAttrs: {
   # Check that the plugin can be loaded successfully and parse simple file.
   doCheck = true;
   checkPhase = ''
-     runHook preCheck
-     echo "module litmustest(); endmodule;" > litmustest.sv
-     yosys -p "plugin -i build/release/systemverilog-plugin/systemverilog.so;\
-               read_systemverilog litmustest.sv"
-     runHook postCheck
+    runHook preCheck
+    echo "module litmustest(); endmodule;" > litmustest.sv
+    yosys -p "plugin -i build/release/systemverilog-plugin/systemverilog.so;\
+              read_systemverilog litmustest.sv"
+    runHook postCheck
   '';
 
   installPhase = ''
@@ -93,9 +83,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "SystemVerilog support plugin for Yosys";
-    homepage    = "https://github.com/chipsalliance/synlig";
-    license     = licenses.asl20;
+    homepage = "https://github.com/chipsalliance/synlig";
+    license = licenses.asl20;
     maintainers = with maintainers; [ hzeller ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 })

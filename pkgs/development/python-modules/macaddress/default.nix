@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, hypothesis
-, reprshed
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  hypothesis,
+  reprshed,
 }:
 
 buildPythonPackage rec {
@@ -18,9 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-2eD5Ui8kUduKLJ0mSiwaz7TQSeF1+2ASirp70V/8+EA=";
   };
 
-  pythonImportsCheck = [
-    "macaddress"
-  ];
+  pythonImportsCheck = [ "macaddress" ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -28,13 +27,11 @@ buildPythonPackage rec {
     reprshed
   ];
 
-  pytestFlagsArray = [
-    "$src/test.py"
-  ];
+  pytestFlagsArray = [ "test.py" ];
 
   meta = with lib; {
     homepage = "https://github.com/mentalisttraceur/python-macaddress";
-    description = "A module for handling hardware identifiers like MAC addresses";
+    description = "Module for handling hardware identifiers like MAC addresses";
     license = licenses.bsd0;
     maintainers = with maintainers; [ netali ];
   };

@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, aiohttp
-, async-timeout
-, defusedxml
-, python-didl-lite
-, voluptuous
+  # dependencies
+  aiohttp,
+  async-timeout,
+  defusedxml,
+  python-didl-lite,
+  voluptuous,
 
-# tests
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
+  # tests
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "async-upnp-client";
-  version = "0.38.2";
+  version = "0.44.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,15 +31,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "StevenLooman";
     repo = "async_upnp_client";
-    rev = "refs/tags/${version}";
-    hash = "sha256-gPA9u1BuMswfg5Nll8l6vrcTP2s3Zn9ESTbV+dOxlhA=";
+    tag = version;
+    hash = "sha256-xtouCq8nkvXxgZ0jX4VuTU41xxrAkXqWEpZg/vms4Zo=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  pythonRelaxDeps = [
+    "async-timeout"
+    "defusedxml"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     async-timeout
     defusedxml
@@ -56,32 +60,14 @@ buildPythonPackage rec {
     # socket.gaierror: [Errno -2] Name or service not known
     "test_async_get_local_ip"
     "test_get_local_ip"
-    # OSError: [Errno 101] Network is unreachable
-    "test_auto_resubscribe_fail"
-    "test_init"
-    "test_on_notify_dlna_event"
-    "test_on_notify_upnp_event"
-    "test_server_init"
-    "test_server_start"
-    "test_start_server"
-    "test_subscribe"
-    "test_subscribe_auto_resubscribe"
-    "test_subscribe_fail"
-    "test_subscribe_manual_resubscribe"
-    "test_subscribe_renew"
-    "test_unsubscribe"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_deferred_callback_url"
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_deferred_callback_url" ];
 
   disabledTestPaths = [
     # Tries to bind to multicast socket and fails to find proper interface
     "tests/test_ssdp_listener.py"
   ];
 
-  pythonImportsCheck = [
-    "async_upnp_client"
-  ];
+  pythonImportsCheck = [ "async_upnp_client" ];
 
   meta = with lib; {
     description = "Asyncio UPnP Client library for Python";
@@ -89,5 +75,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/StevenLooman/async_upnp_client/blob/${version}/CHANGES.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ hexa ];
+    mainProgram = "upnp-client";
   };
 }

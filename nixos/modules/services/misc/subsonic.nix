@@ -1,28 +1,32 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.subsonic;
   opt = options.services.subsonic;
-in {
+in
+{
   options = {
     services.subsonic = {
-      enable = mkEnableOption (lib.mdDoc "Subsonic daemon");
+      enable = lib.mkEnableOption "Subsonic daemon";
 
-      home = mkOption {
-        type = types.path;
+      home = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/subsonic";
-        description = lib.mdDoc ''
+        description = ''
           The directory where Subsonic will create files.
           Make sure it is writable.
         '';
       };
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = "0.0.0.0";
-        description = lib.mdDoc ''
+        description = ''
           The host name or IP address on which to bind Subsonic.
           Only relevant if you have multiple network interfaces and want
           to make Subsonic available on only one of them. The default value
@@ -30,74 +34,74 @@ in {
         '';
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 4040;
-        description = lib.mdDoc ''
+        description = ''
           The port on which Subsonic will listen for
           incoming HTTP traffic. Set to 0 to disable.
         '';
       };
 
-      httpsPort = mkOption {
-        type = types.port;
+      httpsPort = lib.mkOption {
+        type = lib.types.port;
         default = 0;
-        description = lib.mdDoc ''
+        description = ''
           The port on which Subsonic will listen for
           incoming HTTPS traffic. Set to 0 to disable.
         '';
       };
 
-      contextPath = mkOption {
-        type = types.path;
+      contextPath = lib.mkOption {
+        type = lib.types.path;
         default = "/";
-        description = lib.mdDoc ''
+        description = ''
           The context path, i.e., the last part of the Subsonic
           URL. Typically '/' or '/subsonic'. Default '/'
         '';
       };
 
-      maxMemory = mkOption {
-        type = types.int;
+      maxMemory = lib.mkOption {
+        type = lib.types.int;
         default = 100;
-        description = lib.mdDoc ''
+        description = ''
           The memory limit (max Java heap size) in megabytes.
           Default: 100
         '';
       };
 
-      defaultMusicFolder = mkOption {
-        type = types.path;
+      defaultMusicFolder = lib.mkOption {
+        type = lib.types.path;
         default = "/var/music";
-        description = lib.mdDoc ''
+        description = ''
           Configure Subsonic to use this folder for music.  This option
           only has effect the first time Subsonic is started.
         '';
       };
 
-      defaultPodcastFolder = mkOption {
-        type = types.path;
+      defaultPodcastFolder = lib.mkOption {
+        type = lib.types.path;
         default = "/var/music/Podcast";
-        description = lib.mdDoc ''
+        description = ''
           Configure Subsonic to use this folder for Podcasts.  This option
           only has effect the first time Subsonic is started.
         '';
       };
 
-      defaultPlaylistFolder = mkOption {
-        type = types.path;
+      defaultPlaylistFolder = lib.mkOption {
+        type = lib.types.path;
         default = "/var/playlists";
-        description = lib.mdDoc ''
+        description = ''
           Configure Subsonic to use this folder for playlists.  This option
           only has effect the first time Subsonic is started.
         '';
       };
 
-      transcoders = mkOption {
-        type = types.listOf types.path;
+      transcoders = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
         default = [ "${pkgs.ffmpeg.bin}/bin/ffmpeg" ];
-        defaultText = literalExpression ''[ "''${pkgs.ffmpeg.bin}/bin/ffmpeg" ]'';
-        description = lib.mdDoc ''
+        defaultText = lib.literalExpression ''[ "''${pkgs.ffmpeg.bin}/bin/ffmpeg" ]'';
+        description = ''
           List of paths to transcoder executables that should be accessible
           from Subsonic. Symlinks will be created to each executable inside
           ''${config.${opt.home}}/transcoders.
@@ -106,7 +110,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.subsonic = {
       description = "Personal media streamer";
       after = [ "network.target" ];

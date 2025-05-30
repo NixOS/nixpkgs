@@ -1,37 +1,50 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, numpy, future, spglib, glibcLocales, pytest, scipy }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  numpy,
+  scipy,
+  spglib,
+  glibcLocales,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "seekpath";
-  version = "2.0.1";
-  format = "setuptools";
-  disabled = pythonOlder "3.5";
+  version = "2.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "giovannipizzi";
-    repo = pname;
+    repo = "seekpath";
     rev = "v${version}";
-    sha256 = "0x592650ynacmx5n5bilj5lja4iw0gf1nfypy82cmy5z363qhqxn";
+    hash = "sha256-8Nm8SKHda2qt1kncXZxC4T3cpicXpDZhxPzs78JICzE=";
   };
 
   LC_ALL = "en_US.utf-8";
 
-  # scipy isn't listed in install_requires, but used in package
-  propagatedBuildInputs = [ numpy spglib future scipy ];
+  build-system = [ setuptools ];
+
+  dependencies = [
+    numpy
+    spglib
+  ];
+
+  optional-dependencies = {
+    bz = [ scipy ];
+  };
 
   nativeBuildInputs = [ glibcLocales ];
 
-  nativeCheckInputs = [ pytest ];
+  pythonImportsCheck = [ "seekpath" ];
 
-  # I don't know enough about crystal structures to fix
-  checkPhase = ''
-    pytest . -k 'not oI2Y'
-  '';
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.bz;
 
   meta = with lib; {
-    description = "A module to obtain and visualize band paths in the Brillouin zone of crystal structures.";
+    description = "Module to obtain and visualize band paths in the Brillouin zone of crystal structures";
     homepage = "https://github.com/giovannipizzi/seekpath";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };
 }
-

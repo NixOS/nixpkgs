@@ -1,40 +1,46 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }: {
+{ lib, pkgs, ... }:
+{
   name = "luks";
 
-  nodes.machine = { pkgs, ... }: {
-    imports = [ ./common/auto-format-root-device.nix ];
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      imports = [ ./common/auto-format-root-device.nix ];
 
-    # Use systemd-boot
-    virtualisation = {
-      emptyDiskImages = [ 512 512 ];
-      useBootLoader = true;
-      useEFIBoot = true;
-      # To boot off the encrypted disk, we need to have a init script which comes from the Nix store
-      mountHostNixStore = true;
-    };
-    boot.loader.systemd-boot.enable = true;
-
-    boot.kernelParams = lib.mkOverride 5 [ "console=tty1" ];
-
-    environment.systemPackages = with pkgs; [ cryptsetup ];
-
-    specialisation = rec {
-      boot-luks.configuration = {
-        boot.initrd.luks.devices = lib.mkVMOverride {
-          # We have two disks and only type one password - key reuse is in place
-          cryptroot.device = "/dev/vdb";
-          cryptroot2.device = "/dev/vdc";
-        };
-        virtualisation.rootDevice = "/dev/mapper/cryptroot";
+      # Use systemd-boot
+      virtualisation = {
+        emptyDiskImages = [
+          512
+          512
+        ];
+        useBootLoader = true;
+        useEFIBoot = true;
+        # To boot off the encrypted disk, we need to have a init script which comes from the Nix store
+        mountHostNixStore = true;
       };
-      boot-luks-custom-keymap.configuration = lib.mkMerge [
-        boot-luks.configuration
-        {
-          console.keyMap = "neo";
-        }
-      ];
+      boot.loader.systemd-boot.enable = true;
+
+      boot.kernelParams = lib.mkOverride 5 [ "console=tty1" ];
+
+      environment.systemPackages = with pkgs; [ cryptsetup ];
+
+      specialisation = rec {
+        boot-luks.configuration = {
+          boot.initrd.luks.devices = lib.mkVMOverride {
+            # We have two disks and only type one password - key reuse is in place
+            cryptroot.device = "/dev/vdb";
+            cryptroot2.device = "/dev/vdc";
+          };
+          virtualisation.rootDevice = "/dev/mapper/cryptroot";
+        };
+        boot-luks-custom-keymap.configuration = lib.mkMerge [
+          boot-luks.configuration
+          {
+            console.keyMap = "neo";
+          }
+        ];
+      };
     };
-  };
 
   enableOCR = true;
 
@@ -70,4 +76,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
 
     assert "/dev/mapper/cryptroot on / type ext4" in machine.succeed("mount")
   '';
-})
+}

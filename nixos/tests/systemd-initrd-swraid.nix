@@ -1,41 +1,50 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }: {
+{ lib, pkgs, ... }:
+{
   name = "systemd-initrd-swraid";
 
-  nodes.machine = { pkgs, ... }: {
-    # Use systemd-boot
-    virtualisation = {
-      emptyDiskImages = [ 512 512 ];
-      useBootLoader = true;
-      # Booting off the RAID requires an available init script
-      mountHostNixStore = true;
-      useEFIBoot = true;
-    };
-    boot.loader.systemd-boot.enable = true;
-    boot.loader.efi.canTouchEfiVariables = true;
-
-    environment.systemPackages = with pkgs; [ mdadm e2fsprogs ]; # for mdadm and mkfs.ext4
-    boot.swraid = {
-      enable = true;
-      mdadmConf = ''
-        ARRAY /dev/md0 devices=/dev/vdb,/dev/vdc
-      '';
-    };
-    environment.etc."mdadm.conf".text = ''
-      MAILADDR test@example.com
-    '';
-    boot.initrd = {
-      systemd = {
-        enable = true;
-        emergencyAccess = true;
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      # Use systemd-boot
+      virtualisation = {
+        emptyDiskImages = [
+          512
+          512
+        ];
+        useBootLoader = true;
+        # Booting off the RAID requires an available init script
+        mountHostNixStore = true;
+        useEFIBoot = true;
       };
-      kernelModules = [ "raid0" ];
-    };
+      boot.loader.systemd-boot.enable = true;
+      boot.loader.efi.canTouchEfiVariables = true;
 
-    specialisation.boot-swraid.configuration.virtualisation.rootDevice = "/dev/disk/by-label/testraid";
-    # This protects against a regression. We do not have to switch to it.
-    # It's sufficient to trigger its evaluation.
-    specialisation.build-old-initrd.configuration.boot.initrd.systemd.enable = lib.mkForce false;
-  };
+      environment.systemPackages = with pkgs; [
+        mdadm
+        e2fsprogs
+      ]; # for mdadm and mkfs.ext4
+      boot.swraid = {
+        enable = true;
+        mdadmConf = ''
+          ARRAY /dev/md0 devices=/dev/vdb,/dev/vdc
+        '';
+      };
+      environment.etc."mdadm.conf".text = ''
+        MAILADDR test@example.com
+      '';
+      boot.initrd = {
+        systemd = {
+          enable = true;
+          emergencyAccess = true;
+        };
+        kernelModules = [ "raid0" ];
+      };
+
+      specialisation.boot-swraid.configuration.virtualisation.rootDevice = "/dev/disk/by-label/testraid";
+      # This protects against a regression. We do not have to switch to it.
+      # It's sufficient to trigger its evaluation.
+      specialisation.build-old-initrd.configuration.boot.initrd.systemd.enable = lib.mkForce false;
+    };
 
   testScript = ''
     # Create RAID
@@ -63,4 +72,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     assert expected_config == got_config, repr((expected_config, got_config))
     machine.wait_for_unit("mdmonitor.service")
   '';
-})
+}

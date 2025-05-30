@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, six
-, certauth
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  six,
+  certauth,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "wsgiprox";
   version = "1.5.2";
   format = "setuptools";

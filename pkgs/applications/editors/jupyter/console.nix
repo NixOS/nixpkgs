@@ -1,25 +1,32 @@
-{ python3
-, jupyter-kernel
-, lib
+{
+  python3,
+  jupyter-kernel,
+  lib,
 }:
 
 let
-  mkConsole = {
-    definitions ? jupyter-kernel.default
-    , kernel ? null
-  }:
+  mkConsole =
+    {
+      definitions ? jupyter-kernel.default,
+      kernel ? null,
+    }:
     (python3.buildEnv.override {
       extraLibs = [ python3.pkgs.jupyter-console ];
-      makeWrapperArgs = [
-        "--set JUPYTER_PATH ${jupyter-kernel.create { inherit definitions; }}"
-      ] ++ lib.optionals (kernel != null) [
-        "--add-flags --kernel"
-        "--add-flags ${kernel}"
-      ];
-    }).overrideAttrs (oldAttrs: {
-      # To facilitate running nix run .#jupyter-console
-      meta = oldAttrs.meta // { mainProgram = "jupyter-console"; };
-    });
+      makeWrapperArgs =
+        [
+          "--set JUPYTER_PATH ${jupyter-kernel.create { inherit definitions; }}"
+        ]
+        ++ lib.optionals (kernel != null) [
+          "--add-flags --kernel"
+          "--add-flags ${kernel}"
+        ];
+    }).overrideAttrs
+      (oldAttrs: {
+        # To facilitate running nix run .#jupyter-console
+        meta = oldAttrs.meta // {
+          mainProgram = "jupyter-console";
+        };
+      });
 
 in
 
@@ -30,8 +37,10 @@ in
   inherit mkConsole;
 
   # An ergonomic way to start a console with a single kernel.
-  withSingleKernel = definition: mkConsole {
-    definitions = lib.listToAttrs [(lib.nameValuePair definition.language definition)];
-    kernel = definition.language;
-  };
+  withSingleKernel =
+    definition:
+    mkConsole {
+      definitions = lib.listToAttrs [ (lib.nameValuePair definition.language definition) ];
+      kernel = definition.language;
+    };
 }

@@ -1,12 +1,19 @@
-{ buildDunePackage, mirage-block, logs }:
+{
+  buildDunePackage,
+  mirage-block,
+  logs,
+}:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "mirage-block-combinators";
   inherit (mirage-block) version src;
 
   duneVersion = "3";
 
-  propagatedBuildInputs = [ mirage-block logs ];
+  propagatedBuildInputs = [
+    mirage-block
+    logs
+  ];
 
   meta = mirage-block.meta // {
     description = "Block signatures and implementations for MirageOS using Lwt";

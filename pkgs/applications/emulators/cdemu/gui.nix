@@ -1,22 +1,47 @@
-{ callPackage, makeWrapper, gobject-introspection, cmake
-, python3Packages, gtk3, glib, libnotify, intltool, gnome, gdk-pixbuf, librsvg }:
-let
-  pkg = import ./base.nix {
-    version = "3.2.5";
-    pname = "gcdemu";
-    pkgSha256 = "1nvpbq4mz8caw91q5ny9gf206g9bypavxws9nxyfcanfkc4zfkl4";
-  };
-  inherit (python3Packages) python pygobject3;
-in callPackage pkg {
-  buildInputs = [ python pygobject3 gtk3 glib libnotify gnome.adwaita-icon-theme gdk-pixbuf librsvg ];
-  drvParams = {
-    nativeBuildInputs = [ gobject-introspection cmake makeWrapper intltool ];
-    postFixup = ''
-      wrapProgram $out/bin/gcdemu \
-        --set PYTHONPATH "$PYTHONPATH" \
-        --set GI_TYPELIB_PATH "$GI_TYPELIB_PATH" \
-        --prefix XDG_DATA_DIRS : "$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
-    '';
-    # TODO AppIndicator
-  };
+{
+  callPackage,
+  cmake,
+  pkg-config,
+  wrapGAppsHook3,
+  gobject-introspection,
+  python3Packages,
+  libnotify,
+  intltool,
+  adwaita-icon-theme,
+  gdk-pixbuf,
+}:
+python3Packages.buildPythonApplication {
+
+  inherit
+    (callPackage ./common-drv-attrs.nix {
+      version = "3.2.6";
+      pname = "gcdemu";
+      hash = "sha256-w4vzKoSotL5Cjfr4Cu4YhNSWXJqS+n/vySrwvbhR1zA=";
+    })
+    pname
+    version
+    src
+    meta
+    ;
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapGAppsHook3
+    intltool
+    gobject-introspection
+  ];
+  buildInputs = [
+    libnotify
+    adwaita-icon-theme
+    gdk-pixbuf
+  ];
+  propagatedBuildInputs = with python3Packages; [ pygobject3 ];
+
+  pyproject = false;
+  dontWrapGApps = true;
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
 }

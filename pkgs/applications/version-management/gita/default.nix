@@ -1,11 +1,10 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, git
-, pytest
-, pyyaml
-, setuptools
-, installShellFiles
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  pyyaml,
+  setuptools,
+  installShellFiles,
 }:
 
 buildPythonApplication rec {
@@ -35,7 +34,7 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A command-line tool to manage multiple git repos";
+    description = "Command-line tool to manage multiple git repos";
     homepage = "https://github.com/nosarthur/gita";
     license = licenses.mit;
     maintainers = with maintainers; [ seqizz ];

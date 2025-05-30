@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -12,7 +17,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Enable the kodi multimedia center.";
+        description = "Enable the kodi multimedia center.";
       };
 
       package = mkPackageOption pkgs "kodi" {
@@ -22,13 +27,15 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.xserver.desktopManager.session = [{
-      name = "kodi";
-      start = ''
-        LIRC_SOCKET_PATH=/run/lirc/lircd ${cfg.package}/bin/kodi --standalone &
-        waitPID=$!
-      '';
-    }];
+    services.xserver.desktopManager.session = [
+      {
+        name = "kodi";
+        start = ''
+          LIRC_SOCKET_PATH=/run/lirc/lircd ${cfg.package}/bin/kodi --standalone &
+          waitPID=$!
+        '';
+      }
+    ];
 
     environment.systemPackages = [ cfg.package ];
   };

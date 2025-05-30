@@ -1,52 +1,69 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, vala, gtk3, libgee
-, poppler, libpthreadstubs, gstreamer, gst-plugins-base, gst-plugins-good, gst-libav, gobject-introspection, wrapGAppsHook
-, qrencode, webkitgtk, discount, json-glib, fetchpatch }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  vala,
+  gtk3,
+  libgee,
+  poppler,
+  libpthreadstubs,
+  gstreamer,
+  gst-plugins-base,
+  gst-plugins-good,
+  gst-libav,
+  gobject-introspection,
+  wrapGAppsHook3,
+  qrencode,
+  webkitgtk_4_1,
+  discount,
+  json-glib,
+  nix-update-script,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pdfpc";
-  version = "4.6.0";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     repo = "pdfpc";
     owner = "pdfpc";
     rev = "v${version}";
-    hash = "sha256-5HFmbVsNajMwo+lBe9kJcJyQGe61N6Oy2CI/WJwmSE4=";
+    hash = "sha256-fPhCrn1ELC03/II+e021BUNJr1OKCBIcFCM7z+2Oo+s=";
   };
 
   nativeBuildInputs = [
-    cmake pkg-config vala
+    cmake
+    pkg-config
+    vala
     # For setup hook
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
-    gtk3 libgee poppler
+    gtk3
+    libgee
+    poppler
     libpthreadstubs
     gstreamer
     gst-plugins-base
     (gst-plugins-good.override { gtkSupport = true; })
     gst-libav
     qrencode
-    webkitgtk
+    webkitgtk_4_1
     discount
     json-glib
   ];
 
-  patches = [
-    # needed for compiling pdfpc 4.6.0 with vala 0.56.7, see
-    # https://github.com/pdfpc/pdfpc/issues/686
-    # https://github.com/pdfpc/pdfpc/pull/687
-    (fetchpatch {
-      url = "https://github.com/pdfpc/pdfpc/commit/d38edfac63bec54173b4b31eae5c7fb46cd8f714.diff";
-      hash = "sha256-KC2oyzcwU2fUmxaed8qAsKcePwR5KcXgpVdstJg8KmU=";
-    })
-  ];
+  cmakeFlags = lib.optional stdenv.hostPlatform.isDarwin (lib.cmakeBool "MOVIES" false);
 
-  cmakeFlags = lib.optional stdenv.isDarwin "-DMOVIES=OFF";
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A presenter console with multi-monitor support for PDF files";
+    description = "Presenter console with multi-monitor support for PDF files";
+    mainProgram = "pdfpc";
     homepage = "https://pdfpc.github.io/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pSub ];

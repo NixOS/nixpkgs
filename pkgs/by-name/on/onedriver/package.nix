@@ -1,13 +1,15 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, pkg-config
-, webkitgtk_4_1
-, glib
-, fuse
-, installShellFiles
-, wrapGAppsHook
-, wrapperDir ? "/run/wrappers/bin"
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  pkg-config,
+  webkitgtk_4_1,
+  glib,
+  fuse,
+  installShellFiles,
+  wrapGAppsHook3,
+  glib-networking,
+  wrapperDir ? "/run/wrappers/bin",
 }:
 let
   pname = "onedriver";
@@ -24,8 +26,17 @@ buildGoModule {
   inherit pname version src;
   vendorHash = "sha256-OOiiKtKb+BiFkoSBUQQfqm4dMfDW3Is+30Kwcdg8LNA=";
 
-  nativeBuildInputs = [ pkg-config installShellFiles wrapGAppsHook ];
-  buildInputs = [ webkitgtk_4_1 glib fuse ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+    wrapGAppsHook3
+  ];
+  buildInputs = [
+    webkitgtk_4_1
+    glib
+    fuse
+    glib-networking
+  ];
 
   ldflags = [ "-X github.com/jstaf/onedriver/cmd/common.commit=v${version}" ];
 
@@ -56,7 +67,7 @@ buildGoModule {
   '';
 
   meta = with lib; {
-    description = "A network filesystem for Linux";
+    description = "Network filesystem for Linux";
     longDescription = ''
       onedriver is a network filesystem that gives your computer direct access to your files on Microsoft OneDrive.
       This is not a sync client. Instead of syncing files, onedriver performs an on-demand download of files when

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cryptography
-, flit-core
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cryptography,
+  flit-core,
 }:
 
 buildPythonPackage rec {
@@ -14,25 +15,24 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "cryptography_vectors";
     inherit version;
-    hash = "sha256-rc3M9dnuZhqWAq0h0lJfZ4ugem52jOeYNZlOIIurDhY=";
+    hash = "sha256-qzLhVrbn6vbYxyejIkWWfczgSUhzAUgvyjjAxf3ITks=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
   # No tests included
   doCheck = false;
 
-  pythonImportsCheck = [
-    "cryptography_vectors"
-  ];
+  pythonImportsCheck = [ "cryptography_vectors" ];
 
   meta = with lib; {
     description = "Test vectors for the cryptography package";
     homepage = "https://cryptography.io/en/latest/development/test-vectors/";
     downloadPage = "https://github.com/pyca/cryptography/tree/master/vectors";
-    license = with licenses; [ asl20 bsd3 ];
+    license = with licenses; [
+      asl20
+      bsd3
+    ];
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

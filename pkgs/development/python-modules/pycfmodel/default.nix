@@ -1,34 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, pydantic
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  pydantic,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pycfmodel";
-  version = "0.22.0";
+  version = "1.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Skyscanner";
     repo = "pycfmodel";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-NLi94W99LhrBXNFItMfJczV9EZlgvmvkavrfDQJs0YU=";
+    tag = "v${version}";
+    hash = "sha256-mFO3T5FmVLAXPmLJsueCDdCLoFfBwQwryxfEtkLz1rM=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  pythonRelaxDeps = [ "pydantic" ];
 
-  propagatedBuildInputs = [
-    pydantic
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pydantic ];
 
   nativeCheckInputs = [
     httpx
@@ -42,11 +41,12 @@ buildPythonPackage rec {
     "test_valid_es_domain_from_aws_documentation_examples_resource_can_be_built"
     "test_valid_opensearch_domain_from_aws_documentation_examples_resource_can_be_built"
     "test_resolve_booleans_different_properties_for_generic_resource"
+    "test_loose_ip"
+    "test_extra_fields_not_allowed_s3_bucket"
+    "test_raise_error_if_invalid_fields_in_resource"
   ];
 
-  pythonImportsCheck = [
-    "pycfmodel"
-  ];
+  pythonImportsCheck = [ "pycfmodel" ];
 
   meta = with lib; {
     description = "Model for Cloud Formation scripts";
@@ -54,6 +54,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/Skyscanner/pycfmodel/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
-    broken = versionAtLeast pydantic.version "2";
   };
 }

@@ -1,30 +1,33 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qtbase
-, qttools
-, qtx11extras
-, qtsvg
-, qtimageformats
-, xorg
-, lxqt-build-tools
-, libfm-qt
-, libexif
-, menu-cache
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libXdmcp,
+  libexif,
+  libfm-qt,
+  libpthreadstubs,
+  lxqt-build-tools,
+  menu-cache,
+  qtbase,
+  qtimageformats,
+  qtsvg,
+  qttools,
+  qtwayland,
+  wrapQtAppsHook,
+  gitUpdater,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "lximage-qt";
-  version = "1.4.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-Igfd8lhKDjdseQeARiirj+tEoJdcaeHuyd4mfQHOVg0=";
+    hash = "sha256-4j/5z+kePFXubYXAbIaWYVU+plJv1xEpHHI1IXqbQog=";
   };
 
   nativeBuildInputs = [
@@ -32,27 +35,29 @@ mkDerivation rec {
     pkg-config
     lxqt-build-tools
     qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtx11extras
-    qtsvg
-    qtimageformats # add-on module to support more image file formats
-    libfm-qt
-    xorg.libpthreadstubs
-    xorg.libXdmcp
+    libXdmcp
     libexif
+    libfm-qt
+    libpthreadstubs
     menu-cache
+    qtbase
+    qtimageformats # add-on module to support more image file formats
+    qtsvg
+    qtwayland
   ];
 
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lximage-qt";
-    description = "The image viewer and screenshot tool for lxqt";
+    description = "Image viewer and screenshot tool for lxqt";
+    mainProgram = "lximage-qt";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
-    maintainers = teams.lxqt.members;
+    teams = [ teams.lxqt ];
   };
 }

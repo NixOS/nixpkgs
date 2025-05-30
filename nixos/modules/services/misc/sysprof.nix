@@ -1,9 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options = {
     services.sysprof = {
-      enable = lib.mkEnableOption (lib.mdDoc "sysprof profiling daemon");
+      enable = lib.mkEnableOption "sysprof profiling daemon";
     };
   };
 

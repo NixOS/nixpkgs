@@ -1,61 +1,58 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, fetchNpmDeps
-, npmHooks
-, nodejs
-, pkg-config
-, sqlite
-, zstd
-, stdenv
-, darwin
-, open-policy-agent
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchNpmDeps,
+  npmHooks,
+  nodejs,
+  python3,
+  pkg-config,
+  sqlite,
+  zstd,
+  stdenv,
+  open-policy-agent,
+  cctools,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-authentication-service";
-  version = "0.7.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
-    owner = "matrix-org";
+    owner = "element-hq";
     repo = "matrix-authentication-service";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-foipChunzRKIbeO+O+XYx0luzaA0G9LKrH59luQl9R0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/UrMmC5DTxoN6uzvTB+V3//hGQmKlkYvi5Lv4p31fq4=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "opa-wasm-0.1.0" = "sha256-GuOlUNGegdDieTvthk9SyfQSTeem7ArJTdiD1t7Ojd4=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-UvRv69rHqPNqTg5nhUojTDHEFUIXF8LEB4ndzA7CHc0=";
 
   npmDeps = fetchNpmDeps {
-    name = "${pname}-${version}-npm-deps";
-    src = "${src}/${npmRoot}";
-    hash = "sha256-ymI+ZkPEGMTLMdTLfKv/v/cgW5iS/nd9PNXFvYaYNjo=";
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    src = "${finalAttrs.src}/${finalAttrs.npmRoot}";
+    hash = "sha256-7EN8GIO8VutAZujVvgM67fGIXWD2aJhHhEJrTeHRiGE=";
   };
 
   npmRoot = "frontend";
+  npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
     pkg-config
     open-policy-agent
     npmHooks.npmConfigHook
     nodejs
-  ];
+    (python3.withPackages (ps: [ ps.setuptools ])) # Used by gyp
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin cctools; # libtool used by gyp;
 
   buildInputs = [
     sqlite
     zstd
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
+    VERGEN_GIT_DESCRIBE = finalAttrs.version;
   };
 
   buildNoDefaultFeatures = true;
@@ -78,7 +75,7 @@ rustPlatform.buildRustPackage rec {
     (cd "$npmRoot" && npm run build)
   '';
 
-  # Adopted from https://github.com/matrix-org/matrix-authentication-service/blob/main/Dockerfile
+  # Adopted from https://github.com/element-hq/matrix-authentication-service/blob/main/Dockerfile
   postInstall = ''
     install -Dm444 -t "$out/share/$pname"        "policies/policy.wasm"
     install -Dm444 -t "$out/share/$pname/assets" "$npmRoot/dist/"*
@@ -86,12 +83,12 @@ rustPlatform.buildRustPackage rec {
     cp -r translations   "$out/share/$pname/translations"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "OAuth2.0 + OpenID Provider for Matrix Homeservers";
-    homepage = "https://github.com/matrix-org/matrix-authentication-service";
-    changelog = "https://github.com/matrix-org/matrix-authentication-service/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ teutat3s ];
+    homepage = "https://github.com/element-hq/matrix-authentication-service";
+    changelog = "https://github.com/element-hq/matrix-authentication-service/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ teutat3s ];
     mainProgram = "mas-cli";
   };
-}
+})

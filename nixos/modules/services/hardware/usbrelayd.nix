@@ -1,15 +1,19 @@
-{ config, lib, pkgs, ... }:
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.usbrelayd;
 in
 {
-  options.services.usbrelayd = with types; {
-    enable = mkEnableOption (lib.mdDoc "USB Relay MQTT daemon");
+  options.services.usbrelayd = with lib.types; {
+    enable = lib.mkEnableOption "USB Relay MQTT daemon";
 
-    broker = mkOption {
+    broker = lib.mkOption {
       type = str;
-      description = lib.mdDoc "Hostname or IP address of your MQTT Broker.";
+      description = "Hostname or IP address of your MQTT Broker.";
       default = "127.0.0.1";
       example = [
         "mqtt"
@@ -17,14 +21,14 @@ in
       ];
     };
 
-    clientName = mkOption {
+    clientName = lib.mkOption {
       type = str;
-      description = lib.mdDoc "Name, your client connects as.";
+      description = "Name, your client connects as.";
       default = "MyUSBRelay";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.etc."usbrelayd.conf".text = ''
       [MQTT]

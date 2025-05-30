@@ -1,32 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, aiohttp
-, bcrypt
-, pyopenssl
-, python-gnupg
-, requests
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  aiohttp,
+  bcrypt,
+  pyopenssl,
+  python-gnupg,
+  requests,
+  pytestCheckHook,
+  pyotp,
+  pytest-cov-stub,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "proton-core";
-  version = "0.1.15-unstable-2023-10-24";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-core";
-    rev = "5e795e04094dff67c03c56f2f3de03ff43514cc4";
-    hash = "sha256-hchwrolc65tVmSe2IzxwH2zDU2JZzXrCMzWaETWcMDI=";
+    tag = "v${version}";
+    hash = "sha256-EZsPw2kPgY42MQxrXt7yAtCNSmSNN5AYxx7SllwsbvA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bcrypt
     aiohttp
     pyopenssl
@@ -34,15 +35,12 @@ buildPythonPackage {
     requests
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=proton --cov-report html --cov-report term" ""
-  '';
-
   pythonImportsCheck = [ "proton" ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
+    pyotp
   ];
 
   disabledTestPaths = [
@@ -71,6 +69,6 @@ buildPythonPackage {
     description = "Core logic used by the other Proton components";
     homepage = "https://github.com/ProtonVPN/python-proton-core";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ wolfangaukang ];
+    maintainers = with lib.maintainers; [ sebtm ];
   };
 }

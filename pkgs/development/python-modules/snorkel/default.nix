@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, tensorboard
-, scipy
-, tqdm
-, scikit-learn
-, munkres
-, networkx
-, torch
-, pandas
-# test dependencies
-, pytestCheckHook
-, spacy
-, pyspark
-, dill
-, dask
-, spacy_models
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  tensorboard,
+  scipy,
+  tqdm,
+  scikit-learn,
+  munkres,
+  networkx,
+  torch,
+  pandas,
+  # test dependencies
+  pytestCheckHook,
+  spacy,
+  pyspark,
+  dill,
+  dask,
+  spacy-models,
 }:
 let
   pname = "snorkel";
@@ -30,8 +31,8 @@ buildPythonPackage {
 
   src = fetchFromGitHub {
     owner = "snorkel-team";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "snorkel";
+    tag = "v${version}";
     hash = "sha256-1DgkMHYToiI3266yCND1bXiui80x8AaBttxM83kJImw=";
   };
 
@@ -56,11 +57,11 @@ buildPythonPackage {
     pyspark
     dill
     dask
-    spacy_models.en_core_web_sm
+    spacy-models.en_core_web_sm
   ] ++ dask.optional-dependencies.distributed;
 
   meta = with lib; {
-    description = "A system for quickly generating training data with weak supervision";
+    description = "System for quickly generating training data with weak supervision";
     homepage = "https://github.com/snorkel-team/snorkel";
     changelog = "https://github.com/snorkel/snorkel/releases/tag/v${version}";
     license = licenses.asl20;

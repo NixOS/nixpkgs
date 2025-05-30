@@ -1,0 +1,12 @@
+diff --git a/src/main.cpp b/src/main.cpp
+index 382b4236..4e1ecc62 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -201,6 +201,7 @@ static char * main_check_latest_version() {
+  * @return NULL.
+  */
+ void * main_check_latest_version_thread(void *arg) {
++	return NULL;
+ 	set_thread_name("CheckLatestVers");
+ 	// Fetch the latest version information
+ 	char * latest_version = main_check_latest_version();

@@ -1,15 +1,16 @@
-{ lib
-, attrs
-, buildPythonPackage
-, cattrs
-, fetchFromGitHub
-, flit-core
-, importlib-resources
-, jsonschema
-, nox
-, pyhamcrest
-, pytest
-, pythonOlder
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  cattrs,
+  fetchFromGitHub,
+  flit-core,
+  importlib-resources,
+  jsonschema,
+  nox,
+  pyhamcrest,
+  pytest,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "lsprotocol";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-PHjLKazMaT6W4Lve1xNxm6hEwqE3Lr2m5L7Q03fqb68=";
   };
 
@@ -36,9 +37,7 @@ buildPythonPackage rec {
     cattrs
   ];
 
-  nativeCheckInputs = [
-    pytest
-  ];
+  nativeCheckInputs = [ pytest ];
 
   checkInputs = [
     importlib-resources
@@ -63,15 +62,16 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "lsprotocol"
-  ];
+  pythonImportsCheck = [ "lsprotocol" ];
 
   meta = with lib; {
     description = "Python implementation of the Language Server Protocol";
     homepage = "https://github.com/microsoft/lsprotocol";
     changelog = "https://github.com/microsoft/lsprotocol/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar fab ];
+    maintainers = with maintainers; [
+      doronbehar
+      fab
+    ];
   };
 }

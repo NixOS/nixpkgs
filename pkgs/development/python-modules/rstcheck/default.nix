@@ -1,68 +1,47 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, docutils
-, fetchFromGitHub
-, importlib-metadata
-, poetry-core
-, pydantic
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, rstcheck-core
-, typer
-, types-docutils
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  pythonOlder,
+  rstcheck-core,
+  sphinx,
+  typer,
 }:
 
 buildPythonPackage rec {
   pname = "rstcheck";
-  version = "6.1.2";
-  format = "pyproject";
+  version = "6.2.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "rstcheck";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-UMByfnnP1va3v1IgyQL0f3kC+W6HoiWScb7U2FAvWkU=";
+    repo = "rstcheck";
+    tag = "v${version}";
+    hash = "sha256-CB8UtYAJpPrUOGgHOIp9Ts0GaID6GdtKHWD/ihxRoNg=";
   };
 
-  pythonRelaxDeps = [
-    "typer"
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
-
-  propagatedBuildInputs = [
-    docutils
+  dependencies = [
     rstcheck-core
-    types-docutils
-    typing-extensions
-    pydantic
     typer
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-    importlib-metadata
-  ] ++ typer.optional-dependencies.all;
-
-  nativeCheckInputs = [
-    pytestCheckHook
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
-    # Disabled until https://github.com/rstcheck/rstcheck-core/issues/19 is resolved.
-    "test_error_without_config_file_macos"
-    "test_file_1_is_bad_without_config_macos"
-  ];
+  optional-dependencies = {
+    sphinx = [ sphinx ];
+  };
 
-  pythonImportsCheck = [
-    "rstcheck"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "rstcheck" ];
 
   preCheck = ''
     # The tests need to find and call the rstcheck executable
@@ -75,5 +54,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/rstcheck/rstcheck/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ staccato ];
+    mainProgram = "rstcheck";
   };
 }

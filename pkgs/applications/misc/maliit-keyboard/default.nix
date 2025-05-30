@@ -1,23 +1,22 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, fetchpatch
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
 
-, anthy
-, hunspell
-, libchewing
-, libpinyin
-, maliit-framework
-, pcre
-, presage
-, qtfeedback
-, qtmultimedia
-, qtquickcontrols2
-, qtgraphicaleffects
+  anthy,
+  hunspell,
+  libchewing,
+  libpinyin,
+  maliit-framework,
+  presage,
+  qtfeedback,
+  qtmultimedia,
+  qtquickcontrols2,
+  qtgraphicaleffects,
 
-, cmake
-, pkg-config
-, wrapGAppsHook
+  cmake,
+  pkg-config,
+  wrapGAppsHook3,
 }:
 
 mkDerivation rec {
@@ -42,7 +41,6 @@ mkDerivation rec {
     libchewing
     libpinyin
     maliit-framework
-    pcre
     presage
     qtfeedback
     qtmultimedia
@@ -58,7 +56,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   postInstall = ''
@@ -67,8 +65,13 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Virtual keyboard";
+    mainProgram = "maliit-keyboard";
     homepage = "http://maliit.github.io/";
-    license = with licenses; [ lgpl3Only bsd3 cc-by-30 ];
-    maintainers = with maintainers; [ samueldr ];
+    license = with licenses; [
+      lgpl3Only
+      bsd3
+      cc-by-30
+    ];
+    maintainers = [ ];
   };
 }

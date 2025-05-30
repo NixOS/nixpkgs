@@ -1,0 +1,27 @@
+diff --git a/cmake/LLVM.cmake b/cmake/LLVM.cmake
+index 3c7c1b54..7f66d6bd 100644
+--- a/cmake/LLVM.cmake
++++ b/cmake/LLVM.cmake
+@@ -7,7 +7,7 @@ function(llvm_target_from_components target_name)
+         ${components}
+     )
+     add_library(${target_name} INTERFACE)
+-    target_link_libraries(${target_name} INTERFACE ${llvm_libs})
++    target_link_libraries(${target_name} INTERFACE LLVM)
+     target_include_directories(
+         ${target_name}
+         SYSTEM
+@@ -66,12 +66,7 @@ function(fetch_or_build_slang_llvm)
+         llvm_target_from_components(llvm-dep filecheck native orcjit)
+         clang_target_from_libs(
+             clang-dep
+-            clangBasic
+-            clangCodeGen
+-            clangDriver
+-            clangLex
+-            clangFrontend
+-            clangFrontendTool
++            clang-cpp
+         )
+         slang_add_target(
+             source/slang-llvm

@@ -1,11 +1,11 @@
-{ attrs
-, buildPythonPackage
-, fetchFromGitHub
-, fetchPypi
-, lib
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -17,26 +17,18 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "weaveworks";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "grafanalib";
+    tag = "v${version}";
     hash = "sha256-vXnyAfC9avKz8U4+MJVnu2zoPD0nR2qarWYidhEPW5s=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    attrs
-  ];
+  propagatedBuildInputs = [ attrs ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "grafanalib"
-  ];
+  pythonImportsCheck = [ "grafanalib" ];
 
   meta = with lib; {
     description = "Library for building Grafana dashboards";

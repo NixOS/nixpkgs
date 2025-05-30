@@ -3,7 +3,10 @@
 
 { pkgs, ... }:
 let
-  calamares-nixos-autostart = pkgs.makeAutostartItem { name = "io.calamares.calamares"; package = pkgs.calamares-nixos; };
+  calamares-nixos-autostart = pkgs.makeAutostartItem {
+    name = "io.calamares.calamares";
+    package = pkgs.calamares-nixos;
+  };
 in
 {
   imports = [ ./installation-cd-graphical-base.nix ];

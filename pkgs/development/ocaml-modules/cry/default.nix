@@ -1,14 +1,18 @@
-{ lib, buildDunePackage, fetchFromGitHub }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+}:
 
 buildDunePackage rec {
   pname = "cry";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-cry";
     rev = "v${version}";
-    hash = "sha256-wtilYOUOHElW8ZVxolMNomvT//ho2tACmoubEvU2bpQ=";
+    hash = "sha256-ea6f2xTVmYekPmzAKasA9mNG4Voxw2MCkfZ9LB9gwbo=";
   };
 
   postPatch = ''

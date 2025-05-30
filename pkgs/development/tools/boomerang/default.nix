@@ -1,4 +1,14 @@
-{ mkDerivation, lib, fetchFromGitHub, fetchpatch, cmake, qtbase, capstone, bison, flex }:
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  qtbase,
+  capstone,
+  bison,
+  flex,
+}:
 
 mkDerivation rec {
   pname = "boomerang";
@@ -19,8 +29,15 @@ mkDerivation rec {
   # updating this derivation.
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  nativeBuildInputs = [ cmake bison flex ];
-  buildInputs = [ qtbase capstone ];
+  nativeBuildInputs = [
+    cmake
+    bison
+    flex
+  ];
+  buildInputs = [
+    qtbase
+    capstone
+  ];
   patches = [
     (fetchpatch {
       name = "include-missing-cstdint.patch";
@@ -32,7 +49,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/BoomerangDecompiler/boomerang";
     license = licenses.bsd3;
-    description = "A general, open source, retargetable decompiler";
-    maintainers = with maintainers; [ dtzWill ];
+    description = "General, open source, retargetable decompiler";
+    maintainers = [ ];
   };
 }

@@ -1,39 +1,42 @@
-{ lib
-, stdenv
-, apscheduler
-, bitstring
-, buildPythonPackage
-, cffi
-, ecdsa
-, fetchFromGitHub
-, monero
-, poetry-core
-, pypng
-, pyqrcode
-, pyramid
-, pyramid-jinja2
-, pysocks
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, tzlocal
-, waitress
-, webtest
-, yoyo-migrations
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  apscheduler,
+  bitstring,
+  cffi,
+  ecdsa,
+  monero,
+  pypng,
+  pyqrcode,
+  pyramid,
+  pyramid-jinja2,
+  pysocks,
+  pytz,
+  requests,
+  tzlocal,
+  waitress,
+  yoyo-migrations,
+
+  # tests
+  pytestCheckHook,
+  webtest,
 }:
 
 buildPythonPackage rec {
   pname = "cypherpunkpay";
   version = "1.0.16";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CypherpunkPay";
     repo = "CypherpunkPay";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-X0DB0PVwR0gRnt3jixFzglWAOPKBMvqTOG6pK6OJ03w=";
   };
 
@@ -44,14 +47,14 @@ buildPythonPackage rec {
     "pypng"
     "tzlocal"
     "yoyo-migrations"
+    "waitress"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     apscheduler
     bitstring
     cffi
@@ -62,6 +65,7 @@ buildPythonPackage rec {
     pyramid
     pyramid-jinja2
     pysocks
+    pytz
     requests
     tzlocal
     waitress
@@ -102,15 +106,16 @@ buildPythonPackage rec {
     "tests/acceptance/views_dummystore"
   ];
 
-  pythonImportsCheck = [
-    "cypherpunkpay"
-  ];
+  pythonImportsCheck = [ "cypherpunkpay" ];
 
-  meta = with lib; {
+  meta = {
     description = "Modern self-hosted software for accepting Bitcoin";
     homepage = "https://github.com/CypherpunkPay/CypherpunkPay";
     changelog = "https://github.com/CypherpunkPay/CypherpunkPay/releases/tag/v${version}";
-    license = with licenses; [ mit /* or */ unlicense ];
-    maintainers = with maintainers; [ prusnak ];
+    license = with lib.licenses; [
+      mit # or
+      unlicense
+    ];
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

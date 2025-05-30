@@ -1,4 +1,9 @@
-{ lib, buildDunePackage, fetchFromGitHub, qcheck }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  qcheck,
+}:
 
 buildDunePackage rec {
   pname = "qtest";
@@ -21,6 +26,7 @@ buildDunePackage rec {
 
   meta = {
     description = "Inline (Unit) Tests for OCaml";
+    mainProgram = "qtest";
     inherit (src.meta) homepage;
     maintainers = with lib.maintainers; [ vbgl ];
     license = lib.licenses.gpl3;

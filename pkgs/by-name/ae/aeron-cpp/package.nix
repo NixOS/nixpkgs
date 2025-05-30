@@ -1,5 +1,6 @@
 {
   autoPatchelfHook,
+  aeron,
   cmake,
   fetchFromGitHub,
   fetchMavenArtifact,
@@ -10,27 +11,20 @@
   makeWrapper,
   patchelf,
   stdenv,
-  zlib
+  zlib,
 }:
 
 let
-  version = "1.42.1";
+  version = aeron.version;
 
-  aeronAll = fetchMavenArtifact {
-    artifactId = "aeron-all";
-    groupId = "io.aeron";
-    inherit version;
-    hash = "sha512-pjX+JopK6onDwElMIroj+ZXrKwdPj5H2uPg08XgNlrK1rAkHo9MUT8weBGbuFVFDLeqOZrHj0bt1wJ9XgYY5aA==";
-  };
-
-  sbeAll_1_29_0 = fetchMavenArtifact {
+  sbeAll_1_31_1 = fetchMavenArtifact {
     groupId = "uk.co.real-logic";
-    version = "1.29.0";
+    version = "1.31.1";
     artifactId = "sbe-all";
-    hash = "sha512-exklKS9MgOH369lyuv+5vAWRHt+Iwg/FmsWy8PsSMjenvjs8I2KA1VTa00pIXkw/YNqbUDBIWvS07b4mS8YdPQ==";
+    hash = "sha512-Ypsk8PbShFOxm49u1L+TTuApaW6ECTSee+hHEhmY/jNi5AymHXBWwDMBMkzC25aowiHLJS5EnzLk6hu9Lea93Q==";
   };
 
-  sbeAll = sbeAll_1_29_0;
+  sbeAll = sbeAll_1_31_1;
 
 in
 
@@ -42,7 +36,7 @@ stdenv.mkDerivation {
     owner = "real-logic";
     repo = "aeron";
     rev = version;
-    hash = "sha256-ODJeJ4XLazPeNLdzaoclPnE59NpxFUqZu3Aw3iTVQT8=";
+    hash = "sha256-sROEZVOfScrlqMLbfrPtw3LQCQ5TfMcrLiP6j/Z9rSM=";
   };
 
   patches = [
@@ -54,7 +48,6 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    jdk11
     libbsd
     libuuid
     zlib
@@ -63,6 +56,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     autoPatchelfHook
     cmake
+    jdk11
     makeWrapper
     patchelf
   ];
@@ -89,7 +83,7 @@ stdenv.mkDerivation {
   buildPhase = ''
     runHook preBuild
 
-    ln --symbolic  "${aeronAll.jar}" ./aeron-all.jar
+    ln --symbolic  "${aeron.jar}" ./aeron-all.jar
     ln --symbolic  "${sbeAll.jar}" ./sbe.jar
     mkdir --parents aeron-all/build/libs
     (
@@ -104,7 +98,7 @@ stdenv.mkDerivation {
         aeron_driver_static \
         aeronmd
 
-      make -j $NIX_BUILD_CORES install
+      make install
     )
 
     runHook postBuild
@@ -131,4 +125,3 @@ stdenv.mkDerivation {
     ];
   };
 }
-

@@ -1,11 +1,12 @@
-{ lib
-, mkDerivation
-, fetchzip
-, wrapQtAppsHook
-, autoPatchelfHook
-, qtbase
-, qtmultimedia
-, qtx11extras
+{
+  lib,
+  mkDerivation,
+  fetchzip,
+  wrapQtAppsHook,
+  autoPatchelfHook,
+  qtbase,
+  qtmultimedia,
+  qtx11extras,
 }:
 
 mkDerivation rec {
@@ -35,7 +36,8 @@ mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.beebeep.net/";
-    description = "BeeBEEP is the free office messenger that is indispensable in all those places where privacy and security are an essential requirement.";
+    description = "BeeBEEP is the free office messenger that is indispensable in all those places where privacy and security are an essential requirement";
+    mainProgram = "beebeep";
     platforms = platforms.linux;
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ mglolenstine ];

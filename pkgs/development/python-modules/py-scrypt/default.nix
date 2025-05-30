@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, openssl
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  openssl,
 }:
 
 buildPythonPackage rec {
   pname = "py-scrypt";
-  version = "0.8.20";
+  version = "0.8.27";
 
   src = fetchPypi {
     pname = "scrypt";
     inherit version;
-    hash = "sha256-DSJsHGdE+y4wizkUEGabHfXP6CY3/8te1Im/grLS63g=";
+    hash = "sha256-p7Y3hI7VGMHqKzGp7Kqj9JYWWY2EQt6HBs8fAfur8Kc=";
   };
 
   buildInputs = [ openssl ];
@@ -20,7 +21,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Bindings for scrypt key derivation function library";
     homepage = "https://pypi.python.org/pypi/scrypt";
-    maintainers = [];
+    maintainers = [ ];
     license = licenses.bsd2;
   };
 }

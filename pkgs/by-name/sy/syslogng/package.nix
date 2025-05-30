@@ -1,99 +1,120 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf-archive
-, autoreconfHook
-, bison
-, flex
-, openssl
-, libcap
-, curl
-, which
-, eventlog
-, pkg-config
-, glib
-, hiredis
-, systemd
-, perl
-, python3
-, riemann_c_client
-, protobufc
-, pcre
-, paho-mqtt-c
-, libnet
-, json_c
-, libuuid
-, libivykis
-, libxslt
-, docbook_xsl
-, pcre2
-, mongoc
-, rabbitmq-c
-, libesmtp
-, rdkafka
-, gperf
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf-archive,
+  autoreconfHook,
+  bison,
+  flex,
+  openssl,
+  libcap,
+  curl,
+  which,
+  eventlog,
+  pkg-config,
+  glib,
+  hiredis,
+  systemd,
+  perl,
+  python3,
+  riemann_c_client,
+  protobufc,
+  paho-mqtt-c,
+  python3Packages,
+  libnet,
+  json_c,
+  libuuid,
+  libivykis,
+  libxslt,
+  docbook_xsl,
+  pcre2,
+  mongoc,
+  rabbitmq-c,
+  libesmtp,
+  rdkafka,
+  gperf,
+  withGrpc ? true,
+  grpc,
+  # see https://github.com/syslog-ng/syslog-ng/pull/5263
+  protobuf_29,
 }:
 let
-  python-deps = ps: with ps; [
-    boto3
-    botocore
-    cachetools
-    certifi
-    charset-normalizer
-    google-auth
-    idna
-    kubernetes
-    oauthlib
-    pyasn1
-    pyasn1-modules
-    python-dateutil
-    pyyaml
-    requests
-    requests-oauthlib
-    rsa
-    six
-    urllib3
-    websocket-client
-    ply
-  ];
+  python-deps =
+    ps: with ps; [
+      boto3
+      botocore
+      cachetools
+      certifi
+      charset-normalizer
+      google-auth
+      idna
+      kubernetes
+      oauthlib
+      pyasn1
+      pyasn1-modules
+      python-dateutil
+      pyyaml
+      requests
+      requests-oauthlib
+      rsa
+      six
+      urllib3
+      websocket-client
+      ply
+    ];
   py = python3.withPackages python-deps;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "syslog-ng";
-  version = "4.6.0";
+  version = "4.8.3";
 
   src = fetchFromGitHub {
     owner = "syslog-ng";
     repo = "syslog-ng";
-    rev = "syslog-ng-${version}";
-    hash = "sha256-B9s7mprPpS4xc7mfJbsDaq2hB1rjYmuOnOnpu+NnMRs=";
+    rev = "syslog-ng-${finalAttrs.version}";
+    hash = "sha256-eYcDdNbUYDsM4k/BDABj/8aV7tZty52XzZ4nqXRC39M=";
     fetchSubmodules = true;
   };
-  nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config which bison flex libxslt perl gperf ];
-
-  buildInputs = [
-    libcap
-    curl
-    openssl
-    eventlog
-    glib
-    py
-    systemd
-    riemann_c_client
-    protobufc
-    pcre
-    libnet
-    json_c
-    libuuid
-    libivykis
-    mongoc
-    rabbitmq-c
-    libesmtp
-    pcre2
-    paho-mqtt-c
-    hiredis
-    rdkafka
+  nativeBuildInputs = [
+    autoreconfHook
+    autoconf-archive
+    pkg-config
+    which
+    bison
+    flex
+    libxslt
+    perl
+    gperf
+    python3Packages.setuptools
   ];
+
+  buildInputs =
+    [
+      libcap
+      curl
+      openssl
+      eventlog
+      glib
+      py
+      systemd
+      riemann_c_client
+      protobufc
+      libnet
+      json_c
+      libuuid
+      libivykis
+      mongoc
+      rabbitmq-c
+      libesmtp
+      pcre2
+      paho-mqtt-c
+      hiredis
+      rdkafka
+    ]
+    ++ (lib.optionals withGrpc [
+      protobuf_29
+      grpc
+    ]);
 
   configureFlags = [
     "--enable-manpages"
@@ -110,17 +131,23 @@ stdenv.mkDerivation rec {
     "--with-systemd-journal=system"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--without-compile-date"
-  ];
+  ] ++ (lib.optionals withGrpc [ "--enable-grpc" ]);
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.syslog-ng.com";
     description = "Next-generation syslogd with advanced networking and filtering capabilities";
-    license = with licenses; [ gpl2Plus lgpl21Plus ];
-    maintainers = with maintainers; [ vifino ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [
+      gpl2Plus
+      lgpl21Plus
+    ];
+    maintainers = with lib.maintainers; [ vifino ];
+    platforms = lib.platforms.linux;
   };
-}
+})

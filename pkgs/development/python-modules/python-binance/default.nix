@@ -1,42 +1,39 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, dateparser
-, fetchFromGitHub
-, fetchpatch
-, pycryptodome
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
-, six
-, ujson
-, websockets
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  dateparser,
+  fetchFromGitHub,
+  pycryptodome,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  requests-mock,
+  requests,
+  six,
+  ujson,
+  setuptools,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "python-binance";
-  version = "1.0.17";
-  format = "setuptools";
+  version = "1.0.27";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "sammchardy";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-e88INUEkjOSVOD0KSs9LmstuQ7dQZdJk8K6VqFEusww=";
+    repo = "python-binance";
+    tag = "v${version}";
+    hash = "sha256-nsJuHxPXhMBRY4BUDDLj5sHK/GuJA0pBU3RGUDxVm50=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-unable-to-determine-version-error.patch";
-      url = "https://github.com/sammchardy/python-binance/commit/1b9dd4853cafccf6cdacc13bb64a18632a79a6f1.patch";
-      hash = "sha256-6KRHm2cZRcdD6qMdRAwlea4qLZ1/1YFzZAQ7Ph4XMCs=";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     dateparser
     requests
@@ -47,6 +44,8 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aioresponses
+    pytest-asyncio
     pytestCheckHook
     requests-mock
   ];
@@ -54,12 +53,33 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests require network access
     "tests/test_api_request.py"
-    "tests/test_historical_klines.py"
+    "tests/test_async_client.py"
+    "tests/test_async_client_futures.py"
+    "tests/test_async_client_margin.py"
+    "tests/test_async_client_options.py"
+    "tests/test_async_client_portfolio.py"
+    "tests/test_async_client_ws_api.py"
+    "tests/test_async_client_ws_futures_requests.py"
+    "tests/test_client.py"
+    "tests/test_client_futures.py"
+    "tests/test_client_gift_card.py"
+    "tests/test_client_margin.py"
+    "tests/test_client_options.py"
+    "tests/test_client_portfolio.py"
+    "tests/test_client_ws_api.py"
+    "tests/test_client_ws_futures_requests.py"
+    "tests/test_depth_cache.py"
+    "tests/test_get_order_book.py"
+    "tests/test_ping.py"
+    "tests/test_reconnecting_websocket.py"
+    "tests/test_socket_manager.py"
+    "tests/test_streams.py"
+    "tests/test_threaded_socket_manager.py"
+    "tests/test_threaded_stream.py"
+    "tests/test_ws_api.py"
   ];
 
-  pythonImportsCheck = [
-    "binance"
-  ];
+  pythonImportsCheck = [ "binance" ];
 
   meta = with lib; {
     description = "Binance Exchange API python implementation for automated trading";

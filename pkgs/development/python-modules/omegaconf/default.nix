@@ -1,35 +1,37 @@
-{ lib
-, antlr4
-, antlr4-python3-runtime
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, jre_minimal
-, pydevd
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, substituteAll
+{
+  lib,
+  antlr4,
+  antlr4-python3-runtime,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  jre_minimal,
+  pydevd,
+  pytest-mock,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  pyyaml,
+  replaceVars,
 }:
 
 buildPythonPackage rec {
   pname = "omegaconf";
   version = "2.3.0";
   pyproject = true;
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "omry";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "omegaconf";
+    tag = "v${version}";
     hash = "sha256-Qxa4uIiX5TAyQ5rFkizdev60S4iVAJ08ES6FpNqf8zI=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./antlr4.patch;
+    (replaceVars ./antlr4.patch {
       antlr_jar = "${antlr4.out}/share/java/antlr-${antlr4.version}-complete.jar";
     })
 
@@ -45,12 +47,11 @@ buildPythonPackage rec {
     sed -i 's/antlr4-python3-runtime==.*/antlr4-python3-runtime/' requirements/base.txt
   '';
 
-  nativeBuildInputs = [
-    setuptools
-    jre_minimal
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ jre_minimal ];
+
+  dependencies = [
     antlr4-python3-runtime
     pyyaml
   ];
@@ -62,14 +63,24 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "omegaconf"
-  ];
+  pythonImportsCheck = [ "omegaconf" ];
 
   pytestFlagsArray = [
     "-W"
     "ignore::DeprecationWarning"
   ];
+
+  disabledTests =
+    [
+      # assert (1560791320562868035 == 1560791320562868035) == False
+      "test_eq"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # pathlib._local.Path != pathlib.Path type check mismatch
+      "test_errors"
+      "test_to_yaml"
+      "test_type_str"
+    ];
 
   meta = with lib; {
     description = "Framework for configuring complex applications";

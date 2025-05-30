@@ -5,55 +5,68 @@ let
   containerIp6 = "fc00::2/7";
 in
 
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+{
   name = "containers-bridge";
   meta = {
-    maintainers = with lib.maintainers; [ aristid aszlig eelco kampfschlaefer ];
+    maintainers = with lib.maintainers; [
+      aristid
+      aszlig
+      kampfschlaefer
+    ];
   };
 
   nodes.machine =
     { pkgs, ... }:
-    { imports = [ ../modules/installer/cd-dvd/channel.nix ];
+    {
+      imports = [ ../modules/installer/cd-dvd/channel.nix ];
       virtualisation.writableStore = true;
 
       networking.bridges = {
         br0 = {
-          interfaces = [];
+          interfaces = [ ];
         };
       };
       networking.interfaces = {
         br0 = {
-          ipv4.addresses = [{ address = hostIp; prefixLength = 24; }];
-          ipv6.addresses = [{ address = hostIp6; prefixLength = 7; }];
+          ipv4.addresses = [
+            {
+              address = hostIp;
+              prefixLength = 24;
+            }
+          ];
+          ipv6.addresses = [
+            {
+              address = hostIp6;
+              prefixLength = 7;
+            }
+          ];
         };
       };
 
-      containers.webserver =
-        {
-          autoStart = true;
-          privateNetwork = true;
-          hostBridge = "br0";
-          localAddress = containerIp;
-          localAddress6 = containerIp6;
-          config =
-            { services.httpd.enable = true;
-              services.httpd.adminAddr = "foo@example.org";
-              networking.firewall.allowedTCPPorts = [ 80 ];
-            };
+      containers.webserver = {
+        autoStart = true;
+        privateNetwork = true;
+        hostBridge = "br0";
+        localAddress = containerIp;
+        localAddress6 = containerIp6;
+        config = {
+          services.httpd.enable = true;
+          services.httpd.adminAddr = "foo@example.org";
+          networking.firewall.allowedTCPPorts = [ 80 ];
         };
+      };
 
-      containers.web-noip =
-        {
-          autoStart = true;
-          privateNetwork = true;
-          hostBridge = "br0";
-          config =
-            { services.httpd.enable = true;
-              services.httpd.adminAddr = "foo@example.org";
-              networking.firewall.allowedTCPPorts = [ 80 ];
-            };
+      containers.web-noip = {
+        autoStart = true;
+        privateNetwork = true;
+        hostBridge = "br0";
+        config = {
+          services.httpd.enable = true;
+          services.httpd.adminAddr = "foo@example.org";
+          networking.firewall.allowedTCPPorts = [ 80 ];
         };
-
+      };
 
       virtualisation.additionalPaths = [ pkgs.stdenv ];
     };
@@ -96,4 +109,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     # Destroying a declarative container should fail.
     machine.fail("nixos-container destroy webserver")
   '';
-})
+}

@@ -1,4 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "shippai";
@@ -15,6 +19,6 @@ buildPythonPackage rec {
     description = "Use Rust failures as Python exceptions";
     homepage = "https://github.com/untitaker/shippai";
     license = licenses.mit;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ ];
   };
 }

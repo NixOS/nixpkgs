@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -11,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "sinkmanu";
     repo = "nucleiparser";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-/SLaRuO06rF7aLV7zY7tfIxkJRzsx+/Z+mc562RX2OQ=";
   };
 
@@ -28,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = "A Nuclei output parser for CLI";
+    description = "Nuclei output parser for CLI";
     homepage = "https://github.com/sinkmanu/nucleiparser";
     changelog = "https://github.com/Sinkmanu/nucleiparser/releases/tag/${version}";
     license = licenses.gpl3Only;

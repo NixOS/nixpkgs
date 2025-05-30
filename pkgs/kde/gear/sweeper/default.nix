@@ -1,9 +1,6 @@
-{
-  mkKdeDerivation,
-  plasma-activities-stats,
-}:
+{ mkKdeDerivation }:
 mkKdeDerivation {
   pname = "sweeper";
 
-  extraBuildInputs = [plasma-activities-stats];
+  meta.mainProgram = "sweeper";
 }

@@ -1,33 +1,36 @@
-{ lib
-, stdenv
-, appdirs
-, bokeh
-, buildPythonPackage
-, dask
-, entrypoints
-, fetchFromGitHub
-, fsspec
-, hvplot
-, intake-parquet
-, jinja2
-, msgpack
-, msgpack-numpy
-, pandas
-, panel
-, pyarrow
-, pytestCheckHook
-, python-snappy
-, pythonOlder
-, pyyaml
-, requests
-, setuptools
-, setuptools-scm
-, tornado
+{
+  lib,
+  stdenv,
+  platformdirs,
+  bokeh,
+  buildPythonPackage,
+  dask,
+  entrypoints,
+  fetchFromGitHub,
+  fsspec,
+  hvplot,
+  intake-parquet,
+  jinja2,
+  msgpack,
+  msgpack-numpy,
+  pandas,
+  panel,
+  pyarrow,
+  pytestCheckHook,
+  python-snappy,
+  pythonOlder,
+  pythonAtLeast,
+  pyyaml,
+  networkx,
+  requests,
+  setuptools,
+  setuptools-scm,
+  tornado,
 }:
 
 buildPythonPackage rec {
   pname = "intake";
-  version = "2.0.3";
+  version = "2.0.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -35,8 +38,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "intake";
     repo = "intake";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Fyv85HkoE9OPOoSHR1sgCG0iAFuSiQMT7cyZcQyLvv0=";
+    tag = version;
+    hash = "sha256-F13jbAQP3G3cKeAegM1w/t32xyC0BgL9/67aIlzA4SE=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    appdirs
+    platformdirs
     dask
     entrypoints
     fsspec
@@ -53,14 +56,15 @@ buildPythonPackage rec {
     jinja2
     pandas
     pyyaml
+    networkx
   ];
 
   nativeCheckInputs = [
     intake-parquet
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     server = [
       msgpack
       python-snappy
@@ -75,9 +79,7 @@ buildPythonPackage rec {
       bokeh
       panel
     ];
-    remote = [
-      requests
-    ];
+    remote = [ requests ];
   };
 
   __darwinAllowLocalNetworking = true;
@@ -101,42 +103,43 @@ buildPythonPackage rec {
     "intake/tests/test_top_level.py"
   ];
 
-  disabledTests = [
-    # Disable tests which touch network
-    "http"
-    "test_address_flag"
-    "test_dir"
-    "test_discover"
-    "test_filtered_compressed_cache"
-    "test_flatten_flag"
-    "test_get_dir"
-    "test_pagination"
-    "test_port_flag"
-    "test_read_part_compressed"
-    "test_read_partition"
-    "test_read_pattern"
-    "test_remote_arr"
-    "test_remote_cat"
-    "test_remote_env"
-    # ValueError
-    "test_datasource_python_to_dask"
-    "test_catalog_passthrough"
-    # Timing-based, flaky on darwin and possibly others
-    "test_idle_timer"
-  ] ++ lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
-    # Flaky with older low-res mtime on darwin < 10.13 (#143987)
-    "test_second_load_timestamp"
-  ];
+  disabledTests =
+    [
+      # Disable tests which touch network
+      "http"
+      "test_address_flag"
+      "test_dir"
+      "test_discover"
+      "test_filtered_compressed_cache"
+      "test_flatten_flag"
+      "test_get_dir"
+      "test_pagination"
+      "test_port_flag"
+      "test_read_part_compressed"
+      "test_read_partition"
+      "test_read_pattern"
+      "test_remote_arr"
+      "test_remote_cat"
+      "test_remote_env"
+      # ValueError
+      "test_datasource_python_to_dask"
+      "test_catalog_passthrough"
+      # Timing-based, flaky on darwin and possibly others
+      "test_idle_timer"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.12") [
+      # Require deprecated distutils
+      "test_which"
+      "test_load"
+    ];
 
-  pythonImportsCheck = [
-    "intake"
-  ];
+  pythonImportsCheck = [ "intake" ];
 
   meta = with lib; {
     description = "Data load and catalog system";
     homepage = "https://github.com/ContinuumIO/intake";
     changelog = "https://github.com/intake/intake/blob/${version}/docs/source/changelog.rst";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

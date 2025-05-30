@@ -1,11 +1,10 @@
-{ lib
-, stdenv
-, python3
-, callPackage
-, recurseIntoAttrs
-, nixosTests
-, config
-, fetchPypi
+{
+  lib,
+  python3,
+  callPackage,
+  recurseIntoAttrs,
+  nixosTests,
+  config,
 }:
 
 # To expose the *srht modules, they have to be a python module so we use `buildPythonModule`
@@ -13,6 +12,7 @@
 # https://github.com/NixOS/nixpkgs/pull/54425#discussion_r250688781
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       srht = self.callPackage ./core.nix { };
 
@@ -27,84 +27,30 @@ let
       todosrht = self.callPackage ./todo.nix { };
 
       scmsrht = self.callPackage ./scm.nix { };
-
-      # sourcehut is not (yet) compatible with SQLAlchemy 2.x
-      sqlalchemy = super.sqlalchemy_1_4;
-
-      # sourcehut is not (yet) compatible with flask-sqlalchemy 3.x
-      flask-sqlalchemy = super.flask-sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-        version = "2.5.1";
-        format = "setuptools";
-        src = fetchPypi {
-          pname = "Flask-SQLAlchemy";
-          inherit version;
-          hash = "sha256-K9pEtD58rLFdTgX/PMH4vJeTbMRkYjQkECv8LDXpWRI=";
-        };
-        propagatedBuildInputs = with self; [
-          flask
-          sqlalchemy
-        ];
-      });
-
-      # flask-sqlalchemy 2.x requires flask 2.x
-      flask = super.flask.overridePythonAttrs (oldAttrs: rec {
-        version = "2.3.3";
-        src = fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          hash = "sha256-CcNHqSqn/0qOfzIGeV8w2CZlS684uHPQdEzVccpgnvw=";
-        };
-      });
-
-      # flask 2.x requires werkzeug 2.x
-      werkzeug = super.werkzeug.overridePythonAttrs (oldAttrs: rec {
-        version = "2.3.8";
-        src = fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          hash = "sha256-VUslfHS763oNJUFgpPj/4YUkP1KlIDUGC3Ycpi2XfwM=";
-        };
-      });
-
-      # sourcehut is not (yet) compatible with factory-boy 3.x
-      factory-boy = super.factory-boy.overridePythonAttrs (oldAttrs: rec {
-        version = "2.12.0";
-        src = fetchPypi {
-          pname = "factory_boy";
-          inherit version;
-          hash = "sha256-+vSNYIoXNfDQo8nL9TbWT5EytUfa57pFLE2Zp56Eo3A=";
-        };
-        nativeCheckInputs = (with super; [
-          django
-          mongoengine
-          pytestCheckHook
-        ]) ++ (with self; [
-          sqlalchemy
-          flask
-          flask-sqlalchemy
-        ]);
-        postPatch = "";
-      });
     };
   };
 in
-with python.pkgs; recurseIntoAttrs ({
-  inherit python;
-  coresrht = toPythonApplication srht;
-  buildsrht = toPythonApplication buildsrht;
-  gitsrht = toPythonApplication gitsrht;
-  hgsrht = toPythonApplication hgsrht;
-  hubsrht = toPythonApplication hubsrht;
-  listssrht = toPythonApplication listssrht;
-  mansrht = toPythonApplication mansrht;
-  metasrht = toPythonApplication metasrht;
-  pagessrht = callPackage ./pages.nix { };
-  pastesrht = toPythonApplication pastesrht;
-  todosrht = toPythonApplication todosrht;
-  passthru.tests = {
-    nixos-sourcehut = nixosTests.sourcehut;
-  };
-} // lib.optionalAttrs config.allowAliases {
-  # Added 2022-10-29
-  dispatchsrht = throw "dispatch is deprecated. See https://sourcehut.org/blog/2022-08-01-dispatch-deprecation-plans/ for more information.";
-})
+with python.pkgs;
+recurseIntoAttrs (
+  {
+    inherit python;
+    coresrht = toPythonApplication srht;
+    buildsrht = toPythonApplication buildsrht;
+    gitsrht = toPythonApplication gitsrht;
+    hgsrht = toPythonApplication hgsrht;
+    hubsrht = toPythonApplication hubsrht;
+    listssrht = toPythonApplication listssrht;
+    mansrht = toPythonApplication mansrht;
+    metasrht = toPythonApplication metasrht;
+    pagessrht = callPackage ./pages.nix { };
+    pastesrht = toPythonApplication pastesrht;
+    todosrht = toPythonApplication todosrht;
+    passthru.tests = {
+      nixos-sourcehut = nixosTests.sourcehut;
+    };
+  }
+  // lib.optionalAttrs config.allowAliases {
+    # Added 2022-10-29
+    dispatchsrht = throw "dispatch is deprecated. See https://sourcehut.org/blog/2022-08-01-dispatch-deprecation-plans/ for more information.";
+  }
+)

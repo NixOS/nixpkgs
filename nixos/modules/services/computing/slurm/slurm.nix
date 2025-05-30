@@ -1,7 +1,10 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.slurm;
@@ -10,45 +13,51 @@ let
 
   defaultUser = "slurm";
 
-  configFile = pkgs.writeTextDir "slurm.conf"
-    ''
-      ClusterName=${cfg.clusterName}
-      StateSaveLocation=${cfg.stateSaveLocation}
-      SlurmUser=${cfg.user}
-      ${optionalString (cfg.controlMachine != null) "controlMachine=${cfg.controlMachine}"}
-      ${optionalString (cfg.controlAddr != null) "controlAddr=${cfg.controlAddr}"}
-      ${toString (map (x: "NodeName=${x}\n") cfg.nodeName)}
-      ${toString (map (x: "PartitionName=${x}\n") cfg.partitionName)}
-      PlugStackConfig=${plugStackConfig}/plugstack.conf
-      ProctrackType=${cfg.procTrackType}
-      ${cfg.extraConfig}
-    '';
+  configFile = pkgs.writeTextDir "slurm.conf" ''
+    ClusterName=${cfg.clusterName}
+    StateSaveLocation=${cfg.stateSaveLocation}
+    SlurmUser=${cfg.user}
+    ${lib.optionalString (cfg.controlMachine != null) "controlMachine=${cfg.controlMachine}"}
+    ${lib.optionalString (cfg.controlAddr != null) "controlAddr=${cfg.controlAddr}"}
+    ${toString (map (x: "NodeName=${x}\n") cfg.nodeName)}
+    ${toString (map (x: "PartitionName=${x}\n") cfg.partitionName)}
+    PlugStackConfig=${plugStackConfig}/plugstack.conf
+    ProctrackType=${cfg.procTrackType}
+    ${cfg.extraConfig}
+  '';
 
-  plugStackConfig = pkgs.writeTextDir "plugstack.conf"
-    ''
-      ${optionalString cfg.enableSrunX11 "optional ${pkgs.slurm-spank-x11}/lib/x11.so"}
-      ${cfg.extraPlugstackConfig}
-    '';
+  plugStackConfig = pkgs.writeTextDir "plugstack.conf" ''
+    ${lib.optionalString cfg.enableSrunX11 "optional ${pkgs.slurm-spank-x11}/lib/x11.so"}
+    ${cfg.extraPlugstackConfig}
+  '';
 
-  cgroupConfig = pkgs.writeTextDir "cgroup.conf"
-   ''
-     ${cfg.extraCgroupConfig}
-   '';
+  cgroupConfig = pkgs.writeTextDir "cgroup.conf" ''
+    ${cfg.extraCgroupConfig}
+  '';
 
-  slurmdbdConf = pkgs.writeText "slurmdbd.conf"
-   ''
-     DbdHost=${cfg.dbdserver.dbdHost}
-     SlurmUser=${cfg.user}
-     StorageType=accounting_storage/mysql
-     StorageUser=${cfg.dbdserver.storageUser}
-     ${cfg.dbdserver.extraConfig}
-   '';
+  mpiConf = pkgs.writeTextDir "mpi.conf" ''
+    PMIxCliTmpDirBase=${cfg.mpi.PmixCliTmpDirBase}
+    ${cfg.mpi.extraMpiConfig}
+  '';
+
+  slurmdbdConf = pkgs.writeText "slurmdbd.conf" ''
+    DbdHost=${cfg.dbdserver.dbdHost}
+    SlurmUser=${cfg.user}
+    StorageType=accounting_storage/mysql
+    StorageUser=${cfg.dbdserver.storageUser}
+    ${cfg.dbdserver.extraConfig}
+  '';
 
   # slurm expects some additional config files to be
   # in the same directory as slurm.conf
   etcSlurm = pkgs.symlinkJoin {
     name = "etc-slurm";
-    paths = [ configFile cgroupConfig plugStackConfig ] ++ cfg.extraConfigPaths;
+    paths = [
+      configFile
+      cgroupConfig
+      plugStackConfig
+      mpiConf
+    ] ++ cfg.extraConfigPaths;
   };
 in
 
@@ -56,17 +65,17 @@ in
 
   ###### interface
 
-  meta.maintainers = [ maintainers.markuskowa ];
+  meta.maintainers = [ lib.maintainers.markuskowa ];
 
   options = {
 
     services.slurm = {
 
       server = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Whether to enable the slurm control daemon.
             Note that the standard authentication method is "munge".
             The "munge" service needs to be provided with a password file in order for
@@ -76,40 +85,40 @@ in
       };
 
       dbdserver = {
-        enable = mkEnableOption (lib.mdDoc "SlurmDBD service");
+        enable = lib.mkEnableOption "SlurmDBD service";
 
-        dbdHost = mkOption {
-          type = types.str;
+        dbdHost = lib.mkOption {
+          type = lib.types.str;
           default = config.networking.hostName;
-          defaultText = literalExpression "config.networking.hostName";
-          description = lib.mdDoc ''
+          defaultText = lib.literalExpression "config.networking.hostName";
+          description = ''
             Hostname of the machine where `slurmdbd`
             is running (i.e. name returned by `hostname -s`).
           '';
         };
 
-        storageUser = mkOption {
-          type = types.str;
+        storageUser = lib.mkOption {
+          type = lib.types.str;
           default = cfg.user;
-          defaultText = literalExpression "config.${opt.user}";
-          description = lib.mdDoc ''
+          defaultText = lib.literalExpression "config.${opt.user}";
+          description = ''
             Database user name.
           '';
         };
 
-        storagePassFile = mkOption {
-          type = with types; nullOr str;
+        storagePassFile = lib.mkOption {
+          type = with lib.types; nullOr str;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             Path to file with database password. The content of this will be used to
             create the password for the `StoragePass` option.
           '';
         };
 
-        extraConfig = mkOption {
-          type = types.lines;
+        extraConfig = lib.mkOption {
+          type = lib.types.lines;
           default = "";
-          description = lib.mdDoc ''
+          description = ''
             Extra configuration for `slurmdbd.conf` See also:
             {manpage}`slurmdbd.conf(8)`.
           '';
@@ -117,13 +126,13 @@ in
       };
 
       client = {
-        enable = mkEnableOption (lib.mdDoc "slurm client daemon");
+        enable = lib.mkEnableOption "slurm client daemon";
       };
 
-      enableStools = mkOption {
-        type = types.bool;
+      enableStools = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to provide a slurm.conf file.
           Enable this option if you do not run a slurm daemon on this host
           (i.e. `server.enable` and `client.enable` are `false`)
@@ -131,68 +140,70 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "slurm" {
-        example = "slurm-full";
-      } // {
-        default = pkgs.slurm.override { enableX11 = ! cfg.enableSrunX11; };
-      };
+      package =
+        lib.mkPackageOption pkgs "slurm" {
+          example = "slurm-full";
+        }
+        // {
+          default = pkgs.slurm.override { enableX11 = !cfg.enableSrunX11; };
+        };
 
-      controlMachine = mkOption {
-        type = types.nullOr types.str;
+      controlMachine = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = null;
-        description = lib.mdDoc ''
+        description = ''
           The short hostname of the machine where SLURM control functions are
           executed (i.e. the name returned by the command "hostname -s", use "tux001"
           rather than "tux001.my.com").
         '';
       };
 
-      controlAddr = mkOption {
-        type = types.nullOr types.str;
+      controlAddr = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = cfg.controlMachine;
-        defaultText = literalExpression "config.${opt.controlMachine}";
+        defaultText = lib.literalExpression "config.${opt.controlMachine}";
         example = null;
-        description = lib.mdDoc ''
+        description = ''
           Name that ControlMachine should be referred to in establishing a
           communications path.
         '';
       };
 
-      clusterName = mkOption {
-        type = types.str;
+      clusterName = lib.mkOption {
+        type = lib.types.str;
         default = "default";
         example = "myCluster";
-        description = lib.mdDoc ''
+        description = ''
           Necessary to distinguish accounting records in a multi-cluster environment.
         '';
       };
 
-      nodeName = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        example = literalExpression ''[ "linux[1-32] CPUs=1 State=UNKNOWN" ];'';
-        description = lib.mdDoc ''
+      nodeName = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        example = lib.literalExpression ''[ "linux[1-32] CPUs=1 State=UNKNOWN" ];'';
+        description = ''
           Name that SLURM uses to refer to a node (or base partition for BlueGene
           systems). Typically this would be the string that "/bin/hostname -s"
           returns. Note that now you have to write node's parameters after the name.
         '';
       };
 
-      partitionName = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        example = literalExpression ''[ "debug Nodes=linux[1-32] Default=YES MaxTime=INFINITE State=UP" ];'';
-        description = lib.mdDoc ''
+      partitionName = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        example = lib.literalExpression ''[ "debug Nodes=linux[1-32] Default=YES MaxTime=INFINITE State=UP" ];'';
+        description = ''
           Name by which the partition may be referenced. Note that now you have
           to write the partition's parameters after the name.
         '';
       };
 
-      enableSrunX11 = mkOption {
+      enableSrunX11 = lib.mkOption {
         default = false;
-        type = types.bool;
-        description = lib.mdDoc ''
+        type = lib.types.bool;
+        description = ''
           If enabled srun will accept the option "--x11" to allow for X11 forwarding
           from within an interactive session or a batch job. This activates the
           slurm-spank-x11 module. Note that this option also enables
@@ -207,28 +218,28 @@ in
         '';
       };
 
-      procTrackType = mkOption {
-        type = types.str;
+      procTrackType = lib.mkOption {
+        type = lib.types.str;
         default = "proctrack/linuxproc";
-        description = lib.mdDoc ''
+        description = ''
           Plugin to be used for process tracking on a job step basis.
           The slurmd daemon uses this mechanism to identify all processes
           which are children of processes it spawns for a user job step.
         '';
       };
 
-      stateSaveLocation = mkOption {
-        type = types.str;
+      stateSaveLocation = lib.mkOption {
+        type = lib.types.str;
         default = "/var/spool/slurmctld";
-        description = lib.mdDoc ''
+        description = ''
           Directory into which the Slurm controller, slurmctld, saves its state.
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = defaultUser;
-        description = lib.mdDoc ''
+        description = ''
           Set this option when you want to run the slurmctld daemon
           as something else than the default slurm user "slurm".
           Note that the UID of this user needs to be the same
@@ -236,36 +247,54 @@ in
         '';
       };
 
-      extraConfig = mkOption {
+      extraConfig = lib.mkOption {
         default = "";
-        type = types.lines;
-        description = lib.mdDoc ''
+        type = lib.types.lines;
+        description = ''
           Extra configuration options that will be added verbatim at
           the end of the slurm configuration file.
         '';
       };
 
-      extraPlugstackConfig = mkOption {
+      mpi = {
+        PmixCliTmpDirBase = lib.mkOption {
+          default = "/tmp/pmix";
+          type = lib.types.str;
+          description = ''
+            Base path for PMIx temporary files.
+          '';
+        };
+
+        extraMpiConfig = lib.mkOption {
+          default = "";
+          type = lib.types.lines;
+          description = ''
+            Extra configuration for that will be added to `mpi.conf`.
+          '';
+        };
+      };
+
+      extraPlugstackConfig = lib.mkOption {
         default = "";
-        type = types.lines;
-        description = lib.mdDoc ''
+        type = lib.types.lines;
+        description = ''
           Extra configuration that will be added to the end of `plugstack.conf`.
         '';
       };
 
-      extraCgroupConfig = mkOption {
+      extraCgroupConfig = lib.mkOption {
         default = "";
-        type = types.lines;
-        description = lib.mdDoc ''
+        type = lib.types.lines;
+        description = ''
           Extra configuration for `cgroup.conf`. This file is
           used when `procTrackType=proctrack/cgroup`.
         '';
       };
 
-      extraConfigPaths = mkOption {
-        type = with types; listOf path;
-        default = [];
-        description = lib.mdDoc ''
+      extraConfigPaths = lib.mkOption {
+        type = with lib.types; listOf path;
+        default = [ ];
+        description = ''
           Slurm expects config files for plugins in the same path
           as `slurm.conf`. Add extra nix store
           paths that should be merged into same directory as
@@ -273,15 +302,15 @@ in
         '';
       };
 
-      etcSlurm = mkOption {
-        type = types.path;
+      etcSlurm = lib.mkOption {
+        type = lib.types.path;
         internal = true;
         default = etcSlurm;
-        defaultText = literalMD ''
+        defaultText = lib.literalMD ''
           Directory created from generated config files and
           `config.${opt.extraConfigPaths}`.
         '';
-        description = lib.mdDoc ''
+        description = ''
           Path to directory with slurm config files. This option is set by default from the
           Slurm module and is meant to make the Slurm config file available to other modules.
         '';
@@ -292,11 +321,11 @@ in
   };
 
   imports = [
-    (mkRemovedOptionModule [ "services" "slurm" "dbdserver" "storagePass" ] ''
+    (lib.mkRemovedOptionModule [ "services" "slurm" "dbdserver" "storagePass" ] ''
       This option has been removed so that the database password is not exposed via the nix store.
       Use services.slurm.dbdserver.storagePassFile to provide the database password.
     '')
-    (mkRemovedOptionModule [ "services" "slurm" "dbdserver" "configFile" ] ''
+    (lib.mkRemovedOptionModule [ "services" "slurm" "dbdserver" "configFile" ] ''
       This option has been removed. Use services.slurm.dbdserver.storagePassFile
       and services.slurm.dbdserver.extraConfig instead.
     '')
@@ -310,9 +339,8 @@ in
         name = "wrappedSlurm";
 
         builder = pkgs.writeText "builder.sh" ''
-          source $stdenv/setup
           mkdir -p $out/bin
-          find  ${getBin cfg.package}/bin -type f -executable | while read EXE
+          find  ${lib.getBin cfg.package}/bin -type f -executable | while read EXE
           do
             exename="$(basename $EXE)"
             wrappername="$out/bin/$exename"
@@ -329,110 +357,136 @@ in
           done
 
           mkdir -p $out/share
-          ln -s ${getBin cfg.package}/share/man $out/share/man
+          ln -s ${lib.getBin cfg.package}/share/man $out/share/man
         '';
       };
 
-  in mkIf ( cfg.enableStools ||
-            cfg.client.enable ||
-            cfg.server.enable ||
-            cfg.dbdserver.enable ) {
+    in
+    lib.mkIf (cfg.enableStools || cfg.client.enable || cfg.server.enable || cfg.dbdserver.enable) {
 
-    environment.systemPackages = [ wrappedSlurm ];
+      environment.systemPackages = [ wrappedSlurm ];
 
-    services.munge.enable = mkDefault true;
+      services.munge.enable = lib.mkDefault true;
 
-    # use a static uid as default to ensure it is the same on all nodes
-    users.users.slurm = mkIf (cfg.user == defaultUser) {
-      name = defaultUser;
-      group = "slurm";
-      uid = config.ids.uids.slurm;
-    };
+      # use a static uid as default to ensure it is the same on all nodes
+      users.users.slurm = lib.mkIf (cfg.user == defaultUser) {
+        name = defaultUser;
+        group = "slurm";
+        uid = config.ids.uids.slurm;
+      };
 
-    users.groups.slurm.gid = config.ids.uids.slurm;
+      users.groups.slurm.gid = config.ids.uids.slurm;
 
-    systemd.services.slurmd = mkIf (cfg.client.enable) {
-      path = with pkgs; [ wrappedSlurm coreutils ]
-        ++ lib.optional cfg.enableSrunX11 slurm-spank-x11;
+      systemd.services.slurmd = lib.mkIf (cfg.client.enable) {
+        path =
+          with pkgs;
+          [
+            wrappedSlurm
+            coreutils
+          ]
+          ++ lib.optional cfg.enableSrunX11 slurm-spank-x11;
 
-      wantedBy = [ "multi-user.target" ];
-      after = [
-        "systemd-tmpfiles-clean.service"
-        "munge.service"
-        "network-online.target"
-        "remote-fs.target"
+        wantedBy = [ "multi-user.target" ];
+        after = [
+          "systemd-tmpfiles-clean.service"
+          "munge.service"
+          "network-online.target"
+          "remote-fs.target"
+        ];
+        wants = [ "network-online.target" ];
+
+        serviceConfig = {
+          Type = "forking";
+          KillMode = "process";
+          ExecStart = "${wrappedSlurm}/bin/slurmd";
+          PIDFile = "/run/slurmd.pid";
+          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+          LimitMEMLOCK = "infinity";
+          Delegate = "Yes";
+        };
+      };
+
+      systemd.tmpfiles.rules = lib.optionals cfg.client.enable [
+        "d /var/spool/slurmd 755 root root -"
+        "d ${cfg.mpi.PmixCliTmpDirBase} 755 root root -"
       ];
-      wants = [ "network-online.target" ];
 
-      serviceConfig = {
-        Type = "forking";
-        KillMode = "process";
-        ExecStart = "${wrappedSlurm}/bin/slurmd";
-        PIDFile = "/run/slurmd.pid";
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-        LimitMEMLOCK = "infinity";
-        Delegate="Yes";
+      services.openssh.settings.X11Forwarding = lib.mkIf cfg.client.enable (lib.mkDefault true);
+
+      systemd.services.slurmctld = lib.mkIf (cfg.server.enable) {
+        path =
+          with pkgs;
+          [
+            wrappedSlurm
+            munge
+            coreutils
+          ]
+          ++ lib.optional cfg.enableSrunX11 slurm-spank-x11;
+
+        wantedBy = [ "multi-user.target" ];
+        after = [
+          "network.target"
+          "munged.service"
+        ];
+        requires = [ "munged.service" ];
+
+        serviceConfig = {
+          Type = "forking";
+          ExecStart = "${wrappedSlurm}/bin/slurmctld";
+          PIDFile = "/run/slurmctld.pid";
+          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        };
+
+        preStart = ''
+          mkdir -p ${cfg.stateSaveLocation}
+          chown -R ${cfg.user}:slurm ${cfg.stateSaveLocation}
+        '';
       };
+
+      systemd.services.slurmdbd =
+        let
+          # slurm strips the last component off the path
+          configPath = "$RUNTIME_DIRECTORY/slurmdbd.conf";
+        in
+        lib.mkIf (cfg.dbdserver.enable) {
+          path = with pkgs; [
+            wrappedSlurm
+            munge
+            coreutils
+          ];
+
+          wantedBy = [ "multi-user.target" ];
+          after = [
+            "network.target"
+            "munged.service"
+            "mysql.service"
+          ];
+          requires = [
+            "munged.service"
+            "mysql.service"
+          ];
+
+          preStart = ''
+            install -m 600 -o ${cfg.user} -T ${slurmdbdConf} ${configPath}
+            ${lib.optionalString (cfg.dbdserver.storagePassFile != null) ''
+              echo "StoragePass=$(cat ${cfg.dbdserver.storagePassFile})" \
+                >> ${configPath}
+            ''}
+          '';
+
+          script = ''
+            export SLURM_CONF=${configPath}
+            exec ${cfg.package}/bin/slurmdbd -D
+          '';
+
+          serviceConfig = {
+            RuntimeDirectory = "slurmdbd";
+            Type = "simple";
+            PIDFile = "/run/slurmdbd.pid";
+            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+          };
+        };
+
     };
-
-    systemd.tmpfiles.rules = mkIf cfg.client.enable [
-      "d /var/spool/slurmd 755 root root -"
-    ];
-
-    services.openssh.settings.X11Forwarding = mkIf cfg.client.enable (mkDefault true);
-
-    systemd.services.slurmctld = mkIf (cfg.server.enable) {
-      path = with pkgs; [ wrappedSlurm munge coreutils ]
-        ++ lib.optional cfg.enableSrunX11 slurm-spank-x11;
-
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "munged.service" ];
-      requires = [ "munged.service" ];
-
-      serviceConfig = {
-        Type = "forking";
-        ExecStart = "${wrappedSlurm}/bin/slurmctld";
-        PIDFile = "/run/slurmctld.pid";
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-      };
-
-      preStart = ''
-        mkdir -p ${cfg.stateSaveLocation}
-        chown -R ${cfg.user}:slurm ${cfg.stateSaveLocation}
-      '';
-    };
-
-    systemd.services.slurmdbd = let
-      # slurm strips the last component off the path
-      configPath = "$RUNTIME_DIRECTORY/slurmdbd.conf";
-    in mkIf (cfg.dbdserver.enable) {
-      path = with pkgs; [ wrappedSlurm munge coreutils ];
-
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "munged.service" "mysql.service" ];
-      requires = [ "munged.service" "mysql.service" ];
-
-      preStart = ''
-        install -m 600 -o ${cfg.user} -T ${slurmdbdConf} ${configPath}
-        ${optionalString (cfg.dbdserver.storagePassFile != null) ''
-          echo "StoragePass=$(cat ${cfg.dbdserver.storagePassFile})" \
-            >> ${configPath}
-        ''}
-      '';
-
-      script = ''
-        export SLURM_CONF=${configPath}
-        exec ${cfg.package}/bin/slurmdbd -D
-      '';
-
-      serviceConfig = {
-        RuntimeDirectory = "slurmdbd";
-        Type = "simple";
-        PIDFile = "/run/slurmdbd.pid";
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-      };
-    };
-
-  };
 
 }

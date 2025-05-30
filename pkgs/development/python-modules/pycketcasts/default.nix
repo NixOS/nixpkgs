@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python-magic
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python-magic,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "nwithan8";
-    repo = pname;
+    repo = "pycketcasts";
     rev = version;
     hash = "sha256-O4j89fE7fYPthhCH8b2gGskkelEA4mU6GvSbKIl+4Mk=";
   };
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pycketcasts"
-  ];
+  pythonImportsCheck = [ "pycketcasts" ];
 
   meta = with lib; {
     description = "Module to interact with PocketCast's unofficial API";

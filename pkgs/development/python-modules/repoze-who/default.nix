@@ -1,32 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, zope-interface
-, webob
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  zope-interface,
+  webob,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "repoze-who";
-  version = "3.0.0";
+  version = "3.1.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "repoze.who";
-    inherit version;
-    hash = "sha256-6VWt8AwfCwxxXoKJeaI37Ev37nCCe9l/Xhe/gnYNyzA=";
+  src = fetchFromGitHub {
+    owner = "repoze";
+    repo = "repoze.who";
+    tag = version;
+    hash = "sha256-vc4McZ0Mve2F/KjT/63NZwy5wl11WG2G/w5sUI71NWg=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  build-system = [ setuptools ];
+
+  dependencies = [
+    zope-interface
+    webob
   ];
 
-  propagatedBuildInputs = [ zope-interface webob ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # skip failing test
   # OSError: [Errno 22] Invalid argument
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     rm repoze/who/plugins/tests/test_htpasswd.py
   '';
 
-  pythonImportsCheck = [
-    "repoze.who"
-  ];
+  pythonImportsCheck = [ "repoze.who" ];
 
   pythonNamespaces = [
     "repoze"
@@ -49,6 +48,6 @@ buildPythonPackage rec {
     homepage = "http://www.repoze.org";
     changelog = "https://github.com/repoze/repoze.who/blob/${version}/CHANGES.rst";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,9 +1,10 @@
-{ fetchFromGitHub
-, buildPythonPackage
-, pillow
-, numpy
-, libdmtx
-, lib
+{
+  fetchFromGitHub,
+  buildPythonPackage,
+  pillow,
+  numpy,
+  libdmtx,
+  lib,
 }:
 
 buildPythonPackage rec {
@@ -13,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "NaturalHistoryMuseum";
-    repo = pname;
+    repo = "pylibdmtx";
     rev = "v${version}";
     hash = "sha256-vNWzhO4V0mj4eItZ0Z5UG9RBCqprIcgMGNyIe1+mXWY=";
   };
@@ -35,7 +36,10 @@ buildPythonPackage rec {
     rm pylibdmtx/tests/test_dmtx_library.py
   '';
 
-  propagatedBuildInputs = [ pillow numpy ];
+  propagatedBuildInputs = [
+    pillow
+    numpy
+  ];
 
   pythonImportsCheck = [ "pylibdmtx" ];
 

@@ -1,33 +1,35 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf-archive
-, autoreconfHook
-, makeWrapper
-, pkg-config
-, substituteAll
-, curl
-, gtk3
-, libassuan
-, libbsd
-, libproxy
-, libxml2
-, nssTools
-, openssl
-, p11-kit
-, pcsclite
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf-archive,
+  autoreconfHook,
+  makeWrapper,
+  pkg-config,
+  replaceVarsWith,
+  curl,
+  gtk3,
+  libassuan,
+  libbsd,
+  libproxy,
+  libxml2,
+  nssTools,
+  openssl,
+  p11-kit,
+  pcsclite,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "eid-mw";
   # NOTE: Don't just blindly update to the latest version/tag. Releases are always for a specific OS.
-  version = "5.1.16";
+  version = "5.1.21";
 
   src = fetchFromGitHub {
     owner = "Fedict";
     repo = "eid-mw";
     rev = "v${version}";
-    hash = "sha256-UOZVCTXiqYnatS/ZhJZZprqtwtkVt8EJRHZ9XuX5W5o=";
+    hash = "sha256-WFXVQ2CNrEEy4R6xGiwWkAZmbvXK44FtO5w6s1ZUZpA=";
   };
 
   postPatch = ''
@@ -35,9 +37,24 @@ stdenv.mkDerivation rec {
     substituteInPlace configure.ac --replace 'p11kitcfdir=""' 'p11kitcfdir="'$out/share/p11-kit/modules'"'
   '';
 
-
-  nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config makeWrapper ];
-  buildInputs = [ curl gtk3 libassuan libbsd libproxy libxml2 openssl p11-kit pcsclite ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    autoreconfHook
+    autoconf-archive
+    pkg-config
+    makeWrapper
+  ];
+  buildInputs = [
+    curl
+    gtk3
+    libassuan
+    libbsd
+    libproxy
+    libxml2
+    openssl
+    p11-kit
+    pcsclite
+  ];
 
   preConfigure = ''
     mkdir openssl
@@ -53,10 +70,12 @@ stdenv.mkDerivation rec {
 
   postInstall =
     let
-      eid-nssdb-in = substituteAll {
-        inherit (stdenv) shell;
+      eid-nssdb-in = replaceVarsWith {
         isExecutable = true;
         src = ./eid-nssdb.in;
+        replacements = {
+          inherit (stdenv) shell;
+        };
       };
     in
     ''
@@ -99,6 +118,9 @@ stdenv.mkDerivation rec {
           firefox.override { pkcs11Modules = [ pkgs.eid-mw ]; }
     '';
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bfortz chvp ];
+    maintainers = with maintainers; [
+      bfortz
+      chvp
+    ];
   };
 }

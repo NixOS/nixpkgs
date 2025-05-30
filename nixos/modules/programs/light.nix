@@ -1,6 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.light;
@@ -10,18 +13,18 @@ in
   options = {
     programs.light = {
 
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
-        description = lib.mdDoc ''
+        type = lib.types.bool;
+        description = ''
           Whether to install Light backlight control command
           and udev rules granting access to members of the "video" group.
         '';
       };
 
       brightnessKeys = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Whether to enable brightness control with keyboard keys.
@@ -38,11 +41,20 @@ in
           '';
         };
 
-        step = mkOption {
-          type = types.int;
+        step = lib.mkOption {
+          type = lib.types.int;
           default = 10;
           description = ''
             The percentage value by which to increase/decrease brightness.
+          '';
+        };
+
+        minBrightness = lib.mkOption {
+          type = lib.types.numbers.between 0 100;
+          default = 0.1;
+          description = ''
+            The minimum authorized brightness value, e.g. to avoid the
+            display going dark.
           '';
         };
 
@@ -51,27 +63,30 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.light ];
     services.udev.packages = [ pkgs.light ];
-    services.actkbd = mkIf cfg.brightnessKeys.enable {
+    services.actkbd = lib.mkIf cfg.brightnessKeys.enable {
       enable = true;
-      bindings = let
-        light = "${pkgs.light}/bin/light";
-        step = toString cfg.brightnessKeys.step;
-      in [
-        {
-          keys = [ 224 ];
-          events = [ "key" ];
-          # Use minimum brightness 0.1 so the display won't go totally black.
-          command = "${light} -N 0.1 && ${light} -U ${step}";
-        }
-        {
-          keys = [ 225 ];
-          events = [ "key" ];
-          command = "${light} -A ${step}";
-        }
-      ];
+      bindings =
+        let
+          light = "${pkgs.light}/bin/light";
+          step = builtins.toString cfg.brightnessKeys.step;
+          minBrightness = builtins.toString cfg.brightnessKeys.minBrightness;
+        in
+        [
+          {
+            keys = [ 224 ];
+            events = [ "key" ];
+            # -N is used to ensure that value >= minBrightness
+            command = "${light} -N ${minBrightness} && ${light} -U ${step}";
+          }
+          {
+            keys = [ 225 ];
+            events = [ "key" ];
+            command = "${light} -A ${step}";
+          }
+        ];
     };
   };
 }

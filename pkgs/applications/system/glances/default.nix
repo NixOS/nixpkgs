@@ -1,55 +1,98 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, fetchpatch, isPyPy, lib
-, defusedxml, future, ujson, packaging, psutil, setuptools
-# Optional dependencies:
-, bottle, pysnmp
-, hddtemp
-, netifaces # IP module
-, py-cpuinfo
+{
+  stdenv,
+  buildPythonApplication,
+  fetchFromGitHub,
+  isPyPy,
+  pythonOlder,
+  lib,
+  defusedxml,
+  packaging,
+  psutil,
+  setuptools,
+  nixosTests,
+  pytestCheckHook,
+  which,
+  podman,
+  selenium,
+  # Optional dependencies:
+  fastapi,
+  jinja2,
+  pysnmp,
+  hddtemp,
+  netifaces2, # IP module
+  uvicorn,
+  requests,
+  prometheus-client,
 }:
 
 buildPythonApplication rec {
   pname = "glances";
-  version = "3.4.0.3";
-  disabled = isPyPy;
+  version = "4.3.1";
+  pyproject = true;
+
+  disabled = isPyPy || pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TakQqyHKuiFdBL73JQzflNUMYmBINyY0flqitqoIpmg=";
+    tag = "v${version}";
+    hash = "sha256-KaH2dV9bOtBZkfbIGIgQS8vL39XwSyatSjclcXpeVGM=";
   };
+
+  build-system = [ setuptools ];
 
   # On Darwin this package segfaults due to mismatch of pure and impure
   # CoreFoundation. This issues was solved for binaries but for interpreted
   # scripts a workaround below is still required.
   # Relevant: https://github.com/NixOS/nixpkgs/issues/24693
-  makeWrapperArgs = lib.optionals stdenv.isDarwin [
-    "--set" "DYLD_FRAMEWORK_PATH" "/System/Library/Frameworks"
+  makeWrapperArgs = lib.optionals stdenv.hostPlatform.isDarwin [
+    "--set"
+    "DYLD_FRAMEWORK_PATH"
+    "/System/Library/Frameworks"
   ];
 
-  doCheck = true;
-  preCheck = lib.optionalString stdenv.isDarwin ''
-    export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
-  '';
+  # some tests fail in darwin sandbox
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
-  propagatedBuildInputs = [
-    bottle
+  dependencies = [
     defusedxml
-    future
-    ujson
-    netifaces
+    netifaces2
     packaging
     psutil
     pysnmp
-    setuptools
-    py-cpuinfo
-  ] ++ lib.optional stdenv.isLinux hddtemp;
+    fastapi
+    uvicorn
+    requests
+    jinja2
+    which
+    prometheus-client
+  ] ++ lib.optional stdenv.hostPlatform.isLinux hddtemp;
 
-  meta = with lib; {
+  passthru.tests = {
+    service = nixosTests.glances;
+  };
+
+  nativeCheckInputs = [
+    which
+    pytestCheckHook
+    selenium
+    podman
+  ];
+
+  disabledTestPaths = [
+    # Message: Unable to obtain driver for chrome
+    "tests/test_webui.py"
+  ];
+
+  meta = {
     homepage = "https://nicolargo.github.io/glances/";
     description = "Cross-platform curses-based monitoring tool";
-    changelog = "https://github.com/nicolargo/glances/blob/v${version}/NEWS.rst";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ jonringer primeos koral ];
+    mainProgram = "glances";
+    changelog = "https://github.com/nicolargo/glances/blob/${src.tag}/NEWS.rst";
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [
+      primeos
+      koral
+    ];
   };
 }

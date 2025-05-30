@@ -1,14 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pandas
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pandas,
+  pythonOlder,
+  numpy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pycatch22";
-  version = "0.4.4";
+  version = "0.4.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -16,37 +19,25 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DynamicsAndNeuralSystems";
     repo = "pycatch22";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-l41LLo9k075EL8rV48bwa4Yw12XuqNJSDYtd9kyqS3U=";
+    tag = "v${version}";
+    hash = "sha256-NvZrjOdC6rV4hwCuGcc2Br/VDhLwZcYpfnNvQpqU134=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     pandas
+    numpy
+    pytestCheckHook
   ];
 
-  # This packages does not have real tests
-  # But we can run this file as smoketest
-  checkPhase = ''
-    runHook preCheck
+  pythonImportsCheck = [ "pycatch22" ];
 
-    python tests/testing.py
-
-    runHook postCheck
-  '';
-
-  pythonImportsCheck = [
-    "pycatch22"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Python implementation of catch22";
     homepage = "https://github.com/DynamicsAndNeuralSystems/pycatch22";
     changelog = "https://github.com/DynamicsAndNeuralSystems/pycatch22/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mbalatsko ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

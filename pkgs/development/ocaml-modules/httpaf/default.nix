@@ -1,5 +1,11 @@
-{ lib, fetchFromGitHub, fetchpatch, buildDunePackage
-, angstrom, faraday, result, alcotest
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  angstrom,
+  faraday,
+  result,
+  alcotest,
 }:
 
 buildDunePackage rec {
@@ -16,11 +22,15 @@ buildDunePackage rec {
   };
 
   checkInputs = [ alcotest ];
-  propagatedBuildInputs = [ angstrom faraday result ];
+  propagatedBuildInputs = [
+    angstrom
+    faraday
+    result
+  ];
   doCheck = true;
 
   meta = {
-    description = "A high-performance, memory-efficient, and scalable web server for OCaml";
+    description = "High-performance, memory-efficient, and scalable web server for OCaml";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.vbgl ];
     inherit (src.meta) homepage;

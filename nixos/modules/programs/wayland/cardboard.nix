@@ -1,24 +1,31 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.cardboard;
 in
 {
-  meta.maintainers = with lib.maintainers; [ AndersonTorres ];
+  meta.maintainers = with lib.maintainers; [ ];
 
   options.programs.cardboard = {
-    enable = lib.mkEnableOption (lib.mdDoc "cardboard");
+    enable = lib.mkEnableOption "cardboard";
 
     package = lib.mkPackageOption pkgs "cardboard" { };
   };
 
-  config = lib.mkIf cfg.enable (lib.mkMerge [
-    {
-      environment.systemPackages = [ cfg.package ];
+  config = lib.mkIf cfg.enable (
+    lib.mkMerge [
+      {
+        environment.systemPackages = [ cfg.package ];
 
-      # To make a cardboard session available for certain DMs like SDDM
-      services.xserver.displayManager.sessionPackages = [ cfg.package ];
-    }
-    (import ./wayland-session.nix { inherit lib pkgs; })
-  ]);
+        # To make a cardboard session available for certain DMs like SDDM
+        services.displayManager.sessionPackages = [ cfg.package ];
+      }
+      (import ./wayland-session.nix { inherit lib pkgs; })
+    ]
+  );
 }

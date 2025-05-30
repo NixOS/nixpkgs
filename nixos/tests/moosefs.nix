@@ -1,59 +1,69 @@
-import ./make-test-python.nix ({ pkgs, ... } :
+{ pkgs, ... }:
 
 let
-  master = { pkgs, ... } : {
-    # data base is stored in memory
-    # server crashes with default memory size
-    virtualisation.memorySize = 1024;
+  master =
+    { pkgs, ... }:
+    {
+      # data base is stored in memory
+      # server crashes with default memory size
+      virtualisation.memorySize = 1024;
 
-    services.moosefs.master = {
-      enable = true;
-      openFirewall = true;
-      exports = [
-        "* / rw,alldirs,admin,maproot=0:0"
-        "* . rw"
-      ];
-    };
-  };
-
-  chunkserver = { pkgs, ... } : {
-    virtualisation.emptyDiskImages = [ 4096 ];
-    boot.initrd.postDeviceCommands = ''
-      ${pkgs.e2fsprogs}/bin/mkfs.ext4 -L data /dev/vdb
-    '';
-
-    fileSystems = pkgs.lib.mkVMOverride {
-      "/data" = {
-        device = "/dev/disk/by-label/data";
-        fsType = "ext4";
-      };
-    };
-
-    services.moosefs = {
-      masterHost = "master";
-      chunkserver = {
-        openFirewall = true;
+      services.moosefs.master = {
         enable = true;
-        hdds = [ "~/data" ];
+        openFirewall = true;
+        autoInit = true;
+        exports = [
+          "* / rw,alldirs,admin,maproot=0:0"
+          "* . rw"
+        ];
       };
     };
-  };
 
-  metalogger = { pkgs, ... } : {
-    services.moosefs = {
-      masterHost = "master";
-      metalogger.enable = true;
+  chunkserver =
+    { pkgs, ... }:
+    {
+      virtualisation.emptyDiskImages = [ 4096 ];
+      boot.initrd.postDeviceCommands = ''
+        ${pkgs.e2fsprogs}/bin/mkfs.ext4 -L data /dev/vdb
+      '';
+
+      fileSystems = pkgs.lib.mkVMOverride {
+        "/data" = {
+          device = "/dev/disk/by-label/data";
+          fsType = "ext4";
+        };
+      };
+
+      services.moosefs = {
+        masterHost = "master";
+        chunkserver = {
+          openFirewall = true;
+          enable = true;
+          hdds = [ "~/data" ];
+        };
+      };
     };
-  };
 
-  client = { pkgs, ... } : {
-    services.moosefs.client.enable = true;
-  };
+  metalogger =
+    { pkgs, ... }:
+    {
+      services.moosefs = {
+        masterHost = "master";
+        metalogger.enable = true;
+      };
+    };
 
-in {
+  client =
+    { pkgs, ... }:
+    {
+      services.moosefs.client.enable = true;
+    };
+
+in
+{
   name = "moosefs";
 
-  nodes= {
+  nodes = {
     inherit master;
     inherit metalogger;
     chunkserver1 = chunkserver;
@@ -66,8 +76,6 @@ in {
     # prepare master server
     master.start()
     master.wait_for_unit("multi-user.target")
-    master.succeed("mfsmaster-init")
-    master.succeed("systemctl restart mfs-master")
     master.wait_for_unit("mfs-master.service")
 
     metalogger.wait_for_unit("mfs-metalogger.service")
@@ -86,4 +94,4 @@ in {
     client1.succeed("echo test > /moosefs/file")
     client2.succeed("grep test /moosefs/file")
   '';
-})
+}

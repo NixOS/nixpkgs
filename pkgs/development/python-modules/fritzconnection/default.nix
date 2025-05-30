@@ -1,47 +1,40 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytestCheckHook
-, requests
-, segno
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  requests,
+  segno,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "fritzconnection";
-  version = "1.13.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.15.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kbr";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-nWXtXhF2pUBxHdrivi4DA7+bFiZPyxb2nqsiN3j4HdI=";
+    repo = "fritzconnection";
+    tag = version;
+    hash = "sha256-ulY+nh9CSnxrktTlFSXAWJALkS4GwP/3dRIG07jQCWs=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  build-system = [ setuptools ];
 
-  passthru.optional-dependencies = {
-    qr = [
-      segno
-    ];
+  dependencies = [ requests ];
+
+  optional-dependencies = {
+    qr = [ segno ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$TEMP
   '';
 
-  pythonImportsCheck = [
-    "fritzconnection"
-  ];
+  pythonImportsCheck = [ "fritzconnection" ];
 
   disabledTestPaths = [
     # Functional tests require network access
@@ -53,6 +46,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/kbr/fritzconnection";
     changelog = "https://fritzconnection.readthedocs.io/en/${version}/sources/version_history.html";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda valodim ];
+    maintainers = with maintainers; [
+      dotlambda
+      valodim
+    ];
   };
 }

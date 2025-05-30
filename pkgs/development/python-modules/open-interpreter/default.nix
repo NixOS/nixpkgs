@@ -1,81 +1,108 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, pythonRelaxDepsHook
-, poetry-core
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  poetry-core,
 
-, appdirs
-, astor
-, inquirer
-, litellm
-, pyyaml
-, rich
-, six
-, tiktoken
-, tokentrim
-, wget
-, psutil
-, html2image
-, ipykernel
-, jupyter-client
-, matplotlib
-, toml
-, posthog
-, openai
-, setuptools
+  anthropic,
+  astor,
+  fastapi,
+  google-generativeai,
+  html2image,
+  html2text,
+  inquirer,
+  ipykernel,
+  jupyter-client,
+  litellm,
+  matplotlib,
+  platformdirs,
+  psutil,
+  pyautogui,
+  pydantic,
+  pyperclip,
+  pyyaml,
+  rich,
+  selenium,
+  send2trash,
+  setuptools,
+  shortuuid,
+  six,
+  starlette,
+  tiktoken,
+  tokentrim,
+  toml,
+  typer,
+  uvicorn,
+  webdriver-manager,
+  wget,
+  yaspin,
+
+  nltk,
 }:
 
 buildPythonPackage rec {
   pname = "open-interpreter";
-  version = "0.2.0";
+  version = "0.4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "KillianLucas";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-XeJ6cADtyXtqoTXwYJu+i9d3NYbJCLpYOeZYmdImtwI=";
+    repo = "open-interpreter";
+    tag = "v${version}";
+    hash = "sha256-fogCcWAhcrCrrcV0q4oKttkf/GeJaJSZnbgiFxvySs8=";
   };
 
-  # Remove unused dependency
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace 'git-python = "^1.0.3"' ""
-  '';
+  pythonRemoveDeps = [ "git-python" ];
 
   pythonRelaxDeps = [
+    "anthropic"
+    "google-generativeai"
+    "psutil"
+    "rich"
+    "starlette"
     "tiktoken"
+    "typer"
+    "yaspin"
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    appdirs
+  dependencies = [
+    anthropic
     astor
-    inquirer
-    litellm
-    pyyaml
-    rich
-    six
-    tiktoken
-    tokentrim
-    wget
-    psutil
+    fastapi
+    google-generativeai
     html2image
+    html2text
+    inquirer
     ipykernel
     jupyter-client
+    litellm
     matplotlib
-    toml
-    posthog
-    openai
-
-    # Not explicitly in pyproject.toml but required due to use of `pkgs_resources`
+    platformdirs
+    psutil
+    pyautogui
+    pydantic
+    pyperclip
+    pyyaml
+    rich
+    selenium
+    send2trash
     setuptools
+    shortuuid
+    six
+    starlette
+    tiktoken
+    tokentrim
+    toml
+    typer
+    uvicorn
+    webdriver-manager
+    wget
+    yaspin
+
+    # marked optional in pyproject.toml but still required?
+    nltk
   ];
 
   pythonImportsCheck = [ "interpreter" ];
@@ -83,12 +110,12 @@ buildPythonPackage rec {
   # Most tests required network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "OpenAI's Code Interpreter in your terminal, running locally";
     homepage = "https://github.com/KillianLucas/open-interpreter";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     changelog = "https://github.com/KillianLucas/open-interpreter/releases/tag/v${version}";
-    maintainers = with maintainers; [ happysalada ];
+    maintainers = with lib.maintainers; [ happysalada ];
     mainProgram = "interpreter";
   };
 }

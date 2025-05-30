@@ -1,62 +1,63 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, poetry-core
-, pythonRelaxDepsHook
-, numpy
-, pyyaml
-, python-dateutil
-, urllib3
-, tqdm
-, dnspython
-, requests
-, typing-extensions
-, loguru
+{
+  lib,
+  buildPythonPackage,
+  dnspython,
+  fetchFromGitHub,
+  loguru,
+  numpy,
+  poetry-core,
+  python-dateutil,
+  pythonOlder,
+  pyyaml,
+  requests,
+  setuptools,
+  tqdm,
+  typing-extensions,
+  pinecone-plugin-interface,
+  pinecone-plugin-inference,
+  urllib3,
 }:
+
 buildPythonPackage rec {
   pname = "pinecone-client";
-  version = "3.1.0";
+  version = "5.4.2";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "pinecone_client";
-    inherit version;
-    hash = "sha256-RbggYBP5GpgrmU8fuqOefoyZ0w7zd4qfMZxDuMmS/EI=";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "pinecone-io";
+    repo = "pinecone-python-client";
+    tag = "v${version}";
+    hash = "sha256-5BCjqcJ+xCTTF/Q+PrgNV4Y/GcT2cfNqvY1ydUL6EZ8=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
-    numpy
-    pyyaml
-    python-dateutil
-    urllib3
-    tqdm
+  dependencies = [
     dnspython
-    requests
-    typing-extensions
     loguru
+    numpy
+    python-dateutil
+    pinecone-plugin-interface
+    pinecone-plugin-inference
+    pyyaml
+    requests
+    tqdm
+    typing-extensions
+    urllib3
   ];
 
-  pythonRelaxDeps = [
-    "urllib3"
-  ];
+  pythonImportsCheck = [ "pinecone" ];
 
-  doCheck = false;
-
-  pythonImportsCheck = [
-    "pinecone"
-  ];
-
-  meta = with lib; {
+  meta = {
+    description = "Pinecone python client";
     homepage = "https://www.pinecone.io/";
-    description = "The Pinecone python client";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    changelog = "https://github.com/pinecone-io/pinecone-python-client/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

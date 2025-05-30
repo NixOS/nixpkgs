@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, unittestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  unittestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -16,25 +17,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "robbmcleod";
     repo = "cpufeature";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dp569Tp8E5/avQpYvhPNPgS/A+q2e/ie+7BR7h2Ip+I=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    setuptools
-  ];
+  propagatedBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
-  pythonImportsCheck = [
-    "cpufeature"
-  ];
+  pythonImportsCheck = [ "cpufeature" ];
 
   preCheck = ''
     # Change into the test directory due to a relative resource path
@@ -46,6 +39,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/robbmcleod/cpufeature";
     license = licenses.cc0;
     maintainers = with maintainers; [ fab ];
-    platforms = [ "x86_64-linux" "x86_64-windows" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-windows"
+    ];
   };
 }

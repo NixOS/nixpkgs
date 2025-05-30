@@ -1,31 +1,34 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, appstream-glib
-, desktop-file-utils
-, glib
-, gtk4
-, libGL
-, libepoxy
-, libadwaita
-, meson
-, mpv
-, ninja
-, nix-update-script
-, pkg-config
-, python3
-, wrapGAppsHook4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  appstream-glib,
+  desktop-file-utils,
+  glib,
+  gtk4,
+  libGL,
+  libepoxy,
+  libadwaita,
+  meson,
+  mpv,
+  ninja,
+  nix-update-script,
+  pkg-config,
+  python3,
+  wrapGAppsHook4,
+  yt-dlp,
+  youtubeSupport ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "celluloid";
-  version = "0.26";
+  version = "0.29";
 
   src = fetchFromGitHub {
     owner = "celluloid-player";
     repo = "celluloid";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-npaagLlkwDe0r0hqj7buM4B9sbLCX1sR2yFXXj+obdE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-p4jMEM+ikcyVIi7cHm7u0wk9PKD8YJyhRXABgsh/SJc=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs meson-post-install.py src/generate-authors.py
   '';
 
+  preFixup = lib.optionalString youtubeSupport ''
+    gappsWrapperArgs+=(
+      --prefix PATH : "${lib.makeBinPath [ yt-dlp ]}"
+    )
+  '';
+
   strictDeps = true;
 
   doCheck = true;
@@ -68,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/celluloid-player/celluloid/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Plus;
     mainProgram = "celluloid";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ samlukeyes123 ];
     platforms = lib.platforms.linux;
   };
 })

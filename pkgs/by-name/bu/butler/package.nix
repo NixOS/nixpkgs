@@ -1,44 +1,42 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, stdenv
-, Cocoa
-, fetchpatch
+{
+  buildGoModule,
+  brotli,
+  lib,
+  fetchFromGitHub,
 }:
+
+# update instructions:
+# - Check if butler version bug was fixed https://github.com/itchio/butler/issues/266
+# - if it's fixed, remove patch.
+# - if it was not fixed, follow steps below to regenerate the patch
+# - manually clone butler, change go.mod's version number to 1.18 at least
+# - run `go mod tidy` in the cloned repository.
+# - generate patch with `git diff > go.mod.patch`
 
 buildGoModule rec {
   pname = "butler";
-  version = "15.21.0";
+  version = "15.24.0";
 
   src = fetchFromGitHub {
     owner = "itchio";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-vciSmXR3wI3KcnC+Uz36AgI/WUfztA05MJv1InuOjJM=";
+    repo = "butler";
+    tag = "v${version}";
+    hash = "sha256-Gzf+8icPIXrNc8Vk8z0COPv/QA6GL6nSvQg13bAlfZM=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    Cocoa
-  ];
+  buildInputs = [ brotli ];
 
-  patches = [
-    # update x/sys dependency for darwin build https://github.com/itchio/butler/pull/245
-    (fetchpatch {
-      url = "https://github.com/itchio/butler/pull/245/commits/ef651d373e3061fda9692dd44ae0f7ce215e9655.patch";
-      hash = "sha256-rZZn/OGiv3mRyy89uORyJ99zWN21kZCCQAlFvSKxlPU=";
-    })
-  ];
+  patches = [ ./go.mod.patch ];
 
-  proxyVendor = true;
+  doCheck = false; # disabled because the tests don't work in a non-FHS compliant environment.
 
-  vendorHash = "sha256-CtBwc5mcgLvl2Bvg5gI+ULJMQEEibx1aN3IpmRNUtwE=";
+  vendorHash = "sha256-A6u7bKI7eoptkjBuXoQlLYHkEVtrl8aNnBb65k1bFno=";
 
-  doCheck = false;
-
-  meta = with lib; {
+  meta = {
     description = "Command-line itch.io helper";
-    homepage = "https://github.com/itchio/butler";
-    license = licenses.mit;
-    maintainers = with maintainers; [ martfont ];
+    changelog = "https://github.com/itchio/butler/releases/tag/v${version}/CHANGELOG.md";
+    homepage = "http://itch.io";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ naelstrof ];
   };
 }

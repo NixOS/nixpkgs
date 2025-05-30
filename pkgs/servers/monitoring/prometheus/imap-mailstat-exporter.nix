@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -21,6 +22,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Export Prometheus-style metrics about how many emails you have in your INBOX and in additional configured folders";
+    mainProgram = "imap-mailstat-exporter";
     homepage = "https://github.com/bt909/imap-mailstat-exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ raboof ];

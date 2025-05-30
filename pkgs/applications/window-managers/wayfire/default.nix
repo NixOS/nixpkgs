@@ -1,39 +1,41 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, meson
-, ninja
-, pkg-config
-, wf-config
-, cairo
-, doctest
-, libGL
-, libdrm
-, libexecinfo
-, libevdev
-, libinput
-, libjpeg
-, libxkbcommon
-, wayland
-, wayland-protocols
-, wayland-scanner
-, wlroots
-, pango
-, nlohmann_json
-, xorg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nixosTests,
+  cmake,
+  meson,
+  ninja,
+  pkg-config,
+  wf-config,
+  cairo,
+  doctest,
+  libGL,
+  libdrm,
+  libexecinfo,
+  libevdev,
+  libinput,
+  libjpeg,
+  libxkbcommon,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  wlroots,
+  pango,
+  nlohmann_json,
+  xorg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayfire";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "WayfireWM";
     repo = "wayfire";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-YI8N1rY71b2ulv7tAdah7sibG4qq3kY0/hyS0cls5to=";
+    hash = "sha256-xQZ4/UE66IISZQLl702OQXAAr8XmEsA4hJwB7aXua+E=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    wf-config
     libGL
     libdrm
     libexecinfo
@@ -54,14 +55,15 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     wayland-protocols
     xorg.xcbutilwm
-    wayland
-    cairo
-    pango
     nlohmann_json
   ];
 
   propagatedBuildInputs = [
+    wf-config
     wlroots
+    wayland
+    cairo
+    pango
   ];
 
   nativeCheckInputs = [
@@ -83,11 +85,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.providedSessions = [ "wayfire" ];
 
+  passthru.tests.mate = nixosTests.mate-wayland;
+
   meta = {
     homepage = "https://wayfire.org/";
     description = "3D Wayland compositor";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ qyliss wucke13 rewine ];
+    maintainers = with lib.maintainers; [
+      wucke13
+      rewine
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "wayfire";
   };

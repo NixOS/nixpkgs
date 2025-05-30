@@ -1,43 +1,45 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, fsspec
-, xrootd
-, pkgs
-, pytestCheckHook
-, stdenv
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  fsspec,
+  xrootd,
+
+  # tests
+  pkgs,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "fsspec-xrootd";
-  version = "0.2.4";
+  version = "0.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
     repo = "fsspec-xrootd";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-8TT+49SF/3i2OMIDcDD0AXEn0J9UkNX2q/SBkfoMXso=";
+    tag = "v${version}";
+    hash = "sha256-Vpe/Gcm6rmehG05h2H7BDZcBQDyie0Ww9X8LgoTgAkE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     fsspec
     xrootd
   ];
 
-  pythonImportsCheck = [
-    "fsspec_xrootd"
-  ];
+  pythonImportsCheck = [ "fsspec_xrootd" ];
 
   nativeCheckInputs = [
     pkgs.xrootd
@@ -51,15 +53,13 @@ buildPythonPackage rec {
   ];
 
   # Timeout related tests hang indifinetely
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    "tests/test_basicio.py"
-  ];
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test_basicio.py" ];
 
-  meta = with lib; {
-    description = "An XRootD implementation for fsspec";
+  meta = {
+    description = "XRootD implementation for fsspec";
     homepage = "https://github.com/CoffeaTeam/fsspec-xrootd";
     changelog = "https://github.com/CoffeaTeam/fsspec-xrootd/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

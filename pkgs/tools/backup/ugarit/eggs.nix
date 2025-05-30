@@ -10,7 +10,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -53,7 +53,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -113,7 +113,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -146,7 +146,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -176,7 +176,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -190,7 +190,12 @@ rec {
     };
 
     buildInputs = [
-      
+
+    ];
+
+    patches = [
+      # missing include <sys/sysmacros.h> since Jan 2025, cause unknown
+      ./posix-extras-add-sysmacros-include.patch
     ];
   };
 
@@ -204,7 +209,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -218,7 +223,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -232,7 +237,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -275,7 +280,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -289,7 +294,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -452,7 +457,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 
@@ -466,7 +471,7 @@ rec {
     };
 
     buildInputs = [
-      
+
     ];
   };
 

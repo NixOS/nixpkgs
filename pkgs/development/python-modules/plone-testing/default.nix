@@ -1,28 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, zope-testing
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  zope-testing,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  pname = "plone.testing";
-  version = "8.0.3";
+  pname = "plone-testing";
+  version = "9.0.3";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "39bc23bbb59b765702090ad61fe579f8bd9fe1f005f4dd1c2988a5bd1a71faf0";
+  src = fetchFromGitHub {
+    owner = "plone";
+    repo = "plone.testing";
+    tag = version;
+    hash = "sha256-EjKKwLUBhzjtk3stHkdUDsteXQGJcrwdu9EEA4FFK1w=";
   };
 
-  propagatedBuildInputs = [ six setuptools zope-testing ];
+  build-system = [ setuptools ];
+
+  dependencies = [
+    setuptools
+    zope-testing
+  ];
+
+  pythonImportsCheck = [ "plone.testing" ];
 
   # Huge amount of testing dependencies (including Zope2)
   doCheck = false;
 
+  pythonNamespaces = [ "plone" ];
+
   meta = {
     description = "Testing infrastructure for Zope and Plone projects";
     homepage = "https://github.com/plone/plone.testing";
+    changelog = "https://github.com/plone/plone.testing/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.bsd3;
   };
 }

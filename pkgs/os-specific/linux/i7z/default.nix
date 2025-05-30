@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, ncurses
-, withGui ? false, qtbase }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  ncurses,
+  withGui ? false,
+  qtbase,
+}:
 
 stdenv.mkDerivation rec {
   pname = "i7z";
@@ -33,11 +40,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postBuild = lib.optionalString withGui ''
-      cd GUI
-      qmake
-      make clean
-      make
-      cd ..
+    cd GUI
+    qmake
+    make clean
+    make
+    cd ..
   '';
 
   makeFlags = [ "prefix=${placeholder "out"}" ];
@@ -47,9 +54,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A better i7 (and now i3, i5) reporting tool for Linux";
+    description = "Better i7 (and now i3, i5) reporting tool for Linux";
+    mainProgram = "i7z";
     homepage = "https://github.com/DimitryAndric/i7z";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ bluescreen303 ];
     # broken on ARM
     platforms = [ "x86_64-linux" ];

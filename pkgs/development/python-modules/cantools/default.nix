@@ -1,36 +1,32 @@
-{ lib
-, argparse-addons
-, bitstruct
-, buildPythonPackage
-, can
-, crccheck
-, diskcache
-, fetchPypi
-, matplotlib
-, parameterized
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-scm
-, textparser
+{
+  lib,
+  argparse-addons,
+  bitstruct,
+  buildPythonPackage,
+  python-can,
+  crccheck,
+  diskcache,
+  fetchPypi,
+  matplotlib,
+  parameterized,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  textparser,
 }:
 
 buildPythonPackage rec {
   pname = "cantools";
-  version = "39.4.4";
+  version = "40.2.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bo6Ri2ZxpiqfOZBUbs5WI+Hetx3vsc74WplVrDAdqZ4=";
+    hash = "sha256-ba5GyqiiAL2/mIvDLw4/vLHbOE6wl+znynPAeeXu2Bw=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "setuptools_scm>=8" "setuptools_scm"
-  '';
 
   nativeBuildInputs = [
     setuptools
@@ -40,24 +36,24 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     argparse-addons
     bitstruct
-    can
+    python-can
     crccheck
     diskcache
-    matplotlib
     textparser
   ];
+
+  optional-dependencies.plot = [ matplotlib ];
 
   nativeCheckInputs = [
     parameterized
     pytestCheckHook
-  ];
+  ] ++ optional-dependencies.plot;
 
-  pythonImportsCheck = [
-    "cantools"
-  ];
+  pythonImportsCheck = [ "cantools" ];
 
   meta = with lib; {
     description = "Tools to work with CAN bus";
+    mainProgram = "cantools";
     homepage = "https://github.com/cantools/cantools";
     changelog = "https://github.com/cantools/cantools/releases/tag/${version}";
     license = licenses.mit;

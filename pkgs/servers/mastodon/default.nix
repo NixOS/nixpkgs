@@ -1,16 +1,24 @@
-{ lib, stdenv, nodejs-slim, bundlerEnv, nixosTests
-, yarn, callPackage, ruby, writeShellScript
-, fetchYarnDeps, prefetch-yarn-deps
-, brotli
+{
+  lib,
+  stdenv,
+  nodejs-slim,
+  bundlerEnv,
+  nixosTests,
+  yarn-berry,
+  callPackage,
+  ruby,
+  writeShellScript,
+  brotli,
+  python3,
 
   # Allow building a fork or custom version of Mastodon:
-, pname ? "mastodon"
-, version ? srcOverride.version
-, patches ? []
+  pname ? "mastodon",
+  version ? srcOverride.version,
+  patches ? [ ],
   # src is a package
-, srcOverride ? callPackage ./source.nix { inherit patches; }
-, gemset ? ./. + "/gemset.nix"
-, yarnHash ? srcOverride.yarnHash
+  srcOverride ? callPackage ./source.nix { inherit patches; },
+  gemset ? ./. + "/gemset.nix",
+  yarnHash ? srcOverride.yarnHash,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,12 +36,20 @@ stdenv.mkDerivation rec {
     pname = "${pname}-modules";
     inherit src version;
 
-    yarnOfflineCache = fetchYarnDeps {
-      yarnLock = "${src}/yarn.lock";
+    yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
+      inherit src;
       hash = yarnHash;
     };
 
-    nativeBuildInputs = [ prefetch-yarn-deps nodejs-slim yarn mastodonGems mastodonGems.wrappedRuby brotli ];
+    nativeBuildInputs = [
+      nodejs-slim
+      yarn-berry
+      yarn-berry.yarnBerryConfigHook
+      mastodonGems
+      mastodonGems.wrappedRuby
+      brotli
+      python3
+    ];
 
     RAILS_ENV = "production";
     NODE_ENV = "production";
@@ -41,33 +57,28 @@ stdenv.mkDerivation rec {
     buildPhase = ''
       runHook preBuild
 
-      export HOME=$PWD
-      # This option is needed for openssl-3 compatibility
-      # Otherwise we encounter this upstream issue: https://github.com/mastodon/mastodon/issues/17924
-      export NODE_OPTIONS=--openssl-legacy-provider
-      fixup-yarn-lock ~/yarn.lock
-      yarn config --offline set yarn-offline-mirror $yarnOfflineCache
-      yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
+      export SECRET_KEY_BASE_DUMMY=1
 
-      patchShebangs ~/bin
-      patchShebangs ~/node_modules
+      patchShebangs bin
 
-      # skip running yarn install
-      rm -rf ~/bin/yarn
+      bundle exec rails assets:precompile
 
-      OTP_SECRET=precompile_placeholder SECRET_KEY_BASE=precompile_placeholder \
-        rails assets:precompile
-      yarn cache clean --offline
-      rm -rf ~/node_modules/.cache
+      rm -rf node_modules/.cache
+
+      # Remove workspace "package" as it contains broken symlinks
+      # See https://github.com/NixOS/nixpkgs/issues/380366
+      rm -rf node_modules/@mastodon
+
+      # Remove execute permissions
+      find public/assets -type f ! -perm 0555 \
+        -exec chmod 0444 {} ';'
 
       # Create missing static gzip and brotli files
-      gzip --best --keep ~/public/assets/500.html
-      gzip --best --keep ~/public/packs/report.html
-      find ~/public/assets -maxdepth 1 -type f -name '.*.json' \
-        -exec gzip --best --keep --force {} ';'
-      brotli --best --keep ~/public/packs/report.html
-      find ~/public/assets -type f -regextype posix-extended -iregex '.*\.(css|js|json|html)' \
+      find public/assets -type f -regextype posix-extended -iregex '.*\.(css|html|js|json|svg)' \
+        -exec gzip --best --keep --force {} ';' \
         -exec brotli --best --keep {} ';'
+      gzip --best --keep public/packs/report.html
+      brotli --best --keep public/packs/report.html
 
       runHook postBuild
     '';
@@ -86,7 +97,10 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ mastodonGems.wrappedRuby ];
   nativeBuildInputs = [ brotli ];
-  buildInputs = [ mastodonGems nodejs-slim ];
+  buildInputs = [
+    mastodonGems
+    nodejs-slim
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -104,13 +118,14 @@ stdenv.mkDerivation rec {
     done
 
     # Remove execute permissions
-    chmod 0444 public/emoji/*.svg
+    find public/emoji -type f ! -perm 0555 \
+      -exec chmod 0444 {} ';'
 
     # Create missing static gzip and brotli files
-    find public -maxdepth 1 -type f -regextype posix-extended -iregex '.*\.(css|js|svg|txt|xml)' \
+    find public -maxdepth 1 -type f -regextype posix-extended -iregex '.*\.(js|txt)' \
       -exec gzip --best --keep --force {} ';' \
       -exec brotli --best --keep {} ';'
-    find public/emoji -type f -name '.*.svg' \
+    find public/emoji -type f -name '*.svg' \
       -exec gzip --best --keep --force {} ';' \
       -exec brotli --best --keep {} ';'
     ln -s assets/500.html.gz public/500.html.gz
@@ -127,20 +142,23 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
-  installPhase = let
-    run-streaming = writeShellScript "run-streaming.sh" ''
-      # NixOS helper script to consistently use the same NodeJS version the package was built with.
-      ${nodejs-slim}/bin/node ./streaming
+  installPhase =
+    let
+      run-streaming = writeShellScript "run-streaming.sh" ''
+        # NixOS helper script to consistently use the same NodeJS version the package was built with.
+        ${nodejs-slim}/bin/node ./streaming
+      '';
+    in
+    ''
+      runHook preInstall
+
+      mkdir -p $out
+      mv .{env*,ruby*} $out/
+      mv * $out/
+      ln -s ${run-streaming} $out/run-streaming.sh
+
+      runHook postInstall
     '';
-  in ''
-    runHook preInstall
-
-    mkdir -p $out
-    cp -r * $out/
-    ln -s ${run-streaming} $out/run-streaming.sh
-
-    runHook postInstall
-  '';
 
   passthru = {
     tests.mastodon = nixosTests.mastodon;
@@ -152,7 +170,16 @@ stdenv.mkDerivation rec {
     description = "Self-hosted, globally interconnected microblogging software based on ActivityPub";
     homepage = "https://joinmastodon.org";
     license = licenses.agpl3Plus;
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ happy-river erictapen izorkin ghuntley ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "aarch64-linux"
+    ];
+    maintainers = with maintainers; [
+      happy-river
+      erictapen
+      izorkin
+      ghuntley
+    ];
   };
 }

@@ -1,10 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, atpublic
-, zope-interface
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch2,
+  setuptools,
+  atpublic,
+  zope-interface,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -18,32 +20,32 @@ buildPythonPackage rec {
     hash = "sha256-JVBK65duwP5aGc1sQTo0EMtRT9zb3Kn5tdjTQ6hgODE=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  patches = [
+    (fetchpatch2 {
+      # Replace deprecated failIf with assertFalse for Python 3.12 compatibility.
+      url = "https://gitlab.com/warsaw/flufl.bounce/-/commit/e0b9fd0f24572e024a8d0484a3c9fb4542337d18.patch";
+      hash = "sha256-HJHEbRVjiiP5Z7W0sQCj6elUMyaWOTqQw6UpYOYCVZM=";
+    })
   ];
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     atpublic
     zope-interface
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "flufl.bounce"
-  ];
+  pythonImportsCheck = [ "flufl.bounce" ];
 
-  pythonNamespaces = [
-    "flufl"
-  ];
+  pythonNamespaces = [ "flufl" ];
 
   meta = with lib; {
     description = "Email bounce detectors";
     homepage = "https://gitlab.com/warsaw/flufl.bounce";
     changelog = "https://gitlab.com/warsaw/flufl.bounce/-/blob/${version}/flufl/bounce/NEWS.rst";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.asl20;
   };
 }

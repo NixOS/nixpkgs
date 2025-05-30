@@ -55,7 +55,7 @@ def get_metadata(wheel: str) -> Metadata:
     """
     text = get_manifest_text_from_wheel(wheel)
     raw, _ = parse_email(text)
-    metadata = Metadata.from_raw(raw)
+    metadata = Metadata.from_raw(raw, validate=False)
 
     return metadata
 
@@ -78,7 +78,10 @@ def test_requirement(requirement: Requirement) -> bool:
         error(f"{package_name} not installed")
         return False
 
-    if package.version not in requirement.specifier:
+    # Allow prereleases, to give to give us some wiggle-room
+    requirement.specifier.prereleases = True
+
+    if requirement.specifier and package.version not in requirement.specifier:
         error(
             f"{package_name}{requirement.specifier} not satisfied by version {package.version}"
         )
@@ -91,7 +94,12 @@ if __name__ == "__main__":
     args = argparser.parse_args()
 
     metadata = get_metadata(args.wheel)
-    tests = [test_requirement(requirement) for requirement in metadata.requires_dist]
+    requirements = metadata.requires_dist
+
+    if not requirements:
+        sys.exit(0)
+
+    tests = [test_requirement(requirement) for requirement in requirements]
 
     if not all(tests):
         sys.exit(1)

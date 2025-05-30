@@ -1,30 +1,37 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "rsyncd";
   meta.maintainers = with pkgs.lib.maintainers; [ ehmry ];
 
-  nodes = let
-    mkNode = socketActivated:
-      { config, ... }: {
-        networking.firewall.allowedTCPPorts = [ config.services.rsyncd.port ];
-        services.rsyncd = {
-          enable = true;
-          inherit socketActivated;
-          settings = {
-            global = {
-              "reverse lookup" = false;
-              "forward lookup" = false;
-            };
-            tmp = {
-              path = "/nix/store";
-              comment = "test module";
+  nodes =
+    let
+      mkNode =
+        socketActivated:
+        { config, ... }:
+        {
+          networking.firewall.allowedTCPPorts = [ config.services.rsyncd.port ];
+          services.rsyncd = {
+            enable = true;
+            inherit socketActivated;
+            settings = {
+              globalSection = {
+                "reverse lookup" = false;
+                "forward lookup" = false;
+              };
+              sections = {
+                tmp = {
+                  path = "/nix/store";
+                  comment = "test module";
+                };
+              };
             };
           };
         };
-      };
-  in {
-    a = mkNode false;
-    b = mkNode true;
-  };
+    in
+    {
+      a = mkNode false;
+      b = mkNode true;
+    };
 
   testScript = ''
     start_all()
@@ -33,4 +40,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     b.succeed("rsync a::")
     a.succeed("rsync b::")
   '';
-})
+}

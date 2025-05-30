@@ -1,36 +1,39 @@
-{ lib, pkgs, config, ... }:
-
-with lib;
-
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 let
 
   cfg = config.services.domoticz;
   pkgDesc = "Domoticz home automation";
 
-in {
+in
+{
 
   options = {
 
     services.domoticz = {
-      enable = mkEnableOption (lib.mdDoc pkgDesc);
+      enable = lib.mkEnableOption pkgDesc;
 
-      bind = mkOption {
-        type = types.str;
+      bind = lib.mkOption {
+        type = lib.types.str;
         default = "0.0.0.0";
-        description = lib.mdDoc "IP address to bind to.";
+        description = "IP address to bind to.";
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 8080;
-        description = lib.mdDoc "Port to bind to for HTTP, set to 0 to disable HTTP.";
+        description = "Port to bind to for HTTP, set to 0 to disable HTTP.";
       };
 
     };
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.services."domoticz" = {
       description = pkgDesc;

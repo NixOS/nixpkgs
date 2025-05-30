@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, nix-update-script
-, python3Packages
+{
+  lib,
+  fetchFromGitHub,
+  nix-update-script,
+  python3Packages,
 }:
 
 python3Packages.buildPythonApplication {
   pname = "memtree";
-  version = "unstable-2024-01-04";
+  version = "0-unstable-2024-01-04";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -15,6 +16,8 @@ python3Packages.buildPythonApplication {
     rev = "97615952eabdc5e8e1a4bd590dd1f4971f3c5a24";
     hash = "sha256-Ifp8hwkuyBw57fGer3GbDiJaRjL4TD3hzj+ecGXWqI0=";
   };
+
+  pythonRelaxDeps = [ "rich" ];
 
   nativeBuildInputs = with python3Packages; [
     poetry-core

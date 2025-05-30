@@ -1,19 +1,20 @@
-{ lib
-, mkDerivation
-, cmake
-, extra-cmake-modules
-, applet-window-buttons
-, karchive
-, kcoreaddons
-, ki18n
-, kio
-, kirigami2
-, mauikit
-, mauikit-accounts
-, mauikit-filebrowsing
-, qtmultimedia
-, qtquickcontrols2
-, taglib
+{
+  lib,
+  mkDerivation,
+  cmake,
+  extra-cmake-modules,
+  applet-window-buttons,
+  karchive,
+  kcoreaddons,
+  ki18n,
+  kio,
+  kirigami2,
+  mauikit,
+  mauikit-accounts,
+  mauikit-filebrowsing,
+  qtmultimedia,
+  qtquickcontrols2,
+  taglib,
 }:
 
 mkDerivation {
@@ -41,9 +42,9 @@ mkDerivation {
 
   meta = with lib; {
     description = "Multi-platform media player";
+    mainProgram = "vvave";
     homepage = "https://invent.kde.org/maui/vvave";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ onny ];
   };
 }
-

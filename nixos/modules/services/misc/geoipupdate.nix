@@ -1,24 +1,39 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.geoipupdate;
-  inherit (builtins) isAttrs isString isInt isList typeOf hashString;
+  inherit (builtins)
+    isAttrs
+    isString
+    isInt
+    isList
+    typeOf
+    hashString
+    ;
 in
 {
   imports = [
-    (lib.mkRemovedOptionModule [ "services" "geoip-updater" ] "services.geoip-updater has been removed, use services.geoipupdate instead.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "geoip-updater"
+    ] "services.geoip-updater has been removed, use services.geoipupdate instead.")
   ];
 
   options = {
     services.geoipupdate = {
-      enable = lib.mkEnableOption (lib.mdDoc ''
-        periodic downloading of GeoIP databases using geoipupdate.
-      '');
+      enable = lib.mkEnableOption ''
+        periodic downloading of GeoIP databases using geoipupdate
+      '';
 
       interval = lib.mkOption {
         type = lib.types.str;
         default = "weekly";
-        description = lib.mdDoc ''
+        description = ''
           Update the GeoIP databases at this time / interval.
           The format is described in
           {manpage}`systemd.time(7)`.
@@ -35,7 +50,7 @@ in
             ProxyUserPassword = { _secret = "/run/keys/proxy_pass"; };
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           geoipupdate configuration options. See
           <https://github.com/maxmind/geoipupdate/blob/main/doc/GeoIP.conf.md>
           for a full list of available options.
@@ -54,15 +69,19 @@ in
           freeformType =
             with lib.types;
             let
-              type = oneOf [str int bool];
+              type = oneOf [
+                str
+                int
+                bool
+              ];
             in
-              attrsOf (either type (listOf type));
+            attrsOf (either type (listOf type));
 
           options = {
 
             AccountID = lib.mkOption {
               type = lib.types.int;
-              description = lib.mdDoc ''
+              description = ''
                 Your MaxMind account ID.
               '';
             };
@@ -74,7 +93,7 @@ in
                 "GeoLite2-City"
                 "GeoLite2-Country"
               ];
-              description = lib.mdDoc ''
+              description = ''
                 List of database edition IDs. This includes new string
                 IDs like `GeoIP2-City` and old
                 numeric IDs like `106`.
@@ -83,7 +102,7 @@ in
 
             LicenseKey = lib.mkOption {
               type = with lib.types; either path (attrsOf path);
-              description = lib.mdDoc ''
+              description = ''
                 A file containing the MaxMind license key.
 
                 Always handled as a secret whether the value is
@@ -98,7 +117,7 @@ in
               type = lib.types.path;
               default = "/var/lib/GeoIP";
               example = "/run/GeoIP";
-              description = lib.mdDoc ''
+              description = ''
                 The directory to store the database files in. The
                 directory will be automatically created, the owner
                 changed to `geoip` and permissions
@@ -149,19 +168,33 @@ in
             isSecret = v: isAttrs v && v ? _secret && isString v._secret;
             geoipupdateKeyValue = lib.generators.toKeyValue {
               mkKeyValue = lib.flip lib.generators.mkKeyValueDefault " " rec {
-                mkValueString = v:
-                  if isInt           v then toString v
-                  else if isString   v then v
-                  else if true  ==   v then "1"
-                  else if false ==   v then "0"
-                  else if isList     v then lib.concatMapStringsSep " " mkValueString v
-                  else if isSecret   v then hashString "sha256" v._secret
-                  else throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty {}) v}";
+                mkValueString =
+                  v:
+                  if isInt v then
+                    toString v
+                  else if isString v then
+                    v
+                  else if true == v then
+                    "1"
+                  else if false == v then
+                    "0"
+                  else if isList v then
+                    lib.concatMapStringsSep " " mkValueString v
+                  else if isSecret v then
+                    hashString "sha256" v._secret
+                  else
+                    throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty { }) v}";
               };
             };
             secretPaths = lib.catAttrs "_secret" (lib.collect isSecret cfg.settings);
             mkSecretReplacement = file: ''
-              replace-secret ${lib.escapeShellArgs [ (hashString "sha256" file) file "/run/geoipupdate/GeoIP.conf" ]}
+              replace-secret ${
+                lib.escapeShellArgs [
+                  (hashString "sha256" file)
+                  file
+                  "/run/geoipupdate/GeoIP.conf"
+                ]
+              }
             '';
             secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
 
@@ -177,7 +210,7 @@ in
               ${secretReplacements}
             '';
           in
-            "+${pkgs.writeShellScript "start-pre-full-privileges" script}";
+          "+${pkgs.writeShellScript "start-pre-full-privileges" script}";
         ExecStart = "${pkgs.geoipupdate}/bin/geoipupdate -f /run/geoipupdate/GeoIP.conf";
         User = "geoip";
         DynamicUser = true;
@@ -197,8 +230,14 @@ in
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
         ProcSubset = "pid";
-        SystemCallFilter = [ "@system-service" "~@privileged" ];
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictRealtime = true;
         RestrictNamespaces = true;
         MemoryDenyWriteExecute = true;

@@ -1,17 +1,24 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
-let cfg = config.services.touchegg;
+let
+  cfg = config.services.touchegg;
 
-in {
+in
+{
   meta = {
     maintainers = teams.pantheon.members;
   };
 
   ###### interface
   options.services.touchegg = {
-    enable = mkEnableOption (lib.mdDoc "touchegg, a multi-touch gesture recognizer");
+    enable = mkEnableOption "touchegg, a multi-touch gesture recognizer";
 
     package = mkPackageOption pkgs "touchegg" { };
   };

@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.netclient;
 in
@@ -6,13 +11,14 @@ in
   meta.maintainers = with lib.maintainers; [ wexder ];
 
   options.services.netclient = {
-    enable = lib.mkEnableOption (lib.mdDoc "Netclient Daemon");
+    enable = lib.mkEnableOption "Netclient Daemon";
     package = lib.mkPackageOption pkgs "netclient" { };
   };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     systemd.services.netclient = {
+      wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
       description = "Netclient Daemon";

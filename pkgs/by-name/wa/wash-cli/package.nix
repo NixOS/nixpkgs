@@ -1,33 +1,38 @@
-{ lib, stdenv, fetchCrate, rustPlatform, pkg-config, openssl, darwin, fetchurl }:
+{
+  lib,
+  fetchCrate,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  fetchurl,
+}:
 
 let
   wasiPreviewCommandComponentAdapter = fetchurl {
-    url = "https://github.com/bytecodealliance/wasmtime/releases/download/v13.0.0/wasi_snapshot_preview1.command.wasm";
-    hash = "sha256-QihT0Iaq9VJs2mLL9CdS32lVMtDc9M952k/ZZ4tO6qs=";
+    url = "https://github.com/bytecodealliance/wasmtime/releases/download/v22.0.0/wasi_snapshot_preview1.command.wasm";
+    hash = "sha256-UVBFddlI0Yh1ZNs0b2jSnKsHvGGAS5U09yuwm8Q6lxw=";
   };
   wasiPreviewReactorComponentAdapter = fetchurl {
-    url = "https://github.com/bytecodealliance/wasmtime/releases/download/v13.0.0/wasi_snapshot_preview1.reactor.wasm";
-    hash = "sha256-bNmx/IqYPkA7YHvlYvHPmIMF/fkKtSXlZx1bjR3Neow=";
+    url = "https://github.com/bytecodealliance/wasmtime/releases/download/v22.0.0/wasi_snapshot_preview1.reactor.wasm";
+    hash = "sha256-oE53IRMZgysSWT7RhrpZJjdaIyzCRf0h4d1yjqj/PSk=";
   };
 
-in rustPlatform.buildRustPackage rec {
+in
+rustPlatform.buildRustPackage rec {
   pname = "wash-cli";
-  version = "0.24.0";
+  version = "0.39.0";
 
   src = fetchCrate {
     inherit version pname;
-      hash = "sha256-exhN+44Sikcn2JiIry/jHOpYrPG2oQOpwq/Mq+0VK0U=";
+    hash = "sha256-qOxYBhwkcn4g1cUBHuF0AoecpxN4ukgTjBnzVhWtw7A=";
   };
 
-  cargoHash = "sha256-eEfkMoi4BPpKWkiTshHj59loFPzyrhFN/S8HKdMCGFM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-dPHzRZh5jBxbPt+1a9wVbsBclAkfrcAXhpZgTw7e4Qo=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-      darwin.apple_sdk.frameworks.CoreServices
-    ];
+  buildInputs = [ openssl ];
 
   preBuild = "
     export WASI_PREVIEW1_COMMAND_COMPONENT_ADAPTER=${wasiPreviewCommandComponentAdapter}

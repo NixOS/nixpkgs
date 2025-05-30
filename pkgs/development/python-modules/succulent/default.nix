@@ -1,58 +1,56 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, pandas
-, pyyaml
-, poetry-core
-, pytestCheckHook
-, pythonRelaxDepsHook
-, pythonOlder
-, toml-adapt
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  lxml,
+  numpy,
+  pandas,
+  pyyaml,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "succulent";
-  version = "0.3.2";
-  format = "pyproject";
+  version = "0.4.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "succulent";
-    rev = "refs/tags/${version}";
-    hash = "sha256-2WiKrIQkgFIjmZkEA8veXcKCY4X0aygqoP7R3UCCljQ=";
+    tag = version;
+    hash = "sha256-lmN31Xdp1PCLhgInGxvTKTLBXFpz3NnHYSFjKQfRfec=";
   };
 
   pythonRelaxDeps = [
     "flask"
-    "pandas"
+    "numpy"
   ];
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
     flask
+    lxml
+    numpy
     pandas
     pyyaml
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "succulent"
-  ];
+  pythonImportsCheck = [ "succulent" ];
 
   meta = with lib; {
     description = "Collect POST requests";
     homepage = "https://github.com/firefly-cpp/succulent";
-    changelog = "https://github.com/firefly-cpp/succulent/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/firefly-cpp/succulent/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ firefly-cpp ];
   };

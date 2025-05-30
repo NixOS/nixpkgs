@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pandas
-, dask
-, fastparquet
-, pyarrow
-, setuptools
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dask,
+  fastparquet,
+  fetchFromGitHub,
+  pandas,
+  pyarrow,
+  pythonOlder,
+  setuptools,
+  versioneer,
 }:
 
 buildPythonPackage rec {
@@ -19,21 +21,24 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "intake";
     repo = "intake-parquet";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-zSwylXBKOM/tG5mwYtc0FmxwcKJ6j+lw1bxJqf57NY8=";
   };
 
   postPatch = ''
-    # Break circular dependency
-    substituteInPlace requirements.txt \
-      --replace-fail "intake" ""
+    # Remove vendorized versioneer.py
+    rm versioneer.py
   '';
 
-  nativeBuildInputs = [
+  # Break circular dependency
+  pythonRemoveDeps = [ "intake" ];
+
+  build-system = [
     setuptools
+    versioneer
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pandas
     dask
     fastparquet

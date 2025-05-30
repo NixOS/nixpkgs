@@ -1,21 +1,26 @@
-{ lib
-, check
-, cmake
-, doxygen
-, expat
-, fetchFromGitHub
-, libxml2
-, python
-, sphinx
-, stdenv
-, zlib
+{
+  lib,
+  check,
+  cmake,
+  doxygen,
+  expat,
+  fetchFromGitHub,
+  libxml2,
+  python3,
+  sphinx,
+  stdenv,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libcomps";
   version = "0.1.21";
 
-  outputs = [ "out" "dev" "py" ];
+  outputs = [
+    "out"
+    "dev"
+    "py"
+  ];
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
@@ -30,14 +35,14 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace libcomps/src/python/src/CMakeLists.txt \
-      --replace "@PYTHON_INSTALL_DIR@" "$out/${python.sitePackages}"
+      --replace "@PYTHON_INSTALL_DIR@" "$out/${python3.sitePackages}"
   '';
 
   nativeBuildInputs = [
     check
     cmake
     doxygen
-    python
+    python3
     sphinx
   ];
 
@@ -52,7 +57,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     ls $out/lib
-    moveToOutput "lib/${python.libPrefix}" "$py"
+    moveToOutput "lib/${python3.libPrefix}" "$py"
   '';
 
   meta = with lib; {

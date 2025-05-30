@@ -1,14 +1,28 @@
-{ buildDunePackage, irmin, ppx_irmin, mtime, astring, fmt, jsonm, logs, lwt
-, metrics-unix, ocaml-syntax-shims, cmdliner, metrics, alcotest-lwt
-, hex, vector
+{
+  buildDunePackage,
+  irmin,
+  ppx_irmin,
+  mtime,
+  astring,
+  fmt,
+  jsonm,
+  logs,
+  lwt,
+  metrics-unix,
+  ocaml-syntax-shims,
+  cmdliner,
+  metrics,
+  alcotest-lwt,
+  hex,
+  vector,
+  qcheck-alcotest,
 }:
 
 buildDunePackage {
 
   pname = "irmin-test";
 
-  inherit (irmin) version src strictDeps;
-  duneVersion = "3";
+  inherit (irmin) version src;
 
   nativeBuildInputs = [ ppx_irmin ];
 
@@ -28,7 +42,12 @@ buildDunePackage {
     metrics
   ];
 
-  checkInputs = [ hex vector ];
+  doCheck = true;
+  checkInputs = [
+    hex
+    qcheck-alcotest
+    vector
+  ];
 
   meta = irmin.meta // {
     description = "Irmin test suite";

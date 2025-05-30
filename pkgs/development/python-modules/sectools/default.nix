@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, ldap3
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ldap3,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "sectools";
-  version = "1.4.3";
+  version = "1.4.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -16,29 +17,23 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "p0dalirius";
     repo = "sectools";
-    rev = "refs/tags/${version}";
-    hash = "sha256-k3k1/DFmv0resnsNht/C+2Xh6qbSQmk83eN/3vtDU00=";
+    tag = version;
+    hash = "sha256-dI0zokmndMZ4C7aX73WOdyXvOjCQJzZU6C1uXDt97Vg=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    ldap3
-  ];
+  propagatedBuildInputs = [ ldap3 ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "sectools"
-  ];
+  pythonImportsCheck = [ "sectools" ];
 
   meta = with lib; {
     description = "library containing functions to write security tools";
     homepage = "https://github.com/p0dalirius/sectools";
-    changelog = "https://github.com/p0dalirius/sectools/releases/tag/${version}";
+    changelog = "https://github.com/p0dalirius/sectools/releases/tag/${src.tag}";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
   };

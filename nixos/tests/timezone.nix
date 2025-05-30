@@ -1,18 +1,25 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+{ pkgs, ... }:
+{
   name = "timezone";
-  meta.maintainers = with pkgs.lib.maintainers; [ lheckemann ];
+  meta.maintainers = with pkgs.lib.maintainers; [ ];
 
   nodes = {
-    node_eutz = { pkgs, ... }: {
-      time.timeZone = "Europe/Amsterdam";
-    };
+    node_eutz =
+      { pkgs, ... }:
+      {
+        time.timeZone = "Europe/Amsterdam";
+      };
 
-    node_nulltz = { pkgs, ... }: {
-      time.timeZone = null;
-    };
+    node_nulltz =
+      { pkgs, ... }:
+      {
+        time.timeZone = null;
+      };
   };
 
-  testScript = { nodes, ... }: ''
+  testScript =
+    { nodes, ... }:
+    ''
       node_eutz.wait_for_unit("dbus.socket")
 
       with subtest("static - Ensure timezone change gives the correct result"):
@@ -46,5 +53,5 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           assert (
               date_result == "1970-01-01 09:00:00\n"
           ), "Timezone adjustment was not persisted"
-  '';
-})
+    '';
+}

@@ -1,23 +1,26 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   meta = {
-    maintainers = teams.freedesktop.members;
+    maintainers = lib.teams.freedesktop.members;
   };
 
   options = {
-    xdg.sounds.enable = mkOption {
-      type = types.bool;
+    xdg.sounds.enable = lib.mkOption {
+      type = lib.types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to install files to support the
         [XDG Sound Theme specification](https://www.freedesktop.org/wiki/Specifications/sound-theme-spec/).
       '';
     };
   };
 
-  config = mkIf config.xdg.sounds.enable {
+  config = lib.mkIf config.xdg.sounds.enable {
     environment.systemPackages = [
       pkgs.sound-theme-freedesktop
     ];

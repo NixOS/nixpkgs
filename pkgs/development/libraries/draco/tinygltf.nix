@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {

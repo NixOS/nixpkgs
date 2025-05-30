@@ -1,56 +1,73 @@
-{ callPackage, lib, stdenv, chicken, makeWrapper }:
-{ name, src
-, buildInputs ? []
-, chickenInstallFlags ? []
-, cscOptions          ? []
-, ...} @ args:
+{
+  callPackage,
+  lib,
+  stdenv,
+  chicken,
+  makeWrapper,
+}:
+{
+  name,
+  src,
+  buildInputs ? [ ],
+  chickenInstallFlags ? [ ],
+  cscOptions ? [ ],
+  ...
+}@args:
 
 let
   overrides = callPackage ./overrides.nix { };
   baseName = lib.getName name;
-  override = if builtins.hasAttr baseName overrides
-   then
-     builtins.getAttr baseName overrides
-   else
-     lib.id;
+  override =
+    if builtins.hasAttr baseName overrides then builtins.getAttr baseName overrides else lib.id;
 in
-(stdenv.mkDerivation ({
-  name = "chicken-${name}";
-  propagatedBuildInputs = buildInputs;
-  nativeBuildInputs = [ chicken makeWrapper ];
-  buildInputs = [ chicken ];
+(stdenv.mkDerivation (
+  {
+    name = "chicken-${name}";
+    propagatedBuildInputs = buildInputs;
+    nativeBuildInputs = [
+      chicken
+      makeWrapper
+    ];
+    buildInputs = [ chicken ];
 
-  strictDeps = true;
+    strictDeps = true;
 
-  CSC_OPTIONS = lib.concatStringsSep " " cscOptions;
+    CSC_OPTIONS = lib.concatStringsSep " " cscOptions;
 
-  buildPhase = ''
-    runHook preBuild
-    chicken-install -cached -no-install -host ${lib.escapeShellArgs chickenInstallFlags}
-    runHook postBuild
-  '';
+    buildPhase = ''
+      runHook preBuild
+      chicken-install -cached -no-install -host ${lib.escapeShellArgs chickenInstallFlags}
+      runHook postBuild
+    '';
 
-  installPhase = ''
-    runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-    export CHICKEN_INSTALL_PREFIX=$out
-    export CHICKEN_INSTALL_REPOSITORY=$out/lib/chicken/${toString chicken.binaryVersion}
-    chicken-install -cached -host ${lib.escapeShellArgs chickenInstallFlags}
+      export CHICKEN_INSTALL_PREFIX=$out
+      export CHICKEN_INSTALL_REPOSITORY=$out/lib/chicken/${toString chicken.binaryVersion}
+      chicken-install -cached -host ${lib.escapeShellArgs chickenInstallFlags}
 
-    for f in $out/bin/*
-    do
-      wrapProgram $f \
-        --prefix CHICKEN_REPOSITORY_PATH : "$out/lib/chicken/${toString chicken.binaryVersion}:$CHICKEN_REPOSITORY_PATH" \
-        --prefix CHICKEN_INCLUDE_PATH : "$CHICKEN_INCLUDE_PATH:$out/share" \
-        --prefix PATH : "$out/bin:${chicken}/bin:$CHICKEN_REPOSITORY_PATH"
-    done
+      for f in $out/bin/*
+      do
+        wrapProgram $f \
+          --prefix CHICKEN_REPOSITORY_PATH : "$out/lib/chicken/${toString chicken.binaryVersion}:$CHICKEN_REPOSITORY_PATH" \
+          --prefix CHICKEN_INCLUDE_PATH : "$CHICKEN_INCLUDE_PATH:$out/share" \
+          --prefix PATH : "$out/bin:${chicken}/bin:$CHICKEN_REPOSITORY_PATH"
+      done
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
-  dontConfigure = true;
+    dontConfigure = true;
 
-  meta = {
-    inherit (chicken.meta) platforms;
-  } // args.meta or {};
-} // builtins.removeAttrs args ["name" "buildInputs" "meta"]) ).overrideAttrs override
+    meta = {
+      inherit (chicken.meta) platforms;
+    } // args.meta or { };
+  }
+  // builtins.removeAttrs args [
+    "name"
+    "buildInputs"
+    "meta"
+  ]
+)).overrideAttrs
+  override

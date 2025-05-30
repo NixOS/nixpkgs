@@ -1,28 +1,29 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
 }:
 
 buildGoModule rec {
   pname = "hof";
-  version = "0.6.9-beta.1";
+  version = "0.6.10";
 
   src = fetchFromGitHub {
     owner = "hofstadter-io";
     repo = "hof";
     rev = "v${version}";
-    hash = "sha256-4yVP6DRHrsp52VxBhr7qppPhInYEsvPbIfxxQcRwHTw=";
+    hash = "sha256-okc11mXqB/PaXd0vsRuIIL70qWSFprvsZJtE6PvCaIg=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  vendorHash = "sha256-cDUcYwcxPn+9TEP5lhVJXofijCZX94Is+Qt41PqUgjI=";
+  vendorHash = "sha256-mLOWnHzKw/B+jFNuswejEnYbPxFkk95I/BWeHRTH55I=";
 
-  subPackages = [ "./cmd/hof/main.go" ];
+  subPackages = [ "./cmd/hof" ];
 
   postInstall = ''
-    mv $out/bin/main $out/bin/hof
     local INSTALL="$out/bin/hof"
     installShellCompletion --cmd hof \
       --bash <($out/bin/hof completion bash) \
@@ -36,5 +37,8 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ jfvillablanca ];
     mainProgram = "hof";
+    # Broken on darwin for Go toolchain > 1.22, with error:
+    # 'panic: open /etc/protocols: operation not permitted'
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

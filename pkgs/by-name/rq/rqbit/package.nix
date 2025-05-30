@@ -1,36 +1,88 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, darwin }:
-
-rustPlatform.buildRustPackage rec {
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  buildNpmPackage,
+  nodejs_20,
+  nix-update-script,
+}:
+let
   pname = "rqbit";
-  version = "5.5.0";
+
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "ikatson";
     repo = "rqbit";
     rev = "v${version}";
-    hash = "sha256-3Wqej2Zb/RxxOOhWscZiyafGftl3ShozqVkUF7V0fP4=";
+    hash = "sha256-Meztr/UxLgnbd3YwkSW0vy+D2N4mFg2v+T4nBnYiQBI=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "network-interface-1.1.1" = "sha256-9fWdR5nr73oFP9FzHhDsbA4ifQf3LkzBygspxI9/ufs=";
-    };
+  rqbit-webui = buildNpmPackage {
+    pname = "rqbit-webui";
+
+    nodejs = nodejs_20;
+
+    inherit version src;
+
+    sourceRoot = "${src.name}/crates/librqbit/webui";
+
+    npmDepsHash = "sha256-vib8jpf7Jn1qv0m/dWJ4TbisByczNbtEd8hIM5ll2Q8=";
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/dist
+      cp -r dist/** $out/dist
+
+      runHook postInstall
+    '';
   };
+in
+rustPlatform.buildRustPackage {
+  inherit pname version src;
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-FGcws80cX0I74bVaSV6OLntPFPNanGAFm6CVHDAGbOU=";
 
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
+
+  preConfigure = ''
+    mkdir -p crates/librqbit/webui/dist
+    cp -R ${rqbit-webui}/dist/** crates/librqbit/webui/dist
+  '';
+
+  postPatch = ''
+    # This script fascilitates the build of the webui,
+    #  we've already built that
+    rm crates/librqbit/build.rs
+  '';
 
   doCheck = false;
 
+  passthru.webui = rqbit-webui;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--subpackage"
+      "webui"
+    ];
+  };
+
   meta = with lib; {
-    description = "A bittorrent client in Rust";
+    description = "Bittorrent client in Rust";
     homepage = "https://github.com/ikatson/rqbit";
     changelog = "https://github.com/ikatson/rqbit/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [
+      cafkafk
+      toasteruwu
+    ];
     mainProgram = "rqbit";
   };
 }

@@ -1,26 +1,40 @@
-{ lib
-, fetchFromGitHub
-, gtest
-, meson
-, nasm
-, ninja
-, pkg-config
-, stdenv
-, windows
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  gtest,
+  meson,
+  nasm,
+  ninja,
+  pkg-config,
+  stdenv,
+  windows,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openh264";
-  version = "2.4.1";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "cisco";
     repo = "openh264";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ai7lcGcQQqpsLGSwHkSs7YAoEfGCIbxdClO6JpGA+MI=";
+    hash = "sha256-tf0lnxATCkoq+xRti6gK6J47HwioAYWnpEsLGSA5Xdg=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
+
+  patches = [
+    # https://github.com/cisco/openh264/pull/3867
+    (fetchpatch {
+      name = "freebsd-configure.patch";
+      url = "https://github.com/cisco/openh264/commit/ea8a1ad5791ee5c4e2ecf459aec235128d69b35b.patch";
+      hash = "sha256-pJvh9eRxFZQ+ob4WPu/x+jr1CCpgnug1uBViLfAtBDg=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -29,20 +43,31 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    gtest
-  ] ++ lib.optionals stdenv.hostPlatform.isWindows [
-    windows.pthreads
-  ];
+  buildInputs =
+    [
+      gtest
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isWindows [
+      windows.pthreads
+    ];
 
   strictDeps = true;
 
   meta = {
     homepage = "https://www.openh264.org";
-    description = "A codec library which supports H.264 encoding and decoding";
+    description = "Codec library which supports H.264 encoding and decoding";
     changelog = "https://github.com/cisco/openh264/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [ bsd2 ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix ++ lib.platforms.windows;
+    maintainers = with lib.maintainers; [ ];
+    # See meson.build
+    platforms =
+      lib.platforms.windows
+      ++ lib.intersectLists (
+        lib.platforms.x86
+        ++ lib.platforms.arm
+        ++ lib.platforms.aarch64
+        ++ lib.platforms.loongarch64
+        ++ lib.platforms.riscv64
+      ) lib.platforms.unix;
   };
 })

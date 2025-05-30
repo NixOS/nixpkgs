@@ -1,36 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, llama-index-core
-, poetry-core
-, pyowm
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  llama-index-core,
+  poetry-core,
+  pyowm,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-readers-weather";
-  version = "0.1.4";
-
-  inherit (llama-index-core) src meta;
-
+  version = "0.3.0";
   pyproject = true;
 
-  sourceRoot = "${src.name}/llama-index-integrations/readers/${pname}";
+  disabled = pythonOlder "3.8";
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  src = fetchPypi {
+    pname = "llama_index_readers_weather";
+    inherit version;
+    hash = "sha256-oGk2M/YaVm8pY4JDFOWGkKbDhEfd/OYBgWLSzV3peAQ=";
+  };
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     llama-index-core
     pyowm
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "llama_index.readers.weather"
-  ];
+  # Tests are only available in the mono repo
+  doCheck = false;
+
+  pythonImportsCheck = [ "llama_index.readers.weather" ];
+
+  meta = with lib; {
+    description = "LlamaIndex Readers Integration for Weather";
+    homepage = "https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/readers/llama-index-readers-weather";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+  };
 }

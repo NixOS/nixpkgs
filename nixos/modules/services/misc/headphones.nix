@@ -1,7 +1,10 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 let
 
   name = "headphones";
@@ -17,51 +20,50 @@ in
 
   options = {
     services.headphones = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc "Whether to enable the headphones server.";
+        description = "Whether to enable the headphones server.";
       };
-      dataDir = mkOption {
-        type = types.path;
+      dataDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/${name}";
-        description = lib.mdDoc "Path where to store data files.";
+        description = "Path where to store data files.";
       };
-      configFile = mkOption {
-        type = types.path;
+      configFile = lib.mkOption {
+        type = lib.types.path;
         default = "${cfg.dataDir}/config.ini";
-        defaultText = literalExpression ''"''${config.${opt.dataDir}}/config.ini"'';
-        description = lib.mdDoc "Path to config file.";
+        defaultText = lib.literalExpression ''"''${config.${opt.dataDir}}/config.ini"'';
+        description = "Path to config file.";
       };
-      host = mkOption {
-        type = types.str;
+      host = lib.mkOption {
+        type = lib.types.str;
         default = "localhost";
-        description = lib.mdDoc "Host to listen on.";
+        description = "Host to listen on.";
       };
-      port = mkOption {
-        type = types.ints.u16;
+      port = lib.mkOption {
+        type = lib.types.ints.u16;
         default = 8181;
-        description = lib.mdDoc "Port to bind to.";
+        description = "Port to bind to.";
       };
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = name;
-        description = lib.mdDoc "User to run the service as";
+        description = "User to run the service as";
       };
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = name;
-        description = lib.mdDoc "Group to run the service as";
+        description = "Group to run the service as";
       };
     };
   };
 
-
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    users.users = optionalAttrs (cfg.user == name) {
+    users.users = lib.optionalAttrs (cfg.user == name) {
       ${name} = {
         uid = config.ids.uids.headphones;
         group = cfg.group;
@@ -71,19 +73,19 @@ in
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == name) {
+    users.groups = lib.optionalAttrs (cfg.group == name) {
       ${name}.gid = config.ids.gids.headphones;
     };
 
     systemd.services.headphones = {
-        description = "Headphones Server";
-        wantedBy    = [ "multi-user.target" ];
-        after = [ "network.target" ];
-        serviceConfig = {
-          User = cfg.user;
-          Group = cfg.group;
-          ExecStart = "${pkgs.headphones}/bin/headphones --datadir ${cfg.dataDir} --config ${cfg.configFile} --host ${cfg.host} --port ${toString cfg.port}";
-        };
+      description = "Headphones Server";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+      serviceConfig = {
+        User = cfg.user;
+        Group = cfg.group;
+        ExecStart = "${pkgs.headphones}/bin/headphones --datadir ${cfg.dataDir} --config ${cfg.configFile} --host ${cfg.host} --port ${toString cfg.port}";
+      };
     };
   };
 }

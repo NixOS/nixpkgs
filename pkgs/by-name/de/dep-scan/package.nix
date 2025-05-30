@@ -1,30 +1,38 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
+let
+  appthreat-vulnerability-db = (
+    python3.pkgs.appthreat-vulnerability-db.overrideAttrs (oldAttrs: rec {
+      version = "5.8.1";
+      src = oldAttrs.src.override {
+        tag = "v${version}";
+        hash = "sha256-/Yo0yyDp2vd9KJhy3LGRml55eqTiaHSSuSoe2h2bSw0=";
+      };
+    })
+  );
+
+in
 python3.pkgs.buildPythonApplication rec {
   pname = "dep-scan";
-  version = "5.2.12";
+  version = "5.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "owasp-dep-scan";
     repo = "dep-scan";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-UoppQAokiWBcgTcSmwfoqrDKt/QHYd2NBR3CpNOqI4k=";
+    tag = "v${version}";
+    hash = "sha256-lgqS8GY5JuHL3strNcb0B3mGieFkQTzGuRyV4dBp5e4=";
   };
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace " --cov-append --cov-report term --cov depscan" ""
-  '';
+  pythonRelaxDeps = [ "oras" ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     appthreat-vulnerability-db
     cvss
     defusedxml
@@ -41,12 +49,11 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python3.pkgs; [
     httpretty
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "depscan"
-  ];
+  pythonImportsCheck = [ "depscan" ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

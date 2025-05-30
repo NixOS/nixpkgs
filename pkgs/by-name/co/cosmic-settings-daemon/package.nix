@@ -1,31 +1,71 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, udev
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  rustPlatform,
+  pop-gtk-theme,
+  adw-gtk3,
+  pkg-config,
+  libpulseaudio,
+  geoclue2-with-demo-agent,
+  libinput,
+  udev,
+  nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-settings-daemon";
-  version = "unstable-2023-12-29";
+  version = "1.0.0-alpha.7";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
-    rev = "f7183b68c6ca3f68054b5dd6457b1d5798a75a48";
-    hash = "sha256-Wck0NY6CUjD16gxi74stayiahs4UiqS7iQCkbOXCgKE=";
+    repo = "cosmic-settings-daemon";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-vdhkE5CmgiGYg5TXxN7lLqxjv7apKEKvIscXFIzZfRc=";
   };
 
-  cargoHash = "sha256-vCs20RdGhsI1+f78KEau7ohtoGTrGP9QH91wooQlgOE=";
+  postPatch = ''
+    substituteInPlace src/battery.rs \
+      --replace-fail '/usr/share/sounds/Pop/' '${pop-gtk-theme}/share/sounds/Pop/'
+    substituteInPlace src/theme.rs \
+      --replace-fail '/usr/share/themes/adw-gtk3' '${adw-gtk3}/share/themes/adw-gtk3'
+  '';
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Dzv1SDeZFIa+LFQQ91lO7RBHldsjDnGf+R12Ln2WZwU=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ udev ];
+  buildInputs = [
+    libinput
+    libpulseaudio
+    udev
+  ];
+
+  env.GEOCLUE_AGENT = "${lib.getLib geoclue2-with-demo-agent}/libexec/geoclue-2.0/demos/agent";
+
+  makeFlags = [
+    "prefix=$(out)"
+    "CARGO_TARGET_DIR=target/${stdenv.hostPlatform.rust.cargoShortTarget}"
+  ];
+
+  dontCargoInstall = true;
+
+  passthru.tests = {
+    inherit (nixosTests)
+      cosmic
+      cosmic-autologin
+      cosmic-noxwayland
+      cosmic-autologin-noxwayland
+      ;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-settings-daemon";
     description = "Settings Daemon for the COSMIC Desktop Environment";
+    mainProgram = "cosmic-settings-daemon";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyanbinary ];
+    teams = [ teams.cosmic ];
     platforms = platforms.linux;
   };
-}
+})

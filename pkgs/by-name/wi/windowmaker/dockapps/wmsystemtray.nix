@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, libX11
-, libXext
-, libXfixes
-, libXmu
-, libXpm
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+  libXext,
+  libXfixes,
+  libXmu,
+  libXpm,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "A system tray for Windowmaker";
+    description = "System tray for Windowmaker";
     homepage = "http://wmsystemtray.sourceforge.net";
     license = lib.licenses.gpl2Only;
     maintainers = [ ];

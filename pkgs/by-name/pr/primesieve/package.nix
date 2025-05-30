@@ -1,22 +1,29 @@
-{ lib
-, cmake
-, fetchFromGitHub
-, stdenv
-, primecount
+{
+  lib,
+  cmake,
+  fetchFromGitHub,
+  gitUpdater,
+  stdenv,
+  primecount,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "primesieve";
-  version = "12.1";
+  version = "12.9";
 
   src = fetchFromGitHub {
     owner = "kimwalisch";
     repo = "primesieve";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-AHl2GfZ1oJ8ZyjJzvg10AqN7TA7HFZ+qa6N2v51Qa78=";
+    hash = "sha256-xEGpMQ6kxby3nq3RBv6s6ZrTwC9KRKr3II1VQHGaAXk=";
   };
 
-  outputs = [ "out" "dev" "lib" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+    "man"
+  ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -26,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       inherit primecount; # dependent
     };
+    updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
   meta = {
@@ -42,8 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/kimwalisch/primesieve/blob/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.bsd2;
     mainProgram = "primesieve";
-    maintainers = lib.teams.sage.members ++
-      (with lib.maintainers; [ abbradar AndersonTorres ]);
+    teams = [ lib.teams.sage ];
     platforms = lib.platforms.unix;
   };
 })

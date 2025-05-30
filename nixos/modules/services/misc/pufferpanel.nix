@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.pufferpanel;
 in
@@ -7,7 +12,7 @@ in
     enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable PufferPanel game management server.
 
         Note that [PufferPanel templates] and binaries downloaded by PufferPanel
@@ -39,7 +44,7 @@ in
       type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [ "podman" ];
-      description = lib.mdDoc ''
+      description = ''
         Additional groups for the systemd service.
       '';
     };
@@ -48,7 +53,7 @@ in
       type = lib.types.listOf lib.types.package;
       default = [ ];
       example = lib.literalExpression "[ pkgs.jre ]";
-      description = lib.mdDoc ''
+      description = ''
         Packages to add to the PATH environment variable. Both the {file}`bin`
         and {file}`sbin` subdirectories of each package are added.
       '';
@@ -66,7 +71,7 @@ in
           PUFFER_PANEL_REGISTRATIONENABLED = "false";
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Environment variables to set for the service. Secrets should be
         specified using {option}`environmentFile`.
 
@@ -93,7 +98,7 @@ in
     environmentFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         File to load environment variables from. Loaded variables override
         values set in {option}`environment`.
       '';
@@ -116,14 +121,18 @@ in
       # would set PUFFER_LOGS to $LOGS_DIRECTORY if PUFFER_LOGS environment
       # variable is not defined.
       script = ''
-        ${lib.concatLines (lib.mapAttrsToList (name: value: ''
-          export ${name}="''${${name}-${value}}"
-        '') {
-          PUFFER_LOGS = "$LOGS_DIRECTORY";
-          PUFFER_DAEMON_DATA_CACHE = "$CACHE_DIRECTORY";
-          PUFFER_DAEMON_DATA_SERVERS = "$STATE_DIRECTORY/servers";
-          PUFFER_DAEMON_DATA_BINARIES = "$STATE_DIRECTORY/binaries";
-        })}
+        ${lib.concatLines (
+          lib.mapAttrsToList
+            (name: value: ''
+              export ${name}="''${${name}-${value}}"
+            '')
+            {
+              PUFFER_LOGS = "$LOGS_DIRECTORY";
+              PUFFER_DAEMON_DATA_CACHE = "$CACHE_DIRECTORY";
+              PUFFER_DAEMON_DATA_SERVERS = "$STATE_DIRECTORY/servers";
+              PUFFER_DAEMON_DATA_BINARIES = "$STATE_DIRECTORY/binaries";
+            }
+        )}
         exec ${lib.getExe cfg.package} run --workDir "$STATE_DIRECTORY"
       '';
 
@@ -162,8 +171,15 @@ in
         PrivateUsers = true;
         PrivateDevices = true;
         RestrictRealtime = true;
-        RestrictNamespaces = [ "user" "mnt" ]; # allow buildFHSEnv
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+        RestrictNamespaces = [
+          "user"
+          "mnt"
+        ]; # allow buildFHSEnv
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
         LockPersonality = true;
         DeviceAllow = [ "" ];
         DevicePolicy = "closed";

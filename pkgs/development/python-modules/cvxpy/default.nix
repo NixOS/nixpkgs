@@ -1,60 +1,55 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchpatch
-, clarabel
-, cvxopt
-, ecos
-, fetchPypi
-, numpy
-, osqp
-, pytestCheckHook
-, pythonOlder
-, scipy
-, scs
-, setuptools
-, wheel
-, pybind11
-, useOpenmp ? (!stdenv.isDarwin)
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  numpy,
+  pybind11,
+  setuptools,
+
+  # dependencies
+  clarabel,
+  cvxopt,
+  osqp,
+  scipy,
+  scs,
+
+  # tests
+  hypothesis,
+  pytestCheckHook,
+
+  useOpenmp ? (!stdenv.hostPlatform.isDarwin),
 }:
 
 buildPythonPackage rec {
   pname = "cvxpy";
-  version = "1.4.2";
-  format = "pyproject";
+  version = "1.6.5";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-CjhqV4jb14t7IN0HFSTsY2yPpys2KOafGrxxTI+YEeU=";
+  src = fetchFromGitHub {
+    owner = "cvxpy";
+    repo = "cvxpy";
+    tag = "v${version}";
+    hash = "sha256-utTd/13RQ3WKWreCKFMqGwPUFbPw3TaKKbS4T1BGGP4=";
   };
-
-  patches = [
-    # fix QP tests. remove on next update
-    # https://github.com/cvxpy/cvxpy/pull/2343
-    (fetchpatch {
-      name = "fix-QP-tests.patch";
-      url = "https://github.com/cvxpy/cvxpy/commit/4c8549b9820e64c1b06f5d71c5d3f36528dd4a76.patch";
-      hash = "sha256-43zjS1STEBaGgj1jEOlX3XzMsE4wjoKAk8ApJo98AzY=";
-    })
-  ];
 
   # we need to patch out numpy version caps from upstream
   postPatch = ''
-    sed -i 's/\(numpy>=[0-9.]*\),<[0-9.]*;/\1;/g' pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy >= 2.0.0" "numpy"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
+  build-system = [
+    numpy
     pybind11
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     clarabel
     cvxopt
-    ecos
     numpy
     osqp
     scipy
@@ -62,6 +57,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    hypothesis
     pytestCheckHook
   ];
 
@@ -71,32 +67,30 @@ buildPythonPackage rec {
     export LDFLAGS="-lgomp"
   '';
 
-  pytestFlagsArray = [
-    "cvxpy"
-  ];
+  pytestFlagsArray = [ "cvxpy" ];
 
   disabledTests = [
-   # Disable the slowest benchmarking tests, cuts test time in half
+    # Disable the slowest benchmarking tests, cuts test time in half
     "test_tv_inpainting"
     "test_diffcp_sdp_example"
     "test_huber"
     "test_partial_problem"
-    # https://github.com/cvxpy/cvxpy/issues/2174
-    "test_scipy_mi_time_limit_reached"
-  ] ++ lib.optionals stdenv.isAarch64 [
-    "test_ecos_bb_mi_lp_2" # https://github.com/cvxpy/cvxpy/issues/1241#issuecomment-780912155
+
+    # cvxpy.error.SolverError: Solver 'CVXOPT' failed. Try another solver, or solve with verbose=True for more information.
+    # https://github.com/cvxpy/cvxpy/issues/1588
+    "test_oprelcone_1_m1_k3_complex"
+    "test_oprelcone_1_m3_k1_complex"
+    "test_oprelcone_2"
   ];
 
-  pythonImportsCheck = [
-    "cvxpy"
-  ];
+  pythonImportsCheck = [ "cvxpy" ];
 
-  meta = with lib; {
-    description = "A domain-specific language for modeling convex optimization problems in Python";
+  meta = {
+    description = "Domain-specific language for modeling convex optimization problems in Python";
     homepage = "https://www.cvxpy.org/";
     downloadPage = "https://github.com/cvxpy/cvxpy//releases";
     changelog = "https://github.com/cvxpy/cvxpy/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ drewrisinger ];
   };
 }

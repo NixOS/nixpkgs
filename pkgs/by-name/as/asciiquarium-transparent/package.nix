@@ -3,32 +3,35 @@
   stdenv,
   fetchFromGitHub,
   makeWrapper,
-  perlPackages,
+  perl,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "asciiquarium-transparent";
-  version = "unstable-2023-02-19";
+  version = "1.3";
+
   src = fetchFromGitHub {
     owner = "nothub";
     repo = "asciiquarium";
-    rev = "653cd99a611080c776d18fc7991ae5dd924c72ce";
-    hash = "sha256-72LRFydbObFDXJllmlRjr5O8qjDqtlp3JunE3kwb5aU=";
+    rev = "${finalAttrs.version}";
+    hash = "sha256-zQyVIfwmhF3WsCeIZLwjDufvKzAfjLxaK2s7WTedqCg=";
   };
-  nativeBuildInputs = [makeWrapper];
-  buildInputs = [perlPackages.perl];
+
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perl ];
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin
-    cp asciiquarium $out/bin/asciiquarium
-    wrapProgram $out/bin/asciiquarium --set PERL5LIB ${perlPackages.makeFullPerlPath [perlPackages.TermAnimation]}
+    install -Dm555 asciiquarium -t $out/bin
+    wrapProgram $out/bin/asciiquarium \
+      --set PERL5LIB ${with perl.pkgs; makeFullPerlPath [ TermAnimation ]}
     runHook postInstall
   '';
-  meta = with lib; {
-    description = "An aquarium/sea animation in ASCII art (with option of transparent background)";
-    mainProgram = "asciiquarium";
+
+  meta = {
+    description = "Aquarium/sea animation in ASCII art (with option of transparent background)";
     homepage = "https://github.com/nothub/asciiquarium";
-    license = with licenses; [gpl2Only];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [quantenzitrone];
+    license = lib.licenses.gpl2Only;
+    mainProgram = "asciiquarium";
+    maintainers = with lib.maintainers; [ quantenzitrone ];
+    platforms = perl.meta.platforms;
   };
-}
+})

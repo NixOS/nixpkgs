@@ -1,101 +1,120 @@
-{ stdenv
-, lib
-, pkg-config
-, fetchFromGitLab
-, gitUpdater
-, ffmpeg_6
+{
+  stdenv,
+  lib,
+  pkg-config,
+  fetchFromGitLab,
+  gitUpdater,
+  ffmpeg_6,
 
   # for daemon
-, autoreconfHook
-, perl # for pod2man
-, alsa-lib
-, asio
-, dbus
-, sdbus-cpp
-, fmt
-, gmp
-, gnutls
-, http-parser
-, jack
-, jsoncpp
-, libarchive
-, libgit2
-, libnatpmp
-, libpulseaudio
-, libupnp
-, yaml-cpp
-, msgpack-cxx
-, openssl
-, restinio
-, secp256k1
-, speex
-, udev
-, webrtc-audio-processing
-, zlib
+  autoreconfHook,
+  perl, # for pod2man
+  alsa-lib,
+  asio,
+  dbus,
+  sdbus-cpp,
+  fmt,
+  gmp,
+  gnutls,
+  llhttp,
+  jack,
+  jsoncpp,
+  libarchive,
+  libgit2,
+  libnatpmp,
+  libpulseaudio,
+  libupnp,
+  msgpack-cxx,
+  openssl,
+  restinio,
+  secp256k1,
+  speex,
+  udev,
+  webrtc-audio-processing,
+  yaml-cpp,
+  zlib,
+
+  # for dhtnet
+  expected-lite,
 
   # for client
-, cmake
-, networkmanager # for libnm
-, python3
-, qttools # for translations
-, wrapQtAppsHook
-, libnotify
-, qt5compat
-, qtbase
-, qtdeclarative
-, qrencode
-, qtmultimedia
-, qtnetworkauth
-, qtpositioning
-, qtsvg
-, qtwebengine
-, qtwebchannel
-, wrapGAppsHook
-, withWebengine ? true
+  cmake,
+  git,
+  networkmanager, # for libnm
+  python3,
+  qttools, # for translations
+  wrapQtAppsHook,
+  libnotify,
+  qt5compat,
+  qtbase,
+  qtdeclarative,
+  qrencode,
+  qtmultimedia,
+  qtnetworkauth,
+  qtpositioning,
+  qtsvg,
+  qtwebengine,
+  qtwebchannel,
+  wrapGAppsHook3,
+  withWebengine ? true,
 
   # for pjsip
-, fetchFromGitHub
-, pjsip
+  fetchFromGitHub,
+  pjsip,
 
   # for opendht
-, opendht
+  opendht,
 }:
 
-let
-  readLinesToList = with builtins; file: filter (s: isString s && stringLength s > 0) (split "\n" (readFile file));
-in
 stdenv.mkDerivation rec {
   pname = "jami";
-  version = "20231201.0";
+  version = "20250523.0";
 
   src = fetchFromGitLab {
     domain = "git.jami.net";
     owner = "savoirfairelinux";
     repo = "jami-client-qt";
     rev = "stable/${version}";
-    hash = "sha256-A38JwjqdQVy03d738p2tpTFA6EWRSPNiesS5wZfti7Y=";
+    hash = "sha256-uc2IcSAaCTkTMwjhgMRVdWsStLkOO5dPU2Hx+cYUUL0=";
     fetchSubmodules = true;
   };
 
-  pjsip-jami = pjsip.overrideAttrs (old:
-    let
-      patch-src = src + "/daemon/contrib/src/pjproject/";
-    in
-    rec {
-      version = "311bd018fc07aaf62d4c2d2494e08b5ee97e6846";
+  pjsip-jami = pjsip.overrideAttrs (old: {
+    version = "sfl-2.15-unstable-2025-02-24";
 
-      src = fetchFromGitHub {
-        owner = "savoirfairelinux";
-        repo = "pjproject";
-        rev = version;
-        hash = "sha256-pZiOSOUxAXzMY4c1/AyKcwa7nyIJC/ZVOqDg9/QO/Nk=";
-      };
+    src = fetchFromGitHub {
+      owner = "savoirfairelinux";
+      repo = "pjproject";
+      rev = "37130c943d59f25a71935803ea2d84515074a237";
+      hash = "sha256-7gAiriuooqqF38oajAuD/Lj5trn/9VMkCGOumcV45NA=";
+    };
 
-      patches = (map (x: patch-src + x) (readLinesToList ./config/pjsip_patches));
+    configureFlags = [
+      "--disable-sound"
+      "--enable-video"
+      "--enable-ext-sound"
+      "--disable-android-mediacodec"
+      "--disable-speex-aec"
+      "--disable-g711-codec"
+      "--disable-l16-codec"
+      "--disable-gsm-codec"
+      "--disable-g722-codec"
+      "--disable-g7221-codec"
+      "--disable-speex-codec"
+      "--disable-ilbc-codec"
+      "--disable-opencore-amr"
+      "--disable-silk"
+      "--disable-sdl"
+      "--disable-ffmpeg"
+      "--disable-v4l2"
+      "--disable-openh264"
+      "--disable-resample"
+      "--disable-libwebrtc"
+      "--with-gnutls=yes"
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "--enable-epoll" ];
 
-      configureFlags = (readLinesToList ./config/pjsip_args_common)
-        ++ lib.optionals stdenv.isLinux (readLinesToList ./config/pjsip_args_linux);
-    });
+    buildInputs = old.buildInputs ++ [ gnutls ];
+  });
 
   opendht-jami = opendht.override {
     enableProxyServerAndClient = true;
@@ -104,15 +123,22 @@ stdenv.mkDerivation rec {
 
   dhtnet = stdenv.mkDerivation {
     pname = "dhtnet";
-    version = "unstable-2023-11-23";
+    version = "unstable-2025-03-19";
 
     src = fetchFromGitLab {
       domain = "git.jami.net";
       owner = "savoirfairelinux";
       repo = "dhtnet";
-      rev = "b1bcdecbac2a41de3941ef5a34faa6fbe4472535";
-      hash = "sha256-EucSsUuHXbVqr7drrTLK0f+WZT2k9Tx/LV+IBldTQO8=";
+      rev = "7e7359ff5dadd9aaf6d341486f3ee41029f645e1";
+      hash = "sha256-sT7OgYUBnO+HfIeCaR3lmoFJ9qE1Y5TEK1/KHzhvK7M=";
     };
+
+    postPatch = ''
+      substituteInPlace dependencies/build.py \
+        --replace-fail \
+        "wget https://raw.githubusercontent.com/martinmoene/expected-lite/master/include/nonstd/expected.hpp -O" \
+        "cp ${expected-lite}/include/nonstd/expected.hpp"
+    '';
 
     nativeBuildInputs = [
       cmake
@@ -123,13 +149,14 @@ stdenv.mkDerivation rec {
       asio
       fmt
       gnutls
-      http-parser
+      llhttp
       jsoncpp
       libupnp
       msgpack-cxx
       opendht-jami
       openssl
       pjsip-jami
+      python3
       restinio
     ];
 
@@ -138,6 +165,8 @@ stdenv.mkDerivation rec {
       "-DBUILD_BENCHMARKS=Off"
       "-DBUILD_TOOLS=Off"
       "-DBUILD_TESTING=Off"
+      "-DBUILD_DEPENDENCIES=Off"
+      "-DBUILD_EXAMPLE=Off"
     ];
 
     meta = with lib; {
@@ -152,6 +181,12 @@ stdenv.mkDerivation rec {
     pname = "jami-daemon";
     inherit src version meta;
     sourceRoot = "${src.name}/daemon";
+
+    # Fix for libgit2 breaking changes
+    postPatch = ''
+      substituteInPlace src/jamidht/conversationrepository.cpp \
+        --replace-fail "git_commit* const" "const git_commit*"
+    '';
 
     nativeBuildInputs = [
       autoreconfHook
@@ -169,7 +204,7 @@ stdenv.mkDerivation rec {
       ffmpeg_6
       gmp
       gnutls
-      http-parser
+      llhttp
       jack
       jsoncpp
       libarchive
@@ -177,7 +212,6 @@ stdenv.mkDerivation rec {
       libnatpmp
       libpulseaudio
       libupnp
-      yaml-cpp
       msgpack-cxx
       opendht-jami
       openssl
@@ -187,11 +221,26 @@ stdenv.mkDerivation rec {
       speex
       udev
       webrtc-audio-processing
+      yaml-cpp
       zlib
     ];
 
     enableParallelBuilding = true;
   };
+
+  qwindowkit-src = fetchFromGitHub {
+    owner = "stdware";
+    repo = "qwindowkit";
+    rev = "758b00cb6c2d924be3a1ea137ec366dc33a5132d";
+    hash = "sha256-qpVsF4gUX2noG9nKgjNP7FCEe59okZtDA8R/aZOef7Q=";
+    fetchSubmodules = true;
+  };
+
+  postPatch = ''
+    sed -i -e '/GIT_REPOSITORY/,+1c SOURCE_DIR ''${CMAKE_CURRENT_SOURCE_DIR}/qwindowkit' extras/build/cmake/contrib_tools.cmake
+    sed -i -e 's/if(DISTRO_NEEDS_QMSETUP_PATCH)/if(TRUE)/' CMakeLists.txt
+    cp -R --no-preserve=mode,ownership ${qwindowkit-src} qwindowkit
+  '';
 
   preConfigure = ''
     echo 'const char VERSION_STRING[] = "${version}";' > src/app/version.h
@@ -204,10 +253,11 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
     pkg-config
     cmake
+    git
     python3
     qttools
   ];
@@ -225,13 +275,9 @@ stdenv.mkDerivation rec {
     qtpositioning
     qtsvg
     qtwebchannel
-  ] ++ lib.optionals withWebengine [
-    qtwebengine
-  ];
+  ] ++ lib.optionals withWebengine [ qtwebengine ];
 
-  cmakeFlags = lib.optionals (!withWebengine) [
-    "-DWITH_WEBENGINE=false"
-  ];
+  cmakeFlags = lib.optionals (!withWebengine) [ "-DWITH_WEBENGINE=false" ];
 
   qtWrapperArgs = [
     # With wayland the titlebar is not themed and the wmclass is wrong.
@@ -242,13 +288,12 @@ stdenv.mkDerivation rec {
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "stable/";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "stable/"; };
 
   meta = with lib; {
     homepage = "https://jami.net/";
-    description = "The free and universal communication platform that respects the privacy and freedoms of its users";
+    description = "Free and universal communication platform that respects the privacy and freedoms of its users";
+    mainProgram = "jami";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.linsui ];

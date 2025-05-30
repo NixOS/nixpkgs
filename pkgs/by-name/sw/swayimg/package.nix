@@ -1,38 +1,43 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, wayland-scanner
-, wayland
-, wayland-protocols
-, json_c
-, libxkbcommon
-, fontconfig
-, giflib
-, libheif
-, libjpeg
-, libwebp
-, libtiff
-, librsvg
-, libpng
-, libjxl
-, libexif
-, libavif
-, openexr_3
-, bash-completion
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  wayland-scanner,
+  wayland,
+  wayland-protocols,
+  json_c,
+  libxkbcommon,
+  fontconfig,
+  giflib,
+  libheif,
+  libjpeg,
+  libwebp,
+  libtiff,
+  librsvg,
+  libpng,
+  libjxl,
+  libexif,
+  libavif,
+  libsixel,
+  libraw,
+  openexr,
+  bash-completion,
+  testers,
+  nix-update-script,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "swayimg";
-  version = "2.1";
+  version = "4.0";
 
   src = fetchFromGitHub {
     owner = "artemsen";
     repo = "swayimg";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-+ntunT1FbgGcxpKGTcs7G7FYmoAobu/p/8ATIoBzfKE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2UmaU60+5NNj2CVJt4oJXyBPjVeA0zBfEqZOOSI2vvk=";
   };
 
   strictDeps = true;
@@ -41,7 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    wayland-scanner
+  ];
 
   mesonFlags = [
     (lib.mesonOption "version" finalAttrs.version)
@@ -64,20 +74,29 @@ stdenv.mkDerivation (finalAttrs: {
     libjxl
     libexif
     libavif
-    openexr_3
+    libsixel
+    libraw
+    openexr
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/artemsen/swayimg";
     description = "Image viewer for Sway/Wayland";
-    changelog = "https://github.com/artemsen/swayimg/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/artemsen/swayimg/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      matthewcroughan
+      Gliczy
+    ];
+    platforms = lib.platforms.linux;
     mainProgram = "swayimg";
   };
 })

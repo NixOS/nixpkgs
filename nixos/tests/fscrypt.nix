@@ -1,11 +1,13 @@
-import ./make-test-python.nix ({ ... }:
+{ ... }:
 {
   name = "fscrypt";
 
-  nodes.machine = { pkgs, ... }: {
-    imports = [ ./common/user-account.nix ];
-    security.pam.enableFscrypt = true;
-  };
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      imports = [ ./common/user-account.nix ];
+      security.pam.enableFscrypt = true;
+    };
 
   testScript = ''
     def login_as_alice():
@@ -47,4 +49,4 @@ import ./make-test-python.nix ({ ... }:
       machine.succeed("cat /home/alice/world")
       logout()
   '';
-})
+}

@@ -1,18 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
-let
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+}:
+stdenv.mkDerivation (finalAttrs: {
+  name = "system76-acpi-module-${finalAttrs.version}-${kernel.version}";
   version = "1.0.2";
-  sha256 = "1i7zjn5cdv9h00fgjg46b8yrz4d3dqvfr25g3f13967ycy58m48h";
-in
-stdenv.mkDerivation {
-  name = "system76-acpi-module-${version}-${kernel.version}";
 
   passthru.moduleName = "system76_acpi";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "system76-acpi-dkms";
-    rev = version;
-    inherit sha256;
+    tag = finalAttrs.version;
+    hash = "sha256-EJGKimf+mDSCG6+I7DZuo5GfPVqGPPkcADDtxoqV/8Q=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -24,15 +26,25 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D system76_acpi.ko $out/lib/modules/${kernel.modDirVersion}/misc/system76_acpi.ko
     mkdir -p $out/lib/udev/hwdb.d
     mv lib/udev/hwdb.d/* $out/lib/udev/hwdb.d
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
-    maintainers = [ maintainers.khumba ];
-    license = [ licenses.gpl2Only ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+  # GCC 14 makes this an error by default, remove when fixed upstream
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
+  meta = {
+    maintainers = with lib.maintainers; [ ahoneybun ];
+    license = [ lib.licenses.gpl2Only ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
     broken = kernel.kernelOlder "5.2";
     description = "System76 ACPI Driver (DKMS)";
     homepage = "https://github.com/pop-os/system76-acpi-dkms";
@@ -40,4 +52,4 @@ stdenv.mkDerivation {
       This provides the system76_acpi in-tree driver for systems missing it.
     '';
   };
-}
+})

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   asio,
   boost,
@@ -22,62 +21,54 @@ assert !with_boost_asio -> asio != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "restinio";
-  version = "0.7.1";
+  version = "0.7.6";
 
   src = fetchFromGitHub {
     owner = "Stiffstream";
     repo = "restinio";
-    rev = "v.${finalAttrs.version}";
-    hash = "sha256-XodG+dVW4iBgFx0Aq0+/pZyCLyqTBtW7e9r69y176Ro=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wQIJsybPz5GNcQMECcYhs8nh/h8gWEocS+M+lnP8EOE=";
   };
 
-  patches = let
-    useCommit = {id, name, hash}:
-    fetchpatch {
-      inherit name hash;
-      url = "https://github.com/Stiffstream/restinio/commit/${id}.patch";
-    };
-  in [
-    (useCommit {
-      id = "57e6ae3f73a03a5120feb80a7bb5dca27179fa38";
-      name = "restinio-unvendor-catch2_part1.patch";
-      hash = "sha256-2Htt9WTP6nrh+1y7y2xleFj568IpnSEn9Qhb1ObLam8=";
-    })
-    (useCommit {
-      id = "0060e493b99f03c38dda519763f6d6701bc18112";
-      name = "restinio-unvendor-catch2_part2.patch";
-      hash = "sha256-Eg/VNxPwNtEYmalP5myn+QvqwU6wln9v0vxbRelRHA8=";
-    })
-    (useCommit {
-      id = "05bea25f82917602a49b72b8ea10eeb43984762f";
-      name = "restinio-unvendor-catch2_part3.patch";
-      hash = "sha256-fA+U/Y7FyrxDRiWSVXCy9dMF4gmfDLag7gBWoY74In0=";
-    })
-  ];
+  # https://www.github.com/Stiffstream/restinio/issues/230
+  # > string sub-command JSON failed parsing json string: * Line 1, Column 1
+  # > Syntax error: value, object or array expected.
+  postPatch = ''
+    substituteInPlace dev/test/CMakeLists.txt \
+      --replace-fail "add_subdirectory(metaprogramming)" ""
+  '';
 
   strictDeps = true;
 
   nativeBuildInputs = [ cmake ];
 
-  propagatedBuildInputs = [
-    expected-lite
-    fmt
-    llhttp
-    openssl
-    pcre2
-    zlib
-  ] ++ (if with_boost_asio then [
-    boost
-  ] else [
-    asio
-  ]);
+  propagatedBuildInputs =
+    [
+      expected-lite
+      fmt
+      llhttp
+      openssl
+      pcre2
+      zlib
+    ]
+    ++ (
+      if with_boost_asio then
+        [
+          boost
+        ]
+      else
+        [
+          asio
+        ]
+    );
 
-  checkInputs = [
+  buildInputs = [
     catch2_3
   ];
 
   cmakeDir = "../dev";
   cmakeFlags = [
+    "-DCMAKE_CATCH_DISCOVER_TESTS_DISCOVERY_MODE=PRE_TEST"
     "-DRESTINIO_TEST=ON"
     "-DRESTINIO_SAMPLE=OFF"
     "-DRESTINIO_BENCHMARK=OFF"
@@ -91,10 +82,33 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
   enableParallelChecking = false;
+  __darwinAllowLocalNetworking = true;
+  preCheck =
+    let
+      disabledTests =
+        [ ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          # Tests that fail with error: 'unable to write: Operation not permitted'
+          "HTTP echo server"
+          "single_thread_connection_limiter"
+          "simple sendfile"
+          "simple sendfile with std::filesystem::path"
+          "sendfile the same file several times"
+          "sendfile 2 files"
+          "sendfile offsets_and_size"
+          "sendfile chunks"
+          "sendfile with partially-read response"
+        ];
+      excludeRegex = "^(${builtins.concatStringsSep "|" disabledTests})";
+    in
+    lib.optionalString (builtins.length disabledTests != 0) ''
+      checkFlagsArray+=(ARGS="--exclude-regex '${excludeRegex}'")
+    '';
 
   meta = with lib; {
     description = "Cross-platform, efficient, customizable, and robust asynchronous HTTP(S)/WebSocket server C++ library";
     homepage = "https://github.com/Stiffstream/restinio";
+    changelog = "https://github.com/Stiffstream/restinio/releases/tag/${finalAttrs.src.rev}";
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ tobim ];

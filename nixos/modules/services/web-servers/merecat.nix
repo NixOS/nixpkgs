@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -6,26 +11,26 @@ let
   cfg = config.services.merecat;
   format = pkgs.formats.keyValue {
     mkKeyValue = generators.mkKeyValueDefault {
-      mkValueString = v:
+      mkValueString =
+        v:
         # In merecat.conf, booleans are "true" and "false"
-        if builtins.isBool v
-        then if v then "true" else "false"
-        else generators.mkValueStringDefault {} v;
+        if builtins.isBool v then if v then "true" else "false" else generators.mkValueStringDefault { } v;
     } "=";
   };
   configFile = format.generate "merecat.conf" cfg.settings;
 
-in {
+in
+{
 
   options.services.merecat = {
 
-    enable = mkEnableOption (lib.mdDoc "Merecat HTTP server");
+    enable = mkEnableOption "Merecat HTTP server";
 
     settings = mkOption {
       inherit (format) type;
       default = { };
-      description = lib.mdDoc ''
-        Merecat configuration. Refer to merecat(8) for details on supported values.
+      description = ''
+        Merecat configuration. Refer to {manpage}`merecat(8)` for details on supported values.
       '';
       example = {
         hostname = "localhost";

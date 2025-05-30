@@ -1,22 +1,30 @@
-{ lib
-, stdenv
-, linkFarm
-, buildPythonPackage
-, cargo
-, datasets
-, fetchFromGitHub
-, fetchurl
-, libiconv
-, numpy
-, openssl
-, pkg-config
-, pytestCheckHook
-, pythonOlder
-, requests
-, rustPlatform
-, rustc
-, Security
-, setuptools-rust
+{
+  lib,
+  linkFarm,
+  fetchurl,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # nativeBuildInputs
+  cargo,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  setuptools-rust,
+
+  # buildInputs
+  openssl,
+
+  # dependencies
+  huggingface-hub,
+
+  # tests
+  datasets,
+  numpy,
+  pytestCheckHook,
+  requests,
+  tiktoken,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -25,23 +33,23 @@ let
   test-data = linkFarm "tokenizers-test-data" {
     "roberta-base-vocab.json" = fetchurl {
       url = "https://s3.amazonaws.com/models.huggingface.co/bert/roberta-base-vocab.json";
-      sha256 = "0m86wpkfb2gdh9x9i9ng2fvwk1rva4p0s98xw996nrjxs7166zwy";
+      hash = "sha256-nn9jwtFdZmtS4h0lDS5RO4fJtxPPpph6gu2J5eblBlU=";
     };
     "roberta-base-merges.txt" = fetchurl {
       url = "https://s3.amazonaws.com/models.huggingface.co/bert/roberta-base-merges.txt";
-      sha256 = "1idd4rvkpqqbks51i2vjbd928inw7slij9l4r063w3y5fd3ndq8w";
+      hash = "sha256-HOFmR3PFDz4MyIQmGak+3EYkUltyixiKngvjO3cmrcU=";
     };
     "albert-base-v1-tokenizer.json" = fetchurl {
       url = "https://s3.amazonaws.com/models.huggingface.co/bert/albert-base-v1-tokenizer.json";
-      sha256 = "1hra9pn8rczx7378z88zjclw2qsdrdwq20m56sy42s2crbas6akf";
+      hash = "sha256-biqj1cpMaEG8NqUCgXnLTWPBKZMfoY/OOP2zjOxNKsM=";
     };
     "bert-base-uncased-vocab.txt" = fetchurl {
       url = "https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-uncased-vocab.txt";
-      sha256 = "18rq42cmqa8zanydsbzrb34xwy4l6cz1y900r4kls57cbhvyvv07";
+      hash = "sha256-B+ztN1zsFE0nyQAkHz4zlHjeyVj5L928VR8pXJkgOKM=";
     };
     "big.txt" = fetchurl {
       url = "https://norvig.com/big.txt";
-      sha256 = "0yz80icdly7na03cfpl0nfk5h3j3cam55rj486n03wph81ynq1ps";
+      hash = "sha256-+gZsfUDw8gGsQUTmUqpiQw5YprOAXscGUPZ42lgE6Hs=";
     };
     "bert-wiki.json" = fetchurl {
       url = "https://s3.amazonaws.com/models.huggingface.co/bert/anthony/doc-pipeline/tokenizer.json";
@@ -53,88 +61,104 @@ let
     };
     "openai-gpt-vocab.json" = fetchurl {
       url = "https://s3.amazonaws.com/models.huggingface.co/bert/openai-gpt-vocab.json";
-      sha256 = "0y40gc9bixj5rxv674br1rxmxkd3ly29p80x1596h8yywwcrpx7x";
+      hash = "sha256-/fSbGefeI2hSCR2gm4Sno81eew55kWN2z0X2uBJ7gHg=";
     };
     "openai-gpt-merges.txt" = fetchurl {
       url = "https://s3.amazonaws.com/models.huggingface.co/bert/openai-gpt-merges.txt";
-      sha256 = "09a754pm4djjglv3x5pkgwd6f79i2rq8ydg0f7c3q1wmwqdbba8f";
+      hash = "sha256-Dqm1GuaVBzzYceA1j3AWMR1nGn/zlj42fVI2Ui8pRyU=";
     };
   };
 in
 buildPythonPackage rec {
   pname = "tokenizers";
-  version = "0.15.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "0.21.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-+yfX12eKtgZV1OQvPOlMVTONbpFuigHcl4SjoCIZkSk=";
+    repo = "tokenizers";
+    tag = "v${version}";
+    hash = "sha256-3S7ZCaZnnwyNjoZ4Y/q3ngQE2MIm2iyCCjYAkdMVG2A=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
+  # TestUnigram.test_continuing_prefix_trainer_mismatch fails with:
+  # Exception: No such file or directory (os error 2)
+  # Fix submitted upstream: https://github.com/huggingface/tokenizers/pull/1747
+  postPatch = ''
+    substituteInPlace tests/bindings/test_trainers.py \
+      --replace-fail '"data/' '"tests/data/'
+  '';
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit
+      pname
+      version
+      src
+      sourceRoot
+      ;
+    hash = "sha256-I7LlBmeVY2rWI0ta6x311iAurQKuutsClrbUgkt9xWk=";
   };
 
   sourceRoot = "${src.name}/bindings/python";
 
   nativeBuildInputs = [
+    cargo
     pkg-config
-    setuptools-rust
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
-    cargo
     rustc
+    setuptools-rust
   ];
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-    Security
   ];
 
-  propagatedBuildInputs = [
-    numpy
+  dependencies = [
+    huggingface-hub
   ];
 
   nativeCheckInputs = [
     datasets
+    numpy
     pytestCheckHook
     requests
+    tiktoken
+    writableTmpDirAsHomeHook
   ];
 
-  postUnpack = ''
+  postUnpack =
     # Add data files for tests, otherwise tests attempt network access
-    mkdir $sourceRoot/tests/data
-    ln -s ${test-data}/* $sourceRoot/tests/data/
-  '';
+    ''
+      mkdir $sourceRoot/tests/data
+      ln -s ${test-data}/* $sourceRoot/tests/data/
+    '';
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
-
-  pythonImportsCheck = [
-    "tokenizers"
-  ];
+  pythonImportsCheck = [ "tokenizers" ];
 
   disabledTests = [
     # Downloads data using the datasets module
+    "test_encode_special_tokens"
+    "test_splitting"
     "TestTrainFromIterators"
+
     # Those tests require more data
     "test_from_pretrained"
     "test_from_pretrained_revision"
     "test_continuing_prefix_trainer_mistmatch"
   ];
 
-  meta = with lib; {
+  disabledTestPaths = [
+    # fixture 'model' not found
+    "benches/test_tiktoken.py"
+  ];
+
+  meta = {
     description = "Fast State-of-the-Art Tokenizers optimized for Research and Production";
     homepage = "https://github.com/huggingface/tokenizers";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/huggingface/tokenizers/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
+    platforms = lib.platforms.unix;
   };
 }

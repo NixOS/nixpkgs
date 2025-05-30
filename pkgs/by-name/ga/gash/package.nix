@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, guile
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  guile,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "POSIX-compatible shell written in Guile Scheme";
+    mainProgram = "gash";
     homepage = "https://savannah.nongnu.org/projects/gash/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ wegank ];

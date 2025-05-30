@@ -1,4 +1,8 @@
-{ lib, buildKodiAddon, fetchFromGitHub }:
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+}:
 buildKodiAddon rec {
   pname = "osmc-skin";
   namespace = "skin.osmc";
@@ -13,9 +17,11 @@ buildKodiAddon rec {
 
   meta = with lib; {
     homepage = "https://github.com/osmc/skin.osmc";
-    description = "The default skin for OSMC";
+    description = "Default skin for OSMC";
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.cc-by-nc-sa-30;
+
+    broken = true; # no release for kodi 21
   };
 }

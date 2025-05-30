@@ -1,50 +1,47 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, nixosTests
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, cmake
-, qtbase
-, qtsvg
-, qttools
-, qtx11extras
-, pkg-config
-, wrapQtAppsHook
-, libsecret
-, chrpath
-, lxqt
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  nixosTests,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  cmake,
+  libsForQt5,
+  pkg-config,
+  libsecret,
+  chrpath,
+  lxqt,
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-terminal";
-  version = "6.0.9";
+  version = "6.0.17";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-QdODR4zmbMuzSVy6eJhwJHNPXkAn6oCLHq+YZEOmtIU=";
+    hash = "sha256-T5tjjbNYUaiG9a5zMoKN6I0ec/WLftF2xwUPczlNwB8=";
   };
 
   cmakeFlags = [ "-DVERSION=${version}" ];
 
   nativeBuildInputs = [
     cmake
-    qttools
+    libsForQt5.qttools
     pkg-config
-    wrapQtAppsHook
-    lxqt.lxqt-build-tools
+    libsForQt5.wrapQtAppsHook
+    lxqt.lxqt-build-tools_0_13
   ];
 
   buildInputs = [
     qt5integration
     qt5platform-plugins
-    qtbase
-    qtsvg
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
     dtkwidget
-    qtx11extras
+    libsForQt5.qtx11extras
     libsecret
     chrpath
   ];
@@ -53,11 +50,12 @@ stdenv.mkDerivation rec {
 
   passthru.tests.test = nixosTests.terminal-emulators.deepin-terminal;
 
-  meta = with lib; {
+  meta = {
     description = "Terminal emulator with workspace, multiple windows, remote management, quake mode and other features";
+    mainProgram = "deepin-terminal";
     homepage = "https://github.com/linuxdeepin/deepin-terminal";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.deepin ];
   };
 }

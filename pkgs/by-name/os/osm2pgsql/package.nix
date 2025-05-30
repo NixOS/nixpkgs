@@ -1,35 +1,37 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, expat
-, fmt
-, proj
-, bzip2
-, cli11
-, zlib
-, boost
-, postgresql
-, python3
-, withLuaJIT ? false
-, lua
-, luajit
-, libosmium
-, nlohmann_json
-, opencv
-, potrace
-, protozero
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  expat,
+  fmt_11,
+  proj,
+  bzip2,
+  cli11,
+  zlib,
+  boost,
+  libpq,
+  python3,
+  withLuaJIT ? false,
+  lua,
+  luajit,
+  libosmium,
+  nlohmann_json,
+  opencv,
+  potrace,
+  protozero,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osm2pgsql";
-  version = "1.11.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "osm2pgsql-dev";
     repo = "osm2pgsql";
     rev = finalAttrs.version;
-    hash = "sha256-95B4WVaf3AwaC+S6dCJpUq/1J47rOZjWUBxmRqHCu4w=";
+    hash = "sha256-5rENMcYCfHUdb4QsyOnnGe/qCbdYLoXI15e7OqJXit4=";
   };
 
   postPatch = ''
@@ -39,22 +41,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    boost
-    bzip2
-    cli11
-    expat
-    fmt
-    libosmium
-    nlohmann_json
-    opencv
-    postgresql
-    potrace
-    proj
-    protozero
-    (python3.withPackages (p: with p; [ psycopg2 pyosmium ]))
-    zlib
-  ] ++ lib.optional withLuaJIT luajit
+  buildInputs =
+    [
+      boost
+      bzip2
+      cli11
+      expat
+      fmt_11
+      libosmium
+      libpq
+      nlohmann_json
+      opencv
+      potrace
+      proj
+      protozero
+      (python3.withPackages (
+        p: with p; [
+          psycopg2
+          pyosmium
+        ]
+      ))
+      zlib
+    ]
+    ++ lib.optional withLuaJIT luajit
     ++ lib.optional (!withLuaJIT) lua;
 
   cmakeFlags = [
@@ -64,17 +73,19 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_LUAJIT" withLuaJIT)
   ];
 
-  installFlags = [ "install-gen" ];
-
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "OpenStreetMap data to PostgreSQL converter";
     homepage = "https://osm2pgsql.org";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; teams.geospatial.members ++ [ jglukasik das-g ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      jglukasik
+      das-g
+    ];
+    teams = [ lib.teams.geospatial ];
   };
 })

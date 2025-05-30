@@ -1,12 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, mkDerivation, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libsForQt5,
+}:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "fstl";
-  version = "0.10.0";
+  version = "0.11.0";
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    libsForQt5.wrapQtAppsHook
+  ];
 
-  installPhase = lib.optionalString stdenv.isDarwin ''
+  installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
     runHook preInstall
 
     mkdir -p $out/Applications
@@ -19,11 +28,12 @@ mkDerivation rec {
     owner = "fstl-app";
     repo = "fstl";
     rev = "v" + version;
-    hash = "sha256-z2X78GW/IeiPCnwkeLBCLjILhfMe2sT3V9Gbw4TSf4c=";
+    hash = "sha256-6V1L5aUZQl4zAkXD7yY8Ap0+QXgogQNxaTyZAxHFqM4=";
   };
 
   meta = with lib; {
-    description = "The fastest STL file viewer";
+    description = "Fastest STL file viewer";
+    mainProgram = "fstl";
     homepage = "https://github.com/fstl-app/fstl";
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
