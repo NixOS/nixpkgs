@@ -11721,6 +11721,13 @@ with pkgs;
 
   iosevka-comfy = recurseIntoAttrs (callPackages ../data/fonts/iosevka/comfy.nix { });
 
+  /**
+    A JSON Schema Catalog is a mapping from URIs to JSON Schema documents.
+
+    It enables offline use, e.g. in build processes, and it improves performance, robustness and safety.
+  */
+  inherit (callPackage ../data/json-schema/default.nix { }) jsonSchemaCatalogs;
+
   kde-rounded-corners =
     kdePackages.callPackage ../data/themes/kwin-decorations/kde-rounded-corners
       { };
