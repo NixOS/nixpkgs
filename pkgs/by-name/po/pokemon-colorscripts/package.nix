@@ -1,7 +1,6 @@
 {
   stdenv,
   fetchFromGitLab,
-  # patchShebangs,
   lib,
   ...
 }:
@@ -17,17 +16,18 @@ stdenv.mkDerivation {
     hash = "sha256-gKVmpHKt7S2XhSxLDzbIHTjJMoiIk69Fch202FZffqU=";
   };
 
-  # nativeBuildInputs = [ patchShebangs ];
-
   postPatch = ''
     patchShebangs ./install.sh
     substituteInPlace install.sh --replace-fail "/usr/local" "$out"
   '';
 
   installPhase = ''
-    mkdir -p $out/opt
-    mkdir -p $out/bin
+    runHook preInstall
+
+    mkdir -p "$out/bin"
     ./install.sh
+
+    runHook postInstall
   '';
 
   meta = with lib; {
