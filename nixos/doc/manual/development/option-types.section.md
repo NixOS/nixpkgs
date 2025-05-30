@@ -135,29 +135,6 @@ merging is handled.
     problems.
     :::
 
-`types.attrNamesToTrue`
-
-:   Either a list of attribute names, or an attribute set of
-    booleans. A list will be coerced into an attribute set with those
-    names, whose values are set to `true`. This is useful when it is
-    convenient to be able to write definitions as a simple list, but
-    still need to be able to override and disable individual values.
-
-    ::: {#ex-types-attrNamesToTrue .example}
-    ### `types.attrNamesToTrue`
-    ```
-    {
-      foo = [ "bar" ];
-    }
-    ```
-
-    ```
-    {
-      foo.bar = true;
-    }
-    ```
-    :::
-
 `types.pkgs`
 
 :   A type for the top level Nixpkgs package set.

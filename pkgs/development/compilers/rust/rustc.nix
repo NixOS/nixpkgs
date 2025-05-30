@@ -24,7 +24,6 @@
   xz,
   zlib,
   bintools,
-  libiconv,
   which,
   libffi,
   withBundledLLVM ? false,
@@ -186,9 +185,38 @@ stdenv.mkDerivation (finalAttrs: {
       "${setHost}.cc=${ccForHost}"
       "${setTarget}.cc=${ccForTarget}"
 
+      # The Rust compiler build identifies platforms by Rust target
+      # name, and later arguments override previous arguments. This
+      # means that when platforms differ in configuration but overlap
+      # in Rust target name (for instance, `pkgsStatic`), only one
+      # setting will be applied for any given option.
+      #
+      # This is usually mostly harmless, especially as `fastCross`
+      # means that we usually only compile `std` in such cases.
+      # However, the build does still need to link helper tools for the
+      # build platform in that case. This was breaking the Darwin
+      # `pkgsStatic` build, as it was attempting to link build tools
+      # with the target platform’s static linker, and failing to locate
+      # an appropriate static library for `-liconv`.
+      #
+      # Since the static build does not link anything for the target
+      # platform anyway, we put the target linker first so that the
+      # build platform linker overrides it when the Rust target names
+      # overlap, allowing the helper tools to build successfully.
+      #
+      # Note that Rust does not remember these settings in the built
+      # compiler, so this does not compromise any functionality of the
+      # resulting compiler.
+      #
+      # The longer‐term fix would be to get Rust to use a more nuanced
+      # understanding of platforms, such as by explicitly constructing
+      # and passing Rust JSON target definitions that let us
+      # distinguish the platforms in cases like these. That would also
+      # let us supplant various hacks around the wrappers and hooks
+      # that we currently need.
+      "${setTarget}.linker=${ccForTarget}"
       "${setBuild}.linker=${ccForBuild}"
       "${setHost}.linker=${ccForHost}"
-      "${setTarget}.linker=${ccForTarget}"
 
       "${setBuild}.cxx=${cxxForBuild}"
       "${setHost}.cxx=${cxxForHost}"
@@ -350,7 +378,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [ openssl ]
     ++ optionals stdenv.hostPlatform.isDarwin [
-      libiconv
       zlib
     ]
     ++ optional (!withBundledLLVM) llvmShared.lib

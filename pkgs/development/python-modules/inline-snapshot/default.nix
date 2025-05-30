@@ -3,7 +3,6 @@
   asttokens,
   black,
   buildPythonPackage,
-  click,
   dirty-equals,
   executing,
   fetchFromGitHub,
@@ -21,22 +20,18 @@
   rich,
   time-machine,
   toml,
-  types-toml,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "inline-snapshot";
-  version = "0.21.3";
+  version = "0.23.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "15r10nk";
     repo = "inline-snapshot";
     tag = version;
-    hash = "sha256-ll2wSSTr2QEUXE5liYw+JhcYsTEcJCWWTFXRagd6fCw=";
+    hash = "sha256-UiVxG9W1lwvvoflVey4250iL8gL8Tm41LBo0ab0tTqk=";
   };
 
   build-system = [ hatchling ];
@@ -44,19 +39,15 @@ buildPythonPackage rec {
   dependencies =
     [
       asttokens
-      black
-      click
       executing
       rich
-      typing-extensions
+      toml
     ]
     ++ lib.optionals (pythonOlder "3.11") [
-      types-toml
       toml
     ];
 
   nativeCheckInputs = [
-    dirty-equals
     freezegun
     hypothesis
     pydantic
@@ -67,18 +58,18 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     time-machine
-  ];
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  optional-dependencies = {
+    black = [ black ];
+    dirty-equals = [ dirty-equals ];
+  };
 
   pythonImportsCheck = [ "inline_snapshot" ];
 
   disabledTestPaths = [
     # Tests don't play nice with pytest-xdist
     "tests/test_typing.py"
-  ];
-
-  disabledTests = [
-    # Tests for precise formatting
-    "test_empty_sub_snapshot"
   ];
 
   meta = with lib; {

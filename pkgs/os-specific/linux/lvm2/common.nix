@@ -13,6 +13,7 @@
   enableDmeventd ? false,
   udevSupport ? !stdenv.hostPlatform.isStatic,
   udev,
+  udevCheckHook,
   onlyLib ? stdenv.hostPlatform.isStatic,
   # Otherwise we have a infinity recursion during static compilation
   enableUtilLinux ? !stdenv.hostPlatform.isStatic,
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
     inherit hash;
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals udevSupport [ udevCheckHook ];
   buildInputs =
     [
       libaio
@@ -132,6 +133,7 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = false; # requires root
+  doInstallCheck = true;
 
   makeFlags =
     lib.optionals udevSupport [

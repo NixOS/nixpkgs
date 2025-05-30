@@ -33,9 +33,8 @@ buildPythonPackage rec {
 
   cargoRoot = "src/_bcrypt";
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
+    inherit pname version src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
-    name = "${pname}-${version}";
     hash = "sha256-HgHvfMBspPsSYhllnKBg5XZB6zxFIqJj+4//xKG8HwA=";
   };
 

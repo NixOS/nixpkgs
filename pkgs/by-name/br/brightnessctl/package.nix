@@ -5,6 +5,7 @@
   pkg-config,
   systemd,
   coreutils,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,8 +38,13 @@ stdenv.mkDerivation rec {
     "install_udev_rules"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    udevCheckHook
+  ];
   buildInputs = [ systemd ];
+
+  doInstallCheck = true;
 
   meta = with lib; {
     homepage = "https://github.com/Hummer12007/brightnessctl";

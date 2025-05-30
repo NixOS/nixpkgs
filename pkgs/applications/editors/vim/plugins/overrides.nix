@@ -625,6 +625,7 @@ in
       "codecompanion.providers.actions.mini_pick"
       "codecompanion.providers.actions.snacks"
       "codecompanion.providers.actions.telescope"
+      "codecompanion.providers.actions.fzf_lua"
       "codecompanion.providers.diff.mini_diff"
       # Requires setup call
       "codecompanion.actions.static"
@@ -1904,6 +1905,7 @@ in
       # Optional image providers
       "load_image_nvim"
       "load_wezterm_nvim"
+      "load_snacks_nvim"
     ];
   };
 

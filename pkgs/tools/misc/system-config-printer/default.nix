@@ -119,6 +119,7 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+  doInstallCheck = true;
 
   postInstall = ''
     buildPythonPath "$out $pythonPath"
