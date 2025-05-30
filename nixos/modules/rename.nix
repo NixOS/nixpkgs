@@ -223,6 +223,11 @@ in
       "services"
       "shout"
     ] "shout was removed because it was deprecated upstream in favor of thelounge.")
+    (mkRemovedOptionModule [ "services" "siproxd" ] ''
+      The siproxd package and the corresponding module have been removed due to
+      the service being unmaintained. `services.asterisk.*` or `services.freeswitch.*`
+      could be used instead.
+    '')
     (mkRemovedOptionModule [ "services" "ssmtp" ] ''
       The ssmtp package and the corresponding module have been removed due to
       the program being unmaintained. The options `programs.msmtp.*` can be
