@@ -41,6 +41,8 @@ self: super: with self; {
 
   absl-py = callPackage ../development/python-modules/absl-py { };
 
+  abtem = callPackage ../development/python-modules/abtem { };
+
   accelerate = callPackage ../development/python-modules/accelerate { };
 
   accessible-pygments = callPackage ../development/python-modules/accessible-pygments { };
