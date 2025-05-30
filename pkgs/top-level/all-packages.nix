@@ -5042,6 +5042,17 @@ with pkgs;
   gccFun = callPackage ../development/compilers/gcc;
   gcc-unwrapped = gcc.cc;
 
+  inherit
+    (rec {
+      # NOTE: keep this with the "NG" label until we're ready to drop the monolithic GCC
+      gccNGPackagesSet = recurseIntoAttrs (callPackages ../development/compilers/gcc/ng { });
+      gccNGPackages_15 = gccNGPackagesSet."15";
+      mkGCCNGPackages = gccNGPackagesSet.mkPackage;
+    })
+    gccNGPackages_15
+    mkGCCNGPackages
+    ;
+
   wrapNonDeterministicGcc =
     stdenv: ccWrapper:
     if ccWrapper.isGNU then
