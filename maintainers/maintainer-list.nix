@@ -26069,6 +26069,12 @@
     githubId = 5837359;
     name = "Adrian Pistol";
   };
+  viitorags = {
+    email = "152658654+viitorags@users.noreply.github.com";
+    name = "Vitor Gabriel";
+    github = "viitorags";
+    githubId = 152658654;
+  };
   vikanezrimaya = {
     email = "vika@fireburn.ru";
     github = "vikanezrimaya";
@@ -26160,12 +26166,6 @@
     github = "vizanto";
     githubId = 326263;
     name = "Danny Wilson";
-  };
-  viitorags = {
-    email = "152658654+viitorags@users.noreply.github.com";
-    name = "Vitor Gabriel";
-    github = "viitorags";
-    githubId = 152658654;
   };
   vizid = {
     email = "vizid1337@gmail.com";
