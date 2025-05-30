@@ -463,6 +463,7 @@ let
         mkBefore
         mkAfter
         mkAliasDefinitions
+        mkAliasDefinitionsWith
         mkAliasAndWrapDefinitions
         fixMergeModules
         mkRemovedOptionModule
