@@ -556,7 +556,7 @@ let
                 "x86_64" = "amd64";
                 "wasm32" = "wasm";
               }
-              .${final.parsed.cpu.name} or (throw "Unknown CPU variant ${final.parsed.cpu.name} by Go");
+              .${final.parsed.cpu.name} or null;
             GOOS = if final.isWasi then "wasip1" else final.parsed.kernel.name;
 
             # See https://go.dev/wiki/GoArm
