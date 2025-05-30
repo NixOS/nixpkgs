@@ -10665,6 +10665,8 @@ self: super: with self; {
 
   orgparse = callPackage ../development/python-modules/orgparse { };
 
+  orix = callPackage ../development/python-modules/orix { };
+
   orjson = callPackage ../development/python-modules/orjson { };
 
   orm = callPackage ../development/python-modules/orm { };
