@@ -11,13 +11,7 @@ in
 {
   options = {
     services.jenkins = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = ''
-          Whether to enable the jenkins continuous integration server.
-        '';
-      };
+      enable = lib.mkEnableOption "Jenkins, a continuous integration server";
 
       user = lib.mkOption {
         default = "jenkins";
