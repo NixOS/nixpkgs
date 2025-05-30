@@ -1054,6 +1054,8 @@ self: super: with self; {
 
   atom = callPackage ../development/python-modules/atom { };
 
+  atomap = callPackage ../development/python-modules/atomap { };
+
   atomiclong = callPackage ../development/python-modules/atomiclong { };
 
   atomicwrites = callPackage ../development/python-modules/atomicwrites { };
