@@ -456,6 +456,10 @@ with self;
       url = "mirror://cpan/authors/id/R/RU/RUZ/Alien-LibGumbo-0.05.tar.gz";
       hash = "sha256-D76RarEfaA5cKM0ayAA3IyPioOBq/8bIs2J5/GTXZRc=";
     };
+    # Fix linker detection broken by exported LD (see nixpkgs#9f2a89f)
+    preBuild = ''
+      export LD="${lib.getExe' stdenv.cc.bintools "${stdenv.cc.bintools.targetPrefix}ld"}"
+    '';
     buildInputs = [ AlienBaseModuleBuild ];
     propagatedBuildInputs = [
       AlienBuild
@@ -468,7 +472,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      broken = stdenv.hostPlatform.isLinux; # Fails with: cannot find ./.libs/libgumbo.so
+      broken = stdenv.hostPlatform.isDarwin; # Fails with: ld: unknown option
     };
   };
 
@@ -37571,12 +37575,17 @@ with self;
       url = "mirror://cpan/authors/id/C/CV/CVLIBRARY/UUID4-Tiny-0.003.tar.gz";
       hash = "sha256-4S9sgrg1dcORd3O0HA+1HPeDx8bPcuDJkWks4u8Hg2I=";
     };
-    postPatch = lib.optionalString (stdenv.hostPlatform.isAarch64) ''
-      # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/uapi/asm-generic/unistd.h
-      # printf SYS_getrandom | gcc -include sys/syscall.h -E -
-      substituteInPlace lib/UUID4/Tiny.pm \
-        --replace "syscall( 318" "syscall( 278"
-    '';
+    postPatch =
+      lib.optionalString
+        (
+          stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isLoongArch64 || stdenv.hostPlatform.isRiscV64
+        )
+        ''
+          # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/uapi/asm-generic/unistd.h
+          # printf SYS_getrandom | gcc -include sys/syscall.h -E -
+          substituteInPlace lib/UUID4/Tiny.pm \
+            --replace "syscall( 318" "syscall( 278"
+        '';
     meta = {
       description = "Cryptographically secure v4 UUIDs for Linux x64";
       license = with lib.licenses; [

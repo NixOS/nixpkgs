@@ -1147,6 +1147,8 @@ let
 
         lwt-dllist = callPackage ../development/ocaml-modules/lwt-dllist { };
 
+        lwt_eio = callPackage ../development/ocaml-modules/lwt_eio { };
+
         lwt-exit = callPackage ../development/ocaml-modules/lwt-exit { };
 
         lwt_log = callPackage ../development/ocaml-modules/lwt_log { };
@@ -1193,6 +1195,8 @@ let
         mec = callPackage ../development/ocaml-modules/mec { };
 
         melange = callPackage ../development/tools/ocaml/melange { };
+
+        melange-json = callPackage ../development/ocaml-modules/melange-json { };
 
         memprof-limits = callPackage ../development/ocaml-modules/memprof-limits { };
 

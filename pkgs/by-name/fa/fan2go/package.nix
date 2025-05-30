@@ -11,7 +11,7 @@ buildGo123Module rec {
 
   src = fetchFromGitHub {
     owner = "markusressel";
-    repo = pname;
+    repo = "fan2go";
     rev = version;
     hash = "sha256-eSHeHBzDvzsDAck0zexwR8drasisvlQNTeowv92E2uc=";
   };

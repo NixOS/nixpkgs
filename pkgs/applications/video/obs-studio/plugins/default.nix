@@ -30,6 +30,8 @@
 
   obs-composite-blur = callPackage ./obs-composite-blur.nix { };
 
+  obs-dvd-screensaver = callPackage ./obs-dvd-screensaver.nix { };
+
   obs-freeze-filter = qt6Packages.callPackage ./obs-freeze-filter.nix { };
 
   obs-gradient-source = callPackage ./obs-gradient-source.nix { };
@@ -40,6 +42,8 @@
 
   obs-livesplit-one = callPackage ./obs-livesplit-one { };
 
+  obs-media-controls = qt6Packages.callPackage ./obs-media-controls.nix { };
+
   obs-move-transition = callPackage ./obs-move-transition.nix { };
 
   obs-multi-rtmp = qt6Packages.callPackage ./obs-multi-rtmp { };
@@ -48,15 +52,21 @@
 
   obs-ndi = qt6Packages.callPackage ./obs-ndi { };
 
+  obs-noise = callPackage ./obs-noise.nix { };
+
   obs-nvfbc = callPackage ./obs-nvfbc.nix { };
 
   obs-pipewire-audio-capture = callPackage ./obs-pipewire-audio-capture.nix { };
 
+  obs-recursion-effect = callPackage ./obs-recursion-effect.nix { };
+
   obs-replay-source = qt6Packages.callPackage ./obs-replay-source.nix { };
 
-  obs-rgb-levels-filter = callPackage ./obs-rgb-levels-filter.nix { };
+  obs-rgb-levels = callPackage ./obs-rgb-levels.nix { };
 
   obs-scale-to-sound = callPackage ./obs-scale-to-sound.nix { };
+
+  obs-scene-as-transition = callPackage ./obs-scene-as-transition.nix { };
 
   obs-shaderfilter = qt6Packages.callPackage ./obs-shaderfilter.nix { };
 
@@ -66,6 +76,8 @@
 
   obs-source-switcher = callPackage ./obs-source-switcher.nix { };
 
+  obs-stroke-glow-shadow = callPackage ./obs-stroke-glow-shadow.nix { };
+
   obs-teleport = callPackage ./obs-teleport { };
 
   obs-text-pthread = callPackage ./obs-text-pthread.nix { };
@@ -73,6 +85,8 @@
   obs-transition-table = qt6Packages.callPackage ./obs-transition-table.nix { };
 
   obs-tuna = qt6Packages.callPackage ./obs-tuna { };
+
+  obs-urlsource = qt6Packages.callPackage ./obs-urlsource.nix { };
 
   obs-vaapi = callPackage ./obs-vaapi { };
 
@@ -87,6 +101,8 @@
   obs-websocket = qt6Packages.callPackage ./obs-websocket.nix { }; # Websocket 4.x compatibility for OBS Studio 28+
 
   obs-webkitgtk = callPackage ./obs-webkitgtk.nix { };
+
+  pixel-art = callPackage ./pixel-art.nix { };
 
   wlrobs = callPackage ./wlrobs.nix { };
 
