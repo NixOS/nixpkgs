@@ -76,9 +76,9 @@ let
       listen-on port ${toString cfg.listenOnPort} { ${
         lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOn
       } };
-      listen-on-v6 port ${toString cfg.listenOnIpv6Port} { ${
+      ${lib.optionalString config.networking.enableIPv6 "listen-on-v6 port ${toString cfg.listenOnIpv6Port} { ${
         lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOnIpv6
-      } };
+      } };"}
       allow-query-cache { cachenetworks; };
       blackhole { badnetworks; };
       forward ${cfg.forward};
