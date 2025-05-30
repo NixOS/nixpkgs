@@ -78,8 +78,11 @@ buildGoModule (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.tests = {
-    inherit (nixosTests) victoriametrics;
+  passthru = {
+    tests = {
+      inherit (nixosTests) victoriametrics;
+    };
+    updateScript = ./update.sh;
   };
 
   meta = {
