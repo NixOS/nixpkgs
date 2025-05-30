@@ -19839,6 +19839,12 @@
     githubId = 24578572;
     name = "Blake North";
   };
+  powwu = {
+    name = "powwu";
+    email = "hello@powwu.sh";
+    github = "powwu";
+    githubId = 20643401;
+  };
   poz = {
     name = "Jacek Poziemski";
     email = "poz@poz.pet";
