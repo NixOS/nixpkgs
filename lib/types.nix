@@ -20,7 +20,6 @@ let
     toList
     ;
   inherit (lib.lists)
-    all
     concatLists
     count
     elemAt
@@ -758,16 +757,14 @@ let
       nonEmptyListOf =
         elemType:
         let
-          list = types.listOf elemType;
+          list = addCheck (types.listOf elemType) (l: l != [ ]);
         in
-        addCheck (
-          list
-          // {
-            description = "non-empty ${optionDescriptionPhrase (class: class == "noun") list}";
-            emptyValue = { }; # no .value attr, meaning unset
-            substSubModules = m: nonEmptyListOf (elemType.substSubModules m);
-          }
-        ) (l: l != [ ]);
+        list
+        // {
+          description = "non-empty ${optionDescriptionPhrase (class: class == "noun") list}";
+          emptyValue = { }; # no .value attr, meaning unset
+          substSubModules = m: nonEmptyListOf (elemType.substSubModules m);
+        };
 
       attrsOf = elemType: attrsWith { inherit elemType; };
 
@@ -1504,7 +1501,7 @@ let
           } convertible to it";
           check = x: (coercedType.check x && finalType.check (coerceFunc x)) || finalType.check x;
           merge = {
-            __funtor =
+            __functor =
               self: loc: defs:
               (self.v2 { inherit loc defs; }).value;
             v2 =
@@ -1562,15 +1559,31 @@ let
       */
       addCheck =
         elemType: check:
-        let
-          final = elemType // {
+        if elemType.merge ? v2 then
+          elemType
+          // {
             check = x: elemType.check x && check x;
-            # addCheck discards the merge.v2 function
-            #
-            merge = if elemType.merge ? v2 then elemType.merge.__functor { inherit final; } else elemType.merge;
+            merge = {
+              __functor =
+                self: loc: defs:
+                (self.v2 { inherit loc defs; }).value;
+              v2 =
+                { loc, defs }:
+                let
+                  orig = elemType.merge.v2 { inherit loc defs; };
+                  headError' = if orig.headError != null then orig.headError else checkDefsForError check loc defs;
+                in
+                orig
+                // {
+                  headError = headError';
+                };
+            };
+          }
+        else
+          elemType
+          // {
+            check = x: elemType.check x && check x;
           };
-        in
-        final;
     };
 
     /**
