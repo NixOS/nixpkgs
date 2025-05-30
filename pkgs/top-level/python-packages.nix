@@ -11946,6 +11946,8 @@ self: super: with self; {
 
   py3status = callPackage ../development/python-modules/py3status { };
 
+  py4dstem = callPackage ../development/python-modules/py4dstem { };
+
   py4j = callPackage ../development/python-modules/py4j { };
 
   py65 = callPackage ../development/python-modules/py65 { };
