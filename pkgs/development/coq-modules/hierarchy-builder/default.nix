@@ -2,6 +2,7 @@
   lib,
   mkCoqDerivation,
   coq,
+  rocqPackages,
   stdlib,
   coq-elpi,
   version ? null,
@@ -96,4 +97,20 @@ hb.overrideAttrs (
   // lib.optionalAttrs (o.version != null && o.version == "1.8.1") {
     propagatedBuildInputs = o.propagatedBuildInputs ++ [ stdlib ];
   }
+  # this is just a wrapper for rocqPackages.hierarchy-builder for Rocq >= 9.0
+  //
+    lib.optionalAttrs
+      (coq.version != null && (coq.version == "dev" || lib.versions.isGe "9.0" coq.version))
+      {
+        configurePhase = ''
+          echo no configuration
+        '';
+        buildPhase = ''
+          echo building nothing
+        '';
+        installPhase = ''
+          echo installing nothing
+        '';
+        propagatedBuildInputs = o.propagatedBuildInputs ++ [ rocqPackages.hierarchy-builder ];
+      }
 )
