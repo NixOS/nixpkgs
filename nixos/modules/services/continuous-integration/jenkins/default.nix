@@ -83,6 +83,8 @@ in
 
       package = lib.mkPackageOption pkgs "jenkins" { };
 
+      javaPackage = lib.mkPackageOption pkgs "jdk17" { };
+
       packages = lib.mkOption {
         default = [
           pkgs.stdenv
@@ -233,7 +235,7 @@ in
 
       # For reference: https://wiki.jenkins.io/display/JENKINS/JenkinsLinuxStartupScript
       script = ''
-        ${pkgs.jdk17}/bin/java ${lib.concatStringsSep " " cfg.extraJavaOptions} -jar ${cfg.package}/webapps/jenkins.war --httpListenAddress=${cfg.listenAddress} \
+        ${cfg.javaPackage}/bin/java ${lib.concatStringsSep " " cfg.extraJavaOptions} -jar ${cfg.package}/webapps/jenkins.war --httpListenAddress=${cfg.listenAddress} \
                                                   --httpPort=${toString cfg.port} \
                                                   --prefix=${cfg.prefix} \
                                                   -Djava.awt.headless=true \
