@@ -1,45 +1,43 @@
 {
   lib,
-  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools-scm,
+  setuptools,
+
+  # build inputs
+  cargo,
+  pkg-config,
+  protobuf,
+  rustc,
+  rustPlatform,
+  openssl,
+
+  # dependencies
   bcrypt,
   build,
-  buildPythonPackage,
-  cargo,
-  chroma-hnswlib,
   fastapi,
-  fetchFromGitHub,
   grpcio,
   httpx,
-  hypothesis,
   importlib-resources,
   kubernetes,
   mmh3,
-  nixosTests,
   numpy,
   onnxruntime,
-  openssl,
   opentelemetry-api,
   opentelemetry-exporter-otlp-proto-grpc,
   opentelemetry-instrumentation-fastapi,
   opentelemetry-sdk,
   orjson,
   overrides,
-  pkg-config,
   posthog,
-  protobuf,
-  psutil,
   pulsar-client,
   pydantic,
   pypika,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
-  rustc,
-  rustPlatform,
-  setuptools-scm,
-  setuptools,
   tenacity,
   tokenizers,
   tqdm,
@@ -47,14 +45,24 @@
   typing-extensions,
   uvicorn,
   zstd,
-}:
 
+  # optional dependencies
+  chroma-hnswlib,
+
+  # tests
+  hypothesis,
+  psutil,
+  pytest-asyncio,
+  pytestCheckHook,
+
+  # passthru
+  nixosTests,
+  nix-update-script,
+}:
 buildPythonPackage rec {
   pname = "chromadb";
   version = "0.5.20";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "chroma-core";
@@ -170,13 +178,24 @@ buildPythonPackage rec {
     inherit (nixosTests) chromadb;
   };
 
-  meta = with lib; {
+    updateScript = nix-update-script {
+      # The repo has multiple components on its release stream
+      extraArgs = [
+        "--versionRegex"
+        "([0-9].+)"
+      ];
+    };
+  };
+
+  meta = {
     description = "AI-native open-source embedding database";
     homepage = "https://github.com/chroma-core/chroma";
     changelog = "https://github.com/chroma-core/chroma/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      fab
+      sarahec
+    ];
     mainProgram = "chroma";
-    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
-  };
+      };
 }
