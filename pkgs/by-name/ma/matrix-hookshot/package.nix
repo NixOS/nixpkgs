@@ -38,8 +38,7 @@ mkYarnPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = data.cargoHash;
   };
 
