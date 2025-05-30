@@ -8553,7 +8553,9 @@ self: super: with self; {
 
   marisa = callPackage ../development/python-modules/marisa { inherit (pkgs) marisa; };
 
-  marisa-trie = callPackage ../development/python-modules/marisa-trie { };
+  marisa-trie = callPackage ../development/python-modules/marisa-trie {
+    marisa-cpp = pkgs.marisa;
+  };
 
   markdown = callPackage ../development/python-modules/markdown { };
 
