@@ -38,38 +38,38 @@ perlPackages.buildPerlPackage rec {
     with perlPackages;
     [
       CGI
+      CpanelJSONXS
+      CryptDES
       DataStructureUtil
+      DataUUID
+      DateTime
+      DigestSHA1
       FileCopyRecursive
+      HTTPDaemon
       HTTPProxy
       HTTPServerSimple
       HTTPServerSimpleAuthen
       IOCapture
+      IOCompress
       IOSocketSSL
       IPCRun
       JSON
       LWPProtocolHttps
       ModuleInstall
+      NetPing
       NetSNMP
+      ParallelForkManager
+      ParseEDID
       TestCompile
       TestDeep
       TestException
       TestMockModule
       TestMockObject
       TestNoWarnings
-      CpanelJSONXS
-      XMLLibXML
-      NetPing
-      ParallelForkManager
-      DigestSHA1
-      CryptDES
-      FileCopyRecursive
-      URIEscapeXS
-      DateTime
-      DataUUID
       URI
-      HTTPDaemon
+      URIEscapeXS
+      XMLLibXML
       YAML
-      IOCompress
     ]
   );
 
