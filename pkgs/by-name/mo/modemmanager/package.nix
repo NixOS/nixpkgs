@@ -19,6 +19,7 @@
   dbus,
   bash,
   gobject-introspection,
+  udevCheckHook,
   buildPackages,
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
@@ -64,6 +65,7 @@ stdenv.mkDerivation rec {
       pkg-config
       libxslt
       python3
+      udevCheckHook
     ]
     ++ lib.optionals withIntrospection [
       gobject-introspection

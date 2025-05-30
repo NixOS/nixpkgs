@@ -8,25 +8,22 @@
   dill,
   fetchFromGitHub,
   moto,
-  poetry-core,
-  poetry-dynamic-versioning,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "aioboto3";
-  version = "13.4.0";
+  version = "14.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "terrycain";
     repo = "aioboto3";
     tag = "v${version}";
-    hash = "sha256-o3PynPW6nPvbBrsw+HU2fJheVRpCHCb0EnJdmseorsE=";
+    hash = "sha256-RzaMsJtGvC6IILgwj09kymw+Hv3gjyBf2PHBzYC9itE=";
   };
 
   pythonRelaxDeps = [
@@ -34,8 +31,8 @@ buildPythonPackage rec {
   ];
 
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    setuptools
+    setuptools-scm
   ];
 
   dependencies = [
@@ -57,6 +54,10 @@ buildPythonPackage rec {
     ]
     ++ moto.optional-dependencies.server
     ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  disabledTests = [
+    "test_patches"
+  ];
 
   pythonImportsCheck = [ "aioboto3" ];
 

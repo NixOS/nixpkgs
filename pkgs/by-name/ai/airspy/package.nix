@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
   ];
+
+  doInstallCheck = true;
   buildInputs = [ libusb1 ];
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isLinux [ "-DINSTALL_UDEV_RULES=ON" ];

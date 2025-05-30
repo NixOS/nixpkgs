@@ -16,6 +16,7 @@
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
   ncurses,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
     python3.pkgs.cython
     python3.pkgs.setuptools
     tcl
+    udevCheckHook
   ];
   buildInputs =
     [
@@ -40,6 +42,8 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional systemdSupport systemd;
+
+  doInstallCheck = true;
 
   meta = {
     description = "Access software for a blind person using a braille display";

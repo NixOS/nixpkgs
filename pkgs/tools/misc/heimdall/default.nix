@@ -41,6 +41,8 @@ mkDerivation rec {
       substituteInPlace libpit/CMakeLists.txt --replace "-std=gnu++11" ""
     '';
 
+  doInstallCheck = true;
+
   installPhase =
     lib.optionalString (stdenv.hostPlatform.isDarwin && enableGUI) ''
       mkdir -p $out/Applications
