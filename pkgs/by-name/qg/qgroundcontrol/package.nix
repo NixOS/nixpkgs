@@ -11,11 +11,11 @@
   gst_all_1,
   wayland,
   pkg-config,
+  px4-gpsdrivers,
+  perl,
   qt6,
 }:
 
-# TODO:
-#  * Upstream patch
 stdenv.mkDerivation (finalAttrs: {
   pname = "qgroundcontrol";
   version = "5.0.2";
@@ -29,19 +29,25 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    ./disable-bad-message.patch
+    ./disable-bad-message.patch # TODO: Upstream
   ];
 
   # Unvendor CPM
   postPatch = ''
     rm cmake/modules/CPM.cmake
     ln -s ${cpm-cmake}/share/cpm/CPM.cmake cmake/modules/CPM.cmake
+
+    # Replace CPM finds with find_packages
+    # TODO: Find a way to make this substitution that *doesn't* require bringing in perl
+    perl -0777 -i.original -pe 's|CPMAddPackage\([^)]*ulog_cpp[^)]*\)|find_package(ulog_cpp REQUIRED)|' src/AnalyzeView/CMakeLists.txt
+    perl -0777 -i.original -pe 's|CPMAddPackage\([^)]*px4-gpsdrivers[^)]*\)|find_package(px4-gpsdrivers REQUIRED)|' src/GPS/CMakeLists.txt
   '';
 
   nativeBuildInputs = [
     cmake
     ninja
     pkg-config
+    perl # TODO: Used for temporary patching
   ] ++ (with qt6; [
     qttools
     wrapQtAppsHook
@@ -69,20 +75,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL2
-    geographiclib
+    geographiclib # TODO: Investigate why this does not require a patch to the CPMAddPackage
     ulog-cpp
+    px4-gpsdrivers
   ] ++ finalAttrs.gstInputs ++ finalAttrs.propagatedBuildInputs;
 
   cmakeFlags = [
-    "-DQGC_BUILD_STABLE=ON"
+    # TODO: This needs rationale.
+    (lib.cmakeBool "QGC_BUILD_STABLE" true)
     # Override maximum version to always accept the packaged qr6
-    "-DQGC_QT_MAXIMUM_VERSION=${qt6.qtbase.version}"
+    # TODO: Confirm this is still the case
+    (lib.cmakeFeature "QGC_QT_MAXIMUM_VERSION" qt6.qtbase.version)
     # Default install tries to copy Qt files into package
-    "-DQGC_DISABLE_BUILD_SETUP=ON"
+    # TODO: Confirm this is still the case
+    (lib.cmakeBool "QGC_DISABLE_BUILD_SETUP" true)
     # Disables an /etc/group check that has false positives on nixos
-    "-DQGC_DISABLE_ETC_GROUP_CHECKS=ON"
+    (lib.cmakeBool "QGC_DISABLE_ETC_GROUP_CHECKS" true)
     # Tries to download x86_64-only prebuilt binaries
-    "-DDISABLE_AIRMAP=ON"
+    # TODO: Confirm this is still the case
+    (lib.cmakeBool "DISABLE_AIRMAP" true)
   ];
 
   installPhase = ''
