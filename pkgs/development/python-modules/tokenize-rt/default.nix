@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "asottile";
-    repo = pname;
+    repo = "tokenize-rt";
     rev = "v${version}";
     hash = "sha256-7ykczY73KkqR99tYLL/5bgr9bqU444qHs2ONz+ldVyg=";
   };

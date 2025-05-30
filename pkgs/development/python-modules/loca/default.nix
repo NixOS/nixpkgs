@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchFromSourcehut {
     owner = "~cnx";
-    repo = pname;
+    repo = "loca";
     rev = version;
     sha256 = "1l6jimw3wd81nz1jrzsfw1zzsdm0jm998xlddcqaq0h38sx69w8g";
   };

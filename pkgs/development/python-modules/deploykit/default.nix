@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "numtide";
-    repo = pname;
+    repo = "deploykit";
     rev = version;
     hash = "sha256-7PiXq1bQJ1jswLHNqCDSYZabgfp8HRuRt5YPGzd5Ej0=";
   };

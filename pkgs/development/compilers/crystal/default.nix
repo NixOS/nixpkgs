@@ -169,6 +169,11 @@ let
         export threads=$NIX_BUILD_CORES
         export CRYSTAL_CACHE_DIR=$TMP
         export MACOSX_DEPLOYMENT_TARGET=10.11
+
+        # Available since 1.13.0 https://github.com/crystal-lang/crystal/pull/14574
+        if [[ -f src/SOURCE_DATE_EPOCH ]]; then
+          export SOURCE_DATE_EPOCH="$(<src/SOURCE_DATE_EPOCH)"
+        fi
       '';
 
       strictDeps = true;
@@ -294,6 +299,7 @@ rec {
     };
   };
 
+  # When removing this version, also remove checks for src/SOURCE_DATE_EPOCH existence
   crystal_1_11 = generic {
     version = "1.11.2";
     sha256 = "sha256-BBEDWqFtmFUNj0kuGBzv71YHO3KjxV4d2ySTCD4HhLc=";
@@ -317,5 +323,13 @@ rec {
     doCheck = false;
   };
 
-  crystal = crystal_1_15;
+  crystal_1_16 = generic {
+    version = "1.16.3";
+    sha256 = "sha256-U9H1tHUMyDNicZnXzEccDki5bGXdV0B2Wu2PyCksPVI=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_18;
+    doCheck = false;
+  };
+
+  crystal = crystal_1_16;
 }

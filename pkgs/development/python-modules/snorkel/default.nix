@@ -31,7 +31,7 @@ buildPythonPackage {
 
   src = fetchFromGitHub {
     owner = "snorkel-team";
-    repo = pname;
+    repo = "snorkel";
     tag = "v${version}";
     hash = "sha256-1DgkMHYToiI3266yCND1bXiui80x8AaBttxM83kJImw=";
   };

@@ -17,7 +17,6 @@
 
   # optional-dependencies
   diffusers,
-  evaluate,
   h5py,
   onnx,
   onnxruntime,
@@ -29,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "optimum";
-  version = "1.24.0";
+  version = "1.25.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -38,7 +37,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "optimum";
     tag = "v${version}";
-    hash = "sha256-0D/kHPUI+gM7IblA4ULs0JuGTNQVezIYg0SPD3ESukw=";
+    hash = "sha256-SVyGtWFI5GjfxbaVKICf+QSSMYI62dDVMzphu8TngvY=";
   };
 
   build-system = [ setuptools ];
@@ -56,24 +55,25 @@ buildPythonPackage rec {
   optional-dependencies = {
     onnxruntime = [
       onnx
-      onnxruntime
       datasets
-      evaluate
       protobuf
+      onnxruntime
     ];
     exporters = [
       onnx
-      onnxruntime
       timm
+      onnxruntime
+      protobuf
     ];
     exporters-tf = [
-      tensorflow
-      tf2onnx
       onnx
-      onnxruntime
       timm
       h5py
+      tf2onnx
+      onnxruntime
       numpy
+      datasets
+      tensorflow
     ];
     diffusers = [ diffusers ];
     intel = [

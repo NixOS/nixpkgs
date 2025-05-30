@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "weiwei";
-    repo = pname;
+    repo = "junitparser";
     rev = version;
     hash = "sha256-rhDP05GSWT4K6Z2ip8C9+e3WbvBJOwP0vctvANBs7cw=";
   };

@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "tkdrob";
-    repo = pname;
+    repo = "aiopyarr";
     tag = version;
     hash = "sha256-CzNB6ymvDTktiOGdcdCvWLVQ3mKmbdMpc/vezSXCpG4=";
   };

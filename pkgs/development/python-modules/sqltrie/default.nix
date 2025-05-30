@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "iterative";
-    repo = pname;
+    repo = "sqltrie";
     tag = version;
     hash = "sha256-D1vYXyh/i0wy7sttW117vsMbUlQJ/mq7rlxLMJWoki0=";
   };

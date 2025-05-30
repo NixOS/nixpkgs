@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "hebcal";
-  version = "5.9.0";
+  version = "5.9.1";
 
   src = fetchFromGitHub {
     owner = "hebcal";
     repo = "hebcal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JtabO3/IM7Mh6zzO6Jwth1axnwOxIn/a3GQO9x3EHLw=";
+    hash = "sha256-IhN0n3qa+QlWtSxHyzm3muldsFFrkRzCwulgCcg50eA=";
   };
 
-  vendorHash = "sha256-PhJdUU+QivGuLwHuThL7c645mbAgl160sbZ8y7Dd02M=";
+  vendorHash = "sha256-Rpg+PVXY01+diJnE26iZ/oJhVVSoLdM7nWJFmfXBuHc=";
 
   preBuild = ''
     make dcity.go

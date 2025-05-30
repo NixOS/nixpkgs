@@ -11,7 +11,6 @@
   hatch-fancy-pypi-readme,
 
   # dependencies
-  setuptools,
   fsspec,
   httpx,
   huggingface-hub,
@@ -32,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "gradio-client";
-  version = "1.10.0";
+  version = "1.10.1";
   pyproject = true;
 
   # no tests on pypi
@@ -42,7 +41,7 @@ buildPythonPackage rec {
     # not to be confused with @gradio/client@${version}
     tag = "gradio_client@${version}";
     sparseCheckout = [ "client/python" ];
-    hash = "sha256-6sfY8a6CCfkczsF4yvjOuUZOcyiXx1zK7pUHUtYMq/Q=";
+    hash = "sha256-jIJkJvXy4mKQN0gVb4nm3hCzgk9qofBrXc3Tws2n2qw=";
   };
 
   sourceRoot = "${src.name}/client/python";
@@ -61,7 +60,6 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    setuptools # needed for 'pkg_resources'
     fsspec
     httpx
     huggingface-hub

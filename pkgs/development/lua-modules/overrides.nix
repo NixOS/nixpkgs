@@ -179,11 +179,11 @@ in
 
       # TODO: Figure out why 2 files extra
       substituteInPlace tests/screenshots/tests-file-ui_spec.lua---files\(\)---executable---1-+-args-{-\'fd\'-} \
-        --replace-fail "111" "113"
+        --replace-fail "112" "114"
 
       # TODO: Figure out why 2 files extra
       substituteInPlace tests/screenshots/tests-file-ui_spec.lua---files\(\)---preview-should-work-after-chdir-#1864 \
-        --replace-fail "110" "112"
+        --replace-fail "111" "113"
 
       make test
 
@@ -791,10 +791,12 @@ in
   });
 
   neorg = prev.neorg.overrideAttrs (oa: {
+    # Relax dependencies
     postConfigure = ''
       substituteInPlace ''${rockspecFilename} \
         --replace-fail "'nvim-nio ~> 1.7'," "'nvim-nio >= 1.7'," \
-        --replace-fail "'plenary.nvim == 0.1.4'," "'plenary.nvim',"
+        --replace-fail "'plenary.nvim == 0.1.4'," "'plenary.nvim'," \
+        --replace-fail "'nui.nvim == 0.3.0'," "'nui.nvim',"
     '';
   });
 

@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "cloudtools";
-    repo = pname;
+    repo = "troposphere";
     tag = version;
     hash = "sha256-IqWgqkxJ4EFNt9z58cuCqSTnlbMNi7bFhA04hgQjG8E=";
   };

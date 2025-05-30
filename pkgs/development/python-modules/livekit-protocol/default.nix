@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools,
   protobuf,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -31,6 +32,8 @@ buildPythonPackage rec {
   doCheck = false; # no tests
 
   pythonImportsCheck = [ "livekit" ];
+
+  passthru.updateScript = gitUpdater { rev-prefix = "protocol-v"; };
 
   meta = {
     description = "LiveKit real-time and server SDKs for Python";

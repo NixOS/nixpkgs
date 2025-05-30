@@ -12,13 +12,13 @@ let
 
   pkg = buildGoModule rec {
     pname = "arduino-cli";
-    version = "1.2.0";
+    version = "1.2.2";
 
     src = fetchFromGitHub {
       owner = "arduino";
       repo = "arduino-cli";
       tag = "v${version}";
-      hash = "sha256-7rruSIhKGm2R89Jo1jY+1ZWKloYsL5oaSWuppMKOeFQ=";
+      hash = "sha256-zP0N9QfyaKCFP413S2rlrWwqVdfhdcxAgcxsAO/mfpE=";
     };
 
     nativeBuildInputs = [ installShellFiles ];
@@ -27,7 +27,7 @@ let
 
     subPackages = [ "." ];
 
-    vendorHash = "sha256-uNrkDqw0JoRxe7FuAvQLd7Y4i+nQPhKH0/aWES2+FRc=";
+    vendorHash = "sha256-BOB9K5N4ELLWdSHCNdFYCypbEyoZz2dOz9wouwP7AHw=";
 
     postPatch =
       let
@@ -71,16 +71,16 @@ let
       unset HOME
     '';
 
-    meta = with lib; {
+    meta = {
       inherit (src.meta) homepage;
       description = "Arduino from the command line";
       mainProgram = "arduino-cli";
       changelog = "https://github.com/arduino/arduino-cli/releases/tag/${version}";
-      license = [
-        licenses.gpl3Only
-        licenses.asl20
+      license = with lib.licenses; [
+        gpl3Only
+        asl20
       ];
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         ryantm
         sfrijters
       ];

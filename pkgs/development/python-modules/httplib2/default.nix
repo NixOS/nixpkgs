@@ -20,8 +20,8 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "httplib2";
+    repo = "httplib2";
     rev = "v${version}";
     hash = "sha256-76gdiRbF535CEaNXwNqsVeVc0dKglovMPQpGsOkbd/4=";
   };

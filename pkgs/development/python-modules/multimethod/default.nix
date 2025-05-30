@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "coady";
-    repo = pname;
+    repo = "multimethod";
     tag = "v${version}";
     hash = "sha256-/91re2K+nVKULJOjDoimpOukQlLlsMS9blkVQWit2eI=";
   };

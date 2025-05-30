@@ -1,21 +1,24 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mt-st";
-  version = "1.3";
+  version = "1.8";
 
-  src = fetchurl {
-    url = "https://github.com/iustin/mt-st/releases/download/mt-st-${version}/mt-st-${version}.tar.gz";
-    sha256 = "b552775326a327cdcc076c431c5cbc4f4e235ac7c41aa931ad83f94cccb9f6de";
+  src = fetchFromGitHub {
+    owner = "iustin";
+    repo = "mt-st";
+    tag = "v${version}";
+    hash = "sha256-Sl+/v+ko3K4npY/M49H1YDxqOMy923qcAkTohi5Xg70=";
   };
 
   installFlags = [
-    "PREFIX=$(out)"
-    "EXEC_PREFIX=$(out)"
+    "PREFIX="
+    "DESTDIR=$(out)"
+    "COMPLETIONINSTALLDIR=$(out)/share/bash-completion/completions"
   ];
 
   meta = {

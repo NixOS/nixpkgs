@@ -18,6 +18,7 @@ let
 in
 stdenv.mkDerivation {
   name = "androidenv-test-suite";
+  version = "1";
   buildInputs = lib.mapAttrsToList (name: value: value) all-tests;
 
   buildCommand = ''
@@ -26,9 +27,8 @@ stdenv.mkDerivation {
 
   passthru.tests = all-tests;
 
-  # This is the toplevel package, so inherit the update script
   passthru.updateScript = {
-    command = [ ./update.sh ];
+    command = [ ./update.rb ];
     attrPath = "androidenv.test-suite";
     supportedFeatures = [ "commit" ];
   };

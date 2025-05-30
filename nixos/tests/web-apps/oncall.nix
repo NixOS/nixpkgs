@@ -45,7 +45,7 @@ in
               username = "uid";
               full_name = "cn";
               email = "mail";
-              mobile = "telephoneNumber";
+              call = "telephoneNumber";
               sms = "mobile";
             };
           };

@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
-    repo = pname;
+    repo = "html5-parser";
     tag = "v${version}";
     hash = "sha256-0Qn+To/d3+HMx+KhhgJBEHVYPOfIeBnngBraY7r4uSs=";
   };

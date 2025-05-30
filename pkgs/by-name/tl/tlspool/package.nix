@@ -15,7 +15,7 @@
   p11-kit,
   quickder,
   unbound,
-  nix-update-script,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     unbound
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "TLS daemon with PKCS #11 backend";

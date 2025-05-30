@@ -22,19 +22,23 @@
 
 buildPythonPackage rec {
   pname = "pymc";
-  version = "5.22.0";
+  version = "5.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pymc";
     tag = "v${version}";
-    hash = "sha256-NQYvtt/cjssJ7Lv3RyDeBMQByKMmt1p0X9F+LqhtTV4=";
+    hash = "sha256-Hlj5kOSMz8uoqeBkLiq9kT6CZrb2XJW9mas45G2EZB4=";
   };
 
   build-system = [
     setuptools
     versioneer
+  ];
+
+  pythonRelaxDeps = [
+    "pytensor"
   ];
 
   dependencies = [

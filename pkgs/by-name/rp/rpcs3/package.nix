@@ -63,6 +63,9 @@ stdenv.mkDerivation {
   patches = [
     # Modified from https://github.com/RPCS3/rpcs3/pull/17009; doesn't apply cleanly due to intermediate commits
     ./fix-qt6.9-compilation.patch
+
+    # https://github.com/RPCS3/rpcs3/pull/17246
+    ./0001-cmake-add-option-to-use-system-cubeb.patch
   ];
 
   passthru.updateScript = ./update.sh;
@@ -89,6 +92,7 @@ stdenv.mkDerivation {
     (lib.cmakeBool "USE_SYSTEM_FLATBUFFERS" true)
     (lib.cmakeBool "USE_SYSTEM_SDL" true)
     (lib.cmakeBool "USE_SYSTEM_OPENCV" true)
+    (lib.cmakeBool "USE_SYSTEM_CUBEB" true)
     (lib.cmakeBool "USE_SDL" true)
     (lib.cmakeBool "WITH_LLVM" true)
     (lib.cmakeBool "BUILD_LLVM" false)
@@ -130,8 +134,8 @@ stdenv.mkDerivation {
       llvm_18
       libSM
       opencv
+      cubeb
     ]
-    ++ cubeb.passthru.backendLibs
     ++ lib.optional faudioSupport faudio
     ++ lib.optionals waylandSupport [
       wayland

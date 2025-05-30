@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "dermotduffy";
-    repo = pname;
+    repo = "hyperion-py";
     rev = "v${version}";
     hash = "sha256-arcnpCQsRuiWCrAz/t4TCjTe8DRDtRuzYp8k7nnjGDk=";
   };

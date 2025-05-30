@@ -54,18 +54,19 @@
   torchvision,
   av,
   sentencepiece,
+  hf-xet,
 }:
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.51.3";
+  version = "4.52.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "transformers";
     tag = "v${version}";
-    hash = "sha256-VYEkBt0fpG27MVdnABcMAMmk2Pzsc+2Fetx/GmeFBac=";
+    hash = "sha256-esKAw2zie0xtDWYEx+xAYnx9oCO9UEWH9lSTIJoUTaw=";
   };
 
   build-system = [ setuptools ];
@@ -135,7 +136,7 @@ buildPythonPackage rec {
         optax
       ];
       hf_xet = [
-        # hf-xet (unpackaged)
+        hf-xet
       ];
       tokenizers = [ tokenizers ];
       ftfy = [ ftfy ];

@@ -71,30 +71,32 @@ let
 
   mapMultiPlatformTest =
     crossSystemFun: test:
-    lib.mapAttrs (
-      name: system:
-      test rec {
-        crossPkgs = import pkgs.path {
-          localSystem = { inherit (pkgs.stdenv.hostPlatform) config; };
-          crossSystem = crossSystemFun system;
-        };
+    lib.dontRecurseIntoAttrs (
+      lib.mapAttrs (
+        name: system:
+        lib.recurseIntoAttrs (test rec {
+          crossPkgs = import pkgs.path {
+            localSystem = { inherit (pkgs.stdenv.hostPlatform) config; };
+            crossSystem = crossSystemFun system;
+          };
 
-        emulator = crossPkgs.stdenv.hostPlatform.emulator pkgs;
+          emulator = crossPkgs.stdenv.hostPlatform.emulator pkgs;
 
-        # Apply some transformation on windows to get dlls in the right
-        # place. Unfortunately mingw doesn’t seem to be able to do linking
-        # properly.
-        platformFun =
-          pkg:
-          if crossPkgs.stdenv.hostPlatform.isWindows then
-            pkgs.buildEnv {
-              name = "${pkg.name}-winlinks";
-              paths = [ pkg ] ++ pkg.buildInputs;
-            }
-          else
-            pkg;
-      }
-    ) testedSystems;
+          # Apply some transformation on windows to get dlls in the right
+          # place. Unfortunately mingw doesn’t seem to be able to do linking
+          # properly.
+          platformFun =
+            pkg:
+            if crossPkgs.stdenv.hostPlatform.isWindows then
+              pkgs.buildEnv {
+                name = "${pkg.name}-winlinks";
+                paths = [ pkg ] ++ pkg.buildInputs;
+              }
+            else
+              pkg;
+        })
+      ) testedSystems
+    );
 
   tests = {
 
@@ -214,8 +216,12 @@ let
 
 in
 {
-  gcc = (lib.mapAttrs (_: mapMultiPlatformTest (system: system // { useLLVM = false; })) tests);
-  llvm = (lib.mapAttrs (_: mapMultiPlatformTest (system: system // { useLLVM = true; })) tests);
+  gcc = lib.recurseIntoAttrs (
+    lib.mapAttrs (_: mapMultiPlatformTest (system: system // { useLLVM = false; })) tests
+  );
+  llvm = lib.recurseIntoAttrs (
+    lib.mapAttrs (_: mapMultiPlatformTest (system: system // { useLLVM = true; })) tests
+  );
 
   inherit mbuffer sanity;
 }

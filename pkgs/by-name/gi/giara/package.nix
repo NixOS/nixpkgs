@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
-    repo = pname;
+    repo = "giara";
     rev = version;
     hash = "sha256-FTy0ElcoTGXG9eV85pUrF35qKDKOfYIovPtjLfTJVOg=";
   };

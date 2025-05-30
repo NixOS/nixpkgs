@@ -331,6 +331,7 @@
   ./programs/vivid.nix
   ./programs/wavemon.nix
   ./programs/wayland/cardboard.nix
+  ./programs/wayland/gtklock.nix
   ./programs/wayland/hyprland.nix
   ./programs/wayland/hyprlock.nix
   ./programs/wayland/labwc.nix
@@ -356,6 +357,7 @@
   ./programs/ydotool.nix
   ./programs/yubikey-touch-detector.nix
   ./programs/zmap.nix
+  ./programs/zoom-us.nix
   ./programs/zoxide.nix
   ./programs/zsh/oh-my-zsh.nix
   ./programs/zsh/zsh-autoenv.nix
@@ -587,6 +589,7 @@
   ./services/development/zammad.nix
   ./services/display-managers/cosmic-greeter.nix
   ./services/display-managers/default.nix
+  ./services/display-managers/gdm.nix
   ./services/display-managers/greetd.nix
   ./services/display-managers/ly.nix
   ./services/display-managers/sddm.nix
@@ -603,7 +606,6 @@
   ./services/games/archisteamfarm.nix
   ./services/games/armagetronad.nix
   ./services/games/crossfire-server.nix
-  ./services/games/deliantra-server.nix
   ./services/games/factorio.nix
   ./services/games/freeciv.nix
   ./services/games/mchprs.nix
@@ -644,6 +646,7 @@
   ./services/hardware/kanata.nix
   ./services/hardware/keyd.nix
   ./services/hardware/kmonad.nix
+  ./services/hardware/lact.nix
   ./services/hardware/lcd.nix
   ./services/hardware/libinput.nix
   ./services/hardware/lirc.nix
@@ -1534,6 +1537,7 @@
   ./services/web-apps/engelsystem.nix
   ./services/web-apps/ethercalc.nix
   ./services/web-apps/fider.nix
+  ./services/web-apps/filebrowser.nix
   ./services/web-apps/filesender.nix
   ./services/web-apps/firefly-iii-data-importer.nix
   ./services/web-apps/firefly-iii.nix
@@ -1579,6 +1583,7 @@
   ./services/web-apps/kimai.nix
   ./services/web-apps/komga.nix
   ./services/web-apps/lanraragi.nix
+  ./services/web-apps/lasuite-docs.nix
   ./services/web-apps/lemmy.nix
   ./services/web-apps/limesurvey.nix
   ./services/web-apps/mainsail.nix
@@ -1610,6 +1615,7 @@
   ./services/web-apps/oncall.nix
   ./services/web-apps/onlyoffice.nix
   ./services/web-apps/open-web-calendar.nix
+  ./services/web-apps/opencloud.nix
   ./services/web-apps/openvscode-server.nix
   ./services/web-apps/openwebrx.nix
   ./services/web-apps/outline.nix
@@ -1703,7 +1709,6 @@
   ./services/x11/colord.nix
   ./services/x11/desktop-managers/default.nix
   ./services/x11/display-managers/default.nix
-  ./services/x11/display-managers/gdm.nix
   ./services/x11/display-managers/lightdm.nix
   ./services/x11/display-managers/slim.nix
   ./services/x11/display-managers/startx.nix
@@ -1805,6 +1810,7 @@
   ./system/boot/uki.nix
   ./system/boot/unl0kr.nix
   ./system/boot/uvesafb.nix
+  ./system/boot/zram-as-tmp.nix
   ./system/etc/etc-activation.nix
   ./tasks/auto-upgrade.nix
   ./tasks/bcache.nix

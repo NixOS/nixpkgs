@@ -20,13 +20,14 @@
   lsb-release,
   pciutils,
   procps,
+  gamemode,
   gamescope,
   mangohud,
   vkbasalt-cli,
   vmtouch,
   libportal,
   nix-update-script,
-  removeWarningPopup ? false, # Final reminder to report any issues on nixpkgs' bugtracker
+  removeWarningPopup ? false,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -103,6 +104,7 @@ python3Packages.buildPythonApplication rec {
       imagemagick
       vkbasalt-cli
 
+      gamemode
       gamescope
       mangohud
       vmtouch

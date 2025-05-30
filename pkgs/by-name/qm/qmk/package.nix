@@ -4,6 +4,7 @@
   fetchPypi,
   pkgsCross,
   avrdude,
+  bootloadhid,
   dfu-programmer,
   dfu-util,
   wb32-dfu-updater,
@@ -42,6 +43,7 @@ python3.pkgs.buildPythonApplication rec {
     ++ [
       # Binaries need to be in the path so this is in propagatedBuildInputs
       avrdude
+      bootloadhid
       dfu-programmer
       dfu-util
       wb32-dfu-updater

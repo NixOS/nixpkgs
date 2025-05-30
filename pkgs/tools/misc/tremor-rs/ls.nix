@@ -3,22 +3,23 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "tremor-language-server";
-  version = "0.12.4";
+  version = "0.13.0-rc.11";
 
   src = fetchFromGitHub {
     owner = "tremor-rs";
     repo = "tremor-language-server";
     rev = "v${version}";
-    sha256 = "sha256-odYhpb3FkbIF1dc2DSpz3Lg+r39lhDKml9KGmbqJAtA=";
+    sha256 = "sha256-gooHNSBEcqyTMOSBG7T01kSdCWKK98dbE8+nuwvQkS0=";
   };
 
-  nativeBuildInputs = [ rustPlatform.bindgenHook ];
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
+  ];
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Hl0TY/xZaDybYjrGiRftZhFx8dns+ONuNcxzl8lBUMM=";
+  cargoHash = "sha256-tMs5DRuWuMXIpj5YU4bR4mAlzv7nWycmzDOqMuihj7M=";
 
   meta = with lib; {
     description = "Tremor Language Server (Trill)";

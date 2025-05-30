@@ -15,6 +15,7 @@
 
 # CI
 /.github/*_TEMPLATE*                    @SigmaSquadron
+/.github/actions                        @NixOS/Security @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther
 /.github/workflows                      @NixOS/Security @Mic92 @zowoq @infinisil @azuwis @wolfgangwalther
 /.github/workflows/check-format.yml     @infinisil @wolfgangwalther
 /.github/workflows/codeowners-v2.yml    @infinisil @wolfgangwalther
@@ -130,7 +131,8 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/modules/system/boot/loader/systemd-boot      @JulienMalka
 
 # Limine
-/nixos/modules/system/boot/loader/limine        @lzcunt @phip1611 @programmerlexi
+/nixos/modules/system/boot/loader/limine        @lzcunt @phip1611 @programmerlexi @johnrtitor
+/nixos/tests/limine                             @johnrtitor
 
 # Images and installer media
 /nixos/modules/profiles/installation-device.nix @ElvishJerricco
@@ -162,6 +164,13 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /maintainers/scripts/update.py    @jtojnar
 ## common-updater-scripts
 /pkgs/common-updater/scripts/update-source-version    @jtojnar
+
+# Android tools, libraries, and environments
+/pkgs/development/android*                    @NixOS/android
+/pkgs/development/mobile/android*             @NixOS/android
+/pkgs/applications/editors/android-studio*    @NixOS/android
+/doc/languages-frameworks/android*            @NixOS/android
+/pkgs/by-name/an/android*                     @NixOS/android
 
 # Python-related code and docs
 /doc/languages-frameworks/python.section.md   @mweinelt @natsukium
@@ -241,7 +250,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/applications/editors/jetbrains @edwtjo @leona-ya @theCapypara
 
 # Licenses
-/lib/licenses.nix @alyssais
+/lib/licenses.nix @alyssais @emilazy
 
 # Qt
 /pkgs/development/libraries/qt-5 @K900 @NickCao @SuperSandro2000 @ttuegel
@@ -467,6 +476,9 @@ pkgs/development/beam-modules/          @NixOS/beam
 pkgs/development/interpreters/erlang/   @NixOS/beam
 pkgs/development/interpreters/elixir/   @NixOS/beam
 pkgs/development/interpreters/lfe/      @NixOS/beam
+
+# Authelia
+pkgs/servers/authelia/ @06kellyjac @dit7ya @nicomem
 
 # OctoDNS
 pkgs/by-name/oc/octodns/ @anthonyroussel

@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "go-swagger";
-    repo = pname;
+    repo = "go-swagger";
     tag = "v${version}";
     hash = "sha256-PeH9bkRObsw4+ttuWhaPfPQQTOAw8pwlgTEtPoUBiIQ=";
   };

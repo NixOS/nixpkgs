@@ -16,18 +16,13 @@
   python-dateutil,
   scipy,
   toml,
-  nltk-data,
-  symlinkJoin,
 }:
 let
-  testNltkData = symlinkJoin {
-    name = "nltk-test-data";
-    paths = [
-      nltk-data.punkt
-      nltk-data.punkt_tab
-      nltk-data.stopwords
-    ];
-  };
+  testNltkData = nltk.dataDir (d: [
+    d.punkt
+    d.punkt-tab
+    d.stopwords
+  ]);
 
   version = "0.0.21";
   tag = "v${version}";

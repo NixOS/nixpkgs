@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "bmcfee";
-    repo = pname;
+    repo = "resampy";
     tag = version;
     hash = "sha256-LOWpOPAEK+ga7c3bR15QvnHmON6ARS1Qee/7U/VMlTY=";
   };

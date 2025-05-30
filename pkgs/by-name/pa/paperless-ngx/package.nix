@@ -26,13 +26,13 @@
   xorg,
 }:
 let
-  version = "2.15.3";
+  version = "2.16.2";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
-    hash = "sha256-zkOOUMyAvYYJnYn4s7D4tsYhodVX5kvPdXBBknBsusY=";
+    hash = "sha256-w6VS3m661EvLGk1lVbTAYNzwVgXjvegn0KByGDBFjz0=";
   };
 
   python = python3.override {
@@ -69,7 +69,7 @@ let
 
       pnpmDeps = pnpm.fetchDeps {
         inherit pname version src;
-        hash = "sha256-yoTXlxXLcWD2DMxqjb02ZORJ+E0xE1DbZm1VL7vXM4g=";
+        hash = "sha256-tSBpZ+1aPLUI0SKpOyKo+OLsJZiyDCxRb+5hKMPrxL8=";
       };
 
       nativeBuildInputs =
@@ -149,15 +149,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
-    "celery"
     "django-allauth"
-    "django-extensions"
-    "drf-spectacular-sidecar"
-    "filelock"
-    "python-dotenv"
-    "rapidfuzz"
-    # TODO: https://github.com/NixOS/nixpkgs/pull/373099
-    "zxing-cpp"
   ];
 
   dependencies =
@@ -313,21 +305,21 @@ python.pkgs.buildPythonApplication rec {
       tesseract5
       ;
     nltkData = with nltk-data; [
-      punkt_tab
-      snowball_data
+      punkt-tab
+      snowball-data
       stopwords
     ];
     tests = { inherit (nixosTests) paperless; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to scan, index, and archive all of your physical documents";
     homepage = "https://docs.paperless-ngx.com/";
-    changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
+    changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/${src.tag}";
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
     mainProgram = "paperless-ngx";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       leona
       SuperSandro2000
       erikarvstedt

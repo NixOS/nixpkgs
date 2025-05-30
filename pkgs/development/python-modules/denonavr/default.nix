@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "denonavr";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ol-iver";
     repo = "denonavr";
     tag = version;
-    hash = "sha256-6aEivDQQlLOGURUvaGxHHALgE9aA0r2dPvq8S0XFcAg=";
+    hash = "sha256-7fUHSnhqY5nAAAniAHs6qjuc8iYuxcg1CzPD+WyUCZQ=";
   };
 
   pythonRelaxDeps = [ "defusedxml" ];

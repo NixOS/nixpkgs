@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "universal-ctags";
-    repo = pname;
+    repo = "python-ctags3";
     rev = version;
     hash = "sha256-XVsZckNVJ1H5q8FzqoVd1UWRw0zOygvRtb7arX9dwGE=";
   };

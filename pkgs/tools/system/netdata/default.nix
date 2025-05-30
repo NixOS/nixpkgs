@@ -57,14 +57,14 @@
   withML ? true,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.5.1";
+  version = "2.5.2";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-77k93mg7iED53k38jATbS2Y1N0eLKhjo0RYyinApkuE=";
+    hash = "sha256-QsExU7/fdDHekNa+7WnWGiAKAsR1mqyJU34OXA1vB7c=";
     fetchSubmodules = true;
   };
 
@@ -239,7 +239,9 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/netdata-claim.sh --prefix PATH : ${lib.makeBinPath [ openssl ]}
     wrapProgram $out/libexec/netdata/plugins.d/cgroup-network-helper.sh --prefix PATH : ${lib.makeBinPath [ bash ]}
     wrapProgram $out/bin/netdatacli --set NETDATA_PIPENAME /run/netdata/ipc
-    substituteInPlace $out/lib/netdata/conf.d/go.d/sensors.conf --replace-fail '/usr/bin/sensors' '${lm_sensors}/bin/sensors'
+    ${lib.optionalString (stdenv.hostPlatform.isLinux) ''
+      substituteInPlace $out/lib/netdata/conf.d/go.d/sensors.conf --replace-fail '/usr/bin/sensors' '${lm_sensors}/bin/sensors'
+    ''}
 
     # Time to cleanup the output directory.
     unlink $out/sbin

@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "cgat-developers";
-    repo = pname;
+    repo = "ruffus";
     rev = "v${version}";
     sha256 = "0fnzpchwwqsy5h18fs0n90s51w25n0dx0l74j0ka6lvhjl5sxn4c";
   };

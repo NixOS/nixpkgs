@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "smpclient";
-  version = "4.4.2";
+  version = "4.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "intercreate";
     repo = "smpclient";
     tag = version;
-    hash = "sha256-qbf0xGK1RYaeEIAsbkZ2cWj/MQrmVwm2IKmOkihxBDE=";
+    hash = "sha256-Z0glcCy3JsL45iT8Q82Vtxozi3hv6xaRJvJ3BkHX4PQ=";
   };
 
   build-system = [
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = {
     description = "Simple Management Protocol (SMP) Client for remotely managing MCU firmware";
     homepage = "https://github.com/intercreate/smpclient";
-    changelog = "https://github.com/intercreate/smpclient/releases/tag/${version}";
+    changelog = "https://github.com/intercreate/smpclient/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ otavio ];
   };

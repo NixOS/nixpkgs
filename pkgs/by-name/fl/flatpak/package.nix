@@ -14,7 +14,6 @@
   docbook-xsl-nons,
   docbook_xml_dtd_45,
   fetchurl,
-  fetchpatch,
   fuse3,
   gdk-pixbuf,
   gettext,
@@ -81,7 +80,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flatpak";
-  version = "1.16.0";
+  version = "1.16.1";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs =
@@ -100,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${finalAttrs.version}/flatpak-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ywrFZa3LYhJ8bRHtUO5wRNaoNvppw1Sy9LZAoiv6Syo=";
+    hash = "sha256-K0fo8tkNNdKTOe144abquzbu+pz6WlyjsNHydQLENnU=";
   };
 
   patches =
@@ -121,12 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
       # The icon validator needs to access the gdk-pixbuf loaders in the Nix store
       # and cannot bind FHS paths since those are not available on NixOS.
       finalAttrs.passthru.icon-validator-patch
-
-      (fetchpatch {
-        name = "static.patch";
-        url = "https://github.com/flatpak/flatpak/commit/114c22e814fc28243585915321b8e943471c377f.patch";
-        hash = "sha256-3JLzG74myBTssXQau0Ei5rpthy93Va7xb2MHRnJ3kaI=";
-      })
     ]
     ++ lib.optionals finalAttrs.doCheck [
       # Hardcode paths used by tests and change test runtime generation to use files from Nix store.

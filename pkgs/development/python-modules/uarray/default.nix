@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "Quansight-Labs";
-    repo = pname;
+    repo = "uarray";
     tag = version;
     hash = "sha256-eCrmmP+9TI+T8Km8MOz0EqseneFwPizlnZloK5yNLcM=";
   };

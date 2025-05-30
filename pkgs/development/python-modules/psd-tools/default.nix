@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "psd-tools";
-    repo = pname;
+    repo = "psd-tools";
     tag = "v${version}";
     hash = "sha256-n3OqyItvKXD6NjCm/FgEuu1G5apTmUypwKJ+Y2DCmEg=";
   };

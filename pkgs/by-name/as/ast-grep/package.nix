@@ -4,7 +4,6 @@
   fetchFromGitHub,
   stdenv,
   installShellFiles,
-  buildPackages,
   versionCheckHook,
   nix-update-script,
   enableLegacySg ? false,
@@ -12,13 +11,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ast-grep";
-  version = "0.37.0";
+  version = "0.38.3";
 
   src = fetchFromGitHub {
     owner = "ast-grep";
     repo = "ast-grep";
     tag = finalAttrs.version;
-    hash = "sha256-X2FTIyvpz4nEBc7zrPNAq/yTdOlVupwSoDQzvZGDjo8=";
+    hash = "sha256-KTgpcuojg9sNTTqd8+qp+QIn3bZyNg3Rv/QlkoFGUHg=";
   };
 
   # error: linker `aarch64-linux-gnu-gcc` not found
@@ -27,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-0PUXj9LSFFC10H3LHVuiOHCREwFz8AkgkzJDUAGI+V0=";
+  cargoHash = "sha256-UR+5vW6C6nivX2++QcIO/XAvuL869IYzCxtAkN+eUU8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -35,23 +34,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--package ast-grep --bin ast-grep"
   ] ++ lib.optionals enableLegacySg [ "--package ast-grep --bin sg" ];
 
-  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
-    let
-      emulator = stdenv.hostPlatform.emulator buildPackages;
-    in
-    ''
-      installShellCompletion --cmd ast-grep \
-        --bash <(${emulator} $out/bin/ast-grep completions bash) \
-        --fish <(${emulator} $out/bin/ast-grep completions fish) \
-        --zsh <(${emulator} $out/bin/ast-grep completions zsh)
-    ''
-    + lib.optionalString enableLegacySg ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd ast-grep \
+      --bash <($out/bin/ast-grep completions bash) \
+      --fish <($out/bin/ast-grep completions fish) \
+      --zsh <($out/bin/ast-grep completions zsh)
+    ${lib.optionalString enableLegacySg ''
       installShellCompletion --cmd sg \
-        --bash <(${emulator} $out/bin/sg completions bash) \
-        --fish <(${emulator} $out/bin/sg completions fish) \
-        --zsh <(${emulator} $out/bin/sg completions zsh)
-    ''
-  );
+        --bash <($out/bin/sg completions bash) \
+        --fish <($out/bin/sg completions fish) \
+        --zsh <($out/bin/sg completions zsh)
+    ''}
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook

@@ -1,47 +1,45 @@
 {
   lib,
   buildPythonPackage,
-  pythonAtLeast,
   fetchFromGitHub,
+  pythonOlder,
+  setuptools,
   mock,
-  fetchpatch,
-  python,
+  pytestCheckHook,
 }:
 
 buildPythonPackage {
   pname = "contexttimer";
-  version = "unstable-2019-03-30";
-  format = "setuptools";
-
-  disabled = pythonAtLeast "3.12";
+  version = "unstable-2024-09-05";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "brouberol";
     repo = "contexttimer";
-    rev = "a866f420ed4c10f29abf252c58b11f9db6706100";
-    hash = "sha256-Fc1vK1KSZWgBPtBf5dVydF6dLHEGAOslWMV0FLRdj8w=";
+    rev = "8e77927b8b75365f8e2bc456d2457b3e47c67815";
+    hash = "sha256-LCyXJa+7XkfxzcLGonv1yfOW+gZhLFBAbBT+5IP39qA=";
   };
 
-  patches = [
-    # https://github.com/brouberol/contexttimer/pull/16
-    (fetchpatch {
-      url = "https://github.com/brouberol/contexttimer/commit/dd65871f3f25a523a47a74f2f5306c57048592b0.patch";
-      hash = "sha256-vNBuFXvuvb6hWPzg4W4iyKbd4N+vofhxsKydEkc25E4=";
-    })
+  disabled = pythonOlder "3.12";
+
+  build-system = [ setuptools ];
+
+  preCheck = ''
+    substituteInPlace tests/test_timer.py \
+      --replace-fail "assertRegexpMatches" "assertRegex"
+  '';
+
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "contexttimer" ];
 
-  nativeCheckInputs = [ mock ];
-
-  checkPhase = ''
-    ${python.interpreter} -m unittest tests/test_timer.py
-  '';
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/brouberol/contexttimer";
     description = "Timer as a context manager";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ atila ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ atila ];
   };
 }

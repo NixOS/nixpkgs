@@ -6,11 +6,11 @@
   doxygen,
   eigen,
   fetchFromGitHub,
+  fetchpatch,
   fmt,
   gfortran,
   gts,
   hdf5,
-  libf2c,
   libGLU,
   libredwg,
   libsForQt5,
@@ -37,6 +37,7 @@
   qtVersion ? 5,
   qt5,
   qt6,
+  nix-update-script,
 }:
 let
   inherit (python311Packages)
@@ -64,13 +65,13 @@ in
 freecad-utils.makeCustomizable (
   stdenv.mkDerivation (finalAttrs: {
     pname = "freecad";
-    version = "1.0.0";
+    version = "1.0.1";
 
     src = fetchFromGitHub {
       owner = "FreeCAD";
       repo = "FreeCAD";
       rev = finalAttrs.version;
-      hash = "sha256-u7RYSImUMAgKaAQSAGCFha++RufpZ/QuHAirbSFOUCI=";
+      hash = "sha256-VFTNawXxu2ofjj2Frg4OfVhiMKFywBhm7lZunP85ZEQ=";
       fetchSubmodules = true;
     };
 
@@ -80,6 +81,8 @@ freecad-utils.makeCustomizable (
         ninja
         pkg-config
         gfortran
+        swig
+        doxygen
         wrapGAppsHook3
       ]
       ++ lib.optionals (qtVersion == 5) [
@@ -92,7 +95,6 @@ freecad-utils.makeCustomizable (
       [
         boost
         coin3d
-        doxygen
         eigen
         fmt
         gitpython # for addon manager
@@ -100,7 +102,6 @@ freecad-utils.makeCustomizable (
         hdf5
         libGLU
         libXmu
-        libf2c
         matplotlib
         medfile
         mpi
@@ -114,7 +115,6 @@ freecad-utils.makeCustomizable (
         python
         pyyaml # (at least for) PyrateWorkbench
         scipy
-        swig
         vtk
         xercesc
         yaml-cpp
@@ -152,7 +152,10 @@ freecad-utils.makeCustomizable (
     patches = [
       ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
       ./0002-FreeCad-OndselSolver-pkgconfig.patch
-      ./0003-Gui-take-in-account-module-path-argument.patch
+      (fetchpatch {
+        url = "https://github.com/FreeCAD/FreeCAD/commit/8e04c0a3dd9435df0c2dec813b17d02f7b723b19.patch?full_index=1";
+        hash = "sha256-H6WbJFTY5/IqEdoi5N+7D4A6pVAmZR4D+SqDglwS18c=";
+      })
     ];
 
     cmakeFlags =
@@ -206,11 +209,20 @@ freecad-utils.makeCustomizable (
 
     postFixup = ''
       mv $out/share/doc $out
+      ln -s $out/doc $out/share/doc
       ln -s $out/bin/FreeCAD $out/bin/freecad
       ln -s $out/bin/FreeCADCmd $out/bin/freecadcmd
     '';
 
-    passthru.tests = callPackage ./tests { };
+    passthru = {
+      tests = callPackage ./tests { };
+      updateScript = nix-update-script {
+        extraArgs = [
+          "--version-regex"
+          "([0-9.]+)"
+        ];
+      };
+    };
 
     meta = {
       homepage = "https://www.freecad.org";
@@ -232,7 +244,10 @@ freecad-utils.makeCustomizable (
         right at home with FreeCAD.
       '';
       license = lib.licenses.lgpl2Plus;
-      maintainers = with lib.maintainers; [ srounce ];
+      maintainers = with lib.maintainers; [
+        srounce
+        grimmauld
+      ];
       platforms = lib.platforms.linux;
     };
   })

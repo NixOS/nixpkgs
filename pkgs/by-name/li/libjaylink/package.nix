@@ -9,7 +9,7 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libjaylink";
   version = "0.4.0";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.zapb.de";
     owner = "libjaylink";
     repo = "libjaylink";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-PghPVgovNo/HhNg7c6EGXrqi6jMrb8p/uLqGDIZ7t+s=";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ felixsinger ];
     platforms = platforms.unix;
   };
-}
+})

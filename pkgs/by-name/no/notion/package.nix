@@ -21,24 +21,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "notion";
-  version = "4.0.3";
+  version = "4.0.4";
 
   src = fetchFromGitHub {
     owner = "raboof";
     repo = "notion";
     tag = finalAttrs.version;
-    hash = "sha256-Ll4thDS8fHxkm2IuGjePPVPyPPrz7yDzpKVloFuk/yE=";
+    hash = "sha256-L7WL8zn1Qkf5sqrhqZJqFe4B1l9ULXI3pt3Jpc87huk=";
   };
-
-  postPatch = ''
-    # Fix build failure due missing headers
-    sed -i '1i#define _POSIX_C_SOURCE 200809L' mod_notionflux/notionflux/notionflux.c
-    sed -i '2i#include <stdio.h>' mod_notionflux/notionflux/notionflux.c
-    sed -i '3i#include <string.h>' mod_notionflux/notionflux/notionflux.c
-
-    # error: 'PATH_MAX' undeclared
-    sed 1i'#include <linux/limits.h>' -i mod_notionflux/notionflux/notionflux.c
-  '';
 
   nativeBuildInputs = [
     gettext

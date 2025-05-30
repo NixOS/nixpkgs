@@ -16,8 +16,8 @@
   };
   baked_file_system = {
     url = "https://github.com/schovi/baked_file_system.git";
-    rev = "v0.10.0";
-    sha256 = "10f25sby8ipps5c2jj4j2q30kscgv4g1s5nhdddmldhg9isj0jli";
+    rev = "ea0b659f43d7ce00bde66e8a87eeb4d5a112621b";
+    sha256 = "0zxwmznmh8aazjhlf9j5nxqnij74hb2j4kad48p706bzv3m5bymg";
   };
   dotenv = {
     url = "https://github.com/gdotdesign/cr-dotenv.git";

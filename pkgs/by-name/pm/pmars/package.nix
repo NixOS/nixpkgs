@@ -35,6 +35,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # call to undeclared function 'sighandler' & undefined sighandler on Darwin
     ./0002-fix-sighandler.patch
+
+    # ncurses' WINDOW struct was turned opaque for outside code, use functions for accessing values instead
+    ./0003-fix-ncurses-opaque-WINDOW.patch
   ];
 
   postPatch = ''

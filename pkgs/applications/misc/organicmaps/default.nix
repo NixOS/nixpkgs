@@ -19,6 +19,7 @@
   icu,
   freetype,
   pugixml,
+  xorg,
   nix-update-script,
 }:
 
@@ -32,13 +33,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "organicmaps";
-  version = "2025.03.02-7";
+  version = "2025.05.20-5";
 
   src = fetchFromGitHub {
     owner = "organicmaps";
     repo = "organicmaps";
     tag = "${finalAttrs.version}-android";
-    hash = "sha256-5WX+YDgu8Ll5+rZWWxfbNW0pBFz+2XWkw/ahM14Ml08=";
+    hash = "sha256-cqcFI5cXREOeHusPkXsMwdCopzpea50mZQ/+ogLlemk=";
     fetchSubmodules = true;
   };
 
@@ -78,6 +79,9 @@ stdenv.mkDerivation (finalAttrs: {
     icu
     freetype
     pugixml
+    xorg.libXrandr
+    xorg.libXinerama
+    xorg.libXcursor
   ];
 
   # Yes, this is PRE configure. The configure phase uses cmake
@@ -94,14 +98,14 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     # darwin: "invalid application of 'sizeof' to a function type"
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://organicmaps.app/";
     description = "Detailed Offline Maps for Travellers, Tourists, Hikers and Cyclists";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
     mainProgram = "OMaps";
   };
 })

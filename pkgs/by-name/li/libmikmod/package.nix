@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = optionalString stdenv.hostPlatform.isLinux "-lasound";
 
+  enableParallelBuilding = true;
+
   postInstall = ''
     moveToOutput bin/libmikmod-config "$dev"
   '';

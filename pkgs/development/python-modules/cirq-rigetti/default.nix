@@ -14,7 +14,10 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/${pname}";
 
-  pythonRelaxDeps = [ "pyquil" ];
+  pythonRelaxDeps = [
+    "pyquil"
+    "qcs-sdk-python"
+  ];
 
   postPatch = ''
     # Remove outdated test

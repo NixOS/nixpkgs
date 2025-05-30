@@ -1,13 +1,7 @@
 { lib, pkgs, ... }:
 {
   name = "velocity";
-  meta = {
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-    ];
-    maintainers = [ lib.maintainers.Tert0 ];
-  };
+  meta.maintainers = [ lib.maintainers.Tert0 ];
 
   nodes.server =
     { ... }:

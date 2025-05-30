@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "auth";
-  version = "2.172.1";
+  version = "2.173.0";
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "auth";
     rev = "v${version}";
-    hash = "sha256-i6s8S30LzhgS8uonw/3Hqj9PN6nlHqt472GhmBoOxQQ=";
+    hash = "sha256-9c7BFcI/eMUVwLhKdyIbM+DXrm9m3WdIaR87ps8aBro=";
   };
 
   vendorHash = "sha256-QBQUUFWT3H3L7ajFV8cgi0QREXnm0ReIisD+4ACfLZQ=";

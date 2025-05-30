@@ -27,8 +27,11 @@ php.buildComposerProject2 (finalAttrs: {
     rm -rf "$out/share"
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) davis;
+  passthru = {
+    php = php;
+    tests = {
+      inherit (nixosTests) davis;
+    };
   };
 
   meta = {

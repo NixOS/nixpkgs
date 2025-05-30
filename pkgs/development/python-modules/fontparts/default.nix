@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "fontparts";
-  version = "0.12.3";
+  version = "0.12.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lmzLIqP1qFFqkVNzhFlo/C6kOmuddJ3U1eYLNN2h+d4=";
+    hash = "sha256-cD7ppaYLnKOLyBMlSlF+ham74yid8MBunxgVkyE3I0I=";
     extension = "zip";
   };
 

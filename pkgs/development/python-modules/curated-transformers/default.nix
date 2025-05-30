@@ -36,11 +36,11 @@ buildPythonPackage rec {
   # models from Hugging Face Hub.
   pythonImportsCheck = [ "curated_transformers" ];
 
-  meta = with lib; {
+  meta = {
     description = "PyTorch library of curated Transformer models and their composable components";
     homepage = "https://github.com/explosion/curated-transformers";
     changelog = "https://github.com/explosion/curated-transformers/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ danieldk ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ danieldk ];
   };
 }

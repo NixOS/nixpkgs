@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage {
 
   src = fetchFromGitHub {
     owner = "gluesql";
-    repo = pname;
+    repo = "gluesql";
     rev = "v${version}";
     hash = "sha256-z2fpyPJfyPtO13Ly7XRmMW3rp6G3jNLsMMFz83Wmr0E=";
   };

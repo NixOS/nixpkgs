@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   python3,
+  extraPythonPackages ? ps: [ ],
   unstableGitUpdater,
   makeWrapper,
   writeShellScript,
@@ -10,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "klipper";
-  version = "0.13.0-unstable-2025-05-02";
+  version = "0.13.0-unstable-2025-05-14";
 
   src = fetchFromGitHub {
     owner = "KevinOConnor";
     repo = "klipper";
-    rev = "1cc63980747b80516f8fc4f022eedf18ae739086";
-    sha256 = "sha256-0VKlbCdfVE8XxGoKZQd5Gab5Aq3oq4EHdtCh3tEkgwI=";
+    rev = "82f540bb731fe4ae4575d48aefb2f837491ba4e6";
+    sha256 = "sha256-eP6QQu1FHq08lkZIwaPamuIQg54bLBMDF0UBfQnKiRQ=";
   };
 
   sourceRoot = "${src.name}/klippy";
@@ -29,7 +30,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     (python3.withPackages (
-      p: with p; [
+      p:
+      with p;
+      [
         python-can
         cffi
         pyserial
@@ -38,6 +41,7 @@ stdenv.mkDerivation rec {
         markupsafe
         numpy
       ]
+      ++ extraPythonPackages p
     ))
   ];
 
