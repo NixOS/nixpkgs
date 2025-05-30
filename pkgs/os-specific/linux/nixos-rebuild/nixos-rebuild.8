@@ -66,20 +66,24 @@
 .
 .Sh DESCRIPTION
 This command updates the system so that it corresponds to the
-configuration specified in
-.Pa /etc/nixos/configuration.nix Ns
+configuration specified in one of
+.Pa /etc/nixos/flake.nix Ns
 ,
-.Pa /etc/nixos/flake.nix
-or the file and attribute specified by the
-.Fl -file
-and/or
-.Fl -attr
+.Pa /etc/nixos/system.nix Ns
+,
+.Pa /etc/nixos/configuration.nix
+or specified through the
+.Fl -file Ns
+,
+.Fl -attr Ns
+or
+.Fl -flake
 options. Thus, every time you modify the configuration or any other NixOS
 module, you must run
 .Nm
 to make the changes take effect. It builds the new system in
 .Pa /nix/store Ns
-, runs its activation script, and stop and (re)starts any system services if
+, runs its activation script, stops and (re)starts any system services if
 needed. Please note that user services need to be started manually as they
 aren't detected by the activation script at the moment.
 .
@@ -422,7 +426,7 @@ nixos-rebuild commands in parallel, but may also prevent the remote
 from working properly.
 .
 .It Fl -file Ar path , Fl f Ar path
-Enable and build the NixOS system from the specified file. The file must
+Build the NixOS system from the specified file. The file must
 evaluate to an attribute set, and it must contain a valid NixOS configuration
 at attribute
 .Va attrPath Ns
@@ -435,17 +439,19 @@ function in nixpkgs or importing and calling
 from nixpkgs. If specified without
 .Fl -attr
 option, builds the configuration from the top-level
-attribute of the file.
+attribute set of the file.
 .
 .It Fl -attr Ar attrPath , Fl A Ar attrPath
-Enable and build the NixOS system from nix file and use the specified attribute
+Build the NixOS system from nix file and use the specified attribute
 path from file specified by the
 .Fl -file
 option. If specified without
 .Fl -file
-option, uses
-.Pa default.nix
-in current directory.
+option, it tries to find
+.Pa system.nix
+in
+.Pa /etc/nixos Ns
+, in current directory and iteratively in parent directories.
 .
 .It Fl -flake Va flake-uri Ns Op Va #name
 Build the NixOS system from the specified flake. It defaults to the directory
