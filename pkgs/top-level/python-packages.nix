@@ -14704,6 +14704,8 @@ self: super: with self; {
 
   pyxdg = callPackage ../development/python-modules/pyxdg { };
 
+  pyxem = callPackage ../development/python-modules/pyxem { };
+
   pyxeoma = callPackage ../development/python-modules/pyxeoma { };
 
   pyxiaomigateway = callPackage ../development/python-modules/pyxiaomigateway { };
