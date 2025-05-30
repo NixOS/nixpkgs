@@ -37,6 +37,7 @@ For more details on how overriding works, see [](#ex-fakeNss-overriding) and [](
 ## Examples {#sec-fakeNss-examples}
 
 :::{.example #ex-fakeNss-dockerTools-buildImage}
+
 # Using `fakeNss` with `dockerTools.buildImage`
 
 This example shows how to use `fakeNss` as-is.
@@ -63,9 +64,11 @@ dockerTools.buildImage {
   };
 }
 ```
+
 :::
 
 :::{.example #ex-fakeNss-overriding}
+
 # Using `fakeNss` with an override to add extra lines
 
 The following code uses `override` to add extra lines to `/etc/passwd` and `/etc/group` to create another user and group entry.
@@ -77,4 +80,5 @@ fakeNss.override {
   extraGroupLines = [ "newuser:x:9001:" ];
 }
 ```
+
 :::

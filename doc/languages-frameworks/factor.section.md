@@ -24,6 +24,7 @@ The package also passes through several attributes listing the wrapped libraries
 Additionally, all `runtimeLibs` is the concatenation of all the above for the purpose of providing all necessary dynamic libraries as "`propagatedBuildInputs`".
 
 `factorPackages` provides pre-configured Factor packages:
+
 - `factorPackages.factor-lang` is the default package with GUI support and several default library bindings (e.g. openssl, openal etc.).
 - `factorPackages.factor-no-gui` turns off GUI support while maintaining default library bindings.
 - `factorPackages.factor-minimal` comes with practically no additional library bindings and binaries and no GUI support.
@@ -60,6 +61,7 @@ All extra Factor vocabularies are registered in `pkgs/top-level/factor-packages.
 Package a vocabulary using the `buildFactorVocab` function.
 Its default `installPhase` takes care of installing it under `out/lib/factor`.
 It also understands the following special attributes:
+
 - `vocabName` is the path to the vocabulary to be installed.
   Defaults to `pname`.
 - `vocabRoot` is the vocabulary root to install the vocabulary under.
@@ -71,6 +73,7 @@ It also understands the following special attributes:
   When building factor-lang packages and Factor applications that use this respective vocabulary, these variables are evaluated and their paths added to the runtime environment.
 
 The function understands several forms of source directory trees:
+
 1. Simple single-vocab projects with their Factor and supplementary files directly in the project root.
    All `.factor` and `.txt` files are copied to `out/lib/factor/<vocabRoot>/<vocabName>`.
 2. More complex projects with several vocabularies next to each other, e.g. `./<vocabName>` and `./<otherVocab>`.
@@ -80,6 +83,7 @@ The function understands several forms of source directory trees:
    All directories in `lib/factor` are copied to `out/`.
 
 For instance, packaging the Bresenham algorithm for line interpolation looks like this, see `pkgs/development/compilers/factor-lang/vocabs/bresenham` for the complete file:
+
 ```nix
 {
   factorPackages,
@@ -109,10 +113,11 @@ Factor applications are built using Factor's `deploy` facility with the help of 
 
 ### `buildFactorApplication` function {#ssec-factor-buildFactorApplication-func}
 
-`factorPackages.buildFactorApplication` *`buildDesc`*
+`factorPackages.buildFactorApplication` _`buildDesc`_
 
 When packaging a Factor application with [`buildFactorApplication`](#ssec-factor-buildFactorApplication-func), its [`override`](#sec-pkg-override) interface should contain the `factorPackages` argument.
 For example:
+
 ```nix
 {
   lib,
@@ -131,6 +136,7 @@ factorPackages.buildFactorApplication (finalAttrs: {
 ```
 
 The `buildFactorApplication` function expects the following source structure for a package `foo-1.0` and produces a `/bin/foo` application:
+
 ```
 foo-1.0/
   foo/
@@ -146,6 +152,7 @@ Use the `preInstall` or `postInstall` hooks to copy additional files and directo
 The function itself only builds the application in `/lib/factor/` and a wrapper in `/bin/`.
 
 A more complex example shows how to specify runtime dependencies and additional Factor vocabularies at the example of the `painter` Factor application:
+
 ```nix
 {
   lib,
@@ -186,7 +193,7 @@ This enables the standard pattern for application packages to specify all runtim
 `buildFactorApplication` is a wrapper around `stdenv.mkDerivation` and takes all of its attributes.
 Additional attributes that are understood by `buildFactorApplication`:
 
-- *`buildDesc`* (Function or attribute set): A build description similar to `stdenv.mkDerivation` with the following attributes:
+- _`buildDesc`_ (Function or attribute set): A build description similar to `stdenv.mkDerivation` with the following attributes:
 
   - `vocabName` (String; _optional_): is the path to the vocabulary to be deployed relative to the source root.
     So, directory `foo/` from the example above could be `extra/deep/down/foo`.

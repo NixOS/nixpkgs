@@ -20,4 +20,3 @@ id-prefix: opt-treefmt-
 list-id: configuration-variable-list
 source: ../treefmt-options.json
 ```
-

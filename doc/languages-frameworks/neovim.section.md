@@ -12,6 +12,7 @@ See the next section for more details.
 ## Custom configuration {#neovim-custom-configuration}
 
 There are two wrappers available to provide additional configuration around the vanilla package `pkgs.neovim-unwrapped`:
+
 1. `wrapNeovim`: the historical one you should use
 2. `wrapNeovimUnstable` intended to replace the former. It has more features but
    the interface is not stable yet.
@@ -34,6 +35,7 @@ neovim.override {
   };
 }
 ```
+
 `myVimPackage` is an arbitrary name for the generated package. You can choose any name you like.
 
 If you want to use `neovim-qt` as a graphical editor, you can configure it by overriding Neovim in an overlay
@@ -52,8 +54,9 @@ neovim-qt.override {
 ```
 
 You can use the new unstable wrapper but the interface may change:
+
 - `autoconfigure`: certain plugins need a custom configuration to work with nix.
-For instance, `sqlite-lua` needs `g:sqlite_clib_path` to be set to work. Nixpkgs historically patched these in the plugins with several drawbacks: harder maintenance and making upstream work harder. Per convention, these mandatory bits of configuration are bookmarked in nixpkgs in `passthru.initLua`. Enabling `autoconfigure` automatically adds the snippets required for the plugins to work.
+  For instance, `sqlite-lua` needs `g:sqlite_clib_path` to be set to work. Nixpkgs historically patched these in the plugins with several drawbacks: harder maintenance and making upstream work harder. Per convention, these mandatory bits of configuration are bookmarked in nixpkgs in `passthru.initLua`. Enabling `autoconfigure` automatically adds the snippets required for the plugins to work.
 - `autowrapRuntimeDeps`: Appends plugin's runtime dependencies to `PATH`. For instance, `rest.nvim` requires `curl` to work. Enabling `autowrapRuntimeDeps` adds it to the `PATH` visible by your Neovim wrapper (but not your global `PATH`).
 - `luaRcContent`: Extra lua code to add to the generated `init.lua`.
 - `neovimRcContent`: Extra vimL code sourced by the generated `init.lua`.
@@ -93,6 +96,7 @@ wrapNeovimUnstable neovim-unwrapped {
 
 You can explore the configuration with`nix repl` to discover these options and
 override them. For instance:
+
 ```nix
 neovim.overrideAttrs (oldAttrs: {
   autowrapRuntimeDeps = false;
@@ -118,6 +122,7 @@ a vim plugin. This conversion is necessary because neovim expects lua folders to
 top-level while luarocks installs them in various subfolders by default.
 
 For instance:
+
 ```nix
 {
   rtp-nvim = neovimUtils.buildNeovimPlugin {
@@ -125,13 +130,14 @@ For instance:
   };
 }
 ```
+
 To update these packages, you should use the lua updater rather than vim's.
 
 #### Treesitter {#neovim-plugin-treesitter}
 
 By default `nvim-treesitter` encourages you to download, compile and install
 the required Treesitter grammars at run time with `:TSInstall`. This works
-poorly on NixOS.  Instead, to install the `nvim-treesitter` plugins with a set
+poorly on NixOS. Instead, to install the `nvim-treesitter` plugins with a set
 of precompiled grammars, you can use the `nvim-treesitter.withPlugins` function:
 
 ```nix
@@ -153,13 +159,14 @@ of precompiled grammars, you can use the `nvim-treesitter.withPlugins` function:
 
 To enable all grammars packaged in nixpkgs, use `pkgs.vimPlugins.nvim-treesitter.withAllGrammars`.
 
-
 ### Testing Neovim plugins {#testing-neovim-plugins}
 
 #### neovimRequireCheck {#testing-neovim-plugins-neovim-require-check}
+
 `neovimRequireCheck` is a simple test which checks if Neovim can requires lua modules without errors. This is often enough to catch missing dependencies.
 
 It accepts a single string for a module, or a list of module strings to test.
+
 - `nvimRequireCheck = MODULE;`
 - `nvimRequireCheck = [ MODULE1 MODULE2 ];`
 
@@ -176,8 +183,10 @@ To only check a specific module, add it manually to the plugin definition [overr
   };
 }
 ```
+
 Some plugins will have lua modules that require a user configuration to function properly or can contain optional lua modules that we dont want to test requiring.
 We can skip specific modules using `nvimSkipModules`. Similar to `nvimRequireCheck`, it accepts a list of strings.
+
 - `nvimSkipModules = [ MODULE1 MODULE2 ];`
 
 ```nix
@@ -195,6 +204,7 @@ We can skip specific modules using `nvimSkipModules`. Similar to `nvimRequireChe
 In rare cases, we might not want to actually test loading lua modules for a plugin. In those cases, we can disable `neovimRequireCheck` with `doCheck = false;`.
 
 This can be manually added through plugin definition overrides in the [overrides.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vim/plugins/overrides.nix).
+
 ```nix
 {
   vim-test = super.vim-test.overrideAttrs {

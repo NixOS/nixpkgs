@@ -1,6 +1,6 @@
 # pkg-config {#sec-pkg-config}
 
-*pkg-config* is a unified interface for declaring and querying built C/C++ libraries.
+_pkg-config_ is a unified interface for declaring and querying built C/C++ libraries.
 
 Nixpkgs provides a couple of facilities for working with this tool.
 
@@ -43,9 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
 A [setup hook](#setup-hook-pkg-config) is bundled in the `pkg-config` package to bring a derivation's declared build inputs into the environment.
 This will populate environment variables like `PKG_CONFIG_PATH`, `PKG_CONFIG_PATH_FOR_BUILD`, and `PKG_CONFIG_PATH_HOST` based on:
 
- - how `pkg-config` itself is depended upon
+- how `pkg-config` itself is depended upon
 
- - how other dependencies are depended upon
+- how other dependencies are depended upon
 
 For more details see the section on [specifying dependencies in general](#ssec-stdenv-dependencies).
 

@@ -185,6 +185,7 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
 ### Examples {#ssec-pkgs-dockerTools-buildImage-examples}
 
 :::{.example #ex-dockerTools-buildImage}
+
 # Building a Docker image
 
 The following package builds a Docker image that runs the `redis-server` executable from the `redis` package.
@@ -237,9 +238,11 @@ $ docker image load -i /nix/store/p4dsg62inh9d2ksy3c7bv58xa851dasr-docker-image-
 (some output removed for clarity)
 Loaded image: redis:latest
 ```
+
 :::
 
 :::{.example #ex-dockerTools-buildImage-runAsRoot}
+
 # Building a Docker image with `runAsRoot`
 
 The following package builds a Docker image with the `hello` executable from the `hello` package.
@@ -274,9 +277,11 @@ dockerTools.buildImage {
   };
 }
 ```
+
 :::
 
 :::{.example #ex-dockerTools-buildImage-extraCommands}
+
 # Building a Docker image with `extraCommands`
 
 The following package builds a Docker image with the `hello` executable from the `hello` package.
@@ -312,9 +317,11 @@ dockerTools.buildImage {
   };
 }
 ```
+
 :::
 
 :::{.example #ex-dockerTools-buildImage-creatednow}
+
 # Building a Docker image with a creation date set to the current time
 
 Note that using a value of `"now"` in the `created` attribute will break reproducibility.
@@ -348,6 +355,7 @@ $ docker image ls
 REPOSITORY   TAG      IMAGE ID       CREATED              SIZE
 hello        latest   de2bf4786de6   About a minute ago   25.2MB
 ```
+
 :::
 
 ## buildLayeredImage {#ssec-pkgs-dockerTools-buildLayeredImage}
@@ -368,6 +376,7 @@ See [](#ex-dockerTools-buildLayeredImage-hello) to see how to do that.
 ### Examples {#ssec-pkgs-dockerTools-buildLayeredImage-examples}
 
 :::{.example #ex-dockerTools-buildLayeredImage-hello}
+
 # Building a layered Docker image
 
 The following package builds a layered Docker image that runs the `hello` executable from the `hello` package.
@@ -406,6 +415,7 @@ $ docker image load -i /nix/store/hxcz7snvw7f8rzhbh6mv8jq39d992905-hello.tar.gz
 (some output removed for clarity)
 Loaded image: hello:latest
 ```
+
 :::
 
 ## streamLayeredImage {#ssec-pkgs-dockerTools-streamLayeredImage}
@@ -576,6 +586,7 @@ This allows the function to produce reproducible images.
 ### Examples {#ssec-pkgs-dockerTools-streamLayeredImage-examples}
 
 :::{.example #ex-dockerTools-streamLayeredImage-hello}
+
 # Streaming a layered Docker image
 
 The following package builds a **script** which, when run, will stream a layered Docker image that runs the `hello` executable from the `hello` package.
@@ -615,9 +626,11 @@ Done.
 (some output removed for clarity)
 Loaded image: hello:latest
 ```
+
 :::
 
 :::{.example #ex-dockerTools-streamLayeredImage-exploringlayers}
+
 # Exploring the layers in an image built with `streamLayeredImage`
 
 Assume the following package, which builds a layered Docker image with the `hello` package.
@@ -700,6 +713,7 @@ a container created from such image won't find any of the files it needs to run 
 :::
 
 ::: {.example #ex-dockerTools-streamLayeredImage-configclosure}
+
 # Building a layered Docker image with packages directly in `config`
 
 The closure of `config` is automatically included in the generated image.
@@ -717,9 +731,11 @@ dockerTools.streamLayeredImage {
   config.Cmd = [ "${lib.getExe hello}" ];
 }
 ```
+
 :::
 
 []{#ssec-pkgs-dockerTools-fetchFromRegistry}
+
 ## pullImage {#ssec-pkgs-dockerTools-pullImage}
 
 This function is similar to the `docker image pull` command, which means it can be used to pull a Docker image from a registry that implements the [Docker Registry HTTP API V2](https://distribution.github.io/distribution/spec/api/).
@@ -796,6 +812,7 @@ See [](#ex-dockerTools-pullImage-nixprefetchdocker) for a tool that can help gat
 ### Examples {#ssec-pkgs-dockerTools-pullImage-examples}
 
 ::: {.example #ex-dockerTools-pullImage-niximage}
+
 # Pulling the nixos/nix Docker image from the default registry
 
 This example pulls the [`nixos/nix` image](https://hub.docker.com/r/nixos/nix) and saves it in the Nix store.
@@ -810,9 +827,11 @@ dockerTools.pullImage {
   hash = "sha256-zRwlQs1FiKrvHPaf8vWOR/Tlp1C5eLn1d9pE4BZg3oA=";
 }
 ```
+
 :::
 
 ::: {.example #ex-dockerTools-pullImage-differentregistry}
+
 # Pulling the nixos/nix Docker image from a specific registry
 
 This example pulls the [`coreos/etcd` image](https://quay.io/repository/coreos/etcd) from the `quay.io` registry.
@@ -827,9 +846,11 @@ dockerTools.pullImage {
   hash = "sha256-Myw+85f2/EVRyMB3axECdmQ5eh9p1q77FWYKy8YpRWU=";
 }
 ```
+
 :::
 
 ::: {.example #ex-dockerTools-pullImage-nixprefetchdocker}
+
 # Finding the digest and hash values to use for `dockerTools.pullImage`
 
 Since [`dockerTools.pullImage`](#ssec-pkgs-dockerTools-pullImage) requires two different hashes, one can run the `nix-prefetch-docker` tool to find out the values for the hashes.
@@ -858,10 +879,12 @@ It is important to supply the `--arch` and `--os` arguments to `nix-prefetch-doc
 By default, `nix-prefetch-docker` will set `os` to `linux` and `arch` to `amd64`.
 
 Run `nix-prefetch-docker --help` for a list of all supported arguments:
+
 ```shell
 $ nix run nixpkgs#nix-prefetch-docker -- --help
 (output removed for clarity)
 ```
+
 :::
 
 ## exportImage {#ssec-pkgs-dockerTools-exportImage}
@@ -919,6 +942,7 @@ Because of this, using this function requires the `kvm` device to be available, 
 ### Examples {#ssec-pkgs-dockerTools-exportImage-examples}
 
 :::{.example #ex-dockerTools-exportImage-hello}
+
 # Exporting a Docker image with `dockerTools.exportImage`
 
 This example first builds a layered image with [`dockerTools.buildLayeredImage`](#ssec-pkgs-dockerTools-buildLayeredImage), and then exports its filesystem with `dockerTools.exportImage`.
@@ -974,9 +998,11 @@ dr-xr-xr-x root/0            0 1979-12-31 16:00 ./nix/store/m59xdgkgnjbk8kk6k6vb
 dr-xr-xr-x root/0            0 1979-12-31 16:00 ./nix/store/p3jshbwxiwifm1py0yq544fmdyy98j8a-glibc-2.38-27/
 drwxr-xr-x root/0            0 1979-12-31 16:00 ./share/
 ```
+
 :::
 
 :::{.example #ex-dockerTools-exportImage-importingDocker}
+
 # Importing an archive built with `dockerTools.exportImage` in Docker
 
 We will use the same package from [](#ex-dockerTools-exportImage-hello) and import it into Docker.
@@ -1004,9 +1030,11 @@ $ docker image ls
 REPOSITORY                              TAG                IMAGE ID       CREATED         SIZE
 <none>                                  <none>             1d42dba415e9   4 seconds ago   32.6MB
 ```
+
 :::
 
 :::{.example #ex-dockerTools-exportImage-naming}
+
 # Exploring output naming with `dockerTools.exportImage`
 
 `exportImage` does not require a `name` attribute if `fromImage` is a derivation, which means that the following works:
@@ -1036,6 +1064,7 @@ Because of this, it may be important to set a proper `name` attribute when using
 :::
 
 :::{.example #ex-dockerTools-exportImage-fromImagePath}
+
 # Using `dockerTools.exportImage` with a path as `fromImage`
 
 It is possible to use a path as the value of the `fromImage` attribute when calling `dockerTools.exportImage`.
@@ -1093,6 +1122,7 @@ The locations currently used are:
 - `/etc/pki/tls/certs/ca-bundle.crt`
 
 []{#ssec-pkgs-dockerTools-fakeNss}
+
 ### fakeNss {#sssec-pkgs-dockerTools-helpers-fakeNss}
 
 This is a re-export of the `fakeNss` package from Nixpkgs.
@@ -1120,6 +1150,7 @@ See [](#ex-dockerTools-shadowSetup-buildLayeredImage).
 ### Examples {#ssec-pkgs-dockerTools-helpers-examples}
 
 :::{.example #ex-dockerTools-helpers-buildImage}
+
 # Using `dockerTools`'s environment helpers with `buildImage`
 
 This example adds the [`binSh`](#sssec-pkgs-dockerTools-helpers-binSh) helper to a basic Docker image built with [`dockerTools.buildImage`](#ssec-pkgs-dockerTools-buildImage).
@@ -1153,9 +1184,11 @@ sh-5.2# help
 GNU bash, version 5.2.21(1)-release (x86_64-pc-linux-gnu)
 (rest of output removed for clarity)
 ```
+
 :::
 
 :::{.example #ex-dockerTools-helpers-buildLayeredImage}
+
 # Using `dockerTools`'s environment helpers with `buildLayeredImage`
 
 This example adds the [`binSh`](#sssec-pkgs-dockerTools-helpers-binSh) helper to a basic Docker image built with [`dockerTools.buildLayeredImage`](#ssec-pkgs-dockerTools-buildLayeredImage).
@@ -1193,9 +1226,11 @@ sh-5.2# help
 GNU bash, version 5.2.21(1)-release (x86_64-pc-linux-gnu)
 (rest of output removed for clarity)
 ```
+
 :::
 
 :::{.example #ex-dockerTools-shadowSetup-buildImage}
+
 # Using `dockerTools.shadowSetup` with `dockerTools.buildImage`
 
 This is an example that shows how to use `shadowSetup` with `dockerTools.buildImage`.
@@ -1224,9 +1259,11 @@ dockerTools.buildImage {
   };
 }
 ```
+
 :::
 
 :::{.example #ex-dockerTools-shadowSetup-buildLayeredImage}
+
 # Using `dockerTools.shadowSetup` with `dockerTools.buildLayeredImage`
 
 It accomplishes the same thing as [](#ex-dockerTools-shadowSetup-buildImage), but using `buildLayeredImage` instead.
@@ -1257,9 +1294,11 @@ dockerTools.buildLayeredImage {
   };
 }
 ```
+
 :::
 
 []{#ssec-pkgs-dockerTools-buildNixShellImage-arguments}
+
 ## buildNixShellImage {#ssec-pkgs-dockerTools-buildNixShellImage}
 
 `buildNixShellImage` uses [`streamNixShellImage`](#ssec-pkgs-dockerTools-streamNixShellImage) underneath to build a compressed Docker-compatible repository tarball of an image that sets up an environment similar to that of running `nix-shell` on a derivation.
@@ -1268,9 +1307,11 @@ Basically, `buildNixShellImage` runs the script created by `streamNixShellImage`
 `buildNixShellImage` supports the same options as `streamNixShellImage`, see [`streamNixShellImage`](#ssec-pkgs-dockerTools-streamNixShellImage) for details.
 
 []{#ssec-pkgs-dockerTools-buildNixShellImage-example}
+
 ### Examples {#ssec-pkgs-dockerTools-buildNixShellImage-examples}
 
 :::{.example #ex-dockerTools-buildNixShellImage-hello}
+
 # Building a Docker image with `buildNixShellImage` with the build environment for the `hello` package
 
 This example shows how to build the `hello` package inside a Docker container built with `buildNixShellImage`.
@@ -1317,6 +1358,7 @@ stripping (with command strip and flags -S -p) in  /nix/store/f2vs29jibd7lwxyj35
 [nix-shell:~]$ $out/bin/hello
 Hello, world!
 ```
+
 :::
 
 ## streamNixShellImage {#ssec-pkgs-dockerTools-streamNixShellImage}
@@ -1387,6 +1429,7 @@ The environment in the image doesn't match `nix-shell` or `nix-build` exactly, a
 ### Examples {#ssec-pkgs-dockerTools-streamNixShellImage-examples}
 
 :::{.example #ex-dockerTools-streamNixShellImage-hello}
+
 # Building a Docker image with `streamNixShellImage` with the build environment for the `hello` package
 
 This example shows how to build the `hello` package inside a Docker container built with `streamNixShellImage`.
@@ -1434,9 +1477,11 @@ stripping (with command strip and flags -S -p) in  /nix/store/f2vs29jibd7lwxyj35
 [nix-shell:~]$ $out/bin/hello
 Hello, world!
 ```
+
 :::
 
 :::{.example #ex-dockerTools-streamNixShellImage-extendingBuildInputs}
+
 # Adding extra packages to a Docker image built with `streamNixShellImage`
 
 This example shows how to add extra packages to an image built with `streamNixShellImage`.
@@ -1486,9 +1531,11 @@ $ docker container run -it hello-2.12.1-env:latest
                 ||----w |
                 ||     ||
 ```
+
 :::
 
 :::{.example #ex-dockerTools-streamNixShellImage-addingShellHook}
+
 # Adding a `shellHook` to a Docker image built with `streamNixShellImage`
 
 This example shows how to add a `shellHook` command to an image built with `streamNixShellImage`.
@@ -1529,4 +1576,5 @@ Hello, world!
 
 [nix-shell:~]$
 ```
+
 :::

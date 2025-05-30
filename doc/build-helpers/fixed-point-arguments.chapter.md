@@ -69,6 +69,7 @@ lib.extendMkDerivation {
     };
 }
 ```
+
 :::
 
 If one needs to apply extra changes to the result derivation, pass the derivation transformation function to `lib.extendMkDerivation` as `lib.customisation.extendMkDerivation { transformDrv = drv: ...; }`.

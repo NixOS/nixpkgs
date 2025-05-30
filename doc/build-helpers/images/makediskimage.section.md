@@ -50,6 +50,7 @@ A `deterministic` flag is available for best efforts determinism.
 ## Usage {#sec-make-disk-image-usage}
 
 To produce a Nix-store only image:
+
 ```nix
 let
   pkgs = import <nixpkgs> { };
@@ -76,6 +77,7 @@ Some arguments can be left out, they are shown explicitly for the sake of the ex
 Building this derivation will provide a QCOW2 disk image containing only the Nix store and its registration information.
 
 To produce a NixOS installation image disk with UEFI and bootloader installed:
+
 ```nix
 let
   pkgs = import <nixpkgs> { };

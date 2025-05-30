@@ -85,4 +85,3 @@ This section has been moved to [CONTRIBUTING.md](https://github.com/NixOS/nixpkg
 #### Acceptable backport criteria {#acceptable-backport-criteria}
 
 This section has been moved to [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md).
-

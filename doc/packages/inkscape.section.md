@@ -3,6 +3,7 @@
 [Inkscape](https://inkscape.org) is a powerful vector graphics editor.
 
 ## Plugins {#inkscape-plugins}
+
 Inkscape plugins are collected in the [`inkscape-extensions`](https://search.nixos.org/packages?channel=unstable&type=packages&query=cudaPackages) package set.
 To enable them, use an override on `inkscape-with-extensions`:
 

@@ -1,4 +1,5 @@
 # Passthru-attributes {#chap-passthru}
+
 []{#var-stdenv-passthru} []{#special-variables} <!-- legacy anchors -->
 
 As opposed to most other `mkDerivation` input attributes, `passthru` is not passed to the derivation's [`builder` executable](https://nixos.org/manual/nix/stable/expressions/derivations.html#attr-builder).
@@ -37,6 +38,7 @@ hello.baz.value1
 ```
 4
 ```
+
 :::
 
 ## Common `passthru`-attributes {#sec-common-passthru-attributes}
@@ -58,6 +60,7 @@ They fall in one of these categories:
 Attributes that apply only to particular [build helpers](#part-builders) or [language ecosystems](#chap-language-support) are documented there.
 
 ### `passthru.tests` {#var-passthru-tests}
+
 []{#var-meta-tests} <!-- legacy anchor -->
 
 An attribute set with tests as values.
@@ -75,6 +78,7 @@ The Nixpkgs systems for continuous integration [Hydra](https://hydra.nixos.org/)
 :::
 
 #### Package tests {#var-passthru-tests-packages}
+
 []{#var-meta-tests-packages} <!-- legacy anchor -->
 
 Besides tests provided by upstream, that you run in the [`checkPhase`](#ssec-check-phase), you may want to define tests derivations in the `passthru.tests` attribute, which won't change the build. `passthru.tests` have several advantages over running tests during any of the [standard phases](#sec-stdenv-phases):
@@ -90,9 +94,11 @@ It is also possible to use `passthru.tests` to test the version with [`testVersi
 - When you open a PR, [ofborg](https://github.com/NixOS/ofborg)'s CI _will_ run `passthru.tests` of [packages that are directly changed by your PR (according to your commits' messages)](https://github.com/NixOS/ofborg?tab=readme-ov-file#automatic-building), but if you'd want to use the [`@ofborg build`](https://github.com/NixOS/ofborg?tab=readme-ov-file#build) command for dependent packages, you won't have to specify in addition the `.tests` attribute of the packages you want to build, and no body will be able to avoid these tests.
 
 <!-- NOTE(@fricklerhandwerk): one may argue whether that testing guide should rather be in the user's manual -->
+
 For more on how to write and run package tests for Nixpkgs, see the [testing section in the package contributor guide](https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#package-tests).
 
 #### NixOS tests {#var-passthru-tests-nixos}
+
 []{#var-meta-tests-nixos} <!-- legacy anchor -->
 
 Tests written for NixOS are available as the `nixosTests` argument to package recipes.
@@ -112,7 +118,9 @@ NixOS tests run in a virtual machine (VM), so they are slower than regular packa
 For more information see the NixOS manual on [NixOS module tests](https://nixos.org/manual/nixos/stable/#sec-nixos-tests).
 
 ### `passthru.updateScript` {#var-passthru-updateScript}
+
 <!-- legacy anchors -->
+
 []{#var-passthru-updateScript-command}
 []{#var-passthru-updateScript-set-command}
 []{#var-passthru-updateScript-set-attrPath}

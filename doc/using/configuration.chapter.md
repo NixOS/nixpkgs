@@ -3,13 +3,13 @@
 Nix comes with certain defaults about which packages can and cannot be installed, based on a package's metadata.
 By default, Nix will prevent installation if any of the following criteria are true:
 
--   The package is thought to be broken, and has had its `meta.broken` set to `true`.
+- The package is thought to be broken, and has had its `meta.broken` set to `true`.
 
--   The package isn't intended to run on the given system, as none of its `meta.platforms` match the given system.
+- The package isn't intended to run on the given system, as none of its `meta.platforms` match the given system.
 
--   The package's `meta.license` is set to a license which is considered to be unfree.
+- The package's `meta.license` is set to a license which is considered to be unfree.
 
--   The package has known security vulnerabilities but has not or can not be updated for some reason, and a list of issues has been entered in to the package's `meta.knownVulnerabilities`.
+- The package has known security vulnerabilities but has not or can not be updated for some reason, and a list of issues has been entered in to the package's `meta.knownVulnerabilities`.
 
 Each of these criteria can be altered in the Nixpkgs configuration.
 
@@ -35,40 +35,39 @@ Most unfree licenses prohibit either executing or distributing the software.
 
 There are two ways to try compiling a package which has been marked as broken.
 
--   For allowing the build of a broken package once, you can use an environment variable for a single invocation of the nix tools:
+- For allowing the build of a broken package once, you can use an environment variable for a single invocation of the nix tools:
 
-    ```ShellSession
-    $ export NIXPKGS_ALLOW_BROKEN=1
-    ```
+  ```ShellSession
+  $ export NIXPKGS_ALLOW_BROKEN=1
+  ```
 
--   For permanently allowing broken packages to be built, you may add `allowBroken = true;` to your user's configuration file, like this:
+- For permanently allowing broken packages to be built, you may add `allowBroken = true;` to your user's configuration file, like this:
 
-    ```nix
-    {
-      allowBroken = true;
-    }
-    ```
-
+  ```nix
+  {
+    allowBroken = true;
+  }
+  ```
 
 ## Installing packages on unsupported systems {#sec-allow-unsupported-system}
 
 There are also two ways to try compiling a package which has been marked as unsupported for the given system.
 
--   For allowing the build of an unsupported package once, you can use an environment variable for a single invocation of the nix tools:
+- For allowing the build of an unsupported package once, you can use an environment variable for a single invocation of the nix tools:
 
-    ```ShellSession
-    $ export NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1
-    ```
+  ```ShellSession
+  $ export NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1
+  ```
 
--   For permanently allowing unsupported packages to be built, you may add `allowUnsupportedSystem = true;` to your user's configuration file, like this:
+- For permanently allowing unsupported packages to be built, you may add `allowUnsupportedSystem = true;` to your user's configuration file, like this:
 
-    ```nix
-    {
-      allowUnsupportedSystem = true;
-    }
-    ```
+  ```nix
+  {
+    allowUnsupportedSystem = true;
+  }
+  ```
 
-The difference between a package being unsupported on some system and being broken is admittedly a bit fuzzy. If a program *ought* to work on a certain platform, but doesn't, the platform should be included in `meta.platforms`, but marked as broken with e.g.  `meta.broken = !hostPlatform.isWindows`. Of course, this begs the question of what "ought" means exactly. That is left to the package maintainer.
+The difference between a package being unsupported on some system and being broken is admittedly a bit fuzzy. If a program _ought_ to work on a certain platform, but doesn't, the platform should be included in `meta.platforms`, but marked as broken with e.g. `meta.broken = !hostPlatform.isWindows`. Of course, this begs the question of what "ought" means exactly. That is left to the package maintainer.
 
 ## Installing unfree packages {#sec-allow-unfree}
 
@@ -79,60 +78,60 @@ By default unfree software cannot be installed and doesn’t show up in searches
 
 There are several ways to tweak how Nix handles a package which has been marked as unfree.
 
--   To temporarily allow all unfree packages, you can use an environment variable for a single invocation of the nix tools:
+- To temporarily allow all unfree packages, you can use an environment variable for a single invocation of the nix tools:
 
-    ```ShellSession
-    $ export NIXPKGS_ALLOW_UNFREE=1
-    ```
+  ```ShellSession
+  $ export NIXPKGS_ALLOW_UNFREE=1
+  ```
 
--   It is possible to permanently allow individual unfree packages, while still blocking unfree packages by default using the `allowUnfreePredicate` configuration option in the user configuration file.
+- It is possible to permanently allow individual unfree packages, while still blocking unfree packages by default using the `allowUnfreePredicate` configuration option in the user configuration file.
 
-    This option is a function which accepts a package as a parameter, and returns a boolean. The following example configuration accepts a package and always returns false:
+  This option is a function which accepts a package as a parameter, and returns a boolean. The following example configuration accepts a package and always returns false:
 
-    ```nix
-    {
-      allowUnfreePredicate = (pkg: false);
-    }
-    ```
+  ```nix
+  {
+    allowUnfreePredicate = (pkg: false);
+  }
+  ```
 
-    For a more useful example, try the following. This configuration only allows unfree packages named roon-server and visual studio code:
+  For a more useful example, try the following. This configuration only allows unfree packages named roon-server and visual studio code:
 
-    ```nix
-    {
-      allowUnfreePredicate =
-        pkg:
-        builtins.elem (lib.getName pkg) [
-          "roon-server"
-          "vscode"
-        ];
-    }
-    ```
-
--   It is also possible to allow and block licenses that are specifically acceptable or not acceptable, using `allowlistedLicenses` and `blocklistedLicenses`, respectively.
-
-    The following example configuration allowlists the licenses `amd` and `wtfpl`:
-
-    ```nix
-    {
-      allowlistedLicenses = with lib.licenses; [
-        amd
-        wtfpl
+  ```nix
+  {
+    allowUnfreePredicate =
+      pkg:
+      builtins.elem (lib.getName pkg) [
+        "roon-server"
+        "vscode"
       ];
-    }
-    ```
+  }
+  ```
 
-    The following example configuration blocklists the `gpl3Only` and `agpl3Only` licenses:
+- It is also possible to allow and block licenses that are specifically acceptable or not acceptable, using `allowlistedLicenses` and `blocklistedLicenses`, respectively.
 
-    ```nix
-    {
-      blocklistedLicenses = with lib.licenses; [
-        agpl3Only
-        gpl3Only
-      ];
-    }
-    ```
+  The following example configuration allowlists the licenses `amd` and `wtfpl`:
 
-    Note that `allowlistedLicenses` only applies to unfree licenses unless `allowUnfree` is enabled. It is not a generic allowlist for all types of licenses. `blocklistedLicenses` applies to all licenses.
+  ```nix
+  {
+    allowlistedLicenses = with lib.licenses; [
+      amd
+      wtfpl
+    ];
+  }
+  ```
+
+  The following example configuration blocklists the `gpl3Only` and `agpl3Only` licenses:
+
+  ```nix
+  {
+    blocklistedLicenses = with lib.licenses; [
+      agpl3Only
+      gpl3Only
+    ];
+  }
+  ```
+
+  Note that `allowlistedLicenses` only applies to unfree licenses unless `allowUnfree` is enabled. It is not a generic allowlist for all types of licenses. `blocklistedLicenses` applies to all licenses.
 
 A complete list of licenses can be found in the file `lib/licenses.nix` of the nixpkgs tree.
 
@@ -140,41 +139,41 @@ A complete list of licenses can be found in the file `lib/licenses.nix` of the n
 
 There are several ways to tweak how Nix handles a package which has been marked as insecure.
 
--   To temporarily allow all insecure packages, you can use an environment variable for a single invocation of the nix tools:
+- To temporarily allow all insecure packages, you can use an environment variable for a single invocation of the nix tools:
 
-    ```ShellSession
-    $ export NIXPKGS_ALLOW_INSECURE=1
-    ```
+  ```ShellSession
+  $ export NIXPKGS_ALLOW_INSECURE=1
+  ```
 
--   It is possible to permanently allow individual insecure packages, while still blocking other insecure packages by default using the `permittedInsecurePackages` configuration option in the user configuration file.
+- It is possible to permanently allow individual insecure packages, while still blocking other insecure packages by default using the `permittedInsecurePackages` configuration option in the user configuration file.
 
-    The following example configuration permits the installation of the hypothetically insecure package `hello`, version `1.2.3`:
+  The following example configuration permits the installation of the hypothetically insecure package `hello`, version `1.2.3`:
 
-    ```nix
-    {
-      permittedInsecurePackages = [
-        "hello-1.2.3"
+  ```nix
+  {
+    permittedInsecurePackages = [
+      "hello-1.2.3"
+    ];
+  }
+  ```
+
+- It is also possible to create a custom policy around which insecure packages to allow and deny, by overriding the `allowInsecurePredicate` configuration option.
+
+  The `allowInsecurePredicate` option is a function which accepts a package and returns a boolean, much like `allowUnfreePredicate`.
+
+  The following configuration example allows any version of the `ovftool` package:
+
+  ```nix
+  {
+    allowInsecurePredicate =
+      pkg:
+      builtins.elem (lib.getName pkg) [
+        "ovftool"
       ];
-    }
-    ```
+  }
+  ```
 
--   It is also possible to create a custom policy around which insecure packages to allow and deny, by overriding the `allowInsecurePredicate` configuration option.
-
-    The `allowInsecurePredicate` option is a function which accepts a package and returns a boolean, much like `allowUnfreePredicate`.
-
-    The following configuration example allows any version of the `ovftool` package:
-
-    ```nix
-    {
-      allowInsecurePredicate =
-        pkg:
-        builtins.elem (lib.getName pkg) [
-          "ovftool"
-        ];
-    }
-    ```
-
-    Note that `permittedInsecurePackages` is only checked if `allowInsecurePredicate` is not specified.
+  Note that `permittedInsecurePackages` is only checked if `allowInsecurePredicate` is not specified.
 
 ## Modify packages via `packageOverrides` {#sec-modify-via-packageOverrides}
 
@@ -199,7 +198,6 @@ id-prefix: opt-
 list-id: configuration-variable-list
 source: ../config-options.json
 ```
-
 
 ## Declarative Package Management {#sec-declarative-package-management}
 
@@ -296,7 +294,7 @@ After building that new environment, look through `~/.nix-profile` to make sure 
 }
 ```
 
-This provides us with some useful documentation for using our packages.  However, if we actually want those manpages to be detected by man, we need to set up our environment. This can also be managed within Nix expressions.
+This provides us with some useful documentation for using our packages. However, if we actually want those manpages to be detected by man, we need to set up our environment. This can also be managed within Nix expressions.
 
 ```nix
 {

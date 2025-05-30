@@ -15,7 +15,7 @@ The remote builder runs on host port 31022 by default.
 You can change it by overriding `virtualisation.darwin-builder.hostPort`.
 See the [example](#sec-darwin-builder-example-flake).
 
-You will also need to be a trusted user for your Nix installation.  In other
+You will also need to be a trusted user for your Nix installation. In other
 words, your `/etc/nix/nix.conf` should have something like:
 
 ```

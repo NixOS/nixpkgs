@@ -1,4 +1,3 @@
-
 # `memcachedTestHook` {#sec-memcachedTestHook}
 
 This hook starts a Memcached server during `checkPhase`. Example:
@@ -19,6 +18,7 @@ stdenv.mkDerivation {
 ```
 
 If you use a custom `checkPhase`, remember to add the `runHook` calls:
+
 ```nix
 {
   checkPhase = ''
@@ -35,7 +35,7 @@ If you use a custom `checkPhase`, remember to add the `runHook` calls:
 
 Bash-only variables:
 
- - `memcachedTestPort`: Port to use by Memcached. Defaults to `11211`
+- `memcachedTestPort`: Port to use by Memcached. Defaults to `11211`
 
 Example usage:
 
@@ -53,3 +53,4 @@ stdenv.mkDerivation {
     memcachedTestPort=1234;
   '';
 }
+```

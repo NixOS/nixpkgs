@@ -246,11 +246,15 @@ Of course for this use-case one could also use overlays since the configuration 
 
 Right now, bundix has some issues with pre-built, platform-specific gems: [bundix PR #68](https://github.com/nix-community/bundix/pull/68).
 Until this is solved, you can tell bundler to not use platform-specific gems and instead build them from source each time:
+
 - globally (will be set in `~/.config/.bundle/config`):
+
 ```shell
 $ bundle config set force_ruby_platform true
 ```
+
 - locally (will be set in `<project-root>/.bundle/config`):
+
 ```shell
 $ bundle config set --local force_ruby_platform true
 ```

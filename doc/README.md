@@ -18,6 +18,7 @@ For documentation only relevant for contributors, use Markdown files next to the
 > [Open an issue](https://github.com/NixOS/nixpkgs/issues/new?labels=6.topic%3A+documentation&title=Doc%3A+) to request bugfixes or new features.
 
 Rendered documentation:
+
 - [Unstable (from master)](https://nixos.org/manual/nixpkgs/unstable/)
 - [Stable (from latest release)](https://nixos.org/manual/nixpkgs/stable/)
 
@@ -58,6 +59,7 @@ Make sure that your local files aren't added to Git history by adding the follow
 
 The shell in the manual source directory makes available a command, `devmode`.
 It is a daemon, that:
+
 1. watches the manual's source for changes and when they occur — rebuilds
 2. HTTP serves the manual, injecting a script that triggers reload on changes
 3. opens the manual in the default browser
@@ -66,7 +68,7 @@ It is a daemon, that:
 
 Once you have a successful build, you can open the relevant HTML (path mentioned above) in a browser along with the anchor, and observe the redirection.
 
-Note that if you already loaded the page and *then* input the anchor, you will need to perform a reload. This is because browsers do not re-run client JS code when only the anchor has changed.
+Note that if you already loaded the page and _then_ input the anchor, you will need to perform a reload. This is because browsers do not re-run client JS code when only the anchor has changed.
 
 ## Syntax
 
@@ -106,7 +108,6 @@ They are defined using a hybrid of the link syntax with the attributes syntax kn
 If you **omit a link text** for a link pointing to a section, the text will be substituted automatically. For example `[](#chap-contributing)`.
 
 This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/using/syntax.html#targets-and-cross-referencing).
-
 
 #### HTML
 
@@ -187,8 +188,8 @@ For defining a group of terms:
 
   Examples:
 
-  * doc: update the kernel config documentation to use `nix-shell`
-  * doc: add information about `nix-update-script`
+  - doc: update the kernel config documentation to use `nix-shell`
+  - doc: add information about `nix-update-script`
 
     Closes #216321.
 
@@ -242,6 +243,7 @@ dockerTools.buildLayeredImage {
 
 When showing inputs/outputs of any [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop), such as a shell or the Nix REPL, use a format as you'd see in the REPL, while trying to visually separate inputs from outputs.
 This means that for a shell, you should use a format like the following:
+
 ```shell
 $ nix-build -A hello '<nixpkgs>' \
   --option require-sigs false \
@@ -249,13 +251,16 @@ $ nix-build -A hello '<nixpkgs>' \
   --option substituters file:///tmp/hello-cache
 /nix/store/zhl06z4lrfrkw5rp0hnjjfrgsclzvxpm-hello-2.12.1
 ```
+
 Note how the input is preceded by `$` on the first line and indented on subsequent lines, and how the output is provided as you'd see on the shell.
 
 For the Nix REPL, you should use a format like the following:
+
 ```shell
 nix-repl> builtins.attrNames { a = 1; b = 2; }
 [ "a" "b" ]
 ```
+
 Note how the input is preceded by `nix-repl>` and the output is provided as you'd see on the Nix REPL.
 
 ### Headings for inputs, outputs and examples
@@ -265,6 +270,7 @@ Keep examples as the last nested heading, and link to the examples wherever appl
 
 The purpose of this convention is to provide a familiar structure for navigating the manual, so any reader can expect to find content related to inputs in an "inputs" heading, examples in an "examples" heading, and so on.
 An example:
+
 ```markdown
 ## buildImage
 
@@ -301,29 +307,29 @@ For example:
 ```markdown
 # pkgs.coolFunction {#pkgs.coolFunction}
 
-`pkgs.coolFunction` *`name`* *`config`*
+`pkgs.coolFunction` _`name`_ _`config`_
 
 Description of what `callPackage` does.
-
 
 ## Inputs {#pkgs-coolFunction-inputs}
 
 If something's special about `coolFunction`'s general argument handling, you can say so here.
 Otherwise, just describe the single argument or start the arguments' definition list without introduction.
 
- - *`name`* (String): The name of the resulting image.
+- _`name`_ (String): The name of the resulting image.
 
- - *`config`* (Attribute set): Introduce the parameter. Maybe you have a test to make sure `{ }` is a sensible default; then you can say: these attributes are optional; `{ }` is a valid argument.
+- _`config`_ (Attribute set): Introduce the parameter. Maybe you have a test to make sure `{ }` is a sensible default; then you can say: these attributes are optional; `{ }` is a valid argument.
 
- - `outputHash` (String; _optional_): A brief explanation including when and when not to pass this attribute.
+- `outputHash` (String; _optional_): A brief explanation including when and when not to pass this attribute.
 
-   _Default:_ the output path's hash.
+  _Default:_ the output path's hash.
 ```
 
 Checklist:
+
 - Start with a synopsis, to show the order of positional arguments.
-- Metavariables are in emphasized code spans: ``` *`arg1`* ```. Metavariables are placeholders where users may write arbitrary expressions. This includes positional arguments.
-- Attribute names are regular code spans: ``` `attr1` ```. These identifiers can _not_ be picked freely by users, so they are _not_ metavariables.
+- Metavariables are in emphasized code spans: ``*`arg1`*``. Metavariables are placeholders where users may write arbitrary expressions. This includes positional arguments.
+- Attribute names are regular code spans: `` `attr1` ``. These identifiers can _not_ be picked freely by users, so they are _not_ metavariables.
 - _optional_ attributes have a _`Default:`_ if it's easily described as a value.
 - _optional_ attributes have a _`Default behavior:`_ if it's not easily described using a value.
 - Nix types aren't in code spans, because they are not code
@@ -333,8 +339,9 @@ Checklist:
 
 To define a referenceable figure use the following fencing:
 
-```markdown
+````markdown
 :::{.example #an-attribute-set-example}
+
 # An attribute set example
 
 You can add text before
@@ -345,7 +352,7 @@ You can add text before
 
 and after code fencing
 :::
-```
+````
 
 Defining examples through the `example` fencing class adds them to a "List of Examples" section after the Table of Contents.
 Though this is not shown in the rendered documentation on nixos.org.
@@ -356,7 +363,9 @@ To define a referenceable figure use the following fencing:
 
 ```markdown
 ::: {.figure #nixos-logo}
+
 # NixOS Logo
+
 ![NixOS logo](./nixos_logo.png)
 :::
 ```

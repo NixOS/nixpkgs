@@ -18,17 +18,17 @@ Some applications will also require `gsettings-desktop-schemas` for things like 
 
 GLib’s [GIO](https://developer.gnome.org/gio/stable/ch01.html) library supports several [extension points](https://developer.gnome.org/gio/stable/extending-gio.html). Notably, they allow:
 
-* implementing settings backends (already [mentioned](#ssec-gnome-settings))
-* adding TLS support
-* proxy settings
-* virtual file systems
+- implementing settings backends (already [mentioned](#ssec-gnome-settings))
+- adding TLS support
+- proxy settings
+- virtual file systems
 
 The modules are typically installed to `lib/gio/modules/` directory of a package and you need to add them to `GIO_EXTRA_MODULES` if you need any of those features.
 
 In particular, we recommend:
 
-* adding `dconf.lib` for any software on Linux that reads [GSettings](#ssec-gnome-settings) (even transitively through e.g. GTK’s file manager)
-* adding `glib-networking` for any software that accesses network using GIO or libsoup – glib-networking contains a module that implements TLS support and loads system-wide proxy settings
+- adding `dconf.lib` for any software on Linux that reads [GSettings](#ssec-gnome-settings) (even transitively through e.g. GTK’s file manager)
+- adding `glib-networking` for any software that accesses network using GIO or libsoup – glib-networking contains a module that implements TLS support and loads system-wide proxy settings
 
 To allow software to use various virtual file systems, `gvfs` package can be also added. But that is usually an optional feature so we typically use `gvfs` from the system (e.g. installed globally using NixOS module).
 
@@ -162,7 +162,7 @@ Package is missing some GSettings schemas. You can find out the package containi
 
 ### When using `wrapGApps*` hook with special derivers or hooks you can end up with double wrapped binaries. {#ssec-gnome-common-issues-double-wrapped}
 
-This is because some setup hooks like `qt6.wrapQtAppsHook` also wrap programs using `makeWrapper`.  Likewise, some derivers (e.g. `python.pkgs.buildPythonApplication`) automatically pull in their own setup hooks that produce wrappers.
+This is because some setup hooks like `qt6.wrapQtAppsHook` also wrap programs using `makeWrapper`. Likewise, some derivers (e.g. `python.pkgs.buildPythonApplication`) automatically pull in their own setup hooks that produce wrappers.
 
 The simplest workaround is to disable the `wrapGApps*` hook's automatic wrapping using `dontWrapGApps = true;` while passing its `makeWrapper` arguments to another wrapper.
 
@@ -218,9 +218,9 @@ You can rely on applications depending on the library setting the necessary envi
 
 - []{#ssec-gnome-common-issues-unwrappable-package-gsettings} The following examples are hardcoding GSettings schema paths. To get the schema paths we use the functions
 
-  * `glib.getSchemaPath` Takes a nix package attribute as an argument.
+  - `glib.getSchemaPath` Takes a nix package attribute as an argument.
 
-  * `glib.makeSchemaPath` Takes a package output like `$out` and a derivation name. You should use this if the schemas you need to hardcode are in the same derivation.
+  - `glib.makeSchemaPath` Takes a package output like `$out` and a derivation name. You should use this if the schemas you need to hardcode are in the same derivation.
 
   []{#ssec-gnome-common-issues-unwrappable-package-gsettings-vala} [Hard-coding GSettings schema path in Vala plug-in (dynamically loaded library)](https://github.com/NixOS/nixpkgs/blob/7bb8f05f12ca3cff9da72b56caa2f7472d5732bc/pkgs/desktops/pantheon/apps/elementary-files/default.nix#L78-L86) – here, `replaceVars` cannot be used since the schema comes from the same package preventing us from pass its path to the function, probably due to a [Nix bug](https://github.com/NixOS/nix/issues/1846).
 

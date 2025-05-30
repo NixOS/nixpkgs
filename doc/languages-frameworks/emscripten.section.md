@@ -10,21 +10,21 @@ nix-shell -p emscripten
 
 A few things to note:
 
-* `export EMCC_DEBUG=2` is nice for debugging
-* The build artifact cache in `~/.emscripten` sometimes creates issues and needs to be removed from time to time
+- `export EMCC_DEBUG=2` is nice for debugging
+- The build artifact cache in `~/.emscripten` sometimes creates issues and needs to be removed from time to time
 
 ## Examples {#declarative-usage}
 
 Let's see two different examples from `pkgs/top-level/emscripten-packages.nix`:
 
-* `pkgs.zlib.override`
-* `pkgs.buildEmscriptenPackage`
+- `pkgs.zlib.override`
+- `pkgs.buildEmscriptenPackage`
 
 A special requirement of the `pkgs.buildEmscriptenPackage` is the `doCheck = true`.
 This means each Emscripten package requires that a [`checkPhase`](#ssec-check-phase) is implemented.
 
-* Use `export EMCC_DEBUG=2` from within a phase to get more detailed debug output what is going wrong.
-* The cache at `~/.emscripten` requires to set `HOME=$TMPDIR` in individual phases.
+- Use `export EMCC_DEBUG=2` from within a phase to get more detailed debug output what is going wrong.
+- The cache at `~/.emscripten` requires to set `HOME=$TMPDIR` in individual phases.
   This makes compilation slower but also more deterministic.
 
 ::: {.example #usage-1-pkgs.zlib.override}
@@ -35,7 +35,6 @@ This example uses `zlib` from Nixpkgs, but instead of compiling **C** to **ELF**
 
 A few adaptions and hacks were put in place to make it work.
 One advantage is that when `pkgs.zlib` is updated, it will automatically update this package as well.
-
 
 ```nix
 (pkgs.zlib.override {
