@@ -83,13 +83,13 @@ in
 
       package = lib.mkPackageOption pkgs "jenkins" { };
 
-      javaPackage = lib.mkPackageOption pkgs "jdk17" { };
+      javaPackage = lib.mkPackageOption pkgs "jdk21" { };
 
       packages = lib.mkOption {
         default = [
           pkgs.stdenv
           pkgs.git
-          pkgs.jdk17
+          pkgs.jdk21
           config.programs.ssh.package
           pkgs.nix
         ];
