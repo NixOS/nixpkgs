@@ -4,7 +4,9 @@ The best way to keep your NixOS installation up to date is to use one of
 the NixOS *channels*. A channel is a Nix mechanism for distributing Nix
 expressions and associated binaries. The NixOS channels are updated
 automatically from NixOS's Git repository after certain tests have
-passed and all packages have been built. These channels are:
+passed and a selection of packages has been built successfully
+(see `nixos/release-combined.nix` and `nixos/release-small.nix`).
+These channels are:
 
 -   *Stable channels*, such as [`nixos-25.05`](https://channels.nixos.org/nixos-25.05).
     These only get conservative bug fixes and package upgrades. For
