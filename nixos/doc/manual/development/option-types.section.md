@@ -400,44 +400,100 @@ Composed types are types that take a type as parameter. `listOf
 
 `types.attrsOf` *`t`*
 
-:   An attribute set of where all the values are of *`t`* type. Multiple
-    definitions result in the joined attribute set.
+:   _Shorthand for `types.attrsWith { lazy = false; elemType = t; }`._
 
-    ::: {.note}
-    This type is *strict* in its values, which in turn means attributes
-    cannot depend on other attributes. See `
-           types.lazyAttrsOf` for a lazy version.
-    :::
+    An attribute set of where all the values are of *`t`* type.
+
+    This type is *strict* in its values, which in turn means attributes cannot depend on other attributes.
+    See [`lazy` in `attrsWith`](#sec-option-types-composed-attrsWith-lazy).
 
 `types.lazyAttrsOf` *`t`*
 
-:   An attribute set of where all the values are of *`t`* type. Multiple
-    definitions result in the joined attribute set. This is the lazy
-    version of `types.attrsOf
-          `, allowing attributes to depend on each other.
+:   _Shorthand for `types.attrsWith { lazy = true; elemType = t; }`._
 
-    ::: {.warning}
-    This version does not fully support conditional definitions! With an
-    option `foo` of this type and a definition
-    `foo.attr = lib.mkIf false 10`, evaluating `foo ? attr` will return
-    `true` even though it should be false. Accessing the value will then
-    throw an error. For types *`t`* that have an `emptyValue` defined,
-    that value will be returned instead of throwing an error. So if the
-    type of `foo.attr` was `lazyAttrsOf (nullOr int)`, `null` would be
-    returned instead for the same `mkIf false` definition.
-    :::
+    An attribute set of where all the values are of *`t`* type.
+
+    This is the lazy version of `types.attrsOf`, allowing attributes to depend on each other, at the cost of potentially containing more attributes than desirable.
+    See [`lazy` in `attrsWith`](#sec-option-types-composed-attrsWith-lazy).
 
 `types.attrsWith` { *`elemType`*, *`lazy`* ? false, *`placeholder`* ? "name" }
 
 :   An attribute set of where all the values are of *`elemType`* type.
+
+    Multiple definitions will be merged in the resulting attribute set.
 
     **Parameters**
 
     `elemType` (Required)
     : Specifies the type of the values contained in the attribute set.
 
-    `lazy`
-    : Determines whether the attribute set is lazily evaluated. See: `types.lazyAttrsOf`
+    [`lazy`]{#sec-option-types-composed-attrsWith-lazy}
+    : Determines whether the set of attribute names is evaluated before or after evaluating any attribute values.
+
+      `lazy = true` is a preferable choice in principle, but requires extra effort if the option value is used in aggregate (e.g. `attrNames` or `toJSON`).
+
+      When `lazy` is `true`, the attribute names are determined by looking at the definitions without evaluating them.
+      If only a `mkIf false` occurs in an attribute, this may result in an error when the attribute value is accessed.
+
+      When `lazy` is `false`, the attribute names are determined by evaluating the definitions to see if they are `mkIf` false, but this also causes the evaluation of regular non-`mkIf` definitions.
+      Evaluating too much causes multiple problems:
+        - infinite recursion if an attribute definition depends on a sibling attribute
+        - irrelevant errors are triggered, despite an attribute not really being used
+        - performance is worse, if any of the values are expensive to evaluate
+
+      **Recommendation**
+
+      If the attribute set is used _in aggregate_ (e.g. `attrNames`, `toJSON`), use the default `lazy = false;`, so that `mkIf` conditions are evaluated *before* the attribute names are returned.
+
+      If the attribute set is used _individually_ (e.g. `config.foo`), use `lazy = true;` so that `mkIf` conditions are evaluated *after* the attribute names are returned.
+      This will be more robust and efficient, as the attribute values are not computed until it is needed.
+
+      It possible to combine both behaviors using `submodule` with `freeformType = attrsWith { lazy = false; ... }` instead of `attrsWith`, in which case the declared options are allowed to refer to each other, but *only* through the submodule's module arguments. See the following example.
+
+      ::: {#ex-freeform-attrsWith-recursive .example}
+      ### Free-form submodule with recursion
+
+      This module demonstrates use of a free-form submodule with recursion:
+
+      ```nix
+      { lib, ... }:
+      let
+        inherit (lib) mkOption types;
+      in
+      {
+        options.foo.settings = mkOption {
+          type = types.submodule ({ config, ... }: {
+            freeformType = types.attrsWith {
+              lazy = false;
+              elemType = types.str;
+            };
+            options = {
+              name = mkOption { type = types.str; };
+              displayName = mkOption { type = types.str; };
+            };
+          });
+        };
+        config.foo.settings = { config, ... }: {
+          name = "foo";
+          displayName = config.name;
+          extra = "bar";
+          ghost = lib.mkIf false "this disappears";
+        };
+      }
+      ```
+
+      It evaluates to the following configuration:
+
+      ```nix
+      {
+        foo.settings = {
+          name = "foo";
+          displayName = "foo";
+          extra = "bar";
+        };
+      }
+      ```
+      :::
 
     `placeholder` (`String`, default: `name` )
     : Placeholder string in documentation for the attribute names.

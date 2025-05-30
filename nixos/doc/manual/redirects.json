@@ -1,4 +1,10 @@
 {
+  "ex-freeform-attrsWith-recursive": [
+    "index.html#ex-freeform-attrsWith-recursive"
+  ],
+  "sec-option-types-composed-attrsWith-lazy": [
+    "index.html#sec-option-types-composed-attrsWith-lazy"
+  ],
   "book-nixos-manual": [
     "index.html#book-nixos-manual"
   ],
