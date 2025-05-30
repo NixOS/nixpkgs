@@ -1164,10 +1164,10 @@ with pkgs;
     jdk = jdk8;
   };
 
-  sonar-scanner-cli-minimal =
-    (sonar-scanner-cli.override {
+  sonar-scanner-cli-minimal = (
+    sonar-scanner-cli.override {
       jre = jre_minimal.override {
-        jdk = jdk21_headless;
+        jdk = jdk_headless;
         modules = [
           "java.base"
           "java.logging"
@@ -1179,13 +1179,8 @@ with pkgs;
           "jdk.unsupported"
         ];
       };
-    }).overrideAttrs
-      (oldAttrs: {
-        name = "${oldAttrs.pname}-minimal-${oldAttrs.version}";
-        meta = oldAttrs.meta // {
-          description = "${oldAttrs.meta.description} (minimal JRE)";
-        };
-      });
+    }
+  );
 
   supermin = callPackage ../tools/virtualization/supermin {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
