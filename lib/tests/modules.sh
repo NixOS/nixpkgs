@@ -364,6 +364,9 @@ checkConfigOutput '^"submodule"$' options.submodule.type.description ./declare-s
 ## Paths should be allowed as values and work as expected
 checkConfigOutput '^true$' config.submodule.enable ./declare-submoduleWith-path.nix
 
+## _prefix module argument is available at import time and contains the prefix
+checkConfigOutput '^true$' config.foo.ok ./prefix-module-argument.nix
+
 ## deferredModule
 # default module is merged into nodes.foo
 checkConfigOutput '"beta"' config.nodes.foo.settingsDict.c ./deferred-module.nix
@@ -615,6 +618,7 @@ checkConfigError 'Expected a module, but found a value of type .*"flake".*, whil
 checkConfigOutput '^true$' config.enable ./declare-enable.nix ./define-enable-with-top-level-mkIf.nix
 checkConfigError 'Expected a module, but found a value of type .*"configuration".*, while trying to load a module into .*/import-configuration.nix.' config ./import-configuration.nix
 checkConfigError 'please only import the modules that make up the configuration' config ./import-configuration.nix
+checkConfigError 'Expected a module, but found a value of type "configuration", while trying to load a module into .*/import-error-submodule.nix, while trying to load a module into .*foo.*\.' config.foo ./import-error-submodule.nix
 
 # doRename works when `warnings` does not exist.
 checkConfigOutput '^1234$' config.c.d.e ./doRename-basic.nix
