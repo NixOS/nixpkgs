@@ -435,6 +435,7 @@ let
       ruby = rubyEnv.wrappedRuby;
       tests = import ../../../../nixos/tests/discourse.nix {
         inherit (stdenv) system;
+        inherit lib;
         inherit pkgs;
         package = pkgs.discourse.override args;
       };
