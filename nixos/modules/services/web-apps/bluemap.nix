@@ -18,10 +18,6 @@ let
     ) cfg.maps
   );
 
-  addonsFolder = pkgs.linkFarm "addons" (
-    lib.attrsets.mapAttrs' (name: value: lib.nameValuePair "${name}.jar" value) cfg.addons
-  );
-
   storageFolder = pkgs.linkFarm "storage" (
     lib.attrsets.mapAttrs' (
       name: value: lib.nameValuePair "${name}.conf" (format.generate "${name}.conf" value)
@@ -34,8 +30,7 @@ let
     "core.conf" = coreConfig;
     "webapp.conf" = webappConfig;
     "webserver.conf" = webserverConfig;
-    "packs" = pkgs.linkFarm "packs" cfg.resourcepacks;
-    "addons" = addonsFolder;
+    "packs" = pkgs.linkFarm "packs" cfg.packs;
   };
 
   inherit (lib) mkOption;
@@ -44,6 +39,10 @@ in
   imports = [
     (lib.mkRenamedOptionModule
       [ "services" "bluemap" "resourcepacks" ]
+      [ "services" "bluemap" "packs" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "bluemap" "addons" ]
       [ "services" "bluemap" "packs" ]
     )
   ];
