@@ -212,10 +212,6 @@ let
         # definition values and locations (e.g. [ { file = "/foo.nix";
         # value = 1; } { file = "/bar.nix"; value = 2 } ]).
         merge ? mergeDefaultOption,
-        #
-        # This field does not have a default implementation, so that users' changes
-        # to `check` and `merge` are propagated.
-        checkAndMerge ? null,
         # Whether this type has a value representing nothingness. If it does,
         # this should be a value of the form { value = <the nothing value>; }
         # If it doesn't, this should be {}
@@ -264,7 +260,6 @@ let
           deprecationMessage
           nestedTypes
           descriptionClass
-          checkAndMerge
           ;
         functor =
           if functor ? wrappedDeprecationMessage then
@@ -718,31 +713,36 @@ let
           }";
           descriptionClass = "composite";
           check = isList;
-          merge = loc: defs: (checkAndMerge loc defs).value;
-          checkAndMerge =
-            loc: defs:
-            let
-              evals = filter (x: x.optionalValue ? value) (
-                concatLists (
-                  imap1 (
-                    n: def:
+          merge = {
+            __functor =
+              self: loc: defs:
+              (self.v2 { inherit loc defs; }).value;
+            v2 =
+              { loc, defs }:
+              let
+                evals = filter (x: x.optionalValue ? value) (
+                  concatLists (
                     imap1 (
-                      m: def':
-                      (mergeDefinitions (loc ++ [ "[definition ${toString n}-entry ${toString m}]" ]) elemType [
-                        {
-                          inherit (def) file;
-                          value = def';
-                        }
-                      ])
-                    ) def.value
-                  ) defs
-                )
-              );
-            in
-            {
-              value = map (x: x.optionalValue.value or x.mergedValue) evals;
-              valueMeta.list = map (v: v.checkedAndMerged.valueMeta) evals;
-            };
+                      n: def:
+                      imap1 (
+                        m: def':
+                        (mergeDefinitions (loc ++ [ "[definition ${toString n}-entry ${toString m}]" ]) elemType [
+                          {
+                            inherit (def) file;
+                            value = def';
+                          }
+                        ])
+                      ) def.value
+                    ) defs
+                  )
+                );
+              in
+              {
+                headError = checkDefsForError check loc defs;
+                value = map (x: x.optionalValue.value or x.mergedValue) evals;
+                valueMeta.list = map (v: v.checkedAndMerged.valueMeta) evals;
+              };
+          };
           emptyValue = {
             value = [ ];
           };
@@ -828,30 +828,35 @@ let
             + " of ${optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType}";
           descriptionClass = "composite";
           check = isAttrs;
-          merge = loc: defs: (checkAndMerge loc defs).value;
-          checkAndMerge =
-            loc: defs:
-            let
-              evals =
-                if lazy then
-                  zipAttrsWith (name: defs: mergeDefinitions (loc ++ [ name ]) elemType defs) (pushPositions defs)
-                else
-                  # Filtering makes the merge function more strict
-                  # Meaning it is less lazy
-                  filterAttrs (n: v: v.optionalValue ? value) (
+          merge = {
+            __functor =
+              self: loc: defs:
+              (self.v2 { inherit loc defs; }).value;
+            v2 =
+              { loc, defs }:
+              let
+                evals =
+                  if lazy then
                     zipAttrsWith (name: defs: mergeDefinitions (loc ++ [ name ]) elemType defs) (pushPositions defs)
-                  );
-            in
-            {
-              value = mapAttrs (
-                n: v:
-                if lazy then
-                  v.optionalValue.value or elemType.emptyValue.value or v.mergedValue
-                else
-                  v.optionalValue.value
-              ) evals;
-              valueMeta.attrs = mapAttrs (n: v: v.checkedAndMerged.valueMeta) evals;
-            };
+                  else
+                    # Filtering makes the merge function more strict
+                    # Meaning it is less lazy
+                    filterAttrs (n: v: v.optionalValue ? value) (
+                      zipAttrsWith (name: defs: mergeDefinitions (loc ++ [ name ]) elemType defs) (pushPositions defs)
+                    );
+              in
+              {
+                headError = checkDefsForError check loc defs;
+                value = mapAttrs (
+                  n: v:
+                  if lazy then
+                    v.optionalValue.value or elemType.emptyValue.value or v.mergedValue
+                  else
+                    v.optionalValue.value
+                ) evals;
+                valueMeta.attrs = mapAttrs (n: v: v.checkedAndMerged.valueMeta) evals;
+              };
+          };
 
           emptyValue = {
             value = { };
@@ -1238,6 +1243,7 @@ let
 
           name = "submodule";
 
+          check = x: isAttrs x || isFunction x || path.check x;
         in
         mkOptionType {
           inherit name;
@@ -1249,25 +1255,25 @@ let
                 docsEval = base.extendModules { modules = [ noCheckForDocsModule ]; };
               in
               docsEval._module.freeformType.description or name;
-          check = x: isAttrs x || isFunction x || path.check x;
-          merge =
-            loc: defs:
-            (base.extendModules {
-              modules = [ { _module.args.name = last loc; } ] ++ allModules defs;
-              prefix = loc;
-            }).config;
-          checkAndMerge =
-            loc: defs:
-            let
-              configuration = base.extendModules {
-                modules = [ { _module.args.name = last loc; } ] ++ allModules defs;
-                prefix = loc;
+          inherit check;
+          merge = {
+            __functor =
+              self: loc: defs:
+              (self.v2 { inherit loc defs; }).value;
+            v2 =
+              { loc, defs }:
+              let
+                configuration = base.extendModules {
+                  modules = [ { _module.args.name = last loc; } ] ++ allModules defs;
+                  prefix = loc;
+                };
+              in
+              {
+                headError = checkDefsForError check loc defs;
+                value = configuration.config;
+                valueMeta = configuration;
               };
-            in
-            {
-              value = configuration.config;
-              valueMeta = configuration;
-            };
+          };
           emptyValue = {
             value = { };
           };
@@ -1415,17 +1421,48 @@ let
               }";
           descriptionClass = "conjunction";
           check = x: t1.check x || t2.check x;
-          merge =
-            loc: defs:
-            let
-              defList = map (d: d.value) defs;
-            in
-            if all (x: t1.check x) defList then
-              t1.merge loc defs
-            else if all (x: t2.check x) defList then
-              t2.merge loc defs
-            else
-              mergeOneOption loc defs;
+          merge = {
+            __functor =
+              self: loc: defs:
+              (self.v2 { inherit loc defs; }).value;
+            v2 =
+              { loc, defs }:
+              let
+                t1CheckedAndMerged =
+                  if t1.merge ? v2 then
+                    t1.merge.v2 { inherit loc defs; }
+                  else
+                    {
+                      value = t1.merge loc defs;
+                      headError = checkDefsForError t1.check loc defs;
+                      valueMeta = { };
+                    };
+                t2CheckedAndMerged =
+                  if t2.merge ? v2 then
+                    t2.merge.v2 { inherit loc defs; }
+                  else
+                    {
+                      value = t2.merge loc defs;
+                      headError = checkDefsForError t2.check loc defs;
+                      valueMeta = { };
+                    };
+
+                checkedAndMerged =
+                  if t1CheckedAndMerged.headError == null then
+                    t1CheckedAndMerged
+                  else if t2CheckedAndMerged.headError == null then
+                    t2CheckedAndMerged
+                  else
+                    rec {
+                      valueMeta = {
+                        inherit headError;
+                      };
+                      headError = "The option `${showOption loc}` is neither a value of type `${t1.description}` nor `${t2.description}`, Definition values: ${showDefs defs}";
+                      value = null;
+                    };
+              in
+              checkedAndMerged;
+          };
           typeMerge =
             f':
             let
@@ -1466,12 +1503,43 @@ let
             optionDescriptionPhrase (class: class == "noun") coercedType
           } convertible to it";
           check = x: (coercedType.check x && finalType.check (coerceFunc x)) || finalType.check x;
-          merge =
-            loc: defs:
-            let
-              coerceVal = val: if coercedType.check val then coerceFunc val else val;
-            in
-            finalType.merge loc (map (def: def // { value = coerceVal def.value; }) defs);
+          merge = {
+            __funtor =
+              self: loc: defs:
+              (self.v2 { inherit loc defs; }).value;
+            v2 =
+              { loc, defs }:
+              let
+                isMergeV2 = coercedType.merge ? v2;
+                coerceDef =
+                  def:
+                  let
+                    merged = coercedType.merge.v2 {
+                      inherit loc;
+                      defs = [ def ];
+                    };
+                  in
+                  if isMergeV2 then
+                    if merged.headError == null then coerceFunc def.value else def.value
+                  else if coercedType.check def.value then
+                    coerceFunc def.value
+                  else
+                    def.value;
+
+                finalDefs = (map (def: def // { value = coerceDef def; }) defs);
+              in
+              if finalType.merge ? v2 then
+                finalType.merge.v2 {
+                  inherit loc;
+                  defs = finalDefs;
+                }
+              else
+                {
+                  value = finalType.merge loc finalDefs;
+                  valueMeta = { };
+                  headError = checkDefsForError check loc finalDefs;
+                };
+          };
           emptyValue = finalType.emptyValue;
           getSubOptions = finalType.getSubOptions;
           getSubModules = finalType.getSubModules;
@@ -1494,25 +1562,15 @@ let
       */
       addCheck =
         elemType: check:
-        elemType
-        // {
-          check = x: elemType.check x && check x;
-        }
-        // (lib.optionalAttrs (elemType.checkAndMerge != null) {
-          checkAndMerge =
-            loc: defs:
-            let
-              v = (elemType.checkAndMerge loc defs);
-            in
-            if all (def: elemType.check def.value && check def.value) defs then
-              v
-            else
-              let
-                allInvalid = filter (def: !elemType.check def.value || !check def.value) defs;
-              in
-              throw "A definition for option `${showOption loc}' is not of type `${elemType.description}'. Definition values:${showDefs allInvalid}";
-        });
-
+        let
+          final = elemType // {
+            check = x: elemType.check x && check x;
+            # addCheck discards the merge.v2 function
+            #
+            merge = if elemType.merge ? v2 then elemType.merge.__functor { inherit final; } else elemType.merge;
+          };
+        in
+        final;
     };
 
     /**
