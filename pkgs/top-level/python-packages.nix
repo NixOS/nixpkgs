@@ -4074,6 +4074,8 @@ self: super: with self; {
     callPackage ../development/python-modules/django-postgresql-netfields
       { };
 
+  django-probes = callPackage ../development/python-modules/django-probes { };
+
   django-prometheus = callPackage ../development/python-modules/django-prometheus { };
 
   django-pwa = callPackage ../development/python-modules/django-pwa { };
