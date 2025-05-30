@@ -88,6 +88,8 @@ let
 
         benchmark = callPackage ../development/ocaml-modules/benchmark { };
 
+        bencode = callPackage ../development/ocaml-modules/bencode { };
+
         bheap = callPackage ../development/ocaml-modules/bheap { };
 
         bigarray-compat = callPackage ../development/ocaml-modules/bigarray-compat { };
@@ -201,6 +203,8 @@ let
         carton-lwt = callPackage ../development/ocaml-modules/carton/lwt.nix {
           git-binary = pkgs.git;
         };
+
+        cbor = callPackage ../development/ocaml-modules/cbor { };
 
         cfstream = callPackage ../development/ocaml-modules/cfstream { };
 
@@ -325,6 +329,26 @@ let
         dates_calc = callPackage ../development/ocaml-modules/dates_calc { };
 
         dbf = callPackage ../development/ocaml-modules/dbf { };
+
+        decoders = callPackage ../development/ocaml-modules/decoders { };
+
+        decoders-bencode = callPackage ../development/ocaml-modules/decoders-bencode { };
+
+        decoders-cbor = callPackage ../development/ocaml-modules/decoders-cbor { };
+
+        decoders-ezjsonm = callPackage ../development/ocaml-modules/decoders-ezjsonm { };
+
+        decoders-ezxmlm = callPackage ../development/ocaml-modules/decoders-ezxmlm { };
+
+        decoders-jsonaf = callPackage ../development/ocaml-modules/decoders-jsonaf { };
+
+        decoders-jsonm = callPackage ../development/ocaml-modules/decoders-jsonm { };
+
+        decoders-msgpck = callPackage ../development/ocaml-modules/decoders-msgpck { };
+
+        decoders-sexplib = callPackage ../development/ocaml-modules/decoders-sexplib { };
+
+        decoders-yojson = callPackage ../development/ocaml-modules/decoders-yojson { };
 
         decompress = callPackage ../development/ocaml-modules/decompress { };
 
