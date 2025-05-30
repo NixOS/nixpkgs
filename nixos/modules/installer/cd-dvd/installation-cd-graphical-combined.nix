@@ -11,6 +11,25 @@
   isoImage.showConfiguration = lib.mkDefault false;
 
   specialisation = {
+    cosmic.configuration =
+      { config, ... }:
+      {
+        imports = [ ./installation-cd-graphical-calamares-cosmic.nix ];
+        isoImage.showConfiguration = true;
+        isoImage.configurationName = "COSMIC (Linux LTS)";
+      };
+
+    cosmic_latest_kernel.configuration =
+      { config, ... }:
+      {
+        imports = [
+          ./installation-cd-graphical-calamares-cosmic.nix
+          ./latest-kernel.nix
+        ];
+        isoImage.showConfiguration = true;
+        isoImage.configurationName = "COSMIC (Linux ${config.boot.kernelPackages.kernel.version})";
+      };
+
     gnome.configuration =
       { config, ... }:
       {
