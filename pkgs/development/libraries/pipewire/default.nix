@@ -82,7 +82,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pipewire";
-  version = "1.4.2";
+  version = "1.4.4";
 
   outputs = [
     "out"
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pipewire";
     repo = "pipewire";
     rev = finalAttrs.version;
-    sha256 = "sha256-uxTzdvmazLNmWqc1v1LGiq34zV9IT0y1vTGc/+JiEU8=";
+    sha256 = "sha256-ullr00XbYrjwAAkQ6tWRayoS3aFuQsbDpSv06pgBDSA=";
   };
 
   patches = [
@@ -244,6 +244,7 @@ stdenv.mkDerivation (finalAttrs: {
   FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
   doCheck = true;
+  doInstallCheck = true;
 
   postUnpack = ''
     patchShebangs ${finalAttrs.src.name}/doc/*.py

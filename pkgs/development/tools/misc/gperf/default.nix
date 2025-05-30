@@ -6,17 +6,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gperf";
-  version = "3.1";
+  version = "3.3";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "1qispg6i508rq8pkajh26cznwimbnj06wq9sd85vg95v8nwld1aq";
+    hash = "sha256-/Yfgq6fkOuBUg3r9bNTbA6PyaT3rNhkIXm7Z2NlgStg=";
   };
-
-  patches = [
-    # Clang 16 defaults to C++17, which does not allow `register` as a storage class specifier.
-    ./gperf-c++17-register-fix.patch
-  ];
 
   enableParallelBuilding = true;
 

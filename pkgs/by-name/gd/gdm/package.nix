@@ -31,6 +31,7 @@
   dbus,
   nixos-icons,
   runCommand,
+  udevCheckHook,
 }:
 
 let
@@ -74,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     gobject-introspection
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -143,6 +145,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace meson.build \
       --replace-fail "dconf_prefix = dconf_dep.get_variable(pkgconfig: 'prefix')" "dconf_prefix = gdm_prefix"
   '';
+
+  doInstallCheck = true;
 
   preInstall = ''
     install -D ${override} "$DESTDIR/$out/share/glib-2.0/schemas/org.gnome.login-screen.gschema.override"

@@ -11,7 +11,7 @@ fi
 # Make sure we are inside the nixpkgs repo, even when called from outside
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
-PICKABLE_BRANCHES="master release-??.?? staging-??.?? haskell-updates python-updates"
+PICKABLE_BRANCHES="master staging release-??.?? staging-??.?? haskell-updates python-updates staging-next staging-next-??.??"
 problem=0
 
 # Not everyone calls their remote "origin"
