@@ -1,29 +1,52 @@
-{ lib, stdenv, fetchurl, coreutils, openjdk17, makeWrapper
-, autoPatchelfHook, zlib, libzen, libmediainfo, curlWithGnuTls, libmms, glib
-, genericUpdater, writeShellScript, }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  coreutils,
+  openjdk17,
+  makeWrapper,
+  autoPatchelfHook,
+  zlib,
+  libzen,
+  libmediainfo,
+  curlWithGnuTls,
+  libmms,
+  glib,
+  genericUpdater,
+  writeShellScript,
+}:
 
 let
   lanterna = fetchurl {
-    url =
-      "https://search.maven.org/remotecontent?filepath=com/googlecode/lanterna/lanterna/3.1.1/lanterna-3.1.1.jar";
+    url = "https://search.maven.org/remotecontent?filepath=com/googlecode/lanterna/lanterna/3.1.1/lanterna-3.1.1.jar";
     hash = "sha256-7zxCeXYW5v9ritnvkwRpPKdgSptCmkT3HJOaNgQHUmQ=";
   };
   system = stdenv.hostPlatform.system;
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "filebot";
   version = "5.1.7";
 
   src = fetchurl {
-    url =
-      "https://web.archive.org/web/20230917142929/https://get.filebot.net/filebot/FileBot_${finalAttrs.version}/FileBot_${finalAttrs.version}-portable.tar.xz";
+    url = "https://web.archive.org/web/20230917142929/https://get.filebot.net/filebot/FileBot_${finalAttrs.version}/FileBot_${finalAttrs.version}-portable.tar.xz";
     hash = "sha256-GpjWo2+AsT0hD3CJJ8Pf/K5TbWtG0ZE2tIpH/UEGTws=";
   };
 
   unpackPhase = "tar xvf $src";
 
-  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
+  nativeBuildInputs = [
+    makeWrapper
+    autoPatchelfHook
+  ];
 
-  buildInputs = [ zlib libzen libmediainfo curlWithGnuTls libmms glib ];
+  buildInputs = [
+    zlib
+    libzen
+    libmediainfo
+    curlWithGnuTls
+    libmms
+    glib
+  ];
 
   postPatch = ''
     # replace lanterna.jar to be able to specify `com.googlecode.lanterna.terminal.UnixTerminal.sttyCommand`
@@ -51,15 +74,11 @@ in stdenv.mkDerivation (finalAttrs: {
     case $system in
       x86_64-linux)
         rm $out/opt/lib/Linux-x86_64/libmediainfo.so
-        ln -s ${
-          lib.getLib libmediainfo
-        }/lib/libmediainfo.so $out/opt/lib/Linux-x86_64/
+        ln -s ${lib.getLib libmediainfo}/lib/libmediainfo.so $out/opt/lib/Linux-x86_64/
         ;;
       aarch64-linux)
         rm $out/opt/lib/Linux-aarch64/libmediainfo.so
-        ln -s ${
-          lib.getLib libmediainfo
-        }/lib/libmediainfo.so $out/opt/lib/Linux-aarch64/
+        ln -s ${lib.getLib libmediainfo}/lib/libmediainfo.so $out/opt/lib/Linux-aarch64/
         ;;
       *)
     # Keep default libs
@@ -86,9 +105,15 @@ in stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://filebot.net";
     changelog = "https://www.filebot.net/forums/viewforum.php?f=7";
-    sourceProvenance = with sourceTypes; [ binaryBytecode binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ gleber felschr ];
+    maintainers = with maintainers; [
+      gleber
+      felschr
+    ];
     platforms = platforms.linux;
     mainProgram = "filebot";
   };
