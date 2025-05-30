@@ -1,6 +1,6 @@
 {
   "name": "draupnir",
-  "version": "2.2.0",
+  "version": "2.3.1",
   "description": "A moderation tool for Matrix",
   "main": "lib/index.js",
   "repository": "https://github.com/the-draupnir-project/Draupnir.git",
@@ -20,8 +20,7 @@
     "test:integration:single": "NODE_ENV=harness corepack yarn mocha --require test/tsnode.cjs --require test/integration/fixtures.ts --timeout 300000 --project ./tsconfig.json",
     "test:appservice:integration": "NODE_ENV=harness mocha --require test/tsnode.cjs --async-stack-traces --forbid-only --timeout 300000 --project ./tsconfig.json \"test/appservice/integration/**/*Test.ts\"",
     "test:appservice:integration:single": "NODE_ENV=harness corepack yarn mocha --require test/tsnode.cjs --timeout 300000 --project ./tsconfig.json",
-    "test:manual": "NODE_ENV=harness ts-node test/integration/manualLaunchScript.ts",
-    "version": "sed -i '/# version automated/s/[0-9][0-9]*\\.[0-9][0-9]*\\.[0-9][^\"]*/'$npm_package_version'/' synapse_antispam/setup.py && git add synapse_antispam/setup.py && cat synapse_antispam/setup.py"
+    "test:manual": "NODE_ENV=harness ts-node test/integration/manualLaunchScript.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.7.0",
@@ -52,8 +51,8 @@
     "@gnuxie/typescript-result": "^1.0.0",
     "@sentry/node": "^7.17.2",
     "@sinclair/typebox": "0.34.13",
-    "@the-draupnir-project/interface-manager": "4.0.2",
-    "@the-draupnir-project/matrix-basic-types": "1.2.0",
+    "@the-draupnir-project/interface-manager": "4.1.0",
+    "@the-draupnir-project/matrix-basic-types": "1.3.0",
     "better-sqlite3": "^9.4.3",
     "body-parser": "^1.20.2",
     "config": "^3.3.9",
@@ -63,15 +62,16 @@
     "jsdom": "^24.0.0",
     "matrix-appservice-bridge": "^10.3.1",
     "matrix-bot-sdk": "npm:@vector-im/matrix-bot-sdk@^0.7.1-element.6",
-    "matrix-protection-suite": "npm:@gnuxie/matrix-protection-suite@2.10.0",
-    "matrix-protection-suite-for-matrix-bot-sdk": "npm:@gnuxie/matrix-protection-suite-for-matrix-bot-sdk@2.10.1",
+    "matrix-protection-suite": "npm:@gnuxie/matrix-protection-suite@3.4.0",
+    "matrix-protection-suite-for-matrix-bot-sdk": "npm:@gnuxie/matrix-protection-suite-for-matrix-bot-sdk@3.1.4",
     "pg": "^8.8.0",
     "yaml": "^2.3.2"
   },
   "overrides": {
     "matrix-bot-sdk": "$@vector-im/matrix-bot-sdk",
     "@vector-im/matrix-bot-sdk": "npm:@vector-im/matrix-bot-sdk@^0.7.1-element.6",
-    "@the-draupnir-project/matrix-basic-types": "@the-draupnir-project/matrix-basic-types@1.2.0"
+    "@the-draupnir-project/matrix-basic-types": "@the-draupnir-project/matrix-basic-types@1.2.0",
+    "matrix-protection-suite": "$matrix-protection-suite"
   },
   "engines": {
     "node": ">=20.0.0"
