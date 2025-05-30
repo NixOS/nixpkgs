@@ -26070,7 +26070,6 @@
     name = "Adrian Pistol";
   };
   viitorags = {
-    email = "152658654+viitorags@users.noreply.github.com";
     name = "Vitor Gabriel";
     github = "viitorags";
     githubId = 152658654;
