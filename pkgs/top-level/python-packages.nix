@@ -3501,6 +3501,7 @@ self: super: with self; {
 
   diffpy-structure = callPackage ../development/python-modules/diffpy-structure { };
 
+  diffsims = callPackage ../development/python-modules/diffsims { };
 
   diffsync = callPackage ../development/python-modules/diffsync { };
 
