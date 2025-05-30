@@ -2,8 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  autoconf,
-  automake,
   autoreconfHook,
   buildPackages,
   libiconv,
@@ -132,8 +130,6 @@ stdenv.mkDerivation rec {
     [
       perl
       xz.bin
-      autoconf
-      automake
     ]
     ++ optionals stdenv.hostPlatform.isCygwin [
       # due to patch
