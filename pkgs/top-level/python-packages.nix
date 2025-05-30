@@ -12401,6 +12401,8 @@ self: super: with self; {
 
   pyfdt = callPackage ../development/python-modules/pyfdt { };
 
+  pyfftw = callPackage ../development/python-modules/pyfftw { };
+
   pyfibaro = callPackage ../development/python-modules/pyfibaro { };
 
   pyfido = callPackage ../development/python-modules/pyfido { };
