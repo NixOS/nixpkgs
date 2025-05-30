@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   bash,
+  udevCheckHook,
   nix-update-script,
 }:
 
@@ -16,6 +17,12 @@ stdenvNoCC.mkDerivation {
     rev = "e2971e45063f6b327ccedbf18e168bda6749155c";
     hash = "sha256-kBqWw3TlCSWS7gJXgza2ghemypQ0AEg7NhWqAFnal04=";
   };
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   installPhase = ''
     runHook preInstall

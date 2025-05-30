@@ -3,28 +3,24 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
-  six,
+  setuptools,
   wcwidth,
 }:
 
 buildPythonPackage rec {
   pname = "prompt-toolkit";
-  version = "3.0.50";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "3.0.51";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "prompt_toolkit";
     inherit version;
-    hash = "sha256-VEdI84YKJiPKXNbSeV56FPPQ4cPJcoNZAT95h3/Im6s=";
+    hash = "sha256-kxoWLjsn/JDIbxtIux+yxSjCdhR15XycBt4TMRx7VO0=";
   };
 
-  propagatedBuildInputs = [
-    six
-    wcwidth
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ wcwidth ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

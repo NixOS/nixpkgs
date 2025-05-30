@@ -4,6 +4,7 @@
   fetchFromGitHub,
   ruby,
   bundlerEnv,
+  udevCheckHook,
 }:
 let
 
@@ -41,6 +42,12 @@ stdenv.mkDerivation rec {
     gems
     ruby
   ];
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   # See: https://wiki.nixos.org/wiki/Packaging/Ruby
   #

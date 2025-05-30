@@ -109,13 +109,13 @@
           lib.optionalString (stdenv.hostPlatform.config != stdenv.targetPlatform.config) ''
             [target."${stdenv.targetPlatform.rust.rustcTarget}"]
             "linker" = "${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}cc"
+            "rustflags" = [ "-C", "target-feature=${
+              if pkgsTargetTarget.stdenv.targetPlatform.isStatic then "+" else "-"
+            }crt-static" ]
           ''
           + ''
             [target."${stdenv.hostPlatform.rust.rustcTarget}"]
             "linker" = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
-            "rustflags" = [ "-C", "target-feature=${
-              if pkgsTargetTarget.stdenv.targetPlatform.isStatic then "+" else "-"
-            }crt-static" ]
           '';
       };
       passthru.tests =

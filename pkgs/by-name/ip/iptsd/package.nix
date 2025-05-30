@@ -13,6 +13,7 @@
   microsoft-gsl,
   spdlog,
   systemd,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    udevCheckHook
   ];
 
   dontUseCmakeConfigure = true;
@@ -44,6 +46,8 @@ stdenv.mkDerivation rec {
     spdlog
     systemd
   ];
+
+  doInstallCheck = true;
 
   # Original installs udev rules and service config into global paths
   postPatch = ''

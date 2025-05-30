@@ -178,6 +178,8 @@ stdenv.mkDerivation (finalAttrs: {
   # many tests fails on darwin, according to ofborg
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+  doInstallCheck = true;
+
   # Build only the host software
   preConfigure = "cd host";
   patches = [

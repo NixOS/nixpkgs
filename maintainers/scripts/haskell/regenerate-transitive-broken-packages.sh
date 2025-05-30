@@ -20,6 +20,6 @@ cat > $tmpfile << EOF
 dont-distribute-packages:
 EOF
 
-nix-instantiate --eval --option restrict-eval true -I . --strict --json maintainers/scripts/haskell/transitive-broken-packages.nix | jq -r . | LC_ALL=C.UTF-8 sort -i >> $tmpfile
+nix-instantiate --eval --option restrict-eval true -I . --strict --json maintainers/scripts/haskell/transitive-broken-packages.nix | jq -r . | LC_ALL=C.UTF-8 sort --ignore-case >> $tmpfile
 
 mv $tmpfile $config_file

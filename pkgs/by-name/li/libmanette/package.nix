@@ -34,6 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-SLNJJnGA8dw01AWp4ekLoW8FShnOkHkw5nlJPZEeodg=";
   };
 
+  depsBuildBuild = lib.optionals withIntrospection [
+    pkg-config
+  ];
+
   nativeBuildInputs =
     [
       meson
@@ -68,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+  strictDeps = true;
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
