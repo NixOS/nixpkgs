@@ -6,7 +6,7 @@
 
   # build-system
   cymem,
-  cython_0,
+  cython,
   murmurhash,
   numpy,
   preshed,
@@ -47,19 +47,19 @@
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.8.6";
+  version = "3.8.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "spaCy";
     tag = "release-v${version}";
-    hash = "sha256-Zy2RLib/B9fLtcqO24ltvn1PUD68l9Rf7nHH4XuT6to=";
+    hash = "sha256-mRra5/4W3DFVI/KbReTg2Ey9mOC6eQQ31/QDt7Pw0fU=";
   };
 
   build-system = [
     cymem
-    cython_0
+    cython
     murmurhash
     numpy
     preshed
