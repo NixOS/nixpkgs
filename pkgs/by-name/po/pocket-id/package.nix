@@ -9,18 +9,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "pocket-id";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cHPG4KZgfLuEDzLJ9dV4PRUlqWjd7Ji3480lrFwK6Ds=";
+    hash = "sha256-J/s8wpKAU7w8Djtd7rtamCzg/7176W0ybSoAB/vHOjs=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";
 
-  vendorHash = "sha256-82kdx9ihJgqMCiUjZTONGa1nCZoxKltw8mpF0KoOdT8=";
+  vendorHash = "sha256-jLwuBYiFZhUDIvG5uk78vXmo+wuqkFmyC5lAUZ3vUxU=";
 
   env.CGO_ENABLED = 0;
   ldflags = [
