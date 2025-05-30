@@ -1,4 +1,4 @@
-{ system, lib, stdenv, fetchurl, coreutils, openjdk17, makeWrapper
+{ lib, stdenv, fetchurl, coreutils, openjdk17, makeWrapper
 , autoPatchelfHook, zlib, libzen, libmediainfo, curlWithGnuTls, libmms, glib
 , genericUpdater, writeShellScript, }:
 
@@ -8,6 +8,7 @@ let
       "https://search.maven.org/remotecontent?filepath=com/googlecode/lanterna/lanterna/3.1.1/lanterna-3.1.1.jar";
     hash = "sha256-7zxCeXYW5v9ritnvkwRpPKdgSptCmkT3HJOaNgQHUmQ=";
   };
+  system = stdenv.hostPlatform.system;
 in stdenv.mkDerivation (finalAttrs: {
   pname = "filebot";
   version = "5.1.7";
