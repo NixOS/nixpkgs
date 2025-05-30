@@ -37,9 +37,8 @@ buildPythonPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
+    inherit pname version src;
     sourceRoot = "${src.name}/aardwolf/utils/rlers";
-    name = "${pname}-${version}";
     hash = "sha256-doBraJQtekrO/ZZV9KFz7BdIgBVVWtQztUS2Gz8dDdA=";
   };
 
