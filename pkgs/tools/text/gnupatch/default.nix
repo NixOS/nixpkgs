@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   ed,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,6 +14,13 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/patch/patch-${version}.tar.xz";
     hash = "sha256-+Hzuae7CtPy/YKOWsDCtaqNBXxkqpffuhMrV4R9/WuM=";
   };
+
+  # This test is filesystem-dependent - observed failing on ZFS
+  postPatch = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
+    sed -E -i -e '/bad-filenames/d' tests/Makefile.am
+  '';
+
+  nativeBuildInputs = [ autoreconfHook ];
 
   configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_strnlen_working=yes"
