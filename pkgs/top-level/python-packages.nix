@@ -8622,6 +8622,8 @@ self: super: with self; {
 
   matplotlib-inline = callPackage ../development/python-modules/matplotlib-inline { };
 
+  matplotlib-scalebar = callPackage ../development/python-modules/matplotlib-scalebar { };
+
   matplotlib-sixel = callPackage ../development/python-modules/matplotlib-sixel { };
 
   matplotlib-venn = callPackage ../development/python-modules/matplotlib-venn { };
