@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "cminyard";
-    repo = pname;
+    repo = "gensio";
     rev = "v${version}";
     sha256 = "sha256-EDa95r8x5yIXibJigJXR3PCYTTvJlqB6XBN1RZHq6KM=";
   };

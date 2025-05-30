@@ -1,14 +1,13 @@
 {
-  cudaData,
-  cudaLib,
+  _cuda,
   cudaNamePrefix,
   lib,
   runCommand,
 }:
 let
   inherit (builtins) deepSeq toJSON tryEval;
-  inherit (cudaData) cudaCapabilityToInfo;
-  inherit (cudaLib) formatCapabilities;
+  inherit (_cuda.bootstrapData) cudaCapabilityToInfo;
+  inherit (_cuda.lib) formatCapabilities;
   inherit (lib.asserts) assertMsg;
 in
 # When changing names or formats: pause, validate, and update the assert
@@ -62,6 +61,7 @@ assert
         "7.5"
         "8.6"
       ];
+      cudaForwardCompat = true;
     };
     actualWrapped = (tryEval (deepSeq actual actual)).value;
   in

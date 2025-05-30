@@ -3,6 +3,8 @@
   name = "gnome-extensions";
   meta.maintainers = [ ];
 
+  node.pkgsReadOnly = false;
+
   nodes.machine =
     { pkgs, ... }:
     {
@@ -21,21 +23,19 @@
 
       # Configure GDM
       services.xserver.enable = true;
-      services.xserver.displayManager = {
-        gdm = {
-          enable = true;
-          debug = true;
-          wayland = true;
-        };
-        autoLogin = {
-          enable = true;
-          user = "alice";
-        };
+      services.xserver.displayManager.gdm = {
+        enable = true;
+        debug = true;
+        wayland = true;
+      };
+      services.displayManager.autoLogin = {
+        enable = true;
+        user = "alice";
       };
 
       # Configure Gnome
-      services.xserver.desktopManager.gnome.enable = true;
-      services.xserver.desktopManager.gnome.debug = true;
+      services.desktopManager.gnome.enable = true;
+      services.desktopManager.gnome.debug = true;
 
       systemd.user.services = {
         "org.gnome.Shell@wayland" = {

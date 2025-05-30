@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ lib, ... }:
 
 let
   # Settings for both servers and agents
@@ -116,6 +116,8 @@ let
 in
 {
   name = "consul";
+
+  node.pkgsReadOnly = false;
 
   nodes = {
     server1 = server 0;

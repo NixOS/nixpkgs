@@ -1,7 +1,8 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
+  autoreconfHook,
   flex,
   bison,
   readline,
@@ -13,15 +14,20 @@ stdenv.mkDerivation rec {
   pname = "bird";
   version = "2.17.1";
 
-  src = fetchurl {
-    url = "https://bird.network.cz/download/bird-${version}.tar.gz";
-    hash = "sha256-v9cY36WWgZs4AWiHgyElFLRnFjMprsm7zQ+j3uA+EOk=";
+  src = fetchFromGitLab {
+    domain = "gitlab.nic.cz";
+    owner = "labs";
+    repo = "bird";
+    rev = "v${version}";
+    hash = "sha256-9Zg3UmNEW+Q26PMj3Z1XDbPFC5vatX8i7RQSUlKXlwg=";
   };
 
   nativeBuildInputs = [
+    autoreconfHook
     flex
     bison
   ];
+
   buildInputs = [
     readline
     libssh

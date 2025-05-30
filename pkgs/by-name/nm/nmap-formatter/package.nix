@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "vdjagilev";
-    repo = pname;
+    repo = "nmap-formatter";
     rev = "v${version}";
     hash = "sha256-jpgAcnDDVVboZEMkLIE9ei0oT91Y9yp8KUJkH6LQSY4=";
   };

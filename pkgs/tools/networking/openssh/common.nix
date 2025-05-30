@@ -37,7 +37,9 @@
   withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl && withSecurityKey,
   withPAM ? stdenv.hostPlatform.isLinux,
   # Attempts to mlock the entire sshd process on startup to prevent swapping.
-  withLinuxMemlock ? stdenv.hostPlatform.isLinux,
+  # Currently disabled when PAM support is enabled due to crashes
+  # See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1103418
+  withLinuxMemlock ? (stdenv.hostPlatform.isLinux && !withPAM),
   linkOpenssl ? true,
   isNixos ? stdenv.hostPlatform.isLinux,
 }:

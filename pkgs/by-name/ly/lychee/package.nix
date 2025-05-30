@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "lycheeverse";
-    repo = pname;
+    repo = "lychee";
     rev = "lychee-v${version}";
     hash = "sha256-aT7kVN2KM90M193h4Xng6+v69roW0J4GLd+29BzALhI=";
   };

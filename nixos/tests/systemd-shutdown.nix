@@ -1,6 +1,7 @@
 {
+  systemdStage1,
+  lib,
   pkgs,
-  systemdStage1 ? false,
   ...
 }:
 let
@@ -8,9 +9,9 @@ let
 in
 {
   name = "systemd-shutdown";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ das_j ];
-  };
+  meta.maintainers = with lib.maintainers; [ das_j ];
+
+  _module.args.systemdStage1 = lib.mkDefault false;
 
   nodes.machine = {
     imports = [ ../modules/profiles/minimal.nix ];

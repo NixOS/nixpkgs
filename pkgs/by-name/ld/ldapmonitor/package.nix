@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "p0dalirius";
-    repo = pname;
+    repo = "ldapmonitor";
     tag = version;
     hash = "sha256-BmTj/6dOUYfia6wO4nvkEW01MIC9TuBk4kYAsVHMsWY=";
   };

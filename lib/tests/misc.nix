@@ -91,6 +91,7 @@ let
     range
     recursiveUpdateUntil
     removePrefix
+    replaceString
     replicate
     runTests
     setFunctionArgs
@@ -495,6 +496,11 @@ runTests {
       ]
     );
     expected = "/usr/include:/usr/local/include";
+  };
+
+  testReplaceStringString = {
+    expr = strings.replaceString "." "_" "v1.2.3";
+    expected = "v1_2_3";
   };
 
   testReplicateString = {
@@ -1726,6 +1732,11 @@ runTests {
       2
       6
     ];
+  };
+
+  testReplaceString = {
+    expr = replaceString "world" "Nix" "Hello, world!";
+    expected = "Hello, Nix!";
   };
 
   testReplicate = {

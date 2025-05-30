@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage {
   inherit pname version;
   src = fetchFromGitHub {
     owner = "tauri-apps";
-    repo = pname;
+    repo = "cargo-mobile2";
     rev = "cargo-mobile2-v${version}";
     hash = "sha256-7/ol4Jb/2s007LeSMo6YYDT5vipsZZF6O4hfJ7ylHGg=";
   };

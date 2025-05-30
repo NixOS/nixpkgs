@@ -15,28 +15,28 @@ in
 
   meta.maintainers = lib.teams.cyberus.members;
 
-  nodes = {
-    outline =
-      { pkgs, config, ... }:
-      {
-        nixpkgs.config.allowUnfree = true;
-        environment.systemPackages = [ pkgs.minio-client ];
-        services.outline = {
-          enable = true;
-          forceHttps = false;
-          storage = {
-            inherit accessKey secretKeyFile;
-            uploadBucketUrl = "http://localhost:9000";
-            uploadBucketName = "outline";
-            region = config.services.minio.region;
-          };
-        };
-        services.minio = {
-          enable = true;
-          inherit rootCredentialsFile;
+  node.pkgsReadOnly = false;
+
+  nodes.outline =
+    { pkgs, config, ... }:
+    {
+      nixpkgs.config.allowUnfree = true;
+      environment.systemPackages = [ pkgs.minio-client ];
+      services.outline = {
+        enable = true;
+        forceHttps = false;
+        storage = {
+          inherit accessKey secretKeyFile;
+          uploadBucketUrl = "http://localhost:9000";
+          uploadBucketName = "outline";
+          region = config.services.minio.region;
         };
       };
-  };
+      services.minio = {
+        enable = true;
+        inherit rootCredentialsFile;
+      };
+    };
 
   testScript = ''
     machine.wait_for_unit("minio.service")

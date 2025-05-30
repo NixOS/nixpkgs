@@ -309,6 +309,7 @@ let
         stringLength
         substring
         isString
+        replaceString
         replaceStrings
         intersperse
         concatStringsSep

@@ -6,18 +6,19 @@
   azure-common,
   azure-core,
   isodate,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "azure-search-documents";
-  version = "14.0.0";
+  version = "11.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-sdk-for-python";
-    tag = "azure-mgmt-containerregistry_${version}";
-    hash = "sha256-FRdXdk3+G/xPraB2laTV6Xs/yNY65gebvMCKPOgby1g=";
+    tag = "azure_search_documents_${version}";
+    hash = "sha256-RcVdqI50lsYed9L6Kz7faNLec1Y9zq685SGnwaEw6Qc=";
   };
 
   sourceRoot = "${src.name}/sdk/search/azure-search-documents";
@@ -35,8 +36,11 @@ buildPythonPackage rec {
   # require devtools_testutils which is a internal package for azure-sdk
   doCheck = false;
 
-  # multiple packages in the repo and the updater picks the wrong tag
-  passthru.skipBulkUpdate = true;
+  passthru = {
+    # multiple packages in the repo and the updater picks the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater { rev-prefix = "azure.search.documents_"; };
+  };
 
   meta = {
     description = "Microsoft Azure Cognitive Search Client Library for Python";

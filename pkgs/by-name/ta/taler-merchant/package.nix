@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-merchant";
-  version = "0.14.6-unstable-2025-03-02";
+  version = "1.0.1";
 
   src = fetchgit {
     url = "https://git.taler.net/merchant.git";
-    rev = "c84ed905e2d4af60162a7def5c0fc430394930e6";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-LXmrY8foiYOxCik23d3f4t9+tldbm7bVGG8eQOLsm+A=";
+    hash = "sha256-H/JqMGLP0u68g/bMqsollAk6sKL73TCZ9no49psYST0=";
   };
 
   postUnpack = ''
@@ -104,6 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://git.taler.net/merchant.git/tree/ChangeLog";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ astro ];
+    teams = with lib.teams; [ ngi ];
     platforms = lib.platforms.linux;
   };
 })

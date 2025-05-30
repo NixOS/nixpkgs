@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "Bios-Marcel";
-    repo = pname;
+    repo = "cordless";
     rev = version;
     hash = "sha256-nOHLI0N4d8aC7KaWdLezSpVU1DS1fkfW5UO7cVYCbis=";
   };

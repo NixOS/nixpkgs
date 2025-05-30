@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage {
 
   src = fetchFromGitHub {
     owner = "vectordotdev";
-    repo = pname;
+    repo = "vector";
     rev = "v${version}";
     hash = "sha256-09CjhSckptXbbTzBneo5aQ76YwLPSacRlsMpexsw54c=";
   };

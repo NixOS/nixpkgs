@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "dmadisetti";
-    repo = pname;
+    repo = "steam-tui";
     rev = version;
     sha256 = "sha256-3vBIpPIsh+7PjTuNNqp7e/pdciOYnzuGkjb/Eks6QJw=";
   };

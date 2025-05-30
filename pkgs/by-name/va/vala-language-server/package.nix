@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "vala-lang";
-    repo = pname;
+    repo = "vala-language-server";
     rev = version;
     sha256 = "sha256-Vl5DjKBdpk03aPD+0xGoTwD9Slg1rREorqZGX5o10cY=";
   };

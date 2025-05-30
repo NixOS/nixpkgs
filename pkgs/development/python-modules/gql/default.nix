@@ -38,12 +38,6 @@ buildPythonPackage rec {
     hash = "sha256-0mVMhJHlF6EZ3D9fuNrzkoHm9vIAKxbuajmUs1JL0HY=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py --replace \
-      "websockets>=10,<11;python_version>'3.6'" \
-      "websockets>=10,<12;python_version>'3.6'"
-  '';
-
   build-system = [ setuptools ];
 
   dependencies = [
@@ -115,11 +109,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gql" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "GraphQL client in Python";
     homepage = "https://github.com/graphql-python/gql";
     changelog = "https://github.com/graphql-python/gql/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     mainProgram = "gql-cli";
   };

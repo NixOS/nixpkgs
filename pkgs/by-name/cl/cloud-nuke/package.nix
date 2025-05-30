@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "gruntwork-io";
-    repo = pname;
+    repo = "cloud-nuke";
     tag = "v${version}";
     hash = "sha256-zf/aHRZ1WhHwXn+1OJEiTNlOLedP7zXQLuFF2C4D0mw=";
   };

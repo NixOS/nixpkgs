@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "utkuozdemir";
-    repo = pname;
+    repo = "pv-migrate";
     tag = "v${version}";
     sha256 = "sha256-ZCNOg2HZjcEEM+hsAOtRR6hYmoKLyThpIw3warnravc=";
   };

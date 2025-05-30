@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   dontFixCmake = true; # https://github.com/NixOS/nixpkgs/pull/232522#issuecomment-2133803566
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "ispc";
+    repo = "ispc";
     rev = "v${version}";
     sha256 = "sha256-nNiAlQ+MLkOV0/xLafsUNPV5HKCIqWCD2Fo8ChgFJMk=";
   };

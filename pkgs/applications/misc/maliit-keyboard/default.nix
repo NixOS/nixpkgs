@@ -8,7 +8,6 @@
   libchewing,
   libpinyin,
   maliit-framework,
-  pcre,
   presage,
   qtfeedback,
   qtmultimedia,
@@ -42,7 +41,6 @@ mkDerivation rec {
     libchewing
     libpinyin
     maliit-framework
-    pcre
     presage
     qtfeedback
     qtmultimedia

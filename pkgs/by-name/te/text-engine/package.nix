@@ -15,13 +15,13 @@
   libxml2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "text-engine";
   version = "0.1.1-unstable-2024-09-16";
 
   src = fetchFromGitHub {
     owner = "mjakeman";
-    repo = pname;
+    repo = "text-engine";
     rev = "4c26887556fd8e28211324c4058d49508eb5f557";
     hash = "sha256-0rMBz2s3wYv7gZiJTj8rixWxBjT6Dd6SaINP8kDbTyw=";
   };

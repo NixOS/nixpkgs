@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "hashicorp";
-    repo = pname;
+    repo = "nomad-driver-podman";
     rev = "v${version}";
     sha256 = "sha256-QvIc0RNQX9do6pTyGbJTTR7jANp50DVlHsl/8teiCnY=";
   };

@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "rverton";
-    repo = pname;
+    repo = "webanalyze";
     tag = "v${version}";
     hash = "sha256-rnNbEPlbye0gjUamwq1xjFM/4g0eEHsGOAZWziEqxwM=";
   };

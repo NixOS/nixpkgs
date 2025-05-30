@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage {
 
   src = fetchFromGitHub {
     owner = "zurawiki";
-    repo = pname;
+    repo = "gptcommit";
     rev = "v${version}";
     hash = "sha256-MB78QsJA90Au0bCUXfkcjnvfPagTPZwFhFVqxix+Clw=";
   };

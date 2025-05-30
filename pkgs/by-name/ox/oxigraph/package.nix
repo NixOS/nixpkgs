@@ -10,8 +10,8 @@ rustPlatform.buildRustPackage rec {
   version = "0.4.9";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "oxigraph";
+    repo = "oxigraph";
     rev = "v${version}";
     hash = "sha256-sv9LpAoPQ4oFrGI6j6NgVZwEwpM1wt93lHkUwnvmhIY=";
     fetchSubmodules = true;

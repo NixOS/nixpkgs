@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "WhyNotHugo";
-    repo = pname;
+    repo = "caffeine-ng";
     rev = "v${version}";
     hash = "sha256-uYzLRZ+6ZgIwhSuJWRBpLYHgonX7sFXgUZid0V26V0Q=";
   };

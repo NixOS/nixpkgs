@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "not-stirred";
-    repo = pname;
+    repo = "nextinspace";
     tag = "v${version}";
     hash = "sha256-CrhzCvIA3YAFsWvdemvK1RLMacsM5RtgMjLeiqz5MwY=";
   };

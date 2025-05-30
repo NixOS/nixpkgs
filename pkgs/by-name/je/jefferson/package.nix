@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "onekey-sec";
-    repo = pname;
+    repo = "jefferson";
     rev = "v${version}";
     hash = "sha256-6eh4i9N3aArU8+W8K341pp9J0QYEojDiMrEc8yax4SY=";
   };

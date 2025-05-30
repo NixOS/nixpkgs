@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "consbio";
-    repo = pname;
+    repo = "mbtileserver";
     rev = "v${version}";
     sha256 = "sha256-RLaAhc24zdCFvpSN2LZXNyS1ygg9zCi4jEj8owdreWU=";
   };

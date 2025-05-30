@@ -11,12 +11,12 @@ let
   pname = "surrealdb-migrations";
   version = "2.2.2";
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = "Odonno";
-    repo = pname;
+    repo = "surrealdb-migrations";
     rev = "v${version}";
     hash = "sha256-PLCnfkjmmp7Xx6sF9u15X52JB3x8135xjBr8yYkqYhQ=";
   };

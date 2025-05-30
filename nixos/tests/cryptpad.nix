@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 let
   certs = pkgs.runCommand "cryptpadSelfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''
     mkdir -p $out
@@ -12,6 +12,48 @@ let
   test_write_data = pkgs.writeText "cryptpadTestData" ''
     {"command":"WRITE_BLOCK","content":{"publicKey":"O2onvM62pC1io6jQKm8Nc2UyFXcd4kOmOsBIoYtZ2ik=","signature":"aXcM9SMO59lwA7q7HbYB+AnzymmxSyy/KhkG/cXIBVzl8v+kkPWXmFuWhcuKfRF8yt3Zc3ktIsHoFyuyDSAwAA==","ciphertext":"AFwCIfBHKdFzDKjMg4cu66qlJLpP+6Yxogbl3o9neiQou5P8h8yJB8qgnQ=="},"publicKey":"O2onvM62pC1io6jQKm8Nc2UyFXcd4kOmOsBIoYtZ2ik=","nonce":"bitSbJMNSzOsg98nEzN80a231PCkBQeH"}
   '';
+  seleniumScript =
+    pkgs.writers.writePython3Bin "selenium-script"
+      {
+        libraries = with pkgs.python3Packages; [ selenium ];
+      }
+      ''
+        from sys import stderr
+        from time import time
+        from selenium import webdriver
+        from selenium.webdriver.common.by import By
+        from selenium.webdriver.firefox.options import Options
+        from selenium.webdriver.support.ui import WebDriverWait
+        from selenium.webdriver.support import expected_conditions as EC
+
+        options = Options()
+        options.add_argument("--headless")
+        service = webdriver.FirefoxService(executable_path="${lib.getExe pkgs.geckodriver}")  # noqa: E501
+
+        driver = webdriver.Firefox(options=options, service=service)
+        driver.implicitly_wait(10)
+        driver.get("https://cryptpad.localhost")
+
+        WebDriverWait(driver, 10).until(
+          EC.text_to_be_present_in_element(
+            (By.TAG_NAME, "body"), "CryptPad")
+        )
+
+        driver.find_element(By.PARTIAL_LINK_TEXT, "Sheet").click()
+
+        # Title changes once the sheet is rendered, which can take
+        # a lot of time on first run (browser generates keypair etc)
+        start = time()
+        WebDriverWait(driver, 60).until(
+          EC.title_contains('Sheet')
+        )
+        print(f"Sheets done loading in {time() - start}", file=stderr)
+
+        # check screen looks sane...
+        # driver.print_page() and dump pdf somewhere through pdftotext? OCR?
+
+        driver.close()
+      '';
 in
 {
   name = "cryptpad";
@@ -20,6 +62,9 @@ in
   };
 
   nodes.machine = {
+    environment.systemPackages = [
+      pkgs.firefox-unwrapped
+    ];
     services.cryptpad = {
       enable = true;
       configureNginx = true;
@@ -61,6 +106,9 @@ in
 
     # test some API (e.g. check cryptpad main process)
     machine.succeed("curl --fail -d @${test_write_data} -H 'Content-Type: application/json' https://cryptpad.localhost/api/auth")
+
+    # page loads
+    machine.succeed("${lib.getExe seleniumScript}")
 
     # test telemetry has been disabled
     machine.fail("journalctl -u cryptpad | grep TELEMETRY");

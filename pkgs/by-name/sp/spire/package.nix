@@ -16,7 +16,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "spiffe";
-    repo = pname;
+    repo = "spire";
     rev = "v${version}";
     sha256 = "sha256-+jy0hvvjkkp6vDUEkoskjgTlq+wd0eKh/i1xkOLXbrA=";
   };

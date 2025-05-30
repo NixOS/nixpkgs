@@ -14,7 +14,7 @@ let
     optionalAttrs
     optionalString
     removeSuffix
-    replaceStrings
+    replaceString
     toUpper
     ;
 
@@ -522,7 +522,7 @@ let
             #
             # https://github.com/rust-lang/cargo/pull/9169
             # https://github.com/rust-lang/cargo/issues/8285#issuecomment-634202431
-            cargoEnvVarTarget = replaceStrings [ "-" ] [ "_" ] (toUpper final.rust.cargoShortTarget);
+            cargoEnvVarTarget = replaceString "-" "_" (toUpper final.rust.cargoShortTarget);
 
             # True if the target is no_std
             # https://github.com/rust-lang/rust/blob/2e44c17c12cec45b6a682b1e53a04ac5b5fcc9d2/src/bootstrap/config.rs#L415-L421

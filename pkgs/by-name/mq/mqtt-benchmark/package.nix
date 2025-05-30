@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "krylovsk";
-    repo = pname;
+    repo = "mqtt-benchmark";
     tag = "v${version}";
     hash = "sha256-gejLDtJ1geO4eDBapHjXgpc+M2TRGKcv5YzybmIyQSs=";
   };

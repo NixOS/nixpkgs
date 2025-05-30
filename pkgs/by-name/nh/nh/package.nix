@@ -18,13 +18,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nh";
-  version = "4.0.3";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BCD0tfDNlQHFM75THRtXM3GegMg/KbREsYllg7Az9ao=";
+    hash = "sha256-OiuhBrJe1AyVxC+AV4HMJ+vhDvUfCyLpBmj+Fy7MDtM=";
   };
 
   strictDeps = true;
@@ -34,15 +34,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     makeBinaryWrapper
   ];
 
-  preFixup = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
     let
       emulator = stdenv.hostPlatform.emulator buildPackages;
     in
     ''
       mkdir completions
-      ${emulator} $out/bin/nh completions bash > completions/nh.bash
-      ${emulator} $out/bin/nh completions zsh > completions/nh.zsh
-      ${emulator} $out/bin/nh completions fish > completions/nh.fish
+
+      for shell in bash zsh fish; do
+        NH_NO_CHECKS=1 ${emulator} $out/bin/nh completions $shell > completions/nh.$shell
+      done
 
       installShellCompletion completions/*
     ''
@@ -54,9 +55,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-cNYPxM2DOLdyq0YcZ0S/WIa3gAx7aTzPp7Zhbtu4PKg=";
+  cargoHash = "sha256-/tbmzGUd1b4oa+29+eFdkE4l8vxMoIdHx40YgErY9pY=";
 
   passthru.updateScript = nix-update-script { };
+
+  env.NH_REV = finalAttrs.src.tag;
 
   meta = {
     changelog = "https://github.com/nix-community/nh/blob/${finalAttrs.version}/CHANGELOG.md";

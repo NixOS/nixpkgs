@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
-    repo = pname;
+    repo = "vt-cli";
     tag = version;
     hash = "sha256-NB5eo+6IwIxhQX1lwJzPOZ0pSeFVo7LYIEEmDqE4A7Y=";
   };

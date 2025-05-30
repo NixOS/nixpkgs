@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "tats";
-    repo = pname;
+    repo = "w3m";
     rev = "v${version}";
     hash = "sha256-upb5lWqhC1jRegzTncIz5e21v4Pw912FyVn217HucFs=";
   };

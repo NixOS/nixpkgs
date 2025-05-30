@@ -12,8 +12,8 @@ python3.pkgs.buildPythonApplication rec {
   version = "2.1.6";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "inkcut";
+    repo = "inkcut";
     tag = "v${version}";
     hash = "sha256-qfgzJTFr4VTV/x4PVnUKJzIndfjXB8z2jTWLXvadBuY=";
   };

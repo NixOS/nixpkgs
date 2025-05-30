@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "mechpen";
-    repo = pname;
+    repo = "sockdump";
     rev = "d40ec77e960d021861220bc14a273c5dcad13160";
     hash = "sha256-FLK1rgWvIoFGv/6+DtDhZGeOZrn7V1jYNS3S8qwL/dc=";
   };
@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
 
   format = "other"; # none
 
-  installPhase = "install -D ${pname}.py $out/bin/${pname}";
+  installPhase = "install -D sockdump.py $out/bin/sockdump";
 
   meta = src.meta // {
     description = "Dump unix domain socket traffic with bpf";

@@ -30,7 +30,7 @@ py.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "oracle";
-    repo = pname;
+    repo = "oci-cli";
     tag = "v${version}";
     hash = "sha256-KvyhQ8MM74MYR8gf18XVYZrOSEKcOqdmyITg2UyNqp8=";
   };

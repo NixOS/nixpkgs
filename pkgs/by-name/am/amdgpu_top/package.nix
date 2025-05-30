@@ -16,17 +16,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "amdgpu_top";
-  version = "0.10.4";
+  version = "0.10.5";
 
   src = fetchFromGitHub {
     owner = "Umio-Yasuno";
     repo = "amdgpu_top";
     rev = "v${version}";
-    hash = "sha256-OvxrcVjngIW/fVIPX1XhbGImAeDifoLzlaZpXUYS9FA=";
+    hash = "sha256-BT451a9S3hyugEFH1rHPiJLAb6LzB8rqMAZdWf4UNC8=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-na6pghbJ7Ek+rdbX4qJt2kv7C3AAqpgU/nYHaT9CQdo=";
+  cargoHash = "sha256-bZuwouL8kuEhEiuLsehON1OEPKR3QtSHtn8HvXTovSs=";
 
   buildInputs = [
     libdrm

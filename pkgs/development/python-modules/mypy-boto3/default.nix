@@ -182,8 +182,8 @@ rec {
       "sha256-WXMpTKmBXa1q51tnLTE5sOxJyn0LLqOwpV2wdZfM1v0=";
 
   mypy-boto3-ce =
-    buildMypyBoto3Package "ce" "1.38.0"
-      "sha256-bdy/QUEmHR1czRK79z/vlayX3HGX0pzKQSQSg+eyTac=";
+    buildMypyBoto3Package "ce" "1.38.24"
+      "sha256-daz9r4KWlK/n3ZcxDRARlOlSKcUbhyW/12HPWja30RY=";
 
   mypy-boto3-chime =
     buildMypyBoto3Package "chime" "1.38.0"
@@ -446,8 +446,8 @@ rec {
       "sha256-RQh46jrXqj4bXTRJ+tPR9sql7yUn7Ek9u4p0OU0A7b0=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.38.23"
-      "sha256-rS6zGXH0fa6FpSHWczTtfe0ywJbFKRij4eD4YoH48Sc=";
+    buildMypyBoto3Package "ec2" "1.38.24"
+      "sha256-QehCKooiP5jPrE6UA4OA6MJTdCczUTPsoFfDi/R13TQ=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.38.0"

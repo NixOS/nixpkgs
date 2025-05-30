@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "dalibo";
-    repo = pname;
+    repo = "pg_activity";
     tag = "v${version}";
     sha256 = "sha256-7nHtJl/b2pZqiJbpWArMS5jh7B8dv8V1esic6uFPV/0=";
   };

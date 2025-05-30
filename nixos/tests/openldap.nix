@@ -54,7 +54,7 @@ in
   name = "openldap";
 
   nodes.machine =
-    { pkgs, ... }:
+    { config, pkgs, ... }:
     {
       environment.etc."openldap/root_password".text = "notapassword";
 
@@ -124,6 +124,8 @@ in
           configuration =
             { ... }:
             {
+              nixpkgs.hostPlatform = config.nixpkgs.hostPlatform;
+
               users.ldap = ldapClientConfig;
               services.openldap = {
                 enable = true;
@@ -133,6 +135,7 @@ in
         };
       };
     };
+
   testScript =
     { nodes, ... }:
     let

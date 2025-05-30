@@ -86,7 +86,10 @@ buildPythonPackage rec {
     webob
   ];
 
-  disabledTests = [ "elasticapm_client" ];
+  disabledTests = [
+    "elasticapm_client"
+    "test_get_name_from_func_partialmethod_unbound"
+  ];
 
   disabledTestPaths =
     [

@@ -1,21 +1,20 @@
 {
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
-  systemdStage1 ? false,
+  systemdStage1,
+  lib,
+  pkgs,
+  ...
 }:
-{ lib, pkgs, ... }:
 let
-
   keyfile = pkgs.writeText "luks-keyfile" ''
     MIGHAoGBAJ4rGTSo/ldyjQypd0kuS7k2OSsmQYzMH6TNj3nQ/vIUjDn7fqa3slt2
     gV6EK3TmTbGc4tzC1v4SWx2m+2Bjdtn4Fs4wiBwn1lbRdC6i5ZYCqasTWIntWn+6
     FllUkMD5oqjOR/YcboxG8Z3B5sJuvTP9llsF+gnuveWih9dpbBr7AgEC
   '';
-
 in
 {
   name = "initrd-luks-empty-passphrase";
+
+  _module.args.systemdStage1 = lib.mkDefault false;
 
   nodes.machine =
     { pkgs, ... }:

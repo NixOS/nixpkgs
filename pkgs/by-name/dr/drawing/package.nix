@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "maoschanz";
-    repo = pname;
+    repo = "drawing";
     tag = version;
     hash = "sha256-kNF9db8NoHWW1A0WEFQzxHqAQ4A7kxInMRZFJOXQX/k=";
   };

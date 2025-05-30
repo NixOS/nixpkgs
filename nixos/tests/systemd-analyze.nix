@@ -1,14 +1,14 @@
 {
-  pkgs,
-  latestKernel ? false,
+  latestKernel,
+  lib,
   ...
 }:
 
 {
   name = "systemd-analyze";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ raskin ];
-  };
+  meta.maintainers = with lib.maintainers; [ raskin ];
+
+  _module.args.latestKernel = lib.mkDefault false;
 
   nodes.machine =
     { pkgs, lib, ... }:

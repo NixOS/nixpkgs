@@ -4,9 +4,9 @@
 #  3. replying to that message via email.
 
 {
+  package,
   pkgs,
   lib,
-  package ? pkgs.discourse,
   ...
 }:
 let
@@ -24,9 +24,9 @@ let
 in
 {
   name = "discourse";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ talyz ];
-  };
+  meta.maintainers = with lib.maintainers; [ talyz ];
+
+  _module.args.package = lib.mkDefault pkgs.discourse;
 
   nodes.discourse =
     { nodes, ... }:
@@ -62,7 +62,7 @@ in
 
       services.discourse = {
         enable = true;
-        inherit admin package;
+        inherit admin;
         hostname = discourseDomain;
         sslCertificate = "${certs.${discourseDomain}.cert}";
         sslCertificateKey = "${certs.${discourseDomain}.key}";

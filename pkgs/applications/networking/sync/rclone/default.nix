@@ -17,7 +17,7 @@
 
 buildGoModule rec {
   pname = "rclone";
-  version = "1.69.2";
+  version = "1.69.3";
 
   outputs = [
     "out"
@@ -28,15 +28,10 @@ buildGoModule rec {
     owner = "rclone";
     repo = "rclone";
     tag = "v${version}";
-    hash = "sha256-WhviYa9H3FsYRgnUhheP6dRj9A9l2nrGeFAhUj5TCKU=";
+    hash = "sha256-VLE9cWR4Wp+MDbwmfNaJArxhXTOcVfM2C1TMCymKflw=";
   };
 
-  patches = [
-    # TODO: remove after updating to 1.69.3
-    ./purego-update.patch
-  ];
-
-  vendorHash = "sha256-Wu9d98SIENCkJYoGT/f9KN8vnYYGMN7HxhzqtkOYQ/8=";
+  vendorHash = "sha256-WY5xBBOhDRl+mU0KuVxph0wDhfUYLI0gmiGY1boxmKU=";
 
   subPackages = [ "." ];
 

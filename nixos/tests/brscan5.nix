@@ -1,34 +1,30 @@
 # integration tests for brscan5 sane driver
-#
-
-{ pkgs, ... }:
+{ lib, ... }:
 {
   name = "brscan5";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ mattchrist ];
-  };
+  meta.maintainers = with lib.maintainers; [ mattchrist ];
 
-  nodes.machine =
-    { pkgs, ... }:
-    {
-      nixpkgs.config.allowUnfree = true;
-      hardware.sane = {
+  node.pkgsReadOnly = false;
+
+  nodes.machine = {
+    nixpkgs.config.allowUnfree = true;
+    hardware.sane = {
+      enable = true;
+      brscan5 = {
         enable = true;
-        brscan5 = {
-          enable = true;
-          netDevices = {
-            "a" = {
-              model = "ADS-1200";
-              nodename = "BRW0080927AFBCE";
-            };
-            "b" = {
-              model = "ADS-1200";
-              ip = "192.168.1.2";
-            };
+        netDevices = {
+          "a" = {
+            model = "ADS-1200";
+            nodename = "BRW0080927AFBCE";
+          };
+          "b" = {
+            model = "ADS-1200";
+            ip = "192.168.1.2";
           };
         };
       };
     };
+  };
 
   testScript = ''
     import re
