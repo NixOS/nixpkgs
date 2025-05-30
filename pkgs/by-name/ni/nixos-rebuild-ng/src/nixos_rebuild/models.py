@@ -122,7 +122,7 @@ class Flake:
         m = cls._re.match(flake_str)
         assert m is not None, f"got no matches for {flake_str}"
         attr = m.group("attr")
-        nixos_attr = f"nixosConfigurations.{attr or hostname_fn() or 'default'}"
+        nixos_attr = f'nixosConfigurations."{attr or hostname_fn() or "default"}"'
         path_str = m.group("path")
         if ":" in path_str:
             return cls(path_str, nixos_attr)
