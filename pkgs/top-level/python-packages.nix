@@ -14700,6 +14700,8 @@ self: super: with self; {
 
   pyyaml-env-tag = callPackage ../development/python-modules/pyyaml-env-tag { };
 
+  pyyaml-ft = callPackage ../development/python-modules/pyyaml-ft { };
+
   pyyaml-include = callPackage ../development/python-modules/pyyaml-include { };
 
   pyyardian = callPackage ../development/python-modules/pyyardian { };
