@@ -60,7 +60,7 @@ python3Packages.buildPythonApplication rec {
         ++ lib.optional withNom nix-output-monitor;
     in
     [
-      "--prefix PATH : ${lib.makeBinPath binPath}"
+      "--suffix PATH : ${lib.makeBinPath binPath}"
       "--set-default NIX_SSL_CERT_FILE ${cacert}/etc/ssl/certs/ca-bundle.crt"
       # we don't have any runtime deps but nixpkgs-review shells might inject unwanted dependencies
       "--unset PYTHONPATH"
