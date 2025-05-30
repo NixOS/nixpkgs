@@ -3499,6 +3499,9 @@ self: super: with self; {
 
   diffimg = callPackage ../development/python-modules/diffimg { };
 
+  diffpy-structure = callPackage ../development/python-modules/diffpy-structure { };
+
+
   diffsync = callPackage ../development/python-modules/diffsync { };
 
   diffusers = callPackage ../development/python-modules/diffusers { };
