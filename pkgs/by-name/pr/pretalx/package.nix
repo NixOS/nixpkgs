@@ -22,13 +22,13 @@ let
     };
   };
 
-  version = "2024.3.1";
+  version = "2025.1.0";
 
   src = fetchFromGitHub {
     owner = "pretalx";
     repo = "pretalx";
     rev = "v${version}";
-    hash = "sha256-y3BsNmLh9M5NgDPURCjCGWYci40hYcQtDVqsu2HqPRU=";
+    hash = "sha256-BlPmrfHbpsLI8DCldzoRudpf7T4SUpJXQA5h9o4Thek=";
   };
 
   meta = with lib; {
@@ -48,7 +48,7 @@ let
 
     sourceRoot = "${src.name}/src/pretalx/frontend/schedule-editor";
 
-    npmDepsHash = "sha256-i7awRuR7NxhpxN2IZuI01PsN6FjXht7BxTbB1k039HA=";
+    npmDepsHash = "sha256-8difCdoG7j75wqwuWA/VBRk9oTjsM0QqLnR0iLkd/FY=";
 
     npmBuildScript = "build";
 
@@ -79,6 +79,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "beautifulsoup4"
     "bleach"
     "celery"
     "css-inline"
@@ -106,8 +107,8 @@ python.pkgs.buildPythonApplication rec {
       beautifulsoup4
       bleach
       celery
-      css-inline
       csscompressor
+      css-inline
       cssutils
       defusedcsv
       defusedxml
@@ -124,6 +125,8 @@ python.pkgs.buildPythonApplication rec {
       django-libsass
       django-scopes
       djangorestframework
+      drf-flex-fields
+      drf-spectacular
       libsass
       markdown
       pillow

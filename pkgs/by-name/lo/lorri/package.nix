@@ -23,7 +23,7 @@ in
 
   src = fetchFromGitHub {
     owner = "nix-community";
-    repo = pname;
+    repo = "lorri";
     rev = version;
     inherit sha256;
   };

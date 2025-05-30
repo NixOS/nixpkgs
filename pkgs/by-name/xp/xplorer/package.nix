@@ -24,7 +24,7 @@ let
 
   src = fetchFromGitHub {
     owner = "kimlimjustin";
-    repo = pname;
+    repo = "xplorer";
     rev = "8d69a281cbceda277958796cb6b77669fb062ee3";
     sha256 = "sha256-VFRdkSfe2mERaYYtZlg9dvH1loGWVBGwiTRj4AoNEAo=";
   };

@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  replaceVars,
   gitMinimal,
   portaudio,
   playwright-driver,
@@ -254,9 +255,11 @@ let
       gitMinimal
     ];
 
-    postPatch = ''
-      substituteInPlace aider/linter.py --replace-fail "\"flake8\"" "\"${flake8}\""
-    '';
+    patches = [
+      (replaceVars ./fix-flake8-invoke.patch {
+        flake8 = lib.getExe flake8;
+      })
+    ];
 
     disabledTestPaths = [
       # Tests require network access

@@ -42,7 +42,7 @@ buildPythonPackage {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isAarch [
     # Rounding differences
     "test_float_to_twelths_frac"
   ];

@@ -20,14 +20,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "alpaca";
-  version = "5.2.0";
+  version = "6.0.5";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
     tag = version;
-    hash = "sha256-uUGsdHrqzA5fZ4LNtX04H4ue9n4JQrkTYW2PCCFYFHc=";
+    hash = "sha256-faxqSUYqf3vRZYeuXAzv+n1inMVwl5KmnndABF77Sus=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +51,6 @@ python3Packages.buildPythonApplication rec {
     pygobject3
     requests
     pillow
-    pypdf
     html2text
     youtube-transcript-api
     pydbus
@@ -59,7 +58,12 @@ python3Packages.buildPythonApplication rec {
     pyicu
     matplotlib
     openai
+    markitdown
   ];
+
+  optional-dependencies = {
+    speech-to-text = [ python3Packages.openai-whisper ];
+  };
 
   dontWrapGApps = true;
 
