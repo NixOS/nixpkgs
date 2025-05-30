@@ -2,7 +2,7 @@
   lib,
   writeShellApplication,
   gnumake,
-  pkgsCross,
+  crossStdenv,
   klipper,
   klipper-firmware,
   python3,
@@ -28,7 +28,7 @@ writeShellApplication {
   runtimeInputs =
     [
       python3
-      pkgsCross.avr.stdenv.cc
+      crossStdenv.configs.avr.cc
       gnumake
     ]
     ++ lib.optionals (boardArch == "avr") [ avrdude ]
