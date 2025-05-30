@@ -46,11 +46,19 @@ in
         options = {
           # TODO: do we want this to be a sub-attribute or only define the exchange set of options here
           exchange = {
-            AML_THRESHOLD = lib.mkOption {
+            CURRENCY = lib.mkOption {
+              type = lib.types.nonEmptyStr;
+              description = ''
+                The currency which the exchange will operate with. This cannot be changed later.
+              '';
+            };
+            CURRENCY_ROUND_UNIT = lib.mkOption {
               type = lib.types.str;
-              default = "${cfgTaler.settings.taler.CURRENCY}:1000000";
-              defaultText = "1000000 in {option}`CURRENCY`";
-              description = "Monthly transaction volume until an account is considered suspicious and flagged for AML review.";
+              default = "${cfg.settings.exchange.CURRENCY}:0.01";
+              defaultText = "0.01 in {option}`CURRENCY`";
+              description = ''
+                Smallest amount in this currency that can be transferred using the underlying RTGS. For example: "EUR:0.01" or "JPY:1"
+              '';
             };
             DB = lib.mkOption {
               type = lib.types.enum [ "postgres" ];
