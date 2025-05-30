@@ -2365,8 +2365,6 @@ with pkgs;
     electron = electron_35;
   };
 
-  pokemon-colorscripts = callPackage ../by-name/po/pokemon-colorscripts/package.nix { };
-
   pixcat = with python3Packages; toPythonApplication pixcat;
 
   pyznap = python3Packages.callPackage ../tools/backup/pyznap { };
