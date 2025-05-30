@@ -53,7 +53,10 @@ rustPlatform.buildRustPackage rec {
       "aarch64-linux"
       "aarch64-darwin"
     ];
-    maintainers = with maintainers; [ astro ];
+    maintainers = with maintainers; [
+      astro
+      tnias
+    ];
     license = with licenses; [
       asl20
       mit
