@@ -1,8 +1,7 @@
-let
-  mirrors = import ./mirrors.nix;
-in
-
-{ system }:
+{
+  mirrors,
+  system,
+}:
 
 {
   url ? builtins.head urls,

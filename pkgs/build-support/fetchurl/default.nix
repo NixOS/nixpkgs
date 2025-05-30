@@ -6,12 +6,10 @@
   stdenvNoCC,
   curl, # Note that `curl' may be `null', in case of the native stdenvNoCC.
   cacert ? null,
+  mirrors,
 }:
 
 let
-
-  mirrors = import ./mirrors.nix;
-
   # Write the list of mirrors to a file that we can reuse between
   # fetchurl instantiations, instead of passing the mirrors to
   # fetchurl instantiations via environment variables.  This makes the
