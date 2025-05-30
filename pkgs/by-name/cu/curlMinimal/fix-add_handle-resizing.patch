@@ -1,0 +1,209 @@
+From d16ccbd55de80c271fe822f4ba8b6271fd9166ff Mon Sep 17 00:00:00 2001
+From: Stefan Eissing <stefan@eissing.org>
+Date: Wed, 28 May 2025 14:04:31 +0200
+Subject: [PATCH] multi: fix add_handle resizing
+
+Due to someone being stupid, the resizing of the multi's transfer
+table was actually shrinking it. Oh my.
+
+Add test751 to reproduce, add code assertion.
+
+Fixes #17473
+Reported-by: Jeroen Ooms
+Closes #17475
+---
+ lib/multi.c                |  3 +-
+ tests/data/Makefile.am     |  2 +-
+ tests/data/test751         | 33 ++++++++++++++
+ tests/libtest/Makefile.inc |  4 ++
+ tests/libtest/lib751.c     | 92 ++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 132 insertions(+), 2 deletions(-)
+ create mode 100644 tests/data/test751
+ create mode 100644 tests/libtest/lib751.c
+
+diff --git a/lib/multi.c b/lib/multi.c
+index 792b30515d8b..b744e03ae52f 100644
+--- a/lib/multi.c
++++ b/lib/multi.c
+@@ -347,7 +347,8 @@ static CURLMcode multi_xfers_add(struct Curl_multi *multi,
+   if(unused <= min_unused) {
+      /* make it a 64 multiple, since our bitsets frow by that and
+       * small (easy_multi) grows to at least 64 on first resize. */
+-    unsigned int newsize = ((capacity + min_unused) + 63) / 64;
++    unsigned int newsize = (((capacity + min_unused) + 63) / 64) * 64;
++    DEBUGASSERT(newsize > capacity);
+     /* Grow the bitsets first. Should one fail, we do not need
+      * to downsize the already resized ones. The sets continue
+      * to work properly when larger than the table, but not
+diff --git a/tests/data/Makefile.am b/tests/data/Makefile.am
+index e8f9e12be71e..16bb57db8e69 100644
+--- a/tests/data/Makefile.am
++++ b/tests/data/Makefile.am
+@@ -107,7 +107,7 @@ test709 test710 test711 test712 test713 test714 test715 test716 test717 \
+ test718 test719 test720 test721 test722 test723 test724 test725 test726 \
+ test727 test728 test729 test730 test731 test732 test733 test734 test735 \
+ test736 test737 test738 test739 test740 test741 test742 test743 test744 \
+-test745 test746 test747 test748 test749 test750 \
++test745 test746 test747 test748 test749 test750 test751 \
+ \
+ test780 test781 test782 test783 test784 test785 test786 test787 test788 \
+ test789 test790 test791 \
+diff --git a/tests/data/test751 b/tests/data/test751
+new file mode 100644
+index 000000000000..ffc6df512f83
+--- /dev/null
++++ b/tests/data/test751
+@@ -0,0 +1,33 @@
++<testcase>
++<info>
++<keywords>
++MULTI
++</keywords>
++</info>
++<reply>
++<data>
++</data>
++</reply>
++
++# Client-side
++<client>
++<server>
++none
++</server>
++# tool is what to use instead of 'curl'
++<tool>
++lib%TESTNUMBER
++</tool>
++
++<name>
++multi - add many easy handles
++</name>
++<command>
++</command>
++</file>
++</client>
++
++# Verify data after the test has been "shot"
++<verify>
++</verify>
++</testcase>
+diff --git a/tests/libtest/Makefile.inc b/tests/libtest/Makefile.inc
+index faf7eacdf6af..002e7ab5470d 100644
+--- a/tests/libtest/Makefile.inc
++++ b/tests/libtest/Makefile.inc
+@@ -50,6 +50,7 @@ LIBTESTPROGS = libauthretry libntlmconnect libprereq                     \
+  lib659 lib661 lib666 lib667 lib668 \
+  lib670 lib671 lib672 lib673 lib674 lib676 lib677 lib678 lib694 lib695   \
+  lib696 \
++ lib751 \
+  lib1156 \
+  lib1301 \
+  lib1308 \
+@@ -349,6 +350,9 @@ lib695_SOURCES = lib695.c $(SUPPORTFILES)
+ lib696_SOURCES = lib556.c $(SUPPORTFILES) $(WARNLESS)
+ lib696_CPPFLAGS = $(AM_CPPFLAGS) -DLIB696
+ 
++lib751_SOURCES = lib751.c $(SUPPORTFILES) $(TESTUTIL) $(WARNLESS)
++lib751_LDADD = $(TESTUTIL_LIBS)
++
+ lib1301_SOURCES = lib1301.c $(SUPPORTFILES) $(TESTUTIL)
+ lib1301_LDADD = $(TESTUTIL_LIBS)
+ 
+diff --git a/tests/libtest/lib751.c b/tests/libtest/lib751.c
+new file mode 100644
+index 000000000000..ab2f923b959d
+--- /dev/null
++++ b/tests/libtest/lib751.c
+@@ -0,0 +1,92 @@
++/***************************************************************************
++ *                                  _   _ ____  _
++ *  Project                     ___| | | |  _ \| |
++ *                             / __| | | | |_) | |
++ *                            | (__| |_| |  _ <| |___
++ *                             \___|\___/|_| \_\_____|
++ *
++ * Copyright (C) Daniel Stenberg, <daniel@haxx.se>, et al.
++ *
++ * This software is licensed as described in the file COPYING, which
++ * you should have received as part of this distribution. The terms
++ * are also available at https://curl.se/docs/copyright.html.
++ *
++ * You may opt to use, copy, modify, merge, publish, distribute and/or sell
++ * copies of the Software, and permit persons to whom the Software is
++ * furnished to do so, under the terms of the COPYING file.
++ *
++ * This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY
++ * KIND, either express or implied.
++ *
++ * SPDX-License-Identifier: curl
++ *
++ ***************************************************************************/
++#include "test.h"
++
++#include "testutil.h"
++#include "warnless.h"
++#include "memdebug.h"
++
++#define TEST_HANG_TIMEOUT 60 * 1000
++
++/*
++ * Get a single URL without select().
++ */
++
++CURLcode test(char *URL)
++{
++  CURL *easies[1000];
++  CURLM *m;
++  CURLcode res = CURLE_FAILED_INIT;
++  CURLMcode mres;
++  int i;
++
++  (void)URL;
++  memset(easies, 0, sizeof(easies));
++
++  curl_global_init(CURL_GLOBAL_DEFAULT);
++  m = curl_multi_init();
++  if(!m) {
++    res = CURLE_OUT_OF_MEMORY;
++    goto test_cleanup;
++  }
++
++  for(i = 0; i < 1000; i++) {
++    CURL *e = curl_easy_init();
++    if(!e) {
++      res = CURLE_OUT_OF_MEMORY;
++      goto test_cleanup;
++    }
++    easies[i] = e;
++
++    res = curl_easy_setopt(e, CURLOPT_URL, "https://www.example.com/");
++    if(!res)
++      res = curl_easy_setopt(e, CURLOPT_VERBOSE, 1L);
++    if(res)
++      goto test_cleanup;
++
++    mres = curl_multi_add_handle(m, e);
++    if(mres != CURLM_OK) {
++      printf("MULTI ERROR: %s\n", curl_multi_strerror(mres));
++      res = CURLE_FAILED_INIT;
++      goto test_cleanup;
++    }
++  }
++
++test_cleanup:
++
++  if(res)
++    printf("ERROR: %s\n", curl_easy_strerror(res));
++
++  for(i = 0; i < 1000; i++) {
++    if(easies[i]) {
++      curl_multi_add_handle(m, easies[i]);
++      curl_easy_cleanup(easies[i]);
++      easies[i] = NULL;
++    }
++  }
++  curl_multi_cleanup(m);
++  curl_global_cleanup();
++
++  return res;
++}
