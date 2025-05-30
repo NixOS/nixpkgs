@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchurl,
+  autoconf,
+  automake,
   autoreconfHook,
   buildPackages,
   libiconv,
@@ -54,6 +56,12 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/coreutils/coreutils-${version}.tar.xz";
     hash = "sha256-6LsmrQKT+bWh/EP7QrqXDjEsZs6SwbCxZxPXUA2yUb8=";
   };
+
+  patches = [
+    # Heap buffer overflow that's been here since coreutils 7.2 in 2009:
+    # https://www.openwall.com/lists/oss-security/2025/05/27/2
+    ./CVE-2025-5278.patch
+  ];
 
   postPatch =
     ''
@@ -124,6 +132,8 @@ stdenv.mkDerivation rec {
     [
       perl
       xz.bin
+      autoconf
+      automake
     ]
     ++ optionals stdenv.hostPlatform.isCygwin [
       # due to patch
