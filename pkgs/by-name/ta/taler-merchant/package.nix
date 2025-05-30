@@ -82,6 +82,14 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
+  postFixup = ''
+    # - taler-merchant-dbinit expects `versioning.sql` under `share/taler/sql`
+    # - taler-merchant-httpd expects `share/taler/merchant/templates`
+    mkdir -p $out/share/taler/sql
+    ln -s $out/share/taler-merchant $out/share/taler/merchant
+    ln -s $out/share/taler-merchant/sql $out/share/taler/sql/merchant
+  '';
+
   enableParallelBuilding = true;
 
   doInstallCheck = true;
