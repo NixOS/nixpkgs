@@ -4,15 +4,17 @@
   fetchzip,
   ripgrep,
   makeWrapper,
+  amp-cli,
+  testers,
 }:
 
 buildNpmPackage rec {
   pname = "amp-cli";
-  version = "0.0.1748404992-ga3f78f";
+  version = "0.0.1748491454-gdefe97";
 
   src = fetchzip {
     url = "https://registry.npmjs.org/@sourcegraph/amp/-/amp-${version}.tgz";
-    hash = "sha256-axd5VP7afa4ptAl/y8CEVguqoRKVRhWfRDSI0sgyXqA=";
+    hash = "sha256-X6MgDghfoll8ddnCIpizk94N3rKgWCNE1UozcJtfdH4=";
   };
 
   postPatch = ''
@@ -44,7 +46,7 @@ buildNpmPackage rec {
     chmod +x bin/amp-wrapper.js
   '';
 
-  npmDepsHash = "sha256-05+hBr+eX3I92U9TsqPQrYcJCmKXTvz3n6ZTxR1XvC8=";
+  npmDepsHash = "sha256-6N+vTLmta11esTHw8BZEVxRuTUSih9F1SbcakB8RzJM=";
 
   propagatedBuildInputs = [
     ripgrep
@@ -69,6 +71,10 @@ buildNpmPackage rec {
   '';
 
   passthru.updateScript = ./update.sh;
+  passthru.tests.version = testers.testVersion {
+    package = amp-cli;
+    command = "HOME=$(mktemp -d) amp --version";
+  };
 
   meta = {
     description = "CLI for Amp, an agentic coding agent in research preview from Sourcegraph";
