@@ -2586,7 +2586,7 @@
         "version": "35.5.0"
     },
     "36": {
-        "chrome": "136.0.7103.49",
+        "chrome": "136.0.7103.115",
         "chromium": {
             "deps": {
                 "gn": {
@@ -2596,15 +2596,15 @@
                     "version": "2025-03-24"
                 }
             },
-            "version": "136.0.7103.49"
+            "version": "136.0.7103.115"
         },
         "chromium_npm_hash": "sha256-QRjk9X4rJW3ofizK33R4T1qym1riqcnpBhDF+FfNZLo=",
         "deps": {
             "src": {
                 "args": {
-                    "hash": "sha256-7ykQd8jKE9aVfTBPrJnOGHQYhmm+gJoMX7kET7eYFXM=",
+                    "hash": "sha256-yUWNV65TshvAMaz1kGOUQuy+J5vXPryjisGN3MxTU9Q=",
                     "postFetch": "rm -r $out/third_party/blink/web_tests; rm -r $out/content/test/data; rm -rf $out/courgette/testdata; rm -r $out/extensions/test/data; rm -r $out/media/test/data; ",
-                    "rev": "136.0.7103.49",
+                    "tag": "136.0.7103.115",
                     "url": "https://chromium.googlesource.com/chromium/src.git"
                 },
                 "fetcher": "fetchFromGitiles"
@@ -2643,10 +2643,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-mErVGqPBvplWEEOnEFnEdxDU34jc5YECLj18rU7E/XM=",
+                    "hash": "sha256-bMQJfOkWRFE7Qg4kHiwkNcuXOSWU0EzEGSo8U1SuGTQ=",
                     "owner": "electron",
                     "repo": "electron",
-                    "rev": "v36.2.0"
+                    "tag": "v36.3.2"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -2972,10 +2972,10 @@
             },
             "src/third_party/electron_node": {
                 "args": {
-                    "hash": "sha256-KXhkO1qKbf7/KktyLQcPGEzcIErsIKAUE89oGTP2mbI=",
+                    "hash": "sha256-fGfV1IkJoAMQC49vZPgmoYW6OznOCJ4IIUNUiyLjIKE=",
                     "owner": "nodejs",
                     "repo": "node",
-                    "rev": "v22.15.0"
+                    "tag": "v22.15.1"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -3905,9 +3905,9 @@
                 "fetcher": "fetchFromGitiles"
             }
         },
-        "electron_yarn_hash": "195amc05nj4p1x0mqi04m3qgw15k7fj62lw0xbrjz5iyjdyrdxan",
+        "electron_yarn_hash": "10n86jnzcq8kh0nk29ljw9wi1fgj13f07h92b009i1dryagliyrs",
         "modules": "135",
-        "node": "22.15.0",
-        "version": "36.2.0"
+        "node": "22.15.1",
+        "version": "36.3.2"
     }
 }
