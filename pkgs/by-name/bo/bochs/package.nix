@@ -148,7 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
       Intel x86 CPU, common I/O devices, and a custom BIOS.
     '';
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ patrickdag ];
     platforms = lib.platforms.unix;
   };
 })
