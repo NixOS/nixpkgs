@@ -189,11 +189,16 @@ import ../../make-test-python.nix (
 
             # Accept & confirm withdrawal
             with subtest("Accept & confirm withdrawal"):
-                wallet_cli(f"withdraw accept-uri {withdrawal["taler_withdraw_uri"]} --exchange http://exchange:8081/")
+                # the withdrawal can only be confirmed if this is executed twice, for some reason
+                for i in range(2):
+                    wallet_cli(f"withdraw accept-uri {withdrawal["taler_withdraw_uri"]} --exchange 'http://exchange:8081/'")
+                    client.sleep(5) # needs some time to process things
+
                 succeed(client, [
                     "curl -X POST",
                     f"-H 'Authorization: Bearer {accessTokenUser}'",
                     "-H 'Content-Type: application/json'",
+                    f"""--data '{{"amount": "{balanceWanted}"}}'""", # double brackets escapes them
                     f"-sSfL 'http://bank:8082/accounts/${TUSER}/withdrawals/{withdrawal["withdrawal_id"]}/confirm'"
                 ])
 
