@@ -257,6 +257,9 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir --parents $out $out/share $boot
     cp -prvd dist/install/nix/store/*/* $out/
     cp -prvd dist/install/etc $out
+    # Decompresses the multiboot binary so it's present for bootloaders such as Limine
+    # The find command is used instead of a simple file glob so we skip processing symlinks
+    find dist/install/boot -type f -name '*.gz' -print -exec gunzip -k '{}' ';'
     cp -prvd dist/install/boot $boot
 
     runHook postInstall
@@ -296,6 +299,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     efi = "boot/xen-${upstreamVersion}.efi";
+    multiboot = "boot/xen-${upstreamVersion}";
     flaskPolicy =
       if withFlask then
         warn "This Xen was compiled with FLASK support, but the FLASK file does not match the Xen version number. Please hardcode the path to the FLASK file instead." "boot/xenpolicy-${version}"
@@ -342,7 +346,8 @@ stdenv.mkDerivation (finalAttrs: {
 
         Use with the `qemu_xen` package.
       ''
-      + "\nIncludes:\n* `xen.efi`: The Xen Project's [EFI binary](https://xenbits.xenproject.org/docs/${branch}-testing/misc/efi.html), available on the `boot` output of this package."
+      + "\nIncludes:\n* `xen-${upstreamVersion}.efi`: The Xen Project's [EFI binary](https://xenbits.xenproject.org/docs/${branch}-testing/misc/efi.html), available on the `boot` output of this package."
+      + "\n* `xen-${upstreamVersion}`: The Xen Project's multiboot binary, available on the `boot` output of this package."
       + optionalString withFlask "\n* `xsm-flask`: The [FLASK Xen Security Module](https://wiki.xenproject.org/wiki/Xen_Security_Modules_:_XSM-FLASK). The `xenpolicy-${upstreamVersion}` file is available on the `boot` output of this package."
       + optionalString withSeaBIOS "\n* `seabios`: Support for the SeaBIOS boot firmware on HVM domains."
       + optionalString withOVMF "\n* `ovmf`: Support for the OVMF UEFI boot firmware on HVM domains."
