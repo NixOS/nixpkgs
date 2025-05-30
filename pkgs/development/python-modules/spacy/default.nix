@@ -140,9 +140,9 @@ buildPythonPackage rec {
   meta = {
     description = "Industrial-strength Natural Language Processing (NLP)";
     homepage = "https://github.com/explosion/spaCy";
-    changelog = "https://github.com/explosion/spaCy/releases/tag/release-v${version}";
+    changelog = "https://github.com/explosion/spaCy/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.sarahec ];
     mainProgram = "spacy";
   };
 }
