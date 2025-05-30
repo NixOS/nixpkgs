@@ -1,6 +1,8 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
+  installShellFiles,
   nix-update-script,
   rustPlatform,
   versionCheckHook,
@@ -19,6 +21,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-OVGaHLA/VzF8wGrWrHaKpYDcp4ZeR9mf2s5I+u5ddcs=";
+
+  nativeBuildInputs = lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    installShellFiles
+  ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd zizmor \
+      --bash <("$out/bin/zizmor" --completions bash) \
+      --zsh <("$out/bin/zizmor" --completions zsh) \
+      --fish <("$out/bin/zizmor" --completions fish)
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
