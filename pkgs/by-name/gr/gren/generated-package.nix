@@ -21,7 +21,6 @@
   indexed-traversable,
   lib,
   mtl,
-  prettyprint-avh4,
   process,
   raw-strings-qq,
   scientific,
@@ -32,16 +31,16 @@
 }:
 mkDerivation {
   pname = "gren";
-  version = "0.5.2";
+  version = "0.5.3";
   src = fetchgit {
     url = "https://github.com/gren-lang/compiler.git";
-    sha256 = "1mksfma6c1dn091ab4x794hs71v44bx294wbn80qfc5kgrrl5lf4";
-    rev = "ee19481f5715b78cad8be09e29e56dcb82d65f4f";
+    sha256 = "1kav6cw4m4ir5qghwv104f140qq25hj060yz1ijq72ia4yfx63cr";
+    rev = "94e8dcbaabeca498417414e6b3ae7b706917073f";
     fetchSubmodules = true;
   };
   isLibrary = false;
   isExecutable = true;
-  executableHaskellDepends = [
+  libraryHaskellDepends = [
     ansi-terminal
     ansi-wl-pprint
     base
@@ -57,7 +56,6 @@ mkDerivation {
     haskeline
     indexed-traversable
     mtl
-    prettyprint-avh4
     process
     raw-strings-qq
     scientific
@@ -65,34 +63,20 @@ mkDerivation {
     time
     utf8-string
     vector
+  ];
+  executableHaskellDepends = [
+    base
+    bytestring
   ];
   testHaskellDepends = [
-    ansi-terminal
-    ansi-wl-pprint
     base
-    base64-bytestring
-    binary
     bytestring
-    containers
-    directory
-    edit-distance
-    filelock
-    filepath
-    ghc-prim
-    haskeline
     hspec
-    indexed-traversable
-    mtl
-    prettyprint-avh4
-    process
-    raw-strings-qq
-    scientific
     text
-    time
     utf8-string
-    vector
   ];
   testToolDepends = [ hspec-discover ];
+  doHaddock = false;
   jailbreak = true;
   homepage = "https://gren-lang.org";
   description = "The `gren` command line interface";
