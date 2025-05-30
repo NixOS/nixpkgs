@@ -95,6 +95,11 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
+  postFixup = ''
+    # else it fails to find the python interpreter
+    patchShebangs --build $out/bin/taler-helper-sqlite3
+  '';
+
   env.ESBUILD_BINARY_PATH = lib.getExe esbuild';
 
   meta = {
