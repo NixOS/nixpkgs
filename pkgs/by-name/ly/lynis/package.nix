@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "CISOfy";
-    repo = pname;
+    repo = "lynis";
     rev = version;
     sha256 = "sha256-OnEEdJGU7ma6f7aA6ihgixHWZGZDmx7nzqmJH3p+ijk=";
   };

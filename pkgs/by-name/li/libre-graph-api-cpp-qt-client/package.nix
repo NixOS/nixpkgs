@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "owncloud";
-    repo = pname;
+    repo = "libre-graph-api-cpp-qt-client";
     tag = "v${version}";
     hash = "sha256-wbdamPi2XSLWeprrYZtBUDH1A2gdp6/5geFZv+ZqSWk=";
   };

@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "helmfile";
-    repo = pname;
+    repo = "vals";
     sha256 = "sha256-zgIU4J7p7tXFTdwznC4solJD22QlizzJyBkKyCprayA=";
   };
 

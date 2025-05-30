@@ -16,7 +16,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
-    repo = pname;
+    repo = "guest-agent";
     tag = version;
     hash = "sha256-DP15KDnD09edBxOQDwP0cjVIFxjMzE1hu1Sbu6Faj9Y=";
   };

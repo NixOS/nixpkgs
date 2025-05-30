@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "vitessio";
-    repo = pname;
+    repo = "vitess";
     rev = "v${version}";
     hash = "sha256-YfFGKOYlsCy9mSjtRB+ajmXnXIB8Awjm54DGGhTnu5U=";
   };

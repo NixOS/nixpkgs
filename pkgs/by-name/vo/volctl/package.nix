@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "buzz";
-    repo = pname;
+    repo = "volctl";
     rev = "v${version}";
     sha256 = "sha256-jzS97KV17wKeBI6deKE4rEj5lvqC38fq1JGundHn2So=";
   };

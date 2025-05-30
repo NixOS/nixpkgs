@@ -13,7 +13,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "goodwithtech";
-    repo = pname;
+    repo = "dockle";
     rev = "v${version}";
     hash = "sha256-YoDgTKhXpN4UVF/+NDFxaEFwMj81RJaqfjr29t1UdLY=";
   };

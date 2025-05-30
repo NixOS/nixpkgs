@@ -12,7 +12,7 @@ buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "iluxonchik";
-    repo = pname;
+    repo = "rfc-bibtex";
     tag = version;
     hash = "sha256-bPCNQqiG50vWVFA6J2kyxftwsXunHTNBdSkoIRYkb0s=";
   };
