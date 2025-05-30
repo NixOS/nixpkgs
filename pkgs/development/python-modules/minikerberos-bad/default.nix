@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CravateRouge";
     repo = "minikerberos-bAD";
-    rev = version;
+    tag = version;
     hash = "sha256-pnIn7UOpnCke6voFvOwcONXDd9i/di1lE/57vkg0/0w=";
   };
 
