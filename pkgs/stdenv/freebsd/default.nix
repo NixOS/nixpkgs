@@ -96,6 +96,7 @@ let
           "bin/clang"
           "bin/clang++"
           "bin/cpp"
+          "lib/clang"
         ];
         # SYNCME: this version number must be synced with the one in make-bootstrap-tools.nix
         version = "18";
