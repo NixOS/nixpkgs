@@ -22,6 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-r8wASontO8R4qeS6ObIPPVibJOI+J1tzg/kaWQ1NV8U=";
   };
 
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./opencsgexample.patch ];
+
   nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs =
@@ -37,17 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false;
 
-  postInstall =
-    ''
-      install -D ../copying.txt "$out/share/doc/opencsg/copying.txt"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Applications
-      mv $out/bin/*.app $out/Applications
-      rmdir $out/bin || true
-    '';
-
-  dontWrapQtApps = true;
+  postInstall = ''
+    install -D ../copying.txt "$out/share/doc/opencsg/copying.txt"
+  '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     app=$out/Applications/opencsgexample.app/Contents/MacOS/opencsgexample
