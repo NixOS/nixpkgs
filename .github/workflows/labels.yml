@@ -3,7 +3,7 @@
 # access to the GitHub API. This means that it should not evaluate user input in
 # a way that allows code injection.
 
-name: "Label PR"
+name: Labels
 
 on:
   schedule:
@@ -33,8 +33,7 @@ defaults:
     shell: bash
 
 jobs:
-  labels:
-    name: label-pr
+  update:
     runs-on: ubuntu-24.04-arm
     if: github.event_name != 'schedule' || github.repository_owner == 'NixOS'
     steps:
