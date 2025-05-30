@@ -216,8 +216,7 @@ let
           cargoDeps =
             if yjitSupport then
               rustPlatform.fetchCargoVendor {
-                inherit (finalAttrs) src;
-                sourceRoot = "${finalAttrs.pname}-${version}/${finalAttrs.cargoRoot}";
+                inherit (finalAttrs) src cargoRoot;
                 hash =
                   assert cargoHash != null;
                   cargoHash;
