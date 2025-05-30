@@ -10,7 +10,7 @@
 # The actual trigger happens by closing and re-opening the pull request, which triggers the default pull_request_target events.
 # This is much simpler and reliable than other approaches.
 
-name: "Edited base branch"
+name: PR edit
 
 on:
   pull_request_target:
@@ -27,8 +27,8 @@ defaults:
     shell: bash
 
 jobs:
-  base:
-    name: Trigger jobs
+  base-branch:
+    name: base branch
     runs-on: ubuntu-24.04
     if: github.event.changes.base.ref.from && github.event.changes.base.ref.from != github.event.pull_request.base.ref
     steps:

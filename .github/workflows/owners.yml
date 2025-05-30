@@ -20,7 +20,7 @@
 #
 # Note that the latter is also used for ./eval.yml requesting reviewers.
 
-name: Codeowners v2
+name: Owners
 
 on:
   pull_request:
@@ -47,7 +47,6 @@ env:
 jobs:
   # Check that code owners is valid
   check:
-    name: Check
     runs-on: ubuntu-24.04-arm
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -91,8 +90,8 @@ jobs:
         run: result/bin/codeowners-validator
 
   # Request reviews from code owners
-  request:
-    name: Request
+  request-reviews:
+    name: request reviews
     runs-on: ubuntu-24.04-arm
     steps:
       - uses: cachix/install-nix-action@17fe5fb4a23ad6cbbe47d6b3f359611ad276644c # v31
