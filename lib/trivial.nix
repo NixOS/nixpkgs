@@ -373,6 +373,8 @@ in
     isFloat
     add
     sub
+    mul
+    div
     lessThan
     seq
     deepSeq
@@ -380,6 +382,8 @@ in
     bitAnd
     bitOr
     bitXor
+    ceil
+    floor
     ;
 
   ## nixpkgs version strings
