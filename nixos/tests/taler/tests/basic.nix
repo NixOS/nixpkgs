@@ -97,8 +97,8 @@ import ../../make-test-python.nix (
             exchange.succeed('taler-exchange-offline -c "${configFile}" upload < ${exchangeAccount}')
 
             # Set up wire fees, needed in order to deposit coins/pay merchant
-            exchange.succeed('taler-exchange-offline -c "${configFile}" wire-fee now x-taler-bank "${CURRENCY}:0" "${CURRENCY}:0" upload')
-            exchange.succeed('taler-exchange-offline -c "${configFile}" global-fee now "${CURRENCY}:0" "${CURRENCY}:0" "${CURRENCY}:0" 1h 6a 0 upload')
+            exchange.succeed('taler-exchange-offline -c "${configFile}" wire-fee now x-taler-bank "${CURRENCY}:0.01" "${CURRENCY}:0.01" upload')
+            exchange.succeed('taler-exchange-offline -c "${configFile}" global-fee now "${CURRENCY}:0.01" "${CURRENCY}:0.0" "${CURRENCY}:0" 1h 6a 0 upload')
 
 
         # Verify that exchange keys exist
@@ -204,7 +204,8 @@ import ../../make-test-python.nix (
 
 
         with subtest("Pay for an order"):
-            balanceWanted = "${CURRENCY}:9" # after paying
+            # after paying (1 for the order and 0.1 as fee)
+            balanceWanted = "${CURRENCY}:8.9"
 
             # Create an order to be paid
             response = json.loads(
