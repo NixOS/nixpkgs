@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   # Fix FTBFS with Qt >= 6.8
   prePatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace 'find_qt(COMPONENTS Widgets Core)' 'find_package(Qt6 REQUIRED COMPONENTS Core Widgets)'
+      --replace-fail 'find_qt(COMPONENTS Widgets Core)' 'find_package(Qt6 REQUIRED COMPONENTS Core Widgets)'
   '';
 
   nativeBuildInputs = [ cmake ];
