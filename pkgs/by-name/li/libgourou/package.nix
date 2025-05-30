@@ -12,12 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libgourou";
-  version = "0.8.2";
+  version = "0.8.7";
 
   src = fetchzip {
-    url = "https://indefero.soutade.fr/p/libgourou/source/download/v${version}/";
-    sha256 = "sha256-adkrvBCgN07Ir+J3JFCy+X9p9609lj1w8nElrlHXTxc";
-    extension = "zip";
+    url = "https://forge.soutade.fr/soutade/libgourou/archive/v${version}.tar.gz";
+    hash = "sha256-Tkft/pe3lH07pmyVibTEutIIvconUWDH1ZVN3qV4sSY=";
   };
 
   postPatch = ''
