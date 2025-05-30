@@ -4140,22 +4140,26 @@ runTests {
       callPackage = path: overrides: import path overrides;
       directory = ./packages-from-directory/plain;
     };
-    expected = {
-      a = "a";
-      b = "b";
-      # Note: Other files/directories in `./test-data/c/` are ignored and can be
-      # used by `package.nix`.
-      c = "c";
-      my-namespace = {
-        d = "d";
-        e = "e";
-        f = "f";
-        my-sub-namespace = {
-          g = "g";
-          h = "h";
+    expected =
+      let
+        inherit (lib) recurseIntoAttrs;
+      in
+      recurseIntoAttrs {
+        a = "a";
+        b = "b";
+        # Note: Other files/directories in `./test-data/c/` are ignored and can be
+        # used by `package.nix`.
+        c = "c";
+        my-namespace = recurseIntoAttrs {
+          d = "d";
+          e = "e";
+          f = "f";
+          my-sub-namespace = recurseIntoAttrs {
+            g = "g";
+            h = "h";
+          };
         };
       };
-    };
   };
 
   # Check that `packagesFromDirectoryRecursive` can process a directory with a

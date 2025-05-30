@@ -56,4 +56,6 @@ mkDerivation {
     runHook postInstall
   '';
   setupHook = ./install-setup-hook.sh;
+
+  meta.platforms = lib.platforms.unix;
 }
