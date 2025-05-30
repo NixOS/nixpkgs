@@ -15635,14 +15635,14 @@ with pkgs;
     ;
 
   trimmomatic = callPackage ../applications/science/biology/trimmomatic {
-    jdk = pkgs.jdk11_headless;
+    jdk = pkgs.jdk21_headless;
     # Reduce closure size
     jre = pkgs.jre_minimal.override {
       modules = [
         "java.base"
         "java.logging"
       ];
-      jdk = pkgs.jdk11_headless;
+      jdk = pkgs.jdk21_headless;
     };
   };
 
