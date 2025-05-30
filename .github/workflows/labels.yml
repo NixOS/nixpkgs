@@ -3,7 +3,7 @@
 # access to the GitHub API. This means that it should not evaluate user input in
 # a way that allows code injection.
 
-name: "Label PR"
+name: Labels
 
 on:
   workflow_call:
@@ -26,8 +26,7 @@ defaults:
     shell: bash
 
 jobs:
-  labels:
-    name: label-pr
+  update:
     runs-on: ubuntu-24.04-arm
     if: "!contains(github.event.pull_request.title, '[skip treewide]')"
     steps:

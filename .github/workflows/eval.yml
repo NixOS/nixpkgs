@@ -14,7 +14,6 @@ defaults:
 
 jobs:
   prepare:
-    name: Prepare
     runs-on: ubuntu-24.04-arm
     outputs:
       mergedSha: ${{ steps.get-merge-commit.outputs.mergedSha }}
@@ -35,14 +34,14 @@ jobs:
         run: |
           echo "systems=$(jq -c <ci/supportedSystems.json)" >> "$GITHUB_OUTPUT"
 
-  outpaths:
-    name: Outpaths
+  eval:
     runs-on: ubuntu-24.04-arm
     needs: [prepare]
     strategy:
       fail-fast: false
       matrix:
         system: ${{ fromJSON(needs.prepare.outputs.systems) }}
+    name: ${{ matrix.system }}
     steps:
       - name: Enable swap
         run: |
@@ -147,9 +146,8 @@ jobs:
           path: diff/*
 
   compare:
-    name: Comparison
     runs-on: ubuntu-24.04-arm
-    needs: [prepare, outpaths]
+    needs: [prepare, eval]
     if: needs.prepare.outputs.targetSha
     permissions:
       issues: write # needed to create *new* labels
@@ -248,7 +246,7 @@ jobs:
     # No dependency on "compare", so that it can start at the same time.
     # We only wait for the "comparison" artifact to be available, which makes the start-to-finish time
     # for the eval workflow considerably faster.
-    needs: [prepare, outpaths]
+    needs: [prepare, eval]
     if: needs.prepare.outputs.targetSha
     uses: ./.github/workflows/reviewers.yml
     secrets:
