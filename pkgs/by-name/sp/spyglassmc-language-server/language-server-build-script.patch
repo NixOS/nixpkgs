@@ -1,0 +1,32 @@
+diff --git a/packages/language-server/package.json b/packages/language-server/package.json
+index 7105a0de6..aef75f15d 100644
+--- a/packages/language-server/package.json
++++ b/packages/language-server/package.json
+@@ -11,11 +11,25 @@
+     "test": "test"
+   },
+   "bin": {
+-    "spyglassmc-language-server": "./bin/server.js"
++    "spyglassmc-language-server": "bin/server.js"
+   },
+   "scripts": {
+     "release": "npm publish",
+-    "release:dry": "npm publish --dry-run"
++    "release:dry": "npm publish --dry-run",
++    "build": "wireit",
++    "build:dev": "wireit"
++  },
++  "wireit": {
++    "build": {
++      "dependencies": [
++        "../..:build:packages"
++      ]
++    },
++    "build:dev": {
++      "dependencies": [
++        "../..:build:packages"
++      ]
++    }
+   },
+   "dependencies": {
+     "env-paths": "^2.2.1",
