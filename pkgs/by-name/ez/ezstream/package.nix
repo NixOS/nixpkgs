@@ -2,33 +2,48 @@
   lib,
   stdenv,
   fetchurl,
+
+  # nativeBuildInputs
+  pkg-config,
+
+  # buildInputs
+  check,
   libiconv,
   libshout,
-  taglib,
   libxml2,
-  pkg-config,
+  taglib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ezstream";
-  version = "0.6.0";
+  version = "1.0.2";
 
   src = fetchurl {
-    url = "https://ftp.osuosl.org/pub/xiph/releases/ezstream/${pname}-${version}.tar.gz";
-    sha256 = "f86eb8163b470c3acbc182b42406f08313f85187bd9017afb8b79b02f03635c9";
+    url = "https://ftp.osuosl.org/pub/xiph/releases/ezstream/ezstream-${finalAttrs.version}.tar.gz";
+    hash = "sha256-Ed6Jf0ValbpYVGvc1AqV072mmGbsX3h5qDsCQSbFTCo=";
   };
 
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/playlist.c \
+      --replace-fail "#include <sys/stat.h>" $'#include <stddef.h>\n#include <sys/stat.h>'
+    substituteInPlace tests/Makefile.am \
+      --replace-fail "check_mdata " "" \
+      --replace-fail "check_playlist " ""
+  '';
+
+  nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [
+    check
     libiconv
     libshout
-    taglib
     libxml2
+    taglib
   ];
-  nativeBuildInputs = [ pkg-config ];
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Command line source client for Icecast media streaming servers";
     longDescription = ''
       Ezstream is a command line source client for Icecast media
@@ -40,8 +55,8 @@ stdenv.mkDerivation rec {
       very little CPU resources.
     '';
     homepage = "https://icecast.org/ezstream/";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.barrucadu ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.barrucadu ];
+    platforms = lib.platforms.all;
   };
-}
+})
