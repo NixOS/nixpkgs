@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitea,
   rustPlatform,
   cairo,
@@ -50,20 +51,18 @@ rustPlatform.buildRustPackage rec {
 
   strictDeps = true;
 
-  postInstall =
-    # The build.rs compiles the settings schema and writes the compiled file next to the .xml file.
-    # This copies the compiled file to a path that can be detected by gsettings-desktop-schemas
-    ''
-      mkdir -p "$out/share/glib-2.0/schemas"
-      cp "schemas/gschemas.compiled" "$out/share/glib-2.0/schemas"
-    '';
+  installPhase = ''
+    substituteInPlace Makefile --replace-fail "target/release/turnon" "target/${stdenv.hostPlatform.rust.rustcTarget}/release/turnon"
+    make DESTPREFIX=$out install
+    cp "schemas/gschemas.compiled" "$out/share/glib-2.0/schemas"
+  '';
 
   meta = {
     description = "Turn on devices in your local network";
     homepage = "https://codeberg.org/swsnr/turnon";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ mksafavi ];
-    mainProgram = "turnon";
+    mainProgram = "de.swsnr.turnon";
     platforms = lib.platforms.linux;
   };
 }
