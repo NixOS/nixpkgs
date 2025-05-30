@@ -28,7 +28,7 @@ lib.makeOverridable (
       url,
       tag ? null,
       rev ? null,
-      leaveDotGit ? deepClone,
+      leaveDotGit ? deepClone || fetchTags,
       outputHash ? lib.fakeHash,
       outputHashAlgo ? null,
       fetchSubmodules ? true,
@@ -55,6 +55,8 @@ lib.makeOverridable (
       netrcImpureEnvVars ? [ ],
       meta ? { },
       allowedRequisites ? null,
+      # fetch all tags after tree (useful for git describe)
+      fetchTags ? false,
     }:
 
     /*
@@ -81,6 +83,7 @@ lib.makeOverridable (
     */
 
     assert nonConeMode -> (sparseCheckout != [ ]);
+    assert fetchTags -> leaveDotGit;
 
     let
       revWithTag =
@@ -136,6 +139,7 @@ lib.makeOverridable (
           nonConeMode
           preFetch
           postFetch
+          fetchTags
           ;
         rev = revWithTag;
 

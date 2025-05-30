@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "ossobv";
-    repo = pname;
+    repo = "xpaste";
     tag = "v${version}";
     hash = "sha256-eVnoLG+06UTOkvGhzL/XS4JBrEwbXYZ1fuNTIW7YAfE=";
   };

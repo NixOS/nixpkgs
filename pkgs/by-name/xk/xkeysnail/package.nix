@@ -5,13 +5,13 @@
   fetchpatch,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "xkeysnail";
   version = "0.4";
 
   src = fetchFromGitHub {
     owner = "mooz";
-    repo = pname;
+    repo = "xkeysnail";
     rev = "bf3c93b4fe6efd42893db4e6588e5ef1c4909cfb";
     hash = "sha256-12AkB6Zb1g9hY6mcphO8HlquxXigiiFhadr9Zsm6jF4=";
   };

@@ -9,13 +9,13 @@
   withRawsocket ? (stdenv.hostPlatform.isLinux && !withPcap),
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "phantomsocks";
   version = "unstable-2023-11-30";
 
   src = fetchFromGitHub {
     owner = "macronut";
-    repo = pname;
+    repo = "phantomsocks";
     rev = "b1b13c5b88cf3bac54f39c37c0ffcb0b46e31049";
     hash = "sha256-ptCzd2/8dNHjAkhwA2xpZH8Ki/9DnblHI2gAIpgM+8E=";
   };

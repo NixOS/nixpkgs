@@ -14,7 +14,7 @@ buildGoModule {
 
   src = fetchFromGitHub {
     owner = "ledgerwatch";
-    repo = pname;
+    repo = "erigon";
     rev = "v${version}";
     hash = "sha256-gSgkdg7677OBOkAbsEjxX1QttuIbfve2A3luUZoZ5Ik=";
     fetchSubmodules = true;

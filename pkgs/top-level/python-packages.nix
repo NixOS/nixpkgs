@@ -7811,6 +7811,8 @@ self: super: with self; {
 
   lib4vex = callPackage ../development/python-modules/lib4vex { };
 
+  lib50 = callPackage ../development/python-modules/lib50 { };
+
   libagent = callPackage ../development/python-modules/libagent { };
 
   libais = callPackage ../development/python-modules/libais { };
@@ -11065,8 +11067,6 @@ self: super: with self; {
   pepit = callPackage ../development/python-modules/pepit { };
 
   peppercorn = callPackage ../development/python-modules/peppercorn { };
-
-  percol = callPackage ../development/python-modules/percol { };
 
   perfplot = callPackage ../development/python-modules/perfplot { };
 
