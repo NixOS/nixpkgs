@@ -151,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
       booxter
       panda2134
     ];
-    inherit (electron.meta) platforms;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "podman-desktop";
   };
 })
