@@ -8,7 +8,7 @@
 
 let
   pname = "hamrs-pro";
-  version = "2.37.1";
+  version = "2.38.0";
 
   throwSystem = throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}";
 
@@ -30,7 +30,7 @@ let
 
     aarch64-darwin = fetchurl {
       url = "https://hamrs-dist.s3.amazonaws.com/hamrs-pro-${version}-mac-arm64.dmg";
-      hash = "sha256-Hi/t5ShfhUFw0aEzb2XIhOIppXg04qnq8tl3LKNH3qQ=";
+      hash = "sha256-s8Ly1UYBy0EzUCKUCJxx1PcxVQe2gkeuXDudqnSuYjE=";
     };
   };
 
