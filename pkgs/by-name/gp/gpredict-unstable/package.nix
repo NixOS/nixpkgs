@@ -11,7 +11,7 @@
 }).overrideAttrs
   (finalAttrs: {
     # Next version is 2.4.0
-    version = "2.4.0-unstable-2024-09-17";
+    version = "2.2.1-unstable-2024-09-17";
 
     src = fetchFromGitHub {
       owner = "csete";
