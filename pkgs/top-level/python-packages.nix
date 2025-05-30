@@ -4484,6 +4484,8 @@ self: super: with self; {
 
   emcee = callPackage ../development/python-modules/emcee { };
 
+  emdfile = callPackage ../development/python-modules/emdfile { };
+
   emoji = callPackage ../development/python-modules/emoji { };
 
   emojis = callPackage ../development/python-modules/emojis { };
