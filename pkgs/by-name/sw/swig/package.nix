@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swig";
-  version = "4.3.0";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "swig";
     repo = "swig";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hFHEE9wy8Lja9G396tI4fj4LhOkpPKJkDuy1L62AXr4=";
+    hash = "sha256-wEqbKDgXVU8kQxdh7uC+EZ0u5leeoYh2d/61qB4guOg=";
   };
 
   strictDeps = true;
@@ -40,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     ./autogen.sh
   '';
+
+  enableParallelBuilding = true;
 
   meta = {
     changelog = "https://github.com/swig/swig/blob/${finalAttrs.src.rev}/CHANGES.current";
