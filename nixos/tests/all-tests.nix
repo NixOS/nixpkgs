@@ -390,6 +390,7 @@ in
   containers-ip = runTest ./containers-ip.nix;
   containers-ipv6-slaac = runTest ./containers-ipv6-slaac.nix;
   containers-macvlans = runTest ./containers-macvlans.nix;
+  containers-mtu = runTest ./containers-mtu.nix;
   containers-names = runTest ./containers-names.nix;
   containers-nested = runTest ./containers-nested.nix;
   containers-physical_interfaces = runTest ./containers-physical_interfaces.nix;
