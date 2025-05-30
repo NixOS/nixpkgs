@@ -21,7 +21,21 @@
 }:
 
 let
-  pythonEnv = python3.withPackages (
+  # remove ASAP: https://github.com/googleapis/google-api-python-client/issues/2554
+  pythonCustom = python3.override {
+    self = pythonCustom;
+    packageOverrides = _: super: {
+      pyopenssl = super.pyopenssl.overridePythonAttrs (old: rec {
+        version = "24.2.1";
+        src = old.src.override {
+          tag = version;
+          hash = "sha256-otK7Y7Kb/l3QOErhAcuDHB/CKG9l1vH2BTnOieAWNc0=";
+        };
+      });
+    };
+  };
+
+  pythonEnv = pythonCustom.withPackages (
     p:
     with p;
     [
