@@ -10,6 +10,7 @@
   python-dateutil,
   xxhash,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
   requests,
   xdoctest,
 }:
@@ -31,6 +32,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     wheel
+    writableTmpDirAsHomeHook
   ];
 
   optional-dependencies = {
@@ -51,10 +53,9 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    # fail due to sandbox environment
-    "CacheStamp.expired"
-    "userhome"
+  disabledTests = [
+    # fails on python 3.13, see https://github.com/Erotemic/ubelt/issues/157
+    "import_module_from_name"
   ];
 
   pythonImportsCheck = [ "ubelt" ];
