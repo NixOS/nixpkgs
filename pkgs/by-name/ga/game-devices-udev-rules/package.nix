@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "game-devices-udev-rules";
-  version = "0.23";
+  version = "0.24";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "fabiscafe";
     repo = "game-devices-udev";
     rev = finalAttrs.version;
-    hash = "sha256-dWWo3qXnxdLP68NuFKM4/Cw5yE6uAsWzj0vZa9UTT0U=";
+    hash = "sha256-b2NBgGpRQ2pQZYQgiRSAt0loAxq1NEByRHVkQQRDOj0=";
   };
 
   postInstall = ''
