@@ -8930,6 +8930,8 @@ self: super: with self; {
 
   minikerberos = callPackage ../development/python-modules/minikerberos { };
 
+  minikerberos-bad = callPackage ../development/python-modules/minikerberos-bad { };
+
   minimal-snowplow-tracker = callPackage ../development/python-modules/minimal-snowplow-tracker { };
 
   minimock = callPackage ../development/python-modules/minimock { };
