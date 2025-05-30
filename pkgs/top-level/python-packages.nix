@@ -15542,6 +15542,8 @@ self: super: with self; {
 
   sanic-auth = callPackage ../development/python-modules/sanic-auth { };
 
+  sanic-ext = callPackage ../development/python-modules/sanic-ext { };
+
   sanic-routing = callPackage ../development/python-modules/sanic-routing { };
 
   sanic-testing = callPackage ../development/python-modules/sanic-testing { };
