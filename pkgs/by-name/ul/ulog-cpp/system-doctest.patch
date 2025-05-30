@@ -1,0 +1,41 @@
+From 87cf98a4d7512c7ccd5d76d1b218997bdf3122f1 Mon Sep 17 00:00:00 2001
+From: Gavin John <gavinnjohn@gmail.com>
+Date: Thu, 29 May 2025 22:52:53 -0700
+Subject: [PATCH] Use system doctest if available
+
+---
+ test/CMakeLists.txt | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
+
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index 17f7527..c3f1401 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -7,16 +7,18 @@ set(SYSTEM_ARG SYSTEM)
+ if (CMAKE_VERSION VERSION_LESS "3.25")
+ 	set(SYSTEM_ARG "")
+ endif ()
+-FetchContent_Declare(
+-		DocTest
+-		GIT_REPOSITORY "https://github.com/doctest/doctest.git"
+-		GIT_TAG "v2.4.11"
+-		${SYSTEM_ARG}
+-)
+-
+-
+-FetchContent_MakeAvailable(DocTest)
+ 
++find_package(doctest CONFIG)
++
++if(NOT doctest_FOUND)
++    include(FetchContent)
++    FetchContent_Declare(
++        doctest
++        GIT_REPOSITORY "https://github.com/doctest/doctest.git"
++        GIT_TAG "v2.4.11"
++    )
++    FetchContent_MakeAvailable(doctest)
++endif()
+ 
+ add_executable(tests
+     main.cpp
