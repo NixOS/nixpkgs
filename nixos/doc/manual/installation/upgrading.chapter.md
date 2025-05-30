@@ -97,6 +97,30 @@ easily, so in that case you will not be able to go back to your original
 channel.
 :::
 
+|  NixOS version  |  Nix version  |
+| --------------- | ------------- |
+|      24.05      |    2.18       |
+|      23.11      |    2.18       |
+|      23.05      |    2.13       |
+|      22.11      |    2.11       |
+|      22.05      |    2.8        |
+|      21.11      |    2.3        |
+|      21.05      |    2.3        |
+|      20.09      |    2.3.11     |
+|      20.03      |    2.3.6      |
+|      19.09      |    2.3.3      |
+|      19.03      |    2.2.2      |
+|      18.09      |    2.1.3      |
+|      18.03      |    2.0.4      |
+|      17.09      |    1.11.16    |
+|      17.03      |    1.11.14    |
+|      16.09      |    1.11.8     |
+|      16.03      |    1.11.4     |
+|      15.09      |    1.10       |
+|      14.12      |    1.8        |
+|      14.04      |    1.7        |
+|      13.10      |    1.6.1      |
+
 ## Automatic Upgrades {#sec-upgrading-automatic}
 
 You can keep a NixOS system up-to-date automatically by adding the
