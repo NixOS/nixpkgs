@@ -1056,6 +1056,8 @@ self: super: with self; {
 
   atopile = callPackage ../development/python-modules/atopile { };
 
+  atopile-easyeda2ato = callPackage ../development/python-modules/atopile-easyeda2ato { };
+
   atproto = callPackage ../development/python-modules/atproto { };
 
   atpublic = callPackage ../development/python-modules/atpublic { };
