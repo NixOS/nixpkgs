@@ -7,9 +7,6 @@
   nix-update-script,
 }:
 
-# TODO:
-#  * Upstream Patche
-#  * Upstream cmake file
 stdenv.mkDerivation (finalAttrs: {
   pname = "ulog-cpp";
   version = "0-unstable-2025-03-18";
@@ -20,31 +17,18 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "eaac352b04501a49550fe6bcf02487b818c58f84";
     hash = "sha256-KNnZNiEDvBGUWsxUEEJhqBvZ5BiwQshImHyOfETltuM=";
   };
-  customCmakeFile = ./ulog_cpp.cmake;
 
   patches = [
-    ./system-doctest.patch
+    ./build-overhaul.patch # https://github.com/PX4/ulog_cpp/pull/15
   ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ doctest ];
 
-  cmakeFlage = [ (lib.cmakeBool "MAIN_PROJECT" true)];
-
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm644 ${finalAttrs.customCmakeFile} $out/lib/cmake/ulog_cpp/ulog_cpp.cmake
-    install -Dm644 ./ulog_cpp/libulog_cpp.a $out/lib/libulog_cpp.a
-    install -Dm755 ./ulog_writer $out/bin/ulog_writer
-    install -Dm755 ./ulog_info $out/bin/ulog_info
-    install -Dm755 ./ulog_data $out/bin/ulog_data
-    for header in $(find ../ulog_cpp -type f -name "*.hpp"); do
-      install -Dm644 "$header" $out/include/$(basename "$header")
-    done
-
-    runHook postInstall
-  '';
+  cmakeFlags = [
+    (lib.cmakeBool "MAIN_PROJECT" true)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+  ];
 
   passthru.updateScript = nix-update-script { };
 
