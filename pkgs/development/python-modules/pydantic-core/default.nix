@@ -30,8 +30,7 @@ let
     };
 
     cargoDeps = rustPlatform.fetchCargoVendor {
-      inherit src;
-      name = "${pname}-${version}";
+      inherit pname version src;
       hash = "sha256-MY6Gxoz5Q7nCptR+zvdABh2agfbpqOtfTtor4pmkb9c=";
     };
 
