@@ -23,14 +23,14 @@ let
 in
 buildPythonPackage rec {
   pname = "hyperscan";
-  version = "0.7.13";
+  version = "0.7.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "darvid";
     repo = "python-hyperscan";
     tag = "v${version}";
-    hash = "sha256-l97UXuM37WK3XRSoIfQzobkM+3WYp6JUtemn/28mMNk=";
+    hash = "sha256-1mb8uJUEOTELwPaD8s7uREwSVTkNsUUZDzWKMT8OeFY=";
   };
 
   env.CMAKE_ARGS = "-DHS_SRC_ROOT=${pkgs.hyperscan.src} -DHS_BUILD_LIB_ROOT=${lib-deps}/lib";
