@@ -15297,7 +15297,7 @@ with pkgs;
 
   steam-run-free = steam-fhsenv-without-steam.run;
 
-  steamback = python311.pkgs.callPackage ../tools/games/steamback { };
+  steamback = python3.pkgs.callPackage ../tools/games/steamback { };
 
   protontricks = python3Packages.callPackage ../tools/package-management/protontricks {
     steam-run = steam-run-free;
