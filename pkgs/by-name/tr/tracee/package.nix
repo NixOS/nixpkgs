@@ -3,12 +3,13 @@
   buildGoModule,
   fetchFromGitHub,
 
-  clang,
+  clang_14,
   pkg-config,
 
-  zlib,
   elfutils,
   libbpf,
+  zlib,
+  zstd,
 
   nixosTests,
   testers,
@@ -18,23 +19,20 @@
 
 buildGoModule rec {
   pname = "tracee";
-  version = "0.20.0";
+  version = "0.23.1";
 
+  # src = /home/tim/repos/tracee;
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     # project has branches and tags of the same name
     tag = "v${version}";
-    hash = "sha256-OnOayDxisvDd802kDKGctaQc5LyoyFfdfvC+2JpRjHY=";
+    hash = "sha256-9uP0yoW+xRYv7wHuCfUMU8B2oTQjiSW5p/Ty76ni2wo=";
   };
-  vendorHash = "sha256-26sAKTJQ7Rf5KRlu7j5XiZVr6CkAC6fm60Pam7KH0uA=";
+  vendorHash = "sha256-2+4UN9WB6eGzedogy5dMvhHj1x5VeUUkDM0Z28wKQgM=";
 
   patches = [
-    ./use-our-libbpf.patch
-    # can not vendor dependencies with old pyroscope
-    # remove once https://github.com/aquasecurity/tracee/pull/3927
-    # makes it to a release
-    ./update-pyroscope.patch
+    ./0001-fix-do-not-build-libbpf.patch
   ];
 
   enableParallelBuilding = true;
@@ -42,17 +40,18 @@ buildGoModule rec {
   hardeningDisable = [ "stackprotector" ];
 
   nativeBuildInputs = [
+    clang_14
     pkg-config
-    clang
   ];
   buildInputs = [
     elfutils
     libbpf
-    zlib
+    zlib.dev
+    zstd.dev
   ];
 
   makeFlags = [
-    "VERSION=v${version}"
+    "RELEASE_VERSION=v${version}"
     "GO_DEBUG_FLAG=-s -w"
     # don't actually need git but the Makefile checks for it
     "CMD_GIT=echo"
