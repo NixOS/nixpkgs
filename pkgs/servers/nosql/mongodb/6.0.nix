@@ -24,8 +24,8 @@ let
 in
 buildMongoDB {
   inherit avxSupport;
-  version = "6.0.17";
-  sha256 = "sha256-rGGAu2B0gAAE/n0NSdVm7Me2YeChZhDGWehvzcBJTi8=";
+  version = "6.0.23";
+  sha256 = "sha256-E87l73bA2i/wEPkzYBX70UptX7tWqBRyhb4fIyrwHZk=";
   patches = [
     # Patches a bug that it couldn't build MongoDB 6.0 on gcc 13 because a include in ctype.h was missing
     ./fix-gcc-13-ctype-6_0.patch
