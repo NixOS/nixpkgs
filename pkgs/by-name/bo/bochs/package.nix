@@ -82,11 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
 
       (lib.enableFeature false "docbook") # Broken - it requires docbook2html
 
-      # Dangerous options - they are marked as "incomplete/experimental" on Bochs documentation
-      (lib.enableFeature false "3dnow")
-      (lib.enableFeature false "monitor-mwait")
-      (lib.enableFeature false "raw-serial")
-
       # These are completely configurable, and they don't depend of external tools
       (lib.enableFeature true "a20-pin")
       (lib.enableFeature true "avx")
@@ -153,7 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
       Intel x86 CPU, common I/O devices, and a custom BIOS.
     '';
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ patrickdag ];
     platforms = lib.platforms.unix;
   };
 })
