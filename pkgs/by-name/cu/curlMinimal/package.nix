@@ -98,6 +98,23 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-A0Hx7ZeibIEauuvTfWK4M5VnkrdgfqPxXQAWE8dt4gI=";
   };
 
+  patches = lib.optionals wolfsslSupport [
+    (fetchpatch {
+      # https://curl.se/docs/CVE-2025-4947.html backported to 8.13. Remove when version is bumped to 8.14.
+      # Note that this works since fetchpatch uses curl, but does not use WolfSSL.
+      name = "curl-CVE-2025-4947.patch";
+      url = "https://github.com/curl/curl/commit/a85f1df4803bbd272905c9e7125.diff";
+      hash = "sha256-zxwcboJwHjpcVciJXoCiSLrkAi0V9GtSEBf14V6cfvQ=";
+
+      # All the test patches fail to apply (seemingly, they were added for 8.14)
+      includes = [ "lib/vquic/vquic-tls.c" ];
+
+      postFetch = ''
+        substituteInPlace $out --replace-fail "ctx->wssl.ssl" "ctx->wssl.handle"
+      '';
+    })
+  ];
+
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure
   postPatch = ''
@@ -299,6 +316,11 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     # Fails to link against static brotli or gss
     broken = stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport);
+    knownVulnerabilities = lib.optionals wolfsslSupport [
+      # wolfssl.c has been refactored in between 8.12.1 and this patch:
+      # https://github.com/curl/curl/commit/e1f65937a96a451292e92313396.diff
+      "CVE-2025-5025"
+    ];
     pkgConfigModules = [ "libcurl" ];
     mainProgram = "curl";
   };
