@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "xjasonlyu";
-    repo = pname;
+    repo = "tun2socks";
     rev = "8c7c9085c21d8be8d18bf79ff547e1f2225842a9";
     hash = "sha256-LdiCVp6w5yGbFnbArUcjPIwbqFk3zgbbZO1rQNW4w0M=";
   };

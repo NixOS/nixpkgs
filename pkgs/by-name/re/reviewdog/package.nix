@@ -9,8 +9,8 @@ buildGoModule rec {
   version = "0.20.3";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "reviewdog";
+    repo = "reviewdog";
     rev = "v${version}";
     hash = "sha256-B0gu6vhbnhMx2CNQzQlIIwsycBup6bnmAk/1C6F/AWE=";
   };

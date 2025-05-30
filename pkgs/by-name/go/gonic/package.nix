@@ -23,7 +23,7 @@ buildGoModule rec {
   version = "0.16.4";
   src = fetchFromGitHub {
     owner = "sentriz";
-    repo = pname;
+    repo = "gonic";
     rev = "v${version}";
     sha256 = "sha256-+8rKODoADU2k1quKvbijjs/6S/hpkegHhG7Si0LSE0k=";
   };
