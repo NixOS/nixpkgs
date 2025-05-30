@@ -100,6 +100,13 @@ let
       }is accessed, use `${lib.optionalString (loc != null) "type."}nestedTypes.elemType` instead.
     '' payload.elemType;
 
+  checkDefsForError =
+    check: loc: defs:
+    let
+      invalidDefs = filter (def: !check def.value) defs;
+    in
+    if invalidDefs != [ ] then "Definition values: ${showDefs invalidDefs}" else null;
+
   outer_types = rec {
     isType = type: x: (x._type or "") == type;
 
