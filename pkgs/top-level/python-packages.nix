@@ -9871,6 +9871,8 @@ self: super: with self; {
 
   ncclient = callPackage ../development/python-modules/ncclient { };
 
+  ncempy = callPackage ../development/python-modules/ncempy { };
+
   nclib = callPackage ../development/python-modules/nclib { };
 
   ndcurves = toPythonModule (
