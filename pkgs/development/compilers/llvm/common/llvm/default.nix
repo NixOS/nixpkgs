@@ -294,17 +294,7 @@ stdenv.mkDerivation (
       ++
         lib.optional (lib.versionAtLeast release_version "15")
           # Just like the `llvm-lit-cfg` patch, but for `polly`.
-          (getVersionFile "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch")
-      ++
-        lib.optional (lib.versions.major release_version == "20")
-          # https://github.com/llvm/llvm-project/pull/139822 adds a commit which didn't get backported but is necessary for tests.
-          (
-            fetchpatch {
-              url = "https://github.com/llvm/llvm-project/commit/ff2e8f93f6090965e82d799af43f6dfef52baa66.patch";
-              stripLen = 1;
-              hash = "sha256-CZBTZKzi4cYkZhgTB5oXIo1UdEAArg9I4vR/m0upSRk=";
-            }
-          );
+          (getVersionFile "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch");
 
     nativeBuildInputs =
       [
