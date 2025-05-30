@@ -5,14 +5,20 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+let
+  features = [
+    "rustls-webpki"
+    "geosparql"
+  ];
+in
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oxigraph";
   version = "0.4.9";
 
   src = fetchFromGitHub {
     owner = "oxigraph";
     repo = "oxigraph";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-sv9LpAoPQ4oFrGI6j6NgVZwEwpM1wt93lHkUwnvmhIY=";
     fetchSubmodules = true;
   };
@@ -27,10 +33,7 @@ rustPlatform.buildRustPackage rec {
 
   buildAndTestSubdir = "cli";
   buildNoDefaultFeatures = true;
-  buildFeatures = [
-    "rustls-webpki"
-    "geosparql"
-  ];
+  buildFeatures = features;
 
   # Man pages and autocompletion
   postInstall = ''
@@ -43,9 +46,9 @@ rustPlatform.buildRustPackage rec {
   '';
 
   cargoCheckNoDefaultFeatures = true;
-  cargoCheckFeatures = buildFeatures;
+  cargoCheckFeatures = features;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/oxigraph/oxigraph";
     description = "SPARQL graph database";
     platforms = [
@@ -53,14 +56,14 @@ rustPlatform.buildRustPackage rec {
       "aarch64-linux"
       "aarch64-darwin"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       astro
       tnias
     ];
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
     mainProgram = "oxigraph";
   };
-}
+})
