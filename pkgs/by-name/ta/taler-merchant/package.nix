@@ -14,6 +14,7 @@
   libgcrypt,
   texinfo,
   curl,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -97,6 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [ jq ];
 
   checkTarget = "check";
+
+  passthru.tests = nixosTests.taler.basic;
 
   meta = {
     description = "Merchant component for the GNU Taler electronic payment system";
