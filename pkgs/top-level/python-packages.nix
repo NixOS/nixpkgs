@@ -19135,6 +19135,8 @@ self: super: with self; {
 
   wn = callPackage ../development/python-modules/wn { };
 
+  wokkel = callPackage ../development/python-modules/wokkel { };
+
   wolf-comm = callPackage ../development/python-modules/wolf-comm { };
 
   woob = callPackage ../development/python-modules/woob { };
