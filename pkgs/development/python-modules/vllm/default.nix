@@ -9,15 +9,16 @@
   autoAddDriverRunpath,
 
   # build system
+  cmake,
+  jinja2,
+  ninja,
   packaging,
   setuptools,
+  setuptools-scm,
   wheel,
 
   # dependencies
   which,
-  ninja,
-  cmake,
-  setuptools-scm,
   torch,
   outlines,
   psutil,
@@ -246,10 +247,14 @@ buildPythonPackage rec {
     ./0004-drop-lsmod.patch
   ];
 
-  # Ignore the python version check because it hard-codes minor versions and
-  # lags behind `ray`'s python interpreter support
   postPatch =
     ''
+      # pythonRelaxDeps does not cover build-system
+      substituteInPlace pyproject.toml \
+        --replace-fail "torch ==" "torch >="
+
+      # Ignore the python version check because it hard-codes minor versions and
+      # lags behind `ray`'s python interpreter support
       substituteInPlace CMakeLists.txt \
         --replace-fail \
           'set(PYTHON_SUPPORTED_VERSIONS' \
@@ -263,9 +268,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs =
     [
-      cmake
-      ninja
-      pythonRelaxDepsHook
       which
     ]
     ++ lib.optionals rocmSupport [
@@ -280,17 +282,17 @@ buildPythonPackage rec {
     ];
 
   build-system = [
+    cmake
+    jinja2
+    ninja
     packaging
     setuptools
-    wheel
+    setuptools-scm
+    torch
   ];
 
   buildInputs =
-    [
-      setuptools-scm
-      torch
-    ]
-    ++ lib.optionals cpuSupport [
+    lib.optionals cpuSupport [
       oneDNN
     ]
     ++ lib.optionals (cpuSupport && stdenv.isLinux) [
