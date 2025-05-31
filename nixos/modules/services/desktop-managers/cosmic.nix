@@ -114,12 +114,14 @@ in
     security.rtkit.enable = true;
     services.accounts-daemon.enable = true;
     services.displayManager.sessionPackages = [ pkgs.cosmic-session ];
-    services.geoclue2.enable = true;
-    services.geoclue2.enableDemoAgent = false;
     services.libinput.enable = true;
     services.upower.enable = true;
     # Required for screen locker
     security.pam.services.cosmic-greeter = { };
+
+    # Fix for https://github.com/pop-os/cosmic-settings/issues/1154
+    services.geoclue2.enable = true;
+    services.geoclue2.enableDemoAgent = lib.mkDefault false; # No need to enable the demo agent to fix the bug; only the geoclue2 service needs to run
 
     # Good to have defaults
     hardware.bluetooth.enable = lib.mkDefault true;
