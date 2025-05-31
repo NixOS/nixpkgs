@@ -881,6 +881,7 @@ mapAliases {
   hyenae = throw "hyenae has been removed because it fails to build and was unmaintained for 15 years"; # Added 2025-04-04
   hyprgui = throw "hyprgui has been removed as the repository is deleted"; # Added 2024-12-27
   hyprlauncher = throw "hyprlauncher has been removed as the repository is deleted"; # Added 2024-12-27
+  hyprswitch = throw "hyprswitch has been renamed to hyprshell"; # Added 2025-06-01
   hyprwall = throw "hyprwall has been removed as the repository is deleted"; # Added 2024-12-27
 
   ### I ###
