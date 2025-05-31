@@ -155,10 +155,11 @@ stdenv.mkDerivation (finalAttrs: {
     cc = wrapCCWith {
       cc = finalAttrs.finalPackage.cc-unwrapped;
       bintools = finalAttrs.finalPackage.bintools;
+      extraPackages = [ ];
       nixSupport.cc-cflags =
         [
           "-target"
-          "${stdenv.targetPlatform.config}"
+          "${stdenv.targetPlatform.system}-${stdenv.targetPlatform.parsed.abi.name}"
         ]
         ++ lib.optional (
           stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.isStatic or false)
