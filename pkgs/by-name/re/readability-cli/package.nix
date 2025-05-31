@@ -39,7 +39,7 @@ buildNpmPackage (finalAttrs: {
     description = "Firefox Reader Mode in your terminal - get useful text from a web page using Mozilla's Readability library";
     homepage = "https://gitlab.com/gardenappl/readability-cli";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ juliusfreudenberger ];
     mainProgram = "readable";
   };
 })
