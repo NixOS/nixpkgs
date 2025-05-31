@@ -1,24 +1,12 @@
 {
   lib,
-  stdenv,
+  buildSddmThemePackage,
   fetchFromGitHub,
   qtgraphicaleffects,
+  qtquickcontrols,
   themeConfig ? { },
 }:
-let
-  customToString = x: if builtins.isBool x then lib.boolToString x else toString x;
-  configLines = lib.mapAttrsToList (name: value: lib.nameValuePair name value) themeConfig;
-  configureTheme =
-    "cp theme.conf theme.conf.orig \n"
-    + (lib.concatMapStringsSep "\n" (
-      configLine:
-      "grep -q '^${configLine.name}=' theme.conf || echo '${configLine.name}=' >> \"$1\"\n"
-      + "sed -i -e 's/^${configLine.name}=.*$/${configLine.name}=${
-        lib.escape [ "/" "&" "\\" ] (customToString configLine.value)
-      }/' theme.conf"
-    ) configLines);
-in
-stdenv.mkDerivation {
+buildSddmThemePackage {
   pname = "sddm-chili-theme";
   version = "0.1.5";
 
@@ -29,25 +17,18 @@ stdenv.mkDerivation {
     sha256 = "036fxsa7m8ymmp3p40z671z163y6fcsa9a641lrxdrw225ssq5f3";
   };
 
-  propagatedBuildInputs = [
+  qtVersion = "qt5";
+  sddmBuildInputs = [
     qtgraphicaleffects
+    qtquickcontrols
   ];
 
-  dontWrapQtApps = true;
+  themeName = "Chili";
+  srcThemeDir = ".";
 
-  preInstall = configureTheme;
+  configPath = "theme.conf";
+  configOverrides = themeConfig;
 
-  postInstall = ''
-    mkdir -p $out/share/sddm/themes/chili
-
-    mv * $out/share/sddm/themes/chili/
-  '';
-
-  postFixup = ''
-    mkdir -p $out/nix-support
-
-    echo ${qtgraphicaleffects} >> $out/nix-support/propagated-user-env-packages
-  '';
   meta = with lib; {
     license = licenses.gpl3;
     maintainers = with lib.maintainers; [ sents ];
