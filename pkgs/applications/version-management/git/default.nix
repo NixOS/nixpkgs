@@ -94,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
   separateDebugInfo = true;
+  __structuredAttrs = true;
 
   hardeningDisable = [ "format" ];
 
@@ -165,7 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   # required to support pthread_cancel()
-  NIX_LDFLAGS =
+  env.NIX_LDFLAGS =
     lib.optionalString (stdenv.cc.isGNU && stdenv.hostPlatform.libc == "glibc") "-lgcc_s"
     + lib.optionalString (stdenv.hostPlatform.isFreeBSD) "-lthr";
 
