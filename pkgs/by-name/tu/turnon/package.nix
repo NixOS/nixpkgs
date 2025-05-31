@@ -1,6 +1,7 @@
 {
   lib,
-  fetchFromGitHub,
+  stdenv,
+  fetchFromGitea,
   rustPlatform,
   cairo,
   pango,
@@ -13,17 +14,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "turnon";
-  version = "2.6.3";
+  version = "2.7.0";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "swsnr";
     repo = "turnon";
     rev = "v${version}";
-    hash = "sha256-fRDyfgS+jLGFJTYIEXJ27cCM9knfbIjlGpYNU4OyoJ0=";
+    hash = "sha256-MI1qcsPO7Kb7j91nLTmk3dshEpeJuqu6H0k5hrqy4WQ=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Bg3+PX5/BlqeN3EEFzBX42Dw4BbyKHlN1dnQSHnEz+c=";
+  cargoHash = "sha256-103EZdoxW+6NWtD7PhEamsOVCeLk+nlGa+LikGn8g+0=";
 
   doCheck = true;
 
@@ -49,20 +51,18 @@ rustPlatform.buildRustPackage rec {
 
   strictDeps = true;
 
-  postInstall =
-    # The build.rs compiles the settings schema and writes the compiled file next to the .xml file.
-    # This copies the compiled file to a path that can be detected by gsettings-desktop-schemas
-    ''
-      mkdir -p "$out/share/glib-2.0/schemas"
-      cp "schemas/gschemas.compiled" "$out/share/glib-2.0/schemas"
-    '';
+  installPhase = ''
+    substituteInPlace Makefile --replace-fail "target/release/turnon" "target/${stdenv.hostPlatform.rust.rustcTarget}/release/turnon"
+    make DESTPREFIX=$out install
+    cp "schemas/gschemas.compiled" "$out/share/glib-2.0/schemas"
+  '';
 
   meta = {
     description = "Turn on devices in your local network";
-    homepage = "https://github.com/swsnr/turnon";
-    license = lib.licenses.mpl20;
+    homepage = "https://codeberg.org/swsnr/turnon";
+    license = lib.licenses.eupl12;
     maintainers = with lib.maintainers; [ mksafavi ];
-    mainProgram = "turnon";
+    mainProgram = "de.swsnr.turnon";
     platforms = lib.platforms.linux;
   };
 }
