@@ -9,6 +9,7 @@ let
   inherit (lib)
     getExe
     mapAttrs
+    match
     mkEnableOption
     mkIf
     mkPackageOption
@@ -31,6 +32,8 @@ let
     else
       toString value
   ) cfg.settings;
+
+  proxySuffix = if match "unix:.*" cfg.bind != null then ":" else "";
 
   commonServiceConfig = {
     RuntimeDirectory = "lasuite-docs";
@@ -476,10 +479,9 @@ in
         };
 
         locations."/media-auth" = {
-          proxyPass = "http://${cfg.bind}";
+          proxyPass = "http://${cfg.bind}${proxySuffix}/api/v1.0/documents/media-auth/";
           recommendedProxySettings = true;
           extraConfig = ''
-            rewrite $/(.*)^ /api/v1.0/documents/$1 break;
             proxy_set_header X-Original-URL $request_uri;
             proxy_pass_request_body off;
             proxy_set_header Content-Length "";
@@ -489,7 +491,6 @@ in
 
         locations."/media/" = {
           proxyPass = cfg.s3Url;
-          recommendedProxySettings = true;
           extraConfig = ''
             auth_request /media-auth;
             auth_request_set $authHeader $upstream_http_authorization;
