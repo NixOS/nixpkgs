@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "luau-lsp";
-  version = "1.47.0";
+  version = "1.48.0";
 
   src = fetchFromGitHub {
     owner = "JohnnyMorganz";
     repo = "luau-lsp";
     tag = finalAttrs.version;
-    hash = "sha256-/LJCLH94Egk7FvsarsMimIyehE3T9tgMz7SK6vf+BDg=";
+    hash = "sha256-KW47R5hOFESDiPt/dvVLFQqHqLxza/lUNLy2PYUPxIg=";
     fetchSubmodules = true;
   };
 
