@@ -20,17 +20,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stalwart-mail" + (lib.optionalString stalwartEnterprise "-enterprise");
-  version = "0.11.8";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
-    repo = "mail-server";
+    repo = "stalwart";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VqGosbSQxNeOS+kGtvXAmz6vyz5mJlXvKZM57B1Xue4=";
+    hash = "sha256-P19jeEzFE8Gu6hqHZJiPoJ70r+zOmzOpEwfFqPQczZY=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-iheURWxO0cOvO+FV01l2Vmo0B+S2mXzue6mx3gapftQ=";
+  cargoHash = "sha256-WVvDapCA9pTgOtPpbsK78u2AC2hUfo3sOejZ6pJSlQk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zstd
   ] ++ lib.optionals (stdenv.hostPlatform.isLinux && withFoundationdb) [ foundationdb ];
 
-  # Issue: https://github.com/stalwartlabs/mail-server/issues/1104
+  # Issue: https://github.com/stalwartlabs/stalwart/issues/1104
   buildNoDefaultFeatures = true;
   buildFeatures =
     [
@@ -116,6 +116,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=smtp::queue::retry::queue_retry"
     # Missing store type. Try running `STORE=<store_type> cargo test`: NotPresent
     "--skip=store::store_tests"
+    # Missing store type. Try running `STORE=<store_type> cargo test`: NotPresent
+    "--skip=cluster::cluster_tests"
+    # Missing store type. Try running `STORE=<store_type> cargo test`: NotPresent
+    "--skip=webdav::webdav_tests"
     # thread 'config::parser::tests::toml_parse' panicked at crates/utils/src/config/parser.rs:463:58:
     # called `Result::unwrap()` on an `Err` value: "Expected ['\\n'] but found '!' in value at line 70."
     "--skip=config::parser::tests::toml_parse"
@@ -172,6 +176,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         }
       ];
 
+    mainProgram = "stalwart";
     maintainers = with lib.maintainers; [
       happysalada
       onny
