@@ -32,6 +32,10 @@ buildPythonPackage rec {
 
   dependencies = lib.optionals isPyPy [ cffi ];
 
+  # python-zstandard depends on unstable zstd C APIs and may break with version mismatches,
+  # so we don't provide system zstd for this package
+  # https://github.com/indygreg/python-zstandard/blob/9eb56949b1764a166845e065542690942a3203d3/c-ext/backend_c.c#L137-L150
+
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook
