@@ -7,9 +7,9 @@ This is in contrast with [`maintainers/scripts`](../maintainers/scripts) which i
 
 CI may need certain packages from Nixpkgs.
 In order to ensure that the needed packages are generally available without building,
-[`pinned-nixpkgs.json`](./pinned-nixpkgs.json) contains a pinned Nixpkgs version tested by Hydra.
+[`pinned.json`](./pinned.json) contains a pinned Nixpkgs version tested by Hydra.
 
-Run [`update-pinned-nixpkgs.sh`](./update-pinned-nixpkgs.sh) to update it.
+Run [`update-pinned.sh`](./update-pinned.sh) to update it.
 
 ## `ci/nixpkgs-vet.sh BASE_BRANCH [REPOSITORY]`
 
