@@ -30,6 +30,7 @@ For new packages please briefly describe the package or provide a link to its ho
 - [NixOS 25.11 Release Notes](https://github.com/NixOS/nixpkgs/blob/master/nixos/doc/manual/release-notes/rl-2511.section.md) (or backporting [24.11](https://github.com/NixOS/nixpkgs/blob/master/nixos/doc/manual/release-notes/rl-2411.section.md) and [25.05](https://github.com/NixOS/nixpkgs/blob/master/nixos/doc/manual/release-notes/rl-2505.section.md) NixOS Release notes)
   - [ ] (Module updates) Added a release notes entry if the change is significant
   - [ ] (Module addition) Added a release notes entry if adding a new NixOS module
+- [ ] Posted to [Breaking Changes Announcement thread](https://discourse.nixos.org/t/17574) if the change might cause breakage
 - [ ] Fits [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md).
 
 <!--
