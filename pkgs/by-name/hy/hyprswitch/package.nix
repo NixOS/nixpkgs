@@ -9,17 +9,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyprswitch";
-  version = "3.3.2";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "H3rmt";
     repo = "hyprswitch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cmo544QvdacVTHPqmc6er4xnSSc63e6Z71BS0FxSklE=";
+    hash = "sha256-k3mxR4xp+BLwc75cM3t3K1WA1TCSULzowUsu5ISnfdY=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-DEifup2oAcqZplx2JoN3hkP1VmxwYVFS8ZqfpR80baA=";
+  cargoHash = "sha256-8+p3K1kAahMExNUV5AX7jDJzmEVvPsy83JyEY6yskh0=";
 
   nativeBuildInputs = [
     wrapGAppsHook4
