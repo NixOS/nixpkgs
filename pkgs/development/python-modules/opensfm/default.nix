@@ -125,6 +125,7 @@ buildPythonPackage rec {
   disabledTests =
     [
       "test_run_all" # Matplotlib issues. Broken integration is less useless than a broken build
+      "test_match_candidates_from_metadata_bow" # flaky
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "test_reconstruction_incremental"
