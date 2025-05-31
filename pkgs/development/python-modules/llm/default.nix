@@ -231,6 +231,9 @@ let
       mkPluginTest = plugin: {
         ${plugin.pname} = callPackage ./mk-plugin-test.nix { inherit llm plugin; };
       };
+
+      # include tests for all the plugins
+      tests = lib.mergeAttrsList (map (name: python.pkgs.${name}.tests) withPluginsArgNames);
     };
 
     meta = {
