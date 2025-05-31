@@ -266,3 +266,6 @@ a034fb50f79816c6738fb48b48503b09ea3b0132
 
 # treewide: switch instances of lib.teams.*.members to the new meta.teams attribute
 05580f4b4433fda48fff30f60dfd303d6ee05d21
+
+# nixos/redmine: Get rid of global lib expansions
+d7f1102f04c58b2edfc74c9a1d577e3aebfca775

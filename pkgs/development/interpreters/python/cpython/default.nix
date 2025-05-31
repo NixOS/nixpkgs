@@ -24,6 +24,7 @@
   sqlite,
   xz,
   zlib,
+  zstd,
 
   # platform-specific dependencies
   bashNonInteractive,
@@ -197,6 +198,8 @@ let
     ++ optionals (!stdenv.hostPlatform.isDarwin) [
       autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
       autoreconfHook
+    ]
+    ++ optionals (!stdenv.hostPlatform.isDarwin || passthru.pythonAtLeast "3.14") [
       pkg-config
     ]
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
@@ -227,6 +230,9 @@ let
       sqlite
       xz
       zlib
+    ]
+    ++ optionals (passthru.pythonAtLeast "3.14") [
+      zstd
     ]
     ++ optionals bluezSupport [
       bluez
@@ -506,6 +512,7 @@ stdenv.mkDerivation (finalAttrs: {
       "ac_cv_func_lchmod=no"
     ]
     ++ optionals static [
+      "--disable-test-modules"
       "LDFLAGS=-static"
       "MODULE_BUILDTYPE=static"
     ]
@@ -597,7 +604,11 @@ stdenv.mkDerivation (finalAttrs: {
           echo $item
         fi
       done
+    ''
+    + lib.optionalString (!static) ''
       touch $out/lib/${libPrefix}/test/__init__.py
+    ''
+    + ''
 
       # Determinism: Windows installers were not deterministic.
       # We're also not interested in building Windows installers.

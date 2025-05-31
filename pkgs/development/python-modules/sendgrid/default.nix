@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "sendgrid";
-  version = "6.12.2";
+  version = "6.12.3";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = "sendgrid-python";
     tag = version;
-    hash = "sha256-p9U/tno5LhcfhhZE4iPspN2Du0RA7vurqwxlZmTwavk=";
+    hash = "sha256-7j/V731e+eXFW42WRHuJpZ3OFObVXLOgl81Ww3EAApU=";
   };
 
   build-system = [ setuptools ];
