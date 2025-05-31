@@ -20,13 +20,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "readest";
-  version = "0.9.43";
+  version = "0.9.51";
 
   src = fetchFromGitHub {
     owner = "readest";
     repo = "readest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9ACeMGbOpa3Nh6NQIGckcI2oYNjtQ1pE4Zn++qcE0tM=";
+    hash = "sha256-UJ4H+pBR+EWr2O34WUmbF2rd3pTVssE/8b9iO9bbx7Y=";
     fetchSubmodules = true;
   };
 
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-ozRDNXWqg0CZ1IgU33C6yJu4e05010jsHeTdIVhB72M=";
+    hash = "sha256-Bd+7MHYBMo4N7UpwkXGmk4oQBbyBMJOtnv6iTVQgn64=";
   };
 
   pnpmRoot = "../..";
@@ -60,7 +60,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"Readest"' '"readest"'
     jq 'del(.plugins."deep-link")' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
     substituteInPlace src/services/constants.ts \
-      --replace-fail "autoCheckUpdates: true" "autoCheckUpdates: false"
+      --replace-fail "autoCheckUpdates: true" "autoCheckUpdates: false" \
+      --replace-fail "telemetryEnabled: true" "telemetryEnabled: false"
   '';
 
   nativeBuildInputs = [
