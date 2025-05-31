@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  protobuf,
   fetchFromGitLab,
   rustPlatform,
   symlinkJoin,
@@ -32,6 +32,7 @@
   libadwaita,
   libdrm,
   libgbm,
+  missioncenter-magpie,
   pango,
   sqlite,
   udev,
@@ -41,47 +42,57 @@
   versionCheckHook,
 }:
 
-# UPDATE PROCESS:
-# 1) Get the nvtop commit hash (`source-url` in `nvtop.json`):
-#     https://gitlab.com/mission-center-devs/mission-center/-/blob/v<VERSION>/src/sys_info_v2/gatherer/3rdparty/nvtop/nvtop.json?ref_type=tags
-# 2) Update the version of the main derivation
-# 3) Refresh all hashes:
-#   - main `src`
-#   - `nvtop` (if needed)
-#   - **both** CargoDeps hashes
-
 let
-  nvtop = fetchFromGitHub {
-    owner = "Syllo";
-    repo = "nvtop";
-    rev = "20ea55dbd1eeb4342ff0112fae3ee2a0bfe352ea";
-    hash = "sha256-8lNvxmNAqkmBPFeiYIGtpW0hYXA9N0l4HURew5loj+g=";
-  };
+  # magpie = stdenv.mkDerivation {
+  #   pname = "magpie";
+  #   version = "0-unstable-2025-05-02";
+
+  #   src = fetchFromGitLab {
+  #     owner = "mission-center-devs";
+  #     repo = "gng";
+  #     rev = "dcf9672ef314eb77336edea9b6ccd10de30e53d4";
+  #     hash = "sha256-Y2ZIk9SAzw98HAHuMGkLMnxvebMQEGYxSbQW4S4QY44=";
+  #   };
+
+  #   # useFetchCargoVendor = true;
+  #   # cargoHash = "sha256-WVXMeW3pF3TCJ9MBfK3Q76/pJ4/W09KPjCNqyIzzcvg=";
+
+  #   nativeBuildInputs = [
+  #   ];
+
+  #   buildInputs = [
+  #     libdrm
+  #     sqlite
+  #     vulkan-loader
+  #   ];
+
+  #   meta = {
+  #     description = "Set of executables and binaries for ";
+  #     homepage = "https://gitlab.com/mission-center-devs/gng";
+  #     license = lib.licenses.unfree; # FIXME: nix-init did not find a license
+  #     maintainers = with lib.maintainers; [ GaetanLepage ];
+  #     mainProgram = "magpie";
+  #   };
+  # };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mission-center";
-  version = "0.6.2";
+  version = "1.0.2";
 
   src = fetchFromGitLab {
     owner = "mission-center-devs";
     repo = "mission-center";
-    rev = "v${version}";
-    hash = "sha256-PvHIvWyhGovlLaeHk2WMp3yRz4VxvvINzX1oqkFgVuQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-82pLzLvfZbm68GHpZsLNQAnRboOeO8nl4+gAiUqwS88=";
   };
 
-  cargoDeps = symlinkJoin {
-    name = "cargo-vendor-dir";
-    paths = [
-      (rustPlatform.fetchCargoVendor {
-        inherit pname version src;
-        hash = "sha256-Yd6PlsSo8/yHMF4YdYz1Io4uGniAMyIj2RKy3yK4byU=";
-      })
-      (rustPlatform.fetchCargoVendor {
-        inherit pname version src;
-        sourceRoot = "${src.name}/src/sys_info_v2/gatherer";
-        hash = "sha256-oUAPJWNElj08jfmsdXz/o2bgzeBQsbm6nWHC8jGN2n0=";
-      })
-    ];
+  patches = [
+    ./dont-vendor-magpie.patch
+  ];
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-1Bcxp0EuHbJrLQIb2STLNIL2BM2eOgL8ftx4g1o/JY4=";
   };
 
   nativeBuildInputs = [
@@ -92,10 +103,12 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
+    protobuf # for protoc
     rustPlatform.cargoSetupHook
     rustc
     wrapGAppsHook4
   ];
+  dontUseCmakeConfigure = true;
 
   buildInputs = [
     appstream-glib
@@ -113,6 +126,7 @@ stdenv.mkDerivation rec {
     libadwaita
     libdrm
     libgbm
+    missioncenter-magpie
     pango
     sqlite
     udev
@@ -120,53 +134,32 @@ stdenv.mkDerivation rec {
     wayland
   ];
 
-  postPatch = ''
-    substituteInPlace src/sys_info_v2/gatherer.rs \
-      --replace-fail '"missioncenter-gatherer"' '"${placeholder "out"}/bin/missioncenter-gatherer"'
-
-    SRC_GATHERER=$NIX_BUILD_TOP/source/src/sys_info_v2/gatherer
-    SRC_GATHERER_NVTOP=$SRC_GATHERER/3rdparty/nvtop
-
-    substituteInPlace $SRC_GATHERER_NVTOP/nvtop.json \
-      --replace-fail "nvtop-${nvtop.rev}" "nvtop-src"
-
-    GATHERER_BUILD_DEST=$NIX_BUILD_TOP/source/build/src/sys_info_v2/gatherer/src/debug/build/native
-    mkdir -p $GATHERER_BUILD_DEST
-    NVTOP_SRC=$GATHERER_BUILD_DEST/nvtop-src
-
-    cp -r --no-preserve=mode,ownership "${nvtop}" $NVTOP_SRC
-    pushd $NVTOP_SRC
-    mkdir -p include/libdrm
-    for patchfile in $(ls $SRC_GATHERER_NVTOP/patches/nvtop*.patch); do
-      patch -p1 < $patchfile
-    done
-    popd
-
-    patchShebangs data/hwdb/generate_hwdb.py
-  '';
-
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgram = "${builtins.placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgram = "${builtins.placeholder "out"}/bin/missioncenter";
   doInstallCheck = true;
 
   env = {
     # Make sure libGL and libvulkan can be found by dlopen()
-    RUSTFLAGS = toString (
-      map (flag: "-C link-arg=" + flag) [
-        "-Wl,--push-state,--no-as-needed"
-        "-lGL"
-        "-lvulkan"
-        "-Wl,--pop-state"
-      ]
-    );
+    # RUSTFLAGS = toString (
+    #   map (flag: "-C link-arg=" + flag) [
+    #     "-Wl,--push-state,--no-as-needed"
+    #     "-lGL"
+    #     "-lvulkan"
+    #     "-Wl,--pop-state"
+    #   ]
+    # );
+  };
+
+  passthru = {
+    magpie = missioncenter-magpie;
   };
 
   meta = {
     description = "Monitor your CPU, Memory, Disk, Network and GPU usage";
     homepage = "https://gitlab.com/mission-center-devs/mission-center";
-    changelog = "https://gitlab.com/mission-center-devs/mission-center/-/releases/v${version}";
+    changelog = "https://gitlab.com/mission-center-devs/mission-center/-/releases/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       GaetanLepage
@@ -175,4 +168,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "missioncenter";
   };
-}
+})
