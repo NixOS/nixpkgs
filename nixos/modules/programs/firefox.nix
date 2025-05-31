@@ -275,7 +275,14 @@ in
     };
 
     autoConfigFiles = lib.mkOption {
-      type = with lib.types; listOf path;
+      type =
+        # list of absolute path or relative path
+        with lib.types;
+        listOf (
+          either path (pathWith {
+            absolute = false;
+          })
+        );
       default = [ ];
       description = ''
         AutoConfig files can be used to set and lock preferences that are not covered
