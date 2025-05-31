@@ -13018,7 +13018,7 @@ with pkgs;
     k3s_1_32
     k3s_1_33
     ;
-  k3s = k3s_1_32;
+  k3s = k3s_1_33;
 
   kapow = libsForQt5.callPackage ../applications/misc/kapow { };
 
