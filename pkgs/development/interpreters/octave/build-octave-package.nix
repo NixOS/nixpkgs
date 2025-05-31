@@ -9,6 +9,7 @@
   stdenv,
   config,
   octave,
+  callPackage,
   texinfo,
   computeRequiredOctavePackages,
   writeRequiredOctavePackagesHook,
@@ -64,20 +65,6 @@ let
     writeRequiredOctavePackagesHook
   ] ++ nativeBuildInputs;
 
-  passthru' =
-    {
-      updateScript = [
-        ../../../../maintainers/scripts/update-octave-packages
-        (builtins.unsafeGetAttrPos "pname" octave.pkgs.${attrs.pname}).file
-      ];
-    }
-    // passthru
-    // {
-      tests = {
-        testOctaveBuildEnv = octave.withPackages (ps: [ self ]);
-      } // passthru.tests or { };
-    };
-
   # This step is required because when
   # a = { test = [ "a" "b" ]; }; b = { test = [ "c" "d" ]; };
   # (a // b).test = [ "c" "d" ];
@@ -88,65 +75,79 @@ let
     "nativeBuildInputs"
     "passthru"
   ];
-
-  self = stdenv.mkDerivation (
-    {
-      packageName = "${fullLibName}";
-      # The name of the octave package ends up being
-      # "octave-version-package-version"
-      name = "${octave.pname}-${octave.version}-${fullLibName}";
-
-      # This states that any package built with the function that this returns
-      # will be an octave package. This is used for ensuring other octave
-      # packages are installed into octave during the environment building phase.
-      isOctavePackage = true;
-
-      OCTAVE_HISTFILE = "/dev/null";
-
-      inherit src;
-
-      inherit dontPatch patches patchPhase;
-
-      dontConfigure = true;
-
-      enableParallelBuilding = enableParallelBuilding;
-
-      requiredOctavePackages = requiredOctavePackages';
-
-      nativeBuildInputs = nativeBuildInputs';
-
-      buildInputs = buildInputs ++ requiredOctavePackages';
-
-      propagatedBuildInputs = propagatedBuildInputs ++ [ texinfo ];
-
-      preBuild =
-        if preBuild == "" then
-          ''
-            # This trickery is needed because Octave expects a single directory inside
-            # at the top-most level of the tarball.
-            tar --transform 's,^,${fullLibName}/,' -cz * -f ${fullLibName}.tar.gz
-          ''
-        else
-          preBuild;
-
-      buildPhase = ''
-        runHook preBuild
-
-        mkdir -p $out
-        octave-cli --eval "pkg build $out ${fullLibName}.tar.gz"
-
-        runHook postBuild
-      '';
-
-      # We don't install here, because that's handled when we build the environment
-      # together with Octave.
-      dontInstall = true;
-
-      passthru = passthru';
-
-      inherit meta;
-    }
-    // attrs'
-  );
 in
-self
+stdenv.mkDerivation (
+  finalAttrs:
+  {
+    packageName = "${fullLibName}";
+    # The name of the octave package ends up being
+    # "octave-version-package-version"
+    name = "${octave.pname}-${octave.version}-${fullLibName}";
+
+    # This states that any package built with the function that this returns
+    # will be an octave package. This is used for ensuring other octave
+    # packages are installed into octave during the environment building phase.
+    isOctavePackage = true;
+
+    OCTAVE_HISTFILE = "/dev/null";
+
+    inherit src;
+
+    inherit dontPatch patches patchPhase;
+
+    dontConfigure = true;
+
+    enableParallelBuilding = enableParallelBuilding;
+
+    requiredOctavePackages = requiredOctavePackages';
+
+    nativeBuildInputs = nativeBuildInputs';
+
+    buildInputs = buildInputs ++ requiredOctavePackages';
+
+    propagatedBuildInputs = propagatedBuildInputs ++ [ texinfo ];
+
+    preBuild =
+      if preBuild == "" then
+        ''
+          # This trickery is needed because Octave expects a single directory inside
+          # at the top-most level of the tarball.
+          tar --transform 's,^,${fullLibName}/,' -cz * -f ${fullLibName}.tar.gz
+        ''
+      else
+        preBuild;
+
+    buildPhase = ''
+      runHook preBuild
+
+      mkdir -p $out
+      octave-cli --eval "pkg build $out ${fullLibName}.tar.gz"
+
+      runHook postBuild
+    '';
+
+    # We don't install here, because that's handled when we build the environment
+    # together with Octave.
+    dontInstall = true;
+
+    passthru =
+      {
+        updateScript = [
+          ../../../../maintainers/scripts/update-octave-packages
+          (builtins.unsafeGetAttrPos "pname" octave.pkgs.${attrs.pname}).file
+        ];
+      }
+      // passthru
+      // {
+        tests = {
+          testOctaveBuildEnv = (octave.withPackages (os: [ finalAttrs.finalPackage ])).overrideAttrs (old: {
+            name = "${finalAttrs.name}-pkg-install";
+          });
+          testOctavePkgTests = callPackage ./run-pkg-test.nix { } finalAttrs.finalPackage;
+        } // passthru.tests or { };
+      };
+
+    inherit meta;
+  }
+  // attrs'
+)
