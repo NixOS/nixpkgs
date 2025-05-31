@@ -9,13 +9,13 @@ let
   deps = bundlerEnv rec {
     name = "anystyle-cli-${version}";
     source.sha256 = lib.fakeSha256;
-    version = "1.3.1";
+    version = "1.5.0";
     inherit ruby;
     gemdir = ./.;
     gemset = lib.recursiveUpdate (import ./gemset.nix) {
       anystyle.source = {
         remotes = [ "https://rubygems.org" ];
-        sha256 = "1w79zcia60nnnyrmyvpd10pmxrpk5c7lj9gmmblhwi8x5mfq9k0n";
+        sha256 = "C/OrU7guHzHdY80upEXRfhWmUYDxpI54NIvIjKv0znw=";
         type = "gem";
       };
     };
@@ -25,8 +25,8 @@ buildRubyGem rec {
   inherit ruby;
   gemName = "anystyle-cli";
   pname = gemName;
-  version = "1.3.1";
-  source.sha256 = "1a3ifwxwqkp5dnfk9r8qq8kgfb8k1pl7jjdghbb8ixbxz9ac7awy";
+  version = "1.5.0";
+  source.sha256 = "Bkk00PBk/6noCXgAbr1XUcdBq5vpdeL0ES02eeNA594=";
 
   propagatedBuildInputs = [ deps ];
 
@@ -41,7 +41,5 @@ buildRubyGem rec {
     maintainers = with maintainers; [ shamilton ];
     mainProgram = "anystyle";
     platforms = platforms.unix;
-    # error: passing argument 2 of 'rb_hash_foreach' from incompatible pointer type [-Wincompatible-pointer-types]
-    broken = true;
   };
 }
