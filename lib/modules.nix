@@ -1377,6 +1377,41 @@ let
   */
   mkDefinition = args@{ file, value, ... }: args // { _type = "definition"; };
 
+  /**
+    Overrides the previous value of a NixOS option by changing its priority to a default value.
+
+    type: function
+
+    # Input
+
+    - `priority` (number): How to prioritise the value (high number -> lower priority, low number -> higher priority )
+    - `value` (any): The value to prioritise.
+
+    # Example
+
+    In one file the Nextcloud service could be enabled by default, but depending on some condition
+    that could be overridden.
+
+    **configuration.nix**
+    ```nix
+    {
+      services.nextcloud.enable = lib.mkDefault true;
+    }
+    ```
+
+    **my-module.nix**
+    ```nix
+    {
+      services.nextcloud.enable = lib.mkOverride 50 false;
+    }
+    ```
+
+    # How it works
+
+    Values have metadata attached to them. One of these fields is a number called "priority".
+    When evaluating the inputs assigned to an option, the value with the highest priority wins.
+    (Again, remember the lower the number, the higher the priority!)
+  */
   mkOverride = priority: content: {
     _type = "override";
     inherit priority content;
