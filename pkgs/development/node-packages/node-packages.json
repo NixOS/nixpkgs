@@ -87,6 +87,7 @@
 , "fx"
 , "gatsby-cli"
 , "@gitbeaker/cli"
+, "git-jump"
 , "grunt-cli"
 , "makam"
 , "gulp"
