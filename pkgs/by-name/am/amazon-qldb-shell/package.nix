@@ -24,12 +24,8 @@ let
       rustPlatform.bindgenHook
     ];
 
-    cargoLock = {
-      lockFile = ./Cargo.lock;
-      outputHashes = {
-        "amazon-qldb-driver-0.1.0" = "sha256-az0rANBcryHHnpGWvo15TGGW4KMUULZHaj5msIHts14=";
-      };
-    };
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-tD35Py81QLDVlBahYzgskOQK5lQW03xuCnUwVUi4oLU=";
 
     passthru.tests.version = testers.testVersion { inherit package; };
 
