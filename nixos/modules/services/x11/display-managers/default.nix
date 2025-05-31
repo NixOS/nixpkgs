@@ -223,10 +223,14 @@ in
 
       importedVariables = mkOption {
         type = types.listOf (types.strMatching "[a-zA-Z_][a-zA-Z0-9_]*");
-        visible = false;
         description = ''
-          Environment variables to import into the systemd user environment.
+          Environment variables to import into the systemd user environment
+          when starting a graphical session.
         '';
+        example = [
+          "PATH"
+          "XDG_DATA_DIRS"
+        ];
       };
 
     };
