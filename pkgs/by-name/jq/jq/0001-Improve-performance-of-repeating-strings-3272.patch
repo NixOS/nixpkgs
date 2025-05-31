@@ -1,7 +1,7 @@
 From c15fc903e00fdd3b460e64d5a6a540f944e1eca6 Mon Sep 17 00:00:00 2001
 From: itchyny <itchyny@cybozu.co.jp>
 Date: Tue, 4 Mar 2025 22:13:55 +0900
-Subject: [PATCH 1/4] Improve performance of repeating strings (#3272)
+Subject: [PATCH 1/5] Improve performance of repeating strings (#3272)
 
 This commit improves the performance of repeating strings, by copying
 the result string instead of the string being repeated. Also it adds
