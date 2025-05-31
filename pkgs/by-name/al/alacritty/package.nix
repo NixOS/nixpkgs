@@ -23,6 +23,7 @@
   xdg-utils,
 
   nix-update-script,
+  withGraphics ? false,
 }:
 let
   rpathLibs =
@@ -44,17 +45,32 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "0.15.1";
+  version = "0.15.1" + lib.optionalString withGraphics "-graphics";
 
-  src = fetchFromGitHub {
-    owner = "alacritty";
-    repo = "alacritty";
-    tag = "v${version}";
-    hash = "sha256-/yERMNfCFLPb1S17Y9OacVH8UobDIIZDhM2qPzf5Vds=";
-  };
+  src =
+    # by default we want the official package
+    if !withGraphics then
+      fetchFromGitHub {
+        owner = "alacritty";
+        repo = "alacritty";
+        tag = "v${version}";
+        hash = "sha256-/yERMNfCFLPb1S17Y9OacVH8UobDIIZDhM2qPzf5Vds=";
+      }
+    # optionally we want to build the sixels feature fork
+    else
+      fetchFromGitHub {
+        owner = "ayosec";
+        repo = "alacritty";
+        tag = "v${version}";
+        hash = "sha256-n8vO6Q4bzWLaOqg8YhZ+aLOtBBTQ9plKIEJHXq+hhnM=";
+      };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-uXwefUV1NAKqwwPIWj4Slkx0c5b+RfLR3caTb42fc4M=";
+  cargoHash =
+    if !withGraphics then
+      "sha256-uXwefUV1NAKqwwPIWj4Slkx0c5b+RfLR3caTb42fc4M="
+    else
+      "sha256-UtxZFqU974N+YcHoEHifBjNSyaVuMvuc1clTDgUPuoQ=";
 
   nativeBuildInputs = [
     cmake
