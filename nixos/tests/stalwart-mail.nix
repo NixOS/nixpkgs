@@ -48,8 +48,19 @@ in
           session.auth.directory = "'in-memory'";
           storage.directory = "in-memory";
 
+          storage.data = "rocksdb";
+          storage.fts = "rocksdb";
+          storage.blob = "rocksdb";
+          storage.lookup = "rocksdb";
+
           session.rcpt.directory = "'in-memory'";
           queue.outbound.next-hop = "'local'";
+
+          store."rocksdb" = {
+            type = "rocksdb";
+            path = "/var/lib/stalwart-mail/data";
+            compression = "lz4";
+          };
 
           directory."in-memory" = {
             type = "memory";
@@ -116,6 +127,12 @@ in
       main.wait_for_open_port(143)
 
       main.succeed("test-smtp-submission")
+
+      # restart stalwart to test rocksdb compaction of existing database
+      main.succeed("systemctl restart stalwart-mail.service")
+      main.wait_for_open_port(587)
+      main.wait_for_open_port(143)
+
       main.succeed("test-imap-read")
     '';
 
