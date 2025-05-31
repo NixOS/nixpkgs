@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication {
   };
 
   meta = {
-    description = "A Python script to parse the NTFS USN Journal";
+    description = "Python script to parse the NTFS USN Journal";
     homepage = "https://github.com/PoorBillionaire/USN-Journal-Parser";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
