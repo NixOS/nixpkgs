@@ -60,19 +60,9 @@ in
 
   options = {
     services.murmur = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "If enabled, start the Murmur Mumble server.";
-      };
+      enable = lib.mkEnableOption "Mumble server";
 
-      openFirewall = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Open ports in the firewall for the Murmur Mumble server.
-        '';
-      };
+      openFirewall = lib.mkEnableOption "opening ports in the firewall for the Mumble server";
 
       user = mkOption {
         type = types.str;
@@ -203,14 +193,7 @@ in
         '';
       };
 
-      bonjour = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable Bonjour auto-discovery, which allows clients over
-          your LAN to automatically discover Murmur servers.
-        '';
-      };
+      bonjour = lib.mkEnableOption "Bonjour auto-discovery, which allows clients over your LAN to automatically discover Mumble servers";
 
       sendVersion = mkOption {
         type = types.bool;
@@ -255,11 +238,7 @@ in
         '';
       };
 
-      clientCertRequired = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Require clients to authenticate via certificates.";
-      };
+      clientCertRequired = lib.mkEnableOption "requiring clients to authenticate via certificates";
 
       sslCert = mkOption {
         type = types.str;
