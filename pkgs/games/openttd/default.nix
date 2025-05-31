@@ -6,7 +6,9 @@
   cmake,
   pkg-config,
   SDL2,
+  libglvnd,
   libpng,
+  lzo,
   zlib,
   xz,
   freetype,
@@ -31,6 +33,7 @@
   libvorbis,
   libopus,
   libmpg123,
+  opusfile,
   pulseaudio,
   alsa-lib,
   libjack2,
@@ -80,7 +83,9 @@ stdenv.mkDerivation rec {
   buildInputs =
     [
       SDL2
+      libglvnd
       libpng
+      lzo
       xz
       zlib
       freetype
@@ -102,6 +107,7 @@ stdenv.mkDerivation rec {
       libvorbis
       libopus
       libmpg123
+      opusfile
       pulseaudio
       alsa-lib
       libjack2
