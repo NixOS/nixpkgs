@@ -1,12 +1,12 @@
 {
   pkgs,
-  python,
+  python3,
   ...
 }:
 # propagatedBuildInputs are for Python libraries and executables
 # buildInputs are for libraries
 let
-  py = python.pkgs;
+  py = python3.pkgs;
 in
 {
   amixer.propagatedBuildInputs = [ pkgs.alsa-utils ];
