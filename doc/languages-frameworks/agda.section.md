@@ -11,10 +11,10 @@ set to a generated library-file within the nix store, this means your library-fi
 with no libraries, i.e. the generated library-file is empty. To use Agda with libraries,
 the `agda.withPackages` function can be used. This function either takes:
 
-* A list of packages,
-* or a function which returns a list of packages when given the `agdaPackages` attribute set,
-* or an attribute set containing a list of packages and a GHC derivation for compilation (see below).
-* or an attribute set containing a function which returns a list of packages when given the `agdaPackages` attribute set and a GHC derivation for compilation (see below).
+- A list of packages,
+- or a function which returns a list of packages when given the `agdaPackages` attribute set,
+- or an attribute set containing a list of packages and a GHC derivation for compilation (see below).
+- or an attribute set containing a function which returns a list of packages when given the `agdaPackages` attribute set and a GHC derivation for compilation (see below).
 
 For example, suppose we wanted a version of Agda which has access to the standard library. This can be obtained with the expressions:
 
@@ -93,17 +93,17 @@ See [Building Agda Packages](#building-agda-packages) for more information on `m
 
 Agda will not by default use these libraries. To tell Agda to use a library we have some options:
 
-* Call `agda` with the library flag:
+- Call `agda` with the library flag:
   ```ShellSession
   $ agda -l standard-library -i . MyFile.agda
   ```
-* Write a `my-library.agda-lib` file for the project you are working on which may look like:
+- Write a `my-library.agda-lib` file for the project you are working on which may look like:
   ```
   name: my-library
   include: .
   depend: standard-library
   ```
-* Create the file `~/.agda/defaults` and add any libraries you want to use by default.
+- Create the file `~/.agda/defaults` and add any libraries you want to use by default.
 
 More information can be found in the [official Agda documentation on library management](https://agda.readthedocs.io/en/v2.6.1/tools/package-system.html).
 
@@ -129,9 +129,9 @@ To write a nix derivation for an Agda library, first check that the library has 
 
 A derivation can then be written using `agdaPackages.mkDerivation`. This has similar arguments to `stdenv.mkDerivation` with the following additions:
 
-* `everythingFile` can be used to specify the location of the `Everything.agda` file, defaulting to `./Everything.agda`. If this file does not exist then either it should be patched in or the `buildPhase` should be overridden (see below).
-* `libraryName` should be the name that appears in the `*.agda-lib` file, defaulting to `pname`.
-* `libraryFile` should be the file name of the `*.agda-lib` file, defaulting to `${libraryName}.agda-lib`.
+- `everythingFile` can be used to specify the location of the `Everything.agda` file, defaulting to `./Everything.agda`. If this file does not exist then either it should be patched in or the `buildPhase` should be overridden (see below).
+- `libraryName` should be the name that appears in the `*.agda-lib` file, defaulting to `pname`.
+- `libraryFile` should be the file name of the `*.agda-lib` file, defaulting to `${libraryName}.agda-lib`.
 
 Here is an example `default.nix`
 

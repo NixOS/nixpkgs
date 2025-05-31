@@ -16,9 +16,7 @@ If you need that to be available, see [`dockerTools.binSh`](#sssec-pkgs-dockerTo
 `fakeNss` is made available in Nixpkgs as a package rather than a function, but it has two attributes that can be overridden and might be useful in particular cases.
 For more details on how overriding works, see [](#ex-fakeNss-overriding) and [](#sec-pkg-override).
 
-`extraPasswdLines` (List of Strings; _optional_)
-
-: A list of lines that will be added to `/etc/passwd`.
+- `extraPasswdLines` (List of Strings; _optional_): A list of lines that will be added to `/etc/passwd`.
   Useful if extra users need to exist in the output of `fakeNss`.
   If `extraPasswdLines` is specified, it will **not** override the `root` and `nobody` entries created by `fakeNss`.
   Those entries will always exist.
@@ -27,9 +25,7 @@ For more details on how overriding works, see [](#ex-fakeNss-overriding) and [](
 
   _Default value:_ `[]`.
 
-`extraGroupLines` (List of Strings; _optional_)
-
-: A list of lines that will be added to `/etc/group`.
+- `extraGroupLines` (List of Strings; _optional_): A list of lines that will be added to `/etc/group`.
   Useful if extra groups need to exist in the output of `fakeNss`.
   If `extraGroupLines` is specified, it will **not** override the `root` and `nobody` entries created by `fakeNss`.
   Those entries will always exist.
@@ -41,6 +37,7 @@ For more details on how overriding works, see [](#ex-fakeNss-overriding) and [](
 ## Examples {#sec-fakeNss-examples}
 
 :::{.example #ex-fakeNss-dockerTools-buildImage}
+
 # Using `fakeNss` with `dockerTools.buildImage`
 
 This example shows how to use `fakeNss` as-is.
@@ -67,9 +64,11 @@ dockerTools.buildImage {
   };
 }
 ```
+
 :::
 
 :::{.example #ex-fakeNss-overriding}
+
 # Using `fakeNss` with an override to add extra lines
 
 The following code uses `override` to add extra lines to `/etc/passwd` and `/etc/group` to create another user and group entry.
@@ -81,4 +80,5 @@ fakeNss.override {
   extraGroupLines = [ "newuser:x:9001:" ];
 }
 ```
+
 :::

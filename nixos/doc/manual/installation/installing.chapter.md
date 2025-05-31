@@ -420,9 +420,7 @@ Use the following commands:
     install other editors -- for instance, you can install Emacs by
     running `nix-env -f '<nixpkgs>' -iA emacs`.
 
-    BIOS systems
-
-    :   You *must* set the option [](#opt-boot.loader.grub.device) to
+    - BIOS systems: You *must* set the option [](#opt-boot.loader.grub.device) to
         specify on which disk the GRUB boot loader is to be installed.
         Without it, NixOS cannot boot.
 
@@ -431,9 +429,7 @@ Use the following commands:
         option can be set to `true` to automatically add them to the grub
         menu.
 
-    UEFI systems
-
-    :   You must select a boot-loader, either systemd-boot or GRUB. The recommended
+    - UEFI systems: You must select a boot-loader, either systemd-boot or GRUB. The recommended
         option is systemd-boot: set the option [](#opt-boot.loader.systemd-boot.enable)
         to `true`. `nixos-generate-config` should do this automatically
         for new configurations when booted in UEFI mode.

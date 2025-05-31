@@ -72,41 +72,41 @@ exceptions are the tools, platform-tools and build-tools sub packages.
 
 The following parameters are supported:
 
-* `cmdLineToolsVersion` specifies the version of the `cmdline-tools` package to use.
+- `cmdLineToolsVersion` specifies the version of the `cmdline-tools` package to use.
   It defaults to the latest.
-* `toolsVersion`, specifies the version of the `tools` package. Notice `tools` is
+- `toolsVersion`, specifies the version of the `tools` package. Notice `tools` is
   obsolete, and currently only `26.1.1` is available, so there's not a lot of
   options here, however, you can set it as `null` if you don't want it. It defaults
   to the latest.
-* `platformToolsVersion` specifies the version of the `platform-tools` plugin.
+- `platformToolsVersion` specifies the version of the `platform-tools` plugin.
   It defaults to the latest.
-* `buildToolsVersions` specifies the versions of the `build-tools` plugins to
+- `buildToolsVersions` specifies the versions of the `build-tools` plugins to
   use. It defaults to the latest.
-* `includeEmulator` specifies whether to deploy the emulator package (`false`
+- `includeEmulator` specifies whether to deploy the emulator package (`false`
   by default). When enabled, the version of the emulator to deploy can be
   specified by setting the `emulatorVersion` parameter. If set to
   `"if-supported"`, it will deploy the emulator if it's supported by the system.
-* `includeCmake` specifies whether CMake should be included. It defaults to true
+- `includeCmake` specifies whether CMake should be included. It defaults to true
   on x86-64 and Darwin platforms, and also supports `"if-supported"`.
-* `cmakeVersions` specifies which CMake versions should be deployed.
+- `cmakeVersions` specifies which CMake versions should be deployed.
   It defaults to the latest.
-* `includeNDK` specifies that the Android NDK bundle should be included.
+- `includeNDK` specifies that the Android NDK bundle should be included.
   Defaults to `false` though can be set to `true` or `"if-supported"`.
-* `ndkVersions` specifies the NDK versions that we want to use. These are linked
+- `ndkVersions` specifies the NDK versions that we want to use. These are linked
   under the `ndk` directory of the SDK root, and the first is linked under the
   `ndk-bundle` directory. It defaults to the latest.
-* `ndkVersion` is equivalent to specifying one entry in `ndkVersions`, and
+- `ndkVersion` is equivalent to specifying one entry in `ndkVersions`, and
   `ndkVersions` overrides this parameter if provided.
-* `includeExtras` is an array of identifier strings referring to arbitrary
+- `includeExtras` is an array of identifier strings referring to arbitrary
   add-on packages that should be installed. Note that extras may not be compatible
   with all platforms (for example, the Google TV head unit, which does not
   have an aarch64-linux compile).
-* `platformVersions` specifies which platform SDK versions should be included.
+- `platformVersions` specifies which platform SDK versions should be included.
   It defaults to including only the latest API level, though you can add more.
-* `numLatestPlatformVersions` specifies how many of the latest API levels to include,
+- `numLatestPlatformVersions` specifies how many of the latest API levels to include,
   if you are using the default for `platformVersions`. It defaults to 1, though you can
   increase this to, for example, 5 to get the last 5 years of Android API packages.
-* `minPlatformVersion` and `maxPlatformVersion` take priority over `platformVersions`
+- `minPlatformVersion` and `maxPlatformVersion` take priority over `platformVersions`
   if both are provided. Note that `maxPlatformVersion` always defaults to the latest
   Android SDK platform version, allowing you to specify `minPlatformVersion` to describe
   the minimum SDK version your Android composition supports.
@@ -114,20 +114,20 @@ The following parameters are supported:
 For each platform version that has been specified, we can apply the following
 options:
 
-* `includeSystemImages` specifies whether a system image for each platform SDK
+- `includeSystemImages` specifies whether a system image for each platform SDK
   should be included.
-* `includeSources` specifies whether the sources for each SDK version should be
+- `includeSources` specifies whether the sources for each SDK version should be
   included.
-* `useGoogleAPIs` specifies that for each selected platform version the
+- `useGoogleAPIs` specifies that for each selected platform version the
   Google API should be included.
-* `useGoogleTVAddOns` specifies that for each selected platform version the
+- `useGoogleTVAddOns` specifies that for each selected platform version the
   Google TV add-on should be included.
 
 For each requested system image we can specify the following options:
 
-* `systemImageTypes` specifies what kind of system images should be included.
+- `systemImageTypes` specifies what kind of system images should be included.
   Defaults to: `default`.
-* `abiVersions` specifies what kind of ABI version of each system image should
+- `abiVersions` specifies what kind of ABI version of each system image should
   be included. Defaults to `armeabi-v7a` and `arm64-v8a`.
 
 Most of the function arguments have reasonable default settings, preferring the latest
@@ -136,7 +136,7 @@ that you do not care about, and just want the latest of.
 
 You can specify license names:
 
-* `extraLicenses` is a list of license names.
+- `extraLicenses` is a list of license names.
   You can get these names from repo.json or `querypackages.sh licenses`. The SDK
   license (`android-sdk-license`) is accepted for you if you set accept_license
   to true. If you are doing something like working with preview SDKs, you will
@@ -145,9 +145,9 @@ You can specify license names:
 Additionally, you can override the repositories that composeAndroidPackages will
 pull from:
 
-* `repoJson` specifies a path to a generated repo.json file. You can generate this
+- `repoJson` specifies a path to a generated repo.json file. You can generate this
   by running `generate.sh`, which in turn will call into `mkrepo.rb`.
-* `repoXmls` is an attribute set containing paths to repo XML files. If specified,
+- `repoXmls` is an attribute set containing paths to repo XML files. If specified,
   it takes priority over `repoJson`, and will trigger a local build writing out a
   repo.json to the Nix store based on the given repository XMLs. Note that this uses
   import-from-derivation.
@@ -255,10 +255,10 @@ In addition to prebuilt APKs, you can also bind the APK parameter to a
 
 ## Notes on environment variables in Android projects {#notes-on-environment-variables-in-android-projects}
 
-* `ANDROID_HOME` should point to the Android SDK. In your Nix expressions, this should be
+- `ANDROID_HOME` should point to the Android SDK. In your Nix expressions, this should be
   `${androidComposition.androidsdk}/libexec/android-sdk`. Note that `ANDROID_SDK_ROOT` is deprecated,
   but if you rely on tools that need it, you can export it too.
-* `ANDROID_NDK_ROOT` should point to the Android NDK, if you're doing NDK development.
+- `ANDROID_NDK_ROOT` should point to the Android NDK, if you're doing NDK development.
   In your Nix expressions, this should be `${ANDROID_HOME}/ndk-bundle`.
 
 If you are running the Android Gradle plugin, you need to export GRADLE_OPTS to override aapt2

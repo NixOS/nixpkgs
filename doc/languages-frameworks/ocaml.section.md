@@ -10,6 +10,7 @@ OCaml applications are usually available top-level, and not inside `ocamlPackage
 
 To open a shell able to build a typical OCaml project, put the dependencies in `buildInputs` and add `ocamlPackages.ocaml` and `ocamlPackages.findlib` to `nativeBuildInputs` at least.
 For example:
+
 ```nix
 let
   pkgs = import <nixpkgs> { };

@@ -11,6 +11,7 @@ compatible are available as well. For example, there can be a
 `cudaPackages.cudnn_8_3` package.
 
 To use one or more CUDA packages in an expression, give the expression a `cudaPackages` parameter, and in case CUDA is optional
+
 ```nix
 {
   config,
@@ -23,6 +24,7 @@ To use one or more CUDA packages in an expression, give the expression a `cudaPa
 
 When using `callPackage`, you can choose to pass in a different variant, e.g.
 when a different version of the toolkit suffices
+
 ```nix
 {
   mypkg = callPackage { cudaPackages = cudaPackages_11_5; };
@@ -32,6 +34,7 @@ when a different version of the toolkit suffices
 If another version of say `cudnn` or `cutensor` is needed, you can override the
 package set to make it the default. This guarantees you get a consistent package
 set.
+
 ```nix
 {
   mypkg =
@@ -50,7 +53,7 @@ The CUDA NVCC compiler requires flags to determine which hardware you
 want to target for in terms of SASS (real hardware) or PTX (JIT kernels).
 
 Nixpkgs tries to target support real architecture defaults based on the
-CUDA toolkit version with PTX support for future hardware.  Experienced
+CUDA toolkit version with PTX support for future hardware. Experienced
 users may optimize this configuration for a variety of reasons such as
 reducing binary size and compile time, supporting legacy hardware, or
 optimizing for specific hardware.
@@ -91,6 +94,7 @@ All new projects should use the CUDA redistributables available in [`cudaPackage
    ```
 
    This will download a copy of the manifest for the new version of CUDA.
+
 4. Run
 
    ```bash
@@ -103,6 +107,7 @@ All new projects should use the CUDA redistributables available in [`cudaPackage
    ```
 
    This will generate a `redistrib_features_<newest CUDA version>.json` file in the same directory as the manifest.
+
 5. Update the `cudaVersionMap` attribute set in `pkgs/development/cuda-modules/cuda/extension.nix`.
 
 ### Updating cuTensor {#updating-cutensor}
@@ -148,11 +153,11 @@ All new projects should use the CUDA redistributables available in [`cudaPackage
 
 2. Successfully build the closure of the new package set, updating `pkgs/development/cuda-modules/cuda/overrides.nix` as needed. Below are some common failures:
 
-| Unable to ... | During ... | Reason | Solution | Note |
-| --- | --- | --- | --- | --- |
-| Find headers | `configurePhase` or `buildPhase` | Missing dependency on a `dev` output | Add the missing dependency | The `dev` output typically contain the headers |
-| Find libraries | `configurePhase` | Missing dependency on a `dev` output | Add the missing dependency | The `dev` output typically contain CMake configuration files |
-| Find libraries | `buildPhase` or `patchelf` | Missing dependency on a `lib` or `static` output | Add the missing dependency | The `lib` or `static` output typically contain the libraries |
+| Unable to ...  | During ...                       | Reason                                           | Solution                   | Note                                                         |
+| -------------- | -------------------------------- | ------------------------------------------------ | -------------------------- | ------------------------------------------------------------ |
+| Find headers   | `configurePhase` or `buildPhase` | Missing dependency on a `dev` output             | Add the missing dependency | The `dev` output typically contain the headers               |
+| Find libraries | `configurePhase`                 | Missing dependency on a `dev` output             | Add the missing dependency | The `dev` output typically contain CMake configuration files |
+| Find libraries | `buildPhase` or `patchelf`       | Missing dependency on a `lib` or `static` output | Add the missing dependency | The `lib` or `static` output typically contain the libraries |
 
 In the scenario you are unable to run the resulting binary: this is arguably the most complicated as it could be any combination of the previous reasons. This type of failure typically occurs when a library attempts to load or open a library it depends on that it does not declare in its `DT_NEEDED` section. As a first step, ensure that dependencies are patched with [`autoAddDriverRunpath`](https://search.nixos.org/packages?channel=unstable&type=packages&query=autoAddDriverRunpath). Failing that, try running the application with [`nixGL`](https://github.com/guibou/nixGL) or a similar wrapper tool. If that works, it likely means that the application is attempting to load a library that is not in the `RPATH` or `RUNPATH` of the binary.
 
@@ -235,9 +240,9 @@ services:
       resources:
         reservations:
           devices:
-          - driver: cdi
-            device_ids:
-            - nvidia.com/gpu=all
+            - driver: cdi
+              device_ids:
+                - nvidia.com/gpu=all
 ```
 
 In the same manner, you can pick specific devices that will be exposed to the container:
@@ -251,8 +256,8 @@ services:
       resources:
         reservations:
           devices:
-          - driver: cdi
-            device_ids:
-            - nvidia.com/gpu=0
-            - nvidia.com/gpu=1
+            - driver: cdi
+              device_ids:
+                - nvidia.com/gpu=0
+                - nvidia.com/gpu=1
 ```

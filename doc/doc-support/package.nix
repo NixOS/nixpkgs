@@ -15,6 +15,7 @@
   markdown-code-runner,
   roboto,
   treefmt,
+  nodePackages,
 }:
 stdenvNoCC.mkDerivation (
   finalAttrs:
@@ -134,12 +135,14 @@ stdenvNoCC.mkDerivation (
             devmode'
             nixos-render-docs-redirects'
             markdown-code-runner
+            nodePackages.prettier
           ];
         };
 
       tests = {
         manpage-urls = callPackage ../tests/manpage-urls.nix { };
         check-nix-code-blocks = callPackage ../tests/check-nix-code-blocks.nix { };
+        check-formatting = callPackage ../tests/check-formatting.nix { };
       };
     };
   }
