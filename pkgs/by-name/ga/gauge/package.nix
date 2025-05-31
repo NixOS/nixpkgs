@@ -7,7 +7,6 @@
   xorg,
   gaugePlugins,
   plugins ? [ ],
-  runCommand,
 }:
 
 stdenvNoCC.mkDerivation {
