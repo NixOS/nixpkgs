@@ -49,7 +49,7 @@ jobs:
             const header = await readFile('trusted/ci/check-cherry-picks.md')
             const body = await readFile('checked-cherry-picks.md')
             const footer =
-              `\n_Hint: The diffs are also available in the [runner logs](${job_url}) with slightly better highlighting._`
+              `\n_Hint: The full diffs are also available in the [runner logs](${job_url}) with slightly better highlighting._`
 
             const review = header + body + footer
             await writeFile('review.md', review)
@@ -79,6 +79,9 @@ jobs:
               )
             )
 
+            // Either of those two requests could fail for very long comments. This can only happen
+            // with multiple commits all hitting the truncation limit for the diff. If you ever hit
+            // this case, consider just splitting up those commits into multiple PRs.
             if (pendingReview) {
               await github.rest.pulls.updateReview({
                 owner: context.repo.owner,
