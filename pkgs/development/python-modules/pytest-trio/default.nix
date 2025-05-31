@@ -47,7 +47,10 @@ buildPythonPackage rec {
   meta = {
     description = "Pytest plugin for trio";
     homepage = "https://github.com/python-trio/pytest-trio";
-    license = lib.licenses.asl20;
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
     maintainers = with lib.maintainers; [ hexa ];
   };
 }
