@@ -3,7 +3,6 @@
   generateSplicesForMkScope,
   makeScopeWithSplicing',
   fetchurl,
-  libsForQt5,
   qt6Packages,
   cmark,
   gpgme,
@@ -62,9 +61,6 @@ let
         # Alias to match metadata
         kquickimageeditor = self.kquickimageedit;
 
-        # Alias because it's just data
-        plasma-wayland-protocols = libsForQt5.plasma-wayland-protocols;
-
         selenium-webdriver-at-spi = null; # Used for integration tests that we don't run, stub
 
         alpaka = self.callPackage ./misc/alpaka { };
@@ -82,6 +78,7 @@ let
         oxygen-icons = self.callPackage ./misc/oxygen-icons { };
         phonon = self.callPackage ./misc/phonon { };
         phonon-vlc = self.callPackage ./misc/phonon-vlc { };
+        plasma-wayland-protocols = self.callPackage ./misc/plasma-wayland-protocols { };
         polkit-qt-1 = self.callPackage ./misc/polkit-qt-1 { };
         pulseaudio-qt = self.callPackage ./misc/pulseaudio-qt { };
 

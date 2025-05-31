@@ -54,6 +54,7 @@ let
 
       # FIXME: typo lol
       "ICS" = lib.licenses.isc;
+      "BSD-2-Clauses" = lib.licenses.bsd2;
       "BSD-3-clause" = lib.licenses.bsd3;
       "BSD-3-Clauses" = lib.licenses.bsd3;
 
