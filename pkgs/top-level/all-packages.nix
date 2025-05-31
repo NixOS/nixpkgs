@@ -3293,9 +3293,7 @@ with pkgs;
 
   heimdall-gui = heimdall.override { enableGUI = true; };
 
-  headscale = callPackage ../servers/headscale {
-    buildGoModule = buildGo123Module;
-  };
+  headscale = callPackage ../servers/headscale { };
 
   highlight = callPackage ../tools/text/highlight {
     lua = lua5;
@@ -15905,6 +15903,7 @@ with pkgs;
     polyml = polyml.overrideAttrs {
       pname = "polyml-for-isabelle";
       version = "2025";
+      __intentionallyOverridingVersion = true; # avoid a warning, no src override
       configureFlags = [
         "--enable-intinf-as-int"
         "--with-gmp"
