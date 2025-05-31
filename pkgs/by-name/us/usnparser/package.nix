@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "usnparser";
-  version = "4.1.6";
+  version = "4.1.6-unstable-2021-04-27";
 
   src = fetchFromGitHub {
     owner = "PoorBillionaire";
