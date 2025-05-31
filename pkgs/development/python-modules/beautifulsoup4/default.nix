@@ -68,6 +68,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
+  disabledTests = [
+    # these tests fail with libxml 2.14.3
+    # https://bugs.launchpad.net/beautifulsoup/+bug/2112242
+    "test_real_xhtml_document"
+    "test_processing_instruction"
+    "test_out_of_range_entity"
+  ];
+
   pythonImportsCheck = [ "bs4" ];
 
   passthru.tests = {
