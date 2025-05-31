@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ../egs $out/share/kaldi
   '';
 
-  dontCheckForBrokenSymlinks = true;  #TODO: investigate
+  dontCheckForBrokenSymlinks = true; # TODO: investigate
 
   passthru = {
     sources = {
