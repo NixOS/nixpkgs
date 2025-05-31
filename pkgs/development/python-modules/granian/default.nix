@@ -13,6 +13,7 @@
   pytest-asyncio,
   websockets,
   httpx,
+  rust-jemalloc-sys,
   sniffio,
   nix-update-script,
 }:
@@ -37,6 +38,21 @@ buildPythonPackage rec {
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
+  ];
+
+  buildInputs = [
+    # fix "Unsupported system page size" on aarch64-linux with 16k pages
+    # https://github.com/NixOS/nixpkgs/issues/410572
+    (rust-jemalloc-sys.overrideAttrs (
+      { configureFlags, ... }:
+      {
+        configureFlags = configureFlags ++ [
+          # otherwise import check fails with:
+          # ImportError: {{storeDir}}/lib/libjemalloc.so.2: cannot allocate memory in static TLS block
+          "--disable-initial-exec-tls"
+        ];
+      }
+    ))
   ];
 
   dependencies = [
