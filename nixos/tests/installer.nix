@@ -1110,7 +1110,7 @@ in
   simple = makeInstallerTest "simple" (
     simple-test-config
     // {
-      passthru.override = args: makeInstallerTest "simple" simple-test-config // args;
+      passthru.override = args: makeInstallerTest "simple" (simple-test-config // args);
     }
   );
 
