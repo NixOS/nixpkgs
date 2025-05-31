@@ -7,13 +7,13 @@
 
 rustPlatform.buildRustPackage {
   pname = "nufmt";
-  version = "0-unstable-2025-04-28";
+  version = "0-unstable-2025-05-08";
 
   src = fetchFromGitHub {
     owner = "nushell";
     repo = "nufmt";
-    rev = "feafe695659c4d5153018a78fad949d088d8a480";
-    hash = "sha256-4FnZIlZWuvSAXMQbdyONNrgIuMxH5Vq3MFbb8J2CnHM=";
+    rev = "e6b253167d5136be5ae765efb7ebe56300bd09fc";
+    hash = "sha256-mMCWfdWVA/MidMlzhYoIYa21WIzq4QAEjCcH+t+Dmv0=";
   };
 
   nativeBuildInputs = [
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
   ];
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-zS4g/uMh1eOoPo/RZfanL6afCEU5cnyzHrIqkvuQVrg=";
+  cargoHash = "sha256-KDXC2/1GcJL6qH+L/FzzQCA7kJigtKOfxVDLv5qXYao=";
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
