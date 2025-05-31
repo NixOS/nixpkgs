@@ -74,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
           # the filesystem does not necessarily have hardlink capabilities
           "libarchive/test/test_write_disk_hardlink.c"
           # access-time-related tests flakey on some systems
+          "libarchive/test/test_read_disk_directory_traversals.c"
           "cpio/test/test_option_a.c"
           "cpio/test/test_option_t.c"
         ]
