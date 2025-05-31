@@ -51,7 +51,7 @@ in
       (lib.genAttrs (map (n: "taler-${talerComponent}-${n}") services) (name: {
         serviceConfig = {
           DynamicUser = true;
-          User = name;
+          User = dbName;
           Group = groupName;
           ExecStart = toString [
             (lib.getExe' cfg.package name)
@@ -85,6 +85,7 @@ in
             Type = "oneshot";
             DynamicUser = true;
             User = dbName;
+            Group = groupName;
             Restart = "on-failure";
             RestartSec = "5s";
           };
@@ -116,7 +117,7 @@ in
     services.postgresql = {
       enable = true;
       ensureDatabases = [ dbName ];
-      ensureUsers = map (service: { name = "taler-${talerComponent}-${service}"; }) servicesDB ++ [
+      ensureUsers = [
         {
           name = dbName;
           ensureDBOwnership = true;
