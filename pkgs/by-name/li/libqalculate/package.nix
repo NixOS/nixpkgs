@@ -14,7 +14,15 @@
   libxml2,
   mpfr,
   icu,
+  # Upstream's `plot` UX is not ideal - it doesn't write a good message
+  # suggesting the user to install this optional dependency when they write
+  # `plot(..)`. Not to mention support for non-x dependent `gnuplot_qt`
+  # executable. Hence we hardcode a path to a gnuplot binary by default, and
+  # changing this is possible via putting an empty string as a `gnuplotBinary`
+  # - to let `libqalculate` pick it from $PATH during runtime. See also:
+  # https://github.com/Qalculate/libqalculate/issues/796
   gnuplot,
+  gnuplotBinary ? lib.getExe gnuplot,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -61,10 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
     intltoolize -f
   '';
 
-  postPatch = ''
+  postPatch = lib.optionalString (gnuplotBinary != "") ''
     substituteInPlace libqalculate/Calculator-plot.cc \
-      --replace-fail 'commandline = "gnuplot"' 'commandline = "${gnuplot}/bin/gnuplot"' \
-      --replace-fail '"gnuplot - ' '"${gnuplot}/bin/gnuplot - '
+      --replace-fail 'commandline = "gnuplot"' 'commandline = "${gnuplotBinary}"' \
+      --replace-fail '"gnuplot - ' '"${gnuplotBinary} - '
   '';
 
   preBuild = ''
