@@ -9291,9 +9291,8 @@ with pkgs;
 
   place-cursor-at = haskell.lib.compose.justStaticExecutables haskellPackages.place-cursor-at;
 
-  podofo = callPackage ../development/libraries/podofo { };
-
   podofo010 = callPackage ../development/libraries/podofo/0.10.x.nix { };
+  podofo = podofo_0_9;
 
   poppler = callPackage ../development/libraries/poppler { lcms = lcms2; };
 
