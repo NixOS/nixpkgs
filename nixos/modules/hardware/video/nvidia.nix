@@ -472,7 +472,7 @@ in
           #   "nvidia" driver.
           # - Add the AllowEmptyInitialConfiguration option to the Screen section for the
           #   "nvidia" driver, in order to allow the X server to start without any outputs.
-          # - Ad the `BusID`s to the configuration of the iGPU `Device` sections.
+          # - Add the `BusID`s to the configuration of the iGPU `Device` sections.
           #   Note that here we do not _add_ these `Device` sections, but make that
           #   _if_ such a `Device` section is generated on the system
           #   (based on what's in `services.xserver.videoDrivers`), then it will
