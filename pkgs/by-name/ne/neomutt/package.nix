@@ -51,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-30uagr4Z748U34yaTpw0lqxifuMlQRqccuZHKpbkXVE=";
   };
 
+  strictDeps = true;
+
   buildInputs =
     [
       cyrus_sasl
@@ -70,17 +72,19 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withNotmuch notmuch;
 
   nativeBuildInputs = [
-    docbook_xsl
     docbook_xml_dtd_42
+    docbook_xsl
     gettext
+    libkrb5
     libxml2
     libxslt.bin
     makeWrapper
+    perl
+    pkg-config
     tcl
+    w3m
     which
     zlib
-    w3m
-    pkg-config
   ];
 
   enableParallelBuilding = true;
