@@ -7,21 +7,18 @@
 
 stdenv.mkDerivation rec {
   pname = "zsync";
-  version = "0.6.2-unstable-2017-04-25";
+  version = "0.6.3-unstable-2025-05-21";
 
   src = fetchFromGitHub {
     owner = "cph6";
     repo = "zsync";
-    rev = "6cfe374f8f2310cbd624664ca98e5bb28244ba7a";
-    hash = "sha256-SnCzNDMyhMx+2JmgsrjtYDa31Ki1EWix9iBfaduDnro=";
+    rev = "74073c1ad65200de9790449178b3578cd2f2d428";
+    hash = "sha256-d8O03G9QHHCLpunZO1qJpHj0WhLsA31r6Tm09W8LUKs=";
   };
 
   sourceRoot = "${src.name}/c";
 
-  patches = [
-    ./remove-inexisting-rsumtest.patch
-    ./read-blocksums-declaration-fix.patch
-  ];
+  patches = [ ./remove-inexisting-rsumtest.patch ];
 
   makeFlags = [ "AR=${stdenv.cc.bintools.targetPrefix}ar" ];
 
