@@ -5,7 +5,6 @@
   fetchPypi,
   lxml,
   pytestCheckHook,
-  pythonAtLeast,
   pythonOlder,
   requests,
   webob,
@@ -54,9 +53,15 @@ buildPythonPackage rec {
     "--deselect=tests/test_pyquery.py::TestWebScrappingEncoding::test_get"
   ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.12") [
-    # https://github.com/gawel/pyquery/issues/249
-    "pyquery.pyquery.PyQuery.serialize_dict"
+  disabledTests = [
+    # broken in libxml 2.14 update
+    # https://github.com/gawel/pyquery/issues/257
+    "test_val_for_textarea"
+    "test_replaceWith"
+    "test_replaceWith_with_function"
+    "test_get"
+    "test_post"
+    "test_session"
   ];
 
   meta = with lib; {
