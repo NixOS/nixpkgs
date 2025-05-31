@@ -16,10 +16,10 @@ in
 
       nvidiaSupport = lib.mkOption {
         type = lib.types.bool;
-        default = lib.elem "nvidia" config.services.xserver.videoDrivers;
+        default = false;
         defaultText = lib.literalExpression "lib.elem \"nvidia\" config.services.xserver.videoDrivers";
         description = ''
-          Enable support for Nvidia GPUs.
+          **Deprecated**: Nvidia support is now automatically provided by graphics drivers.
         '';
       };
     };
@@ -54,10 +54,12 @@ in
           let
             nvidiaPkg = config.hardware.nvidia.package;
           in
-          [
-            nvidiaPkg # nvidia-smi
-            nvidiaPkg.settings # nvidia-settings
-          ];
+          lib.warn
+            "programs.coolercontrol.nvidiaSupport is deprecated. Nvidia support is now provided automatically."
+            [
+              nvidiaPkg # nvidia-smi
+              nvidiaPkg.settings # nvidia-settings
+            ];
       })
     ]
   );
