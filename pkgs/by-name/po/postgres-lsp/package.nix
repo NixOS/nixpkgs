@@ -48,7 +48,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Tools and language server for Postgres";
     homepage = "https://pgtools.dev";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [
+      figsoda
+      myypo
+    ];
     mainProgram = "postgrestools";
   };
 })
