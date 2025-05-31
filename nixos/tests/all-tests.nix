@@ -747,6 +747,7 @@ in
   lightdm = runTest ./lightdm.nix;
   lighttpd = runTest ./lighttpd.nix;
   livekit = runTest ./networking/livekit.nix;
+  librechat = runTest ./librechat.nix;
   limesurvey = runTest ./limesurvey.nix;
   limine = import ./limine { inherit runTest; };
   listmonk = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./listmonk.nix { };
