@@ -1,0 +1,26 @@
+--- b/neofetch	1969-12-31 19:00:01.000000000 -0500
++++ a/neofetch	2025-05-26 20:48:52.399560225 -0400
+@@ -4779,16 +4779,16 @@
+         err "Config: Sourced user config. (${config_file})"
+         return
+ 
+-    elif [[ -f "${XDG_CONFIG_HOME}/neofetch/config.conf" ]]; then
+-        source "${XDG_CONFIG_HOME}/neofetch/config.conf"
+-        err "Config: Sourced user config.    (${XDG_CONFIG_HOME}/neofetch/config.conf)"
++    elif [[ -f "/etc/nufetch.conf" ]]; then
++        source "/etc/nufetch.conf"
++        err "Config: Sourced user config.    (/etc/nufetch.conf)"
+ 
+-    elif [[ -f "${XDG_CONFIG_HOME}/neofetch/config" ]]; then
+-        source "${XDG_CONFIG_HOME}/neofetch/config"
+-        err "Config: Sourced user config.    (${XDG_CONFIG_HOME}/neofetch/config)"
++    elif [[ -f "/etc/nufetch" ]]; then
++        source "/etc/nufetch"
++        err "Config: Sourced user config.    (/etc/nufetch)"
+ 
+     elif [[ -z "$no_config" ]]; then
+-        config_file="${XDG_CONFIG_HOME}/neofetch/config.conf"
++        config_file="/etc/nufetch.conf"
+ 
+         # The config file doesn't exist, create it.
+         mkdir -p "${XDG_CONFIG_HOME}/neofetch/"
