@@ -49,6 +49,7 @@ stdenv.mkDerivation (
       "devdoc"
     ];
     outputBin = "dev"; # very small
+    passthru.bin = finalAttrs.finalPackage.${finalAttrs.outputBin}; # fixes lib.getExe
     separateDebugInfo = true;
 
     nativeBuildInputs = [

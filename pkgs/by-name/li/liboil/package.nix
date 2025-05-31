@@ -5,12 +5,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liboil";
   version = "0.3.17";
 
   src = fetchurl {
-    url = "${meta.homepage}/download/liboil-${version}.tar.gz";
+    url = "${finalAttrs.meta.homepage}/download/liboil-${finalAttrs.version}.tar.gz";
     sha256 = "0sgwic99hxlb1av8cm0albzh8myb7r3lpcwxfm606l0bkc3h4pqh";
   };
 
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     "devdoc"
   ];
   outputBin = "dev"; # oil-bugreport
+  passthru.bin = finalAttrs.finalPackage.${finalAttrs.outputBin}; # fixes lib.getExe
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -42,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ lovek323 ];
     platforms = platforms.all;
   };
-}
+})
