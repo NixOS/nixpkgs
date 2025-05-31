@@ -4,23 +4,25 @@
   fetchFromGitLab,
   imagemagick,
   inkscape,
+  jq,
   xcursorgen,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "hackneyed";
-  version = "0.9.1";
+  version = "0.9.3";
 
   src = fetchFromGitLab {
     owner = "Enthymeme";
     repo = "hackneyed-x11-cursors";
     rev = version;
-    hash = "sha256-+7QtHgBuhJtQejiHeZ+QoedJo24LqSY51XRVLv9Ho2g=";
+    hash = "sha256-gq+qBYm15satH/XXK1QYDVu2L2DvZ+2aYg/wDqncwmA=";
   };
 
   nativeBuildInputs = [
     imagemagick
     inkscape
+    jq
     xcursorgen
   ];
 
@@ -33,6 +35,7 @@ stdenvNoCC.mkDerivation rec {
   makeFlags = [
     "INKSCAPE=inkscape"
     "INSTALL=install"
+    "JQ=jq"
     "PREFIX=$(out)"
     "VERBOSE=1"
     "XCURSORGEN=xcursorgen"
