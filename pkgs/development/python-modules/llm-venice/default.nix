@@ -19,12 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-vsb3oXGr+2FDJnTwYomICfald1ptben28hAJ8ypKiBI=";
   };
 
-  build-system = [
-    setuptools
-    llm
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [ ];
+  dependencies = [ llm ];
 
   # Reaches out to the real API
   doCheck = false;

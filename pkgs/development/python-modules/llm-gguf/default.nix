@@ -25,13 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-ihMOiQnTfgZKICVDoQHLOMahrd+GiB+HwWFBMyIcs0A=";
   };
 
-  build-system = [
-    setuptools
-    llm
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     httpx
+    llm
     llama-cpp-python
   ];
 

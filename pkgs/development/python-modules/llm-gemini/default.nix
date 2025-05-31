@@ -25,14 +25,12 @@ buildPythonPackage rec {
     hash = "sha256-aCP0YjcghzpgceuZRKGTN15wm7OIPCwcJAJJBxh78f4=";
   };
 
-  build-system = [
-    setuptools
-    llm
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     httpx
     ijson
+    llm
   ];
 
   nativeCheckInputs = [

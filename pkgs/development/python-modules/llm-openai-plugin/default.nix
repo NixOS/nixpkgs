@@ -25,12 +25,10 @@ buildPythonPackage rec {
     hash = "sha256-UoUxCwR+qOUufHuS0gw6A5Q7sB77VO4HYuMjFGN7mhA=";
   };
 
-  build-system = [
-    setuptools
-    llm
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
+    llm
     openai
   ];
 

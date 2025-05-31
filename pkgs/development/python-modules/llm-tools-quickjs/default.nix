@@ -23,12 +23,12 @@ buildPythonPackage rec {
     hash = "sha256-Si3VcHnRUj8Q/N8pRhltPOM6K64TX9DBH/u4WQxQJjQ=";
   };
 
-  build-system = [
-    setuptools
-    llm
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [ quickjs ];
+  dependencies = [
+    llm
+    quickjs
+  ];
 
   nativeCheckInputs = [
     llm-echo

@@ -19,12 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-brTyBymoFuvSQzsD/4aWzFGCrh3yEmWbpsUNGKT9dcU=";
   };
 
-  build-system = [
-    setuptools
-    llm
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [ ];
+  dependencies = [ llm ];
 
   pythonImportsCheck = [ "llm_video_frames" ];
 

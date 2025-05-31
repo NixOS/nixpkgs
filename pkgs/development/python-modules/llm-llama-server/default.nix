@@ -21,12 +21,9 @@ buildPythonPackage rec {
     hash = "sha256-jtFSfGu3JhNUfTsspY+OFLTMt9jQrh6R05sK9KBOKTE=";
   };
 
-  build-system = [
-    setuptools
-    llm
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [ ];
+  dependencies = [ llm ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -39,7 +36,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "LLM plugin providing access to Mistral models using the Mistral API";
-    homepage = "Interact with llama-server models";
+    homepage = "https://github.com/simonw/llm-llama-server";
     changelog = "https://github.com/simonw/llm-llama-server/releases/tag/${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ philiptaron ];

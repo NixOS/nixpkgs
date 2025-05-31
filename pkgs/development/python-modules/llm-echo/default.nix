@@ -21,10 +21,9 @@ buildPythonPackage rec {
     hash = "sha256-4345UIyaQx+mYYBAFD5AaX5YbjbnJQt8bKMD5Vl8VJc=";
   };
 
-  build-system = [
-    setuptools
-    llm
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ llm ];
 
   nativeCheckInputs = [
     pytestCheckHook

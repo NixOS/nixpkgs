@@ -22,12 +22,12 @@ buildPythonPackage rec {
     hash = "sha256-LECMHv4tGMCY60JU68y2Sfxp97Px7T/RJVhYVDSFCy4=";
   };
 
-  build-system = [
-    setuptools
-    llm
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [ symbex ];
+  dependencies = [
+    llm
+    symbex
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

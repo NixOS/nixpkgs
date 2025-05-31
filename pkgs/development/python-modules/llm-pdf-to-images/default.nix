@@ -23,12 +23,12 @@ buildPythonPackage rec {
     hash = "sha256-UWtCPdKrGE93NNjCroct5fPhq1pWIkngXXtRb+BHm8k=";
   };
 
-  build-system = [
-    setuptools
-    llm
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [ pymupdf ];
+  dependencies = [
+    llm
+    pymupdf
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
