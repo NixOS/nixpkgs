@@ -133,7 +133,7 @@ in
         description = "Host to bind to. Defaults binding on all addresses.";
       };
 
-      package = lib.mkPackageOption pkgs "murmur" { };
+      package = lib.mkPackageOption pkgs "mumble-server" { };
 
       password = lib.mkOption {
         type = lib.types.str;
