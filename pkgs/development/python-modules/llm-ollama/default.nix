@@ -32,14 +32,11 @@ buildPythonPackage rec {
     hash = "sha256-iwrDqrPt/zwXypBwD7zDAcen4fQq6PXl7Xj5VUL2KWA=";
   };
 
-  build-system = [
-    setuptools
-    # Follows the reasoning from https://github.com/NixOS/nixpkgs/pull/327800#discussion_r1681586659 about including llm in build-system
-    llm
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     click
+    llm
     ollama
     pydantic
   ];

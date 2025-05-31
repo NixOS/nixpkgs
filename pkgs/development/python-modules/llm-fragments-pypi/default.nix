@@ -20,11 +20,12 @@ buildPythonPackage rec {
     hash = "sha256-1XqAmuZ1WMHD6JbLbLsK9K4Uf3FvvKJD4mn1G2J/3C8=";
   };
 
-  build-system = [
-    hatchling
+  build-system = [ hatchling ];
+
+  dependencies = [
+    httpx
     llm
   ];
-  dependencies = [ httpx ];
 
   pythonImportsCheck = [ "llm_fragments_pypi" ];
 

@@ -26,10 +26,12 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    llm
   ];
 
-  dependencies = [ anthropic ];
+  dependencies = [
+    anthropic
+    llm
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

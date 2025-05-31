@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    llm
   ];
 
   dependencies = [
     httpx
+    llm
     openai
   ];
 

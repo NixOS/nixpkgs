@@ -36,9 +36,9 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "Ask questions of LLM documentation using LLM";
-    homepage = "https://github.com/simonw/llm-docs";
-    changelog = "https://github.com/simonw/llm-docs/releases/tag/${version}/CHANGELOG.md";
+    description = "Find the Python code for specified symbols";
+    homepage = "https://github.com/simonw/symbex";
+    changelog = "https://github.com/simonw/symbex/releases/tag/${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ philiptaron ];
   };

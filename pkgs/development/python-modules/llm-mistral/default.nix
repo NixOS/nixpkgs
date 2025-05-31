@@ -27,12 +27,12 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    llm
   ];
 
   dependencies = [
     httpx
     httpx-sse
+    llm
   ];
 
   nativeCheckInputs = [

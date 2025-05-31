@@ -22,10 +22,12 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    llm
   ];
 
-  dependencies = [ groq ];
+  dependencies = [
+    groq
+    llm
+  ];
 
   pythonImportsCheck = [ "llm_groq" ];
 
