@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "types-docutils";
-  version = "0.21.0.20250516";
+  version = "0.21.0.20250526";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_docutils";
     inherit version;
-    hash = "sha256-l15a3p7wsfRbawdfAXoPRw7k5TsMLdUMy/OgTZxTgW8=";
+    hash = "sha256-bHujh3FjFd8NhqeWuuydWnGCXtJ0bLd2MZOq+7cKyGw=";
   };
 
   build-system = [ setuptools ];
