@@ -16,17 +16,18 @@
   zlib,
   pkg-config,
   cmake,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bitwuzla";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "bitwuzla";
     repo = "bitwuzla";
     rev = finalAttrs.version;
-    hash = "sha256-S8CtK8WEehUdOoqOmu5KnoqHFpCGrYWjZKv1st4M7bo=";
+    hash = "sha256-Th2YkynOzxcZB4xqyH8D3QqcuQzkWYAd+hYfZ5OmrJ0=";
   };
 
   strictDeps = true;
@@ -86,6 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstallCheck
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "SMT solver for fixed-size bit-vectors, floating-point arithmetic, arrays, and uninterpreted functions";
