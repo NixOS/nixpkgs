@@ -11173,7 +11173,12 @@ with pkgs;
 
   linuxKernel = recurseIntoAttrs (callPackage ./linux-kernels.nix { });
 
-  inherit (linuxKernel) buildLinux linuxConfig kernelPatches;
+  inherit (linuxKernel)
+    buildLinux
+    linuxConfig
+    mergeConfigs
+    kernelPatches
+    ;
 
   linuxPackagesFor = linuxKernel.packagesFor;
 
@@ -11471,6 +11476,8 @@ with pkgs;
     withVmspawn = false;
     withQrencode = false;
     withLibarchive = false;
+    withNsresourced = false;
+    withMountfsd = false;
   };
   systemdLibs = systemdMinimal.override {
     pname = "systemd-minimal-libs";
