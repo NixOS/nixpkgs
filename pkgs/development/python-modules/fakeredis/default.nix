@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "2.26.2";
+  version = "2.29.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "dsoftwareinc";
     repo = "fakeredis-py";
     tag = "v${version}";
-    hash = "sha256-jD0e04ltH1MjExfrPsR6LUn4X0/qoJZWzX9i2A58HHI=";
+    hash = "sha256-wBUsoPmTIE3VFvmMnW4B9Unw/V63dIvsBTYCloElamA=";
   };
 
   build-system = [ poetry-core ];

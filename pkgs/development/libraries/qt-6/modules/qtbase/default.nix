@@ -12,7 +12,6 @@
   which,
   cmake,
   ninja,
-  xmlstarlet,
   libproxy,
   xorg,
   zstd,
@@ -179,7 +178,6 @@ stdenv.mkDerivation rec {
     pkg-config
     which
     cmake
-    xmlstarlet
     ninja
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
 

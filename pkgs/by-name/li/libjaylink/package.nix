@@ -29,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ libusb1 ];
 
+  doInstallCheck = true;
+
   postPatch = ''
     substituteInPlace contrib/60-libjaylink.rules \
       --replace-fail 'GROUP="plugdev"' 'GROUP="jlink"'

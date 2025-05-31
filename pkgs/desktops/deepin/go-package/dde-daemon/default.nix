@@ -31,6 +31,7 @@
   lshw,
   dmidecode,
   systemd,
+  udevCheckHook,
 }:
 
 buildGoModule rec {
@@ -93,6 +94,7 @@ buildGoModule rec {
     gettext
     python3
     wrapGAppsHook3
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -126,6 +128,8 @@ buildGoModule rec {
   '';
 
   doCheck = false;
+
+  doInstallCheck = true;
 
   preFixup = ''
     gappsWrapperArgs+=(

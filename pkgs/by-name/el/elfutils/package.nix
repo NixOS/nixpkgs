@@ -29,11 +29,11 @@
 # TODO: Look at the hardcoded paths to kernel, modules etc.
 stdenv.mkDerivation rec {
   pname = "elfutils";
-  version = "0.192";
+  version = "0.193";
 
   src = fetchurl {
     url = "https://sourceware.org/elfutils/ftp/${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-YWCZvq4kq6Efm2PYbKbMjVZtlouAI5EzTJHfVOq0FrQ=";
+    hash = "sha256-eFf0S2JPTY1CHfhRqq57FALP5rzdLYBJ8V/AfT3edjU=";
   };
 
   patches =
@@ -117,6 +117,8 @@ stdenv.mkDerivation rec {
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
+  hardeningDisable = [ "strictflexarrays3" ];
+
   configureFlags =
     [
       "--program-prefix=eu-" # prevent collisions with binutils
@@ -145,6 +147,14 @@ stdenv.mkDerivation rec {
     # can be executed, so we need to match build and host platform exactly.
     && (stdenv.hostPlatform == stdenv.buildPlatform);
   doInstallCheck = !stdenv.hostPlatform.isMusl && (stdenv.hostPlatform == stdenv.buildPlatform);
+
+  preCheck = ''
+    # Workaround lack of rpath linking:
+    #   ./dwarf_srclang_check: error while loading shared libraries:
+    #     libelf.so.1: cannot open shared object file: No such file or directory
+    # Remove once https://sourceware.org/PR32929 is fixed.
+    export LD_LIBRARY_PATH="$PWD/libelf:$LD_LIBRARY_PATH"
+  '';
 
   passthru.updateScript = gitUpdater {
     url = "https://sourceware.org/git/elfutils.git";

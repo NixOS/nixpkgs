@@ -14,7 +14,6 @@
   # for passthru.tests
   dvgrab,
   epeg,
-  freeimage,
   gd,
   graphicsmagick,
   imagemagick,
@@ -26,30 +25,24 @@
   python3,
   vips,
   testers,
+  nix-update-script,
 }:
 
 assert !(enableJpeg7 && enableJpeg8); # pick only one or none, not both
 
 stdenv.mkDerivation (finalAttrs: {
-
   pname = "libjpeg-turbo";
-  version = "3.0.4";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "libjpeg-turbo";
     repo = "libjpeg-turbo";
-    rev = finalAttrs.version;
-    hash = "sha256-ZNqhOfZtWcMv10VWIUxn7MSy4KhW/jBrgC1tUFKczqs=";
+    tag = finalAttrs.version;
+    hash = "sha256-ImDTMObirpw/SouCftlALJoWCbXsRc6bf4IFjYfWpUY=";
   };
 
   patches =
-    [
-      # This is needed by freeimage
-      ./0001-Compile-transupp.c-as-part-of-the-library.patch
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [
-      ./0002-Make-exported-symbols-in-transupp.c-weak.patch
-    ]
+    [ ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW [
       ./mingw-boolean.patch
     ];
@@ -57,15 +50,10 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "bin"
     "dev"
-    "dev_private"
     "out"
     "man"
     "doc"
   ];
-
-  postFixup = ''
-    moveToOutput include/transupp.h $dev_private
-  '';
 
   nativeBuildInputs =
     [
@@ -99,36 +87,40 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   installCheckTarget = "test";
 
-  passthru.tests = {
-    inherit
-      dvgrab
-      epeg
-      gd
-      graphicsmagick
-      imagemagick
-      imlib2
-      jhead
-      libjxl
-      mjpegtools
-      opencv
-      vips
-      ;
-    inherit (python3.pkgs) pillow imread pyturbojpeg;
-    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru = {
+    updateScript = nix-update-script { };
+    dev_private = throw "not supported anymore";
+    tests = {
+      inherit
+        dvgrab
+        epeg
+        gd
+        graphicsmagick
+        imagemagick
+        imlib2
+        jhead
+        libjxl
+        mjpegtools
+        opencv
+        vips
+        ;
+      inherit (python3.pkgs) pillow imread pyturbojpeg;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libjpeg-turbo.org/";
     description = "Faster (using SIMD) libjpeg implementation";
-    license = licenses.ijg; # and some parts under other BSD-style licenses
+    license = lib.licenses.ijg; # and some parts under other BSD-style licenses
     pkgConfigModules = [
       "libjpeg"
       "libturbojpeg"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       vcunat
       kamadorueda
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

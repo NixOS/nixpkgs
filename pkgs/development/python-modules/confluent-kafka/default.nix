@@ -1,11 +1,12 @@
 {
   lib,
+  attrs,
+  authlib,
   avro,
   azure-identity,
   azure-keyvault-keys,
   boto3,
   buildPythonPackage,
-  cacert,
   cachetools,
   fastavro,
   fetchFromGitHub,
@@ -13,7 +14,9 @@
   google-api-core,
   google-cloud-kms,
   hvac,
+  httpx,
   jsonschema,
+  orjson,
   protobuf,
   pyflakes,
   pyrsistent,
@@ -29,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "confluent-kafka";
-  version = "2.8.0";
+  version = "2.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -38,7 +41,7 @@ buildPythonPackage rec {
     owner = "confluentinc";
     repo = "confluent-kafka-python";
     tag = "v${version}";
-    hash = "sha256-EDEp260G/t7s17RlbT+Bcl7FZlVQFagNijDNw53DFpY=";
+    hash = "sha256-JJSGYGM/ukEABgzlHbw8xJr1HKVm/EW6EXEIJQBSCt8=";
   };
 
   buildInputs = [ rdkafka ];
@@ -74,11 +77,17 @@ buildPythonPackage rec {
       pyyaml
       # TODO: tink
     ];
-    schema-registry = [ requests ];
+    schema-registry = [
+      attrs
+      authlib
+      cachetools
+      httpx
+    ];
   };
 
   nativeCheckInputs = [
     cachetools
+    orjson
     pyflakes
     pytestCheckHook
     requests-mock
@@ -95,6 +104,10 @@ buildPythonPackage rec {
     "tests/schema_registry/test_avro_serdes.py"
     "tests/schema_registry/test_json_serdes.py"
     "tests/schema_registry/test_proto_serdes.py"
+    # missing tink dependency
+    "tests/schema_registry/test_config.py"
+    # crashes the test runner on shutdown
+    "tests/test_KafkaError.py"
   ];
 
   meta = with lib; {

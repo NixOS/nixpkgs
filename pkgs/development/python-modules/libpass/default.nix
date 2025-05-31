@@ -14,21 +14,17 @@
 
 buildPythonPackage rec {
   pname = "libpass";
-  version = "1.9.0";
+  version = "1.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ThirVondukr";
     repo = "passlib";
     tag = version;
-    hash = "sha256-Q5OEQkty0/DugRvF5LA+PaDDlF/6ysx4Nel5K2kH5s4=";
+    hash = "sha256-G6Fu1RjVb+OPdxt2hWpgAzTefRA41S0zV4hSvvCEWEA=";
   };
 
   build-system = [ hatchling ];
-
-  dependencies = [
-    typing-extensions
-  ];
 
   optional-dependencies = {
     argon2 = [ argon2-cffi ];

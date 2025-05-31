@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -40,9 +41,18 @@ buildPythonPackage rec {
     hash = "sha256-SZizjwkx8dsnaobDYpeQm9jeXZ4PlzYyjIScnQrH63Q=";
   };
 
+  patches = [
+    (fetchpatch {
+      # Remove geom_almost_equals, because it broke with shapely 2.1.0 and is not being updated
+      url = "https://github.com/geopandas/geopandas/commit/0e1f871a02e9612206dcadd6817284131026f61c.patch";
+      excludes = [ "CHANGELOG.md" ];
+      hash = "sha256-n9AmmbjjNwV66lxDQV2hfkVVfxRgMfEGfHZT6bql684=";
+    })
+  ];
+
   build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     packaging
     pandas
     pyogrio

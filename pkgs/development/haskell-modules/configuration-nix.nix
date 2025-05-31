@@ -44,6 +44,8 @@ with haskellLib;
 #
 # To avoid this, we use `intersectAttrs` here so we never add packages that are not present
 # in the parent package set (`super`).
+
+# To avoid merge conflicts, consider adding your item at an arbitrary place in the list instead.
 self: super:
 builtins.intersectAttrs super {
 

@@ -24,6 +24,7 @@
   openldap,
   cyrus_sasl,
   libxml2,
+  udevCheckHook,
   enablePython ? true,
   enableLdap ? true,
 }:
@@ -58,6 +59,7 @@ stdenv.mkDerivation rec {
     pkg-config
     buildPackages.stdenv.cc
     rpcsvc-proto
+    udevCheckHook
   ];
 
   buildInputs =
@@ -141,6 +143,8 @@ stdenv.mkDerivation rec {
     "sbindir=$(out)/bin"
     "generator_dir=$(out)/etc/systemd/system-generators"
   ];
+
+  doInstallCheck = true;
 
   installFlags = [
     "statedir=$(TMPDIR)"

@@ -46,7 +46,7 @@ sed -r \
     -e '/^with-compiler:/d' \
     -e '/installed$/d' \
     -e '/^$/d' \
-    < "${tmpfile}" | sort --ignore-case >"${tmpfile_new}"
+    < "${tmpfile}" | LC_ALL=C.UTF-8 sort --ignore-case >"${tmpfile_new}"
 
 cat > $stackage_config << EOF
 # Stackage $version

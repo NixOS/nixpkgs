@@ -34,11 +34,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "click_option_group" ];
 
-  disabledTests = [
-    # https://github.com/click-contrib/click-option-group/issues/65
-    "test_missing_group_decl_first_api"
-  ];
-
   meta = with lib; {
     description = "Option groups missing in Click";
     longDescription = ''

@@ -10,6 +10,7 @@
   iproute2,
   libnl,
   udev,
+  udevCheckHook,
   python3,
   perl,
 }:
@@ -39,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     pandoc
     pkg-config
     python3
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -72,6 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
         "${perl}/bin/perl" "${perl}/bin/perl -I $out/${perl.libPrefix}"
     done
   '';
+
+  doInstallCheck = true;
 
   meta = {
     description = "RDMA Core Userspace Libraries and Daemons";

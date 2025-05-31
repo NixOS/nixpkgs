@@ -36,6 +36,7 @@
   swig,
   xcbuild,
   gitUpdater,
+  enableBarcode ? false,
 
   # for passthru.tests
   cups-filters,
@@ -61,18 +62,15 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "1.25.3";
+  version = "1.26.1";
   pname = "mupdf";
 
   src = fetchurl {
     url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
-    hash = "sha256-uXTXBqloBTPRBLQRIiTHvz3pPye+fKQbS/tRVSYk8Kk=";
+    hash = "sha256-vc4BfHdnRMKIsCECl37gN4y0NseN+BJ6I/KB8TYEBv0=";
   };
 
   patches = [
-    # Upstream makefile does not work with system deps on macOS by default, so
-    # we reuse the Linux section instead.
-    ./fix-darwin-system-deps.patch
     # Upstream C++ wrap script only defines fixed-sized integers on macOS but
     # this is required on aarch64-linux too.
     ./fix-cpp-build.patch
@@ -101,7 +99,11 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals (!enableX11) [ "HAVE_X11=no" ]
     ++ lib.optionals (!enableGL) [ "HAVE_GLUT=no" ]
-    ++ lib.optionals (enableOcr) [ "USE_TESSERACT=yes" ];
+    ++ lib.optionals (enableOcr) [ "USE_TESSERACT=yes" ]
+    ++ lib.optionals (enableBarcode) [
+      "barcode=yes"
+      "USE_SYSTEM_ZXINGCPP=no"
+    ];
 
   nativeBuildInputs =
     [ pkg-config ]
@@ -159,7 +161,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    # Don't remove mujs because upstream version is incompatible
+    # Don't remove mujs or zxing-cpp because upstream version is incompatible
     rm -rf thirdparty/{curl,freetype,glfw,harfbuzz,jbig2dec,libjpeg,openjpeg,zlib}
   '';
 
@@ -242,7 +244,7 @@ stdenv.mkDerivation rec {
     )
     + (lib.optionalString (enableCxx) ''
       cp platform/c++/include/mupdf/*.h $out/include/mupdf
-      cp build/*/libmupdfcpp.so $out/lib
+      cp build/*/libmupdfcpp.so* $out/lib
     '')
     + (lib.optionalString (enablePython) (
       ''
@@ -257,7 +259,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  env.USE_SONAME = "no";
+  env.USE_SONAME = "yes";
 
   passthru = {
     tests = {

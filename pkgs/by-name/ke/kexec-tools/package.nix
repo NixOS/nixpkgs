@@ -5,19 +5,21 @@
   fetchurl,
   fetchpatch,
   nixosTests,
+  gitUpdater,
   zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation rec {
   pname = "kexec-tools";
-  version = "2.0.29";
+  version = "2.0.31";
 
   src = fetchurl {
     urls = [
       "mirror://kernel/linux/utils/kernel/kexec/${pname}-${version}.tar.xz"
       "http://horms.net/projects/kexec/kexec-tools/${pname}-${version}.tar.xz"
     ];
-    sha256 = "sha256-Z7GsUDqt5FpU2wvHkiiogwo11dT4PO6TLP8+eoGkqew=";
+    sha256 = "sha256-io81Ddxm4ckFo6tSWn6bqWyB4E5w72k5ewFVtnuSLDE=";
   };
 
   patches = [
@@ -43,11 +45,21 @@ stdenv.mkDerivation rec {
   ];
   configureFlags = [ "BUILD_CC=${buildPackages.stdenv.cc.targetPrefix}cc" ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  buildInputs = [ zlib ];
+  buildInputs = [
+    zlib
+    zstd
+  ];
 
   enableParallelBuilding = true;
 
-  passthru.tests.kexec = nixosTests.kexec;
+  passthru = {
+    tests.kexec = nixosTests.kexec;
+    updateScript = gitUpdater {
+      url = "https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git";
+      rev-prefix = "v";
+      allowedVersions = "^([0-9]+\\.){2}[0-9]+$";
+    };
+  };
 
   meta = with lib; {
     homepage = "http://horms.net/projects/kexec/kexec-tools";

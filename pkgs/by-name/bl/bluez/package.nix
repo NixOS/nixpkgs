@@ -23,6 +23,7 @@
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
   gitUpdater,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -51,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3Packages.pygments
     python3Packages.wrapPython
+    udevCheckHook
   ];
 
   outputs = [
@@ -121,6 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = stdenv.hostPlatform.isx86_64;
+  doInstallCheck = true;
 
   postInstall =
     let

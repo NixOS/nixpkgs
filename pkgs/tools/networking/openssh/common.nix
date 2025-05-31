@@ -20,6 +20,7 @@
   autoreconfHook,
   zlib,
   openssl,
+  softhsm,
   libedit,
   ldns,
   pkg-config,
@@ -138,56 +139,71 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false;
   enableParallelChecking = false;
-  nativeCheckInputs = [ openssl ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) hostname;
-  preCheck = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
-    # construct a dummy HOME
-    export HOME=$(realpath ../dummy-home)
-    mkdir -p ~/.ssh
+  nativeCheckInputs =
+    [
+      openssl
+    ]
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) hostname
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl) softhsm;
 
-    # construct a dummy /etc/passwd file for the sshd under test
-    # to use to look up the connecting user
-    DUMMY_PASSWD=$(realpath ../dummy-passwd)
-    cat > $DUMMY_PASSWD <<EOF
-    $(whoami)::$(id -u):$(id -g)::$HOME:$SHELL
-    EOF
+  preCheck =
+    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      # construct a dummy HOME
+      export HOME=$(realpath ../dummy-home)
+      mkdir -p ~/.ssh
 
-    # we need to NIX_REDIRECTS /etc/passwd both for processes
-    # invoked directly and those invoked by the "remote" session
-    cat > ~/.ssh/environment.base <<EOF
-    NIX_REDIRECTS=/etc/passwd=$DUMMY_PASSWD
-    LD_PRELOAD=${libredirect}/lib/libredirect.so
-    EOF
+      # construct a dummy /etc/passwd file for the sshd under test
+      # to use to look up the connecting user
+      DUMMY_PASSWD=$(realpath ../dummy-passwd)
+      cat > $DUMMY_PASSWD <<EOF
+      $(whoami)::$(id -u):$(id -g)::$HOME:$SHELL
+      EOF
 
-    # use an ssh environment file to ensure environment is set
-    # up appropriately for build environment even when no shell
-    # is invoked by the ssh session. otherwise the PATH will
-    # only contain default unix paths like /bin which we don't
-    # have in our build environment
-    cat - regress/test-exec.sh > regress/test-exec.sh.new <<EOF
-    cp $HOME/.ssh/environment.base $HOME/.ssh/environment
-    echo "PATH=\$PATH" >> $HOME/.ssh/environment
-    EOF
-    mv regress/test-exec.sh.new regress/test-exec.sh
+      # we need to NIX_REDIRECTS /etc/passwd both for processes
+      # invoked directly and those invoked by the "remote" session
+      cat > ~/.ssh/environment.base <<EOF
+      NIX_REDIRECTS=/etc/passwd=$DUMMY_PASSWD
+      LD_PRELOAD=${libredirect}/lib/libredirect.so
+      EOF
 
-    # explicitly enable the PermitUserEnvironment feature
-    substituteInPlace regress/test-exec.sh \
-      --replace \
-        'cat << EOF > $OBJ/sshd_config' \
-        $'cat << EOF > $OBJ/sshd_config\n\tPermitUserEnvironment yes'
+      # use an ssh environment file to ensure environment is set
+      # up appropriately for build environment even when no shell
+      # is invoked by the ssh session. otherwise the PATH will
+      # only contain default unix paths like /bin which we don't
+      # have in our build environment
+      cat - regress/test-exec.sh > regress/test-exec.sh.new <<EOF
+      cp $HOME/.ssh/environment.base $HOME/.ssh/environment
+      echo "PATH=\$PATH" >> $HOME/.ssh/environment
+      EOF
+      mv regress/test-exec.sh.new regress/test-exec.sh
 
-    # some tests want to use files under /bin as example files
-    for f in regress/sftp-cmds.sh regress/forwarding.sh; do
-      substituteInPlace $f --replace '/bin' "$(dirname $(type -p ls))"
-    done
+      # explicitly enable the PermitUserEnvironment feature
+      substituteInPlace regress/test-exec.sh \
+        --replace \
+          'cat << EOF > $OBJ/sshd_config' \
+          $'cat << EOF > $OBJ/sshd_config\n\tPermitUserEnvironment yes'
 
-    # set up NIX_REDIRECTS for direct invocations
-    set -a; source ~/.ssh/environment.base; set +a
-  '';
+      # some tests want to use files under /bin as example files
+      for f in regress/sftp-cmds.sh regress/forwarding.sh; do
+        substituteInPlace $f --replace '/bin' "$(dirname $(type -p ls))"
+      done
+
+      # set up NIX_REDIRECTS for direct invocations
+      set -a; source ~/.ssh/environment.base; set +a
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl) ''
+      # The extra tests check PKCS#11 interactions, which softhsm emulates with software only
+      substituteInPlace regress/test-exec.sh \
+        --replace /usr/local/lib/softhsm/libsofthsm2.so ${lib.getLib softhsm}/lib/softhsm/libsofthsm2.so
+    '';
   # integration tests hard to get working on darwin with its shaky
   # sandbox
   # t-exec tests fail on musl
   checkTarget =
-    lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl) "t-exec"
+    lib.optionals (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl) [
+      "t-exec"
+      "extra-tests"
+    ]
     # other tests are less demanding of the environment
     ++ [
       "unit"

@@ -100,11 +100,6 @@ in
 ++ optional langD ./libphobos.patch
 ++ optional (!atLeast14) ./cfi_startproc-reorder-label-09-1.diff
 ++ optional (atLeast14 && !canApplyIainsDarwinPatches) ./cfi_startproc-reorder-label-14-1.diff
-# backports of https://gcc.gnu.org/bugzilla/show_bug.cgi?id=118501
-#          and https://gcc.gnu.org/bugzilla/show_bug.cgi?id=118892
-#          and https://gcc.gnu.org/bugzilla/show_bug.cgi?id=119133
-# (hopefully all three will be included in the upcoming 14.3.0 release)
-++ optional is14 ./14/aarch64-fix-ice-subreg.patch
 
 ## 2. Patches relevant to gcc>=12 on specific platforms ####################################
 

@@ -7,6 +7,7 @@
   libudev-zero,
   nixosTests,
   nix-update-script,
+  udevCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -30,6 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    udevCheckHook
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -42,6 +44,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail /opt/bitbox-bridge/bin/bitbox-bridge $out/bin/bitbox-bridge
     install -Dm644 bitbox-bridge/release/linux/hid-digitalbitbox.rules $out/etc/udev/rules.d/50-hid-digitalbitbox.rules
   '';
+
+  doInstallCheck = true;
 
   passthru = {
     tests.basic = nixosTests.bitbox-bridge;

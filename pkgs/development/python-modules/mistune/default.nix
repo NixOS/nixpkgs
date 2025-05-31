@@ -10,16 +10,14 @@
 
 buildPythonPackage rec {
   pname = "mistune";
-  version = "3.1.2";
+  version = "3.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "lepture";
     repo = "mistune";
     tag = "v${version}";
-    hash = "sha256-XvDp+X/+s6TsUC889qjTGzrde6s/BYoXUw2AblaATnI=";
+    hash = "sha256-aD+c41nuSmLUoYzK8adP0eLYRU0FihHEqG4e0b0GZ9k=";
   };
 
   dependencies = lib.optionals (pythonOlder "3.11") [

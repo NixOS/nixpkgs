@@ -65,6 +65,7 @@
   desktop-file-utils,
   egl-wayland,
   graphene,
+  udevCheckHook,
   wayland,
   wayland-protocols,
 }:
@@ -123,6 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
     gi-docgen
     xorgserver
     gobject-introspection
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -200,6 +202,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   separateDebugInfo = true;
   strictDeps = true;
+
+  doInstallCheck = true;
 
   passthru = {
     libmutter_api_version = "16"; # bumped each dev cycle

@@ -99,6 +99,11 @@ stdenv.mkDerivation (
         cat ${./lua-dso.make} >> src/Makefile
       '';
 
+    env = {
+      inherit luaversion;
+      pkgversion = version;
+    };
+
     # see configurePhase for additional flags (with space)
     makeFlags = [
       "INSTALL_TOP=${placeholder "out"}"
