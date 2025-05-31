@@ -469,6 +469,12 @@
   "footnote-stdenv-find-inputs-location.__back.0": [
     "index.html#footnote-stdenv-find-inputs-location.__back.0"
   ],
+  "strictflexarrays1": [
+    "doc/stdenv/stdenv.chapter.md#strictflexarrays1"
+  ],
+  "strictflexarrays3": [
+    "doc/stdenv/stdenv.chapter.md#strictflexarrays3"
+  ],
   "tester-shfmt": [
     "index.html#tester-shfmt"
   ],
