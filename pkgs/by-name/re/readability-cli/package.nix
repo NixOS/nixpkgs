@@ -3,18 +3,23 @@
   buildNpmPackage,
   fetchFromGitLab,
   installShellFiles,
+  nix-update-script,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "readability-cli";
-  version = "2.4.4";
+  version = "2.4.5";
 
   src = fetchFromGitLab {
     owner = "gardenappl";
     repo = "readability-cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pvAp3ZJ8/FPhrSMC8B4U1m5zuBNRP/HcsXkrW6QYgSQ=";
+    hash = "sha256-fkXhAXbvCj5eRkPcv0Q7ryZeGdERI/lHHg64EDyK2F4=";
   };
+
+  patches = [
+    ./lockfile.patch
+  ];
 
   postPatch = ''
     # Set a script name to avoid yargs using index.js as $0
@@ -22,7 +27,7 @@ buildNpmPackage (finalAttrs: {
       --replace-fail '.version(false)' '.version(false).scriptName("readable")'
   '';
 
-  npmDepsHash = "sha256-X1pcgDm8C4G+hIsgx3sAVFQPadWsULvXrdLAIHnpjmE=";
+  npmDepsHash = "sha256-9sN1TgyOjgGLQsAlnI/fVbez7Oy2r6QwfaUTKyLQRVc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -34,6 +39,8 @@ buildNpmPackage (finalAttrs: {
       --bash <(SHELL=bash $out/bin/readable --completion) \
       --zsh <(SHELL=zsh $out/bin/readable --completion)
   '';
+
+  updateScript = nix-update-script { };
 
   meta = {
     description = "Firefox Reader Mode in your terminal - get useful text from a web page using Mozilla's Readability library";
