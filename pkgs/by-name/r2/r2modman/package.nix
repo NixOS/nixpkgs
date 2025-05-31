@@ -95,11 +95,12 @@ stdenv.mkDerivation (finalAttrs: {
   desktopItems = [
     (makeDesktopItem {
       name = "r2modman";
-      exec = "r2modman";
+      exec = "r2modman %U";
       icon = "r2modman";
       desktopName = "r2modman";
       comment = finalAttrs.meta.description;
       categories = [ "Game" ];
+      mimeTypes = [ "x-scheme-handler/ror2mm" ];
       keywords = [
         "launcher"
         "mod manager"
