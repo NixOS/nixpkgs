@@ -87,6 +87,31 @@ let
           "pkgs/development/haskell-modules/configuration-hackage2nix/transitive-broken.yaml"
         ];
 
+        programs.nixf-diagnose.enable = true;
+        settings.formatter.nixf-diagnose = {
+          # Ensure nixfmt cleans up after nixf-diagnose.
+          priority = -1;
+          options = [
+            "--auto-fix"
+            # Rule names can currently be looked up here:
+            # https://github.com/nix-community/nixd/blob/main/libnixf/src/Basic/diagnostic.py
+            # TODO: Remove the following and fix things.
+            "--ignore=parse-redundant-paren"
+            "--ignore=sema-extra-rec"
+            "--ignore=sema-extra-with"
+            "--ignore=sema-unused-def-lambda-noarg-formal"
+            "--ignore=sema-unused-def-lambda-witharg-arg"
+            "--ignore=sema-unused-def-lambda-witharg-formal"
+            "--ignore=sema-unused-def-let"
+            # Keep this rule, because we have `lib.or`.
+            "--ignore=or-identifier"
+          ];
+          excludes = [
+            # https://github.com/nix-community/nixd/issues/708
+            "nixos/maintainers/scripts/azure-new/examples/basic/system.nix"
+          ];
+        };
+
         settings.formatter.editorconfig-checker = {
           command = "${pkgs.lib.getExe pkgs.editorconfig-checker}";
           options = [ "-disable-indent-size" ];
