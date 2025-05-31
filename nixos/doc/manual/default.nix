@@ -8,6 +8,7 @@
   baseOptionsJSON ? null,
   warningsAreErrors ? true,
   prefix ? ../../..,
+  checkRedirects ? true,
 }:
 
 let
@@ -146,7 +147,7 @@ rec {
 
         nixos-render-docs -j $NIX_BUILD_CORES manual html \
           --manpage-urls ${manpageUrls} \
-          --redirects ${./redirects.json} \
+          ${if checkRedirects then "--redirects ${./redirects.json}" else ""} \
           --revision ${escapeShellArg revision} \
           --generator "nixos-render-docs ${pkgs.lib.version}" \
           --stylesheet style.css \
