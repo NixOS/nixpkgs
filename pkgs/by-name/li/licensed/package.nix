@@ -3,12 +3,12 @@
   bundlerApp,
   bundlerUpdateScript,
 }:
-bundlerApp {
+bundlerApp rec {
   pname = "licensed";
   gemdir = ./.;
   exes = [ "licensed" ];
 
-  passthru.updateScript = bundlerUpdateScript "licensed";
+  passthru.updateScript = bundlerUpdateScript pname;
 
   meta = {
     description = "Ruby gem to cache and verify the licenses of dependencies";
