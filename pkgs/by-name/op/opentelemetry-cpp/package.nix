@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  abseil-cpp,
   cmake,
   gtest,
   protobuf,
