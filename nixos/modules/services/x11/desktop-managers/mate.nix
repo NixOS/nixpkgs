@@ -92,6 +92,7 @@ in
       services.gnome.at-spi2-core.enable = true;
       services.gnome.glib-networking.enable = true;
       services.gnome.gnome-keyring.enable = true;
+      services.gnome.gcr-ssh-agent.enable = mkDefault true;
       services.udev.packages = [ pkgs.mate.mate-settings-daemon ];
       services.gvfs.enable = true;
       services.upower.enable = config.powerManagement.enable;
