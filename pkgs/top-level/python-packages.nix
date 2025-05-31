@@ -5728,6 +5728,8 @@ self: super: with self; {
 
   glue-vispy-viewers = callPackage ../development/python-modules/glue-vispy-viewers { };
 
+  glueviz = callPackage ../development/python-modules/glueviz { };
+
   gluonts = callPackage ../development/python-modules/gluonts { };
 
   glymur = callPackage ../development/python-modules/glymur { };
