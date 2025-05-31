@@ -51,11 +51,6 @@ let
   '';
 in
 {
-  imports = [
-    (lib.mkRenamedOptionModule [ "services" "murmur" "welcome" ] [ "services" "murmur" "welcometext" ])
-    (lib.mkRemovedOptionModule [ "services" "murmur" "pidfile" ] "Hardcoded to /run/murmur/murmurd.pid now")
-  ];
-
   options = {
     services.murmur = {
       enable = lib.mkEnableOption "Mumble server";
