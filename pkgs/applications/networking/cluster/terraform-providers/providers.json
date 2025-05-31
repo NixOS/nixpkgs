@@ -1,4 +1,13 @@
 {
+  "_assert": {
+    "hash": "sha256-ngHxzV7lRg6pOtyNTdCv3ToRK/vO016Vp2mlh7QT8Rc=",
+    "homepage": "https://registry.terraform.io/providers/hashicorp/assert",
+    "owner": "hashicorp",
+    "repo": "terraform-provider-assert",
+    "rev": "v0.16.0",
+    "spdx": "MPL-2.0",
+    "vendorHash": "sha256-nHaBNYCKfTvaDnz2SeexM2cyNVK5ThPYn4rnGEw7Wi0="
+  },
   "aci": {
     "hash": "sha256-NS5q6ElCGEGSceOCIVudKE6m6EzXMV/3HGHHXwYopOA=",
     "homepage": "https://registry.terraform.io/providers/CiscoDevNet/aci",
