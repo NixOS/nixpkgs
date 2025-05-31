@@ -61,16 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
     intltoolize -f
   '';
 
-  patchPhase =
-    ''
-      substituteInPlace libqalculate/Calculator-plot.cc \
-        --replace 'commandline = "gnuplot"' 'commandline = "${gnuplot}/bin/gnuplot"' \
-        --replace '"gnuplot - ' '"${gnuplot}/bin/gnuplot - '
-    ''
-    + lib.optionalString stdenv.cc.isClang ''
-      substituteInPlace src/qalc.cc \
-        --replace 'printf(_("aborted"))' 'printf("%s", _("aborted"))'
-    '';
+  patchPhase = ''
+    substituteInPlace libqalculate/Calculator-plot.cc \
+      --replace-fail 'commandline = "gnuplot"' 'commandline = "${gnuplot}/bin/gnuplot"' \
+      --replace-fail '"gnuplot - ' '"${gnuplot}/bin/gnuplot - '
+  '';
 
   preBuild = ''
     pushd docs/reference
