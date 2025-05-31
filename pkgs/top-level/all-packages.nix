@@ -2672,6 +2672,7 @@ with pkgs;
     dual-function-keys =
       callPackage ../tools/inputmethods/interception-tools/dual-function-keys.nix
         { };
+    space2meta = callPackage ../by-name/sp/space2meta/package.nix { };
   };
 
   blacken-docs = with python3Packages; toPythonApplication blacken-docs;
