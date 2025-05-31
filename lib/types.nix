@@ -1167,6 +1167,40 @@ let
             mergedOption.type;
       };
 
+      /**
+        Like `types.submodule`, but more flexible and with better defaults.
+        It has parameters
+
+        - *`modules`* A list of modules to use by default for this
+          submodule type. This gets combined with all option definitions
+          to build the final list of modules that will be included.
+
+        - *`specialArgs`* An attribute set of extra arguments to be passed
+          to the module functions. The option `_module.args` should be
+          used instead for most arguments since it allows overriding.
+          *`specialArgs`* should only be used for arguments that can't go
+          through the module fixed-point, because of infinite recursion or
+          other problems. An example is overriding the `lib` argument,
+          because `lib` itself is used to define `_module.args`, which
+          makes using `_module.args` to define it impossible.
+
+        - *`shorthandOnlyDefinesConfig`* Whether definitions of this type
+          should default to the `config` section of a module (see
+          [Example: Structure of NixOS Modules](#ex-module-syntax))
+          if it is an attribute set. Enabling this only has a benefit
+          when the submodule defines an option named `config` or `options`.
+          In such a case it would allow the option to be set with
+          `the-submodule.config = "value"` instead of requiring
+          `the-submodule.config.config = "value"`. This is because
+          only when modules *don't* set the `config` or `options`
+          keys, all keys are interpreted as option definitions in the
+          `config` section. Enabling this option implicitly puts all
+          attributes in the `config` section.
+
+          With this option enabled, defining a non-`config` section
+          requires using a function:
+          `the-submodule = { ... }: { options = { ... }; }`.
+      */
       submoduleWith =
         {
           modules,
