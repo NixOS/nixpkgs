@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
 
   # build-system
   setuptools,
@@ -27,17 +26,6 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-dZD93ZZiQLmWuMAR/nnYB7oGBBYr4YPEi+LdpSzweVc=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      # Revert <https://github.com/mill1000/midea-msmart/pull/209> until setuptools
-      # implements support for <https://peps.python.org/pep-0639/>.
-      name = "revert-pyproject-license-declaration-pep639-syntax.patch";
-      url = "https://github.com/mill1000/midea-msmart/commit/e5d6a982135e497c251095e421d3de4686f36056.patch?full_index=1";
-      hash = "sha256-+mxmFGZd04MZY2C5eo4k1lFoXsM8XyeJNazShnjAseE=";
-      revert = true;
-    })
-  ];
 
   build-system = [
     setuptools
