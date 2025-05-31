@@ -157,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     export FC_INC_DIR=${fontconfig.dev}/include/fontconfig
     export FC_LIB_DIR=${fontconfig.lib}/lib
     export PODOFO_INC_DIR=${podofo.dev}/include/podofo
-    export PODOFO_LIB_DIR=${podofo.lib}/lib
+    export PODOFO_LIB_DIR=${podofo}/lib
     export XDG_DATA_HOME=$out/share
     export XDG_UTILS_INSTALL_MODE="user"
     export PIPER_TTS_DIR=${piper-tts}/bin
