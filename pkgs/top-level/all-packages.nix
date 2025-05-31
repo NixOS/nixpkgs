@@ -11766,6 +11766,10 @@ with pkgs;
 
   nordic = libsForQt5.callPackage ../data/themes/nordic { };
 
+  noto-fonts-cjk-sans-static = callPackage ../by-name/no/noto-fonts-cjk-sans/package.nix {
+    static = true;
+  };
+
   noto-fonts-lgc-plus = callPackage ../by-name/no/noto-fonts/package.nix {
     suffix = "-lgc-plus";
     variants = [
