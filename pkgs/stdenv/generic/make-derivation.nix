@@ -716,7 +716,9 @@ let
       );
 
     let
-      envIsExportable = isAttrs env && !isDerivation env;
+      mainProgram = meta.mainProgram or null;
+      env' = env // lib.optionalAttrs (mainProgram != null) { NIX_MAIN_PROGRAM = mainProgram; };
+      envIsExportable = isAttrs env' && !isDerivation env';
 
       derivationArg = makeDerivationArgument (
         removeAttrs attrs (
@@ -746,11 +748,11 @@ let
 
       checkedEnv =
         let
-          overlappingNames = attrNames (builtins.intersectAttrs env derivationArg);
+          overlappingNames = attrNames (builtins.intersectAttrs env' derivationArg);
           prettyPrint = lib.generators.toPretty { };
           makeError =
             name:
-            "  - ${name}: in `env`: ${prettyPrint env.${name}}; in derivation arguments: ${
+            "  - ${name}: in `env`: ${prettyPrint env'.${name}}; in derivation arguments: ${
                 prettyPrint derivationArg.${name}
               }";
           errors = lib.concatMapStringsSep "\n" makeError overlappingNames;
@@ -764,7 +766,7 @@ let
           assert assertMsg (isString v || isBool v || isInt v || isDerivation v)
             "The `env` attribute set can only contain derivation, string, boolean or integer attributes. The `${n}` attribute is of type ${builtins.typeOf v}.";
           v
-        ) env;
+        ) env';
 
       # Fixed-output derivations may not reference other paths, which means that
       # for a fixed-output derivation, the corresponding inputDerivation should
