@@ -1,0 +1,43 @@
+From 28b2866967b78b8aa2d4d8f875ae18c7873e4cfd Mon Sep 17 00:00:00 2001
+From: Peter Collingbourne <peter@pcc.me.uk>
+Date: Sat, 31 May 2025 17:55:01 -0700
+Subject: [PATCH] fix: install test binaries to correct paths
+
+With a non-default KDE_INSTALL_EXECROOTDIR (e.g. when building with Nix)
+the tests are unable to find these binaries, so install them in the
+correct location.
+---
+ tests/modeltests/CMakeLists.txt                 | 4 ++++
+ tests/test-clients/cpp-recursion/CMakeLists.txt | 4 ++++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/tests/modeltests/CMakeLists.txt b/tests/modeltests/CMakeLists.txt
+index 0f667a4..a8af447 100644
+--- a/tests/modeltests/CMakeLists.txt
++++ b/tests/modeltests/CMakeLists.txt
+@@ -5,6 +5,10 @@ add_library(
+     disassembly/fib.cpp
+ )
+ 
++set_target_properties(
++    fib PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/${KDE_INSTALL_EXECROOTDIR}/tests/modeltests"
++)
++
+ ecm_add_test(
+     tst_models.cpp
+     LINK_LIBRARIES
+diff --git a/tests/test-clients/cpp-recursion/CMakeLists.txt b/tests/test-clients/cpp-recursion/CMakeLists.txt
+index 53776b4..ef8fe2a 100644
+--- a/tests/test-clients/cpp-recursion/CMakeLists.txt
++++ b/tests/test-clients/cpp-recursion/CMakeLists.txt
+@@ -2,3 +2,7 @@ add_executable(
+     cpp-recursion
+     main.cpp
+ )
++
++set_target_properties(
++    cpp-recursion PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/${KDE_INSTALL_EXECROOTDIR}/tests/test-clients/cpp-recursion"
++)
+-- 
+2.49.0
+
