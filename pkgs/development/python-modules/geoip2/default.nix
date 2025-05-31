@@ -58,6 +58,8 @@ buildPythonPackage rec {
     ]
     ++ lib.optionals (pythonAtLeast "3.10") [ "test_request" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "GeoIP2 webservice client and database reader";
     homepage = "https://github.com/maxmind/GeoIP2-python";
