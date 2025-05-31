@@ -21768,6 +21768,12 @@
     githubId = 7309170;
     name = "Ryota Kameoka";
   };
+  ryota2357 = {
+    email = "contact@ryota2357.com";
+    github = "ryota2357";
+    githubId = 61523777;
+    name = "Ryota Otsuki";
+  };
   rypervenche = {
     email = "git@ryper.org";
     github = "rypervenche";

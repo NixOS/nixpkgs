@@ -12918,6 +12918,8 @@ self: super: with self; {
 
   pymupdf-fonts = callPackage ../development/python-modules/pymupdf-fonts { };
 
+  pymupdf4llm = callPackage ../development/python-modules/pymupdf4llm { };
+
   pymvglive = callPackage ../development/python-modules/pymvglive { };
 
   pymysensors = callPackage ../development/python-modules/pymysensors { };
