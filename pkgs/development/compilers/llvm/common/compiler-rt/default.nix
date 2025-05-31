@@ -23,6 +23,29 @@
   # are, so long as it provides some builtins.
   doFakeLibgcc ? stdenv.hostPlatform.isFreeBSD,
 
+  # Whether to build the set of __atomic_* routines that would typically
+  # be provided by libatomic in gcc environments. Although this has
+  # always been available, we only enable this by default on LLVM >= 13
+  # since that's when the standalone build became available; GCC's
+  # libatomic should be used in other cases.
+  withAtomics ?
+    (stdenv.hostPlatform.useLLVM or false)
+    && (
+      (lib.versionAtLeast release_version "13" && stdenv.cc.libc != null)
+      || !stdenv.hostPlatform.hasSharedLibraries
+    ),
+  # If withAtomics is enabled, setting this to true ships those routines
+  # in a separate DSO (aliased as libatomic to match gcc's) rather than
+  # making them part of builtins.a. Unless no dynamic linking is used at
+  # all, this is the correct setup as it ensures the locks are unique in
+  # memory.
+  withAtomicsLib ? lib.versionAtLeast release_version "13" && stdenv.hostPlatform.hasSharedLibraries,
+  # If withAtomics is enabled, this selects the pthreads-based
+  # implementation of the routines instead of the implementation
+  # using ad-hoc mutexes (which doesn't depend on libc at all).
+  # Use of pthreads helps code play better with sanitizers.
+  withAtomicsPthread ? lib.versionAtLeast release_version "19" && stdenv.cc.libc != null,
+
   # In recent releases, the compiler-rt build seems to produce
   # many `libclang_rt*` libraries, but not a single unified
   # `libcompiler_rt` library, at least under certain configurations. Some
@@ -243,6 +266,11 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (noSanitizers && lib.versionAtLeast release_version "19") [
       (lib.cmakeBool "COMPILER_RT_BUILD_CTX_PROFILE" false)
     ]
+    ++ lib.optionals withAtomics (
+      [ (lib.cmakeBool "COMPILER_RT_EXCLUDE_ATOMIC_BUILTIN" (!withAtomicsLib)) ]
+      ++ lib.optional withAtomicsLib (lib.cmakeBool "COMPILER_RT_BUILD_STANDALONE_LIBATOMIC" true)
+      ++ lib.optional withAtomicsPthread (lib.cmakeBool "COMPILER_RT_LIBATOMIC_USE_PTHREAD" true)
+    )
     ++ devExtraCmakeFlags;
 
   outputs = [
@@ -329,6 +357,11 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     + lib.optionalString forceLinkCompilerRt ''
       ln -s $out/lib/*/libclang_rt.builtins-*.a $out/lib/libcompiler_rt.a
+    ''
+    + lib.optionalString (withAtomics && withAtomicsLib) ''
+      ln -s $out/lib/*/libclang_rt.atomic-*.so $out/lib/libatomic.so
+      # create a link with the original soname as well, so it's found at runtime
+      ln -s $out/lib/*/libclang_rt.atomic-*.so $out/lib/
     '';
 
   meta = llvm_meta // {
