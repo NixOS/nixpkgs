@@ -6,6 +6,7 @@
   cffi,
   setuptools,
   hypothesis,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -31,7 +32,14 @@ buildPythonPackage rec {
 
   dependencies = lib.optionals isPyPy [ cffi ];
 
-  nativeCheckInputs = [ hypothesis ];
+  nativeCheckInputs = [
+    hypothesis
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    rm -r zstandard
+  '';
 
   pythonImportsCheck = [ "zstandard" ];
 
