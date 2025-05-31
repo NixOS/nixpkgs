@@ -63,25 +63,26 @@
 
 buildPythonPackage rec {
   pname = "chromadb";
-  version = "0.5.20";
+  version = "0.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chroma-core";
     repo = "chroma";
     tag = version;
-    hash = "sha256-DQHkgCHtrn9xi7Kp7TZ5NP1EtFtTH5QOvne9PUvxsWc=";
+    hash = "sha256-yvAX8buETsdPvMQmRK5+WFz4fVaGIdNlfhSadtHwU5U=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    name = "${pname}-${version}-vendor";
-    hash = "sha256-ZtCTg8qNCiqlH7RsZxaWUNAoazdgmXP2GtpjDpRdvbk=";
+    name = "${pname}-${version}";
+    hash = "sha256-lHRBXJa/OFNf4x7afEJw9XcuDveTBIy3XpQ3+19JXn4=";
   };
 
   pythonRelaxDeps = [
     "chroma-hnswlib"
     "orjson"
+    "tokenizers"
   ];
 
   build-system = [
@@ -166,9 +167,11 @@ buildPythonPackage rec {
     # Tests are flaky / timing sensitive
     "test_fastapi_server_token_authn_allows_when_it_should_allow"
     "test_fastapi_server_token_authn_rejects_when_it_should_reject"
+
     # Issue with event loop
     "test_http_client_bw_compatibility"
-    # Issue with httpx
+
+    # httpx ReadError
     "test_not_existing_collection_delete"
   ];
 
@@ -181,6 +184,17 @@ buildPythonPackage rec {
     "chromadb/test/property/test_cross_version_persist.py"
     "chromadb/test/stress/"
     "chromadb/test/test_api.py"
+
+    # httpx failures
+    "chromadb/test/api/test_delete_database.py"
+
+    # Cannot be loaded by pytest without path hacks (fixed in 1.0.0)
+    "chromadb/test/test_logservice.py"
+    "chromadb/test/proto/test_utils.py"
+    "chromadb/test/segment/distributed/test_protobuf_translation.py"
+
+    # Hypothesis FailedHealthCheck due to nested @given tests
+    "chromadb/test/cache/test_cache.py"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -198,17 +212,17 @@ buildPythonPackage rec {
         "([0-9].+)"
       ];
     };
-  };
 
-  meta = {
-    description = "AI-native open-source embedding database";
-    homepage = "https://github.com/chroma-core/chroma";
-    changelog = "https://github.com/chroma-core/chroma/releases/tag/${version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      fab
-      sarahec
-    ];
-    mainProgram = "chroma";
+    meta = {
+      description = "AI-native open-source embedding database";
+      homepage = "https://github.com/chroma-core/chroma";
+      changelog = "https://github.com/chroma-core/chroma/releases/tag/${version}";
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [
+        fab
+        sarahec
+      ];
+      mainProgram = "chroma";
+    };
   };
 }
