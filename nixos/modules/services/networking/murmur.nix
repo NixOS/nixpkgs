@@ -5,8 +5,6 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.murmur;
   forking = cfg.logFile != null;
@@ -14,48 +12,48 @@ let
     database=${cfg.stateDir}/murmur.sqlite
     dbDriver=QSQLITE
 
-    autobanAttempts=${toString cfg.autobanAttempts}
-    autobanTimeframe=${toString cfg.autobanTimeframe}
-    autobanTime=${toString cfg.autobanTime}
+    autobanAttempts=${lib.toString cfg.autobanAttempts}
+    autobanTimeframe=${lib.toString cfg.autobanTimeframe}
+    autobanTime=${lib.toString cfg.autobanTime}
 
-    logfile=${optionalString (cfg.logFile != null) cfg.logFile}
-    ${optionalString forking "pidfile=/run/murmur/murmurd.pid"}
+    logfile=${lib.optionalString (cfg.logFile != null) cfg.logFile}
+    ${lib.optionalString forking "pidfile=/run/murmur/murmurd.pid"}
 
     welcometext="${cfg.welcometext}"
-    port=${toString cfg.port}
+    port=${lib.toString cfg.port}
 
-    ${optionalString (cfg.hostName != "") "host=${cfg.hostName}"}
-    ${optionalString (cfg.password != "") "serverpassword=${cfg.password}"}
+    ${lib.optionalString (cfg.hostName != "") "host=${cfg.hostName}"}
+    ${lib.optionalString (cfg.password != "") "serverpassword=${cfg.password}"}
 
-    bandwidth=${toString cfg.bandwidth}
-    users=${toString cfg.users}
+    bandwidth=${lib.toString cfg.bandwidth}
+    users=${lib.toString cfg.users}
 
-    textmessagelength=${toString cfg.textMsgLength}
-    imagemessagelength=${toString cfg.imgMsgLength}
-    allowhtml=${boolToString cfg.allowHtml}
-    logdays=${toString cfg.logDays}
-    bonjour=${boolToString cfg.bonjour}
-    sendversion=${boolToString cfg.sendVersion}
+    textmessagelength=${lib.toString cfg.textMsgLength}
+    imagemessagelength=${lib.toString cfg.imgMsgLength}
+    allowhtml=${lib.boolToString cfg.allowHtml}
+    logdays=${lib.toString cfg.logDays}
+    bonjour=${lib.boolToString cfg.bonjour}
+    sendversion=${lib.boolToString cfg.sendVersion}
 
-    ${optionalString (cfg.registerName != "") "registerName=${cfg.registerName}"}
-    ${optionalString (cfg.registerPassword != "") "registerPassword=${cfg.registerPassword}"}
-    ${optionalString (cfg.registerUrl != "") "registerUrl=${cfg.registerUrl}"}
-    ${optionalString (cfg.registerHostname != "") "registerHostname=${cfg.registerHostname}"}
+    ${lib.optionalString (cfg.registerName != "") "registerName=${cfg.registerName}"}
+    ${lib.optionalString (cfg.registerPassword != "") "registerPassword=${cfg.registerPassword}"}
+    ${lib.optionalString (cfg.registerUrl != "") "registerUrl=${cfg.registerUrl}"}
+    ${lib.optionalString (cfg.registerHostname != "") "registerHostname=${cfg.registerHostname}"}
 
-    certrequired=${boolToString cfg.clientCertRequired}
-    ${optionalString (cfg.sslCert != "") "sslCert=${cfg.sslCert}"}
-    ${optionalString (cfg.sslKey != "") "sslKey=${cfg.sslKey}"}
-    ${optionalString (cfg.sslCa != "") "sslCA=${cfg.sslCa}"}
+    certrequired=${lib.boolToString cfg.clientCertRequired}
+    ${lib.optionalString (cfg.sslCert != "") "sslCert=${cfg.sslCert}"}
+    ${lib.optionalString (cfg.sslKey != "") "sslKey=${cfg.sslKey}"}
+    ${lib.optionalString (cfg.sslCa != "") "sslCA=${cfg.sslCa}"}
 
-    ${optionalString (cfg.dbus != null) "dbus=${cfg.dbus}"}
+    ${lib.optionalString (cfg.dbus != null) "dbus=${cfg.dbus}"}
 
     ${cfg.extraConfig}
   '';
 in
 {
   imports = [
-    (mkRenamedOptionModule [ "services" "murmur" "welcome" ] [ "services" "murmur" "welcometext" ])
-    (mkRemovedOptionModule [ "services" "murmur" "pidfile" ] "Hardcoded to /run/murmur/murmurd.pid now")
+    (lib.mkRenamedOptionModule [ "services" "murmur" "welcome" ] [ "services" "murmur" "welcometext" ])
+    (lib.mkRemovedOptionModule [ "services" "murmur" "pidfile" ] "Hardcoded to /run/murmur/murmurd.pid now")
   ];
 
   options = {
@@ -64,8 +62,8 @@ in
 
       openFirewall = lib.mkEnableOption "opening ports in the firewall for the Mumble server";
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "murmur";
         description = ''
           The name of an existing user to use to run the service.
@@ -73,8 +71,8 @@ in
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "murmur";
         description = ''
           The name of an existing group to use to run the service.
@@ -82,16 +80,16 @@ in
         '';
       };
 
-      stateDir = mkOption {
-        type = types.path;
+      stateDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/murmur";
         description = ''
           Directory to store data for the server.
         '';
       };
 
-      autobanAttempts = mkOption {
-        type = types.int;
+      autobanAttempts = lib.mkOption {
+        type = lib.types.int;
         default = 10;
         description = ''
           Number of attempts a client is allowed to make in
@@ -100,8 +98,8 @@ in
         '';
       };
 
-      autobanTimeframe = mkOption {
-        type = types.int;
+      autobanTimeframe = lib.mkOption {
+        type = lib.types.int;
         default = 120;
         description = ''
           Timeframe in which a client can connect without being banned
@@ -109,47 +107,47 @@ in
         '';
       };
 
-      autobanTime = mkOption {
-        type = types.int;
+      autobanTime = lib.mkOption {
+        type = lib.types.int;
         default = 300;
         description = "The amount of time an IP ban lasts (in seconds).";
       };
 
-      logFile = mkOption {
-        type = types.nullOr types.path;
+      logFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/var/log/murmur/murmurd.log";
         description = "Path to the log file for Murmur daemon. Empty means log to journald.";
       };
 
-      welcometext = mkOption {
-        type = types.str;
+      welcometext = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = "Welcome message for connected clients.";
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 64738;
         description = "Ports to bind to (UDP and TCP).";
       };
 
-      hostName = mkOption {
-        type = types.str;
+      hostName = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = "Host to bind to. Defaults binding on all addresses.";
       };
 
-      package = mkPackageOption pkgs "murmur" { };
+      package = lib.mkPackageOption pkgs "murmur" { };
 
-      password = mkOption {
-        type = types.str;
+      password = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = "Required password to join server, if specified.";
       };
 
-      bandwidth = mkOption {
-        type = types.int;
+      bandwidth = lib.mkOption {
+        type = lib.types.int;
         default = 72000;
         description = ''
           Maximum bandwidth (in bits per second) that clients may send
@@ -157,26 +155,26 @@ in
         '';
       };
 
-      users = mkOption {
-        type = types.int;
+      users = lib.mkOption {
+        type = lib.types.int;
         default = 100;
         description = "Maximum number of concurrent clients allowed.";
       };
 
-      textMsgLength = mkOption {
-        type = types.int;
+      textMsgLength = lib.mkOption {
+        type = lib.types.int;
         default = 5000;
         description = "Max length of text messages. Set 0 for no limit.";
       };
 
-      imgMsgLength = mkOption {
-        type = types.int;
+      imgMsgLength = lib.mkOption {
+        type = lib.types.int;
         default = 131072;
         description = "Max length of image messages. Set 0 for no limit.";
       };
 
-      allowHtml = mkOption {
-        type = types.bool;
+      allowHtml = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Allow HTML in client messages, comments, and channel
@@ -184,8 +182,8 @@ in
         '';
       };
 
-      logDays = mkOption {
-        type = types.int;
+      logDays = lib.mkOption {
+        type = lib.types.int;
         default = 31;
         description = ''
           How long to store RPC logs for in the database. Set 0 to
@@ -195,14 +193,14 @@ in
 
       bonjour = lib.mkEnableOption "Bonjour auto-discovery, which allows clients over your LAN to automatically discover Mumble servers";
 
-      sendVersion = mkOption {
-        type = types.bool;
+      sendVersion = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = "Send Murmur version in UDP response.";
       };
 
-      registerName = mkOption {
-        type = types.str;
+      registerName = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           Public server registration name, and also the name of the
@@ -211,8 +209,8 @@ in
         '';
       };
 
-      registerPassword = mkOption {
-        type = types.str;
+      registerPassword = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           Public server registry password, used authenticate your
@@ -221,14 +219,14 @@ in
         '';
       };
 
-      registerUrl = mkOption {
-        type = types.str;
+      registerUrl = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = "URL website for your server.";
       };
 
-      registerHostname = mkOption {
-        type = types.str;
+      registerHostname = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           DNS hostname where your server can be reached. This is only
@@ -240,34 +238,34 @@ in
 
       clientCertRequired = lib.mkEnableOption "requiring clients to authenticate via certificates";
 
-      sslCert = mkOption {
-        type = types.str;
+      sslCert = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = "Path to your SSL certificate.";
       };
 
-      sslKey = mkOption {
-        type = types.str;
+      sslKey = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = "Path to your SSL key.";
       };
 
-      sslCa = mkOption {
-        type = types.str;
+      sslCa = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = "Path to your SSL CA certificate.";
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = "Extra configuration to put into murmur.ini.";
       };
 
-      environmentFile = mkOption {
-        type = types.nullOr types.path;
+      environmentFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
-        example = literalExpression ''"''${config.services.murmur.stateDir}/murmurd.env"'';
+        example = lib.literalExpression ''"''${config.services.murmur.stateDir}/murmurd.env"'';
         description = ''
           Environment file as defined in {manpage}`systemd.exec(5)`.
 
@@ -290,8 +288,8 @@ in
         '';
       };
 
-      dbus = mkOption {
-        type = types.enum [
+      dbus = lib.mkOption {
+        type = lib.types.enum [
           null
           "session"
           "system"
@@ -302,19 +300,19 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    users.users.murmur = mkIf (cfg.user == "murmur") {
+  config = lib.mkIf cfg.enable {
+    users.users.murmur = lib.mkIf (cfg.user == "murmur") {
       description = "Murmur Service user";
       home = cfg.stateDir;
       createHome = true;
       uid = config.ids.uids.murmur;
       group = cfg.group;
     };
-    users.groups.murmur = mkIf (cfg.group == "murmur") {
+    users.groups.murmur = lib.mkIf (cfg.group == "murmur") {
       gid = config.ids.gids.murmur;
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.port ];
       allowedUDPPorts = [ cfg.port ];
     };
@@ -332,8 +330,8 @@ in
       serviceConfig = {
         # murmurd doesn't fork when logging to the console.
         Type = if forking then "forking" else "simple";
-        PIDFile = mkIf forking "/run/murmur/murmurd.pid";
-        EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
+        PIDFile = lib.mkIf forking "/run/murmur/murmurd.pid";
+        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         ExecStart = "${cfg.package}/bin/mumble-server -ini /run/murmur/murmurd.ini";
         Restart = "always";
         RuntimeDirectory = "murmur";
@@ -369,7 +367,7 @@ in
 
     # currently not included in upstream package, addition requested at
     # https://github.com/mumble-voip/mumble/issues/6078
-    services.dbus.packages = mkIf (cfg.dbus == "system") [
+    services.dbus.packages = lib.mkIf (cfg.dbus == "system") [
       (pkgs.writeTextFile {
         name = "murmur-dbus-policy";
         text = ''
@@ -411,19 +409,19 @@ in
           r /run/murmur/murmurd.ini,
           r ${configFile},
       ''
-      + optionalString (cfg.logFile != null) ''
+      + lib.optionalString (cfg.logFile != null) ''
         rw ${cfg.logFile},
       ''
-      + optionalString (cfg.sslCert != "") ''
+      + lib.optionalString (cfg.sslCert != "") ''
         r ${cfg.sslCert},
       ''
-      + optionalString (cfg.sslKey != "") ''
+      + lib.optionalString (cfg.sslKey != "") ''
         r ${cfg.sslKey},
       ''
-      + optionalString (cfg.sslCa != "") ''
+      + lib.optionalString (cfg.sslCa != "") ''
         r ${cfg.sslCa},
       ''
-      + optionalString (cfg.dbus != null) ''
+      + lib.optionalString (cfg.dbus != null) ''
         dbus bus=${cfg.dbus}
       ''
       + ''
