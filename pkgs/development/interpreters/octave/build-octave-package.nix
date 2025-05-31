@@ -9,6 +9,7 @@
   stdenv,
   config,
   octave,
+  callPackage,
   texinfo,
   computeRequiredOctavePackages,
   writeRequiredOctavePackagesHook,
@@ -74,7 +75,8 @@ let
     // passthru
     // {
       tests = {
-        testOctaveBuildEnv = octave.withPackages (ps: [ self ]);
+        testOctaveBuildEnv = octave.withPackages (os: [ self ]);
+        testOctavePkgTests = callPackage ./run-pkg-test.nix { } self;
       } // passthru.tests or { };
     };
 
