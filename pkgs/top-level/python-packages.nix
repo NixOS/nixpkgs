@@ -6865,6 +6865,10 @@ self: super: with self; {
 
   intelhex = callPackage ../development/python-modules/intelhex { };
 
+  intel-extension-for-pytorch =
+    callPackage ../development/python-modules/intel-extension-for-pytorch
+      { };
+
   intellifire4py = callPackage ../development/python-modules/intellifire4py { };
 
   intensity-normalization = callPackage ../development/python-modules/intensity-normalization { };
