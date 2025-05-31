@@ -52,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
       libxslt.bin
     ];
 
+  patches = lib.optional (ninjaRelease == "1.11") ./no-pipes.patch;
+
   postPatch = ''
     # write rebuild args to file after bootstrap
     substituteInPlace configure.py --replace "subprocess.check_call(rebuild_args)" "open('rebuild_args','w').write(rebuild_args[0])"
