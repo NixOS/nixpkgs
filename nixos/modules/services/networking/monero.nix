@@ -32,6 +32,10 @@ let
         restricted-rpc=1
       ''}
 
+      ${lib.optionalString (banlist != null) ''
+        ban-list=${banlist}
+      ''}
+
       limit-rate-up=${toString limits.upload}
       limit-rate-down=${toString limits.download}
       max-concurrency=${toString limits.threads}
@@ -61,6 +65,23 @@ in
         default = "/var/lib/monero";
         description = ''
           The directory where Monero stores its data files.
+        '';
+      };
+
+      banlist = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        description = ''
+          Path to a text file containing IPs to block.
+          Useful to prevent DDoS/deanonymization attacks.
+
+          https://github.com/monero-project/meta/issues/1124
+        '';
+        example = lib.literalExpression ''
+          builtins.fetchurl {
+            url = "https://raw.githubusercontent.com/rblaine95/monero-banlist/c6eb9413ddc777e7072d822f49923df0b2a94d88/block.txt";
+            hash = "";
+          };
         '';
       };
 
