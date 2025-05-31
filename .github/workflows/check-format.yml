@@ -6,6 +6,10 @@ on:
       - .github/workflows/check-format.yml
   pull_request_target:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 permissions: {}
 
 jobs:
