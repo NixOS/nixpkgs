@@ -16,6 +16,7 @@ in
       description = ''
         Enables improved Linux module drivers for Logitech driving wheels.
         This will replace the existing in-kernel hid-logitech modules.
+        It also sets the CONFIG_LOGIWHEELS_FF kernel config switch to true,
         Works most notably on the Logitech G25, G27, G29 and Driving Force (GT).
       '';
     };
@@ -25,6 +26,9 @@ in
     boot = {
       extraModulePackages = [ kernelPackages.new-lg4ff ];
       kernelModules = [ "hid-logitech-new" ];
+      kernelPatches.extraConfig = ''
+        LOGIWHEELS_FF y
+      '';
     };
   };
 
