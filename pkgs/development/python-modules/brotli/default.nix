@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "google";
-    repo = pname;
+    repo = "brotli";
     tag = "v${version}";
     hash = "sha256-U1vAupUthD5W0xvlOKdgm9MAVLqsVyZUaFdeLsDAbDM=";
     # .gitattributes is not correct or GitHub does not parse it correct and the archive is missing the test data

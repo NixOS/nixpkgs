@@ -204,6 +204,9 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "/usr/bin/sqlite3" "${lib.getExe sqlite}"
   '';
 
+  # over 3h in a normal build slot (2 cores
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = {
     description = "Photo management application";
     homepage = "https://www.digikam.org/";

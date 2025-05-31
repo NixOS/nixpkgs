@@ -6,11 +6,11 @@
 
   # build-system
   setuptools,
+  setuptools-scm,
 
   # dependencies
   anytree,
   cgen,
-  click,
   cloudpickle,
   codepy,
   llvmPackages,
@@ -22,6 +22,7 @@
   sympy,
 
   # tests
+  click,
   gcc,
   matplotlib,
   pytest-xdist,
@@ -31,26 +32,28 @@
 
 buildPythonPackage rec {
   pname = "devito";
-  version = "4.8.16";
+  version = "4.8.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "devitocodes";
     repo = "devito";
     tag = "v${version}";
-    hash = "sha256-yG4nJLnzIrITRMbtT/9UxDB0xvRiwnQMW13Z9HNQIq8=";
+    hash = "sha256-1aZSL23yNi/X9hnYKpIvgEOjEZtvPgTo5Pi5kKOWJhQ=";
   };
 
   pythonRemoveDeps = [ "pip" ];
 
   pythonRelaxDeps = true;
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     anytree
     cgen
-    click
     cloudpickle
     codepy
     multidict
@@ -62,6 +65,7 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   nativeCheckInputs = [
+    click
     gcc
     matplotlib
     pytest-xdist

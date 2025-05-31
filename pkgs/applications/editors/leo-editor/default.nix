@@ -10,13 +10,13 @@
 
 mkDerivation rec {
   pname = "leo-editor";
-  version = "6.8.3";
+  version = "6.8.4";
 
   src = fetchFromGitHub {
     owner = "leo-editor";
     repo = "leo-editor";
     rev = version;
-    sha256 = "sha256-nK6JMR4XrxZxvLOAsYjuyHQo/sob+OLSk/8U3zZ/Iyo=";
+    sha256 = "sha256-CSugdfkAMy6VFdNdSGR+iCrK/XhwseoiMQ4mfgu4F/E=";
   };
 
   dontBuild = true;
@@ -99,7 +99,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://leoeditor.com";
+    homepage = "https://leo-editor.github.io/leo-editor/";
     description = "A powerful folding editor";
     longDescription = "Leo is a PIM, IDE and outliner that accelerates the work flow of programmers, authors and web designers.";
     license = licenses.mit;

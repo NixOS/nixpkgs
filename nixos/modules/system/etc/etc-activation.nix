@@ -46,6 +46,10 @@
         "overlay"
       ];
 
+      system.requiredKernelConfig = with config.lib.kernelConfig; [
+        (isEnabled "EROFS_FS")
+      ];
+
       boot.initrd.systemd = {
         mounts = [
           {

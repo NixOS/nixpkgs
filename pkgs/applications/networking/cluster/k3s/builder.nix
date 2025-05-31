@@ -41,6 +41,7 @@ lib:
   ethtool,
   fetchFromGitHub,
   fetchgit,
+  fetchpatch,
   fetchurl,
   fetchzip,
   findutils,
@@ -69,7 +70,7 @@ lib:
   sqlite,
   stdenv,
   systemd,
-  util-linux,
+  util-linuxMinimal,
   yq-go,
   zstd,
 }:
@@ -331,6 +332,11 @@ let
       ldflags = versionldflags;
     }).overrideAttrs
       overrideContainerdAttrs;
+
+  # TODO (#409339): remove this patch. We had to add it to avoid a mass rebuild
+  # for the 25.05 release. Once the staging cycle referenced in the above PR completes,
+  # switch back to plain util-linuxMinimal.
+  k3sUtilLinux = util-linuxMinimal.withPatches;
 in
 buildGoModule rec {
   pname = "k3s";
@@ -377,7 +383,7 @@ buildGoModule rec {
     ipset
     bridge-utils
     ethtool
-    util-linux # kubelet wants 'nsenter' from util-linux: https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-705994388
+    k3sUtilLinux # kubelet wants 'nsenter' and 'mount' from util-linux: https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-705994388
     conntrack-tools
     runc
     bash

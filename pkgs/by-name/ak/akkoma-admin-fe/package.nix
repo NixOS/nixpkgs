@@ -12,6 +12,7 @@
   pkg-config,
   libsass,
   nix-update-script,
+  xcbuild,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     git
     libsass
-  ];
+  ] ++ lib.optional stdenv.isDarwin xcbuild;
 
   configurePhase = ''
     runHook preConfigure

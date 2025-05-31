@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sigma-cli";
-  version = "1.0.5";
+  version = "1.0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "sigma-cli";
     tag = "v${version}";
-    hash = "sha256-ywf7k2RsrAMUrDUv1nxTEixmP+NjtIyuBDhj4l9ZQCE=";
+    hash = "sha256-BINKEptzdfEJPJAfPoYWiDXdmVnG7NYVaQar7dz4Ptk=";
   };
 
   postPatch = ''
@@ -68,7 +68,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Sigma command line interface";
     homepage = "https://github.com/SigmaHQ/sigma-cli";
-    changelog = "https://github.com/SigmaHQ/sigma-cli/releases/tag/v${version}";
+    changelog = "https://github.com/SigmaHQ/sigma-cli/releases/tag/${src.tag}";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ fab ];
     mainProgram = "sigma";

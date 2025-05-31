@@ -3,17 +3,16 @@
   buildGoModule,
   fetchFromGitHub,
   testers,
-  go-jsonnet,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-jsonnet";
   version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "google";
-    repo = pname;
-    rev = "v${version}";
+    repo = finalAttrs.pname;
+    tag = "v${finalAttrs.version}";
     hash = "sha256-J92xNDpCidbiSsN6NveS6BX6Tx+qDQqkgm6pjk1wBTQ=";
   };
 
@@ -21,9 +20,14 @@ buildGoModule rec {
 
   subPackages = [ "cmd/jsonnet*" ];
 
+  ldflags = [
+    "-s"
+    "-w"
+  ];
+
   passthru.tests.version = testers.testVersion {
-    package = go-jsonnet;
-    version = "v${version}";
+    package = finalAttrs.finalPackage;
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
@@ -36,4 +40,4 @@ buildGoModule rec {
     ];
     mainProgram = "jsonnet";
   };
-}
+})

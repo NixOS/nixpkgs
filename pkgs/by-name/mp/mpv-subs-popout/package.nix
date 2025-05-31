@@ -8,13 +8,13 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "mpv-subs-popout";
-  version = "0.5.2";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "sdaqo";
     repo = "mpv-subs-popout";
     rev = "v${version}";
-    hash = "sha256-Z8IWiYKitkbEFdjca5G6P0I6j4Fg2fIHco6fD90UoBw=";
+    hash = "sha256-ELxI1pn1o+SQNtCKbZ0NFffqhJwRJzoeLSQHli9ZYwM=";
   };
 
   useFetchCargoVendor = true;

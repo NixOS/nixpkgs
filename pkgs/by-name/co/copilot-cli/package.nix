@@ -13,7 +13,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "aws";
-    repo = pname;
+    repo = "copilot-cli";
     rev = "v${version}";
     hash = "sha256-Oxt1+0z+woNPsFuCkj4t71/e21mHtoCd281BwbHCGc8=";
   };

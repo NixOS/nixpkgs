@@ -11,7 +11,6 @@
   click,
   prettytable,
   prompt-toolkit,
-  ptable,
   pygments,
   requests,
   rich,
@@ -50,7 +49,6 @@ buildPythonPackage rec {
     click
     prettytable
     prompt-toolkit
-    ptable
     pygments
     requests
     rich

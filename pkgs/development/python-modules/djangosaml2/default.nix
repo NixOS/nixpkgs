@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = {
     description = "Django SAML2 Service Provider based on pySAML2";
     homepage = "https://github.com/IdentityPython/djangosaml2";
-    changelog = "https://github.com/IdentityPython/djangosaml2/blob/${src.tag}/CHANGES";
+    changelog = "https://github.com/IdentityPython/djangosaml2/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ melvyn2 ];
   };

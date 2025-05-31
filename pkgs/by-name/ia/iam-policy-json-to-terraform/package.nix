@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "flosell";
-    repo = pname;
+    repo = "iam-policy-json-to-terraform";
     rev = version;
     sha256 = "sha256-xIhe+Mnvog+xRu1qMA7yxS1pCs91cr5EcaJroO+0zJ8=";
   };

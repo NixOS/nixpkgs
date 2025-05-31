@@ -20,11 +20,12 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
-          filter: blob:none
+          filter: tree:0
+          path: trusted
 
       - name: Check cherry-picks
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          ./maintainers/scripts/check-cherry-picks.sh "$BASE_SHA" "$HEAD_SHA"
+          ./trusted/ci/check-cherry-picks.sh "$BASE_SHA" "$HEAD_SHA"

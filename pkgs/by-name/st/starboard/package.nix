@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
-    repo = pname;
+    repo = "starboard";
     rev = "v${version}";
     hash = "sha256-mCYnJ1SFa3OuYQlPWTq9vWV9s/jtaQ6dOousV/UNR18=";
     # populate values that require us to use git. By doing this in postFetch we

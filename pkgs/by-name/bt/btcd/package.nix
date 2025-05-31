@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "btcsuite";
-    repo = pname;
+    repo = "btcd";
     rev = "v${version}";
     hash = "sha256-83eiVYXpyiGgLmYxj3rFk4CHG7F9UQ3vk1ZHm64Cm4A=";
   };

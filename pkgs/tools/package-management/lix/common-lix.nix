@@ -254,7 +254,10 @@ stdenv.mkDerivation (finalAttrs: {
       # Enable LTO, since it improves eval performance a fair amount
       # LTO is disabled on:
       # - static builds (strange linkage errors)
-      (lib.mesonBool "b_lto" (!stdenv.hostPlatform.isStatic && (isLLVMOnly || stdenv.cc.isGNU)))
+      # - darwin builds (install test failures. see fj#568 & fj#832)
+      (lib.mesonBool "b_lto" (
+        !stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isDarwin && (isLLVMOnly || stdenv.cc.isGNU)
+      ))
       (lib.mesonEnable "gc" true)
       (lib.mesonBool "enable-tests" true)
       (lib.mesonBool "enable-docs" enableDocumentation)

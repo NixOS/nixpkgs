@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "iterfzf";
-  version = "1.6.0.60.3";
+  version = "1.8.0.62.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "dahlia";
     repo = "iterfzf";
     tag = version;
-    hash = "sha256-M6ri90GNHOmr0HtQ/tGxqpG7f+D5rsH/SAlbaVtmTwU=";
+    hash = "sha256-eLgF+9p+sqxWR1VkSoeL0NPDMamzUYbql4gMeG8fyNY=";
   };
 
   postPatch = ''
@@ -53,11 +53,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "iterfzf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pythonic interface to fzf, a CLI fuzzy finder";
     homepage = "https://github.com/dahlia/iterfzf";
     changelog = "https://github.com/dahlia/iterfzf/releases/tag/${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
+    platforms = lib.platforms.unix;
   };
 }

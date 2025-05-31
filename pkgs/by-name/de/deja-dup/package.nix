@@ -22,19 +22,20 @@
   json-glib,
   duplicity,
   rclone,
+  restic,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deja-dup";
-  version = "47.0";
+  version = "48.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "deja-dup";
     rev = finalAttrs.version;
-    hash = "sha256-MjZ+NkNAzwEnC9R48Q5Cb3+c5jM7ooOv7+5TQ6Xo4LM=";
+    hash = "sha256-g6bGOlpiEMJ9d+xe2GJyTBWAuGlY9EZTlJaYhB/5Ldw=";
   };
 
   patches = [
@@ -68,6 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Dduplicity_command=${lib.getExe duplicity}"
     "-Drclone_command=${lib.getExe rclone}"
+    "-Denable_restic=true"
+    "-Drestic_command=${lib.getExe restic}"
   ];
 
   preFixup = ''

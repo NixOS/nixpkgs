@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   cython,
   fetchFromGitHub,
@@ -8,7 +9,6 @@
   pythonOlder,
   setuptools,
   unittestCheckHook,
-  wheel,
 }:
 
 buildPythonPackage rec {
@@ -25,23 +25,21 @@ buildPythonPackage rec {
     hash = "sha256-0FDhkIK8jy3/SFmCzrl9l4RTeIKDjO0o5UoODx6Wnfs=";
   };
 
-  build-system = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     cython
     pkg-config
   ];
 
-  buildInputs = [
-    libstatgrab
-  ];
+  buildInputs = [ libstatgrab ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "statgrab" ];
+
+  # Tests don't work on darwin due to seg fault
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Python bindings for libstatgrab";

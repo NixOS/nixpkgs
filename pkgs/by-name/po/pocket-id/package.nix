@@ -3,36 +3,38 @@
   fetchFromGitHub,
   buildGoModule,
   buildNpmPackage,
-  makeWrapper,
-  nodejs,
-  stdenvNoCC,
   nixosTests,
   nix-update-script,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "pocket-id";
-  version = "0.53.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3lW4jPh9YElgpBcIooGQ2zZbNwC/rz7CABsp7ScTxyQ=";
+    hash = "sha256-J/s8wpKAU7w8Djtd7rtamCzg/7176W0ybSoAB/vHOjs=";
   };
 
-  backend = buildGoModule {
-    pname = "pocket-id-backend";
-    inherit (finalAttrs) version src;
+  sourceRoot = "${finalAttrs.src.name}/backend";
 
-    sourceRoot = "${finalAttrs.src.name}/backend";
+  vendorHash = "sha256-jLwuBYiFZhUDIvG5uk78vXmo+wuqkFmyC5lAUZ3vUxU=";
 
-    vendorHash = "sha256-wOrYIhOrUxz22Ay2A26FTrPJA8YRgdRihP78Ls8VgNM=";
+  env.CGO_ENABLED = 0;
+  ldflags = [
+    "-X github.com/pocket-id/pocket-id/backend/internal/common.Version=${finalAttrs.version}"
+    "-buildid=${finalAttrs.version}"
+  ];
 
-    preFixup = ''
-      mv $out/bin/cmd $out/bin/pocket-id-backend
-    '';
-  };
+  preBuild = ''
+    cp -r ${finalAttrs.frontend}/lib/pocket-id-frontend/dist frontend/dist
+  '';
+
+  preFixup = ''
+    mv $out/bin/cmd $out/bin/pocket-id
+  '';
 
   frontend = buildNpmPackage {
     pname = "pocket-id-frontend";
@@ -40,47 +42,20 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     sourceRoot = "${finalAttrs.src.name}/frontend";
 
-    npmDepsHash = "sha256-UjYAndueuJU07unbNFoTQHqRFkdyaBKHyT4k3Ex4pg0=";
+    npmDepsHash = "sha256-ykoyJtnqFK1fK60SbzrL7nhRcKYa3qYdHf9kFOC3EwE=";
     npmFlags = [ "--legacy-peer-deps" ];
 
-    nativeBuildInputs = [
-      makeWrapper
-    ];
+    env.BUILD_OUTPUT_PATH = "dist";
 
     installPhase = ''
       runHook preInstall
 
-      # even though vite build creates most of the minified js files,
-      # it still needs a few packages from node_modules, try to strip that
-      npm prune --omit=dev --omit=optional $npmFlags
-      # larger seemingly unused packages
-      rm -r node_modules/{lucide-svelte,jiti,@swc,.bin}
-      # unused file types
-      for pattern in '*.map' '*.map.js' '*.ts'; do
-        find . -type f -name "$pattern" -exec rm {} +
-      done
-
-      mkdir -p $out/{bin,lib/pocket-id-frontend}
-      cp -r build $out/lib/pocket-id-frontend/dist
-      cp -r node_modules $out/lib/pocket-id-frontend/node_modules
-      makeWrapper ${lib.getExe nodejs} $out/bin/pocket-id-frontend \
-        --add-flags $out/lib/pocket-id-frontend/dist/index.js
+      mkdir -p $out/lib/pocket-id-frontend
+      cp -r dist $out/lib/pocket-id-frontend/dist
 
       runHook postInstall
     '';
   };
-
-  dontUnpack = true;
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/bin
-    ln -s ${finalAttrs.backend}/bin/pocket-id-backend $out/bin/pocket-id-backend
-    ln -s ${finalAttrs.frontend}/bin/pocket-id-frontend $out/bin/pocket-id-frontend
-
-    runHook postInstall
-  '';
 
   passthru = {
     tests = {
@@ -88,8 +63,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     };
     updateScript = nix-update-script {
       extraArgs = [
-        "--subpackage"
-        "backend"
         "--subpackage"
         "frontend"
       ];
@@ -101,6 +74,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://pocket-id.org";
     changelog = "https://github.com/pocket-id/pocket-id/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
+    mainProgram = "pocket-id";
     maintainers = with lib.maintainers; [
       gepbird
       marcusramberg

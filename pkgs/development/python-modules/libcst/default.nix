@@ -10,7 +10,9 @@
   libiconv,
   pytestCheckHook,
   python,
+  pythonOlder,
   pyyaml,
+  pyyaml-ft,
   rustPlatform,
   rustc,
   setuptools-rust,
@@ -20,20 +22,20 @@
 
 buildPythonPackage rec {
   pname = "libcst";
-  version = "1.7.0";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Instagram";
     repo = "LibCST";
     tag = "v${version}";
-    hash = "sha256-KqiB1LieRJJ34kJgIlqyMKCzO7iDen8j9+s0ZmrHe+c=";
+    hash = "sha256-mHYcbw3BfvntKHadObYow8H/2f0LqpfSTbKju0CKhx4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-EPS506x8KUFAbZ47ZWtH1q0ndXutM2fOqcsYpXRc0+c=";
+    hash = "sha256-K8hug7JeLPIvrqgVaONKfixu8XRvn+pnqS0fHV+nTqg=";
   };
 
   cargoRoot = "native";
@@ -52,7 +54,7 @@ buildPythonPackage rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   dependencies = [
-    pyyaml
+    (if pythonOlder "3.13" then pyyaml else pyyaml-ft)
   ];
 
   nativeCheckInputs = [

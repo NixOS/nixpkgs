@@ -24,6 +24,7 @@
   sqlite,
   xz,
   zlib,
+  zstd,
 
   # platform-specific dependencies
   bashNonInteractive,
@@ -71,6 +72,7 @@
   enableFramework ? false,
   noldconfigPatch ? ./. + "/${sourceVersion.major}.${sourceVersion.minor}/no-ldconfig.patch",
   enableGIL ? true,
+  enableDebug ? false,
 
   # pgo (not reproducible) + -fno-semantic-interposition
   # https://docs.python.org/3/using/configure.html#cmdoption-enable-optimizations
@@ -196,6 +198,8 @@ let
     ++ optionals (!stdenv.hostPlatform.isDarwin) [
       autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
       autoreconfHook
+    ]
+    ++ optionals (!stdenv.hostPlatform.isDarwin || passthru.pythonAtLeast "3.14") [
       pkg-config
     ]
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
@@ -226,6 +230,9 @@ let
       sqlite
       xz
       zlib
+    ]
+    ++ optionals (passthru.pythonAtLeast "3.14") [
+      zstd
     ]
     ++ optionals bluezSupport [
       bluez
@@ -463,6 +470,9 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optionals enableOptimizations [
       "--enable-optimizations"
     ]
+    ++ optionals enableDebug [
+      "--with-pydebug"
+    ]
     ++ optionals (sqlite != null) [
       "--enable-loadable-sqlite-extensions"
     ]
@@ -502,6 +512,7 @@ stdenv.mkDerivation (finalAttrs: {
       "ac_cv_func_lchmod=no"
     ]
     ++ optionals static [
+      "--disable-test-modules"
       "LDFLAGS=-static"
       "MODULE_BUILDTYPE=static"
     ]
@@ -593,7 +604,11 @@ stdenv.mkDerivation (finalAttrs: {
           echo $item
         fi
       done
+    ''
+    + lib.optionalString (!static) ''
       touch $out/lib/${libPrefix}/test/__init__.py
+    ''
+    + ''
 
       # Determinism: Windows installers were not deterministic.
       # We're also not interested in building Windows installers.

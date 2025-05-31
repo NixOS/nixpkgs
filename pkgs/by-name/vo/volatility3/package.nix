@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "volatility3";
-  version = "2.11.0";
+  version = "2.26.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "volatilityfoundation";
     repo = "volatility3";
     tag = "v${version}";
-    hash = "sha256-X2cTZaEUQm7bE0k2ve4vKj0k1N6zeLXfDzhWm32diVY=";
+    hash = "sha256-O12w1NM2Hdp3UeeHpvibYfqLlXdQ+baqWX1qrr6SxSE=";
   };
 
   build-system = with python3.pkgs; [
@@ -42,7 +42,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Volatile memory extraction frameworks";
     homepage = "https://www.volatilityfoundation.org/";
-    changelog = "https://github.com/volatilityfoundation/volatility3/releases/tag/v${version}";
+    changelog = "https://github.com/volatilityfoundation/volatility3/releases/tag/${src.tag}";
     license = {
       # Volatility Software License 1.0
       free = false;

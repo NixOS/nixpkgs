@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "powerstation";
-  version = "0.4.3";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "ShadowBlip";
     repo = "PowerStation";
     tag = "v${version}";
-    hash = "sha256-2NCUDR85LAWGYrxruHLSipgX41N/jgy/P34qfm+bOb4=";
+    hash = "sha256-m8o2sg0qsn+QyPWiOFDIYgfNb/gT5UO6w6Fjo0sg2u0=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-4ACSwxGSPEdbGeVL44SN4qCd7ActL1T0xKuebPvTHPk=";
+  cargoHash = "sha256-/C9BJBKhkBpvxMonbctmdRa697u3SgGQHyzTbP/dt78=";
 
   nativeBuildInputs = [
     cmake

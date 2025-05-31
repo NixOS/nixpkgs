@@ -126,7 +126,7 @@ let
       "zstd" = "zstd --no-progress --threads=$NIX_BUILD_CORES -${toString compression.level}";
       "xz" = "xz --keep --verbose --threads=$NIX_BUILD_CORES -${toString compression.level}";
       "zstd-seekable" =
-        "zeekstd --quiet --max-frame-size 2M --compression-level ${toString compression.level}";
+        "zeekstd --no-progress --frame-size 2M --compression-level ${toString compression.level}";
     }
     ."${compression.algorithm}";
 in

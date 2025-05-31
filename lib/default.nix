@@ -309,6 +309,7 @@ let
         stringLength
         substring
         isString
+        replaceString
         replaceStrings
         intersperse
         concatStringsSep
@@ -345,6 +346,7 @@ let
         upperChars
         toLower
         toUpper
+        toCamelCase
         toSentenceCase
         addContextFrom
         splitString

@@ -9,6 +9,7 @@
   stdenv,
   cmake,
   ninja,
+  cubeb,
 }:
 
 {
@@ -162,5 +163,16 @@
       license = lib.licenses.mit;
       platforms = lib.platforms.linux;
     };
+  });
+
+  cubeb = cubeb.overrideAttrs (old: {
+    pname = "cubeb-patched-for-duckstation";
+    patches = (old.patches or [ ]) ++ [
+      (fetchpatch {
+        url = "https://github.com/PCSX2/pcsx2/commit/430e31abe4a9e09567cb542f1416b011bb9b6ef9.patch";
+        stripLen = 2;
+        hash = "sha256-bbH0c1X3lMeX6hfNKObhcq5xraFpicFV3mODQGYudvQ=";
+      })
+    ];
   });
 }

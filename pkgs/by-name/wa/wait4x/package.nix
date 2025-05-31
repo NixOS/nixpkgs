@@ -5,19 +5,19 @@
 }:
 let
   pname = "wait4x";
-  version = "3.3.0";
+  version = "3.3.1";
 in
 buildGoModule {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = "wait4x";
-    repo = pname;
+    repo = "wait4x";
     rev = "v${version}";
-    hash = "sha256-QmuBoUHOZf6VKrh00BXFxT2e+gJL1gyv9BnhGaWVAD0=";
+    hash = "sha256-3s+ug4KqFv1P55eqNfAB2jbSPVzySxlHmkDMuuVlJcQ=";
   };
 
-  vendorHash = "sha256-EqJDw88BqKfIUE/YoDNoI249covv5bzEcx9ykfUkik8=";
+  vendorHash = "sha256-dN7R2d7roA6H9wIz2sBaWctD8K6M8nbQbwPc3t/7rlk=";
 
   # Tests make network access
   doCheck = false;

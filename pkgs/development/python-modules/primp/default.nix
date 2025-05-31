@@ -72,8 +72,7 @@ buildPythonPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-iPf25DMGNHrWYByNTylB6bPpLfzs0ADwgkjfhVxiiXA=";
   };
 

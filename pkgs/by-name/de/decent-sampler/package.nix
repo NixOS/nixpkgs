@@ -14,7 +14,7 @@
 
 let
   pname = "decent-sampler";
-  version = "1.12.5";
+  version = "1.12.14";
 
   icon = fetchurl {
     url = "https://www.decentsamples.com/wp-content/uploads/2018/09/cropped-Favicon_512x512.png";
@@ -26,8 +26,8 @@ let
 
     src = fetchzip {
       # dropbox links: https://www.dropbox.com/sh/dwyry6xpy5uut07/AABBJ84bjTTSQWzXGG5TOQpfa\
-      url = "https://www.dropbox.com/scl/fo/a0i0udw7ggfwnjoi05hh3/APOyrCpI3CaO46Gq1IFUv-A/Decent_Sampler-1.12.5-Linux-Static-x86_64.tar.gz?rlkey=orvjprslmwn0dkfs0ncx6nxnm&dl=0";
-      hash = "sha256-jr2bl8nQhfWdpZZGQU6T6TDKSW6SZpweJ2GiQz7n9Ug=";
+      url = "https://www.dropbox.com/scl/fo/a0i0udw7ggfwnjoi05hh3/AFAQQGWSQ-kxJv5JggeMTrE/Decent_Sampler-1.12.14-Linux-Static-x86_64.tar.gz?rlkey=orvjprslmwn0dkfs0ncx6nxnm&dl=0";
+      hash = "sha256-n9WTR11chK9oCz84uYhymov1axTVRr4OLo6W0cRpdWc=";
     };
 
     nativeBuildInputs = [ copyDesktopItems ];
@@ -91,6 +91,7 @@ buildFHSEnv {
     # It claims to be free but we currently cannot find any license
     # that it is released under.
     license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [
       adam248

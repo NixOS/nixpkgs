@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "SoMuchForSubtlety";
-    repo = pname;
+    repo = "f1viewer";
     rev = "v${version}";
     sha256 = "sha256-jXC2dENXuqicNQqTHyZKsjibDvjta/npQmf3+uivjX0=";
   };

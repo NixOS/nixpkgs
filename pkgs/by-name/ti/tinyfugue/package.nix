@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./001-darwin-fixes.patch
+    ./fix-build.patch
   ];
 
   configureFlags = optional (!sslSupport) "--disable-ssl";

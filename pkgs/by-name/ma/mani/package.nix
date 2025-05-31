@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "mani";
-  version = "0.30.1";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "alajmo";
     repo = "mani";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-BD9NpWaaBBVHWJesXsJJmFV51n+JOFGtYOH73PvSxv4=";
+    sha256 = "sha256-sV3yxtLlOTtCCj0kNstJ07cvI+B+rL4QNPQKGo98V6A=";
   };
 
   vendorHash = "sha256-PnQocOtnIBl0+5mDG7irEqGjAnzJ9Wk/fA4NW/nU+zw=";

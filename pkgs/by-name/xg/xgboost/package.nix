@@ -48,14 +48,14 @@ effectiveStdenv.mkDerivation rec {
   #   in \
   #   rWrapper.override{ packages = [ xgb ]; }"
   pname = lib.optionalString rLibrary "r-" + pnameBase;
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "dmlc";
     repo = pnameBase;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-OwsZ1RzVi6ba+XJqFbIW1Rmqu5OVttBfcpDe84gmQxI=";
+    hash = "sha256-sa8Ea/3ypHqnjn0Rl5dgqGejh6921T6JVHXo8y5gp90=";
   };
 
   nativeBuildInputs =

@@ -9,13 +9,13 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "nanosaur";
   version = "1.4.4-unstable-2024-04-06";
 
   src = fetchFromGitHub {
     owner = "jorio";
-    repo = pname;
+    repo = "nanosaur";
     rev = "4f2612f81697a0852f63fa2ea1ac80892f8a5a9c";
     hash = "sha256-MQmlZbsQSREAIqKXyIIOF6Psa1rqY/iUsBHpeKGekBI=";
     fetchSubmodules = true;

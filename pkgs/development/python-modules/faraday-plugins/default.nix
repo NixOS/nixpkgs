@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "faraday-plugins";
-  version = "1.24.0";
+  version = "1.24.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "infobyte";
     repo = "faraday_plugins";
     tag = version;
-    hash = "sha256-GADunGRBcVTnzYzBgXQH2IkDXHRSJiPsdeRBEdJJs0s=";
+    hash = "sha256-CTBEerFfqE9zRTe6l7IDKXOP+WVEPYdNMuMk2PBkkdw=";
   };
 
   postPatch = ''
@@ -76,7 +76,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Security tools report parsers for Faraday";
     homepage = "https://github.com/infobyte/faraday_plugins";
-    changelog = "https://github.com/infobyte/faraday_plugins/releases/tag/${version}";
+    changelog = "https://github.com/infobyte/faraday_plugins/releases/tag/${src.tag}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
     mainProgram = "faraday-plugins";

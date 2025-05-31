@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "kool";
-  version = "3.4.0";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "kool-dev";
     repo = "kool";
     rev = version;
-    hash = "sha256-UVdkymG9Ni83NhGRAXalJiLbpn3xzNl0quew+vDfyec=";
+    hash = "sha256-iB/9owaBNQVzdA4edrx0zl+COs7yVLs61Mij5kfjEhg=";
   };
 
-  vendorHash = "sha256-3PLSFPL0S18Bb6CB4UOgtRcUMbePHweDlrpAIhTho7M=";
+  vendorHash = "sha256-IqUkIf0uk4iUTedTO5xRzjmJwHS+p6apo4E0WEEU6cc=";
 
   ldflags = [
     "-s"

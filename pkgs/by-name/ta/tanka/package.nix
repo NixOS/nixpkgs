@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "grafana";
-    repo = pname;
+    repo = "tanka";
     rev = "v${version}";
     sha256 = "sha256-+875PMDATNarFhnAhpi9QxBNgV9irrjRWd/hHsqlH+c=";
   };

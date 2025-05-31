@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "deepmap";
-    repo = pname;
+    repo = "oapi-codegen";
     tag = "v${version}";
     hash = "sha256-21VhHSyfF+NHkXlr2svjwBNZmfS1O448POBP9XUQxak=";
   };

@@ -118,7 +118,13 @@ pkgs.stdenv.mkDerivation {
     runHook postBuild
   '';
 
-  installPhase = "mv gulpdist $out";
+  installPhase = ''
+    runHook preInstall
+
+    mv gulpdist $out
+
+    runHook postInstall
+  '';
 }
 ```
 

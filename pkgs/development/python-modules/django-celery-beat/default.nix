@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "django-celery-beat";
-  version = "2.8.0";
+  version = "2.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "celery";
     repo = "django-celery-beat";
     tag = "v${version}";
-    hash = "sha256-PWTWFcmjeY0T6dmLzMDN3gqgJaYx1kWy1VJKlWxY+io=";
+    hash = "sha256-pakOpch5r2ug0UDSqEU34qr4Tz1/mkuFiHW+IOUuGcc=";
   };
 
   pythonRelaxDeps = [ "django" ];

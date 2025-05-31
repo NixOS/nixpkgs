@@ -15,13 +15,13 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "glpi-agent";
-  version = "1.11";
+  version = "1.14";
 
   src = fetchFromGitHub {
     owner = "glpi-project";
     repo = "glpi-agent";
     tag = version;
-    hash = "sha256-WdQ+/ZnMCRqLZK64oJNoR9dtMPq+CghsA8NUwt3EpjA=";
+    hash = "sha256-6q+JcTFZlZjtMaQKUvCwE9Sjw9662ZXl78kha0tEFv4=";
   };
 
   postPatch = ''
@@ -38,38 +38,38 @@ perlPackages.buildPerlPackage rec {
     with perlPackages;
     [
       CGI
+      CpanelJSONXS
+      CryptDES
       DataStructureUtil
+      DataUUID
+      DateTime
+      DigestSHA1
       FileCopyRecursive
+      HTTPDaemon
       HTTPProxy
       HTTPServerSimple
       HTTPServerSimpleAuthen
       IOCapture
+      IOCompress
       IOSocketSSL
       IPCRun
       JSON
       LWPProtocolHttps
       ModuleInstall
+      NetPing
       NetSNMP
+      ParallelForkManager
+      ParseEDID
       TestCompile
       TestDeep
       TestException
       TestMockModule
       TestMockObject
       TestNoWarnings
-      CpanelJSONXS
-      XMLLibXML
-      NetPing
-      ParallelForkManager
-      DigestSHA1
-      CryptDES
-      FileCopyRecursive
-      URIEscapeXS
-      DateTime
-      DataUUID
       URI
-      HTTPDaemon
+      URIEscapeXS
+      XMLLibXML
       YAML
-      IOCompress
     ]
   );
 

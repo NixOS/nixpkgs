@@ -9,7 +9,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "gptscript-ai";
-    repo = pname;
+    repo = "gptscript";
     tag = "v${version}";
     hash = "sha256-9wyDcvY5JCjtvx6XtvHwOsZLCiN1fRn0wBGaIaw2iRQ=";
   };

@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "kannibalox";
-    repo = pname;
+    repo = "pyrosimple";
     tag = "v${version}";
     hash = "sha256-qER73B6wuRczwV23A+NwfDL4oymvSwmauA0uf2AE+kY=";
   };

@@ -4,16 +4,15 @@
   fetchFromGitHub,
   kernel,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "xone";
-  version = "0.3-unstable-2024-12-23";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "dlundqvist";
     repo = "xone";
-    rev = "6b9d59aed71f6de543c481c33df4705d4a590a31";
-    hash = "sha256-MpxP2cb0KEPKaarjfX/yCbkxIFTwwEwVpTMhFcis+A4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qMZlQgAe5vB5zfuhyK7EBxIwfhnC5MvnF/qr3BGnDms=";
   };
 
   setSourceRoot = ''
@@ -43,6 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
       fazzi
     ];
     platforms = platforms.linux;
-    broken = kernel.kernelOlder "5.11";
+    broken = kernel.kernelOlder "6";
   };
 })

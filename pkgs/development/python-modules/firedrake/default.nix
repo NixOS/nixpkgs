@@ -140,8 +140,9 @@ buildPythonPackage rec {
       # required by script spydump
       matplotlib
     ]
-    ++ pytools.optional-dependencies.siphash
-    ++ lib.optional stdenv.hostPlatform.isDarwin islpy;
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      islpy
+    ];
 
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -add_rpath ${libsupermesh}/${python.sitePackages}/libsupermesh/lib \

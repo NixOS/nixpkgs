@@ -66,13 +66,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "syslog-ng";
-  version = "4.8.2";
+  version = "4.8.3";
 
   src = fetchFromGitHub {
     owner = "syslog-ng";
     repo = "syslog-ng";
     rev = "syslog-ng-${finalAttrs.version}";
-    hash = "sha256-iWH64e5LBEiIy/A5N8pfOkjbn9wbmAswk2NhGyJ63f8=";
+    hash = "sha256-eYcDdNbUYDsM4k/BDABj/8aV7tZty52XzZ4nqXRC39M=";
     fetchSubmodules = true;
   };
   nativeBuildInputs = [

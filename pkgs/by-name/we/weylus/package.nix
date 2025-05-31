@@ -23,13 +23,13 @@
   libxkbcommon,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "weylus";
   version = "unstable-2025-02-24";
 
   src = fetchFromGitHub {
     owner = "H-M-H";
-    repo = pname;
+    repo = "weylus";
     rev = "5202806798ccca67c24da52ba51ee50b973b7089";
     sha256 = "sha256-lx1ZVp5DkQiL9/vw6PAZ34Lge+K8dfEVh6vLnCUNf7M=";
   };
@@ -73,12 +73,8 @@ rustPlatform.buildRustPackage rec {
       libtool
     ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "autopilot-0.4.0" = "sha256-1DRuhAAXaIADUmXlDVr8UNbI/Ab2PYdrx9Qh0j9rTX8=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-dLhlYOrLjoBSRGDJB0qTEIb+oGnp9X+ADHddpYITdl8=";
 
   cargoBuildFlags = [ "--features=ffmpeg-system" ];
   cargoTestFlags = [ "--features=ffmpeg-system" ];

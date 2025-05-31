@@ -20,15 +20,15 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "wash-cli";
-  version = "0.29.2";
+  version = "0.39.0";
 
   src = fetchCrate {
     inherit version pname;
-    hash = "sha256-A66KSDYFbByguhnlzzU5nf8pE3lhnYQjI3h73SKB2Zo=";
+    hash = "sha256-qOxYBhwkcn4g1cUBHuF0AoecpxN4ukgTjBnzVhWtw7A=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-m8NkYqfWRNJn+1Qym1C5ZwKhvXrwFd01TSpVigYwsJ8=";
+  cargoHash = "sha256-dPHzRZh5jBxbPt+1a9wVbsBclAkfrcAXhpZgTw7e4Qo=";
 
   nativeBuildInputs = [ pkg-config ];
 

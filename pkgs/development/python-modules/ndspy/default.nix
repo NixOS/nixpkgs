@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "RoadrunnerWMC";
-    repo = pname;
+    repo = "ndspy";
     tag = "v${version}";
     hash = "sha256-PQONVEuh5Fg2LHr4gq0XTGcOpps/s9FSgoyDn4BCcik=";
   };

@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "haileys";
-    repo = pname;
+    repo = "tangara-companion";
     tag = "v${version}";
     hash = "sha256-pTE+xlXWIOOt1oiKosnbXTCLYoAqP3CfXA283a//Ds0=";
   };
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
+      name = "tangara-companion";
       desktopName = "Tangara Companion";
       comment = meta.description;
       type = "Application";

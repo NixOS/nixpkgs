@@ -68,7 +68,7 @@ def test_build_flake(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> 
             "nix-command flakes",
             "build",
             "--print-out-paths",
-            ".#nixosConfigurations.hostname.config.system.build.toplevel",
+            '.#nixosConfigurations."hostname".config.system.build.toplevel',
             "--no-link",
             "--nix-flag",
             "foo",
@@ -78,7 +78,7 @@ def test_build_flake(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> 
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
-@patch(get_qualified_name(n.uuid4, n), autospec=True)
+@patch("uuid.uuid4", autospec=True)
 def test_build_remote(
     mock_uuid4: Mock, mock_run: Mock, monkeypatch: MonkeyPatch
 ) -> None:
@@ -194,7 +194,7 @@ def test_build_remote_flake(
                     "nix-command flakes",
                     "eval",
                     "--raw",
-                    ".#nixosConfigurations.hostname.config.system.build.toplevel.drvPath",
+                    '.#nixosConfigurations."hostname".config.system.build.toplevel.drvPath',
                     "--flake",
                 ],
                 stdout=PIPE,
@@ -304,7 +304,7 @@ def test_edit(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> None:
             "edit",
             "--commit-lock-file",
             "--",
-            f"{tmpdir}#nixosConfigurations.attr",
+            f'{tmpdir}#nixosConfigurations."attr"',
         ],
         check=False,
     )
@@ -809,7 +809,7 @@ def test_switch_to_configuration_with_systemd_run(
 
 
 @patch(
-    get_qualified_name(n.Path.glob, n),
+    "pathlib.Path.glob",
     autospec=True,
     return_value=[
         Path("/nix/var/nix/profiles/per-user/root/channels/nixos"),
@@ -817,7 +817,7 @@ def test_switch_to_configuration_with_systemd_run(
         Path("/nix/var/nix/profiles/per-user/root/channels/home-manager"),
     ],
 )
-@patch(get_qualified_name(n.Path.is_dir, n), autospec=True, return_value=True)
+@patch("pathlib.Path.is_dir", autospec=True, return_value=True)
 def test_upgrade_channels(mock_is_dir: Mock, mock_glob: Mock) -> None:
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
         n.upgrade_channels(False)

@@ -62,5 +62,5 @@ stdenv.mkDerivation {
     )
   '';
 
-  inherit (mate-panel.meta) ;
+  inherit (mate-panel) meta;
 }

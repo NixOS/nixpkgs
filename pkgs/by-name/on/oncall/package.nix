@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "linkedin";
-    repo = pname;
+    repo = "oncall";
     #tag = "v${version}";
     rev = "030f5d0286b253e4300d36de1954c7b2a7490a76";
     hash = "sha256-Lox9aqYKsl/vg6mNwr0MoLmJQkC+kEf7AqvCCKhgo94=";

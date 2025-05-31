@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zoxide";
-  version = "0.9.7";
+  version = "0.9.8";
 
   src = fetchFromGitHub {
     owner = "ajeetdsouza";
     repo = "zoxide";
     tag = "v${version}";
-    hash = "sha256-+QZpLMlHOZdbKLFYOUOIRZHvIsbMDdstj9oGzyEGVxk=";
+    hash = "sha256-8hXoC3vyR08hN8MMojnAO7yIskg4FsEm28GtFfh5liI=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-uqIL8KTrgWzzzyoPR9gctyh0Rf7WQpTGqXow2/xFvCU=";
+  cargoHash = "sha256-Nonid/5Jh0WIQV0G3fpmkW0bql6bvlcNJBMZ+6MTTPQ=";
 
   postInstall = ''
     installManPage man/man*/*
@@ -49,6 +49,7 @@ rustPlatform.buildRustPackage rec {
       ysndr
       cole-h
       SuperSandro2000
+      matthiasbeyer
     ];
     mainProgram = "zoxide";
   };

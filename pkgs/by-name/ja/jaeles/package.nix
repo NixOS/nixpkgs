@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "jaeles-project";
-    repo = pname;
+    repo = "jaeles";
     rev = "beta-v${version}";
     hash = "sha256-IGvIjO1nCilg2sPyScGTH5Zmv0rORlGwRv3NRxQk+aM=";
   };

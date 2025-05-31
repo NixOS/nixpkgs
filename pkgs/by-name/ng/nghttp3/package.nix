@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
-    repo = pname;
+    repo = "nghttp3";
     rev = "v${version}";
     hash = "sha256-CTra8vmpIig8LX7RWqRzhWhX9yn0RnFrnV/kYPgZgJk=";
     fetchSubmodules = true;

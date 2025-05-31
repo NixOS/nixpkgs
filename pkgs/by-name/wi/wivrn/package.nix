@@ -4,7 +4,6 @@
   stdenv,
   fetchFromGitHub,
   fetchFromGitLab,
-  fetchpatch2,
   applyPatches,
   autoAddDriverRunpath,
   avahi,
@@ -52,13 +51,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wivrn";
-  version = "0.24.1";
+  version = "0.25";
 
   src = fetchFromGitHub {
     owner = "wivrn";
     repo = "wivrn";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-aWQcGIrBoDAO7XqWb3dQLBKg5RZYxC7JxwZ+OBSwmEs=";
+    hash = "sha256-dDf+BW0AZMWRlWl0ye5s3Muurz+CiM3U5+bYgaFIT7M=";
   };
 
   monado = applyPatches {
@@ -66,17 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
       domain = "gitlab.freedesktop.org";
       owner = "monado";
       repo = "monado";
-      rev = "848a24aa106758fd6c7afcab6d95880c57dbe450";
-      hash = "sha256-+rax9/CG/3y8rLYwGqoWJa4FxH+Z3eREiwhuxDOUzLs=";
+      rev = "2a6932d46dad9aa957205e8a47ec2baa33041076";
+      hash = "sha256-Bus9GTNC4+nOSwN8pUsMaFsiXjlpHYioQfBLxbQEF+0=";
     };
-
-    patches = [
-      ./force-enable-steamvr_lh.patch
-      (fetchpatch2 {
-        url = "https://gitlab.freedesktop.org/monado/monado/-/commit/2a6932d46dad9aa957205e8a47ec2baa33041076.patch";
-        hash = "sha256-CZMbGgx7mEDcjcoRJHDZ5P6BecFW8CB4fpzxQ9bpAvE=";
-      })
-    ];
 
     postPatch = ''
       ${finalAttrs.src}/patches/apply.sh ${finalAttrs.src}/patches/monado/*
@@ -199,9 +190,12 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "An OpenXR streaming application to a standalone headset";
     homepage = "https://github.com/WiVRn/WiVRn/";
-    changelog = "https://github.com/WiVRn/WiVRn/releases/";
+    changelog = "https://github.com/WiVRn/WiVRn/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
-    maintainers = [ lib.maintainers.passivelemon ];
+    maintainers = with lib.maintainers; [
+      ImSapphire
+      passivelemon
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "wivrn-server";
     sourceProvenance = [ lib.sourceTypes.fromSource ];

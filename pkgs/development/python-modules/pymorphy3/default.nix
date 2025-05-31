@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "no-plagiarism";
-    repo = pname;
+    repo = "pymorphy3";
     tag = version;
     hash = "sha256-xqz9BW6vaYnDE+rPEhAO4igPYLZNwZLj42BnnJ7Uk1M=";
   };

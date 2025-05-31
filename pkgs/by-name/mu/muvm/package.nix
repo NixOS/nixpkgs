@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "AsahiLinux";
-    repo = pname;
+    repo = "muvm";
     rev = "muvm-${version}";
     hash = "sha256-1XPhVEj7iqTxdWyYwNk6cbb9VRGuhpvvowYDPJb1cWU=";
   };

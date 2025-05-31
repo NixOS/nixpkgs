@@ -1,19 +1,24 @@
 {
+  fetchFromSavannah,
+  gnucap,
+  installShellFiles,
   lib,
   stdenv,
-  fetchurl,
-  gnucap,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnucap-modelgen-verilog";
-  version = "20240130-dev";
+  version = "20240220";
 
-  src = fetchurl {
-    url = "https://git.savannah.gnu.org/cgit/gnucap/gnucap-modelgen-verilog.git/snapshot/${pname}-${version}.tar.gz";
-    hash = "sha256-7w0eWUJKVRYFicQgDvKrJTkZ6fzgwxvcCKj78KrHj8E=";
+  src = fetchFromSavannah {
+    repo = "gnucap/gnucap-modelgen-verilog";
+    rev = finalAttrs.version;
+    hash = "sha256-hDH+aUuCjr5JK2UOy1diNXJaqt6Lrw4GgiiZmQ/SaQs=";
   };
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
   propagatedBuildInputs = [ gnucap ];
 
   doCheck = true;
@@ -26,6 +31,10 @@ stdenv.mkDerivation rec {
     export GNUCAP_PKGLIBDIR=$out/lib/gnucap
   '';
 
+  postInstall = ''
+    installManPage man/*.*
+  '';
+
   meta = with lib; {
     description = "gnucap modelgen to preprocess, parse and dump vams files";
     homepage = "http://www.gnucap.org/";
@@ -35,4 +44,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = [ maintainers.raboof ];
   };
-}
+})

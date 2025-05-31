@@ -19,8 +19,7 @@ buildPythonPackage rec {
   inherit (sudachi-rs) src version;
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-/VKveTtB8BbWgRBEzWBjrSrW84uFcz08cz6tZTuMMeE=";
   };
 

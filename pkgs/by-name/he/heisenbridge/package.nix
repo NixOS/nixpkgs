@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "hifi";
-    repo = pname;
+    repo = "heisenbridge";
     tag = "v${version}";
     sha256 = "sha256-wH3IZcY4CtawEicKCkFMh055SM0chYHsPKxYess9II0=";
   };

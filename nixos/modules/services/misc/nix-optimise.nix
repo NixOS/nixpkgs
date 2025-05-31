@@ -15,7 +15,8 @@ in
 
       dates = lib.mkOption {
         default = [ "03:45" ];
-        type = with lib.types; listOf str;
+        apply = lib.toList;
+        type = with lib.types; either singleLineStr (listOf str);
         description = ''
           Specification (in the format described by
           {manpage}`systemd.time(7)`) of the time at

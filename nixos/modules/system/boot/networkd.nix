@@ -100,6 +100,9 @@ let
           "ReceiveQueues"
           "TransmitQueues"
           "TransmitQueueLength"
+          "RxFlowControl"
+          "TxFlowControl"
+          "AutoNegotiationFlowControl"
         ])
         (assertValueOneOf "MACAddressPolicy" [
           "persistent"
@@ -137,6 +140,9 @@ let
         (assertValueOneOf "GenericSegmentationOffload" boolValues)
         (assertValueOneOf "GenericReceiveOffload" boolValues)
         (assertValueOneOf "LargeReceiveOffload" boolValues)
+        (assertValueOneOf "RxFlowControl" boolValues)
+        (assertValueOneOf "TxFlowControl" boolValues)
+        (assertValueOneOf "AutoNegotiationFlowControl" boolValues)
         (assertInt "RxChannels")
         (assertRange "RxChannels" 1 4294967295)
         (assertInt "TxChannels")

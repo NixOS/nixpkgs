@@ -26,7 +26,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "jollheef";
-    repo = pname;
+    repo = "appvm";
     tag = "v${version}";
     sha256 = "sha256-n+YputGiNWSOYbwes/rjz0h3RWZONDTc8+LDc0La/KU=";
   };
@@ -47,7 +47,7 @@ buildGoModule rec {
 
   meta = {
     description = "Nix-based app VMs";
-    homepage = "https://code.dumpstack.io/tools/${pname}";
+    homepage = "https://code.dumpstack.io/tools/appvm";
     maintainers = with lib.maintainers; [
       dump_stack
       cab404

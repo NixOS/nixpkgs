@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "mechanicalsoup";
-  version = "1.3.0";
+  version = "1.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "MechanicalSoup";
     repo = "MechanicalSoup";
     tag = "v${version}";
-    hash = "sha256-iZ2nwBxikf0cTTlxzcGvHJim4N6ZEqIhlK7t1WAYdms=";
+    hash = "sha256-fu3DGTsLrw+MHZCFF4WHMpyjqkexH/c8j9ko9ZAeAwU=";
   };
 
   postPatch = ''

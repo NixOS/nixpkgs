@@ -11,13 +11,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "sql-formatter";
-  version = "15.6.1";
+  version = "15.6.2";
 
   src = fetchFromGitHub {
     owner = "sql-formatter-org";
     repo = "sql-formatter";
     rev = "v${version}";
-    hash = "sha256-Olq7DAhiopFlLnn6r78nJU6LjS2EiU93kc/iY4mLCL8=";
+    hash = "sha256-pqNxZ8bmnwQYPLIQ8vQrKct9fD8i0fiLn4h4f2779q4=";
   };
 
   yarnOfflineCache = fetchYarnDeps {

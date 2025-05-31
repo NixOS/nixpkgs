@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "zmap";
-    repo = pname;
+    repo = "zdns";
     tag = "v${version}";
     hash = "sha256-jnrewp0wXaRFVBY6Wo9JHGDnDxzQFOhh3JoLqxRicew=";
   };

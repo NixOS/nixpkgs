@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "AGProjects";
-    repo = pname;
+    repo = "python3-application";
     rev = "release-${version}";
     hash = "sha256-L7KN6rKkbjNmkSoy8vdMYpXSBkWN7afNpreJO0twjq8=";
   };
