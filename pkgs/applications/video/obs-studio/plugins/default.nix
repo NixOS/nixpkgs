@@ -62,6 +62,8 @@
 
   obs-replay-source = qt6Packages.callPackage ./obs-replay-source.nix { };
 
+  obs-retro-effects = callPackage ./obs-retro-effects.nix { };
+
   obs-rgb-levels = callPackage ./obs-rgb-levels.nix { };
 
   obs-scale-to-sound = callPackage ./obs-scale-to-sound.nix { };
