@@ -75,6 +75,16 @@ in
             '';
             default = false;
           };
+
+          ANALYTICS_DISABLED = mkOption {
+            type = bool;
+            description = ''
+              Whether to disable analytics.
+
+              See [docs page](https://pocket-id.org/docs/configuration/analytics/).
+            '';
+            default = false;
+          };
         };
       };
 
