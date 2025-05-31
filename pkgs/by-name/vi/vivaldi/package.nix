@@ -233,7 +233,10 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "vivaldi";
-    maintainers = with lib.maintainers; [ rewine ];
+    maintainers = with lib.maintainers; [
+      marcusramberg
+      rewine
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
