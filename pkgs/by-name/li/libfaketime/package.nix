@@ -17,17 +17,22 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-JiXirneGMaPGfw3G88hfJZ6cyjlPOQYtiwNcyMLnAuw="; # not upstream yet, WIP
   };
 
-  patches = [
-    ./nix-store-date.patch
-  ];
+  buildInputs = [ coreutils ];
 
-  postPatch = ''
-    patchShebangs test src
-    substituteInPlace test/functests/test_exclude_mono.sh src/faketime.c \
-      --replace-fail /bin/bash ${stdenv.shell}
-    substituteInPlace src/faketime.c \
-      --replace-fail @DATE_CMD@ ${lib.getExe' coreutils "date"}
-  '';
+  postPatch =
+    let
+      dateCmd = lib.getExe' coreutils "date";
+    in
+    ''
+      patchShebangs test
+
+      substituteInPlace src/faketime.c \
+        --replace-fail 'date_cmd = "date"' 'date_cmd = "${dateCmd}"' \
+        --replace-fail 'date_cmd = "gdate"' 'date_cmd = "${dateCmd}"'
+
+      substituteInPlace test/functests/test_exclude_mono.sh \
+        --replace-fail '/bin/bash' '$0'
+    '';
 
   PREFIX = placeholder "out";
   LIBDIRNAME = "/lib";
