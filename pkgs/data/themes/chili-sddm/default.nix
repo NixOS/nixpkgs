@@ -53,6 +53,8 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ sents ];
     homepage = "https://github.com/MarianArlt/sddm-chili";
     description = "Chili login theme for SDDM";
+
+    platforms = lib.platforms.linux;
     longDescription = ''
       Chili is hot, just like a real chili!
       Spice up the login experience for your users, your family and yourself.
