@@ -23,7 +23,6 @@
   pytestCheckHook,
   pytest-trio,
   trustme,
-  yapf,
 }:
 
 let
@@ -69,7 +68,6 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-trio'
     trustme
-    yapf
   ];
 
   preCheck = ''
