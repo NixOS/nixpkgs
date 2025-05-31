@@ -8308,6 +8308,8 @@ self: super: with self; {
 
   llm-openai-plugin = callPackage ../development/python-modules/llm-openai-plugin { };
 
+  llm-openrouter = callPackage ../development/python-modules/llm-openrouter { };
+
   llmx = callPackage ../development/python-modules/llmx { };
 
   llvmlite = callPackage ../development/python-modules/llvmlite {
