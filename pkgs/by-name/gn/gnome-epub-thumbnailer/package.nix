@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     description = "Thumbnailer for EPub and MOBI books";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-epub-thumbnailer";
     license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.linux;
   };
 }

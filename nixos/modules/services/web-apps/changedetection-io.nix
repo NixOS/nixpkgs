@@ -73,7 +73,7 @@ in
       default = null;
       example = "/run/secrets/changedetection-io.env";
       description = ''
-        Securely pass environment variabels to changedetection-io.
+        Securely pass environment variables to changedetection-io.
 
         This can be used to set for example a frontend password reproducible via `SALTED_PASS`
         which convinetly also deactivates nags about the hosted version.

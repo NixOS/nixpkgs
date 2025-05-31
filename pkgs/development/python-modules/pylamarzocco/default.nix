@@ -5,6 +5,7 @@
   bleak,
   buildPythonPackage,
   fetchFromGitHub,
+  mashumaro,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
@@ -14,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "pylamarzocco";
-  version = "1.4.6";
+  version = "2.0.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "zweckj";
     repo = "pylamarzocco";
     tag = "v${version}";
-    hash = "sha256-Ntss7erVbpeW6EEeKrkR/anzvTUQhzggNhHi6rOIsFQ=";
+    hash = "sha256-IFac66zBGvRASXJDa/Y6F3BxZhRD9tG8yAB2l2IsDVk=";
   };
 
   build-system = [ setuptools ];
@@ -31,6 +32,7 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     bleak
+    mashumaro
   ];
 
   nativeCheckInputs = [
@@ -45,7 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to interface with La Marzocco's cloud";
     homepage = "https://github.com/zweckj/pylamarzocco";
-    changelog = "https://github.com/zweckj/pylamarzocco/releases/tag/v${version}";
+    changelog = "https://github.com/zweckj/pylamarzocco/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

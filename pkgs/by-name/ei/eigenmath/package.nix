@@ -6,15 +6,15 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "eigenmath";
-  version = "337-unstable-2025-01-31";
+  version = "340-unstable-2025-05-05";
 
   src = fetchFromGitHub {
     owner = "georgeweigt";
-    repo = pname;
-    rev = "42a92c35d0ccc85fd8b16aa432c641edd3fa5b87";
-    hash = "sha256-59iD5ivu2hPBfoxItfmTek4944ch6PlkAiVIimmvI5o=";
+    repo = "eigenmath";
+    rev = "94fee6b02ebd4cd718dd9ea45583a6af2129dd28";
+    hash = "sha256-2bdO0nRXhDZlEmGRfNf6g9zwc65Ih9Ymlo6PxlpAxes=";
   };
 
   checkPhase =

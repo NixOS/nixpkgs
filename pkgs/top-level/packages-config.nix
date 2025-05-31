@@ -13,7 +13,6 @@
       inherit (super)
         agdaPackages
         apacheHttpdPackages
-        fdbPackages
         fusePackages
         gns3Packages
         haskellPackages
@@ -24,9 +23,7 @@
         rPackages
         roundcubePlugins
         sourceHanPackages
-        zabbix50
         zabbix60
-        zeroadPackages
         ;
 
       # Make sure haskell.compiler is included, so alternative GHC versions show up,
@@ -35,6 +32,10 @@
       haskell = super.haskell // {
         compiler = recurseIntoAttrs super.haskell.compiler;
       };
+
+      # emacsPackages is an alias for emacs.pkgs
+      # Re-introduce emacsPackages here so that emacs.pkgs can be searched.
+      emacsPackages = emacs.pkgs;
 
       # minimal-bootstrap packages aren't used for anything but bootstrapping our
       # stdenv. They should not be used for any other purpose and therefore not

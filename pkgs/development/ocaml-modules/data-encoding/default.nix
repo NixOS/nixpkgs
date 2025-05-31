@@ -13,7 +13,7 @@
   ppx_expect,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "data-encoding";
   inherit (json-data-encoding) src version;
 

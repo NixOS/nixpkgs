@@ -9,12 +9,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.122.0";
+  version = "0.126.1";
   pname = "jbang";
 
   src = fetchzip {
     url = "https://github.com/jbangdev/jbang/releases/download/v${version}/${pname}-${version}.tar";
-    sha256 = "sha256-uBzIk4Ivy/XLFlsUpGejV45T8MIseE2l8AVprWJi3hI=";
+    sha256 = "sha256-lFb8j1hl47buUKZjFNuSaQVr5IW++eame5vPi2Vi1o8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

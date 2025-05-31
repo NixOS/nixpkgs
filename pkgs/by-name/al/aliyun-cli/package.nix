@@ -8,24 +8,24 @@
 
 buildGoModule rec {
   pname = "aliyun-cli";
-  version = "3.0.252";
+  version = "3.0.278";
 
   src = fetchFromGitHub {
     owner = "aliyun";
     repo = "aliyun-cli";
     tag = "v${version}";
-    hash = "sha256-BNoNO8HQQGkUTR2MfpolF+PRo7YgT0hUbi5n+zPst6c=";
+    hash = "sha256-SFoTeFKPUlP0clAP4gkPiNNVjqetJ8syNJDhGhNs6vo=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-xwhq1UJ73Xxmt3NkpQMCrcl9N0F833N3/V+O+w1SVrQ=";
+  vendorHash = "sha256-cyE7yuwYUR/vv1w/b7QaiSoyX2XiUy5vNdodu+9PIl8=";
 
   subPackages = [ "main" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/aliyun/aliyun-cli/cli.Version=${version}"
+    "-X github.com/aliyun/aliyun-cli/v3/cli.Version=${version}"
   ];
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];

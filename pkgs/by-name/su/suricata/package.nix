@@ -8,7 +8,6 @@
   makeWrapper,
   elfutils,
   file,
-  hyperscan,
   jansson,
   libbpf_0,
   libcap_ng,
@@ -25,9 +24,10 @@
   nspr,
   pcre2,
   python3,
+  vectorscan,
   zlib,
   redisSupport ? true,
-  redis,
+  valkey,
   hiredis,
   rustSupport ? true,
   rustc,
@@ -36,15 +36,14 @@
 }:
 let
   libmagic = file;
-  hyperscanSupport = stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
 in
 stdenv.mkDerivation rec {
   pname = "suricata";
-  version = "7.0.8";
+  version = "7.0.10";
 
   src = fetchurl {
     url = "https://www.openinfosecfoundation.org/download/${pname}-${version}.tar.gz";
-    hash = "sha256-SSkoxiLhcL2cRdNTC8KxAzxVgtwYCFxDb86vtigp084=";
+    hash = "sha256-GX+SXqcBvctKFaygJLBlRrACZ0zZWLWJWPKaW7IU11k=";
   };
 
   nativeBuildInputs =
@@ -83,11 +82,11 @@ stdenv.mkDerivation rec {
       nspr
       pcre2
       python3
+      vectorscan
       zlib
     ]
-    ++ lib.optional hyperscanSupport hyperscan
     ++ lib.optionals redisSupport [
-      redis
+      valkey
       hiredis
     ];
 
@@ -121,12 +120,10 @@ stdenv.mkDerivation rec {
       "--enable-unix-socket"
       "--localstatedir=/var"
       "--sysconfdir=/etc"
+      "--with-libhs-includes=${lib.getDev vectorscan}/include/hs"
+      "--with-libhs-libraries=${lib.getLib vectorscan}/lib"
       "--with-libnet-includes=${libnet}/include"
       "--with-libnet-libraries=${libnet}/lib"
-    ]
-    ++ lib.optionals hyperscanSupport [
-      "--with-libhs-includes=${hyperscan.dev}/include/hs"
-      "--with-libhs-libraries=${hyperscan}/lib"
     ]
     ++ lib.optional redisSupport "--enable-hiredis"
     ++ lib.optionals rustSupport [

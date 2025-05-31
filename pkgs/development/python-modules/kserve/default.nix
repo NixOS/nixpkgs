@@ -11,6 +11,7 @@
   # dependencies
   cloudevents,
   fastapi,
+  grpc-interceptor,
   grpcio,
   httpx,
   kubernetes,
@@ -28,6 +29,7 @@
   huggingface-hub,
   asgi-logger,
   ray,
+  vllm,
 
   prometheus-client,
   protobuf,
@@ -44,6 +46,7 @@
   avro,
   grpcio-testing,
   pytest-asyncio,
+  pytest-httpx,
   pytest-xdist,
   pytestCheckHook,
   tomlkit,
@@ -51,14 +54,14 @@
 
 buildPythonPackage rec {
   pname = "kserve";
-  version = "0.14.1";
+  version = "0.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kserve";
     repo = "kserve";
     tag = "v${version}";
-    hash = "sha256-VwuUXANjshV4fN0i54Fs0zubHY81UtQcCV14JwMpXwA=";
+    hash = "sha256-k+uyOhsxWPpiA82wCCEn53W2VQgSHGgSABFipEPErRk=";
   };
 
   sourceRoot = "${src.name}/python/kserve";
@@ -81,6 +84,7 @@ buildPythonPackage rec {
   dependencies = [
     cloudevents
     fastapi
+    grpc-interceptor
     grpcio
     httpx
     kubernetes
@@ -108,15 +112,19 @@ buildPythonPackage rec {
       huggingface-hub
       google-cloud-storage
       requests
-    ];
+    ] ++ huggingface-hub.optional-dependencies.hf_transfer;
     logging = [ asgi-logger ];
     ray = [ ray ];
+    llm = [
+      vllm
+    ];
   };
 
   nativeCheckInputs = [
     avro
     grpcio-testing
     pytest-asyncio
+    pytest-httpx
     pytest-xdist
     pytestCheckHook
     tomlkit
@@ -141,6 +149,8 @@ buildPythonPackage rec {
       "--deselect=test/test_server.py::TestRayServer::test_list_handler"
       "--deselect=test/test_server.py::TestRayServer::test_liveness_handler"
       "--deselect=test/test_server.py::TestRayServer::test_predict"
+      # Permission Error
+      "--deselect=test/test_server.py::TestMutiProcessServer::test_rest_server_multiprocess"
     ];
 
   disabledTestPaths = [

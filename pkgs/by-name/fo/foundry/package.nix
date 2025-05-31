@@ -13,21 +13,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "foundry";
-  version = "1.0.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "foundry-rs";
     repo = "foundry";
     tag = "v${version}";
-    hash = "sha256-YTsneUj5OPw7EyKZMFLJJeAtZoD0je1DdmfMjVju4L8=";
+    hash = "sha256-hHvHnSq6XarfofX0G5RE2hIai2eY8Nf1aqgJ5Z6ZuDg=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-vVRFS7o0zV+ek9ho+URks6peOryMpFCE1sDzN9g7uH0=";
+  cargoHash = "sha256-spB89RmR6+9L+zo2YOl7fBxcmRdLUELXr8OmUt3waO4=";
 
-  nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.isDarwin [ darwin.DarwinTools ];
+  nativeBuildInputs = [
+    pkg-config
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
 
-  buildInputs = [ solc ] ++ lib.optionals stdenv.isDarwin [ libusb1 ];
+  buildInputs = [ solc ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libusb1 ];
 
   # Tests are run upstream, and many perform I/O
   # incompatible with the nix build sandbox.
@@ -37,14 +39,14 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/forge";
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
   env = {
     SVM_RELEASES_LIST_JSON =
-      if stdenv.isDarwin then
+      if stdenv.hostPlatform.isDarwin then
         # Confusingly, these are universal binaries, not amd64.
         # See: https://github.com/ethereum/solidity/issues/12291#issuecomment-1974771433
         "${./svm-lists/macosx-amd64.json}"

@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, desktop-file-utils
-, gettext
-, pkg-config
-, gnome-keyring
-, gnome-session
-, wingpanel
-, orca
-, onboard
-, elementary-default-settings
-, gnome-settings-daemon
-, runtimeShell
-, systemd
-, writeText
-, meson
-, ninja
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  desktop-file-utils,
+  gettext,
+  pkg-config,
+  gnome-keyring,
+  gnome-session,
+  wingpanel,
+  orca,
+  onboard,
+  elementary-default-settings,
+  gnome-settings-daemon,
+  runtimeShell,
+  systemd,
+  writeText,
+  meson,
+  ninja,
 }:
 
 stdenv.mkDerivation rec {
@@ -80,6 +81,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/session-settings";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }

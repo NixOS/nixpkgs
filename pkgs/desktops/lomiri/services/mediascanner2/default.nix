@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   nixosTests,
   testers,
@@ -32,26 +31,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mediascanner2";
-  version = "0.117";
+  version = "0.118";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/mediascanner2";
-    rev = finalAttrs.version;
-    hash = "sha256-e1vDPnIIfevXj9ODEEKJ2y4TiU0H+08aTf2vU+emdQk=";
+    tag = finalAttrs.version;
+    hash = "sha256-ZJXJNDZUDor5EJ+rn7pQt7lLzoszZUQM3B+u1gBSMs8=";
   };
 
   outputs = [
     "out"
     "dev"
-  ];
-
-  patches = [
-    (fetchpatch {
-      name = "0001-mediascanner2-scannerdaemon-Drop-desktop-and-MEDIASCANNER_RUN-check.patch";
-      url = "https://gitlab.com/ubports/development/core/mediascanner2/-/commit/1e65b32e32a0536b9e2f283ba563fa78b6ef6d61.patch";
-      hash = "sha256-Xhm5+/E/pP+mn+4enqdsor1oRqfYTzabg1ODVfIhra4=";
-    })
   ];
 
   postPatch = ''
@@ -123,8 +114,11 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Media scanner service & access library";
     homepage = "https://gitlab.com/ubports/development/core/mediascanner2";
+    changelog = "https://gitlab.com/ubports/development/core/mediascanner2/-/blob/${
+      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+    }/ChangeLog";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     mainProgram = "mediascanner-service-2.0";
     platforms = lib.platforms.linux;
     pkgConfigModules = [ "mediascanner-2.0" ];

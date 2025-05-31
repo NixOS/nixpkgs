@@ -9,6 +9,7 @@
   pyyaml,
   requests,
   requests-unixsocket,
+  pyfakefs,
   pytestCheckHook,
   pytest-check,
   pytest-mock,
@@ -28,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "craft-parts";
-  version = "2.6.1";
+  version = "2.8.0";
 
   pyproject = true;
 
@@ -36,7 +37,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-parts";
     tag = version;
-    hash = "sha256-KQS4jjA66rROglOrGR7UofJL+oYEEC2X+o6pROrR5r4=";
+    hash = "sha256-1SnT/yB6vJm82yhszBRjeph13B91KYap8/KR4L9VcjM=";
   };
 
   patches = [ ./bash-path.patch ];
@@ -67,6 +68,7 @@ buildPythonPackage rec {
     jdk
     jsonschema
     maven
+    pyfakefs
     pytest-check
     pytest-mock
     pytest-subprocess

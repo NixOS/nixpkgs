@@ -5,9 +5,6 @@
   fetchFromGitHub,
   openssl,
   pkg-config,
-  Security,
-  SystemConfiguration,
-  IOKit,
   installShellFiles,
   nix,
 }:
@@ -32,15 +29,9 @@ rustPlatform.buildRustPackage rec {
     nix
   ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      IOKit
-      Security
-      SystemConfiguration
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    openssl
+  ];
 
   postInstall = ''
     installShellCompletion --cmd nixci \
@@ -63,7 +54,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/srid/nixci";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
-      srid
       shivaraj-bh
       rsrohitsingh682
     ];

@@ -7,28 +7,24 @@
   fetchFromGitHub,
   pydantic,
   python-dateutil,
-  pythonOlder,
   setuptools,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "weheat";
-  version = "2025.1.15";
+  version = "2025.4.29";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "wefabricate";
     repo = "wh-python";
     tag = version;
-    hash = "sha256-zt/4d7s4yoLQUQxtsc8Y6htS0PByuYmaecGsjKYo2tc=";
+    hash = "sha256-z+tRxx+wtEj5cBXBVG1B5SNyvkQk2UwjH7lPgNQQ+ng=";
   };
 
   pythonRelaxDeps = [
     "urllib3"
-    "pydantic"
   ];
 
   build-system = [ setuptools ];

@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Cropi";
-    repo = pname;
-    rev = "${pname}-${version}";
+    repo = "usbguard-notifier";
+    rev = "usbguard-notifier-${version}";
     hash = "sha256-gWvCGSbOuey2ELAPD2WCG4q77IClL0S7rE2RaUJDc1I=";
   };
 
@@ -60,5 +60,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ fpletz ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
+    mainProgram = "usbguard-notifier";
   };
 }

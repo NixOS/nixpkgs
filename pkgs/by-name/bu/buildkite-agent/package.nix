@@ -33,6 +33,13 @@ buildGoModule rec {
 
   doCheck = false;
 
+  # buildkite-agent expects the `buildVersion` variable to be set to something
+  # other than its sentinel, otherwise the agent will not work correctly as of
+  # https://github.com/buildkite/agent/pull/3123
+  ldflags = [
+    "-X github.com/buildkite/agent/v3/version.buildNumber=nix"
+  ];
+
   postInstall = ''
     # Fix binary name
     mv $out/bin/{agent,buildkite-agent}

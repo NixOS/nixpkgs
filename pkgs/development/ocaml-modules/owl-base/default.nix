@@ -21,7 +21,7 @@ buildDunePackage rec {
     description = "Numerical computing library for Ocaml";
     homepage = "https://ocaml.xyz";
     changelog = "https://github.com/owlbarn/owl/releases";
-    platforms = platforms.x86_64;
+    platforms = platforms.x86_64 ++ platforms.aarch64;
     maintainers = [ maintainers.bcdarwin ];
     license = licenses.mit;
   };

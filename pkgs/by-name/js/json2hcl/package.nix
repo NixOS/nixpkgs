@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "kvz";
-    repo = pname;
+    repo = "json2hcl";
     rev = "v${version}";
     sha256 = "sha256-h7DudYVWvDRCbjoIgOoCIudf7ZfUfWXp5OJ4ni0nm6c=";
   };

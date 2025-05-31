@@ -11,7 +11,9 @@ ags.bundle {
   pname = "hyprpanel";
   version = "1.0.0";
 
-  src = fetchFromGitHub { ... };
+  src = fetchFromGitHub {
+    #...
+  };
 
   # change your entry file (default is `app.ts`)
   entry = "app.ts";
@@ -32,7 +34,9 @@ ags.bundle {
   # GTK 4 support is opt-in
   enableGtk4 = true;
 
-  meta = { ... };
+  meta = {
+    #...
+  };
 }
 ```
 

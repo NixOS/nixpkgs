@@ -12,7 +12,7 @@
   libpng,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "qemacs";
   version = "6.3.2";
 

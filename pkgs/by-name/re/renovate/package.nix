@@ -4,8 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   nodejs,
-  overrideSDK,
-  pnpm_9,
+  pnpm_10,
   python3,
   testers,
   xcbuild,
@@ -16,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "renovate";
-  version = "39.153.1";
+  version = "40.33.1";
 
   src = fetchFromGitHub {
     owner = "renovatebot";
     repo = "renovate";
     tag = finalAttrs.version;
-    hash = "sha256-QKCUHwm6c50wTDFbmAqhh/tV8Lzx9HD4U9k7ke6t8OE=";
+    hash = "sha256-W2FoiU48rJr6o7HQW9MFNr92sag4QUGaRLbtMeM5418=";
   };
 
   postPatch = ''
@@ -33,14 +32,14 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm_9.configHook
+    pnpm_10.configHook
     python3
     yq-go
   ] ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-MTkbRQnimEXP4XepJ+x2KGHtJTkqN9WBWvisAHH/j18=";
+    hash = "sha256-NEqgX3OHy9kbIhdaHiR7C7wGHZKe35it5G7kOro5RPQ=";
   };
 
   env.COREPACK_ENABLE_STRICT = 0;
@@ -94,7 +93,12 @@ stdenv.mkDerivation (finalAttrs: {
       version = testers.testVersion { package = finalAttrs.finalPackage; };
       vm-test = nixosTests.renovate;
     };
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^(\\d+\\.\\d+\\.\\d+)$"
+      ];
+    };
   };
 
   meta = {

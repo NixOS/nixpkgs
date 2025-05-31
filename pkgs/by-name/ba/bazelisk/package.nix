@@ -10,14 +10,12 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
-    repo = pname;
+    repo = "bazelisk";
     rev = "v${version}";
     sha256 = "sha256-1/J/Y2NlIghxQS/5CnGX+2z+glOeOZVEgSE4KWft9Zw=";
   };
 
   vendorHash = "sha256-kXv7q32cFD9mwWsFaod7QPn3el72P4ugVc4DGwez8v0=";
-
-  doCheck = false;
 
   ldflags = [
     "-s"

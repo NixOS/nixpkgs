@@ -40,7 +40,7 @@
 }:
 
 let
-  version = "1.21.0";
+  version = "1.27.1";
 
   # Hide symbols to prevent accidental use
   rust-jemalloc-sys = throw "polars: use polarsMemoryAllocator over rust-jemalloc-sys";
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     owner = "pola-rs";
     repo = "polars";
     tag = "py-${version}";
-    hash = "sha256-/MmuaQG8ozl2yAVBXIibbtKjCQbw98azBFSKiP2PE0A=";
+    hash = "sha256-/VigBBjZglPleXB9jhWHtA+y7WixjboVbzslprZ/A98=";
   };
 
   # Do not type-check assertions because some of them use unstable features (`is_none_or`)
@@ -67,7 +67,7 @@ buildPythonPackage rec {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-CVKT3x8SkpL7VFw6yc4pGwd0EYwufXtBp4Xl2eD88sM=";
+    hash = "sha256-dbPhEMhfe8DZO1D8U+3W1goNK1TAVyLzXHwXzzRvASw=";
   };
 
   requiredSystemFeatures = [ "big-parallel" ];
@@ -177,7 +177,7 @@ buildPythonPackage rec {
 
     requiredSystemFeatures = [ "big-parallel" ];
 
-    sourceRoot = "source/py-polars";
+    sourceRoot = "${src.name}/py-polars";
     postPatch = ''
       for f in * ; do
         [[ "$f" == "tests" ]] || \

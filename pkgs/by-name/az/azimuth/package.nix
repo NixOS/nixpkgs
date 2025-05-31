@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  libGL,
   SDL,
   which,
   installTool ? false,
@@ -19,7 +20,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ which ];
-  buildInputs = [ SDL ];
+  buildInputs = [
+    libGL
+    SDL
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=maybe-uninitialized" ];
 

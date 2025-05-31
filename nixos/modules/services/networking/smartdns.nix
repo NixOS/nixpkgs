@@ -1,24 +1,35 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 
 with lib;
 
 let
-  inherit (lib.types) attrsOf coercedTo listOf oneOf str int bool;
+  inherit (lib.types)
+    attrsOf
+    coercedTo
+    listOf
+    oneOf
+    str
+    int
+    bool
+    ;
   cfg = config.services.smartdns;
 
-  confFile = pkgs.writeText "smartdns.conf" (with generators;
+  confFile = pkgs.writeText "smartdns.conf" (
+    with generators;
     toKeyValue {
       mkKeyValue = mkKeyValueDefault {
-        mkValueString = v:
-          if isBool v then
-            if v then "yes" else "no"
-          else
-            mkValueStringDefault { } v;
+        mkValueString = v: if isBool v then if v then "yes" else "no" else mkValueStringDefault { } v;
       } " ";
-      listsAsDuplicateKeys =
-        true; # Allowing duplications because we need to deal with multiple entries with the same key.
-    } cfg.settings);
-in {
+      listsAsDuplicateKeys = true; # Allowing duplications because we need to deal with multiple entries with the same key.
+    } cfg.settings
+  );
+in
+{
   options.services.smartdns = {
     enable = mkEnableOption "SmartDNS DNS server";
 
@@ -30,8 +41,14 @@ in {
 
     settings = mkOption {
       type =
-      let atom = oneOf [ str int bool ];
-      in attrsOf (coercedTo atom toList (listOf atom));
+        let
+          atom = oneOf [
+            str
+            int
+            bool
+          ];
+        in
+        attrsOf (coercedTo atom toList (listOf atom));
       example = literalExpression ''
         {
           bind = ":5353 -no-rule -group example";
@@ -56,7 +73,6 @@ in {
     systemd.services.smartdns.wantedBy = [ "multi-user.target" ];
     systemd.services.smartdns.restartTriggers = [ confFile ];
     environment.etc."smartdns/smartdns.conf".source = confFile;
-    environment.etc."default/smartdns".source =
-      "${pkgs.smartdns}/etc/default/smartdns";
+    environment.etc."default/smartdns".source = "${pkgs.smartdns}/etc/default/smartdns";
   };
 }

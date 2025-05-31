@@ -119,16 +119,23 @@ in
 
   # Additional packages needed as part of a fetch
   nativeBuildInputs ? [ ],
-}:
+}@args:
 
 let
   urls_ =
     if urls != [ ] && url == "" then
-      (if lib.isList urls then urls else throw "`urls` is not a list")
+      (
+        if lib.isList urls then urls else throw "`urls` is not a list: ${lib.generators.toPretty { } urls}"
+      )
     else if urls == [ ] && url != "" then
-      (if lib.isString url then [ url ] else throw "`url` is not a string")
+      (
+        if lib.isString url then
+          [ url ]
+        else
+          throw "`url` is not a string: ${lib.generators.toPretty { } urls}"
+      )
     else
-      throw "fetchurl requires either `url` or `urls` to be set";
+      throw "fetchurl requires either `url` or `urls` to be set: ${lib.generators.toPretty { } args}";
 
   hash_ =
     if
@@ -143,7 +150,7 @@ let
         ]
       ) > 1
     then
-      throw "multiple hashes passed to fetchurl"
+      throw "multiple hashes passed to fetchurl: ${lib.generators.toPretty { } urls_}"
     else
 
     if hash != "" then
@@ -155,7 +162,7 @@ let
       if outputHashAlgo != "" then
         { inherit outputHashAlgo outputHash; }
       else
-        throw "fetchurl was passed outputHash without outputHashAlgo"
+        throw "fetchurl was passed outputHash without outputHashAlgo: ${lib.generators.toPretty { } urls_}"
     else if sha512 != "" then
       {
         outputHashAlgo = "sha512";
@@ -177,7 +184,7 @@ let
         outputHash = "";
       }
     else
-      throw "fetchurl requires a hash for fixed-output derivation: ${lib.concatStringsSep ", " urls_}";
+      throw "fetchurl requires a hash for fixed-output derivation: ${lib.generators.toPretty urls_}";
 in
 
 assert
@@ -215,7 +222,7 @@ stdenvNoCC.mkDerivation (
 
     # If set, prefer the content-addressable mirrors
     # (http://tarballs.nixos.org) over the original URLs.
-    preferHashedMirrors = true;
+    preferHashedMirrors = false;
 
     # New-style output content requirements.
     inherit (hash_) outputHashAlgo outputHash;

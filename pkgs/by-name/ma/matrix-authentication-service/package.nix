@@ -10,29 +10,28 @@
   sqlite,
   zstd,
   stdenv,
-  darwin,
   open-policy-agent,
   cctools,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-authentication-service";
-  version = "0.13.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "matrix-authentication-service";
-    tag = "v${version}";
-    hash = "sha256-rFex6stw++xNrcCYnYn3N0HrUQd91DAw9QU0R2MUzyQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/UrMmC5DTxoN6uzvTB+V3//hGQmKlkYvi5Lv4p31fq4=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-u3C6JmaPU4/pyg8Ko01Y33UkuqrVa2lV/jYdMUAF6ng=";
+  cargoHash = "sha256-UvRv69rHqPNqTg5nhUojTDHEFUIXF8LEB4ndzA7CHc0=";
 
   npmDeps = fetchNpmDeps {
-    name = "${pname}-${version}-npm-deps";
-    src = "${src}/${npmRoot}";
-    hash = "sha256-4tFE7za2bBOCtX0fSaLvvyD4UTGtvtJlgO30lHCv07Y=";
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    src = "${finalAttrs.src}/${finalAttrs.npmRoot}";
+    hash = "sha256-7EN8GIO8VutAZujVvgM67fGIXWD2aJhHhEJrTeHRiGE=";
   };
 
   npmRoot = "frontend";
@@ -46,19 +45,14 @@ rustPlatform.buildRustPackage rec {
     (python3.withPackages (ps: [ ps.setuptools ])) # Used by gyp
   ] ++ lib.optional stdenv.hostPlatform.isDarwin cctools; # libtool used by gyp;
 
-  buildInputs =
-    [
-      sqlite
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.CoreFoundation
-      darwin.apple_sdk_11_0.frameworks.Security
-      darwin.apple_sdk_11_0.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    sqlite
+    zstd
+  ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
+    VERGEN_GIT_DESCRIBE = finalAttrs.version;
   };
 
   buildNoDefaultFeatures = true;
@@ -92,9 +86,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "OAuth2.0 + OpenID Provider for Matrix Homeservers";
     homepage = "https://github.com/element-hq/matrix-authentication-service";
-    changelog = "https://github.com/element-hq/matrix-authentication-service/releases/tag/v${version}";
+    changelog = "https://github.com/element-hq/matrix-authentication-service/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ teutat3s ];
     mainProgram = "mas-cli";
   };
-}
+})

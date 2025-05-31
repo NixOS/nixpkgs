@@ -41,7 +41,6 @@
   importlib-resources,
   packaging,
   unidiff,
-  glibcLocales,
   nixosTests,
 }:
 
@@ -136,7 +135,6 @@ buildPythonApplication rec {
     parameterized
     git
     openssh
-    glibcLocales
   ];
 
   patches = [
@@ -155,7 +153,6 @@ buildPythonApplication rec {
   doCheck = !stdenv.hostPlatform.isAarch64;
 
   preCheck = ''
-    export LC_ALL="en_US.UTF-8"
     export PATH="$out/bin:$PATH"
   '';
 
@@ -174,7 +171,7 @@ buildPythonApplication rec {
     description = "Open-source continuous integration framework for automating software build, test, and release processes";
     homepage = "https://buildbot.net/";
     changelog = "https://github.com/buildbot/buildbot/releases/tag/v${version}";
-    maintainers = teams.buildbot.members;
+    teams = [ teams.buildbot ];
     license = licenses.gpl2Only;
   };
 }

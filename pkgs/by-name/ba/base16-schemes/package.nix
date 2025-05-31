@@ -4,16 +4,15 @@
   fetchFromGitHub,
   ...
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "base16-schemes";
-  version = "unstable-2024-11-12";
+  version = "unstable-2025-04-18";
 
   src = fetchFromGitHub {
     owner = "tinted-theming";
     repo = "schemes";
-    rev = "61058a8d2e2bd4482b53d57a68feb56cdb991f0b";
-    sha256 = "sha256-Tp1BpaF5qRav7O2TsSGjCfgRzhiasu4IuwROR66gz1o=";
+    rev = "28c26a621123ad4ebd5bbfb34ab39421c0144bdd";
+    hash = "sha256-Fg+rdGs5FAgfkYNCs74lnl8vkQmiZVdBsziyPhVqrlY=";
   };
 
   installPhase = ''

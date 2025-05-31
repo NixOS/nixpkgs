@@ -10,25 +10,24 @@
   openssl,
   libkrb5,
   makeDesktopItem,
-  writeShellScript,
-  nix-update,
+  nix-update-script,
 }:
 buildDotnetModule (finalAttrs: rec {
   pname = "msbuild-structured-log-viewer";
-  version = "2.2.392";
+  version = "2.2.490";
 
   src = fetchFromGitHub {
     owner = "KirillOsenkov";
     repo = "MSBuildStructuredLog";
     rev = "v${version}";
-    hash = "sha256-oMWFgELF/bIDQWOdrBAOLTluwH3rFO2vU0xCuRnrT1Y=";
+    hash = "sha256-VJun6bs47NKj90e/6ZGp66x+MG1R/qxqrn2L1bVkdHY=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   projectFile = [ "src/StructuredLogViewer.Avalonia/StructuredLogViewer.Avalonia.csproj" ];
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   # HACK: Clear out RuntimeIdentifiers that's set in StructuredLogViewer.Avalonia.csproj, otherwise our --runtime has no effect
   dotnetFlags = [ "-p:RuntimeIdentifiers=" ];
@@ -73,10 +72,7 @@ buildDotnetModule (finalAttrs: rec {
     categories = [ "Development" ];
   };
 
-  passthru.updateScript = writeShellScript "update-${finalAttrs.pname}" ''
-    ${lib.getExe nix-update}
-    "$(nix-build -A "$UPDATE_NIX_ATTR_PATH.fetch-deps" --no-out-link)"
-  '';
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Rich interactive log viewer for MSBuild logs";

@@ -19,7 +19,7 @@ This function accepts a list of strings representing Julia package names.
 For example, you can build a Julia environment with the `Plots` package as follows.
 
 ```nix
-julia.withPackages ["Plots"]
+julia.withPackages [ "Plots" ]
 ```
 
 Arguments can be passed using `.override`.
@@ -28,7 +28,8 @@ For example:
 ```nix
 (julia.withPackages.override {
   precompile = false; # Turn off precompilation
-}) ["Plots"]
+})
+  [ "Plots" ]
 ```
 
 Here's a nice way to run a Julia environment with a shell one-liner:

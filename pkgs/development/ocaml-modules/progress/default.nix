@@ -11,7 +11,7 @@
   astring,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "progress";
 
   minimalOCamlVersion = "4.08";

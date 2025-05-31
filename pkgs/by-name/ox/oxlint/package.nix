@@ -1,34 +1,34 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, rust-jemalloc-sys
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  rust-jemalloc-sys,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "oxlint";
-  version = "0.15.6";
+  version = "0.16.9";
 
   src = fetchFromGitHub {
     owner = "web-infra-dev";
     repo = "oxc";
     rev = "oxlint_v${version}";
-    hash = "sha256-2916XMkNvHmnY1wYHPSsRdCcgBHi4Akv1+A6WNlg6J4=";
+    hash = "sha256-6CTDUtui1YwfmR2f0MdqpNGmZ+fLyxtsf7NdhQTgsoI=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Qx2y4m9qTBb/OZpgMLpGwrkU0M1smjnRwxxdD1r90UQ=";
+  cargoHash = "sha256-Pt67KLcUiHRiQ7E6Rm3MuJ3kPYwmXzfUo0u6IVZn8D8=";
 
   buildInputs = [
     rust-jemalloc-sys
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
   ];
 
   env.OXC_VERSION = version;
 
-  cargoBuildFlags = [ "--bin=oxlint" "--bin=oxc_language_server" ];
+  cargoBuildFlags = [
+    "--bin=oxlint"
+    "--bin=oxc_language_server"
+  ];
   cargoTestFlags = cargoBuildFlags;
 
   meta = with lib; {

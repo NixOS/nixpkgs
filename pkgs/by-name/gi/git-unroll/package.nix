@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail \
         "#! nix-shell -i bash -p git nix rWrapper rPackages.jsonlite rPackages.processx rPackages.dplyr rPackages.plyr rPackages.stringr -I nixpkgs=." \
         "" \
-      --replace-fail '"$PWD/pkgs/build-support/fetchgit/nix-prefetch-git",' '"nix-prefetch-git"'
+      --replace-fail '"$PWD/pkgs/build-support/fetchgit/nix-prefetch-git",' '"nix-prefetch-git",'
   '';
 
   nativeBuildInputs = [

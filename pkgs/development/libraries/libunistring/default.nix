@@ -10,7 +10,7 @@
 
 let
   # https://lists.gnu.org/archive/html/bug-gnulib/2024-05/msg00375.html
-  # macoOS libiconv 14 & 15 do not work with libunistring and a configure test
+  # macOS libiconv 14 & 15 do not work with libunistring and a configure test
   # added in 1.3 rejects even building with it so use gnu libiconv on darwin
   libiconv = if stdenv.hostPlatform.isDarwin then libiconvReal else args.libiconv;
 in

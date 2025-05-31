@@ -99,10 +99,18 @@ let
   isGeneric =
     (stdenv.hostPlatform.isPower && stdenv.hostPlatform.isLittleEndian)
     || stdenv.hostPlatform.parsed.cpu.name == "armv6l"
+    || stdenv.hostPlatform.isLoongArch64
     || stdenv.hostPlatform.isRiscV;
 
   target =
-    if (stdenv.hostPlatform.isBSD || stdenv.hostPlatform != stdenv.buildPlatform) then
+    if
+      (
+        stdenv.hostPlatform.isBSD
+        || stdenv.hostPlatform != stdenv.buildPlatform
+        # https://issues.chromium.org/issues/359039635
+        || stdenv.hostPlatform.isLoongArch64
+      )
+    then
       (if isGeneric then "generic-gnu" else "${cpu}-${kernel}-gcc")
     else
       null;
@@ -127,7 +135,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "webmproject";
-    repo = pname;
+    repo = "libvpx";
     rev = "v${version}";
     hash = "sha256-ewkx1okhpa05jn4DyN8pkl6UJoz4Ymw4jRe6GN1lWuA=";
   };

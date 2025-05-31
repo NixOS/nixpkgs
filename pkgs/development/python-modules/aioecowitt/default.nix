@@ -12,21 +12,21 @@
 
 buildPythonPackage rec {
   pname = "aioecowitt";
-  version = "2024.2.2";
+  version = "2025.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
-    repo = pname;
+    repo = "aioecowitt";
     tag = version;
-    hash = "sha256-QfUawUtkNl2molropV8NSU7Kfm/D5/xuaPCjgm2TVOs=";
+    hash = "sha256-BAiRonfu3tFf5ZERbWO+MuEsefrOIaGxUExYx5fXZIM=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     meteocalc
   ];

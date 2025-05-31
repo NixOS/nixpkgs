@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  substituteAll,
+  replaceVars,
   buildPythonPackage,
   fetchPypi,
   joblib,
@@ -27,8 +27,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./backend-paths.patch;
+    (replaceVars ./backend-paths.patch {
       libespeak = "${lib.getLib espeak-ng}/lib/libespeak-ng${stdenv.hostPlatform.extensions.sharedLibrary}";
       # FIXME package festival
     })

@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, desktop-file-utils
-, gala
-, gsettings-desktop-schemas
-, gtk4
-, glib
-, gnome-settings-daemon
-, granite7
-, libgee
-, mutter
-, wrapGAppsHook4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  desktop-file-utils,
+  gala,
+  gsettings-desktop-schemas,
+  gtk4,
+  glib,
+  gnome-settings-daemon,
+  granite7,
+  libgee,
+  mutter,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/shortcut-overlay";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
     mainProgram = "io.elementary.shortcut-overlay";
   };
 }

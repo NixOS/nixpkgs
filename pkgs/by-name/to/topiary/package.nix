@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
   ];
   cargoTestFlags = cargoBuildFlags;
 
-  # Skip tests that cannot be executed in sandbox (operation not permited)
+  # Skip tests that cannot be executed in sandbox (operation not permitted)
   checkFlags = [
     "--skip=test_fmt_dir"
     "--skip=test_fmt_files"
@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage rec {
     '';
 
   doInstallCheck = true;
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

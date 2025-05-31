@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "asyncwhois";
-  version = "1.1.9";
+  version = "1.1.10";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "pogzyb";
     repo = "asyncwhois";
     tag = "v${version}";
-    hash = "sha256-Eb7De2AMxZi0Wu8dYA5wlX84BbF62L24vIuBEnvfxBU=";
+    hash = "sha256-vNXz8a0tXMxgcJ3xGKyJFgxQuIxpBg/xUeeG1TPXB0E=";
   };
 
   build-system = [ hatchling ];

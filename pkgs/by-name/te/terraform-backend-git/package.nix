@@ -41,6 +41,6 @@ buildGoModule rec {
     homepage = "https://github.com/plumber-cd/terraform-backend-git";
     changelog = "https://github.com/plumber-cd/terraform-backend-git/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ blaggacao ];
+    maintainers = with maintainers; [ ];
   };
 }

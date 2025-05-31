@@ -9,17 +9,17 @@
 
 let
   pname = "s3proxy";
-  version = "2.1.0";
+  version = "2.6.0";
 in
 maven.buildMavenPackage {
   inherit pname version;
-  mvnHash = "sha256-85mE/pZ0DXkzOKvTAqBXGatAt8gc4VPRCxmEyIlyVGI=";
+  mvnHash = "sha256-OCFs1Q4NL5heP8AVvkQ+ZdhmPD2SNZMCF2gxjXpbfW4=";
 
   src = fetchFromGitHub {
     owner = "gaul";
-    repo = pname;
+    repo = "s3proxy";
     rev = "s3proxy-${version}";
-    hash = "sha256-GhZPvo8wlXInHwg8rSmpwMMkZVw5SMpnZyKqFUYLbrE=";
+    hash = "sha256-wd3GdSAcoJvlyFqnccdhM83IY2Q7KJQHoyV+sQGEwo4=";
   };
 
   doCheck = !stdenv.hostPlatform.isDarwin;

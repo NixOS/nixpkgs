@@ -9,7 +9,6 @@
   xorg,
   cmake,
   libgit2,
-  darwin,
   curl,
   writableTmpDirAsHomeHook,
 }:
@@ -41,14 +40,9 @@ rustPlatform.buildRustPackage rec {
       xorg.libxcb
       libgit2
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        curl
-        Security
-        AppKit
-      ]
-    );
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      curl
+    ];
 
   nativeCheckInputs = [
     writableTmpDirAsHomeHook

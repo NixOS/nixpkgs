@@ -3,9 +3,8 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  installShellFiles,
   pkg-config,
-  sphinx,
-  python3Packages,
   glib,
   pcre,
   pcre2,
@@ -25,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mydumper";
-  version = "0.17.1-1";
+  version = "0.18.1-1";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "mydumper";
+    repo = "mydumper";
     tag = "v${version}";
-    hash = "sha256-PidivIe9zzLeRpn9ECfF6qVmkP/Xd+6kIYQXo64V9fM=";
+    hash = "sha256-7CnNcaZ2jLlLx211DA5Zk3uf724yCMpt/0zgjvZl3fM=";
     # as of mydumper v0.16.5-1, mydumper extracted its docs into a submodule
     fetchSubmodules = true;
   };
@@ -45,11 +44,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    # for docs
-    sphinx
-    python3Packages.furo
-    python3Packages.sphinx-copybutton
-    python3Packages.sphinx-inline-tabs
+    installShellFiles
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -67,19 +62,18 @@ stdenv.mkDerivation rec {
       zlib
       zstd
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       libselinux
       libsepol
     ];
 
   cmakeFlags = [
-    "-DBUILD_DOCS=ON"
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
     "-DMYSQL_INCLUDE_DIR=${lib.getDev libmysqlclient}/include/mysql"
   ];
 
   env.NIX_CFLAGS_COMPILE = (
-    if stdenv.isDarwin then
+    if stdenv.hostPlatform.isDarwin then
       toString [
         "-Wno-error=deprecated-non-prototype"
         "-Wno-error=format"
@@ -92,14 +86,13 @@ stdenv.mkDerivation rec {
     # as of mydumper v0.14.5-1, mydumper tries to install its config to /etc
     substituteInPlace CMakeLists.txt\
       --replace-fail "/etc" "$out/etc"
-
-    # as of mydumper v0.16.5-1, mydumper disables building docs by default
-    substituteInPlace CMakeLists.txt\
-        --replace-fail "#  add_subdirectory(docs)" "add_subdirectory(docs)"
   '';
 
-  preBuild = ''
-    cp -r $src/docs/images ./docs
+  # copy man files & docs over
+  postInstall = ''
+    installManPage $src/docs/man/*
+    mkdir -p $doc/share/doc/mydumper
+    cp -r $src/docs/html/* $doc/share/doc/mydumper
   '';
 
   passthru.updateScript = nix-update-script {

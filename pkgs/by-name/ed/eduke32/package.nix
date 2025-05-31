@@ -15,17 +15,10 @@
   libGL,
   SDL2,
   SDL2_mixer,
-  darwin,
   graphicsmagick,
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks)
-    AGL
-    Cocoa
-    GLUT
-    OpenGL
-    ;
   wrapper = "eduke32-wrapper";
   swWrapper = "voidsw-wrapper";
   furyWrapper = "fury-wrapper";
@@ -33,14 +26,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "eduke32";
-  version = "0-unstable-2024-07-26";
+  version = "0-unstable-2025-04-11";
 
   src = fetchFromGitLab {
     domain = "voidpoint.io";
     owner = "terminx";
     repo = "eduke32";
-    rev = "19c21b9ab10b0c17147c9ad951cc15279ed33f77";
-    hash = "sha256-lwnx2tVjbHouB0vaT7Dh1Ozea8+7Az6e4Wn6HmxDxCo=";
+    rev = "b8759847124c2c53a165a02efef4a0c778674baf";
+    hash = "sha256-PudO6EKCh6UpoY6GT/J0hkVteKNIAO4Q454jIzaegMg=";
   };
 
   patches = [
@@ -61,12 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
       alsa-lib
       gtk2
       libGL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AGL
-      Cocoa
-      GLUT
-      OpenGL
     ];
 
   nativeBuildInputs =
@@ -97,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "SDLCONFIG=${SDL2}/bin/sdl2-config"
     # git rev-list --count HEAD
-    "VC_REV=10593"
+    "VC_REV=10619"
     "VC_HASH=${lib.substring 0 9 finalAttrs.src.rev}"
     "VC_BRANCH=master"
   ];

@@ -9,13 +9,6 @@
   which,
   DarwinTools,
   xcbuild,
-  AppKit,
-  Carbon,
-  CoreAudio,
-  CoreMIDI,
-  CoreServices,
-  Kernel,
-  MultitouchSupport,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,18 +31,7 @@ stdenv.mkDerivation rec {
       xcbuild
     ];
 
-  buildInputs =
-    [ libsndfile ]
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) alsa-lib
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      Carbon
-      CoreAudio
-      CoreMIDI
-      CoreServices
-      Kernel
-      MultitouchSupport
-    ];
+  buildInputs = [ libsndfile ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) alsa-lib;
 
   patches = [ ./darwin-limits.patch ];
 

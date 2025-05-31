@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "ols";
-  version = "0-unstable-2025-01-28";
+  version = "0-unstable-2025-05-11";
 
   src = fetchFromGitHub {
     owner = "DanielGavin";
     repo = "ols";
-    rev = "a71caaac9f8ac113d81fc714a41c9b9e96d1fee7";
-    hash = "sha256-aUQKbZOrxDdUGORY2Rr2Drfxi0Q+dZZQSBCkJ+XQhcE=";
+    rev = "89f83305019a70d714af015aec734700dfee967c";
+    hash = "sha256-z+0+eEc+DOmHRv4jt3kOq4WvvJ4o+h9j/JDYgmxNCms=";
   };
 
   postPatch = ''

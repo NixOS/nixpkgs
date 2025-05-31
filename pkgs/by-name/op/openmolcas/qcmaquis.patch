@@ -45,3 +45,58 @@ index 5fd1ef207..8d2957c6e 100644
                         SOURCE_SUBDIR dmrg
                         CMAKE_ARGS ${EP_CMAKE_ARGS}
                         CMAKE_CACHE_ARGS ${EP_CMAKE_CACHE_ARGS}
+diff --git a/cmake/custom/qcmaquis.cmake b/cmake/custom/qcmaquis.cmake
+index 5fd1ef207..4291ec3d7 100644
+--- a/cmake/custom/qcmaquis.cmake
++++ b/cmake/custom/qcmaquis.cmake
+@@ -94,47 +94,9 @@ if (NOT MAQUIS_DMRG_FOUND) # Does the opposite work?
+     )
+   endif (BOOST_ROOT)
+
+-  if (LINALG STREQUAL "Manual")
+-    target_files (LINALG_LIBRARIES_FILES ${LINALG_LIBRARIES})
+-    list (APPEND LINALG_LIBRARIES_FILES ${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES})
+-    string (REPLACE ";" '\' LINALG_LIBRARIES_FILES "${LINALG_LIBRARIES_FILES}")
+-    list (APPEND QCMaquisCMakeArgs
+-          "-DBLAS_LAPACK_SELECTOR=manual"
+-          "-DMAQUISLapack_LIBRARIES=${LINALG_LIBRARIES_FILES}"
+-    )
+-  elseif (LINALG STREQUAL "MKL")
+-    list (APPEND QCMaquisCMakeArgs
+-          "-DBLAS_LAPACK_SELECTOR=mkl_sequential"
+-    )
+-  elseif (LINALG STREQUAL "OpenBLAS")
+-    list (APPEND QCMaquisCMakeArgs
+-          "-DBLAS_LAPACK_SELECTOR=openblas"
+-          "-DOPENBLASROOT=${OPENBLASROOT}"
+-    )
+-  elseif (LINALG STREQUAL "Accelerate")
+-    list (APPEND QCMaquisCMakeArgs
+-          "-DBLAS_LAPACK_SELECTOR:STRING=veclib"
+-    )
+-  elseif (LINALG STREQUAL "Internal")
+-
+-    # To link QCMaquis with Fortran static libraries, we
+-    # need to add -lgfortran for gfortran
+-    # It seems that ${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES}
+-    # is not suited for this because it contains also other unnecessary libraries
+-
+-    # for some reason, the list does not work if the generator expression -lgfortran is not first
+-    # but for correct linking it needs to be last AND with a prepended "-l"
+-    if (CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
+-      set (Fortran_RUNTIME_LIBRARY "gfortran")
+-    endif ()
+-
+-    list (APPEND QCMaquisCMakeArgs
+-          "-DBLAS_LAPACK_SELECTOR=manual"
+-          "-DMAQUISLapack_LIBRARIES=$<$<BOOL:Fortran_RUNTIME_LIBRARY>:${Fortran_RUNTIME_LIBRARY}\ >$<TARGET_FILE:blas>\ $<TARGET_FILE:lapack>\ $<TARGET_FILE:blas>\ -l$<$<BOOL:Fortran_RUNTIME_LIBRARY>:${Fortran_RUNTIME_LIBRARY}>"
+-    )
+-  else ()
+-    message (FATAL_ERROR "LINALG=${LINALG} is not supported by QCMaquis")
+-  endif ()
++  list (APPEND QCMaquisCMakeArgs
++        "-DBLAS_LAPACK_SELECTOR=auto"
++  )
+
+   # Enabling source changes to keep ExternalProject happy
+   set (CMAKE_DISABLE_SOURCE_CHANGES OFF

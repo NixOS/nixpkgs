@@ -15,23 +15,24 @@
   libadwaita,
   glib-networking,
   gst_all_1,
+  libxml2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netease-cloud-music-gtk";
-  version = "2.5.0";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "gmg137";
     repo = "netease-cloud-music-gtk";
     tag = finalAttrs.version;
-    hash = "sha256-QRgGQDYrqOpZErz+OHZF1GPshxnZRPTIJSNkFWqQeHM=";
+    hash = "sha256-3vAEk4HwS7EiMv0DAYOvZ9dOlO0yMEUcaO2qCCWlpLs=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "netease-cloud-music-api-1.5.0" = "sha256-3CBWYUJ+5/KRQ6/EPt84rBxXQRjhvazrasRzbpkRwPU=";
+      "netease-cloud-music-api-1.5.1" = "sha256-PFzXm7jgNsEJiluBaNuhSF0kg/licDdbItMDWmfIBDk=";
     };
   };
 
@@ -48,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
     cargo
     rustc
+    libxml2
   ];
 
   buildInputs =

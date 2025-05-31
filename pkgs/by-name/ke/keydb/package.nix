@@ -37,11 +37,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    jemalloc
-    curl
-    libuuid
-  ] ++ lib.optionals tlsSupport [ openssl ] ++ lib.optionals withSystemd [ systemd ];
+  buildInputs =
+    [
+      jemalloc
+      curl
+      libuuid
+    ]
+    ++ lib.optionals tlsSupport [ openssl ]
+    ++ lib.optionals withSystemd [ systemd ];
 
   makeFlags =
     [
@@ -114,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     changelog = "https://github.com/Snapchat/KeyDB/raw/v${finalAttrs.version}/00-RELEASENOTES";
-    maintainers = lib.teams.helsinki-systems.members;
+    teams = [ lib.teams.helsinki-systems ];
     mainProgram = "keydb-cli";
   };
 })

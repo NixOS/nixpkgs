@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/udisks2-qt5";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }

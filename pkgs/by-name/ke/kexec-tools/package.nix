@@ -4,6 +4,7 @@
   buildPackages,
   fetchurl,
   fetchpatch,
+  nixosTests,
   zlib,
 }:
 
@@ -46,6 +47,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.tests.kexec = nixosTests.kexec;
+
   meta = with lib; {
     homepage = "http://horms.net/projects/kexec/kexec-tools";
     description = "Tools related to the kexec Linux feature";
@@ -59,5 +62,6 @@ stdenv.mkDerivation rec {
       "sparc64-linux"
     ];
     license = licenses.gpl2Only;
+    mainProgram = "kexec";
   };
 }

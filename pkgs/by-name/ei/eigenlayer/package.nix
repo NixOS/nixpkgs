@@ -6,21 +6,24 @@
 }:
 buildGoModule rec {
   pname = "eigenlayer";
-  version = "0.11.1";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "Layr-Labs";
     repo = "eigenlayer-cli";
     rev = "v${version}";
-    hash = "sha256-CqEHf19Xup2p+pBRZQUnh+hapSJxgo26xz7WcAH4iQM=";
+    hash = "sha256-5JOI1JBHiM9gPuBQv/7lWtfpAEdPLueVaSDnN8G4llA=";
   };
 
-  vendorHash = "sha256-CUCxGSZ7NxCu3uQswp2mrcJClCTQtLnCvpO/KdKZAZo=";
+  vendorHash = "sha256-VUYYgGsFcrSlt2YXmPk5mBJlWWKl48upF7i/xYZApiM=";
 
-  ldflags = ["-s" "-w"];
-  subPackages = ["cmd/eigenlayer"];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
+  subPackages = [ "cmd/eigenlayer" ];
 
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://www.eigenlayer.xyz/";
@@ -28,6 +31,6 @@ buildGoModule rec {
     description = "Utility that manages core operator functionalities like local keys, operator registration and updates";
     mainProgram = "eigenlayer";
     license = licenses.bsl11;
-    maintainers = with maintainers; [selfuryon];
+    maintainers = with maintainers; [ selfuryon ];
   };
 }

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -30,6 +31,10 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "geocodio" ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_timeout"
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

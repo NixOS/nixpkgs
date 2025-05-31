@@ -1,20 +1,21 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "dbmate";
-  version = "2.25.0";
+  version = "2.27.0";
 
   src = fetchFromGitHub {
     owner = "amacneil";
     repo = "dbmate";
     tag = "v${version}";
-    hash = "sha256-bXiLg3l9Uj1QdEyF6JfKqHMZP7Zi1Q88SsvrX2CueM4=";
+    hash = "sha256-HlX84eqM9s9EWCKnFDqcpUoEBc20/fpw1KHQ7q0UkLo=";
   };
 
-  vendorHash = "sha256-PpEWupCSyxzei8faGzJzWyfcrvgF9IiPRyjxasJ2XlM=";
+  vendorHash = "sha256-yZmTzoa/tl/vJWX5Ds0wL14iAc2uxJHRWCS5XMN12Hs=";
 
   doCheck = false;
 

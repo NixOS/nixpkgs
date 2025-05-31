@@ -1,17 +1,16 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, libgit2
-, openssl
-, zlib
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  libgit2,
+  openssl,
+  zlib,
 }:
 
 let
-  version = "5.14.3";
+  version = "5.14.4";
 in
 rustPlatform.buildRustPackage {
   pname = "git-mit";
@@ -21,20 +20,17 @@ rustPlatform.buildRustPackage {
     owner = "PurpleBooth";
     repo = "git-mit";
     rev = "v${version}";
-    hash = "sha256-+7rl4wxVQq4bLBsnLSeJD+1kkRuf7FCi81pXGrNNOPI=";
+    hash = "sha256-8XWwzR9TiSCU6fKbrulKpCDFDEyzQpaT2nrahF8iac8=";
   };
 
   useFetchCargoVendor = true;
 
   cargoPatches = [
-    (fetchpatch {
-      name = "libgit2-update.patch";
-      url = "https://github.com/PurpleBooth/git-mit/pull/1543/commits/3e82a4f5017972c7d28151a468bb71fe7d2279e0.patch";
-      hash = "sha256-M9RpZHjOpZZqdHQe57LwMZ9zX6/4BNg3ymz8H3qupFk=";
-    })
+    # https://github.com/PurpleBooth/git-mit/pull/1543
+    ./libgit2-update.patch
   ];
 
-  cargoHash = "sha256-uoS6vmHmOVkHS81mrsbbXqP/dAC/FNHAlpTDHSa632k=";
+  cargoHash = "sha256-B2XRdcwcFxMwnDl5ndIw72OEsn6D2Y8rIoeO4tclJkk=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -42,8 +38,6 @@ rustPlatform.buildRustPackage {
     libgit2
     openssl
     zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
   ];
 
   env = {

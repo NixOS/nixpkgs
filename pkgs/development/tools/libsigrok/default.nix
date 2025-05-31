@@ -12,14 +12,14 @@
   libserialport,
   doxygen,
   glibmm,
-  python,
+  python3,
   hidapi,
   libieee1284,
   bluez,
   sigrok-firmware-fx2lafw,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libsigrok";
   version = "0.5.2-unstable-2024-10-20";
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     doxygen
     pkg-config
-    python
+    python3
   ];
   buildInputs =
     [

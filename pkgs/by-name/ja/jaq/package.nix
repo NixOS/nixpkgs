@@ -8,22 +8,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jaq";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "01mf02";
     repo = "jaq";
     tag = "v${version}";
-    hash = "sha256-J+48TWGio6KplqYFJM25LGIuf+yAyE7NMqgPUPgpTeY=";
+    hash = "sha256-mVC2aggfcEpCtriuz/s4JL8mYkrlyAQLnaN5vyfcW3s=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-hgbRDsm9qghvUpKaFMr7keHEk9TUYRVZnnWouky/Zm8=";
+  cargoHash = "sha256-ZZLp3Vwq013MPxKy9gTZ1yMi2O0QcDPgFw5YnrYt90I=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

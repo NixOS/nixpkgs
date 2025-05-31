@@ -204,7 +204,7 @@ in
         ensurePermissions =
           let
             privs = "SELECT, SHOW VIEW, TRIGGER, LOCK TABLES";
-            grant = db: lib.nameValuePair "${db}.*" privs;
+            grant = db: lib.nameValuePair "\\`${db}\\`.*" privs;
           in
           lib.listToAttrs (map grant cfg.databases);
       }

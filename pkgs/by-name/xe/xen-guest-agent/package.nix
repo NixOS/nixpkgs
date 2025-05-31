@@ -5,13 +5,13 @@
   pkg-config,
   xen,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "xen-guest-agent";
   version = "0.4.0-unstable-2024-05-31";
 
   src = fetchFromGitLab {
     owner = "xen-project";
-    repo = pname;
+    repo = "xen-guest-agent";
     rev = "03aaadbe030f303b1503e172ee2abb6d0cab7ac6";
     hash = "sha256-OhzRsRwDvt0Ov+nLxQSP87G3RDYSLREMz2w9pPtSUYg=";
   };
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://gitlab.com/xen-project/xen-guest-agent";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.unix;
-    maintainers = lib.teams.xen.members;
+    teams = [ lib.teams.xen ];
     mainProgram = "xen-guest-agent";
   };
 }

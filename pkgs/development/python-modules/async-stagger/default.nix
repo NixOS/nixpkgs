@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "async-stagger";
-  version = "0.4.0.post1";
+  version = "0.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "twisteroidambassador";
     repo = "async_stagger";
     tag = "v${version}";
-    hash = "sha256-uJohc3EsAKevqT0J+N0Cqop3xy0PCM5jsP6YYtx+HuQ=";
+    hash = "sha256-qLeTP5FWHho/CbXth3OQNW15Y8uibOh35KqskoIUTHQ=";
   };
 
   build-system = [ setuptools ];

@@ -1,0 +1,118 @@
+diff --git a/packages/plugin-essentials/sources/commands/install.ts b/packages/plugin-essentials/sources/commands/install.ts
+index 9dcd02d12..cf1765a20 100644
+--- a/packages/plugin-essentials/sources/commands/install.ts
++++ b/packages/plugin-essentials/sources/commands/install.ts
+@@ -254,6 +254,7 @@ export default class YarnCommand extends BaseCommand {
+       // If migrating from a v1 install, we automatically enable the node-modules linker,
+       // since that's likely what the author intended to do.
+       if (content?.includes(`yarn lockfile v1`)) {
++        throw new Error("Tried to use yarn-berry_3.yarnConfigHook (nixpkgs), but found a yarn v1 lockfile");
+         const nmReport = await StreamReport.start({
+           configuration,
+           json: this.json,
+diff --git a/packages/plugin-git/sources/GitFetcher.ts b/packages/plugin-git/sources/GitFetcher.ts
+index fe2a4fce8..bfa82728e 100644
+--- a/packages/plugin-git/sources/GitFetcher.ts
++++ b/packages/plugin-git/sources/GitFetcher.ts
+@@ -50,9 +50,14 @@ export class GitFetcher implements Fetcher {
+   }
+ 
+   async cloneFromRemote(locator: Locator, opts: FetchOptions) {
+-    const cloneTarget = await gitUtils.clone(locator.reference, opts.project.configuration);
+-
+     const repoUrlParts = gitUtils.splitRepoUrl(locator.reference);
++
++    if (repoUrlParts.treeish.protocol !== "commit") {
++        throw new Error(`Missing source for git dependency ${locator.reference}`);
++    };
++
++    const cloneTarget = opts.cache.checkoutPath(repoUrlParts.treeish.request);
++
+     const packagePath = ppath.join(cloneTarget, `package.tgz` as PortablePath);
+ 
+     await scriptUtils.prepareExternalProject(cloneTarget, packagePath, {
+diff --git a/packages/plugin-npm/sources/NpmSemverFetcher.ts b/packages/plugin-npm/sources/NpmSemverFetcher.ts
+index 0f69423c7..5b21462a5 100644
+--- a/packages/plugin-npm/sources/NpmSemverFetcher.ts
++++ b/packages/plugin-npm/sources/NpmSemverFetcher.ts
+@@ -47,6 +47,7 @@ export class NpmSemverFetcher implements Fetcher {
+   }
+ 
+   private async fetchFromNetwork(locator: Locator, opts: FetchOptions) {
++    throw new Error(`Missing sources for ${structUtils.prettyLocator(opts.project.configuration, locator)}`);
+     let sourceBuffer;
+     try {
+       sourceBuffer = await npmHttpUtils.get(NpmSemverFetcher.getLocatorUrl(locator), {
+diff --git a/packages/yarnpkg-core/sources/Cache.ts b/packages/yarnpkg-core/sources/Cache.ts
+index d5e686420..374b5d67f 100644
+--- a/packages/yarnpkg-core/sources/Cache.ts
++++ b/packages/yarnpkg-core/sources/Cache.ts
+@@ -158,6 +158,10 @@ export class Cache {
+     }
+   }
+ 
++  checkoutPath(commit: string): string {
++    return ppath.join(ppath.join(this.cwd, "../checkouts"), commit);
++  }
++
+   async fetchPackageFromCache(locator: Locator, expectedChecksum: string | null, {onHit, onMiss, loader, ...opts}: {onHit?: () => void, onMiss?: () => void, loader?: () => Promise<ZipFS> } & CacheOptions): Promise<[FakeFS<PortablePath>, () => void, string | null]> {
+     const mirrorPath = this.getLocatorMirrorPath(locator);
+ 
+diff --git a/packages/yarnpkg-core/sources/scriptUtils.ts b/packages/yarnpkg-core/sources/scriptUtils.ts
+index b3c2c5903..641687745 100644
+--- a/packages/yarnpkg-core/sources/scriptUtils.ts
++++ b/packages/yarnpkg-core/sources/scriptUtils.ts
+@@ -262,20 +262,6 @@ export async function prepareExternalProject(cwd: PortablePath, outputPath: Port
+               ? [`workspace`, workspace]
+               : [];
+ 
+-            // `set version` will update the Manifest to contain a `packageManager` field with the latest
+-            // Yarn version which causes the results to change depending on when this command was run,
+-            // therefore we revert any change made to it.
+-            const manifestPath = ppath.join(cwd, Filename.manifest);
+-            const manifestBuffer = await xfs.readFilePromise(manifestPath);
+-
+-            // Makes sure that we'll be using Yarn 1.x
+-            const version = await execUtils.pipevp(process.execPath, [process.argv[1], `set`, `version`, `classic`, `--only-if-needed`], {cwd, env, stdin, stdout, stderr, end: execUtils.EndStrategy.ErrorCode});
+-            if (version.code !== 0)
+-              return version.code;
+-
+-            // Revert any changes made to the Manifest by `set version`.
+-            await xfs.writeFilePromise(manifestPath, manifestBuffer);
+-
+             // Otherwise Yarn 1 will pack the .yarn directory :(
+             await xfs.appendFilePromise(ppath.join(cwd, `.npmignore` as PortablePath), `/.yarn\n`);
+ 
+@@ -284,16 +270,8 @@ export async function prepareExternalProject(cwd: PortablePath, outputPath: Port
+             // Remove environment variables that limit the install to just production dependencies
+             delete env.NODE_ENV;
+ 
+-            // Run an install; we can't avoid it unless we inspect the
+-            // package.json, which I don't want to do to keep the codebase
+-            // clean (even if it has a slight perf cost when cloning v1 repos)
+-            const install = await execUtils.pipevp(`yarn`, [`install`], {cwd, env, stdin, stdout, stderr, end: execUtils.EndStrategy.ErrorCode});
+-            if (install.code !== 0)
+-              return install.code;
+-
+-            stdout.write(`\n`);
+-
+-            const pack = await execUtils.pipevp(`yarn`, [...workspaceCli, `pack`, `--filename`, npath.fromPortablePath(outputPath)], {cwd, env, stdin, stdout, stderr});
++            env["SKIP_YARN_COREPACK_CHECK"] = "1";
++            const pack = await execUtils.pipevp(`@yarnv1@`, [...workspaceCli, `--offline`, `pack`, `--filename`, npath.fromPortablePath(outputPath)], {cwd, env, stdin, stdout, stderr});
+             if (pack.code !== 0)
+               return pack.code;
+ 
+@@ -372,13 +350,6 @@ export async function prepareExternalProject(cwd: PortablePath, outputPath: Port
+             delete env.NPM_CONFIG_PRODUCTION;
+             delete env.NODE_ENV;
+ 
+-            // We can't use `npm ci` because some projects don't have npm
+-            // lockfiles that are up-to-date. Hopefully npm won't decide
+-            // to change the versions randomly.
+-            const install = await execUtils.pipevp(`npm`, [`install`], {cwd, env, stdin, stdout, stderr, end: execUtils.EndStrategy.ErrorCode});
+-            if (install.code !== 0)
+-              return install.code;
+-
+             const packStream = new PassThrough();
+             const packPromise = miscUtils.bufferStream(packStream);
+ 

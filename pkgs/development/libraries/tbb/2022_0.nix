@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
+  ninja,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,6 +25,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    ninja
   ];
 
   patches = [
@@ -31,6 +33,12 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://patch-diff.githubusercontent.com/raw/oneapi-src/oneTBB/pull/899.patch";
       hash = "sha256-kU6RRX+sde0NrQMKlNtW3jXav6J4QiVIUmD50asmBPU=";
+    })
+    # Fix tests on FreeBSD and Windows
+    (fetchpatch {
+      name = "fix-tbb-freebsd-and-windows-tests.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/uxlfoundation/oneTBB/pull/1696.patch";
+      hash = "sha256-yjX2FkOK8bz29a/XSA7qXgQw9lxzx8VIgEBREW32NN4=";
     })
   ];
 
@@ -61,6 +69,8 @@ stdenv.mkDerivation rec {
       --replace-fail 'tbb_add_test(SUBDIR conformance NAME conformance_resumable_tasks DEPENDENCIES TBB::tbb)' ""
   '';
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     description = "Intel Thread Building Blocks C++ Library";
     homepage = "http://threadingbuildingblocks.org/";
@@ -73,8 +83,9 @@ stdenv.mkDerivation rec {
       represents a higher-level, task-based parallelism that abstracts platform
       details and threading mechanisms for scalability and performance.
     '';
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
     maintainers = with maintainers; [
+      silvanshade
       thoughtpolice
       tmarkus
     ];

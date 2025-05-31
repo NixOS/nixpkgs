@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   beamPackages,
   fetchFromGitHub,
   fetchFromGitLab,
@@ -12,21 +11,20 @@
   vips,
   pkg-config,
   glib,
-  darwin,
   fetchpatch,
   ...
 }:
 
 beamPackages.mixRelease rec {
   pname = "pleroma";
-  version = "2.8.0";
+  version = "2.9.1";
 
   src = fetchFromGitLab {
     domain = "git.pleroma.social";
     owner = "pleroma";
     repo = "pleroma";
     rev = "v${version}";
-    sha256 = "sha256-8xhBItGl2BvpYB1N1hZbO1xbtYFldUPCiOI4Kvvywaw=";
+    sha256 = "sha256-mZcr+LlRQFDZVU5yAm0XkFdFHCDp4DZNLoVUlWxknMI=";
   };
 
   patches = [ ./Revert-Config-Restrict-permissions-of-OTP-config.patch ];
@@ -126,16 +124,10 @@ beamPackages.mixRelease rec {
 
       vix = prev.vix.override {
         nativeBuildInputs = [ pkg-config ];
-        buildInputs =
-          [
-            vips
-            glib.dev
-          ]
-          ++ lib.optionals stdenv.hostPlatform.isDarwin [
-            darwin.apple_sdk.frameworks.Foundation
-            darwin.apple_sdk.frameworks.AppKit
-            darwin.apple_sdk.frameworks.Kerberos
-          ];
+        buildInputs = [
+          vips
+          glib.dev
+        ];
         VIX_COMPILATION_MODE = "PLATFORM_PROVIDED_LIBVIPS";
       };
 

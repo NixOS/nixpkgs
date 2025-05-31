@@ -1,23 +1,25 @@
-{ lib, stdenv
-, fetchFromGitLab
-, bzip2
-, cmake
-, expat
-, freetype
-, irrlicht
-, libICE
-, libGL
-, libGLU
-, libSM
-, libX11
-, libXext
-, libXxf86vm
-, libjpeg
-, libpng
-, libvorbis
-, openal
-, pkg-config
-, sqlite
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  bzip2,
+  cmake,
+  expat,
+  freetype,
+  irrlicht,
+  libICE,
+  libGL,
+  libGLU,
+  libSM,
+  libX11,
+  libXext,
+  libXxf86vm,
+  libjpeg,
+  libpng,
+  libvorbis,
+  openal,
+  pkg-config,
+  sqlite,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,8 +27,8 @@ stdenv.mkDerivation rec {
   version = "1704.00";
 
   src = fetchFromGitLab {
-    owner = pname;
-    repo = pname;
+    owner = "voxelands";
+    repo = "voxelands";
     rev = version;
     sha256 = "0yj9z9nygpn0z63y739v72l3kg81wd71xgix5k045vfzhqsam5m0";
   };
@@ -69,6 +71,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ ];
-    broken = stdenv.hostPlatform.isAarch64;  # build fails with "libIrrlicht.so: undefined reference to `png_init_filter_functions_neon'"
+    broken = stdenv.hostPlatform.isAarch64; # build fails with "libIrrlicht.so: undefined reference to `png_init_filter_functions_neon'"
   };
 }

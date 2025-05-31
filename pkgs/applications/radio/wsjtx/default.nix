@@ -23,12 +23,12 @@
 
 stdenv.mkDerivation rec {
   pname = "wsjtx";
-  version = "2.6.1";
+  version = "2.7.0";
 
   src = fetchgit {
     url = "http://git.code.sf.net/p/wsjt/wsjtx";
     rev = "wsjtx-${version}";
-    hash = "sha256-fELx3B9JqCCL5vaIHab3of5ah9qdu5lemqjUnvY5DdM=";
+    hash = "sha256-AAPZTJUhz3x/28B9rk2uwFs1bkcEvaj+hOzAjpsFALQ=";
   };
 
   nativeBuildInputs = [

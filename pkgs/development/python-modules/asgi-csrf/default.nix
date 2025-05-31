@@ -6,7 +6,7 @@
   # build-system
   setuptools,
 
-  # depedencies
+  # dependencies
   itsdangerous,
   python-multipart,
 

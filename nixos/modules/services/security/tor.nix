@@ -1324,6 +1324,7 @@ in
 
     systemd.services.tor = {
       description = "Tor Daemon";
+      documentation = [ "man:tor(8)" ];
       path = [ pkgs.tor ];
 
       wantedBy = [ "multi-user.target" ];

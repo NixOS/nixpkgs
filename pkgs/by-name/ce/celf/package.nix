@@ -8,11 +8,11 @@
 stdenv.mkDerivation rec {
   pname = "celf";
   pversion = "2013-07-25";
-  name = "${pname}-${pversion}";
+  name = "celf-${pversion}";
 
   src = fetchFromGitHub {
     owner = "clf";
-    repo = pname;
+    repo = "celf";
     rev = "d61d95900ab316468ae850fa34a2fe9488bc5b59";
     sha256 = "0slrwcxglp0sdbp6wr65cdkl5wcap2i0fqxbwqfi1q3cpb6ph6hq";
   };

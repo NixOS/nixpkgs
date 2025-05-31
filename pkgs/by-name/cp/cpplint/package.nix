@@ -7,20 +7,20 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "cpplint";
-  version = "2.0.0";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cpplint";
     repo = "cpplint";
     tag = version;
-    hash = "sha256-076363ZwcriPb+Fn9S5jay8oL+LlBTNh+IqQRCAndRo=";
+    hash = "sha256-4crTuqynQt8Nyjqea6DpREtLy7ydRF0hNVnc7tUnO1k=";
   };
 
+  # We use pytest-cov-stub instead
   postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail "pytest-cov" "" \
-      --replace-fail "--cov-fail-under=90 --cov=cpplint" ""
+    substituteInPlace pyproject.toml \
+      --replace-fail '"pytest-cov",' ""
   '';
 
   build-system = with python3Packages; [
@@ -29,12 +29,13 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = with python3Packages; [
     parameterized
-    pytestCheckHook
+    pytest-cov-stub
     pytest-timeout
+    pytestCheckHook
     testfixtures
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     homepage = "https://github.com/cpplint/cpplint";

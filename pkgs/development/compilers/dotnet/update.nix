@@ -91,7 +91,7 @@ writeScript "update-dotnet-vmr.sh" ''
 
   (
       curl -fsSL https://api.github.com/repos/dotnet/dotnet/releases | \
-      jq -r "$query" \
+      jq -er "$query" \
   ) | (
       read tagName
       read releaseUrl
@@ -140,7 +140,7 @@ writeScript "update-dotnet-vmr.sh" ''
 
       artifactsHash=$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url "$artifactsUrl")")
 
-      sdkVersion=$(jq -r .tools.dotnet global.json)
+      sdkVersion=$(jq -er .tools.dotnet global.json)
 
       # below needs to be run in nixpkgs because toOutputPath uses relative paths
       cd -
@@ -158,8 +158,8 @@ writeScript "update-dotnet-vmr.sh" ''
           }' > "${toOutputPath releaseInfoFile}"
 
       ${lib.escapeShellArg (toOutputPath ./update.sh)} \
-          -o ${lib.escapeShellArg (toOutputPath bootstrapSdkFile)} --sdk "$sdkVersion"
+          -o ${lib.escapeShellArg (toOutputPath bootstrapSdkFile)} --sdk "$sdkVersion" >&2
 
-      $(nix-build -A $UPDATE_NIX_ATTR_PATH.fetch-deps --no-out-link)
+      $(nix-build -A $UPDATE_NIX_ATTR_PATH.fetch-deps --no-out-link) >&2
   )
 ''

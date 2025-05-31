@@ -15,16 +15,16 @@
 let
   package = buildGoModule rec {
     pname = "opentofu";
-    version = "1.9.0";
+    version = "1.9.1";
 
     src = fetchFromGitHub {
       owner = "opentofu";
       repo = "opentofu";
       tag = "v${version}";
-      hash = "sha256-e0ZzbQdex0DD7Bj9WpcVI5roh0cMbJuNr5nsSVaOSu4=";
+      hash = "sha256-YZMv17fnvzgzm35MXFkvMc5JAuPnyapa41H8Ob4t88c=";
     };
 
-    vendorHash = "sha256-fMTbLSeW+pw6GK8/JLZzG2ER90ss2g1FSDX5+f292do=";
+    vendorHash = "sha256-avfyMwYv8nKLCUHSExsPvYQrt9sMKZNPHFB/YFGQs2s=";
     ldflags = [
       "-s"
       "-w"
@@ -108,28 +108,7 @@ let
   withPlugins =
     plugins:
     let
-      actualPlugins = lib.lists.map (
-        provider:
-        if provider ? override then
-          # use opentofu plugin registry over terraform's
-          provider.override (
-            oldArgs:
-            if (builtins.hasAttr "homepage" oldArgs) then
-              {
-                provider-source-address =
-                  lib.replaceStrings
-                    [ "https://registry.terraform.io/providers" ]
-                    [
-                      "registry.opentofu.org"
-                    ]
-                    oldArgs.homepage;
-              }
-            else
-              { }
-          )
-        else
-          provider
-      ) (plugins package.plugins);
+      actualPlugins = plugins package.plugins;
 
       # Wrap PATH of plugins propagatedBuildInputs, plugins may have runtime dependencies on external binaries
       wrapperInputs = lib.unique (
@@ -183,13 +162,16 @@ let
           passthru = package.passthru // passthru;
 
           buildCommand = ''
-            # Create wrappers for terraform plugins because Terraform only
+            # Create wrappers for terraform plugins because OpenTofu only
             # walks inside of a tree of files.
+            # Also replace registry.terraform.io dir with registry.opentofu.org,
+            # so OpenTofu can find the plugins.
             for providerDir in ${toString actualPlugins}
             do
               for file in $(find $providerDir/libexec/terraform-providers -type f)
               do
                 relFile=''${file#$providerDir/}
+                relFile=''${relFile/registry.terraform.io/registry.opentofu.org}
                 mkdir -p $out/$(dirname $relFile)
                 cat <<WRAPPER > $out/$relFile
             #!${runtimeShell}

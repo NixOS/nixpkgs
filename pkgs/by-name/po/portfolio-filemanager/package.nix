@@ -18,7 +18,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "portfolio";
-  version = "1.0.1";
+  version = "1.0.2";
 
   format = "other";
 
@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "tchx84";
     repo = "Portfolio";
     rev = "v${version}";
-    hash = "sha256-IbzAkHlD6duXkPJRSyD9HJ/JHP8+IR7vIGFp2ESbBug=";
+    hash = "sha256-v86pQbj5+SqdzsW0Ko5TW/12NsFVNSPyX6g0e+MdzHE=";
   };
 
   postPatch = ''

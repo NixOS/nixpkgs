@@ -64,7 +64,6 @@ buildDunePackage {
     in
     [
       (replaceVars (if old-patch then ./fix-paths.patch else ./fix-paths2.patch) {
-
         dot-merlin-reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
         dune = "${dune_3}/bin/dune";
       })
@@ -96,6 +95,7 @@ buildDunePackage {
     description = "Editor-independent tool to ease the development of programs in OCaml";
     homepage = "https://github.com/ocaml/merlin";
     license = licenses.mit;
+    mainProgram = "ocamlmerlin";
     maintainers = [
       maintainers.vbgl
       maintainers.sternenseemann

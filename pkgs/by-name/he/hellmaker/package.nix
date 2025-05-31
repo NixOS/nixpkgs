@@ -6,7 +6,7 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "hellmaker";
   version = "0-unstable-2023-03-18";
 

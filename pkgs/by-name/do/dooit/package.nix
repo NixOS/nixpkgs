@@ -12,14 +12,14 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "dooit";
-  version = "3.1.0";
+  version = "3.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dooit-org";
     repo = "dooit";
     tag = "v${version}";
-    hash = "sha256-tqSWDW3nj+nMt7t5vgSqWvtx7YA3y2GV29gI1MYFMhc=";
+    hash = "sha256-2W3iO4AOuDdDKJDMMY8YKXlI+dQKRI3PQtkdi9J3wZo=";
   };
 
   build-system = with python3.pkgs; [ poetry-core ];

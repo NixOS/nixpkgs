@@ -4,6 +4,7 @@
   buildPythonPackage,
   pytestCheckHook,
   fetchFromGitLab,
+  fetchpatch,
   replaceVars,
   bubblewrap,
   exiftool,
@@ -36,6 +37,11 @@ buildPythonPackage rec {
 
   patches =
     [
+      (fetchpatch {
+        name = "exiftool-13.25-compat.patch";
+        url = "https://0xacab.org/jvoisin/mat2/-/commit/473903b70e1b269a6110242a9c098a10c18554e2.patch";
+        hash = "sha256-vxxjAFwiTDlcTT3ZlfhOG4rlzBJS+LhLoA++8y2hEok=";
+      })
       # hardcode paths to some binaries
       (replaceVars ./paths.patch {
         exiftool = lib.getExe exiftool;

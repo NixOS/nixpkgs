@@ -95,6 +95,6 @@ buildPythonPackage rec {
     homepage = "https://geopandas.org";
     changelog = "https://github.com/geopandas/geopandas/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = teams.geospatial.members;
+    teams = [ teams.geospatial ];
   };
 }

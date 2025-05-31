@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "spatialmath-python";
-  version = "1.1.13";
+  version = "1.1.14";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "spatialmath_python";
     inherit version;
-    hash = "sha256-BhIB4VapnARkzyhps8xRWnQTAlRB8aVPDpNuN/FNezo=";
+    hash = "sha256-DI5+aSmAlOSbUSPPOrnMoSDBG+xp4zxURSGtZbsv5X4=";
   };
 
   build-system = [

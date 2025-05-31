@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "kubeone";
-  version = "1.9.2";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "kubermatic";
     repo = "kubeone";
     rev = "v${version}";
-    hash = "sha256-pMY86Ucp5nuH63YgAh60l3WZYDPvM8LcTaV9QS2BzAA=";
+    hash = "sha256-lBeIhsPiEHGSvEhMNjSr5bv/jp2xbbd3wIgaaRARiI8=";
   };
 
-  vendorHash = "sha256-dvsq2idsLmo1Tc8kfg3pJKNIMosrAMXN1fxvayS7glQ=";
+  vendorHash = "sha256-Ltrs86I5CAjx21BZZrG+UD5/YdLbaFwJqRQLvGwOA9E=";
 
   ldflags = [
     "-s"

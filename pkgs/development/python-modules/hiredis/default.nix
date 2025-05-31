@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "hiredis";
-  version = "3.1.0";
+  version = "3.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     repo = "hiredis-py";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-ID5OJdARd2N2GYEpcYOpxenpZlhWnWr5fAClAgqEgGg=";
+    hash = "sha256-z28fBGqZE88vQuJfb39AEN3hGEZMz5gq71IdlpO5VAg=";
   };
 
   build-system = [ setuptools ];

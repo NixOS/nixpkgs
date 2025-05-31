@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "segno";
-  version = "1.6.1";
+  version = "1.6.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "heuer";
     repo = "segno";
     tag = version;
-    hash = "sha256-5CDrQhbgUydz1ORp4ktZwhcgbJxQq1snKIAA0v4mZ00=";
+    hash = "sha256-A6lESmVogypit0SDeG4g9axn3+welSqTt1A17BNLmvU=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "segno" ];
 
   meta = with lib; {
-    changelog = "https://github.com/heuer/segno/releases/tag/${version}";
+    changelog = "https://github.com/heuer/segno/releases/tag/${src.tag}";
     description = "QR Code and Micro QR Code encoder";
     mainProgram = "segno";
     homepage = "https://github.com/heuer/segno/";

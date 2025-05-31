@@ -10,6 +10,7 @@
   fetchgit,
   hsyslog,
   http-conduit,
+  http-types,
   lib,
   mtl,
   network,
@@ -30,11 +31,11 @@
 }:
 mkDerivation {
   pname = "oama";
-  version = "0.14";
+  version = "0.20.1";
   src = fetchgit {
     url = "https://github.com/pdobsan/oama.git";
-    sha256 = "1hdhkc6hh4nvx31vkaii7hd2rxlwqrsvr6i1i0a9r1xlda05ffq0";
-    rev = "4e1ffd3001034771d284678f0160060c1871707c";
+    sha256 = "sha256-59tKAHL7rCZJyfraD7NnwFR5iP6784IcgH82hfsFHiA=";
+    rev = "99659a8567808b28885ed241abe4df03f37e92fc";
     fetchSubmodules = true;
   };
   isLibrary = true;
@@ -47,6 +48,7 @@ mkDerivation {
     directory
     hsyslog
     http-conduit
+    http-types
     mtl
     network
     network-uri
@@ -72,6 +74,7 @@ mkDerivation {
     directory
     hsyslog
     http-conduit
+    http-types
     mtl
     network
     network-uri

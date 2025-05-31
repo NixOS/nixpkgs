@@ -2,33 +2,73 @@
   lib,
   stdenvNoCC,
   fetchurl,
+
+  # build
   appimageTools,
+
+  # linux dependencies
+  alsa-lib,
+  at-spi2-atk,
+  autoPatchelfHook,
+  cairo,
+  cups,
+  curlWithGnuTls,
+  egl-wayland,
+  expat,
+  fontconfig,
+  freetype,
+  ffmpeg,
+  glib,
+  glibc,
+  glibcLocales,
+  gtk3,
+  libappindicator-gtk3,
+  libdrm,
+  libgbm,
+  libGL,
+  libnotify,
+  libva-minimal,
+  libxkbcommon,
+  libxkbfile,
   makeWrapper,
-  writeScript,
+  nspr,
+  nss,
+  pango,
+  pciutils,
+  pulseaudio,
+  vivaldi-ffmpeg-codecs,
+  vulkan-loader,
+  wayland,
+
+  # linux installation
+  rsync,
+  commandLineArgs ? "",
+
+  # darwin build
   undmg,
 }:
 let
   pname = "cursor";
-  version = "0.45.11";
+  version = "0.50.5";
 
   inherit (stdenvNoCC) hostPlatform;
 
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://download.todesktop.com/230313mzl4w4u92/cursor-0.45.11-build-250207y6nbaw5qc-x86_64.AppImage";
-      hash = "sha256-kpS4YHlv9C3e7Em4yCl4YS9nNgNNpMsSyXmMlT29hCI=";
+      url = "https://downloads.cursor.com/production/96e5b01ca25f8fbd4c4c10bc69b15f6228c80771/linux/x64/Cursor-0.50.5-x86_64.AppImage";
+      hash = "sha256-DUWIgQYD3Wj6hF7NBb00OGRynKmXcFldWFUA6W8CZeM=";
     };
     aarch64-linux = fetchurl {
-      url = "https://download.todesktop.com/230313mzl4w4u92/cursor-0.45.11-build-250207y6nbaw5qc-arm64.AppImage";
-      hash = "sha256-XyxyXRzqZnb3XQ07XP+U3hVGm2Rq+kjcPMaeoqyqwys=";
+      url = "https://downloads.cursor.com/production/96e5b01ca25f8fbd4c4c10bc69b15f6228c80771/linux/arm64/Cursor-0.50.5-aarch64.AppImage";
+      hash = "sha256-51zTYg4A+4ZUbGZ6/Qp3d5aL8IafewGOUYbXWGG8ILY=";
     };
     x86_64-darwin = fetchurl {
-      url = "https://download.todesktop.com/230313mzl4w4u92/Cursor%200.45.11%20-%20Build%20250207y6nbaw5qc-x64.dmg";
-      hash = "sha256-VehjX0mcngBeUdEbkB6Vpu+mcTXy9YAh7BLAM1K9K+Y=";
+      url = "https://downloads.cursor.com/production/96e5b01ca25f8fbd4c4c10bc69b15f6228c80771/darwin/x64/Cursor-darwin-x64.dmg";
+      hash = "sha256-C2+z3WXi3Ma3PzlU8BrcuJFGMx8YosNdxuSqR5tJdBE=";
     };
     aarch64-darwin = fetchurl {
-      url = "https://download.todesktop.com/230313mzl4w4u92/Cursor%200.45.11%20-%20Build%20250207y6nbaw5qc-arm64.dmg";
-      hash = "sha256-VeRroXuhJsSnlF8Ys8CjsNRE0LAUgOHPMddVFn8cItI=";
+      url = "https://downloads.cursor.com/production/96e5b01ca25f8fbd4c4c10bc69b15f6228c80771/darwin/arm64/Cursor-darwin-arm64.dmg";
+      hash = "sha256-Gz+aYDaDMDx46R7HA8u5vZwkXx9q//uu4hNyyRmrq9s=";
     };
   };
 
@@ -52,8 +92,53 @@ stdenvNoCC.mkDerivation {
   src = if hostPlatform.isLinux then wrappedAppimage else source;
 
   nativeBuildInputs =
-    lib.optionals hostPlatform.isLinux [ makeWrapper ]
+    lib.optionals hostPlatform.isLinux [
+      autoPatchelfHook
+      glibcLocales
+      makeWrapper
+      rsync
+    ]
     ++ lib.optionals hostPlatform.isDarwin [ undmg ];
+
+  buildInputs = lib.optionals hostPlatform.isLinux [
+    alsa-lib
+    at-spi2-atk
+    cairo
+    cups
+    curlWithGnuTls
+    egl-wayland
+    expat
+    ffmpeg
+    glib
+    gtk3
+    libdrm
+    libgbm
+    libGL
+    libva-minimal
+    libxkbcommon
+    libxkbfile
+    nspr
+    nss
+    pango
+    pulseaudio
+    vivaldi-ffmpeg-codecs
+    vulkan-loader
+    wayland
+  ];
+
+  runtimeDependencies = lib.optionals hostPlatform.isLinux [
+    egl-wayland
+    ffmpeg
+    glibc
+    libappindicator-gtk3
+    libnotify
+    libxkbfile
+    pciutils
+    pulseaudio
+    wayland
+    fontconfig
+    freetype
+  ];
 
   sourceRoot = lib.optionalString hostPlatform.isDarwin ".";
 
@@ -68,29 +153,26 @@ stdenvNoCC.mkDerivation {
 
     ${lib.optionalString hostPlatform.isLinux ''
       cp -r bin $out/bin
-      mkdir -p $out/share/cursor
-      cp -a ${appimageContents}/locales $out/share/cursor
-      cp -a ${appimageContents}/resources $out/share/cursor
-      cp -a ${appimageContents}/usr/share/icons $out/share/
-      install -Dm 644 ${appimageContents}/cursor.desktop -t $out/share/applications/
+      # mkdir -p $out/share/cursor
+      # cp -ar ${appimageContents}/usr/share $out/
 
-      substituteInPlace $out/share/applications/cursor.desktop --replace-fail "AppRun" "cursor"
+      rsync -a -q ${appimageContents}/usr/share $out/ --exclude "*.so"
+
+      # Fix the desktop file to point to the correct location
+      substituteInPlace $out/share/applications/cursor.desktop --replace-fail "/usr/share/cursor/cursor" "$out/bin/cursor"
 
       wrapProgram $out/bin/cursor \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}} --no-update"
+        --add-flags "--update=false" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}} --no-update" \
+        --add-flags ${lib.escapeShellArg commandLineArgs}
     ''}
 
     ${lib.optionalString hostPlatform.isDarwin ''
       APP_DIR="$out/Applications"
-      CURSOR_APP="$APP_DIR/Cursor.app"
       mkdir -p "$APP_DIR"
       cp -Rp Cursor.app "$APP_DIR"
       mkdir -p "$out/bin"
-      cat << EOF > "$out/bin/cursor"
-      #!${stdenvNoCC.shell}
-      open -na "$CURSOR_APP" --args "\$@"
-      EOF
-      chmod +x "$out/bin/cursor"
+      ln -s "$APP_DIR/Cursor.app/Contents/Resources/app/bin/cursor" "$out/bin/cursor"
     ''}
 
     runHook postInstall
@@ -98,52 +180,7 @@ stdenvNoCC.mkDerivation {
 
   passthru = {
     inherit sources;
-    updateScript = writeScript "update.sh" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl yq coreutils gnused trurl common-updater-scripts
-      set -eu -o pipefail
-
-      baseUrl="https://download.todesktop.com/230313mzl4w4u92"
-      latestLinux="$(curl -s $baseUrl/latest-linux.yml)"
-      latestDarwin="$(curl -s $baseUrl/latest-mac.yml)"
-      linuxVersion="$(echo "$latestLinux" | yq -r .version)"
-
-      currentVersion=$(nix-instantiate --eval -E "with import ./. {}; code-cursor.version or (lib.getVersion code-cursor)" | tr -d '"')
-
-      if [[ "$linuxVersion" != "$currentVersion" ]]; then
-          darwinVersion="$(echo "$latestDarwin" | yq -r .version)"
-          if [ "$linuxVersion" != "$darwinVersion" ]; then
-              echo "Linux version ($linuxVersion) and Darwin version ($darwinVersion) do not match"
-              exit 1
-          fi
-          version="$linuxVersion"
-
-          linuxFilename="$(echo "$latestLinux" | yq -r '.files[] | .url | select(. | endswith(".AppImage"))' | head -n 1)"
-          linuxStem="$(echo "$linuxFilename" | sed -E s/^\(.+build.+\)-[^-]+AppImage$/\\1/)"
-
-          darwinFilename="$(echo "$latestDarwin" | yq -r '.files[] | .url | select(. | endswith(".dmg"))' | head -n 1)"
-          darwinStem="$(echo "$darwinFilename" | sed -E s/^\(.+Build[^-]+\)-.+dmg$/\\1/)"
-
-          for platform in  "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"; do
-              if [ $platform = "x86_64-linux" ]; then
-                  url="$baseUrl/$linuxStem-x86_64.AppImage"
-              elif [ $platform = "aarch64-linux" ]; then
-                  url="$baseUrl/$linuxStem-arm64.AppImage"
-              elif [ $platform = "x86_64-darwin" ]; then
-                  url="$baseUrl/$darwinStem-x64.dmg"
-              elif [ $platform = "aarch64-darwin" ]; then
-                  url="$baseUrl/$darwinStem-arm64.dmg"
-              else
-                  echo "Unsupported platform: $platform"
-                  exit 1
-              fi
-
-              url=$(trurl --accept-space "$url")
-              hash=$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url "$url" --name "cursor-$version")")
-              update-source-version code-cursor $version $hash $url --system=$platform --ignore-same-version --source-key="sources.$platform"
-          done
-      fi
-    '';
+    updateScript = ./update.sh;
   };
 
   meta = {
@@ -153,8 +190,8 @@ stdenvNoCC.mkDerivation {
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
-      sarahec
       aspauldingcode
+      prince213
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "cursor";

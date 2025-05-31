@@ -13,6 +13,7 @@
   python3,
   readline,
   zlib,
+  buildPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "steveicarus";
-    repo = pname;
+    repo = "iverilog";
     rev = "v${lib.replaceStrings [ "." ] [ "_" ] version}";
     hash = "sha256-J9hedSmC6mFVcoDnXBtaTXigxrSCFa2AhhFd77ueo7I=";
   };
@@ -33,8 +34,8 @@ stdenv.mkDerivation rec {
     gperf
   ];
 
-  CC_FOR_BUILD = "${stdenv.cc}/bin/cc";
-  CXX_FOR_BUILD = "${stdenv.cc}/bin/c++";
+  CC_FOR_BUILD = "${buildPackages.stdenv.cc}/bin/cc";
+  CXX_FOR_BUILD = "${buildPackages.stdenv.cc}/bin/c++";
 
   patches = [
     # NOTE(jleightcap): `-Werror=format-security` warning patched shortly after release, backport the upstream fix

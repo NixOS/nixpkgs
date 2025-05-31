@@ -8,14 +8,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "fittrackee";
-  version = "0.9.1";
+  version = "0.9.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SamR1";
     repo = "FitTrackee";
     tag = "v${version}";
-    hash = "sha256-ZWSlJijW8vNuUtCHhEhmZPcEygcRrtHQUOQQKZdf868=";
+    hash = "sha256-WwyDDH/ucXyYF0uCaDPdb32Fof+UlM9eBNk11cyhH90=";
   };
 
   build-system = [
@@ -90,7 +90,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Self-hosted outdoor activity tracker";
     homepage = "https://github.com/SamR1/FitTrackee";
-    changelog = "https://github.com/SamR1/FitTrackee/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/SamR1/FitTrackee/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ traxys ];
   };

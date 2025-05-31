@@ -1,10 +1,11 @@
-{ lib
-, btrfs-progs
-, buildGoModule
-, fetchFromGitHub
-, lvm2
-, pkg-config
-, stdenv
+{
+  lib,
+  btrfs-progs,
+  buildGoModule,
+  fetchFromGitHub,
+  lvm2,
+  pkg-config,
+  stdenv,
 }:
 
 buildGoModule rec {
@@ -13,7 +14,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "openclarity";
-    repo = pname;
+    repo = "kubeclarity";
     tag = "v${version}";
     hash = "sha256-MC9GeJeVG7ROkpmOW2HD/fWMMnHo43q4Du9MzWTk2cg=";
   };

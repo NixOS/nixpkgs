@@ -8,7 +8,7 @@
   cffi,
   numpy,
   portaudio,
-  substituteAll,
+  replaceVars,
 }:
 
 buildPythonPackage rec {
@@ -38,8 +38,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sounddevice" ];
 
   patches = [
-    (substituteAll {
-      src = ./fix-portaudio-library-path.patch;
+    (replaceVars ./fix-portaudio-library-path.patch {
       portaudio = "${portaudio}/lib/libportaudio${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];

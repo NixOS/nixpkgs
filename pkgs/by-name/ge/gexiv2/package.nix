@@ -88,6 +88,6 @@ stdenv.mkDerivation rec {
     description = "GObject wrapper around the Exiv2 photo metadata library";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
   };
 }

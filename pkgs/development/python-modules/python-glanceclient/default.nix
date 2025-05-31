@@ -22,7 +22,7 @@
 }:
 let
   pname = "python-glanceclient";
-  version = "4.7.0";
+  version = "4.8.0";
 
   # Skip tests which require networking.
   disabledTests = [
@@ -49,8 +49,9 @@ buildPythonPackage {
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-wZRS7xLaPEhLadIqiIznp0kQvbh4O76RJIxg76U3iBA=";
+    pname = "python_glanceclient";
+    inherit version;
+    hash = "sha256-+FtvyB8ns02hyHSEswl2WdsFKavRxnWV0vD+fLFZA2w=";
   };
 
   postPatch = ''
@@ -91,6 +92,6 @@ buildPythonPackage {
     description = "Python bindings for the OpenStack Images API";
     homepage = "https://github.com/openstack/python-glanceclient/";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

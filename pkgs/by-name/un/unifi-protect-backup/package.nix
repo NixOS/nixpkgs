@@ -55,7 +55,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/ep1cman/unifi-protect-backup";
     changelog = "https://github.com/ep1cman/unifi-protect-backup/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = teams.helsinki-systems.members;
+    teams = [ teams.helsinki-systems ];
     mainProgram = "unifi-protect-backup";
   };
 }

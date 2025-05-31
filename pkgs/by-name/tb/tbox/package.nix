@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tbox";
-  version = "1.7.6";
+  version = "1.7.7";
 
   src = fetchFromGitHub {
     owner = "tboox";
-    repo = pname;
+    repo = "tbox";
     rev = "v${version}";
-    hash = "sha256-cwpZ7F8WzT/46HrckHe0Aug2mxirCkNA68aCxg/FcsE=";
+    hash = "sha256-piPfPg3NAvP2zhWgtPlNvlAHoqIU77TE/kd1B/6GIuc=";
   };
 
   configureFlags = [

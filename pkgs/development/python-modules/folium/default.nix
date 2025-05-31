@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "folium";
-  version = "0.19.4";
+  version = "0.19.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "python-visualization";
     repo = "folium";
     tag = "v${version}";
-    hash = "sha256-qTTJK12nHIhcMkPu4rb2IYWm96EjRafftacrlfeGqZg=";
+    hash = "sha256-jZrGJWSmQXQNlZYldeNSh5AhlTHow5gxCEkksEoKZ7E=";
   };
 
   build-system = [
@@ -80,6 +80,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-visualization/folium";
     changelog = "https://github.com/python-visualization/folium/releases/tag/${src.tag}";
     license = with lib.licenses; [ mit ];
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
 }

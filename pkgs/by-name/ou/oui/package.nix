@@ -21,7 +21,7 @@ buildGoModule rec {
     description = "MAC Address CLI Toolkit";
     homepage = "https://github.com/thatmattlove/oui";
     license = with licenses; [ bsd3 ];
-    maintainers = teams.wdz.members;
+    teams = [ teams.wdz ];
     mainProgram = "oui";
   };
 }

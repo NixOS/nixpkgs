@@ -8,7 +8,6 @@
   libtool,
   makeWrapper,
   texinfo,
-  CoreServices,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     makeWrapper
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
+  ];
   buildInputs = [
     gettext
     libtool

@@ -8,14 +8,15 @@
   procps,
   unixtools,
   util-linux,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "otpw";
   version = "1.5";
 
   src = fetchurl {
-    url = "https://www.cl.cam.ac.uk/~mgk25/download/otpw-${version}.tar.gz";
+    url = "https://www.cl.cam.ac.uk/~mgk25/download/otpw-${finalAttrs.version}.tar.gz";
     hash = "sha256-mKyjimHHcTZ3uW8kQmynBTSAwP0HfZGx6ZvJ+SzLgyo=";
   };
 
@@ -34,6 +35,17 @@ stdenv.mkDerivation rec {
     pam
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    # demologin.c:132:25: error: implicit declaration of function 'crypt' []
+    #   132 |     if (!user || strcmp(crypt(password, user->pwd.pw_passwd),
+    "-Wno-error=implicit-function-declaration"
+    # demologin.c:132:25: error: passing argument 1 of 'strcmp' makes pointer from integer without a cast []
+    #   132 |     if (!user || strcmp(crypt(password, user->pwd.pw_passwd),
+    "-Wno-error=int-conversion"
+  ];
+
+  enableParallelBuilding = true;
+
   installPhase = ''
     mkdir -p $out/bin $out/lib/security $out/share/man/man{1,8}
     cp pam_*.so $out/lib/security
@@ -46,12 +58,16 @@ stdenv.mkDerivation rec {
     "stackprotector"
   ];
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+  doInstallCheck = true;
+
+  meta = {
     description = "One-time password login package";
     mainProgram = "otpw-gen";
     homepage = "http://www.cl.cam.ac.uk/~mgk25/otpw.html";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication {
   version = "1.0.5-unstable-2024-01-17";
   pname = "nix-visualize";
   pyproject = true;

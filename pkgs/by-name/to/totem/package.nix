@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
     homepage = "https://apps.gnome.org/Totem/";
     changelog = "https://gitlab.gnome.org/GNOME/totem/-/blob/${version}/NEWS?ref_type=tags";
     description = "Movie player for the GNOME desktop based on GStreamer";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.gpl2Plus; # with exception to allow use of non-GPL compatible plug-ins
     platforms = platforms.linux;
     # gst-inspect-1.0 is not smart enough for cross compiling

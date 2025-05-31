@@ -109,7 +109,7 @@ lib.warnIf (useHardenedMalloc != null)
         ++ lib.optionals mediaSupport [ ffmpeg ]
       );
 
-      version = "14.0.5";
+      version = "14.5.3";
 
       sources = {
         x86_64-linux = fetchurl {
@@ -119,7 +119,7 @@ lib.warnIf (useHardenedMalloc != null)
             "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
             "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
           ];
-          hash = "sha256-S+v0w6lMuWnzYoDvIEJ9/7Rus2wcKbwx2/J1LYXOfhw=";
+          hash = "sha256-1MgXLdoRrmwFAG2JtkCUa2NQ/H3Xxd9+2jbV+fRRVXA=";
         };
 
         i686-linux = fetchurl {
@@ -129,7 +129,7 @@ lib.warnIf (useHardenedMalloc != null)
             "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
             "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
           ];
-          hash = "sha256-ThGKSb3lTwblUTyKbd54I5ZyA0xXeEiQeXFK3IDhOmw=";
+          hash = "sha256-T6BdLhEXYzo3zIJZ2aREjAWmIRDV/xtVhVvkDUozoo4=";
         };
       };
 
@@ -291,7 +291,7 @@ lib.warnIf (useHardenedMalloc != null)
         # FONTCONFIG_FILE is required to make fontconfig read the TBB
         # fonts.conf; upstream uses FONTCONFIG_PATH, but FC_DEBUG=1024
         # indicates the system fonts.conf being used instead.
-        FONTCONFIG_FILE=$TBB_IN_STORE/fontconfig/fonts.conf
+        FONTCONFIG_FILE=$TBB_IN_STORE/fonts/fonts.conf
         substituteInPlace "$FONTCONFIG_FILE" \
           --replace-fail '<dir prefix="cwd">fonts</dir>' "<dir>$TBB_IN_STORE/fonts</dir>"
 

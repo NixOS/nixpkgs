@@ -101,6 +101,6 @@ buildPythonPackage rec {
     mainProgram = "fio";
     homepage = "https://fiona.readthedocs.io/";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
 }

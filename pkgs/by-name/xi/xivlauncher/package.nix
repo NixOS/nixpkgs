@@ -17,7 +17,7 @@
 }:
 
 let
-  rev = "1.1.1";
+  rev = "1.1.2";
 in
 buildDotnetModule rec {
   pname = "XIVLauncher";
@@ -27,7 +27,7 @@ buildDotnetModule rec {
     owner = "goatcorp";
     repo = "XIVLauncher.Core";
     inherit rev;
-    hash = "sha256-gXec5Btnm/9M7jgPdrnLn8im0jCdLCJjsEBPpuCNz2I=";
+    hash = "sha256-QkA18C3oWxcW0vK6sji7vbm4bY5LxwIWierAg5qf38Q=";
     fetchSubmodules = true;
   };
 
@@ -116,7 +116,7 @@ buildDotnetModule rec {
     homepage = "https://github.com/goatcorp/XIVLauncher.Core";
     license = licenses.gpl3;
     maintainers = with maintainers; [
-      sersorrel
+      keysmashes
       witchof0x20
     ];
     platforms = [ "x86_64-linux" ];

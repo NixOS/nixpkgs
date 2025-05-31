@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   nixosTests,
   testers,
@@ -126,7 +125,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
     tests = {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      vm = nixosTests.ayatana-indicators;
+      startup = nixosTests.ayatana-indicators;
+      lomiri = nixosTests.lomiri.desktop-ayatana-indicator-network;
     };
     updateScript = gitUpdater { };
   };
@@ -136,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/ubports/development/core/lomiri-indicator-network";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-indicator-network/-/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [ "lomiri-connectivity-qt1" ];
   };

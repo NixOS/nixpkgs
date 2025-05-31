@@ -3,33 +3,33 @@
   lib,
   fetchFromGitHub,
   pkg-config,
-  libsForQt5,
-  dtkwidget,
+  qt6Packages,
+  dtk6widget,
   xorg,
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-picker";
-  version = "6.0.3";
+  version = "6.0.4";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-FCFRBhInmqKap1pms8TJrUJmbF8RgiXSTCUy8G1IlAg=";
+    hash = "sha256-TeUhDEldte5PJJe1l0q4wUTnnaXY052YP1JAhpLz/sA=";
   };
 
   nativeBuildInputs = [
-    libsForQt5.qmake
-    libsForQt5.qttools
+    qt6Packages.qmake
+    qt6Packages.qttools
     pkg-config
-    libsForQt5.wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
   ];
 
   buildInputs = [
-    libsForQt5.qtbase
-    dtkwidget
-    libsForQt5.qtsvg
+    qt6Packages.qtbase
+    dtk6widget
+    qt6Packages.qtsvg
     xorg.libXtst
   ];
 
@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/deepin-picker";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    teams = [ lib.teams.deepin ];
   };
 }

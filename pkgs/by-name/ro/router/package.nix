@@ -1,11 +1,12 @@
-{ lib
-, callPackage
-, fetchFromGitHub
-, rustPlatform
-, cmake
-, pkg-config
-, protobuf
-, elfutils
+{
+  lib,
+  callPackage,
+  fetchFromGitHub,
+  rustPlatform,
+  cmake,
+  pkg-config,
+  protobuf,
+  elfutils,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "apollographql";
-    repo = pname;
+    repo = "router";
     rev = "v${version}";
     hash = "sha256-4l9nTbtF8hy2x1fdRhmMKcYxTD6wWKXIfihLTWdtm7U=";
   };

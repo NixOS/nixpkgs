@@ -1,4 +1,11 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript, requests }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+  requests,
+}:
 
 buildKodiAddon rec {
   pname = "radioparadise";
@@ -25,6 +32,6 @@ buildKodiAddon rec {
     homepage = "https://github.com/alxndr42/script.radioparadise";
     description = "Radio Paradise addon for Kodi";
     license = licenses.gpl3Plus;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

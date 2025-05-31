@@ -1,27 +1,22 @@
 {
   lib,
   buildGoModule,
-  ente-cli,
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
   stdenv,
   testers,
 }:
-let
-  version = "0.2.2";
 
-  canExecute = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-in
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "ente-cli";
-  inherit version;
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "ente-io";
     repo = "ente";
-    tag = "cli-v${version}";
-    hash = "sha256-ynbljYl73XwCnt3RUNmOYdrN8FX3sJ+3qDhWa8m2YJs=";
+    tag = "cli-v${finalAttrs.version}";
+    hash = "sha256-qKMFoNtD5gH0Y+asD0LR5d3mxGpr2qVWXIUzJTSezeI=";
     sparseCheckout = [ "cli" ];
   };
 
@@ -34,7 +29,7 @@ buildGoModule {
   ldflags = [
     "-s"
     "-w"
-    "-X main.AppVersion=cli-v${version}"
+    "-X main.AppVersion=cli-v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -50,27 +45,30 @@ buildGoModule {
     # also guarding with `isLinux` because ENTE_CLI_SECRETS_PATH doesn't help on darwin:
     # > error setting password in keyring: exit status 195
     #
-    + lib.optionalString (stdenv.buildPlatform.isLinux && canExecute) ''
-      export ENTE_CLI_CONFIG_PATH=$TMP
-      export ENTE_CLI_SECRETS_PATH=$TMP/secrets
+    +
+      lib.optionalString
+        (stdenv.buildPlatform.isLinux && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+        ''
+          export ENTE_CLI_CONFIG_PATH=$TMP
+          export ENTE_CLI_SECRETS_PATH=$TMP/secrets
 
-      installShellCompletion --cmd ente \
-        --bash <($out/bin/ente completion bash) \
-        --fish <($out/bin/ente completion fish) \
-        --zsh <($out/bin/ente completion zsh)
-    '';
+          installShellCompletion --cmd ente \
+            --bash <($out/bin/ente completion bash) \
+            --fish <($out/bin/ente completion fish) \
+            --zsh <($out/bin/ente completion zsh)
+        '';
 
   passthru = {
     # only works on linux, see comment above about ENTE_CLI_SECRETS_PATH on darwin
     tests.version = lib.optionalAttrs stdenv.hostPlatform.isLinux (
       testers.testVersion {
-        package = ente-cli;
+        package = finalAttrs.finalPackage;
         command = ''
           env ENTE_CLI_CONFIG_PATH=$TMP \
               ENTE_CLI_SECRETS_PATH=$TMP/secrets \
               ente version
         '';
-        version = "Version cli-v${ente-cli.version}";
+        version = "Version cli-v${finalAttrs.version}";
       }
     );
     updateScript = nix-update-script {
@@ -87,11 +85,11 @@ buildGoModule {
       The Ente CLI is a Command Line Utility for exporting data from Ente. It also does a few more things, for example, you can use it to decrypting the export from Ente Auth.
     '';
     homepage = "https://github.com/ente-io/ente/tree/main/cli#readme";
-    changelog = "https://github.com/ente-io/ente/releases/tag/cli-v${version}";
+    changelog = "https://github.com/ente-io/ente/releases/tag/cli-v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = [
       lib.maintainers.zi3m5f
     ];
     mainProgram = "ente";
   };
-}
+})

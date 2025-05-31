@@ -195,6 +195,7 @@ in
                 Extra arguments passed to restic backup.
               '';
               example = [
+                "--cleanup-cache"
                 "--exclude-file=/etc/nixos/restic-ignore"
               ];
             };
@@ -345,13 +346,14 @@ in
           "--what='sleep'"
           "--why=${lib.escapeShellArg "Scheduled backup ${name}"} "
         ];
-        resticCmd = "${lib.optionalString backup.inhibitsSleep inhibitCmd}${backup.package}/bin/restic${extraOptions}";
+        resticCmd = "${lib.optionalString backup.inhibitsSleep inhibitCmd}${lib.getExe backup.package}${extraOptions}";
         excludeFlags = lib.optional (
           backup.exclude != [ ]
         ) "--exclude-file=${pkgs.writeText "exclude-patterns" (lib.concatStringsSep "\n" backup.exclude)}";
         filesFromTmpFile = "/run/restic-backups-${name}/includes";
         doBackup = (backup.dynamicFilesFrom != null) || (backup.paths != null && backup.paths != [ ]);
         pruneCmd = lib.optionals (builtins.length backup.pruneOpts > 0) [
+          (resticCmd + " unlock")
           (resticCmd + " forget --prune " + (lib.concatStringsSep " " backup.pruneOpts))
         ];
         checkCmd = lib.optionals backup.runCheck [
@@ -455,7 +457,7 @@ in
       name: backup:
       let
         extraOptions = lib.concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
-        resticCmd = "${backup.package}/bin/restic${extraOptions}";
+        resticCmd = "${lib.getExe backup.package}${extraOptions}";
       in
       pkgs.writeShellScriptBin "restic-${name}" ''
         set -a  # automatically export variables
@@ -463,8 +465,8 @@ in
         # set same environment variables as the systemd service
         ${lib.pipe config.systemd.services."restic-backups-${name}".environment [
           (lib.filterAttrs (n: v: v != null && n != "PATH"))
-          (lib.mapAttrsToList (n: v: "${n}=${v}"))
-          (lib.concatStringsSep "\n")
+          (lib.mapAttrs (_: v: "${v}"))
+          (lib.toShellVars)
         ]}
         PATH=${config.systemd.services."restic-backups-${name}".environment.PATH}:$PATH
 

@@ -1,18 +1,19 @@
-{ lib
-, buildDotnetModule
-, dotnetCorePackages
-, fetchFromGitHub
+{
+  lib,
+  buildDotnetModule,
+  dotnetCorePackages,
+  fetchFromGitHub,
 }:
 
 buildDotnetModule rec {
   pname = "lubelogger";
-  version = "1.4.4";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "hargata";
     repo = "lubelog";
     rev = "v${version}";
-    hash = "sha256-gKNZ/rGEOIPalexMTXduY/c3dGW4adKuzA2aGDpomsM=";
+    hash = "sha256-ZlB9lyfC4xrLWAb+Jbo6eI/LuYjvgMEauQeLxGCqy88=";
   };
 
   projectFile = "CarCareTracker.sln";

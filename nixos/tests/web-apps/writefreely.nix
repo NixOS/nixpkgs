@@ -1,16 +1,12 @@
 {
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../../.. { inherit system config; },
+  runTest,
+  ...
 }:
-
-with import ../../lib/testing-python.nix { inherit system pkgs; };
-with pkgs.lib;
 
 let
   writefreelyTest =
     { name, type }:
-    makeTest {
+    runTest {
       name = "writefreely-${name}";
 
       nodes.machine =

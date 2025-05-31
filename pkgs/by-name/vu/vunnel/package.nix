@@ -7,14 +7,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "vunnel";
-  version = "0.29.0";
+  version = "0.32.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "vunnel";
     tag = "v${version}";
-    hash = "sha256-oHK855EQglFZrjW30n/z0vgf/NtaXVOcntEWQMcAbDw=";
+    hash = "sha256-5zO1/lfB5ULJqSt14by9OYFT/0H9ZGSkA90wmf7dB5U=";
+    leaveDotGit = true;
   };
 
   pythonRelaxDeps = [
@@ -27,31 +28,37 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   build-system = with python3.pkgs; [
-    poetry-core
-    poetry-dynamic-versioning
+    hatchling
+    uv-dynamic-versioning
   ];
 
-  dependencies = with python3.pkgs; [
-    click
-    colorlog
-    cvss
-    defusedxml
-    ijson
-    importlib-metadata
-    iso8601
-    lxml
-    mashumaro
-    mergedeep
-    orjson
-    pytest-snapshot
-    python-dateutil
-    pyyaml
-    requests
-    sqlalchemy
-    xsdata
-    xxhash
-    zstandard
-  ];
+  dependencies =
+    with python3.pkgs;
+    [
+      click
+      colorlog
+      cvss
+      defusedxml
+      ijson
+      importlib-metadata
+      iso8601
+      lxml
+      mashumaro
+      mergedeep
+      orjson
+      packageurl-python
+      pytest-snapshot
+      python-dateutil
+      pyyaml
+      requests
+      sqlalchemy
+      xsdata
+      xxhash
+      zstandard
+    ]
+    ++ xsdata.optional-dependencies.cli
+    ++ xsdata.optional-dependencies.lxml
+    ++ xsdata.optional-dependencies.soap;
 
   nativeCheckInputs =
     [ git ]

@@ -9,7 +9,7 @@ You use it like this:
   lib,
   stdenv,
   versionCheckHook,
-  # ...
+# ...
 }:
 
 stdenv.mkDerivation (finalAttrs: {

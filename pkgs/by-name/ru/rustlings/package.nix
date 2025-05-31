@@ -1,13 +1,12 @@
 {
   lib,
-  stdenv,
-  darwin,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   cargo,
   rustc,
   clippy,
+  gcc,
   makeWrapper,
 }:
 let
@@ -37,16 +36,13 @@ rustPlatform.buildRustPackage {
     makeWrapper
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks; [ CoreServices ]
-  );
-
   postFixup = ''
     wrapProgram $out/bin/rustlings --suffix PATH : ${
       lib.makeBinPath [
         cargo
         rustc
         clippy
+        gcc
       ]
     }
   '';

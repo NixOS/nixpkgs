@@ -1,72 +1,84 @@
 {
   lib,
-  fetchPypi,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
   setuptools-scm,
-  lxml,
+
+  # dependencies
   cwcwidth,
-  pytestCheckHook,
+  lxml,
+
+  # tests
+  aeidon,
+  charset-normalizer,
+  cheroot,
+  fluent-syntax,
+  gettext,
   iniparse,
-  vobject,
   mistletoe,
   phply,
   pyparsing,
+  pytestCheckHook,
   ruamel-yaml,
-  cheroot,
-  fluent-syntax,
-  aeidon,
-  charset-normalizer,
   syrupy,
-  gettext,
+  vobject,
 }:
 
 buildPythonPackage rec {
   pname = "translate-toolkit";
-  version = "3.14.7";
+  version = "3.15.2";
 
   pyproject = true;
-  build-system = [ setuptools-scm ];
 
-  src = fetchPypi {
-    pname = "translate_toolkit";
-    inherit version;
-    hash = "sha256-5xpvNxEQBuMggHCb2RPCQ/lQWop6Hiep8BpRSey31R0=";
+  src = fetchFromGitHub {
+    owner = "translate";
+    repo = "translate";
+    tag = version;
+    hash = "sha256-HZ00ds3MUrtLb6WjxpCch8CPvOuadHJXZsJRQdqge0M=";
   };
 
+  build-system = [ setuptools-scm ];
+
   dependencies = [
-    lxml
     cwcwidth
+    lxml
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    aeidon
+    charset-normalizer
+    cheroot
+    fluent-syntax
+    gettext
     iniparse
-    vobject
     mistletoe
     phply
     pyparsing
+    pytestCheckHook
     ruamel-yaml
-    cheroot
-    fluent-syntax
-    aeidon
-    charset-normalizer
     syrupy
-    gettext
+    vobject
   ];
 
   disabledTests = [
     # Probably breaks because of nix sandbox
     "test_timezones"
+
     # Requires network
     "test_xliff_conformance"
   ];
 
   pythonImportsCheck = [ "translate" ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Useful localization tools for building localization & translation systems";
     homepage = "https://toolkit.translatehouse.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ erictapen ];
+    changelog = "https://docs.translatehouse.org/projects/translate-toolkit/en/latest/releases/${version}.html";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 }

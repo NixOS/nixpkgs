@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://launchpad.net/dbus-test-runner";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = teams.lomiri.members;
+    teams = [ teams.lomiri ];
     pkgConfigModules = [
       "dbustest-1"
     ];

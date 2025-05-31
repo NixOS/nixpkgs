@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/rtbrick/bngblaster/";
     changelog = "https://github.com/rtbrick/bngblaster/releases/tag/${finalAttrs.version}";
     license = licenses.bsd3;
-    maintainers = teams.wdz.members;
+    teams = [ teams.wdz ];
     badPlatforms = platforms.darwin;
   };
 })

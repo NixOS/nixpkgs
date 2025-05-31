@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "esphome-glyphsets";
-  version = "0.1.0";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome-glyphsets";
     tag = "v${version}";
-    hash = "sha256-kST2AsZRWZrVmInUNN153+FOXa/t9vbHN3hAReKQJaU=";
+    hash = "sha256-nM8omtLIWwIY6AGVqVR2/4twmMlOj21+9cSuyXzAAXY=";
     fetchSubmodules = true;
   };
 

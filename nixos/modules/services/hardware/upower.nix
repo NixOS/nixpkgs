@@ -1,5 +1,10 @@
 # Upower daemon.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.upower;
@@ -242,7 +247,7 @@ in
 
     systemd.packages = [ cfg.package ];
 
-    environment.etc."UPower/UPower.conf".text = lib.generators.toINI {} {
+    environment.etc."UPower/UPower.conf".text = lib.generators.toINI { } {
       UPower = {
         EnableWattsUpPro = cfg.enableWattsUpPro;
         NoPollBatteries = cfg.noPollBatteries;

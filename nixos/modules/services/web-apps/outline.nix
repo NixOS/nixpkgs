@@ -781,7 +781,6 @@ in
           Group = cfg.group;
           Restart = "always";
           ProtectSystem = "strict";
-          PrivateHome = true;
           PrivateTmp = true;
           UMask = "0007";
 

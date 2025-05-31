@@ -10,8 +10,6 @@
   glib,
   gtk3,
   pango,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,34 +23,22 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-qLqyv5XXG7cpW+/eNCWguqemT3G2BhnolntHi2zZJ0o=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "druid-0.8.3" = "sha256-s9csjZ0ZimOrPnjJpPjrrMdNKAXFfroWHBPeR369Phk=";
-      "rolling-file-0.2.0" = "sha256-3xeOSXFVVgeKRE39gtzTURt0OkKScQ4uwtvLl4CE3R4=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-b8sqzv7Mg8w3eA381r9vkB7yh3G8fgTvQFqmkoX4JQk=";
 
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      atk
-      cairo
-      gdk-pixbuf
-      glib
-      gtk3
-      pango
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.CoreGraphics
-      darwin.apple_sdk.frameworks.CoreText
-      darwin.apple_sdk.frameworks.Foundation
-    ];
+  buildInputs = [
+    atk
+    cairo
+    gdk-pixbuf
+    glib
+    gtk3
+    pango
+  ];
 
   postInstall = ''
     install -m 444 \

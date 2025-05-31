@@ -34,9 +34,9 @@ body:
         > If you are using an older version, please update to the latest stable version and check if the issue persists before continuing this bug report.
       options:
         - "Please select a version."
-        - "- Unstable (25.05)"
-        - "- Stable (24.11)"
-        - "- Previous Stable (24.05)"
+        - "- Unstable (25.11)"
+        - "- Stable (25.05)"
+        - "- Previous Stable (24.11)"
       default: 0
     validations:
       required: true
@@ -101,6 +101,7 @@ body:
       description: |
         Please mention the people who are in the **Maintainers** list of the offending package. This is done by by searching for the package on the [NixOS Package Search](https://search.nixos.org/packages) and mentioning the people listed under **Maintainers** by prefixing their GitHub usernames with an '@' character. Please add the mentions above the `---` characters in the template below.
       value: |
+
 
         ---
 

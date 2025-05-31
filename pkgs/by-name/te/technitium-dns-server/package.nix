@@ -9,13 +9,13 @@
 }:
 buildDotnetModule rec {
   pname = "technitium-dns-server";
-  version = "13.2";
+  version = "13.6.0";
 
   src = fetchFromGitHub {
     owner = "TechnitiumSoftware";
     repo = "DnsServer";
     tag = "v${version}";
-    hash = "sha256-oxLMBs+XkzvlfSst6ZD56ZIgiXwm0Px8Tn3Trdd/6H8=";
+    hash = "sha256-2OSuLGWdaiiPxyW0Uvq736wHKa7S3CHv79cmZZ86GRE=";
     name = "${pname}-${version}";
   };
 

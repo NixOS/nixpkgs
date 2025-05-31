@@ -39,11 +39,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "exim";
-  version = "4.98";
+  version = "4.98.2";
 
   src = fetchurl {
     url = "https://ftp.exim.org/pub/exim/exim4/${pname}-${version}.tar.xz";
-    hash = "sha256-DrwQinefkpO6S0I8IIGPmj23m2AobZarxrprhaFYUvc=";
+    hash = "sha256-iLjopnwdtswLHRSBYao25mL0yi/vJdW282lNSQ5C3K4=";
   };
 
   enableParallelBuilding = true;
@@ -201,7 +201,8 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "exim";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tv ] ++ teams.helsinki-systems.members;
+    maintainers = with maintainers; [ tv ];
+    teams = [ teams.helsinki-systems ];
     changelog = "https://github.com/Exim/exim/blob/exim-${version}/doc/doc-txt/ChangeLog";
   };
 }

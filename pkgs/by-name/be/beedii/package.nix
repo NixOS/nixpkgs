@@ -2,13 +2,11 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  gitUpdater,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "beedii";
-
-  # 1.2.0 does not include font files.
-  # https://github.com/webkul/beedii/issues/1
   version = "1.0.0";
 
   src = fetchzip {
@@ -24,6 +22,15 @@ stdenvNoCC.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/webkul/beedii";
+    rev-prefix = "v";
+
+    # This version does not include font files in the released assets.
+    # https://github.com/webkul/beedii/issues/1
+    ignoredVersions = "^1\.2\.0$";
+  };
 
   meta = {
     description = "Free Hand Drawn Emoji Font";

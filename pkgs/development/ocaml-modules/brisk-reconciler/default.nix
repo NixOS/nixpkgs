@@ -6,7 +6,7 @@
   ppxlib,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "brisk-reconciler";
   version = "unstable-2020-12-02";
 

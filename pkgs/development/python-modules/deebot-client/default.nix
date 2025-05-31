@@ -7,8 +7,6 @@
   defusedxml,
   docker,
   fetchFromGitHub,
-  numpy,
-  pillow,
   pkg-config,
   pycountry,
   pytest-asyncio,
@@ -16,28 +14,27 @@
   pytestCheckHook,
   pythonOlder,
   rustPlatform,
-  svg-py,
   testfixtures,
   xz,
 }:
 
 buildPythonPackage rec {
   pname = "deebot-client";
-  version = "12.1.0";
+  version = "13.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.12";
+  disabled = pythonOlder "3.13";
 
   src = fetchFromGitHub {
     owner = "DeebotUniverse";
     repo = "client.py";
     tag = version;
-    hash = "sha256-K5dsu4n3ClU7CPYkqSrvocQAPzV0tMrlBapueVBstQ0=";
+    hash = "sha256-6R9ihxe63YMVgVk+5R9pDNT3a/c9lK28wNleVb5NcRA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-mrAPalyxEhJFE1VYNOZRjjdviXqU0JeeGuY3vFZYSNE=";
+    hash = "sha256-GNqoP/Zz5xHl2cLz7AqRKXsfLXgdLbgXSK8EdBWtOAU=";
   };
 
   pythonRelaxDeps = [
@@ -45,12 +42,11 @@ buildPythonPackage rec {
     "defusedxml"
   ];
 
-  build-system = with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
   ];
-
-  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ xz ];
 
@@ -59,9 +55,6 @@ buildPythonPackage rec {
     aiomqtt
     cachetools
     defusedxml
-    numpy
-    pillow
-    svg-py
   ];
 
   nativeCheckInputs = [

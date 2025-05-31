@@ -7,7 +7,7 @@
   libxml2,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "ua";
   version = "unstable-2022-10-23";
 

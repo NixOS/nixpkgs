@@ -11,18 +11,18 @@
 }:
 stdenv.mkDerivation rec {
   pname = "sql-formatter";
-  version = "15.4.10";
+  version = "15.6.2";
 
   src = fetchFromGitHub {
     owner = "sql-formatter-org";
     repo = "sql-formatter";
     rev = "v${version}";
-    hash = "sha256-KRF4AFBkXzy9wYBTTsc4LvlLNbSohzbdbue+SZjNTJo=";
+    hash = "sha256-pqNxZ8bmnwQYPLIQ8vQrKct9fD8i0fiLn4h4f2779q4=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-w+riBFsxqQ3BY2MF5yih1www+TMChneuTOS+sKWmlus=";
+    hash = "sha256-zcCYGTuaPkizZHc4K6RAPWwMnP5LtnyaLbF9xcPpNBs=";
   };
 
   nativeBuildInputs = [

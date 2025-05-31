@@ -29,31 +29,38 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "0-unstable-2025-02-13";
+  version = "0-unstable-2025-05-18";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = "wezterm";
-    rev = "ee0c04e735fb94cb5119681f704fb7fa6731e713";
+    rev = "5663e749948df3ed3c2d8ee0bfea6c85226310d9";
     fetchSubmodules = true;
-    hash = "sha256-0jqnSzzfg8ecBaayJI8oP9X0FyijFFT3LA6GKfpAFwI=";
+    hash = "sha256-SQ1H16jy6GVjM8tEKZZC7AGIADLR1NyGfOT/6pFcFA0=";
   };
 
-  postPatch = ''
-    echo ${version} > .tag
+  postPatch =
+    ''
+      echo ${version} > .tag
 
-    # tests are failing with: Unable to exchange encryption keys
-    rm -r wezterm-ssh/tests
+      # hash does not work well with NixOS
+      substituteInPlace assets/shell-integration/wezterm.sh \
+        --replace-fail 'hash wezterm 2>/dev/null' 'command type -P wezterm &>/dev/null' \
+        --replace-fail 'hash base64 2>/dev/null' 'command type -P base64 &>/dev/null' \
+        --replace-fail 'hash hostname 2>/dev/null' 'command type -P hostname &>/dev/null' \
+        --replace-fail 'hash hostnamectl 2>/dev/null' 'command type -P hostnamectl &>/dev/null'
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # many tests fail with: No such file or directory
+      rm -r wezterm-ssh/tests
+    '';
 
-    # hash does not work well with NixOS
-    substituteInPlace assets/shell-integration/wezterm.sh \
-      --replace-fail 'hash wezterm 2>/dev/null' 'command type -P wezterm &>/dev/null' \
-      --replace-fail 'hash base64 2>/dev/null' 'command type -P base64 &>/dev/null' \
-      --replace-fail 'hash hostname 2>/dev/null' 'command type -P hostname &>/dev/null' \
-      --replace-fail 'hash hostnamectl 2>/dev/null' 'command type -P hostnamectl &>/dev/null'
-  '';
+  # dep: syntax causes build failures in rare cases
+  # https://github.com/rust-secure-code/cargo-auditable/issues/124
+  # https://github.com/wezterm/wezterm/blob/main/nix/flake.nix#L134
+  auditable = false;
 
-  cargoHash = "sha256-WyQYmRNlabJaCTJm7Cn9nkXfOGAcOHwhoD9vmEggrDw=";
+  cargoHash = "sha256-9pdkXpkIbe5HeVGvgusRaI4A6ZjDGssO5k0ULVnO6k8=";
   useFetchCargoVendor = true;
 
   nativeBuildInputs = [

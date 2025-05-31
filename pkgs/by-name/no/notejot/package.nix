@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lainsce";
-    repo = pname;
+    repo = "notejot";
     rev = version;
     hash = "sha256-p5F0OITgfZyvHwndI5r5BE524+nft7A2XfR3BJZFamU=";
   };

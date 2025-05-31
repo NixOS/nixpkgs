@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "candy-icons";
-  version = "0-unstable-2025-02-08";
+  version = "0-unstable-2025-05-24";
 
   src = fetchFromGitHub {
     owner = "EliverLara";
     repo = "candy-icons";
-    rev = "19b7c01be70bb29475cd939638972ddbb7a33194";
-    hash = "sha256-fUQCC4B3+DOxjvX6Fjxy8BBE+piPfbvbKbrIj1Yc6us=";
+    rev = "b099e7f437da41f65ffb710d801471e2f813f1b2";
+    hash = "sha256-gy58GQMoYOFXbvXoKELUydg/X/B8BJ6hIbcOl5com1E=";
   };
 
   nativeBuildInputs = [ gtk3 ];

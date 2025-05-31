@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchzip,
   pkg-config,
   vst2-sdk,
   wine64,

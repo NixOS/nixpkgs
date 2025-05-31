@@ -1,27 +1,37 @@
-{ lib, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, wrapGAppsNoGuiHook
-, glib
-, coreutils
-, accountsservice
-, dbus
-, pam
-, polkit
-, glib-testing
-, python3
-, nixosTests
-, malcontent-ui
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  wrapGAppsNoGuiHook,
+  glib,
+  coreutils,
+  accountsservice,
+  dbus,
+  pam,
+  polkit,
+  glib-testing,
+  python3,
+  nixosTests,
+  malcontent-ui,
 }:
 
 stdenv.mkDerivation rec {
   pname = "malcontent";
   version = "0.13.0";
 
-  outputs = [ "bin" "out" "lib" "pam" "dev" "man" "installedTests" ];
+  outputs = [
+    "bin"
+    "out"
+    "lib"
+    "pam"
+    "dev"
+    "man"
+    "installedTests"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -53,9 +63,11 @@ stdenv.mkDerivation rec {
     pam
     polkit
     glib-testing
-    (python3.withPackages (pp: with pp; [
-      pygobject3
-    ]))
+    (python3.withPackages (
+      pp: with pp; [
+        pygobject3
+      ]
+    ))
   ];
 
   propagatedBuildInputs = [
@@ -94,13 +106,17 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     # We need to install Polkit & AccountsService data files in `out`
     # but `buildEnv` only uses `bin` when both `bin` and `out` are present.
-    outputsToInstall = [ "bin" "out" "man" ];
+    outputsToInstall = [
+      "bin"
+      "out"
+      "man"
+    ];
 
     description = "Parental controls library";
     mainProgram = "malcontent-client";
     homepage = "https://gitlab.freedesktop.org/pwithnall/malcontent";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.unix;
+    inherit (polkit.meta) platforms badPlatforms;
   };
 }

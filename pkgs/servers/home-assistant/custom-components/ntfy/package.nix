@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "hbrennhaeuser";
   domain = "ntfy";
-  version = "1.1.0-pre.2";
+  version = "1.2.0-pre.2";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "homeassistant_integration_ntfy";
     rev = "v${version}";
-    hash = "sha256-OGCAJsAsnUjwaLR8lCBdU+ghVOGFF0mT73t5JtcngUA=";
+    hash = "sha256-ydWZ4ApYQ9kyMA5A2OGXG323/7H3fa2XPiOAFBZNM30=";
   };
 
   dependencies = [

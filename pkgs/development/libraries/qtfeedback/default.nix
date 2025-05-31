@@ -7,7 +7,7 @@
   qtdeclarative,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "qtfeedback";
   version = "unstable-2018-09-03";
 

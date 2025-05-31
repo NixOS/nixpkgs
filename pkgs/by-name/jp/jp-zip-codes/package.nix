@@ -7,15 +7,15 @@
 
 stdenvNoCC.mkDerivation {
   pname = "jp-zip-code";
-  version = "0-unstable-2025-02-01";
+  version = "0-unstable-2025-05-01";
 
   # This package uses a mirror as the source because the
   # original provider uses the same URL for updated content.
   src = fetchFromGitHub {
     owner = "musjj";
     repo = "jp-zip-codes";
-    rev = "2fdcd4f4c00a90de1dacfe16644bbaadbfd377aa";
-    hash = "sha256-i81TzPrhHE3wZdq/HJGnTsvmo/clWCYO74hJf9hMxs4=";
+    rev = "3c1c1db248113ad37fac18ede96b5936866a9726";
+    hash = "sha256-BAS7Iqzoxbt77uRh99n0rUC+0+OVgkB7OEIEgZMoDAk=";
   };
 
   installPhase = ''

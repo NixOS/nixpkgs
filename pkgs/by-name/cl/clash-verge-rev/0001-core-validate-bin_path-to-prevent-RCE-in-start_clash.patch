@@ -1,0 +1,72 @@
+From fff6494e26edce6bf8a5b4c40d9535f820608cc3 Mon Sep 17 00:00:00 2001
+From: Moraxyc <i@qaq.li>
+Date: Mon, 28 Apr 2025 16:43:29 +0800
+Subject: [PATCH 1/2] core: validate bin_path to prevent RCE in start_clash
+
+Add a security check in CoreManager::start_clash to ensure that the provided
+binary path (`bin_path`) must be located under the current executable's
+directory. This prevents potential remote code execution (RCE) attacks
+caused by arbitrary binary path injection.
+---
+ src/service/core.rs | 21 ++++++++++++++++++---
+ 1 file changed, 18 insertions(+), 3 deletions(-)
+
+diff --git a/src/service/core.rs b/src/service/core.rs
+index 84407a5..51081ed 100644
+--- a/src/service/core.rs
++++ b/src/service/core.rs
+@@ -7,6 +7,7 @@ use once_cell::sync::Lazy;
+ use std::{
+     collections::HashMap,
+     sync::{atomic::Ordering, Arc, Mutex},
++    env,
+ };
+ 
+ impl CoreManager {
+@@ -227,7 +228,7 @@ impl CoreManager {
+             .unwrap()
+             .running_pid
+             .load(Ordering::Relaxed) as u32;
+-        
++
+         match process::find_processes("verge-mihomo") {
+             Ok(pids) => {
+                 // 直接在迭代过程中过滤和终止
+@@ -248,18 +249,32 @@ impl CoreManager {
+                     })
+                     .filter(|&success| success)
+                     .count();
+-                    
++
+                 println!("Successfully stopped {} verge-mihomo processes", kill_count);
+             }
+             Err(e) => {
+                 eprintln!("Error finding verge-mihomo processes: {}", e);
+             }
+         }
+-        
++
+         Ok(())
+     }
+ 
+     pub fn start_clash(&self, body: StartBody) -> Result<(), String> {
++        {
++            let bin_path = std::path::Path::new(body.bin_path.as_str());
++            let current_exe = std::env::current_exe()
++                .map_err(|e| format!("Failed to get current exe path: {}", e))?;
++            let current_dir = current_exe.parent()
++                .ok_or("Failed to get current directory")?;
++
++            if !bin_path.starts_with(current_dir) {
++                return Err(format!(
++                    "Invalid binary path for clash kernel. It must be under: {}",
++                    current_dir.display()
++                ));
++            }
++        }
+         {
+             // Check clash & stop if needed
+             let is_running_clash = self
+-- 
+2.49.0
+

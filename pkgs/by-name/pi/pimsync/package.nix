@@ -10,21 +10,21 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pimsync";
-  version = "0.2.0";
+  version = "0.4.1";
 
   src = fetchFromSourcehut {
     owner = "~whynothugo";
     repo = "pimsync";
-    rev = "v${version}";
-    hash = "sha256-mNOKAnBpCo4LFn7l16UG7V3cCJkUhRxhB/0jwoPLttM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-EHDGiyDGNr6cPj2N2cTV0f7I9vmM/WIZTsPR1f+HFIE=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-2Uj+dDtuykQx1tBSGN3AE3Bz904bHfkbhKN3VIeG40M=";
+  cargoHash = "sha256-/6YjyKB/xOCTNZlKewddEaZ1ZN2PC5dQoP0A5If67MA=";
 
-  PIMSYNC_VERSION = version;
+  PIMSYNC_VERSION = finalAttrs.version;
 
   nativeBuildInputs = [
     pkg-config
@@ -55,4 +55,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.qxrein ];
     mainProgram = "pimsync";
   };
-}
+})

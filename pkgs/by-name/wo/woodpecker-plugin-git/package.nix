@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "woodpecker-plugin-git";
-  version = "2.6.0";
+  version = "2.6.4";
 
   src = fetchFromGitHub {
     owner = "woodpecker-ci";
     repo = "plugin-git";
     tag = version;
-    hash = "sha256-ffP4CmvoxmXdwrWWOG2HIoz1pgmxTUdG5rPsgJ1+3do=";
+    hash = "sha256-iCB2GQ8SpuW+uT8RyMNb6cq4bbWIeMO069yq4a+nIVI=";
   };
 
-  vendorHash = "sha256-wB1Uv7ZSIEHzR8z96hwXScoGA31uhoql/wwAH3Olj2E=";
+  vendorHash = "sha256-Zn2TYNyKvtmtEAlKmWBhjyzHiM0dwDT3E/LOtSzjFK0=";
 
   env.CGO_ENABLED = "0";
 

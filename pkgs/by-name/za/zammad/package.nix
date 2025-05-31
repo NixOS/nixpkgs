@@ -5,25 +5,22 @@
   fetchFromGitHub,
   applyPatches,
   bundlerEnv,
-  defaultGemConfig,
   callPackage,
   procps,
   ruby,
   postgresql,
-  libpq,
-  imlib2,
   jq,
   moreutils,
   nodejs,
   pnpm_9,
   cacert,
-  redis,
+  valkey,
   dataDir ? "/var/lib/zammad",
 }:
 
 let
   pname = "zammad";
-  version = "6.4.1";
+  version = "6.5.0";
 
   src = applyPatches {
     src = fetchFromGitHub (lib.importJSON ./source.json);
@@ -58,28 +55,6 @@ let
       "development"
       "postgres" # database
     ];
-    gemConfig = defaultGemConfig // {
-      pg = attrs: {
-        buildInputs = [ libpq ];
-      };
-      rszr = attrs: {
-        buildInputs = [
-          imlib2
-          imlib2.dev
-        ];
-        buildFlags = [ "--without-imlib2-config" ];
-      };
-      mini_racer = attrs: {
-        buildFlags = [
-          "--with-v8-dir=\"${nodejs.libv8}\""
-        ];
-        dontBuild = false;
-        postPatch = ''
-          substituteInPlace ext/mini_racer_extension/extconf.rb \
-            --replace Libv8.configure_makefile '$CPPFLAGS += " -x c++"; Libv8.configure_makefile'
-        '';
-      };
-    };
   };
 
 in
@@ -93,7 +68,7 @@ stdenvNoCC.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    redis
+    valkey
     postgresql
     pnpm_9.configHook
     nodejs
@@ -106,7 +81,7 @@ stdenvNoCC.mkDerivation {
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname src;
 
-    hash = "sha256-bdm1nkJnXE7oZZhG2uBnk3fYhITaMROHGKPbf0G3bFs=";
+    hash = "sha256-mfdzb/LXQYL8kaQpWi9wD3OOroOOonDlJrhy9Dwl1no";
   };
 
   buildPhase = ''

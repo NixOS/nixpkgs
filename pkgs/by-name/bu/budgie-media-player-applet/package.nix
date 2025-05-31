@@ -54,6 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/zalesyc/budgie-media-player-applet/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.budgie.members;
+    teams = [ lib.teams.budgie ];
   };
 })

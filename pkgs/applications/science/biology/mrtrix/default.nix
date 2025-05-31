@@ -2,9 +2,9 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  python,
+  python3,
   makeWrapper,
-  eigen,
+  eigen_3_4_0,
   fftw,
   libtiff,
   libpng,
@@ -20,27 +20,29 @@
   withGui ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mrtrix";
-  version = "3.0.4";
+  version = "3.0.4-unstable-2025-04-09";
 
   src = fetchFromGitHub {
     owner = "MRtrix3";
     repo = "mrtrix3";
-    tag = version;
-    hash = "sha256-87zBAoBLWQPccGS37XyQ8H0GhL01k8GQFgcLL6IwbcM=";
+    rev = "7843bfc53a75f465901804ccf3fd6797d77531dd";
+    hash = "sha256-C4Io3VkX10eWia4djrYvN12fWmwm0j1G60I8lmFH49w=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
-    eigen
     makeWrapper
+    less
+    python3
   ] ++ lib.optional withGui qt5.wrapQtAppsHook;
 
   buildInputs =
     [
       ants
-      python
+      eigen_3_4_0
+      python3
       fftw
       libtiff
       libpng
@@ -58,36 +60,47 @@ stdenv.mkDerivation rec {
   nativeInstallCheckInputs = [ bc ];
 
   postPatch = ''
-    patchShebangs ./build ./configure ./run_tests ./bin/*
+    patchShebangs --build ./build ./configure ./run_tests
+    patchShebangs --host ./bin/*
 
     # patching interpreters before fixup is needed for tests:
-    patchShebangs ./bin/*
     patchShebangs testing/binaries/data/vectorstats/*py
 
     substituteInPlace ./run_tests  \
-      --replace 'git submodule update --init $datadir >> $LOGFILE 2>&1' ""
+      --replace-fail 'git submodule update --init $datadir >> $LOGFILE 2>&1' ""
 
+    # reduce build noise
+    substituteInPlace ./configure \
+      --replace-fail "[ '-Wall' ]" "[]"
+
+    # fix error output (cuts off after a few lines otherwise)
     substituteInPlace ./build  \
-      --replace '"less -RX "' '"${less}/bin/less -RX "'
+      --replace-fail 'stderr=subprocess.PIPE' 'stderr=None'
   '';
 
   configurePhase = ''
-    export EIGEN_CFLAGS="-isystem ${eigen}/include/eigen3"
+    runHook preConfigure
+    export EIGEN_CFLAGS="-isystem ${eigen_3_4_0}/include/eigen3"
     unset LD  # similar to https://github.com/MRtrix3/mrtrix3/issues/1519
     ./configure ${lib.optionalString (!withGui) "-nogui"};
+    runHook postConfigure
   '';
 
   buildPhase = ''
+    runHook preBuild
     ./build
     (cd testing && ../build)
+    runHook postBuild
   '';
 
   installCheckPhase = ''
+    runHook preInstallCheck
     ./run_tests units
     ./run_tests binaries
 
     # can also `./run_tests scripts`, but this fails due to lack of FSL package
     # (and there's no convenient way to disable individual tests)
+    runHook postInstallCheck
   '';
   doInstallCheck = true;
 
@@ -99,13 +112,19 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  postInstall = ''
-    for prog in $out/bin/*; do
-      if [[ -x "$prog" ]]; then
-        wrapProgram $prog --prefix PATH : ${lib.makeBinPath [ ants ]}
-      fi
-    done
-  '';
+  preFixup =
+    if withGui then
+      ''
+        qtWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ ants ]})
+      ''
+    else
+      ''
+        for prog in $out/bin/*; do
+          if [[ -x "$prog" ]]; then
+            wrapProgram $prog --prefix PATH : ${lib.makeBinPath [ ants ]}
+          fi
+        done
+      '';
 
   meta = with lib; {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);

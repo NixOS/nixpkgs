@@ -5,7 +5,7 @@
   swig,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "marisa";
   format = "setuptools";
   inherit (marisa) src version;

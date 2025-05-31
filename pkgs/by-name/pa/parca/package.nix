@@ -8,13 +8,13 @@
   stdenv,
 }:
 let
-  version = "0.22.0";
+  version = "0.23.1";
 
   parca-src = fetchFromGitHub {
     owner = "parca-dev";
     repo = "parca";
     tag = "v${version}";
-    hash = "sha256-iuTlKUmugRum0qZRhuw0FR13iE2qrQegTgwpAvgJSXk=";
+    hash = "sha256-UCYBT+KegoXpMRMoA3iuX8WiXhkX43JVOmhHksH5Pwk=";
   };
 
   ui = stdenv.mkDerivation (finalAttrs: {
@@ -24,7 +24,7 @@ let
 
     pnpmDeps = pnpm_9.fetchDeps {
       inherit (finalAttrs) pname src version;
-      hash = "sha256-MVNO24Oksy/qRUmEUoWoviQEo6Eimb18ZnDj5Z1vJkY=";
+      hash = "sha256-MByoIJtynv38TFNVDdZWjkJJpABCjJU2wBrChxM2rdE=";
     };
 
     nativeBuildInputs = [
@@ -56,7 +56,7 @@ buildGoModule rec {
   pname = "parca";
   src = parca-src;
 
-  vendorHash = "sha256-fErrbi3iSJlkguqzL6nH+fzmjxhoYVl1qH7tqRR1F1A=";
+  vendorHash = "sha256-O7dzdMGZ1l+cmVA3svbh/Ig1SbXXiMwJ7TXmrT2IM+g=";
 
   ldflags = [
     "-X=main.version=${version}"
@@ -67,6 +67,11 @@ buildGoModule rec {
     # Copy the built UI into the right place for the Go build to embed it.
     cp -r ${ui}/share/parca/ui/* ui/packages/app/web/build
   '';
+
+  passthru = {
+    inherit ui;
+    updateScript = ./update.sh;
+  };
 
   meta = {
     mainProgram = "parca";

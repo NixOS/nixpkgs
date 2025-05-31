@@ -4,7 +4,7 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "clematis";
   version = "2022-04-16";
 

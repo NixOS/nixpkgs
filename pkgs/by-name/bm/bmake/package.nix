@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bmake";
-  version = "20241124";
+  version = "20250308";
 
   src = fetchurl {
     url = "https://www.crufty.net/ftp/pub/sjg/bmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-T2ZAYJHC+F6pZLI41p649xq0uqydykaHpxiDum3k3bI=";
+    hash = "sha256-I4jZ+xhldmM6pyX/FjVSpdunpqN1qMuakBSrV+59maI=";
   };
 
   patches = [
@@ -27,18 +27,23 @@ stdenv.mkDerivation (finalAttrs: {
     ./004-unconditional-ksh-test.diff
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   nativeBuildInputs = [
     getopt
   ];
 
-  nativeCheckInputs = [
-    bc
-    tzdata
-  ] ++ lib.optionals (stdenv.hostPlatform.libc != "musl") [
-    ksh
-  ];
+  nativeCheckInputs =
+    [
+      bc
+      tzdata
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.libc != "musl") [
+      ksh
+    ];
 
   # The generated makefile is a small wrapper for calling ./boot-strap with a
   # given op. On a case-insensitive filesystem this generated makefile clobbers

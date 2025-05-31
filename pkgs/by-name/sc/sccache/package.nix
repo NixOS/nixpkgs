@@ -4,35 +4,28 @@
   rustPlatform,
   pkg-config,
   openssl,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
-  version = "0.9.1";
+  version = "0.10.0";
   pname = "sccache";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "sccache";
     rev = "v${version}";
-    sha256 = "sha256-MR/zfE87Z4TXc3ta3192lG/tD7YiVrn0HCLr5O29Izo=";
+    sha256 = "sha256-VEDMeRFQKNPS3V6/DhMWxHR7YWsCzAXTzp0lO+COl08=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Cv+tIivwqNqnA8anDWWEgQKpDFktG4rGZ+qZejBoDAE=";
+  cargoHash = "sha256-1kfKBN4uRbU5LjbC0cLgMqoGnOSEAdC0S7EzXlfaDPo=";
 
   nativeBuildInputs = [
     pkg-config
   ];
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+  ];
 
   # Tests fail because of client server setup which is not possible inside the
   # pure environment, see https://github.com/mozilla/sccache/issues/460

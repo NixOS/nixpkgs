@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scite";
-  version = "5.5.4";
+  version = "5.5.6";
 
   src = fetchurl {
     url = "https://www.scintilla.org/scite${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}.tgz";
-    hash = "sha256-Q50DPEUrswv3lS4wOQmRpqvQIqAx6OdLJXF/nkaukKg=";
+    hash = "sha256-VmNP6NepkF7Ln9eh9pfStmch9nwIKKZTOYxkeduSxrI=";
   };
 
   nativeBuildInputs = [

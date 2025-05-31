@@ -7,6 +7,7 @@
   xcbuild,
   targetPackages,
   libxml2,
+  ninja,
   zlib,
   coreutils,
   callPackage,
@@ -35,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       cmake
       (lib.getDev llvmPackages.llvm.dev)
+      ninja
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # provides xcode-select, which is required for SDK detection
@@ -111,7 +113,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   postBuild =
-    if lib.versionAtLeast finalAttrs.version "0.13" then
+    if lib.versionAtLeast finalAttrs.version "0.14" then
+      ''
+        stage3/bin/zig build langref --zig-lib-dir $(pwd)/stage3/lib/zig
+      ''
+    else if lib.versionAtLeast finalAttrs.version "0.13" then
       ''
         stage3/bin/zig build langref
       ''
@@ -152,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
       nixSupport.cc-cflags =
         [
           "-target"
-          "${stdenv.targetPlatform.parsed.cpu.name}-${stdenv.targetPlatform.parsed.kernel.name}-${stdenv.targetPlatform.parsed.abi.name}"
+          "${stdenv.targetPlatform.config}"
         ]
         ++ lib.optional (
           stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.isStatic or false)
@@ -167,7 +173,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://ziglang.org/";
     changelog = "https://ziglang.org/download/${finalAttrs.version}/release-notes.html";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ andrewrk ] ++ lib.teams.zig.members;
+    maintainers = with lib.maintainers; [ andrewrk ];
+    teams = [ lib.teams.zig ];
     mainProgram = "zig";
     platforms = lib.platforms.unix;
   };

@@ -277,7 +277,7 @@ def get_profiles() -> list[str]:
 def install_bootloader(args: argparse.Namespace) -> None:
     try:
         with open("/etc/machine-id") as machine_file:
-            machine_id = machine_file.readlines()[0]
+            machine_id = machine_file.readlines()[0].strip()
     except IOError as e:
         if e.errno != errno.ENOENT:
             raise
@@ -335,7 +335,7 @@ def install_bootloader(args: argparse.Namespace) -> None:
         available_match = re.search(r"^\((.*)\)$", available_out)
 
         if installed_match is None:
-            raise Exception("could not find any previously installed systemd-boot")
+            raise Exception("Could not find any previously installed systemd-boot. If you are switching to systemd-boot from a different bootloader, you need to run `nixos-rebuild switch --install-bootloader`")
 
         if available_match is None:
             raise Exception("could not determine systemd-boot version")

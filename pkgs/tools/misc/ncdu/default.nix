@@ -4,24 +4,25 @@
   fetchurl,
   ncurses,
   pkg-config,
-  zig,
+  zig_0_14,
   zstd,
   installShellFiles,
+  versionCheckHook,
   testers,
   pie ? stdenv.hostPlatform.isDarwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ncdu";
-  version = "2.7";
+  version = "2.8.2";
 
   src = fetchurl {
     url = "https://dev.yorhel.nl/download/ncdu-${finalAttrs.version}.tar.gz";
-    hash = "sha256-shjMFKK7mFLPlR204hrsiYDnqMOsoJfjqjQX8g65MAA=";
+    hash = "sha256-Ai+nZdNaeXl6zcgMgxcH30PJo7pg0a4+bqTMG3osAT0=";
   };
 
   nativeBuildInputs = [
-    zig.hook
+    zig_0_14.hook
     installShellFiles
     pkg-config
   ];
@@ -37,6 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
     installManPage ncdu.1
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;
   };
@@ -50,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
       pSub
       rodrgz
     ];
-    inherit (zig.meta) platforms;
+    inherit (zig_0_14.meta) platforms;
     mainProgram = "ncdu";
   };
 })

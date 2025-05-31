@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, curl
-, fetchFromGitHub
-, pkg-config
+{
+  lib,
+  buildGoModule,
+  curl,
+  fetchFromGitHub,
+  pkg-config,
 }:
 
 buildGoModule rec {
@@ -11,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "Ullaakut";
-    repo = pname;
+    repo = "cameradar";
     rev = "v${version}";
     sha256 = "sha256-GOqmz/aiOLGMfs9rQBIEQSgBycPzhu8BohcAc2U+gBw=";
   };

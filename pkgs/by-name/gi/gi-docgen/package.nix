@@ -9,13 +9,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gi-docgen";
-  version = "2024.1";
+  version = "2025.3";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gi-docgen/${lib.versions.major version}/gi-docgen-${version}.tar.xz";
-    hash = "sha256-hwx3+WIEYszknjVUKkLcFhL8hYcz6D274kjFNUWK7B4=";
+    hash = "sha256-iomli8D3ffw+iioONJf8OfVBOuNeVZfp7GFgq/juFNg=";
   };
 
   depsBuildBuild = [
@@ -56,6 +56,6 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "gi-docgen";
     homepage = "https://gitlab.gnome.org/GNOME/gi-docgen";
     license = licenses.asl20; # OR GPL-3.0-or-later
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
   };
 }

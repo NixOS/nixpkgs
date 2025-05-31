@@ -5,35 +5,40 @@
   callPackage,
   fetchurl,
   icu73,
+  icu77,
   fetchpatch2,
   config,
 }:
 
 let
-  icu73' = icu73.overrideAttrs (attrs: {
-    # standardize vtzone output
-    # Work around ICU-22132 https://unicode-org.atlassian.net/browse/ICU-22132
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1790071
-    patches = attrs.patches ++ [
-      (fetchpatch2 {
-        url = "https://hg.mozilla.org/mozilla-central/raw-file/fb8582f80c558000436922fb37572adcd4efeafc/intl/icu-patches/bug-1790071-ICU-22132-standardize-vtzone-output.diff";
-        stripLen = 3;
-        hash = "sha256-MGNnWix+kDNtLuACrrONDNcFxzjlUcLhesxwVZFzPAM=";
-      })
-    ];
-  });
+  patchICU =
+    icu:
+    icu.overrideAttrs (attrs: {
+      # standardize vtzone output
+      # Work around ICU-22132 https://unicode-org.atlassian.net/browse/ICU-22132
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1790071
+      patches = attrs.patches ++ [
+        (fetchpatch2 {
+          url = "https://hg.mozilla.org/mozilla-central/raw-file/fb8582f80c558000436922fb37572adcd4efeafc/intl/icu-patches/bug-1790071-ICU-22132-standardize-vtzone-output.diff";
+          stripLen = 3;
+          hash = "sha256-MGNnWix+kDNtLuACrrONDNcFxzjlUcLhesxwVZFzPAM=";
+        })
+      ];
+    });
+  icu73' = patchICU icu73;
+  icu77' = patchICU icu77;
 
   common =
     {
       version,
       sha512,
       updateScript,
+      applicationName ? "Thunderbird",
     }:
     (buildMozillaMach rec {
       pname = "thunderbird";
-      inherit version updateScript;
+      inherit version updateScript applicationName;
       application = "comm/mail";
-      applicationName = "Mozilla Thunderbird";
       binaryName = pname;
       src = fetchurl {
         url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
@@ -52,6 +57,7 @@ let
 
       extraPassthru = {
         icu73 = icu73';
+        icu77 = icu77';
       };
 
       meta = with lib; {
@@ -78,16 +84,16 @@ let
         pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
 
         icu73 = icu73';
+        icu77 = icu77';
       };
 
 in
 rec {
-  # Upstream claims -latest is "for testing purposes only". Stick to -esr until this changes.
-  thunderbird = thunderbird-esr;
+  thunderbird = thunderbird-latest;
 
   thunderbird-latest = common {
-    version = "133.0";
-    sha512 = "8cf8973964cabdc7fafe83d1dfd4f9fbfd340638b1f3d396a98059c00650549b0f4a7bfc486a294b2966136266d4524d6c825a6ee344cd753ac2f7ab412cbc96";
+    version = "138.0.1";
+    sha512 = "2e71ee537292ec1a49237e93c43ed4c1a9eae58becfc7fa9ca0daf1e982c38704cb6d44e92b1bf7b45c5b8c27b23eb3aa7f48b375580f49ee60884dadc5d85b5";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-latest";
@@ -98,8 +104,10 @@ rec {
   thunderbird-esr = thunderbird-128;
 
   thunderbird-128 = common {
-    version = "128.6.1esr";
-    sha512 = "f41936b90aaefde5c6a31a03d1f7ed4b6560729584061d82d032efde3df0836eede807a318d4a403de4a3cd5d6a6f7eace483e08fcc284699176f1b3ad01437a";
+    applicationName = "Thunderbird ESR";
+
+    version = "128.11.0esr";
+    sha512 = "33de73db2d5ab5152ff11c1947317081259f4e7644631b5e6b9c3b192b4473a5ae6fe897b27b3c8e240ff8c606ffaa8cc14e169c34a94b8de6e64b0c5f0f6810";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-128";

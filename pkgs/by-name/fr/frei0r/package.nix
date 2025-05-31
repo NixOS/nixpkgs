@@ -6,7 +6,6 @@
   cairo,
   cmake,
   opencv,
-  pcre,
   pkg-config,
   cudaSupport ? config.cudaSupport,
   cudaPackages,
@@ -31,7 +30,6 @@ stdenv.mkDerivation rec {
     [
       cairo
       opencv
-      pcre
     ]
     ++ lib.optionals cudaSupport [
       cudaPackages.cuda_cudart
@@ -49,6 +47,6 @@ stdenv.mkDerivation rec {
     description = "Minimalist, cross-platform, shared video plugins";
     license = licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }

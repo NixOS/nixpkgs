@@ -1,0 +1,208 @@
+From e0cbc1049b9a3a3322cd48d32af148f87d5007c2 Mon Sep 17 00:00:00 2001
+From: Marcin Serwin <marcin@serwin.dev>
+Date: Mon, 19 May 2025 22:36:53 +0200
+Subject: [PATCH] cmake: add pkg-config file generation
+
+Signed-off-by: Marcin Serwin <marcin@serwin.dev>
+---
+ CMakeLists.txt | 50 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ libcubeb.pc.in | 12 ++++++++++++
+ 2 files changed, 62 insertions(+)
+ create mode 100644 libcubeb.pc.in
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 07618fa..6470837 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -23,6 +23,17 @@ if(NOT CMAKE_BUILD_TYPE)
+       "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel." FORCE)
+ endif()
+ 
++set(private_requires)
++set(private_libs)
++set(private_libs_flags)
++if(UNIX AND NOT APPLE)
++  if(BSD OR ANDROID)
++    list(APPEND private_libs c++)
++  else()
++    list(APPEND private_libs stdc++)
++  endif()
++endif()
++
+ set(CMAKE_C_STANDARD 99)
+ set(CMAKE_CXX_STANDARD 17)
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+@@ -141,6 +152,7 @@ if(NOT BUNDLE_SPEEX)
+     pkg_check_modules(speexdsp IMPORTED_TARGET speexdsp)
+     if(speexdsp_FOUND)
+       add_library(speex ALIAS PkgConfig::speexdsp)
++      list(APPEND private_requires speexdsp)
+     endif()
+   endif()
+ endif()
+@@ -155,6 +167,7 @@ if(NOT TARGET speex)
+     EXPORT=
+     RANDOM_PREFIX=speex
+   )
++  list(APPEND private_libs speex)
+ endif()
+ 
+ # $<BUILD_INTERFACE:> required because of https://gitlab.kitware.com/cmake/cmake/-/issues/15415
+@@ -166,6 +179,7 @@ include(CheckIncludeFiles)
+ set(THREADS_PREFER_PTHREAD_FLAG ON)
+ find_package(Threads)
+ target_link_libraries(cubeb PRIVATE Threads::Threads)
++list(APPEND private_libs ${CMAKE_THREAD_LIBS_INIT})
+ 
+ if(LAZY_LOAD_LIBS)
+   check_include_files(pulse/pulseaudio.h USE_PULSE)
+@@ -176,6 +190,7 @@ if(LAZY_LOAD_LIBS)
+ 
+   if(USE_PULSE OR USE_ALSA OR USE_JACK OR USE_SNDIO OR USE_AAUDIO)
+     target_link_libraries(cubeb PRIVATE ${CMAKE_DL_LIBS})
++    list(APPEND private_libs ${CMAKE_DL_LIBS})
+ 
+     if(ANDROID)
+       target_compile_definitions(cubeb PRIVATE __ANDROID_UNAVAILABLE_SYMBOLS_ARE_WEAK__)
+@@ -191,6 +206,7 @@ else()
+     set(USE_PULSE ON)
+     target_compile_definitions(cubeb PRIVATE DISABLE_LIBPULSE_DLOPEN)
+     target_link_libraries(cubeb PRIVATE PkgConfig::libpulse)
++    list(APPEND private_requires libpulse)
+   endif()
+ 
+   pkg_check_modules(alsa IMPORTED_TARGET alsa)
+@@ -198,6 +214,7 @@ else()
+     set(USE_ALSA ON)
+     target_compile_definitions(cubeb PRIVATE DISABLE_LIBASOUND_DLOPEN)
+     target_link_libraries(cubeb PRIVATE PkgConfig::alsa)
++    list(APPEND private_requires alsa)
+   endif()
+ 
+   pkg_check_modules(jack IMPORTED_TARGET jack)
+@@ -205,18 +222,21 @@ else()
+     set(USE_JACK ON)
+     target_compile_definitions(cubeb PRIVATE DISABLE_LIBJACK_DLOPEN)
+     target_link_libraries(cubeb PRIVATE PkgConfig::jack)
++    list(APPEND private_requires jack)
+   endif()
+ 
+   check_include_files(sndio.h USE_SNDIO)
+   if(USE_SNDIO)
+     target_compile_definitions(cubeb PRIVATE DISABLE_LIBSNDIO_DLOPEN)
+     target_link_libraries(cubeb PRIVATE sndio)
++    list(APPEND private_libs sndio)
+   endif()
+ 
+   check_include_files(aaudio/AAudio.h USE_AAUDIO)
+   if(USE_AAUDIO)
+     target_compile_definitions(cubeb PRIVATE DISABLE_LIBAAUDIO_DLOPEN)
+     target_link_libraries(cubeb PRIVATE aaudio)
++    list(APPEND private_libs aaudio)
+   endif()
+ endif()
+ 
+@@ -263,6 +283,7 @@ if(USE_AUDIOUNIT)
+     src/cubeb_osx_run_loop.cpp)
+   target_compile_definitions(cubeb PRIVATE USE_AUDIOUNIT)
+   target_link_libraries(cubeb PRIVATE "-framework AudioUnit" "-framework CoreAudio" "-framework CoreServices")
++  list(APPEND private_libs_flags "-framework AudioUnit" "-framework CoreAudio" "-framework CoreServices")
+ endif()
+ 
+ check_include_files(audioclient.h USE_WASAPI)
+@@ -271,6 +292,7 @@ if(USE_WASAPI)
+     src/cubeb_wasapi.cpp)
+   target_compile_definitions(cubeb PRIVATE USE_WASAPI)
+   target_link_libraries(cubeb PRIVATE avrt ole32 ksuser)
++  list(APPEND private_libs avrt ole32 ksuser)
+ endif()
+ 
+ check_include_files("windows.h;mmsystem.h" USE_WINMM)
+@@ -279,6 +301,7 @@ if(USE_WINMM)
+     src/cubeb_winmm.c)
+   target_compile_definitions(cubeb PRIVATE USE_WINMM)
+   target_link_libraries(cubeb PRIVATE winmm)
++  list(APPEND private_libs winmm)
+ endif()
+ 
+ check_include_files(SLES/OpenSLES.h USE_OPENSL)
+@@ -288,6 +311,7 @@ if(USE_OPENSL)
+     src/cubeb-jni.cpp)
+   target_compile_definitions(cubeb PRIVATE USE_OPENSL)
+   target_link_libraries(cubeb PRIVATE OpenSLES)
++  list(APPEND private_libs OpenSLES)
+ endif()
+ 
+ check_include_files(sys/soundcard.h HAVE_SYS_SOUNDCARD_H)
+@@ -303,6 +327,7 @@ if(HAVE_SYS_SOUNDCARD_H)
+       pkg_check_modules(libbsd-overlay IMPORTED_TARGET libbsd-overlay)
+       if(libbsd-overlay_FOUND)
+         target_link_libraries(cubeb PRIVATE PkgConfig::libbsd-overlay)
++        list(APPEND private_requires libbsd-overlay)
+         set(HAVE_STRLCPY true)
+       endif()
+     endif()
+@@ -320,6 +345,7 @@ if(USE_AUDIOTRACK)
+     src/cubeb_audiotrack.c)
+   target_compile_definitions(cubeb PRIVATE USE_AUDIOTRACK)
+   target_link_libraries(cubeb PRIVATE log)
++  list(APPEND private_libs log)
+ endif()
+ 
+ check_include_files(sys/audioio.h USE_SUN)
+@@ -335,6 +361,7 @@ if(USE_KAI)
+     src/cubeb_kai.c)
+   target_compile_definitions(cubeb PRIVATE USE_KAI)
+   target_link_libraries(cubeb PRIVATE kai)
++  list(APPEND private_libs kai)
+ endif()
+ 
+ if(USE_PULSE AND USE_PULSE_RUST)
+@@ -452,3 +479,26 @@ add_custom_target(clang-format-check
+   | xargs -0 ${CLANG_FORMAT_BINARY} -Werror -n
+   COMMENT "Check formatting with clang-format"
+   VERBATIM)
++
++
++list(TRANSFORM private_libs PREPEND "-l")
++string(JOIN " " CUBEB_PC_PRIVATE_LIBS ${private_libs} ${private_libs_flags})
++
++string(JOIN " " CUBEB_PC_PRIVATE_REQUIRES ${private_requires})
++
++if(IS_ABSOLUTE "${CMAKE_INSTALL_INCLUDEDIR}")
++  set(CUBEB_PC_INCLUDEDIR "${CMAKE_INSTALL_INCLUDEDIR}")
++else()
++  set(CUBEB_PC_INCLUDEDIR "\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")
++endif()
++if(IS_ABSOLUTE "${CMAKE_INSTALL_LIBDIR}")
++  set(CUBEB_PC_LIBDIR "${CMAKE_INSTALL_LIBDIR}")
++else()
++  set(CUBEB_PC_LIBDIR "\${prefix}/${CMAKE_INSTALL_LIBDIR}")
++endif()
++
++configure_file(libcubeb.pc.in libcubeb.pc @ONLY)
++install(FILES "${CMAKE_CURRENT_BINARY_DIR}/libcubeb.pc"
++  DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
++)
++
+diff --git a/libcubeb.pc.in b/libcubeb.pc.in
+new file mode 100644
+index 0000000..2310ae6
+--- /dev/null
++++ b/libcubeb.pc.in
+@@ -0,0 +1,12 @@
++prefix=@CMAKE_INSTALL_PREFIX@
++exec_prefix=${prefix}
++libdir=@CUBEB_PC_LIBDIR@
++includedir=@CUBEB_PC_INCLUDEDIR@
++
++Name: libcubeb
++Description: Cross platform audio library
++Version: @PROJECT_VERSION@
++Requires.private: @CUBEB_PC_PRIVATE_REQUIRES@
++Libs: -L${libdir} -lcubeb
++Libs.private: @CUBEB_PC_PRIVATE_LIBS@
++Cflags: -I${includedir}
+-- 
+2.49.0
+

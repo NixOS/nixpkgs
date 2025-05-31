@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  brotlicffi,
   buildPythonPackage,
   certifi,
   chardet,
@@ -37,7 +36,6 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    brotlicffi
     certifi
     charset-normalizer
     idna

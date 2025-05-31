@@ -2,29 +2,55 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  filelock,
   poetry-core,
+  postgresql,
+  postgresqlTestHook,
+  psycopg,
+  psycopg-pool,
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-xdist,
+  redis,
+  redisTestHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyrate-limiter";
-  version = "2.10.0";
-  format = "pyproject";
+  version = "3.7.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vutran1710";
     repo = "PyrateLimiter";
-    rev = "v${version}";
-    hash = "sha256-CPusPeyTS+QyWiMHsU0ii9ZxPuizsqv0wQy3uicrDw0=";
+    tag = "v${version}";
+    hash = "sha256-oNwFxH75TJm0iJSbLIO8SlIih72ImlHIhUW7GjOEorw=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  postPatch = ''
+    # tests cause too many connections to the postgres server and crash/timeout
+    sed -i "/create_postgres_bucket,/d" tests/conftest.py
+  '';
+
+  build-system = [ poetry-core ];
+
+  optional-dependencies = {
+    all = [
+      filelock
+      redis
+      psycopg
+      psycopg-pool
+    ];
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+    pytest-xdist
+    redisTestHook
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "pyrate_limiter" ];
-
-  # The only consumer of this is Lutris (via python-moddb), and it requires 2.x,
-  # so don't auto-update it and break Lutris every python-updates.
-  # FIXME: remove when python-moddb updates.
-  passthru.skipBulkUpdate = true;
 
   meta = with lib; {
     description = "Python Rate-Limiter using Leaky-Bucket Algorimth Family";

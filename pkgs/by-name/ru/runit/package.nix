@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  darwin,
 
   # Build runit-init as a static binary
   static ? false,
@@ -30,12 +29,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  buildInputs =
-    lib.optionals static [
-      stdenv.cc.libc
-      stdenv.cc.libc.static
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.libs.utmp;
+  buildInputs = lib.optionals static [
+    stdenv.cc.libc
+    stdenv.cc.libc.static
+  ];
 
   postPatch =
     ''

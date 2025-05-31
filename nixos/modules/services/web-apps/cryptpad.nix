@@ -195,10 +195,12 @@ in
           SystemCallFilter = [
             "@pkey"
             "@system-service"
-            "@chown"
+            # /!\ order matters: @privileged contains @chown, so we need
+            # @privileged negated before we re-list @chown for libuv copy
+            "~@privileged"
+            "~@chown:EPERM"
             "~@keyring"
             "~@memlock"
-            "~@privileged"
             "~@resources"
             "~@setuid"
             "~@timer"
@@ -239,7 +241,7 @@ in
             "-/etc/resolv.conf"
             "-/run/systemd"
             "/etc/hosts"
-            "/etc/ssl/certs/ca-certificates.crt"
+            "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"
           ];
         };
       };

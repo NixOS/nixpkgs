@@ -5,7 +5,7 @@
   autoreconfHook,
   pkg-config,
   expat,
-  icu,
+  icu74,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     expat
-    icu
+    icu74
   ];
 
   enableParallelBuilding = true;

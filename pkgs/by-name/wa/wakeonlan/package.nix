@@ -13,7 +13,7 @@ perlPackages.buildPerlPackage rec {
 
   src = fetchFromGitHub {
     owner = "jpoliv";
-    repo = pname;
+    repo = "wakeonlan";
     rev = "v${version}";
     sha256 = "sha256-zCOpp5iNrWwh2knBGWhiEyG9IPAnFRwH5jJLEVLBISM=";
   };

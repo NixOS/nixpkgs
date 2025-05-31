@@ -14,7 +14,6 @@
   openjpeg,
   jbig2dec,
   libjpeg,
-  darwin,
   gumbo,
   enableX11 ? (!stdenv.hostPlatform.isDarwin),
   libX11,
@@ -62,12 +61,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "1.25.2";
+  version = "1.25.3";
   pname = "mupdf";
 
   src = fetchurl {
     url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
-    hash = "sha256-Nsz2peaR4Yis+NtumNCL8F8nu0zjBDLcFfx20ympLU0=";
+    hash = "sha256-uXTXBqloBTPRBLQRIiTHvz3pPye+fKQbS/tRVSYk8Kk=";
   };
 
   patches = [
@@ -142,19 +141,10 @@ stdenv.mkDerivation rec {
       curl
       openssl
     ]
-    ++ lib.optionals enableGL (
-      if stdenv.hostPlatform.isDarwin then
-        with darwin.apple_sdk.frameworks;
-        [
-          GLUT
-          OpenGL
-        ]
-      else
-        [
-          freeglut-mupdf
-          libGLU
-        ]
-    )
+    ++ lib.optionals (enableGL && !stdenv.hostPlatform.isDarwin) [
+      freeglut-mupdf
+      libGLU
+    ]
     ++ lib.optionals enableOcr [
       leptonica
       tesseract

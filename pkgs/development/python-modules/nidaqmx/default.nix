@@ -54,7 +54,7 @@ buildPythonPackage rec {
       click
       requests
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       distro
     ];
 

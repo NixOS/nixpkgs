@@ -47,6 +47,7 @@
   miniupnpc,
   nlohmann_json,
   config,
+  coreutils,
   cudaSupport ? config.cudaSupport,
   cudaPackages ? { },
 }:
@@ -94,6 +95,8 @@ stdenv'.mkDerivation rec {
     ]
     ++ lib.optionals cudaSupport [
       autoAddDriverRunpath
+      cudaPackages.cuda_nvcc
+      (lib.getDev cudaPackages.cuda_cudart)
     ];
 
   buildInputs =
@@ -192,11 +195,14 @@ stdenv'.mkDerivation rec {
     substituteInPlace packaging/linux/sunshine.desktop \
       --subst-var-by PROJECT_NAME 'Sunshine' \
       --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
+      --subst-var-by SUNSHINE_DESKTOP_ICON 'sunshine' \
+      --subst-var-by CMAKE_INSTALL_FULL_DATAROOTDIR "$out/share" \
       --replace-fail '/usr/bin/env systemctl start --u sunshine' 'sunshine'
 
     substituteInPlace packaging/linux/sunshine.service.in \
       --subst-var-by PROJECT_DESCRIPTION 'Self-hosted game stream host for Moonlight' \
-      --subst-var-by SUNSHINE_EXECUTABLE_PATH $out/bin/sunshine
+      --subst-var-by SUNSHINE_EXECUTABLE_PATH $out/bin/sunshine \
+      --replace-fail '/bin/sleep' '${lib.getExe' coreutils "sleep"}'
   '';
 
   preBuild = ''

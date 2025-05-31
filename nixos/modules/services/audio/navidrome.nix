@@ -77,6 +77,12 @@ in
         default = false;
         description = "Whether to open the TCP port in the firewall";
       };
+
+      environmentFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        description = "Environment file, used to set any secret ND_* environment variables.";
+      };
     };
   };
 
@@ -96,6 +102,11 @@ in
             mode = "700";
             inherit (cfg) user group;
           };
+          "${cfg.settings.MusicFolder or (WorkingDirectory + "/music")}"."d" = {
+            mode = ":700";
+            user = ":${cfg.user}";
+            group = ":${cfg.group}";
+          };
         };
         services.navidrome = {
           description = "Navidrome Media Server";
@@ -105,6 +116,7 @@ in
             ExecStart = ''
               ${getExe cfg.package} --configfile ${settingsFormat.generate "navidrome.json" cfg.settings}
             '';
+            EnvironmentFile = lib.mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
             User = cfg.user;
             Group = cfg.group;
             StateDirectory = "navidrome";
@@ -118,9 +130,7 @@ in
             BindReadOnlyPaths =
               [
                 # navidrome uses online services to download additional album metadata / covers
-                "${
-                  config.environment.etc."ssl/certs/ca-certificates.crt".source
-                }:/etc/ssl/certs/ca-certificates.crt"
+                "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"
                 builtins.storeDir
                 "/etc"
               ]

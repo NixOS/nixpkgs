@@ -5,7 +5,6 @@
   buildPythonPackage,
   setuptools,
   pyasn1,
-  fetchpatch,
   cryptography,
   pytestCheckHook,
 }:

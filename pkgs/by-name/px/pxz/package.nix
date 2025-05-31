@@ -7,7 +7,7 @@
   xz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pxz";
   version = "4.999.9beta";
 

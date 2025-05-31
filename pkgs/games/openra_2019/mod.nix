@@ -1,5 +1,5 @@
 /*
-  The package defintion for an OpenRA out-of-tree mod.
+  The package definition for an OpenRA out-of-tree mod.
    It shares code with `engine.nix` by what is defined in `common.nix`.
    To build an out-of-tree mod it needs the source code of the engine available,
    and they each need to be build with a specific version or fork of the engine,

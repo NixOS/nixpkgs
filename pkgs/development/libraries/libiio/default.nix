@@ -6,7 +6,7 @@
   bison,
   libxml2,
   pythonSupport ? stdenv.hostPlatform.hasSharedLibraries,
-  python,
+  python3,
   libusb1,
   avahiSupport ? true,
   avahi,
@@ -14,8 +14,6 @@
   runtimeShell,
   lib,
   pkg-config,
-  CFNetwork,
-  CoreServices,
 }:
 
 stdenv.mkDerivation rec {
@@ -48,9 +46,9 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals pythonSupport (
       [
-        python
+        python3
       ]
-      ++ lib.optional python.isPy3k python.pkgs.setuptools
+      ++ lib.optional python3.isPy3k python3.pkgs.setuptools
     );
 
   buildInputs =
@@ -59,11 +57,7 @@ stdenv.mkDerivation rec {
       libusb1
     ]
     ++ lib.optional avahiSupport avahi
-    ++ lib.optional stdenv.hostPlatform.isLinux libaio
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CFNetwork
-      CoreServices
-    ];
+    ++ lib.optional stdenv.hostPlatform.isLinux libaio;
 
   cmakeFlags =
     [
@@ -74,7 +68,7 @@ stdenv.mkDerivation rec {
       "-DOSX_FRAMEWORK=off"
     ]
     ++ lib.optionals pythonSupport [
-      "-DPython_EXECUTABLE=${python.pythonOnBuildForHost.interpreter}"
+      "-DPython_EXECUTABLE=${python3.pythonOnBuildForHost.interpreter}"
       "-DPYTHON_BINDINGS=on"
     ]
     ++ lib.optionals (!avahiSupport) [
@@ -93,7 +87,7 @@ stdenv.mkDerivation rec {
 
   postInstall = lib.optionalString pythonSupport ''
     # Move Python bindings into a separate output.
-    moveToOutput ${python.sitePackages} "$python"
+    moveToOutput ${python3.sitePackages} "$python"
   '';
 
   meta = with lib; {

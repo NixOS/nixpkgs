@@ -1,6 +1,5 @@
 {
   bzip2,
-  Cocoa,
   copyDesktopItems,
   curl,
   fetchFromGitHub,
@@ -8,6 +7,7 @@
   jsoncpp,
   lib,
   libpng,
+  libX11,
   lua,
   luajit,
   meson,
@@ -20,13 +20,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "the-powder-toy";
-  version = "99.2.382";
+  version = "99.3.384";
 
   src = fetchFromGitHub {
     owner = "The-Powder-Toy";
     repo = "The-Powder-Toy";
     tag = "v${version}";
-    hash = "sha256-qf5Bh7f4nNNhzh+3id7+lW/eKnZ4ZKgrJxR1EWurKy8=";
+    hash = "sha256-vlswHNkjyxM9sZT+mwiCMfNbdAbhYyx06w+ZLfaPaEQ=";
   };
 
   nativeBuildInputs = [
@@ -42,11 +42,12 @@ stdenv.mkDerivation rec {
     fftwFloat
     jsoncpp
     libpng
+    libX11
     lua
     luajit
     SDL2
     zlib
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
+  ];
 
   mesonFlags = [ "-Dworkaround_elusive_bzip2=false" ];
 

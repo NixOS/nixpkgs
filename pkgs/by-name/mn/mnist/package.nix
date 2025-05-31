@@ -23,7 +23,7 @@ let
     };
   };
 in
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "mnist";
   version = "2018-11-16";
   installPhase = ''

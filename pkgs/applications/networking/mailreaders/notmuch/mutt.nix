@@ -8,7 +8,7 @@
   notmuch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "notmuch-mutt";
   version = notmuch.version;
 

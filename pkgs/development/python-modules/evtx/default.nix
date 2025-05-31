@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "evtx";
-  version = "0.8.5";
+  version = "0.8.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,13 +20,12 @@ buildPythonPackage rec {
     owner = "omerbenamram";
     repo = "pyevtx-rs";
     tag = version;
-    hash = "sha256-wo6CeHlEBbu3klzzC4dUbjSfu7XwLo/cmtmZsVIKgS8=";
+    hash = "sha256-rxE3Srm+5L9r6uNIeOPBnpQAbS89WCel/U7xgLc2ZDU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-Zdj0trB0wIVC9xg64wVOIrstdG7LGMOhWcRFXQJGNls=";
+    inherit pname version src;
+    hash = "sha256-IqV4BsLE+5Dk3ey4M+h5wxR/SToZTLf8vU0BlWU5e8c=";
   };
 
   nativeBuildInputs = with rustPlatform; [

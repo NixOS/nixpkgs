@@ -21,26 +21,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "slimevr";
-  version = "0.13.2";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "SlimeVR";
     repo = "SlimeVR-Server";
     rev = "v${version}";
-    hash = "sha256-XQDbP+LO/brpl7viSxuV3H4ALN0yIkj9lwr5eS1txNs=";
+    hash = "sha256-7b2IlMYpOVvthOUNr63PUsZyr2JH37O2DVWH9N6M8Xg=";
     # solarxr
     fetchSubmodules = true;
   };
 
   buildAndTestSubdir = "gui/src-tauri";
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-93aOM6iJguTdC5RAUDuoSr05ar+iKilmddgKBOG2fDE=";
+  cargoHash = "sha256-+WrBVL4/XslJSOwuxs4IzqXG9l1/lMSbKil/8OHc9Xw=";
 
   pnpmDeps = pnpm_9.fetchDeps {
     pname = "${pname}-pnpm-deps";
     inherit version src;
-    hash = "sha256-5IqIUwVvufrws6/xpCAilmgRNG4mUGX8NXajZcVZypM=";
+    hash = "sha256-IoLY3ByDQGfbkWjxlEHHTiKiE3+tpwCrYLUDE8zPkeQ=";
   };
 
   nativeBuildInputs = [
@@ -69,18 +68,10 @@ rustPlatform.buildRustPackage rec {
   patches = [
     # Upstream code uses Git to find the program version.
     (replaceVars ./gui-no-git.patch {
-      inherit version;
+      version = src.rev;
     })
-  ];
-
-  cargoPatches = [
-    # Fix Tauri dependencies issue.
-    # FIXME: Remove with next package update.
-    (fetchpatch {
-      name = "enable-rustls-feature.patch";
-      url = "https://github.com/SlimeVR/SlimeVR-Server/commit/2708b5a15b7c1b8af3e86d942c5e842d83cf078f.patch";
-      hash = "sha256-UDVztPGPaKp2Hld3bMDuPMAu5s1OhvKEsTiXoDRK7cU=";
-    })
+    # By default, SlimeVR will give a big warning about our `JAVA_TOOL_OPTIONS` changes.
+    ./no-java-tool-options-warning.patch
   ];
 
   postPatch =
@@ -91,22 +82,27 @@ rustPlatform.buildRustPackage rec {
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       # Both libappindicator-rs and SlimeVR need to know where Nix's appindicator lib is.
-      pushd $cargoDepsCopy/libappindicator-sys-*
-      oldHash=$(sha256sum src/lib.rs | cut -d " " -f 1)
-      substituteInPlace src/lib.rs \
+      substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
         --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
-      # Cargo doesn't like it when vendored dependencies are edited.
-      substituteInPlace .cargo-checksum.json \
-        --replace-warn $oldHash $(sha256sum src/lib.rs | cut -d " " -f 1)
-      popd
       substituteInPlace gui/src-tauri/src/tray.rs \
         --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+
+      # tao < version 0.31 has a GTK crash. Manually apply the fix.
+      pushd $cargoDepsCopy/tao-0.30.*
+      patch -p1 < ${
+        fetchpatch {
+          name = "fix-gtk-crash.patch";
+          url = "https://github.com/tauri-apps/tao/commit/83e35e961f4893790b913ee2efc15ae33fd16fb2.diff";
+          hash = "sha256-FNXWzsg4lO6VbLsqS6NevX8kVj26YtcYdKbbFejq9hM=";
+        }
+      }
+      popd
     '';
 
   # solarxr needs to be installed after compiling its Typescript files. This isn't
   # done the first time, because `pnpm_9.configHook` ignores `package.json` scripts.
   preBuild = ''
-    pnpm --filter solarxr-protocol install
+    pnpm --filter solarxr-protocol build
   '';
 
   doCheck = false; # No tests
@@ -129,8 +125,26 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    homepage = "https://docs.slimevr.dev/";
+    homepage = "https://slimevr.dev";
     description = "App for facilitating full-body tracking in virtual reality";
+    longDescription = ''
+      App for SlimeVR ecosystem. It orchestrates communication between multiple sensors and integrations, like SteamVR.
+
+      Sensors implementations:
+
+      - [SlimeVR Tracker for ESP](https://github.com/SlimeVR/SlimeVR-Tracker-ESP) - ESP microcontrollers and multiple IMUs are supported
+      - [owoTrack Mobile App](https://github.com/abb128/owoTrackVRSyncMobile) - use phones as trackers (limited functionality and compatibility)
+      - [SlimeVR Wrangler](https://github.com/carl-anders/slimevr-wrangler) - use Nintendo Switch Joycon controllers as trackers
+
+      Integrations:
+
+      - Use [SlimeVR OpenVR Driver](https://github.com/SlimeVR/SlimeVR-OpenVR-Driver) as a driver for SteamVR.
+      - Use built-in OSC Trackers support for FBT integration with VRChat, PCVR or Standalone.
+      - Use built-in VMC support for sending and receiving tracking data to and from other apps such as VSeeFace.
+      - Export recordings as .BVH files to integrate motion capture data into 3d applications such as Blender.
+
+      More at https://docs.slimevr.dev/tools/index.html.
+    '';
     license = with lib.licenses; [
       mit
       asl20

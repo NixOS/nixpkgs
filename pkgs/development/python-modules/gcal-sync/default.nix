@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "gcal-sync";
-  version = "7.0.0";
+  version = "7.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "allenporter";
     repo = "gcal_sync";
     tag = version;
-    hash = "sha256-8VUXW6tIX43TV7UIxeforZIxAUqGY9uqpz6WGyH4d8E=";
+    hash = "sha256-jdhPoZdkgMg9TBIV9j3dvaEnEOpOoa1OKBeR1YAWWKs=";
   };
 
   build-system = [ setuptools ];

@@ -10,7 +10,7 @@
   x11Support ? stdenv.hostPlatform.isLinux,
   # pypinput is marked as broken for darwin
   pynputSupport ? stdenv.hostPlatform.isLinux,
-  # Experimental Drag & Drop support requires x11 & pyinput suport
+  # Experimental Drag & Drop support requires x11 & pyinput support
   hasDndSupport ? x11Support && pynputSupport,
   enableDragAndDrop ? false,
 }:

@@ -12,20 +12,19 @@
   libssh2,
   openssl,
   zlib,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-update";
-  version = "16.1.0";
+  version = "16.2.1";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-bdIFenNMW5iDQaKS2+lMYVVfc0zpbYNOHQqczpjBNC4=";
+    hash = "sha256-Vl5ClzS3OULsd+3dlaN5iZPw2YZeBSPHWFOS+izmr7Q=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-KujJB9o5+yHu6mEQOvzGUcBS6/fh/jcnt7/FbUPLefg=";
+  cargoHash = "sha256-Yq2jT8YnWPsNe7akShsj0nWxXXpgNvX1A95x7O8LOes=";
 
   nativeBuildInputs =
     [
@@ -47,7 +46,6 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       curl
-      darwin.apple_sdk.frameworks.Security
     ];
 
   postBuild = ''

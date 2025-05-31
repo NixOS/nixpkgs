@@ -10,16 +10,24 @@ in
 {
   options.programs.amnezia-vpn = {
     enable = lib.mkEnableOption "The AmneziaVPN client";
+    package = lib.mkPackageOption pkgs "amnezia-vpn" { };
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.amnezia-vpn ];
-    services.dbus.packages = [ pkgs.amnezia-vpn ];
+    environment.systemPackages = [ cfg.package ];
+    services.dbus.packages = [ cfg.package ];
     services.resolved.enable = true;
 
     systemd = {
-      packages = [ pkgs.amnezia-vpn ];
-      services."AmneziaVPN".wantedBy = [ "multi-user.target" ];
+      packages = [ cfg.package ];
+      services."AmneziaVPN" = {
+        wantedBy = [ "multi-user.target" ];
+        path = with pkgs; [
+          procps
+          iproute2
+          sudo
+        ];
+      };
     };
   };
 

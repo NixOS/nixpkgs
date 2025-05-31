@@ -42,7 +42,7 @@
   fetchurl,
   fetchzip,
   kernel ? null,
-  kernelModuleMakeFlags ? [],
+  kernelModuleMakeFlags ? [ ],
   perl,
   nukeReferences,
   which,

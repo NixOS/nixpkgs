@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/mongod";
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   # Only enable the version install check on darwin.
   # On Linux, this would fail as mongod relies on tcmalloc, which
   # requires access to `/sys/devices/system/cpu/possible`.

@@ -12,7 +12,7 @@
   nixosTests,
 }:
 let
-  version = "4.12.5";
+  version = "4.13.2";
 
   frontend = buildNpmPackage {
     pname = "dependency-track-frontend";
@@ -25,10 +25,15 @@ let
       owner = "DependencyTrack";
       repo = "frontend";
       rev = version;
-      hash = "sha256-BCnWDu9DbZgzMKONtY5ZRZepvBgbHKAeXD+7n7cop6Q=";
+      hash = "sha256-HshphdOvJMRdMWYNc+nOkoFGA9Rr+N7+Gs8THBZjKTM=";
     };
 
-    npmDepsHash = "sha256-RRx3oOAL178fXhEs2ihng3l/OuZnEqk1W7vhHCpWRZQ=";
+    installPhase = ''
+      mkdir $out
+      cp -R ./dist $out/
+    '';
+
+    npmDepsHash = "sha256-u5yVJlW9LhptyHQddd1RCBgU/xNdSNX5FAmSEj6n7Ng=";
     forceGitDeps = true;
     makeCacheWritable = true;
 
@@ -45,7 +50,7 @@ maven.buildMavenPackage rec {
     owner = "DependencyTrack";
     repo = "dependency-track";
     rev = version;
-    hash = "sha256-nprAY8GinSkzgSIe3KKNQjv5hCXCHQrGcIZEaoWxw6I=";
+    hash = "sha256-4A34lt6M0M1+HPGFFqH/Ik07FBNz6pI0XYiW9rIVsOk=";
   };
 
   patches = [
@@ -60,7 +65,7 @@ maven.buildMavenPackage rec {
   '';
 
   mvnJdk = jre_headless;
-  mvnHash = "sha256-5R+k+h6biY9xt8g6WdTtQ94sSywluQcrFTcYZbw4JgA=";
+  mvnHash = "sha256-V0EhfPN8htR4v/KQpQ9tec6dAe/FOxBCp8cUZqL7mFo=";
   manualMvnArtifacts = [ "com.coderplus.maven.plugins:copy-rename-maven-plugin:1.0.1" ];
   buildOffline = true;
 
@@ -74,16 +79,10 @@ maven.buildMavenPackage rec {
     "-Dmaven.test.skip=true"
     "-P enhance"
     "-P embedded-jetty"
-    "-P bundle-ui"
     "-Dservices.bom.merge.skip=false"
     "-Dlogback.configuration.file=${src}/src/main/docker/logback.xml"
     "-Dcyclonedx-cli.path=${lib.getExe cyclonedx-cli}"
   ];
-
-  preBuild = ''
-    mkdir -p frontend
-    cp -r ${frontend}/lib/node_modules/@dependencytrack/frontend/dist frontend/
-  '';
 
   afterDepsSetup = ''
     mvn cyclonedx:makeBom -Dmaven.repo.local=$mvnDeps/.m2 \
@@ -105,7 +104,6 @@ maven.buildMavenPackage rec {
   '';
 
   passthru = {
-    # passthru for nix-update
     inherit frontend;
     tests = {
       inherit (nixosTests) dependency-track;
@@ -122,7 +120,7 @@ maven.buildMavenPackage rec {
     description = "Intelligent Component Analysis platform that allows organizations to identify and reduce risk in the software supply chain";
     homepage = "https://github.com/DependencyTrack/dependency-track";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.cyberus.members;
+    teams = [ lib.teams.cyberus ];
     mainProgram = "dependency-track";
     inherit (jre_headless.meta) platforms;
   };

@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/GoldenCheetah/GoldenCheetah/releases/download/v${version}/GoldenCheetah_v${builtins.substring 0 7 version}_x64.dmg";
-    hash = "sha256-GGe8pGf16FWqN9uaStnGOtOeKDB44VBD7QwHkaZb7wY=";
+    hash = "sha256-AA9J3wyz2huLSGVvjA/st1kb6aDT6uQA1Ut21S1GU2M=";
   };
 
   nativeBuildInputs = [

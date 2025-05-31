@@ -2,14 +2,11 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
   fetchFromGitHub,
-  fetchpatch,
-  pythonOlder,
   writeShellScriptBin,
   gradio,
 
-  # pyproject
+  # build-system
   hatchling,
   hatch-requirements-txt,
   hatch-fancy-pypi-readme,
@@ -19,7 +16,7 @@
   nodejs,
   pnpm_9,
 
-  # runtime
+  # dependencies
   setuptools,
   aiofiles,
   anyio,
@@ -27,6 +24,7 @@
   fastapi,
   ffmpy,
   gradio-client,
+  groovy,
   httpx,
   huggingface-hub,
   importlib-resources,
@@ -53,14 +51,16 @@
   authlib,
   itsdangerous,
 
-  # check
+  # tests
   pytestCheckHook,
   hypothesis,
   altair,
   boto3,
+  docker,
   gradio-pdf,
   ffmpeg,
   ipython,
+  mcp,
   pytest-asyncio,
   respx,
   scikit-image,
@@ -68,42 +68,32 @@
   tqdm,
   transformers,
   vega-datasets,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "gradio";
-  version = "5.11.0";
+  version = "5.29.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  # unfortunately no fetchPypi due to https://github.com/gradio-app/gradio/pull/9778
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
     tag = "gradio@${version}";
-    hash = "sha256-HW0J7oSkCo4DIHpU4LUoBZ2jmmrv5Xd64floA4uyo5A=";
+    hash = "sha256-nL+m64JTLRS5UOB9WSl7lpsw8v0Vzkt7XWGl9a08Xko=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = "sha256-9fAkP2zV3OfyROdtvmS94ujpkGmlB0wGOaWS13LgJTM=";
-   };
-
-  # fix packaging.ParserSyntaxError, which can't handle comments
-  postPatch = ''
-    sed -i -e "s/ #.*$//g" requirements*.txt
-  '';
+    hash = "sha256-h3ulPik0Uf8X687Se3J7h3+8jYzwXtbO6obsO27zyfA=";
+  };
 
   pythonRelaxDeps = [
-    "tomlkit"
     "aiofiles"
     "markupsafe"
-    "pillow"
   ];
 
   pythonRemoveDeps = [
-    # our package is presented as a binary, not a python lib - and
     # this isn't a real runtime dependency
     "ruff"
   ];
@@ -128,6 +118,7 @@ buildPythonPackage rec {
     fastapi
     ffmpy
     gradio-client
+    groovy
     httpx
     huggingface-hub
     importlib-resources
@@ -156,26 +147,32 @@ buildPythonPackage rec {
     itsdangerous
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    hypothesis
-    altair
-    boto3
-    gradio-pdf
-    ffmpeg
-    ipython
-    pytest-asyncio
-    respx
-    scikit-image
-    # shap is needed as well, but breaks too often
-    torch
-    tqdm
-    transformers
-    vega-datasets
+  nativeCheckInputs =
+    [
+      altair
+      boto3
+      docker
+      ffmpeg
+      gradio-pdf
+      hypothesis
+      ipython
+      mcp
+      pytest-asyncio
+      pytestCheckHook
+      respx
+      # shap is needed as well, but breaks too often
+      scikit-image
+      torch
+      tqdm
+      transformers
+      vega-datasets
 
-    # mock calls to `shutil.which(...)`
-    (writeShellScriptBin "npm" "false")
-  ] ++ optional-dependencies.oauth ++ pydantic.optional-dependencies.email;
+      # mock calls to `shutil.which(...)`
+      (writeShellScriptBin "npm" "false")
+      writableTmpDirAsHomeHook
+    ]
+    ++ optional-dependencies.oauth
+    ++ pydantic.optional-dependencies.email;
 
   preBuild = ''
     pnpm build
@@ -191,11 +188,10 @@ buildPythonPackage rec {
   # We additionally xfail FileNotFoundError, since the gradio devs often fail to upload test assets to pypi.
   preCheck =
     ''
-      export HOME=$TMPDIR
       cat ${./conftest-skip-network-errors.py} >> test/conftest.py
     ''
+    # OSError: [Errno 24] Too many open files
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # OSError: [Errno 24] Too many open files
       ulimit -n 4096
     '';
 
@@ -250,6 +246,16 @@ buildPythonPackage rec {
       "test_get_executable_path"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # TypeError: argument should be a str or an os.PathLike object where __fspath__ returns a str, not 'NoneType'
+      "test_component_example_values"
+      "test_component_functions"
+      "test_public_request_pass"
+
+      # Failed: DID NOT RAISE <class 'ValueError'>
+      # test.conftest.NixNetworkAccessDeniedError
+      "test_private_request_fail"
+      "test_theme_builder_launches"
+
       # flaky on darwin (depend on port availability)
       "test_all_status_messages"
       "test_async_generators"
@@ -299,6 +305,7 @@ buildPythonPackage rec {
       "test_updates_stored_up_to_capacity"
       "test_varying_output_forms_with_generators"
     ];
+
   disabledTestPaths = [
     # 100% touches network
     "test/test_networking.py"
@@ -308,7 +315,13 @@ buildPythonPackage rec {
 
     # Local network tests dependant on port availability (port 7860-7959)
     "test/test_routes.py"
+
+    # No module named build.__main__; 'build' is a package and cannot be directly executed
+    "test/test_docker/test_reverse_proxy/test_reverse_proxy.py"
+    "test/test_docker/test_reverse_proxy_fastapi_mount/test_reverse_proxy_fastapi_mount.py"
+    "test/test_docker/test_reverse_proxy_root_path/test_reverse_proxy_root_path.py"
   ];
+
   pytestFlagsArray = [
     "-x" # abort on first failure
     "-m 'not flaky'"
@@ -316,8 +329,7 @@ buildPythonPackage rec {
   ];
 
   # check the binary works outside the build env
-  doInstallCheck = true;
-  postInstallCheck = ''
+  postCheck = ''
     env --ignore-environment $out/bin/gradio environment >/dev/null
   '';
 

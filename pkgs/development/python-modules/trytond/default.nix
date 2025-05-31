@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "trytond";
-  version = "7.4.4";
+  version = "7.4.10";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rmwen1XmH7NkUJpgobVPkIGuDbwjzuWKNvOAj8Mwiq8=";
+    hash = "sha256-kzoZDcHNPjmsNxrQ11MAksK+24nI1YNmONQd21s3weA=";
   };
 
   build-system = [ setuptools ];

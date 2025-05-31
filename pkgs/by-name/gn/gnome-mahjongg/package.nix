@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-mahjongg";
-  version = "47.2";
+  version = "48.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-mahjongg/${lib.versions.major finalAttrs.version}/gnome-mahjongg-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Nd+SZBnzeCY4CjNGIHVjzYfH6ZoT3r4Ok6FAnYXMYVc=";
+    hash = "sha256-3Ujg+BrKNL6tpGxdIhsyWRuO2B6dNhw6JY359rIiLIQ=";
   };
 
   nativeBuildInputs = [
@@ -58,8 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.gnome.org/GNOME/gnome-mahjongg/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Disassemble a pile of tiles by removing matching pairs";
     mainProgram = "gnome-mahjongg";
-    maintainers = teams.gnome.members;
-    license = licenses.gpl3Plus;
+    teams = [ teams.gnome ];
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
 })

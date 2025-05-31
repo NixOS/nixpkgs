@@ -3,6 +3,7 @@
 # To update `thunderbird-bin`'s `release_sources.nix`, run from the nixpkgs root:
 #
 #     nix-shell maintainers/scripts/update.nix --argstr package pkgs.thunderbird-bin-unwrapped
+#     nix-shell maintainers/scripts/update.nix --argstr package pkgs.thunderbird-esr-bin-unwrapped
 {
   lib,
   stdenv,
@@ -24,6 +25,8 @@
   systemLocale ? config.i18n.defaultLocale or "en_US",
   patchelfUnstable, # have to use patchelfUnstable to support --no-clobber-old-sections
   generated,
+  versionSuffix ? "",
+  applicationName ? "Thunderbird",
 }:
 
 let
@@ -62,8 +65,7 @@ stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://download-installer.cdn.mozilla.net/pub/thunderbird/releases/${version}/${source.arch}/${source.locale}/thunderbird-${version}.tar.bz2";
-    inherit (source) sha256;
+    inherit (source) url sha256;
   };
 
   nativeBuildInputs = [
@@ -111,15 +113,16 @@ stdenv.mkDerivation {
       curl
       gnupg
       runtimeShell
+      versionSuffix
       ;
     baseName = "thunderbird";
     channel = "release";
     basePath = "pkgs/applications/networking/mailreaders/thunderbird-bin";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
-    versionSuffix = "esr";
   };
 
   passthru = {
+    inherit applicationName;
     binaryName = "thunderbird";
     gssSupport = true;
     gtk3 = gtk3;

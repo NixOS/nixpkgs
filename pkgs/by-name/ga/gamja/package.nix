@@ -8,17 +8,17 @@
 }:
 buildNpmPackage rec {
   pname = "gamja";
-  version = "1.0.0-beta.10";
+  version = "1.0.0-beta.11";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "emersion";
     repo = "gamja";
     rev = "v${version}";
-    hash = "sha256-JqnEiPnYRGSeIZm34Guu7MgMfwcySc42aTXweMqL8BQ=";
+    hash = "sha256-amwJ6PWS0In7ERcvZr5XbJyHedSwJGAUUS2vWIqktNE=";
   };
 
-  npmDepsHash = "sha256-dAfbluNNBF1e9oagej+SRxO/YffCdLLAUUgt8krnWvg=";
+  npmDepsHash = "sha256-5YU9H3XHwZADdIvKmS99cAFFg69GPJzD9u0LOuJmKXE=";
 
   installPhase = ''
     runHook preInstall
@@ -33,7 +33,7 @@ buildNpmPackage rec {
 
   meta = with lib; {
     description = "Simple IRC web client";
-    homepage = "https://git.sr.ht/~emersion/gamja";
+    homepage = "https://codeberg.org/emersion/gamja";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [
       motiejus

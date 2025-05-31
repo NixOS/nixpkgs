@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, kube-router }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  kube-router,
+}:
 
 buildGoModule rec {
   pname = "kube-router";
@@ -6,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "cloudnativelabs";
-    repo = pname;
+    repo = "kube-router";
     rev = "v${version}";
     hash = "sha256-bt7BnMIq/tkRL8d1pf/gG5qBq/1yiMqXDpBrIICo780=";
   };

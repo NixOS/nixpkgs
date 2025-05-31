@@ -31,12 +31,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nixos-anywhere";
-  version = "1.7.0";
+  version = "1.10.0";
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nixos-anywhere";
     rev = finalAttrs.version;
-    hash = "sha256-noRVvCgGxgZLCL9d3Pqfn6jEq5U7uF1OugrVPuIDR00=";
+    hash = "sha256-xzalz30m0iTVfxPMf0nROg5j/xvg6NhHsX04+ym1E9w=";
   };
   nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
@@ -59,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
       maintainers.mic92
       maintainers.lassulus
       maintainers.phaer
+      maintainers.Enzime
     ];
   };
 })

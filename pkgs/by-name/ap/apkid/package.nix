@@ -6,28 +6,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "apkid";
-  version = "2.1.5";
-  format = "setuptools";
+  version = "3.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rednaga";
     repo = "APKiD";
     tag = "v${version}";
-    hash = "sha256-yO3k2kT043/KkiCjDnNUlqxX86kQqMZ+CghD+yon3r4=";
+    hash = "sha256-/8p2qR1je65k1irXFcCre2e16rhGjcu0+u6RChMYTWQ=";
   };
-
-  propagatedBuildInputs = with python3.pkgs; [
-    yara-python
-  ];
-
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
-
-  preBuild = ''
-    # Prepare the YARA rules
-    ${python3.interpreter} prep-release.py
-  '';
 
   postPatch = ''
     # We have dex support enabled in yara-python
@@ -35,15 +22,25 @@ python3.pkgs.buildPythonApplication rec {
       --replace "yara-python-dex>=1.0.1" "yara-python"
   '';
 
-  pythonImportsCheck = [
-    "apkid"
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [ yara-python ];
+
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
+
+  preBuild = ''
+    # Prepare the YARA rules
+    ${python3.interpreter} prep-release.py
+  '';
+
+  pythonImportsCheck = [ "apkid" ];
 
   meta = with lib; {
     description = "Android Application Identifier";
-    mainProgram = "apkid";
     homepage = "https://github.com/rednaga/APKiD";
-    license = with licenses; [ gpl3Only ];
+    changelog = "https://github.com/rednaga/APKiD/releases/tag/${src.tag}";
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "apkid";
   };
 }

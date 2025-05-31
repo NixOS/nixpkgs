@@ -52,7 +52,7 @@ buildPythonPackage {
       onnxruntime.protobuf
 
       # https://github.com/NixOS/nixpkgs/pull/357656 patches the onnx lib to ${pkgs.onnxruntime}/lib
-      # but these files are copied into this package too. If the origional non-python onnxruntime
+      # but these files are copied into this package too. If the original non-python onnxruntime
       # package is GC-ed, cuda support in this python package will break.
       # Two options, rebuild onnxruntime twice with the different paths hard-coded, or just hold a runtime
       # dependency between the two. Option 2, because onnxruntime takes forever to build with cuda support.

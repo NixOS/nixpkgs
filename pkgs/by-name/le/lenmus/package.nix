@@ -16,14 +16,10 @@
   wxsqlite3,
   fluidsynth,
   fontconfig,
-  darwin,
   soundfont-fluid,
   openlilylib-fonts,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) Cocoa;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lenmus";
   version = "6.0.1";
@@ -54,23 +50,19 @@ stdenv.mkDerivation (finalAttrs: {
       makeWrapper
     ];
 
-  buildInputs =
-    [
-      boost
-      portmidi
-      sqlite
-      freetype
-      libpng
-      pngpp
-      zlib
-      wxGTK32
-      wxsqlite3
-      fluidsynth
-      fontconfig
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-    ];
+  buildInputs = [
+    boost
+    portmidi
+    sqlite
+    freetype
+    libpng
+    pngpp
+    zlib
+    wxGTK32
+    wxsqlite3
+    fluidsynth
+    fontconfig
+  ];
 
   preConfigure = ''
     mkdir res/fonts

@@ -72,6 +72,20 @@ let
     } cfg.imapdSettings;
 in
 {
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "services" "cyrus-imap" "sslServerCert" ]
+      [ "services" "cyrus-imap" "imapdSettings" "tls_server_cert" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "cyrus-imap" "sslServerKey" ]
+      [ "services" "cyrus-imap" "imapdSettings" "tls_server_key" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "cyrus-imap" "sslCACert" ]
+      [ "services" "cyrus-imap" "imapdSettings" "tls_client_ca_file" ]
+    )
+  ];
   options.services.cyrus-imap = {
     enable = mkEnableOption "Cyrus IMAP, an email, contacts and calendar server";
     debug = mkEnableOption "debugging messages for the Cyrus master process";
@@ -293,24 +307,6 @@ in
       default = null;
       description = "Path to the configuration file used for Cyrus.";
       apply = v: if v != null then v else pkgs.writeText "cyrus.conf" cyrusConfig;
-    };
-
-    sslCACert = mkOption {
-      type = nullOr str;
-      default = null;
-      description = "File path which containing one or more CA certificates to use.";
-    };
-
-    sslServerCert = mkOption {
-      type = nullOr str;
-      default = null;
-      description = "File containing the global certificate used for all services (IMAP, POP3, LMTP, Sieve)";
-    };
-
-    sslServerKey = mkOption {
-      type = nullOr str;
-      default = null;
-      description = "File containing the private key belonging to the global server certificate.";
     };
   };
 

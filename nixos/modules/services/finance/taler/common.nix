@@ -68,11 +68,19 @@ in
         requires = [ "taler-${talerComponent}-dbinit.service" ];
         after = [ "taler-${talerComponent}-dbinit.service" ];
         wantedBy = [ "multi-user.target" ]; # TODO slice?
+        documentation = [
+          "man:taler-${talerComponent}-${name}(1)"
+          "info:taler-${talerComponent}"
+        ];
       }))
       # Database Initialisation
       {
         "taler-${talerComponent}-dbinit" = {
           path = [ config.services.postgresql.package ];
+          documentation = [
+            "man:taler-${talerComponent}-dbinit(1)"
+            "info:taler-${talerComponent}"
+          ];
           serviceConfig = {
             Type = "oneshot";
             DynamicUser = true;

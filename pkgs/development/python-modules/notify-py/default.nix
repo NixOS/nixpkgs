@@ -4,7 +4,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   alsa-utils,
   libnotify,
   which,
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "ms7m";
-    repo = pname;
+    repo = "notify-py";
     tag = "v${version}";
     hash = "sha256-4PJ/0dLG3bWDuF1G/qUmvNaIUFXgPP2S/0uhZz86WRA=";
   };
@@ -33,16 +33,14 @@ buildPythonPackage rec {
   patches =
     lib.optionals stdenv.hostPlatform.isLinux [
       # hardcode paths to aplay and notify-send
-      (substituteAll {
-        src = ./linux-paths.patch;
+      (replaceVars ./linux-paths.patch {
         aplay = "${alsa-utils}/bin/aplay";
         notifysend = "${libnotify}/bin/notify-send";
       })
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # hardcode path to which
-      (substituteAll {
-        src = ./darwin-paths.patch;
+      (replaceVars ./darwin-paths.patch {
         which = "${which}/bin/which";
       })
     ];

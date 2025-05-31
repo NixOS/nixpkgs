@@ -43,7 +43,7 @@
 }:
 
 let
-  libupnp' = libupnp.overrideAttrs (super: rec {
+  libupnp' = libupnp.overrideAttrs (super: {
     cmakeFlags = super.cmakeFlags or [ ] ++ [
       "-Dblocking_tcp_connections=OFF"
       "-Dreuseaddr=ON"
@@ -121,13 +121,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gerbera";
-  version = "2.4.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     repo = "gerbera";
     owner = "gerbera";
     rev = "v${version}";
-    sha256 = "sha256-bqqD6juae0+plX6kEtHhWYgMd0KDz/1N7jJf7F6dMgQ=";
+    sha256 = "sha256-3X8/8ewqXy9tvy4S9frmPENhsYTwaW6SydtJeiyVH1I=";
   };
 
   postPatch =

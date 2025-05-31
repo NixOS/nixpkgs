@@ -6,7 +6,7 @@
   coreutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "taskspooler";
   version = "1.0.1";
 

@@ -1,11 +1,10 @@
 {
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  postgresql,
   boost186,
+  fetchFromGitHub,
+  lib,
+  postgresql,
+  postgresqlBuildExtension,
   postgresqlTestExtension,
-  buildPostgresqlExtension,
 }:
 
 let
@@ -15,7 +14,7 @@ let
     name = "datasketches-postgresql";
     owner = "apache";
     repo = "datasketches-postgresql";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-W41uAs3W4V7c9O/wBw3rut65bcmY8EdQS1/tPszMGqA=";
   };
 
@@ -23,12 +22,12 @@ let
     name = "datasketches-cpp";
     owner = "apache";
     repo = "datasketches-cpp";
-    rev = "refs/tags/5.0.2";
+    tag = "5.0.2";
     hash = "sha256-yGk1OckYipAgLTQK6w6p6EdHMxBIQSjPV/MMND3cDks=";
   };
 in
 
-buildPostgresqlExtension (finalAttrs: {
+postgresqlBuildExtension (finalAttrs: {
   pname = "apache_datasketches";
   inherit version;
 

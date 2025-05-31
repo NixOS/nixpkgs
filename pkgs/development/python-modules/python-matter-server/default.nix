@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pythonOlder,
   stdenvNoCC,
-  substituteAll,
+  replaceVars,
 
   # build
   setuptools,
@@ -34,13 +34,13 @@
 let
   paaCerts = stdenvNoCC.mkDerivation rec {
     pname = "matter-server-paa-certificates";
-    version = "1.3.0.0";
+    version = "1.4.0.0";
 
     src = fetchFromGitHub {
       owner = "project-chip";
       repo = "connectedhomeip";
       rev = "refs/tags/v${version}";
-      hash = "sha256-5MI6r0KhSTzolesTQ8YWeoko64jFu4jHfO5KOOKpV0A=";
+      hash = "sha256-uJyStkwynPCm1B2ZdnDC6IAGlh+BKGfJW7tU4tULHFo=";
     };
 
     installPhase = ''
@@ -69,8 +69,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./link-paa-root-certs.patch;
+    (replaceVars ./link-paa-root-certs.patch {
       paacerts = paaCerts;
     })
   ];
@@ -130,6 +129,6 @@ buildPythonPackage rec {
     mainProgram = "matter-server";
     homepage = "https://github.com/home-assistant-libs/python-matter-server";
     license = licenses.asl20;
-    maintainers = teams.home-assistant.members;
+    teams = [ teams.home-assistant ];
   };
 }

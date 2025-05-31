@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "c-blosc2";
-  version = "2.16.0";
+  version = "2.17.1";
 
   src = fetchFromGitHub {
     owner = "Blosc";
     repo = "c-blosc2";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Ag5541Qf9y91fHvst9NkF+NkPbRam4z+ngjZCTttVNw=";
+    sha256 = "sha256-VxMErhuk160/0jF6pl6/YKAwaswnfBKnmOD5ZgcU2U4=";
   };
 
   # https://github.com/NixOS/nixpkgs/issues/144170

@@ -1,22 +1,29 @@
-{ lib, buildGoModule, fetchFromGitHub, kubectl-gadget, testers }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  kubectl-gadget,
+  testers,
+}:
 
 buildGoModule rec {
   pname = "kubectl-gadget";
-  version = "0.37.0";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "inspektor-gadget";
     repo = "inspektor-gadget";
     rev = "v${version}";
-    hash = "sha256-M0RfwO8YcjMx2eBbSjo4BgTJHbzFnpqhGhhLg9l1KYY=";
+    hash = "sha256-fizq0S2pvhrMwGR/l6yqzq3IXDuD01Abi3VRiNJqs48=";
   };
 
-  vendorHash = "sha256-gYaO+8WhMZNTSBndncrB9JDe3CYL50JGP45ugg6DMDQ=";
+  vendorHash = "sha256-zBEb61gxjCRXjdANIHWKVNu5Do+iEmxttKvyiYp8FYQ=";
 
   env.CGO_ENABLED = 0;
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/inspektor-gadget/inspektor-gadget/internal/version.version=v${version}"
     "-X main.gadgetimage=ghcr.io/inspektor-gadget/inspektor-gadget:v${version}"
     "-extldflags=-static"
@@ -39,6 +46,9 @@ buildGoModule rec {
     mainProgram = "kubectl-gadget";
     homepage = "https://inspektor-gadget.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ kranurag7 devusb ];
+    maintainers = with maintainers; [
+      kranurag7
+      devusb
+    ];
   };
 }

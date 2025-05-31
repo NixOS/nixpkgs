@@ -21,22 +21,21 @@
 
 buildPythonPackage rec {
   pname = "bcrypt";
-  version = "4.2.1";
+  version = "4.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Z2U4bjq4f1abJ2mIdCA5uqsIeyzbAegJ1050UDwvqv4=";
+    hash = "sha256-Oj/SIEF4ttKtzwnLT2Qm/+9UdiV3p8m1TBWQCMsojBg=";
   };
 
   cargoRoot = "src/_bcrypt";
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
+    inherit pname version src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
-    name = "${pname}-${version}";
-    hash = "sha256-tCeXgypF5Tqnzv7KfoliUZeO6B83YK5cYORhwlvBVnY=";
+    hash = "sha256-HgHvfMBspPsSYhllnKBg5XZB6zxFIqJj+4//xKG8HwA=";
   };
 
   nativeBuildInputs = [

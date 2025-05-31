@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   gitUpdater,
-  glibcLocales,
   adwaita-icon-theme,
   gobject-introspection,
   gtk3,
@@ -18,8 +17,8 @@ python311Packages.buildPythonApplication rec {
   format = "other";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "gpodder";
+    repo = "gpodder";
     rev = version;
     sha256 = "kEhyV1o8VSQW9qMx6m5avj6LnJuVTONDd6msRuc8t/4=";
   };
@@ -35,7 +34,6 @@ python311Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     intltool
     wrapGAppsHook3
-    glibcLocales
     gobject-introspection
   ];
 
@@ -72,10 +70,6 @@ python311Packages.buildPythonApplication rec {
     "share/applications/gpodder.desktop"
     "share/dbus-1/services/org.gpodder.service"
   ];
-
-  preBuild = ''
-    export LC_ALL="en_US.UTF-8"
-  '';
 
   installCheckPhase = ''
     LC_ALL=C PYTHONPATH=src/:$PYTHONPATH pytest --ignore=tests --ignore=src/gpodder/utilwin32ctypes.py --doctest-modules src/gpodder/util.py src/gpodder/jsonconfig.py

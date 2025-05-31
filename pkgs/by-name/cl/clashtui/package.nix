@@ -47,6 +47,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "clashtui";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ nayeko ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "oblogic7";
-    repo = pname;
+    repo = "pyqvrpro";
     rev = "v${version}";
     hash = "sha256-lOd2AqnrkexNqT/usmJts5NW7vJtV8CRsliYgkhgRaU=";
   };

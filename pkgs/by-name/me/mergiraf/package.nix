@@ -11,18 +11,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mergiraf";
-  version = "0.5.0";
+  version = "0.8.1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "mergiraf";
     repo = "mergiraf";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BUZnchpwvBQ84xaw/p0IQO/QOBUs+8gN6dpvPjhszhc=";
+    hash = "sha256-HtIrl9q64JLV/ufJ2g9OrQDDOkcwvyn4+l6/dUqwXkw=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-90GNH526dqsu7GsRz857/SV7SWndwiSHIzS/UJgc8AA=";
+  cargoHash = "sha256-xe+JbXKOfxj0XSUM3zW0cYkWo22nyTOp+mOudv3UbE4=";
 
   nativeCheckInputs = [
     git
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
 
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Syntax-aware git merge driver for a growing collection of programming languages and file formats";

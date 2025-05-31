@@ -3,7 +3,7 @@
   lib,
   fetchzip,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "catamaran";
   version = "0-unstable-2024-03-02";
 

@@ -42,7 +42,6 @@
   varnish,
   xen,
   yajl,
-  IOKit,
   # Defaults to `null` for all supported plugins (except xen, which is marked as
   # insecure), otherwise a list of plugin names for a custom build
   enabledPlugins ? null,
@@ -61,9 +60,6 @@ let
       curl
       libxml2
     ];
-    battery.buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-      IOKit
-    ];
     bind.buildInputs = [
       curl
       libxml2
@@ -79,13 +75,9 @@ let
       libxml2
     ];
     dbi.buildInputs = [ libdbi ];
-    disk.buildInputs =
-      lib.optionals stdenv.hostPlatform.isLinux [
-        udev
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        IOKit
-      ];
+    disk.buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+      udev
+    ];
     dns.buildInputs = [ libpcap ];
     ipmi.buildInputs = [ openipmi ];
     iptables.buildInputs =

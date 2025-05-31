@@ -21,7 +21,7 @@ php.buildComposerProject2 (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {
@@ -30,6 +30,6 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://github.com/Roave/BackwardCompatibilityCheck";
     license = lib.licenses.mit;
     mainProgram = "roave-backward-compatibility-check";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

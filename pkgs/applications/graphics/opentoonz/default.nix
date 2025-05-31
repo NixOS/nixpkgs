@@ -5,6 +5,7 @@
   libglut,
   freetype,
   glew,
+  libsForQt5,
   libjpeg,
   libmypaint,
   libpng,
@@ -15,14 +16,9 @@
   openblas,
   opencv,
   pkg-config,
-  qtbase,
-  qtmultimedia,
-  qtscript,
-  qtserialport,
   lib,
   stdenv,
   superlu,
-  wrapQtAppsHook,
   libtiff,
   zlib,
 }:
@@ -103,7 +99,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -121,10 +117,10 @@ stdenv.mkDerivation {
     lzo
     openblas
     opentoonz-opencv
-    qtbase
-    qtmultimedia
-    qtscript
-    qtserialport
+    libsForQt5.qtbase
+    libsForQt5.qtmultimedia
+    libsForQt5.qtscript
+    libsForQt5.qtserialport
     superlu
   ];
 

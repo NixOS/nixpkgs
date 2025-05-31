@@ -4,7 +4,7 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "paratype-pt-sans";
   version = "2.005";
 

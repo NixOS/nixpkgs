@@ -5,37 +5,31 @@
   pkg-config,
   sqlite,
   zstd,
-  stdenv,
-  darwin,
   nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wastebin";
-  version = "2.7.1";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "matze";
     repo = "wastebin";
     rev = version;
-    hash = "sha256-O0nWjRiQBDclfbeulGjCZANXwQypV8uHHR5syuki5xE=";
+    hash = "sha256-7+Ufin68gMQtKv8SC8Gmn0Ra2qpumsKYgpURTkVqzt8=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-WMofTTkJCcx+6vicrYfxJWTo1YCzheeGOE7LC5JQ8mM=";
+  cargoHash = "sha256-j9Wpo3N1kwCvjDEqmn87rGSYFVw1ZGkSps72zVpXNls=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      sqlite
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    sqlite
+    zstd
+  ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;

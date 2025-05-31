@@ -4,8 +4,8 @@
   fetchFromGitHub,
   pythonOlder,
   pdm-backend,
-  appdirs,
   loguru,
+  platformdirs,
   requests,
   setuptools,
   toml,
@@ -29,16 +29,16 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "pawamoy";
-    repo = pname;
+    repo = "aria2p";
     tag = version;
     hash = "sha256-JEXTCDfFjxI1hooiEQq0KIGGoS2F7fyzOM0GMl+Jr7w=";
   };
 
-  nativeBuildInputs = [ pdm-backend ];
+  build-system = [ pdm-backend ];
 
-  propagatedBuildInputs = [
-    appdirs
+  dependencies = [
     loguru
+    platformdirs
     requests
     setuptools # for pkg_resources
     toml

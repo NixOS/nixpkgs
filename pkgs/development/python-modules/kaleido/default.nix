@@ -93,7 +93,7 @@ buildPythonPackage rec {
       #ln -s ${dejavu_fonts}/share/fonts/truetype/* $out/${python.sitePackages}/kaleido/executable/xdg/fonts/truetype/dejavu/
       #ln -s ${lato}/share/fonts/lato/* $out/${python.sitePackages}/kaleido/executable/xdg/fonts/truetype/lato/
     ''
-    + lib.optionalString (!stdenv.isDarwin) ''
+    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       # Replace bundled swiftshader with libGL
       rm -rf $out/${python.sitePackages}/kaleido/executable/bin/swiftshader
       ln -s ${libGL}/lib $out/${python.sitePackages}/kaleido/executable/bin/swiftshader

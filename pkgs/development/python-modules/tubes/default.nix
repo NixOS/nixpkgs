@@ -8,7 +8,7 @@
   twisted,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "tubes";
   version = "0.2.1-unstable-2023-11-06";
   format = "setuptools";

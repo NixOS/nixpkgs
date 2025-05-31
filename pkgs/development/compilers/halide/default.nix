@@ -22,6 +22,7 @@
   wasmSupport ? false,
   wabt,
   doCheck ? true,
+  ctestCheckHook,
 }:
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
@@ -102,15 +103,9 @@ stdenv.mkDerivation (finalAttrs: {
     "correctness_cross_compilation"
     "correctness_simd_op_check_hvx"
   ];
-  # ninja's setup-hook doesn't let us specify custom flags for the checkPhase, see
-  # https://discourse.nixos.org/t/building-only-specific-targets-with-cmake/31545/4
-  # so we resort to overriding the whole checkPhase
+
   dontUseNinjaCheck = true;
-  checkPhase = ''
-    runHook preCheck
-    ctest --exclude-regex '^(${lib.strings.concatStringsSep "|" finalAttrs.disabledTests})$'
-    runHook postCheck
-  '';
+  nativeCheckInputs = [ ctestCheckHook ];
 
   postInstall =
     lib.optionalString pythonSupport ''

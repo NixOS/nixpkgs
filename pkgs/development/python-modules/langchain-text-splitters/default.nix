@@ -2,9 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   # build-system
-  poetry-core,
+  pdm-backend,
 
   # dependencies
   langchain-core,
@@ -17,19 +18,25 @@
 
 buildPythonPackage rec {
   pname = "langchain-text-splitters";
-  version = "0.3.5";
+  version = "0.3.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-text-splitters==${version}";
-    hash = "sha256-2IoNUixZ/+o6ONJpqFa3Z5CLpxj6b6z8dh89kxh2rP4=";
+    hash = "sha256-Ia3ZZ94uLZUVr1/w4HLPZLM6u8leA4OJtAwUf7eSAE0=";
   };
 
   sourceRoot = "${src.name}/libs/text-splitters";
 
-  build-system = [ poetry-core ];
+  build-system = [ pdm-backend ];
+
+  pythonRelaxDeps = [
+    # Each component release requests the exact latest core.
+    # That prevents us from updating individul components.
+    "langchain-core"
+  ];
 
   dependencies = [ langchain-core ];
 
@@ -43,10 +50,11 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests/unit_tests" ];
 
-  passthru = {
-    inherit (langchain-core) updateScript;
-    # updates the wrong fetcher rev attribute
-    skipBulkUpdate = true;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^langchain-test-splitters==([0-9.]+)$"
+    ];
   };
 
   meta = {

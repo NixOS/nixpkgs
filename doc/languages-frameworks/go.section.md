@@ -13,14 +13,14 @@ The following is an example expression using `buildGoModule`:
 
 ```nix
 {
-  pet = buildGoModule rec {
+  pet = buildGoModule (finalAttrs: {
     pname = "pet";
     version = "0.3.4";
 
     src = fetchFromGitHub {
       owner = "knqyf263";
       repo = "pet";
-      rev = "v${version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-Gjw1dRrgM8D3G7v6WIM2+50r4HmTXvx0Xxme2fH9TlQ=";
     };
 
@@ -32,7 +32,7 @@ The following is an example expression using `buildGoModule`:
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ kalbasit ];
     };
-  };
+  });
 }
 ```
 
@@ -188,6 +188,13 @@ Whether the build result should be allowed to contain references to the Go tool 
 
 Defaults to `false`
 
+### `goSum` {#var-go-goSum}
+
+Specifies the contents of the `go.sum` file and triggers rebuilds when it changes. This helps combat inconsistent dependency errors on `go.sum` changes.
+
+Defaults to `null`
+
+
 ## Overriding `goModules` {#buildGoModule-goModules-override}
 
 Overriding `<pkg>.goModules` by calling `goModules.overrideAttrs` is unsupported. Still, it is possible to override the `vendorHash` (`goModules`'s `outputHash`) and the `pre`/`post` hooks for both the build and patch phases of the primary and `goModules` derivation.
@@ -304,4 +311,4 @@ In case a project doesn't have external dependencies or dependencies are vendore
 - Run `go mod init <module name>` in `postPatch`
 
 In case the package has external dependencies that aren't vendored or the build setup is more complex the upstream source might need to be patched.
-Examples for the migration can be found in the [issue tracking migration withing nixpkgs](https://github.com/NixOS/nixpkgs/issues/318069).
+Examples for the migration can be found in the [issue tracking migration within nixpkgs](https://github.com/NixOS/nixpkgs/issues/318069).

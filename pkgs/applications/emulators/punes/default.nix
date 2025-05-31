@@ -31,11 +31,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Fix FTBFS with Qt 6.7.1
-    # Remove when https://github.com/punesemu/puNES/pull/403 merged & in release
+    # Remove when version > 0.111
     (fetchpatch {
       name = "0001-punes-Fix-compatibility-with-Qt-6.7.1.patch";
-      url = "https://github.com/punesemu/puNES/commit/78c72d2dfcd570e7463a78da10904cebae6127f5.patch";
+      url = "https://github.com/punesemu/puNES/commit/6e51b1a6107ad3de97edd40ae4ec2d41b32d804f.patch";
       hash = "sha256-xRalKIOb1qWgqJsFLcm7uUOblEfHDYbkukmcr4/+4Qc=";
+    })
+
+    # Fix FTBFS with Qt 6.9
+    # Remove when version > 0.111
+    (fetchpatch {
+      name = "0002-punes-Updated-code-for-Qt-6.9.0-compatibility.patch";
+      url = "https://github.com/punesemu/puNES/commit/ff906e0a79eeac9a2d16783e0accf65748bb275e.patch";
+      hash = "sha256-+s7AdaUBgCseQs6Mxat/cDmQ77s6K6J0fUfyihP82jM=";
     })
   ];
 

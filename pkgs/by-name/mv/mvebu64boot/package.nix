@@ -5,7 +5,7 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mvebu64boot";
   version = "unstable-2022-10-20";
 

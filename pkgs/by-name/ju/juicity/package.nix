@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
 }:
 buildGoModule rec {
   pname = "juicity";
@@ -8,7 +9,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "juicity";
-    repo = pname;
+    repo = "juicity";
     rev = "v${version}";
     hash = "sha256-4sej/nb7d58+hSCaD6KIfDsqiGmgECPIbRKR65TbMBM=";
   };

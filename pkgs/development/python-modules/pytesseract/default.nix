@@ -5,7 +5,7 @@
   packaging,
   pillow,
   tesseract,
-  substituteAll,
+  replaceVars,
   pytestCheckHook,
   setuptools,
 }:
@@ -17,14 +17,13 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "madmaze";
-    repo = pname;
+    repo = "pytesseract";
     tag = "v${version}";
     hash = "sha256-gQMeck6ojlIwyiOCBBhzHHrjQfBMelVksVGd+fyxWZk=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./tesseract-binary.patch;
+    (replaceVars ./tesseract-binary.patch {
       drv = tesseract;
     })
   ];

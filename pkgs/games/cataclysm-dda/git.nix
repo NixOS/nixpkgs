@@ -1,10 +1,15 @@
-{ lib, callPackage, fetchFromGitHub, fetchpatch, pkgs, wrapCDDA, attachPkgs
-, tiles ? true
-, debug ? false
-, useXdgDir ? false
-, version ? "2024-12-11"
-, rev ? "b871679a2d54dbc6bf3e6566033fadd2dc651592"
-, sha256 ? "sha256-t9R0QPky7zvjgGMq4kV8DdQFToJ/qngbJCw+8FlQztM="
+{
+  lib,
+  callPackage,
+  fetchFromGitHub,
+  pkgs,
+  attachPkgs,
+  tiles ? true,
+  debug ? false,
+  useXdgDir ? false,
+  version ? "2024-12-11",
+  rev ? "b871679a2d54dbc6bf3e6566033fadd2dc651592",
+  sha256 ? "sha256-t9R0QPky7zvjgGMq4kV8DdQFToJ/qngbJCw+8FlQztM=",
 }:
 
 let
@@ -32,8 +37,7 @@ let
     ];
 
     meta = common.meta // {
-      maintainers = with lib.maintainers;
-      common.meta.maintainers ++ [ rardiol ];
+      maintainers = with lib.maintainers; common.meta.maintainers ++ [ rardiol ];
     };
   });
 in

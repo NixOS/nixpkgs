@@ -23,17 +23,17 @@
 
 buildPythonPackage rec {
   pname = "certbot";
-  version = "3.1.0";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
     tag = "v${version}";
-    hash = "sha256-lYGJgUNDzX+bE64GJ+djdKR+DXmhpcNbFJrAEnP86yQ=";
+    hash = "sha256-GS4JLLXrX4+BQ4S6ySbOHUaUthCFYTCHWnOaMpfnIj8=";
   };
 
-  postPatch = "cd ${pname}"; # using sourceRoot would interfere with patches
+  postPatch = "cd certbot"; # using sourceRoot would interfere with patches
 
   build-system = [ setuptools ];
 

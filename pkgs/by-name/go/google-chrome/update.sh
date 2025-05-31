@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=./. -i bash -p curl jq gawk libossp_uuid libxml2 nix
+#!nix-shell -I nixpkgs=./. -i bash -p curl jq gawk libossp_uuid libuuid libxml2 nix
 # shellcheck shell=bash
 
 set -euo pipefail
@@ -30,7 +30,7 @@ update_linux() {
     local new_hash
     local new_sri_hash
 
-    read -ra version_info <<< "$(get_version_info "linux" "linux = stdenv.mkDerivation" "});")"
+    read -ra version_info <<< "$(get_version_info "linux" "linux = stdenvNoCC.mkDerivation" "});")"
     version="${version_info[0]}"
     current_version="${version_info[1]}"
 
@@ -43,8 +43,8 @@ update_linux() {
     new_hash="$(nix-prefetch-url "$download_url" 2>/dev/null)"
     new_sri_hash="$(nix hash to-sri --type sha256 "$new_hash")"
 
-    sed -i "/^  linux = stdenv.mkDerivation/,/^  });/s/version = \".*\"/version = \"$version\"/" "$DEFAULT_NIX"
-    sed -i "/^  linux = stdenv.mkDerivation/,/^  });/s|hash = \".*\"|hash = \"$new_sri_hash\"|" "$DEFAULT_NIX"
+    sed -i "/^  linux = stdenvNoCC.mkDerivation/,/^  });/s/version = \".*\"/version = \"$version\"/" "$DEFAULT_NIX"
+    sed -i "/^  linux = stdenvNoCC.mkDerivation/,/^  });/s|hash = \".*\"|hash = \"$new_sri_hash\"|" "$DEFAULT_NIX"
 
     echo "[Nix] Linux google-chrome: $current_version -> $version with hash $new_hash"
 }

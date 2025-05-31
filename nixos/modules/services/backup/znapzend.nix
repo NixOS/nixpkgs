@@ -474,7 +474,7 @@ in
         after = [ "zfs.target" ];
 
         path = with pkgs; [
-          zfs
+          config.boot.zfs.package
           mbuffer
           openssh
         ];

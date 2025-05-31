@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "keszybz";
-    repo = pname;
+    repo = "add-determinism";
     tag = "v${version}";
     hash = "sha256-QFhed8YTgvfm6bB/cRsrnN0foplJhK1b9IYD9HGdJUc=";
   };

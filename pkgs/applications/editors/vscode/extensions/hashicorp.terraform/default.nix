@@ -3,18 +3,17 @@
   vscode-utils,
   terraform-ls,
 }:
-vscode-utils.buildVscodeMarketplaceExtension rec {
+vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "terraform";
     publisher = "hashicorp";
-    version = "2.19.0";
-    hash = "sha256-k/fcEJuELz0xkwivSrP6Nxtz861BLq1wR2ZDMXVrvkY=";
+    version = "2.34.3";
+    hash = "sha256-kE9xH0cp741aCqhrwFDW+lQxOAsdLNzCCOTWMxd+li0=";
   };
 
-  patches = [ ./fix-terraform-ls.patch ];
-
   postPatch = ''
-    substituteInPlace out/serverPath.js --replace TERRAFORM-LS-PATH ${terraform-ls}/bin/terraform-ls
+    substituteInPlace dist/extension.js \
+      --replace-fail 'this.customBinPath=Ga("terraform").get("languageServer.path")' 'this.customBinPath = Ga("terraform").get("languageServer.path") || '${terraform-ls}/bin/terraform-ls';'
   '';
 
   meta = {

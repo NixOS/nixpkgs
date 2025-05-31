@@ -8,10 +8,9 @@
 
 {
   lib,
-  stdenv,
+  clangStdenv,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
   fontconfig,
   harfbuzzFull,
   openssl,
@@ -20,7 +19,17 @@
   fetchpatch2,
 }:
 
-rustPlatform.buildRustPackage rec {
+let
+
+  buildRustPackage = rustPlatform.buildRustPackage.override {
+    # use clang to work around build failure with GCC 14
+    # see: https://github.com/tectonic-typesetting/tectonic/issues/1263
+    stdenv = clangStdenv;
+  };
+
+in
+
+buildRustPackage rec {
   pname = "tectonic";
   version = "0.15.0";
 
@@ -43,9 +52,9 @@ rustPlatform.buildRustPackage rec {
   cargoPatches = [
     (fetchpatch2 {
       # cherry-picked from https://github.com/tectonic-typesetting/tectonic/pull/1202
-      name = "1202-fix-build-with-rust-1_80";
-      url = "https://github.com/tectonic-typesetting/tectonic/commit/6b49ca8db40aaca29cb375ce75add3e575558375.patch";
-      hash = "sha256-i1L3XaSuBbsmgOSXIWVqr6EHlHGs8A+6v06kJ3C50sk=";
+      name = "1202-fix-build-with-rust-1_80-and-icu-75";
+      url = "https://github.com/tectonic-typesetting/tectonic/compare/19654bf152d602995da970f6164713953cffc2e6...6b49ca8db40aaca29cb375ce75add3e575558375.patch?full_index=1";
+      hash = "sha256-CgQBCFvfYKKXELnR9fMDqmdq97n514CzGJ7EBGpghJc=";
     })
   ];
 
@@ -56,28 +65,19 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = [ "external-harfbuzz" ];
 
-  buildInputs =
-    [
-      icu
-      fontconfig
-      harfbuzzFull
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        ApplicationServices
-        Cocoa
-        Foundation
-      ]
-    );
+  buildInputs = [
+    icu
+    fontconfig
+    harfbuzzFull
+    openssl
+  ];
 
   postInstall =
     ''
       # Makes it possible to automatically use the V2 CLI API
       ln -s $out/bin/tectonic $out/bin/nextonic
     ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
+    + lib.optionalString clangStdenv.hostPlatform.isLinux ''
       substituteInPlace dist/appimage/tectonic.desktop \
         --replace Exec=tectonic Exec=$out/bin/tectonic
       install -D dist/appimage/tectonic.desktop -t $out/share/applications/

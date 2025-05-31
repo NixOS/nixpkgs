@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyaprilaire";
-  version = "0.8.0";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chamberlain2007";
     repo = "pyaprilaire";
     tag = version;
-    hash = "sha256-W94NsL3hPIsi0WJ9EL4Z+IuoU9e0gZq3m+ntz+vShno=";
+    hash = "sha256-o14G0sUEvNbhKtwdrCDS0rmNokEMaa+756Ac6pSKiiU=";
   };
 
   build-system = [ setuptools ];
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/chamberlain2007/pyaprilaire/releases/tag/${version}";
+    changelog = "https://github.com/chamberlain2007/pyaprilaire/releases/tag/${src.tag}";
     description = "Python library for interacting with Aprilaire thermostats";
     homepage = "https://github.com/chamberlain2007/pyaprilaire";
     license = lib.licenses.mit;

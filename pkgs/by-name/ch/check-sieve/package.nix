@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "check-sieve";
-  version = "0.10";
+  version = "0.10-unstable-2025-05-06";
 
   src = fetchFromGitHub {
     owner = "dburkart";
     repo = "check-sieve";
-    tag = "check-sieve-${version}";
-    hash = "sha256-UMtkiyRGX+/lL7a+c+iZHUJhg0nb4+puSPzM5W71F9o=";
+    rev = "794c2b116078af59fa8b7bf7a00450f8de0f06de";
+    hash = "sha256-jml+G253cqYco9vKXwI8LW7w/mN74lMthCzlRXl+SWc=";
   };
 
   nativeBuildInputs = [

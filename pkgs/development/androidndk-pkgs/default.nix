@@ -53,7 +53,7 @@ let
     };
 in
 
-{
+lib.recurseIntoAttrs {
   "21" = makeNdkPkgs "21.0.6113669" pkgs.llvmPackages_14; # "9"
   "23" = makeNdkPkgs "23.1.7779620" pkgs.llvmPackages_14; # "12"
   # Versions below 24 use a version not available in nixpkgs/old version which could be removed in the near future so use 14 for them as this is only used to get the hardening flags.

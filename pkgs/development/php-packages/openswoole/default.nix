@@ -34,7 +34,7 @@ buildPecl {
       It offers a range of multi-threaded I/O modules (HTTP Server, WebSockets, TaskWorkers, Process Pools) out of the box and support for popular PHP clients like PDO for MySQL, and CURL.
       You can use the sync or async, Coroutine API to write whole applications or create thousands of light weight Coroutines within one Linux process.
     '';
-    maintainers = teams.php.members;
-    broken = lib.versionAtLeast php.version "8.4";
+    teams = [ teams.php ];
+    broken = lib.versionOlder php.version "8.2";
   };
 }

@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "NetworkManager's OpenVPN plugin";
     homepage = "https://gitlab.gnome.org/GNOME/NetworkManager-openvpn";
     changelog = "https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/-/blob/main/NEWS";
-    inherit (networkmanager.meta) maintainers platforms;
+    inherit (networkmanager.meta) maintainers teams platforms;
     license = lib.licenses.gpl2Plus;
   };
 })

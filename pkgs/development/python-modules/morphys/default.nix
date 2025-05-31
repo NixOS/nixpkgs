@@ -3,7 +3,7 @@
   fetchFromGitHub,
   lib,
 }:
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "morphys";
   version = "1.0";
   format = "setuptools";

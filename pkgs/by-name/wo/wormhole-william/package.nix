@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "wormhole-william";
-  version = "1.0.7";
+  version = "1.0.8";
 
   src = fetchFromGitHub {
     owner = "psanford";
     repo = "wormhole-william";
     rev = "v${version}";
-    sha256 = "sha256-KLj9ZeLcIOWA4VeuxfoOr99kUCDb7OARX/h9DSG1WHw=";
+    sha256 = "sha256-KGJfz3nd03vcdrIsX8UUfdw96XwyU9PRzwK8O4/I8JQ=";
   };
 
-  vendorHash = "sha256-oJz7HgtjuP4ooXdpofIKaDndGg4WqVZgbT8Yb1AyaMs=";
+  vendorHash = "sha256-7KOeG0orp7pLlk9VlPwHW/SWKgRe3/kmT3JXBgOCcTg=";
 
   __darwinAllowLocalNetworking = true;
 

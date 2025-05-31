@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ricochet-refresh";
-  version = "3.0.30";
+  version = "3.0.33";
 
   src = fetchFromGitHub {
     owner = "blueprint-freespeech";
     repo = "ricochet-refresh";
     rev = "v${finalAttrs.version}-release";
     fetchSubmodules = true;
-    hash = "sha256-8KYjK3pW6xVTGPtHW0SkIpVqKokF2S748xtuI0zfp0E=";
+    hash = "sha256-KI2C0+S2CKTqaHKL94aS/znGTrnrHjkKCij14BwZMIo=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";

@@ -80,7 +80,7 @@ stdenv.mkDerivation {
     # symlink in share for autoconf to find macros
 
     # TODO(@Ericson2314): in the future just make the unwrapped pkg-config a
-    # propagated dep once we can rely on downstream deps comming first in
+    # propagated dep once we can rely on downstream deps coming first in
     # search paths. (https://github.com/NixOS/nixpkgs/pull/31414 took a crack
     # at this.)
     + ''

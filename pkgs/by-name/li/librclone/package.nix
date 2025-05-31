@@ -8,7 +8,7 @@
 let
   ext = stdenv.hostPlatform.extensions.sharedLibrary;
 in
-buildGoModule rec {
+buildGoModule {
   pname = "librclone";
   inherit (rclone) version src vendorHash;
 

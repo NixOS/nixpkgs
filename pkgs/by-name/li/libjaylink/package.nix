@@ -1,14 +1,15 @@
 {
-  autoreconfHook,
   fetchFromGitLab,
   lib,
   libusb1,
+  meson,
+  ninja,
   nix-update-script,
   pkg-config,
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libjaylink";
   version = "0.4.0";
 
@@ -16,22 +17,25 @@ stdenv.mkDerivation rec {
     domain = "gitlab.zapb.de";
     owner = "libjaylink";
     repo = "libjaylink";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-PghPVgovNo/HhNg7c6EGXrqi6jMrb8p/uLqGDIZ7t+s=";
   };
 
   nativeBuildInputs = [
-    autoreconfHook
+    meson
+    ninja
     pkg-config
   ];
+
   buildInputs = [ libusb1 ];
 
   postPatch = ''
-    patchShebangs autogen.sh
+    substituteInPlace contrib/60-libjaylink.rules \
+      --replace-fail 'GROUP="plugdev"' 'GROUP="jlink"'
   '';
 
   postInstall = ''
-    install -Dm644 contrib/60-libjaylink.rules $out/lib/udev/rules.d/60-libjaylink.rules
+    install -Dm644 ../contrib/60-libjaylink.rules $out/lib/udev/rules.d/60-libjaylink.rules
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -43,4 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ felixsinger ];
     platforms = platforms.unix;
   };
-}
+})

@@ -20,13 +20,13 @@ buildOctavePackage rec {
     io
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://packages.octave.org/statistics";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       publicDomain
     ];
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Statistics package for GNU Octave";
   };
 }

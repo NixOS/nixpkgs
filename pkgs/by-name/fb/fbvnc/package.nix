@@ -4,13 +4,13 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "fbvnc";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "zohead";
-    repo = pname;
+    repo = "fbvnc";
     rev = "783204ff6c92afec33d6d36f7e74f1fcf2b1b601";
     hash = "sha256-oT7+6kIeFDgU6GbcHYQ6k0jCU84p8fTEVgUozYMkeVI=";
   };

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  cmake,
   libGLU,
   libGL,
   libglut,
@@ -9,20 +10,19 @@
   libXmu,
   libXext,
   libX11,
-  qmake,
-  GLUT,
   fixDarwinDylibNames,
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.7.0";
+stdenv.mkDerivation (finalAttrs: {
   pname = "opencsg";
+  version = "1.8.1";
+
   src = fetchurl {
-    url = "http://www.opencsg.org/OpenCSG-${version}.tar.gz";
-    hash = "sha256-uJLezIGp5nwsTSXFOZ1XbY93w7DAUmBgZ0MkPIZTnfg=";
+    url = "http://www.opencsg.org/OpenCSG-${finalAttrs.version}.tar.gz";
+    hash = "sha256-r8wASontO8R4qeS6ObIPPVibJOI+J1tzg/kaWQ1NV8U=";
   };
 
-  nativeBuildInputs = [ qmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs =
     [ glew ]
@@ -33,19 +33,13 @@ stdenv.mkDerivation rec {
       libXmu
       libXext
       libX11
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin GLUT;
+    ];
 
   doCheck = false;
 
-  preConfigure = ''
-    rm example/Makefile src/Makefile
-    qmakeFlags=("''${qmakeFlags[@]}" "INSTALLDIR=$out")
-  '';
-
   postInstall =
     ''
-      install -D copying.txt "$out/share/doc/opencsg/copying.txt"
+      install -D ../copying.txt "$out/share/doc/opencsg/copying.txt"
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
@@ -63,12 +57,12 @@ stdenv.mkDerivation rec {
       $app
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Constructive Solid Geometry library";
     mainProgram = "opencsgexample";
     homepage = "http://www.opencsg.org/";
-    platforms = platforms.unix;
-    maintainers = [ maintainers.raskin ];
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.raskin ];
+    license = lib.licenses.gpl2Plus;
   };
-}
+})

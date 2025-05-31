@@ -29,7 +29,11 @@ Given a package `foo` containing an init script `this-foo.fish` that depends on 
 patch the init script for users to source without having the above dependencies in their `PATH`:
 
 ```nix
-{ lib, stdenv, patchRcPathFish}:
+{
+  lib,
+  stdenv,
+  patchRcPathFish,
+}:
 stdenv.mkDerivation {
 
   # ...
@@ -39,7 +43,13 @@ stdenv.mkDerivation {
   ];
 
   postFixup = ''
-    patchRcPathFish $out/bin/this-foo.fish ${lib.makeBinPath [ coreutils man which ]}
+    patchRcPathFish $out/bin/this-foo.fish ${
+      lib.makeBinPath [
+        coreutils
+        man
+        which
+      ]
+    }
   '';
 }
 ```

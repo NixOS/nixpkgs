@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre_headless, gnused }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre_headless,
+  gnused,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ktlint";
@@ -18,7 +25,12 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/ktlint --prefix PATH : "${lib.makeBinPath [ jre_headless gnused ]}"
+    wrapProgram $out/bin/ktlint --prefix PATH : "${
+      lib.makeBinPath [
+        jre_headless
+        gnused
+      ]
+    }"
   '';
 
   meta = with lib; {
@@ -27,7 +39,10 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = jre_headless.meta.platforms;
     changelog = "https://github.com/pinterest/ktlint/blob/master/CHANGELOG.md";
-    maintainers = with maintainers; [ tadfisher SubhrajyotiSen ];
+    maintainers = with maintainers; [
+      tadfisher
+      SubhrajyotiSen
+    ];
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     mainProgram = "ktlint";
   };

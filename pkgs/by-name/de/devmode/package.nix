@@ -55,6 +55,7 @@ let
         --chmod=u=rwX \
         --delete-before \
         --delay-updates \
+        --links \
         $out_link/ \
         $serve/
     else

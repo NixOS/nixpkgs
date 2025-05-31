@@ -14,7 +14,7 @@ let
   common = import ./common.nix { inherit fetchzip; };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = common.pname;
   version = common.version;
 

@@ -5,7 +5,7 @@
   zsh,
   installShellFiles,
   ncurses,
-  nix-update-script,
+  unstableGitUpdater,
   testers,
   runCommand,
 }:
@@ -79,7 +79,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         version = "0.2.0";
       };
     };
-    updateScript = nix-update-script { };
+    updateScript = unstableGitUpdater {
+      tagPrefix = "v";
+    };
   };
 
   meta = {

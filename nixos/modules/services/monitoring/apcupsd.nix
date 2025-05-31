@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.apcupsd;
 
@@ -40,40 +45,53 @@ let
     chmod a+x "$out/${eventname}"
   '';
 
-  eventToShellCmds = event: if builtins.hasAttr event cfg.hooks then (shellCmdsForEventScript event (builtins.getAttr event cfg.hooks)) else "";
+  eventToShellCmds =
+    event:
+    if builtins.hasAttr event cfg.hooks then
+      (shellCmdsForEventScript event (builtins.getAttr event cfg.hooks))
+    else
+      "";
 
-  scriptDir = pkgs.runCommand "apcupsd-scriptdir" { preferLocalBuild = true; } (''
-    mkdir "$out"
-    # Copy SCRIPTDIR from apcupsd package
-    cp -r ${pkgs.apcupsd}/etc/apcupsd/* "$out"/
-    # Make the files writeable (nix will unset the write bits afterwards)
-    chmod u+w "$out"/*
-    # Remove the sample event notification scripts, because they don't work
-    # anyways (they try to send mail to "root" with the "mail" command)
-    (cd "$out" && rm changeme commok commfailure onbattery offbattery)
-    # Remove the sample apcupsd.conf file (we're generating our own)
-    rm "$out/apcupsd.conf"
-    # Set the SCRIPTDIR= line in apccontrol to the dir we're creating now
-    sed -i -e "s|^SCRIPTDIR=.*|SCRIPTDIR=$out|" "$out/apccontrol"
-    '' + lib.concatStringsSep "\n" (map eventToShellCmds eventList)
+  scriptDir = pkgs.runCommand "apcupsd-scriptdir" { preferLocalBuild = true; } (
+    ''
+      mkdir "$out"
+      # Copy SCRIPTDIR from apcupsd package
+      cp -r ${pkgs.apcupsd}/etc/apcupsd/* "$out"/
+      # Make the files writeable (nix will unset the write bits afterwards)
+      chmod u+w "$out"/*
+      # Remove the sample event notification scripts, because they don't work
+      # anyways (they try to send mail to "root" with the "mail" command)
+      (cd "$out" && rm changeme commok commfailure onbattery offbattery)
+      # Remove the sample apcupsd.conf file (we're generating our own)
+      rm "$out/apcupsd.conf"
+      # Set the SCRIPTDIR= line in apccontrol to the dir we're creating now
+      sed -i -e "s|^SCRIPTDIR=.*|SCRIPTDIR=$out|" "$out/apccontrol"
+    ''
+    + lib.concatStringsSep "\n" (map eventToShellCmds eventList)
 
   );
 
   # Ensure the CLI uses our generated configFile
-  wrappedBinaries = pkgs.runCommand "apcupsd-wrapped-binaries" {
-    preferLocalBuild = true;
-    nativeBuildInputs = [ pkgs.makeWrapper ];
-  } ''
-      for p in "${lib.getBin pkgs.apcupsd}/bin/"*; do
-          bname=$(basename "$p")
-          makeWrapper "$p" "$out/bin/$bname" --add-flags "-f ${configFile}"
-      done
-    '';
+  wrappedBinaries =
+    pkgs.runCommand "apcupsd-wrapped-binaries"
+      {
+        preferLocalBuild = true;
+        nativeBuildInputs = [ pkgs.makeWrapper ];
+      }
+      ''
+        for p in "${lib.getBin pkgs.apcupsd}/bin/"*; do
+            bname=$(basename "$p")
+            makeWrapper "$p" "$out/bin/$bname" --add-flags "-f ${configFile}"
+        done
+      '';
 
   apcupsdWrapped = pkgs.symlinkJoin {
     name = "apcupsd-wrapped";
     # Put wrappers first so they "win"
-    paths = [ wrappedBinaries pkgs.apcupsd ];
+    paths = [
+      wrappedBinaries
+      pkgs.apcupsd
+    ];
   };
 in
 
@@ -115,7 +133,7 @@ in
       };
 
       hooks = lib.mkOption {
-        default = {};
+        default = { };
         example = {
           doshutdown = "# shell commands to notify that the computer is shutting down";
         };
@@ -136,19 +154,24 @@ in
 
   };
 
-
   ###### implementation
 
   config = lib.mkIf cfg.enable {
 
-    assertions = [ {
-      assertion = let hooknames = builtins.attrNames cfg.hooks; in lib.all (x: lib.elem x eventList) hooknames;
-      message = ''
-        One (or more) attribute names in services.apcupsd.hooks are invalid.
-        Current attribute names: ${toString (builtins.attrNames cfg.hooks)}
-        Valid attribute names  : ${toString eventList}
-      '';
-    } ];
+    assertions = [
+      {
+        assertion =
+          let
+            hooknames = builtins.attrNames cfg.hooks;
+          in
+          lib.all (x: lib.elem x eventList) hooknames;
+        message = ''
+          One (or more) attribute names in services.apcupsd.hooks are invalid.
+          Current attribute names: ${toString (builtins.attrNames cfg.hooks)}
+          Valid attribute names  : ${toString eventList}
+        '';
+      }
+    ];
 
     # Give users access to the "apcaccess" tool
     environment.systemPackages = [ apcupsdWrapped ];

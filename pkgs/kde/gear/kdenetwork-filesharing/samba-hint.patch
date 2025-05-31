@@ -1,12 +1,13 @@
+diff --git a/samba/filepropertiesplugin/qml/MissingSambaPage.qml b/samba/filepropertiesplugin/qml/MissingSambaPage.qml
+index 4419b25..f16e70b 100644
 --- a/samba/filepropertiesplugin/qml/MissingSambaPage.qml
 +++ b/samba/filepropertiesplugin/qml/MissingSambaPage.qml
-@@ -16,7 +16,7 @@ Item {
- 
+@@ -17,7 +17,7 @@ Item {
          icon.name: "dialog-error"
  
--        text: xi18nc("@info", "The <application>Samba</application> file sharing service must be installed before folders can be shared.")
--        explanation: i18n("Because this distro does not include PackageKit, we cannot show you a nice \"Install it\" button, and you will have to use your package manager to install the <command>samba</command> server package manually.")
-+        text: xi18nc("@info", "File sharing service unavailable")
+         text: xi18nc("@info", "File sharing service unavailable")
+-        explanation: i18n("Please ensure the Samba service is enabled and running.\nIf you haven't disabled it manually, consider reporting a bug to your distribution.")
 +        explanation: i18n("Please enable the `services.samba.enable` and `services.samba.usershares.enable` options in your NixOS configuration.")
-     }
- }
+ 
+         helpfulAction: Kirigami.Action {
+             icon.name: "mail-message-new"

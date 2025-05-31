@@ -13,13 +13,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ugit";
-  version = "5.8";
+  version = "5.9";
 
   src = fetchFromGitHub {
     owner = "Bhupesh-V";
     repo = "ugit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WnEyS2JKH6rrsYOeGEwughWq2LKrHPSjio3TOI0Xm4g=";
+    hash = "sha256-MufnBUVjEpEpZ/zyzo2e/hj+XJlikSSaXFwscCdaU48=";
   };
 
   strictDeps = true;

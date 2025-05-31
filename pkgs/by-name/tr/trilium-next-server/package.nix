@@ -7,12 +7,12 @@
 }:
 
 let
-  version = "0.91.5";
+  version = "0.93.0";
 
-  serverSource_x64.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-linux-x64-v${version}.tar.xz";
-  serverSource_x64.sha256 = "sha256-zLq3Dfgdz01Ds3eNqd5MrgQ5Jy7Ioj3UwnaR+Mt1IjE=";
-  serverSource_arm64.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-linux-arm64-v${version}.tar.xz";
-  serverSource_arm64.sha256 = "0bih1v3lfmrjdvsdrlfayq23b3dnb2gpszxlvchgx4vq98nqdc8f";
+  serverSource_x64.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-Server-v${version}-linux-x64.tar.xz";
+  serverSource_x64.sha256 = "0gm0j8w16ynwb1rsgxd7g4pa4vm47728d8393bazppxgf91gnh3d";
+  serverSource_arm64.url = "https://github.com/TriliumNext/Notes/releases/download/v${version}/TriliumNextNotes-Server-v${version}-linux-arm64.tar.xz";
+  serverSource_arm64.sha256 = "0in1y3zsx4mni02lq17q0camn07p7fngl1qjmjnhkps7pr799d2q";
 
   serverSource =
     if stdenv.hostPlatform.isx86_64 then
@@ -56,7 +56,6 @@ stdenv.mkDerivation {
       --add-flags "src/main"
 
     # Clean up broken symlinks and build tools.
-    rm "$out"/share/trilium-server/node/bin/{npm,npx}
     rm -r "$out"/share/trilium-server/node_modules/{@npmcli,@rollup,@babel}
 
     runHook postInstall

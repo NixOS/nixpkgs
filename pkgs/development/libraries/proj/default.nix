@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "proj";
-  version = "9.5.1";
+  version = "9.6.0";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "PROJ";
     rev = finalAttrs.version;
-    hash = "sha256-gKfsuznAhq29sOw78gpQ7TNZ6xCgmDBad3TcqFzoWVc=";
+    hash = "sha256-sY3AIvsQnV2zi38nJs/U6zTsIgIv4/CaZaxinCg5nEs=";
   };
 
   patches = [
@@ -86,7 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Cartographic Projections Library";
     homepage = "https://proj.org/";
     license = licenses.mit;
-    maintainers = with maintainers; teams.geospatial.members ++ [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda ];
+    teams = [ teams.geospatial ];
     platforms = platforms.unix;
   };
 })

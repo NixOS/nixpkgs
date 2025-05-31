@@ -55,7 +55,7 @@ fetchFromGitHub {
     description = "Packaged sources for the first bootstrapping stage";
     homepage = "https://github.com/oriansj/stage0-posix";
     license = licenses.gpl3Plus;
-    maintainers = teams.minimal-bootstrap.members;
+    teams = [ teams.minimal-bootstrap ];
     platforms = platforms.all;
   };
 }

@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, callPackage, stuffbin, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  callPackage,
+  stuffbin,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "listmonk";
@@ -17,7 +24,11 @@ buildGoModule rec {
     stuffbin
   ];
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/listmonk
@@ -36,10 +47,10 @@ buildGoModule rec {
         "i18n:/i18n"
       ];
     in
-      ''
-        stuffbin -a stuff -in $out/bin/listmonk -out $out/bin/listmonk \
-          ${lib.concatStringsSep " " vfsMappings}
-      '';
+    ''
+      stuffbin -a stuff -in $out/bin/listmonk -out $out/bin/listmonk \
+        ${lib.concatStringsSep " " vfsMappings}
+    '';
 
   passthru = {
     frontend = callPackage ./frontend.nix { inherit meta version src; };

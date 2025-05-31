@@ -49,6 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/leanprover-community/mathlib-tools";
     changelog = "https://github.com/leanprover-community/mathlib-tools/raw/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -2,11 +2,11 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  hyperscan,
   pkg-config,
   protobuf,
   protoc-gen-go,
   protoc-gen-go-grpc,
+  vectorscan,
 }:
 
 buildGoModule rec {
@@ -35,7 +35,7 @@ buildGoModule rec {
   ];
 
   buildInputs = [
-    hyperscan
+    vectorscan
   ];
 
   preBuild = ''
@@ -52,7 +52,10 @@ buildGoModule rec {
     mainProgram = "secretscanner";
     homepage = "https://github.com/deepfence/SecretScanner";
     changelog = "https://github.com/deepfence/SecretScanner/releases/tag/v${version}";
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "albert";
-  version = "0.26.13";
+  version = "0.27.8";
 
   src = fetchFromGitHub {
     owner = "albertlauncher";
     repo = "albert";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-p/8kCj9dN9x7gEvXnHGABL9Ab5zUJP5jI2L6AvCT8Qs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UZJS61YeieA68PUNgudpjn1iWHCTvhXpt3uXJAkJtCg=";
     fetchSubmodules = true;
   };
 
@@ -77,7 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
     # See: https://github.com/NixOS/nixpkgs/issues/279226
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
-      ericsagnes
       synthetica
       eljamm
     ];

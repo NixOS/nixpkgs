@@ -3,6 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
+  setuptools,
+  setuptools-scm,
   babel,
   gitpython,
   mkdocs,
@@ -13,7 +15,7 @@
 buildPythonPackage rec {
   pname = "mkdocs-git-revision-date-localized-plugin";
   version = "1.3.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -24,7 +26,12 @@ buildPythonPackage rec {
     hash = "sha256-Z0a/V8wyo15E7bTumLRM+0QxMGXlxVc1Sx9uXlDbg+8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     babel
     gitpython
     mkdocs

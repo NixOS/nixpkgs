@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchzip,
-  jre,
+  jdk23,
   copyDesktopItems,
   makeDesktopItem,
 }:
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    ./build/script/package-weasis.sh --no-installer --jdk ${jre}
+    ./build/script/package-weasis.sh --no-installer --jdk ${jdk23}
 
     runHook postBuild
   '';
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/share/{applications,pixmaps}
 
-    mv weasis-${platform}-jdk${lib.versions.major jre.version}-${version}/Weasis/* $out/
+    mv weasis-${platform}-jdk${lib.versions.major jdk23.version}-${version}/Weasis/* $out/
     mv $out/lib/*.png $out/share/pixmaps/
 
     runHook postInstall

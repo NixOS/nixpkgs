@@ -111,8 +111,7 @@ in
         --config=${cfg.configFile} \
         --output="$out/${config.system.boot.loader.ukiFile}"
     '';
-
-    meta.maintainers = with lib.maintainers; [ nikstur ];
-
   };
+
+  meta.maintainers = with lib.maintainers; [ nikstur ];
 }

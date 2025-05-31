@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchgit,
-  stdenv,
-  darwin,
 }:
 rustPlatform.buildRustPackage {
   pname = "taler-depolymerization";
@@ -36,19 +34,10 @@ rustPlatform.buildRustPackage {
     cp docs/*.conf $out/share/examples
   '';
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      CoreFoundation
-      Security
-      SystemConfiguration
-    ]
-  );
-
   meta = {
     description = "Wire gateway for Bitcoin/Ethereum";
     homepage = "https://git.taler.net/depolymerization.git/";
     license = lib.licenses.agpl3Only;
-    maintainers = lib.teams.ngi.members;
+    teams = [ lib.teams.ngi ];
   };
 }

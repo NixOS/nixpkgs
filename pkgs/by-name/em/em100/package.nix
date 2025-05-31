@@ -7,7 +7,7 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "em100";
   version = "0-unstable-2024-11-14";
 

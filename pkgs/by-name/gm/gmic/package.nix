@@ -31,7 +31,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmic";
-  version = "3.4.3";
+  version = "3.5.4";
 
   outputs = [
     "out"
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GreycLab";
     repo = "gmic";
     rev = "v.${finalAttrs.version}";
-    hash = "sha256-dYHADdt9PboUgIRU6wu5uCs2KQ88z5/FZPXvvyYct00=";
+    hash = "sha256-WhhEBhwv2bBwsWPPMDIA2jhUzqcD6yJhHg1Eunu8y14=";
   };
 
   # TODO: build this from source
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://gmic.eu/gmic_stdlib_community${
       lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }.h";
-    hash = "sha256-M/AL1w9KGi+dIGVQ+vdWY8PSCHi+s/aZef08AxeQMJE=";
+    hash = "sha256-JO8ijrOgrOq7lB8NaxnlsQhDXSMgAGQlOG3lT9NfuMw=";
   };
 
   nativeBuildInputs = [

@@ -14,6 +14,7 @@
   btrees,
   unittestCheckHook,
   zope-exceptions,
+  zope-testing,
 }:
 
 buildPythonPackage rec {
@@ -56,7 +57,8 @@ buildPythonPackage rec {
     btrees
     unittestCheckHook
     zope-exceptions
-  ];
+    zope-testing
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   # Import process is too complex and some tests fail
   preCheck = ''

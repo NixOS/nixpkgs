@@ -6,13 +6,12 @@
   installShellFiles,
   testers,
   nix-update-script,
-  deno,
   dprint,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dprint";
-  version = "0.49.0";
+  version = "0.50.0";
 
   # Prefer repository rather than crate here
   #   - They have Cargo.lock in the repository
@@ -20,21 +19,25 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "dprint";
     repo = "dprint";
-    tag = version;
-    hash = "sha256-IhxtHOf4IY95B7UQPSOyLj4LqvcD2I9RxEu8B+OjtCE=";
+    tag = finalAttrs.version;
+    hash = "sha256-6AgbKH5f7N/yYqq7KBVHOqYbyuZkjFSaYwZwIXsgd9o=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-OdtUzlvbezeNk06AB6mzR3Rybh08asJJ3roNX0WOg54=";
+  cargoHash = "sha256-OnrsuVK1gEDweldq+P8lDkkrHjklsG8MRpM0wqWsdlM=";
 
   nativeBuildInputs = lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     installShellFiles
   ];
 
-  nativeCheckInputs = [
-    # Used in unsafe_ignore_cert test
-    # https://github.com/dprint/dprint/blob/00e8f5e9895147b20fe70a0e4e5437bd54d928e8/crates/dprint/src/utils/url.rs#L527
-    deno
+  cargoBuildFlags = [
+    "--package=dprint"
+    # Required only for dprint package tests; the binary is removed in postInstall.
+    "--package=test-process-plugin"
+  ];
+
+  cargoTestFlags = [
+    "--package=dprint"
   ];
 
   checkFlags = [
@@ -43,19 +46,25 @@ rustPlatform.buildRustPackage rec {
     "--skip=utils::lax_single_process_fs_flag::test"
     # Require cargo is running
     "--skip=utils::process::test"
+    # Requires deno for the testing, and making unstable results on darwin
+    "--skip=utils::url::test::unsafe_ignore_cert"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    export DPRINT_CACHE_DIR="$(mktemp -d)"
-    installShellCompletion --cmd dprint \
-      --bash <($out/bin/dprint completions bash) \
-      --zsh <($out/bin/dprint completions zsh) \
-      --fish <($out/bin/dprint completions fish)
-  '';
+  postInstall =
+    ''
+      rm "$out/bin/test-process-plugin"
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      export DPRINT_CACHE_DIR="$(mktemp -d)"
+      installShellCompletion --cmd dprint \
+        --bash <($out/bin/dprint completions bash) \
+        --zsh <($out/bin/dprint completions zsh) \
+        --fish <($out/bin/dprint completions fish)
+    '';
 
   passthru = {
     tests.version = testers.testVersion {
-      inherit version;
+      inherit (finalAttrs) version;
 
       package = dprint;
       command = ''
@@ -73,13 +82,14 @@ rustPlatform.buildRustPackage rec {
       It offers multiple WASM plugins to support various languages. It's written in
       Rust, so it’s small, fast, and portable.
     '';
-    changelog = "https://github.com/dprint/dprint/releases/tag/${version}";
+    changelog = "https://github.com/dprint/dprint/releases/tag/${finalAttrs.version}";
     homepage = "https://dprint.dev";
     license = licenses.mit;
     maintainers = with maintainers; [
       khushraj
       kachick
+      phanirithvij
     ];
     mainProgram = "dprint";
   };
-}
+})

@@ -6,7 +6,7 @@
   openssl,
   nixosTests,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pgmanage";
   # The last release 11.0.1 from 2018 fails the NixOS test
   # probably because of PostgreSQL-12 incompatibility.
@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libpq
     openssl
+  ];
+
+  nativeBuildInputs = [
+    libpq.pg_config
   ];
 
   passthru.tests.sign-in = nixosTests.pgmanage;

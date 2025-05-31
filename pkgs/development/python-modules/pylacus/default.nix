@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pylacus";
-  version = "1.12.1";
+  version = "1.14.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "ail-project";
     repo = "PyLacus";
     tag = "v${version}";
-    hash = "sha256-nFVIS7G1EvoiOz0MWuCdNPfEL1Tb6lLD00Cw9427obQ=";
+    hash = "sha256-fpu22X4xWRP7Kzp15gIziNCxMmS7P8wb+Zcbr5wlUBc=";
   };
 
   build-system = [ poetry-core ];
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to enqueue and query a remote Lacus instance";
     homepage = "https://github.com/ail-project/PyLacus";
-    changelog = "https://github.com/ail-project/PyLacus/releases/tag/v${version}";
+    changelog = "https://github.com/ail-project/PyLacus/releases/tag/${src.tag}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };

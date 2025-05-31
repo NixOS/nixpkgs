@@ -1,11 +1,11 @@
 # This module defines a NixOS installation CD that contains Plasma 6.
 
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
   imports = [ ./installation-cd-graphical-calamares.nix ];
 
-  isoImage.edition = "plasma6";
+  isoImage.edition = lib.mkDefault "plasma6";
 
   services.desktopManager.plasma6.enable = true;
 

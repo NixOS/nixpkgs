@@ -25,7 +25,7 @@ buildPythonPackage rec {
   # PyPI source tarballs omit tests, fetch from Github instead
   src = fetchFromGitHub {
     owner = "simoncozens";
-    repo = pname;
+    repo = "babelfont";
     tag = "v${version}";
     hash = "sha256-XNoyM3kjKRc0NWA94ufzC2DBzAsufJNJbzFDUbLu8Lc=";
   };
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Want non exsiting test data
+  # Want non existing test data
   disabledTests = [
     "test_rename"
     "test_rename_nested"

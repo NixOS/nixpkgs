@@ -1,6 +1,6 @@
 #!/usr/bin/env nix-shell
 /*
-#!nix-shell -i node -p nodejs_18
+#!nix-shell -i node -p nodejs
 */
 
 import { promises as fs } from 'node:fs';

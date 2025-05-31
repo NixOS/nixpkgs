@@ -1,6 +1,7 @@
 {
   stdenv,
   jdk,
+  jdkOnBuild, # must provide jlink
   lib,
   callPackage,
   modules ? [ "java.base" ],
@@ -11,7 +12,9 @@ let
     pname = "${jdk.pname}-minimal-jre";
     version = jdk.version;
 
+    nativeBuildInputs = [ jdkOnBuild ];
     buildInputs = [ jdk ];
+    strictDeps = true;
 
     dontUnpack = true;
 

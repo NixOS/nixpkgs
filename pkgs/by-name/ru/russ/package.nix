@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage {
@@ -22,14 +20,6 @@ rustPlatform.buildRustPackage {
 
   # tests are network based :(
   doCheck = false;
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      CoreServices
-      AppKit
-    ]
-  );
 
   meta = {
     changelog = "https://github.com/ckampfe/russ/blob/master/CHANGELOG.md";

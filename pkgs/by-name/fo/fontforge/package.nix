@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
     sed -r -i 's#sprintf\(.+ author \);#if (!getenv("SOURCE_DATE_EPOCH")) &#g'                        fontforgeexe/fontinfo.c
   '';
 
-  # do not use x87's 80-bit arithmetic, rouding errors result in very different font binaries
+  # do not use x87's 80-bit arithmetic, rounding errors result in very different font binaries
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isi686 "-msse2 -mfpmath=sse";
 
   nativeBuildInputs = [

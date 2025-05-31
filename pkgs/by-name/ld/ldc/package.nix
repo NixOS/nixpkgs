@@ -2,6 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
+  callPackage,
+  makeWrapper,
+  removeReferencesTo,
+  runCommand,
+  writeText,
+  targetPackages,
   cmake,
   ninja,
   llvm_18,
@@ -10,12 +17,6 @@
   lit,
   gdb,
   unzip,
-  darwin,
-  callPackage,
-  makeWrapper,
-  runCommand,
-  writeText,
-  targetPackages,
 
   ldcBootstrap ? callPackage ./bootstrap.nix { },
 }:
@@ -31,18 +32,29 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ldc";
-  version = "1.39.0";
+  version = "1.40.1";
 
   src = fetchFromGitHub {
     owner = "ldc-developers";
     repo = "ldc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ZiG0ATsY6Asu2nus3Y404fvqIwtKYoHl1JRUDU5A6mo=";
+    hash = "sha256-WdnwdH25A5oMNNY3uWG2hxnaAT+S1hNuP7LElH3uuuk=";
     fetchSubmodules = true;
   };
 
   # https://issues.dlang.org/show_bug.cgi?id=19553
   hardeningDisable = [ "fortify" ];
+
+  # Fix output programs segfaulting on macOS Sequoia 15.4 - see:
+  # https://github.com/NixOS/nixpkgs/issues/398443
+  # https://github.com/ldc-developers/ldc/issues/4899
+  # TODO: Remove this when upgrading to a fixed version (>= 1.41.0-beta2)
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/ldc-developers/ldc/commit/60079c3b596053b1a70f9f2e0cf38a287089df56.patch";
+      hash = "sha256-Y/5+zt5ou9rzU7rLJq2OqUxMDvC7aSFS6AsPeDxNATQ=";
+    })
+  ];
 
   postPatch =
     ''
@@ -75,9 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
       makeWrapper
       ninja
       unzip
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Foundation
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       # https://github.com/NixOS/nixpkgs/pull/36378#issuecomment-385034818
@@ -153,6 +162,12 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : ${targetPackages.stdenv.cc}/bin \
       --set-default CC ${targetPackages.stdenv.cc}/bin/cc
   '';
+
+  preFixup = ''
+    find $out/bin -type f -exec ${removeReferencesTo}/bin/remove-references-to -t ${ldcBootstrap} '{}' +
+  '';
+
+  disallowedReferences = [ ldcBootstrap ];
 
   meta = with lib; {
     description = "LLVM-based D compiler";

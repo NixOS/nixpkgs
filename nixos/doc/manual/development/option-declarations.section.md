@@ -158,14 +158,14 @@ lib.mkOption {
 ::: {#ex-options-declarations-util-mkPackageOption-extraDescription .example}
 ### `mkPackageOption` with additional description text
 ```nix
-mkPackageOption pkgs [ "python39Packages" "pytorch" ] {
+mkPackageOption pkgs [ "python312Packages" "torch" ] {
   extraDescription = "This is an example and doesn't actually do anything.";
 }
 # is like
 lib.mkOption {
   type = lib.types.package;
-  default = pkgs.python39Packages.pytorch;
-  defaultText = lib.literalExpression "pkgs.python39Packages.pytorch";
+  default = pkgs.python312Packages.torch;
+  defaultText = lib.literalExpression "pkgs.python312Packages.torch";
   description = "The pytorch package to use. This is an example and doesn't actually do anything.";
 }
 ```

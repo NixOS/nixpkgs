@@ -1,19 +1,21 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-valent";
-  version = "1.0.0.alpha.46";
+  version = "1.0.0.alpha.47";
 
   src = fetchFromGitHub {
     owner = "andyholmes";
     repo = "gnome-shell-extension-valent";
-    rev = "v${version}";
-    hash = "sha256-OY0fxO6IYg7xukYYuK0QM9YriaEAlM2dH6t8Wv3XKIs=";
+    tag = "v${version}";
+    hash = "sha256-KynVbJtpGl4moIAlxzXouM+nxOGImIcCWdevveshbbo=";
   };
 
   nativeBuildInputs = [
@@ -24,6 +26,9 @@ stdenv.mkDerivation rec {
   passthru = {
     extensionUuid = "valent@andyholmes.ca";
     extensionPortalSlug = "valent";
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
   };
 
   meta = {

@@ -6,23 +6,22 @@
   versionCheckHook,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nezha-agent";
-  version = "0.20.5";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "nezhahq";
     repo = "agent";
-    tag = "v${version}";
-    hash = "sha256-CVE1c0LLheGlH8oMWQWs6fox7mlHc5Y2O9XQ6kqXAwI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-j0GIfte5z7uyhsnWqsRexWZHJxnqf1cFl1Hq4jnONAo=";
   };
 
-  vendorHash = "sha256-ytFsTHl6kVwmqCabaMDxxijszY3jzWWUIZKBCebPMkI=";
+  vendorHash = "sha256-+0goz1TpHcNd0T45mRc0QornXdHFPy5Y+uH0aOiql+A=";
 
   ldflags = [
     "-s"
-    "-w"
-    "-X main.version=${version}"
+    "-X github.com/nezhahq/agent/pkg/monitor.Version=${finalAttrs.version}"
     "-X main.arch=${stdenv.hostPlatform.system}"
   ];
 
@@ -66,4 +65,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "nezha-agent";
   };
-}
+})

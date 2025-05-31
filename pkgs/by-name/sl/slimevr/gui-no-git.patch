@@ -1,8 +1,8 @@
 diff --git a/gui/vite.config.ts b/gui/vite.config.ts
-index c9eb27be..4b3757f0 100644
+index 2171bccd..b4db20b9 100644
 --- a/gui/vite.config.ts
 +++ b/gui/vite.config.ts
-@@ -4,13 +4,10 @@ import { execSync } from 'child_process';
+@@ -5,14 +5,10 @@ import { execSync } from 'child_process';
  import path from 'path';
  import { visualizer } from 'rollup-plugin-visualizer';
  
@@ -14,8 +14,9 @@ index c9eb27be..4b3757f0 100644
 +const commitHash = "";
 +const versionTag = "@version@";
  // If not empty then it's not clean
--const gitClean = execSync('git status --porcelain').toString() ? false : true;
+-const gitCleanString = execSync('git status --porcelain').toString();
+-const gitClean = gitCleanString ? false : true;
 +const gitClean = true;
+ if (!gitClean) console.log('Git is dirty because of:\n' + gitCleanString);
  
  console.log(`version is ${versionTag || commitHash}${gitClean ? '' : '-dirty'}`);
- 

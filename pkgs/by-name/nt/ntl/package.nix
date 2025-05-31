@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.shoup.net/ntl/";
     # also locally at "${src}/doc/tour-changes.html";
     changelog = "https://www.shoup.net/ntl/doc/tour-changes.html";
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
     license = licenses.gpl2Plus;
     platforms = platforms.all;
   };

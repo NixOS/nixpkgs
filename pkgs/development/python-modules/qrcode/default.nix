@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pythonAtLeast,
 
   # build-system
@@ -20,12 +20,14 @@
 
 buildPythonPackage rec {
   pname = "qrcode";
-  version = "8.0";
+  version = "8.2";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-AlzisVD3/kKW0Rbum61FWmZDq09ufc5UFhOkdYy840c=";
+  src = fetchFromGitHub {
+    owner = "lincolnloop";
+    repo = "python-qrcode";
+    tag = "v${version}";
+    hash = "sha256-qLIYUFnBJQGidnfC0bQAkO/aUmT94uXFMeMhnUgUnfQ=";
   };
 
   build-system = [ poetry-core ];
@@ -56,12 +58,12 @@ buildPythonPackage rec {
     "test_piped"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python QR Code image generator";
     mainProgram = "qr";
     homepage = "https://github.com/lincolnloop/python-qrcode";
     changelog = "https://github.com/lincolnloop/python-qrcode/blob/v${version}/CHANGES.rst";
-    license = licenses.bsd3;
-    maintainers = [ ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ attila ];
   };
 }

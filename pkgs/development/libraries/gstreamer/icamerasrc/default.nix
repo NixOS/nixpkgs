@@ -8,9 +8,10 @@
   ipu6-camera-hal,
   libdrm,
   libva,
+  apple-sdk_gstreamer,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "icamerasrc-${ipu6-camera-hal.ipuVersion}";
   version = "unstable-2024-09-29";
 
@@ -33,14 +34,18 @@ stdenv.mkDerivation rec {
     export STRIP_VIRTUAL_CHANNEL_CAMHAL=ON
   '';
 
-  buildInputs = [
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-bad
-    ipu6-camera-hal
-    libdrm
-    libva
-  ];
+  buildInputs =
+    [
+      gst_all_1.gstreamer
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-bad
+      ipu6-camera-hal
+      libdrm
+      libva
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_gstreamer
+    ];
 
   NIX_CFLAGS_COMPILE = [
     "-Wno-error"

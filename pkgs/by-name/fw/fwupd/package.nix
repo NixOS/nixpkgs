@@ -52,6 +52,7 @@
   modemmanager,
   pango,
   polkit,
+  readline,
   sqlite,
   tpm2-tss,
   valgrind,
@@ -84,17 +85,6 @@
 let
   isx86 = stdenv.hostPlatform.isx86;
 
-  # Dell isn't supported on Aarch64
-  haveDell = isx86;
-
-  # only redfish for x86_64
-  haveRedfish = stdenv.hostPlatform.isx86_64;
-
-  # only use msr if x86 (requires cpuid)
-  haveMSR = isx86;
-
-  # # Currently broken on Aarch64
-  # haveFlashrom = isx86;
   # Experimental
   haveFlashrom = isx86 && enableFlashrom;
 
@@ -141,7 +131,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "2.0.6";
+  version = "2.0.9";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -159,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     tag = finalAttrs.version;
-    hash = "sha256-//y2kkCrj6E3kKxZIEK2bBUiZezB9j4xzR6WrBdcpqQ=";
+    hash = "sha256-Izh6PHMgUsOeez9uWSLoA2GhvawYQlEZo480vovxn38=";
   };
 
   patches = [
@@ -248,6 +238,7 @@ stdenv.mkDerivation (finalAttrs: {
       pango
       polkit
       protobufc
+      readline
       sqlite
       tpm2-tss
       valgrind
@@ -262,7 +253,6 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.mesonEnable "docs" true)
       # We are building the official releases.
       (lib.mesonEnable "supported_build" true)
-      (lib.mesonEnable "launchd" false)
       (lib.mesonOption "systemd_root_prefix" "${placeholder "out"}")
       (lib.mesonOption "installed_test_prefix" "${placeholder "installedTests"}")
       "--localstatedir=/var"
@@ -281,17 +271,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (!enablePassim) [
       (lib.mesonEnable "passim" false)
     ]
-    ++ lib.optionals (!haveDell) [
-      (lib.mesonEnable "plugin_synaptics_mst" false)
-    ]
-    ++ lib.optionals (!haveRedfish) [
-      (lib.mesonEnable "plugin_redfish" false)
-    ]
     ++ lib.optionals (!haveFlashrom) [
       (lib.mesonEnable "plugin_flashrom" false)
-    ]
-    ++ lib.optionals (!haveMSR) [
-      (lib.mesonEnable "plugin_msr" false)
     ];
 
   # TODO: wrapGAppsHook3 wraps efi capsule even though it is not ELF
@@ -317,6 +298,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     polkit
+    libredirect.hook
   ];
 
   preCheck = ''
@@ -324,7 +306,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     echo "12345678901234567890123456789012" > machine-id
     export NIX_REDIRECTS=/etc/machine-id=$(realpath machine-id) \
-    LD_PRELOAD=${libredirect}/lib/libredirect.so
   '';
 
   postInstall = ''

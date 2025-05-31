@@ -5,40 +5,31 @@
   fetchFromGitHub,
   installShellFiles,
   pkg-config,
-  libgit2,
-  openssl,
-  zlib,
   buildPackages,
   versionCheckHook,
   nix-update-script,
   vscode-extensions,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tinymist";
   # Please update the corresponding vscode extension when updating
   # this derivation.
-  version = "0.12.18";
+  version = "0.13.12";
 
   src = fetchFromGitHub {
     owner = "Myriad-Dreamin";
     repo = "tinymist";
-    tag = "v${version}";
-    hash = "sha256-/QalLr4kerOe+KooKY+Vq6FaGJyzGvaUHhUSu+LTphA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5uokMl+ZgDKVoxnQ/her/Aq6c69Gv0ngZuTDH0jcyoE=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-D4UWFg22lnkqozsWAQydNSnOpDlw5AUhGCHHfuyihfU=";
+  cargoHash = "sha256-GJJXTVm7hLmMaRJnpmslrpKNHnyhgo/6ZWXU//xl1Vc=";
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
-  ];
-
-  buildInputs = [
-    libgit2
-    openssl
-    zlib
   ];
 
   checkFlags = [
@@ -65,7 +56,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=semantic_tokens_full::tests::test"
   ];
 
-  postInstall =
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
     let
       emulator = stdenv.hostPlatform.emulator buildPackages;
     in
@@ -74,12 +65,13 @@ rustPlatform.buildRustPackage rec {
         --bash <(${emulator} $out/bin/tinymist completion bash) \
         --fish <(${emulator} $out/bin/tinymist completion fish) \
         --zsh <(${emulator} $out/bin/tinymist completion zsh)
-    '';
+    ''
+  );
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "-V" ];
+  versionCheckProgramArg = "-V";
   doInstallCheck = true;
 
   passthru = {
@@ -90,9 +82,9 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/Myriad-Dreamin/tinymist/blob/v${version}/CHANGELOG.md";
     description = "Tinymist is an integrated language service for Typst";
     homepage = "https://github.com/Myriad-Dreamin/tinymist";
+    changelog = "https://github.com/Myriad-Dreamin/tinymist/blob/v${finalAttrs.version}/editors/vscode/CHANGELOG.md";
     license = lib.licenses.asl20;
     mainProgram = "tinymist";
     maintainers = with lib.maintainers; [
@@ -100,4 +92,4 @@ rustPlatform.buildRustPackage rec {
       lampros
     ];
   };
-}
+})

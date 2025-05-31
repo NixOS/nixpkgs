@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "smuellerDD";
-    repo = pname;
+    repo = "jitterentropy-rngd";
     rev = "v${version}";
     hash = "sha256-LDym636ss3B1G/vrqatu9g5vbVEeDX0JQcxZ/IxGeY0=";
   };

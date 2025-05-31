@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   kdePackages,
@@ -12,14 +13,12 @@
   shadowsocks-rust,
   cloak-pt,
   wireguard-tools,
-  procps,
-  iproute2,
-  sudo,
   libssh,
   zlib,
   tun2socks,
   xray,
   nix-update-script,
+  bash,
 }:
 let
   amnezia-tun2socks = tun2socks.overrideAttrs (
@@ -56,15 +55,24 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amnezia-vpn";
-  version = "4.8.3.1";
+  version = "4.8.6.0";
 
   src = fetchFromGitHub {
     owner = "amnezia-vpn";
     repo = "amnezia-client";
     tag = finalAttrs.version;
-    hash = "sha256-U/fVO9GcSdxFg5r57vX5Ylgu6CMjG4GKyInIgBNUiEw=";
+    hash = "sha256-WQbay3dtGNPPpcK1O7bfs/HKO4ytfmQo60firU/9o28=";
     fetchSubmodules = true;
   };
+
+  # Temporary patch header file to fix build with QT 6.9
+  patches = [
+    (fetchpatch {
+      name = "add-missing-include.patch";
+      url = "https://github.com/amnezia-vpn/amnezia-client/commit/c44ce0d77cc3acdf1de48a12459a1a821d404a1c.patch";
+      hash = "sha256-Q6UMD8PlKAcI6zNolT5+cULECnxNrYrD7cifvNg1ZrY=";
+    })
+  ];
 
   postPatch =
     ''
@@ -83,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace client/configurators/openvpn_configurator.cpp \
         --replace-fail ".arg(qApp->applicationDirPath());" ".arg(\"$out/libexec\");"
       substituteInPlace client/ui/qautostart.cpp \
-        --replace-fail "/usr/share/pixmaps/AmneziaVPN.png" "$out/share/pixmaps/AmneziaVPN.png"
+        --replace-fail "/usr/share/pixmaps/AmneziaVPN.png" "AmneziaVPN"
       substituteInPlace deploy/installer/config/AmneziaVPN.desktop.in \
         --replace-fail "/usr/share/pixmaps/AmneziaVPN.png" "$out/share/pixmaps/AmneziaVPN.png"
       substituteInPlace deploy/data/linux/AmneziaVPN.service \
@@ -107,31 +115,26 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    bash
+    kdePackages.qt5compat
+    kdePackages.qtremoteobjects
+    kdePackages.qtsvg
     libsecret
     qt6.qtbase
     qt6.qttools
-    kdePackages.qtremoteobjects
-    kdePackages.qtsvg
-    kdePackages.qt5compat
   ];
 
-  qtWrapperArgs = [
-    ''--prefix PATH : ${
-      lib.makeBinPath [
-        procps
-        iproute2
-        sudo
-      ]
-    }''
-  ];
+  installPhase = ''
+    runHook preInstall
 
-  postInstall = ''
     mkdir -p $out/bin $out/libexec $out/share/applications $out/share/pixmaps $out/lib/systemd/system
-    cp client/AmneziaVPN service/server/AmneziaVPN-service $out/bin/
-    cp ../deploy/data/linux/client/bin/update-resolv-conf.sh $out/libexec/
-    cp ../AppDir/AmneziaVPN.desktop $out/share/applications/
-    cp ../deploy/data/linux/AmneziaVPN.png $out/share/pixmaps/
-    cp ../deploy/data/linux/AmneziaVPN.service $out/lib/systemd/system/
+    install -m555 client/AmneziaVPN service/server/AmneziaVPN-service $out/bin/
+    install -m555 ../deploy/data/linux/client/bin/update-resolv-conf.sh $out/libexec/
+    install -m444 ../AppDir/AmneziaVPN.desktop $out/share/applications/
+    install -m444 ../deploy/data/linux/AmneziaVPN.png $out/share/pixmaps/
+    install -m444 ../deploy/data/linux/AmneziaVPN.service $out/lib/systemd/system/
+
+    runHook postInstall
   '';
 
   passthru = {
@@ -149,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Amnezia VPN Client";
     downloadPage = "https://amnezia.org/en/downloads";
-    homepage = "https://amnezia.org/en";
+    homepage = "https://github.com/amnezia-vpn/amnezia-client";
     license = licenses.gpl3;
     mainProgram = "AmneziaVPN";
     maintainers = with maintainers; [ sund3RRR ];

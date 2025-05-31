@@ -3,7 +3,6 @@
   buildPythonPackage,
   click,
   fetchFromGitHub,
-  fetchpatch,
   pytestCheckHook,
   pythonOlder,
   setuptools,

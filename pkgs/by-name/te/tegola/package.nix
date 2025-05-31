@@ -51,7 +51,8 @@ buildGoModule {
     homepage = "https://www.tegola.io/";
     description = "Mapbox Vector Tile server";
     mainProgram = "tegola";
-    maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ ingenieroariel ]);
+    maintainers = with lib.maintainers; [ ingenieroariel ];
+    teams = [ lib.teams.geospatial ];
     license = lib.licenses.mit;
   };
 }

@@ -56,13 +56,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bambu-studio";
-  version = "01.10.01.50";
+  version = "01.10.02.76";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
     rev = "v${version}";
-    hash = "sha256-7mkrPl2CQSfc1lRjl1ilwxdYcK5iRU//QGKmdCicK30=";
+    hash = "sha256-LvAi3I5lnnumhOUagyej28uVy0Lgd3e19HNQXOUWSvQ=";
   };
 
   nativeBuildInputs = [
@@ -72,41 +72,44 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    binutils
-    boost186
-    cereal
-    cgal
-    curl
-    dbus
-    eigen
-    expat
-    ffmpeg
-    gcc-unwrapped
-    glew
-    glfw
-    glib
-    glib-networking
-    gmp
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-good
-    gtk3
-    hicolor-icon-theme
-    ilmbase
-    libpng
-    mpfr
-    nlopt
-    opencascade-occt_7_6
-    openvdb
-    pcre
-    tbb_2021_11
-    webkitgtk_4_0
-    wxGTK'
-    xorg.libX11
-    opencv
-  ] ++ lib.optionals withSystemd [ systemd ] ++ checkInputs;
+  buildInputs =
+    [
+      binutils
+      boost186
+      cereal
+      cgal
+      curl
+      dbus
+      eigen
+      expat
+      ffmpeg
+      gcc-unwrapped
+      glew
+      glfw
+      glib
+      glib-networking
+      gmp
+      gst_all_1.gstreamer
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-bad
+      gst_all_1.gst-plugins-good
+      gtk3
+      hicolor-icon-theme
+      ilmbase
+      libpng
+      mpfr
+      nlopt
+      opencascade-occt_7_6
+      openvdb
+      pcre
+      tbb_2021_11
+      webkitgtk_4_0
+      wxGTK'
+      xorg.libX11
+      opencv
+    ]
+    ++ lib.optionals withSystemd [ systemd ]
+    ++ checkInputs;
 
   patches = [
     # Fix for webkitgtk linking

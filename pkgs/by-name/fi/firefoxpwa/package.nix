@@ -28,25 +28,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "firefoxpwa";
-  version = "2.13.2";
+  version = "2.14.1";
 
   src = fetchFromGitHub {
     owner = "filips123";
     repo = "PWAsForFirefox";
     rev = "v${version}";
-    hash = "sha256-0VHuS507uQXaRRYjaJ9uPh1bhPrxA6PQa/x5o4IE78U=";
+    hash = "sha256-yYvQxz+lAxKXpAWeLiBnepGuwYfNLyIhu4vQ8NdH3pc=";
   };
 
   sourceRoot = "${src.name}/native";
   buildFeatures = [ "immutable-runtime" ];
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-UxUXXF13YyS+ViEsjjfuNinq7n4W28J+fZsy/WeV6Dc=";
+  cargoHash = "sha256-elVthXdjlI9DSQgaIRzu3M72dgGNXGgMiUXEICaBJCQ=";
 
   preConfigure = ''
     sed -i 's;version = "0.0.0";version = "${version}";' Cargo.toml
     sed -zi 's;name = "firefoxpwa"\nversion = "0.0.0";name = "firefoxpwa"\nversion = "${version}";' Cargo.lock
-    sed -i $'s;DISTRIBUTION_VERSION = \'0.0.0\';DISTRIBUTION_VERSION = \'${version}\';' userchrome/profile/chrome/pwa/chrome.jsm
+    sed -i $'s;DISTRIBUTION_VERSION = \'0.0.0\';DISTRIBUTION_VERSION = \'${version}\';' userchrome/profile/chrome/pwa/chrome.sys.mjs
   '';
 
   nativeBuildInputs = [
@@ -151,7 +151,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://pwasforfirefox.filips.si/";
     changelog = "https://github.com/filips123/PWAsForFirefox/releases/tag/v${version}";
     license = lib.licenses.mpl20;
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       camillemndn
       pasqui23

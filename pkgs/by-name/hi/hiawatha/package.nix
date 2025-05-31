@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hiawatha";
-  version = "11.6";
+  version = "11.7";
 
   src = fetchFromGitLab {
     owner = "hsleisink";
     repo = "hiawatha";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-YsZdVqanVNibA4KnAknLh61hVo7x5uu67lb+RX2N7c8=";
+    hash = "sha256-Vr7rpYyUgB2NI/PJgh/nQa7gY1XJ4AfUDAHEOVblD1g=";
   };
 
   nativeBuildInputs = [

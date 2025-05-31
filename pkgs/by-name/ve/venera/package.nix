@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  flutter327,
+  flutter329,
   webkitgtk_4_1,
   copyDesktopItems,
   makeDesktopItem,
@@ -12,37 +12,45 @@
   gitUpdater,
 }:
 
-flutter327.buildFlutterApplication rec {
+flutter329.buildFlutterApplication rec {
   pname = "venera";
-  version = "1.2.2";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "venera-app";
     repo = "venera";
     tag = "v${version}";
-    hash = "sha256-uVy3M5H2zIbHPk5Uug0HBFauiYk5+wR9CJrheATTjbc=";
+    hash = "sha256-hhKfHJRZyNsQcGhbgBdBvy2KjKOxg4+0yi+ynX3qMw4=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes = {
-    desktop_webview_window = "sha256-15tw3gLN9e886QjBFuYP34KLD1lN8AmQYXVza5Bvs40=";
-    flutter_qjs = "sha256-nbXKfiCvG6JT570RNVq3gec+JFw3H7XG4g/QSNkDw18=";
-    flutter_7zip = "sha256-KHDq4XG3l+dq1NPW84wOK5kKbXJ8qCK8voGeTnX/Krw=";
-    lodepng_flutter = "sha256-bGc9uXD1EQ/19OIZmR7a/YL9w93fNWdQF5S19LSwxZw=";
-    photo_view = "sha256-Z+9xgvk8YS+bgCbBW7BBY72tV6JUq2kCX5OwKFK4YPE=";
-    scrollable_positioned_list = "sha256-6XmBlNxE7DEqY2LsEFtVrshn2Xt55XnmaiTq+tiPInA=";
-    webdav_client = "sha256-Dz/4qW+cYGyNtK8S/abFslwQNroidgrHl7oJw3uXIqM=";
-    flutter_saf = "sha256-haY4eabTwUUBTpwenK0ILKpLggrtjVQszcmlpirEeTU=";
-  };
+  gitHashes =
+    let
+      flutter_inappwebview-hash = "sha256-Vh5bZP/tkSAlstbT3souy/iLmpw3CENrA/rCUOcJb2o=";
+    in
+    {
+      desktop_webview_window = "sha256-c2f1CjfZJ8M9SJz65WQVG+0uuKaFMjQFFAGSNH9osjg=";
+      flutter_qjs = "sha256-Mp9swQ4JEIyIEBQGlR7i+37Jp2sFGwL0uGrSTwE/n88=";
+      flutter_7zip = "sha256-KHDq4XG3l+dq1NPW84wOK5kKbXJ8qCK8voGeTnX/Krw=";
+      lodepng_flutter = "sha256-fOOhjoo3dzNNZI04Ie7GHLTfVlD5X+5IONpg8+RlmsE=";
+      photo_view = "sha256-zRc/WCbVybWkF52KDZZXgvKA8bbXASI7Yj2RFzLhXUk=";
+      scrollable_positioned_list = "sha256-6XmBlNxE7DEqY2LsEFtVrshn2Xt55XnmaiTq+tiPInA=";
+      webdav_client = "sha256-euNF7HdDtZ68BqSEq9BvO10BK09MxX2wWGoElFS0yeE=";
+      flutter_saf = "sha256-zmRZ82aJPYX/N/lOUcOoT8UAHEDoUk0FTFSqB4gKR+U=";
+      flutter_inappwebview = flutter_inappwebview-hash;
+      flutter_inappwebview_android = flutter_inappwebview-hash;
+      flutter_inappwebview_ios = flutter_inappwebview-hash;
+      flutter_inappwebview_macos = flutter_inappwebview-hash;
+      flutter_inappwebview_web = flutter_inappwebview-hash;
+      flutter_inappwebview_windows = flutter_inappwebview-hash;
+      flutter_inappwebview_platform_interface = flutter_inappwebview-hash;
+      rhttp = "sha256-odYLLj9Vd0+UQVXtYgGzMDKLD7SbTqrqHI1jAXVr5XU=";
+    };
 
-  nativeBuildInputs = [
-    copyDesktopItems
-  ];
+  nativeBuildInputs = [ copyDesktopItems ];
 
-  buildInputs = [
-    webkitgtk_4_1
-  ];
+  buildInputs = [ webkitgtk_4_1 ];
 
   desktopItems = [
     (makeDesktopItem {

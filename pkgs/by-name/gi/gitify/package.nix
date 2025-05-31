@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gitify";
-  version = "5.18.0";
+  version = "6.3.0";
 
   src = fetchFromGitHub {
     owner = "gitify-app";
     repo = "gitify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-INeOQY39IepcqigThymEcBjkrQkIC/9Py+g32/VBpmg=";
+    hash = "sha256-pzyTL0wloTBht7w8MZQoe7jUlOTFTGcq+u0now+Wrxs=";
   };
 
   nativeBuildInputs = [
@@ -33,15 +33,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-86RiBzZwoyDX5l9wV3JiUo4efkol3sKH3tlu61D7D+0=";
+    hash = "sha256-mV0MgJRP5rN+RRTtKlYi29Yq8+8DMO5bMFXRmPcWx6o=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   postPatch = ''
-    substituteInPlace package.json \
-      --replace-fail '"Emmanouil Konstantinidis (3YP8SXP3BF)"' null \
-      --replace-fail '"scripts/notarize.js"' null
+    substituteInPlace config/electron-builder.js \
+      --replace-fail "'Adam Setch (5KD23H9729)'" "null" \
+      --replace-fail "'scripts/afterSign.js'" "null"
   '';
 
   buildPhase = ''
@@ -53,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     pnpm build
     pnpm exec electron-builder \
+        --config config/electron-builder.js \
         --dir \
         -c.electronDist=electron-dist \
         -c.electronVersion="${electron.version}" \

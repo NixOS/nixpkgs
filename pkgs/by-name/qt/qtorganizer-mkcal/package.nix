@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qtorganizer-mkcal";
-  version = "0-unstable-2025-02-14";
+  version = "0-unstable-2025-04-24";
 
   src = fetchFromGitHub {
     owner = "dcaliste";
     repo = "qtorganizer-mkcal";
-    rev = "3090565d70ecdfaad2cba57d5a895fa69afd024a";
-    hash = "sha256-ZNAcqjkVf9efP+WWTDr2YFZT+eZdIJAfX45Gm0+Y81A=";
+    rev = "45906b1df8ad758a824369873f423d9e0c457fbf";
+    hash = "sha256-sgYCO8LxBFhMkjGnKVvOx2d4hyw9Oa5lbu6LKhuwl8s=";
   };
 
   postPatch = ''
@@ -31,12 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     pkg-config
   ];
 
   buildInputs =
     [
-      extra-cmake-modules
       mkcal
     ]
     ++ (with libsForQt5; [
@@ -51,11 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
-  cmakeFlags = [
-    (lib.cmakeBool "INSTALL_TESTS" false)
-  ];
-
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  # Flaky: https://github.com/dcaliste/qtorganizer-mkcal/issues/9
+  doCheck = false;
 
   preCheck =
     let
@@ -85,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "QtOrganizer plugin using sqlite via mKCal";
     homepage = "https://github.com/dcaliste/qtorganizer-mkcal";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
   };
 })

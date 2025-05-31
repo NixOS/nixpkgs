@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, pkg-config
-, libstrophe
-, installShellFiles
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  pkg-config,
+  libstrophe,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     libstrophe
   ];
 
-  strictDeps  = true;
+  strictDeps = true;
 
   # Makefile is hardcoded to install to /usr, install manually
   installPhase = ''

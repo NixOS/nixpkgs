@@ -43,11 +43,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "imlib2";
-  version = "1.12.3";
+  version = "1.12.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/enlightenment/imlib2-${finalAttrs.version}.tar.xz";
-    hash = "sha256-liRGVldqPgpvWLeOUU3ckZYirGgGcRvCMYN+7mLB3jQ=";
+    hash = "sha256-+iMV8oN5tDCm5mBbQoSwe+BqPvQi1PXhybskcUxM9t0=";
   };
 
   buildInputs =

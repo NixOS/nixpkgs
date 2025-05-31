@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "tf-keras";
-  version = "2.18.0";
+  version = "2.19.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "tf_keras";
     inherit version;
-    hash = "sha256-6/dEUZsyKv6tMwhqKrqHIkVHMpSv/UCXNpTz63x6130=";
+    hash = "sha256-sJpAfYekVxzh6MqYXPxoSD49Y7JRil15qXrZLLZNvpw=";
   };
 
   build-system = [

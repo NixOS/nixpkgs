@@ -1,40 +1,29 @@
 {
-  buildPythonPackage,
-  colormath,
-  fetchFromGitHub,
-  fetchpatch2,
   lib,
-  pytestCheckHook,
+  buildPythonPackage,
+  fetchFromGitHub,
   setuptools,
+  colormath2,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "spectra";
-  version = "0.0.11";
+  version = "0.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jsvine";
     repo = "spectra";
     tag = "v${version}";
-    hash = "sha256-4A2TWTxYqckJ3DX5cd2KN3KXcmO/lQdXmOEnGi76RsA=";
+    hash = "sha256-PS5p9IR3v6+Up5Fcq8mhkprVgXigD6PZUF4/6hbv7NI=";
   };
-
-  patches = [
-    # https://github.com/jsvine/spectra/pull/21
-    (fetchpatch2 {
-      name = "nose-to-pytest.patch";
-      url = "https://github.com/jsvine/spectra/commit/50037aba16dac4bf0fb7ffbd787d0e6b906e8a4b.patch";
-      hash = "sha256-cMoIbjRwcZjvhiIOcJR7NmIAOaqpr/e5eh9+sPGKqos=";
-      excludes = [ ".github/*" ];
-    })
-  ];
 
   build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [ colormath ];
+  dependencies = [ colormath2 ];
 
   nativeCheckInputs = [
     pytestCheckHook

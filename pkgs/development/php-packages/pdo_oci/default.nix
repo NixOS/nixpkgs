@@ -24,6 +24,6 @@ buildPecl {
     description = "The PHP PDO_OCI extension lets you access Oracle Database";
     license = lib.licenses.php301;
     homepage = "https://pecl.php.net/package/pdo_oci";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 }

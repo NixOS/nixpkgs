@@ -1,9 +1,11 @@
 {
   lib,
+  stdenv,
   buildDotnetModule,
   fetchFromGitHub,
   dotnetCorePackages,
   versionCheckHook,
+  nix-update-script,
 }:
 
 buildDotnetModule rec {
@@ -27,7 +29,7 @@ buildDotnetModule rec {
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru = {
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -41,5 +43,9 @@ buildDotnetModule rec {
       gepbird
     ];
     platforms = lib.platforms.all;
+    # https://hydra.nixos.org/build/286325419
+    # a libsodium.dylib file should be kept as per https://github.com/samuel-lucas6/Kryptor/releases/tag/v4.1.1
+    # upstream issue: https://github.com/dotnet/sdk/issues/45903
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

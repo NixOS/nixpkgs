@@ -1,41 +1,60 @@
 {
   lib,
+  stdenv,
   fetchurl,
-  appimageTools,
+  dpkg,
+  autoPatchelfHook,
+  webkitgtk_4_1,
+  libsoup_3,
+  glib,
+  gtk3,
+  cairo,
+  dbus,
+  gdk-pixbuf,
+  nix-update-script,
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "museeks";
-  version = "0.13.1";
+  version = "0.20.9";
 
   src = fetchurl {
-    url = "https://github.com/martpie/museeks/releases/download/${version}/museeks-x86_64.AppImage";
-    hash = "sha256-LvunhCFmpv00TnXzWjp3kQUAhoKpmp6pqKgcaUqZV+o=";
+    url = "https://github.com/martpie/museeks/releases/download/${finalAttrs.version}/Museeks_${finalAttrs.version}_amd64.deb";
+    hash = "sha256-7jRgMpfQTJr3yW3YAPTnPSvtrqumScN3Tr7YXQX3Fi8=";
   };
 
-  appimageContents = appimageTools.extractType2 {
-    inherit pname version src;
-  };
-in
-appimageTools.wrapType2 {
-  inherit pname version src;
+  nativeBuildInputs = [
+    dpkg
+    autoPatchelfHook
+  ];
 
-  extraInstallCommands = ''
-    mkdir -p $out/share/${pname}
-    cp -a ${appimageContents}/{locales,resources} $out/share/${pname}
-    cp -a ${appimageContents}/usr/share/icons $out/share/
-    install -Dm 444 ${appimageContents}/${pname}.desktop -t $out/share/applications
+  buildInputs = [
+    dbus
+    webkitgtk_4_1
+    libsoup_3
+    gtk3
+    cairo
+    gdk-pixbuf
+    glib
+    (lib.getLib stdenv.cc.cc)
+  ];
 
-    substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+  installPhase = ''
+    runHook preInstall
+
+    cp -r usr $out
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Simple, clean and cross-platform music player";
     homepage = "https://github.com/martpie/museeks";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ zendo ];
+    maintainers = with lib.maintainers; [ zendo ];
     mainProgram = "museeks";
   };
-}
+})

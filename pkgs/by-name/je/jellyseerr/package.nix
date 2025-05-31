@@ -6,6 +6,7 @@
   makeWrapper,
   nodejs_22,
   python3,
+  python3Packages,
   sqlite,
   nix-update-script,
 }:
@@ -16,24 +17,25 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jellyseerr";
-  version = "2.3.0";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "Fallenbagel";
     repo = "jellyseerr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vAMuiHcf13CDyOB0k36DXUk+i6K6h/R7dmBLJsMkzNA=";
+    hash = "sha256-EbBvgaTTMA4B7uBwiftIy54oo0K5hCvIAWhBHjeM5WU=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-iSzs+lMQzcFjUz4K3rYP0I6g/wVz6u49FSQuPHXbVRM=";
+    hash = "sha256-4odVuAhjc9lUxorWOqPd2ODgexk5PDSS2HtFyq0csU0=";
   };
 
   buildInputs = [ sqlite ];
 
   nativeBuildInputs = [
     python3
+    python3Packages.distutils
     nodejs
     makeWrapper
     pnpm.configHook
@@ -63,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share
-    cp -r -t $out/share .next node_modules dist public package.json overseerr-api.yml
+    cp -r -t $out/share .next node_modules dist public package.json jellyseerr-api.yml
     runHook postInstall
   '';
 

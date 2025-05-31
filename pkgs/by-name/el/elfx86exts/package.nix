@@ -4,19 +4,19 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "elfx86exts";
-  version = "unstable-2023-04-20";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "pkgw";
-    repo = pname;
-    rev = "26bf98cf1fc773196e594c48bfe808d7151076f6";
-    hash = "sha256-xNmaKGbMN92CPIQQRbdmeePk5Wt9XcIsB/2vbk5NJzg=";
+    repo = "elfx86exts";
+    tag = "elfx86exts@${finalAttrs.version}";
+    hash = "sha256-lqaOnZxuiip1HPDpQraXlpUBYeJuBCRTaNARZVEV5UY=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-FB2mEI1ZXR0f1+eRcEc8hzlTQZNygU4R5L6qyEl6tLw=";
+  cargoHash = "sha256-7FVcLvbZQK5M90ofoBpK2V/1+vWlBI/Z2x3ydbCwVbM=";
 
   meta = with lib; {
     description = "Decode x86 binaries and print out which instruction set extensions they use";
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ mit ];
     mainProgram = "elfx86exts";
   };
-}
+})

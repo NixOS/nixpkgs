@@ -28,7 +28,6 @@
   freetype,
   gst_all_1,
   harfbuzz,
-  libcxx,
   libGL,
   libunwind,
   libxkbcommon,
@@ -36,6 +35,9 @@
   vulkan-loader,
   wayland,
   xorg,
+
+  # tests
+  nixosTests,
 }:
 
 let
@@ -59,24 +61,24 @@ in
 
 rustPlatform.buildRustPackage {
   pname = "servo";
-  version = "0-unstable-2025-01-14";
+  version = "0-unstable-2025-05-25";
 
   src = fetchFromGitHub {
     owner = "servo";
     repo = "servo";
-    rev = "f5ef8aaed32e6a6da3faca3a710e73cd35c31059";
-    hash = "sha256-LaAg07Lp/oWNsrtqM6UrqmPAm/ajmPJPZb5O7q9eLO8=";
+    rev = "3a04f4195eb650f092c44d5a05fee178b9e84fbe";
+    hash = "sha256-7dbt7h4qUPWgsKBt0wo9by6yTB4034SzlzdqMXmw2Xg=";
+    # Breaks reproducibility depending on whether the picked commit
+    # has other ref-names or not, which may change over time, i.e. with
+    # "ref-names: HEAD -> main" as long this commit is the branch HEAD
+    # and "ref-names:" when it is not anymore.
+    postFetch = ''
+      rm $out/tests/wpt/tests/tools/third_party/attrs/.git_archival.txt
+    '';
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-a5Dv/AiPs/fnKcboBej9H7BiRKCIjm0GaQ2ICiH9SpQ=";
-
-  postPatch = ''
-    # Remap absolute path between modules to include SEMVER
-    substituteInPlace ../servo-0-unstable-*-vendor/servo_atoms-0.0.1/build.rs --replace-fail \
-      "../style/counter_style/predefined.rs" \
-      "../style-0.0.1/counter_style/predefined.rs"
-  '';
+  cargoHash = "sha256-XTtM7yU1kpzK2cspnYdgp7yrt4Xk7xeQ98rmBgu46Tg=";
 
   # set `HOME` to a temp dir for write access
   # Fix invalid option errors during linking (https://github.com/mozilla/nixpkgs-mozilla/commit/c72ff151a3e25f14182569679ed4cd22ef352328)
@@ -128,10 +130,14 @@ rustPlatform.buildRustPackage {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_14
-      libcxx
     ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
+  # Builds with additional features for aarch64, see https://github.com/servo/servo/issues/36819
+  buildFeatures = lib.optionals stdenv.hostPlatform.isAarch64 [
+    "servo_allocator/use-system-allocator"
+  ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
 
   # copy resources into `$out` to be used during runtime
   # link runtime libraries
@@ -143,11 +149,19 @@ rustPlatform.buildRustPackage {
       --prefix LD_LIBRARY_PATH : ${runtimePaths}
   '';
 
+  passthru = {
+    updateScript = ./update.sh;
+    tests = { inherit (nixosTests) servo; };
+  };
+
   meta = {
     description = "The embeddable, independent, memory-safe, modular, parallel web rendering engine";
     homepage = "https://servo.org";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ supinie ];
+    maintainers = with lib.maintainers; [
+      hexa
+      supinie
+    ];
     mainProgram = "servo";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

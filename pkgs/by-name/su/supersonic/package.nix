@@ -13,7 +13,6 @@
   libxkbcommon,
   libglvnd,
   mpv-unwrapped,
-  darwin,
   waylandSupport ? false,
 }:
 
@@ -21,16 +20,16 @@ assert waylandSupport -> stdenv.hostPlatform.isLinux;
 
 buildGoModule rec {
   pname = "supersonic" + lib.optionalString waylandSupport "-wayland";
-  version = "0.13.2";
+  version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "dweymouth";
     repo = "supersonic";
     rev = "v${version}";
-    hash = "sha256-zSfUhqhmTiWVrW03mos1jV26O4hM5NCF0BD1lP919Dk=";
+    hash = "sha256-grVZgsoehx32zpdKXuy78gcBb/ESZtzyizRuRKIjgwM=";
   };
 
-  vendorHash = "sha256-d3IkOLY1907w9zeVEJBFb+NP8nDIJe+6Hv+k+5wymwo=";
+  vendorHash = "sha256-fc86z8bvdFI3LdlyHej2G42O554hpRszqre+e3WUOKI=";
 
   nativeBuildInputs =
     [
@@ -64,13 +63,6 @@ buildGoModule rec {
       wayland
       wayland-protocols
       libxkbcommon
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.Cocoa
-      darwin.apple_sdk_11_0.frameworks.Kernel
-      darwin.apple_sdk_11_0.frameworks.OpenGL
-      darwin.apple_sdk_11_0.frameworks.UserNotifications
-      darwin.apple_sdk_11_0.frameworks.MediaPlayer
     ];
 
   postInstall =

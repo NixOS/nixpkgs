@@ -12,7 +12,7 @@ let
     gemdir = ./.;
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "uniscribe";
   version = (import ./gemset.nix).uniscribe.version;
 

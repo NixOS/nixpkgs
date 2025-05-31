@@ -8,14 +8,14 @@
 
 buildGoModule rec {
   pname = "runitor";
-  version = "1.3.0";
-  vendorHash = null;
+  version = "1.4.0";
+  vendorHash = "sha256-SYYAAtuWt/mTmZPBilYxf2uZ6OcgeTnobYiye47i8mI=";
 
   src = fetchFromGitHub {
     owner = "bdd";
     repo = "runitor";
     rev = "v${version}";
-    sha256 = "sha256-9sg+ku3Qh/X/EZ2VCrvIc0pq5iyn4O8RZrO4KpkciAI=";
+    sha256 = "sha256-eD8bJ34ZfTPToQrZ8kZGcSBdMmmCwRtuXgwZmz15O3s=";
   };
 
   ldflags = [

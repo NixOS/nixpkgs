@@ -23,14 +23,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "itgmania";
-  version = "0.9.0";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "itgmania";
     repo = "itgmania";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-SAEYkAPNUjGNfNnHfwyOj65i2SpEX0ct/fREob5/6fI=";
+    hash = "sha256-OGOvC7/NmEsWXVw4bFjqdT/Hg3Ypbwct//uWuW3/f1o=";
   };
 
   nativeBuildInputs = [
@@ -88,7 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Fork of StepMania 5.1, improved for the post-ITG community";
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ftsimas ];
+    maintainers = with lib.maintainers; [
+      ftsimas
+      maxwell-lt
+    ];
     mainProgram = "itgmania";
   };
 })

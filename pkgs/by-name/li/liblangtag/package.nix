@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   autoreconfHook,
   autoconf-archive,
   gtk-doc,

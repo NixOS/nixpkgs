@@ -1,5 +1,5 @@
 {
-  cudaVersion,
+  cudaMajorMinorVersion,
   lib,
   stdenv,
 }:
@@ -27,7 +27,7 @@ let
 
   # Samples are built around the CUDA Toolkit, which is not available for
   # aarch64. Check for both CUDA version and platform.
-  cudaVersionIsSupported = cudaVersionToHash ? ${cudaVersion};
+  cudaVersionIsSupported = cudaVersionToHash ? ${cudaMajorMinorVersion};
   platformIsSupported = hostPlatform.isx86_64;
   isSupported = cudaVersionIsSupported && platformIsSupported;
 
@@ -36,8 +36,7 @@ let
     final: _:
     lib.attrsets.optionalAttrs isSupported {
       cuda-samples = final.callPackage ./generic.nix {
-        inherit cudaVersion;
-        hash = cudaVersionToHash.${cudaVersion};
+        hash = cudaVersionToHash.${cudaMajorMinorVersion};
       };
     };
 in

@@ -21,13 +21,13 @@ assert
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "box64";
-  version = "0.3.2";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "ptitSeb";
     repo = "box64";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-SHAfZatLrc6+8kRHGwUlXuUP0blQazZtdQmDv58Csv4=";
+    hash = "sha256-CY5Emg5TsMVs++2EukhVzqn9440kF/BO8HZGQgCpGu4=";
   };
 
   nativeBuildInputs = [

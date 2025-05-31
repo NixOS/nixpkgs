@@ -4,34 +4,23 @@
   pkg-config,
   rustPlatform,
   fetchFromGitHub,
-  darwin,
-  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "aiken";
-  version = "1.1.11";
+  version = "1.1.17";
 
   src = fetchFromGitHub {
     owner = "aiken-lang";
     repo = "aiken";
     rev = "v${version}";
-    hash = "sha256-RCMUF9+dj+zJM1tyuUs2oOMk+5xdHrzWYejuOPd/Ngc=";
+    hash = "sha256-bEsBLihMqYHJa5913Q434xKVufxTrcaxwcANPV9u37U=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-R6jTr4F+ZbRracW8yQdpDHHerzbJy1jQYr/ttFSwCWc=";
+  cargoHash = "sha256-Ob4UuBLD6HFbghv4E2XMj+xVeUSFtc9qPUNuUDgZeQA=";
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-        CoreServices
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [ openssl ];
 
   nativeBuildInputs = [ pkg-config ];
 

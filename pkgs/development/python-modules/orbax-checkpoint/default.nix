@@ -23,6 +23,7 @@
   typing-extensions,
 
   # tests
+  aiofiles,
   chex,
   google-cloud-logging,
   mock,
@@ -34,19 +35,23 @@
 
 buildPythonPackage rec {
   pname = "orbax-checkpoint";
-  version = "0.11.4";
+  version = "0.11.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "orbax";
     tag = "v${version}";
-    hash = "sha256-zKQcqDW0dOQIGNllrK6bPdTr8mkKU6eevdfvMGssd9w=";
+    hash = "sha256-qmq0Kz8wXUFFE4CqsdFwKXAIvysFbv7JomQSrNj1QCc=";
   };
 
   sourceRoot = "${src.name}/checkpoint";
 
   build-system = [ flit-core ];
+
+  pythonRelaxDeps = [
+    "jax"
+  ];
 
   dependencies = [
     absl-py
@@ -65,6 +70,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aiofiles
     chex
     google-cloud-logging
     mock
@@ -98,6 +104,7 @@ buildPythonPackage rec {
     "orbax/checkpoint/_src/metadata/tree_rich_types_test.py"
     "orbax/checkpoint/_src/metadata/tree_test.py"
     "orbax/checkpoint/_src/testing/test_tree_utils.py"
+    "orbax/checkpoint/_src/tree/parts_of_test.py"
     "orbax/checkpoint/_src/tree/utils_test.py"
     "orbax/checkpoint/single_host_test.py"
     "orbax/checkpoint/transform_utils_test.py"

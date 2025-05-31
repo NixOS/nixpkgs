@@ -8,24 +8,28 @@
   stdenv,
   vimPlugins,
   vimUtils,
+  makeWrapper,
+  pkgs,
 }:
 let
-  version = "0.0.18";
+  version = "0.0.23-unstable-2025-05-30";
   src = fetchFromGitHub {
     owner = "yetone";
     repo = "avante.nvim";
-    tag = "v${version}";
-    hash = "sha256-HSXqD+bC0sdvNbmV8hIU99cLrVyIMAzbWf5cqUpIhZU=";
+    rev = "22418bff8bcac4377ebf975cd48f716823867979";
+    hash = "sha256-qyeiDDjeReOr+TvgCWnKhb8FBN9t1YPFGvVqPvxXr0k=";
   };
   avante-nvim-lib = rustPlatform.buildRustPackage {
     pname = "avante-nvim-lib";
     inherit version src;
 
     useFetchCargoVendor = true;
-    cargoHash = "sha256-XDxWeEbsDf4r346OkQkZPmYLANgtydspPk1uLrnvrnY=";
+    cargoHash = "sha256-pmnMoNdaIR0i+4kwW3cf01vDQo39QakTCEG9AXA86ck=";
 
     nativeBuildInputs = [
       pkg-config
+      makeWrapper
+      pkgs.perl
     ];
 
     buildInputs = [
@@ -49,6 +53,7 @@ vimUtils.buildVimPlugin {
 
   dependencies = with vimPlugins; [
     dressing-nvim
+    img-clip-nvim
     nui-nvim
     nvim-treesitter
     plenary-nvim
@@ -63,10 +68,12 @@ vimUtils.buildVimPlugin {
       ln -s ${avante-nvim-lib}/lib/libavante_repo_map${ext} $out/build/avante_repo_map${ext}
       ln -s ${avante-nvim-lib}/lib/libavante_templates${ext} $out/build/avante_templates${ext}
       ln -s ${avante-nvim-lib}/lib/libavante_tokenizers${ext} $out/build/avante_tokenizers${ext}
+      ln -s ${avante-nvim-lib}/lib/libavante_html2md${ext} $out/build/avante_html2md${ext}
     '';
 
   passthru = {
     updateScript = nix-update-script {
+      extraArgs = [ "--version=branch" ];
       attrPath = "vimPlugins.avante-nvim.avante-nvim-lib";
     };
 
@@ -74,10 +81,14 @@ vimUtils.buildVimPlugin {
     inherit avante-nvim-lib;
   };
 
-  nvimSkipModule = [
+  nvimSkipModules = [
     # Requires setup with corresponding provider
     "avante.providers.azure"
     "avante.providers.copilot"
+    "avante.providers.gemini"
+    "avante.providers.ollama"
+    "avante.providers.vertex"
+    "avante.providers.vertex_claude"
   ];
 
   meta = {
@@ -87,6 +98,7 @@ vimUtils.buildVimPlugin {
     maintainers = with lib.maintainers; [
       ttrei
       aarnphm
+      jackcres
     ];
   };
 }

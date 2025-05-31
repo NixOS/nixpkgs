@@ -6,7 +6,9 @@
   fetchpatch,
   fetchurl,
   libGL,
+  libGLU,
   libvorbis,
+  libX11,
   lua,
   pkg-config,
   scons,
@@ -62,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     SDL_image
     expat
     libGL
+    libGLU
+    libX11
     libvorbis
     lua
     smpeg

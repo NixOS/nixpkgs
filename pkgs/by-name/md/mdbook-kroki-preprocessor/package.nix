@@ -4,8 +4,6 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,14 +24,9 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    openssl
+  ];
 
   meta = with lib; {
     description = "Render Kroki diagrams from files or code blocks in mdbook";
@@ -41,7 +34,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/joelcourtney/mdbook-kroki-preprocessor";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [
-      blaggacao
       matthiasbeyer
     ];
   };

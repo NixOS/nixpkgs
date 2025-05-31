@@ -2,8 +2,6 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  darwin,
-  stdenv,
 }:
 buildGoModule rec {
   pname = "gptscript";
@@ -11,14 +9,12 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "gptscript-ai";
-    repo = pname;
+    repo = "gptscript";
     tag = "v${version}";
     hash = "sha256-9wyDcvY5JCjtvx6XtvHwOsZLCiN1fRn0wBGaIaw2iRQ=";
   };
 
   vendorHash = "sha256-ajglXWGJhSJtcrbSBmxmriXFTT+Vb4xYq0Ec9SYRlQk=";
-
-  propagatedBuildInputs = with darwin; lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   ldflags = [
     "-s"

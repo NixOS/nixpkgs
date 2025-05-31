@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
-    repo = pname;
+    repo = "sn0int";
     tag = "v${version}";
     hash = "sha256-tiJLwlxZ9ndircgkH23ew+3QJeuuqt93JahAtFPcuG8=";
   };
@@ -37,9 +37,6 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libseccomp
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      pkgs.darwin.apple_sdk.frameworks.Security
     ];
 
   # One of the dependencies (chrootable-https) tries to read "/etc/resolv.conf"

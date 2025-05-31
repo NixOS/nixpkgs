@@ -4,8 +4,6 @@
   fetchFromGitHub,
   protobuf,
   rustfmt,
-  stdenv,
-  darwin,
   pkg-config,
   openssl,
 }:
@@ -42,10 +40,6 @@ in
       rustfmt
     ];
 
-    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-    ];
-
     passthru.updateScript = updateScript;
 
     __darwinAllowLocalNetworking = true;
@@ -70,13 +64,9 @@ in
       rustfmt
     ];
 
-    buildInputs =
-      [
-        openssl
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        darwin.apple_sdk.frameworks.SystemConfiguration
-      ];
+    buildInputs = [
+      openssl
+    ];
 
     passthru.updateScript = updateScript;
 

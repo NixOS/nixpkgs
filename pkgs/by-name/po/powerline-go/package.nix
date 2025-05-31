@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "justjanne";
-    repo = pname;
+    repo = "powerline-go";
     rev = "v${version}";
     hash = "sha256-DLw/6jnJo0IAh0/Y21mfCLP4GgTFlUGvuwyWJwhzYFU=";
   };

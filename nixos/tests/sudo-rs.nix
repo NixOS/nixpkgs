@@ -1,140 +1,138 @@
 # Some tests to ensure sudo is working properly.
 { pkgs, ... }:
 let
-  inherit (pkgs.lib) mkIf optionalString;
   password = "helloworld";
 in
-import ./make-test-python.nix (
-  { lib, pkgs, ... }:
-  {
-    name = "sudo-rs";
-    meta.maintainers = pkgs.sudo-rs.meta.maintainers;
+{
+  name = "sudo-rs";
+  meta.maintainers = pkgs.sudo-rs.meta.maintainers;
 
-    nodes.machine =
-      { lib, ... }:
-      {
-        environment.systemPackages = [ pkgs.faketty ];
-        users.groups = {
-          foobar = { };
-          barfoo = { };
-          baz = {
-            gid = 1337;
-          };
+  nodes.machine =
+    { lib, ... }:
+    {
+      environment.systemPackages = [ pkgs.faketty ];
+      users.groups = {
+        foobar = { };
+        barfoo = { };
+        baz = {
+          gid = 1337;
         };
-        users.users = {
-          test0 = {
-            isNormalUser = true;
-            extraGroups = [ "wheel" ];
-          };
-          test1 = {
-            isNormalUser = true;
-            password = password;
-          };
-          test2 = {
-            isNormalUser = true;
-            extraGroups = [ "foobar" ];
-            password = password;
-          };
-          test3 = {
-            isNormalUser = true;
-            extraGroups = [ "barfoo" ];
-          };
-          test4 = {
-            isNormalUser = true;
-            extraGroups = [ "baz" ];
-          };
-          test5 = {
-            isNormalUser = true;
-          };
+      };
+      users.users = {
+        test0 = {
+          isNormalUser = true;
+          extraGroups = [ "wheel" ];
         };
-
-        security.sudo-rs = {
-          enable = true;
-          wheelNeedsPassword = false;
-
-          extraRules = [
-            # SUDOERS SYNTAX CHECK (Test whether the module produces a valid output;
-            # errors being detected by the visudo checks.
-
-            # These should not create any entries
-            {
-              users = [ "notest1" ];
-              commands = [ ];
-            }
-            {
-              commands = [
-                {
-                  command = "ALL";
-                  options = [ ];
-                }
-              ];
-            }
-
-            # Test defining commands with the options syntax, though not setting any options
-            {
-              users = [ "notest2" ];
-              commands = [
-                {
-                  command = "ALL";
-                  options = [ ];
-                }
-              ];
-            }
-
-            # CONFIGURATION FOR TEST CASES
-            {
-              users = [ "test1" ];
-              groups = [ "foobar" ];
-              commands = [ "ALL" ];
-            }
-            {
-              groups = [
-                "barfoo"
-                1337
-              ];
-              commands = [
-                {
-                  command = "ALL";
-                  options = [ "NOPASSWD" ];
-                }
-              ];
-            }
-            {
-              users = [ "test5" ];
-              commands = [
-                {
-                  command = "ALL";
-                  options = [ "NOPASSWD" ];
-                }
-              ];
-              runAs = "test1:barfoo";
-            }
-          ];
+        test1 = {
+          isNormalUser = true;
+          password = password;
+        };
+        test2 = {
+          isNormalUser = true;
+          extraGroups = [ "foobar" ];
+          password = password;
+        };
+        test3 = {
+          isNormalUser = true;
+          extraGroups = [ "barfoo" ];
+        };
+        test4 = {
+          isNormalUser = true;
+          extraGroups = [ "baz" ];
+        };
+        test5 = {
+          isNormalUser = true;
         };
       };
 
-    nodes.strict =
-      { ... }:
-      {
-        environment.systemPackages = [ pkgs.faketty ];
-        users.users = {
-          admin = {
-            isNormalUser = true;
-            extraGroups = [ "wheel" ];
-          };
-          noadmin = {
-            isNormalUser = true;
-          };
-        };
+      security.sudo-rs = {
+        enable = true;
+        wheelNeedsPassword = false;
 
-        security.sudo-rs = {
-          enable = true;
-          wheelNeedsPassword = false;
-          execWheelOnly = true;
+        extraRules = [
+          # SUDOERS SYNTAX CHECK (Test whether the module produces a valid output;
+          # errors being detected by the visudo checks.
+
+          # These should not create any entries
+          {
+            users = [ "notest1" ];
+            commands = [ ];
+          }
+          {
+            commands = [
+              {
+                command = "ALL";
+                options = [ ];
+              }
+            ];
+          }
+
+          # Test defining commands with the options syntax, though not setting any options
+          {
+            users = [ "notest2" ];
+            commands = [
+              {
+                command = "ALL";
+                options = [ ];
+              }
+            ];
+          }
+
+          # CONFIGURATION FOR TEST CASES
+          {
+            users = [ "test1" ];
+            groups = [ "foobar" ];
+            commands = [ "ALL" ];
+          }
+          {
+            groups = [
+              "barfoo"
+              1337
+            ];
+            commands = [
+              {
+                command = "ALL";
+                options = [ "NOPASSWD" ];
+              }
+            ];
+          }
+          {
+            users = [ "test5" ];
+            commands = [
+              {
+                command = "ALL";
+                options = [ "NOPASSWD" ];
+              }
+            ];
+            runAs = "test1:barfoo";
+          }
+        ];
+      };
+    };
+
+  nodes.strict =
+    { ... }:
+    {
+      environment.systemPackages = [ pkgs.faketty ];
+      users.users = {
+        admin = {
+          isNormalUser = true;
+          extraGroups = [ "wheel" ];
+        };
+        noadmin = {
+          isNormalUser = true;
         };
       };
 
-    testScript = ''
+      security.sudo-rs = {
+        enable = true;
+        wheelNeedsPassword = false;
+        execWheelOnly = true;
+      };
+    };
+
+  testScript = # python
+    ''
       with subtest("users in wheel group should have passwordless sudo"):
           machine.succeed('faketty -- su - test0 -c "sudo -u root true"')
 
@@ -165,5 +163,4 @@ import ./make-test-python.nix (
       with subtest("non-wheel users should be unable to run sudo thanks to execWheelOnly"):
           strict.fail('faketty -- su - noadmin -c "sudo --help"')
     '';
-  }
-)
+}

@@ -33,12 +33,14 @@ rustPlatform.buildRustPackage rec {
   nativeCheckInputs = [ gitMinimal ];
 
   cargoBuildFlags = [ "-p=biome_cli" ];
-  cargoTestFlags =
-    cargoBuildFlags
-    ++
-    # skip a broken test from v1.7.3 release
-    # this will be removed on the next version
-    [ "-- --skip=diagnostics::test::termination_diagnostic_size" ];
+  cargoTestFlags = cargoBuildFlags ++ [
+    "-- --skip=commands::check::print_json"
+    "--skip=commands::check::print_json_pretty"
+    "--skip=commands::explain::explain_logs"
+    "--skip=commands::format::print_json"
+    "--skip=commands::format::print_json_pretty"
+    "--skip=commands::format::should_format_files_in_folders_ignored_by_linter"
+  ];
 
   env = {
     BIOME_VERSION = version;

@@ -31,7 +31,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/nilp0inter/cpe/releases/tag/v${version}";
     description = "Common platform enumeration for python";
     homepage = "https://github.com/nilp0inter/cpe";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ tochiaha ];
   };
 }

@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "scim2-server";
-  version = "0.1.2";
+  version = "0.1.5";
 
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "scim2_server";
-    hash = "sha256-6MHQVo0vqJ/69iBz3GtH1f2YO/Vh/MORSkEETwy/9pE=";
+    hash = "sha256-VCJVLnYg3+Kz7/DXWnZXkFqXVszsd2hm3cLY22J4NRw=";
   };
 
   build-system = [ hatchling ];

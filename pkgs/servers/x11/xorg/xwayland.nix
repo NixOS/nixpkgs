@@ -1,4 +1,5 @@
 {
+  dri-pkgconfig-stub,
   egl-wayland,
   bash,
   libepoxy,
@@ -6,6 +7,7 @@
   fontutil,
   lib,
   libdecor,
+  libgbm,
   libei,
   libGL,
   libGLU,
@@ -30,7 +32,7 @@
   libxkbfile,
   libxshmfence,
   libxcvt,
-  mesa,
+  mesa-gl-headers,
   meson,
   ninja,
   openssl,
@@ -52,11 +54,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xwayland";
-  version = "24.1.5";
+  version = "24.1.6";
 
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/${pname}-${version}.tar.xz";
-    hash = "sha256-y0vRcOb6a1RboFZ76PaT0u7M/GLQTGcDfdFPBtqtNh0=";
+    hash = "sha256-c35hLKNrvfQVqRFkTrdZLPk4mEaEe0f6RtxwW9dU0tc=";
   };
 
   postPatch = ''
@@ -75,8 +77,10 @@ stdenv.mkDerivation rec {
   ];
   buildInputs =
     [
+      dri-pkgconfig-stub
       egl-wayland
       libdecor
+      libgbm
       libepoxy
       libei
       fontutil
@@ -100,7 +104,7 @@ stdenv.mkDerivation rec {
       libxkbfile
       libxshmfence
       libxcvt
-      mesa # uses dri_interface.h
+      mesa-gl-headers
       openssl
       pixman
       systemd

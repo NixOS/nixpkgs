@@ -54,7 +54,7 @@ in
     if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then
       null
     else
-      doDistribute self.terminfo_0_4_1_6;
+      doDistribute self.terminfo_0_4_1_7;
   text = null;
   time = null;
   transformers = null;
@@ -62,6 +62,12 @@ in
   # GHC only bundles the xhtml library if haddock is enabled, check if this is
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
   xhtml = if self.ghc.hasHaddock or true then null else doDistribute self.xhtml_3000_4_0_0;
+
+  # Becomes a core package in GHC >= 9.8
+  semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
+
+  # only broken for >= 9.6
+  calligraphy = doDistribute (unmarkBroken super.calligraphy);
 
   # Jailbreaks & Version Updates
 
@@ -73,6 +79,9 @@ in
   generically = addBuildDepends [
     self.base-orphans
   ] super.generically;
+
+  # Needs base-orphans for GHC < 9.8 / base < 4.19
+  some = addBuildDepend self.base-orphans super.some;
 
   # the dontHaddock is due to a GHC panic. might be this bug, not sure.
   # https://gitlab.haskell.org/ghc/ghc/-/issues/21619
@@ -86,16 +95,26 @@ in
     ] ++ drv.testFlags or [ ];
   }) (doJailbreak super.hpack);
 
-  # https://github.com/sjakobi/bsb-http-chunked/issues/38
-  bsb-http-chunked = dontCheck super.bsb-http-chunked;
-
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
   hiedb = dontCheck super.hiedb;
 
   # 2022-10-06: https://gitlab.haskell.org/ghc/ghc/-/issues/22260
   ghc-check = dontHaddock super.ghc-check;
 
-  ghc-tags = self.ghc-tags_1_6;
+  ghc-tags = doDistribute (doJailbreak self.ghc-tags_1_7); # aeson < 2.2
+
+  # ghc-lib >= 9.8 and friends no longer build with GHC 9.4 since they require semaphore-compat
+  ghc-lib-parser = doDistribute (
+    self.ghc-lib-parser_9_6_7_20250325.override {
+      happy = self.happy_1_20_1_1; # wants happy < 1.21
+    }
+  );
+  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_6_0_2;
+  ghc-lib = doDistribute (
+    self.ghc-lib_9_6_7_20250325.override {
+      happy = self.happy_1_20_1_1; # wants happy < 1.21
+    }
+  );
 
   # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = super.ghc-exactprint_1_6_1_3;
@@ -112,14 +131,15 @@ in
       let
         hls_overlay = lself: lsuper: {
           Cabal-syntax = lself.Cabal-syntax_3_10_3_0;
+          Cabal = lself.Cabal_3_10_3_0;
         };
       in
       lib.mapAttrs (_: pkg: doDistribute (pkg.overrideScope hls_overlay)) {
         haskell-language-server = allowInconsistentDependencies super.haskell-language-server;
-        fourmolu = super.fourmolu;
-        ormolu = super.ormolu;
-        hlint = super.hlint;
-        stylish-haskell = super.stylish-haskell;
+        fourmolu = doJailbreak self.fourmolu_0_14_0_0; # ansi-terminal, Diff
+        ormolu = doJailbreak self.ormolu_0_7_2_0; # ansi-terminal
+        hlint = self.hlint_3_6_1;
+        stylish-haskell = self.stylish-haskell_0_14_5_0;
       }
     )
     haskell-language-server
@@ -139,6 +159,9 @@ in
     self.foldable1-classes-compat
     self.OneTuple
   ] super.base-compat-batteries;
+
+  # Tests require nothunks < 0.3 (conflicting with Stackage) for GHC < 9.8
+  aeson = dontCheck super.aeson;
 
   # Too strict lower bound on base
   primitive-addr = doJailbreak super.primitive-addr;

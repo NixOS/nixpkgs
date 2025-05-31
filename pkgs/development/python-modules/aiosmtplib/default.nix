@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aiosmtplib";
-  version = "4.0.0";
+  version = "4.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "cole";
     repo = "aiosmtplib";
     tag = "v${version}";
-    hash = "sha256-Bj5wkNaNm9ojjffsS4nNKUucwbitvApIK1Ux88MSOoE=";
+    hash = "sha256-DHZyed94XgixMTeKQ7Lj4oykL42HMmEMSdNGRHCiRvM=";
   };
 
   build-system = [ hatchling ];

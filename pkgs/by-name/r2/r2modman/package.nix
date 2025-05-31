@@ -15,18 +15,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "r2modman";
-  version = "3.1.55";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "ebkr";
     repo = "r2modmanPlus";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-gFQzZUuKEMcD34OlRuNNA2edzs2tQXm8hl3r6PIEUrE=";
+    hash = "sha256-RCMb9NaGzFRV2sXBxeb9G9pHmKf66/wwlNrpKIUE2iQ=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-VXlFB7hT+aL3yufJ/Ar7FMdrk2Iptf5rdvagAop00lk=";
+    hash = "sha256-F+TYP8F/2YAubeBIFMXlhNjjAPVTPMkZ+oH6UVt/gbs=";
   };
 
   patches = [

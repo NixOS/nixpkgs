@@ -5,7 +5,7 @@
   version ? null,
 }:
 
-mkCoqDerivation rec {
+mkCoqDerivation {
   pname = "semantics";
   owner = "coq-community";
   releaseRev = v: "v${v}";

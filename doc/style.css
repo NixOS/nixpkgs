@@ -7,25 +7,29 @@ body {
     margin: 0;
 }
 
-.book {
+.book,
+.appendix {
     margin: auto;
     width: 100%;
 }
 
 @media screen and (min-width: 768px) {
-    .book {
+    .book,
+    .appendix {
         max-width: 46rem;
     }
 }
 
 @media screen and (min-width: 992px) {
-    .book {
+    .book,
+    .appendix {
         max-width: 60rem;
     }
 }
 
 @media screen and (min-width: 1200px) {
-    .book {
+    .book,
+    .appendix {
         max-width: 73rem;
     }
 }
@@ -113,10 +117,10 @@ html {
 
 body {
     font-size: 1rem;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
     font-weight: 300;
-    color: #000000;
-    background-color: #ffffff;
+    color: var(--main-text-color);
+    background-color: var(--background);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -132,7 +136,7 @@ body {
 a {
     text-decoration: none;
     border-bottom: 1px solid;
-    color: #405d99;
+    color: var(--link-color);
 }
 
 ul {
@@ -163,7 +167,7 @@ h1 {
     line-height: 110%;
     font-size: 200%;
     margin-bottom: 1rem;
-    color: #6586c8;
+    color: var(--heading-color);
 }
 
 h2 {
@@ -171,7 +175,7 @@ h2 {
     line-height: 110%;
     font-size: 170%;
     margin-bottom: 0.625rem;
-    color: #6586c8;
+    color: var(--heading-color);
 }
 
 h2:not(:first-child) {
@@ -183,7 +187,7 @@ h3 {
     line-height: 110%;
     margin-bottom: 1rem;
     font-size: 150%;
-    color: #6586c8;
+    color: var(--heading-color);
 }
 
 .note h3,
@@ -199,7 +203,7 @@ h4 {
     line-height: 110%;
     margin-bottom: 1rem;
     font-size: 140%;
-    color: #6586c8;
+    color: var(--heading-color);
 }
 
 h5 {
@@ -207,14 +211,14 @@ h5 {
     line-height: 110%;
     margin-bottom: 1rem;
     font-size: 130%;
-    color: #6a6a6a;
+    color: var(--small-heading-color);
 }
 
 h6 {
     font-weight: 800;
     line-height: 110%;
     margin-bottom: 1rem;
-    font-size: 120%
+    font-size: 120%;
 }
 
 strong {
@@ -226,13 +230,13 @@ p {
     margin-bottom: 1rem;
 }
 
-dt>*:first-child,
-dd>*:first-child {
+dt > *:first-child,
+dd > *:first-child {
     margin-top: 0;
 }
 
-dt>*:last-child,
-dd>*:last-child {
+dt > *:last-child,
+dd > *:last-child {
     margin-bottom: 0;
 }
 
@@ -256,8 +260,8 @@ div.appendix .programlisting {
     border-radius: 0.5rem;
     padding: 1rem;
     overflow: auto;
-    background: #f2f8fd;
-    color: #000000;
+    background: var(--codeblock-background);
+    color: var(--codeblock-text-color);
 }
 
 div.book .note,
@@ -277,47 +281,46 @@ div.appendix .important {
     background: #f4f4f4;
 }
 
-div.book .note>.title,
-div.book .tip>.title,
-div.book .warning>.title,
-div.book .caution>.title,
-div.book .important>.title,
-div.appendix .note>.title,
-div.appendix .tip>.title,
-div.appendix .warning>.title,
-div.appendix .caution>.title,
-div.appendix .important>.title {
+div.book .note > .title,
+div.book .tip > .title,
+div.book .warning > .title,
+div.book .caution > .title,
+div.book .important > .title,
+div.appendix .note > .title,
+div.appendix .tip > .title,
+div.appendix .warning > .title,
+div.appendix .caution > .title,
+div.appendix .important > .title {
     font-weight: 800;
-    /* font-family: 'Overpass', serif; */
     line-height: 110%;
     margin-bottom: 1rem;
     color: inherit;
     margin-bottom: 0;
 }
 
-div.book .note> :first-child,
-div.book .tip> :first-child,
-div.book .warning> :first-child,
-div.book .caution> :first-child,
-div.book .important> :first-child,
-div.appendix .note> :first-child,
-div.appendix .tip> :first-child,
-div.appendix .warning> :first-child,
-div.appendix .caution> :first-child,
-div.appendix .important> :first-child {
+div.book .note > :first-child,
+div.book .tip > :first-child,
+div.book .warning > :first-child,
+div.book .caution > :first-child,
+div.book .important > :first-child,
+div.appendix .note > :first-child,
+div.appendix .tip > :first-child,
+div.appendix .warning > :first-child,
+div.appendix .caution > :first-child,
+div.appendix .important > :first-child {
     margin-top: 0;
 }
 
-div.book .note> :last-child,
-div.book .tip> :last-child,
-div.book .warning> :last-child,
-div.book .caution> :last-child,
-div.book .important> :last-child,
-div.appendix .note> :last-child,
-div.appendix .tip> :last-child,
-div.appendix .warning> :last-child,
-div.appendix .caution> :last-child,
-div.appendix .important> :last-child {
+div.book .note > :last-child,
+div.book .tip > :last-child,
+div.book .warning > :last-child,
+div.book .caution > :last-child,
+div.book .important > :last-child,
+div.appendix .note > :last-child,
+div.appendix .tip > :last-child,
+div.appendix .warning > :last-child,
+div.appendix .caution > :last-child,
+div.appendix .important > :last-child {
     margin-bottom: 0;
 }
 
@@ -325,16 +328,16 @@ div.book .note,
 div.book .tip,
 div.appendix .note,
 div.appendix .tip {
-    color: #5277c3;
-    background: #f2f8fd;
+    color: var(--note-text-color);
+    background: var(--note-background);
 }
 
 div.book .warning,
 div.book .caution,
 div.appendix .warning,
 div.appendix .caution {
-    color: #cc3900;
-    background-color: #fff5e1;
+    color: var(--warning-text-color);
+    background-color: var(--warning-background);
 }
 
 div.book .section,
@@ -358,8 +361,8 @@ div.appendix div.example details[open] {
     border-radius: 4px;
 }
 
-div.book div.example details>summary,
-div.appendix div.example details>summary {
+div.book div.example details > summary,
+div.appendix div.example details > summary {
     cursor: pointer;
 }
 
@@ -368,13 +371,13 @@ div.appendix br.example-break {
     display: none;
 }
 
-div.book div.footnotes>hr,
-div.appendix div.footnotes>hr {
+div.book div.footnotes > hr,
+div.appendix div.footnotes > hr {
     border-color: #d8d8d8;
 }
 
-div.book div.footnotes>br,
-div.appendix div.footnotes>br {
+div.book div.footnotes > br,
+div.appendix div.footnotes > br {
     display: none;
 }
 
@@ -443,4 +446,48 @@ div.appendix .variablelist .term {
 .hljs-meta.prompt_ {
     user-select: none;
     -webkit-user-select: none;
+}
+
+:root {
+    --background: #fff;
+    --main-text-color: #000;
+    --link-color: #405d99;
+    --heading-color: #6586c8;
+    --small-heading-color: #6a6a6a;
+    --note-text-color: #5277c3;
+    --note-background: #f2f8fd;
+    --warning-text-color: #cc3900;
+    --warning-background: #fff5e1;
+    --codeblock-background: #f2f8fd;
+    --codeblock-text-color: #000;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background: #242424;
+        --main-text-color: #fff;
+        --link-color: #6586c8;
+        --small-heading-color: #fff;
+        --note-background: none;
+        --warning-background: none;
+        --codeblock-background: #393939;
+        --codeblock-text-color: #fff;
+    }
+
+    div.book .note,
+    div.book .tip,
+    div.appendix .note,
+    div.appendix .tip,
+    div.book .warning,
+    div.book .caution,
+    div.appendix .warning,
+    div.appendix .caution {
+        border: 2px solid;
+        font-weight: 400;
+    }
+}
+
+@font-face {
+    font-family: Roboto;
+    src: url(Roboto.ttf);
 }

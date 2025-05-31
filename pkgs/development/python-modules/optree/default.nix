@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "optree";
-  version = "0.14.0";
+  version = "0.14.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "metaopt";
     repo = "optree";
     tag = "v${version}";
-    hash = "sha256-etFWoUmD4MoXrR3caIxEtLLSkcSngCOtUh/M/2SA958=";
+    hash = "sha256-5PIe/mXPNohwM0oNT/zSPmNUycjXuujtIFCki5t7V1I=";
   };
 
   dontUseCmakeConfigure = true;

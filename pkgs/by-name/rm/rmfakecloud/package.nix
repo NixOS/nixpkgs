@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "rmfakecloud";
-  version = "0.0.23";
+  version = "0.0.24";
 
   src = fetchFromGitHub {
     owner = "ddvk";
     repo = "rmfakecloud";
     rev = "v${version}";
-    hash = "sha256-XlKqh6GKGreWLPjS8XfEUJCMMxiOw8pP2qX8otD+RCo=";
+    hash = "sha256-ZsYq1+Bb6SyMGdbiy5UzanDiUiFOt4uhttiPKC0ESis=";
   };
 
-  vendorHash = "sha256-9tfxE03brUvCYusmewiqNpCkKyIS9qePqylrzDWrJLY=";
+  vendorHash = "sha256-S2P80uhX86IVUVEoR4tZ7e6qMe7CK+6bmmjBgjXGZmo=";
 
   # if using webUI build it
   # use env because of https://github.com/NixOS/nixpkgs/issues/358844

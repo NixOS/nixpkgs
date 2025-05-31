@@ -7,7 +7,6 @@
   qtwebsockets,
   minizinc,
   makeWrapper,
-  Cocoa,
 }:
 
 let
@@ -19,13 +18,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "minizinc-ide";
-  version = "2.8.7";
+  version = "2.9.2";
 
   src = fetchFromGitHub {
     owner = "MiniZinc";
     repo = "MiniZincIDE";
     rev = version;
-    hash = "sha256-mlLW7RHwO+VHWJdKhDjIWYoRpdTrt7QpPKp0EiHGkEs=";
+    hash = "sha256-gUsv4peZhWrwujRloNisuSf/0Wx5W5xRusAHJCx0wNA=";
     fetchSubmodules = true;
   };
 
@@ -36,7 +35,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtbase
     qtwebsockets
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+  ];
 
   sourceRoot = "${src.name}/MiniZincIDE";
 

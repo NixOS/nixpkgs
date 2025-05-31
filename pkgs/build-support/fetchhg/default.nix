@@ -16,7 +16,7 @@
 if hash != null && sha256 != null then
   throw "Only one of sha256 or hash can be set"
 else
-  # TODO: statically check if mercurial as the https support if the url starts woth https.
+  # TODO: statically check if mercurial as the https support if the url starts with https.
   stdenvNoCC.mkDerivation {
     name = "hg-archive" + (lib.optionalString (name != null) "-${name}");
     builder = ./builder.sh;

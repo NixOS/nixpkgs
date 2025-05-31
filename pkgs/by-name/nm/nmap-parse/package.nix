@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "nmap-parse";
   version = "0-unstable-2022-09-26";
   format = "other";

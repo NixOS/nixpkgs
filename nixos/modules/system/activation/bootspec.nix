@@ -111,6 +111,8 @@ in
             Enable this option if you want to ascertain that your documents are correct
     '';
 
+    package = lib.mkPackageOption pkgs "bootspec" { };
+
     extensions = lib.mkOption {
       # NOTE(RaitoBezarius): this is not enough to validate: extensions."osRelease" = drv; those are picked up by cue validation.
       type = lib.types.attrsOf lib.types.anything; # <namespace>: { ...namespace-specific fields }

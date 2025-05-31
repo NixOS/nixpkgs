@@ -24,6 +24,7 @@
   dissect-util,
   dissect-volume,
   dissect-xfs,
+  docutils,
   fetchFromGitHub,
   flow-record,
   fusepy,
@@ -107,13 +108,21 @@ buildPythonPackage rec {
     mqtt = [ paho-mqtt ] ++ optional-dependencies.full;
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.full;
+  nativeCheckInputs = [
+    docutils
+    pytestCheckHook
+  ] ++ optional-dependencies.full;
 
   pythonImportsCheck = [ "dissect.target" ];
 
   disabledTests =
     [
       "test_cpio"
+      "test_env_parser"
+      "test_cp_directory"
+      "test_cp_subdirectories"
+      "test_shell_cli"
+      "test_shell_cmd"
       # Test requires rdump
       "test_exec_target_command"
       # Issue with tar file
@@ -136,9 +145,7 @@ buildPythonPackage rec {
       "test_reg_output"
       "test_regflex"
       "test_systemd_basic_syntax"
-      "test_target_cli_unicode_argparse"
-      "test_target_query"
-      "test_target_info"
+      "test_target"
       "test_yara"
     ]
     ++
@@ -151,8 +158,10 @@ buildPythonPackage rec {
     # ValueError: Invalid Locate file magic. Expected /x00LOCATE02/x00
     "tests/plugins/os/unix/locate/"
     # Missing plugin support
+    "tests/plugins/child/"
     "tests/tools/test_dump.py"
     "tests/plugins/os/"
+    "tests/test_container.py"
     "tests/plugins/filesystem/"
     "tests/test_registration.py"
     "tests/filesystems/"

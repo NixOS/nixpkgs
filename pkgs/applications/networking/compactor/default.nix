@@ -5,7 +5,7 @@
   asciidoctor,
   autoreconfHook,
   pkg-config,
-  boost,
+  boost186,
   libctemplate,
   libmaxminddb,
   libpcap,
@@ -39,6 +39,9 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./patches/add-a-space-after-type-in-check-response-opt-sh.patch
+
+    # https://github.com/dns-stats/compactor/pull/91
+    ./patches/update-golden-cbor2diag-output.patch
   ];
 
   nativeBuildInputs = [
@@ -47,7 +50,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
   buildInputs = [
-    boost
+    boost186
     libctemplate
     libmaxminddb
     libpcap
@@ -69,10 +72,11 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-boost-libdir=${boost.out}/lib"
-    "--with-boost=${boost.dev}"
+    "--with-boost-libdir=${boost186.out}/lib"
+    "--with-boost=${boost186.dev}"
   ];
   enableParallelBuilding = true;
+  enableParallelInstalling = false; # race conditions when installing
 
   doCheck = !stdenv.hostPlatform.isDarwin; # check-dnstap.sh failing on Darwin
   nativeCheckInputs = [

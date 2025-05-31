@@ -9,6 +9,7 @@
   stdenv,
   cmake,
   ninja,
+  cubeb,
 }:
 
 {
@@ -25,7 +26,7 @@
           # Some files are filled by using Git commands; it requires deepClone.
           # More info at `checkout_ref` function in nix-prefetch-git.
           # However, `.git` is a bit nondeterministic (and Git itself makes no
-          # guarrantees whatsoever).
+          # guarantees whatsoever).
           # Then, in order to enhance reproducibility, what we will do here is:
           #
           # - Execute the desired Git commands;
@@ -162,5 +163,16 @@
       license = lib.licenses.mit;
       platforms = lib.platforms.linux;
     };
+  });
+
+  cubeb = cubeb.overrideAttrs (old: {
+    pname = "cubeb-patched-for-duckstation";
+    patches = (old.patches or [ ]) ++ [
+      (fetchpatch {
+        url = "https://github.com/PCSX2/pcsx2/commit/430e31abe4a9e09567cb542f1416b011bb9b6ef9.patch";
+        stripLen = 2;
+        hash = "sha256-bbH0c1X3lMeX6hfNKObhcq5xraFpicFV3mODQGYudvQ=";
+      })
+    ];
   });
 }

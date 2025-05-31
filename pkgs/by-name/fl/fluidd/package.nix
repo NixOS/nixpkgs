@@ -1,28 +1,33 @@
-{ lib, stdenvNoCC, fetchurl, unzip, nixosTests }:
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  replaceVars,
+  nixosTests,
+}:
 
-stdenvNoCC.mkDerivation rec {
+buildNpmPackage rec {
   pname = "fluidd";
-  version = "1.31.4";
+  version = "1.34.2";
 
-  src = fetchurl {
-    name = "fluidd-v${version}.zip";
-    url = "https://github.com/fluidd-core/fluidd/releases/download/v${version}/fluidd.zip";
-    sha256 = "sha256-gqwVZg37pZA+XjT3FpTMYkrOIT1KKUN6upg7e1vh1t0=";
+  src = fetchFromGitHub {
+    owner = "fluidd-core";
+    repo = "fluidd";
+    tag = "v${version}";
+    hash = "sha256-DbuUAHsRwAiXTGjAPxT1zEcsxNloCEFLuA62/wR4+yg=";
   };
 
-  nativeBuildInputs = [ unzip ];
+  patches = [
+    (replaceVars ./hardcode-version.patch {
+      inherit version;
+    })
+  ];
 
-  dontConfigure = true;
-  dontBuild = true;
-
-  unpackPhase = ''
-    mkdir fluidd
-    unzip $src -d fluidd
-  '';
+  npmDepsHash = "sha256-ZOsPUON9/bBvSrc432SGHEKKLl9ZVCq9/Nkr9Xxba/g=";
 
   installPhase = ''
     mkdir -p $out/share/fluidd
-    cp -r fluidd $out/share/fluidd/htdocs
+    cp -r dist $out/share/fluidd/htdocs
   '';
 
   passthru.tests = { inherit (nixosTests) fluidd; };

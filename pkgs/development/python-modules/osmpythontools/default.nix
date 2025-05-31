@@ -57,6 +57,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/mocnik-science/osm-python-tools";
     license = licenses.gpl3Only;
     changelog = "https://raw.githubusercontent.com/mocnik-science/osm-python-tools/v${version}/version-history.md";
-    maintainers = with maintainers; teams.geospatial.members ++ [ das-g ];
+    maintainers = with maintainers; [ das-g ];
+    teams = [ teams.geospatial ];
   };
 }

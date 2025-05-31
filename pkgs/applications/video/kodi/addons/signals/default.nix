@@ -26,6 +26,6 @@ buildKodiAddon rec {
     homepage = "https://github.com/ruuk/script.module.addon.signals";
     description = "Provides signal/slot mechanism for inter-addon communication";
     license = licenses.lgpl21Only;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

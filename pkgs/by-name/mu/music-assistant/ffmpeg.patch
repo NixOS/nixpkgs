@@ -1,8 +1,8 @@
 diff --git a/music_assistant/helpers/audio.py b/music_assistant/helpers/audio.py
-index dad3c5db..d1398d66 100644
+index 482ab8e8..a02fc435 100644
 --- a/music_assistant/helpers/audio.py
 +++ b/music_assistant/helpers/audio.py
-@@ -74,7 +74,7 @@ async def crossfade_pcm_parts(
+@@ -80,7 +80,7 @@ async def crossfade_pcm_parts(
          await outfile.write(fade_out_part)
      args = [
          # generic args
@@ -11,7 +11,7 @@ index dad3c5db..d1398d66 100644
          "-hide_banner",
          "-loglevel",
          "quiet",
-@@ -135,7 +135,7 @@ async def strip_silence(
+@@ -141,7 +141,7 @@ async def strip_silence(
      reverse: bool = False,
  ) -> bytes:
      """Strip silence from begin or end of pcm audio using ffmpeg."""
@@ -20,16 +20,7 @@ index dad3c5db..d1398d66 100644
      args += [
          "-acodec",
          pcm_format.content_type.name.lower(),
-@@ -734,7 +734,7 @@ async def get_file_stream(
- async def check_audio_support() -> tuple[bool, bool, str]:
-     """Check if ffmpeg is present (with/without libsoxr support)."""
-     # check for FFmpeg presence
--    returncode, output = await check_output("ffmpeg", "-version")
-+    returncode, output = await check_output("@ffmpeg@", "-version")
-     ffmpeg_present = returncode == 0 and "FFmpeg" in output.decode()
- 
-     # use globals as in-memory cache
-@@ -789,7 +789,7 @@ async def get_silence(
+@@ -912,7 +912,7 @@ async def get_silence(
          return
      # use ffmpeg for all other encodings
      args = [
@@ -39,11 +30,11 @@ index dad3c5db..d1398d66 100644
          "-loglevel",
          "quiet",
 diff --git a/music_assistant/helpers/ffmpeg.py b/music_assistant/helpers/ffmpeg.py
-index 0405fc27..570f9157 100644
+index 7c1c8d83..501a7370 100644
 --- a/music_assistant/helpers/ffmpeg.py
 +++ b/music_assistant/helpers/ffmpeg.py
-@@ -213,7 +213,7 @@ def get_ffmpeg_args(  # noqa: PLR0915
- 
+@@ -218,7 +218,7 @@ def get_ffmpeg_args(
+         extra_args = []
      # generic args
      generic_args = [
 -        "ffmpeg",
@@ -51,11 +42,20 @@ index 0405fc27..570f9157 100644
          "-hide_banner",
          "-loglevel",
          loglevel,
+@@ -370,7 +370,7 @@ async def check_ffmpeg_version() -> None:
+     """Check if ffmpeg is present (with libsoxr support)."""
+     # check for FFmpeg presence
+     try:
+-        returncode, output = await check_output("ffmpeg", "-version")
++        returncode, output = await check_output("@ffmpeg@", "-version")
+     except FileNotFoundError:
+         raise AudioError(
+             "FFmpeg binary is missing from system. "
 diff --git a/music_assistant/helpers/tags.py b/music_assistant/helpers/tags.py
-index 55def74b..7c26e13d 100644
+index 06c8bcb5..a703aacd 100644
 --- a/music_assistant/helpers/tags.py
 +++ b/music_assistant/helpers/tags.py
-@@ -387,7 +387,7 @@ async def parse_tags(input_file: str, file_size: int | None = None) -> AudioTags
+@@ -438,7 +438,7 @@ def parse_tags(input_file: str, file_size: int | None = None) -> AudioTags:
      Input_file may be a (local) filename or URL accessible by ffmpeg.
      """
      args = (
@@ -64,7 +64,7 @@ index 55def74b..7c26e13d 100644
          "-hide_banner",
          "-loglevel",
          "fatal",
-@@ -448,7 +448,7 @@ async def get_embedded_image(input_file: str) -> bytes | None:
+@@ -553,7 +553,7 @@ async def get_embedded_image(input_file: str) -> bytes | None:
      Input_file may be a (local) filename or URL accessible by ffmpeg.
      """
      args = (

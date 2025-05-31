@@ -6,7 +6,7 @@
   sdcc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sigrok-firmware-fx2lafw";
   version = "0.1.7-unstable-2024-02-03";
 

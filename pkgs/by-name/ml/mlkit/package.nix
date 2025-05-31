@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, mlton }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  mlton,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mlkit";
@@ -11,11 +17,21 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-0nAQHBcQgGdcWd4SFhDon7I0zi5U+YRTdGvG78tri6A=";
   };
 
-  nativeBuildInputs = [ autoreconfHook mlton ];
+  nativeBuildInputs = [
+    autoreconfHook
+    mlton
+  ];
 
-  buildFlags = [ "mlkit" "mlkit_libs" ];
+  buildFlags = [
+    "mlkit"
+    "mlkit_libs"
+  ];
 
   doCheck = true;
+
+  # MLKit intentionally has some of these in its test suite.
+  # Since the test suite is available in `$out/share/mlkit/test`, we must disable this check.
+  dontCheckForBrokenSymlinks = true;
 
   checkPhase = ''
     runHook preCheck

@@ -3,6 +3,7 @@
   rustPlatform,
   fetchCrate,
   perl,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,14 +21,11 @@ rustPlatform.buildRustPackage rec {
 
   nativeCheckInputs = [
     perl
+    writableTmpDirAsHomeHook
   ];
   # FIXME: remove patch when upstream version of rustc-serialize is updated
   # https://github.com/NixOS/nixpkgs/pull/310673
   cargoPatches = [ ./rustc-serialize-fix.patch ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   meta = with lib; {
     description = "Small command-line note-taking app";

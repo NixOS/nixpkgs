@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "stp";
-    repo = pname;
+    repo = "minisat";
     rev = "releases/${version}";
     sha256 = "14vcbjnlia00lpyv2fhbmw3wbc9bk9h7bln9zpyc3nwiz5cbjz4a";
   };
@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Compact and readable SAT solver";
     maintainers = with maintainers; [
-      gebner
       raskin
     ];
     platforms = platforms.unix;

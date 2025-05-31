@@ -1,12 +1,10 @@
 {
   lib,
   fetchCrate,
-  darwin,
   rustPlatform,
   pkg-config,
   openssl,
   nix-update-script,
-  stdenv,
   testers,
   talecast,
 }:
@@ -27,7 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+  ];
 
   passthru = {
     updateScript = nix-update-script { };

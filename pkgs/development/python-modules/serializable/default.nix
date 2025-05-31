@@ -7,14 +7,14 @@
   typechecks,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "serializable";
   version = "unstable-2023-07-13";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "iskandr";
-    repo = pname;
+    repo = "serializable";
     # See https://github.com/iskandr/serializable/issues/7. As of 2023-07-13,
     # they do no have version tags.
     rev = "ed309a6f8f2590b525fc0f93c00549223c8c944f";

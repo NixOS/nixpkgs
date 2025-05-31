@@ -19,7 +19,7 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "subtitleeditor";
   version = "unstable-2019-11-30";
 

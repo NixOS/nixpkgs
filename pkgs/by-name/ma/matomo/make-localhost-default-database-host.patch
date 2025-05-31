@@ -1,8 +1,8 @@
 diff --git a/plugins/Installation/FormDatabaseSetup.php b/plugins/Installation/FormDatabaseSetup.php
-index 74de2535b4..bc172ad0eb 100644
+index 97c7e74460..d70e83d155 100644
 --- a/plugins/Installation/FormDatabaseSetup.php
 +++ b/plugins/Installation/FormDatabaseSetup.php
-@@ -82,7 +82,7 @@ class FormDatabaseSetup extends QuickForm2
+@@ -96,7 +96,7 @@ class FormDatabaseSetup extends QuickForm2
  
  
          $defaults = array(
@@ -10,4 +10,4 @@ index 74de2535b4..bc172ad0eb 100644
 +            'host'          => 'localhost',
              'type'          => $defaultDatabaseType,
              'tables_prefix' => 'matomo_',
-         );
+             'schema'        => 'Mysql',

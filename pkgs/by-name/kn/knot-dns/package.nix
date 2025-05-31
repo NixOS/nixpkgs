@@ -33,11 +33,11 @@
 
 stdenv.mkDerivation rec {
   pname = "knot-dns";
-  version = "3.4.4";
+  version = "3.4.6";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "sha256-59nW3pfyG/M+kHvZhqQDgCXzlIea8KX9GXhyA6w7ITE=";
+    sha256 = "sha256-0ZxaH/lLTyYCfWNd4Qjb/Ij1ZSvobMs7qaRO6b4OWDk=";
   };
 
   outputs = [
@@ -100,6 +100,8 @@ stdenv.mkDerivation rec {
     "-O2"
     "-DNDEBUG"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   doCheck = true;
   checkFlags = [ "V=1" ]; # verbose output in case some test fails

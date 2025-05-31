@@ -3,16 +3,16 @@
   dns,
   dns-client,
   lwt,
-  mirage-clock,
-  mirage-time,
-  mirage-crypto-rng-mirage,
+  mirage-sleep,
+  mirage-mtime,
+  mirage-ptime,
+  mirage-crypto-rng,
   domain-name,
   ipaddr,
   ca-certs-nss,
   happy-eyeballs,
   happy-eyeballs-mirage,
   tcpip,
-  tls,
   tls-mirage,
 }:
 
@@ -25,14 +25,14 @@ buildDunePackage {
     domain-name
     ipaddr
     lwt
-    mirage-crypto-rng-mirage
-    mirage-time
-    mirage-clock
+    mirage-crypto-rng
+    mirage-sleep
+    mirage-mtime
+    mirage-ptime
     ca-certs-nss
     happy-eyeballs
     happy-eyeballs-mirage
     tcpip
-    tls
     tls-mirage
   ];
   doCheck = true;

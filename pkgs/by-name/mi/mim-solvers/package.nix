@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mim-solvers";
-  version = "0.0.5";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "machines-in-motion";
     repo = "mim_solvers";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-XV8EJqCOTYqljZe2PQvnhIaPUOJ+bBjRIoshdeqZycA=";
+    hash = "sha256-jUL/kyXKODpcCURG7e7/qNarvwm4+EnzZRL2Wix5Jbs=";
   };
 
   # eigenpy is not used without python support
@@ -51,6 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
       (lib.cmakeBool "BUILD_WITH_PROXSUITE" true)
     ]
+    ++ lib.optional (stdenv.hostPlatform.isDarwin) (
+      lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'py-test-clqr-osqp'"
+    )
     ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) (
       lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'test_solvers'"
     );

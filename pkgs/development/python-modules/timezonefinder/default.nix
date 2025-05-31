@@ -14,16 +14,16 @@
 
 buildPythonPackage rec {
   pname = "timezonefinder";
-  version = "6.5.7";
+  version = "6.5.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "jannikmi";
     repo = "timezonefinder";
     tag = version;
-    hash = "sha256-Jo3sOFbmy+NKPL0+21rZQUXIC9WpVT1D3X2sxTC89jY=";
+    hash = "sha256-LkGDR8nSGfRiBxSXugauGhe3+8RsLRPWU3oE+1c5iCk=";
   };
 
   build-system = [
@@ -45,6 +45,11 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "timezonefinder" ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-warn '"poetry-core>=1.0.0,<2.0.0"' '"poetry-core>=1.0.0"'
+  '';
 
   preCheck = ''
     # Some tests need the CLI on the PATH

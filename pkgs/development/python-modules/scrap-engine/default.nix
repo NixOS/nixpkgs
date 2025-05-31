@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "scrap-engine";
-  version = "1.4.2";
+  version = "1.4.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "scrap_engine";
     inherit version;
-    hash = "sha256-9jiStwFD5vhPSxWsEVmHOvfRgNgVOUvlzAa1Rmf+faE=";
+    hash = "sha256-dNMOS8vYTMsIu28PLt2jhHjL+fSUgdb91V2HsKAjxOo=";
   };
 
   build-system = [

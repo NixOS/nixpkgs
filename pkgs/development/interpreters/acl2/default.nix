@@ -6,7 +6,7 @@
   fetchpatch,
   runCommandLocal,
   makeWrapper,
-  substituteAll,
+  replaceVars,
   sbcl,
   bash,
   which,
@@ -52,8 +52,7 @@ stdenv.mkDerivation rec {
   libipasir = callPackage ./libipasirglucose4 { };
 
   patches = [
-    (substituteAll {
-      src = ./0001-Fix-some-paths-for-Nix-build.patch;
+    (replaceVars ./0001-Fix-some-paths-for-Nix-build.patch {
       libipasir = "${libipasir}/lib/${libipasir.libname}";
       libssl = "${lib.getLib openssl}/lib/libssl${stdenv.hostPlatform.extensions.sharedLibrary}";
       libcrypto = "${lib.getLib openssl}/lib/libcrypto${stdenv.hostPlatform.extensions.sharedLibrary}";

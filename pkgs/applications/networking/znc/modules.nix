@@ -33,7 +33,7 @@ let
 in
 {
 
-  backlog = zncDerivation rec {
+  backlog = zncDerivation {
     pname = "znc-backlog";
     version = "unstable-2017-06-13";
     module_name = "backlog";

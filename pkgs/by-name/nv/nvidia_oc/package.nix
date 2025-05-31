@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nvidia_oc";
-  version = "0.1.18";
+  version = "0.1.20";
 
   src = fetchFromGitHub {
     owner = "Dreaming-Codes";
     repo = "nvidia_oc";
     tag = version;
-    hash = "sha256-4dXdOwo7RidYEwKkoJp3+IvkGcXuS+irRbOlsfOKqIQ=";
+    hash = "sha256-2BijC+LDZJKEheZVlqG+EP6+/GSRLNQfxPEUKCY8lfU=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-CxiKkm4NyYtKqSf/FtE7Pp3myCYxMMaV0h3Khd6HgTY=";
+  cargoHash = "sha256-Xt+0clazawNvc9iIX6PR76NlyuJnjCTMkI/k2JzJ6nw=";
 
   nativeBuildInputs = [
     autoAddDriverRunpath
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
 
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Simple command line tool to overclock Nvidia GPUs using the NVML library on Linux";

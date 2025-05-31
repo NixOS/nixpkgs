@@ -77,7 +77,8 @@ stdenv.mkDerivation rec {
     homepage = "https://apps.gnome.org/app/org.gnome.World.PikaBackup";
     changelog = "https://gitlab.gnome.org/World/pika-backup/-/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ] ++ lib.teams.gnome-circle.members;
+    maintainers = with maintainers; [ dotlambda ];
+    teams = [ teams.gnome-circle ];
     platforms = platforms.linux;
   };
 }

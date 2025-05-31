@@ -9,7 +9,6 @@
   openssl,
   pcre,
   nim-unwrapped-2_2 ? buildPackages.nim-unwrapped-2_2,
-  Security ? darwin.Security,
 }:
 
 let
@@ -28,7 +27,6 @@ let
 
       # Needed for any nim package that uses the standard library's
       # 'std/sysrand' module.
-      depsTargetTargetPropagated = lib.optional stdenv.hostPlatform.isDarwin Security;
 
       inherit patches;
 

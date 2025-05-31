@@ -2,29 +2,37 @@
   lib,
   stdenv,
   buildPythonPackage,
-  click,
-  coverage,
-  fetchPypi,
+  fetchFromGitHub,
+
+  # build-system
   pdm-backend,
-  procps,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
+
+  # dependencies
+  click,
+  typing-extensions,
+
+  # optional-dependencies
   rich,
   shellingham,
-  typing-extensions,
+
+  # tests
+  coverage,
+  pytest-xdist,
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
+  procps,
 }:
 
 buildPythonPackage rec {
   pname = "typer";
-  version = "0.15.1";
+  version = "0.15.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-oFiMCn+mihl4oGmBhld3j4ar5v9epqv0cvlAoIv+Two=";
+  src = fetchFromGitHub {
+    owner = "fastapi";
+    repo = "typer";
+    tag = version;
+    hash = "sha256-9YukmX16fn5u7N9K9fUqZsAzKjio4bl70gHNmsYuQxo";
   };
 
   build-system = [ pdm-backend ];
@@ -38,8 +46,8 @@ buildPythonPackage rec {
 
   optional-dependencies = {
     standard = [
-      shellingham
       rich
+      shellingham
     ];
   };
 
@@ -48,14 +56,11 @@ buildPythonPackage rec {
       coverage # execs coverage in tests
       pytest-xdist
       pytestCheckHook
+      writableTmpDirAsHomeHook
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       procps
     ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   disabledTests =
     [
@@ -71,11 +76,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "typer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for building CLI applications";
     homepage = "https://typer.tiangolo.com/";
     changelog = "https://github.com/tiangolo/typer/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ winpat ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ winpat ];
   };
 }

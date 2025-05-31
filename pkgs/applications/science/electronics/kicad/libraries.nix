@@ -28,7 +28,7 @@ let
         find $out -type f -name '*.step' | parallel 'stepreduce {} {} && zip -9 {.}.stpZ {} && rm {}'
       '';
 
-      meta = rec {
+      meta = {
         license = lib.licenses.cc-by-sa-40;
         platforms = lib.platforms.all;
       };

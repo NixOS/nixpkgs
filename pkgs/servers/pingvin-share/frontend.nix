@@ -23,7 +23,7 @@ buildNpmPackage {
   buildInputs = [ vips ];
   nativeBuildInputs = [ pkg-config ];
 
-  npmDepsHash = "sha256-J+EFv5F1twvexJHS0pcH9TQi2e6cDK3xV+iHPcuimnw=";
+  npmDepsHash = "sha256-OLlh1YLS+fKw9Mcc2y724+WyK/j80McM2nGDLf2UzPA=";
   makeCacheWritable = true;
   npmFlags = [ "--legacy-peer-deps" ];
 

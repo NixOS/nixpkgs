@@ -11,17 +11,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "fum";
-  version = "0.9.17";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "qxb3";
     repo = "fum";
     tag = "v${version}";
-    hash = "sha256-E9Z8bs5bdNcXHRJIkzcISIz8R1wnZu8sO6tXQp+5bpQ=";
+    hash = "sha256-qZGbJGotxJCxlMIRPS/hw/cfz/k8PFdVKoJtqWKXD6s=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-yrDukkbbXqS2iAdtY4WZS6VkqSbyeBXWkn2Od4+mWLw=";
+  cargoHash = "sha256-g6Nn3teRHMdlKReX3j0jkhfJEHOigDF4ghSfSYU33o8=";
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/qxb3/fum";
     changelog = "https://github.com/qxb3/fum/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ linuxmobile ];
+    maintainers = with lib.maintainers; [ FKouhai ];
     platforms = lib.platforms.linux;
     mainProgram = "fum";
   };

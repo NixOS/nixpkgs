@@ -52,7 +52,7 @@ python3Packages.buildPythonApplication rec {
     pillow
   ];
 
-  # wrapGAppsHook4 propogates gtk4 -- which provides gtk4-update-icon-cache instead
+  # wrapGAppsHook4 propagates gtk4 -- which provides gtk4-update-icon-cache instead
   postPatch = ''
     substituteInPlace meson_post_install.py \
       --replace-fail gtk-update-icon-cache gtk4-update-icon-cache

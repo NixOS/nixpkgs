@@ -7,12 +7,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pifpaf";
-  version = "3.2.3";
+  version = "3.3.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-L039ZAFnYLCU52h1SczJU0T7+1gufxQlVzQr1EPCqc8=";
+    hash = "sha256-xXkMj1sP1xXf6Ad/71BFbq8SHz/uHcaSqv6RQN0Ca1o=";
   };
 
   propagatedBuildInputs = with python3Packages; [

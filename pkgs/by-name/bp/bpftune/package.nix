@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bpftune";
-  version = "0-unstable-2025-01-17";
+  version = "0-unstable-2025-03-20";
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "bpftune";
-    rev = "3c6ce4fc0c963610b7bada0ad6bac31c43eaab2e";
-    hash = "sha256-0f9cbJgZqGlatMSCKjNsT1NniyrteRANHR1Fj8o4J0c=";
+    rev = "8c6a3ffc09265bd44ed89b75c400ef97959d1aff";
+    hash = "sha256-TQ8WaGvMcvyeZC4B9gSjJ2k5NOxpTaV4n7Qi36aA78Q=";
   };
 
   postPatch = ''

@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "strip-tags";
-  version = "0.5.1";
+  version = "0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "strip-tags";
     tag = version;
-    hash = "sha256-Oy4xii668Y37gWJlXtF0LgU+r5seZX6l2SjlqLKzaSU=";
+    hash = "sha256-K+rImwURcN6UWjmFt7Y3YLC5s07zPAT5Xqd0k+3J9/s=";
   };
 
   build-system = with python3Packages; [
@@ -32,12 +32,12 @@ python3Packages.buildPythonApplication rec {
     pyyaml
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "CLI tool for stripping tags from HTML";
     homepage = "https://github.com/simonw/strip-tags";
-    changelog = "https://github.com/simonw/strip-tags/releases/tag/${version}";
+    changelog = "https://github.com/simonw/strip-tags/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ erethon ];
     mainProgram = "strip-tags";

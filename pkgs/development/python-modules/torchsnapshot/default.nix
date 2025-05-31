@@ -68,7 +68,7 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     badPlatforms = [
-      # ModuleNotFoundError: No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
+      # test suite gets stuck and eventually times out with: "torch.distributed.DistNetworkError: The client socket has timed out after"
       lib.systems.inspect.patterns.isDarwin
     ];
   };

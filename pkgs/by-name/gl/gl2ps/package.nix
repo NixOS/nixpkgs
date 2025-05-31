@@ -8,7 +8,6 @@
   libGL,
   libGLU,
   libglut,
-  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,9 +32,6 @@ stdenv.mkDerivation rec {
       libGL
       libGLU
       libglut
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.OpenGL
     ];
 
   meta = with lib; {

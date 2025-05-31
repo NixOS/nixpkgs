@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./make_configure
   '';
 
-  # don't let the intaller gzip ppd files as we would
+  # don't let the installer gzip ppd files as we would
   # have to unzip them later in order to patch them
   configureFlags = [ "--disable-gzip-ppds" ];
 

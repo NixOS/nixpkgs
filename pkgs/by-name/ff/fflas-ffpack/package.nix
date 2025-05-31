@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "linbox-team";
-    repo = pname;
+    repo = "fflas-ffpack";
     rev = "v${version}";
     sha256 = "sha256-Eztc2jUyKRVUiZkYEh+IFHkDuPIy+Gx3ZW/MsuOVaMc=";
   };
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     description = "Finite Field Linear Algebra Subroutines";
     mainProgram = "fflas-ffpack-config";
     license = licenses.lgpl21Plus;
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
     platforms = platforms.unix;
     homepage = "https://linbox-team.github.io/fflas-ffpack/";
   };

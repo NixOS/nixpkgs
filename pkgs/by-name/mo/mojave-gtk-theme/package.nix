@@ -72,7 +72,7 @@ lib.checkListOfEnum "${pname}: button size variants" [ "standard" "small" ] butt
   themeVariants
 
   stdenvNoCC.mkDerivation
-  rec {
+  {
     inherit pname version;
 
     srcs = [ main_src ] ++ lib.optional wallpapers wallpapers_src;

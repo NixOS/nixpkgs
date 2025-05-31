@@ -19,7 +19,7 @@
   texliveSmall,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "enblend-enfuse";
   version = "unstable-2022-03-06";
 

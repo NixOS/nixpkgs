@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchzip,
   gitUpdater,
   apple-sdk_11,
   cmake,
@@ -29,7 +28,7 @@
   xcbutilkeysyms,
   xcb-util-cursor,
   gtk3,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   python3,
   curl,
   pcre,
@@ -108,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
       libXScrnSaver
       curl
       gtk3
-      webkitgtk_4_0
+      webkitgtk_4_1
       freetype
       libGL
       libusb1

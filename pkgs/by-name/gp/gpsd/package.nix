@@ -84,6 +84,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./sconstruct-env-fixes.patch
+    ./sconstrict-rundir-fixes.patch
 
     # fix build with Python 3.12
     (fetchpatch {

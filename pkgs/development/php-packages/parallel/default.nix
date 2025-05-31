@@ -6,8 +6,8 @@
 
 buildPecl {
   pname = "parallel";
-  version = "1.2.4";
-  hash = "sha256-s9W9aZpQsJLdzZ/d2E1iGDsMTAAjeWbOgWeKP6nNp0A=";
+  version = "1.2.6";
+  hash = "sha256-tFQUbRxEb7gJlec0447akrngkJ0UZqojz5QNfXqvDcA=";
   meta = {
     description = "Parallel concurrency API";
     # parallel extension requires PHP with ZTS enabled
@@ -15,6 +15,6 @@ buildPecl {
     broken = !php.ztsSupport;
     homepage = "https://pecl.php.net/package/parallel";
     license = lib.licenses.php301;
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 }

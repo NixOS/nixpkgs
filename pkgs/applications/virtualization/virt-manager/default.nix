@@ -75,6 +75,16 @@ stdenv.mkDerivation rec {
       gst_all_1.gst-plugins-good
       spice-gtk
     ];
+
+  postInstall = ''
+    if ! grep -q StartupWMClass= "$out/share/applications/virt-manager.desktop"; then
+        echo "StartupWMClass=.virt-manager-wrapped" >> "$out/share/applications/virt-manager.desktop"
+    else
+        echo "error: upstream desktop file already contains StartupWMClass=, please update Nix expr" >&2
+        exit 1
+    fi
+  '';
+
   preFixup = ''
     glib-compile-schemas $out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas
 

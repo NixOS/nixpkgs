@@ -28,6 +28,12 @@ rustPlatform.buildRustPackage rec {
     export NO_COLOR=true
   '';
 
+  patches = [
+    # Related to https://github.com/stepchowfun/typical/pull/501
+    # Commiting a slightly different patch because the upstream one doesn't apply cleanly
+    ./lifetime.patch
+  ];
+
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd typical \
       --bash <($out/bin/typical shell-completion bash) \

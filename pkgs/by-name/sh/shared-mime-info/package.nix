@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "xdg";
-    repo = pname;
+    repo = "shared-mime-info";
     rev = version;
     hash = "sha256-5eyMkfSBUOD7p8woIYTgz5C/L8uQMXyr0fhL0l23VMA=";
   };
@@ -52,7 +52,8 @@ stdenv.mkDerivation rec {
     homepage = "http://freedesktop.org/wiki/Software/shared-mime-info";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = teams.freedesktop.members ++ [ maintainers.mimame ];
+    maintainers = [ maintainers.mimame ];
+    teams = [ teams.freedesktop ];
     mainProgram = "update-mime-database";
   };
 }
