@@ -1,0 +1,13 @@
+diff --git a/configure b/configure
+index 53e90a7..cc80615 100755
+--- a/configure
++++ b/configure
+@@ -908,7 +908,7 @@ cat > conftest.$ac_ext << EOF
+ #line 909 "configure"
+ #include "confdefs.h"
+ 
+-main(){return(0);}
++int main(){return(0);}
+ EOF
+ if { (eval echo configure:914: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+   ac_cv_prog_cc_works=yes
