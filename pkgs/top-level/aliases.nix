@@ -2005,7 +2005,6 @@ mapAliases {
   vistafonts = vista-fonts; # Added 2025-02-03
   vistafonts-chs = vista-fonts-chs; # Added 2025-02-03
   vistafonts-cht = vista-fonts-cht; # Added 2025-02-03
-  vivaldi = throw "'vivaldi' has been removed due to lack of maintenance in nixpkgs"; # Added 2025-05-29
   vkBasalt = vkbasalt; # Added 2022-11-22
   vkdt-wayland = vkdt; # Added 2024-04-19
   vocal = throw "'vocal' has been archived upstream. Consider using 'gnome-podcasts' or 'kasts' instead."; # Added 2025-04-12
