@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  perl,
   coreutils,
+  perl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,20 +17,22 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Hd59b7pc6GIDvRR6EEosr/f8sKuV2q7RU7gDSaGFp3Y=";
   };
 
-  patches = [
-    ./nix-store-date.patch
+  buildInputs = [ coreutils ];
+
+  postPatch =
+    let
+      dateCmd = lib.getExe' coreutils "date";
+    in
+    ''
+      substituteInPlace src/faketime.c \
+        --replace-fail 'date_cmd = "date"' 'date_cmd = "${dateCmd}"' \
+        --replace-fail 'date_cmd = "gdate"' 'date_cmd = "${dateCmd}"'
+    '';
+
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "LIBDIRNAME=/lib"
   ];
-
-  postPatch = ''
-    patchShebangs test src
-    substituteInPlace test/functests/test_exclude_mono.sh src/faketime.c \
-      --replace-fail /bin/bash ${stdenv.shell}
-    substituteInPlace src/faketime.c \
-      --replace-fail @DATE_CMD@ ${lib.getExe' coreutils "date"}
-  '';
-
-  PREFIX = placeholder "out";
-  LIBDIRNAME = "/lib";
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.cc.isClang [
@@ -46,6 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [ perl ];
 
   doCheck = true;
+
+  preCheck = ''
+    patchShebangs test
+    substituteInPlace test/functests/test_exclude_mono.sh \
+      --replace-fail '/bin/bash' '$0'
+  '';
 
   meta = {
     description = "Report faked system time to programs without having to change the system-wide time";
