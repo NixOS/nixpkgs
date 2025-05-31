@@ -5726,7 +5726,11 @@ self: super: with self; {
 
   glom = callPackage ../development/python-modules/glom { };
 
-  glueviz = callPackage ../development/python-modules/glueviz { };
+  glue-core = callPackage ../development/python-modules/glue-core { };
+
+  glue-qt = callPackage ../development/python-modules/glue-qt { };
+
+  glue-vispy-viewers = callPackage ../development/python-modules/glue-vispy-viewers { };
 
   gluonts = callPackage ../development/python-modules/gluonts { };
 
