@@ -207,12 +207,11 @@ in
         '';
       };
 
-      claimTokenFile = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
+      claimToken = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           If set, automatically registers the agent using the given claim token
-          file.
         '';
       };
 
@@ -242,6 +241,14 @@ in
       };
     };
   };
+
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "netdata"
+      "claimTokenFile"
+    ] "This option was replaced by `services.netdata.claimToken`")
+  ];
 
   config = lib.mkIf cfg.enable {
     assertions = [
@@ -329,83 +336,66 @@ in
         }
         // lib.optionalAttrs (!cfg.enableAnalyticsReporting) {
           DO_NOT_TRACK = "1";
+        }
+        // lib.optionalAttrs (cfg.claimToken != null) {
+          NETDATA_CLAIM_TOKEN = cfg.claimToken;
         };
       restartTriggers = [
         config.environment.etc."netdata/netdata.conf".source
         config.environment.etc."netdata/conf.d".source
       ];
-      serviceConfig =
-        {
-          ExecStart = "${cfg.package}/bin/netdata -P /run/netdata/netdata.pid -D -c /etc/netdata/netdata.conf";
-          ExecReload = "${pkgs.util-linux}/bin/kill -s HUP -s USR1 -s USR2 $MAINPID";
-          ExecStartPost = pkgs.writeShellScript "wait-for-netdata-up" ''
-            while [ "$(${cfg.package}/bin/netdatacli ping)" != pong ]; do sleep 0.5; done
-          '';
+      serviceConfig = {
+        ExecStart = "${cfg.package}/bin/netdata -P /run/netdata/netdata.pid -D -c /etc/netdata/netdata.conf";
+        ExecReload = "${pkgs.util-linux}/bin/kill -s HUP -s USR1 -s USR2 $MAINPID";
+        ExecStartPost = pkgs.writeShellScript "wait-for-netdata-up" ''
+          while [ "$(${cfg.package}/bin/netdatacli ping)" != pong ]; do sleep 0.5; done
+        '';
 
-          TimeoutStopSec = cfg.deadlineBeforeStopSec;
-          Restart = "on-failure";
-          # User and group
-          User = cfg.user;
-          Group = cfg.group;
-          # Performance
-          LimitNOFILE = "30000";
-          # Runtime directory and mode
-          RuntimeDirectory = "netdata";
-          RuntimeDirectoryMode = "0750";
-          # State directory and mode
-          StateDirectory = "netdata";
-          StateDirectoryMode = "0750";
-          # Cache directory and mode
-          CacheDirectory = "netdata";
-          CacheDirectoryMode = "0750";
-          # Logs directory and mode
-          LogsDirectory = "netdata";
-          LogsDirectoryMode = "0750";
-          # Configuration directory and mode
-          ConfigurationDirectory = "netdata";
-          ConfigurationDirectoryMode = "0755";
-          # AmbientCapabilities
-          AmbientCapabilities = lib.optional isThereAnyWireGuardTunnels "CAP_NET_ADMIN";
-          # Capabilities
-          CapabilityBoundingSet = [
-            "CAP_DAC_OVERRIDE" # is required for freeipmi and slabinfo plugins
-            "CAP_DAC_READ_SEARCH" # is required for apps and systemd-journal plugin
-            "CAP_FOWNER" # is required for freeipmi plugin
-            "CAP_SETPCAP" # is required for apps, perf and slabinfo plugins
-            "CAP_SYS_ADMIN" # is required for perf plugin
-            "CAP_SYS_PTRACE" # is required for apps plugin
-            "CAP_SYS_RESOURCE" # is required for ebpf plugin
-            "CAP_NET_RAW" # is required for fping app
-            "CAP_SYS_CHROOT" # is required for cgroups plugin
-            "CAP_SETUID" # is required for cgroups and cgroups-network plugins
-            "CAP_SYSLOG" # is required for systemd-journal plugin
-          ] ++ lib.optional isThereAnyWireGuardTunnels "CAP_NET_ADMIN";
-          # Sandboxing
-          ProtectSystem = "full";
-          ProtectHome = "read-only";
-          PrivateTmp = true;
-          ProtectControlGroups = true;
-          PrivateMounts = true;
-        }
-        // (lib.optionalAttrs (cfg.claimTokenFile != null) {
-          LoadCredential = [
-            "netdata_claim_token:${cfg.claimTokenFile}"
-          ];
-
-          ExecStartPre = pkgs.writeShellScript "netdata-claim" ''
-            set -euo pipefail
-
-            if [[ -f /var/lib/netdata/cloud.d/claimed_id ]]; then
-              # Already registered
-              exit
-            fi
-
-            exec ${cfg.package}/bin/netdata-claim.sh \
-              -token="$(< "$CREDENTIALS_DIRECTORY/netdata_claim_token")" \
-              -url=https://app.netdata.cloud \
-              -daemon-not-running
-          '';
-        });
+        TimeoutStopSec = cfg.deadlineBeforeStopSec;
+        Restart = "on-failure";
+        # User and group
+        User = cfg.user;
+        Group = cfg.group;
+        # Performance
+        LimitNOFILE = "30000";
+        # Runtime directory and mode
+        RuntimeDirectory = "netdata";
+        RuntimeDirectoryMode = "0750";
+        # State directory and mode
+        StateDirectory = "netdata";
+        StateDirectoryMode = "0750";
+        # Cache directory and mode
+        CacheDirectory = "netdata";
+        CacheDirectoryMode = "0750";
+        # Logs directory and mode
+        LogsDirectory = "netdata";
+        LogsDirectoryMode = "0750";
+        # Configuration directory and mode
+        ConfigurationDirectory = "netdata";
+        ConfigurationDirectoryMode = "0755";
+        # AmbientCapabilities
+        AmbientCapabilities = lib.optional isThereAnyWireGuardTunnels "CAP_NET_ADMIN";
+        # Capabilities
+        CapabilityBoundingSet = [
+          "CAP_DAC_OVERRIDE" # is required for freeipmi and slabinfo plugins
+          "CAP_DAC_READ_SEARCH" # is required for apps and systemd-journal plugin
+          "CAP_FOWNER" # is required for freeipmi plugin
+          "CAP_SETPCAP" # is required for apps, perf and slabinfo plugins
+          "CAP_SYS_ADMIN" # is required for perf plugin
+          "CAP_SYS_PTRACE" # is required for apps plugin
+          "CAP_SYS_RESOURCE" # is required for ebpf plugin
+          "CAP_NET_RAW" # is required for fping app
+          "CAP_SYS_CHROOT" # is required for cgroups plugin
+          "CAP_SETUID" # is required for cgroups and cgroups-network plugins
+          "CAP_SYSLOG" # is required for systemd-journal plugin
+        ] ++ lib.optional isThereAnyWireGuardTunnels "CAP_NET_ADMIN";
+        # Sandboxing
+        ProtectSystem = "full";
+        ProtectHome = "read-only";
+        PrivateTmp = true;
+        ProtectControlGroups = true;
+        PrivateMounts = true;
+      };
     };
 
     systemd.enableCgroupAccounting = true;
