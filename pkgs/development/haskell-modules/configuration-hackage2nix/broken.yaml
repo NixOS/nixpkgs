@@ -5373,7 +5373,6 @@ broken-packages:
   - secureUDP # failure in job https://hydra.nixos.org/build/233215410 at 2023-09-02
   - SegmentTree # failure in job https://hydra.nixos.org/build/233216161 at 2023-09-02
   - selda-postgresql # failure in job https://hydra.nixos.org/build/245539286 at 2024-01-02
-  - selda-sqlite # failure in job https://hydra.nixos.org/build/295096791 at 2025-04-22
   - selectors # failure in job https://hydra.nixos.org/build/233227433 at 2023-09-02
   - selenium # failure in job https://hydra.nixos.org/build/233214276 at 2023-09-02
   - sel # failure in job https://hydra.nixos.org/build/255671988 at 2024-04-16
