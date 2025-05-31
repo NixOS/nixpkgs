@@ -14,18 +14,21 @@
   openjpeg,
   zlib,
   pkg-config,
+  ctestCheckHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = if enablePython then "python-gdcm" else "gdcm";
-  version = "3.0.24";
+  version = "3.0.25";
 
   src = fetchFromGitHub {
     owner = "malaterre";
     repo = "GDCM";
     tag = "v${version}";
-    hash = "sha256-Zlb6UCP4aFZOJJNhFQBBrwzst+f37gs1zaCBMTOUgZE=";
+    hash = "sha256-PYVVlSqeAZCWvnWPqqWGQIWatMfPYqnrXc7cqi8UseU=";
   };
+
+  patches = [ ./add-missing-losslylosslessarray-in-TestTransferSyntax.patch ];
 
   cmakeFlags =
     [
@@ -95,11 +98,10 @@ stdenv.mkDerivation rec {
       "TestRescaler2"
     ];
 
-  checkPhase = ''
-    runHook preCheck
-    ctest --exclude-regex '^(${lib.concatStringsSep "|" disabledTests})$'
-    runHook postCheck
-  '';
+  nativeCheckInputs = [
+    ctestCheckHook
+  ];
+
   doCheck = true;
   # note that when the test data is available to the build via `fetchSubmodules = true`,
   # a number of additional but much slower tests are enabled
