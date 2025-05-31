@@ -4936,7 +4936,7 @@ with pkgs;
     jdk = jdk8;
   };
 
-  armips = callPackage ../development/compilers/armips {
+  armips = callPackage ../by-name/ar/armips/package.nix {
     stdenv = gcc10Stdenv;
   };
 
