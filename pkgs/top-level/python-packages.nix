@@ -10736,7 +10736,11 @@ self: super: with self; {
 
   osqp = callPackage ../development/python-modules/osqp { };
 
+  osrparse = callPackage ../development/python-modules/osrparse { };
+
   oss2 = callPackage ../development/python-modules/oss2 { };
+
+  ossapi = callPackage ../development/python-modules/ossapi { };
 
   ossfs = callPackage ../development/python-modules/ossfs { };
 
@@ -18411,6 +18415,8 @@ self: super: with self; {
   typing-inspect = callPackage ../development/python-modules/typing-inspect { };
 
   typing-inspection = callPackage ../development/python-modules/typing-inspection { };
+
+  typing-utils = callPackage ../development/python-modules/typing-utils { };
 
   typing-validation = callPackage ../development/python-modules/typing-validation { };
 
