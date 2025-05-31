@@ -13643,8 +13643,6 @@ with pkgs;
 
   organicmaps = qt6Packages.callPackage ../applications/misc/organicmaps { };
 
-  vivaldi = callPackage ../applications/networking/browsers/vivaldi { };
-
   openrazer-daemon = python3Packages.toPythonApplication python3Packages.openrazer-daemon;
 
   orpie = callPackage ../applications/misc/orpie {
