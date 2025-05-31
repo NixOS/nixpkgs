@@ -2,8 +2,8 @@
   jq,
   lib,
   moreutils,
+  prettier,
   vscode-utils,
-  nodePackages,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {
@@ -19,11 +19,11 @@ vscode-utils.buildVscodeMarketplaceExtension {
     moreutils
   ];
 
-  buildInputs = [ nodePackages.prettier ];
+  buildInputs = [ prettier ];
 
   postInstall = ''
     cd "$out/$installPrefix"
-    jq '.contributes.configuration.properties."prettier.prettierPath".default = "${nodePackages.prettier}/lib/node_modules/prettier"' package.json | sponge package.json
+    jq '.contributes.configuration.properties."prettier.prettierPath".default = "${prettier}/lib/node_modules/prettier"' package.json | sponge package.json
   '';
 
   meta = {
