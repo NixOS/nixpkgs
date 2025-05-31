@@ -836,6 +836,20 @@ stdenv.mkDerivation (finalAttrs: {
       mv $out/lib/sysusers.d $out/example
     '';
 
+  doInstallCheck = true;
+
+  # check udev rules exposed by systemd
+  # can't use `udevCheckHook` here as that would introduce infinite recursion
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    ${lib.optionalString (
+      !buildLibsOnly
+    ) "$out/bin/udevadm verify --resolve-names=never --no-style $out/lib/udev/rules.d"}
+
+    runHook postInstallCheck
+  '';
+
   # Avoid *.EFI binary stripping.
   # At least on aarch64-linux strip removes too much from PE32+ files:
   #   https://github.com/NixOS/nixpkgs/issues/169693
