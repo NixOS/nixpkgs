@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     kdePackages.drumstick
   ];
-
+passthru.updateScript = nix-update-script { };
   meta = {
     description = "Kontakt MIDI Monitor";
     homepage = "https://sourceforge.net/projects/kmidimon/";
