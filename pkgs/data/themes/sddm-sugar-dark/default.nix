@@ -1,15 +1,16 @@
 {
-  pkgs,
   lib,
+  formats,
   stdenvNoCC,
+  fetchFromGitHub,
+  qt5,
   themeConfig ? null,
 }:
-
 stdenvNoCC.mkDerivation rec {
   pname = "sddm-sugar-dark";
   version = "1.2";
 
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "MarianArlt";
     repo = "sddm-sugar-dark";
     rev = "v${version}";
@@ -18,11 +19,11 @@ stdenvNoCC.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  buildInputs = with pkgs.libsForQt5.qt5; [ qtgraphicaleffects ];
+  buildInputs = with qt5; [ qtgraphicaleffects ];
 
   installPhase =
     let
-      iniFormat = pkgs.formats.ini { };
+      iniFormat = formats.ini { };
       configFile = iniFormat.generate "" { General = themeConfig; };
 
       basePath = "$out/share/sddm/themes/sugar-dark";
