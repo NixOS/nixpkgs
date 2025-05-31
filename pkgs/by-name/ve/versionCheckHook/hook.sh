@@ -5,6 +5,7 @@ _handleCmdOutput(){
         --chdir=/ \
         --argv0="$(basename "${command[0]}")" \
         $( [[ -z "$3" || "$3" = "0" ]] && echo --ignore-environment ) \
+        $(for var in $4; do echo "$var=${!var}"; done) \
         "${command[@]}" 2>&1 \
         | sed -e 's|@storeDir@/[^/ ]*/|{{storeDir}}/|g' \
         || true)"
@@ -28,6 +29,9 @@ versionCheckHook(){
     # Enable --ignore-environment by default unless explicitly disabled
     : "${versionCheckDontIgnoreEnvironment:=0}"
 
+    # Don't keep any environment variables by default
+    : "${versionCheckKeepEnvironment:=}"
+
     local cmdProgram cmdArg echoPrefix
     if [[ -z "${versionCheckProgram-}" ]]; then
         if [[ -z "${pname-}" ]]; then
@@ -47,14 +51,14 @@ versionCheckHook(){
     fi
     if [[ -z "${versionCheckProgramArg}" ]]; then
         for cmdArg in "--help" "--version"; do
-            echoPrefix="$(_handleCmdOutput "$cmdProgram" "$cmdArg" "$versionCheckDontIgnoreEnvironment")"
+            echoPrefix="$(_handleCmdOutput "$cmdProgram" "$cmdArg" "$versionCheckDontIgnoreEnvironment" "$versionCheckKeepEnvironment")"
             if [[ "$echoPrefix" == "Successfully managed to" ]]; then
                 break
             fi
         done
     else
         cmdArg="$versionCheckProgramArg"
-        echoPrefix="$(_handleCmdOutput "$cmdProgram" "$cmdArg" "$versionCheckDontIgnoreEnvironment")"
+        echoPrefix="$(_handleCmdOutput "$cmdProgram" "$cmdArg" "$versionCheckDontIgnoreEnvironment" "$versionCheckKeepEnvironment")"
     fi
     if [[ "$echoPrefix" == "Did not" ]]; then
         exit 2
