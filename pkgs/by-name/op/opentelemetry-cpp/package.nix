@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  abseil-cpp,
   cmake,
   gtest,
   protobuf,
@@ -48,9 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     nlohmann_json
   ];
 
-  propagatedBuildInputs =
-    [ abseil-cpp ]
-    ++ lib.optionals enableGrpc [
+  propagatedBuildInputs = lib.optionals enableGrpc [
       protobuf
       grpc
     ]
