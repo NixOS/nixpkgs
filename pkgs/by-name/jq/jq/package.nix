@@ -44,6 +44,11 @@ stdenv.mkDerivation rec {
     # CVE-2024-23337
     # https://github.com/jqlang/jq/commit/de21386681c0df0104a99d9d09db23a9b2a78b1e
     ./0004-Fix-signed-integer-overflow-in-jvp_array_write-and-j.patch
+
+    # CVE-2025-48060, part two
+    # Improve-performance-of-repeating-strings is only a partial fix
+    # https://github.com/jqlang/jq/commit/c6e041699d8cd31b97375a2596217aff2cfca85b
+    ./0005-Fix-heap-buffer-overflow-when-formatting-an-empty-st.patch
   ];
 
   # https://github.com/jqlang/jq/issues/2871
