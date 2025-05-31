@@ -17,7 +17,7 @@ let
     gemset = ./gemset.nix;
   };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "papertrail";
   version = (import ./gemset.nix).papertrail.version;
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     ln -s ${papertrail-env}/bin/papertrail $out/bin/papertrail
   '';
 
-  passthru.updateScript = bundlerUpdateScript "papertrail";
+  passthru.updateScript = bundlerUpdateScript pname;
 
   passthru.tests.version = testers.testVersion { package = papertrail; };
 
