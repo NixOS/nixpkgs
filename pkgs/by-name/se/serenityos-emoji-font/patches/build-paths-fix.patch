@@ -1,0 +1,23 @@
+diff --git a/main.py b/main.py
+index d8185f4..83b6cce 100644
+--- a/serenityos-emoji-font/main.py
++++ b/serenityos-emoji-font/main.py
+@@ -6,8 +6,7 @@ import subprocess
+ import unicodedata
+ from pathlib import Path
+ 
+-SERENITY_SOURCE_DIR = Path(os.environ["SERENITY_SOURCE_DIR"])
+-EMOJI_PNG_DIR = SERENITY_SOURCE_DIR / "Base/res/emoji"
++EMOJI_PNG_DIR = Path("emojis")
+ BUILD_DIR = Path("build")
+ EMOJI_SVG_DIR = BUILD_DIR / "emoji"
+ 
+@@ -72,7 +71,7 @@ def convert_images() -> None:
+     for i, svg_file in enumerate(missing_svg_files):
+         png_file = svg_to_png_file_map[svg_file]
+         logger.info(f"[{i + 1}/{len(missing_svg_files)}] Converting {png_file.name}")
+-        subprocess.call(["python3", "pixart2svg.py", str(png_file), str(svg_file)])
++        subprocess.call(["python3", "pixart2svg/pixart2svg.py", str(png_file), str(svg_file)])
+ 
+ 
+ def build_font(emoji_svg_paths: list[str]) -> None:

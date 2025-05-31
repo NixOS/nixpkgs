@@ -1,0 +1,80 @@
+diff --git a/pixart2svg.py b/pixart2svg.py
+index a542f88..0492537 100644
+--- a/pixart2svg/pixart2svg.py
++++ b/pixart2svg/pixart2svg.py
+@@ -16,15 +16,17 @@
+ # You should have received a copy of the GNU General Public License
+ # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ 
++# The changes made in this fork are a recreation of the patches in this repository: https://github.com/linusg/serenityos-emoji-font/tree/main/patches
++
+ from typing import List, Set, Tuple
+-import imageio
++import imageio.v2 as imageio
+ import numpy
+ import sys
+ 
+ 
+ def fill_block(image: numpy.ndarray, is_pixel_filled: numpy.ndarray, x: int, y: int) -> Set[Tuple[int, int]]:
+     # Flood fill algorithm
+-    pixel_color = image[y, x, :3]
++    pixel_color = image[y, x, :4]
+     color_block = [(x, y)]
+     i = 0
+     while i < len(color_block):
+@@ -34,7 +36,7 @@ def fill_block(image: numpy.ndarray, is_pixel_filled: numpy.ndarray, x: int, y:
+                 continue
+             if is_pixel_filled[y2, x2]:
+                 continue
+-            if (image[y2, x2, :3] == pixel_color).all():
++            if (image[y2, x2, :4] == pixel_color).all():
+                 color_block.append((x2, y2))
+                 is_pixel_filled[y2, x2] = True
+         i += 1
+@@ -69,42 +71,21 @@ def main(argv: str) -> int:
+         print('Usage: pixart2svg.py <input_image_file> <output_svg_file>')
+         return 1
+     input_file, output_file = argv[1], argv[2]
+-    image = imageio.imread(input_file)
+-    if len(image.shape) != 3:
+-        print('Image must be RGB')
+-        return 1
+-
+-    height, width, channels = image.shape
+-    if channels not in (3, 4):
+-        print('Image must be RGB')
+-        return 1
++    image = imageio.imread(input_file, pilmode="RGBA")
++    height, width, _ = image.shape
+ 
+     is_pixel_filled = numpy.zeros((height, width), dtype=bool)
+     with open(output_file, 'w', encoding='UTF-8') as f:
+         f.write('<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n')
+         f.write(f'<svg viewBox="0 0 {width} {height}" width="{width}" height="{height}" xmlns="http://www.w3.org/2000/svg">\n')
+-        f.write('  <style>\n')
+-        f.write('      .pixart2svg {\n')
+-        f.write('        color-interpolation: linearRGB;\n')
+-        f.write('        shape-rendering: geometricPrecision;\n')
+-        f.write('      }\n')
+-        f.write(f'    @media (min-width: {width * 2}px) and (min-height: {height * 2}px) {{\n')
+-        f.write('      /* Disable anti-aliasing when zoom level > 200%.\n')
+-        f.write('         However, there is currently no way to completely eliminate edge artifacts.\n')
+-        f.write('         See also: https://bugs.webkit.org/show_bug.cgi?id=35211 */\n')
+-        f.write('      .pixart2svg {\n')
+-        f.write('        shape-rendering: crispEdges;\n')
+-        f.write('      }\n')
+-        f.write('    }\n')
+-        f.write('  </style>\n')
+-        f.write('  <g class="pixart2svg">\n')
++        f.write('  <g>\n')
+         f.flush()
+         for x, y in sorted([(x, y) for y in range(height) for x in range(width)], key=lambda x: (x[0] + x[1], x[1], x[0])):
+             if is_pixel_filled[y, x]:
+                 continue
+             color_block = fill_block(image, is_pixel_filled, x, y)
+             path = generate_path(color_block)
+-            pixel_color = '#{:02x}{:02x}{:02x}'.format(image[y, x, 0], image[y, x, 1], image[y, x, 2])
++            pixel_color = '#{:02x}{:02x}{:02x}{:02x}'.format(image[y, x, 0], image[y, x, 1], image[y, x, 2], image[y, x, 3])
+             if len(path) == 4:
+                 assert path[0][1] == path[1][1]
+                 assert path[1][0] == path[2][0]
