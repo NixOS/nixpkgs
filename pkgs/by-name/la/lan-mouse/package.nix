@@ -8,6 +8,7 @@
   libadwaita,
   libX11,
   libXtst,
+  librsvg,
   pkg-config,
   wrapGAppsHook4,
 }:
@@ -45,10 +46,21 @@ rustPlatform.buildRustPackage rec {
     libadwaita
     libX11
     libXtst
+    librsvg
   ];
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-+UXRBYfbkb114mwDGj36oG5ZT3TQtcEzsbyZvtWTMxM=";
+
+  postInstall = ''
+    install -Dm444 de.feschber.LanMouse.desktop -t $out/share/applications
+    install -Dm444 lan-mouse-gtk/resources/de.feschber.LanMouse.svg -t $out/share/icons/hicolor/scalable/apps
+  '';
+
+  # enable support for SVG icons in GTK
+  preFixup = ''
+    gappsWrapperArgs+=(--set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE")
+  '';
 
   meta = {
     description = "Software KVM switch for sharing a mouse and keyboard with multiple hosts through the network";
