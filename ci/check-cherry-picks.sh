@@ -112,7 +112,18 @@ while read -r new_commit_sha ; do
           echo '> ```diff' >> $markdown_file
           # The output of `git range-diff` is indented with 4 spaces, which we need to match with the
           # code blocks indent to get proper syntax highlighting on GitHub.
-          $range_diff_common | tail -n +2 | sed -Ee 's/^ {4}/> /g' >> $markdown_file
+          diff="$($range_diff_common | tail -n +2 | sed -Ee 's/^ {4}/> /g')"
+          # Also limit the output to 10k bytes (and remove the last, potentially incomplete line), because
+          # GitHub comments are limited in length. The value of 10k is arbitrary with the assumption, that
+          # after the range-diff becomes a certain size, a reviewer is better off reviewing the regular diff
+          # in GitHub's UI anyway, thus treating the commit as "new" and not cherry-picked.
+          # Note: This could still lead to a too lengthy comment with multiple commits touching the limit. We
+          # consider this too unlikely to happen, to deal with explicitly.
+          max_length=10000
+          if [ "${#diff}" -gt $max_length ]; then
+            printf -v diff "%s\n\n[...truncated...]" "$(echo "$diff" | head -c $max_length | head -n-1)"
+          fi
+          echo "$diff" >> $markdown_file
           echo '> ```' >> $markdown_file
           echo "> </details>" >> $markdown_file
 
