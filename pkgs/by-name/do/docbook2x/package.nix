@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     texinfo
     libxslt
     iconv
+    opensp
   ];
   buildInputs =
     [
