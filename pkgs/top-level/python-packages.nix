@@ -5726,6 +5726,8 @@ self: super: with self; {
 
   glue-qt = callPackage ../development/python-modules/glue-qt { };
 
+  glue-vispy-viewers = callPackage ../development/python-modules/glue-vispy-viewers { };
+
   gluonts = callPackage ../development/python-modules/gluonts { };
 
   glymur = callPackage ../development/python-modules/glymur { };
