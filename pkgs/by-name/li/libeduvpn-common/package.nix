@@ -27,15 +27,15 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://raw.githubusercontent.com/eduvpn/eduvpn-common/${version}/CHANGES.md";
     description = "Code to be shared between eduVPN clients";
     homepage = "https://github.com/eduvpn/eduvpn-common";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       benneti
       jwijenbergh
     ];
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 }

@@ -37,7 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Minimalist command line knowledge base manager";
     longDescription = ''
       kb is a text-oriented minimalist command line knowledge base manager. kb
@@ -49,8 +49,8 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/gnebbia/kb";
     changelog = "https://github.com/gnebbia/kb/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ wesleyjrz ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ wesleyjrz ];
     mainProgram = "kb";
   };
 }

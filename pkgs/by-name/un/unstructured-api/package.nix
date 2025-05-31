@@ -181,11 +181,11 @@ stdenvNoCC.mkDerivation {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "open-source toolkit designed to make it easy to prepare unstructured data like PDFs, HTML and Word Documents for downstream data science tasks";
     homepage = "https://github.com/Unstructured-IO/unstructured-api";
     changelog = "https://github.com/Unstructured-IO/unstructured-api/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

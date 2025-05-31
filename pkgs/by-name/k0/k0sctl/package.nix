@@ -44,13 +44,13 @@ buildGoModule rec {
     version = "version: (devel)\ncommit: v${version}\n";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Bootstrapping and management tool for k0s clusters";
     homepage = "https://k0sproject.io/";
     changelog = "https://github.com/k0sproject/k0sctl/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "k0sctl";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       nickcao
       qjoly
     ];

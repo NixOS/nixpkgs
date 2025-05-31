@@ -11,10 +11,10 @@ rec {
 
   yarnHash = "sha256-CFPofExwhvto6FVBXdsEY/uZaVKPkWaSdfqkEV7KY70=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tandoor.dev/";
     changelog = "https://github.com/TandoorRecipes/recipes/releases/tag/${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ jvanbruegge ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ jvanbruegge ];
   };
 }

@@ -34,7 +34,7 @@ buildGoModule rec {
 
   versionCheckProgramArg = "-version";
 
-  meta = with lib; {
+  meta = {
     description = "Fast and multi-purpose HTTP toolkit";
     longDescription = ''
       httpx is a fast and multi-purpose HTTP toolkit allow to run multiple
@@ -43,8 +43,8 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/projectdiscovery/httpx";
     changelog = "https://github.com/projectdiscovery/httpx/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "httpx";
   };
 }

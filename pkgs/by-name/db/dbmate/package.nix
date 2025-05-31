@@ -19,12 +19,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Database migration tool";
     mainProgram = "dbmate";
     homepage = "https://github.com/amacneil/dbmate";
     changelog = "https://github.com/amacneil/dbmate/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ manveru ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ manveru ];
   };
 }

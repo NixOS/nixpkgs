@@ -33,13 +33,13 @@ buildGraalvmNativeImage rec {
     command = "cljfmt --version";
   };
 
-  meta = with lib; {
+  meta = {
     mainProgram = "cljfmt";
     description = "Tool for formatting Clojure code";
     homepage = "https://github.com/weavejester/cljfmt";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.epl10;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.epl10;
     changelog = "https://github.com/weavejester/cljfmt/blob/${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ sg-qwt ];
+    maintainers = with lib.maintainers; [ sg-qwt ];
   };
 }

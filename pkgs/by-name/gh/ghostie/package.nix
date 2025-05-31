@@ -38,12 +38,12 @@ rustPlatform.buildRustPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Github notifications in your terminal";
     homepage = "https://github.com/attriaayush/ghostie";
     changelog = "https://github.com/attriaayush/ghostie/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
     broken = stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin;
     mainProgram = "ghostie";
   };

@@ -32,12 +32,12 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for determining the time a print will take using the Klipper firmware";
     homepage = "https://github.com/Annex-Engineering/klipper_estimator";
     changelog = "https://github.com/Annex-Engineering/klipper_estimator/releases/tag/v${version}";
     mainProgram = "klipper_estimator";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tmarkus ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tmarkus ];
   };
 }

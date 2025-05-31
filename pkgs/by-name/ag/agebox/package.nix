@@ -22,12 +22,12 @@ buildGoModule rec {
     "-X main.Version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/slok/agebox";
     changelog = "https://github.com/slok/agebox/releases/tag/v${version}";
     description = "Age based repository file encryption gitops tool";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lesuisse ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lesuisse ];
     mainProgram = "agebox";
   };
 }

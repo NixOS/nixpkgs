@@ -45,12 +45,12 @@ buildGoModule rec {
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Build, Release and Operate Containerized Applications on AWS";
     homepage = "https://github.com/aws/copilot-cli";
     changelog = "https://github.com/aws/copilot-cli/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jiegec ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jiegec ];
     mainProgram = "copilot";
   };
 }

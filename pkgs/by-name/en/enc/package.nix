@@ -38,7 +38,7 @@ buildGoModule rec {
       --zsh <($out/bin/enc completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/life4/enc";
     changelog = "https://github.com/life4/enc/releases/tag/v${version}";
     description = "Modern and friendly alternative to GnuPG";
@@ -50,7 +50,7 @@ buildGoModule rec {
       Our goal was to make encryption available to all engineers without the need to learn a lot of new words, concepts,
       and commands. It is the most beginner-friendly CLI tool for encryption, and keeping it that way is our top priority.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ rvnstn ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rvnstn ];
   };
 }

@@ -23,15 +23,15 @@ rustPlatform.buildRustPackage rec {
     rm tests/test_cli_interactive.rs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Parser for the Windows XML Event Log (EVTX) format";
     homepage = "https://github.com/omerbenamram/evtx";
     changelog = "https://github.com/omerbenamram/evtx/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "evtx_dump";
   };
 }

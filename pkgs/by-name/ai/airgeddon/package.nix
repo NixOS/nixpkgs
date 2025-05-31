@@ -162,13 +162,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Multi-use TUI to audit wireless networks";
     mainProgram = "airgeddon";
     homepage = "https://github.com/v1s1t0r1sh3r3/airgeddon";
     changelog = "https://github.com/v1s1t0r1sh3r3/airgeddon/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -49,13 +49,13 @@ lib.checkListOfEnum "${pname}: dict-type" [ "core" "full" "small" ] [ dict-type 
       dict-type = dict-type;
     };
 
-    meta = with lib; {
+    meta = {
       description = "Lexicon for Sudachi";
       homepage = "https://github.com/WorksApplications/SudachiDict";
       changelog = "https://github.com/WorksApplications/SudachiDict/releases/tag/v${version}";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ natsukium ];
-      platforms = platforms.all;
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [ natsukium ];
+      platforms = lib.platforms.all;
       # it is a waste of space and time to build this package in hydra since it is just data
       hydraPlatforms = [ ];
     };

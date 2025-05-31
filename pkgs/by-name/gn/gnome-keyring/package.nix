@@ -117,17 +117,17 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Collection of components in GNOME that store secrets, passwords, keys, certificates and make them available to applications";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-keyring";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-keyring/-/blob/${version}/NEWS?ref_type=tags";
     license = [
       # Most of the code (some is 2Plus)
-      licenses.lgpl21Plus
+      lib.licenses.lgpl21Plus
       # Some stragglers
-      licenses.gpl2Plus
+      lib.licenses.gpl2Plus
     ];
-    teams = [ teams.gnome ];
-    platforms = platforms.linux;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 }

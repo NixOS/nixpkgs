@@ -335,12 +335,12 @@ buildDotnetModule (finalAttrs: {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
-    changelog = "https://github.com/actions/runner/releases/tag/v${version}";
+  meta = {
+    changelog = "https://github.com/actions/runner/releases/tag/v${finalAttrs.version}";
     description = "Self-hosted runner for GitHub Actions";
     homepage = "https://github.com/actions/runner";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       veehaitch
       kfollesdal
       aanderse
@@ -352,6 +352,6 @@ buildDotnetModule (finalAttrs: {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

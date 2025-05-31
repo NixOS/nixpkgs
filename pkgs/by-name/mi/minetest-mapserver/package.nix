@@ -17,16 +17,16 @@ buildGoModule rec {
 
   vendorHash = "sha256-sPqwY3c/ehrrP6aeUyRUMqCpHqBErwIXUlgoX0P99/w=";
 
-  meta = with lib; {
+  meta = {
     description = "Realtime mapserver for minetest";
     mainProgram = "mapserver";
     homepage = "https://github.com/minetest-mapserver/mapserver/blob/master/readme.md";
     changelog = "https://github.com/minetest-mapserver/mapserver/releases/tag/v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       cc-by-sa-30
     ];
-    platforms = platforms.all;
-    maintainers = with maintainers; [ gm6k ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ gm6k ];
   };
 }
