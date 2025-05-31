@@ -4937,7 +4937,7 @@ with pkgs;
   };
 
   armips = callPackage ../by-name/ar/armips/package.nix {
-    stdenv = gcc10Stdenv;
+    stdenv = clangStdenv;
   };
 
   ballerina = callPackage ../development/compilers/ballerina {
