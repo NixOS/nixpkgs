@@ -38,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-core";
-  version = "0.12.35";
+  version = "0.12.36";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     owner = "run-llama";
     repo = "llama_index";
     tag = "v${version}";
-    hash = "sha256-qBLCuQjkUNER70wJiWH6pEN4D2J9L8emGQukdlWAAYU=";
+    hash = "sha256-Wfugrzn/7Ihv3WQTNx09OaxeMG9sDk/ZVHQcZlKynRw=";
   };
 
   sourceRoot = "${src.name}/${pname}";
@@ -133,13 +133,17 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Tests require network access
+    "test_context_extraction_basic"
+    "test_context_extraction_custom_prompt"
+    "test_context_extraction_oversized_document"
+    "test_document_block_from_b64"
+    "test_document_block_from_bytes"
+    "test_document_block_from_path"
+    "test_document_block_from_url"
     "test_from_namespaced_persist_dir"
     "test_from_persist_dir"
-    "test_context_extraction_basic"
-    "test_context_extraction_oversized_document"
-    "test_context_extraction_custom_prompt"
-    "test_multiple_documents_context"
     "test_mimetype_raw_data"
+    "test_multiple_documents_context"
     # asyncio.exceptions.InvalidStateError: invalid state
     "test_workflow_context_to_dict_mid_run"
     "test_SimpleDirectoryReader"
