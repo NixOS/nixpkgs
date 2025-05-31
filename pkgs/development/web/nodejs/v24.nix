@@ -58,6 +58,20 @@ buildNodejs {
         hash = "sha256-k3h8mPgvaIYGAkGmaL+ix7kUnyLw4/PF7wXMAWrPMXo=";
         revert = true;
       })
+      # Fix builds with shared llhttp, remove in the next point release
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/ff3a028f8bf88da70dc79e1d7b7947a8d5a8548a.patch?full_index=1";
+        hash = "sha256-LJcO3RXVPnpbeuD87fiJ260m3BQXNk3+vvZkBMFUz5w=";
+      })
+      # update tests for nghttp2 1.65
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/pull/58293.diff?full_index=1";
+        hash = "sha256-dAs2gz5BKEDsaW81zbRHVJc173IFylYH9RQN0QkOXWI=";
+        includes = [
+          "lib/*"
+          "test/*"
+        ];
+      })
     ]
     ++ lib.optionals (!stdenv.buildPlatform.isDarwin) [
       # test-icu-env is failing without the reverts
