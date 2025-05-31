@@ -69,7 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
         owner = "kkm000";
         repo = "openfst";
         rev = "338225416178ac36b8002d70387f5556e44c8d05";
-        hash = "sha256-MGEUuw7ex+WcujVdxpO2Bf5sB6Z0edcAeLGqW/Lo1Hs=";
+        hash = "sha256-y1E6bQgBfYt1Co02UutOyEM2FnETuUl144tHwypiX+M=";
+        # https://github.com/kkm000/openfst/issues/59
+        postFetch = ''(cd "$out"; patch -p1 < '${./gcc14.patch}')'';
       };
     };
 
