@@ -53,11 +53,11 @@ stdenvNoCC.mkDerivation rec {
         --replace 'inkscape-version: $(INKSCAPE)' 'inkscape-version:'
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/Enthymeme/hackneyed-x11-cursors";
     description = "Scalable cursor theme that resembles Windows 3.x/NT 3.x cursors";
-    platforms = platforms.all;
-    license = licenses.mit;
-    maintainers = with maintainers; [ somasis ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ somasis ];
   };
 }
