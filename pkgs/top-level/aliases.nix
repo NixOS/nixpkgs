@@ -1526,6 +1526,7 @@ mapAliases {
   plots = throw "'plots' has been replaced by 'gnome-graphs'"; # Added 2025-02-05
   pltScheme = racket; # just to be sure
   poac = cabinpkg; # Added 2025-01-22
+  podofo010 = podofo_0_10; # Added 2025-06-01
   polkit-kde-agent = throw ''
     The top-level polkit-kde-agent alias has been removed.
 
