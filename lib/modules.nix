@@ -652,11 +652,11 @@ let
         name: _: addErrorContext (context name) (args.${name} or config._module.args.${name})
       ) (functionArgs f);
 
-      # Note: we append in the opposite order such that we can add an error
-      # context on the explicit arguments of "args" too. This update
-      # operator is used to make the "args@{ ... }: with args.lib;" notation
-      # works.
     in
+    # Note: we append in the opposite order such that we can add an error
+    # context on the explicit arguments of "args" too. This update
+    # operator is used to make the "args@{ ... }: with args.lib;" notation
+    # works.
     f (args // extraArgs);
 
   /**
@@ -1087,6 +1087,7 @@ let
       files = map (def: def.file) res.defsFinal;
       definitionsWithLocations = res.defsFinal;
       inherit (res) isDefined;
+      inherit (res.checkedAndMerged) valueMeta;
       # This allows options to be correctly displayed using `${options.path.to.it}`
       __toString = _: showOption loc;
     };
@@ -1130,7 +1131,14 @@ let
     # Type-check the remaining definitions, and merge them. Or throw if no definitions.
     mergedValue =
       if isDefined then
-        if all (def: type.check def.value) defsFinal then
+        if type.merge ? v2 then
+          # check and merge share the same closure
+          # .headError is either non-present null or an error describing string
+          if checkedAndMerged.headError or null != null then
+            throw "A definition for option `${showOption loc}' is not of type `${type.description}'. TypeError: ${checkedAndMerged.headError}"
+          else
+            checkedAndMerged.value
+        else if all (def: type.check def.value) defsFinal then
           type.merge loc defsFinal
         else
           let
@@ -1142,6 +1150,30 @@ let
         # handling.  If changed here, please change it there too.)
         throw
           "The option `${showOption loc}' was accessed but has no value defined. Try setting the option.";
+
+    ensureMergedValueEnvelope =
+      v:
+      if attrNames v == attrNames defaultCheckedAndMerged then
+        v
+      else
+        throw "Invalid 'type.merge.v2' of type: '${type.name}' must return exactly the following attributes: ${builtins.toJSON (attrNames defaultCheckedAndMerged)} but got ${builtins.toJSON (attrNames v)}";
+
+    defaultCheckedAndMerged = {
+      headError = null;
+      value = mergedValue;
+      valueMeta = { };
+    };
+
+    checkedAndMerged = ensureMergedValueEnvelope (
+      if type.merge ? v2 then
+        type.merge.v2 {
+          inherit loc;
+          defs = defsFinal;
+        }
+      else
+        defaultCheckedAndMerged
+
+    );
 
     isDefined = defsFinal != [ ];
 
