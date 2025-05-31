@@ -10236,6 +10236,21 @@ with pkgs;
   apacheHttpd_2_4 = callPackage ../servers/http/apache-httpd/2.4.nix { };
   apacheHttpd = apacheHttpd_2_4;
 
+  /**
+    Create an attribute set of packages built for the specified apache-httpd package.
+    It contains apache-httpd modules such as `auth_mellon`, `ca`, and `crl`.
+
+    # Parameters (positional)
+
+    - `apacheHttpd`: The apache-httpd package to build packages for
+    - `self`: The scope to use when using `pkgs.newScope`. This should generally be the same value as `apacheHttpd`.
+
+    # Examples
+
+    ```nix
+    myApachePackages = apacheHttpdPackagesFor apacheHttpd apacheHttpd
+    ```
+  */
   apacheHttpdPackagesFor =
     apacheHttpd: self:
     let
