@@ -111,6 +111,10 @@ in
           Enabling this and using version 545 or newer of the proprietary NVIDIA
           driver causes it to provide its own framebuffer device, which can cause
           Wayland compositors to work when they otherwise wouldn't.
+
+          This setting should not be confused with the
+          Intel "modesetting" Xorg driver (`"modesetting"` in
+          {option}`services.xserver.videoDrivers`).
         ''
         // {
           default = lib.versionAtLeast cfg.package.version "535";
@@ -200,6 +204,14 @@ in
         be specified ({option}`hardware.nvidia.prime.nvidiaBusId` and
         {option}`hardware.nvidia.prime.intelBusId` or
         {option}`hardware.nvidia.prime.amdgpuBusId`)
+
+        If you use this, it is recommended to add BOTH your Intel/AMD iGPU's
+        driver AND the `"nvidia"` driver to {option}`services.xserver.videoDrivers`,
+        for example `[ "modesetting" "nvidia" ]` or `[ "modesetting" "amdgpu" ]`.
+        Otherwise the Xorg X server will always use the NVIDIA GPU and keep it running,
+        defeating the benefits of offloading.
+        You can check this by running `nvidia-smi`; it should not show the
+        `X` process in the list.
       '';
 
       prime.offload.enableOffloadCmd = lib.mkEnableOption ''
@@ -460,10 +472,29 @@ in
           #   "nvidia" driver.
           # - Add the AllowEmptyInitialConfiguration option to the Screen section for the
           #   "nvidia" driver, in order to allow the X server to start without any outputs.
-          # - Add a separate Device section for the Intel GPU, using the "modesetting"
-          #   driver and with the configured BusID.
-          # - OR add a separate Device section for the AMD APU, using the "amdgpu"
-          #   driver and with the configures BusID.
+          # - Ad the `BusID`s to the configuration of the iGPU `Device` sections.
+          #   Note that here we do not _add_ these `Device` sections, but make that
+          #   _if_ such a `Device` section is generated on the system
+          #   (based on what's in `services.xserver.videoDrivers`), then it will
+          #   include a `BusId` setting configured below.
+          #   This means that you still have to use e.g.
+          #       services.xserver.videoDrivers = [
+          #         "modesetting"
+          #         "nvidia"
+          #       ];
+          #   or
+          #       services.xserver.videoDrivers = [
+          #         "amdgpu"
+          #         "nvidia"
+          #       ];
+          #   otherwise the "modesetting" or "amdgpu" sections will not be generated
+          #   at all, and the X process will run on the NVIDIA GPU instead of the iGPU,
+          #   thus defeating offloading because X will keep the NVIDIA GPu always on.
+          #
+          #   The Intel "modesetting" Xorg driver (in `services.xserver.videoDrivers`)
+          #   should not be confused with `hardware.nvidia.modesetting`,
+          #   which is the kernel modesetting option of the NVIDIA driver itself
+          #   (independent from Xorg).
           # - Reference that Device section from the ServerLayout section as an inactive
           #   device.
           # - Configure the display manager to run specific `xrandr` commands which will
