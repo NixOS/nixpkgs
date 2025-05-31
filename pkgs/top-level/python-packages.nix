@@ -5724,6 +5724,8 @@ self: super: with self; {
 
   glue-core = callPackage ../development/python-modules/glue-core { };
 
+  glue-qt = callPackage ../development/python-modules/glue-qt { };
+
   gluonts = callPackage ../development/python-modules/gluonts { };
 
   glymur = callPackage ../development/python-modules/glymur { };
