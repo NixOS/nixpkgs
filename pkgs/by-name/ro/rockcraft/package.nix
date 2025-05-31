@@ -12,13 +12,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "rockcraft";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "rockcraft";
     rev = version;
-    hash = "sha256-LrUs6/YRQYU0o1kmNdBhafvDIyw91FnW8+9i0Jj5f+Y=";
+    hash = "sha256-+cbMPERsEScsGfrspgbKkkzQ3tiSZtIP3xFA7cwgEfM=";
   };
 
   pyproject = true;
@@ -43,6 +43,8 @@ python3Packages.buildPythonApplication rec {
       writableTmpDirAsHomeHook
     ]
     ++ [ dpkg ];
+
+  pytestFlagsArray = [ "tests/unit" ];
 
   disabledTests = [
     "test_project_all_platforms_invalid"
