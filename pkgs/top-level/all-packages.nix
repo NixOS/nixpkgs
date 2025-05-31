@@ -9291,7 +9291,6 @@ with pkgs;
 
   place-cursor-at = haskell.lib.compose.justStaticExecutables haskellPackages.place-cursor-at;
 
-  podofo010 = callPackage ../development/libraries/podofo/0.10.x.nix { };
   podofo = podofo_0_9;
 
   poppler = callPackage ../development/libraries/poppler { lcms = lcms2; };
@@ -12007,7 +12006,7 @@ with pkgs;
   calcmysky = qt6Packages.callPackage ../applications/science/astronomy/calcmysky { };
 
   calibre = callPackage ../by-name/ca/calibre/package.nix {
-    podofo = podofo010;
+    podofo = podofo_0_10;
   };
 
   # calico-felix and calico-node have not been packaged due to libbpf, linking issues
