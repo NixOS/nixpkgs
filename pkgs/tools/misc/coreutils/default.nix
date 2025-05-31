@@ -57,6 +57,10 @@ stdenv.mkDerivation rec {
 
   patches =
     [
+      # Heap buffer overflow that's been here since coreutils 7.2 in 2009:
+      # https://www.openwall.com/lists/oss-security/2025/05/27/2
+      ./CVE-2025-5278.patch
+
       # https://lists.gnu.org/archive/html/bug-coreutils/2024-05/msg00037.html
       # This is not precisely the patch provided - this is a diff of the Makefile.in
       # after the patch was applied and autoreconf was run, since adding autoreconf
