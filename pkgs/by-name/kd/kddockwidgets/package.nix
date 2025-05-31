@@ -3,10 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  qtbase,
-  qtdeclarative,
-  qtquickcontrols2,
-  qtx11extras,
+  qt6,
   spdlog,
   fmt,
   nlohmann_json,
@@ -29,12 +26,12 @@ stdenv.mkDerivation rec {
     fmt
     nlohmann_json
   ];
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with qt6; [
     qtbase
     qtdeclarative
-    qtquickcontrols2
-    qtx11extras
   ];
+
+  cmakeFlags = [ (lib.strings.cmakeBool "KDDockWidgets_QT6" true) ];
 
   dontWrapQtApps = true;
 
@@ -45,6 +42,9 @@ stdenv.mkDerivation rec {
       gpl2Only
       gpl3Only
     ];
-    maintainers = with maintainers; [ _1000teslas ];
+    maintainers = with maintainers; [
+      _1000teslas
+      tmarkus
+    ];
   };
 }
