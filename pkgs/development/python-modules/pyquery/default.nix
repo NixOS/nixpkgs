@@ -5,8 +5,8 @@
   fetchPypi,
   lxml,
   pytestCheckHook,
-  pythonOlder,
   requests,
+  setuptools,
   webob,
   webtest,
 }:
@@ -14,22 +14,16 @@
 buildPythonPackage rec {
   pname = "pyquery";
   version = "2.0.1";
-  disabled = pythonOlder "3.7";
-
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-AZS7JwaxLQN9sSxRko/p67NrctnnGVZdq6WmxZUyL68=";
   };
 
-  # https://github.com/gawel/pyquery/issues/248
-  postPatch = ''
-    substituteInPlace tests/test_pyquery.py \
-      --replace test_selector_html skip_test_selector_html
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cssselect
     lxml
   ];
@@ -38,7 +32,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyquery" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     requests
     webob
@@ -68,6 +62,6 @@ buildPythonPackage rec {
     description = "Jquery-like library for Python";
     homepage = "https://github.com/gawel/pyquery";
     changelog = "https://github.com/gawel/pyquery/blob/${version}/CHANGES.rst";
-    license = licenses.bsd0;
+    license = licenses.bsd3;
   };
 }
