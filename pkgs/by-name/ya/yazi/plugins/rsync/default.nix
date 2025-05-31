@@ -5,7 +5,7 @@
 }:
 mkYaziPlugin {
   pname = "rsync.yazi";
-  version = "0-unstable-2025-04-12";
+  version = "0-unstable-2025-04-24";
   src = fetchFromGitHub {
     owner = "GianniBYoung";
     repo = "rsync.yazi";
