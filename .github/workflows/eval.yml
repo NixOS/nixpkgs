@@ -4,8 +4,8 @@ on:
   pull_request:
     paths:
       - .github/workflows/eval.yml
+      - .github/workflows/reviews.yml # needs eval results from the same event type
   pull_request_target:
-    types: [opened, ready_for_review, synchronize, reopened]
   push:
     # Keep this synced with ci/request-reviews/dev-branches.txt
     branches:
@@ -153,12 +153,13 @@ jobs:
           name: diff-${{ matrix.system }}
           path: diff/*
 
-  tag:
-    name: Tag
+  compare:
+    name: Comparison
     runs-on: ubuntu-24.04-arm
     needs: [ prepare, outpaths ]
     if: needs.prepare.outputs.targetSha
     permissions:
+      issues: write # needed to create *new* labels
       pull-requests: write
       statuses: write
     steps:
@@ -209,11 +210,8 @@ jobs:
           name: comparison
           path: comparison/*
 
-      - name: Build the requestReviews derivation
-        run: nix-build trusted/ci -A requestReviews
-
       - name: Labelling pull request
-        if: ${{ github.event_name == 'pull_request_target' && github.repository_owner == 'NixOS' }}
+        if: ${{ github.event_name == 'pull_request_target' }}
         env:
           GH_TOKEN: ${{ github.token }}
           REPOSITORY: ${{ github.repository }}
@@ -247,7 +245,7 @@ jobs:
           done < <(comm -13 before after)
 
       - name: Add eval summary to commit statuses
-        if: ${{ github.event_name == 'pull_request_target' && github.repository_owner == 'NixOS' }}
+        if: ${{ github.event_name == 'pull_request_target' }}
         env:
           GH_TOKEN: ${{ github.token }}
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
@@ -266,30 +264,12 @@ jobs:
             "/repos/$GITHUB_REPOSITORY/statuses/$PR_HEAD_SHA" \
             -f "context=Eval / Summary" -f "state=success" -f "description=$description" -f "target_url=$target_url"
 
-      # See ./codeowners-v2.yml, reuse the same App because we need the same permissions
-      # Can't use the token received from permissions above, because it can't get enough permissions
-      - uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
-        if: vars.OWNER_APP_ID
-        id: app-token
-        with:
-          app-id: ${{ vars.OWNER_APP_ID }}
-          private-key: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
-          permission-administration: read
-          permission-members: read
-          permission-pull-requests: write
-
-      - name: Requesting maintainer reviews
-        if: ${{ steps.app-token.outputs.token && github.repository_owner == 'NixOS' }}
-        env:
-          GH_TOKEN: ${{ github.token }}
-          REPOSITORY: ${{ github.repository }}
-          NUMBER: ${{ github.event.number }}
-          AUTHOR: ${{ github.event.pull_request.user.login }}
-          # Don't request reviewers on draft PRs
-          DRY_MODE: ${{ github.event.pull_request.draft && '1' || '' }}
-        run: |
-          # maintainers.json contains GitHub IDs. Look up handles to request reviews from.
-          # There appears to be no API to request reviews based on GitHub IDs
-          jq -r 'keys[]' comparison/maintainers.json \
-            | while read -r id; do gh api /user/"$id" --jq .login; done \
-            | GH_TOKEN=${{ steps.app-token.outputs.token }} result/bin/request-reviewers.sh "$REPOSITORY" "$NUMBER" "$AUTHOR"
+  reviewers:
+    name: Reviewers
+    # No dependency on "compare", so that it can start at the same time.
+    # We only wait for the "comparison" artifact to be available, which makes the start-to-finish time
+    # for the eval workflow considerably faster.
+    needs: [ prepare, outpaths ]
+    if: needs.prepare.outputs.targetSha
+    uses: ./.github/workflows/reviewers.yml
+    secrets: inherit

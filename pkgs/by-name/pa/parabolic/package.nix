@@ -7,6 +7,7 @@
   itstool,
   ninja,
   yelp-tools,
+  desktop-file-utils,
   pkg-config,
   libnick,
   boost,
@@ -18,6 +19,8 @@
   libxmlxx5,
   blueprint-compiler,
   qt6,
+  qlementine,
+  qlementine-icons,
   yt-dlp,
   ffmpeg,
   aria2,
@@ -31,13 +34,13 @@ assert lib.assertOneOf "uiPlatform" uiPlatform [
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "parabolic";
-  version = "2025.1.4";
+  version = "2025.5.4";
 
   src = fetchFromGitHub {
     owner = "NickvisionApps";
     repo = "Parabolic";
     tag = finalAttrs.version;
-    hash = "sha256-B8/e5urhy5tAgHNd/PR3HlNQd0M0CxgC56nArFGlQ9c=";
+    hash = "sha256-2CFV9//8gFK1TYksdy9P4nLb7kj/8Q5dr5huoAuDNRs=";
   };
 
   # Patches desktop file/dbus service bypassing wrapped executable
@@ -59,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
       pkg-config
       itstool
       yelp-tools
+      desktop-file-utils
     ]
     ++ lib.optionals (uiPlatform == "gnome") [
       wrapGAppsHook4
@@ -76,6 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (uiPlatform == "qt") [
       qt6.qtbase
       qt6.qtsvg
+      qlementine
+      qlementine-icons
     ]
     ++ lib.optionals (uiPlatform == "gnome") [
       glib
@@ -88,16 +94,28 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "UI_PLATFORM" uiPlatform)
   ];
 
+  dontWrapGApps = true;
+  dontWrapQtApps = true;
+
   preFixup =
-    lib.optionalString (uiPlatform == "gnome") "gappsWrapperArgs"
-    + lib.optionalString (uiPlatform == "qt") "qtWrapperArgs"
-    + "+=(--prefix PATH : ${
-      lib.makeBinPath [
-        aria2
-        ffmpeg
-        yt-dlp
-      ]
-    })";
+    lib.optionalString (uiPlatform == "gnome") ''
+      makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    ''
+    + lib.optionalString (uiPlatform == "qt") ''
+      makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+    ''
+    + ''
+        makeWrapperArgs+=(--prefix PATH : ${
+          lib.makeBinPath [
+            aria2
+            ffmpeg
+            yt-dlp
+          ]
+        })
+
+      wrapProgram $out/bin/org.nickvision.tubeconverter \
+        ''${makeWrapperArgs[@]}
+    '';
 
   passthru.updateScript = nix-update-script { };
 
