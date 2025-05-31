@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import dataclasses as dc
+from pathlib import Path
 import html
 import itertools
 
@@ -8,7 +9,7 @@ from typing import cast, get_args, Iterable, Literal, Sequence
 
 from markdown_it.token import Token
 
-from .utils import Freezeable
+from .utils import Freezeable, relative_path_from
 
 # FragmentType is used to restrict structural include blocks.
 FragmentType = Literal['preface', 'part', 'chapter', 'section', 'appendix']
@@ -113,6 +114,10 @@ class XrefTarget:
     """whether to drop the `path.html` from links when expanding xrefs.
        mostly useful for docbook compatibility"""
     drop_target: bool = False
+
+    def href_from(self, origin: str) -> str:
+        path = relative_path_from(origin, self.path)
+        return path if self.drop_fragment else f"{path}#{html.escape(self.id, True)}"
 
     def href(self) -> str:
         path = "" if self.drop_target else html.escape(self.path, True)

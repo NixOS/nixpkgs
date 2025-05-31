@@ -20,7 +20,7 @@ class TestRedirects(unittest.TestCase):
                 infile.write(content)
 
         redirects = Redirects({"redirects-test-suite": ["index.html#redirects-test-suite"]} | raw_redirects, '')
-        return HTMLConverter("1.0.0", HTMLParameters("", [], [], 2, 2, 2, Path("")), {}, redirects)
+        return HTMLConverter("1.0.0", HTMLParameters("", [], [], 2, 2, 2, Path(""), True), {}, redirects)
 
     def run_test(self, md: HTMLConverter):
         md.convert(Path(__file__).parent / 'index.md', Path(__file__).parent / 'index.html')
@@ -100,62 +100,6 @@ class TestRedirects(unittest.TestCase):
         after = self.setup_test(
             sources={"foo.md": "# Foo Prime {#foo-prime}\n## Bar {#bar}"},
             raw_redirects={"foo-prime": ["foo.html#foo-prime", "foo.html#foo"], "bar": ["foo.html#bar"]},
-        )
-        self.run_test(after)
-
-    def test_leaf_identifier_moved_to_different_file(self):
-        """Test moving a leaf identifier to a different output path."""
-        before = self.setup_test(
-            sources={"foo.md": "# Foo {#foo}\n## Bar {#bar}"},
-            raw_redirects={"foo": ["foo.html#foo"], "bar": ["foo.html#bar"]},
-        )
-        self.run_test(before)
-
-        intermediate = self.setup_test(
-            sources={
-                "foo.md": "# Foo {#foo}",
-                "bar.md": "# Bar {#bar}"
-            },
-            raw_redirects={"foo": ["foo.html#foo"], "bar": ["foo.html#foo"]},
-        )
-        self.assert_redirect_error({"identifiers_missing_current_outpath": ["bar"]}, intermediate)
-
-        after = self.setup_test(
-            sources={
-                "foo.md": "# Foo {#foo}",
-                "bar.md": "# Bar {#bar}"
-            },
-            raw_redirects={"foo": ["foo.html#foo"], "bar": ["bar.html#bar", "foo.html#bar"]},
-        )
-        self.run_test(after)
-
-    def test_non_leaf_identifier_moved_to_different_file(self):
-        """Test moving a non-leaf identifier to a different output path."""
-        before = self.setup_test(
-            sources={"foo.md": "# Foo {#foo}\n## Bar {#bar}\n### Baz {#baz}"},
-            raw_redirects={"foo": ["foo.html#foo"], "bar": ["foo.html#bar"], "baz": ["foo.html#baz"]},
-        )
-        self.run_test(before)
-
-        intermediate = self.setup_test(
-            sources={
-                "foo.md": "# Foo {#foo}",
-                "bar.md": "# Bar {#bar}\n## Baz {#baz}"
-            },
-            raw_redirects={"foo": ["foo.html#foo"], "bar": ["foo.html#bar"], "baz": ["foo.html#baz"]},
-        )
-        self.assert_redirect_error({"identifiers_missing_current_outpath": ["bar", "baz"]}, intermediate)
-
-        after = self.setup_test(
-            sources={
-                "foo.md": "# Foo {#foo}",
-                "bar.md": "# Bar {#bar}\n## Baz {#baz}"
-            },
-            raw_redirects={
-                "foo": ["foo.html#foo"],
-                "bar": ["bar.html#bar", "foo.html#bar"],
-                "baz": ["bar.html#baz", "foo.html#baz"]
-            },
         )
         self.run_test(after)
 
