@@ -45,6 +45,7 @@
   symlinkJoin,
   libpulseaudio,
   pcsclite,
+  sane-backends,
   glib-networking,
   llvmPackages,
   opencv4,
@@ -165,6 +166,7 @@ stdenv.mkDerivation rec {
     openssl'
     pango
     pcsclite
+    sane-backends
     speex
     (lib.getLib systemd)
     stdenv.cc.cc
