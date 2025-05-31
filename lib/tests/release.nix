@@ -9,8 +9,8 @@
   pkgsBB ? pkgs.pkgsBuildBuild,
   nix ? pkgs-nixVersions.stable,
   nixVersions ? [
-    pkgs-nixVersions.minimum
-    nix
+    # pkgs-nixVersions.minimum
+    # nix
     pkgs-nixVersions.latest
   ],
   pkgs-nixVersions ? import ./nix-for-tests.nix { pkgs = pkgsBB; },

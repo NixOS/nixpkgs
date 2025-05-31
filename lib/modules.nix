@@ -245,24 +245,22 @@ let
         };
       };
 
-      merged =
-        let
-          collected =
-            collectModules class (specialArgs.modulesPath or "") (regularModules ++ [ internalModule ])
-              (
-                {
-                  inherit
-                    lib
-                    options
-                    config
-                    specialArgs
-                    ;
-                  _class = class;
-                }
-                // specialArgs
-              );
-        in
-        mergeModules prefix (reverseList collected);
+      collected =
+        collectModules class (specialArgs.modulesPath or "") (regularModules ++ [ internalModule ])
+          (
+            {
+              inherit
+                lib
+                options
+                config
+                specialArgs
+                ;
+              _class = class;
+            }
+            // specialArgs
+          );
+
+      merged = mergeModules prefix (reverseList collected.modules);
 
       options = merged.matchedOptions;
 
@@ -358,12 +356,13 @@ let
         options = checked options;
         config = checked (removeAttrs config [ "_module" ]);
         _module = checked (config._module);
+        inherit (collected) graph;
         inherit extendModules type class;
       };
     in
     result;
 
-  # collectModules :: (class: String) -> (modulesPath: String) -> (modules: [ Module ]) -> (args: Attrs) -> [ Module ]
+  # collectModules :: (class: String) -> (modulesPath: String) -> (modules: [ Module ]) -> (args: Attrs) -> ModulesTree
   #
   # Collects all modules recursively through `import` statements, filtering out
   # all modules in disabledModules.
@@ -422,8 +421,37 @@ let
         else
           m: m;
 
+      # isDisabled :: String -> [ { disabled, file } ] -> StructuredModule -> bool
+      #
+      # Figures out whether a `StructuredModule` is disabled.
+      isDisabled =
+        modulesPath: disabledList:
+        let
+          moduleKey =
+            file: m:
+            if isString m then
+              if substring 0 1 m == "/" then m else toString modulesPath + "/" + m
+
+            else if isConvertibleWithToString m then
+              if m ? key && m.key != toString m then
+                throw "Module `${file}` contains a disabledModules item that is an attribute set that can be converted to a string (${toString m}) but also has a `.key` attribute (${m.key}) with a different value. This makes it ambiguous which module should be disabled."
+              else
+                toString m
+
+            else if m ? key then
+              m.key
+
+            else if isAttrs m then
+              throw "Module `${file}` contains a disabledModules item that is an attribute set, presumably a module, that does not have a `key` attribute. This means that the module system doesn't have any means to identify the module that should be disabled. Make sure that you've put the correct value in disabledModules: a string path relative to modulesPath, a path value, or an attribute set with a `key` attribute."
+            else
+              throw "Each disabledModules item must be a path, string, or a attribute set with a key attribute, or a value supported by toString. However, one of the disabledModules items in `${toString file}` is none of that, but is of type ${typeOf m}.";
+
+          disabledKeys = concatMap ({ file, disabled }: map (moduleKey file) disabled) disabledList;
+        in
+        structuredModule: elem structuredModule.key disabledKeys;
+
       /**
-        Collects all modules recursively into the form
+        Collects all modules recursively into a `[ StructuredModule ]` and a list of disabled modules:
 
           {
             disabled = [ <list of disabled modules> ];
@@ -483,44 +511,52 @@ let
           ) initialModules
         );
 
-      # filterModules :: String -> { disabled, modules } -> [ Module ]
+      # filterModules :: (StructuredModule: bool) -> [ StructuredModule ] -> [ Module ]
       #
-      # Filters a structure as emitted by collectStructuredModules by removing all disabled
+      # Filters a `[ StructuredModule ]` by removing all disabled
       # modules recursively. It returns the final list of unique-by-key modules
       filterModules =
-        modulesPath:
-        { disabled, modules }:
+        isDisabled: structuredModules:
         let
-          moduleKey =
-            file: m:
-            if isString m then
-              if substring 0 1 m == "/" then m else toString modulesPath + "/" + m
-
-            else if isConvertibleWithToString m then
-              if m ? key && m.key != toString m then
-                throw "Module `${file}` contains a disabledModules item that is an attribute set that can be converted to a string (${toString m}) but also has a `.key` attribute (${m.key}) with a different value. This makes it ambiguous which module should be disabled."
-              else
-                toString m
-
-            else if m ? key then
-              m.key
-
-            else if isAttrs m then
-              throw "Module `${file}` contains a disabledModules item that is an attribute set, presumably a module, that does not have a `key` attribute. This means that the module system doesn't have any means to identify the module that should be disabled. Make sure that you've put the correct value in disabledModules: a string path relative to modulesPath, a path value, or an attribute set with a `key` attribute."
-            else
-              throw "Each disabledModules item must be a path, string, or a attribute set with a key attribute, or a value supported by toString. However, one of the disabledModules items in `${toString file}` is none of that, but is of type ${typeOf m}.";
-
-          disabledKeys = concatMap ({ file, disabled }: map (moduleKey file) disabled) disabled;
-          keyFilter = filter (attrs: !elem attrs.key disabledKeys);
+          keyFilter = filter (attrs: !isDisabled attrs);
         in
         map (attrs: attrs.module) (genericClosure {
-          startSet = keyFilter modules;
+          startSet = keyFilter structuredModules;
           operator = attrs: keyFilter attrs.modules;
         });
 
+      # TODO
+      # isDisabled =
+      #   modulesPath: disableds: structuredModule:
+      #   abort "todo";
+
+      mkGraph =
+        isDisabled: structuredModules:
+        let
+          mkModuleGraph = structuredModule: {
+            disabled = isDisabled structuredModule;
+            inherit (structuredModule) key;
+            modules = map mkModuleGraph structuredModule.modules;
+          };
+        in
+        {
+          modules = lib.pipe structuredModules [
+            (filter (x: x.key != "lib/modules.nix"))
+            (map mkModuleGraph)
+          ];
+        };
     in
     modulesPath: initialModules: args:
-    filterModules modulesPath (collectStructuredModules unknownModule "" initialModules args);
+    let
+      inherit (collectStructuredModules unknownModule "" initialModules args) disabled modules;
+      isDisabled' = isDisabled modulesPath disabled;
+    in
+    # Our structure should include disabled modules.
+    # Therefore, filterModules will not be involved.
+    {
+      modules = filterModules isDisabled' modules;
+      graph = mkGraph isDisabled' modules;
+    };
 
   /**
     Wrap a module with a default location for reporting errors.
