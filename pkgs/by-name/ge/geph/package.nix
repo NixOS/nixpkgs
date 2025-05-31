@@ -1,142 +1,115 @@
 {
   lib,
-  stdenvNoCC,
   rustPlatform,
   fetchFromGitHub,
-  buildGoModule,
-  makeWrapper,
-  nodejs,
-  pnpm,
-  esbuild,
-  perl,
   pkg-config,
-  glib,
-  webkitgtk_4_0,
-  libayatana-appindicator,
-  cairo,
+  libxkbcommon,
   openssl,
+  rust-jemalloc-sys-unprefixed,
+  sqlite,
+  vulkan-loader,
+  wayland,
+  iproute2,
+  iptables,
+  libglvnd,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
-
 let
-  version = "4.99.16";
-  geph-meta = with lib; {
-    description = "Modular Internet censorship circumvention system designed specifically to deal with national filtering";
-    homepage = "https://geph.io";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ penalty1083 ];
-  };
+  binPath = lib.makeBinPath [
+    iproute2
+    iptables
+  ];
 in
-{
-  cli = rustPlatform.buildRustPackage rec {
-    pname = "geph4-client";
-    inherit version;
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "geph5";
+  version = "0.2.61";
 
-    src = fetchFromGitHub {
-      owner = "geph-official";
-      repo = pname;
-      rev = "v${version}";
-      hash = "sha256-6YWPsSRIZpvVCIGZ1z7srobDvVzLr0o2jBcB/7kbK7I=";
-    };
-
-    useFetchCargoVendor = true;
-    cargoHash = "sha256-igIYTlI3hqvlOTgdwouA9YussP9h0pOHUUTCjA2LE5U=";
-
-    nativeBuildInputs = [ perl ];
-
-    meta = geph-meta // {
-      license = with lib.licenses; [ gpl3Only ];
-    };
+  src = fetchFromGitHub {
+    owner = "geph-official";
+    repo = "geph5";
+    rev = "geph5-client-v${finalAttrs.version}";
+    hash = "sha256-qy1E5x5Fn+xwS5st6HkMrJu9nksXQQIyJf97FvNOKO4=";
   };
 
-  gui = stdenvNoCC.mkDerivation (finalAttrs: {
-    pname = "geph-gui";
-    inherit version;
+  cargoHash = "sha256-r97DsSsqp/KtgqtYQe92nz2qaOBcJF6w9ckfxpk8Cxg=";
 
-    src = fetchFromGitHub {
-      owner = "geph-official";
-      repo = "gephgui-pkg";
-      rev = "9f0d5c689c2cae67a4750a68295676f449724a98";
-      hash = "sha256-/aHd1EDrFp1kXen5xRCCl8LVlMVH0pY8buILZri81II=";
-      fetchSubmodules = true;
-    };
+  patches = [ ./test-fix.patch ];
 
-    gephgui-wry = rustPlatform.buildRustPackage {
-      pname = "gephgui-wry";
-      inherit (finalAttrs) version src;
+  postPatch = ''
+    substituteInPlace binaries/geph5-client/src/vpn/*.sh \
+      --replace-fail 'PATH=' 'PATH=${binPath}:'
+  '';
 
-      sourceRoot = "${finalAttrs.src.name}/gephgui-wry";
+  nativeBuildInputs = [
+    pkg-config
+    copyDesktopItems
+  ];
 
-      useFetchCargoVendor = true;
-      cargoHash = "sha256-pCj4SulUVEC4QTPBrPQBn5xJ+sHPs6KfjsdVRcsRapY=";
+  buildInputs = [
+    openssl
+    rust-jemalloc-sys-unprefixed
+    sqlite
+  ];
 
-      pnpmDeps = pnpm.fetchDeps {
-        inherit (finalAttrs) pname version src;
-        sourceRoot = "${finalAttrs.src.name}/gephgui-wry/gephgui";
-        hash = "sha256-0MGlsLEgugQ1wEz07ROIwkanTa8PSKwIaxNahyS1014=";
-      };
+  env = {
+    OPENSSL_NO_VENDOR = true;
+    LIBSQLITE3_SYS_USE_PKG_CONFIG = "1";
+  };
 
-      nativeBuildInputs = [
-        pkg-config
-        pnpm.configHook
-        makeWrapper
-        nodejs
-      ];
+  buildFeatures = [
+    "aws_lambda"
+    "windivert"
+  ];
 
-      buildInputs = [
-        glib
-        webkitgtk_4_0
-        libayatana-appindicator
-        cairo
-        openssl
-      ];
+  checkFlags = [
+    # Wrong test
+    "--skip=traffcount::tests::test_traffic_cleanup"
+    "--skip=traffcount::tests::test_traffic_count_basic"
+    # Requires network
+    "--skip=dns::tests::resolve_google"
+    # Never finish
+    "--skip=tests::test_blind_sign"
+    "--skip=tests::test_generate_secret_key"
+  ];
 
-      ESBUILD_BINARY_PATH = "${lib.getExe (
-        esbuild.override {
-          buildGoModule =
-            args:
-            buildGoModule (
-              args
-              // rec {
-                version = "0.15.10";
-                src = fetchFromGitHub {
-                  owner = "evanw";
-                  repo = "esbuild";
-                  rev = "v${version}";
-                  hash = "sha256-DebmLtgPrla+1UcvOHMnWmxa/ZqrugeRRKXIiJ9LYDk=";
-                };
-                vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-              }
-            );
-        }
-      )}";
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Geph5";
+      desktopName = "Geph5";
+      icon = "geph5";
+      exec = "geph5-client-gui";
+      categories = [ "Network" ];
+      comment = "Modular Internet censorship circumvention system designed specifically to deal with national filtering";
+    })
+  ];
 
-      pnpmRoot = "gephgui";
+  postInstall = ''
+    install -m 444 -D binaries/geph5-client-gui/icon.png $out/share/icons/hicolor/512x512/apps/geph5.png
+  '';
 
-      preBuild = ''
-        pushd gephgui
-        pnpm build
-        popd
-      '';
-    };
+  postFixup = ''
+    # Add required but not explicitly requested libraries
+    patchelf --add-rpath '${
+      lib.makeLibraryPath [
+        wayland
+        libxkbcommon
+        vulkan-loader
+        libglvnd
+      ]
+    }' "$out/bin/geph5-client-gui"
+  '';
 
-    dontBuild = true;
-
-    installPhase = ''
-      install -Dt $out/bin ${finalAttrs.gephgui-wry}/bin/gephgui-wry
-      install -d $out/share/icons/hicolor
-      for i in '16' '32' '64' '128' '256'
-      do
-        name=''${i}x''${i}
-        dir=$out/share/icons/hicolor
-        mkdir -p $dir
-        mv flatpak/icons/$name $dir
-      done
-      install -Dt $out/share/applications flatpak/icons/io.geph.GephGui.desktop
-      sed -i -e '/StartupWMClass/s/=.*/=gephgui-wry/' $out/share/applications/io.geph.GephGui.desktop
-    '';
-
-    meta = geph-meta // {
-      license = with lib.licenses; [ unfree ];
-    };
-  });
-}
+  meta = {
+    description = "Modular Internet censorship circumvention system designed specifically to deal with national filtering";
+    homepage = "https://github.com/geph-official/geph5";
+    changelog = "https://github.com/geph-official/geph5/releases/tag/geph5-client-v${finalAttrs.version}";
+    mainProgram = "geph5-client";
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
+      penalty1083
+      MCSeekeri
+    ];
+  };
+})
