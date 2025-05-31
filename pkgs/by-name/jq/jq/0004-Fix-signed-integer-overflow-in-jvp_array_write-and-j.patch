@@ -1,7 +1,7 @@
 From dc65d5af447f266d8a4037551e028785aab31e04 Mon Sep 17 00:00:00 2001
 From: itchyny <itchyny@cybozu.co.jp>
 Date: Wed, 21 May 2025 07:45:00 +0900
-Subject: [PATCH 4/4] Fix signed integer overflow in jvp_array_write and
+Subject: [PATCH 4/5] Fix signed integer overflow in jvp_array_write and
  jvp_object_rehash
 
 This commit fixes signed integer overflow and SEGV issues on growing
