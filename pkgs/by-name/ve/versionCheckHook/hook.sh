@@ -26,13 +26,13 @@ versionCheckHook(){
 
     local cmdProgram cmdArg echoPrefix
     if [[ -z "${versionCheckProgram-}" ]]; then
-        if [[ -z "${pname-}" ]]; then
-            echo "both \$pname and \$versionCheckProgram are empty, so" \
+        if [[ -z "${mainProgram-}" ]]; then
+            echo "both \$mainProgram and \$versionCheckProgram are empty, so" \
                 "we don't know which program to run the versionCheckPhase" \
                 "upon" >&2
             exit 2
         else
-            cmdProgram="${!outputBin}/bin/$pname"
+            cmdProgram="${!outputBin}/bin/${mainProgram}"
         fi
     else
         cmdProgram="$versionCheckProgram"
