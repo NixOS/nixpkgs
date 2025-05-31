@@ -89,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     cd ..
     cp src/squid $out/bin
     cp src/unlinkd $out/libexec
+    cp src/security_file_certgen $out/libexec
     cp src/mime.conf.default $out/etc/mime.conf
     cp -r icons $out/share
     cp -r errors $out/share
