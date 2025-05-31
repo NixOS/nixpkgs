@@ -237,6 +237,7 @@ mapAliases {
   adminer-pematon = adminneo; # Added 2025-02-20
   adminerneo = adminneo; # Added 2025-02-27
   adtool = throw "'adtool' has been removed, as it was broken and unmaintained";
+  adobe-reader = throw "'adobe-reader' has been removed, as it was broken, outdated and insecure"; # added 2025-05-31
   adom = throw "'adom' has been removed, as it was broken and unmaintained"; # added 2024-05-09
   adoptopenjdk-bin = throw "adoptopenjdk has been removed as the upstream project is deprecated. Consider using `temurin-bin`"; # Added 2024-05-09
   adoptopenjdk-bin-17-packages-darwin = throw "adoptopenjdk has been removed as the upstream project is deprecated. Consider using `temurin-bin-17`."; # Added 2024-05-09
