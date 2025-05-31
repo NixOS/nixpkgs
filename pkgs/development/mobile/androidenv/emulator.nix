@@ -57,7 +57,7 @@ deployAndroidPackage {
       libxshmfence
     ])
     ++ lib.optional (os == "linux" && stdenv.isx86_64) pkgsi686Linux.glibc;
-  patchInstructions = lib.optionalString (os == "linux") ''
+  patchInstructions = (lib.optionalString (os == "linux") ''
     addAutoPatchelfSearchPath $packageBaseDir/lib
     addAutoPatchelfSearchPath $packageBaseDir/lib64
     addAutoPatchelfSearchPath $packageBaseDir/lib64/qt/lib
@@ -85,7 +85,8 @@ deployAndroidPackage {
       } \
       --set QT_XKB_CONFIG_ROOT ${pkgs.xkeyboard_config}/share/X11/xkb \
       --set QTCOMPOSE ${pkgs.xorg.libX11.out}/share/X11/locale
-
+  '')
+  + ''
     mkdir -p $out/bin
     cd $out/bin
     find $out/libexec/android-sdk/emulator -type f -executable -mindepth 1 -maxdepth 1 | while read i; do
