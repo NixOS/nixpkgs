@@ -29,8 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail 'date_cmd = "gdate"' 'date_cmd = "${dateCmd}"'
     '';
 
-  PREFIX = placeholder "out";
-  LIBDIRNAME = "/lib";
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "LIBDIRNAME=/lib"
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.cc.isClang [
