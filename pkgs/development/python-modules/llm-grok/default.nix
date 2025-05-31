@@ -25,12 +25,10 @@ buildPythonPackage rec {
     hash = "sha256-OeeU/53XKucLCtGvnl5RWc/QqF0TprB/SO8pnnK5fdw=";
   };
 
-  build-system = [
-    setuptools
-    llm
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
+    llm
     httpx
     httpx-sse
     rich

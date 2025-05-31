@@ -23,13 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-FDDMItKFEYEptiL3EHKgKVxClqRU9RaM3uD3xP0F4OM=";
   };
 
-  build-system = [
-    setuptools
-    llm
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     einops
+    llm
     sentence-transformers
   ];
 

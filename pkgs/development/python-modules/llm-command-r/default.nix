@@ -23,12 +23,12 @@ buildPythonPackage rec {
     hash = "sha256-PxICRds9NJQP64HwoL7Oxd39yaIrMdAyQEbhaumJCgo=";
   };
 
-  build-system = [
-    setuptools
+  build-system = [ setuptools ];
+
+  dependencies = [
+    cohere
     llm
   ];
-
-  dependencies = [ cohere ];
 
   nativeCheckInputs = [
     pytestCheckHook

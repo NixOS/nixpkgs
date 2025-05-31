@@ -23,12 +23,12 @@ buildPythonPackage rec {
     hash = "sha256-IOmYu7zoim7Co/xIm5VLaGkCPI0o+2Nb2Pu3U2fH0BU=";
   };
 
-  build-system = [
-    setuptools
-    llm
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [ simpleeval ];
+  dependencies = [
+    llm
+    simpleeval
+  ];
 
   nativeCheckInputs = [
     llm-echo

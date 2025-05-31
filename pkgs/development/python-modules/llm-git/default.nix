@@ -31,12 +31,12 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    llm
   ];
 
   dependencies = [
     click
     deepmerge
+    llm
     pyyaml
     rich
     pygments

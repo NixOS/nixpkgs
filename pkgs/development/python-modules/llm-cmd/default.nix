@@ -27,13 +27,11 @@ buildPythonPackage rec {
 
   # Only needed until https://github.com/simonw/llm-cmd/pull/18 is merged and released
   patches = [ ./fix-test.patch ];
-  build-system = [
-    setuptools
-    # Follows the reasoning from https://github.com/NixOS/nixpkgs/pull/327800#discussion_r1681586659 about including llm in build-system
-    llm
-  ];
+
+  build-system = [ setuptools ];
 
   dependencies = [
+    llm
     prompt-toolkit
     pygments
   ];
@@ -53,6 +51,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/simonw/llm-cmd";
     changelog = "https://github.com/simonw/llm-cmd/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ erethon ];
+    maintainers = with lib.maintainers; [
+      erethon
+      philiptaron
+    ];
   };
 }
