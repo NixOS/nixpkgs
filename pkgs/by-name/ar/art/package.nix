@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromBitbucket,
+  fetchFromGitHub,
   cmake,
   pkg-config,
   util-linux,
@@ -40,13 +40,13 @@
 
 stdenv.mkDerivation rec {
   pname = "art";
-  version = "1.24.2";
+  version = "1.25.5";
 
-  src = fetchFromBitbucket {
-    owner = "agriggio";
+  src = fetchFromGitHub {
+    owner = "artpixls";
     repo = "art";
     rev = version;
-    hash = "sha256-TpjmmDeXuxnlvCimsq6mZZk15VOVU3WGrPd3vmcIClI=";
+    hash = "sha256-lKjYSKjZSJ9HtbmGWFR0bVv6hLnRzpklq2ueWirJ+Nw=";
   };
 
   nativeBuildInputs = [
