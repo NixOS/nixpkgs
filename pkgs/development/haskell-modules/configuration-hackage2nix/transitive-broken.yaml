@@ -267,7 +267,6 @@ dont-distribute-packages:
  - birch-beer
  - bird
  - BirdPP
- - bisc
  - biscuit-servant
  - bishbosh
  - bit-array
@@ -339,9 +338,7 @@ dont-distribute-packages:
  - bytestring-read
  - bytetrie
  - ca
- - cabal-bounds
  - cabal-cache
- - cabal-cargs
  - cabal-query
  - cabal-test
  - cabal2arch
