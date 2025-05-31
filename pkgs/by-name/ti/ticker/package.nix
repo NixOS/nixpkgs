@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/achannarasappa/ticker/v4/cmd.Version=${version}"
+    "-X github.com/achannarasappa/ticker/v${builtins.head (lib.splitString "." version)}/cmd.Version=${version}"
   ];
 
   # Tests require internet
