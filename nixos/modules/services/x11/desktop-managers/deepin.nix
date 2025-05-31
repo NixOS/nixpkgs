@@ -63,6 +63,7 @@ in
     services.gvfs.enable = mkDefault true;
     services.gnome.glib-networking.enable = mkDefault true;
     services.gnome.gnome-keyring.enable = mkDefault true;
+    services.gnome.gcr-ssh-agent.enable = mkDefault true;
     services.bamf.enable = mkDefault true;
 
     services.libinput.enable = mkDefault true;
