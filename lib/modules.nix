@@ -245,24 +245,22 @@ let
         };
       };
 
-      merged =
-        let
-          collected =
-            collectModules class (specialArgs.modulesPath or "") (regularModules ++ [ internalModule ])
-              (
-                {
-                  inherit
-                    lib
-                    options
-                    config
-                    specialArgs
-                    ;
-                  _class = class;
-                }
-                // specialArgs
-              );
-        in
-        mergeModules prefix (reverseList collected);
+      collected =
+        collectModules class (specialArgs.modulesPath or "") (regularModules ++ [ internalModule ])
+          (
+            {
+              inherit
+                lib
+                options
+                config
+                specialArgs
+                ;
+              _class = class;
+            }
+            // specialArgs
+          );
+
+      merged = mergeModules prefix (reverseList collected.modules);
 
       options = merged.matchedOptions;
 
@@ -358,12 +356,13 @@ let
         options = checked options;
         config = checked (removeAttrs config [ "_module" ]);
         _module = checked (config._module);
+        inherit (collected) graph;
         inherit extendModules type class;
       };
     in
     result;
 
-  # collectModules :: (class: String) -> (modulesPath: String) -> (modules: [ Module ]) -> (args: Attrs) -> [ Module ]
+  # collectModules :: (class: String) -> (modulesPath: String) -> (modules: [ Module ]) -> (args: Attrs) -> ModulesTree
   #
   # Collects all modules recursively through `import` statements, filtering out
   # all modules in disabledModules.
@@ -526,12 +525,38 @@ let
           operator = attrs: keyFilter attrs.modules;
         });
 
+      # TODO
+      # isDisabled =
+      #   modulesPath: disableds: structuredModule:
+      #   abort "todo";
+
+      mkGraph =
+        isDisabled: structuredModules:
+        let
+          mkModuleGraph = structuredModule: {
+            disabled = isDisabled structuredModule;
+            inherit (structuredModule) key;
+            modules = map mkModuleGraph structuredModule.modules;
+          };
+        in
+        {
+          modules = lib.pipe structuredModules [
+            (filter (x: x.key != "lib/modules.nix"))
+            (map mkModuleGraph)
+          ];
+        };
     in
     modulesPath: initialModules: args:
     let
       inherit (collectStructuredModules unknownModule "" initialModules args) disabled modules;
+      isDisabled' = isDisabled modulesPath disabled;
     in
-    filterModules (isDisabled modulesPath disabled) modules;
+    # Our structure should include disabled modules.
+    # Therefore, filterModules will not be involved.
+    {
+      modules = filterModules isDisabled' modules;
+      graph = mkGraph isDisabled' modules;
+    };
 
   /**
     Wrap a module with a default location for reporting errors.
