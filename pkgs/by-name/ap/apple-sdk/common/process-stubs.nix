@@ -44,15 +44,16 @@ self: super: {
       # it should hopefully be harmless.
       #
       # TODO FIXME: This is kind of horrible.
-      while read -r -d "" stub; do
-        printf 'Stripping weak C++ symbols from %s\n' "$stub"
+      find . -type f -name '*.tbd' -print0 | xargs -0 -P "$NIX_BUILD_CORES" -I {} sh -c '
+        stub="{}"
+        printf "Stripping weak C++ symbols from %s\n" "$stub"
         llvm-readtapi --filetype=tbd-v5 "$stub" \
-        | jq '
+        | jq "
           (.main_library, .libraries[]?).exported_symbols[]?.data.weak[]? |=
-            select(startswith("__Z") | not)
-        ' > $stub~
+          select(startswith(\"__Z\") | not)
+        " > $stub~
         llvm-readtapi --filetype=tbd-v4 $stub~ -o $stub
         rm $stub~
-      done < <(find . -name '*.tbd' -print0)
+      '
     '';
 }
