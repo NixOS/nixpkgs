@@ -14,10 +14,10 @@
   numpy,
   openpyxl,
   pandas,
-  pyqt-builder,
   pytestCheckHook,
-  qt6,
+  pytest-cov,
   scipy,
+  scikit-image,
   setuptools,
   setuptools-scm,
   shapely,
@@ -25,7 +25,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "glueviz";
+  pname = "glue-core";
   version = "1.22.2";
   pyproject = true;
 
@@ -37,10 +37,6 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-5YwZxVer3icA/7YmUIXTuyIlZYKrlFn5+4OYMbfvIlU=";
   };
-
-  buildInputs = [ pyqt-builder ];
-
-  nativeBuildInputs = [ qt6.wrapQtAppsHook ];
 
   build-system = [
     setuptools
@@ -60,6 +56,7 @@ buildPythonPackage rec {
     openpyxl
     pandas
     scipy
+    scikit-image
     setuptools
     shapely
     xlrd
@@ -71,7 +68,10 @@ buildPythonPackage rec {
   # qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.
   doCheck = false;
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov
+  ];
 
   pythonImportsCheck = [ "glue" ];
 
