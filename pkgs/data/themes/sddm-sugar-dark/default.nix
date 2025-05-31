@@ -1,12 +1,11 @@
 {
   lib,
-  formats,
-  stdenvNoCC,
+  buildSddmThemePackage,
   fetchFromGitHub,
   qt5,
-  themeConfig ? null,
+  themeConfig ? { },
 }:
-stdenvNoCC.mkDerivation rec {
+buildSddmThemePackage rec {
   pname = "sddm-sugar-dark";
   version = "1.2";
 
@@ -17,24 +16,16 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-C3qB9hFUeuT5+Dos2zFj5SyQegnghpoFV9wHvE9VoD8=";
   };
 
-  dontWrapQtApps = true;
+  qtVersion = "qt5";
+  sddmBuildInputs = with qt5; [
+    qtgraphicaleffects
+  ];
 
-  buildInputs = with qt5; [ qtgraphicaleffects ];
+  themeName = "Sugar Dark";
+  srcThemeDir = ".";
 
-  installPhase =
-    let
-      iniFormat = formats.ini { };
-      configFile = iniFormat.generate "" { General = themeConfig; };
-
-      basePath = "$out/share/sddm/themes/sugar-dark";
-    in
-    ''
-      mkdir -p ${basePath}
-      cp -r $src/* ${basePath}
-    ''
-    + lib.optionalString (themeConfig != null) ''
-      ln -sf ${configFile} ${basePath}/theme.conf.user
-    '';
+  configPath = "theme.conf";
+  configOverrides = themeConfig;
 
   meta = {
     description = "Dark SDDM theme from the sugar family";
