@@ -48,23 +48,23 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "peertube";
-  version = "7.0.1";
+  version = "7.1.1";
 
   src = fetchFromGitHub {
     owner = "Chocobozzz";
     repo = "PeerTube";
     tag = "v${version}";
-    hash = "sha256-DoUSzqb8lrU+s5R95rxCN/5A8sgb11edAhv0T6YACRo=";
+    hash = "sha256-rRga8pR/gfEFyVOkh1xmreM/ZVjiMre316/beCkjJP4=";
   };
 
   yarnOfflineCacheServer = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-WLaIIyz6SEekLFeVO39Swpny5/x5Jc1zoxy/6bmOXTk=";
+    hash = "sha256-Z6ACAkgk0RbcqVIjwKlCEZbZH0CHQU9sixJW73VyYDE=";
   };
 
   yarnOfflineCacheClient = fetchYarnDeps {
     yarnLock = "${src}/client/yarn.lock";
-    hash = "sha256-/ZdORSnwk29ubsgKKB7RfHCetODNOH9DzkflQdDsMz0=";
+    hash = "sha256-fi1fSxL7EbsjQntnDj2S0WLVZWLcP6nLHXpsM0y5HRs=";
   };
 
   yarnOfflineCacheAppsCli = fetchYarnDeps {
@@ -106,6 +106,26 @@ stdenv.mkDerivation rec {
     cd ~/client
     yarn config --offline set yarn-offline-mirror $yarnOfflineCacheClient
     yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
+
+    substituteInPlace package.json \
+      --replace-fail '"sass-embedded":' '"sass":'
+
+    find node_modules/vite/dist -name "*.js" -type f -exec grep -l "sass-embedded" {} \; | while read file; do
+      echo "Patching $file"
+      sed -i 's/"sass-embedded"/"sass"/g; s/'"'"'sass-embedded'"'"'/'"'"'sass'"'"'/g' "$file"
+    done
+
+    rm -rf node_modules/sass-embedded*
+
+    if [ -L "node_modules/.bin/sass" ]; then
+      rm node_modules/.bin/sass
+      ln -s ../sass/sass.js node_modules/.bin/sass
+    fi
+    if [ -L "node_modules/vite/node_modules/.bin/sass" ]; then
+      rm node_modules/vite/node_modules/.bin/sass
+      ln -s ../../../sass/sass.js node_modules/vite/node_modules/.bin/sass
+    fi
+
     cd ~/apps/peertube-cli
     yarn config --offline set yarn-offline-mirror $yarnOfflineCacheAppsCli
     yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
@@ -174,7 +194,7 @@ stdenv.mkDerivation rec {
     # be needed, either now or in the future. If they might be, then we probably want
     # to move the package to $out above instead of removing the broken symlink.
     rm $out/node_modules/@peertube/{peertube-server,peertube-transcription-devtools,peertube-types-generator,tests}
-    rm $out/client/node_modules/@peertube/{peertube-transcription-devtools,peertube-types-generator,tests}
+    rm $out/client/node_modules/@peertube/{peertube-transcription-devtools,peertube-types-generator,tests,player}
 
     mkdir -p $cli/bin
     mv ~/apps/peertube-cli/{dist,node_modules,package.json,yarn.lock} $cli
