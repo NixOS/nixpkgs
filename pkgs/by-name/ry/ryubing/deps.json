@@ -795,9 +795,9 @@
     "hash": "sha256-NHGzMcYduuYJjduIlf8M8zSQQuJcXAEaMNmKIqAgs3w="
   },
   {
-    "pname": "Ryujinx.Graphics.Nvdec.Dependencies",
-    "version": "5.0.3-build14",
-    "hash": "sha256-+ff+tlWggY+qZTBJroOOphRpOjBDg5cQgwGtVOTiqRQ="
+    "pname": "Ryujinx.Graphics.Nvdec.Dependencies.AllArch",
+    "version": "6.1.2-build3",
+    "hash": "sha256-Glhvv00ZbrbB+Z4PMSTsmiP14HZDonp611s1gXGuyqI="
   },
   {
     "pname": "Ryujinx.Graphics.Vulkan.Dependencies.MoltenVK",
@@ -946,8 +946,8 @@
   },
   {
     "pname": "System.CodeDom",
-    "version": "9.0.0",
-    "hash": "sha256-578lcBgswW0eM16r0EnJzfGodPx86RxxFoZHc2PSzsw="
+    "version": "9.0.2",
+    "hash": "sha256-hNhCSyuD9/teTgFuX4zrBn/LWlijczwrMqv+r3/yfHI="
   },
   {
     "pname": "System.Collections",
@@ -991,8 +991,8 @@
   },
   {
     "pname": "System.IO.Hashing",
-    "version": "9.0.0",
-    "hash": "sha256-k6Pdndm5fTD6CB1QsQfP7G+2h4B30CWIsuvjHuBg3fc="
+    "version": "9.0.2",
+    "hash": "sha256-CI1z3rCDA2XnYE7hA1Hh6+rPkdIRAcswCXu/Pbaavck="
   },
   {
     "pname": "System.IO.Pipelines",
@@ -1011,8 +1011,8 @@
   },
   {
     "pname": "System.Management",
-    "version": "9.0.0",
-    "hash": "sha256-UyLO5dgNVC7rBT1S6o/Ix6EQGlVTSWUQtVC+/cyTkfQ="
+    "version": "9.0.2",
+    "hash": "sha256-7FhGnAYgoJnPcHy+HbVdK/fD8ICSLAttLtueTLBoWZc="
   },
   {
     "pname": "System.Memory",
