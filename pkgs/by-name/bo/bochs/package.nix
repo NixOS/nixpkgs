@@ -32,6 +32,9 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://sourceforge/project/bochs/bochs/${finalAttrs.version}/bochs-${finalAttrs.version}.tar.gz";
     hash = "sha256-y29UK1HzWizJIGsqmA21YCt80bfPLk7U8Ras1VB3gao=";
   };
+  # Fix build on darwin, remove on next version
+  # https://sourceforge.net/p/bochs/bugs/1466/
+  patches = lib.optional stdenv.hostPlatform.isDarwin ./fix-darwin-build.patch;
 
   nativeBuildInputs = [
     docbook_xml_dtd_45
