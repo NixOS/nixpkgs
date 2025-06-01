@@ -105,9 +105,9 @@ stdenv.mkDerivation rec {
   env.CXXFLAGS = "-include cstdint"; # needed at least with gcc13 on aarch64-linux
 
   meta = {
-    description = "A raw converter based on RawTherapee";
-    homepage = "https://bitbucket.org/agriggio/art/";
-    license = lib.licenses.gpl3Only;
+    description = "Raw converter based on RawTherapee";
+    homepage = "https://art.pixls.us";
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ paperdigits ];
     mainProgram = "art";
     platforms = lib.platforms.linux;
