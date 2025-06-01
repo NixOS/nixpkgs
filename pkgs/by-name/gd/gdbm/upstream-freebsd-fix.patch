@@ -1,0 +1,51 @@
+From 2cb9effa454ca4ce3ebb47d6ce442d6784700c52 Mon Sep 17 00:00:00 2001
+From: Sergey Poznyakoff <gray@gnu.org>
+Date: Fri, 11 Apr 2025 08:36:19 +0300
+Subject: Minor change
+
+* src/lock.c: Don't set errno to ETIME, preserve the original EINTR
+instead.
+---
+ src/lock.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
+
+diff --git a/src/lock.c b/src/lock.c
+index cf28478..b1ca7ad 100644
+--- a/src/lock.c
++++ b/src/lock.c
+@@ -73,15 +73,10 @@ try_lock_flock (GDBM_FILE dbf, int nb)
+     {
+       return TRY_LOCK_OK;
+     }
+-  else if (errno == EWOULDBLOCK)
++  else if (errno == EWOULDBLOCK || errno == EINTR)
+     {
+       return TRY_LOCK_FAIL;
+     }
+-  else if (errno == EINTR)
+-    {
+-      errno = ETIME;
+-      return TRY_LOCK_FAIL;
+-    }
+ #endif
+   return TRY_LOCK_NEXT;
+ }
+@@ -116,7 +111,6 @@ try_lock_lockf (GDBM_FILE dbf, int nb)
+       switch (errno)
+ 	{
+ 	case EINTR:
+-	  errno = ETIME;
+ 	case EACCES:
+ 	case EAGAIN:
+ 	case EDEADLK:
+@@ -162,7 +156,6 @@ try_lock_fcntl (GDBM_FILE dbf, int nb)
+   switch (errno)
+     {
+     case EINTR:
+-      errno = ETIME;
+     case EACCES:
+     case EAGAIN:
+     case EDEADLK:
+-- 
+cgit v1.2.3
+
