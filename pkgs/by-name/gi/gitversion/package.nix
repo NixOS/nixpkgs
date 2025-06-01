@@ -6,9 +6,9 @@
 buildDotnetGlobalTool rec {
   pname = "dotnet-gitversion";
   nugetName = "GitVersion.Tool";
-  version = "5.12.0";
+  version = "6.3.0";
 
-  nugetHash = "sha256-dclYG2D0uSYqf++y33JCefkYLwbuRCuKd3qLMnx3BDI=";
+  nugetHash = "sha256-gtkD+egl9zAfJ4ZsOwb7u82IhBabjBFxU+nv9yQ1HHQ=";
 
   meta = with lib; {
     description = "From git log to SemVer in no time";
