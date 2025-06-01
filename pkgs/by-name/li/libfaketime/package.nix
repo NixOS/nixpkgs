@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
     patchShebangs test src
     for a in test/functests/test_exclude_mono.sh src/faketime.c ; do
       substituteInPlace $a \
-        --replace /bin/bash ${stdenv.shell}
+        --replace-fail /bin/bash ${stdenv.shell}
     done
-    substituteInPlace src/faketime.c --replace @DATE_CMD@ ${coreutils}/bin/date
+    substituteInPlace src/faketime.c --replace-fail @DATE_CMD@ ${coreutils}/bin/date
   '';
 
   PREFIX = placeholder "out";
