@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cc1541";
-  version = "4.1";
+  version = "unstable-2024-02-29";
 
   src = fetchFromBitbucket {
     owner = "ptv_claus";
     repo = "cc1541";
-    rev = finalAttrs.version;
-    hash = "sha256-b8cEGC3WxrjebQjed/VD9SIWkiQpNaE2yW+bQRCtmSs=";
+    rev = "f51ba77";
+    hash = "sha256-IKkQhm6oBpv6VZNLxt1SMVZ6Xm8AGNjxLfHYS2OvT8A=";
   };
 
   env.ENABLE_MAN = 1;
