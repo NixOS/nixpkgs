@@ -10,13 +10,13 @@
 
 flutter329.buildFlutterApplication rec {
   pname = "simple-live-app";
-  version = "1.7.7";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "xiaoyaocz";
     repo = "dart_simple_live";
     tag = "v${version}";
-    hash = "sha256-NK1qIlxgSZQ1Es3KhMcUc1Je5ATq53kXcBqLBQVw5DQ=";
+    hash = "sha256-8l+9NA9W7um61dbEf264OhrAdJLS6zyCTv78daOKfOw=";
   };
 
   sourceRoot = "${src.name}/simple_live_app";
