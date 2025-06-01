@@ -12977,12 +12977,6 @@
     githubId = 843652;
     name = "Kim Burgess";
   };
-  kindrowboat = {
-    email = "hello@kindrobot.ca";
-    github = "kindrowboat";
-    githubId = 777773;
-    name = "Stef Dunlap";
-  };
   kini = {
     email = "keshav.kini@gmail.com";
     github = "kini";
