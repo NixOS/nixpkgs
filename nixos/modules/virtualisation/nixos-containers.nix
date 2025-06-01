@@ -113,6 +113,11 @@ let
 
     cp --remove-destination /etc/resolv.conf "$root/etc/resolv.conf"
 
+    if [ -n "$FLAKE" ] && [ ! -e "/nix/var/nix/profiles/per-container/$INSTANCE/system" ]; then
+      # we create the etc/nixos-container config file, then if we utilize the update function, we can then build all the necessary system files for the container
+      ${lib.getExe nixos-container} update "$INSTANCE"
+    fi
+
     declare -a extraFlags
 
     if [ "$PRIVATE_NETWORK" = 1 ]; then
@@ -944,7 +949,10 @@ in
 
           unitConfig.RequiresMountsFor = "${stateDirectory}/%i";
 
-          path = [ pkgs.iproute2 ];
+          path = [
+            pkgs.iproute2
+            config.nix.package
+          ];
 
           environment = {
             root = "${stateDirectory}/%i";
