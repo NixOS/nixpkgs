@@ -12148,8 +12148,6 @@ with pkgs;
 
   pragha = libsForQt5.callPackage ../applications/audio/pragha { };
 
-  rofi-emoji = (callPackage ../applications/misc/rofi-emoji { }).v3;
-
   rquickshare-legacy = rquickshare.override { app-type = "legacy"; };
 
   # a somewhat more maintained fork of ympd
