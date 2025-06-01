@@ -89,12 +89,12 @@
       "url": "https://download.jetbrains.com/python/pycharm-community-2025.1.1.tar.gz",
       "build_number": "251.25410.122"
     },
-    "pycharm-professional": {
+    "pycharm": {
       "update-channel": "PyCharm RELEASE",
-      "url-template": "https://download.jetbrains.com/python/pycharm-professional-{version}.tar.gz",
+      "url-template": "https://download.jetbrains.com/python/pycharm-{version}.tar.gz",
       "version": "2025.1.1",
       "sha256": "b1e8660b1c947f3bb746d0736e1e9c247635fadedb52f230ef5c64862893ad0b",
-      "url": "https://download.jetbrains.com/python/pycharm-professional-2025.1.1.tar.gz",
+      "url": "https://download.jetbrains.com/python/pycharm-2025.1.1.tar.gz",
       "build_number": "251.25410.122"
     },
     "rider": {
@@ -228,12 +228,12 @@
       "url": "https://download.jetbrains.com/python/pycharm-community-2025.1.1-aarch64.tar.gz",
       "build_number": "251.25410.122"
     },
-    "pycharm-professional": {
+    "pycharm": {
       "update-channel": "PyCharm RELEASE",
-      "url-template": "https://download.jetbrains.com/python/pycharm-professional-{version}-aarch64.tar.gz",
+      "url-template": "https://download.jetbrains.com/python/pycharm-{version}-aarch64.tar.gz",
       "version": "2025.1.1",
       "sha256": "3f8f8a3773652ec99ea7a05b55dff41b5683548838f009e5e3d132ea644384d9",
-      "url": "https://download.jetbrains.com/python/pycharm-professional-2025.1.1-aarch64.tar.gz",
+      "url": "https://download.jetbrains.com/python/pycharm-2025.1.1-aarch64.tar.gz",
       "build_number": "251.25410.122"
     },
     "rider": {
@@ -367,12 +367,12 @@
       "url": "https://download.jetbrains.com/python/pycharm-community-2025.1.1.dmg",
       "build_number": "251.25410.122"
     },
-    "pycharm-professional": {
+    "pycharm": {
       "update-channel": "PyCharm RELEASE",
-      "url-template": "https://download.jetbrains.com/python/pycharm-professional-{version}.dmg",
+      "url-template": "https://download.jetbrains.com/python/pycharm-{version}.dmg",
       "version": "2025.1.1",
       "sha256": "cd56a7e1072f4562e2d3ef67e70f227606376572634120170f5689d3b970b570",
-      "url": "https://download.jetbrains.com/python/pycharm-professional-2025.1.1.dmg",
+      "url": "https://download.jetbrains.com/python/pycharm-2025.1.1.dmg",
       "build_number": "251.25410.122"
     },
     "rider": {
@@ -506,12 +506,12 @@
       "url": "https://download.jetbrains.com/python/pycharm-community-2025.1.1-aarch64.dmg",
       "build_number": "251.25410.122"
     },
-    "pycharm-professional": {
+    "pycharm": {
       "update-channel": "PyCharm RELEASE",
-      "url-template": "https://download.jetbrains.com/python/pycharm-professional-{version}-aarch64.dmg",
+      "url-template": "https://download.jetbrains.com/python/pycharm-{version}-aarch64.dmg",
       "version": "2025.1.1",
       "sha256": "76a97e0d1ca75cbfbcc0acb046154daec1113010c052318077a128ff89fb55a6",
-      "url": "https://download.jetbrains.com/python/pycharm-professional-2025.1.1-aarch64.dmg",
+      "url": "https://download.jetbrains.com/python/pycharm-2025.1.1-aarch64.dmg",
       "build_number": "251.25410.122"
     },
     "rider": {

@@ -29,9 +29,9 @@ let
         idea-ultimate
         mps
         phpstorm
-        pycharm-community-src
-        pycharm-community-bin
-        pycharm-professional
+        pycharm-community-bin # TODO: Should be removed later
+        pycharm-community-src # TODO: Should be replaced with pycharm-src once available
+        pycharm-bin
         rider
         ruby-mine
         rust-rover
@@ -63,11 +63,16 @@ in
         builtins.map (plugin: plugin.name) (
           builtins.filter (
             plugin:
+            let
+              # Allow all PyCharm plugins for PyCharm Community - TODO: Remove this special case once PyCharm Community is removed
+              pycharmCommunityCheck =
+                ide.pname == "pycharm-community" && builtins.elem "pycharm" plugin.compatible;
+            in
             (
               # Plugin has to not be broken
               (!builtins.elem plugin.name broken-plugins)
               # IDE has to be compatible
-              && (builtins.elem ide.pname plugin.compatible)
+              && (pycharmCommunityCheck || builtins.elem ide.pname plugin.compatible)
               # Assert: The build number needs to be included (if marked compatible)
               && (assertMsg (builtins.elem ide.buildNumber (builtins.attrNames plugin.builds)) "For plugin ${plugin.name} no entry for IDE build ${ide.buildNumber} is defined, even though ${ide.pname} is on that build.")
               # The plugin has to exist for the build
