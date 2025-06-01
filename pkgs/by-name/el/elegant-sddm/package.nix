@@ -1,20 +1,14 @@
 {
   lib,
-  formats,
-  stdenvNoCC,
+  buildSddmThemePackage,
   fetchFromGitHub,
   kdePackages,
 
-  # Override themeConfig.General.background for custom backgrounds
-  # https://wiki.nixos.org/wiki/SDDM_Themes
+  # deprecated in favor of `.withConfig`
   themeConfig ? null,
 }:
 
-let
-  user-cfg = (formats.ini { }).generate "theme.conf.user" themeConfig;
-in
-
-stdenvNoCC.mkDerivation {
+buildSddmThemePackage {
   pname = "elegant-sddm";
   version = "0-unstable-2024-03-30";
 
@@ -25,24 +19,17 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-l4gv1PEVWpLmzNt1c+dHTHtM5WlEsXdDgW3q8U3FMUQ=";
   };
 
-  dontWrapQtApps = true;
-  propagatedBuildInputs = [
-    # avoid .dev outputs propagation
-    kdePackages.qt5compat.out
+  sddmBuildInputs = with kdePackages; [
+    qt5compat
   ];
 
-  installPhase = ''
-    runHook preInstall
+  srcThemeDir = "Elegant";
 
-    mkdir -p "$out/share/sddm/themes"
-    cp -r Elegant/ "$out/share/sddm/themes/Elegant"
-  ''
-  + (lib.optionalString (lib.isAttrs themeConfig) ''
-    ln -sf ${user-cfg} $out/share/sddm/themes/Elegant/theme.conf.user
-  '')
-  + ''
-    runHook postInstall
-  '';
+  configPath = "theme.conf";
+  configOverrides =
+    lib.warnIf (themeConfig != null)
+      "elegant-sddm: `themeConfig` is deprecated, use `elegant-sddm.withConfig { ... }` instead"
+      (themeConfig.General or { });
 
   meta = {
     description = "Sleek and stylish SDDM theme crafted in QML for Qt6";
