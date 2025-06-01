@@ -10464,6 +10464,11 @@ with pkgs;
 
   libuuid = if stdenv.hostPlatform.isLinux then util-linuxMinimal else null;
 
+  where-is-my-sddm-theme = {
+    inherit (libsForQt5.callPackage ../data/themes/where-is-my-sddm-theme { }) qt5;
+    inherit (kdePackages.callPackage ../data/themes/where-is-my-sddm-theme { }) qt6;
+  };
+
   elegant-sddm = libsForQt5.callPackage ../data/themes/elegant-sddm { };
 
   error-inject = callPackages ../os-specific/linux/error-inject { };
