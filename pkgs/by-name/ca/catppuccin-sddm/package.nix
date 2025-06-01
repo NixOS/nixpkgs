@@ -3,7 +3,6 @@
   stdenvNoCC,
   fetchFromGitHub,
   just,
-  kdePackages,
   flavor ? "mocha",
   font ? "Noto Sans",
   fontSize ? "9",
@@ -25,10 +24,6 @@ stdenvNoCC.mkDerivation rec {
 
   nativeBuildInputs = [
     just
-  ];
-
-  propagatedBuildInputs = [
-    kdePackages.qtsvg
   ];
 
   buildPhase = ''
