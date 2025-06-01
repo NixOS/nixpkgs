@@ -8,6 +8,7 @@
   asciidoc,
   docbook_xml_dtd_45,
   docbook_xsl,
+  desktopToDarwinBundle,
   libxml2,
   libxslt,
   withPdfReader ? true,
@@ -69,7 +70,7 @@ python3.pkgs.buildPythonApplication {
     docbook_xsl
     libxml2
     libxslt
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   dependencies = with python3.pkgs; [
     colorama
@@ -131,6 +132,11 @@ python3.pkgs.buildPythonApplication {
   preFixup =
     let
       libPath = lib.makeLibraryPath [ pipewire ];
+      resourcesPath =
+        if (isQt6 && stdenv.hostPlatform.isDarwin) then
+          "${qt6Packages.qtwebengine}/lib/QtWebEngineCore.framework/Resources"
+        else
+          "${qt6Packages.qtwebengine}/resources";
     in
     ''
       makeWrapperArgs+=(
@@ -145,7 +151,7 @@ python3.pkgs.buildPythonApplication {
           --set-default QSG_RHI_BACKEND vulkan
         ''}
         ${lib.optionalString enableWideVine ''--add-flags "--qt-flag widevine-path=${widevine-cdm}/share/google/chrome/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so"''}
-        --set QTWEBENGINE_RESOURCES_PATH "${qt6Packages.qtwebengine}/resources"
+        --set QTWEBENGINE_RESOURCES_PATH "${resourcesPath}"
       )
     '';
 
