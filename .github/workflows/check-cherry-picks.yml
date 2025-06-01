@@ -10,6 +10,10 @@ on:
       - 'staging-**'
       - '!staging-next'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 permissions:
   pull-requests: write
 
