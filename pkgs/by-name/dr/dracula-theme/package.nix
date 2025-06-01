@@ -1,25 +1,62 @@
 {
   lib,
   stdenvNoCC,
+  buildSddmThemePackage,
   fetchFromGitHub,
   unstableGitUpdater,
   gtk-engine-murrine,
+  libsForQt5,
 }:
-
 let
   themeName = "Dracula";
   version = "4.0.0-unstable-2025-08-04";
+
+  base = {
+    pname = "dracula-theme";
+    inherit version;
+
+    src = fetchFromGitHub {
+      owner = "dracula";
+      repo = "gtk";
+      rev = "3834a1bac175b226cff6b1c94faac9aba2819bd5";
+      hash = "sha256-8p9IS5aMZGP/VCuFTjQU+D3wfFIwfT/lcY7ujUv3SRc=";
+    };
+
+    meta = with lib; {
+      homepage = "https://github.com/dracula/gtk";
+      license = licenses.gpl3;
+
+      maintainers = with maintainers; [ alexarice ];
+    };
+  };
+
+  sddmTheme = buildSddmThemePackage {
+    pname = "${base.pname}-sddm";
+    inherit (base) version src;
+
+    qtVersion = "qt5";
+    sddmBuildInputs = with libsForQt5; [
+      plasma-framework
+      # plasma-workspace # TODO (only for qt6)
+
+      qtquickcontrols
+      qtgraphicaleffects
+    ];
+
+    inherit themeName;
+    srcThemeDir = "kde/sddm/Dracula";
+    configPath = "theme.conf";
+
+    meta = base.meta // {
+      description = "Dracula variant of the Ant SDDM theme";
+
+      platforms = lib.platforms.linux;
+      broken = true;
+    };
+  };
 in
 stdenvNoCC.mkDerivation {
-  pname = "dracula-theme";
-  inherit version;
-
-  src = fetchFromGitHub {
-    owner = "dracula";
-    repo = "gtk";
-    rev = "646918e419c98747f4e6f8305c0ecaf6bbc860c6";
-    hash = "sha256-8p9IS5aMZGP/VCuFTjQU+D3wfFIwfT/lcY7ujUv3SRc=";
-  };
+  inherit (base) pname version src;
 
   propagatedUserEnvPkgs = [
     gtk-engine-murrine
@@ -34,8 +71,6 @@ stdenvNoCC.mkDerivation {
     cp -a kde/kvantum $out/share/Kvantum
     mkdir -p $out/share/aurorae/themes
     cp -a kde/aurorae/* $out/share/aurorae/themes/
-    mkdir -p $out/share/sddm/themes
-    cp -a kde/sddm/* $out/share/sddm/themes/
 
     mkdir -p $out/share/icons/Dracula-cursors
     mv kde/cursors/Dracula-cursors/index.theme $out/share/icons/Dracula-cursors/cursor.theme
@@ -44,15 +79,16 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = unstableGitUpdater {
-    tagPrefix = "v";
+  passthru = {
+    updateScript = unstableGitUpdater {
+      tagPrefix = "v";
+    };
+
+    sddm = sddmTheme;
   };
 
-  meta = with lib; {
+  meta = base.meta // {
     description = "Dracula variant of the Ant theme";
-    homepage = "https://github.com/dracula/gtk";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ alexarice ];
+    platforms = lib.platforms.all;
   };
 }
