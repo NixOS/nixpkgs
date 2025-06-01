@@ -13,6 +13,8 @@
   rofi-unwrapped,
   xclip,
   xdotool,
+
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (final: {
@@ -58,6 +60,13 @@ stdenv.mkDerivation (final: {
     glib
     rofi-unwrapped
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "v(${lib.versions.major final.version}\\..*)"
+    ];
+  };
 
   meta = {
     description = "Emoji selector plugin for Rofi (built against ${rofi-unwrapped.pname})";
