@@ -107,10 +107,6 @@ stdenv.mkDerivation rec {
       libjack2
     ];
 
-  prefixKey = "--prefix-dir=";
-
-  configureFlags = [ "--without-liblzo2" ];
-
   postPatch = ''
     substituteInPlace src/music/fluidsynth.cpp \
       --replace-fail "/usr/share/soundfonts/default.sf2" \
