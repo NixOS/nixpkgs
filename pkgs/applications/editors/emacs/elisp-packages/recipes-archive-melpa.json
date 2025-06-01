@@ -98932,11 +98932,11 @@
   "repo": "lorniu/pdd.el",
   "unstable": {
    "version": [
-    20250530,
-    1619
+    20250531,
+    1253
    ],
-   "commit": "34963a26443270fa0d409c3bd900ab7dae92523a",
-   "sha256": "0j6lj9jln14gmdfxd4zwpvah49jf1sr195ih6f1b2pvl059d9q6z"
+   "commit": "cf45dccead3895463d284dda135d1236fb5d760d",
+   "sha256": "03nwfq96zy1qy5a88nc7njnw9xrgp8qfllzxv6bb1c36kpb9wbpn"
   }
  },
  {
