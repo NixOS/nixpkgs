@@ -13,12 +13,12 @@
 }).overrideAttrs
   (
     final: _: {
-      version = "4.0.0";
+      version = "4.1.0";
       src = fetchFromGitHub {
         owner = "Mange";
         repo = "rofi-emoji";
         rev = "v${final.version}";
-        hash = "sha256-864Mohxfc3EchBKtSNifxy8g8T8YBUQ/H7+8Ti6TiFo=";
+        hash = "sha256-Amaz+83mSPue+pjZq/pJiCxu5QczYvmJk6f96eraaK8=";
       };
     }
   )
