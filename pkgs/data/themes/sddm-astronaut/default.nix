@@ -1,7 +1,8 @@
 {
-  pkgs,
   lib,
   stdenvNoCC,
+  fetchFromGitHub,
+  qt6,
   themeConfig ? null,
   embeddedTheme ? "astronaut",
 }:
@@ -9,7 +10,7 @@ stdenvNoCC.mkDerivation rec {
   pname = "sddm-astronaut";
   version = "1.0-unstable-2025-01-05";
 
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "Keyitdev";
     repo = "sddm-astronaut-theme";
     rev = "11c0bf6147bbea466ce2e2b0559e9a9abdbcc7c3";
@@ -18,7 +19,7 @@ stdenvNoCC.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  propagatedBuildInputs = with pkgs.kdePackages; [
+  propagatedBuildInputs = with qt6; [
     qtsvg
     qtmultimedia
     qtvirtualkeyboard
