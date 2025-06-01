@@ -1,6 +1,14 @@
 { hostPkgs, lib, ... }:
 {
+  imports = [
+    ./common/set-package.nix
+  ];
+
   name = "ghostunnel";
+
+  setPackage = pkg: { services.ghostunnel.package = pkg; };
+  defaultPackage = pkgs: pkgs.ghostunnel;
+
   nodes = {
     backend =
       { pkgs, ... }:
