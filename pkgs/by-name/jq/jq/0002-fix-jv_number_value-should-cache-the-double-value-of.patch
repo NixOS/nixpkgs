@@ -1,7 +1,7 @@
 From df0ddb83feb656230157f5bc9b7f34caef1f82be Mon Sep 17 00:00:00 2001
 From: itchyny <itchyny@cybozu.co.jp>
 Date: Sun, 16 Feb 2025 22:08:36 +0900
-Subject: [PATCH 2/4] fix: `jv_number_value` should cache the double value of
+Subject: [PATCH 2/5] fix: `jv_number_value` should cache the double value of
  literal numbers (#3245)
 
 The code of `jv_number_value` is intended to cache the double value of

@@ -1319,10 +1319,10 @@ with self;
 
   Apppapersway = buildPerlPackage rec {
     pname = "App-papersway";
-    version = "1.004";
+    version = "2.001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SP/SPWHITTON/App-papersway-${version}.tar.gz";
-      hash = "sha256-/RLSAM0tJEmVlzNDkTCItNZQXGb1hnllmXvEvxgh4Qo=";
+      hash = "sha256-Jx8MJdyr/tfumMhuCofQX0r3vWcVuDzfJGpCjq2+Odw=";
     };
     buildInputs = [
       AnyEvent
@@ -1397,11 +1397,11 @@ with self;
   };
 
   AppSqitch = buildPerlModule {
-    version = "1.5.0";
+    version = "1.5.1";
     pname = "App-Sqitch";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DW/DWHEELER/App-Sqitch-v1.5.0.tar.gz";
-      hash = "sha256-oViHFpPt8en/460D55i1ZQBze4AcCiiMY/gR75oUAYQ=";
+      url = "mirror://cpan/authors/id/D/DW/DWHEELER/App-Sqitch-v1.5.1.tar.gz";
+      hash = "sha256-Fqo0j8Sedfj/ZQMfBiLUGSkyMhsFvWUYq5lkYYVy1pg=";
     };
     buildInputs = [
       CaptureTiny
@@ -1907,10 +1907,10 @@ with self;
 
   AuthenKrb5 = buildPerlModule {
     pname = "Authen-Krb5";
-    version = "1.905";
+    version = "1.906";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IO/IOANR/Authen-Krb5-1.905.tar.gz";
-      hash = "sha256-13sAuxUBpW9xGOkarAx+Qi2888QY+c6YuAF3HDqg900=";
+      url = "mirror://cpan/authors/id/O/OD/ODENBACH/Authen-Krb5-1.906.tar.gz";
+      hash = "sha256-LcCSjvsTtfMF3zRSCI5j+StnrOqH+9RwMI9GD3kSboQ=";
     };
     propagatedBuildInputs = [ pkgs.libkrb5 ];
     buildInputs = [
@@ -2478,11 +2478,6 @@ with self;
 
     propagatedBuildInputs = [ BioPerl ];
     htslibStore = toString pkgs.htslib;
-
-    postPatch = ''
-      # -Wl,-rpath not recognized : replaced by -rpath=
-      sed -i 's/Wl,-rpath,/rpath=/' Build.PL
-    '';
 
     preBuild = ''
       export HTSLIB_DIR=${pkgs.htslib}
@@ -7623,10 +7618,10 @@ with self;
 
   CryptOpenSSLRSA = buildPerlPackage {
     pname = "Crypt-OpenSSL-RSA";
-    version = "0.33";
+    version = "0.35";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TODDR/Crypt-OpenSSL-RSA-0.33.tar.gz";
-      hash = "sha256-vb5jD21vVAMldGrZmXcnKshmT/gb0Z8K2rptb0Xv2GQ=";
+      url = "mirror://cpan/authors/id/T/TO/TODDR/Crypt-OpenSSL-RSA-0.35.tar.gz";
+      hash = "sha256-XuvVWsBxY0yGSo549c+vuq9Dz4TAQyOgm3Hddr8CXMI=";
     };
     propagatedBuildInputs = [ CryptOpenSSLRandom ];
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
@@ -14151,10 +14146,10 @@ with self;
 
   FinanceQuote = buildPerlPackage rec {
     pname = "Finance-Quote";
-    version = "1.64";
+    version = "1.65";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BP/BPSCHUCK/Finance-Quote-${version}.tar.gz";
-      hash = "sha256-BYB8lEFakSzlbiJ4FRcTjv/OdoOaj4LtOLsxxAaOXBs=";
+      hash = "sha256-C3pJZaLJrW+nwDawloHHtEWyB1j6qYNnsmZZz2L+Axg=";
     };
     buildInputs = [
       DateManip
@@ -31811,10 +31806,10 @@ with self;
 
   SubHandlesVia = buildPerlPackage {
     pname = "Sub-HandlesVia";
-    version = "0.050000";
+    version = "0.050002";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TOBYINK/Sub-HandlesVia-0.050000.tar.gz";
-      hash = "sha256-Lfk0k+L56VvleblQtuGf9ST5TIBhOq3AOohhHf91eU8=";
+      url = "mirror://cpan/authors/id/T/TO/TOBYINK/Sub-HandlesVia-0.050002.tar.gz";
+      hash = "sha256-PMWPrjBcCOEZziwz44SHBD5odSE4JkRBw1oxATTrUDg=";
     };
     propagatedBuildInputs = [
       ClassMethodModifiers

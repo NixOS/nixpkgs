@@ -7,8 +7,8 @@
 }:
 let
   cfg = config.services.filebrowser;
-  inherit (lib) types;
   format = pkgs.formats.json { };
+  inherit (lib) types;
 in
 {
   options = {
@@ -16,6 +16,18 @@ in
       enable = lib.mkEnableOption "FileBrowser";
 
       package = lib.mkPackageOption pkgs "filebrowser" { };
+
+      user = lib.mkOption {
+        type = types.str;
+        default = "filebrowser";
+        description = "User account under which FileBrowser runs.";
+      };
+
+      group = lib.mkOption {
+        type = types.str;
+        default = "filebrowser";
+        description = "Group under which FileBrowser runs.";
+      };
 
       openFirewall = lib.mkEnableOption "opening firewall ports for FileBrowser";
 
@@ -96,7 +108,9 @@ in
           CacheDirectory = "filebrowser";
           WorkingDirectory = cfg.settings.root;
 
-          DynamicUser = true;
+          User = cfg.user;
+          Group = cfg.group;
+          UMask = "0077";
 
           NoNewPrivileges = true;
           PrivateDevices = true;
@@ -117,15 +131,31 @@ in
         };
       };
 
-      tmpfiles.settings.filebrowser =
-        lib.genAttrs
-          [
-            cfg.settings.root
-            (builtins.dirOf cfg.settings.database)
-          ]
-          (_: {
-            d.mode = "0700";
-          });
+      tmpfiles.settings.filebrowser = {
+        "${cfg.settings.root}".d = {
+          inherit (cfg) user group;
+          mode = "0700";
+        };
+        "${cfg.settings.cache-dir}".d = {
+          inherit (cfg) user group;
+          mode = "0700";
+        };
+        "${builtins.dirOf cfg.settings.database}".d = {
+          inherit (cfg) user group;
+          mode = "0700";
+        };
+      };
+    };
+
+    users.users = lib.mkIf (cfg.user == "filebrowser") {
+      filebrowser = {
+        inherit (cfg) group;
+        isSystemUser = true;
+      };
+    };
+
+    users.groups = lib.mkIf (cfg.group == "filebrowser") {
+      filebrowser = { };
     };
 
     networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.settings.port ];

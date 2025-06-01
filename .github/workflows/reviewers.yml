@@ -1,0 +1,107 @@
+# This workflow will request reviews from the maintainers of each package
+# listed in the PR's most recent eval comparison artifact.
+
+name: Reviewers
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/reviewers.yml
+  pull_request_target:
+    types: [ready_for_review]
+  workflow_call:
+    inputs:
+      caller:
+        description: Name of the calling workflow.
+        required: true
+        type: string
+
+concurrency:
+  group: ${{ inputs.caller }}-${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  request:
+    name: Request
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - name: Check out the PR at the base commit
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          path: trusted
+          sparse-checkout: ci
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
+        with:
+          extra_nix_config: sandbox = true
+
+      - name: Build the requestReviews derivation
+        run: nix-build trusted/ci -A requestReviews
+
+      # See ./codeowners-v2.yml, reuse the same App because we need the same permissions
+      # Can't use the token received from permissions above, because it can't get enough permissions
+      - uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
+        if: vars.OWNER_APP_ID
+        id: app-token
+        with:
+          app-id: ${{ vars.OWNER_APP_ID }}
+          private-key: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
+          permission-administration: read
+          permission-members: read
+          permission-pull-requests: write
+
+
+      # In the regular case, this workflow is called via workflow_call from the eval workflow directly.
+      # In the more special case, when a PR is undrafted an eval run will have started already.
+      - name: Wait for comparison to be done
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            const run_id = (await github.rest.actions.listWorkflowRuns({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'eval.yml',
+              event: context.eventName,
+              head_sha: context.payload.pull_request.head.sha
+            })).data.workflow_runs[0].id
+
+            // Waiting 120 * 5 sec = 10 min. max.
+            // The extreme case is an Eval run that just started when the PR is undrafted.
+            // Eval takes max 5-6 minutes, normally.
+            for (let i = 0; i < 120; i++) {
+              const result = await github.rest.actions.listWorkflowRunArtifacts({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                run_id,
+                name: 'comparison'
+              })
+              if (result.data.total_count > 0) return
+              await new Promise(resolve => setTimeout(resolve, 5000))
+            }
+            throw new Error("No comparison artifact found.")
+
+      - name: Download the comparison results
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        with:
+          pattern: comparison
+          path: comparison
+          merge-multiple: true
+
+      - name: Requesting maintainer reviews
+        if: ${{ steps.app-token.outputs.token }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          NUMBER: ${{ github.event.number }}
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+          # Don't request reviewers on draft PRs
+          DRY_MODE: ${{ github.event.pull_request.draft && '1' || '' }}
+        run: |
+          # maintainers.json contains GitHub IDs. Look up handles to request reviews from.
+          # There appears to be no API to request reviews based on GitHub IDs
+          jq -r 'keys[]' comparison/maintainers.json \
+            | while read -r id; do gh api /user/"$id" --jq .login; done \
+            | GH_TOKEN=${{ steps.app-token.outputs.token }} result/bin/request-reviewers.sh "$REPOSITORY" "$NUMBER" "$AUTHOR"

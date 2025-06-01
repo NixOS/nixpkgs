@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxkbcommon";
-  version = "1.8.1";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "xkbcommon";
     repo = "libxkbcommon";
     tag = "xkbcommon-${finalAttrs.version}";
-    hash = "sha256-MnegPisAtev69pNV6cR4a/oLIQhijG2e6ed6mpKr5js=";
+    hash = "sha256-rLh5BD9a0bI0nHtWX+n0LqmdIO5ykd98rNc5hAN3ndE=";
   };
 
   patches = [
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
       and dead keys.
     ''; # and a separate library for listing available keyboard layouts.
     homepage = "https://xkbcommon.org";
-    changelog = "https://github.com/xkbcommon/libxkbcommon/blob/xkbcommon-${finalAttrs.version}/NEWS";
+    changelog = "https://github.com/xkbcommon/libxkbcommon/blob/xkbcommon-${finalAttrs.version}/NEWS.md";
     license = licenses.mit;
     maintainers = with maintainers; [
       primeos

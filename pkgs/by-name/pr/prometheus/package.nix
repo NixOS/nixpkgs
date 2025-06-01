@@ -33,7 +33,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "prometheus";
-  version = "3.1.0";
+  version = "3.4.1";
 
   outputs = [
     "out"
@@ -45,18 +45,19 @@ buildGoModule (finalAttrs: {
     owner = "prometheus";
     repo = "prometheus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q3f0L6cRVQRL1AHgUI3VNbMG9eTfcApbXfSjOTHr7Go=";
+    hash = "sha256-qF4yXBNAdcndwbXEmDPIhG16agvhqKUVB9ajOsvpgrg=";
   };
 
-  vendorHash = "sha256-vQwBnSxoyIYTeWLk3GD9pKDuUjjsMfwPptgyVnzcTok=";
+  vendorHash = "sha256-edR9vvSNexRR8EGEiSCIIYl3ndGckS8XuIWojPrq60U=";
 
   webUiStatic = fetchurl {
     url = "https://github.com/prometheus/prometheus/releases/download/v${finalAttrs.version}/prometheus-web-ui-${finalAttrs.version}.tar.gz";
-    hash = "sha256-05DaaDIFtADnkLFqdHe5eUvo6LRz6BduMvGVmzOeurM=";
+    hash = "sha256-GBKjrmlQi+DHtbKICc3pO8IMVdu3IUXh/DTwvd/ArWE=";
   };
 
   excludedPackages = [
     "documentation/prometheus-mixin"
+    "internal/tools"
     "web/ui/mantine-ui/src/promql/tools"
   ];
 

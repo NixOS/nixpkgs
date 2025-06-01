@@ -1,7 +1,7 @@
 From dfd25612454deacb6df47329787844795bf59821 Mon Sep 17 00:00:00 2001
 From: itchyny <itchyny@cybozu.co.jp>
 Date: Wed, 5 Mar 2025 07:43:54 +0900
-Subject: [PATCH 3/4] Reject NaN with payload while parsing JSON
+Subject: [PATCH 3/5] Reject NaN with payload while parsing JSON
 
 This commit drops support for parsing NaN with payload in JSON like
 `NaN123` and fixes CVE-2024-53427. Other JSON extensions like `NaN` and

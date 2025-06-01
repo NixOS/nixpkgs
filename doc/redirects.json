@@ -469,6 +469,12 @@
   "footnote-stdenv-find-inputs-location.__back.0": [
     "index.html#footnote-stdenv-find-inputs-location.__back.0"
   ],
+  "strictflexarrays1": [
+    "index.html#strictflexarrays1"
+  ],
+  "strictflexarrays3": [
+    "index.html#strictflexarrays3"
+  ],
   "tester-shfmt": [
     "index.html#tester-shfmt"
   ],
@@ -2428,6 +2434,9 @@
   ],
   "tetex-tex-live": [
     "index.html#tetex-tex-live"
+  ],
+  "udevcheckhook": [
+    "index.html#udevcheckhook"
   ],
   "unzip": [
     "index.html#unzip"
