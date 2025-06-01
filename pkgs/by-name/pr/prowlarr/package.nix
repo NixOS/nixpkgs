@@ -83,12 +83,12 @@ stdenv.mkDerivation rec {
     tests.smoke-test = nixosTests.prowlarr;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Indexer manager/proxy built on the popular arr .net/reactjs base stack";
     homepage = "https://wiki.servarr.com/prowlarr";
     changelog = "https://github.com/Prowlarr/Prowlarr/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ pizzapim ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ pizzapim ];
     mainProgram = "Prowlarr";
     platforms = [
       "aarch64-darwin"

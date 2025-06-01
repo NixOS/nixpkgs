@@ -180,12 +180,12 @@ python3.pkgs.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://matrix.org";
     changelog = "https://github.com/element-hq/synapse/releases/tag/v${version}";
     description = "Matrix reference homeserver";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ sumnerevans ];
-    teams = [ teams.matrix ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ sumnerevans ];
+    teams = [ lib.teams.matrix ];
   };
 }

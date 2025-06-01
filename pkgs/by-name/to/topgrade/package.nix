@@ -41,12 +41,12 @@ rustPlatform.buildRustPackage rec {
     installManPage topgrade.8
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Upgrade all the things";
     homepage = "https://github.com/topgrade-rs/topgrade";
     changelog = "https://github.com/topgrade-rs/topgrade/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       SuperSandro2000
       xyenon
     ];

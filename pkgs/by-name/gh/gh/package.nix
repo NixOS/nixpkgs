@@ -55,12 +55,12 @@ buildGoModule rec {
     package = gh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "GitHub CLI tool";
     homepage = "https://cli.github.com/";
     changelog = "https://github.com/cli/cli/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "gh";
-    maintainers = with maintainers; [ zowoq ];
+    maintainers = with lib.maintainers; [ zowoq ];
   };
 }

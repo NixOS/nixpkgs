@@ -10,7 +10,7 @@
   xdg-utils,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "avrdudess";
   version = "2.18";
 
@@ -54,13 +54,13 @@ stdenv.mkDerivation {
     chmod a+x "$out/bin/"*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GUI for AVRDUDE (AVR microcontroller programmer)";
     homepage = "https://blog.zakkemble.net/avrdudess-a-gui-for-avrdude/";
-    changelog = "https://github.com/ZakKemble/AVRDUDESS/blob/v${version}/Changelog.txt";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    changelog = "https://github.com/ZakKemble/AVRDUDESS/blob/v${finalAttrs.version}/Changelog.txt";
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "avrdudess";
   };
-}
+})

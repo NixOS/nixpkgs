@@ -57,13 +57,13 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://rbspy.github.io/";
     description = "Sampling CPU Profiler for Ruby";
     mainProgram = "rbspy";
     changelog = "https://github.com/rbspy/rbspy/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ viraptor ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ viraptor ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

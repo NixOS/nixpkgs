@@ -41,15 +41,15 @@ buildGoModule rec {
         --zsh  <(${emulator} $out/bin/nfpm completion zsh)
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple deb and rpm packager written in Go";
     homepage = "https://github.com/goreleaser/nfpm";
     changelog = "https://github.com/goreleaser/nfpm/releases/tag/v${version}";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       techknowlogick
       caarlos0
     ];
-    license = with licenses; [ mit ];
+    license = with lib.licenses; [ mit ];
     mainProgram = "nfpm";
   };
 }

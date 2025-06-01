@@ -40,12 +40,12 @@ rustPlatform.buildRustPackage rec {
     installManPage $OUT_DIR/git-cliff.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Highly customizable Changelog Generator that follows Conventional Commit specifications";
     homepage = "https://github.com/orhun/git-cliff";
     changelog = "https://github.com/orhun/git-cliff/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       siraben
       matthiasbeyer
     ];

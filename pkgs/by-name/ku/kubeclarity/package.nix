@@ -45,7 +45,7 @@ buildGoModule rec {
     mv $out/bin/cli $out/bin/kubeclarity
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Kubernetes runtime scanner";
     mainProgram = "kubeclarity";
     longDescription = ''
@@ -56,7 +56,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/openclarity/kubeclarity";
     changelog = "https://github.com/openclarity/kubeclarity/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

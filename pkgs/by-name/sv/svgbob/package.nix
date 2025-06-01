@@ -21,12 +21,12 @@ rustPlatform.buildRustPackage rec {
     mv $out/bin/svgbob_cli $out/bin/svgbob
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Convert your ascii diagram scribbles into happy little SVG";
     homepage = "https://github.com/ivanceras/svgbob";
     changelog = "https://github.com/ivanceras/svgbob/raw/${version}/Changelog.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ cafkafk ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ cafkafk ];
     mainProgram = "svgbob";
   };
 }

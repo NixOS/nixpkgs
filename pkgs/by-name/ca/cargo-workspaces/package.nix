@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
     LIBSSH2_SYS_USE_PKG_CONFIG = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for managing cargo workspaces and their crates, inspired by lerna";
     longDescription = ''
       A tool that optimizes the workflow around cargo workspaces with
@@ -43,8 +43,8 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/pksunkara/cargo-workspaces";
     changelog = "https://github.com/pksunkara/cargo-workspaces/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       figsoda
       macalinao
       matthiasbeyer

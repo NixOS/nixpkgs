@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
     mv * "$out/share/cyberchef"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cyber Swiss Army Knife for encryption, encoding, compression and data analysis";
     homepage = "https://gchq.github.io/CyberChef";
     changelog = "https://github.com/gchq/CyberChef/blob/v${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ sebastianblunt ];
-    license = licenses.asl20;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ sebastianblunt ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
   };
 }

@@ -41,7 +41,7 @@ buildGoModule rec {
     command = "zlint -version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "X.509 Certificate Linter focused on Web PKI standards and requirements";
     longDescription = ''
       ZLint is a X.509 certificate linter written in Go that checks for
@@ -50,7 +50,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/zmap/zlint";
     changelog = "https://github.com/zmap/zlint/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ baloo ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ baloo ];
   };
 }

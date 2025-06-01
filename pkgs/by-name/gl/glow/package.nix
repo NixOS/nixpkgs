@@ -36,12 +36,12 @@ buildGoModule rec {
       --zsh <($out/bin/glow completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Render markdown on the CLI, with pizzazz!";
     homepage = "https://github.com/charmbracelet/glow";
     changelog = "https://github.com/charmbracelet/glow/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       Br1ght0ne
       penguwin
     ];

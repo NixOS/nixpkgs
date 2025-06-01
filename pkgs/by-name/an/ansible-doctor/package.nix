@@ -53,12 +53,12 @@ python3.pkgs.buildPythonApplication rec {
     "ansibledoctor"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Annotation based documentation for your Ansible roles";
     mainProgram = "ansible-doctor";
     homepage = "https://github.com/thegeeklab/ansible-doctor";
     changelog = "https://github.com/thegeeklab/ansible-doctor/releases/tag/v${version}";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ tboerger ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ tboerger ];
   };
 }

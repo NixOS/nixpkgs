@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
         --set GDK_PIXBUF_MODULE_FILE ${gdkPixbufModuleFile}
     '';
 
-  meta = with lib; {
+  meta = {
     description = "C implementation of the AV1 Image File Format";
     longDescription = ''
       Libavif aims to be a friendly, portable C implementation of the
@@ -128,8 +128,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/AOMediaCodec/libavif";
     changelog = "https://github.com/AOMediaCodec/libavif/blob/v${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ mkg20001 ];
-    platforms = platforms.all;
-    license = licenses.bsd2;
+    maintainers = with lib.maintainers; [ mkg20001 ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.bsd2;
   };
 }

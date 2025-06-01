@@ -89,15 +89,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Derivative of Bitcoin Core with a collection of improvements";
     homepage = "https://bitcoinknots.org/";
     changelog = "https://github.com/bitcoinknots/bitcoin/blob/v${version}/doc/release-notes.md";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       prusnak
       mmahut
     ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

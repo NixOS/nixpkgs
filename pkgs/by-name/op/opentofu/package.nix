@@ -60,12 +60,12 @@ let
 
     subPackages = [ "./cmd/..." ];
 
-    meta = with lib; {
+    meta = {
       description = "Tool for building, changing, and versioning infrastructure";
       homepage = "https://opentofu.org/";
       changelog = "https://github.com/opentofu/opentofu/blob/v${version}/CHANGELOG.md";
-      license = licenses.mpl20;
-      maintainers = with maintainers; [
+      license = lib.licenses.mpl20;
+      maintainers = with lib.maintainers; [
         nickcao
         zowoq
       ];

@@ -58,12 +58,12 @@ buildGoModule rec {
       --fish <($out/bin/process-compose completion fish)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple and flexible scheduler and orchestrator to manage non-containerized applications";
     homepage = "https://github.com/F1bonacc1/process-compose";
     changelog = "https://github.com/F1bonacc1/process-compose/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ thenonameguy ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ thenonameguy ];
     mainProgram = "process-compose";
   };
 }

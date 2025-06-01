@@ -19,14 +19,14 @@ stdenv.mkDerivation rec {
     install -D mlxbf-bootctl $out/bin/mlxbf-bootctl
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Control BlueField boot partitions";
     homepage = "https://github.com/Mellanox/mlxbf-bootctl";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     changelog = "https://github.com/Mellanox/mlxbf-bootctl/releases/tag/${pname}-${version}";
     # This package is supposed to only run on a BlueField. Thus aarch64-linux
     # is the only relevant platform.
     platforms = [ "aarch64-linux" ];
-    maintainers = with maintainers; [ nikstur ];
+    maintainers = with lib.maintainers; [ nikstur ];
   };
 }

@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
     libxkbcommon
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Show keys you typed on screen";
     homepage = "https://showmethekey.alynx.one/";
     changelog = "https://github.com/AlynxZhou/showmethekey/releases/tag/v${version}";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ocfox ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ocfox ];
   };
 }

@@ -26,12 +26,12 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion completions/{tldr.bash,_tldr,tldr.fish}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Official tldr client written in Rust";
     homepage = "https://github.com/tldr-pages/tlrc";
     changelog = "https://github.com/tldr-pages/tlrc/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "tldr";
-    maintainers = with maintainers; [ acuteenvy ];
+    maintainers = with lib.maintainers; [ acuteenvy ];
   };
 }

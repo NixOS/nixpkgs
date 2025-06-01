@@ -34,12 +34,12 @@ buildGoModule rec {
       --zsh <($out/bin/keepassxc-go completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library and basic CLI tool to interact with KeepassXC via unix socket";
     homepage = "https://github.com/MarkusFreitag/keepassxc-go";
     changelog = "https://github.com/MarkusFreitag/keepassxc-go/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ xgwq ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ xgwq ];
     mainProgram = "keepassxc-go";
   };
 }

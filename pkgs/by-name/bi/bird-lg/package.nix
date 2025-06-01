@@ -27,12 +27,12 @@ let
 
       inherit modRoot vendorHash;
 
-      meta = with lib; {
+      meta = {
         description = "Bird Looking Glass";
         homepage = "https://github.com/xddxdd/bird-lg-go";
         changelog = "https://github.com/xddxdd/bird-lg-go/releases/tag/v${version}";
-        license = licenses.gpl3Plus;
-        maintainers = with maintainers; [
+        license = lib.licenses.gpl3Plus;
+        maintainers = with lib.maintainers; [
           tchekda
           e1mo
         ];

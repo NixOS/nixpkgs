@@ -35,12 +35,12 @@ buildGoModule rec {
     command = "vals version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Helm-like configuration values loader with support for various sources";
     mainProgram = "vals";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/helmfile/vals";
     changelog = "https://github.com/helmfile/vals/releases/v${version}";
-    maintainers = with maintainers; [ stehessel ];
+    maintainers = with lib.maintainers; [ stehessel ];
   };
 }

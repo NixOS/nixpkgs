@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/d-bahr/CRCpp";
     changelog = "https://github.com/d-bahr/CRCpp/releases/tag/release-${version}";
     description = "Easy to use and fast C++ CRC library";
-    platforms = platforms.all;
-    maintainers = [ ];
-    license = licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ];
+    license = lib.licenses.bsd3;
   };
 }

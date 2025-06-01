@@ -20,15 +20,15 @@ rustPlatform.buildRustPackage rec {
     patchShebangs tests/test.sh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper to execute a command in a pty, even if redirecting the output";
     homepage = "https://github.com/dtolnay/faketty";
     changelog = "https://github.com/dtolnay/faketty/releases/tag/${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "faketty";
   };
 }

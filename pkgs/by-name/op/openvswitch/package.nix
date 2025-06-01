@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://www.openvswitch.org/releases/NEWS-${version}.txt";
     description = "Multilayer virtual switch";
     longDescription = ''
@@ -148,13 +148,13 @@ stdenv.mkDerivation rec {
       to VMware's vNetwork distributed vswitch or Cisco's Nexus 1000V.
     '';
     homepage = "https://www.openvswitch.org/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       adamcstephens
       kmcopper
       netixx
       xddxdd
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

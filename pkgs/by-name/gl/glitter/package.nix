@@ -34,12 +34,12 @@ rustPlatform.buildRustPackage rec {
     "runs_correctly"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Git wrapper that allows you to compress multiple commands into one";
     homepage = "https://github.com/milo123459/glitter";
     changelog = "https://github.com/Milo123459/glitter/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "glitter";
   };
 }

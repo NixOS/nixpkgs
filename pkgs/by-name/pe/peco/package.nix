@@ -19,12 +19,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-+HQz7UUgATdgSWlI1dg2DdQRUSke9MyAtXgLikFhF90=";
 
-  meta = with lib; {
+  meta = {
     description = "Simplistic interactive filtering tool";
     mainProgram = "peco";
     homepage = "https://github.com/peco/peco";
     changelog = "https://github.com/peco/peco/blob/v${version}/Changes";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pSub ];
   };
 }

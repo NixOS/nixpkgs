@@ -99,12 +99,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Lightning-fast and Powerful Code Editor written in Rust";
     homepage = "https://github.com/lapce/lapce";
     changelog = "https://github.com/lapce/lapce/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ elliot ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ elliot ];
     mainProgram = "lapce";
   };
 }

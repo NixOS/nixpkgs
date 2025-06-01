@@ -49,12 +49,12 @@ rustPlatform.buildRustPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool to serve files and directories over HTTP";
     homepage = "https://github.com/svenstaro/miniserve";
     changelog = "https://github.com/svenstaro/miniserve/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ figsoda ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "miniserve";
   };
 }

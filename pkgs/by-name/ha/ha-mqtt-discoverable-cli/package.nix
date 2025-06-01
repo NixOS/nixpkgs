@@ -30,12 +30,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "ha_mqtt_discoverable_cli" ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI for creating Home Assistant compatible MQTT entities that will be automatically discovered";
     homepage = "https://github.com/unixorn/ha-mqtt-discoverable-cli";
     changelog = "https://github.com/unixorn/ha-mqtt-discoverable-cli/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "hmd";
   };
 }

@@ -82,13 +82,13 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     mainProgram = "caffeine";
-    maintainers = with maintainers; [ marzipankaiser ];
+    maintainers = with lib.maintainers; [ marzipankaiser ];
     description = "Status bar application to temporarily inhibit screensaver and sleep mode";
     homepage = "https://codeberg.org/WhyNotHugo/caffeine-ng";
     changelog = "https://codeberg.org/WhyNotHugo/caffeine-ng/src/tag/v${version}/CHANGELOG.rst";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
 }

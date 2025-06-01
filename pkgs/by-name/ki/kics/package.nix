@@ -37,7 +37,7 @@ buildGoModule rec {
     command = "kics version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to check for vulnerabilities and other issues";
     longDescription = ''
       Find security vulnerabilities, compliance issues, and
@@ -46,8 +46,8 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/Checkmarx/kics";
     changelog = "https://github.com/Checkmarx/kics/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ patryk4815 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ patryk4815 ];
     mainProgram = "kics";
   };
 }

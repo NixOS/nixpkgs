@@ -21,15 +21,15 @@ rustPlatform.buildRustPackage rec {
     rm .cargo/config.toml
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Generate Rust register maps (`struct`s) from SVD files";
     mainProgram = "svd2rust";
     homepage = "https://github.com/rust-embedded/svd2rust";
     changelog = "https://github.com/rust-embedded/svd2rust/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [ newam ];
+    maintainers = with lib.maintainers; [ newam ];
   };
 }

@@ -90,11 +90,11 @@ python3.pkgs.buildPythonApplication rec {
     echo "__version__ = \"${version}\"" > ripe/atlas/tools/version.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "RIPE ATLAS project tools";
     homepage = "https://github.com/RIPE-NCC/ripe-atlas-tools";
     changelog = "https://github.com/RIPE-NCC/ripe-atlas-tools/blob/v${version}/CHANGES.rst";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ raitobezarius ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ raitobezarius ];
   };
 }
