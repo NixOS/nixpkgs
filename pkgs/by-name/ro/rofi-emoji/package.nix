@@ -19,6 +19,8 @@
   waylandSupport ? true,
   wl-clipboard,
   wtype,
+
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (final: {
@@ -67,6 +69,8 @@ stdenv.mkDerivation (final: {
     glib
     rofi-unwrapped
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Emoji selector plugin for Rofi";
