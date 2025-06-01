@@ -13345,11 +13345,10 @@ with pkgs;
 
   pragha = libsForQt5.callPackage ../applications/audio/pragha { };
 
-  rofi-emoji = (callPackage ../applications/misc/rofi-emoji { }).v3;
-  rofi-emoji-wayland =
-    (callPackage ../applications/misc/rofi-emoji {
-      rofi-unwrapped = rofi-wayland-unwrapped;
-    }).v4;
+  rofi-emoji-wayland = rofi-emoji.override {
+    waylandSupport = true;
+    x11Support = false;
+  };
 
   rofi-rbw-wayland = rofi-rbw.override {
     waylandSupport = true;
