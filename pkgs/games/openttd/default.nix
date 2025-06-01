@@ -40,25 +40,25 @@
 let
   opengfx = fetchzip {
     url = "https://cdn.openttd.org/opengfx-releases/7.1/opengfx-7.1-all.zip";
-    sha256 = "sha256-daJ/Qwg/okpmLQkXcCjruIiP8GEwyyp02YWcGQepxzs=";
+    hash = "sha256-daJ/Qwg/okpmLQkXcCjruIiP8GEwyyp02YWcGQepxzs=";
   };
 
   opensfx = fetchzip {
     url = "https://cdn.openttd.org/opensfx-releases/1.0.3/opensfx-1.0.3-all.zip";
-    sha256 = "sha256-QmfXizrRTu/fUcVOY7tCndv4t4BVW+fb0yUi8LgSYzM=";
+    hash = "sha256-QmfXizrRTu/fUcVOY7tCndv4t4BVW+fb0yUi8LgSYzM=";
   };
 
   openmsx = fetchzip {
     url = "https://cdn.openttd.org/openmsx-releases/0.4.2/openmsx-0.4.2-all.zip";
-    sha256 = "sha256-Cgrg2m+uTODFg39mKgX+hE8atV7v5bVyZd716vSZB8M=";
+    hash = "sha256-Cgrg2m+uTODFg39mKgX+hE8atV7v5bVyZd716vSZB8M=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openttd";
   version = "14.1";
 
   src = fetchzip {
-    url = "https://cdn.openttd.org/openttd-releases/${version}/${pname}-${version}-source.tar.xz";
+    url = "https://cdn.openttd.org/openttd-releases/${finalAttrs.version}/openttd-${finalAttrs.version}-source.tar.xz";
     hash = "sha256-YT4IE/rJ9pnpeMWKbOra6AbSUwW19RwOKlXkxwoMeKY=";
   };
 
@@ -77,6 +77,7 @@ stdenv.mkDerivation rec {
     pkg-config
     makeWrapper
   ];
+
   buildInputs =
     [
       SDL2
@@ -107,6 +108,8 @@ stdenv.mkDerivation rec {
       libjack2
     ];
 
+  strictDeps = true;
+
   postPatch = ''
     substituteInPlace src/music/fluidsynth.cpp \
       --replace-fail "/usr/share/soundfonts/default.sf2" \
@@ -124,7 +127,7 @@ stdenv.mkDerivation rec {
       tar -xf ${openmsx}/*.tar -C $out/share/games/openttd/baseset
     '';
 
-  meta = with lib; {
+  meta = {
     description = ''Open source clone of the Microprose game "Transport Tycoon Deluxe"'';
     mainProgram = "openttd";
     longDescription = ''
@@ -138,12 +141,12 @@ stdenv.mkDerivation rec {
         - observe as spectators
     '';
     homepage = "https://www.openttd.org/";
-    changelog = "https://cdn.openttd.org/openttd-releases/${version}/changelog.txt";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    changelog = "https://cdn.openttd.org/openttd-releases/${finalAttrs.version}/changelog.txt";
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       jcumming
       fpletz
     ];
   };
-}
+})
