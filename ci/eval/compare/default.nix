@@ -173,7 +173,12 @@ runCommand "compare"
       } >> $out/step-summary.md
     fi
 
-    jq -r -f ${./generate-step-summary.jq} < ${changed-paths} >> $out/step-summary.md
+    {
+      echo
+      echo "# Packages"
+      echo
+      jq -r -f ${./generate-step-summary.jq} < ${changed-paths}
+    } >> $out/step-summary.md
 
     cp "$maintainersPath" "$out/maintainers.json"
   ''

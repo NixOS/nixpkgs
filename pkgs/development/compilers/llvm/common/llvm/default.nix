@@ -208,16 +208,16 @@ stdenv.mkDerivation (
               stripLen = 1;
             }
           )
-      ++
-        lib.optional (lib.versionOlder release_version "16")
-          # Fix musl build.
-          (
-            fetchpatch {
-              url = "https://github.com/llvm/llvm-project/commit/5cd554303ead0f8891eee3cd6d25cb07f5a7bf67.patch";
-              relative = "llvm";
-              hash = "sha256-XPbvNJ45SzjMGlNUgt/IgEvM2dHQpDOe6woUJY+nUYA=";
-            }
-          )
+      ++ lib.optionals (lib.versionOlder release_version "16") [
+        # Fix musl build.
+        (fetchpatch {
+          url = "https://github.com/llvm/llvm-project/commit/5cd554303ead0f8891eee3cd6d25cb07f5a7bf67.patch";
+          relative = "llvm";
+          hash = "sha256-XPbvNJ45SzjMGlNUgt/IgEvM2dHQpDOe6woUJY+nUYA=";
+        })
+        # Fix for Python 3.13
+        (getVersionFile "llvm/no-pipes.patch")
+      ]
       ++ lib.optionals (lib.versionOlder release_version "14") [
         # Backport gcc-13 fixes with missing includes.
         (fetchpatch {

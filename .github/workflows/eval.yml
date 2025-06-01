@@ -4,8 +4,8 @@ on:
   pull_request:
     paths:
       - .github/workflows/eval.yml
+      - .github/workflows/reviews.yml # needs eval results from the same event type
   pull_request_target:
-    types: [opened, ready_for_review, synchronize, reopened]
   push:
     # Keep this synced with ci/request-reviews/dev-branches.txt
     branches:
@@ -15,6 +15,10 @@ on:
       - staging-*
       - haskell-updates
       - python-updates
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 
 permissions: {}
 
@@ -87,44 +91,43 @@ jobs:
       - name: Get target run id
         if: needs.prepare.outputs.targetSha
         id: targetRunId
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         env:
-          GH_TOKEN: ${{ github.token }}
           MATRIX_SYSTEM: ${{ matrix.system }}
-          REPOSITORY: ${{ github.repository }}
           TARGET_SHA: ${{ needs.prepare.outputs.targetSha }}
-        run: |
-          # Get the latest eval.yml workflow run for the PR's target commit
-          if ! run=$(gh api --method GET /repos/"$REPOSITORY"/actions/workflows/eval.yml/runs \
-            -f head_sha="$TARGET_SHA" -f event=push \
-            --jq '.workflow_runs | sort_by(.run_started_at) | .[-1]') \
-            || [[ -z "$run" ]]; then
-            echo "Could not find an eval.yml workflow run for $TARGET_SHA, cannot make comparison"
-            exit 1
-          fi
-          echo "Comparing against $(jq .html_url <<< "$run")"
-          runId=$(jq .id <<< "$run")
+        with:
+          script: |
+            const system = process.env.MATRIX_SYSTEM
+            const targetSha = process.env.TARGET_SHA
 
-          if ! job=$(gh api --method GET /repos/"$REPOSITORY"/actions/runs/"$runId"/jobs \
-            --jq ".jobs[] | select (.name == \"Outpaths ($MATRIX_SYSTEM)\")") \
-            || [[ -z "$job" ]]; then
-            echo "Could not find the Outpaths ($MATRIX_SYSTEM) job for workflow run $runId, cannot make comparison"
-            exit 1
-          fi
-          jobId=$(jq .id <<< "$job")
-          conclusion=$(jq -r .conclusion <<< "$job")
+            let run_id
+            try {
+              run_id = (await github.rest.actions.listWorkflowRuns({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id: 'eval.yml',
+                event: 'push',
+                head_sha: targetSha
+              })).data.workflow_runs[0].id
+            } catch {
+              throw new Error(`Could not find an eval.yml workflow run for ${targetSha}.`)
+            }
 
-          while [[ "$conclusion" == null || "$conclusion" == "" ]]; do
-            echo "Job not done, waiting 10 seconds before checking again"
-            sleep 10
-            conclusion=$(gh api /repos/"$REPOSITORY"/actions/jobs/"$jobId" --jq '.conclusion')
-          done
+            core.setOutput('targetRunId', run_id)
 
-          if [[ "$conclusion" != "success" ]]; then
-            echo "Job was not successful (conclusion: $conclusion), cannot make comparison"
-            exit 1
-          fi
-
-          echo "targetRunId=$runId" >> "$GITHUB_OUTPUT"
+            // Waiting 120 * 5 sec = 10 min. max.
+            // Eval takes max 5-6 minutes, normally.
+            for (let i = 0; i < 120; i++) {
+              const result = await github.rest.actions.listWorkflowRunArtifacts({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                run_id,
+                name: `merged-${system}`
+              })
+              if (result.data.total_count > 0) return
+              await new Promise(resolve => setTimeout(resolve, 5000))
+            }
+            throw new Error(`No merged-${system} artifact found.`)
 
       - uses: actions/download-artifact@v4
         if: steps.targetRunId.outputs.targetRunId
@@ -153,12 +156,13 @@ jobs:
           name: diff-${{ matrix.system }}
           path: diff/*
 
-  tag:
-    name: Tag
+  compare:
+    name: Comparison
     runs-on: ubuntu-24.04-arm
     needs: [ prepare, outpaths ]
     if: needs.prepare.outputs.targetSha
     permissions:
+      issues: write # needed to create *new* labels
       pull-requests: write
       statuses: write
     steps:
@@ -209,87 +213,86 @@ jobs:
           name: comparison
           path: comparison/*
 
-      - name: Build the requestReviews derivation
-        run: nix-build trusted/ci -A requestReviews
-
       - name: Labelling pull request
-        if: ${{ github.event_name == 'pull_request_target' && github.repository_owner == 'NixOS' }}
-        env:
-          GH_TOKEN: ${{ github.token }}
-          REPOSITORY: ${{ github.repository }}
-          NUMBER: ${{ github.event.number }}
-        run: |
-          # Get all currently set labels that we manage
-          gh api \
-            /repos/"$REPOSITORY"/issues/"$NUMBER"/labels \
-            --jq '.[].name | select(startswith("10.rebuild") or . == "11.by: package-maintainer")' \
-            | sort > before
+        if: ${{ github.event_name == 'pull_request_target' }}
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            const { readFile } = require('node:fs/promises')
 
-          # And the labels that should be there
-          jq -r '.labels[]' comparison/changed-paths.json \
-            | sort > after
+            const pr = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number
+            }
 
-          # Remove the ones not needed anymore
-          while read -r toRemove; do
-            echo "Removing label $toRemove"
-            gh api \
-              --method DELETE \
-              /repos/"$REPOSITORY"/issues/"$NUMBER"/labels/"$toRemove"
-          done < <(comm -23 before after)
+            // Get all currently set labels that we manage
+            const before =
+              (await github.paginate(github.rest.issues.listLabelsOnIssue, pr))
+              .map(({ name }) => name)
+              .filter(name => name.startsWith('10.rebuild') || name == '11.by: package-maintainer')
 
-          # And add the ones that aren't set already
-          while read -r toAdd; do
-            echo "Adding label $toAdd"
-            gh api \
-              --method POST \
-              /repos/"$REPOSITORY"/issues/"$NUMBER"/labels \
-              -f "labels[]=$toAdd"
-          done < <(comm -13 before after)
+            // And the labels that should be there
+            const after = JSON.parse(await readFile('comparison/changed-paths.json', 'utf-8')).labels
+
+            // Remove the ones not needed anymore
+            await Promise.all(
+              before.filter(name => !after.includes(name))
+              .map(name => github.rest.issues.removeLabel({
+                ...pr,
+                name
+              }))
+            )
+
+            // And add the ones that aren't set already
+            const added = after.filter(name => !before.includes(name))
+            if (added.length > 0) {
+              await github.rest.issues.addLabels({
+                ...pr,
+                labels: added
+              })
+            }
 
       - name: Add eval summary to commit statuses
-        if: ${{ github.event_name == 'pull_request_target' && github.repository_owner == 'NixOS' }}
-        env:
-          GH_TOKEN: ${{ github.token }}
-          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-          NUMBER: ${{ github.event.number }}
-        run: |
-          description=$(jq -r '
-          "Package: added " + (.attrdiff.added | length | tostring) +
-          ", removed " + (.attrdiff.removed | length | tostring) +
-          ", changed " + (.attrdiff.changed | length | tostring) +
-          ", Rebuild: linux " + (.rebuildCountByKernel.linux | tostring) +
-          ", darwin " + (.rebuildCountByKernel.darwin | tostring)
-          ' <comparison/changed-paths.json)
-          target_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID?pr=$NUMBER"
-          gh api --method POST \
-            -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" \
-            "/repos/$GITHUB_REPOSITORY/statuses/$PR_HEAD_SHA" \
-            -f "context=Eval / Summary" -f "state=success" -f "description=$description" -f "target_url=$target_url"
-
-      # See ./codeowners-v2.yml, reuse the same App because we need the same permissions
-      # Can't use the token received from permissions above, because it can't get enough permissions
-      - uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
-        if: vars.OWNER_APP_ID
-        id: app-token
+        if: ${{ github.event_name == 'pull_request_target' }}
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         with:
-          app-id: ${{ vars.OWNER_APP_ID }}
-          private-key: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
-          permission-administration: read
-          permission-members: read
-          permission-pull-requests: write
+          script: |
+            const { readFile } = require('node:fs/promises')
+            const changed = JSON.parse(await readFile('comparison/changed-paths.json', 'utf-8'))
+            const description =
+              'Package: ' + [
+                `added ${changed.attrdiff.added.length}`,
+                `removed ${changed.attrdiff.removed.length}`,
+                `changed ${changed.attrdiff.changed.length}`
+              ].join(', ') +
+              ' — Rebuild: ' + [
+                `linux ${changed.rebuildCountByKernel.linux}`,
+                `darwin ${changed.rebuildCountByKernel.darwin}`
+              ].join(', ')
 
-      - name: Requesting maintainer reviews
-        if: ${{ steps.app-token.outputs.token && github.repository_owner == 'NixOS' }}
-        env:
-          GH_TOKEN: ${{ github.token }}
-          REPOSITORY: ${{ github.repository }}
-          NUMBER: ${{ github.event.number }}
-          AUTHOR: ${{ github.event.pull_request.user.login }}
-          # Don't request reviewers on draft PRs
-          DRY_MODE: ${{ github.event.pull_request.draft && '1' || '' }}
-        run: |
-          # maintainers.json contains GitHub IDs. Look up handles to request reviews from.
-          # There appears to be no API to request reviews based on GitHub IDs
-          jq -r 'keys[]' comparison/maintainers.json \
-            | while read -r id; do gh api /user/"$id" --jq .login; done \
-            | GH_TOKEN=${{ steps.app-token.outputs.token }} result/bin/request-reviewers.sh "$REPOSITORY" "$NUMBER" "$AUTHOR"
+            const { serverUrl, repo, runId, payload } = context
+            const target_url =
+              `${serverUrl}/${repo.owner}/${repo.repo}/actions/runs/${runId}?pr=${payload.pull_request.number}`
+
+            await github.rest.repos.createCommitStatus({
+              owner: repo.owner,
+              repo: repo.repo,
+              sha: payload.pull_request.head.sha,
+              context: 'Eval / Summary',
+              state: 'success',
+              description,
+              target_url
+            })
+
+  reviewers:
+    name: Reviewers
+    # No dependency on "compare", so that it can start at the same time.
+    # We only wait for the "comparison" artifact to be available, which makes the start-to-finish time
+    # for the eval workflow considerably faster.
+    needs: [ prepare, outpaths ]
+    if: needs.prepare.outputs.targetSha
+    uses: ./.github/workflows/reviewers.yml
+    secrets: inherit
+    with:
+      caller: ${{ github.workflow }}
