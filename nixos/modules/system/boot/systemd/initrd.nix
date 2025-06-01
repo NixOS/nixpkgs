@@ -133,7 +133,9 @@ let
     name = "initrd-${kernel-name}";
     inherit (config.boot.initrd) compressor compressorArgs prepend;
 
-    contents = lib.filter ({ source, ... }: !lib.elem source cfg.suppressedStorePaths) cfg.storePaths;
+    contents = lib.filter (
+      { source, enable, ... }: (!lib.elem source cfg.suppressedStorePaths) && enable
+    ) cfg.storePaths;
   };
 
 in
