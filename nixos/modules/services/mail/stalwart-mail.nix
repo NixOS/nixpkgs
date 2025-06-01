@@ -107,21 +107,17 @@ in
       resolver.public-suffix = lib.mkDefault [
         "file://${pkgs.publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
       ];
-      config = {
-        spam-filter.resource = lib.mkDefault "file://${cfg.package}/etc/stalwart/spamfilter.toml";
-        webadmin =
-          let
-            hasHttpListener = builtins.any (listener: listener.protocol == "http") (
-              lib.attrValues cfg.settings.server.listener
-            );
-          in
-          {
-            path = "/var/cache/stalwart-mail";
-          }
-          // lib.optionalAttrs ((builtins.hasAttr "listener" cfg.settings.server) && hasHttpListener) {
-            resource = lib.mkDefault "file://${cfg.package.webadmin}/webadmin.zip";
-          };
-      };
+      spam-filter.resource = lib.mkDefault "file://${cfg.package}/etc/stalwart/spamfilter.toml";
+      webadmin =
+        let
+          hasHttpListener = builtins.any (listener: listener.protocol == "http") (
+            lib.attrValues (cfg.settings.server.listener or { })
+          );
+        in
+        {
+          path = "/var/cache/stalwart-mail";
+          resource = lib.mkIf (hasHttpListener) (lib.mkDefault "file://${cfg.package.webadmin}/webadmin.zip");
+        };
     };
 
     # This service stores a potentially large amount of data.
