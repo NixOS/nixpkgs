@@ -214,7 +214,7 @@ let
 
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "otb";
+  pname = "otb-test";
   version = "10.0-unstable-2025-04-03";
 
   src = fetchFromGitHub {
