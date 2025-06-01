@@ -1,4 +1,5 @@
 {
+  stdenv,
   targetPackages,
   lib,
   makeSetupHook,
@@ -20,6 +21,7 @@ makeSetupHook {
         cc.isClang && !cc.stdenv.hostPlatform.isDarwin
       ) "--ld-path=${cc.targetPrefix}ld"
     }";
+    static = lib.optionalString stdenv.targetPlatform.isStatic "-static";
   };
 
   passthru = {
