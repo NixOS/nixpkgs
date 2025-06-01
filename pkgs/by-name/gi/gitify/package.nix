@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_9,
+  pnpm_10,
   nodejs,
   electron,
   makeDesktopItem,
@@ -25,15 +25,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpm_10.configHook
     copyDesktopItems
     imagemagick
     makeWrapper
   ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-4Ite75ZMMSbPnmNcpoYaggiH9r2xQYkOnl29CF/6swA=";
+    hash = "sha256-eIvqZ9a+foYH+jXuqGz1m/4C+0Xq8mTvm7ZajKeOw58=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
