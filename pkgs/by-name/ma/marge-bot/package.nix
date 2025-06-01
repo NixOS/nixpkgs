@@ -56,7 +56,10 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://gitlab.com/marge-org/marge-bot";
     changelog = "https://gitlab.com/marge-org/marge-bot/-/blob/${src.rev}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with maintainers; [
+      bcdarwin
+      lelgenio
+    ];
     mainProgram = "marge.app";
   };
 }
