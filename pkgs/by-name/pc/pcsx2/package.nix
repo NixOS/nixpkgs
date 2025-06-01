@@ -1,7 +1,7 @@
 {
   lib,
   SDL2,
-  callPackage,
+  fetchFromGitHub,
   cmake,
   cubeb,
   curl,
@@ -28,7 +28,13 @@
 }:
 
 let
-  sources = callPackage ./sources.nix { };
+  pcsx2_patches = fetchFromGitHub {
+    owner = "PCSX2";
+    repo = "pcsx2_patches";
+    rev = "5cc1d09a72c0afcd04e2ca089a6b279108328fda";
+    hash = "sha256-or77ZsWU0YWtxj9LKJ/m8nDvKSyiF1sO140QaH6Jr64=";
+  };
+
   inherit (qt6)
     qtbase
     qtsvg
@@ -38,7 +44,15 @@ let
     ;
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
-  inherit (sources.pcsx2) pname version src;
+  pname = "pcsx2";
+  version = "2.3.39";
+  src = fetchFromGitHub {
+    pname = "pcsx2-source";
+    owner = "PCSX2";
+    repo = "pcsx2";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Knlkf4GcN8OCgrd1nwdnYVCDA/7lyAfcoV4mLCkrHtg=";
+  };
 
   patches = [
     # Remove PCSX2_GIT_REV
@@ -51,7 +65,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "PACKAGE_MODE" true)
     (lib.cmakeBool "DISABLE_ADVANCE_SIMD" true)
     (lib.cmakeBool "USE_LINKED_FFMPEG" true)
-    (lib.cmakeFeature "PCSX2_GIT_REV" finalAttrs.src.rev)
+    (lib.cmakeFeature "PCSX2_GIT_REV" finalAttrs.src.tag)
   ];
 
   nativeBuildInputs = [
@@ -91,7 +105,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     install -Dm644 $src/pcsx2-qt/resources/icons/AppIcon64.png $out/share/pixmaps/PCSX2.png
     install -Dm644 $src/.github/workflows/scripts/linux/pcsx2-qt.desktop $out/share/applications/PCSX2.desktop
 
-    zip -jq $out/share/PCSX2/resources/patches.zip ${sources.pcsx2_patches.src}/patches/*
+    zip -jq $out/share/PCSX2/resources/patches.zip ${pcsx2_patches}/patches/*
     strip-nondeterminism $out/share/PCSX2/resources/patches.zip
   '';
 
@@ -111,6 +125,10 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/pcsx2-qt \
       --run 'if [[ -z $I_WANT_A_BROKEN_WAYLAND_UI ]]; then export QT_QPA_PLATFORM=xcb; fi'
   '';
+
+  passthru = {
+    inherit pcsx2_patches;
+  };
 
   meta = {
     homepage = "https://pcsx2.net";
