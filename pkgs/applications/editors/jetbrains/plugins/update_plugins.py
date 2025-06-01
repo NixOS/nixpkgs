@@ -172,8 +172,8 @@ def make_plugin_files(plugin_infos: dict, ide_versions: dict, quiet: bool, extra
             "name": names[pid]
         }
         relevant_builds = [
-            builds for ide, builds 
-            in ide_versions.items() 
+            builds for ide, builds
+            in ide_versions.items()
             if (
                 ide in plugin_versions["compatible"]
                 # TODO: Remove this once we removed pycharm-community
