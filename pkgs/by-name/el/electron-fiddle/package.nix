@@ -1,13 +1,13 @@
 {
   buildFHSEnv,
-  electron_33,
+  electron,
   fetchFromGitHub,
   fetchYarnDeps,
   fetchurl,
   git,
   lib,
   makeDesktopItem,
-  nodejs_20,
+  nodejs,
   stdenvNoCC,
   util-linux,
   yarnBuildHook,
@@ -18,8 +18,6 @@
 let
   pname = "electron-fiddle";
   version = "0.36.5";
-  electron = electron_33;
-  nodejs = nodejs_20;
 
   src = fetchFromGitHub {
     owner = "electron";
