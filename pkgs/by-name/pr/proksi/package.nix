@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "proksi";
-  version = "0.5.3-unstable-2025-05-12";
+  version = "0.5.3-unstable-2025-05-19";
 
   src = fetchFromGitHub {
     owner = "luizfonseca";
     repo = "proksi";
-    rev = "da697ae58c515759b710b93ea1d2065a6ae07443";
-    hash = "sha256-maoiQc8s+gGC/xqyii/KsYZmF9li8VjyizBqlGq7H0c=";
+    rev = "4e31e5223dd4a8e3b955fbfa6c895c94c834e5aa";
+    hash = "sha256-7NeRU+VJf2HvT7PRmryhE8u56/PoKvKtGGuZTCujGNQ=";
   };
 
   postPatch = ''
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Mmq68jk4EK3J8wnnqznAgcggoFv0iSStlnUwmumRFmQ=";
+  cargoHash = "sha256-jypYyXN9caTax+11shkJJfEEPtoq4RILWjffm/3ymzE=";
 
   nativeBuildInputs = [
     pkg-config
