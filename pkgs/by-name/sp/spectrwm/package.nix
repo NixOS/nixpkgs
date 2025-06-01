@@ -36,11 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     libbsd
   ];
 
-  prePatch =
-    let
-      subdir = if stdenv.hostPlatform.isDarwin then "osx" else "linux";
-    in
-    "cd ${subdir}";
+  sourceRoot = finalAttrs.src.name + (if stdenv.hostPlatform.isDarwin then "/osx" else "/linux");
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
