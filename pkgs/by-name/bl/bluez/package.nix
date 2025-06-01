@@ -13,7 +13,6 @@
   pkg-config,
   python3Packages,
   readline,
-  systemdMinimal,
   udev,
   # Test gobject-introspection instead of pygobject because the latter
   # causes an infinite recursion.
@@ -61,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch =
     ''
       substituteInPlace tools/hid2hci.rules \
-        --replace-fail /sbin/udevadm ${systemdMinimal}/bin/udevadm \
+        --replace-fail /sbin/udevadm ${udev}/bin/udevadm \
         --replace-fail "hid2hci " "$out/lib/udev/hid2hci "
     ''
     +
