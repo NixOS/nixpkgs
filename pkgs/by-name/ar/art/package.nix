@@ -44,8 +44,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "artpixls";
-    repo = "art";
-    rev = version;
+    repo = "ART";
+    tag = version;
     hash = "sha256-lKjYSKjZSJ9HtbmGWFR0bVv6hLnRzpklq2ueWirJ+Nw=";
   };
 
