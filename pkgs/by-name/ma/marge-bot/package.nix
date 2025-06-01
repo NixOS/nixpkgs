@@ -4,6 +4,7 @@
   fetchFromGitLab,
   git,
   openssh,
+  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -47,6 +48,8 @@ python3.pkgs.buildPythonApplication rec {
     ];
 
   pythonImportsCheck = [ "marge" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Merge bot for GitLab";
