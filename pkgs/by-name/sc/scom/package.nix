@@ -5,13 +5,13 @@
 }:
 stdenv.mkDerivation (finaAttrs: {
   pname = "scom";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "crash-systems";
     repo = "scom";
     tag = finaAttrs.version;
-    hash = "sha256-z/y4SB0R3nxiBGAWLGBsRH0tncDuBxpjy6NGG8ZbIPw=";
+    hash = "sha256-mhMUoiVSehAILbDZ4fXVt3+GOAlvu2WlUDatjpuVG1w=";
   };
 
   enableParallelBuilding = true;
