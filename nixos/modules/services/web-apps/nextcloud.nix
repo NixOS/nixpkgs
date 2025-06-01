@@ -190,14 +190,6 @@ let
   mysqlLocal = cfg.database.createLocally && cfg.config.dbtype == "mysql";
   pgsqlLocal = cfg.database.createLocally && cfg.config.dbtype == "pgsql";
 
-  nextcloudGreaterOrEqualThan = versionAtLeast overridePackage.version;
-  nextcloudOlderThan = versionOlder overridePackage.version;
-
-  # https://github.com/nextcloud/documentation/pull/11179
-  ocmProviderIsNotAStaticDirAnymore =
-    nextcloudGreaterOrEqualThan "27.1.2"
-    || (nextcloudOlderThan "27.0.0" && nextcloudGreaterOrEqualThan "26.0.8");
-
   overrideConfig =
     let
       c = cfg.config;
@@ -1233,9 +1225,6 @@ in
             serviceConfig.LoadCredential = [
               "adminpass:${cfg.config.adminpassFile}"
             ] ++ runtimeSystemdCredentials;
-            # On Nextcloud ≥ 26, it is not necessary to patch the database files to prevent
-            # an automatic creation of the database user.
-            environment.NC_setup_create_db_user = lib.mkIf (nextcloudGreaterOrEqualThan "26") "false";
           };
         nextcloud-cron = {
           after = [ "nextcloud-setup.service" ];
@@ -1457,9 +1446,7 @@ in
             priority = 500;
             extraConfig = ''
               # legacy support (i.e. static files and directories in cfg.package)
-              rewrite ^/(?!index|remote|public|cron|core\/ajax\/update|status|ocs\/v[12]|updater\/.+|oc[s${
-                optionalString (!ocmProviderIsNotAStaticDirAnymore) "m"
-              }]-provider\/.+|.+\/richdocumentscode\/proxy) /index.php$request_uri;
+              rewrite ^/(?!index|remote|public|cron|core\/ajax\/update|status|ocs\/v[12]|updater\/.+|ocs-provider\/.+|.+\/richdocumentscode\/proxy) /index.php$request_uri;
               include ${config.services.nginx.package}/conf/fastcgi.conf;
               fastcgi_split_path_info ^(.+?\.php)(\\/.*)$;
               set $path_info $fastcgi_path_info;
@@ -1487,13 +1474,10 @@ in
                 default_type application/wasm;
               }
             '';
-          "~ ^\\/(?:updater|ocs-provider${
-            optionalString (!ocmProviderIsNotAStaticDirAnymore) "|ocm-provider"
-          })(?:$|\\/)".extraConfig =
-            ''
-              try_files $uri/ =404;
-              index index.php;
-            '';
+          "~ ^\\/(?:updater|ocs-provider)(?:$|\\/)".extraConfig = ''
+            try_files $uri/ =404;
+            index index.php;
+          '';
           "/remote" = {
             priority = 1500;
             extraConfig = ''
