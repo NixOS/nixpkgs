@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "py-sucks";
-  version = "0.9.10";
+  version = "0.9.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mib1185";
     repo = "py-sucks";
     tag = "v${version}";
-    hash = "sha256-MjlE5HdxChAgV/O7cD3foqkmKie7FgRRxvOcW+NAtfA=";
+    hash = "sha256-srj/3x04R9KgbdC6IgbQdgUz+srAx0OttB6Ndb2+Nh4=";
   };
 
   build-system = [ setuptools ];
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/mib1185/py-sucks/releases/tag/v${version}";
+    changelog = "https://github.com/mib1185/py-sucks/releases/tag/${src.tag}";
     description = "Library for controlling certain robot vacuums";
     homepage = "https://github.com/mib1185/py-sucks";
     license = lib.licenses.gpl3Only;
