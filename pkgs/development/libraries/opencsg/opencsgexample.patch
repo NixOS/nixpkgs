@@ -1,0 +1,8 @@
+--- a/example/CMakeLists.txt
++++ b/example/CMakeLists.txt
+@@ -19,4 +19,5 @@
+ 
+ install(TARGETS opencsgexample
+     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
++    BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX}/Applications
+ )
