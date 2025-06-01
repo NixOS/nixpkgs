@@ -128,6 +128,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit pcsx2_patches;
+    updateScript.command = [ ./update.sh ];
   };
 
   meta = {
