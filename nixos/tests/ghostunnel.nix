@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ hostPkgs, lib, ... }:
 {
   name = "ghostunnel";
   nodes = {
@@ -58,21 +58,21 @@
         raise Exception(f"Command {command} failed with exit code {r}")
 
     # Create CA
-    cmd("${pkgs.openssl}/bin/openssl genrsa -out ca-key.pem 4096")
-    cmd("${pkgs.openssl}/bin/openssl req -new -x509 -days 365 -key ca-key.pem -sha256 -subj '/C=NL/ST=Zuid-Holland/L=The Hague/O=Stevige Balken en Planken B.V./OU=OpSec/CN=Certificate Authority' -out ca.pem")
+    cmd("${hostPkgs.openssl}/bin/openssl genrsa -out ca-key.pem 4096")
+    cmd("${hostPkgs.openssl}/bin/openssl req -new -x509 -days 365 -key ca-key.pem -sha256 -subj '/C=NL/ST=Zuid-Holland/L=The Hague/O=Stevige Balken en Planken B.V./OU=OpSec/CN=Certificate Authority' -out ca.pem")
 
     # Create service
-    cmd("${pkgs.openssl}/bin/openssl genrsa -out service-key.pem 4096")
-    cmd("${pkgs.openssl}/bin/openssl req -subj '/CN=service' -sha256 -new -key service-key.pem -out service.csr")
+    cmd("${hostPkgs.openssl}/bin/openssl genrsa -out service-key.pem 4096")
+    cmd("${hostPkgs.openssl}/bin/openssl req -subj '/CN=service' -sha256 -new -key service-key.pem -out service.csr")
     cmd("echo subjectAltName = DNS:service,IP:127.0.0.1 >> extfile.cnf")
     cmd("echo extendedKeyUsage = serverAuth >> extfile.cnf")
-    cmd("${pkgs.openssl}/bin/openssl x509 -req -days 365 -sha256 -in service.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out service-cert.pem -extfile extfile.cnf")
+    cmd("${hostPkgs.openssl}/bin/openssl x509 -req -days 365 -sha256 -in service.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out service-cert.pem -extfile extfile.cnf")
 
     # Create client
-    cmd("${pkgs.openssl}/bin/openssl genrsa -out client-key.pem 4096")
-    cmd("${pkgs.openssl}/bin/openssl req -subj '/CN=client' -new -key client-key.pem -out client.csr")
+    cmd("${hostPkgs.openssl}/bin/openssl genrsa -out client-key.pem 4096")
+    cmd("${hostPkgs.openssl}/bin/openssl req -subj '/CN=client' -new -key client-key.pem -out client.csr")
     cmd("echo extendedKeyUsage = clientAuth > extfile-client.cnf")
-    cmd("${pkgs.openssl}/bin/openssl x509 -req -days 365 -sha256 -in client.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out client-cert.pem -extfile extfile-client.cnf")
+    cmd("${hostPkgs.openssl}/bin/openssl x509 -req -days 365 -sha256 -in client.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out client-cert.pem -extfile extfile-client.cnf")
 
     cmd("ls -al")
 
@@ -108,7 +108,7 @@
     client.fail("bash -c 'diff <(curl -v --no-progress-meter --cacert /root/ca.pem https://service:1443/hi.txt) <(echo hi)'")
   '';
 
-  meta.maintainers = with pkgs.lib.maintainers; [
+  meta.maintainers = with lib.maintainers; [
     roberth
   ];
 }
