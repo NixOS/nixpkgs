@@ -10887,8 +10887,6 @@ with pkgs;
 
   rake = callPackage ../development/tools/build-managers/rake { };
 
-  restic = callPackage ../tools/backup/restic { };
-
   rethinkdb = callPackage ../servers/nosql/rethinkdb {
     stdenv = clangStdenv;
     libtool = cctools;
