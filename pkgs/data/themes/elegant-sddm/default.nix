@@ -62,6 +62,8 @@ stdenvNoCC.mkDerivation {
     description = "Sleek and stylish SDDM theme crafted in QML";
     homepage = "https://github.com/surajmandalcell/Elegant-sddm";
     license = licenses.gpl3;
+
+    platforms = platforms.linux;
     maintainers = with maintainers; [ GaetanLepage ];
   };
 }
