@@ -1,5 +1,6 @@
 {
   lib,
+  buildSddmThemePackage,
   stdenvNoCC,
   fetchFromGitHub,
   bash,
@@ -7,84 +8,77 @@
   catppuccin-whiskers,
   flavor ? "mocha",
   accent ? "mauve",
-  font ? "Noto Sans",
-  fontSize ? "9",
+
+  # deprecated in favor of `.withConfig`
+  font ? null,
+  fontSize ? null,
   background ? null,
-  disableBackground ? false,
-  loginBackground ? false,
-  userIcon ? false,
-  clockEnabled ? true,
+  disableBackground ? null,
+  loginBackground ? null,
+  userIcon ? null,
+  clockEnabled ? null,
 }:
-stdenvNoCC.mkDerivation (finalAttrs: {
+buildSddmThemePackage (finalAttrs: {
   pname = "catppuccin-sddm";
   version = "1.1.2";
 
-  src = fetchFromGitHub {
-    owner = "catppuccin";
-    repo = "sddm";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-7S0DKyb+4lP+5HCPAJRw/KDls2ZO9kksdlwYSz2uQC8=";
+  src = stdenvNoCC.mkDerivation {
+    pname = "${finalAttrs.pname}-src";
+    inherit (finalAttrs) version;
+
+    src = fetchFromGitHub {
+      owner = "catppuccin";
+      repo = "sddm";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-7S0DKyb+4lP+5HCPAJRw/KDls2ZO9kksdlwYSz2uQC8=";
+    };
+
+    nativeBuildInputs = [
+      just
+      catppuccin-whiskers
+    ];
+
+    postPatch = ''
+      substituteInPlace justfile \
+        --replace-fail '#!/usr/bin/env bash' '#!${lib.getExe bash}'
+    '';
+
+    buildPhase = ''
+      runHook preBuild
+
+      just build
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p "$out"
+      cp -r themes "$out"
+
+      runHook postInstall
+    '';
   };
 
-  dontWrapQtApps = true;
+  srcThemeDir = "themes/catppuccin-${flavor}-${accent}";
 
-  nativeBuildInputs = [
-    just
-    catppuccin-whiskers
-  ];
-
-  postPatch = ''
-    substituteInPlace justfile \
-      --replace-fail '#!/usr/bin/env bash' '#!${lib.getExe bash}'
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-
-    just build
-
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p "$out/share/sddm/themes/"
-    cp -r themes/catppuccin-${flavor}-${accent} "$out/share/sddm/themes/catppuccin-${flavor}-${accent}"
-
-    configFile=$out/share/sddm/themes/catppuccin-${flavor}-${accent}/theme.conf
-
-    substituteInPlace $configFile \
-      --replace-fail 'Font="Noto Sans"' 'Font="${font}"' \
-      --replace-fail 'FontSize=9' 'FontSize=${fontSize}'
-
-    ${lib.optionalString (background != null) ''
-      substituteInPlace $configFile \
-        --replace-fail 'Background="backgrounds/wall.png"' 'Background="${background}"'
-    ''}
-
-    ${lib.optionalString disableBackground ''
-      substituteInPlace $configFile \
-        --replace-fail 'CustomBackground="true"' 'CustomBackground="false"'
-    ''}
-
-    ${lib.optionalString loginBackground ''
-      substituteInPlace $configFile \
-        --replace-fail 'LoginBackground="false"' 'LoginBackground="true"'
-    ''}
-
-    ${lib.optionalString userIcon ''
-      substituteInPlace $configFile \
-        --replace-fail 'UserIcon="false"' 'UserIcon="true"'
-    ''}
-
-    ${lib.optionalString (!clockEnabled) ''
-      substituteInPlace $configFile \
-        --replace-fail 'ClockEnabled="true"' 'ClockEnabled="false"'
-    ''}
-
-    runHook postInstall
-  '';
+  configPath = "theme.conf";
+  configOverrides =
+    let
+      legacyConfig = lib.filterAttrs (_: value: value != null) {
+        Font = font;
+        FontSize = fontSize;
+        Background = background;
+        CustomBackground = lib.mapNullable (disable: !disable) disableBackground;
+        LoginBackground = loginBackground;
+        UserIcon = userIcon;
+        ClockEnabled = clockEnabled;
+      };
+    in
+    lib.warnIf (legacyConfig != { })
+      "catppuccin-sddm: `font`, `fontSize`, `background`, `disableBackground`, `loginBackground`, `userIcon` and `clockEnabled` are deprecated, use `catppuccin-sddm.withConfig { ... }` instead"
+      legacyConfig;
 
   meta = {
     description = "Soothing pastel theme for SDDM";
