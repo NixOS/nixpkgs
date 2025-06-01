@@ -4,7 +4,13 @@
   fetchFromGitHub,
   libbsd,
   pkg-config,
-  xorg,
+  libXrandr,
+  libXcursor,
+  libXft,
+  libXt,
+  xcbutil,
+  xcbutilkeysyms,
+  xcbutilwm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,19 +25,16 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = (
-    with xorg;
-    [
-      libXrandr
-      libXcursor
-      libXft
-      libXt
-      xcbutil
-      xcbutilkeysyms
-      xcbutilwm
-    ]
-    ++ [ libbsd ]
-  );
+  buildInputs = [
+    libXrandr
+    libXcursor
+    libXft
+    libXt
+    xcbutil
+    xcbutilkeysyms
+    xcbutilwm
+    libbsd
+  ];
 
   prePatch =
     let
