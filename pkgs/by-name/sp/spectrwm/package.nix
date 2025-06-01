@@ -44,12 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tiling window manager";
     homepage = "https://github.com/conformal/spectrwm";
-    maintainers = with maintainers; [ rake5k ];
-    license = licenses.isc;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [
+      rake5k
+    ];
+    license = lib.licenses.isc;
+    platforms = lib.platforms.all;
 
     longDescription = ''
       spectrwm is a small dynamic tiling window manager for X11. It
