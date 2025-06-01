@@ -1,20 +1,16 @@
 {
   lib,
-  stdenvNoCC,
+  buildSddmThemePackage,
   fetchFromGitHub,
   installFonts,
   kdePackages,
-  formats,
   nix-update-script,
-  themeConfig ? null,
   embeddedTheme ? "astronaut",
+
+  # deprecated in favor of `.withConfig`
+  themeConfig ? null,
 }:
-let
-  configFile = (formats.ini { }).generate "" { General = themeConfig; };
-  basePath = "$out/share/sddm/themes/sddm-astronaut-theme";
-  sedString = "ConfigFile=Themes/";
-in
-stdenvNoCC.mkDerivation {
+buildSddmThemePackage {
   pname = "sddm-astronaut";
   version = "0-unstable-2026-09-18";
 
@@ -25,36 +21,18 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-BujSjoQlMH6PZIfn3Ox7hp6JFb2aRGtALOnpAGqqyNE=";
   };
 
-  dontWrapQtApps = true;
-
   nativeBuildInputs = [ installFonts ];
 
-  propagatedBuildInputs = with kdePackages; [
-    # avoid .dev outputs propagation
-    qtsvg.out
-    qtmultimedia.out
-    qtvirtualkeyboard.out
+  sddmBuildInputs = with kdePackages; [
+    qtmultimedia
+    qtvirtualkeyboard
   ];
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p ${basePath}
-    cp -r $src/* ${basePath}
-  ''
-  + lib.optionalString (embeddedTheme != "astronaut") ''
-
-    # Replaces astronaut.conf with embedded theme in metadata.desktop on line 9.
-    # ConfigFile=Themes/astronaut.conf.
-    sed -i "s|^${sedString}.*\\.conf$|${sedString}${embeddedTheme}.conf|" ${basePath}/metadata.desktop
-  ''
-  + lib.optionalString (themeConfig != null) ''
-    chmod u+w ${basePath}/Themes/
-    ln -sf ${configFile} ${basePath}/Themes/${embeddedTheme}.conf.user
-  ''
-  + ''
-    runHook postInstall
-  '';
+  configPath = "Themes/${embeddedTheme}.conf";
+  configOverrides =
+    lib.warnIf (themeConfig != null)
+      "sddm-astronaut: `themeConfig` is deprecated, use `sddm-astronaut.withConfig { ... }` instead"
+      (if themeConfig != null then themeConfig else { });
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
