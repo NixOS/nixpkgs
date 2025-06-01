@@ -117,6 +117,7 @@ let
             override = cfg.overrideFolders;
             conf = folders;
             baseAddress = curlAddressArgs "/rest/config/folders";
+            ignoreAddress = curlAddressArgs "/rest/db/ignores";
           };
         }
         [
@@ -142,7 +143,8 @@ let
                 let
                   jsonPreSecretsFile = pkgs.writeTextFile {
                     name = "${conf_type}-${new_cfg.id}-conf-pre-secrets.json";
-                    text = builtins.toJSON new_cfg;
+                    # Remove the ignorePatterns attribute, it is handled separately
+                    text = builtins.toJSON (builtins.removeAttrs new_cfg [ "ignorePatterns" ]);
                   };
                   injectSecretsJqCmd =
                     {
@@ -208,6 +210,13 @@ let
                 in
                 ''
                   ${injectSecretsJqCmd} ${jsonPreSecretsFile} | curl --json @- -X POST ${s.baseAddress}
+                ''
+                /*
+                  Check if we are configuring a folder which has ignore patterns.
+                  If it does, write the ignore patterns to the rest API.
+                */
+                + lib.optionalString ((conf_type == "dirs") && (new_cfg.ignorePatterns != null)) ''
+                  curl -d '{"ignore": ${builtins.toJSON new_cfg.ignorePatterns}}' -X POST ${s.ignoreAddress}?folder=${new_cfg.id}
                 ''
               ))
               (lib.concatStringsSep "\n")
@@ -633,6 +642,23 @@ in
                           On Unix systems, tries to copy file/folder ownership from the parent directory (the directory it’s located in).
                           Requires running Syncthing as a privileged user, or granting it additional capabilities (e.g. CAP_CHOWN on Linux).
                         '';
+                      };
+
+                      ignorePatterns = mkOption {
+                        type = types.nullOr (types.listOf types.str);
+                        default = null;
+                        description = ''
+                          Syncthing can be configured to ignore certain files in a folder using ignore patterns.
+                          Enter them as a list of strings, one string per line.
+                          Patterns set manually using the WebUI will be overridden if you define this option.
+                          If you want your ignore patterns to be empty, use `ignorePatterns = []`.
+                          See the Syncthing documentation for details: <https://docs.syncthing.net/users/ignoring.html>
+                        '';
+                        example = [
+                          "// This is a comment"
+                          "*.part // Firefox downloads and other things"
+                          "*.crdownload // Chrom(ium|e) downloads"
+                        ];
                       };
                     };
                   }
