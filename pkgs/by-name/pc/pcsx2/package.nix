@@ -1,7 +1,7 @@
 {
   lib,
-  SDL2,
   fetchFromGitHub,
+  sdl3,
   cmake,
   cubeb,
   curl,
@@ -25,14 +25,17 @@
   wayland,
   zip,
   zstd,
+  plutovg,
+  plutosvg,
+  kddockwidgets,
 }:
 
 let
   pcsx2_patches = fetchFromGitHub {
     owner = "PCSX2";
     repo = "pcsx2_patches";
-    rev = "5cc1d09a72c0afcd04e2ca089a6b279108328fda";
-    hash = "sha256-or77ZsWU0YWtxj9LKJ/m8nDvKSyiF1sO140QaH6Jr64=";
+    rev = "49d2f7bb0b4387e9cb7c68233e2bdc156850542b";
+    hash = "sha256-WByW40lf5h1hlnxxiiP9WyEhk8NwxATZDguWQj+j3iA=";
   };
 
   inherit (qt6)
@@ -45,13 +48,13 @@ let
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "pcsx2";
-  version = "2.3.39";
+  version = "2.3.407";
   src = fetchFromGitHub {
     pname = "pcsx2-source";
     owner = "PCSX2";
     repo = "pcsx2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Knlkf4GcN8OCgrd1nwdnYVCDA/7lyAfcoV4mLCkrHtg=";
+    hash = "sha256-3/nnGdEr7flA8g9jPC8clAyvZlwQh12/YH4+t0O9OuU=";
   };
 
   patches = [
@@ -90,7 +93,10 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     qtsvg
     qttools
     qtwayland
-    SDL2
+    sdl3
+    plutovg
+    plutosvg
+    kddockwidgets
     shaderc
     soundtouch
     vulkan-headers
