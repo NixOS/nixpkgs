@@ -55,12 +55,14 @@ stdenv.mkDerivation rec {
     makeWrapper ${openjdk11}/bin/java $out/bin/microsoft-identity-broker \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath buildInputs}" \
       --add-flags "-classpath $classpath" \
+      --add-flags "-Xmx256m -Xss256k -XX:+UseParallelGC -XX:ParallelGCThreads=1" \
       --add-flags "-verbose" \
       --add-flags "com.microsoft.identity.broker.service.IdentityBrokerService"
 
     makeWrapper ${openjdk11}/bin/java $out/bin/microsoft-identity-device-broker \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath buildInputs}" \
       --add-flags "-classpath $classpath" \
+      --add-flags "-Xmx256m -Xss256k -XX:+UseParallelGC -XX:ParallelGCThreads=1" \
       --add-flags "-verbose" \
       --add-flags "com.microsoft.identity.broker.service.DeviceBrokerService"
 
