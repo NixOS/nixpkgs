@@ -1,12 +1,12 @@
 {
   lib,
-  stdenvNoCC,
+  buildSddmThemePackage,
   fetchFromGitHub,
   qt6,
-  themeConfig ? null,
-  embeddedTheme ? "astronaut",
+  themeConfig ? { },
+  flavor ? "astronaut",
 }:
-stdenvNoCC.mkDerivation rec {
+buildSddmThemePackage {
   pname = "sddm-astronaut";
   version = "1.0-unstable-2025-01-05";
 
@@ -17,36 +17,16 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-gBSz+k/qgEaIWh1Txdgwlou/Lfrfv3ABzyxYwlrLjDk=";
   };
 
-  dontWrapQtApps = true;
-
-  propagatedBuildInputs = with qt6; [
-    qtsvg
+  sddmBuildInputs = with qt6; [
     qtmultimedia
     qtvirtualkeyboard
   ];
 
-  installPhase =
-    let
-      iniFormat = pkgs.formats.ini { };
-      configFile = iniFormat.generate "" { General = themeConfig; };
+  themeName = "sddm-astronaut-theme";
+  srcThemeDir = ".";
 
-      basePath = "$out/share/sddm/themes/sddm-astronaut-theme";
-      sedString = "ConfigFile=Themes/";
-    in
-    ''
-      mkdir -p ${basePath}
-      cp -r $src/* ${basePath}
-    ''
-    + lib.optionalString (embeddedTheme != "astronaut") ''
-
-      # Replaces astronaut.conf with embedded theme in metadata.desktop on line 9.
-      # ConfigFile=Themes/astronaut.conf.
-      sed -i "s|^${sedString}.*\\.conf$|${sedString}${embeddedTheme}.conf|" ${basePath}/metadata.desktop
-    ''
-    + lib.optionalString (themeConfig != null) ''
-      chmod u+w ${basePath}/Themes/
-      ln -sf ${configFile} ${basePath}/Themes/${embeddedTheme}.conf.user
-    '';
+  configPath = "Themes/${flavor}.conf";
+  configOverrides = themeConfig;
 
   meta = {
     description = "Modern looking qt6 sddm theme";
