@@ -167,7 +167,7 @@ let
             presets.recentlyAddedImages
           ]
         '';
-        apply = type: if builtins.isFunction type then (type uiPresets) else type;
+        apply = type: if lib.isFunction type then (type uiPresets) else type;
       };
       blobs_path = mkOption {
         type = types.path;
