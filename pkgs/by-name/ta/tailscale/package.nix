@@ -149,6 +149,9 @@ buildGoModule {
 
           # context deadline exceeded
           "TestPacketFilterFromNetmap"
+
+          # flaky: https://github.com/tailscale/tailscale/issues/15348
+          "TestSafeFuncHappyPath"
         ]
         ++ lib.optionals stdenv.hostPlatform.isDarwin [
           # syscall default route interface en0 differs from netstat
