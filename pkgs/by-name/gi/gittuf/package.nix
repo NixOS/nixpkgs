@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "gittuf";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "gittuf";
     repo = "gittuf";
     rev = "v${version}";
-    hash = "sha256-sHaQOqD8CzAb8LIOqPpvTAzdmm/NoktLnAOhVNdRIeo=";
+    hash = "sha256-Jeyb9eBSOf2tlW7SKOZ8oD5IwpIZwbHSwghLclNdAhE=";
   };
 
   vendorHash = "sha256-v45pMH05f6HmAcfujk25w5TN65nllLUMVlkNYm6Q/gM=";
