@@ -34,6 +34,9 @@ let
       # Legacy overrides to the intermediate kernel config, as string
       extraConfig ? "",
 
+      # Use the platform specific extraConfig from ../../../../lib/systems/platforms.nix
+      usePlatformExtraConfig ? true,
+
       # Additional make flags passed to kbuild
       extraMakeFlags ? [ ],
 
@@ -134,7 +137,9 @@ let
         configfile.moduleStructuredConfig.intermediateNixConfig
         # extra config in legacy string format
         + extraConfig
-        + stdenv.hostPlatform.linux-kernel.extraConfig or "";
+        + lib.strings.optionalString usePlatformExtraConfig (
+          stdenv.hostPlatform.linux-kernel.extraConfig or ""
+        );
 
       structuredConfigFromPatches = map (
         {
