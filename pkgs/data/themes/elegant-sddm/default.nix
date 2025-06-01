@@ -1,28 +1,11 @@
 {
   lib,
-  formats,
-  stdenvNoCC,
+  buildSddmThemePackage,
   fetchFromGitHub,
   qtgraphicaleffects,
-  /*
-    An example of how you can override the background with a NixOS wallpaper
-    *
-    *  environment.systemPackages = [
-    *    (pkgs.elegant-sddm.override {
-    *      themeConfig.General = {
-             background = "${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath}";
-    *      };
-    *    })
-    *  ];
-  */
-  themeConfig ? null,
+  themeConfig ? { },
 }:
-
-let
-  user-cfg = (formats.ini { }).generate "theme.conf.user" themeConfig;
-in
-
-stdenvNoCC.mkDerivation {
+buildSddmThemePackage {
   pname = "elegant-sddm";
   version = "unstable-2024-02-08";
 
@@ -33,30 +16,16 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-yn0fTYsdZZSOcaYlPCn8BUIWeFIKcTI1oioTWqjYunQ=";
   };
 
-  propagatedBuildInputs = [
+  qtVersion = "qt5";
+  sddmBuildInputs = [
     qtgraphicaleffects
   ];
 
-  dontWrapQtApps = true;
+  themeName = "Elegant";
+  srcThemeDir = "Elegant";
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p "$out/share/sddm/themes"
-    cp -r Elegant/ "$out/share/sddm/themes/Elegant"
-  ''
-  + (lib.optionalString (lib.isAttrs themeConfig) ''
-    ln -sf ${user-cfg} $out/share/sddm/themes/Elegant/theme.conf.user
-  '')
-  + ''
-    runHook postInstall
-  '';
-
-  postFixup = ''
-    mkdir -p $out/nix-support
-
-    echo ${qtgraphicaleffects} >> $out/nix-support/propagated-user-env-packages
-  '';
+  configPath = "theme.conf";
+  configOverrides = themeConfig;
 
   meta = with lib; {
     description = "Sleek and stylish SDDM theme crafted in QML";
