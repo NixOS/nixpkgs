@@ -31,7 +31,7 @@ in
       default = false;
       description = ''
         Whether to open TCP firewall ports, which are specified in
-        {option}`services.stalwart-mail.settings.listener` on all interfaces.
+        {option}`services.stalwart-mail.settings.server.listener` on all interfaces.
       '';
     };
 
