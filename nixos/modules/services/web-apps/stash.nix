@@ -512,7 +512,7 @@ in
           ExecStartPre = pkgs.writers.writeBash "stash-setup.bash" (
             ''
               install -d ${cfg.settings.generated}
-              if [[ ! -z "${toString cfg.mutableSettings}" || ! -f ${cfg.dataDir}/config.yml ]]; then
+              if [[ -z "${toString cfg.mutableSettings}" || ! -f ${cfg.dataDir}/config.yml ]]; then
                 env \
                   password=$(< ${cfg.passwordFile}) \
                   jwtSecretKeyFile=$(< ${cfg.jwtSecretKeyFile}) \
