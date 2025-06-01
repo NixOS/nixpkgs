@@ -11837,8 +11837,6 @@ with pkgs;
     withConplay = false;
   };
 
-  rofi-emoji = (callPackage ../applications/misc/rofi-emoji { }).v3;
-
   # a somewhat more maintained fork of ympd
   memento = qt6Packages.callPackage ../applications/video/memento { };
 
