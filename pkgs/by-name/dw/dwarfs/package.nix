@@ -119,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Fast high compression read-only file system";
     homepage = "https://github.com/mhx/dwarfs";
     changelog = "https://github.com/mhx/dwarfs/blob/v${finalAttrs.version}/CHANGES.md";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.luftmensch-luftmensch ];
     platforms = lib.platforms.linux;
   };
