@@ -5,7 +5,6 @@
   bash,
   just,
   catppuccin-whiskers,
-  kdePackages,
   flavor ? "mocha",
   accent ? "mauve",
   font ? "Noto Sans",
@@ -32,11 +31,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     just
     catppuccin-whiskers
-  ];
-
-  propagatedBuildInputs = [
-    # avoid .dev outputs propagation
-    kdePackages.qtsvg.out
   ];
 
   postPatch = ''
