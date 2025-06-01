@@ -25,14 +25,14 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "awsebcli";
-  version = "3.23.3";
+  version = "3.24.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-elastic-beanstalk-cli";
     tag = version;
-    hash = "sha256-Jaj90NRCwaxRQQlB4s4Us+liYiNohpwRsHuvKM5WmbU=";
+    hash = "sha256-t6dqiC9zY3Apcc4F/x5c/QhsNKGBZxIY20a50wCEER8=";
   };
 
   pythonRelaxDeps = [
@@ -46,6 +46,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   dependencies = with python.pkgs; [
+    packaging
     blessed
     botocore
     cement
@@ -53,6 +54,7 @@ python.pkgs.buildPythonApplication rec {
     pathspec
     pyyaml
     future
+    fabric
     requests
     semantic-version
     setuptools
