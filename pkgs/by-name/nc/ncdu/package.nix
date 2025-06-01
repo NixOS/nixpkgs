@@ -8,7 +8,6 @@
   zstd,
   installShellFiles,
   versionCheckHook,
-  testers,
   pie ? stdenv.hostPlatform.isDarwin,
 }:
 
@@ -38,14 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
     installManPage ncdu.1
   '';
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-  };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     homepage = "https://dev.yorhel.nl/ncdu";
@@ -55,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       pSub
       rodrgz
+      defelo
     ];
     inherit (zig_0_14.meta) platforms;
     mainProgram = "ncdu";
