@@ -43,6 +43,11 @@ import ./make-test-python.nix (
                 bind = [ "[::]:143" ];
                 protocol = "imap";
               };
+
+              "http" = {
+                bind = [ "[::]:80" ];
+                protocol = "http";
+              };
             };
 
             session.auth.mechanisms = "[plain]";
@@ -115,9 +120,13 @@ import ./make-test-python.nix (
         main.wait_for_unit("stalwart-mail.service")
         main.wait_for_open_port(587)
         main.wait_for_open_port(143)
+        main.wait_for_open_port(80)
 
         main.succeed("test-smtp-submission")
         main.succeed("test-imap-read")
+
+        main.succeed("test -d /var/cache/stalwart-mail/STALWART_WEBADMIN")
+        main.succeed("curl --fail http://localhost")
       '';
 
     meta = {
