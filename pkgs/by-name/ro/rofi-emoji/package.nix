@@ -20,6 +20,8 @@
   rofi-wayland-unwrapped,
   wl-clipboard,
   wtype,
+
+  nix-update-script,
 }:
 let
   rofi = if waylandSupport then rofi-wayland-unwrapped else rofi-unwrapped;
@@ -76,6 +78,8 @@ stdenv.mkDerivation (final: {
     glib
     rofi
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Emoji selector plugin for Rofi (built against ${rofi.pname})";
