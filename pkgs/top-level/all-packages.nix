@@ -10889,8 +10889,6 @@ with pkgs;
 
   restic = callPackage ../tools/backup/restic { };
 
-  restic-rest-server = callPackage ../tools/backup/restic/rest-server.nix { };
-
   rethinkdb = callPackage ../servers/nosql/rethinkdb {
     stdenv = clangStdenv;
     libtool = cctools;
