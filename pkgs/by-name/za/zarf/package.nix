@@ -8,10 +8,10 @@
 
 buildGoModule rec {
   pname = "zarf";
-  version = "0.41.0";
+  version = "0.54.0";
 
   src = fetchFromGitHub {
-    owner = "defenseunicorns";
+    owner = "zarf-dev";
     repo = "zarf";
     rev = "v${version}";
     hash = "sha256-rY9xWqJ+2Yfs6VRHTF89LmuEruAavDI7MgBm4UFEuBs=";
@@ -33,7 +33,7 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X"
-    "github.com/defenseunicorns/zarf/src/config.CLIVersion=${src.rev}"
+    "github.com/zarf-dev/zarf/src/config.CLIVersion=${src.rev}"
     "-X"
     "k8s.io/component-base/version.gitVersion=v0.0.0+zarf${src.rev}"
     "-X"
@@ -53,7 +53,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "DevSecOps for Air Gap & Limited-Connection Systems. https://zarf.dev";
     mainProgram = "zarf";
-    homepage = "https://github.com/defenseunicorns/zarf.git";
+    homepage = "https://zarf.dev";
     license = licenses.asl20;
     maintainers = with maintainers; [ ragingpastry ];
   };

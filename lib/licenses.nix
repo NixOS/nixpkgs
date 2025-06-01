@@ -651,6 +651,11 @@ lib.mapAttrs mkLicense (
       url = "https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception";
     };
 
+    gpl2UBDLPlus = {
+      fullName = "GNU General Public License v3.0 or later (with UBDL exception)";
+      url = "https://spdx.org/licenses/UBDL-exception.html";
+    };
+
     gpl2Oss = {
       fullName = "GNU General Public License version 2 only (with OSI approved licenses linking exception)";
       url = "https://www.mysql.com/about/legal/licensing/foss-exception";

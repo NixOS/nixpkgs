@@ -69,9 +69,13 @@ script to run it using a JRE. You can use `makeWrapper` for this:
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     makeWrapper ${jre}/bin/java $out/bin/foo \
       --add-flags "-cp $out/share/java/foo.jar org.foo.Main"
+
+    runHook postInstall
   '';
 }
 ```

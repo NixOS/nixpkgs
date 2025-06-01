@@ -3,6 +3,8 @@
   stdenv,
   fetchurl,
   pkg-config,
+  meson,
+  ninja,
   dbus,
   libgcrypt,
   pam,
@@ -15,16 +17,17 @@
   libselinux,
   p11-kit,
   openssh,
-  wrapGAppsHook3,
+  wrapGAppsNoGuiHook,
   docbook-xsl-nons,
   docbook_xml_dtd_43,
   gnome,
+  writeText,
   useWrappedDaemon ? true,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-keyring";
-  version = "46.2";
+  version = "48.0";
 
   outputs = [
     "out"
@@ -33,16 +36,19 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-keyring/${lib.versions.major version}/gnome-keyring-${version}.tar.xz";
-    hash = "sha256-vybJZriot/MoXsyLs+RnucIPlTW5TcRRycVZ3c/2GSU=";
+    hash = "sha256-8gUYySDp6j+cm4tEvoxQ2Nf+7NDdViSWD3e9LKT7650=";
   };
 
   nativeBuildInputs = [
     pkg-config
+    meson
+    ninja
     gettext
+    glib # for glib-genmarshal
     libxslt
     docbook-xsl-nons
     docbook_xml_dtd_43
-    wrapGAppsHook3
+    wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
@@ -61,32 +67,38 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  configureFlags = [
-    "--with-pkcs11-config=${placeholder "out"}/etc/pkcs11/" # installation directories
-    "--with-pkcs11-modules=${placeholder "out"}/lib/pkcs11/"
+  mesonFlags = [
+    # installation directories
+    "-Dpkcs11-config=${placeholder "out"}/etc/pkcs11" # todo: this should probably be /share/p11-kit/modules
+    "-Dpkcs11-modules=${placeholder "out"}/lib/pkcs11"
     # gnome-keyring doesn't build with ssh-agent by default anymore, we need to
     # switch to using gcr https://github.com/NixOS/nixpkgs/issues/140824
-    "--enable-ssh-agent"
-    # cross compilation requires these paths to be explicitly declared:
-    "LIBGCRYPT_CONFIG=${lib.getExe' (lib.getDev libgcrypt) "libgcrypt-config"}"
-    "SSH_ADD=${lib.getExe' openssh "ssh-add"}"
-    "SSH_AGENT=${lib.getExe' openssh "ssh-agent"}"
+    "-Dssh-agent=true"
+    # TODO: enable socket activation
+    "-Dsystemd=disabled"
+    "--cross-file=${writeText "crossfile.ini" ''
+      [binaries]
+      ssh-add = '${lib.getExe' openssh "ssh-add"}'
+      ssh-agent = '${lib.getExe' openssh "ssh-agent"}'
+    ''}"
   ];
 
   # Tends to fail non-deterministically.
   # - https://github.com/NixOS/nixpkgs/issues/55293
   # - https://github.com/NixOS/nixpkgs/issues/51121
+  # - At least “gnome-keyring:gkm::xdg-store / xdg-trust” is still flaky on 48.beta.
   doCheck = false;
-
-  postPatch = ''
-    patchShebangs build
-  '';
+  strictDeps = true;
 
   checkPhase = ''
+    runHook postCheck
+
     export HOME=$(mktemp -d)
     dbus-run-session \
       --config-file=${dbus}/share/dbus-1/session.conf \
-      make check
+      meson test --print-errorlogs
+
+    runHook preCheck
   '';
 
   # Use wrapped gnome-keyring-daemon with cap_ipc_lock=ep
@@ -109,7 +121,12 @@ stdenv.mkDerivation rec {
     description = "Collection of components in GNOME that store secrets, passwords, keys, certificates and make them available to applications";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-keyring";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-keyring/-/blob/${version}/NEWS?ref_type=tags";
-    license = licenses.gpl2;
+    license = [
+      # Most of the code (some is 2Plus)
+      licenses.lgpl21Plus
+      # Some stragglers
+      licenses.gpl2Plus
+    ];
     teams = [ teams.gnome ];
     platforms = platforms.linux;
   };

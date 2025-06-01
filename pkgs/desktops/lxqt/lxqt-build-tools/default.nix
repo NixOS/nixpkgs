@@ -9,7 +9,7 @@
   perl,
   wrapQtAppsHook,
   gitUpdater,
-  version ? "2.1.0",
+  version ? "2.2.0",
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     hash =
       {
         "0.13.0" = "sha256-4/hVlEdqqqd6CNitCRkIzsS1R941vPJdirIklp4acXA=";
-        "2.1.0" = "sha256-fZ5DbXnYm6oWDZdwiw2DpWFQMYd7VZ4oKkGIzQkaV94=";
+        "2.2.0" = "sha256-q/VkxfC2vGRpFnAGULkjhmJ8JsdpxChROqemCyf0esE=";
       }
       ."${version}";
   };

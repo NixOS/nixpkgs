@@ -8,21 +8,21 @@
 
 buildGoModule rec {
   pname = "ticker";
-  version = "4.8.1";
+  version = "5.0.5";
 
   src = fetchFromGitHub {
     owner = "achannarasappa";
-    repo = pname;
+    repo = "ticker";
     tag = "v${version}";
-    hash = "sha256-2qg7/gzogvK8eIj9NzFELoeXrtJGC5pS4LvR2msOuHY=";
+    hash = "sha256-SwQkoviJCPJmz//EIBRqvaWtg65xgTo98VnoiciwKHY=";
   };
 
-  vendorHash = "sha256-o3hVRHyrJpmYgephoZ2JlVLGSqZtRQAp48OzoIMY3do=";
+  vendorHash = "sha256-XKl4bGWTz3AKl+hLFY0R0uT5ryOCHNzoeVHczMb32zo=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/achannarasappa/ticker/v4/cmd.Version=${version}"
+    "-X github.com/achannarasappa/ticker/v${lib.versions.major version}/cmd.Version=${version}"
   ];
 
   # Tests require internet

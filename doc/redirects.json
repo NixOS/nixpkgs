@@ -5,6 +5,9 @@
   "chap-release-notes": [
     "release-notes.html#chap-release-notes"
   ],
+  "chap-toolchains": [
+    "index.html#chap-toolchains"
+  ],
   "cmake-ctest": [
     "index.html#cmake-ctest"
   ],
@@ -66,6 +69,18 @@
   "pkgs-replacevarswith": [
     "index.html#pkgs-replacevarswith"
   ],
+  "part-toolchains": [
+    "index.html#part-toolchains"
+  ],
+  "pkgs.treefmt.buildConfig": [
+    "index.html#pkgs.treefmt.buildConfig"
+  ],
+  "pkgs.treefmt.evalConfig": [
+    "index.html#pkgs.treefmt.evalConfig"
+  ],
+  "pkgs.treefmt.withConfig": [
+    "index.html#pkgs.treefmt.withConfig"
+  ],
   "preface": [
     "index.html#preface"
   ],
@@ -99,6 +114,15 @@
   "sec-build-helper-extendMkDerivation": [
     "index.html#sec-build-helper-extendMkDerivation"
   ],
+  "sec-building-packages-with-llvm": [
+    "index.html#sec-building-packages-with-llvm"
+  ],
+  "sec-building-packages-with-llvm-using-clang-stdenv": [
+    "index.html#sec-building-packages-with-llvm-using-clang-stdenv"
+  ],
+  "sec-functions-library-treefmt": [
+    "index.html#sec-functions-library-treefmt"
+  ],
   "sec-inkscape": [
     "index.html#sec-inkscape"
   ],
@@ -126,6 +150,30 @@
   "chap-overlays": [
     "index.html#chap-overlays"
   ],
+  "sec-nixpkgs-release-25.11": [
+    "release-notes.html#sec-nixpkgs-release-25.11"
+  ],
+  "sec-nixpkgs-release-25.11-highlights": [
+    "release-notes.html#sec-nixpkgs-release-25.11-highlights"
+  ],
+  "sec-nixpkgs-release-25.11-incompatibilities": [
+    "release-notes.html#sec-nixpkgs-release-25.11-incompatibilities"
+  ],
+  "sec-nixpkgs-release-25.11-lib": [
+    "release-notes.html#sec-nixpkgs-release-25.11-lib"
+  ],
+  "sec-nixpkgs-release-25.11-lib-breaking": [
+    "release-notes.html#sec-nixpkgs-release-25.11-lib-breaking"
+  ],
+  "sec-nixpkgs-release-25.11-lib-deprecations": [
+    "release-notes.html#sec-nixpkgs-release-25.11-lib-deprecations"
+  ],
+  "sec-nixpkgs-release-25.11-lib-additions-improvements": [
+    "release-notes.html#sec-nixpkgs-release-25.11-lib-additions-improvements"
+  ],
+  "sec-nixpkgs-release-25.11-notable-changes": [
+    "release-notes.html#sec-nixpkgs-release-25.11-notable-changes"
+  ],
   "sec-nixpkgs-release-25.05": [
     "release-notes.html#sec-nixpkgs-release-25.05"
   ],
@@ -133,16 +181,14 @@
     "release-notes.html#sec-nixpkgs-release-25.05-highlights"
   ],
   "sec-nixpkgs-release-25.05-incompatibilities": [
-    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities"
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities",
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities-nexusmods-app-upgraded"
   ],
   "sec-nixpkgs-release-25.05-incompatibilities-titanium-removed": [
     "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities-titanium-removed",
     "index.html#titanium",
     "index.html#building-a-titanium-app",
     "index.html#emulating-or-simulating-the-app"
-  ],
-  "sec-nixpkgs-release-25.05-incompatibilities-nexusmods-app-upgraded": [
-    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities-nexusmods-app-upgraded"
   ],
   "sec-nixpkgs-release-25.05-lib": [
     "release-notes.html#sec-nixpkgs-release-25.05-lib"
@@ -360,6 +406,9 @@
   "chap-stdenv": [
     "index.html#chap-stdenv"
   ],
+  "sec-using-llvm": [
+    "index.html#sec-using-llvm"
+  ],
   "sec-using-stdenv": [
     "index.html#sec-using-stdenv"
   ],
@@ -368,6 +417,9 @@
   ],
   "sec-tools-of-stdenv": [
     "index.html#sec-tools-of-stdenv"
+  ],
+  "sec-treefmt-options-reference": [
+    "index.html#sec-treefmt-options-reference"
   ],
   "ssec-cosmic-common-issues": [
     "index.html#ssec-cosmic-common-issues"
@@ -443,6 +495,9 @@
   ],
   "tester-testEqualArrayOrMap-return": [
     "index.html#tester-testEqualArrayOrMap-return"
+  ],
+  "treefmt": [
+    "index.html#treefmt"
   ],
   "typst": [
     "index.html#typst",
@@ -2373,6 +2428,9 @@
   ],
   "tetex-tex-live": [
     "index.html#tetex-tex-live"
+  ],
+  "udevcheckhook": [
+    "index.html#udevcheckhook"
   ],
   "unzip": [
     "index.html#unzip"

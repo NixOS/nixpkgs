@@ -1,13 +1,18 @@
 name: "Build Nixpkgs manual v2"
 
 on:
+  pull_request:
+    paths:
+      - .github/workflows/manual-nixpkgs-v2.yml
   pull_request_target:
-    branches:
-      - master
     paths:
       - 'doc/**'
       - 'lib/**'
       - 'pkgs/by-name/ni/nixdoc/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 
 permissions: {}
 
@@ -18,18 +23,21 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          ref: refs/pull/${{ github.event.pull_request.number }}/merge
+          sparse-checkout: .github/actions
+      - name: Check if the PR can be merged and checkout the merge commit
+        uses: ./.github/actions/get-merge-commit
+        with:
+          merged-as-untrusted: true
 
       - uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
         with:
           extra_nix_config: sandbox = true
 
       - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
-        if: github.repository_owner == 'NixOS'
         with:
           # This cache is for the nixpkgs repo checks and should not be trusted or used elsewhere.
           name: nixpkgs-ci
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
 
       - name: Building Nixpkgs manual
-        run: NIX_PATH=nixpkgs=$(pwd) nix-build --option restrict-eval true ci -A manual-nixpkgs -A manual-nixpkgs-tests
+        run: nix-build untrusted/ci -A manual-nixpkgs -A manual-nixpkgs-tests

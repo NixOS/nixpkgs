@@ -18,13 +18,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cherry-studio";
-  version = "1.3.0";
+  version = "1.3.12";
 
   src = fetchFromGitHub {
     owner = "CherryHQ";
     repo = "cherry-studio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/cj4wMYPWjO5tJxIDdP7GkciWLVZBiDivEIHiOxpk0s=";
+    hash = "sha256-BQvoH/F1CCzeGulUg5J1wK/WzHB4Y5j3BWYPAFyTpGs=";
   };
 
   postPatch = ''
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-WUsG8mqozphU2YIT73KqMNP62TBiay3EiGrMBgd2QJw=";
+    hash = "sha256-ZVgn/mB7XPozjBT1jKscpr7Izi5vDkNNAQJCpPqB+QE=";
   };
 
   nativeBuildInputs = [
@@ -89,7 +89,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/opt/cherry-studio
-    cp -r dist/linux-unpacked/{resources,LICENSE*} $out/opt/cherry-studio
+    ${
+      if stdenv.hostPlatform.isAarch64 then
+        "cp -r dist/linux-arm64-unpacked/{resources,LICENSE*} $out/opt/cherry-studio"
+      else
+        "cp -r dist/linux-unpacked/{resources,LICENSE*} $out/opt/cherry-studio"
+    }
     install -Dm644 build/icon.png $out/share/pixmaps/cherry-studio.png
     makeWrapper ${lib.getExe electron} $out/bin/cherry-studio \
       --inherit-argv0 \

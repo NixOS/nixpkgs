@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "cpbotha";
-    repo = pname;
+    repo = "nvpy";
     tag = "v${version}";
     sha256 = "sha256-guNdLu/bCk89o5M3gQU7J0W4h7eZdLHM0FG5IAPLE7c=";
   };

@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "aiodiscover";
-  version = "2.6.1";
+  version = "2.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "aiodiscover";
     tag = "v${version}";
-    hash = "sha256-dgmRgokHDw0ooxD8Ksxb8QKeAdUhYj/WO85EC57MeNg=";
+    hash = "sha256-zJOsf4oZbZgaiaaPM0HfR0GNwxvGoR6fgkJB5ZFY0O8=";
   };
 
   build-system = [ poetry-core ];

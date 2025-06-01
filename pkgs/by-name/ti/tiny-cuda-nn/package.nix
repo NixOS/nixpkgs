@@ -43,7 +43,7 @@ let
 
   cudaCapabilities = lists.subtractLists unsupportedCudaCapabilities flags.cudaCapabilities;
 
-  cudaArchitecturesString = strings.concatMapStringsSep ";" flags.dropDot cudaCapabilities;
+  cudaArchitecturesString = strings.concatMapStringsSep ";" flags.dropDots cudaCapabilities;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tiny-cuda-nn";

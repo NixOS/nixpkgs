@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "kapi2289";
-    repo = pname;
+    repo = "vulcan-api";
     tag = "v${version}";
     hash = "sha256-oWtyqFacWkKhv4QvbZCuq3KHlM/o7SfENg90O/ygXUw=";
   };

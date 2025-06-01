@@ -26,15 +26,15 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "4.4-01";
+  version = "4.5-01";
   pname = "imager";
 
   src = fetchurl {
     # The recommended download link is on Nextcloud instance that
     # requires to accept some general terms of use. Use a mirror at
     # univ-grenoble-alpes.fr instead.
-    url = "https://cloud.univ-grenoble-alpes.fr/s/J6yEqA6yZ8tX9da/download?path=%2F&files=imager-dec24.tar.gz";
-    hash = "sha256-Pq92IsGY4heekm5zNGngnp6J6YiCHYAyuMT2RsD1/9o=";
+    url = "https://cloud.univ-grenoble-alpes.fr/s/J6yEqA6yZ8tX9da/download?path=%2F&files=imager-may25.tar.gz";
+    hash = "sha256-E3JjdVGEQ0I/ogYj0G1OZxfQ3hA+sRgA4LAfHK52Sec=";
   };
 
   nativeBuildInputs = [
@@ -55,13 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Update the Python link flag script from Gildas upstream
-    # version. This patch will be included in the the IMAGER release.
-    ./python-ldflags.patch
     # Use Clang as the default compiler on Darwin.
     ./clang.patch
     # Replace hardcoded cpp with GAG_CPP (see below).
     ./cpp-darwin.patch
+    # Fix the numpy header detection with numpy > 2.0.0
+    # Patch submitted upstream, it will be included in the next release.
+    ./numpy-header.patch
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";

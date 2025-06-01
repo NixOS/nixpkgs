@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "freref";
     repo = "fancy-cat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ziHtPfK9GOxKF800kk+kh12Fwh91xbjDYx9wv2pLZWI=";
+    hash = "sha256-Wasxhsv4QhGscOEsGirabsq92963S8v1vOBWvAFuRoM=";
   };
 
   patches = [ ./0001-changes.patch ];
@@ -50,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    broken = true; # build phase wants to fetch from github
     description = "PDF viewer for terminals using the Kitty image protocol";
     homepage = "https://github.com/freref/fancy-cat";
     license = lib.licenses.agpl3Plus;

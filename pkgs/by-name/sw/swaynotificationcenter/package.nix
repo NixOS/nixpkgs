@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   src = fetchFromGitHub {
     owner = "ErikReider";
-    repo = pname;
+    repo = "SwayNotificationCenter";
     rev = "v${version}";
     hash = "sha256-kRawYbBLVx0ie4t7tChkA8QJShS83fUcGrJSKkxBy8Q=";
   };

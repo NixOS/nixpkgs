@@ -40,6 +40,8 @@ py.pkgs.buildPythonApplication rec {
       --replace-fail "prov == 1.5.1" "prov" \
       --replace-fail '"schema-salad >= 8.7, < 9",' '"schema-salad",' \
       --replace-fail "PYTEST_RUNNER + " ""
+    substituteInPlace pyproject.toml \
+      --replace-fail "mypy==1.14.1" "mypy"
   '';
 
   build-system = with py.pkgs; [

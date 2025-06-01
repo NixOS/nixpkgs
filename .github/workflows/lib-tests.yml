@@ -1,26 +1,32 @@
 name: "Building Nixpkgs lib-tests"
 
 on:
+  pull_request:
+    paths:
+      - .github/workflows/lib-tests.yml
   pull_request_target:
     paths:
       - 'lib/**'
       - 'maintainers/**'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 permissions: {}
 
 jobs:
-  get-merge-commit:
-    uses: ./.github/workflows/get-merge-commit.yml
-
   nixpkgs-lib-tests:
     name: nixpkgs-lib-tests
     runs-on: ubuntu-24.04
-    needs: get-merge-commit
-    if: needs.get-merge-commit.outputs.mergedSha
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          ref: ${{ needs.get-merge-commit.outputs.mergedSha }}
+          sparse-checkout: .github/actions
+      - name: Check if the PR can be merged and checkout the merge commit
+        uses: ./.github/actions/get-merge-commit
+        with:
+          merged-as-untrusted: true
 
       - uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
         with:
@@ -28,4 +34,4 @@ jobs:
 
       - name: Building Nixpkgs lib-tests
         run: |
-          nix-build ci -A lib-tests
+          nix-build untrusted/ci -A lib-tests

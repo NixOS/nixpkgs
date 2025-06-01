@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "emirozer";
-    repo = pname;
+    repo = "kubectl-doctor";
     rev = version;
     hash = "sha256-yp5OfSDxIASiCgISUVNxfe3dsLukgIoHARVPALIaQfY=";
   };

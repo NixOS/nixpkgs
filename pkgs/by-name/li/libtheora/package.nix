@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   autoreconfHook,
   libogg,
   libvorbis,
@@ -13,20 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtheora";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchurl {
     url = "https://downloads.xiph.org/releases/theora/libtheora-${finalAttrs.version}.tar.gz";
-    hash = "sha256-QJUpVsR4EZKNHnkizaO8H0J+t1aAw8NySckelJBUkWs=";
+    hash = "sha256-J5MnM5kDtUTCipKurafQ3P0Dl7WcLzaMxpisVvUVkG4=";
   };
 
-  patches = [
-    # fix error in autoconf scripts
-    (fetchpatch {
-      url = "https://github.com/xiph/theora/commit/28cc6dbd9b2a141df94f60993256a5fca368fa54.diff";
-      hash = "sha256-M/UULkiklvEay7LyOuCamxWCSvt37QSMzHOsAAnOWJo=";
-    })
-  ] ++ lib.optionals stdenv.hostPlatform.isMinGW [ ./mingw-remove-export.patch ];
+  patches = lib.optionals stdenv.hostPlatform.isMinGW [ ./mingw-remove-export.patch ];
 
   configureFlags = [ "--disable-examples" ];
 
@@ -60,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://gitlab.xiph.org/xiph/theora/-/releases/v${finalAttrs.version}";
     description = "Library for Theora, a free and open video compression format";
     homepage = "https://www.theora.org/";
     license = lib.licenses.bsd3;

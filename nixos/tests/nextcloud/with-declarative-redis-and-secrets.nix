@@ -84,13 +84,12 @@ runTest (
           # This file is meant to contain secret options which should
           # not go into the nix store. Here it is just used to set the
           # redis password.
-          environment.etc."nextcloud-secrets.json".text = ''
-            {
-              "redis": {
-                "password": "secret"
-              }
-            }
-          '';
+          environment.etc."nextcloud-secrets.json" = {
+            mode = "0600";
+            text = builtins.toJSON {
+              redis.password = "secret";
+            };
+          };
         };
     };
 

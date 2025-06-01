@@ -17,19 +17,21 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-Sds16h+W9t7N755ADPXXDi+SxwouBMxP9ApUqaXedqY=";
   };
 
+  nativeBuildInputs = [
+    beets
+  ];
+
   pythonRelaxDeps = true;
 
   build-system = with python3Packages; [
     hatchling
   ];
 
-  dependencies =
-    [ beets ]
-    ++ (with python3Packages; [
-      markdownify
-      natsort
-      tldextract
-    ]);
+  dependencies = with python3Packages; [
+    markdownify
+    natsort
+    tldextract
+  ];
 
   passthru = {
     updateScript = nix-update-script { };

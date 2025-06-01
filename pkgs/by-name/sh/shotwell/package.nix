@@ -35,6 +35,7 @@
   libsecret,
   libportal-gtk3,
   gsettings-desktop-schemas,
+  libheif,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -86,6 +87,18 @@ stdenv.mkDerivation (finalAttrs: {
     libsecret
     libportal-gtk3
   ];
+
+  postInstall = ''
+    # Pull in HEIF support.
+    # In postInstall to run before gappsWrapperArgsHook.
+    export GDK_PIXBUF_MODULE_FILE="${
+      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+        extraLoaders = [
+          libheif.out
+        ];
+      }
+    }"
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {

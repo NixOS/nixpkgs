@@ -1,21 +1,22 @@
 {
   lib,
   buildPythonPackage,
+  ecdsa,
   fetchFromGitHub,
   flask,
   pytestCheckHook,
   python-http-client,
   pythonOlder,
   pyyaml,
+  setuptools,
   starkbank-ecdsa,
-  six,
   werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "sendgrid";
-  version = "6.12.0";
-  format = "setuptools";
+  version = "6.12.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -23,13 +24,15 @@ buildPythonPackage rec {
     owner = pname;
     repo = "sendgrid-python";
     tag = version;
-    hash = "sha256-+1Tkue09C2qqCqN8lbseo2MzVbx+qDE/M/3r3Q6EXYE=";
+    hash = "sha256-7j/V731e+eXFW42WRHuJpZ3OFObVXLOgl81Ww3EAApU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
+    ecdsa
     python-http-client
     starkbank-ecdsa
-    six
   ];
 
   nativeCheckInputs = [

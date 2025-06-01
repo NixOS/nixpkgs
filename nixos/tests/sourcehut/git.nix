@@ -63,25 +63,26 @@ import ../make-test-python.nix (
         machine.wait_for_unit("sshd.service")
 
         with subtest("Check whether meta comes up"):
-             machine.wait_for_unit("metasrht-api.service")
-             machine.wait_for_unit("metasrht.service")
-             machine.wait_for_unit("metasrht-webhooks.service")
+             machine.wait_for_unit("meta.sr.ht-api.service")
+             machine.wait_for_unit("meta.sr.ht.service")
+             machine.wait_for_unit("meta.sr.ht-webhooks.service")
              machine.wait_for_open_port(5000)
              machine.succeed("curl -sL http://localhost:5000 | grep meta.${domain}")
              machine.succeed("curl -sL http://meta.${domain} | grep meta.${domain}")
 
         with subtest("Create a new user account and OAuth access key"):
-             machine.succeed("echo ${userPass} | metasrht-manageuser -ps -e ${userName}@${domain}\
-                              -t active_paying ${userName}");
+             machine.succeed("echo ${userPass} | meta.sr.ht-manageuser -ps -e ${userName}@${domain}\
+                              -t USER ${userName}");
+             cmd = "srht-gen-oauth-tok -i ${domain} -q ${userName} ${userPass}"
              (_, token) = machine.execute("srht-gen-oauth-tok -i ${domain} -q ${userName} ${userPass}")
              token = token.strip().replace("/", r"\\/") # Escape slashes in token before passing it to sed
              machine.execute("mkdir -p ~/.config/hut/")
              machine.execute("sed s/OAUTH-TOKEN/" + token + "/ ${hutConfig} > ~/.config/hut/config")
 
         with subtest("Check whether git comes up"):
-             machine.wait_for_unit("gitsrht-api.service")
-             machine.wait_for_unit("gitsrht.service")
-             machine.wait_for_unit("gitsrht-webhooks.service")
+             machine.wait_for_unit("git.sr.ht-api.service")
+             machine.wait_for_unit("git.sr.ht.service")
+             machine.wait_for_unit("git.sr.ht-webhooks.service")
              machine.succeed("curl -sL http://git.${domain} | grep git.${domain}")
 
         with subtest("Add an SSH key for Git access"):
@@ -95,7 +96,7 @@ import ../make-test-python.nix (
              machine.execute("cd test && git add .")
              machine.execute("cd test && git commit -m \"Initial commit\"")
              machine.execute("cd test && git tag v0.1")
-             machine.succeed("cd test && git remote add origin gitsrht@git.${domain}:~${userName}/test")
+             machine.succeed("cd test && git remote add origin git.sr.ht@git.${domain}:~${userName}/test")
              machine.execute("( echo -n 'git.${domain} '; cat /etc/ssh/ssh_host_ed25519_key.pub ) > ~/.ssh/known_hosts")
              machine.succeed("hut git create test")
              machine.succeed("cd test && git push --tags --set-upstream origin master")

@@ -4,16 +4,11 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  qmake,
-  qtbase,
-  qtxmlpatterns,
-  qttools,
-  qtwebengine,
+  libsForQt5,
   libGL,
   fontconfig,
   openssl,
   poppler,
-  wrapQtAppsHook,
   ffmpeg,
   libva,
   alsa-lib,
@@ -27,7 +22,6 @@
   lame,
   fdk_aac,
   libass,
-  quazip,
   libXext,
   libXfixes,
 }:
@@ -44,8 +38,11 @@ let
       sha256 = "19zhgsimy0f070caikc4vrrqyc8kv2h6rl37sy3iggks8z0g98gf";
     };
 
-    nativeBuildInputs = [ qmake ];
-    buildInputs = [ qtbase ];
+    nativeBuildInputs = [
+      libsForQt5.qmake
+      libsForQt5.wrapQtAppsHook
+    ];
+    buildInputs = [ libsForQt5.qtbase ];
     dontWrapQtApps = true;
 
     installPhase = ''
@@ -79,14 +76,14 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtxmlpatterns
-    qttools
-    qtwebengine
+    libsForQt5.qtbase
+    libsForQt5.qtxmlpatterns
+    libsForQt5.qttools
+    libsForQt5.qtwebengine
     libGL
     fontconfig
     openssl
@@ -104,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     lame
     fdk_aac
     libass
-    quazip
+    libsForQt5.quazip
     libXext
     libXfixes
   ];

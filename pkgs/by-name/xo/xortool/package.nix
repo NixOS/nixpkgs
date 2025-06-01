@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "xortool";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hellman";
     repo = "xortool";
     tag = "v${version}";
-    hash = "sha256-xxaWhGUh/r34eS2TJt8c3Q795OsZOoQLXQllJGJTjqY=";
+    hash = "sha256-KakpXRhBVgUtIiqqvq30u7sIIeXe9vr5aqndOb0cR64=";
   };
 
   build-system = with python3Packages; [ poetry-core ];

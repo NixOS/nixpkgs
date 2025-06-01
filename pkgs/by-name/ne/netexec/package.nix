@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   python3,
+  writableTmpDirAsHomeHook,
 }:
 let
   python = python3.override {
@@ -27,14 +28,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "netexec";
-  version = "1.3.0";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Pennyw0rth";
     repo = "NetExec";
     tag = "v${version}";
-    hash = "sha256-Pub7PAw6CTN4c/PHTPE9KcnDR2a6hSza1ODp3EWMOH0=";
+    hash = "sha256-1yNnnPntJ5aceX3Z8yYAMLv5bSFfCFVp0pgxAySlVfE=";
   };
 
   pythonRelaxDeps = true;
@@ -46,8 +47,9 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail '{ git = "https://github.com/fortra/impacket.git" }' '"*"' \
-      --replace-fail '{ git = "https://github.com/Pennyw0rth/NfsClient" }' '"*"'
+      --replace-fail " @ git+https://github.com/fortra/impacket.git" "" \
+      --replace-fail " @ git+https://github.com/wbond/oscrypto" "" \
+      --replace-fail " @ git+https://github.com/Pennyw0rth/NfsClient" ""
   '';
 
   build-system = with python.pkgs; [
@@ -56,6 +58,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   dependencies = with python.pkgs; [
+    jwt
     aardwolf
     aioconsole
     aiosqlite
@@ -89,14 +92,10 @@ python.pkgs.buildPythonApplication rec {
     xmltodict
   ];
 
-  nativeCheckInputs = with python.pkgs; [ pytestCheckHook ];
+  nativeCheckInputs = with python.pkgs; [ pytestCheckHook ] ++ [ writableTmpDirAsHomeHook ];
 
   # Tests no longer works out-of-box with 1.3.0
   doCheck = false;
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   meta = {
     description = "Network service exploitation tool (maintained fork of CrackMapExec)";

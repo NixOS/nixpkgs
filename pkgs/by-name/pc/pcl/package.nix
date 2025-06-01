@@ -41,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-UCuQMWGwe+YxeGj0Y6m5IT58NW2lAWN5RqyZnvyFSr4=";
   };
 
+  strictDeps = true;
+
   # remove attempt to prevent (x86/x87-specific) extended precision use
   # when SSE not detected
   postPatch = lib.optionalString (!stdenv.hostPlatform.isx86) ''
@@ -59,8 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpcap
     libsForQt5.qtbase
     libusb1
-    llvmPackages.openmp
-  ];
+  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   propagatedBuildInputs = [
     boost
@@ -71,8 +72,11 @@ stdenv.mkDerivation (finalAttrs: {
     vtk
   ];
 
-  cmakeFlags = lib.optionals cudaSupport [
-    (lib.cmakeBool "WITH_CUDA" true)
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_CUDA" cudaSupport)
+    (lib.cmakeBool "BUILD_GPU" cudaSupport)
+    (lib.cmakeBool "PCL_ENABLE_MARCHNATIVE" false)
+    (lib.cmakeBool "WITH_CUDA" cudaSupport)
   ];
 
   passthru.updateScript = gitUpdater {

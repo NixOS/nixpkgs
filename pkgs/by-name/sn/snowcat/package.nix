@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "praetorian-inc";
-    repo = pname;
+    repo = "snowcat";
     rev = "v${version}";
     sha256 = "sha256-EulQYGOMIh952e4Xp13hT/HMW3qP1QXYtt5PEej1VTY=";
   };

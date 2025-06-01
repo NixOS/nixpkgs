@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gale";
-  version = "1.5.6";
+  version = "1.5.12";
 
   src = fetchFromGitHub {
     owner = "Kesomannen";
     repo = "gale";
     tag = finalAttrs.version;
-    hash = "sha256-YNTmREWSsXjQ8S2bM9JTsoTdPCmPnmt/svhTOoUFEs4=";
+    hash = "sha256-5iJ04/q/emPwG0ILurFx2gNlXkZrfP2D6xv25AIlhfc=";
   };
 
   postPatch = ''
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-EFP2Lwqg2bFaSCXXDPIAF6nfeV7/CH3XgI9fzxE+veA=";
+    hash = "sha256-yaPUNtlb2vMwK42u+3/rViGx6YzhYxRDJylPu++tbNs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       cargoRoot
       ;
-    hash = "sha256-AsViBPdXNzQBnN3Vv8ojfdG7fvy5DN3FiQHTzdLmxyQ=";
+    hash = "sha256-GGH5kQlnYIlKbTAKbF275mH4J9BcbcBHSdzP7RgfDwk=";
   };
 
   cargoRoot = "src-tauri";

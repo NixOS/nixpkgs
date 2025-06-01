@@ -4,6 +4,7 @@
   fetchFromGitHub,
   patsh,
   hostname,
+  coreutils,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,6 +20,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ patsh ];
 
+  # needed for cross
+  buildInputs = [ coreutils ];
+
   buildPhase = ''
     runHook preBuild
 
@@ -26,7 +30,7 @@ stdenv.mkDerivation rec {
       --replace-fail \
         'echo "hostname"' \
         'echo "${hostname}/bin/hostname"'
-    patsh -f rmate -s ${builtins.storeDir}
+    patsh -f rmate -s ${builtins.storeDir} --path "$HOST_PATH"
 
     runHook postBuild
   '';

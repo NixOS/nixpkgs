@@ -14,7 +14,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "tdewolff";
-    repo = pname;
+    repo = "minify";
     rev = "v${version}";
     hash = "sha256-v0KLQlf2WhI18uanVtvWfX6/7s9ZtfPM5AGyEIHZf54=";
   };

@@ -1,13 +1,12 @@
 {
   fetchzip,
-  gitUpdater,
   lib,
   stdenv,
   nix-update-script,
 }:
 
 let
-  version = "2.3.29";
+  version = "3.3.39";
 in
 stdenv.mkDerivation {
   pname = "flashspace";
@@ -16,7 +15,7 @@ stdenv.mkDerivation {
 
   src = fetchzip {
     url = "https://github.com/wojciech-kulik/FlashSpace/releases/download/v${version}/FlashSpace.app.zip";
-    hash = "sha256-aBqlxIPPhx5GwNowf172Ko10g8RXnN7nIJaD3Zh4TPg=";
+    hash = "sha256-/mgdeRxaxq+oIjbbaxCSExHxyYqqWl80+6jPzPIhT4M=";
   };
 
   installPhase = ''

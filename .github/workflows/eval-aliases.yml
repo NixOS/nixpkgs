@@ -1,24 +1,29 @@
 name: Eval aliases
 
 on:
+  pull_request:
+    paths:
+      - .github/workflows/eval-aliases.yml
   pull_request_target:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 
 permissions: {}
 
 jobs:
-  get-merge-commit:
-    uses: ./.github/workflows/get-merge-commit.yml
-
   eval-aliases:
     name: Eval nixpkgs with aliases enabled
     runs-on: ubuntu-24.04-arm
-    needs: [ get-merge-commit ]
     steps:
-      - name: Check out the PR at the test merge commit
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          ref: ${{ needs.get-merge-commit.outputs.mergedSha }}
-          path: nixpkgs
+          sparse-checkout: .github/actions
+      - name: Check if the PR can be merged and checkout the merge commit
+        uses: ./.github/actions/get-merge-commit
+        with:
+          merged-as-untrusted: true
 
       - name: Install Nix
         uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
@@ -26,8 +31,8 @@ jobs:
           extra_nix_config: sandbox = true
 
       - name: Ensure flake outputs on all systems still evaluate
-        run: nix --experimental-features 'nix-command flakes' flake check --all-systems --no-build ./nixpkgs
+        run: nix flake check --all-systems --no-build ./untrusted
 
       - name: Query nixpkgs with aliases enabled to check for basic syntax errors
         run: |
-          time nix-env -I ./nixpkgs -f ./nixpkgs -qa '*' --option restrict-eval true --option allow-import-from-derivation false >/dev/null
+          time nix-env -I ./untrusted -f ./untrusted -qa '*' --option restrict-eval true --option allow-import-from-derivation false >/dev/null

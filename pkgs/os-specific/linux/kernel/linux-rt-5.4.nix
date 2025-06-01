@@ -10,7 +10,7 @@
 }@args:
 
 let
-  version = "5.4.290-rt96"; # updated by ./update-rt.sh
+  version = "5.4.293-rt98"; # updated by ./update-rt.sh
   branch = lib.versions.majorMinor version;
   kversion = builtins.elemAt (lib.splitString "-" version) 0;
 in
@@ -22,7 +22,7 @@ buildLinux (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v5.x/linux-${kversion}.tar.xz";
-      sha256 = "0mm4q8f6kbqddy4zaxjf5xyqpnla5qprvsf7v3vq01gmlzr3rivc";
+      sha256 = "0b9p8l6ndm75751f7s03rnxg7yg9c4pj9rb537lhsv6pqx096n1l";
     };
 
     kernelPatches =
@@ -31,7 +31,7 @@ buildLinux (
           name = "rt";
           patch = fetchurl {
             url = "mirror://kernel/linux/kernel/projects/rt/${branch}/older/patch-${version}.patch.xz";
-            sha256 = "1vcyz46n6yznbil5lqiqrn9vrdf0cpva7br9fj7lrr958yjv7101";
+            sha256 = "0vsb893cmc1rqrb2jqpc748748py2dc8nz8p5x3rh35ky8p3shss";
           };
         };
       in

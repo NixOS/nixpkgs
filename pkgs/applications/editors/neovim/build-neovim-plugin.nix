@@ -26,6 +26,7 @@ let
 
   luaDrv = originalLuaDrv.overrideAttrs (oa: {
     version = attrs.version or oa.version;
+    __intentionallyOverridingVersion = true;
     rockspecVersion = oa.rockspecVersion;
 
     extraConfig = ''
@@ -43,6 +44,7 @@ let
           lua.pkgs.luarocksMoveDataFolder
         ];
         version = "${originalLuaDrv.version}-unstable-${oa.version}";
+        __intentionallyOverridingVersion = true;
       }
     )
   );

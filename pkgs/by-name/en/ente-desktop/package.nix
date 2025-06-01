@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Path to vips (otherwise it looks within the electron derivation)
   postPatch = ''
     substituteInPlace src/main/services/image.ts src/main.ts \
-      --replace-fail "process.resourcesPath" '"$out/share/ente-desktop/resources"'
+      --replace-fail "process.resourcesPath" "\"$out/share/ente-desktop/resources\""
   '';
 
   postConfigure = ''

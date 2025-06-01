@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   python3,
   nodejs,
   closurecompiler,
@@ -59,6 +60,17 @@ stdenv.mkDerivation rec {
   patches = [
     (replaceVars ./0001-emulate-clang-sysroot-include-logic.patch {
       resourceDir = "${llvmEnv}/lib/clang/${lib.versions.major llvmPackages.llvm.version}/";
+    })
+    # The following patches work around a bug where EM_CACHE is not copied with
+    # the correct permissions; the bug will be fixed in the next release (probably 4.0.10).
+    # See also: https://github.com/emscripten-core/emscripten/issues/24404
+    (fetchpatch {
+      url = "https://github.com/emscripten-core/emscripten/commit/99c6e41154f701e423074e33a4fdaf5eea49d073.patch";
+      hash = "sha256-/wkhz08NhbgxsrXd7YFfdCGX6LrS2Ncct8dcwxBMsjY=";
+    })
+    (fetchpatch {
+      url = "https://github.com/emscripten-core/emscripten/commit/f4d358d740a238b67a1d6935e71638519d25afa0.patch";
+      hash = "sha256-hib5ZAN/R2dH+rTv3nYF37+xKZmeboKxnS+5mkht2lM=";
     })
   ];
 

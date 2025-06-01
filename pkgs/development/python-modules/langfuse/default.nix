@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "langfuse";
-  version = "2.60.3";
+  version = "2.60.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langfuse";
     repo = "langfuse-python";
     tag = "v${version}";
-    hash = "sha256-B1WpBv3nWfCM4eU6e9yon5fMMWLOIHCYT/+q7u/q7fg=";
+    hash = "sha256-DpfbebbONJ8+7mVouvULRbGs9t1cGjOZHhk3KvaY+gM=";
   };
 
   build-system = [ poetry-core ];

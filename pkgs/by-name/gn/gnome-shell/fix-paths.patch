@@ -10,10 +10,10 @@ index de91167c5..1c9965678 100644
 +ExecStart=@gsettings@ set org.gnome.shell disable-user-extensions true
  Restart=no
 diff --git a/js/ui/extensionDownloader.js b/js/ui/extensionDownloader.js
-index 197cc1c1c..dd74aa167 100644
+index 53fd92846..89533cedc 100644
 --- a/js/ui/extensionDownloader.js
 +++ b/js/ui/extensionDownloader.js
-@@ -110,7 +110,7 @@ async function extractExtensionArchive(bytes, dir) {
+@@ -124,7 +124,7 @@ async function extractExtensionArchive(bytes, dir) {
      stream.close_async(GLib.PRIORITY_DEFAULT, null);
  
      const unzip = Gio.Subprocess.new(
@@ -22,7 +22,7 @@ index 197cc1c1c..dd74aa167 100644
          Gio.SubprocessFlags.NONE);
      await unzip.wait_check_async(null);
  
-@@ -132,7 +132,7 @@ async function extractExtensionArchive(bytes, dir) {
+@@ -146,7 +146,7 @@ async function extractExtensionArchive(bytes, dir) {
      }
  
      const compileSchema = Gio.Subprocess.new(
@@ -32,15 +32,15 @@ index 197cc1c1c..dd74aa167 100644
  
      try {
 diff --git a/js/ui/status/keyboard.js b/js/ui/status/keyboard.js
-index fff4e73c2..92859b099 100644
+index 1b43e1051..a31b0a304 100644
 --- a/js/ui/status/keyboard.js
 +++ b/js/ui/status/keyboard.js
-@@ -1092,6 +1092,6 @@ class InputSourceIndicator extends PanelMenu.Button {
-         if (xkbVariant.length > 0)
-             description = `${description}\t${xkbVariant}`;
+@@ -1104,6 +1104,6 @@ class InputSourceIndicator extends PanelMenu.Button {
+     _showLayout() {
+         Main.overview.hide();
  
--        Util.spawn(['tecla', description]);
-+        Util.spawn(['@tecla@', description]);
+-        Util.spawn(['tecla']);
++        Util.spawn(['@tecla@']);
      }
  });
 diff --git a/subprojects/extensions-tool/src/command-install.c b/subprojects/extensions-tool/src/command-install.c

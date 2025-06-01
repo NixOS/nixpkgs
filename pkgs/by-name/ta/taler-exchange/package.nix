@@ -18,24 +18,30 @@
   jq,
   gettext,
   texinfo,
+  libtool,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-exchange";
-  version = "0.14.6-unstable-2025-03-02";
+  version = "1.0.4";
 
   src = fetchgit {
     url = "https://git.taler.net/exchange.git";
-    rev = "13e058a902a3dbee9d7fe327030b88c2d126675b";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-fqlYpFggQkB/IqD6V01ec+G4EtoNaA/FXigM+jqIMe0=";
+    hash = "sha256-k2e9pzy7vSIjCVGOVif9ntYvLcvoJA6J63vB/lg3iwA=";
   };
 
   patches = [ ./0001-add-TALER_TEMPLATING_init_path.patch ];
 
   nativeBuildInputs = [
     autoreconfHook
+    recutils # recfix
     pkg-config
+    python3.pkgs.jinja2
+    texinfo # makeinfo
+    # jq is necessary for some tests and is checked by configure script
+    jq
   ];
 
   buildInputs = [
@@ -44,15 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
     jansson
     libsodium
     libpq
+    libtool
     curl
-    recutils
     gettext
-    texinfo # Fix 'makeinfo' is missing on your system.
     libunistring
-    python3.pkgs.jinja2
-    # jq is necessary for some tests and is checked by configure script
-    jq
   ];
+
+  strictDeps = true;
 
   propagatedBuildInputs = [ gnunet ];
 
@@ -90,6 +94,10 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
+  configureFlags = [
+    "ac_cv_path__libcurl_config=${lib.getDev curl}/bin/curl-config"
+  ];
+
   enableParallelBuilding = true;
 
   doInstallCheck = true;
@@ -117,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://git.taler.net/exchange.git/tree/ChangeLog";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ astro ];
+    teams = with lib.teams; [ ngi ];
     platforms = lib.platforms.linux;
   };
 })

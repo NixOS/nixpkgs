@@ -48,7 +48,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ipxe";
-  version = "1.21.1-unstable-2025-05-07";
+  version = "1.21.1-unstable-2025-05-27";
 
   nativeBuildInputs = [
     mtools
@@ -65,8 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ipxe";
     repo = "ipxe";
-    rev = "12dee2dab2ea6bc619603c2036e6512889813c4c";
-    hash = "sha256-um0CAxIY7FFGAzM1vCL8uurFY3DieK46Y9JA12s5fVw=";
+    rev = "3fe321c42a6032f9608026486015cda185f0d5f0";
+    hash = "sha256-kc1FdkyVerqs8mmzf1WWRvzkP7Nkw3wKltlrJIvyHBw=";
   };
 
   # Calling syslinux on a FAT image isn't going to work on Aarch64.
@@ -142,7 +142,15 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Network boot firmware";
     homepage = "https://ipxe.org/";
-    license = lib.licenses.gpl2Only;
+    license = with lib.licenses; [
+      bsd2
+      bsd3
+      gpl2Only
+      gpl2UBDLPlus
+      isc
+      mit
+      mpl11
+    ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ sigmasquadron ];
   };

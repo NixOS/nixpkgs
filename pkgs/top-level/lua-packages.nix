@@ -205,6 +205,9 @@ rec {
     }
   ) { };
 
+  luv = callPackage ../development/lua-modules/luv { };
+  libluv = callPackage ../development/lua-modules/luv/lib.nix { };
+
   luxio = callPackage (
     {
       fetchurl,

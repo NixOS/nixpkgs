@@ -4,33 +4,63 @@
   fetchFromGitHub,
   makeWrapper,
   copyDesktopItems,
-  electron_34,
+  electron_36,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   makeDesktopItem,
   darwin,
   nix-update-script,
+  _experimental-update-script-combinators,
+  writeShellApplication,
+  nix,
+  jq,
+  gnugrep,
 }:
 
 let
-  electron = electron_34;
+  electron = electron_36;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "podman-desktop";
-  version = "1.18.0";
+  version = "1.19.1";
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script { })
+    (lib.getExe (writeShellApplication {
+      name = "${finalAttrs.pname}-dependencies-updater";
+      runtimeInputs = [
+        nix
+        jq
+        gnugrep
+      ];
+      runtimeEnv = {
+        PNAME = finalAttrs.pname;
+        PKG_FILE = builtins.toString ./package.nix;
+      };
+      text = ''
+        new_src="$(nix-build --attr "pkgs.$PNAME.src" --no-out-link)"
+        new_electron_major="$(jq '.devDependencies.electron' "$new_src/package.json" | grep --perl-regexp --only-matching '\d+' | head -n 1)"
+        new_pnpm_major="$(jq '.packageManager' "$new_src/package.json" | grep --perl-regexp --only-matching '\d+' | head -n 1)"
+        sed -i -E "s/electron_[0-9]+/electron_$new_electron_major/g" "$PKG_FILE"
+        sed -i -E "s/pnpm_[0-9]+/pnpm_$new_pnpm_major/g" "$PKG_FILE"
+      '';
+    }))
+    (nix-update-script {
+      # Changing the pnpm version requires updating `pnpmDeps.hash`.
+      extraArgs = [ "--version=skip" ];
+    })
+  ];
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-u3Irn+hSyTNTLl8QenMZbISE5aFhb58mOSOooVoijKw=";
+    hash = "sha256-HTfrbMwXw+GGseVzJR2eagBJ7AmuPeFMuy/lO7EADmY=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-2k0BbE9FkWEErsTuCECjy+iI3u1Biv1MF9hI7Oq3Aus=";
+    hash = "sha256-6xXTzqEeWpDKhZN6z4dSHrU7qWK9AAlD2DXnr7ac0So=";
   };
 
   patches = [
@@ -47,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs =
     [
       nodejs
-      pnpm_9.configHook
+      pnpm_10.configHook
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       copyDesktopItems

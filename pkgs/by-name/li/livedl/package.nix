@@ -5,13 +5,13 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "livedl";
   version = "unstable-2021-05-16";
 
   src = fetchFromGitHub {
     owner = "himananiito";
-    repo = pname;
+    repo = "livedl";
     rev = "a8720f1e358e5b0ade6fdeb8aacc00781e6cc504";
     sha256 = "1zax215jp6sl47m8ahssyyrbzn96dh74srq9g61jc76sq10xg329";
   };

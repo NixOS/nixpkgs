@@ -11,7 +11,6 @@
   filelock,
   packaging,
   tomli,
-  typing-extensions,
 
   distutils,
   pythonOlder,
@@ -29,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "cx-freeze";
-  version = "8.2.0";
+  version = "8.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "marcelotduarte";
     repo = "cx_Freeze";
     tag = version;
-    hash = "sha256-xrSMW7z3XblwAuaC18Rju/XuBZvU+5+xAW+MO6u32EE=";
+    hash = "sha256-PhUzHSn9IqUcb11D0kRT8zhmZ/KusTBDpAempiDN4Rc=";
   };
 
   patches = [
@@ -44,6 +43,11 @@ buildPythonPackage rec {
     # is not in the subpath of '/nix/store/fqm9bqqlmaqqr02qbalm1bazp810qfiw-python3-3.12.9'
     ./fix-tests-relative-path.patch
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=77.0.3,<=80.4.0" "setuptools>=77.0.3"
+  '';
 
   build-system = [
     setuptools
@@ -62,9 +66,6 @@ buildPythonPackage rec {
     ]
     ++ lib.optionals (pythonOlder "3.11") [
       tomli
-    ]
-    ++ lib.optionals (pythonOlder "3.10") [
-      typing-extensions
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       dmgbuild
@@ -97,6 +98,7 @@ buildPythonPackage rec {
   disabledTests =
     [
       # Require internet access
+      "test_bdist_appimage_download_appimagetool"
       "test_bdist_appimage_target_name"
       "test_bdist_appimage_target_name_and_version"
       "test_bdist_appimage_target_name_and_version_none"
@@ -150,7 +152,7 @@ buildPythonPackage rec {
   meta = {
     description = "Set of scripts and modules for freezing Python scripts into executables";
     homepage = "https://marcelotduarte.github.io/cx_Freeze";
-    changelog = "https://github.com/marcelotduarte/cx_Freeze/releases/tag/${version}";
+    changelog = "https://github.com/marcelotduarte/cx_Freeze/releases/tag/${src.tag}";
     license = lib.licenses.psfl;
     maintainers = [ ];
     mainProgram = "cxfreeze";

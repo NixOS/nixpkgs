@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "Pylons";
     repo = "pastedeploy";
     tag = version;
-    hash = "sha256-8MNeOcYPEYAfghZN/K/1v/tAAdgz/fCvuVnBoru+81Q=";
+    hash = "sha256-yR7UxAeF0fQrbU7tl29GpPeEAc4YcxHdNQWMD67pP3g=";
   };
 
   postPatch = ''
@@ -32,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "paste.deploy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Load, configure, and compose WSGI applications and servers";
     homepage = "https://github.com/Pylons/pastedeploy";
-    changelog = "https://github.com/Pylons/pastedeploy/blob/${version}/docs/news.rst";
-    license = licenses.mit;
-    teams = [ teams.openstack ];
+    changelog = "https://github.com/Pylons/pastedeploy/blob/${src.tag}/docs/news.rst";
+    license = lib.licenses.mit;
+    teams = [ lib.teams.openstack ];
   };
 }

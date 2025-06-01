@@ -4,8 +4,9 @@
   fetchurl,
   fetchpatch,
   gettext,
+  meson,
+  ninja,
   pkg-config,
-  xfce4-dev-tools,
   glib,
   gtk3,
   json_c,
@@ -19,36 +20,32 @@
   gitUpdater,
 }:
 
-let
-  category = "panel-plugins";
-in
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-weather-plugin";
-  version = "0.11.3";
+  version = "0.12.0";
 
   src = fetchurl {
-    url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-AC0f5jkG0vOgEvPLWMzv8d+8xGZ1njbHbTsD3QHA3Fc=";
+    url = "mirror://xfce/src/panel-plugins/xfce4-weather-plugin/${lib.versions.majorMinor finalAttrs.version}/xfce4-weather-plugin-${finalAttrs.version}.tar.xz";
+    hash = "sha256-XdkLAywG70tkuBgCMVTvlGOixpSgKQ5X80EilsdUX/Y=";
   };
 
   patches = [
-    # Port to libsoup-3.0
-    # https://gitlab.xfce.org/panel-plugins/xfce4-weather-plugin/-/merge_requests/28
+    # meson-build: Add missing HAVE_UPOWER_GLIB definition
+    # https://gitlab.xfce.org/panel-plugins/xfce4-weather-plugin/-/merge_requests/37
     (fetchpatch {
-      url = "https://gitlab.xfce.org/panel-plugins/xfce4-weather-plugin/-/commit/c0653a903c6f2cecdf41ac9eaeba4f4617656ffe.patch";
-      hash = "sha256-wAowm4ppBSKvYwOowZbbs5pnTh9EQ9XX05lA81wtsRM=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.xfce.org/panel-plugins/xfce4-weather-plugin/-/commit/279c975dc1f95bd1ce9152eee1d19122e7deb9a8.patch";
-      hash = "sha256-gVfyXkE0bjBfvcQU9fDp+Gm59bD3VbAam04Jak8i31k=";
+      url = "https://gitlab.xfce.org/panel-plugins/xfce4-weather-plugin/-/commit/1d8e5e5dbbc4d53e4b810f9b01a460197cd47b64.patch";
+      hash = "sha256-g9AIp1iBcA3AxD1tpnv32PvxxulXYjFvQh3EqD1gmHg=";
     })
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     gettext
+    glib # glib-compile-resources
+    meson
+    ninja
     pkg-config
-    xfce4-dev-tools
   ];
 
   buildInputs = [
@@ -64,20 +61,16 @@ stdenv.mkDerivation rec {
     xfconf
   ];
 
-  configureFlags = [ "--enable-maintainer-mode" ];
-
-  enableParallelBuilding = true;
-
   passthru.updateScript = gitUpdater {
-    url = "https://gitlab.xfce.org/panel-plugins/${pname}";
-    rev-prefix = "${pname}-";
+    url = "https://gitlab.xfce.org/panel-plugins/xfce4-weather-plugin";
+    rev-prefix = "xfce4-weather-plugin-";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-weather-plugin";
     description = "Weather plugin for the Xfce desktop environment";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    teams = [ teams.xfce ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.xfce ];
   };
-}
+})

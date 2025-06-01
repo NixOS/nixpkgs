@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "cblopez";
-    repo = pname;
+    repo = "nmapthon2";
     rev = "v${version}";
     hash = "sha256-4Na75TdKDywUomJF4tDWUWwCCtcOSxBUMOF7+FDhbpY=";
   };

@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gala";
-  version = "8.1.0";
+  version = "8.2.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    hash = "sha256-C0Vct2xuGHd/G5x0Faif0DfpyNyCLJDxki+O9697c2s=";
+    hash = "sha256-S71NryqJjWXZgyBj6q088bdjt/NnAEJ6oeUO2OMJ3Z4=";
   };
 
   patches = [

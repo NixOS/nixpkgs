@@ -29,6 +29,7 @@
   nixosTests,
   unstableGitUpdater,
   apple-sdk_14,
+  libtommath,
 }:
 
 let
@@ -37,14 +38,21 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2025-05-07";
+  version = "0-unstable-2025-05-24";
 
   src = fetchFromGitHub {
     owner = "LadybirdWebBrowser";
     repo = "ladybird";
-    rev = "5610f5a8652fb5273acd3739634bb8f69df1d786";
-    hash = "sha256-XG7FmadzZN9ew3oPOFjv0CzB/UzLWGq3AANRp2MQAq8=";
+    rev = "fbd1f771613fc6f13fcc20dcad04c7065633a2c2";
+    hash = "sha256-Gtfnq46JrzfpcapMr6Ez+5BNQ59H/Djsgp7n6QvMSUM=";
   };
+
+  patches = [
+    # Revert https://github.com/LadybirdBrowser/ladybird/commit/51d189198d3fc61141fc367dc315c7f50492a57e
+    # This commit doesn't update the skia used by ladybird vcpkg, but it does update the skia that
+    # that cmake wants.
+    ./001-revert-fake-skia-update.patch
+  ];
 
   postPatch = ''
     sed -i '/iconutil/d' UI/CMakeLists.txt
@@ -86,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     qt6Packages.wrapQtAppsHook
+    libtommath
   ];
 
   buildInputs =

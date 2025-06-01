@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "hwloc";
-  version = "2.12.0";
+  version = "2.12.1";
 
   src = fetchurl {
     url = "https://www.open-mpi.org/software/hwloc/v${lib.versions.majorMinor version}/downloads/hwloc-${version}.tar.bz2";
-    hash = "sha256-BqCivcClcU6DkWRoOEag6TaoliE3WOnTfkniMricWNQ=";
+    hash = "sha256-OKkDKLuGJZ+bsv4dxX/YQeER0eY1gBK+8j39ldIdxms=";
   };
 
   configureFlags = [

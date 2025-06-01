@@ -456,6 +456,10 @@ with self;
       url = "mirror://cpan/authors/id/R/RU/RUZ/Alien-LibGumbo-0.05.tar.gz";
       hash = "sha256-D76RarEfaA5cKM0ayAA3IyPioOBq/8bIs2J5/GTXZRc=";
     };
+    # Fix linker detection broken by exported LD (see nixpkgs#9f2a89f)
+    preBuild = ''
+      export LD="${lib.getExe' stdenv.cc.bintools "${stdenv.cc.bintools.targetPrefix}ld"}"
+    '';
     buildInputs = [ AlienBaseModuleBuild ];
     propagatedBuildInputs = [
       AlienBuild
@@ -468,7 +472,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.AlienLibGumbo.x86_64-darwin
+      broken = stdenv.hostPlatform.isDarwin; # Fails with: ld: unknown option
     };
   };
 
@@ -979,7 +983,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      broken = true; # DB.c:(.text+0x153): undefined reference to `Perl_init_debugger'
+      broken = stdenv.hostPlatform.isLinux; # DB.c: undefined reference to `Perl_init_debugger'
     };
   };
 
@@ -1315,10 +1319,10 @@ with self;
 
   Apppapersway = buildPerlPackage rec {
     pname = "App-papersway";
-    version = "1.004";
+    version = "2.001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SP/SPWHITTON/App-papersway-${version}.tar.gz";
-      hash = "sha256-/RLSAM0tJEmVlzNDkTCItNZQXGb1hnllmXvEvxgh4Qo=";
+      hash = "sha256-Jx8MJdyr/tfumMhuCofQX0r3vWcVuDzfJGpCjq2+Odw=";
     };
     buildInputs = [
       AnyEvent
@@ -1393,11 +1397,11 @@ with self;
   };
 
   AppSqitch = buildPerlModule {
-    version = "1.5.0";
+    version = "1.5.1";
     pname = "App-Sqitch";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DW/DWHEELER/App-Sqitch-v1.5.0.tar.gz";
-      hash = "sha256-oViHFpPt8en/460D55i1ZQBze4AcCiiMY/gR75oUAYQ=";
+      url = "mirror://cpan/authors/id/D/DW/DWHEELER/App-Sqitch-v1.5.1.tar.gz";
+      hash = "sha256-Fqo0j8Sedfj/ZQMfBiLUGSkyMhsFvWUYq5lkYYVy1pg=";
     };
     buildInputs = [
       CaptureTiny
@@ -1903,10 +1907,10 @@ with self;
 
   AuthenKrb5 = buildPerlModule {
     pname = "Authen-Krb5";
-    version = "1.905";
+    version = "1.906";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IO/IOANR/Authen-Krb5-1.905.tar.gz";
-      hash = "sha256-13sAuxUBpW9xGOkarAx+Qi2888QY+c6YuAF3HDqg900=";
+      url = "mirror://cpan/authors/id/O/OD/ODENBACH/Authen-Krb5-1.906.tar.gz";
+      hash = "sha256-LcCSjvsTtfMF3zRSCI5j+StnrOqH+9RwMI9GD3kSboQ=";
     };
     propagatedBuildInputs = [ pkgs.libkrb5 ];
     buildInputs = [
@@ -2474,11 +2478,6 @@ with self;
 
     propagatedBuildInputs = [ BioPerl ];
     htslibStore = toString pkgs.htslib;
-
-    postPatch = ''
-      # -Wl,-rpath not recognized : replaced by -rpath=
-      sed -i 's/Wl,-rpath,/rpath=/' Build.PL
-    '';
 
     preBuild = ''
       export HTSLIB_DIR=${pkgs.htslib}
@@ -7619,10 +7618,10 @@ with self;
 
   CryptOpenSSLRSA = buildPerlPackage {
     pname = "Crypt-OpenSSL-RSA";
-    version = "0.33";
+    version = "0.35";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TODDR/Crypt-OpenSSL-RSA-0.33.tar.gz";
-      hash = "sha256-vb5jD21vVAMldGrZmXcnKshmT/gb0Z8K2rptb0Xv2GQ=";
+      url = "mirror://cpan/authors/id/T/TO/TODDR/Crypt-OpenSSL-RSA-0.35.tar.gz";
+      hash = "sha256-XuvVWsBxY0yGSo549c+vuq9Dz4TAQyOgm3Hddr8CXMI=";
     };
     propagatedBuildInputs = [ CryptOpenSSLRandom ];
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
@@ -8273,14 +8272,13 @@ with self;
       TestRequires
     ];
     meta = {
-      description = "Grep-like program for searching source code";
+      description = "MessagePack serialization format";
       homepage = "https://github.com/msgpack/msgpack-perl";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
       ];
       maintainers = [ maintainers.sgo ];
-      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.DataMessagePack.x86_64-darwin
     };
   };
 
@@ -8655,7 +8653,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.DataUtil.x86_64-darwin
     };
   };
 
@@ -9897,7 +9894,6 @@ with self;
         artistic1
         gpl1Only
       ];
-      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.DBDsybase.x86_64-darwin
     };
   };
 
@@ -13563,7 +13559,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.FileLibMagic.x86_64-darwin
     };
   };
 
@@ -14151,10 +14146,10 @@ with self;
 
   FinanceQuote = buildPerlPackage rec {
     pname = "Finance-Quote";
-    version = "1.64";
+    version = "1.65";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BP/BPSCHUCK/Finance-Quote-${version}.tar.gz";
-      hash = "sha256-BYB8lEFakSzlbiJ4FRcTjv/OdoOaj4LtOLsxxAaOXBs=";
+      hash = "sha256-C3pJZaLJrW+nwDawloHHtEWyB1j6qYNnsmZZz2L+Axg=";
     };
     buildInputs = [
       DateManip
@@ -15809,7 +15804,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.HTMLEscape.x86_64-darwin
     };
   };
 
@@ -21025,7 +21019,6 @@ with self;
       description = "Fast XS implementation of MaxMind DB reader";
       homepage = "https://metacpan.org/release/MaxMind-DB-Reader-XS";
       license = with lib.licenses; [ artistic2 ];
-      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.MaxMindDBReaderXS.x86_64-darwin
     };
   };
 
@@ -21063,7 +21056,6 @@ with self;
         artistic1
         gpl1Plus
       ];
-      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.MaxMindDBWriter.x86_64-darwin
     };
   };
 
@@ -30215,6 +30207,9 @@ with self;
     patches = [
       # https://github.com/PerlGameDev/SDL/pull/304
       ../development/perl-modules/sdl-modern-perl.patch
+      # sdl-compat correctly reports the bit depth of the test image,
+      # while SDL_classic rounded to the next byte
+      ../development/perl-modules/sdl-compat-bit-depth.patch
       (fetchpatch {
         url = "https://aur.archlinux.org/cgit/aur.git/plain/surface-xs-declare-calc-offset-earlier.diff?h=perl-sdl&id=d4b6da86d33046cde0e84fa2cd6eaccff1667cab";
         hash = "sha256-dQ2O4dO18diSAilSZrZj6II+mBuKKI3cx9fR1SJqUvo=";
@@ -31831,10 +31826,10 @@ with self;
 
   SubHandlesVia = buildPerlPackage {
     pname = "Sub-HandlesVia";
-    version = "0.050000";
+    version = "0.050002";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TOBYINK/Sub-HandlesVia-0.050000.tar.gz";
-      hash = "sha256-Lfk0k+L56VvleblQtuGf9ST5TIBhOq3AOohhHf91eU8=";
+      url = "mirror://cpan/authors/id/T/TO/TOBYINK/Sub-HandlesVia-0.050002.tar.gz";
+      hash = "sha256-PMWPrjBcCOEZziwz44SHBD5odSE4JkRBw1oxATTrUDg=";
     };
     propagatedBuildInputs = [
       ClassMethodModifiers
@@ -32358,7 +32353,6 @@ with self;
         gpl2Plus
         artistic1
       ];
-      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.SysVirt.x86_64-darwin
     };
   };
 
@@ -35833,7 +35827,6 @@ with self;
         artistic1
         gpl1Plus
       ]; # taken from el6
-      broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.TextIconv.x86_64-darwin
     };
   };
 
@@ -37577,12 +37570,17 @@ with self;
       url = "mirror://cpan/authors/id/C/CV/CVLIBRARY/UUID4-Tiny-0.003.tar.gz";
       hash = "sha256-4S9sgrg1dcORd3O0HA+1HPeDx8bPcuDJkWks4u8Hg2I=";
     };
-    postPatch = lib.optionalString (stdenv.hostPlatform.isAarch64) ''
-      # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/uapi/asm-generic/unistd.h
-      # printf SYS_getrandom | gcc -include sys/syscall.h -E -
-      substituteInPlace lib/UUID4/Tiny.pm \
-        --replace "syscall( 318" "syscall( 278"
-    '';
+    postPatch =
+      lib.optionalString
+        (
+          stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isLoongArch64 || stdenv.hostPlatform.isRiscV64
+        )
+        ''
+          # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/uapi/asm-generic/unistd.h
+          # printf SYS_getrandom | gcc -include sys/syscall.h -E -
+          substituteInPlace lib/UUID4/Tiny.pm \
+            --replace "syscall( 318" "syscall( 278"
+        '';
     meta = {
       description = "Cryptographically secure v4 UUIDs for Linux x64";
       license = with lib.licenses; [

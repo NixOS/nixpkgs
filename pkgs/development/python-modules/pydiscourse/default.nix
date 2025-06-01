@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "pydiscourse";
-    repo = pname;
+    repo = "pydiscourse";
     tag = "v${version}";
     hash = "sha256-KqJ6ag4owG7US5Q4Ygjq263ds1o/JhEJ3bNa8YecYtE=";
   };

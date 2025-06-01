@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "py-mine";
-    repo = pname;
+    repo = "mcstatus";
     tag = "v${version}";
     hash = "sha256-P8Su5P/ztyoXZBVvm5uCMDn4ezeg11oRSQ0QCyIJbVw=";
   };

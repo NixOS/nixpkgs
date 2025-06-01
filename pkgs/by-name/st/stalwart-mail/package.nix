@@ -9,24 +9,40 @@
   sqlite,
   foundationdb,
   zstd,
+  rust-jemalloc-sys-unprefixed,
   stdenv,
   nix-update-script,
   nixosTests,
   rocksdb,
   callPackage,
   withFoundationdb ? false,
+  stalwartEnterprise ? false,
 }:
 
-rustPlatform.buildRustPackage rec {
-  pname = "stalwart-mail";
+let
+  rocksdbJemalloc = rocksdb.override { enableJemalloc = true; };
+in
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "stalwart-mail" + (lib.optionalString stalwartEnterprise "-enterprise");
   version = "0.11.8";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "mail-server";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VqGosbSQxNeOS+kGtvXAmz6vyz5mJlXvKZM57B1Xue4=";
   };
+
+  # rocksdb does not properly distinguish between pointers it has allocated itself
+  # and pointers which were passed in and might be registered with a different
+  # allocator, so we enable the unprefixed_malloc_on_supported_platforms to use
+  # jemalloc implicitly in the entire process.
+  postPatch = ''
+    for file in crates/main/Cargo.toml tests/Cargo.toml; do
+      substituteInPlace $file --replace-fail \
+        'jemallocator = "0.5.0"' 'jemallocator = { version = "0.5.0", features = ["unprefixed_malloc_on_supported_platforms"] }'
+    done
+  '';
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-iheURWxO0cOvO+FV01l2Vmo0B+S2mXzue6mx3gapftQ=";
@@ -42,25 +58,30 @@ rustPlatform.buildRustPackage rec {
     openssl
     sqlite
     zstd
+    rust-jemalloc-sys-unprefixed
+    rocksdbJemalloc
   ] ++ lib.optionals (stdenv.hostPlatform.isLinux && withFoundationdb) [ foundationdb ];
 
   # Issue: https://github.com/stalwartlabs/mail-server/issues/1104
   buildNoDefaultFeatures = true;
-  buildFeatures = [
-    "sqlite"
-    "postgres"
-    "mysql"
-    "rocks"
-    "elastic"
-    "s3"
-    "redis"
-  ] ++ lib.optionals withFoundationdb [ "foundationdb" ];
+  buildFeatures =
+    [
+      "sqlite"
+      "postgres"
+      "mysql"
+      "rocks"
+      "elastic"
+      "s3"
+      "redis"
+    ]
+    ++ lib.optionals withFoundationdb [ "foundationdb" ]
+    ++ lib.optionals stalwartEnterprise [ "enterprise" ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
     ZSTD_SYS_USE_PKG_CONFIG = true;
-    ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
-    ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+    ROCKSDB_INCLUDE_DIR = "${rocksdbJemalloc}/include";
+    ROCKSDB_LIB_DIR = "${rocksdbJemalloc}/lib";
   };
 
   postInstall = ''
@@ -143,8 +164,11 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
 
+  # Allow network access during tests on Darwin/macOS
+  __darwinAllowLocalNetworking = true;
+
   passthru = {
-    inherit rocksdb; # make used rocksdb version available (e.g., for backup scripts)
+    rocksdb = rocksdbJemalloc; # make used rocksdb version available (e.g., for backup scripts)
     webadmin = callPackage ./webadmin.nix { };
     updateScript = nix-update-script { };
     tests.stalwart-mail = nixosTests.stalwart-mail;
@@ -154,7 +178,17 @@ rustPlatform.buildRustPackage rec {
     description = "Secure & Modern All-in-One Mail Server (IMAP, JMAP, SMTP)";
     homepage = "https://github.com/stalwartlabs/mail-server";
     changelog = "https://github.com/stalwartlabs/mail-server/blob/main/CHANGELOG.md";
-    license = lib.licenses.agpl3Only;
+    license =
+      [ lib.licenses.agpl3Only ]
+      ++ lib.optionals stalwartEnterprise [
+        {
+          fullName = "Stalwart Enterprise License 1.0 (SELv1) Agreement";
+          url = "https://github.com/stalwartlabs/mail-server/blob/main/LICENSES/LicenseRef-SEL.txt";
+          free = false;
+          redistributable = false;
+        }
+      ];
+
     maintainers = with lib.maintainers; [
       happysalada
       onny
@@ -162,4 +196,4 @@ rustPlatform.buildRustPackage rec {
       pandapip1
     ];
   };
-}
+})

@@ -5,8 +5,6 @@
   python3,
   makeWrapper,
   nix-update-script,
-  symlinkJoin,
-  nltk-data,
 }:
 let
   pythonEnv = python3.withPackages (
@@ -147,14 +145,10 @@ let
     ++ unstructured.optional-dependencies.all-docs
   );
   version = "0.0.82";
-  unstructured_api_nltk_data = symlinkJoin {
-    name = "unstructured_api_nltk_data";
-
-    paths = [
-      nltk-data.punkt
-      nltk-data.averaged_perceptron_tagger
-    ];
-  };
+  unstructured_api_nltk_data = python3.pkgs.nltk.dataDir (d: [
+    d.punkt
+    d.averaged-perceptron-tagger
+  ]);
 in
 stdenvNoCC.mkDerivation {
   pname = "unstructured-api";

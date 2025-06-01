@@ -1237,8 +1237,8 @@ in
         message = "services.gitlab.secrets.activeRecordSaltFile must be set!";
       }
       {
-        assertion = versionAtLeast postgresqlPackage.version "14.9";
-        message = "PostgreSQL >= 14.9 is required to run GitLab 17. Follow the instructions in the manual section for upgrading PostgreSQL here: https://nixos.org/manual/nixos/stable/index.html#module-services-postgres-upgrading";
+        assertion = versionAtLeast postgresqlPackage.version "16";
+        message = "PostgreSQL >= 16 is required to run GitLab 18. Follow the instructions in the manual section for upgrading PostgreSQL here: https://nixos.org/manual/nixos/stable/index.html#module-services-postgres-upgrading";
       }
     ];
 

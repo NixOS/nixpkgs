@@ -110,6 +110,9 @@ stdenv.mkDerivation {
   # Firefox uses "relrhack" to manually process relocations from a fixed offset
   patchelfFlags = [ "--no-clobber-old-sections" ];
 
+  # don't break code signing
+  dontFixup = stdenv.hostPlatform.isDarwin;
+
   installPhase =
     if stdenv.hostPlatform.isDarwin then
       ''
@@ -164,7 +167,27 @@ stdenv.mkDerivation {
     changelog = "https://www.mozilla.org/en-US/firefox/${version}/releasenotes/";
     description = "Mozilla Firefox, free web browser (binary package)";
     homepage = "https://www.mozilla.org/firefox/";
-    license = licenses.mpl20;
+    license = {
+      shortName = "firefox";
+      fullName = "Firefox Terms of Use";
+      url = "https://www.mozilla.org/about/legal/terms/firefox/";
+      # "You Are Responsible for the Consequences of Your Use of Firefox"
+      # (despite the heading, not an indemnity clause) states the following:
+      #
+      # > You agree that you will not use Firefox to infringe anyone’s rights
+      # > or violate any applicable laws or regulations.
+      # >
+      # > You will not do anything that interferes with or disrupts Mozilla’s
+      # > services or products (or the servers and networks which are connected
+      # > to Mozilla’s services).
+      #
+      # This conflicts with FSF freedom 0: "The freedom to run the program as
+      # you wish, for any purpose". (Why should Mozilla be involved in
+      # instances where you break your local laws just because you happen to
+      # use Firefox whilst doing it?)
+      free = false;
+      redistributable = true; # since MPL-2.0 still applies
+    };
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = builtins.attrNames mozillaPlatforms;
     hydraPlatforms = [ ];

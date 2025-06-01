@@ -37,12 +37,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-wallet-core";
-  version = "0.14.1";
+  version = "1.0.12";
 
   src = fetchgit {
-    url = "https://git.taler.net/wallet-core.git";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-Sae83qGPqVwuxKf30zHCmdOoo5rDPBHKSOE1hxNn7Xo=";
+    url = "https://git.taler.net/taler-typescript-core.git";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lTFiaIgkPw0FhrpYPwg5/MMl8Yo1MfkDPYEDSJ11rQ8=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-BVVmv0VVvQ2YhL0zOKiM1oVKJKvqwMGNR47DkcCj874=";
+    hash = "sha256-pLe5smsXdzSBgz/OYNO5FVEI2L6y/p+jMxEkzqUaX34=";
   };
 
   buildInputs = [ nodejs_20 ];
@@ -104,5 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.ngi ];
     platforms = lib.platforms.linux;
     mainProgram = "taler-wallet-cli";
+    # ./configure doesn't understand --build / --host
+    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 })

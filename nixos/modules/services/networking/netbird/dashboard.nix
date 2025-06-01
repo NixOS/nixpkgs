@@ -87,7 +87,7 @@ in
     assertions = [
       {
         assertion = hasAttr "AUTH_AUTHORITY" cfg.settings;
-        message = "The setting AUTH_AUTHORITY is required for the dasboard to function.";
+        message = "The setting AUTH_AUTHORITY is required for the dashboard to function.";
       }
     ];
 

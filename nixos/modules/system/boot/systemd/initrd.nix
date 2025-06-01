@@ -132,13 +132,22 @@ let
   initialRamdisk = pkgs.makeInitrdNG {
     name = "initrd-${kernel-name}";
     inherit (config.boot.initrd) compressor compressorArgs prepend;
-    inherit (cfg) strip;
 
-    contents = lib.filter ({ source, ... }: !lib.elem source cfg.suppressedStorePaths) cfg.storePaths;
+    contents = lib.filter (
+      { source, enable, ... }: (!lib.elem source cfg.suppressedStorePaths) && enable
+    ) cfg.storePaths;
   };
 
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "boot" "initrd" "systemd" "strip" ] ''
+      The option to strip ELF files in initrd has been removed.
+      It only saved ~1MiB of initramfs size, but caused a few issues
+      like unloadable kernel modules.
+    '')
+  ];
+
   options.boot.initrd.systemd = {
     enable = mkEnableOption "systemd in initrd" // {
       description = ''
@@ -208,19 +217,6 @@ in
       default = [ ];
     };
 
-    strip = mkOption {
-      description = ''
-        Whether to completely strip executables and libraries copied to the initramfs.
-
-        Setting this to false may save on the order of 30MiB on the
-        machine building the system (by avoiding a binutils
-        reference), at the cost of ~1MiB of initramfs size. This puts
-        this option firmly in the territory of micro-optimisation.
-      '';
-      type = types.bool;
-      default = true;
-    };
-
     extraBin = mkOption {
       description = ''
         Tools to add to /bin
@@ -272,6 +268,8 @@ in
 
         Can also be set to a hashed super user password to allow
         authenticated access to the emergency mode.
+
+        For emergency access after initrd, use `${options.systemd.enableEmergencyMode}` instead.
       '';
       default = false;
     };
@@ -646,7 +644,7 @@ in
         {
           where = "/sysroot/run";
           what = "/run";
-          options = "bind";
+          options = "rbind";
           unitConfig = {
             # See the comment on the mount unit for /run/etc-metadata
             DefaultDependencies = false;

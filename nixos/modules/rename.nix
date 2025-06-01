@@ -66,6 +66,10 @@ in
       pantheon-tweaks is no longer a switchboard plugin but an independent app,
       adding the package to environment.systemPackages is sufficient.
     '')
+    (mkRemovedOptionModule [ "programs" "thefuck" ] ''
+      The corresponding package was removed from nixpkgs,
+      consider using `programs.pay-respects` instead.
+    '')
     (mkRemovedOptionModule [ "programs" "tilp2" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "programs" "way-cooler" ] (
       "way-cooler is abandoned by its author: "
@@ -101,6 +105,10 @@ in
     (mkRemovedOptionModule [
       "services"
       "chronos"
+    ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [
+      "services"
+      "clamsmtp"
     ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "confluence" ]
       "Atlassian software has been removed, as support for the Atlassian Server products ended in February 2024 and there was insufficient interest in maintaining the Atlassian Data Center replacements"
@@ -192,6 +200,9 @@ in
     (mkRemovedOptionModule [ "services" "mwlib" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "pantheon" "files" ] ''
       This module was removed, please add pkgs.pantheon.elementary-files to environment.systemPackages directly.
+    '')
+    (mkRemovedOptionModule [ "services" "polipo" ] ''
+      The polipo project is unmaintained and archived upstream.
     '')
     (mkRemovedOptionModule [ "services" "prey" ] ''
       prey-bash-client is deprecated upstream
@@ -317,6 +328,10 @@ in
     (mkRemovedOptionModule [ "services" "conduwuit" ] ''
       The conduwuit project has been discontinued by upstream.
       See https://github.com/NixOS/nixpkgs/pull/397902 for more information.
+    '')
+    (mkRemovedOptionModule [ "services" "signald" ] ''
+      The signald project is unmaintained and has long been incompatible with the
+      official Signal servers.
     '')
 
     # Do NOT add any option renames here, see top of the file

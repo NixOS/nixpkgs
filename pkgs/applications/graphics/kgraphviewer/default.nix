@@ -1,24 +1,17 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchurl,
   cmake,
   extra-cmake-modules,
   pkg-config,
   wrapGAppsHook3,
-  kconfig,
-  kinit,
-  kdoctools,
-  kio,
-  kparts,
-  kwidgetsaddons,
-  qtbase,
-  qtsvg,
+  libsForQt5,
   boost,
   graphviz,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "kgraphviewer";
   version = "2.4.3";
 
@@ -28,8 +21,8 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    qtbase
-    qtsvg
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
     boost
     graphviz
   ];
@@ -39,10 +32,11 @@ mkDerivation rec {
     extra-cmake-modules
     pkg-config
     wrapGAppsHook3
-    kdoctools
+    libsForQt5.kdoctools
+    libsForQt5.wrapQtAppsHook
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with libsForQt5; [
     kconfig
     kinit
     kio

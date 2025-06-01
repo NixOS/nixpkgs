@@ -17,7 +17,7 @@
 
 buildGoModule rec {
   pname = "rclone";
-  version = "1.69.1";
+  version = "1.69.3";
 
   outputs = [
     "out"
@@ -28,10 +28,10 @@ buildGoModule rec {
     owner = "rclone";
     repo = "rclone";
     tag = "v${version}";
-    hash = "sha256-TNknN4Wr+SWuYWRQmfH7Xjih5WdoSC+ky70Zru1ODsw=";
+    hash = "sha256-VLE9cWR4Wp+MDbwmfNaJArxhXTOcVfM2C1TMCymKflw=";
   };
 
-  vendorHash = "sha256-ms8mHUd6AxYW/OHwwad/34rx082xDK1lh6FIvFshIHM=";
+  vendorHash = "sha256-WY5xBBOhDRl+mU0KuVxph0wDhfUYLI0gmiGY1boxmKU=";
 
   subPackages = [ "." ];
 
@@ -107,7 +107,6 @@ buildGoModule rec {
     mainProgram = "rclone";
     maintainers = with maintainers; [
       SuperSandro2000
-      tomfitzhenry
     ];
   };
 }

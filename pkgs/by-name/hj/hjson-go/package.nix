@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "hjson";
-    repo = pname;
+    repo = "hjson-go";
     rev = "v${version}";
     hash = "sha256-0xFTxnXMJA98+Y6gwO8zCDPQvLecG1qmbGAISCFMaPw=";
   };

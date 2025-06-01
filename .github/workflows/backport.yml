@@ -9,12 +9,15 @@ on:
   pull_request_target:
     types: [closed, labeled]
 
-permissions: {}
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
 
 jobs:
   backport:
     name: Backport Pull Request
-    if: github.repository_owner == 'NixOS' && github.event.pull_request.merged == true && (github.event.action != 'labeled' || startsWith(github.event.label.name, 'backport'))
+    if: vars.NIXPKGS_CI_APP_ID && github.event.pull_request.merged == true && (github.event.action != 'labeled' || startsWith(github.event.label.name, 'backport'))
     runs-on: ubuntu-24.04-arm
     steps:
       # Use a GitHub App to create the PR so that CI gets triggered
@@ -47,12 +50,13 @@ jobs:
 
       - name: "Add 'has: port to stable' label"
         if: steps.backport.outputs.created_pull_numbers != ''
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-          REPOSITORY: ${{ github.repository }}
-          NUMBER: ${{ github.event.number }}
-        run: |
-          gh api \
-            --method POST \
-            /repos/"$REPOSITORY"/issues/"$NUMBER"/labels \
-            -f "labels[]=8.has: port to stable"
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          # Not using the app on purpose to avoid triggering another workflow run after adding this label.
+          script: |
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              labels: [ '8.has: port to stable' ]
+            })

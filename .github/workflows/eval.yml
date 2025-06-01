@@ -1,8 +1,11 @@
 name: Eval
 
 on:
+  pull_request:
+    paths:
+      - .github/workflows/eval.yml
+      - .github/workflows/reviews.yml # needs eval results from the same event type
   pull_request_target:
-    types: [opened, ready_for_review, synchronize, reopened]
   push:
     # Keep this synced with ci/request-reviews/dev-branches.txt
     branches:
@@ -13,20 +16,43 @@ on:
       - haskell-updates
       - python-updates
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 permissions: {}
 
 jobs:
-  get-merge-commit:
-    uses: ./.github/workflows/get-merge-commit.yml
+  prepare:
+    name: Prepare
+    runs-on: ubuntu-24.04-arm
+    outputs:
+      mergedSha: ${{ steps.get-merge-commit.outputs.mergedSha }}
+      targetSha: ${{ steps.get-merge-commit.outputs.targetSha }}
+      systems: ${{ steps.systems.outputs.systems }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          sparse-checkout: |
+            .github/actions
+            ci/supportedSystems.json
+      - name: Check if the PR can be merged and get the test merge commit
+        uses: ./.github/actions/get-merge-commit
+        id: get-merge-commit
+
+      - name: Load supported systems
+        id: systems
+        run: |
+          echo "systems=$(jq -c <ci/supportedSystems.json)" >> "$GITHUB_OUTPUT"
 
   outpaths:
     name: Outpaths
     runs-on: ubuntu-24.04-arm
-    needs: [ get-merge-commit ]
+    needs: [ prepare ]
     strategy:
       fail-fast: false
       matrix:
-        system: ${{ fromJSON(needs.get-merge-commit.outputs.systems) }}
+        system: ${{ fromJSON(needs.prepare.outputs.systems) }}
     steps:
       - name: Enable swap
         run: |
@@ -38,8 +64,8 @@ jobs:
       - name: Check out the PR at the test merge commit
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          ref: ${{ needs.get-merge-commit.outputs.mergedSha }}
-          path: nixpkgs
+          ref: ${{ needs.prepare.outputs.mergedSha }}
+          path: untrusted
 
       - name: Install Nix
         uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
@@ -50,36 +76,108 @@ jobs:
         env:
           MATRIX_SYSTEM: ${{ matrix.system }}
         run: |
-          nix-build nixpkgs/ci -A eval.singleSystem \
+          nix-build untrusted/ci -A eval.singleSystem \
             --argstr evalSystem "$MATRIX_SYSTEM" \
-            --arg chunkSize 10000
+            --arg chunkSize 10000 \
+            --out-link merged
           # If it uses too much memory, slightly decrease chunkSize
 
       - name: Upload the output paths and eval stats
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: intermediate-${{ matrix.system }}
-          path: result/*
+          name: merged-${{ matrix.system }}
+          path: merged/*
 
-  process:
-    name: Process
+      - name: Get target run id
+        if: needs.prepare.outputs.targetSha
+        id: targetRunId
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        env:
+          MATRIX_SYSTEM: ${{ matrix.system }}
+          TARGET_SHA: ${{ needs.prepare.outputs.targetSha }}
+        with:
+          script: |
+            const system = process.env.MATRIX_SYSTEM
+            const targetSha = process.env.TARGET_SHA
+
+            let run_id
+            try {
+              run_id = (await github.rest.actions.listWorkflowRuns({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id: 'eval.yml',
+                event: 'push',
+                head_sha: targetSha
+              })).data.workflow_runs[0].id
+            } catch {
+              throw new Error(`Could not find an eval.yml workflow run for ${targetSha}.`)
+            }
+
+            core.setOutput('targetRunId', run_id)
+
+            // Waiting 120 * 5 sec = 10 min. max.
+            // Eval takes max 5-6 minutes, normally.
+            for (let i = 0; i < 120; i++) {
+              const result = await github.rest.actions.listWorkflowRunArtifacts({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                run_id,
+                name: `merged-${system}`
+              })
+              if (result.data.total_count > 0) return
+              await new Promise(resolve => setTimeout(resolve, 5000))
+            }
+            throw new Error(`No merged-${system} artifact found.`)
+
+      - uses: actions/download-artifact@v4
+        if: steps.targetRunId.outputs.targetRunId
+        with:
+          run-id: ${{ steps.targetRunId.outputs.targetRunId }}
+          name: merged-${{ matrix.system }}
+          path: target
+          github-token: ${{ github.token }}
+          merge-multiple: true
+
+      - name: Compare outpaths against the target branch
+        if: steps.targetRunId.outputs.targetRunId
+        env:
+          MATRIX_SYSTEM: ${{ matrix.system }}
+        run: |
+          nix-build untrusted/ci -A eval.diff \
+            --arg beforeDir ./target \
+            --arg afterDir "$(readlink ./merged)" \
+            --argstr evalSystem "$MATRIX_SYSTEM" \
+            --out-link diff
+
+      - name: Upload outpaths diff and stats
+        if: steps.targetRunId.outputs.targetRunId
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: diff-${{ matrix.system }}
+          path: diff/*
+
+  compare:
+    name: Comparison
     runs-on: ubuntu-24.04-arm
-    needs: [ outpaths, get-merge-commit ]
-    outputs:
-      targetRunId: ${{ steps.targetRunId.outputs.targetRunId }}
+    needs: [ prepare, outpaths ]
+    if: needs.prepare.outputs.targetSha
+    permissions:
+      issues: write # needed to create *new* labels
+      pull-requests: write
+      statuses: write
     steps:
       - name: Download output paths and eval stats for all systems
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
         with:
-          pattern: intermediate-*
-          path: intermediate
+          pattern: diff-*
+          path: diff
+          merge-multiple: true
 
-      - name: Check out the PR at the test merge commit
+      - name: Check out the PR at the target commit
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          ref: ${{ needs.get-merge-commit.outputs.mergedSha }}
-          fetch-depth: 2
-          path: nixpkgs
+          ref: ${{ needs.prepare.outputs.targetSha }}
+          path: trusted
 
       - name: Install Nix
         uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
@@ -88,188 +186,113 @@ jobs:
 
       - name: Combine all output paths and eval stats
         run: |
-          nix-build nixpkgs/ci -A eval.combine \
-            --arg resultsDir ./intermediate \
-            -o prResult
-
-      - name: Upload the combined results
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        with:
-          name: result
-          path: prResult/*
-
-      - name: Get target run id
-        if: needs.get-merge-commit.outputs.targetSha
-        id: targetRunId
-        run: |
-          # Get the latest eval.yml workflow run for the PR's target commit
-          if ! run=$(gh api --method GET /repos/"$REPOSITORY"/actions/workflows/eval.yml/runs \
-            -f head_sha="$TARGET_SHA" -f event=push \
-            --jq '.workflow_runs | sort_by(.run_started_at) | .[-1]') \
-            || [[ -z "$run" ]]; then
-            echo "Could not find an eval.yml workflow run for $TARGET_SHA, cannot make comparison"
-            exit 1
-          fi
-          echo "Comparing against $(jq .html_url <<< "$run")"
-          runId=$(jq .id <<< "$run")
-          conclusion=$(jq -r .conclusion <<< "$run")
-
-          while [[ "$conclusion" == null || "$conclusion" == "" ]]; do
-            echo "Workflow not done, waiting 10 seconds before checking again"
-            sleep 10
-            conclusion=$(gh api /repos/"$REPOSITORY"/actions/runs/"$runId" --jq '.conclusion')
-          done
-
-          if [[ "$conclusion" != "success" ]]; then
-            echo "Workflow was not successful (conclusion: $conclusion), cannot make comparison"
-            exit 1
-          fi
-
-          echo "targetRunId=$runId" >> "$GITHUB_OUTPUT"
-        env:
-          REPOSITORY: ${{ github.repository }}
-          TARGET_SHA: ${{ needs.get-merge-commit.outputs.targetSha }}
-          GH_TOKEN: ${{ github.token }}
-
-      - uses: actions/download-artifact@v4
-        if: steps.targetRunId.outputs.targetRunId
-        with:
-          name: result
-          path: targetResult
-          github-token: ${{ github.token }}
-          run-id: ${{ steps.targetRunId.outputs.targetRunId }}
+          nix-build trusted/ci -A eval.combine \
+            --arg diffDir ./diff \
+            --out-link combined
 
       - name: Compare against the target branch
-        if: steps.targetRunId.outputs.targetRunId
+        env:
+          AUTHOR_ID: ${{ github.event.pull_request.user.id }}
         run: |
-          git -C nixpkgs worktree add ../target ${{ needs.get-merge-commit.outputs.targetSha }}
-          git -C nixpkgs diff --name-only ${{ needs.get-merge-commit.outputs.targetSha }} \
+          git -C trusted fetch --depth 1 origin ${{ needs.prepare.outputs.mergedSha }}
+          git -C trusted diff --name-only ${{ needs.prepare.outputs.mergedSha }} \
             | jq --raw-input --slurp 'split("\n")[:-1]' > touched-files.json
 
           # Use the target branch to get accurate maintainer info
-          nix-build target/ci -A eval.compare \
-            --arg beforeResultDir ./targetResult \
-            --arg afterResultDir "$(realpath prResult)" \
+          nix-build trusted/ci -A eval.compare \
+            --arg combinedDir "$(realpath ./combined)" \
             --arg touchedFilesJson ./touched-files.json \
-            -o comparison
+            --argstr githubAuthorId "$AUTHOR_ID" \
+            --out-link comparison
 
           cat comparison/step-summary.md >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Upload the combined results
-        if: steps.targetRunId.outputs.targetRunId
+      - name: Upload the comparison results
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: comparison
           path: comparison/*
 
-  # Separate job to have a very tightly scoped PR write token
-  tag:
-    name: Tag
-    runs-on: ubuntu-24.04-arm
-    needs: [ process ]
-    if: needs.process.outputs.targetRunId
-    permissions:
-      pull-requests: write
-      statuses: write
-    steps:
-      # See ./codeowners-v2.yml, reuse the same App because we need the same permissions
-      # Can't use the token received from permissions above, because it can't get enough permissions
-      - uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
-        id: app-token
-        with:
-          app-id: ${{ vars.OWNER_APP_ID }}
-          private-key: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
-          permission-administration: read
-          permission-members: read
-          permission-pull-requests: write
-
-      - name: Download process result
-        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
-        with:
-          name: comparison
-          path: comparison
-
-      - name: Install Nix
-        uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
-
-      # Important: This workflow job runs with extra permissions,
-      # so we need to make sure to not run untrusted code from PRs
-      - name: Check out Nixpkgs at the base commit
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        with:
-          ref: ${{ needs.get-merge-commit.outputs.targetSha }}
-          path: base
-          sparse-checkout: ci
-
-      - name: Build the requestReviews derivation
-        run: nix-build base/ci -A requestReviews
-
       - name: Labelling pull request
-        run: |
-          # Get all currently set rebuild labels
-          gh api \
-            /repos/"$REPOSITORY"/issues/"$NUMBER"/labels \
-            --jq '.[].name | select(startswith("10.rebuild"))' \
-            | sort > before
+        if: ${{ github.event_name == 'pull_request_target' }}
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            const { readFile } = require('node:fs/promises')
 
-          # And the labels that should be there
-          jq -r '.labels[]' comparison/changed-paths.json \
-            | sort > after
+            const pr = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number
+            }
 
-          # Remove the ones not needed anymore
-          while read -r toRemove; do
-            echo "Removing label $toRemove"
-            gh api \
-              --method DELETE \
-              /repos/"$REPOSITORY"/issues/"$NUMBER"/labels/"$toRemove"
-          done < <(comm -23 before after)
+            // Get all currently set labels that we manage
+            const before =
+              (await github.paginate(github.rest.issues.listLabelsOnIssue, pr))
+              .map(({ name }) => name)
+              .filter(name => name.startsWith('10.rebuild') || name == '11.by: package-maintainer')
 
-          # And add the ones that aren't set already
-          while read -r toAdd; do
-            echo "Adding label $toAdd"
-            gh api \
-              --method POST \
-              /repos/"$REPOSITORY"/issues/"$NUMBER"/labels \
-              -f "labels[]=$toAdd"
-          done < <(comm -13 before after)
+            // And the labels that should be there
+            const after = JSON.parse(await readFile('comparison/changed-paths.json', 'utf-8')).labels
 
-        env:
-          GH_TOKEN: ${{ github.token }}
-          REPOSITORY: ${{ github.repository }}
-          NUMBER: ${{ github.event.number }}
+            // Remove the ones not needed anymore
+            await Promise.all(
+              before.filter(name => !after.includes(name))
+              .map(name => github.rest.issues.removeLabel({
+                ...pr,
+                name
+              }))
+            )
+
+            // And add the ones that aren't set already
+            const added = after.filter(name => !before.includes(name))
+            if (added.length > 0) {
+              await github.rest.issues.addLabels({
+                ...pr,
+                labels: added
+              })
+            }
 
       - name: Add eval summary to commit statuses
         if: ${{ github.event_name == 'pull_request_target' }}
-        run: |
-          description=$(jq -r '
-          "Package: added " + (.attrdiff.added | length | tostring) +
-          ", removed " + (.attrdiff.removed | length | tostring) +
-          ", changed " + (.attrdiff.changed | length | tostring) +
-          ", Rebuild: linux " + (.rebuildCountByKernel.linux | tostring) +
-          ", darwin " + (.rebuildCountByKernel.darwin | tostring)
-          ' <comparison/changed-paths.json)
-          target_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID?pr=$NUMBER"
-          gh api --method POST \
-            -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" \
-            "/repos/$GITHUB_REPOSITORY/statuses/$PR_HEAD_SHA" \
-            -f "context=Eval / Summary" -f "state=success" -f "description=$description" -f "target_url=$target_url"
-        env:
-          GH_TOKEN: ${{ github.token }}
-          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-          NUMBER: ${{ github.event.number }}
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            const { readFile } = require('node:fs/promises')
+            const changed = JSON.parse(await readFile('comparison/changed-paths.json', 'utf-8'))
+            const description =
+              'Package: ' + [
+                `added ${changed.attrdiff.added.length}`,
+                `removed ${changed.attrdiff.removed.length}`,
+                `changed ${changed.attrdiff.changed.length}`
+              ].join(', ') +
+              ' — Rebuild: ' + [
+                `linux ${changed.rebuildCountByKernel.linux}`,
+                `darwin ${changed.rebuildCountByKernel.darwin}`
+              ].join(', ')
 
-      - name: Requesting maintainer reviews
-        run: |
-          # maintainers.json contains GitHub IDs. Look up handles to request reviews from.
-          # There appears to be no API to request reviews based on GitHub IDs
-          jq -r 'keys[]' comparison/maintainers.json \
-            | while read -r id; do gh api /user/"$id" --jq .login; done \
-            | GH_TOKEN=${{ steps.app-token.outputs.token }} result/bin/request-reviewers.sh "$REPOSITORY" "$NUMBER" "$AUTHOR"
+            const { serverUrl, repo, runId, payload } = context
+            const target_url =
+              `${serverUrl}/${repo.owner}/${repo.repo}/actions/runs/${runId}?pr=${payload.pull_request.number}`
 
-        env:
-          GH_TOKEN: ${{ github.token }}
-          REPOSITORY: ${{ github.repository }}
-          NUMBER: ${{ github.event.number }}
-          AUTHOR: ${{ github.event.pull_request.user.login }}
-          # Don't request reviewers on draft PRs
-          DRY_MODE: ${{ github.event.pull_request.draft && '1' || '' }}
+            await github.rest.repos.createCommitStatus({
+              owner: repo.owner,
+              repo: repo.repo,
+              sha: payload.pull_request.head.sha,
+              context: 'Eval / Summary',
+              state: 'success',
+              description,
+              target_url
+            })
+
+  reviewers:
+    name: Reviewers
+    # No dependency on "compare", so that it can start at the same time.
+    # We only wait for the "comparison" artifact to be available, which makes the start-to-finish time
+    # for the eval workflow considerably faster.
+    needs: [ prepare, outpaths ]
+    if: needs.prepare.outputs.targetSha
+    uses: ./.github/workflows/reviewers.yml
+    secrets: inherit
+    with:
+      caller: ${{ github.workflow }}

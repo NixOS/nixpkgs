@@ -25,10 +25,12 @@ assertExecutable() {
 #                          the environment
 # --unset        VAR     : remove VAR from the environment
 # --chdir        DIR     : change working directory (use instead of --run "cd DIR")
-# --add-flags    ARGS    : prepend ARGS to the invocation of the executable
+# --add-flag     ARG     : prepend the single argument ARG to the invocation of the executable
 #                          (that is, *before* any arguments passed on the command line)
-# --append-flags ARGS    : append ARGS to the invocation of the executable
+# --append-flag  ARG     : append the single argument ARG to the invocation of the executable
 #                          (that is, *after* any arguments passed on the command line)
+# --add-flags    ARGS    : prepend the whitespace-separated list of arguments ARGS to the invocation of the executable
+# --append-flags ARGS    : append the whitespace-separated list of arguments ARGS to the invocation of the executable
 
 # --prefix          ENV SEP VAL   : suffix/prefix ENV with VAL, separated by SEP
 # --suffix
@@ -86,9 +88,9 @@ makeDocumentedCWrapper() {
 # makeCWrapper EXECUTABLE ARGS
 # ARGS: same as makeWrapper
 makeCWrapper() {
-    local argv0 inherit_argv0 n params cmd main flagsBefore flagsAfter flags executable length
+    local argv0 inherit_argv0 n params cmd main flags executable length
     local uses_prefix uses_suffix uses_assert uses_assert_success uses_stdio uses_asprintf
-    local resolve_path
+    local flagsBefore=() flagsAfter=()
     executable=$(escapeStringLiteral "$1")
     params=("$@")
     length=${#params[*]}
@@ -147,16 +149,28 @@ makeCWrapper() {
                 n=$((n + 1))
                 [ $n -ge "$length" ] && main="$main#error makeCWrapper: $p takes 1 argument"$'\n'
             ;;
+            --add-flag)
+                flagsBefore+=("${params[n + 1]}")
+                uses_assert=1
+                n=$((n + 1))
+                [ $n -ge "$length" ] && main="$main#error makeCWrapper: $p takes 1 argument"$'\n'
+            ;;
+            --append-flag)
+                flagsAfter+=("${params[n + 1]}")
+                uses_assert=1
+                n=$((n + 1))
+                [ $n -ge "$length" ] && main="$main#error makeCWrapper: $p takes 1 argument"$'\n'
+            ;;
             --add-flags)
-                flags="${params[n + 1]}"
-                flagsBefore="$flagsBefore $flags"
+                read -ra flags <<< "${params[n + 1]}"
+                flagsBefore+=("${flags[@]}")
                 uses_assert=1
                 n=$((n + 1))
                 [ $n -ge "$length" ] && main="$main#error makeCWrapper: $p takes 1 argument"$'\n'
             ;;
             --append-flags)
-                flags="${params[n + 1]}"
-                flagsAfter="$flagsAfter $flags"
+                read -ra flags <<< "${params[n + 1]}"
+                flagsAfter+=("${flags[@]}")
                 uses_assert=1
                 n=$((n + 1))
                 [ $n -ge "$length" ] && main="$main#error makeCWrapper: $p takes 1 argument"$'\n'
@@ -182,7 +196,7 @@ makeCWrapper() {
             ;;
         esac
     done
-    [[ -z "$flagsBefore" && -z "$flagsAfter" ]] || main="$main"${main:+$'\n'}$(addFlags "$flagsBefore" "$flagsAfter")$'\n'$'\n'
+    (( ${#flagsBefore[@]} + ${#flagsAfter[@]} > 0 )) && main="$main"${main:+$'\n'}$(addFlags flagsBefore flagsAfter)$'\n'$'\n'
     [ -z "$inherit_argv0" ] && main="${main}argv[0] = \"${argv0:-${executable}}\";"$'\n'
     [ -z "$resolve_argv0" ] || main="${main}argv[0] = resolve_argv0(argv[0]);"$'\n'
     main="${main}return execv(\"${executable}\", argv);"$'\n'
@@ -203,23 +217,10 @@ makeCWrapper() {
 }
 
 addFlags() {
-    local n flag before after var
+    local n flag var
 
-    # Disable file globbing, since bash will otherwise try to find
-    # filenames matching the the value to be prefixed/suffixed if
-    # it contains characters considered wildcards, such as `?` and
-    # `*`. We want the value as is, except we also want to split
-    # it on on the separator; hence we can't quote it.
-    local reenableGlob=0
-    if [[ ! -o noglob ]]; then
-        reenableGlob=1
-    fi
-    set -o noglob
-    # shellcheck disable=SC2086
-    before=($1) after=($2)
-    if (( reenableGlob )); then
-        set +o noglob
-    fi
+    local -n before=$1
+    local -n after=$2
 
     var="argv_tmp"
     printf '%s\n' "char **$var = calloc(${#before[@]} + argc + ${#after[@]} + 1, sizeof(*$var));"
@@ -432,6 +433,14 @@ formatArgs() {
                 shift 3
             ;;
             --chdir)
+                formatArgsLine 1 "$@"
+                shift 1
+            ;;
+            --add-flag)
+                formatArgsLine 1 "$@"
+                shift 1
+            ;;
+            --append-flag)
                 formatArgsLine 1 "$@"
                 shift 1
             ;;

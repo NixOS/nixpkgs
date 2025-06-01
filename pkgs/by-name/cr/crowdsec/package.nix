@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "crowdsecurity";
-    repo = pname;
+    repo = "crowdsec";
     tag = "v${version}";
     hash = "sha256-/NTlj0kYCOMxShfoKdmouJTiookDjccUj5HFHLPn5HI=";
   };

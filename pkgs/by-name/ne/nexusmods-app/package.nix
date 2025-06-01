@@ -24,12 +24,12 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.10.2";
+  version = "0.11.3";
 
   src = fetchgit {
     url = "https://github.com/Nexus-Mods/NexusMods.App.git";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-L75nmxjymPfuu6CM5QRE1jInElNrD2OuAXMR8+c2tGQ=";
+    hash = "sha256-EP51nhFKYfYRjOpgHiGLwXGmpDULoTlGh3hQXhR8sy8=";
     fetchSubmodules = true;
   };
 

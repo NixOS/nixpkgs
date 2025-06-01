@@ -35,16 +35,16 @@
 let
 
   pname = "hplip";
-  version = "3.24.4";
+  version = "3.25.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${pname}-${version}.tar.gz";
-    hash = "sha256-XXZDgxiTpeKt351C1YGl2/5arwI2Johrh2LFZF2g8fs=";
+    hash = "sha256-6HL/KOslF3Balfbhg576HlCnejOq6JBSeN8r2CCRllM=";
   };
 
   plugin = fetchurl {
     url = "https://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${pname}-${version}-plugin.run";
-    hash = "sha256-Hzxr3SVmGoouGBU2VdbwbwKMHZwwjWnI7P13Z6LQxao=";
+    hash = "sha256-miz41WYehGVI27tZUjGlRIpctjcpzJPfjR9lLf0WelQ=";
   };
 
   hplipState = replaceVars ./hplip.state {
@@ -161,8 +161,8 @@ python3Packages.buildPythonApplication {
   postPatch = ''
     # https://github.com/NixOS/nixpkgs/issues/44230
     substituteInPlace createPPD.sh \
-      --replace ppdc "${cups}/bin/ppdc" \
-      --replace "gzip -c" "gzip -cn"
+      --replace-fail ppdc "${cups}/bin/ppdc" \
+      --replace-fail "gzip -c" "gzip -cn"
 
     # HPLIP hardcodes absolute paths everywhere. Nuke from orbit.
     find . -type f -exec sed -i \
@@ -223,6 +223,7 @@ python3Packages.buildPythonApplication {
       "policykit_dir=${out}/share/polkit-1/actions"
       "policykit_dbus_etcdir=${out}/etc/dbus-1/system.d"
       "policykit_dbus_sharedir=${out}/share/dbus-1/system-services"
+      "PYTHONEXECDIR=${out}/lib/python${lib.versions.majorMinor python3Packages.python.version}/site-packages"
       "hplip_confdir=${out}/etc/hp"
       "hplip_statedir=${out}/var/lib/hp"
     ];
@@ -347,15 +348,15 @@ python3Packages.buildPythonApplication {
     "lib/sane"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Print, scan and fax HP drivers for Linux";
     homepage = "https://developers.hp.com/hp-linux-imaging-and-printing";
     downloadPage = "https://sourceforge.net/projects/hplip/files/hplip/";
     license =
       if withPlugin then
-        licenses.unfree
+        lib.licenses.unfree
       else
-        with licenses;
+        with lib.licenses;
         [
           mit
           bsd2
@@ -368,6 +369,6 @@ python3Packages.buildPythonApplication {
       "armv7l-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = with lib.maintainers; [ ttuegel ];
   };
 }

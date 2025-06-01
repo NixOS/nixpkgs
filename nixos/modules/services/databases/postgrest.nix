@@ -247,7 +247,7 @@ in
 
     # Since we're using DynamicUser, we can't add the e.g. nginx user to
     # a postgrest group, so the unix socket must be world-readable to make it useful.
-    services.postgrest.settings.service-unix-socket-mode = "666";
+    services.postgrest.settings.server-unix-socket-mode = "666";
 
     systemd.services.postgrest = {
       description = "PostgREST";

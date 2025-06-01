@@ -10,26 +10,13 @@
   h2,
   onecache,
   # test dependencies
-  asgiref,
-  black,
-  django,
-  click,
   httpx,
-  proxy-py,
   pytest-aiohttp,
-  pytest-asyncio,
   pytest-cov-stub,
-  pytest-django,
   pytest-mock,
-  pytest-sugar,
-  pytest-timeout,
   uvicorn,
-  httptools,
-  typed-ast,
-  uvloop,
   requests,
   aiohttp,
-  aiodns,
   pytestCheckHook,
   stdenv,
 }:
@@ -66,27 +53,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aiohttp
-    aiodns
-    asgiref
-    black
-    django
-    click
     httpx
-    proxy-py
     pytest-aiohttp
-    pytest-asyncio
     pytest-cov-stub
-    pytest-django
     pytest-mock
-    pytest-sugar
-    pytest-timeout
     uvicorn
-    httptools
-    typed-ast
-    uvloop
     requests
     pytestCheckHook
-    nodejs
   ];
 
   pythonImportsCheck = [ "aiosonic" ];

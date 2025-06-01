@@ -9,15 +9,16 @@
   autoAddDriverRunpath,
 
   # build system
+  cmake,
+  jinja2,
+  ninja,
   packaging,
   setuptools,
+  setuptools-scm,
   wheel,
 
   # dependencies
   which,
-  ninja,
-  cmake,
-  setuptools-scm,
   torch,
   outlines,
   psutil,
@@ -77,7 +78,7 @@ let
     trivial
     ;
 
-  inherit (cudaPackages) cudaFlags;
+  inherit (cudaPackages) flags;
 
   shouldUsePkg =
     pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
@@ -179,10 +180,10 @@ let
   #   lists.subtractLists a b = b - a
 
   # For CUDA
-  supportedCudaCapabilities = lists.intersectLists cudaFlags.cudaCapabilities supportedTorchCudaCapabilities;
-  unsupportedCudaCapabilities = lists.subtractLists supportedCudaCapabilities cudaFlags.cudaCapabilities;
+  supportedCudaCapabilities = lists.intersectLists flags.cudaCapabilities supportedTorchCudaCapabilities;
+  unsupportedCudaCapabilities = lists.subtractLists supportedCudaCapabilities flags.cudaCapabilities;
 
-  isCudaJetson = cudaSupport && cudaPackages.cudaFlags.isJetsonBuild;
+  isCudaJetson = cudaSupport && cudaPackages.flags.isJetsonBuild;
 
   # Use trivial.warnIf to print a warning if any unsupported GPU targets are specified.
   gpuArchWarner =
@@ -235,7 +236,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "vllm-project";
-    repo = pname;
+    repo = "vllm";
     tag = "v${version}";
     hash = "sha256-LiEBkVwJTT4WoCTk9pI0ykTjmv1pDMzksmFwVktoxMY=";
   };
@@ -246,10 +247,14 @@ buildPythonPackage rec {
     ./0004-drop-lsmod.patch
   ];
 
-  # Ignore the python version check because it hard-codes minor versions and
-  # lags behind `ray`'s python interpreter support
   postPatch =
     ''
+      # pythonRelaxDeps does not cover build-system
+      substituteInPlace pyproject.toml \
+        --replace-fail "torch ==" "torch >="
+
+      # Ignore the python version check because it hard-codes minor versions and
+      # lags behind `ray`'s python interpreter support
       substituteInPlace CMakeLists.txt \
         --replace-fail \
           'set(PYTHON_SUPPORTED_VERSIONS' \
@@ -263,9 +268,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs =
     [
-      cmake
-      ninja
-      pythonRelaxDepsHook
       which
     ]
     ++ lib.optionals rocmSupport [
@@ -280,17 +282,17 @@ buildPythonPackage rec {
     ];
 
   build-system = [
+    cmake
+    jinja2
+    ninja
     packaging
     setuptools
-    wheel
+    setuptools-scm
+    torch
   ];
 
   buildInputs =
-    [
-      setuptools-scm
-      torch
-    ]
-    ++ lib.optionals cpuSupport [
+    lib.optionals cpuSupport [
       oneDNN
     ]
     ++ lib.optionals (cpuSupport && stdenv.isLinux) [
@@ -376,8 +378,7 @@ buildPythonPackage rec {
     ]
     ++ lib.optionals cudaSupport [
       (lib.cmakeFeature "TORCH_CUDA_ARCH_LIST" "${gpuTargetString}")
-      (lib.cmakeFeature "CUTLASS_NVCC_ARCHS_ENABLED" "${cudaPackages.cudaFlags.cmakeCudaArchitecturesString
-      }")
+      (lib.cmakeFeature "CUTLASS_NVCC_ARCHS_ENABLED" "${cudaPackages.flags.cmakeCudaArchitecturesString}")
       (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${symlinkJoin {
         name = "cuda-merged-${cudaPackages.cudaMajorMinorVersion}";
         paths = builtins.concatMap getAllOutputs mergedCudaLibraries;

@@ -117,6 +117,10 @@ self: super:
     # https://github.com/haskell-foundation/foundation/pull/412
     foundation = dontCheck super.foundation;
 
+    # Test suite attempts to create illegal paths on HFS+
+    # https://github.com/fpco/haskell-filesystem/issues/37
+    system-fileio = dontCheck super.system-fileio;
+
     llvm-hs = overrideCabal (oldAttrs: {
       # One test fails on darwin.
       doCheck = false;

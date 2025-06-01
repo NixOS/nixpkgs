@@ -9,7 +9,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "foresto";
-    repo = pname;
+    repo = "joystickwake";
     tag = "v${version}";
     sha256 = "sha256-vSvIpbcDIbRyitVjx3wNSxt5vTIZ9/NPWokOJt0p6oQ=";
   };

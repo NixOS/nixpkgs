@@ -9,23 +9,30 @@
   nixosTests,
   zlib,
   libxcrypt,
-  wolfssl,
+  aws-lc,
   libressl,
-  quictls,
   openssl,
+  quictls,
+  wolfssl,
   lua5_4,
   pcre2,
 }:
 
 assert lib.assertOneOf "sslLibrary" sslLibrary [
-  "quictls"
-  "openssl"
+  "aws-lc"
   "libressl"
+  "openssl"
+  "quictls"
   "wolfssl"
 ];
 let
   sslPkgs = {
-    inherit quictls openssl libressl;
+    inherit
+      aws-lc
+      libressl
+      openssl
+      quictls
+      ;
     wolfssl = wolfssl.override {
       variant = "haproxy";
       extraConfigureFlags = [ "--enable-quic" ];
@@ -77,6 +84,9 @@ stdenv.mkDerivation (finalAttrs: {
       "SSL_LIB=${lib.getDev sslPkg}/lib"
       "USE_QUIC=yes"
     ]
+    ++ lib.optionals (sslLibrary == "aws-lc") [
+      "USE_OPENSSL_AWSLC=true"
+    ]
     ++ lib.optionals (sslLibrary == "openssl") [
       "USE_QUIC_OPENSSL_COMPAT=yes"
     ]
@@ -94,7 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
       "LUA_INC=${lua5_4}/include"
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "USE_SYSTEMD=yes"
       "USE_GETADDRINFO=1"
     ]
     ++ lib.optionals withPrometheusExporter [

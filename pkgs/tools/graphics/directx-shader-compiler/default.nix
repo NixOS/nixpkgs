@@ -45,8 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin $out/lib $dev/include
-    mv bin/dxc* $out/bin/
-    mv lib/libdxcompiler.so* lib/libdxcompiler.*dylib $out/lib/
+    mv bin/{dxc,dxv}* $out/bin/
+    mv lib/lib*.so* lib/lib*.*dylib $out/lib/
     cp -r $src/include/dxc $dev/include/
     runHook postInstall
   '';

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyporscheconnectapi";
-  version = "0.2.3";
+  version = "0.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CJNE";
     repo = "pyporscheconnectapi";
     tag = version;
-    hash = "sha256-MQYhIp+DUYcRKAEwcT8qzrFY043b33BHR8jma3jR0lE=";
+    hash = "sha256-fU+P2M4TQzhyNk4CfcTBpaIOFC0sPaOLh/iGCjLIG5I=";
   };
 
   postPatch = ''

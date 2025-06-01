@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "zigpy";
-    repo = pname;
+    repo = "zigpy-deconz";
     tag = version;
     hash = "sha256-el29EqCK9p3AII9LsMw+ikplHfDKNUIhaU3HJI0gfu8=";
   };

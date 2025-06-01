@@ -163,12 +163,12 @@ let
         };
       });
 
-      openhomedevice = super.openhomedevice.overridePythonAttrs (oldAttrs: rec {
-        version = "2.2";
+      mcp = super.mcp.overridePythonAttrs (oldAttrs: rec {
+        version = "1.5.0";
         src = fetchFromGitHub {
           inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/${version}";
-          hash = "sha256-GGp7nKFH01m1KW6yMkKlAdd26bDi8JDWva6OQ0CWMIw=";
+          tag = "v${version}";
+          hash = "sha256-Z2NN6k4mD6NixDON1MUOELpBZW9JvMvFErcCbFPdg2o=";
         };
       });
 
@@ -192,6 +192,25 @@ let
         ];
 
         doCheck = false; # no tests
+      });
+
+      openhomedevice = super.openhomedevice.overridePythonAttrs (oldAttrs: rec {
+        version = "2.2";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/${version}";
+          hash = "sha256-GGp7nKFH01m1KW6yMkKlAdd26bDi8JDWva6OQ0CWMIw=";
+        };
+      });
+
+      plexapi = super.plexapi.overrideAttrs (oldAttrs: rec {
+        version = "4.15.16";
+        src = fetchFromGitHub {
+          owner = "pkkid";
+          repo = "python-plexapi";
+          tag = version;
+          hash = "sha256-NwGGNN6LC3gvE8zoVL5meNWMbqZjJ+6PcU2ebJTfJmU=";
+        };
       });
 
       # Pinned due to API changes in 0.1.0
@@ -367,7 +386,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.5.1";
+  hassVersion = "2025.5.3";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -388,13 +407,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-/ItMm6/SV0MazK16NfW53XPcIV7ERUUabjcwHBC4c7Y=";
+    hash = "sha256-qqPO7dr+Sb1RKYoOV7MhT2E1FcW7lAKTTB0T+UzLwzk=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-zllQ0h1Ws+HNyfBvAAoKtovQtwkr0fNNtnF2pAjRrqM=";
+    hash = "sha256-8WusUfZEyoBPltVrDpDQVkbIFEHn1GGdA4Pt0Zb1+Fo=";
   };
 
   build-system = with python.pkgs; [

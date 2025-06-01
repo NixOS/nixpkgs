@@ -14,7 +14,7 @@
   postgresql,
   postgresqlTestHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "schemainspect";
   version = "3.1.1663587362";
   format = "pyproject";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "djrobstep";
-    repo = pname;
+    repo = "schemainspect";
     # no tags on github, version patch number is unix time.
     rev = "066262d6fb4668f874925305a0b7dbb3ac866882";
     hash = "sha256-SYpQQhlvexNc/xEgSIk8L8J+Ta+3OZycGLeZGQ6DWzk=";

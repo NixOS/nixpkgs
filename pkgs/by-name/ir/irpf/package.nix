@@ -13,7 +13,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "irpf";
-  version = "2025-1.2";
+  version = "2025-1.3";
 
   # https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/download/pgd/dirpf
   # Para outros sistemas operacionais -> Multi
@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     in
     fetchzip {
       url = "https://downloadirpf.receita.fazenda.gov.br/irpf/${year}/irpf/arquivos/IRPF${finalAttrs.version}.zip";
-      hash = "sha256-RlkDioXLcD3wHm9DDLw42QCRT4z0rEwlM0sGMORxk/A=";
+      hash = "sha256-BWCxnKPvkijVkXfbA1iVbdcgLZqY5SAzASqnzdjXwiw=";
     };
 
   passthru.updateScript = writeScript "update-irpf" ''

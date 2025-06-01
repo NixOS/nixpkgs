@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2025.5.1";
+  version = "2025.5.3";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -1429,10 +1429,11 @@
       ];
     "elvia" =
       ps: with ps; [
+        elvia
         fnv-hash-fast
         psutil-home-assistant
         sqlalchemy
-      ]; # missing inputs: elvia
+      ];
     "emby" =
       ps: with ps; [
         pyemby
@@ -4086,7 +4087,19 @@
       ];
     "onedrive" =
       ps: with ps; [
+        aiohasupervisor
+        cronsim
+        ha-ffmpeg
+        hass-nabucasa
+        hassil
+        home-assistant-intents
+        mutagen
         onedrive-personal-sdk
+        pymicro-vad
+        pyspeex-noise
+        python-matter-server
+        pyturbojpeg
+        securetar
       ];
     "onewire" =
       ps: with ps; [
@@ -6898,6 +6911,7 @@
     "elgato"
     "elkm1"
     "elmax"
+    "elvia"
     "emoncms"
     "emonitor"
     "emulated_hue"

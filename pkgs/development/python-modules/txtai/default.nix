@@ -16,6 +16,9 @@
   regex,
 
   # optional-dependencies
+  # agent
+  mcpadapt,
+  smolagents,
   # ann
   annoy,
   hnswlib,
@@ -25,11 +28,14 @@
   # api
   aiohttp,
   fastapi,
+  fastapi-mcp,
+  httpx,
   pillow,
   python-multipart,
   uvicorn,
   # cloud
   # apache-libcloud, (unpackaged)
+  fasteners,
   # console
   rich,
   # database
@@ -38,7 +44,6 @@
   # grand-cypher (unpackaged)
   # grand-graph (unpackaged)
   networkx,
-  python-louvain,
   # model
   onnx,
   onnxruntime,
@@ -61,8 +66,9 @@
   litellm,
   # llama-cpp-python, (unpackaged)
   # pipeline-text
-  fasttext,
+  gliner,
   sentencepiece,
+  staticvectors,
   # pipeline-train
   accelerate,
   bitsandbytes,
@@ -70,6 +76,7 @@
   peft,
   skl2onnx,
   # vectors
+  fasttext,
   # pymagnitude-lite, (unpackaged)
   scikit-learn,
   sentence-transformers,
@@ -82,12 +89,15 @@
   xmltodict,
 
   # tests
-  httpx,
   msgpack,
   pytestCheckHook,
 }:
 let
-  version = "8.2.0";
+  version = "8.5.0";
+  agent = [
+    mcpadapt
+    smolagents
+  ];
   ann = [
     annoy
     hnswlib
@@ -98,11 +108,16 @@ let
   api = [
     aiohttp
     fastapi
+    fastapi-mcp
+    httpx
     pillow
     python-multipart
     uvicorn
   ];
-  # cloud = [ apache-libcloud ];
+  cloud = [
+    # apache-libcloud
+    fasteners
+  ];
   console = [ rich ];
   database = [
     duckdb
@@ -113,7 +128,6 @@ let
     # grand-cypher
     # grand-graph
     networkx
-    python-louvain
     sqlalchemy
   ];
   model = [
@@ -145,8 +159,9 @@ let
     # llama-cpp-python
   ];
   pipeline-text = [
-    fasttext
+    gliner
     sentencepiece
+    staticvectors
   ];
   pipeline-train = [
     accelerate
@@ -186,7 +201,8 @@ let
   ];
   similarity = ann ++ vectors;
   all =
-    api
+    agent
+    ++ api
     ++ ann
     ++ console
     ++ database
@@ -199,8 +215,10 @@ let
 
   optional-dependencies = {
     inherit
+      agent
       ann
       api
+      cloud
       console
       database
       graph
@@ -222,7 +240,7 @@ let
     owner = "neuml";
     repo = "txtai";
     tag = "v${version}";
-    hash = "sha256-fMzCYw9eqlpGI5FKoyYyxT17EhUFmFP9lrCn/LFC6ks=";
+    hash = "sha256-kYjlA7pJ+xCC+tu0aaxziKaPo3hph5Ld8P/lVrip/eM=";
   };
 in
 buildPythonPackage {
@@ -264,8 +282,10 @@ buildPythonPackage {
       msgpack
       pytestCheckHook
       python-multipart
+      timm
       sqlalchemy
     ]
+    ++ optional-dependencies.agent
     ++ optional-dependencies.ann
     ++ optional-dependencies.api
     ++ optional-dependencies.similarity;
@@ -280,9 +300,9 @@ buildPythonPackage {
     "--deselect=test/python/testconsole.py"
     "--deselect=test/python/testembeddings.py"
     "--deselect=test/python/testgraph.py"
-    "--deselect=test/python/testapi/testembeddings.py"
-    "--deselect=test/python/testapi/testpipelines.py"
-    "--deselect=test/python/testapi/testworkflow.py"
+    "--deselect=test/python/testapi/testapiembeddings.py"
+    "--deselect=test/python/testapi/testapipipelines.py"
+    "--deselect=test/python/testapi/testapiworkflow.py"
     "--deselect=test/python/testdatabase/testclient.py"
     "--deselect=test/python/testdatabase/testduckdb.py"
     "--deselect=test/python/testdatabase/testencoder.py"
@@ -295,6 +315,7 @@ buildPythonPackage {
     "testInvalidZip"
     # Downloads from Huggingface
     "testPipeline"
+    "testVectors"
     # Not finding sqlite-vec despite being supplied
     "testSQLite"
     "testSQLiteCustom"

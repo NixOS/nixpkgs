@@ -1,0 +1,32 @@
+diff --git a/smatch.h b/smatch.h
+index 36ae3497..ceb1907c 100644
+--- a/smatch.h
++++ b/smatch.h
+@@ -1375,7 +1375,7 @@ bool buf_comp_has_bytes(struct expression *buf, struct expression *var);
+ bool buf_comp2_has_bytes(struct expression *buf_expr, struct expression *var);
+ 
+ /* smatch_untracked_param.c */
+-void mark_untracked(struct expression *expr, int param, const char *key, const char *value);
++void mark_untracked(struct expression *expr, int param, char *key, char *value);
+ void add_untracked_param_hook(void (func)(struct expression *call, int param));
+ void add_lost_param_hook(void (func)(struct expression *call, int param));
+ void mark_all_params_untracked(int return_id, char *return_ranges, struct expression *expr);
+diff --git a/smatch_untracked_param.c b/smatch_untracked_param.c
+index 4bb3c244..d24958e7 100644
+--- a/smatch_untracked_param.c
++++ b/smatch_untracked_param.c
+@@ -120,12 +120,12 @@ free:
+ 
+ }
+ 
+-void mark_untracked(struct expression *expr, int param, const char *key, const char *value)
++void mark_untracked(struct expression *expr, int param, char *key, char *value)
+ {
+ 	mark_untracked_lost(expr, param, key, UNTRACKED_PARAM);
+ }
+ 
+-void mark_lost(struct expression *expr, int param, const char *key, const char *value)
++void mark_lost(struct expression *expr, int param, char *key, char *value)
+ {
+ 	mark_untracked_lost(expr, param, key, LOST_PARAM);
+ }

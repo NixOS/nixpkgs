@@ -4,36 +4,38 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0gvdg4yx4p9av2glmp7vsxhs0n8fj1ga9kq2xdb8f95j7b04qhzi";
+      sha256 = "1mvjjn8vh1c3nhibmjj9qcwxagj6m9yy961wblfqdmvhr9aklb3y";
       type = "gem";
     };
-    version = "1.3.0";
+    version = "1.3.2";
   };
   aws-partitions = {
     groups = [ "default" ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "01w3b84d129q9b6bg2cm8p4cn8pl74l343sxsc47ax9sglqz6y99";
+      sha256 = "12svi07s5hss8wq9xpaxwy1ibl64bd00hsn12v810wvz19fw823l";
       type = "gem";
     };
-    version = "1.1001.0";
+    version = "1.1106.0";
   };
   aws-sdk-core = {
     dependencies = [
       "aws-eventstream"
       "aws-partitions"
       "aws-sigv4"
+      "base64"
       "jmespath"
+      "logger"
     ];
     groups = [ "default" ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "16mvscjhxdyhlvk2rpbxdzqmyikcf64xavb35grk4dkh0pg390rk";
+      sha256 = "1b0pi1iibp644dn78g53s7hs7gcxghfa7h8rz3lvz8ivykisl5y6";
       type = "gem";
     };
-    version = "3.211.0";
+    version = "3.224.0";
   };
   aws-sdk-kms = {
     dependencies = [
@@ -44,10 +46,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0ppxhw2qyj69achpmksp1sh2y6k0x44928ln2am9pifx8b30ir9a";
+      sha256 = "1mv8jc8sbvim2m3y3zxm8z4i5sh4x9ds7y9h5z04qfg7kjvbbn24";
       type = "gem";
     };
-    version = "1.95.0";
+    version = "1.101.0";
   };
   aws-sdk-s3 = {
     dependencies = [
@@ -59,10 +61,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1jnf9k9d91ki3yvy12q4kph5wvd8l3ziwwh0qsmar5xhyb7zbwrz";
+      sha256 = "00sq22mfibxq3rjy9c4vj1s8yjszv8988di7z7rs8v62my53nw2v";
       type = "gem";
     };
-    version = "1.169.0";
+    version = "1.186.1";
   };
   aws-sigv4 = {
     dependencies = [ "aws-eventstream" ];
@@ -70,10 +72,20 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1fq3lbvkgm1vk5wa8l7vdnq3vjnlmsnyf4bbd0jq3qadyd9hf54a";
+      sha256 = "1nx1il781qg58nwjkkdn9fw741cjjnixfsh389234qm8j5lpka2h";
       type = "gem";
     };
-    version = "1.10.1";
+    version = "1.11.0";
+  };
+  base64 = {
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "01qml0yilb9basf7is2614skjp8384h2pycfx86cr8023arfj98g";
+      type = "gem";
+    };
+    version = "0.2.0";
   };
   cfn-model = {
     dependencies = [
@@ -153,10 +165,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0lwncq2rf8gm79g2rcnnyzs26ma1f4wnfjm6gs4zf2wlsdz5in9s";
+      sha256 = "00q2zznygpbls8asz5knjvvj2brr3ghmqxgr83xnrdj4rk3xwvhr";
       type = "gem";
     };
-    version = "1.6.1";
+    version = "1.7.0";
   };
   logging = {
     dependencies = [
@@ -207,10 +219,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "11dsv71gfbhy92yzj3xkckjzdai2bsz5a4fydgimv62dkz4kc5rv";
+      sha256 = "05xqijcf80sza5pnlp1c8whdaay8x5dc13214ngh790zrizgp8q9";
       type = "gem";
     };
-    version = "0.6.0";
+    version = "0.6.1";
   };
   psych = {
     groups = [ "default" ];
@@ -227,19 +239,20 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1j9p66pmfgxnzp76ksssyfyqqrg7281dyi3xyknl3wwraaw7a66p";
+      sha256 = "1jmbf6lf7pcyacpb939xjjpn1f84c3nw83dy3p1lwjx0l2ljfif7";
       type = "gem";
     };
-    version = "3.3.9";
+    version = "3.4.1";
   };
   syslog = {
+    dependencies = [ "logger" ];
     groups = [ "default" ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "12xqgjrnjpc1c7shajyz2h96bw2nlgb4lkaypj58dp6rch7s36sr";
+      sha256 = "023lbh48fcn72gwyh1x52ycs1wx1bnhdajmv0qvkidmdsmxnxzjd";
       type = "gem";
     };
-    version = "0.1.2";
+    version = "0.3.0";
   };
 }

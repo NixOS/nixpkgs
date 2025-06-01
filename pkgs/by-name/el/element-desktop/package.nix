@@ -123,7 +123,10 @@ stdenv.mkDerivation (
         "Chat"
       ];
       startupWMClass = "Element";
-      mimeTypes = [ "x-scheme-handler/element" ];
+      mimeTypes = [
+        "x-scheme-handler/element"
+        "x-scheme-handler/io.element.desktop"
+      ];
     };
 
     postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''

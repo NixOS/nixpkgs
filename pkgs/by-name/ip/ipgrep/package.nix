@@ -12,15 +12,15 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "jedisct1";
-    repo = pname;
+    repo = "ipgrep";
     rev = version;
     hash = "sha256-NrhcUFQM+L66KaDRRpAoC+z5s54a+1fqEepTRXVZ5Qs=";
   };
 
   patchPhase = ''
-    mkdir -p ${pname}
+    mkdir -p ipgrep
     substituteInPlace setup.py \
-      --replace "'scripts': []" "'scripts': { '${pname}.py' }"
+      --replace "'scripts': []" "'scripts': { 'ipgrep.py' }"
   '';
 
   propagatedBuildInputs = with python3Packages; [

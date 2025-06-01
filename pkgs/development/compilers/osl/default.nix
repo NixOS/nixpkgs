@@ -8,13 +8,14 @@
   libxml2,
   zlib,
   openexr,
-  openimageio_2,
+  openimageio,
   llvm,
   boost,
   flex,
   bison,
   partio,
   pugixml,
+  robin-map,
   util-linux,
   python3,
 }:
@@ -22,15 +23,15 @@
 let
   boost_static = boost.override { enableStatic = true; };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openshadinglanguage";
-  version = "1.13.11.0";
+  version = "1.14.5.1";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenShadingLanguage";
-    rev = "v${version}";
-    hash = "sha256-E/LUTtT0ZU0SBuwtJPA0FznvOuc2a3aJn2/n3ru5l0s=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-dmGVCx4m2bkeKhAJbU1mrzEDAmnL++7GA5okb9wwk/Y=";
   };
 
   cmakeFlags = [
@@ -43,12 +44,16 @@ stdenv.mkDerivation rec {
     "-DLLVM_DIRECTORY=${llvm}"
     "-DLLVM_CONFIG=${llvm.dev}/bin/llvm-config"
     "-DLLVM_BC_GENERATOR=${clang}/bin/clang++"
-
-    # Set C++11 to C++14 required for LLVM10+
-    "-DCMAKE_CXX_STANDARD=14"
   ];
 
-  preConfigure = "patchShebangs src/liboslexec/serialize-bc.bash ";
+  prePatch = ''
+    substituteInPlace src/cmake/modules/FindLLVM.cmake \
+      --replace-fail "NO_DEFAULT_PATH" ""
+  '';
+
+  preConfigure = ''
+    patchShebangs src/liboslexec/serialize-bc.bash
+  '';
 
   nativeBuildInputs = [
     bison
@@ -63,10 +68,11 @@ stdenv.mkDerivation rec {
       libclang
       llvm
       openexr
-      openimageio_2
+      openimageio
       partio
       pugixml
       python3.pkgs.pybind11
+      robin-map
       util-linux # needed just for hexdump
       zlib
     ]
@@ -79,11 +85,11 @@ stdenv.mkDerivation rec {
       --replace '=''${exec_prefix}//' '=/'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Advanced shading language for production GI renderers";
     homepage = "https://opensource.imageworks.com/osl.html";
-    maintainers = with maintainers; [ hodapp ];
-    license = licenses.bsd3;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ hodapp ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -27,7 +27,7 @@
 
 let
   minRequiredCudaCapability = "6.1"; # build fails with 6.0
-  inherit (cudaPackages.cudaFlags) cudaCapabilities;
+  inherit (cudaPackages.flags) cudaCapabilities;
   cudaCapabilityString =
     if cudaCapability == null then
       (builtins.head (
@@ -38,7 +38,7 @@ let
       ))
     else
       cudaCapability;
-  cudaCapability' = lib.toInt (cudaPackages.cudaFlags.dropDot cudaCapabilityString);
+  cudaCapability' = lib.toInt (cudaPackages.flags.dropDots cudaCapabilityString);
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "moshi";

@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "Escape-Technologies";
-    repo = pname;
+    repo = "graphinder";
     tag = "v${version}";
     hash = "sha256-TDc6aIFkxShlfC6fLYMKULfrFUAYhQZrIHZNDuMh68g=";
   };

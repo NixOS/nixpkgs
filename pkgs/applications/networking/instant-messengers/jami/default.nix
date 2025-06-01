@@ -68,31 +68,32 @@
 
 stdenv.mkDerivation rec {
   pname = "jami";
-  version = "20241031.0";
+  version = "20250523.0";
 
   src = fetchFromGitLab {
     domain = "git.jami.net";
     owner = "savoirfairelinux";
     repo = "jami-client-qt";
     rev = "stable/${version}";
-    hash = "sha256-LKezdzM+ltUSgW4GmTXICyufx9mI1AVbdEcwSp6tmao=";
+    hash = "sha256-uc2IcSAaCTkTMwjhgMRVdWsStLkOO5dPU2Hx+cYUUL0=";
     fetchSubmodules = true;
   };
 
-  pjsip-jami = pjsip.overrideAttrs (old: rec {
-    version = "8fc165b833eea6e3c88d67a541385424b129fd3f";
+  pjsip-jami = pjsip.overrideAttrs (old: {
+    version = "sfl-2.15-unstable-2025-02-24";
 
     src = fetchFromGitHub {
       owner = "savoirfairelinux";
       repo = "pjproject";
-      rev = version;
-      hash = "sha256-uA6ZJYUgAu3cK4CKCGtqaI0KPM/0szExPS2pCOflz5A=";
+      rev = "37130c943d59f25a71935803ea2d84515074a237";
+      hash = "sha256-7gAiriuooqqF38oajAuD/Lj5trn/9VMkCGOumcV45NA=";
     };
 
     configureFlags = [
       "--disable-sound"
       "--enable-video"
       "--enable-ext-sound"
+      "--disable-android-mediacodec"
       "--disable-speex-aec"
       "--disable-g711-codec"
       "--disable-l16-codec"
@@ -115,30 +116,21 @@ stdenv.mkDerivation rec {
     buildInputs = old.buildInputs ++ [ gnutls ];
   });
 
-  opendht-jami =
-    (opendht.overrideAttrs {
-      src = fetchFromGitHub {
-        owner = "savoirfairelinux";
-        repo = "opendht";
-        rev = "074e05cc3254d5d73b0d96ee772a6e01bb3113e5";
-        hash = "sha256-WuaURlC7eDDxvnM3YuyU9CNrwnE4WBQUIEw3z/0zjN8=";
-      };
-    }).override
-      {
-        enableProxyServerAndClient = true;
-        enablePushNotifications = true;
-      };
+  opendht-jami = opendht.override {
+    enableProxyServerAndClient = true;
+    enablePushNotifications = true;
+  };
 
   dhtnet = stdenv.mkDerivation {
     pname = "dhtnet";
-    version = "unstable-2024-07-22";
+    version = "unstable-2025-03-19";
 
     src = fetchFromGitLab {
       domain = "git.jami.net";
       owner = "savoirfairelinux";
       repo = "dhtnet";
-      rev = "8cd00200669fa5b7632faa447ba206c3847e2879";
-      hash = "sha256-SGidaCi5z7hO0ePJIZIkcWAkb+cKsZTdksVS7ldpjME=";
+      rev = "7e7359ff5dadd9aaf6d341486f3ee41029f645e1";
+      hash = "sha256-sT7OgYUBnO+HfIeCaR3lmoFJ9qE1Y5TEK1/KHzhvK7M=";
     };
 
     postPatch = ''
@@ -236,18 +228,18 @@ stdenv.mkDerivation rec {
     enableParallelBuilding = true;
   };
 
-  qwindowkit = fetchFromGitHub {
+  qwindowkit-src = fetchFromGitHub {
     owner = "stdware";
     repo = "qwindowkit";
-    rev = "79b1f3110754f9c21af2d7dacbd07b1a9dbaf6ef";
-    hash = "sha256-iZfmv3ADVjHf47HPK/FdrfeAzrXbxbjH3H5MFVg/ZWE=";
+    rev = "758b00cb6c2d924be3a1ea137ec366dc33a5132d";
+    hash = "sha256-qpVsF4gUX2noG9nKgjNP7FCEe59okZtDA8R/aZOef7Q=";
     fetchSubmodules = true;
   };
 
   postPatch = ''
     sed -i -e '/GIT_REPOSITORY/,+1c SOURCE_DIR ''${CMAKE_CURRENT_SOURCE_DIR}/qwindowkit' extras/build/cmake/contrib_tools.cmake
     sed -i -e 's/if(DISTRO_NEEDS_QMSETUP_PATCH)/if(TRUE)/' CMakeLists.txt
-    cp -R --no-preserve=mode,ownership ${qwindowkit} qwindowkit
+    cp -R --no-preserve=mode,ownership ${qwindowkit-src} qwindowkit
   '';
 
   preConfigure = ''

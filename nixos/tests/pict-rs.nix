@@ -1,24 +1,22 @@
-import ./make-test-python.nix (
-  { pkgs, lib, ... }:
-  {
-    name = "pict-rs";
-    meta.maintainers = with lib.maintainers; [ happysalada ];
+{ pkgs, lib, ... }:
+{
+  name = "pict-rs";
+  meta.maintainers = with lib.maintainers; [ happysalada ];
 
-    nodes.machine =
-      { ... }:
-      {
-        environment.systemPackages = with pkgs; [
-          curl
-          jq
-        ];
-        services.pict-rs.enable = true;
-      };
+  nodes.machine =
+    { ... }:
+    {
+      environment.systemPackages = with pkgs; [
+        curl
+        jq
+      ];
+      services.pict-rs.enable = true;
+    };
 
-    testScript = ''
-      start_all()
+  testScript = ''
+    start_all()
 
-      machine.wait_for_unit("pict-rs")
-      machine.wait_for_open_port(8080)
-    '';
-  }
-)
+    machine.wait_for_unit("pict-rs")
+    machine.wait_for_open_port(8080)
+  '';
+}

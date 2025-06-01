@@ -333,6 +333,41 @@ rec {
   concatLines = concatMapStrings (s: s + "\n");
 
   /**
+    Given string `s`, replace every occurrence of the string `from` with the string `to`.
+
+    # Inputs
+
+    `from`
+    : The string to be replaced
+
+    `to`
+    : The string to replace with
+
+    `s`
+    : The original string where replacements will be made
+
+    # Type
+
+    ```
+    replaceString :: string -> string -> string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.replaceString` usage example
+
+    ```nix
+    replaceString "world" "Nix" "Hello, world!"
+    => "Hello, Nix!"
+    replaceString "." "_" "v1.2.3"
+    => "v1_2_3"
+    ```
+
+    :::
+  */
+  replaceString = from: to: replaceStrings [ from ] [ to ];
+
+  /**
     Repeat a string `n` times,
     and concatenate the parts into a new string.
 
@@ -1138,7 +1173,7 @@ rec {
       string = toString arg;
     in
     if match "[[:alnum:],._+:@%/-]+" string == null then
-      "'${replaceStrings [ "'" ] [ "'\\''" ] string}'"
+      "'${replaceString "'" "'\\''" string}'"
     else
       string;
 
@@ -1499,6 +1534,63 @@ rec {
         in
         addContextFrom str (toUpper firstChar + toLower rest)
       );
+
+  /**
+    Converts a string to camelCase. Handles snake_case, PascalCase,
+    kebab-case strings as well as strings delimited by spaces.
+
+    # Inputs
+
+    `string`
+    : The string to convert to camelCase
+
+    # Type
+
+    ```
+    toCamelCase :: string -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.toCamelCase` usage example
+
+    ```nix
+    toCamelCase "hello-world"
+    => "helloWorld"
+    toCamelCase "hello_world"
+    => "helloWorld"
+    toCamelCase "hello world"
+    => "helloWorld"
+    toCamelCase "HelloWorld"
+    => "helloWorld"
+    ```
+
+    :::
+  */
+  toCamelCase =
+    str:
+    lib.throwIfNot (isString str) "toCamelCase does only accepts string values, but got ${typeOf str}" (
+      let
+        separators = splitStringBy (
+          prev: curr:
+          elem curr [
+            "-"
+            "_"
+            " "
+          ]
+        ) false str;
+
+        parts = lib.flatten (
+          map (splitStringBy (
+            prev: curr: match "[a-z]" prev != null && match "[A-Z]" curr != null
+          ) true) separators
+        );
+
+        first = if length parts > 0 then toLower (head parts) else "";
+        rest = if length parts > 1 then map toSentenceCase (tail parts) else [ ];
+      in
+      concatStrings (map (addContextFrom str) ([ first ] ++ rest))
+    );
 
   /**
     Appends string context from string like object `src` to `target`.

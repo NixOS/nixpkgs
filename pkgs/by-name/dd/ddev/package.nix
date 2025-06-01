@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "ddev";
-  version = "1.24.4";
+  version = "1.24.6";
 
   src = fetchFromGitHub {
     owner = "ddev";
     repo = "ddev";
     rev = "v${version}";
-    hash = "sha256-sd8Ux3zkKd9L2phv0dovWHSIpLS/OXCNwxTGGcvBQ3c=";
+    hash = "sha256-vOf500/HdOWn24MdXDfbetqAyKbEsaut707O+Rndks8=";
   };
 
   nativeBuildInputs = [

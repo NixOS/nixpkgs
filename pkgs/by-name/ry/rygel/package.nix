@@ -38,7 +38,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rygel";
-  version = "0.44.1";
+  version = "0.44.2";
 
   # TODO: split out lib
   outputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/rygel/${lib.versions.majorMinor finalAttrs.version}/rygel-${finalAttrs.version}.tar.xz";
-    hash = "sha256-eyxjG4QkCNonpUJC+Agqukm9HKAgQeeeHu+6DHAJqHs=";
+    hash = "sha256-eW7uSUzfYNwr+CsAuPmaFLocfPQNKUSBf/DBqmBz1aA=";
   };
 
   patches = [

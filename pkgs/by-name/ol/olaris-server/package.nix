@@ -14,7 +14,7 @@ buildGoModule rec {
 
   src = fetchFromGitLab {
     owner = "olaris";
-    repo = pname;
+    repo = "olaris-server";
     rev = "bdb2aeb1595c941210249164a97c12404c1ae0d8";
     hash = "sha256-Uhnh6GC85ORKnfHeYNtbSA40osuscxXDF5/kXJrF2Cs=";
   };

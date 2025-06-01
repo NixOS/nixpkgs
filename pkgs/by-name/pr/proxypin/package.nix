@@ -7,13 +7,13 @@
 
 flutter329.buildFlutterApplication rec {
   pname = "proxypin";
-  version = "1.1.8";
+  version = "1.1.9";
 
   src = fetchFromGitHub {
     owner = "wanghongenpin";
     repo = "proxypin";
     tag = "v${version}";
-    hash = "sha256-SLAm/Ab6/LgDFV/bUdBOTdNBFFh4+F+OrYFxjv5X3wo=";
+    hash = "sha256-yYZUXgWM7e1+TUvOid1X3WXlAGbUzDHrMXptPXKhuA8=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

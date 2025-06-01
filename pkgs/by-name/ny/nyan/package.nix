@@ -20,9 +20,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-BtvMZaQutcPqTSCN5gxYUU3CQTyCns1ldkcnjwJOFa8=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     clang
     cmake
+    flex
   ];
 
   buildInputs = [

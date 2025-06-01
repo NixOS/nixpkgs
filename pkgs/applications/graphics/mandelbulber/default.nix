@@ -1,15 +1,12 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   libpng,
   gsl,
   libsndfile,
   lzo,
-  qmake,
-  qttools,
-  qtbase,
-  qtmultimedia,
+  libsForQt5,
   withOpenCL ? true,
   opencl-clhpp ? null,
   ocl-icd ? null,
@@ -18,7 +15,7 @@
 assert withOpenCL -> opencl-clhpp != null;
 assert withOpenCL -> ocl-icd != null;
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "mandelbulber";
   version = "2.32";
 
@@ -30,13 +27,14 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    qmake
-    qttools
+    libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
+    libsForQt5.qttools
   ];
   buildInputs =
     [
-      qtbase
-      qtmultimedia
+      libsForQt5.qtbase
+      libsForQt5.qtmultimedia
       libpng
       gsl
       libsndfile

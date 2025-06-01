@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "frederickjansen";
-    repo = pname;
+    repo = "polyline";
     tag = "v${version}";
     hash = "sha256-fbGGfZdme4OiIGNlXG1uVl1xP+rPVI9l5hjHM0gwAsE=";
   };

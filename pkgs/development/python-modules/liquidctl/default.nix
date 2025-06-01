@@ -26,8 +26,8 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "liquidctl";
+    repo = "liquidctl";
     tag = "v${version}";
     hash = "sha256-ifYPUAF0lR9aCwiseNQZXbq+d+CXD/MwnZQhAM1TRLI=";
   };

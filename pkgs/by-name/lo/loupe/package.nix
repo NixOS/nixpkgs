@@ -8,8 +8,6 @@
   meson,
   ninja,
   pkg-config,
-  jq,
-  moreutils,
   rustc,
   wrapGAppsHook4,
   gtk4,
@@ -19,21 +17,25 @@
   libseccomp,
   glycin-loaders,
   gnome,
+  common-updater-scripts,
+  _experimental-update-script-combinators,
+  rustPlatform,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "loupe";
-  version = "47.4";
+  version = "48.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/loupe/${lib.versions.major finalAttrs.version}/loupe-${finalAttrs.version}.tar.xz";
-    hash = "sha256-jckmgpqcM4gAyPQytaNHJG5ty9mtLdGiTEmOr90+ias=";
+    hash = "sha256-EHE9PpZ4nQd659M4lFKl9sOX3fQ6UMBxy/4tEnJZcN4=";
   };
 
-  patches = [
-    # Fix paths in glycin library
-    glycin-loaders.passthru.glycinPathsPatch
-  ];
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src;
+    name = "loupe-deps-${finalAttrs.version}";
+    hash = "sha256-PKkyZDd4FLWGZ/kDKWkaSV8p8NDniSQGcR9Htce6uCg=";
+  };
 
   nativeBuildInputs = [
     cargo
@@ -42,9 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    jq
-    moreutils
     rustc
+    rustPlatform.cargoSetupHook
     wrapGAppsHook4
   ];
 
@@ -56,13 +57,12 @@ stdenv.mkDerivation (finalAttrs: {
     libseccomp
   ];
 
-  postPatch = ''
-    # Replace hash of file we patch in vendored glycin.
-    jq \
-      --arg hash "$(sha256sum vendor/glycin/src/sandbox.rs | cut -d' ' -f 1)" \
-      '.files."src/sandbox.rs" = $hash' \
-      vendor/glycin/.cargo-checksum.json \
-      | sponge vendor/glycin/.cargo-checksum.json
+  preConfigure = ''
+    # Dirty approach to add patches after cargoSetupPostUnpackHook
+    # We should eventually use a cargo vendor patch hook instead
+    pushd ../$(stripHash $cargoDeps)/glycin-2.*
+      patch -p3 < ${glycin-loaders.passthru.glycinPathsPatch}
+    popd
   '';
 
   preFixup = ''
@@ -73,8 +73,34 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  passthru.updateScript = gnome.updateScript {
-    packageName = "loupe";
+  passthru = {
+    updateScript =
+      let
+        updateSource = gnome.updateScript {
+          packageName = "loupe";
+        };
+
+        updateLockfile = {
+          command = [
+            "sh"
+            "-c"
+            ''
+              PATH=${
+                lib.makeBinPath [
+                  common-updater-scripts
+                ]
+              }
+              update-source-version loupe --ignore-same-version --source-key=cargoDeps.vendorStaging > /dev/null
+            ''
+          ];
+          # Experimental feature: do not copy!
+          supportedFeatures = [ "silent" ];
+        };
+      in
+      _experimental-update-script-combinators.sequence [
+        updateSource
+        updateLockfile
+      ];
   };
 
   meta = with lib; {

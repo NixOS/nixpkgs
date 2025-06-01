@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitLab {
     owner = "jtaimisto";
-    repo = pname;
+    repo = "bluewalker";
     rev = "v${version}";
     hash = "sha256-wAzBlCczsLfHboGYIsyN7dGwz52CMw+L3XQ0njfLVR0=";
   };

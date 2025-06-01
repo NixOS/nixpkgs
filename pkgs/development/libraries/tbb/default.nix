@@ -50,6 +50,18 @@ stdenv.mkDerivation rec {
       url = "https://patch-diff.githubusercontent.com/raw/uxlfoundation/oneTBB/pull/1696.patch";
       hash = "sha256-yjX2FkOK8bz29a/XSA7qXgQw9lxzx8VIgEBREW32NN4=";
     })
+    # Fix Threads::Threads target for static from https://github.com/oneapi-src/oneTBB/pull/1248
+    # This is a conflict-resolved cherry-pick of the above PR to due to formatting differences.
+    (fetchpatch {
+      name = "fix-cmake-threads-threads-target-for-static.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/uxlfoundation/oneTBB/pull/1248.patch";
+      hash = "sha256-3WKzxU93vxuy7NgW+ap+ocZz5Q5utZ/pK7+FQExzLLA=";
+    })
+  ];
+
+  patchFlags = [
+    "-p1"
+    "--ignore-whitespace"
   ];
 
   # Fix build with modern gcc
@@ -95,6 +107,7 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.unix ++ platforms.windows;
     maintainers = with maintainers; [
+      silvanshade
       thoughtpolice
       tmarkus
     ];

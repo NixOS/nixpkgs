@@ -30,10 +30,18 @@ mkCoqDerivation {
           ];
           out = "0.1.0";
         }
+        {
+          cases = [
+            (range "8.20" "9.0")
+            (range "1.3.2" "1.3.4")
+          ];
+          out = "0.1.1";
+        }
       ]
       null;
 
   release."0.1.0".sha256 = "+Of/DP2Vjsa7ASKswjlvqqhcmDhC9WrozridedNZQkY=";
+  release."0.1.1".sha256 = "CPZ5J9knJ1aYoQ7RQN8YFSpxqJXjgQaxIA4F8G6X4tM=";
 
   releaseRev = v: "v${v}";
 

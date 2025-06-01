@@ -1,11 +1,9 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitHub,
+  libsForQt5,
   libGLU,
-  qtbase,
-  qtscript,
-  qtxmlpatterns,
   lib3ds,
   bzip2,
   muparser,
@@ -36,7 +34,7 @@ let
     hash = "sha256-IyezvHzgLRyc3z8HdNsQMqDEhP+Ytw0stFNak3C8lTo=";
   };
 in
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "meshlab";
   version = "2023.12";
 
@@ -49,9 +47,9 @@ mkDerivation rec {
 
   buildInputs = [
     libGLU
-    qtbase
-    qtscript
-    qtxmlpatterns
+    libsForQt5.qtbase
+    libsForQt5.qtscript
+    libsForQt5.qtxmlpatterns
     lib3ds
     bzip2
     muparser
@@ -73,7 +71,10 @@ mkDerivation rec {
     structuresynth
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    libsForQt5.wrapQtAppsHook
+  ];
 
   preConfigure = ''
     substituteAll ${./meshlab.desktop} resources/linux/meshlab.desktop

@@ -1,0 +1,24 @@
+From 323c4c437b0eb027ac5acbd2d0c5b6d62a38befb Mon Sep 17 00:00:00 2001
+From: Florian Weimer <fweimer@redhat.com>
+Date: Tue, 11 Apr 2023 09:03:09 +0200
+Subject: [PATCH] Declare UDrawXAt in prototypes.h
+
+This avoids an implicit function declaration in functions.c for
+HAVE_CAIRO.  Future compilers will not accept such implicit function
+declarations by default, leading to a build failure.
+---
+ prototypes.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/prototypes.h b/prototypes.h
+index d577c854c48eddf1b9d086294930c714d69b7af5..5ec4b272722fd658253b70a3fe211c65881075a5 100644
+--- a/prototypes.h
++++ b/prototypes.h
+@@ -431,6 +431,7 @@ extern void UDrawSimpleLine(XPoint *, XPoint *);
+ extern void UDrawLine(XPoint *, XPoint *);
+ extern void UDrawCircle(XPoint *, u_char);
+ extern void UDrawX(labelptr);
++extern void UDrawXAt(XPoint *);
+ extern void UDrawXDown(labelptr);
+ extern int  toplevelwidth(objinstptr, short *);
+ extern int  toplevelheight(objinstptr, short *);

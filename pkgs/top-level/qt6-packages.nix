@@ -86,6 +86,7 @@ makeScopeWithSplicing' {
         inherit (qt6) qtbase qt5compat;
       };
       qcoro = callPackage ../development/libraries/qcoro { };
+      qcustomplot = callPackage ../development/libraries/qcustomplot { };
       qgpgme = callPackage ../development/libraries/gpgme { };
       qmlbox2d = callPackage ../development/libraries/qmlbox2d { };
       packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };

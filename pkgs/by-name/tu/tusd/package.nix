@@ -18,6 +18,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-YununGyB72zE0tmqO3BREJeMTjCuy/1fhPHC5r8OLjg=";
 
+  ldflags = [
+    "-X github.com/tus/tusd/v2/cmd/tusd/cli.VersionName=v${version}"
+  ];
+
   # Tests need the path to the binary:
   # https://github.com/tus/tusd/blob/0e52ad650abed02ec961353bb0c3c8bc36650d2c/internal/e2e/e2e_test.go#L37
   preCheck = ''
@@ -33,6 +37,8 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       nh2
       kalbasit
+      kvz
+      Acconut
     ];
   };
 }

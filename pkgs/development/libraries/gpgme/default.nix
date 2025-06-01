@@ -104,6 +104,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    # fatal error: 'QtCore/qcompare.h' file not found
+    broken = qtbase != null && stdenv.hostPlatform.isDarwin;
     homepage = "https://gnupg.org/software/gpgme/index.html";
     changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;f=NEWS;hb=gpgme-${version}";
     description = "Library for making GnuPG easier to use";

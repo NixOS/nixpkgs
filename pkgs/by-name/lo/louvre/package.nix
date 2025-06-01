@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C++ library for building Wayland compositors";
     homepage = "https://github.com/CuarzoSoftware/Louvre";
     mainProgram = "louvre-views";
-    maintainers = [ lib.maintainers.dblsaiko ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

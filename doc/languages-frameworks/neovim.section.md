@@ -59,7 +59,7 @@ For instance, `sqlite-lua` needs `g:sqlite_clib_path` to be set to work. Nixpkgs
 - `neovimRcContent`: Extra vimL code sourced by the generated `init.lua`.
 - `wrapperArgs`: Extra arguments forwarded to the `makeWrapper` call.
 - `wrapRc`: Nix, not being able to write in your `$HOME`, loads the
-  generated Neovim configuration via its  `-u` argument, i.e. : `-u /nix/store/...generatedInit.lua`. This has side effects like preventing Neovim from reading your config in `$XDG_CONFIG_HOME` (see bullet 7 of [`:help startup`](https://neovim.io/doc/user/starting.html#_initialization) in Neovim). Disable it if you want to generate your own wrapper. You can still reuse while reusing the logic of the nixpkgs wrapper and access the generated config via `neovim.passthru.initRc`.
+  generated Neovim configuration via the `$VIMINIT` environment variable, i.e. : `export VIMINIT='lua dofile("/nix/store/…-init.lua")'`. This has side effects like preventing Neovim from sourcing your `init.lua` in `$XDG_CONFIG_HOME/nvim` (see bullet 7 of [`:help startup`](https://neovim.io/doc/user/starting.html#startup) in Neovim). Disable it if you want to generate your own wrapper. You can still reuse the generated vimscript init code via `neovim.passthru.initRc`.
 - `plugins`: A list of plugins to add to the wrapper.
 
 ```

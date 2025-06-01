@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "cyclonedx-python";
-  version = "6.0.0";
+  version = "6.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-python";
     tag = "v${version}";
-    hash = "sha256-58btE2eMX4oucgg9gbiouKZvX8TVct69YpOP2Bp2Ez8=";
+    hash = "sha256-faR7sC4ymS0g5+r++QrgX01E8CbDKCmChPFMW8jgWBg=";
   };
 
   build-system = with python3Packages; [ poetry-core ];

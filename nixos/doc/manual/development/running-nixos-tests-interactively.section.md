@@ -71,9 +71,18 @@ An SSH-based backdoor to log into machines can be enabled with
 {
   name = "…";
   nodes.machines = { /* … */ };
-  sshBackdoor.enable = true;
+  interactive.sshBackdoor.enable = true;
 }
 ```
+
+::: {.warning}
+Make sure to only enable the backdoor for interactive tests
+(i.e. by using `interactive.sshBackdoor.enable`)! This is the only
+supported configuration.
+
+Running a test in a sandbox with this will fail because `/dev/vhost-vsock` isn't available
+in the sandbox.
+:::
 
 This creates a [vsock socket](https://man7.org/linux/man-pages/man7/vsock.7.html)
 for each VM to log in with SSH. This configures root login with an empty password.

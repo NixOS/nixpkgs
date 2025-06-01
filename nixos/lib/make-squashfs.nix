@@ -55,7 +55,8 @@ stdenv.mkDerivation {
     + ''
 
       # Generate the squashfs image.
-      mksquashfs nix-path-registration $(cat $closureInfo/store-paths) $imgPath ${pseudoFilesArgs} \
+      # We have to set SOURCE_DATE_EPOCH to 0 here for reproducibility (https://github.com/NixOS/nixpkgs/issues/390696)
+      SOURCE_DATE_EPOCH=0 mksquashfs nix-path-registration $(cat $closureInfo/store-paths) $imgPath ${pseudoFilesArgs} \
         -no-hardlinks ${lib.optionalString noStrip "-no-strip"} -keep-as-directory -all-root -b 1048576 ${compFlag} \
         -processors $NIX_BUILD_CORES -root-mode 0755
     ''

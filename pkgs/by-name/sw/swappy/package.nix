@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jtheoof";
-    repo = pname;
+    repo = "swappy";
     rev = "v${version}";
     hash = "sha256-/XPvy98Il4i8cDl9vH6f0/AZmiSqseSXnen7HfMqCDo=";
   };

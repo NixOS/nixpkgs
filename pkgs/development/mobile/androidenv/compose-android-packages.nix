@@ -31,7 +31,7 @@ in
     # Reads the repo JSON. If repoXmls is provided, will build a repo JSON into the Nix store.
     if repoXmls != null then
       let
-        # Uses mkrepo.rb to create a repo spec.
+        # Uses update.rb to create a repo spec.
         mkRepoJson =
           {
             packages ? [ ],
@@ -43,6 +43,7 @@ in
               ruby.withPackages (
                 pkgs: with pkgs; [
                   slop
+                  curb
                   nokogiri
                 ]
               )
@@ -68,7 +69,7 @@ in
             preferLocalBuild = true;
             unpackPhase = "true";
             buildPhase = ''
-              ruby ${./mkrepo.rb} ${lib.escapeShellArgs mkRepoRubyArguments} > repo.json
+              env ruby -e 'load "${./update.rb}"' -- ${lib.escapeShellArgs mkRepoRubyArguments} --input /dev/null --output repo.json
             '';
             installPhase = ''
               mv repo.json $out

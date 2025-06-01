@@ -55,6 +55,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace restranslator.pas --replace /usr/ $out/
+
+    # Fix build with lazarus 4.0, https://github.com/transmission-remote-gui/transgui/issues/1486
+    substituteInPlace main.pas --replace-warn "h <> INVALID_HANDLE_VALUE" "h >= 0"
   '';
 
   preBuild = ''

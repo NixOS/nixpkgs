@@ -12,19 +12,20 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bashunit";
-  version = "0.19.0";
+  version = "0.19.1";
+
   src = fetchFromGitHub {
     owner = "TypedDevs";
     repo = "bashunit";
     tag = finalAttrs.version;
-    hash = "sha256-EoCCqESzmCW12AuAqA3qh2VcE8gyUPIGJEoCcZhMA/Y=";
+    hash = "sha256-LoPtWf4Vo7hodWa0WJmqYDW7p7xJDrRZ5/qwUy/rB3U=";
     forceFetchGit = true; # needed to include the tests directory for the check phase
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
   postConfigure = ''
-    patchShebangs src tests build.sh bashunit
+    patchShebangs tests build.sh bashunit
     substituteInPlace Makefile \
       --replace-fail "SHELL=/bin/bash" "SHELL=${lib.getExe bash}"
   '';
@@ -41,9 +42,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  # some tests are currently broken on linux and it is not easy to disable them
-  # reenable them after https://github.com/TypedDevs/bashunit/pull/397 has been merged
-  doCheck = false;
+  doCheck = true;
   nativeCheckInputs = [ which ];
   checkPhase = ''
     runHook preCheck

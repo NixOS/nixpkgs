@@ -20,6 +20,12 @@ buildPythonPackage rec {
     hash = "sha256-crI+X3YMRzPPmpGNsI2U+9bZgwcR0qTowJuPNFY/Ooo=";
   };
 
+  # py3exiv2 only checks in `/usr/local/lib` for Boost, which is obviously wrong in nixpkgs.
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace setup.py \
+      --replace-fail /usr/local/lib/ ${lib.escapeShellArg (lib.getLib boost)}/lib/
+  '';
+
   buildInputs = [
     boost
     exiv2
@@ -34,7 +40,6 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    broken = stdenv.hostPlatform.isDarwin;
     description = "Python binding to the library exiv2";
     homepage = "https://launchpad.net/py3exiv2";
     license = licenses.gpl3Plus;

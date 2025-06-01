@@ -2,6 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  installShellFiles,
+  meson,
+  ninja,
   pkg-config,
   dbus,
   hidapi,
@@ -12,20 +15,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dualsensectl";
-  version = "0.6";
+  version = "0.7";
 
   src = fetchFromGitHub {
     owner = "nowrep";
     repo = "dualsensectl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Wu3TcnHoMZELC7I2PlE8z00+CycgpNd6SiZd5MjYD+I=";
+    hash = "sha256-/EPFZWpa7U4fmcdX2ycFkPgaqlKEA2cD84LBkcvVVhc=";
   };
 
-  postPatch = ''
-    substituteInPlace Makefile --replace "/usr/" "/"
-  '';
-
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    meson
+    ninja
+    pkg-config
+  ];
 
   buildInputs = [
     dbus
@@ -33,7 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
     udev
   ];
 
-  makeFlags = [ "DESTDIR=$(out)" ];
+  postInstall = ''
+    installShellCompletion --cmd dualsensectl \
+      --bash ../completion/dualsensectl \
+      --zsh ../completion/_dualsensectl
+  '';
 
   passthru = {
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };

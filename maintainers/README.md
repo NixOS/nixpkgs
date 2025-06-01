@@ -40,6 +40,10 @@ In order to do so, add yourself to the
 [`maintainer-list.nix`](./maintainer-list.nix), and then to the desired
 package's `meta.maintainers` list, and send a PR with the changes.
 
+If you're adding yourself as a maintainer as part of another PR (in which
+you become a maintainer of a package, for example), make your change to
+`maintainer-list.nix` in a separate commit.
+
 ### How to lose maintainer status
 
 Maintainers who have become inactive on a given package can be removed. This

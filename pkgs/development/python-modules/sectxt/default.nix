@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "sectxt";
-  version = "0.9.6";
+  version = "0.9.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "DigitalTrustCenter";
     repo = "sectxt";
     tag = version;
-    hash = "sha256-49YxhcOpi1wofKMRuNxt8esBtfaSoBrGu+yBCRFWZYY=";
+    hash = "sha256-CDVfT3ANb4ugLEvrSRTbkZMvZA6rcEwBu2c3pnjsza8=";
   };
 
   build-system = [ setuptools ];
@@ -35,13 +35,6 @@ buildPythonPackage rec {
     langcodes
     pgpy-dtc
     validators
-  ];
-
-  pythonRelaxDeps = [
-    "requests"
-    "langcodes"
-    "pgpy-dtc"
-    "validators"
   ];
 
   nativeCheckInputs = [

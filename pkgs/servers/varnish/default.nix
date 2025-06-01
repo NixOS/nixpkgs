@@ -91,17 +91,12 @@ in
 {
   # EOL (LTS) TBA
   varnish60 = common {
-    version = "6.0.13";
-    hash = "sha256-DcpilfnGnUenIIWYxBU4XFkMZoY+vUK/6wijZ7eIqbo=";
-  };
-  # EOL 2025-09-15
-  varnish76 = common {
-    version = "7.6.2";
-    hash = "sha256-OFxhDsxj3P61PXb0fMRl6J6+J9osCSJvmGHE+o6dLJo=";
+    version = "6.0.14";
+    hash = "sha256-tZlBf3ppntxxYSufEJ86ot6ujvnbfIyZOu9B3kDJ72k=";
   };
   # EOL 2026-03-15
   varnish77 = common {
-    version = "7.7.0";
-    hash = "sha256-aZSPIVEfgc548JqXFdmodQ6BEWGb1gVaPIYTFaIQtOQ=";
+    version = "7.7.1";
+    hash = "sha256-TAbFyZaApCm3KTT5/VE5Y/fhuoVTszyn7BLIWlwrdRo=";
   };
 }

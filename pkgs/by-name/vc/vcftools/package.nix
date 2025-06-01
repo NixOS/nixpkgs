@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vcftools";
-  version = "0.1.16";
+  version = "0.1.17";
 
   src = fetchFromGitHub {
     repo = "vcftools";
     owner = "vcftools";
     rev = "v${version}";
-    sha256 = "0msb09d2cnm8rlpg8bsc1lhjddvp3kf3i9dsj1qs4qgsdlzhxkyx";
+    sha256 = "sha256-IiePgDpaL/6XOpQsOn90clB6ST7F/37sztmHrC7Ysbw=";
   };
 
   nativeBuildInputs = [

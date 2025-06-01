@@ -1337,10 +1337,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0sz584vw17pwrrc5zg6yd8lqcgfpjf4qplq3s7fr0r3505nybky3";
+      sha256 = "00q2zznygpbls8asz5knjvvj2brr3ghmqxgr83xnrdj4rk3xwvhr";
       type = "gem";
     };
-    version = "1.6.5";
+    version = "1.7.0";
   };
   lograge = {
     dependencies = [
@@ -1541,10 +1541,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0x8asxl83msn815lwmb2d7q5p29p7drhjv5va0byhk60v9n16iwf";
+      sha256 = "12f2830x7pq3kj0v8nz0zjvaw02sv01bqs1zwdrc04704kwcgmqc";
       type = "gem";
     };
-    version = "2.8.8";
+    version = "2.8.9";
   };
   mini_racer = {
     dependencies = [ "libv8-node" ];
@@ -2571,10 +2571,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1ch4k2y80r4glr579kxliqnxld2qa91ydq8fiqam38bzpbps3gpg";
+      sha256 = "1jmbf6lf7pcyacpb939xjjpn1f84c3nw83dy3p1lwjx0l2ljfif7";
       type = "gem";
     };
-    version = "3.4.0";
+    version = "3.4.1";
   };
   rinku = {
     groups = [ "default" ];
@@ -3104,10 +3104,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "076vwy4x41hahcwni4bjkpc6fira79y1f9qbvx6w5ciwvn99k9qa";
+      sha256 = "1v2i8bmf92fb6c3cs7wnkxw48mgk3b8r2dib947h62ll7qgyqqiq";
       type = "gem";
     };
-    version = "0.132.0";
+    version = "0.135.0";
   };
   selenium-webdriver = {
     dependencies = [
@@ -3121,10 +3121,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1lw9b8gxr921akpc02zvwkig5m0m6y6xd438c6f1ysf3c8h75xsc";
+      sha256 = "1s80s7mgpwpfj4df2f43f5im37ks884xkbcxd9fxpk93xs7dicnx";
       type = "gem";
     };
-    version = "4.28.0";
+    version = "4.31.0";
   };
   shoulda-matchers = {
     dependencies = [ "activesupport" ];

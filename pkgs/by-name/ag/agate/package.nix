@@ -11,17 +11,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "agate";
-  version = "3.3.14";
+  version = "3.3.16";
 
   src = fetchFromGitHub {
     owner = "mbrubeck";
     repo = "agate";
     rev = "v${version}";
-    hash = "sha256-3IVl11eG9gSriOddgzgF0FecdldBxEOE/UXlFDKGyic=";
+    hash = "sha256-TLLmoQXrvgDskmH9sKxUi5AqYrCR0ZaJJdbOV03IbMc=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-pVxXUFuHyQ7YBJ6cBv3wPK5aZOs2QIhKf9awwY/y1hw=";
+  cargoHash = "sha256-HA1h06ZlWvq7z5hJFqKxGtXNk8/GHxUivigaVqWQCvA=";
 
   nativeBuildInputs = [ pkg-config ];
 

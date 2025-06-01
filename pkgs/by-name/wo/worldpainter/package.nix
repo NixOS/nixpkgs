@@ -10,11 +10,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "worldpainter";
-  version = "2.23.2";
+  version = "2.24.1";
 
   src = fetchurl {
     url = "https://www.worldpainter.net/files/${pname}_${version}.tar.gz";
-    hash = "sha256-FhrfI2/mBeIZAg26Q8x8T2YU2ANwAkoC3h9Tgw6ggoY=";
+    hash = "sha256-I7bf+BKaHSsR08stLtJu+wY5ek8cj+SjRVwu+RwqEq0=";
   };
 
   nativeBuildInputs = [

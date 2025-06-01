@@ -1,6 +1,7 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
   google-api-core,
   google-auth,
   google-geo-type,
@@ -42,6 +43,8 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ];
+
+  passthru.updateScript = gitUpdater { rev-prefix = "google-maps-routing-v"; };
 
   meta = {
     changelog = "https://github.com/googleapis/google-cloud-python/blob/${src.tag}/packages/google-maps-routing/CHANGELOG.md";

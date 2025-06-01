@@ -19,10 +19,10 @@ in
     package = lib.mkPackageOption pkgs "nh" { };
 
     flake = lib.mkOption {
-      type = lib.types.nullOr lib.types.path;
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
-        The path that will be used for the `NH_FLAKE` environment variable.
+        The string that will be used for the `NH_FLAKE` environment variable.
 
         `NH_FLAKE` is used by nh as the default flake for performing actions, such as
         `nh os switch`. This behaviour can be overriden per-command with environment

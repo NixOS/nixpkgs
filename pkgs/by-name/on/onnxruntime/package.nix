@@ -29,14 +29,14 @@
 }@inputs:
 
 let
-  version = "1.21.0";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
     tag = "v${version}";
-    hash = "sha256-BaHXpK6Ek+gsld7v+OBM+C3FjrPiyMQYP1liv7mEjho=";
     fetchSubmodules = true;
+    hash = "sha256-fcTvMsEgO3tHOvCKCAqkO/bpZX4tcJHq9ZqpZH+uMqs=";
   };
 
   stdenv = throw "Use effectiveStdenv instead";
@@ -98,26 +98,17 @@ let
     hash = "sha256-YJdZ0cMtUncH5Z6TtAWBH0xtAIu2UcbjnVcCM4tfg20=";
   };
 
-  isCudaJetson = cudaSupport && cudaPackages.cudaFlags.isJetsonBuild;
+  isCudaJetson = cudaSupport && cudaPackages.flags.isJetsonBuild;
 in
 effectiveStdenv.mkDerivation rec {
   pname = "onnxruntime";
   inherit src version;
 
-  patches =
-    [
-      # drop with the next update
-      # https://github.com/microsoft/onnxruntime/pull/23939
-      (fetchpatch {
-        url = "https://github.com/microsoft/onnxruntime/commit/55553703eaa8cd01d2b01cc21171a0ea515c888a.patch";
-        hash = "sha256-gL1rMNUcteKcjLmdJ+0r67rvNrC31bAyKYx4aeseWkM=";
-      })
-    ]
-    ++ lib.optionals cudaSupport [
-      # We apply the referenced 1064.patch ourselves to our nix dependency.
-      #  FIND_PACKAGE_ARGS for CUDA was added in https://github.com/microsoft/onnxruntime/commit/87744e5 so it might be possible to delete this patch after upgrading to 1.17.0
-      ./nvcc-gsl.patch
-    ];
+  patches = lib.optionals cudaSupport [
+    # We apply the referenced 1064.patch ourselves to our nix dependency.
+    #  FIND_PACKAGE_ARGS for CUDA was added in https://github.com/microsoft/onnxruntime/commit/87744e5 so it might be possible to delete this patch after upgrading to 1.17.0
+    ./nvcc-gsl.patch
+  ];
 
   nativeBuildInputs =
     [
@@ -287,7 +278,7 @@ effectiveStdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform, high performance scoring engine for ML models";
     longDescription = ''
       ONNX Runtime is a performance-focused complete scoring engine
@@ -301,9 +292,9 @@ effectiveStdenv.mkDerivation rec {
     homepage = "https://github.com/microsoft/onnxruntime";
     changelog = "https://github.com/microsoft/onnxruntime/releases/tag/v${version}";
     # https://github.com/microsoft/onnxruntime/blob/master/BUILD.md#architectures
-    platforms = platforms.unix;
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       puffnfresh
       ck3d
       cbourjau

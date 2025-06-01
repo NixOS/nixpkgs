@@ -11,7 +11,7 @@
 }:
 
 {
-  fetchDeps =
+  fetchDeps = lib.makeOverridable (
     {
       hash ? "",
       pname,
@@ -120,7 +120,8 @@
         }
         // hash'
       )
-    );
+    )
+  );
 
   configHook = makeSetupHook {
     name = "pnpm-config-hook";

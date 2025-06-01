@@ -9,17 +9,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fselect";
-  version = "0.8.11";
+  version = "0.8.12";
 
   src = fetchFromGitHub {
     owner = "jhspetersson";
     repo = "fselect";
     rev = version;
-    sha256 = "sha256-S7SFcOhFl5dVgUl2qlsE/Bizq8v0NPKPqBggzPGoOu8=";
+    sha256 = "sha256-tvc6Ume9VoPsVFH0AdaQejyRG2M3VapG073a3aYDp7o=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-r6GKJGJThaaawHcL+IL29Vy/NXmA75eswEBWDS/zs1g=";
+  cargoHash = "sha256-cLskCSeMLe1aryBVhnAQAVbdKiF0pVFRi9JqcUR1Q6I=";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;

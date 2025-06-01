@@ -147,7 +147,7 @@ in
 
         schedule = mkOption {
           type = str;
-          default = "*:0/15";
+          default = "daily";
           description = ''
             How often to run the collector in systemd calendar format.
           '';

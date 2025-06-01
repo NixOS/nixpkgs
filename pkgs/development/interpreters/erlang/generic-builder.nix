@@ -9,6 +9,7 @@
   libxml2,
   libxslt,
   ncurses,
+  nix-update-script,
   openssl,
   perl,
   runtimeShell,
@@ -23,11 +24,6 @@
   wxSupport ? true,
   # systemd support for epmd
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  # updateScript deps
-  writeScript,
-  common-updater-scripts,
-  coreutils,
-  git,
   wrapGAppsHook3,
   zlib,
 }:
@@ -104,6 +100,7 @@ let
     ;
   wxPackages2 = if stdenv.hostPlatform.isDarwin then [ wxGTK ] else wxPackages;
 
+  major = builtins.head (builtins.splitVersion version);
 in
 stdenv.mkDerivation (
   {
@@ -201,30 +198,14 @@ stdenv.mkDerivation (
     '';
 
     passthru = {
-      updateScript =
-        let
-          major = builtins.head (builtins.splitVersion version);
-        in
-        writeScript "update.sh" ''
-          #!${stdenv.shell}
-          set -ox errexit
-          PATH=${
-            lib.makeBinPath [
-              common-updater-scripts
-              coreutils
-              git
-              gnused
-            ]
-          }
-          latest=$(list-git-tags --url=https://github.com/erlang/otp.git | sed -n 's/^OTP-${major}/${major}/p' | sort -V | tail -1)
-          if [ "$latest" != "${version}" ]; then
-            nixpkgs="$(git rev-parse --show-toplevel)"
-            nix_file="$nixpkgs/pkgs/development/interpreters/erlang/${major}.nix"
-            update-source-version ${baseName}_${major} "$latest" --version-key=version --print-changes --file="$nix_file"
-          else
-            echo "${baseName}R${major} is already up-to-date"
-          fi
-        '';
+      updateScript = nix-update-script {
+        extraArgs = [
+          "--version-regex"
+          "OTP-(${major}.*)"
+          "--override-filename"
+          "pkgs/development/interpreters/erlang/${major}.nix"
+        ];
+      };
     };
 
     meta =

@@ -6,17 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-careful";
-  version = "0.4.5";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "RalfJung";
     repo = "cargo-careful";
     rev = "v${version}";
-    hash = "sha256-dalsBILFZzVHBIhGGIOUMSCWuM7xE46w91MbzCYa1Io=";
+    hash = "sha256-aKmaNDk9yZ/1MS3vQ9c1rCySfxiNv8PRwnIjT5bdhMg=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Es5BT0jfyJXuw7TTtGRhI4PeplZgTYm6JhSxQiZ+6NE=";
+  cargoHash = "sha256-KtTTpYwhNYvghb8k2NXyCRV5NGn07d7iaW+5uTI6qJ4=";
 
   meta = with lib; {
     description = "Tool to execute Rust code carefully, with extra checking along the way";

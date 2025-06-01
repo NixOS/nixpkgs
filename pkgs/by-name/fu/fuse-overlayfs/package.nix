@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fuse-overlayfs";
-  version = "1.14";
+  version = "1.15";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "fuse-overlayfs";
     rev = "v${version}";
-    hash = "sha256-A70AxYPKph/5zRNFRDWrwl8Csc8Vf1gmOLJ39ixJgL0=";
+    hash = "sha256-awVDq87lxMtpTADhy8k95N/4yuGH+2Fn94j3JZzkuUY=";
   };
 
   nativeBuildInputs = [

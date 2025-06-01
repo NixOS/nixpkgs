@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "any1";
-    repo = pname;
+    repo = "wayvnc";
     rev = "v${version}";
     hash = "sha256-LINzkC18gitj1a8Giqlt/6LyydOdV+8YXRJmuxT/Nq8=";
   };

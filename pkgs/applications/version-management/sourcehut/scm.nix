@@ -6,12 +6,12 @@
   pyyaml,
   buildsrht,
   pythonOlder,
-  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "scmsrht";
-  version = "0.22.24";
+  version = "0.22.28";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,11 +20,11 @@ buildPythonPackage rec {
     owner = "~sircmpwn";
     repo = "scm.sr.ht";
     rev = version;
-    hash = "sha256-9IgMmYzInfrten7z8bznlSFJlUjHf3k3z76lkP6tP50=";
+    hash = "sha256-+zxqiz5yPpgTwAw7w8GqJFb3OCcJEH/UhS5u2Xs7pzo=";
   };
 
   nativeBuildInputs = [
-    setuptools
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
@@ -33,9 +33,7 @@ buildPythonPackage rec {
     buildsrht
   ];
 
-  preBuild = ''
-    export PKGVER=${version}
-  '';
+  env.PKGVER = version;
 
   pythonImportsCheck = [ "scmsrht" ];
 

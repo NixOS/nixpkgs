@@ -7,25 +7,29 @@
   libxkbcommon,
   installShellFiles,
   scdoc,
+  wayland-protocols,
+  wayland-scanner,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "swww";
-  version = "0.9.5";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "LGFae";
     repo = "swww";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ldy9HhIsWdtTdvtRLV3qDT80oX646BI4Q+YX5wJXbsc=";
+    hash = "sha256-HEocjIsij9k4NjcmI8YRW6yzrYh+i3XN9YkRTr5fzDE=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-K1ww0bOD747EDtqYkA0Dlu7cwbjYcPwSXPSqQDbTwZo=";
+  cargoHash = "sha256-muWY99OtzG0AumbKpYoxNSjhXHYmkiwElVUdp2zE8a0=";
 
   buildInputs = [
     lz4
     libxkbcommon
+    wayland-protocols
+    wayland-scanner
   ];
 
   doCheck = false; # Integration tests do not work in sandbox environment

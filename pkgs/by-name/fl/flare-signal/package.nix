@@ -22,19 +22,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flare";
-  version = "0.15.16";
+  version = "0.16.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "schmiddi-on-mobile";
     repo = "flare";
-    rev = finalAttrs.version;
-    hash = "sha256-oG5RHCOk/VPCUAdg/+gfw9/cErnaZBKnwzLzdaboSyY=";
+    tag = finalAttrs.version;
+    hash = "sha256-5phXBsXi0kbTb4RVzbB4LS9b+S2M3U2l/6QYoSHo114=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-Id08JgFbeuGrMrBFyXF/ke/LfkqvT+biEgDOyW8sZh0=";
+    hash = "sha256-sI+zV1YW9RhtYRgUWiFKN8Iw9a5qkktOo0hFwyimPI8=";
   };
 
   nativeBuildInputs = [
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    changelog = "https://gitlab.com/schmiddi-on-mobile/flare/-/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://gitlab.com/schmiddi-on-mobile/flare/-/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Unofficial Signal GTK client";
     mainProgram = "flare";
     homepage = "https://gitlab.com/schmiddi-on-mobile/flare";

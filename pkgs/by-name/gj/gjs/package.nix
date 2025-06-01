@@ -8,6 +8,7 @@
   pkg-config,
   gnome,
   gtk3,
+  gtk4,
   atk,
   gobject-introspection,
   spidermonkey_128,
@@ -30,6 +31,7 @@
 let
   testDeps = [
     gtk3
+    gtk4
     atk
     pango.out
     gdk-pixbuf
@@ -39,7 +41,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gjs";
-  version = "1.82.1";
+  version = "1.84.2";
 
   outputs = [
     "out"
@@ -49,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor finalAttrs.version}/gjs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-+zmqVjZXbeDloRcfVqGlgl4r0aaZcvsSC6eL0Qm1aTw=";
+    hash = "sha256-NRQu3zRXBWNjACkew6fVg/FJaf8/rg/zD0qVseZ0AWY=";
   };
 
   patches = [
@@ -123,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $PWD/libgjs.so.0 $out/lib/libgjs.so.0
     ln -s $PWD/subprojects/gobject-introspection-tests/libgimarshallingtests.so $installedTests/libexec/installed-tests/gjs/libgimarshallingtests.so
     ln -s $PWD/subprojects/gobject-introspection-tests/libregress.so $installedTests/libexec/installed-tests/gjs/libregress.so
+    ln -s $PWD/subprojects/gobject-introspection-tests/libutility.so $installedTests/libexec/installed-tests/gjs/libutility.so
     ln -s $PWD/subprojects/gobject-introspection-tests/libwarnlib.so $installedTests/libexec/installed-tests/gjs/libwarnlib.so
     ln -s $PWD/installed-tests/js/libgjstesttools/libgjstesttools.so $installedTests/libexec/installed-tests/gjs/libgjstesttools.so
   '';
@@ -142,6 +145,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkPhase = ''
     runHook preCheck
+    GTK_A11Y=none \
+    HOME=$(mktemp -d) \
     xvfb-run -s '-screen 0 800x600x24' \
       meson test --print-errorlogs
     runHook postCheck

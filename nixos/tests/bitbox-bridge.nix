@@ -5,13 +5,10 @@ let
 in
 {
   name = "bitbox-bridge";
-  meta = {
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
-      izelnakri
-      tensor5
-    ];
-  };
+  meta.maintainers = with lib.maintainers; [
+    izelnakri
+    tensor5
+  ];
 
   nodes.machine = {
     services.bitbox-bridge = {

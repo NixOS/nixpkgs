@@ -1,0 +1,31 @@
+From 4f8dff52e99bdd70d07d7cb47d357bb91dc5f1a9 Mon Sep 17 00:00:00 2001
+From: Marcin Serwin <marcin@serwin.dev>
+Date: Sat, 24 May 2025 16:20:51 +0200
+Subject: [PATCH] cmake: don't hardcode "include" as the includedir
+
+When the default CMAKE_INSTALL_INCLUDEDIR is changed
+headers are installed to a different location, however, the
+INTERFACE_INCLUDE_DIRECTORIES in exported cmake configuration still
+point to <prefix>/include.
+
+Signed-off-by: Marcin Serwin <marcin@serwin.dev>
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 07618fa..bdf2212 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -91,7 +91,7 @@ add_library(cubeb
+   src/cubeb_utils.cpp
+ )
+ target_include_directories(cubeb
+-  PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:include>
++  PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+ )
+ set_target_properties(cubeb PROPERTIES
+   VERSION ${cubeb_VERSION}
+-- 
+2.49.0
+

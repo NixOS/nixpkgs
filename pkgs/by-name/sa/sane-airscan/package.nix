@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "alexpevzner";
-    repo = pname;
+    repo = "sane-airscan";
     rev = version;
     sha256 = "sha256-sWBqYoeCEAIM5Gug+w4b4WZ8SwFrywqJVzo0nt69diA=";
   };

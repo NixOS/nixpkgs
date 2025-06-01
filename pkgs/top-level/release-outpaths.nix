@@ -27,7 +27,7 @@ let
           config = {
             allowAliases = false;
             allowBroken = includeBroken;
-            allowUnfree = false;
+            allowUnfree = true;
             allowInsecurePredicate = x: true;
             checkMeta = checkMeta;
 

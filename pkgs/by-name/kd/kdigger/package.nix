@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "quarkslab";
-    repo = pname;
+    repo = "kdigger";
     rev = "v${version}";
     hash = "sha256-hpLhtTENtOBQjm+CZRAcx1BG9831JUFIsLL57wZIrso=";
     # populate values that require us to use git. By doing this in postFetch we

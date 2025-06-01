@@ -10,18 +10,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "veryl";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "veryl-lang";
     repo = "veryl";
     rev = "v${version}";
-    hash = "sha256-PeRz44agIKDPsgUhjPgm1Pn1oJb7Epyw0oj3xPCkj4k=";
+    hash = "sha256-KlW5GC5fgUnS6YAb01VEaKv48+yu8VqgAe/5QsilYjs=";
     fetchSubmodules = true;
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-PD1S9h4cGGgfRBB0iZzY7GRTeclRhwWLrxvNVEs8OJY=";
+  cargoHash = "sha256-HKDkV2eDjhfuky2ORdKwbyBa/kt1gEqK55AibKg5VYE=";
 
   nativeBuildInputs = [
     pkg-config
@@ -60,6 +60,14 @@ rustPlatform.buildRustPackage rec {
     "--skip=path::directory_target"
     "--skip=path::source_directory"
     "--skip=path::source_target"
+    "--skip=path::rootdir_directory_directory"
+    "--skip=path::rootdir_directory_target"
+    "--skip=path::rootdir_source_directory"
+    "--skip=path::rootdir_source_target"
+    "--skip=path::subdir_directory_directory"
+    "--skip=path::subdir_directory_target"
+    "--skip=path::subdir_source_directory"
+    "--skip=path::subdir_source_target"
   ];
 
   meta = {

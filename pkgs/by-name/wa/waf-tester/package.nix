@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "jreisinger";
-    repo = pname;
+    repo = "waf-tester";
     tag = "v${version}";
     hash = "sha256-UPviooQNGRVwf/bTz9ApedJDAGeCvh9iD1HXFOQXPcw=";
   };

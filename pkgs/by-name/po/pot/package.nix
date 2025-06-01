@@ -34,8 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-0Q1hf1AGAZv6jt05tV3F6++lzLpddvjhiykIhV40cPs=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/src-tauri";
-
   postPatch = ''
     substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
@@ -46,11 +44,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-iYQNGRWqXYBU+WIH/Xm8qndgOQ6RKYCtAyi93kb7xrQ=";
   };
 
-  pnpmRoot = "..";
+  cargoRoot = "src-tauri";
+  buildAndTestSubdir = "src-tauri";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
-    sourceRoot = "${finalAttrs.src.name}/src-tauri";
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      cargoRoot
+      ;
     hash = "sha256-dyXINRttgsqCfmgtZNXxr/Rl8Yn0F2AVm8v2Ao+OBsw=";
   };
 
@@ -92,12 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
         );
     }
   )}";
-
-  preConfigure = ''
-    # pnpm.configHook has to write to .., as our sourceRoot is set to src-tauri
-    # TODO: move frontend into its own drv
-    chmod +w ..
-  '';
 
   meta = {
     description = "Cross-platform translation software";

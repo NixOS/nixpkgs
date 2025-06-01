@@ -27,7 +27,10 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals mbedtlsSupport [ mbedtls ];
 
   cmakeFlags =
-    [ "-G Ninja" ]
+    [
+      "-G Ninja"
+      (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    ]
     ++ lib.optionals mbedtlsSupport [
       "-DMBEDTLS_ROOT_DIR=${mbedtls}"
       "-DNNG_ENABLE_TLS=ON"

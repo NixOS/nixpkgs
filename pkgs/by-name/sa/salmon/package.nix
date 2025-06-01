@@ -7,6 +7,7 @@
   cmake,
   curl,
   fetchFromGitHub,
+  icu,
   jemalloc,
   libgff,
   libiconv,
@@ -50,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
     cereal_1_3_2
     curl
+    icu
     jemalloc
     libgff
     libstaden-read

@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "sckott";
-    repo = pname;
+    repo = "habanero";
     tag = "v${version}";
     hash = "sha256-tEsuCOuRXJleiv02VGLVSg0ykh3Yu77uZzE6vhf5PaQ=";
   };

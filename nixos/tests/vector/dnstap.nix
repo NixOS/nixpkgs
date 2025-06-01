@@ -114,6 +114,7 @@ import ../make-test-python.nix (
       unbound.wait_for_file("${dnstapSocket}")
       unbound.succeed("test 770 -eq $(stat -c '%a' ${dnstapSocket})")
 
+      dnsclient.systemctl("start network-online.target")
       dnsclient.wait_for_unit("network-online.target")
       dnsclient.succeed(
         "dig @unbound test.local"

@@ -1,4 +1,6 @@
 {
+  lib,
+  stdenv,
   buildPythonPackage,
   onnxruntime-native,
   piper-phonemize-native,
@@ -21,7 +23,8 @@ buildPythonPackage {
     piper-phonemize-native.espeak-ng
   ];
 
-  pythonImportsCheck = [ "piper_phonemize" ];
+  # coredump in onnxruntime::logging::Logger& onnxruntime::logging::LoggingManager::DefaultLogger()
+  pythonImportsCheck = lib.optionals stdenv.hostPlatform.isx86 [ "piper_phonemize" ];
 
   # no tests
   doCheck = false;

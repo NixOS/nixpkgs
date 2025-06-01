@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   fetchCrate,
   rustPlatform,
+  libz,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -12,6 +14,8 @@ rustPlatform.buildRustPackage rec {
     inherit pname version;
     hash = "sha256-FS1WFlK0YNq1QCi3S3f5tMN+Bdcfx2dxhDKRLXLcios=";
   };
+
+  buildInputs = lib.optional stdenv.isDarwin libz;
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-E/yF42Vx9tv8Ik1j23El3+fI19ZGzq6nikVMATY7m3E=";

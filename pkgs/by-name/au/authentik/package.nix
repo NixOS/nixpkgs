@@ -16,13 +16,13 @@
 }:
 
 let
-  version = "2025.2.3";
+  version = "2025.4.1";
 
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
     rev = "version/${version}";
-    hash = "sha256-aaSAlFIc5Gn5PJPVuObi24Y86/3N3yFJVQTx1tV2i2A=";
+    hash = "sha256-idShMSYIrf3ViG9VFNGNu6TSjBz3Q+GJMMeCzcJwfG4=";
   };
 
   meta = with lib; {
@@ -45,7 +45,7 @@ let
 
     sourceRoot = "source/website";
 
-    outputHash = "sha256-lPpphGi8l2X/fR9YoJv37piAe82oqSLAKHze8oTrGNc=";
+    outputHash = "sha256-AnQpjCoCTzm28Wl/t3YHx0Kl0CuMHL2OgRjRB1Trrsw=";
     outputHashMode = "recursive";
 
     nativeBuildInputs = [
@@ -55,7 +55,7 @@ let
 
     buildPhase = ''
       npm ci --cache ./cache
-      rm -r ./cache node_modules/@parcel/watcher-linux-* node_modules/.package-lock.json
+      rm -r ./cache node_modules/.package-lock.json
     '';
 
     installPhase = ''
@@ -131,7 +131,7 @@ let
       ln -s ${src}/website $out/
       ln -s ${clientapi} $out/web/node_modules/@goauthentik/api
     '';
-    npmDepsHash = "sha256-uVur1DyXaIGPny7u/JQyx9HQ7VJqeSi2pPSORZgLjEw=";
+    npmDepsHash = "sha256-i95sH+KUgAQ76cv1+7AE/UA6jsReQMttDGWClNE2Ol4=";
 
     postPatch = ''
       cd web
@@ -159,28 +159,31 @@ let
   python = python312.override {
     self = python;
     packageOverrides = final: prev: {
+      django = final.django_5;
+
       django-tenants = prev.django-tenants.overrideAttrs {
-        version = "3.6.1-unstable-2024-01-11";
+        version = "3.7.0-unstable-2025-03-14";
         src = fetchFromGitHub {
           owner = "rissson";
           repo = "django-tenants";
-          rev = "a7f37c53f62f355a00142473ff1e3451bb794eca";
-          hash = "sha256-YBT0kcCfETXZe0j7/f1YipNIuRrcppRVh1ecFS3cvNo=";
+          rev = "156e53a6f5902d74b73dd9d0192fffaa2587a740";
+          hash = "sha256-xmhfPgCmcFr5axVV65fCq/AcV8ApRVvFVEpq3cQSVqo=";
         };
       };
-      # Use 3.14.0 until https://github.com/encode/django-rest-framework/issues/9358 is fixed.
-      # Otherwise applying blueprints/default/default-brand.yaml fails with:
-      #   authentik.flows.models.RelatedObjectDoesNotExist: FlowStageBinding has no target.
-      djangorestframework = prev.buildPythonPackage rec {
+
+      # Running authentik currently requires a custom version.
+      # Look in `pyproject.toml` for changes to the rev in the `[tool.uv.sources]` section.
+      # See https://github.com/goauthentik/authentik/pull/14057 for latest version bump.
+      djangorestframework = prev.buildPythonPackage {
         pname = "djangorestframework";
-        version = "3.14.0";
+        version = "3.16.0";
         format = "setuptools";
 
         src = fetchFromGitHub {
-          owner = "encode";
+          owner = "authentik-community";
           repo = "django-rest-framework";
-          rev = version;
-          hash = "sha256-Fnj0n3NS3SetOlwSmGkLE979vNJnYE6i6xwVBslpNz4=";
+          rev = "896722bab969fabc74a08b827da59409cf9f1a4e";
+          hash = "sha256-YrEDEU3qtw/iyQM3CoB8wYx57zuPNXiJx6ZjrIwnCNU=";
         };
 
         propagatedBuildInputs = with final; [
@@ -195,8 +198,17 @@ let
           # optional tests
           coreapi
           django-guardian
+          inflection
           pyyaml
           uritemplate
+        ];
+
+        disabledTests = [
+          "test_ignore_validation_for_unchanged_fields"
+          "test_invalid_inputs"
+          "test_shell_code_example_rendering"
+          "test_unique_together_condition"
+          "test_unique_together_with_source"
         ];
 
         pythonImportsCheck = [ "rest_framework" ];
@@ -215,14 +227,19 @@ let
             --replace-fail '/blueprints' "$out/blueprints" \
             --replace-fail './media' '/var/lib/authentik/media'
           substituteInPlace pyproject.toml \
-            --replace-fail 'dumb-init = "*"' "" \
+            --replace-fail '"dumb-init",' "" \
             --replace-fail 'djangorestframework-guardian' 'djangorestframework-guardian2'
           substituteInPlace authentik/stages/email/utils.py \
             --replace-fail 'web/' '${webui}/'
         '';
 
         nativeBuildInputs = [
-          prev.poetry-core
+          prev.hatchling
+          prev.pythonRelaxDepsHook
+        ];
+
+        pythonRelaxDeps = [
+          "xmlsec"
         ];
 
         propagatedBuildInputs =
@@ -298,6 +315,7 @@ let
           ++ django-storages.optional-dependencies.s3
           ++ opencontainers.optional-dependencies.reggie
           ++ psycopg.optional-dependencies.c
+          ++ psycopg.optional-dependencies.pool
           ++ uvicorn.optional-dependencies.standard;
 
         postInstall = ''
@@ -330,7 +348,7 @@ let
 
     env.CGO_ENABLED = 0;
 
-    vendorHash = "sha256-aG/VqpmHJeGyF98aS0jgwEAq1R5c8VggeJxLWS9W8HY=";
+    vendorHash = "sha256-cEB22KFDONcJBq/FvLpYKN7Zd06mh8SACvCSuj5i4fI=";
 
     postInstall = ''
       mv $out/bin/server $out/bin/authentik

@@ -77,14 +77,7 @@ let
   );
 
   # Handle assertions and warnings
-
-  failedAssertions = map (x: x.message) (filter (x: !x.assertion) config.assertions);
-
-  baseSystemAssertWarn =
-    if failedAssertions != [ ] then
-      throw "\nFailed assertions:\n${concatStringsSep "\n" (map (x: "- ${x}") failedAssertions)}"
-    else
-      showWarnings config.warnings baseSystem;
+  baseSystemAssertWarn = lib.asserts.checkAssertWarn config.assertions config.warnings baseSystem;
 
   # Replace runtime dependencies
   system =

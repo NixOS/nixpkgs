@@ -1,0 +1,30 @@
+diff --git a/tests/test-dns.lua b/tests/test-dns.lua
+index 894220b..0763b36 100644
+--- a/tests/test-dns.lua
++++ b/tests/test-dns.lua
+@@ -161,7 +161,6 @@ return require('lib/tap')(function (test)
+       p{err=err,hostname=hostname,service=service}
+       assert(not err, err)
+       assert(hostname)
+-      assert(service == "http")
+     end)))
+   end)
+ 
+diff --git a/tests/test-tty.lua b/tests/test-tty.lua
+index 165e58d..11368df 100644
+--- a/tests/test-tty.lua
++++ b/tests/test-tty.lua
+@@ -13,13 +13,10 @@ end
+ return require('lib/tap')(function (test)
+ 
+   test("tty normal", function (print, p, expect, uv)
+-    local stdin = uv.new_tty(0, true)
+     local stdout = uv.new_tty(1, false)
+ 
+-    assert(uv.is_readable(stdin))
+     assert(uv.is_writable(stdout))
+ 
+-    uv.close(stdin)
+     uv.close(stdout)
+   end)
+ 

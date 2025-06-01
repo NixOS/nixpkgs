@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   src = fetchFromGitHub {
     owner = "jdwhite";
-    repo = pname;
+    repo = "aquosctl";
     rev = "b5e48d9ef848188b97dfb24bfcc99d5196cab5f6";
     hash = "sha256-FA3LR58KMG5RzSxxnOkVw1+inM/gMGPtw5+JQwSHBYs=";
   };

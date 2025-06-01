@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "oprypin";
-    repo = pname;
+    repo = "pytest-golden";
     tag = "v${version}";
     hash = "sha256-l5fXWDK6gWJc3dkYFTokI9tWvawMRnF0td/lSwqkYXE=";
   };

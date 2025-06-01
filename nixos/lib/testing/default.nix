@@ -9,15 +9,13 @@ let
     };
   runTest =
     module:
-    # Infra issue: virtualization on darwin doesn't seem to work yet.
-    lib.addMetaAttrs { hydraPlatforms = lib.platforms.linux; }
-      (evalTest (
-        { config, ... }:
-        {
-          imports = [ module ];
-          result = config.test;
-        }
-      )).config.result;
+    (evalTest (
+      { config, ... }:
+      {
+        imports = [ module ];
+        result = config.test;
+      }
+    )).config.result;
 
   testModules = [
     ./call-test.nix

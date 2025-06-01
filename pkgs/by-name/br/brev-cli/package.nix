@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "brev-cli";
-  version = "0.6.309";
+  version = "0.6.310";
 
   src = fetchFromGitHub {
     owner = "brevdev";
-    repo = pname;
+    repo = "brev-cli";
     rev = "v${version}";
-    sha256 = "sha256-T94hJqNnCsJO1Gd+CXjKXri++NZqlFjke27Xnkfz+0U=";
+    sha256 = "sha256-dZY87iUPr1NYZNERAzuxX/en0fgefekpXAi5Um1nTBc=";
   };
 
   vendorHash = "sha256-7MXZVdpsPHfHk8hNZM2CT0FW8gTKt3oUap7CTVYMNfI=";

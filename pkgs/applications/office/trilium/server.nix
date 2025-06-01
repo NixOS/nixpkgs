@@ -17,6 +17,7 @@ stdenv.mkDerivation {
   inherit version;
   meta = metaCommon // {
     platforms = [ "x86_64-linux" ];
+    mainProgram = "trilium-server";
   };
 
   src = fetchurl serverSource;
@@ -50,6 +51,12 @@ stdenv.mkDerivation {
     exec ./node/bin/node src/www
     EOF
     chmod a+x $out/bin/trilium-server
+
+    # ERROR: noBrokenSymlinks: found 4 dangling symlinks, 0 reflexive symlinks and 0 unreadable symlinks
+    unlink $out/share/trilium-server/node/bin/npx
+    unlink $out/share/trilium-server/node/bin/npm
+    unlink $out/share/trilium-server/node_modules/.bin/electron
+    unlink $out/share/trilium-server/node_modules/.bin/electron-installer-debian
   '';
 
   passthru.tests = {

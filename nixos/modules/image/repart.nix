@@ -3,6 +3,7 @@
 
 {
   config,
+  options,
   pkgs,
   lib,
   utils,
@@ -88,6 +89,31 @@ in
 {
   imports = [
     ./repart-verity-store.nix
+    ./file-options.nix
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2411;
+      from = [
+        "image"
+        "repart"
+        "imageFileBasename"
+      ];
+      to = [
+        "image"
+        "baseName"
+      ];
+    })
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2411;
+      from = [
+        "image"
+        "repart"
+        "imageFile"
+      ];
+      to = [
+        "image"
+        "fileName"
+      ];
+    })
   ];
 
   options.image.repart = {
@@ -95,7 +121,7 @@ in
     name = lib.mkOption {
       type = lib.types.str;
       description = ''
-        Name of the image.
+          Name of the image.
 
         If this option is unset but config.system.image.id is set,
         config.system.image.id is used as the default value.
@@ -107,23 +133,6 @@ in
       default = config.system.image.version;
       defaultText = lib.literalExpression "config.system.image.version";
       description = "Version of the image";
-    };
-
-    imageFileBasename = lib.mkOption {
-      type = lib.types.str;
-      readOnly = true;
-      description = ''
-        Basename of the image filename without any extension (e.g. `image_1`).
-      '';
-    };
-
-    imageFile = lib.mkOption {
-      type = lib.types.str;
-      readOnly = true;
-      description = ''
-        Filename of the image including all extensions (e.g `image_1.raw` or
-        `image_1.raw.zst`).
-      '';
     };
 
     compression = {
@@ -250,55 +259,37 @@ in
       '';
     };
 
+    assertions = lib.mkOption {
+      type = options.assertions.type;
+      default = [ ];
+      internal = true;
+      visible = false;
+      description = ''
+        Assertions only evaluated by the repart image, not by the system toplevel.
+      '';
+    };
+
+    warnings = lib.mkOption {
+      type = options.warnings.type;
+      default = [ ];
+      internal = true;
+      visible = false;
+      description = ''
+        Warnings only evaluated by the repart image, not by the system toplevel.
+      '';
+    };
+
   };
 
   config = {
-
-    assertions = lib.mapAttrsToList (
-      fileName: partitionConfig:
-      let
-        inherit (partitionConfig) repartConfig;
-        labelLength = builtins.stringLength repartConfig.Label;
-      in
-      {
-        assertion = repartConfig ? Label -> GPTMaxLabelLength >= labelLength;
-        message = ''
-          The partition label '${repartConfig.Label}'
-          defined for '${fileName}' is ${toString labelLength} characters long,
-          but the maximum label length supported by UEFI is ${toString GPTMaxLabelLength}.
-        '';
-      }
-    ) cfg.partitions;
-
-    warnings = lib.filter (v: v != null) (
-      lib.mapAttrsToList (
-        fileName: partitionConfig:
-        let
-          inherit (partitionConfig) repartConfig;
-          suggestedMaxLabelLength = GPTMaxLabelLength - 2;
-          labelLength = builtins.stringLength repartConfig.Label;
-        in
-        if (repartConfig ? Label && labelLength >= suggestedMaxLabelLength) then
-          ''
-            The partition label '${repartConfig.Label}'
-            defined for '${fileName}' is ${toString labelLength} characters long.
-            The suggested maximum label length is ${toString suggestedMaxLabelLength}.
-
-            If you use sytemd-sysupdate style A/B updates, this might
-            not leave enough space to increment the version number included in
-            the label in a future release. For example, if your label is
-            ${toString GPTMaxLabelLength} characters long (the maximum enforced by UEFI) and
-            you're at version 9, you cannot increment this to 10.
-          ''
-        else
-          null
-      ) cfg.partitions
-    );
-
-    image.repart =
+    image.baseName =
       let
         version = config.image.repart.version;
         versionInfix = if version != null then "_${version}" else "";
+      in
+      cfg.name + versionInfix;
+    image.extension =
+      let
         compressionSuffix =
           lib.optionalString cfg.compression.enable
             {
@@ -308,6 +299,11 @@ in
             }
             ."${cfg.compression.algorithm}";
 
+      in
+      "raw" + compressionSuffix;
+
+    image.repart =
+      let
         makeClosure = paths: pkgs.closureInfo { rootPaths = paths; };
 
         # Add the closure of the provided Nix store paths to cfg.partitions so
@@ -321,9 +317,6 @@ in
       in
       {
         name = lib.mkIf (config.system.image.id != null) (lib.mkOptionDefault config.system.image.id);
-        imageFileBasename = cfg.name + versionInfix;
-        imageFile = cfg.imageFileBasename + ".raw" + compressionSuffix;
-
         compression = {
           # Generally default to slightly faster than default compression
           # levels under the assumption that most of the building will be done
@@ -339,6 +332,47 @@ in
         };
 
         finalPartitions = lib.mapAttrs addClosure cfg.partitions;
+
+        assertions = lib.mapAttrsToList (
+          fileName: partitionConfig:
+          let
+            inherit (partitionConfig) repartConfig;
+            labelLength = builtins.stringLength repartConfig.Label;
+          in
+          {
+            assertion = repartConfig ? Label -> GPTMaxLabelLength >= labelLength;
+            message = ''
+              The partition label '${repartConfig.Label}'
+              defined for '${fileName}' is ${toString labelLength} characters long,
+              but the maximum label length supported by UEFI is ${toString GPTMaxLabelLength}.
+            '';
+          }
+        ) cfg.partitions;
+
+        warnings = lib.filter (v: v != null) (
+          lib.mapAttrsToList (
+            fileName: partitionConfig:
+            let
+              inherit (partitionConfig) repartConfig;
+              suggestedMaxLabelLength = GPTMaxLabelLength - 2;
+              labelLength = builtins.stringLength repartConfig.Label;
+            in
+            if (repartConfig ? Label && labelLength >= suggestedMaxLabelLength) then
+              ''
+                The partition label '${repartConfig.Label}'
+                defined for '${fileName}' is ${toString labelLength} characters long.
+                The suggested maximum label length is ${toString suggestedMaxLabelLength}.
+
+                If you use sytemd-sysupdate style A/B updates, this might
+                not leave enough space to increment the version number included in
+                the label in a future release. For example, if your label is
+                ${toString GPTMaxLabelLength} characters long (the maximum enforced by UEFI) and
+                you're at version 9, you cannot increment this to 10.
+              ''
+            else
+              null
+          ) cfg.partitions
+        );
       };
 
     system.build.image =
@@ -354,21 +388,22 @@ in
         );
 
         mkfsEnv = mkfsOptionsToEnv cfg.mkfsOptions;
+        val = pkgs.callPackage ./repart-image.nix {
+          systemd = cfg.package;
+          imageFileBasename = config.image.baseName;
+          inherit (cfg)
+            name
+            version
+            compression
+            split
+            seed
+            sectorSize
+            finalPartitions
+            ;
+          inherit fileSystems definitionsDirectory mkfsEnv;
+        };
       in
-      pkgs.callPackage ./repart-image.nix {
-        systemd = cfg.package;
-        inherit (cfg)
-          name
-          version
-          imageFileBasename
-          compression
-          split
-          seed
-          sectorSize
-          finalPartitions
-          ;
-        inherit fileSystems definitionsDirectory mkfsEnv;
-      };
+      lib.asserts.checkAssertWarn cfg.assertions cfg.warnings val;
   };
 
   meta.maintainers = with lib.maintainers; [

@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "fermitools";
-    repo = pname;
+    repo = "htgettoken";
     tag = "v${version}";
     hash = "sha256-BHDLDAbssDCU59nUAVjKo1cCkXoht1lB+2BA6mGbDFU=";
   };

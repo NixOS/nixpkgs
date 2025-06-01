@@ -23,7 +23,6 @@
   libxmlb,
   libyaml,
   gobject-introspection,
-  pcre,
   itstool,
   gperf,
   vala,
@@ -109,7 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [
       libstemmer
-      pcre
       glib
       xapian
       libxml2

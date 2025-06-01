@@ -88,6 +88,7 @@ buildPythonPackage rec {
     "test_raw_base64_autodetect_png"
 
     # Performance benchmarks that sometimes fail when running many parallel builds
+    "test_combine_system_messages_benchmark"
     "test_extract_system_messages_benchmark"
   ];
 

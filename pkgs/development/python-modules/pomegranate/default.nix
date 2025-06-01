@@ -25,7 +25,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "pomegranate";
     owner = "jmschrei";
     tag = "v${version}";
     hash = "sha256-p2Gn0FXnsAHvRUeAqx4M1KH0+XvDl3fmUZZ7MiMvPSs=";

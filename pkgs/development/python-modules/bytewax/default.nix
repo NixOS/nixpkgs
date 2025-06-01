@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
@@ -37,7 +36,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "bytewax";
-    repo = pname;
+    repo = "bytewax";
     tag = "v${version}";
     hash = "sha256-O5q1Jd3AMUaQwfQM249CUnkjqEkXybxtM9SOISoULZk=";
   };
@@ -106,7 +105,5 @@ buildPythonPackage rec {
       mslingsby
       kfollesdal
     ];
-    # mismatched type expected u8, found i8
-    broken = stdenv.hostPlatform.isAarch64;
   };
 }

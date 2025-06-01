@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "segmentio";
-    repo = pname;
+    repo = "chamber";
     rev = "v${version}";
     sha256 = "sha256-9+I/zH4sHlLQkEn+fCboI3vCjYjlk+hdYnWuxq47r5I=";
   };

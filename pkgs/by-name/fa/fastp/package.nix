@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fastp";
-  version = "0.24.1";
+  version = "0.24.2";
 
   src = fetchFromGitHub {
     owner = "OpenGene";
     repo = "fastp";
     rev = "v${version}";
-    sha256 = "sha256-vTAuuhnJ5O2mUFUxM5RIq8w/Zo3SmAgQIDd99YpDcww=";
+    sha256 = "sha256-8AJ6wgqbCqH/f3flgdVYUb5u0C5/CQl6MJe7HmZrp60=";
   };
 
   buildInputs = [

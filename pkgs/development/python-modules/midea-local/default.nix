@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "midea-lan";
-    repo = pname;
+    repo = "midea-local";
     tag = "v${version}";
     hash = "sha256-zXOxgPFX6TRdFnQ0OqqEu1sy9MmlfxEg7KedQWxYv48=";
   };

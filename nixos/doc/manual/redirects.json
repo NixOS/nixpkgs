@@ -50,6 +50,12 @@
   "module-services-crab-hole-upstream-options": [
     "index.html#module-services-crab-hole-upstream-options"
   ],
+  "module-services-opencloud": [
+    "index.html#module-services-opencloud"
+  ],
+  "module-services-opencloud-basic-usage": [
+    "index.html#module-services-opencloud-basic-usage"
+  ],
   "module-services-strfry": [
     "index.html#module-services-strfry"
   ],
@@ -70,6 +76,9 @@
   ],
   "ch-installation": [
     "index.html#ch-installation"
+  ],
+  "sec-contributing-development-env": [
+    "index.html#sec-contributing-development-env"
   ],
   "sec-mattermost": [
     "index.html#sec-mattermost"
@@ -1874,6 +1883,9 @@
   "test-opt-meta.platforms": [
     "index.html#test-opt-meta.platforms"
   ],
+  "test-opt-meta.hydraPlatforms": [
+    "index.html#test-opt-meta.hydraPlatforms"
+  ],
   "test-opt-meta.timeout": [
     "index.html#test-opt-meta.timeout"
   ],
@@ -1976,6 +1988,21 @@
   "ch-release-notes": [
     "release-notes.html#ch-release-notes"
   ],
+  "sec-release-25.11": [
+    "release-notes.html#sec-release-25.11"
+  ],
+  "sec-release-25.11-highlights": [
+    "release-notes.html#sec-release-25.11-highlights"
+  ],
+  "sec-release-25.11-new-modules": [
+    "release-notes.html#sec-release-25.11-new-modules"
+  ],
+  "sec-release-25.11-incompatibilities": [
+    "release-notes.html#sec-release-25.11-incompatibilities"
+  ],
+  "sec-release-25.11-notable-changes": [
+    "release-notes.html#sec-release-25.11-notable-changes"
+  ],
   "sec-release-25.05": [
     "release-notes.html#sec-release-25.05"
   ],
@@ -1991,20 +2018,21 @@
   "sec-release-25.05-notable-changes": [
     "release-notes.html#sec-release-25.05-notable-changes"
   ],
+  "sec-release-25.05-wiki": [
+    "release-notes.html#sec-release-25.05-wiki"
+  ],
   "sec-nixpkgs-release-25.05": [
     "release-notes.html#sec-nixpkgs-release-25.05"
   ],
   "sec-nixpkgs-release-25.05-incompatibilities": [
-    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities"
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities",
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities-nexusmods-app-upgraded"
   ],
   "sec-nixpkgs-release-25.05-incompatibilities-titanium-removed": [
     "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities-titanium-removed",
     "index.html#titanium",
     "index.html#building-a-titanium-app",
     "index.html#emulating-or-simulating-the-app"
-  ],
-  "sec-nixpkgs-release-25.05-incompatibilities-nexusmods-app-upgraded": [
-    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities-nexusmods-app-upgraded"
   ],
   "sec-nixpkgs-release-25.05-lib": [
     "release-notes.html#sec-nixpkgs-release-25.05-lib"

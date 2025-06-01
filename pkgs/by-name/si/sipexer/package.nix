@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "miconda";
-    repo = pname;
+    repo = "sipexer";
     rev = "v${version}";
     hash = "sha256-7L29nyFOc/5XAHpzGsFSngxMTwwIDkmwhIKIjHYGszc=";
   };

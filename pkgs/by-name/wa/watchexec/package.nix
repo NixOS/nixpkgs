@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "watchexec";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "watchexec";
+    repo = "watchexec";
     rev = "v${version}";
-    hash = "sha256-yZGMibh6Qo4gIwj5v0LRt7kdrHGsJ1OG3ACvVKZY7hQ=";
+    hash = "sha256-ldxB1/WgOe1uGfKXkMEtGHIlWiKJgnZz6j/7eCOGD8s=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-O2Y0LT16p8tV02OFFgKwPIPn7+qeACJPtT0VWLSyCVE=";
+  cargoHash = "sha256-LdjJlf4HPN+kZOQKPNSdbYApGBD4Z6tKV9Y0FFKpAf0=";
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -35,7 +35,7 @@ supported_versions = {
 }
 
 # shell versions that we want to put into the gnomeExtensions attr set
-versions_to_merge = ["45", "46", "47"]
+versions_to_merge = ["46", "47", "48"]
 
 # Some type alias to increase readability of complex compound types
 PackageName = str
@@ -351,7 +351,7 @@ def find_collisions(
                 package_name_registry.setdefault(pname, set()).add(uuid)
     return {
         pname: sorted(uuids)
-        for pname, uuids in package_name_registry.items()
+        for pname, uuids in sorted(package_name_registry.items())
         if len(uuids) > 1
     }
 

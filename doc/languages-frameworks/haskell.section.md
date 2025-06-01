@@ -779,7 +779,7 @@ that depend on that library, you may want to use:
 
 ```nix
 haskellPackages.haskell-ci.overrideScope (self: super: {
-  Cabal = self.Cabal_3_14_1_1;
+  Cabal = self.Cabal_3_14_2_0;
 })
 ```
 

@@ -22,10 +22,10 @@
 # I've (@connorbaker) attempted to do that, though I'm unsure of how this will interact with overrides.
 {
   config,
+  _cuda,
   cudaMajorMinorVersion,
   lib,
   newScope,
-  pkgs,
   stdenv,
 }:
 let
@@ -37,40 +37,37 @@ let
     strings
     versions
     ;
-  # MUST be defined outside fix-point (cf. "NAMESET STRICTNESS" above)
-  fixups = import ../development/cuda-modules/fixups { inherit lib; };
-  gpus = import ../development/cuda-modules/gpus.nix;
-  nvccCompatibilities = import ../development/cuda-modules/nvcc-compatibilities.nix;
-  flags = import ../development/cuda-modules/flags.nix {
-    inherit
-      config
-      cudaMajorMinorVersion
-      gpus
-      lib
-      stdenv
-      ;
-  };
 
-  mkVersionedPackageName =
-    name: version: name + "_" + strings.replaceStrings [ "." ] [ "_" ] (versions.majorMinor version);
+  cudaLib = _cuda.lib;
+
+  # Since Jetson capabilities are never built by default, we can check if any of them were requested
+  # through final.config.cudaCapabilities and use that to determine if we should change some manifest versions.
+  # Copied from backendStdenv.
+  jetsonCudaCapabilities = lib.filter (
+    cudaCapability: _cuda.db.cudaCapabilityToInfo.${cudaCapability}.isJetson
+  ) _cuda.db.allSortedCudaCapabilities;
+  hasJetsonCudaCapability =
+    lib.intersectLists jetsonCudaCapabilities (config.cudaCapabilities or [ ]) != [ ];
+  redistSystem = _cuda.lib.getRedistSystem hasJetsonCudaCapability stdenv.hostPlatform.system;
 
   passthruFunction = final: {
-    inherit
-      cudaMajorMinorVersion
-      fixups
-      flags
-      gpus
-      lib
-      nvccCompatibilities
-      pkgs
-      ;
+    # NOTE:
+    # It is important that _cuda is not part of the package set fixed-point. As described by
+    # @SomeoneSerge:
+    # > The layering should be: configuration -> (identifies/is part of) cudaPackages -> (is built using) cudaLib.
+    # > No arrows should point in the reverse directions.
+    # That is to say that cudaLib should only know about package sets and configurations, because it implements
+    # functionality for interpreting configurations, resolving them against data, and constructing package sets.
+    # This decision is driven both by a separation of concerns and by "NAMESET STRICTNESS" (see above).
+    # Also see the comment in `pkgs/top-level/all-packages.nix` about the `_cuda` attribute.
+
+    inherit cudaMajorMinorVersion;
+
+    cudaNamePrefix = "cuda${cudaMajorMinorVersion}";
+
     cudaMajorVersion = versions.major cudaMajorMinorVersion;
     cudaOlder = strings.versionOlder cudaMajorMinorVersion;
     cudaAtLeast = strings.versionAtLeast cudaMajorMinorVersion;
-
-    # NOTE: mkVersionedPackageName is an internal, implementation detail and should not be relied on by outside consumers.
-    # It may be removed in the future.
-    inherit mkVersionedPackageName;
 
     # Maintain a reference to the final cudaPackages.
     # Without this, if we use `final.callPackage` and a package accepts `cudaPackages` as an
@@ -82,8 +79,20 @@ let
       __attrsFailEvaluation = true;
     };
 
-    # TODO(@connorbaker): `cudaFlags` is an alias for `flags` which should be removed in the future.
-    cudaFlags = flags;
+    flags =
+      cudaLib.formatCapabilities {
+        inherit (final.backendStdenv) cudaCapabilities cudaForwardCompat;
+        inherit (_cuda.db) cudaCapabilityToInfo;
+      }
+      # TODO(@connorbaker): Enable the corresponding warnings in `../development/cuda-modules/aliases.nix` after some
+      # time to allow users to migrate to cudaLib and backendStdenv.
+      // {
+        inherit (cudaLib) dropDots;
+        cudaComputeCapabilityToName =
+          cudaCapability: _cuda.db.cudaCapabilityToInfo.${cudaCapability}.archName;
+        dropDot = cudaLib.dropDots;
+        isJetsonBuild = final.backendStdenv.hasJetsonCudaCapability;
+      };
 
     # Loose packages
     # Barring packages which share a home (e.g., cudatoolkit and cudatoolkit-legacy-runfile), new packages
@@ -131,7 +140,10 @@ let
             value = final.callPackage ../development/cuda-modules/tests/opencv-and-torch config;
           };
       in
-      attrsets.listToAttrs (attrsets.mapCartesianProduct builder configs);
+      attrsets.listToAttrs (attrsets.mapCartesianProduct builder configs)
+      // {
+        flags = final.callPackage ../development/cuda-modules/tests/flags.nix { };
+      };
   };
 
   composedExtension = fixedPoints.composeManyExtensions (
@@ -146,10 +158,10 @@ let
       (import ../development/cuda-modules/cuda/extension.nix { inherit cudaMajorMinorVersion lib; })
       (import ../development/cuda-modules/generic-builders/multiplex.nix {
         inherit
+          cudaLib
           cudaMajorMinorVersion
-          flags
           lib
-          mkVersionedPackageName
+          redistSystem
           stdenv
           ;
         pname = "cudnn";
@@ -159,28 +171,25 @@ let
       })
       (import ../development/cuda-modules/cutensor/extension.nix {
         inherit
+          cudaLib
           cudaMajorMinorVersion
-          flags
           lib
-          mkVersionedPackageName
-          stdenv
+          redistSystem
           ;
       })
       (import ../development/cuda-modules/cusparselt/extension.nix {
         inherit
-          cudaMajorMinorVersion
-          flags
+          cudaLib
           lib
-          mkVersionedPackageName
-          stdenv
+          redistSystem
           ;
       })
       (import ../development/cuda-modules/generic-builders/multiplex.nix {
         inherit
+          cudaLib
           cudaMajorMinorVersion
-          flags
           lib
-          mkVersionedPackageName
+          redistSystem
           stdenv
           ;
         pname = "tensorrt";
@@ -193,7 +202,9 @@ let
       })
       (import ../development/cuda-modules/cuda-library-samples/extension.nix { inherit lib stdenv; })
     ]
-    ++ lib.optionals config.allowAliases [ (import ../development/cuda-modules/aliases.nix) ]
+    ++ lib.optionals config.allowAliases [
+      (import ../development/cuda-modules/aliases.nix { inherit lib; })
+    ]
   );
 
   cudaPackages = customisation.makeScope newScope (

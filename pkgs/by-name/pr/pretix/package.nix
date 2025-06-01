@@ -40,13 +40,13 @@ let
   };
 
   pname = "pretix";
-  version = "2025.4.0";
+  version = "2025.5.0";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-K/llv85CWp+V70BiYAR7lT+urGdLbXBhWpCptxUqDrc=";
+    hash = "sha256-vu+7jKXIuNZ4BN2IamdDxGJkraj93eNYUT3sUU2LCAg=";
   };
 
   npmDeps = buildNpmPackage {
@@ -54,7 +54,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-FqwgHmIUfcipVbeXmN4uYPHdmnuaSgOQ9LHgKRf16ys=";
+    npmDepsHash = "sha256-NSBSL6+0ancoPHbvJu4fBxK8EVj06dbltjHqJi2yh5w=";
 
     dontBuild = true;
 
@@ -82,6 +82,7 @@ python.pkgs.buildPythonApplication rec {
     "beautifulsoup4"
     "celery"
     "django-bootstrap3"
+    "django-localflavor"
     "django-phonenumber-field"
     "dnspython"
     "drf_ujson2"
@@ -198,7 +199,6 @@ python.pkgs.buildPythonApplication rec {
       requests
       sentry-sdk
       sepaxml
-      slimit
       stripe
       text-unidecode
       tlds

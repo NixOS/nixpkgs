@@ -74,11 +74,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "inkscape";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchurl {
     url = "https://inkscape.org/release/inkscape-${finalAttrs.version}/source/archive/xz/dl/inkscape-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-dHlqivThSg1dXBzFjT7B6m1IigQwbdbo0ywR8HSNcjI=";
+    sha256 = "sha256-IABTDHkX5SYMnoV1pxVP9pJmQ9IAZIfXFOMEqWPwx4I=";
   };
 
   # Inkscape hits the ARGMAX when linking on macOS. It appears to be

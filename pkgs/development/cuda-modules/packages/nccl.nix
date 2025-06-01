@@ -18,9 +18,9 @@ let
     cuda_cudart
     cuda_nvcc
     cudaAtLeast
-    cudaFlags
     cudaOlder
     cudatoolkit
+    flags
     ;
   # versions 2.26+ with CUDA 11.x error with
   # fatal error: cuda/atomic: No such file or directory
@@ -87,7 +87,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   makeFlags =
     [
       "PREFIX=$(out)"
-      "NVCC_GENCODE=${cudaFlags.gencodeString}"
+      "NVCC_GENCODE=${flags.gencodeString}"
     ]
     ++ lib.optionals (cudaOlder "11.4") [
       "CUDA_HOME=${cudatoolkit}"
@@ -118,7 +118,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     platforms = platforms.linux;
     # NCCL is not supported on Jetson, because it does not use NVLink or PCI-e for inter-GPU communication.
     # https://forums.developer.nvidia.com/t/can-jetson-orin-support-nccl/232845/9
-    badPlatforms = lib.optionals cudaFlags.isJetsonBuild [ "aarch64-linux" ];
+    badPlatforms = lib.optionals flags.isJetsonBuild [ "aarch64-linux" ];
     maintainers = with maintainers; [
       mdaiter
       orivej

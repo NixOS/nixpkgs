@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "GhostNaN";
-    repo = pname;
+    repo = "mpvpaper";
     rev = version;
     sha256 = "sha256-JTlZSl8CZmWx7YTd0T58pwq10L1GKXNfAw0XlIsz7F8=";
   };

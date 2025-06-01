@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
-    repo = pname;
+    repo = "interactsh";
     tag = "v${version}";
     hash = "sha256-28d+ghJ/A/dg6aeypqPF4EAhDp8k3yXLYylxnQR/J+M=";
   };

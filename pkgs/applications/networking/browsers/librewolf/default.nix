@@ -32,6 +32,7 @@ in
       squalus
       dwrege
       fpletz
+      grimmauld
     ];
     platforms = lib.platforms.unix;
     broken = stdenv.buildPlatform.is32bit;

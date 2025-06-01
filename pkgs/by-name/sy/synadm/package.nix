@@ -1,21 +1,26 @@
 {
   lib,
-  python3,
-  fetchPypi,
+  python3Packages,
+  fetchFromGitea,
   nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "synadm";
-  version = "0.47";
-  format = "setuptools";
+  version = "0.48";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Ts/WPonVa+DUvKKa/XbmDDWx3vW17z0orVaIREJfnO0=";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "synadm";
+    repo = "synadm";
+    tag = "v${version}";
+    hash = "sha256-6t4CXXt22/yR0gIxSsM/r+zJQeoKz5q/Ifg8PLNojLI=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = [ python3Packages.setuptools ];
+
+  dependencies = with python3Packages; [
     click
     click-option-group
     dnspython
@@ -41,8 +46,9 @@ python3.pkgs.buildPythonApplication rec {
       conveniently issue commands available via its admin API's
       (element-hq/synapse@master/docs/admin_api)
     '';
-    changelog = "https://github.com/JOJ0/synadm/releases/tag/v${version}";
-    homepage = "https://github.com/JOJ0/synadm";
+    changelog = "https://codeberg.org/synadm/synadm/releases/tag/${src.tag}";
+    downloadPage = "https://codeberg.org/synadm/synadm";
+    homepage = "https://synadm.readthedocs.io/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hexa ];
   };

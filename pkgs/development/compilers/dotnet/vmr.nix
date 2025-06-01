@@ -276,7 +276,6 @@ stdenv.mkDerivation rec {
         substituteInPlace \
           src/runtime/src/installer/managed/Microsoft.NET.HostModel/HostModelUtils.cs \
       ''
-      + lib.optionalString (lib.versionAtLeast version "10") "  src/runtime/src/installer/managed/Microsoft.NET.HostModel/Bundle/Codesign.cs \\\n"
       + lib.optionalString (lib.versionOlder version "10") "  src/sdk/src/Tasks/Microsoft.NET.Build.Tasks/targets/Microsoft.NET.Sdk.targets \\\n"
       + ''
           --replace-fail '/usr/bin/codesign' '${sigtool}/bin/codesign'

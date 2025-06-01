@@ -106,9 +106,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       ryneeverett
-      alyaeanyx
+      pentane
       ryand56
       sigmasquadron
+      ddogfoodd
     ];
     badPlatforms = [
       # output app is called "Electron.app" while derivation expects "FreeTube.app"

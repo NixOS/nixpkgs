@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "liamg";
-    repo = pname;
+    repo = "scout";
     rev = "v${version}";
     hash = "sha256-9SimePyBUXXfT4+ZtciQMaoyXpyKi9D3LTwud8QMJ6w=";
   };
