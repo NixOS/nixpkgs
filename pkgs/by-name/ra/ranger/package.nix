@@ -7,11 +7,13 @@
   highlight,
   w3m,
   imagemagick,
+  ffmpegthumbnailer,
   imagePreviewSupport ? true,
   sixelPreviewSupport ? true,
   neoVimSupport ? true,
   improvedEncodingDetection ? true,
   rightToLeftTextSupport ? false,
+  videoThumbnailSupport ? true,
   gitUpdater,
 }:
 
@@ -42,7 +44,8 @@ python3Packages.buildPythonApplication rec {
     ++ lib.optionals sixelPreviewSupport [ imagemagick ]
     ++ lib.optionals neoVimSupport [ python3Packages.pynvim ]
     ++ lib.optionals improvedEncodingDetection [ python3Packages.chardet ]
-    ++ lib.optionals rightToLeftTextSupport [ python3Packages.python-bidi ];
+    ++ lib.optionals rightToLeftTextSupport [ python3Packages.python-bidi ]
+    ++ lib.optionals videoThumbnailSupport [ ffmpegthumbnailer ];
 
   preConfigure =
     ''
@@ -52,20 +55,27 @@ python3Packages.buildPythonApplication rec {
       ''}
 
       substituteInPlace ranger/__init__.py \
-        --replace "DEFAULT_PAGER = 'less'" "DEFAULT_PAGER = '${lib.getBin less}/bin/less'"
+        --replace-fail "DEFAULT_PAGER = 'less'" "DEFAULT_PAGER = '${lib.getBin less}/bin/less'"
 
       # give file previews out of the box
       substituteInPlace ranger/config/rc.conf \
-        --replace /usr/share $out/share \
-        --replace "#set preview_script ~/.config/ranger/scope.sh" "set preview_script $out/share/doc/ranger/config/scope.sh"
+        --replace-fail /usr/share $out/share \
+        --replace-fail "#set preview_script ~/.config/ranger/scope.sh" "set preview_script $out/share/doc/ranger/config/scope.sh"
     ''
     + lib.optionalString imagePreviewSupport ''
       substituteInPlace ranger/ext/img_display.py \
-        --replace /usr/lib/w3m ${w3m}/libexec/w3m
+        --replace-fail /usr/lib/w3m ${w3m}/libexec/w3m
 
       # give image previews out of the box when building with w3m
       substituteInPlace ranger/config/rc.conf \
-        --replace "set preview_images false" "set preview_images true"
+        --replace-fail "set preview_images false" "set preview_images true"
+    ''
+    + lib.optionalString videoThumbnailSupport ''
+      substituteInPlace ranger/data/scope.sh \
+        --replace-fail "# video/*)" "video/*)" \
+        --replace-fail "#     ffmpegthumbnailer -i \"\''${FILE_PATH}\" -o \"\''${IMAGE_CACHE_PATH}\" -s 0 && exit 6" \
+            '    ffmpegthumbnailer -i "''${FILE_PATH}" -o "''${IMAGE_CACHE_PATH}" -s 0 && exit 6
+                  exit 1;;'
     '';
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
