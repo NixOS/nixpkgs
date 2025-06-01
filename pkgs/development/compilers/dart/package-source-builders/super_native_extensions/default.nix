@@ -17,6 +17,19 @@ let
     pname = "super_native_extensions-rs";
     inherit version src;
 
+    unpackPhase = ''
+      runHook preUnpack
+
+      if [ -d $src/super_native_extensions ]; then
+        cp -r $src/super_native_extensions ${src.name}
+      else
+        cp -r $src ${src.name}
+      fi
+      chmod -R u+w -- "$sourceRoot"
+
+      runHook postUnpack
+    '';
+
     sourceRoot = "${src.name}/rust";
 
     useFetchCargoVendor = true;
@@ -69,8 +82,14 @@ stdenv.mkDerivation {
     runHook preInstall
 
     cp -r "$src" "$out"
-    chmod +rwx $out/cargokit/cmake/cargokit.cmake
-    cp ${fakeCargokitCmake} $out/cargokit/cmake/cargokit.cmake
+    if [ -d $out/super_native_extensions ]; then
+      pushd $out/super_native_extensions
+    else
+      pushd $out
+    fi
+    chmod +rwx cargokit/cmake/cargokit.cmake
+    cp ${fakeCargokitCmake} cargokit/cmake/cargokit.cmake
+    popd
 
     runHook postInstall
   '';
