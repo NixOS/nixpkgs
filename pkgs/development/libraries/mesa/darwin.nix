@@ -64,6 +64,10 @@ stdenv.mkDerivation {
     (lib.mesonEnable "llvm" true)
   ];
 
+  postFixup = ''
+    install_name_tool -add_rpath "$out/lib" "$out/lib/libGL.dylib"
+  '';
+
   passthru = {
     # needed to pass evaluation of bad platforms
     driverLink = throw "driverLink not supported on darwin";
