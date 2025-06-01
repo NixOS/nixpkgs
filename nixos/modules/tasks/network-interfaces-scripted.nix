@@ -55,17 +55,19 @@ let
       bond: (filterAttrs (attrName: attr: elem attrName deprecated && attr != null) bond);
   };
 
-  bondWarnings =
-    let
-      oneBondWarnings =
-        bondName: bond: mapAttrsToList (bondText bondName) (bondDeprecation.filterDeprecated bond);
-      bondText =
-        bondName: optName: _:
-        "${bondName}.${optName} is deprecated, use ${bondName}.driverOptions";
-    in
-    {
-      warnings = flatten (mapAttrsToList oneBondWarnings cfg.bonds);
-    };
+  bondWarnings = {
+    warnings.networking.bonds.deprecatedOptions = lib.mapAttrs (
+      bondName: bond:
+      lib.mergeAttrsList (
+        map (optName: {
+          ${optName} = {
+            condition = (cfg.bonds.${bondName}.${optName} or null) != null;
+            message = "${bondName}.${optName} is deprecated, use ${bondName}.driverOptions";
+          };
+        }) bondDeprecation.deprecated
+      )
+    ) cfg.bonds;
+  };
 
   normalConfig = {
     systemd.network.links =
