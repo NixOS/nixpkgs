@@ -24009,6 +24009,12 @@
     githubId = 52673095;
     name = "Syed Ahkam";
   };
+  sylonin = {
+    email = "syl@sperg.net";
+    github = "Sylonin";
+    githubId = 89575562;
+    name = "Sylonin";
+  };
   symphorien = {
     email = "symphorien_nixpkgs@xlumurb.eu";
     matrix = "@symphorien:xlumurb.eu";
