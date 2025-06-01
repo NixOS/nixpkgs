@@ -5,6 +5,7 @@
   fetchFromGitHub,
 
   # build-system
+  setuptools,
   cython,
   versioneer,
 
@@ -46,6 +47,7 @@ buildPythonPackage rec {
   };
 
   build-system = [
+    setuptools
     cython
     versioneer
   ];
