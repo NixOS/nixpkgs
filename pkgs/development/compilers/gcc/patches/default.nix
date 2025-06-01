@@ -185,20 +185,13 @@ in
     ];
     "14" = [
       (fetchpatch {
+        # There are no upstream release tags nor a static branch for 14.3.0 in https://github.com/iains/gcc-14-branch.
+        # aa4cd614456de65ee3417acb83c6cff0640144e9 is the merge base of https://github.com/iains/gcc-14-branch/tree/gcc-14-3-darwin-pre-0 and https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-14.3.0
+        # 3e1d48d240f4aa5223c701b5c231c66f66ab1126 is the newest commit of https://github.com/iains/gcc-14-branch/tree/gcc-14-3-darwin-pre-0
         name = "gcc-14-darwin-aarch64-support.patch";
-        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/41fdb9d5ec21fc8165cd4bee89bd23d0c90572ee/gcc/gcc-14.2.0-r2.diff";
-        # The patch is based on 14.2.0, but we use a GCC snapshot. We
-        # exclude the files with conflicts and apply our own merged patch
-        # to avoid vendoring the entire huge patch in‐tree.
-        excludes = [
-          "gcc/config/aarch64/aarch64-tune.md"
-          "gcc/config/darwin.h"
-          "libgcc/config.host"
-          "libgcc/config/t-darwin-min-11"
-        ];
-        hash = "sha256-E4zEKm4tMhovOJKc1/FXZCLQvA+Jt5SC0O2C6SEvZjI=";
+        url = "https://github.com/iains/gcc-14-branch/compare/aa4cd614456de65ee3417acb83c6cff0640144e9..3e1d48d240f4aa5223c701b5c231c66f66ab1126.diff";
+        hash = "sha256-BSTSYnkBJBEm++mGerVVyaCUC4dUyXq0N1tqbk25bO4=";
       })
-      ./14/fixup-gcc-14-darwin-aarch64-support.patch
     ];
     "13" = [
       (fetchpatch {
