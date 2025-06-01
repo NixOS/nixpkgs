@@ -152,16 +152,29 @@ Changing the `GradleUtils.getExecutable` function signature is a delibarate choi
  import 'package:process/process.dart';
  import 'package:unified_analytics/unified_analytics.dart';
  
-@@ -154,9 +155,16 @@ class GradleUtils {
+@@ -154,9 +155,29 @@ class GradleUtils {
    final Logger _logger;
    final OperatingSystemUtils _operatingSystemUtils;
  
-+  List<String> get _requiredArguments => <String>[
-+    '--project-cache-dir=${join(switch (globals.platform.environment['XDG_CACHE_HOME']) {
-+      final String cacheHome => cacheHome,
-+      _ => join(globals.fsUtils.homeDirPath ?? throwToolExit('No cache directory has been specified.'), '.cache'),
-+    }, 'flutter', 'nix-flutter-tools-gradle', globals.flutterVersion.engineRevision.substring(0, 10), 'cache')}',
-+  ];
++  List<String> get _requiredArguments {
++    final String cacheDir = join(
++      switch (globals.platform.environment['XDG_CACHE_HOME']) {
++        final String cacheHome => cacheHome,
++        _ => join(
++          globals.fsUtils.homeDirPath ?? throwToolExit('No cache directory has been specified.'),
++          '.cache',
++        ),
++      },
++      'flutter',
++      'nix-flutter-tools-gradle',
++      globals.flutterVersion.engineRevision.substring(0, 10),
++    );
++
++    return <String>[
++      '--project-cache-dir=${join(cacheDir, 'cache')}',
++      '-Pkotlin.project.persistent.dir=${join(cacheDir, 'kotlin')}',
++    ];
++  }
 +
    /// Gets the Gradle executable path and prepares the Gradle project.
    /// This is the `gradlew` or `gradlew.bat` script in the `android/` directory.
@@ -170,7 +183,7 @@ Changing the `GradleUtils.getExecutable` function signature is a delibarate choi
      final Directory androidDir = project.android.hostAppGradleRoot;
      injectGradleWrapperIfNeeded(androidDir);
  
-@@ -167,7 +175,7 @@ class GradleUtils {
+@@ -167,7 +188,7 @@ class GradleUtils {
        // If the Gradle executable doesn't have execute permission,
        // then attempt to set it.
        _operatingSystemUtils.makeExecutable(gradle);
