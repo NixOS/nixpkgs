@@ -75,6 +75,8 @@ stdenv.mkDerivation rec {
       src/vlock/Makefile.am
   '';
 
+  enableParallelBuilding = true;
+
   postInstall = ''
     for i in $out/bin/unicode_{start,stop}; do
       substituteInPlace "$i" \
