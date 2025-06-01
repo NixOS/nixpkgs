@@ -205,6 +205,7 @@ stdenv.mkDerivation {
   # Keep build-ids so drivers can use them for caching, etc.
   # Also some drivers segfault without this.
   separateDebugInfo = true;
+  __structuredAttrs = true;
 
   # Needed to discover llvm-config for cross
   preConfigure = ''
