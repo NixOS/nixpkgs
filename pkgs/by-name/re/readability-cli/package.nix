@@ -3,6 +3,7 @@
   buildNpmPackage,
   fetchFromGitLab,
   installShellFiles,
+  nix-update-script,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -34,6 +35,8 @@ buildNpmPackage (finalAttrs: {
       --bash <(SHELL=bash $out/bin/readable --completion) \
       --zsh <(SHELL=zsh $out/bin/readable --completion)
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Firefox Reader Mode in your terminal - get useful text from a web page using Mozilla's Readability library";
