@@ -17,7 +17,8 @@ let
     # Upstream only works with a fixed version of cargo-pgrx for each release,
     # so we're pinning it here to avoid future incompatibility.
     cargo-pgrx = cargo-pgrx_0_14_1;
-    rustPlatform = rustPackages_1_87.rustPlatform;
+
+    inherit (rustPackages_1_87) rustPlatform;
   };
 
   # Follow upstream and use rust-jemalloc-sys on linux aarch64 and x86_64
@@ -88,7 +89,6 @@ buildPgrxExtension' (finalAttrs: {
     updateScript = nix-update-script { };
 
     tests.extension = postgresqlTestExtension {
-      # buildPgrxExtension does not support overlay-like functions (finalAttrs)
       inherit (finalAttrs) finalPackage;
       withPackages = [ "pgvector" ]; # vectorchord depends on pgvector at runtime
       postgresqlExtraSettings = ''
