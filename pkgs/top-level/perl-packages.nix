@@ -2479,11 +2479,6 @@ with self;
     propagatedBuildInputs = [ BioPerl ];
     htslibStore = toString pkgs.htslib;
 
-    postPatch = ''
-      # -Wl,-rpath not recognized : replaced by -rpath=
-      sed -i 's/Wl,-rpath,/rpath=/' Build.PL
-    '';
-
     preBuild = ''
       export HTSLIB_DIR=${pkgs.htslib}
     '';
