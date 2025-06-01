@@ -47,5 +47,6 @@ self: super:
     self.callPackage ../misc/haskell/hercules-ci-optparse-applicative.nix
       { };
 
+  simplex-chat = self.callPackage ../misc/haskell/simplex-chat.nix {};
 }
 // lib.mapAttrs (_name: path: self.callPackage path { }) pathsByName
