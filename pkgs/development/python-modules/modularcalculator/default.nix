@@ -5,7 +5,7 @@
   fetchpatch,
   setuptools,
   strct,
-  pytestCheckHook,
+  python,
   pyyaml,
   scipy,
 }:
@@ -31,6 +31,10 @@ buildPythonPackage rec {
     scipy
     strct
   ];
+
+  checkPhase = ''
+    PYTHONPATH=$PYTHONPATH:$PWD ${python.interpreter} tests/tests.py
+  '';
 
   meta = {
     description = "Powerful modular calculator engine";
