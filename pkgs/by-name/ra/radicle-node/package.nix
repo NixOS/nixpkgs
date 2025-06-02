@@ -25,7 +25,13 @@ rustPlatform.buildRustPackage rec {
   src = fetchgit {
     url = "https://seed.radicle.xyz/z3gqcJUoA1n9HaHKufZs5FCSGazv5.git";
     rev = "refs/namespaces/z6MkireRatUThvd3qzfKht1S44wpm4FEWSSa4PRMTSQZ3voM/refs/tags/v${version}";
-    hash = "sha256-RB8yDfttVTkZmk01ubLkwrwD6IYo3Ehe7bPosJzoQk4=";
+    hash = "sha256-AWgLhL6GslE3r2FcZu2imV5ZtEKlUD+a4C5waRGO2lM=";
+    leaveDotGit = true;
+    postFetch = ''
+      git -C $out rev-parse HEAD > $out/.git_head
+      git -C $out log -1 --pretty=%ct HEAD > $out/.git_time
+      rm -rf $out/.git
+    '';
   };
   useFetchCargoVendor = true;
   cargoHash = "sha256-/6VlRwWtJfHf6tXD2HJUTbThwTYeZFTJqtaxclrm3+c=";
@@ -36,6 +42,11 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
   ];
   nativeCheckInputs = [ git ];
+
+  preBuild = ''
+    export GIT_HEAD=$(<$src/.git_head)
+    export SOURCE_DATE_EPOCH=$(<$src/.git_time)
+  '';
 
   # tests regularly time out on aarch64
   doCheck = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86;
