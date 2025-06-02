@@ -215,27 +215,6 @@ with haskellLib;
     disableCabalFlag "auto" super.ghc-lib-parser-ex
   );
 
-  ghcide = appendPatches [
-    # Support ghc == 9.10.2
-    (pkgs.fetchpatch2 {
-      name = "ghcide-ghc-9.10.2.patch";
-      url = "https://github.com/haskell/haskell-language-server/commit/fb17921128bd56ba74872cae9539767e63b9fd79.patch";
-      sha256 = "161kcpfnv3q0n1fgsc0rx2v1rqf16g3pnjqabayym47yg2kp1qiv";
-      stripLen = 1;
-    })
-    # Support hie-bios >= 0.15 (unreleased to hackage)
-    (pkgs.fetchpatch2 {
-      name = "ghcide-hie-bios-0.15.patch";
-      url = "https://github.com/haskell/haskell-language-server/commit/eb06c6f6ad7d7fcc29ff4b62f679f428897147f8.patch";
-      sha256 = "0im3mf71chsgk787lz942c8zlmq00gfsd5rclprlsncg0zli1whq";
-      includes = [
-        "ghcide.cabal"
-        "**/Diagnostics.hs"
-      ];
-      stripLen = 1;
-    })
-  ] super.ghcide;
-
   ###########################################
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
@@ -481,15 +460,6 @@ with haskellLib;
 
   # https://github.com/schuelermine/ret/issues/3
   ret = doJailbreak super.ret; # base < 4.19
-
-  # 2025-02-13: This part from https://github.com/haskell/ThreadScope/pull/130 seems to be unreleased:
-  threadscope = appendPatches [
-    (fetchpatch {
-      name = "import-monad.patch";
-      url = "https://github.com/haskell/ThreadScope/commit/8846508e9769a8dfd82b3ff66259ba4d58255932.patch";
-      sha256 = "sha256-wBqDJWmqvmU1sFuw/ZlxHOb8xPhZO2RBuyYFP9bJCVI=";
-    })
-  ] super.threadscope;
 
   # The latest release on hackage has an upper bound on containers which
   # breaks the build, though it works with the version of containers present
@@ -2750,20 +2720,6 @@ with haskellLib;
   tasty-autocollect = dontCheck super.tasty-autocollect;
 
   postgres-websockets = lib.pipe super.postgres-websockets [
-    (appendPatches [
-      (pkgs.fetchpatch {
-        # Needed for the patch below to apply.
-        name = "remove-protolude.patch";
-        url = "https://github.com/diogob/postgres-websockets/commit/8027c0f6dc0c5fe6bab4e3e7730db8653b2c51cc.patch";
-        hash = "sha256-gefVUR+tJLrmpwnc1hf4GjLbGVe1GwNmLn5YU7qW/HY=";
-      })
-      (pkgs.fetchpatch {
-        # Can be removed with the next update.
-        name = "fix-connection-closing-when-no-write-mode-is-present.patch";
-        url = "https://github.com/diogob/postgres-websockets/commit/577a2f0bf4750c682c2c3c63e37d90e0ec6f95eb.patch";
-        hash = "sha256-7PCVbfNiJhWfmQrEjaVqbmCL5jffhofOto1RF2FVYJo=";
-      })
-    ])
     (addTestToolDepends [
       pkgs.postgresql
       pkgs.postgresqlTestHook
