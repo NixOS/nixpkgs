@@ -20,5 +20,14 @@ let
 in
 pkgs.symlinkJoin {
   name = "nixpkgs-lib-tests";
-  paths = map testWithNix nixVersions;
+  paths = map testWithNix nixVersions ++ [
+    (import ./maintainers.nix {
+      inherit pkgs;
+      lib = import ../.;
+    })
+    (import ./teams.nix {
+      inherit pkgs;
+      lib = import ../.;
+    })
+  ];
 }
