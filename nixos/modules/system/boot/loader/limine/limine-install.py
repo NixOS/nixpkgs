@@ -6,6 +6,7 @@ from typing import Any, Callable, Dict, List, Optional, Tuple
 import datetime
 import hashlib
 import json
+import ctypes
 import os
 import psutil
 import re
@@ -19,6 +20,7 @@ import textwrap
 limine_dir = None
 can_use_direct_paths = False
 install_config = json.load(open('@configPath@', 'r'))
+libc = ctypes.CDLL("libc.so.6")
 
 
 def config(*path: List[str]) -> Optional[Any]:
@@ -232,7 +234,7 @@ def option_from_config(name: str, config_path: List[str], conversion: Callable[[
     return ''
 
 
-def main():
+def install_bootloader() -> None:
     global limine_dir
 
     boot_fs = None
@@ -483,4 +485,17 @@ def main():
         if not paths[path]:
             os.remove(path)
 
-main()
+def main() -> None:
+    try:
+        install_bootloader()
+    finally:
+        # Since fat32 provides little recovery facilities after a crash,
+        # it can leave the system in an unbootable state, when a crash/outage
+        # happens shortly after an update. To decrease the likelihood of this
+        # event sync the efi filesystem after each update.
+        rc = libc.syncfs(os.open(f"{config('efiMountPoint')}", os.O_RDONLY))
+        if rc != 0:
+            print(f"could not sync {config('efiMountPoint')}: {os.strerror(rc)}", file=sys.stderr)
+
+if __name__ == '__main__':
+    main()
