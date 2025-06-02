@@ -291,6 +291,7 @@ stdenv.mkDerivation (finalAttrs: {
       ulrikstrid
       emaryn
       maeve-oake
+      leleuvilela
     ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
