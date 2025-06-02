@@ -59,6 +59,11 @@ python3Packages.buildPythonApplication rec {
     matplotlib
     openai
     markitdown
+    kokoro
+    loguru
+    torch
+    transformers
+    misaki
   ];
 
   optional-dependencies = {
