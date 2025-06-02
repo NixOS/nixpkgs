@@ -2368,6 +2368,8 @@ self: super: with self; {
 
   cfgv = callPackage ../development/python-modules/cfgv { };
 
+  cflib = callPackage ../development/python-modules/cflib { };
+
   cfn-flip = callPackage ../development/python-modules/cfn-flip { };
 
   cfn-lint = callPackage ../development/python-modules/cfn-lint { };
@@ -8042,6 +8044,10 @@ self: super: with self; {
 
   libtorrent-rasterbar =
     (toPythonModule (pkgs.libtorrent-rasterbar.override { python3 = python; })).python;
+
+  libusb-package = callPackage ../development/python-modules/libusb-package {
+    inherit (pkgs) libusb1;
+  };
 
   libusb1 = callPackage ../development/python-modules/libusb1 { inherit (pkgs) libusb1; };
 
