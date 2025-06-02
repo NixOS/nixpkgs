@@ -9,6 +9,7 @@
   opentelemetry-sdk,
   orjson,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-httpserver,
   pytestCheckHook,
   pythonOlder,
@@ -33,11 +34,6 @@ buildPythonPackage rec {
     hash = "sha256-ZCzG7a/SWvUDWiIWwzVfj4JG/w7XUa25yKuuR53XCEQ=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov-report=term-missing --cov=elastic_transport" ""
-  '';
-
   build-system = [ setuptools ];
 
   propagatedBuildInputs = [
@@ -52,6 +48,7 @@ buildPythonPackage rec {
     opentelemetry-sdk
     orjson
     pytest-asyncio
+    pytest-cov-stub
     pytest-httpserver
     pytestCheckHook
     requests
