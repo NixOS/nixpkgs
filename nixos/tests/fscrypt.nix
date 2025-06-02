@@ -47,7 +47,8 @@
 
       with subtest("File should be readable again as alice"):
         login_as_alice()
-        machine.succeed("cat /home/alice/world")
+        assert "Unlocked: Yes" in machine.succeed("fscrypt status /home/alice")
+        assert "hello" in machine.succeed("cat /home/alice/world")
         logout()
     '';
 }
