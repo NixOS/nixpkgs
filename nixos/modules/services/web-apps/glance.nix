@@ -103,7 +103,59 @@ in
         attribute set with this format: `{ _secret = "/path/to/secret"; }`.
         See the example in `services.glance.settings.pages` at the weather widget
         with a location secret to get a better picture of this.
+
+        Alternatively, you can use a single file with environment variables,
+        see `services.glance.environmentFile`.
       '';
+    };
+
+    environmentFile = mkOption {
+      type = types.nullOr types.path;
+      description =
+        let
+          singleQuotes = "''";
+        in
+        ''
+          Path to an environment file as defined in {manpage}`systemd.exec(5)`.
+
+          See upstream documentation
+          <https://github.com/glanceapp/glance/blob/main/docs/configuration.md#environment-variables>.
+
+          Example content of the file:
+          ```
+          TIMEZONE=Europe/Paris
+          ```
+
+          Example `services.glance.settings.pages` configuration:
+          ```nix
+            [
+              {
+                name = "Home";
+                columns = [
+                  {
+                    size = "full";
+                    widgets = [
+                      {
+                        type = "clock";
+                        timezone = "\''${TIMEZONE}";
+                        label = "Local Time";
+                      }
+                    ];
+                  }
+                ];
+              }
+            ];
+          ```
+
+          Note that when using Glance's `''${ENV_VAR}` syntax in Nix,
+          you need to escape it as follows: use `\''${ENV_VAR}` in `"` strings
+          and `${singleQuotes}''${ENV_VAR}` in `${singleQuotes}` strings.
+
+          Alternatively, you can put each secret in it's own file,
+          see `services.glance.settings`.
+        '';
+      default = "/dev/null";
+      example = "/var/lib/secrets/glance";
     };
 
     openFirewall = mkOption {
@@ -157,6 +209,7 @@ in
           '';
         ExecStart = "${getExe cfg.package} --config ${mergedSettingsFile}";
         WorkingDirectory = "/var/lib/glance";
+        EnvironmentFile = cfg.environmentFile;
         StateDirectory = "glance";
         RuntimeDirectory = "glance";
         RuntimeDirectoryMode = "0755";
