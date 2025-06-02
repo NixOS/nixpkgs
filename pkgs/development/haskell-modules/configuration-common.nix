@@ -1615,17 +1615,6 @@ with haskellLib;
     unmarkBroken
   ];
 
-  # Tests disabled because they assume to run in the whole jsaddle repo and not the hackage tarball of jsaddle-warp.
-  jsaddle-warp =
-    appendPatch
-      # https://github.com/ghcjs/jsaddle/pull/158
-      (fetchpatch {
-        url = "https://github.com/ghcjs/jsaddle/commit/3a5648dd2e326c589170b58af711c72ab2a10a84.patch";
-        relative = "jsaddle-warp";
-        sha256 = "sha256-Eqm/oFRvQsAWtmd/Q1m25lOlcYB+j4bJ27t43CzZpHo=";
-      })
-      (dontCheck super.jsaddle-warp);
-
   # https://github.com/ghcjs/jsaddle/issues/151
   jsaddle-webkit2gtk =
     overrideCabal

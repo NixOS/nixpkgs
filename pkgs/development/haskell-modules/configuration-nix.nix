@@ -1666,6 +1666,8 @@ builtins.intersectAttrs super {
     (overrideCabal { __onlyPropagateKnownPkgConfigModules = true; })
   ];
 
+  jsaddle-warp = addTestToolDepends [ pkgs.nodejs ] super.jsaddle-warp;
+
   # Makes the mpi-hs package respect the choice of mpi implementation in Nixpkgs.
   # Also adds required test dependencies for checks to pass
   mpi-hs =
