@@ -167,8 +167,10 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${cudaPackages.cudatoolkit}")
     ];
 
-  postFixup = ''
-    wrapProgram $out/bin/wivrn-dashboard \
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    wrapQtApp "$out/bin/wivrn-dashboard" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
