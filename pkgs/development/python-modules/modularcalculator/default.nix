@@ -32,6 +32,10 @@ buildPythonPackage rec {
     strct
   ];
 
+  postPatch = ''
+    sed -i 's/unittest.main(exit=False)/unittest.main(exit=True)/g' tests/testrunner.py
+  '';
+
   checkPhase = ''
     PYTHONPATH=$PYTHONPATH:$PWD ${python.interpreter} tests/tests.py
   '';
