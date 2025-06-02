@@ -19,13 +19,13 @@
 #
 # Debian builds with std.h (systemtap).
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lttng-ust";
   version = "2.13.9";
 
   src = fetchurl {
-    url = "https://lttng.org/files/lttng-ust/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-KtbWmlSh2STBikqnojPbEE48wzK83SQOGWv3rb7T9xI=";
+    url = "https://lttng.org/files/lttng-ust/lttng-ust-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-KtbWmlSh2STBikqnojPbEE48wzK83SQOGWv3rb7T9xI=";
   };
 
   outputs = [
@@ -36,6 +36,9 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config ];
+
+  propagatedBuildInputs = [ liburcu ];
+
   buildInputs = [
     numactl
     python3
@@ -49,21 +52,21 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-examples" ];
 
-  propagatedBuildInputs = [ liburcu ];
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "LTTng Userspace Tracer libraries";
     mainProgram = "lttng-gen-tp";
     homepage = "https://lttng.org/";
-    license = with licenses; [
+    changelog = "https://github.com/lttng/lttng-ust/blob/v${finalAttrs.version}/ChangeLog";
+    license = with lib.licenses; [
       lgpl21Only
       gpl2Only
       mit
     ];
-    platforms = lib.intersectLists platforms.linux liburcu.meta.platforms;
-    maintainers = [ maintainers.bjornfor ];
+    platforms = lib.intersectLists lib.platforms.linux liburcu.meta.platforms;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
-
-}
+})
