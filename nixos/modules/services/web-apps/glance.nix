@@ -100,10 +100,8 @@ in
         for more.
 
         Settings containing secret data should be set to an
-        attribute set containing the attribute
-        <literal>_secret</literal> - a string pointing to a file
-        containing the value the option should be set to. See the
-        example in `services.glance.settings.pages` at the weather widget
+        attribute set with this format: `{ _secret = "/path/to/secret"; }`.
+        See the example in `services.glance.settings.pages` at the weather widget
         with a location secret to get a better picture of this.
       '';
     };
