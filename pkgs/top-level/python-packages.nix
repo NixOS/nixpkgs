@@ -4205,6 +4205,8 @@ self: super: with self; {
 
   dramatiq = callPackage ../development/python-modules/dramatiq { };
 
+  dramatiq-abort = callPackage ../development/python-modules/dramatiq-abort { };
+
   drawille = callPackage ../development/python-modules/drawille { };
 
   drawilleplot = callPackage ../development/python-modules/drawilleplot { };
