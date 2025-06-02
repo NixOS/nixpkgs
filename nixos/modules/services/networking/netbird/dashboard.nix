@@ -102,7 +102,7 @@ in
           # special options as its public anyway
           # As far as I know leaking this secret is just
           # an information leak as one can fetch some basic app
-          # informations from the IDP
+          # information from the IDP
           # To actually do something one still needs to have login
           # data and this secret so this being public will not
           # suffice for anything just decreasing security

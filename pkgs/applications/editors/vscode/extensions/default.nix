@@ -1240,8 +1240,8 @@ let
         mktplcRef = {
           name = "dart-code";
           publisher = "dart-code";
-          version = "3.110.0";
-          hash = "sha256-YLdhL5xNj8sidZUzMVZgOK6zTXgQnWdKWRrDg0on90s=";
+          version = "3.112.0";
+          hash = "sha256-nnEEKijl5ZdsHyBAWCL+MucjNGIuup75xSJaVzNawrs=";
         };
 
         meta.license = lib.licenses.mit;
@@ -1251,8 +1251,8 @@ let
         mktplcRef = {
           name = "flutter";
           publisher = "dart-code";
-          version = "3.110.0";
-          hash = "sha256-Zi+q56XcHZGUKgF3TNpaYSwwdqLT8Q1fxf8dFVAEuQY=";
+          version = "3.112.0";
+          hash = "sha256-S+srv0zUCobM3IPXOME5oT0xdXdPmMHSs7rwNTBcnhk=";
         };
 
         meta.license = lib.licenses.mit;
@@ -5709,7 +5709,7 @@ let
   };
 
   # TODO: add overrides overlay, so that we can have a generated.nix
-  # then apply extension specific modifcations to packages.
+  # then apply extension specific modifications to packages.
 
   # overlays will be applied left to right, overrides should come after aliases.
   overlays = lib.optionals config.allowAliases [

@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # instead of runnning git during the build process
+    # instead of running git during the build process
     # use the .COMMIT file generated in the fetcher FOD
     ./git-rev-parse.patch
   ];
