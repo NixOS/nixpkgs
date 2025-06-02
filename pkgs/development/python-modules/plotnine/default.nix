@@ -17,6 +17,7 @@
   # tests
   geopandas,
   pytestCheckHook,
+  pytest-cov-stub,
   scikit-misc,
 }:
 
@@ -32,11 +33,6 @@ buildPythonPackage rec {
     hash = "sha256-3ImNLmZ8RhhqRGv/FtdjbHmdOtgQC7hjUsViEQYE8Ao=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=plotnine --cov-report=xml" ""
-  '';
-
   build-system = [ setuptools-scm ];
 
   dependencies = [
@@ -51,6 +47,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     geopandas
     pytestCheckHook
+    pytest-cov-stub
     scikit-misc
   ];
 
