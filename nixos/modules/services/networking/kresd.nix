@@ -144,7 +144,7 @@ in
       group = "knot-resolver";
       description = "Knot-resolver daemon user";
     };
-    users.groups.knot-resolver.gid = null;
+    users.groups.knot-resolver = { };
 
     systemd.packages = [ cfg.package ]; # the units are patched inside the package a bit
 
