@@ -4,7 +4,7 @@
   stdenv,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "passh";
   version = "2020-03-18";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp ${finalAttrs.pname} $out/bin
+    cp passh $out/bin
   '';
 
   meta = with lib; {
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Sshpass alternative for non-interactive ssh auth";
     license = licenses.gpl3;
     maintainers = [ maintainers.lovesegfault ];
-    mainProgram = finalAttrs.pname;
+    mainProgram = "passh";
     platforms = platforms.unix;
   };
-})
+}
