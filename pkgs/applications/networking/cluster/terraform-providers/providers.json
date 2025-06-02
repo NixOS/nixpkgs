@@ -1111,11 +1111,11 @@
     "vendorHash": "sha256-xo0alLK3fccbKRG5bN1G7orDsP47I3ySAzpZ9O0f2Fg="
   },
   "rootly": {
-    "hash": "sha256-SwZm4XCQUf3TQ6m77fAnhHMoW6ckpO5XSnjpEYuNyec=",
+    "hash": "sha256-2TVqXQYiCMsMQJtZMWtYiPbeOOsPck5Hpu6cmo9ZaIM=",
     "homepage": "https://registry.terraform.io/providers/rootlyhq/rootly",
     "owner": "rootlyhq",
     "repo": "terraform-provider-rootly",
-    "rev": "v2.27.1",
+    "rev": "v2.27.2",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-KezwDRmQQj0MnmsVlrX1OhNG6oMgw8fCxX5VFGdUynw="
   },
