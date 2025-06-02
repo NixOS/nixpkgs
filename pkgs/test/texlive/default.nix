@@ -625,7 +625,7 @@ rec {
         "outocp"
         "pmxab"
 
-        # GUI scripts that accept no argument or crash without a graphics server; please test manualy
+        # GUI scripts that accept no argument or crash without a graphics server; please test manually
         "epspdftk"
         "texdoctk"
         "tlshell"

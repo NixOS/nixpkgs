@@ -133,7 +133,7 @@ in
 
       services.yggdrasil.settings.Listen =
         let
-          # By default linux dynamically alocates ports in range 32768..60999
+          # By default linux dynamically allocates ports in range 32768..60999
           # `sysctl net.ipv4.ip_local_port_range`
           # See: https://xkcd.com/221/
           prot_port = {
