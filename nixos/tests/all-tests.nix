@@ -410,8 +410,9 @@ in
   drawterm = discoverTests (import ./drawterm.nix);
   drbd = runTest ./drbd.nix;
   druid = handleTestOn [ "x86_64-linux" ] ./druid { };
-  drbd-driver = runTest ./drbd-driver.nix;
-  dublin-traceroute = runTest ./dublin-traceroute.nix;
+  drupal = runTest ./drupal.nix;
+  drbd-driver = handleTest ./drbd-driver.nix { };
+  dublin-traceroute = handleTest ./dublin-traceroute.nix { };
   earlyoom = handleTestOn [ "x86_64-linux" ] ./earlyoom.nix { };
   early-mount-options = handleTest ./early-mount-options.nix { };
   ec2-config = (handleTestOn [ "x86_64-linux" ] ./ec2.nix { }).boot-ec2-config or { };
