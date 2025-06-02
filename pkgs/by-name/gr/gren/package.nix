@@ -59,7 +59,7 @@ stdenv.mkDerivation {
     cp -r $src/node_modules/. $out/node_modules
 
     mkdir -p $out/bin
-    ln -s $out/node_modules/.bin/* $out/bin
+    ln -s $out/node_modules/.bin/gren $out/bin
 
     wrapProgram $out/bin/gren \
       --set GREN_BIN ${lib.makeBinPath [ backendPkg ]}/gren
