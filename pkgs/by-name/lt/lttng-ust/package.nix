@@ -1,12 +1,16 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  autoreconfHook,
   pkg-config,
+  asciidoc,
+  xmlto,
   liburcu,
   numactl,
   python3,
   testers,
+  nix-update-script,
 }:
 
 # NOTE:
@@ -24,9 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "lttng-ust";
   version = "2.13.9";
 
-  src = fetchurl {
-    url = "https://lttng.org/files/lttng-ust/lttng-ust-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-KtbWmlSh2STBikqnojPbEE48wzK83SQOGWv3rb7T9xI=";
+  src = fetchFromGitHub {
+    owner = "lttng";
+    repo = "lttng-ust";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-iwMhXUH569ey16C8F4HzU1ebZbn1oyDWOGpSIIokuGA=";
   };
 
   outputs = [
@@ -36,7 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
     "devdoc"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    asciidoc
+    xmlto
+  ];
 
   propagatedBuildInputs = [ liburcu ];
 
@@ -44,6 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
     numactl
     python3
   ];
+
+  postPatch = ''
+    # to build the manpages, xmlto uses xmllint which tries to fetch a dtd schema
+    # from the internet - just don't validate to work around this
+    substituteInPlace doc/man/Makefile.am \
+      --replace-fail '$(XMLTO)' '$(XMLTO) --skip-validation'
+  '';
 
   preConfigure = ''
     patchShebangs .
@@ -59,6 +77,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "v(.+)"
+      ];
+    };
   };
 
   meta = {
