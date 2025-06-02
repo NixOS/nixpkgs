@@ -339,9 +339,12 @@ def install_bootloader() -> None:
 
     config_file += config('extraEntries')
 
-    with open(config_file_path, 'w') as file:
+    with open(f"{config_file_path}.tmp", 'w') as file:
         file.truncate()
         file.write(config_file.strip())
+        file.flush()
+        os.fsync(file.fileno())
+    os.rename(f"{config_file_path}.tmp", config_file_path)
 
     paths[config_file_path] = True
 
