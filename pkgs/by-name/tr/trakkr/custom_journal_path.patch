@@ -1,0 +1,28 @@
+diff --git a/electron/events/journal.js b/electron/events/journal.js
+index 28d9481..9a7e510 100644
+--- a/electron/events/journal.js
++++ b/electron/events/journal.js
+@@ -5,12 +5,17 @@ const ships = require('../data/json/ships.json');
+ let currentWatcher = null;
+
+ function readJournalDir() {
+-    return path.join(
+-        process.env.HOME || process.env.USERPROFILE || '',
+-        'Saved Games',
+-        'Frontier Developments',
+-        'Elite Dangerous'
+-    );
++    if (process.env.TRAKKR_CUSTOM_JOURNAL_LOCATION) {
++        return process.env.TRAKKR_CUSTOM_JOURNAL_LOCATION;
++    }
++    else {
++        return path.join(
++            process.env.HOME || process.env.USERPROFILE || '',
++            'Saved Games',
++            'Frontier Developments',
++            'Elite Dangerous'
++        );
++    }
+ }
+
+ function sortJournal() {
