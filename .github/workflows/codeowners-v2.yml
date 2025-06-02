@@ -67,7 +67,7 @@ jobs:
         run: nix-build trusted/ci -A codeownersValidator
 
       - uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
-        if: vars.OWNER_RO_APP_ID
+        if: github.event_name == 'pull_request_target' && vars.OWNER_RO_APP_ID
         id: app-token
         with:
           app-id: ${{ vars.OWNER_RO_APP_ID }}
@@ -103,7 +103,7 @@ jobs:
         run: nix-build trusted/ci -A requestReviews
 
       - uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
-        if: vars.OWNER_APP_ID
+        if: github.event_name == 'pull_request_target' && vars.OWNER_APP_ID
         id: app-token
         with:
           app-id: ${{ vars.OWNER_APP_ID }}
