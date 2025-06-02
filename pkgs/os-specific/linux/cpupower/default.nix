@@ -37,6 +37,7 @@ stdenv.mkDerivation {
     man = "share/man";
     include = "include";
     lib = "lib";
+    libexec = "libexec";
     locale = "share/locale";
     doc = "share/doc/cpupower";
     conf = "etc";
