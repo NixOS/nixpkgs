@@ -1,16 +1,19 @@
 {
   lib,
   stdenv,
-  fetchzip,
+  fetchFromGitea,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   name = "updfparser";
-  version = "unstable-2024-03-24";
+  version = "0-unstable-2024-03-24";
   rev = "6060d123441a06df699eb275ae5ffdd50409b8f3";
 
-  src = fetchzip {
-    url = "https://forge.soutade.fr/soutade/updfparser/archive/${rev}.tar.gz";
+  src = fetchFromGitea {
+    inherit (finalAttrs) rev;
+    domain = "forge.soutade.fr";
+    owner = "soutade";
+    repo = "updfparser";
     hash = "sha256-HD73WGZ4e/3T7vQmwU/lRADtvsInFG62uqvJmF773Rk=";
   };
 
@@ -34,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ autumnal ];
     platforms = platforms.all;
   };
-}
+})
