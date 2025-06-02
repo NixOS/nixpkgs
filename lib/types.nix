@@ -75,7 +75,7 @@ let
     if pos == null then "" else " at ${pos.file}:${toString pos.line}:${toString pos.column}";
 
   # Internal functor to help for migrating functor.wrapped to functor.payload.elemType
-  # Note that individual attributes can be overriden if needed.
+  # Note that individual attributes can be overridden if needed.
   elemTypeFunctor =
     name:
     { elemType, ... }@payload:

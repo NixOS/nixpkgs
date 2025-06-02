@@ -20,7 +20,7 @@ with haskellLib;
 
 self: super:
 {
-  # Hackage's accelerate is from 2020 and incomptible with our GHC.
+  # Hackage's accelerate is from 2020 and incompatible with our GHC.
   # The existing derivation also has missing dependencies
   # compared to the source from github.
   # https://github.com/AccelerateHS/accelerate/issues/553
@@ -791,7 +791,7 @@ self: super:
   katt = dontCheck super.katt;
   language-slice = dontCheck super.language-slice;
 
-  # Bogus lower bound on data-default-class added via Hackage revison
+  # Bogus lower bound on data-default-class added via Hackage revision
   # https://github.com/mrkkrp/req/pull/180#issuecomment-2628201485
   req = overrideCabal {
     revision = null;
@@ -1963,7 +1963,7 @@ self: super:
     license = lib.licenses.bsd3;
     # ghc-bignum is not buildable if none of the three backends
     # is explicitly enabled. We enable Native for now as it doesn't
-    # depend on anything else as oppossed to GMP and FFI.
+    # depend on anything else as opposed to GMP and FFI.
     # Apply patch which fixes a compilation failure we encountered.
     # Will need to be kept until we can drop ghc-bignum entirely,
     # i. e. if GHC 8.10.* and 8.8.* have been removed.
@@ -2529,7 +2529,7 @@ self: super:
   # Missing test files https://github.com/kephas/xdg-basedir-compliant/issues/1
   xdg-basedir-compliant = dontCheck super.xdg-basedir-compliant;
 
-  # Test failure after libxcrypt migration, reported upstrem at
+  # Test failure after libxcrypt migration, reported upstream at
   # https://github.com/phadej/crypt-sha512/issues/13
   crypt-sha512 = dontCheck super.crypt-sha512;
 
