@@ -115,16 +115,17 @@ jobs:
                 repo: context.repo.repo,
                 pull_number: context.payload.pull_request.number
               })).filter(review =>
-                review.user.login == 'github-actions[bot]' &&
-                review.state == 'CHANGES_REQUESTED'
+                review.user.login == 'github-actions[bot]'
               ).map(async (review) => {
-                await github.rest.pulls.dismissReview({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  pull_number: context.payload.pull_request.number,
-                  review_id: review.id,
-                  message: 'All cherry-picks are good now, thank you!'
-                })
+                if (review.state == 'CHANGES_REQUESTED') {
+                  await github.rest.pulls.dismissReview({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    pull_number: context.payload.pull_request.number,
+                    review_id: review.id,
+                    message: 'All cherry-picks are good now, thank you!'
+                  })
+                }
                 await github.graphql(`mutation($node_id:ID!) {
                   minimizeComment(input: {
                     classifier: RESOLVED,
