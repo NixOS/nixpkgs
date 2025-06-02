@@ -289,7 +289,7 @@ in
 
             {
               # Note: we want by default to enable OpenSSL, but it seems anything 100 and above is
-              # overriden by default value from vhost-options.nix
+              # overridden by default value from vhost-options.nix
               enableACME = mkOverride 99 true;
               forceSSL = mkOverride 99 true;
               locations.${cfg.nginx.path} = {

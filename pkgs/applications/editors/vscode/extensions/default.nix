@@ -5709,7 +5709,7 @@ let
   };
 
   # TODO: add overrides overlay, so that we can have a generated.nix
-  # then apply extension specific modifcations to packages.
+  # then apply extension specific modifications to packages.
 
   # overlays will be applied left to right, overrides should come after aliases.
   overlays = lib.optionals config.allowAliases [

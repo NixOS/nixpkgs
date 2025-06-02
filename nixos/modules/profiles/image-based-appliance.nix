@@ -1,4 +1,4 @@
-# This profile sets up a sytem for image based appliance usage. An appliance is
+# This profile sets up a system for image based appliance usage. An appliance is
 # installed as an image, cannot be re-built, has no Nix available, and is
 # generally not meant for interactive use. Updates to such an appliance are
 # handled by updating whole partition images via a tool like systemd-sysupdate.

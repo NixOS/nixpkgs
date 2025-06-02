@@ -26,7 +26,7 @@ in
 
     # Enable cloud-init by default for waagent.
     # Otherwise waagent would try manage networking using ifupdown,
-    # which is currently not availeble in nixpkgs.
+    # which is currently not available in nixpkgs.
     services.cloud-init.enable = true;
     services.cloud-init.network.enable = true;
     systemd.services.cloud-config.serviceConfig.Restart = "on-failure";
