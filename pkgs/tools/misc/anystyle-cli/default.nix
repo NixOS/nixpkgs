@@ -38,7 +38,10 @@ buildRubyGem rec {
     description = "Command line interface to the AnyStyle Parser and Finder";
     homepage = "https://anystyle.io/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ shamilton ];
+    maintainers = with maintainers; [
+      aschleck
+      shamilton
+    ];
     mainProgram = "anystyle";
     platforms = platforms.unix;
   };
