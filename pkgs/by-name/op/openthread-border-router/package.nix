@@ -6,6 +6,7 @@
   pkg-config,
   systemdLibs,
   avahi,
+  dbus,
   protobuf,
   jsoncpp,
   boost,
@@ -16,22 +17,14 @@
 }:
 let
   pname = "ot-br-posix";
-  version = "0-unstable-2024-10-18";
+  version = "0-unstable-2025-05-30";
 
   src = fetchFromGitHub {
     owner = "openthread";
     repo = "ot-br-posix";
-    rev = "76bfeef4e3e0242c235aa6bdf5480a0642883599";
-    hash = "sha256-VtekJD++PAse+yNmWzpO8lsyw0jnEsRFrzs/wK6VqqM=";
+    rev = "387fef65d3f89901175f4d8bb7f6aa7a66cf94c0";
+    hash = "sha256-sEOUCx9G9/NSk/m6FpF9DXHQzHpX+VKRfnpgnF4mO7g=";
     fetchSubmodules = true;
-  };
-
-  # hass-addons contains a few patches
-  hass-addons = fetchFromGitHub {
-    owner = "home-assistant";
-    repo = "addons";
-    rev = "583a62a69fa92ca8fdf9a2f298270a50bb3663a1";
-    hash = "sha256-u+lvU7mlJZqCCDIT4n7WnHyzAd0nZCh9Ddvqjs4SkHA=";
   };
 
   frontendModules = buildNpmPackage {
@@ -49,20 +42,9 @@ stdenv.mkDerivation {
   env.NIX_CFLAGS_COMPILE = "-O";
 
   patches = [
-    # Skip installing systemd units since it doesn't respect the installation prefix and attempts
-    # to install them at their final location
-    ./dont-install-systemd-units.patch
-    ./dont-use-boost-static-libs.patch
     # Patch the firewall script so we can run it within the systemd start script
     ./firewall-script.patch
-    "${hass-addons}/openthread_border_router/0002-rest-support-deleting-the-dataset.patch"
   ];
-
-  postPatch = ''
-    pushd third_party/openthread/repo
-    patch -p1 -i "${hass-addons}/openthread_border_router/0001-channel-monitor-disable-by-default.patch"
-    popd
-  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -83,26 +65,28 @@ stdenv.mkDerivation {
     boost
     libnetfilter_queue
     libnfnetlink
+    dbus
   ];
 
   postInstall = ''
     mkdir -p $out/bin
-    echo "PWD: "$(pwd)
-    echo "SRC: ${src}"
     cp ../script/otbr-firewall $out/bin/
     chmod +x $out/bin/otbr-firewall
   '';
 
   cmakeFlags = [
-    # These defaults are from "examples/platforms/raspbian/default and script/_otbr
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
+
     (lib.cmakeBool "BUILD_TESTING" false)
+    (lib.cmakeBool "INSTALL_SYSTEMD_UNIT" false)
+    (lib.cmakeBool "Boost_USE_STATIC_LIBS" false)
     (lib.cmakeBool "OTBR_REST" true)
 
     (lib.cmakeBool "OTBR_WEB" true)
     (lib.cmakeBool "OTBR_NAT64" true)
     (lib.cmakeBool "OTBR_BACKBONE_ROUTER" true)
     (lib.cmakeBool "OTBR_BORDER_ROUTING" true)
-    (lib.cmakeBool "OTBR_DBUS" false)
+    (lib.cmakeBool "OTBR_DBUS" true)
     (lib.cmakeBool "OTBR_TREL" true)
 
     (lib.cmakeFeature "OTBR_VERSION" version)

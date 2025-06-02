@@ -144,7 +144,6 @@ in
     boot.kernel.sysctl = {
       "net.ipv4.conf.all.forwarding" = 1;
       "net.ipv6.conf.all.forwarding" = 1;
-      "net.ipv6.ip_forward" = 1;
 
       # Make sure we accept IPv6 router advertisements from the local network interface
       "net.ipv6.conf.${cfg.backboneInterface}.accept_ra" = 2;
@@ -168,8 +167,8 @@ in
       otbr-agent = {
         description = "OpenThread Border Router Agent";
         wantedBy = [ "multi-user.target" ];
-        requires = [ "dbus.socket" ];
-        after = [ "dbus.socket" ];
+        requires = [ "network-online.target" ];
+        after = [ "network-online.target" ];
         environment = {
           THREAD_IF = cfg.interfaceName;
         };
