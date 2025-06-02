@@ -17,6 +17,7 @@
   lark,
   pandas,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pytest-mock,
   pytest-socket,
@@ -43,11 +44,6 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/libs/partners/openai";
 
-  preConfigure = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=langchain_openai" ""
-  '';
-
   build-system = [ pdm-backend ];
 
   pythonRelaxDeps = [
@@ -68,6 +64,7 @@ buildPythonPackage rec {
     lark
     pandas
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     pytest-mock
     pytest-socket
