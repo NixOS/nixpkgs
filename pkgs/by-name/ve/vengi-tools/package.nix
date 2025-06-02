@@ -34,13 +34,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vengi-tools";
-  version = "0.0.37";
+  version = "0.0.38";
 
   src = fetchFromGitHub {
     owner = "vengi-voxel";
     repo = "vengi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Pm3vGS6u//iktkj/2RR7xaCTt8fevCWm0a1Hlfkxry8=";
+    hash = "sha256-TTbwoZt5+tkxuoC05sbgrwIRmyWIR272D4TZWYXyPjA=";
   };
 
   prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
