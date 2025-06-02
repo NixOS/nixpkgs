@@ -1,0 +1,20 @@
+From 4ae20ef527de228951fe5ebd7077f4d7672d9246 Mon Sep 17 00:00:00 2001
+From: Thomas Heijligen <src@posteo.de>
+Date: Mon, 2 Jun 2025 14:32:01 +0200
+Subject: [PATCH] wallclock_timeline_reached: inclompatible-pointer-types
+
+
+--- a/why3/src/server/cpulimit-unix.c
++++ b/why3/src/server/cpulimit-unix.c
+@@ -42,7 +42,7 @@ void show_time() {
+   }
+ }
+ 
+-void wallclock_timelimit_reached() {
++void wallclock_timelimit_reached(int unused) {
+   fprintf(stderr,
+           "Why3cpulimit: wallclock timelimit %d reached, killing command\n",
+           wallclock_timelimit);
+-- 
+2.49.0
+
