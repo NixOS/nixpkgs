@@ -3291,45 +3291,6 @@ self: super:
 }
 // import ./configuration-tensorflow.nix { inherit pkgs haskellLib; } self super
 
-# Gogol Packages
-# 2024-12-27: use latest source files from github, as the hackage release is outdated
-// (
-  let
-    gogolSrc = pkgs.fetchFromGitHub {
-      owner = "brendanhay";
-      repo = "gogol";
-      rev = "a9d50bbd73d2cb9675bd9bff0f50fcd108f95608";
-      sha256 = "sha256-8ilQe/Z5MLFIDY8T68azFpYW5KkSyhy3c6pgWtsje9w=";
-    };
-    setGogolSourceRoot =
-      dir: drv:
-      (overrideCabal (drv: { src = gogolSrc; }) drv).overrideAttrs (_oldAttrs: {
-        sourceRoot = "${gogolSrc.name}/${dir}";
-      });
-    isGogolService = name: lib.hasPrefix "gogol-" name && name != "gogol-core";
-    gogolServices = lib.filter isGogolService (lib.attrNames super);
-    gogolServiceOverrides = (
-      lib.genAttrs gogolServices (name: setGogolSourceRoot "lib/services/${name}" super.${name})
-    );
-  in
-  {
-    gogol-core =
-      assert super.gogol-core.version == "0.5.0";
-      lib.pipe super.gogol-core [
-        (setGogolSourceRoot "lib/gogol-core")
-        (addBuildDepend self.base64)
-        (overrideCabal (drv: {
-          editedCabalFile = null;
-          revision = null;
-        }))
-      ];
-    gogol =
-      assert super.gogol.version == "0.5.0";
-      setGogolSourceRoot "lib/gogol" super.gogol;
-  }
-  // gogolServiceOverrides
-)
-
 # Amazonka Packages
 # 2025-01-24: use latest source files from github, as the hackage release is outdated, https://github.com/brendanhay/amazonka/issues/1001
 // (
