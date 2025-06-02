@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [ "-DQT_VERSION_MAJOR=6" ];
 
   postInstall = ''
-    install -Dm644 $src/LICENSE.txt $out/share/licenses/${finalAttrs.pname}/LICENSE
+    install -Dm644 $src/LICENSE.txt $out/share/licenses/efibooteditor/LICENSE
   '';
 
   meta = {

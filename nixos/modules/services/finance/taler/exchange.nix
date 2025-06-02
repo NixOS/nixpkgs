@@ -25,6 +25,8 @@ let
     "secmod-eddsa"
     "secmod-rsa"
   ];
+
+  configFile = config.environment.etc."taler/taler.conf".source;
 in
 
 {
@@ -44,11 +46,19 @@ in
         options = {
           # TODO: do we want this to be a sub-attribute or only define the exchange set of options here
           exchange = {
-            AML_THRESHOLD = lib.mkOption {
+            CURRENCY = lib.mkOption {
+              type = lib.types.nonEmptyStr;
+              description = ''
+                The currency which the exchange will operate with. This cannot be changed later.
+              '';
+            };
+            CURRENCY_ROUND_UNIT = lib.mkOption {
               type = lib.types.str;
-              default = "${cfgTaler.settings.taler.CURRENCY}:1000000";
-              defaultText = "1000000 in {option}`CURRENCY`";
-              description = "Monthly transaction volume until an account is considered suspicious and flagged for AML review.";
+              default = "${cfg.settings.exchange.CURRENCY}:0.01";
+              defaultText = "0.01 in {option}`CURRENCY`";
+              description = ''
+                Smallest amount in this currency that can be transferred using the underlying RTGS. For example: "EUR:0.01" or "JPY:1"
+              '';
             };
             DB = lib.mkOption {
               type = lib.types.enum [ "postgres" ];
@@ -131,24 +141,8 @@ in
       after = [ "taler-exchange-httpd.service" ];
     };
 
-    # Taken from https://docs.taler.net/taler-exchange-manual.html#exchange-database-setup
-    # TODO: Why does aggregator need DELETE?
-    systemd.services."taler-${talerComponent}-dbinit".script =
-      let
-        deletePerm = name: lib.optionalString (name == "aggregator") ",DELETE";
-        dbScript = pkgs.writers.writeText "taler-exchange-db-permissions.sql" (
-          lib.pipe servicesDB [
-            (map (name: ''
-              GRANT SELECT,INSERT,UPDATE${deletePerm name} ON ALL TABLES IN SCHEMA exchange TO "taler-exchange-${name}";
-              GRANT USAGE ON SCHEMA exchange TO "taler-exchange-${name}";
-            ''))
-            lib.concatStrings
-          ]
-        );
-      in
-      ''
-        ${lib.getExe' cfg.package "taler-exchange-dbinit"}
-        psql -U taler-exchange-httpd -f ${dbScript}
-      '';
+    systemd.services."taler-${talerComponent}-dbinit".script = ''
+      ${lib.getExe' cfg.package "taler-exchange-dbinit"} -c ${configFile}
+    '';
   };
 }

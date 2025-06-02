@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "9.20.9";
 
   src = fetchurl {
-    url = "https://downloads.isc.org/isc/bind9/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+    url = "https://downloads.isc.org/isc/bind9/${finalAttrs.version}/bind-${finalAttrs.version}.tar.xz";
     hash = "sha256-PSaQDtnJqFkHP/6puX4pLBJI2tGCebF7BfyyPDCR+G0=";
   };
 
