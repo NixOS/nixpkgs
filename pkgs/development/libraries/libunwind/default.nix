@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libunwind";
-  version = "1.8.1";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "libunwind";
     repo = "libunwind";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rCFBHs6rCSnp5FEwbUR5veNNTqSQpFblAv8ebSPX0qE=";
+    hash = "sha256-MsUReXFHlj15SgEZHOYhdSfAbSeVVl8LCi4NnUwvhpw=";
   };
 
   patches = lib.optional (stdenv.targetPlatform.useLLVM or false) (fetchpatch {
@@ -59,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   propagatedBuildInputs = [ xz ];
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     find $out -name \*.la | while read file; do
