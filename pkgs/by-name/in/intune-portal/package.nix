@@ -24,11 +24,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "intune-portal";
-  version = "1.2405.17-jammy";
+  version = "1.2503.10-jammy";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/ubuntu/22.04/prod/pool/main/i/intune-portal/intune-portal_${version}_amd64.deb";
-    hash = "sha256-WpVPWzh8jN092MaY2rMXhLfpVXsflMl9hOY9nNGJlLk=";
+    hash = "sha256-5RsxJUCipMz+KgJF2umPC/1KDr6LGlu1/x/iRqJFLLk=";
   };
 
   nativeBuildInputs = [ dpkg ];
