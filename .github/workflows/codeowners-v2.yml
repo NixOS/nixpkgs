@@ -55,7 +55,7 @@ jobs:
           merged-as-untrusted: true
           target-as-trusted: true
 
-      - uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
+      - uses: cachix/install-nix-action@17fe5fb4a23ad6cbbe47d6b3f359611ad276644c # v31
 
       - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
         with:
@@ -91,7 +91,7 @@ jobs:
     name: Request
     runs-on: ubuntu-24.04-arm
     steps:
-      - uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
+      - uses: cachix/install-nix-action@17fe5fb4a23ad6cbbe47d6b3f359611ad276644c # v31
 
       # Important: Because we use pull_request_target, this checks out the base branch of the PR, not the PR head.
       # This is intentional, because we need to request the review of owners as declared in the base branch.
