@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Implementation of Adobe's ADEPT protocol for ePub/PDF DRM";
-    homepage = "https://indefero.soutade.fr/p/libgourou";
+    homepage = "https://forge.soutade.fr/soutade/libgourou";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ autumnal ];
     platforms = platforms.all;
