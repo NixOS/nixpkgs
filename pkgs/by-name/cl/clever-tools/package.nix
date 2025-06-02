@@ -46,12 +46,12 @@ buildNpmPackage rec {
       --zsh <($out/bin/clever --zsh-autocomplete-script $out/bin/clever)
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/CleverCloud/clever-tools";
     changelog = "https://github.com/CleverCloud/clever-tools/blob/${version}/CHANGELOG.md";
     description = "Deploy on Clever Cloud and control your applications, add-ons, services from command line";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "clever";
-    teams = [ teams.clevercloud ];
+    teams = [ lib.teams.clevercloud ];
   };
 }

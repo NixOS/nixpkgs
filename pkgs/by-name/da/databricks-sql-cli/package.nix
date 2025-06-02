@@ -42,12 +42,12 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI for querying Databricks SQL";
     mainProgram = "dbsqlcli";
     homepage = "https://github.com/databricks/databricks-sql-cli";
     changelog = "https://github.com/databricks/databricks-sql-cli/releases/tag/v${version}";
-    license = licenses.databricks;
-    maintainers = with maintainers; [ kfollesdal ];
+    license = lib.licenses.databricks;
+    maintainers = with lib.maintainers; [ kfollesdal ];
   };
 }

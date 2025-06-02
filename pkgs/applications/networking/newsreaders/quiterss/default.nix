@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     sqlite.dev
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Qt-based RSS/Atom news feed reader";
     longDescription = ''
       QuiteRSS is a open-source cross-platform RSS/Atom news feeds reader
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://quiterss.org";
     changelog = "https://github.com/QuiteRSS/quiterss/blob/${version}/CHANGELOG";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ primeos ];
   };
 }

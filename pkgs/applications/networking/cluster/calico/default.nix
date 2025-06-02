@@ -32,13 +32,13 @@ builtins.mapAttrs
         "-w"
       ];
 
-      meta = with lib; {
+      meta = {
         homepage = "https://projectcalico.docs.tigera.io";
         changelog = "https://github.com/projectcalico/calico/releases/tag/v${version}";
         description = "Cloud native networking and network security";
-        license = licenses.asl20;
-        maintainers = with maintainers; [ urandom ];
-        platforms = platforms.linux;
+        license = lib.licenses.asl20;
+        maintainers = with lib.maintainers; [ urandom ];
+        platforms = lib.platforms.linux;
         inherit mainProgram;
       };
     }

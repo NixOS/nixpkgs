@@ -81,15 +81,15 @@ rustPlatform.buildRustPackage rec {
     $out/bin/elan completions zsh >  "$out/share/zsh/site-functions/_elan"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Small tool to manage your installations of the Lean theorem prover";
     homepage = "https://github.com/leanprover/elan";
     changelog = "https://github.com/leanprover/elan/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "elan";
   };
 }

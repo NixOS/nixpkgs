@@ -34,12 +34,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "doq" ];
 
-  meta = with lib; {
+  meta = {
     description = "Docstring generator for Python";
     homepage = "https://github.com/heavenshell/py-doq";
     changelog = "https://github.com/heavenshell/py-doq/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "doq";
   };
 }

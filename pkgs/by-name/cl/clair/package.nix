@@ -45,11 +45,11 @@ buildGoModule rec {
       }"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Vulnerability Static Analysis for Containers";
     homepage = "https://github.com/quay/clair";
     changelog = "https://github.com/quay/clair/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ];
   };
 }

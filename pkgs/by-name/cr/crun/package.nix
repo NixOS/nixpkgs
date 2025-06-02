@@ -85,13 +85,13 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) podman; };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/containers/crun/releases/tag/${version}";
     description = "Fast and lightweight fully featured OCI runtime and C library for running containers";
     homepage = "https://github.com/containers/crun";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    teams = [ teams.podman ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.podman ];
     mainProgram = "crun";
   };
 }

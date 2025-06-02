@@ -217,16 +217,16 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Mail indexer";
     homepage = "https://notmuchmail.org/";
-    changelog = "https://git.notmuchmail.org/git?p=notmuch;a=blob_plain;f=NEWS;hb=${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    changelog = "https://git.notmuchmail.org/git?p=notmuch;a=blob_plain;f=NEWS;hb=${finalAttrs.version}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       flokli
       puckipedia
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "notmuch";
   };
 })

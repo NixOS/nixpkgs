@@ -84,18 +84,18 @@ stdenv.mkDerivation rec {
     onlyGraphemeShaping = fcft.override { withShapingTypes = [ "grapheme" ]; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://codeberg.org/dnkl/fcft";
     changelog = "https://codeberg.org/dnkl/fcft/releases/tag/${version}";
     description = "Simple library for font loading and glyph rasterization";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       fionera
       sternenseemann
     ];
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       zlib
     ];
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
   };
 }

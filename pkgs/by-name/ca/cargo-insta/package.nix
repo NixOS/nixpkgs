@@ -29,13 +29,13 @@ rustPlatform.buildRustPackage rec {
     "--skip=env::test_get_cargo_workspace_manifest_dir"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand for snapshot testing";
     mainProgram = "cargo-insta";
     homepage = "https://github.com/mitsuhiko/insta";
     changelog = "https://github.com/mitsuhiko/insta/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       figsoda
       oxalica
       matthiasbeyer

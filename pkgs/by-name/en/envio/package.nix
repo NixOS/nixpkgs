@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     installManPage man/*.1
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://envio-cli.github.io/home";
     changelog = "https://github.com/envio-cli/envio/blob/${version}/CHANGELOG.md";
     description = "Modern and secure CLI tool for managing environment variables";
@@ -47,11 +47,11 @@ rustPlatform.buildRustPackage rec {
       switch between different configurations and apply them to their current
       environment.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ afh ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ afh ];
   };
 }

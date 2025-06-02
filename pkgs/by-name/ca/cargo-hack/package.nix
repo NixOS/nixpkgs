@@ -19,15 +19,15 @@ rustPlatform.buildRustPackage rec {
   # some necessary files are absent in the crate version
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand to provide various options useful for testing and continuous integration";
     mainProgram = "cargo-hack";
     homepage = "https://github.com/taiki-e/cargo-hack";
     changelog = "https://github.com/taiki-e/cargo-hack/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

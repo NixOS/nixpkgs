@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     echo "${version}" >.version
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Set of tools to optimize deflate-compressed files";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     homepage = "https://github.com/amadvance/advancecomp";
     changelog = "https://github.com/amadvance/advancecomp/blob/v${version}/HISTORY";
   };

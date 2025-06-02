@@ -21,13 +21,13 @@ buildGraalvmNativeImage rec {
     "--no-fallback"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Linter for Clojure code that sparks joy";
     homepage = "https://github.com/clj-kondo/clj-kondo";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.epl10;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.epl10;
     changelog = "https://github.com/clj-kondo/clj-kondo/blob/v${version}/CHANGELOG.md";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jlesquembre
       bandresen
     ];

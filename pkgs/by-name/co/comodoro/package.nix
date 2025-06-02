@@ -41,12 +41,12 @@ rustPlatform.buildRustPackage rec {
         --zsh <($out/bin/comodoro completion zsh)
     '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI to manage your time";
     homepage = "https://github.com/pimalaya/comodoro";
     changelog = "https://github.com/soywod/comodoro/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ soywod ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ soywod ];
     mainProgram = "comodoro";
   };
 }

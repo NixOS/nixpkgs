@@ -61,13 +61,13 @@ stdenv.mkDerivation rec {
     install -m 444 -D desktop/samplebrain.svg $out/share/icons/hicolor/scalable/apps/samplebrain.svg
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Custom sample mashing app";
     mainProgram = "samplebrain";
     homepage = "https://thentrythis.org/projects/samplebrain";
     changelog = "https://gitlab.com/then-try-this/samplebrain/-/releases/v${version}_release";
-    maintainers = with maintainers; [ mitchmindtree ];
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ mitchmindtree ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

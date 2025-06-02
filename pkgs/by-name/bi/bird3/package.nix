@@ -45,12 +45,12 @@ stdenv.mkDerivation rec {
 
   passthru.tests = nixosTests.bird;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://gitlab.nic.cz/labs/bird/-/blob/v${version}/NEWS";
     description = "BIRD Internet Routing Daemon";
     homepage = "https://bird.nic.cz/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ herbetom ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ herbetom ];
+    platforms = lib.platforms.linux;
   };
 }

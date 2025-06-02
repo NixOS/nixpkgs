@@ -43,12 +43,12 @@ buildGoModule rec {
       --zsh  <($out/bin/eksctl completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI for Amazon EKS";
     homepage = "https://github.com/weaveworks/eksctl";
     changelog = "https://github.com/eksctl-io/eksctl/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       xrelkd
       Chili-Man
     ];
