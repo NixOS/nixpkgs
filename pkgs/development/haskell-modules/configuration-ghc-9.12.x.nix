@@ -5,19 +5,11 @@ self: super:
 let
   inherit (pkgs) lib;
 
-  versionAtMost = a: b: lib.versionAtLeast b a;
-
-  warnVersion =
-    predicate: ver: pkg:
-    let
-      pname = pkg.pname;
-    in
-    lib.warnIf (predicate ver
-      super.${pname}.version
-    ) "override for haskell.packages.ghc912.${pname} may no longer be needed" pkg;
-
-  warnAfterVersion = warnVersion lib.versionOlder;
-  warnFromVersion = warnVersion versionAtMost;
+  warnAfterVersion =
+    ver: pkg:
+    lib.warnIf (lib.versionOlder ver
+      super.${pkg.pname}.version
+    ) "override for haskell.packages.ghc912.${pkg.pname} may no longer be needed" pkg;
 
 in
 
