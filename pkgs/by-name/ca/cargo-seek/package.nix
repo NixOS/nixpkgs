@@ -22,13 +22,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-DyXRbtvCJte7mCQKusipeikr981vMHPEVYcGSwVI5Kg=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ];
+  buildInputs = [ openssl ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [
@@ -36,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
   versionCheckProgramArg = "--version";
-  versionCheckDontIgnoreEnvironment = true;
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru.updateScript = nix-update-script { };
 
