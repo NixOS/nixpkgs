@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "porres";
     repo = "pd-else";
-    rev = "v.${version}";
+    tag = "v.${version}";
     hash = "sha256-WebjdozcFup2xk3cS9LPTiA6m0l1sR6sj3hHlt6ScfU=";
   };
 
@@ -62,21 +62,20 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    # Patch binaries.
     interpreter=$(cat $NIX_CC/nix-support/dynamic-linker)
     find $out -type f -executable -exec patchelf --set-interpreter "$interpreter" --set-rpath ${lib.makeLibraryPath buildInputs} {} \;
   '';
 
-  meta = with lib; {
-    description = "ELSE - EL Locus Solus' Externals for Pure Data";
+  meta = {
+    description = "EL Locus Solus' Externals for Pure Data";
     longDescription = ''
       ELSE is a library of externals and abstractions for Pure Data.
       It provides a comprehensive set of tools for signal processing,
       MIDI, GUI, and more in Pure Data.
     '';
     homepage = "https://github.com/porres/pd-else";
-    license = licenses.wtfpl;
-    platforms = platforms.unix;
+    license = lib.licenses.wtfpl;
+    platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.kugland ];
   };
 }
