@@ -27,8 +27,8 @@
   python3,
   json-glib,
   libnotify ? null,
-  enableUI ? true,
-  withWayland ? true,
+  enableUI ? !libOnly,
+  withWayland ? !libOnly,
   libxkbcommon,
   wayland,
   buildPackages,
@@ -36,6 +36,8 @@
   nixosTests,
   versionCheckHook,
   nix-update-script,
+  libX11,
+  libOnly ? false,
 }:
 
 let
@@ -86,11 +88,14 @@ stdenv.mkDerivation (finalAttrs: {
     ./build-without-dbus-launch.patch
   ];
 
-  outputs = [
-    "out"
-    "dev"
-    "installedTests"
-  ];
+  outputs =
+    [
+      "out"
+      "dev"
+    ]
+    ++ lib.optionals (!libOnly) [
+      "installedTests"
+    ];
 
   postPatch = ''
     # Maintainer does not want to create separate tarballs for final release candidate and release versions,
@@ -107,29 +112,38 @@ stdenv.mkDerivation (finalAttrs: {
 
   preAutoreconf = "touch ChangeLog";
 
-  configureFlags = [
-    # The `AX_PROG_{CC,CXX}_FOR_BUILD` autoconf macros can pick up unwrapped GCC binaries,
-    # so we set `{CC,CXX}_FOR_BUILD` to override that behavior.
-    # https://github.com/NixOS/nixpkgs/issues/21751
-    "CC_FOR_BUILD=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
-    "CXX_FOR_BUILD=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++"
-    "GLIB_COMPILE_RESOURCES=${lib.getDev buildPackages.glib}/bin/glib-compile-resources"
-    "PKG_CONFIG_VAPIGEN_VAPIGEN=${lib.getBin buildPackages.vala}/bin/vapigen"
-    "--disable-memconf"
-    (lib.enableFeature (dconf != null) "dconf")
-    (lib.enableFeature (libnotify != null) "libnotify")
-    (lib.enableFeature withWayland "wayland")
-    (lib.enableFeature enableUI "ui")
-    "--disable-gtk2"
-    "--enable-gtk4"
-    "--enable-install-tests"
-    "--with-unicode-emoji-dir=${unicode-emoji}/share/unicode/emoji"
-    "--with-emoji-annotation-dir=${cldr-annotations}/share/unicode/cldr/common/annotations"
-    "--with-python=${python3BuildEnv.interpreter}"
-    "--with-ucd-dir=${unicode-character-database}/share/unicode"
-  ];
+  configureFlags =
+    [
+      # The `AX_PROG_{CC,CXX}_FOR_BUILD` autoconf macros can pick up unwrapped GCC binaries,
+      # so we set `{CC,CXX}_FOR_BUILD` to override that behavior.
+      # https://github.com/NixOS/nixpkgs/issues/21751
+      "CC_FOR_BUILD=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
+      "CXX_FOR_BUILD=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++"
+      "GLIB_COMPILE_RESOURCES=${lib.getDev buildPackages.glib}/bin/glib-compile-resources"
+      "PKG_CONFIG_VAPIGEN_VAPIGEN=${lib.getBin buildPackages.vala}/bin/vapigen"
+      "--disable-memconf"
+      "--disable-gtk2"
+      "--with-python=${python3BuildEnv.interpreter}"
+      (lib.enableFeature (!libOnly && dconf != null) "dconf")
+      (lib.enableFeature (!libOnly && libnotify != null) "libnotify")
+      (lib.enableFeature withWayland "wayland")
+      (lib.enableFeature enableUI "ui")
+      (lib.enableFeature (!libOnly) "gtk3")
+      (lib.enableFeature (!libOnly) "gtk4")
+      (lib.enableFeature (!libOnly) "xim")
+      (lib.enableFeature (!libOnly) "appindicator")
+      (lib.enableFeature (!libOnly) "tests")
+      (lib.enableFeature (!libOnly) "install-tests")
+      (lib.enableFeature (!libOnly) "emoji-dict")
+      (lib.enableFeature (!libOnly) "unicode-dict")
+    ]
+    ++ lib.optionals (!libOnly) [
+      "--with-unicode-emoji-dir=${unicode-emoji}/share/unicode/emoji"
+      "--with-emoji-annotation-dir=${cldr-annotations}/share/unicode/cldr/common/annotations"
+      "--with-ucd-dir=${unicode-character-database}/share/unicode"
+    ];
 
-  makeFlags = [
+  makeFlags = lib.optionals (!libOnly) [
     "test_execsdir=${placeholder "installedTests"}/libexec/installed-tests/ibus"
     "test_sourcesdir=${placeholder "installedTests"}/share/installed-tests/ibus"
   ];
@@ -138,18 +152,22 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  nativeBuildInputs = [
-    autoreconfHook
-    gtk-doc
-    gettext
-    makeWrapper
-    pkg-config
-    python3BuildEnv
-    vala
-    wrapGAppsHook3
-    dbus-launch
-    gobject-introspection
-  ];
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      gtk-doc
+      gettext
+      makeWrapper
+      pkg-config
+      python3BuildEnv
+      dbus-launch
+      glib # required to satisfy AM_PATH_GLIB_2_0
+      vala
+      gobject-introspection
+    ]
+    ++ lib.optionals (!libOnly) [
+      wrapGAppsHook3
+    ];
 
   propagatedBuildInputs = [
     glib
@@ -160,14 +178,17 @@ stdenv.mkDerivation (finalAttrs: {
       dbus
       systemd
       dconf
-      gdk-pixbuf
       python3.pkgs.pygobject3 # for pygobject overrides
-      gtk3
-      gtk4
       isocodes
       json-glib
-      libnotify
+      libX11
+    ]
+    ++ lib.optionals (!libOnly) [
+      gtk3
+      gtk4
+      gdk-pixbuf
       libdbusmenu-gtk3
+      libnotify
       vala # for share/vala/Makefile.vapigen (PKG_CONFIG_VAPIGEN_VAPIGEN)
     ]
     ++ lib.optionals withWayland [
@@ -185,13 +206,13 @@ stdenv.mkDerivation (finalAttrs: {
   versionCheckProgramArg = "version";
   versionCheckProgram = "${placeholder "out"}/bin/ibus";
 
-  postInstall = ''
+  postInstall = lib.optionalString (!libOnly) ''
     # It has some hardcoded FHS paths and also we do not use it
     # since we set up the environment in NixOS tests anyway.
     moveToOutput "bin/ibus-desktop-testing-runner" "$installedTests"
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString (!libOnly) ''
     # set necessary environment also for tests
     for f in $installedTests/libexec/installed-tests/ibus/*; do
         wrapGApp $f
@@ -199,7 +220,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests = {
+    tests = lib.optionalAttrs (!libOnly) {
       installed-tests = nixosTests.installed-tests.ibus;
     };
     updateScript = nix-update-script { };
