@@ -377,7 +377,7 @@ in
         Attrset of the LibreNMS configuration.
         See <https://docs.librenms.org/Support/Configuration/> for reference.
 
-        All possible options and their defaults are listed [here](https://github.com/librenms/librenms/blob/master/misc/config_definitions.json).
+        All possible options and their defaults are listed [here](https://github.com/librenms/librenms/blob/88fe1a7abdb500d9a2d4c45f9872df54c9ff8062/misc/config_definitions.json).
         Be aware, that in case you want to extend a setting that is of type list, you will overwrite the defaults and not extend them.
         Therefore you have to include the defaults as well, if you want to use them.
 
@@ -396,7 +396,7 @@ in
       default = null;
       description = ''
         Additional config for LibreNMS that will be appended to the `config.php`. See
-        <https://github.com/librenms/librenms/blob/master/misc/config_definitions.json>
+        <https://github.com/librenms/librenms/blob/88fe1a7abdb500d9a2d4c45f9872df54c9ff8062/misc/config_definitions.json>
         for possible options. Useful if you want to use PHP-Functions in your config.
       '';
     };
