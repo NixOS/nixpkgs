@@ -16,6 +16,7 @@
 
   # tests
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -33,10 +34,6 @@ buildPythonPackage rec {
     hash = "sha256-X0ePdHQeBSWjsCFQgCoNloQZRhKbvPBE43aavBppvmg=";
   };
 
-  postPatch = ''
-    sed -i '/--cov/d' pyproject.toml
-  '';
-
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
@@ -46,7 +43,10 @@ buildPythonPackage rec {
     openapi-schema-validator
   ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   disabledTests = [
     # network access
