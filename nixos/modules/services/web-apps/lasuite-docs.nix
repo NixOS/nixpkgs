@@ -173,6 +173,13 @@ in
               defaultText = lib.literalExpression "https://\${cfg.domain}";
               description = "URL to the backend server base";
             };
+
+            COLLABORATION_SERVER_ORIGIN = mkOption {
+              type = types.str;
+              default = "https://${cfg.domain}";
+              defaultText = lib.literalExpression "https://\${cfg.domain}";
+              description = "Origins allowed to connect to the collaboration server";
+            };
           };
         };
         default = { };
