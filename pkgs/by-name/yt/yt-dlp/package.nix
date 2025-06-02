@@ -55,6 +55,9 @@ python3Packages.buildPythonApplication rec {
               url = "https://github.com/lexiforest/curl_cffi/releases/download/v${version}/curl_cffi-${version}-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl";
               hash = "sha256-xpJyktXsFDbaW/JUseuV6R3m5ck6HSpwWjVgLG7dBiY=";
             };
+            pyproject = null;
+            format = "wheel";
+            patches = [ ];
             buildInputs = [ stdenv.cc.cc.lib ];
             nativeBuildInputs = [
               stdenv.cc.cc.lib
