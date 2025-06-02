@@ -42,18 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional pipewireSupport pipewire
     ++ lib.optional pulseSupport libpulseaudio;
 
-  cmakeFlags =
-    [
-      # Automatically links dependencies without having to rely on dlopen, thus
-      # removes the need for NIX_LDFLAGS.
-      (lib.cmakeBool "ALSOFT_DLOPEN" false)
-      # allow oal-soft to find its own data files (e.g. HRTF profiles)
-      (lib.cmakeBool "ALSOFT_SEARCH_INSTALL_DATADIR" true)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # https://github.com/NixOS/nixpkgs/issues/183774
-      (lib.cmakeBool "ALSOFT_BACKEND_OSS" false)
-    ];
+  cmakeFlags = [
+    # Automatically links dependencies without having to rely on dlopen, thus
+    # removes the need for NIX_LDFLAGS.
+    (lib.cmakeBool "ALSOFT_DLOPEN" false)
+    # allow oal-soft to find its own data files (e.g. HRTF profiles)
+    (lib.cmakeBool "ALSOFT_SEARCH_INSTALL_DATADIR" true)
+  ];
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
