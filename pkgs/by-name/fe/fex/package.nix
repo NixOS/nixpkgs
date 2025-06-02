@@ -12,7 +12,6 @@
   fmt,
   nasm,
   buildEnv,
-  runCommand,
   writeText,
   pkgsCross,
   libclang,
@@ -27,7 +26,7 @@
 let
   pkgsCross32 = pkgsCross.gnu32;
   pkgsCross64 = pkgsCross.gnu64;
-  devRootFSBase = buildEnv {
+  devRootFS = buildEnv {
     name = "fex-dev-rootfs";
     paths = [
       # later stdenv seems to have shuffled around the headers
@@ -55,13 +54,12 @@ let
       "/include"
       "/lib"
     ];
-  };
 
-  devRootFS = runCommand "fex-dev-rootfs2" {} ''
-    mkdir -p $out/usr
-    ln -s ${devRootFSBase}/* $out/
-    ln -s ${devRootFSBase}/include $out/usr/
-  '';
+    postBuild = ''
+      mkdir -p $out/usr
+      ln -s $out/include $out/usr/
+    '';
+  };
 
   toolchain32 = writeText "toolchain_nix_x86_32.txt" "
     set(CMAKE_EXE_LINKER_FLAGS_INIT \"-fuse-ld=lld\")
@@ -94,7 +92,7 @@ in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "fex";
   # version = "2505";
-  version = "5811914a784cc6fdfdc90242ab7f8ea6ff39ec38";
+  version = "5a6e29f6d2aadf0a3537e20ec55d89a549fd1b2b";
 
   src = fetchFromGitHub {
     owner = "neobrain";
@@ -102,7 +100,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     rev = "${finalAttrs.version}";
     # tag = "FEX-${finalAttrs.version}";
 
-    hash = "sha256-4JDUdxVyuEkefqRamukKgFe8aX4aJs0fMLYCwh3BQS8=";
+    hash = "sha256-32BzKicsasqSoCZu1vynACFIthRK0gHRXbvPHjSqtRs=";
     leaveDotGit = true;
     postFetch = ''
       cd $out
