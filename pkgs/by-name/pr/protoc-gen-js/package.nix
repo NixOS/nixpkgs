@@ -9,13 +9,13 @@
 
 buildBazelPackage rec {
   pname = "protoc-gen-js";
-  version = "3.21.4";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "protocolbuffers";
     repo = "protobuf-javascript";
     rev = "v${version}";
-    hash = "sha256-eIOtVRnHv2oz4xuVc4aL6JmhpvlODQjXHt1eJHsjnLg=";
+    hash = "sha256-E647zdLrQK6rfmopS2eerQPdPk/YM/4sr5K6GyA/2Zw=";
   };
 
   bazel = bazel_7;
@@ -31,29 +31,27 @@ buildBazelPackage rec {
 
   LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
 
-  fetchAttrs = {
-    preInstall = ''
-      rm -rv "$bazelOut/external/host_platform"
-    '';
-
-    hash = "sha256-CekpXINZSr6Hysa4qrVkdchBla9pgBwRtqBiuUGPNq0=";
-  };
+  fetchAttrs.hash = "sha256-3Sq6zSl38WRzy0ZkSj+/2q/UBZvlUQvyHd9RriYEW9w=";
 
   buildAttrs.installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -Dm755 bazel-bin/generator/protoc-gen-js $out/bin/
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Protobuf plugin for generating JavaScript code";
     mainProgram = "protoc-gen-js";
     homepage = "https://github.com/protocolbuffers/protobuf-javascript";
-    platforms = platforms.linux ++ platforms.darwin;
-    license = with licenses; [
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = with lib.licenses; [
       asl20
       bsd3
     ];
-    sourceProvenance = [ sourceTypes.fromSource ];
-    maintainers = [ ];
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
+    maintainers = with lib.maintainers; [ adda ];
   };
 }
