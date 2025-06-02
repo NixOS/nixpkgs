@@ -99,13 +99,13 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command line program to sync files and directories to and from major cloud storage";
     homepage = "https://rclone.org";
     changelog = "https://github.com/rclone/rclone/blob/v${version}/docs/content/changelog.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "rclone";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       SuperSandro2000
     ];
   };
