@@ -19,28 +19,28 @@
 
   # optional dependencies
   libcst,
-
-  # testing
-  google-cloud-monitoring,
-  mmh3,
-  mock,
   opentelemetry-api,
   opentelemetry-sdk,
   opentelemetry-semantic-conventions,
+  google-cloud-monitoring,
+  mmh3,
+
+  # testing
+  mock,
   pytest-asyncio,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-spanner";
-  version = "3.54.0";
+  version = "3.55.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-spanner";
     tag = "v${version}";
-    hash = "sha256-uJKUgY7fV+AK/2HQyjQRFypcL+mPZ/M5ZtAU+f73ezM=";
+    hash = "sha256-0+mTBqgy8SaHjoYhQjCaypipVsJTrN2DdhcfPY3PxSc=";
   };
 
   build-system = [ setuptools ];
@@ -54,10 +54,18 @@ buildPythonPackage rec {
     proto-plus
     protobuf
     sqlparse
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ];
 
   optional-dependencies = {
     libcst = [ libcst ];
+    tracing = [
+      opentelemetry-api
+      opentelemetry-sdk
+      opentelemetry-semantic-conventions
+      # opentelemetry-resourcedetector-gcp # Not available in nixpkgs
+      google-cloud-monitoring
+      mmh3
+    ];
   };
 
   nativeCheckInputs = [
@@ -70,7 +78,7 @@ buildPythonPackage rec {
     opentelemetry-semantic-conventions
     pytest-asyncio
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   preCheck = ''
     # prevent google directory from shadowing google imports
@@ -84,6 +92,8 @@ buildPythonPackage rec {
     "test_list_instance"
     # can't import mmh3
     "test_generate_client_hash"
+    # Flaky, compares to execution time
+    "test_snapshot_read_concurrent"
   ];
 
   disabledTestPaths = [
@@ -117,7 +127,7 @@ buildPythonPackage rec {
   meta = {
     description = "Cloud Spanner API client library";
     homepage = "https://github.com/googleapis/python-spanner";
-    changelog = "https://github.com/googleapis/python-spanner/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/python-spanner/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sarahec ];
   };
