@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "gphoto2";
-  version = "2.5.1";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Jgh7ff+iUaeNQtBsXw2Jm+2gj1ctvrY3oahGrbxx3uE=";
+    hash = "sha256-hev0a6RTC5dhXSXQMAgeLsjDzXmsU1GHOrsDpkn0MTI=";
   };
 
   nativeBuildInputs = [
