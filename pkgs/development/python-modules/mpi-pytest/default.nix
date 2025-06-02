@@ -21,7 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-r9UB5H+qAJc6k2SVAiOCI2yRDLNv2zKRmfrAan+cX9I=";
   };
 
-  # A temporary fixup to support fork mode with openmpi implemention
+  # A temporary fixup to support fork mode with openmpi implementation
   # See https://github.com/firedrakeproject/mpi-pytest/pull/17
   postPatch = lib.optionalString (mpi4py.mpi.pname == "openmpi") ''
     substituteInPlace pytest_mpi/plugin.py \
