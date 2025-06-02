@@ -1,19 +1,20 @@
 {
   lib,
-  git,
+  gitMinimal,
   python3,
   fetchFromGitHub,
   nix-update-script,
-  testers,
-  charmcraft,
   cacert,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 let
+  version = "4.10.0";
   python = python3.override {
     self = python;
     packageOverrides = self: super: {
-      craft-application = super.craft-application.overridePythonAttrs (old: rec {
-        version = "4.10.0";
+      craft-application = super.craft-application.overridePythonAttrs (old: {
+        inherit version;
         src = fetchFromGitHub {
           owner = "canonical";
           repo = "craft-application";
@@ -21,28 +22,9 @@ let
           hash = "sha256-9M49/XQuWwKuQqseleTeZYcrwd/S16lNCljvlVsoXbs=";
         };
 
-        patches = [ ];
-
         postPatch = ''
-          substituteInPlace pyproject.toml \
-            --replace-fail "setuptools==75.8.0" "setuptools"
-
-          substituteInPlace craft_application/git/_git_repo.py \
-            --replace-fail "/snap/core22/current/etc/ssl/certs" "${cacert}/etc/ssl/certs"
-        '';
-
-        preCheck = ''
-          export HOME=$(mktemp -d)
-
-          # Tests require access to /etc/os-release, which isn't accessible in
-          # the test environment, so create a fake file, and modify the code
-          # to look for it.
-          echo 'ID=nixos' > $HOME/os-release
-          echo 'NAME=NixOS' >> $HOME/os-release
-          echo 'VERSION_ID="24.05"' >> $HOME/os-release
-
-          substituteInPlace craft_application/util/platforms.py \
-            --replace-fail "os_utils.OsRelease()" "os_utils.OsRelease(os_release_file='$HOME/os-release')"
+          substituteInPlace pyproject.toml --replace-fail "setuptools==75.8.0" "setuptools"
+          substituteInPlace craft_application/git/_git_repo.py --replace-fail "/snap/core22/current/etc/ssl/certs" "${cacert}/etc/ssl/certs"
         '';
       });
     };
@@ -50,7 +32,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "charmcraft";
-  version = "3.4.6";
+  version = "3.5.0";
 
   pyproject = true;
 
@@ -58,7 +40,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "canonical";
     repo = "charmcraft";
     tag = version;
-    hash = "sha256-i7XhsVmeO3fzAWCQ1v9J/dv4oSdN00svauIColQcj9A=";
+    hash = "sha256-NIOfjd4r9mDP0x1IpIVJlU+Aza0a17bc3jDxtInrf4A=";
   };
 
   postPatch = ''
@@ -113,13 +95,10 @@ python.pkgs.buildPythonApplication rec {
     ]
     ++ [
       cacert
-      git
+      gitMinimal
+      versionCheckHook
+      writableTmpDirAsHomeHook
     ];
-
-  preCheck = ''
-    mkdir -p check-phase
-    export HOME="$(pwd)/check-phase"
-  '';
 
   pytestFlagsArray = [ "tests/unit" ];
 
@@ -130,14 +109,10 @@ python.pkgs.buildPythonApplication rec {
     "test_read_charm_from_yaml_file_self_contained_success[full-platforms.yaml]"
   ];
 
-  passthru = {
-    updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = charmcraft;
-      command = "env SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt HOME=$(mktemp -d) charmcraft --version";
-      version = "charmcraft ${version}";
-    };
-  };
+  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "SSL_CERT_FILE" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     mainProgram = "charmcraft";
