@@ -34,6 +34,7 @@
   alsa-lib,
   libjack2,
   makeWrapper,
+  buildPackages,
 }:
 
 let
@@ -51,6 +52,18 @@ let
     url = "https://cdn.openttd.org/openmsx-releases/0.4.2/openmsx-0.4.2-all.zip";
     hash = "sha256-Cgrg2m+uTODFg39mKgX+hE8atV7v5bVyZd716vSZB8M=";
   };
+
+  # OpenTTD builds and uses some of its own tools during the build and we need those to be available for cross-compilation.
+  # Build the tools for buildPlatform with minimal dependencies, using the "OPTION_TOOLS_ONLY" flag.
+  crossTools = buildPackages.openttd.overrideAttrs (oldAttrs: {
+    pname = "openttd-tools";
+    buildInputs = [ ];
+    cmakeFlags = oldAttrs.cmakeFlags or [ ] ++ [ (lib.cmakeBool "OPTION_TOOLS_ONLY" true) ];
+    installPhase = ''
+      install -Dm555 src/strgen/strgen -t $out/bin
+      install -Dm555 src/settingsgen/settingsgen -t $out/bin
+    '';
+  });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openttd";
@@ -71,11 +84,15 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    makeWrapper
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+      makeWrapper
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      crossTools
+    ];
 
   buildInputs =
     [
