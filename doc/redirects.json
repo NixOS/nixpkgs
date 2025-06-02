@@ -40,8 +40,17 @@
   "ex-testEqualArrayOrMap-test-function-add-cowbell": [
     "index.html#ex-testEqualArrayOrMap-test-function-add-cowbell"
   ],
+  "ghc-deprecation-policy": [
+    "index.html#ghc-deprecation-policy"
+  ],
   "inkscape-plugins": [
     "index.html#inkscape-plugins"
+  ],
+  "major-ghc-deprecation": [
+    "index.html#major-ghc-deprecation"
+  ],
+  "minor-ghc-deprecation": [
+    "index.html#minor-ghc-deprecation"
   ],
   "neovim": [
     "index.html#neovim"
