@@ -37,7 +37,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Python package to interact with Kickstart files commonly found in the RPM world";
     homepage = "https://github.com/pykickstart/pykickstart";
-    changelog = "https://github.com/pykickstart/pykickstart/releases/tag/r${src.tag}";
+    changelog = "https://github.com/pykickstart/pykickstart/releases/tag/${src.tag}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       thefossguy
