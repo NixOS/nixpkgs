@@ -46,6 +46,8 @@
 
   obs-livesplit-one = callPackage ./obs-livesplit-one { };
 
+  obs-markdown = callPackage ./obs-markdown.nix { };
+
   obs-media-controls = qt6Packages.callPackage ./obs-media-controls.nix { };
 
   obs-move-transition = callPackage ./obs-move-transition.nix { };
