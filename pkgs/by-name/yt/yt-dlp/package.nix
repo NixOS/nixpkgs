@@ -47,20 +47,25 @@ python3Packages.buildPythonApplication rec {
       websockets
     ];
     curl-cffi = [
-      (if stdenv.hostPlatform.system == "x86_64-linux" then
-        python3Packages.curl-cffi.overridePythonAttrs (old: rec {
-          version = "0.11.1";
-          src = fetchurl {
-            url = "https://github.com/lexiforest/curl_cffi/releases/download/v${version}/curl_cffi-${version}-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl";
-            hash = "sha256-xpJyktXsFDbaW/JUseuV6R3m5ck6HSpwWjVgLG7dBiY=";
-          };
-          buildInputs = [ stdenv.cc.cc.lib ];
-          nativeBuildInputs = [ stdenv.cc.cc.lib autoPatchelfHook ];
-          meta.sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-      })
-      else
-        lib.warn "Currently, yt-dlp only supports curl-cffi on x86_64-linux."
-        "")
+      (
+        if stdenv.hostPlatform.system == "x86_64-linux" then
+          python3Packages.curl-cffi.overridePythonAttrs (old: rec {
+            version = "0.11.1";
+            src = fetchurl {
+              url = "https://github.com/lexiforest/curl_cffi/releases/download/v${version}/curl_cffi-${version}-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl";
+              hash = "sha256-xpJyktXsFDbaW/JUseuV6R3m5ck6HSpwWjVgLG7dBiY=";
+            };
+            buildInputs = [ stdenv.cc.cc.lib ];
+            nativeBuildInputs = [
+              stdenv.cc.cc.lib
+              autoPatchelfHook
+            ];
+            meta.sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+          })
+        else
+          # NOTE: Currently, yt-dlp only supports curl-cffi on x86_64-linux.
+          ""
+      )
     ];
     secretstorage = with python3Packages; [
       cffi
