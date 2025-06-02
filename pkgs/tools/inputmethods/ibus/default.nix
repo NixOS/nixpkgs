@@ -34,6 +34,8 @@
   buildPackages,
   runtimeShell,
   nixosTests,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 let
@@ -59,15 +61,15 @@ let
       '';
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ibus";
   version = "1.5.31";
 
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus";
-    rev = version;
-    sha256 = "sha256-YMCtLIK/9iUdS37Oiow7WMhFFPKhomNXvzWbLzlUkdQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-YMCtLIK/9iUdS37Oiow7WMhFFPKhomNXvzWbLzlUkdQ=";
   };
 
   patches = [
@@ -173,12 +175,14 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+  strictDeps = true;
 
   doCheck = false; # requires X11 daemon
+
   doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/ibus version
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  versionCheckProgram = "${placeholder "out"}/bin/ibus";
 
   postInstall = ''
     # It has some hardcoded FHS paths and also we do not use it
@@ -197,13 +201,15 @@ stdenv.mkDerivation rec {
     tests = {
       installed-tests = nixosTests.installed-tests.ibus;
     };
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/ibus/ibus/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/ibus/ibus";
     description = "Intelligent Input Bus, input method framework";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ttuegel ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ttuegel ];
   };
-}
+})
