@@ -11,39 +11,46 @@
 # distinction.
 { pkgs, haskellLib }:
 
+self: super:
+
 let
   inherit (pkgs) fetchpatch lib;
   inherit (lib) throwIfNot versionOlder;
+
+  warnAfterVersion =
+    ver: pkg:
+    lib.warnIf (lib.versionOlder ver
+      super.${pkg.pname}.version
+    ) "override for haskellPackages.${pkg.pname} may no longer be needed" pkg;
+
 in
 
 with haskellLib;
 
 # To avoid merge conflicts, consider adding your item at an arbitrary place in the list instead.
-self: super:
 {
   # Hackage's accelerate is from 2020 and incomptible with our GHC.
   # The existing derivation also has missing dependencies
   # compared to the source from github.
   # https://github.com/AccelerateHS/accelerate/issues/553
-  accelerate =
-    assert super.accelerate.version == "1.3.0.0";
-    lib.pipe super.accelerate [
-      (addBuildDepends [
-        self.double-conversion
-        self.formatting
-        self.microlens
-      ])
+  accelerate = lib.pipe super.accelerate [
+    (warnAfterVersion "1.3.0.0")
+    (addBuildDepends [
+      self.double-conversion
+      self.formatting
+      self.microlens
+    ])
 
-      (overrideCabal (drv: {
-        version = "1.3.0.0-unstable-2025-04-25";
-        src = pkgs.fetchFromGitHub {
-          owner = "AccelerateHS";
-          repo = "accelerate";
-          rev = "3f681a5091eddf5a3b97f4cd0de32adc830e1117";
-          sha256 = "sha256-tCcl7wAls+5cBSrqbxfEAJngbV43OJcLJdaC4qqkBxc=";
-        };
-      }))
-    ];
+    (overrideCabal (drv: {
+      version = "1.3.0.0-unstable-2025-04-25";
+      src = pkgs.fetchFromGitHub {
+        owner = "AccelerateHS";
+        repo = "accelerate";
+        rev = "3f681a5091eddf5a3b97f4cd0de32adc830e1117";
+        sha256 = "sha256-tCcl7wAls+5cBSrqbxfEAJngbV43OJcLJdaC4qqkBxc=";
+      };
+    }))
+  ];
 
   # https://github.com/ivanperez-keera/dunai/issues/427
   dunai = addBuildDepend self.list-transformer (enableCabalFlag "list-transformer" super.dunai);
@@ -1826,19 +1833,13 @@ self: super:
   semver-range = dontCheck super.semver-range;
 
   # 2024-03-02: vty <5.39 - https://github.com/reflex-frp/reflex-ghci/pull/33
-  reflex-ghci =
-    assert super.reflex-ghci.version == "0.2.0.1";
-    doJailbreak super.reflex-ghci;
+  reflex-ghci = warnAfterVersion "0.2.0.1" (doJailbreak super.reflex-ghci);
 
   # 2024-09-18: transformers <0.5  https://github.com/reflex-frp/reflex-gloss/issues/6
-  reflex-gloss =
-    assert super.reflex-gloss.version == "0.2";
-    doJailbreak super.reflex-gloss;
+  reflex-gloss = warnAfterVersion "0.2" (doJailbreak super.reflex-gloss);
 
   # 2024-09-18: primitive <0.8  https://gitlab.com/Kritzefitz/reflex-gi-gtk/-/merge_requests/20
-  reflex-gi-gtk =
-    assert super.reflex-gi-gtk.version == "0.2.0.1";
-    doJailbreak super.reflex-gi-gtk;
+  reflex-gi-gtk = warnAfterVersion "0.2.0.1" (doJailbreak super.reflex-gi-gtk);
 
   # Due to tests restricting base in 0.8.0.0 release
   http-media = doJailbreak super.http-media;
@@ -2118,17 +2119,15 @@ self: super:
 
   # 2024-09-18: Make compatible with haskell-gi 0.26.10
   # https://github.com/owickstrom/gi-gtk-declarative/pull/118
-  gi-gtk-declarative = overrideCabal (
-    drv:
-    assert drv.version == "0.7.1";
-    {
+  gi-gtk-declarative = warnAfterVersion "0.7.1" (
+    overrideCabal (drv: {
       jailbreak = true;
       postPatch = ''
         sed -i '1 i {-# LANGUAGE FlexibleContexts #-}' \
           src/GI/Gtk/Declarative/Widget/Conversions.hs
       '';
-    }
-  ) super.gi-gtk-declarative;
+    }) super.gi-gtk-declarative
+  );
   gi-gtk-declarative-app-simple = doJailbreak super.gi-gtk-declarative-app-simple;
 
   # FIXME: These should be removed as gi-gtk4/gi-gdk4 become the standard
@@ -2238,8 +2237,7 @@ self: super:
   # https://github.com/kapralVV/Unique/issues/9
   # Too strict bounds on hashable
   # https://github.com/kapralVV/Unique/pull/10
-  Unique =
-    assert super.Unique.version == "0.4.7.9";
+  Unique = warnAfterVersion "0.4.7.9" (
     overrideCabal (drv: {
       testFlags = [
         "--skip"
@@ -2249,17 +2247,18 @@ self: super:
         "--skip"
         "/Data.List.UniqueUnsorted.repeatedBy,repeated,unique/repeatedBy: simple test/"
       ] ++ drv.testFlags or [ ];
-    }) super.Unique;
+    }) super.Unique
+  );
 
   # https://github.com/AndrewRademacher/aeson-casing/issues/8
-  aeson-casing =
-    assert super.aeson-casing.version == "0.2.0.0";
+  aeson-casing = warnAfterVersion "0.2.0.0" (
     overrideCabal (drv: {
       testFlags = [
         "-p"
         "! /encode train/"
       ] ++ drv.testFlags or [ ];
-    }) super.aeson-casing;
+    }) super.aeson-casing
+  );
 
   # https://github.com/emc2/HUnit-Plus/issues/26
   HUnit-Plus = dontCheck super.HUnit-Plus;
@@ -2718,8 +2717,7 @@ self: super:
 
   # 2024-03-02: Apply unreleased changes necessary for compatibility
   # with commonmark-extensions-0.2.5.3.
-  commonmark-simple =
-    assert super.commonmark-simple.version == "0.1.0.0";
+  commonmark-simple = warnAfterVersion "0.1.0.0" (
     appendPatches (map
       (
         { rev, hash }:
@@ -2740,7 +2738,8 @@ self: super:
           hash = "sha256-9cpgRNFWhpSuSttAvnwPiLmi1sIoDSYbp0sMwcKWgDQ=";
         }
       ]
-    ) (doJailbreak super.commonmark-simple);
+    ) (doJailbreak super.commonmark-simple)
+  );
 
   # Test files missing from sdist
   # https://github.com/tweag/webauthn/issues/166
@@ -3002,7 +3001,7 @@ self: super:
   http-client-tls = doJailbreak super.http-client-tls;
 
   bsb-http-chunked = lib.pipe super.bsb-http-chunked [
-    (lib.warnIf (lib.versionOlder "0.0.0.4" super.bsb-http-chunked.version) "override for haskellPackages.bsb-http-chunked may no longer be needed")
+    (warnAfterVersion "0.0.0.4")
     # Last released in 2018
     # https://github.com/sjakobi/bsb-http-chunked/issues/38
     # https://github.com/sjakobi/bsb-http-chunked/issues/45
@@ -3060,19 +3059,13 @@ self: super:
   ];
 
   # 2025-04-09: jailbreak to allow hedgehog >= 1.5
-  hw-int =
-    assert super.hw-int.version == "0.0.2.0";
-    doJailbreak super.hw-int;
+  hw-int = warnAfterVersion "0.0.2.0" (doJailbreak super.hw-int);
 
   # 2025-04-09: jailbreak to allow tasty-quickcheck >= 0.11
-  chimera =
-    assert super.chimera.version == "0.4.1.0";
-    doJailbreak super.chimera;
+  chimera = warnAfterVersion "0.4.1.0" (doJailbreak super.chimera);
 
   # 2025-04-09: jailbreak to allow tasty-quickcheck >= 0.11
-  bzlib =
-    assert super.bzlib.version == "0.5.2.0";
-    doJailbreak super.bzlib;
+  bzlib = warnAfterVersion "0.5.2.0" (doJailbreak super.bzlib);
 
   inherit
     (lib.mapAttrs (
@@ -3102,80 +3095,54 @@ self: super:
   ];
 
   # 2025-04-09: jailbreak to allow mtl >= 2.3, template-haskell >= 2.17, text >= 1.3
-  egison-pattern-src-th-mode =
-    assert super.egison-pattern-src-th-mode.version == "0.2.1.2";
-    doJailbreak super.egison-pattern-src-th-mode;
+  egison-pattern-src-th-mode = warnAfterVersion "0.2.1.2" (
+    doJailbreak super.egison-pattern-src-th-mode
+  );
 
   # 2025-04-09: jailbreak to allow base >= 4.17, hasql >= 1.6, hasql-transaction-io >= 0.2
-  hasql-streams-core =
-    assert super.hasql-streams-core.version == "0.1.0.0";
-    doJailbreak super.hasql-streams-core;
+  hasql-streams-core = warnAfterVersion "0.1.0.0" (doJailbreak super.hasql-streams-core);
 
   # 2025-04-09: jailbreak to allow bytestring >= 0.12, text >= 2.1
-  pipes-text =
-    assert super.pipes-text.version == "1.0.1";
-    doJailbreak super.pipes-text;
+  pipes-text = warnAfterVersion "1.0.1" (doJailbreak super.pipes-text);
 
   # 2025-04-09: jailbreak to allow bytestring >= 0.12
-  array-builder =
-    assert super.array-builder.version == "0.1.4.1";
-    doJailbreak super.array-builder;
+  array-builder = warnAfterVersion "0.1.4.1" (doJailbreak super.array-builder);
 
   # 2025-04-09: missing dependency - somehow it's not listed on hackage
   broadcast-chan = addExtraLibrary self.conduit super.broadcast-chan;
 
   # 2025-04-09: jailbreak to allow template-haskell >= 2.21, th-abstraction >= 0.7
-  kind-generics-th =
-    assert super.kind-generics-th.version == "0.2.3.3";
-    doJailbreak super.kind-generics-th;
+  kind-generics-th = warnAfterVersion "0.2.3.3" (doJailbreak super.kind-generics-th);
 
   # 2025-04-09: jailbreak to allow tasty >= 1.5
-  cvss =
-    assert super.cvss.version == "0.1";
-    doJailbreak super.cvss;
+  cvss = warnAfterVersion "0.1" (doJailbreak super.cvss);
 
   # 2025-04-09: jailbreak to allow aeson >= 2.2, base >= 4.19, text >= 2.1
-  ebird-api =
-    assert super.ebird-api.version == "0.2.0.0";
-    doJailbreak super.ebird-api;
+  ebird-api = warnAfterVersion "0.2.0.0" (doJailbreak super.ebird-api);
 
   # 2025-04-13: jailbreak to allow bytestring >= 0.12
-  strings =
-    assert super.strings.version == "1.1";
-    doJailbreak super.strings;
+  strings = warnAfterVersion "1.1" (doJailbreak super.strings);
 
   # 2025-04-13: jailbreak to allow bytestring >= 0.12
-  twain =
-    assert super.twain.version == "2.2.0.1";
-    doJailbreak super.twain;
+  twain = warnAfterVersion "2.2.0.1" (doJailbreak super.twain);
 
   # 2025-04-13: jailbreak to allow hedgehog >= 1.5
-  hw-bits =
-    assert super.hw-bits.version == "0.7.2.2";
-    doJailbreak super.hw-bits;
+  hw-bits = warnAfterVersion "0.7.2.2" (doJailbreak super.hw-bits);
 
   # 2025-04-23: jailbreak to allow bytestring >= 0.12
-  brillo-rendering = lib.warnIf (
-    super.brillo-rendering.version != "1.13.3"
-  ) "haskellPackages.brillo-rendering override can be dropped" doJailbreak super.brillo-rendering;
-  brillo-examples = lib.warnIf (
-    super.brillo-examples.version != "1.13.3"
-  ) "haskellPackages.brillo-examples override can be dropped" doJailbreak super.brillo-examples;
-  brillo-juicy = lib.warnIf (
-    super.brillo-juicy.version != "0.2.4"
-  ) "haskellPackages.brillo-juicy override can be dropped" doJailbreak super.brillo-juicy;
-  brillo = lib.warnIf (
-    super.brillo.version != "1.13.3"
-  ) "haskellPackages.brillo override can be dropped" doJailbreak super.brillo;
+  brillo-rendering = warnAfterVersion "1.13.3" (doJailbreak super.brillo-rendering);
+  brillo-examples = warnAfterVersion "1.13.3" (doJailbreak super.brillo-examples);
+  brillo-juicy = warnAfterVersion "0.2.4" (doJailbreak super.brillo-juicy);
+  brillo = warnAfterVersion "1.13.3" (doJailbreak super.brillo);
 
   # 2025-04-13: jailbreak to allow th-abstraction >= 0.7
-  crucible =
-    assert super.crucible.version == "0.7.2";
+  crucible = warnAfterVersion "0.7.2" (
     doJailbreak (
       super.crucible.override {
         what4 = self.what4_1_7;
       }
-    );
+    )
+  );
 
   crucible-llvm = super.crucible-llvm.override {
     what4 = self.what4_1_7;
@@ -3229,29 +3196,27 @@ self: super:
   finitary = dontCheck super.finitary;
 
   # 2025-04-13: jailbreak to allow bytestring >= 0.12, text >= 2.1
-  ktx-codec =
-    assert super.ktx-codec.version == "0.0.2.1";
-    doJailbreak super.ktx-codec;
+  ktx-codec = warnAfterVersion "0.0.2.1" (doJailbreak super.ktx-codec);
 
   # 2025-04-23: jailbreak to allow text >= 2.1
   # https://github.com/wereHamster/haskell-css-syntax/issues/8
   css-syntax = doJailbreak super.css-syntax;
 
   # 2025-04-13: jailbreak to allow template-haskell >= 2.17
-  sr-extra = overrideCabal (drv: {
-    version =
-      assert super.sr-extra.version == "1.88";
-      "1.88-unstable-2025-03-30";
-    # includes https://github.com/seereason/sr-extra/pull/7
-    src = pkgs.fetchFromGitHub {
-      owner = "seereason";
-      repo = "sr-extra";
-      rev = "2b18ced8d07aa8832168971842b20ea49369e4f0";
-      hash = "sha256-jInfHA1xkLjx5PfsgQVzeQIN3OjTUpEz7dpVNOGNo3g=";
-    };
-    editedCabalFile = null;
-    revision = null;
-  }) super.sr-extra;
+  sr-extra = warnAfterVersion "1.88" (
+    overrideCabal (drv: {
+      version = "1.88-unstable-2025-03-30";
+      # includes https://github.com/seereason/sr-extra/pull/7
+      src = pkgs.fetchFromGitHub {
+        owner = "seereason";
+        repo = "sr-extra";
+        rev = "2b18ced8d07aa8832168971842b20ea49369e4f0";
+        hash = "sha256-jInfHA1xkLjx5PfsgQVzeQIN3OjTUpEz7dpVNOGNo3g=";
+      };
+      editedCabalFile = null;
+      revision = null;
+    }) super.sr-extra
+  );
 
   # Too strict bounds on base <4.19 and tasty <1.5
   # https://github.com/maoe/ghc-prof/issues/25
@@ -3302,18 +3267,17 @@ self: super:
   in
   amazonkaServiceOverrides
   // {
-    amazonka-core =
-      assert super.amazonka-core.version == "2.0";
-      lib.pipe super.amazonka-core [
-        (setAmazonkaSourceRoot "lib/amazonka-core")
-        (addBuildDepends [
-          self.microlens
-          self.microlens-contra
-          self.microlens-pro
-        ])
-      ];
-    amazonka =
-      assert super.amazonka.version == "2.0";
-      setAmazonkaSourceRoot "lib/amazonka" (doJailbreak super.amazonka);
+    amazonka-core = lib.pipe super.amazonka-core [
+      (warnAfterVersion "2.0")
+      (setAmazonkaSourceRoot "lib/amazonka-core")
+      (addBuildDepends [
+        self.microlens
+        self.microlens-contra
+        self.microlens-pro
+      ])
+    ];
+    amazonka = warnAfterVersion "2.0" (
+      setAmazonkaSourceRoot "lib/amazonka" (doJailbreak super.amazonka)
+    );
   }
 )
