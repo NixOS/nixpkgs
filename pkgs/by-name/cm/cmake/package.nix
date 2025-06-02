@@ -137,7 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags =
     [
       "CXXFLAGS=-Wno-elaborated-enum-base"
-      "--docdir=share/doc/${finalAttrs.pname}-${finalAttrs.version}"
+      "--docdir=share/doc/cmake-${finalAttrs.version}"
     ]
     ++ (
       if useSharedLibraries then
