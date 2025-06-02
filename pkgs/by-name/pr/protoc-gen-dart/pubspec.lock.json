@@ -303,11 +303,12 @@
     "protobuf": {
       "dependency": "direct main",
       "description": {
-        "path": "../protobuf",
-        "relative": true
+        "name": "protobuf",
+        "sha256": "579fe5557eae58e3adca2e999e38f02441d8aa908703854a9e0a0f47fa857731",
+        "url": "https://pub.dev"
       },
-      "source": "path",
-      "version": "4.0.1-wip"
+      "source": "hosted",
+      "version": "4.1.0"
     },
     "pub_semver": {
       "dependency": "transitive",
