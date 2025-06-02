@@ -3054,18 +3054,6 @@ self: super:
       url = "https://github.com/sjakobi/bsb-http-chunked/commit/689bf9ce12b8301d0e13a68e4a515c2779b62947.patch";
       sha256 = "sha256-ZdCXMhni+RGisRODiElObW5c4hKy2giWQmWnatqeRJo=";
     }))
-
-    # blaze-builder's code is missing the following fix, causing it to produce
-    # incorrect chunking on 32 bit platforms:
-    # https://github.com/sjakobi/bsb-http-chunked/commit/dde7c9fa33bb6e55b44c5f3e3024215475f64d4c
-    (overrideCabal (drv: {
-      testFlags =
-        drv.testFlags or [ ]
-        ++ lib.optionals pkgs.stdenv.hostPlatform.is32bit [
-          "-p"
-          "!/Identical output as Blaze/"
-        ];
-    }))
   ];
 
   # jailbreak to allow deepseq >= 1.5, https://github.com/jumper149/blucontrol/issues/3
@@ -3090,7 +3078,7 @@ self: super:
       sha256 = "sha256-ayRKeCqYKgZVA826xgAXxGhttm0Gx4ZrIRJlFlXPKhw=";
     }))
     (appendPatch (fetchpatch {
-      name="jats:use-texmath-0.12.10.1";
+      name = "jats:use-texmath-0.12.10.1";
       url = "https://github.com/jgm/pandoc/commit/d3d5366e5197330e035f9f1700929c9b5a24d532.patch";
       sha256 = "sha256-skG7LbKl4ypVnEYA9xMtDbUmHrjuXWfuchV8iMn8Yy0=";
       includes = [ "test/*" ];
