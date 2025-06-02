@@ -737,6 +737,107 @@ let
           nestedTypes.elemType = elemType;
         };
 
+      /**
+        TODO: Docs
+      */
+      setRemove = value: {
+        _type = "remove";
+        inherit value;
+      };
+
+      /**
+        TODO: Docs
+      */
+      setWith =
+        { elemType, toKey }:
+        mkOptionType {
+          name = "setOf";
+          description = "set of ${
+            optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType
+          }";
+          descriptionClass = "composite";
+          # disable typeMerging because 'toKey' cannot be merged
+          typeMerge = t: null;
+          check = v: isList v || isType "remove" v;
+          merge =
+            loc: defs:
+            let
+              # Attribute set for efficient key lookup
+              removedKeys = lib.listToAttrs (
+                lib.concatLists (
+                  lib.imap1 (
+                    n: def:
+                    if !isType "remove" def.value then
+                      [ ]
+                    else
+                      imap1 (m: singleDef: rec {
+                        name = toKey value;
+                        value =
+                          (mergeDefinitions (loc ++ [ "[definition ${toString n}-entry ${toString m}]" ]) elemType [
+                            {
+                              value = singleDef;
+                              file = def.file;
+                            }
+                          ]).mergedValue;
+                      }) def.value.value
+                  ) defs
+                )
+              );
+
+              definitionsByKey = zipAttrsWith (n: vs: vs) (
+                concatLists (
+                  lib.imap1 (
+                    n: def:
+                    if isType "remove" def.value then
+                      [ ]
+                    else
+                      imap1 (
+                        m: singleDef:
+                        let
+                          key =
+                            toKey
+                              (mergeDefinitions (loc ++ [ "[definition ${toString n}-entry ${toString m}]" ]) elemType [
+                                {
+                                  value = singleDef;
+                                  file = def.file;
+                                }
+                              ]).mergedValue;
+                        in
+                        if removedKeys ? ${key} then
+                          { }
+                        else
+                          {
+                            ${key} = {
+                              value = singleDef;
+                              inherit (def) file;
+                            };
+                          }
+                      ) def.value
+                  ) (defs)
+                )
+              );
+              mergedByKey = lib.mapAttrsToList (
+                key: defs: (mergeDefinitions (loc ++ [ "[definition key:'${key}']" ]) elemType defs).optionalValue
+              ) definitionsByKey;
+
+              values = map (x: x.value) (filter (x: x ? value) (mergedByKey));
+            in
+            values;
+
+          emptyValue = {
+            value = [ ];
+          };
+          getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "*" ]);
+          getSubModules = elemType.getSubModules;
+          substSubModules =
+            m:
+            setWith {
+              elemType = (elemType.substSubModules m);
+              inherit toKey;
+            };
+          nestedTypes.elemType = elemType;
+        };
+
       nonEmptyListOf =
         elemType:
         let
