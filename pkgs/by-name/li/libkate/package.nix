@@ -1,34 +1,50 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
+  autoreconfHook,
+  bison,
+  flex,
   libogg,
   libpng,
+  pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libkate";
-  version = "0.4.1";
+  version = "0.4.3";
 
-  src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/libkate/${pname}-${version}.tar.gz";
-    sha256 = "0s3vr2nxfxlf1k75iqpp4l78yf4gil3f0v778kvlngbchvaq23n4";
+  src = fetchFromGitLab {
+    domain = "gitlab.xiph.org/";
+    owner = "xiph";
+    repo = "kate";
+    tag = "kate-${finalAttrs.version}";
+    hash = "sha256-HwDahmjDC+O321Ba7MnHoQdHOFUMpFzaNdLHQeEg11Q=";
   };
+
+  nativeBuildInputs = [
+    autoreconfHook
+    bison
+    flex
+    pkg-config # provides macro PKG_CHECK_MODULES
+  ];
 
   buildInputs = [
     libogg
     libpng
   ];
 
-  meta = with lib; {
+  enableParallelBuilding = true;
+
+  meta = {
     description = "Library for encoding and decoding Kate streams";
     longDescription = ''
       This is libkate, the reference implementation of a codec for the Kate
       bitstream format. Kate is a karaoke and text codec meant for encapsulation
       in an Ogg container. It can carry Unicode text, images, and animate
       them.'';
-    homepage = "https://code.google.com/archive/p/libkate/";
-    platforms = platforms.unix;
-    license = licenses.bsd3;
+    homepage = "https://wiki.xiph.org/index.php/OggKate";
+    platforms = lib.platforms.unix;
+    license = lib.licenses.bsd3;
   };
-}
+})
