@@ -44,8 +44,6 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt \
       --replace-fail 'add_subdirectory(Source/Shared/ffmpeg)' '# add_subdirectory(Source/Shared/ffmpeg) - using system FFmpeg' \
       --replace-fail 'target_link_libraries(play.file_tilde PRIVATE ffmpeg)' 'target_link_libraries(play.file_tilde PRIVATE avformat avcodec avutil swresample z)' \
-      --replace-fail 'target_link_libraries(streamin_tilde PRIVATE ffmpeg)' 'target_link_libraries(streamin_tilde PRIVATE avformat avcodec avutil swresample z)' \
-      --replace-fail 'target_link_libraries(streamout_tilde PRIVATE ffmpeg)' 'target_link_libraries(streamout_tilde PRIVATE avformat avcodec avutil swresample z)' \
       --replace-fail 'target_link_libraries(sfload PRIVATE ffmpeg)' 'target_link_libraries(sfload PRIVATE avformat avcodec avutil swresample z)' \
       --replace-fail 'target_link_libraries(sfinfo PRIVATE ffmpeg)' 'target_link_libraries(sfinfo PRIVATE avformat avcodec avutil swresample z)'
   '';
