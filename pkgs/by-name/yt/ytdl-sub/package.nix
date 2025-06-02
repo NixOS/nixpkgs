@@ -4,8 +4,8 @@
   ffmpeg,
   lib,
   versionCheckHook,
-  nix-update-script,
 }:
+
 python3Packages.buildPythonApplication rec {
   pname = "ytdl-sub";
   version = "2025.05.23";
@@ -45,7 +45,7 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     homepage = "https://github.com/jmbannon/ytdl-sub";
