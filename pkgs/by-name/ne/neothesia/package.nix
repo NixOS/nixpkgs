@@ -12,13 +12,13 @@
   xorg,
 }:
 let
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "PolyMeilex";
     repo = "Neothesia";
     rev = "v${version}";
-    hash = "sha256-JD1jQ/a6GHtB/d/fRMCiE4ZOO676BIiZ980VIYUloU0=";
+    hash = "sha256-qYwBSye6RYClSlWmHwuy/rxq9w5932tR33Z+o2S1l8k=";
   };
 in
 rustPlatform.buildRustPackage {
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage {
   ];
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-OYdKuYOL3X6eqVYANvmfTRA8TGd4+QLg0zodDH0jxXk=";
+  cargoHash = "sha256-mXeNAVYqPsBWiUZFV/atx/xjLgFNarm2HwI7k/NaAbc=";
 
   cargoBuildFlags = [
     "-p neothesia -p neothesia-cli"
