@@ -8,7 +8,7 @@
   darwinMinVersionHook,
   dbus,
   fetchFromGitHub,
-  ibus,
+  ibusMinimal,
   installShellFiles,
   libGL,
   libayatana-appindicator,
@@ -104,7 +104,11 @@ stdenv.mkDerivation (finalAttrs: {
       apple-sdk_11
     ]
     ++ lib.optionals ibusSupport [
-      ibus
+      # sdl3 only uses some constants of the ibus headers
+      # it never actually loads the library
+      # thus, it also does not have to care about gtk integration,
+      # so using ibusMinimal avoids an unnecessarily large closure here.
+      ibusMinimal
     ]
     ++ lib.optional waylandSupport zenity;
 
