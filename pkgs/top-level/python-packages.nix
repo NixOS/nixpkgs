@@ -11756,8 +11756,6 @@ self: super: with self; {
 
   pulp = callPackage ../development/python-modules/pulp { };
 
-  pulsar = callPackage ../development/python-modules/pulsar { };
-
   pulsar-client = callPackage ../development/python-modules/pulsar-client { };
 
   pulsectl = callPackage ../development/python-modules/pulsectl { };
