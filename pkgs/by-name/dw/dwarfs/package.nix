@@ -4,6 +4,7 @@
   stdenv,
   bison,
   boost,
+  brotli,
   cmake,
   double-conversion,
   fmt,
@@ -33,14 +34,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dwarfs";
-  version = "0.12.3";
+  version = "0.12.4";
 
   src = fetchFromGitHub {
     owner = "mhx";
     repo = "dwarfs";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-DIlGeZXWyM9rMzo/DNQlzSbNBIRJhe2viXFM/zT2heY=";
+    hash = "sha256-EYNnmv0QKdWddIRFRsuwsazHep3nrJ8lInlR4S67rME=";
   };
 
   cmakeFlags = [
@@ -68,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     parallel-hashmap
     nlohmann_json
     boost
+    brotli
     flac # optional; allows automatic audio compression
     fmt
     fuse3
@@ -117,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Fast high compression read-only file system";
     homepage = "https://github.com/mhx/dwarfs";
     changelog = "https://github.com/mhx/dwarfs/blob/v${finalAttrs.version}/CHANGES.md";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.luftmensch-luftmensch ];
     platforms = lib.platforms.linux;
   };
