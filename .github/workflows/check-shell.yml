@@ -44,5 +44,11 @@ jobs:
 
       - uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
 
+      - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
+        with:
+          # This cache is for the nixpkgs repo checks and should not be trusted or used elsewhere.
+          name: nixpkgs-ci
+          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+
       - name: Build shell
         run: nix-build untrusted/ci -A shell
