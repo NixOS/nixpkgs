@@ -1251,8 +1251,8 @@ let
         mktplcRef = {
           name = "flutter";
           publisher = "dart-code";
-          version = "3.110.0";
-          hash = "sha256-Zi+q56XcHZGUKgF3TNpaYSwwdqLT8Q1fxf8dFVAEuQY=";
+          version = "3.112.0";
+          hash = "sha256-S+srv0zUCobM3IPXOME5oT0xdXdPmMHSs7rwNTBcnhk=";
         };
 
         meta.license = lib.licenses.mit;
