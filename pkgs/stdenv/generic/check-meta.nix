@@ -120,7 +120,7 @@ let
 
   isMarkedInsecure = attrs: (attrs.meta.knownVulnerabilities or [ ]) != [ ];
 
-  # Alow granular checks to allow only some unfree packages
+  # Allow granular checks to allow only some unfree packages
   # Example:
   # {pkgs, ...}:
   # {

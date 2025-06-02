@@ -34,7 +34,7 @@
   # all dependants in Nixpkgs
   withSmallDeps ? ffmpegVariant == "small" || withFullDeps,
 
-  # Everything enabled; only guarded behind platform exclusivity or brokeness.
+  # Everything enabled; only guarded behind platform exclusivity or brokenness.
   # If you need to depend on ffmpeg-full because ffmpeg is missing some feature
   # your package needs, you should enable that feature in regular ffmpeg
   # instead.
