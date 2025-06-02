@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   hatchling,
   hatch-vcs,
@@ -24,16 +23,14 @@
 
 buildPythonPackage rec {
   pname = "datashader";
-  version = "0.18.0";
+  version = "0.18.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "holoviz";
     repo = "datashader";
     tag = "v${version}";
-    hash = "sha256-HduEO2XDH20tovtlpg5DbF96G5Lpbo+XVmQKnWvfyL8=";
+    hash = "sha256-nQsVuj4zK5bfF617K71n+El5/ZC7vNia7dhrIqv7t+M=";
   };
 
   build-system = [
@@ -68,6 +65,7 @@ buildPythonPackage rec {
     description = "Data visualization toolchain based on aggregating into a grid";
     mainProgram = "datashader";
     homepage = "https://datashader.org";
+    changelog = "https://github.com/holoviz/datashader/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nickcao ];
   };
