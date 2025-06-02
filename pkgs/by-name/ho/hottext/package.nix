@@ -24,9 +24,9 @@ buildNimPackage (finalAttrs: {
   desktopItem = makeDesktopItem {
     categories = [ "Utility" ];
     comment = finalAttrs.meta.description;
-    desktopName = finalAttrs.pname;
-    exec = finalAttrs.pname;
-    name = finalAttrs.pname;
+    desktopName = "hottext";
+    exec = "hottext";
+    name = "hottext";
   };
 
   postInstall = ''

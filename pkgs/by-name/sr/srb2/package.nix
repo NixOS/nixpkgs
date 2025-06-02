@@ -90,8 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
   desktopItems = [
     (makeDesktopItem rec {
       name = "Sonic Robo Blast 2";
-      exec = finalAttrs.pname;
-      icon = finalAttrs.pname;
+      exec = "srb2";
+      icon = "srb2";
       comment = finalAttrs.meta.description;
       desktopName = name;
       genericName = name;
