@@ -1331,13 +1331,6 @@
     githubId = 9567176;
     name = "Alexis Simon";
   };
-  alyaeanyx = {
-    email = "alyaeanyx@mailbox.org";
-    github = "alyaeanyx";
-    githubId = 74795488;
-    name = "alyaeanyx";
-    keys = [ { fingerprint = "1F73 8879 5E5A 3DFC E2B3 FA32 87D1 AADC D25B 8DEE"; } ];
-  };
   amadaluzia = {
     email = "amad@atl.tools";
     github = "amadaluzia";
@@ -7841,6 +7834,12 @@
     github = "hatch01";
     githubId = 42416805;
   };
+  ezrizhu = {
+    name = "Ezri Zhu";
+    email = "me@ezrizhu.com";
+    github = "ezrizhu";
+    githubId = 44515009;
+  };
   f--t = {
     email = "git@f-t.me";
     github = "f--t";
@@ -12978,12 +12977,6 @@
     githubId = 843652;
     name = "Kim Burgess";
   };
-  kindrowboat = {
-    email = "hello@kindrobot.ca";
-    github = "kindrowboat";
-    githubId = 777773;
-    name = "Stef Dunlap";
-  };
   kini = {
     email = "keshav.kini@gmail.com";
     github = "kini";
@@ -15654,6 +15647,16 @@
     githubId = 55669980;
     name = "John McParland";
     keys = [ { fingerprint = "39D2 171D D733 C718 DD21  285E B326 E14B 05D8 7A4E"; } ];
+  };
+  MCSeekeri = {
+    email = "mcseekeri@outlook.com";
+    github = "mcseekeri";
+    githubId = 20928094;
+    name = "MCSeekeri";
+    keys = [
+      { fingerprint = "5922 79AB D9D6 85EB 9D16  754C ECDC AD89 5A38 4A12"; }
+      { fingerprint = "0762 A387 F160 76F1 116C  BF13 3276 6666 6666 6666"; }
+    ];
   };
   McSinyx = {
     email = "cnx@loang.net";
@@ -19069,6 +19072,13 @@
     github = "penguwin";
     githubId = 13225611;
     name = "Nicolas Martin";
+  };
+  pentane = {
+    email = "cyclopentane@aidoskyneen.eu";
+    github = "cyclic-pentane";
+    githubId = 74795488;
+    name = "pentane";
+    keys = [ { fingerprint = "4231 75F6 8360 68C8 2ACB AEDA 63F4 EC2F FE55 0874"; } ];
   };
   perchun = {
     name = "Perchun Pak";

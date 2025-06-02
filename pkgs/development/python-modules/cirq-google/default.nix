@@ -6,6 +6,7 @@
   protobuf,
   freezegun,
   pytestCheckHook,
+  typedunits,
 }:
 
 buildPythonPackage rec {
@@ -25,6 +26,7 @@ buildPythonPackage rec {
     cirq-core
     google-api-core
     protobuf
+    typedunits
   ] ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
