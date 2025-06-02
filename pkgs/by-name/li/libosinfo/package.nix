@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libosinfo";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchurl {
     url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-G/lu7J4UYPPRpxMWPMof8NSAo0kLUImSkvFFSLOpa2A=";
+    sha256 = "sha256-rYVX7OJnk9pD0m3lZePWjOLua/uNARO3zH3+B/a/xrY=";
   };
 
   outputs = [
@@ -65,10 +65,10 @@ stdenv.mkDerivation rec {
       osinfo_db_data_dir = "${osinfo-db}/share";
     })
 
-    # Fix build with libxml 2.12
+    # Fix build with libxml 2.14
     (fetchpatch {
-      url = "https://gitlab.com/libosinfo/libosinfo/-/commit/5bbdd06503456784c5ffa22409e8bab50470d673.patch";
-      hash = "sha256-KqgHXI+lD5VYp2wtA58Drp15TgNK1O3xCaYBy4/B9wc=";
+      url = "https://gitlab.com/libosinfo/libosinfo/-/commit/0adf38535637ec668e658d43f04f60f11f51574f.patch";
+      hash = "sha256-NZija5BwevRU7bAe2SPx9GnoGb1P+mXEbJ5EVAFT9Yw=";
     })
   ];
 
