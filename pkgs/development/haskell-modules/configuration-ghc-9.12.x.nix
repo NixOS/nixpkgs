@@ -85,8 +85,10 @@ with haskellLib;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_12_2_20250421;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_12_0_0;
   hlint = doDistribute self.hlint_3_10;
-  fourmolu = doDistribute self.fourmolu_0_18_0_0;
+  # fourmolu checks require Diff > 1.0, which is not yet supported by various other deps of hls. 
+  fourmolu = doDistribute (dontCheck self.fourmolu_0_18_0_0);
   ormolu = doDistribute self.ormolu_0_8_0_0;
+  stylish-haskell = doDistribute self.stylish-haskell_0_15_1_0;
   apply-refact = doDistribute self.apply-refact_0_15_0_0;
 
   #
@@ -167,13 +169,6 @@ with haskellLib;
   # Multiple issues
   #
 
-  fourmolu_0_18_0_0 = dontCheck (
-    super.fourmolu_0_18_0_0.override {
-      # Diff >=1 && <2
-      Diff = super.Diff_1_0_2;
-    }
-  );
-
   doctest-parallel = overrideCabal (drv: {
     patches = drv.patches or [ ] ++ [
       (pkgs.fetchpatch {
@@ -185,15 +180,10 @@ with haskellLib;
     ];
   }) (dontCheck (doJailbreak super.doctest-parallel)); # Cabal >=2.4 && <3.13
 
-  haskell-language-server = disableCabalFlag "retrie" (
-    disableCabalFlag "stylishhaskel" (
-      super.haskell-language-server.override {
-        stylish-haskell = null;
-        floskell = null;
-        retrie = null;
-      }
-    )
-  );
+  haskell-language-server = super.haskell-language-server.override {
+      floskell = null;
+      retrie = null;
+    };
 
   # Allow Cabal 3.14
   hpack = doDistribute self.hpack_0_38_0;
