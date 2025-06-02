@@ -60,7 +60,7 @@ buildPythonPackage rec {
       # https://github.com/DataDog/datadogpy/issues/746
       "TestDogshell"
 
-      # Flaky: test execution time aganst magic values
+      # Flaky: test execution time against magic values
       "test_distributed"
       "test_timed"
       "test_timed_in_ms"

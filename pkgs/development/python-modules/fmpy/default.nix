@@ -178,7 +178,7 @@ buildPythonPackage rec {
           };
 
         # FMPy searches for sundials without the "lib"-prefix; strip it
-        # and symlink the so-files into existance.
+        # and symlink the so-files into existence.
         postFixup = ''
           pushd $out/lib
           for so in *.so; do
