@@ -264,7 +264,7 @@ in
             type = types.str;
             default = if cfg.enableNginx then "localhost,127.0.0.1,${cfg.domain}" else "";
             defaultText = lib.literalExpression ''
-              if cfg.enableNginx then "localhost,127.0.0.1,$${cfg.domain}" else ""
+              if cfg.enableNginx then "localhost,127.0.0.1,''${cfg.domain}" else ""
             '';
             description = "Comma-separated list of hosts that are able to connect to the server";
           };
@@ -348,8 +348,6 @@ in
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
-        ln -sfT ${cfg.backendPackage}/share/static /var/lib/lasuite-docs/static
-
         if [ ! -f .version ]; then
           touch .version
         fi
@@ -371,6 +369,8 @@ in
       environment = pythonEnvironment;
 
       serviceConfig = {
+        BindReadOnlyPaths = "${cfg.backendPackage}/share/static:/var/lib/lasuite-docs/static";
+
         ExecStart = utils.escapeSystemdExecArgs (
           [
             (lib.getExe' cfg.backendPackage "gunicorn")
