@@ -48,8 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs .
   '';
 
-  hardeningDisable = [ "trivialautovarinit" ];
-
   configureFlags = [ "--disable-examples" ];
 
   strictDeps = true;
