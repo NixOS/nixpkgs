@@ -544,24 +544,24 @@ self: super:
 
   # Manually maintained
   cachix-api = overrideCabal (drv: {
-    version = "1.7.8";
+    version = "1.7.9";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      tag = "v1.7.8";
-      hash = "sha256-pb5aYkE8FOoa4n123slgHiOf1UbNSnKe5pEZC+xXD5g=";
+      tag = "v1.7.9";
+      hash = "sha256-R0W7uAg+BLoHjMRMQ8+oiSbTq8nkGz5RDpQ+ZfxxP3A=";
     };
     postUnpack = "sourceRoot=$sourceRoot/cachix-api";
   }) super.cachix-api;
   cachix = (
     overrideCabal
       (drv: {
-        version = "1.7.8";
+        version = "1.7.9";
         src = pkgs.fetchFromGitHub {
           owner = "cachix";
           repo = "cachix";
-          tag = "v1.7.8";
-          hash = "sha256-pb5aYkE8FOoa4n123slgHiOf1UbNSnKe5pEZC+xXD5g=";
+          tag = "v1.7.9";
+          hash = "sha256-R0W7uAg+BLoHjMRMQ8+oiSbTq8nkGz5RDpQ+ZfxxP3A=";
         };
         postUnpack = "sourceRoot=$sourceRoot/cachix";
       })
