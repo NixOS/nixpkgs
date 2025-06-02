@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pd-else";
-  version = "1.0-beta";
+  version = "1.0-rc13";
 
   src = fetchFromGitHub {
     owner = "porres";
     repo = "pd-else";
-    rev = "1.0-beta";
-    hash = "sha256-PndIy5fDK5f4wkd0noLJHT6IIzYP8QRBLC0+tPnaDek=";
+    rev = "v.${version}";
+    hash = "sha256-WebjdozcFup2xk3cS9LPTiA6m0l1sR6sj3hHlt6ScfU=";
   };
 
   nativeBuildInputs = [
@@ -54,8 +54,8 @@ stdenv.mkDerivation rec {
     "-DCMAKE_C_FLAGS=-I${puredata}/include/pd"
     "-DCMAKE_CXX_FLAGS=-I${puredata}/include/pd"
     "-DUSE_LTO=ON"
-    "-DOPENSSL_CRYPTO_LIBRARY=${openssl.out}/lib/libcrypto.so"
-    "-DOPENSSL_SSL_LIBRARY=${openssl.out}/lib/libssl.so"
+    "-DOPENSSL_CRYPTO_LIBRARY=${lib.getLib openssl}/lib/libcrypto.so"
+    "-DOPENSSL_SSL_LIBRARY=${lib.getLib openssl}/lib/libssl.so"
   ];
 
   postInstall = ''
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Patch binaries.
     interpreter=$(cat $NIX_CC/nix-support/dynamic-linker)
-    find $out -type f -executable -exec patchelf --set-interpreter $interpreter --set-rpath ${lib.makeLibraryPath buildInputs} {} \;
+    find $out -type f -executable -exec patchelf --set-interpreter "$interpreter" --set-rpath ${lib.makeLibraryPath buildInputs} {} \;
   '';
 
   meta = with lib; {
