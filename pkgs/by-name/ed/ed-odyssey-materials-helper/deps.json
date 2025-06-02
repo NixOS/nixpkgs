@@ -493,10 +493,10 @@
    "module": "sha256-rwV/vBEyR6Pp/cYOWU+dh2xPW8oZy4sb2myBGP9ixpU=",
    "pom": "sha256-EeldzI+ywwumAH/f9GxW+HF2/lwwLFGEQThZEk1Tq60="
   },
-  "io/sentry#sentry/8.11.1": {
-   "jar": "sha256-0EmSqkQXOQazcYAmpRyUMXDc663czsRTtszYAdGuZkg=",
-   "module": "sha256-x4i43VQ1Avv5hy7X11gvLfBPZwEzEoWb0fgun5sqgRM=",
-   "pom": "sha256-Fcd/SfMLh3uTBDq5O05T5KlFDlXxgWz+++/2fd47X2c="
+  "io/sentry#sentry/8.12.0": {
+   "jar": "sha256-LkfktB4/El/cgKUS1fUaA5DRD9haWRHR+A5im7p3AAQ=",
+   "module": "sha256-LrKRmE4DJppwx0nCTSBwZHF9Rw8ex1lAD96birtXim4=",
+   "pom": "sha256-pwlifFbJHCooUNMFXPWWFTk+TCEMcMojMEpifX9SAlg="
   },
   "jakarta/json/bind#jakarta.json.bind-api/2.0.0": {
    "jar": "sha256-peYGtYiLQStIkHrWiLNN/k4wroGJxvJ8wEkbjzwDYoc=",

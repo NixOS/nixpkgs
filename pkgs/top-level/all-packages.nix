@@ -8151,8 +8151,6 @@ with pkgs;
   gecode_6 = qt5.callPackage ../development/libraries/gecode { };
   gecode = gecode_6;
 
-  geph = recurseIntoAttrs (callPackages ../applications/networking/geph { pnpm = pnpm_8; });
-
   gegl = callPackage ../development/libraries/gegl {
     openexr = openexr_2;
   };
@@ -13569,9 +13567,7 @@ with pkgs;
 
   mythtv = libsForQt5.callPackage ../applications/video/mythtv { };
 
-  ncdu = callPackage ../tools/misc/ncdu { };
-
-  ncdu_1 = callPackage ../tools/misc/ncdu/1.nix { };
+  ncdu_1 = callPackage ../by-name/nc/ncdu/1.nix { };
 
   notepadqq = libsForQt5.callPackage ../applications/editors/notepadqq { };
 

@@ -1046,6 +1046,18 @@ self: super:
               + "/${name}";
             # 2025-04-09: jailbreak to allow bytestring >= 0.12, text >= 2.1
             jailbreak = true;
+            # Note: jailbreak ignores constraints under an if(flag)
+            postPatch = lib.optionalString (name == "selda-sqlite") ''
+              check_sed() {
+                if ! test -s "$1"; then
+                  echo "sed: pattern '$2' doesn't match anything" >&2
+                  exit 1
+                fi
+              }
+              sed -i ${name}.cabal \
+                -e 's/\(bytestring\) .*/\1,/w c1'
+              check_sed c1 'bytestring .*'
+            '';
           }) super.${name};
       in
       lib.genAttrs [ "selda" "selda-sqlite" "selda-json" ] mkSeldaPackage
@@ -2087,6 +2099,26 @@ self: super:
   # FIXME: These should be removed as gi-gtk4/gi-gdk4 become the standard
   gi-gtk_4 = self.gi-gtk_4_0_12;
   gi-gdk_4 = self.gi-gdk_4_0_10;
+
+  # Missing dependency on gi-gdkpixbuf
+  # https://github.com/haskell-gi/haskell-gi/commit/889f478456b38425eca7df42b01f85fae626f113
+  # Fixed in 2.91.35
+  gi-vte = overrideCabal (
+    oldAttrs:
+    assert lib.versionOlder oldAttrs.version "2.91.35";
+    {
+      # This is implemented as a sed expression instead of pulling a patch
+      # from upstream because the gi-vte repo doesn't actually contain a
+      # gi-vte.cabal file. The gi-vte.cabal file is generated from metadata in
+      # the repo.
+      postPatch =
+        (oldAttrs.postPatch or "")
+        + ''
+          sed -i 's/\(gi-gtk == .*\),/\1, gi-gdkpixbuf == 2.0.*,/' ./gi-vte.cabal
+        '';
+      buildDepends = (oldAttrs.buildDepends or [ ]) ++ [ self.gi-gdkpixbuf ];
+    }
+  ) super.gi-vte;
 
   # 2023-04-09: haskell-ci needs Cabal-syntax 3.10
   # 2024-03-21: pins specific version of ShellCheck

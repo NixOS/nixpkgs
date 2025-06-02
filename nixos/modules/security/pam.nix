@@ -249,6 +249,23 @@ let
               to provide Google Authenticator token to log in.
             '';
           };
+          allowNullOTP = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = ''
+              Whether to allow login for accounts that have no OTP set
+              (i.e., accounts with no OTP configured or no existing
+              {file}`~/.google_authenticator`).
+            '';
+          };
+          forwardPass = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = ''
+              The authentication provides a single field requiring
+              the user's password followed by the one-time password (OTP).
+            '';
+          };
         };
 
         otpwAuth = lib.mkOption {
@@ -1048,6 +1065,8 @@ let
                       modulePath = "${pkgs.google-authenticator}/lib/security/pam_google_authenticator.so";
                       settings = {
                         no_increment_hotp = true;
+                        forward_pass = cfg.googleAuthenticator.forwardPass;
+                        nullok = cfg.googleAuthenticator.allowNullOTP;
                       };
                     }
                     {
