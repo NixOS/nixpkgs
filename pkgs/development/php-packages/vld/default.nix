@@ -8,7 +8,7 @@
 
 buildPecl {
   pname = "vld";
-  version = "0.18.0-unstable-2024-08-22";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "derickr";
