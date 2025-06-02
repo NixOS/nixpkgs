@@ -2979,21 +2979,6 @@ self: super:
     doJailbreak
   ];
 
-  # 2024-08-09: Apply optparse-applicative compat fix from master branch
-  # https://github.com/NorfairKing/feedback/commit/9368468934a4d8bd94709bdcb1116210b162bab8
-  feedback = overrideCabal (
-    drv:
-    assert drv.version == "0.1.0.5";
-    {
-      postPatch =
-        drv.postPatch or ""
-        + ''
-          substituteInPlace src/Feedback/Loop/OptParse.hs \
-            --replace-fail '(uncurry loopConfigLine)' '(pure . uncurry loopConfigLine)'
-        '';
-    }
-  ) super.feedback;
-
   testcontainers = lib.pipe super.testcontainers [
     dontCheck # Tests require docker
     doJailbreak # https://github.com/testcontainers/testcontainers-hs/pull/58
