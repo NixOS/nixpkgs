@@ -273,7 +273,7 @@ in
       caddy = 239;
       taskd = 240;
       # factorio = 241; # DynamicUser = true
-      # emby = 242; # unusued, removed 2019-05-01
+      # emby = 242; # unused, removed 2019-05-01
       #graylog = 243;# dynamically allocated as of 2021-09-03
       sniproxy = 244;
       nzbget = 245;
@@ -371,7 +371,7 @@ in
       # system user or group of the same id in someone else's NixOS.
       # This could break their system and make that person upset for a whole day.
       #
-      # Sidenote: the default is defined in `shadow` module[2], and the relavent change
+      # Sidenote: the default is defined in `shadow` module[2], and the relevant change
       # was made way back in 2014[3].
       #
       # [1]: https://man7.org/linux/man-pages/man5/login.defs.5.html#:~:text=SYS_UID_MAX%20(number)%2C%20SYS_UID_MIN%20(number)
@@ -700,7 +700,7 @@ in
       # system user or group of the same id in someone else's NixOS.
       # This could break their system and make that person upset for a whole day.
       #
-      # Sidenote: the default is defined in `shadow` module[2], and the relavent change
+      # Sidenote: the default is defined in `shadow` module[2], and the relevant change
       # was made way back in 2014[3].
       #
       # [1]: https://man7.org/linux/man-pages/man5/login.defs.5.html#:~:text=SYS_UID_MAX%20(number)%2C%20SYS_UID_MIN%20(number)
