@@ -21,9 +21,9 @@ php.buildComposerProject2 (finalAttrs: {
   postInstall = ''
     chmod -R u+w $out/share
     # Only include the files needed for runtime in the derivation
-    mv $out/share/php/${finalAttrs.pname}/{migrations,public,src,config,bin,templates,tests,translations,vendor,symfony.lock,composer.json,composer.lock} $out
+    mv $out/share/php/davis/{migrations,public,src,config,bin,templates,tests,translations,vendor,symfony.lock,composer.json,composer.lock} $out
     # Save the upstream .env file for reference, but rename it so it is not loaded
-    mv $out/share/php/${finalAttrs.pname}/.env $out/env-upstream
+    mv $out/share/php/davis/.env $out/env-upstream
     rm -rf "$out/share"
   '';
 
