@@ -15289,6 +15289,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  uv-nvim = buildVimPlugin {
+    pname = "uv.nvim";
+    version = "2025-05-31";
+    src = fetchFromGitHub {
+      owner = "benomahony";
+      repo = "uv.nvim";
+      rev = "642e45d392a65fe15dbebd63444e45e21a38f883";
+      sha256 = "1l681q5d3c8hqr1vvb4rxs6y5a1fs3m3cx3v0n6lvmlcdbdn4mjb";
+    };
+    meta.homepage = "https://github.com/benomahony/uv.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   vCoolor-vim = buildVimPlugin {
     pname = "vCoolor.vim";
     version = "2020-10-14";
