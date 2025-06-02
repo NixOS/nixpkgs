@@ -72,6 +72,9 @@ let
       options = callLibs ./options.nix;
       types = callLibs ./types.nix;
 
+      # nixos lib
+      nixos = callLibs ../nixos/lib;
+
       # constants
       licenses = callLibs ./licenses.nix;
       sourceTypes = callLibs ./source-types.nix;
