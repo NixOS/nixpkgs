@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p cabal2nix node2nix curl jq nixfmt-rfc-style
+#!nix-shell -i bash -p cabal2nix nodejs curl jq nixfmt-rfc-style
 
 set -euo pipefail
 
@@ -7,7 +7,6 @@ set -euo pipefail
 script_dir="$(dirname "${BASH_SOURCE[0]}")"
 
 backend_derivation_file="${script_dir}/generated-backend-package.nix"
-frontend_derivation_file="${script_dir}/generated-frontend-package.nix"
 latest_version="$(curl --silent 'https://api.github.com/repos/gren-lang/compiler/releases/latest' | jq --raw-output '.tag_name')"
 
 echo "Updating gren to version ${latest_version}."
@@ -21,15 +20,8 @@ EOF
 cabal2nix 'https://github.com/gren-lang/compiler.git' --revision "${latest_version}" --jailbreak >> "${backend_derivation_file}"
 nixfmt "${backend_derivation_file}"
 
-echo "Running node2nix and outputting to ${frontend_derivation_file}"
+echo "Updating version specified in package.json"
 
-cat > "frontend-package.json" << EOF
-[{"gren-lang": "${latest_version}"}]
-EOF
-
-node2nix -i frontend-package.json -c "${frontend_derivation_file}"
-nixfmt "${frontend_derivation_file}"
-nixfmt node-packages.nix
-nixfmt node-env.nix
+npm install --save "gren-lang@${latest_version}"
 
 echo 'Finished.'

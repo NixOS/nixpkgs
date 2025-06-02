@@ -1,32 +1,69 @@
 {
-  callPackage,
-  makeWrapper,
+  stdenv,
   lib,
-  haskell,
+  makeWrapper,
+  fetchurl,
+  nodejs,
   haskellPackages,
   versionCheckHook,
 }:
 
 let
-  backend-pkg = (haskellPackages.callPackage ./generated-backend-package.nix { }).overrideScope (
+  backendPkg = (haskellPackages.callPackage ./generated-backend-package.nix { }).overrideScope (
     final: prev: {
       ansi-wl-pprint = final.ansi-wl-pprint_0_6_9;
     }
   );
 
-  frontend-pkg = (callPackage ./generated-frontend-package.nix { })."gren-lang-0.5.4";
+  npmPkgLock = builtins.fromJSON (builtins.readFile ./package-lock.json);
+
+  # Download all packages that end up in node_modules so they can be
+  # pulled from cache in the build phase when we are sandboxed.
+  gren = fetchurl {
+    url = npmPkgLock.packages.${"node_modules/gren-lang"}.resolved;
+    hash = npmPkgLock.packages.${"node_modules/gren-lang"}.integrity;
+  };
+
+  postject = fetchurl {
+    url = npmPkgLock.packages.${"node_modules/postject"}.resolved;
+    hash = npmPkgLock.packages.${"node_modules/postject"}.integrity;
+  };
+
+  commander = fetchurl {
+    url = npmPkgLock.packages.${"node_modules/commander"}.resolved;
+    hash = npmPkgLock.packages.${"node_modules/commander"}.integrity;
+  };
 in
-frontend-pkg.overrideAttrs (oldAttrs: {
+stdenv.mkDerivation {
+  src = ./.;
   pname = "gren";
+  version = npmPkgLock.packages.${"node_modules/gren-lang"}.version;
 
-  buildInputs = oldAttrs.buildInputs or [ ] ++ [ makeWrapper ];
+  buildInputs = [
+    nodejs
+    makeWrapper
+  ];
 
-  postInstall =
-    oldAttrs.postInstall or ""
-    + ''
-      wrapProgram $out/bin/gren \
-        --set GREN_BIN ${lib.makeBinPath [ backend-pkg ]}/gren
-    '';
+  buildPhase = ''
+    export HOME=$PWD/.home
+    export npm_config_cache=$PWD/.npm
+
+    npm cache add "${gren}"
+    npm cache add "${postject}"
+    npm cache add "${commander}"
+    npm ci
+  '';
+
+  installPhase = ''
+    mkdir -p $out/node_modules
+    cp -r $src/node_modules/. $out/node_modules
+
+    mkdir -p $out/bin
+    ln -s $out/node_modules/.bin/* $out/bin
+
+    wrapProgram $out/bin/gren \
+      --set GREN_BIN ${lib.makeBinPath [ backendPkg ]}/gren
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -38,10 +75,9 @@ frontend-pkg.overrideAttrs (oldAttrs: {
     updateScript = "./update.sh";
   };
 
-  meta = oldAttrs.meta // {
+  meta = {
     maintainers = with lib.maintainers; [
-      tomasajt
       robinheghan
     ];
   };
-})
+}
