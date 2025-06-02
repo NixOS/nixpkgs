@@ -120,6 +120,8 @@
   websocat,
   # luau-lsp-nvim dependencies
   luau-lsp,
+  # uv.nvim dependencies
+  uv,
   # nvim-vstsl dependencies
   vtsls,
 }:
@@ -3526,6 +3528,13 @@ in
   unison = super.unison.overrideAttrs {
     # Editor stuff isn't at top level
     postPatch = "cd editor-support/vim";
+  };
+
+  uv-nvim = super.uv-nvim.overrideAttrs {
+    dependencies = with self; [
+      telescope-nvim
+    ];
+    runtimeDeps = [ uv ];
   };
 
   vCoolor-vim = super.vCoolor-vim.overrideAttrs {
