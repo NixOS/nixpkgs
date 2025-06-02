@@ -1455,8 +1455,14 @@ let
           nestedTypes.coercedType = coercedType;
           nestedTypes.finalType = finalType;
         };
+      /**
+        Augment the given type with an additional type check function.
 
-      # Augment the given type with an additional type check function.
+        :::{.warning}
+        This function has some broken behavior see: [#396021](https://github.com/NixOS/nixpkgs/issues/396021)
+        Fixing is not trivial, we appreciate any help!
+        :::
+      */
       addCheck = elemType: check: elemType // { check = x: elemType.check x && check x; };
 
     };
