@@ -1339,6 +1339,8 @@ let
         };
       };
 
+      detachhead.basedpyright = callPackage ./detachhead.basedpyright { };
+
       devsense.composer-php-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "composer-php-vscode";
