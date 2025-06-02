@@ -26,16 +26,15 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pyyaml
     scipy
+    strct
   ];
-
-  dependencies = [ strct ];
 
   meta = {
     description = "Powerful modular calculator engine";
-    homepage = "https://github.com/JordanL2/ModularCalculatorInterface";
+    homepage = "https://github.com/JordanL2/ModularCalculator";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ Tommimon ];
   };
