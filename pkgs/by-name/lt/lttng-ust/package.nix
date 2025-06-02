@@ -51,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ "--disable-examples" ];
 
+  doCheck = true;
+
   strictDeps = true;
 
   enableParallelBuilding = true;
