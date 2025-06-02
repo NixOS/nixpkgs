@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Very simple PDF parser";
-    homepage = "https://indefero.soutade.fr/p/updfparser";
+    homepage = "https://forge.soutade.fr/soutade/updfparser";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ autumnal ];
     platforms = platforms.all;
