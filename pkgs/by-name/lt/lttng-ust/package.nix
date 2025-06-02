@@ -6,6 +6,7 @@
   liburcu,
   numactl,
   python3,
+  testers,
 }:
 
 # NOTE:
@@ -54,6 +55,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
+
   meta = {
     description = "LTTng Userspace Tracer libraries";
     mainProgram = "lttng-gen-tp";
@@ -65,6 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
       mit
     ];
     platforms = lib.intersectLists lib.platforms.linux liburcu.meta.platforms;
+    pkgConfigModules = [
+      "lttng-ust-ctl"
+      "lttng-ust"
+    ];
     maintainers = [ lib.maintainers.bjornfor ];
   };
 })
