@@ -8,6 +8,7 @@
   poetry-dynamic-versioning,
   pytest-asyncio,
   pytest-rerunfailures,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
@@ -26,11 +27,6 @@ buildPythonPackage rec {
     hash = "sha256-P8Su5P/ztyoXZBVvm5uCMDn4ezeg11oRSQ0QCyIJbVw=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=mcstatus --cov-append --cov-branch --cov-report=term-missing -vvv --no-cov-on-fail" ""
-  '';
-
   nativeBuildInputs = [
     poetry-core
     poetry-dynamic-versioning
@@ -46,6 +42,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytest-rerunfailures
+    pytest-cov-stub
     pytestCheckHook
   ];
 
