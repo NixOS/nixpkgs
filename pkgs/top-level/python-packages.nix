@@ -16783,6 +16783,8 @@ self: super: with self; {
 
   staticmap = callPackage ../development/python-modules/staticmap { };
 
+  staticmap3 = callPackage ../development/python-modules/staticmap3 { };
+
   staticvectors = callPackage ../development/python-modules/staticvectors { };
 
   statistics = callPackage ../development/python-modules/statistics { };
