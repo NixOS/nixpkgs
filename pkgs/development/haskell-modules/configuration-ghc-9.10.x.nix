@@ -68,8 +68,8 @@ self: super: {
   extensions = doJailbreak (doDistribute self.extensions_0_1_0_2);
   fourmolu = doDistribute self.fourmolu_0_16_0_0;
   # https://github.com/digital-asset/ghc-lib/issues/600
-  ghc-lib = doDistribute (doJailbreak self.ghc-lib_9_10_2_20250503);
-  ghc-lib-parser = doDistribute (doJailbreak self.ghc-lib-parser_9_10_2_20250503);
+  ghc-lib = doDistribute (doJailbreak self.ghc-lib_9_10_2_20250515);
+  ghc-lib-parser = doDistribute (doJailbreak self.ghc-lib-parser_9_10_2_20250515);
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_10_0_0;
   htree = doDistribute self.htree_0_2_0_0;
   ormolu = doDistribute self.ormolu_0_7_7_0;
