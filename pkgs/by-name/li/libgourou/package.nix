@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchzip,
+  fetchFromGitea,
   pugixml,
   updfparser,
   curl,
@@ -10,12 +10,15 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgourou";
   version = "0.8.7";
 
-  src = fetchzip {
-    url = "https://forge.soutade.fr/soutade/libgourou/archive/v${version}.tar.gz";
+  src = fetchFromGitea {
+    domain = "forge.soutade.fr";
+    owner = "soutade";
+    repo = "libgourou";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Tkft/pe3lH07pmyVibTEutIIvconUWDH1ZVN3qV4sSY=";
   };
 
@@ -46,7 +49,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
     install -Dt $out/include include/libgourou*.h
     install -Dt $out/lib libgourou.so
-    install -Dt $out/lib libgourou.so.${version}
+    install -Dt $out/lib libgourou.so.${finalAttrs.version}
     install -Dt $out/lib libgourou.a
     install -Dt $out/bin utils/acsmdownloader
     install -Dt $out/bin utils/adept_{activate,loan_mgt,remove}
@@ -62,4 +65,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})
