@@ -20,7 +20,6 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir $out
     cp -R build/lib $out/lib
     cp -R build/include $out/include
-    ln -sf $out/lib/libcs50.so.11.0.3 $out/lib/libcs50.so.11
     runHook postInstall
   '';
 
