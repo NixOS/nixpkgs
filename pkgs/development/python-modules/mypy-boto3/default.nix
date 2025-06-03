@@ -330,8 +330,8 @@ rec {
       "sha256-VPJP8laiJsNC/uxn/K2jaH2jrQWfltP46xLJEg1erx0=";
 
   mypy-boto3-compute-optimizer =
-    buildMypyBoto3Package "compute-optimizer" "1.38.0"
-      "sha256-DNpcAOVA9BvJDK/ZnCUF/iXJrQM7nxQB0YkH1DkWgQs=";
+    buildMypyBoto3Package "compute-optimizer" "1.38.28"
+      "sha256-ItKYimrEeI5dR8fF76gJ7VQ6Ws/WQNU0srmtQyHFylo=";
 
   mypy-boto3-config =
     buildMypyBoto3Package "config" "1.38.0"
