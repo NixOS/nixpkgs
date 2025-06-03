@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.openvscode-server;
@@ -8,13 +13,13 @@ in
 {
   options = {
     services.openvscode-server = {
-      enable = lib.mkEnableOption (lib.mdDoc "openvscode-server");
+      enable = lib.mkEnableOption "openvscode-server";
 
       package = lib.mkPackageOption pkgs "openvscode-server" { };
 
       extraPackages = lib.mkOption {
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           Additional packages to add to the openvscode-server {env}`PATH`.
         '';
         example = lib.literalExpression "[ pkgs.go ]";
@@ -23,16 +28,18 @@ in
 
       extraEnvironment = lib.mkOption {
         type = lib.types.attrsOf lib.types.str;
-        description = lib.mdDoc ''
+        description = ''
           Additional environment variables to pass to openvscode-server.
         '';
         default = { };
-        example = { PKG_CONFIG_PATH = "/run/current-system/sw/lib/pkgconfig"; };
+        example = {
+          PKG_CONFIG_PATH = "/run/current-system/sw/lib/pkgconfig";
+        };
       };
 
       extraArguments = lib.mkOption {
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           Additional arguments to pass to openvscode-server.
         '';
         example = lib.literalExpression ''[ "--log=info" ]'';
@@ -41,7 +48,7 @@ in
 
       host = lib.mkOption {
         default = "localhost";
-        description = lib.mdDoc ''
+        description = ''
           The host name or IP address the server should listen to.
         '';
         type = lib.types.str;
@@ -49,7 +56,7 @@ in
 
       port = lib.mkOption {
         default = 3000;
-        description = lib.mdDoc ''
+        description = ''
           The port the server should listen to. If 0 is passed a random free port is picked. If a range in the format num-num is passed, a free port from the range (end inclusive) is selected.
         '';
         type = lib.types.port;
@@ -58,7 +65,7 @@ in
       user = lib.mkOption {
         default = defaultUser;
         example = "yourUser";
-        description = lib.mdDoc ''
+        description = ''
           The user to run openvscode-server as.
           By default, a user named `${defaultUser}` will be created.
         '';
@@ -68,7 +75,7 @@ in
       group = lib.mkOption {
         default = defaultGroup;
         example = "yourGroup";
-        description = lib.mdDoc ''
+        description = ''
           The group to run openvscode-server under.
           By default, a group named `${defaultGroup}` will be created.
         '';
@@ -77,7 +84,7 @@ in
 
       extraGroups = lib.mkOption {
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           An array of additional groups for the `${defaultUser}` user.
         '';
         example = [ "docker" ];
@@ -86,7 +93,7 @@ in
 
       withoutConnectionToken = lib.mkOption {
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Run without a connection token. Only use this if the connection is secured by other means.
         '';
         example = true;
@@ -96,7 +103,7 @@ in
       socketPath = lib.mkOption {
         default = null;
         example = "/run/openvscode/socket";
-        description = lib.mdDoc ''
+        description = ''
           The path to a socket file for the server to listen to.
         '';
         type = lib.types.nullOr lib.types.str;
@@ -104,7 +111,7 @@ in
 
       userDataDir = lib.mkOption {
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Specifies the directory that user data is kept in. Can be used to open multiple distinct instances of Code.
         '';
         type = lib.types.nullOr lib.types.str;
@@ -112,7 +119,7 @@ in
 
       serverDataDir = lib.mkOption {
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Specifies the directory that server data is kept in.
         '';
         type = lib.types.nullOr lib.types.str;
@@ -120,7 +127,7 @@ in
 
       extensionsDir = lib.mkOption {
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Set the root path for extensions.
         '';
         type = lib.types.nullOr lib.types.str;
@@ -129,16 +136,23 @@ in
       telemetryLevel = lib.mkOption {
         default = null;
         example = "crash";
-        description = lib.mdDoc ''
+        description = ''
           Sets the initial telemetry level. Valid levels are: 'off', 'crash', 'error' and 'all'.
         '';
-        type = lib.types.nullOr (lib.types.enum [ "off" "crash" "error" "all" ]);
+        type = lib.types.nullOr (
+          lib.types.enum [
+            "off"
+            "crash"
+            "error"
+            "all"
+          ]
+        );
       };
 
       connectionToken = lib.mkOption {
         default = null;
         example = "secret-token";
-        description = lib.mdDoc ''
+        description = ''
           A secret that must be included with all requests.
         '';
         type = lib.types.nullOr lib.types.str;
@@ -146,7 +160,7 @@ in
 
       connectionTokenFile = lib.mkOption {
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Path to a file that contains the connection token.
         '';
         type = lib.types.nullOr lib.types.str;
@@ -164,28 +178,38 @@ in
       path = cfg.extraPackages;
       environment = cfg.extraEnvironment;
       serviceConfig = {
-        ExecStart = ''
-          ${lib.getExe cfg.package} \
-            --accept-server-license-terms \
-            --host=${cfg.host} \
-            --port=${toString cfg.port} \
-        '' + lib.optionalString (cfg.telemetryLevel != null) ''
-          --telemetry-level=${cfg.telemetryLevel} \
-        '' + lib.optionalString (cfg.withoutConnectionToken) ''
-          --without-connection-token \
-        '' + lib.optionalString (cfg.socketPath != null) ''
-          --socket-path=${cfg.socketPath} \
-        '' + lib.optionalString (cfg.userDataDir != null) ''
-          --user-data-dir=${cfg.userDataDir} \
-        '' + lib.optionalString (cfg.serverDataDir != null) ''
-          --server-data-dir=${cfg.serverDataDir} \
-        '' + lib.optionalString (cfg.extensionsDir != null) ''
-          --extensions-dir=${cfg.extensionsDir} \
-        '' + lib.optionalString (cfg.connectionToken != null) ''
-          --connection-token=${cfg.connectionToken} \
-        '' + lib.optionalString (cfg.connectionTokenFile != null) ''
-          --connection-token-file=${cfg.connectionTokenFile} \
-        '' + lib.escapeShellArgs cfg.extraArguments;
+        ExecStart =
+          ''
+            ${lib.getExe cfg.package} \
+              --accept-server-license-terms \
+              --host=${cfg.host} \
+              --port=${toString cfg.port} \
+          ''
+          + lib.optionalString (cfg.telemetryLevel != null) ''
+            --telemetry-level=${cfg.telemetryLevel} \
+          ''
+          + lib.optionalString (cfg.withoutConnectionToken) ''
+            --without-connection-token \
+          ''
+          + lib.optionalString (cfg.socketPath != null) ''
+            --socket-path=${cfg.socketPath} \
+          ''
+          + lib.optionalString (cfg.userDataDir != null) ''
+            --user-data-dir=${cfg.userDataDir} \
+          ''
+          + lib.optionalString (cfg.serverDataDir != null) ''
+            --server-data-dir=${cfg.serverDataDir} \
+          ''
+          + lib.optionalString (cfg.extensionsDir != null) ''
+            --extensions-dir=${cfg.extensionsDir} \
+          ''
+          + lib.optionalString (cfg.connectionToken != null) ''
+            --connection-token=${cfg.connectionToken} \
+          ''
+          + lib.optionalString (cfg.connectionTokenFile != null) ''
+            --connection-token-file=${cfg.connectionTokenFile} \
+          ''
+          + lib.escapeShellArgs cfg.extraArguments;
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         RuntimeDirectory = cfg.user;
         User = cfg.user;

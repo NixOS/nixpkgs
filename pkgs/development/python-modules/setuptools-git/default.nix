@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pkgs
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pkgs,
 }:
 
 buildPythonPackage rec {
@@ -22,5 +23,4 @@ buildPythonPackage rec {
     homepage = "https://pypi.python.org/pypi/setuptools-git";
     license = licenses.bsd3;
   };
-
 }

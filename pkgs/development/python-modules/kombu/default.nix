@@ -1,104 +1,93 @@
-{ lib
-, amqp
-, azure-identity
-, azure-servicebus
-, azure-storage-queue
-, backports-zoneinfo
-, boto3
-, buildPythonPackage
-, case
-, confluent-kafka
-, fetchPypi
-, hypothesis
-, kazoo
-, msgpack
-, pycurl
-, pymongo
+{
+  lib,
+  amqp,
+  azure-identity,
+  azure-servicebus,
+  azure-storage-queue,
+  boto3,
+  buildPythonPackage,
+  confluent-kafka,
+  fetchPypi,
+  google-cloud-pubsub,
+  google-cloud-monitoring,
+  hypothesis,
+  kazoo,
+  msgpack,
+  pycurl,
+  pymongo,
   #, pyro4
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, redis
-, sqlalchemy
-, typing-extensions
-, urllib3
-, vine
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  redis,
+  setuptools,
+  sqlalchemy,
+  typing-extensions,
+  tzdata,
+  urllib3,
+  vine,
 }:
 
 buildPythonPackage rec {
   pname = "kombu";
-  version = "5.3.5";
-  format = "setuptools";
+  version = "5.5.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MORw8aa0nHDcb20Tw+TMTheKpsRpzra81VZFOF/IS5M=";
+    hash = "sha256-AhoOEfz82bAmDvH7ZAiMDpK+uXbrWcHfyn3dStRWLqI=";
   };
+
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     amqp
+    tzdata
     vine
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
-  ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
-  passthru.optional-dependencies = {
-    msgpack = [
-      msgpack
-    ];
-    yaml = [
-      pyyaml
-    ];
-    redis = [
-      redis
-    ];
-    mongodb = [
-      pymongo
-    ];
+  optional-dependencies = {
+    msgpack = [ msgpack ];
+    yaml = [ pyyaml ];
+    redis = [ redis ];
+    mongodb = [ pymongo ];
     sqs = [
       boto3
       urllib3
       pycurl
     ];
-    zookeeper = [
-      kazoo
-    ];
-    sqlalchemy = [
-      sqlalchemy
-    ];
+    zookeeper = [ kazoo ];
+    sqlalchemy = [ sqlalchemy ];
     azurestoragequeues = [
       azure-identity
       azure-storage-queue
     ];
-    azureservicebus = [
-      azure-servicebus
+    azureservicebus = [ azure-servicebus ];
+    confluentkafka = [ confluent-kafka ];
+    gcpubsub = [
+      google-cloud-pubsub
+      google-cloud-monitoring
     ];
-    confluentkafka = [
-      confluent-kafka
-    ];
-    # pyro4 doesn't suppport Python 3.11
+    # pyro4 doesn't support Python 3.11
     #pyro = [
     #  pyro4
     #];
   };
 
   nativeCheckInputs = [
-    case
     hypothesis
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "kombu"
-  ];
+  pythonImportsCheck = [ "kombu" ];
 
   disabledTests = [
     # Disable pyro4 test
     "test_driver_version"
+    # AssertionError: assert [call('WATCH'..., 'test-tag')] ==...
+    "test_global_keyprefix_transaction"
   ];
 
   meta = with lib; {

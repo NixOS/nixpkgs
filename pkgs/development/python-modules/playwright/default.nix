@@ -1,17 +1,19 @@
-{ lib
-, stdenv
-, auditwheel
-, buildPythonPackage
-, git
-, greenlet
-, fetchFromGitHub
-, pyee
-, python
-, pythonOlder
-, setuptools
-, setuptools-scm
-, playwright-driver
-, pythonRelaxDepsHook
+{
+  lib,
+  stdenv,
+  auditwheel,
+  buildPythonPackage,
+  gitMinimal,
+  greenlet,
+  fetchFromGitHub,
+  pyee,
+  python,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  playwright-driver,
+  nixosTests,
+  nodejs,
 }:
 
 let
@@ -20,15 +22,15 @@ in
 buildPythonPackage rec {
   pname = "playwright";
   # run ./pkgs/development/python-modules/playwright/update.sh to update
-  version = "1.40.0";
+  version = "1.52.0";
   pyproject = true;
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "playwright-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-+gq/aFq/rQpl04LbaZXGxL35iIX1Wi/motYg5jwv91I=";
+    tag = "v${version}";
+    hash = "sha256-8hl+5kIORq9uwYbf9354iqlL0RIkhTnokzQXoYFr5AI=";
   };
 
   patches = [
@@ -49,33 +51,26 @@ buildPythonPackage rec {
     git config --global user.name "nixpkgs"
     git commit -m "workaround setuptools-scm"
 
-    substituteInPlace setup.py \
-      --replace "setuptools-scm==8.0.4" "setuptools-scm" \
-      --replace "wheel==0.41.2" "wheel"
+    sed -i -e 's/requires = \["setuptools==.*", "setuptools-scm==.*", "wheel==.*", "auditwheel==.*"\]/requires = ["setuptools", "setuptools-scm", "wheel"]/' pyproject.toml
 
-    substituteInPlace pyproject.toml \
-      --replace 'requires = ["setuptools==68.2.2", "setuptools-scm==8.0.4", "wheel==0.41.2", "auditwheel==5.4.0"]' \
-                'requires = ["setuptools", "setuptools-scm", "wheel"]'
-
-    # Skip trying to download and extract the driver.
+    # setup.py downloads and extracts the driver.
     # This is done manually in postInstall instead.
-    substituteInPlace setup.py \
-      --replace "self._download_and_extract_local_driver(base_wheel_bundles)" ""
+    rm setup.py
 
     # Set the correct driver path with the help of a patch in patches
     substituteInPlace playwright/_impl/_driver.py \
-      --replace "@driver@" "${driver}/bin/playwright"
+      --replace-fail "@node@" "${lib.getExe nodejs}" \
+      --replace-fail "@driver@" "${driver}/cli.js"
   '';
 
-
   nativeBuildInputs = [
-    git
+    gitMinimal
     setuptools-scm
     setuptools
-    pythonRelaxDepsHook
-  ] ++ lib.optionals stdenv.isLinux [ auditwheel ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ auditwheel ];
 
   pythonRelaxDeps = [
+    "greenlet"
     "pyee"
   ];
 
@@ -91,24 +86,38 @@ buildPythonPackage rec {
   # Skip tests because they require network access.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "playwright"
-  ];
+  pythonImportsCheck = [ "playwright" ];
 
   passthru = {
     inherit driver;
-    tests = {
-      driver = playwright-driver;
-      browsers = playwright-driver.browsers;
-    };
+    tests =
+      {
+        driver = playwright-driver;
+        browsers = playwright-driver.browsers;
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+        inherit (nixosTests) playwright-python;
+      };
+    # Package and playwright driver versions are tightly coupled.
+    # Use the update script to ensure synchronized updates.
+    skipBulkUpdate = true;
     updateScript = ./update.sh;
   };
 
   meta = with lib; {
     description = "Python version of the Playwright testing and automation library";
+    mainProgram = "playwright";
     homepage = "https://github.com/microsoft/playwright-python";
     license = licenses.asl20;
-    maintainers = with maintainers; [ techknowlogick yrd ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    maintainers = with maintainers; [
+      techknowlogick
+      yrd
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 }

@@ -1,41 +1,38 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, cargo
-, meson
-, ninja
-, pkg-config
-, glib
-, gtk4
-, appstream-glib
-, desktop-file-utils
-, libxml2
-, rustc
-, wrapGAppsHook4
-, openssl
-, dbus
-, libadwaita
-, glib-networking
-, gst_all_1
-, libsoup_3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  cargo,
+  meson,
+  ninja,
+  pkg-config,
+  desktop-file-utils,
+  rustc,
+  wrapGAppsHook4,
+  openssl,
+  dbus,
+  libadwaita,
+  glib-networking,
+  gst_all_1,
+  libxml2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "netease-cloud-music-gtk";
-  version = "2.3.0";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "gmg137";
-    repo = pname;
-    rev = version;
-    hash = "sha256-/HvP82QqN+dWb5XJelsayeo4sz/pVvCKQ9RKQJv7PAI=";
+    repo = "netease-cloud-music-gtk";
+    tag = finalAttrs.version;
+    hash = "sha256-3vAEk4HwS7EiMv0DAYOvZ9dOlO0yMEUcaO2qCCWlpLs=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "netease-cloud-music-api-1.3.0" = "sha256-SzMu+klhcLi+jDYc9RZUWrBph5TjfddV0STHaijuQ8Q=";
+      "netease-cloud-music-api-1.5.1" = "sha256-PFzXm7jgNsEJiluBaNuhSF0kg/licDdbItMDWmfIBDk=";
     };
   };
 
@@ -47,42 +44,38 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    glib # glib-compile-resources
-    gtk4 # gtk4-update-icon-cache
-    appstream-glib # appstream-util
     desktop-file-utils # update-desktop-database
-    libxml2 # xmllint
     wrapGAppsHook4
     rustPlatform.cargoSetupHook
     cargo
     rustc
+    libxml2
   ];
 
-  buildInputs = [
-    openssl
-    dbus
-    libadwaita
-    glib-networking
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-    gst-plugins-ugly
-  ]);
+  buildInputs =
+    [
+      openssl
+      dbus
+      libadwaita
+      glib-networking
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+      gst-plugins-ugly
+    ]);
 
-  # FIXME: gst-plugins-good missing libsoup breaks streaming
-  # (https://github.com/nixos/nixpkgs/issues/271960)
-  preFixup = ''
-    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libsoup_3 ]}")
-  '';
-
-  meta = with lib; {
-    description = "A Rust + GTK based netease cloud music player";
+  meta = {
+    description = "Rust + GTK based netease cloud music player";
     homepage = "https://github.com/gmg137/netease-cloud-music-gtk";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ diffumist aleksana ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      diffumist
+      aleksana
+    ];
     mainProgram = "netease-cloud-music-gtk4";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, cmake
-, setuptools-scm
-, numpy
-, pillow
-, pybind11
-, libzxing-cpp
-, pytestCheckHook
+{
+  buildPythonPackage,
+  cmake,
+  setuptools-scm,
+  numpy,
+  pillow,
+  pybind11,
+  libzxing-cpp,
+  pytestCheckHook,
+  zint,
 }:
 
 buildPythonPackage rec {
@@ -20,34 +21,34 @@ buildPythonPackage rec {
   # https://pybind11.readthedocs.io/en/stable/installing.html#include-with-pypi
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "pybind11[global]" "pybind11"
+      --replace-fail "pybind11[global]" "pybind11"
+
+    substituteInPlace setup.py \
+      --replace-fail "cfg = 'Debug' if self.debug else 'Release'" "cfg = 'Release'" \
+      --replace-fail " '-DVERSION_INFO=' + self.distribution.get_version()]" " '-DVERSION_INFO=' + self.distribution.get_version(), '-DZXING_DEPENDENCIES=LOCAL', '-DZXING_USE_BUNDLED_ZINT=OFF']"
   '';
 
   dontUseCmakeConfigure = true;
 
-  propagatedBuildInputs = [
-    numpy
-  ];
-
-  buildInputs = [
+  build-system = [
+    setuptools-scm
     pybind11
   ];
 
+  dependencies = [ numpy ];
+
   nativeBuildInputs = [
     cmake
-    setuptools-scm
   ];
+
+  buildInputs = [ zint ];
 
   nativeCheckInputs = [
     pillow
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "test.py"
-  ];
+  pytestFlagsArray = [ "test.py" ];
 
-  pythonImportsCheck = [
-    "zxingcpp"
-  ];
+  pythonImportsCheck = [ "zxingcpp" ];
 }

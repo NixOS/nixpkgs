@@ -1,16 +1,21 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
     literalExpression
     mkEnableOption
-    mdDoc
     mkIf
     mkOption
     mkPackageOption
     optionalAttrs
     optional
-    types;
+    types
+    ;
 
   cfg = config.services.legit;
 
@@ -23,25 +28,25 @@ let
 in
 {
   options.services.legit = {
-    enable = mkEnableOption (mdDoc "legit git web frontend");
+    enable = mkEnableOption "legit git web frontend";
 
     package = mkPackageOption pkgs "legit-web" { };
 
     user = mkOption {
       type = types.str;
       default = "legit";
-      description = mdDoc "User account under which legit runs.";
+      description = "User account under which legit runs.";
     };
 
     group = mkOption {
       type = types.str;
       default = "legit";
-      description = mdDoc "Group account under which legit runs.";
+      description = "Group account under which legit runs.";
     };
 
     settings = mkOption {
       default = { };
-      description = mdDoc ''
+      description = ''
         The primary legit configuration. See the
         [sample configuration](https://github.com/icyphox/legit/blob/master/config.yaml)
         for possible values.
@@ -51,22 +56,25 @@ in
           scanPath = mkOption {
             type = types.path;
             default = defaultStateDir;
-            description = mdDoc "Directory where legit will scan for repositories.";
+            description = "Directory where legit will scan for repositories.";
           };
           readme = mkOption {
             type = types.listOf types.str;
             default = [ ];
-            description = mdDoc "Readme files to look for.";
+            description = "Readme files to look for.";
           };
           mainBranch = mkOption {
             type = types.listOf types.str;
-            default = [ "main" "master" ];
-            description = mdDoc "Main branch to look for.";
+            default = [
+              "main"
+              "master"
+            ];
+            description = "Main branch to look for.";
           };
           ignore = mkOption {
             type = types.listOf types.str;
             default = [ ];
-            description = mdDoc "Repositories to ignore.";
+            description = "Repositories to ignore.";
           };
         };
         options.dirs = {
@@ -74,42 +82,42 @@ in
             type = types.path;
             default = "${pkgs.legit-web}/lib/legit/templates";
             defaultText = literalExpression ''"''${pkgs.legit-web}/lib/legit/templates"'';
-            description = mdDoc "Directories where template files are located.";
+            description = "Directories where template files are located.";
           };
           static = mkOption {
             type = types.path;
             default = "${pkgs.legit-web}/lib/legit/static";
             defaultText = literalExpression ''"''${pkgs.legit-web}/lib/legit/static"'';
-            description = mdDoc "Directories where static files are located.";
+            description = "Directories where static files are located.";
           };
         };
         options.meta = {
           title = mkOption {
             type = types.str;
             default = "legit";
-            description = mdDoc "Website title.";
+            description = "Website title.";
           };
           description = mkOption {
             type = types.str;
             default = "git frontend";
-            description = mdDoc "Website description.";
+            description = "Website description.";
           };
         };
         options.server = {
           name = mkOption {
             type = types.str;
             default = "localhost";
-            description = mdDoc "Server name.";
+            description = "Server name.";
           };
           host = mkOption {
             type = types.str;
             default = "127.0.0.1";
-            description = mdDoc "Host address.";
+            description = "Host address.";
           };
           port = mkOption {
             type = types.port;
             default = 5555;
-            description = mdDoc "Legit port.";
+            description = "Legit port.";
           };
         };
       };
@@ -143,10 +151,11 @@ in
         Restart = "always";
 
         WorkingDirectory = cfg.settings.repo.scanPath;
-        StateDirectory = [ ] ++
-          optional (cfg.settings.repo.scanPath == defaultStateDir) "legit" ++
-          optional (cfg.settings.dirs.static == defaultStaticDir) "legit/static" ++
-          optional (cfg.settings.dirs.templates == defaultTemplatesDir) "legit/templates";
+        StateDirectory =
+          [ ]
+          ++ optional (cfg.settings.repo.scanPath == defaultStateDir) "legit"
+          ++ optional (cfg.settings.dirs.static == defaultStaticDir) "legit/static"
+          ++ optional (cfg.settings.dirs.templates == defaultTemplatesDir) "legit/templates";
 
         # Hardening
         CapabilityBoundingSet = [ "" ];
@@ -169,12 +178,18 @@ in
         ProtectSystem = "strict";
         ReadWritePaths = cfg.settings.repo.scanPath;
         RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
         UMask = "0077";
       };
     };

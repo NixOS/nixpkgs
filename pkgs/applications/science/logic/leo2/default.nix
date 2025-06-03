@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, eprover, ocaml, camlp4, perl, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  makeWrapper,
+  eprover,
+  ocaml,
+  camlp4,
+  perl,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "leo2";
@@ -11,10 +22,17 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ makeWrapper eprover ocaml camlp4 perl ];
+  nativeBuildInputs = [
+    makeWrapper
+    eprover
+    ocaml
+    camlp4
+    perl
+  ];
   buildInputs = [ zlib ];
 
-  patches = [ (fetchpatch {
+  patches = [
+    (fetchpatch {
       url = "https://github.com/niklasso/minisat/commit/7eb6015313561a2586032574788fcb133eeaa19f.patch";
       stripLen = 1;
       extraPrefix = "lib/";
@@ -44,7 +62,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A high-performance typed higher order prover";
+    description = "High-performance typed higher order prover";
+    mainProgram = "leo";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.unix;
     license = licenses.bsd3;

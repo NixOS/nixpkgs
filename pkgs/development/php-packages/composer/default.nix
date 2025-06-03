@@ -1,46 +1,119 @@
-{ lib
-, callPackage
-, fetchFromGitHub
-, php
-, unzip
-, _7zz
-, xz
-, git
-, curl
-, cacert
-, makeBinaryWrapper
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  callPackage,
+  php,
+  unzip,
+  _7zz,
+  xz,
+  gitMinimal,
+  curl,
+  cacert,
+  makeBinaryWrapper,
+  versionCheckHook,
 }:
 
-php.buildComposerProject (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "composer";
+  version = "2.8.5";
+
   # Hash used by ../../../build-support/php/pkgs/composer-phar.nix to
   # use together with the version from this package to keep the
   # bootstrap phar file up-to-date together with the end user composer
   # package.
-  passthru.pharHash = "sha256-H/0L4/J+I3sa5H+ejyn5asf1CgvZ7vT4jNvpTdBL//A=";
+  passthru.pharHash = "sha256-nO8YIS4iI1GutHa4HeeypTg/d1M2R0Rnv1x8z+hKsMw=";
 
   composer = callPackage ../../../build-support/php/pkgs/composer-phar.nix {
     inherit (finalAttrs) version;
     inherit (finalAttrs.passthru) pharHash;
   };
 
-  pname = "composer";
-  version = "2.7.1";
-
   src = fetchFromGitHub {
     owner = "composer";
     repo = "composer";
-    rev = finalAttrs.version;
-    hash = "sha256-OThWqY3m/pIas4qvR/kiYgc/2QrAbnsYEOxpHxKhDfM=";
+    tag = finalAttrs.version;
+    hash = "sha256-/E/fXh+jefPwzsADpmGyrJ+xqW5CSPNok0DVLD1KZDY=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
-  postInstall = ''
+  buildInputs = [ php ];
+
+  vendor = stdenvNoCC.mkDerivation {
+    pname = "${finalAttrs.pname}-vendor";
+
+    inherit (finalAttrs) src version;
+
+    nativeBuildInputs = [
+      cacert
+      finalAttrs.composer
+    ];
+
+    dontPatchShebangs = true;
+    doCheck = true;
+
+    buildPhase = ''
+      runHook preBuild
+
+      composer install --no-dev --no-interaction --no-progress --optimize-autoloader
+
+      runHook postBuild
+    '';
+
+    checkPhase = ''
+      runHook preCheck
+
+      composer validate
+
+      runHook postCheck
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      cp -ar . $out/
+
+      runHook postInstall
+    '';
+
+    env = {
+      COMPOSER_CACHE_DIR = "/dev/null";
+      COMPOSER_DISABLE_NETWORK = "0";
+      COMPOSER_HTACCESS_PROTECT = "0";
+      COMPOSER_MIRROR_PATH_REPOS = "1";
+      COMPOSER_ROOT_VERSION = finalAttrs.version;
+    };
+
+    outputHashMode = "recursive";
+    outputHashAlgo = "sha256";
+    outputHash = "sha256-UcMB0leKqD8cXeExXpjDgPvF8pfhGXnCR0EN4FVWouw=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out
+    cp -ar ${finalAttrs.vendor}/* $out/
+    chmod +w $out/bin
+
     wrapProgram $out/bin/composer \
-      --prefix PATH : ${lib.makeBinPath [ _7zz cacert curl git unzip xz ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          _7zz
+          curl
+          gitMinimal
+          unzip
+          xz
+        ]
+      }
+
+    runHook postInstall
   '';
 
-  vendorHash = "sha256-NJa6nu60HQeBJr7dd79ATptjcekgY35Jq9V40SrN9Ds";
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     changelog = "https://github.com/composer/composer/releases/tag/${finalAttrs.version}";
@@ -48,6 +121,6 @@ php.buildComposerProject (finalAttrs: {
     homepage = "https://getcomposer.org/";
     license = lib.licenses.mit;
     mainProgram = "composer";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

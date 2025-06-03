@@ -1,18 +1,19 @@
-{ lib
-, appdirs
-, buildPythonPackage
-, certifi
-, fetchFromGitHub
-, importlib-metadata
-, poetry-core
-, pyee
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, syncer
-, tqdm
-, urllib3
-, websockets
+{
+  lib,
+  appdirs,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  importlib-metadata,
+  poetry-core,
+  pyee,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  syncer,
+  tqdm,
+  urllib3,
+  websockets,
 }:
 
 buildPythonPackage rec {
@@ -25,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyppeteer";
     repo = "pyppeteer";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-izMaWtJdkLHMQbyq7o7n46xB8dOHXZ5uO0UXt+twjL4=";
   };
 
@@ -36,9 +37,7 @@ buildPythonPackage rec {
       --replace 'websockets = "^10.0"' 'websockets = "*"'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     appdirs
@@ -83,12 +82,11 @@ buildPythonPackage rec {
     "TestPDF"
   ];
 
-  pythonImportsCheck = [
-    "pyppeteer"
-  ];
+  pythonImportsCheck = [ "pyppeteer" ];
 
   meta = with lib; {
     description = "Headless chrome/chromium automation library (unofficial port of puppeteer)";
+    mainProgram = "pyppeteer-install";
     homepage = "https://github.com/pyppeteer/pyppeteer";
     changelog = "https://github.com/pyppeteer/pyppeteer/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

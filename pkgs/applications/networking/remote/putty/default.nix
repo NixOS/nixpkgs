@@ -1,9 +1,18 @@
-{ stdenv, lib, fetchurl, cmake, perl, pkg-config
-, gtk3, ncurses, darwin, copyDesktopItems, makeDesktopItem
+{
+  stdenv,
+  lib,
+  fetchurl,
+  cmake,
+  perl,
+  pkg-config,
+  gtk3,
+  ncurses,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.80";
+  version = "0.83";
   pname = "putty";
 
   src = fetchurl {
@@ -11,13 +20,19 @@ stdenv.mkDerivation rec {
       "https://the.earth.li/~sgtatham/putty/${version}/${pname}-${version}.tar.gz"
       "ftp://ftp.wayne.edu/putty/putty-website-mirror/${version}/${pname}-${version}.tar.gz"
     ];
-    hash = "sha256-IBPIOnIbF1NSnpCQ98ODDo/kyAoHDMznZFObrbP2cIE=";
+    hash = "sha256-cYd3wT1j0N/5H+AxYrwqBbTfyLCCdjTNYLUc79/2McY=";
   };
 
-  nativeBuildInputs = [ cmake perl pkg-config copyDesktopItems ];
+  nativeBuildInputs = [
+    cmake
+    perl
+    pkg-config
+    copyDesktopItems
+  ];
   buildInputs = lib.optionals stdenv.hostPlatform.isUnix [
-    gtk3 ncurses
-  ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.libs.utmp;
+    gtk3
+    ncurses
+  ];
   enableParallelBuilding = true;
 
   desktopItems = [
@@ -27,7 +42,10 @@ stdenv.mkDerivation rec {
       icon = "putty";
       desktopName = "PuTTY";
       comment = "Connect to an SSH server with PuTTY";
-      categories = [ "GTK" "Network" ];
+      categories = [
+        "GTK"
+        "Network"
+      ];
     })
     (makeDesktopItem {
       name = "PuTTY Terminal Emulator";
@@ -35,12 +53,17 @@ stdenv.mkDerivation rec {
       icon = "pterm";
       desktopName = "Pterm";
       comment = "Start a PuTTY terminal session";
-      categories = [ "GTK" "System" "Utility" "TerminalEmulator" ];
+      categories = [
+        "GTK"
+        "System"
+        "Utility"
+        "TerminalEmulator"
+      ];
     })
   ];
 
   meta = with lib; {
-    description = "A Free Telnet/SSH Client";
+    description = "Free Telnet/SSH Client";
     longDescription = ''
       PuTTY is a free implementation of Telnet and SSH for Windows and Unix
       platforms, along with an xterm terminal emulator.

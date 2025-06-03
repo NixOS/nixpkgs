@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cons
-, multipledispatch
-, py
-, pytestCheckHook
-, pytest-html
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cons,
+  multipledispatch,
+  py,
+  pytestCheckHook,
+  pytest-html,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pythological";
     repo = "etuples";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dl+exar98PnqEiCNX+Ydllp7aohsAYrFtxb2Q1Lxx6Y=";
   };
 
@@ -39,9 +40,7 @@ buildPythonPackage rec {
     "--self-contained-html"
   ];
 
-  pythonImportsCheck = [
-    "etuples"
-  ];
+  pythonImportsCheck = [ "etuples" ];
 
   meta = with lib; {
     description = "Python S-expression emulation using tuple-like objects";

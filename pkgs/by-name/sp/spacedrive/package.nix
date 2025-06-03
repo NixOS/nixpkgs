@@ -1,77 +1,128 @@
-{ lib
-, pkgs
-, stdenv
-, fetchurl
-, appimageTools
-, undmg
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchurl,
+  undmg,
+  nix-update-script,
+  #linux required
+  autoPatchelfHook,
+  dpkg,
+  gdk-pixbuf,
+  glib,
+  gst_all_1,
+  libsoup_3,
+  webkitgtk_4_1,
+  xdotool,
 }:
 
 let
   pname = "spacedrive";
-  version = "0.2.4";
+  version = "0.4.3";
 
-  src = fetchurl {
-    aarch64-darwin = {
-      url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-darwin-aarch64.dmg";
-      hash = "sha256-rVRmlhsvvFFRr3ghX0cvfcJO3WlbaNNBo+r4I556YEg=";
-    };
-    x86_64-darwin = {
-      url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-darwin-x86_64.dmg";
-      hash = "sha256-etRAcGC5S0GwVrBWICfB5ef83xcp/35K0/QndKmPUSE=";
-    };
-    x86_64-linux = {
-      url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-linux-x86_64.AppImage";
-      hash = "sha256-D8etNXrDVLHa1wg+7Xu9yXUvhlAXxMVBM3GpOerFsu0=";
-    };
-  }.${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
+  src =
+    fetchurl
+      {
+        aarch64-darwin = {
+          url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-darwin-aarch64.dmg";
+          hash = "sha256-0Bj6GjsxLUgLlycA33pXIvItoqFtatjJl2Z/ZwjnC0c=";
+        };
+        x86_64-darwin = {
+          url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-darwin-x86_64.dmg";
+          hash = "sha256-E1XCGeWBe/oHHE3izMykT8wFrIGhNMvmxEieMrnSfZ8=";
+        };
+        x86_64-linux = {
+          url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-linux-x86_64.deb";
+          hash = "sha256-MLCAHNLJ/9bdCBLBBssrpk98uvKTfHs9YGxmxJ11/oY=";
+        };
+      }
+      .${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
 
   meta = {
-    description = "An open source file manager, powered by a virtual distributed filesystem";
+    description = "Open source file manager, powered by a virtual distributed filesystem";
     homepage = "https://www.spacedrive.com";
     changelog = "https://github.com/spacedriveapp/spacedrive/releases/tag/${version}";
-    platforms = [ "aarch64-darwin" "x86_64-darwin" "x86_64-linux" ];
+    platforms = [
+      "aarch64-darwin"
+      "x86_64-darwin"
+      "x86_64-linux"
+    ];
     license = lib.licenses.agpl3Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ DataHearth heisfer mikaelfangel stepbrobd ];
+    maintainers = with lib.maintainers; [
+      DataHearth
+      heisfer
+      mikaelfangel
+      stepbrobd
+    ];
     mainProgram = "spacedrive";
   };
 
   passthru.updateScript = nix-update-script { };
 in
-if stdenv.isDarwin then stdenv.mkDerivation
-{
-  inherit pname version src meta passthru;
+if stdenv.hostPlatform.isDarwin then
+  stdenv.mkDerivation {
+    inherit
+      pname
+      version
+      src
+      meta
+      passthru
+      ;
 
-  sourceRoot = "Spacedrive.app";
+    sourceRoot = "Spacedrive.app";
 
-  nativeBuildInputs = [ undmg ];
+    nativeBuildInputs = [ undmg ];
 
-  installPhase = ''
-    mkdir -p "$out/Applications/Spacedrive.app"
-    cp -r . "$out/Applications/Spacedrive.app"
-    mkdir -p "$out/bin"
-    ln -s "$out/Applications/Spacedrive.app/Contents/MacOS/Spacedrive" "$out/bin/spacedrive"
-  '';
-}
-else appimageTools.wrapType2 {
-  inherit pname version src meta passthru;
+    installPhase = ''
+      runHook preInstall
 
-  extraPkgs = pkgs:
-    (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ [ pkgs.libthai ];
+      mkdir -p "$out/Applications/Spacedrive.app"
+      cp -r . "$out/Applications/Spacedrive.app"
+      mkdir -p "$out/bin"
+      ln -s "$out/Applications/Spacedrive.app/Contents/MacOS/sd-desktop" "$out/bin/spacedrive"
 
-  extraInstallCommands =
-    let
-      appimageContents = appimageTools.extractType2 { inherit pname version src; };
-    in
-    ''
-      # Remove version from entrypoint
-      mv $out/bin/spacedrive-${version} $out/bin/spacedrive
-
-      # Install .desktop files
-      install -Dm444 ${appimageContents}/com.spacedrive.desktop -t $out/share/applications
-      install -Dm444 ${appimageContents}/spacedrive.png -t $out/share/pixmaps
-      substituteInPlace $out/share/applications/com.spacedrive.desktop \
-        --replace 'Exec=usr/bin/spacedrive' 'Exec=spacedrive'
+      runHook postInstall
     '';
-}
+  }
+
+else
+  stdenv.mkDerivation {
+    inherit
+      pname
+      version
+      src
+      meta
+      passthru
+      ;
+
+    nativeBuildInputs = [
+      autoPatchelfHook
+      dpkg
+    ];
+
+    # Depends: libc6, libxdo3, libwebkit2gtk-4.1-0, libgtk-3-0
+    # Recommends: gstreamer1.0-plugins-ugly
+    # Suggests: gstreamer1.0-plugins-bad
+    buildInputs = [
+      xdotool
+      glib
+      libsoup_3
+      webkitgtk_4_1
+      gdk-pixbuf
+      gst_all_1.gst-plugins-ugly
+      gst_all_1.gst-plugins-bad
+      gst_all_1.gst-plugins-base
+      gst_all_1.gstreamer
+    ];
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/bin
+      cp -r usr/share $out/
+      cp -r usr/lib $out/
+      cp -r usr/bin $out/
+
+      runHook postInstall
+    '';
+  }

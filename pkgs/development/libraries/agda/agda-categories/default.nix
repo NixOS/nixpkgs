@@ -1,4 +1,9 @@
-{ lib, mkDerivation, fetchFromGitHub, standard-library }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  standard-library,
+}:
 
 mkDerivation rec {
   version = "0.2.0";
@@ -26,17 +31,16 @@ mkDerivation rec {
     find src -name '*.agda' | sed -e 's|^src/[/]*|import |' -e 's|/|.|g' -e 's/.agda//' -e '/import Everything/d' | LC_COLLATE='C' sort > Everything.agda
   '';
 
-  # agda: Heap exhausted;
-  # agda: Current maximum heap size is 4294967296 bytes (4096 MB).
-  GHCRTS = "-M5G";
-
   buildInputs = [ standard-library ];
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "A new Categories library";
+    description = "New Categories library";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ alexarice turion ];
+    maintainers = with maintainers; [
+      alexarice
+      turion
+    ];
   };
 }

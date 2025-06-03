@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -15,8 +16,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "usb-devices";
+    tag = "v${version}";
     hash = "sha256-Nfdl5oRIdOfAo5PFAJJpadRyu2zeEkmYzxDQxbvpt6c=";
   };
 
@@ -25,17 +26,11 @@ buildPythonPackage rec {
       --replace " --cov=usb_devices --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "usb_devices"
-  ];
+  pythonImportsCheck = [ "usb_devices" ];
 
   meta = with lib; {
     description = "Library for for mapping, describing, and resetting USB devices";

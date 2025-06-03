@@ -1,9 +1,23 @@
-{ lib, stdenv, writeScriptBin, fetchpatch, fetchFromGitLab, autoreconfHook, pkg-config
-, autoconf-archive, libxslt, boost, gtkmm2, imagemagick, sane-backends
-, tesseract4, udev, libusb1
-, withNetworkScan ? false, utsushi-networkscan
+{
+  lib,
+  stdenv,
+  writeScriptBin,
+  fetchpatch,
+  fetchFromGitLab,
+  autoreconfHook,
+  pkg-config,
+  autoconf-archive,
+  libxslt,
+  boost,
+  gtkmm2,
+  imagemagick,
+  sane-backends,
+  tesseract4,
+  udev,
+  libusb1,
+  withNetworkScan ? false,
+  utsushi-networkscan,
 }:
-
 
 let
   fakegit = writeScriptBin "git" ''
@@ -13,7 +27,8 @@ let
     fi
   '';
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "imagescan";
   version = "3.65.0";
 
@@ -21,7 +36,7 @@ in stdenv.mkDerivation rec {
     owner = "utsushi";
     repo = pname;
     rev = version;
-    sha256 = "sha256-CrN9F/WJKmlDN7eozEHtKgGUQBWVwTqwjnrfiATk7lI=";
+    hash = "sha256-CrN9F/WJKmlDN7eozEHtKgGUQBWVwTqwjnrfiATk7lI=";
   };
 
   patches = [
@@ -38,7 +53,7 @@ in stdenv.mkDerivation rec {
       sha256 = "sha256-W8R1l7ZPcsfiIy1QBJvh0M8du0w1cnTg3PyAz65v4rE=";
     })
     (fetchpatch {
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-gfx/iscan/files/iscan-3.65.0-sane-backends-1.1.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-gfx/iscan/files/iscan-3.65.0-sane-backends-1.1.patch?id=dec60bb6900d6ebdaaa6aa1dcb845b30b739f9b5";
       sha256 = "sha256-AmMZ+/lrUMR7IU+S8MEn0Ji5pqOiD6izFJBsJ0tCCCw=";
     })
   ];
@@ -65,7 +80,6 @@ in stdenv.mkDerivation rec {
     "-Wno-error=parentheses"
     "-Wno-error=unused-variable"
   ];
-
 
   postPatch = ''
     # create fake udev and sane config
@@ -106,6 +120,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "SANE utsushi backend for some Epson scanners";
+    mainProgram = "utsushi";
     longDescription = ''
       ImageScanV3 (aka utsushi) scanner driver. Non-free plugins are not
       included, so no network support. To use the SANE backend, in
@@ -173,7 +188,10 @@ in stdenv.mkDerivation rec {
     '';
     homepage = "https://gitlab.com/utsushi/imagescan";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ wucke13 maxwilson ];
+    maintainers = with maintainers; [
+      wucke13
+      maxwilson
+    ];
     platforms = platforms.linux;
   };
 }

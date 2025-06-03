@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, packaging
-, hypothesis
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  packaging,
+  hypothesis,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "rmscene";
-  version = "0.5.0";
+  version = "0.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -18,17 +19,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ricklupton";
     repo = "rmscene";
-    rev = "v${version}";
-    hash = "sha256-uIvoKdW7caOfc8OEGIcyDwyos9NLwtZ++CeZdUO/G8M=";
+    tag = "v${version}";
+    hash = "sha256-LaUzWEptzCGir6ZOgyMfP3Uf+jERT+cTb7Wx/eean1I=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
-    packaging
-  ];
+  pythonRelaxDeps = [ "packaging" ];
+
+  dependencies = [ packaging ];
 
   pythonImportsCheck = [ "rmscene" ];
 
@@ -38,7 +39,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/ricklupton/rmscene/blob/${src.rev}/README.md#changelog";
+    changelog = "https://github.com/ricklupton/rmscene/blob/${src.tag}/README.md#changelog";
     description = "Read v6 .rm files from the reMarkable tablet";
     homepage = "https://github.com/ricklupton/rmscene";
     license = lib.licenses.mit;

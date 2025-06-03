@@ -1,57 +1,62 @@
-import ./make-test-python.nix (
-  { pkgs, lib, ... }:
-  let
-    drbdPort = 7789;
+{ pkgs, lib, ... }:
+let
+  drbdPort = 7789;
 
-    drbdConfig =
-      { nodes, ... }:
-      {
-        virtualisation.emptyDiskImages = [ 1 ];
-        networking.firewall.allowedTCPPorts = [ drbdPort ];
+  drbdConfig =
+    { nodes, ... }:
+    {
+      virtualisation.emptyDiskImages = [ 1 ];
+      networking.firewall.allowedTCPPorts = [ drbdPort ];
 
-        services.drbd = {
-          enable = true;
-          config = ''
-            global {
-              usage-count yes;
+      services.drbd = {
+        enable = true;
+        config = ''
+          global {
+            usage-count yes;
+          }
+
+          common {
+            net {
+              protocol C;
+              ping-int 1;
+            }
+          }
+
+          resource r0 {
+            volume 0 {
+              device    /dev/drbd0;
+              disk      /dev/vdb;
+              meta-disk internal;
             }
 
-            common {
-              net {
-                protocol C;
-                ping-int 1;
-              }
+            on drbd1 {
+              address ${nodes.drbd1.networking.primaryIPAddress}:${toString drbdPort};
             }
 
-            resource r0 {
-              volume 0 {
-                device    /dev/drbd0;
-                disk      /dev/vdb;
-                meta-disk internal;
-              }
-
-              on drbd1 {
-                address ${nodes.drbd1.config.networking.primaryIPAddress}:${toString drbdPort};
-              }
-
-              on drbd2 {
-                address ${nodes.drbd2.config.networking.primaryIPAddress}:${toString drbdPort};
-              }
+            on drbd2 {
+              address ${nodes.drbd2.networking.primaryIPAddress}:${toString drbdPort};
             }
-          '';
-        };
+          }
+        '';
       };
-  in
-  {
-    name = "drbd";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ ryantm astro ];
     };
+in
+{
+  name = "drbd";
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [
+      ryantm
+      astro
+      birkb
+    ];
+  };
 
-    nodes.drbd1 = drbdConfig;
-    nodes.drbd2 = drbdConfig;
+  nodes.drbd1 = drbdConfig;
+  nodes.drbd2 = drbdConfig;
 
-    testScript = { nodes }: ''
+  testScript =
+    { nodes }:
+    ''
       drbd1.start()
       drbd2.start()
 
@@ -83,5 +88,4 @@ import ./make-test-python.nix (
           "ls /mnt/drbd/hello",
       )
     '';
-  }
-)
+}

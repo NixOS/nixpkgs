@@ -1,68 +1,96 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  py = python3.override {
+    packageOverrides = self: super: {
+
+      # Doesn't work with latest pydantic
+      py-ocsf-models = super.py-ocsf-models.overridePythonAttrs (oldAttrs: rec {
+        dependencies = [
+          python3.pkgs.pydantic_1
+          python3.pkgs.cryptography
+          python3.pkgs.email-validator
+        ];
+      });
+    };
+  };
+in
+py.pkgs.buildPythonApplication rec {
   pname = "prowler";
-  version = "3.12.1";
+  version = "5.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "prowler-cloud";
     repo = "prowler";
-    rev = "refs/tags/${version}";
-    hash = "sha256-QauDqeCa499AcZurGjn2Yv4GH04F/pahAH2ms7gAca4=";
+    tag = version;
+    hash = "sha256-yVUZsH/hLl/VCbLdaMujIl6NT6FzgkPfhpcOrQMcHGk=";
   };
 
-  pythonRelaxDeps = [
-    "azure-mgmt-security"
-    "boto3"
-    "botocore"
-    "google-api-python-client"
-    "slack-sdk"
-    "pydantic"
-  ];
+  pythonRelaxDeps = true;
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = with py.pkgs; [ poetry-core ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with py.pkgs; [
     alive-progress
     awsipranges
     azure-identity
+    azure-keyvault-keys
+    azure-mgmt-applicationinsights
     azure-mgmt-authorization
+    azure-mgmt-compute
+    azure-mgmt-containerregistry
+    azure-mgmt-containerservice
+    azure-mgmt-cosmosdb
+    azure-mgmt-keyvault
+    azure-mgmt-monitor
+    azure-mgmt-network
+    azure-mgmt-rdbms
+    azure-mgmt-resource
     azure-mgmt-security
+    azure-mgmt-search
     azure-mgmt-sql
     azure-mgmt-storage
     azure-mgmt-subscription
+    azure-mgmt-web
     azure-storage-blob
     boto3
     botocore
     colorama
+    cryptography
+    dash
+    dash-bootstrap-components
     detect-secrets
     google-api-python-client
     google-auth-httplib2
     jsonschema
-    msgraph-core
-    msrestazure
+    kubernetes
+    microsoft-kiota-abstractions
+    msgraph-sdk
+    numpy
+    pandas
+    py-ocsf-models
     pydantic_1
+    pygithub
+    python-dateutil
+    pytz
     schema
     shodan
     slack-sdk
     tabulate
+    tzlocal
   ];
 
-  pythonImportsCheck = [
-    "prowler"
-  ];
+  pythonImportsCheck = [ "prowler" ];
 
   meta = with lib; {
     description = "Security tool for AWS, Azure and GCP to perform Cloud Security best practices assessments";
     homepage = "https://github.com/prowler-cloud/prowler";
-    changelog = "https://github.com/prowler-cloud/prowler/releases/tag/${version}";
+    changelog = "https://github.com/prowler-cloud/prowler/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     mainProgram = "prowler";

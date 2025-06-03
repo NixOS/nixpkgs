@@ -1,42 +1,51 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, stdenv
-, click
-, coloredlogs
-, psutil
-, pycyphal
-, pyserial
-, ruamel-yaml
-, requests
-, scipy
-, simplejson
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  stdenv,
+  click,
+  coloredlogs,
+  mido,
+  psutil,
+  pycyphal,
+  pysdl2,
+  python-rtmidi,
+  ruamel-yaml,
+  requests,
+  scipy,
+  simplejson,
 }:
 
 buildPythonApplication rec {
   pname = "yakut";
-  version = "0.13.0";
+  version = "0.14.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MBVSt01D36rBPW2bopujyu8Opwwavmm7S3tdaWp5ACw=";
+    hash = "sha256-58SYSbKJWFgxm8QAaLPIDfVowV+NEh2nMEDrwSSBDbI=";
   };
 
   buildInputs = [
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
+  ];
+  dependencies = [
     click
     coloredlogs
     psutil
     pycyphal
-    pyserial
     ruamel-yaml
     requests
     scipy
     simplejson
   ];
+  optional-dependencies.joystick = [
+    pysdl2
+    mido
+    python-rtmidi
+  ];
 
-  # Can't seem to run the tests on nix
+  # All these require extra permissions and/or actual hardware connected
   doCheck = false;
 
   meta = with lib; {
@@ -46,6 +55,6 @@ buildPythonApplication rec {
     '';
     homepage = "https://github.com/OpenCyphal/yakut/";
     license = licenses.mit;
-    maintainers = teams.ororatech.members;
+    teams = [ teams.ororatech ];
   };
 }

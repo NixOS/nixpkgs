@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, qttools, wrapQtAppsHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qttools,
+  wrapQtAppsHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "molequeue";
@@ -26,6 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Desktop integration of high performance computing resources";
+    mainProgram = "molequeue";
     maintainers = with maintainers; [ sheepforce ];
     homepage = "https://github.com/OpenChemistry/molequeue";
     platforms = platforms.linux;

@@ -1,13 +1,14 @@
-{ cmake
-, fetchFromGitLab
-, fetchpatch
-, sqlite
-, boost
-, lib
-, stdenv
+{
+  cmake,
+  fetchFromGitLab,
+  fetchpatch,
+  sqlite,
+  boost,
+  lib,
+  stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "bc-soci";
   version = "linphone-4.4.1";
 
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Database access library for C++. Belledonne Communications' fork for Linphone.";
+    description = "Database access library for C++. Belledonne Communications' fork for Linphone";
     homepage = "https://gitlab.linphone.org/BC/public/external/soci";
     license = licenses.boost;
     platforms = platforms.all;

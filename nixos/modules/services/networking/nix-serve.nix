@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -8,12 +13,12 @@ in
 {
   options = {
     services.nix-serve = {
-      enable = mkEnableOption (lib.mdDoc "nix-serve, the standalone Nix binary cache server");
+      enable = mkEnableOption "nix-serve, the standalone Nix binary cache server";
 
       port = mkOption {
         type = types.port;
         default = 5000;
-        description = lib.mdDoc ''
+        description = ''
           Port number where nix-serve will listen on.
         '';
       };
@@ -21,7 +26,7 @@ in
       bindAddress = mkOption {
         type = types.str;
         default = "0.0.0.0";
-        description = lib.mdDoc ''
+        description = ''
           IP address where nix-serve will bind its listening socket.
         '';
       };
@@ -31,13 +36,13 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Open ports in the firewall for nix-serve.";
+        description = "Open ports in the firewall for nix-serve.";
       };
 
       secretKeyFile = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           The path to the file used for signing derivation data.
           Generate with:
 
@@ -52,7 +57,7 @@ in
       extraParams = mkOption {
         type = types.separatedString " ";
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra command line parameters for nix-serve.
         '';
       };
@@ -69,7 +74,10 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      path = [ config.nix.package.out pkgs.bzip2.bin ];
+      path = [
+        config.nix.package.out
+        pkgs.bzip2.bin
+      ];
       environment.NIX_REMOTE = "daemon";
 
       script = ''
@@ -85,8 +93,9 @@ in
         User = "nix-serve";
         Group = "nix-serve";
         DynamicUser = true;
-        LoadCredential = lib.optionalString (cfg.secretKeyFile != null)
-          "NIX_SECRET_KEY_FILE:${cfg.secretKeyFile}";
+        LoadCredential = lib.optionalString (
+          cfg.secretKeyFile != null
+        ) "NIX_SECRET_KEY_FILE:${cfg.secretKeyFile}";
       };
     };
 

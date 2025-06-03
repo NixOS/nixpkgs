@@ -1,23 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cairo
-, cmake
-, glib
-, gtkmm3
-, harfbuzz
-, libX11
-, libXdmcp
-, libxcb
-, makeWrapper
-, pcre2
-, pkg-config
-, xcbutilcursor
-, xcbutilkeysyms
-, xcbutilwm
-, xcbutil
-, xmodmap
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cairo,
+  cmake,
+  glib,
+  gtkmm3,
+  harfbuzz,
+  libX11,
+  libXdmcp,
+  libxcb,
+  makeWrapper,
+  pcre2,
+  pkg-config,
+  xcbutilcursor,
+  xcbutilkeysyms,
+  xcbutilwm,
+  xcbutil,
+  xmodmap,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # src/ewmh/ewmh.cpp:67:28: error: non-constant-expression cannot be narrowed from type 'int' to 'uint32_t' (aka 'unsigned int') in initializer list
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-c++11-narrowing";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-c++11-narrowing";
 
   installPhase = ''
     runHook preInstall
@@ -73,9 +73,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     inherit (finalAttrs.src.meta) homepage;
-    description = "A tiling X11 window manager written in modern C++";
+    description = "Tiling X11 window manager written in modern C++";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     inherit (libX11.meta) platforms;
     mainProgram = "Hypr";
   };

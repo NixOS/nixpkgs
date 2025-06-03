@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, fetchpatch, pidgin, intltool, libxml2, gmime, nss }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pidgin,
+  intltool,
+  libxml2,
+  gmime,
+  nss,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pidgin-sipe";
@@ -21,10 +31,16 @@ stdenv.mkDerivation rec {
       url = "https://repo.or.cz/siplcs.git/patch/583a734e63833f03d11798b7b0d59a17d08ae60f";
       sha256 = "Ai6Czpy/FYvBi4GZR7yzch6OcouJgfreI9HcojhGVV4=";
     })
+    ./0001-fix-libxml-error-signature.patch
   ];
 
   nativeBuildInputs = [ intltool ];
-  buildInputs = [ pidgin gmime libxml2 nss ];
+  buildInputs = [
+    pidgin
+    gmime
+    libxml2
+    nss
+  ];
   configureFlags = [
     "--without-dbus"
     "--enable-quality-check=no"

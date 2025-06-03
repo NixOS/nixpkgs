@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, rns
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  rns,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "lxmf";
-  version = "0.4.0";
+  version = "0.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -16,30 +17,27 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "markqvist";
     repo = "lxmf";
-    rev = "refs/tags/${version}";
-    hash = "sha256-d0D12nnvLzrWoYTAF+kLMciDNkBtaRHwUAR9jrNsx1k=";
+    tag = version;
+    hash = "sha256-BSQhhjiZcu9xctEXKQ2Dr4GQNkX7DUIpsncG8zUO74Y=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    rns
-  ];
+  dependencies = [ rns ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "LXMF"
-  ];
+  pythonImportsCheck = [ "LXMF" ];
 
   meta = with lib; {
     description = "Lightweight Extensible Message Format for Reticulum";
     homepage = "https://github.com/markqvist/lxmf";
     changelog = "https://github.com/markqvist/LXMF/releases/tag/${version}";
-    license = licenses.mit;
+    # Reticulum License
+    # https://github.com/markqvist/LXMF/blob/master/LICENSE
+    license = licenses.unfree;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "lxmd";
   };
 }

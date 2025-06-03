@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, cmake
-, fetchFromGitHub
-, gettext
-, libcomps
-, libdnf
-, python
-, rpm
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  cmake,
+  fetchFromGitHub,
+  gettext,
+  libcomps,
+  libdnf,
+  python,
+  rpm,
+  sphinx,
+  nix-update-script,
 }:
 
 let
@@ -16,21 +18,23 @@ in
 
 buildPythonPackage rec {
   pname = "dnf4";
-  version = "4.18.2";
+  version = "4.23.0";
   format = "other";
 
-  outputs = [ "out" "man" "py" ];
+  outputs = [
+    "out"
+    "man"
+    "py"
+  ];
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "dnf";
-    rev = version;
-    hash = "sha256-WOLVKsrHp0V0wMXXRf1hrxsxuVv2bFOKIw8Aitz0cac=";
+    tag = version;
+    hash = "sha256-qlOnFtEURhyxfsprhRaYUj141vZJp8qMjLpP1wGxikw=";
   };
 
-  patches = [
-    ./fix-python-install-dir.patch
-  ];
+  patches = [ ./fix-python-install-dir.patch ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
@@ -58,9 +62,7 @@ buildPythonPackage rec {
     rpm
   ];
 
-  cmakeFlags = [
-    "-DPYTHON_DESIRED=${pyMajor}"
-  ];
+  cmakeFlags = [ "-DPYTHON_DESIRED=${pyMajor}" ];
 
   dontWrapPythonPrograms = true;
 
@@ -79,13 +81,16 @@ buildPythonPackage rec {
     ln -s dnf-${pyMajor} $out/bin/yum
 
     mkdir -p $out/share/bash-completion/completions
-    mv $out/etc/bash_completion.d/dnf $out/share/bash-completion/completions/dnf
+    mv $out/etc/bash_completion.d/dnf-3 $out/share/bash-completion/completions/dnf4
+    ln -s $out/share/bash-completion/completions/dnf4 $out/share/bash-completion/completions/dnf
     rm -r $out/etc/bash_completion.d
   '';
 
   postFixup = ''
     moveToOutput "lib/${python.libPrefix}" "$py"
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Package manager based on libdnf and libsolv. Replaces YUM";

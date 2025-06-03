@@ -1,44 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, wheel
-, networkx
-, numpy
-, pydot
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  networkx,
+  numpy,
+  pydot,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "pyformlang";
-  version = "1.0.7";
+  version = "1.0.11";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-i4ib18Ktyc9pRu4P+tQIHoZ/IbAOk8Dn0MXJoxw8gAA=";
+    hash = "sha256-4pLsi5z6ZMJrWS+vm3z8csT0sOsNUz8EWkYGHnXFzpk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     networkx
     numpy
     pydot
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyformlang" ];
 
   meta = with lib; {
-    description = "A python framework for formal grammars";
-    homepage = "https://pypi.org/project/pyformlang/";
+    description = "Framework for formal grammars";
+    homepage = "https://github.com/Aunsiels/pyformlang";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
   };

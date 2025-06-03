@@ -1,18 +1,21 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "soapui";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ ];
   };
 
-  nodes.machine = { config, pkgs, ... }: {
-    imports = [
-      ./common/x11.nix
-    ];
+  nodes.machine =
+    { config, pkgs, ... }:
+    {
+      imports = [
+        ./common/x11.nix
+      ];
 
-    services.xserver.enable = true;
+      services.xserver.enable = true;
 
-    environment.systemPackages = [ pkgs.soapui ];
-  };
+      environment.systemPackages = [ pkgs.soapui ];
+    };
 
   testScript = ''
     machine.wait_for_x()
@@ -21,4 +24,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.sleep(1)
     machine.screenshot("soapui")
   '';
-})
+}

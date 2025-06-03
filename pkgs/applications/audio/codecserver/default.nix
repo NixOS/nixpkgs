@@ -1,5 +1,11 @@
-{ stdenv, lib, fetchFromGitHub
-, cmake, pkg-config, udev, protobuf
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  udev,
+  protobuf,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Modular audio codec server";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = teams.c3d2.members;
+    teams = [ teams.c3d2 ];
     mainProgram = "codecserver";
   };
 }

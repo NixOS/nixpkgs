@@ -1,32 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, protobuf
-, proto-plus
-, pytestCheckHook
-, pytest-asyncio
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  protobuf,
+  proto-plus,
+  pytestCheckHook,
+  pytest-asyncio,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-os-config";
-  version = "1.17.2";
+  version = "1.20.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-d6LvrMM+n0PKd751zafDHrtUZUBpip/Nf+PcD6MuEsg=";
+    pname = "google_cloud_os_config";
+    inherit version;
+    hash = "sha256-15sKmKW9y3/JU7rTLRZJXYqxWdWvqIFmIqpXKo2tE8Q=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     proto-plus
     protobuf
@@ -37,9 +37,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "google.cloud.osconfig"
-  ];
+  pythonImportsCheck = [ "google.cloud.osconfig" ];
 
   disabledTests = [
     # Test requires a project ID
@@ -53,6 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-os-config";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-os-config-v${version}/packages/google-cloud-os-config/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

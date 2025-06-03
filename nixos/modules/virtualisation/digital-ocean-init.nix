@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 with lib;
 let
   cfg = config.virtualisation.digitalOcean;
@@ -10,12 +15,13 @@ let
       ];
     }
   '';
-in {
+in
+{
   options.virtualisation.digitalOcean.rebuildFromUserData = mkOption {
     type = types.bool;
     default = true;
     example = true;
-    description = lib.mdDoc "Whether to reconfigure the system from Digital Ocean user data";
+    description = "Whether to reconfigure the system from Digital Ocean user data";
   };
   options.virtualisation.digitalOcean.defaultConfigFile = mkOption {
     type = types.path;
@@ -24,7 +30,7 @@ in {
       The default configuration imports user-data if applicable and
       `(modulesPath + "/virtualisation/digital-ocean-config.nix")`.
     '';
-    description = lib.mdDoc ''
+    description = ''
       A path to a configuration file which will be placed at
       `/etc/nixos/configuration.nix` and be used when switching to
       a new configuration.
@@ -37,7 +43,10 @@ in {
       wantedBy = [ "network-online.target" ];
       unitConfig = {
         ConditionPathExists = "!/etc/nixos/do-userdata.nix";
-        After = [ "digitalocean-metadata.service" "network-online.target" ];
+        After = [
+          "digitalocean-metadata.service"
+          "network-online.target"
+        ];
         Requires = [ "digitalocean-metadata.service" ];
         X-StopOnRemoval = false;
       };
@@ -46,7 +55,14 @@ in {
         RemainAfterExit = true;
       };
       restartIfChanged = false;
-      path = [ pkgs.jq pkgs.gnused pkgs.gnugrep config.systemd.package config.nix.package config.system.build.nixos-rebuild ];
+      path = [
+        pkgs.jq
+        pkgs.gnused
+        pkgs.gnugrep
+        config.systemd.package
+        config.nix.package
+        config.system.build.nixos-rebuild
+      ];
       environment = {
         HOME = "/root";
         NIX_PATH = concatStringsSep ":" [
@@ -88,8 +104,11 @@ in {
         else
           echo "no user data is available"
         fi
-        '';
+      '';
     };
   };
-  meta.maintainers = with maintainers; [ arianvp eamsden ];
+  meta.maintainers = with maintainers; [
+    arianvp
+    eamsden
+  ];
 }

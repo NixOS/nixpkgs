@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, jupyter-server
-, pytestCheckHook
-, pytest-tornasync
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  jupyter-server,
+  pytestCheckHook,
+  pytest-tornasync,
 }:
 
 buildPythonPackage rec {
   pname = "notebook-shim";
-  version = "0.2.3";
+  version = "0.2.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "notebook_shim";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-eAYZuNYqOMKC6joDbbKk4Q4nrfdbO7b+yZeSvMdWWrI=";
+    tag = "v${version}";
+    hash = "sha256-CWnXOKE1xvr+a/qWNY6XCTB5+G/fg2O/glgeLzYD+Zc=";
   };
 
   nativeBuildInputs = [ hatchling ];
@@ -28,7 +29,7 @@ buildPythonPackage rec {
   '';
 
   # TODO: understand & possibly fix why tests fail. On github most testfiles
-  # have been comitted with msgs "wip" though.
+  # have been committed with msgs "wip" though.
   doCheck = false;
 
   nativeCheckInputs = [
@@ -46,6 +47,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/jupyter/notebook_shim";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ friedelino ];
+    maintainers = [ ];
   };
 }

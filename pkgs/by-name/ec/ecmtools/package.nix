@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,11 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A utility to uncompress ECM files to BIN CD format";
+    description = "Utility to uncompress ECM files to BIN CD format";
     homepage = "https://github.com/alucryd/ecm-tools";
     license = lib.licenses.gpl3Plus;
     mainProgram = "bin2ecm";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
   };
 })

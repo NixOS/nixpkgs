@@ -1,15 +1,15 @@
 {
-  bazel
-, bazelTest
-, stdenv
-, darwin
-, extraBazelArgs ? ""
-, lib
-, runLocal
-, runtimeShell
-, writeScript
-, writeText
-, distDir
+  bazel,
+  bazelTest,
+  stdenv,
+  cctools,
+  extraBazelArgs ? "",
+  lib,
+  runLocal,
+  runtimeShell,
+  writeScript,
+  writeText,
+  distDir,
 }:
 
 let
@@ -17,8 +17,8 @@ let
     #! ${runtimeShell}
 
     export CXX='${stdenv.cc}/bin/clang++'
-    export LD='${darwin.cctools}/bin/ld'
-    export LIBTOOL='${darwin.cctools}/bin/libtool'
+    export LD='${cctools}/bin/ld'
+    export LIBTOOL='${cctools}/bin/libtool'
     export CC='${stdenv.cc}/bin/clang'
 
     # XXX: hack for macosX, this flags disable bazel usage of xcode
@@ -57,21 +57,23 @@ let
     )
   '';
 
-  workspaceDir = runLocal "our_workspace" {} (''
-    mkdir $out
-    cp ${WORKSPACE} $out/WORKSPACE
-    mkdir $out/python
-    cp ${pythonLib} $out/python/lib.py
-    cp ${pythonBin} $out/python/bin.py
-    cp ${pythonBUILD} $out/python/BUILD.bazel
-  ''
-  + (lib.optionalString stdenv.isDarwin ''
-    mkdir $out/tools
-    cp ${toolsBazel} $out/tools/bazel
-  ''));
+  workspaceDir = runLocal "our_workspace" { } (
+    ''
+      mkdir $out
+      cp ${WORKSPACE} $out/WORKSPACE
+      mkdir $out/python
+      cp ${pythonLib} $out/python/lib.py
+      cp ${pythonBin} $out/python/bin.py
+      cp ${pythonBUILD} $out/python/BUILD.bazel
+    ''
+    + (lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir $out/tools
+      cp ${toolsBazel} $out/tools/bazel
+    '')
+  );
 
   testBazel = bazelTest {
-    name = "bazel-test-builtin-rules";
+    name = "${bazel.pname}-test-builtin-rules";
     inherit workspaceDir;
     bazelPkg = bazel;
     bazelScript = ''
@@ -83,4 +85,5 @@ let
     '';
   };
 
-in testBazel
+in
+testBazel

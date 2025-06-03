@@ -1,71 +1,53 @@
-{ lib
-, black
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, pytest
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, ruff
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  pytest,
+  black,
+  ruff,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-examples";
-  version = "0.0.10";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "0.0.18";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pytest-examples";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-jCxOGDJlFkMH9VtaaPsE5zt+p3Z/mrVzhdNSI51/nVM=";
+    tag = "v${version}";
+    hash = "sha256-ZnDl0B7/oLX6PANrqsWtVJwe4E/+7inCgOpo7oSeZlw=";
   };
 
-  postPatch = ''
-    # ruff binary is used directly, the ruff Python package is not needed
-    substituteInPlace pytest_examples/lint.py \
-      --replace "'ruff'" "'${ruff}/bin/ruff'"
-  '';
-
-  pythonRemoveDeps = [
-    "ruff"
-  ];
-
-  nativeBuildInputs = [
+  build-system = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     black
+    ruff
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pytest_examples"
-  ];
+  pythonImportsCheck = [ "pytest_examples" ];
 
   disabledTests = [
-    # Test fails with latest ruff v0.1.2
-    # See https://github.com/pydantic/pytest-examples/issues/26
-    "test_ruff_error"
+    # Fails with AssertionError because formatting is different than expected
+    "test_black_error"
+    "test_black_error_dot_space"
+    "test_black_error_multiline"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin for testing examples in docstrings and markdown files";
     homepage = "https://github.com/pydantic/pytest-examples";
-    changelog = "https://github.com/pydantic/pytest-examples/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/pydantic/pytest-examples/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

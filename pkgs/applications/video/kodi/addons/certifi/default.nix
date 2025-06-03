@@ -1,11 +1,18 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript, cacert }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+  cacert,
+}:
 buildKodiAddon rec {
   pname = "certifi";
   namespace = "script.module.certifi";
   version = "2023.5.7";
 
   src = fetchzip {
-    url = "https://mirrors.kodi.tv/addons/nexus/${namespace}/${namespace}-${version}.zip";
+    url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
     sha256 = "sha256-NQbjx+k9fnQMYLLMR5+N5NSuDcXEzZjlhGPA3qSmjfI=";
   };
 
@@ -35,6 +42,6 @@ buildKodiAddon rec {
     homepage = "https://certifi.io";
     description = "Python package for providing Mozilla's CA Bundle";
     license = licenses.mpl20;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

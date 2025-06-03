@@ -1,6 +1,9 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
 
@@ -9,25 +12,25 @@ let
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "programs" "_1password-gui" "gid" ] ''
+    (lib.mkRemovedOptionModule [ "programs" "_1password-gui" "gid" ] ''
       A preallocated GID will be used instead.
     '')
   ];
 
   options = {
     programs._1password-gui = {
-      enable = mkEnableOption (lib.mdDoc "the 1Password GUI application");
+      enable = lib.mkEnableOption "the 1Password GUI application";
 
-      polkitPolicyOwners = mkOption {
-        type = types.listOf types.str;
+      polkitPolicyOwners = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
-        example = literalExpression ''["user1" "user2" "user3"]'';
-        description = lib.mdDoc ''
+        example = lib.literalExpression ''["user1" "user2" "user3"]'';
+        description = ''
           A list of users who should be able to integrate 1Password with polkit-based authentication mechanisms.
         '';
       };
 
-      package = mkPackageOption pkgs "1Password GUI" {
+      package = lib.mkPackageOption pkgs "1Password GUI" {
         default = [ "_1password-gui" ];
       };
     };
@@ -39,7 +42,7 @@ in
         polkitPolicyOwners = cfg.polkitPolicyOwners;
       };
     in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       environment.systemPackages = [ package ];
       users.groups.onepassword.gid = config.ids.gids.onepassword;
 
@@ -49,14 +52,6 @@ in
           owner = "root";
           group = "onepassword";
           setuid = false;
-          setgid = true;
-        };
-
-        "1Password-KeyringHelper" = {
-          source = "${package}/share/1password/1Password-KeyringHelper";
-          owner = "root";
-          group = "onepassword";
-          setuid = true;
           setgid = true;
         };
       };

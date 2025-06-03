@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, glib
-, boost
-, libsigrok
-, libserialport
-, libzip
-, libftdi1
-, hidapi
-, glibmm
-, python3
-, bluez
-, pcre
-, libsForQt5
-, desktopToDarwinBundle
-, qt5
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  glib,
+  boost,
+  libsigrok,
+  libserialport,
+  libzip,
+  libftdi1,
+  hidapi,
+  glibmm,
+  python3,
+  bluez,
+  pcre,
+  libsForQt5,
+  desktopToDarwinBundle,
+  qt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "smuview";
   version = "0.0.5-unstable-2023-04-12";
 
@@ -30,8 +31,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-WH8X75yk0aMivbBBOyODcM1eBWwa5UO/3nTaKV1LCGs=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config qt5.wrapQtAppsHook ]
-    ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    qt5.wrapQtAppsHook
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
     glib
@@ -45,10 +49,11 @@ stdenv.mkDerivation rec {
     python3
     pcre
     libsForQt5.qwt
-  ] ++ lib.optionals stdenv.isLinux [ bluez ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ bluez ];
 
   meta = with lib; {
-    description = "A Qt based source measure unit GUI for sigrok";
+    description = "Qt based source measure unit GUI for sigrok";
+    mainProgram = "smuview";
     longDescription = "SmuView is a GUI for sigrok that supports power supplies, electronic loads and all sorts of measurement devices like multimeters, LCR meters and so on";
     homepage = "https://github.com/knarfS/smuview";
     license = licenses.gpl3Plus;

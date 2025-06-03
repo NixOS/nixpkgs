@@ -1,4 +1,10 @@
-{ pkgs, lib, fetchFromGitHub, gerbilPackages, lmdb, ... }:
+{
+  pkgs,
+  lib,
+  fetchFromGitHub,
+  lmdb,
+  ...
+}:
 
 {
   pname = "gerbil-lmdb";
@@ -21,9 +27,9 @@
 
   meta = with lib; {
     description = "LMDB bindings for Gerbil";
-    homepage    = "https://github.com/mighty-gerbils/gerbil-lmdb";
-    license     = licenses.asl20;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/mighty-gerbils/gerbil-lmdb";
+    license = licenses.asl20;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ fare ];
   };
 

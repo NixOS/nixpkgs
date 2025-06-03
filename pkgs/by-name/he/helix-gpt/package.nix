@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, bun, makeBinaryWrapper }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  bun,
+  makeBinaryWrapper,
+}:
 let
   pin = lib.importJSON ./pin.json;
   src = fetchFromGitHub {
@@ -11,8 +17,10 @@ let
     pname = "helix-gpt-node_modules";
     inherit src;
     version = pin.version;
-    impureEnvVars = lib.fetchers.proxyImpureEnvVars
-      ++ [ "GIT_PROXY_COMMAND" "SOCKS_SERVER" ];
+    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+      "GIT_PROXY_COMMAND"
+      "SOCKS_SERVER"
+    ];
     nativeBuildInputs = [ bun ];
     dontConfigure = true;
     buildPhase = ''
@@ -55,9 +63,16 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://github.com/leona/helix-gpt";
+    changelog = "https://github.com/leona/helix-gpt/releases/tag/${src.rev}";
     description = "Code completion LSP for Helix with support for Copilot + OpenAI";
+    mainProgram = "helix-gpt";
     maintainers = with maintainers; [ happysalada ];
     license = with licenses; [ mit ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+      "aarch64-linux"
+    ];
   };
 }

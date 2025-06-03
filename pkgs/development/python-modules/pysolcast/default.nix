@@ -1,20 +1,21 @@
-{ lib
-, anyconfig
-, buildPythonPackage
-, fetchFromGitHub
-, isodate
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, responses
-, poetry-core
-, pythonRelaxDepsHook
+{
+  lib,
+  anyconfig,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isodate,
+  poetry-core,
+  poetry-dynamic-versioning,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  responses,
 }:
 
 buildPythonPackage rec {
   pname = "pysolcast";
-  version = "2.0.0";
+  version = "2.0.7";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,20 +23,21 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mcaulifn";
     repo = "solcast";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-jLhM47o6LvkPux0kusOrRk4TDS6VLWE0QMEiQxlBCwo=";
+    tag = "v${version}";
+    hash = "sha256-VNT86sZyQBNCA4jq+uYp2sBd/FLN0c5tp2u4/PjVGnA=";
   };
 
   pythonRelaxDeps = [
+    "isodate"
     "responses"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
-    pythonRelaxDepsHook
+    poetry-dynamic-versioning
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     anyconfig
     isodate
     pyyaml
@@ -47,15 +49,13 @@ buildPythonPackage rec {
     responses
   ];
 
-  pythonImportsCheck = [
-    "pysolcast"
-  ];
+  pythonImportsCheck = [ "pysolcast" ];
 
   meta = with lib; {
     description = "Python library for interacting with the Solcast API";
     homepage = "https://github.com/mcaulifn/solcast";
-    changelog = "https://github.com/mcaulifn/solcast/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
+    changelog = "https://github.com/mcaulifn/solcast/releases/tag/${src.tag}";
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }

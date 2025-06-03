@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pyopenssl
-, tldextract
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pyopenssl,
+  tldextract,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "certauth";
   version = "1.3.0";
   pyproject = true;
@@ -23,14 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-Rso5N0jb9k7bdorjPIUMNiZZPnzwbkxFNiTpsJ9pco0=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "--cov certauth " ""
-  '';
-
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     pyopenssl
@@ -38,12 +33,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "certauth"
-  ];
+  pythonImportsCheck = [ "certauth" ];
 
   disabledTests = [
     # https://github.com/ikreymer/certauth/issues/23
@@ -59,6 +53,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Simple CertificateAuthority and host certificate creation, useful for man-in-the-middle HTTPS proxy";
+    mainProgram = "certauth";
     homepage = "https://github.com/ikreymer/certauth";
     license = licenses.mit;
     maintainers = with maintainers; [ Luflosi ];

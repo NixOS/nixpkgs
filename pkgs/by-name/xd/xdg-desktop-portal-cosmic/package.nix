@@ -1,62 +1,108 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, mesa
-, libglvnd
-, libxkbcommon
-, pipewire
-, wayland
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  libcosmicAppHook,
+  pkg-config,
+  util-linux,
+  libgbm,
+  pipewire,
+  gst_all_1,
+  cosmic-wallpapers,
+  coreutils,
+  nix-update-script,
+  nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xdg-desktop-portal-cosmic";
-  version = "unstable-2023-12-07";
+  version = "1.0.0-alpha.7";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
-    rev = "23b3e5a1b9fa76e30266f29949d54e97c2fadf6e";
-    hash = "sha256-AqwJ3bV8Xz0MpY/ZmWgE9vNJIACX5SVeIYbSewyG/Bs=";
+    repo = "xdg-desktop-portal-cosmic";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-7yfrjKHuYOWPMMkHdGZ+g0hynh2TtSf4h8zW13tTus4=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "smithay-client-toolkit-0.18.0" = "sha256-2WbDKlSGiyVmi7blNBr2Aih9FfF2dq/bny57hoA4BrE=";
-      "cosmic-protocols-0.1.0" = "sha256-AEgvF7i/OWPdEMi8WUaAg99igBwE/AexhAXHxyeJMdc=";
-      "ashpd-0.7.0" = "sha256-jBuxKJ2ADBvkJPPv4gzmFlZFybrfZBkCjerzeKe2Tt4=";
-      "libspa-0.7.2" = "sha256-QWOcNWzEyxfTdjUIB33s9dpWJ7Fsfmb5jd70CXOP/bw=";
-    };
+  env = {
+    VERGEN_GIT_COMMIT_DATE = "2025-04-08";
+    VERGEN_GIT_SHA = finalAttrs.src.tag;
   };
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-fOaLeWtrjgBDSShC5OmBZKODNQn4bp/+iPZX5ZMQFqk=";
 
   separateDebugInfo = true;
 
-  nativeBuildInputs = [ rustPlatform.bindgenHook pkg-config ];
-  buildInputs = [ libglvnd libxkbcommon mesa pipewire wayland ];
-
-  # Force linking to libEGL, which is always dlopen()ed, and to
-  # libwayland-client, which is always dlopen()ed except by the
-  # obscure winit backend.
-  RUSTFLAGS = map (a: "-C link-arg=${a}") [
-    "-Wl,--push-state,--no-as-needed"
-    "-lEGL"
-    "-lwayland-client"
-    "-Wl,--pop-state"
+  nativeBuildInputs = [
+    libcosmicAppHook
+    rustPlatform.bindgenHook
+    pkg-config
+    util-linux
   ];
 
-  postInstall = ''
-    mkdir -p $out/share/{dbus-1/services,xdg-desktop-portal/portals}
-    cp data/*.service $out/share/dbus-1/services/
-    cp data/cosmic.portal $out/share/xdg-desktop-portal/portals/
+  buildInputs = [
+    libgbm
+    pipewire
+  ];
+
+  checkInputs = [ gst_all_1.gstreamer ];
+
+  postPatch = ''
+    # While the `kate-hazen-COSMIC-desktop-wallpaper.png` image is present
+    # in the `pop-wallpapers` package, we're using the Orion Nebula image
+    # from NASA available in the `cosmic-wallpapers` package. Mainly because
+    # the previous image was used in the GNOME shell extension and the
+    # Orion Nebula image is widely used in the Rust-based COSMIC DE's
+    # marketing materials. Another reason to use the Orion Nebula image
+    # is that it's actually the default wallpaper as configured by the
+    # `cosmic-bg` package's configuration in upstream [1] [2].
+    #
+    # [1]: https://github.com/pop-os/cosmic-bg/blob/epoch-1.0.0-alpha.6/config/src/lib.rs#L142
+    # [2]: https://github.com/pop-os/cosmic-bg/blob/epoch-1.0.0-alpha.6/data/v1/all#L3
+    substituteInPlace src/screenshot.rs src/widget/screenshot.rs \
+      --replace-fail '/usr/share/backgrounds/pop/kate-hazen-COSMIC-desktop-wallpaper.png' '${cosmic-wallpapers}/share/backgrounds/cosmic/orion_nebula_nasa_heic0601a.jpg'
+
+    # Also modifies the functionality by replacing 'false' with 'true' to enable the portal to start properly.
+    substituteInPlace data/org.freedesktop.impl.portal.desktop.cosmic.service \
+      --replace-fail 'Exec=/bin/false' 'Exec=${lib.getExe' coreutils "true"}'
   '';
 
-  meta = with lib; {
+  dontCargoInstall = true;
+
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+    "CARGO_TARGET_DIR=target/${stdenv.hostPlatform.rust.cargoShortTarget}"
+  ];
+
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version"
+        "unstable"
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
+  };
+
+  meta = {
     homepage = "https://github.com/pop-os/xdg-desktop-portal-cosmic";
     description = "XDG Desktop Portal for the COSMIC Desktop Environment";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyanbinary ];
+    license = lib.licenses.gpl3Only;
+    teams = [ lib.teams.cosmic ];
     mainProgram = "xdg-desktop-portal-cosmic";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

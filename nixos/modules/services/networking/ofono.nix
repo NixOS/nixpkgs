@@ -1,5 +1,10 @@
 # Ofono daemon.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -7,11 +12,7 @@ let
 
   cfg = config.services.ofono;
 
-  plugin_path =
-    lib.concatMapStringsSep ":"
-      (plugin: "${plugin}/lib/ofono/plugins")
-      cfg.plugins
-    ;
+  plugin_path = lib.concatMapStringsSep ":" (plugin: "${plugin}/lib/ofono/plugins") cfg.plugins;
 
 in
 
@@ -19,13 +20,13 @@ in
   ###### interface
   options = {
     services.ofono = {
-      enable = mkEnableOption (lib.mdDoc "Ofono");
+      enable = mkEnableOption "Ofono";
 
       plugins = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         example = literalExpression "[ pkgs.modem-manager-gui ]";
-        description = lib.mdDoc ''
+        description = ''
           The list of plugins to install.
         '';
       };
@@ -38,7 +39,7 @@ in
 
     systemd.packages = [ pkgs.ofono ];
 
-    systemd.services.ofono.environment.OFONO_PLUGIN_PATH = mkIf (cfg.plugins != []) plugin_path;
+    systemd.services.ofono.environment.OFONO_PLUGIN_PATH = mkIf (cfg.plugins != [ ]) plugin_path;
 
   };
 }

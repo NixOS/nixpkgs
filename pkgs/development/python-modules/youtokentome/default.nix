@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, click
-, cython
-, pytestCheckHook
-, pythonOlder
-, tabulate
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  click,
+  cython,
+  pythonOlder,
+  tabulate,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "VKCOM";
     repo = "YouTokenToMe";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-IFZS4jSi4yMzI7VbOPHI3KFZu5tjPjfQDPY7e1qbKAM=";
   };
 
@@ -33,12 +33,11 @@ buildPythonPackage rec {
     tabulate
   ];
 
-  pythonImportsCheck = [
-    "youtokentome"
-  ];
+  pythonImportsCheck = [ "youtokentome" ];
 
   meta = with lib; {
     description = "Unsupervised text tokenizer";
+    mainProgram = "yttm";
     homepage = "https://github.com/VKCOM/YouTokenToMe";
     changelog = "https://github.com/VKCOM/YouTokenToMe/releases/tag/v${version}";
     license = licenses.mit;

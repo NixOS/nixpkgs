@@ -1,8 +1,13 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  nix-update-script,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "pyprland";
-  version = "2.0.5";
+  version = "2.4.5";
   format = "pyproject";
 
   disabled = python3Packages.pythonOlder "3.10";
@@ -10,13 +15,16 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "hyprland-community";
     repo = "pyprland";
-    rev = "refs/tags/${version}";
-    hash = "sha256-VaNJ6hSdcH23Vk7JJpmNV6Qxb7gK5xWK6WHdeyfjUvQ=";
+    tag = version;
+    hash = "sha256-s93zuBS2jpGLTKKGvna1Zc+ph6A6kemgfkl8j7uSdKY=";
   };
 
   nativeBuildInputs = with python3Packages; [ poetry-core ];
 
   propagatedBuildInputs = with python3Packages; [ aiofiles ];
+  pythonRelaxDeps = [
+    "aiofiles"
+  ];
 
   postInstall = ''
     # file has shebang but cant be run due to a relative import, has proper entrypoint in /bin
@@ -53,12 +61,17 @@ python3Packages.buildPythonApplication rec {
     "pyprland.plugins.workspaces_follow_focus"
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     mainProgram = "pypr";
-    description = "An hyperland plugin system";
+    description = "Hyperland plugin system";
     homepage = "https://github.com/hyprland-community/pyprland";
-    license = licenses.mit;
-    maintainers = with maintainers; [ iliayar ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      iliayar
+      johnrtitor
+    ];
+    platforms = lib.platforms.linux;
   };
 }

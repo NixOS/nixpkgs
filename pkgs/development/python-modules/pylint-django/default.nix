@@ -1,42 +1,37 @@
-{ lib
-, buildPythonPackage
-, django
-, django-tables2
-, django-tastypie
-, factory-boy
-, fetchFromGitHub
-, poetry-core
-, pylint-plugin-utils
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  django,
+  django-tables2,
+  django-tastypie,
+  factory-boy,
+  fetchFromGitHub,
+  poetry-core,
+  pylint-plugin-utils,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pylint-django";
-  version = "2.5.4";
+  version = "2.6.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "pylint-django";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-MNgu3LvFoohXA+JzUiHIaYFw0ssEe+H5T8Ea56LcGuI=";
+    tag = "v${version}";
+    hash = "sha256-9b0Sbo6E036UmUmP/CVPrS9cxxKtkMMZtqJsI53g4sU=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    pylint-plugin-utils
-  ];
+  dependencies = [ pylint-plugin-utils ];
 
-  passthru.optional-dependencies = {
-    with_django = [
-      django
-    ];
+  optional-dependencies = {
+    with_django = [ django ];
   };
 
   nativeCheckInputs = [
@@ -51,11 +46,11 @@ buildPythonPackage rec {
     "test_migrations_plugin"
     "func_noerror_model_unicode_lambda"
     "test_linter_should_be_pickleable_with_pylint_django_plugin_installed"
+    "func_noerror_model_fields"
+    "func_noerror_form_fields"
   ];
 
-  pythonImportsCheck = [
-    "pylint_django"
-  ];
+  pythonImportsCheck = [ "pylint_django" ];
 
   meta = with lib; {
     description = "Pylint plugin to analyze Django applications";

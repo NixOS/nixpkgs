@@ -1,9 +1,9 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -15,21 +15,17 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "DCSBL";
-    repo = pname;
+    repo = "aiohwenergy";
     rev = version;
     hash = "sha256-WfkwIxyDzLNzhWNWST/V3iN9Bhu2oXDwGiA5UXCq5ho=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aiohwenergy"
-  ];
+  pythonImportsCheck = [ "aiohwenergy" ];
 
   meta = with lib; {
     description = "Python library to interact with the HomeWizard Energy devices API";

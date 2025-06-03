@@ -1,17 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pkgs
-, setuptools
-, aiofiles
-, click
-, coverage
-, tomli
-, pytest
-, pytest-mock
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  aiofiles,
+  click,
+  tomli,
+  pytest-mock,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -30,37 +28,31 @@ buildPythonPackage rec {
     sed -i 's/3\.5\.\*/3.5/' setup.py
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    click
-  ];
+  propagatedBuildInputs = [ click ];
 
-  passthru.optional-dependencies = {
-    async = [
-      aiofiles
-    ];
+  optional-dependencies = {
+    async = [ aiofiles ];
   };
 
   # Don't try to load the kernel module in tests.
   env.W1THERMSENSOR_NO_KERNEL_MODULE = 1;
 
-  nativeCheckInputs = [
-    pytest-mock
-    pytest-asyncio
-    pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  nativeCheckInputs =
+    [
+      pytest-mock
+      pytest-asyncio
+      pytestCheckHook
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [ tomli ]
+    ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "w1thermsensor"
-  ];
+  pythonImportsCheck = [ "w1thermsensor" ];
 
   meta = with lib; {
     description = "Python interface to 1-Wire temperature sensors";
+    mainProgram = "w1thermsensor";
     longDescription = ''
       A Python package and CLI tool to work with w1 temperature sensors like
       DS1822, DS18S20 & DS18B20 on the Raspberry Pi, Beagle Bone and other

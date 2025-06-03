@@ -1,8 +1,10 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+{
   name = "pass-secret-service";
   meta.maintainers = [ lib.maintainers.aidalgol ];
 
-  nodes.machine = { nodes, pkgs, ... }:
+  nodes.machine =
+    { nodes, pkgs, ... }:
     {
       imports = [ ./common/user-account.nix ];
 
@@ -13,27 +15,29 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         (pkgs.writers.writePython3Bin "secrets-dbus-init"
           {
             libraries = [ pkgs.python3Packages.secretstorage ];
-          } ''
-          import secretstorage
-          print("Initializing dbus connection...")
-          connection = secretstorage.dbus_init()
-          print("Requesting default collection...")
-          collection = secretstorage.get_default_collection(connection)
-          print("Done!  dbus-org.freedesktop.secrets should now be active.")
-        '')
+          }
+          ''
+            import secretstorage
+            print("Initializing dbus connection...")
+            connection = secretstorage.dbus_init()
+            print("Requesting default collection...")
+            collection = secretstorage.get_default_collection(connection)
+            print("Done!  dbus-org.freedesktop.secrets should now be active.")
+          ''
+        )
         pkgs.pass
       ];
 
       programs.gnupg = {
         agent.enable = true;
-        agent.pinentryFlavor = "tty";
         dirmngr.enable = true;
       };
     };
 
   # Some of the commands are run via a virtual console because they need to be
   # run under a real login session, with D-Bus running in the environment.
-  testScript = { nodes, ... }:
+  testScript =
+    { nodes, ... }:
     let
       user = nodes.machine.config.users.users.alice;
       gpg-uid = "alice@example.net";
@@ -66,4 +70,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           _, output = machine.systemctl("status dbus-org.freedesktop.secrets --no-pager", "alice")
           assert "Active: active (running)" in output
     '';
-})
+}

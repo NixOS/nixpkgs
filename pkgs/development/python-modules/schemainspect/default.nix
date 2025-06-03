@@ -1,20 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
-, sqlalchemy
-, sqlbag
-, setuptools
-, poetry-core
-, pytestCheckHook
-, pytest-xdist
-, pytest-sugar
-, postgresql
-, postgresqlTestHook
-,
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pythonOlder,
+  sqlalchemy,
+  sqlbag,
+  setuptools,
+  poetry-core,
+  pytestCheckHook,
+  pytest-xdist,
+  pytest-sugar,
+  postgresql,
+  postgresqlTestHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "schemainspect";
   version = "3.1.1663587362";
   format = "pyproject";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "djrobstep";
-    repo = pname;
+    repo = "schemainspect";
     # no tags on github, version patch number is unix time.
     rev = "066262d6fb4668f874925305a0b7dbb3ac866882";
     hash = "sha256-SYpQQhlvexNc/xEgSIk8L8J+Ta+3OZycGLeZGQ6DWzk=";
@@ -30,17 +30,14 @@ buildPythonPackage rec {
 
   patches = [
     # https://github.com/djrobstep/schemainspect/pull/87
-    (fetchpatch
-      {
-        name = "specify_poetry.patch";
-        url = "https://github.com/djrobstep/schemainspect/commit/bdcd001ef7798236fe0ff35cef52f34f388bfe68.patch";
-        hash = "sha256-/SEmcV9GjjvzfbszeGPkfd2DvYenl7bZyWdC0aI3M4M=";
-      })
+    (fetchpatch {
+      name = "specify_poetry.patch";
+      url = "https://github.com/djrobstep/schemainspect/commit/bdcd001ef7798236fe0ff35cef52f34f388bfe68.patch";
+      hash = "sha256-/SEmcV9GjjvzfbszeGPkfd2DvYenl7bZyWdC0aI3M4M=";
+    })
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
   propagatedBuildInputs = [
     setuptools # needed for 'pkg_resources'
     sqlalchemy
@@ -100,9 +97,7 @@ buildPythonPackage rec {
     "-svv"
     "tests"
   ];
-  pythonImportsCheck = [
-    "schemainspect"
-  ];
+  pythonImportsCheck = [ "schemainspect" ];
 
   postUnpack = ''
     # this dir is used to bump the version number, having it here fails the build
@@ -113,6 +108,6 @@ buildPythonPackage rec {
     description = "Schema inspection for PostgreSQL, and potentially others";
     homepage = "https://github.com/djrobstep/schemainspect";
     license = with licenses; [ unlicense ];
-    maintainers = with maintainers; [ soispha ];
+    maintainers = with maintainers; [ bpeetz ];
   };
 }

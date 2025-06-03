@@ -1,45 +1,42 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, dissect-util
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dissect-cstruct,
+  dissect-util,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-ntfs";
-  version = "3.8";
-  format = "pyproject";
+  version = "3.14";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.ntfs";
-    rev = "refs/tags/${version}";
-    hash = "sha256-BmXYnN8B7r/gz+zEWWS7ClOv29QOiHrm7g2ZNZXlnGU=";
+    tag = version;
+    hash = "sha256-C2tve1RVR8Q7t1Xz7Of1xRZH6IuLP9nL2l1cHbycFQ4=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dissect.ntfs"
-  ];
+  pythonImportsCheck = [ "dissect.ntfs" ];
 
   disabledTestPaths = [
     # Test is very time consuming
@@ -49,7 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing a parser for the NTFS file system";
     homepage = "https://github.com/fox-it/dissect.ntfs";
-    changelog = "https://github.com/fox-it/dissect.ntfs/releases/tag/${version}";
+    changelog = "https://github.com/fox-it/dissect.ntfs/releases/tag/${src.tag}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

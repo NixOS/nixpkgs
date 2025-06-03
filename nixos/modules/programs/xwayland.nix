@@ -1,6 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.xwayland;
@@ -10,36 +13,35 @@ in
 {
   options.programs.xwayland = {
 
-    enable = mkEnableOption (lib.mdDoc "Xwayland (an X server for interfacing X11 apps with the Wayland protocol)");
+    enable = lib.mkEnableOption "Xwayland (an X server for interfacing X11 apps with the Wayland protocol)";
 
-    defaultFontPath = mkOption {
-      type = types.str;
-      default = optionalString config.fonts.fontDir.enable
-        "/run/current-system/sw/share/X11/fonts";
-      defaultText = literalExpression ''
+    defaultFontPath = lib.mkOption {
+      type = lib.types.str;
+      default = lib.optionalString config.fonts.fontDir.enable "/run/current-system/sw/share/X11/fonts";
+      defaultText = lib.literalExpression ''
         optionalString config.fonts.fontDir.enable "/run/current-system/sw/share/X11/fonts"
       '';
-      description = lib.mdDoc ''
+      description = ''
         Default font path. Setting this option causes Xwayland to be rebuilt.
       '';
     };
 
-    package = mkOption {
-      type = types.path;
+    package = lib.mkOption {
+      type = lib.types.path;
       default = pkgs.xwayland.override (oldArgs: {
         inherit (cfg) defaultFontPath;
       });
-      defaultText = literalExpression ''
+      defaultText = lib.literalExpression ''
         pkgs.xwayland.override (oldArgs: {
           inherit (config.programs.xwayland) defaultFontPath;
         })
       '';
-      description = lib.mdDoc "The Xwayland package to use.";
+      description = "The Xwayland package to use.";
     };
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     # Needed by some applications for fonts and default settings
     environment.pathsToLink = [ "/share/X11" ];

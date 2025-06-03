@@ -1,73 +1,72 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, jinja2
-, poetry-core
-, round
-, graphviz
-, inkscape
-, imagemagick
-, pytestCheckHook
-, typed-ast
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  graphviz,
+  imagemagick,
+  inkscape,
+  jinja2,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  round,
 }:
 
 buildPythonPackage rec {
   pname = "diagrams";
-  version = "0.23.4";
-  format = "pyproject";
+  version = "0.24.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mingrammer";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-2jRWN2glGEr51fzny8nkqa5c2EdJG5aZPG2eTD7AISY=";
+    repo = "diagrams";
+    tag = "v${version}";
+    hash = "sha256-N4JGrtgLgGUayFR6/xTf3GZEZjtxC/4De3ZCfRZbi6M=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'graphviz = ">=0.13.2,<0.20.0"' 'graphviz = "*"'
-  '';
+  patches = [
+    # Add build-system, https://github.com/mingrammer/diagrams/pull/1089
+    (fetchpatch {
+      name = "add-build-system.patch";
+      url = "https://github.com/mingrammer/diagrams/commit/59b84698b142f5a0998ee9e395df717a1b77e9b2.patch";
+      hash = "sha256-/zV5X4qgHJs+KO9gHyu6LqQ3hB8Zx+BzOFo7K1vQK78=";
+    })
+    ./remove-black-requirement.patch
+  ];
+
+  pythonRemoveDeps = [ "pre-commit" ];
+
+  pythonRelaxDeps = [ "graphviz" ];
 
   preConfigure = ''
     patchShebangs autogen.sh
     ./autogen.sh
   '';
 
-  patches = [
-    # The build-system section is missing
-    ./build_poetry.patch
-    ./remove-black-requirement.patch
-  ];
+  build-system = [ poetry-core ];
 
   # Despite living in 'tool.poetry.dependencies',
   # these are only used at build time to process the image resource files
   nativeBuildInputs = [
-    inkscape imagemagick
+    inkscape
+    imagemagick
     jinja2
-    poetry-core
     round
   ];
 
-  propagatedBuildInputs = [
-    graphviz
-    typed-ast
-  ];
+  dependencies = [ graphviz ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "diagrams"
-  ];
+  pythonImportsCheck = [ "diagrams" ];
 
   meta = with lib; {
     description = "Diagram as Code";
     homepage = "https://diagrams.mingrammer.com/";
-    changelog = "https://github.com/mingrammer/diagrams/releases/tag/v${version}";
+    changelog = "https://github.com/mingrammer/diagrams/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ addict3d ];
   };

@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
   name = "loki";
@@ -7,36 +7,43 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
     maintainers = [ willibutz ];
   };
 
-  nodes.machine = { ... }: {
-    services.loki = {
-      enable = true;
-      configFile = "${pkgs.grafana-loki.src}/cmd/loki/loki-local-config.yaml";
-    };
-    services.promtail = {
-      enable = true;
-      configuration = {
-        server = {
-          http_listen_port = 9080;
-          grpc_listen_port = 0;
+  nodes.machine =
+    { ... }:
+    {
+      services.loki = {
+        enable = true;
+
+        # FIXME(globin) revert to original file when upstream fix released
+        # configFile = "${pkgs.grafana-loki.src}/cmd/loki/loki-local-config.yaml";
+        configFile = pkgs.runCommandNoCC "patched-loki-cfg.yml" { } ''
+          sed '/metric_aggregation/!b;n;/enable/d' "${pkgs.grafana-loki.src}/cmd/loki/loki-local-config.yaml" > $out
+        '';
+      };
+      services.promtail = {
+        enable = true;
+        configuration = {
+          server = {
+            http_listen_port = 9080;
+            grpc_listen_port = 0;
+          };
+          clients = [ { url = "http://localhost:3100/loki/api/v1/push"; } ];
+          scrape_configs = [
+            {
+              job_name = "system";
+              static_configs = [
+                {
+                  targets = [ "localhost" ];
+                  labels = {
+                    job = "varlogs";
+                    __path__ = "/var/log/*log";
+                  };
+                }
+              ];
+            }
+          ];
         };
-        clients = [ { url = "http://localhost:3100/loki/api/v1/push"; } ];
-        scrape_configs = [
-          {
-            job_name = "system";
-            static_configs = [
-              {
-                targets = [ "localhost" ];
-                labels = {
-                  job = "varlogs";
-                  __path__ = "/var/log/*log";
-                };
-              }
-            ];
-          }
-        ];
       };
     };
-  };
 
   testScript = ''
     machine.start
@@ -53,4 +60,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
         "${pkgs.grafana-loki}/bin/logcli --addr='http://localhost:3100' query --no-labels '{job=\"varlogs\",filename=\"/var/log/testlog\"}' | grep -q 'Loki Ingestion Test'"
     )
   '';
-})
+}

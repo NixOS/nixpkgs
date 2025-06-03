@@ -1,13 +1,14 @@
-{ lib
-, kernel
-, stdenv
-, clang-tools
-, llvmPackages
-, elfutils
-, flex
-, bison
-, bc
-, opensnitch
+{
+  lib,
+  kernel,
+  stdenv,
+  clang-tools,
+  llvmPackages,
+  elfutils,
+  flex,
+  bison,
+  bc,
+  opensnitch,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
 
   inherit (opensnitch) src;
 
-  sourceRoot = "source/ebpf_prog";
+  sourceRoot = "${src.name}/ebpf_prog";
 
   nativeBuildInputs = with llvmPackages; [
     bc
@@ -33,10 +34,10 @@ stdenv.mkDerivation rec {
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=opensnitch-ebpf-module&id=984b952a784eb701f691dd9f2d45dfeb8d15053b
   env.NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
-  env.KERNEL_DIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/source";
-  env.KERNEL_HEADERS="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+  env.KERNEL_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/source";
+  env.KERNEL_HEADERS = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
-  extraConfig =''
+  extraConfig = ''
     CONFIG_UPROBE_EVENTS=y
   '';
 

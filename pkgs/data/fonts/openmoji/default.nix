@@ -1,93 +1,107 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, scfbuild
-, fontforge
-, node-glob
-, libuninameslist
-, nodejs
-, nodePackages
-, python3Packages
-, variant ? "color" # "color" or "black"
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  nanoemoji,
+  python3Packages,
+  woff2,
+  xmlstarlet,
+  # available color formats: ["cbdt" "glyf_colr_0" "glyf_colr_1" "sbix" "picosvgz" "untouchedsvgz"]
+  # available black formats: ["glyf"]
+  fontFormats ? [
+    "glyf"
+    "cbdt"
+    "glyf_colr_0"
+    "glyf_colr_1"
+  ],
+  # when at least one of the glyf_colr_0/1 formats is specified, whether to build maximum color fonts
+  # "none" to not build any, "svg" to build colr+svg, "bitmap" to build cbdt+colr+svg fonts
+  buildMaximumColorFonts ? "bitmap",
 }:
-
 let
-  filename = builtins.replaceStrings
-    [ "color"              "black"              ]
-    [ "OpenMoji-Color.ttf" "OpenMoji-Black.ttf" ]
-    variant;
-
-  # With newer fontforge the build hangs, see
-  # https://github.com/NixOS/nixpkgs/issues/167869
-  # Patches etc taken from
-  # https://github.com/NixOS/nixpkgs/commit/69da642a5a9bb433138ba1b13c8d56fb5bb6ec05
-  fontforge-20201107 = fontforge.overrideAttrs (old: rec {
-    version = "20201107";
-    src = fetchFromGitHub {
-      owner = "fontforge";
-      repo = "fontforge";
-      rev = version;
-      sha256 = "sha256-Rl/5lbXaPgIndANaD0IakaDus6T53FjiBb45FIuGrvc=";
-    };
-    patches = [
-      (fetchpatch {
-        url = "https://salsa.debian.org/fonts-team/fontforge/raw/76bffe6ccf8ab20a0c81476a80a87ad245e2fd1c/debian/patches/0001-add-extra-cmake-install-rules.patch";
-        sha256 = "u3D9od2xLECNEHhZ+8dkuv9818tPkdP6y/Tvd9CADJg=";
-      })
-      (fetchpatch {
-        url = "https://github.com/fontforge/fontforge/commit/69e263b2aff29ad22f97f13935cfa97a1eabf207.patch";
-        sha256 = "06yyf90605aq6ppfiz83mqkdmnaq5418axp9jgsjyjq78b00xb29";
-      })
+  # all available methods
+  methods = {
+    black = [ "glyf" ];
+    color = [
+      "cbdt"
+      "glyf_colr_0"
+      "glyf_colr_1"
+      "sbix"
+      "picosvgz"
+      "untouchedsvgz"
     ];
-    buildInputs = old.buildInputs ++ [ libuninameslist ];
-  });
-  scfbuild-with-fontforge-20201107 = scfbuild.override (old: {
-    fontforge = fontforge-20201107;
-  });
+  };
+in
 
-in stdenv.mkDerivation rec {
+assert lib.asserts.assertEachOneOf "fontFormats" fontFormats (methods.black ++ methods.color);
+assert lib.asserts.assertOneOf "buildMaximumColorFonts" buildMaximumColorFonts [
+  "none"
+  "bitmap"
+  "svg"
+];
+
+stdenvNoCC.mkDerivation rec {
   pname = "openmoji";
-  version = "14.0.0";
+  version = "15.1.0";
 
   src = fetchFromGitHub {
     owner = "hfg-gmuend";
     repo = pname;
     rev = version;
-    sha256 = "sha256-XnSRSlWXOMeSaO6dKaOloRg3+sWS4BSaro4bPqOyKmE=";
+    hash = "sha256-k37MsBbRUZ4vIEPAgVMiCK8gz377DWwAfjjjOassNMY=";
   };
 
-  nativeBuildInputs = [
-    scfbuild-with-fontforge-20201107
-    nodejs
-    node-glob
-    nodePackages.lodash
+  patches = [
+    # fix paths and variables for nix build and skip generating font demos
+    ./build.patch
   ];
 
-  postPatch = ''
-    # this is API change in glob >9
-    substituteInPlace helpers/generate-font-glyphs.js \
-      --replace "require('glob').sync" "require('glob').globSync"
+  nativeBuildInputs = [
+    nanoemoji
+    python3Packages.fonttools
+    woff2
+    xmlstarlet
+  ];
+
+  methods_black = builtins.filter (m: builtins.elem m fontFormats) methods.black;
+  methods_color = builtins.filter (m: builtins.elem m fontFormats) methods.color;
+  saturations =
+    lib.optional (methods_black != [ ]) "black"
+    ++ lib.optional (methods_color != [ ]) "color";
+  maximumColorVersions = lib.optionals (buildMaximumColorFonts != "none") (
+    lib.optional (builtins.elem "glyf_colr_0" fontFormats) "0"
+    ++ lib.optional (builtins.elem "glyf_colr_1" fontFormats) "1"
+  );
+
+  postPatch = lib.optionalString (buildMaximumColorFonts == "bitmap") ''
+    substituteInPlace helpers/generate-fonts-runner.sh \
+      --replace 'maximum_color' 'maximum_color --bitmaps'
   '';
 
   buildPhase = ''
     runHook preBuild
 
-    node helpers/generate-font-glyphs.js
-
-    cd font
-    scfbuild -c scfbuild-${variant}.yml
+    bash helpers/generate-fonts-runner.sh "$(pwd)/build" "${version}"
 
     runHook postBuild
   '';
 
   installPhase = ''
-    install -Dm644 ${filename} $out/share/fonts/truetype/${filename}
+    runHook preInstall
+
+    mkdir -p $out/share/fonts/truetype $out/share/fonts/woff2
+    cp build/fonts/*/*.ttf $out/share/fonts/truetype/
+    cp build/fonts/*/*.woff2 $out/share/fonts/woff2/
+
+    runHook postInstall
   '';
 
   meta = with lib; {
     license = licenses.cc-by-sa-40;
-    maintainers = with maintainers; [ fgaz ];
+    maintainers = with maintainers; [
+      _999eagle
+      fgaz
+    ];
     platforms = platforms.all;
     homepage = "https://openmoji.org/";
     downloadPage = "https://github.com/hfg-gmuend/openmoji/releases";

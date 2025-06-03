@@ -1,44 +1,48 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, dissect-util
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dissect-cstruct,
+  dissect-util,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-shellitem";
-  version = "3.6";
-  format = "pyproject";
+  version = "3.10";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.shellitem";
-    rev = "refs/tags/${version}";
-    hash = "sha256-g8o6W5MZ7E8AKYs5QGQGw3IQhZehrOcY6wJrt9TJf4s=";
+    tag = version;
+    hash = "sha256-BS+c9QbMMsaoZHyuv6jMxbQFQNJeLt3da8Fq/wwXesQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dissect.shellitem"
+  pythonImportsCheck = [ "dissect.shellitem" ];
+
+  disabledTests = [
+    # Windows-specific tests
+    "test_xp_remote_lnk_file"
+    "test_xp_remote_lnk_dir"
+    "test_win7_local_lnk_dir"
   ];
 
   meta = with lib; {
@@ -47,5 +51,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/fox-it/dissect.shellitem/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "parse-lnk";
   };
 }

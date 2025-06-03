@@ -1,33 +1,32 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pytest-console-scripts
-, pytestCheckHook
-, pythonOlder
-, pyvips
-, scipy
-, setuptools-scm
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pytest-console-scripts,
+  pytestCheckHook,
+  pythonOlder,
+  pyvips,
+  scipy,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "scooby";
-  version = "0.9.2";
-  format = "setuptools";
+  version = "0.10.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "banesullivan";
     repo = "scooby";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-x6GPRo0OuXJtN41urviY0joZKzq0SQjUdRBpIylgcXY=";
+    tag = "v${version}";
+    hash = "sha256-ldDmw2TDvXgfu0fMj6dSr2zh9WfYGNpBGZb3MixKq+k=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
   nativeCheckInputs = [
     beautifulsoup4
@@ -42,9 +41,7 @@ buildPythonPackage rec {
     export PATH="$PATH:$out/bin";
   '';
 
-  pythonImportsCheck = [
-    "scooby"
-  ];
+  pythonImportsCheck = [ "scooby" ];
 
   disabledTests = [
     # Tests have additions requirements (e.g., time and module)
@@ -58,7 +55,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/banesullivan/scooby/releases/tag/v${version}";
-    description = "A lightweight tool for reporting Python package versions and hardware resources";
+    description = "Lightweight tool for reporting Python package versions and hardware resources";
+    mainProgram = "scooby";
     homepage = "https://github.com/banesullivan/scooby";
     license = licenses.mit;
     maintainers = with maintainers; [ wegank ];

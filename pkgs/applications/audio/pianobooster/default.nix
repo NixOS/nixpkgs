@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qttools
-, alsa-lib
-, ftgl
-, libGLU
-, qtbase
-, rtmidi
-, libjack2
-, fluidsynth
-, soundfont-fluid
-, unzip
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qttools,
+  alsa-lib,
+  ftgl,
+  libGLU,
+  qtbase,
+  rtmidi,
+  libjack2,
+  fluidsynth,
+  soundfont-fluid,
+  unzip,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -62,10 +63,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A MIDI file player that teaches you how to play the piano";
+    description = "MIDI file player that teaches you how to play the piano";
+    mainProgram = "pianobooster";
     homepage = "https://github.com/pianobooster/PianoBooster";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ goibhniu orivej ];
+    maintainers = with maintainers; [ orivej ];
   };
 }

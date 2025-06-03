@@ -1,50 +1,61 @@
-{ lib
-, async-timeout
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, orjson
-, packaging
-, pythonOlder
-, xmltodict
+{
+  lib,
+  async-timeout,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  orjson,
+  packaging,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "axis";
-  version = "48";
-  format = "setuptools";
+  version = "64";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "Kane610";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/Iz1F40Y00bgJUvNrkPGyA8Kkch92Kijeg8TQ8mostM=";
+    repo = "axis";
+    tag = "v${version}";
+    hash = "sha256-6g4Dqk+oGlEcqlNuMiwep+NCVFmwRZjKgEZC1OzmKw0=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools==75.6.0" "setuptools" \
+      --replace-fail "wheel==0.45.1" "wheel"
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     async-timeout
     attrs
     httpx
     orjson
     packaging
+    typing-extensions
     xmltodict
   ];
 
   # Tests requires a server on localhost
   doCheck = false;
 
-  pythonImportsCheck = [
-    "axis"
-  ];
+  pythonImportsCheck = [ "axis" ];
 
   meta = with lib; {
     description = "Python library for communicating with devices from Axis Communications";
     homepage = "https://github.com/Kane610/axis";
     changelog = "https://github.com/Kane610/axis/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "axis";
   };
 }

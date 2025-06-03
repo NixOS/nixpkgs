@@ -1,58 +1,66 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonAtLeast
-, pythonOlder
-, matplotlib
-, numpy
-, pandas
-, pillow
-, pytest
-, pytest-datadir
-, pytestCheckHook
-, pyyaml
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  matplotlib,
+  numpy,
+  pandas,
+  pillow,
+  pytest,
+  pytest-datadir,
+  pytestCheckHook,
+  pyyaml,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-regressions";
-  version = "2.5.0";
-  format = "setuptools";
+  version = "2.7.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-gYx4hMHP87q/ie67AsvCezB4VrGYVCfCTVLLgSoQb9k=";
+  src = fetchFromGitHub {
+    owner = "ESSS";
+    repo = "pytest-regressions";
+    tag = "v${version}";
+    hash = "sha256-w9uwJJtikbjUtjpJJ3dEZ1zU0KbdyLaDuJWJr45WpCg=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pytest-datadir
     pyyaml
   ];
 
+  optional-dependencies = {
+    dataframe = [
+      pandas
+      numpy
+    ];
+    image = [
+      numpy
+      pillow
+    ];
+    num = [
+      numpy
+      pandas
+    ];
+  };
 
   nativeCheckInputs = [
     matplotlib
     pandas
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
-  ];
-
-  disabledTestPathss = lib.optionals (pythonAtLeast "3.12") [
-    # AttributeError: partially initialized module 'pandas' has no attribute '_pandas_datetime_CAPI' (most likely due to a circular import)
-    "tests/test_num_regression.py"
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   pythonImportsCheck = [
@@ -60,13 +68,8 @@ buildPythonPackage rec {
     "pytest_regressions.plugin"
   ];
 
-  passthru.optional-dependencies = {
-    dataframe = [ pandas numpy ];
-    image = [ numpy pillow ];
-    num = [ numpy pandas ];
-  };
-
   meta = with lib; {
+    changelog = "https://github.com/ESSS/pytest-regressions/blob/${src.tag}/CHANGELOG.rst";
     description = "Pytest fixtures to write regression tests";
     longDescription = ''
       pytest-regressions makes it simple to test general data, images,
@@ -76,6 +79,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/ESSS/pytest-regressions";
     license = licenses.mit;
-    maintainers = with maintainers; [ AluisioASG ];
+    maintainers = [ ];
   };
 }

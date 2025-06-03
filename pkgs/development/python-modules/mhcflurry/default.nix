@@ -1,43 +1,53 @@
-{ appdirs
-, buildPythonPackage
-, fetchFromGitHub
-, keras
-, lib
-, mhcgnomes
-, nose
-, pandas
-, pytestCheckHook
-, pyyaml
-, scikit-learn
-, tensorflow
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # dependencies
+  appdirs,
+  keras,
+  mhcgnomes,
+  numpy,
+  pandas,
+  pyyaml,
+  scikit-learn,
+  tensorflow,
+  tf-keras,
+  tqdm,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mhcflurry";
-  version = "2.1.0";
-  format = "setuptools";
+  version = "2.1.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openvax";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-VyPHcNlZYgNJZb2UBFX55x+nE0GnHixkcsiTNjDCju0=";
+    repo = "mhcflurry";
+    tag = "v${version}";
+    hash = "sha256-TNb3oKZvgBuXoSwsTuEJjFKEVZyHynazuPInj7wVKs8=";
   };
 
   # keras and tensorflow are not in the official setup.py requirements but are required for the CLI utilities to run.
-  propagatedBuildInputs = [
+  dependencies = [
     appdirs
     keras
     mhcgnomes
+    numpy
     pandas
     pyyaml
     scikit-learn
     tensorflow
+    tf-keras
     tqdm
   ];
 
-  nativeCheckInputs = [ nose pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   disabledTests = [
     # RuntimeError: Missing MHCflurry downloadable file: /homeless-shelter/.local...
@@ -78,10 +88,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mhcflurry" ];
 
-  meta = with lib; {
+  meta = {
     description = "Peptide-MHC I binding affinity prediction";
     homepage = "https://github.com/openvax/mhcflurry";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ samuela ];
+    changelog = "https://github.com/openvax/mhcflurry/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

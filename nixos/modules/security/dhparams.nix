@@ -1,4 +1,10 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib) literalExpression mkOption types;
@@ -10,53 +16,61 @@ let
     description = "integer of at least 16 bits";
   };
 
-  paramsSubmodule = { name, config, ... }: {
-    options.bits = mkOption {
-      type = bitType;
-      default = cfg.defaultBitSize;
-      defaultText = literalExpression "config.${opt.defaultBitSize}";
-      description = lib.mdDoc ''
-        The bit size for the prime that is used during a Diffie-Hellman
-        key exchange.
-      '';
+  paramsSubmodule =
+    { name, config, ... }:
+    {
+      options.bits = mkOption {
+        type = bitType;
+        default = cfg.defaultBitSize;
+        defaultText = literalExpression "config.${opt.defaultBitSize}";
+        description = ''
+          The bit size for the prime that is used during a Diffie-Hellman
+          key exchange.
+        '';
+      };
+
+      options.path = mkOption {
+        type = types.path;
+        readOnly = true;
+        description = ''
+          The resulting path of the generated Diffie-Hellman parameters
+          file for other services to reference. This could be either a
+          store path or a file inside the directory specified by
+          {option}`security.dhparams.path`.
+        '';
+      };
+
+      config.path =
+        let
+          generated = pkgs.runCommand "dhparams-${name}.pem" {
+            nativeBuildInputs = [ pkgs.openssl ];
+          } "openssl dhparam -out \"$out\" ${toString config.bits}";
+        in
+        if cfg.stateful then "${cfg.path}/${name}.pem" else generated;
     };
 
-    options.path = mkOption {
-      type = types.path;
-      readOnly = true;
-      description = lib.mdDoc ''
-        The resulting path of the generated Diffie-Hellman parameters
-        file for other services to reference. This could be either a
-        store path or a file inside the directory specified by
-        {option}`security.dhparams.path`.
-      '';
-    };
-
-    config.path = let
-      generated = pkgs.runCommand "dhparams-${name}.pem" {
-        nativeBuildInputs = [ pkgs.openssl ];
-      } "openssl dhparam -out \"$out\" ${toString config.bits}";
-    in if cfg.stateful then "${cfg.path}/${name}.pem" else generated;
-  };
-
-in {
+in
+{
   options = {
     security.dhparams = {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to generate new DH params and clean up old DH params.
         '';
       };
 
       params = mkOption {
-        type = with types; let
-          coerce = bits: { inherit bits; };
-        in attrsOf (coercedTo int coerce (submodule paramsSubmodule));
-        default = {};
+        type =
+          with types;
+          let
+            coerce = bits: { inherit bits; };
+          in
+          attrsOf (coercedTo int coerce (submodule paramsSubmodule));
+        default = { };
         example = lib.literalExpression "{ nginx.bits = 3072; }";
-        description = lib.mdDoc ''
+        description = ''
           Diffie-Hellman parameters to generate.
 
           The value is the size (in bits) of the DH params to generate. The
@@ -91,7 +105,7 @@ in {
       stateful = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether generation of Diffie-Hellman parameters should be stateful or
           not. If this is enabled, PEM-encoded files for Diffie-Hellman
           parameters are placed in the directory specified by
@@ -109,7 +123,7 @@ in {
       defaultBitSize = mkOption {
         type = bitType;
         default = 2048;
-        description = lib.mdDoc ''
+        description = ''
           This allows to override the default bit size for all of the
           Diffie-Hellman parameters set in
           {option}`security.dhparams.params`.
@@ -119,7 +133,7 @@ in {
       path = mkOption {
         type = types.str;
         default = "/var/lib/dhparams";
-        description = lib.mdDoc ''
+        description = ''
           Path to the directory in which Diffie-Hellman parameters will be
           stored. This only is relevant if
           {option}`security.dhparams.stateful` is
@@ -130,55 +144,67 @@ in {
   };
 
   config = lib.mkIf (cfg.enable && cfg.stateful) {
-    systemd.services = {
-      dhparams-init = {
-        description = "Clean Up Old Diffie-Hellman Parameters";
+    systemd.services =
+      {
+        dhparams-init = {
+          description = "Clean Up Old Diffie-Hellman Parameters";
 
-        # Clean up even when no DH params is set
-        wantedBy = [ "multi-user.target" ];
+          # Clean up even when no DH params is set
+          wantedBy = [ "multi-user.target" ];
 
-        serviceConfig.RemainAfterExit = true;
-        serviceConfig.Type = "oneshot";
+          serviceConfig.RemainAfterExit = true;
+          serviceConfig.Type = "oneshot";
 
-        script = ''
-          if [ ! -d ${cfg.path} ]; then
-            mkdir -p ${cfg.path}
-          fi
-
-          # Remove old dhparams
-          for file in ${cfg.path}/*; do
-            if [ ! -f "$file" ]; then
-              continue
+          script = ''
+            if [ ! -d ${cfg.path} ]; then
+              mkdir -p ${cfg.path}
             fi
-            ${lib.concatStrings (lib.mapAttrsToList (name: { bits, path, ... }: ''
-              if [ "$file" = ${lib.escapeShellArg path} ] && \
-                 ${pkgs.openssl}/bin/openssl dhparam -in "$file" -text \
-                 | head -n 1 | grep "(${toString bits} bit)" > /dev/null; then
+
+            # Remove old dhparams
+            for file in ${cfg.path}/*; do
+              if [ ! -f "$file" ]; then
                 continue
               fi
-            '') cfg.params)}
-            rm $file
-          done
+              ${lib.concatStrings (
+                lib.mapAttrsToList (
+                  name:
+                  { bits, path, ... }:
+                  ''
+                    if [ "$file" = ${lib.escapeShellArg path} ] && \
+                       ${pkgs.openssl}/bin/openssl dhparam -in "$file" -text \
+                       | head -n 1 | grep "(${toString bits} bit)" > /dev/null; then
+                      continue
+                    fi
+                  ''
+                ) cfg.params
+              )}
+              rm "$file"
+            done
 
-          # TODO: Ideally this would be removing the *former* cfg.path, though
-          # this does not seem really important as changes to it are quite
-          # unlikely
-          rmdir --ignore-fail-on-non-empty ${cfg.path}
-        '';
-      };
-    } // lib.mapAttrs' (name: { bits, path, ... }: lib.nameValuePair "dhparams-gen-${name}" {
-      description = "Generate Diffie-Hellman Parameters for ${name}";
-      after = [ "dhparams-init.service" ];
-      before = [ "${name}.service" ];
-      wantedBy = [ "multi-user.target" ];
-      unitConfig.ConditionPathExists = "!${path}";
-      serviceConfig.Type = "oneshot";
-      script = ''
-        mkdir -p ${lib.escapeShellArg cfg.path}
-        ${pkgs.openssl}/bin/openssl dhparam -out ${lib.escapeShellArg path} \
-          ${toString bits}
-      '';
-    }) cfg.params;
+            # TODO: Ideally this would be removing the *former* cfg.path, though
+            # this does not seem really important as changes to it are quite
+            # unlikely
+            rmdir --ignore-fail-on-non-empty ${cfg.path}
+          '';
+        };
+      }
+      // lib.mapAttrs' (
+        name:
+        { bits, path, ... }:
+        lib.nameValuePair "dhparams-gen-${name}" {
+          description = "Generate Diffie-Hellman Parameters for ${name}";
+          after = [ "dhparams-init.service" ];
+          before = [ "${name}.service" ];
+          wantedBy = [ "multi-user.target" ];
+          unitConfig.ConditionPathExists = "!${path}";
+          serviceConfig.Type = "oneshot";
+          script = ''
+            mkdir -p ${lib.escapeShellArg cfg.path}
+            ${pkgs.openssl}/bin/openssl dhparam -out ${lib.escapeShellArg path} \
+              ${toString bits}
+          '';
+        }
+      ) cfg.params;
   };
 
   meta.maintainers = with lib.maintainers; [ ekleog ];

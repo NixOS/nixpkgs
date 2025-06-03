@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, bison
-, flex
-, buildsystem
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bison,
+  flex,
+  buildsystem,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,6 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://www.netsurf-browser.org/";
     description = "Generator for JavaScript bindings for netsurf browser";
+    mainProgram = "nsgenbind";
     license = lib.licenses.mit;
     inherit (buildsystem.meta) maintainers platforms;
   };

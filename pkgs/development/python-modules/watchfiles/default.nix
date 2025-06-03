@@ -1,53 +1,41 @@
-{ lib
-, stdenv
-, anyio
-, buildPythonPackage
-, cargo
-, fetchFromGitHub
-, rustPlatform
-, rustc
-, pythonOlder
-, dirty-equals
-, pytest-mock
-, pytest-timeout
-, pytestCheckHook
-, CoreServices
-, libiconv
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  rustPlatform,
+  anyio,
+
+  # tests
+  dirty-equals,
+  pytest-mock,
+  pytest-timeout,
+  pytestCheckHook,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "watchfiles";
-  version = "0.21.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "1.0.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/qNgkPF5N8jzSV3M0YFWvQngZ4Hf4WM/GBS1LtgFbWM=";
+    repo = "watchfiles";
+    tag = "v${version}";
+    hash = "sha256-a6SHqYRNMGXNkVvwj9RpLj449dAQtWXO44v1ko5suaw=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-sqHTW1+E7Fp33KW6IYlNa77AYc2iCfaSoBRXzrhEKr8=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname src version;
+    hash = "sha256-2RMWxeOjitbEqer9+ETpMX9WxHEiPzVmEv7LpSiaRVg=";
   };
-
-  buildInputs = lib.optionals stdenv.isDarwin [
-    CoreServices
-    libiconv
-  ];
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
-    cargo
-    rustc
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     anyio
   ];
 
@@ -61,11 +49,9 @@ buildPythonPackage rec {
     pytest-mock
     pytest-timeout
     pytestCheckHook
+    versionCheckHook
   ];
-
-  postPatch = ''
-    sed -i "/^requires-python =.*/a version = '${version}'" pyproject.toml
-  '';
+  versionCheckProgramArg = "--version";
 
   preCheck = ''
     rm -rf watchfiles
@@ -76,14 +62,14 @@ buildPythonPackage rec {
     "test_awatch_interrupt_raise"
   ];
 
-  pythonImportsCheck = [
-    "watchfiles"
-  ];
+  pythonImportsCheck = [ "watchfiles" ];
 
-  meta = with lib; {
+  meta = {
     description = "File watching and code reload";
     homepage = "https://watchfiles.helpmanual.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/samuelcolvin/watchfiles/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "watchfiles";
   };
 }

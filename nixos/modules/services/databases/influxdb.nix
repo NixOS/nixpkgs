@@ -1,11 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.influxdb;
 
-  configOptions = recursiveUpdate {
+  configOptions = lib.recursiveUpdate {
     meta = {
       bind-address = ":8088";
       commit-timeout = "50ms";
@@ -58,24 +60,32 @@ let
       https-enabled = false;
     };
 
-    graphite = [{
-      enabled = false;
-    }];
+    graphite = [
+      {
+        enabled = false;
+      }
+    ];
 
-    udp = [{
-      enabled = false;
-    }];
+    udp = [
+      {
+        enabled = false;
+      }
+    ];
 
-    collectd = [{
-      enabled = false;
-      typesdb = "${pkgs.collectd-data}/share/collectd/types.db";
-      database = "collectd_db";
-      bind-address = ":25826";
-    }];
+    collectd = [
+      {
+        enabled = false;
+        typesdb = "${pkgs.collectd-data}/share/collectd/types.db";
+        database = "collectd_db";
+        bind-address = ":25826";
+      }
+    ];
 
-    opentsdb = [{
-      enabled = false;
-    }];
+    opentsdb = [
+      {
+        enabled = false;
+      }
+    ];
 
     continuous_queries = {
       enabled = true;
@@ -96,11 +106,7 @@ let
     };
   } cfg.extraConfig;
 
-  configFile = pkgs.runCommandLocal "config.toml" { } ''
-    ${pkgs.buildPackages.remarshal}/bin/remarshal -if json -of toml \
-      < ${pkgs.writeText "config.json" (builtins.toJSON configOptions)} \
-      > $out
-  '';
+  configFile = (pkgs.formats.toml { }).generate "config.toml" configOptions;
 in
 {
 
@@ -110,44 +116,43 @@ in
 
     services.influxdb = {
 
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        description = lib.mdDoc "Whether to enable the influxdb server";
-        type = types.bool;
+        description = "Whether to enable the influxdb server";
+        type = lib.types.bool;
       };
 
-      package = mkPackageOption pkgs "influxdb" { };
+      package = lib.mkPackageOption pkgs "influxdb" { };
 
-      user = mkOption {
+      user = lib.mkOption {
         default = "influxdb";
-        description = lib.mdDoc "User account under which influxdb runs";
-        type = types.str;
+        description = "User account under which influxdb runs";
+        type = lib.types.str;
       };
 
-      group = mkOption {
+      group = lib.mkOption {
         default = "influxdb";
-        description = lib.mdDoc "Group under which influxdb runs";
-        type = types.str;
+        description = "Group under which influxdb runs";
+        type = lib.types.str;
       };
 
-      dataDir = mkOption {
+      dataDir = lib.mkOption {
         default = "/var/db/influxdb";
-        description = lib.mdDoc "Data directory for influxd data files.";
-        type = types.path;
+        description = "Data directory for influxd data files.";
+        type = lib.types.path;
       };
 
-      extraConfig = mkOption {
-        default = {};
-        description = lib.mdDoc "Extra configuration options for influxdb";
-        type = types.attrs;
+      extraConfig = lib.mkOption {
+        default = { };
+        description = "Extra configuration options for influxdb";
+        type = lib.types.attrs;
       };
     };
   };
 
-
   ###### implementation
 
-  config = mkIf config.services.influxdb.enable {
+  config = lib.mkIf config.services.influxdb.enable {
 
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' 0770 ${cfg.user} ${cfg.group} - -"
@@ -166,16 +171,18 @@ in
       postStart =
         let
           scheme = if configOptions.http.https-enabled then "-k https" else "http";
-          bindAddr = (ba: if hasPrefix ":" ba then "127.0.0.1${ba}" else "${ba}")(toString configOptions.http.bind-address);
+          bindAddr = (ba: if lib.hasPrefix ":" ba then "127.0.0.1${ba}" else "${ba}") (
+            toString configOptions.http.bind-address
+          );
         in
-        mkBefore ''
+        lib.mkBefore ''
           until ${pkgs.curl.bin}/bin/curl -s -o /dev/null ${scheme}://${bindAddr}/ping; do
             sleep 1;
           done
         '';
     };
 
-    users.users = optionalAttrs (cfg.user == "influxdb") {
+    users.users = lib.optionalAttrs (cfg.user == "influxdb") {
       influxdb = {
         uid = config.ids.uids.influxdb;
         group = "influxdb";
@@ -183,7 +190,7 @@ in
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == "influxdb") {
+    users.groups = lib.optionalAttrs (cfg.group == "influxdb") {
       influxdb.gid = config.ids.gids.influxdb;
     };
   };

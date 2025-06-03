@@ -1,4 +1,8 @@
-{ lib, buildNimPackage, fetchFromGitea, raylib }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitea,
+}:
 
 buildNimPackage (finalAttrs: {
   pname = "snekim";
@@ -9,7 +13,7 @@ buildNimPackage (finalAttrs: {
     owner = "annaaurora";
     repo = "snekim";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Qgvq4CkGvNppYFpITCCifOHtVQYRQJPEK3rTJXQkTvI=";
+    hash = "sha256-Qgvq4CkGvNppYFpITCCifOHtVQYRQJPEK3rTJXQkTvI=";
   };
 
   strictDeps = true;
@@ -24,7 +28,8 @@ buildNimPackage (finalAttrs: {
 
   meta = {
     homepage = "https://codeberg.org/annaaurora/snekim";
-    description = "A simple implementation of the classic snake game";
+    description = "Simple implementation of the classic snake game";
+    mainProgram = "snekim";
     license = lib.licenses.lgpl3Only;
     maintainers = [ lib.maintainers.annaaurora ];
   };

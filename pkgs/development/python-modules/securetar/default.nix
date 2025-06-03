@@ -1,46 +1,39 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "securetar";
-  version = "2024.2.0";
+  version = "2025.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pvizeli";
     repo = "securetar";
-    rev = "refs/tags/${version}";
-    hash = "sha256-rYRbrpXo2oVW8SpddNsKb0FBdscovNUaGXLHy7WBiVU=";
+    tag = version;
+    hash = "sha256-uVzyVgS8bWxS7jhwVyv7wTNF8REW+dJIhkRaS/8/FmY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    cryptography
-  ];
+  dependencies = [ cryptography ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "securetar"
-  ];
+  pythonImportsCheck = [ "securetar" ];
 
   meta = with lib; {
     description = "Module to handle tarfile backups";
     homepage = "https://github.com/pvizeli/securetar";
-    changelog = "https://github.com/pvizeli/securetar/releases/tag/${version}";
+    changelog = "https://github.com/pvizeli/securetar/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

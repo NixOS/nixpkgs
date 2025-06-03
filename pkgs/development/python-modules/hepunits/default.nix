@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hatch-vcs
-, hatchling
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatch-vcs,
+  hatchling,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "hepunits";
-  version = "2.3.3";
+  version = "2.3.6";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Z9fMd81U1ytpwmpo5e+teEK29o+ovGJ7uQ5BF3q+aUU=";
+    hash = "sha256-z/wcggQLFbtTBULsl/PB+DquYFDKpMxcGgMJe+vjSTI=";
   };
 
   nativeBuildInputs = [
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Units and constants in the HEP system of units";
@@ -32,4 +31,3 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ doronbehar ];
   };
 }
-

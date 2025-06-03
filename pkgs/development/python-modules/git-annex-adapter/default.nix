@@ -1,17 +1,17 @@
-{ lib
-, buildPythonPackage
-, cacert
-, fetchFromGitHub
-, fetchpatch
-, git-annex
-, gitMinimal
-, pygit2
-, pytestCheckHook
-, python
-, pythonOlder
-, setuptools
-, substituteAll
-, util-linux
+{
+  lib,
+  buildPythonPackage,
+  cacert,
+  fetchFromGitHub,
+  fetchpatch,
+  git-annex,
+  gitMinimal,
+  pygit2,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  replaceVars,
+  util-linux,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alpernebbi";
     repo = "git-annex-adapter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vb0vxnwAs0/yOjpyyoGWvX6Tu+cuziGNdnXbdzXexhg=";
   };
 
@@ -42,15 +42,12 @@ buildPythonPackage rec {
       url = "https://github.com/alpernebbi/git-annex-adapter/commit/d0d8905965a3659ce95cbd8f8b1e8598f0faf76b.patch";
       hash = "sha256-UcRTKzD3sbXGIuxj4JzZDnvjTYyWVkfeWgKiZ1rAlus=";
     })
-    (substituteAll {
-      src = ./git-annex-path.patch;
+    (replaceVars ./git-annex-path.patch {
       gitAnnex = "${git-annex}/bin/git-annex";
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     pygit2
@@ -63,15 +60,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "git_annex_adapter"
-  ];
+  pythonImportsCheck = [ "git_annex_adapter" ];
 
   disabledTests = [
     # KeyError and AssertionError
+    "test_annex_keys"
+    "test_batchjson_metadata"
+    "test_file_tree"
     "test_jsonprocess_annex_metadata_batch"
     "test_process_annex_metadata_batch"
-    "test_batchjson_metadata"
   ];
 
   meta = with lib; {

@@ -1,19 +1,18 @@
-{ lib
-, buildDunePackage
-, paf
-, cohttp-lwt
-, domain-name
-, httpaf
-, ipaddr
-, alcotest-lwt
-, fmt
-, logs
-, mirage-crypto-rng
-, mirage-time-unix
-, tcpip
-, uri
-, lwt
-, astring
+{
+  buildDunePackage,
+  paf,
+  cohttp-lwt,
+  domain-name,
+  h1,
+  ipaddr,
+  alcotest-lwt,
+  fmt,
+  logs,
+  mirage-crypto-rng,
+  tcpip,
+  uri,
+  lwt,
+  astring,
 }:
 
 buildDunePackage {
@@ -24,13 +23,11 @@ buildDunePackage {
     src
     ;
 
-  duneVersion = "3";
-
   propagatedBuildInputs = [
     paf
     cohttp-lwt
     domain-name
-    httpaf
+    h1
     ipaddr
   ];
 
@@ -40,7 +37,6 @@ buildDunePackage {
     fmt
     logs
     mirage-crypto-rng
-    mirage-time-unix
     tcpip
     uri
     lwt
@@ -50,6 +46,6 @@ buildDunePackage {
   __darwinAllowLocalNetworking = true;
 
   meta = paf.meta // {
-    description = "A CoHTTP client with its HTTP/AF implementation";
+    description = "CoHTTP client with its HTTP/AF implementation";
   };
 }

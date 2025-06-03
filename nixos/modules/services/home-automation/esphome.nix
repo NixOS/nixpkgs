@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
@@ -7,7 +12,6 @@ let
     mkEnableOption
     mkIf
     mkOption
-    mdDoc
     types
     ;
 
@@ -16,48 +20,54 @@ let
   stateDir = "/var/lib/esphome";
 
   esphomeParams =
-    if cfg.enableUnixSocket
-    then "--socket /run/esphome/esphome.sock"
-    else "--address ${cfg.address} --port ${toString cfg.port}";
+    if cfg.enableUnixSocket then
+      "--socket /run/esphome/esphome.sock"
+    else
+      "--address ${cfg.address} --port ${toString cfg.port}";
 in
 {
   meta.maintainers = with maintainers; [ oddlama ];
 
   options.services.esphome = {
-    enable = mkEnableOption (mdDoc "esphome");
+    enable = mkEnableOption "esphome, for making custom firmwares for ESP32/ESP8266";
 
     package = lib.mkPackageOption pkgs "esphome" { };
 
     enableUnixSocket = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "Listen on a unix socket `/run/esphome/esphome.sock` instead of the TCP port.";
+      description = "Listen on a unix socket `/run/esphome/esphome.sock` instead of the TCP port.";
     };
 
     address = mkOption {
       type = types.str;
       default = "localhost";
-      description = mdDoc "esphome address";
+      description = "esphome address";
     };
 
     port = mkOption {
       type = types.port;
       default = 6052;
-      description = mdDoc "esphome port";
+      description = "esphome port";
     };
 
     openFirewall = mkOption {
       default = false;
       type = types.bool;
-      description = mdDoc "Whether to open the firewall for the specified port.";
+      description = "Whether to open the firewall for the specified port.";
     };
 
     allowedDevices = mkOption {
-      default = ["char-ttyS" "char-ttyUSB"];
-      example = ["/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0"];
-      description = lib.mdDoc ''
+      default = [
+        "char-ttyS"
+        "char-ttyUSB"
+      ];
+      example = [
+        "/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0"
+      ];
+      description = ''
         A list of device nodes to which {command}`esphome` has access to.
-        Refer to DeviceAllow in systemd.resource-control(5) for more information.
+        Refer to DeviceAllow in {manpage}`systemd.resource-control(5)` for more information.
         Beware that if a device is referred to by an absolute path instead of a device category,
         it will only allow devices that already are plugged in when the service is started.
       '';
@@ -67,18 +77,18 @@ in
     usePing = mkOption {
       default = false;
       type = types.bool;
-      description = lib.mdDoc "Use ping to check online status of devices instead of mDNS";
+      description = "Use ping to check online status of devices instead of mDNS";
     };
   };
 
   config = mkIf cfg.enable {
-    networking.firewall.allowedTCPPorts = mkIf (cfg.openFirewall && !cfg.enableUnixSocket) [cfg.port];
+    networking.firewall.allowedTCPPorts = mkIf (cfg.openFirewall && !cfg.enableUnixSocket) [ cfg.port ];
 
     systemd.services.esphome = {
       description = "ESPHome dashboard";
-      after = ["network.target"];
-      wantedBy = ["multi-user.target"];
-      path = [cfg.package];
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      path = [ cfg.package ];
 
       environment = {
         # platformio fails to determine the home directory when using DynamicUser
@@ -103,7 +113,7 @@ in
         MemoryDenyWriteExecute = true;
         DevicePolicy = "closed";
         DeviceAllow = map (d: "${d} rw") cfg.allowedDevices;
-        SupplementaryGroups = ["dialout"];
+        SupplementaryGroups = [ "dialout" ];
         #NoNewPrivileges = true; # Implied by DynamicUser
         PrivateUsers = true;
         #PrivateTmp = true; # Implied by DynamicUser

@@ -1,20 +1,52 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, flex, cadical, symfpu, gmp, python3, gtest, libantlr3c, antlr3_4, boost, jdk }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  flex,
+  cadical,
+  symfpu,
+  gmp,
+  python3,
+  gtest,
+  libantlr3c,
+  antlr3_4,
+  boost,
+  jdk,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cvc5";
-  version = "1.1.1";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
-    owner  = "cvc5";
-    repo   = "cvc5";
-    rev    = "cvc5-${version}";
-    hash  = "sha256-TU2ZG6/9bXRPozvEVUiSWixImY38iavD3huhSU8DbCw=";
+    owner = "cvc5";
+    repo = "cvc5";
+    rev = "cvc5-${version}";
+    hash = "sha256-mTWPGYeUH05qmLYUtNpsFXicUm3GMrQC06t7Z4J1YQ0=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake flex ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    flex
+  ];
   buildInputs = [
-    cadical.dev symfpu gmp gtest libantlr3c antlr3_4 boost jdk
-    (python3.withPackages (ps: with ps; [ pyparsing tomli ]))
+    cadical.dev
+    symfpu
+    gmp
+    gtest
+    libantlr3c
+    antlr3_4
+    boost
+    jdk
+    (python3.withPackages (
+      ps: with ps; [
+        pyparsing
+        tomli
+      ]
+    ))
   ];
 
   preConfigure = ''
@@ -28,11 +60,14 @@ stdenv.mkDerivation rec {
     "-DANTLR3_JAR=${antlr3_4}/lib/antlr/antlr-3.4-complete.jar"
   ];
 
+  doCheck = true;
+
   meta = with lib; {
-    description = "A high-performance theorem prover and SMT solver";
-    homepage    = "https://cvc5.github.io";
-    license     = licenses.gpl3Only;
-    platforms   = platforms.unix;
+    description = "High-performance theorem prover and SMT solver";
+    mainProgram = "cvc5";
+    homepage = "https://cvc5.github.io";
+    license = licenses.gpl3Only;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ shadaj ];
   };
 }

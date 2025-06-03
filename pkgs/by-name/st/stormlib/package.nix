@@ -1,40 +1,63 @@
-{ lib, stdenv, fetchFromGitHub, cmake, bzip2, libtomcrypt, zlib, darwin }:
+{
+  lib,
+  stdenv,
+  bzip2,
+  cmake,
+  fetchFromGitHub,
+  libtomcrypt,
+  zlib,
+  pkg-config,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stormlib";
-  version = "9.22";
+  version = "9.30";
 
   src = fetchFromGitHub {
     owner = "ladislav-zezula";
     repo = "StormLib";
-    rev = "v${version}";
-    sha256 = "1rcdl6ryrr8fss5z5qlpl4prrw8xpbcdgajg2hpp0i7fpk21ymcc";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gW3jR9XnBo5uEORu12TpGsUMFAS4w5snWPA/bIUt9UY=";
   };
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
+  buildInputs = [
+    bzip2
+    libtomcrypt
+    zlib
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "WITH_LIBTOMCRYPT" true)
+  ];
+
+  strictDeps = true;
+
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isClang [
+      "-Wno-implicit-function-declaration"
+      "-Wno-int-conversion"
+    ]
+  );
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "FRAMEWORK DESTINATION /Library/Frameworks" "FRAMEWORK DESTINATION Library/Frameworks"
+      --replace-fail "FRAMEWORK DESTINATION /Library/Frameworks" "FRAMEWORK DESTINATION Library/Frameworks"
   '';
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DWITH_LIBTOMCRYPT=ON"
-  ];
-
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ bzip2 libtomcrypt zlib ] ++
-    lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Carbon ];
-
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
-    "-Wno-implicit-function-declaration"
-    "-Wno-int-conversion"
-  ]);
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ladislav-zezula/StormLib";
-    license = licenses.mit;
-    description = "An open-source project that can work with Blizzard MPQ archives";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ aanderse karolchmist ];
+    description = "Open-source project that can work with Blizzard MPQ archives";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      aanderse
+    ];
+    platforms = lib.platforms.all;
+    broken = stdenv.hostPlatform.isDarwin; # installation directory mismatch
   };
-}
+})

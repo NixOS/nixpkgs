@@ -5,5 +5,6 @@
 mkKdeDerivation {
   pname = "ksnakeduel";
 
-  extraBuildInputs = [qtsvg];
+  extraBuildInputs = [ qtsvg ];
+  meta.mainProgram = "ksnakeduel";
 }

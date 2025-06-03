@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  sphinx,
 }:
 
 buildPythonPackage rec {
@@ -27,5 +28,4 @@ buildPythonPackage rec {
     homepage = "https://bitbucket.org/birkenfeld/sphinx-contrib";
     license = licenses.bsd0;
   };
-
 }

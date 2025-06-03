@@ -1,17 +1,21 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, hatchling
-, platformdirs
-, traitlets
-, pip
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  hatchling,
+  platformdirs,
+  traitlets,
+  pip,
+  pytestCheckHook,
+
+  # Reverse dependency
+  sage,
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-core";
-  version = "5.7.1";
+  version = "5.7.2";
   disabled = pythonOlder "3.7";
 
   pyproject = true;
@@ -19,17 +23,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "jupyter_core";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Uh7slD8mQg2R++wltXrYiPSJnmM5w9tej8GN/0GMBmA=";
+    tag = "v${version}";
+    hash = "sha256-qu25ryZreRPHoubFJTFusGdkTPHbl/yl94g+XU5A5Mc=";
   };
 
-  patches = [
-    ./tests_respect_pythonpath.patch
-  ];
+  patches = [ ./tests_respect_pythonpath.patch ];
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     platformdirs
@@ -61,11 +61,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jupyter_core" ];
 
+  passthru.tests = {
+    inherit sage;
+  };
+
   meta = with lib; {
     description = "Base package on which Jupyter projects rely";
     homepage = "https://jupyter.org/";
     changelog = "https://github.com/jupyter/jupyter_core/blob/${src.rev}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = teams.jupyter.members;
+    teams = [ teams.jupyter ];
   };
 }

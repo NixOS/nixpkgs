@@ -1,20 +1,19 @@
-{ lib
-, aiofiles
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, h2
-, httpx
-, lxml
-, pythonOlder
-, requests
-, setuptools
-, socksio
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  click,
+  primp,
+
+  # Optional dependencies
+  lxml,
 }:
 
 buildPythonPackage rec {
   pname = "duckduckgo-search";
-  version = "3.9.9";
+  version = "8.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,35 +21,31 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "deedy5";
     repo = "duckduckgo_search";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-swuMCobYF5u41O1Qp5Gx/n8BIgSEnhRVZ5Owk3IPbeI=";
+    tag = "v${version}";
+    hash = "sha256-Hbhrm++F6aVvJ//WAgyLNsJe+KS0cjnQ83I1ba72Ows=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    aiofiles
+  dependencies = [
     click
-    h2
-    httpx
-    lxml
-    requests
-    socksio
-  ] ++ httpx.optional-dependencies.brotli
-    ++ httpx.optional-dependencies.http2
-    ++ httpx.optional-dependencies.socks;
+    primp
+  ] ++ optional-dependencies.lxml;
 
-  pythonImportsCheck = [
-    "duckduckgo_search"
-  ];
+  optional-dependencies = {
+    lxml = [ lxml ];
+  };
 
-  meta = with lib; {
+  doCheck = false; # tests require network access
+
+  pythonImportsCheck = [ "duckduckgo_search" ];
+
+  meta = {
     description = "Python CLI and library for searching for words, documents, images, videos, news, maps and text translation using the DuckDuckGo.com search engine";
+    mainProgram = "ddgs";
     homepage = "https://github.com/deedy5/duckduckgo_search";
-    changelog = "https://github.com/deedy5/duckduckgo_search/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/deedy5/duckduckgo_search/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ drawbu ];
   };
 }

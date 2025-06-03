@@ -1,16 +1,21 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.hardware.argonone;
 in
 {
   options.services.hardware.argonone = {
-    enable = lib.mkEnableOption (lib.mdDoc "the driver for Argon One Raspberry Pi case fan and power button");
+    enable = lib.mkEnableOption "the driver for Argon One Raspberry Pi case fan and power button";
     package = lib.mkOption {
       type = lib.types.package;
       default = pkgs.argononed;
       defaultText = lib.literalExpression "pkgs.argononed";
-      description = lib.mdDoc ''
+      description = ''
         The package implementing the Argon One driver
       '';
     };

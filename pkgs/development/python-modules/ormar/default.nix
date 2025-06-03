@@ -1,42 +1,42 @@
-{ lib
-, aiomysql
-, aiopg
-, aiosqlite
-, asyncpg
-, buildPythonPackage
-, cryptography
-, databases
-, fastapi
-, fetchFromGitHub
-, httpx
-, importlib-metadata
-, mysqlclient
-, nest-asyncio
-, orjson
-, poetry-core
-, psycopg2
-, pydantic
-, pymysql
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, sqlalchemy
-, typing-extensions
+{
+  lib,
+  aiomysql,
+  aiopg,
+  aiosqlite,
+  asyncpg,
+  buildPythonPackage,
+  cryptography,
+  databases,
+  fastapi,
+  fetchFromGitHub,
+  httpx,
+  importlib-metadata,
+  mysqlclient,
+  nest-asyncio,
+  orjson,
+  poetry-core,
+  psycopg2,
+  pydantic,
+  pymysql,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  sqlalchemy,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "ormar";
-  version = "0.12.2";
+  version = "0.20.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "collerek";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-Yd5ex0bcy61zq5Sn2dKeb98s/CMxUWnyGx6jFWQ3RUs=";
+    repo = "ormar";
+    tag = version;
+    hash = "sha256-jg1qgOJiRBJCRThhq/jaXNmSoL0FmceIOWMKNxtyGJI=";
   };
 
   pythonRelaxDeps = [
@@ -47,42 +47,29 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
-    databases
-    psycopg2
-    pydantic
-    sqlalchemy
-    psycopg2
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-    importlib-metadata
-  ];
+  propagatedBuildInputs =
+    [
+      databases
+      psycopg2
+      pydantic
+      sqlalchemy
+      psycopg2
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      typing-extensions
+      importlib-metadata
+    ];
 
-  passthru.optional-dependencies = {
-    postgresql = [
-      asyncpg
-    ];
-    postgres = [
-      asyncpg
-    ];
-    aiopg = [
-      aiopg
-    ];
-    mysql = [
-      aiomysql
-    ];
-    sqlite = [
-      aiosqlite
-    ];
-    orjson = [
-      orjson
-    ];
-    crypto = [
-      cryptography
-    ];
+  optional-dependencies = {
+    postgresql = [ asyncpg ];
+    postgres = [ asyncpg ];
+    aiopg = [ aiopg ];
+    mysql = [ aiomysql ];
+    sqlite = [ aiosqlite ];
+    orjson = [ orjson ];
+    crypto = [ cryptography ];
     all = [
       aiomysql
       aiopg
@@ -95,20 +82,16 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   checkInputs = [
     fastapi
     httpx
     nest-asyncio
     pytest-asyncio
-  ] ++ passthru.optional-dependencies.all;
+  ] ++ optional-dependencies.all;
 
-  disabledTestPaths = [
-    "benchmarks/test_benchmark_*.py"
-  ];
+  disabledTestPaths = [ "benchmarks/test_benchmark_*.py" ];
 
   disabledTests = [
     # TypeError: Object of type bytes is not JSON serializable
@@ -154,15 +137,14 @@ buildPythonPackage rec {
     "test_quering_of_related_model_works_but_no_result"
   ];
 
-  pythonImportsCheck = [
-    "ormar"
-  ];
+  pythonImportsCheck = [ "ormar" ];
 
   meta = with lib; {
     description = "Async ORM with fastapi in mind and pydantic validation";
     homepage = "https://github.com/collerek/ormar";
-    changelog = "https://github.com/collerek/ormar/releases/tag/${version}";
+    changelog = "https://github.com/collerek/ormar/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ andreasfelix ];
+    broken = true;
   };
 }

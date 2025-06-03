@@ -1,27 +1,28 @@
-{ lib
-, python3Packages
-, fetchFromSourcehut
-, desktop-file-utils
-, gobject-introspection
-, gtk3
-, libhandy
-, meson
-, ninja
-, pkg-config
-, scdoc
-, wrapGAppsHook
+{
+  lib,
+  python3Packages,
+  fetchFromSourcehut,
+  desktop-file-utils,
+  gobject-introspection,
+  gtk3,
+  libhandy,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  wrapGAppsHook3,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "openswitcher";
-  version = "0.10.0";
+  version = "0.12.0";
   format = "other";
 
   src = fetchFromSourcehut {
     owner = "~martijnbraam";
     repo = "pyatem";
     rev = version;
-    hash = "sha256-O+f1vVwfGJjLem25hsYE1Q1V4vzjrc0HxTBUCANCEwE=";
+    hash = "sha256-2NuqZn/WZzQXLc/hVm5/5gp9l0LMIHHPBW5h4j34/a4=";
   };
 
   outputs = [
@@ -41,7 +42,7 @@ python3Packages.buildPythonApplication rec {
     ninja
     pkg-config
     scdoc
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   dontWrapGApps = true;

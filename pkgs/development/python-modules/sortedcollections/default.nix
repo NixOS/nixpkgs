@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-cov
-, pytestCheckHook
-, sortedcontainers
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-cov-stub,
+  pytestCheckHook,
+  sortedcontainers,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ sortedcontainers ];
 
   nativeCheckInputs = [
-    pytest-cov
+    pytest-cov-stub
     pytestCheckHook
   ];
 

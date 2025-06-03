@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -12,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "lmas";
-    repo = pname;
+    repo = "opensimplex";
     rev = "v${version}";
     sha256 = "C/MTKTHjxMsOgzuXvokw039Kv6N/PgBoOqKleWPLpw0=";
   };

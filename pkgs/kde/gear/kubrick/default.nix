@@ -1,10 +1,17 @@
 {
   mkKdeDerivation,
   qtsvg,
+  _7zz,
   libGLU,
 }:
 mkKdeDerivation {
   pname = "kubrick";
 
-  extraBuildInputs = [qtsvg libGLU];
+  extraNativeBuildInputs = [ _7zz ];
+  extraBuildInputs = [
+    qtsvg
+    libGLU
+  ];
+
+  meta.mainProgram = "kubrick";
 }

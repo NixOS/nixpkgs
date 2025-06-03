@@ -1,7 +1,12 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) mkOption types mdDoc literalExpression;
+  inherit (lib) mkOption types literalExpression;
 
   cfg = config.services.hedgedoc;
 
@@ -9,24 +14,30 @@ let
   # versionAtLeast statement remains set to 21.03 for backwards compatibility.
   # See https://github.com/NixOS/nixpkgs/pull/108899 and
   # https://github.com/NixOS/rfcs/blob/master/rfcs/0080-nixos-release-schedule.md.
-  name = if lib.versionAtLeast config.system.stateVersion "21.03" then
-    "hedgedoc"
-  else
-    "codimd";
+  name = if lib.versionAtLeast config.system.stateVersion "21.03" then "hedgedoc" else "codimd";
 
   settingsFormat = pkgs.formats.json { };
 in
 {
-  meta.maintainers = with lib.maintainers; [ SuperSandro2000 h7x4 ];
+  meta.maintainers = with lib.maintainers; [
+    SuperSandro2000
+    h7x4
+  ];
 
   imports = [
     (lib.mkRenamedOptionModule [ "services" "codimd" ] [ "services" "hedgedoc" ])
-    (lib.mkRenamedOptionModule [ "services" "hedgedoc" "configuration" ] [ "services" "hedgedoc" "settings" ])
-    (lib.mkRenamedOptionModule [ "services" "hedgedoc" "groups" ] [ "users" "users" "hedgedoc" "extraGroups" ])
+    (lib.mkRenamedOptionModule
+      [ "services" "hedgedoc" "configuration" ]
+      [ "services" "hedgedoc" "settings" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "hedgedoc" "groups" ]
+      [ "users" "users" "hedgedoc" "extraGroups" ]
+    )
     (lib.mkRemovedOptionModule [ "services" "hedgedoc" "workDir" ] ''
       This option has been removed in favor of systemd managing the state directory.
 
-      If you have set this option without specifying `services.settings.uploadsDir`,
+      If you have set this option without specifying `services.hedgedoc.settings.uploadsPath`,
       please move these files to `/var/lib/hedgedoc/uploads`, or set the option to point
       at the correct location.
     '')
@@ -34,7 +45,7 @@ in
 
   options.services.hedgedoc = {
     package = lib.mkPackageOption pkgs "hedgedoc" { };
-    enable = lib.mkEnableOption (mdDoc "the HedgeDoc Markdown Editor");
+    enable = lib.mkEnableOption "the HedgeDoc Markdown Editor";
 
     settings = mkOption {
       type = types.submodule {
@@ -44,7 +55,7 @@ in
             type = with types; nullOr str;
             default = null;
             example = "hedgedoc.org";
-            description = mdDoc ''
+            description = ''
               Domain to use for website.
 
               This is useful if you are trying to run hedgedoc behind
@@ -55,7 +66,7 @@ in
             type = with types; nullOr str;
             default = null;
             example = "hedgedoc";
-            description = mdDoc ''
+            description = ''
               URL path for the website.
 
               This is useful if you are hosting hedgedoc on a path like
@@ -65,7 +76,7 @@ in
           host = mkOption {
             type = with types; nullOr str;
             default = "localhost";
-            description = mdDoc ''
+            description = ''
               Address to listen on.
             '';
           };
@@ -73,7 +84,7 @@ in
             type = types.port;
             default = 3000;
             example = 80;
-            description = mdDoc ''
+            description = ''
               Port to listen on.
             '';
           };
@@ -81,7 +92,7 @@ in
             type = with types; nullOr path;
             default = null;
             example = "/run/hedgedoc/hedgedoc.sock";
-            description = mdDoc ''
+            description = ''
               Path to UNIX domain socket to listen on
 
               ::: {.note}
@@ -93,7 +104,7 @@ in
             type = types.bool;
             default = false;
             example = true;
-            description = mdDoc ''
+            description = ''
               Use `https://` for all links.
 
               This is useful if you are trying to run hedgedoc behind
@@ -110,8 +121,11 @@ in
             defaultText = literalExpression ''
               with config.services.hedgedoc.settings; [ host ] ++ lib.optionals (domain != null) [ domain ]
             '';
-            example = [ "localhost" "hedgedoc.org" ];
-            description = mdDoc ''
+            example = [
+              "localhost"
+              "hedgedoc.org"
+            ];
+            description = ''
               List of domains to whitelist.
             '';
           };
@@ -137,7 +151,7 @@ in
                 dialect = "postgresql";
               };
             '';
-            description = mdDoc ''
+            description = ''
               Specify the configuration for sequelize.
               HedgeDoc supports `mysql`, `postgres`, `sqlite` and `mssql`.
               See <https://sequelize.readthedocs.io/en/v3/>
@@ -151,7 +165,7 @@ in
           useSSL = mkOption {
             type = types.bool;
             default = false;
-            description = mdDoc ''
+            description = ''
               Enable to use SSL server.
 
               ::: {.note}
@@ -170,7 +184,7 @@ in
             type = types.path;
             default = "/var/lib/${name}/uploads";
             defaultText = "/var/lib/hedgedoc/uploads";
-            description = mdDoc ''
+            description = ''
               Directory for storing uploaded images.
             '';
           };
@@ -180,7 +194,7 @@ in
             type = types.bool;
             default = false;
             example = true;
-            description = mdDoc ''
+            description = ''
               Whether to enable [Libravatar](https://wiki.libravatar.org/) as
               profile picture source on your instance.
 
@@ -191,7 +205,7 @@ in
         };
       };
 
-      description = mdDoc ''
+      description = ''
         HedgeDoc configuration, see
         <https://docs.hedgedoc.org/configuration/>
         for documentation.
@@ -202,7 +216,7 @@ in
       type = with types; nullOr path;
       default = null;
       example = "/var/lib/hedgedoc/hedgedoc.env";
-      description = mdDoc ''
+      description = ''
         Environment file as defined in {manpage}`systemd.exec(5)`.
 
         Secrets may be passed to the service without adding them to the world-readable
@@ -236,9 +250,9 @@ in
     };
 
     services.hedgedoc.settings = {
-      defaultNotePath = lib.mkDefault "${cfg.package}/public/default.md";
-      docsPath = lib.mkDefault "${cfg.package}/public/docs";
-      viewPath = lib.mkDefault "${cfg.package}/public/views";
+      defaultNotePath = lib.mkDefault "${cfg.package}/share/hedgedoc/public/default.md";
+      docsPath = lib.mkDefault "${cfg.package}/share/hedgedoc/public/docs";
+      viewPath = lib.mkDefault "${cfg.package}/share/hedgedoc/public/views";
     };
 
     systemd.services.hedgedoc = {
@@ -263,7 +277,7 @@ in
         Group = name;
 
         Restart = "always";
-        ExecStart = "${cfg.package}/bin/hedgedoc";
+        ExecStart = lib.getExe cfg.package;
         RuntimeDirectory = [ name ];
         StateDirectory = [ name ];
         WorkingDirectory = "/run/${name}";
@@ -313,6 +327,7 @@ in
           "@system-service"
           "~@privileged @obsolete"
           "@pkey"
+          "fchown" # needed for filesystem image backend
         ];
         UMask = "0007";
       };

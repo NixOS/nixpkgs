@@ -1,4 +1,10 @@
-{ options, config, lib, pkgs, ... }:
+{
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -7,10 +13,10 @@ let
 
   cfg = config.services.searx;
 
-  settingsFile = pkgs.writeText "settings.yml"
-    (builtins.toJSON cfg.settings);
+  settingsFile = pkgs.writeText "settings.yml" (builtins.toJSON cfg.settings);
 
   limiterSettingsFile = (pkgs.formats.toml { }).generate "limiter.toml" cfg.limiterSettings;
+  faviconsSettingsFile = (pkgs.formats.toml { }).generate "favicons.toml" cfg.faviconsSettings;
 
   generateConfig = ''
     cd ${runDir}
@@ -27,20 +33,26 @@ let
     done
   '';
 
-  settingType = with types; (oneOf
-    [ bool int float str
+  settingType =
+    with types;
+    (oneOf [
+      bool
+      int
+      float
+      str
       (listOf settingType)
       (attrsOf settingType)
-    ]) // { description = "JSON value"; };
+    ])
+    // {
+      description = "JSON value";
+    };
 
 in
 
 {
 
   imports = [
-    (mkRenamedOptionModule
-      [ "services" "searx" "configFile" ]
-      [ "services" "searx" "settingsFile" ])
+    (mkRenamedOptionModule [ "services" "searx" "configFile" ] [ "services" "searx" "settingsFile" ])
   ];
 
   options = {
@@ -49,14 +61,14 @@ in
         type = types.bool;
         default = false;
         relatedPackages = [ "searx" ];
-        description = lib.mdDoc "Whether to enable Searx, the meta search engine.";
+        description = "Whether to enable Searx, the meta search engine.";
       };
 
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc ''
-          Environment file (see `systemd.exec(5)`
+        description = ''
+          Environment file (see {manpage}`systemd.exec(5)`
           "EnvironmentFile=" section for the syntax) to define variables for
           Searx. This option can be used to safely include secret keys into the
           Searx configuration.
@@ -66,7 +78,7 @@ in
       redisCreateLocally = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Configure a local Redis server for SearXNG. This is required if you
           want to enable the rate limiter and bot protection of SearXNG.
         '';
@@ -88,7 +100,7 @@ in
               };
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Searx settings. These will be merged with (taking precedence over)
           the default configuration. It's also possible to refer to
           environment variables
@@ -105,7 +117,7 @@ in
       settingsFile = mkOption {
         type = types.path;
         default = "${runDir}/settings.yml";
-        description = lib.mdDoc ''
+        description = ''
           The path of the Searx server settings.yml file. If no file is
           specified, a default file is used (default config file has debug mode
           enabled). Note: setting this options overrides
@@ -133,12 +145,40 @@ in
             ];
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Limiter settings for SearXNG.
 
           ::: {.note}
           For available settings, see the SearXNG
-          [schema file](https://github.com/searxng/searxng/blob/master/searx/botdetection/limiter.toml).
+          [schema file](https://github.com/searxng/searxng/blob/master/searx/limiter.toml).
+          :::
+        '';
+      };
+
+      faviconsSettings = mkOption {
+        type = types.attrsOf settingType;
+        default = { };
+        example = literalExpression ''
+          {
+            favicons = {
+              cfg_schema = 1;
+              cache = {
+                db_url = "/run/searx/faviconcache.db";
+                HOLD_TIME = 5184000;
+                LIMIT_TOTAL_BYTES = 2147483648;
+                BLOB_MAX_BYTES = 40960;
+                MAINTENANCE_MODE = "auto";
+                MAINTENANCE_PERIOD = 600;
+              };
+            };
+          }
+        '';
+        description = ''
+          Favicons settings for SearXNG.
+
+          ::: {.note}
+          For available settings, see the SearXNG
+          [schema file](https://github.com/searxng/searxng/blob/master/searx/favicons/favicons.toml).
           :::
         '';
       };
@@ -148,7 +188,7 @@ in
       runInUwsgi = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to run searx in uWSGI as a "vassal", instead of using its
           built-in HTTP server. This is the recommended mode for public or
           large instances, but is unnecessary for LAN or local-only use.
@@ -161,7 +201,9 @@ in
 
       uwsgiConfig = mkOption {
         type = options.services.uwsgi.instance.type;
-        default = { http = ":8080"; };
+        default = {
+          http = ":8080";
+        };
         example = literalExpression ''
           {
             disable-logging = true;
@@ -170,7 +212,7 @@ in
             chmod-socket = "660";             # allow the searx group to read/write to the socket
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Additional configuration of the uWSGI vassal running searx. It
           should notably specify on which interfaces and ports the vassal
           should listen.
@@ -184,38 +226,47 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
-    users.users.searx =
-      { description = "Searx daemon user";
-        group = "searx";
-        isSystemUser = true;
-      };
+    users.users.searx = {
+      description = "Searx daemon user";
+      group = "searx";
+      isSystemUser = true;
+    };
 
     users.groups.searx = { };
 
     systemd.services.searx-init = {
       description = "Initialise Searx settings";
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        User = "searx";
-        RuntimeDirectory = "searx";
-        RuntimeDirectoryMode = "750";
-      } // optionalAttrs (cfg.environmentFile != null)
-        { EnvironmentFile = builtins.toPath cfg.environmentFile; };
+      serviceConfig =
+        {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          User = "searx";
+          RuntimeDirectory = "searx";
+          RuntimeDirectoryMode = "750";
+        }
+        // optionalAttrs (cfg.environmentFile != null) {
+          EnvironmentFile = builtins.toPath cfg.environmentFile;
+        };
       script = generateConfig;
     };
 
     systemd.services.searx = mkIf (!cfg.runInUwsgi) {
       description = "Searx server, the meta search engine.";
-      wantedBy = [ "network.target" "multi-user.target" ];
+      wantedBy = [
+        "network.target"
+        "multi-user.target"
+      ];
       requires = [ "searx-init.service" ];
       after = [ "searx-init.service" ];
-      serviceConfig = {
-        User  = "searx";
-        Group = "searx";
-        ExecStart = lib.getExe cfg.package;
-      } // optionalAttrs (cfg.environmentFile != null)
-        { EnvironmentFile = builtins.toPath cfg.environmentFile; };
+      serviceConfig =
+        {
+          User = "searx";
+          Group = "searx";
+          ExecStart = lib.getExe cfg.package;
+        }
+        // optionalAttrs (cfg.environmentFile != null) {
+          EnvironmentFile = builtins.toPath cfg.environmentFile;
+        };
       environment = {
         SEARX_SETTINGS_PATH = cfg.settingsFile;
         SEARXNG_SETTINGS_PATH = cfg.settingsFile;
@@ -263,10 +314,18 @@ in
       port = 0;
     };
 
-    environment.etc."searxng/limiter.toml" = lib.mkIf (cfg.limiterSettings != { }) {
-      source = limiterSettingsFile;
+    environment.etc = {
+      "searxng/limiter.toml" = lib.mkIf (cfg.limiterSettings != { }) {
+        source = limiterSettingsFile;
+      };
+      "searxng/favicons.toml" = lib.mkIf (cfg.faviconsSettings != { }) {
+        source = faviconsSettingsFile;
+      };
     };
   };
 
-  meta.maintainers = with maintainers; [ rnhmjoj _999eagle ];
+  meta.maintainers = with maintainers; [
+    rnhmjoj
+    _999eagle
+  ];
 }

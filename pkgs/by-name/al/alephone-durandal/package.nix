@@ -3,13 +3,13 @@
 alephone.makeWrapper rec {
   pname = "durandal";
   desktopName = "Marathon-Durandal";
-  version = "20230119";
+  version = "20240510";
   icon = alephone.icons + "/marathon2.png";
 
+  # nixpkgs-update: no auto update
   zip = fetchurl {
-    url =
-      "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${version}/Marathon2-${version}-Data.zip";
-    sha256 = "sha256-Vbfk5wLgvNEZW2BohMY5mPXaRbNlHxJdWLYTsE8CSwI=";
+    url = "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${version}/Marathon2-${version}-Data.zip";
+    hash = "sha256-uoBl1/7XlXmMLqpk3tvme9w18q4Yh0WCrmqSzjGxNz0=";
   };
 
   meta = {

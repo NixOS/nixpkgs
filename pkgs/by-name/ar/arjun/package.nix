@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -11,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "s0md3v";
     repo = "Arjun";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-odVUFs517RSp66MymniSeTKTntQtXomjC68Hhdsglf0=";
   };
 
@@ -32,12 +33,12 @@ python3.pkgs.buildPythonApplication rec {
     "arjun"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "HTTP parameter discovery suite";
     homepage = "https://github.com/s0md3v/Arjun";
     changelog = "https://github.com/s0md3v/Arjun/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ octodi ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ octodi ];
     mainProgram = "arjun";
   };
 }

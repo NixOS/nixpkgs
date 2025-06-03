@@ -1,28 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
   # Python Inputs
-, ipyvue
+  setuptools,
+  ipyvue,
 }:
 
 buildPythonPackage rec {
   pname = "ipyvuetify";
-  version = "1.8.10";
-  format = "setuptools";
+  version = "1.11.1";
+  pyproject = true;
 
   # GitHub version tries to run npm (Node JS)
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-m6RCeUefM/XLg69AaqgTBQ7pYgGVXCy6CH/SOoQ9W04=";
+    hash = "sha256-voAD6ZrUL2Vjx3jMYECEhPtdffsXlSuU2wWu3S8NoYs=";
   };
 
-  propagatedBuildInputs = [ ipyvue ];
+  # drop pynpm which tries to install node_modules
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"jupyterlab~=4.0",' "" \
+      --replace-fail '"pynpm"' ""
+  '';
 
-  doCheck = false;  # no tests on PyPi/GitHub
+  build-system = [ setuptools ];
+
+  dependencies = [ ipyvue ];
+
+  doCheck = false; # no tests on PyPi/GitHub
   pythonImportsCheck = [ "ipyvuetify" ];
 
   meta = with lib; {
-    description = "Jupyter widgets based on Vuetify UI Components.";
+    description = "Jupyter widgets based on Vuetify UI Components";
     homepage = "https://github.com/mariobuikhuizen/ipyvuetify";
     license = licenses.mit;
     maintainers = with maintainers; [ drewrisinger ];

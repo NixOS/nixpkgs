@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, sane-backends
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  sane-backends,
 }:
 
 buildPythonPackage rec {
@@ -15,13 +16,11 @@ buildPythonPackage rec {
     sha256 = "JAmOuDxujhsBEm5q16WwR5wHsBPF0iBQm1VYkv5JJd4=";
   };
 
-  buildInputs = [
-    sane-backends
-  ];
+  buildInputs = [ sane-backends ];
 
   meta = with lib; {
     homepage = "https://github.com/python-pillow/Sane";
-    description = "Python interface to the SANE scanner and frame grabber ";
+    description = "Python interface to the SANE scanner and frame grabber";
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar ];
   };

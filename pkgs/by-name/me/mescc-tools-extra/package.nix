@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, m2libc
-, perl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  m2libc,
+  perl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Collection of tools written for use in bootstrapping";
     homepage = "https://github.com/oriansj/mescc-tools-extra";
     license = licenses.gpl3Only;
-    maintainers = teams.minimal-bootstrap.members;
+    teams = [ teams.minimal-bootstrap ];
     inherit (m2libc.meta) platforms;
   };
 })

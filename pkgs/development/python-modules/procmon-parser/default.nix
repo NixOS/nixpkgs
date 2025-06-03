@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, construct
-, fetchFromGitHub
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, six
+{
+  lib,
+  buildPythonPackage,
+  construct,
+  fetchFromGitHub,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eronnen";
     repo = "procmon-parser";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-XkMf3MQK4WFRLl60XHDG/j2gRHAiz7XL9MmC6SRg9RE=";
   };
 
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     python-dateutil
   ];
 
-  pythonImportsCheck = [
-    "procmon_parser"
-  ];
+  pythonImportsCheck = [ "procmon_parser" ];
 
   meta = with lib; {
     description = "Parser to process monitor file formats";

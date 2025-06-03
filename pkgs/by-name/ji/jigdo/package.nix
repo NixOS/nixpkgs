@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, gettext
-, bzip2
-, db
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  bzip2,
+  db,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Download utility that can fetch files from several sources simultaneously";
     homepage = "https://www.einval.com/~steve/software/jigdo/";
+    changelog = "https://git.einval.com/cgi-bin/gitweb.cgi?p=jigdo.git;a=blob;f=changelog;hb=refs/tags/${version}";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ wegank ];
     platforms = platforms.unix;

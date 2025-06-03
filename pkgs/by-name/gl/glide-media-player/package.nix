@@ -1,49 +1,45 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, meson
-, ninja
-, rustc
-, cargo
-, wrapGAppsHook4
-, python3
-, libadwaita
-, graphene
-, gst_all_1
-, glib-networking
-, darwin
-, libsoup_3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  meson,
+  ninja,
+  rustc,
+  cargo,
+  wrapGAppsHook4,
+  python3,
+  libadwaita,
+  graphene,
+  gst_all_1,
+  glib-networking,
 }:
 
 stdenv.mkDerivation rec {
   pname = "glide-media-player";
-  version = "0.6.2";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "philn";
     repo = "glide";
     rev = version;
-    hash = "sha256-SN/1Yf4fHlDbJ2X6DGktsn1GFW8bbkeznlO1S8sBZyg=";
+    hash = "sha256-gmBXUj6LxC7VDH/ni8neYivysagqcbI/UCUq9Ly3D24=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-2Ma7ZAKFiAQXFWFze4RLwGu33d/vC6FVW6fJdqwED20=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-5cohhm8/QP+vYzVf8iz3hLtu0ej7lQiHpDAC9I52+ME=";
   };
 
   postPatch = ''
     substituteInPlace scripts/meson_post_install.py \
       --replace-warn "gtk-update-icon-cache" "gtk4-update-icon-cache"
-    substituteInPlace data/net.baseart.Glide.desktop \
-      --replace-warn "Icon=net.baseart.Glide.svg" "Icon=net.baseart.Glide"
+    substituteInPlace data/net.base_art.Glide.desktop \
+      --replace-warn "Icon=net.base_art.Glide.svg" "Icon=net.baseart.Glide"
     patchShebangs --build \
       scripts/meson_post_install.py \
       build-aux/cargo-build.py
-  '' + lib.optionalString stdenv.isDarwin ''
-    sed -i "/wayland,x11egl,x11glx/d" meson.build
   '';
 
   nativeBuildInputs = [
@@ -65,15 +61,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-good
     glib-networking
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.IOKit
   ];
-
-  # FIXME: gst-plugins-good missing libsoup breaks streaming
-  # (https://github.com/nixos/nixpkgs/issues/271960)
-  preFixup = ''
-    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libsoup_3 ]}")
-  '';
 
   meta = with lib; {
     description = "Linux/macOS media player based on GStreamer and GTK";
@@ -81,8 +69,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ aleksana ];
     mainProgram = "glide";
-    platforms = platforms.unix;
-    # error: could not find system library 'gstreamer-gl-1.0' required by the 'gstreamer-gl-sys' crate
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    # Required gdk4-{wayland,x11} and gstreamer-gl not available on darwin
+    platforms = subtractLists platforms.darwin platforms.unix;
   };
 }

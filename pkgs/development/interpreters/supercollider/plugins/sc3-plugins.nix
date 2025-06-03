@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchurl, cmake, supercollider, fftw, gitUpdater }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  cmake,
+  supercollider,
+  fftw,
+  gitUpdater,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sc3-plugins";
@@ -23,7 +31,10 @@ stdenv.mkDerivation rec {
     "-DSUPERNOVA=ON"
   ];
 
-  stripDebugList = [ "lib" "share" ];
+  stripDebugList = [
+    "lib"
+    "share"
+  ];
 
   passthru.updateScript = gitUpdater {
     url = "https://github.com/supercollider/sc3-plugins.git";
@@ -34,7 +45,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Community plugins for SuperCollider";
     homepage = "https://supercollider.github.io/sc3-plugins/";
-    maintainers = with maintainers; [ lilyinstarlight ];
+    maintainers = [ ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

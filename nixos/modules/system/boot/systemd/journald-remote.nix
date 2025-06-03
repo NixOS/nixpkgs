@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.journald.remote;
@@ -17,8 +22,11 @@ in
 
     listen = lib.mkOption {
       default = "https";
-      type = lib.types.enum [ "https" "http" ];
-      description = lib.mdDoc ''
+      type = lib.types.enum [
+        "https"
+        "http"
+      ];
+      description = ''
         Which protocol to listen to.
       '';
     };
@@ -26,7 +34,7 @@ in
     output = lib.mkOption {
       default = "/var/log/journal/remote/";
       type = lib.types.str;
-      description = lib.mdDoc ''
+      description = ''
         The location of the output journal.
 
         In case the output file is not specified, journal files will be created
@@ -52,7 +60,7 @@ in
     settings = lib.mkOption {
       default = { };
 
-      description = lib.mdDoc ''
+      description = ''
         Configuration in the journal-remote configuration file. See
         {manpage}`journal-remote.conf(5)` for available options.
       '';
@@ -74,8 +82,11 @@ in
           SplitMode = lib.mkOption {
             default = "host";
             example = "none";
-            type = lib.types.enum [ "host" "none" ];
-            description = lib.mdDoc ''
+            type = lib.types.enum [
+              "host"
+              "none"
+            ];
+            description = ''
               With "host", a separate output file is used, based on the
               hostname of the other endpoint of a connection. With "none", only
               one output journal file is used.
@@ -85,7 +96,7 @@ in
           ServerKeyFile = lib.mkOption {
             default = "/etc/ssl/private/journal-remote.pem";
             type = lib.types.str;
-            description = lib.mdDoc ''
+            description = ''
               A path to a SSL secret key file in PEM format.
 
               Note that due to security reasons, `systemd-journal-remote` will
@@ -101,7 +112,7 @@ in
           ServerCertificateFile = lib.mkOption {
             default = "/etc/ssl/certs/journal-remote.pem";
             type = lib.types.str;
-            description = lib.mdDoc ''
+            description = ''
               A path to a SSL certificate file in PEM format.
 
               This option can be used with `listen = "https"`. If the path
@@ -113,7 +124,7 @@ in
           TrustedCertificateFile = lib.mkOption {
             default = "/etc/ssl/ca/trusted.pem";
             type = lib.types.str;
-            description = lib.mdDoc ''
+            description = ''
               A path to a SSL CA certificate file in PEM format, or `all`.
 
               If `all` is set, then client certificate checking will be

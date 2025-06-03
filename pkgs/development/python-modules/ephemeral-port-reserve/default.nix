@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 let
@@ -20,23 +21,20 @@ buildPythonPackage {
     hash = "sha256-R6NRpfaT05PO/cTWgCakiGfCuCyucjVOXbAezn5x1cU=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # can't find hostname in our darwin build environment
     "test_fqdn"
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "ephemeral_port_reserve"
-  ];
+  pythonImportsCheck = [ "ephemeral_port_reserve" ];
 
   meta = with lib; {
     description = "Find an unused port, reliably";
+    mainProgram = "ephemeral-port-reserve";
     homepage = "https://github.com/Yelp/ephemeral-port-reserve/";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];

@@ -1,16 +1,27 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.json;
+  inherit (lib)
+    mkOption
+    types
+    escapeShellArg
+    concatStringsSep
+    mkRemovedOptionModule
+    ;
 in
 {
   port = 7979;
   extraOpts = {
     configFile = mkOption {
       type = types.path;
-      description = lib.mdDoc ''
+      description = ''
         Path to configuration file.
       '';
     };
@@ -38,6 +49,9 @@ in
       For more information, take a look at the official documentation
       (https://github.com/prometheus-community/json_exporter) of the json_exporter.
     '')
-     ({ options.warnings = options.warnings; options.assertions = options.assertions; })
+    ({
+      options.warnings = options.warnings;
+      options.assertions = options.assertions;
+    })
   ];
 }

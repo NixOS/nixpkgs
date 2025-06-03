@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, factory-boy
-, faker
-, fetchPypi
-, httpretty
-, importlib-metadata
-, inflection
-, jsondate
-, mock
-, more-itertools
-, numpy
-, pandas
-, parameterized
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, requests
-, six
+{
+  lib,
+  buildPythonPackage,
+  factory-boy,
+  faker,
+  fetchPypi,
+  httpretty,
+  importlib-metadata,
+  inflection,
+  jsondate,
+  mock,
+  more-itertools,
+  numpy,
+  pandas,
+  parameterized,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  requests,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     hash = "sha256-bguC+8eGFhCzV3xTlyd8QiDgZe7g/tTkbNa2AhZVtkw=";
   };
 
-  patches = [
-    ./pandas2-datetime-removal.patch
-  ];
+  patches = [ ./pandas2-datetime-removal.patch ];
 
   propagatedBuildInputs = [
     pandas
@@ -44,9 +43,7 @@ buildPythonPackage rec {
     python-dateutil
     six
     more-itertools
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   nativeCheckInputs = [
     factory-boy
@@ -58,9 +55,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "quandl"
-  ];
+  pythonImportsCheck = [ "quandl" ];
 
   meta = with lib; {
     description = "Quandl Python client library";

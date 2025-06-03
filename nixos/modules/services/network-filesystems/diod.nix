@@ -1,5 +1,9 @@
-{ config, lib, pkgs, ... }:
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.diod;
 
@@ -9,9 +13,9 @@ let
     allsquash = ${diodBool cfg.allsquash}
     auth_required = ${diodBool cfg.authRequired}
     exportall = ${diodBool cfg.exportall}
-    exportopts = "${concatStringsSep "," cfg.exportopts}"
-    exports = { ${concatStringsSep ", " (map (s: ''"${s}"'' ) cfg.exports)} }
-    listen = { ${concatStringsSep ", " (map (s: ''"${s}"'' ) cfg.listen)} }
+    exportopts = "${lib.concatStringsSep "," cfg.exportopts}"
+    exports = { ${lib.concatStringsSep ", " (map (s: ''"${s}"'') cfg.exports)} }
+    listen = { ${lib.concatStringsSep ", " (map (s: ''"${s}"'') cfg.listen)} }
     logdest = "${cfg.logdest}"
     nwthreads = ${toString cfg.nwthreads}
     squashuser = "${cfg.squashuser}"
@@ -23,25 +27,25 @@ in
 {
   options = {
     services.diod = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc "Whether to enable the diod 9P file server.";
+        description = "Whether to enable the diod 9P file server.";
       };
 
-      listen = mkOption {
-        type = types.listOf types.str;
+      listen = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ "0.0.0.0:564" ];
-        description = lib.mdDoc ''
+        description = ''
           [ "IP:PORT" [,"IP:PORT",...] ]
           List the interfaces and ports that diod should listen on.
         '';
       };
 
-      exports = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = lib.mdDoc ''
+      exports = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        description = ''
           List the file systems that clients will be allowed to mount. All paths should
           be fully qualified. The exports table can include two types of element:
           a string element (as above),
@@ -54,10 +58,10 @@ in
         '';
       };
 
-      exportall = mkOption {
-        type = types.bool;
+      exportall = lib.mkOption {
+        type = lib.types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Export all file systems listed in /proc/mounts. If new file systems are mounted
           after diod has started, they will become immediately mountable. If there is a
           duplicate entry for a file system in the exports list, any options listed in
@@ -65,86 +69,85 @@ in
         '';
       };
 
-      exportopts = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = lib.mdDoc ''
+      exportopts = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        description = ''
           Establish a default set of export options. These are overridden, not appended
           to, by opts attributes in an "exports" entry.
         '';
       };
 
-      nwthreads = mkOption {
-        type = types.int;
+      nwthreads = lib.mkOption {
+        type = lib.types.int;
         default = 16;
-        description = lib.mdDoc ''
+        description = ''
           Sets the (fixed) number of worker threads created to handle 9P
           requests for a unique aname.
         '';
       };
 
-      authRequired = mkOption {
-        type = types.bool;
+      authRequired = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Allow clients to connect without authentication, i.e. without a valid MUNGE credential.
         '';
       };
 
-      userdb = mkOption {
-        type = types.bool;
+      userdb = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           This option disables password/group lookups. It allows any uid to attach and
           assumes gid=uid, and supplementary groups contain only the primary gid.
         '';
       };
 
-      allsquash = mkOption {
-        type = types.bool;
+      allsquash = lib.mkOption {
+        type = lib.types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Remap all users to "nobody". The attaching user need not be present in the
           password file.
         '';
       };
 
-      squashuser = mkOption {
-        type = types.str;
+      squashuser = lib.mkOption {
+        type = lib.types.str;
         default = "nobody";
-        description = lib.mdDoc ''
+        description = ''
           Change the squash user. The squash user must be present in the password file.
         '';
       };
 
-      logdest = mkOption {
-        type = types.str;
+      logdest = lib.mkOption {
+        type = lib.types.str;
         default = "syslog:daemon:err";
-        description = lib.mdDoc ''
+        description = ''
           Set the destination for logging.
           The value has the form of "syslog:facility:level" or "filename".
         '';
       };
 
-
-      statfsPassthru = mkOption {
-        type = types.bool;
+      statfsPassthru = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           This option configures statfs to return the host file system's type
           rather than V9FS_MAGIC.
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
-        description = lib.mdDoc "Extra configuration options for diod.conf.";
+        description = "Extra configuration options for diod.conf.";
       };
     };
   };
 
-  config = mkIf config.services.diod.enable {
+  config = lib.mkIf config.services.diod.enable {
     environment.systemPackages = [ pkgs.diod ];
 
     systemd.services.diod = {

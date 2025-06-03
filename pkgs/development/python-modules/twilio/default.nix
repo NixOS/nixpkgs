@@ -1,25 +1,27 @@
-{ lib
-, aiohttp
-, aiohttp-retry
-, aiounittest
-, buildPythonPackage
-, cryptography
-, django
-, fetchFromGitHub
-, mock
-, multidict
-, pyngrok
-, pyjwt
-, pytestCheckHook
-, pythonOlder
-, pytz
-, requests
-, setuptools
+{
+  lib,
+  aiohttp-retry,
+  aiohttp,
+  aiounittest,
+  buildPythonPackage,
+  cryptography,
+  django,
+  fetchFromGitHub,
+  mock,
+  multidict,
+  pyjwt,
+  pyngrok,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  pytz,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "twilio";
-  version = "9.0.0";
+  version = "9.6.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,15 +29,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "twilio";
     repo = "twilio-python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-5PhINmG1y+oAEpfxaB8ZFHfWlo0jRZnUKO5oUPcnFuM=";
+    tag = version;
+    hash = "sha256-W0+lRCVWrm+dieZozloePlro/pGp3ag2WBTzpJ9CXxY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     aiohttp-retry
     pyjwt
@@ -65,14 +65,12 @@ buildPythonPackage rec {
     "tests/cluster/test_cluster.py"
   ];
 
-  pythonImportsCheck = [
-    "twilio"
-  ];
+  pythonImportsCheck = [ "twilio" ];
 
   meta = with lib; {
     description = "Twilio API client and TwiML generator";
     homepage = "https://github.com/twilio/twilio-python/";
-    changelog = "https://github.com/twilio/twilio-python/blob/${version}/CHANGES.md";
+    changelog = "https://github.com/twilio/twilio-python/blob/${src.tag}/CHANGES.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

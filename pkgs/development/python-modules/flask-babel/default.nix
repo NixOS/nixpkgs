@@ -1,24 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, poetry-core
+  # build-system
+  poetry-core,
 
-# docs
-, furo
-, sphinxHook
+  # docs
+  furo,
+  sphinxHook,
 
-# runtime
-, babel
-, flask
-, jinja2
-, pytz
+  # runtime
+  babel,
+  flask,
+  jinja2,
+  pytz,
 
-# tests
-, pytest-mock
-, pytestCheckHook
+  # tests
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-babel";
     repo = "flask-babel";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-BAT+oupy4MCSjeZ4hFtSKMkGU9xZtc7Phnz1mIsb2Kc=";
   };
 
@@ -51,9 +51,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  pythonImportsCheck = [
-    "flask_babel"
-  ];
+  pythonImportsCheck = [ "flask_babel" ];
 
   checkInputs = [
     pytest-mock
@@ -69,7 +67,8 @@ buildPythonPackage rec {
       installed automatically for you if you install this library.
     '';
     license = licenses.bsd2;
-    maintainers = teams.sage.members ++ (with maintainers; [ matejc ]);
+    maintainers = with maintainers; [ matejc ];
+    teams = [ teams.sage ];
     homepage = "https://github.com/python-babel/flask-babel";
   };
 }

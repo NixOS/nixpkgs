@@ -1,35 +1,36 @@
-{ lib
-, blueprint-compiler
-, cargo
-, desktop-file-utils
-, fetchFromGitHub
-, glib
-, gtk4
-, libadwaita
-, meson
-, ninja
-, pkg-config
-, rustPlatform
-, rustc
-, stdenv
-, wrapGAppsHook4
+{
+  lib,
+  blueprint-compiler,
+  cargo,
+  desktop-file-utils,
+  fetchFromGitHub,
+  glib,
+  gtk4,
+  libadwaita,
+  meson,
+  ninja,
+  nix-update-script,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  stdenv,
+  wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fretboard";
-  version = "5.3";
+  version = "9.1";
 
   src = fetchFromGitHub {
     owner = "bragefuglseth";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-wwq4Xq6IVLF2hICk9HfCpfxpWer8PNWywD8p3wQdp6U=";
+    repo = "fretboard";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-LTUZPOecX1OiLcfdiY/P2ffq91QcnFjW6knM9H/Z+Lc=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-H/dAKaYHxRmldny8EoasrcDROZhLo5UbHPAoMicDehA=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-Gl78z9FR/sB14uFDLKgnfN4B5yOi6A6MH64gDXcLiWA=";
   };
 
   nativeBuildInputs = [
@@ -50,13 +51,24 @@ stdenv.mkDerivation rec {
     libadwaita
   ];
 
-  meta = with lib; {
-    description = "Look up guitar chords";
-    homepage = "https://github.com/bragefuglseth/fretboard";
-    changelog = "https://github.com/bragefuglseth/fretboard/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ michaelgrahamevans ];
-    mainProgram = "fretboard";
-    platforms = platforms.linux;
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isClang [
+      "-Wno-error=incompatible-function-pointer-types"
+    ]
+  );
+
+  passthru = {
+    updateScript = nix-update-script { };
   };
-}
+
+  meta = {
+    changelog = "https://github.com/bragefuglseth/fretboard/releases/tag/v${finalAttrs.version}";
+    description = "Look up guitar chords";
+    homepage = "https://apps.gnome.org/Fretboard/";
+    license = lib.licenses.gpl3Plus;
+    mainProgram = "fretboard";
+    teams = [ lib.teams.gnome-circle ];
+    platforms = lib.platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
+  };
+})

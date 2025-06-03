@@ -1,45 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, mkdocs-material-extensions
-, flask
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiosmtpd,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  mkdocs-material-extensions,
+  flask,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "flask-mailman";
-  version = "1.0.0";
-  format = "pyproject";
+  version = "1.1.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "waynerv";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-wfbMz9k9cy9m95mc0Y0lqmpJczrfjhmumO31gRQy704=";
+    repo = "flask-mailman";
+    tag = "v${version}";
+    hash = "sha256-0kD3rxFDJ7FcmBLVju75z1nf6U/7XfjiLD/oM/VP4jQ=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     flask
     mkdocs-material-extensions
   ];
 
   nativeCheckInputs = [
+    aiosmtpd
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "flask_mailman" ];
 
   meta = with lib; {
+    changelog = "https://github.com/waynerv/flask-mailman/blob/${src.rev}/CHANGELOG.md";
     homepage = "https://github.com/waynerv/flask-mailman";
-    description = "Flask extension providing simple email sending capabilities.";
+    description = "Flask extension providing simple email sending capabilities";
     license = licenses.bsd3;
     maintainers = with maintainers; [ gador ];
   };

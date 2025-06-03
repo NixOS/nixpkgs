@@ -1,12 +1,13 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, kdecoration
-, plasma-workspace
-, qtbase
-, qt5
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  kdecoration,
+  plasma-workspace,
+  qtbase,
+  qt5,
 }:
 
 mkDerivation rec {
@@ -33,7 +34,8 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A fork of breeze theme style that aims to be visually modern and minimalistic";
+    description = "Fork of breeze theme style that aims to be visually modern and minimalistic";
+    mainProgram = "lightly-settings5";
     homepage = "https://github.com/Luwx/Lightly";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.pwoelfel ];

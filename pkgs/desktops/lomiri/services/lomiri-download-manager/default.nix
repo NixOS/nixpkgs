@@ -1,28 +1,29 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, gitUpdater
-, testers
-, boost
-, cmake
-, cmake-extras
-, dbus
-, dbus-test-runner
-# Needs qdoc, https://github.com/NixOS/nixpkgs/pull/245379
-, withDocumentation ? false
-, doxygen
-, glog
-, graphviz
-, gtest
-, lomiri-api
-, pkg-config
-, python3
-, qtbase
-, qtdeclarative
-, validatePkgConfig
-, wrapQtAppsHook
-, xvfb-run
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  gitUpdater,
+  testers,
+  boost,
+  cmake,
+  cmake-extras,
+  dbus,
+  dbus-test-runner,
+  withDocumentation ? true,
+  doxygen,
+  glog,
+  graphviz,
+  gtest,
+  lomiri-api,
+  pkg-config,
+  python3,
+  qtbase,
+  qtdeclarative,
+  qttools,
+  validatePkgConfig,
+  wrapQtAppsHook,
+  xvfb-run,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,9 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optionals withDocumentation [
-    "doc"
-  ];
+  ] ++ lib.optionals withDocumentation [ "doc" ];
 
   patches = [
     # This change seems incomplete, potentially breaks things on systems that don't use AppArmor mediation
@@ -52,26 +51,39 @@ stdenv.mkDerivation (finalAttrs: {
       revert = true;
       hash = "sha256-xS0Wz6d+bZWj/kDGK2WhOduzyP4Rgz3n9n2XY1Zu5hE=";
     })
+
+    # Fix compatibility with glog 0.7.x
+    # Remove when https://gitlab.com/ubports/development/core/lomiri-download-manager/-/merge_requests/29 merged & in release (vendored patch was manually backported)
+    ./1001-treewide-Switch-to-glog-CMake-module.patch
   ];
 
   postPatch = ''
-    # pkg_get_variable doesn't let us substitute prefix pkg-config variable from systemd
+    # Substitute systemd's prefix in pkg-config call
     substituteInPlace CMakeLists.txt \
-      --replace 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir)' 'set(SYSTEMD_USER_DIR "${placeholder "out"}/lib/systemd/user")' \
-      --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+      --replace-fail 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir)' 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})' \
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+
+    # For our automatic pkg-config output patcher to work, prefix must be used here
+    substituteInPlace src/{common/public,downloads/client,downloads/common,uploads/common}/*.pc.in \
+      --replace-fail 'libdir=''${exec_prefix}' 'libdir=''${prefix}'
+    substituteInPlace src/downloads/client/lomiri-download-manager-client.pc.in \
+      --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
   '';
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    validatePkgConfig
-    wrapQtAppsHook
-  ] ++ lib.optionals withDocumentation [
-    doxygen
-    graphviz
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+      validatePkgConfig
+      wrapQtAppsHook
+    ]
+    ++ lib.optionals withDocumentation [
+      doxygen
+      graphviz
+      qttools # qdoc
+    ];
 
   buildInputs = [
     boost
@@ -89,9 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     xvfb-run
   ];
 
-  checkInputs = [
-    gtest
-  ];
+  checkInputs = [ gtest ];
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_DOC" withDocumentation)
@@ -100,11 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_WERROR" false)
   ];
 
-  makeTargets = [
-    "all"
-  ] ++ lib.optionals withDocumentation [
-    "doc"
-  ];
+  makeTargets = [ "all" ] ++ lib.optionals withDocumentation [ "doc" ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
@@ -121,13 +127,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Performs uploads and downloads from a centralized location";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-download-manager";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-download-manager/-/blob/${finalAttrs.version}/ChangeLog";
-    license = licenses.lgpl3Only;
-    maintainers = teams.lomiri.members;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Only;
+    teams = [ lib.teams.lomiri ];
+    platforms = lib.platforms.linux;
     pkgConfigModules = [
       "ldm-common"
       "lomiri-download-manager-client"

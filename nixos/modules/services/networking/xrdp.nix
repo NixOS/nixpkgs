@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -49,19 +54,19 @@ in
 
     services.xrdp = {
 
-      enable = mkEnableOption (lib.mdDoc "xrdp, the Remote Desktop Protocol server");
+      enable = mkEnableOption "xrdp, the Remote Desktop Protocol server";
 
-      package = mkPackageOptionMD pkgs "xrdp" { };
+      package = mkPackageOption pkgs "xrdp" { };
 
       audio = {
-        enable = mkEnableOption (lib.mdDoc "audio support for xrdp sessions. So far it only works with PulseAudio sessions on the server side. No PipeWire support yet");
-        package = mkPackageOptionMD pkgs "pulseaudio-module-xrdp" {};
+        enable = mkEnableOption "audio support for xrdp sessions. So far it only works with PulseAudio sessions on the server side. No PipeWire support yet";
+        package = mkPackageOption pkgs "pulseaudio-module-xrdp" { };
       };
 
       port = mkOption {
         type = types.port;
         default = 3389;
-        description = lib.mdDoc ''
+        description = ''
           Specifies on which port the xrdp daemon listens.
         '';
       };
@@ -69,14 +74,14 @@ in
       openFirewall = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc "Whether to open the firewall for the specified RDP port.";
+        description = "Whether to open the firewall for the specified RDP port.";
       };
 
       sslKey = mkOption {
         type = types.str;
         default = "/etc/xrdp/key.pem";
         example = "/path/to/your/key.pem";
-        description = lib.mdDoc ''
+        description = ''
           ssl private key path
           A self-signed certificate will be generated if file not exists.
         '';
@@ -86,7 +91,7 @@ in
         type = types.str;
         default = "/etc/xrdp/cert.pem";
         example = "/path/to/your/cert.pem";
-        description = lib.mdDoc ''
+        description = ''
           ssl certificate path
           A self-signed certificate will be generated if file not exists.
         '';
@@ -96,7 +101,7 @@ in
         type = types.str;
         default = "xterm";
         example = "xfce4-session";
-        description = lib.mdDoc ''
+        description = ''
           The script to run when user log in, usually a window manager, e.g. "icewm", "xfce4-session"
           This is per-user overridable, if file ~/startwm.sh exists it will be used instead.
         '';
@@ -106,7 +111,7 @@ in
         type = types.path;
         default = confDir;
         internal = true;
-        description = lib.mdDoc ''
+        description = ''
           Configuration directory of xrdp and sesman.
 
           Changes to this must be made through extraConfDirCommands.
@@ -117,7 +122,7 @@ in
       extraConfDirCommands = mkOption {
         type = types.str;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra commands to run on the default confDir derivation.
         '';
         example = ''
@@ -133,9 +138,9 @@ in
 
   config = lib.mkMerge [
     (mkIf cfg.audio.enable {
-      environment.systemPackages = [ cfg.audio.package ];  # needed for autostart
+      environment.systemPackages = [ cfg.audio.package ]; # needed for autostart
 
-      hardware.pulseaudio.extraModules = [ cfg.audio.package ];
+      services.pulseaudio.extraModules = [ cfg.audio.package ];
     })
 
     (mkIf cfg.enable {
@@ -197,18 +202,18 @@ in
           restartIfChanged = false; # do not restart on "nixos-rebuild switch". like "display-manager", it can have many interactive programs as children
           serviceConfig = {
             ExecStart = "${pkgs.xrdp}/bin/xrdp-sesman --nodaemon --config ${confDir}/sesman.ini";
-            ExecStop  = "${pkgs.coreutils}/bin/kill -INT $MAINPID";
+            ExecStop = "${pkgs.coreutils}/bin/kill -INT $MAINPID";
           };
         };
 
       };
 
       users.users.xrdp = {
-        description   = "xrdp daemon user";
-        isSystemUser  = true;
-        group         = "xrdp";
+        description = "xrdp daemon user";
+        isSystemUser = true;
+        group = "xrdp";
       };
-      users.groups.xrdp = {};
+      users.groups.xrdp = { };
 
       security.pam.services.xrdp-sesman = {
         allowNullPassword = true;

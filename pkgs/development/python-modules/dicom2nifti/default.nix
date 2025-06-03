@@ -1,48 +1,84 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, gdcm
-, nibabel
-, numpy
-, pydicom
-, scipy
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  gdcm,
+  nibabel,
+  numpy,
+  pydicom,
+  scipy,
+
+  # tests
+  pillow,
+  pylibjpeg,
+  pylibjpeg-libjpeg,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "dicom2nifti";
-  version = "2.4.8";
-  format = "setuptools";
-  disabled = pythonOlder "3.6";
+  version = "2.5.1";
+  pyproject = true;
 
   # no tests in PyPI dist
   src = fetchFromGitHub {
     owner = "icometrix";
-    repo = pname;
-    rev = version;
-    hash = "sha256-2Pspxdeu3pHwXpbjS6bQQnvdeMuITRwYarPuLlmNcv8";
+    repo = "dicom2nifti";
+    tag = version;
+    hash = "sha256-lPaBKqYO8B138fCgeKH6vpwGQhN3JCOnDj5PgaYfRPA=";
   };
 
-  propagatedBuildInputs = [ gdcm nibabel numpy pydicom scipy setuptools ];
-
-  # python-gdcm just builds the python interface provided by the "gdcm" package, so
-  # we should be able to replace "python-gdcm" with "gdcm" but this doesn't work
-  # (similar to https://github.com/NixOS/nixpkgs/issues/84774)
   postPatch = ''
-    substituteInPlace setup.py --replace "python-gdcm" ""
-    substituteInPlace tests/test_generic.py --replace "from common" "from dicom2nifti.common"
+    substituteInPlace tests/test_generic.py --replace-fail "from common" "from dicom2nifti.common"
+    substituteInPlace tests/test_ge.py --replace-fail "import convert_generic" "import dicom2nifti.convert_generic as convert_generic"
   '';
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  build-system = [ setuptools ];
+
+  dependencies = [
+    gdcm
+    nibabel
+    numpy
+    pydicom
+    scipy
+  ];
 
   pythonImportsCheck = [ "dicom2nifti" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    pillow
+    pylibjpeg
+    pylibjpeg-libjpeg
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # OverflowError: Python integer -1024 out of bounds for uint16
+    "test_not_a_volume"
+    "test_resampling"
+    "test_validate_orthogonal_disabled"
+
+    # RuntimeError: Unable to decompress 'JPEG 2000 Image Compression (Lossless O...
+    "test_anatomical"
+    "test_compressed_j2k"
+    "test_main_function"
+    "test_rgb"
+
+    # Missing script 'dicom2nifti_scrip'
+    "test_gantry_option"
+    "test_gantry_resampling"
+  ];
+
+  meta = {
     homepage = "https://github.com/icometrix/dicom2nifti";
     description = "Library for converting dicom files to nifti";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    mainProgram = "dicom2nifti";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

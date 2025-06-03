@@ -1,13 +1,14 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, click
-, fetchPypi
-, jsonpickle
-, requests
-, tabulate
-, xmltodict
-, zeroconf
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  click,
+  fetchPypi,
+  jsonpickle,
+  requests,
+  tabulate,
+  xmltodict,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-AtqMWe2zgRqOp5S9oKq7keHNHM8pnTmV1mfGiVzygTc=";
+    hash = "sha256-AtqMWe2zgRqOp5S9oKq7keHNHM8pnTmV1mfGiVzygTc=";
   };
 
   propagatedBuildInputs = [
@@ -36,6 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python client for Vizio SmartCast";
+    mainProgram = "pyvizio";
     homepage = "https://github.com/vkorn/pyvizio";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];

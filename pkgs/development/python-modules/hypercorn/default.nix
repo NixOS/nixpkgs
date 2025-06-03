@@ -1,54 +1,72 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, typing-extensions
-, wsproto
-, toml
-, h2
-, priority
-, mock
-, poetry-core
-, pytest-asyncio
-, pytest-trio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  aioquic,
+  cacert,
+  h11,
+  h2,
+  httpx,
+  priority,
+  trio,
+  uvloop,
+  wsproto,
+  poetry-core,
+  pytest-asyncio,
+  pytest-trio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  pname = "Hypercorn";
-  version = "0.14.3";
-  disabled = pythonOlder "3.7";
-  format = "pyproject";
+  pname = "hypercorn";
+  version = "0.17.3";
+  pyproject = true;
+
+  disabled = pythonOlder "3.11"; # missing taskgroup dependency
 
   src = fetchFromGitHub {
     owner = "pgjones";
-    repo = pname;
-    rev = version;
-    hash = "sha256-ECREs8UwqTWUweUrwnUwpVotCII2v4Bz7ZCk3DSAd8I=";
+    repo = "Hypercorn";
+    tag = version;
+    hash = "sha256-AtSMURz1rOr6VTQ7L2EQ4XZeKVEGTPXTbs3u7IhnZo8";
   };
 
   postPatch = ''
     sed -i "/^addopts/d" pyproject.toml
   '';
 
-  nativeBuildInputs = [
-    poetry-core
+  build-system = [ poetry-core ];
+
+  dependencies = [
+    h11
+    h2
+    priority
+    wsproto
   ];
 
-  propagatedBuildInputs = [ wsproto toml h2 priority ]
-    ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  optional-dependencies = {
+    h3 = [ aioquic ];
+    trio = [ trio ];
+    uvloop = [ uvloop ];
+  };
 
   nativeCheckInputs = [
+    httpx
     pytest-asyncio
     pytest-trio
     pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.8") [ mock ];
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "hypercorn" ];
 
   meta = with lib; {
+    changelog = "https://github.com/pgjones/hypercorn/blob/${src.tag}/CHANGELOG.rst";
     homepage = "https://github.com/pgjones/hypercorn";
-    description = "The ASGI web server inspired by Gunicorn";
+    description = "ASGI web server inspired by Gunicorn";
+    mainProgram = "hypercorn";
     license = licenses.mit;
     maintainers = with maintainers; [ dgliwka ];
   };

@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, chardet
-, humanfriendly
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, smartmontools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  chardet,
+  humanfriendly,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  smartmontools,
 }:
 
 buildPythonPackage rec {
   pname = "pysmart";
-  version = "1.3.0";
+  version = "1.4.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "truenas";
     repo = "py-SMART";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1k+5XnIT/AfZmzKUxkyU/uc0eW05CvugpY6OdJCoALc=";
+    tag = "v${version}";
+    hash = "sha256-eVrJ83MTIlu7sDrOoaXwiWqxYmDJFU8tf+pb3ui9N5w=";
   };
 
   postPatch = ''
@@ -33,22 +34,16 @@ buildPythonPackage rec {
     humanfriendly
   ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pySMART"
-  ];
+  pythonImportsCheck = [ "pySMART" ];
 
   meta = with lib; {
     description = "Wrapper for smartctl (smartmontools)";
     homepage = "https://github.com/truenas/py-SMART";
-    changelog = "https://github.com/truenas/py-SMART/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/truenas/py-SMART/blob/${src.tag}/CHANGELOG.md";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ nyanloutre ];
   };

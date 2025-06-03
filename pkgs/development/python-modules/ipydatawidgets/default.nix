@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, pytest
-, pytest-cov
-, nbval
-, jupyter-packaging
-, ipywidgets
-, numpy
-, six
-, traittypes
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  pytestCheckHook,
+  nbval,
+  jupyter-packaging,
+  ipywidgets,
+  numpy,
+  six,
+  traittypes,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-OU8kiVdlh8/XVTd6CaBn9GytIggZZQkgIf0avL54Uqg=";
   };
 
-  nativeBuildInputs = [
-    jupyter-packaging
-  ];
+  nativeBuildInputs = [ jupyter-packaging ];
 
   setupPyBuildFlags = [ "--skip-npm" ];
 
@@ -37,9 +35,21 @@ buildPythonPackage rec {
     traittypes
   ];
 
-  nativeCheckInputs = [ pytest pytest-cov nbval ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    nbval
+  ];
 
-  checkPhase = "pytest ipydatawidgets/tests";
+  # Tests bind ports
+  __darwinAllowLocalNetworking = true;
+
+  pytestFlagsArray = [
+    # https://github.com/vidartf/ipydatawidgets/issues/62
+    "--deselect=ipydatawidgets/tests/test_ndarray_trait.py::test_dtype_coerce"
+
+    # https://github.com/vidartf/ipydatawidgets/issues/63
+    "--deselect=examples/test.ipynb::Cell\\\ 3"
+  ];
 
   meta = {
     description = "Widgets to help facilitate reuse of large datasets across different widgets";

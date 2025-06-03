@@ -1,20 +1,23 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.novacomd;
 
-in {
+in
+{
 
   options = {
     services.novacomd = {
-      enable = mkEnableOption (lib.mdDoc "Novacom service for connecting to WebOS devices");
+      enable = lib.mkEnableOption "Novacom service for connecting to WebOS devices";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.webos.novacom ];
 
     systemd.services.novacomd = {
@@ -27,5 +30,5 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [ dtzWill ];
+  meta.maintainers = with lib.maintainers; [ dtzWill ];
 }

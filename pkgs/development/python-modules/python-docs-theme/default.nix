@@ -1,41 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, pythonOlder
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pythonOlder,
+  sphinx,
 }:
 
 buildPythonPackage rec {
   pname = "python-docs-theme";
-  version = "2024.2";
+  version = "2025.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "python-docs-theme";
-    rev = "refs/tags/${version}";
-    hash = "sha256-5qn/bROc3wekTyYq+e7rLpJjeI8IBByKvrOE4Kw0fjQ=";
+    tag = version;
+    hash = "sha256-dcxlZGPB36q2MO2WHtshkgNE5ryKtI/RfuVG7hcLcas=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
-   sphinx
-  ];
+  dependencies = [ sphinx ];
 
-  pythonImportsCheck = [
-    "python_docs_theme"
-  ];
+  pythonImportsCheck = [ "python_docs_theme" ];
 
   meta = with lib; {
     description = "Sphinx theme for CPython project";
     homepage = "https://github.com/python/python-docs-theme";
-    changelog = "https://github.com/python/python-docs-theme/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/python/python-docs-theme/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.psfl;
     maintainers = with maintainers; [ kaction ];
   };

@@ -1,12 +1,13 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, typish
-, tzdata
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  typish,
+  tzdata,
 }:
 
 buildPythonPackage rec {
@@ -19,13 +20,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ramonhagenaars";
     repo = "jsons";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7OIByHvsqhKFOkb1q2kuxmbkkleryavYgp/T4U5hvGk=";
   };
 
-  propagatedBuildInputs = [
-    typish
-  ];
+  propagatedBuildInputs = [ typish ];
 
   nativeCheckInputs = [
     attrs
@@ -44,9 +43,7 @@ buildPythonPackage rec {
     "test_dump_load_parameterized_collections"
   ];
 
-  pythonImportsCheck = [
-    "jsons"
-  ];
+  pythonImportsCheck = [ "jsons" ];
 
   meta = with lib; {
     description = "Turn Python objects into dicts or json strings and back";

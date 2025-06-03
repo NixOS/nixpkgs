@@ -1,9 +1,10 @@
-{ lib
-, aiohttp
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -15,8 +16,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "amelchio";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "eternalegypt";
+    tag = "v${version}";
     hash = "sha256-ubKepd3yBaoYrIUe5WCt1zd4CjvU7SeftOR+2cBaEf0=";
   };
 
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "eternalegypt"
-  ];
+  pythonImportsCheck = [ "eternalegypt" ];
 
   meta = with lib; {
     description = "Python API for Netgear LTE modems";

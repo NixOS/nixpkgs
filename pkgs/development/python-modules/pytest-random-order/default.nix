@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, py
-, pytest
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  py,
+  pytest,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -21,13 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-RHLX008fHF86NZxP/FwT7QZSMvMeyhnIhEwatAbnkIA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
   nativeCheckInputs = [
     py
@@ -35,9 +32,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "random_order"
-  ];
+  pythonImportsCheck = [ "random_order" ];
 
   meta = with lib; {
     homepage = "https://github.com/jbasko/pytest-random-order";

@@ -1,7 +1,8 @@
-{ fetchFromGitHub
-, buildPythonPackage
-, lib
-, isPy27
+{
+  fetchFromGitHub,
+  buildPythonPackage,
+  lib,
+  isPy27,
 }:
 
 buildPythonPackage rec {
@@ -27,7 +28,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    description = "A distributed issue tracker";
+    description = "Distributed issue tracker";
     longDescription = ''
       Nitpick is a distributed issue tracker. It helps keep track of which nits you
       should pick. It's intended to be used with source code such that the issues can
@@ -35,6 +36,6 @@ buildPythonPackage rec {
     '';
     homepage = "http://travisbrown.ca/projects/nitpick/docs/nitpick.html";
     license = with lib.licenses; gpl2;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

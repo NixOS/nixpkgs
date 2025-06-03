@@ -1,6 +1,7 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -9,7 +10,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "RicterZ";
-    repo = pname;
+    repo = "nhentai";
     rev = version;
     hash = "sha256-SjWIctAyczjYGP4buXQBA/RcrdikMSuSBtfhORNmXMc=";
   };
@@ -31,7 +32,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/RicterZ/nhentai";
     description = "CLI tool for downloading doujinshi from adult site(s)";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "nhentai";
   };
 }

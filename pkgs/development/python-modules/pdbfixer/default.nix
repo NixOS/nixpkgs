@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, numpy
-, openmm
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
+  numpy,
+  openmm,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pdbfixer";
-  version = "1.9";
+  version = "1.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openmm";
     repo = "pdbfixer";
-    rev = version;
-    hash = "sha256-ZXQWdNQyoVgjpZj/Wimcfwcbxk3CIvg3n5S1glNYUP4=";
+    tag = "v${version}";
+    hash = "sha256-7bg/i7nhbBw/DCc7Rabt5pwUUPF27Iiy2dMQnV6GTiM=";
   };
 
   nativeBuildInputs = [
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     openmm
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export PATH=$out/bin:$PATH
@@ -56,7 +55,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "PDBFixer fixes problems in PDB files";
     homepage = "https://github.com/openmm/pdbfixer";
-    changelog = "https://github.com/openmm/pdbfixer/releases/tag/${src.rev}";
+    changelog = "https://github.com/openmm/pdbfixer/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
     mainProgram = "pdbfixer";

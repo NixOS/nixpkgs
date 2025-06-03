@@ -1,18 +1,20 @@
-{ buildNpmPackage
-, buildGoModule
-, fetchFromGitHub
-, nixosTests
-, lib
+{
+  buildNpmPackage,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+  lib,
+  nix-update-script,
 }:
 let
   pname = "scrutiny";
-  version = "0.7.3";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "AnalogJ";
     repo = "scrutiny";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-S7GW8z6EWB+5vntKew0+EDVqhun+Ae2//15dSIlfoSs=";
+    tag = "v${version}";
+    hash = "sha256-WoU5rdsIEhZQ+kPoXcestrGXC76rFPvhxa0msXjFsNg=";
   };
 
   frontend = buildNpmPackage {
@@ -35,6 +37,8 @@ let
       cp -r dist/* $out
       runHook postInstall
     '';
+
+    passthru.updatescript = nix-update-script { };
   };
 in
 buildGoModule rec {
@@ -44,7 +48,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-SiQw6pq0Fyy8Ia39S/Vgp9Mlfog2drtVn43g+GXiQuI=";
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [ "-extldflags=-static" ];
 
@@ -56,10 +60,12 @@ buildGoModule rec {
   '';
 
   passthru.tests.scrutiny = nixosTests.scrutiny;
+  passthru.updatescript = nix-update-script { };
 
   meta = {
-    description = "Hard Drive S.M.A.R.T Monitoring, Historical Trends & Real World Failure Thresholds.";
+    description = "Hard Drive S.M.A.R.T Monitoring, Historical Trends & Real World Failure Thresholds";
     homepage = "https://github.com/AnalogJ/scrutiny";
+    changelog = "https://github.com/AnalogJ/scrutiny/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jnsgruk ];
     mainProgram = "scrutiny";

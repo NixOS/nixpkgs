@@ -1,11 +1,23 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.journald.gateway;
 
   cliArgs = lib.cli.toGNUCommandLineShell { } {
     # If either of these are null / false, they are not passed in the command-line
-    inherit (cfg) cert key trust system user merge;
+    inherit (cfg)
+      cert
+      key
+      trust
+      system
+      user
+      merge
+      ;
   };
 in
 {
@@ -24,7 +36,7 @@ in
     cert = lib.mkOption {
       default = null;
       type = with lib.types; nullOr str;
-      description = lib.mdDoc ''
+      description = ''
         The path to a file or `AF_UNIX` stream socket to read the server
         certificate from.
 
@@ -37,7 +49,7 @@ in
     key = lib.mkOption {
       default = null;
       type = with lib.types; nullOr str;
-      description = lib.mdDoc ''
+      description = ''
         Specify the path to a file or `AF_UNIX` stream socket to read the
         secret server key corresponding to the certificate specified with
         {option}`services.journald.gateway.cert` from.
@@ -52,7 +64,7 @@ in
     trust = lib.mkOption {
       default = null;
       type = with lib.types; nullOr str;
-      description = lib.mdDoc ''
+      description = ''
         Specify the path to a file or `AF_UNIX` stream socket to read a CA
         certificate from.
 
@@ -65,7 +77,7 @@ in
     system = lib.mkOption {
       default = true;
       type = lib.types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Serve entries from system services and the kernel.
 
         This has the same meaning as `--system` for {manpage}`journalctl(1)`.
@@ -75,7 +87,7 @@ in
     user = lib.mkOption {
       default = true;
       type = lib.types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Serve entries from services for the current user.
 
         This has the same meaning as `--user` for {manpage}`journalctl(1)`.
@@ -85,7 +97,7 @@ in
     merge = lib.mkOption {
       default = false;
       type = lib.types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Serve entries interleaved from all available journals, including other
         machines.
 
@@ -118,9 +130,9 @@ in
     users.groups.systemd-journal-gateway.gid = config.ids.gids.systemd-journal-gateway;
 
     systemd.services.systemd-journal-gatewayd.serviceConfig.ExecStart = [
-        # Clear the default command line
-        ""
-        "${pkgs.systemd}/lib/systemd/systemd-journal-gatewayd ${cliArgs}"
+      # Clear the default command line
+      ""
+      "${pkgs.systemd}/lib/systemd/systemd-journal-gatewayd ${cliArgs}"
     ];
 
     systemd.sockets.systemd-journal-gatewayd = {

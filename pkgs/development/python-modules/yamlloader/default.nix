@@ -1,31 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, pyyaml
-, hypothesis
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatch-vcs,
+  hatchling,
+  pytestCheckHook,
+  pyyaml,
+  hypothesis,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "yamlloader";
-  version = "1.3.2";
-  format = "setuptools";
+  version = "1.5.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fb2YQh2AkMUhZV8bBsoDAGfynfUlOoh4EmvOOpD1aBc=";
+    hash = "sha256-jezhmwUKyxxqjKFKoweTOI+b4VT3NLgmVB+aGCjUHOw=";
   };
 
-  propagatedBuildInputs = [
-    pyyaml
+  build-system = [
+    hatch-vcs
+    hatchling
   ];
+
+  dependencies = [ pyyaml ];
 
   nativeCheckInputs = [
     hypothesis
-    pytest
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
@@ -34,7 +40,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A case-insensitive list for Python";
+    description = "Case-insensitive list for Python";
     homepage = "https://github.com/Phynix/yamlloader";
     changelog = "https://github.com/Phynix/yamlloader/releases/tag/${version}";
     license = licenses.mit;

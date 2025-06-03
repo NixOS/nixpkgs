@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -7,24 +12,24 @@ let
 in
 {
   options.services.chatgpt-retrieval-plugin = {
-    enable = mkEnableOption (lib.mdDoc "chatgpt-retrieval-plugin service");
+    enable = mkEnableOption "chatgpt-retrieval-plugin service";
 
     port = mkOption {
       type = types.port;
       default = 8080;
-      description = lib.mdDoc "Port the chatgpt-retrieval-plugin service listens on.";
+      description = "Port the chatgpt-retrieval-plugin service listens on.";
     };
 
     host = mkOption {
       type = types.str;
       default = "127.0.0.1";
       example = "0.0.0.0";
-      description = lib.mdDoc "The hostname or IP address for chatgpt-retrieval-plugin to bind to.";
+      description = "The hostname or IP address for chatgpt-retrieval-plugin to bind to.";
     };
 
     bearerTokenPath = mkOption {
       type = types.path;
-      description = lib.mdDoc ''
+      description = ''
         Path to the secret bearer token used for the http api authentication.
       '';
       default = "";
@@ -33,7 +38,7 @@ in
 
     openaiApiKeyPath = mkOption {
       type = types.path;
-      description = lib.mdDoc ''
+      description = ''
         Path to the secret openai api key used for embeddings.
       '';
       default = "";
@@ -41,14 +46,21 @@ in
     };
 
     datastore = mkOption {
-      type = types.enum [ "pinecone" "weaviate" "zilliz" "milvus" "qdrant" "redis" ];
+      type = types.enum [
+        "pinecone"
+        "weaviate"
+        "zilliz"
+        "milvus"
+        "qdrant"
+        "redis"
+      ];
       default = "qdrant";
-      description = lib.mdDoc "This specifies the vector database provider you want to use to store and query embeddings.";
+      description = "This specifies the vector database provider you want to use to store and query embeddings.";
     };
 
     qdrantCollection = mkOption {
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         name of the qdrant collection used to store documents.
       '';
       default = "document_chunks";

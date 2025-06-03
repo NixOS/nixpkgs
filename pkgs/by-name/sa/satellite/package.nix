@@ -1,40 +1,41 @@
-{ lib
-, python3
-, fetchFromGitea
-, gobject-introspection
-, gtk3
-, libhandy
-, modemmanager
-, wrapGAppsHook
+{
+  lib,
+  python3,
+  fetchFromGitea,
+  gobject-introspection,
+  libadwaita,
+  modemmanager,
+  wrapGAppsHook4,
+  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "satellite";
-  version = "0.4.2";
+  version = "0.9.1";
 
   pyproject = true;
 
   src = fetchFromGitea {
-    domain ="codeberg.org";
+    domain = "codeberg.org";
     owner = "tpikonen";
     repo = "satellite";
-    rev = version;
-    hash = "sha256-VPljvbHsPpBvH//LFs1P0YiyMfQxTLHrrxqnVk261hg=";
+    tag = version;
+    hash = "sha256-E/OKdVB+JDP/01ydEgA/B6+GMiVYB4jlPI70TW8HBDU=";
   };
 
   nativeBuildInputs = [
     gobject-introspection
-    python3.pkgs.setuptools
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
+  build-system = with python3.pkgs; [ setuptools ];
+
   buildInputs = [
-    gtk3
-    libhandy
+    libadwaita
     modemmanager
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     gpxpy
     pygobject3
     pynmea2
@@ -42,16 +43,20 @@ python3.pkgs.buildPythonApplication rec {
 
   strictDeps = true;
 
-  meta = with lib; {
-    description = "A program for showing navigation satellite data";
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
+    description = "Program for showing navigation satellite data";
     longDescription = ''
       Satellite is an adaptive GTK3 / libhandy application which displays global navigation satellite system (GNSS: GPS et al.) data obtained from ModemManager or gnss-share.
       It can also save your position to a GPX-file.
     '';
     homepage = "https://codeberg.org/tpikonen/satellite";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "satellite";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ Luflosi ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

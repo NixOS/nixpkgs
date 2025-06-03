@@ -1,32 +1,44 @@
-{ stdenv, lib, fetchgit, buildGoModule, zlib, makeWrapper, xcodeenv, androidenv
-, xcodeWrapperArgs ? { }
-, xcodeWrapper ? xcodeenv.composeXcodeWrapper xcodeWrapperArgs
-, withAndroidPkgs ? true
-, androidPkgs ? androidenv.composeAndroidPackages {
-    includeNDK = true;
-    ndkVersion = "22.1.7171670";
-  } }:
-
+{
+  stdenv,
+  lib,
+  fetchgit,
+  buildGoModule,
+  zlib,
+  makeWrapper,
+  xcodeenv,
+  androidenv,
+  xcodeWrapperArgs ? { },
+  xcodeWrapper ? xcodeenv.composeXcodeWrapper xcodeWrapperArgs,
+  withAndroidPkgs ? true,
+  androidPkgs ? (
+    androidenv.composeAndroidPackages {
+      includeNDK = true;
+    }
+  ),
+}:
 buildGoModule {
   pname = "gomobile";
-  version = "unstable-2022-05-18";
-
-  vendorHash = "sha256-AmOy3X+d2OD7ZLbFuy+SptdlgWbZJaXYEgO79M64ufE=";
+  version = "0-unstable-2024-12-13";
 
   src = fetchgit {
-    rev = "8578da9835fd365e78a6e63048c103b27a53a82c";
     name = "gomobile";
     url = "https://go.googlesource.com/mobile";
-    sha256 = "sha256-AOR/p+DW83f2+BOxm2rFXBCrotcIyunK3UzQ/dnauWY=";
+    rev = "a87c1cf6cf463f0d4476cfe0fcf67c2953d76e7c";
+    hash = "sha256-7j4rdmCZMC8tn4vAsC9x/mMNkom/+Tl7uAY+5gkSvfY=";
   };
 
-  subPackages = [ "bind" "cmd/gobind" "cmd/gomobile" ];
+  vendorHash = "sha256-6ycxEDEE0/i6Lxo0gb8wq3U2U7Q49AJj+PdzSl57wwI=";
+
+  subPackages = [
+    "bind"
+    "cmd/gobind"
+    "cmd/gomobile"
+  ];
 
   # Fails with: go: cannot find GOROOT directory
   doCheck = false;
 
-  nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optionals stdenv.isDarwin [ xcodeWrapper ];
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodeWrapper ];
 
   # Prevent a non-deterministic temporary directory from polluting the resulting object files
   postPatch = ''
@@ -45,21 +57,21 @@ buildGoModule {
   '';
 
   postFixup = ''
-    for bin in $(ls $out/bin); do
-      wrapProgram $out/bin/$bin \
+    for prog in gomobile gobind; do
+      wrapProgram $out/bin/$prog \
         --suffix GOPATH : $out \
-  '' + lib.optionalString withAndroidPkgs ''
-        --prefix PATH : "${androidPkgs.androidsdk}/bin" \
-        --set-default ANDROID_HOME "${androidPkgs.androidsdk}/libexec/android-sdk" \
-  '' + ''
-        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ zlib ]}"
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ zlib ]}" \
+        ${lib.optionalString withAndroidPkgs ''
+          --prefix PATH : "${androidPkgs.androidsdk}/bin" \
+          --set-default ANDROID_HOME "${androidPkgs.androidsdk}/libexec/android-sdk"
+        ''}
     done
   '';
 
-  meta = with lib; {
-    description = "A tool for building and running mobile apps written in Go";
+  meta = {
+    description = "Tool for building and running mobile apps written in Go";
     homepage = "https://pkg.go.dev/golang.org/x/mobile/cmd/gomobile";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jakubgs ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ jakubgs ];
   };
 }

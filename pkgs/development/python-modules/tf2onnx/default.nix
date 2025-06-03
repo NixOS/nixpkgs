@@ -1,86 +1,69 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonRelaxDepsHook
-, pytest-runner
-# runtime dependencies
-, numpy
-, onnx
-, requests
-, six
-, flatbuffers
-, protobuf
-, tensorflow
-# check dependencies
-, pytestCheckHook
-, graphviz
-, parameterized
-, pytest-cov
-, pyyaml
-, timeout-decorator
-, onnxruntime
-, keras
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  flatbuffers,
+  numpy,
+  onnx,
+  onnxruntime,
+  protobuf,
+  requests,
+  six,
+  tensorflow,
 }:
 
 buildPythonPackage rec {
   pname = "tf2onnx";
-  version = "1.15.1";
-  format = "setuptools";
+  version = "1.16.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "onnx";
     repo = "tensorflow-onnx";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-HqzcoPPX9+NOj0uFfOSVI2MNCkxq1NmLqXflwdi5RF0=";
+    tag = "v${version}";
+    hash = "sha256-qtRzckw/KHWm3gjFwF+cPuBhGbfktjhYIwImwHn2CFk=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    pytest-runner
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "'pytest-runner'" ""
+  '';
+
+  build-system = [
+    setuptools
   ];
 
   pythonRelaxDeps = [
-    "flatbuffers"
+    "protobuf"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    flatbuffers
     numpy
     onnx
+    onnxruntime
+    protobuf
     requests
     six
-    flatbuffers
-    protobuf
     tensorflow
-    onnxruntime
   ];
 
   pythonImportsCheck = [ "tf2onnx" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    graphviz
-    parameterized
-    pytest-cov
-    pyyaml
-    timeout-decorator
-    keras
-  ];
+  # All tests fail at import with:
+  # AttributeError: `...` is not available with Keras 3.
+  doCheck = false;
 
-  # TODO investigate the failures
-  disabledTestPaths = [
-    "tests/test_backend.py"
-    "tests/test_einsum_helper.py"
-    "tests/test_einsum_optimizers.py"
-  ];
-
-  disabledTests = [
-    "test_profile_conversion_time"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Convert TensorFlow, Keras, Tensorflow.js and Tflite models to ONNX";
     homepage = "https://github.com/onnx/tensorflow-onnx";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    changelog = "https://github.com/onnx/tensorflow-onnx/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, meson
-, ninja
-, setuptools
-, toml
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  meson,
+  ninja,
+  setuptools,
+  toml,
+  wheel,
 }:
 
 # TODO: offer meson as a Python package so we have dist-info folder.
@@ -13,7 +14,7 @@
 buildPythonPackage rec {
   pname = "mesonpep517";
   version = "0.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -25,22 +26,24 @@ buildPythonPackage rec {
   #
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'backend-path = "."' 'backend-path = ["."]'
+      --replace-fail 'backend-path = "."' 'backend-path = ["."]'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = [ toml ];
+  dependencies = [ toml ];
 
-  propagatedNativeBuildInputs = [ meson ninja ];
+  propagatedNativeBuildInputs = [
+    meson
+    ninja
+  ];
 
   meta = {
     description = "Create pep517 compliant packages from the meson build system";
     homepage = "https://gitlab.com/thiblahute/mesonpep517";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.fridh ];
   };
 }

@@ -1,25 +1,30 @@
-{ lib
-, azure-common
-, azure-mgmt-core
-, buildPythonPackage
-, fetchPypi
-, isodate
-, pythonOlder
+{
+  lib,
+  azure-common,
+  azure-mgmt-core,
+  buildPythonPackage,
+  fetchPypi,
+  isodate,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-kusto";
-  version = "3.3.0";
-  format = "setuptools";
+  version = "3.4.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-PmGGtyVrYFCMnpiCq9x9uwoMboDO1ePlGAJzrMTj3ps=";
+    pname = "azure_mgmt_kusto";
+    inherit version;
+    hash = "sha256-K8keApefYp/u7cTZuWNYhltVlFethunG+ccJpAgyDmM=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     azure-mgmt-core
     isodate
@@ -38,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-kusto_${version}/sdk/kusto/azure-mgmt-kusto/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

@@ -1,86 +1,85 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, cmake
-, cython_3
-, ninja
-, oldest-supported-numpy
-, pkg-config
-, scikit-build
-, setuptools
-, wheel
+  # build-system
+  cmake,
+  cython,
+  ninja,
+  pkg-config,
+  scikit-build-core,
 
-# c library
-, c-blosc2
+  # native dependencies
+  c-blosc2,
 
-# propagates
-, msgpack
-, ndindex
-, numpy
-, py-cpuinfo
-, rich
+  # dependencies
+  msgpack,
+  ndindex,
+  numexpr,
+  numpy,
+  platformdirs,
+  py-cpuinfo,
+  requests,
 
-# tests
-, psutil
-, pytestCheckHook
-, torch
+  # tests
+  psutil,
+  pytestCheckHook,
+  torch,
+  runTorchTests ? lib.meta.availableOn stdenv.hostPlatform torch,
 }:
 
 buildPythonPackage rec {
   pname = "blosc2";
-  version = "2.5.1";
+  version = "3.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Blosc";
     repo = "python-blosc2";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-yBgnNJU1q+FktIkpQn74LuRP19Ta/fNC60Z8TxzlWPk=";
+    tag = "v${version}";
+    hash = "sha256-7R08SZxj0nqEonGB/iL5Zoy0yk3rhENIv0hdUjF9KqA=";
   };
-
-  postPatch = ''
-    substituteInPlace requirements-runtime.txt \
-      --replace "pytest" ""
-  '';
 
   nativeBuildInputs = [
     cmake
-    cython_3
     ninja
-    oldest-supported-numpy
     pkg-config
-    scikit-build
-    setuptools
-    wheel
+  ];
+
+  dontUseCmakeConfigure = true;
+  env.CMAKE_ARGS = lib.cmakeBool "USE_SYSTEM_BLOSC2" true;
+
+  build-system = [
+    cython
+    numpy
+    scikit-build-core
   ];
 
   buildInputs = [ c-blosc2 ];
 
-  dontUseCmakeConfigure = true;
-  env.CMAKE_ARGS = "-DUSE_SYSTEM_BLOSC2:BOOL=YES";
-
-  propagatedBuildInputs = [
+  dependencies = [
     msgpack
     ndindex
+    numexpr
     numpy
+    platformdirs
     py-cpuinfo
-    rich
+    requests
   ];
 
   nativeCheckInputs = [
     psutil
     pytestCheckHook
-    torch
-  ];
+  ] ++ lib.optionals runTorchTests [ torch ];
 
   passthru.c-blosc2 = c-blosc2;
 
   meta = with lib; {
     description = "Python wrapper for the extremely fast Blosc2 compression library";
     homepage = "https://github.com/Blosc/python-blosc2";
-    changelog = "https://github.com/Blosc/python-blosc2/releases/tag/v${version}";
+    changelog = "https://github.com/Blosc/python-blosc2/releases/tag/${src.tag}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ris ];
   };

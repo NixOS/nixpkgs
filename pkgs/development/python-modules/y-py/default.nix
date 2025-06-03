@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, rustPlatform
-, cargo
-, rustc
-, libiconv
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  rustPlatform,
+  cargo,
+  rustc,
+  libiconv,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,10 +21,9 @@ buildPythonPackage rec {
     hash = "sha256-R1eoKlBAags6MzqgEiAZozG9bxbkn+1n3KQj+Siz/U0=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-RXwrDSPU0wiprsUJwoDzti14H/+bSwy4hK4tYhNVfYw=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-Wh25tLOVhAYFLqjOrKSu4klB1hGSOMconC1xZG31Dbw=";
   };
 
   nativeBuildInputs = [
@@ -33,13 +33,11 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   pythonImportsCheck = [ "y_py" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Python bindings for Y-CRDT";

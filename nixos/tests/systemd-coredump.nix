@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+{ pkgs, ... }:
 
 let
 
@@ -22,12 +22,14 @@ in
   };
 
   nodes.machine1 = { pkgs, lib, ... }: commonConfig;
-  nodes.machine2 = { pkgs, lib, ... }: lib.recursiveUpdate commonConfig {
-    systemd.coredump.enable = false;
-    systemd.package = pkgs.systemd.override {
-      withCoredump = false;
+  nodes.machine2 =
+    { pkgs, lib, ... }:
+    lib.recursiveUpdate commonConfig {
+      systemd.coredump.enable = false;
+      systemd.package = pkgs.systemd.override {
+        withCoredump = false;
+      };
     };
-  };
 
   testScript = ''
     with subtest("systemd-coredump enabled"):
@@ -41,4 +43,4 @@ in
       machine2.systemctl("start crasher");
       machine2.wait_until_succeeds("stat /var/lib/crasher/core", timeout=10)
   '';
-})
+}

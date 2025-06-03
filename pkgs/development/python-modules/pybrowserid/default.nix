@@ -1,24 +1,46 @@
-{ lib, buildPythonPackage, fetchPypi
-, requests, mock }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  requests,
+  unittestCheckHook,
+  mock,
+}:
 
 buildPythonPackage rec {
-  pname = "PyBrowserID";
+  pname = "pybrowserid";
   version = "0.14.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1qvi79kfb8x9kxkm5lw2mp42hm82cpps1xknmsb5ghkwx1lpc8kc";
+    pname = "PyBrowserID";
+    inherit version;
+    hash = "sha256-bCJ2aeh8wleWrnb2oO9lAlUoyK2C01Jnn6mj5WY6ceM=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  patches = [ ./darwin_fix.patch ];
 
-  nativeCheckInputs = [ mock ];
+  postPatch = ''
+    substituteInPlace browserid/tests/* \
+        --replace-warn 'assertEquals' 'assertEqual'
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
+
+  pythonImportsCheck = [ "browserid" ];
+
+  nativeCheckInputs = [
+    unittestCheckHook
+    mock
+  ];
 
   meta = with lib; {
     description = "Python library for the BrowserID Protocol";
-    homepage    = "https://github.com/mozilla/PyBrowserID";
-    license     = licenses.mpl20;
-    maintainers = with maintainers; [ ];
+    homepage = "https://github.com/mozilla/PyBrowserID";
+    license = licenses.mpl20;
+    maintainers = [ ];
   };
 }
-

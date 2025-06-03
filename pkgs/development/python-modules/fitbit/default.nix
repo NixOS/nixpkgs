@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, freezegun
-, mock
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, requests-mock
-, requests-oauthlib
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  freezegun,
+  mock,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  requests-mock,
+  requests-oauthlib,
 }:
 
 buildPythonPackage rec {
@@ -24,6 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-1u3h47lRBrJ7EUWBl5+RLGW4KHHqXqqrXbboZdy7VPA=";
   };
 
+  postPatch = ''
+    substituteInPlace fitbit_tests/test_api.py \
+      --replace-fail assertRaisesRegexp assertRaisesRegex
+  '';
+
   propagatedBuildInputs = [
     python-dateutil
     requests-oauthlib
@@ -36,14 +42,12 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  pythonImportsCheck = [
-    "fitbit"
-  ];
+  pythonImportsCheck = [ "fitbit" ];
 
   meta = with lib; {
     description = "Fitbit API Python Client Implementation";
     homepage = "https://github.com/orcasgit/python-fitbit";
     license = licenses.asl20;
-    maintainers = with maintainers; [ delroth ];
+    maintainers = [ ];
   };
 }

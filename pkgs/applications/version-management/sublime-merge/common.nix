@@ -1,18 +1,49 @@
-{ buildVersion, aarch64sha256, x64sha256, dev ? false }:
+{
+  buildVersion,
+  dev ? false,
+  aarch64sha256,
+  x64sha256,
+}:
 
-{ fetchurl, lib, stdenv, xorg, glib, libGL, glibcLocales, gtk3, cairo, pango, libredirect, makeWrapper, wrapGAppsHook
-, pkexecPath ? "/run/wrappers/bin/pkexec"
-, writeShellScript, common-updater-scripts, curl, gnugrep, coreutils
+{
+  fetchurl,
+  lib,
+  stdenv,
+  xorg,
+  glib,
+  libGL,
+  glibcLocales,
+  gtk3,
+  cairo,
+  pango,
+  libredirect,
+  makeWrapper,
+  wrapGAppsHook3,
+  pkexecPath ? "/run/wrappers/bin/pkexec",
+  writeShellScript,
+  common-updater-scripts,
+  curl,
+  gnugrep,
+  coreutils,
 }:
 
 let
   pnameBase = "sublime-merge";
   packageAttribute = "sublime-merge${lib.optionalString dev "-dev"}";
-  binaries = [ "sublime_merge" crashHandlerBinary "git-credential-sublime" "ssh-askpass-sublime" ];
+  binaries = [
+    "sublime_merge"
+    crashHandlerBinary
+    "git-credential-sublime"
+    "ssh-askpass-sublime"
+  ];
   primaryBinary = "sublime_merge";
-  primaryBinaryAliases = [ "smerge" ];
-  crashHandlerBinary = if lib.versionAtLeast buildVersion "2086" then "crash_handler" else "crash_reporter";
-  downloadUrl = arch: "https://download.sublimetext.com/sublime_merge_build_${buildVersion}_${arch}.tar.xz";
+  primaryBinaryAliases = [
+    "smerge"
+  ];
+  crashHandlerBinary =
+    if lib.versionAtLeast buildVersion "2086" then "crash_handler" else "crash_reporter";
+  downloadUrl =
+    arch: "https://download.sublimetext.com/sublime_merge_build_${buildVersion}_${arch}.tar.xz";
   versionUrl = "https://www.sublimemerge.com/${if dev then "dev" else "download"}";
   versionFile = builtins.toString ./default.nix;
 
@@ -25,8 +56,11 @@ let
     curl
   ];
 
-  redirects = [ "/usr/bin/pkexec=${pkexecPath}" "/bin/true=${coreutils}/bin/true" ];
-in let
+  redirects = [
+    "/usr/bin/pkexec=${pkexecPath}"
+    "/bin/true=${coreutils}/bin/true"
+  ];
+
   binaryPackage = stdenv.mkDerivation rec {
     pname = "${pnameBase}-bin";
     version = buildVersion;
@@ -35,16 +69,23 @@ in let
 
     dontStrip = true;
     dontPatchELF = true;
-    buildInputs = [ glib gtk3 ]; # for GSETTINGS_SCHEMAS_PATH
-    nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
+    buildInputs = [
+      glib
+      # for GSETTINGS_SCHEMAS_PATH
+      gtk3
+    ];
+    nativeBuildInputs = [
+      makeWrapper
+      wrapGAppsHook3
+    ];
 
     buildPhase = ''
       runHook preBuild
 
-      for binary in ${ builtins.concatStringsSep " " binaries }; do
+      for binary in ${builtins.concatStringsSep " " binaries}; do
         patchelf \
           --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath ${lib.makeLibraryPath neededLibraries}:${libGL}/lib:${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"} \
+          --set-rpath ${lib.makeLibraryPath neededLibraries}:${libGL}/lib:${lib.getLib stdenv.cc.cc}/lib${lib.optionalString stdenv.hostPlatform.is64bit "64"} \
           $binary
       done
 
@@ -74,7 +115,7 @@ in let
 
       # We need to replace the ssh-askpass-sublime executable because the default one
       # will not function properly, in order to work it needs to pass an argv[0] to
-      # the sublime_merge binary, and the built-in version will will try to call the
+      # the sublime_merge binary, and the built-in version will try to call the
       # sublime_merge wrapper script which cannot pass through the original argv[0] to
       # the sublime_merge binary. Thankfully the ssh-askpass-sublime functionality is
       # very simple and can be replaced with a simple wrapper script.
@@ -96,7 +137,8 @@ in let
       };
     };
   };
-in stdenv.mkDerivation (rec {
+in
+stdenv.mkDerivation (rec {
   pname = pnameBase;
   version = buildVersion;
 
@@ -104,27 +146,47 @@ in stdenv.mkDerivation (rec {
 
   ${primaryBinary} = binaryPackage;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+  ];
 
-  installPhase = ''
-    mkdir -p "$out/bin"
-    makeWrapper "''$${primaryBinary}/${primaryBinary}" "$out/bin/${primaryBinary}"
-  '' + builtins.concatStringsSep "" (map (binaryAlias: "ln -s $out/bin/${primaryBinary} $out/bin/${binaryAlias}\n") primaryBinaryAliases) + ''
-    mkdir -p "$out/share/applications"
-    substitute "''$${primaryBinary}/${primaryBinary}.desktop" "$out/share/applications/${primaryBinary}.desktop" --replace "/opt/${primaryBinary}/${primaryBinary}" "${primaryBinary}"
-    for directory in ''$${primaryBinary}/Icon/*; do
-      size=$(basename $directory)
-      mkdir -p "$out/share/icons/hicolor/$size/apps"
-      ln -s ''$${primaryBinary}/Icon/$size/* $out/share/icons/hicolor/$size/apps
-    done
-  '';
+  installPhase =
+    ''
+      runHook preInstall
+      mkdir -p "$out/bin"
+      makeWrapper "''$${primaryBinary}/${primaryBinary}" "$out/bin/${primaryBinary}"
+    ''
+    + builtins.concatStringsSep "" (
+      map (binaryAlias: "ln -s $out/bin/${primaryBinary} $out/bin/${binaryAlias}\n") primaryBinaryAliases
+    )
+    + ''
+      mkdir -p "$out/share/applications"
+
+      substitute \
+        "''$${primaryBinary}/${primaryBinary}.desktop" \
+        "$out/share/applications/${primaryBinary}.desktop" \
+        --replace-fail "/opt/${primaryBinary}/${primaryBinary}" "${primaryBinary}"
+
+      for directory in ''$${primaryBinary}/Icon/*; do
+        size=$(basename $directory)
+        mkdir -p "$out/share/icons/hicolor/$size/apps"
+        ln -s ''$${primaryBinary}/Icon/$size/* $out/share/icons/hicolor/$size/apps
+      done
+      runHook postInstall
+    '';
 
   passthru = {
     updateScript =
       let
         script = writeShellScript "${packageAttribute}-update-script" ''
           set -o errexit
-          PATH=${lib.makeBinPath [ common-updater-scripts curl gnugrep ]}
+          PATH=${
+            lib.makeBinPath [
+              common-updater-scripts
+              curl
+              gnugrep
+            ]
+          }
 
           versionFile=$1
           latestVersion=$(curl -s ${versionUrl} | grep -Po '(?<=<p class="latest"><i>Version:</i> Build )([0-9]+)')
@@ -135,21 +197,26 @@ in stdenv.mkDerivation (rec {
           fi
 
           for platform in ${lib.escapeShellArgs meta.platforms}; do
-              # The script will not perform an update when the version attribute is up to date from previous platform run
-              # We need to clear it before each run
-              update-source-version "${packageAttribute}.${primaryBinary}" 0 "${lib.fakeSha256}" --file="$versionFile" --version-key=buildVersion --source-key="sources.$platform"
-              update-source-version "${packageAttribute}.${primaryBinary}" "$latestVersion" --file="$versionFile" --version-key=buildVersion --source-key="sources.$platform"
+              update-source-version "${packageAttribute}.${primaryBinary}" "$latestVersion" --ignore-same-version --file="$versionFile" --version-key=buildVersion --source-key="sources.$platform"
           done
         '';
-      in [ script versionFile ];
+      in
+      [
+        script
+        versionFile
+      ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Git client from the makers of Sublime Text";
     homepage = "https://www.sublimemerge.com";
-    maintainers = with maintainers; [ zookatron ];
+    mainProgram = "sublime_merge";
+    maintainers = with lib.maintainers; [ zookatron ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    license = lib.licenses.unfree;
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
   };
 })

@@ -1,41 +1,44 @@
-{ lib
-, buildPythonPackage
-, django
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  django,
+  fetchPypi,
+  oracledb,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "django-stubs-ext";
-  version = "4.2.7";
+  version = "5.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-UZNCrAhJzaFVl0bJpWPwP/mfY2sOvnwUt16BagDf3cM=";
+    pname = "django_stubs_ext";
+    inherit version;
+    hash = "sha256-AMSuMHtTj1ZDr3YakUw/jk4/JfTnxtcJjxkGwNjyqsk=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
     typing-extensions
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  optional-dependencies = {
+    redis = [ redis ];
+    oracle = [ oracledb ];
+  };
 
-  pythonImportsCheck = [
-    "django_stubs_ext"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "django_stubs_ext" ];
 
   meta = with lib; {
     description = "Extensions and monkey-patching for django-stubs";

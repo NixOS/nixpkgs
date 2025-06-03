@@ -1,13 +1,27 @@
-{ buildPecl, lib, oracle-instantclient, php }:
+{
+  buildPecl,
+  lib,
+  oracle-instantclient,
+  php,
+}:
 
 let
-  versionData = if (lib.versionOlder php.version "8.1") then {
-    version = "3.0.1";
-    sha256 = "108ds92620dih5768z19hi0jxfa7wfg5hdvyyvpapir87c0ap914";
-  } else {
-    version = "3.2.1";
-    sha256 = "zyF703DzRZDBhlNFFt/dknmZ7layqhgjG1/ZDN+PEsg=";
-  };
+  versionData =
+    if (lib.versionOlder php.version "8.1") then
+      {
+        version = "3.0.1";
+        sha256 = "108ds92620dih5768z19hi0jxfa7wfg5hdvyyvpapir87c0ap914";
+      }
+    else if (lib.versionOlder php.version "8.2") then
+      {
+        version = "3.2.1";
+        sha256 = "sha256-zyF703DzRZDBhlNFFt/dknmZ7layqhgjG1/ZDN+PEsg=";
+      }
+    else
+      {
+        version = "3.3.0";
+        sha256 = "sha256-0y5VnRKspJYE6xWeBcX2OG2pJTNbB+27GMywDv4gzwQ=";
+      };
 in
 buildPecl {
   pname = "oci8";
@@ -25,6 +39,6 @@ buildPecl {
     description = "Extension for Oracle Database";
     license = licenses.php301;
     homepage = "https://pecl.php.net/package/oci8";
-    maintainers = teams.php.members;
+    teams = [ teams.php ];
   };
 }

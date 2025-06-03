@@ -1,45 +1,51 @@
-{ lib
-, stdenv
-, asn1crypto
-, buildPythonPackage
-, defusedxml
-, dissect-cim
-, dissect-clfs
-, dissect-cstruct
-, dissect-esedb
-, dissect-etl
-, dissect-eventlog
-, dissect-evidence
-, dissect-extfs
-, dissect-fat
-, dissect-ffs
-, dissect-hypervisor
-, dissect-ntfs
-, dissect-regf
-, dissect-sql
-, dissect-shellitem
-, dissect-thumbcache
-, dissect-util
-, dissect-volume
-, dissect-xfs
-, fetchFromGitHub
-, flow-record
-, fusepy
-, ipython
-, pycryptodome
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, setuptools
-, setuptools-scm
-, structlog
-, yara-python
-, zstandard
+{
+  lib,
+  stdenv,
+  asn1crypto,
+  buildPythonPackage,
+  defusedxml,
+  dissect-btrfs,
+  dissect-cim,
+  dissect-clfs,
+  dissect-cstruct,
+  dissect-esedb,
+  dissect-etl,
+  dissect-eventlog,
+  dissect-evidence,
+  dissect-extfs,
+  dissect-fat,
+  dissect-ffs,
+  dissect-hypervisor,
+  dissect-ntfs,
+  dissect-regf,
+  dissect-shellitem,
+  dissect-sql,
+  dissect-thumbcache,
+  dissect-util,
+  dissect-volume,
+  dissect-xfs,
+  docutils,
+  fetchFromGitHub,
+  flow-record,
+  fusepy,
+  impacket,
+  ipython,
+  paho-mqtt,
+  pycryptodome,
+  pytestCheckHook,
+  pythonOlder,
+  ruamel-yaml,
+  setuptools,
+  setuptools-scm,
+  structlog,
+  tomli,
+  yara-python,
+  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-target";
-  version = "3.15";
+  version = "3.20.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -47,21 +53,21 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.target";
-    rev = "refs/tags/${version}";
-    hash = "sha256-1uWKlp0t1mVtt3lbjl4U1TMxE2YHN/GzGs8OuoVTRqc=";
+    tag = version;
+    hash = "sha256-kB1RhLnmsK77V5uI/GesRQX//awWKVAtWUGgtj38URM=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-warn "flow.record~=" "flow.record>="
+      --replace-fail "flow.record~=" "flow.record>="
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     defusedxml
     dissect-cstruct
     dissect-eventlog
@@ -75,9 +81,10 @@ buildPythonPackage rec {
     structlog
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     full = [
       asn1crypto
+      dissect-btrfs
       dissect-cim
       dissect-clfs
       dissect-esedb
@@ -92,48 +99,80 @@ buildPythonPackage rec {
       fusepy
       ipython
       pycryptodome
-      pyyaml
+      ruamel-yaml
       yara-python
       zstandard
-    ];
+    ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+    yara = [ yara-python ] ++ optional-dependencies.full;
+    smb = [ impacket ] ++ optional-dependencies.full;
+    mqtt = [ paho-mqtt ] ++ optional-dependencies.full;
   };
 
   nativeCheckInputs = [
+    docutils
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.full;
+  ] ++ optional-dependencies.full;
 
-  pythonImportsCheck = [
-    "dissect.target"
-  ];
+  pythonImportsCheck = [ "dissect.target" ];
 
-  disabledTests = [
-    # Test requires rdump
-    "test_exec_target_command"
-    # Issue with tar file
-    "test_dpapi_decrypt_blob"
-    "test_md"
-    "test_nested_md_lvm"
-    "test_notifications_appdb"
-    "test_notifications_wpndatabase"
-    "test_tar_anonymous_filesystems"
-    "test_tar_sensitive_drive_letter"
-    # Tests compare dates and times
-    "yum"
-    # Filesystem access, windows defender tests
-    "test_defender_quarantine_recovery"
-  ] ++
-  # test is broken on Darwin
-  lib.optional stdenv.hostPlatform.isDarwin "test_fs_attrs_no_os_listxattr";
+  disabledTests =
+    [
+      "test_cpio"
+      "test_env_parser"
+      "test_cp_directory"
+      "test_cp_subdirectories"
+      "test_shell_cli"
+      "test_shell_cmd"
+      # Test requires rdump
+      "test_exec_target_command"
+      # Issue with tar file
+      "test_dpapi_decrypt_blob"
+      "test_md"
+      "test_nested_md_lvm"
+      "test_notifications_appdb"
+      "test_notifications_wpndatabase"
+      "test_tar_anonymous_filesystems"
+      "test_tar_sensitive_drive_letter"
+      # Tests compare dates and times
+      "yum"
+      # Filesystem access, windows defender tests
+      "test_config_tree_plugin"
+      "test_defender_quarantine_recovery"
+      "test_execute_pipeline"
+      "test_keychain_register_keychain_file"
+      "test_plugins_child_docker"
+      "test_plugins_child_wsl"
+      "test_reg_output"
+      "test_regflex"
+      "test_systemd_basic_syntax"
+      "test_target"
+      "test_yara"
+    ]
+    ++
+    # test is broken on Darwin
+    lib.optional stdenv.hostPlatform.isDarwin "test_fs_attrs_no_os_listxattr";
 
   disabledTestPaths = [
-    # Tests are using Windows paths
-    "tests/plugins/apps/browser/test_browser.py"
+    # Tests are using Windows paths, missing test files
+    "tests/plugins/apps/"
+    # ValueError: Invalid Locate file magic. Expected /x00LOCATE02/x00
+    "tests/plugins/os/unix/locate/"
+    # Missing plugin support
+    "tests/plugins/child/"
+    "tests/tools/test_dump.py"
+    "tests/plugins/os/"
+    "tests/test_container.py"
+    "tests/plugins/filesystem/"
+    "tests/test_registration.py"
+    "tests/filesystems/"
+    "tests/test_filesystem.py"
+    "tests/loaders/"
   ];
 
   meta = with lib; {
     description = "Dissect module that provides a programming API and command line tools";
     homepage = "https://github.com/fox-it/dissect.target";
-    changelog = "https://github.com/fox-it/dissect.target/releases/tag/${version}";
+    changelog = "https://github.com/fox-it/dissect.target/releases/tag/${src.tag}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

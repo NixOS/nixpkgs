@@ -1,37 +1,47 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, glib
-, glib-networking
-, libxml2
-, gtk3
-, libsoup
-, tzdata
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchurl,
+  pkg-config,
+  gettext,
+  glib,
+  glib-networking,
+  libxml2,
+  gtk3,
+  gtk-doc,
+  libsoup_3,
+  tzdata,
+  mateUpdateScript,
 }:
-
 stdenv.mkDerivation rec {
   pname = "libmateweather";
-  version = "1.26.3";
+  version = "1.28.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "XmzSRBiEfLRazxfaW0NacTHLTsKs/2joKPNCob8T70o=";
+    sha256 = "VUNz3rWzk7nYSydd0spmyaSi0ObskgRPq4qlPjAy0rU=";
   };
+
+  patches = [
+    # https://github.com/mate-desktop/libmateweather/pull/133
+    ./libsoup_3_support.patch
+  ];
 
   strictDeps = true;
 
   nativeBuildInputs = [
+    autoreconfHook # the libsoup patch changes the autoconf file
     pkg-config
     gettext
     glib # glib-compile-schemas
+    gtk-doc # required for autoconf
     libxml2 # xmllint
   ];
 
   buildInputs = [
-    libsoup
+    libxml2
+    libsoup_3
     tzdata
   ];
 
@@ -43,7 +53,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-zoneinfo-dir=${tzdata}/share/zoneinfo"
-    "--enable-locations-compression"
   ];
 
   preFixup = "rm -f $out/share/icons/mate/icon-theme.cache";
@@ -57,6 +66,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mate-desktop/libmateweather";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

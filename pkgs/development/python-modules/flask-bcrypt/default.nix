@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, bcrypt
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  bcrypt,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -13,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "maxcountryman";
-    repo = pname;
+    repo = "flask-bcrypt";
     rev = version;
     hash = "sha256-WlIholi/nzq6Ikc0LS6FhG0Q5Kz0kvvAlA2YJ7EksZ4=";
   };
@@ -25,9 +26,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  pythonImportsCheck = [
-    "flask_bcrypt"
-  ];
+  pythonImportsCheck = [ "flask_bcrypt" ];
 
   meta = with lib; {
     description = "Brcrypt hashing for Flask";

@@ -1,32 +1,29 @@
-{ lib
-, buildPythonPackage
-, django
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  django,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "django-admin-datta";
-  version = "1.0.10";
+  version = "1.0.19";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VV7mb3501aZVuXUqzVqQYUttvkYa4pAECYWn7HksOmI=";
+    hash = "sha256-65fUrV4FIbuVvNX93rgOCMjz4CoozMHEEVpzJqtbhKY=";
   };
 
-  propagatedBuildInputs = [
-    django
-  ];
+  propagatedBuildInputs = [ django ];
 
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "admin_datta"
-  ];
+  pythonImportsCheck = [ "admin_datta" ];
 
   meta = with lib; {
     description = "Modern template for Django that covers Admin Section";

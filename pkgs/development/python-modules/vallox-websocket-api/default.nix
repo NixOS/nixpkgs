@@ -1,40 +1,32 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, pythonOlder
-, pythonRelaxDepsHook
-, fetchFromGitHub
-, setuptools
-, construct
-, websockets
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  construct,
+  websockets,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "vallox-websocket-api";
-  version = "4.2.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "5.4.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yozik04";
     repo = "vallox_websocket_api";
-    rev = "refs/tags/${version}";
-    hash = "sha256-e05MP130okj8j20yMn8a7P6PYZ4PKwCOlAf0ZlUR5aI=";
+    tag = version;
+    hash = "sha256-L9duL8XfDUxHgJxVbG7PPPRJRzVEckxqbB+1vX0GalU=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "websockets"
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     construct
     websockets
@@ -48,7 +40,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "vallox_websocket_api" ];
 
   meta = {
-    changelog = "https://github.com/yozik04/vallox_websocket_api/releases/tag/${version}";
+    changelog = "https://github.com/yozik04/vallox_websocket_api/releases/tag/${src.tag}";
     description = "Async API for Vallox ventilation units";
     homepage = "https://github.com/yozik04/vallox_websocket_api";
     license = lib.licenses.lgpl3Only;

@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qtbase
-, qmake
-, pkg-config
-, libssh
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qtbase,
+  qmake,
+  pkg-config,
+  libssh,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,9 +37,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Qt-based graphical user interface for systemd's journalctl command";
+    mainProgram = "qjournalctl";
     homepage = "https://github.com/pentix/qjournalctl";
     license = licenses.gpl3Only;
     platforms = platforms.all;
-    maintainers = with maintainers; [ dtzWill srgom romildo ];
+    maintainers = with maintainers; [ romildo ];
   };
 }

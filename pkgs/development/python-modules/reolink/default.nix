@@ -1,12 +1,13 @@
-{ lib
-, aiohttp
-, aiounittest
-, buildPythonPackage
-, fetchFromGitHub
-, ffmpeg-python
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  aiohttp,
+  aiounittest,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ffmpeg-python,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -18,8 +19,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "fwestenberg";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "reolink";
+    tag = "v${version}";
     hash = "sha256-DZcTfmzO9rBhhRN2RkgoPwUPE+LPPeZgc8kmhYU9V2I=";
   };
 
@@ -43,9 +44,7 @@ buildPythonPackage rec {
   # https://github.com/fwestenberg/reolink/issues/83
   doCheck = false;
 
-  pytestFlagsArray = [
-    "test.py"
-  ];
+  pytestFlagsArray = [ "test.py" ];
 
   disabledTests = [
     # Tests require network access
@@ -56,9 +55,7 @@ buildPythonPackage rec {
     "test_succes"
   ];
 
-  pythonImportsCheck = [
-    "reolink"
-  ];
+  pythonImportsCheck = [ "reolink" ];
 
   meta = with lib; {
     description = "Module to interact with the Reolink IP camera API";

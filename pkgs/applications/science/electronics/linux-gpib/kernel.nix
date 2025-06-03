@@ -1,23 +1,30 @@
-{ lib
-, stdenv
-, fetchurl
-, kernel
-, pahole
+{
+  lib,
+  stdenv,
+  fetchurl,
+  kernel,
+  pahole,
 }:
 
-stdenv.mkDerivation (import ./common.nix { inherit fetchurl lib; pname = "linux-gpib-kernel"; } // {
+stdenv.mkDerivation (
+  import ./common.nix {
+    inherit fetchurl lib;
+    pname = "linux-gpib-kernel";
+  }
+  // {
 
-  postPatch = ''
-    sed -i 's@/sbin/depmod -A@@g' Makefile
-  '';
+    postPatch = ''
+      sed -i 's@/sbin/depmod -A@@g' Makefile
+    '';
 
-  buildInputs = [ pahole ] ++ kernel.moduleBuildDependencies;
+    buildInputs = [ pahole ] ++ kernel.moduleBuildDependencies;
 
-  makeFlags = [
-    "LINUX_SRCDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-  ];
+    makeFlags = [
+      "LINUX_SRCDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    ];
 
-  installFlags = [
-    "INSTALL_MOD_PATH=$(out)"
-  ];
-})
+    installFlags = [
+      "INSTALL_MOD_PATH=$(out)"
+    ];
+  }
+)

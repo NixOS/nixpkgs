@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-cov
-, pytestCheckHook
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-cov-stub,
+  pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -13,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "chrillux";
-    repo = pname;
+    repo = "brottsplatskartan";
     rev = version;
     sha256 = "07iwmnchvpw156j23yfccg4c32izbwm8b02bjr1xgmcwzbq21ks9";
   };
@@ -21,7 +22,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ requests ];
 
   nativeCheckInputs = [
-    pytest-cov
+    pytest-cov-stub
     pytestCheckHook
   ];
 

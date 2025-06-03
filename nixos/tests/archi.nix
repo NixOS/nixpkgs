@@ -1,14 +1,17 @@
-import ./make-test-python.nix ({ lib, ... }: {
+{ lib, ... }:
+{
   name = "archi";
   meta.maintainers = with lib.maintainers; [ paumr ];
 
-  nodes.machine = { pkgs, ... }: {
-    imports = [
-      ./common/x11.nix
-    ];
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      imports = [
+        ./common/x11.nix
+      ];
 
-    environment.systemPackages = with pkgs; [ archi ];
-  };
+      environment.systemPackages = with pkgs; [ archi ];
+    };
 
   enableOCR = true;
 
@@ -24,8 +27,10 @@ import ./make-test-python.nix ({ lib, ... }: {
          machine.wait_for_window("Archi")
 
          # wait till main UI is open
-         machine.wait_for_text("Welcome to Archi")
+         # since OCR seems to be buggy wait_for_text was replaced by sleep, issue: #302965
+         # machine.wait_for_text("Welcome to Archi")
+         machine.sleep(20)
 
          machine.screenshot("welcome-screen")
   '';
-})
+}

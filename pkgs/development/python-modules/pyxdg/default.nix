@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
 }:
 
 buildPythonPackage rec {
@@ -8,10 +9,10 @@ buildPythonPackage rec {
   version = "0.28";
   format = "setuptools";
 
-  src =  fetchFromGitLab {
+  src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "xdg";
-    repo = pname;
+    repo = "pyxdg";
     rev = "rel-${version}";
     hash = "sha256-TrFQzfkXabmfpGYwhxD1UVY1F645KycfSPPrMJFAe+0=";
   };

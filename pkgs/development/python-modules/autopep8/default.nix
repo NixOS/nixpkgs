@@ -1,32 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, glibcLocales
-, pycodestyle
-, pytestCheckHook
-, pythonOlder
-, tomli
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  glibcLocales,
+  pycodestyle,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "autopep8";
-  version = "2.0.4";
-  format = "setuptools";
+  version = "2.3.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "hhatto";
     repo = "autopep8";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TuaDnZqn9mRUsoDJkj9JK4ztvzl9JTwAk8nghIkZBvw=";
+    tag = "v${version}";
+    hash = "sha256-9OJ5XbzpHMHsFjf5oVyHjn5zqmAxRuSItWP4sQx8jD4=";
   };
 
-  propagatedBuildInputs = [
-    pycodestyle
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  build-system = [ setuptools ];
+
+  propagatedBuildInputs = [ pycodestyle ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
     glibcLocales
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/hhatto/autopep8/releases/tag/v${version}";
-    description = "A tool that automatically formats Python code to conform to the PEP 8 style guide";
+    description = "Tool that automatically formats Python code to conform to the PEP 8 style guide";
     homepage = "https://github.com/hhatto/autopep8";
     license = licenses.mit;
     mainProgram = "autopep8";

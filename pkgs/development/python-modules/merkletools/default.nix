@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Tierion";
     repo = "pymerkletools";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-pd7Wxi7Sk95RcrFOTOtl725nIXidva3ftdKSGxHYPTA=";
   };
 
@@ -25,13 +26,9 @@ buildPythonPackage rec {
       --replace "install_requires=install_requires" "install_requires=[],"
   '';
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "merkletools"
-  ];
+  pythonImportsCheck = [ "merkletools" ];
 
   meta = with lib; {
     description = "Python tools for creating Merkle trees, generating Merkle proofs, and verification of Merkle proofs";

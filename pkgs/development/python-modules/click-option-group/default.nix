@@ -1,34 +1,42 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, click
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "click-option-group";
-  version = "0.5.6";
-  format = "setuptools";
-  disabled = pythonOlder "3.6";
+  version = "0.5.7";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "click-contrib";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-uR5rIZPPT6pRk/jJEy2rZciOXrHWVWN6BfGroQ3znas=";
+    repo = "click-option-group";
+    tag = "v${version}";
+    hash = "sha256-MiTOAgIZZEvU6aLdUpQvLTd7dJpYXU1gJz+ea8C/95Y=";
   };
 
-  propagatedBuildInputs = [
-    click
+  build-system = [
+    hatchling
+    hatch-vcs
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  dependencies = [ click ];
 
-  pythonImportsCheck = [
-    "click_option_group"
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "click_option_group" ];
+
+  disabledTests = [
+    # https://github.com/click-contrib/click-option-group/issues/65
+    "test_missing_group_decl_first_api"
   ];
 
   meta = with lib; {
@@ -40,7 +48,7 @@ buildPythonPackage rec {
       for example). Moreover, argparse stdlib package contains this
       functionality out of the box.
     '';
-    homepage = "https://github.com/click-contrib/click-option-group";
+    homepage = "https://github.com/click-contrib/click-option-group/releases/tag/${src.tag}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ hexa ];
   };

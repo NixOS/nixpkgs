@@ -90,7 +90,7 @@ buildDhallPackage {
 
 let
   nixpkgs = builtins.fetchTarball {
-    url    = "https://github.com/NixOS/nixpkgs/archive/94b2848559b12a8ed1fe433084686b2a81123c99.tar.gz";
+    url = "https://github.com/NixOS/nixpkgs/archive/94b2848559b12a8ed1fe433084686b2a81123c99.tar.gz";
     hash = "sha256-B4Q3c6IvTLg3Q92qYa8y+i4uTaphtFdjp+Ir3QQjdN0=";
   };
 
@@ -100,15 +100,17 @@ let
 
   overlay = self: super: {
     dhallPackages = super.dhallPackages.override (old: {
-      overrides =
-        self.lib.composeExtensions (old.overrides or (_: _: {})) dhallOverlay;
+      overrides = self.lib.composeExtensions (old.overrides or (_: _: { })) dhallOverlay;
     });
   };
 
-  pkgs = import nixpkgs { config = {}; overlays = [ overlay ]; };
+  pkgs = import nixpkgs {
+    config = { };
+    overlays = [ overlay ];
+  };
 
 in
-  pkgs
+pkgs
 ```
 
 … which we can then build using this command:
@@ -187,13 +189,14 @@ wish to specify `source = true` for all Dhall packages, then you can amend the
 Dhall overlay like this:
 
 ```nix
+{
   dhallOverrides = self: super: {
     # Enable source for all Dhall packages
-    buildDhallPackage =
-      args: super.buildDhallPackage (args // { source = true; });
+    buildDhallPackage = args: super.buildDhallPackage (args // { source = true; });
 
     true = self.callPackage ./true.nix { };
   };
+}
 ```
 
 … and now the Prelude will contain the fully decoded result of interpreting
@@ -429,22 +432,26 @@ $ dhall-to-nixpkgs github https://github.com/dhall-lang/dhall-lang.git \
 the Prelude globally for all packages, like this:
 
 ```nix
+{
   dhallOverrides = self: super: {
     true = self.callPackage ./true.nix { };
 
     Prelude = self.callPackage ./Prelude.nix { };
   };
+}
 ```
 
 … or selectively overriding the Prelude dependency for just the `true` package,
 like this:
 
 ```nix
+{
   dhallOverrides = self: super: {
     true = self.callPackage ./true.nix {
       Prelude = self.callPackage ./Prelude.nix { };
     };
   };
+}
 ```
 
 ## Overrides {#ssec-dhall-overrides}
@@ -454,11 +461,13 @@ You can override any of the arguments to `buildDhallGitHubPackage` or
 For example, suppose we wanted to selectively enable `source = true` just for the Prelude.  We can do that like this:
 
 ```nix
+{
   dhallOverrides = self: super: {
     Prelude = super.Prelude.overridePackage { source = true; };
 
-    …
+    # ...
   };
+}
 ```
 
 [semantic-integrity-checks]: https://docs.dhall-lang.org/tutorials/Language-Tour.html#installing-packages

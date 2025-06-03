@@ -1,12 +1,13 @@
-{ lib
-, aiofiles
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, requests
+{
+  lib,
+  aiofiles,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "acunetix";
   version = "0.0.7";
   format = "setuptools";
@@ -29,9 +30,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "acunetix"
-  ];
+  pythonImportsCheck = [ "acunetix" ];
 
   meta = with lib; {
     description = "Acunetix Web Vulnerability Scanner SDK for Python";

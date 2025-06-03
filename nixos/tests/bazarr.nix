@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ lib, ... }:
+{ lib, ... }:
 
 let
   port = 42069;
@@ -21,4 +21,4 @@ in
     machine.wait_for_open_port(${toString port})
     machine.succeed("curl --fail http://localhost:${toString port}/")
   '';
-})
+}

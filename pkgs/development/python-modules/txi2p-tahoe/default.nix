@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, parsley
-, twisted
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  parsley,
+  twisted,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tahoe-lafs";
     repo = "txi2p";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-u/IOhxK9jWC/tTKKLsc4PexbCuki+yEtMNw7LuQKmuk=";
   };
 

@@ -1,14 +1,16 @@
-import ./make-test-python.nix ({pkgs, lib, ...}:
+{ pkgs, lib, ... }:
 {
   name = "code-server";
 
   nodes = {
-    machine = {pkgs, ...}: {
-      services.code-server = {
-        enable = true;
-        auth = "none";
+    machine =
+      { pkgs, ... }:
+      {
+        services.code-server = {
+          enable = true;
+          auth = "none";
+        };
       };
-    };
   };
 
   testScript = ''
@@ -19,4 +21,4 @@ import ./make-test-python.nix ({pkgs, lib, ...}:
   '';
 
   meta.maintainers = [ lib.maintainers.drupol ];
-})
+}

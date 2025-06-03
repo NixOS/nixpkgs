@@ -1,33 +1,34 @@
-{ lib
-, ajpy
-, buildPythonPackage
-, cx-oracle
-, dnspython
-, fetchPypi
-, impacket
-, ipy
-, mysqlclient
-, paramiko
-, psycopg2
-, pyasn1
-, pycrypto
-, pycurl
-, pyopenssl
-, pysnmp
-, pysqlcipher3
-, pythonOlder
+{
+  lib,
+  ajpy,
+  buildPythonPackage,
+  cx-oracle,
+  dnspython,
+  fetchPypi,
+  impacket,
+  ipy,
+  mysqlclient,
+  paramiko,
+  psycopg2,
+  pyasn1,
+  pycrypto,
+  pycurl,
+  pyopenssl,
+  pysnmp,
+  pysqlcipher3,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "patator";
-  version = "1.0";
+  version = "1.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VQ7JPyQOY9X/7LVAvTwftoOegt4KyfERgu38HfmsYDM=";
+    hash = "sha256-BupB/s4HNk6DUxbrHB/onqeS7kL0WsGPZ2jqKUj7DJw=";
   };
 
   postPatch = ''

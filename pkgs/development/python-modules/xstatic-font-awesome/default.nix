@@ -1,15 +1,17 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
-  pname = "XStatic-Font-Awesome";
+  pname = "xstatic-font-awesome";
   version = "6.2.1.1";
 
   src = fetchPypi {
-    inherit version pname;
-    sha256 = "sha256-8HWHEJYShjjy4VOQINgid1TD2IXdaOfubemgEjUHaCg=";
+    pname = "XStatic-Font-Awesome";
+    inherit version;
+    hash = "sha256-8HWHEJYShjjy4VOQINgid1TD2IXdaOfubemgEjUHaCg=";
   };
 
   # no tests implemented

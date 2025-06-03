@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitea
-, autoreconfHook
-, pkg-config
-, guile
-, texinfo
-, zstd
+{
+  stdenv,
+  lib,
+  fetchFromGitea,
+  autoreconfHook,
+  pkg-config,
+  guile,
+  texinfo,
+  zstd,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,15 +22,20 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ autoreconfHook guile pkg-config texinfo ];
+  nativeBuildInputs = [
+    autoreconfHook
+    guile
+    pkg-config
+    texinfo
+  ];
   buildInputs = [ guile ];
   propagatedBuildInputs = [ zstd ];
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
-    description = "A GNU Guile library providing bindings to zstd";
+    description = "GNU Guile library providing bindings to zstd";
     homepage = "https://notabug.org/guile-zstd/guile-zstd";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ foo-dogsquared ];

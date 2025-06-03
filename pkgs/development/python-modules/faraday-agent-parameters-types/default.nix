@@ -1,16 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, marshmallow
-, packaging
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  marshmallow,
+  packaging,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  validators,
 }:
 
 buildPythonPackage rec {
   pname = "faraday-agent-parameters-types";
-  version = "1.4.0";
+  version = "1.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "faraday_agent_parameters_types";
     inherit version;
-    hash = "sha256-pene97VKOX8mZEQgHkOBDu72Dpww2D9nDjA94s5F9rM=";
+    hash = "sha256-ZyTaQN6T+F8QKPuTfGcEtdKM/2hvtekghG4UwtER02A=";
   };
 
   postPatch = ''
@@ -26,18 +28,15 @@ buildPythonPackage rec {
       --replace-warn '"pytest-runner",' ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     marshmallow
     packaging
+    validators
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
     "faraday_agent_parameters_types"
@@ -53,7 +52,7 @@ buildPythonPackage rec {
     description = "Collection of Faraday agent parameters types";
     homepage = "https://github.com/infobyte/faraday_agent_parameters_types";
     changelog = "https://github.com/infobyte/faraday_agent_parameters_types/blob/${version}/CHANGELOG.md";
-    license = with licenses; [ gpl3Plus ];
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fab ];
   };
 }

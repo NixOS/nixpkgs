@@ -1,21 +1,26 @@
 # This module creates netboot media containing the given NixOS
 # configuration.
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  modulesPath,
+  ...
+}:
 
 with lib;
 
 {
+  imports = [
+    ../../image/file-options.nix
+  ];
+
   options = {
 
     netboot.squashfsCompression = mkOption {
-      default = with pkgs.stdenv.hostPlatform; "xz -Xdict-size 100% "
-                + lib.optionalString isx86 "-Xbcj x86"
-                # Untested but should also reduce size for these platforms
-                + lib.optionalString isAarch "-Xbcj arm"
-                + lib.optionalString (isPower && is32bit && isBigEndian) "-Xbcj powerpc"
-                + lib.optionalString (isSparc) "-Xbcj sparc";
-      description = lib.mdDoc ''
+      default = "zstd -Xcompression-level 19";
+      description = ''
         Compression settings to use for the squashfs nix store.
       '';
       example = "zstd -Xcompression-level 6";
@@ -24,7 +29,7 @@ with lib;
 
     netboot.storeContents = mkOption {
       example = literalExpression "[ pkgs.stdenv ]";
-      description = lib.mdDoc ''
+      description = ''
         This option lists additional derivations to be included in the
         Nix store in the generated netboot image.
       '';
@@ -37,47 +42,50 @@ with lib;
     # here and it causes a cyclic dependency.
     boot.loader.grub.enable = false;
 
-    # !!! Hack - attributes expected by other modules.
-    environment.systemPackages = [ pkgs.grub2_efi ]
-      ++ (lib.optionals (pkgs.stdenv.hostPlatform.system != "aarch64-linux") [pkgs.grub2 pkgs.syslinux]);
-
-    fileSystems."/" = mkImageMediaOverride
-      { fsType = "tmpfs";
-        options = [ "mode=0755" ];
-      };
+    fileSystems."/" = mkImageMediaOverride {
+      fsType = "tmpfs";
+      options = [ "mode=0755" ];
+    };
 
     # In stage 1, mount a tmpfs on top of /nix/store (the squashfs
     # image) to make this a live CD.
-    fileSystems."/nix/.ro-store" = mkImageMediaOverride
-      { fsType = "squashfs";
-        device = "../nix-store.squashfs";
-        options = [ "loop" ];
-        neededForBoot = true;
+    fileSystems."/nix/.ro-store" = mkImageMediaOverride {
+      fsType = "squashfs";
+      device = "../nix-store.squashfs";
+      options = [
+        "loop"
+      ] ++ lib.optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2") "threads=multi";
+      neededForBoot = true;
+    };
+
+    fileSystems."/nix/.rw-store" = mkImageMediaOverride {
+      fsType = "tmpfs";
+      options = [ "mode=0755" ];
+      neededForBoot = true;
+    };
+
+    fileSystems."/nix/store" = mkImageMediaOverride {
+      overlay = {
+        lowerdir = [ "/nix/.ro-store" ];
+        upperdir = "/nix/.rw-store/store";
+        workdir = "/nix/.rw-store/work";
       };
+      neededForBoot = true;
+    };
 
-    fileSystems."/nix/.rw-store" = mkImageMediaOverride
-      { fsType = "tmpfs";
-        options = [ "mode=0755" ];
-        neededForBoot = true;
-      };
+    boot.initrd.availableKernelModules = [
+      "squashfs"
+      "overlay"
+    ];
 
-    fileSystems."/nix/store" = mkImageMediaOverride
-      { overlay = {
-          lowerdir = [ "/nix/.ro-store" ];
-          upperdir = "/nix/.rw-store/store";
-          workdir = "/nix/.rw-store/work";
-        };
-        neededForBoot = true;
-      };
-
-    boot.initrd.availableKernelModules = [ "squashfs" "overlay" ];
-
-    boot.initrd.kernelModules = [ "loop" "overlay" ];
+    boot.initrd.kernelModules = [
+      "loop"
+      "overlay"
+    ];
 
     # Closures to be copied to the Nix store, namely the init
     # script and the top-level system configuration directory.
-    netboot.storeContents =
-      [ config.system.build.toplevel ];
+    netboot.storeContents = [ config.system.build.toplevel ];
 
     # Create the squashfs image that contains the Nix store.
     system.build.squashfsStore = pkgs.callPackage ../../../lib/make-squashfs.nix {
@@ -85,17 +93,17 @@ with lib;
       comp = config.netboot.squashfsCompression;
     };
 
-
     # Create the initrd
     system.build.netbootRamdisk = pkgs.makeInitrdNG {
       inherit (config.boot.initrd) compressor;
       prepend = [ "${config.system.build.initialRamdisk}/initrd" ];
 
-      contents =
-        [ { object = config.system.build.squashfsStore;
-            symlink = "/nix-store.squashfs";
-          }
-        ];
+      contents = [
+        {
+          source = config.system.build.squashfsStore;
+          target = "/nix-store.squashfs";
+        }
+      ];
     };
 
     system.build.netbootIpxeScript = pkgs.writeTextDir "netboot.ipxe" ''
@@ -138,20 +146,49 @@ with lib;
       }
     ];
 
+    image.extension = "tar.xz";
+    image.filePath = "tarball/${config.image.fileName}";
+    system.nixos.tags = [ "kexec" ];
+    system.build.image = config.system.build.kexecTarball;
+    system.build.kexecTarball =
+      pkgs.callPackage "${toString modulesPath}/../lib/make-system-tarball.nix"
+        {
+          fileName = config.image.baseName;
+          storeContents = [
+            {
+              object = config.system.build.kexecScript;
+              symlink = "/kexec_nixos";
+            }
+          ];
+          contents = [ ];
+        };
+
     boot.loader.timeout = 10;
 
-    boot.postBootCommands =
-      ''
-        # After booting, register the contents of the Nix store
-        # in the Nix database in the tmpfs.
-        ${config.nix.package}/bin/nix-store --load-db < /nix/store/nix-path-registration
+    boot.postBootCommands = ''
+      # After booting, register the contents of the Nix store
+      # in the Nix database in the tmpfs.
+      ${config.nix.package}/bin/nix-store --load-db < /nix/store/nix-path-registration
 
-        # nixos-rebuild also requires a "system" profile and an
-        # /etc/NIXOS tag.
-        touch /etc/NIXOS
-        ${config.nix.package}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
-      '';
+      # nixos-rebuild also requires a "system" profile and an
+      # /etc/NIXOS tag.
+      touch /etc/NIXOS
+      ${config.nix.package}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
 
+      # Set password for user nixos if specified on cmdline
+      # Allows using nixos-anywhere in headless environments
+      for o in $(</proc/cmdline); do
+        case "$o" in
+          live.nixos.passwordHash=*)
+            set -- $(IFS==; echo $o)
+            ${pkgs.gnugrep}/bin/grep -q "root::" /etc/shadow && ${pkgs.shadow}/bin/usermod -p "$2" root
+            ;;
+          live.nixos.password=*)
+            set -- $(IFS==; echo $o)
+            ${pkgs.gnugrep}/bin/grep -q "root::" /etc/shadow && echo "root:$2" | ${pkgs.shadow}/bin/chpasswd
+            ;;
+        esac
+      done
+    '';
   };
-
 }

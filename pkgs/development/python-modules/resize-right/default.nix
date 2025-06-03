@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# dependencies
-, numpy
-, torch
+  # dependencies
+  numpy,
+  torch,
 }:
 
 buildPythonPackage rec {
@@ -22,17 +23,15 @@ buildPythonPackage rec {
     torch
   ];
 
-  pythonImportsCheck = [
-    "resize_right"
-  ];
+  pythonImportsCheck = [ "resize_right" ];
 
   # no tests
   doCheck = false;
 
   meta = with lib; {
-    description = "The correct way to resize images or tensors. For Numpy or Pytorch (differentiable";
+    description = "Correct way to resize images or tensors. For Numpy or Pytorch (differentiable";
     homepage = "https://github.com/assafshocher/ResizeRight";
     license = licenses.mit;
-    maintainers = teams.tts.members;
+    teams = [ teams.tts ];
   };
 }

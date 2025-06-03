@@ -1,16 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, cmake, qtbase }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+}:
 
 let
   isQt6 = lib.versions.major qtbase.version == "6";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "kcolorpicker";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "ksnip";
     repo = "kColorPicker";
     rev = "v${version}";
-    hash = "sha256-gkjlIiLB3/074EEFrQUa0djvVt/C44O3afqqNis64P0=";
+    hash = "sha256-FG/A4pDNuhGPOeJNZlsnX3paEy4ibJVWKxn8rVUGpN8=";
   };
 
   nativeBuildInputs = [ cmake ];

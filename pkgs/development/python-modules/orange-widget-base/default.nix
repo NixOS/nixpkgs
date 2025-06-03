@@ -1,39 +1,44 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pyqt5
-, pyqtwebengine
-, matplotlib
-, orange-canvas-core
-, pyqtgraph
-, typing-extensions
-, qt5
-, pytestCheckHook
-, pytest-qt
-, appnope
+{
+  lib,
+  gitUpdater,
+  stdenv,
+  buildPythonPackage,
+  setuptools,
+  fetchFromGitHub,
+  pyqt5,
+  pyqtwebengine,
+  matplotlib,
+  orange-canvas-core,
+  pyqtgraph,
+  typing-extensions,
+  qt5,
+  pytestCheckHook,
+  pytest-qt,
+  appnope,
 }:
 
 buildPythonPackage rec {
   pname = "orange-widget-base";
-  version = "4.22.0";
-  format = "setuptools";
+  version = "4.25.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-nV2aBPZzn7K+QECtCVoLLh5smG31zE2G9jFTKlxh9qM=";
+  src = fetchFromGitHub {
+    owner = "biolab";
+    repo = "orange-widget-base";
+    tag = version;
+    hash = "sha256-ENP3Xyubsx7Q2w4cTQCsZuvC0cbm3KwaoDGbF0fk3dg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     matplotlib
     orange-canvas-core
     pyqt5
     pyqtgraph
     pyqtwebengine
     typing-extensions
-  ] ++ lib.optionals stdenv.isDarwin [
-    appnope
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ appnope ];
 
   pythonImportsCheck = [ "orangewidget" ];
 
@@ -53,6 +58,8 @@ buildPythonPackage rec {
     "orangewidget/report/tests/test_report.py"
     "orangewidget/tests/test_widget.py"
   ];
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Implementation of the base OWBaseWidget class and utilities for use in Orange Canvas workflows";

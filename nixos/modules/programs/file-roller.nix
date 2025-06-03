@@ -1,19 +1,17 @@
 # File Roller.
 
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
-with lib;
+let
+  cfg = config.programs.file-roller;
 
-let cfg = config.programs.file-roller;
-
-in {
-
-  # Added 2019-08-09
-  imports = [
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "file-roller" "enable" ]
-      [ "programs" "file-roller" "enable" ])
-  ];
+in
+{
 
   ###### interface
 
@@ -21,18 +19,17 @@ in {
 
     programs.file-roller = {
 
-      enable = mkEnableOption (lib.mdDoc "File Roller, an archive manager for GNOME");
+      enable = lib.mkEnableOption "File Roller, an archive manager for GNOME";
 
-      package = mkPackageOption pkgs [ "gnome" "file-roller" ] { };
+      package = lib.mkPackageOption pkgs "file-roller" { };
 
     };
 
   };
 
-
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ cfg.package ];
 

@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.services.spice-autorandr;
@@ -6,7 +11,7 @@ in
 {
   options = {
     services.spice-autorandr = {
-      enable = lib.mkEnableOption (lib.mdDoc "spice-autorandr service that will automatically resize display to match SPICE client window size.");
+      enable = lib.mkEnableOption "spice-autorandr service that will automatically resize display to match SPICE client window size";
       package = lib.mkPackageOption pkgs "spice-autorandr" { };
     };
   };

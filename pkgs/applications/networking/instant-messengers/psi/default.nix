@@ -1,6 +1,17 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake
-, qtbase, qtmultimedia, qtx11extras, qttools, qtwebengine
-, libidn, qca-qt5, libXScrnSaver, hunspell
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  qtmultimedia,
+  qtx11extras,
+  qttools,
+  qtwebengine,
+  libidn,
+  qca-qt5,
+  libXScrnSaver,
+  hunspell,
 }:
 
 mkDerivation rec {
@@ -16,15 +27,25 @@ mkDerivation rec {
   patches = [
     ./fix-cmake-hunspell-1.7.patch
   ];
-  nativeBuildInputs = [ cmake qttools ];
+  nativeBuildInputs = [
+    cmake
+    qttools
+  ];
   buildInputs = [
-    qtbase qtmultimedia qtx11extras qtwebengine
-    libidn qca-qt5 libXScrnSaver hunspell
+    qtbase
+    qtmultimedia
+    qtx11extras
+    qtwebengine
+    libidn
+    qca-qt5
+    libXScrnSaver
+    hunspell
   ];
 
   meta = with lib; {
     homepage = "https://psi-im.org";
-    description = "An XMPP (Jabber) client";
+    description = "XMPP (Jabber) client";
+    mainProgram = "psi";
     maintainers = [ maintainers.raskin ];
     license = licenses.gpl2;
     platforms = platforms.linux;

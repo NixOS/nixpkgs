@@ -1,30 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildGoModule
-, makeWrapper
-, cacert
-, moreutils
-, jq
-, git
-, rsync
-, pkg-config
-, yarn
-, python3
-, esbuild
-, nodejs
-, node-gyp
-, libsecret
-, xorg
-, ripgrep
-, AppKit
-, Cocoa
-, CoreServices
-, Security
-, cctools
-, xcbuild
-, quilt
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildGoModule,
+  makeWrapper,
+  cacert,
+  moreutils,
+  jq,
+  git,
+  rsync,
+  pkg-config,
+  yarn,
+  python3,
+  esbuild,
+  nodejs,
+  node-gyp,
+  libsecret,
+  xorg,
+  ripgrep,
+  cctools,
+  xcbuild,
+  quilt,
+  nixosTests,
 }:
 
 let
@@ -35,16 +32,21 @@ let
   defaultYarnOpts = [ ];
 
   esbuild' = esbuild.override {
-    buildGoModule = args: buildGoModule (args // rec {
-      version = "0.16.17";
-      src = fetchFromGitHub {
-        owner = "evanw";
-        repo = "esbuild";
-        rev = "v${version}";
-        hash = "sha256-8L8h0FaexNsb3Mj6/ohA37nYLFogo5wXkAhGztGUUsQ=";
-      };
-      vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-    });
+    buildGoModule =
+      args:
+      buildGoModule (
+        args
+        // rec {
+          version = "0.16.17";
+          src = fetchFromGitHub {
+            owner = "evanw";
+            repo = "esbuild";
+            rev = "v${version}";
+            hash = "sha256-8L8h0FaexNsb3Mj6/ohA37nYLFogo5wXkAhGztGUUsQ=";
+          };
+          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+        }
+      );
   };
 
   # replaces esbuild's download script with a binary from nixpkgs
@@ -71,25 +73,29 @@ let
   # To compute the commit when upgrading this derivation, do:
   # `$ git rev-parse <git-rev>` where <git-rev> is the git revision of the `src`
   # Example: `$ git rev-parse v4.16.1`
-  commit = "0c98611e6b43803a9d5dba222d7023b569abfb49";
+  commit = "1962f48b7f71772dc2c060dbaa5a6b4c0792a549";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "code-server";
-  version = "4.19.1";
+  version = "4.91.1";
 
   src = fetchFromGitHub {
     owner = "coder";
     repo = "code-server";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-J+6zuqVf1YKQjiRiqO4867DEwYzZsgQYgbsRXPo2hwY=";
+    hash = "sha256-w0+lg/DcxKLrAz6DQGQ9+yPn42LrQ95Yn16IKNfqPvE=";
   };
 
   yarnCache = stdenv.mkDerivation {
     name = "${finalAttrs.pname}-${finalAttrs.version}-${system}-yarn-cache";
     inherit (finalAttrs) src;
 
-    nativeBuildInputs = [ yarn' git cacert ];
+    nativeBuildInputs = [
+      yarn'
+      git
+      cacert
+    ];
 
     buildPhase = ''
       runHook preBuild
@@ -114,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-g2rwB+PuWuYgrzIuW0ngia7cdPMC8s7ffBEkbmPPzB4=";
+    outputHash = "sha256-LCmygPid6VJqR1PCOMk/Hc6bo4nwsLwYr7O1p3FQVvQ=";
   };
 
   nativeBuildInputs = [
@@ -130,16 +136,18 @@ stdenv.mkDerivation (finalAttrs: {
     quilt
   ];
 
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
-    ++ (with xorg; [ libX11 libxkbfile ])
-    ++ lib.optionals stdenv.isDarwin [
-    AppKit
-    Cocoa
-    CoreServices
-    Security
-    cctools
-    xcbuild
-  ];
+  buildInputs =
+    [
+      xorg.libX11
+      xorg.libxkbfile
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      libsecret
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      cctools
+      xcbuild
+    ];
 
   patches = [
     # Remove all git calls from the VS Code build script except `git rev-parse
@@ -154,9 +162,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # inject git commit
     substituteInPlace ./ci/build/build-vscode.sh \
-      --replace '$(git rev-parse HEAD)' "${commit}"
+      --replace-fail '$(git rev-parse HEAD)' "${commit}"
     substituteInPlace ./ci/build/build-release.sh \
-      --replace '$(git rev-parse HEAD)' "${commit}"
+      --replace-fail '$(git rev-parse HEAD)' "${commit}"
   '';
 
   configurePhase = ''
@@ -190,97 +198,98 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postConfigure
   '';
 
-  buildPhase = ''
-    runHook preBuild
+  buildPhase =
+    ''
+      runHook preBuild
 
-    # install code-server dependencies
-    yarn --offline --ignore-scripts
+      # Apply patches.
+      quilt push -a
 
-    # apply patches
-    quilt push -a
+      export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+      export SKIP_SUBMODULE_DEPS=1
+      export NODE_OPTIONS="--openssl-legacy-provider --max-old-space-size=4096"
 
-    # patch shebangs of everything to allow binary packages to build
-    patchShebangs .
+      # Remove all built-in extensions, as these are 3rd party extensions that
+      # get downloaded from the VS Code marketplace.
+      jq --slurp '.[0] * .[1]' "./lib/vscode/product.json" <(
+        cat << EOF
+      {
+        "builtInExtensions": []
+      }
+      EOF
+      ) | sponge ./lib/vscode/product.json
 
-    export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
-    export SKIP_SUBMODULE_DEPS=1
-    export NODE_OPTIONS=--openssl-legacy-provider
+      # Disable automatic updates.
+      sed -i '/update.mode/,/\}/{s/default:.*/default: "none",/g}' \
+        lib/vscode/src/vs/platform/update/common/update.config.contribution.ts
 
-    # rebuild binary packages now that scripts have been patched
-    echo "----- NPM rebuild"
-    npm rebuild --prefer-offline
+      # Patch out remote download of nodejs from build script.
+      patch -p1 -i ${./remove-node-download.patch}
 
-    # Replicate ci/dev/postinstall.sh
-    echo "----- Replicate ci/dev/postinstall.sh"
-    yarn --cwd "./vendor" install --modules-folder modules --offline --ignore-scripts --frozen-lockfile
+      # Install dependencies.
+      patchShebangs .
+      find . -name "yarn.lock" -printf "%h\n" | \
+          xargs -I {} yarn --cwd {} \
+            --offline --frozen-lockfile --ignore-scripts --ignore-engines
+      patchShebangs .
 
-    # remove all built-in extensions, as these are 3rd party extensions that
-    # get downloaded from vscode marketplace
-    jq --slurp '.[0] * .[1]' "./lib/vscode/product.json" <(
-      cat << EOF
-    {
-      "builtInExtensions": []
-    }
-    EOF
-    ) | sponge ./lib/vscode/product.json
+      # Use esbuild from nixpkgs.
+      ${patchEsbuild "./lib/vscode/build" "0.12.6"}
+      ${patchEsbuild "./lib/vscode/extensions" "0.11.23"}
 
-    # disable automatic updates
-    sed -i '/update.mode/,/\}/{s/default:.*/default: "none",/g}' \
-      lib/vscode/src/vs/platform/update/common/update.config.contribution.ts
+      # Kerberos errors while building, so remove it for now as it is not
+      # required.
+      yarn remove kerberos --cwd lib/vscode/remote --offline --frozen-lockfile --ignore-scripts --ignore-engines
 
-    # Patch out remote download of nodejs from build script
-    patch -p1 -i ${./remove-node-download.patch}
+      # Put ripgrep binary into bin, so post-install does not try to download it.
+      find -name ripgrep -type d \
+        -execdir mkdir -p {}/bin \; \
+        -execdir ln -s ${ripgrep}/bin/rg {}/bin/rg \;
 
-    # Fetch packages for vscode
-    find ./lib/vscode -name "yarn.lock" -printf "%h\n" | \
-        xargs -I {} yarn --cwd {} \
-          --frozen-lockfile --ignore-scripts --ignore-engines
+      # Run post-install scripts after patching.
+      find ./lib/vscode \( -path "*/node_modules/*" -or -path "*/extensions/*" \) \
+        -and -type f -name "yarn.lock" -printf "%h\n" | \
+          xargs -I {} sh -c 'jq -e ".scripts.postinstall" {}/package.json >/dev/null && yarn --cwd {} postinstall --frozen-lockfile --offline || true'
+      patchShebangs .
 
-    # patch shebangs of everything to allow binary packages to build
-    patchShebangs .
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # Use prebuilt binary for @parcel/watcher, which requires macOS SDK 10.13+
+      # (see issue #101229).
+      pushd ./lib/vscode/remote/node_modules/@parcel/watcher
+      mkdir -p ./build/Release
+      mv ./prebuilds/darwin-x64/node.napi.glibc.node ./build/Release/watcher.node
+      jq "del(.scripts) | .gypfile = false" ./package.json | sponge ./package.json
+      popd
+    ''
+    + ''
 
-    ${patchEsbuild "./lib/vscode/build" "0.12.6"}
-    ${patchEsbuild "./lib/vscode/extensions" "0.11.23"}
-  '' + lib.optionalString stdenv.isDarwin ''
-    # use prebuilt binary for @parcel/watcher, which requires macOS SDK 10.13+
-    # (see issue #101229)
-    pushd ./lib/vscode/remote/node_modules/@parcel/watcher
-    mkdir -p ./build/Release
-    mv ./prebuilds/darwin-x64/node.napi.glibc.node ./build/Release/watcher.node
-    jq "del(.scripts) | .gypfile = false" ./package.json | sponge ./package.json
-    popd
-  '' + ''
+      # Build binary packages (argon2, node-pty, etc).
+      npm rebuild --offline
+      npm rebuild --offline --prefix lib/vscode/remote
 
-    # put ripgrep binary into bin, so postinstall does not try to download it
-    find -name ripgrep -type d \
-      -execdir mkdir -p {}/bin \; \
-      -execdir ln -s ${ripgrep}/bin/rg {}/bin/rg \;
+      # Build code-server and VS Code.
+      yarn build
+      VERSION=${finalAttrs.version} yarn build:vscode
 
-    # run postinstall scripts after patching
-    find ./lib/vscode \( -path "*/node_modules/*" -or -path "*/extensions/*" \) \
-      -and -type f -name "yarn.lock" -printf "%h\n" | \
-        xargs -I {} sh -c 'jq -e ".scripts.postinstall" {}/package.json >/dev/null && yarn --cwd {} postinstall --frozen-lockfile --offline || true'
+      # Inject version into package.json.
+      jq --slurp '.[0] * .[1]' ./package.json <(
+        cat << EOF
+      {
+        "version": "${finalAttrs.version}"
+      }
+      EOF
+      ) | sponge ./package.json
 
-    # build code-server
-    yarn build
+      # Create release, keeping all dependencies.
+      KEEP_MODULES=1 yarn release
 
-    # build vscode
-    VERSION=${finalAttrs.version} yarn build:vscode
+      # Prune development dependencies.  We only need to do this for the root as
+      # the VS Code build process already does this for VS Code.
+      npm prune --omit=dev --prefix release
 
-    # inject version into package.json
-    jq --slurp '.[0] * .[1]' ./package.json <(
-      cat << EOF
-    {
-      "version": "${finalAttrs.version}"
-    }
-    EOF
-    ) | sponge ./package.json
-
-    # create release
-    yarn release
-
-    runHook postBuild
-  '';
+      runHook postBuild
+    '';
 
   installPhase = ''
     runHook preInstall
@@ -289,9 +298,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # copy release to libexec path
     cp -R -T release "$out/libexec/code-server"
-
-    # install only production dependencies
-    yarn --offline --cwd "$out/libexec/code-server" --production
 
     # create wrapper
     makeWrapper "${nodejs}/bin/node" "$out/bin/code-server" \
@@ -313,6 +319,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://github.com/coder/code-server/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Run VS Code on a remote server";
     longDescription = ''
       code-server is VS Code running on a remote server, accessible through the
@@ -320,8 +327,16 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/coder/code-server";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ offline henkery code-asher ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    maintainers = with lib.maintainers; [
+      offline
+      henkery
+      code-asher
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+    ];
     mainProgram = "code-server";
   };
 })

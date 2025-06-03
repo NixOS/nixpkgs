@@ -1,21 +1,17 @@
 # GNOME Disks.
 
-{ config, pkgs, lib, ... }:
-
-with lib;
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
 
   meta = {
-    maintainers = teams.gnome.members;
+    maintainers = lib.teams.gnome.members;
   };
-
-  # Added 2019-08-09
-  imports = [
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "gnome-disks" "enable" ]
-      [ "programs" "gnome-disks" "enable" ])
-  ];
 
   ###### interface
 
@@ -23,10 +19,10 @@ with lib;
 
     programs.gnome-disks = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable GNOME Disks daemon, a program designed to
           be a UDisks2 graphical front-end.
         '';
@@ -36,14 +32,13 @@ with lib;
 
   };
 
-
   ###### implementation
 
-  config = mkIf config.programs.gnome-disks.enable {
+  config = lib.mkIf config.programs.gnome-disks.enable {
 
-    environment.systemPackages = [ pkgs.gnome.gnome-disk-utility ];
+    environment.systemPackages = [ pkgs.gnome-disk-utility ];
 
-    services.dbus.packages = [ pkgs.gnome.gnome-disk-utility ];
+    services.dbus.packages = [ pkgs.gnome-disk-utility ];
 
   };
 

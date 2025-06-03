@@ -1,24 +1,27 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.gobgpd;
   format = pkgs.formats.toml { };
   confFile = format.generate "gobgpd.conf" cfg.settings;
-in {
+in
+{
   options.services.gobgpd = {
-    enable = mkEnableOption (lib.mdDoc "GoBGP Routing Daemon");
+    enable = lib.mkEnableOption "GoBGP Routing Daemon";
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = format.type;
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         GoBGP configuration. Refer to
         <https://github.com/osrg/gobgp#documentation>
         for details on supported values.
       '';
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           global = {
             config = {
@@ -45,7 +48,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.gobgpd ];
     systemd.services.gobgpd = {
       wantedBy = [ "multi-user.target" ];

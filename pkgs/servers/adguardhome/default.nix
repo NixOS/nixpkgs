@@ -1,32 +1,57 @@
-{ lib, stdenv, fetchurl, fetchzip, nixosTests }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  buildNpmPackage,
+  nixosTests,
+}:
 
-let
-  inherit (stdenv.hostPlatform) system;
-  sources = import ./bins.nix { inherit fetchurl fetchzip; };
-in
-
-stdenv.mkDerivation rec {
+buildGoModule rec {
   pname = "adguardhome";
-  version = "0.107.36";
-  src = sources.${system} or (throw "Source for ${pname} is not available for ${system}");
+  version = "0.107.62";
+  src = fetchFromGitHub {
+    owner = "AdguardTeam";
+    repo = "AdGuardHome";
+    tag = "v${version}";
+    hash = "sha256-CqXf19DyDFgSnd/dziUq9Gl1d1V20OWE5MTQMi260Zc=";
+  };
 
-  installPhase = ''
-    install -m755 -D ./AdGuardHome $out/bin/adguardhome
+  vendorHash = "sha256-lY24TtW4vpMRUzOZmeX3Ip9ikUc4z1HG49DpeECExdk=";
+
+  dashboard = buildNpmPackage {
+    inherit src;
+    name = "dashboard";
+    postPatch = ''
+      cd client
+    '';
+    npmDepsHash = "sha256-s7TJvGyk05HkAOgjYmozvIQ3l2zYUhWrGRJrWdp9ZJQ=";
+    npmBuildScript = "build-prod";
+    postBuild = ''
+      mkdir -p $out/build/
+      cp -r ../build/static/ $out/build/
+    '';
+  };
+
+  preBuild = ''
+    cp -r ${dashboard}/build/static build
   '';
 
   passthru = {
     updateScript = ./update.sh;
-    schema_version = 24;
+    schema_version = 29;
     tests.adguardhome = nixosTests.adguardhome;
   };
 
   meta = with lib; {
     homepage = "https://github.com/AdguardTeam/AdGuardHome";
     description = "Network-wide ads & trackers blocking DNS server";
-    platforms = builtins.attrNames sources;
-    maintainers = with maintainers; [ numkem iagoq rhoriguchi ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with maintainers; [
+      numkem
+      iagoq
+      rhoriguchi
+      baksa
+    ];
     license = licenses.gpl3Only;
-    mainProgram = "adguardhome";
+    mainProgram = "AdGuardHome";
   };
 }

@@ -1,60 +1,74 @@
-{ lib
-, stdenv
-, fetchurl
-, gmp
-, mpfr
-, ntl
-, autoconf
-, automake
-, gettext
-, libtool
-, openblas ? null, blas, lapack
-, withBlas ? true
-, withNtl ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gmp,
+  mpfr,
+  ntl,
+  autoconf,
+  automake,
+  gettext,
+  libtool,
+  openblas ? null,
+  blas,
+  lapack,
+  withBlas ? true,
+  withNtl ? true,
 }:
 
-assert withBlas -> openblas != null && blas.implementation == "openblas" && lapack.implementation == "openblas";
+assert
+  withBlas
+  -> openblas != null && blas.implementation == "openblas" && lapack.implementation == "openblas";
 
 stdenv.mkDerivation rec {
   pname = "flint3";
-  version = "3.0.1";
+  version = "3.2.1";
 
   src = fetchurl {
-    url = "https://www.flintlib.org/flint-${version}.tar.gz";
-    sha256 = "sha256-ezEaAFA6hjiB64F32+uEMi8pOZ89fXLzsaTJuh1XlLQ=";
+    url = "https://flintlib.org/download/flint-${version}.tar.gz";
+    hash = "sha256-ynvkbXeXInfrb+DE92dUhDL1a7U0qhfW26LXzOFc0j8=";
   };
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
     autoconf
     automake
     gettext
     libtool
   ];
 
-  buildInputs = [
-    gmp
+  propagatedBuildInputs = [
     mpfr
-  ] ++ lib.optionals withBlas [
-    openblas
-  ] ++ lib.optionals withNtl [
-    ntl
   ];
+
+  buildInputs =
+    [
+      gmp
+    ]
+    ++ lib.optionals withBlas [
+      openblas
+    ]
+    ++ lib.optionals withNtl [
+      ntl
+    ];
 
   # We're not using autoreconfHook because flint's bootstrap
   # script calls autoreconf, among other things.
-  preConfigurePhase = ''
+  preConfigure = ''
     echo "Executing bootstrap.sh"
     ./bootstrap.sh
   '';
 
-  configureFlags = [
-    "--with-gmp=${gmp}"
-    "--with-mpfr=${mpfr}"
-  ] ++ lib.optionals withBlas [
-    "--with-blas=${openblas}"
-  ] ++ lib.optionals withNtl [
-    "--with-ntl=${ntl}"
-  ];
+  configureFlags =
+    [
+      "--with-gmp=${gmp}"
+      "--with-mpfr=${mpfr}"
+    ]
+    ++ lib.optionals withBlas [
+      "--with-blas=${openblas}"
+    ]
+    ++ lib.optionals withNtl [
+      "--with-ntl=${ntl}"
+    ];
 
   enableParallelBuilding = true;
 
@@ -62,8 +76,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fast Library for Number Theory";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ smasher164 ] ++ teams.sage.members;
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ smasher164 ];
+    teams = [ teams.sage ];
     platforms = platforms.unix;
     homepage = "https://www.flintlib.org/";
     downloadPage = "https://www.flintlib.org/downloads.html";

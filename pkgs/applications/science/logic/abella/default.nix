@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, rsync, ocamlPackages }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  rsync,
+  ocamlPackages,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "abella";
@@ -11,8 +17,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ rsync ] ++ (with ocamlPackages; [ ocaml dune_3 menhir findlib ]);
-  buildInputs = with ocamlPackages; [ cmdliner yojson ];
+  nativeBuildInputs =
+    [ rsync ]
+    ++ (with ocamlPackages; [
+      ocaml
+      dune_3
+      menhir
+      findlib
+    ]);
+  buildInputs = with ocamlPackages; [
+    cmdliner
+    yojson
+  ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -27,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Interactive theorem prover";
+    mainProgram = "abella";
     longDescription = ''
       Abella is an interactive theorem prover based on lambda-tree syntax.
       This means that Abella is well-suited for reasoning about the meta-theory
@@ -35,7 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://abella-prover.org";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ bcdarwin ciil ];
+    maintainers = with lib.maintainers; [
+      bcdarwin
+      ciil
+    ];
     platforms = lib.platforms.unix;
   };
 })

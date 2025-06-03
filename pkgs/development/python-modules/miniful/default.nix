@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, scipy
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  scipy,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "miniful"
-  ];
+  pythonImportsCheck = [ "miniful" ];
 
   meta = with lib; {
     description = "Minimal Fuzzy Library";

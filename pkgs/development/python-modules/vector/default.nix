@@ -1,59 +1,81 @@
-{ lib
-, awkward
-, buildPythonPackage
-, fetchPypi
-, hatch-vcs
-, hatchling
-, numba
-, numpy
-, notebook
-, packaging
-, papermill
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatch-vcs,
+  hatchling,
+
+  # dependencies
+  numpy,
+  packaging,
+
+  # tests
+  awkward,
+  dask-awkward,
+  notebook,
+  numba,
+  papermill,
+  pytestCheckHook,
+  sympy,
 }:
 
 buildPythonPackage rec {
   pname = "vector";
-  version = "1.2.0";
-  format = "pyproject";
+  version = "1.6.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-I7esW9qyc7T5MGFn/YZmajd3pSgE0CgqVW2YkTDLV6Q=";
+  src = fetchFromGitHub {
+    owner = "scikit-hep";
+    repo = "vector";
+    tag = "v${version}";
+    hash = "sha256-IMr3+YveR/FDQ2MbgbWr1KJFrdH9B+KOFVNGJjz6Zdk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     packaging
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     awkward
+    dask-awkward
     notebook
     numba
     papermill
     pytestCheckHook
+    sympy
   ];
 
-  pythonImportsCheck = [
-    "vector"
-  ];
+  pythonImportsCheck = [ "vector" ];
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  disabledTests =
+    lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # Fatal Python error: Segmentation fault
+      # numba/typed/typeddict.py", line 185 in __setitem__
+      "test_method_transform2D"
+      "test_method_transform3D"
+      "test_method_transform4D"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+      # AssertionError: assert 2.1073424255447017e-08 == 0.0
+      "test_issue_463"
+    ];
+
+  meta = {
     description = "Library for 2D, 3D, and Lorentz vectors, especially arrays of vectors, to solve common physics problems in a NumPy-like way";
     homepage = "https://github.com/scikit-hep/vector";
-    changelog = "https://github.com/scikit-hep/vector/releases/tag/v${version}";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ veprbl ];
+    changelog = "https://github.com/scikit-hep/vector/releases/tag/${src.tag}";
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

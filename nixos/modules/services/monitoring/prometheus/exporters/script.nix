@@ -1,35 +1,47 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.script;
+  inherit (lib)
+    mkOption
+    types
+    literalExpression
+    concatStringsSep
+    ;
   configFile = pkgs.writeText "script-exporter.yaml" (builtins.toJSON cfg.settings);
 in
 {
   port = 9172;
   extraOpts = {
     settings.scripts = mkOption {
-      type = with types; listOf (submodule {
-        options = {
-          name = mkOption {
-            type = str;
-            example = "sleep";
-            description = lib.mdDoc "Name of the script.";
+      type =
+        with types;
+        listOf (submodule {
+          options = {
+            name = mkOption {
+              type = str;
+              example = "sleep";
+              description = "Name of the script.";
+            };
+            script = mkOption {
+              type = str;
+              example = "sleep 5";
+              description = "Shell script to execute when metrics are requested.";
+            };
+            timeout = mkOption {
+              type = nullOr int;
+              default = null;
+              example = 60;
+              description = "Optional timeout for the script in seconds.";
+            };
           };
-          script = mkOption {
-            type = str;
-            example = "sleep 5";
-            description = lib.mdDoc "Shell script to execute when metrics are requested.";
-          };
-          timeout = mkOption {
-            type = nullOr int;
-            default = null;
-            example = 60;
-            description = lib.mdDoc "Optional timeout for the script in seconds.";
-          };
-        };
-      });
+        });
       example = literalExpression ''
         {
           scripts = [
@@ -37,7 +49,7 @@ in
           ];
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         All settings expressed as an Nix attrset.
 
         Check the official documentation for the corresponding YAML

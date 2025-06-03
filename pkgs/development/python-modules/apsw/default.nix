@@ -1,42 +1,51 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, sqlite
-, isPyPy
-, python
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools,
+  sqlite,
 }:
 
 buildPythonPackage rec {
   pname = "apsw";
-  version = "3.44.2.0";
-  format = "setuptools";
+  version = "3.46.1.0";
+  pyproject = true;
 
-  disabled = isPyPy;
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "rogerbinns";
     repo = "apsw";
-    rev = "refs/tags/${version}";
-    hash = "sha256-H7aqZHU4SXNrfbv6iwHckkNm5MeGkro42+njSoFJgS4=";
+    tag = version;
+    hash = "sha256-/MMCwdd2juFbv/lrYwuO2mdWm0+v+YFn6h9CwdQMTpg=";
   };
 
-  buildInputs = [
-    sqlite
-  ];
+  build-system = [ setuptools ];
 
-  # Project uses custom test setup to exclude some tests by default, so using pytest
-  # requires more maintenance
-  # https://github.com/rogerbinns/apsw/issues/335
-  checkPhase = ''
-    ${python.interpreter} setup.py test
-  '';
+  buildInputs = [ sqlite ];
 
-  pythonImportsCheck = [
-    "apsw"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlagsArray = [ "apsw/tests.py" ];
+
+  disabledTests = [
+    # we don't build the test extension
+    "testLoadExtension"
+    "testShell"
+    "testVFS"
+    "testVFSWithWAL"
+    # no lines in errout.txt
+    "testWriteUnraisable"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "testzzForkChecker" ];
+
+  pythonImportsCheck = [ "apsw" ];
 
   meta = with lib; {
-    description = "A Python wrapper for the SQLite embedded relational database engine";
+    changelog = "https://github.com/rogerbinns/apsw/blob/${src.rev}/doc/changes.rst";
+    description = "Python wrapper for the SQLite embedded relational database engine";
     homepage = "https://github.com/rogerbinns/apsw";
     license = licenses.zlib;
     maintainers = with maintainers; [ gador ];

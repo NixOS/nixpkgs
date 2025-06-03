@@ -1,37 +1,33 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, lib
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "viewstate";
-  version = "0.4.3";
-  format = "setuptools";
-  disabled = !isPy3k;
+  version = "0.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yuvadm";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "15s0n1lhkz0zwi33waqkkjipal3f7s45rxsj1bw89xpr4dj87qx5";
+    repo = "viewstate";
+    tag = "v${version}";
+    sha256 = "sha256-cXT5niE3rNdqmNqnITWy9c9/MF0gZ6LU2i1uzfOzkUI=";
   };
 
-  nativeCheckInputs = [
-    pytest
-  ];
+  build-system = [ poetry-core ];
 
-  checkPhase = ''
-    pytest
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = {
     description = ".NET viewstate decoder";
     homepage = "https://github.com/yuvadm/viewstate";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      kamadorueda
-    ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

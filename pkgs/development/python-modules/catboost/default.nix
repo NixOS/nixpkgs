@@ -1,30 +1,37 @@
-{ lib
-, buildPythonPackage
-, catboost
-, python
-, graphviz
-, matplotlib
-, numpy
-, pandas
-, plotly
-, scipy
-, setuptools
-, six
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  catboost,
+  python,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  graphviz,
+  matplotlib,
+  numpy,
+  pandas,
+  plotly,
+  scipy,
+  six,
 }:
 
-buildPythonPackage {
-  inherit (catboost) pname version src meta;
-  format = "pyproject";
+buildPythonPackage rec {
+  inherit (catboost)
+    pname
+    version
+    src
+    ;
+  pyproject = true;
 
-  sourceRoot = "source/catboost/python-package";
+  sourceRoot = "${src.name}/catboost/python-package";
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     graphviz
     matplotlib
     numpy
@@ -47,4 +54,9 @@ buildPythonPackage {
   doCheck = false;
 
   pythonImportsCheck = [ "catboost" ];
+
+  meta = catboost.meta // {
+    # https://github.com/catboost/catboost/issues/2671
+    broken = lib.versionAtLeast numpy.version "2";
+  };
 }

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, weechat }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  weechat,
+}:
 
 stdenv.mkDerivation {
   pname = "buffer_autoset";
@@ -19,7 +24,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     inherit (weechat.meta) platforms;
-    description = "buffer_autoset.py is a weechat script which auto-set buffer properties when a buffer is opened.";
+    description = "buffer_autoset.py is a weechat script which auto-set buffer properties when a buffer is opened";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ govanify ];
   };

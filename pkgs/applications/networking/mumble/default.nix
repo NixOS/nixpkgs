@@ -1,134 +1,240 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, qt5, cmake
-, avahi, boost, libopus, libsndfile, protobuf, speex, libcap
-, alsa-lib, python3
-, rnnoise
-, nixosTests
-, poco
-, flac
-, libogg
-, libvorbis
-, iceSupport ? true, zeroc-ice
-, jackSupport ? false, libjack2
-, pipewireSupport ? true, pipewire
-, pulseSupport ? true, libpulseaudio
-, speechdSupport ? false, speechd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  qt5,
+  cmake,
+  avahi,
+  boost,
+  libopus,
+  libsndfile,
+  speexdsp,
+  protobuf,
+  libcap,
+  alsa-lib,
+  python3,
+  rnnoise,
+  nixosTests,
+  poco,
+  flac,
+  libogg,
+  libvorbis,
+  stdenv_32bit,
+  alsaSupport ? stdenv.hostPlatform.isLinux,
+  iceSupport ? true,
+  zeroc-ice,
+  jackSupport ? false,
+  libjack2,
+  pipewireSupport ? stdenv.hostPlatform.isLinux,
+  pipewire,
+  pulseSupport ? true,
+  libpulseaudio,
+  speechdSupport ? false,
+  speechd-minimal,
+  microsoft-gsl,
+  nlohmann_json,
+  xar,
+  makeWrapper,
 }:
 
 let
-  generic = overrides: source: stdenv.mkDerivation (source // overrides // {
-    pname = overrides.type;
-    version = source.version;
+  generic =
+    overrides: source:
+    (overrides.stdenv or stdenv).mkDerivation (
+      source
+      // overrides
+      // {
+        pname = overrides.type;
+        version = source.version;
 
-    patches = [
-      ./0001-BUILD-crypto-Migrate-to-OpenSSL-3.0-compatible-API.patch
-      # fix crash caused by openssl3 thread unsafe evp implementation
-      # see https://github.com/mumble-voip/mumble/issues/5361#issuecomment-1173001440
-      (fetchpatch {
-        url = "https://github.com/mumble-voip/mumble/commit/f8d47db318f302f5a7d343f15c9936c7030c49c4.patch";
-        hash = "sha256-xk8vBrPwvQxHCY8I6WQJAyaBGHmlH9NCixweP6FyakU=";
-      })
-      ./0002-FIX-positional-audio-Force-8-bytes-alignment-for-CCa.patch
-    ];
+        nativeBuildInputs = [
+          cmake
+          pkg-config
+          python3
+          qt5.wrapQtAppsHook
+          qt5.qttools
+        ] ++ (overrides.nativeBuildInputs or [ ]);
 
-    nativeBuildInputs = [ cmake pkg-config python3 qt5.wrapQtAppsHook qt5.qttools ]
-      ++ (overrides.nativeBuildInputs or [ ]);
+        buildInputs =
+          [
+            boost
+            poco
+            protobuf
+            microsoft-gsl
+            nlohmann_json
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isLinux [ avahi ]
+          ++ (overrides.buildInputs or [ ]);
 
-    buildInputs = [ avahi boost poco protobuf ]
-      ++ (overrides.buildInputs or [ ]);
+        cmakeFlags = [
+          "-D g15=OFF"
+          "-D CMAKE_CXX_STANDARD=17" # protobuf >22 requires C++ 17
+          "-D BUILD_NUMBER=${lib.versions.patch source.version}"
+          "-D bundled-gsl=OFF"
+          "-D bundled-json=OFF"
+        ] ++ (overrides.cmakeFlags or [ ]);
 
-    cmakeFlags = [
-      "-D g15=OFF"
-    ] ++ (overrides.configureFlags or [ ]);
+        preConfigure = ''
+          patchShebangs scripts
+        '';
 
-    preConfigure = ''
-       patchShebangs scripts
-    '';
+        passthru.tests.connectivity = nixosTests.mumble;
 
-    passthru.tests.connectivity = nixosTests.mumble;
+        meta = with lib; {
+          description = "Low-latency, high quality voice chat software";
+          homepage = "https://mumble.info";
+          license = licenses.bsd3;
+          maintainers = with maintainers; [
+            felixsinger
+            lilacious
+          ];
+          platforms = platforms.linux ++ (overrides.platforms or [ ]);
+        };
+      }
+    );
 
-    meta = with lib; {
-      description = "Low-latency, high quality voice chat software";
-      homepage = "https://mumble.info";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ infinisil felixsinger ];
-      platforms = platforms.linux;
-    };
-  });
+  client =
+    source:
+    generic {
+      type = "mumble";
 
-  client = source: generic {
-    type = "mumble";
+      platforms = lib.platforms.darwin;
+      nativeBuildInputs =
+        [ qt5.qttools ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          makeWrapper
+        ];
 
-    nativeBuildInputs = [ qt5.qttools ];
-    buildInputs = [ flac libogg libopus libsndfile libvorbis qt5.qtsvg rnnoise speex ]
-      ++ lib.optional (!jackSupport) alsa-lib
-      ++ lib.optional jackSupport libjack2
-      ++ lib.optional speechdSupport speechd
-      ++ lib.optional pulseSupport libpulseaudio
-      ++ lib.optional pipewireSupport pipewire;
+      buildInputs =
+        [
+          flac
+          libogg
+          libopus
+          libsndfile
+          libvorbis
+          speexdsp
+          qt5.qtsvg
+          rnnoise
+        ]
+        ++ lib.optional (!jackSupport && alsaSupport) alsa-lib
+        ++ lib.optional jackSupport libjack2
+        ++ lib.optional speechdSupport speechd-minimal
+        ++ lib.optional pulseSupport libpulseaudio
+        ++ lib.optional pipewireSupport pipewire
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          xar
+        ];
 
-    configureFlags = [
-      "-D server=OFF"
-      "-D bundled-celt=ON"
-      "-D bundled-opus=OFF"
-      "-D bundled-speex=OFF"
-      "-D bundled-rnnoise=OFF"
-      "-D bundle-qt-translations=OFF"
-      "-D update=OFF"
-      "-D overlay-xcompile=OFF"
-      "-D oss=OFF"
-    ] ++ lib.optional (!speechdSupport) "-D speechd=OFF"
-      ++ lib.optional (!pulseSupport) "-D pulseaudio=OFF"
-      ++ lib.optional (!pipewireSupport) "-D pipewire=OFF"
-      ++ lib.optional jackSupport "-D alsa=OFF -D jackaudio=ON";
-
-    env.NIX_CFLAGS_COMPILE = lib.optionalString speechdSupport "-I${speechd}/include/speech-dispatcher";
-
-    postFixup = ''
-      wrapProgram $out/bin/mumble \
-        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath (lib.optional pulseSupport libpulseaudio ++ lib.optional pipewireSupport pipewire)}"
-    '';
-  } source;
-
-  server = source: generic {
-    type = "murmur";
-
-    configureFlags = [
-      "-D client=OFF"
-    ] ++ lib.optional (!iceSupport) "-D ice=OFF"
-      ++ lib.optionals iceSupport [
-        "-D Ice_HOME=${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}"
-        "-D CMAKE_PREFIX_PATH=${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}"
-        "-D Ice_SLICE_DIR=${lib.getDev zeroc-ice}/share/ice/slice"
+      cmakeFlags = [
+        "-D server=OFF"
+        "-D bundled-speex=OFF"
+        "-D bundle-qt-translations=OFF"
+        "-D update=OFF"
+        "-D overlay-xcompile=OFF"
+        "-D oss=OFF"
+        "-D warnings-as-errors=OFF" # conversion error workaround
+        # building the overlay on darwin does not work in nipxkgs (yet)
+        # also see the patch below to disable scripts the build option misses
+        # see https://github.com/mumble-voip/mumble/issues/6816
+        (lib.cmakeBool "overlay" (!stdenv.hostPlatform.isDarwin))
+        (lib.cmakeBool "speechd" speechdSupport)
+        (lib.cmakeBool "pulseaudio" pulseSupport)
+        (lib.cmakeBool "pipewire" pipewireSupport)
+        (lib.cmakeBool "jackaudio" jackSupport)
+        (lib.cmakeBool "alsa" (!jackSupport && alsaSupport))
       ];
 
-    buildInputs = [ libcap ]
-      ++ lib.optional iceSupport zeroc-ice;
-  } source;
+      env.NIX_CFLAGS_COMPILE = lib.optionalString speechdSupport "-I${speechd-minimal}/include/speech-dispatcher";
+
+      patches = [
+        ./disable-overlay-build.patch
+        ./fix-plugin-copy.patch
+        # Can be removed before the next update of Mumble, as that fix was upstreamed
+        # fix version display in MacOS Finder
+        (fetchpatch {
+          url = "https://github.com/mumble-voip/mumble/commit/fbd21bd422367bed19f801bf278562f567cbb8b7.patch";
+          sha256 = "sha256-qFhC2j/cOWzAhs+KTccDIdcgFqfr4y4VLjHiK458Ucs=";
+        })
+      ];
+
+      postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+        # The build erraneously marks the *.dylib as executable
+        # which causes the qt-hook to wrap it, which then prevents the app from loading it
+        chmod -x $out/lib/mumble/plugins/*.dylib
+
+        # Post-processing for the app bundle
+        $NIX_BUILD_TOP/source/macx/scripts/osxdist.py \
+          --source-dir=$NIX_BUILD_TOP/source/ \
+          --binary-dir=$out \
+          --only-appbundle \
+          --version "${source.version}"
+
+        mkdir -p $out/Applications $out/bin
+        mv $out/Mumble.app $out/Applications/Mumble.app
+
+        # ensure that the app can be started from the shell
+        makeWrapper $out/Applications/Mumble.app/Contents/MacOS/mumble $out/bin/mumble
+      '';
+
+      postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+        wrapProgram $out/bin/mumble \
+          --prefix LD_LIBRARY_PATH : "${
+            lib.makeLibraryPath (
+              lib.optional pulseSupport libpulseaudio ++ lib.optional pipewireSupport pipewire
+            )
+          }"
+      '';
+
+    } source;
+
+  server =
+    source:
+    generic {
+      type = "murmur";
+
+      cmakeFlags =
+        [
+          "-D client=OFF"
+          (lib.cmakeBool "ice" iceSupport)
+        ]
+        ++ lib.optionals iceSupport [
+          "-D Ice_HOME=${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}"
+          "-D Ice_SLICE_DIR=${lib.getDev zeroc-ice}/share/ice/slice"
+        ];
+
+      buildInputs = [ libcap ] ++ lib.optional iceSupport zeroc-ice;
+    } source;
+
+  overlay =
+    source:
+    generic {
+      stdenv = stdenv_32bit;
+      type = "mumble-overlay";
+
+      cmakeFlags = [
+        "-D server=OFF"
+        "-D client=OFF"
+        "-D overlay=ON"
+      ];
+    } source;
 
   source = rec {
-    version = "1.4.287";
+    version = "1.5.735";
 
     # Needs submodules
     src = fetchFromGitHub {
       owner = "mumble-voip";
       repo = "mumble";
-      rev = "5d808e287e99b402b724e411a7a0848e00956a24";
-      sha256 = "sha256-SYsGCuj3HeyAQRUecGLaRdJR9Rm7lbaM54spY/zx0jU=";
+      rev = "v${version}";
+      hash = "sha256-JRnGgxkf5ct6P71bYgLbCEUmotDLS2Evy6t8R7ac7D4=";
       fetchSubmodules = true;
     };
-
-    patches = [
-      # fixes 'static assertion failed: static_assert(sizeof(CCameraAngles) == 0x408, "");'
-      # when compiling pkgsi686Linux.mumble, which is a dependency of x64 mumble_overlay
-      # https://github.com/mumble-voip/mumble/pull/5850
-      # Remove with next version update
-      (fetchpatch {
-        url = "https://github.com/mumble-voip/mumble/commit/13c051b36b387356815cff5d685bc628b74ba136.patch";
-        hash = "sha256-Rq8fb6NFd4DCNWm6OOMYIP7tBllufmQcB5CSxPU4qqg=";
-      })
-    ];
   };
-in {
-  mumble  = client source;
-  murmur  = server source;
+in
+{
+  mumble = lib.recursiveUpdate (client source) { meta.mainProgram = "mumble"; };
+  murmur = lib.recursiveUpdate (server source) { meta.mainProgram = "mumble-server"; };
+  overlay = overlay source;
 }

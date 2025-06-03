@@ -1,47 +1,54 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-cloud-core
-, grpcio
-, grpc-google-iam-v1
-, libcst
-, mock
-, proto-plus
-, protobuf
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  google-api-core,
+  google-cloud-core,
+  google-crc32c,
+  grpc-google-iam-v1,
+  proto-plus,
+  protobuf,
+
+  # optional dependencies
+  libcst,
+
+  # testing
+  grpcio,
+  mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-bigtable";
-  version = "2.23.0";
-  pyproject = true;
+  version = "2.30.1";
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-w8q7Zhn18u6hGz23JzHoTSixaAVcnMF8LS2v8Vy4I3k=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "python-bigtable";
+    tag = "v${version}";
+    hash = "sha256-TciCYpnwfIIvOexp4Ing6grZ7ufFonwP2G26UzlNaJ4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  pyproject = true;
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-api-core
     google-cloud-core
+    google-crc32c
     grpc-google-iam-v1
     proto-plus
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  passthru.optional-dependencies = {
-    libcst = [
-      libcst
-    ];
+  optional-dependencies = {
+    libcst = [ libcst ];
   };
 
   nativeCheckInputs = [
@@ -55,9 +62,7 @@ buildPythonPackage rec {
     rm -r google
   '';
 
-  disabledTests = [
-    "policy"
-  ];
+  disabledTests = [ "policy" ];
 
   pythonImportsCheck = [
     "google.cloud.bigtable_admin_v2"
@@ -65,11 +70,11 @@ buildPythonPackage rec {
     "google.cloud.bigtable"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Cloud Bigtable API client library";
     homepage = "https://github.com/googleapis/python-bigtable";
     changelog = "https://github.com/googleapis/python-bigtable/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.sarahec ];
   };
 }

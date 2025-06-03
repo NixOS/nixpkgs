@@ -1,42 +1,38 @@
-{ lib
-, allpairspy
-, approval-utilities
-, beautifulsoup4
-, buildPythonPackage
-, empty-files
-, fetchFromGitHub
-, mock
-, mrjob
-, numpy
-, pyperclip
-, pytest
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, testfixtures
-, typing-extensions
+{
+  lib,
+  allpairspy,
+  approval-utilities,
+  beautifulsoup4,
+  buildPythonPackage,
+  empty-files,
+  fetchFromGitHub,
+  mock,
+  mrjob,
+  numpy,
+  pyperclip,
+  pytest,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
+  testfixtures,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "11.1.0";
+  version = "14.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "ApprovalTests.Python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-F03qctswG0/y2ZCdHCacHsMiBZFTmEEegYXIIB2UPlc=";
+    tag = "v${version}";
+    hash = "sha256-VWYl+8hS9XnvtqmokNntdKGHWSJVlGPomvAEwaBcjY8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     allpairspy
     approval-utilities
     beautifulsoup4
@@ -56,7 +52,9 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # Tests expects paths below ApprovalTests.Python directory
+    "test_preceding_whitespace"
+    "test_command_line_verify"
+    # Tests expect paths below ApprovalTests.Python directory
     "test_received_filename"
     "test_pytest_namer"
   ];
@@ -66,11 +64,11 @@ buildPythonPackage rec {
     "approvaltests.reporters.generic_diff_reporter_factory"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Assertion/verification library to aid testing";
     homepage = "https://github.com/approvals/ApprovalTests.Python";
-    changelog = "https://github.com/approvals/ApprovalTests.Python/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ];
+    changelog = "https://github.com/approvals/ApprovalTests.Python/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

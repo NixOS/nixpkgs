@@ -1,26 +1,38 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) mkEnableOption mkIf mkOption types literalExpression;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    types
+    literalExpression
+    ;
 
   cfg = config.services.isso;
 
   settingsFormat = pkgs.formats.ini { };
   configFile = settingsFormat.generate "isso.conf" cfg.settings;
-in {
+in
+{
 
   options = {
     services.isso = {
-      enable = mkEnableOption (lib.mdDoc ''
+      enable = mkEnableOption ''
         isso, a commenting server similar to Disqus.
 
         Note: The application's author suppose to run isso behind a reverse proxy.
         The embedded solution offered by NixOS is also only suitable for small installations
         below 20 requests per second
-      '');
+      '';
 
       settings = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Configuration for `isso`.
 
           See [Isso Server Configuration](https://posativ.org/isso/docs/configuration/server/)
@@ -79,11 +91,18 @@ in {
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "~@resources"
+        ];
         UMask = "0077";
       };
     };

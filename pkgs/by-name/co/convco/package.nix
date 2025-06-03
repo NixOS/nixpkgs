@@ -1,35 +1,52 @@
-{ stdenv
-, lib
-, rustPlatform
-, fetchFromGitHub
-, cmake
-, libiconv
-, openssl
-, pkg-config
-, darwin
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  cmake,
+  libiconv,
+  openssl,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "convco";
-  version = "0.5.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "convco";
-    repo = pname;
+    repo = "convco";
     rev = "v${version}";
-    hash = "sha256-x01fkicoAH8NaJJqIF5jjbZ53TitnXBCdKEbr8xVCyE=";
+    hash = "sha256-s0rcSekJLe99oxi6JD8VL1S6nqQTUFTn5pdgxnknbaY=";
   };
 
-  cargoHash = "sha256-j2xuaAkycWp5sCAmVJLYfqH1ZGxIGU/a/97WpGyQcvU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ClkpGHN2me+R3jX7S5hFR1FlsXGhHZ/y6iIGK08Mdfc=";
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ];
+
+  checkFlags = [
+    # disable test requiring networking
+    "--skip=git::tests::test_find_last_unordered_prerelease"
+  ];
 
   meta = with lib; {
-    description = "A Conventional commit cli";
+    description = "Conventional commit cli";
+    mainProgram = "convco";
     homepage = "https://github.com/convco/convco";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ hoverbear cafkafk ];
+    maintainers = with maintainers; [
+      hoverbear
+      cafkafk
+    ];
   };
 }

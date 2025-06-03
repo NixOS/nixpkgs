@@ -1,60 +1,63 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qt5
-, openssl
-, protobuf3_20  # https://github.com/blueprint-freespeech/ricochet-refresh/issues/178
-, pkg-config
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qt5,
+  openssl,
+  protobuf,
+  pkg-config,
+  cmake,
 }:
 
-let
-  protobuf = protobuf3_20;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ricochet-refresh";
-  version = "3.0.18";
+  version = "3.0.34";
 
   src = fetchFromGitHub {
     owner = "blueprint-freespeech";
     repo = "ricochet-refresh";
     rev = "v${finalAttrs.version}-release";
-    hash = "sha256-QN2cxcYWGoszPdrWv+4FoTGNjQViK/OwxbBC6uoDhfA=";
     fetchSubmodules = true;
+    hash = "sha256-/IT3K3PL2fNl4P7xzItVnI8xJx5MmKxhw3ZEX9rN7j4=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
 
   strictDeps = true;
 
-  buildInputs = (with qt5; [
-    qtbase
-    qttools
-    qtmultimedia
-    qtquickcontrols2
-    qtwayland
-  ]) ++ [
-    openssl
-    protobuf
-  ];
+  buildInputs =
+    (with qt5; [
+      qtbase
+      qttools
+      qtmultimedia
+      qtquickcontrols2
+      qtwayland
+    ])
+    ++ [
+      openssl
+      protobuf
+    ];
 
   nativeBuildInputs = [
     pkg-config
+    protobuf
     cmake
     qt5.wrapQtAppsHook
   ];
 
   enableParallelBuilding = true;
 
+  cmakeBuildType = "MinSizeRel";
+
   # https://github.com/blueprint-freespeech/ricochet-refresh/blob/main/BUILDING.md
   cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "MinSizeRel")
     (lib.cmakeBool "RICOCHET_REFRESH_INSTALL_DESKTOP" true)
     (lib.cmakeBool "USE_SUBMODULE_FMT" true)
   ];
 
   meta = {
     description = "Secure chat without DNS or WebPKI";
+    mainProgram = "ricochet-refresh";
     longDescription = ''
       Ricochet Refresh is a peer-to-peer messenger app that uses Tor
       to connect clients.
@@ -74,6 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.ricochetrefresh.net/";
     downloadPage = "https://github.com/blueprint-freespeech/ricochet-refresh/releases";
     license = lib.licenses.bsd3;
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.linux;
   };
 })

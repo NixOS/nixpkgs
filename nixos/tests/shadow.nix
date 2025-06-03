@@ -6,48 +6,54 @@ let
   hashed_bcrypt = "$2b$05$8xIEflrk2RxQtcVXbGIxs.Vl0x7dF1/JSv3cyX6JJt0npzkTCWvxK"; # fnord
   hashed_yeshash = "$y$j9T$d8Z4EAf8P1SvM/aDFbxMS0$VnTXMp/Hnc7QdCBEaLTq5ZFOAFo2/PM0/xEAFuOE88."; # fnord
   hashed_sha512crypt = "$6$ymzs8WINZ5wGwQcV$VC2S0cQiX8NVukOLymysTPn4v1zJoJp3NGyhnqyv/dAf4NWZsBWYveQcj6gEJr4ZUjRBRjM0Pj1L8TCQ8hUUp0"; # meow
-in import ./make-test-python.nix ({ pkgs, ... }: {
+in
+{ pkgs, ... }:
+{
   name = "shadow";
-  meta = with pkgs.lib.maintainers; { maintainers = [ nequissimus ]; };
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ nequissimus ];
+  };
 
-  nodes.shadow = { pkgs, ... }: {
-    environment.systemPackages = [ pkgs.shadow ];
+  nodes.shadow =
+    { pkgs, ... }:
+    {
+      environment.systemPackages = [ pkgs.shadow ];
 
-    users = {
-      mutableUsers = true;
-      users.emma = {
-        isNormalUser = true;
-        password = password1;
-        shell = pkgs.bash;
-      };
-      users.layla = {
-        isNormalUser = true;
-        password = password2;
-        shell = pkgs.shadow;
-      };
-      users.ash = {
-        isNormalUser = true;
-        password = password4;
-        shell = pkgs.bash;
-      };
-      users.berta = {
-        isNormalUser = true;
-        hashedPasswordFile = (pkgs.writeText "hashed_bcrypt" hashed_bcrypt).outPath;
-        shell = pkgs.bash;
-      };
-      users.yesim = {
-        isNormalUser = true;
-        hashedPassword = hashed_yeshash;
-        shell = pkgs.bash;
-      };
-      users.leo = {
-        isNormalUser = true;
-        initialHashedPassword = "!";
-        hashedPassword = hashed_sha512crypt; # should take precedence over initialHashedPassword
-        shell = pkgs.bash;
+      users = {
+        mutableUsers = true;
+        users.emma = {
+          isNormalUser = true;
+          password = password1;
+          shell = pkgs.bash;
+        };
+        users.layla = {
+          isNormalUser = true;
+          password = password2;
+          shell = pkgs.shadow;
+        };
+        users.ash = {
+          isNormalUser = true;
+          password = password4;
+          shell = pkgs.bash;
+        };
+        users.berta = {
+          isNormalUser = true;
+          hashedPasswordFile = (pkgs.writeText "hashed_bcrypt" hashed_bcrypt).outPath;
+          shell = pkgs.bash;
+        };
+        users.yesim = {
+          isNormalUser = true;
+          hashedPassword = hashed_yeshash;
+          shell = pkgs.bash;
+        };
+        users.leo = {
+          isNormalUser = true;
+          initialHashedPassword = "!";
+          hashedPassword = hashed_sha512crypt; # should take precedence over initialHashedPassword
+          shell = pkgs.bash;
+        };
       };
     };
-  };
 
   testScript = ''
     shadow.wait_for_unit("multi-user.target")
@@ -169,4 +175,4 @@ in import ./make-test-python.nix ({ pkgs, ... }: {
         assert "leo" in shadow.succeed("cat /tmp/leo")
         shadow.send_chars("logout\n")
   '';
-})
+}

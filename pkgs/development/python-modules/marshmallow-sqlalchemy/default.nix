@@ -1,25 +1,30 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, marshmallow
-, packaging
-, sqlalchemy
-, pytest-lazy-fixture
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  flit-core,
+  marshmallow,
+  packaging,
+  sqlalchemy,
+  pytest-lazy-fixtures,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "marshmallow-sqlalchemy";
-  version = "0.30.0";
-  format = "setuptools";
+  version = "1.4.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Ka0KT9G0oeUtywf5Zz0oSmsHlRQZFswhadTuml0Ac0c=";
+    pname = "marshmallow_sqlalchemy";
+    inherit version;
+    hash = "sha256-ZBAwS/mOwm6jXz+dPO6C5R/Qk8Q0YSrdMqC9zbVmj3w=";
   };
+
+  build-system = [ flit-core ];
 
   propagatedBuildInputs = [
     marshmallow
@@ -27,12 +32,10 @@ buildPythonPackage rec {
     sqlalchemy
   ];
 
-  pythonImportsCheck = [
-    "marshmallow_sqlalchemy"
-  ];
+  pythonImportsCheck = [ "marshmallow_sqlalchemy" ];
 
   nativeCheckInputs = [
-    pytest-lazy-fixture
+    pytest-lazy-fixtures
     pytestCheckHook
   ];
 
@@ -41,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/marshmallow-code/marshmallow-sqlalchemy";
     changelog = "https://github.com/marshmallow-code/marshmallow-sqlalchemy/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

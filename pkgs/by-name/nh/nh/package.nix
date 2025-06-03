@@ -1,31 +1,30 @@
-{ stdenv
-, lib
-, rustPlatform
-, installShellFiles
-, makeBinaryWrapper
-, darwin
-, fetchFromGitHub
-, nix-update-script
-, nvd
-, use-nom ? true
-, nix-output-monitor ? null
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  installShellFiles,
+  makeBinaryWrapper,
+  fetchFromGitHub,
+  nix-update-script,
+  nvd,
+  nix-output-monitor,
+  buildPackages,
 }:
-
-assert use-nom -> nix-output-monitor != null;
-
 let
-  version = "3.5.3";
-  runtimeDeps = [ nvd ] ++ lib.optionals use-nom [ nix-output-monitor ];
+  runtimeDeps = [
+    nvd
+    nix-output-monitor
+  ];
 in
-rustPlatform.buildRustPackage {
-  inherit version;
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nh";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
-    owner = "viperML";
+    owner = "nix-community";
     repo = "nh";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-37BcFt67NZj4YQ9kqm69O+OJkgt+TXWTu53bvJvOtn8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OiuhBrJe1AyVxC+AV4HMJ+vhDvUfCyLpBmj+Fy7MDtM=";
   };
 
   strictDeps = true;
@@ -35,32 +34,43 @@ rustPlatform.buildRustPackage {
     makeBinaryWrapper
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      mkdir completions
 
-  preFixup = ''
-    mkdir completions
-    $out/bin/nh completions --shell bash > completions/nh.bash
-    $out/bin/nh completions --shell zsh > completions/nh.zsh
-    $out/bin/nh completions --shell fish > completions/nh.fish
+      for shell in bash zsh fish; do
+        NH_NO_CHECKS=1 ${emulator} $out/bin/nh completions $shell > completions/nh.$shell
+      done
 
-    installShellCompletion completions/*
-  '';
+      installShellCompletion completions/*
+    ''
+  );
 
   postFixup = ''
     wrapProgram $out/bin/nh \
-      --prefix PATH : ${lib.makeBinPath runtimeDeps} \
-      ${lib.optionalString use-nom "--set-default NH_NOM 1"}
+      --prefix PATH : ${lib.makeBinPath runtimeDeps}
   '';
 
-  cargoHash = "sha256-uRibycYznqzdf8QVX6bHfq3J3Imu8KnWCL0ZS1w4KFk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-/tbmzGUd1b4oa+29+eFdkE4l8vxMoIdHx40YgErY9pY=";
 
   passthru.updateScript = nix-update-script { };
 
+  env.NH_REV = finalAttrs.src.tag;
+
   meta = {
+    changelog = "https://github.com/nix-community/nh/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "Yet another nix cli helper";
-    homepage = "https://github.com/viperML/nh";
+    homepage = "https://github.com/nix-community/nh";
     license = lib.licenses.eupl12;
     mainProgram = "nh";
-    maintainers = with lib.maintainers; [ drupol viperML ];
+    maintainers = with lib.maintainers; [
+      drupol
+      NotAShelf
+      viperML
+    ];
   };
-}
+})

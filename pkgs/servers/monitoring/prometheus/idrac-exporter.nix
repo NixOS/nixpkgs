@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "idrac_exporter";
@@ -15,7 +20,10 @@ buildGoModule rec {
 
   patches = [ ./idrac-exporter/config-from-environment.patch ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   doCheck = true;
 
@@ -24,6 +32,7 @@ buildGoModule rec {
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "Simple iDRAC exporter for Prometheus";
+    mainProgram = "idrac_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ codec ];
   };

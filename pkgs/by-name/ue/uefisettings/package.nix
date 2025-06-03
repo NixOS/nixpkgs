@@ -1,26 +1,37 @@
-{ fetchFromGitHub
-, lib
-, rustPlatform
+{
+  fetchFromGitHub,
+  lib,
+  rustPlatform,
+  unstableGitUpdater,
 }:
 
 rustPlatform.buildRustPackage {
   name = "uefisettings";
-  version = "unstable-2024-02-20";
+  version = "0-unstable-2024-11-28";
 
   src = fetchFromGitHub {
     owner = "linuxboot";
     repo = "uefisettings";
-    rev = "eae8b8b622b7ac3c572eeb3b3513ed623e272fcc";
-    hash = "sha256-zLgrxYBj5bEMZRw5sKWqKuV3jQOJ6dnzbzpoqE0OhKs=";
+    rev = "f4d12fbdb32d1bc355dd37d5077add0a0a049be4";
+    hash = "sha256-f6CTmnY/BzIP/nfHa3Q4HWd1Ee+b7C767FB/8A4DUUM=";
   };
 
-  cargoHash = "sha256-FCQ/1E6SZyVOOAlpqyaDWEZx0y0Wk3Caosvr48VamAA=";
+  passthru.updateScript = unstableGitUpdater { };
 
-  # Tests expect filesystem access to directories like /proc
-  doCheck = false;
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-adCC5o17j6tuffymiLUn2SEPlrjMzYn6a74/4a9HI/w=";
+
+  checkFlags = [
+    # Expects filesystem access to /proc and rootfs
+    "--skip=hii::efivarfs::tests::test_get_current_mount_flags_for_proc"
+    "--skip=hii::efivarfs::tests::test_get_current_mount_flags_for_root"
+    # Expects FHS
+    "--skip=ilorest::blobstore::Transport"
+    "--skip=ilorest::chif::IloRestChif"
+  ];
 
   meta = with lib; {
-    description = "CLI tool to read/get/extract and write/change/modify BIOS/UEFI settings.";
+    description = "CLI tool to read/get/extract and write/change/modify BIOS/UEFI settings";
     homepage = "https://github.com/linuxboot/uefisettings";
     license = with licenses; [ bsd3 ];
     mainProgram = "uefisettings";

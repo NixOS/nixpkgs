@@ -1,82 +1,96 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.dgraph;
-  settingsFormat = pkgs.formats.json {};
+  settingsFormat = pkgs.formats.json { };
   configFile = settingsFormat.generate "config.json" cfg.settings;
-  dgraphWithNode = pkgs.runCommand "dgraph" {
-    nativeBuildInputs = [ pkgs.makeWrapper ];
-  }
-  ''
-    mkdir -p $out/bin
-    makeWrapper ${cfg.package}/bin/dgraph $out/bin/dgraph \
-      --prefix PATH : "${lib.makeBinPath [ pkgs.nodejs ]}" \
-  '';
+  dgraphWithNode =
+    pkgs.runCommand "dgraph"
+      {
+        nativeBuildInputs = [ pkgs.makeWrapper ];
+      }
+      ''
+        mkdir -p $out/bin
+        makeWrapper ${cfg.package}/bin/dgraph $out/bin/dgraph \
+          --prefix PATH : "${lib.makeBinPath [ pkgs.nodejs ]}" \
+      '';
   securityOptions = {
-      NoNewPrivileges = true;
+    NoNewPrivileges = true;
 
-      AmbientCapabilities = "";
-      CapabilityBoundingSet = "";
+    AmbientCapabilities = "";
+    CapabilityBoundingSet = "";
 
-      DeviceAllow = "";
+    DeviceAllow = "";
 
-      LockPersonality = true;
+    LockPersonality = true;
 
-      PrivateTmp = true;
-      PrivateDevices = true;
-      PrivateUsers = true;
+    PrivateTmp = true;
+    PrivateDevices = true;
+    PrivateUsers = true;
 
-      ProtectClock = true;
-      ProtectControlGroups = true;
-      ProtectHostname = true;
-      ProtectKernelLogs = true;
-      ProtectKernelModules = true;
-      ProtectKernelTunables = true;
+    ProtectClock = true;
+    ProtectControlGroups = true;
+    ProtectHostname = true;
+    ProtectKernelLogs = true;
+    ProtectKernelModules = true;
+    ProtectKernelTunables = true;
 
-      RemoveIPC = true;
+    RemoveIPC = true;
 
-      RestrictNamespaces = true;
-      RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
-      RestrictRealtime = true;
-      RestrictSUIDSGID = true;
+    RestrictNamespaces = true;
+    RestrictAddressFamilies = [
+      "AF_INET"
+      "AF_INET6"
+      "AF_UNIX"
+    ];
+    RestrictRealtime = true;
+    RestrictSUIDSGID = true;
 
-      SystemCallArchitectures = "native";
-      SystemCallErrorNumber = "EPERM";
-      SystemCallFilter = [
-        "@system-service"
-        "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock" "~@obsolete" "~@privileged" "~@setuid"
-      ];
+    SystemCallArchitectures = "native";
+    SystemCallErrorNumber = "EPERM";
+    SystemCallFilter = [
+      "@system-service"
+      "~@cpu-emulation"
+      "~@debug"
+      "~@keyring"
+      "~@memlock"
+      "~@obsolete"
+      "~@privileged"
+      "~@setuid"
+    ];
   };
 in
 {
   options = {
     services.dgraph = {
-      enable = mkEnableOption (lib.mdDoc "Dgraph native GraphQL database with a graph backend");
+      enable = lib.mkEnableOption "Dgraph native GraphQL database with a graph backend";
 
       package = lib.mkPackageOption pkgs "dgraph" { };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = settingsFormat.type;
-        default = {};
-        description = lib.mdDoc ''
+        default = { };
+        description = ''
           Contents of the dgraph config. For more details see https://dgraph.io/docs/deploy/config
         '';
       };
 
       alpha = {
-        host = mkOption {
-          type = types.str;
+        host = lib.mkOption {
+          type = lib.types.str;
           default = "localhost";
-          description = lib.mdDoc ''
+          description = ''
             The host which dgraph alpha will be run on.
           '';
         };
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = 7080;
-          description = lib.mdDoc ''
+          description = ''
             The port which to run dgraph alpha on.
           '';
         };
@@ -84,17 +98,17 @@ in
       };
 
       zero = {
-        host = mkOption {
-          type = types.str;
+        host = lib.mkOption {
+          type = lib.types.str;
           default = "localhost";
-          description = lib.mdDoc ''
+          description = ''
             The host which dgraph zero will be run on.
           '';
         };
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = 5080;
-          description = lib.mdDoc ''
+          description = ''
             The port which to run dgraph zero on.
           '';
         };
@@ -103,9 +117,9 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.dgraph.settings = {
-      badger.compression = mkDefault "zstd:3";
+      badger.compression = lib.mkDefault "zstd:3";
     };
 
     systemd.services.dgraph-zero = {
@@ -124,7 +138,10 @@ in
 
     systemd.services.dgraph-alpha = {
       description = "Dgraph native GraphQL database with a graph backend. Alpha serves data";
-      after = [ "network.target" "dgraph-zero.service" ];
+      after = [
+        "network.target"
+        "dgraph-zero.service"
+      ];
       requires = [ "dgraph-zero.service" ];
       wantedBy = [ "multi-user.target" ];
 

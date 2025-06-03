@@ -1,43 +1,44 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, rustPlatform
-, bitstring
-, cachetools
-, cffi
-, deprecation
-, iconv
-, matplotlib
-, numpy
-, scipy
-, screed
-, hypothesis
-, pytest-xdist
-, pyyaml
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  stdenv,
+  pythonOlder,
+  rustPlatform,
+  bitstring,
+  cachetools,
+  cffi,
+  deprecation,
+  iconv,
+  matplotlib,
+  numpy,
+  scipy,
+  screed,
+  hypothesis,
+  pytest-xdist,
+  pyyaml,
+  pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "sourmash";
-  version = "4.8.4";
-  format = "pyproject";
-  disabled = pythonOlder "3.8";
+  version = "4.8.14";
+  pyproject = true;
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Q1hMESwzEHGXcd4XW4nLqU8cLTCxrqRgAOr1qB77roo=";
+    hash = "sha256-no99VjO1KVE+/JUOJcl0xOz3yZtMr70A8vE1rQVjMH8=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-HisWvJgx15OfYoMzzqYm1JyY1/jmGXBSZZmuNaKTDjI=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-DnJ0RFc03+rBg7yNdezgb/YuoQr3RKj+NeMyin/kSRk=";
   };
 
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
+    bindgenHook
   ];
 
   buildInputs = [ iconv ];
@@ -70,6 +71,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Quickly search, compare, and analyze genomic and metagenomic data sets";
+    mainProgram = "sourmash";
     homepage = "https://sourmash.bio";
     changelog = "https://github.com/sourmash-bio/sourmash/releases/tag/v${version}";
     maintainers = with maintainers; [ luizirber ];

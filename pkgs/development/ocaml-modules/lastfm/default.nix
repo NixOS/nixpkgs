@@ -1,27 +1,28 @@
-{ lib
-, buildDunePackage
-, fetchFromGitHub
-, pkg-config
-, dune-configurator
-, xmlplaylist
-, ocaml_pcre
-, ocamlnet
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  re,
+  xmlplaylist,
 }:
 
 buildDunePackage rec {
   pname = "lastfm";
-  version = "0.3.3";
+  version = "0.3.4";
 
-  useDune2 = true;
+  minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-lastfm";
     rev = "v${version}";
-    sha256 = "1sz400ny9h7fs20k7600q475q164x49ba30ls3q9y35rhm3g2y2b";
+    sha256 = "sha256-1te9B2+sUmkT/i2K5ueswWAWpvJf9rXob0zR4CMOJlg=";
   };
 
-  propagatedBuildInputs = [ xmlplaylist ocaml_pcre ocamlnet ];
+  propagatedBuildInputs = [
+    re
+    xmlplaylist
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/savonet/ocaml-lastfm";

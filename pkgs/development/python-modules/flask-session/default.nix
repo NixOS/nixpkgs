@@ -1,52 +1,80 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, flit-core
-, flask
-, cachelib
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+
+  # build-system
+  flit-core,
+
+  # dependencies
+  flask,
+  cachelib,
+  msgspec,
+
+  # tests
+  boto3,
+  flask-sqlalchemy,
+  memcachedTestHook,
+  pytestCheckHook,
+  redis,
+  redisTestHook,
+  pymongo,
+  pymemcache,
+  python-memcached,
 }:
 
 buildPythonPackage rec {
-  pname = "Flask-Session";
-  version = "0.5.0";
-  format = "pyproject";
+  pname = "flask-session";
+  version = "0.8.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pallets-eco";
     repo = "flask-session";
-    rev = "refs/tags/${version}";
-    hash = "sha256-t8w6ZS4gBDpnnKvL3DLtn+rRLQNJbrT2Hxm4f3+a3Xc=";
+    tag = version;
+    hash = "sha256-QLtsM0MFgZbuLJPLc5/mUwyYc3bYxildNKNxOF8Z/3Y=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
-    flask
+  dependencies = [
     cachelib
+    flask
+    msgspec
   ];
 
   nativeCheckInputs = [
+    flask-sqlalchemy
+    memcachedTestHook
     pytestCheckHook
+    redis
+    redisTestHook
+    pymongo
+    pymemcache
+    python-memcached
+    boto3
   ];
 
-  # The rest of the tests require database servers and optional db connector dependencies
-  pytestFlagsArray = [
-    "-k"
-    "'null_session or filesystem_session'"
+  disabledTests = [
+    # unfree
+    "test_mongo_default"
   ];
 
-  pythonImportsCheck = [
-    "flask_session"
-  ];
+  disabledTestPaths = [ "tests/test_dynamodb.py" ];
 
-  meta = with lib; {
-    description = "A Flask extension that adds support for server-side sessions";
+  pythonImportsCheck = [ "flask_session" ];
+
+  __darwinAllowLocalNetworking = true;
+
+  # Hang indefinitely
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
+
+  meta = {
+    description = "Flask extension that adds support for server-side sessions";
     homepage = "https://github.com/pallets-eco/flask-session";
     changelog = "https://github.com/pallets-eco/flask-session/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ zhaofengli ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ zhaofengli ];
   };
 }

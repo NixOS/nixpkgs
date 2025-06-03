@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -10,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "elysium-suite";
     repo = "aeacus";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LMsfogcz3CoShQDqyshMshb+iz2r0k5I7NDLXevMakI=";
   };
 
@@ -31,5 +32,6 @@ buildGoModule rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ fab ];
     mainProgram = "aeacus";
+    platforms = platforms.linux;
   };
 }

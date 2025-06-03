@@ -1,53 +1,83 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hatch-jupyter-builder
-, hatchling
-, async-lru
-, packaging
-, tornado
-, ipykernel
-, jupyter-core
-, jupyter-lsp
-, jupyterlab-server
-, jupyter-server
-, notebook-shim
-, jinja2
-, tomli
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nodejs,
+  yarn-berry_3,
+  hatch-jupyter-builder,
+  hatchling,
+  async-lru,
+  httpx,
+  importlib-metadata,
+  ipykernel,
+  jinja2,
+  jupyter-core,
+  jupyter-lsp,
+  jupyter-server,
+  jupyterlab-server,
+  notebook-shim,
+  packaging,
+  setuptools,
+  tomli,
+  tornado,
+  traitlets,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab";
-  version = "4.0.12";
+  version = "4.4.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ll2S76gqU47XDMs5aNmqu6eIhA2oguE9ewYXgM3tw7c=";
+  src = fetchFromGitHub {
+    owner = "jupyterlab";
+    repo = "jupyterlab";
+    tag = "v${version}";
+    hash = "sha256-j1K5aBLLGSWER3S0Vojrwdd+9T9vYbp1+XgxYD2NORY=";
   };
 
   nativeBuildInputs = [
+    nodejs
+    yarn-berry_3.yarnBerryConfigHook
+  ];
+
+  preConfigure = ''
+    pushd jupyterlab/staging
+  '';
+
+  offlineCache = yarn-berry_3.fetchYarnBerryDeps {
+    inherit src;
+    sourceRoot = "${src.name}/jupyterlab/staging";
+    hash = "sha256-rko09rqT7UQUq/Ddi8lo3V02eJQEEnpjH5RaLSgqj/o=";
+  };
+
+  preBuild = ''
+    popd
+  '';
+
+  build-system = [
     hatch-jupyter-builder
     hatchling
   ];
 
-  propagatedBuildInputs = [
-    async-lru
-    packaging
-    tornado
-    ipykernel
-    jupyter-core
-    jupyter-lsp
-    jupyterlab-server
-    jupyter-server
-    notebook-shim
-    jinja2
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  dependencies =
+    [
+      async-lru
+      httpx
+      ipykernel
+      jinja2
+      jupyter-core
+      jupyter-lsp
+      jupyter-server
+      jupyterlab-server
+      notebook-shim
+      packaging
+      setuptools
+      tornado
+      traitlets
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [ tomli ]
+    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   makeWrapperArgs = [
     "--set"
@@ -58,16 +88,14 @@ buildPythonPackage rec {
   # Depends on npm
   doCheck = false;
 
-  pythonImportsCheck = [
-    "jupyterlab"
-  ];
+  pythonImportsCheck = [ "jupyterlab" ];
 
   meta = with lib; {
     changelog = "https://github.com/jupyterlab/jupyterlab/blob/v${version}/CHANGELOG.md";
     description = "Jupyter lab environment notebook server extension";
     license = licenses.bsd3;
     homepage = "https://jupyter.org/";
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
     mainProgram = "jupyter-lab";
   };
 }

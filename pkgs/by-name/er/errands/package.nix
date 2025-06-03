@@ -1,35 +1,37 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, gobject-introspection
-, libadwaita
-, wrapGAppsHook
-, meson
-, ninja
-, desktop-file-utils
-, pkg-config
-, appstream
-, libsecret
-, gtk4
-, gtksourceview5
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  gobject-introspection,
+  libadwaita,
+  wrapGAppsHook4,
+  meson,
+  ninja,
+  desktop-file-utils,
+  pkg-config,
+  appstream,
+  libsecret,
+  libportal,
+  gtk4,
+  gtksourceview5,
+  nix-update-script,
 }:
-
 python3Packages.buildPythonApplication rec {
   pname = "errands";
-  version = "45.1.9";
+  version = "46.2.8";
 
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "mrvladus";
     repo = "Errands";
-    rev = "refs/tags/${version}";
-    hash = "sha256-q8vmT7XUx3XJjPfbEd/c3HrTENfopl1MqwT0x5OuG0c=";
+    tag = version;
+    hash = "sha256-Gs3/DPMsoPTxH+fR7H3gPJr8ITrQDPlmw236vDnmBaA";
   };
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook4
     desktop-file-utils
     meson
     ninja
@@ -40,6 +42,7 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [
     libadwaita
+    libportal
     libsecret
     gtksourceview5
   ];
@@ -57,11 +60,20 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Manage your tasks";
+    changelog = "https://github.com/mrvladus/Errands/releases/tag/${version}";
     homepage = "https://github.com/mrvladus/Errands";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "errands";
-    maintainers = with maintainers; [ sund3RRR ];
+    maintainers = with lib.maintainers; [
+      luftmensch-luftmensch
+      sund3RRR
+    ];
+    teams = [ lib.teams.gnome-circle ];
   };
 }

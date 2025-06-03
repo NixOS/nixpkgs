@@ -1,50 +1,33 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, buildPythonPackage
-, setuptools
-, pytestCheckHook
-, sortedcontainers
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  setuptools,
+  pytestCheckHook,
+  pytest-cov-stub,
+  sortedcontainers,
 }:
 
 buildPythonPackage rec {
   pname = "strct";
-  version = "0.0.32";
+  version = "0.0.34";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "shaypal5";
     repo = "strct";
     rev = "v${version}";
-    hash = "sha256-ctafvdfSOdp7tlCUYg7d5XTXR1qBcWvOVtGtNUnhYIw=";
+    hash = "sha256-uPM2U+emZUCGqEhIeTBmaOu8eSfK4arqvv9bItBWpUs=";
   };
 
-  patches = [
-    # https://github.com/shaypal5/strct/pull/4
-    (fetchpatch {
-      name = "fix-versioneer-on-python312.patch";
-      url = "https://github.com/shaypal5/strct/commit/a1e5b6ca9045b52efdfdbb3c82e12a01e251d41b.patch";
-      hash = "sha256-xXADCSIhq1ARny2twzrhR1J8LkMFWFl6tmGxrM8RvkU=";
-    })
-  ];
+  # don't append .dev0 to version
+  env.RELEASING_PROCESS = "1";
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace  \
-        "--cov" \
-        "#--cov"
-
-    # configure correct version, which fails due to missing .git
-    substituteInPlace versioneer.py strct/_version.py \
-      --replace '"0+unknown"' '"${version}"'
-  '';
-
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     sortedcontainers
   ];
 
@@ -58,7 +41,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A small pure-python package for data structure related utility functions";
+    description = "Small pure-python package for data structure related utility functions";
     homepage = "https://github.com/shaypal5/strct";
     license = licenses.mit;
     maintainers = with maintainers; [ pbsds ];

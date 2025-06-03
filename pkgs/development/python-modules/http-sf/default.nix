@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "http-sf";
-  version = "1.0.1";
+  version = "1.0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -16,24 +17,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mnot";
     repo = "http-sf";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-8xK8/IVrhqMDgkxZY10QqSGswCrttc29FZLCntmSUQ4=";
+    tag = "v${version}";
+    hash = "sha256-swstFntoox9cafLZ5tj02uFoReIRf+9xGOxHvga+Q5o=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    typing-extensions
-  ];
+  dependencies = [ typing-extensions ];
 
   # Tests require external data (https://github.com/httpwg/structured-field-tests)
   doCheck = false;
 
-  pythonImportsCheck = [
-    "http_sf"
-  ];
+  pythonImportsCheck = [ "http_sf" ];
 
   meta = with lib; {
     description = "Module to parse and serialise HTTP structured field values";

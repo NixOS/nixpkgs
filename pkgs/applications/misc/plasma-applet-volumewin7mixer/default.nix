@@ -1,4 +1,13 @@
-{ lib, stdenv, cmake, extra-cmake-modules, plasma-framework, kwindowsystem, plasma-pa, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  cmake,
+  extra-cmake-modules,
+  plasma-framework,
+  kwindowsystem,
+  plasma-pa,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "plasma-applet-volumewin7mixer";
@@ -14,13 +23,20 @@ stdenv.mkDerivation rec {
   # Adds the CMakeLists.txt not provided by upstream
   patches = [ ./cmake.patch ];
   postPatch = "rm build";
-  nativeBuildInputs = [ cmake extra-cmake-modules ];
-  buildInputs = [ plasma-framework kwindowsystem plasma-pa ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
+  buildInputs = [
+    plasma-framework
+    kwindowsystem
+    plasma-pa
+  ];
 
   dontWrapQtApps = true;
 
   meta = with lib; {
-    description = "A fork of the default volume plasmoid with a Windows 7 theme (vertical sliders)";
+    description = "Fork of the default volume plasmoid with a Windows 7 theme (vertical sliders)";
     homepage = "https://github.com/Zren/plasma-applet-volumewin7mixer";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

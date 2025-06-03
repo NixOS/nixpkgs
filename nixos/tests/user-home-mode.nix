@@ -1,6 +1,9 @@
-import ./make-test-python.nix ({ lib, ... }: {
+{ lib, ... }:
+{
   name = "user-home-mode";
-  meta = with lib.maintainers; { maintainers = [ fbeffa ]; };
+  meta = with lib.maintainers; {
+    maintainers = [ fbeffa ];
+  };
 
   nodes.machine = {
     users.users.alice = {
@@ -11,6 +14,12 @@ import ./make-test-python.nix ({ lib, ... }: {
       initialPassword = "pass2";
       isNormalUser = true;
       homeMode = "750";
+    };
+    users.users.carol = {
+      initialPassword = "pass3";
+      isNormalUser = true;
+      createHome = true;
+      home = "/users/carol";
     };
   };
 
@@ -23,5 +32,7 @@ import ./make-test-python.nix ({ lib, ... }: {
     machine.send_chars("pass1\n")
     machine.succeed('[ "$(stat -c %a /home/alice)" == "700" ]')
     machine.succeed('[ "$(stat -c %a /home/bob)" == "750" ]')
+    machine.succeed('[ "$(stat -c %a /users)" == "755" ]')
+    machine.succeed('[ "$(stat -c %a /users/carol)" == "700" ]')
   '';
-})
+}

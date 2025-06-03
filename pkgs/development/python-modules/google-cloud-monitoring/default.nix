@@ -1,44 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-cloud-testutils
-, mock
-, pandas
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  google-cloud-testutils,
+  mock,
+  pandas,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-monitoring";
-  version = "2.19.2";
+  version = "2.27.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-OIGwJiBOBkhwdGGpeD736ExscWvQZ6OGSxyz1Mn13HM=";
+    pname = "google_cloud_monitoring";
+    inherit version;
+    hash = "sha256-9HAJAKZYzWybf3FLsp0Af6zvDPDWKNAHVpnDpzvOilU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     proto-plus
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  passthru.optional-dependencies = {
-    pandas = [
-      pandas
-    ];
+  optional-dependencies = {
+    pandas = [ pandas ];
   };
 
   nativeCheckInputs = [
@@ -46,7 +44,7 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
     pytest-asyncio
-  ] ++ passthru.optional-dependencies.pandas;
+  ] ++ optional-dependencies.pandas;
 
   disabledTests = [
     # Test requires credentials
@@ -65,6 +63,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-monitoring";
     changelog = "https://github.com/googleapis/google-cloud-python/tree/google-cloud-monitoring-v${version}/packages/google-cloud-monitoring";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

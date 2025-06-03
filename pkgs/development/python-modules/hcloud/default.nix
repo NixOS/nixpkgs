@@ -1,27 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, future
-, mock
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  future,
+  mock,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "hcloud";
-  version = "1.33.2";
-  format = "setuptools";
+  version = "2.5.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GCiw+HbN/0na2fiAS16On72nj09VR0Naw6wwCIQ4zl8=";
+    hash = "sha256-v1vnII5q1bOf/neiNOJPa+t03ma/cjLbxbabo2jQptQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     future
     requests
     python-dateutil
@@ -32,9 +36,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "hcloud"
-  ];
+  pythonImportsCheck = [ "hcloud" ];
 
   meta = with lib; {
     description = "Library for the Hetzner Cloud API";

@@ -1,24 +1,24 @@
-{ lib
-, astor
-, buildPythonPackage
-, fetchFromGitHub
-, git
-, hatch-vcs
-, hatchling
-, interface-meta
-, numpy
-, pandas
-, pytestCheckHook
-, pythonOlder
-, scipy
-, sympy
-, typing-extensions
-, wrapt
+{
+  lib,
+  astor,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
+  interface-meta,
+  numpy,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  scipy,
+  sympy,
+  typing-extensions,
+  wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "formulaic";
-  version = "1.0.1";
+  version = "1.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "matthewwardrop";
     repo = "formulaic";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-qivWv1LtFkW55tVKD/Zjd8Q5gVbxhDpZ0inkV6NR7bA=";
+    tag = "v${version}";
+    hash = "sha256-7vmnibL0PMZWL/unUQxN4GtLPSYKmGnhDNtE5GRDFHk=";
   };
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -48,22 +48,16 @@ buildPythonPackage rec {
     sympy
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "formulaic"
-  ];
+  pythonImportsCheck = [ "formulaic" ];
 
-  disabledTestPaths = [
-    "tests/transforms/test_poly.py"
-  ];
+  disabledTestPaths = [ "tests/transforms/test_poly.py" ];
 
   meta = with lib; {
     description = "High-performance implementation of Wilkinson formulas";
     homepage = "https://matthewwardrop.github.io/formulaic/";
-    changelog = "https://github.com/matthewwardrop/formulaic/releases/tag/v${version}";
+    changelog = "https://github.com/matthewwardrop/formulaic/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ swflint ];
   };

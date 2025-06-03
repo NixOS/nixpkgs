@@ -1,10 +1,12 @@
-{ lib, stdenv
-, fetchurl
-, dpkg
-, writeScript
-, curl
-, jq
-, common-updater-scripts
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  writeScript,
+  curl,
+  jq,
+  common-updater-scripts,
 }:
 
 # The raw package that fetches and extracts the Plex RPM. Override the source
@@ -12,25 +14,28 @@
 # server, and the FHS userenv and corresponding NixOS module should
 # automatically pick up the changes.
 stdenv.mkDerivation rec {
-  version = "1.40.0.7998-c29d4c0c8";
+  version = "1.41.7.9799-5bce000f7";
   pname = "plexmediaserver";
 
   # Fetch the source
-  src = if stdenv.hostPlatform.system == "aarch64-linux" then fetchurl {
-    url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_arm64.deb";
-    sha256 = "sha256-uVsOI6sItfq7wLP+xPOYSC9ueOv/lcDeL+vnrx1WdRA=";
-  } else fetchurl {
-    url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_amd64.deb";
-    sha256 = "sha256-ucxDtnGpfTpQURaGvLwohHeIZPE3aulXtoITRZCYA9c=";
-  };
+  src =
+    if stdenv.hostPlatform.system == "aarch64-linux" then
+      fetchurl {
+        url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_arm64.deb";
+        sha256 = "0pzyzgp6w04zrc8wxdkna939wmb7f64wklqlar0bb6g0270hx40v";
+      }
+    else
+      fetchurl {
+        url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_amd64.deb";
+        sha256 = "1p26cgzds3h229npp839fll5wdvz29z580xh34mws2ayq25lk796";
+      };
 
-  outputs = [ "out" "basedb" ];
+  outputs = [
+    "out"
+    "basedb"
+  ];
 
   nativeBuildInputs = [ dpkg ];
-
-  unpackPhase = ''
-    dpkg-deb -R $src .
-  '';
 
   installPhase = ''
     runHook preInstall
@@ -59,7 +64,13 @@ stdenv.mkDerivation rec {
   passthru.updateScript = writeScript "${pname}-updater" ''
     #!${stdenv.shell}
     set -eu -o pipefail
-    PATH=${lib.makeBinPath [curl jq common-updater-scripts]}:$PATH
+    PATH=${
+      lib.makeBinPath [
+        curl
+        jq
+        common-updater-scripts
+      ]
+    }:$PATH
 
     plexApiJson=$(curl -sS https://plex.tv/api/downloads/5.json)
     latestVersion="$(echo $plexApiJson | jq .computer.Linux.version | tr -d '"\n')"
@@ -70,10 +81,7 @@ stdenv.mkDerivation rec {
 
       latestSha="$(nix-prefetch-url $dlUrl)"
 
-      # The script will not perform an update when the version attribute is up to date from previous platform run
-      # We need to clear it before each run
-      update-source-version plexRaw 0 $(yes 0 | head -64 | tr -d "\n") --system=$platform
-      update-source-version plexRaw "$latestVersion" "$latestSha" --system=$platform
+      update-source-version plexRaw "$latestVersion" "$latestSha" --system=$platform --ignore-same-version
     done
   '';
 
@@ -81,14 +89,16 @@ stdenv.mkDerivation rec {
     homepage = "https://plex.tv/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     maintainers = with maintainers; [
       badmutex
       forkk
       lnl7
       pjones
       thoughtpolice
-      amaxine
       MayNiklas
     ];
     description = "Media library streaming server";

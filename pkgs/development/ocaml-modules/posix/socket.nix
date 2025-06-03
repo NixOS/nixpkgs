@@ -1,11 +1,11 @@
-{ lib, buildDunePackage, posix-base }:
+{ buildDunePackage, posix-base }:
 
 buildDunePackage {
   pname = "posix-socket";
 
   inherit (posix-base) version src;
 
-  duneVersion = "3";
+  minimalOCamlVersion = "4.12";
 
   propagatedBuildInputs = [ posix-base ];
 

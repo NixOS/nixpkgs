@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, setuptools
-, versioneer
+  # build-system
+  setuptools,
+  versioneer,
 
-# tests
-, twisted
+  # tests
+  twisted,
 }:
 
 let
@@ -22,7 +23,7 @@ let
     src = fetchFromGitHub {
       owner = "twisted";
       repo = "constantly";
-      rev = "refs/tags/${version}";
+      tag = version;
       hash = "sha256-yXPHQP4B83PuRNvDBnRTx/MaPaQxCl1g5Xrle+N/d7I=";
     };
 
@@ -34,9 +35,7 @@ let
     # would create dependency loop with twisted
     doCheck = false;
 
-    nativeCheckInputs = [
-      twisted
-    ];
+    nativeCheckInputs = [ twisted ];
 
     checkPhase = ''
       runHook preCheck
@@ -44,9 +43,7 @@ let
       runHook postCheck
     '';
 
-    pythonImportsCheck = [
-      "constantly"
-    ];
+    pythonImportsCheck = [ "constantly" ];
 
     passthru.tests.constantly = self.overridePythonAttrs { doCheck = true; };
 
@@ -54,7 +51,7 @@ let
       description = "Module for symbolic constant support";
       homepage = "https://github.com/twisted/constantly";
       license = licenses.mit;
-      maintainers =  with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 in

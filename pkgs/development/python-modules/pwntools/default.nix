@@ -1,27 +1,31 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, debugger
-, fetchPypi
-, mako
-, packaging
-, pysocks
-, pygments
-, ropgadget
-, capstone
-, colored-traceback
-, paramiko
-, pip
-, psutil
-, pyelftools
-, pyserial
-, python-dateutil
-, requests
-, rpyc
-, tox
-, unicorn
-, intervaltree
-, installShellFiles
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  debugger,
+  fetchPypi,
+  capstone,
+  colored-traceback,
+  intervaltree,
+  mako,
+  packaging,
+  paramiko,
+  psutil,
+  pyelftools,
+  pygments,
+  pyserial,
+  pysocks,
+  python-dateutil,
+  requests,
+  ropgadget,
+  rpyc,
+  setuptools,
+  six,
+  sortedcontainers,
+  unicorn,
+  unix-ar,
+  zstandard,
+  installShellFiles,
 }:
 
 let
@@ -29,61 +33,76 @@ let
 in
 buildPythonPackage rec {
   pname = "pwntools";
-  version = "4.11.1";
-  format = "setuptools";
+  version = "4.14.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7hnjX721t0YzKcJ75R+tEfUI6E9bxMYXUEtI56GDZP0=";
+    hash = "sha256-YPBJdtFyISDRi51QVTQIoCRmS1z4iPNvJYr8pL8DXKw=";
   };
 
   postPatch = ''
     # Upstream hardcoded the check for the command `gdb-multiarch`;
-    # Forcefully use the provided debugger, as `gdb` (hence `pwndbg`) is built with multiarch in `nixpkgs`.
+    # Forcefully use the provided debugger as `gdb`.
     sed -i 's/gdb-multiarch/${debuggerName}/' pwnlib/gdb.py
   '';
 
-  nativeBuildInputs = [
-    installShellFiles
+  nativeBuildInputs = [ installShellFiles ];
+
+  build-system = [ setuptools ];
+
+  pythonRemoveDeps = [
+    "pip"
+    "unicorn"
   ];
 
   propagatedBuildInputs = [
-    mako
-    packaging
-    pysocks
-    pygments
-    ropgadget
     capstone
     colored-traceback
+    intervaltree
+    mako
+    packaging
     paramiko
-    pip
     psutil
     pyelftools
+    pygments
     pyserial
+    pysocks
     python-dateutil
     requests
+    ropgadget
     rpyc
-    tox
+    six
+    sortedcontainers
     unicorn
-    intervaltree
+    unix-ar
+    zstandard
   ];
 
   doCheck = false; # no setuptools tests for the package
 
   postInstall = ''
-    installShellCompletion --bash extra/bash_completion.d/shellcraft
+    installShellCompletion --cmd pwn \
+      --bash extra/bash_completion.d/pwn \
+      --zsh extra/zsh_completion/_pwn
   '';
 
-  postFixup = lib.optionalString (!stdenv.isDarwin) ''
+  postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mkdir -p "$out/bin"
     makeWrapper "${debugger}/bin/${debuggerName}" "$out/bin/pwntools-gdb"
   '';
+
+  pythonImportsCheck = [ "pwn" ];
 
   meta = with lib; {
     description = "CTF framework and exploit development library";
     homepage = "https://pwntools.com";
     changelog = "https://github.com/Gallopsled/pwntools/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ bennofs kristoff3r pamplemousse ];
+    maintainers = with maintainers; [
+      bennofs
+      kristoff3r
+      pamplemousse
+    ];
   };
 }

@@ -8,7 +8,7 @@ replication tool for SQLite.
 Litestream service is managed by a dedicated user named `litestream`
 which needs permission to the database file. Here's an example config which gives
 required permissions to access [grafana database](#opt-services.grafana.settings.database.path):
-```
+```nix
 { pkgs, ... }:
 {
   users.users.litestream.extraGroups = [ "grafana" ];

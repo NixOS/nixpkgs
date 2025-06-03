@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "cfscrape";
   version = "2.1.1";
   format = "setuptools";
@@ -21,9 +22,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/Anorov/cloudflare-scrape";
-    description = "A Python module to bypass Cloudflare's anti-bot page";
+    description = "Python module to bypass Cloudflare's anti-bot page";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

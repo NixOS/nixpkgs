@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, vala
-, wrapGAppsHook
-, pkg-config
-, pantheon
-, libhandy
-, libportal
-, glib
-, gtk3
-, desktop-file-utils
-, scrot
-, tesseract
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  vala,
+  wrapGAppsHook3,
+  pkg-config,
+  pantheon,
+  libhandy,
+  libportal,
+  glib,
+  gtk3,
+  desktop-file-utils,
+  scrot,
+  tesseract,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     vala
     pkg-config
     desktop-file-utils
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -46,7 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : ${lib.makeBinPath [ scrot tesseract ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          scrot
+          tesseract
+        ]
+      }
     )
   '';
 

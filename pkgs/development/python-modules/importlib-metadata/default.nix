@@ -1,50 +1,56 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, setuptools-scm
-, typing-extensions
-, toml
-, zipp
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  typing-extensions,
+  toml,
+  zipp,
+
+  # Reverse dependency
+  sage,
 }:
 
 buildPythonPackage rec {
   pname = "importlib-metadata";
-  version = "6.9.0";
-  format = "pyproject";
+  version = "8.6.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "importlib_metadata";
     inherit version;
-    hash = "sha256-6Ky1I8M1qRgiZ04Um0bAOZ7E0yjE0fbknCc9pf8CAbk=";
+    hash = "sha256-MQtB11VEXXRWn5k8z8IoOCldn+AFQlCU+tlT1/FchYA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools # otherwise cross build fails
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     toml
     zipp
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   # Cyclic dependencies due to pyflakefs
   doCheck = false;
 
-  pythonImportsCheck = [
-    "importlib_metadata"
-  ];
+  pythonImportsCheck = [ "importlib_metadata" ];
+
+  passthru.tests = {
+    inherit sage;
+  };
 
   meta = with lib; {
     description = "Read metadata from Python packages";
     homepage = "https://importlib-metadata.readthedocs.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab AndersonTorres ];
+    maintainers = with maintainers; [
+      fab
+    ];
   };
 }

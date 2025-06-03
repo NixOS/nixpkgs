@@ -1,6 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.cnping;
@@ -8,11 +11,11 @@ in
 {
   options = {
     programs.cnping = {
-      enable = mkEnableOption (lib.mdDoc "a setcap wrapper for cnping");
+      enable = lib.mkEnableOption "a setcap wrapper for cnping";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     security.wrappers.cnping = {
       source = "${pkgs.cnping}/bin/cnping";
       capabilities = "cap_net_raw+ep";

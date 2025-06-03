@@ -1,11 +1,11 @@
-diff --git i/sounddevice.py w/sounddevice.py
-index c7c1d62..aabcb12 100644
---- i/sounddevice.py
-+++ w/sounddevice.py
-@@ -58,29 +58,7 @@ from ctypes.util import find_library as _find_library
+diff --git a/sounddevice.py b/sounddevice.py
+index 0974289..2d56c28 100644
+--- a/sounddevice.py
++++ b/sounddevice.py
+@@ -58,32 +58,7 @@ from ctypes.util import find_library as _find_library
  from _sounddevice import ffi as _ffi
-
-
+ 
+ 
 -try:
 -    for _libname in (
 -            'portaudio',  # Default name on POSIX systems
@@ -22,7 +22,10 @@ index c7c1d62..aabcb12 100644
 -    if _platform.system() == 'Darwin':
 -        _libname = 'libportaudio.dylib'
 -    elif _platform.system() == 'Windows':
--        _libname = 'libportaudio' + _platform.architecture()[0] + '.dll'
+-        if 'SD_ENABLE_ASIO' in _os.environ:
+-            _libname = 'libportaudio' + _platform.architecture()[0] + '-asio.dll'
+-        else:
+-            _libname = 'libportaudio' + _platform.architecture()[0] + '.dll'
 -    else:
 -        raise
 -    import _sounddevice_data
@@ -30,6 +33,6 @@ index c7c1d62..aabcb12 100644
 -        next(iter(_sounddevice_data.__path__)), 'portaudio-binaries', _libname)
 -    _lib = _ffi.dlopen(_libname)
 +_lib = _ffi.dlopen('@portaudio@')
-
+ 
  _sampleformats = {
      'float32': _lib.paFloat32,

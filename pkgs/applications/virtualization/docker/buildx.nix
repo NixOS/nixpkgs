@@ -1,14 +1,18 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "docker-buildx";
-  version = "0.12.1";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "buildx";
     rev = "v${version}";
-    hash = "sha256-QC2mlJWjOtqYAB+YrL+s2FsJ79LuLFZGOgSVGL6WmX8=";
+    hash = "sha256-KU9B6ygK6PwMvXDL+SBB79TCBScJDgVMs4m92zgibdE=";
   };
 
   doCheck = false;
@@ -16,7 +20,8 @@ buildGoModule rec {
   vendorHash = null;
 
   ldflags = [
-    "-w" "-s"
+    "-w"
+    "-s"
     "-X github.com/docker/buildx/version.Package=github.com/docker/buildx"
     "-X github.com/docker/buildx/version.Version=v${version}"
   ];
@@ -32,8 +37,12 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Docker CLI plugin for extended build capabilities with BuildKit";
+    mainProgram = "docker-buildx";
     homepage = "https://github.com/docker/buildx";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ivan-babrou developer-guy ];
+    maintainers = with maintainers; [
+      ivan-babrou
+      developer-guy
+    ];
   };
 }

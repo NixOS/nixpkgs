@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -14,18 +15,14 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "manicmaniac";
-    repo = pname;
+    repo = "arc4";
     rev = version;
     hash = "sha256-DlZIygf5v3ZNY2XFmrKOA15ccMo3Rv0kf6hZJ0CskeQ=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "arc4"
-  ];
+  pythonImportsCheck = [ "arc4" ];
 
   meta = with lib; {
     description = "ARCFOUR (RC4) cipher implementation";

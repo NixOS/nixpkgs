@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonAtLeast
-, pythonOlder
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "overrides";
-  version = "7.6.0";
+  version = "7.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,26 +18,20 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mkorpela";
     repo = "overrides";
-    rev = "refs/tags/${version}";
-    hash = "sha256-UdahbhmRfuxKTxb6Afjny/hMgXX1UuDUrIcLjZ0Jtak=";
+    tag = version;
+    hash = "sha256-gQDw5/RpAFNYWFOuxIAArPkCOoBYWUnsDtv1FEFteHo=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.12") [
     # KeyError: 'assertRaises'
     "test_enforcing_when_incompatible"
   ];
 
-  pythonImportsCheck = [
-    "overrides"
-  ];
+  pythonImportsCheck = [ "overrides" ];
 
   meta = with lib; {
     description = "Decorator to automatically detect mismatch when overriding a method";

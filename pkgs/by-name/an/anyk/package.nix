@@ -1,55 +1,61 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchzip
-, openjdk
-, writeScript
-, runCommandLocal
-, bash
-, unzip
-, makeWrapper
-, libredirect
-, xsettingsd
-, makeDesktopItem
-, copyDesktopItems
-, python3
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchzip,
+  openjdk,
+  openjfx,
+  writeScript,
+  runCommandLocal,
+  bash,
+  unzip,
+  makeWrapper,
+  libredirect,
+  xsettingsd,
+  makeDesktopItem,
+  copyDesktopItems,
+  python3,
 }:
 let
-  # Downloads can be found here: https://nav.gov.hu/nyomtatvanyok/letoltesek/nyomtatvanykitolto_programok/nyomtatvany_apeh/keretprogramok/AbevJava
-  # There are no versioned download URLs but archive.org can be used to preserve them.
-  # The original download URL is: https://nav.gov.hu/pfile/programFile?path=/nyomtatvanyok/letoltesek/nyomtatvanykitolto_programok/nyomtatvany_apeh/keretprogramok/AbevJava
-  # You can put the URL here to create a fresh archive URL: https://web.archive.org/save
-  abevjavaSrc = fetchzip {
-    url = "https://web.archive.org/web/20231106112510if_/https://nav.gov.hu/pfile/programFile?path=/nyomtatvanyok/letoltesek/nyomtatvanykitolto_programok/nyomtatvany_apeh/keretprogramok/AbevJava";
-    sha256 = "sha256-qt0mHv3HI6C8OltFjSR47+RLSnmB2Si5U8rXEvdN4/c=";
+  # Run update.py to update this file.
+  inherit (lib.importJSON ./version.json) version url sha256;
+
+  src = fetchzip {
+    inherit url sha256;
     extension = "zip";
     stripRoot = false;
   };
 
-  # ÁNYK uses some SOAP stuff that's not shipped with OpenJDK any more.
-  # We don't really want to use openjdk8 because it's unusable on HiDPI
-  # and people are more likely to have a modern OpenJDK installed.
+  # ÁNYK needs JavaFX for the Ügyfélkapu login webview.
+  jdkWithFX = openjdk.override {
+    enableJavaFX = true;
+    openjfx_jdk = openjfx.override { withWebKit = true; };
+  };
+
   extraClasspath = [
+    # ÁNYK uses some SOAP stuff that's not shipped with OpenJDK any more.
+    # We don't really want to use openjdk8 because it's unusable on HiDPI
+    # and people are more likely to have a modern OpenJDK installed.
     (fetchurl {
       url = "mirror://maven/org/glassfish/metro/webservices-rt/2.4.10/webservices-rt-2.4.10.jar";
-      sha256 = "sha256-lHclIZn3HR2B2lMttmmQGIV67qJi5KhL5jT2WNUQpPI=";
+      hash = "sha256-lHclIZn3HR2B2lMttmmQGIV67qJi5KhL5jT2WNUQpPI=";
     })
 
     (fetchurl {
       url = "mirror://maven/org/glassfish/metro/webservices-api/2.4.10/webservices-api-2.4.10.jar";
-      sha256 = "sha256-1jiabjPkRnh+l/fmTt8aKE5hpeLreYOiLH9sVIcLUQE=";
+      hash = "sha256-1jiabjPkRnh+l/fmTt8aKE5hpeLreYOiLH9sVIcLUQE=";
     })
 
     (fetchurl {
       url = "mirror://maven/com/sun/activation/jakarta.activation/2.0.1/jakarta.activation-2.0.1.jar";
-      sha256 = "sha256-ueJLfdbgdJVWLqllMb4xMMltuk144d/Yitu96/QzKHE=";
+      hash = "sha256-ueJLfdbgdJVWLqllMb4xMMltuk144d/Yitu96/QzKHE=";
     })
 
-    # Patch one of the classes so it works with the packages above by removing .internal. from the package names.
-    (runCommandLocal "anyk-patch" {} ''
+    # Patch one of the ÁNYK classes so it works with the packages above by removing .internal. from the package names.
+    (runCommandLocal "anyk-patch" { } ''
       mkdir $out
       cd $out
-      ${unzip}/bin/unzip ${abevjavaSrc}/application/abevjava.jar hu/piller/enykp/niszws/ClientStubBuilder.class
+      ${unzip}/bin/unzip ${src}/application/abevjava.jar hu/piller/enykp/niszws/ClientStubBuilder.class
       ${python3}/bin/python ${./patch_paths.py} hu/piller/enykp/niszws/ClientStubBuilder.class
     '')
   ];
@@ -85,21 +91,23 @@ let
       SCALING_PROP="-Dsun.java2d.uiScale=''${WINDOW_SCALING_FACTOR}"
     fi
     # ÁNYK crashes with NullPointerException with the GTK look and feel so use the cross-platform one.
-    exec ${openjdk}/bin/java -Dswing.systemlaf=javax.swing.plaf.metal.MetalLookAndFeel $SCALING_PROP "$@"
+    exec ${jdkWithFX}/bin/java -Dswing.systemlaf=javax.swing.plaf.metal.MetalLookAndFeel $SCALING_PROP "$@"
   '';
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "anyk";
-  version = "3.26.0";
-
-  src = abevjavaSrc;
+  inherit version src;
 
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ];
 
   desktopItems = [
-    (makeDesktopItem rec {
+    (makeDesktopItem {
       desktopName = "ÁNYK";
       name = "anyk";
       exec = "anyk";
@@ -142,4 +150,3 @@ in stdenv.mkDerivation {
     mainProgram = "anyk";
   };
 }
-

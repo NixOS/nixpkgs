@@ -1,10 +1,12 @@
-{ lib
-, fetchFromGitLab
-, buildPythonApplication
-, dbus-python
-, pygobject3
-, systemd
-, wirelesstools
+{
+  lib,
+  fetchFromGitLab,
+  buildPythonApplication,
+  dbus-python,
+  pygobject3,
+  systemd,
+  wirelesstools,
+  wrapGAppsNoGuiHook,
 }:
 
 buildPythonApplication rec {
@@ -17,8 +19,12 @@ buildPythonApplication rec {
     owner = "wavexx";
     repo = pname;
     rev = "c2f3e71076a0f51c097064b1eb2505a361c7cc0e";
-    sha256 = "sha256-fanP1EWERT2Jy4OnMo8OMdR9flginYUgMw+XgmDve3o=";
+    hash = "sha256-fanP1EWERT2Jy4OnMo8OMdR9flginYUgMw+XgmDve3o=";
   };
+
+  nativeBuildInputs = [
+    wrapGAppsNoGuiHook
+  ];
 
   propagatedBuildInputs = [
     dbus-python
@@ -39,8 +45,16 @@ buildPythonApplication rec {
     install -D -m0644 networkd-notify.desktop -t "$out/share/applications/"
   '';
 
+  # Let the Python wrapper add gappsWrapperArgs, to avoid two layers of wrapping.
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "Desktop notification integration for systemd-networkd";
+    mainProgram = "networkd-notify";
     homepage = "https://gitlab.com/wavexx/networkd-notify";
     maintainers = with maintainers; [ danc86 ];
     license = licenses.gpl3;

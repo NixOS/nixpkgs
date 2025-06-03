@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, ipykernel
-, ipython
-, ipywidgets
-, nbconvert
-, nbformat
-, pythonOlder
-, sphinx
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  ipykernel,
+  ipython,
+  ipywidgets,
+  nbconvert,
+  nbformat,
+  pythonOlder,
+  sphinx,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,13 +23,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "jupyter-sphinx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-o/i3WravKZPf7uw2H4SVYfAyaZGf19ZJlkmeHCWcGtE=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     ipykernel
@@ -39,14 +38,15 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  pythonImportsCheck = [
-    "jupyter_sphinx"
-  ];
+  pythonImportsCheck = [ "jupyter_sphinx" ];
 
   env.JUPYTER_PLATFORM_DIRS = 1;
 
-  nativeCheckInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # https://github.com/jupyter/jupyter-sphinx/issues/280"
+    "test_builder_priority"
   ];
 
   preCheck = ''
@@ -58,7 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Jupyter Sphinx Extensions";
     homepage = "https://github.com/jupyter/jupyter-sphinx/";
-    changelog = "https://github.com/jupyter/jupyter-sphinx/releases/tag/${src.rev}";
+    changelog = "https://github.com/jupyter/jupyter-sphinx/releases/tag/v${version}";
     license = licenses.bsd3;
   };
 }

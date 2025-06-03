@@ -1,54 +1,55 @@
-{ stdenv
-, lib
-, mkDerivation
-, fetchFromGitHub
-, extra-cmake-modules
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cargo,
+  extra-cmake-modules,
+  rustc,
+  rustPlatform,
 
-# common deps
-, karchive
+  # common deps
+  libzip,
+  qt6Packages,
 
-# client deps
-, qtbase
-, qtkeychain
-, qtmultimedia
-, qtsvg
-, qttools
-, libsecret
+  # client deps
+  ffmpeg,
+  libsecret,
+  libwebp,
 
-# optional client deps
-, giflib
-, kdnssd
-, libvpx
-, miniupnpc
-, qtx11extras # kis
+  # optional client deps
+  giflib,
+  libvpx,
+  miniupnpc,
 
-# optional server deps
-, libmicrohttpd
-, libsodium
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, systemd ? null
+  # optional server deps
+  libmicrohttpd,
+  libsodium,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd ? null,
 
-# options
-, buildClient ? true
-, buildServer ? true
-, buildServerGui ? true # if false builds a headless server
-, buildExtraTools ? false
-, enableKisTablet ? false # enable improved graphics tablet support
+  # options
+  buildClient ? true,
+  buildServer ? true,
+  buildServerGui ? true, # if false builds a headless server
+  buildExtraTools ? false,
 }:
 
-with lib;
+assert lib.assertMsg (
+  buildClient || buildServer || buildExtraTools
+) "You must specify at least one of buildClient, buildServer, or buildExtraTools.";
 
 let
-  clientDeps = [
+  clientDeps = with qt6Packages; [
     qtbase
     qtkeychain
     qtmultimedia
     qtsvg
     qttools
+    ffmpeg
     libsecret
+    libwebp
     # optional:
     giflib # gif animation export support
-    kdnssd # local server discovery with Zeroconf
     libvpx # WebM video export
     miniupnpc # automatic port forwarding
   ];
@@ -57,53 +58,68 @@ let
     # optional:
     libmicrohttpd # HTTP admin api
     libsodium # ext-auth support
-  ] ++ optional withSystemd systemd;
+  ] ++ lib.optional withSystemd systemd;
 
-  kisDeps = [
-    qtx11extras
-  ];
-
-  boolToFlag = bool:
-    if bool then "ON" else "OFF";
-
-in mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "drawpile";
-  version = "2.1.20";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "drawpile";
     repo = "drawpile";
     rev = version;
-    sha256 = "sha256-HjGsaa2BYRNxaQP9e8Z7BkVlIKByC/ta92boGbYHRWQ=";
+    sha256 = "sha256-xcutcSpbFt+pb7QP1E/RG6iNnZwpfhIZTxr+1usLKHc=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules ];
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit src;
+    hash = "sha256-VUX6J7TfxWpa07HPFZ8JzpltIwJUYAl5TABIpBmGYYo=";
+  };
 
-  buildInputs = [
-    karchive
-  ]
-  ++ optionals buildClient      clientDeps
-  ++ optionals buildServer      serverDeps
-  ++ optionals enableKisTablet  kisDeps;
-
-  cmakeFlags = [
-    "-Wno-dev"
-    "-DINITSYS=systemd"
-    "-DCLIENT=${boolToFlag buildClient}"
-    "-DSERVER=${boolToFlag buildServer}"
-    "-DSERVERGUI=${boolToFlag buildServerGui}"
-    "-DTOOLS=${boolToFlag buildExtraTools}"
-    "-DKIS_TABLET=${boolToFlag enableKisTablet}"
+  nativeBuildInputs = [
+    cargo
+    extra-cmake-modules
+    rustc
+    rustPlatform.cargoSetupHook
+    (
+      if buildClient || buildServerGui then
+        qt6Packages.wrapQtAppsHook
+      else
+        qt6Packages.wrapQtAppsNoGuiHook
+    )
   ];
 
-  meta = {
-    description = "A collaborative drawing program that allows multiple users to sketch on the same canvas simultaneously";
-    homepage = "https://drawpile.net/";
-    downloadPage = "https://drawpile.net/download/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.unix;
-    broken = stdenv.isDarwin;
-  };
-}
+  buildInputs =
+    [
+      libzip
+      qt6Packages.qtwebsockets
+    ]
+    ++ lib.optionals buildClient clientDeps
+    ++ lib.optionals buildServer serverDeps;
 
+  cmakeFlags = [
+    (lib.cmakeFeature "INITSYS" (lib.optionalString withSystemd "systemd"))
+    (lib.cmakeBool "CLIENT" buildClient)
+    (lib.cmakeBool "SERVER" buildServer)
+    (lib.cmakeBool "SERVERGUI" buildServerGui)
+    (lib.cmakeBool "TOOLS" buildExtraTools)
+  ];
+
+  meta =
+    {
+      description = "Collaborative drawing program that allows multiple users to sketch on the same canvas simultaneously";
+      homepage = "https://drawpile.net/";
+      downloadPage = "https://drawpile.net/download/";
+      license = lib.licenses.gpl3Plus;
+      maintainers = with lib.maintainers; [ fgaz ];
+      platforms = lib.platforms.unix;
+      broken = stdenv.hostPlatform.isDarwin;
+    }
+    // lib.optionalAttrs buildServer {
+      mainProgram = "drawpile-srv";
+    }
+    // lib.optionalAttrs buildClient {
+      mainProgram = "drawpile";
+    };
+}

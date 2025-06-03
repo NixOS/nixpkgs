@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,43 +13,60 @@ let
 
   format = pkgs.formats.json { };
 
-  configFile = format.generate "nats.conf" cfg.settings;
+  validateConfig =
+    file:
+    pkgs.callPackage (
+      { runCommand, nats-server }:
+      runCommand "validate-nats-conf"
+        {
+          nativeBuildInputs = [ nats-server ];
+        }
+        ''
+          nats-server --config "${file}" -t
+          ln -s "${file}" "$out"
+        ''
+    ) { };
 
-in {
+  unvalidatedConfigFile = format.generate "nats.conf" cfg.settings;
+
+  configFile =
+    if cfg.validateConfig then validateConfig unvalidatedConfigFile else unvalidatedConfigFile;
+in
+{
 
   ### Interface
 
   options = {
     services.nats = {
-      enable = mkEnableOption (lib.mdDoc "NATS messaging system");
+      enable = mkEnableOption "NATS messaging system";
 
       user = mkOption {
         type = types.str;
         default = "nats";
-        description = lib.mdDoc "User account under which NATS runs.";
+        description = "User account under which NATS runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "nats";
-        description = lib.mdDoc "Group under which NATS runs.";
+        description = "Group under which NATS runs.";
       };
 
       serverName = mkOption {
         default = "nats";
         example = "n1-c3";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Name of the NATS server, must be unique if clustered.
         '';
       };
 
-      jetstream = mkEnableOption (lib.mdDoc "JetStream");
+      jetstream = mkEnableOption "JetStream";
 
       port = mkOption {
         default = 4222;
         type = types.port;
-        description = lib.mdDoc ''
+        description = ''
           Port on which to listen.
         '';
       };
@@ -52,7 +74,7 @@ in {
       dataDir = mkOption {
         default = "/var/lib/nats";
         type = types.path;
-        description = lib.mdDoc ''
+        description = ''
           The NATS data directory. Only used if JetStream is enabled, for
           storing stream metadata and messages.
 
@@ -74,10 +96,20 @@ in {
             };
           };
         '';
-        description = lib.mdDoc ''
+        description = ''
           Declarative NATS configuration. See the
           [
           NATS documentation](https://docs.nats.io/nats-server/configuration) for a list of options.
+        '';
+      };
+
+      validateConfig = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          If true, validate nats config at build time. When the config can't
+          be checked during build time, for example when it includes other
+          files, disable this option.
         '';
       };
     };
@@ -133,11 +165,17 @@ in {
           ProtectSystem = "strict";
           ReadOnlyPaths = [ ];
           ReadWritePaths = [ cfg.dataDir ];
-          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+          ];
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
-          SystemCallFilter = [ "@system-service" "~@privileged" ];
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged"
+          ];
           UMask = "0077";
         }
       ];

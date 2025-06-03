@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, gnupg
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  gnupg,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "python-gnupg";
-  version = "0.5.1";
+  version = "0.5.4";
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VnS61Ok4dsCw0xl+MU1/lC05AYvzHiuDP2eIpoE8P7g=";
+    hash = "sha256-8v21+ylhXHfCdD4cs9kxQ1Om6HsQw30jjZGuHG/q4IY=";
   };
 
   postPatch = ''
@@ -24,13 +25,9 @@ buildPythonPackage rec {
       --replace "os.environ.get('GPGBINARY', 'gpg')" "os.environ.get('GPGBINARY', '${gnupg}/bin/gpg')"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # network access
@@ -44,6 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/vsajip/python-gnupg";
     changelog = "https://github.com/vsajip/python-gnupg/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ copumpkin ];
+    maintainers = [ ];
   };
 }

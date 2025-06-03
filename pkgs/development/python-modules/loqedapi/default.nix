@@ -1,16 +1,17 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, wheel
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "loqedapi";
-  version = "2.1.8";
+  version = "2.1.10";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cpolhout";
     repo = "loqedAPI";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9ekZ98GazH1tna4JT5SEUETKR227UYRIBBghdj+TFB4=";
+    tag = "v${version}";
+    hash = "sha256-IYzrGqql6mmm+FmasxFJvKgHvg7n81WOu+GGAEQ1+Os=";
   };
 
   nativeBuildInputs = [
@@ -35,9 +36,7 @@ buildPythonPackage rec {
   # Tests require network access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "loqedAPI"
-  ];
+  pythonImportsCheck = [ "loqedAPI" ];
 
   meta = with lib; {
     description = "Module to interact with the Loqed Smart Door Lock API";

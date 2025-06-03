@@ -1,25 +1,24 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, cmake
-, wrapQtAppsHook
-, qtbase
-, qttools
-, doxygen
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  cmake,
+  libsForQt5,
+  doxygen,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dde-app-services";
-  version = "1.0.23";
+  version = "1.0.25";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-INxbRDpG3MqPW6IMTqEagDCGo7vwxkR6D1+lcWdjO3w=";
+    hash = "sha256-/lHiSUOTD8nC0WDLAHAFzm1YC0WjSS5W5JNC0cjeVEo=";
   };
 
   postPatch = ''
@@ -38,9 +37,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    qttools
+    libsForQt5.qttools
     doxygen
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -52,13 +51,13 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DDVERSION=${version}"
     "-DDSG_DATA_DIR=/run/current-system/sw/share/dsg"
-    "-DQCH_INSTALL_DESTINATION=${placeholder "out"}/${qtbase.qtDocPrefix}"
+    "-DQCH_INSTALL_DESTINATION=${placeholder "out"}/${libsForQt5.qtbase.qtDocPrefix}"
   ];
 
   preConfigure = ''
     # qt.qpa.plugin: Could not find the Qt platform plugin "minimal"
     # A workaround is to set QT_PLUGIN_PATH explicitly
-    export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
+    export QT_PLUGIN_PATH=${libsForQt5.qtbase.bin}/${libsForQt5.qtbase.qtPluginPrefix}
   '';
 
   meta = with lib; {
@@ -66,6 +65,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/dde-app-services";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }

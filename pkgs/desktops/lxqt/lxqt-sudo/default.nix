@@ -1,43 +1,46 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, lxqt-build-tools
-, qtbase
-, qttools
-, qtx11extras
-, qtsvg
-, kwindowsystem
-, liblxqt
-, libqtxdg
-, sudo
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  kwindowsystem,
+  liblxqt,
+  libqtxdg,
+  lxqt-build-tools,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtwayland,
+  sudo,
+  wrapQtAppsHook,
+  gitUpdater,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "lxqt-sudo";
-  version = "1.4.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-J7jiap3qZD+P0kGzt+b3wa16pxbS2fr3OmalhV5O9ro=";
+    hash = "sha256-H2uprArYfiX1KyoWx3RRHkLcA0z9LKGDeghD+085VC4=";
   };
 
   nativeBuildInputs = [
     cmake
     lxqt-build-tools
     qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtx11extras
-    qtsvg
     kwindowsystem
     liblxqt
     libqtxdg
+    qtbase
+    qtsvg
+    qtwayland
     sudo
   ];
 
@@ -48,6 +51,6 @@ mkDerivation rec {
     description = "GUI frontend for sudo/su";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    teams = [ teams.lxqt ];
   };
 }

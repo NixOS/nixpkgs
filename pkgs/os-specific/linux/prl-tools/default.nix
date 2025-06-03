@@ -1,30 +1,37 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, bbe
-, makeWrapper
-, p7zip
-, perl
-, undmg
-, dbus-glib
-, glib
-, xorg
-, zlib
-, kernel
-, bash
-, cups
-, gawk
-, netcat
-, timetrap
-, util-linux
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  bbe,
+  makeWrapper,
+  p7zip,
+  perl,
+  undmg,
+  dbus-glib,
+  fuse,
+  glib,
+  xorg,
+  zlib,
+  kernel,
+  bash,
+  cups,
+  gawk,
+  netcat,
+  timetrap,
+  util-linux,
+  wayland,
 }:
 
 let
   kernelVersion = kernel.modDirVersion;
   kernelDir = "${kernel.dev}/lib/modules/${kernelVersion}";
 
-  libPath = lib.concatStringsSep ":" [ "${glib.out}/lib" "${xorg.libXrandr}/lib" ];
+  libPath = lib.concatStringsSep ":" [
+    "${glib.out}/lib"
+    "${xorg.libXrandr}/lib"
+    "${wayland.out}/lib"
+  ];
   scriptPath = lib.concatStringsSep ":" [
     "${bash}/bin"
     "${cups}/sbin"
@@ -36,16 +43,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prl-tools";
-  version = "19.2.1-54832";
+  version = "20.3.1-55959";
 
   # We download the full distribution to extract prl-tools-lin.iso from
   # => ${dmg}/Parallels\ Desktop.app/Contents/Resources/Tools/prl-tools-lin.iso
   src = fetchurl {
     url = "https://download.parallels.com/desktop/v${lib.versions.major finalAttrs.version}/${finalAttrs.version}/ParallelsDesktop-${finalAttrs.version}.dmg";
-    hash = "sha256-PmQSGoJbB0+Q7t56FOFxOVQ86CJLqAa6PTnWLx5CzpA=";
+    hash = "sha256-/J6NouI2htptG06Undeg1rUfbWUu6q/nV2P9D+sS7OA=";
   };
 
-  hardeningDisable = [ "pic" "format" ];
+  hardeningDisable = [
+    "pic"
+    "format"
+  ];
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -58,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     dbus-glib
+    fuse
     glib
     xorg.libX11
     xorg.libXcomposite
@@ -78,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     undmg $src
     export sourceRoot=prl-tools-build
-    7z x "Parallels Desktop.app/Contents/Resources/Tools/prl-tools-lin${lib.optionalString stdenv.isAarch64 "-arm"}.iso" -o$sourceRoot
+    7z x "Parallels Desktop.app/Contents/Resources/Tools/prl-tools-lin${lib.optionalString stdenv.hostPlatform.isAarch64 "-arm"}.iso" -o$sourceRoot
     ( cd $sourceRoot/kmods; tar -xaf prl_mod.tar.gz )
 
     runHook postUnpack
@@ -106,15 +117,20 @@ stdenv.mkDerivation (finalAttrs: {
     ( # kernel modules
       cd kmods
       mkdir -p $out/lib/modules/${kernelVersion}/extra
-      cp prl_fs/SharedFolders/Guest/Linux/prl_fs/prl_fs.ko $out/lib/modules/${kernelVersion}/extra
       cp prl_fs_freeze/Snapshot/Guest/Linux/prl_freeze/prl_fs_freeze.ko $out/lib/modules/${kernelVersion}/extra
       cp prl_tg/Toolgate/Guest/Linux/prl_tg/prl_tg.ko $out/lib/modules/${kernelVersion}/extra
-      ${lib.optionalString stdenv.isAarch64
-      "cp prl_notifier/Installation/lnx/prl_notifier/prl_notifier.ko $out/lib/modules/${kernelVersion}/extra"}
+      ${lib.optionalString stdenv.hostPlatform.isAarch64 "cp prl_notifier/Installation/lnx/prl_notifier/prl_notifier.ko $out/lib/modules/${kernelVersion}/extra"}
     )
 
     ( # tools
-      cd tools/tools${if stdenv.isAarch64 then "-arm64" else if stdenv.isx86_64 then "64" else "32"}
+      cd tools/tools${
+        if stdenv.hostPlatform.isAarch64 then
+          "-arm64"
+        else if stdenv.hostPlatform.isx86_64 then
+          "64"
+        else
+          "32"
+      }
       mkdir -p $out/lib
 
       # prltoolsd contains hardcoded /bin/bash path
@@ -142,6 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
       done
 
       install -Dm755 ../../tools/prlfsmountd.sh $out/sbin/prlfsmountd
+      install -Dm755 ../../tools/prlbinfmtconfig.sh $out/sbin/prlbinfmtconfig
       for f in $out/bin/* $out/sbin/*; do
         wrapProgram $f \
           --prefix LD_LIBRARY_PATH ':' "${libPath}" \
@@ -153,9 +170,6 @@ stdenv.mkDerivation (finalAttrs: {
         ln -s $out/$i $out/''${i%.0.0}
       done
 
-      mkdir -p $out/share/man/man8
-      install -Dm644 ../mount.prl_fs.8 $out/share/man/man8
-
       substituteInPlace ../99prltoolsd-hibernate \
         --replace "/bin/bash" "${bash}/bin/bash"
 
@@ -166,11 +180,16 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Parallels Tools for Linux guests";
     homepage = "https://parallels.com";
     license = licenses.unfree;
-    maintainers = with maintainers; [ catap wegank ];
+    maintainers = with maintainers; [
+      wegank
+      codgician
+    ];
     platforms = platforms.linux;
   };
 })

@@ -1,37 +1,38 @@
-{ lib
-, aiohttp
-, azure-core
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, microsoft-kiota-abstractions
-, opentelemetry-api
-, opentelemetry-sdk
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  azure-core,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  microsoft-kiota-abstractions,
+  opentelemetry-api,
+  opentelemetry-sdk,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "microsoft-kiota-authentication-azure";
-  version = "1.0.0";
+  version = "1.9.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "microsoft";
-    repo = "kiota-authentication-azure-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-RA0BbIwDs3cXiH4tQsvCGUO1OAg+DWjEeWd7MEVIC8E=";
+    repo = "kiota-python";
+    tag = "microsoft-kiota-serialization-text-v${version}";
+    hash = "sha256-FUfVkJbpD0X7U7DPzyoh+84Bk7C07iLT9dmbUeliFu8=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  sourceRoot = "source/packages/authentication/azure/";
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     aiohttp
     azure-core
     microsoft-kiota-abstractions
@@ -45,14 +46,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "kiota_authentication_azure"
-  ];
+  pythonImportsCheck = [ "kiota_authentication_azure" ];
 
   meta = with lib; {
     description = "Kiota Azure authentication provider";
-    homepage = "https://github.com/microsoft/kiota-authentication-azure-python";
-    changelog = "https://github.com/microsoft/kiota-authentication-azure-python/blob/${version}/CHANGELOG.md";
+    homepage = "https://github.com/microsoft/kiota-python/tree/main/packages/authentication/azure";
+    changelog = "https://github.com/microsoft/kiota-python/releases/tag/microsoft-kiota-authentication-azure-${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

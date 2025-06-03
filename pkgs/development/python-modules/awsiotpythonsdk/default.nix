@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -15,20 +16,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-iot-device-sdk-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-TUNIWGal7NQy2qmHVTiw6eX4t/Yt3NnM3HHztBwMfoM=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "AWSIoTPythonSDK"
-  ];
+  pythonImportsCheck = [ "AWSIoTPythonSDK" ];
 
   meta = with lib; {
     description = "Python SDK for connecting to AWS IoT";

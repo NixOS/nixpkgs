@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, substituteAll
-, file
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  replaceVars,
+  file,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,8 +22,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./libmagic-path.patch;
+    (replaceVars ./libmagic-path.patch {
       libmagic = "${file}/lib/libmagic${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
     (fetchpatch {
@@ -44,14 +44,16 @@ buildPythonPackage rec {
     export LC_ALL=en_US.UTF-8
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  postCheck = ''
+    unset LC_ALL
+  '';
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "A python interface to the libmagic file type identification library";
+    description = "Python interface to the libmagic file type identification library";
     homepage = "https://github.com/ahupp/python-magic";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

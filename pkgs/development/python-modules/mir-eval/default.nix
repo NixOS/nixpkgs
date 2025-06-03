@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, future
-, six
-, numpy
-, scipy
-, matplotlib
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  future,
+  six,
+  numpy,
+  scipy,
+  matplotlib,
 }:
 
 buildPythonPackage rec {
   pname = "mir-eval";
-  version = "0.7";
+  version = "0.8.2";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "mir_eval";
     inherit version;
-    hash = "sha256-4f66pXZsZadUXCoXCyQUkPR6mJhzcLHgZ0JCTF3r5l4=";
+    hash = "sha256-FBo+EZMnaIn8MukRVH5z3LPoKe6M/qYPe7zWM8B5JWk=";
   };
 
   propagatedBuildInputs = [
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     matplotlib
   ];
 
-  pythonImportsCheck = [
-    "mir_eval"
-  ];
+  pythonImportsCheck = [ "mir_eval" ];
 
   meta = with lib; {
     description = "Common metrics for common audio/music processing tasks";

@@ -1,57 +1,69 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, interegular
-, cloudpickle
-, diskcache
-, joblib
-, jsonschema
-, pydantic
-, lark
-, nest-asyncio
-, numba
-, scipy
-, torch
-, transformers
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  airportsdata,
+  interegular,
+  cloudpickle,
+  datasets,
+  diskcache,
+  jinja2,
+  jsonschema,
+  numpy,
+  outlines-core,
+  pycountry,
+  pydantic,
+  lark,
+  nest-asyncio,
+  referencing,
+  requests,
+  torch,
+  transformers,
 }:
 
 buildPythonPackage rec {
   pname = "outlines";
-  version = "0.0.34";
+  version = "0.1.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "outlines-dev";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-iIlthrhmCm3n0PwUSa1n7CL04sDc1Cs+rVboPY4nH78=";
+    repo = "outlines";
+    tag = version;
+    hash = "sha256-HuJqLbBHyoyY5ChQQi+9ftvPjLuh63Guk2w6KSZxq6s=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    airportsdata
     interegular
     cloudpickle
+    datasets
     diskcache
-    joblib
+    jinja2
     jsonschema
+    outlines-core
     pydantic
     lark
     nest-asyncio
-    numba
-    scipy
+    numpy
+    referencing
+    requests
     torch
     transformers
+    pycountry
   ];
 
-  pythonImportsCheck = [
-    "outlines"
-  ];
+  checkPhase = ''
+    export HOME=$(mktemp -d)
+    python3 -c 'import outlines'
+  '';
 
   meta = with lib; {
     description = "Structured text generation";

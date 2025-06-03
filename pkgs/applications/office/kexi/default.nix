@@ -1,10 +1,37 @@
 {
-  mkDerivation, lib, fetchurl, fetchpatch, extra-cmake-modules, kdoctools,
-  boost, qttools, qtwebkit,
-  breeze-icons, karchive, kcodecs, kcompletion, kconfig, kconfigwidgets, kcoreaddons,
-  kcrash, kguiaddons, ki18n, kiconthemes, kitemviews, kio, ktexteditor, ktextwidgets,
-  kwidgetsaddons, kxmlgui,
-  kdb, kproperty, kreport, lcms2, libmysqlclient, marble, postgresql
+  mkDerivation,
+  lib,
+  fetchurl,
+  fetchpatch,
+  extra-cmake-modules,
+  kdoctools,
+  boost,
+  qttools,
+  qtwebkit,
+  breeze-icons,
+  karchive,
+  kcodecs,
+  kcompletion,
+  kconfig,
+  kconfigwidgets,
+  kcoreaddons,
+  kcrash,
+  kguiaddons,
+  ki18n,
+  kiconthemes,
+  kitemviews,
+  kio,
+  ktexteditor,
+  ktextwidgets,
+  kwidgetsaddons,
+  kxmlgui,
+  kdb,
+  kproperty,
+  kreport,
+  lcms2,
+  libmysqlclient,
+  libpq,
+  marble,
 }:
 
 mkDerivation rec {
@@ -16,14 +43,39 @@ mkDerivation rec {
     sha256 = "1zy1q7q9rfdaws3rwf3my22ywkn6g747s3ixfcg9r80mm2g3z0bs";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    kdoctools
+  ];
 
   buildInputs = [
-    boost qttools qtwebkit
-    breeze-icons karchive kcodecs kcompletion kconfig kconfigwidgets kcoreaddons
-    kcrash kguiaddons ki18n kiconthemes kitemviews kio ktexteditor ktextwidgets
-    kwidgetsaddons kxmlgui
-    kdb kproperty kreport lcms2 libmysqlclient marble postgresql
+    boost
+    qttools
+    qtwebkit
+    breeze-icons
+    karchive
+    kcodecs
+    kcompletion
+    kconfig
+    kconfigwidgets
+    kcoreaddons
+    kcrash
+    kguiaddons
+    ki18n
+    kiconthemes
+    kitemviews
+    kio
+    ktexteditor
+    ktextwidgets
+    kwidgetsaddons
+    kxmlgui
+    kdb
+    kproperty
+    kreport
+    lcms2
+    libmysqlclient
+    libpq
+    marble
   ];
 
   propagatedUserEnvPkgs = [ kproperty ];
@@ -40,7 +92,7 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A open source visual database applications creator, a long-awaited competitor for programs like MS Access or Filemaker";
+    description = "Open source visual database applications creator, a long-awaited competitor for programs like MS Access or Filemaker";
     longDescription = ''
       Kexi is a visual database applications creator.
       It can be used for creating database schemas,
@@ -52,6 +104,9 @@ mkDerivation rec {
     homepage = "https://kexi-project.org/";
     maintainers = with maintainers; [ zraexy ];
     platforms = platforms.linux;
-    license = with licenses; [ gpl2 lgpl2 ];
+    license = with licenses; [
+      gpl2
+      lgpl2
+    ];
   };
 }

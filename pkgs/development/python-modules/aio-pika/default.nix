@@ -1,44 +1,59 @@
-{ lib
-, aiomisc-pytest
-, aiormq
-, buildPythonPackage
-, fetchFromGitHub
-, pamqp
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, shortuuid
-, yarl
+{
+  lib,
+  aiomisc-pytest,
+  aiormq,
+  buildPythonPackage,
+  docker,
+  exceptiongroup,
+  fetchFromGitHub,
+  pamqp,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  shortuuid,
+  testcontainers,
+  wrapt,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "aio-pika";
-  version = "9.4.0";
+  version = "9.5.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = "aio-pika";
-    rev = "refs/tags/${version}";
-    hash = "sha256-EntV/CBvT4II4nxsVe3KjNA4EPV7Oc6h2G0fX0fHKTU=";
+    tag = version;
+    hash = "sha256-Gs01y1VRVgk5i4JI+fqtRo6mOyzBzHM/2hJPVenc+3g=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiormq
+    exceptiongroup
     yarl
   ];
 
   nativeCheckInputs = [
     aiomisc-pytest
+    docker
     pamqp
     pytestCheckHook
     shortuuid
+    testcontainers
+    wrapt
+  ];
+
+  disabledTests = [
+    # Tests attempt to connect to a RabbitMQ server
+    "test_connection_interleave"
+    "test_connection_happy_eyeballs_delay"
+    "test_robust_connection_interleave"
+    "test_robust_connection_happy_eyeballs_delay"
   ];
 
   disabledTestPaths = [
@@ -53,9 +68,7 @@ buildPythonPackage rec {
     "tests/test_types.py"
   ];
 
-  pythonImportsCheck = [
-    "aio_pika"
-  ];
+  pythonImportsCheck = [ "aio_pika" ];
 
   meta = with lib; {
     description = "AMQP 0.9 client designed for asyncio and humans";

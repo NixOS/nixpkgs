@@ -4,20 +4,24 @@ let
   inherit (lib)
     genAttrs
     isString
+    mapAttrs
+    removeAttrs
     throwIfNot
     ;
 
-  showMaybeAttrPosPre = prefix: attrName: v:
-    let pos = builtins.unsafeGetAttrPos attrName v;
-    in if pos == null then "" else "${prefix}${pos.file}:${toString pos.line}:${toString pos.column}";
+  showMaybeAttrPosPre =
+    prefix: attrName: v:
+    let
+      pos = builtins.unsafeGetAttrPos attrName v;
+    in
+    if pos == null then "" else "${prefix}${pos.file}:${toString pos.line}:${toString pos.column}";
 
-  showMaybePackagePosPre = prefix: pkg:
-    if pkg?meta.position && isString pkg.meta.position
-    then "${prefix}${pkg.meta.position}"
-    else "";
+  showMaybePackagePosPre =
+    prefix: pkg:
+    if pkg ? meta.position && isString pkg.meta.position then "${prefix}${pkg.meta.position}" else "";
 in
 {
-  /*
+  /**
     Restrict a derivation to a predictable set of attribute names, so
     that the returned attrset is not strict in the actual derivation,
     saving a lot of computation when the derivation is non-trivial.
@@ -62,34 +66,44 @@ in
 
         (lazyDerivation { inherit derivation }).pythonPath
 
+    # Inputs
+
+    Takes an attribute set with the following attributes
+
+    `derivation`
+    : The derivation to be wrapped.
+
+    `meta`
+    : Optional meta attribute.
+
+      While this function is primarily about derivations, it can improve
+      the `meta` package attribute, which is usually specified through
+      `mkDerivation`.
+
+    `passthru`
+    : Optional extra values to add to the returned attrset.
+
+      This can be used for adding package attributes, such as `tests`.
+
+    `outputs`
+    : Optional list of assumed outputs. Default: ["out"]
+
+      This must match the set of outputs that the returned derivation has.
+      You must use this when the derivation has multiple outputs.
   */
   lazyDerivation =
     args@{
-      # The derivation to be wrapped.
-      derivation
-    , # Optional meta attribute.
-      #
-      # While this function is primarily about derivations, it can improve
-      # the `meta` package attribute, which is usually specified through
-      # `mkDerivation`.
-      meta ? null
-    , # Optional extra values to add to the returned attrset.
-      #
-      # This can be used for adding package attributes, such as `tests`.
-      passthru ? { }
-    , # Optional list of assumed outputs. Default: ["out"]
-      #
-      # This must match the set of outputs that the returned derivation has.
-      # You must use this when the derivation has multiple outputs.
-      outputs ? [ "out" ]
+      derivation,
+      meta ? null,
+      passthru ? { },
+      outputs ? [ "out" ],
     }:
     let
       # These checks are strict in `drv` and some `drv` attributes, but the
       # attrset spine returned by lazyDerivation does not depend on it.
       # Instead, the individual derivation attributes do depend on it.
       checked =
-        throwIfNot (derivation.type or null == "derivation")
-          "lazyDerivation: input must be a derivation."
+        throwIfNot (derivation.type or null == "derivation") "lazyDerivation: input must be a derivation."
           throwIfNot
           # NOTE: Technically we could require our outputs to be a subset of the
           # actual ones, or even leave them unchecked and fail on a lazy basis.
@@ -139,7 +153,13 @@ in
       # A fixed set of derivation values, so that `lazyDerivation` can return
       # its attrset before evaluating `derivation`.
       # This must only list attributes that are available on _all_ derivations.
-      inherit (checked) outPath outputName drvPath name system;
+      inherit (checked)
+        outPath
+        outputName
+        drvPath
+        name
+        system
+        ;
       inherit outputs;
 
       # The meta attribute can either be taken from the derivation, or if the
@@ -149,29 +169,84 @@ in
     // genAttrs outputs (outputName: checked.${outputName})
     // passthru;
 
-  /* Conditionally set a derivation attribute.
+  /**
+    Conditionally set a derivation attribute.
 
-     Because `mkDerivation` sets `__ignoreNulls = true`, a derivation
-     attribute set to `null` will not impact the derivation output hash.
-     Thus, this function passes through its `value` argument if the `cond`
-     is `true`, but returns `null` if not.
+    Because `mkDerivation` sets `__ignoreNulls = true`, a derivation
+    attribute set to `null` will not impact the derivation output hash.
+    Thus, this function passes through its `value` argument if the `cond`
+    is `true`, but returns `null` if not.
 
-     Type: optionalDrvAttr :: Bool -> a -> a | Null
+    # Inputs
 
-     Example:
-       (stdenv.mkDerivation {
-         name = "foo";
-         x = optionalDrvAttr true 1;
-         y = optionalDrvAttr false 1;
-       }).drvPath == (stdenv.mkDerivation {
-         name = "foo";
-         x = 1;
-       }).drvPath
-       => true
+    `cond`
+
+    : Condition
+
+    `value`
+
+    : Attribute value
+
+    # Type
+
+    ```
+    optionalDrvAttr :: Bool -> a -> a | Null
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.derivations.optionalDrvAttr` usage example
+
+    ```nix
+    (stdenv.mkDerivation {
+      name = "foo";
+      x = optionalDrvAttr true 1;
+      y = optionalDrvAttr false 1;
+    }).drvPath == (stdenv.mkDerivation {
+      name = "foo";
+      x = 1;
+    }).drvPath
+    => true
+    ```
+
+    :::
   */
-  optionalDrvAttr =
-    # Condition
-    cond:
-    # Attribute value
-    value: if cond then value else null;
+  optionalDrvAttr = cond: value: if cond then value else null;
+
+  /**
+    Wrap a derivation such that instantiating it produces a warning.
+
+    All attributes apart from `meta`, `name`, and `type` (which are used by
+    `nix search`) will be wrapped in `lib.warn`.
+
+    # Inputs
+
+    `msg`
+    : The warning message to emit (via `lib.warn`).
+
+    `drv`
+    : The derivation to wrap.
+
+    # Examples
+    :::{.example}
+    ## `lib.derivations.warnOnInstantiate` usage example
+
+    ```nix
+    {
+      myPackage = warnOnInstantiate "myPackage has been renamed to my-package" my-package;
+    }
+    ```
+
+    :::
+  */
+  warnOnInstantiate =
+    msg: drv:
+    let
+      drvToWrap = removeAttrs drv [
+        "meta"
+        "name"
+        "type"
+      ];
+    in
+    drv // mapAttrs (_: lib.warn msg) drvToWrap;
 }

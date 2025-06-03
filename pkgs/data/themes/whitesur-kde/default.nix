@@ -1,63 +1,78 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, kdeclarative
-, plasma-framework
-, plasma-workspace
-, gitUpdater
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gitUpdater,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+# NOTE:
+#
+# In order to use the whitesur sddm themes, the packages
+# kdePackages.plasma-desktop and kdePackages.qtsvg should be added to
+# the option services.displayManager.sddm.extraPackages of the sddm
+# module:
+#
+# environment.systemPackages = with pkgs; [
+#   whitesur-kde
+# ];
+#
+# services.displayManager.sddm = {
+#     enable = true;
+#     package = pkgs.kdePackages.sddm;
+#     theme = "WhiteSur-dark";
+#     extraPackages = with pkgs; [
+#       kdePackages.plasma-desktop
+#       kdePackages.qtsvg
+#     ];
+# };
+
+stdenvNoCC.mkDerivation rec {
   pname = "whitesur-kde";
-  version = "unstable-2023-10-06";
+  version = "2024-11-18";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
-    repo = finalAttrs.pname;
-    rev = "2b4bcc76168bd8a4a7601188e177fa0ab485cdc8";
-    hash = "sha256-+Iooj8a7zfLhEWnjLEVoe/ebD9Vew5HZdz0wpWVZxA8=";
+    repo = "whitesur-kde";
+    rev = version;
+    hash = "sha256-052mKpf8e5pSecMzaWB3McOZ/uAqp/XGJjcVWnlKPLE=";
   };
 
-  # Propagate sddm theme dependencies to user env otherwise sddm does
-  # not find them. Putting them in buildInputs is not enough.
-  propagatedUserEnvPkgs = [
-    kdeclarative.bin
-    plasma-framework
-    plasma-workspace
-  ];
-
   postPatch = ''
-    patchShebangs install.sh
+    patchShebangs install.sh sddm/install.sh
 
     substituteInPlace install.sh \
-      --replace '$HOME/.config' $out/share \
-      --replace '$HOME/.local' $out \
-      --replace '"$HOME"/.Xresources' $out/doc/.Xresources
+      --replace-fail '[ "$UID" -eq "$ROOT_UID" ]' true \
+      --replace-fail /usr $out \
+      --replace-fail '"$HOME"/.Xresources' $out/doc/.Xresources
+
+    substituteInPlace sddm/install.sh \
+      --replace-fail '[ "$UID" -eq "$ROOT_UID" ]' true \
+      --replace-fail /usr $out \
+      --replace-fail 'REO_DIR="$(cd $(dirname $0) && pwd)"' 'REO_DIR=sddm'
 
     substituteInPlace sddm/*/Main.qml \
-      --replace /usr $out
+      --replace-fail /usr $out
   '';
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/doc
-
     name= ./install.sh
 
     mkdir -p $out/share/sddm/themes
-    cp -a sddm/WhiteSur $out/share/sddm/themes/
+    sddm/install.sh
 
     runHook postInstall
   '';
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
-    description = "A MacOS big sur like theme for KDE Plasma desktop";
+  meta = {
+    description = "MacOS big sur like theme for KDE Plasma desktop";
     homepage = "https://github.com/vinceliuice/WhiteSur-kde";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.romildo ];
   };
-})
+}

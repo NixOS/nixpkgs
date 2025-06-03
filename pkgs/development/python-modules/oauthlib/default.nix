@@ -1,19 +1,21 @@
-{ lib
-, blinker
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, mock
-, pyjwt
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  blinker,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  mock,
+  pyjwt,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
 
-# for passthru.tests
-, django-allauth
-, django-oauth-toolkit
-, google-auth-oauthlib
-, requests-oauthlib
+  # for passthru.tests
+  django-allauth,
+  django-oauth-toolkit,
+  google-auth-oauthlib,
+  requests-oauthlib,
 }:
 
 buildPythonPackage rec {
@@ -30,31 +32,40 @@ buildPythonPackage rec {
     hash = "sha256-KADS1pEaLYi86LEt2VVuz8FVTBANzxC8EeQLgGMxuBU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     rsa = [ cryptography ];
-    signedtoken = [ cryptography pyjwt ];
+    signedtoken = [
+      cryptography
+      pyjwt
+    ];
     signals = [ blinker ];
   };
 
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "oauthlib"
-  ];
+  disabledTests =
+    [
+      # https://github.com/oauthlib/oauthlib/issues/877
+      "test_rsa_bad_keys"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      "test_filter_params"
+    ];
+
+  pythonImportsCheck = [ "oauthlib" ];
 
   passthru.tests = {
     inherit
       django-allauth
       django-oauth-toolkit
       google-auth-oauthlib
-      requests-oauthlib;
+      requests-oauthlib
+      ;
   };
 
   meta = with lib; {

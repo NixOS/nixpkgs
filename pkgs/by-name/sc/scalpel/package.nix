@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, autoconf
-, automake
-, libtool
-, tre
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  autoconf,
+  automake,
+  libtool,
+  tre,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,6 +23,9 @@ stdenv.mkDerivation (finalAttrs: {
     autoconf
     automake
     libtool
+  ];
+
+  buildInputs = [
     tre
   ];
 
@@ -31,7 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
       src/scalpel.h
   '';
 
-  env.CXXFLAGS = "-std=c++14" + lib.optionalString  stdenv.cc.isClang " -Wno-error=reserved-user-defined-literal";
+  env.CXXFLAGS =
+    "-std=c++14" + lib.optionalString stdenv.cc.isClang " -Wno-error=reserved-user-defined-literal";
 
   preConfigure = ''
     ./bootstrap

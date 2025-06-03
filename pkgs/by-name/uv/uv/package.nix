@@ -1,58 +1,83 @@
-{ lib
-, cmake
-, darwin
-, fetchFromGitHub
-, openssl
-, pkg-config
-, rustPlatform
-, stdenv
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+
+  # buildInputs
+  rust-jemalloc-sys,
+
+  # nativeBuildInputs
+  installShellFiles,
+
+  buildPackages,
+  versionCheckHook,
+  python3Packages,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uv";
-  version = "0.1.14";
+  version = "0.7.9";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
-    rev = version;
-    hash = "sha256-2YqmqqkC6tnjuJ+bekf4WHRohxYS0nvJsH6AvLdCVKs=";
+    tag = finalAttrs.version;
+    hash = "sha256-Q2HOR8kpHuCB4c61vS0yojyue5tYNCHpx/NuG0HGHl4=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "async_zip-0.0.16" = "sha256-M94ceTCtyQc1AtPXYrVGplShQhItqZZa/x5qLiL+gs0=";
-      "pubgrub-0.2.1" = "sha256-p6RQ0pmatTnwp1s37ZktkhwakPTTehMlI3H5JUzwVrI=";
-    };
-  };
-
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-oIgvufZsS65gL0SL8WQggjZ3UFPDfEpf0yM+kkkUiqg=";
 
   buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
+    rust-jemalloc-sys
   ];
 
-  cargoBuildFlags = [ "--package" "uv" ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  # Tests require network access
+  cargoBuildFlags = [
+    "--package"
+    "uv"
+  ];
+
+  # Tests require python3
   doCheck = false;
 
-  env = {
-    OPENSSL_NO_VENDOR = true;
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd uv \
+        --bash <(${emulator} $out/bin/uv generate-shell-completion bash) \
+        --fish <(${emulator} $out/bin/uv generate-shell-completion fish) \
+        --zsh <(${emulator} $out/bin/uv generate-shell-completion zsh)
+    ''
+  );
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    tests.uv-python = python3Packages.uv;
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
-    description = "An extremely fast Python package installer and resolver, written in Rust";
+  meta = {
+    description = "Extremely fast Python package installer and resolver, written in Rust";
     homepage = "https://github.com/astral-sh/uv";
-    changelog = "https://github.com/astral-sh/uv/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ marsam ];
+    changelog = "https://github.com/astral-sh/uv/blob/${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with lib.maintainers; [
+      bengsparks
+      GaetanLepage
+      prince213
+    ];
     mainProgram = "uv";
   };
-}
+})

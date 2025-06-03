@@ -1,30 +1,32 @@
-{ lib
-, attrs
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, hatch-fancy-pypi-readme
-, hatch-vcs
-, hatchling
-, idna
-, pyasn1
-, pyasn1-modules
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  hatch-fancy-pypi-readme,
+  hatch-vcs,
+  hatchling,
+  idna,
+  pyasn1,
+  pyasn1-modules,
+  pytestCheckHook,
+  pythonOlder,
+  pyopenssl,
 }:
 
 buildPythonPackage rec {
   pname = "service-identity";
-  version = "23.1.0";
+  version = "24.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pyca";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-PGDtsDgRwh7GuuM4OuExiy8L4i3Foo+OD0wMrndPkvo=";
+    repo = "service-identity";
+    tag = version;
+    hash = "sha256-onxCUWqGVeenLqB5lpUpj3jjxTM61ogXCQOGnDnClT4=";
   };
 
   nativeBuildInputs = [
@@ -41,13 +43,11 @@ buildPythonPackage rec {
     pyasn1-modules
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pyopenssl ];
 
-  pythonImportsCheck = [
-    "service_identity"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "service_identity" ];
 
   meta = with lib; {
     description = "Service identity verification for pyOpenSSL";

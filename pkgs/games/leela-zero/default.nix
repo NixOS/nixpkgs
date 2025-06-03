@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, boost
-, opencl-headers
-, ocl-icd
-, qtbase
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  opencl-headers,
+  ocl-icd,
+  qtbase,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,11 +18,17 @@ stdenv.mkDerivation rec {
     owner = "gcp";
     repo = "leela-zero";
     rev = "v${version}";
-    sha256 = "sha256-AQRp2rkL9KCZdsJN6uz2Y+3kV4lyRLYjWn0p7UOjBMw=";
+    hash = "sha256-AQRp2rkL9KCZdsJN6uz2Y+3kV4lyRLYjWn0p7UOjBMw=";
     fetchSubmodules = true;
   };
 
-  buildInputs = [ boost opencl-headers ocl-icd qtbase zlib ];
+  buildInputs = [
+    boost
+    opencl-headers
+    ocl-icd
+    qtbase
+    zlib
+  ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -31,7 +38,10 @@ stdenv.mkDerivation rec {
     description = "Go engine modeled after AlphaGo Zero";
     homepage = "https://github.com/gcp/leela-zero";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.averelld maintainers.omnipotententity ];
+    maintainers = [
+      maintainers.averelld
+      maintainers.omnipotententity
+    ];
     platforms = platforms.linux;
   };
 }

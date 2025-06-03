@@ -1,57 +1,54 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapQtAppsHook
-, alsa-lib
-, boost
-, chromaprint
-, fftw
-, gnutls
-, libcdio
-, libebur128
-, libmtp
-, libpthreadstubs
-, libtasn1
-, libXdmcp
-, ninja
-, pcre
-, protobuf
-, sqlite
-, taglib
-, libgpod
-, libidn2
-, libpulseaudio
-, libselinux
-, libsepol
-, p11-kit
-, util-linux
-, qtbase
-, qtx11extras ? null # doesn't exist in qt6
-, qttools
-, withGstreamer ? true
-, glib-networking
-, gst_all_1
-, withVlc ? true
-, libvlc
-, nix-update-script
+{
+  alsa-lib,
+  boost,
+  chromaprint,
+  cmake,
+  fetchFromGitHub,
+  fftw,
+  glib-networking,
+  gnutls,
+  gst_all_1,
+  kdsingleapplication,
+  lib,
+  libXdmcp,
+  libcdio,
+  libebur128,
+  libgpod,
+  libidn2,
+  libmtp,
+  libpthreadstubs,
+  libpulseaudio,
+  libselinux,
+  libsepol,
+  libtasn1,
+  ninja,
+  nix-update-script,
+  p11-kit,
+  pkg-config,
+  qtbase,
+  qttools,
+  sqlite,
+  stdenv,
+  taglib,
+  util-linux,
+  wrapQtAppsHook,
+  sparsehash,
+  rapidjson,
 }:
 
 let
-  inherit (lib) optionals optionalString;
+  inherit (lib) optionals;
 
 in
 stdenv.mkDerivation rec {
   pname = "strawberry";
-  version = "1.0.23";
+  version = "1.2.11";
 
   src = fetchFromGitHub {
     owner = "jonaski";
     repo = pname;
     rev = version;
-    hash = "sha256-hzZx530HD7R3JOG6cCsoaW9puYkmu7m5lr+EfobKX7o=";
-    fetchSubmodules = true;
+    hash = "sha256-AhNx2CdfE7ff3+L47X6lYPD8GA7imkDIJD5ESndn/cc=";
   };
 
   # the big strawberry shown in the context menu is *very* much in your face, so use the grey version instead
@@ -60,52 +57,57 @@ stdenv.mkDerivation rec {
       --replace pictures/strawberry.png pictures/strawberry-grey.png
   '';
 
-  buildInputs = [
-    alsa-lib
-    boost
-    chromaprint
-    fftw
-    gnutls
-    libcdio
-    libebur128
-    libidn2
-    libmtp
-    libpthreadstubs
-    libtasn1
-    libXdmcp
-    pcre
-    protobuf
-    sqlite
-    taglib
-    qtbase
-    qtx11extras
-  ] ++ optionals stdenv.isLinux [
-    libgpod
-    libpulseaudio
-    libselinux
-    libsepol
-    p11-kit
-  ] ++ optionals withGstreamer (with gst_all_1; [
-    glib-networking
-    gstreamer
-    gst-libav
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-    gst-plugins-ugly
-  ]) ++ optionals withVlc [ libvlc ];
+  buildInputs =
+    [
+      alsa-lib
+      boost
+      chromaprint
+      fftw
+      gnutls
+      kdsingleapplication
+      libXdmcp
+      libcdio
+      libebur128
+      libidn2
+      libmtp
+      libpthreadstubs
+      libtasn1
+      qtbase
+      sqlite
+      taglib
+      sparsehash
+      rapidjson
+    ]
+    ++ optionals stdenv.hostPlatform.isLinux [
+      libgpod
+      libpulseaudio
+      libselinux
+      libsepol
+      p11-kit
+    ]
+    ++ (with gst_all_1; [
+      glib-networking
+      gst-libav
+      gst-plugins-bad
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-ugly
+      gstreamer
+    ]);
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-    pkg-config
-    qttools
-    wrapQtAppsHook
-  ] ++ optionals stdenv.isLinux [
-    util-linux
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      ninja
+      pkg-config
+      qttools
+      wrapQtAppsHook
+    ]
+    ++ optionals stdenv.hostPlatform.isLinux [
+      util-linux
+    ];
 
-  postInstall = optionalString withGstreamer ''
+  postInstall = ''
     qtWrapperArgs+=(
       --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
       --prefix GIO_EXTRA_MODULES : "${glib-networking.out}/lib/gio/modules"
@@ -114,14 +116,14 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Music player and music collection organizer";
     homepage = "https://www.strawberrymusicplayer.org/";
     changelog = "https://raw.githubusercontent.com/jonaski/strawberry/${version}/Changelog";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     # upstream says darwin should work but they lack maintainers as of 0.6.6
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "strawberry";
   };
 }

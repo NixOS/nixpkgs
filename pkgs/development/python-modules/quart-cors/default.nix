@@ -1,54 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, poetry-core
+  # build-system
+  pdm-backend,
 
-# propagates
-, quart
-, typing-extensions
+  # propagates
+  quart,
+  typing-extensions,
 
-# tests
-, pytestCheckHook
-, pytest-asyncio
+  # tests
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "quart-cors";
-  version = "0.7.0";
-  format = "pyproject";
+  version = "0.8.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pgjones";
     repo = "quart-cors";
-    rev = "refs/tags/${version}";
-    hash = "sha256-qUzs0CTZHf3fGADBXPkd3CjZ6dnz1t3cTxflMErvz/k=";
+    tag = version;
+    hash = "sha256-f+l+j0bjzi5FTwJzdXNyCgh3uT4zldpg22ZOgW1Wub4=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ pdm-backend ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--no-cov-on-fail " ""
-  '';
+  dependencies = [ quart ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
-  propagatedBuildInputs = [
-    quart
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    typing-extensions
-  ];
-
-  pythonImportsCheck = [
-    "quart_cors"
-  ];
+  pythonImportsCheck = [ "quart_cors" ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
+    pytest-cov-stub
   ];
 
   meta = with lib; {

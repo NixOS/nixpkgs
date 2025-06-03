@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchurl, testers, infisical, installShellFiles }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  testers,
+  installShellFiles,
+}:
 
 # this expression is mostly automated, and you are STRONGLY
 # RECOMMENDED to use to nix-update for updating this expression when new
@@ -15,19 +21,21 @@ let
   buildHashes = builtins.fromJSON (builtins.readFile ./hashes.json);
 
   # the version of infisical
-  version = "0.17.1";
+  version = "0.41.1";
 
   # the platform-specific, statically linked binary
   src =
     let
-      suffix = {
-        # map the platform name to the golang toolchain suffix
-        # NOTE: must be synchronized with update.sh!
-        x86_64-linux = "linux_amd64";
-        x86_64-darwin = "darwin_amd64";
-        aarch64-linux = "linux_arm64";
-        aarch64-darwin = "darwin_arm64";
-      }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      suffix =
+        {
+          # map the platform name to the golang toolchain suffix
+          # NOTE: must be synchronized with update.sh!
+          x86_64-linux = "linux_amd64";
+          x86_64-darwin = "darwin_amd64";
+          aarch64-linux = "linux_arm64";
+          aarch64-darwin = "darwin_arm64";
+        }
+        ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
       name = "infisical_${version}_${suffix}.tar.gz";
       hash = buildHashes."${stdenv.hostPlatform.system}";
@@ -36,7 +44,7 @@ let
     fetchurl { inherit name url hash; };
 
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "infisical";
   version = version;
   inherit src;
@@ -63,11 +71,11 @@ stdenv.mkDerivation {
 
   passthru = {
     updateScript = ./update.sh;
-    tests.version = testers.testVersion { package = infisical; };
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
   meta = with lib; {
-    description = "The official Infisical CLI";
+    description = "Official Infisical CLI";
     longDescription = ''
       Infisical is the open-source secret management platform:
       Sync secrets across your team/infrastructure and prevent secret leaks.
@@ -76,7 +84,8 @@ stdenv.mkDerivation {
     changelog = "https://github.com/infisical/infisical/releases/tag/infisical-cli%2Fv${version}";
     license = licenses.mit;
     mainProgram = "infisical";
-    maintainers = [ maintainers.ivanmoreau maintainers.jgoux ];
+    maintainers = with maintainers; [ hausken ];
+    teams = [ teams.infisical ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
@@ -84,4 +93,4 @@ stdenv.mkDerivation {
       "x86_64-darwin"
     ];
   };
-}
+})

@@ -1,52 +1,100 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, buildNpmPackage
-, buildGoModule
-, runCommand
-, openapi-generator-cli
-, nodejs
-, python3
-, codespell
-, makeWrapper }:
+{
+  lib,
+  stdenvNoCC,
+  callPackages,
+  cacert,
+  fetchFromGitHub,
+  buildNpmPackage,
+  buildGoModule,
+  runCommand,
+  bash,
+  chromedriver,
+  openapi-generator-cli,
+  nodejs,
+  python312,
+  makeWrapper,
+}:
 
 let
-  version = "2023.10.7";
+  version = "2025.4.1";
 
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
     rev = "version/${version}";
-    hash = "sha256-+1IdXRt28UZ2KTa0zsmjneNUOcutP99UUwqcYyVyqTI=";
+    hash = "sha256-idShMSYIrf3ViG9VFNGNu6TSjBz3Q+GJMMeCzcJwfG4=";
   };
 
   meta = with lib; {
-    description = "The authentication glue you need";
+    description = "Authentication glue you need";
     changelog = "https://github.com/goauthentik/authentik/releases/tag/version%2F${version}";
     homepage = "https://goauthentik.io/";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jvanbruegge ];
+    broken = stdenvNoCC.buildPlatform != stdenvNoCC.hostPlatform;
+    maintainers = with maintainers; [
+      jvanbruegge
+      risson
+    ];
   };
 
-  website = buildNpmPackage {
-    pname = "authentik-website";
-    inherit version src meta;
-    npmDepsHash = "sha256-4dgFxEvMnp+35nSQNsEchtN1qoS5X2KzEbLPvMnyR+k=";
+  # prefetch-npm-deps does not save all dependencies even though the lockfile is fine
+  website-deps = stdenvNoCC.mkDerivation {
+    pname = "authentik-website-deps";
+    inherit src version meta;
 
-    NODE_ENV = "production";
-    NODE_OPTIONS = "--openssl-legacy-provider";
+    sourceRoot = "source/website";
 
-    postPatch = ''
-      cd website
+    outputHash = "sha256-AnQpjCoCTzm28Wl/t3YHx0Kl0CuMHL2OgRjRB1Trrsw=";
+    outputHashMode = "recursive";
+
+    nativeBuildInputs = [
+      nodejs
+      cacert
+    ];
+
+    buildPhase = ''
+      npm ci --cache ./cache
+      rm -r ./cache node_modules/.package-lock.json
     '';
 
     installPhase = ''
-      cp -r help $out
+      mv node_modules $out
     '';
 
-    npmInstallFlags = [ "--include=dev" ];
-    npmBuildScript = "build-docs-only";
+    dontPatchShebangs = true;
+  };
+
+  website = stdenvNoCC.mkDerivation {
+    pname = "authentik-website";
+    inherit src version meta;
+
+    nativeBuildInputs = [ nodejs ];
+
+    postPatch = ''
+      substituteInPlace package.json --replace-fail 'cross-env ' ""
+    '';
+
+    sourceRoot = "source/website";
+
+    buildPhase = ''
+      runHook preBuild
+
+      cp -r ${website-deps} node_modules
+      chmod -R +w node_modules
+      pushd node_modules/.bin
+      patchShebangs $(readlink docusaurus)
+      popd
+      cat node_modules/.bin/docusaurus
+      npm run build-bundled
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      mkdir $out
+      cp -r build $out/help
+    '';
   };
 
   clientapi = stdenvNoCC.mkDerivation {
@@ -66,7 +114,7 @@ let
       openapi-generator-cli generate -i ./schema.yml \
       -g typescript-fetch -o $out \
       -c ./scripts/api-ts-config.yaml \
-        --additional-properties=npmVersion=${nodejs.pkgs.npm.version} \
+        --additional-properties=npmVersion="$(${lib.getExe' nodejs "npm"} --version)" \
         --git-repo-id authentik --git-user-id goauthentik
       runHook postBuild
     '';
@@ -76,17 +124,20 @@ let
     pname = "authentik-webui";
     inherit version meta;
 
-    src = runCommand "authentik-webui-source" {} ''
+    src = runCommand "authentik-webui-source" { } ''
       mkdir -p $out/web/node_modules/@goauthentik/
       cp -r ${src}/web $out/
+      ln -s ${src}/package.json $out/
       ln -s ${src}/website $out/
       ln -s ${clientapi} $out/web/node_modules/@goauthentik/api
     '';
-    npmDepsHash = "sha256-5aCKlArtoEijGqeYiY3zoV0Qo7/Xt5hSXbmy2uYZpok=";
+    npmDepsHash = "sha256-i95sH+KUgAQ76cv1+7AE/UA6jsReQMttDGWClNE2Ol4=";
 
     postPatch = ''
       cd web
     '';
+
+    CHROMEDRIVER_FILEPATH = lib.getExe chromedriver;
 
     installPhase = ''
       runHook preInstall
@@ -99,89 +150,173 @@ let
     NODE_ENV = "production";
     NODE_OPTIONS = "--openssl-legacy-provider";
 
-    npmInstallFlags = [ "--include=dev" ];
+    npmInstallFlags = [
+      "--include=dev"
+      "--ignore-scripts"
+    ];
   };
 
-  python = python3.override {
+  python = python312.override {
     self = python;
     packageOverrides = final: prev: {
+      django = final.django_5;
+
+      django-tenants = prev.django-tenants.overrideAttrs {
+        version = "3.7.0-unstable-2025-03-14";
+        src = fetchFromGitHub {
+          owner = "rissson";
+          repo = "django-tenants";
+          rev = "156e53a6f5902d74b73dd9d0192fffaa2587a740";
+          hash = "sha256-xmhfPgCmcFr5axVV65fCq/AcV8ApRVvFVEpq3cQSVqo=";
+        };
+      };
+
+      # Running authentik currently requires a custom version.
+      # Look in `pyproject.toml` for changes to the rev in the `[tool.uv.sources]` section.
+      # See https://github.com/goauthentik/authentik/pull/14057 for latest version bump.
+      djangorestframework = prev.buildPythonPackage {
+        pname = "djangorestframework";
+        version = "3.16.0";
+        format = "setuptools";
+
+        src = fetchFromGitHub {
+          owner = "authentik-community";
+          repo = "django-rest-framework";
+          rev = "896722bab969fabc74a08b827da59409cf9f1a4e";
+          hash = "sha256-YrEDEU3qtw/iyQM3CoB8wYx57zuPNXiJx6ZjrIwnCNU=";
+        };
+
+        propagatedBuildInputs = with final; [
+          django
+          pytz
+        ];
+
+        nativeCheckInputs = with final; [
+          pytest-django
+          pytest7CheckHook
+
+          # optional tests
+          coreapi
+          django-guardian
+          inflection
+          pyyaml
+          uritemplate
+        ];
+
+        disabledTests = [
+          "test_ignore_validation_for_unchanged_fields"
+          "test_invalid_inputs"
+          "test_shell_code_example_rendering"
+          "test_unique_together_condition"
+          "test_unique_together_with_source"
+        ];
+
+        pythonImportsCheck = [ "rest_framework" ];
+      };
+
       authentik-django = prev.buildPythonPackage {
         pname = "authentik-django";
         inherit version src meta;
         pyproject = true;
 
         postPatch = ''
+          rm lifecycle/system_migrations/tenant_files.py
           substituteInPlace authentik/root/settings.py \
-            --replace-fail 'Path(__file__).absolute().parent.parent.parent' "\"$out\""
+            --replace-fail 'Path(__file__).absolute().parent.parent.parent' "Path(\"$out\")"
           substituteInPlace authentik/lib/default.yml \
-            --replace-fail '/blueprints' "$out/blueprints"
+            --replace-fail '/blueprints' "$out/blueprints" \
+            --replace-fail './media' '/var/lib/authentik/media'
           substituteInPlace pyproject.toml \
-            --replace-fail 'dumb-init = "*"' "" \
+            --replace-fail '"dumb-init",' "" \
             --replace-fail 'djangorestframework-guardian' 'djangorestframework-guardian2'
           substituteInPlace authentik/stages/email/utils.py \
             --replace-fail 'web/' '${webui}/'
         '';
 
-        nativeBuildInputs = [ prev.poetry-core ];
-
-        propagatedBuildInputs = with prev; [
-          argon2-cffi
-          celery
-          channels
-          channels-redis
-          colorama
-          dacite
-          daphne
-          deepmerge
-          defusedxml
-          django
-          django-filter
-          django-guardian
-          django-model-utils
-          django-prometheus
-          django-redis
-          djangorestframework
-          djangorestframework-guardian2
-          docker
-          drf-spectacular
-          duo-client
-          facebook-sdk
-          flower
-          geoip2
-          gunicorn
-          httptools
-          kubernetes
-          ldap3
-          lxml
-          opencontainers
-          packaging
-          paramiko
-          psycopg
-          pycryptodome
-          pydantic
-          pydantic-scim
-          pyjwt
-          pyyaml
-          requests-oauthlib
-          sentry-sdk
-          structlog
-          swagger-spec-validator
-          twilio
-          twisted
-          ua-parser
-          urllib3
-          uvicorn
-          uvloop
-          watchdog
-          webauthn
-          websockets
-          wsproto
-          xmlsec
-          zxcvbn
-          jsonpatch
-        ] ++ [
-          codespell
+        nativeBuildInputs = [
+          prev.hatchling
+          prev.pythonRelaxDepsHook
         ];
+
+        pythonRelaxDeps = [
+          "xmlsec"
+        ];
+
+        propagatedBuildInputs =
+          with final;
+          [
+            argon2-cffi
+            celery
+            channels
+            channels-redis
+            cryptography
+            dacite
+            deepmerge
+            defusedxml
+            django
+            django-countries
+            django-cte
+            django-filter
+            django-guardian
+            django-model-utils
+            django-pglock
+            django-prometheus
+            django-redis
+            django-storages
+            django-tenants
+            djangorestframework
+            djangorestframework-guardian2
+            docker
+            drf-orjson-renderer
+            drf-spectacular
+            duo-client
+            fido2
+            flower
+            geoip2
+            geopy
+            google-api-python-client
+            gunicorn
+            gssapi
+            jsonpatch
+            jwcrypto
+            kubernetes
+            ldap3
+            lxml
+            msgraph-sdk
+            opencontainers
+            packaging
+            paramiko
+            psycopg
+            pydantic
+            pydantic-scim
+            pyjwt
+            pyrad
+            python-kadmin-rs
+            pyyaml
+            requests-oauthlib
+            scim2-filter-parser
+            sentry-sdk
+            service-identity
+            setproctitle
+            structlog
+            swagger-spec-validator
+            tenant-schemas-celery
+            twilio
+            ua-parser
+            unidecode
+            urllib3
+            uvicorn
+            watchdog
+            webauthn
+            wsproto
+            xmlsec
+            zxcvbn
+          ]
+          ++ django-storages.optional-dependencies.s3
+          ++ opencontainers.optional-dependencies.reggie
+          ++ psycopg.optional-dependencies.c
+          ++ psycopg.optional-dependencies.pool
+          ++ uvicorn.optional-dependencies.standard;
 
         postInstall = ''
           mkdir -p $out/web $out/website
@@ -189,6 +324,7 @@ let
           cp -r blueprints $out/
           cp -r ${webui}/dist ${webui}/authentik $out/web/
           cp -r ${website} $out/website/help
+          ln -s $out/${prev.python.sitePackages}/authentik $out/authentik
           ln -s $out/${prev.python.sitePackages}/lifecycle $out/lifecycle
         '';
       };
@@ -210,9 +346,9 @@ let
         --replace-fail './web' "${authentik-django}/web"
     '';
 
-    CGO_ENABLED = 0;
+    env.CGO_ENABLED = 0;
 
-    vendorHash = "sha256-74rSuZrO5c7mjhHh0iQlJEkOslsFrcDb1aRXXC4RsUM=";
+    vendorHash = "sha256-cEB22KFDONcJBq/FvLpYKN7Zd06mh8SACvCSuj5i4fI=";
 
     postInstall = ''
       mv $out/bin/server $out/bin/authentik
@@ -221,9 +357,12 @@ let
     subPackages = [ "cmd/server" ];
   };
 
-in stdenvNoCC.mkDerivation {
+in
+stdenvNoCC.mkDerivation {
   pname = "authentik";
   inherit src version;
+
+  buildInputs = [ bash ];
 
   postPatch = ''
     rm Makefile
@@ -232,7 +371,7 @@ in stdenvNoCC.mkDerivation {
     # This causes issues in systemd services
     substituteInPlace lifecycle/ak \
       --replace-fail 'printf' '>&2 printf' \
-      --replace-fail '> /dev/stderr' ""
+      --replace-fail '>/dev/stderr' ""
   '';
 
   installPhase = ''
@@ -241,12 +380,19 @@ in stdenvNoCC.mkDerivation {
     cp -r lifecycle/ak $out/bin/
 
     wrapProgram $out/bin/ak \
-      --prefix PATH : ${lib.makeBinPath [ (python.withPackages (ps: [ps.authentik-django])) proxy ]} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          (python.withPackages (ps: [ ps.authentik-django ]))
+          proxy
+        ]
+      } \
       --set TMPDIR /dev/shm \
       --set PYTHONDONTWRITEBYTECODE 1 \
       --set PYTHONUNBUFFERED 1
     runHook postInstall
   '';
+
+  passthru.outposts = callPackages ./outposts.nix { };
 
   nativeBuildInputs = [ makeWrapper ];
 

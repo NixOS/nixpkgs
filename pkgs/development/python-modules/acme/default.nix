@@ -1,34 +1,39 @@
-{ buildPythonPackage
-, certbot
-, cryptography
-, pyasn1
-, pyopenssl
-, pyrfc3339
-, josepy
-, pytz
-, requests
-, requests-toolbelt
-, six
-, werkzeug
-, ndg-httpsclient
+{
+  buildPythonPackage,
+  certbot,
+  cryptography,
+  pyopenssl,
+  pyrfc3339,
+  josepy,
+  pytz,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  inherit (certbot) src version;
-
   pname = "acme";
-  format = "setuptools";
+  inherit (certbot) version src;
+  pyproject = true;
 
-  propagatedBuildInputs = [
-    cryptography pyasn1 pyopenssl pyrfc3339 pytz requests requests-toolbelt six
-    werkzeug ndg-httpsclient josepy
+  sourceRoot = "${src.name}/acme";
+
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
+    cryptography
+    pyopenssl
+    pyrfc3339
+    pytz
+    requests
+    josepy
   ];
 
   # does not contain any tests
   doCheck = false;
-  pythonImportsCheck = [ "acme" ];
 
-  sourceRoot = "${src.name}/${pname}";
+  pythonImportsCheck = [ "acme" ];
 
   meta = certbot.meta // {
     description = "ACME protocol implementation in Python";

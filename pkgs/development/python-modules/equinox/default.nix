@@ -1,41 +1,52 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, hatchling
-, jax
-, jaxlib
-, jaxtyping
-, typing-extensions
-, beartype
-, optax
-, pytest-xdist
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  jax,
+  jaxtyping,
+  typing-extensions,
+  wadler-lindig,
+
+  # tests
+  beartype,
+  optax,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "equinox";
-  version = "0.11.3";
+  version = "0.12.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "equinox";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-la3gPfwQ2pxfZoEikn9uG+Pc3PKafgEgxZ8oVQEm9YM=";
+    tag = "v${version}";
+    hash = "sha256-q/5gNXA8TnHwtm+krVBulHH3QMj9E2JVQgXJk6QYjUI=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  # Relax speed constraints on tests that can fail on busy builders
+  postPatch = ''
+    substituteInPlace tests/test_while_loop.py \
+      --replace-fail "speed < 0.1" "speed < 0.5" \
+      --replace-fail "speed < 0.5" "speed < 1" \
+      --replace-fail "speed < 1" "speed < 4" \
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = [
     jax
-    jaxlib
     jaxtyping
     typing-extensions
+    wadler-lindig
   ];
 
   nativeCheckInputs = [
@@ -45,13 +56,18 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
+    "test_filter"
+  ];
+
   pythonImportsCheck = [ "equinox" ];
 
-  meta = with lib; {
-    description = "A JAX library based around a simple idea: represent parameterised functions (such as neural networks) as PyTrees";
+  meta = {
+    description = "JAX library based around a simple idea: represent parameterised functions (such as neural networks) as PyTrees";
     changelog = "https://github.com/patrick-kidger/equinox/releases/tag/v${version}";
     homepage = "https://github.com/patrick-kidger/equinox";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

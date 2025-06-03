@@ -1,4 +1,4 @@
-/*
+/**
   Simulate a migration from a single-instance `services.foo` to a multi instance
   `services.foos.<name>` module, where `name = ""` serves as the legacy /
   compatibility instance.
@@ -10,28 +10,44 @@
   The relevant scenarios are tested in separate files:
   - ./doRename-condition-enable.nix
   - ./doRename-condition-no-enable.nix
- */
+*/
 { config, lib, ... }:
 let
-  inherit (lib) mkOption mkEnableOption types doRename;
+  inherit (lib)
+    mkOption
+    mkEnableOption
+    types
+    doRename
+    ;
 in
 {
   options = {
     services.foo.enable = mkEnableOption "foo";
     services.foos = mkOption {
-      type = types.attrsOf (types.submodule {
-        options = {
-          bar = mkOption { type = types.str; };
-        };
-      });
+      type = types.attrsOf (
+        types.submodule {
+          options = {
+            bar = mkOption { type = types.str; };
+          };
+        }
+      );
       default = { };
     };
-    result = mkOption {};
+    result = mkOption { };
   };
   imports = [
     (doRename {
-      from = [ "services" "foo" "bar" ];
-      to = [ "services" "foos" "" "bar" ];
+      from = [
+        "services"
+        "foo"
+        "bar"
+      ];
+      to = [
+        "services"
+        "foos"
+        ""
+        "bar"
+      ];
       visible = true;
       warn = false;
       use = x: x;

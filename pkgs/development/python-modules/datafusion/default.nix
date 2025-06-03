@@ -1,15 +1,17 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, rustPlatform
-, pytestCheckHook
-, libiconv
-, numpy
-, protobuf
-, pyarrow
-, Security
-, SystemConfiguration
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  rustPlatform,
+  pytestCheckHook,
+  libiconv,
+  numpy,
+  protobuf,
+  protoc,
+  pyarrow,
+  typing-extensions,
+  pythonOlder,
 }:
 
 let
@@ -17,54 +19,66 @@ let
     name = "arrow-testing";
     owner = "apache";
     repo = "arrow-testing";
-    rev = "5bab2f264a23f5af68f69ea93d24ef1e8e77fc88";
-    hash = "sha256-Pxx8ohUpXb5u1995IvXmxQMqWiDJ+7LAll/AjQP7ph8=";
+    rev = "4d209492d514c2d3cb2d392681b9aa00e6d8da1c";
+    hash = "sha256-IkiCbuy0bWyClPZ4ZEdkEP7jFYLhM7RCuNLd6Lazd4o=";
   };
 
   parquet-testing = fetchFromGitHub {
     name = "parquet-testing";
     owner = "apache";
     repo = "parquet-testing";
-    rev = "e13af117de7c4f0a4d9908ae3827b3ab119868f3";
-    hash = "sha256-rVI9zyk9IRDlKv4u8BeMb0HRdWLfCpqOlYCeUdA7BB8=";
+    rev = "50af3d8ce206990d81014b1862e5ce7380dc3e08";
+    hash = "sha256-edyv/r5olkj09aHtm8LHZY0b3jUtLNUcufwI41qKYaY=";
   };
 in
 
 buildPythonPackage rec {
   pname = "datafusion";
-  version = "35.0.0";
-  format = "pyproject";
+  version = "40.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     name = "datafusion-source";
     owner = "apache";
     repo = "arrow-datafusion-python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-43XY7j/8x+7SCY4W8nysaeWax2nvTTHZXMmy3hSz6pI=";
+    tag = version;
+    hash = "sha256-5WOSlx4XW9zO6oTY16lWQElShLv0ubflVPfSSEGrFgg=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     name = "datafusion-cargo-deps";
-    inherit src pname version;
-    hash = "sha256-YWAyEMojw0bc/fu5kIZKMNPEgsAIpWqjVNodWXbgTl4=";
+    inherit src;
+    hash = "sha256-xUpchV4UFEX1HkCpClOwxnEfGLVlOIX4UmzYKiUth9U=";
   };
 
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
+    protoc
   ];
 
-  buildInputs = [ protobuf ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-    Security
-    SystemConfiguration
+  buildInputs =
+    [ protobuf ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ];
+
+  dependencies = [
+    pyarrow
+    typing-extensions
   ];
 
-  propagatedBuildInputs = [ pyarrow ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    numpy
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook numpy ];
   pythonImportsCheck = [ "datafusion" ];
-  pytestFlagsArray = [ "--pyargs" pname ];
+
+  pytestFlagsArray = [
+    "--pyargs"
+    pname
+  ];
 
   preCheck = ''
     pushd $TMPDIR

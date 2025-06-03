@@ -1,33 +1,32 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchPypi
-, pytest-asyncio
-, pytest-httpserver
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, voluptuous
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchPypi,
+  pytest-asyncio,
+  pytest-httpserver,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "solax";
-  version = "0.3.3";
+  version = "3.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+e0z65qMjj1vQ3BR6kmLs+S5CF5chSaQ3mHQPIo++bQ=";
+    hash = "sha256-ht+UP/is9+galMiVz/pkwtre1BXfCTT39SpSz4Vctvs=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     async-timeout
     voluptuous
@@ -39,9 +38,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "solax"
-  ];
+  pythonImportsCheck = [ "solax" ];
 
   disabledTests = [
     # Tests require network access

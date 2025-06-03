@@ -1,26 +1,31 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, python
-, zope-testrunner
-, transaction
-, six
-, zope-interface
-, zodbpickle
-, zconfig
-, persistent
-, zc-lockfile
-, btrees
-, manuel
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  python,
+  setuptools,
+  zope-testing,
+  zope-testrunner,
+  transaction,
+  zope-interface,
+  zodbpickle,
+  zconfig,
+  persistent,
+  zc-lockfile,
+  btrees,
+  manuel,
 }:
 
 buildPythonPackage rec {
-  pname = "ZODB";
-  version = "5.8.1";
+  pname = "zodb";
+  version = "6.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-xsc6vTZg1gb/wfIfl97xS1K0b0pwLsnm7kSabiviZN8=";
+  src = fetchFromGitHub {
+    owner = "zopefoundation";
+    repo = "zodb";
+    tag = version;
+    hash = "sha256-AFlRDci/OnRDGVNHAMAssefZshaGT0XlkhaO/Aee2Ao=";
   };
 
   # remove broken test
@@ -28,9 +33,10 @@ buildPythonPackage rec {
     rm -vf src/ZODB/tests/testdocumentation.py
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     transaction
-    six
     zope-interface
     zodbpickle
     zconfig
@@ -41,6 +47,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     manuel
+    zope-testing
     zope-testrunner
   ];
 
@@ -48,11 +55,11 @@ buildPythonPackage rec {
     ${python.interpreter} -m zope.testrunner --test-path=src []
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Zope Object Database: object database and persistence";
     homepage = "https://zodb-docs.readthedocs.io/";
     changelog = "https://github.com/zopefoundation/ZODB/blob/${version}/CHANGES.rst";
-    license = licenses.zpl21;
-    maintainers = with maintainers; [ goibhniu ];
+    license = lib.licenses.zpl21;
+    maintainers = [ ];
   };
 }

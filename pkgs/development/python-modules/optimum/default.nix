@@ -1,75 +1,81 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, coloredlogs
-, datasets
-, evaluate
-, h5py
-, huggingface-hub
-, numpy
-, onnx
-, onnxruntime
-, packaging
-, protobuf
-, sympy
-, tensorflow
-, tf2onnx
-, timm
-, torch
-, transformers
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  datasets,
+  huggingface-hub,
+  numpy,
+  packaging,
+  torch,
+  transformers,
+
+  # optional-dependencies
+  diffusers,
+  h5py,
+  onnx,
+  onnxruntime,
+  protobuf,
+  tensorflow,
+  tf2onnx,
+  timm,
 }:
 
 buildPythonPackage rec {
   pname = "optimum";
-  version = "1.17.1";
-  format = "setuptools";
+  version = "1.25.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "optimum";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-21y7pFRCZqwNaZR+TcXH2KIK5IZuLVq0wgIQqByyEf8=";
+    tag = "v${version}";
+    hash = "sha256-SVyGtWFI5GjfxbaVKICf+QSSMYI62dDVMzphu8TngvY=";
   };
 
-  propagatedBuildInputs = [
-    coloredlogs
-    datasets
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [ "transformers" ];
+
+  dependencies = [
     huggingface-hub
     numpy
     packaging
-    sympy
     torch
     transformers
   ] ++ transformers.optional-dependencies.sentencepiece;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     onnxruntime = [
       onnx
-      onnxruntime
       datasets
-      evaluate
       protobuf
+      onnxruntime
     ];
     exporters = [
       onnx
-      onnxruntime
       timm
+      onnxruntime
+      protobuf
     ];
     exporters-tf = [
-      tensorflow
-      tf2onnx
       onnx
-      onnxruntime
       timm
       h5py
+      tf2onnx
+      onnxruntime
       numpy
+      datasets
+      tensorflow
     ];
-    diffusers = [
-      # diffusers
-    ];
+    diffusers = [ diffusers ];
     intel = [
       # optimum-intel
     ];
@@ -105,11 +111,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "optimum" ];
 
-  meta = with lib; {
+  meta = {
     description = "Accelerate training and inference of 🤗 Transformers and 🤗 Diffusers with easy to use hardware optimization tools";
+    mainProgram = "optimum-cli";
     homepage = "https://github.com/huggingface/optimum";
-    changelog = "https://github.com/huggingface/optimum/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ natsukium ];
+    changelog = "https://github.com/huggingface/optimum/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

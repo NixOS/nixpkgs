@@ -1,20 +1,21 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, python3
-, restic
-, nixosTests
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  python3,
+  restic,
+  nixosTests,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "prometheus-restic-exporter";
-  version = "1.5.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "ngosang";
     repo = "restic-exporter";
     rev = version;
-    hash = "sha256-SC2ZCIQ33RaFI9+l/WI6edNzGEtsxJ2bBdeGNMHuyqY=";
+    hash = "sha256-b3TbBZqNJEAveNVf+6OGHU2G3UUyuSEjzFMPJVuxlBE=";
   };
 
   buildInputs = [

@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
 
-# propagated
-, aiohttp
+  # propagated
+  aiohttp,
 
-# tests
-, pytest-asyncio
-, pytestCheckHook
+  # tests
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 let
   pname = "pyoctoprintapi";
-  version = "0.1.12";
+  version = "0.1.14";
 in
 buildPythonPackage {
   inherit pname version;
@@ -25,21 +26,15 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "rfleming71";
     repo = "pyoctoprintapi";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Jf/zYnBHVl3TYxFy9Chy6qNH/eCroZkmUOEWfd62RIo=";
+    tag = "v${version}";
+    hash = "sha256-DKqkT0Wyxf4grXBqei9IYBGMOgPxjzuo955M/nHDLo8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  pythonImportsCheck = [
-    "pyoctoprintapi"
-  ];
+  pythonImportsCheck = [ "pyoctoprintapi" ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -51,6 +46,6 @@ buildPythonPackage {
     homepage = "https://github.com/rfleming71/pyoctoprintapi";
     changelog = "https://github.com/rfleming71/pyoctoprintapi/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers= with maintainers; [ hexa ];
+    maintainers = with maintainers; [ hexa ];
   };
 }

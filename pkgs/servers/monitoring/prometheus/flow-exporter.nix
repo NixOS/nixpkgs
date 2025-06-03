@@ -1,4 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 
 buildGoModule rec {
   pname = "flow-exporter";
@@ -15,6 +19,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Export network flows from kafka to Prometheus";
+    mainProgram = "flow-exporter";
     homepage = "https://github.com/neptune-networks/flow-exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ kloenk ];

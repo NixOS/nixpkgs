@@ -1,37 +1,39 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, httpx
-, iso8601
-, poetry-core
-, pydantic
-, pyjwt
-, pytest-asyncio
-, pytestCheckHook
-, python-dateutil
-, pythonAtLeast
-, pythonOlder
-, pythonRelaxDepsHook
-, respx
-, retrying
-, rfc3339
-, toml
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  httpx,
+  iso8601,
+  poetry-core,
+  pydantic,
+  pydantic-settings,
+  pyjwt,
+  pytest-asyncio,
+  pytestCheckHook,
+  python-dateutil,
+  pythonAtLeast,
+  pythonOlder,
+  tenacity,
+  respx,
+  retrying,
+  rfc3339,
+  toml,
 }:
 
 buildPythonPackage rec {
   pname = "qcs-api-client";
-  version = "0.23.1";
+  version = "0.26.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "qcs-api-client-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Z+RCjpSpfYU3oU5HQ8CzZfwqUjMHvCKVn+p2tq+VDxQ=";
+    tag = "v${version}";
+    hash = "sha256-8ZD/vqWA1QnEQXz6P/+NIxe0go1Q/XQ3iRNL/TkoTmM=";
   };
 
   patches = [
@@ -48,22 +50,22 @@ buildPythonPackage rec {
     "httpx"
     "iso8601"
     "pydantic"
+    "tenacity"
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     httpx
     iso8601
     pydantic
+    pydantic-settings
     pyjwt
     python-dateutil
     retrying
     rfc3339
+    tenacity
     toml
   ];
 
@@ -76,14 +78,12 @@ buildPythonPackage rec {
   # Tests are failing on Python 3.11, Fatal Python error: Aborted
   doCheck = !(pythonAtLeast "3.11");
 
-  pythonImportsCheck = [
-    "qcs_api_client"
-  ];
+  pythonImportsCheck = [ "qcs_api_client" ];
 
   meta = with lib; {
     description = "Python library for accessing the Rigetti QCS API";
     homepage = "https://qcs-api-client-python.readthedocs.io/";
-    changelog = "https://github.com/rigetti/qcs-api-client-python/releases/tag/v${version}";
+    changelog = "https://github.com/rigetti/qcs-api-client-python/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

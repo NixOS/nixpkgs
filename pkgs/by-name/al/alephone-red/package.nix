@@ -1,13 +1,13 @@
-{ alephone, fetchurl, unrar }:
+{ alephone, fetchurl }:
 
-alephone.makeWrapper rec {
+alephone.makeWrapper {
   pname = "marathon-red";
   version = "0";
   desktopName = "Marathon-Red";
 
   zip = fetchurl {
     url = "http://files3.bungie.org/trilogy/MarathonRED.zip";
-    sha256 = "1p13snlrvn39znvfkxql67crhysn71db2bwsfrkhjkq58wzs6qgw";
+    hash = "sha256-/GGjP0cFTwlndpovsVo4VnuY2TEU9+m2/WnYnanVI9w=";
   };
 
   meta = {

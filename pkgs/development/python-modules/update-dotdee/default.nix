@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, coloredlogs
-, executor
-, fetchFromGitHub
-, humanfriendly
-, naturalsort
-, property-manager
-, pytestCheckHook
-, pythonOlder
-, six
+{
+  lib,
+  buildPythonPackage,
+  coloredlogs,
+  executor,
+  fetchFromGitHub,
+  humanfriendly,
+  naturalsort,
+  property-manager,
+  pytestCheckHook,
+  pythonOlder,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -34,18 +35,14 @@ buildPythonPackage rec {
     six
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace tox.ini \
       --replace " --cov --showlocals --verbose" ""
   '';
 
-  pythonImportsCheck = [
-    "update_dotdee"
-  ];
+  pythonImportsCheck = [ "update_dotdee" ];
 
   disabledTests = [
     # TypeError: %o format: an integer is required, not str
@@ -54,6 +51,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Generic modularized configuration file manager";
+    mainProgram = "update-dotdee";
     homepage = "https://github.com/xolox/python-update-dotdee";
     license = licenses.mit;
     maintainers = with maintainers; [ eyjhb ];

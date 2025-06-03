@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zpaqfranz";
-  version = "59.2";
+  version = "62.2";
 
   src = fetchFromGitHub {
     owner = "fcorbelli";
     repo = "zpaqfranz";
     rev = finalAttrs.version;
-    hash = "sha256-NPkaOmjeLPznG/kY2cF9ROA7SzWEeKKCcPhP91PnYOk=";
+    hash = "sha256-brTlBvJ6MQY7kPbdUuNrSuYZUtwhkNfu+SDoNJqyZ9o=";
   };
 
   nativeBuildInputs = [
@@ -38,9 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/fcorbelli/zpaqfranz";
+    changelog = "https://github.com/fcorbelli/zpaqfranz/releases/tag/${finalAttrs.version}";
     description = "Advanced multiversioned deduplicating archiver, with HW acceleration, encryption and paranoid-level tests";
+    mainProgram = "zpaqfranz";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

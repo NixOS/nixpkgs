@@ -1,50 +1,55 @@
-{ stdenv
-, fetchurl
-, alsa-lib
-, atk
-, cairo
-, dpkg
-, ffmpeg
-, freetype
-, gdk-pixbuf
-, glib
-, gtk3
-, harfbuzz
-, lib
-, libglvnd
-, libjack2
-, libjpeg
-, libxkbcommon
-, makeWrapper
-, pango
-, pipewire
-, pulseaudio
-, wrapGAppsHook
-, xdg-utils
-, xorg
-, zlib
+{
+  stdenv,
+  fetchurl,
+  alsa-lib,
+  atk,
+  cairo,
+  dpkg,
+  ffmpeg,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  harfbuzz,
+  lcms,
+  lib,
+  libglvnd,
+  libjack2,
+  libjpeg,
+  libnghttp2,
+  libudev-zero,
+  libxkbcommon,
+  makeWrapper,
+  pango,
+  pipewire,
+  vulkan-loader,
+  wrapGAppsHook3,
+  xcb-imdkit,
+  xdg-utils,
+  xorg,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
-  pname = "bitwig-studio";
-  version = "5.1.3";
+  pname = "bitwig-studio-unwrapped";
+  version = "5.3.8";
 
   src = fetchurl {
-    url = "https://downloads.bitwig.com/stable/${version}/${pname}-${version}.deb";
-    sha256 = "sha256-1/iKezOD2HCym6JBXRa9rGpjolJjrxRZA4vwfgZyVng=";
+    name = "bitwig-studio-${version}.deb";
+    url = "https://www.bitwig.com/dl/Bitwig%20Studio/${version}/installer_linux/";
+    hash = "sha256-ccDgNsKskEsaL3G5ISZUMckvFosMALFzEzOM9D4/Xgo=";
   };
 
-  nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook ];
-
-  unpackCmd = ''
-    mkdir -p root
-    dpkg-deb -x $curSrc root
-  '';
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+    wrapGAppsHook3
+  ];
 
   dontBuild = true;
   dontWrapGApps = true; # we only want $gappsWrapperArgs here
 
-  buildInputs = with xorg; [
+  buildInputs = [
     alsa-lib
     atk
     cairo
@@ -53,21 +58,25 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     harfbuzz
+    lcms
     libglvnd
     libjack2
     # libjpeg8 is required for converting jpeg's to colour palettes
     libjpeg
-    libxcb
-    libXcursor
-    libX11
-    libXtst
+    libnghttp2
+    xorg.libxcb
+    xorg.libXcursor
+    xorg.libX11
+    xorg.libXtst
     libxkbcommon
+    libudev-zero
     pango
     pipewire
-    pulseaudio
-    stdenv.cc.cc.lib
-    xcbutil
-    xcbutilwm
+    (lib.getLib stdenv.cc.cc)
+    vulkan-loader
+    xcb-imdkit
+    xorg.xcbutil
+    xorg.xcbutilwm
     zlib
   ];
 
@@ -78,6 +87,11 @@ stdenv.mkDerivation rec {
     cp -r opt/bitwig-studio $out/libexec
     ln -s $out/libexec/bitwig-studio $out/bin/bitwig-studio
     cp -r usr/share $out/share
+
+    # Bitwig includes a copy of libxcb-imdkit.
+    # Removing it will force it to use our version.
+    rm $out/libexec/lib/bitwig-studio/libxcb-imdkit.so.1
+
     substitute usr/share/applications/com.bitwig.BitwigStudio.desktop \
       $out/share/applications/com.bitwig.BitwigStudio.desktop \
       --replace /usr/bin/bitwig-studio $out/bin/bitwig-studio
@@ -111,16 +125,21 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
-    description = "A digital audio workstation";
+  meta = {
+    description = "Digital audio workstation";
     longDescription = ''
       Bitwig Studio is a multi-platform music-creation system for
       production, performance and DJing, with a focus on flexible
       editing tools and a super-fast workflow.
     '';
     homepage = "https://www.bitwig.com/";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ bfortz michalrus mrVanDalo ];
+    maintainers = with lib.maintainers; [
+      bfortz
+      michalrus
+      mrVanDalo
+    ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

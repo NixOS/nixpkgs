@@ -1,32 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, asciidoctor
-, openssl
-, Security
-, SystemConfiguration
-, ansi2html
-, installShellFiles
+{
+  lib,
+  curl,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  asciidoctor,
+  openssl,
+  ansi2html,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdcat";
-  version = "2.1.1";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "swsnr";
     repo = "mdcat";
     rev = "mdcat-${version}";
-    hash = "sha256-2ThjIv77kdjHyOpGcQplYZXPdu+cN4oBnyHRGptN7f4=";
+    hash = "sha256-j6BFXx5cyjE3+fo1gGKlqpsxrm3i9HfQ9tJGNNjjLwo=";
   };
 
-  nativeBuildInputs = [ pkg-config asciidoctor installShellFiles ];
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
+  nativeBuildInputs = [
+    pkg-config
+    asciidoctor
+    installShellFiles
+  ];
+  buildInputs = [
+    curl
+    openssl
+  ];
 
-  cargoHash = "sha256-y828L8HHkFeem/76yizQWX7DpCGQP+HzJP+pQnxAn70=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-8A0RLbFkh3fruZAbjJzipQvuFLchqIRovPcc6MSKdOc=";
 
   nativeCheckInputs = [ ansi2html ];
   # Skip tests that use the network and that include files.
@@ -41,17 +48,19 @@ rustPlatform.buildRustPackage rec {
     "--skip iterm2_tests_render_md_samples_images_md"
   ];
 
-  postInstall = ''
-    installManPage $releaseDir/build/mdcat-*/out/mdcat.1
-    ln -sr $out/bin/{mdcat,mdless}
-
-    for bin in mdcat mdless; do
-      installShellCompletion \
-        --bash $releaseDir/build/mdcat-*/out/completions/$bin.bash \
-        --fish $releaseDir/build/mdcat-*/out/completions/$bin.fish \
-        --zsh $releaseDir/build/mdcat-*/out/completions/_$bin
-    done
-  '';
+  postInstall =
+    ''
+      installManPage $releaseDir/build/mdcat-*/out/mdcat.1
+      ln -sr $out/bin/{mdcat,mdless}
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      for bin in mdcat mdless; do
+        installShellCompletion --cmd $bin \
+          --bash <($out/bin/$bin --completions bash) \
+          --fish <($out/bin/$bin --completions fish) \
+          --zsh <($out/bin/$bin --completions zsh)
+      done
+    '';
 
   meta = with lib; {
     description = "cat for markdown";

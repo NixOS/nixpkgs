@@ -1,25 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flit-core
-, mock
-, pbr
-, pytest-mock
-, pytestCheckHook
-, pytz
-, requests
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  mock,
+  pbr,
+  pytest-mock,
+  pytestCheckHook,
+  pytz,
+  requests,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "jenkinsapi";
-  version = "0.3.13";
+  version = "0.3.14";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JGqYpj5h9UoV0WEFyxVIjFZwc030HobHrw1dnAryQLk=";
+    hash = "sha256-G+Wj1gu5e4/VqdnUR34iAeB+RyWn1CwOsWhGu4eeS5c=";
   };
+
+  patches = [ ./pytest-warn-none.patch ];
 
   nativeBuildInputs = [
     flit-core
@@ -29,6 +33,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     pytz
     requests
+    setuptools
     six
   ];
 
@@ -41,13 +46,17 @@ buildPythonPackage rec {
   # don't run tests that try to spin up jenkins
   disabledTests = [ "systests" ];
 
-  pythonImportsCheck = [ "jenkinsapi" ];
+  pythonImportsCheck = [
+    "jenkinsapi"
+    "jenkinsapi.utils"
+    "jenkinsapi.utils.jenkins_launcher"
+  ];
 
   meta = with lib; {
-    description = "A Python API for accessing resources on a Jenkins continuous-integration server";
+    description = "Python API for accessing resources on a Jenkins continuous-integration server";
     homepage = "https://github.com/salimfadhley/jenkinsapi";
-    maintainers = with maintainers; [ drets ] ++ teams.deshaw.members;
+    maintainers = with maintainers; [ drets ];
+    teams = [ teams.deshaw ];
     license = licenses.mit;
   };
-
 }

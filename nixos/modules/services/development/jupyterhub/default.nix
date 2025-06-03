@@ -1,16 +1,18 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.jupyterhub;
 
-  kernels = (pkgs.jupyter-kernel.create  {
-    definitions = if cfg.kernels != null
-      then cfg.kernels
-      else  pkgs.jupyter-kernel.default;
-  });
+  kernels = (
+    pkgs.jupyter-kernel.create {
+      definitions = if cfg.kernels != null then cfg.kernels else pkgs.jupyter-kernel.default;
+    }
+  );
 
   jupyterhubConfig = pkgs.writeText "jupyterhub_config.py" ''
     c.JupyterHub.bind_url = "http://${cfg.host}:${toString cfg.port}"
@@ -26,16 +28,17 @@ let
 
     ${cfg.extraConfig}
   '';
-in {
-  meta.maintainers = with maintainers; [ costrouc ];
+in
+{
+  meta.maintainers = with lib.maintainers; [ costrouc ];
 
   options.services.jupyterhub = {
-    enable = mkEnableOption (lib.mdDoc "Jupyterhub development server");
+    enable = lib.mkEnableOption "Jupyterhub development server";
 
-    authentication = mkOption {
-      type = types.str;
+    authentication = lib.mkOption {
+      type = lib.types.str;
       default = "jupyterhub.auth.PAMAuthenticator";
-      description = lib.mdDoc ''
+      description = ''
         Jupyterhub authentication to use
 
         There are many authenticators available including: oauth, pam,
@@ -43,10 +46,10 @@ in {
       '';
     };
 
-    spawner = mkOption {
-      type = types.str;
+    spawner = lib.mkOption {
+      type = lib.types.str;
       default = "systemdspawner.SystemdSpawner";
-      description = lib.mdDoc ''
+      description = ''
         Jupyterhub spawner to use
 
         There are many spawners available including: local process,
@@ -54,10 +57,10 @@ in {
       '';
     };
 
-    extraConfig = mkOption {
-      type = types.lines;
+    extraConfig = lib.mkOption {
+      type = lib.types.lines;
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         Extra contents appended to the jupyterhub configuration
 
         Jupyterhub configuration is a normal python file using
@@ -72,19 +75,21 @@ in {
       '';
     };
 
-    jupyterhubEnv = mkOption {
-      type = types.package;
-      default = pkgs.python3.withPackages (p: with p; [
-        jupyterhub
-        jupyterhub-systemdspawner
-      ]);
-      defaultText = literalExpression ''
+    jupyterhubEnv = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.python3.withPackages (
+        p: with p; [
+          jupyterhub
+          jupyterhub-systemdspawner
+        ]
+      );
+      defaultText = lib.literalExpression ''
         pkgs.python3.withPackages (p: with p; [
           jupyterhub
           jupyterhub-systemdspawner
         ])
       '';
-      description = lib.mdDoc ''
+      description = ''
         Python environment to run jupyterhub
 
         Customizing will affect the packages available in the hub and
@@ -94,19 +99,21 @@ in {
       '';
     };
 
-    jupyterlabEnv = mkOption {
-      type = types.package;
-      default = pkgs.python3.withPackages (p: with p; [
-        jupyterhub
-        jupyterlab
-      ]);
-      defaultText = literalExpression ''
+    jupyterlabEnv = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.python3.withPackages (
+        p: with p; [
+          jupyterhub
+          jupyterlab
+        ]
+      );
+      defaultText = lib.literalExpression ''
         pkgs.python3.withPackages (p: with p; [
           jupyterhub
           jupyterlab
         ])
       '';
-      description = lib.mdDoc ''
+      description = ''
         Python environment to run jupyterlab
 
         Customizing will affect the packages available in the
@@ -117,13 +124,19 @@ in {
       '';
     };
 
-    kernels = mkOption {
-      type = types.nullOr (types.attrsOf(types.submodule (import ../jupyter/kernel-options.nix {
-        inherit lib pkgs;
-      })));
+    kernels = lib.mkOption {
+      type = lib.types.nullOr (
+        lib.types.attrsOf (
+          lib.types.submodule (
+            import ../jupyter/kernel-options.nix {
+              inherit lib pkgs;
+            }
+          )
+        )
+      );
 
       default = null;
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           python3 = let
             env = (pkgs.python3.withPackages (pythonPackages: with pythonPackages; [
@@ -146,7 +159,7 @@ in {
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Declarative kernel config
 
         Kernels can be declared in any language that supports and has
@@ -156,33 +169,33 @@ in {
       '';
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 8000;
-      description = lib.mdDoc ''
+      description = ''
         Port number Jupyterhub will be listening on
       '';
     };
 
-    host = mkOption {
-      type = types.str;
+    host = lib.mkOption {
+      type = lib.types.str;
       default = "0.0.0.0";
-      description = lib.mdDoc ''
+      description = ''
         Bind IP JupyterHub will be listening on
       '';
     };
 
-    stateDirectory = mkOption {
-      type = types.str;
+    stateDirectory = lib.mkOption {
+      type = lib.types.str;
       default = "jupyterhub";
-      description = lib.mdDoc ''
+      description = ''
         Directory for jupyterhub state (token + database)
       '';
     };
   };
 
-  config = mkMerge [
-    (mkIf cfg.enable  {
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
       systemd.services.jupyterhub = {
         description = "Jupyterhub development server";
 

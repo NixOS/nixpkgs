@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, jinja2
-, pdoc-pyo3-sample-library
-, pygments
-, markupsafe
-, astunparse
-, pytestCheckHook
-, hypothesis
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  jinja2,
+  pdoc-pyo3-sample-library,
+  pygments,
+  markupsafe,
+  pytestCheckHook,
+  hypothesis,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "pdoc";
-  version = "14.4.0";
-  disabled = pythonOlder "3.8";
+  version = "15.0.3";
+  disabled = pythonOlder "3.9";
 
   pyproject = true;
 
@@ -23,18 +24,16 @@ buildPythonPackage rec {
     owner = "mitmproxy";
     repo = "pdoc";
     rev = "v${version}";
-    hash = "sha256-2k9uIK6TvoGtVqnh97g9f5QvjhyZlznRvYdw5sPaeVE=";
+    hash = "sha256-qr0K+ZOmEPWMkm/cPisdw6gSPZI4FvICaKQNt/sef40=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jinja2
     pygments
     markupsafe
-  ] ++ lib.optional (pythonOlder "3.9") astunparse;
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -55,10 +54,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pdoc" ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     changelog = "https://github.com/mitmproxy/pdoc/blob/${src.rev}/CHANGELOG.md";
     homepage = "https://pdoc.dev/";
     description = "API Documentation for Python Projects";
+    mainProgram = "pdoc";
     license = licenses.unlicense;
     maintainers = with maintainers; [ pbsds ];
   };

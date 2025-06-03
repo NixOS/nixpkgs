@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, poetry-core
-, pytestCheckHook
-, numpy
-, typing-extensions
-, xarray
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  poetry-core,
+  pytestCheckHook,
+  numpy,
+  typing-extensions,
+  xarray,
 }:
 
 buildPythonPackage rec {
   pname = "xarray-dataclasses";
-  version = "1.7.0";
+  version = "1.9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,13 +20,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "astropenguin";
     repo = "xarray-dataclasses";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-fyRUH6t2+9tsxRQFfJR2EHinYtwCmWeCB77kpmBgdBA=";
+    tag = "v${version}";
+    hash = "sha256-p9xV9Mpk5fsWR8X6VWNaeRi66OqK4QQWA8pwD2aYqOU=";
   };
 
   nativeBuildInputs = [
     poetry-core
   ];
+
+  pythonRelaxDeps = [ "xarray" ];
 
   propagatedBuildInputs = [
     numpy

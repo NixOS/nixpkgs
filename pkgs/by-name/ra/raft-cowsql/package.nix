@@ -1,27 +1,34 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, libuv
-, lz4
-, pkg-config
-, incus
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libuv,
+  lz4,
+  pkg-config,
+  incus,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "raft-cowsql";
-  version = "0.22.0";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "cowsql";
     repo = "raft";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-kd0PD45+CenlfRMp5O48uELyZ2gEtasCe7xNEzsKU+M=";
+    tag = "v${version}";
+    hash = "sha256-aGw/ATu8Xdjfqa0qWg8Sld9PKCmQsMtZhuNBwagER7M=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libuv lz4 ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    libuv
+    lz4
+  ];
 
   enableParallelBuilding = true;
 
@@ -39,7 +46,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  outputs = [ "dev" "out" ];
+  outputs = [
+    "dev"
+    "out"
+  ];
 
   passthru = {
     inherit (incus) tests;
@@ -54,6 +64,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/cowsql/raft";
     license = licenses.lgpl3Only;
     platforms = platforms.linux;
-    maintainers = teams.lxc.members;
+    teams = [ teams.lxc ];
   };
 }

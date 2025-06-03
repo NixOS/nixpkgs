@@ -1,33 +1,57 @@
-{ lib
-, mkXfceDerivation
-, glib
-, gtk3
-, libxfce4ui
-, libxfce4util
-, xfce4-panel
-, xfconf
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gettext,
+  meson,
+  ninja,
+  pkg-config,
+  glib,
+  gtk3,
+  libX11,
+  libxfce4ui,
+  libxfce4util,
+  xfce4-panel,
+  gitUpdater,
 }:
 
-mkXfceDerivation {
-  category = "panel-plugins";
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-time-out-plugin";
-  version = "1.1.3";
-  rev-prefix = "xfce4-time-out-plugin-";
-  odd-unstable = false;
-  sha256 = "sha256-sm6y3t4nngZDg4Q8S3SVkNR++XkCKysQePN6Qei1OY8=";
+  version = "1.2.0";
+
+  src = fetchFromGitLab {
+    domain = "gitlab.xfce.org";
+    owner = "panel-plugins";
+    repo = "xfce4-time-out-plugin";
+    tag = "xfce4-time-out-plugin-${finalAttrs.version}";
+    hash = "sha256-hyeqSnynsjAeD67oPjQs0ZeLKreXFMZXmvu38zweqrE=";
+  };
+
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    gettext
+    meson
+    ninja
+    pkg-config
+  ];
 
   buildInputs = [
     glib
     gtk3
+    libX11
     libxfce4ui
     libxfce4util
     xfce4-panel
-    xfconf
   ];
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater { rev-prefix = "xfce4-time-out-plugin-"; };
+
+  meta = {
     description = "Panel plug-in to take periodical breaks from the computer";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    homepage = "https://gitlab.xfce.org/panel-plugins/xfce4-time-out-plugin";
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.xfce ];
+    platforms = lib.platforms.linux;
   };
-}
+})

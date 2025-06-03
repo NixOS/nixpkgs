@@ -1,25 +1,26 @@
-{ lib
-, mkDerivation
-, cmake
-, extra-cmake-modules
-, qtbase
-, qtdeclarative
-, qtquickcontrols2
-, qtwebchannel
-, qtwebengine
-, qtwebsockets
-, baloo
-, karchive
-, kconfig
-, kcoreaddons
-, kdbusaddons
-, kfilemetadata
-, ki18n
-, kirigami-addons
-, kitemmodels
-, kquickcharts
-, kwindowsystem
-, qqc2-desktop-style
+{
+  lib,
+  mkDerivation,
+  cmake,
+  extra-cmake-modules,
+  qtbase,
+  qtdeclarative,
+  qtquickcontrols2,
+  qtwebchannel,
+  qtwebengine,
+  qtwebsockets,
+  baloo,
+  karchive,
+  kconfig,
+  kcoreaddons,
+  kdbusaddons,
+  kfilemetadata,
+  ki18n,
+  kirigami-addons,
+  kitemmodels,
+  kquickcharts,
+  kwindowsystem,
+  qqc2-desktop-style,
 }:
 
 mkDerivation {
@@ -52,7 +53,8 @@ mkDerivation {
   ];
 
   meta = with lib; {
-    description = "An Epub Reader for Plasma and Plasma Mobile";
+    description = "Epub Reader for Plasma and Plasma Mobile";
+    mainProgram = "arianna";
     homepage = "https://invent.kde.org/graphics/arianna";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

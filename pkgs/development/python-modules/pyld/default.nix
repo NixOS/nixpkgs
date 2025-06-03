@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python, requests }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  requests,
+}:
 
 let
 
@@ -15,7 +21,6 @@ let
     rev = "aceeaf224b64d6880189d795bd99c3ffadb5d79e";
     sha256 = "125q5rllfm8vg9mz8hn7bhvhv2vqpd86kx2kxlk84smh33l8kbyl";
   };
-
 in
 
 buildPythonPackage rec {
@@ -25,7 +30,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "digitalbazaar";
-    repo = pname;
+    repo = "pyld";
     rev = version;
     sha256 = "0z2vkllw8bvzxripwb6l757r7av5qwhzsiy4061gmlhq8z8gq961";
   };

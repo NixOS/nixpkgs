@@ -1,34 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, qtbase
-, qtx11extras ? null # qt5 only
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qt6,
+  wrapQtAppsHook,
 
-# before that => zeal
-, sqlite
-, json_c
-, mecab
-, libzip
-, mpv
-, yt-dlp
-# optional
-, makeWrapper}:
-
-let
-  isQt5 = lib.versions.major qtbase.version == "5";
-
-in
+  # before that => zeal
+  sqlite,
+  json_c,
+  mecab,
+  libzip,
+  mpv,
+  yt-dlp,
+  # optional
+  makeWrapper,
+}:
 stdenv.mkDerivation (finalAttrs: {
   pname = "memento";
-  version = "1.2.2";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "ripose-jp";
     repo = "Memento";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-55VvT7pHN0/HqxM4vMDQDgUwkVmO/8aOEOye8jcFzgI=";
+    hash = "sha256-IvzvlToSyA20FWU0x+wgE3rT0dYbuY6xyaGgz1D1f6Q=";
   };
 
   nativeBuildInputs = [
@@ -38,22 +34,24 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    qtbase
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qtwayland
     sqlite
     json_c
     libzip
     mecab
-  ] ++ lib.optionals isQt5 [ qtx11extras ];
+  ];
 
-  propagatedBuildInputs = [ mpv  ];
+  propagatedBuildInputs = [ mpv ];
 
   preFixup = ''
-     wrapProgram "$out/bin/memento" \
-       --prefix PATH : "${yt-dlp}/bin" \
+    wrapProgram "$out/bin/memento" \
+      --prefix PATH : "${yt-dlp}/bin" \
   '';
 
   meta = with lib; {
-    description = "An mpv-based video player for studying Japanese";
+    description = "Mpv-based video player for studying Japanese";
     homepage = "https://ripose-jp.github.io/Memento/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ teto ];
@@ -61,4 +59,3 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "memento";
   };
 })
-

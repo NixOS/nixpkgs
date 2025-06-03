@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, redis
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
+  redis,
 }:
 
 buildPythonPackage rec {
   pname = "huey";
-  version = "2.5.0";
+  version = "2.5.3";
 
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "coleifer";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-t767eqZ6U12mG8nWEYC9Hoq/jW2yfrPkCxB3/xLKQww=";
+    repo = "huey";
+    tag = version;
+    hash = "sha256-Avy5aMYoeIhO7Q83s2W4o6RBMaVFdRBqa7HGNIGNOqE=";
   };
 
   nativeBuildInputs = [
@@ -30,10 +31,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    changelog = "https://github.com/coleifer/huey/blob/${src.rev}/CHANGELOG.md";
-    description = "A little task queue for python";
+    changelog = "https://github.com/coleifer/huey/blob/${src.tag}/CHANGELOG.md";
+    description = "Little task queue for python";
     homepage = "https://github.com/coleifer/huey";
     license = licenses.mit;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

@@ -1,50 +1,45 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, mashumaro
-, orjson
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, syrupy
-, yarl
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mashumaro,
+  orjson,
+  poetry-core,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  syrupy,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "autarco";
-  version = "0.3.0";
+  version = "3.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-autarco";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-IBf6Dw2Yf7m+5bQ72K0kPxGdtpl8JowQ9IO3gWS3Vso=";
+    tag = "v${version}";
+    hash = "sha256-zSqIEtQucrrAFEY7pBJ14Cevq8xbcGOheEmEE7Jd4qk=";
   };
 
-  pythonRelaxDeps = [
-    "orjson"
-  ];
+  pythonRelaxDeps = [ "orjson" ];
 
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
     substituteInPlace pyproject.toml \
-      --replace "0.0.0" "${version}" \
-      --replace "--cov" ""
+      --replace-fail "0.0.0" "${version}"
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     mashumaro
     orjson
@@ -56,19 +51,18 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     syrupy
   ];
 
-  pythonImportsCheck = [
-    "autarco"
-  ];
+  pythonImportsCheck = [ "autarco" ];
 
   meta = with lib; {
     description = "Module for the Autarco Inverter";
     homepage = "https://github.com/klaasnicolaas/python-autarco";
     changelog = "https://github.com/klaasnicolaas/python-autarco/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

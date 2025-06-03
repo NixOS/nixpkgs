@@ -1,25 +1,40 @@
-{ stdenv
-, lib
-, fetchurl
-, aspell
-, groff
-, pkg-config
-, glib
-, hunspell
-, hspell
-, nuspell
-, unittest-cpp
+{
+  stdenv,
+  lib,
+  fetchurl,
+  aspell,
+  groff,
+  pkg-config,
+  glib,
+  hunspell,
+  hspell,
+  nuspell,
+  libvoikko,
+  unittest-cpp,
+
+  withHspell ? true,
+  withAspell ? true,
+  withHunspell ? true,
+  withNuspell ? true,
+  withVoikko ? true,
+  withAppleSpell ? stdenv.hostPlatform.isDarwin,
+
 }:
+
+assert withAppleSpell -> stdenv.hostPlatform.isDarwin;
 
 stdenv.mkDerivation rec {
   pname = "enchant";
-  version = "2.6.7";
+  version = "2.6.9";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
-    url = "https://github.com/AbiWord/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-ocLltZrMoAC7+ySBCvShFlcz1AfyFUeGWI4HbIzVe/w=";
+    url = "https://github.com/rrthomas/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
+    hash = "sha256-2aWhDcmzikOzoPoix27W67fgnrU1r/YpVK/NvUDv/2s=";
   };
 
   strictDeps = true;
@@ -29,21 +44,32 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    glib
-    hunspell
-    nuspell
-  ];
+  buildInputs =
+    [
+      glib
+    ]
+    ++ lib.optionals withHunspell [
+      hunspell
+    ]
+    ++ lib.optionals withNuspell [
+      nuspell
+    ]
+    ++ lib.optionals withVoikko [
+      libvoikko
+    ];
 
   checkInputs = [
     unittest-cpp
   ];
 
   # libtool puts these to .la files
-  propagatedBuildInputs = [
-    hspell
-    aspell
-  ];
+  propagatedBuildInputs =
+    lib.optionals withHspell [
+      hspell
+    ]
+    ++ lib.optionals withAspell [
+      aspell
+    ];
 
   enableParallelBuilding = true;
 
@@ -51,15 +77,17 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-relocatable" # needed for tests
-    "--with-aspell"
-    "--with-hspell"
-    "--with-hunspell"
-    "--with-nuspell"
+    (lib.withFeature withAspell "aspell")
+    (lib.withFeature withHspell "hspell")
+    (lib.withFeature withHunspell "hunspell")
+    (lib.withFeature withNuspell "nuspell")
+    (lib.withFeature withVoikko "voikko")
+    (lib.withFeature withAppleSpell "applespell")
   ];
 
   meta = with lib; {
     description = "Generic spell checking library";
-    homepage = "https://abiword.github.io/enchant/";
+    homepage = "https://rrthomas.github.io/enchant/";
     license = licenses.lgpl21Plus; # with extra provision for non-free checkers
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.unix;

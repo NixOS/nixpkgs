@@ -1,52 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pdm-pep517
-, appdirs
-, loguru
-, requests
-, setuptools
-, toml
-, websocket-client
-, asciimatics
-, pyperclip
-, aria2
-, fastapi
-, pytest-xdist
-, pytestCheckHook
-, responses
-, uvicorn
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pdm-backend,
+  loguru,
+  platformdirs,
+  requests,
+  setuptools,
+  toml,
+  websocket-client,
+  asciimatics,
+  pyperclip,
+  aria2,
+  fastapi,
+  psutil,
+  pytest-xdist,
+  pytestCheckHook,
+  responses,
+  uvicorn,
 }:
 
 buildPythonPackage rec {
   pname = "aria2p";
-  version = "0.11.2";
+  version = "0.12.1";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "pawamoy";
-    repo = pname;
-    rev = version;
-    hash = "sha256-z74ej6J6Yh1aVsXR5fE+XhoCzCS+zfDxQL8gKFd7tBA=";
+    repo = "aria2p";
+    tag = version;
+    hash = "sha256-JEXTCDfFjxI1hooiEQq0KIGGoS2F7fyzOM0GMl+Jr7w=";
   };
 
-  nativeBuildInputs = [
-    pdm-pep517
-  ];
+  build-system = [ pdm-backend ];
 
-  propagatedBuildInputs = [
-    appdirs
+  dependencies = [
     loguru
+    platformdirs
     requests
     setuptools # for pkg_resources
     toml
     websocket-client
   ];
 
-  passthru.optional-dependencies = {
-    tui = [ asciimatics pyperclip ];
+  optional-dependencies = {
+    tui = [
+      asciimatics
+      pyperclip
+    ];
   };
 
   preCheck = ''
@@ -59,14 +62,16 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     responses
+    psutil
     uvicorn
-  ] ++ passthru.optional-dependencies.tui;
+  ] ++ optional-dependencies.tui;
 
   disabledTests = [
     # require a running display server
     "test_add_downloads_torrents_and_metalinks"
     "test_add_downloads_uris"
     # require a running aria2 server
+    "test_cli_autoclear_commands"
     "test_get_files_method"
     "test_pause_subcommand"
     "test_resume_method"
@@ -76,8 +81,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/pawamoy/aria2p";
-    changelog = "https://github.com/pawamoy/aria2p/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/pawamoy/aria2p/blob/${src.tag}/CHANGELOG.md";
     description = "Command-line tool and library to interact with an aria2c daemon process with JSON-RPC";
+    mainProgram = "aria2p";
     license = licenses.isc;
     maintainers = with maintainers; [ koral ];
   };

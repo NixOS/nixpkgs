@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -18,8 +19,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "SOCKS module for Python";
-    license     = licenses.bsd3;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ thoughtpolice ];
   };
-
 }

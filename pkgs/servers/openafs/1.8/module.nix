@@ -1,30 +1,25 @@
-{ lib
-, stdenv
-, fetchurl
-, which
-, autoconf
-, automake
-, flex
-, bison
-, kernel
-, glibc
-, perl
-, libtool_2
-, libkrb5
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  which,
+  autoconf,
+  automake,
+  flex,
+  bison,
+  kernel,
+  glibc,
+  perl,
+  libtool_2,
+  libkrb5,
 }:
 
-with (import ./srcs.nix {
-  inherit fetchurl;
-});
-
 let
+  inherit (import ./srcs.nix { inherit fetchurl; }) src version;
+
   modDestDir = "$out/lib/modules/${kernel.modDirVersion}/extra/openafs";
   kernelBuildDir = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
-
-  fetchBase64Patch = args: (fetchpatch args).overrideAttrs (o: {
-    postFetch = "mv $out p; base64 -d p > $out; " + o.postFetch;
-  });
 
 in
 stdenv.mkDerivation {
@@ -33,85 +28,65 @@ stdenv.mkDerivation {
   inherit src;
 
   patches = [
-    # cf: Fix cast-function-type err w/disable-checking
+    # LINUX: Refactor afs_linux_dentry_revalidate()
     (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=6867a3e8429f37fb748575df52256227ae9e5b53";
-      hash = "sha256-FDvOFDzl2eFN7ZKUqQBQSWGo0ntayc8NCYh/haVi8Ng=";
+      url = "https://gerrit.openafs.org/changes/16276/revisions/c1d074317e5c8cb8212e0b19a29f7d710bcabb32/patch";
+      decode = "base64 -d";
+      hash = "sha256-8ga9ks9pr6pWaV2t67v+FaG0yVExhqELkvkpdLvO8Nc=";
     })
-    # LINUX: Make 'fs flush*' invalidate dentry
+    # Linux-6.14: Handle dops.d_revalidate with parent
     (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=898098e01e19970f80f60a0551252b2027246038";
-      hash = "sha256-ehwRrzpqB8iJKuZ/18oJsrHVlKQs6EzCNaPtSG1m0sw=";
+      url = "https://gerrit.openafs.org/changes/16277/revisions/0051bd0ee82b05e8caacdc0596e5b62609bebd2e/patch";
+      decode = "base64 -d";
+      hash = "sha256-08jedwZ1KX1RSs8y9sh7BUvv5xK9tlzZ6uBOR4kS0Jo=";
     })
-    # Linux 6.5: Replace generic_file_splice_read
+    # Linux: Add required MODULE_DESCRIPTION
     (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=fef245769366efe8694ddadd1e1f2ed5ef8608f4";
-      hash = "sha256-TD1xYvlc9aJyravNZLPhceeOwBawvn0Ndxd50rszTJU=";
+      url = "https://gerrit.openafs.org/changes/16372/revisions/39189eba45542376e668636bd79a93ae6a8a7cd2/patch";
+      decode = "base64 -d";
+      hash = "sha256-j5ckKQvybEvmlnFs5jX8g8Dfw37LYWGnfsl4hnZ3+A4=";
     })
-    # LINUX: Make sysctl definitions more concise
+    # linux: inode_ops mkdir returns struct dentry *
     (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=d15c7ab50c92671052cbe9a93b0440c81156d8aa";
-      hash = "sha256-6K593AJvgC34RfnIqW8+0A/v9cF6tsbVMeKpCv+QrK4=";
+      url = "https://gerrit.openafs.org/changes/16373/revisions/769847e205d5908a0c430f7bcfbd2f48e19f8bf8/patch";
+      decode = "base64 -d";
+      hash = "sha256-znv5gunyPnJgi4SRFERJudtYFqiS+AVYDWfvr52Ku3s=";
     })
-    # Linux 6.5: Use register_sysctl()
+    # Linux: Use __filemap_get_folio()
     (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=63801cfd1fc06ec3259fcfd67229f3a3c70447ed";
-      hash = "sha256-eoQxaZ28OanSoaHRJcfvXQORbe21YLhwPLoJUILjMkU=";
+      url = "https://gerrit.openafs.org/changes/16374/revisions/f187add554da9e9c52752edbfa98f486f683cf25/patch";
+      decode = "base64 -d";
+      hash = "sha256-+ay87ThSn6QyPZcN0+oE01Wqbxmz0Z1KXYwocQCvYLg=";
     })
-    # hcrypto: rename abort to _afscrypto_abort
+    # Linux: Use folio_wait_locked()
     (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=538f450033a67e251b473ff92238b3124b85fc72";
-      hash = "sha256-ztfJQKvGHGdWQe/0+BGkgRFxOi3n4YY+EFxgbD3DO1E=";
+      url = "https://gerrit.openafs.org/changes/16375/revisions/87a93f6488585553d833e1397e7f0dae0545cb7e/patch";
+      decode = "base64 -d";
+      hash = "sha256-MOVX2LFe8OBnvsQ2UdLvwKrwztOmnu1rdIou4CF+EBs=";
     })
-    # cf: Avoid nested C functions built by autoconf
+    # cf: Introduce AC_CHECK_LINUX_SYMBOL
     (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=d50ced2a17e05884ea18bb3dfcde6378b2531dc7";
-      hash = "sha256-dK2/9bGhlXCPCB9t9T/K2dKdRBShVKXtYXWPttsOhAM=";
+      url = "https://gerrit.openafs.org/changes/16376/revisions/bab5968d7f4639d4a0cbe81aaa3e9716dda00632/patch";
+      decode = "base64 -d";
+      hash = "sha256-d6DZqDTW1uEKSB5PsomS4ix9fYYQzdQVmDATKl6n7x4=";
     })
-    # cf: Use static allocated structs for cf tests
+    # cf: check for dentry flag macros/enums
     (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=00f13c45d637249a0d698458e08c1b8e2da8e219";
-      hash = "sha256-YNszJIxBDIsl3RgBcHEpNtYIrNLC0tnSbIOQvX0oZ+s=";
-    })
-    # LINUX: Pass an array of structs to register_sysctl
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=5b647bf17a878271e1ce9882e41663770ee73528";
-      hash = "sha256-9o4cr/KORtanTfuKMAMAOvePB+vK579rR85rY+m8VNM=";
-    })
-    # linux: Replace fop iterate with fop iterate_shared
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=6de0a646036283266e1d4aeb583e426005ca5ad4";
-      hash = "sha256-cL3ByjUS3QU8fSbuN7ZEEKyjb+6TbbZL10UKbSgNl6c=";
-    })
-    # Linux 6.6: convert to ctime accessor functions
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=6413fdbc913834f2884989e5811841f4ccea2b5f";
-      hash = "sha256-vdK25vfS5Yr0xQufzUk431FXHwMIWlP2UpLjqnobJWI=";
-    })
-    # Linux 6.6: Pass request_mask to generic_fillattr
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=4f1d8104d17d2b4e95c7abaf5498db6b80aefa8f";
-      hash = "sha256-XJpqbDB/LOuqZj3gPHlcLeGzAQCGvPH8ArgWf+sbBJU=";
-    })
-    # Linux: Fix to use time_t instead of time64_t
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=56763a199f92101c35d6b9b733302cb08fe0cdbe";
-      hash = "sha256-A2z+smBLQg6k+cHPpNr2s/SgoYuCOMNLcvm5LFRiqeM=";
-    })
-    # dir: Introduce struct DirEntryFlex
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=fd527549c2d2b29a955f8c0427ac67c5d49ef38c";
-      hash = "sha256-jblsaJuTt3BsW5MG69ETcao/ZzSuh9aKRZyTIxZ7Ty4=";
-    })
-    # Linux 6.7: convert to inode a/mtime accessor funcs
-    (fetchpatch {
-      url = "https://git.openafs.org?p=openafs.git;a=patch;h=6edf9d350c6ffd9d5e51fb8106701c1bc2f6a4d9";
-      hash = "sha256-oQVyKzIcqzYDZHSut9Mw1t3kcEC5HGUX6eGlGJ9fZYo=";
+      url = "https://gerrit.openafs.org/changes/16377/revisions/f791d8ca4804486c656bc7c221076480df39b465/patch";
+      decode = "base64 -d";
+      hash = "sha256-7B0VJE3FeSQU1ElvXI5zXCPq1JRLAycyhqIQuDdR7xE=";
     })
   ];
 
-  nativeBuildInputs = [ autoconf automake flex libtool_2 perl which bison ]
-    ++ kernel.moduleBuildDependencies;
+  nativeBuildInputs = [
+    autoconf
+    automake
+    flex
+    libtool_2
+    perl
+    which
+    bison
+  ] ++ kernel.moduleBuildDependencies;
 
   buildInputs = [ libkrb5 ];
 
@@ -151,7 +126,11 @@ stdenv.mkDerivation {
     homepage = "https://www.openafs.org";
     license = licenses.ipl10;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ andersk maggesi spacefrogg ];
+    maintainers = with maintainers; [
+      andersk
+      maggesi
+      spacefrogg
+    ];
     broken = kernel.isHardened;
   };
 }

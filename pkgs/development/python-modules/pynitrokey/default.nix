@@ -1,36 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonRelaxDepsHook
-, installShellFiles
-, libnitrokey
-, flit-core
-, certifi
-, cffi
-, click
-, cryptography
-, ecdsa
-, fido2
-, intelhex
-, nkdfu
-, python-dateutil
-, pyusb
-, requests
-, spsdk
-, tqdm
-, tlv8
-, typing-extensions
-, pyserial
-, protobuf
-, click-aliases
-, semver
-, nethsm
-, importlib-metadata
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  installShellFiles,
+  libnitrokey,
+  flit-core,
+  certifi,
+  cffi,
+  click,
+  cryptography,
+  ecdsa,
+  fido2,
+  intelhex,
+  nkdfu,
+  python-dateutil,
+  pyusb,
+  requests,
+  tqdm,
+  tlv8,
+  typing-extensions,
+  click-aliases,
+  semver,
+  nethsm,
+  importlib-metadata,
+  nitrokey,
+  pyscard,
+  asn1crypto,
 }:
 
 let
   pname = "pynitrokey";
-  version = "0.4.45";
+  version = "0.8.5";
   mainProgram = "nitropy";
 in
 
@@ -40,10 +40,14 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iY4ThrmXP7pEjTYYU4lePVAbuJGTdHX3iKswXzuf7W8=";
+    hash = "sha256-mPhH4IdpKKA9d8sJOGMWpGerzki5qZHFHe4u4ao2RgE=";
   };
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ installShellFiles ];
+
+  build-system = [ flit-core ];
+
+  dependencies = [
     certifi
     cffi
     click
@@ -55,22 +59,16 @@ buildPythonPackage {
     python-dateutil
     pyusb
     requests
-    spsdk
     tqdm
     tlv8
     typing-extensions
-    pyserial
-    protobuf
     click-aliases
     semver
     nethsm
     importlib-metadata
-  ];
-
-  nativeBuildInputs = [
-    flit-core
-    installShellFiles
-    pythonRelaxDepsHook
+    nitrokey
+    pyscard
+    asn1crypto
   ];
 
   pythonRelaxDeps = true;
@@ -80,9 +78,7 @@ buildPythonPackage {
 
   # libnitrokey is not propagated to users of the pynitrokey Python package.
   # It is only usable from the wrapped bin/nitropy
-  makeWrapperArgs = [
-    "--set LIBNK_PATH ${lib.makeLibraryPath [ libnitrokey ]}"
-  ];
+  makeWrapperArgs = [ "--set LIBNK_PATH ${lib.makeLibraryPath [ libnitrokey ]}" ];
 
   # no tests
   doCheck = false;
@@ -100,8 +96,14 @@ buildPythonPackage {
     description = "Python client for Nitrokey devices";
     homepage = "https://github.com/Nitrokey/pynitrokey";
     changelog = "https://github.com/Nitrokey/pynitrokey/releases/tag/v${version}";
-    license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ frogamic ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with maintainers; [
+      frogamic
+      raitobezarius
+    ];
     inherit mainProgram;
   };
 }

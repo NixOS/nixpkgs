@@ -1,17 +1,18 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, certifi
-, fetchFromGitHub
-, numpy
-, poetry-core
-, pygments
-, pysmb
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  numpy,
+  poetry-core,
+  pygments,
+  pysmb,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -24,13 +25,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "pyairvisual";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-uN31LeHYmg4V6Ln3EQp765nOsN5v56TxjYSS/g6TUCY=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -56,9 +55,7 @@ buildPythonPackage rec {
     "examples/"
   ];
 
-  pythonImportsCheck = [
-    "pyairvisual"
-  ];
+  pythonImportsCheck = [ "pyairvisual" ];
 
   meta = with lib; {
     description = "Python library for interacting with AirVisual";

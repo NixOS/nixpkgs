@@ -1,11 +1,17 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
 
   cfg = config.services.shairport-sync;
-
+  configFormat = pkgs.formats.libconfig { };
+  configFile = configFormat.generate "shairport-sync.conf" cfg.settings;
 in
 
 {
@@ -19,7 +25,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable the shairport-sync daemon.
 
           Running with a local system-wide or remote pulseaudio server
@@ -27,10 +33,47 @@ in
         '';
       };
 
+      package = lib.options.mkPackageOption pkgs "shairport-sync" { };
+
+      settings = mkOption {
+        type = configFormat.type;
+        default = {
+          general.output_backend = "pa";
+          diagnostics.log_verbosity = 1;
+        };
+        example = {
+          general = {
+            name = "NixOS Shairport";
+            output_backend = "pw";
+          };
+          metadata = {
+            enabled = "yes";
+            include_cover_art = "yes";
+            cover_art_cache_directory = "/tmp/shairport-sync/.cache/coverart";
+            pipe_name = "/tmp/shairport-sync-metadata";
+            pipe_timeout = 5000;
+          };
+          mqtt = {
+            enabled = "yes";
+            hostname = "mqtt.server.domain.example";
+            port = 1883;
+            publish_parsed = "yes";
+            publish_cover = "yes";
+          };
+        };
+        description = ''
+          Configuration options for Shairport-Sync.
+
+          See the example [shairport-sync.conf][example-file] for possible options.
+
+          [example-file]: https://github.com/mikebrady/shairport-sync/blob/master/scripts/shairport-sync.conf
+        '';
+      };
+
       arguments = mkOption {
         type = types.str;
-        default = "-v -o pa";
-        description = lib.mdDoc ''
+        default = "";
+        description = ''
           Arguments to pass to the daemon. Defaults to a local pulseaudio
           server.
         '';
@@ -39,7 +82,7 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to automatically open ports in the firewall.
         '';
       };
@@ -47,7 +90,7 @@ in
       user = mkOption {
         type = types.str;
         default = "shairport";
-        description = lib.mdDoc ''
+        description = ''
           User account name under which to run shairport-sync. The account
           will be created.
         '';
@@ -56,7 +99,7 @@ in
       group = mkOption {
         type = types.str;
         default = "shairport";
-        description = lib.mdDoc ''
+        description = ''
           Group account name under which to run shairport-sync. The account
           will be created.
         '';
@@ -66,7 +109,6 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf config.services.shairport-sync.enable {
@@ -75,6 +117,11 @@ in
     services.avahi.publish.enable = true;
     services.avahi.publish.userServices = true;
 
+    services.shairport-sync.settings = {
+      general.output_backend = lib.mkDefault "pa";
+      diagnostics.log_verbosity = lib.mkDefault 1;
+    };
+
     users = {
       users.${cfg.user} = {
         description = "Shairport user";
@@ -82,31 +129,43 @@ in
         createHome = true;
         home = "/var/lib/shairport-sync";
         group = cfg.group;
-        extraGroups = [ "audio" ] ++ optional config.hardware.pulseaudio.enable "pulse";
+        extraGroups = [
+          "audio"
+        ] ++ optional (config.services.pulseaudio.enable || config.services.pipewire.pulse.enable) "pulse";
       };
-      groups.${cfg.group} = {};
+      groups.${cfg.group} = { };
     };
 
     networking.firewall = mkIf cfg.openFirewall {
       allowedTCPPorts = [ 5000 ];
-      allowedUDPPortRanges = [ { from = 6001; to = 6011; } ];
+      allowedUDPPortRanges = [
+        {
+          from = 6001;
+          to = 6011;
+        }
+      ];
     };
 
-    systemd.services.shairport-sync =
-      {
-        description = "shairport-sync";
-        after = [ "network.target" "avahi-daemon.service" ];
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig = {
-          User = cfg.user;
-          Group = cfg.group;
-          ExecStart = "${pkgs.shairport-sync}/bin/shairport-sync ${cfg.arguments}";
-          RuntimeDirectory = "shairport-sync";
-        };
+    systemd.services.shairport-sync = {
+      description = "shairport-sync";
+      after = [
+        "network.target"
+        "avahi-daemon.service"
+      ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        User = cfg.user;
+        Group = cfg.group;
+        ExecStart = "${lib.getExe cfg.package} ${cfg.arguments}";
+        Restart = "on-failure";
+        RuntimeDirectory = "shairport-sync";
       };
+    };
 
-    environment.systemPackages = [ pkgs.shairport-sync ];
-
+    environment = {
+      systemPackages = [ cfg.package ];
+      etc."shairport-sync.conf".source = configFile;
+    };
   };
 
 }

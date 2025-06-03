@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -10,7 +15,7 @@ in
 {
   options = {
     services.nexus = {
-      enable = mkEnableOption (lib.mdDoc "Sonatype Nexus3 OSS service");
+      enable = mkEnableOption "Sonatype Nexus3 OSS service";
 
       package = lib.mkPackageOption pkgs "nexus" { };
 
@@ -19,31 +24,31 @@ in
       user = mkOption {
         type = types.str;
         default = "nexus";
-        description = lib.mdDoc "User which runs Nexus3.";
+        description = "User which runs Nexus3.";
       };
 
       group = mkOption {
         type = types.str;
         default = "nexus";
-        description = lib.mdDoc "Group which runs Nexus3.";
+        description = "Group which runs Nexus3.";
       };
 
       home = mkOption {
         type = types.str;
         default = "/var/lib/sonatype-work";
-        description = lib.mdDoc "Home directory of the Nexus3 instance.";
+        description = "Home directory of the Nexus3 instance.";
       };
 
       listenAddress = mkOption {
         type = types.str;
         default = "127.0.0.1";
-        description = lib.mdDoc "Address to listen on.";
+        description = "Address to listen on.";
       };
 
       listenPort = mkOption {
         type = types.int;
         default = 8081;
-        description = lib.mdDoc "Port to listen on.";
+        description = "Port to listen on.";
       };
 
       jvmOpts = mkOption {
@@ -89,7 +94,7 @@ in
           '''
         '';
 
-        description = lib.mdDoc ''
+        description = ''
           Options for the JVM written to `nexus.jvmopts`.
           Please refer to the docs (https://help.sonatype.com/repomanager3/installation/configuring-the-runtime-environment)
           for further information.

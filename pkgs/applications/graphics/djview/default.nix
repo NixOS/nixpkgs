@@ -1,53 +1,65 @@
-{ lib, stdenv
-, mkDerivation
-, fetchurl
-, pkg-config
-, djvulibre
-, qtbase
-, qttools
-, xorg
-, libtiff
-, darwin
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoconf,
+  automake,
+  libtool,
+  pkg-config,
+  djvulibre,
+  libsForQt5,
+  xorg,
+  libtiff,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "djview";
-  version = "4.10.6";
+  version = "4.12";
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchurl {
     url = "mirror://sourceforge/djvu/${pname}-${version}.tar.gz";
-    sha256 = "08bwv8ppdzhryfcnifgzgdilb12jcnivl4ig6hd44f12d76z6il4";
+    hash = "sha256-VnPGqLfhlbkaFyCyQJGRW4FF3jSHnbEVi8k2sQDq8+M=";
   };
 
   nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
     pkg-config
-    qttools
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     djvulibre
-    qtbase
+    libsForQt5.qtbase
     xorg.libXt
     libtiff
-  ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.AGL;
+  ];
+
+  preConfigure = ''
+    NOCONFIGURE=1 ./autogen.sh
+  '';
 
   configureFlags = [
     "--disable-silent-rules"
     "--disable-dependency-tracking"
     "--with-x"
     "--with-tiff"
-    # NOTE: 2019-09-19: experimental "--enable-npdjvu" fails
-  ] ++ lib.optional stdenv.isDarwin "--enable-mac";
-
-  passthru = {
-    mozillaPlugin = "/lib/mozilla/plugins";
-  };
+    "--disable-nsdejavu" # 2023-11-14: modern browsers have dropped support for NPAPI
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin "--enable-mac";
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
-    description = "A portable DjVu viewer (Qt5) and browser (nsdejavu) plugin";
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "Portable DjVu viewer (Qt5) and browser (nsdejavu) plugin";
+    mainProgram = "djview";
     homepage = "https://djvu.sourceforge.net/djview4.html";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ Anton-Latukha ];
     longDescription = ''

@@ -1,9 +1,16 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, pythonOlder }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+}:
 
 let
   pname = "translitcodec";
   version = "0.7.0";
-in buildPythonPackage {
+in
+buildPythonPackage {
   inherit pname version;
 
   format = "setuptools";
@@ -12,7 +19,7 @@ in buildPythonPackage {
 
   src = fetchFromGitHub {
     owner = "claudep";
-    repo = pname;
+    repo = "translitcodec";
     rev = "version-${version}";
     hash = "sha256-/EKquTchx9i3fZqJ6AMzHYP9yCORvwbuUQ95WJQOQbI=";
   };

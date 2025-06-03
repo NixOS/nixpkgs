@@ -1,6 +1,7 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -23,7 +24,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A Resource Compiler in a Single CMake Script";
+    description = "Resource Compiler in a Single CMake Script";
     homepage = "https://github.com/vector-of-bool/cmrc";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ guekka ];

@@ -1,48 +1,44 @@
-{ stdenvNoCC
-, stdenv
-, lib
-, dpkg
-, autoPatchelfHook
-, makeWrapper
-, fetchurl
-, alsa-lib
-, openssl
-, udev
-, libglvnd
-, libX11
-, libXcursor
-, libXi
-, libXrandr
-, libXfixes
-, libpulseaudio
-, libva
-, ffmpeg_5
-, libpng
-, libjpeg8
-, curl
-, vulkan-loader
-, gnome
-, zenity ? gnome.zenity
+{
+  stdenvNoCC,
+  stdenv,
+  lib,
+  dpkg,
+  autoPatchelfHook,
+  makeWrapper,
+  fetchurl,
+  alsa-lib,
+  openssl,
+  udev,
+  libglvnd,
+  libX11,
+  libXcursor,
+  libXi,
+  libXrandr,
+  libXfixes,
+  libpulseaudio,
+  libva,
+  ffmpeg_7,
+  libpng,
+  libjpeg8,
+  curl,
+  vulkan-loader,
+  zenity,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "parsec-bin";
-  version = "150_91a";
+  version = "150_97c";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20231209190803if_/https://builds.parsec.app/package/parsec-linux.deb";
-    sha256 = "sha256-/qugI7k0NYpq7p9l9auD2Pp+SFoFZ9jAZswpreVfgO4=";
+    url = "https://web.archive.org/web/20250226223019/https://builds.parsec.app/package/parsec-linux.deb";
+    sha256 = "sha256-8Wkbo6l1NGBPX2QMJszq+u9nLM96tu7WYRTQq6/CzM8=";
   };
 
-  unpackPhase = ''
-    runHook preUnpack
-
-    dpkg-deb -x $src .
-
-    runHook postUnpack
-  '';
-
-  nativeBuildInputs = [ dpkg autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [
+    dpkg
+    autoPatchelfHook
+    makeWrapper
+  ];
 
   buildInputs = [
     stdenv.cc.cc # libstdc++
@@ -58,7 +54,7 @@ stdenvNoCC.mkDerivation {
     alsa-lib
     libpulseaudio
     libva
-    ffmpeg_5
+    ffmpeg_7
     libpng
     libjpeg8
     curl
@@ -117,7 +113,10 @@ stdenvNoCC.mkDerivation {
     changelog = "https://parsec.app/changelog";
     description = "Remote streaming service client";
     license = licenses.unfree;
-    maintainers = with maintainers; [ arcnmx pabloaul ];
+    maintainers = with maintainers; [
+      arcnmx
+      pabloaul
+    ];
     platforms = platforms.linux;
     mainProgram = "parsecd";
   };

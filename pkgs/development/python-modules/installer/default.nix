@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonAtLeast
-, fetchFromGitHub
-, pytestCheckHook
-, flit-core
-, installer
-, mock
+{
+  lib,
+  buildPythonPackage,
+  pythonAtLeast,
+  fetchFromGitHub,
+  pytestCheckHook,
+  flit-core,
+  installer,
+  mock,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "pypa";
-    repo = pname;
+    repo = "installer";
     rev = version;
     hash = "sha256-thHghU+1Alpay5r9Dc3v7ATRFfYKV8l9qR0nbGOOX/A=";
   };
@@ -50,10 +51,11 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "A low-level library for installing a Python package from a wheel distribution";
+    description = "Low-level library for installing a Python package from a wheel distribution";
     homepage = "https://github.com/pypa/installer";
     changelog = "https://github.com/pypa/installer/blob/${src.rev}/docs/changelog.md";
     license = licenses.mit;
-    maintainers = teams.python.members ++ [ maintainers.cpcloud ];
+    maintainers = [ maintainers.cpcloud ];
+    teams = [ teams.python ];
   };
 }

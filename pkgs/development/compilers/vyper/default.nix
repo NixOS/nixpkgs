@@ -1,27 +1,27 @@
-{ lib
-, asttokens
-, buildPythonPackage
-, cbor2
-, fetchPypi
-, git
-, importlib-metadata
-, packaging
-, pycryptodome
-, pytest-runner
-, pythonOlder
-, pythonRelaxDepsHook
-, recommonmark
-, setuptools-scm
-, sphinx
-, sphinx-rtd-theme
-, writeText
+{
+  lib,
+  lark,
+  asttokens,
+  buildPythonPackage,
+  cbor2,
+  fetchPypi,
+  git,
+  importlib-metadata,
+  packaging,
+  pycryptodome,
+  pythonOlder,
+  recommonmark,
+  setuptools-scm,
+  sphinx,
+  sphinx-rtd-theme,
+  writeText,
 }:
 
 let
   sample-contract = writeText "example.vy" ''
     count: int128
 
-    @external
+    @deploy
     def __init__(foo: address):
         self.count = 1
   '';
@@ -29,20 +29,20 @@ let
 in
 buildPythonPackage rec {
   pname = "vyper";
-  version = "0.3.10";
+  version = "0.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jcH1AcqrQX+wzpxoppRFh/AUfsfMfTiJzzpFwZRm5Ik=";
+    hash = "sha256-KiGbiVybWtanEjem+30DpuzKqAD6owujJBiEfjUKleM=";
   };
 
   postPatch = ''
     # pythonRelaxDeps doesn't work
     substituteInPlace setup.py \
-      --replace "setuptools_scm>=7.1.0,<8.0.0" "setuptools_scm>=7.1.0"
+      --replace-fail "setuptools_scm>=7.1.0,<8.0.0" "setuptools_scm>=7.1.0"
   '';
 
   nativeBuildInputs = [
@@ -50,16 +50,16 @@ buildPythonPackage rec {
     # ever since https://github.com/vyperlang/vyper/pull/2816
     git
 
-    pythonRelaxDepsHook
-    pytest-runner
     setuptools-scm
   ];
 
   pythonRelaxDeps = [
     "asttokens"
+    "packaging"
   ];
 
   propagatedBuildInputs = [
+    lark
     asttokens
     cbor2
     importlib-metadata

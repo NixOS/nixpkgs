@@ -1,11 +1,12 @@
-{ stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, cryptominisat
-, boost
-, louvain-community
-, lib
+{
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  cryptominisat,
+  boost,
+  louvain-community,
+  lib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

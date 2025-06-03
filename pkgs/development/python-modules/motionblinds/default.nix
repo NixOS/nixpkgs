@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pycryptodomex
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pycryptodomex,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "motionblinds";
-  version = "0.6.23";
+  version = "0.6.27";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -16,24 +17,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "starkillerOG";
     repo = "motion-blinds";
-    rev = "refs/tags/${version}";
-    hash = "sha256-f5R58p6tMVqmXAjybae8qjeNI3vxtGJ7qxZOl9H5iKw=";
+    tag = version;
+    hash = "sha256-kvCvgSoiyDCDmEG8goM3hYXpvb5CO7nqz0/CKPBlZ2g=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    pycryptodomex
-  ];
+  dependencies = [ pycryptodomex ];
 
-  # Project has no tests
+  # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "motionblinds"
-  ];
+  pythonImportsCheck = [ "motionblinds" ];
 
   meta = with lib; {
     description = "Python library for interfacing with Motion Blinds";

@@ -24,33 +24,33 @@ in
     nixpkgs = {
       pkgs = mkOption {
         type = lib.types.pkgs;
-        description = lib.mdDoc ''The pkgs module argument.'';
+        description = ''The pkgs module argument.'';
       };
       config = mkOption {
         internal = true;
         type = types.unique { message = "nixpkgs.config is set to read-only"; } types.anything;
-        description = lib.mdDoc ''
+        description = ''
           The Nixpkgs `config` that `pkgs` was initialized with.
         '';
       };
       overlays = mkOption {
         internal = true;
         type = types.unique { message = "nixpkgs.overlays is set to read-only"; } types.anything;
-        description = lib.mdDoc ''
+        description = ''
           The Nixpkgs overlays that `pkgs` was initialized with.
         '';
       };
       hostPlatform = mkOption {
         internal = true;
         readOnly = true;
-        description = lib.mdDoc ''
+        description = ''
           The platform of the machine that is running the NixOS configuration.
         '';
       };
       buildPlatform = mkOption {
         internal = true;
         readOnly = true;
-        description = lib.mdDoc ''
+        description = ''
           The platform of the machine that built the NixOS configuration.
         '';
       };
@@ -61,11 +61,9 @@ in
   config = {
     _module.args.pkgs =
       # find mistaken definitions
-      builtins.seq cfg.config
-      builtins.seq cfg.overlays
-      builtins.seq cfg.hostPlatform
-      builtins.seq cfg.buildPlatform
-      cfg.pkgs;
+      builtins.seq cfg.config builtins.seq cfg.overlays builtins.seq cfg.hostPlatform builtins.seq
+        cfg.buildPlatform
+        cfg.pkgs;
     nixpkgs.config = cfg.pkgs.config;
     nixpkgs.overlays = cfg.pkgs.overlays;
     nixpkgs.hostPlatform = cfg.pkgs.stdenv.hostPlatform;

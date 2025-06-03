@@ -1,53 +1,76 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, ase
-, cython
-, glibcLocales
-, joblib
-, matplotlib
-, monty
-, networkx
-, numpy
-, palettable
-, pandas
-, plotly
-, pybtex
-, pydispatcher
-, pytestCheckHook
-, pytest-xdist
-, pythonOlder
-, requests
-, ruamel-yaml
-, scipy
-, seekpath
-, spglib
-, sympy
-, tabulate
-, uncertainties
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonAtLeast,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # nativeBuildInputs
+  cython,
+  glibcLocales,
+
+  # dependencies
+  joblib,
+  matplotlib,
+  monty,
+  networkx,
+  numpy,
+  palettable,
+  pandas,
+  plotly,
+  pybtex,
+  requests,
+  ruamel-yaml,
+  scipy,
+  spglib,
+  sympy,
+  tabulate,
+  tqdm,
+  uncertainties,
+
+  # optional-dependencies
+  netcdf4,
+  ase,
+  pytest,
+  pytest-cov,
+  invoke,
+  sphinx,
+  sphinx-rtd-theme,
+  numba,
+  vtk,
+
+  # tests
+  addBinToPathHook,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pymatgen";
-  version = "2024.2.23";
-  format = "setuptools";
+  version = "2025.1.24";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "materialsproject";
     repo = "pymatgen";
-    rev= "v${version}";
-    hash = "sha256-eswoup9ACj/PHVW3obcnZjD4tWemsmROZFtwGGigEYE=";
+    tag = "v${version}";
+    hash = "sha256-0P3/M6VI2RKPArMwXD95sjW7dYOTXxUeu4tOliN0IGk=";
   };
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     cython
     glibcLocales
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    joblib
     matplotlib
     monty
     networkx
@@ -56,50 +79,98 @@ buildPythonPackage rec {
     pandas
     plotly
     pybtex
-    pydispatcher
     requests
     ruamel-yaml
     scipy
     spglib
     sympy
     tabulate
+    tqdm
     uncertainties
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-xdist
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
-  preCheck = ''
-    # hide from tests
-    mv pymatgen _pymatgen
-    # ensure tests can find these
-    export PMG_TEST_FILES_DIR="$(realpath ./tests/files)"
-    # some tests cover the command-line scripts
-    export PATH=$out/bin:$PATH
-  '';
-  disabledTests = [
-    # presumably won't work with our dir layouts
-    "test_egg_sources_txt_is_complete"
-    # borderline precision failure
-    "test_thermal_conductivity"
-  ];
-
-  passthru.optional-dependencies = {
+  optional-dependencies = {
+    abinit = [ netcdf4 ];
     ase = [ ase ];
-    joblib = [ joblib ];
-    seekpath = [ seekpath ];
+    ci = [
+      pytest
+      pytest-cov
+      # pytest-split
+    ];
+    docs = [
+      invoke
+      sphinx
+      # sphinx_markdown_builder
+      sphinx-rtd-theme
+    ];
+    electronic_structure = [
+      # fdint
+    ];
+    mlp = [
+      # chgnet
+      # matgl
+    ];
+    numba = [ numba ];
+    vis = [ vtk ];
   };
 
-  pythonImportsCheck = [
-    "pymatgen"
+  pythonImportsCheck = [ "pymatgen" ];
+
+  nativeCheckInputs = [
+    addBinToPathHook
+    pytestCheckHook
+    pytest-xdist
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  preCheck =
+    # ensure tests can find these
+    ''
+      export PMG_TEST_FILES_DIR="$(realpath ./tests/files)"
+    '';
+
+  disabledTests =
+    [
+      # Flaky
+      "test_numerical_eos_values"
+      "test_pca"
+      "test_static_si_no_kgrid"
+      "test_thermal_conductivity"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # AttributeError: 'NoneType' object has no attribute 'items'
+      "test_mean_field"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Fatal Python error: Aborted
+      # matplotlib/backend_bases.py", line 2654 in create_with_canvas
+      "test_angle"
+      "test_as_dict_from_dict"
+      "test_attributes"
+      "test_basic"
+      "test_core_state_eigen"
+      "test_eos_func"
+      "test_get_info_cohps_to_neighbors"
+      "test_get_plot"
+      "test_get_point_group_operations"
+      "test_matplotlib_plots"
+      "test_ph_plot_w_gruneisen"
+      "test_plot"
+      "test_proj_bandstructure_plot"
+      "test_structure"
+      "test_structure_environments"
+    ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Crash when running the pmg command
+    # Critical error: required built-in appearance SystemAppearance not found
+    "tests/cli/test_pmg_plot.py"
   ];
 
-  meta = with lib; {
-    broken = stdenv.isDarwin;  # tests segfault. that's bad.
-    description = "A robust materials analysis code that defines core object representations for structures and molecules";
+  meta = {
+    description = "Robust materials analysis code that defines core object representations for structures and molecules";
     homepage = "https://pymatgen.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy ];
+    changelog = "https://github.com/materialsproject/pymatgen/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ psyanticy ];
   };
 }

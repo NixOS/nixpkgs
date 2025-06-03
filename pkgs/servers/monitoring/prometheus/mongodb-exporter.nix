@@ -1,17 +1,21 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "mongodb_exporter";
-  version = "0.40.0";
+  version = "0.44.0";
 
   src = fetchFromGitHub {
     owner = "percona";
     repo = "mongodb_exporter";
     rev = "v${version}";
-    hash = "sha256-cWXfMi48aF06Prua3n4geG2yP1JzLlHq/xh1HmiJkT4=";
+    hash = "sha256-FwY4rAmv7P55EGfEHrs0y15BvU3qnq0VHf37R7W2yA4=";
   };
 
-  vendorHash = "sha256-69YBrDAEruWXaAqLfRVtqmZ0pop3r5cusePSV2Q1MXw=";
+  vendorHash = "sha256-jF6Of16mMpsCrkvtI3xZcla4/MJGpCX5YVkGM6eFfmo=";
 
   ldflags = [
     "-s"
@@ -28,12 +32,11 @@ buildGoModule rec {
   # nixpkgs doesn't have mongodb application available;
   doCheck = false;
 
-  meta = with lib;
-    {
-      description = "A Prometheus exporter for MongoDB including sharding, replication and storage engines";
-      homepage = "https://github.com/percona/mongodb_exporter";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ undefined-moe ];
-      mainProgram = "mongodb_exporter";
-    };
+  meta = with lib; {
+    description = "Prometheus exporter for MongoDB including sharding, replication and storage engines";
+    homepage = "https://github.com/percona/mongodb_exporter";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ undefined-moe ];
+    mainProgram = "mongodb_exporter";
+  };
 }

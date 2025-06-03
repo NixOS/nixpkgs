@@ -1,31 +1,43 @@
-{ stdenv, lib
-, build2
-, fetchurl
-, fixDarwinDylibNames
-, libbutl
-, libpkgconf
-, buildPackages
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableStatic ? !enableShared
+{
+  stdenv,
+  lib,
+  build2,
+  fetchurl,
+  fixDarwinDylibNames,
+  libbutl,
+  libpkgconf,
+  buildPackages,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  enableStatic ? !enableShared,
 }:
 let
-  configSharedStatic = enableShared: enableStatic:
-    if enableShared && enableStatic then "both"
-    else if enableShared then "shared"
-    else if enableStatic then "static"
-    else throw "neither shared nor static libraries requested";
+  configSharedStatic =
+    enableShared: enableStatic:
+    if enableShared && enableStatic then
+      "both"
+    else if enableShared then
+      "shared"
+    else if enableStatic then
+      "static"
+    else
+      throw "neither shared nor static libraries requested";
 in
 stdenv.mkDerivation rec {
   pname = "build2";
-  version = "0.16.0";
+  version = "0.17.0";
 
-  outputs = [ "out" "dev" "doc" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "man"
+  ];
 
   setupHook = ./setup-hook.sh;
 
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/build2-${version}.tar.gz";
-    hash = "sha256-ZK4+UACsAs51bC1dE0sIxmCiHlH3pYGPWJNsl61oSOY=";
+    hash = "sha256-Kx5X/GV3GjFSbjo1mzteiHnnm4mr6+NAKIR/mEE+IdA=";
   };
 
   patches = [
@@ -72,7 +84,7 @@ stdenv.mkDerivation rec {
     "config.build2.libpkgconf=true"
   ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -add_rpath "''${!outputLib}/lib" "''${!outputBin}/bin/b"
   '';
 
@@ -104,7 +116,10 @@ stdenv.mkDerivation rec {
     '';
     changelog = "https://git.build2.org/cgit/build2/tree/NEWS";
     platforms = platforms.all;
-    maintainers = with maintainers; [ hiro98 r-burns ];
+    maintainers = with maintainers; [
+      hiro98
+      r-burns
+    ];
     mainProgram = "b";
   };
 }

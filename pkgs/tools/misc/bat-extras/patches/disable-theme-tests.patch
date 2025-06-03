@@ -1,0 +1,42 @@
+Subject: [PATCH] skip tests depending on color theme
+===================================================================
+diff --git a/test/suite/batpipe.sh b/test/suite/batpipe.sh
+--- a/test/suite/batpipe.sh	(revision 36c77c171cc71b2ff3ec4cb781aa16ca3ad258b1)
++++ b/test/suite/batpipe.sh	(date 1736621098865)
+@@ -29,6 +29,7 @@
+ test:batpipe_term_width() {
+ 	description "Test support for BATPIPE_TERM_WIDTH"
+ 	snapshot STDOUT
++	skip "bat-extras does not support `--theme` flag"
+
+ 	export BATPIPE=color
+ 	export BATPIPE_DEBUG_PARENT_EXECUTABLE=less
+Index: test/suite/batgrep.sh
+===================================================================
+diff --git a/test/suite/batgrep.sh b/test/suite/batgrep.sh
+--- a/test/suite/batgrep.sh	(revision 36c77c171cc71b2ff3ec4cb781aa16ca3ad258b1)
++++ b/test/suite/batgrep.sh	(date 1736621086239)
+@@ -58,6 +58,7 @@
+ 	description "Snapshot test for colored output."
+ 	snapshot stdout
+ 	snapshot stderr
++	skip "bat-extras does not support `--theme` flag"
+
+ 	require_rg
+
+@@ -118,6 +119,7 @@
+ 	description "Should respect the BAT_STYLE variable."
+ 	snapshot stdout
+ 	snapshot stderr
++	skip "bat-extras does not support `--theme` flag"
+
+ 	require_rg
+
+@@ -128,6 +130,7 @@
+ 	description "Snapshot test for output without separator"
+ 	snapshot stdout
+ 	snapshot stderr
++	skip "bat-extras does not support `--theme` flag"
+
+ 	require_rg
+

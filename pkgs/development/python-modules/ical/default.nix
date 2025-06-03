@@ -1,46 +1,37 @@
-{ lib
-, buildPythonPackage
-, emoji
-, fetchFromGitHub
-, freezegun
-, tzdata
-, pyparsing
-, pydantic
-, pytest-asyncio
-, pytest-benchmark
-, pytest-golden
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, python-dateutil
-, pyyaml
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  emoji,
+  fetchFromGitHub,
+  freezegun,
+  tzdata,
+  pyparsing,
+  pydantic,
+  pytest-benchmark,
+  pytestCheckHook,
+  pythonOlder,
+  python-dateutil,
+  setuptools,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "ical";
-  version = "6.1.1";
+  version = "10.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "allenporter";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-pFmJYXIhc9jhpc9ZjSNaol5h5Jb8ZvxuQsQL/2Rjryc=";
+    repo = "ical";
+    tag = version;
+    hash = "sha256-vEVhZ7UBftXsB5xq1LhwitV2Gl6kcR5P0ReJ+71SQFY=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  pythonRelaxDeps = [
-    "tzdata"
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     python-dateutil
     tzdata
     pydantic
@@ -50,22 +41,18 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     emoji
     freezegun
-    pytest-asyncio
     pytest-benchmark
-    pytest-golden
     pytestCheckHook
-    pyyaml
+    syrupy
   ];
 
-  pythonImportsCheck = [
-    "ical"
-  ];
+  pythonImportsCheck = [ "ical" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for handling iCalendar";
     homepage = "https://github.com/allenporter/ical";
-    changelog = "https://github.com/allenporter/ical/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/allenporter/ical/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

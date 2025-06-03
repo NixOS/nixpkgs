@@ -1,4 +1,17 @@
-{ stdenv, fetchFromGitLab, lib, cmake, qtbase, qttools, qtcharts, libGLU, libGL, glm, glew, wrapQtAppsHook }:
+{
+  stdenv,
+  fetchFromGitLab,
+  lib,
+  cmake,
+  qtbase,
+  qttools,
+  qtcharts,
+  libGLU,
+  libGL,
+  glm,
+  glew,
+  wrapQtAppsHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "vite";
@@ -12,11 +25,23 @@ stdenv.mkDerivation rec {
     hash = "sha256-Yf2jYALZplIXzVtd/sg6gzEYrZ+oU0zLG1ETd/hiTi0=";
   };
 
-  nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
-  buildInputs = [ qtbase qtcharts libGLU libGL glm glew ];
+  nativeBuildInputs = [
+    cmake
+    qttools
+    wrapQtAppsHook
+  ];
+  buildInputs = [
+    qtbase
+    qtcharts
+    libGLU
+    libGL
+    glm
+    glew
+  ];
 
   meta = {
     description = "Visual Trace Explorer (ViTE), a tool to visualize execution traces";
+    mainProgram = "vite";
 
     longDescription = ''
       ViTE is a trace explorer. It is a tool to visualize execution
@@ -26,7 +51,7 @@ stdenv.mkDerivation rec {
 
     homepage = "http://vite.gforge.inria.fr/";
     license = lib.licenses.cecill20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

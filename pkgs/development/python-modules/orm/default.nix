@@ -1,12 +1,13 @@
-{ lib
-, aiomysql
-, aiosqlite
-, asyncpg
-, buildPythonPackage
-, databases
-, fetchFromGitHub
-, pythonOlder
-, typesystem
+{
+  lib,
+  aiomysql,
+  aiosqlite,
+  asyncpg,
+  buildPythonPackage,
+  databases,
+  fetchFromGitHub,
+  pythonOlder,
+  typesystem,
 }:
 
 buildPythonPackage rec {
@@ -39,14 +40,12 @@ buildPythonPackage rec {
   # Tests require databases
   doCheck = false;
 
-  pythonImportsCheck = [
-    "orm"
-  ];
+  pythonImportsCheck = [ "orm" ];
 
   meta = with lib; {
-    description = "An async ORM";
+    description = "Async ORM";
     homepage = "https://github.com/encode/orm";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

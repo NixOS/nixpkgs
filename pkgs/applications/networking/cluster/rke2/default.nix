@@ -1,41 +1,51 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, callPackage, ... }@args:
 
-buildGoModule rec {
-  pname = "rke2";
-  version = "1.29.0+rke2r1";
+let
+  common = opts: callPackage (import ./builder.nix lib opts);
+  extraArgs = builtins.removeAttrs args [ "callPackage" ];
+in
+rec {
+  rke2_1_29 = common (
+    (import ./1_29/versions.nix)
+    // {
+      updateScript = [
+        ./update-script.sh
+        "29"
+      ];
+    }
+  ) extraArgs;
 
-  src = fetchFromGitHub {
-    owner = "rancher";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-E59GUcbnbvsGZYn87RGNrGTVUsydKsjL+C5h15q74p0=";
-  };
+  rke2_1_30 = common (
+    (import ./1_30/versions.nix)
+    // {
+      updateScript = [
+        ./update-script.sh
+        "30"
+      ];
+    }
+  ) extraArgs;
 
-  vendorHash = "sha256-Og0CqxNnhRN6PdggneGK05uprZ2D7lux/snXcArIm8Q=";
+  rke2_1_31 = common (
+    (import ./1_31/versions.nix)
+    // {
+      updateScript = [
+        ./update-script.sh
+        "31"
+      ];
+    }
+  ) extraArgs;
 
-  postPatch = ''
-    # Patch the build scripts so they work in the Nix build environment.
-    patchShebangs ./scripts
+  rke2_1_32 = common (
+    (import ./1_32/versions.nix)
+    // {
+      updateScript = [
+        ./update-script.sh
+        "32"
+      ];
+    }
+  ) extraArgs;
 
-    # Disable the static build as it breaks.
-    sed -e 's/STATIC_FLAGS=.*/STATIC_FLAGS=/g' -i scripts/build-binary
-  '';
-
-  buildPhase = ''
-    DRONE_TAG="v${version}" ./scripts/build-binary
-  '';
-
-  installPhase = ''
-    install -D ./bin/rke2 $out/bin/rke2
-  '';
-
-  meta = with lib; {
-    homepage = "https://github.com/rancher/rke2";
-    description = "RKE2, also known as RKE Government, is Rancher's next-generation Kubernetes distribution.";
-    changelog = "https://github.com/rancher/rke2/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ zimbatm zygot ];
-    mainProgram = "rke2";
-    broken = stdenv.isDarwin;
-  };
+  # Automatically set by update script
+  rke2_stable = rke2_1_31;
+  rke2_latest = rke2_1_32;
 }

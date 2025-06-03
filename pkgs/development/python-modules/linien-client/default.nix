@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, linien-common
-, setuptools
-, fabric
-, typing-extensions
-, numpy
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  linien-common,
+  setuptools,
+  fabric,
+  typing-extensions,
+  numpy,
+  scipy,
 }:
 
 buildPythonPackage rec {
@@ -14,15 +15,15 @@ buildPythonPackage rec {
 
   inherit (linien-common) src version;
 
-  sourceRoot = "source/linien-client";
+  sourceRoot = "${src.name}/linien-client";
 
   preBuild = ''
     export HOME=$(mktemp -d)
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     fabric
     typing-extensions
     numpy
@@ -32,10 +33,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "linien_client" ];
 
-  meta = with lib; {
+  meta = {
     description = "Client components of the Linien spectroscopy lock application";
     homepage = "https://github.com/linien-org/linien/tree/develop/linien-client";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fsagbuya doronbehar ];
+    changelog = "https://github.com/linien-org/linien/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      fsagbuya
+      doronbehar
+    ];
+    # See comment near linien-common.meta.broken
+    broken = lib.versionAtLeast numpy.version "2";
   };
 }

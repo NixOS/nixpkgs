@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qmake
-, wrapQtAppsHook
-, qt6Packages
-, bison
-, flex
-, which
-, alsa-lib
-, libsndfile
-, libpulseaudio
-, libjack2
-, audioBackend ? "pulse" # "pulse", "alsa", or "jack"
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  wrapQtAppsHook,
+  qt6Packages,
+  bison,
+  flex,
+  which,
+  alsa-lib,
+  libsndfile,
+  libpulseaudio,
+  libjack2,
+  audioBackend ? "pulse", # "pulse", "alsa", or "jack"
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miniaudicle";
-  version = "1.5.2.0";
+  version = "1.5.4.2";
 
   src = fetchFromGitHub {
     owner = "ccrma";
     repo = "miniAudicle";
     rev = "chuck-${finalAttrs.version}";
-    hash = "sha256-jpPF2Qx/6tiotsj92m1XmxsEUgtm5029ijpu3O8B9qM=";
+    hash = "sha256-LYr9Fc4Siqk0BFKHVXfIV2XskJYAN+/0P+nb6FJLsLE=";
     fetchSubmodules = true;
   };
 
@@ -42,22 +43,25 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    alsa-lib
-    libsndfile
-    qt6Packages.qscintilla
-  ] ++ lib.optional (audioBackend == "pulse") libpulseaudio
-    ++ lib.optional (audioBackend == "jack")  libjack2;
+  buildInputs =
+    [
+      alsa-lib
+      libsndfile
+      qt6Packages.qscintilla
+    ]
+    ++ lib.optional (audioBackend == "pulse") libpulseaudio
+    ++ lib.optional (audioBackend == "jack") libjack2;
 
   buildFlags = [ "linux-${audioBackend}" ];
 
   meta = with lib; {
-    description = "A light-weight integrated development environment for the ChucK digital audio programming language";
+    description = "Light-weight integrated development environment for the ChucK digital audio programming language";
+    mainProgram = "miniAudicle";
     homepage = "https://audicle.cs.princeton.edu/mini/";
     downloadPage = "https://audicle.cs.princeton.edu/mini/linux/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin; # not attempted
+    broken = stdenv.hostPlatform.isDarwin; # not attempted
   };
 })

@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch2
-, appdirs
-, pytz
-, requests
-, pytestCheckHook
-, requests-mock
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch2,
+  appdirs,
+  pytz,
+  requests,
+  pytestCheckHook,
+  requests-mock,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ejep";
     repo = "datapoint-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-zUvwfBwJe8SaB96/Jz7Qeanz1mHmLVp2JW9qkR2dRnY=";
   };
 
@@ -33,9 +34,7 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     appdirs

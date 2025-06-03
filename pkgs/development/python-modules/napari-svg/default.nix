@@ -1,33 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, imageio
-, napari-plugin-engine
-, numpy
-, pythonOlder
-, setuptools-scm
-, vispy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  imageio,
+  napari-plugin-engine,
+  numpy,
+  vispy,
 }:
 
 buildPythonPackage rec {
   pname = "napari-svg";
-  version = "0.1.10";
+  version = "0.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "napari";
     repo = "napari-svg";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ywN9lUwBFW8zP7ivP7MNTYFbTCcmaZxAuKr056uY68Q=";
+    tag = "v${version}";
+    hash = "sha256-m3lm+jXUuGr9WCxzo7VyZNcKadLPX2VrCC9obiSvreQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     imageio
     napari-plugin-engine
     numpy
@@ -37,11 +37,11 @@ buildPythonPackage rec {
   # Circular dependency: napari
   doCheck = false;
 
-  meta = with lib; {
-    description = "A plugin for writing svg files from napari";
+  meta = {
+    description = "Plugin for writing svg files from napari";
     homepage = "https://github.com/napari/napari-svg";
     changelog = "https://github.com/napari/napari-svg/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
 }

@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, glib
-, SDL2
-, libGL
-, pkg-config
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  glib,
+  SDL2,
+  libGL,
+  pkg-config,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "sopwith";
-  version = "2.4.0";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "fragglet";
     repo = "sdl-sopwith";
-    rev = "refs/tags/sdl-sopwith-${version}";
-    hash = "sha256-7/xTg41NYxzeGNyt/ClbM/uHMTAE87wn6vc9Ai6P+30=";
+    tag = "sdl-sopwith-${version}";
+    hash = "sha256-s7npLid3GYZArQmctSwOu8zeC+mSfTiiiOaOEa9dcrg=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/fragglet/sdl-sopwith";
-    description = "Classic biplane shoot ‘em-up game.";
+    description = "Classic biplane shoot ‘em-up game";
     license = licenses.gpl2Plus;
     mainProgram = "sopwith";
     maintainers = with maintainers; [ evilbulgarian ];

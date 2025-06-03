@@ -1,43 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, pyyaml
-, ruamel-yaml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  pyyaml,
+  ruamel-yaml,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "yamale";
-  version = "4.0.4";
-  format = "setuptools";
+  version = "6.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "23andMe";
-    repo = pname;
-    rev = version;
-    hash = "sha256-1GFvgfy3MDsJGKSEm0yaQoLM7VqIS2wphw16trNTUOc=";
+    repo = "yamale";
+    tag = version;
+    hash = "sha256-Ij9jhGMYHUStZ/xR5GUg/eF6YQdtIfpLU7g1pev6wJU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pyyaml
-    ruamel-yaml
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  optional-dependencies = {
+    ruamel = [ ruamel-yaml ];
+  };
 
-  pythonImportsCheck = [
-    "yamale"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.ruamel;
+
+  pythonImportsCheck = [ "yamale" ];
 
   meta = with lib; {
-    description = "A schema and validator for YAML";
+    description = "Schema and validator for YAML";
     homepage = "https://github.com/23andMe/Yamale";
+    changelog = "https://github.com/23andMe/Yamale/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ rtburns-jpl ];
+    mainProgram = "yamale";
   };
 }

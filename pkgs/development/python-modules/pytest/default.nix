@@ -1,40 +1,40 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, pythonOlder
-, fetchPypi
-, writeText
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  pythonOlder,
+  fetchPypi,
+  writeText,
 
-# build-system
-, setuptools
-, setuptools-scm
+  # build-system
+  setuptools,
+  setuptools-scm,
 
-# dependencies
-, attrs
-, exceptiongroup
-, iniconfig
-, packaging
-, pluggy
-, tomli
+  # dependencies
+  attrs,
+  exceptiongroup,
+  iniconfig,
+  packaging,
+  pluggy,
+  tomli,
 
-# optional-dependencies
-, argcomplete
-, hypothesis
-, mock
-, nose
-, pygments
-, requests
-, xmlschema
+  # optional-dependencies
+  argcomplete,
+  hypothesis,
+  mock,
+  pygments,
+  requests,
+  xmlschema,
 }:
 
 buildPythonPackage rec {
   pname = "pytest";
-  version = "7.4.4";
+  version = "8.3.5";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LPAAWSLGrOSj4uyLQIDrDZdT/ckxB0FTMvUM6eeZQoA=";
+    hash = "sha256-9O/nDMFOURVlrEdrV8J54SqFWxH0jyEq8QgO8iY9OEU=";
   };
 
   outputs = [
@@ -47,22 +47,23 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    iniconfig
-    packaging
-    pluggy
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
-    tomli
-  ];
+  propagatedBuildInputs =
+    [
+      iniconfig
+      packaging
+      pluggy
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [
+      exceptiongroup
+      tomli
+    ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     testing = [
       argcomplete
       attrs
       hypothesis
       mock
-      nose
       pygments
       requests
       setuptools
@@ -83,7 +84,7 @@ buildPythonPackage rec {
     pytestcachePhase() {
         find $out -name .pytest_cache -type d -exec rm -rf {} +
     }
-    preDistPhases+=" pytestcachePhase"
+    appendToVar preDistPhases pytestcachePhase
 
     # pytest generates it's own bytecode files to improve assertion messages.
     # These files similar to cpython's bytecode files but are never laoded
@@ -96,18 +97,16 @@ buildPythonPackage rec {
         #    https://github.com/pytest-dev/pytest/blob/7.2.1/src/_pytest/assertion/rewrite.py#L51-L53
         find $out -name "*-pytest-*.py[co]" -delete
     }
-    preDistPhases+=" pytestRemoveBytecodePhase"
+    appendToVar preDistPhases pytestRemoveBytecodePhase
   '';
 
-  pythonImportsCheck = [
-    "pytest"
-  ];
+  pythonImportsCheck = [ "pytest" ];
 
   meta = with lib; {
     description = "Framework for writing tests";
     homepage = "https://docs.pytest.org";
     changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
-    maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
+    teams = [ teams.python ];
     license = licenses.mit;
   };
 }

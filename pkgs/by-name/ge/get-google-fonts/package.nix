@@ -1,7 +1,8 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  fetchpatch,
 }:
 
 buildNpmPackage {
@@ -30,6 +31,7 @@ buildNpmPackage {
 
   meta = with lib; {
     description = "Downloads and adapts Google fonts to working offline";
+    mainProgram = "get-google-fonts";
     homepage = "https://github.com/MrMaxie/get-google-fonts";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];

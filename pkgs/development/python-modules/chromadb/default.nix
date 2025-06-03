@@ -1,55 +1,57 @@
-{ lib
-, stdenv
-, bcrypt
-, build
-, buildPythonPackage
-, cargo
-, chroma-hnswlib
-, darwin
-, fastapi
-, fetchFromGitHub
-, grpcio
-, hypothesis
-, importlib-resources
-, kubernetes
-, mmh3
-, numpy
-, onnxruntime
-, openssl
-, opentelemetry-api
-, opentelemetry-exporter-otlp-proto-grpc
-, opentelemetry-instrumentation-fastapi
-, opentelemetry-sdk
-, orjson
-, overrides
-, pkg-config
-, posthog
-, protobuf
-, pulsar-client
-, pydantic
-, pypika
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, pyyaml
-, requests
-, rustc
-, rustPlatform
-, setuptools
-, setuptools-scm
-, tenacity
-, tokenizers
-, tqdm
-, typer
-, typing-extensions
-, uvicorn
-, zstd
+{
+  lib,
+  stdenv,
+  bcrypt,
+  build,
+  buildPythonPackage,
+  cargo,
+  chroma-hnswlib,
+  fastapi,
+  fetchFromGitHub,
+  grpcio,
+  httpx,
+  hypothesis,
+  importlib-resources,
+  kubernetes,
+  mmh3,
+  nixosTests,
+  numpy,
+  onnxruntime,
+  openssl,
+  opentelemetry-api,
+  opentelemetry-exporter-otlp-proto-grpc,
+  opentelemetry-instrumentation-fastapi,
+  opentelemetry-sdk,
+  orjson,
+  overrides,
+  pkg-config,
+  posthog,
+  protobuf,
+  psutil,
+  pulsar-client,
+  pydantic,
+  pypika,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  rustc,
+  rustPlatform,
+  setuptools-scm,
+  setuptools,
+  tenacity,
+  tokenizers,
+  tqdm,
+  typer,
+  typing-extensions,
+  uvicorn,
+  zstd,
 }:
 
 buildPythonPackage rec {
   pname = "chromadb";
-  version = "0.4.23";
+  version = "0.5.20";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -57,44 +59,45 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "chroma-core";
     repo = "chroma";
-    rev = "refs/tags/${version}";
-    hash = "sha256-5gI+FE2jx4G/qahATLcYsONfPZZkk1RFFYK5nrpE0Ug=";
+    tag = version;
+    hash = "sha256-DQHkgCHtrn9xi7Kp7TZ5NP1EtFtTH5QOvne9PUvxsWc=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-glItbT8gg5SAySnfx3A9TaPyFmd1R46JpAB1JnjBE5M=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-ZtCTg8qNCiqlH7RsZxaWUNAoazdgmXP2GtpjDpRdvbk=";
   };
 
   pythonRelaxDeps = [
+    "chroma-hnswlib"
     "orjson"
+  ];
+
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
   nativeBuildInputs = [
     cargo
     pkg-config
     protobuf
-    pythonRelaxDepsHook
     rustc
     rustPlatform.cargoSetupHook
-    setuptools
-    setuptools-scm
   ];
 
   buildInputs = [
     openssl
     zstd
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bcrypt
     build
     chroma-hnswlib
     fastapi
     grpcio
+    httpx
     importlib-resources
     kubernetes
     mmh3
@@ -122,13 +125,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
+    psutil
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "chromadb"
-  ];
+  pythonImportsCheck = [ "chromadb" ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
@@ -137,24 +139,44 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "-x" ];
 
   preCheck = ''
+    (($(ulimit -n) < 1024)) && ulimit -n 1024
     export HOME=$(mktemp -d)
   '';
 
-  disabledTestPaths = [
-    # Tests require network access
-    "chromadb/test/property/test_cross_version_persist.py"
-    "chromadb/test/auth/test_simple_rbac_authz.py"
-    "chromadb/test/ef/test_default_ef.py"
-    "chromadb/test/test_api.py"
-    "chromadb/test/property/"
-    "chromadb/test/stress/"
+  disabledTests = [
+    # Tests are laky / timing sensitive
+    "test_fastapi_server_token_authn_allows_when_it_should_allow"
+    "test_fastapi_server_token_authn_rejects_when_it_should_reject"
+    # Issue with event loop
+    "test_http_client_bw_compatibility"
+    # Issue with httpx
+    "test_not_existing_collection_delete"
   ];
 
+  disabledTestPaths = [
+    # Tests require network access
+    "chromadb/test/auth/test_simple_rbac_authz.py"
+    "chromadb/test/db/test_system.py"
+    "chromadb/test/ef/test_default_ef.py"
+    "chromadb/test/property/"
+    "chromadb/test/property/test_cross_version_persist.py"
+    "chromadb/test/stress/"
+    "chromadb/test/test_api.py"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  passthru.tests = {
+    inherit (nixosTests) chromadb;
+  };
+
   meta = with lib; {
-    description = "The AI-native open-source embedding database";
+    description = "AI-native open-source embedding database";
     homepage = "https://github.com/chroma-core/chroma";
     changelog = "https://github.com/chroma-core/chroma/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "chroma";
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
 }

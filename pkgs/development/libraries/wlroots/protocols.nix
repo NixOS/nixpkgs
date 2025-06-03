@@ -1,6 +1,11 @@
-{ lib, stdenv, fetchFromGitLab, wayland-scanner }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  wayland-scanner,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wlr-protocols";
   version = "unstable-2022-09-05";
 
@@ -24,7 +29,10 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "check";
 
-  installFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
+  installFlags = [
+    "DESTDIR=$(out)"
+    "PREFIX="
+  ];
 
   meta = with lib; {
     description = "Wayland roots protocol extensions";
@@ -35,9 +43,9 @@ stdenv.mkDerivation rec {
       extend the functionality of some other protocol either in Wayland core,
       or some other protocol in wayland-protocols.
     '';
-    homepage    = "https://gitlab.freedesktop.org/wlroots/wlr-protocols";
-    license     = licenses.mit; # See file headers
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ twitchyliquid64 ];
+    homepage = "https://gitlab.freedesktop.org/wlroots/wlr-protocols";
+    license = licenses.mit; # See file headers
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ Scrumplex ];
   };
 }

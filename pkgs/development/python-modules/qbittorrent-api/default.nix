@@ -1,46 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, urllib3
-, packaging
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  packaging,
+  requests,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "qbittorrent-api";
-  version = "2024.1.58";
+  version = "2025.5.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-6JyU9mr0xfRLB7AJOcnPc+PpF0EWi/R/Wy3lCKanAmA=";
+    pname = "qbittorrent_api";
+    inherit version;
+    hash = "sha256-NKD5weGufhbeUOlGUXUsjZejz1TCo+GgXGqDdzmaDjA=";
   };
 
-  propagatedBuildInputs = [
-    requests
-    urllib3
-    packaging
-  ];
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
+  ];
+
+  dependencies = [
+    packaging
+    requests
+    urllib3
   ];
 
   # Tests require internet access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "qbittorrentapi"
-  ];
+  pythonImportsCheck = [ "qbittorrentapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client implementation for qBittorrent's Web API";
     homepage = "https://github.com/rmartin16/qbittorrent-api";
     changelog = "https://github.com/rmartin16/qbittorrent-api/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ savyajha ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ savyajha ];
   };
 }

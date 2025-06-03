@@ -1,27 +1,35 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchpatch
-, fetchPypi
-, gmpy2
-, mpmath
-, numpy
-, pythonOlder
-, scipy
-, setuptools-scm
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  fetchpatch,
+  gmpy2,
+  hypothesis,
+  mpmath,
+  numpy,
+  pexpect,
+  pythonOlder,
+  pytest-cov-stub,
+  pytest-timeout,
+  pytest-xdist,
+  pytestCheckHook,
+  scipy,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "diofant";
   version = "0.14.0";
-  format = "pyproject";
+  pyproject = true;
+
   disabled = pythonOlder "3.10";
 
-  src = fetchPypi {
-    inherit version;
-    pname = "Diofant";
-    hash = "sha256-c886y37xR+4TxZw9+3tb7nkTGxWcS+Ag/ruUUdpf7S4=";
+  src = fetchFromGitHub {
+    owner = "diofant";
+    repo = "diofant";
+    tag = "v${version}";
+    hash = "sha256-+VM5JBj4NRhNwyAVhnsACg5cVyyxJ3IcOKNL1osr67E=";
   };
 
   patches = [
@@ -32,34 +40,48 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-    wheel
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    mpmath
-  ];
+  dependencies = [ mpmath ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     exports = [
       cython
       numpy
       scipy
     ];
-    gmpy = [
-      gmpy2
-    ];
+    gmpy = [ gmpy2 ];
   };
 
-  # tests take ~1h
-  doCheck = false;
+  doCheck = false; # some tests get stuck easily
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+    "-m 'not slow'"
+  ];
+
+  nativeCheckInputs = [
+    hypothesis
+    pexpect
+    pytest-cov-stub
+    pytest-xdist
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # AssertionError: assert '9.9012134805...5147838841057' == '2.7182818284...2178525166427'
+    "test_evalf_fast_series"
+    # AssertionError: assert Float('0.0051000000000000004', dps=15) == Float('0.010050166663333571', dps=15)
+    "test_evalf_sum"
+  ];
 
   pythonImportsCheck = [ "diofant" ];
 
   meta = with lib; {
-    description = "A Python CAS library";
-    homepage = "https://diofant.readthedocs.io/";
+    changelog = "https://diofant.readthedocs.io/en/latest/release/notes-${version}.html";
+    description = "Python CAS library";
+    homepage = "https://github.com/diofant/diofant";
     license = licenses.bsd3;
     maintainers = with maintainers; [ suhr ];
   };

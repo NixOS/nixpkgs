@@ -1,0 +1,14 @@
+diff --git a/misc/dtkcore.pc.in b/misc/dtkcore.pc.in
+index 83eecb7..da24ce8 100644
+--- a/misc/dtkcore.pc.in
++++ b/misc/dtkcore.pc.in
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+-libdir=${prefix}/@LIBRARY_INSTALL_DIR@
+-includedir=${prefix}/@INCLUDE_INSTALL_DIR@
++libdir=@LIBRARY_INSTALL_DIR@
++includedir=@INCLUDE_INSTALL_DIR@
+ 
+ Name: dtk@DTK_VERSION_MAJOR@core
+ Description: Deepin Tool Kit dtkcore header files

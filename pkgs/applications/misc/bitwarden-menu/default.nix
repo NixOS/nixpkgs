@@ -1,32 +1,42 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, pynput
-, xdg
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  hatch-vcs,
+  hatchling,
+  pynput,
+  xdg-base-dirs,
 }:
 
 buildPythonApplication rec {
   pname = "bitwarden-menu";
-  version = "0.4.1";
-  format = "setuptools";
+  version = "0.4.5";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-OC+MHEiUU6bDT2wSSDtu0KnwDwBpbLTBta0xjfuzlOI=";
+    pname = "bitwarden_menu";
+    inherit version;
+    hash = "sha256-vUlNqSVdGhfN5WjDjf1ub32Y2WoBndIdFzfCNwo5+Vg=";
   };
+
+  nativeBuildInputs = [
+    hatch-vcs
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     pynput
-    xdg
+    xdg-base-dirs
   ];
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/firecat53/bitwarden-menu/releases/tag/v${version}";
-    description = "Dmenu/Rofi frontend for managing Bitwarden vaults. Uses the Bitwarden CLI tool to interact with the Bitwarden database.";
+    description = "Dmenu/Rofi frontend for managing Bitwarden vaults. Uses the Bitwarden CLI tool to interact with the Bitwarden database";
+    mainProgram = "bwm";
     homepage = "https://github.com/firecat53/bitwarden-menu";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aman9das ];
   };
 }

@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, mdformat
-, mdit-py-plugins
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  mdformat,
+  mdit-py-plugins,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mdformat-admon";
-  version = "1.0.2";
+  version = "2.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,22 +19,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KyleKing";
     repo = "mdformat-admon";
-    rev = "v${version}";
-    hash = "sha256-33Q3Re/axnoOHZ9XYA32mmK+efsSelJXW8sD7C1M/jU=";
+    tag = "v${version}";
+    hash = "sha256-y0TNyje2OXBY4oo9kBePlqSZAU36vbQQKZUPm/u6DAc=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     mdformat
     mdit-py-plugins
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Mdformat plugin for admonitions";

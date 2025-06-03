@@ -1,11 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.programs.ns-usbloader;
 in
 {
   options = {
     programs.ns-usbloader = {
-      enable = lib.mkEnableOption (lib.mdDoc "ns-usbloader application with udev rules applied");
+      enable = lib.mkEnableOption "ns-usbloader application with udev rules applied";
     };
   };
 

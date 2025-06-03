@@ -1,26 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, flit-core
-, pytestCheckHook
-, pythonOlder
-, borgbackup
-, appdirs
-, arrow
-, docopt
-, inform
-, nestedtext
-, parametrize-from-file
-, quantiphy
-, requests
-, shlib
-, voluptuous
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pytestCheckHook,
+  pythonOlder,
+  borgbackup,
+  appdirs,
+  arrow,
+  docopt,
+  inform,
+  nestedtext,
+  parametrize-from-file,
+  quantiphy,
+  requests,
+  shlib,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "emborg";
-  version = "1.38";
+  version = "1.41";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,13 +28,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "emborg";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-dK/6y1cjegomiy3fta2grUm4T0ZrylmstXfkJo4mDCE=";
+    tag = "v${version}";
+    hash = "sha256-ViELR5pbGZc1vMxluHWBARuP6N031u+75WmJEYdckJo=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     appdirs
@@ -61,17 +59,7 @@ buildPythonPackage rec {
     patchShebangs .
   '';
 
-  # this patch fixes a whitespace issue in the message that a test is expecting, https://github.com/KenKundert/emborg/pull/67
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/KenKundert/emborg/commit/afac6d1ddcecdb4bddbec87b6c8eed4cfbf4ebf9.diff";
-      sha256 = "3xg2z03FLKH4ckmiBZqE1FDjpgjgdO8OZL1ewrJlQ4o=";
-    })
-  ];
-
-  pythonImportsCheck = [
-    "emborg"
-  ];
+  pythonImportsCheck = [ "emborg" ];
 
   meta = with lib; {
     description = "Interactive command line interface to Borg Backup";

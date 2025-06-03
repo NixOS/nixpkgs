@@ -1,29 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
   # build_requires
-, cython_3
+  cython,
   # install_requires
-, certifi
-, importlib-metadata
-, urllib3
-, pytz
-, zstandard
-, lz4
+  certifi,
+  importlib-metadata,
+  urllib3,
+  pytz,
+  zstandard,
+  lz4,
   # extras_require
-, sqlalchemy
-, numpy
-, pandas
-, pyarrow
-, orjson
+  sqlalchemy,
+  numpy,
+  pandas,
+  pyarrow,
+  orjson,
   # not in tests_require, but should be
-, pytest-dotenv
+  pytest-dotenv,
 }:
 buildPythonPackage rec {
   pname = "clickhouse-connect";
-  version = "0.7.1";
+  version = "0.8.17";
 
   format = "setuptools";
 
@@ -32,11 +33,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "clickhouse-connect";
     owner = "ClickHouse";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Qdv0DcdIjqz8NtyMsVNQxGTxsB3TpXUGDA3oL8QbBDc=";
+    tag = "v${version}";
+    hash = "sha256-UFsAKROnzaaAyUDHHARZIO8zZP3knUYoBdGSf9ZGjXo=";
   };
 
-  nativeBuildInputs = [ cython_3 ];
+  nativeBuildInputs = [ cython ];
   setupPyBuildFlags = [ "--inplace" ];
   enableParallelBuilding = true;
 
@@ -49,14 +50,17 @@ buildPythonPackage rec {
     lz4
   ];
 
-  nativeCheckInputs = [ pytestCheckHook pytest-dotenv ]
-    ++ passthru.optional-dependencies.sqlalchemy
-    ++ passthru.optional-dependencies.numpy;
+  nativeCheckInputs =
+    [
+      pytestCheckHook
+      pytest-dotenv
+    ]
+    ++ optional-dependencies.sqlalchemy
+    ++ optional-dependencies.numpy;
 
   # these tests require a running clickhouse instance
   disabledTestPaths = [
     "tests/integration_tests"
-    "tests/tls"
   ];
 
   pythonImportsCheck = [
@@ -66,14 +70,12 @@ buildPythonPackage rec {
     "clickhouse_connect.driverc.npconv"
   ];
 
-  passthru = {
-    optional-dependencies = {
-      sqlalchemy = [ sqlalchemy ];
-      numpy = [ numpy ];
-      pandas = [ pandas ];
-      arrow = [ pyarrow ];
-      orjson = [ orjson ];
-    };
+  optional-dependencies = {
+    sqlalchemy = [ sqlalchemy ];
+    numpy = [ numpy ];
+    pandas = [ pandas ];
+    arrow = [ pyarrow ];
+    orjson = [ orjson ];
   };
 
   meta = with lib; {

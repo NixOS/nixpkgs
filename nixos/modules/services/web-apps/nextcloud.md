@@ -5,7 +5,7 @@ self-hostable cloud platform. The server setup can be automated using
 [services.nextcloud](#opt-services.nextcloud.enable). A
 desktop client is packaged at `pkgs.nextcloud-client`.
 
-The current default by NixOS is `nextcloud28` which is also the latest
+The current default by NixOS is `nextcloud31` which is also the latest
 major version available.
 
 ## Basic usage {#module-services-nextcloud-basic-usage}
@@ -25,7 +25,7 @@ to `true`, Nextcloud will automatically be configured to connect to it through
 socket.
 
 A very basic configuration may look like this:
-```
+```nix
 { pkgs, ... }:
 {
   services.nextcloud = {
@@ -121,6 +121,65 @@ Auto updates for Nextcloud apps can be enabled using
     This is not an end-to-end encryption, but can be used to encrypt files that will be persisted
     to external storage such as S3.
 
+  - **Issues with file permissions / unsafe path transitions**
+
+    {manpage}`systemd-tmpfiles(8)` makes sure that the paths for
+
+    * configuration (including declarative config)
+    * data
+    * app store
+    * home directory itself (usually `/var/lib/nextcloud`)
+
+    are properly set up. However, `systemd-tmpfiles` will refuse to do so
+    if it detects an unsafe path transition, i.e. creating files/directories
+    within a directory that is neither owned by `root` nor by `nextcloud`, the
+    owning user of the files/directories to be created.
+
+    Symptoms of that include
+
+    * `config/override.config.php` not being updated (and the config file
+      eventually being garbage-collected).
+    * failure to read from application data.
+
+    To work around that, please make sure that all directories in question
+    are owned by `nextcloud:nextcloud`.
+
+  - **`Failed to open stream: No such file or directory` after deploys**
+
+    Symptoms are errors like this after a deployment that disappear after
+    a few minutes:
+
+    ```
+    Warning: file_get_contents(/run/secrets/nextcloud_db_password): Failed to open stream: No such file or directory in /nix/store/lqw657xbh6h67ccv9cgv104qhcs1i2vw-nextcloud-config.php on line 11
+
+    Warning: http_response_code(): Cannot set response code - headers already sent (output started at /nix/store/lqw657xbh6h67ccv9cgv104qhcs1i2vw-nextcloud-config.php:11) in /nix/store/ikxpaq7kjdhpr4w7cgl1n28kc2gvlhg6-nextcloud-29.0.7/lib/base.php on line 639
+    Cannot decode /run/secrets/nextcloud_secrets, because: Syntax error
+    ```
+
+    This can happen if [](#opt-services.nextcloud.secretFile) or
+    [](#opt-services.nextcloud.config.dbpassFile) are managed by
+    [sops-nix](https://github.com/Mic92/sops-nix/).
+
+    Here, `/run/secrets/nextcloud_secrets` is a symlink to
+    `/run/secrets.d/N/nextcloud_secrets`. The `N` will be incremented
+    when the sops-nix activation script runs, i.e.
+    `/run/secrets.d/N` doesn't exist anymore after a deploy,
+    only `/run/secrets.d/N+1`.
+
+    PHP maintains a [cache for `realpath`](https://www.php.net/manual/en/ini.core.php#ini.realpath-cache-size)
+    that still resolves to the old path which is causing
+    the `No such file or directory` error. Interestingly,
+    the cache isn't used for `file_exists` which is why this warning
+    comes instead of the error from `nix_read_secret` in
+    `override.config.php`.
+
+    One option to work around this is to turn off the cache by setting
+    the cache size to zero:
+
+    ```nix
+    services.nextcloud.phpOptions."realpath_cache_size" = "0";
+    ```
+
 ## Using an alternative webserver as reverse-proxy (e.g. `httpd`) {#module-services-nextcloud-httpd}
 
 By default, `nginx` is used as reverse-proxy for `nextcloud`.
@@ -130,7 +189,7 @@ settings `listen.owner` &amp; `listen.group` in the
 [corresponding `phpfpm` pool](#opt-services.phpfpm.pools).
 
 An exemplary configuration may look like this:
-```
+```nix
 { config, lib, pkgs, ... }: {
   services.nginx.enable = false;
   services.nextcloud = {
@@ -182,7 +241,37 @@ This can be configured with the [](#opt-services.nextcloud.phpExtraExtensions) s
 
 Alternatively, extra apps can also be declared with the [](#opt-services.nextcloud.extraApps) setting.
 When using this setting, apps can no longer be managed statefully because this can lead to Nextcloud updating apps
-that are managed by Nix. If you want automatic updates it is recommended that you use web interface to install apps.
+that are managed by Nix:
+
+```nix
+{ config, pkgs, ... }: {
+  services.nextcloud.extraApps = with config.services.nextcloud.package.packages.apps; [
+    inherit user_oidc calendar contacts;
+  ];
+}
+```
+
+Keep in mind that this is essentially a mirror of the apps from the appstore, but managed in
+nixpkgs. This is by no means a curated list of apps that receive special testing on each update.
+
+If you want automatic updates it is recommended that you use web interface to install apps.
+
+## Known warnings {#module-services-nextcloud-known-warnings}
+
+### Logreader application only supports "file" log_type {#module-services-nextcloud-warning-logreader}
+
+This is because
+
+* our module writes logs into the journal (`journalctl -t Nextcloud`)
+* the Logreader application that allows reading logs in the admin panel is enabled
+  by default and requires logs written to a file.
+
+If you want to view logs in the admin panel,
+set [](#opt-services.nextcloud.settings.log_type) to "file".
+
+If you prefer logs in the journal, disable the logreader application to shut up the
+"info". We can't really do that by default since whether apps are enabled/disabled
+is part of the application's state and tracked inside the database.
 
 ## Maintainer information {#module-services-nextcloud-maintainer-info}
 
@@ -205,7 +294,7 @@ If major-releases will be abandoned by upstream, we should check first if those 
 in NixOS for a safe upgrade-path before removing those. In that case we should keep those
 packages, but mark them as insecure in an expression like this (in
 `<nixpkgs/pkgs/servers/nextcloud/default.nix>`):
-```
+```nix
 /* ... */
 {
   nextcloud17 = generic {

@@ -1,11 +1,17 @@
-{ config, lib, moduleType, hostPkgs, ... }:
+{
+  config,
+  lib,
+  moduleType,
+  hostPkgs,
+  ...
+}:
 let
-  inherit (lib) mkOption types mdDoc;
+  inherit (lib) mkOption types;
 in
 {
   options = {
     interactive = mkOption {
-      description = mdDoc ''
+      description = ''
         Tests [can be run interactively](#sec-running-nixos-tests-interactively)
         using the program in the test derivation's `.driverInteractive` attribute.
 

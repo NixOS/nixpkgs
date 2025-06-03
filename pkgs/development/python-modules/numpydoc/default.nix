@@ -1,39 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, setuptools
-, jinja2
-, sphinx
-, tabulate
-, pytestCheckHook
-, matplotlib
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  jinja2,
+  sphinx,
+  tabulate,
+
+  # tests
+  matplotlib,
+  pytest-cov-stub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "numpydoc";
-  version = "1.6.0";
+  version = "1.8.0";
   pyproject = true;
-
-  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname;
     inherit version;
-    hash = "sha256-rnpTgPCgY3PDr+FszRW9ebxrB/JwTLxvHn7MlLT1/A0=";
+    hash = "sha256-AiOQq3RkpE+HN/efizHOHTz6S0r3nMqhqsXoNo21h/s=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov-report=" "" \
-      --replace "--cov=numpydoc" ""
-  '';
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     jinja2
     sphinx
     tabulate
@@ -41,6 +38,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     matplotlib
+    pytest-cov-stub
     pytestCheckHook
   ];
 
@@ -48,17 +46,23 @@ buildPythonPackage rec {
     # https://github.com/numpy/numpydoc/issues/373
     "test_MyClass"
     "test_my_function"
-    "test_reference"
+
+    # AttributeError: 'MockApp' object has no attribute '_exception_on_warning'
+    "test_mangle_docstring_validation_exclude"
+    "test_mangle_docstring_validation_warnings"
+    "test_mangle_docstrings_overrides"
+    # AttributeError: 'MockBuilder' object has no attribute '_translator'
+    "test_mangle_docstrings_basic"
+    "test_mangle_docstrings_inherited_class_members"
   ];
 
-  pythonImportsCheck = [
-    "numpydoc"
-  ];
+  pythonImportsCheck = [ "numpydoc" ];
 
   meta = {
     changelog = "https://github.com/numpy/numpydoc/releases/tag/v${version}";
     description = "Sphinx extension to support docstrings in Numpy format";
+    mainProgram = "validate-docstrings";
     homepage = "https://github.com/numpy/numpydoc";
     license = lib.licenses.free;
-   };
+  };
 }

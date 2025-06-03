@@ -1,4 +1,10 @@
-{ symlinkJoin, lib, makeWrapper, wayfire, plugins ? [ ] }:
+{
+  symlinkJoin,
+  lib,
+  makeWrapper,
+  wayfire,
+  plugins ? [ ],
+}:
 
 symlinkJoin {
   name = "wayfire-wrapped-${lib.getVersion wayfire}";
@@ -25,8 +31,8 @@ symlinkJoin {
 
   meta = wayfire.meta // {
     # To prevent builds on hydra
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     # prefer wrapper over the package
-    priority = (wayfire.meta.priority or 0) - 1;
+    priority = (wayfire.meta.priority or lib.meta.defaultPriority) - 1;
   };
 }

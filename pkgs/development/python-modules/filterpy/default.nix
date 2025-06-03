@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, scipy
-, matplotlib
-, pytestCheckHook
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  numpy,
+  scipy,
+  matplotlib,
+  pytestCheckHook,
+  isPy3k,
 }:
 
 buildPythonPackage {
   pname = "filterpy";
-  version = "unstable-2022-08-23";
-  format = "setuptools";
+  version = "1.4.5-unstable-2022-08-23";
+  pyproject = true;
 
   disabled = !isPy3k;
 
@@ -22,14 +24,19 @@ buildPythonPackage {
     hash = "sha256-KuuVu0tqrmQuNKYmDmdy+TU6BnnhDxh4G8n9BGzjGag=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     scipy
     matplotlib
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # ValueError: Unable to avoid copy while creating an array as requested."
+    "test_multivariate_gaussian"
   ];
 
   meta = with lib; {

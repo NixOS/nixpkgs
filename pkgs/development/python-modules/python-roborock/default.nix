@@ -1,76 +1,78 @@
-{ lib
-, stdenv
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, click
-, construct
-, dacite
-, fetchFromGitHub
-, paho-mqtt
-, poetry-core
-, pycryptodome
-, pycryptodomex
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  stdenv,
+  aiohttp,
+  aiomqtt,
+  aioresponses,
+  async-timeout,
+  buildPythonPackage,
+  click,
+  construct,
+  dacite,
+  fetchFromGitHub,
+  freezegun,
+  paho-mqtt,
+  poetry-core,
+  pycryptodome,
+  pycryptodomex,
+  pyrate-limiter,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  vacuum-map-parser-roborock,
 }:
 
 buildPythonPackage rec {
   pname = "python-roborock";
-  version = "0.39.2";
+  version = "2.19.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "humbertogontijo";
     repo = "python-roborock";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-hgd6/3GO1r6Xmgcq3iWVxWzi3VIN8MvV27CxF6tWwgU=";
+    tag = "v${version}";
+    hash = "sha256-d0rjMo9/ZsqygxdNf78t3Ct2VJjvYQrCrYkIeG6Zkkc=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "poetry-core==1.7.1" "poetry-core"
+      --replace-fail "poetry-core==1.8.0" "poetry-core"
   '';
 
-  pythonRelaxDeps = [
-    "pycryptodome"
-  ];
+  pythonRelaxDeps = [ "pycryptodome" ];
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
+    aiomqtt
     async-timeout
     click
     construct
     dacite
     paho-mqtt
     pycryptodome
-  ] ++ lib.optionals stdenv.isDarwin [
-    pycryptodomex
-  ];
+    pyrate-limiter
+    vacuum-map-parser-roborock
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pycryptodomex ];
 
   nativeCheckInputs = [
+    aioresponses
+    freezegun
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "roborock"
-  ];
+  pythonImportsCheck = [ "roborock" ];
 
   meta = with lib; {
     description = "Python library & console tool for controlling Roborock vacuum";
     homepage = "https://github.com/humbertogontijo/python-roborock";
-    changelog = "https://github.com/humbertogontijo/python-roborock/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/humbertogontijo/python-roborock/blob/${src.tag}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "roborock";
   };
 }

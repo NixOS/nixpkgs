@@ -1,10 +1,14 @@
 # Global configuration for spacefm.
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
-with lib;
-
-let cfg = config.programs.spacefm;
+let
+  cfg = config.programs.spacefm;
 
 in
 {
@@ -14,27 +18,27 @@ in
 
     programs.spacefm = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to install SpaceFM and create {file}`/etc/spacefm/spacefm.conf`.
         '';
       };
 
-      settings = mkOption {
-        type = types.attrs;
+      settings = lib.mkOption {
+        type = lib.types.attrs;
         default = {
           tmp_dir = "/tmp";
           terminal_su = "${pkgs.sudo}/bin/sudo";
         };
-        defaultText = literalExpression ''
+        defaultText = lib.literalExpression ''
           {
             tmp_dir = "/tmp";
             terminal_su = "''${pkgs.sudo}/bin/sudo";
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           The system-wide spacefm configuration.
           Parameters to be written to {file}`/etc/spacefm/spacefm.conf`.
           Refer to the [relevant entry](https://ignorantguru.github.io/spacefm/spacefm-manual-en.html#programfiles-etc) in the SpaceFM manual.
@@ -46,10 +50,11 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.spaceFM ];
 
-    environment.etc."spacefm/spacefm.conf".text =
-      concatStrings (mapAttrsToList (n: v: "${n}=${toString v}\n") cfg.settings);
+    environment.etc."spacefm/spacefm.conf".text = lib.concatStrings (
+      lib.mapAttrsToList (n: v: "${n}=${builtins.toString v}\n") cfg.settings
+    );
   };
 }

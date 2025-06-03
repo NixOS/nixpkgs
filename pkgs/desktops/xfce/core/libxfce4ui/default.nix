@@ -1,16 +1,55 @@
-{ lib, mkXfceDerivation, gobject-introspection, vala, gtk3, libICE, libSM
-, libstartup_notification, libgtop, libepoxy, libxfce4util, xfconf }:
+{
+  stdenv,
+  mkXfceDerivation,
+  lib,
+  perl,
+  libICE,
+  libSM,
+  libepoxy,
+  libgtop,
+  libgudev,
+  libstartup_notification,
+  xfconf,
+  gtk3,
+  libxfce4util,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  buildPackages,
+  gobject-introspection,
+  vala,
+}:
 
 mkXfceDerivation {
   category = "xfce";
   pname = "libxfce4ui";
-  version = "4.18.5";
+  version = "4.20.1";
 
-  sha256 = "sha256-Jf+oxdUWXJJmMoJ9kIx9F+ndb2c6bNpf+JOzxpi2Lwo=";
+  sha256 = "sha256-CY9KCCbKBAuoYAJtPHlQj04dUuCZAovnyJsBgjzzQkI=";
 
-  nativeBuildInputs = [ gobject-introspection vala ];
-  buildInputs =  [ gtk3 libstartup_notification libgtop libepoxy xfconf ];
-  propagatedBuildInputs = [ libxfce4util libICE libSM ];
+  nativeBuildInputs =
+    [
+      perl
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+      vala # vala bindings require GObject introspection
+    ];
+
+  buildInputs = [
+    libICE
+    libSM
+    libepoxy
+    libgtop
+    libgudev
+    libstartup_notification
+    xfconf
+  ];
+
+  propagatedBuildInputs = [
+    gtk3
+    libxfce4util
+  ];
 
   configureFlags = [
     "--with-vendor-info=NixOS"
@@ -18,7 +57,11 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Widgets library for Xfce";
-    license = with licenses; [ lgpl2Plus lgpl21Plus ];
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    mainProgram = "xfce4-about";
+    license = with licenses; [
+      lgpl2Plus
+      lgpl21Plus
+    ];
+    teams = [ teams.xfce ];
   };
 }

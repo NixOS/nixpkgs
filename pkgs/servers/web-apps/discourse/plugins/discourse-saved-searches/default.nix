@@ -1,12 +1,16 @@
-{ lib, mkDiscoursePlugin, fetchFromGitHub }:
+{
+  lib,
+  mkDiscoursePlugin,
+  fetchFromGitHub,
+}:
 
 mkDiscoursePlugin {
   name = "discourse-saved-searches";
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse-saved-searches";
-    rev = "1b90d26cc35bd049d0ab7ea3922f7db6ac7ec017";
-    sha256 = "sha256-d+zbm8UAZ/ow8o1Y5mWAyjg5JCvQ761jcGcO72tHEIs=";
+    rev = "b78aae086e95255b1a1e91a01e2d56b45b7aead2";
+    sha256 = "sha256-Wai+oZR+Pzjre6Th0kQDgvFOwfPRHlZkpKYYOUKNlx4=";
   };
   meta = with lib; {
     homepage = "https://github.com/discourse/discourse-saved-searches";

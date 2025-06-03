@@ -6,6 +6,8 @@ import logging
 import requests
 import subprocess
 import sys
+from urllib.error import HTTPError
+import urllib.request
 import xmltodict
 from packaging import version
 
@@ -57,6 +59,19 @@ def download_sha256(url):
 channels = download_channels()
 
 
+def get_url(template, version_or_build_number, version_number):
+    release = [str(n) for n in version.parse(version_number).release]
+    for k in range(len(release), 0, -1):
+        s = ".".join(release[0:k])
+        url = template.format(version=version_or_build_number, versionMajorMinor=s)
+        try:
+            if urllib.request.urlopen(url).getcode() == 200:
+                return url
+        except HTTPError:
+            pass
+    return None
+
+
 def update_product(name, product):
     update_channel = product["update-channel"]
     logging.info("Updating %s", name)
@@ -68,13 +83,19 @@ def update_product(name, product):
         try:
             build = latest_build(channel)
             new_version = build["@version"]
-            new_build_number = build["@fullNumber"]
+            new_build_number = ""
+            if "@fullNumber" not in build:
+                new_build_number = build["@number"]
+            else:
+                new_build_number = build["@fullNumber"]
             if "EAP" not in channel["@name"]:
                 version_or_build_number = new_version
             else:
                 version_or_build_number = new_build_number
             version_number = new_version.split(' ')[0]
-            download_url = product["url-template"].format(version=version_or_build_number, versionMajorMinor=version_number)
+            download_url = get_url(product["url-template"], version_or_build_number, version_number)
+            if not download_url:
+                raise Exception(f"No valid url for {name} version {version_or_build_number}")
             product["url"] = download_url
             if "sha256" not in product or product.get("build_number") != new_build_number:
                 fromVersions[name] = product["version"]
@@ -128,4 +149,3 @@ subprocess.run(['git', 'commit', f'-m{commitMessage}', '--', f'{versions_file_pa
 logging.info("#### Updating plugins ####")
 plugin_script = current_path.joinpath("../plugins/update_plugins.py").resolve()
 subprocess.call(plugin_script)
-

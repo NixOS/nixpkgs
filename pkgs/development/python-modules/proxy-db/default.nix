@@ -1,14 +1,15 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
-, six
-, sqlalchemy
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  six,
+  sqlalchemy,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Nekmo";
     repo = "proxy-db";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NdbvK2sJKKoWNYsuBaCMWtKEvuMhgyKXcKZXQgTC4bY=";
   };
 
@@ -42,12 +43,11 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  pythonImportsCheck = [
-    "proxy_db"
-  ];
+  pythonImportsCheck = [ "proxy_db" ];
 
   meta = with lib; {
     description = "Module to manage proxies in a local database";
+    mainProgram = "proxy-db";
     homepage = "https://github.com/Nekmo/proxy-db/";
     changelog = "https://github.com/Nekmo/proxy-db/blob/v${version}/HISTORY.rst";
     license = licenses.asl20;

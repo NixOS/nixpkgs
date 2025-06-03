@@ -1,14 +1,44 @@
-{ config, lib, pkgs, ... }:
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.qt;
 
   platformPackages = with pkgs; {
-    gnome = [ qgnomeplatform qgnomeplatform-qt6 ];
-    gtk2 = [ libsForQt5.qtstyleplugins qt6Packages.qt6gtk2 ];
-    kde = [ libsForQt5.plasma-integration libsForQt5.systemsettings ];
-    lxqt = [ lxqt.lxqt-qtplugin lxqt.lxqt-config ];
-    qt5ct = [ libsForQt5.qt5ct qt6Packages.qt6ct ];
+    gnome = [
+      qgnomeplatform
+      qgnomeplatform-qt6
+    ];
+    gtk2 = [
+      libsForQt5.qtstyleplugins
+      qt6Packages.qt6gtk2
+    ];
+    kde = [
+      libsForQt5.kio
+      libsForQt5.plasma-integration
+      libsForQt5.systemsettings
+    ];
+    kde6 = [
+      kdePackages.kio
+      kdePackages.plasma-integration
+      kdePackages.systemsettings
+    ];
+    lxqt = [
+      lxqt.lxqt-qtplugin
+      lxqt.lxqt-config
+    ];
+    qt5ct = [
+      libsForQt5.qt5ct
+      qt6Packages.qt6ct
+    ];
+  };
+
+  # Maps style names to their QT_QPA_PLATFORMTHEME, if necessary.
+  styleNames = {
+    kde6 = "kde";
   };
 
   stylePackages = with pkgs; {
@@ -16,22 +46,46 @@ let
     bb10dark = [ libsForQt5.qtstyleplugins ];
     cde = [ libsForQt5.qtstyleplugins ];
     cleanlooks = [ libsForQt5.qtstyleplugins ];
-    gtk2 = [ libsForQt5.qtstyleplugins qt6Packages.qt6gtk2 ];
+    gtk2 = [
+      libsForQt5.qtstyleplugins
+      qt6Packages.qt6gtk2
+    ];
     motif = [ libsForQt5.qtstyleplugins ];
     plastique = [ libsForQt5.qtstyleplugins ];
 
-    adwaita = [ adwaita-qt adwaita-qt6 ];
-    adwaita-dark = [ adwaita-qt adwaita-qt6 ];
-    adwaita-highcontrast = [ adwaita-qt adwaita-qt6 ];
-    adwaita-highcontrastinverse = [ adwaita-qt adwaita-qt6 ];
+    adwaita = [
+      adwaita-qt
+      adwaita-qt6
+    ];
+    adwaita-dark = [
+      adwaita-qt
+      adwaita-qt6
+    ];
+    adwaita-highcontrast = [
+      adwaita-qt
+      adwaita-qt6
+    ];
+    adwaita-highcontrastinverse = [
+      adwaita-qt
+      adwaita-qt6
+    ];
 
-    breeze = [ libsForQt5.breeze-qt5 ];
+    breeze = [
+      libsForQt5.breeze-qt5
+      kdePackages.breeze
+    ];
 
-    kvantum = [ libsForQt5.qtstyleplugin-kvantum qt6Packages.qtstyleplugin-kvantum ];
+    kvantum = [
+      libsForQt5.qtstyleplugin-kvantum
+      qt6Packages.qtstyleplugin-kvantum
+    ];
   };
 in
 {
-  meta.maintainers = with lib.maintainers; [ romildo thiagokokada ];
+  meta.maintainers = with lib.maintainers; [
+    romildo
+    thiagokokada
+  ];
 
   imports = [
     (lib.mkRenamedOptionModule [ "qt5" "enable" ] [ "qt" "enable" ])
@@ -42,7 +96,7 @@ in
   options = {
     qt = {
       enable = lib.mkEnableOption "" // {
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable Qt configuration, including theming.
 
           Enabling this option is necessary for Qt plugins to work in the
@@ -57,22 +111,55 @@ in
         relatedPackages = [
           "qgnomeplatform"
           "qgnomeplatform-qt6"
-          [ "libsForQt5" "plasma-integration" ]
-          [ "libsForQt5" "qt5ct" ]
-          [ "libsForQt5" "qtstyleplugins" ]
-          [ "libsForQt5" "systemsettings" ]
-          [ "lxqt" "lxqt-config" ]
-          [ "lxqt" "lxqt-qtplugin" ]
-          [ "qt6Packages" "qt6ct" ]
-          [ "qt6Packages" "qt6gtk2" ]
+          [
+            "libsForQt5"
+            "plasma-integration"
+          ]
+          [
+            "libsForQt5"
+            "qt5ct"
+          ]
+          [
+            "libsForQt5"
+            "qtstyleplugins"
+          ]
+          [
+            "libsForQt5"
+            "systemsettings"
+          ]
+          [
+            "kdePackages"
+            "plasma-integration"
+          ]
+          [
+            "kdePackages"
+            "systemsettings"
+          ]
+          [
+            "lxqt"
+            "lxqt-config"
+          ]
+          [
+            "lxqt"
+            "lxqt-qtplugin"
+          ]
+          [
+            "qt6Packages"
+            "qt6ct"
+          ]
+          [
+            "qt6Packages"
+            "qt6gtk2"
+          ]
         ];
-        description = lib.mdDoc ''
+        description = ''
           Selects the platform theme to use for Qt applications.
 
           The options are
           - `gnome`: Use GNOME theme with [qgnomeplatform](https://github.com/FedoraQt/QGnomePlatform)
           - `gtk2`: Use GTK theme with [qtstyleplugins](https://github.com/qt/qtstyleplugins)
-          - `kde`: Use Qt settings from Plasma.
+          - `kde`: Use Qt settings from Plasma 5.
+          - `kde6`: Use Qt settings from Plasma 6.
           - `lxqt`: Use LXQt style set using the [lxqt-config-appearance](https://github.com/lxqt/lxqt-config)
              application.
           - `qt5ct`: Use Qt style set using the [qt5ct](https://sourceforge.net/projects/qt5ct/)
@@ -87,13 +174,28 @@ in
         relatedPackages = [
           "adwaita-qt"
           "adwaita-qt6"
-          [ "libsForQt5" "breeze-qt5" ]
-          [ "libsForQt5" "qtstyleplugin-kvantum" ]
-          [ "libsForQt5" "qtstyleplugins" ]
-          [ "qt6Packages" "qt6gtk2" ]
-          [ "qt6Packages" "qtstyleplugin-kvantum" ]
+          [
+            "libsForQt5"
+            "breeze-qt5"
+          ]
+          [
+            "libsForQt5"
+            "qtstyleplugin-kvantum"
+          ]
+          [
+            "libsForQt5"
+            "qtstyleplugins"
+          ]
+          [
+            "qt6Packages"
+            "qt6gtk2"
+          ]
+          [
+            "qt6Packages"
+            "qtstyleplugin-kvantum"
+          ]
         ];
-        description = lib.mdDoc ''
+        description = ''
           Selects the style to use for Qt applications.
 
           The options are
@@ -134,13 +236,18 @@ in
       ];
 
     environment.variables = {
-      QT_QPA_PLATFORMTHEME = lib.mkIf (cfg.platformTheme != null) cfg.platformTheme;
+      QT_QPA_PLATFORMTHEME =
+        lib.mkIf (cfg.platformTheme != null)
+          styleNames.${cfg.platformTheme} or cfg.platformTheme;
       QT_STYLE_OVERRIDE = lib.mkIf (cfg.style != null) cfg.style;
     };
 
     environment.profileRelativeSessionVariables =
       let
-        qtVersions = with pkgs; [ qt5 qt6 ];
+        qtVersions = with pkgs; [
+          qt5
+          qt6
+        ];
       in
       {
         QT_PLUGIN_PATH = map (qt: "/${qt.qtbase.qtPluginPrefix}") qtVersions;

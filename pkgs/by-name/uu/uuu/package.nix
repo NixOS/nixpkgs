@@ -1,32 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
 
-, cmake
-, installShellFiles
-, pkg-config
+  cmake,
+  installShellFiles,
+  pkg-config,
 
-, bzip2
-, libusb1
-, openssl
-, zlib
-, zstd
+  bzip2,
+  libusb1,
+  openssl,
+  tinyxml-2,
+  zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uuu";
-  version = "1.5.141";
+  version = "1.5.201";
 
   src = fetchFromGitHub {
     owner = "nxp-imx";
     repo = "mfgtools";
     rev = "uuu_${finalAttrs.version}";
-    hash = "sha256-N5L6k2oVXfnER7JRoX0JtzgEhb/vFMexu7hUKQhmcoE=";
+    hash = "sha256-G1Let5cJVzxKLs+4umnGfcSEvTeotqsgpZ0CDycBNEo=";
   };
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex" "uuu_\([0-9.]+\)" ];
+    extraArgs = [
+      "--version-regex"
+      "uuu_([0-9.]+)"
+    ];
   };
 
   nativeBuildInputs = [
@@ -39,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
     libusb1
     openssl
+    tinyxml-2
     zlib
     zstd
   ];

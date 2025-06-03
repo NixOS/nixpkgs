@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage rec {
@@ -10,14 +11,12 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "gmr";
-    repo = pname;
+    repo = "flatdict";
     rev = version;
     hash = "sha256-CWsTiCNdIKSQtjpQC07lhZoU1hXT/MGpXdj649x2GlU=";
   };
 
-  pythonImportsCheck = [
-    "flatdict"
-  ];
+  pythonImportsCheck = [ "flatdict" ];
 
   meta = with lib; {
     description = "Python module for interacting with nested dicts as a single level dict with delimited keys";

@@ -1,70 +1,67 @@
-{ lib
-, awkward
-, buildPythonPackage
-, dask
-, dask-histogram
-, distributed
-, fetchFromGitHub
-, hatch-vcs
-, hatchling
-, hist
-, pandas
-, pyarrow
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, typing-extensions
-, uproot
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatch-vcs,
+  hatchling,
+
+  # dependencies
+  awkward,
+  cachetools,
+  dask,
+  typing-extensions,
+
+  # optional-dependencies
+  pyarrow,
+
+  # tests
+  distributed,
+  hist,
+  pandas,
+  pytestCheckHook,
+  uproot,
 }:
 
 buildPythonPackage rec {
   pname = "dask-awkward";
-  version = "2024.2.0";
+  version = "2025.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dask-contrib";
     repo = "dask-awkward";
-    rev = "refs/tags/${version}";
-    hash = "sha256-oBGja1dt9UbHym0c5K/pAMXNErryr3u6IhDRuhwTvG0=";
+    tag = version;
+    hash = "sha256-TLMT7YxedBUfz05F8wTsS5LQ9LyBbcUhQENM8C7Xric=";
   };
 
-  pythonRelaxDeps = [
-    "awkward"
-  ];
-
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
-    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     awkward
+    cachetools
     dask
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
-    io = [
-      pyarrow
-    ];
+  optional-dependencies = {
+    io = [ pyarrow ];
   };
 
-  checkInputs = [
-    dask-histogram
+  nativeCheckInputs = [
+    # dask-histogram (circular dependency)
     distributed
     hist
     pandas
     pytestCheckHook
     uproot
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "dask_awkward"
-  ];
+  pythonImportsCheck = [ "dask_awkward" ];
 
   disabledTests = [
     # Tests require network access
@@ -73,13 +70,22 @@ buildPythonPackage rec {
     "test_from_text"
     # ValueError: not a ROOT file: first four bytes...
     "test_basic_root_works"
+    # Flaky. https://github.com/dask-contrib/dask-awkward/issues/506.
+    "test_distance_behavior"
+
+    # RuntimeError: Attempting to use an asynchronous Client in a synchronous context of `dask.compute`
+    # https://github.com/dask-contrib/dask-awkward/issues/573
+    "test_persist"
+    "test_ravel_fail"
   ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Native Dask collection for awkward arrays, and the library to use it";
     homepage = "https://github.com/dask-contrib/dask-awkward";
-    changelog = "https://github.com/dask-contrib/dask-awkward/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ veprbl ];
+    changelog = "https://github.com/dask-contrib/dask-awkward/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

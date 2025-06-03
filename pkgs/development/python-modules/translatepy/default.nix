@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, beautifulsoup4
-, pyuseragents
-, safeio
-, inquirer
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  beautifulsoup4,
+  pyuseragents,
+  safeio,
+  inquirer,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Animenosekai";
     repo = "translate";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cx5OeBrB8il8KrcyOmQbQ7VCXoaA5RP++oTTxCs/PcM=";
   };
 
@@ -38,7 +39,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "translatepy" ];
 
   meta = with lib; {
-    description = "A module grouping multiple translation APIs";
+    description = "Module grouping multiple translation APIs";
+    mainProgram = "translatepy";
     homepage = "https://github.com/Animenosekai/translate";
     license = with licenses; [ agpl3Only ];
     maintainers = with maintainers; [ emilytrau ];

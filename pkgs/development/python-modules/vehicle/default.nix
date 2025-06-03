@@ -1,44 +1,43 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, mashumaro
-, orjson
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, syrupy
-, yarl
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mashumaro,
+  orjson,
+  poetry-core,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  syrupy,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "vehicle";
-  version = "2.2.1";
-  format = "pyproject";
+  version = "2.2.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-vehicle";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-mu30v4iZoOYfQZc1P45UZaor6hf+i+gOvGcVGcQYzTo=";
+    tag = "v${version}";
+    hash = "sha256-MPK5Aim/kGXLMOapttkp5ygl8gIlHv0675sBBf6kyAA=";
   };
 
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
     substituteInPlace pyproject.toml \
       --replace "0.0.0" "${version}" \
-      --replace "--cov" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     mashumaro
     orjson
@@ -48,13 +47,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     syrupy
   ];
 
-  pythonImportsCheck = [
-    "vehicle"
-  ];
+  pythonImportsCheck = [ "vehicle" ];
 
   meta = with lib; {
     description = "Python client providing RDW vehicle information";

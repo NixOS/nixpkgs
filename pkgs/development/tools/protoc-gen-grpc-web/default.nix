@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, protobuf
-, isStatic ? stdenv.hostPlatform.isStatic
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  protobuf,
+  isStatic ? stdenv.hostPlatform.isStatic,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -52,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/grpc/grpc-web";
     changelog = "https://github.com/grpc/grpc-web/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "gRPC web support for Google's protocol buffers";
+    mainProgram = "protoc-gen-grpc-web";
     license = licenses.asl20;
     maintainers = with maintainers; [ jk ];
     platforms = platforms.unix;

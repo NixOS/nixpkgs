@@ -1,8 +1,20 @@
-{ lib, ocamlPackages, fetchFromGitHub, python3, dune_3, makeWrapper, poppler_utils, fzf }:
+{
+  lib,
+  ocamlPackages,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  dune_3,
+  makeWrapper,
+  pandoc,
+  poppler-utils,
+  testers,
+  docfd,
+}:
 
 ocamlPackages.buildDunePackage rec {
   pname = "docfd";
-  version = "2.2.0";
+  version = "11.0.1";
 
   minimalOCamlVersion = "5.1";
 
@@ -10,27 +22,56 @@ ocamlPackages.buildDunePackage rec {
     owner = "darrenldl";
     repo = "docfd";
     rev = version;
-    hash = "sha256-v6V9+/Ra19Xy6nCLe/ODJ1uVBwNkQO4lKcxcr2pmxIY=";
+    hash = "sha256-uRC2QBn4gAfS9u85YaNH2Mm2C0reP8FnDHbyloY+OC8=";
   };
 
-  nativeBuildInputs = [ python3 dune_3 makeWrapper ];
-  buildInputs = with ocamlPackages; [ oseq spelll notty nottui lwd cmdliner domainslib digestif yojson eio_main containers-data timedesc ];
+  nativeBuildInputs = [
+    python3
+    dune_3
+    makeWrapper
+  ];
+
+  buildInputs = with ocamlPackages; [
+    cmdliner
+    containers-data
+    decompress
+    diet
+    digestif
+    eio_main
+    lwd
+    nottui
+    notty
+    ocaml_sqlite3
+    ocolor
+    oseq
+    ppx_deriving
+    ppxlib
+    progress
+    re
+    spelll
+    timedesc
+    uuseg
+    yojson
+  ];
 
   postInstall = ''
-  # docfd needs pdftotext from popler_utils to allow pdf search
-  # also fzf for "docfd ?" usage
-  wrapProgram $out/bin/docfd --prefix PATH : "${lib.makeBinPath [ poppler_utils fzf ]}"
+    wrapProgram $out/bin/docfd --prefix PATH : "${
+      lib.makeBinPath [
+        pandoc
+        poppler-utils
+      ]
+    }"
   '';
+
+  passthru.tests.version = testers.testVersion { package = docfd; };
 
   meta = with lib; {
     description = "TUI multiline fuzzy document finder";
     longDescription = ''
-      TUI multiline fuzzy document finder.
-      Think interactive grep for both text files and PDFs, but word/token based
-      instead of regex and line based, so you can search across lines easily.
-      Docfd aims to provide good UX via integration with common text editors
-      and PDF viewers, so you can jump directly to a search result with a
-      single key press.
+      Think interactive grep for text and other document files.
+      Word/token based instead of regex and line based, so you
+      can search across lines easily. Aims to provide good UX via
+      integration with common text editors and other file viewers.
     '';
     homepage = "https://github.com/darrenldl/docfd";
     license = licenses.mit;

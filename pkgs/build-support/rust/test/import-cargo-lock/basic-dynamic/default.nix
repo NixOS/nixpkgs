@@ -4,9 +4,9 @@ rustPlatform.buildRustPackage {
   pname = "basic-dynamic";
   version = "0.1.0";
 
-  src = ./.;
+  src = ./package;
 
-  cargoLock.lockFileContents = builtins.readFile ./Cargo.lock;
+  cargoLock.lockFileContents = builtins.readFile ./package/Cargo.lock;
 
   doInstallCheck = true;
 

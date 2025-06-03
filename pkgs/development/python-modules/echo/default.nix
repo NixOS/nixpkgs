@@ -1,37 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, setuptools-scm
-, libxcrypt
-, numpy
-, qt6
-, qtpy
-, pyqt6
-, pytestCheckHook
-, pytest-cov
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  libxcrypt,
+  numpy,
+  qt6,
+  qtpy,
+  pyqt6,
+  pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "echo";
-  version = "0.8.0";
+  version = "0.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "glue-viz";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-0FmUA7kOFSRZXwbj8d7asujBPOjE2pFhu6TDNSGD4r0=";
+    repo = "echo";
+    tag = "v${version}";
+    sha256 = "sha256-RlTscoStJQ0vjrrk14xHRsMZOJt8eJSqinc4rY/lW4k=";
   };
 
-  nativeBuildInputs = [ setuptools setuptools-scm qt6.wrapQtAppsHook ];
-
-  buildInputs = lib.optionals (pythonOlder "3.9") [
-    libxcrypt
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    qt6.wrapQtAppsHook
   ];
+
+  buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
 
   propagatedBuildInputs = [
     qt6.qtconnectivity
@@ -48,7 +51,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
   ];
 
   pythonImportsCheck = [ "echo" ];

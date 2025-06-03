@@ -1,6 +1,12 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy3k,
+  pytestCheckHook,
+}:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "baseline";
   version = "1.2.1";
   format = "setuptools";
@@ -17,6 +23,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Easy String Baseline";
+    mainProgram = "baseline";
     longDescription = ''
       This tool streamlines creation and maintenance of tests which compare
       string output against a baseline.

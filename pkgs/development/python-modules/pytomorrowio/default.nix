@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, aiohttp
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  aiohttp,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-ZCA+GYuZuRgc4Pi9Bcg4zthOnkmQ+/IddFMkR0WYfKk=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   nativeCheckInputs = [
     pytest-aiohttp
@@ -30,9 +29,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pytomorrowio"
+  disabledTests = [
+    # aiohttp 3.10.6 compat
+    "test_errors"
   ];
+
+  pythonImportsCheck = [ "pytomorrowio" ];
 
   meta = {
     description = "Async Python package to access the Tomorrow.io API";

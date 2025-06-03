@@ -1,45 +1,61 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, setuptools-scm
-, websocket-client
-, zeroconf
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-freezer,
+  pytest-mock,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  requests,
+  requests-mock,
+  setuptools-scm,
+  setuptools,
+  syrupy,
+  websocket-client,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "devolo-home-control-api";
-  version = "0.18.3";
-  format = "setuptools";
-  disabled = pythonOlder "3.6";
+  version = "0.19.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "2Fake";
     repo = "devolo_home_control_api";
-    rev = "v${version}";
-    hash = "sha256-4AyC1DDYtKl8SwJf75BbzoOAhbZXmBZ05ma9YmLzksM=";
+    tag = "v${version}";
+    hash = "sha256-eBJ6hdxUplc1poh7WFACWkyfReSdRSyCEoq2A6Sudgg=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    python-dateutil
     requests
     zeroconf
     websocket-client
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pytest-freezer
     pytest-mock
+    pytestCheckHook
+    requests-mock
+    syrupy
   ];
 
-  # Disable test that requires network access
+  pytestFlags = [
+    "--snapshot-update"
+  ];
+
   disabledTests = [
+    # Disable test that requires network access
     "test__on_pong"
     "TestMprm"
   ];
@@ -49,7 +65,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to work with devolo Home Control";
     homepage = "https://github.com/2Fake/devolo_home_control_api";
-    license = with licenses; [ gpl3Only ];
+    changelog = "https://github.com/2Fake/devolo_home_control_api/blob/${src.tag}/docs/CHANGELOG.md";
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
   };
 }

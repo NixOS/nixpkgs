@@ -1,48 +1,60 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchurl
-, cimg
-, cmake
-, common-updater-scripts
-, coreutils
-, curl
-, fftw
-, gmic-qt
-, gnugrep
-, gnused
-, graphicsmagick
-, jq
-, libjpeg
-, libpng
-, libtiff
-, ninja
-, opencv
-, openexr
-, pkg-config
-, writeShellScript
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  buildPackages,
+  cimg,
+  cmake,
+  common-updater-scripts,
+  coreutils,
+  curl,
+  fftw,
+  gmic-qt,
+  gnugrep,
+  gnused,
+  graphicsmagick,
+  jq,
+  libX11,
+  libXext,
+  libjpeg,
+  libpng,
+  libtiff,
+  llvmPackages,
+  ninja,
+  opencv,
+  openexr,
+  pkg-config,
+  writeShellScript,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmic";
-  version = "3.3.1";
+  version = "3.5.4";
 
-  outputs = [ "out" "lib" "dev" "man" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "GreycLab";
     repo = "gmic";
     rev = "v.${finalAttrs.version}";
-    hash = "sha256-HagGabJ1jkg5SkMlr0Y5rGFw64jPW8QLuR0I2idM1N0=";
+    hash = "sha256-WhhEBhwv2bBwsWPPMDIA2jhUzqcD6yJhHg1Eunu8y14=";
   };
 
   # TODO: build this from source
-  # Reference: src/Makefile, directive gmic_stdlib.h
+  # Reference: src/Makefile, directive gmic_stdlib_community.h
   gmic_stdlib = fetchurl {
-    name = "gmic_stdlib.h";
-    url = "http://gmic.eu/gmic_stdlib${lib.replaceStrings ["."] [""] finalAttrs.version}.h";
-    hash = "sha256-7JzFU4HvAtC5Nz5vusKCnJ8VMuKfSi1yFmjj0Hh+vA4=";
+    name = "gmic_stdlib_community.h";
+    url = "https://gmic.eu/gmic_stdlib_community${
+      lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
+    }.h";
+    hash = "sha256-JO8ijrOgrOq7lB8NaxnlsQhDXSMgAGQlOG3lT9NfuMw=";
   };
 
   nativeBuildInputs = [
@@ -51,35 +63,46 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    cimg
-    fftw
-    graphicsmagick
-    libjpeg
-    libpng
-    libtiff
-    opencv
-    openexr
-    zlib
-  ];
+  buildInputs =
+    [
+      cimg
+      fftw
+      graphicsmagick
+      libX11
+      libXext
+      libjpeg
+      libpng
+      libtiff
+      opencv
+      openexr
+      zlib
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      llvmPackages.openmp
+    ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_LIB_STATIC" false)
     (lib.cmakeBool "ENABLE_CURL" false)
     (lib.cmakeBool "ENABLE_DYNAMIC_LINKING" true)
+    (lib.cmakeBool "ENABLE_OPENCV" true)
+    (lib.cmakeBool "ENABLE_XSHM" true)
     (lib.cmakeBool "USE_SYSTEM_CIMG" true)
   ];
 
-  postPatch = ''
-    cp -r ${finalAttrs.gmic_stdlib} src/gmic_stdlib.h
-
-    # CMake build files were moved to subdirectory.
-    mv resources/CMakeLists.txt resources/cmake .
-  ''
-  + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace CMakeLists.txt \
-      --replace "LD_LIBRARY_PATH" "DYLD_LIBRARY_PATH"
-  '';
+  postPatch =
+    ''
+      cp -r ${finalAttrs.gmic_stdlib} src/gmic_stdlib_community.h
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace CMakeLists.txt \
+        --replace "LD_LIBRARY_PATH" "DYLD_LIBRARY_PATH"
+    ''
+    + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      substituteInPlace CMakeLists.txt --replace-fail \
+        'LD_LIBRARY_PATH=''${GMIC_BINARIES_PATH} ''${GMIC_BINARIES_PATH}/gmic' \
+        '${lib.getExe buildPackages.gmic}'
+    '';
 
   passthru = {
     tests = {
@@ -89,7 +112,16 @@ stdenv.mkDerivation (finalAttrs: {
 
     updateScript = writeShellScript "gmic-update-script" ''
       set -o errexit
-      PATH=${lib.makeBinPath [ common-updater-scripts coreutils curl gnugrep gnused jq ]}
+      PATH=${
+        lib.makeBinPath [
+          common-updater-scripts
+          coreutils
+          curl
+          gnugrep
+          gnused
+          jq
+        ]
+      }
 
       latestVersion=$(curl 'https://gmic.eu/files/source/' \
                        | grep -E 'gmic_[^"]+\.tar\.gz' \
@@ -102,11 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
       fi
 
       for component in src gmic_stdlib; do
-          # The script will not perform an update when the version attribute is
-          # up to date from previous platform run; we need to clear it before
-          # each run
-          update-source-version "--source-key=$component" "gmic" 0 "${lib.fakeHash}"
-          update-source-version "--source-key=$component" "gmic" $latestVersion
+          update-source-version "--source-key=$component" "gmic" $latestVersion --ignore-same-version
       done
     '';
   };
@@ -114,11 +142,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://gmic.eu/";
     description = "Open and full-featured framework for image processing";
+    mainProgram = "gmic";
     license = lib.licenses.cecill21;
-    maintainers = [
-      lib.maintainers.AndersonTorres
-      lib.maintainers.lilyinstarlight
-    ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

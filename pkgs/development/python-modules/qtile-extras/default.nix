@@ -1,50 +1,54 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, pytestCheckHook
-, xorgserver
-, imagemagick
-, gobject-introspection
-, pulseaudio
-, pytest-asyncio
-, pytest-lazy-fixture
-, qtile
-, keyring
-, requests
-, librsvg
-, gtk3
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gobject-introspection,
+  gtk3,
+  imagemagick,
+  keyring,
+  librsvg,
+  pulseaudio,
+  pytest-asyncio,
+  pytest-lazy-fixture,
+  pytestCheckHook,
+  python-dateutil,
+  qtile,
+  requests,
+  setuptools-scm,
+  xorgserver,
 }:
 
 buildPythonPackage rec {
   pname = "qtile-extras";
-  version = "0.24.0";
-  format = "pyproject";
+  version = "0.31.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elParaguayo";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-DJmnJcqhfCfl39SF3Ypv0PGtI4r8heaVv9JmpiCBGJo=";
+    repo = "qtile-extras";
+    tag = "v${version}";
+    hash = "sha256-87xdSw4JKQyb/jpfTUkFDjHvKgPKzu+rKLGeaAzP8NI=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
+
+  dependencies = [ gtk3 ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    xorgserver
-    imagemagick
     gobject-introspection
-  ];
-  checkInputs = [
+    imagemagick
+    keyring
+    pulseaudio
     pytest-asyncio
     pytest-lazy-fixture
+    pytestCheckHook
+    python-dateutil
     qtile
-    pulseaudio
-    keyring
     requests
+    xorgserver
     # stravalib  # marked as broken due to https://github.com/stravalib/stravalib/issues/379
   ];
+
   disabledTests = [
     # Needs a running DBUS
     "test_brightness_power_saving"
@@ -55,12 +59,15 @@ buildPythonPackage rec {
     "test_wifiicon_internet_check"
     # Image difference is outside tolerance
     "test_decoration_output"
-    # Needs github token
+    # Needs Github token
     "test_githubnotifications_reload_token"
     # AttributeError: 'NoneType' object has no attribute 'theta'
     "test_image_size_horizontal"
     "test_image_size_vertical"
+    # flaky, timing sensitive
+    "test_visualiser"
   ];
+
   disabledTestPaths = [
     # Needs a running DBUS
     "test/widget/test_iwd.py"
@@ -68,15 +75,12 @@ buildPythonPackage rec {
     # Marked as broken due to https://github.com/stravalib/stravalib/issues/379
     "test/widget/test_strava.py"
   ];
+
   preCheck = ''
     export HOME=$(mktemp -d)
     export GDK_PIXBUF_MODULE_FILE=${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
     sed -i 's#/usr/bin/sleep#sleep#' test/widget/test_snapcast.py
   '';
-
-  propagatedBuildInputs = [
-    gtk3
-  ];
 
   pythonImportsCheck = [ "qtile_extras" ];
 

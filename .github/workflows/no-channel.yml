@@ -2,25 +2,25 @@ name: "No channel PR"
 
 on:
   pull_request:
-    branches:
-      - 'nixos-**'
-      - 'nixpkgs-**'
+    paths:
+      - .github/workflows/no-channel.yml
+  pull_request_target:
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   fail:
-    permissions:
-      contents: none
-    name: "This PR is is targeting a channel branch"
-    runs-on: ubuntu-latest
+    if: |
+      startsWith(github.event.pull_request.base.ref, 'nixos-') ||
+      startsWith(github.event.pull_request.base.ref, 'nixpkgs-')
+    name: "This PR is targeting a channel branch"
+    runs-on: ubuntu-24.04-arm
     steps:
-    - run: |
-        cat <<EOF
-        The nixos-* and nixpkgs-* branches are pushed to by the channel
-        release script and should not be merged into directly.
+      - run: |
+          cat <<EOF
+          The nixos-* and nixpkgs-* branches are pushed to by the channel
+          release script and should not be merged into directly.
 
-        Please target the equivalent release-* branch or master instead.
-        EOF
-        exit 1
+          Please target the equivalent release-* branch or master instead.
+          EOF
+          exit 1

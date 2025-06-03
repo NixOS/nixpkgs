@@ -1,15 +1,20 @@
-{ build-idris-package
-, fetchFromGitHub
-, idrisscript
-, hrtime
-, webgl
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  idrisscript,
+  hrtime,
+  webgl,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   pname = "console";
   version = "2017-04-20";
 
-  idrisDeps = [ idrisscript hrtime webgl ];
+  idrisDeps = [
+    idrisscript
+    hrtime
+    webgl
+  ];
 
   src = fetchFromGitHub {
     owner = "pierrebeaucamp";
@@ -19,7 +24,7 @@ build-idris-package  {
   };
 
   meta = {
-    description = "An Idris library to interact with the browser console";
+    description = "Idris library to interact with the browser console";
     homepage = "https://github.com/pierrebeaucamp/idris-console";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.brainrape ];

@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -11,39 +11,27 @@ buildPythonPackage rec {
   version = "6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "zope.dottedname";
     inherit version;
     hash = "sha256-28S4W/vzSx74jasWJSrG7xbZBDnyIjstCiYs9Bnq6QI=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "src/zope/dottedname/tests.py"
-  ];
+  pytestFlagsArray = [ "src/zope/dottedname/tests.py" ];
 
-  pythonImportsCheck = [
-    "zope.dottedname"
-  ];
+  pythonImportsCheck = [ "zope.dottedname" ];
 
-  pythonNamespaces = [
-    "zope"
-  ];
+  pythonNamespaces = [ "zope" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/zopefoundation/zope.dottedname";
     description = "Resolver for Python dotted names";
     changelog = "https://github.com/zopefoundation/zope.dottedname/blob/${version}/CHANGES.rst";
-    license = licenses.zpl21;
-    maintainers = with maintainers; [ goibhniu ];
+    license = lib.licenses.zpl21;
+    maintainers = [ ];
   };
 }

@@ -1,17 +1,21 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.opentracker;
-in {
+in
+{
   options.services.opentracker = {
-    enable = mkEnableOption (lib.mdDoc "opentracker");
+    enable = lib.mkEnableOption "opentracker";
 
-    package = mkPackageOption pkgs "opentracker" { };
+    package = lib.mkPackageOption pkgs "opentracker" { };
 
-    extraOptions = mkOption {
-      type = types.separatedString " ";
-      description = lib.mdDoc ''
+    extraOptions = lib.mkOption {
+      type = lib.types.separatedString " ";
+      description = ''
         Configuration Arguments for opentracker
         See https://erdgeist.org/arts/software/opentracker/ for all params
       '';
@@ -35,4 +39,3 @@ in {
     };
   };
 }
-

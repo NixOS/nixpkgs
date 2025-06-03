@@ -1,28 +1,32 @@
-{ lib
-, stdenv
-, fetchurl
-, appimageTools
-, imagemagick
+{
+  lib,
+  stdenv,
+  fetchurl,
+  appimageTools,
+  imagemagick,
 }:
 
 let
   pname = "mqttx";
-  version = "1.9.9";
+  version = "1.11.1";
 
-  suffixedUrl = suffix: "https://github.com/emqx/MQTTX/releases/download/v${version}/MQTTX-${version}${suffix}.AppImage";
+  suffixedUrl =
+    suffix:
+    "https://github.com/emqx/MQTTX/releases/download/v${version}/MQTTX-${version}${suffix}.AppImage";
   sources = {
     "aarch64-linux" = fetchurl {
       url = suffixedUrl "-arm64";
-      hash = "sha256-mCCRvLS6diKoKYZNUMsyiWyFWmyYYB0pAxNT0yriJHI=";
+      hash = "sha256-gRR0gFHqIPXOrSytqERAi7msfrrYXm2xP84Jy+UhrKg=";
     };
     "x86_64-linux" = fetchurl {
       url = suffixedUrl "";
-      hash = "sha256-InGfGiT3c5M8ueFZl5/hFmYRPeXnwSCUPhAqmz0jsU8=";
+      hash = "sha256-rqzh4whp8NaeQb98mKTu+hL3RXQBEOKgvJKwLhzu+hg=";
     };
   };
 
-  src = sources.${stdenv.hostPlatform.system}
-    or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  src =
+    sources.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;
@@ -31,10 +35,9 @@ in
 appimageTools.wrapType2 {
   inherit pname version src;
 
-  extraPkgs = pkgs: [ ];
+  extraPkgs = pkgs: [ pkgs.xorg.libxshmfence ];
 
   extraInstallCommands = ''
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
     install -m 444 -D ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
     install -m 444 -D ${appimageContents}/${pname}.png $out/share/icons/hicolor/1024x1024/apps/${pname}.png
 
@@ -42,7 +45,7 @@ appimageTools.wrapType2 {
     install -m 444 -D ${pname}_512.png $out/share/icons/hicolor/512x512/apps/${pname}.png
 
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
   '';
 
   meta = with lib; {

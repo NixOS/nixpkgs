@@ -1,66 +1,53 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, prompt-toolkit
-, pygments
-, pyserial
-, pytest-asyncio
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, redis
-, setuptools
-, sqlalchemy
-, twisted
-, typer
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  prompt-toolkit,
+  pygments,
+  pymodbus-repl,
+  pyserial,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytest-xdist,
+  pytestCheckHook,
+  redis,
+  setuptools,
+  sqlalchemy,
+  twisted,
+  typer,
 }:
 
 buildPythonPackage rec {
   pname = "pymodbus";
-  version = "3.6.5";
+  version = "3.9.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pymodbus-dev";
     repo = "pymodbus";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-BWoonOmKTvl5pKvdysmrCTHL6Bf3NGULXI6dpP5t/C0=";
+    tag = "v${version}";
+    hash = "sha256-nzaIE8ZBIwo6ZChYBzQzMndCM/hOwCVKepkUACn8e80=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov-report html " ""
-  '';
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
-
-  passthru.optional-dependencies = {
-    repl = [
-      aiohttp
-      typer
-      prompt-toolkit
-      pygments
-      click
-    ] ++ typer.optional-dependencies.all;
-    serial = [
-      pyserial
-    ];
+  optional-dependencies = {
+    repl = [ pymodbus-repl ];
+    serial = [ pyserial ];
+    simulator = [ aiohttp ];
   };
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytest-xdist
     pytestCheckHook
     redis
     sqlalchemy
     twisted
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     pushd test
@@ -70,18 +57,18 @@ buildPythonPackage rec {
     popd
   '';
 
-  pythonImportsCheck = [
-    "pymodbus"
-  ];
+  pythonImportsCheck = [ "pymodbus" ];
 
-  disabledTests = [
-    # Tests often hang
-    "test_connected"
-  ] ++ lib.optionals (lib.versionAtLeast aiohttp.version "3.9.0") [
-    "test_split_serial_packet"
-    "test_serial_poll"
-    "test_simulator"
-  ];
+  disabledTests =
+    [
+      # Tests often hang
+      "test_connected"
+    ]
+    ++ lib.optionals (lib.versionAtLeast aiohttp.version "3.9.0") [
+      "test_split_serial_packet"
+      "test_serial_poll"
+      "test_simulator"
+    ];
 
   meta = with lib; {
     description = "Python implementation of the Modbus protocol";
@@ -95,5 +82,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pymodbus-dev/pymodbus/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "pymodbus.simulator";
   };
 }

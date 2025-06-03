@@ -1,13 +1,17 @@
-{ lib, fetchFromGitLab, buildDunePackage }:
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+}:
 
 buildDunePackage rec {
   pname = "ringo";
-  version = "1.0.0";
+  version = "1.1.0";
   src = fetchFromGitLab {
     owner = "nomadic-labs";
     repo = "ringo";
     rev = "v${version}";
-    sha256 = "sha256-9HW3M27BxrEPbF8cMHwzP8FmJduUInpQQAE2672LOuU=";
+    hash = "sha256-8dThhY7TIjd0lLdCt6kxr0yhgVGDyN6ZMSx0Skfbcwk=";
   };
 
   minimalOCamlVersion = "4.08";

@@ -1,15 +1,27 @@
-{ stdenv, pytest, spacy_models }:
+{
+  lib,
+  stdenv,
+  pytest,
+  spacy-models,
+}:
 
 stdenv.mkDerivation {
   name = "spacy-annotation-test";
 
-  src = ./.;
+  src = lib.fileset.toSource {
+    root = ./.;
+    fileset = lib.fileset.unions [
+      ./annotate.py
+    ];
+  };
 
   dontConfigure = true;
   dontBuild = true;
-  doCheck = true;
 
-  nativeCheckInputs = [ pytest spacy_models.en_core_web_sm ];
+  nativeCheckInputs = [
+    pytest
+    spacy-models.en_core_web_sm
+  ];
 
   checkPhase = ''
     pytest annotate.py

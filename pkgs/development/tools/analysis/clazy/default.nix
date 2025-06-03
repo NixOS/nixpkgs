@@ -1,21 +1,23 @@
 {
-    lib
-  , stdenv
-  , fetchFromGitHub
-  , llvmPackages
-  , cmake
-  , makeWrapper
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  llvmPackages,
+  cmake,
+  makeWrapper,
+  versionCheckHook,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clazy";
-  version = "1.11";
+  version = "1.14";
 
   src = fetchFromGitHub {
-    owner  = "KDE";
-    repo   = "clazy";
-    rev    = "v${version}";
-    sha256 = "sha256-kcl4dUg84fNdizKUS4kpvIKFfajtTRdz+MYUbKcMFvg=";
+    owner = "KDE";
+    repo = "clazy";
+    tag = finalAttrs.version;
+    hash = "sha256-t1j/MrKD8ocmhbFtWz6BJUbPSCSWjlRmuYnsPhHWgAM=";
   };
 
   buildInputs = [
@@ -45,12 +47,22 @@ stdenv.mkDerivation rec {
       --suffix CPLUS_INCLUDE_PATH : "${llvmPackages.clang}/resource-root/include"
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = gitUpdater { };
+  };
+
   meta = {
     description = "Qt-oriented static code analyzer based on the Clang framework";
     homepage = "https://github.com/KDE/clazy";
+    changelog = "https://github.com/KDE/clazy/blob/${finalAttrs.version}/Changelog";
     license = lib.licenses.lgpl2Plus;
     maintainers = [ lib.maintainers.cadkin ];
     platforms = lib.platforms.linux;
   };
-
-}
+})

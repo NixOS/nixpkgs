@@ -1,69 +1,95 @@
-{ lib, stdenv, cmake, python3, fetchFromGitHub, fetchpatch, emscripten,
-  gtest, lit, nodejs, filecheck
+{
+  lib,
+  stdenv,
+  cmake,
+  python3,
+  fetchFromGitHub,
+  emscripten,
+  gtest,
+  lit,
+  nodejs,
+  filecheck,
 }:
-
+let
+  testsuite = fetchFromGitHub {
+    owner = "WebAssembly";
+    repo = "testsuite";
+    rev = "e05365077e13a1d86ffe77acfb1a835b7aa78422";
+    hash = "sha256-yvZ5AZTPUA6nsD3xpFC0VLthiu2CxVto66RTXBXXeJM=";
+  };
+in
 stdenv.mkDerivation rec {
   pname = "binaryen";
-  version = "116";
+  version = "123";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "binaryen";
     rev = "version_${version}";
-    hash = "sha256-gMwbWiP+YDCVafQMBWhTuJGWmkYtnhEdn/oofKaUT08=";
+    hash = "sha256-SFruWOJVxO3Ll1HwjK3DYSPY2IprnDly7QjxrECTrzE=";
   };
 
-  # FIXME: remove for next release
-  patches = [
-    (fetchpatch {
-      name = "nodejs-20.patch";
-      url = "https://github.com/WebAssembly/binaryen/commit/889422e0c92552ff484659f9b41e777ba7ab35c1.patch";
-      hash = "sha256-acM8mytL9nhm4np9tpUbd1X0wJ7y308HV2fvgcAW1lY=";
-    })
-
-    # Fix fmin tests on gcc-13: https://github.com/WebAssembly/binaryen/pull/5994
-    (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://github.com/WebAssembly/binaryen/commit/1e17dfb695a19d5d41f1f88411fbcbc5f2408c8f.patch";
-      hash = "sha256-5JZh15CXkg5XdTG8eRJXPwO+zmymYeFjKbHutRPTmlU=";
-    })
+  nativeBuildInputs = [
+    cmake
+    python3
   ];
 
-  nativeBuildInputs = [ cmake python3 ];
+  strictDeps = true;
 
   preConfigure = ''
     if [ $doCheck -eq 1 ]; then
-      sed -i '/googletest/d' third_party/CMakeLists.txt
+      sed -i '/gtest/d' third_party/CMakeLists.txt
+      rmdir test/spec/testsuite
+      ln -s ${testsuite} test/spec/testsuite
     else
       cmakeFlagsArray=($cmakeFlagsArray -DBUILD_TESTS=0)
     fi
   '';
 
-  nativeCheckInputs = [ gtest lit nodejs filecheck ];
+  nativeCheckInputs = [
+    lit
+    nodejs
+    filecheck
+  ];
+  checkInputs = [ gtest ];
   checkPhase = ''
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib python3 ../check.py $tests
   '';
 
-  tests = [
-    "version" "wasm-opt" "wasm-dis"
-    "crash" "dylink" "ctor-eval"
-    "wasm-metadce" "wasm-reduce" "spec"
-    "lld" "wasm2js" "validator"
-    "example" "unit"
-    # "binaryenjs" "binaryenjs_wasm" # not building this
-    "lit" "gtest"
-  ];
-  doCheck = stdenv.isLinux;
+  tests =
+    [
+      "version"
+      "wasm-opt"
+      "wasm-dis"
+      "crash"
+      "dylink"
+      "ctor-eval"
+      "wasm-metadce"
+      "wasm-reduce"
+      "spec"
+      "lld"
+      "wasm2js"
+      # "unit" # fails on test.unit.test_cluster_fuzz.ClusterFuzz
+      # "binaryenjs" "binaryenjs_wasm" # not building this
+      # "lit" # fails on d8/fuzz_shell*
+      "gtest"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      "example"
+      "validator"
+    ];
+
+  doCheck = (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin);
 
   meta = with lib; {
     homepage = "https://github.com/WebAssembly/binaryen";
     description = "Compiler infrastructure and toolchain library for WebAssembly, in C++";
     platforms = platforms.all;
-    maintainers = with maintainers; [ asppsa ];
+    maintainers = with maintainers; [
+      asppsa
+      willcohen
+    ];
     license = licenses.asl20;
   };
-
-  passthru.tests = {
-    inherit emscripten;
-  };
+  passthru.tests = { inherit emscripten; };
 }

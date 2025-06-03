@@ -1,20 +1,25 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+{ pkgs, ... }:
 {
   name = "vault-dev";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ lnl7 mic92 ];
+    maintainers = [
+      lnl7
+      mic92
+    ];
   };
-  nodes.machine = { pkgs, config, ... }: {
-    environment.systemPackages = [ pkgs.vault ];
-    environment.variables.VAULT_ADDR = "http://127.0.0.1:8200";
-    environment.variables.VAULT_TOKEN = "phony-secret";
+  nodes.machine =
+    { pkgs, config, ... }:
+    {
+      environment.systemPackages = [ pkgs.vault ];
+      environment.variables.VAULT_ADDR = "http://127.0.0.1:8200";
+      environment.variables.VAULT_TOKEN = "phony-secret";
 
-    services.vault = {
-      enable = true;
-      dev = true;
-      devRootTokenID = config.environment.variables.VAULT_TOKEN;
+      services.vault = {
+        enable = true;
+        dev = true;
+        devRootTokenID = config.environment.variables.VAULT_TOKEN;
+      };
     };
-  };
 
   testScript = ''
     import json
@@ -32,4 +37,4 @@ import ./make-test-python.nix ({ pkgs, ... }:
     status = json.loads(out)
     assert status.get("data", {}).get("data", {}).get("bar") == "baz"
   '';
-})
+}

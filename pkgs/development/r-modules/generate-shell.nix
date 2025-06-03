@@ -1,4 +1,4 @@
-with import ../../.. {};
+with import ../../.. { };
 
 stdenv.mkDerivation {
   name = "generate-r-packages-shell";
@@ -17,6 +17,7 @@ stdenv.mkDerivation {
         data_table
         parallel
         BiocManager
+        jsonlite
       ];
     })
   ];

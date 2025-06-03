@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -16,20 +21,20 @@ in
       type = types.bool;
       default = versionOlder config.system.stateVersion "19.09" && xSessionEnabled;
       defaultText = literalExpression ''versionOlder config.system.stateVersion "19.09" && config.services.xserver.enable;'';
-      description = lib.mdDoc "Enable a xterm terminal as a desktop manager.";
+      description = "Enable a xterm terminal as a desktop manager.";
     };
 
   };
 
   config = mkIf cfg.enable {
 
-    services.xserver.desktopManager.session = singleton
-      { name = "xterm";
-        start = ''
-          ${pkgs.xterm}/bin/xterm -ls &
-          waitPID=$!
-        '';
-      };
+    services.xserver.desktopManager.session = singleton {
+      name = "xterm";
+      start = ''
+        ${pkgs.xterm}/bin/xterm -ls &
+        waitPID=$!
+      '';
+    };
 
     environment.systemPackages = [ pkgs.xterm ];
 

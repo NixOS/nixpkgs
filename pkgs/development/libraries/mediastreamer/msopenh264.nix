@@ -1,12 +1,10 @@
-{ autoreconfHook
-, cmake
-, fetchFromGitLab
-, fetchpatch
-, mediastreamer
-, openh264
-, pkg-config
-, lib
-, stdenv
+{
+  cmake,
+  fetchFromGitLab,
+  mediastreamer,
+  openh264,
+  lib,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +21,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ mediastreamer openh264 ];
+  buildInputs = [
+    mediastreamer
+    openh264
+  ];
 
   # Do not build static libraries
   cmakeFlags = [
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "H.264 encoder/decoder plugin for mediastreamer2. Part of the Linphone project.";
+    description = "H.264 encoder/decoder plugin for mediastreamer2. Part of the Linphone project";
     homepage = "https://www.linphone.org/technical-corner/mediastreamer2";
     license = licenses.gpl2;
     platforms = platforms.linux;

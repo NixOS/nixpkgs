@@ -1,37 +1,59 @@
 # generate the script used to activate the configuration.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
 
-  addAttributeName = mapAttrs (a: v: v // {
-    text = ''
-      #### Activation script snippet ${a}:
-      _localstatus=0
-      ${v.text}
+  addAttributeName = mapAttrs (
+    a: v:
+    v
+    // {
+      text = ''
+        #### Activation script snippet ${a}:
+        _localstatus=0
+        ${v.text}
 
-      if (( _localstatus > 0 )); then
-        printf "Activation script snippet '%s' failed (%s)\n" "${a}" "$_localstatus"
-      fi
-    '';
-  });
+        if (( _localstatus > 0 )); then
+          printf "Activation script snippet '%s' failed (%s)\n" "${a}" "$_localstatus"
+        fi
+      '';
+    }
+  );
 
-  systemActivationScript = set: onlyDry: let
-    set' = mapAttrs (_: v: if isString v then (noDepEntry v) // { supportsDryActivation = false; } else v) set;
-    withHeadlines = addAttributeName set';
-    # When building a dry activation script, this replaces all activation scripts
-    # that do not support dry mode with a comment that does nothing. Filtering these
-    # activation scripts out so they don't get generated into the dry activation script
-    # does not work because when an activation script that supports dry mode depends on
-    # an activation script that does not, the dependency cannot be resolved and the eval
-    # fails.
-    withDrySnippets = mapAttrs (a: v: if onlyDry && !v.supportsDryActivation then v // {
-      text = "#### Activation script snippet ${a} does not support dry activation.";
-    } else v) withHeadlines;
-  in
+  systemActivationScript =
+    set: onlyDry:
+    let
+      set' = mapAttrs (
+        _: v: if isString v then (noDepEntry v) // { supportsDryActivation = false; } else v
+      ) set;
+      withHeadlines = addAttributeName set';
+      # When building a dry activation script, this replaces all activation scripts
+      # that do not support dry mode with a comment that does nothing. Filtering these
+      # activation scripts out so they don't get generated into the dry activation script
+      # does not work because when an activation script that supports dry mode depends on
+      # an activation script that does not, the dependency cannot be resolved and the eval
+      # fails.
+      withDrySnippets = mapAttrs (
+        a: v:
+        if onlyDry && !v.supportsDryActivation then
+          v
+          // {
+            text = "#### Activation script snippet ${a} does not support dry activation.";
+          }
+        else
+          v
+      ) withHeadlines;
+    in
     ''
       #!${pkgs.runtimeShell}
+
+      source ${./lib/lib.sh}
 
       systemConfig='@out@'
 
@@ -48,7 +70,8 @@ let
 
       ${textClosureMap id (withDrySnippets) (attrNames withDrySnippets)}
 
-    '' + optionalString (!onlyDry) ''
+    ''
+    + optionalString (!onlyDry) ''
       # Make this configuration the current configuration.
       # The readlink is there to ensure that when $systemConfig = /system
       # (which is a symlink to the store), /run/current-system is still
@@ -58,8 +81,10 @@ let
       exit $_status
     '';
 
-  path = with pkgs; map getBin
-    [ coreutils
+  path =
+    with pkgs;
+    map getBin [
+      coreutils
       gnugrep
       findutils
       getent
@@ -69,22 +94,27 @@ let
       util-linux # needed for mount and mountpoint
     ];
 
-  scriptType = withDry: with types;
-    let scriptOptions =
-      { deps = mkOption
-          { type = types.listOf types.str;
+  scriptType =
+    withDry:
+    with types;
+    let
+      scriptOptions =
+        {
+          deps = mkOption {
+            type = types.listOf types.str;
             default = [ ];
-            description = lib.mdDoc "List of dependencies. The script will run after these.";
+            description = "List of dependencies. The script will run after these.";
           };
-        text = mkOption
-          { type = types.lines;
-            description = lib.mdDoc "The content of the script.";
+          text = mkOption {
+            type = types.lines;
+            description = "The content of the script.";
           };
-      } // optionalAttrs withDry {
-        supportsDryActivation = mkOption
-          { type = types.bool;
+        }
+        // optionalAttrs withDry {
+          supportsDryActivation = mkOption {
+            type = types.bool;
             default = false;
-            description = lib.mdDoc ''
+            description = ''
               Whether this activation script supports being dry-activated.
               These activation scripts will also be executed on dry-activate
               activations with the environment variable
@@ -93,8 +123,11 @@ let
               modify anything about the system when the variable is set.
             '';
           };
-      };
-    in either str (submodule { options = scriptOptions; });
+        };
+    in
+    either str (submodule {
+      options = scriptOptions;
+    });
 
 in
 
@@ -105,21 +138,26 @@ in
   options = {
 
     system.activationScripts = mkOption {
-      default = {};
+      default = { };
 
       example = literalExpression ''
-        { stdio.text =
-          '''
-            # Needed by some programs.
-            ln -sfn /proc/self/fd /dev/fd
-            ln -sfn /proc/self/fd/0 /dev/stdin
-            ln -sfn /proc/self/fd/1 /dev/stdout
-            ln -sfn /proc/self/fd/2 /dev/stderr
-          ''';
+        {
+          stdio = {
+            # Run after /dev has been mounted
+            deps = [ "specialfs" ];
+            text =
+              '''
+                # Needed by some programs.
+                ln -sfn /proc/self/fd /dev/fd
+                ln -sfn /proc/self/fd/0 /dev/stdin
+                ln -sfn /proc/self/fd/1 /dev/stdout
+                ln -sfn /proc/self/fd/2 /dev/stderr
+              ''';
+          };
         }
       '';
 
-      description = lib.mdDoc ''
+      description = ''
         A set of shell script fragments that are executed when a NixOS
         system configuration is activated.  Examples are updating
         /etc, creating accounts, and so on.  Since these are executed
@@ -129,13 +167,16 @@ in
       '';
 
       type = types.attrsOf (scriptType true);
-      apply = set: set // {
-        script = systemActivationScript set false;
-      };
+      apply =
+        set:
+        set
+        // {
+          script = systemActivationScript set false;
+        };
     };
 
     system.dryActivationScript = mkOption {
-      description = lib.mdDoc "The shell script that is to be run when dry-activating a system.";
+      description = "The shell script that is to be run when dry-activating a system.";
       readOnly = true;
       internal = true;
       default = systemActivationScript (removeAttrs config.system.activationScripts [ "script" ]) true;
@@ -143,7 +184,7 @@ in
     };
 
     system.userActivationScripts = mkOption {
-      default = {};
+      default = { };
 
       example = literalExpression ''
         { plasmaSetup = {
@@ -155,7 +196,7 @@ in
         }
       '';
 
-      description = lib.mdDoc ''
+      description = ''
         A set of shell script fragments that are executed by a systemd user
         service when a NixOS system configuration is activated. Examples are
         rebuilding the .desktop file cache for showing applications in the menu.
@@ -168,7 +209,7 @@ in
 
       apply = set: {
         script = ''
-          unset PATH
+          export PATH=
           for i in ${toString path}; do
             PATH=$PATH:$i/bin:$i/sbin
           done
@@ -180,7 +221,8 @@ in
             let
               set' = mapAttrs (n: v: if isString v then noDepEntry v else v) set;
               withHeadlines = addAttributeName set';
-            in textClosureMap id (withHeadlines) (attrNames withHeadlines)
+            in
+            textClosureMap id (withHeadlines) (attrNames withHeadlines)
           }
 
           exit $_status
@@ -195,19 +237,23 @@ in
       example = literalExpression ''"''${pkgs.busybox}/bin/env"'';
       type = types.nullOr types.path;
       visible = false;
-      description = lib.mdDoc ''
-        The env(1) executable that is linked system-wide to
+      description = ''
+        The {manpage}`env(1)` executable that is linked system-wide to
         `/usr/bin/env`.
       '';
     };
 
     system.build.installBootLoader = mkOption {
       internal = true;
-      # "; true" => make the `$out` argument from switch-to-configuration.pl
-      #             go to `true` instead of `echo`, hiding the useless path
-      #             from the log.
-      default = "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
-      description = lib.mdDoc ''
+      default = pkgs.writeShellScript "no-bootloader" ''
+        echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2
+      '';
+      defaultText = lib.literalExpression ''
+        pkgs.writeShellScript "no-bootloader" '''
+          echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2
+        '''
+      '';
+      description = ''
         A program that writes a bootloader installation script to the path passed in the first command line argument.
 
         See `nixos/modules/system/activation/switch-to-configuration.pl`.
@@ -223,7 +269,6 @@ in
 
   };
 
-
   ###### implementation
 
   config = {
@@ -231,44 +276,49 @@ in
     system.activationScripts.stdio = ""; # obsolete
     system.activationScripts.var = ""; # obsolete
 
-    systemd.tmpfiles.rules = [
-      # Prevent the current configuration from being garbage-collected.
-      "d /nix/var/nix/gcroots -"
-      "L+ /nix/var/nix/gcroots/current-system - - - - /run/current-system"
-      "D /var/empty 0555 root root -"
-      "h /var/empty - - - - +i"
-    ];
+    systemd.tmpfiles.rules =
+      [
+        "D /var/empty 0555 root root -"
+        "h /var/empty - - - - +i"
+      ]
+      ++ lib.optionals config.nix.enable [
+        # Prevent the current configuration from being garbage-collected.
+        "d /nix/var/nix/gcroots -"
+        "L+ /nix/var/nix/gcroots/current-system - - - - /run/current-system"
+      ];
 
-    system.activationScripts.usrbinenv = if config.environment.usrbinenv != null
-      then ''
-        mkdir -p /usr/bin
-        chmod 0755 /usr/bin
-        ln -sfn ${config.environment.usrbinenv} /usr/bin/.env.tmp
-        mv /usr/bin/.env.tmp /usr/bin/env # atomically replace /usr/bin/env
-      ''
-      else ''
-        rm -f /usr/bin/env
-        rmdir --ignore-fail-on-non-empty /usr/bin /usr
-      '';
+    system.activationScripts.usrbinenv =
+      if config.environment.usrbinenv != null then
+        ''
+          mkdir -p /usr/bin
+          chmod 0755 /usr/bin
+          ln -sfn ${config.environment.usrbinenv} /usr/bin/.env.tmp
+          mv /usr/bin/.env.tmp /usr/bin/env # atomically replace /usr/bin/env
+        ''
+      else
+        ''
+          rm -f /usr/bin/env
+          if test -d /usr/bin; then rmdir --ignore-fail-on-non-empty /usr/bin; fi
+          if test -d /usr; then rmdir --ignore-fail-on-non-empty /usr; fi
+        '';
 
-    system.activationScripts.specialfs =
-      ''
-        specialMount() {
-          local device="$1"
-          local mountPoint="$2"
-          local options="$3"
-          local fsType="$4"
+    system.activationScripts.specialfs = ''
+      specialMount() {
+        local device="$1"
+        local mountPoint="$2"
+        local options="$3"
+        local fsType="$4"
 
-          if mountpoint -q "$mountPoint"; then
-            local options="remount,$options"
-          else
-            mkdir -p "$mountPoint"
-            chmod 0755 "$mountPoint"
-          fi
-          mount -t "$fsType" -o "$options" "$device" "$mountPoint"
-        }
-        source ${config.system.build.earlyMountScript}
-      '';
+        if mountpoint -q "$mountPoint"; then
+          local options="remount,$options"
+        else
+          mkdir -p "$mountPoint"
+          chmod 0755 "$mountPoint"
+        fi
+        mount -t "$fsType" -o "$options" "$device" "$mountPoint"
+      }
+      source ${config.system.build.earlyMountScript}
+    '';
 
     systemd.user = {
       services.nixos-activation = {

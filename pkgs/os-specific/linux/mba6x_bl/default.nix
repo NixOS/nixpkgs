@@ -1,4 +1,10 @@
-{ fetchFromGitHub, kernel, lib, stdenv }:
+{
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
+  lib,
+  stdenv,
+}:
 
 stdenv.mkDerivation {
   pname = "mba6x_bl";
@@ -16,7 +22,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=$(out)"
   ];
@@ -24,7 +30,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "MacBook Air 6,1 and 6,2 (mid 2013) backlight driver";
     homepage = "https://github.com/patjak/mba6x_bl";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.simonvandel ];
   };

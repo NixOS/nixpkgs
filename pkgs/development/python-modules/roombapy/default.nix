@@ -1,20 +1,22 @@
-{ lib
-, amqtt
-, buildPythonPackage
-, fetchFromGitHub
-, orjson
-, paho-mqtt
-, poetry-core
-, pydantic
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  amqtt,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  mashumaro,
+  orjson,
+  paho-mqtt,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  tabulate,
 }:
 
 buildPythonPackage rec {
   pname = "roombapy";
-  version = "1.6.13";
+  version = "1.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -22,23 +24,25 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pschmitt";
     repo = "roombapy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-5TFuOk3fj4kg5MyWz7HQ/zWdvceFa3mWnFx+Yuq2III=";
+    tag = version;
+    hash = "sha256-fcCK6yby9Jfc4lSSETn13Y+4A3qjvYfm4Ps3T5yG4Rc=";
   };
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "orjson"
-  ];
+  pythonRelaxDeps = [ "orjson" ];
 
   propagatedBuildInputs = [
+    mashumaro
     orjson
     paho-mqtt
-    pydantic
+  ];
+
+  optional-dependencies.cli = [
+    click
+    tabulate
   ];
 
   nativeCheckInputs = [
@@ -57,12 +61,11 @@ buildPythonPackage rec {
     "test_roomba_connect"
   ];
 
-  pythonImportsCheck = [
-    "roombapy"
-  ];
+  pythonImportsCheck = [ "roombapy" ];
 
   meta = with lib; {
     description = "Python program and library to control Wi-Fi enabled iRobot Roombas";
+    mainProgram = "roombapy";
     homepage = "https://github.com/pschmitt/roombapy";
     changelog = "https://github.com/pschmitt/roombapy/releases/tag/${version}";
     license = licenses.mit;

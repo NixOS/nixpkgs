@@ -1,16 +1,26 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 let
-  generic = { pname, packageToBuild, description }:
+  generic =
+    {
+      pname,
+      packageToBuild,
+      description,
+    }:
     buildGoModule rec {
       inherit pname;
-      version = "1.3.5";
+      version = "1.3.10";
 
       src = fetchFromGitHub {
         owner = "sigstore";
         repo = "rekor";
         rev = "v${version}";
-        hash = "sha256-g/APpfvG1MMTYZfPSXKNa9DdWrOrjOk8uQV3QyzCQjY=";
+        hash = "sha256-fxBLh7QrBBkUsVrONeFmrXtmRGNgkH7WnncMQ+E56Ok=";
         # populate values that require us to use git. By doing this in postFetch we
         # can delete .git afterwards and maintain better reproducibility of the src.
         leaveDotGit = true;
@@ -23,7 +33,7 @@ let
         '';
       };
 
-      vendorHash = "sha256-6ZJ3IgnzoZSDL1+CMYUDumXf1uO+odZ8Y5IZq3GN4bY=";
+      vendorHash = "sha256-2ddpzKzVlmOgxsBtLB28fKZ2o4QvtrNZC+1wOny3Amk=";
 
       nativeBuildInputs = [ installShellFiles ];
 
@@ -54,10 +64,15 @@ let
         homepage = "https://github.com/sigstore/rekor";
         changelog = "https://github.com/sigstore/rekor/releases/tag/v${version}";
         license = licenses.asl20;
-        maintainers = with maintainers; [ lesuisse jk developer-guy ];
+        maintainers = with maintainers; [
+          lesuisse
+          jk
+          developer-guy
+        ];
       };
     };
-in {
+in
+{
   rekor-cli = generic {
     pname = "rekor-cli";
     packageToBuild = "cmd/rekor-cli";

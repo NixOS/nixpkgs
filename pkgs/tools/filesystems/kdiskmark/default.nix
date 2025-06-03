@@ -1,32 +1,36 @@
-{ stdenv
-, lib
-, wrapQtAppsHook
-, qtbase
-, qttools
-, fio
-, cmake
-, polkit-qt
-, extra-cmake-modules
-, fetchFromGitHub
+{
+  stdenv,
+  lib,
+  wrapQtAppsHook,
+  qtbase,
+  qttools,
+  fio,
+  cmake,
+  polkit-qt,
+  extra-cmake-modules,
+  fetchFromGitHub,
 }:
 stdenv.mkDerivation rec {
-  name = "kdiskmark";
+  pname = "kdiskmark";
   version = "3.1.4";
 
   src = fetchFromGitHub {
     owner = "jonmagon";
     repo = "kdiskmark";
     rev = version;
-    sha256 = "sha256-JueY7zw9PIo9ETi7pQLpw8FGRhNXYXeXEvTzZGz9lbw=";
+    hash = "sha256-JueY7zw9PIo9ETi7pQLpw8FGRhNXYXeXEvTzZGz9lbw=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
     qtbase
     qttools
-    extra-cmake-modules
     polkit-qt
   ];
 
@@ -35,8 +39,12 @@ stdenv.mkDerivation rec {
       --replace \$\{POLKITQT-1_POLICY_FILES_INSTALL_DIR\} $out/share/polkit-1/actions
   '';
 
-  qtWrapperArgs =
-    [ "--prefix" "PATH" ":" (lib.makeBinPath [ fio ]) ];
+  qtWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ fio ])
+  ];
 
   meta = with lib; {
     description = "HDD and SSD benchmark tool with a friendly graphical user interface";
@@ -52,4 +60,3 @@ stdenv.mkDerivation rec {
     mainProgram = "kdiskmark";
   };
 }
-

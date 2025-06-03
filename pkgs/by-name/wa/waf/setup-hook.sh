@@ -3,9 +3,10 @@
 wafConfigurePhase() {
     runHook preConfigure
 
-    if ! [ -f "${wafPath:=./waf}" ]; then
-        echo "copying waf to $wafPath..."
-        cp @waf@/bin/waf "$wafPath"
+    if [ -f "${wafPath:=./waf}" ]; then
+        patchShebangs --build "${wafPath}"
+    else
+        wafPath="@waf@/bin/waf"
     fi
 
     if [ -z "${dontAddPrefix:-}" ] && [ -n "$prefix" ]; then
@@ -16,18 +17,11 @@ wafConfigurePhase() {
       export PKGCONFIG="${PKG_CONFIG}"
     fi
 
-    local flagsArray=(
-        $prefixFlag
-        $wafConfigureFlags "${wafConfigureFlagsArray[@]}"
-        ${wafConfigureTargets:-configure}
-    )
-
-    if [ -z "${dontAddWafCrossFlags:-}" ]; then
-        flagsArray+=(@wafCrossFlags@)
-    fi
+    local flagsArray=( $prefixFlag )
+    concatTo flagsArray wafConfigureFlags wafConfigureFlagsArray wafConfigureTargets=configure
 
     echoCmd 'waf configure flags' "${flagsArray[@]}"
-    python "$wafPath" "${flagsArray[@]}"
+    "$wafPath" "${flagsArray[@]}"
 
     if ! [[ -v enableParallelBuilding ]]; then
         enableParallelBuilding=1
@@ -45,18 +39,11 @@ wafConfigurePhase() {
 wafBuildPhase () {
     runHook preBuild
 
-    # set to empty if unset
-    : "${wafFlags=}"
-
-    local flagsArray=(
-      ${enableParallelBuilding:+-j ${NIX_BUILD_CORES}}
-      $wafFlags ${wafFlagsArray[@]}
-      $wafBuildFlags ${wafBuildFlagsArray[@]}
-      ${wafBuildTargets:-build}
-    )
+    local flagsArray=( ${enableParallelBuilding:+-j ${NIX_BUILD_CORES}} )
+    concatTo flagsArray wafFlags wafFlagsArray wafBuildFlags wafBuildFlagsArray wafBuildTargets=build
 
     echoCmd 'waf build flags' "${flagsArray[@]}"
-    python "$wafPath" "${flagsArray[@]}"
+    "$wafPath" "${flagsArray[@]}"
 
     runHook postBuild
 }
@@ -68,15 +55,11 @@ wafInstallPhase() {
         mkdir -p "$prefix"
     fi
 
-    local flagsArray=(
-        ${enableParallelInstalling:+-j ${NIX_BUILD_CORES}}
-        $wafFlags ${wafFlagsArray[@]}
-        $wafInstallFlags ${wafInstallFlagsArray[@]}
-        ${wafInstallTargets:-install}
-    )
+    local flagsArray=( ${enableParallelInstalling:+-j ${NIX_BUILD_CORES}} )
+    concatTo flagsArray wafFlags wafFlagsArray wafInstallFlags wafInstallFlagsArray wafInstallTargets=install
 
     echoCmd 'waf install flags' "${flagsArray[@]}"
-    python "$wafPath" "${flagsArray[@]}"
+    "$wafPath" "${flagsArray[@]}"
 
     runHook postInstall
 }

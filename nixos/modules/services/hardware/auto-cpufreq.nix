@@ -1,30 +1,35 @@
-{ config, lib, pkgs, ... }:
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.auto-cpufreq;
   cfgFilename = "auto-cpufreq.conf";
   cfgFile = format.generate cfgFilename cfg.settings;
 
-  format = pkgs.formats.ini {};
-in {
+  format = pkgs.formats.ini { };
+in
+{
   options = {
     services.auto-cpufreq = {
-      enable = mkEnableOption (lib.mdDoc "auto-cpufreq daemon");
+      enable = lib.mkEnableOption "auto-cpufreq daemon";
 
-      settings = mkOption {
-        description = lib.mdDoc ''
+      settings = lib.mkOption {
+        description = ''
           Configuration for `auto-cpufreq`.
 
           The available options can be found in [the example configuration file](https://github.com/AdnanHodzic/auto-cpufreq/blob/v${pkgs.auto-cpufreq.version}/auto-cpufreq.conf-example).
-          '';
+        '';
 
-        default = {};
-        type = types.submodule { freeformType = format.type; };
+        default = { };
+        type = lib.types.submodule { freeformType = format.type; };
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.auto-cpufreq ];
 
     systemd = {
@@ -32,7 +37,10 @@ in {
       services.auto-cpufreq = {
         # Workaround for https://github.com/NixOS/nixpkgs/issues/81138
         wantedBy = [ "multi-user.target" ];
-        path = with pkgs; [ bash coreutils ];
+        path = with pkgs; [
+          bash
+          coreutils
+        ];
 
         serviceConfig.WorkingDirectory = "";
         serviceConfig.ExecStart = [

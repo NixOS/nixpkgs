@@ -1,47 +1,40 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, fetchpatch
-, substituteAll
-, graphviz-nox
-, xdg-utils
-, makeFontsConf
-, freefont_ttf
-, setuptools
-, mock
-, pytest
-, pytest-mock
-, python
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  replaceVars,
+  graphviz-nox,
+  xdg-utils,
+  makeFontsConf,
+  freefont_ttf,
+  setuptools,
+  mock,
+  pytest_7,
+  pytest-mock,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "graphviz";
-  version = "0.20.1";
+  version = "0.20.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   # patch does not apply to PyPI tarball due to different line endings
   src = fetchFromGitHub {
     owner = "xflr6";
     repo = "graphviz";
-    rev = version;
-    hash = "sha256-plhWG9mE9DoTMg7mWCvFLAgtBx01LAgJ0gQ/mqBU3yc=";
+    tag = version;
+    hash = "sha256-IqjqcBEL4BK/VfRjdxJ9t/DkG8OMAoXJxbW5JXpALuw=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./paths.patch;
+    (replaceVars ./paths.patch {
       graphviz = graphviz-nox;
       xdgutils = xdg-utils;
-    })
-    # https://github.com/xflr6/graphviz/issues/209
-    (fetchpatch {
-      name = "fix-tests-with-python312.patch";
-      url = "https://github.com/xflr6/graphviz/commit/5ce9fc5de4f2284baa27d7a8d68ab0885d032868.patch";
-      hash = "sha256-jREPACSc4aoHY3G+39e8Axqajw4eeKkAeVu2s40v1nI=";
     })
   ];
 
@@ -50,17 +43,13 @@ buildPythonPackage rec {
   '';
 
   # Fontconfig error: Cannot load default config file
-  FONTCONFIG_FILE = makeFontsConf {
-    fontDirectories = [ freefont_ttf ];
-  };
+  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ freefont_ttf ]; };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     mock
-    pytest
+    pytest_7
     pytest-mock
   ];
 
@@ -73,7 +62,7 @@ buildPythonPackage rec {
   '';
 
   # Too many failures due to attempting to connect to com.apple.fonts daemon
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Simple Python interface for Graphviz";
@@ -82,5 +71,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };
-
 }

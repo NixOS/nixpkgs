@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, hypothesis
-, numpy
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  hypothesis,
+  numpy,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "cmaes";
-  version = "0.10.0";
+  version = "0.11.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,26 +19,20 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CyberAgentAILab";
     repo = "cmaes";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1mXulG/yqNwKQKDFGBh8uxIYOPSsm8+PNp++CSswc50=";
+    tag = "v${version}";
+    hash = "sha256-u2CgU9n8N9AMxfMBbDbnYzBMdl/IGOLTxOeh8RlnB/Y=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "cmaes"
-  ];
+  pythonImportsCheck = [ "cmaes" ];
 
   disabledTests = [
     # Disable time-sensitive test

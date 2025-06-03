@@ -1,14 +1,18 @@
-{ lib, buildFishPlugin, fetchFromGitHub }:
+{
+  lib,
+  buildFishPlugin,
+  fetchFromGitHub,
+}:
 
 buildFishPlugin rec {
   pname = "forgit";
-  version = "24.03.1";
+  version = "25.06.0";
 
   src = fetchFromGitHub {
     owner = "wfxr";
     repo = "forgit";
     rev = version;
-    hash = "sha256-DIaoD6o+oY+/FnwQadQh0XqMVP4xbE8gAPtWrvwsG+c=";
+    hash = "sha256-D1we3pOPXNsK8KgEaRBAmD5eH1i2ud4zX1GwYbOyZvY=";
   };
 
   postInstall = ''
@@ -16,7 +20,7 @@ buildFishPlugin rec {
   '';
 
   meta = with lib; {
-    description = "A utility tool powered by fzf for using git interactively.";
+    description = "Utility tool powered by fzf for using git interactively";
     homepage = "https://github.com/wfxr/forgit";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];

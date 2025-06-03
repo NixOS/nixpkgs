@@ -1,72 +1,79 @@
-import ../make-test-python.nix ({ pkgs, ... }:
-  let
-    homeserverUrl = "http://homeserver:8008";
-  in
-  {
-    name = "matrix-appservice-irc";
-    meta = {
-      maintainers = pkgs.matrix-appservice-irc.meta.maintainers;
-    };
+{ pkgs, ... }:
+let
+  homeserverUrl = "http://homeserver:8008";
+in
+{
+  name = "matrix-appservice-irc";
+  meta = {
+    maintainers = pkgs.matrix-appservice-irc.meta.maintainers;
+  };
 
-    nodes = {
-      homeserver = { pkgs, ... }: {
-        # We'll switch to this once the config is copied into place
-        specialisation.running.configuration = {
-          services.matrix-synapse = {
-            enable = true;
-            settings = {
-              database.name = "sqlite3";
-              app_service_config_files = [ "/registration.yml" ];
+  nodes = {
+    homeserver = {
+      # We'll switch to this once the config is copied into place
+      specialisation.running.configuration = {
+        services.matrix-synapse = {
+          enable = true;
+          settings = {
+            database.name = "sqlite3";
+            app_service_config_files = [ "/registration.yml" ];
 
-              enable_registration = true;
+            enable_registration = true;
 
-              # don't use this in production, always use some form of verification
-              enable_registration_without_verification = true;
+            # don't use this in production, always use some form of verification
+            enable_registration_without_verification = true;
 
-              listeners = [ {
+            listeners = [
+              {
                 # The default but tls=false
                 bind_addresses = [
                   "0.0.0.0"
                 ];
                 port = 8008;
-                resources = [ {
-                  "compress" = true;
-                  "names" = [ "client" ];
-                } {
-                  "compress" = false;
-                  "names" = [ "federation" ];
-                } ];
+                resources = [
+                  {
+                    "compress" = true;
+                    "names" = [ "client" ];
+                  }
+                  {
+                    "compress" = false;
+                    "names" = [ "federation" ];
+                  }
+                ];
                 tls = false;
                 type = "http";
-              } ];
-            };
+              }
+            ];
           };
-
-          networking.firewall.allowedTCPPorts = [ 8008 ];
         };
+
+        networking.firewall.allowedTCPPorts = [ 8008 ];
       };
+    };
 
-      ircd = { pkgs, ... }: {
-        services.ngircd = {
-          enable = true;
-          config = ''
-            [Global]
-              Name = ircd.ircd
-              Info = Server Info Text
-              AdminInfo1 = _
+    ircd = {
+      services.ngircd = {
+        enable = true;
+        config = ''
+          [Global]
+            Name = ircd.ircd
+            Info = Server Info Text
+            AdminInfo1 = _
 
-            [Channel]
-              Name = #test
-              Topic = a cool place
+          [Channel]
+            Name = #test
+            Topic = a cool place
 
-            [Options]
-              PAM = no
-          '';
-        };
-        networking.firewall.allowedTCPPorts = [ 6667 ];
+          [Options]
+            PAM = no
+        '';
       };
+      networking.firewall.allowedTCPPorts = [ 6667 ];
+    };
 
-      appservice = { pkgs, ... }: {
+    appservice =
+      { pkgs, ... }:
+      {
         services.matrix-appservice-irc = {
           enable = true;
           registrationUrl = "http://appservice:8009";
@@ -75,12 +82,18 @@ import ../make-test-python.nix ({ pkgs, ... }:
             homeserver.url = homeserverUrl;
             homeserver.domain = "homeserver";
 
-            ircService.servers."ircd" = {
-              name = "IRCd";
-              port = 6667;
-              dynamicChannels = {
-                enabled = true;
-                aliasTemplate = "#irc_$CHANNEL";
+            ircService = {
+              servers."ircd" = {
+                name = "IRCd";
+                port = 6667;
+                dynamicChannels = {
+                  enabled = true;
+                  aliasTemplate = "#irc_$CHANNEL";
+                };
+              };
+              mediaProxy = {
+                publicUrl = "http://localhost:11111/media";
+                ttl = 0;
               };
             };
           };
@@ -89,18 +102,21 @@ import ../make-test-python.nix ({ pkgs, ... }:
         networking.firewall.allowedTCPPorts = [ 8009 ];
       };
 
-      client = { pkgs, ... }: {
+    client =
+      { pkgs, ... }:
+      {
         environment.systemPackages = [
           (pkgs.writers.writePython3Bin "do_test"
-          {
-            libraries = [ pkgs.python3Packages.matrix-nio ];
-            flakeIgnore = [
-              # We don't live in the dark ages anymore.
-              # Languages like Python that are whitespace heavy will overrun
-              # 79 characters..
-              "E501"
-            ];
-          } ''
+            {
+              libraries = [ pkgs.python3Packages.matrix-nio ];
+              flakeIgnore = [
+                # We don't live in the dark ages anymore.
+                # Languages like Python that are whitespace heavy will overrun
+                # 79 characters..
+                "E501"
+              ];
+            }
+            ''
               import sys
               import socket
               import functools
@@ -189,37 +205,39 @@ import ../make-test-python.nix ({ pkgs, ... }:
           )
         ];
       };
-    };
+  };
 
-    testScript = ''
-      import pathlib
-      import os
+  testScript = ''
+    import pathlib
+    import os
 
-      start_all()
+    start_all()
 
-      ircd.wait_for_unit("ngircd.service")
-      ircd.wait_for_open_port(6667)
+    ircd.wait_for_unit("ngircd.service")
+    ircd.wait_for_open_port(6667)
 
-      with subtest("start the appservice"):
-          appservice.wait_for_unit("matrix-appservice-irc.service")
-          appservice.wait_for_open_port(8009)
+    with subtest("start the appservice"):
+        appservice.wait_for_unit("matrix-appservice-irc.service")
+        appservice.wait_for_open_port(8009)
+        appservice.wait_for_file("/var/lib/matrix-appservice-irc/media-signingkey.jwk")
+        appservice.wait_for_open_port(11111)
 
-      with subtest("copy the registration file"):
-          appservice.copy_from_vm("/var/lib/matrix-appservice-irc/registration.yml")
-          homeserver.copy_from_host(
-              str(pathlib.Path(os.environ.get("out", os.getcwd())) / "registration.yml"), "/"
-          )
-          homeserver.succeed("chmod 444 /registration.yml")
+    with subtest("copy the registration file"):
+        appservice.copy_from_vm("/var/lib/matrix-appservice-irc/registration.yml")
+        homeserver.copy_from_host(
+            str(pathlib.Path(os.environ.get("out", os.getcwd())) / "registration.yml"), "/"
+        )
+        homeserver.succeed("chmod 444 /registration.yml")
 
-      with subtest("start the homeserver"):
-          homeserver.succeed(
-              "/run/current-system/specialisation/running/bin/switch-to-configuration test >&2"
-          )
+    with subtest("start the homeserver"):
+        homeserver.succeed(
+            "/run/current-system/specialisation/running/bin/switch-to-configuration test >&2"
+        )
 
-          homeserver.wait_for_unit("matrix-synapse.service")
-          homeserver.wait_for_open_port(8008)
+        homeserver.wait_for_unit("matrix-synapse.service")
+        homeserver.wait_for_open_port(8008)
 
-      with subtest("ensure messages can be exchanged"):
-          client.succeed("do_test ${homeserverUrl} >&2")
-    '';
-  })
+    with subtest("ensure messages can be exchanged"):
+        client.succeed("do_test ${homeserverUrl} >&2")
+  '';
+}

@@ -1,16 +1,18 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p nix-update
+#!nix-shell -i bash -p nix-update curl jq
 
 set -eu -o pipefail
 
 source_file=pkgs/development/python-modules/types-aiobotocore-packages/default.nix
 
-version="2.11.2"
-
-nix-update python311Packages.types-aiobotocore --commit --build
+nix-update python312Packages.types-aiobotocore --commit --build
 
 packages=(
-  types-aiobotocore-alexaforbusiness
+  types-aiobotocore-accessanalyzer
+  types-aiobotocore-account
+  types-aiobotocore-acm
+  types-aiobotocore-acm-pca
+  # types-aiobotocore-alexaforbusiness  Obsolete, will be removed soon
   types-aiobotocore-amp
   types-aiobotocore-amplify
   types-aiobotocore-amplifybackend
@@ -37,7 +39,7 @@ packages=(
   types-aiobotocore-autoscaling-plans
   types-aiobotocore-backup
   types-aiobotocore-backup-gateway
-  types-aiobotocore-backupstorage
+  # types-aiobotocore-backupstorage  Obsolete, will be removed soon
   types-aiobotocore-batch
   types-aiobotocore-billingconductor
   types-aiobotocore-braket
@@ -71,7 +73,7 @@ packages=(
   types-aiobotocore-codeguru-security
   types-aiobotocore-codeguruprofiler
   types-aiobotocore-codepipeline
-  types-aiobotocore-codestar
+  # types-aiobotocore-codestar  Obsolete, will be removed soon
   types-aiobotocore-codestar-connections
   types-aiobotocore-codestar-notifications
   types-aiobotocore-cognito-identity
@@ -138,6 +140,7 @@ packages=(
   types-aiobotocore-frauddetector
   types-aiobotocore-fsx
   types-aiobotocore-gamelift
+  # types-aiobotocore-gamesparks  Obsolete, will be removed soon
   types-aiobotocore-glacier
   types-aiobotocore-globalaccelerator
   types-aiobotocore-glue
@@ -148,7 +151,7 @@ packages=(
   types-aiobotocore-guardduty
   types-aiobotocore-health
   types-aiobotocore-healthlake
-  types-aiobotocore-honeycode
+  # types-aiobotocore-honeycode  Obsolete, will be removed soon
   types-aiobotocore-iam
   types-aiobotocore-identitystore
   types-aiobotocore-imagebuilder
@@ -159,9 +162,9 @@ packages=(
   types-aiobotocore-iot
   types-aiobotocore-iot-data
   types-aiobotocore-iot-jobs-data
-  types-aiobotocore-iot-roborunner
-  types-aiobotocore-iot1click-devices
-  types-aiobotocore-iot1click-projects
+  # types-aiobotocore-iot-roborunner  Obsolete, will be removed soon
+  # types-aiobotocore-iot1click-devices
+  # types-aiobotocore-iot1click-projects
   types-aiobotocore-iotanalytics
   types-aiobotocore-iotdeviceadvisor
   types-aiobotocore-iotevents
@@ -207,6 +210,7 @@ packages=(
   types-aiobotocore-lookoutvision
   types-aiobotocore-m2
   types-aiobotocore-machinelearning
+  # types-aiobotocore-macie  Obsolete, will be removed soon
   types-aiobotocore-macie2
   types-aiobotocore-managedblockchain
   types-aiobotocore-managedblockchain-query
@@ -231,7 +235,7 @@ packages=(
   types-aiobotocore-migrationhub-config
   types-aiobotocore-migrationhuborchestrator
   types-aiobotocore-migrationhubstrategy
-  types-aiobotocore-mobile
+  # types-aiobotocore-mobile  Obsolete, will be removed soon
   types-aiobotocore-mq
   types-aiobotocore-mturk
   types-aiobotocore-mwaa
@@ -351,7 +355,7 @@ packages=(
   types-aiobotocore-wellarchitected
   types-aiobotocore-wisdom
   types-aiobotocore-workdocs
-  types-aiobotocore-worklink
+  # types-aiobotocore-worklink
   types-aiobotocore-workmail
   types-aiobotocore-workmailmessageflow
   types-aiobotocore-workspaces
@@ -359,21 +363,32 @@ packages=(
   types-aiobotocore-xray
 )
 
+version=$(curl -s https://pypi.org/pypi/types-aiobotocore/json | jq -r '.info.version')
+echo "All types-aiobotocore-* packages will be updated to ${version}"
+
 for package in "${packages[@]}"; do
-  echo "Updating ${package}"
+  echo "Updating ${package} ..."
 
-  url="https://pypi.io/packages/source/t/${package}/${package}-${version}.tar.gz"
+  url="https://pypi.io/packages/source/t/${package}/${package//-/_}-${version}.tar.gz"
   hash=$(nix-prefetch-url --type sha256 $url)
-  sri_hash="$(nix hash to-sri --type sha256 $hash)"
+  sri_hash="$(nix hash convert --hash-algo sha256 --to sri $hash)"
+  package_short="${package#types-aiobotocore-}"
 
-  awk -i inplace -v package="$package" -v new_version="$version" -v new_sha256="$sri_hash" '
-    $1 == package {
-      $5 = "\"" new_version "\"";
-      $6 = "\"" new_sha256 "\";";
-    }
-    {print}
-  ' $source_file
+  awk -i inplace -v pkg="$package" -v pkg_short="$package_short" -v ver="$version" -v hash="$sri_hash" '
+  {
+      # If the line contains the package name
+      if ($0 ~ "^\\s*" pkg "\\s*=") {
+          print $0
+          inside_block = 1
+      } else if (inside_block && $0 ~ "buildTypesAiobotocorePackage") {
+          print "    buildTypesAiobotocorePackage \"" "" pkg_short "\" \"" ver "\""
+      } else if (inside_block && $0 ~ "sha256-") {
+          print "      \"" hash "\";"
+          inside_block = 0
+      } else {
+          # Preserve blank lines to honor nixfmt
+          print $0
+      }
+  }' ${source_file}
 
 done
-
-nixpkgs-fmt ${source_file}

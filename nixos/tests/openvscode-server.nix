@@ -1,14 +1,16 @@
-import ./make-test-python.nix ({pkgs, lib, ...}:
+{ pkgs, lib, ... }:
 {
   name = "openvscode-server";
 
   nodes = {
-    machine = {pkgs, ...}: {
-      services.openvscode-server = {
-        enable = true;
-        withoutConnectionToken = true;
+    machine =
+      { pkgs, ... }:
+      {
+        services.openvscode-server = {
+          enable = true;
+          withoutConnectionToken = true;
+        };
       };
-    };
   };
 
   testScript = ''
@@ -19,4 +21,4 @@ import ./make-test-python.nix ({pkgs, lib, ...}:
   '';
 
   meta.maintainers = [ lib.maintainers.drupol ];
-})
+}

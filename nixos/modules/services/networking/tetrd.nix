@@ -1,7 +1,12 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
-  options.services.tetrd.enable = lib.mkEnableOption (lib.mdDoc "tetrd");
+  options.services.tetrd.enable = lib.mkEnableOption "tetrd";
 
   config = lib.mkIf config.services.tetrd.enable {
     environment = {
@@ -41,7 +46,12 @@
           ProtectProc = "invisible";
           ProtectSystem = "strict";
           RemoveIPC = true;
-          RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" ];
+          RestrictAddressFamilies = [
+            "AF_UNIX"
+            "AF_INET"
+            "AF_INET6"
+            "AF_NETLINK"
+          ];
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;

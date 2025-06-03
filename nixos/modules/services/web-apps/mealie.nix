@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ...}:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.mealie;
   pkg = cfg.package;
@@ -23,13 +28,11 @@ in
 
     settings = lib.mkOption {
       type = with lib.types; attrsOf anything;
-      default = {};
-      description = lib.mdDoc ''
+      default = { };
+      description = ''
         Configuration of the Mealie service.
 
         See [the mealie documentation](https://nightly.mealie.io/documentation/getting-started/installation/backend-config/) for available options and default values.
-
-        In addition to the official documentation, you can set {env}`MEALIE_LOG_FILE`.
       '';
       example = {
         ALLOW_SIGNUP = "false";
@@ -47,22 +50,33 @@ in
         Expects the format of an `EnvironmentFile=`, as described by {manpage}`systemd.exec(5)`.
       '';
     };
+
+    database = {
+      createLocally = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Configure local PostgreSQL database server for Mealie.
+        '';
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
     systemd.services.mealie = {
       description = "Mealie, a self hosted recipe manager and meal planner";
 
-      after = [ "network-online.target" ];
+      after = [ "network-online.target" ] ++ lib.optional cfg.database.createLocally "postgresql.service";
+      requires = lib.optional cfg.database.createLocally "postgresql.service";
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
       environment = {
         PRODUCTION = "true";
-        ALEMBIC_CONFIG_FILE="${pkg}/config/alembic.ini";
         API_PORT = toString cfg.port;
+        BASE_URL = "http://localhost:${toString cfg.port}";
         DATA_DIR = "/var/lib/mealie";
-        CRF_MODEL_PATH = "/var/lib/mealie/model.crfmodel";
+        NLTK_DATA = pkgs.nltk-data.averaged-perceptron-tagger-eng;
       } // (builtins.mapAttrs (_: val: toString val) cfg.settings);
 
       serviceConfig = {
@@ -72,8 +86,24 @@ in
         ExecStart = "${lib.getExe pkg} -b ${cfg.listenAddress}:${builtins.toString cfg.port}";
         EnvironmentFile = lib.mkIf (cfg.credentialsFile != null) cfg.credentialsFile;
         StateDirectory = "mealie";
-        StandardOutput="journal";
+        StandardOutput = "journal";
       };
+    };
+
+    services.mealie.settings = lib.mkIf cfg.database.createLocally {
+      DB_ENGINE = "postgres";
+      POSTGRES_URL_OVERRIDE = "postgresql://mealie:@/mealie?host=/run/postgresql";
+    };
+
+    services.postgresql = lib.mkIf cfg.database.createLocally {
+      enable = true;
+      ensureDatabases = [ "mealie" ];
+      ensureUsers = [
+        {
+          name = "mealie";
+          ensureDBOwnership = true;
+        }
+      ];
     };
   };
 }

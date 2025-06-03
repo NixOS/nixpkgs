@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, qtbase }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libirc";
   version = "unstable-2022-10-15";
 

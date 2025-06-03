@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, mecab
-, setuptools-scm
-, cython
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  mecab,
+  setuptools-scm,
+  cython,
 }:
 
 buildPythonPackage rec {
@@ -16,14 +17,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "polm";
     repo = "ipadic-py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ybC8G1AOIZWkS3uQSErXctIJKq9Y7xBjRbBrO8/yAj4=";
   };
 
   # no tests
   doCheck = false;
 
-  nativeBuildInputs = [ cython mecab setuptools-scm ];
+  nativeBuildInputs = [
+    cython
+    mecab
+    setuptools-scm
+  ];
 
   pythonImportsCheck = [ "ipadic" ];
 

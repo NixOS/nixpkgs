@@ -1,43 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fixtures
-, pytestCheckHook
-, pythonOlder
-, pyxdg
-, requests
-, requests-mock
-, rich
-, setuptools
-, tomli
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fixtures,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  rich,
+  setuptools,
+  tomli,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "podman";
-  version = "4.9.0";
+  version = "5.4.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-py";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-fLuWOfv4kW5a9h658s8pBgXsBfcYdkXNp9+bWtgKHv8=";
+    tag = "v${version}";
+    hash = "sha256-6K6wBLCJCIAHbJQuY7JPnkmuq8OwrxCaSAHWeFDwH10=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    pyxdg
+  dependencies = [
     requests
-    rich
-    tomli
     urllib3
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+
+  optional-dependencies = {
+    progress_bar = [ rich ];
+  };
 
   nativeCheckInputs = [
     fixtures
@@ -49,14 +48,13 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  pythonImportsCheck = [
-    "podman"
-  ];
+  pythonImportsCheck = [ "podman" ];
 
   disabledTests = [
     # Integration tests require a running container setup
     "AdapterIntegrationTest"
     "ContainersIntegrationTest"
+    "ContainersExecIntegrationTests"
     "ImagesIntegrationTest"
     "ManifestsIntegrationTest"
     "NetworksIntegrationTest"
@@ -69,9 +67,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python bindings for Podman's RESTful API";
     homepage = "https://github.com/containers/podman-py";
-    changelog = "https://github.com/containers/podman-py/releases/tag/v${version}";
+    changelog = "https://github.com/containers/podman-py/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
-    mainProgram = "podman";
   };
 }

@@ -1,4 +1,12 @@
-{ lib, fetchFromGitHub, buildPythonPackage, pyyaml, six, pytest, pyaml }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pyyaml,
+  six,
+  pytest,
+  pyaml,
+}:
 
 buildPythonPackage rec {
   pname = "python-frontmatter";
@@ -7,8 +15,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "eyeseast";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "python-frontmatter";
+    tag = "v${version}";
     sha256 = "sha256-Sr0RbNVk87Zu01U7nkuPUSnl1bm6G72EZDP/eDn099s=";
   };
 
@@ -21,9 +29,7 @@ buildPythonPackage rec {
   # tries to import test.test, which conflicts with module
   # exported by python interpreter
   doCheck = false;
-  nativeCheckInputs = [
-    pytest
-  ];
+  nativeCheckInputs = [ pytest ];
 
   pythonImportsCheck = [ "frontmatter" ];
 

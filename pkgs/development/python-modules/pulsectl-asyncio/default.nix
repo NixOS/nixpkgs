@@ -1,41 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pulsectl
-, pythonOlder
-, setuptools
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pulsectl,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pulsectl-asyncio";
-  version = "1.1.1";
-  format = "pyproject";
+  version = "1.2.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mhthies";
     repo = "pulsectl-asyncio";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Uc8iUo9THWNPRRsvJxfw++41cnKrANe/Fk6e8bgLSkc=";
+    tag = "v${version}";
+    hash = "sha256-lHVLrkFdNM8Y4t6TcXYnX8sQ4COrW3vV2sTDWeI4xZU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
+  postPatch = ''
+    substituteInPlace setup.cfg --replace-fail "pulsectl >=23.5.0,<=24.11.0" "pulsectl >=23.5.0"
+  '';
 
-  propagatedBuildInputs = [
-    pulsectl
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pulsectl ];
 
   # Tests require a running pulseaudio instance
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pulsectl_asyncio"
-  ];
+  pythonImportsCheck = [ "pulsectl_asyncio" ];
 
   meta = with lib; {
     description = "Python bindings library for PulseAudio";

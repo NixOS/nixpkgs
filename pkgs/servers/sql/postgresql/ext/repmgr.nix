@@ -1,47 +1,36 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, postgresql
-, openssl
-, zlib
-, readline
-, flex
-, curl
-, json_c
-, libxcrypt
+{
+  curl,
+  fetchFromGitHub,
+  flex,
+  json_c,
+  lib,
+  postgresql,
+  postgresqlBuildExtension,
 }:
 
-stdenv.mkDerivation rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "repmgr";
-  version = "5.4.1";
+  version = "5.5.0";
 
   src = fetchFromGitHub {
     owner = "EnterpriseDB";
     repo = "repmgr";
-    rev = "v${version}";
-    sha256 = "sha256-OaEoP1BajVW9dt8On9Ppf8IXmAk47HHv8zKw3WlsLHw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8G2CzzkWTKEglpUt1Gr7d/DuHJvCIEjsbYDMl3Zt3cs=";
   };
 
   nativeBuildInputs = [ flex ];
 
-  buildInputs = [ postgresql openssl zlib readline curl json_c ]
-    ++ lib.optionals (stdenv.isLinux && lib.versionOlder postgresql.version "13") [ libxcrypt ];
+  buildInputs = postgresql.buildInputs ++ [
+    curl
+    json_c
+  ];
 
-  installPhase = ''
-    mkdir -p $out/{bin,lib,share/postgresql/extension}
-
-    cp repmgr{,d} $out/bin
-    cp *${postgresql.dlSuffix} $out/lib
-    cp *.sql      $out/share/postgresql/extension
-    cp *.control  $out/share/postgresql/extension
-  '';
-
-  meta = with lib; {
+  meta = {
     homepage = "https://repmgr.org/";
     description = "Replication manager for PostgreSQL cluster";
-    license = licenses.postgresql;
+    license = lib.licenses.postgresql;
     platforms = postgresql.meta.platforms;
-    maintainers = with maintainers; [ zimbatm ];
+    maintainers = with lib.maintainers; [ zimbatm ];
   };
-}
-
+})

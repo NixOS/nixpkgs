@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cryptography
-, dictdiffer
-, grpcio
-, protobuf
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cryptography,
+  dictdiffer,
+  grpcio,
+  protobuf,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pygnmi";
-  version = "0.8.13";
+  version = "0.8.15";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "akarneliuk";
     repo = "pygnmi";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-NkByimHk1DoBjMMD7ywplo38VxBpp1pnClYUzhtKwY4=";
+    tag = "v${version}";
+    sha256 = "sha256-2QPUyPGTtXlO6A05mmb/jofRidXfKq0xvH7lv1f9OQk=";
   };
 
   propagatedBuildInputs = [
@@ -34,19 +35,16 @@ buildPythonPackage rec {
   # TypeError: expected string or bytes-like object
   doCheck = false;
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pygnmi"
-  ];
+  pythonImportsCheck = [ "pygnmi" ];
 
   meta = with lib; {
     description = "Pure Python gNMI client to manage network functions and collect telemetry";
+    mainProgram = "pygnmicli";
     homepage = "https://github.com/akarneliuk/pygnmi";
-    changelog = "https://github.com/akarneliuk/pygnmi/releases/tag/v${version}";
+    changelog = "https://github.com/akarneliuk/pygnmi/releases/tag/${src.tag}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

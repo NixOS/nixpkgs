@@ -1,69 +1,70 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, antlr4
-, antlr4-python3-runtime
-, igraph
-, pygments
-, pytestCheckHook
-, pythonRelaxDepsHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  igraph,
+  pygments,
+  scikit-build-core,
+  pybind11,
+  ninja,
+  cmake,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "explorerscript";
-  version = "0.1.5";
+  version = "0.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
-    repo = pname;
-    rev = version;
-    hash = "sha256-dGbzZYEFEWE5bUz+647pPzP4Z/XmrJU82jNT4ZBRNHk=";
+    repo = "explorerscript";
+    tag = version;
+    hash = "sha256-fh40HCU12AVA3cZ5xvRott+93qo8VzHFsbPzTkoV3x4=";
+    # Include a pinned antlr4 fork used as a C++ library
+    fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    antlr4
-    pythonRelaxDepsHook
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "scikit-build-core>=0.10.7, < 0.11" "scikit-build-core"
+  '';
+
+  build-system = [
     setuptools
+    scikit-build-core
+    pybind11
   ];
 
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
+
+  # The source include some auto-generated ANTLR code that could be recompiled, but trying that resulted in a crash while decompiling unionall.ssb.
+  # We thus do not rebuild them.
+
+  dontUseCmakeConfigure = true;
+
   pythonRelaxDeps = [
-    # antlr output is rebuilt in postPatch step.
-    "antlr4-python3-runtime"
-    # igraph > 0.10.4 was marked as incompatible by upstream
-    # due to a breaking change introduced in 0.10.5. Later versions reverted
-    # this change, and introduced a deprecation warning instead.
-    #
-    # https://github.com/igraph/python-igraph/issues/693
     "igraph"
   ];
 
-  postPatch = ''
-    antlr -Dlanguage=Python3 -visitor explorerscript/antlr/{ExplorerScript,SsbScript}.g4
-  '';
-
-  propagatedBuildInputs = [
-    antlr4-python3-runtime
+  dependencies = [
     igraph
   ];
 
-  passthru.optional-dependencies.pygments = [
-    pygments
-  ];
+  optional-dependencies.pygments = [ pygments ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.pygments;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.pygments;
 
-  pythonImportsCheck = [
-    "explorerscript"
-  ];
+  pythonImportsCheck = [ "explorerscript" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/SkyTemple/explorerscript";
-    description = "A programming language + compiler/decompiler for creating scripts for Pokémon Mystery Dungeon Explorers of Sky";
-    license = licenses.mit;
-    maintainers = with maintainers; [ marius851000 xfix ];
+    description = "Programming language + compiler/decompiler for creating scripts for Pokémon Mystery Dungeon Explorers of Sky";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
 }

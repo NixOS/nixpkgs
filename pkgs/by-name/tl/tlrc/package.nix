@@ -1,31 +1,29 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, installShellFiles
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tlrc";
-  version = "1.8.0";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "tldr-pages";
     repo = "tlrc";
     rev = "v${version}";
-    hash = "sha256-wHAPlBNVhIytquEAUdrbxE4m0njVRPxxlYlwjqG9Zlw=";
+    hash = "sha256-SPYLQ7o3sbrjy3MmBAB0YoVJI1rSmePbrZY0yb2SnFE=";
   };
 
-  cargoHash = "sha256-BymyjSVNwS3HPNnZcaAu1xUssV2iXmECtpKXPdZpM3g=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-i2nSwsQnwhiMhG8QJb0z0zPuNxTLwuO1dgJxI4e4FqY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
     installManPage tldr.1
-
-    installShellCompletion --name tldr \
-      --bash $releaseDir/build/tlrc-*/out/tldr.bash \
-      --zsh $releaseDir/build/tlrc-*/out/_tldr \
-      --fish $releaseDir/build/tlrc-*/out/tldr.fish
+    installShellCompletion completions/{tldr.bash,_tldr,tldr.fish}
   '';
 
   meta = with lib; {

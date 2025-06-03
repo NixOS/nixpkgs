@@ -30,12 +30,33 @@ Before adding a new package, please consider the following questions:
 
 * Is the package ready for general use? We don't want to include projects that are too immature or are going to be abandoned immediately. In case of doubt, check with upstream.
 * Does the project have a clear license statement? Remember that software is unfree by default (all rights reserved), and merely providing access to the source code does not imply its redistribution. In case of doubt, ask upstream.
-* How realistic is it that it will be used by other people? It's good that nixpkgs caters to various niches, but if it's a niche of 5 people it's probably too small.
+* How realistic is it that it will be used by other people? It's good that nixpkgs caters to various niches, but if it's a niche of 5 people it's probably too small. A good estimate is checking upstream issues and pull requests, or other software repositories. Library packages should have at least one dependent.
+* Is the software actively maintained upstream? Especially packages that are security-critical, rely on fast-moving dependencies, or affect data integrity should see regular maintenance.
 * Are you willing to maintain the package? You should care enough about the package to be willing to keep it up and running for at least one complete Nixpkgs' release life-cycle.
+  * In case you are not able to maintain the package you wrote, you can seek someone to fill that role, effectively adopting the package.
 
 If any of these questions' answer is no, then you should probably not add the package.
 
-This is section describes a general framework of understanding and exceptions might apply.
+Special care has to be taken with security-critical software components. Because entries in the Nix store are inert and do nothing by themselves, packages should be considered by their intended use, e.g. when used together with a NixOS module.
+
+* Any package that immediately would need to be tagged with `meta.knownVulnerabilities` is unlikely to be fit for nixpkgs.
+* Any package depending on a known-vulnerable library should be considered carefully.
+* Packages typically used with untrusted data should have a maintained and responsible upstream. For example:
+  * Any package which does not follow upstream security policies should be considered vulnerable. In particular, packages that vendor or fork web engines like Blink, Gecko or Webkit need to keep up with the frequent updates of those projects.
+  * Any security-critical fast-moving package such as Chrome or Firefox (or their forks) must have at least one active committer among the maintainers. This ensures no critical fixes are delayed unnecessarily, endangering unsuspecting users.
+  * Services which typically work on web traffic are working on untrusted input.
+  * Data (such as archives or rich documents) commonly shared over untrusted channels (e.g. email) is untrusted.
+* Applications in the Unix authentication stack such as PAM/D-Bus modules or SUID binaries should be considered carefully, and should have a maintained and responsible upstream.
+* Encryption libraries should have a maintained and responsible upstream.
+* Security-critical components that are part of larger packages should be unvendored (=use the nixpkgs package as dependency, instead of vendored and pinned sources).
+* A "responsible upstream" includes various aspects, such as:
+  * channels to disclose security concerns
+  * being responsive to security concerns, providing fixes or workarounds
+  * transparent public disclosure of security issues when they are found or fixed
+  * These aspects are sometimes hard to verify, in which case an upstream that is not known to be irresponsible should be considered as responsible.
+* Source-available software should be built from source where possible. Binary blobs risk supply chain attacks and vendored outdated libraries.
+
+This section describes a general framework of understanding and exceptions might apply.
 
 Luckily it's pretty easy to maintain your own package set with Nix, which can then be added to the [Nix User Repository](https://github.com/nix-community/nur) project.
 
@@ -65,38 +86,38 @@ Now that this is out of the way. To add a package to Nixpkgs:
    $ git add pkgs/by-name/so/some-package/package.nix
    ```
 
+   If the package is written in a language other than C, you should use [the corresponding language framework](https://nixos.org/manual/nixpkgs/stable/#chap-language-support).
+
    You can have a look at the existing Nix expressions under `pkgs/` to see how it’s done, some of which are also using the [category hierarchy](#category-hierarchy).
    Here are some good ones:
 
    - GNU Hello: [`pkgs/by-name/he/hello/package.nix`](./by-name/he/hello/package.nix). Trivial package, which specifies some `meta` attributes which is good practice.
 
-   - GNU cpio: [`pkgs/tools/archivers/cpio/default.nix`](tools/archivers/cpio/default.nix). Also a simple package. The generic builder in `stdenv` does everything for you. It has no dependencies beyond `stdenv`.
+   - GNU cpio: [`pkgs/by-name/cp/cpio/package.nix`](./by-name/cp/cpio/package.nix). Also a simple package. The generic builder in `stdenv` does everything for you. It has no dependencies beyond `stdenv`.
 
-   - GNU Multiple Precision arithmetic library (GMP): [`pkgs/development/libraries/gmp/5.1.x.nix`](development/libraries/gmp/5.1.x.nix). Also done by the generic builder, but has a dependency on `m4`.
+   - GNU Multiple Precision arithmetic library (GMP): [`pkgs/development/libraries/gmp`](development/libraries/gmp). Also done by the generic builder, but has a dependency on `m4`.
 
-   - Pan, a GTK-based newsreader: [`pkgs/applications/networking/newsreaders/pan/default.nix`](applications/networking/newsreaders/pan/default.nix). Has an optional dependency on `gtkspell`, which is only built if `spellCheck` is `true`.
+   - Pan, a GTK-based newsreader: [`pkgs/by-name/pa/pan/package.nix`](./by-name/pa/pan/package.nix). Has an optional dependency on `gtkspell`, which is only built if `spellCheck` is `true`.
 
    - Apache HTTPD: [`pkgs/servers/http/apache-httpd/2.4.nix`](servers/http/apache-httpd/2.4.nix). A bunch of optional features, variable substitutions in the configure flags, a post-install hook, and miscellaneous hackery.
 
    - buildMozillaMach: [`pkgs/applications/networking/browser/firefox/common.nix`](applications/networking/browsers/firefox/common.nix). A reusable build function for Firefox, Thunderbird and Librewolf.
 
-   - JDiskReport, a Java utility: [`pkgs/tools/misc/jdiskreport/default.nix`](tools/misc/jdiskreport/default.nix). Nixpkgs doesn’t have a decent `stdenv` for Java yet so this is pretty ad-hoc.
+   - JDiskReport, a Java utility: [`pkgs/by-name/jd/jdiskreport/package.nix`](./by-name/jd/jdiskreport/package.nix). Nixpkgs doesn’t have a decent `stdenv` for Java yet so this is pretty ad-hoc.
 
    - XML::Simple, a Perl module: [`pkgs/top-level/perl-packages.nix`](top-level/perl-packages.nix) (search for the `XMLSimple` attribute). Most Perl modules are so simple to build that they are defined directly in `perl-packages.nix`; no need to make a separate file for them.
 
-   - Adobe Reader: [`pkgs/applications/misc/adobe-reader/default.nix`](applications/misc/adobe-reader/default.nix). Shows how binary-only packages can be supported. In particular the [builder](applications/misc/adobe-reader/builder.sh) uses `patchelf` to set the RUNPATH and ELF interpreter of the executables so that the right libraries are found at runtime.
+   - Discord Game SDK: [`pkgs/by-name/di/discord-gamesdk/package.nix`](./by-name/di/discord-gamesdk/package.nix). Shows how binary-only packages can be supported. In particular, the `autoPatchelfHook` is used to set the RUNPATH and ELF interpreter of the executables so that the right libraries are found at runtime.
 
    Some notes:
 
    - Add yourself as the maintainer of the package.
 
+     - If this is your first time contributing (welcome!), [add yourself to the maintainers list](../maintainers/README.md#how-to-become-a-maintainer) in a separate commit.
+
    - All other [`meta`](https://nixos.org/manual/nixpkgs/stable/#chap-meta) attributes are optional, but it’s still a good idea to provide at least the `description`, `homepage` and [`license`](https://nixos.org/manual/nixpkgs/stable/#sec-meta-license).
 
-   - You can use `nix-prefetch-url url` to get the SHA-256 hash of source distributions. There are similar commands as `nix-prefetch-git` and `nix-prefetch-hg` available in `nix-prefetch-scripts` package.
-
-   - A list of schemes for `mirror://` URLs can be found in [`pkgs/build-support/fetchurl/mirrors.nix`](build-support/fetchurl/mirrors.nix).
-
-   The exact syntax and semantics of the Nix expression language, including the built-in function, are [described in the Nix manual](https://nixos.org/manual/nix/stable/language/).
+   - The exact syntax and semantics of the Nix expression language, including the built-in functions, are [Nix language reference](https://nixos.org/manual/nix/stable/language/).
 
 5. To test whether the package builds, run the following command from the root of the nixpkgs source tree:
 
@@ -132,6 +153,8 @@ Now that this is out of the way. To add a package to Nixpkgs:
   * firefox: 54.0.1 -> 55.0
 
     https://www.mozilla.org/en-US/firefox/55.0/releasenotes/
+
+(using "→" instead of "->" is also accepted)
 
 ## Category Hierarchy
 [categories]: #category-hierarchy
@@ -176,7 +199,7 @@ For example, the `libxml2` package builds both a library and some tools; but it�
 
   - **If it’s a _language server_:**
 
-    - `development/tools/language-servers` (e.g. `ccls` or `rnix-lsp`)
+    - `development/tools/language-servers` (e.g. `ccls` or `nil`)
 
   - **Else:**
 
@@ -328,54 +351,83 @@ A (typically large) program with a distinct user interface, primarily used inter
 
 # Conventions
 
-## Package naming
-
 The key words _must_, _must not_, _required_, _shall_, _shall not_, _should_, _should not_, _recommended_, _may_, and _optional_ in this section are to be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119). Only _emphasized_ words are to be interpreted in this way.
+
+## Package naming
 
 In Nixpkgs, there are generally three different names associated with a package:
 
 - The `pname` attribute of the derivation. This is what most users see, in particular when using `nix-env`.
 
-- The variable name used for the instantiated package in `all-packages.nix`, and when passing it as a dependency to other functions. Typically this is called the _package attribute name_. This is what Nix expression authors see. It can also be used when installing using `nix-env -iA`.
+- The attribute name used for the package in the [`pkgs/by-name` structure](./by-name/README.md) or in [`all-packages.nix`](./top-level/all-packages.nix), and when passing it as a dependency in recipes.
 
 - The filename for (the directory containing) the Nix expression.
 
-Most of the time, these are the same. For instance, the package `e2fsprogs` has a `pname` attribute `"e2fsprogs"`, is bound to the variable name `e2fsprogs` in `all-packages.nix`, and the Nix expression is in `pkgs/os-specific/linux/e2fsprogs/default.nix`.
+Most of the time, these are the same. For instance, the package `e2fsprogs` has a `pname` attribute `"e2fsprogs"`, is bound to the attribute name `e2fsprogs` in `all-packages.nix`, and the Nix expression is in `pkgs/os-specific/linux/e2fsprogs/default.nix`.
 
-There are a few naming guidelines:
+Follow these guidelines:
 
-- The `pname` attribute _should_ be identical to the upstream package name.
+- For the `pname` attribute:
 
-- The `pname` and the `version` attribute _must not_ contain uppercase letters — e.g., `"mplayer"` instead of `"MPlayer"`.
+  - It _should_ be identical to the upstream package name.
 
-- The `version` attribute _must_ start with a digit e.g., `"0.3.1rc2"`.
+  - It _must not_ contain uppercase letters.
 
-- If a package is a commit from a repository without a version assigned, then the `version` attribute _should_ be the latest upstream version preceding that commit, followed by `-unstable-` and the date of the (fetched) commit. The date _must_ be in `"YYYY-MM-DD"` format.
+    Example: Use `"mplayer"` instead of `"MPlayer"`
 
-Example: Given a project had its latest releases `2.2` in November 2021, and `3.0` in January 2022, a commit authored on March 15, 2022 for an upcoming bugfix release `2.2.1` would have `version = "2.2-unstable-2022-03-15"`.
+- For the package attribute name:
 
-- If a project has no suitable preceding releases - e.g., no versions at all, or an incompatible versioning / tagging schema - then the latest upstream version in the above schema should be `0`.
+  - It _must_ be a valid identifier in Nix.
 
-Example: Given a project that has no tags / released versions at all, or applies versionless tags like `latest` or `YYYY-MM-DD-Build`, a commit authored on March 15, 2022 would have `version = "0-unstable-2022-03-15"`.
+  - If the `pname` starts with a digit, the attribute name _should_ be prefixed with an underscore. Otherwise the attribute name _should not_ be prefixed with an underline.
 
-- Dashes in the package `pname` _should_ be preserved in new variable names, rather than converted to underscores or camel cased — e.g., `http-parser` instead of `http_parser` or `httpParser`. The hyphenated style is preferred in all three package names.
+    Example: The corresponding attribute name for `0ad` should be `_0ad`.
 
-- If there are multiple versions of a package, this _should_ be reflected in the variable names in `all-packages.nix`, e.g. `json-c_0_9` and `json-c_0_11`. If there is an obvious “default” version, make an attribute like `json-c = json-c_0_9;`. See also [versioning][versioning].
+  - New attribute names _should_ be the same as the value in `pname`.
+
+    Hyphenated names _should not_ be converted to [snake case](https://en.wikipedia.org/wiki/Snake_case) or [camel case](https://en.wikipedia.org/wiki/Camel_case).
+    This was done historically, but is not necessary any more.
+    [The Nix language allows dashes in identifiers since 2012](https://github.com/NixOS/nix/commit/95c74eae269b2b9e4bc514581b5caa1d80b54acc).
+
+  - If there are multiple versions of a package, this _should_ be reflected in the attribute names in `all-packages.nix`.
+
+    Example: `json-c_0_9` and `json-c_0_11`
+
+    If there is an obvious “default” version, make an extra attribute.
+
+    Example: `json-c = json-c_0_9;`
+
+    See also [versioning][versioning].
 
 ## Versioning
 [versioning]: #versioning
 
+These are the guidelines the `version` attribute of a package:
+
+- It _must_ start with a digit. This is required for backwards-compatibility with [how `nix-env` parses derivation names](https://nix.dev/manual/nix/latest/command-ref/nix-env#selectors).
+
+  Example: `"0.3.1rc2"` or `"0-unstable-1970-01-01"`
+
+- If a package is a commit from a repository without a version assigned, then the `version` attribute _should_ be the latest upstream version preceding that commit, followed by `-unstable-` and the date of the (fetched) commit. The date _must_ be in `"YYYY-MM-DD"` format.
+
+  Example: Given a project had its latest releases `2.2` in November 2021 and `3.0` in January 2022, a commit authored on March 15, 2022 for an upcoming bugfix release `2.2.1` would have `version = "2.2-unstable-2022-03-15"`.
+
+- If a project has no suitable preceding releases - e.g., no versions at all, or an incompatible versioning or tagging scheme - then the latest upstream version in the above schema should be `0`.
+
+  Example: Given a project that has no tags or released versions at all, or applies versionless tags like `latest` or `YYYY-MM-DD-Build`, a commit authored on March 15, 2022 would have `version = "0-unstable-2022-03-15"`.
+
 Because every version of a package in Nixpkgs creates a potential maintenance burden, old versions of a package should not be kept unless there is a good reason to do so. For instance, Nixpkgs contains several versions of GCC because other packages don’t build with the latest version of GCC. Other examples are having both the latest stable and latest pre-release version of a package, or to keep several major releases of an application that differ significantly in functionality.
 
-If there is only one version of a package, its Nix expression should be named `e2fsprogs/default.nix`. If there are multiple versions, this should be reflected in the filename, e.g. `e2fsprogs/1.41.8.nix` and `e2fsprogs/1.41.9.nix`. The version in the filename should leave out unnecessary detail. For instance, if we keep the latest Firefox 2.0.x and 3.5.x versions in Nixpkgs, they should be named `firefox/2.0.nix` and `firefox/3.5.nix`, respectively (which, at a given point, might contain versions `2.0.0.20` and `3.5.4`). If a version requires many auxiliary files, you can use a subdirectory for each version, e.g. `firefox/2.0/default.nix` and `firefox/3.5/default.nix`.
-
-All versions of a package _must_ be included in `all-packages.nix` to make sure that they evaluate correctly.
+If there is only one version of a package, its Nix expression should be named (e.g) `pkgs/by-name/xy/xyz/package.nix`. If there are multiple versions, this should be reflected in the attribute name. If you wish to share code between the Nix expressions of each version, you cannot rely upon `pkgs/by-name`'s automatic attribute creation, and must create the attributes yourself in `all-packages.nix`. See also [`pkgs/by-name/README.md`'s section on this topic](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/README.md#recommendation-for-new-packages-with-multiple-versions).
 
 ## Meta attributes
+
+The `meta` attribute set should always be placed last in the derivativion and any other "meta"-like attribute sets like `passthru` should be written before it.
 
 * `meta.description` must:
   * Be short, just one sentence.
   * Be capitalized.
+  * Not start with the definite or an indefinite article.
   * Not start with the package name.
     * More generally, it should not refer to the package name.
   * Not end with a period (or any punctuation for that matter).
@@ -395,7 +447,7 @@ All versions of a package _must_ be included in `all-packages.nix` to make sure 
 
 See the Nixpkgs manual for more details on [standard meta-attributes](https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes).
 
-### Import From Derivation
+## Import From Derivation
 
 [Import From Derivation](https://nixos.org/manual/nix/unstable/language/import-from-derivation) (IFD) is disallowed in Nixpkgs for performance reasons:
 [Hydra](https://github.com/NixOS/hydra) evaluates the entire package set, and sequential builds during evaluation would increase evaluation times to become impractical.
@@ -404,121 +456,105 @@ Import From Derivation can be worked around in some cases by committing generate
 
 ## Sources
 
-### Fetching Sources
+Always fetch source files using [Nixpkgs fetchers](https://nixos.org/manual/nixpkgs/unstable/#chap-pkgs-fetchers).
+Use reproducible sources with a high degree of availability.
+Prefer protocols that support proxies.
 
-There are multiple ways to fetch a package source in nixpkgs. The general guideline is that you should package reproducible sources with a high degree of availability. Right now there is only one fetcher which has mirroring support and that is `fetchurl`. Note that you should also prefer protocols which have a corresponding proxy environment variable.
+A list of schemes for `mirror://` URLs can be found in [`pkgs/build-support/fetchurl/mirrors.nix`](build-support/fetchurl/mirrors.nix), and is supported by [`fetchurl`](https://nixos.org/manual/nixpkgs/unstable/#fetchurl).
+Other fetchers which end up relying on `fetchurl` may also support mirroring.
 
-You can find many source fetch helpers in `pkgs/build-support/fetch*`.
+The preferred source hash type is `sha256`.
 
-In the file `pkgs/top-level/all-packages.nix` you can find fetch helpers, these have names on the form `fetchFrom*`. The intention of these are to provide snapshot fetches but using the same api as some of the version controlled fetchers from `pkgs/build-support/`. As an example going from bad to good:
+Examples going from bad to best practices:
 
 - Bad: Uses `git://` which won't be proxied.
 
   ```nix
-  src = fetchgit {
-    url = "git://github.com/NixOS/nix.git";
-    rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-    hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
+  {
+    src = fetchgit {
+      url = "git://github.com/NixOS/nix.git";
+      rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
+      hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
+    };
   }
   ```
 
 - Better: This is ok, but an archive fetch will still be faster.
 
   ```nix
-  src = fetchgit {
-    url = "https://github.com/NixOS/nix.git";
-    rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-    hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
+  {
+    src = fetchgit {
+      url = "https://github.com/NixOS/nix.git";
+      rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
+      hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
+    };
   }
   ```
 
-- Best: Fetches a snapshot archive and you get the rev you want.
+- Best: Fetches a snapshot archive for the given revision.
 
   ```nix
-  src = fetchFromGitHub {
-    owner = "NixOS";
-    repo = "nix";
-    rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-    hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
+  {
+    src = fetchFromGitHub {
+      owner = "NixOS";
+      repo = "nix";
+      rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
+      hash = "sha256-7D4m+saJjbSFP5hOwpQq2FGR2rr+psQMTcyb1ZvtXsQ=";
+    };
   }
   ```
 
-When fetching from GitHub, commits must always be referenced by their full commit hash. This is because GitHub shares commit hashes among all forks and returns `404 Not Found` when a short commit hash is ambiguous. It already happens for some short, 6-character commit hashes in `nixpkgs`.
-It is a practical vector for a denial-of-service attack by pushing large amounts of auto generated commits into forks and was already [demonstrated against GitHub Actions Beta](https://blog.teddykatz.com/2019/11/12/github-actions-dos.html).
+> [!Note]
+> When fetching from GitHub, always reference revisions by their full commit hash.
+> GitHub shares commit hashes among all forks and returns `404 Not Found` when a short commit hash is ambiguous.
+> It already happened in Nixpkgs for short, 6-character commit hashes.
+>
+> Pushing large amounts of auto generated commits into forks is a practical vector for a denial-of-service attack, and was already [demonstrated against GitHub Actions Beta](https://blog.teddykatz.com/2019/11/12/github-actions-dos.html).
 
-Find the value to put as `hash` by running `nix-shell -p nix-prefetch-github --run "nix-prefetch-github --rev 1f795f9f44607cc5bec70d1300150bfefcef2aae NixOS nix"`.
+## Patches
 
-#### Obtaining source hash
+Sometimes, changes are needed to the source to allow building a derivation in nixpkgs, or to get earlier access to an upstream fix or improvement.
+When using the `patches` parameter to `mkDerivation`, make sure the patch name clearly describes the reason for the patch, or add a comment.
 
-Preferred source hash type is sha256. There are several ways to get it.
+> [!Note]
+> The version of the package does not need to be changed just because a patch is applied. Declarative package installations don't depend on the version, while imperative `nix-env` installations can use [`upgrade --eq/leq/--always`](https://nix.dev/manual/nix/2.25/command-ref/nix-env/upgrade#flags).
+>
+> See [Versioning](#versioning) for details on package versioning.
 
-1. Prefetch URL (with `nix-prefetch-XXX URL`, where `XXX` is one of `url`, `git`, `hg`, `cvs`, `bzr`, `svn`). Hash is printed to stdout.
+### Fetching patches
 
-2. Prefetch by package source (with `nix-prefetch-url '<nixpkgs>' -A PACKAGE.src`, where `PACKAGE` is package attribute name). Hash is printed to stdout.
-
-    This works well when you've upgraded existing package version and want to find out new hash, but is useless if package can't be accessed by attribute or package has multiple sources (`.srcs`, architecture-dependent sources, etc).
-
-3. Upstream provided hash: use it when upstream provides `sha256` or `sha512` (when upstream provides `md5`, don't use it, compute `sha256` instead).
-
-    A little nuance is that `nix-prefetch-*` tools produce hash encoded with `base32`, but upstream usually provides hexadecimal (`base16`) encoding. Fetchers understand both formats. Nixpkgs does not standardize on any one format.
-
-    You can convert between formats with nix-hash, for example:
-
-    ```ShellSession
-    $ nix-hash --type sha256 --to-base32 HASH
-    ```
-
-4. Extracting hash from local source tarball can be done with `sha256sum`. Use `nix-prefetch-url file:///path/to/tarball` if you want base32 hash.
-
-5. Fake hash: set the hash to one of
-
-   - `""`
-   - `lib.fakeHash`
-   - `lib.fakeSha256`
-   - `lib.fakeSha512`
-
-   in the package expression, attempt build and extract correct hash from error messages.
-
-   > [!Warning]
-   > You must use one of these four fake hashes and not some arbitrarily-chosen hash.
-   > See [here][secure-hashes]
-
-   This is last resort method when reconstructing source URL is non-trivial and `nix-prefetch-url -A` isn’t applicable (for example, [one of `kodi` dependencies](https://github.com/NixOS/nixpkgs/blob/d2ab091dd308b99e4912b805a5eb088dd536adb9/pkgs/applications/video/kodi/default.nix#L73)). The easiest way then would be replace hash with a fake one and rebuild. Nix build will fail and error message will contain desired hash.
-
-
-#### Obtaining hashes securely
-[secure-hashes]: #obtaining-hashes-securely
-
-Let's say Man-in-the-Middle (MITM) sits close to your network. Then instead of fetching source you can fetch malware, and instead of source hash you get hash of malware. Here are security considerations for this scenario:
-
-- `http://` URLs are not secure to prefetch hash from;
-
-- hashes from upstream (in method 3) should be obtained via secure protocol;
-
-- `https://` URLs are secure in methods 1, 2, 3;
-
-- `https://` URLs are secure in method 5 *only if* you use one of the listed fake hashes. If you use any other hash, `fetchurl` will pass `--insecure` to `curl` and may then degrade to HTTP in case of TLS certificate expiration.
-
-### Patches
-
-Patches available online should be retrieved using `fetchpatch`.
+In the interest of keeping our maintenance burden and the size of Nixpkgs to a minimum, patches already merged upstream or published elsewhere _should_ be retrieved using `fetchpatch2`:
 
 ```nix
-patches = [
-  (fetchpatch {
-    name = "fix-check-for-using-shared-freetype-lib.patch";
-    url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=8f5d285";
-    hash = "sha256-uRcxaCjd+WAuGrXOmGfFeu79cUILwkRdBu48mwcBE7g=";
-  })
-];
+{
+  patches = [
+    (fetchpatch2 {
+      name = "fix-check-for-using-shared-freetype-lib.patch";
+      url = "https://cgit.ghostscript.com/cgi-bin/cgit.cgi/ghostpdl.git/patch/?id=8f5d28536e4518716fdfe974e580194c8f57871d";
+      hash = "sha256-uRcxaCjd+WAuGrXOmGfFeu79cUILwkRdBu48mwcBE7g=";
+    })
+  ];
+}
 ```
 
-Otherwise, you can add a `.patch` file to the `nixpkgs` repository. In the interest of keeping our maintenance burden to a minimum, only patches that are unique to `nixpkgs` should be added in this way.
+If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch2`. Check [the `fetchpatch` reference](https://nixos.org/manual/nixpkgs/unstable/#fetchpatch) for details.
 
-If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch`. Check [the `fetchpatch` reference](https://nixos.org/manual/nixpkgs/unstable/#fetchpatch) for details.
+When adding patches in this manner you should be reasonably sure that the used URL is stable. Patches referencing open pull requests will change when the PR is updated and code forges (such as GitHub) usually garbage collect commits that are no longer reachable due to rebases/amends.
+
+### Vendoring patches
+
+In the following cases, a `.patch` file _should_ be added to Nixpkgs repository, instead of retrieved:
+
+- solves problems unique to packaging in Nixpkgs
+- cannot be fetched easily
+- has a high chance to disappear in the future due to unstable or unreliable URLs
+
+The latter avoids link rot when the upstream abandons, squashes or rebases their change, in which case the commit may get garbage-collected.
 
 ```nix
-patches = [ ./0001-changes.patch ];
+{
+  patches = [ ./0001-add-missing-include.patch ];
+}
 ```
 
 If you do need to do create this sort of patch file, one way to do so is with git:
@@ -562,8 +598,10 @@ We use jbidwatcher as an example for a discontinued project here.
 
     For example in this case:
 
-    ```
-    jbidwatcher = throw "jbidwatcher was discontinued in march 2021"; # added 2021-03-15
+    ```nix
+    {
+      jbidwatcher = throw "jbidwatcher was discontinued in march 2021"; # added 2021-03-15
+    }
     ```
 
     The throw message should explain in short why the package was removed for users that still have it installed.
@@ -615,10 +653,10 @@ Here in the nixpkgs manual we describe mostly _package tests_; for _module tests
 For very simple tests, they can be written inline:
 
 ```nix
-{ …, yq-go }:
+{ /* ... , */ yq-go }:
 
 buildGoModule rec {
-  …
+  # …
 
   passthru.tests = {
     simple = runCommand "${pname}-test" {} ''
@@ -627,6 +665,34 @@ buildGoModule rec {
     '';
   };
 }
+```
+
+Any derivation can be specified as a test, even if it's in a different file.
+Such a derivation that implements a test can depend on the package under test, even in the presence of `overrideAttrs`.
+
+In the following example, `(my-package.overrideAttrs f).passthru.tests` will work as expected, as long as the definition of `tests` does not rely on the original `my-package` or overrides all occurrences of `my-package`:
+
+```nix
+# my-package/default.nix
+{ stdenv, callPackage }:
+stdenv.mkDerivation (finalAttrs: {
+  # ...
+  passthru.tests.example = callPackage ./example.nix { my-package = finalAttrs.finalPackage; };
+})
+```
+
+```nix
+# my-package/example.nix
+{ runCommand, lib, my-package, ... }:
+runCommand "my-package-test" {
+  nativeBuildInputs = [ my-package ];
+  src = lib.sources.sourcesByRegex ./. [ ".*.in" ".*.expected" ];
+} ''
+  my-package --help
+  my-package <example.in >example.actual
+  diff -U3 --color=auto example.expected example.actual
+  mkdir $out
+''
 ```
 
 ### Writing larger package tests
@@ -640,13 +706,13 @@ Add the tests in `passthru.tests` to the package definition like this:
 { stdenv, lib, fetchurl, callPackage }:
 
 stdenv.mkDerivation {
-  …
+  # …
 
   passthru.tests = {
     simple-execution = callPackage ./tests.nix { };
   };
 
-  meta = { … };
+  meta = { /* … */ };
 }
 ```
 
@@ -688,11 +754,11 @@ $ nix-build -A phoronix-test-suite.tests
 
 Here are examples of package tests:
 
-- [Jasmin compile test](development/compilers/jasmin/test-assemble-hello-world/default.nix)
+- [Jasmin compile test](by-name/ja/jasmin/test-assemble-hello-world/default.nix)
 - [Lobster compile test](development/compilers/lobster/test-can-run-hello-world.nix)
 - [Spacy annotation test](development/python-modules/spacy/annotation-test/default.nix)
 - [Libtorch test](development/libraries/science/math/libtorch/test/default.nix)
-- [Multiple tests for nanopb](development/libraries/nanopb/default.nix)
+- [Multiple tests for nanopb](./by-name/na/nanopb/package.nix)
 
 ### Linking NixOS module tests to a package
 
@@ -704,15 +770,161 @@ For example, assuming we're packaging `nginx`, we can link its module test via `
 { stdenv, lib, nixosTests }:
 
 stdenv.mkDerivation {
-  ...
+  # ...
 
   passthru.tests = {
     nginx = nixosTests.nginx;
   };
 
-  ...
+  # ...
 }
 ```
+
+## Automatic package updates
+[automatic-package-updates]: #automatic-package-updates
+
+Nixpkgs periodically tries to update all packages that have a `passthru.updateScript` attribute.
+
+> [!Note]
+> A common pattern is to use the [`nix-update-script`](../pkgs/by-name/ni/nix-update/nix-update-script.nix) attribute provided in Nixpkgs, which runs [`nix-update`](https://github.com/Mic92/nix-update):
+>
+> ```nix
+> { stdenv, nix-update-script }:
+> stdenv.mkDerivation {
+>   # ...
+>   passthru.updateScript = nix-update-script { };
+> }
+> ```
+>
+> For simple packages, this is often enough, and will ensure that the package is updated automatically by [`nixpkgs-update`](https://github.com/nix-community/nixpkgs-update) when a new version is released.
+> The [update bot](https://nix-community.org/update-bot) runs periodically to attempt to automatically update packages, and will run `passthru.updateScript` if set.
+> While not strictly necessary if the project is listed on [Repology](https://repology.org), using `nix-update-script` allows the package to update via many more sources (e.g. GitHub releases).
+
+The `passthru.updateScript` attribute can contain one of the following:
+
+- an executable file, either on the file system:
+
+  ```nix
+  { stdenv }:
+  stdenv.mkDerivation {
+    # ...
+    passthru.updateScript = ./update.sh;
+  }
+  ```
+
+  or inside the expression itself:
+
+  ```nix
+  { stdenv, writeScript }:
+  stdenv.mkDerivation {
+    # ...
+    passthru.updateScript = writeScript "update-zoom-us" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
+
+      set -eu -o pipefail
+
+      version="$(curl -sI https://zoom.us/client/latest/zoom_x86_64.tar.xz | grep -Fi 'Location:' | pcre2grep -o1 '/(([0-9]\.?)+)/')"
+      update-source-version zoom-us "$version"
+    '';
+  }
+  ```
+
+- a list, a script file followed by arguments to be passed to it:
+
+  ```nix
+  { stdenv }:
+  stdenv.mkDerivation {
+    # ...
+    passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ];
+  }
+  ```
+
+- an attribute set containing:
+  - `command`
+
+    A string or list in the [format expected by `passthru.updateScript`][automatic-package-updates]
+
+  - `attrPath` (optional)
+
+    A string containing the canonical attribute path for the package.
+
+    If present, it will be passed to the update script instead of the attribute path on which the package was discovered during Nixpkgs traversal.
+
+  - `supportedFeatures` (optional)
+
+    A list of the [extra features the script supports][supported-features].
+
+    ```nix
+    { stdenv }:
+    stdenv.mkDerivation rec {
+      pname = "my-package";
+      # ...
+      passthru.updateScript = {
+        command = [ ../../update.sh pname ];
+        attrPath = pname;
+        supportedFeatures = [ /* ... */ ];
+      };
+    }
+    ```
+
+### How are update scripts executed?
+
+Update scripts are to be invoked by the [automatic package update script](../maintainers/scripts/update.nix).
+You can run `nix-shell maintainers/scripts/update.nix` in the root of Nixpkgs repository for information on how to use it.
+`update.nix` offers several modes for selecting packages to update, and it will execute update scripts for all matched packages that have an `updateScript` attribute.
+
+Each update script will be passed the following environment variables:
+
+- [`UPDATE_NIX_NAME`] – content of the `name` attribute of the updated package
+- [`UPDATE_NIX_PNAME`] – content of the `pname` attribute of the updated package
+- [`UPDATE_NIX_OLD_VERSION`] – content of the `version` attribute of the updated package
+- [`UPDATE_NIX_ATTR_PATH`] – attribute path the `update.nix` discovered the package on (or the package's specified `attrPath` when available). Example: `pantheon.elementary-terminal`
+
+> [!Note]
+> An update script will be usually run from the root of the Nixpkgs repository, but you should not rely on that.
+> Also note that `update.nix` executes update scripts in parallel by default, so you should avoid running `git commit` or any other commands that cannot handle that.
+
+While update scripts should not create commits themselves, `update.nix` supports automatically creating commits when running it with `--argstr commit true`.
+If you need to customize commit message, you can have the update script implement the `commit` feature.
+
+### Supported features
+[update-script-supported-features]: #supported-features
+
+- `commit`
+
+  This feature allows update scripts to *ask* `update.nix` to create Git commits.
+
+  When support of this feature is declared, whenever the update script exits with `0` return status, it is expected to print a JSON list containing an object described below for each updated attribute to standard output.
+  Example:
+
+  ```json
+  [
+    {
+      "attrPath": "volume_key",
+      "oldVersion": "0.3.11",
+      "newVersion": "0.3.12",
+      "files": [
+        "/path/to/nixpkgs/pkgs/development/libraries/volume-key/default.nix"
+      ]
+    }
+  ]
+  ```
+  :::
+
+  When `update.nix` is run with `--argstr commit true`, it will create a separate commit for each of the objects.
+  An empty list can be returned when the script did not update any files; for example, when the package is already at the latest version.
+
+  The commit object contains the following values:
+
+  - `attrPath` – a string containing the attribute path
+  - `oldVersion` – a string containing the old version
+  - `newVersion` – a string containing the new version
+  - `files` – a non-empty list of file paths (as strings) to add to the commit
+  - `commitBody` (optional) – a string with extra content to be appended to the default commit message (useful for adding changelog links)
+  - `commitMessage` (optional) – a string to use instead of the default commit message
+
+  If the returned list contains exactly one object (e.g. `[{}]`), all values are optional and will be determined automatically.
 
 ## Reviewing contributions
 
@@ -727,10 +939,13 @@ Reviewing process:
 - Ensure that the package versioning [fits the guidelines](#versioning).
 - Ensure that the commit text [fits the guidelines](../CONTRIBUTING.md#commit-conventions).
 - Ensure that the package maintainers are notified.
-  - [CODEOWNERS](https://help.github.com/articles/about-codeowners) will make GitHub notify users based on the submitted changes, but it can happen that it misses some of the package maintainers.
+  - The continuous integration system will make GitHub notify users based on the submitted changes, but it can happen that it misses some of the package maintainers.
 - Ensure that the meta field information [fits the guidelines](#meta-attributes) and is correct:
   - License can change with version updates, so it should be checked to match the upstream license.
   - If the package has no maintainer, a maintainer must be set. This can be the update submitter or a community member that accepts to take maintainership of the package.
+- Verify any change of upstream.
+  - If switching from e.g. PyPi to GitHub, verify that the repo is the official one.
+  - If switching to a fork, check with external sources like other package repositories for community consensus.
 - Ensure that the code contains no typos.
 - Build the package locally.
   - Pull requests are often targeted to the master or staging branch, and building the pull request locally when it is submitted can trigger many source builds.
@@ -761,6 +976,7 @@ Sample template for a package update review is provided below.
 - [ ] package version fits guidelines
 - [ ] package builds on ARCHITECTURE
 - [ ] executables tested on ARCHITECTURE
+- [ ] any change of upstream are verified
 - [ ] all depending packages build
 - [ ] patches have a comment describing either the upstream URL or a reason why the patch wasn't upstreamed
 - [ ] patches that are remotely available are fetched rather than vendored
@@ -780,10 +996,12 @@ Review process:
 - Ensure that the package name and version [fits the guidelines](#package-naming).
 - Ensure that the package versioning [fits the guidelines](#versioning).
 - Ensure that the commit text [fits the guidelines](../CONTRIBUTING.md#commit-conventions).
+- Ensure that the source is fetched from an official location, one of our [trusted mirrors](./build-support/fetchurl/mirrors.nix), or a mirror trusted by the authors.
 - Ensure that the meta fields [fits the guidelines](#meta-attributes) and contain the correct information:
   - License must match the upstream license.
   - Platforms should be set (or the package will not get binary substitutes).
   - Maintainers must be set. This can be the package submitter or a community member that accepts taking up maintainership of the package.
+  - The `meta.mainProgram` must be set if a main executable exists.
 - Report detected typos.
 - Ensure the package source:
   - Uses `mirror://` URLs when available.
@@ -805,7 +1023,9 @@ Sample template for a new package review is provided below.
 - [ ] `meta.license` fits upstream license
 - [ ] `meta.platforms` is set
 - [ ] `meta.maintainers` is set
+- [ ] `meta.mainProgram` is set, if applicable.
 - [ ] build time only dependencies are declared in `nativeBuildInputs`
+- [ ] source is fetched from an official or trusted location
 - [ ] source is fetched using the appropriate function
 - [ ] the list of `phases` is not overridden
 - [ ] when a phase (like `installPhase`) is overridden it starts with `runHook preInstall` and ends with `runHook postInstall`.

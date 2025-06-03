@@ -1,81 +1,95 @@
-{ config, lib, pkgs, ... }:
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.hound;
-in {
+  settingsFormat = pkgs.formats.json { };
+  houndConfigFile = pkgs.writeTextFile {
+    name = "hound-config.json";
+    text = builtins.toJSON cfg.settings;
+    checkPhase = ''
+      ${cfg.package}/bin/houndd -check-conf -conf $out
+    '';
+  };
+in
+{
   imports = [
-    (lib.mkRemovedOptionModule [ "services" "hound" "extraGroups" ] "Use users.users.hound.extraGroups instead")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "hound"
+      "extraGroups"
+    ] "Use users.users.hound.extraGroups instead")
+    (lib.mkChangedOptionModule [ "services" "hound" "config" ] [ "services" "hound" "settings" ] (
+      config: builtins.fromJSON config.services.hound.config
+    ))
   ];
 
-  meta.maintainers = with maintainers; [ SuperSandro2000 ];
+  meta.maintainers = with lib.maintainers; [ SuperSandro2000 ];
 
   options = {
     services.hound = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Whether to enable the hound code search daemon.
-        '';
-      };
+      enable = lib.mkEnableOption "hound";
 
-      package = mkPackageOptionMD pkgs "hound" { };
+      package = lib.mkPackageOption pkgs "hound" { };
 
-      user = mkOption {
+      user = lib.mkOption {
         default = "hound";
-        type = types.str;
-        description = lib.mdDoc ''
+        type = lib.types.str;
+        description = ''
           User the hound daemon should execute under.
         '';
       };
 
-      group = mkOption {
+      group = lib.mkOption {
         default = "hound";
-        type = types.str;
-        description = lib.mdDoc ''
+        type = lib.types.str;
+        description = ''
           Group the hound daemon should execute under.
         '';
       };
 
-      home = mkOption {
+      home = lib.mkOption {
         default = "/var/lib/hound";
-        type = types.path;
-        description = lib.mdDoc ''
+        type = lib.types.path;
+        description = ''
           The path to use as hound's $HOME.
           If the default user "hound" is configured then this is the home of the "hound" user.
         '';
       };
 
-      config = mkOption {
-        type = types.str;
-        description = lib.mdDoc ''
-          The full configuration of the Hound daemon. Note the dbpath
-          should be an absolute path to a writable location on disk.
-        '';
-        example = literalExpression ''
+      settings = lib.mkOption {
+        type = settingsFormat.type;
+        example = lib.literalExpression ''
           {
-            "max-concurrent-indexers" : 2,
-            "repos" : {
-                "nixpkgs": {
-                  "url" : "https://www.github.com/NixOS/nixpkgs.git"
-                }
-            }
+            max-concurrent-indexers = 2;
+            repos.nixpkgs.url = "https://www.github.com/NixOS/nixpkgs.git";
           }
+        '';
+        description = ''
+          The full configuration of the Hound daemon.
+          See the upstream documentation <https://github.com/hound-search/hound/blob/main/docs/config-options.md> for details.
+
+          :::{.note}
+          The `dbpath` should be an absolute path to a writable directory.
+          :::.com/hound-search/hound/blob/main/docs/config-options.md>.
         '';
       };
 
-      listen = mkOption {
-        type = types.str;
+      listen = lib.mkOption {
+        type = lib.types.str;
         default = "0.0.0.0:6080";
         example = ":6080";
-        description = lib.mdDoc ''
+        description = ''
           Listen on this [IP]:port
         '';
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.groups = lib.mkIf (cfg.group == "hound") {
       hound = { };
     };
@@ -89,25 +103,23 @@ in {
       };
     };
 
-    systemd.services.hound = let
-      configFile = pkgs.writeTextFile {
-        name = "hound.json";
-        text = cfg.config;
-        checkPhase = ''
-          # check if the supplied text is valid json
-          ${lib.getExe pkgs.jq} . $target > /dev/null
-        '';
-      };
-    in {
+    environment.etc."hound/config.json".source = houndConfigFile;
+
+    services.hound.settings = {
+      dbpath = "${config.services.hound.home}/data";
+    };
+
+    systemd.services.hound = {
       description = "Hound Code Search";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
+      restartTriggers = [ houndConfigFile ];
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.home;
-        ExecStartPre = "${pkgs.git}/bin/git config --global --replace-all http.sslCAinfo /etc/ssl/certs/ca-certificates.crt";
-        ExecStart = "${cfg.package}/bin/houndd -addr ${cfg.listen} -conf ${configFile}";
+        ExecStartPre = "${pkgs.git}/bin/git config --global --replace-all http.sslCAinfo ${config.security.pki.caBundle}";
+        ExecStart = "${cfg.package}/bin/houndd -addr ${cfg.listen} -conf /etc/hound/config.json";
       };
     };
   };

@@ -1,13 +1,13 @@
-{ stdenvNoCC
-, lib
-, nixosTests
-, glib
-, lndir
-, lomiri-system-settings-unwrapped
-, lomiri-system-settings-security-privacy
-, wrapGAppsHook
-, wrapQtAppsHook
-, plugins ? [ lomiri-system-settings-security-privacy ]
+{
+  stdenvNoCC,
+  lib,
+  nixosTests,
+  glib,
+  lndir,
+  lomiri-system-settings-unwrapped,
+  wrapGAppsHook3,
+  wrapQtAppsHook,
+  plugins ? [ ],
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     lndir
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
   ];
 
@@ -65,6 +65,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = lomiri-system-settings-unwrapped.meta // {
     description = "System Settings application for Lomiri (wrapped)";
-    priority = (lomiri-system-settings-unwrapped.meta.priority or 0) - 1;
+    priority = (lomiri-system-settings-unwrapped.meta.priority or lib.meta.defaultPriority) - 1;
   };
 })

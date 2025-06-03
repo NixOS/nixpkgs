@@ -10,19 +10,19 @@
       "rev": "9f51fc4e94d0960ab63fa6ea274518159720aa69",
       "sha256": "1n8cx5vl26ppjsn889zmfpa37yhlxahy2va4bqp6q4v4r1dl1h14",
       "srcDir": "src",
-      "url": "https://github.com/Yardanico/asciigraph/archive/9f51fc4e94d0960ab63fa6ea274518159720aa69.tar.gz"
+      "url": "https://github.com/nimbackup/asciigraph/archive/9f51fc4e94d0960ab63fa6ea274518159720aa69.tar.gz"
     },
     {
       "method": "fetchzip",
       "packages": [
         "illwill"
       ],
-      "path": "/nix/store/3lmm3z36qn4gz7bfa209zv0pqrpm3di9-source",
-      "ref": "v0.3.2",
-      "rev": "1d12cb36ab7b76c31d2d25fa421013ecb382e625",
-      "sha256": "0f9yncl5gbdja18mrqf5ixrdgrh95k0khda923dm1jd1x1b7ar8z",
+      "path": "/nix/store/k3sxzm7qnkgnwkrfd8hc3gkwzbayb1h1-source",
+      "ref": "v0.4.1",
+      "rev": "2736d9e0eb6b2bf32cd2fdb8226407a388362cd1",
+      "sha256": "0hiic5yjsaw6sgl1jzmfpm5g6a5ckzmd29c3pzg30glchn2g94sk",
       "srcDir": "",
-      "url": "https://github.com/johnnovak/illwill/archive/1d12cb36ab7b76c31d2d25fa421013ecb382e625.tar.gz"
+      "url": "https://github.com/johnnovak/illwill/archive/99a120f7f69868b94f5d35ce7e21dd12535de70c.tar.gz"
     },
     {
       "method": "fetchzip",
@@ -52,12 +52,12 @@
       "packages": [
         "zippy"
       ],
-      "path": "/nix/store/dj520pi1q9xh5gplcjs0jsn5wgnaa0cr-source",
-      "ref": "0.10.11",
-      "rev": "9560f3d20479fb390c97f731ef8d100f1ed54e6c",
-      "sha256": "140r42kgynwsnrga4x2mildx9pflwniyhjjzmid2jvnl4i6jrsr4",
+      "path": "/nix/store/zcd2hmjxlkp1bpb7c9xrpg153ssj3w0b-source",
+      "ref": "0.10.16",
+      "rev": "a99f6a7d8a8e3e0213b3cad0daf0ea974bf58e3f",
+      "sha256": "16qdnyql8d7nm7nwwpq0maflm3p6cpbb2jfaqx6xkld9xkc9lsbv",
       "srcDir": "src",
-      "url": "https://github.com/guzba/zippy/archive/9560f3d20479fb390c97f731ef8d100f1ed54e6c.tar.gz"
+      "url": "https://github.com/guzba/zippy/archive/a99f6a7d8a8e3e0213b3cad0daf0ea974bf58e3f.tar.gz"
     }
   ]
 }

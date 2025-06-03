@@ -1,27 +1,31 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
   pname = "eksctl";
-  version = "0.173.0";
+  version = "0.208.0";
 
   src = fetchFromGitHub {
     owner = "weaveworks";
-    repo = pname;
+    repo = "eksctl";
     rev = version;
-    hash = "sha256-PVBt+AoYd8fMYHzBpgQ261TGlkmyooN7UKX9ooXaRYA=";
+    hash = "sha256-lRRB6yAELCNzXWiuxaEHTwlTG7/x3AC97ZnaEtJ3AVs=";
   };
 
-  vendorHash = "sha256-5bHZt+Oze7JiaY0dKjoMNDdU6wzMphgZ3W3NveRKGy0=";
+  vendorHash = "sha256-7aV+BJDudRpqpNk0ve2u7/GHCswMvw07yKrdnnvfO6M=";
 
   doCheck = false;
 
   subPackages = [ "cmd/eksctl" ];
 
-  tags = [ "netgo" "release" ];
+  tags = [
+    "netgo"
+    "release"
+  ];
 
   ldflags = [
     "-s"
@@ -39,11 +43,15 @@ buildGoModule rec {
       --zsh  <($out/bin/eksctl completion zsh)
   '';
 
-  meta = with lib; {
-    description = "A CLI for Amazon EKS";
+  meta = {
+    description = "CLI for Amazon EKS";
     homepage = "https://github.com/weaveworks/eksctl";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ xrelkd Chili-Man ];
+    changelog = "https://github.com/eksctl-io/eksctl/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      xrelkd
+      Chili-Man
+    ];
     mainProgram = "eksctl";
   };
 }

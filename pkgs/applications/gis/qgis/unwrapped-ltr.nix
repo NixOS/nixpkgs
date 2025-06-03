@@ -1,56 +1,61 @@
-{ lib
-, callPackage
-, fetchFromGitHub
-, fetchpatch
-, makeWrapper
-, mkDerivation
-, substituteAll
-, wrapGAppsHook
+{
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  mkDerivation,
+  replaceVars,
+  wrapGAppsHook3,
+  wrapQtAppsHook,
 
-, withGrass ? true
-, withWebKit ? false
+  withGrass,
+  withServer,
+  withWebKit,
 
-, bison
-, cmake
-, exiv2
-, fcgi
-, flex
-, geos
-, grass
-, gsl
-, hdf5
-, libspatialindex
-, libspatialite
-, libzip
-, netcdf
-, ninja
-, openssl
-# , pdal
-, postgresql
-, proj
-, protobuf
-, python3
-, qca-qt5
-, qscintilla
-, qt3d
-, qtbase
-, qtkeychain
-, qtlocation
-, qtsensors
-, qtserialport
-, qtwebkit
-, qtxmlpatterns
-, qwt
-, sqlite
-, txt2tags
-, zstd
+  bison,
+  cmake,
+  draco,
+  exiv2,
+  fcgi,
+  flex,
+  geos,
+  grass,
+  gsl,
+  hdf5,
+  libpq,
+  libspatialindex,
+  libspatialite,
+  libzip,
+  netcdf,
+  ninja,
+  openssl,
+  pdal,
+  proj,
+  protobuf,
+  python3,
+  qca-qt5,
+  qscintilla,
+  qt3d,
+  qtbase,
+  qtkeychain,
+  qtlocation,
+  qtmultimedia,
+  qtsensors,
+  qtserialport,
+  qtwebkit,
+  qtxmlpatterns,
+  qwt,
+  sqlite,
+  txt2tags,
+  zstd,
 }:
 
 let
   py = python3.override {
+    self = py;
     packageOverrides = self: super: {
       pyqt5 = super.pyqt5.override {
         withLocation = true;
+        withSerialPort = true;
       };
     };
   };
@@ -63,8 +68,8 @@ let
     owslib
     psycopg2
     pygments
-    pyqt-builder
     pyqt5
+    pyqt-builder
     python-dateutil
     pytz
     pyyaml
@@ -75,15 +80,16 @@ let
     six
     urllib3
   ];
-in mkDerivation rec {
-  version = "3.28.15";
+in
+mkDerivation rec {
+  version = "3.40.7";
   pname = "qgis-ltr-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-R6p1MVeCMbaD74Eqn+OLQkTYP+00y9mBucJR1JXPEJ4=";
+    hash = "sha256-XC3UVKtOokFH9MDnz7M1+aTfNFVQKGYV2jTThE69jQs=";
   };
 
   passthru = {
@@ -93,7 +99,8 @@ in mkDerivation rec {
 
   nativeBuildInputs = [
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
+    wrapQtAppsHook
 
     bison
     cmake
@@ -101,63 +108,80 @@ in mkDerivation rec {
     ninja
   ];
 
-  buildInputs = [
-    openssl
-    proj
-    geos
-    sqlite
-    gsl
-    qwt
-    exiv2
-    protobuf
-    fcgi
-    libspatialindex
-    libspatialite
-    postgresql
-    txt2tags
-    libzip
-    hdf5
-    netcdf
-    qtbase
-    qtsensors
-    qca-qt5
-    qtkeychain
-    qscintilla
-    qtlocation
-    qtserialport
-    qtxmlpatterns
-    qt3d
-    # pdal
-    zstd
-  ] ++ lib.optional withGrass grass
+  buildInputs =
+    [
+      draco
+      exiv2
+      fcgi
+      geos
+      gsl
+      hdf5
+      libpq
+      libspatialindex
+      libspatialite
+      libzip
+      netcdf
+      openssl
+      pdal
+      proj
+      protobuf
+      qca-qt5
+      qscintilla
+      qt3d
+      qtbase
+      qtkeychain
+      qtlocation
+      qtmultimedia
+      qtsensors
+      qtserialport
+      qtxmlpatterns
+      qwt
+      sqlite
+      txt2tags
+      zstd
+    ]
+    ++ lib.optional withGrass grass
     ++ lib.optional withWebKit qtwebkit
     ++ pythonBuildInputs;
 
   patches = [
-    (substituteAll {
-      src = ./set-pyqt-package-dirs-ltr.patch;
+    (replaceVars ./set-pyqt-package-dirs-ltr.patch {
       pyQt5PackageDir = "${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}";
       qsciPackageDir = "${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}";
     })
-    (fetchpatch {
-      name = "qgis-3.28.9-exiv2-0.28.patch";
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sci-geosciences/qgis/files/qgis-3.28.9-exiv2-0.28.patch?id=002882203ad6a2b08ce035a18b95844a9f4b85d0";
-      hash = "sha256-mPRo0A7ko4GCHJrfJ2Ls0dUKvkFtDmhKekI2CR9StMw=";
-    })
   ];
 
-  # PDAL is disabled until https://github.com/qgis/QGIS/pull/54940
-  # is backported.
-  cmakeFlags = [
-    "-DWITH_3D=True"
-    "-DWITH_PDAL=False"  # TODO: re-enable PDAL
-    "-DENABLE_TESTS=False"
-  ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
-    ++ lib.optional withGrass (let
+  # Add path to Qt platform plugins
+  # (offscreen is needed by "${APIS_SRC_DIR}/generate_console_pap.py")
+  env.QT_QPA_PLATFORM_PLUGIN_PATH = "${qtbase}/${qtbase.qtPluginPrefix}/platforms";
+
+  cmakeFlags =
+    [
+      "-DWITH_3D=True"
+      "-DWITH_PDAL=True"
+      "-DENABLE_TESTS=False"
+      "-DQT_PLUGINS_DIR=${qtbase}/${qtbase.qtPluginPrefix}"
+
+      # Remove for QGIS 3.42
+      "-DCMAKE_POLICY_DEFAULT_CMP0175=OLD"
+      "-DCMAKE_POLICY_DEFAULT_CMP0177=OLD"
+    ]
+    ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
+    ++ lib.optional withServer [
+      "-DWITH_SERVER=True"
+      "-DQGIS_CGIBIN_SUBDIR=${placeholder "out"}/lib/cgi-bin"
+    ]
+    ++ lib.optional withGrass (
+      let
         gmajor = lib.versions.major grass.version;
         gminor = lib.versions.minor grass.version;
-      in "-DGRASS_PREFIX${gmajor}=${grass}/grass${gmajor}${gminor}"
+      in
+      "-DGRASS_PREFIX${gmajor}=${grass}/grass${gmajor}${gminor}"
     );
+
+  qtWrapperArgs = [
+    "--set QT_QPA_PLATFORM_PLUGIN_PATH ${qtbase}/${qtbase.qtPluginPrefix}/platforms"
+  ];
 
   dontWrapGApps = true; # wrapper params passed below
 
@@ -166,16 +190,22 @@ in mkDerivation rec {
     # the path at build time using GRASS_PREFIX.
     # Using wrapGAppsHook also prevents file dialogs from crashing the program
     # on non-NixOS.
-    wrapProgram $out/bin/qgis \
-      "''${gappsWrapperArgs[@]}" \
-      --prefix PATH : ${lib.makeBinPath [ grass ]}
+    for program in $out/bin/*; do
+      wrapProgram $program \
+        "''${gappsWrapperArgs[@]}" \
+        --prefix PATH : ${lib.makeBinPath [ grass ]}
+    done
   '';
 
+  # >9k objects, >3h build time on a normal build slot
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = with lib; {
-    description = "A Free and Open Source Geographic Information System";
+    description = "Free and Open Source Geographic Information System";
     homepage = "https://www.qgis.org";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; teams.geospatial.members ++ [ lsix ];
+    maintainers = with maintainers; [ lsix ];
+    teams = [ teams.geospatial ];
     platforms = with platforms; linux;
   };
 }

@@ -1,39 +1,48 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.services.anuko-time-tracker;
-  configFile = let
-    smtpPassword = if cfg.settings.email.smtpPasswordFile == null
-                   then "''"
-                   else "trim(file_get_contents('${cfg.settings.email.smtpPasswordFile}'))";
+  configFile =
+    let
+      smtpPassword =
+        if cfg.settings.email.smtpPasswordFile == null then
+          "''"
+        else
+          "trim(file_get_contents('${cfg.settings.email.smtpPasswordFile}'))";
 
-  in pkgs.writeText "config.php" ''
-    <?php
-    // Set include path for PEAR and its modules, which we include in the distribution.
-    // Updated for the correct location in the nix store.
-    set_include_path('${cfg.package}/WEB-INF/lib/pear' . PATH_SEPARATOR . get_include_path());
-    define('DSN', 'mysqli://${cfg.database.user}@${cfg.database.host}/${cfg.database.name}?charset=utf8mb4');
-    define('MULTIORG_MODE', ${lib.boolToString cfg.settings.multiorgMode});
-    define('EMAIL_REQUIRED', ${lib.boolToString cfg.settings.emailRequired});
-    define('WEEKEND_START_DAY', ${toString cfg.settings.weekendStartDay});
-    define('FORUM_LINK', '${cfg.settings.forumLink}');
-    define('HELP_LINK', '${cfg.settings.helpLink}');
-    define('SENDER', '${cfg.settings.email.sender}');
-    define('MAIL_MODE', '${cfg.settings.email.mode}');
-    define('MAIL_SMTP_HOST', '${toString cfg.settings.email.smtpHost}');
-    define('MAIL_SMTP_PORT', '${toString cfg.settings.email.smtpPort}');
-    define('MAIL_SMTP_USER', '${cfg.settings.email.smtpUser}');
-    define('MAIL_SMTP_PASSWORD', ${smtpPassword});
-    define('MAIL_SMTP_AUTH', ${lib.boolToString cfg.settings.email.smtpAuth});
-    define('MAIL_SMTP_DEBUG', ${lib.boolToString cfg.settings.email.smtpDebug});
-    define('DEFAULT_CSS', 'default.css');
-    define('RTL_CSS', 'rtl.css'); // For right to left languages.
-    define('LANG_DEFAULT', '${cfg.settings.defaultLanguage}');
-    define('CURRENCY_DEFAULT', '${cfg.settings.defaultCurrency}');
-    define('EXPORT_DECIMAL_DURATION', ${lib.boolToString cfg.settings.exportDecimalDuration});
-    define('REPORT_FOOTER', ${lib.boolToString cfg.settings.reportFooter});
-    define('AUTH_MODULE', 'db');
-  '';
+    in
+    pkgs.writeText "config.php" ''
+      <?php
+      // Set include path for PEAR and its modules, which we include in the distribution.
+      // Updated for the correct location in the nix store.
+      set_include_path('${cfg.package}/WEB-INF/lib/pear' . PATH_SEPARATOR . get_include_path());
+      define('DSN', 'mysqli://${cfg.database.user}@${cfg.database.host}/${cfg.database.name}?charset=utf8mb4');
+      define('MULTIORG_MODE', ${lib.boolToString cfg.settings.multiorgMode});
+      define('EMAIL_REQUIRED', ${lib.boolToString cfg.settings.emailRequired});
+      define('WEEKEND_START_DAY', ${toString cfg.settings.weekendStartDay});
+      define('FORUM_LINK', '${cfg.settings.forumLink}');
+      define('HELP_LINK', '${cfg.settings.helpLink}');
+      define('SENDER', '${cfg.settings.email.sender}');
+      define('MAIL_MODE', '${cfg.settings.email.mode}');
+      define('MAIL_SMTP_HOST', '${toString cfg.settings.email.smtpHost}');
+      define('MAIL_SMTP_PORT', '${toString cfg.settings.email.smtpPort}');
+      define('MAIL_SMTP_USER', '${cfg.settings.email.smtpUser}');
+      define('MAIL_SMTP_PASSWORD', ${smtpPassword});
+      define('MAIL_SMTP_AUTH', ${lib.boolToString cfg.settings.email.smtpAuth});
+      define('MAIL_SMTP_DEBUG', ${lib.boolToString cfg.settings.email.smtpDebug});
+      define('DEFAULT_CSS', 'default.css');
+      define('RTL_CSS', 'rtl.css'); // For right to left languages.
+      define('LANG_DEFAULT', '${cfg.settings.defaultLanguage}');
+      define('CURRENCY_DEFAULT', '${cfg.settings.defaultCurrency}');
+      define('EXPORT_DECIMAL_DURATION', ${lib.boolToString cfg.settings.exportDecimalDuration});
+      define('REPORT_FOOTER', ${lib.boolToString cfg.settings.reportFooter});
+      define('AUTH_MODULE', 'db');
+    '';
   package = pkgs.stdenv.mkDerivation rec {
     pname = "anuko-time-tracker";
     inherit (src) version;
@@ -56,44 +65,50 @@ let
 in
 {
   options.services.anuko-time-tracker = {
-    enable = lib.mkEnableOption (lib.mdDoc "Anuko Time Tracker");
+    enable = lib.mkEnableOption "Anuko Time Tracker";
 
-    package = lib.mkPackageOption pkgs "anuko-time-tracker" {};
+    package = lib.mkPackageOption pkgs "anuko-time-tracker" { };
 
     database = {
       createLocally = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = lib.mdDoc "Create the database and database user locally.";
+        description = "Create the database and database user locally.";
       };
 
       host = lib.mkOption {
         type = lib.types.str;
-        description = lib.mdDoc "Database host.";
+        description = "Database host.";
         default = "localhost";
       };
 
       name = lib.mkOption {
         type = lib.types.str;
-        description = lib.mdDoc "Database name.";
+        description = "Database name.";
         default = "anuko_time_tracker";
       };
 
       user = lib.mkOption {
         type = lib.types.str;
-        description = lib.mdDoc "Database username.";
+        description = "Database username.";
         default = "anuko_time_tracker";
       };
 
       passwordFile = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        description = lib.mdDoc "Database user password file.";
+        description = "Database user password file.";
         default = null;
       };
     };
 
     poolConfig = lib.mkOption {
-      type = lib.types.attrsOf (lib.types.oneOf [ lib.types.str lib.types.int lib.types.bool ]);
+      type = lib.types.attrsOf (
+        lib.types.oneOf [
+          lib.types.str
+          lib.types.int
+          lib.types.bool
+        ]
+      );
       default = {
         "pm" = "dynamic";
         "pm.max_children" = 32;
@@ -102,7 +117,7 @@ in
         "pm.max_spare_servers" = 4;
         "pm.max_requests" = 500;
       };
-      description = lib.mdDoc ''
+      description = ''
         Options for Anuko Time Tracker's PHP-FPM pool.
       '';
     };
@@ -110,22 +125,19 @@ in
     hostname = lib.mkOption {
       type = lib.types.str;
       default =
-        if config.networking.domain != null
-        then config.networking.fqdn
-        else config.networking.hostName;
+        if config.networking.domain != null then config.networking.fqdn else config.networking.hostName;
       defaultText = lib.literalExpression "config.networking.fqdn";
       example = "anuko.example.com";
-      description = lib.mdDoc ''
+      description = ''
         The hostname to serve Anuko Time Tracker on.
       '';
     };
 
     nginx = lib.mkOption {
       type = lib.types.submodule (
-        lib.recursiveUpdate
-          (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {}
+        lib.recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) { }
       );
-      default = {};
+      default = { };
       example = lib.literalExpression ''
         {
           serverAliases = [
@@ -137,7 +149,7 @@ in
           enableACME = true;
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         With this option, you can customize the Nginx virtualHost settings.
       '';
     };
@@ -145,21 +157,21 @@ in
     dataDir = lib.mkOption {
       type = lib.types.str;
       default = "/var/lib/anuko-time-tracker";
-      description = lib.mdDoc "Default data folder for Anuko Time Tracker.";
+      description = "Default data folder for Anuko Time Tracker.";
       example = "/mnt/anuko-time-tracker";
     };
 
     user = lib.mkOption {
       type = lib.types.str;
       default = "anuko_time_tracker";
-      description = lib.mdDoc "User under which Anuko Time Tracker runs.";
+      description = "User under which Anuko Time Tracker runs.";
     };
 
     settings = {
       multiorgMode = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Defines whether users see the Register option in the menu of Time Tracker that allows them
           to self-register and create new organizations (top groups).
         '';
@@ -168,13 +180,13 @@ in
       emailRequired = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = lib.mdDoc "Defines whether an email is required for new registrations.";
+        description = "Defines whether an email is required for new registrations.";
       };
 
       weekendStartDay = lib.mkOption {
         type = lib.types.int;
         default = 6;
-        description = lib.mdDoc ''
+        description = ''
           This option defines which days are highlighted with weekend color.
           6 means Saturday. For Saudi Arabia, etc. set it to 4 for Thursday and Friday to be
           weekend days.
@@ -183,58 +195,58 @@ in
 
       forumLink = lib.mkOption {
         type = lib.types.str;
-        description = lib.mdDoc "Forum link from the main menu.";
+        description = "Forum link from the main menu.";
         default = "https://www.anuko.com/forum/viewforum.php?f=4";
       };
 
       helpLink = lib.mkOption {
         type = lib.types.str;
-        description = lib.mdDoc "Help link from the main menu.";
+        description = "Help link from the main menu.";
         default = "https://www.anuko.com/time-tracker/user-guide/index.htm";
       };
 
       email = {
         sender = lib.mkOption {
           type = lib.types.str;
-          description = lib.mdDoc "Default sender for mail.";
+          description = "Default sender for mail.";
           default = "Anuko Time Tracker <bounces@example.com>";
         };
 
         mode = lib.mkOption {
           type = lib.types.str;
-          description = lib.mdDoc "Mail sending mode. Can be 'mail' or 'smtp'.";
+          description = "Mail sending mode. Can be 'mail' or 'smtp'.";
           default = "smtp";
         };
 
         smtpHost = lib.mkOption {
           type = lib.types.str;
-          description = lib.mdDoc "MTA hostname.";
+          description = "MTA hostname.";
           default = "localhost";
         };
 
         smtpPort = lib.mkOption {
           type = lib.types.int;
-          description = lib.mdDoc "MTA port.";
+          description = "MTA port.";
           default = 25;
         };
 
         smtpUser = lib.mkOption {
           type = lib.types.str;
-          description = lib.mdDoc "MTA authentication username.";
+          description = "MTA authentication username.";
           default = "";
         };
 
         smtpAuth = lib.mkOption {
           type = lib.types.bool;
           default = false;
-          description = lib.mdDoc "MTA requires authentication.";
+          description = "MTA requires authentication.";
         };
 
         smtpPasswordFile = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
           default = null;
           example = "/var/lib/anuko-time-tracker/secrets/smtp-password";
-          description = lib.mdDoc ''
+          description = ''
             Path to file containing the MTA authentication password.
           '';
         };
@@ -242,13 +254,13 @@ in
         smtpDebug = lib.mkOption {
           type = lib.types.bool;
           default = false;
-          description = lib.mdDoc "Debug mail sending.";
+          description = "Debug mail sending.";
         };
       };
 
       defaultLanguage = lib.mkOption {
         type = lib.types.str;
-        description = lib.mdDoc ''
+        description = ''
           Defines Anuko Time Tracker default language. It is used on Time Tracker login page.
           After login, a language set for user group is used.
           Empty string means the language is defined by user browser.
@@ -259,7 +271,7 @@ in
 
       defaultCurrency = lib.mkOption {
         type = lib.types.str;
-        description = lib.mdDoc ''
+        description = ''
           Defines a default currency symbol for new groups.
           Use €, £, a more specific dollar like US$, CAD, etc.
         '';
@@ -270,7 +282,7 @@ in
       exportDecimalDuration = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Defines whether time duration values are decimal in CSV and XML data
           exports (1.25 vs 1:15).
         '';
@@ -279,7 +291,7 @@ in
       reportFooter = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = lib.mdDoc "Defines whether to use a footer on reports.";
+        description = "Defines whether to use a footer on reports.";
       };
     };
   };
@@ -340,12 +352,14 @@ in
       enable = lib.mkDefault true;
       package = lib.mkDefault pkgs.mariadb;
       ensureDatabases = [ cfg.database.name ];
-      ensureUsers = [{
-        name = cfg.database.user;
-        ensurePermissions = {
-          "${cfg.database.name}.*" = "ALL PRIVILEGES";
-        };
-      }];
+      ensureUsers = [
+        {
+          name = cfg.database.user;
+          ensurePermissions = {
+            "${cfg.database.name}.*" = "ALL PRIVILEGES";
+          };
+        }
+      ];
     };
 
     systemd = {

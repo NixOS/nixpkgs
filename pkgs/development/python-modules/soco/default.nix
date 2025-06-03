@@ -1,34 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, graphviz
-, appdirs
-, ifaddr
-, pythonOlder
-, lxml
-, mock
-, nix-update-script
-, pytestCheckHook
-, requests
-, requests-mock
-, xmltodict
+{
+  lib,
+  appdirs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  graphviz,
+  ifaddr,
+  lxml,
+  mock,
+  nix-update-script,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  setuptools,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "soco";
-  version = "0.30.2";
-  format = "setuptools";
+  version = "0.30.10";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "SoCo";
     repo = "SoCo";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-T5kZxwLtqdECuYNfI0z2kLuTPp8yuPsx+MQG27WUJYU=";
+    tag = "v${version}";
+    hash = "sha256-BTDKn6JVqXfLiry6jES/OnsO3SGniEMWW2osf9veukU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     appdirs
     ifaddr
     lxml
@@ -43,9 +47,7 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  pythonImportsCheck = [
-    "soco"
-  ];
+  pythonImportsCheck = [ "soco" ];
 
   passthru.updateScript = nix-update-script { };
 

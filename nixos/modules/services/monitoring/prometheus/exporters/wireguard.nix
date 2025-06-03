@@ -1,23 +1,39 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.wireguard;
-in {
+  inherit (lib)
+    mkOption
+    types
+    mkRenamedOptionModule
+    mkEnableOption
+    optionalString
+    escapeShellArg
+    ;
+in
+{
   port = 9586;
   imports = [
     (mkRenamedOptionModule [ "addr" ] [ "listenAddress" ])
-    ({ options.warnings = options.warnings; options.assertions = options.assertions; })
+    ({
+      options.warnings = options.warnings;
+      options.assertions = options.assertions;
+    })
   ];
   extraOpts = {
-    verbose = mkEnableOption (lib.mdDoc "verbose logging mode for prometheus-wireguard-exporter");
+    verbose = mkEnableOption "verbose logging mode for prometheus-wireguard-exporter";
 
     wireguardConfig = mkOption {
       type = with types; nullOr (either path str);
       default = null;
 
-      description = lib.mdDoc ''
+      description = ''
         Path to the Wireguard Config to
         [add the peer's name to the stats of a peer](https://github.com/MindFlavor/prometheus_wireguard_exporter/tree/2.0.0#usage).
 
@@ -31,7 +47,7 @@ in {
     singleSubnetPerField = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         By default, all allowed IPs and subnets are comma-separated in the
         `allowed_ips` field. With this option enabled,
         a single IP and subnet will be listed in fields like `allowed_ip_0`,
@@ -42,7 +58,7 @@ in {
     withRemoteIp = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether or not the remote IP of a WireGuard peer should be exposed via prometheus.
       '';
     };

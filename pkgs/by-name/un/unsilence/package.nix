@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, ffmpeg
-,
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  ffmpeg,
 }:
 python3Packages.buildPythonPackage rec {
   pname = "unsilence";
@@ -12,12 +12,11 @@ python3Packages.buildPythonPackage rec {
     owner = "lagmoellertim";
     repo = "unsilence";
     rev = version;
-    sha256 = "sha256-M4Ek1JZwtr7vIg14aTa8h4otIZnPQfKNH4pZE4GpiBQ=";
+    hash = "sha256-M4Ek1JZwtr7vIg14aTa8h4otIZnPQfKNH4pZE4GpiBQ=";
   };
 
   nativeBuildInputs = with python3Packages; [
     rich
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -37,6 +36,7 @@ python3Packages.buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/lagmoellertim/unsilence";
     description = "Console Interface and Library to remove silent parts of a media file";
+    mainProgram = "unsilence";
     license = licenses.mit;
     maintainers = with maintainers; [ esau79p ];
   };

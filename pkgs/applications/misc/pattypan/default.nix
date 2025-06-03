@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ant
-, jdk
-, makeWrapper
-, wrapGAppsHook
-, makeDesktopItem
-, copyDesktopItems
-, canonicalize-jars-hook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ant,
+  jdk,
+  makeWrapper,
+  wrapGAppsHook3,
+  makeDesktopItem,
+  copyDesktopItems,
+  stripJavaArchivesHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,9 +26,9 @@ stdenv.mkDerivation (finalAttrs: {
     ant
     jdk
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
     copyDesktopItems
-    canonicalize-jars-hook
+    stripJavaArchivesHook
   ];
 
   dontWrapGApps = true;
@@ -66,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
-    description = "An uploader for Wikimedia Commons";
+    description = "Uploader for Wikimedia Commons";
     homepage = "https://commons.wikimedia.org/wiki/Commons:Pattypan";
     license = licenses.mit;
     mainProgram = "pattypan";

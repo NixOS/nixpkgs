@@ -1,12 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, gnustep
-, re2c
-, openldap
-, openssl
-, openvpn
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch2,
+  autoreconfHook,
+  gnustep-base,
+  re2c,
+  openldap,
+  openssl,
+  openvpn,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,13 +24,22 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./auth-ldap-fix-conftest.patch
+    (fetchpatch2 {
+      name = "fix-cve-2024-28820";
+      url = "https://patch-diff.githubusercontent.com/raw/threerings/openvpn-auth-ldap/pull/92.patch";
+      hash = "sha256-SXuo1D/WywKO5hCsmoeDdTsR7EelxFxJAKmlAQJ6vuE=";
+    })
   ];
+
+  # clang > 17 dropped support for `-export-dynamic` but `-rdynamic` does the
+  # same thing
+  postPatch = ''
+    substituteInPlace platform.m4 \
+      --replace-fail -export-dynamic -rdynamic
+  '';
 
   nativeBuildInputs = [
     autoreconfHook
-    gnustep.base
-    gnustep.libobjc
-    gnustep.make
     re2c
   ];
 
@@ -36,6 +47,7 @@ stdenv.mkDerivation rec {
     openldap
     openssl
     openvpn
+    gnustep-base
   ];
 
   configureFlags = [

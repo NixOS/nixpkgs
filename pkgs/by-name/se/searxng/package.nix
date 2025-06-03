@@ -1,79 +1,128 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  nixosTests,
 }:
+let
+  python = python3.override {
+    packageOverrides = final: prev: {
+      httpx = prev.httpx.overridePythonAttrs (old: rec {
+        version = "0.27.2";
+        src = old.src.override {
+          tag = version;
+          hash = "sha256-N0ztVA/KMui9kKIovmOfNTwwrdvSimmNkSvvC+3gpck=";
+        };
+      });
 
-python3.pkgs.toPythonModule (python3.pkgs.buildPythonApplication rec {
-  pname = "searxng";
-  version = "0-unstable-2024-02-24";
+      httpx-socks = prev.httpx-socks.overridePythonAttrs (old: rec {
+        version = "0.9.2";
+        src = old.src.override {
+          tag = "v${version}";
+          hash = "sha256-PUiciSuDCO4r49st6ye5xPLCyvYMKfZY+yHAkp5j3ZI=";
+        };
+      });
 
-  src = fetchFromGitHub {
-    owner = "searxng";
-    repo = "searxng";
-    rev = "d72fa99bd0a4d702a55188b07919ce5a764b1d6c";
-    hash = "sha256-1A7dyWrF63fSSvWP+2HrCS6H8o/4CUlqiP0KANVZHUA=";
+      starlette = prev.starlette.overridePythonAttrs (old: {
+        disabledTests = old.disabledTests or [ ] ++ [
+          # fails in assertion with spacing issue
+          "test_request_body"
+          "test_request_stream"
+          "test_wsgi_post"
+        ];
+      });
+    };
   };
+in
+python.pkgs.toPythonModule (
+  python.pkgs.buildPythonApplication rec {
+    pname = "searxng";
+    version = "0-unstable-2025-04-09";
 
-  postPatch = ''
-    sed -i 's/==.*$//' requirements.txt
-  '';
+    src = fetchFromGitHub {
+      owner = "searxng";
+      repo = "searxng";
+      rev = "15384e8fc596da9c4a7e27393f8100018c3a61ed";
+      hash = "sha256-exkn/gQALJteUAsg3qeSnRGEbKANkhSBDziWUgJ1fF8=";
+    };
 
-  preBuild =
-    let
-      versionString = lib.concatStringsSep "." (builtins.tail (lib.splitString "-" (lib.removePrefix "0-" version)));
-      commitAbbrev = builtins.substring 0 8 src.rev;
-    in
-    ''
-      export SEARX_DEBUG="true";
-
-      cat > searx/version_frozen.py <<EOF
-      VERSION_STRING="${versionString}+${commitAbbrev}"
-      VERSION_TAG="${versionString}+${commitAbbrev}"
-      DOCKER_TAG="${versionString}-${commitAbbrev}"
-      GIT_URL="https://github.com/searxng/searxng"
-      GIT_BRANCH="master"
-      EOF
+    postPatch = ''
+      sed -i 's/==/>=/' requirements.txt
     '';
 
-  propagatedBuildInputs = with python3.pkgs; [
-    babel
-    certifi
-    python-dateutil
-    fasttext-predict
-    flask
-    flask-babel
-    brotli
-    jinja2
-    lxml
-    pygments
-    pytomlpp
-    pyyaml
-    redis
-    uvloop
-    setproctitle
-    httpx
-    httpx-socks
-    markdown-it-py
-  ] ++ httpx.optional-dependencies.http2
-  ++ httpx-socks.optional-dependencies.asyncio;
+    preBuild =
+      let
+        versionString = lib.concatStringsSep "." (
+          builtins.tail (lib.splitString "-" (lib.removePrefix "0-" version))
+        );
+        commitAbbrev = builtins.substring 0 8 src.rev;
+      in
+      ''
+        export SEARX_DEBUG="true";
 
-  # tests try to connect to network
-  doCheck = false;
+        cat > searx/version_frozen.py <<EOF
+        VERSION_STRING="${versionString}+${commitAbbrev}"
+        VERSION_TAG="${versionString}+${commitAbbrev}"
+        DOCKER_TAG="${versionString}-${commitAbbrev}"
+        GIT_URL="https://github.com/searxng/searxng"
+        GIT_BRANCH="master"
+        EOF
+      '';
 
-  postInstall = ''
-    # Create a symlink for easier access to static data
-    mkdir -p $out/share
-    ln -s ../${python3.sitePackages}/searx/static $out/share/
+    dependencies =
+      with python.pkgs;
+      [
+        babel
+        brotli
+        certifi
+        fasttext-predict
+        flask
+        flask-babel
+        isodate
+        jinja2
+        lxml
+        msgspec
+        pygments
+        python-dateutil
+        pyyaml
+        redis
+        typer
+        uvloop
+        setproctitle
+        httpx
+        httpx-socks
+        markdown-it-py
+      ]
+      ++ httpx.optional-dependencies.http2
+      ++ httpx-socks.optional-dependencies.asyncio;
 
-    # copy config schema for the limiter
-    cp searx/limiter.toml $out/${python3.sitePackages}/searx/limiter.toml
-  '';
+    # tests try to connect to network
+    doCheck = false;
 
-  meta = with lib; {
-    homepage = "https://github.com/searxng/searxng";
-    description = "A fork of Searx, a privacy-respecting, hackable metasearch engine";
-    license = licenses.agpl3Plus;
-    mainProgram = "searxng-run";
-    maintainers = with maintainers; [ SuperSandro2000 _999eagle ];
-  };
-})
+    postInstall = ''
+      # Create a symlink for easier access to static data
+      mkdir -p $out/share
+      ln -s ../${python.sitePackages}/searx/static $out/share/
+
+      # copy config schema for the limiter
+      cp searx/limiter.toml $out/${python.sitePackages}/searx/limiter.toml
+    '';
+
+    passthru = {
+      tests = {
+        searxng = nixosTests.searx;
+      };
+    };
+
+    meta = with lib; {
+      homepage = "https://github.com/searxng/searxng";
+      description = "Fork of Searx, a privacy-respecting, hackable metasearch engine";
+      license = licenses.agpl3Plus;
+      mainProgram = "searxng-run";
+      maintainers = with maintainers; [
+        SuperSandro2000
+        _999eagle
+      ];
+    };
+  }
+)

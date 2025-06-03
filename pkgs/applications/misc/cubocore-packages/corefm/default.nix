@@ -1,32 +1,43 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, cmake, ninja, libcprime, libcsys }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  qt6,
+  cmake,
+  ninja,
+  libcprime,
+  libcsys,
+}:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "corefm";
-  version = "4.5.0";
+  version = "5.0.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-mCFFT/vHzfC4jl1I8SkgaX8qu+AFNNcwUZx4eJeE+i4=";
+    repo = "corefm";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VsnbWknkMJp/2MDXbJuEQomotGqTXhZcUvu+ODJOjdM=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
+    qt6.qtbase
     libcprime
     libcsys
   ];
 
-  meta = with lib; {
-    description = "A lightwight filemanager from the C Suite";
+  meta = {
+    description = "Lightwight filemanager from the C Suite";
+    mainProgram = "corefm";
     homepage = "https://gitlab.com/cubocore/coreapps/corefm";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dan4ik605743 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ dan4ik605743 ];
+    platforms = lib.platforms.linux;
   };
-}
+})

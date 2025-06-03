@@ -1,19 +1,27 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, click }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  click,
+}:
 
 buildPythonPackage rec {
   pname = "click-datetime";
-  version = "0.2.0";
-  format = "setuptools";
+  version = "0.4.0";
+  pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "click-contrib";
-    repo = pname;
-    rev = version;
-    sha256 = "1yxagk4wd2h77nxml19bn2y26fv2xw2n9g981ls8mjy0g51ms3gh";
+  src = fetchPypi {
+    pname = "click_datetime";
+    inherit version;
+    hash = "sha256-nzXtP6sT9VMiHOjFqJXlGF1zYJk8Ud1/hii5tPY2kws=";
   };
 
-  propagatedBuildInputs = [ click ];
+  build-system = [ poetry-core ];
+
+  pythonRemoveDeps = [ "wheel" ];
+
+  dependencies = [ click ];
 
   # no tests
   doCheck = false;
@@ -21,7 +29,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "click_datetime" ];
 
   meta = with lib; {
-    description = "Datetime type support for click.";
+    description = "Datetime type support for click";
     homepage = "https://github.com/click-contrib/click-datetime";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];

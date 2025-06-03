@@ -1,6 +1,7 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -22,9 +23,9 @@ stdenvNoCC.mkDerivation {
 
   meta = {
     homepage = "https://github.com/noriokanisawa/HachiMaruPop";
-    description = "A cute, Japanese font";
+    description = "Cute, Japanese font";
     license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
   };
 }

@@ -1,84 +1,67 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, callPackage
-, cargo
-, certifi
-, cffi
-, cryptography-vectors ? (callPackage ./vectors.nix { })
-, fetchPypi
-, fetchpatch2
-, isPyPy
-, libiconv
-, libxcrypt
-, openssl
-, pkg-config
-, pretend
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, rustc
-, rustPlatform
-, Security
-, setuptoolsRustBuildHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  callPackage,
+  setuptools,
+  bcrypt,
+  certifi,
+  cffi,
+  cryptography-vectors ? (callPackage ./vectors.nix { }),
+  fetchFromGitHub,
+  isPyPy,
+  libiconv,
+  libxcrypt,
+  openssl,
+  pkg-config,
+  pretend,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  rustPlatform,
 }:
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "42.0.2"; # Also update the hash in vectors.nix
+  version = "44.0.2"; # Also update the hash in vectors.nix
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-4OxSujx/G32BPNUmSaWz7x/A1DMhncjJOCfFfqts+Ig=";
+  src = fetchFromGitHub {
+    owner = "pyca";
+    repo = "cryptography";
+    tag = version;
+    hash = "sha256-nXwW6v+U47/+CmjhREHcuQ7QQi/b26gagWBQ3F16DuQ=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    sourceRoot = "${pname}-${version}/${cargoRoot}";
-    name = "${pname}-${version}";
-    hash = "sha256-jw/FC5rQO77h6omtBp0Nc2oitkVbNElbkBUduyprTIc=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-HbUsV+ABE89UvhCRZYXr+Q/zRDKUy+HgCVdQFHqaP4o=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      # skip overflowing tests on 32 bit; https://github.com/pyca/cryptography/pull/10366
-      url = "https://github.com/pyca/cryptography/commit/d741901dddd731895346636c0d3556c6fa51fbe6.patch";
-      hash = "sha256-eC+MZg5O8Ia5CbjRE4y+JhaFs3Q5c62QtPHr3x9T+zw=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "--benchmark-disable" ""
   '';
 
-  cargoRoot = "src/rust";
-
-  nativeBuildInputs = [
+  build-system = [
     rustPlatform.cargoSetupHook
-    setuptoolsRustBuildHook
-    cargo
-    rustc
+    rustPlatform.maturinBuildHook
     pkg-config
-  ] ++ lib.optionals (!isPyPy) [
-    cffi
-  ];
+    setuptools
+  ] ++ lib.optionals (!isPyPy) [ cffi ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-    libiconv
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    libxcrypt
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];
 
-  propagatedBuildInputs = lib.optionals (!isPyPy) [
-    cffi
-  ];
+  dependencies = lib.optionals (!isPyPy) [ cffi ];
+
+  optional-dependencies.ssh = [ bcrypt ];
 
   nativeCheckInputs = [
     certifi
@@ -86,32 +69,34 @@ buildPythonPackage rec {
     pretend
     pytestCheckHook
     pytest-xdist
-  ];
+  ] ++ optional-dependencies.ssh;
 
-  pytestFlagsArray = [
-    "--disable-pytest-warnings"
-  ];
+  pytestFlagsArray = [ "--disable-pytest-warnings" ];
 
   disabledTestPaths = [
     # save compute time by not running benchmarks
     "tests/bench"
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    # aarch64-darwin forbids W+X memory, but this tests depends on it:
-    # * https://cffi.readthedocs.io/en/latest/using.html#callbacks
-    "tests/hazmat/backends/test_openssl_memleak.py"
   ];
 
+  passthru = {
+    vectors = cryptography-vectors;
+  };
+
   meta = with lib; {
-    description = "A package which provides cryptographic recipes and primitives";
+    description = "Package which provides cryptographic recipes and primitives";
     longDescription = ''
       Cryptography includes both high level recipes and low level interfaces to
       common cryptographic algorithms such as symmetric ciphers, message
       digests, and key derivation functions.
     '';
     homepage = "https://github.com/pyca/cryptography";
-    changelog = "https://cryptography.io/en/latest/changelog/#v"
-      + replaceStrings [ "." ] [ "-" ] version;
-    license = with licenses; [ asl20 bsd3 psfl ];
+    changelog =
+      "https://cryptography.io/en/latest/changelog/#v" + replaceStrings [ "." ] [ "-" ] version;
+    license = with licenses; [
+      asl20
+      bsd3
+      psfl
+    ];
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

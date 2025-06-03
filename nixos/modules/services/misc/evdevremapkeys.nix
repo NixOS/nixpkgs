@@ -1,6 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   format = pkgs.formats.yaml { };
   cfg = config.services.evdevremapkeys;
@@ -8,18 +11,18 @@ let
 in
 {
   options.services.evdevremapkeys = {
-    enable = mkEnableOption (lib.mdDoc ''evdevremapkeys'');
+    enable = lib.mkEnableOption ''evdevremapkeys, a daemon to remap events on linux input devices'';
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = format.type;
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         config.yaml for evdevremapkeys
       '';
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     boot.kernelModules = [ "uinput" ];
     services.udev.extraRules = ''
       KERNEL=="uinput", MODE="0660", GROUP="input"

@@ -1,56 +1,70 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, ninja
-, setuptools
-, wheel
-, which
-, cloudpickle
-, numpy
-, torch
-, ale-py
-, gym
-, pygame
-, gymnasium
-, mujoco
-, moviepy
-, git
-, hydra-core
-, tensorboard
-, tqdm
-, wandb
-, packaging
-, tensordict
-, imageio
-, pytest-rerunfailures
-, pytestCheckHook
-, pyyaml
-, scipy
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  ninja,
+  setuptools,
+  which,
+
+  # dependencies
+  cloudpickle,
+  numpy,
+  packaging,
+  tensordict,
+  torch,
+
+  # optional-dependencies
+  ale-py,
+  gym,
+  pygame,
+  torchsnapshot,
+  gymnasium,
+  mujoco,
+  h5py,
+  huggingface-hub,
+  minari,
+  pandas,
+  pillow,
+  requests,
+  scikit-learn,
+  torchvision,
+  tqdm,
+  moviepy,
+  git,
+  hydra-core,
+  tensorboard,
+  wandb,
+
+  # tests
+  imageio,
+  pytest-rerunfailures,
+  pytestCheckHook,
+  pyyaml,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "torchrl";
-  version = "0.3.0";
+  version = "0.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "rl";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ngl/gbNm+62W6UFNo8GOhSaIuK9FERDxGBCr++7B4gw=";
+    tag = "v${version}";
+    hash = "sha256-ANoqIAVKSq023hG83Q71t8oLzud1LeVN5WVPYL3nOks=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     ninja
     setuptools
-    wheel
     which
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cloudpickle
     numpy
     packaging
@@ -58,19 +72,29 @@ buildPythonPackage rec {
     torch
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     atari = [
       ale-py
       gym
       pygame
     ];
+    checkpointing = [ torchsnapshot ];
     gym-continuous = [
       gymnasium
       mujoco
     ];
-    rendering = [
-      moviepy
+    offline-data = [
+      h5py
+      huggingface-hub
+      minari
+      pandas
+      pillow
+      requests
+      scikit-learn
+      torchvision
+      tqdm
     ];
+    rendering = [ moviepy ];
     utils = [
       git
       hydra-core
@@ -85,9 +109,7 @@ buildPythonPackage rec {
     export D4RL_DATASET_DIR=$(mktemp -d)
   '';
 
-  pythonImportsCheck = [
-    "torchrl"
-  ];
+  pythonImportsCheck = [ "torchrl" ];
 
   # We have to delete the source because otherwise it is used instead of the installed package.
   preCheck = ''
@@ -96,45 +118,87 @@ buildPythonPackage rec {
     export XDG_RUNTIME_DIR=$(mktemp -d)
   '';
 
-  nativeCheckInputs = [
-    gymnasium
-    imageio
-    pytest-rerunfailures
-    pytestCheckHook
-    pyyaml
-    scipy
-  ]
-  ++ passthru.optional-dependencies.atari
-  ++ passthru.optional-dependencies.gym-continuous
-  ++ passthru.optional-dependencies.rendering;
+  nativeCheckInputs =
+    [
+      h5py
+      gymnasium
+      imageio
+      pytest-rerunfailures
+      pytestCheckHook
+      pyyaml
+      scipy
+      torchvision
+    ]
+    ++ optional-dependencies.atari
+    ++ optional-dependencies.gym-continuous
+    ++ optional-dependencies.rendering;
 
-  disabledTests = [
-    # mujoco.FatalError: an OpenGL platform library has not been loaded into this process, this most likely means that a valid OpenGL context has not been created before mjr_makeContext was called
-    "test_vecenvs_env"
+  disabledTests =
+    [
+      # torchrl is incompatible with gymnasium>=1.0
+      # https://github.com/pytorch/rl/discussions/2483
+      "test_resetting_strategies"
+      "test_torchrl_to_gym"
+      "test_vecenvs_nan"
 
-    # ValueError: Can't write images with one color channel.
-    "test_log_video"
+      # gym.error.VersionNotFound: Environment version `v5` for environment `HalfCheetah` doesn't exist.
+      "test_collector_run"
+      "test_transform_inverse"
 
-    # Those tests require the ALE environments (provided by unpackaged shimmy)
-    "test_collector_env_reset"
-    "test_gym"
-    "test_gym_fake_td"
-    "test_recorder"
-    "test_recorder_load"
-    "test_rollout"
-    "test_parallel_trans_env_check"
-    "test_serial_trans_env_check"
-    "test_single_trans_env_check"
-    "test_td_creation_from_spec"
-    "test_trans_parallel_env_check"
-    "test_trans_serial_env_check"
-    "test_transform_env"
-  ];
+      # OSError: Unable to synchronously create file (unable to truncate a file which is already open)
+      "test_multi_env"
+      "test_simple_env"
 
-  meta = with lib; {
-    description = "A modular, primitive-first, python-first PyTorch library for Reinforcement Learning";
+      # ImportWarning: Ignoring non-library in plugin directory:
+      # /nix/store/cy8vwf1dacp3xfwnp9v6a1sz8bic8ylx-python3.12-mujoco-3.3.2/lib/python3.12/site-packages/mujoco/plugin/libmujoco.so.3.3.2
+      "test_auto_register"
+      "test_info_dict_reader"
+
+      # mujoco.FatalError: an OpenGL platform library has not been loaded into this process, this most likely means that a valid OpenGL context has not been created before mjr_makeContext was called
+      "test_vecenvs_env"
+
+      # ValueError: Can't write images with one color channel.
+      "test_log_video"
+
+      # Those tests require the ALE environments (provided by unpackaged shimmy)
+      "test_collector_env_reset"
+      "test_gym"
+      "test_gym_fake_td"
+      "test_recorder"
+      "test_recorder_load"
+      "test_rollout"
+      "test_parallel_trans_env_check"
+      "test_serial_trans_env_check"
+      "test_single_trans_env_check"
+      "test_td_creation_from_spec"
+      "test_trans_parallel_env_check"
+      "test_trans_serial_env_check"
+      "test_transform_env"
+
+      # undeterministic
+      "test_distributed_collector_updatepolicy"
+      "test_timeit"
+
+      # On a 24 threads system
+      # assert torch.get_num_threads() == max(1, init_threads - 3)
+      # AssertionError: assert 23 == 21
+      "test_auto_num_threads"
+
+      # Flaky (hangs indefinitely on some CPUs)
+      "test_gae_multidim"
+      "test_gae_param_as_tensor"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # Flaky
+      # AssertionError: assert tensor([51.]) == ((5 * 11) + 2)
+      "test_vecnorm_parallel_auto"
+    ];
+
+  meta = {
+    description = "Modular, primitive-first, python-first PyTorch library for Reinforcement Learning";
     homepage = "https://github.com/pytorch/rl";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
+    changelog = "https://github.com/pytorch/rl/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

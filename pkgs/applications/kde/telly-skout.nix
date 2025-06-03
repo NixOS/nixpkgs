@@ -1,11 +1,12 @@
-{ mkDerivation
-, lib
-, extra-cmake-modules
-, qtquickcontrols2
-, kcoreaddons
-, kconfig
-, ki18n
-, kirigami2
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  qtquickcontrols2,
+  kcoreaddons,
+  kconfig,
+  ki18n,
+  kirigami2,
 }:
 
 mkDerivation {
@@ -13,12 +14,19 @@ mkDerivation {
 
   nativeBuildInputs = [ extra-cmake-modules ];
 
-  buildInputs = [ qtquickcontrols2 kcoreaddons kconfig ki18n kirigami2 ];
+  buildInputs = [
+    qtquickcontrols2
+    kcoreaddons
+    kconfig
+    ki18n
+    kirigami2
+  ];
 
   meta = {
-    description = "A convergent Kirigami TV guide";
+    description = "Convergent Kirigami TV guide";
+    mainProgram = "telly-skout";
     homepage = "https://apps.kde.org/telly-skout/";
     license = lib.licenses.gpl2Plus;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

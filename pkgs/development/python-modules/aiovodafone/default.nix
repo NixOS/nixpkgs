@@ -1,53 +1,47 @@
-{ lib
-, aiohttp
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aiovodafone";
-  version = "0.5.4";
+  version = "1.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "chemelli74";
     repo = "aiovodafone";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-J2VdRxCzIjRUOqQW4YzOC8RRth9tibBS9YuizveqhhI=";
+    tag = "v${version}";
+    hash = "sha256-qjhezzetTKBaPeToQ9TSZ3+epgW/nMsADVL3Hb4kTBU=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=aiovodafone --cov-report=term-missing:skip-covered" ""
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     beautifulsoup4
   ];
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aiovodafone"
-  ];
+  pythonImportsCheck = [ "aiovodafone" ];
 
   meta = with lib; {
     description = "Library to control Vodafon Station";
     homepage = "https://github.com/chemelli74/aiovodafone";
-    changelog = "https://github.com/chemelli74/aiovodafone/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/chemelli74/aiovodafone/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

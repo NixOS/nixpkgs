@@ -1,52 +1,65 @@
-{ lib
-, black
-, buildPythonPackage
-, cachecontrol
-, fetchFromGitHub
-, importlib-resources
-, mistune
-, mypy-extensions
-, pytestCheckHook
-, pythonOlder
-, rdflib
-, requests
-, ruamel-yaml
-, setuptools-scm
+{
+  lib,
+  black,
+  buildPythonPackage,
+  cachecontrol,
+  fetchFromGitHub,
+  importlib-resources,
+  mistune,
+  mypy,
+  mypy-extensions,
+  pytestCheckHook,
+  pythonOlder,
+  rdflib,
+  requests,
+  ruamel-yaml,
+  setuptools-scm,
+  types-dataclasses,
+  types-requests,
+  types-setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "schema-salad";
-  version = "8.5.20240102191336.dev7+g8e95468";
-  format = "setuptools";
+  version = "8.8.20250205075315";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "schema_salad";
-    rev = "8e954684b08d222d54b7eff680eaa4d4e65920a9";
-    hash = "sha256-VoFFKe6XHDytj5UlmsN14RevKcgpl+DSDMGDVS2Ols4=";
+    tag = version;
+    hash = "sha256-Lev5daC3RCuXN1GJjOwplTx9PB3HTNZdNNzusn2dBaI=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  pythonRelaxDeps = [ "mistune" ];
 
-  propagatedBuildInputs = [
-    cachecontrol
-    mistune
-    mypy-extensions
-    rdflib
-    requests
-    ruamel-yaml
-  ] ++ cachecontrol.optional-dependencies.filecache
-  ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "mypy[mypyc]==1.15.0" "mypy"
+    sed -i "/black>=/d" pyproject.toml
+  '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.pycodegen;
+  build-system = [ setuptools-scm ];
+
+  dependencies =
+    [
+      cachecontrol
+      mistune
+      mypy
+      mypy-extensions
+      rdflib
+      requests
+      ruamel-yaml
+      types-dataclasses
+      types-requests
+      types-setuptools
+    ]
+    ++ cachecontrol.optional-dependencies.filecache
+    ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.pycodegen;
 
   preCheck = ''
     rm tox.ini
@@ -54,6 +67,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_load_by_yaml_metaschema"
+    "test_detect_changes_in_html"
     # Setup for these tests requires network access
     "test_secondaryFiles"
     "test_outputBinding"
@@ -62,14 +76,10 @@ buildPythonPackage rec {
     "test_bad_schemas"
   ];
 
-  pythonImportsCheck = [
-    "schema_salad"
-  ];
+  pythonImportsCheck = [ "schema_salad" ];
 
-  passthru.optional-dependencies = {
-    pycodegen = [
-      black
-    ];
+  optional-dependencies = {
+    pycodegen = [ black ];
   };
 
   meta = with lib; {

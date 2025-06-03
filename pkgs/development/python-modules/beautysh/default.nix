@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, colorama
-, fetchFromGitHub
-, fetchpatch
-, poetry-core
-, pytestCheckHook
-, setuptools
-, types-colorama
-, types-setuptools
+{
+  lib,
+  buildPythonPackage,
+  colorama,
+  fetchFromGitHub,
+  fetchpatch,
+  poetry-core,
+  pytest7CheckHook,
+  setuptools,
+  types-colorama,
+  types-setuptools,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "lovesegfault";
-    repo = pname;
+    repo = "beautysh";
     rev = "v${version}";
     hash = "sha256-rPeGRcyNK45Y7OvtzaIH93IIzexBf/jM1SzYP0phQ1o=";
   };
@@ -36,9 +37,7 @@ buildPythonPackage rec {
       --replace 'types-setuptools = "^57.4.0"' 'types-setuptools = "*"'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     colorama
@@ -47,13 +46,9 @@ buildPythonPackage rec {
     types-setuptools
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytest7CheckHook ];
 
-  pythonImportsCheck = [
-    "beautysh"
-  ];
+  pythonImportsCheck = [ "beautysh" ];
 
   meta = with lib; {
     description = "Tool for beautifying Bash scripts";

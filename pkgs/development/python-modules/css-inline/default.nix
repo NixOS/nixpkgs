@@ -1,30 +1,30 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, rustPlatform
+  # build-system
+  rustPlatform,
 
-# native darwin dependencies
-, libiconv
-, Security
+  # native darwin dependencies
+  libiconv,
 
-# tests
-, pytestCheckHook
-, hypothesis
+  # tests
+  pytestCheckHook,
+  hypothesis,
 }:
 
 buildPythonPackage rec {
   pname = "css-inline";
-  version = "0.10.1";
-  format = "pyproject";
+  version = "0.14.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Stranger6667";
     repo = "css-inline";
     rev = "python-v${version}";
-    hash = "sha256-oBAJv/hAz/itT2WakIw/1X1NvOHX108NoeS6V7k+aG8=";
+    hash = "sha256-x0DxoEKXgMMIlebzL6xVedViGGra2Bx/aox0XiXi+Dc=";
   };
 
   postPatch = ''
@@ -34,14 +34,13 @@ buildPythonPackage rec {
 
   # call `cargo build --release` in bindings/python and copy the
   # resulting lock file
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
     postPatch = ''
       cd bindings/python
       ln -s ${./Cargo.lock} Cargo.lock
     '';
-    name = "${pname}-${version}";
-    hash = "sha256-SFG1nsP4+I0zH8VeyL1eeaTx0tHNIvmx6M0cko0pqIA=";
+    hash = "sha256-4zi29ZdALummwcWxYqDDEPAjKptmLqyYUJzWMrEK4os=";
   };
 
   nativeBuildInputs = [
@@ -49,19 +48,27 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-    Security
   ];
 
-  pythonImportsCheck = [
-    "css_inline"
-  ];
+  pythonImportsCheck = [ "css_inline" ];
 
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook
   ];
+
+  disabledTests =
+    [
+      # fails to connect to local server
+      "test_cache"
+      "test_remote_stylesheet"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+      # pyo3_runtime.PanicException: event loop thread panicked
+      "test_invalid_href"
+    ];
 
   meta = with lib; {
     description = "Inline CSS into style attributes";

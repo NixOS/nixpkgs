@@ -1,35 +1,31 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildNpmPackage
-, curl
-, jdk
-, jq
-, makeWrapper
-, maven
-, writeText
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildNpmPackage,
+  curl,
+  jdk,
+  jq,
+  makeWrapper,
+  maven,
 }:
 
 let
-  maven' = maven.override {
-    inherit jdk;
-  };
-
-  version = "3.7.9";
+  version = "3.9.3";
   src = fetchFromGitHub {
     owner = "openrefine";
     repo = "openrefine";
     rev = version;
-    hash = "sha256-wtg0BOGr/aJPZeFQbJSBHtTVfpcSCSHP++8AnpS8pgQ=";
+    hash = "sha256-wV5ur31JEGcMSLRHQq/H6GlsdpEzTH6ZxBkE9Sj6TkU=";
   };
 
   npmPkg = buildNpmPackage {
     inherit src version;
 
     pname = "openrefine-npm";
-    sourceRoot = "source/main/webapp";
+    sourceRoot = "${src.name}/main/webapp";
 
-    npmDepsHash = "sha256-8GhcL4tohQ5u2HeYN6JyTMMobUOqAL8ETCLiP1SoDSk=";
+    npmDepsHash = "sha256-I0iqGniXeqyCWf1DG2nMNkTScCrtJYeYF9n2Zt6Syjc=";
 
     # package.json doesn't supply a version, which npm doesn't like - fix this.
     # directly referencing jq because buildNpmPackage doesn't pass
@@ -47,7 +43,8 @@ let
     '';
   };
 
-in maven'.buildMavenPackage {
+in
+maven.buildMavenPackage {
   inherit src version;
 
   pname = "openrefine";
@@ -55,20 +52,16 @@ in maven'.buildMavenPackage {
   postPatch = ''
     cp -r ${npmPkg} main/webapp/modules/core/3rdparty
   '';
-  mvnParameters = "-DskipTests=true -pl !packaging";
-  mvnHash = "sha256-MqE+iloqzBav6E3/rf1LP5BlKhW/FBIt6+6U+S8UJWA=";
+
+  mvnJdk = jdk;
+  mvnParameters = "-pl !packaging";
+  mvnHash = "sha256-pAL+Zhm0qnE1vEvivlXt2cIzIoPFoge5CRrsbfIoGNs=";
 
   nativeBuildInputs = [ makeWrapper ];
 
-  installPhase = let
-    gitProperties = writeText "git.properties" (builtins.toJSON {
-      "git.build.version" = version;
-      "git.branch" = "none";
-      "git.build.time" = "1970-01-01T00:00:00+0000";
-      "git.commit.id.abbrev" = "none";
-      "git.commit.id.describe" = "none";
-    });
-  in ''
+  doCheck = false;
+
+  installPhase = ''
     mkdir -p $out/lib/server/target/lib
     cp -r server/target/lib/* $out/lib/server/target/lib/
     cp server/target/openrefine-*-server.jar $out/lib/server/target/lib/
@@ -84,8 +77,6 @@ in maven'.buildMavenPackage {
         fi
       done
     )
-
-    cp ${gitProperties} $out/lib/webapp/WEB-INF/classes/git.properties
 
     mkdir -p $out/etc
     cp refine.ini $out/etc/
@@ -113,7 +104,12 @@ in maven'.buildMavenPackage {
     EOF
 
     wrapProgram $out/bin/refine \
-      --prefix PATH : '${lib.makeBinPath [ jdk curl ]}' \
+      --prefix PATH : '${
+        lib.makeBinPath [
+          jdk
+          curl
+        ]
+      }' \
       --set-default REFINE_INI_PATH "$out/etc/refine.ini"
   '';
 
@@ -129,9 +125,9 @@ in maven'.buildMavenPackage {
     maintainers = with maintainers; [ ris ];
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # maven dependencies
+      binaryBytecode # maven dependencies
     ];
-    broken = stdenv.isDarwin;  # builds, doesn't run
+    broken = stdenv.hostPlatform.isDarwin; # builds, doesn't run
     mainProgram = "refine";
   };
 }

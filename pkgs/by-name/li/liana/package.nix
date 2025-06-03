@@ -1,19 +1,22 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, cmake
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
-, expat
-, fontconfig
-, freetype
-, libGL
-, systemd
-, vulkan-loader
-, xorg
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  expat,
+  fontconfig,
+  freetype,
+  libGL,
+  udev,
+  libxkbcommon,
+  wayland,
+  vulkan-loader,
+  xorg,
 }:
 
 let
@@ -23,6 +26,10 @@ let
     freetype
     freetype.dev
     libGL
+    pkg-config
+    udev
+    wayland
+    libxkbcommon
     vulkan-loader
     xorg.libX11
     xorg.libXcursor
@@ -32,22 +39,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "liana";
-  version = "4.0";
+  version = "11.0"; # keep in sync with lianad
 
   src = fetchFromGitHub {
     owner = "wizardsardine";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-aeNbPtzS8QhZ+d/HC9/Nx1GvIWsCrjUrMqghIspt2+o=";
+    repo = "liana";
+    tag = "v${version}";
+    hash = "sha256-mpHXaqMbThjCSJIZqg0t7Zz0hCsC3sSrSf3Npn19RpA=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "liana-4.0.0" = "sha256-GT5/HlFU+Cf/Q5aQoT6ldZ+f+7I+S3wpUbq3JAhJjz8=";
-      "iced_futures-0.6.0" = "sha256-ejkAxU6DwiX1/119eA0GRapSmz7dqwx9M0uMwyDHATQ=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-nyWTcKGTVCS1MHmSCiF2aEUtQaVyUfLYzJed+APrdCo=";
 
   nativeBuildInputs = [
     pkg-config
@@ -58,13 +60,13 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     fontconfig
-    systemd
+    udev
   ];
 
-  sourceRoot = "source/gui";
+  buildAndTestSubdir = "liana-gui";
 
   postInstall = ''
-    install -Dm0644 ./ui/static/logos/liana-app-icon.svg $out/share/icons/hicolor/scalable/apps/liana.svg
+    install -Dm0644 ./liana-ui/static/logos/liana-app-icon.svg $out/share/icons/hicolor/scalable/apps/liana.svg
     wrapProgram $out/bin/liana-gui --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeLibs}"
   '';
 
@@ -84,9 +86,10 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "liana-gui";
     description = "A Bitcoin wallet leveraging on-chain timelocks for safety and recovery";
     homepage = "https://wizardsardine.com/liana";
+    changelog = "https://github.com/wizardsardine/liana/releases/tag/${src.rev}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ dunxen ];
     platforms = platforms.linux;
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
   };
 }

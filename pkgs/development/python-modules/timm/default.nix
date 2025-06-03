@@ -1,37 +1,41 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pdm-backend
-, huggingface-hub
-, pyyaml
-, safetensors
-, torch
-, torchvision
-, expecttest
-, pytestCheckHook
-, pytest-timeout
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  pdm-backend,
+
+  # dependencies
+  huggingface-hub,
+  pyyaml,
+  safetensors,
+  torch,
+  torchvision,
+
+  # tests
+  expecttest,
+  pytestCheckHook,
+  pytest-timeout,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "timm";
-  version = "0.9.16";
+  version = "1.0.15";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "pytorch-image-models";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-IWEDKuI2565Z07q1MxTpzKS+CROPR6SyaD5fKcQ5eXk=";
+    tag = "v${version}";
+    hash = "sha256-TXc+D8GRrO46q88fOH44ZHKOGnCdP47ipEcobnGTxWU=";
   };
 
-  nativeBuildInputs = [
-    pdm-backend
-  ];
+  build-system = [ pdm-backend ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     huggingface-hub
     pyyaml
     safetensors
@@ -45,18 +49,26 @@ buildPythonPackage rec {
     pytest-timeout
   ];
 
-  pytestFlagsArray = [
-    "tests"
-  ];
+  pytestFlagsArray = [ "tests" ];
+
+  disabledTests =
+    lib.optionals
+      (
+        # RuntimeError: Dynamo is not supported on Python 3.13+
+        (pythonAtLeast "3.13")
+
+        # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
+        # CppCompileError: C++ compile error
+        # OpenMP support not found.
+        || stdenv.hostPlatform.isDarwin
+      )
+      [
+        "test_kron"
+      ];
 
   disabledTestPaths = [
     # Takes too long and also tries to download models
     "tests/test_models.py"
-  ];
-
-  disabledTests = [
-    # AttributeError: 'Lookahead' object has no attribute '_optimizer_step_pre...
-    "test_lookahead"
   ];
 
   pythonImportsCheck = [
@@ -64,11 +76,11 @@ buildPythonPackage rec {
     "timm.data"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "PyTorch image models, scripts, and pretrained weights";
     homepage = "https://huggingface.co/docs/timm/index";
     changelog = "https://github.com/huggingface/pytorch-image-models/blob/v${version}/README.md#whats-new";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

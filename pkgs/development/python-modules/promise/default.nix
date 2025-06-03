@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, mock
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  mock,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "syrusakbary";
     repo = "promise";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-5s6GMANSO4UpLOP/HAQxuNFSBSjPgvJCB9R1dOoKuJ4=";
   };
 
@@ -37,9 +38,7 @@ buildPythonPackage rec {
       --replace "assert_exc.traceback[-1].path.strpath" "str(assert_exc.traceback[-1].path)"
   '';
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
   nativeCheckInputs = [
     mock
@@ -47,13 +46,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTestPaths = [
-    "tests/test_benchmark.py"
-  ];
+  disabledTestPaths = [ "tests/test_benchmark.py" ];
 
-  pythonImportsCheck = [
-    "promise"
-  ];
+  pythonImportsCheck = [ "promise" ];
 
   meta = with lib; {
     description = "Ultra-performant Promise implementation in Python";

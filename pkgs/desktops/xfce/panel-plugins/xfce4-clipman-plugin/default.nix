@@ -1,27 +1,52 @@
-{ lib
-, mkXfceDerivation
-, wayland-scanner
-, glib
-, gtk3
-, libX11
-, libXtst
-, libxfce4ui
-, libxfce4util
-, qrencode
-, xfce4-panel
-, xfconf
-, wayland
-, wlr-protocols
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gettext,
+  meson,
+  ninja,
+  pkg-config,
+  wayland-scanner,
+  wrapGAppsHook3,
+  glib,
+  gtk3,
+  libX11,
+  libXtst,
+  libxfce4ui,
+  libxfce4util,
+  qrencode,
+  xfce4-panel,
+  xfconf,
+  wayland,
+  wlr-protocols,
+  gitUpdater,
 }:
 
-mkXfceDerivation {
-  category = "panel-plugins";
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-clipman-plugin";
-  version = "1.6.6";
-  sha256 = "sha256-wdEoM4etco+s0+dULkBvWJZ3WBCW3Ph2bdY0E/l5VRc=";
+  version = "1.7.0";
+
+  src = fetchFromGitLab {
+    domain = "gitlab.xfce.org";
+    owner = "panel-plugins";
+    repo = "xfce4-clipman-plugin";
+    tag = "xfce4-clipman-plugin-${finalAttrs.version}";
+    hash = "sha256-w9axHJJnTQrkN9s3RQyvkOcK0FOqsvWpoJ+UCDntnZk=";
+  };
+
+  strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
+    gettext
+    meson
+    ninja
+    pkg-config
     wayland-scanner
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -38,8 +63,13 @@ mkXfceDerivation {
     wlr-protocols
   ];
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater { rev-prefix = "xfce4-clipman-plugin-"; };
+
+  meta = {
     description = "Clipboard manager for Xfce panel";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    homepage = "https://gitlab.xfce.org/panel-plugins/xfce4-clipman-plugin";
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.xfce ];
+    platforms = lib.platforms.linux;
   };
-}
+})

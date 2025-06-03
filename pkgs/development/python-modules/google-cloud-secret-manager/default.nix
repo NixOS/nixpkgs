@@ -1,33 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, grpc-google-iam-v1
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  grpc-google-iam-v1,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-secret-manager";
-  version = "2.18.2";
+  version = "2.23.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-oA1iEVpwCD6GsdRMp+vK4EGzakTMYupX3kAFcx+NPIg=";
+    pname = "google_cloud_secret_manager";
+    inherit version;
+    hash = "sha256-WYxMCp0Q1J1QDrSuoyVd/yUKovksAo9cl+OzZ/doyAg=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     grpc-google-iam-v1
     proto-plus

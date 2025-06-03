@@ -1,4 +1,9 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.ntpd-rs;
@@ -15,7 +20,7 @@ in
     useNetworkingTimeServers = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Use source time servers from {var}`networking.timeServers` in config.
       '';
     };
@@ -25,7 +30,7 @@ in
         freeformType = format.type;
       };
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Settings to write to {file}`ntp.toml`
 
         See <https://docs.ntpd-rs.pendulum-project.org/man/ntp.toml.5>
@@ -56,12 +61,12 @@ in
       observability = {
         observation-path = lib.mkDefault "/var/run/ntpd-rs/observe";
       };
-      source = lib.mkIf cfg.useNetworkingTimeServers (map
-        (ts: {
-          mode = "server";
+      source = lib.mkIf cfg.useNetworkingTimeServers (
+        map (ts: {
+          mode = if lib.strings.hasInfix "pool" ts then "pool" else "server";
           address = ts;
-        })
-        config.networking.timeServers);
+        }) config.networking.timeServers
+      );
     };
 
     systemd.services.ntpd-rs = {
@@ -70,7 +75,10 @@ in
         User = "";
         Group = "";
         DynamicUser = true;
-        ExecStart = [ "" "${lib.makeBinPath [ cfg.package ]}/ntp-daemon --config=${configFile}" ];
+        ExecStart = [
+          ""
+          "${lib.makeBinPath [ cfg.package ]}/ntp-daemon --config=${configFile}"
+        ];
       };
     };
 
@@ -80,7 +88,10 @@ in
         User = "";
         Group = "";
         DynamicUser = true;
-        ExecStart = [ "" "${lib.makeBinPath [ cfg.package ]}/ntp-metrics-exporter --config=${configFile}" ];
+        ExecStart = [
+          ""
+          "${lib.makeBinPath [ cfg.package ]}/ntp-metrics-exporter --config=${configFile}"
+        ];
       };
     };
   };

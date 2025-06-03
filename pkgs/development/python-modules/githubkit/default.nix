@@ -1,67 +1,53 @@
-{ lib
-, anyio
-, buildPythonPackage
-, fetchFromGitHub
-, hishel
-, httpx
-, poetry-core
-, pydantic
-, pyjwt
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, typing-extensions
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hishel,
+  httpx,
+  poetry-core,
+  pydantic,
+  pyjwt,
+  pytest-cov-stub,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "githubkit";
-  version = "0.11.1";
+  version = "0.12.13";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "yanyongyu";
     repo = "githubkit";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-nPXs6thXAshDojgHSNyEeBN/jNJkfFECSuY5f51Zozo=";
+    tag = "v${version}";
+    hash = "sha256-TMn81YY44bXUyU6GHSGtLtQ7aC2/vA9nZf/PaGhBi0s=";
   };
 
-  pythonRelaxDeps = [
-    "hishel"
-  ];
+  pythonRelaxDeps = [ "hishel" ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov=githubkit --cov-append --cov-report=term-missing" ""
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     hishel
     httpx
     pydantic
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       anyio
       pyjwt
     ];
-    jwt = [
-      pyjwt
-    ];
-    auth-app = [
-      pyjwt
-    ];
-    auth-oauth-device = [
-      anyio
-    ];
+    jwt = [ pyjwt ];
+    auth-app = [ pyjwt ];
+    auth-oauth-device = [ anyio ];
     auth = [
       anyio
       pyjwt
@@ -70,11 +56,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+    pytest-cov-stub
+    pytest-xdist
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "githubkit"
-  ];
+  pythonImportsCheck = [ "githubkit" ];
 
   disabledTests = [
     # Tests require network access
@@ -89,7 +75,7 @@ buildPythonPackage rec {
   meta = {
     description = "GitHub SDK for Python";
     homepage = "https://github.com/yanyongyu/githubkit";
-    changelog = "https://github.com/yanyongyu/githubkit/releases/tag/v${version}";
+    changelog = "https://github.com/yanyongyu/githubkit/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kranzes ];
   };

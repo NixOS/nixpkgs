@@ -1,38 +1,37 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, dde-qt-dbus-factory
-, wrapQtAppsHook
-, qtbase
-, qtx11extras
-, dtkwidget
-, qt5integration
-, gtest
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  dde-qt-dbus-factory,
+  dtkwidget,
+  libsForQt5,
+  qt5integration,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dde-widgets";
-  version = "6.0.14";
+  version = "6.0.23";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-bmhT7UhMXtC5wlRtwlVnGjoq8rUQcDSk4rGQ0Xrz9ZI=";
+    hash = "sha256-aeWQdWi1mMche7AJhAvchRXu89hiZ+CM/RR9HvvbXTw=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     dde-qt-dbus-factory
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtx11extras
+    libsForQt5.qtbase
+    libsForQt5.qtx11extras
     dtkwidget
     qt5integration
     gtest
@@ -40,9 +39,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Desktop widgets service/implementation for DDE";
+    mainProgram = "dde-widgets";
     homepage = "https://github.com/linuxdeepin/dde-widgets";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }

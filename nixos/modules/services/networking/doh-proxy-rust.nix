@@ -1,22 +1,25 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.doh-proxy-rust;
 
-in {
+in
+{
 
   options.services.doh-proxy-rust = {
 
-    enable = mkEnableOption (lib.mdDoc "doh-proxy-rust");
+    enable = lib.mkEnableOption "doh-proxy-rust";
 
-    flags = mkOption {
-      type = types.listOf types.str;
-      default = [];
+    flags = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
       example = [ "--server-address=9.9.9.9:53" ];
-      description = lib.mdDoc ''
+      description = ''
         A list of command-line flags to pass to doh-proxy. For details on the
         available options, see <https://github.com/jedisct1/doh-server#usage>.
       '';
@@ -24,13 +27,16 @@ in {
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.doh-proxy-rust = {
       description = "doh-proxy-rust";
-      after = [ "network.target" "nss-lookup.target" ];
+      after = [
+        "network.target"
+        "nss-lookup.target"
+      ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.doh-proxy-rust}/bin/doh-proxy ${escapeShellArgs cfg.flags}";
+        ExecStart = "${pkgs.doh-proxy-rust}/bin/doh-proxy ${lib.escapeShellArgs cfg.flags}";
         Restart = "always";
         RestartSec = 10;
         DynamicUser = true;
@@ -50,11 +56,14 @@ in {
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
         SystemCallErrorNumber = "EPERM";
-        SystemCallFilter = [ "@system-service" "~@privileged @resources" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged @resources"
+        ];
       };
     };
   };
 
-  meta.maintainers = with maintainers; [ stephank ];
+  meta.maintainers = with lib.maintainers; [ stephank ];
 
 }

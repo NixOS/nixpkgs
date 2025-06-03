@@ -1,24 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "drawille";
-  version = "0.1.0";
+  version = "0.2.0";
 
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-t4nS8TWbEGKHibIbLfZZycPQxTiEzuJ7DYsa6Twi+8s=";
+    hash = "sha256-gVND4RYsWAUtTLZS75cPZ3Ht2QBC1UnsxuRTyXNqoa0=";
   };
 
   doCheck = false; # pypi package has no tests, git has no tags
 
-  pythonImportsCheck = [
-    "drawille"
-  ];
+  pythonImportsCheck = [ "drawille" ];
 
   meta = with lib; {
     description = "Drawing in terminal with unicode braille characters";

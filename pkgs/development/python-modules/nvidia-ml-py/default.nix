@@ -1,26 +1,34 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, substituteAll
-, addOpenGLRunpath
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  replaceVars,
+  addDriverRunpath,
+  setuptools,
+  cudaPackages,
+  nvidia-ml-py,
 }:
 
 buildPythonPackage rec {
   pname = "nvidia-ml-py";
-  version = "12.535.133";
-  format = "setuptools";
+  version = "12.575.51";
+
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    extension = "tar.gz";
-    hash = "sha256-sVWa8NV90glVv1jQWv/3sWbd1ElH6zBRyZBWOHmesdw=";
+    pname = "nvidia_ml_py";
+    inherit version;
+    hash = "sha256-ZJDpP+qZ606WYyeuGMbuxiVhlMkh8jRZyHZ67ijFRYE=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./0001-locate-libnvidia-ml.so.1-on-NixOS.patch;
-      inherit (addOpenGLRunpath) driverLink;
+    (replaceVars ./0001-locate-libnvidia-ml.so.1-on-NixOS.patch {
+      inherit (addDriverRunpath) driverLink;
     })
+  ];
+
+  build-system = [
+    setuptools
   ];
 
   # no tests
@@ -28,11 +36,29 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pynvml" ];
 
+  passthru.tests.tester-nvmlInit =
+    cudaPackages.writeGpuTestPython { libraries = [ nvidia-ml-py ]; }
+      ''
+        from pynvml import (
+          nvmlInit,
+          nvmlSystemGetDriverVersion,
+          nvmlDeviceGetCount,
+          nvmlDeviceGetHandleByIndex,
+          nvmlDeviceGetName,
+        )
+
+        nvmlInit()
+        print(f"Driver Version: {nvmlSystemGetDriverVersion()}")
+
+        for i in range(nvmlDeviceGetCount()):
+            handle = nvmlDeviceGetHandleByIndex(i)
+            print(f"Device {i} : {nvmlDeviceGetName(handle)}")
+      '';
+
   meta = {
     description = "Python Bindings for the NVIDIA Management Library";
     homepage = "https://pypi.org/project/nvidia-ml-py";
     license = lib.licenses.bsd3;
-    platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

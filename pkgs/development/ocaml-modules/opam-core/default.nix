@@ -1,15 +1,28 @@
-{ lib, buildDunePackage, unzip
-, opam, ocamlgraph, re, cppo }:
+{
+  lib,
+  buildDunePackage,
+  opam,
+  jsonm,
+  ocamlgraph,
+  re,
+  sha,
+  swhid_core,
+  uutf,
+}:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "opam-core";
 
   inherit (opam) src version;
 
-  useDune2 = true;
-
-  nativeBuildInputs = [ unzip cppo ];
-  propagatedBuildInputs = [ ocamlgraph re ];
+  propagatedBuildInputs = [
+    jsonm
+    ocamlgraph
+    uutf
+    re
+    sha
+    swhid_core
+  ];
 
   # get rid of check for curl at configure time
   # opam-core does not call curl at run time

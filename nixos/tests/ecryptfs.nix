@@ -1,13 +1,15 @@
-import ./make-test-python.nix ({ ... }:
+{ ... }:
 {
   name = "ecryptfs";
 
-  nodes.machine = { pkgs, ... }: {
-    imports = [ ./common/user-account.nix ];
-    boot.kernelModules = [ "ecryptfs" ];
-    security.pam.enableEcryptfs = true;
-    environment.systemPackages = with pkgs; [ keyutils ];
-  };
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      imports = [ ./common/user-account.nix ];
+      boot.kernelModules = [ "ecryptfs" ];
+      security.pam.enableEcryptfs = true;
+      environment.systemPackages = with pkgs; [ keyutils ];
+    };
 
   testScript = ''
     def login_as_alice():
@@ -82,4 +84,4 @@ import ./make-test-python.nix ({ ... }:
 
     logout()
   '';
-})
+}

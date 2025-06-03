@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fzf
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fzf,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -14,18 +15,14 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "nk412";
-    repo = pname;
+    repo = "pyfzf";
     rev = version;
     hash = "sha256-w+ZjQGFd/lR2TiTHc2uQSJXORmzJJZXsr9BO4PIw/Co=";
   };
 
-  propagatedBuildInputs = [
-    fzf
-  ];
+  propagatedBuildInputs = [ fzf ];
 
-  pythonImportsCheck = [
-    "pyfzf"
-  ];
+  pythonImportsCheck = [ "pyfzf" ];
 
   # Module has no tests
   doCheck = false;

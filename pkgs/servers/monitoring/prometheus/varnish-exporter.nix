@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, varnish, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  varnish,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "prometheus_varnish_exporter";
@@ -25,6 +32,7 @@ buildGoModule rec {
   meta = {
     homepage = "https://github.com/jonnenauha/prometheus_varnish_exporter";
     description = "Varnish exporter for Prometheus";
+    mainProgram = "prometheus_varnish_exporter";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ MostAwesomeDude ];
   };

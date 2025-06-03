@@ -1,25 +1,34 @@
-{ stdenv, lib, fetchFromGitHub, kernel, bc }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
+  bc,
+}:
 
-with lib;
+let
+  modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/rtl8192eu";
 
-let modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/rtl8192eu";
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation {
   pname = "rtl8192eu";
-  version = "${kernel.version}-4.4.1.20230613";
+  version = "${kernel.version}-4.4.1.20250504";
 
   src = fetchFromGitHub {
     owner = "Mange";
     repo = "rtl8192eu-linux-driver";
-    rev = "f2fc8af7ab58d2123eed1aa4428e713cdfc27976";
-    sha256 = "sha256-OgsxBcXoIP8h9Z0bLsG91/s/+r89Tdn2dPOt4p3sx8k=";
+    rev = "27aa922c298f2be240eec6c2e8636fe865ece195";
+    sha256 = "sha256-1Kz/GgsHsEgrp+1x2rLpJpo98Ur16aWf9CV0gcYmp0Q=";
   };
 
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies ++ [ bc ];
 
-  makeFlags = kernel.makeFlags ++ [ "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
+  makeFlags = kernelModuleMakeFlags ++ [
+    "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+  ];
 
   enableParallelBuilding = true;
 

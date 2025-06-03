@@ -1,96 +1,125 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, pybind11
-, setuptools
-, wheel
-, aiohttp
-, diskcache
-, gptcache
-, msal
-, nest-asyncio
-, numpy
-, openai
-, ordered-set
-, platformdirs
-, pyformlang
-, requests
-, tiktoken
-, torch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  pybind11,
+  setuptools,
+
+  # dependencies
+  diskcache,
+  guidance-stitch,
+  llguidance,
+  numpy,
+  ordered-set,
+  platformdirs,
+  psutil,
+  pydantic,
+  referencing,
+  requests,
+  tiktoken,
+
+  # optional-dependencies
+  openai,
+  jsonschema,
+  fastapi,
+  uvicorn,
+
+  # tests
+  huggingface-hub,
+  pytestCheckHook,
+  tokenizers,
+  torch,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "guidance";
-  version = "0.1.6";
+  version = "0.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "guidance-ai";
     repo = "guidance";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Z3EuHAQPPXf/i0HnbDhGv5KBUBP0aZDHTwpff7g2E3g=";
+    tag = version;
+    hash = "sha256-FBnND9kCIVmE/IEz3TNOww8x0EAH6TTBYfKTprqSbDg=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     pybind11
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [
-    aiohttp
+  pythonRelaxDeps = [
+    "llguidance"
+  ];
+
+  dependencies = [
     diskcache
-    gptcache
-    msal
-    nest-asyncio
+    guidance-stitch
+    llguidance
     numpy
-    openai
     ordered-set
     platformdirs
-    pyformlang
+    psutil
+    pydantic
+    referencing
     requests
     tiktoken
   ];
 
+  optional-dependencies = {
+    azureai = [ openai ];
+    openai = [ openai ];
+    schemas = [ jsonschema ];
+    server = [
+      fastapi
+      uvicorn
+    ];
+  };
+
   nativeCheckInputs = [
+    huggingface-hub
     pytestCheckHook
+    tokenizers
     torch
-  ];
+    writableTmpDirAsHomeHook
+  ] ++ optional-dependencies.schemas;
+
+  pytestFlagsArray = [ "tests/unit" ];
 
   disabledTests = [
     # require network access
-    "test_select_simple"
-    "test_commit_point"
-    "test_token_healing"
-    "test_fstring"
-    "test_fstring_custom"
-    "test_token_count"
-    "test_gpt2"
-    "test_recursion_error"
-    "test_openai_class_detection"
-    "test_openai_chat_without_roles"
-  ];
+    "test_ll_backtrack_stop"
+    "test_ll_dolphin"
+    "test_ll_fighter"
+    "test_ll_max_tokens"
+    "test_ll_nice_man"
+    "test_ll_nullable_bug"
+    "test_ll_nullable_lexeme"
+    "test_ll_pop_tokens"
+    "test_ll_stop_quote_comma"
+    "test_llparser"
+    "test_str_method_smoke"
 
-  disabledTestPaths = [
-    # require network access
-    "tests/library/test_gen.py"
+    # flaky tests
+    "test_remote_mock_gen" # frequently fails when building packages in parallel
   ];
 
   preCheck = ''
-    export HOME=$TMPDIR
+    rm tests/conftest.py
   '';
 
   pythonImportsCheck = [ "guidance" ];
 
-  meta = with lib; {
-    description = "A guidance language for controlling large language models";
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
+    description = "Guidance language for controlling large language models";
     homepage = "https://github.com/guidance-ai/guidance";
-    changelog = "https://github.com/guidance-ai/guidance/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    changelog = "https://github.com/guidance-ai/guidance/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

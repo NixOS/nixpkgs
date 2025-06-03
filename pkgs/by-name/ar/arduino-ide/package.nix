@@ -1,15 +1,16 @@
-{ appimageTools
-, fetchurl
-, lib
+{
+  appimageTools,
+  fetchurl,
+  lib,
 }:
 
 let
   pname = "arduino-ide";
-  version = "2.2.1";
+  version = "2.3.6";
 
   src = fetchurl {
     url = "https://github.com/arduino/arduino-ide/releases/download/${version}/arduino-ide_${version}_Linux_64bit.AppImage";
-    hash = "sha256-77uS/3ean3dWG/vDHG+ry238hiJlYub7H03f15eJu+I=";
+    hash = "sha256-3Zx6XRhkvAt1Erv13wF3p3lm3guRDYreh+ATBzoO6pk=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -18,21 +19,20 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/{${pname}-${version},${pname}}
-
     install -Dm444 ${appimageContents}/${pname}.desktop -t $out/share/applications/
     install -Dm444 ${appimageContents}/${pname}.png -t $out/share/pixmaps/
+    substituteInPlace $out/share/applications/${pname}.desktop --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=${pname} %U'
   '';
 
-  extraPkgs = pkgs: with pkgs; [ libsecret ];
+  extraPkgs = pkgs: [ pkgs.libsecret ];
 
-  meta = with lib; {
+  meta = {
     description = "Open-source electronics prototyping platform";
     homepage = "https://www.arduino.cc/en/software";
     changelog = "https://github.com/arduino/arduino-ide/releases/tag/${version}";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     mainProgram = "arduino-ide";
-    maintainers = with maintainers; [ clerie ];
+    maintainers = with lib.maintainers; [ clerie ];
     platforms = [ "x86_64-linux" ];
   };
 }

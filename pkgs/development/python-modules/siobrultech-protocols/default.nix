@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sdwilsh";
     repo = "siobrultech-protocols";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-8tls2wlLA3wQ78gK4JvvhSWZS5oHRzzsKE73M4i1eyg=";
   };
 
@@ -34,7 +35,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A Sans-I/O Python client library for Brultech Devices";
+    description = "Sans-I/O Python client library for Brultech Devices";
     homepage = "https://github.com/sdwilsh/siobrultech-protocols";
     changelog = "https://github.com/sdwilsh/siobrultech-protocols/releases/tag/v${version}";
     license = licenses.mit;

@@ -1,113 +1,141 @@
-{ lib
-, baycomp
-, bottleneck
-, buildPythonPackage
-, chardet
-, copyDesktopItems
-, cython
-, fetchFromGitHub
-, fetchurl
-, httpx
-, joblib
-, keyring
-, keyrings-alt
-, makeDesktopItem
-, matplotlib
-, nix-update-script
-, numpy
-, oldest-supported-numpy
-, openpyxl
-, opentsne
-, orange-canvas-core
-, orange-widget-base
-, pandas
-, pyqtgraph
-, pyqtwebengine
-, python
-, python-louvain
-, pythonOlder
-, pyyaml
-, qt5
-, qtconsole
-, recommonmark
-, requests
-, scikit-learn
-, scipy
-, serverfiles
-, setuptools
-, sphinx
-, wheel
-, xlrd
-, xlsxwriter
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  oldest-supported-numpy,
+  setuptools,
+
+  # nativeBuildInputs
+  copyDesktopItems,
+  cython,
+  qt5,
+  recommonmark,
+  sphinx,
+
+  # dependencies
+  baycomp,
+  bottleneck,
+  catboost,
+  chardet,
+  httpx,
+  joblib,
+  keyring,
+  keyrings-alt,
+  matplotlib,
+  numpy,
+  openpyxl,
+  opentsne,
+  orange-canvas-core,
+  orange-widget-base,
+  pandas,
+  pip,
+  pyqt5,
+  pyqtgraph,
+  pyqtwebengine,
+  python-louvain,
+  pyyaml,
+  qtconsole,
+  requests,
+  scikit-learn,
+  scipy,
+  serverfiles,
+  xgboost,
+  xlrd,
+  xlsxwriter,
+
+  makeDesktopItem,
+
+  # passthru
+  gitUpdater,
+  python,
+  pytest-qt,
+  pytestCheckHook,
 }:
 
 let
   self = buildPythonPackage rec {
     pname = "orange3";
-    version = "3.36.2";
-    format = "setuptools";
-
-    disabled = pythonOlder "3.7";
+    version = "3.38.1";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "biolab";
       repo = "orange3";
-      rev = "refs/tags/${version}";
-      hash = "sha256-v9lk5vGhBaR2PHZ+Jq0hy1WaCsbeLe+vZlTaHBkfacU=";
+      tag = version;
+      hash = "sha256-bzF2rK8/cKAoe9Wzj+rQJatgBQTP3KVtT6xU+IzKYIY=";
     };
+
+    build-system = [
+      oldest-supported-numpy
+      setuptools
+    ];
 
     postPatch = ''
       substituteInPlace pyproject.toml \
-        --replace "setuptools>=41.0.0,<50.0" "setuptools"
-      sed -i 's;\(scikit-learn\)[^$]*;\1;g' requirements-core.txt
-      sed -i 's;pyqtgraph[^$]*;;g' requirements-gui.txt # TODO: remove after bump with a version greater than 0.13.1
+          --replace-fail 'cython>=3.0' 'cython'
+
+      # disable update checking
+      echo -e "def check_for_updates():\n\tpass" >> Orange/canvas/__main__.py
     '';
 
     nativeBuildInputs = [
       copyDesktopItems
       cython
-      oldest-supported-numpy
       qt5.wrapQtAppsHook
       recommonmark
-      setuptools
       sphinx
-      wheel
     ];
 
     enableParallelBuilding = true;
 
-    propagatedBuildInputs = [
-      numpy
-      scipy
+    pythonRelaxDeps = [ "scikit-learn" ];
+
+    dependencies = [
+      baycomp
+      bottleneck
+      catboost
       chardet
+      httpx
+      joblib
+      keyring
+      keyrings-alt
+      matplotlib
+      numpy
       openpyxl
       opentsne
-      qtconsole
-      bottleneck
-      matplotlib
-      joblib
-      requests
-      keyring
-      scikit-learn
-      pandas
-      pyqtwebengine
-      serverfiles
       orange-canvas-core
+      orange-widget-base
+      pandas
+      pip
+      pyqt5
+      pyqtgraph
+      pyqtwebengine
       python-louvain
+      pyyaml
+      qtconsole
+      requests
+      scikit-learn
+      scipy
+      serverfiles
+      setuptools
+      xgboost
       xlrd
       xlsxwriter
-      httpx
-      pyqtgraph
-      orange-widget-base
-      keyrings-alt
-      pyyaml
-      baycomp
     ];
 
     # FIXME: ImportError: cannot import name '_variable' from partially initialized module 'Orange.data' (most likely due to a circular import) (/build/source/Orange/data/__init__.py)
     doCheck = false;
 
-    pythonImportsCheck = [ "Orange" "Orange.data._variable" ];
+    # FIXME: pythonRelaxDeps is not relaxing the scikit-learn version constraint, had to disable this
+    dontCheckRuntimeDeps = true;
+
+    pythonImportsCheck = [
+      "Orange"
+      "Orange.data._variable"
+    ];
 
     desktopItems = [
       (makeDesktopItem {
@@ -118,8 +146,19 @@ let
         comment = "Explore, analyze, and visualize your data";
         icon = "orange-canvas";
         mimeTypes = [ "application/x-extension-ows" ];
-        categories = [ "Science" "Education" "ArtificialIntelligence" "DataVisualization" "NumericalAnalysis" "Qt" ];
-        keywords = [ "Machine Learning" "Scientific Visualization" "Statistical Analysis" ];
+        categories = [
+          "Science"
+          "Education"
+          "ArtificialIntelligence"
+          "DataVisualization"
+          "NumericalAnalysis"
+          "Qt"
+        ];
+        keywords = [
+          "Machine Learning"
+          "Scientific Visualization"
+          "Statistical Analysis"
+        ];
       })
     ];
 
@@ -132,10 +171,10 @@ let
     '';
 
     passthru = {
-      updateScript = nix-update-script { };
-      tests.unittests = self.overridePythonAttrs (old: {
-        pname = "${old.pname}-tests";
-        format = "other";
+      updateScript = gitUpdater { };
+      tests.unittests = stdenv.mkDerivation {
+        name = "${self.name}-tests";
+        inherit (self) src;
 
         preCheck = ''
           export HOME=$(mktemp -d)
@@ -147,31 +186,43 @@ let
           cp -r ${self}/${python.sitePackages}/Orange .
           chmod +w -R .
 
-          rm Orange/tests/test_url_reader.py # uses network
-          rm Orange/tests/test_ada_boost.py # broken: The 'base_estimator' parameter of AdaBoostRegressor must be an object implementing 'fit' and 'predict' or a str among {'deprecated'}. Got None instead.
+          substituteInPlace Orange/classification/tests/test_xgb_cls.py \
+            --replace-fail test_learners mk_test_learners
+
+          substituteInPlace Orange/modelling/tests/test_xgb.py \
+            --replace-fail test_learners mk_test_learners
+
+          substituteInPlace Orange/**/tests/*.py \
+            --replace-fail test_filename filename_test
+
+          # TODO: debug why orange is crashing on GC, may be a upstream issue
+          chmod +x Orange/__init__.py
+          echo "import gc; gc.disable()" | tee -a Orange/__init__.py
+
         '';
 
-        checkPhase = ''
-          runHook preCheck
-          ${python.interpreter} -m unittest -b -v ./Orange/**/test*.py
-          runHook postCheck
-        '';
+        nativeBuildInputs = [
+          pytest-qt
+          pytestCheckHook
+        ];
 
-        postInstall = "";
+        postCheck = ''
+          touch $out
+        '';
 
         doBuild = false;
         doInstall = false;
 
-        nativeBuildInputs = [ self ] ++ old.nativeBuildInputs;
-      });
+        buildInputs = [ self ];
+      };
     };
 
-    meta = with lib; {
+    meta = {
       description = "Data mining and visualization toolbox for novice and expert alike";
       homepage = "https://orangedatamining.com/";
-      changelog = "https://github.com/biolab/orange3/blob/${version}/CHANGELOG.md";
-      license = with licenses; [ gpl3Plus ];
-      maintainers = with maintainers; [ lucasew ];
+      changelog = "https://github.com/biolab/orange3/blob/${src.tag}/CHANGELOG.md";
+      license = [ lib.licenses.gpl3Plus ];
+      maintainers = [ lib.maintainers.lucasew ];
       mainProgram = "orange-canvas";
     };
   };

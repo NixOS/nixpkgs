@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, colorama
-, pytest
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  colorama,
+  pytest,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "yukihiko-shinoda";
-    repo = pname;
+    repo = "pytest-resource-path";
     rev = "v${version}";
     sha256 = "1siv3pk4fsabz254fdzr7c0pxy124habnbw4ym66pfk883fr96g2";
   };
@@ -25,21 +26,13 @@ buildPythonPackage rec {
       --replace "pytest-runner" ""
   '';
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    colorama
-  ];
+  propagatedBuildInputs = [ colorama ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pytest_resource_path"
-  ];
+  pythonImportsCheck = [ "pytest_resource_path" ];
 
   meta = with lib; {
     description = "Pytest plugin to provide path for uniform access to test resources";

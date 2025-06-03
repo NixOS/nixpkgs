@@ -1,4 +1,10 @@
-{ callPackage }:
+{ callPackage, flutterPackages }:
 {
-  file-manager = callPackage ./file-manager {};
+  calculator = callPackage ./calculator {
+    flutter = flutterPackages.v3_24;
+  };
+
+  file-manager = callPackage ./file-manager {
+    flutter = flutterPackages.v3_24;
+  };
 }

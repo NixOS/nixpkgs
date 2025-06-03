@@ -6,19 +6,19 @@
 }:
 buildLua {
   pname = "visualizer";
-  version = "unstable-2023-08-13";
+  version = "0-unstable-2025-04-12";
 
   src = fetchFromGitHub {
     owner = "mfcc64";
     repo = "mpv-scripts";
-    rev = "7dbbfb283508714b73ead2a57b6939da1d139bd3";
-    sha256 = "zzB4uBc1M2Gdr/JKY2uk8MY0hmQl1XeomkfTzuM45oE=";
+    rev = "bf6776f5c3dae8d83ba29b820496af89dc436613";
+    sha256 = "9ApUBXjH4TKPP4P/fUXSNYbJu2AH6HBYt+1K+sHB7yE=";
   };
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "various audio visualization";
     homepage = "https://github.com/mfcc64/mpv-scripts";
-    maintainers = with maintainers; [kmein];
+    maintainers = with maintainers; [ kmein ];
   };
 }

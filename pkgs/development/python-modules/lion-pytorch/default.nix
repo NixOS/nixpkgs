@@ -1,27 +1,28 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, torch
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  torch,
 }:
 
 buildPythonPackage rec {
   pname = "lion-pytorch";
-  version = "0.1.2";
+  version = "0.2.3";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "lucidrains";
     repo = "lion-pytorch";
-    rev = "refs/tags/${version}";
-    hash = "sha256-9hdpRJvCpv3PeC7f0IXpHt6i+e6LiT0QUl5jeDGelQE=";
+    tag = version;
+    hash = "sha256-RHixPIZ1kCawWQiqYqLY+c3r6Rg86LKm3tQTyW2BNFU=";
   };
 
   propagatedBuildInputs = [ torch ];
 
   pythonImportsCheck = [ "lion_pytorch" ];
-  doCheck = false;  # no tests currently
+  doCheck = false; # no tests currently
 
   meta = with lib; {
     description = "Optimizer tuned by Google Brain using genetic algorithms";

@@ -1,53 +1,54 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, coloredlogs
-, fetchFromGitHub
-, jsonschema
-, pytest-asyncio
-, pytest-mock
-, pytest-rerunfailures
-, pytest-timeout
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, voluptuous
-, zigpy
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  coloredlogs,
+  fetchFromGitHub,
+  jsonschema,
+  pytest-asyncio,
+  pytest-mock,
+  pytest-rerunfailures,
+  pytest-timeout,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  voluptuous,
+  zigpy,
 }:
 
 buildPythonPackage rec {
   pname = "zigpy-znp";
-  version = "0.12.1";
+  version = "0.14.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "zigpy";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Bs/m9Iyr8x+sMUVXt1whk2E4EJ5bpitMsEWZtmCyIf8=";
+    repo = "zigpy-znp";
+    tag = "v${version}";
+    hash = "sha256-vYB04vEFqpqrjJMS73mtYXakp7lEIJjB+tT0SF9hpWM=";
   };
-
-  nativeBuildInputs = [
-    setuptools
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "timeout = 20" "timeout = 300" \
-      --replace ', "setuptools-git-versioning<2"' "" \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail "timeout = 20" "timeout = 300" \
+      --replace-fail ', "setuptools-git-versioning<2"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     async-timeout
     coloredlogs
     jsonschema
     voluptuous
     zigpy
   ];
+
+  doCheck = false; # tests are not compatible with zigpy 0.65.3
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -58,9 +59,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "--reruns=3"
-  ];
+  pytestFlagsArray = [ "--reruns=3" ];
 
   disabledTests = [
     # failing since zigpy 0.60.0
@@ -73,9 +72,7 @@ buildPythonPackage rec {
     "test_zigpy_request_failure"
   ];
 
-  pythonImportsCheck = [
-    "zigpy_znp"
-  ];
+  pythonImportsCheck = [ "zigpy_znp" ];
 
   meta = with lib; {
     description = "Library for zigpy which communicates with TI ZNP radios";

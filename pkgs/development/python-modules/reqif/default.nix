@@ -1,20 +1,20 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, jinja2
-, lxml
-, pytestCheckHook
-, python
-, pythonOlder
-, pythonRelaxDepsHook
-, xmlschema
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  jinja2,
+  lxml,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  xmlschema,
 }:
 
 buildPythonPackage rec {
   pname = "reqif";
-  version = "0.0.40";
+  version = "0.0.42";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "strictdoc-project";
     repo = "reqif";
-    rev = "refs/tags/${version}";
-    hash = "sha256-VQvwynFv/DN5RHT00rxtDcJ9wsEpKdsh3rdyUakBr2Q=";
+    tag = version;
+    hash = "sha256-cQhis7jrcly3cw2LRv7hpPBFAB0Uag69czf+wJvbh/Q=";
   };
 
   postPatch = ''
@@ -34,7 +34,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -44,16 +43,13 @@ buildPythonPackage rec {
     xmlschema
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "reqif"
-  ];
+  pythonImportsCheck = [ "reqif" ];
 
   meta = with lib; {
     description = "Python library for ReqIF format";
+    mainProgram = "reqif";
     homepage = "https://github.com/strictdoc-project/reqif";
     changelog = "https://github.com/strictdoc-project/reqif/releases/tag/${version}";
     license = licenses.asl20;

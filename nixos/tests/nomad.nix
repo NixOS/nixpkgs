@@ -1,20 +1,23 @@
-import ./make-test-python.nix (
-  { lib, ... }: {
-    name = "nomad";
-    nodes = {
-      default_server = { pkgs, lib, ... }: {
+{ lib, ... }:
+{
+  name = "nomad";
+  nodes = {
+    default_server =
+      { pkgs, lib, ... }:
+      {
         networking = {
-          interfaces.eth1.ipv4.addresses = lib.mkOverride 0 [{
-            address = "192.168.1.1";
-            prefixLength = 16;
-          }];
+          interfaces.eth1.ipv4.addresses = lib.mkOverride 0 [
+            {
+              address = "192.168.1.1";
+              prefixLength = 16;
+            }
+          ];
         };
 
-        environment.etc."nomad.custom.json".source =
-          (pkgs.formats.json { }).generate "nomad.custom.json" {
-            region = "universe";
-            datacenter = "earth";
-          };
+        environment.etc."nomad.custom.json".source = (pkgs.formats.json { }).generate "nomad.custom.json" {
+          region = "universe";
+          datacenter = "earth";
+        };
 
         services.nomad = {
           enable = true;
@@ -31,19 +34,22 @@ import ./make-test-python.nix (
         };
       };
 
-      custom_state_dir_server = { pkgs, lib, ... }: {
+    custom_state_dir_server =
+      { pkgs, lib, ... }:
+      {
         networking = {
-          interfaces.eth1.ipv4.addresses = lib.mkOverride 0 [{
-            address = "192.168.1.1";
-            prefixLength = 16;
-          }];
+          interfaces.eth1.ipv4.addresses = lib.mkOverride 0 [
+            {
+              address = "192.168.1.1";
+              prefixLength = 16;
+            }
+          ];
         };
 
-        environment.etc."nomad.custom.json".source =
-          (pkgs.formats.json { }).generate "nomad.custom.json" {
-            region = "universe";
-            datacenter = "earth";
-          };
+        environment.etc."nomad.custom.json".source = (pkgs.formats.json { }).generate "nomad.custom.json" {
+          region = "universe";
+          datacenter = "earth";
+        };
 
         services.nomad = {
           enable = true;
@@ -67,31 +73,30 @@ import ./make-test-python.nix (
           ${pkgs.coreutils}/bin/mkdir -p /nomad/data/dir
         ''}";
       };
-    };
+  };
 
-    testScript = ''
-      def test_nomad_server(server):
-          server.wait_for_unit("nomad.service")
+  testScript = ''
+    def test_nomad_server(server):
+        server.wait_for_unit("nomad.service")
 
-          # wait for healthy server
-          server.wait_until_succeeds(
-              "[ $(nomad operator raft list-peers | grep true | wc -l) == 1 ]"
-          )
+        # wait for healthy server
+        server.wait_until_succeeds(
+            "[ $(nomad operator raft list-peers | grep true | wc -l) == 1 ]"
+        )
 
-          # wait for server liveness
-          server.succeed("[ $(nomad server members | grep -o alive | wc -l) == 1 ]")
+        # wait for server liveness
+        server.succeed("[ $(nomad server members | grep -o alive | wc -l) == 1 ]")
 
-          # check the region
-          server.succeed("nomad server members | grep -o universe")
+        # check the region
+        server.succeed("nomad server members | grep -o universe")
 
-          # check the datacenter
-          server.succeed("[ $(nomad server members | grep -o earth | wc -l) == 1 ]")
+        # check the datacenter
+        server.succeed("[ $(nomad server members | grep -o earth | wc -l) == 1 ]")
 
 
-      servers = [default_server, custom_state_dir_server]
+    servers = [default_server, custom_state_dir_server]
 
-      for server in servers:
-          test_nomad_server(server)
-    '';
-  }
-)
+    for server in servers:
+        test_nomad_server(server)
+  '';
+}

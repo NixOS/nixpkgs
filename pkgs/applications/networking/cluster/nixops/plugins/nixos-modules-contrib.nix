@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, unstableGitUpdater
-, poetry-core
-, nixops
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  poetry-core,
+  nixops,
 }:
 
 buildPythonPackage {
   pname = "nixos-modules-contrib";
-  version = "unstable-2021-01-20";
+  version = "0-unstable-2021-01-20";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -34,12 +35,12 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "nixos_modules_contrib" ];
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Useful NixOS modules which may not belong in the Nixpkgs repository itself";
     homepage = "https://github.com/nix-community/nixos-modules-contrib";
     license = licenses.lgpl3;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

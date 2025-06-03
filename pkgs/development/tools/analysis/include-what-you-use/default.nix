@@ -1,21 +1,38 @@
-{ lib, stdenv, fetchurl, cmake, llvmPackages, python3 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  llvmPackages,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "include-what-you-use";
-  # Also bump llvmPackages in all-packages.nix to the supported version!
-  version = "0.21";
+  # Make sure to bump `llvmPackages` in "pkgs/top-level/all-packages.nix" to the supported version:
+  # https://github.com/include-what-you-use/include-what-you-use?tab=readme-ov-file#clang-compatibility
+  version = "0.24";
 
   src = fetchurl {
     url = "${meta.homepage}/downloads/${pname}-${version}.src.tar.gz";
-    hash = "sha256-ajUZGf+JvafJXIlUcmAYaNs9qrlqlYs44DYokNWHYLY=";
+    hash = "sha256-ojQhzv9gHT6iFej6kpK/qMo56xrCCY277fxs/mVUHBA=";
   };
 
   postPatch = ''
     patchShebangs .
   '';
 
-  nativeBuildInputs = with llvmPackages; [ cmake llvm.dev llvm python3 ];
-  buildInputs = with llvmPackages; [ libclang clang-unwrapped python3 ];
+  nativeBuildInputs = with llvmPackages; [
+    cmake
+    llvm.dev
+    llvm
+    python3
+  ];
+  buildInputs = with llvmPackages; [
+    libclang
+    clang-unwrapped
+    python3
+  ];
 
   clang = llvmPackages.clang;
 
@@ -23,7 +40,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/bin/iwyu_tool.py \
-      --replace "'include-what-you-use'" "'$out/bin/include-what-you-use'"
+      --replace-fail "'include-what-you-use'" "'$out/bin/include-what-you-use'"
 
 
     mv $out/bin/include-what-you-use $out/bin/.include-what-you-use-unwrapped

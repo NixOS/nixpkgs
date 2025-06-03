@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-, legacy ? false
-, libinput
+  legacy ? false,
+  libinput,
 
-, pkg-config
-, makeWrapper
+  pkg-config,
+  makeWrapper,
 
-, openal
-, alure
-, libXtst
-, libX11
+  openal,
+  alure,
+  libXtst,
+  libX11,
 }:
 
 let
@@ -28,10 +29,20 @@ stdenv.mkDerivation rec {
     sha256 = "0prhqibivxzmz90k79zpwx3c97h8wa61rk5ihi9a5651mnc46mna";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+  ];
 
-  buildInputs = [ openal alure ]
-    ++ optionals (legacy) [ libXtst libX11 ]
+  buildInputs =
+    [
+      openal
+      alure
+    ]
+    ++ optionals (legacy) [
+      libXtst
+      libX11
+    ]
     ++ optionals (!legacy) [ libinput ];
 
   makeFlags = optionals (!legacy) [ "libinput=1" ];
@@ -50,6 +61,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Nostalgia bucklespring keyboard sound";
+    mainProgram = "buckle";
     longDescription = ''
       When built with libinput (wayland or bare console),
       users need to be in the input group to use this:
@@ -57,7 +69,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/zevv/bucklespring";
     license = licenses.gpl2Only;
-    platforms  = platforms.unix;
+    platforms = platforms.unix;
     maintainers = [ maintainers.evils ];
   };
 }

@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.apcupsd;
 
@@ -43,39 +45,53 @@ let
     chmod a+x "$out/${eventname}"
   '';
 
-  eventToShellCmds = event: if builtins.hasAttr event cfg.hooks then (shellCmdsForEventScript event (builtins.getAttr event cfg.hooks)) else "";
+  eventToShellCmds =
+    event:
+    if builtins.hasAttr event cfg.hooks then
+      (shellCmdsForEventScript event (builtins.getAttr event cfg.hooks))
+    else
+      "";
 
-  scriptDir = pkgs.runCommand "apcupsd-scriptdir" { preferLocalBuild = true; } (''
-    mkdir "$out"
-    # Copy SCRIPTDIR from apcupsd package
-    cp -r ${pkgs.apcupsd}/etc/apcupsd/* "$out"/
-    # Make the files writeable (nix will unset the write bits afterwards)
-    chmod u+w "$out"/*
-    # Remove the sample event notification scripts, because they don't work
-    # anyways (they try to send mail to "root" with the "mail" command)
-    (cd "$out" && rm changeme commok commfailure onbattery offbattery)
-    # Remove the sample apcupsd.conf file (we're generating our own)
-    rm "$out/apcupsd.conf"
-    # Set the SCRIPTDIR= line in apccontrol to the dir we're creating now
-    sed -i -e "s|^SCRIPTDIR=.*|SCRIPTDIR=$out|" "$out/apccontrol"
-    '' + concatStringsSep "\n" (map eventToShellCmds eventList)
+  scriptDir = pkgs.runCommand "apcupsd-scriptdir" { preferLocalBuild = true; } (
+    ''
+      mkdir "$out"
+      # Copy SCRIPTDIR from apcupsd package
+      cp -r ${pkgs.apcupsd}/etc/apcupsd/* "$out"/
+      # Make the files writeable (nix will unset the write bits afterwards)
+      chmod u+w "$out"/*
+      # Remove the sample event notification scripts, because they don't work
+      # anyways (they try to send mail to "root" with the "mail" command)
+      (cd "$out" && rm changeme commok commfailure onbattery offbattery)
+      # Remove the sample apcupsd.conf file (we're generating our own)
+      rm "$out/apcupsd.conf"
+      # Set the SCRIPTDIR= line in apccontrol to the dir we're creating now
+      sed -i -e "s|^SCRIPTDIR=.*|SCRIPTDIR=$out|" "$out/apccontrol"
+    ''
+    + lib.concatStringsSep "\n" (map eventToShellCmds eventList)
 
   );
 
   # Ensure the CLI uses our generated configFile
-  wrappedBinaries = pkgs.runCommandLocal "apcupsd-wrapped-binaries"
-    { nativeBuildInputs = [ pkgs.makeWrapper ]; }
-    ''
-      for p in "${lib.getBin pkgs.apcupsd}/bin/"*; do
-          bname=$(basename "$p")
-          makeWrapper "$p" "$out/bin/$bname" --add-flags "-f ${configFile}"
-      done
-    '';
+  wrappedBinaries =
+    pkgs.runCommand "apcupsd-wrapped-binaries"
+      {
+        preferLocalBuild = true;
+        nativeBuildInputs = [ pkgs.makeWrapper ];
+      }
+      ''
+        for p in "${lib.getBin pkgs.apcupsd}/bin/"*; do
+            bname=$(basename "$p")
+            makeWrapper "$p" "$out/bin/$bname" --add-flags "-f ${configFile}"
+        done
+      '';
 
   apcupsdWrapped = pkgs.symlinkJoin {
     name = "apcupsd-wrapped";
     # Put wrappers first so they "win"
-    paths = [ wrappedBinaries pkgs.apcupsd ];
+    paths = [
+      wrappedBinaries
+      pkgs.apcupsd
+    ];
   };
 in
 
@@ -87,10 +103,10 @@ in
 
     services.apcupsd = {
 
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
-        description = lib.mdDoc ''
+        type = lib.types.bool;
+        description = ''
           Whether to enable the APC UPS daemon. apcupsd monitors your UPS and
           permits orderly shutdown of your computer in the event of a power
           failure. User manual: http://www.apcupsd.com/manual/manual.html.
@@ -99,15 +115,15 @@ in
         '';
       };
 
-      configText = mkOption {
+      configText = lib.mkOption {
         default = ''
           UPSTYPE usb
           NISIP 127.0.0.1
           BATTERYLEVEL 50
           MINUTES 5
         '';
-        type = types.lines;
-        description = lib.mdDoc ''
+        type = lib.types.lines;
+        description = ''
           Contents of the runtime configuration file, apcupsd.conf. The default
           settings makes apcupsd autodetect USB UPSes, limit network access to
           localhost and shutdown the system when the battery level is below 50
@@ -116,13 +132,13 @@ in
         '';
       };
 
-      hooks = mkOption {
-        default = {};
+      hooks = lib.mkOption {
+        default = { };
         example = {
           doshutdown = "# shell commands to notify that the computer is shutting down";
         };
-        type = types.attrsOf types.lines;
-        description = lib.mdDoc ''
+        type = lib.types.attrsOf lib.types.lines;
+        description = ''
           Each attribute in this option names an apcupsd event and the string
           value it contains will be executed in a shell, in response to that
           event (prior to the default action). See "man apccontrol" for the
@@ -138,19 +154,24 @@ in
 
   };
 
-
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    assertions = [ {
-      assertion = let hooknames = builtins.attrNames cfg.hooks; in all (x: elem x eventList) hooknames;
-      message = ''
-        One (or more) attribute names in services.apcupsd.hooks are invalid.
-        Current attribute names: ${toString (builtins.attrNames cfg.hooks)}
-        Valid attribute names  : ${toString eventList}
-      '';
-    } ];
+    assertions = [
+      {
+        assertion =
+          let
+            hooknames = builtins.attrNames cfg.hooks;
+          in
+          lib.all (x: lib.elem x eventList) hooknames;
+        message = ''
+          One (or more) attribute names in services.apcupsd.hooks are invalid.
+          Current attribute names: ${toString (builtins.attrNames cfg.hooks)}
+          Valid attribute names  : ${toString eventList}
+        '';
+      }
+    ];
 
     # Give users access to the "apcaccess" tool
     environment.systemPackages = [ apcupsdWrapped ];

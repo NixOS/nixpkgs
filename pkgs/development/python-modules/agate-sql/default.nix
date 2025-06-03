@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchPypi
-, agate
-, sqlalchemy
-, crate
-, pytestCheckHook
-, geojson
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchPypi,
+  agate,
+  sqlalchemy,
+  crate,
+  pytestCheckHook,
+  geojson,
 }:
 
 buildPythonPackage rec {
@@ -21,16 +22,27 @@ buildPythonPackage rec {
     hash = "sha256-mxswKEpXP9QWdZQ3Jz3MXIECK98vrLJLSqAppir9U7A=";
   };
 
-  propagatedBuildInputs = [ agate sqlalchemy ];
+  propagatedBuildInputs = [
+    agate
+    sqlalchemy
+  ];
 
-  nativeCheckInputs = [ crate geojson pytestCheckHook ];
+  nativeCheckInputs = [
+    geojson
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "agatesql" ];
 
+  disabledTests = [
+    # requires crate (sqlalchemy-cratedb)
+    "test_to_sql_create_statement_with_dialects"
+  ];
+
   meta = with lib; {
-    description = "Adds SQL read/write support to agate.";
+    description = "Adds SQL read/write support to agate";
     homepage = "https://github.com/wireservice/agate-sql";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = [ ];
   };
 }

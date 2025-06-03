@@ -1,8 +1,21 @@
-{ pkgs, lib, config, ... }:
-
-with lib;
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 let
+  inherit (lib)
+    mkEnableOption
+    mkPackageOption
+    mkOption
+    mkDefault
+    mkIf
+    types
+    literalExpression
+    ;
+
   cfg = config.services.mobilizon;
 
   user = "mobilizon";
@@ -15,34 +28,29 @@ let
   # Make a package containing launchers with the correct envirenment, instead of
   # setting it with systemd services, so that the user can also use them without
   # troubles
-  launchers = pkgs.stdenv.mkDerivation rec {
-    pname = "${cfg.package.pname}-launchers";
-    inherit (cfg.package) version;
+  launchers =
+    pkgs.runCommand "${cfg.package.pname}-launchers-${cfg.package.version}"
+      {
+        src = cfg.package;
+        nativeBuildInputs = with pkgs; [ makeWrapper ];
+      }
+      ''
+        mkdir -p $out/bin
 
-    src = cfg.package;
+        makeWrapper \
+          $src/bin/mobilizon \
+          $out/bin/mobilizon \
+          --run '. ${secretEnvFile}' \
+          --set MOBILIZON_CONFIG_PATH "${configFile}" \
+          --set-default RELEASE_TMP "/tmp"
 
-    nativeBuildInputs = with pkgs; [ makeWrapper ];
-
-    dontBuild = true;
-
-    installPhase = ''
-      mkdir -p $out/bin
-
-      makeWrapper \
-        $src/bin/mobilizon \
-        $out/bin/mobilizon \
-        --run '. ${secretEnvFile}' \
-        --set MOBILIZON_CONFIG_PATH "${configFile}" \
-        --set-default RELEASE_TMP "/tmp"
-
-      makeWrapper \
-        $src/bin/mobilizon_ctl \
-        $out/bin/mobilizon_ctl \
-        --run '. ${secretEnvFile}' \
-        --set MOBILIZON_CONFIG_PATH "${configFile}" \
-        --set-default RELEASE_TMP "/tmp"
-    '';
-  };
+        makeWrapper \
+          $src/bin/mobilizon_ctl \
+          $out/bin/mobilizon_ctl \
+          --run '. ${secretEnvFile}' \
+          --set MOBILIZON_CONFIG_PATH "${configFile}" \
+          --set-default RELEASE_TMP "/tmp"
+      '';
 
   repoSettings = cfg.settings.":mobilizon"."Mobilizon.Storage.Repo";
   instanceSettings = cfg.settings.":mobilizon".":instance";
@@ -52,20 +60,19 @@ let
   dbUser = if repoSettings.username != null then repoSettings.username else "mobilizon";
 
   postgresql = config.services.postgresql.package;
-  postgresqlSocketDir = "/var/run/postgresql";
+  postgresqlSocketDir = "/run/postgresql";
 
   secretEnvFile = "/var/lib/mobilizon/secret-env.sh";
 in
 {
   options = {
     services.mobilizon = {
-      enable = mkEnableOption
-        (lib.mdDoc "Mobilizon federated organization and mobilization platform");
+      enable = mkEnableOption "Mobilizon federated organization and mobilization platform";
 
       nginx.enable = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether an Nginx virtual host should be
           set up to serve Mobilizon.
         '';
@@ -90,7 +97,7 @@ in
                     defaultText = lib.literalMD ''
                       ''${settings.":mobilizon".":instance".hostname}
                     '';
-                    description = lib.mdDoc ''
+                    description = ''
                       Your instance's hostname for generating URLs throughout the app
                     '';
                   };
@@ -99,14 +106,23 @@ in
                     port = mkOption {
                       type = elixirTypes.port;
                       default = 4000;
-                      description = lib.mdDoc ''
+                      description = ''
                         The port to run the server
                       '';
                     };
                     ip = mkOption {
                       type = elixirTypes.tuple;
-                      default = settingsFormat.lib.mkTuple [ 0 0 0 0 0 0 0 1 ];
-                      description = lib.mdDoc ''
+                      default = settingsFormat.lib.mkTuple [
+                        0
+                        0
+                        0
+                        0
+                        0
+                        0
+                        0
+                        1
+                      ];
+                      description = ''
                         The IP address to listen on. Defaults to [::1] notated as a byte tuple.
                       '';
                     };
@@ -115,7 +131,7 @@ in
                   has_reverse_proxy = mkOption {
                     type = elixirTypes.bool;
                     default = true;
-                    description = lib.mdDoc ''
+                    description = ''
                       Whether you use a reverse proxy
                     '';
                   };
@@ -124,14 +140,14 @@ in
                 ":instance" = {
                   name = mkOption {
                     type = elixirTypes.str;
-                    description = lib.mdDoc ''
+                    description = ''
                       The fallback instance name if not configured into the admin UI
                     '';
                   };
 
                   hostname = mkOption {
                     type = elixirTypes.str;
-                    description = lib.mdDoc ''
+                    description = ''
                       Your instance's hostname
                     '';
                   };
@@ -141,7 +157,7 @@ in
                     defaultText = literalExpression ''
                       noreply@''${settings.":mobilizon".":instance".hostname}
                     '';
-                    description = lib.mdDoc ''
+                    description = ''
                       The email for the From: header in emails
                     '';
                   };
@@ -151,7 +167,7 @@ in
                     defaultText = literalExpression ''
                       ''${email_from}
                     '';
-                    description = lib.mdDoc ''
+                    description = ''
                       The email for the Reply-To: header in emails
                     '';
                   };
@@ -161,7 +177,7 @@ in
                   socket_dir = mkOption {
                     type = types.nullOr elixirTypes.str;
                     default = postgresqlSocketDir;
-                    description = lib.mdDoc ''
+                    description = ''
                       Path to the postgres socket directory.
 
                       Set this to null if you want to connect to a remote database.
@@ -178,7 +194,7 @@ in
                   username = mkOption {
                     type = types.nullOr elixirTypes.str;
                     default = user;
-                    description = lib.mdDoc ''
+                    description = ''
                       User used to connect to the database
                     '';
                   };
@@ -186,7 +202,7 @@ in
                   database = mkOption {
                     type = types.nullOr elixirTypes.str;
                     default = "mobilizon_prod";
-                    description = lib.mdDoc ''
+                    description = ''
                       Name of the database
                     '';
                   };
@@ -196,7 +212,7 @@ in
           };
         default = { };
 
-        description = lib.mdDoc ''
+        description = ''
           Mobilizon Elixir documentation, see
           <https://docs.joinmobilizon.org/administration/configure/reference/>
           for supported values.
@@ -209,7 +225,20 @@ in
 
     assertions = [
       {
-        assertion = cfg.nginx.enable -> (cfg.settings.":mobilizon"."Mobilizon.Web.Endpoint".http.ip == settingsFormat.lib.mkTuple [ 0 0 0 0 0 0 0 1 ]);
+        assertion =
+          cfg.nginx.enable
+          -> (
+            cfg.settings.":mobilizon"."Mobilizon.Web.Endpoint".http.ip == settingsFormat.lib.mkTuple [
+              0
+              0
+              0
+              0
+              0
+              0
+              0
+              1
+            ]
+          );
         message = "Setting the IP mobilizon listens on is only possible when the nginx config is not used, as it is hardcoded there.";
       }
     ];
@@ -219,12 +248,12 @@ in
         "Mobilizon.Web.Endpoint" = {
           server = true;
           url.host = mkDefault instanceSettings.hostname;
-          secret_key_base =
-            settingsFormat.lib.mkGetEnv { envVariable = "MOBILIZON_INSTANCE_SECRET"; };
+          secret_key_base = settingsFormat.lib.mkGetEnv { envVariable = "MOBILIZON_INSTANCE_SECRET"; };
         };
 
-        "Mobilizon.Web.Auth.Guardian".secret_key =
-          settingsFormat.lib.mkGetEnv { envVariable = "MOBILIZON_AUTH_SECRET"; };
+        "Mobilizon.Web.Auth.Guardian".secret_key = settingsFormat.lib.mkGetEnv {
+          envVariable = "MOBILIZON_AUTH_SECRET";
+        };
 
         ":instance" = {
           registrations_open = mkDefault false;
@@ -300,9 +329,7 @@ in
           # Taken from here:
           # https://framagit.org/framasoft/mobilizon/-/blob/1.0.7/lib/mix/tasks/mobilizon/instance.ex#L132-133
           genSecret =
-            "IO.puts(:crypto.strong_rand_bytes(64)" +
-            "|> Base.encode64()" +
-            "|> binary_part(0, 64))";
+            "IO.puts(:crypto.strong_rand_bytes(64)" + "|> Base.encode64()" + "|> binary_part(0, 64))";
 
           # Taken from here:
           # https://github.com/elixir-lang/elixir/blob/v1.11.3/lib/mix/lib/mix/release.ex#L499
@@ -340,7 +367,10 @@ in
       description = "Mobilizon PostgreSQL setup";
 
       after = [ "postgresql.service" ];
-      before = [ "mobilizon.service" "mobilizon-setup-secrets.service" ];
+      before = [
+        "mobilizon.service"
+        "mobilizon-setup-secrets.service"
+      ];
       wantedBy = [ "mobilizon.service" ];
 
       path = [ postgresql ];
@@ -351,23 +381,24 @@ in
       # as PostgreSQL 15 changed their behaviors w.r.t. to privileges.
       # See https://github.com/NixOS/nixpkgs/issues/216989 to get rid
       # of that workaround.
-      script =
-        ''
-          psql "${repoSettings.database}" -c "\
-            CREATE EXTENSION IF NOT EXISTS postgis; \
-            CREATE EXTENSION IF NOT EXISTS pg_trgm; \
-            CREATE EXTENSION IF NOT EXISTS unaccent;"
-          psql -tAc 'ALTER DATABASE "${repoSettings.database}" OWNER TO "${dbUser}";'
+      script = ''
+        psql "${repoSettings.database}" -c "\
+          CREATE EXTENSION IF NOT EXISTS postgis; \
+          CREATE EXTENSION IF NOT EXISTS pg_trgm; \
+          CREATE EXTENSION IF NOT EXISTS unaccent;"
+        psql -tAc 'ALTER DATABASE "${repoSettings.database}" OWNER TO "${dbUser}";'
 
-        '';
+      '';
 
       serviceConfig = {
         Type = "oneshot";
         User = config.services.postgresql.superUser;
+        Restart = "on-failure";
       };
     };
 
     systemd.tmpfiles.rules = [
+      "d /var/lib/mobilizon/sitemap 700 mobilizon mobilizon - -"
       "d /var/lib/mobilizon/uploads/exports/csv 700 mobilizon mobilizon - -"
       "Z /var/lib/mobilizon 700 mobilizon mobilizon - -"
     ];
@@ -384,47 +415,46 @@ in
           ensureDBOwnership = false;
         }
       ];
-      extraPlugins = ps: with ps; [ postgis ];
+      extensions = ps: with ps; [ postgis ];
     };
 
     # Nginx config taken from support/nginx/mobilizon-release.conf
     services.nginx =
       let
         inherit (cfg.settings.":mobilizon".":instance") hostname;
-        proxyPass = "http://[::1]:"
-          + toString cfg.settings.":mobilizon"."Mobilizon.Web.Endpoint".http.port;
+        proxyPass = "http://[::1]:" + toString cfg.settings.":mobilizon"."Mobilizon.Web.Endpoint".http.port;
       in
       lib.mkIf cfg.nginx.enable {
         enable = true;
         virtualHosts."${hostname}" = {
           enableACME = lib.mkDefault true;
           forceSSL = lib.mkDefault true;
-          extraConfig = ''
-            proxy_http_version 1.1;
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection "upgrade";
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-          '';
           locations."/" = {
             inherit proxyPass;
+            proxyWebsockets = true;
+            recommendedProxySettings = lib.mkDefault true;
+            extraConfig = ''
+              expires off;
+              add_header Cache-Control "public, max-age=0, s-maxage=0, must-revalidate" always;
+            '';
           };
-          locations."~ ^/(js|css|img)" = {
+          locations."~ ^/(assets|img)" = {
             root = "${cfg.package}/lib/mobilizon-${cfg.package.version}/priv/static";
             extraConfig = ''
-              etag off;
               access_log off;
-              add_header Cache-Control "public, max-age=31536000, immutable";
+              add_header Cache-Control "public, max-age=31536000, s-maxage=31536000, immutable";
             '';
           };
           locations."~ ^/(media|proxy)" = {
             inherit proxyPass;
+            recommendedProxySettings = lib.mkDefault true;
+            # Combination of HTTP/1.1 and disabled request buffering is
+            # needed to directly forward chunked responses
             extraConfig = ''
-              etag off;
+              proxy_http_version 1.1;
+              proxy_request_buffering off;
               access_log off;
-              add_header Cache-Control "public, max-age=31536000, immutable";
+              add_header Cache-Control "public, max-age=31536000, s-maxage=31536000, immutable";
             '';
           };
         };
@@ -445,5 +475,8 @@ in
     environment.systemPackages = [ launchers ];
   };
 
-  meta.maintainers = with lib.maintainers; [ minijackson erictapen ];
+  meta.maintainers = with lib.maintainers; [
+    minijackson
+    erictapen
+  ];
 }

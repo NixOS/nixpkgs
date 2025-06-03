@@ -1,7 +1,9 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.torque.server;
   torque = pkgs.torque;
@@ -11,17 +13,22 @@ in
 
     services.torque.server = {
 
-      enable = mkEnableOption (lib.mdDoc "torque server");
+      enable = lib.mkEnableOption "torque server";
 
     };
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.torque ];
 
     systemd.services.torque-server-init = {
-      path = with pkgs; [ torque util-linux procps inetutils ];
+      path = with pkgs; [
+        torque
+        util-linux
+        procps
+        inetutils
+      ];
 
       script = ''
         tmpsetup=$(mktemp -t torque-XXXX)
@@ -63,13 +70,20 @@ in
     };
 
     systemd.services.torque-server = {
+      documentation = [ "man:pbs_server(8)" ];
       path = [ torque ];
 
       wantedBy = [ "multi-user.target" ];
-      wants = [ "torque-scheduler.service" "trqauthd.service" ];
+      wants = [
+        "torque-scheduler.service"
+        "trqauthd.service"
+      ];
       before = [ "trqauthd.service" ];
       requires = [ "torque-server-init.service" ];
-      after = [ "torque-server-init.service" "network.target" ];
+      after = [
+        "torque-server-init.service"
+        "network.target"
+      ];
 
       serviceConfig = {
         Type = "forking";
@@ -80,6 +94,7 @@ in
     };
 
     systemd.services.torque-scheduler = {
+      documentation = [ "man:pbs_sched(8)" ];
       path = [ torque ];
 
       requires = [ "torque-server-init.service" ];

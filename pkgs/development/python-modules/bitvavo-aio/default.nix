@@ -1,8 +1,9 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -13,14 +14,12 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "cyberjunky";
-    repo = pname;
+    repo = "bitvavo-aio";
     rev = version;
     sha256 = "1d9nbbvv7xnkixj03sfhs2da5j3i2m7p73r7j1yb7b39zas2rbig";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # Project has no tests
   doCheck = false;

@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, ncurses
-, readline
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  readline,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,10 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.han.de/~werner/ytree.html";
-    description = "A curses-based file manager similar to DOS Xtree(TM)";
+    description = "Curses-based file manager similar to DOS Xtree(TM)";
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "ytree";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

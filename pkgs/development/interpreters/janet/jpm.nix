@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, janet }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  janet,
+}:
 
 let
   platformFiles = {
@@ -54,6 +59,7 @@ stdenv.mkDerivation rec {
 
   meta = janet.meta // {
     description = "Janet Project Manager for the Janet programming language";
+    mainProgram = "jpm";
     platforms = lib.attrNames platformFiles;
   };
 }

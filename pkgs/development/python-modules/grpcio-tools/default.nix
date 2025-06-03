@@ -1,25 +1,45 @@
-{ lib, buildPythonPackage, fetchPypi, protobuf, grpcio, setuptools }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  protobuf,
+  grpcio,
+  setuptools,
+}:
 
+# This package should be updated together with the main grpc package and other
+# related python grpc packages.
+# nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio-tools";
-  version = "1.60.1";
-  format = "setuptools";
+  version = "1.71.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-2ggiSrhnXG1GS5iL2MoCzM0r8Cdbzu/o9iGb/UpPXoU=";
+    pname = "grpcio_tools";
+    inherit version;
+    hash = "sha256-ONuo4NXg+yOgNOCWRP3G7YYr4jcYh+7lSQGZno9nkqg=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'protobuf>=4.21.6,<5.0dev' 'protobuf'
-  '';
-
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   enableParallelBuilding = true;
 
-  propagatedBuildInputs = [ protobuf grpcio setuptools ];
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+    "grpcio"
+  ];
+
+  dependencies = [
+    protobuf
+    grpcio
+    setuptools
+  ];
 
   # no tests in the package
   doCheck = false;
@@ -30,6 +50,6 @@ buildPythonPackage rec {
     description = "Protobuf code generator for gRPC";
     license = licenses.asl20;
     homepage = "https://grpc.io/grpc/python/";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

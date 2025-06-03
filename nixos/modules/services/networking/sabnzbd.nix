@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -15,38 +20,37 @@ in
 
   options = {
     services.sabnzbd = {
-      enable = mkEnableOption (lib.mdDoc "the sabnzbd server");
+      enable = mkEnableOption "the sabnzbd server";
 
       package = mkPackageOption pkgs "sabnzbd" { };
 
       configFile = mkOption {
         type = types.path;
         default = "/var/lib/sabnzbd/sabnzbd.ini";
-        description = lib.mdDoc "Path to config file.";
+        description = "Path to config file.";
       };
 
       user = mkOption {
         default = "sabnzbd";
         type = types.str;
-        description = lib.mdDoc "User to run the service as";
+        description = "User to run the service as";
       };
 
       group = mkOption {
         type = types.str;
         default = "sabnzbd";
-        description = lib.mdDoc "Group to run the service as";
+        description = "Group to run the service as";
       };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Open ports in the firewall for the sabnzbd web interface
         '';
       };
     };
   };
-
 
   ###### implementation
 
@@ -64,17 +68,17 @@ in
     };
 
     systemd.services.sabnzbd = {
-        description = "sabnzbd server";
-        wantedBy    = [ "multi-user.target" ];
-        after = [ "network.target" ];
-        serviceConfig = {
-          Type = "forking";
-          GuessMainPID = "no";
-          User = cfg.user;
-          Group = cfg.group;
-          StateDirectory = "sabnzbd";
-          ExecStart = "${lib.getBin cfg.package}/bin/sabnzbd -d -f ${cfg.configFile}";
-        };
+      description = "sabnzbd server";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+      serviceConfig = {
+        Type = "forking";
+        GuessMainPID = "no";
+        User = cfg.user;
+        Group = cfg.group;
+        StateDirectory = "sabnzbd";
+        ExecStart = "${lib.getBin cfg.package}/bin/sabnzbd -d -f ${cfg.configFile}";
+      };
     };
 
     networking.firewall = mkIf cfg.openFirewall {

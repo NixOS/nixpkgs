@@ -1,30 +1,32 @@
-{ stdenv
-, buildGoModule
-, callPackage
-, fetchFromGitHub
-, lib
+{
+  stdenv,
+  buildGoModule,
+  callPackage,
+  fetchFromGitHub,
+  lib,
 
-, buf
-, cacert
-, grpc-gateway
-, protoc-gen-go
-, protoc-gen-go-grpc
-, protoc-gen-validate
-, sass
-, statik
+  buf,
+  cacert,
+  grpc-gateway,
+  protoc-gen-go,
+  protoc-gen-go-grpc,
+  protoc-gen-validate,
+  sass,
+  statik,
 }:
 
 let
-  version = "2.42.10";
+  version = "2.71.7";
   zitadelRepo = fetchFromGitHub {
     owner = "zitadel";
     repo = "zitadel";
     rev = "v${version}";
-    hash = "sha256-Uv0iEIFkTdBAi0WDBQHf0ATs4L2FOU4NmiE9p1MHSa0=";
+    hash = "sha256-0ZOiwJ/ehDBkbd7iTTyVJzLj6Etph5/oxrDrck30ZL8=";
   };
-  goModulesHash = "sha256-PQch046YjYhAmVlNNdgDLWIqFvEpXRgXAYFMwSZmk4w=";
+  goModulesHash = "sha256-iZCjHSpQ7Gy41Dd4svRLbyEh1N8VE8U0uCOlN9rfJQU=";
 
-  buildZitadelProtocGen = name:
+  buildZitadelProtocGen =
+    name:
     buildGoModule {
       pname = "protoc-gen-${name}";
       inherit version;
@@ -51,24 +53,29 @@ let
   # can download what it needs, and output the relevant generated code for use
   # during the main build.
   generateProtobufCode =
-    { pname
-    , nativeBuildInputs ? [ ]
-    , bufArgs ? ""
-    , workDir ? "."
-    , outputPath
-    , hash
+    {
+      pname,
+      version,
+      nativeBuildInputs ? [ ],
+      bufArgs ? "",
+      workDir ? ".",
+      outputPath,
+      hash,
     }:
     stdenv.mkDerivation {
-      name = "${pname}-buf-generated";
+      pname = "${pname}-buf-generated";
+      inherit version;
 
       src = zitadelRepo;
       patches = [ ./console-use-local-protobuf-plugins.patch ];
 
-      nativeBuildInputs = nativeBuildInputs ++ [ buf ];
+      nativeBuildInputs = nativeBuildInputs ++ [
+        buf
+        cacert
+      ];
 
       buildPhase = ''
         cd ${workDir}
-        export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
         HOME=$TMPDIR buf generate ${bufArgs}
       '';
 
@@ -83,6 +90,7 @@ let
 
   protobufGenerated = generateProtobufCode {
     pname = "zitadel";
+    inherit version;
     nativeBuildInputs = [
       grpc-gateway
       protoc-gen-authoption
@@ -92,16 +100,19 @@ let
       protoc-gen-zitadel
     ];
     outputPath = ".artifacts";
-    hash = "sha256-3qDVY2CvtY8lZDr+p5i0vV6zZ5KyTtxBLyV7Os9KuIw=";
+    hash = "sha256-rc5A2bQ2iWkybprQ7IWsQ/LLAQxPqhlxzVvPn8Ec56E=";
   };
 in
 buildGoModule rec {
-  name = "zitadel";
+  pname = "zitadel";
   inherit version;
 
   src = zitadelRepo;
 
-  nativeBuildInputs = [ sass statik ];
+  nativeBuildInputs = [
+    sass
+    statik
+  ];
 
   proxyVendor = true;
   vendorHash = goModulesHash;
@@ -134,11 +145,9 @@ buildGoModule rec {
   '';
 
   passthru = {
-    console = callPackage
-      (import ./console.nix {
-        inherit generateProtobufCode version zitadelRepo;
-      })
-      { };
+    console = callPackage (import ./console.nix {
+      inherit generateProtobufCode version zitadelRepo;
+    }) { };
   };
 
   meta = with lib; {
@@ -148,6 +157,6 @@ buildGoModule rec {
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.asl20;
     sourceProvenance = [ sourceTypes.fromSource ];
-    maintainers = with maintainers; [ Sorixelle ];
+    maintainers = [ maintainers.nrabulinski ];
   };
 }

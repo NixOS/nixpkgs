@@ -1,19 +1,23 @@
-{ lib
-, vscode-utils
-, lua-language-server
+{
+  lib,
+  vscode-utils,
+  lua-language-server,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "lua";
     publisher = "sumneko";
-    version = "3.7.3";
-    sha256 = "sha256-JsZrCeT843QvQkebyOVlO9MI2xbEQI8xX0DrPacfGrM=";
+    version = "3.14.0";
+    hash = "sha256-auXQudzWRbq/cXMpFkheqHhJMu7XwacdsaZYAkv1pQs=";
   };
 
   # Running chmod in runtime will lock up extension
   # indefinitely if the binary is in nix store.
-  patches = [ ./remove-chmod.patch ];
+  postPatch = ''
+    substituteInPlace client/out/src/languageserver.js \
+      --replace-fail 'await fs.promises.chmod(command, "777");' ""
+  '';
 
   postInstall = ''
     ln -sf ${lua-language-server}/bin/lua-language-server \
@@ -21,7 +25,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   '';
 
   meta = {
-    description = "The Lua language server provides various language features for Lua to make development easier and faster.";
+    description = "Lua language server provides various language features for Lua to make development easier and faster";
     homepage = "https://marketplace.visualstudio.com/items?itemName=sumneko.lua";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.lblasc ];

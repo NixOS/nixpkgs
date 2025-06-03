@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, packaging
-, pythonOlder
-, requests
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  packaging,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -17,13 +18,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lukecyca";
     repo = "pyzabbix";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-2yCbxPUlbTrtjD9eKmkw0fKnjiwPzmjIo5vKGv4aerU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     packaging
@@ -33,9 +32,7 @@ buildPythonPackage rec {
   # Tests require a running Zabbix instance
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyzabbix"
-  ];
+  pythonImportsCheck = [ "pyzabbix" ];
 
   meta = with lib; {
     description = "Module to interact with the Zabbix API";

@@ -1,9 +1,18 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 let
   version = "1.3.9";
 
-  mkPretendard = { pname, typeface, hash }:
+  mkPretendard =
+    {
+      pname,
+      typeface,
+      hash,
+    }:
     stdenvNoCC.mkDerivation {
       inherit pname version;
 
@@ -23,7 +32,7 @@ let
 
       meta = with lib; {
         homepage = "https://github.com/orioncactus/pretendard";
-        description = "An alternative font to system-ui for all platforms";
+        description = "Alternative font to system-ui for all platforms";
         license = licenses.ofl;
         platforms = platforms.all;
         maintainers = with maintainers; [ sudosubin ];

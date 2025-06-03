@@ -2,31 +2,47 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  dash,
+  scdoc,
 }:
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "xdg-terminal-exec";
-  version = "unstable-2023-12-08";
+  version = "0.12.4";
 
   src = fetchFromGitHub {
     owner = "Vladimir-csp";
     repo = "xdg-terminal-exec";
-    rev = "04f37d4337b6ce157d4a7338dd600a32deb43a28";
-    hash = "sha256-QIPdF+/dMUEVcz5j9o+wQ4dnw2yWwz7slnLdMNETkGs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-PA0ttRtFmNVITBidxZsZFMfMaGi2X6296ve5y6Mqlm0=";
   };
 
-  dontBuild = true;
+  nativeBuildInputs = [ scdoc ];
+
+  buildPhase = ''
+    runHook preBuild
+    scdoc < xdg-terminal-exec.1.scd > xdg-terminal-exec.1
+    runHook postBuild
+  '';
+
   installPhase = ''
     runHook preInstall
     install -Dm555 xdg-terminal-exec -t $out/bin
+    install -Dm444 xdg-terminal-exec.1 -t $out/share/man/man1
     runHook postInstall
   '';
 
+  dontPatchShebangs = true;
+  postFixup = ''
+    substituteInPlace $out/bin/xdg-terminal-exec \
+      --replace-fail '#!/bin/sh' '#!${lib.getExe dash}'
+  '';
+
   meta = {
-    description = "Proposal for XDG terminal execution utility";
+    description = "Reference implementation of the proposed XDG Default Terminal Execution Specification";
     homepage = "https://github.com/Vladimir-csp/xdg-terminal-exec";
     license = lib.licenses.gpl3Plus;
     mainProgram = "xdg-terminal-exec";
-    maintainers = with lib.maintainers; [quantenzitrone];
+    maintainers = with lib.maintainers; [ quantenzitrone ];
     platforms = lib.platforms.unix;
   };
-}
+})

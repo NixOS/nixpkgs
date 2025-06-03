@@ -1,25 +1,26 @@
-{ bash
-, coreutils
-, curl
-, fetchFromGitHub
-, gnugrep
-, gnused
-, iproute2
-, jq
-, lib
-, resholve
-, wireguard-tools
+{
+  bash,
+  coreutils,
+  curl,
+  fetchFromGitHub,
+  gnugrep,
+  gnused,
+  iproute2,
+  jq,
+  lib,
+  resholve,
+  wireguard-tools,
 }:
 
 resholve.mkDerivation rec {
   pname = "wgnord";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "phirecc";
     repo = pname;
     rev = version;
-    hash = "sha256-00513jr3Sk8YahqI14pQ7pU4P7MBUlsqXXfrACu35RQ=";
+    hash = "sha256-26cfYXtZVQ7kIRxY6oNGCqIjdw/hjwXhVKimVgolLgk=";
   };
 
   postPatch = ''
@@ -55,12 +56,13 @@ resholve.mkDerivation rec {
     ];
   };
 
-  meta = with lib; {
-    description = "A NordVPN Wireguard (NordLynx) client in POSIX shell";
+  meta = {
+    description = "NordVPN Wireguard (NordLynx) client in POSIX shell";
     homepage = "https://github.com/phirecc/wgnord";
     changelog = "https://github.com/phirecc/wgnord/releases/tag/v${version}";
     maintainers = with lib.maintainers; [ urandom ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "wgnord";
+    platforms = lib.platforms.linux;
   };
 }

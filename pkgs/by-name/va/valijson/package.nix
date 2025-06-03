@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
   pname = "valijson";
-  version = "1.0.2";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "tristanpenman";
     repo = "valijson";
     rev = "v${version}";
-    hash = "sha256-wvFdjsDtKH7CpbEpQjzWtLC4RVOU9+D2rSK0Xo1cJqo=";
+    hash = "sha256-f/pYJTvtSXtAmVbKWQfcz/jGSdj7Yt2HNvlCFHx871Q=";
   };
 
   nativeBuildInputs = [

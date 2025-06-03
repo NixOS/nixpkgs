@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   inherit (lib) literalExpression types;
 in
@@ -9,13 +14,13 @@ in
         enable = lib.mkOption {
           default = false;
           internal = true;
-          description = lib.mdDoc ''
+          description = ''
             Whether the OpenStack instance uses a ZFS root.
           '';
         };
 
         datasets = lib.mkOption {
-          description = lib.mdDoc ''
+          description = ''
             Datasets to create under the `tank` and `boot` zpools.
 
             **NOTE:** This option is used only at image creation time, and
@@ -25,21 +30,23 @@ in
 
           default = { };
 
-          type = types.attrsOf (types.submodule {
-            options = {
-              mount = lib.mkOption {
-                description = lib.mdDoc "Where to mount this dataset.";
-                type = types.nullOr types.str;
-                default = null;
-              };
+          type = types.attrsOf (
+            types.submodule {
+              options = {
+                mount = lib.mkOption {
+                  description = "Where to mount this dataset.";
+                  type = types.nullOr types.str;
+                  default = null;
+                };
 
-              properties = lib.mkOption {
-                description = lib.mdDoc "Properties to set on this dataset.";
-                type = types.attrsOf types.str;
-                default = { };
+                properties = lib.mkOption {
+                  description = "Properties to set on this dataset.";
+                  type = types.attrsOf types.str;
+                  default = { };
+                };
               };
-            };
-          });
+            }
+          );
         };
       };
 
@@ -47,7 +54,7 @@ in
         default = pkgs.stdenv.hostPlatform.isAarch64;
         defaultText = literalExpression "pkgs.stdenv.hostPlatform.isAarch64";
         internal = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether the instance is using EFI.
         '';
       };
@@ -59,13 +66,16 @@ in
 
     fileSystems =
       let
-        mountable = lib.filterAttrs (_: value: ((value.mount or null) != null)) config.openstack.zfs.datasets;
+        mountable = lib.filterAttrs (
+          _: value: ((value.mount or null) != null)
+        ) config.openstack.zfs.datasets;
       in
-      lib.mapAttrs'
-        (dataset: opts: lib.nameValuePair opts.mount {
+      lib.mapAttrs' (
+        dataset: opts:
+        lib.nameValuePair opts.mount {
           device = dataset;
           fsType = "zfs";
-        })
-        mountable;
+        }
+      ) mountable;
   };
 }

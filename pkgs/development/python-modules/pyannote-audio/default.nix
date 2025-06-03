@@ -1,58 +1,64 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, asteroid-filterbanks
-, einops
-, huggingface-hub
-, pytorch-lightning
-, omegaconf
-, pyannote-core
-, pyannote-database
-, pyannote-metrics
-, pyannote-pipeline
-, pytorch-metric-learning
-, rich
-, semver
-, soundfile
-, speechbrain
-, tensorboardx
-, torch
-, torch-audiomentations
-, torchaudio
-, torchmetrics
-, numpy
-, pyscaffold
+{
+  lib,
+  asteroid-filterbanks,
+  buildPythonPackage,
+  einops,
+  fetchFromGitHub,
+  huggingface-hub,
+  hydra-core,
+  numpy,
+  omegaconf,
+  pyannote-core,
+  pyannote-database,
+  pyannote-metrics,
+  pyannote-pipeline,
+  pyscaffold,
+  pythonOlder,
+  pytorch-lightning,
+  pytorch-metric-learning,
+  rich,
+  semver,
+  setuptools,
+  soundfile,
+  speechbrain,
+  tensorboardx,
+  torch-audiomentations,
+  torch,
+  torchaudio,
+  torchmetrics,
+  typer,
 }:
 
 buildPythonPackage rec {
   pname = "pyannote-audio";
-  version = "3.1.1";
+  version = "3.3.2";
   pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pyannote";
     repo = "pyannote-audio";
-    rev = version;
-    hash = "sha256-BxmEJE6v+QkEaAJ2oB2LwDQIoRajv6F9SRc8lP9iRLM=";
+    tag = version;
+    hash = "sha256-Qx7NDXkT3eQr9PZXlYuoJD01dzsVCvfq6HNPnyLzyAQ=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
+  pythonRelaxDeps = [ "torchaudio" ];
+
+  build-system = [
     pyscaffold
     setuptools
-    wheel
   ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "pyscaffold>=3.2a0,<3.3a0" "pyscaffold"
+      --replace-fail "pyscaffold>=3.2a0,<3.3a0" "pyscaffold"
     substituteInPlace requirements.txt \
-      --replace "lightning" "pytorch-lightning"
+      --replace-fail "lightning" "pytorch-lightning"
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     asteroid-filterbanks
     einops
     huggingface-hub
@@ -75,6 +81,13 @@ buildPythonPackage rec {
     pytorch-lightning
   ];
 
+  optional-dependencies = {
+    cli = [
+      hydra-core
+      typer
+    ];
+  };
+
   pythonImportsCheck = [ "pyannote.audio" ];
 
   meta = with lib; {
@@ -82,6 +95,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyannote/pyannote-audio";
     changelog = "https://github.com/pyannote/pyannote-audio/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, fetchpatch2
-, setuptools
-, incremental
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  incremental,
+  pytestCheckHook,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "systembridgemodels";
-  version = "4.0.0";
+  version = "4.2.4";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -17,29 +19,40 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = "system-bridge-models";
-    rev = "refs/tags/${version}";
-    hash = "sha256-4nbTsVRqtoX4UhTrQS4HwoLtx0RO1VA8UewSAWOSsik=";
+    tag = version;
+    hash = "sha256-FjHDd7nI30ChaClL0b1ME9Zv+DV0BiMsfgGOKQF/qBk=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/timmo001/system-bridge-models/commit/7cd506760fd47c0f3717b6fcfe127b673e3198f8.patch";
-      hash = "sha256-i+GCcoyX07ii9Kj46dtAlT85jUKfF0KHEH9++UTjiik=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace requirements_setup.txt \
+      --replace-fail ">=" " #"
 
-  nativeBuildInputs = [
+    substituteInPlace systembridgemodels/_version.py \
+      --replace-fail ", dev=0" ""
+  '';
+
+  build-system = [
+    incremental
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    incremental
-  ];
+  pythonRelaxDeps = [ "incremental" ];
+
+  dependencies = [ incremental ];
 
   pythonImportsCheck = [ "systembridgemodels" ];
 
-  # upstream has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    syrupy
+  ];
+
+  disabledTests = [
+    "test_system"
+    "test_update"
+  ];
+
+  pytestFlagsArray = [ "--snapshot-warn-unused" ];
 
   meta = {
     changelog = "https://github.com/timmo001/system-bridge-models/releases/tag/${version}";

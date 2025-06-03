@@ -1,35 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, grpc-google-iam-v1
-, mock
-, libcst
-, proto-plus
-, protobuf
-, pytestCheckHook
-, pytest-asyncio
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  grpc-google-iam-v1,
+  mock,
+  libcst,
+  proto-plus,
+  protobuf,
+  pytestCheckHook,
+  pytest-asyncio,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-dataproc";
-  version = "5.9.2";
+  version = "5.18.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-E1LjzE4UbbHwn6QodVkkjIs9nAz+zqVsJcP09j1Y5Pg=";
+    pname = "google_cloud_dataproc";
+    inherit version;
+    hash = "sha256-vIGv3275bnnl+ZkaZS0t1+IQRAxNgEvs3NW4ljxwOls=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     grpc-google-iam-v1
     libcst
@@ -58,6 +58,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-dataproc";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-dataproc-v${version}/packages/google-cloud-dataproc/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, coreutils
-, libffi
+{
+  lib,
+  stdenv,
+  fetchurl,
+  coreutils,
+  libffi,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "txr";
-  version = "293";
+  version = "299";
 
   src = fetchurl {
     url = "https://www.kylheku.com/cgit/txr/snapshot/txr-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-b8Ia5zMvmPl681rTyhgI0AQ8TIU4TE5768/Oln42+lw=";
+    hash = "sha256-naDhL2ttucQmLpIhSGPJD4nNQOT6i16sK5g79lGUESo=";
   };
 
   buildInputs = [ libffi ];
@@ -28,16 +29,18 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace tests/018/process.tl --replace /usr/bin/env ${lib.getBin coreutils}/bin/env
   '';
 
-  preCheck = let
-    disabledTests = lib.concatStringsSep " " [
-      # - tries to set sticky bits
-      "tests/018/chmod.tl"
-      # - warning: unbound function crypt
-      "tests/018/crypt.tl"
-    ];
-  in ''
-    rm ${disabledTests}
-  '';
+  preCheck =
+    let
+      disabledTests = lib.concatStringsSep " " [
+        # - tries to set sticky bits
+        "tests/018/chmod.tl"
+        # - warning: unbound function crypt
+        "tests/018/crypt.tl"
+      ];
+    in
+    ''
+      rm ${disabledTests}
+    '';
 
   postInstall = ''
     mkdir -p $out/share/vim-plugins/txr/{syntax,ftdetect}
@@ -54,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://nongnu.org/txr";
-    description = "An Original, New Programming Language for Convenient Data Munging";
+    description = "Original, New Programming Language for Convenient Data Munging";
     longDescription = ''
       TXR is a general-purpose, multi-paradigm programming language. It
       comprises two languages integrated into a single tool: a text scanning and
@@ -67,7 +70,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://www.kylheku.com/cgit/txr/tree/RELNOTES?h=txr-${finalAttrs.version}";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ AndersonTorres dtzWill ];
+    maintainers = with lib.maintainers; [
+      dtzWill
+    ];
     platforms = lib.platforms.all;
   };
 })

@@ -1,23 +1,30 @@
-{ stdenv, lib, fetchFromGitHub, kernel }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleMakeFlags,
+}:
 
+let
+  modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/r8168";
 
-let modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/r8168";
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "r8168-${kernel.version}-${version}";
   # on update please verify that the source matches the realtek version
-  version = "8.052.01";
+  version = "8.053.00";
 
   # This is a mirror. The original website[1] doesn't allow non-interactive
   # downloads, instead emailing you a download link.
-  # [1] https://www.realtek.com/en/component/zoo/category/network-interface-controllers-10-100-1000m-gigabit-ethernet-pci-express-software
-  # I've verified manually (`diff -r`) that the source code for version 8.052.01
+  # [1] https://www.realtek.com/Download/List?cate_id=584
+  # I've verified manually (`diff -r`) that the source code for version 8.053.00
   # is the same as the one available on the realtek website.
   src = fetchFromGitHub {
     owner = "mtorromeo";
     repo = "r8168";
     rev = version;
-    sha256 = "01mi7hh92nc7jaxkfrpz7j0ci78djrhgmq0im4k1270mwmvr0yzj";
+    sha256 = "0bHGs8jyWd+ZiixOoNkBqhS9RjDpRp3vveAgk1YuOWU=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -27,7 +34,7 @@ in stdenv.mkDerivation rec {
   # avoid using the Makefile directly -- it doesn't understand
   # any kernel but the current.
   # based on the ArchLinux pkgbuild: https://git.archlinux.org/svntogit/community.git/tree/trunk/PKGBUILD?h=packages/r8168
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "-C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "M=$(PWD)/src"
     "modules"
@@ -53,7 +60,7 @@ in stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ timokau ];
-    broken = (lib.versions.majorMinor kernel.modDirVersion) != "5.15";
+    maintainers = [ ];
+    broken = lib.versionAtLeast kernel.modDirVersion "6.9";
   };
 }

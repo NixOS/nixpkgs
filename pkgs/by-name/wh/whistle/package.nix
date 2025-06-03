@@ -1,17 +1,21 @@
-{ lib, buildNpmPackage, fetchFromGitHub }:
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+}:
 
 buildNpmPackage rec {
   pname = "whistle";
-  version = "2.9.65";
+  version = "2.9.98";
 
   src = fetchFromGitHub {
     owner = "avwo";
     repo = "whistle";
     rev = "v${version}";
-    hash = "sha256-vF81Nt0gx3k7b6VO6aBpeUSnZ8Op91dYOGZRO9cdleM=";
+    hash = "sha256-G19vNz9tn21HETkExiYR77CjwMkBdvRPWLPwc422M7E=";
   };
 
-  npmDepsHash = "sha256-LzetbeIqfcFbLzie4GXkNOGLTdwqYMnwZ236V5R2TNc=";
+  npmDepsHash = "sha256-c5WNiUza6r++j+JhCkTOfGE/cUAYpYVDVsJhPu1Jpy8=";
 
   dontNpmBuild = true;
 
@@ -20,7 +24,7 @@ buildNpmPackage rec {
     homepage = "https://github.com/avwo/whistle";
     changelog = "https://github.com/avwo/whistle/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     mainProgram = "whistle";
   };
 }

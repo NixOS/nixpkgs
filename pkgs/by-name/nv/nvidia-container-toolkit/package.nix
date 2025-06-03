@@ -1,52 +1,46 @@
-{ lib
-, glibc
-, fetchFromGitLab
-, makeWrapper
-, buildGoModule
-, linkFarm
-, writeShellScript
-, formats
-, containerRuntimePath ? null
-, configTemplate ? null
-, configTemplatePath ? null
-, libnvidia-container
-, cudaPackages
+{
+  lib,
+  glibc,
+  fetchFromGitHub,
+  makeWrapper,
+  buildGoModule,
+  formats,
+  configTemplate ? null,
+  configTemplatePath ? null,
+  libnvidia-container,
+  autoAddDriverRunpath,
 }:
 
 assert configTemplate != null -> (lib.isAttrs configTemplate && configTemplatePath == null);
-assert configTemplatePath != null -> (lib.isStringLike configTemplatePath && configTemplate == null);
+assert
+  configTemplatePath != null -> (lib.isStringLike configTemplatePath && configTemplate == null);
 
 let
-  isolatedContainerRuntimePath = linkFarm "isolated_container_runtime_path" [
-    {
-      name = "runc";
-      path = containerRuntimePath;
-    }
-  ];
-  warnIfXdgConfigHomeIsSet = writeShellScript "warn_if_xdg_config_home_is_set" ''
-    set -eo pipefail
-
-    if [ -n "$XDG_CONFIG_HOME" ]; then
-      echo >&2 "$(tput setaf 3)warning: \$XDG_CONFIG_HOME=$XDG_CONFIG_HOME$(tput sgr 0)"
-    fi
-  '';
-
-  configToml = if configTemplatePath != null then configTemplatePath else (formats.toml { }).generate "config.toml" configTemplate;
+  configToml =
+    if configTemplatePath != null then
+      configTemplatePath
+    else
+      (formats.toml { }).generate "config.toml" configTemplate;
 
   # From https://gitlab.com/nvidia/container-toolkit/container-toolkit/-/blob/03cbf9c6cd26c75afef8a2dd68e0306aace80401/Makefile#L54
   cliVersionPackage = "github.com/NVIDIA/nvidia-container-toolkit/internal/info";
 in
 buildGoModule rec {
-  pname = "container-toolkit/container-toolkit";
-  version = "1.15.0-rc.3";
+  pname = "nvidia-container-toolkit";
+  version = "1.17.7";
 
-  src = fetchFromGitLab {
-    owner = "nvidia";
-    repo = pname;
+  src = fetchFromGitHub {
+    owner = "NVIDIA";
+    repo = "nvidia-container-toolkit";
     rev = "v${version}";
-    hash = "sha256-IH2OjaLbcKSGG44aggolAOuJkjk+GaXnnTbrXfZ0lVo=";
+    hash = "sha256-AQi61oot4fdMvQ8A139AvygxN9U7EM1YkJau3zAy3+I=";
 
   };
+
+  outputs = [
+    "out"
+    "tools"
+  ];
 
   vendorHash = null;
 
@@ -57,22 +51,25 @@ buildGoModule rec {
   ];
 
   postPatch = ''
-    # Replace the default hookDefaultFilePath to the $out path and override
-    # default ldconfig locations to the one in nixpkgs.
-
     substituteInPlace internal/config/config.go \
-      --replace '/usr/bin/nvidia-container-runtime-hook' "$out/bin/nvidia-container-runtime-hook" \
-      --replace '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
-
-    substituteInPlace internal/config/config_test.go \
-      --replace '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
+      --replace-fail '/usr/bin/nvidia-container-runtime-hook' "$tools/bin/nvidia-container-runtime-hook" \
+      --replace-fail '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
 
     substituteInPlace tools/container/toolkit/toolkit.go \
-      --replace '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
+      --replace-fail '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
 
-    substituteInPlace cmd/nvidia-ctk/hook/update-ldcache/update-ldcache.go \
-      --replace '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
+    substituteInPlace cmd/nvidia-cdi-hook/update-ldcache/update-ldcache.go \
+      --replace-fail '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
   '';
+
+  subPackages = [
+    "cmd/nvidia-cdi-hook"
+    "cmd/nvidia-container-runtime"
+    "cmd/nvidia-container-runtime.cdi"
+    "cmd/nvidia-container-runtime-hook"
+    "cmd/nvidia-container-runtime.legacy"
+    "cmd/nvidia-ctk"
+  ];
 
   # Based on upstream's Makefile:
   # https://gitlab.com/nvidia/container-toolkit/container-toolkit/-/blob/03cbf9c6cd26c75afef8a2dd68e0306aace80401/Makefile#L64
@@ -84,20 +81,14 @@ buildGoModule rec {
     # "-X name=value"
     "-X"
     "${cliVersionPackage}.version=${version}"
+    "-X"
+    "github.com/NVIDIA/nvidia-container-toolkit/internal/info.gitCommit=${src.rev}"
   ];
 
   nativeBuildInputs = [
-    cudaPackages.autoAddOpenGLRunpathHook
+    autoAddDriverRunpath
     makeWrapper
   ];
-
-  preConfigure = lib.optionalString (containerRuntimePath != null) ''
-    # Ensure the runc symlink isn't broken:
-    if ! readlink --quiet --canonicalize-existing "${isolatedContainerRuntimePath}/runc" ; then
-      echo "${isolatedContainerRuntimePath}/runc: broken symlink" >&2
-      exit 1
-    fi
-  '';
 
   checkFlags =
     let
@@ -107,42 +98,38 @@ buildGoModule rec {
         "TestDuplicateHook"
       ];
     in
-    [ "-skip" "${builtins.concatStringsSep "|" skippedTests}" ];
+    [
+      "-skip"
+      "${builtins.concatStringsSep "|" skippedTests}"
+    ];
 
-  postInstall = lib.optionalString (containerRuntimePath != null) ''
-    mkdir -p $out/etc/nvidia-container-runtime
+  postInstall =
+    ''
+      mkdir -p $tools/bin
+      mv $out/bin/{nvidia-cdi-hook,nvidia-container-runtime,nvidia-container-runtime.cdi,nvidia-container-runtime-hook,nvidia-container-runtime.legacy} $tools/bin
 
-    # nvidia-container-runtime invokes docker-runc or runc if that isn't
-    # available on PATH.
-    #
-    # Also set XDG_CONFIG_HOME if it isn't already to allow overriding
-    # configuration. This in turn allows users to have the nvidia container
-    # runtime enabled for any number of higher level runtimes like docker and
-    # podman, i.e., there's no need to have mutually exclusivity on what high
-    # level runtime can enable the nvidia runtime because each high level
-    # runtime has its own config.toml file.
-    wrapProgram $out/bin/nvidia-container-runtime \
-      --run "${warnIfXdgConfigHomeIsSet}" \
-      --prefix PATH : ${isolatedContainerRuntimePath}:${libnvidia-container}/bin \
-      --set-default XDG_CONFIG_HOME $out/etc
+      for bin in nvidia-container-runtime-hook nvidia-container-runtime; do
+        wrapProgram $tools/bin/$bin \
+          --prefix PATH : ${libnvidia-container}/bin:$out/bin
+      done
+    ''
+    + lib.optionalString (configTemplate != null || configTemplatePath != null) ''
+      mkdir -p $out/etc/nvidia-container-runtime
 
-    cp ${configToml} $out/etc/nvidia-container-runtime/config.toml
+      cp ${configToml} $out/etc/nvidia-container-runtime/config.toml
 
-    substituteInPlace $out/etc/nvidia-container-runtime/config.toml \
-      --subst-var-by glibcbin ${lib.getBin glibc}
-
-    # See: https://gitlab.com/nvidia/container-toolkit/container-toolkit/-/blob/03cbf9c6cd26c75afef8a2dd68e0306aace80401/packaging/debian/nvidia-container-toolkit.postinst#L12
-    ln -s $out/bin/nvidia-container-runtime-hook $out/bin/nvidia-container-toolkit
-
-    wrapProgram $out/bin/nvidia-container-toolkit \
-      --add-flags "-config ${placeholder "out"}/etc/nvidia-container-runtime/config.toml"
-  '';
+      substituteInPlace $out/etc/nvidia-container-runtime/config.toml \
+        --subst-var-by glibcbin ${lib.getBin glibc}
+    '';
 
   meta = with lib; {
     homepage = "https://gitlab.com/nvidia/container-toolkit/container-toolkit";
     description = "NVIDIA Container Toolkit";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cpcloud ];
+    maintainers = with maintainers; [
+      cpcloud
+      christoph-heiss
+    ];
   };
 }

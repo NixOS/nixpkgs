@@ -30,7 +30,11 @@ The `dart` commands run can be overridden through `pubGetScript` and `dartCompil
 Dart supports multiple [outputs types](https://dart.dev/tools/dart-compile#types-of-output), you can choose between them using `dartOutputType` (defaults to `exe`). If you want to override the binaries path or the source path they come from, you can use `dartEntryPoints`. Outputs that require a runtime will automatically be wrapped with the relevant runtime (`dartaotruntime` for `aot-snapshot`, `dart run` for `jit-snapshot` and `kernel`, `node` for `js`), this can be overridden through `dartRuntimeCommand`.
 
 ```nix
-{ lib, buildDartApplication, fetchFromGitHub }:
+{
+  lib,
+  buildDartApplication,
+  fetchFromGitHub,
+}:
 
 buildDartApplication rec {
   pname = "dart-sass";
@@ -38,8 +42,8 @@ buildDartApplication rec {
 
   src = fetchFromGitHub {
     owner = "sass";
-    repo = pname;
-    rev = version;
+    repo = "dart-sass";
+    tag = version;
     hash = "sha256-U6enz8yJcc4Wf8m54eYIAnVg/jsGi247Wy8lp1r1wg4=";
   };
 
@@ -98,10 +102,12 @@ The function `buildFlutterApplication` builds Flutter applications.
 
 See the [Dart documentation](#ssec-dart-applications) for more details on required files and arguments.
 
-```nix
-{  flutter, fetchFromGitHub }:
+`flutter` in Nixpkgs always points to `flutterPackages.stable`, which is the latest packaged version. To avoid unforeseen breakage during upgrade, packages in Nixpkgs should use a specific flutter version, such as `flutter319` and `flutter322`, instead of using `flutter` directly.
 
-flutter.buildFlutterApplication {
+```nix
+{ flutter322, fetchFromGitHub }:
+
+flutter322.buildFlutterApplication {
   pname = "firmware-updater";
   version = "0-unstable-2023-04-30";
 
@@ -112,7 +118,7 @@ flutter.buildFlutterApplication {
     owner = "canonical";
     repo = "firmware-updater";
     rev = "6e7dbdb64e344633ea62874b54ff3990bd3b8440";
-    sha256 = "sha256-s5mwtr5MSPqLMN+k851+pFIFFPa0N1hqz97ys050tFA=";
+    hash = "sha256-s5mwtr5MSPqLMN+k851+pFIFFPa0N1hqz97ys050tFA=";
     fetchSubmodules = true;
   };
 

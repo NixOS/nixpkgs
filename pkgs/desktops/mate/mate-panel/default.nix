@@ -1,51 +1,69 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, itstool
-, glib
-, libwnck
-, librsvg
-, libxml2
-, dconf
-, gtk3
-, mate
-, hicolor-icon-theme
-, gobject-introspection
-, wrapGAppsHook
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  itstool,
+  glib,
+  gtk-layer-shell,
+  gtk3,
+  libmateweather,
+  libwnck,
+  librsvg,
+  libxml2,
+  dconf,
+  dconf-editor,
+  mate-desktop,
+  mate-menus,
+  hicolor-icon-theme,
+  wayland,
+  gobject-introspection,
+  wrapGAppsHook3,
+  marco,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mate-panel";
-  version = "1.26.4";
+  version = "1.28.4";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "IHD51RVlfl3c2g2H73KXE9upy3sq0GIjvWdKIcxrPa8=";
+    hash = "sha256-AvCesDFMKsGXtvCJlQpXHNujm/0D1sOguP13JSqWiHQ=";
   };
 
   nativeBuildInputs = [
     gobject-introspection
     gettext
     itstool
+    libxml2 # xmllint
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
-    glib
+    gtk-layer-shell
+    libmateweather
     libwnck
     librsvg
-    libxml2
-    gtk3
     dconf
-    mate.libmateweather
-    mate.mate-desktop
-    mate.mate-menus
+    mate-desktop
+    mate-menus
     hicolor-icon-theme
+    wayland
   ];
+
+  propagatedBuildInputs = [
+    glib
+    gtk3
+    # Optionally for the ca.desrt.dconf-editor.Settings schema
+    # This is propagated for mate_panel_applet_settings_new and applet's wrapGAppsHook3
+    dconf-editor
+  ];
+
+  # Needed for Wayland support.
+  configureFlags = [ "--with-in-process-applets=all" ];
 
   env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
@@ -57,7 +75,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(
       # Workspace switcher settings, works only when passed after gtk3 schemas in the wrapper for some reason
-      --prefix XDG_DATA_DIRS : "${glib.getSchemaDataDirPath mate.marco}"
+      --prefix XDG_DATA_DIRS : "${glib.getSchemaDataDirPath marco}"
     )
   '';
 
@@ -66,10 +84,14 @@ stdenv.mkDerivation rec {
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
-    description = "The MATE panel";
+    description = "MATE panel";
     homepage = "https://github.com/mate-desktop/mate-panel";
-    license = with licenses; [ gpl2Plus lgpl2Plus fdl11Plus ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl2Plus
+      fdl11Plus
+    ];
     platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

@@ -1,52 +1,73 @@
-{ stdenv, lib, fetchFromGitHub
-, cmake, wrapQtAppsHook, perl
-, flatbuffers, protobuf, mbedtls
-, hidapi, libcec, libusb1
-, libX11, libxcb, libXrandr, python3
-, qtbase, qtserialport, qtsvg, qtx11extras
-, withRPiDispmanx ? false, libraspberrypi
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  wrapQtAppsHook,
+  perl,
+  flatbuffers,
+  protobuf,
+  mbedtls,
+  alsa-lib,
+  hidapi,
+  libcec,
+  libusb1,
+  libX11,
+  libxcb,
+  libXrandr,
+  python3,
+  qtbase,
+  qtserialport,
+  qtsvg,
+  qtx11extras,
+  withRPiDispmanx ? false,
+  libraspberrypi,
 }:
 
 stdenv.mkDerivation rec {
   pname = "hyperion.ng";
-  version = "2.0.14";
+  version = "2.0.16";
 
   src = fetchFromGitHub {
     owner = "hyperion-project";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Y1PZ+YyPMZEX4fBpMG6IVT1gtXR9ZHlavJMCQ4KAenc=";
+    hash = "sha256-nQPtJw9DOKMPGI5trxZxpP+z2PYsbRKqOQEyaGzvmmA=";
     # needed for `dependencies/external/`:
     # * rpi_ws281x` - not possible to use as a "system" lib
     # * qmdnsengine - not in nixpkgs yet
     fetchSubmodules = true;
   };
 
-  buildInputs = [
-    hidapi
-    libusb1
-    libX11
-    libxcb
-    libXrandr
-    flatbuffers
-    protobuf
-    mbedtls
-    python3
-    qtbase
-    qtserialport
-    qtsvg
-    qtx11extras
-  ] ++ lib.optional stdenv.isLinux libcec
+  buildInputs =
+    [
+      alsa-lib
+      hidapi
+      libusb1
+      libX11
+      libxcb
+      libXrandr
+      flatbuffers
+      protobuf
+      mbedtls
+      python3
+      qtbase
+      qtserialport
+      qtsvg
+      qtx11extras
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux libcec
     ++ lib.optional withRPiDispmanx libraspberrypi;
 
   nativeBuildInputs = [
-    cmake wrapQtAppsHook
-  ] ++ lib.optional stdenv.isDarwin perl; # for macos bundle
+    cmake
+    wrapQtAppsHook
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin perl; # for macos bundle
 
-  patchPhase =  ''
+  patchPhase = ''
     patchShebangs test/testrunner.sh
     patchShebangs src/hyperiond/CMakeLists.txt
-  '' ;
+  '';
 
   cmakeFlags = [
     "-DENABLE_DEPLOY_DEPENDENCIES=OFF"
@@ -63,10 +84,13 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An opensource Bias or Ambient Lighting implementation";
+    description = "Opensource Bias or Ambient Lighting implementation";
     homepage = "https://github.com/hyperion-project/hyperion.ng";
     license = licenses.mit;
-    maintainers = with maintainers; [ algram kazenyuk ];
+    maintainers = with maintainers; [
+      algram
+      kazenyuk
+    ];
     platforms = platforms.unix;
   };
 }

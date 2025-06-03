@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "script_exporter";
@@ -17,6 +22,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Shell script prometheus exporter";
+    mainProgram = "script_exporter";
     homepage = "https://github.com/adhocteam/script_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ Flakebi ];

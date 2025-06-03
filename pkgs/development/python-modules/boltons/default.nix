@@ -1,34 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "boltons";
-  version = "23.0.0";
-  format = "setuptools";
+  version = "25.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mahmoud";
     repo = "boltons";
-    rev = "refs/tags/${version}";
-    hash = "sha256-NqlCu0W/BQkLiaLYs9DB1RrEya6KGPfNtpAzKXxoRD0=";
+    tag = version;
+    hash = "sha256-kBOU17/jRRAGb4MGawY0PY31OJf5arVz+J7xGBoMBkg=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ flit-core ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Tests bind to localhost
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "boltons"
-  ];
+  pythonImportsCheck = [ "boltons" ];
 
   meta = with lib; {
     description = "Constructs, recipes, and snippets extending the Python standard library";

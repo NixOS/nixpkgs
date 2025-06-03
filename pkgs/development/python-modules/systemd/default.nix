@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, libredirect
-, systemd
-, pkg-config
-, pytest
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  libredirect,
+  systemd,
+  pkg-config,
+  pytest,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -20,22 +21,18 @@ buildPythonPackage rec {
     hash = "sha256-8p4m4iM/z4o6PHRQIpuSXb64tPTWGlujEYCDVLiIt2o=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    systemd
-  ];
+  buildInputs = [ systemd ];
 
   nativeCheckInputs = [
+    libredirect.hook
     pytest
   ];
 
   checkPhase = ''
     echo "12345678901234567890123456789012" > machine-id
     export NIX_REDIRECTS=/etc/machine-id=$(realpath machine-id) \
-    LD_PRELOAD=${libredirect}/lib/libredirect.so
 
     # Those tests assume /etc/machine-id to be available
     # But our redirection technique does not work apparently

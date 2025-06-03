@@ -1,9 +1,10 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, async-timeout
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  async-timeout,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
-    repo = pname;
+    repo = "pyevilgenius";
     rev = version;
     hash = "sha256-wjC32oq/lW3Z4XB+4SILRKIOuCgBKk1gruOo4uc/4/o=";
   };
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Project has no test
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyevilgenius"
-  ];
+  pythonImportsCheck = [ "pyevilgenius" ];
 
   meta = with lib; {
     description = "Python SDK to interact with Evil Genius Labs devices";

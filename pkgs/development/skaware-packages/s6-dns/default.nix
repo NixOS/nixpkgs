@@ -1,15 +1,19 @@
-{ skawarePackages }:
+{ skawarePackages, skalibs }:
 
-with skawarePackages;
-
-buildPackage {
+skawarePackages.buildPackage {
   pname = "s6-dns";
-  version = "2.3.7.1";
-  sha256 = "zwJYV07H1itlTgwq14r0x9Z6xMnLN/eBSA9ZflSzD20=";
+  version = "2.4.1.0";
+  sha256 = "sha256-tjCFGfEJpnRpxKqvqd8fAJrQlh+nmP/Dj4lVh+aTVyk=";
 
-  description = "A suite of DNS client programs and libraries for Unix systems";
+  description = "Suite of DNS client programs and libraries for Unix systems";
 
-  outputs = [ "bin" "lib" "dev" "doc" "out" ];
+  outputs = [
+    "bin"
+    "lib"
+    "dev"
+    "doc"
+    "out"
+  ];
 
   configureFlags = [
     "--libdir=\${lib}/lib"

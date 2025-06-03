@@ -1,6 +1,9 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   prg = config.programs;
@@ -10,16 +13,16 @@ let
     eval $(${pkgs.bash-my-aws}/bin/bma-init)
   '';
 in
-  {
-    options = {
-      programs.bash-my-aws = {
-        enable = mkEnableOption (lib.mdDoc "bash-my-aws");
-      };
+{
+  options = {
+    programs.bash-my-aws = {
+      enable = lib.mkEnableOption "bash-my-aws";
     };
+  };
 
-    config = mkIf cfg.enable {
-      environment.systemPackages = with pkgs; [ bash-my-aws ];
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = with pkgs; [ bash-my-aws ];
 
-      programs.bash.interactiveShellInit = initScript;
-    };
-  }
+    programs.bash.interactiveShellInit = initScript;
+  };
+}

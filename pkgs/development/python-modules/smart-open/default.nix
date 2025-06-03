@@ -1,69 +1,64 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, azure-common
-, azure-core
-, azure-storage-blob
-, boto3
-, google-cloud-storage
-, requests
-, moto
-, paramiko
-, pytestCheckHook
-, responses
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  azure-common,
+  azure-core,
+  azure-storage-blob,
+  boto3,
+  google-cloud-storage,
+  requests,
+  moto,
+  paramiko,
+  pytestCheckHook,
+  responses,
+  setuptools,
+  wrapt,
+  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "smart-open";
-  version = "6.4.0";
-  format = "setuptools";
+  version = "7.2.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "RaRe-Technologies";
     repo = "smart_open";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-fciNaVw603FAcgrSrND+LEycJffmnFQij2ZpatYZ/e4=";
+    tag = "v${version}";
+    hash = "sha256-/16Is90235scTAYUW/65QxcTddD0+aiG5TLzYsBUE1A=";
   };
 
-  passthru.optional-dependencies = {
-    s3 = [
-      boto3
-    ];
-    gcs = [
-      google-cloud-storage
-    ];
+  build-system = [ setuptools ];
+
+  dependencies = [ wrapt ];
+
+  optional-dependencies = {
+    s3 = [ boto3 ];
+    gcs = [ google-cloud-storage ];
     azure = [
       azure-storage-blob
       azure-common
       azure-core
     ];
-    http = [
-      requests
-    ];
-    webhdfs = [
-      requests
-    ];
-    ssh = [
-      paramiko
-    ];
+    http = [ requests ];
+    webhdfs = [ requests ];
+    ssh = [ paramiko ];
+    zst = [ zstandard ];
   };
 
-  pythonImportsCheck = [
-    "smart_open"
-  ];
+  pythonImportsCheck = [ "smart_open" ];
 
   nativeCheckInputs = [
     moto
     pytestCheckHook
     responses
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pytestFlagsArray = [
-    "smart_open"
-  ];
+  pytestFlagsArray = [ "smart_open" ];
 
   disabledTests = [
     # https://github.com/RaRe-Technologies/smart_open/issues/784
@@ -74,6 +69,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/piskvorky/smart_open/releases/tag/${src.tag}";
     description = "Library for efficient streaming of very large file";
     homepage = "https://github.com/RaRe-Technologies/smart_open";
     license = licenses.mit;

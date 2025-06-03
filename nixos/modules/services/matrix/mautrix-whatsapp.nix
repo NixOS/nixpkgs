@@ -3,13 +3,14 @@
   config,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.services.mautrix-whatsapp;
   dataDir = "/var/lib/mautrix-whatsapp";
   registrationFile = "${dataDir}/whatsapp-registration.yaml";
   settingsFile = "${dataDir}/config.json";
   settingsFileUnsubstituted = settingsFormat.generate "mautrix-whatsapp-config-unsubstituted.json" cfg.settings;
-  settingsFormat = pkgs.formats.json {};
+  settingsFormat = pkgs.formats.json { };
   appservicePort = 29318;
 
   mkDefaults = lib.mapAttrsRecursive (n: v: lib.mkDefault v);
@@ -29,8 +30,8 @@
     bridge = {
       username_template = "whatsapp_{{.}}";
       displayname_template = "{{if .BusinessName}}{{.BusinessName}}{{else if .PushName}}{{.PushName}}{{else}}{{.JID}}{{end}} (WA)";
-      double_puppet_server_map = {};
-      login_shared_secret_map = {};
+      double_puppet_server_map = { };
+      login_shared_secret_map = { };
       command_prefix = "!wa";
       permissions."*" = "relay";
       relay.enabled = true;
@@ -45,14 +46,17 @@
     };
   };
 
-in {
+in
+{
   options.services.mautrix-whatsapp = {
-    enable = lib.mkEnableOption (lib.mdDoc "mautrix-whatsapp, a puppeting/relaybot bridge between Matrix and WhatsApp.");
+    enable = lib.mkEnableOption "mautrix-whatsapp, a puppeting/relaybot bridge between Matrix and WhatsApp";
+
+    package = lib.mkPackageOption pkgs "mautrix-whatsapp" { };
 
     settings = lib.mkOption {
       type = settingsFormat.type;
       default = defaultConfig;
-      description = lib.mdDoc ''
+      description = ''
         {file}`config.yaml` configuration as a Nix attribute set.
         Configuration options should match those described in
         [example-config.yaml](https://github.com/mautrix/whatsapp/blob/master/example-config.yaml).
@@ -91,7 +95,7 @@ in {
     environmentFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         File containing environment variables to be passed to the mautrix-whatsapp service,
         in which secret tokens can be specified securely by optionally defining a value for
         `MAUTRIX_WHATSAPP_BRIDGE_LOGIN_SHARED_SECRET`.
@@ -104,8 +108,18 @@ in {
       defaultText = lib.literalExpression ''
         optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnits
       '';
-      description = lib.mdDoc ''
+      description = ''
         List of Systemd services to require and wait for when starting the application service.
+      '';
+    };
+
+    registerToSynapse = lib.mkOption {
+      type = lib.types.bool;
+      default = config.services.matrix-synapse.enable;
+      defaultText = lib.literalExpression "config.services.matrix-synapse.enable";
+      description = ''
+        Whether to add the bridge's app service registration file to
+        `services.matrix-synapse.settings.app_service_config_files`.
       '';
     };
   };
@@ -119,20 +133,29 @@ in {
       description = "Mautrix-WhatsApp bridge user";
     };
 
-    users.groups.mautrix-whatsapp = {};
+    users.groups.mautrix-whatsapp = { };
 
-    services.mautrix-whatsapp.settings = lib.mkMerge (map mkDefaults [
-      defaultConfig
-      # Note: this is defined here to avoid the docs depending on `config`
-      { homeserver.domain = config.services.matrix-synapse.settings.server_name; }
-    ]);
+    services.matrix-synapse = lib.mkIf cfg.registerToSynapse {
+      settings.app_service_config_files = [ registrationFile ];
+    };
+    systemd.services.matrix-synapse = lib.mkIf cfg.registerToSynapse {
+      serviceConfig.SupplementaryGroups = [ "mautrix-whatsapp" ];
+    };
+
+    services.mautrix-whatsapp.settings = lib.mkMerge (
+      map mkDefaults [
+        defaultConfig
+        # Note: this is defined here to avoid the docs depending on `config`
+        { homeserver.domain = config.services.matrix-synapse.settings.server_name; }
+      ]
+    );
 
     systemd.services.mautrix-whatsapp = {
       description = "Mautrix-WhatsApp Service - A WhatsApp bridge for Matrix";
 
-      wantedBy = ["multi-user.target"];
-      wants = ["network-online.target"] ++ cfg.serviceDependencies;
-      after = ["network-online.target"] ++ cfg.serviceDependencies;
+      wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ] ++ cfg.serviceDependencies;
+      after = [ "network-online.target" ] ++ cfg.serviceDependencies;
 
       preStart = ''
         # substitute the settings file by environment variables
@@ -147,7 +170,7 @@ in {
 
         # generate the appservice's registration file if absent
         if [ ! -f '${registrationFile}' ]; then
-          ${pkgs.mautrix-whatsapp}/bin/mautrix-whatsapp \
+          ${cfg.package}/bin/mautrix-whatsapp \
             --generate-registration \
             --config='${settingsFile}' \
             --registration='${registrationFile}'
@@ -155,10 +178,15 @@ in {
         chmod 640 ${registrationFile}
 
         umask 0177
+        # 1. Overwrite registration tokens in config
+        # 2. If environment variable MAUTRIX_WHATSAPP_BRIDGE_LOGIN_SHARED_SECRET
+        #    is set, set it as the login shared secret value for the configured
+        #    homeserver domain.
         ${pkgs.yq}/bin/yq -s '.[0].appservice.as_token = .[1].as_token
           | .[0].appservice.hs_token = .[1].hs_token
-          | .[0]' '${settingsFile}' '${registrationFile}' \
-          > '${settingsFile}.tmp'
+          | .[0]
+          | if env.MAUTRIX_WHATSAPP_BRIDGE_LOGIN_SHARED_SECRET then .bridge.login_shared_secret_map.[.homeserver.domain] = env.MAUTRIX_WHATSAPP_BRIDGE_LOGIN_SHARED_SECRET else . end' \
+          '${settingsFile}' '${registrationFile}' > '${settingsFile}.tmp'
         mv '${settingsFile}.tmp' '${settingsFile}'
         umask $old_umask
       '';
@@ -170,7 +198,7 @@ in {
         StateDirectory = baseNameOf dataDir;
         WorkingDirectory = dataDir;
         ExecStart = ''
-          ${pkgs.mautrix-whatsapp}/bin/mautrix-whatsapp \
+          ${cfg.package}/bin/mautrix-whatsapp \
           --config='${settingsFile}' \
           --registration='${registrationFile}'
         '';
@@ -194,12 +222,12 @@ in {
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
         SystemCallErrorNumber = "EPERM";
-        SystemCallFilter = ["@system-service"];
+        SystemCallFilter = [ "@system-service" ];
         Type = "simple";
-        UMask = 0027;
+        UMask = 27;
       };
-      restartTriggers = [settingsFileUnsubstituted];
+      restartTriggers = [ settingsFileUnsubstituted ];
     };
   };
-  meta.maintainers = with lib.maintainers; [frederictobiasc];
+  meta.maintainers = with lib.maintainers; [ frederictobiasc ];
 }

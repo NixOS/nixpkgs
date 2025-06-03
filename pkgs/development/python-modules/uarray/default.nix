@@ -1,50 +1,73 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, matchpy
-, numpy
-, astunparse
-, typing-extensions
-, pytestCheckHook
-, pytest-cov
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  scikit-build-core,
+  setuptools,
+  setuptools-scm,
+  cmake,
+  ninja,
+  matchpy,
+  numpy,
+  astunparse,
+  typing-extensions,
+  nix-update-script,
+  pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "uarray";
-  version = "0.8.2";
-  format = "setuptools";
+  version = "0.9.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Quansight-Labs";
-    repo = pname;
-    rev = version;
-    sha256 = "1x2jp7w2wmn2awyv05xs0frpq0fa0rprwcxyg72wgiss0bnzxnhm";
+    repo = "uarray";
+    tag = version;
+    hash = "sha256-eCrmmP+9TI+T8Km8MOz0EqseneFwPizlnZloK5yNLcM=";
   };
 
-  patches = [(
-    # Fixes a compile error with newer versions of GCC -- should be included
-    # in the next release after 0.8.2
-    fetchpatch {
-      url = "https://github.com/Quansight-Labs/uarray/commit/a2012fc7bb94b3773eb402c6fe1ba1a894ea3d18.patch";
-      sha256 = "1qqh407qg5dz6x766mya2bxrk0ffw5h17k478f5kcs53g4dyfc3s";
-    }
-  )];
+  build-system = [
+    scikit-build-core
+    setuptools
+    setuptools-scm
+    cmake
+    ninja
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook pytest-cov ];
-  propagatedBuildInputs = [ matchpy numpy astunparse typing-extensions ];
+  dontUseCmakeConfigure = true;
+
+  dependencies = [
+    astunparse
+    matchpy
+    numpy
+    typing-extensions
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   # Tests must be run from outside the source directory
   preCheck = ''
     cd $TMP
   '';
-  pytestFlagsArray = ["--pyargs" "uarray"];
+
+  pytestFlagsArray = [
+    "--pyargs"
+    "uarray"
+  ];
+
   pythonImportsCheck = [ "uarray" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Universal array library";
     homepage = "https://github.com/Quansight-Labs/uarray";
     license = licenses.bsd0;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.pbsds ];
   };
 }

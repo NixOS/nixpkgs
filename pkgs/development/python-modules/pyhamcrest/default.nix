@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatch-vcs
-, hatchling
-, numpy
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
+  numpy,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hamcrest";
     repo = "PyHamcrest";
-    rev = "refs/tags/V${version}";
+    tag = "V${version}";
     hash = "sha256-VkfHRo4k8g9/QYG4r79fXf1NXorVdpUKUgVrbV2ELMU=";
   };
 
@@ -46,9 +47,7 @@ buildPythonPackage rec {
     "test_numpy_numeric_type_int"
   ];
 
-  pythonImportsCheck = [
-    "hamcrest"
-  ];
+  pythonImportsCheck = [ "hamcrest" ];
 
   meta = with lib; {
     description = "Hamcrest framework for matcher objects";

@@ -1,30 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, poetry-core
-, pythonOlder
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "celery-types";
-  version = "0.20.0";
-  format = "pyproject";
+  version = "0.23.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-5cdiVVYF7QWSuu2dUZIwBGzo56EcZ6ghVVwIt87OGWA=";
+    pname = "celery_types";
+    inherit version;
+    hash = "sha256-QC7QVVrqPNXh5iSPRjLk8Y7sjtskNRc/nm3AhEn6EB4=";
   };
 
-  propagatedBuildInputs = [
-    typing-extensions
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  propagatedBuildInputs = [ typing-extensions ];
 
   doCheck = false;
 

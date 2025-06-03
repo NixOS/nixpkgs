@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, flit-core
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  flit-core,
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-devhelp";
-  version = "1.0.5";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -15,12 +16,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "sphinxcontrib_devhelp";
     inherit version;
-    hash = "sha256-Y7QeDTggfKQOu+q89NjlH3bAPnjNYavhGM9ENcc9QhI=";
+    hash = "sha256-QR9dltRF0dc7tdUhMzd7QkjsedtceTzn2+WeB0tN0a0=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   # Check is disabled due to circular dependency of sphinx
   dontCheckRuntimeDeps = true;
@@ -29,9 +28,9 @@ buildPythonPackage rec {
   pythonNamespaces = [ "sphinxcontrib" ];
 
   meta = with lib; {
-    description = "sphinxcontrib-devhelp is a sphinx extension which outputs Devhelp document.";
+    description = "sphinxcontrib-devhelp is a sphinx extension which outputs Devhelp document";
     homepage = "https://github.com/sphinx-doc/sphinxcontrib-devhelp";
     license = licenses.bsd2;
-    maintainers = teams.sphinx.members;
+    teams = [ teams.sphinx ];
   };
 }

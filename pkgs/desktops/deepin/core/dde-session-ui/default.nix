@@ -1,29 +1,27 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, qtbase
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, dde-dock
-, gsettings-qt
-, qtx11extras
-, gtest
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libsForQt5,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  dde-tray-loader,
+  gsettings-qt,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dde-session-ui";
-  version = "6.0.10";
+  version = "6.0.20";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-JwktVbwWdfqURhZuEFdB5oaKMsBZu5DekpZ2WGpcL4Q=";
+    hash = "sha256-3twtJ1KT7TqpyLopHqPY2Lo8oZsH9liir0SJUV/k3OU=";
   };
 
   postPatch = ''
@@ -41,32 +39,22 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     dtkwidget
     qt5platform-plugins
-    dde-dock
+    qt5integration
+    dde-tray-loader
     gsettings-qt
-    qtx11extras
+    libsForQt5.qtx11extras
     gtest
   ];
 
-  cmakeFlags = [
-   "-DDISABLE_SYS_UPDATE=ON"
-  ];
-
-  # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
-  qtWrapperArgs = [
-    "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
-  ];
-
-  preFixup = ''
-    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '';
+  cmakeFlags = [ "-DDISABLE_SYS_UPDATE=ON" ];
 
   postFixup = ''
     for binary in $out/lib/deepin-daemon/*; do
@@ -79,6 +67,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/dde-session-ui";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }

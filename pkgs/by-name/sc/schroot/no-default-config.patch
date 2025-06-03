@@ -1,0 +1,33 @@
+diff --git a/etc/CMakeLists.txt b/etc/CMakeLists.txt
+index dd31fd3d..65521010 100644
+--- a/etc/CMakeLists.txt
++++ b/etc/CMakeLists.txt
+@@ -19,20 +19,20 @@
+ set(schroot_sysconf_data
+     schroot.conf)
+ 
+-install(FILES ${schroot_sysconf_data}
+-        DESTINATION ${SCHROOT_SYSCONF_DIR})
++# install(FILES ${schroot_sysconf_data}
++#         DESTINATION ${SCHROOT_SYSCONF_DIR})
+ 
+ set(files
+     copyfiles
+     fstab
+     nssdatabases)
+ 
+-set(profiles
+-    buildd
+-    default
+-    desktop
+-    minimal
+-    sbuild)
++# set(profiles
++#     buildd
++#     default
++#     desktop
++#     minimal
++#     sbuild)
+ 
+ set(arches
+     ${SBUILD_PLATFORM})

@@ -1,6 +1,7 @@
 # Global configuration {#chap-packageconfig}
 
-Nix comes with certain defaults about what packages can and cannot be installed, based on a package's metadata. By default, Nix will prevent installation if any of the following criteria are true:
+Nix comes with certain defaults about which packages can and cannot be installed, based on a package's metadata.
+By default, Nix will prevent installation if any of the following criteria are true:
 
 -   The package is thought to be broken, and has had its `meta.broken` set to `true`.
 
@@ -10,23 +11,14 @@ Nix comes with certain defaults about what packages can and cannot be installed,
 
 -   The package has known security vulnerabilities but has not or can not be updated for some reason, and a list of issues has been entered in to the package's `meta.knownVulnerabilities`.
 
-Note that all this is checked during evaluation already, and the check includes any package that is evaluated. In particular, all build-time dependencies are checked. `nix-env -qa` will (attempt to) hide any packages that would be refused.
+Each of these criteria can be altered in the Nixpkgs configuration.
 
-Each of these criteria can be altered in the nixpkgs configuration.
+:::{.note}
+All this is checked during evaluation already, and the check includes any package that is evaluated.
+In particular, all build-time dependencies are checked.
+:::
 
-The nixpkgs configuration for a NixOS system is set in the `configuration.nix`, as in the following example:
-
-```nix
-{
-  nixpkgs.config = {
-    allowUnfree = true;
-  };
-}
-```
-
-However, this does not allow unfree software for individual users. Their configurations are managed separately.
-
-A user's nixpkgs configuration is stored in a user-specific configuration file located at `~/.config/nixpkgs/config.nix`. For example:
+A user's Nixpkgs configuration is stored in a user-specific configuration file located at `~/.config/nixpkgs/config.nix`. For example:
 
 ```nix
 {
@@ -34,7 +26,10 @@ A user's nixpkgs configuration is stored in a user-specific configuration file l
 }
 ```
 
-Note that we are not able to test or build unfree software on Hydra due to policy. Most unfree licenses prohibit us from either executing or distributing the software.
+:::{.caution}
+Unfree software is not tested or built in Nixpkgs continuous integration, and therefore not cached.
+Most unfree licenses prohibit either executing or distributing the software.
+:::
 
 ## Installing broken packages {#sec-allow-broken}
 
@@ -104,10 +99,12 @@ There are several ways to tweak how Nix handles a package which has been marked 
 
     ```nix
     {
-      allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-        "roon-server"
-        "vscode"
-      ];
+      allowUnfreePredicate =
+        pkg:
+        builtins.elem (lib.getName pkg) [
+          "roon-server"
+          "vscode"
+        ];
     }
     ```
 
@@ -117,7 +114,10 @@ There are several ways to tweak how Nix handles a package which has been marked 
 
     ```nix
     {
-      allowlistedLicenses = with lib.licenses; [ amd wtfpl ];
+      allowlistedLicenses = with lib.licenses; [
+        amd
+        wtfpl
+      ];
     }
     ```
 
@@ -125,7 +125,10 @@ There are several ways to tweak how Nix handles a package which has been marked 
 
     ```nix
     {
-      blocklistedLicenses = with lib.licenses; [ agpl3Only gpl3Only ];
+      blocklistedLicenses = with lib.licenses; [
+        agpl3Only
+        gpl3Only
+      ];
     }
     ```
 
@@ -159,11 +162,15 @@ There are several ways to tweak how Nix handles a package which has been marked 
 
     The `allowInsecurePredicate` option is a function which accepts a package and returns a boolean, much like `allowUnfreePredicate`.
 
-    The following configuration example only allows insecure packages with very short names:
+    The following configuration example allows any version of the `ovftool` package:
 
     ```nix
     {
-      allowInsecurePredicate = pkg: builtins.stringLength (lib.getName pkg) <= 5;
+      allowInsecurePredicate =
+        pkg:
+        builtins.elem (lib.getName pkg) [
+          "ovftool"
+        ];
     }
     ```
 
@@ -176,7 +183,9 @@ You can define a function called `packageOverrides` in your local `~/.config/nix
 ```nix
 {
   packageOverrides = pkgs: rec {
-    foo = pkgs.foo.override { ... };
+    foo = pkgs.foo.override {
+      # ...
+    };
   };
 }
 ```
@@ -196,27 +205,28 @@ source: ../config-options.json
 
 ### Build an environment {#sec-building-environment}
 
-Using `packageOverrides`, it is possible to manage packages declaratively. This means that we can list all of our desired packages within a declarative Nix expression. For example, to have `aspell`, `bc`, `ffmpeg`, `coreutils`, `gdb`, `nixUnstable`, `emscripten`, `jq`, `nox`, and `silver-searcher`, we could use the following in `~/.config/nixpkgs/config.nix`:
+Using `packageOverrides`, it is possible to manage packages declaratively. This means that we can list all of our desired packages within a declarative Nix expression. For example, to have `aspell`, `bc`, `ffmpeg`, `coreutils`, `gdb`, `nix`, `emscripten`, `jq`, `nox`, and `silver-searcher`, we could use the following in `~/.config/nixpkgs/config.nix`:
 
 ```nix
 {
-  packageOverrides = pkgs: with pkgs; {
-    myPackages = pkgs.buildEnv {
-      name = "my-packages";
-      paths = [
-        aspell
-        bc
-        coreutils
-        gdb
-        ffmpeg
-        nixUnstable
-        emscripten
-        jq
-        nox
-        silver-searcher
-      ];
+  packageOverrides =
+    pkgs: with pkgs; {
+      myPackages = pkgs.buildEnv {
+        name = "my-packages";
+        paths = [
+          aspell
+          bc
+          coreutils
+          gdb
+          ffmpeg
+          nix
+          emscripten
+          jq
+          nox
+          silver-searcher
+        ];
+      };
     };
-  };
 }
 ```
 
@@ -224,24 +234,28 @@ To install it into our environment, you can just run `nix-env -iA nixpkgs.myPack
 
 ```nix
 {
-  packageOverrides = pkgs: with pkgs; {
-    myPackages = pkgs.buildEnv {
-      name = "my-packages";
-      paths = [
-        aspell
-        bc
-        coreutils
-        gdb
-        ffmpeg
-        nixUnstable
-        emscripten
-        jq
-        nox
-        silver-searcher
-      ];
-      pathsToLink = [ "/share" "/bin" ];
+  packageOverrides =
+    pkgs: with pkgs; {
+      myPackages = pkgs.buildEnv {
+        name = "my-packages";
+        paths = [
+          aspell
+          bc
+          coreutils
+          gdb
+          ffmpeg
+          nix
+          emscripten
+          jq
+          nox
+          silver-searcher
+        ];
+        pathsToLink = [
+          "/share"
+          "/bin"
+        ];
+      };
     };
-  };
 }
 ```
 
@@ -253,24 +267,32 @@ After building that new environment, look through `~/.nix-profile` to make sure 
 
 ```nix
 {
-  packageOverrides = pkgs: with pkgs; {
-    myPackages = pkgs.buildEnv {
-      name = "my-packages";
-      paths = [
-        aspell
-        bc
-        coreutils
-        ffmpeg
-        nixUnstable
-        emscripten
-        jq
-        nox
-        silver-searcher
-      ];
-      pathsToLink = [ "/share/man" "/share/doc" "/bin" ];
-      extraOutputsToInstall = [ "man" "doc" ];
+  packageOverrides =
+    pkgs: with pkgs; {
+      myPackages = pkgs.buildEnv {
+        name = "my-packages";
+        paths = [
+          aspell
+          bc
+          coreutils
+          ffmpeg
+          nix
+          emscripten
+          jq
+          nox
+          silver-searcher
+        ];
+        pathsToLink = [
+          "/share/man"
+          "/share/doc"
+          "/bin"
+        ];
+        extraOutputsToInstall = [
+          "man"
+          "doc"
+        ];
+      };
     };
-  };
 }
 ```
 
@@ -278,15 +300,15 @@ This provides us with some useful documentation for using our packages.  However
 
 ```nix
 {
-  packageOverrides = pkgs: with pkgs; rec {
-    myProfile = writeText "my-profile" ''
+  packageOverrides = pkgs: {
+    myProfile = pkgs.writeText "my-profile" ''
       export PATH=$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/sbin:/bin:/usr/sbin:/usr/bin
       export MANPATH=$HOME/.nix-profile/share/man:/nix/var/nix/profiles/default/share/man:/usr/share/man
     '';
     myPackages = pkgs.buildEnv {
       name = "my-packages";
-      paths = [
-        (runCommand "profile" {} ''
+      paths = with pkgs; [
+        (runCommand "profile" { } ''
           mkdir -p $out/etc/profile.d
           cp ${myProfile} $out/etc/profile.d/my-profile.sh
         '')
@@ -295,14 +317,22 @@ This provides us with some useful documentation for using our packages.  However
         coreutils
         ffmpeg
         man
-        nixUnstable
+        nix
         emscripten
         jq
         nox
         silver-searcher
       ];
-      pathsToLink = [ "/share/man" "/share/doc" "/bin" "/etc" ];
-      extraOutputsToInstall = [ "man" "doc" ];
+      pathsToLink = [
+        "/share/man"
+        "/share/doc"
+        "/bin"
+        "/etc"
+      ];
+      extraOutputsToInstall = [
+        "man"
+        "doc"
+      ];
     };
   };
 }
@@ -329,16 +359,16 @@ Configuring GNU info is a little bit trickier than man pages. To work correctly,
 
 ```nix
 {
-  packageOverrides = pkgs: with pkgs; rec {
-    myProfile = writeText "my-profile" ''
+  packageOverrides = pkgs: {
+    myProfile = pkgs.writeText "my-profile" ''
       export PATH=$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/sbin:/bin:/usr/sbin:/usr/bin
       export MANPATH=$HOME/.nix-profile/share/man:/nix/var/nix/profiles/default/share/man:/usr/share/man
       export INFOPATH=$HOME/.nix-profile/share/info:/nix/var/nix/profiles/default/share/info:/usr/share/info
     '';
     myPackages = pkgs.buildEnv {
       name = "my-packages";
-      paths = [
-        (runCommand "profile" {} ''
+      paths = with pkgs; [
+        (runCommand "profile" { } ''
           mkdir -p $out/etc/profile.d
           cp ${myProfile} $out/etc/profile.d/my-profile.sh
         '')
@@ -347,15 +377,25 @@ Configuring GNU info is a little bit trickier than man pages. To work correctly,
         coreutils
         ffmpeg
         man
-        nixUnstable
+        nix
         emscripten
         jq
         nox
         silver-searcher
         texinfoInteractive
       ];
-      pathsToLink = [ "/share/man" "/share/doc" "/share/info" "/bin" "/etc" ];
-      extraOutputsToInstall = [ "man" "doc" "info" ];
+      pathsToLink = [
+        "/share/man"
+        "/share/doc"
+        "/share/info"
+        "/bin"
+        "/etc"
+      ];
+      extraOutputsToInstall = [
+        "man"
+        "doc"
+        "info"
+      ];
       postBuild = ''
         if [ -x $out/bin/install-info -a -w $out/share/info ]; then
           shopt -s nullglob

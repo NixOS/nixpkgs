@@ -1,34 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-oauthlib,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ovh";
-  version = "1.1.0";
-  format = "setuptools";
+  version = "1.2.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EI+bWjtHEZPOSkWJx3gvS8y//gugMWl3TrBHKsKO9nk=";
+    hash = "sha256-0xHwjsF7YsxhIWs9rPA+6J+VodqQNqWV2sKfydeYuCc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
+    requests-oauthlib
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "ovh"
-  ];
+  pythonImportsCheck = [ "ovh" ];
 
   disabledTests = [
     # Tests require network access
@@ -37,6 +39,11 @@ buildPythonPackage rec {
     "test_config_from_invalid_ini_file"
     "test_config_from_only_one_file"
     "test_endpoints"
+    # Tests require API key
+    "test_config_oauth2"
+    "test_config_invalid_both"
+    "test_config_invalid_oauth2"
+    "test_config_incompatible_oauth2"
   ];
 
   meta = with lib; {

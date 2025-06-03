@@ -1,72 +1,68 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, setuptools
-, setuptools-scm
+  # build-system
+  hatchling,
+  hatch-vcs,
 
-# dependencies
-, packaging
-, requests
-, urllib3
+  # dependencies
+  packaging,
+  requests,
+  urllib3,
 
-# optional-dependenices
-, paramiko
-, websocket-client
+  # optional-dependencies
+  paramiko,
+  websocket-client,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "docker";
-  version = "7.0.0";
-  format = "pyproject";
+  version = "7.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Mjc2+5LNlBj8XnEzvJU+EanaBPRIP4KLUn21U/Hn5aM=";
+  src = fetchFromGitHub {
+    owner = "docker";
+    repo = "docker-py";
+    tag = version;
+    hash = "sha256-sk6TZLek+fRkKq7kG9g6cR9lvfPC8v8qUXKb7Tq4pLU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
+  build-system = [
+    hatchling
+    hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     packaging
     requests
     urllib3
   ];
 
-  passthru.optional-dependencies = {
-    ssh = [
-      paramiko
-    ];
-    websockets = [
-      websocket-client
-    ];
+  optional-dependencies = {
+    ssh = [ paramiko ];
+    tls = [ ];
+    websockets = [ websocket-client ];
   };
 
-  pythonImportsCheck = [
-    "docker"
-  ];
+  pythonImportsCheck = [ "docker" ];
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pytestFlagsArray = [
-    "tests/unit"
-  ];
+  pytestFlagsArray = [ "tests/unit" ];
 
   # Deselect socket tests on Darwin because it hits the path length limit for a Unix domain socket
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     "api_test"
     "stream_response"
     "socket_file"
@@ -74,9 +70,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/docker/docker-py/releases/tag/${version}";
-    description = "An API client for docker written in Python";
+    description = "API client for docker written in Python";
     homepage = "https://github.com/docker/docker-py";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "tencentcloud-sdk-python";
-  version = "3.0.1100";
+  version = "3.0.1391";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -17,32 +18,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "TencentCloud";
     repo = "tencentcloud-sdk-python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-TaEsYIRYKOSPrUVE1tMy8GjewG7KYoQLXbwJGA//Z9c=";
+    tag = version;
+    hash = "sha256-bzxaCN2fXoZT2W8zpTg7DrBTmRfyUi2aVhrg+/Y1YkU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  dependencies = [ requests ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "tencentcloud"
-  ];
+  pythonImportsCheck = [ "tencentcloud" ];
 
-  pytestFlagsArray = [
-    # Other tests require credentials
-    "tests/unit/test_deserialize_warning.py"
-    "tests/unit/test_import.py"
-    "tests/unit/test_serialization.py"
-  ];
+  pytestFlagsArray = [ "tests/unit/" ];
 
   meta = with lib; {
     description = "Tencent Cloud API 3.0 SDK for Python";

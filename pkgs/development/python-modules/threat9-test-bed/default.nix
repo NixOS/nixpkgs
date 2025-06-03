@@ -1,51 +1,48 @@
-{ lib
-, buildPythonPackage
-, click
-, faker
-, fetchFromGitHub
-, flask
-, gunicorn
-, pyopenssl
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, requests
+{
+  lib,
+  buildPythonPackage,
+  click,
+  faker,
+  fetchFromGitHub,
+  flask,
+  gunicorn,
+  pyopenssl,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  requests,
+  setuptools-scm,
+  standard-telnetlib,
 }:
 
 buildPythonPackage rec {
   pname = "threat9-test-bed";
   version = "0.6.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "threat9";
-    repo = pname;
+    repo = "threat9-test-bed";
     rev = "v${version}";
     hash = "sha256-0YSjMf2gDdrvkDaT77iwfCkiDDXKHnZyI8d7JmBSuCg=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     faker
     flask
     gunicorn
     pyopenssl
     requests
-  ];
+  ] ++ lib.optionals (pythonAtLeast "3.13") [ standard-telnetlib ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "threat9_test_bed"
-  ];
+  pythonImportsCheck = [ "threat9_test_bed" ];
 
   disabledTests = [
     # Assertion issue with the response codes
@@ -59,5 +56,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/threat9/threat9-test-bed";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "test-bed";
   };
 }

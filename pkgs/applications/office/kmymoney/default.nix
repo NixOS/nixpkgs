@@ -1,17 +1,38 @@
-{ stdenv, lib, fetchurl, doxygen, extra-cmake-modules, graphviz, kdoctools
-, wrapQtAppsHook
-, autoPatchelfHook
+{
+  stdenv,
+  lib,
+  fetchurl,
+  doxygen,
+  extra-cmake-modules,
+  graphviz,
+  kdoctools,
+  wrapQtAppsHook,
+  autoPatchelfHook,
 
-, akonadi, alkimia, aqbanking, gmp, gwenhywfar, kactivities, karchive
-, kcmutils, kcontacts, qtwebengine, kdiagram, kholidays, kidentitymanagement
-, kitemmodels, libical, libofx, qgpgme
+  akonadi,
+  alkimia,
+  aqbanking,
+  gmp,
+  gwenhywfar,
+  kactivities,
+  karchive,
+  kcmutils,
+  kcontacts,
+  qtwebengine,
+  kdiagram,
+  kholidays,
+  kidentitymanagement,
+  kitemmodels,
+  libical,
+  libofx,
+  qgpgme,
 
-, sqlcipher
+  sqlcipher,
 
-# Needed for running tests:
-, xvfb-run
+  # Needed for running tests:
+  xvfb-run,
 
-, python3
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,14 +54,33 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-I${kitemmodels.dev}/include/KF5";
 
   nativeBuildInputs = [
-    doxygen extra-cmake-modules graphviz kdoctools
-    python3.pkgs.wrapPython wrapQtAppsHook autoPatchelfHook
+    doxygen
+    extra-cmake-modules
+    graphviz
+    kdoctools
+    python3.pkgs.wrapPython
+    wrapQtAppsHook
+    autoPatchelfHook
   ];
 
   buildInputs = [
-    akonadi alkimia aqbanking gmp gwenhywfar kactivities karchive kcmutils
-    kcontacts qtwebengine kdiagram kholidays kidentitymanagement kitemmodels
-    libical libofx qgpgme
+    akonadi
+    alkimia
+    aqbanking
+    gmp
+    gwenhywfar
+    kactivities
+    karchive
+    kcmutils
+    kcontacts
+    qtwebengine
+    kdiagram
+    kholidays
+    kidentitymanagement
+    kitemmodels
+    libical
+    libofx
+    qgpgme
     sqlcipher
 
     # Put it into buildInputs so that CMake can find it, even though we patch
@@ -59,13 +99,12 @@ stdenv.mkDerivation rec {
       "kmymoney/plugins/woob/interface/kmymoneywoob.py"
   '';
 
-  doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   nativeInstallCheckInputs = [ xvfb-run ];
-  installCheckPhase =
-    lib.optionalString doInstallCheck ''
-      xvfb-run -s '-screen 0 1024x768x24' make test \
-        ARGS="-E '(reports-chart-test)'" # Test fails, so exclude it for now.
-    '';
+  installCheckPhase = lib.optionalString doInstallCheck ''
+    xvfb-run -s '-screen 0 1024x768x24' make test \
+      ARGS="-E '(reports-chart-test)'" # Test fails, so exclude it for now.
+  '';
 
   # libpython is required by the python interpreter embedded in kmymoney, so we
   # need to explicitly tell autoPatchelf about it.
@@ -76,9 +115,13 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Personal finance manager for KDE";
+    mainProgram = "kmymoney";
     homepage = "https://kmymoney.org/";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ aidalgol das-g ];
+    maintainers = with lib.maintainers; [
+      aidalgol
+      das-g
+    ];
   };
 }

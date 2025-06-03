@@ -1,36 +1,38 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
-, nixosTests
-, testers
-, centrifugo
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  nixosTests,
+  testers,
+  centrifugo,
 }:
 let
   # Inspect build flags with `go version -m centrifugo`.
   statsEndpoint = "https://graphite-prod-01-eu-west-0.grafana.net/graphite/metrics,https://stats.centrifugal.dev/usage";
-  statsToken = "425599:eyJrIjoi" +
-    "OWJhMTcyZGNjN2FkYjEzM2E1OTQwZjIyMTU3MTBjMjUyYzAyZWE2MSIsIm4iOiJVc2FnZSBTdGF0cyIsImlkIjo2NDUzOTN9";
+  statsToken =
+    "425599:eyJrIjoi"
+    + "OWJhMTcyZGNjN2FkYjEzM2E1OTQwZjIyMTU3MTBjMjUyYzAyZWE2MSIsIm4iOiJVc2FnZSBTdGF0cyIsImlkIjo2NDUzOTN9";
 in
 buildGoModule rec {
   pname = "centrifugo";
-  version = "5.2.2";
+  version = "6.2.1";
 
   src = fetchFromGitHub {
     owner = "centrifugal";
     repo = "centrifugo";
     rev = "v${version}";
-    hash = "sha256-jBXg4/Uw5pFk1aCNpmHkXeUYrFwZqwtg0zYQ5zkp5QI=";
+    hash = "sha256-KDV63hSnW06J7doYVvfWpN6ZtCb4erCH/d62Yj0owRw=";
   };
 
-  vendorHash = "sha256-s04XSTs1ISfhezvz8RfcXPlx8cstHXdRBFPIEZlKI7k=";
+  vendorHash = "sha256-HNmYly8LtghD/HEIYshjfanwPG0Jw3kqDoGakE9w0yY=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/centrifugal/centrifugo/v5/internal/build.Version=${version}"
-    "-X=github.com/centrifugal/centrifugo/v5/internal/build.UsageStatsEndpoint=${statsEndpoint}"
-    "-X=github.com/centrifugal/centrifugo/v5/internal/build.UsageStatsToken=${statsToken}"
+    "-X=github.com/centrifugal/centrifugo/v6/internal/build.Version=${version}"
+    "-X=github.com/centrifugal/centrifugo/v6/internal/build.UsageStatsEndpoint=${statsEndpoint}"
+    "-X=github.com/centrifugal/centrifugo/v6/internal/build.UsageStatsToken=${statsToken}"
   ];
 
   excludedPackages = [
@@ -43,7 +45,7 @@ buildGoModule rec {
       inherit (nixosTests) centrifugo;
       version = testers.testVersion {
         package = centrifugo;
-        command = "${pname} version";
+        command = "centrifugo version";
         version = "v${version}";
       };
     };
@@ -54,7 +56,10 @@ buildGoModule rec {
     homepage = "https://centrifugal.dev";
     changelog = "https://github.com/centrifugal/centrifugo/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.tie ];
+    maintainers = [
+      lib.maintainers.tie
+      lib.maintainers.valodim
+    ];
     mainProgram = "centrifugo";
   };
 }

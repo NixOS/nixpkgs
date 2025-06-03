@@ -1,21 +1,25 @@
-{ lib
-, stdenv
-, fetchurl
-, libX11
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "worker";
-  version = "5.0.1";
+  version = "5.2.1";
 
   src = fetchurl {
     url = "http://www.boomerangsworld.de/cms/worker/downloads/worker-${finalAttrs.version}.tar.gz";
-    hash = "sha256-7bnJ7w7ejK5VDkna52jCtHKD8iiNOdXCpU0wx7RtkxA=";
+    hash = "sha256-xlWeCOOPXlm71nWP/Uq9i1xswWOgzX0xmkwZwmMWTl0=";
   };
 
   buildInputs = [ libX11 ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   strictDeps = true;
 
@@ -32,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "worker";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     inherit (libX11.meta) platforms;
   };
 })

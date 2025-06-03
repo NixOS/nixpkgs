@@ -1,28 +1,51 @@
-{ lib, stdenv, fetchFromGitHub, SDL2, glew, lua5_4, desktopToDarwinBundle }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  SDL2_net,
+  glew,
+  lua5_4,
+  desktopToDarwinBundle,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cadzinho";
-  version = "0.4.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "zecruel";
     repo = "CadZinho";
     rev = version;
-    hash = "sha256-6/sBNxQb52FFO2fWLVs6YDOmJLEbSOA5mwdMdJDjEDM=";
+    hash = "sha256-AHojy6lYLEyeBaYiIzo6MdQCM3jX5ENNTKgU+PGSD00=";
   };
 
   postPatch = ''
-    substituteInPlace src/gui_config.c --replace "/usr/share/cadzinho" "$out/share/cadzinho"
+    substituteInPlace src/gui_config.c --replace-fail "/usr/share/cadzinho" "$out/share/cadzinho"
+    substituteInPlace Makefile --replace-fail "-lGLEW" "-lGLEW -lSDL2_net"
   '';
 
-  nativeBuildInputs = lib.optional stdenv.isDarwin desktopToDarwinBundle;
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
-  buildInputs = [ SDL2 glew lua5_4 ];
+  buildInputs = [
+    SDL2
+    SDL2_net
+    glew
+    lua5_4
+  ];
 
   makeFlags = [ "CC:=$(CC)" ];
 
-  # https://github.com/llvm/llvm-project/issues/62254
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-fno-builtin-strrchr";
+  env.NIX_CFLAGS_COMPILE = toString (
+    [
+      "-I${lib.getInclude SDL2}/include/SDL2"
+      "-I${SDL2_net.dev}/include/SDL2"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # https://github.com/llvm/llvm-project/issues/62254
+      "-fno-builtin-strrchr"
+    ]
+  );
 
   hardeningDisable = [ "format" ];
 

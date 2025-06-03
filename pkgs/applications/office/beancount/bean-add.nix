@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3Packages,
+}:
 
 stdenv.mkDerivation {
   pname = "bean-add";
@@ -22,6 +27,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/simon-v/bean-add/";
     description = "beancount transaction entry assistant";
+    mainProgram = "bean-add";
 
     # The (only) source file states:
     #   License: "Do what you feel is right, but don't be a jerk" public license.
@@ -29,4 +35,3 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
 }
-

@@ -1,40 +1,110 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, cmake, pkg-config, SDL2, SDL2_image, SDL2_mixer, SDL2_net, SDL2_ttf
-, pango, gettext, boost, libvorbis, fribidi, dbus, libpng, pcre, openssl, icu
-, Cocoa, Foundation
+{
+  lib,
+  stdenv,
+  stdenvNoCC,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_net,
+  SDL2_ttf,
+  pango,
+  gettext,
+  boost,
+  libvorbis,
+  fribidi,
+  dbus,
+  libpng,
+  pcre,
+  openssl,
+  icu,
+  lua,
+  curl,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wesnoth";
-  version = "1.16.9";
+  version = "1.18.5";
 
   src = fetchFromGitHub {
-    rev = version;
     owner = "wesnoth";
     repo = "wesnoth";
-    hash = "sha256-KtAPc2nsqSoHNsLTLom/yaUECn+IWBdBFpiMclrUHxM=";
+    tag = finalAttrs.version;
+    hash = "sha256-0VZJAmaCg12x4S07H1kl5s2NGMEo/NSVnzMniREmPJk=";
   };
 
-  patches = [
-    # Pull upstream fix https://github.com/wesnoth/wesnoth/pull/6726
-    # for gcc-13 support.
-    (fetchpatch {
-      name = "gcc-134.patch";
-      url = "https://github.com/wesnoth/wesnoth/commit/f073493ebc279cefa391d364c48265058795e1d2.patch";
-      hash = "sha256-uTB65DEBZwHFRgDwNx/yVjzmnW3jRoiibadXhNcwMkI=";
-    })
+  nativeBuildInputs = [
+    cmake
+    pkg-config
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [
+    SDL2
+    SDL2_image
+    SDL2_mixer
+    SDL2_net
+    SDL2_ttf
+    pango
+    gettext
+    boost
+    libvorbis
+    fribidi
+    dbus
+    libpng
+    pcre
+    openssl
+    icu
+    lua
+    curl
+  ];
 
-  buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_net SDL2_ttf pango gettext boost
-                  libvorbis fribidi dbus libpng pcre openssl icu ]
-                ++ lib.optionals stdenv.isDarwin [ Cocoa Foundation];
+  cmakeFlags = [
+    "-DENABLE_SYSTEM_LUA=ON"
+  ];
 
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework AppKit";
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    app_name="The Battle for Wesnoth"
+    app_bundle="$out/Applications/$app_name.app"
+    app_contents="$app_bundle/Contents"
+    mkdir -p "$app_contents"
+    echo "APPL????" > "$app_contents/PkgInfo"
+    mv $out/bin "$app_contents/MacOS"
+    mv $out/share/wesnoth "$app_contents/Resources"
+    pushd ../projectfiles/Xcode
+    substitute Info.plist "$app_contents/Info.plist" \
+      --replace-fail ''\'''${EXECUTABLE_NAME}' wesnoth \
+      --replace-fail '$(PRODUCT_BUNDLE_IDENTIFIER)' org.wesnoth.Wesnoth \
+      --replace-fail ''\'''${PRODUCT_NAME}' "$app_name"
+    cp -r Resources/SDLMain.nib "$app_contents/Resources/"
+    install -m0644 Resources/{container-migration.plist,icon.icns} "$app_contents/Resources"
+    popd
 
-  meta = with lib; {
-    description = "The Battle for Wesnoth, a free, turn-based strategy game with a fantasy theme";
+    # Make the game and dedicated server binary available for shell users
+    mkdir -p "$out/bin"
+    ln -s "$app_contents/MacOS/wesnothd" "$out/bin/wesnothd"
+    # Symlinking the game binary is unsifficient as it would be unable to
+    # find the bundle resources
+    cat << EOF > "$out/bin/wesnoth"
+    #!${stdenvNoCC.shell}
+    open -na "$app_bundle" --args "\$@"
+    EOF
+    chmod +x "$out/bin/wesnoth"
+  '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      # the minor release number also denotes if this is a beta release:
+      # even is stable, odd is beta
+      "^(\\d+\\.\\d*[02468]\\.\\d+)$"
+    ];
+  };
+
+  meta = {
+    description = "Battle for Wesnoth, a free, turn-based strategy game with a fantasy theme";
     longDescription = ''
       The Battle for Wesnoth is a Free, turn-based tactical strategy
       game with a high fantasy theme, featuring both single-player, and
@@ -44,8 +114,13 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.wesnoth.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ abbradar ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/wesnoth/wesnoth/blob/${finalAttrs.version}/changelog.md";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      abbradar
+      niklaskorz
+    ];
+    platforms = lib.platforms.unix;
+    mainProgram = "wesnoth";
   };
-}
+})

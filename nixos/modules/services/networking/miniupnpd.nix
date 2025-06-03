@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -22,35 +27,39 @@ let
   '';
   firewall = if config.networking.nftables.enable then "nftables" else "iptables";
   miniupnpd = pkgs.miniupnpd.override { inherit firewall; };
-  firewallScripts = lib.optionals (firewall == "iptables")
-    ([ "iptables"] ++ lib.optional (config.networking.enableIPv6) "ip6tables");
+  firewallScripts = lib.optionals (firewall == "iptables") (
+    [ "iptables" ] ++ lib.optional (config.networking.enableIPv6) "ip6tables"
+  );
 in
 {
   options = {
     services.miniupnpd = {
-      enable = mkEnableOption (lib.mdDoc "MiniUPnP daemon");
+      enable = mkEnableOption "MiniUPnP daemon";
 
       externalInterface = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Name of the external interface.
         '';
       };
 
       internalIPs = mkOption {
         type = types.listOf types.str;
-        example = [ "192.168.1.1/24" "enp1s0" ];
-        description = lib.mdDoc ''
+        example = [
+          "192.168.1.1/24"
+          "enp1s0"
+        ];
+        description = ''
           The IP address ranges to listen on.
         '';
       };
 
-      natpmp = mkEnableOption (lib.mdDoc "NAT-PMP support");
+      natpmp = mkEnableOption "NAT-PMP support";
 
       upnp = mkOption {
         default = true;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable UPNP support.
         '';
       };
@@ -58,7 +67,7 @@ in
       appendConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Configuration lines appended to the MiniUPnP config.
         '';
       };
@@ -66,13 +75,21 @@ in
   };
 
   config = mkIf cfg.enable {
-    networking.firewall.extraCommands = lib.mkIf (firewallScripts != []) (builtins.concatStringsSep "\n" (map (fw: ''
-      EXTIF=${cfg.externalInterface} ${pkgs.bash}/bin/bash -x ${miniupnpd}/etc/miniupnpd/${fw}_init.sh
-    '') firewallScripts));
+    networking.firewall.extraCommands = lib.mkIf (firewallScripts != [ ]) (
+      builtins.concatStringsSep "\n" (
+        map (fw: ''
+          EXTIF=${cfg.externalInterface} ${pkgs.bash}/bin/bash -x ${miniupnpd}/etc/miniupnpd/${fw}_init.sh
+        '') firewallScripts
+      )
+    );
 
-    networking.firewall.extraStopCommands = lib.mkIf (firewallScripts != []) (builtins.concatStringsSep "\n" (map (fw: ''
-      EXTIF=${cfg.externalInterface} ${pkgs.bash}/bin/bash -x ${miniupnpd}/etc/miniupnpd/${fw}_removeall.sh
-    '') firewallScripts));
+    networking.firewall.extraStopCommands = lib.mkIf (firewallScripts != [ ]) (
+      builtins.concatStringsSep "\n" (
+        map (fw: ''
+          EXTIF=${cfg.externalInterface} ${pkgs.bash}/bin/bash -x ${miniupnpd}/etc/miniupnpd/${fw}_removeall.sh
+        '') firewallScripts
+      )
+    );
 
     networking.nftables = lib.mkIf (firewall == "nftables") {
       # see nft_init in ${miniupnpd-nftables}/etc/miniupnpd

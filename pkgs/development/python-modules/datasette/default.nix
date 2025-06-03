@@ -1,44 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiofiles
-, asgi-csrf
-, click
-, click-default-group
-, itsdangerous
-, janus
-, jinja2
-, hupper
-, mergedeep
-, pint
-, pluggy
-, python-baseconv
-, pyyaml
-, uvicorn
-, httpx
-, pytestCheckHook
-, pytest-asyncio
-, pytest-timeout
-, aiohttp
-, beautifulsoup4
-, asgiref
-, setuptools
-, trustme
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aiofiles,
+  asgi-csrf,
+  click,
+  click-default-group,
+  flexcache,
+  flexparser,
+  httpx,
+  hupper,
+  itsdangerous,
+  janus,
+  jinja2,
+  mergedeep,
+  platformdirs,
+  pluggy,
+  pyyaml,
+  typing-extensions,
+  uvicorn,
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-timeout,
+  aiohttp,
+  beautifulsoup4,
+  asgiref,
+  setuptools,
+  trustme,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "datasette";
-  version = "0.64.6";
-  format = "setuptools";
+  version = "0.65.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "simonw";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-chU0AFaVfkJMRwraX/Ky0e6/g3ZSZ2efNIJ15veqFmg=";
+    repo = "datasette";
+    tag = version;
+    hash = "sha256-kVtldBuDy19DmyxEQLtAjs1qiNIjaT8+rnHlFfGNHec=";
   };
 
   postPatch = ''
@@ -46,23 +49,32 @@ buildPythonPackage rec {
       --replace '"pytest-runner"' ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  pythonRemoveDeps = [
+    "pip"
+    "setuptools"
+  ];
+
+  dependencies = [
     aiofiles
     asgi-csrf
     asgiref
     click
     click-default-group
+    flexcache
+    flexparser
     httpx
     hupper
     itsdangerous
     janus
     jinja2
     mergedeep
-    pint
+    platformdirs
     pluggy
-    python-baseconv
     pyyaml
     setuptools
+    typing-extensions
     uvicorn
   ];
 
@@ -79,6 +91,9 @@ buildPythonPackage rec {
   # with pytest-xdist, it still takes around 10 mins with 32 cores
   # just run the csv tests, as this should give some indictation of correctness
   pytestFlagsArray = [
+    # datasette/app.py:14: DeprecationWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html
+    "-W"
+    "ignore::DeprecationWarning"
     "tests/test_csv.py"
   ];
 
@@ -99,9 +114,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Multi-tool for exploring and publishing data";
+    mainProgram = "datasette";
     homepage = "https://datasette.io/";
     changelog = "https://github.com/simonw/datasette/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

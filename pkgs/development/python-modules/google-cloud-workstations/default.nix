@@ -1,35 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-auth
-, grpc-google-iam-v1
-, mock
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  google-auth,
+  grpc-google-iam-v1,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-workstations";
-  version = "0.5.6";
+  version = "0.5.14";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-K6Qq243bX3waymyGcirLAANqmP0UAUgFS3kidwCFYBE=";
+    pname = "google_cloud_workstations";
+    inherit version;
+    hash = "sha256-LwIsVouAh/obOaGx+EvT8gmEJ+NdQNSsfkwEtoxE07I=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     google-auth
     grpc-google-iam-v1

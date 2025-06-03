@@ -1,30 +1,31 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, configargparse
-, setuptools
-, poetry-core
-, rbw
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  configargparse,
+  setuptools,
+  poetry-core,
+  rbw,
 
-, waylandSupport ? false
-, wl-clipboard
-, wtype
+  waylandSupport ? false,
+  wl-clipboard,
+  wtype,
 
-, x11Support ? false
-, xclip
-, xdotool
+  x11Support ? false,
+  xclip,
+  xdotool,
 }:
 
 buildPythonApplication rec {
   pname = "rofi-rbw";
-  version = "1.3.0";
+  version = "1.4.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "fdw";
     repo = "rofi-rbw";
-    rev = "refs/tags/${version}";
-    hash = "sha256-aTMKwb4BLupY0UmvPC86RnElZ9DFep8sApaMrlGbJ0M=";
+    tag = version;
+    hash = "sha256-wUb89GkNB2lEfb42hMvcxpbjc1O+wx8AkFjq7aJwAko=";
   };
 
   nativeBuildInputs = [
@@ -32,29 +33,35 @@ buildPythonApplication rec {
     poetry-core
   ];
 
-  buildInputs = [
-    rbw
-  ] ++ lib.optionals waylandSupport [
-    wl-clipboard
-    wtype
-  ] ++ lib.optionals x11Support [
-    xclip
-    xdotool
-  ];
+  buildInputs =
+    [
+      rbw
+    ]
+    ++ lib.optionals waylandSupport [
+      wl-clipboard
+      wtype
+    ]
+    ++ lib.optionals x11Support [
+      xclip
+      xdotool
+    ];
 
   propagatedBuildInputs = [ configargparse ];
 
   pythonImportsCheck = [ "rofi_rbw" ];
 
-  wrapper_paths = [
-    rbw
-  ] ++ lib.optionals waylandSupport [
-    wl-clipboard
-    wtype
-  ] ++ lib.optionals x11Support [
-    xclip
-    xdotool
-  ];
+  wrapper_paths =
+    [
+      rbw
+    ]
+    ++ lib.optionals waylandSupport [
+      wl-clipboard
+      wtype
+    ]
+    ++ lib.optionals x11Support [
+      xclip
+      xdotool
+    ];
 
   wrapper_flags =
     lib.optionalString waylandSupport "--typer wtype --clipboarder wl-copy"
@@ -68,7 +75,10 @@ buildPythonApplication rec {
     description = "Rofi frontend for Bitwarden";
     homepage = "https://github.com/fdw/rofi-rbw";
     license = licenses.mit;
-    maintainers = with maintainers; [ equirosa dit7ya ];
+    maintainers = with maintainers; [
+      equirosa
+      dit7ya
+    ];
     platforms = platforms.linux;
     mainProgram = "rofi-rbw";
   };

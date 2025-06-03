@@ -1,45 +1,47 @@
-{ config, pkgs, lib, ... }:
-
-with pkgs;
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
 
   cfg = config.services.riemann;
 
-  classpath = concatStringsSep ":" (
-    cfg.extraClasspathEntries ++ [ "${riemann}/share/java/riemann.jar" ]
+  classpath = lib.concatStringsSep ":" (
+    cfg.extraClasspathEntries ++ [ "${pkgs.riemann}/share/java/riemann.jar" ]
   );
 
-  riemannConfig = concatStringsSep "\n" (
-    [cfg.config] ++ (map (f: ''(load-file "${f}")'') cfg.configFiles)
+  riemannConfig = lib.concatStringsSep "\n" (
+    [ cfg.config ] ++ (map (f: ''(load-file "${f}")'') cfg.configFiles)
   );
 
-  launcher = writeScriptBin "riemann" ''
+  launcher = pkgs.writeScriptBin "riemann" ''
     #!/bin/sh
-    exec ${jdk}/bin/java ${concatStringsSep " " cfg.extraJavaOpts} \
+    exec ${pkgs.jdk}/bin/java ${lib.concatStringsSep " " cfg.extraJavaOpts} \
       -cp ${classpath} \
       riemann.bin ${cfg.configFile}
   '';
 
-in {
+in
+{
 
   options = {
 
     services.riemann = {
-      enable = mkEnableOption (lib.mdDoc "Riemann network monitoring daemon");
+      enable = lib.mkEnableOption "Riemann network monitoring daemon";
 
-      config = mkOption {
-        type = types.lines;
-        description = lib.mdDoc ''
+      config = lib.mkOption {
+        type = lib.types.lines;
+        description = ''
           Contents of the Riemann configuration file. For more complicated
           config you should use configFile.
         '';
       };
-      configFiles = mkOption {
-        type = with types; listOf path;
-        default = [];
-        description = lib.mdDoc ''
+      configFiles = lib.mkOption {
+        type = with lib.types; listOf path;
+        default = [ ];
+        description = ''
           Extra files containing Riemann configuration. These files will be
           loaded at runtime by Riemann (with Clojure's
           `load-file` function) at the end of the
@@ -47,31 +49,31 @@ in {
           use configFile.
         '';
       };
-      configFile = mkOption {
-        type = types.str;
-        description = lib.mdDoc ''
+      configFile = lib.mkOption {
+        type = lib.types.str;
+        description = ''
           A Riemann config file. Any files in the same directory as this file
           will be added to the classpath by Riemann.
         '';
       };
-      extraClasspathEntries = mkOption {
-        type = with types; listOf str;
-        default = [];
-        description = lib.mdDoc ''
+      extraClasspathEntries = lib.mkOption {
+        type = with lib.types; listOf str;
+        default = [ ];
+        description = ''
           Extra entries added to the Java classpath when running Riemann.
         '';
       };
-      extraJavaOpts = mkOption {
-        type = with types; listOf str;
-        default = [];
-        description = lib.mdDoc ''
+      extraJavaOpts = lib.mkOption {
+        type = with lib.types; listOf str;
+        default = [ ];
+        description = ''
           Extra Java options used when launching Riemann.
         '';
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     users.groups.riemann.gid = config.ids.gids.riemann;
 
@@ -81,13 +83,11 @@ in {
       group = "riemann";
     };
 
-    services.riemann.configFile = mkDefault (
-      writeText "riemann-config.clj" riemannConfig
-    );
+    services.riemann.configFile = lib.mkDefault (pkgs.writeText "riemann-config.clj" riemannConfig);
 
     systemd.services.riemann = {
       wantedBy = [ "multi-user.target" ];
-      path = [ inetutils ];
+      path = [ pkgs.inetutils ];
       serviceConfig = {
         User = "riemann";
         ExecStart = "${launcher}/bin/riemann";

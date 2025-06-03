@@ -1,20 +1,23 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.hardware.brillo;
 in
 {
   options = {
     hardware.brillo = {
-      enable = mkEnableOption (lib.mdDoc ''
+      enable = lib.mkEnableOption ''
         brillo in userspace.
         This will allow brightness control from users in the video group
-      '');
+      '';
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.udev.packages = [ pkgs.brillo ];
     environment.systemPackages = [ pkgs.brillo ];
   };

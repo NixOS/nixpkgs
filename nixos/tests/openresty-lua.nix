@@ -1,21 +1,22 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
-  let
-    lualibs = [
-      pkgs.lua.pkgs.markdown
-    ];
+{ pkgs, lib, ... }:
+let
+  luaLibs = [
+    pkgs.lua.pkgs.markdown
+  ];
 
-    getPath = lib: type: "${lib}/share/lua/${pkgs.lua.luaversion}/?.${type}";
-    getLuaPath = lib: getPath lib "lua";
-    luaPath = lib.concatStringsSep ";" (map getLuaPath lualibs);
-  in
-  {
-    name = "openresty-lua";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ bbigras ];
-    };
+  getLuaPath = lib: "${lib}/share/lua/${pkgs.lua.luaversion}/?.lua";
+  luaPath = lib.concatStringsSep ";" (map getLuaPath luaLibs);
+in
+{
+  name = "openresty-lua";
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ bbigras ];
+  };
 
-    nodes = {
-      webserver = { pkgs, lib, ... }: {
+  nodes = {
+    webserver =
+      { pkgs, lib, ... }:
+      {
         networking = {
           extraHosts = ''
             127.0.0.1 default.test
@@ -71,31 +72,32 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
           };
         };
       };
-    };
+  };
 
-    testScript = { nodes, ... }:
-      ''
-        url = "http://localhost"
+  testScript =
+    { nodes, ... }:
+    ''
+      url = "http://localhost"
 
-        webserver.wait_for_unit("nginx")
-        webserver.wait_for_open_port(80)
+      webserver.wait_for_unit("nginx")
+      webserver.wait_for_open_port(80)
 
-        http_code = webserver.succeed(
-          f"curl -w '%{{http_code}}' --head --fail {url}"
-        )
-        assert http_code.split("\n")[-1] == "200"
+      http_code = webserver.succeed(
+        f"curl -w '%{{http_code}}' --head --fail {url}"
+      )
+      assert http_code.split("\n")[-1] == "200"
 
-        # This test checks the creation and reading of a file in sandbox mode.
-        # Checking write in temporary folder
-        webserver.succeed("$(curl -vvv http://sandbox.test/test1-write)")
-        webserver.succeed('test "$(curl -fvvv http://sandbox.test/test1-read/foo.txt)" = worked')
-        # Checking write in protected folder. In sandbox mode for the nginx service, the folder /var/web is mounted
-        # in read-only mode.
-        webserver.succeed("mkdir -p /var/web")
-        webserver.succeed("chown nginx:nginx /var/web")
-        webserver.succeed("$(curl -vvv http://sandbox.test/test2-write)")
-        assert "404 Not Found" in machine.succeed(
-            "curl -vvv -s http://sandbox.test/test2-read/bar.txt"
-        )
-      '';
-  })
+      # This test checks the creation and reading of a file in sandbox mode.
+      # Checking write in temporary folder
+      webserver.succeed("$(curl -vvv http://sandbox.test/test1-write)")
+      webserver.succeed('test "$(curl -fvvv http://sandbox.test/test1-read/foo.txt)" = worked')
+      # Checking write in protected folder. In sandbox mode for the nginx service, the folder /var/web is mounted
+      # in read-only mode.
+      webserver.succeed("mkdir -p /var/web")
+      webserver.succeed("chown nginx:nginx /var/web")
+      webserver.succeed("$(curl -vvv http://sandbox.test/test2-write)")
+      assert "404 Not Found" in machine.succeed(
+          "curl -vvv -s http://sandbox.test/test2-read/bar.txt"
+      )
+    '';
+}

@@ -1,12 +1,12 @@
-{ lib
-, buildDunePackage
-, tar
-, cstruct-lwt
-, lwt
-, git
+{
+  buildDunePackage,
+  tar,
+  cstruct-lwt,
+  lwt,
+  git,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "tar-unix";
   inherit (tar) version src doCheck;
 

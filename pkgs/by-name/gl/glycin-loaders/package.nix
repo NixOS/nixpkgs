@@ -1,28 +1,34 @@
-{ stdenv
-, lib
-, fetchurl
-, substituteAll
-, bubblewrap
-, cargo
-, git
-, meson
-, ninja
-, pkg-config
-, rustc
-, gtk4
-, cairo
-, libheif
-, libxml2
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  replaceVars,
+  bubblewrap,
+  cairo,
+  cargo,
+  gettext,
+  git,
+  gnome,
+  gtk4,
+  lcms2,
+  libheif,
+  libjxl,
+  librsvg,
+  libseccomp,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  rustc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glycin-loaders";
-  version = "0.1.2";
+  version = "1.2.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/glycin-loaders/${lib.versions.majorMinor finalAttrs.version}/glycin-loaders-${finalAttrs.version}.tar.xz";
-    hash = "sha256-x2wBklq9BwF0WJzLkWpEpXOrZbHp1JPxVOQnVkMebdc=";
+    url = "mirror://gnome/sources/glycin/${lib.versions.majorMinor finalAttrs.version}/glycin-${finalAttrs.version}.tar.xz";
+    hash = "sha256-zMV46aPoPQ3BU1c30f2gm6qVxxZ/Xl7LFfeGZUCU7tU=";
   };
 
   patches = [
@@ -35,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cargo
+    gettext # for msgfmt
     git
     meson
     ninja
@@ -45,26 +52,41 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtk4 # for GdkTexture
     cairo
+    lcms2
     libheif
     libxml2 # for librsvg crate
+    librsvg
+    libseccomp
+    libjxl
   ];
+
+  mesonFlags = [
+    "-Dglycin-loaders=true"
+    "-Dlibglycin=false"
+    "-Dvapi=false"
+  ];
+
+  strictDeps = true;
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = "glycin-loaders";
+      attrPath = "glycin-loaders";
+      packageName = "glycin";
     };
 
-    glycinPathsPatch = substituteAll {
-      src = ./fix-glycin-paths.patch;
+    glycinPathsPatch = replaceVars ./fix-glycin-paths.patch {
       bwrap = "${bubblewrap}/bin/bwrap";
     };
   };
 
   meta = with lib; {
     description = "Glycin loaders for several formats";
-    homepage = "https://gitlab.gnome.org/sophie-h/glycin";
-    maintainers = teams.gnome.members;
-    license = with licenses; [ mpl20 /* or */ lgpl21Plus ];
+    homepage = "https://gitlab.gnome.org/GNOME/glycin";
+    teams = [ teams.gnome ];
+    license = with licenses; [
+      mpl20 # or
+      lgpl21Plus
+    ];
     platforms = platforms.linux;
   };
 })

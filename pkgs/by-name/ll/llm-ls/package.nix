@@ -1,31 +1,57 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-let
+rustPlatform.buildRustPackage rec {
   pname = "llm-ls";
-  version = "0.4.0";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "llm-ls";
-    rev = version;
-    sha256 = "sha256-aMoT/rH6o4dHCSiSI/btdKysFfIbHvV7R5dRHIOF/Qs=";
+    tag = version;
+    hash = "sha256-ICMM2kqrHFlKt2/jmE4gum1Eb32afTJkT3IRoqcjJJ8=";
   };
 
-  cargoHash = "sha256-Z6BO4kDtlIrVdDk1fiwyelpu1rj7e4cibgFZRsl1pfA=";
+  cargoPatches = [
+    # https://github.com/huggingface/llm-ls/pull/102
+    ./fix-time-compilation-failure.patch
+    (fetchpatch {
+      name = "fix-version.patch";
+      url = "https://github.com/huggingface/llm-ls/commit/479401f3a5173f2917a888c8068f84e29b7dceed.patch?full_index=1";
+      hash = "sha256-4gXasfMqlrrP8II+FiV/qGfO7a9qFkDQMiax7yEua5E=";
+    })
+  ];
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-qiYspv2KcvzxVshVpAMlSqFDqbbiutpLyWMz+QSIVmQ=";
 
-  meta = with lib; {
+  buildAndTestSubdir = "crates/llm-ls";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "LSP server leveraging LLMs for code completion (and more?)";
     homepage = "https://github.com/huggingface/llm-ls";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jfvillablanca ];
-    platforms = platforms.all;
-    badPlatforms = platforms.darwin;
+    changelog = "https://github.com/huggingface/llm-ls/releases/tag/${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jfvillablanca ];
+    platforms = lib.platforms.all;
     mainProgram = "llm-ls";
   };
 }

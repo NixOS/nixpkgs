@@ -1,44 +1,53 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, cmake, pkg-config
-# Transport
-, curl
-# Libraries
-, boost
-, jsoncpp
-, libbsd
-, pcre
-# GUI/Desktop
-, dbus
-, glibmm
-, gsettings-desktop-schemas
-, hicolor-icon-theme
-, libappindicator-gtk3
-, libnotify
-, libxdg_basedir
-, wxGTK
-# GStreamer
-, glib-networking
-, gst_all_1
-, libsoup_3
-# User-agent info
-, lsb-release
-# rt2rtng
-, python3
-# Testing
-, gtest
-# Fixup
-, wrapGAppsHook
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  # Transport
+  curl,
+  # Libraries
+  boost,
+  jsoncpp,
+  libbsd,
+  # GUI/Desktop
+  dbus,
+  glibmm,
+  gsettings-desktop-schemas,
+  hicolor-icon-theme,
+  libappindicator-gtk3,
+  libnotify,
+  libxdg_basedir,
+  wxGTK,
+  # GStreamer
+  glib-networking,
+  gst_all_1,
+  # User-agent info
+  lsb-release,
+  # rt2rtng
+  python3,
+  # Testing
+  gtest,
+  # Fixup
+  wrapGAppsHook3,
+  makeWrapper,
 }:
 
 let
   gstInputs = with gst_all_1; [
-    gstreamer gst-plugins-base
-    gst-plugins-good gst-plugins-bad gst-plugins-ugly
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
     gst-libav
   ];
   # For the rt2rtng utility for converting bookmark file to -ng format
-  pythonInputs = with python3.pkgs; [ python lxml ];
+  pythonInputs = with python3.pkgs; [
+    python
+    lxml
+  ];
 in
 stdenv.mkDerivation rec {
   pname = "radiotray-ng";
@@ -51,18 +60,31 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/0GlQdSsIPKGrDT9CgxvaH8TpAbqxFduwL2A2+BSrEI=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapGAppsHook3
+    makeWrapper
+  ];
 
-  buildInputs = [
-    curl
-    boost jsoncpp libbsd pcre
-    glibmm hicolor-icon-theme gsettings-desktop-schemas libappindicator-gtk3 libnotify
-    libxdg_basedir
-    lsb-release
-    wxGTK
-    # for https gstreamer / libsoup
-    glib-networking
-  ] ++ gstInputs
+  buildInputs =
+    [
+      curl
+      boost
+      jsoncpp
+      libbsd
+      glibmm
+      hicolor-icon-theme
+      gsettings-desktop-schemas
+      libappindicator-gtk3
+      libnotify
+      libxdg_basedir
+      lsb-release
+      wxGTK
+      # for https gstreamer / libsoup
+      glib-networking
+    ]
+    ++ gstInputs
     ++ pythonInputs;
 
   patches = [
@@ -95,20 +117,18 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   nativeCheckInputs = [ gtest ];
-  doCheck = !stdenv.isAarch64; # single failure that I can't explain
+  doCheck = !stdenv.hostPlatform.isAarch64; # single failure that I can't explain
 
   preFixup = ''
     gappsWrapperArgs+=(--suffix PATH : ${lib.makeBinPath [ dbus ]})
     wrapProgram $out/bin/rt2rtng --prefix PYTHONPATH : $PYTHONPATH
-    # for GStreamer
-    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${lib.getLib libsoup_3}/lib")
   '';
 
   meta = with lib; {
-    description = "An internet radio player for linux";
+    description = "Internet radio player for linux";
     homepage = "https://github.com/ebruck/radiotray-ng";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

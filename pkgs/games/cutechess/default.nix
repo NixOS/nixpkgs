@@ -1,10 +1,11 @@
-{ stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapQtAppsHook
-, qtbase
-, lib
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapQtAppsHook,
+  qtbase,
+  lib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "GUI, CLI, and library for playing chess";
     homepage = "https://cutechess.com/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ eclairevoyant ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; (linux ++ windows);
     mainProgram = "cutechess";
   };

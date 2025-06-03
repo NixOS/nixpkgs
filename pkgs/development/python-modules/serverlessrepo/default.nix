@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, boto3
-, six
-, pyyaml
-, mock
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  boto3,
+  six,
+  pyyaml,
+  mock,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -38,13 +39,9 @@ buildPythonPackage rec {
       --replace "boto3~=1.9, >=1.9.56" "boto3"
   '';
 
-  pytestFlagsArray = [
-    "tests/unit"
-  ];
+  pytestFlagsArray = [ "tests/unit" ];
 
-  pythonImportsCheck = [
-    "serverlessrepo"
-  ];
+  pythonImportsCheck = [ "serverlessrepo" ];
 
   meta = with lib; {
     homepage = "https://github.com/awslabs/aws-serverlessrepo-python";

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -7,18 +12,24 @@ let
   user = config.users.users.trafficserver.name;
   group = config.users.groups.trafficserver.name;
 
-  getManualUrl = name: "https://docs.trafficserver.apache.org/en/latest/admin-guide/files/${name}.en.html";
+  getManualUrl =
+    name: "https://docs.trafficserver.apache.org/en/latest/admin-guide/files/${name}.en.html";
 
   yaml = pkgs.formats.yaml { };
 
-  mkYamlConf = name: cfg:
-    if cfg != null then {
-      "trafficserver/${name}.yaml".source = yaml.generate "${name}.yaml" cfg;
-    } else {
-      "trafficserver/${name}.yaml".text = "";
-    };
+  mkYamlConf =
+    name: cfg:
+    if cfg != null then
+      {
+        "trafficserver/${name}.yaml".source = yaml.generate "${name}.yaml" cfg;
+      }
+    else
+      {
+        "trafficserver/${name}.yaml".text = "";
+      };
 
-  mkRecordLines = path: value:
+  mkRecordLines =
+    path: value:
     if isAttrs value then
       lib.mapAttrsToList (n: v: mkRecordLines (path ++ [ n ]) v) value
     else if isInt value then
@@ -33,13 +44,13 @@ let
 in
 {
   options.services.trafficserver = {
-    enable = mkEnableOption (lib.mdDoc "Apache Traffic Server");
+    enable = mkEnableOption "Apache Traffic Server";
 
     cache = mkOption {
       type = types.lines;
       default = "";
       example = "dest_domain=example.com suffix=js action=never-cache";
-      description = lib.mdDoc ''
+      description = ''
         Caching rules that overrule the origin's caching policy.
 
         Consult the [upstream
@@ -51,7 +62,7 @@ in
       type = types.lines;
       default = "";
       example = "domain=example.com volume=1";
-      description = lib.mdDoc ''
+      description = ''
         Partition the cache according to origin server or domain
 
         Consult the [
@@ -73,7 +84,7 @@ in
           }];
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Control client access to Traffic Server and Traffic Server connections
         to upstream servers.
 
@@ -87,7 +98,7 @@ in
       default = lib.importJSON ./logging.json;
       defaultText = literalMD "upstream defaults";
       example = { };
-      description = lib.mdDoc ''
+      description = ''
         Configure logs.
 
         Consult the [upstream
@@ -101,7 +112,7 @@ in
       example = ''
         dest_domain=. method=get parent="p1.example:8080; p2.example:8080" round_robin=true
       '';
-      description = lib.mdDoc ''
+      description = ''
         Identify the parent proxies used in an cache hierarchy.
 
         Consult the [upstream
@@ -112,7 +123,7 @@ in
     plugins = mkOption {
       default = [ ];
 
-      description = lib.mdDoc ''
+      description = ''
         Controls run-time loadable plugins available to Traffic Server, as
         well as their configuration.
 
@@ -120,12 +131,13 @@ in
         documentation](${getManualUrl "plugin.config"}) for more details.
       '';
 
-      type = with types;
+      type =
+        with types;
         listOf (submodule {
           options.path = mkOption {
             type = str;
             example = "xdebug.so";
-            description = lib.mdDoc ''
+            description = ''
               Path to plugin. The path can either be absolute, or relative to
               the plugin directory.
             '';
@@ -134,21 +146,32 @@ in
             type = str;
             default = "";
             example = "--header=ATS-My-Debug";
-            description = lib.mdDoc "arguments to pass to the plugin";
+            description = "arguments to pass to the plugin";
           };
         });
     };
 
     records = mkOption {
-      type = with types;
-        let valueType = (attrsOf (oneOf [ int float str valueType ])) // {
-          description = "Traffic Server records value";
-        };
+      type =
+        with types;
+        let
+          valueType =
+            (attrsOf (oneOf [
+              int
+              float
+              str
+              valueType
+            ]))
+            // {
+              description = "Traffic Server records value";
+            };
         in
         valueType;
       default = { };
-      example = { proxy.config.proxy_name = "my_server"; };
-      description = lib.mdDoc ''
+      example = {
+        proxy.config.proxy_name = "my_server";
+      };
+      description = ''
         List of configurable variables used by Traffic Server.
 
         Consult the [
@@ -160,7 +183,7 @@ in
       type = types.lines;
       default = "";
       example = "map http://from.example http://origin.example";
-      description = lib.mdDoc ''
+      description = ''
         URL remapping rules used by Traffic Server.
 
         Consult the [
@@ -175,7 +198,7 @@ in
         dest_domain=internal.corp.example named="255.255.255.255:212 255.255.255.254" def_domain=corp.example search_list="corp.example corp1.example"
         dest_domain=!internal.corp.example named=255.255.255.253
       '';
-      description = lib.mdDoc ''
+      description = ''
         Specify the DNS server that Traffic Server should use under specific
         conditions.
 
@@ -188,7 +211,7 @@ in
       type = types.lines;
       default = "";
       example = "dest_ip=* ssl_cert_name=default.pem";
-      description = lib.mdDoc ''
+      description = ''
         Configure SSL server certificates to terminate the SSL sessions.
 
         Consult the [
@@ -207,7 +230,7 @@ in
           }];
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Configure aspects of TLS connection handling for both inbound and
         outbound connections.
 
@@ -220,7 +243,7 @@ in
       type = types.lines;
       default = "/var/cache/trafficserver 256M";
       example = "/dev/disk/by-id/XXXXX volume=1";
-      description = lib.mdDoc ''
+      description = ''
         List all the storage that make up the Traffic Server cache.
 
         Consult the [
@@ -231,7 +254,7 @@ in
     strategies = mkOption {
       type = types.nullOr yaml.type;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Specify the next hop proxies used in an cache hierarchy and the
         algorithms used to select the next proxy.
 
@@ -244,7 +267,7 @@ in
       type = types.nullOr yaml.type;
       default = "";
       example = "volume=1 scheme=http size=20%";
-      description = lib.mdDoc ''
+      description = ''
         Manage cache space more efficiently and restrict disk usage by
         creating cache volumes of different sizes.
 
@@ -255,21 +278,23 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.etc = {
-      "trafficserver/cache.config".text = cfg.cache;
-      "trafficserver/hosting.config".text = cfg.hosting;
-      "trafficserver/parent.config".text = cfg.parent;
-      "trafficserver/plugin.config".text = mkPluginConfig cfg.plugins;
-      "trafficserver/records.config".text = mkRecordsConfig cfg.records;
-      "trafficserver/remap.config".text = cfg.remap;
-      "trafficserver/splitdns.config".text = cfg.splitDns;
-      "trafficserver/ssl_multicert.config".text = cfg.sslMulticert;
-      "trafficserver/storage.config".text = cfg.storage;
-      "trafficserver/volume.config".text = cfg.volume;
-    } // (mkYamlConf "ip_allow" cfg.ipAllow)
-    // (mkYamlConf "logging" cfg.logging)
-    // (mkYamlConf "sni" cfg.sni)
-    // (mkYamlConf "strategies" cfg.strategies);
+    environment.etc =
+      {
+        "trafficserver/cache.config".text = cfg.cache;
+        "trafficserver/hosting.config".text = cfg.hosting;
+        "trafficserver/parent.config".text = cfg.parent;
+        "trafficserver/plugin.config".text = mkPluginConfig cfg.plugins;
+        "trafficserver/records.config".text = mkRecordsConfig cfg.records;
+        "trafficserver/remap.config".text = cfg.remap;
+        "trafficserver/splitdns.config".text = cfg.splitDns;
+        "trafficserver/ssl_multicert.config".text = cfg.sslMulticert;
+        "trafficserver/storage.config".text = cfg.storage;
+        "trafficserver/volume.config".text = cfg.volume;
+      }
+      // (mkYamlConf "ip_allow" cfg.ipAllow)
+      // (mkYamlConf "logging" cfg.logging)
+      // (mkYamlConf "sni" cfg.sni)
+      // (mkYamlConf "strategies" cfg.strategies);
 
     environment.systemPackages = [ pkgs.trafficserver ];
     systemd.packages = [ pkgs.trafficserver ];

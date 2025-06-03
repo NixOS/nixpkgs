@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -13,22 +18,20 @@ in
 
   options = {
     services.xserver.windowManager.fvwm3 = {
-      enable = mkEnableOption (lib.mdDoc "Fvwm3 window manager");
+      enable = mkEnableOption "Fvwm3 window manager";
     };
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton
-      { name = "fvwm3";
-        start =
-          ''
-            ${fvwm3}/bin/fvwm3 &
-            waitPID=$!
-          '';
-      };
+    services.xserver.windowManager.session = singleton {
+      name = "fvwm3";
+      start = ''
+        ${fvwm3}/bin/fvwm3 &
+        waitPID=$!
+      '';
+    };
 
     environment.systemPackages = [ fvwm3 ];
   };

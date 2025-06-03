@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  faust2jaqt,
+  faust2lv2,
+}:
 stdenv.mkDerivation rec {
   pname = "CharacterCompressor";
   version = "0.3.3";
@@ -10,7 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "1h0bhjhx023476gbijq842b6f8z71zcyn4c9mddwyb18w9cdamp5";
   };
 
-  buildInputs = [ faust2jaqt faust2lv2 ];
+  buildInputs = [
+    faust2jaqt
+    faust2lv2
+  ];
 
   dontWrapQtApps = true;
 
@@ -32,7 +41,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A compressor with character. For jack and lv2";
+    description = "Compressor with character. For jack and lv2";
     homepage = "https://github.com/magnetophon/CharacterCompressor";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.magnetophon ];

@@ -1,88 +1,180 @@
-{ fetchurl
-, lib, stdenv
-, perl
-, libxml2
-, postgresql
-, geos
-, proj
-, gdalMinimal
-, json_c
-, pkg-config
-, file
-, protobufc
-, libiconv
-, pcre2
-, nixosTests
+{
+  autoconf,
+  automake,
+  cunit,
+  docbook5,
+  fetchFromGitHub,
+  fetchpatch,
+  gdalMinimal,
+  geos,
+  jitSupport,
+  json_c,
+  lib,
+  libiconv,
+  libtool,
+  libxml2,
+  libxslt,
+  llvm,
+  pcre2,
+  perl,
+  pkg-config,
+  postgresql,
+  postgresqlBuildExtension,
+  postgresqlTestExtension,
+  postgresqlTestHook,
+  proj,
+  protobufc,
+  stdenv,
+  which,
+
+  withSfcgal ? false,
+  sfcgal,
 }:
 
 let
   gdal = gdalMinimal;
 in
-stdenv.mkDerivation rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "postgis";
-  version = "3.4.2";
+  version = "3.5.2";
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
-  src = fetchurl {
-    url = "https://download.osgeo.org/postgis/source/postgis-${version}.tar.gz";
-    sha256 = "sha256-yMh0wAukqYSocDCva/lUSCFQIGCtRz1clvHU0INcWJI=";
+  src = fetchFromGitHub {
+    owner = "postgis";
+    repo = "postgis";
+    tag = finalAttrs.version;
+    hash = "sha256-1kOLtG6AMavbWQ1lHG2ABuvIcyTYhgcbjuVmqMR4X+g=";
   };
 
-  buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc pcre2.dev ]
-                ++ lib.optional stdenv.isDarwin libiconv;
-  nativeBuildInputs = [ perl pkg-config ] ++ lib.optional postgresql.jitSupport postgresql.llvm;
+  patches = [
+    # Backport patch for compatibility with GDAL 3.11
+    # FIXME: remove in next update
+    (fetchpatch {
+      url = "https://git.osgeo.org/gitea/postgis/postgis/commit/614eca7c169cd6e9819801d3ea99d5258262c58b.patch";
+      hash = "sha256-VkNZFANAt8Jv+ExCusGvi+ZWB7XLcAheefSx7akA7Go=";
+    })
+  ];
+
+  buildInputs =
+    [
+      geos
+      proj
+      gdal
+      json_c
+      protobufc
+      pcre2.dev
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin libiconv
+    ++ lib.optional withSfcgal sfcgal;
+
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    libxml2
+    perl
+    pkg-config
+    protobufc
+    which
+  ] ++ lib.optional jitSupport llvm;
+
   dontDisableStatic = true;
 
+  nativeCheckInputs = [
+    postgresql
+    postgresqlTestHook
+    cunit
+    libxslt
+  ];
+
+  postgresqlTestUserOptions = "LOGIN SUPERUSER";
+
   # postgis config directory assumes /include /lib from the same root for json-c library
-  NIX_LDFLAGS = "-L${lib.getLib json_c}/lib"
-    # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-    + lib.optionalString (stdenv.cc.isClang && stdenv.cc.libcxx != null) " -l${stdenv.cc.libcxx.cxxabi.libName}";
+  env.NIX_LDFLAGS = "-L${lib.getLib json_c}/lib";
 
-
+  setOutputFlags = false;
   preConfigure = ''
-    sed -i 's@/usr/bin/file@${file}/bin/file@' configure
-    configureFlags="--datadir=$out/share/postgresql --datarootdir=$out/share/postgresql --bindir=$out/bin --docdir=$doc/share/doc/${pname} --with-gdalconfig=${gdal}/bin/gdal-config --with-jsondir=${json_c.dev} --disable-extension-upgrades-install"
-
-    makeFlags="PERL=${perl}/bin/perl datadir=$out/share/postgresql pkglibdir=$out/lib bindir=$out/bin docdir=$doc/share/doc/${pname}"
+    ./autogen.sh
   '';
-  postConfigure = ''
-    sed -i "s|@mkdir -p \$(DESTDIR)\$(PGSQL_BINDIR)||g ;
-            s|\$(DESTDIR)\$(PGSQL_BINDIR)|$prefix/bin|g
-            " \
-        "raster/loader/Makefile";
-    sed -i "s|\$(DESTDIR)\$(PGSQL_BINDIR)|$prefix/bin|g
-            " \
-        "raster/scripts/python/Makefile";
-    mkdir -p $out/bin
 
-    # postgis' build system assumes it is being installed to the same place as postgresql, and looks
-    # for the postgres binary relative to $PREFIX. We gently support this system using an illusion.
-    ln -s ${postgresql}/bin/postgres $out/bin/postgres
+  configureFlags = [
+    "--with-pgconfig=${postgresql.pg_config}/bin/pg_config"
+    "--with-gdalconfig=${gdal}/bin/gdal-config"
+    "--with-jsondir=${json_c.dev}"
+    "--disable-extension-upgrades-install"
+  ] ++ lib.optional withSfcgal "--with-sfcgal=${sfcgal}/bin/sfcgal-config";
+
+  makeFlags = [
+    "PERL=${perl}/bin/perl"
+  ];
+
+  doCheck = stdenv.hostPlatform.isLinux;
+
+  preCheck = ''
+    substituteInPlace doc/postgis-out.xml --replace-fail "http://docbook.org/xml/5.0/dtd/docbook.dtd" "${docbook5}/xml/dtd/docbook/docbookx.dtd"
+    # The test suite hardcodes it to use /tmp.
+    export PGIS_REG_TMPDIR="$TMPDIR/pgis_reg"
   '';
 
   # create aliases for all commands adding version information
   postInstall = ''
-    # Teardown the illusory postgres used for building; see postConfigure.
-    rm $out/bin/postgres
-
     for prog in $out/bin/*; do # */
-      ln -s $prog $prog-${version}
+      ln -s $prog $prog-${finalAttrs.version}
     done
 
     mkdir -p $doc/share/doc/postgis
     mv doc/* $doc/share/doc/postgis/
   '';
 
-  passthru.tests.postgis = nixosTests.postgis;
+  passthru.tests.extension = postgresqlTestExtension {
+    inherit (finalAttrs) finalPackage;
+    sql =
+      ''
+        CREATE EXTENSION postgis;
+        CREATE EXTENSION postgis_raster;
+        CREATE EXTENSION postgis_topology;
+        -- st_makepoint goes through c code
+        select st_makepoint(1, 1);
+      ''
+      + lib.optionalString withSfcgal ''
+        CREATE EXTENSION postgis_sfcgal;
+        CREATE TABLE geometries (
+          name varchar,
+          geom geometry(PolygonZ) NOT NULL
+        );
 
-  meta = with lib; {
+        INSERT INTO geometries(name, geom) VALUES
+          ('planar geom', 'PolygonZ((1 1 0, 1 2 0, 2 2 0, 2 1 0, 1 1 0))'),
+          ('nonplanar geom', 'PolygonZ((1 1 1, 1 2 -1, 2 2 2, 2 1 0, 1 1 1))');
+
+        SELECT name from geometries where cg_isplanar(geom);
+      '';
+    asserts =
+      [
+        {
+          query = "postgis_version()";
+          expected = "'${lib.versions.major finalAttrs.version}.${lib.versions.minor finalAttrs.version} USE_GEOS=1 USE_PROJ=1 USE_STATS=1'";
+          description = "postgis_version() returns correct values.";
+        }
+      ]
+      ++ lib.optional withSfcgal {
+        query = "postgis_sfcgal_version()";
+        expected = "'${sfcgal.version}'";
+        description = "postgis_sfcgal_version() returns correct value.";
+      };
+  };
+
+  meta = {
     description = "Geographic Objects for PostgreSQL";
     homepage = "https://postgis.net/";
-    changelog = "https://git.osgeo.org/gitea/postgis/postgis/raw/tag/${version}/NEWS";
-    license = licenses.gpl2;
-    maintainers = with maintainers; teams.geospatial.members ++ [ marcweber ];
+    changelog = "https://git.osgeo.org/gitea/postgis/postgis/raw/tag/${finalAttrs.version}/NEWS";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ marcweber ];
+    teams = [ lib.teams.geospatial ];
     inherit (postgresql.meta) platforms;
-    broken = versionOlder postgresql.version "12";
   };
-}
+})

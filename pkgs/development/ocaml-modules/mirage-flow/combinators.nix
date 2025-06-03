@@ -1,4 +1,11 @@
-{ buildDunePackage, mirage-flow, fmt, lwt, logs, cstruct, mirage-clock }:
+{
+  buildDunePackage,
+  mirage-flow,
+  lwt,
+  logs,
+  cstruct,
+  mirage-clock,
+}:
 
 buildDunePackage {
   pname = "mirage-flow-combinators";
@@ -7,7 +14,13 @@ buildDunePackage {
 
   duneVersion = "3";
 
-  propagatedBuildInputs = [ lwt logs cstruct mirage-clock mirage-flow ];
+  propagatedBuildInputs = [
+    lwt
+    logs
+    cstruct
+    mirage-clock
+    mirage-flow
+  ];
 
   meta = mirage-flow.meta // {
     description = "Flow implementations and combinators for MirageOS specialized to lwt";

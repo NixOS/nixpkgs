@@ -1,23 +1,29 @@
-{ lib, stdenv, fetchurl, kernel, alsa-lib }:
-
-with lib;
+{
+  lib,
+  stdenv,
+  fetchurl,
+  kernel,
+  alsa-lib,
+}:
 
 let
-  bits =
-    if stdenv.is64bit then "64"
-    else "32";
+  bits = if stdenv.hostPlatform.is64bit then "64" else "32";
 
-  libpath = makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc alsa-lib ];
+  libpath = lib.makeLibraryPath [
+    stdenv.cc.cc
+    stdenv.cc.libc
+    alsa-lib
+  ];
 
 in
 stdenv.mkDerivation rec {
   pname = "mwprocapture";
-  subVersion = "4373";
-  version = "1.3.0.${subVersion}-${kernel.version}";
+  subVersion = "1.3.4418";
+  version = "${subVersion}-${kernel.version}";
 
   src = fetchurl {
     url = "https://www.magewell.com/files/drivers/ProCaptureForLinux_${subVersion}.tar.gz";
-    sha256 = "sha256-/6q+6CTlgkHOgq1PF8dSPfl/xm/UFczr/AGkac2mXZ8=";
+    sha256 = "sha256-ZUqJkARhaMo9aZOtUMEdiHEbEq10lJO6MkGjEDnfx1g=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -27,7 +33,10 @@ stdenv.mkDerivation rec {
     export INSTALL_MOD_PATH="$out"
   '';
 
-  hardeningDisable = [ "pic" "format" ];
+  hardeningDisable = [
+    "pic"
+    "format"
+  ];
 
   makeFlags = [
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
@@ -59,8 +68,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.magewell.com/";
     description = "Linux driver for the Magewell Pro Capture family";
-    license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ flexiondotorg MP2E ];
-    platforms = platforms.linux;
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = with lib.maintainers; [ flexiondotorg ];
+    platforms = lib.platforms.linux;
+    broken = lib.versionAtLeast kernel.version "6.15";
   };
 }

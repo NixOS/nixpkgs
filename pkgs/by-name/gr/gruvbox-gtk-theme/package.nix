@@ -1,42 +1,122 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, gnome-themes-extra
-, gtk-engine-murrine
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  sassc,
+  gnome-themes-extra,
+  gtk-engine-murrine,
+  unstableGitUpdater,
+  colorVariants ? [ ],
+  sizeVariants ? [ ],
+  themeVariants ? [ ],
+  tweakVariants ? [ ],
+  iconVariants ? [ ],
 }:
-stdenvNoCC.mkDerivation {
+
+let
   pname = "gruvbox-gtk-theme";
-  version = "unstable-2023-05-28";
-
-  src = fetchFromGitHub {
-    owner = "Fausto-Korpsvart";
-    repo = "Gruvbox-GTK-Theme";
-    rev = "c0b7fb501938241a3b6b5734f8cb1f0982edc6b4";
-    hash = "sha256-Y+6HuWaVkNqlYc+w5wLkS2LpKcDtpeOpdHnqBmShm5Q=";
-  };
-
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
+  colorVariantList = [
+    "dark"
+    "light"
   ];
-
-  buildInputs = [
-    gnome-themes-extra
+  sizeVariantList = [
+    "compact"
+    "standard"
   ];
+  themeVariantList = [
+    "default"
+    "green"
+    "grey"
+    "orange"
+    "pink"
+    "purple"
+    "red"
+    "teal"
+    "yellow"
+    "all"
+  ];
+  tweakVariantList = [
+    "medium"
+    "soft"
+    "black"
+    "float"
+    "outline"
+    "macos"
+  ];
+  iconVariantList = [
+    "Dark"
+    "Light"
+  ];
+in
+lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants lib.checkListOfEnum
+  "${pname}: sizeVariants"
+  sizeVariantList
+  sizeVariants
+  lib.checkListOfEnum
+  "${pname}: themeVariants"
+  themeVariantList
+  themeVariants
+  lib.checkListOfEnum
+  "${pname}: tweakVariants"
+  tweakVariantList
+  tweakVariants
+  lib.checkListOfEnum
+  "${pname}: iconVariants"
+  iconVariantList
+  iconVariants
 
-  dontBuild = true;
+  stdenvNoCC.mkDerivation
+  {
+    inherit pname;
+    version = "0-unstable-2025-04-24";
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/share/themes
-    cp -a themes/* $out/share/themes
-    runHook postInstall
-  '';
+    src = fetchFromGitHub {
+      owner = "Fausto-Korpsvart";
+      repo = "Gruvbox-GTK-Theme";
+      rev = "fbced4ba03975dadd1d74d6b73cccdcbbd5e8b90";
+      hash = "sha256-zhY3uwvtHNKNrdWiD5Le/AMz1lgV39K/RNhFGnIMpzg=";
+    };
 
-  meta = with lib; {
-    description = "A Gtk theme based on the Gruvbox colour pallete";
-    homepage = "https://www.pling.com/p/1681313/";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.math-42 ];
-  };
-}
+    propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+
+    nativeBuildInputs = [ sassc ];
+    buildInputs = [ gnome-themes-extra ];
+
+    dontBuild = true;
+
+    passthru.updateScript = unstableGitUpdater { };
+
+    postPatch = ''
+      patchShebangs themes/install.sh
+    '';
+
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out/share/themes
+      cd themes
+      ./install.sh -n Gruvbox \
+      ${lib.optionalString (colorVariants != [ ]) "-c " + toString colorVariants} \
+      ${lib.optionalString (sizeVariants != [ ]) "-s " + toString sizeVariants} \
+      ${lib.optionalString (themeVariants != [ ]) "-t " + toString themeVariants} \
+      ${lib.optionalString (tweakVariants != [ ]) "--tweaks " + toString tweakVariants} \
+      -d "$out/share/themes"
+      cd ../icons
+      ${lib.optionalString (iconVariants != [ ]) ''
+        mkdir -p $out/share/icons
+        cp -a ${toString (map (v: "Gruvbox-${v}") iconVariants)} $out/share/icons/
+      ''}
+      runHook postInstall
+    '';
+
+    meta = {
+      description = "GTK theme based on the Gruvbox colour palette";
+      homepage = "https://github.com/Fausto-Korpsvart/Gruvbox-GTK-Theme";
+      license = lib.licenses.gpl3Plus;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [
+        luftmensch-luftmensch
+        math-42
+        d3vil0p3r
+      ];
+    };
+  }

@@ -1,19 +1,21 @@
-{ lib
-, nix-update-script
-, python3
-, fetchFromGitHub
+{
+  lib,
+  nix-update-script,
+  python3,
+  oelint-adv,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "bitbake-language-server";
-  version = "0.0.8";
+  version = "0.0.15";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Freed-Wu";
-    repo = pname;
+    repo = "bitbake-language-server";
     rev = version;
-    hash = "sha256-WJpa2LP95vrJG/OjiLSx8zEPO5ZOw66M5s3r2dufQJA=";
+    hash = "sha256-NLDQ2P5peweugkoNYskpCyCEgBwVFA7RTs8+NvH8fj8=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -21,18 +23,21 @@ python3.pkgs.buildPythonApplication rec {
     setuptools-generate
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    oelint-parser
-    pygls
-  ];
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      pygls
+    ]
+    ++ [ oelint-adv ];
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Language server for bitbake";
+    mainProgram = "bitbake-language-server";
     homepage = "https://github.com/Freed-Wu/bitbake-language-server";
-    changelog = "https://github.com/Freed-Wu/bitbake-language-server/releases/tag/v${version}";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ otavio ];
+    changelog = "https://github.com/Freed-Wu/bitbake-language-server/releases/tag/${version}";
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.otavio ];
   };
 }

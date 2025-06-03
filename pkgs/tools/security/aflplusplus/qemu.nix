@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, python3
-, zlib
-, pkg-config
-, glib
-, perl
-, texinfo
-, libuuid
-, flex
-, bison
-, pixman
-, meson
-, fetchFromGitHub
-, ninja
+{
+  lib,
+  stdenv,
+  python3,
+  zlib,
+  pkg-config,
+  glib,
+  perl,
+  texinfo,
+  libuuid,
+  flex,
+  bison,
+  pixman,
+  meson,
+  fetchFromGitHub,
+  ninja,
 }:
 
 let
@@ -24,8 +25,10 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "AFLplusplus";
     repo = "qemuafl";
-    rev = "a1321713c7502c152dd7527555e0f8a800d55225";
-    sha256 = "sha256-HLlOHqT2vrHjHyu4n83IzVzKv9ErinephLLev1E10nM=";
+    # Use a fixed qemuafl version instead of the one in https://github.com/AFLplusplus/AFLplusplus/blob/v4.31c/qemu_mode/QEMUAFL_VERSION.
+    # See: https://github.com/AFLplusplus/AFLplusplus/issues/2296.
+    rev = "ef1cd9a8cb1522c918faab42805216f9a4054dda";
+    hash = "sha256-tbKDnDoBtFhvtE9nbi9XuHPuFuGezUFngnw4pJyKFgY=";
     fetchSubmodules = true;
   };
 
@@ -57,88 +60,90 @@ stdenv.mkDerivation {
     patchShebangs .
   '';
 
-  configureFlags =
-    [
-      "--target-list=${stdenv.hostPlatform.uname.processor}-linux-user"
-      "--sysconfdir=/etc"
-      "--localstatedir=/var"
-      "--meson=meson"
-      "--disable-system"
-      "--enable-linux-user"
-      "--enable-pie"
-      "--audio-drv-list="
-      "--disable-blobs"
-      "--disable-bochs"
-      "--disable-brlapi"
-      "--disable-bsd-user"
-      "--disable-bzip2"
-      "--disable-cap-ng"
-      "--disable-cloop"
-      "--disable-curl"
-      "--disable-curses"
-      "--disable-dmg"
-      "--disable-fdt"
-      "--disable-gcrypt"
-      "--disable-glusterfs"
-      "--disable-gnutls"
-      "--disable-gtk"
-      "--disable-guest-agent"
-      "--disable-iconv"
-      "--disable-libiscsi"
-      "--disable-libnfs"
-      "--disable-libssh"
-      "--disable-libusb"
-      "--disable-linux-aio"
-      "--disable-live-block-migration"
-      "--disable-lzo"
-      "--disable-nettle"
-      "--disable-numa"
-      "--disable-opengl"
-      "--disable-parallels"
-      "--disable-plugins"
-      "--disable-qcow1"
-      "--disable-qed"
-      "--disable-rbd"
-      "--disable-rdma"
-      "--disable-replication"
-      "--disable-sdl"
-      "--disable-seccomp"
-      "--disable-sheepdog"
-      "--disable-smartcard"
-      "--disable-snappy"
-      "--disable-spice"
-      "--disable-system"
-      "--disable-tools"
-      "--disable-tpm"
-      "--disable-usb-redir"
-      "--disable-vde"
-      "--disable-vdi"
-      "--disable-vhost-crypto"
-      "--disable-vhost-kernel"
-      "--disable-vhost-net"
-      "--disable-vhost-scsi"
-      "--disable-vhost-user"
-      "--disable-vhost-vdpa"
-      "--disable-vhost-vsock"
-      "--disable-virglrenderer"
-      "--disable-virtfs"
-      "--disable-vnc"
-      "--disable-vnc-jpeg"
-      "--disable-vnc-png"
-      "--disable-vnc-sasl"
-      "--disable-vte"
-      "--disable-vvfat"
-      "--disable-xen"
-      "--disable-xen-pci-passthrough"
-      "--disable-xfsctl"
-      "--without-default-devices"
-    ];
+  configureFlags = [
+    "--target-list=${stdenv.hostPlatform.uname.processor}-linux-user"
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+    "--meson=meson"
+    "--disable-system"
+    "--enable-linux-user"
+    "--enable-pie"
+    "--audio-drv-list="
+    "--disable-blobs"
+    "--disable-bochs"
+    "--disable-brlapi"
+    "--disable-bsd-user"
+    "--disable-bzip2"
+    "--disable-cap-ng"
+    "--disable-cloop"
+    "--disable-curl"
+    "--disable-curses"
+    "--disable-dmg"
+    "--disable-fdt"
+    "--disable-gcrypt"
+    "--disable-glusterfs"
+    "--disable-gnutls"
+    "--disable-gtk"
+    "--disable-guest-agent"
+    "--disable-iconv"
+    "--disable-libiscsi"
+    "--disable-libnfs"
+    "--disable-libssh"
+    "--disable-libusb"
+    "--disable-linux-aio"
+    "--disable-live-block-migration"
+    "--disable-lzo"
+    "--disable-nettle"
+    "--disable-numa"
+    "--disable-opengl"
+    "--disable-parallels"
+    "--disable-plugins"
+    "--disable-qcow1"
+    "--disable-qed"
+    "--disable-rbd"
+    "--disable-rdma"
+    "--disable-replication"
+    "--disable-sdl"
+    "--disable-seccomp"
+    "--disable-sheepdog"
+    "--disable-smartcard"
+    "--disable-snappy"
+    "--disable-spice"
+    "--disable-system"
+    "--disable-tools"
+    "--disable-tpm"
+    "--disable-usb-redir"
+    "--disable-vde"
+    "--disable-vdi"
+    "--disable-vhost-crypto"
+    "--disable-vhost-kernel"
+    "--disable-vhost-net"
+    "--disable-vhost-scsi"
+    "--disable-vhost-user"
+    "--disable-vhost-vdpa"
+    "--disable-vhost-vsock"
+    "--disable-virglrenderer"
+    "--disable-virtfs"
+    "--disable-vnc"
+    "--disable-vnc-jpeg"
+    "--disable-vnc-png"
+    "--disable-vnc-sasl"
+    "--disable-vte"
+    "--disable-vvfat"
+    "--disable-xen"
+    "--disable-xen-pci-passthrough"
+    "--disable-xfsctl"
+    "--without-default-devices"
+  ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/AFLplusplus/qemuafl";
     description = "Fork of QEMU with AFL++ instrumentation support";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ris ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      ris
+      msanft
+    ];
+    platforms = lib.platforms.linux;
   };
 }

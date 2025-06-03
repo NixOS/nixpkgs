@@ -1,33 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, grpc-google-iam-v1
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  grpc-google-iam-v1,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-securitycenter";
-  version = "1.28.0";
+  version = "1.38.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-80syqWoK2J+CjsBFO6LJEuF+pimJGpufgRLObHSKcAw=";
+    pname = "google_cloud_securitycenter";
+    inherit version;
+    hash = "sha256-XsR+gNtFCWhe0PEmaS8lIgGl0+ri7MR/omK+bch4Too=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     grpc-google-iam-v1
     google-api-core
     proto-plus
@@ -51,6 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-securitycenter";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-securitycenter-v${version}/packages/google-cloud-securitycenter/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

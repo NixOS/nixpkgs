@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 with lib;
 let
   cfg = config.services.mmsd;
@@ -14,12 +19,12 @@ let
 in
 {
   options.services.mmsd = {
-    enable = mkEnableOption (mdDoc "Multimedia Messaging Service Daemon");
+    enable = mkEnableOption "Multimedia Messaging Service Daemon";
     extraArgs = mkOption {
       type = with types; listOf str;
-      description = mdDoc "Extra arguments passed to `mmsd-tng`";
-      default = [];
-      example = ["--debug"];
+      description = "Extra arguments passed to `mmsd-tng`";
+      default = [ ];
+      example = [ "--debug" ];
     };
   };
   config = mkIf cfg.enable {

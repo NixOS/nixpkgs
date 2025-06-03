@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i python3 -p bundix bundler nix-update nix-universal-prefetch python3 python3Packages.requests python3Packages.click python3Packages.click-log prefetch-yarn-deps
+#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ requests click click-log packaging ])" bundix bundler nix-update nurl
 from __future__ import annotations
 
 import click
@@ -15,8 +15,7 @@ import json
 import requests
 import textwrap
 from functools import total_ordering
-from distutils.version import LooseVersion
-from itertools import zip_longest
+from packaging.version import Version
 from pathlib import Path
 from typing import Union, Iterable
 
@@ -47,33 +46,16 @@ class DiscourseVersion:
         else:
             self.tag = 'v' + version
             self.version = version
-        self.split_version = LooseVersion(self.version).version
+
+        self._version = Version(self.version)
 
     def __eq__(self, other: DiscourseVersion):
         """Versions are equal when their individual parts are."""
-        return self.split_version == other.split_version
+        return self._version == other._version
 
     def __gt__(self, other: DiscourseVersion):
-        """Check if this version is greater than the other.
-
-        Goes through the parts of the version numbers from most to
-        least significant, only continuing on to the next if the
-        numbers are equal and no decision can be made. If one version
-        ends in 'betaX' and the other doesn't, all else being equal,
-        the one without 'betaX' is considered greater, since it's the
-        release version.
-
-        """
-        for (this_ver, other_ver) in zip_longest(self.split_version, other.split_version):
-            if this_ver == other_ver:
-                continue
-            if type(this_ver) is int and type(other_ver) is int:
-                return this_ver > other_ver
-            elif 'beta' in [this_ver, other_ver]:
-                # release version (None) is greater than beta
-                return this_ver is None
-        else:
-            return False
+        """Check if this version is greater than the other."""
+        return self._version > other._version
 
 
 class DiscourseRepo:
@@ -104,12 +86,6 @@ class DiscourseRepo:
 
         return self._latest_commit_sha
 
-    def get_yarn_lock_hash(self, rev: str):
-        yarnLockText = self.get_file('app/assets/javascripts/yarn.lock', rev)
-        with tempfile.NamedTemporaryFile(mode='w') as lockFile:
-            lockFile.write(yarnLockText)
-            return subprocess.check_output(['prefetch-yarn-deps', lockFile.name]).decode('utf-8').strip()
-
     def get_file(self, filepath, rev):
         """Return file contents at a given rev.
 
@@ -120,6 +96,24 @@ class DiscourseRepo:
         r = requests.get(f'https://raw.githubusercontent.com/{self.owner}/{self.repo}/{rev}/{filepath}')
         r.raise_for_status()
         return r.text
+
+
+def _get_build_lock_hash():
+    nixpkgs_path = Path(__file__).parent / '../../../../'
+    output = subprocess.run(['nix-build', '-A', 'discourse'], text=True, cwd=nixpkgs_path, capture_output=True)
+    # The line is of the form "    got:    sha256-xxx"
+    lines = [i.strip() for i in output.stderr.splitlines()]
+    new_hash_lines = [i.strip("got:").strip() for i in lines if i.startswith("got:")]
+    if len(new_hash_lines) == 0:
+        if output.returncode != 0:
+            print("Error while fetching new hash with nix build")
+            print(output.stderr)
+        print("No hash change is needed")
+        return None
+    if len(new_hash_lines) > 1:
+        print(new_hash_lines)
+        raise Exception("Got an unexpected number of new hash lines:")
+    return new_hash_lines[0]
 
 
 def _call_nix_update(pkg, version):
@@ -242,21 +236,25 @@ def update(rev):
         with open(rubyenv_dir / fn, 'w') as f:
             f.write(repo.get_file(fn, version.tag))
 
+    # work around https://github.com/nix-community/bundix/issues/8
+    os.environ["BUNDLE_FORCE_RUBY_PLATFORM"] = "true"
     subprocess.check_output(['bundle', 'lock'], cwd=rubyenv_dir)
     _remove_platforms(rubyenv_dir)
     subprocess.check_output(['bundix'], cwd=rubyenv_dir)
 
     _call_nix_update('discourse', version.version)
 
-    old_yarn_hash = _nix_eval('discourse.assets.yarnOfflineCache.outputHash')
-    new_yarn_hash = repo.get_yarn_lock_hash(version.tag)
-    click.echo(f"Updating yarn lock hash, {old_yarn_hash} -> {new_yarn_hash}")
-    with open(Path(__file__).parent / "default.nix", 'r+') as f:
-        content = f.read()
-        content = content.replace(old_yarn_hash, new_yarn_hash)
-        f.seek(0)
-        f.write(content)
-        f.truncate()
+    old_pnpm_hash = _nix_eval('discourse.assets.pnpmDeps.outputHash')
+    new_pnpm_hash = _get_build_lock_hash()
+    if new_pnpm_hash is not None:
+        click.echo(f"Updating yarn lock hash: {old_pnpm_hash} -> {new_pnpm_hash}")
+
+        with open(Path(__file__).parent / "default.nix", 'r+') as f:
+            content = f.read()
+            content = content.replace(old_pnpm_hash, new_pnpm_hash)
+            f.seek(0)
+            f.write(content)
+            f.truncate()
 
 
 @cli.command()
@@ -300,7 +298,7 @@ def update_plugins():
         {'name': 'discourse-saved-searches'},
         {'name': 'discourse-solved'},
         {'name': 'discourse-spoiler-alert'},
-        {'name': 'discourse-voting'},
+        {'name': 'discourse-voting', 'repo_name': "discourse-topic-voting"},
         {'name': 'discourse-yearly-review'},
     ]
 
@@ -310,28 +308,34 @@ def update_plugins():
         name = plugin.get('name')
         repo_name = plugin.get('repo_name') or name
 
+        if fetcher == "fetchFromGitHub":
+            url = f"https://github.com/{owner}/{repo_name}"
+        else:
+            raise NotImplementedError(f"Missing URL pattern for {fetcher}")
+
         repo = DiscourseRepo(owner=owner, repo=repo_name)
 
         # implement the plugin pinning algorithm laid out here:
         # https://meta.discourse.org/t/pinning-plugin-and-theme-versions-for-older-discourse-installs/156971
         # this makes sure we don't upgrade plugins to revisions that
         # are incompatible with the packaged Discourse version
+        repo_latest_commit = repo.latest_commit_sha
         try:
-            compatibility_spec = repo.get_file('.discourse-compatibility', repo.latest_commit_sha)
+            compatibility_spec = repo.get_file('.discourse-compatibility', repo_latest_commit)
             versions = [(DiscourseVersion(discourse_version), plugin_rev.strip(' '))
                         for [discourse_version, plugin_rev]
-                        in [line.split(':')
+                        in [line.lstrip("< ").split(':')
                             for line
                             in compatibility_spec.splitlines() if line != '']]
             discourse_version = DiscourseVersion(_get_current_package_version('discourse'))
             versions = list(filter(lambda ver: ver[0] >= discourse_version, versions))
             if versions == []:
-                rev = repo.latest_commit_sha
+                rev = repo_latest_commit
             else:
                 rev = versions[0][1]
                 print(rev)
         except requests.exceptions.HTTPError:
-            rev = repo.latest_commit_sha
+            rev = repo_latest_commit
 
         filename = _nix_eval(f'builtins.unsafeGetAttrPos "src" discourse.plugins.{name}')
         if filename is None:
@@ -387,10 +391,11 @@ def update_plugins():
 
         prev_hash = _nix_eval(f'discourse.plugins.{name}.src.outputHash')
         new_hash = subprocess.check_output([
-            'nix-universal-prefetch', fetcher,
-            '--owner', owner,
-            '--repo', repo_name,
-            '--rev', rev,
+            "nurl",
+            "--fetcher", fetcher,
+            "--hash",
+            url,
+            rev,
         ], text=True).strip("\n")
 
         click.echo(f"Update {name}, {prev_commit_sha} -> {rev} in {filename}")

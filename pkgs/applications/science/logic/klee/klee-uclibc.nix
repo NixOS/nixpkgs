@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitHub
-, which
-, linuxHeaders
-, clang
-, llvm
-, python3
-, curl
-, debugRuntime ? true
-, runtimeAsserts ? false
-, extraKleeuClibcConfig ? {}
+{
+  lib,
+  llvmPackages,
+  fetchurl,
+  fetchFromGitHub,
+  linuxHeaders,
+  python3,
+  curl,
+  which,
+  nix-update-script,
+  debugRuntime ? true,
+  runtimeAsserts ? false,
+  extraKleeuClibcConfig ? { },
 }:
 
 let
@@ -19,26 +19,30 @@ let
     url = "http://www.uclibc.org/downloads/${localeSrcBase}";
     sha256 = "xDYr4xijjxjZjcz0YtItlbq5LwVUi7k/ZSmP6a+uvVc=";
   };
-  resolvedExtraKleeuClibcConfig = lib.mapAttrsToList (name: value: "${name}=${value}") (extraKleeuClibcConfig // {
-    "UCLIBC_DOWNLOAD_PREGENERATED_LOCALE_DATA" = "n";
-    "RUNTIME_PREFIX" = "/";
-    "DEVEL_PREFIX" = "/";
-  });
-in stdenv.mkDerivation rec {
+  resolvedExtraKleeuClibcConfig = lib.mapAttrsToList (name: value: "${name}=${value}") (
+    extraKleeuClibcConfig
+    // {
+      "UCLIBC_DOWNLOAD_PREGENERATED_LOCALE_DATA" = "n";
+      "RUNTIME_PREFIX" = "/";
+      "DEVEL_PREFIX" = "/";
+    }
+  );
+in
+llvmPackages.stdenv.mkDerivation rec {
   pname = "klee-uclibc";
-  version = "1.3";
+  version = "1.4";
   src = fetchFromGitHub {
     owner = "klee";
     repo = "klee-uclibc";
     rev = "klee_uclibc_v${version}";
-    sha256 = "sha256-xQ8GWa0Gmd3lbwKodJhrsZeuR4j7NT4zIUh+kNhVY/w=";
+    hash = "sha256-sogQK5Ed0k5tf4rrYwCKT4YRKyEovgT25p0BhGvJ1ok=";
   };
 
   nativeBuildInputs = [
-    clang
-    curl
-    llvm
+    llvmPackages.clang
+    llvmPackages.llvm
     python3
+    curl
     which
   ];
 
@@ -47,20 +51,22 @@ in stdenv.mkDerivation rec {
 
   # HACK: needed for cross-compile.
   # See https://www.mail-archive.com/klee-dev@imperial.ac.uk/msg03141.html
-  KLEE_CFLAGS = "-idirafter ${clang}/resource-root/include";
+  KLEE_CFLAGS = "-idirafter ${llvmPackages.clang}/resource-root/include";
 
   prePatch = ''
-    patchShebangs ./configure
-    patchShebangs ./extra
+    patchShebangs --build ./configure
+    patchShebangs --build ./extra
   '';
 
   # klee-uclibc configure does not support --prefix, so we override configurePhase entirely
   configurePhase = ''
-    ./configure ${lib.escapeShellArgs (
-      ["--make-llvm-lib"]
-      ++ lib.optional (!debugRuntime) "--enable-release"
-      ++ lib.optional runtimeAsserts "--enable-assertions"
-    )}
+    ./configure ${
+      lib.escapeShellArgs (
+        [ "--make-llvm-lib" ]
+        ++ lib.optional (!debugRuntime) "--enable-release"
+        ++ lib.optional runtimeAsserts "--enable-assertions"
+      )
+    }
 
     # Set all the configs we care about.
     configs=(
@@ -86,15 +92,24 @@ in stdenv.mkDerivation rec {
     ln -sf ${localeSrc} extra/locale/${localeSrcBase}
   '';
 
-  makeFlags = ["HAVE_DOT_CONFIG=y"];
+  makeFlags = [ "HAVE_DOT_CONFIG=y" ];
+
+  enableParallelBuilding = true;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "v(\\d\\.\\d)"
+    ];
+  };
 
   meta = with lib; {
-    description = "A modified version of uClibc for KLEE.";
+    description = "Modified version of uClibc for KLEE";
     longDescription = ''
       klee-uclibc is a bitcode build of uClibc meant for compatibility with the
       KLEE symbolic virtual machine.
     '';
-    homepage = "https://klee.github.io/";
+    homepage = "https://github.com/klee/klee-uclibc";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ numinit ];
   };

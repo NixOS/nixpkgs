@@ -1,10 +1,11 @@
-{ lib
-, babel
-, buildPythonPackage
-, fetchFromGitHub
-, linetable
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  babel,
+  buildPythonPackage,
+  fetchFromGitHub,
+  linetable,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -16,26 +17,23 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "jackrosenthal";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "kajiki";
+    tag = "v${version}";
     hash = "sha256-EbXe4Jh2IKAYw9GE0kFgKVv9c9uAOiFFYaMF8CGaOfg=";
   };
 
-  propagatedBuildInputs = [
-    linetable
-  ];
+  propagatedBuildInputs = [ linetable ];
 
   nativeCheckInputs = [
     babel
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "kajiki"
-  ];
+  pythonImportsCheck = [ "kajiki" ];
 
   meta = with lib; {
     description = "Module provides fast well-formed XML templates";
+    mainProgram = "kajiki";
     homepage = "https://github.com/nandoflorestan/kajiki";
     changelog = "https://github.com/jackrosenthal/kajiki/releases/tag/v${version}";
     license = licenses.mit;

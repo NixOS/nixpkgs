@@ -1,36 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, duckdb
-, hypothesis
-, ipython-sql
-, poetry-core
-, snapshottest
-, sqlalchemy
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  python,
+  duckdb,
+  hypothesis,
+  pandas,
+  pyarrow,
+  poetry-core,
+  pytest-remotedata,
+  snapshottest,
+  sqlalchemy,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "duckdb-engine";
-  version = "0.11.2";
+  version = "0.15.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     repo = "duckdb_engine";
     owner = "Mause";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-yW1gaZ0B6JNX98KzAxf146goniNmWnkMUmJRrScot1w=";
+    tag = "v${version}";
+    hash = "sha256-mxv6xYO31MDzHvIf7Zk+kFtm6fX3x3AaJNn7RhvJ2fY=";
   };
 
-  patches = [ ./remote_data.patch ];
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     duckdb
@@ -41,33 +42,52 @@ buildPythonPackage rec {
     export HOME="$(mktemp -d)"
   '';
 
-  disabledTests = [
-    # this test tries to download the httpfs extension
-    "test_preload_extension"
-    "test_motherduck"
-    # test should be skipped based on sqlalchemy version but isn't and fails
-    "test_commit"
-    # rowcount no longer generates an attribute error.
-    "test_rowcount"
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  checkInputs =
+    [
+      hypothesis
+      pandas
+      pytest-remotedata
+      typing-extensions
+      pyarrow
+    ]
+    ++ lib.optionals (pythonOlder "3.12") [
+      # requires wasmer which is broken for python 3.12
+      # https://github.com/wasmerio/wasmer-python/issues/778
+      snapshottest
+    ];
+
+  pytestFlagsArray = [
+    "-m"
+    "'not remote_data'"
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    hypothesis
-    ipython-sql
-    # TODO(cpcloud): include pandas here when it supports sqlalchemy 2.0
-    snapshottest
-    typing-extensions
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [
+    # requires snapshottest
+    "duckdb_engine/tests/test_datatypes.py"
   ];
 
-  pythonImportsCheck = [
-    "duckdb_engine"
-  ];
+  disabledTests =
+    [
+      # incompatible with duckdb 1.1.1
+      "test_with_cache"
+      # these aren't set for some reason
+      "test_user_agent"
+      "test_user_agent_with_custom_user_agent"
+    ]
+    ++ lib.optionals (python.pythonVersion == "3.11") [
+      # incompatible with duckdb 1.1.1
+      "test_all_types_reflection"
+      "test_nested_types"
+    ];
+
+  pythonImportsCheck = [ "duckdb_engine" ];
 
   meta = with lib; {
     description = "SQLAlchemy driver for duckdb";
     homepage = "https://github.com/Mause/duckdb_engine";
-    changelog = "https://github.com/Mause/duckdb_engine/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Mause/duckdb_engine/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
   };

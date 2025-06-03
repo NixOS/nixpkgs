@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, substituteAll
-, opentype-sanitizer
-, setuptools-scm
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  replaceVars,
+  opentype-sanitizer,
+  setuptools-scm,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,23 +23,15 @@ buildPythonPackage rec {
     # Invoke ots-sanitize from the opentype-sanitizer package instead of
     # downloading precompiled binaries from the internet.
     # (nixpkgs-specific, not upstreamable)
-    (substituteAll {
-      src = ./0001-use-packaged-ots.patch;
+    (replaceVars ./0001-use-packaged-ots.patch {
       ots_sanitize = "${opentype-sanitizer}/bin/ots-sanitize";
     })
   ];
 
-  propagatedBuildInputs = [
-    opentype-sanitizer
-  ];
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  propagatedBuildInputs = [ opentype-sanitizer ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  doCheck = true;
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Python wrapper for ots (OpenType Sanitizer)";

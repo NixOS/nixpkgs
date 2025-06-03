@@ -1,14 +1,16 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.pcscd;
-  cfgFile = pkgs.writeText "reader.conf" config.services.pcscd.readerConfig;
+  cfgFile = pkgs.writeText "reader.conf" (
+    builtins.concatStringsSep "\n\n" config.services.pcscd.readerConfigs
+  );
 
-  package = if config.security.polkit.enable
-              then pkgs.pcscliteWithPolkit
-              else pkgs.pcsclite;
+  package = if config.security.polkit.enable then pkgs.pcscliteWithPolkit else pkgs.pcsclite;
 
   pluginEnv = pkgs.buildEnv {
     name = "pcscd-plugins";
@@ -17,40 +19,56 @@ let
 
 in
 {
-  options.services.pcscd = {
-    enable = mkEnableOption (lib.mdDoc "PCSC-Lite daemon");
+  imports = [
+    (lib.mkChangedOptionModule
+      [ "services" "pcscd" "readerConfig" ]
+      [ "services" "pcscd" "readerConfigs" ]
+      (
+        config:
+        let
+          readerConfig = lib.getAttrFromPath [ "services" "pcscd" "readerConfig" ] config;
+        in
+        [ readerConfig ]
+      )
+    )
+  ];
 
-    plugins = mkOption {
-      type = types.listOf types.package;
-      defaultText = literalExpression "[ pkgs.ccid ]";
-      example = literalExpression "[ pkgs.pcsc-cyberjack ]";
-      description = lib.mdDoc "Plugin packages to be used for PCSC-Lite.";
+  options.services.pcscd = {
+    enable = lib.mkEnableOption "PCSC-Lite daemon, to access smart cards using SCard API (PC/SC)";
+
+    plugins = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      defaultText = lib.literalExpression "[ pkgs.ccid ]";
+      example = lib.literalExpression "[ pkgs.pcsc-cyberjack ]";
+      description = "Plugin packages to be used for PCSC-Lite.";
     };
 
-    readerConfig = mkOption {
-      type = types.lines;
-      default = "";
-      example = ''
-        FRIENDLYNAME      "Some serial reader"
-        DEVICENAME        /dev/ttyS0
-        LIBPATH           /path/to/serial_reader.so
-        CHANNELID         1
-      '';
-      description = lib.mdDoc ''
+    readerConfigs = lib.mkOption {
+      type = lib.types.listOf lib.types.lines;
+      default = [ ];
+      example = [
+        ''
+          FRIENDLYNAME      "Some serial reader"
+          DEVICENAME        /dev/ttyS0
+          LIBPATH           /path/to/serial_reader.so
+          CHANNELID         1
+        ''
+      ];
+      description = ''
         Configuration for devices that aren't hotpluggable.
 
         See {manpage}`reader.conf(5)` for valid options.
       '';
     };
 
-    extraArgs = mkOption {
-      type = types.listOf types.str;
+    extraArgs = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
-      description = lib.mdDoc "Extra command line arguments to be passed to the PCSC daemon.";
+      description = "Extra command line arguments to be passed to the PCSC daemon.";
     };
   };
 
-  config = mkIf config.services.pcscd.enable {
+  config = lib.mkIf config.services.pcscd.enable {
     environment.etc."reader.conf".source = cfgFile;
 
     environment.systemPackages = [ package ];
@@ -71,7 +89,10 @@ in
       # around it, we force the path to the cfgFile.
       #
       # https://github.com/NixOS/nixpkgs/issues/121088
-      serviceConfig.ExecStart = [ "" "${lib.getExe package} -f -x -c ${cfgFile} ${lib.escapeShellArgs cfg.extraArgs}" ];
+      serviceConfig.ExecStart = [
+        ""
+        "${lib.getExe package} -f -x -c ${cfgFile} ${lib.escapeShellArgs cfg.extraArgs}"
+      ];
     };
   };
 }

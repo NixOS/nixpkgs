@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "bunch";
   version = "unstable-2017-11-21";
   format = "setuptools";
@@ -14,7 +15,7 @@ buildPythonPackage rec {
   # Use a fork as upstream is dead
   src = fetchFromGitHub {
     owner = "olivecoder";
-    repo = pname;
+    repo = "bunch";
     rev = "71ac9d5c712becd4c502ab3099203731a0f1122e";
     hash = "sha256-XOgzJkcIqkAJFsKAyt2jSEIxcc0h2gFC15xy5kAs+7s=";
   };
@@ -27,14 +28,12 @@ buildPythonPackage rec {
   # No real tests available
   doCheck = false;
 
-  pythonImportsCheck = [
-    "bunch"
-  ];
+  pythonImportsCheck = [ "bunch" ];
 
   meta = with lib; {
     description = "Python dictionary that provides attribute-style access";
     homepage = "https://github.com/dsc/bunch";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

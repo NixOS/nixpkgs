@@ -1,17 +1,22 @@
-{ lib
-, stdenv
-, boost
-, libX11
-, libXext
-, linuxPackages
-, openssl
-, tuxclocker-plugins
+{
+  stdenv,
+  boost,
+  libX11,
+  libXext,
+  linuxPackages,
+  openssl,
+  tuxclocker-plugins,
 }:
 
 stdenv.mkDerivation {
   pname = "tuxclocker-nvidia-plugin";
 
-  inherit (tuxclocker-plugins) src version meta BOOST_INCLUDEDIR BOOST_LIBRARYDIR nativeBuildInputs;
+  inherit (tuxclocker-plugins)
+    src
+    version
+    meta
+    nativeBuildInputs
+    ;
 
   buildInputs = [
     boost

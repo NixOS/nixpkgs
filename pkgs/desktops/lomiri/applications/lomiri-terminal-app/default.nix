@@ -1,57 +1,31 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, gitUpdater
-, nixosTests
-, cmake
-, gsettings-qt
-, lomiri-ui-extras
-, lomiri-ui-toolkit
-, pkg-config
-, qmltermwidget
-, qtbase
-, qtdeclarative
-, qtsystems
-, wrapQtAppsHook
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  nixosTests,
+  cmake,
+  gsettings-qt,
+  lomiri-ui-extras,
+  lomiri-ui-toolkit,
+  pkg-config,
+  qmltermwidget,
+  qtbase,
+  qtdeclarative,
+  qtsystems,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-terminal-app";
-  version = "2.0.2";
+  version = "2.0.5";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/apps/lomiri-terminal-app";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-mXbPmVcl5dL78QUp+w3o4im5ohUQCPTKWLSVqlNO0yo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-STL8Km5NVSW3wEjC96sT4Q9z/lTSYKFQ6ku6M+CKM78=";
   };
-
-  patches = [
-    # Stop usage of private qt5_use_modules function, seemingly unavailable in this package
-    # Remove when https://gitlab.com/ubports/development/apps/lomiri-terminal-app/-/merge_requests/103 merged & in release
-    (fetchpatch {
-      name = "0001-lomiri-terminal-app-Stop-using-qt5_use_modules.patch";
-      url = "https://gitlab.com/ubports/development/apps/lomiri-terminal-app/-/commit/db210c74e771a427066aebdc3a99cab6e782d326.patch";
-      hash = "sha256-op4+/eo8rBRMcW6MZ0rOEFReM7JBCck1B+AsgAPyqAI=";
-    })
-
-    # Explicitly bind textdomain, don't rely on hacky workaround in LUITK
-    # Remove when https://gitlab.com/ubports/development/apps/lomiri-terminal-app/-/merge_requests/104 merged & in release
-    (fetchpatch {
-      name = "0002-lomiri-terminal-app-Call-i18n.bindtextdomain.patch";
-      url = "https://gitlab.com/ubports/development/apps/lomiri-terminal-app/-/commit/7f9d419e29043f0d0922d2ac1dce5673e2723a01.patch";
-      hash = "sha256-HfIvGVbIdTasoHAfHysnzFLufQQ4lskym5HTekH+mjk=";
-    })
-
-    # Add more & correct existing usage of GNUInstallDirs variables
-    # Remove when https://gitlab.com/ubports/development/apps/lomiri-terminal-app/-/merge_requests/105 merged & in release
-    (fetchpatch {
-      name = "0003-lomiri-terminal-app-GNUInstallDirs-usage.patch";
-      url = "https://gitlab.com/ubports/development/apps/lomiri-terminal-app/-/commit/fcde1f05bb442c74b1dff95917fd7594f26e97a7.patch";
-      hash = "sha256-umxCMGNjyz0TVmwH0Gl0MpgjLQtkW9cHkUfpNJcoasE=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
@@ -82,23 +56,31 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DINSTALL_TESTS=OFF"
-    "-DCLICK_MODE=OFF"
+    (lib.cmakeBool "INSTALL_TESTS" false)
+    (lib.cmakeBool "CLICK_MODE" false)
   ];
 
   passthru = {
-    tests.vm-test = nixosTests.terminal-emulators.lomiri-terminal-app;
+    tests = {
+      # The way the test works sometimes causes segfaults in qtfeedback
+      # https://gitlab.com/ubports/development/apps/lomiri-terminal-app/-/issues/117
+      # vm-test = nixosTests.terminal-emulators.lomiri-terminal-app;
+      inherit (nixosTests.lomiri) desktop-basics desktop-appinteractions;
+    };
     updateScript = gitUpdater {
       rev-prefix = "v";
     };
   };
 
-  meta = with lib; {
-    description = "A terminal app for desktop and mobile devices";
+  meta = {
+    description = "Terminal app for desktop and mobile devices";
     homepage = "https://gitlab.com/ubports/development/apps/lomiri-terminal-app";
-    license = licenses.gpl3Only;
+    changelog = "https://gitlab.com/ubports/development/apps/lomiri-terminal-app/-/blob/${
+      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+    }/ChangeLog";
+    license = lib.licenses.gpl3Only;
     mainProgram = "lomiri-terminal-app";
-    maintainers = teams.lomiri.members;
-    platforms = platforms.linux;
+    teams = [ lib.teams.lomiri ];
+    platforms = lib.platforms.linux;
   };
 })

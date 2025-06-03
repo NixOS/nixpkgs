@@ -1,4 +1,9 @@
-{ mkDerivation, haskellPackages, fetchFromGitHub, lib }:
+{
+  mkDerivation,
+  haskellPackages,
+  fetchFromGitHub,
+  lib,
+}:
 
 mkDerivation {
   pname = "fffuu";
@@ -14,7 +19,8 @@ mkDerivation {
   postPatch = ''
     substituteInPlace haskell_tool/fffuu.cabal \
       --replace "containers >=0.5 && <0.6" "containers >= 0.6" \
-      --replace "optparse-generic >= 1.2.3 && < 1.3" "optparse-generic >= 1.2.3"
+      --replace "optparse-generic >= 1.2.3 && < 1.3" "optparse-generic >= 1.2.3" \
+      --replace "split >= 0.2.3 && <= 0.2.4" "split >= 0.2.3"
   '';
 
   preCompileBuildDriver = ''
@@ -47,5 +53,5 @@ mkDerivation {
   description = "Fancy Formal Firewall Universal Understander";
   homepage = "https://github.com/diekmann/Iptables_Semantics/tree/master/haskell_tool";
   license = lib.licenses.bsd2;
-  maintainers = [ lib.maintainers.marsam ];
+  maintainers = [ ];
 }

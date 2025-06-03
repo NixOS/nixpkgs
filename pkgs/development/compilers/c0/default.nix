@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromBitbucket
-, mlton
-, pkg-config
-, getopt
-, boehmgc
-, darwin
-, libbacktrace
-, libpng
-, ncurses
-, readline
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromBitbucket,
+  mlton,
+  pkg-config,
+  getopt,
+  boehmgc,
+  darwin,
+  libbacktrace,
+  libpng,
+  ncurses,
+  readline,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "c0";
-  version = "unstable-2023-09-05";
+  version = "0-unstable-2023-09-05";
 
   src = fetchFromBitbucket {
     owner = "c0-lang";
@@ -28,18 +29,20 @@ stdenv.mkDerivation rec {
     ./use-system-libraries.patch
   ];
 
-  postPatch = ''
-    substituteInPlace cc0/Makefile \
-      --replace '$(shell ./get_version.sh)' '${version}'
-    substituteInPlace cc0/compiler/bin/buildid \
-      --replace '`../get_version.sh`' '${version}' \
-      --replace '`date`' '1970-01-01T00:00:00Z' \
-      --replace '`hostname`' 'nixpkgs'
-  '' + lib.optionalString stdenv.isDarwin ''
-    for f in cc0/compiler/bin/coin-o0-support cc0/compiler/bin/cc0-o0-support; do
-      substituteInPlace $f --replace '$(brew --prefix gnu-getopt)' '${getopt}'
-    done
-  '';
+  postPatch =
+    ''
+      substituteInPlace cc0/Makefile \
+        --replace '$(shell ./get_version.sh)' '${version}'
+      substituteInPlace cc0/compiler/bin/buildid \
+        --replace '`../get_version.sh`' '${version}' \
+        --replace '`date`' '1970-01-01T00:00:00Z' \
+        --replace '`hostname`' 'nixpkgs'
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      for f in cc0/compiler/bin/coin-o0-support cc0/compiler/bin/cc0-o0-support; do
+        substituteInPlace $f --replace '$(brew --prefix gnu-getopt)' '${getopt}'
+      done
+    '';
 
   preConfigure = ''
     cd cc0/
@@ -49,7 +52,7 @@ stdenv.mkDerivation rec {
     getopt
     mlton
     pkg-config
-  ] ++ lib.optionals stdenv.isDarwin [ darwin.sigtool ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.sigtool ];
 
   buildInputs = [
     boehmgc
@@ -73,13 +76,13 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A small safe subset of the C programming language, augmented with contracts";
+    description = "Small safe subset of the C programming language, augmented with contracts";
     homepage = "https://c0.cs.cmu.edu/";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = platforms.unix;
     # line 1: ../../bin/wrappergen: cannot execute: required file not found
     # make[2]: *** [../../lib.mk:83:
-    broken = stdenv.isLinux;
+    broken = stdenv.hostPlatform.isLinux;
   };
 }

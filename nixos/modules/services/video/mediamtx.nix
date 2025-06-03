@@ -1,25 +1,30 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.mediamtx;
-  format = pkgs.formats.yaml {};
+  format = pkgs.formats.yaml { };
 in
 {
   meta.maintainers = with lib.maintainers; [ fpletz ];
 
   options = {
     services.mediamtx = {
-      enable = lib.mkEnableOption (lib.mdDoc "MediaMTX");
+      enable = lib.mkEnableOption "MediaMTX";
 
       package = lib.mkPackageOption pkgs "mediamtx" { };
 
       settings = lib.mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Settings for MediaMTX. Refer to the defaults at
           <https://github.com/bluenviron/mediamtx/blob/main/mediamtx.yml>.
         '';
         type = format.type;
-        default = {};
+        default = { };
         example = {
           paths = {
             cam = {
@@ -32,16 +37,16 @@ in
 
       env = lib.mkOption {
         type = with lib.types; attrsOf anything;
-        description = lib.mdDoc "Extra environment variables for MediaMTX";
-        default = {};
+        description = "Extra environment variables for MediaMTX";
+        default = { };
         example = {
           MTX_CONFKEY = "mykey";
         };
       };
 
-      allowVideoAccess = lib.mkEnableOption (lib.mdDoc ''
+      allowVideoAccess = lib.mkEnableOption ''
         access to video devices like cameras on the system
-      '');
+      '';
     };
   };
 
@@ -61,6 +66,7 @@ in
         Group = "mediamtx";
         SupplementaryGroups = lib.mkIf cfg.allowVideoAccess "video";
         ExecStart = "${cfg.package}/bin/mediamtx /etc/mediamtx.yaml";
+        Restart = "on-failure";
       };
     };
   };

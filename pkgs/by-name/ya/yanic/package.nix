@@ -1,23 +1,28 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
   pname = "yanic";
-  version = "1.5.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "FreifunkBremen";
     repo = "yanic";
     rev = "v${version}";
-    sha256 = "sha256-++tF6nTFIDeqWSqlBDXw/zEfl5YYa4ufzVZaUG2c8Zo=";
+    hash = "sha256-uqmojpwGFs6inhmKIztYlGFvUS8AjQIYTHSkZcGyEUo=";
   };
 
-  vendorHash = "sha256-D9V53/+C/+iv1U4kVrYWzJ8iD0MA1QcR8f5ifejFhLo=";
+  vendorHash = "sha256-UYrQwOyWlKxDH5hHKAZCxQbO+eA6JsPuG0SbkWMF/HQ=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-X github.com/FreifunkBremen/yanic/cmd.VERSION=${version}"
+    "-s"
+    "-w"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -29,7 +34,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A tool to collect and aggregate respondd data";
+    description = "Tool to collect and aggregate respondd data";
     homepage = "https://github.com/FreifunkBremen/yanic";
     changelog = "https://github.com/FreifunkBremen/yanic/releases/tag/${src.rev}";
     license = licenses.agpl3Only;

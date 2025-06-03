@@ -1,13 +1,14 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, yarl
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  yarl,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-omnikinverter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-W9VeRhsCXLLgOgvJcNNCGNmPvakPtKHAtwQAGtYJbcY=";
   };
 
@@ -33,9 +34,7 @@ buildPythonPackage rec {
       --replace "--cov" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -48,9 +47,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "omnikinverter"
-  ];
+  pythonImportsCheck = [ "omnikinverter" ];
 
   meta = with lib; {
     description = "Python module for the Omnik Inverter";

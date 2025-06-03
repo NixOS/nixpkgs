@@ -1,71 +1,84 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, unittestCheckHook
-, flit-core
-, numpy
-, scipy
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  unittestCheckHook,
+  flit-core,
+  numpy,
+  scipy,
 
-# optional dependencies
-, clarabel
-, cvxopt
-, daqp
-, ecos
-, gurobipy
-, osqp
-, quadprog
-, scs
+  # optional dependencies
+  clarabel,
+  cvxopt,
+  daqp,
+  ecos,
+  gurobipy,
+  jaxopt,
+  osqp,
+  quadprog,
+  scs,
+  highspy,
+  piqp,
+  proxsuite,
 }:
 buildPythonPackage rec {
   pname = "qpsolvers";
-  version = "4.3.1";
+  version = "4.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qpsolvers";
     repo = "qpsolvers";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/HLc9dFf9F/6W7ux2Fj2yJuV/xCVeGyO6MblddwIGdM=";
+    tag = "v${version}";
+    hash = "sha256-rHasR2myJjz4DoNWo2wvH11Mxxk/fZ/z9ZdglRcIPX0=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
   pythonImportsCheck = [ "qpsolvers" ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     scipy
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     # FIXME commented out solvers have not been packaged yet
     clarabel = [ clarabel ];
     cvxopt = [ cvxopt ];
     daqp = [ daqp ];
     ecos = [ ecos ];
     gurobi = [ gurobipy ];
-    # highs = [ highspy ];
+    highs = [ highspy ];
+    jaxopt = [ jaxopt ];
     # mosek = [ cvxopt mosek ];
     osqp = [ osqp ];
-    # piqp = [ piqp ];
-    # proxqp = [ proxsuite ];
+    piqp = [ piqp ];
+    proxqp = [ proxsuite ];
     # qpalm = [ qpalm ];
     quadprog = [ quadprog ];
     scs = [ scs ];
-    open_source_solvers = with passthru.optional-dependencies; lib.flatten [
-      clarabel cvxopt daqp ecos /* highs */ osqp /* piqp proxqp qpalm */ quadprog scs
-    ];
+    open_source_solvers =
+      with optional-dependencies;
+      lib.flatten [
+        clarabel
+        cvxopt
+        daqp
+        ecos
+        highs
+        osqp
+        piqp
+        proxqp
+        # qpalm
+        quadprog
+        scs
+      ];
   };
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ] ++ passthru.optional-dependencies.open_source_solvers;
+  nativeCheckInputs = [ unittestCheckHook ] ++ optional-dependencies.open_source_solvers;
 
   meta = with lib; {
-    changelog = "https://github.com/qpsolvers/qpsolvers/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/qpsolvers/qpsolvers/blob/${src.tag}/CHANGELOG.md";
     description = "Quadratic programming solvers in Python with a unified API";
     homepage = "https://github.com/qpsolvers/qpsolvers";
     license = licenses.lgpl3Plus;

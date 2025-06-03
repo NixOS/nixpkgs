@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, callPackage, stuffbin, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  callPackage,
+  stuffbin,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "listmonk";
@@ -8,7 +15,7 @@ buildGoModule rec {
     owner = "knadh";
     repo = "listmonk";
     rev = "v${version}";
-    sha256 = "sha256-eNX+2ens+mz2V8ZBHtFFHDVbi64AAiiREElMjh67Dd8=";
+    hash = "sha256-eNX+2ens+mz2V8ZBHtFFHDVbi64AAiiREElMjh67Dd8=";
   };
 
   vendorHash = "sha256-XAm2VfX1nHWTuAV2COEn8qrqPNv0xbaWgTYCpjrEfMw=";
@@ -17,7 +24,11 @@ buildGoModule rec {
     stuffbin
   ];
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/listmonk
@@ -36,10 +47,10 @@ buildGoModule rec {
         "i18n:/i18n"
       ];
     in
-      ''
-        stuffbin -a stuff -in $out/bin/listmonk -out $out/bin/listmonk \
-          ${lib.concatStringsSep " " vfsMappings}
-      '';
+    ''
+      stuffbin -a stuff -in $out/bin/listmonk -out $out/bin/listmonk \
+        ${lib.concatStringsSep " " vfsMappings}
+    '';
 
   passthru = {
     frontend = callPackage ./frontend.nix { inherit meta version src; };
@@ -47,10 +58,11 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "High performance, self-hosted, newsletter and mailing list manager with a modern dashboard.";
+    description = "High performance, self-hosted, newsletter and mailing list manager with a modern dashboard";
+    mainProgram = "listmonk";
     homepage = "https://github.com/knadh/listmonk";
     changelog = "https://github.com/knadh/listmonk/releases/tag/v${version}";
     maintainers = with maintainers; [ raitobezarius ];
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
   };
 }

@@ -1,15 +1,15 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitHub
-, setuptools-scm
-, pythonOlder
-, importlib-metadata
-, callPackage
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitHub,
+  setuptools-scm,
+  pythonOlder,
+  callPackage,
 }:
 
 buildPythonPackage rec {
   pname = "pluggy";
-  version = "1.4.0";
+  version = "1.5.0";
 
   disabled = pythonOlder "3.8";
 
@@ -18,11 +18,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pluggy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-1XHJwODmpYQkYZvnZck6RrtT4lOeCf8cr1QFx9DCbzw=";
+    tag = version;
+    hash = "sha256-f0DxyZZk6RoYtOEXLACcsOn2B+Hot4U4g5Ogr/hKmOE=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
   # To prevent infinite recursion with pytest
   doCheck = false;

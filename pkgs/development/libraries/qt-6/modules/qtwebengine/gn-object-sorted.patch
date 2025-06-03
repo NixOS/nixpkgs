@@ -1,0 +1,32 @@
+diff --git a/gn/src/gn/rsp_target_writer.cc b/gn/src/gn/rsp_target_writer.cc
+index 6c1c687e99d..097b84b317e 100644
+--- a/src/3rdparty/gn/src/gn/rsp_target_writer.cc
++++ b/src/3rdparty/gn/src/gn/rsp_target_writer.cc
+@@ -117,8 +117,7 @@ void RspTargetWriter::Run() {
+       PathOutput path_output(settings->build_settings()->build_dir(),
+                              settings->build_settings()->root_path_utf8(),
+                              ESCAPE_NONE);
+-      std::vector<SourceFile> object_files;
+-      object_files.reserve(target_->sources().size());
++      std::set<SourceFile> object_files;
+ 
+       for (const auto& source : target_->sources()) {
+         const char* tool_type = nullptr;
+@@ -128,7 +127,7 @@ void RspTargetWriter::Run() {
+             other_files.push_back(source);
+           continue;  // No output for this source.
+         }
+-        object_files.push_back(
++        object_files.insert(
+             tool_outputs[0].AsSourceFile(settings->build_settings()));
+       }
+       if (target_->config_values().has_precompiled_headers()) {
+@@ -137,7 +136,7 @@ void RspTargetWriter::Run() {
+         if (tool_cxx && tool_cxx->precompiled_header_type() == CTool::PCH_MSVC) {
+           GetPCHOutputFiles(target_, CTool::kCToolCxx, &tool_outputs);
+           if (!tool_outputs.empty())
+-            object_files.push_back(
++            object_files.insert(
+                 tool_outputs[0].AsSourceFile(settings->build_settings()));
+         }
+       }

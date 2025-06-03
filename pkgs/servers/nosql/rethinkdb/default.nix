@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchurl, which, m4
-, protobuf, boost, zlib, curl, openssl, icu, jemalloc, libtool
-, python3Packages, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  which,
+  m4,
+  protobuf,
+  boost,
+  zlib,
+  curl,
+  openssl,
+  icu,
+  jemalloc,
+  libtool,
+  python3Packages,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,18 +36,31 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  configureFlags = lib.optionals (!stdenv.isDarwin) [
+  configureFlags = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     "--with-jemalloc"
     "--lib-path=${jemalloc}/lib"
   ];
 
   makeFlags = [ "rethinkdb" ];
 
-  buildInputs = [ protobuf boost zlib curl openssl icu ]
-    ++ lib.optional (!stdenv.isDarwin) jemalloc
-    ++ lib.optional stdenv.isDarwin libtool;
+  buildInputs =
+    [
+      protobuf
+      boost
+      zlib
+      curl
+      openssl
+      icu
+    ]
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) jemalloc
+    ++ lib.optional stdenv.hostPlatform.isDarwin libtool;
 
-  nativeBuildInputs = [ which m4 python3Packages.python makeWrapper ];
+  nativeBuildInputs = [
+    which
+    m4
+    python3Packages.python
+    makeWrapper
+  ];
 
   enableParallelBuilding = true;
 
@@ -44,16 +70,20 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "An open-source distributed database built with love";
+    description = "Open-source distributed database built with love";
+    mainProgram = "rethinkdb";
     longDescription = ''
       RethinkDB is built to store JSON documents, and scale to
       multiple machines with very little effort. It has a pleasant
       query language that supports really useful queries like table
       joins and group by, and is easy to setup and learn.
     '';
-    homepage    = "https://rethinkdb.com";
-    license     = lib.licenses.asl20;
-    platforms   = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ thoughtpolice bluescreen303 ];
+    homepage = "https://rethinkdb.com";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      bluescreen303
+    ];
   };
 }

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, django
-, fetchFromGitHub
-, poetry-core
-, python
-, pythonOlder
-, ua-parser
+{
+  lib,
+  buildPythonPackage,
+  django,
+  fetchFromGitHub,
+  poetry-core,
+  python,
+  pythonOlder,
+  ua-parser,
 }:
 
 buildPythonPackage rec {
@@ -18,22 +19,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aaugustin";
     repo = "django-sesame";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-8jbYhD/PfPnutJZonmdrqLIQdXiUHF12w0M9tuyyDz0=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   nativeCheckInputs = [
     django
     ua-parser
   ];
 
-  pythonImportsCheck = [
-    "sesame"
-  ];
+  pythonImportsCheck = [ "sesame" ];
 
   checkPhase = ''
     runHook preCheck
@@ -48,6 +45,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/aaugustin/django-sesame";
     changelog = "https://github.com/aaugustin/django-sesame/blob/${version}/docs/changelog.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ elohmeier ];
   };
 }

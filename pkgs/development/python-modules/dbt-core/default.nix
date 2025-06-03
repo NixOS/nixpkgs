@@ -1,101 +1,111 @@
-{ lib
-, agate
-, buildPythonPackage
-, cffi
-, click
-, colorama
-, dbt-extractor
-, dbt-semantic-interfaces
-, fetchFromGitHub
-, hologram
-, idna
-, isodate
-, jinja2
-, logbook
-, mashumaro
-, minimal-snowplow-tracker
-, networkx
-, packaging
-, pathspec
-, protobuf
-, python3
-, pythonOlder
-, pythonRelaxDepsHook
-, pytz
-, pyyaml
-, requests
-, setuptools
-, sqlparse
-, typing-extensions
-, urllib3
-, werkzeug
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  agate,
+  click,
+  daff,
+  dbt-adapters,
+  dbt-common,
+  dbt-extractor,
+  dbt-semantic-interfaces,
+  jinja2,
+  logbook,
+  mashumaro,
+  networkx,
+  packaging,
+  pathspec,
+  protobuf,
+  pydantic,
+  pydantic-settings,
+  pytz,
+  pyyaml,
+  requests,
+  snowplow-tracker,
+  sqlparse,
+  typing-extensions,
+
+  # passthru
+  callPackage,
 }:
 
 buildPythonPackage rec {
   pname = "dbt-core";
-  version = "1.7.9";
+  version = "1.10.0b2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-core";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ff+cdY6xy14w30BDn1ct/2Q+4j8cQupJrJHb4vO58J0=";
+    tag = "v${version}";
+    hash = "sha256-MTrdpbPqdakFDmLKRFJ23u9hLgGhZ5T+r4om9HPBjkw=";
   };
 
-  sourceRoot = "${src.name}/core";
+  postPatch = ''
+    substituteInPlace dbt/utils/artifact_upload.py \
+      --replace-fail \
+        "from pydantic import BaseSettings" \
+        "from pydantic_settings import BaseSettings"
+  '';
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools
-  ];
+  sourceRoot = "${src.name}/core";
 
   pythonRelaxDeps = [
     "agate"
     "click"
+    "dbt-common"
+    "dbt-semantic-interfaces"
+    "logbook"
     "mashumaro"
     "networkx"
-    "logbook"
+    "pathspec"
+    "protobuf"
+    "pydantic"
     "urllib3"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     agate
-    cffi
     click
-    colorama
+    daff
+    dbt-adapters
+    dbt-common
     dbt-extractor
     dbt-semantic-interfaces
-    hologram
-    idna
-    isodate
     jinja2
     logbook
     mashumaro
-    minimal-snowplow-tracker
     networkx
     packaging
     pathspec
     protobuf
+    pydantic
+    pydantic-settings
     pytz
     pyyaml
     requests
+    snowplow-tracker
     sqlparse
     typing-extensions
-    urllib3
-    werkzeug
   ] ++ mashumaro.optional-dependencies.msgpack;
 
   # tests exist for the dbt tool but not for this package specifically
   doCheck = false;
 
   passthru = {
-    withAdapters = python3.pkgs.callPackage ./with-adapters.nix { };
+    withAdapters = callPackage ./with-adapters.nix { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Enables data analysts and engineers to transform their data using the same practices that software engineers use to build applications";
     longDescription = ''
       The dbt tool needs adapters to data sources in order to work. The available
@@ -114,9 +124,12 @@ buildPythonPackage rec {
         ])
     '';
     homepage = "https://github.com/dbt-labs/dbt-core";
-    changelog = "https://github.com/dbt-labs/dbt-core/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mausch tjni ];
+    changelog = "https://github.com/dbt-labs/dbt-core/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      mausch
+      tjni
+    ];
     mainProgram = "dbt";
   };
 }

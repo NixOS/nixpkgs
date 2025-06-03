@@ -1,4 +1,12 @@
-{ mkDerivation, lib, qtbase, cmake, fetchFromGitHub, fetchpatch, unstableGitUpdater }:
+{
+  mkDerivation,
+  lib,
+  qtbase,
+  cmake,
+  fetchFromGitHub,
+  fetchpatch,
+  unstableGitUpdater,
+}:
 
 mkDerivation rec {
   pname = "evtest-qt";
@@ -26,10 +34,11 @@ mkDerivation rec {
 
   buildInputs = [ qtbase ];
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Simple input device tester for linux with Qt GUI";
+    mainProgram = "evtest-qt";
     homepage = "https://github.com/Grumbel/evtest-qt";
     maintainers = with maintainers; [ alexarice ];
     platforms = platforms.linux;

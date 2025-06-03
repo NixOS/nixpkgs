@@ -1,46 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, flask-migrate
-, ldap3
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  flask-migrate,
+  flask-sqlalchemy,
+  ldap3,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "automx2";
-  version = "unstable-2023-08-23";
-  format = "setuptools";
+  version = "2025.1.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rseichter";
-    repo = pname;
-    rev = "f3e3fc8e769c3799361001d51b7d9335a6a9d1a8";
-    hash = "sha256-NkeazjjGDYUXfoydvEfww6e7SkSZ8rMRlML+oOaf374=";
+    repo = "automx2";
+    tag = version;
+    hash = "sha256-wsKE1lplFUOi6i12ZMV9Oidc58jyuYawbAxJ4qqcYmg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     flask
     flask-migrate
+    flask-sqlalchemy
     ldap3
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "automx2"
-  ];
+  pythonImportsCheck = [ "automx2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Email client configuration made easy";
     homepage = "https://rseichter.github.io/automx2/";
     changelog = "https://github.com/rseichter/automx2/blob/${version}/CHANGELOG";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ twey ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ twey ];
   };
 }

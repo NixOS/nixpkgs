@@ -1,32 +1,48 @@
-{ lib
-, buildDotnetModule
-, dotnetCorePackages
-, fetchFromGitHub
-, gtk3
-, gdk-pixbuf
-, glib
-, sane-backends
-, libnotify
+{
+  lib,
+  stdenv,
+  buildDotnetModule,
+  dotnetCorePackages,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  gtk3,
+  gdk-pixbuf,
+  glib,
+  sane-backends,
+  libnotify,
 }:
 
 buildDotnetModule rec {
   pname = "naps2";
-  version = "7.3.0";
+  version = "7.5.3";
 
   src = fetchFromGitHub {
     owner = "cyanfish";
     repo = "naps2";
-    rev = "v${version}";
-    hash = "sha256-aR4IDPfcbWWyM+1MhSWIsNUNLi43MvbWBykoEkVbe+4=";
+    tag = "v${version}";
+    hash = "sha256-vX+ZyCQsYqJjgYaufWJRnzX8retiFK5QHSP40bbBaCc=";
   };
 
   projectFile = "NAPS2.App.Gtk/NAPS2.App.Gtk.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
+
+  postPatch = ''
+    substituteInPlace NAPS2.Images.Gtk/NAPS2.Images.Gtk.csproj \
+      --replace-fail TargetFramework TargetFrameworks \
+  '';
+
+  dotnetFlags = [
+    "-p:TargetFrameworks=net8"
+    "-p:EnablePreviewFeatures=true"
+  ];
 
   executables = [ "naps2" ];
 
-  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_6_0 sdk_8_0 ];
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
+
+  nativeBuildInputs = [ wrapGAppsHook3 ];
+
   selfContainedBuild = true;
   runtimeDeps = [
     gtk3
@@ -47,8 +63,9 @@ buildDotnetModule rec {
   '';
 
   meta = {
-    description = "Scan documents to PDF and more, as simply as possible.";
-    homepage = "www.naps2.com";
+    description = "Scan documents to PDF and more, as simply as possible";
+    homepage = "https://www.naps2.com";
+    changelog = "https://github.com/cyanfish/naps2/blob/master/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ eliandoran ];
     platforms = lib.platforms.linux;

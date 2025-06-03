@@ -1,58 +1,70 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, matplotlib
-, numpy
-, pytestCheckHook
-, pythonOlder
-, scipy
-, ezyrb
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-git-versioning,
+
+  # dependencies
+  ezyrb,
+  future,
+  h5netcdf,
+  matplotlib,
+  numpy,
+  scipy,
+  xarray,
+
+  # tests
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pydmd";
-  version = "0.4.0.post2302";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "2025.05.01";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "mathLab";
+    owner = "PyDMD";
     repo = "PyDMD";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-EYVmaxwOxje3KVrNbvsjwRqQBD7Rje/JK+qB1F7EqA0=";
+    tag = version;
+    hash = "sha256-+ol103I4lrTVvANAK5k6bFfeUWj04YlkAqJUW8cw42Q=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools-git-versioning>=2.0,<3" "setuptools-git-versioning"
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-git-versioning
+  ];
+
+  dependencies = [
+    ezyrb
     future
+    h5netcdf
     matplotlib
     numpy
     scipy
-    ezyrb
+    xarray
   ];
 
+  pythonImportsCheck = [ "pydmd" ];
+
   nativeCheckInputs = [
+    pytest-mock
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    # test suite takes over 100 vCPU hours, just run small subset of it.
-    # TODO: Add a passthru.tests with all tests
-    "tests/test_dmdbase.py"
-  ];
-
-  pythonImportsCheck = [
-    "pydmd"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Python Dynamic Mode Decomposition";
-    homepage = "https://mathlab.github.io/PyDMD/";
-    changelog = "https://github.com/mathLab/PyDMD/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ yl3dy ];
-    broken = stdenv.hostPlatform.isAarch64;
+    homepage = "https://pydmd.github.io/PyDMD/";
+    changelog = "https://github.com/PyDMD/PyDMD/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ yl3dy ];
   };
 }

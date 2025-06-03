@@ -1,17 +1,18 @@
-{ lib
-, symlinkJoin
-, nmap
-, rockyou
-, seclists
-, wfuzz
-, lists ? [
+{
+  lib,
+  symlinkJoin,
+  nmap,
+  rockyou,
+  seclists,
+  wfuzz,
+  lists ? [
     nmap
     rockyou
     seclists
     wfuzz
-  ]
-, writeShellScriptBin
-, tree
+  ],
+  writeShellScriptBin,
+  tree,
 }:
 let
   wordlistsCollection = symlinkJoin {
@@ -35,7 +36,8 @@ let
     printf "${wordlistsCollection}/share/wordlists\n"
   '';
 
-in symlinkJoin {
+in
+symlinkJoin {
   name = "wordlists";
 
   paths = [
@@ -45,7 +47,7 @@ in symlinkJoin {
   ];
 
   meta = with lib; {
-    description = "A collection of wordlists useful for security testing";
+    description = "Collection of wordlists useful for security testing";
     longDescription = ''
       The `wordlists` package provides two scripts. One is called {command}`wordlists`,
       and it will list a tree of all the wordlists installed. The other one is
@@ -68,6 +70,9 @@ in symlinkJoin {
       If you want to add a new package that provides wordlist/s the convention
       is to copy it to {file}`$out/share/wordlists/myNewWordlist`.
     '';
-    maintainers = with maintainers; [ janik pamplemousse h7x4 ];
+    maintainers = with maintainers; [
+      pamplemousse
+      h7x4
+    ];
   };
 }

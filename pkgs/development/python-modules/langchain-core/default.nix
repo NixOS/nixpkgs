@@ -1,63 +1,150 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, poetry-core
-, anyio
-, jsonpatch
-, langsmith
-, packaging
-, pydantic
-, pythonRelaxDepsHook
-, pyyaml
-, requests
-, tenacity
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  pdm-backend,
+
+  # dependencies
+  jsonpatch,
+  langsmith,
+  packaging,
+  pydantic,
+  pyyaml,
+  tenacity,
+  typing-extensions,
+
+  # tests
+  blockbuster,
+  freezegun,
+  grandalf,
+  httpx,
+  langchain-core,
+  langchain-tests,
+  numpy,
+  pytest-asyncio,
+  pytest-mock,
+  pytest-xdist,
+  pytestCheckHook,
+  syrupy,
+
+  # passthru
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.1.28";
+  version = "0.3.62";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    pname = "langchain_core";
-    inherit version;
-    hash = "sha256-BOdhpRMgC25bWBhhOCGUV5nAe8U0kIfXaS5QgjEHydY=";
+  src = fetchFromGitHub {
+    owner = "langchain-ai";
+    repo = "langchain";
+    tag = "langchain-core==${version}";
+    hash = "sha256-24y3XGY5AayCtD2PlzVNcHaBiwUC/1GOHL2V0BbCWn0=";
   };
 
-  pythonRelaxDeps = [
-    "langsmith"
-  ];
+  sourceRoot = "${src.name}/libs/core";
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ pdm-backend ];
 
-  propagatedBuildInputs = [
-    anyio
+  pythonRelaxDeps = [ "tenacity" ];
+
+  dependencies = [
     jsonpatch
     langsmith
     packaging
     pydantic
     pyyaml
-    requests
     tenacity
+    typing-extensions
   ];
 
-  pythonImportsCheck = [
-    "langchain_core"
-  ];
+  pythonImportsCheck = [ "langchain_core" ];
 
-  # PyPI source does not have tests
+  # avoid infinite recursion
   doCheck = false;
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    blockbuster
+    freezegun
+    grandalf
+    httpx
+    langchain-tests
+    numpy
+    pytest-asyncio
+    pytest-mock
+    pytest-xdist
+    pytestCheckHook
+    syrupy
+  ];
+
+  pytestFlagsArray = [ "tests/unit_tests" ];
+
+  passthru = {
+    tests.pytest = langchain-core.overridePythonAttrs (_: {
+      doCheck = true;
+    });
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "langchain-core==([0-9.]+)"
+      ];
+    };
+  };
+
+  disabledTests =
+    [
+      # flaky, sometimes fail to strip uuid from AIMessageChunk before comparing to test value
+      "test_map_stream"
+      # Compares with machine-specific timings
+      "test_rate_limit"
+      # flaky: assert (1726352133.7419367 - 1726352132.2697523) < 1
+      "test_benchmark_model"
+
+      # TypeError: exceptions must be derived from Warning, not <class 'NoneType'>
+      "test_chat_prompt_template_variable_names"
+      "test_create_model_v2"
+
+      # Comparison with magic strings
+      "test_prompt_with_chat_model"
+      "test_prompt_with_chat_model_async"
+      "test_prompt_with_llm"
+      "test_prompt_with_llm_parser"
+      "test_prompt_with_llm_and_async_lambda"
+      "test_prompt_with_chat_model_and_parser"
+      "test_combining_sequences"
+
+      # AssertionError: assert [+ received] == [- snapshot]
+      "test_chat_input_schema"
+      # AssertionError: assert {'$defs': {'D...ype': 'array'} == {'$defs': {'D...ype': 'array'}
+      "test_schemas"
+      # AssertionError: assert [+ received] == [- snapshot]
+      "test_graph_sequence_map"
+      "test_representation_of_runnables"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Langchain-core the following tests due to the test comparing execution time with magic values.
+      "test_queue_for_streaming_via_sync_call"
+      "test_same_event_loop"
+      # Comparisons with magic numbers
+      "test_rate_limit_ainvoke"
+      "test_rate_limit_astream"
+    ];
+
+  disabledTestPaths = [ "tests/unit_tests/runnables/test_runnable_events_v2.py" ];
+
+  meta = {
     description = "Building applications with LLMs through composability";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/core";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
   };
 }

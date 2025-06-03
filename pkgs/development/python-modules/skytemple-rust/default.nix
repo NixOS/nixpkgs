@@ -1,34 +1,42 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, cargo
-, fetchPypi
-, libiconv
-, Foundation
-, rustPlatform
-, rustc
-, setuptools-rust
-, range-typed-integers
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  cargo,
+  fetchFromGitHub,
+  libiconv,
+  rustPlatform,
+  rustc,
+  setuptools-rust,
+  range-typed-integers,
 }:
 
 buildPythonPackage rec {
   pname = "skytemple-rust";
-  version = "1.6.3";
+  version = "1.8.5";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-z9Vu9mj82hwuPva56tmav4jN9RCoNIZxL+C3GYtYsOo=";
+  src = fetchFromGitHub {
+    owner = "SkyTemple";
+    repo = "skytemple-rust";
+    rev = version;
+    hash = "sha256-yJ78P00h4SITVuDnIh5IIlWkoed/VtIw3NB8ETB95bk=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-2or419evNxi99HIvL2TlSWFFh4BCky8qI/dVQbq/X38=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-9OgUuuMuo2l4YsZMhBZJBqKqbNwj1W4yidoogjcNgm8=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Foundation ];
-  nativeBuildInputs = [ setuptools-rust rustPlatform.cargoSetupHook cargo rustc ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
+  nativeBuildInputs = [
+    setuptools-rust
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
   propagatedBuildInputs = [ range-typed-integers ];
 
   GETTEXT_SYSTEM = true;
@@ -40,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/SkyTemple/skytemple-rust";
     description = "Binary Rust extensions for SkyTemple";
     license = licenses.mit;
-    maintainers = with maintainers; [ xfix marius851000 ];
+    maintainers = with maintainers; [ marius851000 ];
   };
 }

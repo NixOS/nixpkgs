@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, paho-mqtt
-, pytestCheckHook
-, pythonOlder
-, requests
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  paho-mqtt,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "adafruit-io";
-  version = "2.7.1";
+  version = "2.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,26 +19,20 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adafruit";
     repo = "Adafruit_IO_Python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-vfjyU+czLtUA0WDEvc0iYmJ2Tn75o/OsX909clfDsUE=";
+    tag = version;
+    hash = "sha256-OwTHMyc2ePSdYVuY1h3PY+uDBl6/7fTMXiZC3sZm8fU=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     paho-mqtt
     requests
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "Adafruit_IO"
-  ];
+  pythonImportsCheck = [ "Adafruit_IO" ];
 
   disabledTestPaths = [
     # Tests requires valid credentials

@@ -1,7 +1,16 @@
-{ lib, mkDerivation, fetchFromGitHub, fetchpatch, cmake, pkg-config
-, marisa, qttools, qtlocation }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  marisa,
+  qttools,
+  qtlocation,
+}:
 
-mkDerivation rec {
+mkDerivation {
   pname = "libosmscout";
   version = "2022.04.25";
 
@@ -24,8 +33,15 @@ mkDerivation rec {
 
   cmakeFlags = [ "-DOSMSCOUT_BUILD_TESTS=OFF" ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ marisa qttools qtlocation ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    marisa
+    qttools
+    qtlocation
+  ];
 
   meta = with lib; {
     description = "Simple, high-level interfaces for offline location and POI lokup, rendering and routing functionalities based on OpenStreetMap (OSM) data";

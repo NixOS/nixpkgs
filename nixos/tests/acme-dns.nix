@@ -1,25 +1,30 @@
-import ./make-test-python.nix ({ ... }: {
+{
   name = "acme-dns";
 
-  nodes.machine = { pkgs, ... }: {
-    services.acme-dns = {
-      enable = true;
-      settings = {
-        general = rec {
-          domain = "acme-dns.home.arpa";
-          nsname = domain;
-          nsadmin = "admin.home.arpa";
-          records = [
-            "${domain}. A 127.0.0.1"
-            "${domain}. AAAA ::1"
-            "${domain}. NS ${domain}."
-          ];
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      services.acme-dns = {
+        enable = true;
+        settings = {
+          general = rec {
+            domain = "acme-dns.home.arpa";
+            nsname = domain;
+            nsadmin = "admin.home.arpa";
+            records = [
+              "${domain}. A 127.0.0.1"
+              "${domain}. AAAA ::1"
+              "${domain}. NS ${domain}."
+            ];
+          };
+          logconfig.loglevel = "debug";
         };
-        logconfig.loglevel = "debug";
       };
+      environment.systemPackages = with pkgs; [
+        curl
+        bind
+      ];
     };
-    environment.systemPackages = with pkgs; [ curl bind ];
-  };
 
   testScript = ''
     import json
@@ -47,4 +52,4 @@ import ./make-test-python.nix ({ ... }: {
 
     assert txt in machine.succeed(f'dig -t TXT +short @localhost {registration["fulldomain"]}')
   '';
-})
+}

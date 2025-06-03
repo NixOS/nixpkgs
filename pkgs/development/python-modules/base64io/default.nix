@@ -1,24 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  unstableGitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "base64io";
-  version = "1.0.3";
-  format = "setuptools";
+  version = "1.0.3-unstable-2025-01-09";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-JPLQ/nZcNTOeGy0zqpX5E3sbdltZQWT60QFsFYJ6cHM=";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "aws";
+    repo = "base64io-python";
+    rev = "1bd47f7f8cfeeff654ea0edda3fbb69f840ccd05";
+    hash = "sha256-1MUWjFFitJ3nqvVwAQYcAVVPhPs6NEgq7t/mI71u2Bk=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     mock
     pytestCheckHook
   ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     homepage = "https://base64io-python.readthedocs.io/";

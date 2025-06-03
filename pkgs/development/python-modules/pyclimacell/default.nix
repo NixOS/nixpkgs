@@ -1,10 +1,11 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, pytz
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "raman325";
-    repo = pname;
+    repo = "pyclimacell";
     rev = "v${version}";
     hash = "sha256-jWHjnebg4Aar48gid7bB7XYXOQtSqbmVmASsZd0YoPc=";
   };
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyclimacell" ];
 

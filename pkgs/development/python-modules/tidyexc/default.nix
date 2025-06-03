@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, flit
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  flit,
 }:
 
 buildPythonPackage rec {
@@ -17,13 +18,9 @@ buildPythonPackage rec {
     sha256 = "1gl1jmihafawg7hvnn4xb20vd2x5qpvca0m1wr2gk0m2jj42yiq6";
   };
 
-  nativeBuildInputs = [
-    flit
-  ];
+  nativeBuildInputs = [ flit ];
 
-  pythonImportsCheck = [
-    "tidyexc"
-  ];
+  pythonImportsCheck = [ "tidyexc" ];
 
   meta = with lib; {
     description = "Raise rich, helpful exceptions";

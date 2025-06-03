@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -7,9 +12,8 @@ let
   cfg = config.services.xserver.windowManager.awesome;
   awesome = cfg.package;
   getLuaPath = lib: dir: "${lib}/${dir}/lua/${awesome.lua.luaversion}";
-  makeSearchPath = lib.concatMapStrings (path:
-    " --search " + (getLuaPath path "share") +
-    " --search " + (getLuaPath path "lib")
+  makeSearchPath = lib.concatMapStrings (
+    path: " --search " + (getLuaPath path "share") + " --search " + (getLuaPath path "lib")
   );
 in
 
@@ -21,12 +25,12 @@ in
 
     services.xserver.windowManager.awesome = {
 
-      enable = mkEnableOption (lib.mdDoc "Awesome window manager");
+      enable = mkEnableOption "Awesome window manager";
 
       luaModules = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.package;
-        description = lib.mdDoc "List of lua packages available for being used in the Awesome configuration.";
+        description = "List of lua packages available for being used in the Awesome configuration.";
         example = literalExpression "[ pkgs.luaPackages.vicious ]";
       };
 
@@ -35,25 +39,23 @@ in
       noArgb = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc "Disable client transparency support, which can be greatly detrimental to performance in some setups";
+        description = "Disable client transparency support, which can be greatly detrimental to performance in some setups";
       };
     };
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
 
-    services.xserver.windowManager.session = singleton
-      { name = "awesome";
-        start =
-          ''
-            ${awesome}/bin/awesome ${lib.optionalString cfg.noArgb "--no-argb"} ${makeSearchPath cfg.luaModules} &
-            waitPID=$!
-          '';
-      };
+    services.xserver.windowManager.session = singleton {
+      name = "awesome";
+      start = ''
+        ${awesome}/bin/awesome ${lib.optionalString cfg.noArgb "--no-argb"} ${makeSearchPath cfg.luaModules} &
+        waitPID=$!
+      '';
+    };
 
     environment.systemPackages = [ awesome ];
 

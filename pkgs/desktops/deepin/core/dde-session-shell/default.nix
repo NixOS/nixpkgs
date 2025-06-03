@@ -1,37 +1,36 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, linkFarm
-, cmake
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, wrapGAppsHook
-, qtbase
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, deepin-pw-check
-, gsettings-qt
-, lightdm_qt
-, qtx11extras
-, linux-pam
-, xorg
-, gtest
-, xkeyboard_config
-, dbus
-, dde-session-shell
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  linkFarm,
+  cmake,
+  pkg-config,
+  libsForQt5,
+  wrapGAppsHook3,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  deepin-pw-check,
+  gsettings-qt,
+  lightdm_qt,
+  linux-pam,
+  xorg,
+  gtest,
+  xkeyboard_config,
+  dbus,
+  dde-session-shell,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dde-session-shell";
-  version = "6.0.10";
+  version = "6.0.21";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
-    repo = pname;
+    # DDE 23 releases has moved to `linuxdeepin/dde-session-shell-snipe`
+    repo = "dde-session-shell-snipe";
     rev = version;
-    hash = "sha256-h4X3RZe7+CxVeFmk/7+7K4d/2D1+jhECKQaxl4TsuvM=";
+    hash = "sha256-v0+Bz6J77Kgf4YV1iDhCqhmcNn493GFq1IEQbXBAVUU=";
   };
 
   postPatch = ''
@@ -63,20 +62,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    qttools
-    wrapQtAppsHook
-    wrapGAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
+    wrapGAppsHook3
   ];
   dontWrapGApps = true;
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     dtkwidget
+    qt5integration
     qt5platform-plugins
     deepin-pw-check
     gsettings-qt
     lightdm_qt
-    qtx11extras
+    libsForQt5.qtx11extras
     linux-pam
     xorg.libXcursor
     xorg.libXtst
@@ -85,27 +85,27 @@ stdenv.mkDerivation rec {
     gtest
   ];
 
-  outputs = [ "out" "dev" ];
-
-  # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
-  qtWrapperArgs = [
-    "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
+  outputs = [
+    "out"
+    "dev"
   ];
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  passthru.xgreeters = linkFarm "deepin-greeter-xgreeters" [{
-    path = "${dde-session-shell}/share/xgreeters/lightdm-deepin-greeter.desktop";
-    name = "lightdm-deepin-greeter.desktop";
-  }];
+  passthru.xgreeters = linkFarm "deepin-greeter-xgreeters" [
+    {
+      path = "${dde-session-shell}/share/xgreeters/lightdm-deepin-greeter.desktop";
+      name = "lightdm-deepin-greeter.desktop";
+    }
+  ];
 
   meta = with lib; {
     description = "Deepin desktop-environment - session-shell module";
     homepage = "https://github.com/linuxdeepin/dde-session-shell";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }

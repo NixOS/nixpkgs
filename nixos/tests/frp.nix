@@ -1,6 +1,7 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+{
   name = "frp";
-  meta.maintainers = with lib.maintainers; [ zaldnoay janik ];
+  meta.maintainers = with lib.maintainers; [ zaldnoay ];
   nodes = {
     frps = {
       networking = {
@@ -24,7 +25,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       };
     };
 
-
     frpc = {
       networking = {
         useNetworkd = true;
@@ -40,15 +40,15 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         enable = true;
         adminAddr = "admin@example.com";
         virtualHosts."test-appication" =
-        let
-          testdir = pkgs.writeTextDir "web/index.php" "<?php phpinfo();";
-        in
-        {
-          documentRoot = "${testdir}/web";
-          locations."/" = {
-            index = "index.php index.html";
+          let
+            testdir = pkgs.writeTextDir "web/index.php" "<?php phpinfo();";
+          in
+          {
+            documentRoot = "${testdir}/web";
+            locations."/" = {
+              index = "index.php index.html";
+            };
           };
-        };
         phpPackage = pkgs.php81;
         enablePHP = true;
       };
@@ -82,4 +82,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     response = frpc.succeed("curl -fvvv -s http://10.0.0.1/")
     assert "PHP Version ${pkgs.php81.version}" in response, "PHP version not detected"
   '';
-})
+}

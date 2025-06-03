@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchgit, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchgit,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "jitsiexporter";
@@ -16,8 +21,9 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Export Jitsi Videobridge metrics to Prometheus";
+    mainProgram = "jitsiexporter";
     homepage = "https://git.xsfx.dev/prometheus/jitsiexporter";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

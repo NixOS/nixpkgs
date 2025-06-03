@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, future
-, pyserial
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  future,
+  pyserial,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -18,14 +19,12 @@ buildPythonPackage rec {
 
   src = fetchFromGitLab {
     owner = "energievalsabbia";
-    repo = pname;
+    repo = "aurorapy";
     rev = version;
     hash = "sha256-rGwfGq3zdoG9NCGqVN29Q4bWApk5B6CRdsW9ctWgOec=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     future
@@ -37,9 +36,7 @@ buildPythonPackage rec {
     six
   ];
 
-  pythonImportsCheck = [
-    "aurorapy"
-  ];
+  pythonImportsCheck = [ "aurorapy" ];
 
   meta = with lib; {
     description = "Implementation of the communication protocol for Power-One Aurora inverters";

@@ -1,29 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mock";
-  version = "5.1.0";
+  version = "5.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Xpaq1czaRxjgointlLICTfdcwtVVdbpXYtMfV2e4dn0=";
+    hash = "sha256-TkYOgYYptLFz8y0IvzDTr4Ejr7uOBLtXB6H9R5nlA/A=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "mock"
-  ];
+  pythonImportsCheck = [ "mock" ];
 
   meta = with lib; {
     description = "Rolling backport of unittest.mock for all Pythons";

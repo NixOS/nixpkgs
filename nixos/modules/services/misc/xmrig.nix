@@ -1,28 +1,27 @@
-{ config, pkgs, lib, ... }:
-
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.xmrig;
-
   json = pkgs.formats.json { };
   configFile = json.generate "config.json" cfg.settings;
 in
-
-with lib;
-
 {
   options = {
     services.xmrig = {
-      enable = mkEnableOption (lib.mdDoc "XMRig Mining Software");
+      enable = lib.mkEnableOption "XMRig Mining Software";
 
-      package = mkPackageOption pkgs "xmrig" {
+      package = lib.mkPackageOption pkgs "xmrig" {
         example = "xmrig-mo";
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         default = { };
         type = json.type;
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             autosave = true;
             cpu = true;
@@ -38,7 +37,7 @@ with lib;
             ]
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           XMRig configuration. Refer to
           <https://xmrig.com/docs/miner/config>
           for details on supported values.
@@ -47,7 +46,7 @@ with lib;
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     hardware.cpu.x86.msr.enable = true;
 
     systemd.services.xmrig = {

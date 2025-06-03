@@ -1,13 +1,16 @@
-import ../make-test-python.nix ({ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+{
   name = "phylactery";
 
-  nodes.machine = { ... }: {
-    services.phylactery = rec {
-      enable = true;
-      port = 8080;
-      library = "/tmp";
+  nodes.machine =
+    { ... }:
+    {
+      services.phylactery = rec {
+        enable = true;
+        port = 8080;
+        library = "/tmp";
+      };
     };
-  };
 
   testScript = ''
     start_all()
@@ -17,4 +20,4 @@ import ../make-test-python.nix ({ pkgs, lib, ... }: {
   '';
 
   meta.maintainers = with lib.maintainers; [ McSinyx ];
-})
+}

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -42,24 +47,25 @@ let
     ${cfg.extraConfig}
   '';
 
-in {
+in
+{
   options = {
     services.xserver.desktopManager.surf-display = {
-      enable = mkEnableOption (lib.mdDoc "surf-display as a kiosk browser session");
+      enable = mkEnableOption "surf-display as a kiosk browser session";
 
       defaultWwwUri = mkOption {
         type = types.str;
         default = "${pkgs.surf-display}/share/surf-display/empty-page.html";
         defaultText = literalExpression ''"''${pkgs.surf-display}/share/surf-display/empty-page.html"'';
         example = "https://www.example.com/";
-        description = lib.mdDoc "Default URI to display.";
+        description = "Default URI to display.";
       };
 
       inactivityInterval = mkOption {
         type = types.int;
         default = 300;
         example = 0;
-        description = lib.mdDoc ''
+        description = ''
           Setting for internal inactivity timer to restart surf-display if the
           user goes inactive/idle to get a fresh session for the next user of
           the kiosk.
@@ -72,7 +78,7 @@ in {
       screensaverSettings = mkOption {
         type = types.separatedString " ";
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Screensaver settings, see `man 1 xset` for possible options.
         '';
       };
@@ -80,7 +86,7 @@ in {
       pointerButtonMap = mkOption {
         type = types.str;
         default = "1 0 0 4 5 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0";
-        description = lib.mdDoc ''
+        description = ''
           Disable right and middle pointer device click in browser sessions
           while keeping scrolling wheels' functionality intact. See pointer
           subcommand on `man xmodmap` for details.
@@ -91,7 +97,7 @@ in {
         type = types.str;
         default = "yes";
         example = "no";
-        description = lib.mdDoc "Hide idle mouse pointer.";
+        description = "Hide idle mouse pointer.";
       };
 
       extraConfig = mkOption {
@@ -111,7 +117,7 @@ in {
           DISPLAYS['display-host-3']="www_uri=https://www.displayserver.comany.net/display-4/index.html"|res=1280x1024"
           DISPLAYS['display-host-local-file']="www_uri=file:///usr/share/doc/surf-display/empty-page.html"
         '';
-        description = lib.mdDoc ''
+        description = ''
           Extra configuration options to append to `/etc/default/surf-display`.
         '';
       };
@@ -119,7 +125,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.xserver.displayManager.sessionPackages = [
+    services.displayManager.sessionPackages = [
       pkgs.surf-display
     ];
 

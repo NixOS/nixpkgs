@@ -1,38 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, lxml
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  lxml,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "tcxparser";
-  version = "2.3.0";
-  format = "setuptools";
+  version = "2.4.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "vkurup";
     repo = "python-tcxparser";
-    rev = version;
-    hash = "sha256-HOACQpPVg/UKopz3Jdsyg0CIBnXYuVyhWUVPA+OXI0k=";
+    tag = version;
+    hash = "sha256-YZgzvwRy47MOTClAeJhzD6kZhGgCeVSGko6LgR/Uy0o=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     lxml
     python-dateutil
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "tcxparser"
-  ];
+  pythonImportsCheck = [ "tcxparser" ];
 
   meta = with lib; {
     description = "Simple parser for Garmin TCX files";
@@ -41,4 +43,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ firefly-cpp ];
   };
 }
-

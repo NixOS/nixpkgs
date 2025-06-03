@@ -1,35 +1,38 @@
 # This test runs docker and checks if simple container starts
-
-import ./make-test-python.nix ({ pkgs, ...} : {
+{ pkgs, ... }:
+{
   name = "docker";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ nequissimus offline ];
+    maintainers = [
+      nequissimus
+      offline
+    ];
   };
 
   nodes = {
     docker =
       { pkgs, ... }:
-        {
-          virtualisation.docker.enable = true;
-          virtualisation.docker.autoPrune.enable = true;
-          virtualisation.docker.package = pkgs.docker;
+      {
+        virtualisation.docker.enable = true;
+        virtualisation.docker.autoPrune.enable = true;
+        virtualisation.docker.package = pkgs.docker;
 
-          users.users = {
-            noprivs = {
-              isNormalUser = true;
-              description = "Can't access the docker daemon";
-              password = "foobar";
-            };
+        users.users = {
+          noprivs = {
+            isNormalUser = true;
+            description = "Can't access the docker daemon";
+            password = "foobar";
+          };
 
-            hasprivs = {
-              isNormalUser = true;
-              description = "Can access the docker daemon";
-              password = "foobar";
-              extraGroups = [ "docker" ];
-            };
+          hasprivs = {
+            isNormalUser = true;
+            description = "Can access the docker daemon";
+            password = "foobar";
+            extraGroups = [ "docker" ];
           };
         };
-    };
+      };
+  };
 
   testScript = ''
     start_all()
@@ -50,4 +53,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     docker.succeed("grep 1 /proc/sys/net/ipv4/conf/all/forwarding")
     docker.succeed("grep 1 /proc/sys/net/ipv4/conf/default/forwarding")
   '';
-})
+}

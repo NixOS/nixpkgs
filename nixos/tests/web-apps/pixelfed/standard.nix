@@ -1,22 +1,25 @@
-import ../../make-test-python.nix ({pkgs, ...}:
-{
+import ../../make-test-python.nix {
   name = "pixelfed-standard";
-  meta.maintainers = with pkgs.lib.maintainers; [ raitobezarius ];
+  meta.maintainers = [ ];
 
   nodes = {
-    server = { pkgs, ... }: {
-      services.pixelfed = {
-        enable = true;
-        domain = "pixelfed.local";
-        # Configure NGINX.
-        nginx = {};
-        secretFile = (pkgs.writeText "secrets.env" ''
-          # Snakeoil secret, can be any random 32-chars secret via CSPRNG.
-          APP_KEY=adKK9EcY8Hcj3PLU7rzG9rJ6KKTOtYfA
-        '');
-        settings."FORCE_HTTPS_URLS" = false;
+    server =
+      { pkgs, ... }:
+      {
+        services.pixelfed = {
+          enable = true;
+          domain = "pixelfed.local";
+          # Configure NGINX.
+          nginx = { };
+          secretFile = (
+            pkgs.writeText "secrets.env" ''
+              # Snakeoil secret, can be any random 32-chars secret via CSPRNG.
+              APP_KEY=adKK9EcY8Hcj3PLU7rzG9rJ6KKTOtYfA
+            ''
+          );
+          settings."FORCE_HTTPS_URLS" = false;
+        };
       };
-    };
   };
 
   testScript = ''
@@ -35,4 +38,4 @@ import ../../make-test-python.nix ({pkgs, ...}:
     # server.succeed("pixelfed-manage passport:client --personal")
     # server.succeed("curl -H 'Host: pixefed.local' -H 'Accept: application/json' -H 'Authorization: Bearer secret' -F'status'='test' http://localhost/api/v1/statuses")
   '';
-})
+}

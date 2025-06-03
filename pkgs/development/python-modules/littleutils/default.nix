@@ -1,27 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "littleutils";
-  version = "0.2.2";
-  format = "setuptools";
+  version = "0.2.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5srjpCA+Uw1RyWZ+0xD/47GUjyh249aWBbPeS32WkW8=";
+    hash = "sha256-x4NbAQIM7ULikRGLfXj7FrwtmhtPP0LzyzeHu02lPRk=";
   };
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "littleutils"
-  ];
+  pythonImportsCheck = [ "littleutils" ];
 
   meta = with lib; {
     description = "Small collection of Python utility functions";

@@ -1,25 +1,27 @@
-{ fetchurl
-, fetchpatch
-, lib
-, stdenv
-, pkg-config
-, libdaemon
-, dbus
-, perlPackages
-, libpcap
-, expat
-, gettext
-, glib
-, libiconv
-, libevent
-, nixosTests
-, gtk3Support ? false
-, gtk3
-, qt5
-, qt5Support ? false
-, withLibdnssdCompat ? false
-, python ? null
-, withPython ? false
+{
+  fetchurl,
+  fetchpatch,
+  lib,
+  config,
+  stdenv,
+  pkg-config,
+  libdaemon,
+  dbus,
+  libpcap,
+  expat,
+  gettext,
+  glib,
+  autoreconfHook,
+  libiconv,
+  libevent,
+  nixosTests,
+  gtk3Support ? false,
+  gtk3,
+  qt5,
+  qt5Support ? false,
+  withLibdnssdCompat ? false,
+  python ? null,
+  withPython ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +33,11 @@ stdenv.mkDerivation rec {
     sha256 = "1npdixwxxn3s9q1f365x9n9rc5xgfz39hxf23faqvlrklgbhj0q6";
   };
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
   patches = [
     # CVE-2021-36217 / CVE-2021-3502
@@ -58,6 +64,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/lathiat/avahi/commit/94cb6489114636940ac683515417990b55b5d66c.patch";
       sha256 = "sha256-Fanh9bvz+uknr5pAmltqijuUAZIG39JR2Lyq5zGKJ58=";
     })
+    # https://github.com/avahi/avahi/pull/480 merged Sept 19
+    (fetchpatch {
+      name = "bail-out-unless-escaped-labels-fit.patch";
+      url = "https://github.com/avahi/avahi/commit/20dec84b2480821704258bc908e7b2bd2e883b24.patch";
+      sha256 = "sha256-p/dOuQ/GInIcUwuFhQR3mGc5YBL5J8ho+1gvzcqEN0c=";
+    })
     # CVE-2023-38473
     # https://github.com/lathiat/avahi/pull/486 merged Oct 18
     (fetchpatch {
@@ -80,12 +92,48 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-4dG+5ZHDa+A4/CszYS8uXWlpmA89m7/jhbZ7rheMs7U=";
     })
     # https://github.com/lathiat/avahi/pull/499 merged Oct 25
-    # (but with the changes to '.github/workflows/smoke-tests.sh removed)
-    ./CVE-2023-38471-2.patch
+    (fetchpatch {
+      name = "CVE-2023-38471-2.patch";
+      url = "https://github.com/avahi/avahi/commit/b675f70739f404342f7f78635d6e2dcd85a13460.patch";
+      sha256 = "sha256-uDtMPWuz1lsu7n0Co/Gpyh369miQ6GWGyC0UPQB/yI8=";
+    })
     # CVE-2023-38469
     # https://github.com/lathiat/avahi/pull/500 merged Oct 25
-    # (but with the changes to '.github/workflows/smoke-tests.sh removed)
-    ./CVE-2023-38469.patch
+    (fetchpatch {
+      name = "CVE-2023-38469.patch";
+      url = "https://github.com/avahi/avahi/commit/61b9874ff91dd20a12483db07df29fe7f35db77f.patch";
+      sha256 = "sha256-qR7scfQqhRGxg2n4HQsxVxCLkXbwZi+PlYxrOSEPsL0=";
+      excludes = [ ".github/workflows/smoke-tests.sh" ];
+    })
+    # https://github.com/avahi/avahi/pull/515 merged Nov 3
+    (fetchpatch {
+      name = "fix-compare-rrs-with-zero-length-rdata.patch";
+      url = "https://github.com/avahi/avahi/commit/177d75e8c43be45a8383d794ce4084dd5d600a9e.patch";
+      sha256 = "sha256-uwIyruAWgiWt0yakRrvMdYjjhEhUk5cIGKt6twyXbHw=";
+    })
+    # https://github.com/avahi/avahi/pull/519 merged Nov 8
+    (fetchpatch {
+      name = "reject-non-utf-8-service-names.patch";
+      url = "https://github.com/avahi/avahi/commit/2b6d3e99579e3b6e9619708fad8ad8e07ada8218.patch";
+      sha256 = "sha256-lwSA3eEQgH0g51r0i9/HJMJPRXrhQnTIEDxcYqUuLdI=";
+      excludes = [ "fuzz/fuzz-domain.c" ];
+    })
+    # https://github.com/avahi/avahi/pull/523 merged Nov 12
+    (fetchpatch {
+      name = "core-no-longer-supply-bogus-services-to-callbacks.patch";
+      url = "https://github.com/avahi/avahi/commit/93b14365c1c1e04efd1a890e8caa01a2a514bfd8.patch";
+      sha256 = "sha256-VBm8vsBZkTbbWAK8FI71SL89lZuYd1yFNoB5o+FvlEU=";
+      excludes = [
+        ".github/workflows/smoke-tests.sh"
+        "fuzz/fuzz-packet.c"
+      ];
+    })
+    # https://github.com/avahi/avahi/pull/659 merged Nov 19
+    (fetchpatch {
+      name = "CVE-2024-52616.patch";
+      url = "https://github.com/avahi/avahi/commit/f8710bdc8b29ee1176fe3bfaeabebbda1b7a79f7.patch";
+      hash = "sha256-BUQOQ4evKLBzV5UV8xW8XL38qk1rg6MJ/vcT5NBckfA=";
+    })
   ];
 
   depsBuildBuild = [
@@ -96,52 +144,60 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     glib
+    autoreconfHook
   ];
 
-  buildInputs = [
-    libdaemon
-    dbus
-    glib
-    expat
-    libiconv
-    libevent
-  ] ++ (with perlPackages; [
-    perl
-    XMLParser
-  ]) ++ lib.optionals stdenv.isFreeBSD [
-    libpcap
-  ] ++ lib.optionals gtk3Support [
-    gtk3
-  ] ++ lib.optionals qt5Support [
-    qt5
-  ];
+  buildInputs =
+    [
+      libdaemon
+      dbus
+      glib
+      expat
+      libiconv
+      libevent
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+      libpcap
+    ]
+    ++ lib.optionals gtk3Support [
+      gtk3
+    ]
+    ++ lib.optionals qt5Support [
+      qt5
+    ];
 
-  propagatedBuildInputs = lib.optionals withPython (with python.pkgs; [
-    python
-    pygobject3
-    dbus-python
-  ]);
+  propagatedBuildInputs = lib.optionals withPython (
+    with python.pkgs;
+    [
+      python
+      pygobject3
+      dbus-python
+    ]
+  );
 
-  configureFlags = [
-    "--disable-gdbm"
-    "--disable-mono"
-    # Use non-deprecated path https://github.com/lathiat/avahi/pull/376
-    "--with-dbus-sys=${placeholder "out"}/share/dbus-1/system.d"
-    (lib.enableFeature gtk3Support "gtk3")
-    (lib.enableFeature qt5Support "qt5")
-    (lib.enableFeature withPython "python")
-    "--localstatedir=/var"
-    "--runstatedir=/run"
-    "--sysconfdir=/etc"
-    "--with-distro=${with stdenv.hostPlatform; if isBSD then parsed.kernel.name else "none"}"
-    # A systemd unit is provided by the avahi-daemon NixOS module
-    "--with-systemdsystemunitdir=no"
-  ] ++ lib.optionals withLibdnssdCompat [
-    "--enable-compat-libdns_sd"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # autoipd won't build on darwin
-    "--disable-autoipd"
-  ];
+  configureFlags =
+    [
+      "--disable-gdbm"
+      "--disable-mono"
+      # Use non-deprecated path https://github.com/lathiat/avahi/pull/376
+      "--with-dbus-sys=${placeholder "out"}/share/dbus-1/system.d"
+      (lib.enableFeature gtk3Support "gtk3")
+      (lib.enableFeature qt5Support "qt5")
+      (lib.enableFeature withPython "python")
+      "--localstatedir=/var"
+      "--runstatedir=/run"
+      "--sysconfdir=/etc"
+      "--with-distro=${with stdenv.hostPlatform; if isBSD then parsed.kernel.name else "none"}"
+      # A systemd unit is provided by the avahi-daemon NixOS module
+      "--with-systemdsystemunitdir=no"
+    ]
+    ++ lib.optionals withLibdnssdCompat [
+      "--enable-compat-libdns_sd"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # autoipd won't build on darwin
+      "--disable-autoipd"
+    ];
 
   installFlags = [
     # Override directories to install into the package.
@@ -150,7 +206,7 @@ stdenv.mkDerivation rec {
     "sysconfdir=${placeholder "out"}/etc"
   ];
 
-  preBuild = lib.optionalString stdenv.isDarwin ''
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i '20 i\
     #define __APPLE_USE_RFC_2292' \
     avahi-core/socket.c
@@ -172,7 +228,10 @@ stdenv.mkDerivation rec {
     homepage = "http://avahi.org";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ lovek323 globin ];
+    maintainers = with maintainers; [
+      lovek323
+      globin
+    ];
 
     longDescription = ''
       Avahi is a system which facilitates service discovery on a local

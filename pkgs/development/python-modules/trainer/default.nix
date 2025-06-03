@@ -1,37 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
 
-, coqpit
-, fsspec
-, torch
-, tensorboard
-, protobuf
-, psutil
+  coqpit,
+  fsspec,
+  torch,
+  tensorboard,
+  protobuf,
+  psutil,
 
-, pytestCheckHook
-, soundfile
-, torchvision
+  pytestCheckHook,
+  soundfile,
+  torchvision,
 }:
 
 let
-  pname = "trainer";
-  version = "0.0.36";
+  pname = "coqui-tts-trainer";
+  version = "0.2.2";
 in
 buildPythonPackage {
   inherit pname version;
   format = "pyproject";
 
   src = fetchFromGitHub {
-    owner = "coqui-ai";
-    repo = "Trainer";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-z6TOzWqE3NytkdG3nUzh9GpFVGQEXFyzSQ8gvdB4wiw=";
+    owner = "idiap";
+    repo = "coqui-ai-Trainer";
+    tag = "v${version}";
+    hash = "sha256-MQCLeTruTlXfs3QZxsMC2Gju5rlwWDfZjkyokiIgmOI=";
   };
 
-  postPatch = ''
-    sed -i 's/^protobuf.*/protobuf/' requirements.txt
-  '';
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     coqpit
@@ -51,15 +53,13 @@ buildPythonPackage {
     torchvision
   ];
 
-  pythonImportsCheck = [
-    "trainer"
-  ];
+  pythonImportsCheck = [ "trainer" ];
 
   meta = with lib; {
-    description = "A general purpose model trainer, as flexible as it gets";
-    homepage = "https://github.com/coqui-ai/Trainer";
-    changelog = "https://github.com/coqui-ai/Trainer/releases/tag/v${version}";
+    description = "General purpose model trainer, as flexible as it gets";
+    homepage = "https://github.com/idiap/coqui-ai-Trainer";
+    changelog = "https://github.com/idiap/coqui-ai-Trainer/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = teams.tts.members;
+    teams = [ teams.tts ];
   };
 }

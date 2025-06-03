@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.lambdabot;
@@ -18,18 +20,18 @@ in
 
     services.lambdabot = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc "Enable the Lambdabot IRC bot";
+        description = "Enable the Lambdabot IRC bot";
       };
 
-      package = mkPackageOption pkgs "lambdabot" { };
+      package = lib.mkPackageOption pkgs "lambdabot" { };
 
-      script = mkOption {
-        type = types.str;
+      script = lib.mkOption {
+        type = lib.types.str;
         default = "";
-        description = lib.mdDoc "Lambdabot script";
+        description = "Lambdabot script";
       };
 
     };
@@ -38,7 +40,7 @@ in
 
   ### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.services.lambdabot = {
       description = "Lambdabot daemon";

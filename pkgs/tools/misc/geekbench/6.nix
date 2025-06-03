@@ -1,40 +1,46 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, addOpenGLRunpath
-, makeWrapper
-, ocl-icd
-, vulkan-loader
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  addDriverRunpath,
+  makeWrapper,
+  ocl-icd,
+  vulkan-loader,
 }:
 
 let
   inherit (stdenv.hostPlatform.uname) processor;
-  version = "6.2.0";
+  version = "6.4.0";
   sources = {
     "x86_64-linux" = {
       url = "https://cdn.geekbench.com/Geekbench-${version}-Linux.tar.gz";
-      hash = "sha256-QoxSw825qqx1vzhzW9TZg03BPNvgOCokBWARGUhjCGY=";
+      hash = "sha256-Q4MwU3dIFheKKSMxzCBZI8XoForaN41BuRGVMhJaUKw=";
     };
     "aarch64-linux" = {
       url = "https://cdn.geekbench.com/Geekbench-${version}-LinuxARMPreview.tar.gz";
-      hash = "sha256-m2uz5Rk34rm9Bx3j5FjFigOIKaj2c4I+uXKzU4cK4D4=";
+      hash = "sha256-PZ95w2X4sqTLZGZ5wygt7WjSK4Gfgtdh/UCPo+8Ysc8=";
     };
   };
-  geekbench_avx2 = lib.optionalString stdenv.isx86_64 "geekbench_avx2";
+  geekbench_avx2 = lib.optionalString stdenv.hostPlatform.isx86_64 "geekbench_avx2";
 in
 stdenv.mkDerivation {
   inherit version;
   pname = "geekbench";
 
-  src = fetchurl (sources.${stdenv.system});
+  src = fetchurl (
+    sources.${stdenv.system} or (throw "unsupported system ${stdenv.hostPlatform.system}")
+  );
 
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    makeWrapper
+  ];
 
-  buildInputs = [ stdenv.cc.cc.lib ];
+  buildInputs = [ (lib.getLib stdenv.cc.cc) ];
 
   installPhase = ''
     runHook preInstall
@@ -44,22 +50,27 @@ stdenv.mkDerivation {
 
     for f in geekbench6 geekbench_${processor} ${geekbench_avx2} ; do
       wrapProgram $out/bin/$f \
-        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
-          addOpenGLRunpath.driverLink
-          ocl-icd
-          vulkan-loader
-        ]}"
+        --prefix LD_LIBRARY_PATH : "${
+          lib.makeLibraryPath [
+            addDriverRunpath.driverLink
+            ocl-icd
+            vulkan-loader
+          ]
+        }"
     done
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform benchmark";
     homepage = "https://geekbench.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = [ maintainers.michalrus ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
+      michalrus
+      asininemonkey
+    ];
     platforms = builtins.attrNames sources;
     mainProgram = "geekbench6";
   };

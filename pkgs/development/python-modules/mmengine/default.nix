@@ -1,38 +1,60 @@
-{ lib
-, addict
-, buildPythonPackage
-, coverage
-, fetchFromGitHub
-, lmdb
-, matplotlib
-, mlflow
-, numpy
-, opencv4
-, parameterized
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, rich
-, termcolor
-, torch
-, yapf
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  addict,
+  matplotlib,
+  numpy,
+  opencv4,
+  pyyaml,
+  rich,
+  termcolor,
+  yapf,
+
+  # tests
+  bitsandbytes,
+  coverage,
+  dvclive,
+  lion-pytorch,
+  lmdb,
+  mlflow,
+  parameterized,
+  pytestCheckHook,
+  transformers,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "mmengine";
-  version = "0.10.3";
+  version = "0.10.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "open-mmlab";
     repo = "mmengine";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-fKtPDdeKB3vX2mD+Tsicq8KOkPDSACzKK1XLyugdPQ4=";
+    tag = "v${version}";
+    hash = "sha256-hQnwenuxHQwl+DwQXbIfsKlJkmcRvcHV1roK7q2X1KA=";
   };
 
-  propagatedBuildInputs = [
+  patches = [
+    # Explicitly disable weights_only in torch.load calls
+    # https://github.com/open-mmlab/mmengine/pull/1650
+    (fetchpatch {
+      name = "torch-2.6.0-compat.patch";
+      url = "https://github.com/open-mmlab/mmengine/pull/1650/commits/c21b8431b2c625560a3866c65328cff0380ba1f8.patch";
+      hash = "sha256-SLr030IdYD9wM/jPJuZd+Dr1jjFx/5/YkJj/IwhnNQg=";
+    })
+  ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     addict
     matplotlib
     numpy
@@ -43,65 +65,62 @@ buildPythonPackage rec {
     yapf
   ];
 
+  pythonImportsCheck = [ "mmengine" ];
+
   nativeCheckInputs = [
+    bitsandbytes
     coverage
+    dvclive
+    lion-pytorch
     lmdb
     mlflow
-    torch
     parameterized
     pytestCheckHook
+    transformers
+    writableTmpDirAsHomeHook
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  ''
-  # Otherwise, the backprop hangs forever. More precisely, this exact line:
-  # https://github.com/open-mmlab/mmengine/blob/02f80e8bdd38f6713e04a872304861b02157905a/tests/test_runner/test_activation_checkpointing.py#L46
-  # Solution suggested in https://github.com/pytorch/pytorch/issues/91547#issuecomment-1370011188
-  + ''
-    export MKL_NUM_THREADS=1
-  '';
+  preCheck =
+    # Otherwise, the backprop hangs forever. More precisely, this exact line:
+    # https://github.com/open-mmlab/mmengine/blob/02f80e8bdd38f6713e04a872304861b02157905a/tests/test_runner/test_activation_checkpointing.py#L46
+    # Solution suggested in https://github.com/pytorch/pytorch/issues/91547#issuecomment-1370011188
+    ''
+      export MKL_NUM_THREADS=1
+    '';
 
-  pythonImportsCheck = [
-    "mmengine"
-  ];
+  pytestFlagsArray = [
+    # Require unpackaged aim
+    "--deselect tests/test_visualizer/test_vis_backend.py::TestAimVisBackend"
 
-  disabledTestPaths = [
-    # AttributeError
-    "tests/test_fileio/test_backends/test_petrel_backend.py"
-    # Freezes forever?
-    "tests/test_runner/test_activation_checkpointing.py"
-    # missing dependencies
-    "tests/test_visualizer/test_vis_backend.py"
+    # Cannot find SSL certificate
+    # _pygit2.GitError: OpenSSL error: failed to load certificates: error:00000000:lib(0)::reason(0)
+    "--deselect tests/test_visualizer/test_vis_backend.py::TestDVCLiveVisBackend"
+
+    # AttributeError: type object 'MagicMock' has no attribute ...
+    "--deselect tests/test_fileio/test_backends/test_petrel_backend.py::TestPetrelBackend"
   ];
 
   disabledTests = [
-    # Tests are disabled due to sandbox
+    # Require network access
     "test_fileclient"
     "test_http_backend"
     "test_misc"
+
     # RuntimeError
     "test_dump"
     "test_deepcopy"
     "test_copy"
     "test_lazy_import"
-    # AssertionError
-    "test_lazy_module"
 
-    # Require unpackaged aim
-    "test_experiment"
-    "test_add_config"
-    "test_add_image"
-    "test_add_scalar"
-    "test_add_scalars"
-    "test_close"
+    # AssertionError: os is not <module 'os' (frozen)>
+    "test_lazy_module"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for training deep learning models based on PyTorch";
     homepage = "https://github.com/open-mmlab/mmengine";
     changelog = "https://github.com/open-mmlab/mmengine/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ rxiao ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ rxiao ];
   };
 }

@@ -1,44 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, matplotlib
-, numpy
-, opencv4
-, pillow
-, scikit-learn
-, setuptools
-, torch
-, torchvision
-, ttach
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  setuptools,
+  matplotlib,
+  numpy,
+  opencv-python,
+  pillow,
+  scikit-learn,
+  torch,
+  torchvision,
+  ttach,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "grad-cam";
-  version = "1.5.0";
+  version = "1.5.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aw7Z/6/AMKH2PVBcOr8HxsmRDa6c3v8Xd4xa8HTiFGA=";
+    hash = "sha256-aQxDPSJtNcicnrFwRi2yBJCcsGs5xzgeaICkm2/DcBU=";
   };
 
-  postPatch = ''
-    substituteInPlace requirements.txt\
-      --replace "opencv-python" "opencv"
-  '';
-
   nativeBuildInputs = [
+  ];
+
+  pythonRelaxDeps = [
+    "torchvision"
+  ];
+
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     matplotlib
     numpy
-    opencv4
+    opencv-python
     pillow
     scikit-learn
     torchvision
@@ -47,11 +50,9 @@ buildPythonPackage rec {
   ];
 
   # Let the user bring their own instance (as with torchmetrics)
-  buildInputs = [
-    torch
-  ];
+  buildInputs = [ torch ];
 
-  doCheck = false;  # every nontrivial test tries to download a pretrained model
+  doCheck = false; # every nontrivial test tries to download a pretrained model
 
   pythonImportsCheck = [
     "pytorch_grad_cam"
@@ -63,10 +64,10 @@ buildPythonPackage rec {
     "pytorch_grad_cam.utils.model_targets"
   ];
 
-  meta = with lib; {
-    description = "Advanced AI explainability for computer vision.";
+  meta = {
+    description = "Advanced AI explainability for computer vision";
     homepage = "https://jacobgil.github.io/pytorch-gradcam-book";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

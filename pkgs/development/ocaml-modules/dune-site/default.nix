@@ -1,6 +1,11 @@
-{ lib, buildDunePackage, dune_3, dune-private-libs }:
+{
+  lib,
+  buildDunePackage,
+  dune_3,
+  dune-private-libs,
+}:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "dune-site";
   inherit (dune_3) src version;
 
@@ -15,9 +20,9 @@ buildDunePackage rec {
   '';
 
   meta = with lib; {
-    description = "A library for embedding location information inside executable and libraries";
+    description = "Library for embedding location information inside executable and libraries";
     inherit (dune_3.meta) homepage;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

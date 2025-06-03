@@ -1,58 +1,65 @@
-{ config, lib, pkgs, ... }: with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib;
 let
   cfg = config.services.iperf3;
 
   api = {
-    enable = mkEnableOption (lib.mdDoc "iperf3 network throughput testing server");
+    enable = mkEnableOption "iperf3 network throughput testing server";
+    package = mkPackageOption pkgs "iperf3" { };
     port = mkOption {
-      type        = types.ints.u16;
-      default     = 5201;
-      description = lib.mdDoc "Server port to listen on for iperf3 client requests.";
+      type = types.ints.u16;
+      default = 5201;
+      description = "Server port to listen on for iperf3 client requests.";
     };
     affinity = mkOption {
-      type        = types.nullOr types.ints.unsigned;
-      default     = null;
-      description = lib.mdDoc "CPU affinity for the process.";
+      type = types.nullOr types.ints.unsigned;
+      default = null;
+      description = "CPU affinity for the process.";
     };
     bind = mkOption {
-      type        = types.nullOr types.str;
-      default     = null;
-      description = lib.mdDoc "Bind to the specific interface associated with the given address.";
+      type = types.nullOr types.str;
+      default = null;
+      description = "Bind to the specific interface associated with the given address.";
     };
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "Open ports in the firewall for iperf3.";
+      description = "Open ports in the firewall for iperf3.";
     };
     verbose = mkOption {
-      type        = types.bool;
-      default     = false;
-      description = lib.mdDoc "Give more detailed output.";
+      type = types.bool;
+      default = false;
+      description = "Give more detailed output.";
     };
     forceFlush = mkOption {
-      type        = types.bool;
-      default     = false;
-      description = lib.mdDoc "Force flushing output at every interval.";
+      type = types.bool;
+      default = false;
+      description = "Force flushing output at every interval.";
     };
     debug = mkOption {
-      type        = types.bool;
-      default     = false;
-      description = lib.mdDoc "Emit debugging output.";
+      type = types.bool;
+      default = false;
+      description = "Emit debugging output.";
     };
     rsaPrivateKey = mkOption {
-      type        = types.nullOr types.path;
-      default     = null;
-      description = lib.mdDoc "Path to the RSA private key (not password-protected) used to decrypt authentication credentials from the client.";
+      type = types.nullOr types.path;
+      default = null;
+      description = "Path to the RSA private key (not password-protected) used to decrypt authentication credentials from the client.";
     };
     authorizedUsersFile = mkOption {
-      type        = types.nullOr types.path;
-      default     = null;
-      description = lib.mdDoc "Path to the configuration file containing authorized users credentials to run iperf tests.";
+      type = types.nullOr types.path;
+      default = null;
+      description = "Path to the configuration file containing authorized users credentials to run iperf tests.";
     };
     extraFlags = mkOption {
-      type        = types.listOf types.str;
-      default     = [ ];
-      description = lib.mdDoc "Extra flags to pass to iperf3(1).";
+      type = types.listOf types.str;
+      default = [ ];
+      description = "Extra flags to pass to iperf3(1).";
     };
   };
 
@@ -76,13 +83,17 @@ let
         CapabilityBoundingSet = "";
         NoNewPrivileges = true;
         ExecStart = ''
-          ${pkgs.iperf3}/bin/iperf \
+          ${lib.getExe cfg.package} \
             --server \
             --port ${toString cfg.port} \
             ${optionalString (cfg.affinity != null) "--affinity ${toString cfg.affinity}"} \
             ${optionalString (cfg.bind != null) "--bind ${cfg.bind}"} \
             ${optionalString (cfg.rsaPrivateKey != null) "--rsa-private-key-path ${cfg.rsaPrivateKey}"} \
-            ${optionalString (cfg.authorizedUsersFile != null) "--authorized-users-path ${cfg.authorizedUsersFile}"} \
+            ${
+              optionalString (
+                cfg.authorizedUsersFile != null
+              ) "--authorized-users-path ${cfg.authorizedUsersFile}"
+            } \
             ${optionalString cfg.verbose "--verbose"} \
             ${optionalString cfg.debug "--debug"} \
             ${optionalString cfg.forceFlush "--forceflush"} \
@@ -91,7 +102,8 @@ let
       };
     };
   };
-in {
+in
+{
   options.services.iperf3 = api;
   config = mkIf cfg.enable imp;
 }

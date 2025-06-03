@@ -1,30 +1,31 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
 }:
 
 buildNpmPackage rec {
   pname = "syn2mas";
-  version = "0.8.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
-    owner = "matrix-org";
+    owner = "element-hq";
     repo = "matrix-authentication-service";
     rev = "v${version}";
-    hash = "sha256-DPGigs6DifTRa7VQVHgizZ3BUy3FPX3YhZi++yoBFBA=";
+    hash = "sha256-RK58yfsPJirOKHyBnth42sLTkWo+AkMylEigH0w/RWc=";
   };
 
-  sourceRoot = "source/tools/syn2mas";
+  sourceRoot = "${src.name}/tools/syn2mas";
 
-  npmDepsHash = "sha256-HvBFuRyP1APg5V+yhvlODAJ02MEkdpuLfNjWB/UT2vg=";
+  npmDepsHash = "sha256-RzZjTKS4d/n9mIJ+eUY7NlqWssCnJ2Yh2nAMwasY8Fk=";
 
   dontBuild = true;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to help with the migration of a Matrix Synapse installation to the Matrix Authentication Service";
-    homepage = "https://github.com/matrix-org/matrix-authentication-service/tree/main/tools/syn2mas";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ teutat3s ];
+    homepage = "https://github.com/element-hq/matrix-authentication-service/tree/main/tools/syn2mas";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ teutat3s ];
     mainProgram = "syn2mas";
   };
 }

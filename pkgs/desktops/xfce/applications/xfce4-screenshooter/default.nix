@@ -1,32 +1,72 @@
-{ lib
-, mkXfceDerivation
-, exo
-, libxml2
-, libsoup_3
-, libxfce4ui
-, libxfce4util
-, xfce4-panel
-, xfconf
-, curl
-, gnome
-, jq
-, xclip
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gettext,
+  glib,
+  meson,
+  ninja,
+  pkg-config,
+  wayland-scanner,
+  wrapGAppsHook3,
+  exo,
+  gtk3,
+  libX11,
+  libXext,
+  libXfixes,
+  libXtst,
+  libxfce4ui,
+  libxfce4util,
+  wayland,
+  wlr-protocols,
+  xfce4-panel,
+  xfconf,
+  curl,
+  zenity,
+  jq,
+  xclip,
+  gitUpdater,
 }:
 
-mkXfceDerivation {
-  category = "apps";
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-screenshooter";
-  version = "1.10.5";
-  odd-unstable = false;
+  version = "1.11.2";
 
-  sha256 = "sha256-x1uQIfiUNMYowrCLpwdt1IsHfJLn81f8I/4NBwX/z9k=";
+  src = fetchFromGitLab {
+    domain = "gitlab.xfce.org";
+    owner = "apps";
+    repo = "xfce4-screenshooter";
+    tag = "xfce4-screenshooter-${finalAttrs.version}";
+    hash = "sha256-LELPY3SU25e3Dk9/OljWMLIbZYrDiQD1h6dMq+jRaH8=";
+  };
+
+  strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
+
+  nativeBuildInputs = [
+    gettext
+    glib # glib-compile-resources
+    meson
+    ninja
+    pkg-config
+    wayland-scanner
+    wrapGAppsHook3
+  ];
 
   buildInputs = [
     exo
-    libxml2
-    libsoup_3
+    gtk3
+    libX11
+    libXext
+    libXfixes
+    libXtst
     libxfce4ui
     libxfce4util
+    wayland
+    wlr-protocols
     xfce4-panel
     xfconf
   ];
@@ -35,12 +75,25 @@ mkXfceDerivation {
     # For Imgur upload action
     # https://gitlab.xfce.org/apps/xfce4-screenshooter/-/merge_requests/51
     gappsWrapperArgs+=(
-      --prefix PATH : ${lib.makeBinPath [ curl gnome.zenity jq xclip ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          curl
+          zenity
+          jq
+          xclip
+        ]
+      }
     )
   '';
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater { rev-prefix = "xfce4-screenshooter-"; };
+
+  meta = {
     description = "Screenshot utility for the Xfce desktop";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    homepage = "https://gitlab.xfce.org/apps/xfce4-screenshooter";
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "xfce4-screenshooter";
+    teams = [ lib.teams.xfce ];
+    platforms = lib.platforms.linux;
   };
-}
+})

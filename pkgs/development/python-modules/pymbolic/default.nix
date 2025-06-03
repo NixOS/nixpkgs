@@ -1,56 +1,56 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, matchpy
-, pytestCheckHook
-, pythonOlder
-, pytools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  immutabledict,
+  pytools,
+
+  # optional-dependencies
+  matchpy,
+  numpy,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pymbolic";
-  version = "2022.2";
-  format = "setuptools";
+  version = "2024.2.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-+Cd2lCuzy3Iyn6Hxqito7AnyN9uReMlc/ckqaup87Ik=";
+  src = fetchFromGitHub {
+    owner = "inducer";
+    repo = "pymbolic";
+    tag = "v${version}";
+    hash = "sha256-07RWdEPhO+n9/FOvIWe4nm9fGekut9X6Tz4HlIkBSpo=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/inducer/pymbolic/commit/cb3d999e4788dad3edf053387b6064adf8b08e19.patch";
-      excludes = [ ".github/workflows/ci.yml" ];
-      hash = "sha256-P0YjqAo0z0LZMIUTeokwMkfP8vxBXi3TcV4BSFaO1lU=";
-    })
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    immutabledict
     pytools
   ];
 
-  nativeCheckInputs = [
-    matchpy
-    pytestCheckHook
-  ];
+  optional-dependencies = {
+    matchpy = [ matchpy ];
+    numpy = [ numpy ];
+  };
 
-  postPatch = ''
-    # pytest is a test requirement not a run-time one
-      substituteInPlace setup.py \
-        --replace '"pytest>=2.3",' ""
-  '';
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "pymbolic"
-  ];
+  pythonImportsCheck = [ "pymbolic" ];
 
-  meta = with lib; {
-    description = "A package for symbolic computation";
+  meta = {
+    description = "Package for symbolic computation";
     homepage = "https://documen.tician.de/pymbolic/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/inducer/pymbolic/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

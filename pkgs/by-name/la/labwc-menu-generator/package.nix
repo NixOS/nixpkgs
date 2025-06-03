@@ -1,24 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, glib
-, perl
-, pkg-config
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  glib,
+  pkg-config,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "labwc-menu-generator";
-  version = "unstable-2023-10-31";
+  version = "0.2.0-unstable-2025-04-30";
 
   src = fetchFromGitHub {
     owner = "labwc";
     repo = "labwc-menu-generator";
-    rev = "d7c81071f8b121ef83da32ae3fa16155d1a2ced9";
-    hash = "sha256-gZ0TuSVJwcKW4orawSmRQvoCfrpb8yLXlv81qCR86MU=";
+    rev = "2ca1be707aca1a06852e3a0ce70941e50bd7c02e";
+    hash = "sha256-LoRhTeS7wnv/yqUibQ9+3y8q3JvYPCZZJ51rDOe9EtM=";
   };
 
   nativeBuildInputs = [
+    meson
+    ninja
     pkg-config
   ];
 
@@ -26,19 +30,9 @@ stdenv.mkDerivation (finalAttrs: {
     glib
   ];
 
-  nativeCheckInputs = [
-    perl
-  ];
-
   doCheck = true;
 
   strictDeps = true;
-
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 labwc-menu-generator -t $out/bin
-    runHook postInstall
-  '';
 
   passthru.updateScript = unstableGitUpdater { };
 
@@ -48,6 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "labwc-menu-generator";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ AndersonTorres romildo ];
+    maintainers = with lib.maintainers; [ romildo ];
   };
 })

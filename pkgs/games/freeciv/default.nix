@@ -1,22 +1,46 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, lua5_3, pkg-config, python3
-, zlib, bzip2, curl, xz, gettext, libiconv, icu
-, SDL2, SDL2_mixer, SDL2_image, SDL2_ttf, SDL2_gfx, freetype, fluidsynth
-, sdl2Client ? false
-, gtkClient ? true, gtk3, wrapGAppsHook
-, qtClient ? false, qt5
-, server ? true, readline
-, enableSqlite ? true, sqlite
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  lua5_3,
+  pkg-config,
+  python3,
+  zlib,
+  bzip2,
+  curl,
+  xz,
+  gettext,
+  libiconv,
+  icu,
+  SDL2,
+  SDL2_mixer,
+  SDL2_image,
+  SDL2_ttf,
+  SDL2_gfx,
+  freetype,
+  fluidsynth,
+  sdl2Client ? false,
+  gtkClient ? true,
+  gtk3,
+  wrapGAppsHook3,
+  qtClient ? false,
+  qt5,
+  server ? true,
+  readline,
+  enableSqlite ? true,
+  sqlite,
 }:
 
 stdenv.mkDerivation rec {
   pname = "freeciv";
-  version = "3.0.10";
+  version = "3.1.5";
 
   src = fetchFromGitHub {
     owner = "freeciv";
     repo = "freeciv";
     rev = "R${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-f+VJYWsfsoGLs9Ypk5cJQgn86PhsJ/6ODDjlnp84Frg=";
+    hash = "sha256-+kAV9Jz0aQpzeVUFp3so+rYbWOn52NuxRwE8kP5hzM8=";
   };
 
   postPatch = ''
@@ -29,14 +53,36 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ]
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      pkg-config
+    ]
     ++ lib.optionals qtClient [ qt5.wrapQtAppsHook ]
-    ++ lib.optionals gtkClient [ wrapGAppsHook ];
+    ++ lib.optionals gtkClient [ wrapGAppsHook3 ];
 
-  buildInputs = [ lua5_3 zlib bzip2 curl xz gettext libiconv icu ]
-    ++ [ SDL2 SDL2_mixer SDL2_image SDL2_ttf SDL2_gfx freetype fluidsynth ]
+  buildInputs =
+    [
+      lua5_3
+      zlib
+      bzip2
+      curl
+      xz
+      gettext
+      libiconv
+      icu
+    ]
+    ++ lib.optionals sdl2Client [
+      SDL2
+      SDL2_mixer
+      SDL2_image
+      SDL2_ttf
+      SDL2_gfx
+      freetype
+      fluidsynth
+    ]
     ++ lib.optionals gtkClient [ gtk3 ]
-    ++ lib.optionals qtClient  [ qt5.qtbase ]
+    ++ lib.optionals qtClient [ qt5.qtbase ]
     ++ lib.optional server readline
     ++ lib.optional enableSqlite sqlite;
 
@@ -48,28 +94,33 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export CPPFLAGS="$(echo $SDL2_PATH | sed 's#/nix/store/#-I/nix/store/#g')"
   '';
-  configureFlags = [ "--enable-shared" ]
+  configureFlags =
+    [ "--enable-shared" ]
     ++ lib.optionals sdl2Client [
       "--enable-client=sdl2"
       "--enable-sdl-mixer=sdl2"
     ]
     ++ lib.optionals qtClient [
       "--enable-client=qt"
+      "--with-qtver=qt5"
       "--with-qt5-includes=${qt5.qtbase.dev}/include"
-    ] ++ lib.optionals gtkClient [ "--enable-client=gtk3.22" ]
+    ]
+    ++ lib.optionals gtkClient [ "--enable-client=gtk3.22" ]
     ++ lib.optional enableSqlite "--enable-fcdb=sqlite3"
     ++ lib.optional (!gtkClient) "--enable-fcmp=cli"
-    ++ lib.optional (!server)    "--disable-server";
+    ++ lib.optional (!server) "--disable-server";
 
-  postFixup = lib.optionalString qtClient ''
-    wrapQtApp $out/bin/freeciv-qt
-  '' + lib.optionalString gtkClient ''
-    wrapGApp $out/bin/freeciv-gtk3.22
-  '';
+  postFixup =
+    lib.optionalString qtClient ''
+      wrapQtApp $out/bin/freeciv-qt
+    ''
+    + lib.optionalString gtkClient ''
+      wrapGApp $out/bin/freeciv-gtk3.22
+    '';
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Multiplayer (or single player), turn-based strategy game";
     longDescription = ''
       Freeciv is a Free and Open Source empire-building strategy game
@@ -78,9 +129,10 @@ stdenv.mkDerivation rec {
       to the space age...
     '';
     homepage = "http://www.freeciv.org"; # http only
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ pierron ];
-    platforms = platforms.unix;
-    hydraPlatforms = platforms.linux; # sdl-config times out on darwin
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ pierron ];
+    platforms = lib.platforms.unix;
+    hydraPlatforms = lib.platforms.linux; # sdl-config times out on darwin
+    broken = qtClient && stdenv.hostPlatform.isDarwin; # Missing Qt5 development files
   };
 }

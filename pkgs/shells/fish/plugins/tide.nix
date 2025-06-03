@@ -1,4 +1,8 @@
-{ lib, buildFishPlugin, fetchFromGitHub }:
+{
+  lib,
+  buildFishPlugin,
+  fetchFromGitHub,
+}:
 
 # Due to a quirk in tide breaking wrapFish, we need to add additional commands in the config.fish
 # Refer to the following comment to get you setup: https://github.com/NixOS/nixpkgs/pull/201646#issuecomment-1320893716
@@ -19,10 +23,9 @@ buildFishPlugin rec {
   '';
 
   meta = with lib; {
-    description = "The ultimate Fish prompt";
+    description = "Ultimate Fish prompt";
     homepage = "https://github.com/IlanCosman/tide";
     license = licenses.mit;
     maintainers = [ maintainers.jocelynthode ];
   };
 }
-

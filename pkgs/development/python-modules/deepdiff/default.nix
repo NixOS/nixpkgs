@@ -1,50 +1,57 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, click
-, ordered-set
-, orjson
-, clevercsv
-, jsonpickle
-, numpy
-, pytestCheckHook
-, python-dateutil
-, pyyaml
-, toml
-, tomli-w
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  stdenv,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  orderly-set,
+
+  # optional-dependencies
+  click,
+  orjson,
+  pyyaml,
+
+  # tests
+  jsonpickle,
+  numpy,
+  pytestCheckHook,
+  python-dateutil,
+  tomli-w,
+  polars,
+  pandas,
 }:
 
 buildPythonPackage rec {
   pname = "deepdiff";
-  version = "6.7.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "8.4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "seperman";
     repo = "deepdiff";
-    rev = "refs/tags/${version}";
-    hash = "sha256-YGYprSC5j06Ozg0dUJN5xnba0HUgiXa+d9Ci3czGWoY=";
+    tag = version;
+    hash = "sha256-RXr+6DLzhnuow9JNqqnNmuehE89eOY4oYn4tw4VSI+A=";
   };
 
-  postPatch = ''
-    substituteInPlace tests/test_command.py \
-      --replace '/tmp/' "$TMPDIR/"
-  '';
-
-  propagatedBuildInputs = [
-    ordered-set
-    orjson
+  build-system = [
+    setuptools
   ];
 
-  passthru.optional-dependencies = {
+  dependencies = [
+    orderly-set
+  ];
+
+  optional-dependencies = {
     cli = [
-      clevercsv
       click
       pyyaml
-      toml
+    ];
+    optimize = [
+      orjson
     ];
   };
 
@@ -54,23 +61,35 @@ buildPythonPackage rec {
     pytestCheckHook
     python-dateutil
     tomli-w
-  ] ++ passthru.optional-dependencies.cli;
+    polars
+    pandas
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  disabledTests = [
-    # not compatible with pydantic 2.x
-    "test_pydantic1"
-    "test_pydantic2"
-  ];
+  disabledTests =
+    [
+      # not compatible with pydantic 2.x
+      "test_pydantic1"
+      "test_pydantic2"
+      # Require pytest-benchmark
+      "test_cache_deeply_nested_a1"
+      "test_lfu"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Times out on darwin in Hydra
+      "test_repeated_timer"
+    ];
 
-  pythonImportsCheck = [
-    "deepdiff"
-  ];
+  pythonImportsCheck = [ "deepdiff" ];
 
-  meta = with lib; {
+  meta = {
     description = "Deep Difference and Search of any Python object/data";
+    mainProgram = "deep";
     homepage = "https://github.com/seperman/deepdiff";
-    changelog = "https://github.com/seperman/deepdiff/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
+    changelog = "https://github.com/seperman/deepdiff/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      mic92
+      doronbehar
+    ];
   };
 }

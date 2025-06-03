@@ -1,33 +1,49 @@
-{ lib
-, bokeh
-, buildPythonPackage
-, colorcet
-, fetchPypi
-, ipython
-, matplotlib
-, notebook
-, numpy
-, pandas
-, panel
-, param
-, pythonOlder
-, pyviz-comms
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatch-vcs,
+  hatchling,
+
+  # dependencies
+  colorcet,
+  numpy,
+  pandas,
+  panel,
+  param,
+  pyviz-comms,
+
+  # tests
+  pytestCheckHook,
+  pytest-asyncio,
+  flaky,
 }:
 
 buildPythonPackage rec {
   pname = "holoviews";
-  version = "1.18.1";
-  format = "setuptools";
+  version = "1.20.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-gFxzU65S6XdT5/BmiwUaCGQQ4tLBPI/ilOu0zdArIyQ=";
+  src = fetchFromGitHub {
+    owner = "holoviz";
+    repo = "holoviews";
+    tag = "v${version}";
+    hash = "sha256-QCRVOBMKckPji5rH7iCSnmxbNwtGypMqdfBXilXmngE=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"ignore:No data was collected:coverage.exceptions.CoverageWarning",' ""
+  '';
+
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
+
+  dependencies = [
     colorcet
     numpy
     pandas
@@ -36,17 +52,36 @@ buildPythonPackage rec {
     pyviz-comms
   ];
 
-  # tests not fully included with pypi release
-  doCheck = false;
-
-  pythonImportsCheck = [
-    "holoviews"
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+    flaky
   ];
 
-  meta = with lib; {
+  disabledTests = [
+    # All the below fail due to some change in flaky API
+    "test_periodic_param_fn_non_blocking"
+    "test_callback_cleanup"
+    "test_poly_edit_callback"
+    "test_launch_server_with_complex_plot"
+    "test_launch_server_with_stream"
+    "test_launch_simple_server"
+    "test_server_dynamicmap_with_dims"
+    "test_server_dynamicmap_with_stream"
+    "test_server_dynamicmap_with_stream_dims"
+
+    # ModuleNotFoundError: No module named 'param'
+    "test_no_blocklist_imports"
+  ];
+
+  pythonImportsCheck = [ "holoviews" ];
+
+  meta = {
     description = "Python data analysis and visualization seamless and simple";
+    changelog = "https://github.com/holoviz/holoviews/releases/tag/v${version}";
+    mainProgram = "holoviews";
     homepage = "https://www.holoviews.org/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

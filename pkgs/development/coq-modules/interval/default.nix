@@ -1,20 +1,65 @@
-{ lib, mkCoqDerivation, autoconf, coq, coquelicot, flocq,
-  mathcomp-ssreflect, mathcomp-fingroup, bignums ? null, gnuplot_qt, version ? null }:
+{
+  lib,
+  mkCoqDerivation,
+  autoconf,
+  coq,
+  coquelicot,
+  flocq,
+  mathcomp-boot,
+  mathcomp-fingroup,
+  bignums ? null,
+  gnuplot_qt,
+  version ? null,
+}:
 
 mkCoqDerivation rec {
   pname = "interval";
   owner = "coqinterval";
   domain = "gitlab.inria.fr";
   inherit version;
-  defaultVersion = with lib.versions; lib.switch coq.coq-version [
-    { case = range "8.12" "8.18"; out = "4.9.0"; }
-    { case = range "8.12" "8.17"; out = "4.8.0"; }
-    { case = range "8.12" "8.16"; out = "4.6.0"; }
-    { case = range "8.8" "8.16"; out = "4.5.2"; }
-    { case = range "8.8" "8.12"; out = "4.0.0"; }
-    { case = range "8.7" "8.11"; out = "3.4.2"; }
-    { case = range "8.5" "8.6";  out = "3.3.0"; }
-  ] null;
+  defaultVersion =
+    with lib.versions;
+    lib.switch coq.coq-version [
+      {
+        case = range "8.13" "8.20";
+        out = "4.11.1";
+      }
+      {
+        case = range "8.12" "8.19";
+        out = "4.10.0";
+      }
+      {
+        case = range "8.12" "8.18";
+        out = "4.9.0";
+      }
+      {
+        case = range "8.12" "8.17";
+        out = "4.8.0";
+      }
+      {
+        case = range "8.12" "8.16";
+        out = "4.6.0";
+      }
+      {
+        case = range "8.8" "8.16";
+        out = "4.5.2";
+      }
+      {
+        case = range "8.8" "8.12";
+        out = "4.0.0";
+      }
+      {
+        case = range "8.7" "8.11";
+        out = "3.4.2";
+      }
+      {
+        case = range "8.5" "8.6";
+        out = "3.3.0";
+      }
+    ] null;
+  release."4.11.1".sha256 = "sha256-QWZvU468rOhK796xCCEawW6rhCRTPnE0iLll9ynKflo=";
+  release."4.11.0".sha256 = "sha256-vPwa4zSjyvxHLGDoNaBnHV2pb77dnQFbC50BL80fcvE=";
+  release."4.10.0".sha256 = "sha256-MZJVoKGLXjDabdv9BuUSK1L9z1cubzC9cqVuWevKIXQ=";
   release."4.9.0".sha256 = "sha256-+5NppyQahcc1idGu/U3B+EIWuZz2L3/oY7dIJR6pitE=";
   release."4.8.1".sha256 = "sha256-gknZ3bA90YY2AvwfFsP5iMhohwkQ8G96mH+4st2RPDc=";
   release."4.8.0".sha256 = "sha256-YPQ1tuUgGixAVdQUJ9a3lZUNVgm2pKK3RKvl3m+/8rY=";
@@ -32,8 +77,14 @@ mkCoqDerivation rec {
   releaseRev = v: "interval-${v}";
 
   nativeBuildInputs = [ autoconf ];
-  propagatedBuildInputs = lib.optional (lib.versions.isGe "8.6" coq.coq-version) bignums
-    ++ [ coquelicot flocq mathcomp-ssreflect mathcomp-fingroup ]
+  propagatedBuildInputs =
+    lib.optional (lib.versions.isGe "8.6" coq.coq-version) bignums
+    ++ [
+      coquelicot
+      flocq
+      mathcomp-boot
+      mathcomp-fingroup
+    ]
     ++ lib.optionals (lib.versions.isGe "4.2.0" defaultVersion) [ gnuplot_qt ];
   useMelquiondRemake.logpath = "Interval";
   mlPlugin = true;

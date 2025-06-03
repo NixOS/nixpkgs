@@ -1,30 +1,34 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mmh3";
-  version = "4.1.0";
-  format = "setuptools";
+  version = "5.1.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-oc8lNIuazSKd2kZKCU1hcPR9KFCh/Ldio7YXLSzmyko=";
+  src = fetchFromGitHub {
+    owner = "hajimes";
+    repo = "mmh3";
+    tag = "v${version}";
+    hash = "sha256-56LrJuoBvhGgw+w4GIQ0XEQtf5oR87el+gZxgBYkyx0=";
   };
 
-  pythonImportsCheck = [
-    "mmh3"
-  ];
+  build-system = [ setuptools ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "mmh3" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = {
     description = "Python wrapper for MurmurHash3, a set of fast and robust hash functions";
     homepage = "https://github.com/hajimes/mmh3";
     changelog = "https://github.com/hajimes/mmh3/blob/v${version}/CHANGELOG.md";
-    license = licenses.cc0;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.cc0;
+    maintainers = [ lib.maintainers.sarahec ];
   };
 }

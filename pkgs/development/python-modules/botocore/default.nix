@@ -1,39 +1,39 @@
-{ lib
-, awscrt
-, buildPythonPackage
-, fetchPypi
-, jmespath
-, jsonschema
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pythonRelaxDepsHook
-, setuptools
-, urllib3
+{
+  lib,
+  awscrt,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  jmespath,
+  python-dateutil,
+  urllib3,
+
+  # tests
+  jsonschema,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.34.49"; # N.B: if you change this, change boto3 and awscli to a matching version
+  version = "1.36.21"; # N.B: if you change this, change boto3 and awscli to a matching version
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-2JQQvGBnPq/xaZ8/H9yw46Xh96agSMDYjDzlw1SUM+w=";
+  src = fetchFromGitHub {
+    owner = "boto";
+    repo = "botocore";
+    tag = version;
+    hash = "sha256-wk3KCRagEju4ywJfoBR8/4dH3xYgzGgaSHavDYCd5XY=";
   };
 
-  pythonRelaxDeps = [
-    "urllib3"
-  ];
-
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jmespath
     python-dateutil
     urllib3
@@ -52,21 +52,17 @@ buildPythonPackage rec {
     "tests/functional"
   ];
 
-  pythonImportsCheck = [
-    "botocore"
-  ];
+  pythonImportsCheck = [ "botocore" ];
 
-  passthru.optional-dependencies = {
-    crt = [
-      awscrt
-    ];
+  optional-dependencies = {
+    crt = [ awscrt ];
   };
 
-  meta = with lib; {
-    description = "A low-level interface to a growing number of Amazon Web Services";
+  meta = {
+    description = "Low-level interface to a growing number of Amazon Web Services";
     homepage = "https://github.com/boto/botocore";
     changelog = "https://github.com/boto/botocore/blob/${version}/CHANGELOG.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ anthonyroussel ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ anthonyroussel ];
   };
 }

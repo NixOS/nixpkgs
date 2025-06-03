@@ -1,116 +1,171 @@
-{ lib, stdenv, fetchFromGitHub, buildLinux, ... } @ args:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildLinux,
+  variant,
+  ...
+}@args:
 
 let
-  # comments with variant added for update script
-  # ./update-zen.py zen
-  zenVariant = {
-    version = "6.7.7"; #zen
-    suffix = "zen1"; #zen
-    sha256 = "18h2ng7m70bwl8b80a26rhmnc4ivxcv4ppkn1fviz43x6j2h81mg"; #zen
-    isLqx = false;
+  # Default priority is 100 for common kernel options (see common-config.nix
+  # file), we need something lower to override them, but we still want users to
+  # override options if they need using lib.mkForce (that has 50 priority)
+  mkKernelOverride = lib.mkOverride 90;
+  # Comments with variant added for update script
+  variants = {
+    # ./update-zen.py zen
+    zen = {
+      version = "6.14.9"; # zen
+      suffix = "zen1"; # zen
+      sha256 = "1v28cdv8dyn5181z242f63ns6b472jx8a7wmw77n5wijj8fv5ba1"; # zen
+      isLqx = false;
+    };
+    # ./update-zen.py lqx
+    lqx = {
+      version = "6.14.9"; # lqx
+      suffix = "lqx1"; # lqx
+      sha256 = "1f8sram3xabv119pznpixpm5igyxf33wkg4v8fm5nh9c9g91q19j"; # lqx
+      isLqx = true;
+    };
   };
-  # ./update-zen.py lqx
-  lqxVariant = {
-    version = "6.7.6"; #lqx
-    suffix = "lqx1"; #lqx
-    sha256 = "1z737ma2ak2yddc416svr5s2f7pl31v1cs2bknl9v6syl6xm9sxk"; #lqx
-    isLqx = true;
-  };
-  zenKernelsFor = { version, suffix, sha256, isLqx }: buildLinux (args // {
-    inherit version;
-    modDirVersion = lib.versions.pad 3 "${version}-${suffix}";
-    isZen = true;
+  zenKernelsFor =
+    {
+      version,
+      suffix,
+      sha256,
+      isLqx,
+    }:
+    buildLinux (
+      args
+      // {
+        inherit version;
+        pname = "linux-${if isLqx then "lqx" else "zen"}";
+        modDirVersion = lib.versions.pad 3 "${version}-${suffix}";
+        isZen = true;
 
-    src = fetchFromGitHub {
-      owner = "zen-kernel";
-      repo = "zen-kernel";
-      rev = "v${version}-${suffix}";
-      inherit sha256;
-    };
+        src = fetchFromGitHub {
+          owner = "zen-kernel";
+          repo = "zen-kernel";
+          rev = "v${version}-${suffix}";
+          inherit sha256;
+        };
 
-    # This is based on the following sources:
-    # - zen: https://gitlab.archlinux.org/archlinux/packaging/packages/linux-zen/-/blob/main/config
-    # - lqx: https://github.com/damentz/liquorix-package/blob/6.4/master/linux-liquorix/debian/config/kernelarch-x86/config-arch-64
-    # - Liquorix features: https://liquorix.net/
-    # The list below is not exhaustive, so the kernels probably doesn't match
-    # the upstream, but should bring most of the improvements that will be
-    # expected by users
-    structuredExtraConfig = with lib.kernel; {
-      # Zen Interactive tuning
-      ZEN_INTERACTIVE = yes;
+        # This is based on the following sources:
+        # - zen: https://gitlab.archlinux.org/archlinux/packaging/packages/linux-zen/-/blob/main/config
+        # - lqx: https://github.com/damentz/liquorix-package/blob/6.13/master/linux-liquorix/debian/config/kernelarch-x86/config-arch-64
+        # - Liquorix features: https://liquorix.net/
+        # The list below is not exhaustive, so the kernels probably doesn't match
+        # the upstream, but should bring most of the improvements that will be
+        # expected by users
+        structuredExtraConfig =
+          with lib.kernel;
+          {
+            # Zen Interactive tuning
+            ZEN_INTERACTIVE = yes;
 
-      # FQ-Codel Packet Scheduling
-      NET_SCH_DEFAULT = yes;
-      DEFAULT_FQ_CODEL = yes;
-      DEFAULT_NET_SCH = freeform "fq_codel";
+            # FQ-Codel Packet Scheduling
+            NET_SCH_DEFAULT = yes;
+            DEFAULT_FQ_CODEL = yes;
 
-      # Preempt (low-latency)
-      PREEMPT = lib.mkOverride 60 yes;
-      PREEMPT_VOLUNTARY = lib.mkOverride 60 no;
+            # Preempt (low-latency)
+            PREEMPT = mkKernelOverride yes;
+            PREEMPT_VOLUNTARY = mkKernelOverride no;
 
-      # Preemptible tree-based hierarchical RCU
-      TREE_RCU = yes;
-      PREEMPT_RCU = yes;
-      RCU_EXPERT = yes;
-      TREE_SRCU = yes;
-      TASKS_RCU_GENERIC = yes;
-      TASKS_RCU = yes;
-      TASKS_RUDE_RCU = yes;
-      TASKS_TRACE_RCU = yes;
-      RCU_STALL_COMMON = yes;
-      RCU_NEED_SEGCBLIST = yes;
-      RCU_FANOUT = freeform "64";
-      RCU_FANOUT_LEAF = freeform "16";
-      RCU_BOOST = yes;
-      RCU_BOOST_DELAY = freeform "500";
-      RCU_NOCB_CPU = yes;
-      RCU_LAZY = yes;
+            # Preemptible tree-based hierarchical RCU
+            TREE_RCU = yes;
+            PREEMPT_RCU = yes;
+            RCU_EXPERT = yes;
+            TREE_SRCU = yes;
+            TASKS_RCU_GENERIC = yes;
+            TASKS_RCU = yes;
+            TASKS_RUDE_RCU = yes;
+            TASKS_TRACE_RCU = yes;
+            RCU_STALL_COMMON = yes;
+            RCU_NEED_SEGCBLIST = yes;
+            RCU_FANOUT = freeform "64";
+            RCU_FANOUT_LEAF = freeform "16";
+            RCU_BOOST = yes;
+            RCU_BOOST_DELAY = option (freeform "500");
+            RCU_NOCB_CPU = yes;
+            RCU_LAZY = yes;
+            RCU_DOUBLE_CHECK_CB_TIME = yes;
 
-      # Futex WAIT_MULTIPLE implementation for Wine / Proton Fsync.
-      FUTEX = yes;
-      FUTEX_PI = yes;
+            # BFQ I/O scheduler
+            IOSCHED_BFQ = mkKernelOverride yes;
 
-      # Preemptive Full Tickless Kernel at 1000Hz
-      HZ = freeform "1000";
-      HZ_1000 = yes;
-    } // lib.optionalAttrs (isLqx) {
-      # Google's BBRv3 TCP congestion Control
-      TCP_CONG_BBR = yes;
-      DEFAULT_BBR = yes;
-      DEFAULT_TCP_CONG = freeform "bbr";
+            # Futex WAIT_MULTIPLE implementation for Wine / Proton Fsync.
+            FUTEX = yes;
+            FUTEX_PI = yes;
 
-      # PDS Process Scheduler
-      SCHED_ALT = yes;
-      SCHED_PDS = yes;
+            # NT synchronization primitive emulation
+            NTSYNC = yes;
 
-      # Swap storage is compressed with LZ4 using zswap
-      ZSWAP_COMPRESSOR_DEFAULT_LZ4 = yes;
-      ZSWAP_COMPRESSOR_DEFAULT = freeform "lz4";
+            # Preemptive Full Tickless Kernel at 1000Hz
+            HZ = freeform "1000";
+            HZ_1000 = yes;
 
-      # Fix error: unused option: XXX.
-      CFS_BANDWIDTH = lib.mkForce (option no);
-      PSI = lib.mkForce (option no);
-      RT_GROUP_SCHED = lib.mkForce (option no);
-      SCHED_AUTOGROUP = lib.mkForce (option no);
-      SCHED_CORE = lib.mkForce (option no);
+          }
+          // lib.optionalAttrs (isLqx) {
+            # https://github.com/damentz/liquorix-package/commit/07b176edc002f2a7825ae181613e1f79a3650fd2
+            CMDLINE_BOOL = yes;
+            CMDLINE = freeform "audit=0 intel_pstate=disable amd_pstate=disable ";
 
-      # ERROR: modpost: "sched_numa_hop_mask" [drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko] undefined!
-      MLX5_CORE = no;
-    };
+            # Google's BBRv3 TCP congestion Control
+            TCP_CONG_BBR = yes;
+            DEFAULT_BBR = yes;
 
-    passthru.updateScript = [ ./update-zen.py (if isLqx then "lqx" else "zen") ];
+            # PDS Process Scheduler
+            SCHED_ALT = yes;
+            SCHED_PDS = yes;
 
-    extraMeta = {
-      branch = lib.versions.majorMinor version + "/master";
-      maintainers = with lib.maintainers; [ thiagokokada jerrysm64 ];
-      description = "Built using the best configuration and kernel sources for desktop, multimedia, and gaming workloads." +
-        lib.optionalString isLqx " (Same as linux_zen, but less aggressive release schedule and additional extra config)";
-      broken = stdenv.isAarch64;
-    };
+            # https://github.com/damentz/liquorix-package/commit/a7055b936c0f4edb8f6afd5263fe1d2f8a5cd877
+            RCU_BOOST = no;
+            RCU_LAZY = mkKernelOverride no;
 
-  } // (args.argsOverride or { }));
+            # Swap storage is compressed with LZ4 using zswap
+            ZSWAP_COMPRESSOR_DEFAULT_LZ4 = yes;
+            ZSWAP_COMPRESSOR_DEFAULT_ZSTD = mkKernelOverride no;
+
+            # https://github.com/damentz/liquorix-package/commit/3a82381a4db3452599e2b2a607046a379c72ad27
+            SLAB_BUCKETS = mkKernelOverride (option no);
+            # https://github.com/damentz/liquorix-package/commit/ca7efe07abd478f3f4cbe0725a3383fd235aa5be
+            ENERGY_MODE = mkKernelOverride (option no);
+            # https://github.com/damentz/liquorix-package/commit/fdc93f5633d22c26f0994fba751a26de0cb51a17
+            WQ_POWER_EFFICIENT_DEFAULT = mkKernelOverride (option no);
+
+            # Fix error: unused option: XXX.
+            CFS_BANDWIDTH = mkKernelOverride (option no);
+            PSI = mkKernelOverride (option no);
+            RT_GROUP_SCHED = mkKernelOverride (option no);
+            SCHED_AUTOGROUP = mkKernelOverride (option no);
+            SCHED_CLASS_EXT = mkKernelOverride (option no);
+            SCHED_CORE = mkKernelOverride (option no);
+            UCLAMP_TASK = mkKernelOverride (option no);
+            UCLAMP_TASK_GROUP = mkKernelOverride (option no);
+          };
+
+        passthru.updateScript = [
+          ./update-zen.py
+          (if isLqx then "lqx" else "zen")
+        ];
+
+        extraMeta = {
+          branch = lib.versions.majorMinor version + "/master";
+          maintainers = with lib.maintainers; [
+            thiagokokada
+            jerrysm64
+            axertheaxe
+          ];
+          teams = [ ];
+          description =
+            "Built using the best configuration and kernel sources for desktop, multimedia, and gaming workloads."
+            + lib.optionalString isLqx " (Same as linux_zen, but less aggressive release schedule and additional extra config)";
+          broken = stdenv.hostPlatform.isAarch64;
+        };
+
+      }
+      // (args.argsOverride or { })
+    );
 in
-{
-  zen = zenKernelsFor zenVariant;
-  lqx = zenKernelsFor lqxVariant;
-}
+zenKernelsFor variants.${variant}

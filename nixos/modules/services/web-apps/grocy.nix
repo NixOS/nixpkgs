@@ -1,18 +1,24 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.grocy;
-in {
+in
+{
   options.services.grocy = {
-    enable = mkEnableOption (lib.mdDoc "grocy");
+    enable = mkEnableOption "grocy";
 
     package = mkPackageOption pkgs "grocy" { };
 
     hostName = mkOption {
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         FQDN for the grocy instance.
       '';
     };
@@ -20,14 +26,20 @@ in {
     nginx.enableSSL = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether or not to enable SSL (with ACME and let's encrypt)
         for the grocy vhost.
       '';
     };
 
     phpfpm.settings = mkOption {
-      type = with types; attrsOf (oneOf [ int str bool ]);
+      type =
+        with types;
+        attrsOf (oneOf [
+          int
+          str
+          bool
+        ]);
       default = {
         "pm" = "dynamic";
         "php_admin_value[error_log]" = "stderr";
@@ -41,7 +53,7 @@ in {
         "pm.max_requests" = "500";
       };
 
-      description = lib.mdDoc ''
+      description = ''
         Options for grocy's PHPFPM pool.
       '';
     };
@@ -49,7 +61,7 @@ in {
     dataDir = mkOption {
       type = types.str;
       default = "/var/lib/grocy";
-      description = lib.mdDoc ''
+      description = ''
         Home directory of the `grocy` user which contains
         the application's state.
       '';
@@ -60,15 +72,32 @@ in {
         type = types.str;
         default = "USD";
         example = "EUR";
-        description = lib.mdDoc ''
+        description = ''
           ISO 4217 code for the currency to display.
         '';
       };
 
       culture = mkOption {
-        type = types.enum [ "de" "en" "da" "en_GB" "es" "fr" "hu" "it" "nl" "no" "pl" "pt_BR" "ru" "sk_SK" "sv_SE" "tr" ];
+        type = types.enum [
+          "de"
+          "en"
+          "da"
+          "en_GB"
+          "es"
+          "fr"
+          "hu"
+          "it"
+          "nl"
+          "no"
+          "pl"
+          "pt_BR"
+          "ru"
+          "sk_SK"
+          "sv_SE"
+          "tr"
+        ];
         default = "en";
-        description = lib.mdDoc ''
+        description = ''
           Display language of the frontend.
         '';
       };
@@ -77,14 +106,14 @@ in {
         showWeekNumber = mkOption {
           default = true;
           type = types.bool;
-          description = lib.mdDoc ''
+          description = ''
             Show the number of the weeks in the calendar views.
           '';
         };
         firstDayOfWeek = mkOption {
           default = null;
           type = types.nullOr (types.enum (range 0 6));
-          description = lib.mdDoc ''
+          description = ''
             Which day of the week (0=Sunday, 1=Monday etc.) should be the
             first day.
           '';
@@ -109,9 +138,12 @@ in {
       group = "nginx";
     };
 
-    systemd.tmpfiles.rules = map (
-      dirName: "d '${cfg.dataDir}/${dirName}' - grocy nginx - -"
-    ) [ "viewcache" "plugins" "settingoverrides" "storage" ];
+    systemd.tmpfiles.rules = map (dirName: "d '${cfg.dataDir}/${dirName}' - grocy nginx - -") [
+      "viewcache"
+      "plugins"
+      "settingoverrides"
+      "storage"
+    ];
 
     services.phpfpm.pools.grocy = {
       user = "grocy";
@@ -145,7 +177,8 @@ in {
     services.nginx = {
       enable = true;
       virtualHosts."${cfg.hostName}" = mkMerge [
-        { root = "${cfg.package}/public";
+        {
+          root = "${cfg.package}/public";
           locations."/".extraConfig = ''
             rewrite ^ /index.php;
           '';
@@ -178,7 +211,7 @@ in {
   };
 
   meta = {
-    maintainers = with maintainers; [ n0emis ];
+    maintainers = with maintainers; [ ];
     doc = ./grocy.md;
   };
 }

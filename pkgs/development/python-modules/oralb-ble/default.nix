@@ -1,15 +1,17 @@
-{ lib
-, bleak
-, bleak-retry-connector
-, bluetooth-data-tools
-, bluetooth-sensor-state-data
-, buildPythonPackage
-, fetchFromGitHub
-, home-assistant-bluetooth
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  bleak,
+  bleak-retry-connector,
+  bluetooth-data-tools,
+  bluetooth-sensor-state-data,
+  buildPythonPackage,
+  fetchFromGitHub,
+  home-assistant-bluetooth,
+  poetry-core,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -22,20 +24,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "oralb-ble";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-e6L8HXpqOAHnEktIJ1N1atC5QXno669W3c/S7cISa48=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=oralb_ble --cov-report=term-missing:skip-covered" ""
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     bleak
     bleak-retry-connector
     bluetooth-data-tools
@@ -45,12 +40,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "oralb_ble"
-  ];
+  pythonImportsCheck = [ "oralb_ble" ];
 
   disabledTests = [
     # Test is outdated, TypeError: BLEDevice.__init__() missing 2 required...
@@ -61,7 +55,7 @@ buildPythonPackage rec {
     description = "Library for Oral B BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/oralb-ble";
     changelog = "https://github.com/Bluetooth-Devices/oralb-ble/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

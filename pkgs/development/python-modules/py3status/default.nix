@@ -1,47 +1,53 @@
-{ lib
-, buildPythonPackage
-, acpi
-, alsa-utils
-, coreutils
-, dbus-python
-, fetchPypi
-, file
-, hatchling
-, i3
-, i3ipc
-, libnotify
-, lm_sensors
-, procps
-, pydbus
-, pygobject3
-, pyserial
-, pytz
-, requests
-, setuptools
-, tzlocal
-, xorg
+{
+  lib,
+  buildPythonPackage,
+  acpi,
+  alsa-utils,
+  coreutils,
+  dbus-python,
+  fetchPypi,
+  file,
+  hatchling,
+  i3,
+  i3ipc,
+  libnotify,
+  lm_sensors,
+  procps,
+  pygobject3,
+  pyserial,
+  pytz,
+  requests,
+  setuptools,
+  tzlocal,
+  wrapGAppsHook3,
+  xorg,
+  glib,
+  gobject-introspection,
 }:
 
 buildPythonPackage rec {
   pname = "py3status";
-  version = "3.55";
+  version = "3.61";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HGOHJQWEvTTL+GXVb8ZS8DlL9dHWuS0PioP1bZ32PhI=";
+    hash = "sha256-CL7bD+w8F59aVHAC9k4yG0qaSqJZdkFdEDKkyKkCBTs=";
   };
 
   nativeBuildInputs = [
     hatchling
+    wrapGAppsHook3
+    gobject-introspection
   ];
+
+  buildInputs = [ glib ];
 
   propagatedBuildInputs = [
     pytz
     requests
     tzlocal
     i3ipc
-    pydbus
     pygobject3
     pyserial
     setuptools
@@ -62,6 +68,12 @@ buildPythonPackage rec {
     sed -i -e "s|'xset|'${xorg.xset}/bin/xset|" py3status/modules/keyboard_layout.py
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   doCheck = false;
 
   meta = with lib; {
@@ -69,6 +81,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ultrabug/py3status";
     changelog = "https://github.com/ultrabug/py3status/blob/${version}/CHANGELOG";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

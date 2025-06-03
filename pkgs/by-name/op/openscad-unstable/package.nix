@@ -1,143 +1,164 @@
-{ lib
-, clangStdenv
-, llvmPackages
-, fetchFromGitHub
-, cmake
-, ninja
-, pkg-config
-, bison
-, boost
-, cairo
-, cgal_5
-, clipper2
-, double-conversion
-, eigen
-, flex
-, fontconfig
-, freetype
-, glib
-, glm
-, gmp
-, harfbuzz
-, hidapi
-, lib3mf
-, libGL
-, libGLU
-, libICE
-, libSM
-, libsForQt5
-, libspnav
-, libzip
-, mpfr
-, python3
-, tbb_2021_8
-, wayland
-, wayland-protocols
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  clangStdenv,
+  llvmPackages,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  pkg-config,
+  bison,
+  boost,
+  cairo,
+  cgal,
+  clipper2,
+  double-conversion,
+  eigen,
+  flex,
+  fontconfig,
+  freetype,
+  ghostscript,
+  glib,
+  glm,
+  gmp,
+  harfbuzz,
+  hidapi,
+  lib3mf,
+  libGLU,
+  libICE,
+  libSM,
+  libsForQt5,
+  libspnav,
+  libzip,
+  mesa,
+  mpfr,
+  python3,
+  tbb_2022_0,
+  wayland,
+  wayland-protocols,
+  wrapGAppsHook3,
+  xorg,
+  mimalloc,
+  opencsg,
+  ctestCheckHook,
 }:
-let
-  # get cccl from source to avoid license issues
-  nvidia-cccl = clangStdenv.mkDerivation {
-    pname = "nvidia-cccl";
-    # note that v2.2.0 has some cmake issues
-    version = "2.2.0-unstable-2024-01-26";
-    src = fetchFromGitHub {
-      owner = "NVIDIA";
-      repo = "cccl";
-      fetchSubmodules = true;
-      rev = "0c9d03276206a5f59368e908e3d643610f9fddcd";
-      hash = "sha256-f11CNfa8jF9VbzvOoX1vT8zGIJL9cZ/VBpiklUn0YdU=";
-    };
-    nativeBuildInputs = [ cmake pkg-config ];
-    buildInputs = [ tbb_2021_8 ];
-    cmakeFlags = [
-      # only enable what we need
-      "-DCCCL_ENABLE_CUB=OFF"
-      "-DCCCL_ENABLE_LIBCUDACXX=ON"
-      "-DCCCL_ENABLE_THRUST=ON"
-      "-DCCCL_ENABLE_TESTING=OFF"
-      "-DCCCL_ENABLE_EXAMPLES=OFF"
-
-      "-DTHRUST_DEVICE_SYSTEM=TBB"
-      "-DTHRUST_HOST_SYSTEM=CPP"
-      "-DTHRUST_ENABLE_HEADER_TESTING=OFF"
-      "-DTHRUST_ENABLE_TESTING=OFF"
-      "-DTHRUST_ENABLE_EXAMPLES=OFF"
-
-      "-DLIBCUDACXX_ENABLE_CUDA=OFF"
-      "-DLIBCUDACXX_ENABLE_STATIC_LIBRARY=OFF"
-      "-DLIBCUDACXX_ENABLE_LIBCUDACXX_TESTS=OFF"
-    ];
-    meta = with lib; {
-      description = "CUDA C++ Core Libraries";
-      homepage = "https://github.com/NVIDIA/cccl";
-      license = licenses.asl20;
-      platforms = platforms.unix;
-    };
-  };
-in
 # clang consume much less RAM than GCC
 clangStdenv.mkDerivation rec {
   pname = "openscad-unstable";
-  version = "2024-02-18";
+  version = "2025-05-17";
   src = fetchFromGitHub {
     owner = "openscad";
     repo = "openscad";
-    rev = "f5688998760d6b85d7b280300388448c162edc42";
-    hash = "sha256-rQnih7Am7NvlrTwIGAN4QbZCcziFm6YOOT27wmjcY8A=";
-    fetchSubmodules = true;
+    rev = "c76900f9a62fcb98c503dcc5ccce380db8ac564b";
+    hash = "sha256-R2/8T5+BugVTRIUVLaz6SxKQ1YrtyAGbiE4K1Fuc6bg=";
+    fetchSubmodules = true; # Only really need sanitizers-cmake and MCAD and manifold
   };
+
+  patches = [ ./test.diff ];
+
   nativeBuildInputs = [
-    pkg-config
-    cmake
-    ninja
+    (python3.withPackages (
+      ps: with ps; [
+        numpy
+        pillow
+      ]
+    ))
     bison
+    cmake
     flex
-    python3
     libsForQt5.qt5.wrapQtAppsHook
     llvmPackages.bintools
-    wrapGAppsHook
+    wrapGAppsHook3
+    ninja
+    pkg-config
   ];
-  buildInputs = with libsForQt5; with qt5; [
-    # manifold dependencies
-    clipper2
-    glm
-    tbb_2021_8
-    nvidia-cccl
-
-    boost
-    cairo
-    cgal_5
-    double-conversion
-    eigen
-    fontconfig
-    freetype
-    glib
-    gmp
-    harfbuzz
-    hidapi
-    lib3mf
-    libspnav
-    libzip
-    mpfr
-    qscintilla
-    qtbase
-    qtmultimedia
-  ]
-  ++ lib.optionals clangStdenv.isLinux [ libICE libSM libGLU libGL wayland wayland-protocols qtwayland ]
-  ++ lib.optional clangStdenv.isDarwin qtmacextras
-  ;
+  buildInputs =
+    with libsForQt5;
+    with qt5;
+    [
+      clipper2
+      glm
+      tbb_2022_0
+      mimalloc
+      boost
+      cairo
+      cgal
+      double-conversion
+      eigen
+      fontconfig
+      freetype
+      ghostscript
+      glib
+      gmp
+      opencsg
+      harfbuzz
+      hidapi
+      lib3mf
+      libspnav
+      libzip
+      mpfr
+      qscintilla
+      qtbase
+      qtmultimedia
+    ]
+    ++ lib.optionals clangStdenv.hostPlatform.isLinux [
+      xorg.libXdmcp
+      libICE
+      libSM
+      wayland
+      wayland-protocols
+      qtwayland
+      libGLU
+    ]
+    ++ lib.optional clangStdenv.hostPlatform.isDarwin qtmacextras;
   cmakeFlags = [
     "-DEXPERIMENTAL=ON" # enable experimental options
     "-DSNAPSHOT=ON" # nightly icons
-    "-DUSE_BUILTIN_OPENCSG=ON" # bundled latest opencsg
-    "-DOPENSCAD_VERSION=\"${builtins.replaceStrings ["-"] ["."] version}\""
-    "-DCMAKE_UNITY_BUILD=ON" # faster build
-    "-DENABLE_TESTS=OFF" # tests do not work for now
+    "-DUSE_BUILTIN_OPENCSG=OFF"
+    # use builtin manifold: 3.1.0 doesn't pass tests, builtin is 7c8fbe1, between 3.0.1 and 3.1.0
+    # FIXME revisit on version update
+    "-DUSE_BUILTIN_MANIFOLD=ON"
+    "-DUSE_BUILTIN_CLIPPER2=OFF"
+    "-DOPENSCAD_VERSION=\"${builtins.replaceStrings [ "-" ] [ "." ] version}\""
+    "-DCMAKE_UNITY_BUILD=OFF" # broken compile with unity
     # IPO
     "-DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld"
     "-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON"
+
+    # The sources enable this for only apple. We turn it off globally anyway to stay
+    # consistent.
+    "-DUSE_QT6=OFF"
   ];
+
+  # tests rely on sysprof which is not available on darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  # remove unused submodules, to ensure correct dependency usage
+  postUnpack = ''
+    ( cd $sourceRoot
+      for m in submodules/OpenCSG submodules/mimalloc submodules/Clipper2
+      do rm -r $m
+      done )
+  '';
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir $out/Applications
+    mv $out/bin/*.app $out/Applications
+    rmdir $out/bin
+  '';
+
+  nativeCheckInputs = [
+    mesa.llvmpipeHook
+    ctestCheckHook
+  ];
+
+  dontUseNinjaCheck = true;
+  checkFlags = [
+    "-E"
+    # some fontconfig issues cause pdf output to have wrong font
+    "pdfexporttest"
+  ];
+
   meta = with lib; {
     description = "3D parametric model compiler (unstable)";
     longDescription = ''
@@ -155,7 +176,10 @@ clangStdenv.mkDerivation rec {
     # note that the *binary license* is gpl3 due to CGAL
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ pca006132 raskin ];
+    maintainers = with lib.maintainers; [
+      pca006132
+      raskin
+    ];
     mainProgram = "openscad";
   };
 }

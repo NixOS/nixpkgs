@@ -1,21 +1,47 @@
-{ lib, buildPythonPackage, fetchPypi, six }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  rustPlatform,
+  libiconv,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "python-bidi";
-  version = "0.4.2";
-  format = "setuptools";
+  version = "0.6.6";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "U0f3HoKz6Zdtxlfwne0r/jm6jWd3yoGlssVsMBIcSW4=";
+  src = fetchFromGitHub {
+    owner = "MeirKriheli";
+    repo = "python-bidi";
+    tag = "v${version}";
+    hash = "sha256-8erpcrjAp/1ugPe6cOvjH2CVfy2/hO6xg+cfWWUbj0w=";
   };
 
-  propagatedBuildInputs = [ six ];
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-Oqtva9cTHAcuOXr/uPbqZczDbPVr0zeIEr5p6PoJ610=";
+  };
 
-  meta = with lib; {
+  buildInputs = [ libiconv ];
+
+  build-system = [
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
+  ];
+
+  preCheck = ''
+    rm -rf bidi
+  '';
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = {
     homepage = "https://github.com/MeirKriheli/python-bidi";
     description = "Pure python implementation of the BiDi layout algorithm";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ freezeboy ];
+    mainProgram = "pybidi";
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ freezeboy ];
   };
 }

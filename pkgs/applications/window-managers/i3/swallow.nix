@@ -1,13 +1,14 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, poetry-core
-, i3ipc
-, xlib
-, six
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  poetry-core,
+  i3ipc,
+  xlib,
+  six,
 }:
 
-buildPythonApplication rec {
+buildPythonApplication {
   pname = "i3-swallow";
   version = "unstable-2022-02-19";
 
@@ -39,6 +40,6 @@ buildPythonApplication rec {
     license = licenses.mit;
     platforms = platforms.linux;
     mainProgram = "swallow";
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
   };
 }

@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
-    repo = pname;
+    repo = "farama-notifications";
     rev = version;
     hash = "sha256-UUrJ/5t5x54xs1gweNUhwqrMJQXiyrUPn1bBfTsiPcw=";
   };

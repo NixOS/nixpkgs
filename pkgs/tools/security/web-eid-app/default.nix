@@ -1,22 +1,23 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, gtest
-, pcsclite
-, pkg-config
-, qttools
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  gtest,
+  pcsclite,
+  pkg-config,
+  qttools,
 }:
 
 mkDerivation rec {
   pname = "web-eid-app";
-  version = "2.4.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "web-eid";
     repo = "web-eid-app";
     rev = "v${version}";
-    sha256 = "sha256-xWwguxs/121BFF1zhb/HxS9b1vTwQRemhPKOfHEXVZQ=";
+    hash = "sha256-UqHT85zuoT/ISFP2qgG2J1518eGEvm5L96ntZ/lx9BE=";
     fetchSubmodules = true;
   };
 
@@ -33,6 +34,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "signing and authentication operations with smart cards for the Web eID browser extension";
+    mainProgram = "web-eid";
     longDescription = ''
       The Web eID application performs cryptographic digital signing and
       authentication operations with electronic ID smart cards for the Web eID

@@ -1,22 +1,24 @@
-{ stdenvNoCC
-, lib
-, fetchurl
-, writeScript
-, nix
-, runtimeShell
-, curl
-, cacert
-, jq
-, yq
-, gnupg
+{
+  stdenvNoCC,
+  lib,
+  fetchurl,
+  writeScript,
+  nix,
+  runtimeShell,
+  curl,
+  cacert,
+  jq,
+  yq,
+  gnupg,
 
-, releaseManifestFile
-, releaseInfoFile
-, allowPrerelease
+  releaseManifestFile,
+  releaseInfoFile,
+  bootstrapSdkFile,
+  allowPrerelease,
 }:
 
 let
-  inherit (lib.importJSON releaseManifestFile) channel release;
+  inherit (lib.importJSON releaseManifestFile) channel tag;
 
   pkg = stdenvNoCC.mkDerivation {
     name = "update-dotnet-vmr-env";
@@ -38,19 +40,43 @@ let
 
   drv = builtins.unsafeDiscardOutputDependency pkg.drvPath;
 
-in writeScript "update-dotnet-vmr.sh" ''
+  toOutputPath =
+    path:
+    let
+      root = ../../../..;
+    in
+    lib.path.removePrefix root path;
+
+in
+writeScript "update-dotnet-vmr.sh" ''
   #! ${nix}/bin/nix-shell
-  #! nix-shell -i ${runtimeShell} --pure ${drv}
+  #! nix-shell -i ${runtimeShell} --pure ${drv} --keep UPDATE_NIX_ATTR_PATH
   set -euo pipefail
 
-  query=$(cat <<EOF
-      map(
-          select(
-              ${lib.optionalString (!allowPrerelease) ".prerelease == false and"}
-              .draft == false and
-              (.name | startswith(".NET ${channel}")))) |
-      first | (
-          .name,
+  tag=''${1-}
+
+  if [[ -n $tag ]]; then
+      query=$(cat <<EOF
+          map(
+              select(
+                  (.tag_name == "$tag"))) |
+          first
+  EOF
+      )
+  else
+      query=$(cat <<EOF
+          map(
+              select(
+                  ${lib.optionalString (!allowPrerelease) ".prerelease == false and"}
+                  .draft == false and
+                  (.tag_name | startswith("v${channel}")))) |
+          first
+  EOF
+      )
+  fi
+
+  query="$query "$(cat <<EOF
+      | (
           .tag_name,
           (.assets |
               .[] |
@@ -64,21 +90,24 @@ in writeScript "update-dotnet-vmr.sh" ''
   )
 
   (
-      curl -fsL https://api.github.com/repos/dotnet/dotnet/releases | \
-      jq -r "$query" \
+      curl -fsSL https://api.github.com/repos/dotnet/dotnet/releases | \
+      jq -er "$query" \
   ) | (
-      read name
       read tagName
       read releaseUrl
       read sigUrl
 
-      if [[ "$name" == ".NET ${release}" ]]; then
-          >&2 echo "release is already $name"
-          exit
-      fi
-
       tmp="$(mktemp -d)"
       trap 'rm -rf "$tmp"' EXIT
+
+      cd "$tmp"
+
+      curl -fsSL "$releaseUrl" -o release.json
+
+      if [[ -z $tag && "$tagName" == "${tag}" ]]; then
+          >&2 echo "release is already $tagName"
+          exit
+      fi
 
       tarballUrl=https://github.com/dotnet/dotnet/archive/refs/tags/$tagName.tar.gz
 
@@ -86,27 +115,37 @@ in writeScript "update-dotnet-vmr.sh" ''
       tarballHash=$(nix-hash --to-sri --type sha256 "''${prefetch[0]}")
       tarball=''${prefetch[1]}
 
-      cd "$tmp"
-      curl -L "$sigUrl" -o release.sig
+      curl -fssL "$sigUrl" -o release.sig
 
-      export GNUPGHOME=$PWD/.gnupg
-      gpg --batch --import ${releaseKey}
-      gpg --batch --verify release.sig "$tarball"
+      (
+          export GNUPGHOME=$PWD/.gnupg
+          trap 'gpgconf --kill all' EXIT
+          gpg --batch --import ${releaseKey}
+          gpg --batch --verify release.sig "$tarball"
+      )
 
-      tar --strip-components=1 --no-wildcards-match-slash --wildcards -xzf "$tarball" \*/eng/Versions.props
+      tar --strip-components=1 --no-wildcards-match-slash --wildcards -xzf "$tarball" \*/eng/Versions.props \*/global.json
       artifactsVersion=$(xq -r '.Project.PropertyGroup |
           map(select(.PrivateSourceBuiltArtifactsVersion))
           | .[] | .PrivateSourceBuiltArtifactsVersion' eng/Versions.props)
 
       if [[ "$artifactsVersion" != "" ]]; then
-          artifactsUrl=https://dotnetcli.azureedge.net/source-built-artifacts/assets/Private.SourceBuilt.Artifacts.$artifactsVersion.centos.8-x64.tar.gz
+          artifactsUrl=https://builds.dotnet.microsoft.com/source-built-artifacts/assets/Private.SourceBuilt.Artifacts.$artifactsVersion.centos.9-x64.tar.gz
       else
           artifactsUrl=$(xq -r '.Project.PropertyGroup |
               map(select(.PrivateSourceBuiltArtifactsUrl))
               | .[] | .PrivateSourceBuiltArtifactsUrl' eng/Versions.props)
       fi
+      artifactsUrl="''${artifactsUrl/dotnetcli.azureedge.net/builds.dotnet.microsoft.com}"
 
       artifactsHash=$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url "$artifactsUrl")")
+
+      sdkVersion=$(jq -er .tools.dotnet global.json)
+
+      # below needs to be run in nixpkgs because toOutputPath uses relative paths
+      cd -
+
+      cp "$tmp"/release.json "${toOutputPath releaseManifestFile}"
 
       jq --null-input \
           --arg _0 "$tarballHash" \
@@ -116,8 +155,11 @@ in writeScript "update-dotnet-vmr.sh" ''
               "tarballHash": $_0,
               "artifactsUrl": $_1,
               "artifactsHash": $_2,
-          }' > "${toString releaseInfoFile}"
+          }' > "${toOutputPath releaseInfoFile}"
 
-      curl -fsL "$releaseUrl" -o ${toString releaseManifestFile}
+      ${lib.escapeShellArg (toOutputPath ./update.sh)} \
+          -o ${lib.escapeShellArg (toOutputPath bootstrapSdkFile)} --sdk "$sdkVersion" >&2
+
+      $(nix-build -A $UPDATE_NIX_ATTR_PATH.fetch-deps --no-out-link) >&2
   )
 ''

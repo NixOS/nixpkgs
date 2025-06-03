@@ -1,35 +1,33 @@
-{ lib
-, attrs
-, boto3
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, mock
-, pytest-mock
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, setuptools
-, wrapt
+{
+  lib,
+  attrs,
+  boto3,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  mock,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "aws-encryption-sdk";
-  version = "3.1.1";
+  version = "4.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jV+/AY/GjWscrL5N0Df9gFKWx3Nqn+RX62hNBT9/lWM=";
+    hash = "sha256-cyDcTPjY1am0yIo0O+k4NdoYdW4FMI01NlVL4MooiaU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     boto3
     cryptography
@@ -48,10 +46,12 @@ buildPythonPackage rec {
     "test/integration"
   ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.12") [
-    # AssertionError: Regex pattern did not match, https://github.com/aws/aws-encryption-sdk-python/issues/644
-    "test_abstracts"
+  disabledTests = [
+    # pytest 8 compat issue
+    "test_happy_version"
   ];
+
+  pythonImportsCheck = [ "aws_encryption_sdk" ];
 
   meta = with lib; {
     description = "Python implementation of the AWS Encryption SDK";

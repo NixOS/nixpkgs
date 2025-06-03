@@ -1,49 +1,63 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonAtLeast
-, pythonOlder
-, pytest
-, safe-pysha3
-, pycryptodome
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  isPyPy,
+  # nativeCheckInputs
+  pytest,
+  pytest-xdist,
+  # optional dependencies
+  pycryptodome,
+  safe-pysha3,
 }:
 
 buildPythonPackage rec {
   pname = "eth-hash";
-  version = "0.5.2";
-  format = "setuptools";
-  disabled = pythonOlder "3.5";
+  version = "0.7.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-hash";
-    rev = "v${version}";
-    hash = "sha256-6UN+kvLjjAtkmLgUaovjZC/6n3FZtXCwyXZH7ijQObU=";
+    tag = "v${version}";
+    hash = "sha256-91jWZDqrd7ZZlM0D/3sDokJ26NiAQ3gdeBebTV1Lq8s=";
   };
 
-  nativeCheckInputs = [
-    pytest
-  ] ++ passthru.optional-dependencies.pycryptodome
-  # eth-hash can use either safe-pysha3 or pycryptodome;
-  # safe-pysha3 requires Python 3.9+ while pycryptodome does not.
-  # https://github.com/ethereum/eth-hash/issues/46#issuecomment-1314029211
-  ++ lib.optional (pythonAtLeast "3.9") passthru.optional-dependencies.pysha3;
+  build-system = [ setuptools ];
 
-  checkPhase = ''
-    pytest tests/backends/pycryptodome/
-  '' + lib.optionalString (pythonAtLeast "3.9") ''
-    pytest tests/backends/pysha3/
-  '';
+  nativeCheckInputs =
+    [
+      pytest
+      pytest-xdist
+    ]
+    ++ optional-dependencies.pycryptodome
+    # safe-pysha3 is not available on pypy
+    ++ lib.optional (!isPyPy) optional-dependencies.pysha3;
 
-  passthru.optional-dependencies = {
+  # Backends need to be tested separately and can not use hook
+  checkPhase =
+    ''
+      runHook preCheck
+      pytest tests/core tests/backends/pycryptodome
+    ''
+    + lib.optionalString (!isPyPy) ''
+      pytest tests/backends/pysha3
+    ''
+    + ''
+      runHook postCheck
+    '';
+
+  optional-dependencies = {
     pycryptodome = [ pycryptodome ];
     pysha3 = [ safe-pysha3 ];
   };
 
-  meta = with lib; {
-    description = "The Ethereum hashing function keccak256";
+  meta = {
+    description = "Ethereum hashing function keccak256";
     homepage = "https://github.com/ethereum/eth-hash";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/ethereum/eth-hash/blob/v${version}/docs/release_notes.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hellwolf ];
   };
 }

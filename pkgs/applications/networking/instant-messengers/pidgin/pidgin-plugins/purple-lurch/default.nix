@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pidgin, minixml, libxml2, sqlite, libgcrypt }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pidgin,
+  minixml,
+  libxml2,
+  sqlite,
+  libgcrypt,
+}:
 
 stdenv.mkDerivation rec {
   pname = "purple-lurch";
@@ -8,12 +18,18 @@ stdenv.mkDerivation rec {
     owner = "gkdr";
     repo = "lurch";
     rev = "v${version}";
-    sha256 = "sha256-yyzotKL1Z4B2BxloJndJKemONMPLG9pVDVe2K5AL05g=";
+    hash = "sha256-yyzotKL1Z4B2BxloJndJKemONMPLG9pVDVe2K5AL05g=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ pidgin minixml libxml2 sqlite libgcrypt ];
+  buildInputs = [
+    pidgin
+    minixml
+    libxml2
+    sqlite
+    libgcrypt
+  ];
 
   dontUseCmakeConfigure = true;
 

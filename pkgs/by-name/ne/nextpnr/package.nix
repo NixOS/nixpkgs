@@ -1,76 +1,97 @@
-{ lib, stdenv, fetchFromGitHub, cmake
-, boost, python3, eigen, python3Packages
-, icestorm, trellis
-, llvmPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  python3,
+  eigen,
+  python3Packages,
+  icestorm,
+  trellis,
+  llvmPackages,
 
-, enableGui ? false
-, wrapQtAppsHook ? null
-, qtbase ? null
-, OpenGL ? null
+  enableGui ? false,
+  wrapQtAppsHook ? null,
+  qtbase ? null,
 }:
 
 let
-  boostPython = boost.override { python = python3; enablePython = true; };
-
-  pname = "nextpnr";
-  version = "0.7";
-
-  main_src = fetchFromGitHub {
-    owner = "YosysHQ";
-    repo  = "nextpnr";
-    rev   = "${pname}-${version}";
-    hash  = "sha256-YIAQcCg9RjvCys1bQ3x+sTgTmnmEeXVbt9Lr6wtg1pA=";
-    name  = "nextpnr";
+  boostPython = boost.override {
+    python = python3;
+    enablePython = true;
   };
 
-  test_src = fetchFromGitHub {
-    owner  = "YosysHQ";
-    repo   = "nextpnr-tests";
-    rev    = "00c55a9eb9ea2e062b51fe0d64741412b185d95d";
-    sha256 = "sha256-83suMftMtnaRFq3T2/I7Uahb11WZlXhwYt6Q/rqi2Yo=";
-    name   = "nextpnr-tests";
+  pname = "nextpnr";
+  version = "0.8";
+
+  prjxray_src = fetchFromGitHub {
+    owner = "f4pga";
+    repo = "prjxray";
+    rev = "faf9c774a340e39cf6802d009996ed6016e63521";
+    hash = "sha256-BEv7vJoOHWHZoc9EXbesfwFFClkuiSpVwHUrj4ahUcA=";
+  };
+
+  prjbeyond_src = fetchFromGitHub {
+    owner = "YosysHQ-GmbH";
+    repo = "prjbeyond-db";
+    rev = "06d3b424dd0e52d678087c891c022544238fb9e3";
+    hash = "sha256-nmyFFUO+/J2lb+lPATEjdYq0d21P1fN3N94JXR8brZ0=";
   };
 in
 
 stdenv.mkDerivation rec {
   inherit pname version;
 
-  srcs = [ main_src test_src ];
+  src = fetchFromGitHub {
+    owner = "YosysHQ";
+    repo = "nextpnr";
+    tag = "${pname}-${version}";
+    hash = "sha256-lconcmLACxWxC41fTIkUaGbfp79G98YdHA4mRJ9Qo1w=";
+    fetchSubmodules = true;
+  };
 
-  sourceRoot = main_src.name;
-
-  nativeBuildInputs
-     = [ cmake ]
-    ++ (lib.optional enableGui wrapQtAppsHook);
-  buildInputs
-     = [ boostPython python3 eigen python3Packages.apycula ]
+  nativeBuildInputs = [
+    cmake
+    python3
+  ] ++ (lib.optional enableGui wrapQtAppsHook);
+  buildInputs =
+    [
+      boostPython
+      eigen
+      python3Packages.apycula
+    ]
     ++ (lib.optional enableGui qtbase)
     ++ (lib.optional stdenv.cc.isClang llvmPackages.openmp);
 
   cmakeFlags =
-    [ "-DCURRENT_GIT_VERSION=${lib.substring 0 7 (lib.elemAt srcs 0).rev}"
-      "-DARCH=generic;ice40;ecp5;gowin"
+    let
+      # the specified version must always start with "nextpnr-", so add it if
+      # missing (e.g. if the user overrides with a git hash)
+      rev = src.rev;
+      version = if (lib.hasPrefix "nextpnr-" rev) then rev else "nextpnr-${rev}";
+    in
+    [
+      "-DCURRENT_GIT_VERSION=${version}"
+      "-DARCH=generic;ice40;ecp5;himbaechel"
       "-DBUILD_TESTS=ON"
       "-DICESTORM_INSTALL_PREFIX=${icestorm}"
       "-DTRELLIS_INSTALL_PREFIX=${trellis}"
       "-DTRELLIS_LIBDIR=${trellis}/lib/trellis"
       "-DGOWIN_BBA_EXECUTABLE=${python3Packages.apycula}/bin/gowin_bba"
       "-DUSE_OPENMP=ON"
-      # warning: high RAM usage
-      "-DSERIALIZE_CHIPDBS=OFF"
+      "-DHIMBAECHEL_UARCH=all"
+      "-DHIMBAECHEL_GOWIN_DEVICES=all"
+      "-DHIMBAECHEL_PRJXRAY_DB=${prjxray_src}"
+      "-DHIMBAECHEL_PRJBEYOND_DB=${prjbeyond_src}"
     ]
-    ++ (lib.optional enableGui "-DBUILD_GUI=ON")
-    ++ (lib.optional (enableGui && stdenv.isDarwin)
-        "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks");
+    ++ (lib.optional enableGui "-DBUILD_GUI=ON");
 
-  patchPhase = with builtins; ''
-    # use PyPy for icestorm if enabled
-    substituteInPlace ./ice40/CMakeLists.txt \
-      --replace ''\'''${PYTHON_EXECUTABLE}' '${icestorm.pythonInterp}'
-  '';
-
-  preBuild = ''
-    ln -s ../${test_src.name} tests
+  postPatch = ''
+    # Don't use #embed macro for chipdb binary embeddings - otherwise getting spurious type narrowing errors.
+    # Maybe related to: https://github.com/llvm/llvm-project/issues/119256
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "check_cxx_compiler_hash_embed(HAS_HASH_EMBED CXX_FLAGS_HASH_EMBED)" ""
   '';
 
   doCheck = true;
@@ -79,16 +100,16 @@ stdenv.mkDerivation rec {
     wrapQtApp $out/bin/nextpnr-generic
     wrapQtApp $out/bin/nextpnr-ice40
     wrapQtApp $out/bin/nextpnr-ecp5
-    wrapQtApp $out/bin/nextpnr-gowin
+    wrapQtApp $out/bin/nextpnr-himbaechel
   '';
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Place and route tool for FPGAs";
-    homepage    = "https://github.com/yosyshq/nextpnr";
-    license     = licenses.isc;
-    platforms   = platforms.all;
-    maintainers = with maintainers; [ thoughtpolice emily ];
+    homepage = "https://github.com/yosyshq/nextpnr";
+    license = lib.licenses.isc;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

@@ -1,63 +1,68 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, defusedxml
-, lxml
-, relatorio
-, genshi
-, python-dateutil
-, polib
-, python-sql
-, werkzeug
-, wrapt
-, passlib
-, pydot
-, levenshtein
-, html2text
-, weasyprint
-, gevent
-, pillow
-, withPostgresql ? true
-, psycopg2
-, unittestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  defusedxml,
+  lxml,
+  relatorio,
+  genshi,
+  python-dateutil,
+  polib,
+  python-sql,
+  werkzeug,
+  passlib,
+  pydot,
+  levenshtein,
+  html2text,
+  weasyprint,
+  gevent,
+  pillow,
+  withPostgresql ? true,
+  psycopg2,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "trytond";
-  version = "7.0.5";
-  format = "setuptools";
+  version = "7.4.10";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UTDONJrb28gnGkoV6Rb/2ChsgcLIxCmDhSd4gvFxq14=";
+    hash = "sha256-kzoZDcHNPjmsNxrQ11MAksK+24nI1YNmONQd21s3weA=";
   };
 
-  propagatedBuildInputs = [
-    defusedxml
-    lxml
-    relatorio
-    genshi
-    python-dateutil
-    polib
-    python-sql
-    werkzeug
-    wrapt
-    passlib
+  build-system = [ setuptools ];
 
-    # extra dependencies
-    pydot
-    levenshtein
-    html2text
-    weasyprint
-    gevent
-    pillow
-  ] ++ relatorio.optional-dependencies.fodt
-  ++ passlib.optional-dependencies.bcrypt
-  ++ passlib.optional-dependencies.argon2
-  ++ lib.optional withPostgresql psycopg2;
+  dependencies =
+    [
+      defusedxml
+      lxml
+      relatorio
+      genshi
+      python-dateutil
+      polib
+      python-sql
+      werkzeug
+      passlib
+
+      # extra dependencies
+      pydot
+      levenshtein
+      html2text
+      weasyprint
+      gevent
+      pillow
+    ]
+    ++ relatorio.optional-dependencies.fodt
+    ++ passlib.optional-dependencies.bcrypt
+    ++ passlib.optional-dependencies.argon2
+    ++ lib.optional withPostgresql psycopg2;
 
   nativeCheckInputs = [ unittestCheckHook ];
 
@@ -67,10 +72,13 @@ buildPythonPackage rec {
     export DB_NAME=":memory:";
   '';
 
-  unittestFlagsArray = [ "-s" "trytond.tests" ];
+  unittestFlagsArray = [
+    "-s"
+    "trytond.tests"
+  ];
 
   meta = with lib; {
-    description = "The server of the Tryton application platform";
+    description = "Server of the Tryton application platform";
     longDescription = ''
       The server for Tryton, a three-tier high-level general purpose
       application platform under the license GPL-3 written in Python and using
@@ -80,8 +88,12 @@ buildPythonPackage rec {
       modularity, scalability and security.
     '';
     homepage = "http://www.tryton.org/";
-    changelog = "https://hg.tryton.org/trytond/file/${version}/CHANGELOG";
+    changelog = "https://foss.heptapod.net/tryton/tryton/-/blob/trytond-${version}/trytond/CHANGELOG?ref_type=tags";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ udono johbo ];
+    broken = stdenv.hostPlatform.isDarwin;
+    maintainers = with maintainers; [
+      udono
+      johbo
+    ];
   };
 }

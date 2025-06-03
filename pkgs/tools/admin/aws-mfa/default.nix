@@ -1,14 +1,16 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, fetchpatch
-, boto3
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  fetchpatch,
+  setuptools,
+  boto3,
 }:
 
 buildPythonApplication rec {
   pname = "aws-mfa";
   version = "0.0.12";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "broamski";
@@ -26,7 +28,11 @@ buildPythonApplication rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     boto3
   ];
 
@@ -39,6 +45,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Manage AWS MFA Security Credentials";
+    mainProgram = "aws-mfa";
     homepage = "https://github.com/broamski/aws-mfa";
     license = licenses.mit;
     maintainers = [ ];

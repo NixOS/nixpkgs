@@ -1,25 +1,26 @@
-{ lib
-, mkDerivation
+{
+  lib,
+  mkDerivation,
 
-, fetchurl
-, cmake
-, extra-cmake-modules
+  fetchurl,
+  cmake,
+  extra-cmake-modules,
 
-, exiv2
-, kconfig
-, kcoreaddons
-, kdeclarative
-, kfilemetadata
-, kguiaddons
-, ki18n
-, kio
-, kirigami2
-, knotifications
-, kpurpose
-, kquickimageedit
-, qtgraphicaleffects
-, qtlocation
-, qtquickcontrols2
+  exiv2,
+  kconfig,
+  kcoreaddons,
+  kdeclarative,
+  kfilemetadata,
+  kguiaddons,
+  ki18n,
+  kio,
+  kirigami2,
+  knotifications,
+  kpurpose,
+  kquickimageedit,
+  qtgraphicaleffects,
+  qtlocation,
+  qtquickcontrols2,
 }:
 
 let
@@ -39,7 +40,7 @@ let
     sha256 = "0cwbfff8gzci5zrahh6d53b9b3bfv1cbwlv0k6076531i1c7md9p";
   };
 in
-mkDerivation rec {
+mkDerivation {
   pname = "koko";
 
   nativeBuildInputs = [
@@ -73,9 +74,13 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Image gallery mobile application";
+    mainProgram = "koko";
     homepage = "https://apps.kde.org/koko/";
     # LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
-    license = [ licenses.lgpl3Only licenses.lgpl21Only ];
-    maintainers = with maintainers; [ samueldr ];
+    license = [
+      licenses.lgpl3Only
+      licenses.lgpl21Only
+    ];
+    maintainers = [ ];
   };
 }

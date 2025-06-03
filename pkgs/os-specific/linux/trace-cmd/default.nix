@@ -1,20 +1,27 @@
-{ lib, stdenv, fetchpatch, fetchzip, pkg-config, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt, libtraceevent, libtracefs, zstd, sourceHighlight }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  pkg-config,
+  asciidoc,
+  xmlto,
+  docbook_xsl,
+  docbook_xml_dtd_45,
+  libxslt,
+  libtraceevent,
+  libtracefs,
+  zstd,
+  sourceHighlight,
+  gitUpdater,
+}:
 stdenv.mkDerivation rec {
   pname = "trace-cmd";
-  version = "3.2";
+  version = "3.3.1";
 
   src = fetchzip {
-    url    = "https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot/trace-cmd-v${version}.tar.gz";
-    hash   = "sha256-rTcaaEQ3Y4cneNnZSGiMZNp+Z7dyAa3oNTNMAEXr28g=";
+    url = "https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot/trace-cmd-v${version}.tar.gz";
+    hash = "sha256-kEji3qDqQsSK0tL8Fx2ycSd2lTXBXOHHTvsb6XDNSa8=";
   };
-
-  patches = [
-    # Upstream patches to be released in the next version
-    (fetchpatch {
-      sha256 = "sha256-eGuHODm29M7rbGYsyXUPoNe1xsIG3eJYhwXQDakRJHA=";
-      url = "https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/patch/?id=6b07a7df871342068604b204711ab741d421d051";
-    })
-  ];
 
   # Don't build and install html documentation
   postPatch = ''
@@ -23,13 +30,31 @@ stdenv.mkDerivation rec {
     patchShebangs check-manpages.sh
   '';
 
-  nativeBuildInputs = [ asciidoc libxslt pkg-config xmlto docbook_xsl docbook_xml_dtd_45 sourceHighlight ];
+  nativeBuildInputs = [
+    asciidoc
+    libxslt
+    pkg-config
+    xmlto
+    docbook_xsl
+    docbook_xml_dtd_45
+    sourceHighlight
+  ];
 
-  buildInputs = [ libtraceevent libtracefs zstd ];
+  buildInputs = [
+    libtraceevent
+    libtracefs
+    zstd
+  ];
 
-  outputs = [ "out" "lib" "dev" "man" "devman" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "man"
+    "devman"
+  ];
 
-  MANPAGE_DOCBOOK_XSL="${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl";
+  MANPAGE_DOCBOOK_XSL = "${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl";
 
   dontConfigure = true;
 
@@ -61,11 +86,25 @@ stdenv.mkDerivation rec {
     "BASH_COMPLETE_DIR=${placeholder "out"}/share/bash-completion/completions"
   ];
 
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git";
+    rev-prefix = "trace-cmd-v";
+  };
+
   meta = with lib; {
     description = "User-space tools for the Linux kernel ftrace subsystem";
-    homepage    = "https://www.trace-cmd.org/";
-    license     = with licenses; [ lgpl21Only gpl2Only ];
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ thoughtpolice basvandijk wentasah ];
+    mainProgram = "trace-cmd";
+    homepage = "https://www.trace-cmd.org/";
+    license = with licenses; [
+      lgpl21Only
+      gpl2Only
+    ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+      thoughtpolice
+      basvandijk
+      wentasah
+    ];
   };
 }

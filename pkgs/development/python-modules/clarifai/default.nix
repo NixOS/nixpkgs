@@ -1,29 +1,29 @@
-{ lib
-, buildPythonPackage
-, clarifai-grpc
-, fetchFromGitHub
-, inquirerpy
-, llama-index-core
-, numpy
-, opencv4
-, pandas
-, pillow
-, pycocotools
-, pypdf
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, pyyaml
-, rich
-, schema
-, setuptools
-, tqdm
-, tritonclient
+{
+  lib,
+  buildPythonPackage,
+  clarifai-grpc,
+  clarifai-protocol,
+  click,
+  fetchFromGitHub,
+  fsspec,
+  inquirerpy,
+  numpy,
+  pillow,
+  pycocotools,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  rich,
+  schema,
+  setuptools,
+  tabulate,
+  tqdm,
+  tritonclient,
 }:
 
 buildPythonPackage rec {
   pname = "clarifai";
-  version = "10.1.0";
+  version = "11.0.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,48 +31,39 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Clarifai";
     repo = "clarifai-python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-/2PIsSsYr/R7DuTX/ndBAOX7C3IaFqPw16ZAX8E1Vk8=";
+    tag = version;
+    hash = "sha256-JLZGVVrvGVUWr7WCTu2alVl+4GuYqLWP2dodgxYbmgc=";
   };
 
   pythonRelaxDeps = [
-    "clarifai-grpc"
+    "click"
+    "fsspec"
+    "schema"
   ];
 
-  pythonRemoveDeps = [
-    "opencv-python"
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     clarifai-grpc
+    clarifai-protocol
+    click
+    fsspec
     inquirerpy
-    llama-index-core
     numpy
-    opencv4
-    pandas
     pillow
-    pypdf
     pyyaml
     rich
     schema
+    tabulate
     tqdm
     tritonclient
   ];
 
-  passthru.optional-dependencies = {
-    all = [
-      pycocotools
-    ];
+  optional-dependencies = {
+    all = [ pycocotools ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -81,30 +72,37 @@ buildPythonPackage rec {
   disabledTests = [
     # Test requires network access and API key
     "test_export_workflow_general"
+    "test_validate_invalid_id"
+    "test_validate_invalid_hex_id"
   ];
 
   disabledTestPaths = [
     # Tests require network access and API key
+    "tests/cli/test_compute_orchestration.py"
+    "tests/runners/test_anymodel.py"
+    "tests/runners/test_download_checkpoints.py"
+    "tests/runners/test_runners.py"
+    "tests/runners/test_textmodel.py"
+    "tests/runners/test_url_fetcher.py"
     "tests/test_app.py"
     "tests/test_data_upload.py"
+    "tests/test_eval.py"
     "tests/test_model_predict.py"
     "tests/test_model_train.py"
+    "tests/test_rag.py"
     "tests/test_search.py"
     "tests/workflow/test_create_delete.py"
     "tests/workflow/test_predict.py"
-    "tests/test_rag.py"
-    "clarifai/models/model_serving/repo_build/static_files/base_test.py"
   ];
 
-  pythonImportsCheck = [
-    "clarifai"
-  ];
+  pythonImportsCheck = [ "clarifai" ];
 
   meta = with lib; {
     description = "Clarifai Python Utilities";
     homepage = "https://github.com/Clarifai/clarifai-python";
-    changelog = "https://github.com/Clarifai/clarifai-python/releases/tag/${version}";
+    changelog = "https://github.com/Clarifai/clarifai-python/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ natsukium ];
+    mainProgram = "clarifai";
   };
 }

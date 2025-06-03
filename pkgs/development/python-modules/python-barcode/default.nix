@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools-scm
-, pillow
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools-scm,
+  pillow,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,14 +20,10 @@ buildPythonPackage rec {
     hash = "sha256-Oxgl+9sR5ZdGbf9ChrTqmx6GpXcXtZ5WOuZ5cm/IVN4=";
   };
 
-  propagatedBuildInputs = [
-    setuptools-scm
-  ];
+  propagatedBuildInputs = [ setuptools-scm ];
 
-  passthru.optional-dependencies = {
-    images = [
-      pillow
-    ];
+  optional-dependencies = {
+    images = [ pillow ];
   };
 
   postPatch = ''
@@ -36,17 +33,16 @@ buildPythonPackage rec {
       --replace "--no-cov-on-fail" ""
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.images;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.images;
 
   pythonImportsCheck = [ "barcode" ];
 
   meta = with lib; {
     description = "Create standard barcodes with Python";
+    mainProgram = "python-barcode";
     homepage = "https://github.com/WhyNotHugo/python-barcode";
     changelog = "https://github.com/WhyNotHugo/python-barcode/blob/v${version}/docs/changelog.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

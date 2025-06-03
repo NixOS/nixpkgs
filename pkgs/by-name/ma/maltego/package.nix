@@ -1,37 +1,41 @@
-{ lib
-, stdenv
-, fetchzip
-, jre
-, giflib
-, gawk
-, makeBinaryWrapper
-, icoutils
-, copyDesktopItems
-, makeDesktopItem
+{
+  lib,
+  stdenv,
+  fetchzip,
+  jre,
+  giflib,
+  gawk,
+  makeBinaryWrapper,
+  icoutils,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "maltego";
-  version = "4.6.0";
+  version = "4.9.3";
 
   src = fetchzip {
     url = "https://downloads.maltego.com/maltego-v4/linux/Maltego.v${finalAttrs.version}.linux.zip";
-    hash = "sha256-q+1RYToZtBxAIDSiUWf3i/3GBBDwh6NWteHiK4VM1HY=";
+    hash = "sha256-h0cTA6/i7cpYvGQli3UA6WZnaMOProN4f0TTdeIczcY=";
   };
 
   postPatch = ''
-      substituteInPlace bin/maltego \
-            --replace /usr/bin/awk ${lib.getExe gawk}
+    substituteInPlace bin/maltego \
+      --replace-fail /usr/bin/awk ${lib.getExe gawk}
   '';
 
-    desktopItems = [
+  desktopItems = [
     (makeDesktopItem {
-      name = finalAttrs.pname;
+      name = "maltego";
       desktopName = "Maltego";
-      exec = finalAttrs.meta.mainProgram;
-      icon = finalAttrs.pname;
+      exec = "maltego";
+      icon = "maltego";
       comment = "An open source intelligence and forensics application";
-      categories = [ "Network" "Security" ];
+      categories = [
+        "Network"
+        "Security"
+      ];
       startupNotify = false;
     })
   ];
@@ -42,7 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
   ];
 
-  buildInputs = [ jre giflib ];
+  buildInputs = [
+    jre
+    giflib
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -62,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     cp -aR . "$out/share/maltego/"
 
-    makeWrapper $out/share/maltego/bin/maltego $out/bin/${finalAttrs.meta.mainProgram} \
+    makeWrapper $out/share/maltego/bin/maltego $out/bin/maltego \
       --set JAVA_HOME ${jre} \
       --prefix PATH : ${lib.makeBinPath [ jre ]}
 
@@ -71,10 +78,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://www.maltego.com";
-    description = "An open source intelligence and forensics application, enabling to easily gather information about DNS, domains, IP addresses, websites, persons, and so on";
+    description = "Open source intelligence and forensics application, enabling to easily gather information about DNS, domains, IP addresses, websites, persons, and so on";
     mainProgram = "maltego";
-    maintainers = with maintainers; [ emilytrau d3vil0p3r ];
-    platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [
+      emilytrau
+      d3vil0p3r
+    ];
+    platforms = platforms.unix;
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
   };

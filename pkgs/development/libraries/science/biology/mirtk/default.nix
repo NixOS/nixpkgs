@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, python3
-, boost
-, eigen
-, libGLU
-, fltk
-, itk
-, vtk
-, zlib
-, tbb
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python3,
+  boost186,
+  eigen,
+  libGLU,
+  fltk,
+  itk,
+  vtk,
+  zlib,
+  tbb,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mirtk";
   version = "unstable-2022-07-22";
 
@@ -51,11 +52,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    boost
+    boost186
     eigen
     fltk
     itk
-    libGLU.dev
+    libGLU
     python3
     tbb
     vtk
@@ -65,6 +66,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/BioMedIA/MIRTK";
     description = "Medical image registration library and tools";
+    mainProgram = "mirtk";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.linux;
     license = licenses.asl20;

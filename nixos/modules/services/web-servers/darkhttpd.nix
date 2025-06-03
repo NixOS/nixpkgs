@@ -1,26 +1,41 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
+  inherit (lib) mkIf mkOption optional;
+  inherit (lib.types)
+    path
+    bool
+    listOf
+    str
+    port
+    ;
   cfg = config.services.darkhttpd;
 
-  args = concatStringsSep " " ([
-    cfg.rootDir
-    "--port ${toString cfg.port}"
-    "--addr ${cfg.address}"
-  ] ++ cfg.extraArgs
-    ++ optional cfg.hideServerId             "--no-server-id"
-    ++ optional config.networking.enableIPv6 "--ipv6");
+  args = lib.concatStringsSep " " (
+    [
+      cfg.rootDir
+      "--port ${toString cfg.port}"
+      "--addr ${cfg.address}"
+    ]
+    ++ cfg.extraArgs
+    ++ optional cfg.hideServerId "--no-server-id"
+    ++ optional config.networking.enableIPv6 "--ipv6"
+  );
 
-in {
-  options.services.darkhttpd = with types; {
-    enable = mkEnableOption (lib.mdDoc "DarkHTTPd web server");
+in
+{
+  options.services.darkhttpd = {
+    enable = lib.mkEnableOption "DarkHTTPd web server";
 
     port = mkOption {
       default = 80;
-      type = types.port;
-      description = lib.mdDoc ''
+      type = port;
+      description = ''
         Port to listen on.
         Pass 0 to let the system choose any free port for you.
       '';
@@ -29,7 +44,7 @@ in {
     address = mkOption {
       default = "127.0.0.1";
       type = str;
-      description = lib.mdDoc ''
+      description = ''
         Address to listen on.
         Pass `all` to listen on all interfaces.
       '';
@@ -37,7 +52,7 @@ in {
 
     rootDir = mkOption {
       type = path;
-      description = lib.mdDoc ''
+      description = ''
         Path from which to serve files.
       '';
     };
@@ -45,15 +60,15 @@ in {
     hideServerId = mkOption {
       type = bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Don't identify the server type in headers or directory listings.
       '';
     };
 
     extraArgs = mkOption {
       type = listOf str;
-      default = [];
-      description = lib.mdDoc ''
+      default = [ ];
+      description = ''
         Additional configuration passed to the executable.
       '';
     };

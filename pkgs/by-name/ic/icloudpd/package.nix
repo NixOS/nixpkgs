@@ -1,53 +1,55 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, nix-update-script
-, testers
-, icloudpd
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  nix-update-script,
+  testers,
+  icloudpd,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "icloudpd";
-  version = "1.17.3";
+  version = "1.28.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "icloud-photos-downloader";
     repo = "icloud_photos_downloader";
-    rev = "v${version}";
-    hash = "sha256-GS6GqlZfj5kfjKLImkOTDAgQDGJQHl74uTqbZHVpbac=";
+    tag = "v${version}";
+    hash = "sha256-t2S/WfjNdCgCqaoXtmIu6Gb8tsccRw1Jn8iyjbSukzY=";
   };
 
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = with python3Packages; [
-    pythonRelaxDepsHook
-  ];
-
-  propagatedBuildInputs = with python3Packages; [
-    wheel
-    setuptools
-    requests
-    schema
-    click
-    python-dateutil
-    tqdm
-    piexif
-    urllib3
-    six
-    tzlocal
-    pytz
+  dependencies = with python3Packages; [
     certifi
+    click
+    flask
     keyring
     keyrings-alt
+    piexif
+    python-dateutil
+    pytz
+    requests
+    schema
+    six
+    srp
+    tqdm
+    typing-extensions
+    tzlocal
+    urllib3
+    waitress
+    wheel
   ];
 
+  build-system = with python3Packages; [ setuptools ];
+
   nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-    mock
     freezegun
-    vcrpy
+    mock
     pytest-timeout
+    pytestCheckHook
+    vcrpy
   ];
 
   disabledTests = [
@@ -60,6 +62,7 @@ python3Packages.buildPythonApplication rec {
     "test_autodelete_photos_dry_run"
     "test_retry_fail_delete_after_download_internal_error"
     "test_autodelete_invalid_creation_date"
+    "test_folder_structure_de_posix"
   ];
 
   passthru = {
@@ -69,8 +72,11 @@ python3Packages.buildPythonApplication rec {
 
   preBuild = ''
     substituteInPlace pyproject.toml \
-      --replace "setuptools==69.0.2" "setuptools" \
-      --replace "wheel==0.42.0" "wheel"
+      --replace-fail "setuptools==75.6.0" "setuptools" \
+      --replace-fail "wheel==0.45.1" "wheel"
+
+    substituteInPlace src/foundation/__init__.py \
+      --replace-fail "0.0.1" "${version}"
   '';
 
   meta = with lib; {
@@ -78,6 +84,9 @@ python3Packages.buildPythonApplication rec {
     description = "iCloud Photos Downloader";
     license = licenses.mit;
     mainProgram = "icloudpd";
-    maintainers = with maintainers; [ anpin Enzime ];
+    maintainers = with maintainers; [
+      anpin
+      jnsgruk
+    ];
   };
 }

@@ -1,22 +1,72 @@
-{ mkDerivation, lib
-, extra-cmake-modules, kdoctools
-, ki18n, xcb-util-cursor
-, kconfig, kcoreaddons, kdbusaddons, kdeclarative, kio, kipi-plugins
-, knotifications, kscreen, kwidgetsaddons, kwindowsystem, kxmlgui, libkipi
-, qtx11extras, knewstuff, kwayland, qttools, kcolorpicker, kimageannotator
-, qcoro, qtquickcontrols2, wayland, plasma-wayland-protocols, kpurpose, kpipewire
-, wrapGAppsHook
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  ki18n,
+  xcb-util-cursor,
+  kconfig,
+  kcoreaddons,
+  kdbusaddons,
+  kdeclarative,
+  kio,
+  kipi-plugins,
+  knotifications,
+  kscreen,
+  kwidgetsaddons,
+  kwindowsystem,
+  kxmlgui,
+  libkipi,
+  qtx11extras,
+  knewstuff,
+  kwayland,
+  qttools,
+  kcolorpicker,
+  kimageannotator,
+  qcoro,
+  qtquickcontrols2,
+  wayland,
+  plasma-wayland-protocols,
+  kpurpose,
+  kpipewire,
+  wrapGAppsHook3,
+  wayland-scanner,
 }:
 
 mkDerivation {
   pname = "spectacle";
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    kdoctools
+    wrapGAppsHook3
+    wayland-scanner
+  ];
   buildInputs = [
-    kconfig kcoreaddons kdbusaddons kdeclarative ki18n kio knotifications
-    kscreen kwidgetsaddons kwindowsystem kxmlgui libkipi qtx11extras xcb-util-cursor
-    knewstuff kwayland kcolorpicker kimageannotator qcoro qtquickcontrols2
-    wayland plasma-wayland-protocols kpurpose kpipewire
+    kconfig
+    kcoreaddons
+    kdbusaddons
+    kdeclarative
+    ki18n
+    kio
+    knotifications
+    kscreen
+    kwidgetsaddons
+    kwindowsystem
+    kxmlgui
+    libkipi
+    qtx11extras
+    xcb-util-cursor
+    knewstuff
+    kwayland
+    kcolorpicker
+    kimageannotator
+    qcoro
+    qtquickcontrols2
+    wayland
+    plasma-wayland-protocols
+    kpurpose
+    kpipewire
   ];
   postPatch = ''
     substituteInPlace desktop/org.kde.spectacle.desktop.cmake \
@@ -29,10 +79,14 @@ mkDerivation {
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  propagatedUserEnvPkgs = [ kipi-plugins libkipi ];
+  propagatedUserEnvPkgs = [
+    kipi-plugins
+    libkipi
+  ];
   meta = with lib; {
     homepage = "https://apps.kde.org/spectacle/";
     description = "Screenshot capture utility";
+    mainProgram = "spectacle";
     maintainers = with maintainers; [ ttuegel ];
   };
 }

@@ -1,32 +1,43 @@
-{ pkgs, stdenv, lib, fetchFromGitHub, dataDir ? "/var/lib/bookstack" }:
+{
+  pkgs,
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  dataDir ? "/var/lib/bookstack",
+}:
 
 let
-  package = (import ./composition.nix {
-    inherit pkgs;
-    inherit (stdenv.hostPlatform) system;
-    noDev = true; # Disable development dependencies
-  }).overrideAttrs (attrs : {
-    installPhase = attrs.installPhase + ''
-      rm -R $out/storage $out/public/uploads
-      ln -s ${dataDir}/.env $out/.env
-      ln -s ${dataDir}/storage $out/storage
-      ln -s ${dataDir}/public/uploads $out/public/uploads
-    '';
-  });
+  package =
+    (import ./composition.nix {
+      inherit pkgs;
+      inherit (stdenv.hostPlatform) system;
+      noDev = true; # Disable development dependencies
+    }).overrideAttrs
+      (attrs: {
+        installPhase =
+          attrs.installPhase
+          + ''
+            rm -R $out/storage $out/public/uploads
+            ln -s ${dataDir}/.env $out/.env
+            ln -s ${dataDir}/storage $out/storage
+            ln -s ${dataDir}/public/uploads $out/public/uploads
+          '';
+      });
 
-in package.override rec {
+in
+package.override rec {
   pname = "bookstack";
-  version = "23.12.2";
+  version = "24.12.1";
 
   src = fetchFromGitHub {
     owner = "bookstackapp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ZS93Dk4uK2j55VHWV3d3uJtro3STtaWyuOwdXlXv9Ao=";
+    sha256 = "sha256-uuek56256NCIhvvLYTHgbRBea66SUg+9xnfcOsK5Bo0=";
   };
 
   meta = with lib; {
-    description = "A platform to create documentation/wiki content built with PHP & Laravel";
+    description = "Platform to create documentation/wiki content built with PHP & Laravel";
     longDescription = ''
       A platform for storing and organising information and documentation.
       Details for BookStack can be found on the official website at https://www.bookstackapp.com/.

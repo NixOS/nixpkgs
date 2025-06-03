@@ -1,19 +1,22 @@
-{ config
-, lib
-, pkgs
-, options
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
 }:
 
 let
   logPrefix = "services.prometheus.exporter.scaphandre";
   cfg = config.services.prometheus.exporters.scaphandre;
-in {
+in
+{
   port = 8080;
   extraOpts = {
     telemetryPath = lib.mkOption {
       type = lib.types.str;
       default = "/metrics";
-      description = lib.mdDoc ''
+      description = ''
         Path under which to expose metrics.
       '';
     };

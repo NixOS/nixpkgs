@@ -1,9 +1,10 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, lxml
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lxml,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "fredericvl";
-    repo = pname;
+    repo = "pysaj";
     rev = "v${version}";
     hash = "sha256-7mN6GPRbXfEUfCrCrCs71SSt4x2Ch2y3a5rfXnuwVA0=";
   };
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pysaj"
-  ];
+  pythonImportsCheck = [ "pysaj" ];
 
   meta = with lib; {
     description = "Library to communicate with SAJ inverters";

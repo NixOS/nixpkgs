@@ -1,40 +1,42 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, wrapGAppsHook
-, cargo
-, coreutils
-, gtk-layer-shell
-, libevdev
-, libinput
-, libpulseaudio
-, meson
-, ninja
-, rustc
-, stdenv
-, udev
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  wrapGAppsHook4,
+  brightnessctl,
+  cargo,
+  coreutils,
+  dbus,
+  gtk4-layer-shell,
+  libevdev,
+  libinput,
+  libpulseaudio,
+  meson,
+  ninja,
+  rustc,
+  sassc,
+  stdenv,
+  udev,
 }:
-
 stdenv.mkDerivation rec {
   pname = "swayosd";
-  version = "unstable-2023-09-26";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "ErikReider";
     repo = "SwayOSD";
-    rev = "1c7d2f5b3ee262f25bdd3c899eadf17efb656d26";
-    hash = "sha256-Y22O6Ktya/WIhidnoyxnZu5YvXWNmSS6vecDU8zDD34=";
+    rev = "v${version}";
+    hash = "sha256-V3V18BoBRJU8mtvwWXvdYPbKBDIHdu5LzVSkDkGJjFU=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-tqbMlygX+n14oR1t+0ngjiSG2mHUk/NbiWHk4yEAb2o=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-b5Ei6k9p/KiyiSSl5zxDXrTgGAq24O5ll0BvyJ/41F8=";
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook4
     pkg-config
     meson
     rustc
@@ -44,16 +46,24 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk-layer-shell
+    gtk4-layer-shell
     libevdev
     libinput
     libpulseaudio
+    dbus
     udev
+    sassc
   ];
 
   patches = [
     ./swayosd_systemd_paths.patch
   ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : ${lib.makeBinPath [ brightnessctl ]}
+    )
+  '';
 
   postPatch = ''
     substituteInPlace data/udev/99-swayosd.rules \
@@ -62,10 +72,14 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A GTK based on screen display for keyboard shortcuts";
+    description = "GTK based on screen display for keyboard shortcuts";
     homepage = "https://github.com/ErikReider/SwayOSD";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ aleksana barab-i ];
+    maintainers = with maintainers; [
+      aleksana
+      barab-i
+      sergioribera
+    ];
     platforms = platforms.linux;
   };
 }

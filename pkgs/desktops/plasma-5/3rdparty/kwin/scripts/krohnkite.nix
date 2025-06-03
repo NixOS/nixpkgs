@@ -1,10 +1,11 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, kcoreaddons
-, kwindowsystem
-, plasma-framework
-, systemsettings
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  kcoreaddons,
+  kwindowsystem,
+  plasma-framework,
+  systemsettings,
 }:
 
 mkDerivation rec {
@@ -39,7 +40,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A dynamic tiling extension for KWin";
+    description = "Dynamic tiling extension for KWin";
     license = licenses.mit;
     maintainers = with maintainers; [ seqizz ];
     inherit (src.meta) homepage;

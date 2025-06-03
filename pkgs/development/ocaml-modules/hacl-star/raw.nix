@@ -1,36 +1,28 @@
-{ lib
-, which
-, stdenv
-, fetchzip
-, opaline
-, cmake
-, ocaml
-, findlib
-, hacl-star
-, ctypes
-, cppo
+{
+  lib,
+  which,
+  stdenv,
+  fetchzip,
+  cmake,
+  ocaml,
+  findlib,
+  ctypes,
+  cppo,
 }:
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-hacl-star-raw";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchzip {
     url = "https://github.com/cryspen/hacl-packages/releases/download/ocaml-v${version}/hacl-star.${version}.tar.gz";
-    hash = "sha256-TcAEaJou4BOVXSz5DYewzKfvIpjXmhLAlgF0hlq3ToQ=";
+    hash = "sha256-6WPbdkT9IsX0Q8mF2vLBJMktEES8tU45JztOPepAL0o=";
     stripRoot = false;
   };
-
-  patches = [
-    ./aligned-alloc.patch
-  ];
 
   # strictoverflow is disabled because it breaks aarch64-darwin
   hardeningDisable = [ "strictoverflow" ];
 
-  # Compatibility with ctypes ≥ 0.21
-  # see: https://github.com/cryspen/hacl-packages/commit/81303b83a54a92d3b5f54f1b8ddbea60438cc2bf
   postPatch = ''
-    substituteInPlace hacl-star-raw/META --replace-warn 'requires="ctypes"' 'requires="ctypes ctypes.stubs"'
     patchShebangs ./
   '';
 

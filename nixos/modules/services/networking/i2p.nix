@@ -1,16 +1,19 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.i2p;
   homeDir = "/var/lib/i2p";
-in {
+in
+{
   ###### interface
-  options.services.i2p.enable = mkEnableOption (lib.mdDoc "I2P router");
+  options.services.i2p.enable = lib.mkEnableOption "I2P router";
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.users.i2p = {
       group = "i2p";
       description = "i2p User";
@@ -27,7 +30,7 @@ in {
         User = "i2p";
         WorkingDirectory = homeDir;
         Restart = "on-abort";
-        ExecStart = "${pkgs.i2p}/bin/i2prouter-plain";
+        ExecStart = "${pkgs.i2p}/bin/i2prouter";
       };
     };
   };

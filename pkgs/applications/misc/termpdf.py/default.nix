@@ -1,5 +1,17 @@
-{ lib, buildPythonApplication, fetchFromGitHub, bibtool, pybtex, pymupdf, pynvim
-, pyperclip, roman, pdfrw, pagelabels, setuptools }:
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  bibtool,
+  pybtex,
+  pymupdf,
+  pynvim,
+  pyperclip,
+  roman,
+  pdfrw,
+  pagelabels,
+  setuptools,
+}:
 
 buildPythonApplication {
   pname = "termpdf.py";
@@ -32,6 +44,7 @@ buildPythonApplication {
       A graphical pdf (and epub, cbz, ...) reader that works
       inside the kitty terminal.
     '';
+    mainProgram = "termpdf.py";
     homepage = "https://github.com/dsanson/termpdf.py";
     maintainers = with maintainers; [ teto ];
     license = licenses.mit;

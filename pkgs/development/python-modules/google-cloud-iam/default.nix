@@ -1,31 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, libcst
-, mock
-, proto-plus
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gitUpdater,
+  google-api-core,
+  google-auth,
+  grpc-google-iam-v1,
+  libcst,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-iam";
-  version = "2.12.2";
-  format = "setuptools";
+  version = "2.19.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-YDHQwZEfx5zguLuPb+FkUoO5wakYi0g9rmI7U7TYGBw=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "google-cloud-python";
+    tag = "google-cloud-iam-v${version}";
+    hash = "sha256-E1LISOLQcXqUMTTPLR+lwkR6gF1fuGGB44j38cIK/Z4=";
   };
 
-  propagatedBuildInputs = [
+  sourceRoot = "${src.name}/packages/google-cloud-iam";
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-api-core
+    google-auth
+    grpc-google-iam-v1
     libcst
     proto-plus
+    protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
@@ -34,16 +46,28 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTestPaths = [
+    # unmaintained, reference wrong import path for google.cloud.iam.v1
+    "tests/unit/gapic/iam_admin_v1/test_iam.py"
+  ];
+
   pythonImportsCheck = [
     "google.cloud.iam_credentials"
     "google.cloud.iam_credentials_v1"
   ];
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "google-cloud-iam-v";
+  };
+
+  meta = {
     description = "IAM Service Account Credentials API client library";
-    homepage = "https://github.com/googleapis/python-iam";
-    changelog = "https://github.com/googleapis/python-iam/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ austinbutler ];
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-iam";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/${src.tag}/packages/google-cloud-iam/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      austinbutler
+      sarahec
+    ];
   };
 }

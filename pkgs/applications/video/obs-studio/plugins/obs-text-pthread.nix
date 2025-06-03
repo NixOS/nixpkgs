@@ -1,26 +1,34 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, cairo
-, obs-studio
-, pango
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  cairo,
+  obs-studio,
+  pango,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
   pname = "obs-text-pthread";
-  version = "2.0.3";
+  version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "norihiro";
     repo = "obs-text-pthread";
     rev = version;
-    sha256 = "sha256-iwPoFbXkWzwE3smWJ+//ZUayD5OO/3iMSoYUTR3LVks=";
+    sha256 = "sha256-zrgxKs3jmrwQJiEgKfZz1BOVToTLauQXtFYcuFlV71o=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ cairo obs-studio pango ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    cairo
+    obs-studio
+    pango
+  ];
 
   postInstall = ''
     mkdir $out/lib $out/share
@@ -34,6 +42,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/norihiro/obs-text-pthread";
     maintainers = with maintainers; [ flexiondotorg ];
     license = licenses.gpl2Plus;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
   };
 }

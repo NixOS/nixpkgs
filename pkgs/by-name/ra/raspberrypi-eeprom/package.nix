@@ -1,24 +1,26 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, makeWrapper
-, python3
-, binutils-unwrapped
-, findutils
-, gawk
-, kmod
-, pciutils
-, libraspberrypi
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  python3,
+  binutils-unwrapped,
+  findutils,
+  flashrom,
+  gawk,
+  kmod,
+  pciutils,
+  libraspberrypi,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "raspberrypi-eeprom";
-  version = "2024.02.16-2712";
+  version = "2025.05.08-2712";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-eeprom";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-R3X7JaS8Ob6KwN1KYaJDZA8aI4Hv6Y3R+nOMSPjt2ew=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-y3tBYKFyFz7ft82+zWGT6HUXR3hrq3mYMqJeUSsAKtQ=";
   };
 
   buildInputs = [ python3 ];
@@ -48,25 +50,37 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     for i in rpi-eeprom-update rpi-eeprom-config; do
       wrapProgram $out/bin/$i \
         --set FIRMWARE_ROOT "$out/lib/firmware/raspberrypi/bootloader" \
-        ${lib.optionalString stdenvNoCC.isAarch64 "--set VCMAILBOX ${libraspberrypi}/bin/vcmailbox"} \
-        --prefix PATH : "${lib.makeBinPath ([
-          binutils-unwrapped
-          findutils
-          gawk
-          kmod
-          pciutils
-          (placeholder "out")
-        ] ++ lib.optionals stdenvNoCC.isAarch64 [
-          libraspberrypi
-        ])}"
+        ${lib.optionalString stdenvNoCC.hostPlatform.isAarch64 "--set VCMAILBOX ${libraspberrypi}/bin/vcmailbox"} \
+        --prefix PATH : "${
+          lib.makeBinPath (
+            [
+              binutils-unwrapped
+              findutils
+              flashrom
+              gawk
+              kmod
+              pciutils
+              (placeholder "out")
+            ]
+            ++ lib.optionals stdenvNoCC.hostPlatform.isAarch64 [
+              libraspberrypi
+            ]
+          )
+        }"
     done
   '';
 
   meta = with lib; {
     description = "Installation scripts and binaries for the closed sourced Raspberry Pi 4 and 5 bootloader EEPROMs";
     homepage = "https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#raspberry-pi-4-boot-eeprom";
-    license = with licenses; [ bsd3 unfreeRedistributableFirmware ];
-    maintainers = with maintainers; [ das_j Luflosi ];
+    license = with licenses; [
+      bsd3
+      unfreeRedistributableFirmware
+    ];
+    maintainers = with maintainers; [
+      das_j
+      Luflosi
+    ];
     platforms = platforms.linux;
   };
 })

@@ -1,59 +1,62 @@
-{ lib
-, astral
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, pytz
+{
+  lib,
+  astral,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hypothesis,
+  num2words,
+  pdm-backend,
+  pytest-timeout,
+  pytest-xdist,
+  pytestCheckHook,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "hdate";
-  version = "0.10.4";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "1.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "py-libhdate";
     repo = "py-libhdate";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-NF2ZA9ruW7sL2tLY11VAtyPRxGg2o5/mpv3ZsH/Zxb8=";
+    tag = "v${version}";
+    hash = "sha256-NNaspGNfrtZqo9sUOJVyYlJT7dhr/nzueuaqewUMlpM=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'pytz = ">= 2020.0"' 'pytz = "*"' \
-      --replace 'astral = {version = "^2.2", python = "^3.6"}' 'astral = "*"'
-  '';
-
-  nativeBuildInputs = [
-    poetry-core
+  pythonRelaxDeps = [
+    "astral"
   ];
 
-  propagatedBuildInputs = [
-    astral
-    pytz
+  build-system = [
+    pdm-backend
   ];
+
+  dependencies = [
+    num2words
+  ];
+
+  optional-dependencies = {
+    astral = [ astral ];
+  };
 
   nativeCheckInputs = [
+    hypothesis
+    pytest-timeout
+    pytest-xdist
     pytestCheckHook
+    syrupy
   ];
 
-  pytestFlagsArray = [
-    "tests"
-  ];
+  pytestFlagsArray = [ "tests" ];
 
-  pythonImportsCheck = [
-    "hdate"
-  ];
+  pythonImportsCheck = [ "hdate" ];
 
   meta = with lib; {
     description = "Python module for Jewish/Hebrew date and Zmanim";
     homepage = "https://github.com/py-libhdate/py-libhdate";
-    changelog = "https://github.com/py-libhdate/py-libhdate/releases/tag/v${version}";
-    license = with licenses; [ gpl3Plus ];
+    changelog = "https://github.com/py-libhdate/py-libhdate/blob/${src.tag}/CHANGELOG.md";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fab ];
   };
 }

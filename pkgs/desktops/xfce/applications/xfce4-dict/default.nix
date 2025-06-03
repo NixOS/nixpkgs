@@ -1,27 +1,40 @@
-{ lib
-, mkXfceDerivation
-, automakeAddFlags
-, glib
-, gtk3
-, libxfce4ui
-, libxfce4util
-, xfce4-panel
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook3,
+  glib,
+  gtk3,
+  libxfce4ui,
+  libxfce4util,
+  xfce4-panel,
+  gitUpdater,
 }:
 
-mkXfceDerivation {
-  category = "apps";
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-dict";
-  version = "0.8.6";
+  version = "0.8.9";
 
-  sha256 = "sha256-a7St9iH+jzwq/llrMJkuqwgQrDFEjqebs/N6Lxa3dkI=";
+  src = fetchFromGitLab {
+    domain = "gitlab.xfce.org";
+    owner = "apps";
+    repo = "xfce4-dict";
+    tag = "xfce4-dict-${finalAttrs.version}";
+    hash = "sha256-cl5TnPlgGUZ4esdkptyXO+LagdAboSzR4m0cCre9RHA=";
+  };
 
-  patches = [ ./configure-gio.patch ];
+  strictDeps = true;
 
-  nativeBuildInputs = [ automakeAddFlags ];
-
-  postPatch = ''
-    automakeAddFlags lib/Makefile.am libdict_la_CFLAGS GIO_CFLAGS
-  '';
+  nativeBuildInputs = [
+    glib # glib-compile-resources
+    meson
+    ninja
+    pkg-config
+    wrapGAppsHook3
+  ];
 
   buildInputs = [
     glib
@@ -31,8 +44,14 @@ mkXfceDerivation {
     xfce4-panel
   ];
 
-  meta = with lib; {
-    description = "A Dictionary Client for the Xfce desktop environment";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+  passthru.updateScript = gitUpdater { rev-prefix = "xfce4-dict-"; };
+
+  meta = {
+    description = "Dictionary Client for the Xfce desktop environment";
+    homepage = "https://gitlab.xfce.org/apps/xfce4-dict";
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "xfce4-dict";
+    teams = [ lib.teams.xfce ];
+    platforms = lib.platforms.linux;
   };
-}
+})

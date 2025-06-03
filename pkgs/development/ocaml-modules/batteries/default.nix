@@ -1,10 +1,19 @@
-{ stdenv, lib, fetchFromGitHub, buildDunePackage, ocaml, qtest, qcheck, num, camlp-streams
-, doCheck ? lib.versionAtLeast ocaml.version "4.08"
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  ocaml,
+  ounit,
+  qtest,
+  qcheck,
+  num,
+  camlp-streams,
+  doCheck ? lib.versionAtLeast ocaml.version "4.08",
 }:
 
 buildDunePackage rec {
   pname = "batteries";
-  version = "3.7.2";
+  version = "3.9.0";
 
   minimalOCamlVersion = "4.05";
 
@@ -12,12 +21,18 @@ buildDunePackage rec {
     owner = "ocaml-batteries-team";
     repo = "batteries-included";
     rev = "v${version}";
-    hash = "sha256-POhdb6d4VZyCm9QYgj0m3ejduaBmm+cnd1tshWjgp04=";
+    hash = "sha256-+PGfExdvp3WyX1s8dLTBYp1SoUOBkzrxyqMUuaW6Bto=";
   };
 
   nativeCheckInputs = [ qtest ];
-  checkInputs = [ qcheck ];
-  propagatedBuildInputs = [ camlp-streams num ];
+  checkInputs = [
+    ounit
+    qcheck
+  ];
+  propagatedBuildInputs = [
+    camlp-streams
+    num
+  ];
 
   inherit doCheck;
   checkTarget = "test";

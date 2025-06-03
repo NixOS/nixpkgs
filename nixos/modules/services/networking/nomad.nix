@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 let
   cfg = config.services.nomad;
@@ -8,14 +13,14 @@ in
   ##### interface
   options = {
     services.nomad = {
-      enable = mkEnableOption (lib.mdDoc "Nomad, a distributed, highly available, datacenter-aware scheduler");
+      enable = mkEnableOption "Nomad, a distributed, highly available, datacenter-aware scheduler";
 
       package = mkPackageOption pkgs "nomad" { };
 
       extraPackages = mkOption {
         type = types.listOf types.package;
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           Extra packages to add to {env}`PATH` for the Nomad agent process.
         '';
         example = literalExpression ''
@@ -26,7 +31,7 @@ in
       dropPrivileges = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether the nomad agent should be run as a non-root nomad user.
         '';
       };
@@ -34,7 +39,7 @@ in
       enableDocker = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Enable Docker support. Needed for Nomad's docker driver.
 
           Note that the docker group membership is effectively equivalent
@@ -45,7 +50,7 @@ in
       extraSettingsPaths = mkOption {
         type = types.listOf types.path;
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           Additional settings paths used to configure nomad. These can be files or directories.
         '';
         example = literalExpression ''
@@ -56,7 +61,7 @@ in
       extraSettingsPlugins = mkOption {
         type = types.listOf (types.either types.package types.path);
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           Additional plugins dir used to configure nomad.
         '';
         example = literalExpression ''
@@ -65,7 +70,7 @@ in
       };
 
       credentials = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Credentials envs used to configure nomad secrets.
         '';
         type = types.attrsOf types.str;
@@ -79,7 +84,7 @@ in
       settings = mkOption {
         type = format.type;
         default = { };
-        description = lib.mdDoc ''
+        description = ''
           Configuration for Nomad. See the [documentation](https://www.nomadproject.io/docs/configuration)
           for supported values.
 
@@ -132,12 +137,14 @@ in
       after = [ "network-online.target" ];
       restartTriggers = [ config.environment.etc."nomad.json".source ];
 
-      path = cfg.extraPackages ++ (with pkgs; [
-        # Client mode requires at least the following:
-        coreutils
-        iproute2
-        iptables
-      ]);
+      path =
+        cfg.extraPackages
+        ++ (with pkgs; [
+          # Client mode requires at least the following:
+          coreutils
+          iproute2
+          iptables
+        ]);
 
       serviceConfig = mkMerge [
         {
@@ -145,15 +152,16 @@ in
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           ExecStart =
             let
-              pluginsDir = pkgs.symlinkJoin
-                {
-                  name = "nomad-plugins";
-                  paths = cfg.extraSettingsPlugins;
-                };
+              pluginsDir = pkgs.symlinkJoin {
+                name = "nomad-plugins";
+                paths = cfg.extraSettingsPlugins;
+              };
             in
-            "${cfg.package}/bin/nomad agent -config=/etc/nomad.json -plugin-dir=${pluginsDir}/bin" +
-            concatMapStrings (path: " -config=${path}") cfg.extraSettingsPaths +
-            concatMapStrings (key: " -config=\${CREDENTIALS_DIRECTORY}/${key}") (lib.attrNames cfg.credentials);
+            "${cfg.package}/bin/nomad agent -config=/etc/nomad.json -plugin-dir=${pluginsDir}/bin"
+            + concatMapStrings (path: " -config=${path}") cfg.extraSettingsPaths
+            + concatMapStrings (key: " -config=\${CREDENTIALS_DIRECTORY}/${key}") (
+              lib.attrNames cfg.credentials
+            );
           KillMode = "process";
           KillSignal = "SIGINT";
           LimitNOFILE = 65536;

@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitLab
-, buildDunePackage
-, lwt
-, ptime
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  lwt,
+  ptime,
 }:
 
 buildDunePackage rec {
@@ -28,7 +29,7 @@ buildDunePackage rec {
   doCheck = false;
 
   meta = {
-    description = "An opinionated clean-exit and signal-handling library for Lwt programs";
+    description = "Opinionated clean-exit and signal-handling library for Lwt programs";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ulrikstrid ];
   };

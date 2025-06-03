@@ -1,38 +1,38 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, rustPlatform
-, meson
-, ninja
-, pkg-config
-, rustc
-, cargo
-, wrapGAppsHook4
-, desktop-file-utils
-, libxml2
-, libadwaita
-, openssl
-, libsoup_3
-, webkitgtk_6_0
-, sqlite
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  rustPlatform,
+  meson,
+  ninja,
+  pkg-config,
+  rustc,
+  cargo,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  libxml2,
+  libadwaita,
+  openssl,
+  libsoup_3,
+  webkitgtk_6_0,
+  sqlite,
 }:
 
 stdenv.mkDerivation rec {
   pname = "read-it-later";
-  version = "0.5.0";
+  version = "0.6.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
-    repo = pname;
-    rev = version;
-    hash = "sha256-A8u1fecJAsVlordgZmUJt/KZWxx6EWMhfdayKWHTTFY=";
+    repo = "read-it-later";
+    tag = version;
+    hash = "sha256-ia65XGJonf/327o7L/862tOh04DOM2oXbKq86cCaVp4=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-wK7cegcjiu8i1Grey6ELoqAn2BrvElDXlCwafTLuFv0=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-mn3Jl5XEHYbCCFjLd8TBqtZKEdevH95IWKdgHwAtXk0=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     cargo
     wrapGAppsHook4
     desktop-file-utils
-    libxml2.bin #xmllint
+    libxml2.bin # xmllint
   ];
 
   buildInputs = [
@@ -55,12 +55,13 @@ stdenv.mkDerivation rec {
     sqlite
   ];
 
-  meta = with lib; {
-    description = "A simple Wallabag client with basic features to manage articles";
+  meta = {
+    description = "Simple Wallabag client with basic features to manage articles";
     homepage = "https://gitlab.gnome.org/World/read-it-later";
-    license = licenses.gpl3Plus;
+    changelog = "https://gitlab.gnome.org/World/read-it-later/-/releases/${src.tag}";
+    license = lib.licenses.gpl3Plus;
     mainProgram = "read-it-later";
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -16,18 +17,14 @@ buildPythonPackage rec {
 
   doCheck = false; # tests not in sdist, git not tagged
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "nanoid"
-  ];
+  pythonImportsCheck = [ "nanoid" ];
 
   meta = with lib; {
-    description = "A tiny, secure, URL-friendly, unique string ID generator for Python";
+    description = "Tiny, secure, URL-friendly, unique string ID generator for Python";
     homepage = "https://github.com/puyuan/py-nanoid";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

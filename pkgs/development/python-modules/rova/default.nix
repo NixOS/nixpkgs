@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "rova";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,24 +17,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "GidoHakvoort";
     repo = "rova";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6tICjph+ffS6OSMxzR4ANB4Q6sG1AKAgUN83DyEGpvo=";
+    tag = "v${version}";
+    hash = "sha256-y73Vf/E2xDy+2vnvZEllRUgsDfX33Q7AsL/UY2pR1sI=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "rova"
-  ];
+  pythonImportsCheck = [ "rova" ];
 
   meta = with lib; {
     description = "Module to access for ROVA calendars";

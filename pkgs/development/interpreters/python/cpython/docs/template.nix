@@ -1,6 +1,6 @@
 # This file was generated and will be overwritten by ./generate.sh
 
-{ stdenv, fetchurl, lib }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   pname = "pythonMAJORMINOR-docs-TYPE";

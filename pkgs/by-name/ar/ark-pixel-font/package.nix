@@ -1,38 +1,39 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, nix-update-script
-, ...
+{
+  lib,
+  python312Packages,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
-python3Packages.buildPythonPackage rec {
+python312Packages.buildPythonPackage rec {
   pname = "ark-pixel-font";
-  version = "2023.11.26";
+  version = "2025.03.14";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "TakWolf";
-    repo = pname;
-    rev = version;
-    hash = "sha256-6a9wNmcXlEesPthpMt+GrWyO3x6WVtemVTXP8rbWmLk=";
+    repo = "ark-pixel-font";
+    tag = version;
+    hash = "sha256-B/XsZEpSxY4k8uj3Vy31c9+GcO7d3NFcADLtPU6p/CI=";
   };
 
-  format = "other";
-
-  nativeBuildInputs = with python3Packages; [
+  dependencies = with python312Packages; [
     pixel-font-builder
+    pixel-font-knife
     unidata-blocks
     character-encoding-utils
-    pypng
+    pyyaml
     pillow
     beautifulsoup4
     jinja2
-    gitpython
+    loguru
+    cyclopts
   ];
 
   buildPhase = ''
     runHook preBuild
 
-    python build.py
+    python -m tools.cli --cleanup
 
     runHook postBuild
   '';
@@ -44,6 +45,9 @@ python3Packages.buildPythonPackage rec {
     install -Dm444 build/outputs/*.otf -t $out/share/fonts/opentype
     install -Dm444 build/outputs/*.ttf -t $out/share/fonts/truetype
     install -Dm444 build/outputs/*.woff2 -t $out/share/fonts/woff2
+    install -Dm444 build/outputs/*.pcf -t $out/share/fonts/pcf
+    install -Dm444 build/outputs/*.otc -t $out/share/fonts/otc
+    install -Dm444 build/outputs/*.ttc -t $out/share/fonts/ttc
 
     runHook postInstall
   '';

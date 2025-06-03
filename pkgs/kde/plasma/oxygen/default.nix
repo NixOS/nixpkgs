@@ -6,7 +6,11 @@
 mkKdeDerivation {
   pname = "oxygen";
 
-  outputs = ["out" "dev" "qt5"];
+  outputs = [
+    "out"
+    "dev"
+    "qt5"
+  ];
 
   # We can't add qt5 stuff to dependencies or the hooks blow up,
   # so manually point everything to everything. Oof.

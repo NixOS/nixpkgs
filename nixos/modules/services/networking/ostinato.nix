@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -26,20 +31,23 @@ in
 
     services.ostinato = {
 
-      enable = mkEnableOption (lib.mdDoc "Ostinato agent-controller (Drone)");
+      enable = mkEnableOption "Ostinato agent-controller (Drone)";
 
       port = mkOption {
         type = types.port;
         default = 7878;
-        description = lib.mdDoc ''
+        description = ''
           Port to listen on.
         '';
       };
 
       rateAccuracy = mkOption {
-        type = types.enum [ "High" "Low" ];
+        type = types.enum [
+          "High"
+          "Low"
+        ];
         default = "High";
-        description = lib.mdDoc ''
+        description = ''
           To ensure that the actual transmit rate is as close as possible to
           the configured transmit rate, Drone runs a busy-wait loop.
           While this provides the maximum accuracy possible, the CPU
@@ -52,7 +60,7 @@ in
         address = mkOption {
           type = types.str;
           default = "0.0.0.0";
-          description = lib.mdDoc ''
+          description = ''
             By default, the Drone RPC server will listen on all interfaces and
             local IPv4 addresses for incoming connections from clients.  Specify
             a single IPv4 or IPv6 address if you want to restrict that.
@@ -64,18 +72,24 @@ in
       portList = {
         include = mkOption {
           type = types.listOf types.str;
-          default = [];
-          example = [ "eth*" "lo*" ];
-          description = lib.mdDoc ''
+          default = [ ];
+          example = [
+            "eth*"
+            "lo*"
+          ];
+          description = ''
             For a port to pass the filter and appear on the port list managed
             by drone, it be allowed by this include list.
           '';
         };
         exclude = mkOption {
           type = types.listOf types.str;
-          default = [];
-          example = [ "usbmon*" "eth0" ];
-          description = lib.mdDoc ''
+          default = [ ];
+          example = [
+            "usbmon*"
+            "eth0"
+          ];
+          description = ''
             A list of ports does not appear on the port list managed by drone.
           '';
         };

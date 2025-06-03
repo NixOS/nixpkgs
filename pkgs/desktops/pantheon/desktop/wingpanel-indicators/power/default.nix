@@ -1,42 +1,44 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, nix-update-script
-, gnome-power-manager
-, pkg-config
-, meson
-, ninja
-, vala
-, gtk3
-, granite
-, bamf
-, libgtop
-, libnotify
-, udev
-, wingpanel
-, libgee
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  replaceVars,
+  nix-update-script,
+  gnome-power-manager,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  elementary-settings-daemon,
+  gettext,
+  gtk3,
+  granite,
+  libgtop,
+  libnotify,
+  udev,
+  wingpanel,
+  libgee,
 }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-power";
-  version = "6.2.1";
+  version = "8.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-EEY32O7GeXBHSjZQ3XGogT1sUzIKGX+CzcGx8buGLq4=";
+    sha256 = "sha256-AeeL/OcQ7V3HT3IWhTQHx/dcCSqL/0s/fShPq96V3xE=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       gnome_power_manager = gnome-power-manager;
     })
   ];
 
   nativeBuildInputs = [
+    gettext # msgfmt
     meson
     ninja
     pkg-config
@@ -44,7 +46,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    bamf
+    elementary-settings-daemon
     granite
     gtk3
     libgee
@@ -63,6 +65,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/wingpanel-indicator-power";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }

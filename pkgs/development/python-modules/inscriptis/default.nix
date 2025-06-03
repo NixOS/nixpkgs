@@ -1,44 +1,51 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, lxml
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  lxml,
+  fastapi,
+  httpx,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "inscriptis";
-  version = "2.3.2";
-  format = "setuptools";
+  version = "2.6.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "weblyzard";
     repo = "inscriptis";
-    rev = "refs/tags/${version}";
-    hash = "sha256-grsyHqt7ahiNsYKcZN/c5cJaag/nTWTBcaHaXnW1SpU=";
+    tag = version;
+    hash = "sha256-+qLHdQ4i/PYSUCZLYV3BguXjacjs7aB3MP0rJegv+dI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     lxml
     requests
   ];
 
   nativeCheckInputs = [
+    fastapi
+    httpx
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "inscriptis"
-  ];
+  pythonImportsCheck = [ "inscriptis" ];
 
   meta = with lib; {
     description = "HTML to text converter";
+    mainProgram = "inscript.py";
     homepage = "https://github.com/weblyzard/inscriptis";
-    changelog = "https://github.com/weblyzard/inscriptis/releases/tag/${version}";
+    changelog = "https://github.com/weblyzard/inscriptis/releases/tag/${src.tag}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,67 +1,81 @@
-{ lib
-, aiohttp
-, aiosqlite
-, buildPythonPackage
-, crccheck
-, cryptography
-, freezegun
-, fetchFromGitHub
-, pycryptodome
-, pyserial-asyncio
-, pytest-asyncio
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, voluptuous
+{
+  lib,
+  stdenv,
+  aiohttp,
+  aioresponses,
+  aiosqlite,
+  async-timeout,
+  attrs,
+  buildPythonPackage,
+  crccheck,
+  cryptography,
+  fetchFromGitHub,
+  freezegun,
+  frozendict,
+  jsonschema,
+  pyserial-asyncio,
+  pytest-asyncio,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.62.3";
+  version = "0.79.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-LMcyYDUH/jGrDW8sjrT9kHdIWQ20fOOcOJRhUpKMGi8=";
+    tag = version;
+    hash = "sha256-4bvVn9Pv37zngsiwy54g+z05uej5Bfwpt3mC9cxF2hk=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '"setuptools-git-versioning<2"' "" \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail '"setuptools-git-versioning<2"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    attrs
     aiohttp
     aiosqlite
     crccheck
     cryptography
+    frozendict
+    jsonschema
     pyserial-asyncio
-    pycryptodome
+    typing-extensions
     voluptuous
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
+    aioresponses
     freezegun
     pytest-asyncio
     pytest-timeout
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # # Our two manual scans succeeded and the periodic one was attempted
-    # assert len(mock_scan.mock_calls) == 3
-    # AssertionError: assert 4 == 3
-    "test_periodic_scan_priority"
+  disabledTests =
+    [
+      # assert quirked.quirk_metadata.quirk_location.endswith("zigpy/tests/test_quirks_v2.py]-line:104") is False
+      "test_quirks_v2"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+      "test_periodic_scan_priority"
+    ];
+
+  disabledTestPaths = [
+    # Tests require network access
+    "tests/ota/test_ota_providers.py"
   ];
 
   pythonImportsCheck = [

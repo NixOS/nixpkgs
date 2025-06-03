@@ -1,44 +1,43 @@
-{ lib
-, buildPythonPackage
-, fastavro
-, fetchPypi
-, google-api-core
-, google-auth
-, google-cloud-bigquery
-, pandas
-, protobuf
-, pyarrow
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fastavro,
+  fetchPypi,
+  google-api-core,
+  google-auth,
+  google-cloud-bigquery,
+  pandas,
+  protobuf,
+  pyarrow,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery-storage";
-  version = "2.24.0";
-  format = "setuptools";
+  version = "2.30.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-tK9bmqzYOWuEB9G4d2AaN22O6m0ZKCOop4gb0v3Ads4=";
+    pname = "google_cloud_bigquery_storage";
+    inherit version;
+    hash = "sha256-QayD+p7dvIIBAhd5hKuS+Le736fZDqZLOgr17LT8o/I=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-api-core
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  passthru.optional-dependencies = {
-    fastavro = [
-      fastavro
-    ];
-    pandas = [
-      pandas
-    ];
-    pyarrow = [
-      pyarrow
-    ];
+  optional-dependencies = {
+    fastavro = [ fastavro ];
+    pandas = [ pandas ];
+    pyarrow = [ pyarrow ];
   };
 
   nativeCheckInputs = [
@@ -65,6 +64,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-bigquery-storage";
     changelog = "https://github.com/googleapis/python-bigquery-storage/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
+    mainProgram = "fixup_bigquery_storage_v1_keywords.py";
   };
 }

@@ -1,14 +1,16 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
-  # interface
   options.programs.k3b = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable k3b, the KDE disk burning application.
 
         Additionally to installing `k3b` enabling this will
@@ -21,11 +23,10 @@ with lib;
     };
   };
 
-  # implementation
-  config = mkIf config.programs.k3b.enable {
+  config = lib.mkIf config.programs.k3b.enable {
 
     environment.systemPackages = with pkgs; [
-      k3b
+      kdePackages.k3b
       dvdplusrwtools
       cdrdao
       cdrtools

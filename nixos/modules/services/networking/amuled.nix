@@ -1,7 +1,10 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.amule;
   opt = options.services.amule;
@@ -16,29 +19,29 @@ in
 
     services.amule = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to run the AMule daemon. You need to manually run "amuled --ec-config" to configure the service for the first time.
         '';
       };
 
-      dataDir = mkOption {
-        type = types.str;
+      dataDir = lib.mkOption {
+        type = lib.types.str;
         default = "/home/${user}/";
-        defaultText = literalExpression ''
+        defaultText = lib.literalExpression ''
           "/home/''${config.${opt.user}}/"
         '';
-        description = lib.mdDoc ''
+        description = ''
           The directory holding configuration, incoming and temporary files.
         '';
       };
 
-      user = mkOption {
-        type = types.nullOr types.str;
+      user = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           The user the AMule daemon should run as.
         '';
       };
@@ -47,22 +50,25 @@ in
 
   };
 
-
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    users.users = mkIf (cfg.user == null) [
-      { name = "amule";
+    users.users = lib.mkIf (cfg.user == null) [
+      {
+        name = "amule";
         description = "AMule daemon";
         group = "amule";
         uid = config.ids.uids.amule;
-      } ];
+      }
+    ];
 
-    users.groups = mkIf (cfg.user == null) [
-      { name = "amule";
+    users.groups = lib.mkIf (cfg.user == null) [
+      {
+        name = "amule";
         gid = config.ids.gids.amule;
-      } ];
+      }
+    ];
 
     systemd.services.amuled = {
       description = "AMule daemon";

@@ -1,125 +1,157 @@
-{ lib
-, stdenv
-, anytree
-, buildPythonPackage
-, cached-property
-, cgen
-, click
-, codepy
-, distributed
-, fetchFromGitHub
-, gcc
-, llvmPackages
-, matplotlib
-, multidict
-, nbval
-, psutil
-, py-cpuinfo
-, pyrevolve
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, scipy
-, sympy
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  anytree,
+  cgen,
+  cloudpickle,
+  codepy,
+  llvmPackages,
+  multidict,
+  numpy,
+  packaging,
+  psutil,
+  py-cpuinfo,
+  sympy,
+
+  # tests
+  click,
+  gcc,
+  matplotlib,
+  pytest-xdist,
+  pytestCheckHook,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "devito";
-  version = "4.8.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "4.8.17";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "devitocodes";
     repo = "devito";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-g9rRJF1JrZ6+s3tj4RZHuGOjt5LJjtK9I5CJmq4CJL4=";
+    tag = "v${version}";
+    hash = "sha256-1aZSL23yNi/X9hnYKpIvgEOjEZtvPgTo5Pi5kKOWJhQ=";
   };
 
-  pythonRemoveDeps = [
-    "codecov"
-    "flake8"
-    "pytest-runner"
-    "pytest-cov"
-  ];
+  pythonRemoveDeps = [ "pip" ];
 
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     anytree
-    cached-property
     cgen
-    click
+    cloudpickle
     codepy
-    distributed
-    nbval
     multidict
+    numpy
+    packaging
     psutil
     py-cpuinfo
-    pyrevolve
-    scipy
     sympy
-  ] ++ lib.optionals stdenv.cc.isClang [
-    llvmPackages.openmp
-  ];
+  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   nativeCheckInputs = [
+    click
     gcc
     matplotlib
     pytest-xdist
     pytestCheckHook
+    scipy
   ];
 
-  pytestFlagsArray = [ "-x" ];
+  pytestFlagsArray =
+    [
+      "-x"
+      # Tests marked as 'parallel' require mpi and fail in the sandbox:
+      # FileNotFoundError: [Errno 2] No such file or directory: 'mpiexec'
+      "-m 'not parallel'"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # assert np.all(f.data == check)
+      # assert Data(False)
+      "--deselect tests/test_data.py::TestDataReference::test_w_data"
 
-  # I've had to disable the following tests since they fail while using nix-build, but they do pass
-  # outside the build. They mostly related to the usage of MPI in a sandboxed environment.
-  disabledTests = [
-    "test_assign_parallel"
-    "test_cache_blocking_structure_distributed"
-    "test_codegen_quality0"
-    "test_coefficients_w_xreplace"
-    "test_docstrings"
-    "test_docstrings[finite_differences.coefficients]"
-    "test_gs_parallel"
-    "test_if_halo_mpi"
-    "test_if_parallel"
-    "test_init_omp_env_w_mpi"
-    "test_loop_bounds_forward"
-    "test_mpi_nocomms"
-    "test_mpi"
-    "test_index_derivative"
-    "test_new_distributor"
-    "test_setupWOverQ"
-    "test_shortcuts"
-    "test_subdomainset_mpi"
-  ];
+      # AssertionError: assert 'omp for schedule(dynamic,1)' == 'omp for coll...le(dynamic,1)'
+      "--deselect tests/test_dle.py::TestNestedParallelism::test_nested_cache_blocking_structure_subdims"
 
-  disabledTestPaths = [
-    "tests/test_pickle.py"
-    "tests/test_benchmark.py"
-    "tests/test_mpi.py"
-    "tests/test_autotuner.py"
-    "tests/test_data.py"
-    "tests/test_dse.py"
-    "tests/test_gradient.py"
-  ];
+      # codepy.CompileError: module compilation failed
+      # FAILED compiler invocation
+      "--deselect tests/test_dle.py::TestNodeParallelism::test_dynamic_nthreads"
 
-  pythonImportsCheck = [
-    "devito"
-  ];
+      # AssertionError: assert all(not i.pragmas for i in iters[2:])
+      "--deselect tests/test_dle.py::TestNodeParallelism::test_incr_perfect_sparse_outer"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # IndexError: tuple index out of range
+      "--deselect tests/test_dle.py::TestNestedParallelism"
 
-  meta = with lib; {
+      # codepy.CompileError: module compilation failed
+      "--deselect tests/test_autotuner.py::test_nested_nthreads"
+
+      # assert np.all(np.isclose(f0.data, check0))
+      # assert Data(false)
+      "--deselect tests/test_interpolation.py::TestSubDomainInterpolation::test_inject_subdomain"
+    ];
+
+  disabledTests =
+    [
+      # Download dataset from the internet
+      "test_gs_2d_float"
+      "test_gs_2d_int"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # FAILED tests/test_unexpansion.py::Test2Pass::test_v0 - assert False
+      "test_v0"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # FAILED tests/test_caching.py::TestCaching::test_special_symbols - ValueError: not enough values to unpack (expected 3, got 2)
+      "test_special_symbols"
+
+      # FAILED tests/test_unexpansion.py::Test2Pass::test_v0 - codepy.CompileError: module compilation failed
+      "test_v0"
+
+      # AssertionError: assert(np.allclose(grad_u.data, grad_v.data, rtol=tolerance, atol=tolerance))
+      "test_gradient_equivalence"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      # Numerical tests
+      "test_lm_fb"
+      "test_lm_ds"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+      # Numerical error
+      "test_pow_precision"
+    ];
+
+  disabledTestPaths =
+    lib.optionals
+      ((stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin)
+      [
+        # Flaky: codepy.CompileError: module compilation failed
+        "tests/test_dse.py"
+      ];
+
+  pythonImportsCheck = [ "devito" ];
+
+  meta = {
     description = "Code generation framework for automated finite difference computation";
     homepage = "https://www.devitoproject.org/";
     changelog = "https://github.com/devitocodes/devito/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ atila ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ atila ];
   };
 }

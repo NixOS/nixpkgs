@@ -1,48 +1,81 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, cython
-, fftw
-, pandas
-, scikit-learn
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  cython,
+  fftw,
+  pandas,
+  scikit-learn,
+  numpy,
+  pip,
+  setuptools,
+  pytestCheckHook,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "mrsqm";
-  version = "0.0.6";
-  format = "setuptools";
+  version = "0.0.7";
+  pyproject = true;
+
+  build-system = [
+    setuptools
+  ];
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-dBwWiJEL76aXqM2vKn4uQsd86Rm3bMeDSsRRs/aLWCE=";
+  src = fetchFromGitHub {
+    owner = "mlgig";
+    repo = "mrsqm";
+    tag = "v.${version}";
+    hash = "sha256-5K6vCU0HExnmYNThZNDCbEtII9bUGauxDtKkJXe/85Q=";
   };
 
   buildInputs = [ fftw ];
 
-  nativeBuildInputs = [
-    cython
-  ];
+  nativeBuildInputs = [ cython ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pandas
     scikit-learn
     numpy
+    pip
   ];
 
-  # Package has no tests
-  doCheck = false;
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "setup_requires=['pytest-runner']," ""
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy==" "numpy>="
+  '';
+
+  preBuild = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "tests/mrsqm"
+  ];
 
   pythonImportsCheck = [ "mrsqm" ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "v\\.(.*)"
+    ];
+  };
+
+  meta = {
     description = "MrSQM (Multiple Representations Sequence Miner) is a time series classifier";
     homepage = "https://pypi.org/project/mrsqm";
-    changelog = "https://github.com/mlgig/mrsqm/releases/tag/v.${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ mbalatsko ];
+    changelog = "https://github.com/mlgig/mrsqm/releases/tag/v.${src.tag}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ mbalatsko ];
   };
 }

@@ -1,15 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, buildPythonPackage
-, python3Packages
-, pybind11
-, cmake
-, xcbuild
-, zsh
-, darwin
-, blas
-, lapack
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pybind11,
+  cmake,
+  xcbuild,
+  zsh,
+  blas,
+  lapack,
+  setuptools,
 }:
 
 let
@@ -29,13 +28,13 @@ let
 in
 buildPythonPackage rec {
   pname = "mlx";
-  version = "0.1.0";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "ml-explore";
     repo = "mlx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xNJPG8XGbC0fy6RGcn1cxCsejyHsgnV35PuP8F1I4R4=";
+    hash = "sha256-wxv9bA9e8VyFv/FMh63sUTTNgkXHGQJNQhLuVynczZA=";
   };
 
   pyproject = true;
@@ -53,6 +52,9 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
+  # updates the wrong fetcher rev attribute
+  passthru.skipBulkUpdate = true;
+
   env = {
     PYPI_RELEASE = version;
     # we can't use Metal compilation with Darwin SDK 11
@@ -63,16 +65,30 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeBuildInputs = [ cmake pybind11 xcbuild zsh gguf-tools nlohmann_json ] ++ (with python3Packages; [ setuptools ]);
+  nativeBuildInputs = [
+    cmake
+    pybind11
+    xcbuild
+    zsh
+    gguf-tools
+    nlohmann_json
+    setuptools
+  ];
 
-  buildInputs = [ blas lapack ];
+  buildInputs = [
+    blas
+    lapack
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/ml-explore/mlx";
-    description = "An array framework for Apple silicon";
+    description = "Array framework for Apple silicon";
     changelog = "https://github.com/ml-explore/mlx/releases/tag/v${version}";
     license = licenses.mit;
     platforms = [ "aarch64-darwin" ];
-    maintainers = with maintainers; [ viraptor ];
+    maintainers = with maintainers; [
+      viraptor
+      Gabriella439
+    ];
   };
 }

@@ -1,34 +1,35 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, hatchling
-, hatch-vcs
-, numpy
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  hatchling,
+  hatch-vcs,
+  fastjsonschema,
+  numpy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "uhi";
-  version = "0.4.0";
-  format = "pyproject";
+  version = "0.5.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-DctrGXdQh9OKMe44jLLHDy7P4ExP/iymMiNBDK5b7vo=";
+    hash = "sha256-lVm78vOPGKL8HY9zE5OWBo+I+JjWqa/IMyB+wP1Zoxw=";
   };
 
-  buildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    fastjsonschema
     numpy
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Universal Histogram Interface";

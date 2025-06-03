@@ -1,25 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, markdown
-, mkdocs
-, pytestCheckHook
-, pdm-backend
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  markdown,
+  mkdocs-material,
+  pytestCheckHook,
+  pdm-backend,
+  markupsafe,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs-autorefs";
-  version = "0.5.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "1.4.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "autorefs";
-    rev = "refs/tags/${version}";
-    hash = "sha256-GZKQlOXhQIQhS/z4cbmS6fhAKYgnVhSXh5a8Od7+TWc=";
+    tag = version;
+    hash = "sha256-MO1ovW95v3QFaUfY2MDNLi14Hq/TbPkLKClQfOPc5no=";
   };
 
   postPatch = ''
@@ -27,28 +26,34 @@ buildPythonPackage rec {
       --replace 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
-    pdm-backend
-  ];
+  build-system = [ pdm-backend ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     markdown
-    mkdocs
+    markupsafe
+    mkdocs-material
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTestPaths = [
+    # Circular dependencies
+    "tests/test_api.py"
   ];
 
-  pythonImportsCheck = [
-    "mkdocs_autorefs"
+  disabledTests = [
+    # missing pymdownx
+    "test_reference_implicit_with_code_inlinehilite_plain"
+    "test_reference_implicit_with_code_inlinehilite_python"
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "mkdocs_autorefs" ];
+
+  meta = {
     description = "Automatically link across pages in MkDocs";
     homepage = "https://github.com/mkdocstrings/autorefs/";
-    changelog = "https://github.com/mkdocstrings/autorefs/blob/${version}/CHANGELOG.md";
-    license = licenses.isc;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/mkdocstrings/autorefs/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

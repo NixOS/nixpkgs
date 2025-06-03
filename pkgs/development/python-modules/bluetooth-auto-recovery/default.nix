@@ -1,35 +1,36 @@
-{ lib
-, async-timeout
-, bluetooth-adapters
-, btsocket
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pyric
-, pytestCheckHook
-, pythonOlder
-, usb-devices
+{
+  lib,
+  async-timeout,
+  bluetooth-adapters,
+  btsocket,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pyric,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  usb-devices,
 }:
 
 buildPythonPackage rec {
   pname = "bluetooth-auto-recovery";
-  version = "1.3.0";
-  format = "pyproject";
+  version = "1.5.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-4DFi7UrEQgU7dckUuGxj/sWyystx8NYb6xK4hyurKKo=";
+    repo = "bluetooth-auto-recovery";
+    tag = "v${version}";
+    hash = "sha256-p8xuYmU0gXQYnPdTzzJTyQTYuShzPa/twD8r5HNEsN4=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     async-timeout
     bluetooth-adapters
     btsocket
@@ -38,17 +39,12 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=bluetooth_auto_recovery --cov-report=term-missing:skip-covered" ""
-  '';
-
-  pythonImportsCheck = [
-    "bluetooth_auto_recovery"
-  ];
+  pythonImportsCheck = [ "bluetooth_auto_recovery" ];
 
   meta = with lib; {
     description = "Library for recovering Bluetooth adapters";

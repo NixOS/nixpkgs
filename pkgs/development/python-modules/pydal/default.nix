@@ -1,30 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
+  legacy-cgi,
 }:
 
 buildPythonPackage rec {
   pname = "pydal";
-  version = "20231114.3";
-  format = "pyproject";
+  version = "20250526.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xC0W/Knju205mu+yQ0wOcIYu4Tx1Q3hS9CGSBDLuX7E=";
+    hash = "sha256-OprwHcF7vHpqdNUd9vAcHJAmiI8mTJgR6GRLwZvn928=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  checkInputs = lib.optionals (pythonAtLeast "3.13") [ legacy-cgi ];
 
   pytestFlagsArray = [
     "tests/*.py"
@@ -35,17 +37,23 @@ buildPythonPackage rec {
     "--deselect=tests/nosql.py::TestExpressions::testRun"
     "--deselect=tests/nosql.py::TestImportExportUuidFields::testRun"
     "--deselect=tests/nosql.py::TestConnection::testRun"
+    "--deselect=tests/restapi.py::TestRestAPI::test_search"
     "--deselect=tests/validation.py::TestValidateAndInsert::testRun"
     "--deselect=tests/validation.py::TestValidateUpdateInsert::testRun"
     "--deselect=tests/validators.py::TestValidators::test_IS_IN_DB"
   ];
 
-  pythonImportsCheck = ["pydal"];
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+    "test_scheduler"
+  ];
+
+  pythonImportsCheck = [ "pydal" ];
 
   meta = with lib; {
     description = "Python Database Abstraction Layer";
     homepage = "https://github.com/web2py/pydal";
-    license = with licenses; [ bsd3 ] ;
+    license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ wamserma ];
   };
 }

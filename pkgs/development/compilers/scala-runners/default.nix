@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, coursier }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  coursier,
+}:
 
 stdenv.mkDerivation rec {
   pname = "scala-runners";
@@ -14,7 +19,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   installPhase = ''
     mkdir -p $out/bin $out/lib
-    sed -ie "s| cs | ${coursier}/bin/cs |" scala-runner
+    sed -i -e "s| cs | ${coursier}/bin/cs |" scala-runner
     cp scala-runner $out/lib
     ln -s $out/lib/scala-runner $out/bin/scala
     ln -s $out/lib/scala-runner $out/bin/scalac
@@ -24,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/dwijnand/scala-runners";
-    description = "An alternative implementation of the Scala distribution's runners";
+    description = "Alternative implementation of the Scala distribution's runners";
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ hrhino ];

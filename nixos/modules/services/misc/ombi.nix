@@ -1,51 +1,59 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+let
+  cfg = config.services.ombi;
 
-with lib;
-
-let cfg = config.services.ombi;
-
-in {
+in
+{
   options = {
     services.ombi = {
-      enable = mkEnableOption (lib.mdDoc ''
-        Ombi.
+      enable = lib.mkEnableOption ''
+        Ombi, a web application that automatically gives your shared Plex or
+        Emby users the ability to request content by themselves!
+
         Optionally see <https://docs.ombi.app/info/reverse-proxy>
         on how to set up a reverse proxy
-      '');
+      '';
 
-      dataDir = mkOption {
-        type = types.str;
+      package = lib.mkPackageOption pkgs "ombi" { };
+
+      dataDir = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/ombi";
-        description = lib.mdDoc "The directory where Ombi stores its data files.";
+        description = "The directory where Ombi stores its data files.";
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 5000;
-        description = lib.mdDoc "The port for the Ombi web interface.";
+        description = "The port for the Ombi web interface.";
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc "Open ports in the firewall for the Ombi web interface.";
+        description = "Open ports in the firewall for the Ombi web interface.";
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "ombi";
-        description = lib.mdDoc "User account under which Ombi runs.";
+        description = "User account under which Ombi runs.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "ombi";
-        description = lib.mdDoc "Group under which Ombi runs.";
+        description = "Group under which Ombi runs.";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -"
     ];
@@ -59,16 +67,16 @@ in {
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${pkgs.ombi}/bin/Ombi --storage '${cfg.dataDir}' --host 'http://*:${toString cfg.port}'";
+        ExecStart = "${lib.getExe cfg.package} --storage '${cfg.dataDir}' --host 'http://*:${toString cfg.port}'";
         Restart = "on-failure";
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.port ];
     };
 
-    users.users = mkIf (cfg.user == "ombi") {
+    users.users = lib.mkIf (cfg.user == "ombi") {
       ombi = {
         isSystemUser = true;
         group = cfg.group;
@@ -76,6 +84,6 @@ in {
       };
     };
 
-    users.groups = mkIf (cfg.group == "ombi") { ombi = { }; };
+    users.groups = lib.mkIf (cfg.group == "ombi") { ombi = { }; };
   };
 }

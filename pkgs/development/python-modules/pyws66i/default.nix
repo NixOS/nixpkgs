@@ -1,8 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  standard-telnetlib,
 }:
 
 buildPythonPackage rec {
@@ -14,18 +17,16 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "ssaenger";
-    repo = pname;
+    repo = "pyws66i";
     rev = "v${version}";
     hash = "sha256-NTL2+xLqSNsz4YdUTwr0nFjhm1NNgB8qDnWSoE2sizY=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  dependencies = lib.optionals (pythonAtLeast "3.13") [ standard-telnetlib ];
 
-  pythonImportsCheck = [
-    "pyws66i"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "pyws66i" ];
 
   meta = with lib; {
     description = "Library to interface with WS66i 6-zone amplifier";

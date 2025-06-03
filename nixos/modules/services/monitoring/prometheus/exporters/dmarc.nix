@@ -1,15 +1,23 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.dmarc;
+  inherit (lib) mkOption types optionalString;
 
   json = builtins.toJSON {
     inherit (cfg) folders port;
     listen_addr = cfg.listenAddress;
     storage_path = "$STATE_DIRECTORY";
-    imap = (builtins.removeAttrs cfg.imap [ "passwordFile" ]) // { password = "$IMAP_PASSWORD"; use_ssl = true; };
+    imap = (builtins.removeAttrs cfg.imap [ "passwordFile" ]) // {
+      password = "$IMAP_PASSWORD";
+      use_ssl = true;
+    };
     poll_interval_seconds = cfg.pollIntervalSeconds;
     deduplication_max_seconds = cfg.deduplicationMaxSeconds;
     logging = {
@@ -17,35 +25,36 @@ let
       disable_existing_loggers = false;
     };
   };
-in {
+in
+{
   port = 9797;
   extraOpts = {
     imap = {
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = lib.mdDoc ''
+        description = ''
           Hostname of IMAP server to connect to.
         '';
       };
       port = mkOption {
         type = types.port;
         default = 993;
-        description = lib.mdDoc ''
+        description = ''
           Port of the IMAP server to connect to.
         '';
       };
       username = mkOption {
         type = types.str;
         example = "postmaster@example.org";
-        description = lib.mdDoc ''
+        description = ''
           Login username for the IMAP connection.
         '';
       };
       passwordFile = mkOption {
         type = types.str;
         example = "/run/secrets/dovecot_pw";
-        description = lib.mdDoc ''
+        description = ''
           File containing the login password for the IMAP connection.
         '';
       };
@@ -54,21 +63,21 @@ in {
       inbox = mkOption {
         type = types.str;
         default = "INBOX";
-        description = lib.mdDoc ''
+        description = ''
           IMAP mailbox that is checked for incoming DMARC aggregate reports
         '';
       };
       done = mkOption {
         type = types.str;
         default = "Archive";
-        description = lib.mdDoc ''
+        description = ''
           IMAP mailbox that successfully processed reports are moved to.
         '';
       };
       error = mkOption {
         type = types.str;
         default = "Invalid";
-        description = lib.mdDoc ''
+        description = ''
           IMAP mailbox that emails are moved to that could not be processed.
         '';
       };
@@ -76,7 +85,7 @@ in {
     pollIntervalSeconds = mkOption {
       type = types.ints.unsigned;
       default = 60;
-      description = lib.mdDoc ''
+      description = ''
         How often to poll the IMAP server in seconds.
       '';
     };
@@ -84,7 +93,7 @@ in {
       type = types.ints.unsigned;
       default = 604800;
       defaultText = "7 days (in seconds)";
-      description = lib.mdDoc ''
+      description = ''
         How long individual report IDs will be remembered to avoid
         counting double delivered reports twice.
       '';
@@ -92,13 +101,16 @@ in {
     debug = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to declare enable `--debug`.
       '';
     };
   };
   serviceOpts = {
-    path = with pkgs; [ envsubst coreutils ];
+    path = with pkgs; [
+      envsubst
+      coreutils
+    ];
     serviceConfig = {
       StateDirectory = "prometheus-dmarc-exporter";
       WorkingDirectory = "/var/lib/prometheus-dmarc-exporter";

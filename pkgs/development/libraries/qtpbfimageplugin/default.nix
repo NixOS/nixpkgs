@@ -1,18 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qtbase, protobuf }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  qtbase,
+}:
 
 stdenv.mkDerivation rec {
   pname = "qtpbfimageplugin";
-  version = "3.0";
+  version = "4.0";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "QtPBFImagePlugin";
-    rev = version;
-    sha256 = "sha256-RYZnuHjK6/ygFsjjnOTz7glYnibTwDNlou/4cQ7HfKM=";
+    tag = version;
+    hash = "sha256-17mQ7aTpZhmsoAHhnueHSRTvCIHRcpWwZHZM+YUdeps=";
   };
 
-  nativeBuildInputs = [ qmake ];
-  buildInputs = [ qtbase protobuf ];
+  nativeBuildInputs = [
+    qmake
+  ];
+
+  buildInputs = [
+    qtbase
+  ];
 
   dontWrapQtApps = true;
 
@@ -20,11 +31,6 @@ stdenv.mkDerivation rec {
     # Fix plugin dir
     substituteInPlace pbfplugin.pro \
       --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
-  '' + lib.optionalString stdenv.isDarwin ''
-    # Fix darwin build
-    substituteInPlace pbfplugin.pro \
-      --replace '$$PROTOBUF/include' '${protobuf}/include' \
-      --replace '$$PROTOBUF/lib/libprotobuf-lite.a' '${protobuf}/lib/libprotobuf-lite.dylib'
   '';
 
   meta = with lib; {

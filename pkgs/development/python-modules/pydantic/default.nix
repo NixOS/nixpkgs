@@ -1,79 +1,82 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, hatchling
-, hatch-fancy-pypi-readme
+  # build-system
+  hatchling,
+  hatch-fancy-pypi-readme,
 
-# native dependencies
-, libxcrypt
+  # dependencies
+  annotated-types,
+  pydantic-core,
+  typing-extensions,
+  typing-inspection,
 
-# dependencies
-, annotated-types
-, pydantic-core
-, typing-extensions
-
-# tests
-, cloudpickle
-, email-validator
-, dirty-equals
-, faker
-, pytestCheckHook
-, pytest-mock
+  # tests
+  cloudpickle,
+  email-validator,
+  dirty-equals,
+  jsonschema,
+  pytestCheckHook,
+  pytest-codspeed,
+  pytest-mock,
+  pytest-run-parallel,
+  eval-type-backport,
+  rich,
 }:
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "2.5.2";
+  version = "2.11.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-D0gYcyrKVVDhBgV9sCVTkGq/kFmIoT9l0i5bRM1qxzM=";
+    tag = "v${version}";
+    hash = "sha256-82knT2Dzm/p0dz56bH0sZ4WffgFnN5cukbipPBO65fQ=";
   };
 
-  buildInputs = lib.optionals (pythonOlder "3.9") [
-    libxcrypt
-  ];
+  postPatch = ''
+    sed -i "/--benchmark/d" pyproject.toml
+  '';
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-fancy-pypi-readme
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     annotated-types
     pydantic-core
     typing-extensions
+    typing-inspection
   ];
 
-  passthru.optional-dependencies = {
-    email = [
-      email-validator
-    ];
+  optional-dependencies = {
+    email = [ email-validator ];
   };
 
-  nativeCheckInputs = [
-    cloudpickle
-    dirty-equals
-    faker
-    pytest-mock
-    pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  nativeCheckInputs =
+    [
+      cloudpickle
+      dirty-equals
+      jsonschema
+      pytest-codspeed
+      pytest-mock
+      pytest-run-parallel
+      pytestCheckHook
+      rich
+    ]
+    ++ lib.flatten (lib.attrValues optional-dependencies)
+    ++ lib.optionals (pythonOlder "3.10") [ eval-type-backport ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
-    substituteInPlace pyproject.toml \
-      --replace "'--benchmark-columns', 'min,mean,stddev,outliers,rounds,iterations'," "" \
-      --replace "'--benchmark-group-by', 'group'," "" \
-      --replace "'--benchmark-warmup', 'on'," "" \
-      --replace "'--benchmark-disable'," ""
   '';
 
   disabledTestPaths = [
@@ -88,7 +91,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Data validation and settings management using Python type hinting";
     homepage = "https://github.com/pydantic/pydantic";
-    changelog = "https://github.com/pydantic/pydantic/blob/v${version}/HISTORY.md";
+    changelog = "https://github.com/pydantic/pydantic/blob/${src.tag}/HISTORY.md";
     license = licenses.mit;
     maintainers = with maintainers; [ wd15 ];
   };

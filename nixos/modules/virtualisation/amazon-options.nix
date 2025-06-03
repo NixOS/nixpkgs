@@ -1,20 +1,26 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   inherit (lib) literalExpression types;
-in {
+in
+{
   options = {
     ec2 = {
       zfs = {
         enable = lib.mkOption {
           default = false;
           internal = true;
-          description = lib.mdDoc ''
+          description = ''
             Whether the EC2 instance uses a ZFS root.
           '';
         };
 
         datasets = lib.mkOption {
-          description = lib.mdDoc ''
+          description = ''
             Datasets to create under the `tank` and `boot` zpools.
 
             **NOTE:** This option is used only at image creation time, and
@@ -22,30 +28,32 @@ in {
             on an existing system.
           '';
 
-          default = {};
+          default = { };
 
-          type = types.attrsOf (types.submodule {
-            options = {
-              mount = lib.mkOption {
-                description = lib.mdDoc "Where to mount this dataset.";
-                type = types.nullOr types.str;
-                default = null;
-              };
+          type = types.attrsOf (
+            types.submodule {
+              options = {
+                mount = lib.mkOption {
+                  description = "Where to mount this dataset.";
+                  type = types.nullOr types.str;
+                  default = null;
+                };
 
-              properties = lib.mkOption {
-                description = lib.mdDoc "Properties to set on this dataset.";
-                type = types.attrsOf types.str;
-                default = {};
+                properties = lib.mkOption {
+                  description = "Properties to set on this dataset.";
+                  type = types.attrsOf types.str;
+                  default = { };
+                };
               };
-            };
-          });
+            }
+          );
         };
       };
       efi = lib.mkOption {
         default = pkgs.stdenv.hostPlatform.isAarch64;
         defaultText = literalExpression "pkgs.stdenv.hostPlatform.isAarch64";
         internal = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether the EC2 instance is using EFI.
         '';
       };
@@ -61,13 +69,16 @@ in {
   config = lib.mkIf config.ec2.zfs.enable {
     networking.hostId = lib.mkDefault "00000000";
 
-    fileSystems = let
-      mountable = lib.filterAttrs (_: value: ((value.mount or null) != null)) config.ec2.zfs.datasets;
-    in lib.mapAttrs'
-      (dataset: opts: lib.nameValuePair opts.mount {
-        device = dataset;
-        fsType = "zfs";
-      })
-      mountable;
+    fileSystems =
+      let
+        mountable = lib.filterAttrs (_: value: ((value.mount or null) != null)) config.ec2.zfs.datasets;
+      in
+      lib.mapAttrs' (
+        dataset: opts:
+        lib.nameValuePair opts.mount {
+          device = dataset;
+          fsType = "zfs";
+        }
+      ) mountable;
   };
 }

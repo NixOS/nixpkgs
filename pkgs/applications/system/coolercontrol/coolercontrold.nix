@@ -1,12 +1,15 @@
-{ rustPlatform
-, buildNpmPackage
-, testers
-, coolercontrol
+{
+  rustPlatform,
+  testers,
+  libdrm,
+  coolercontrol,
+  runtimeShell,
 }:
 
-{ version
-, src
-, meta
+{
+  version,
+  src,
+  meta,
 }:
 
 rustPlatform.buildRustPackage {
@@ -14,19 +17,25 @@ rustPlatform.buildRustPackage {
   inherit version src;
   sourceRoot = "${src.name}/coolercontrold";
 
-  cargoHash = "sha256-Ybqr36AkcPnGJeFcCqg/zuWcaooZ1gJPCi5IbgXmeJ0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ZyYyQcaYd3VZ7FL0Hki33JO3LscPfBT5gl+nw2cXvUs=";
 
-  # copy the frontend static resources to a directory for embedding
+  buildInputs = [ libdrm ];
+
   postPatch = ''
+    # copy the frontend static resources to a directory for embedding
     mkdir -p ui-build
-    cp -R ${coolercontrol.coolercontrol-ui-data}/* ui-build/
-    substituteInPlace build.rs --replace '"./resources/app"' '"./ui-build"'
+    cp -R ${coolercontrol.coolercontrol-ui-data}/* resources/app/
+
+    # Hardcode a shell
+    substituteInPlace src/repositories/utils.rs \
+      --replace-fail 'Command::new("sh")' 'Command::new("${runtimeShell}")'
   '';
 
   postInstall = ''
     install -Dm444 "${src}/packaging/systemd/coolercontrold.service" -t "$out/lib/systemd/system"
     substituteInPlace "$out/lib/systemd/system/coolercontrold.service" \
-      --replace '/usr/bin' "$out/bin"
+      --replace-fail '/usr/bin' "$out/bin"
   '';
 
   passthru.tests.version = testers.testVersion {

@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonRelaxDepsHook
-, setuptools-scm
-, python-vagrant
-, docker
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  python-vagrant,
+  docker,
 }:
 
 buildPythonPackage rec {
@@ -18,22 +18,15 @@ buildPythonPackage rec {
   };
 
   # reverse the dependency
-  pythonRemoveDeps = [
-    "molecule"
-  ];
+  pythonRemoveDeps = [ "molecule" ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools-scm
   ];
 
-  passthru.optional-dependencies = {
-    docker = [
-      docker
-    ];
-    vagrant = [
-      python-vagrant
-    ];
+  optional-dependencies = {
+    docker = [ docker ];
+    vagrant = [ python-vagrant ];
   };
 
   pythonImportsCheck = [ "molecule_plugins" ];

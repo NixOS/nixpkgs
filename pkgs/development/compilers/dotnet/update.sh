@@ -1,394 +1,425 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=../../../../. -i bash -p curl jq nix gnused
+#!nix-shell -I nixpkgs=./. -i bash -p curl jq nix gnused nixfmt-rfc-style
 # shellcheck shell=bash
 
 set -Eeuo pipefail
+shopt -s inherit_errexit
+
+rids=({linux-{,musl-}{arm,arm64,x64},osx-{arm64,x64},win-{arm64,x64,x86}})
 
 release () {
-  local content="$1"
-  local version="$2"
+    local content="$1"
+    local version="$2"
 
-  jq -r '.releases[] | select(.sdks[] | ."version" == "'"$version"'")' <<< "$content"
+    jq -er '.releases[] | select(."release-version" == "'"$version"'")' <<< "$content"
 }
 
 release_files () {
-  local release="$1"
-  local type="$2"
+    local release="$1"
+    local expr="$2"
 
-  jq -r '[."'"$type"'".files[] | select(.name | test("^.*.tar.gz$"))]' <<< "$release"
+    jq -er '[('"$expr"').files[] | select(.name | test("^.*.tar.gz$"))]' <<< "$release"
 }
-
-sdk_files () {
-  local release="$1"
-  local version="$2"
-
-  jq -r '[.sdks[] | select(.version == "'"$version"'") | .files[] | select(.name | test("^.*.tar.gz$"))]' <<< "$release"
-}
-
 
 release_platform_attr () {
-  local release_files="$1"
-  local platform="$2"
-  local attr="$3"
+    local release_files="$1"
+    local platform="$2"
+    local attr="$3"
 
-  jq -r '.[] | select((.rid == "'"$platform"'") and (.name | contains("composite") | not)) | ."'"$attr"'"' <<< "$release_files"
+    jq -r '.[] | select((.rid == "'"$platform"'") and (.name | contains("-composite-") or contains("-pack-") | not)) | ."'"$attr"'"' <<< "$release_files"
 }
 
 platform_sources () {
-  local release_files="$1"
-  local platforms=( \
-    "x86_64-linux   linux-x64" \
-    "aarch64-linux  linux-arm64" \
-    "x86_64-darwin  osx-x64" \
-    "aarch64-darwin osx-arm64" \
-  )
+    local release_files="$1"
 
-  echo "srcs = {"
-  for kv in "${platforms[@]}"; do
-    local nix_platform=${kv%% *}
-    local ms_platform=${kv##* }
+    echo "srcs = {"
+    for rid in "${rids[@]}"; do
+        local url hash
 
-    local url=$(release_platform_attr "$release_files" "$ms_platform" url)
-    local hash=$(release_platform_attr "$release_files" "$ms_platform" hash)
+        url=$(release_platform_attr "$release_files" "$rid" url)
+        hash=$(release_platform_attr "$release_files" "$rid" hash)
 
-    [[ -z "$url" || -z "$hash" ]] && continue
-    echo "      $nix_platform = {
-        url     = \"$url\";
-        sha512  = \"$hash\";
+        [[ -z "$url" || -z "$hash" ]] && continue
+
+        hash=$(nix hash convert --to sri --hash-algo sha512 "$hash")
+
+        echo "      $rid = {
+        url = \"$url\";
+        hash = \"$hash\";
       };"
     done
     echo "    };"
 }
 
-generate_package_list() {
-    local version pkgs nuget_url
-    version="$1"
-    shift
-    pkgs=( "$@" )
+nuget_index="$(curl -fsSL "https://api.nuget.org/v3/index.json")"
 
-    nuget_url="$(curl -f "https://api.nuget.org/v3/index.json" | jq --raw-output '.resources[] | select(."@type" == "PackageBaseAddress/3.0.0")."@id"')"
+get_nuget_resource() {
+    jq -er '.resources[] | select(."@type" == "'"$1"'")."@id"' <<<"$nuget_index"
+}
+
+nuget_package_base_url="$(get_nuget_resource "PackageBaseAddress/3.0.0")"
+nuget_registration_base_url="$(get_nuget_resource "RegistrationsBaseUrl/3.6.0")"
+
+generate_package_list() {
+    local version="$1" indent="$2"
+    shift 2
+    local pkgs=( "$@" ) pkg url hash catalog_url catalog hash_algorithm
 
     for pkg in "${pkgs[@]}"; do
-        local url hash
-        url="${nuget_url}${pkg,,}/${version,,}/${pkg,,}.${version,,}.nupkg"
-        hash="$(nix-prefetch-url "$url")"
-        if [[ -z "$hash" ]]; then
+        url=${nuget_package_base_url}${pkg,,}/${version,,}/${pkg,,}.${version,,}.nupkg
+
+        if hash=$(curl -s --head "$url" -o /dev/null -w '%header{x-ms-meta-sha512}') && [[ -n "$hash" ]]; then
+            # Undocumented fast path for nuget.org
+            # https://github.com/NuGet/NuGetGallery/issues/9433#issuecomment-1472286080
+            hash=$(nix hash convert --to sri --hash-algo sha512 "$hash")
+        elif {
+            catalog_url=$(curl -sL --compressed "${nuget_registration_base_url}${pkg,,}/${version,,}.json" | jq -r ".catalogEntry") && [[ -n "$catalog_url" ]] &&
+            catalog=$(curl -sL "$catalog_url") && [[ -n "$catalog" ]] &&
+            hash_algorithm="$(jq -er '.packageHashAlgorithm' <<<"$catalog")"&& [[ -n "$hash_algorithm" ]] &&
+            hash=$(jq -er '.packageHash' <<<"$catalog") && [[ -n "$hash" ]]
+        }; then
+            # Documented but slower path (requires 2 requests)
+            hash=$(nix hash convert --to sri --hash-algo "${hash_algorithm,,}" "$hash")
+        elif hash=$(nix-prefetch-url "$url" --type sha512); then
+            # Fallback to downloading and hashing locally
+            echo "Failed to fetch hash from nuget for $url, falling back to downloading locally" >&2
+            hash=$(nix hash convert --to sri --hash-algo sha512 "$hash")
+        else
             echo "Failed to fetch hash for $url" >&2
             exit 1
         fi
 
-        echo "      (fetchNuGet { pname = \"${pkg}\"; version = \"${version}\"; sha256 = \"${hash}\"; })"
+        echo "$indent(fetchNupkg { pname = \"${pkg}\"; version = \"${version}\"; hash = \"${hash}\"; })"
     done
 }
 
-version_older () {
-    cur_version=$1
-    max_version=$2
-    result=$(nix-instantiate -I ../../../../. \
-        --eval -E "(import <nixpkgs> {}).lib.versionOlder \"$cur_version\" \"$max_version\"")
-    if [[ "$result" == "true" ]]; then
-        return 0
-    else
-        return 1
-    fi
+versionAtLeast () {
+    local cur_version=$1 min_version=$2
+    printf "%s\0%s" "$min_version" "$cur_version" | sort -zVC
 }
 
+# These packages are implicitly references by the build process,
+# based on the specific project configurations (RIDs, used features, etc.)
+# They are always referenced with the same version as the SDK used for building.
+# Since we lock nuget dependencies, when these packages are included in the generated
+# lock files (deps.nix), every update of SDK required those lock files to be
+# updated to reflect the new versions of these packages - otherwise, the build
+# would fail due to missing dependencies.
+#
+# Moving them to a separate list stored alongside the SDK package definitions,
+# and implicitly including them along in buildDotnetModule allows us
+# to make updating .NET SDK packages a lot easier - we now just update
+# the versions of these packages in one place, and all packages that
+# use buildDotnetModule continue building with the new .NET version without changes.
+#
+# Keep in mind that there is no canonical list of these implicitly
+# referenced packages - this list was created based on looking into
+# the deps.nix files of existing packages, and which dependencies required
+# updating after a SDK version bump.
+#
+# Due to this, make sure to check if new SDK versions introduce any new packages.
+# This should not happend in minor or bugfix updates, but probably happens
+# with every new major .NET release.
 aspnetcore_packages () {
     local version=$1
-    # These packages are implicitly references by the build process,
-    # based on the specific project configurations (RIDs, used features, etc.)
-    # They are always referenced with the same version as the SDK used for building.
-    # Since we lock nuget dependencies, when these packages are included in the generated
-    # lock files (deps.nix), every update of SDK required those lock files to be
-    # updated to reflect the new versions of these packages - otherwise, the build
-    # would fail due to missing dependencies.
-    #
-    # Moving them to a separate list stored alongside the SDK package definitions,
-    # and implicitly including them along in buildDotnetModule allows us
-    # to make updating .NET SDK packages a lot easier - we now just update
-    # the versions of these packages in one place, and all packages that
-    # use buildDotnetModule continue building with the new .NET version without changes.
-    #
-    # Keep in mind that there is no canonical list of these implicitly
-    # referenced packages - this list was created based on looking into
-    # the deps.nix files of existing packages, and which dependencies required
-    # updating after a SDK version bump.
-    #
-    # Due to this, make sure to check if new SDK versions introduce any new packages.
-    # This should not happend in minor or bugfix updates, but probably happens
-    # with every new major .NET release.
-    local pkgs=( \
-      "Microsoft.AspNetCore.App.Runtime.linux-arm" \
-      "Microsoft.AspNetCore.App.Runtime.linux-arm64" \
-      "Microsoft.AspNetCore.App.Runtime.linux-musl-arm64" \
-      "Microsoft.AspNetCore.App.Runtime.linux-musl-x64" \
-      "Microsoft.AspNetCore.App.Runtime.linux-x64" \
-      "Microsoft.AspNetCore.App.Runtime.osx-x64" \
-      "Microsoft.AspNetCore.App.Runtime.win-arm64" \
-      "Microsoft.AspNetCore.App.Runtime.win-x64" \
-      "Microsoft.AspNetCore.App.Runtime.win-x86" \
+    local pkgs=(
+        Microsoft.AspNetCore.App.Ref
     )
 
-    # These packages are currently broken on .NET 8
-    if version_older "$version" "8"; then
-        pkgs+=( \
-            "Microsoft.AspNetCore.App.Runtime.win-arm" \
-        )
-    fi
-
-    # Packages that only apply to .NET 6 and up
-    if ! version_older "$version" "6"; then
-        pkgs+=( \
-          "Microsoft.AspNetCore.App.Ref" \
-          "Microsoft.AspNetCore.App.Runtime.linux-musl-arm" \
-          "Microsoft.AspNetCore.App.Runtime.osx-arm64" \
-        )
-    fi
-
-
-    generate_package_list "$version" "${pkgs[@]}"
+    generate_package_list "$version" '    ' "${pkgs[@]}"
 }
 
-sdk_packages () {
+aspnetcore_target_packages () {
     local version=$1
-    # These packages are implicitly references by the build process,
-    # based on the specific project configurations (RIDs, used features, etc.)
-    # They are always referenced with the same version as the SDK used for building.
-    # Since we lock nuget dependencies, when these packages are included in the generated
-    # lock files (deps.nix), every update of SDK required those lock files to be
-    # updated to reflect the new versions of these packages - otherwise, the build
-    # would fail due to missing dependencies.
-    #
-    # Moving them to a separate list stored alongside the SDK package definitions,
-    # and implicitly including them along in buildDotnetModule allows us
-    # to make updating .NET SDK packages a lot easier - we now just update
-    # the versions of these packages in one place, and all packages that
-    # use buildDotnetModule continue building with the new .NET version without changes.
-    #
-    # Keep in mind that there is no canonical list of these implicitly
-    # referenced packages - this list was created based on looking into
-    # the deps.nix files of existing packages, and which dependencies required
-    # updating after a SDK version bump.
-    #
-    # Due to this, make sure to check if new SDK versions introduce any new packages.
-    # This should not happend in minor or bugfix updates, but probably happens
-    # with every new major .NET release.
-    local pkgs=( \
-      "Microsoft.NETCore.App.Host.linux-arm" \
-      "Microsoft.NETCore.App.Host.linux-arm64" \
-      "Microsoft.NETCore.App.Host.linux-musl-arm64" \
-      "Microsoft.NETCore.App.Host.linux-musl-x64" \
-      "Microsoft.NETCore.App.Host.linux-x64" \
-      "Microsoft.NETCore.App.Host.osx-x64" \
-      "Microsoft.NETCore.App.Host.win-arm64" \
-      "Microsoft.NETCore.App.Host.win-x64" \
-      "Microsoft.NETCore.App.Host.win-x86" \
-      "Microsoft.NETCore.App.Runtime.linux-arm" \
-      "Microsoft.NETCore.App.Runtime.linux-arm64" \
-      "Microsoft.NETCore.App.Runtime.linux-musl-arm64" \
-      "Microsoft.NETCore.App.Runtime.linux-musl-x64" \
-      "Microsoft.NETCore.App.Runtime.linux-x64" \
-      "Microsoft.NETCore.App.Runtime.osx-x64" \
-      "Microsoft.NETCore.App.Runtime.win-arm64" \
-      "Microsoft.NETCore.App.Runtime.win-x64" \
-      "Microsoft.NETCore.App.Runtime.win-x86" \
-      "Microsoft.NETCore.DotNetAppHost" \
-      "Microsoft.NETCore.DotNetHost" \
-      "Microsoft.NETCore.DotNetHostPolicy" \
-      "Microsoft.NETCore.DotNetHostResolver" \
-      "runtime.linux-arm64.Microsoft.NETCore.DotNetAppHost" \
-      "runtime.linux-arm64.Microsoft.NETCore.DotNetHost" \
-      "runtime.linux-arm64.Microsoft.NETCore.DotNetHostPolicy" \
-      "runtime.linux-arm64.Microsoft.NETCore.DotNetHostResolver" \
-      "runtime.linux-arm.Microsoft.NETCore.DotNetAppHost" \
-      "runtime.linux-arm.Microsoft.NETCore.DotNetHost" \
-      "runtime.linux-arm.Microsoft.NETCore.DotNetHostPolicy" \
-      "runtime.linux-arm.Microsoft.NETCore.DotNetHostResolver" \
-      "runtime.linux-musl-arm64.Microsoft.NETCore.DotNetAppHost" \
-      "runtime.linux-musl-arm64.Microsoft.NETCore.DotNetHost" \
-      "runtime.linux-musl-arm64.Microsoft.NETCore.DotNetHostPolicy" \
-      "runtime.linux-musl-arm64.Microsoft.NETCore.DotNetHostResolver" \
-      "runtime.linux-musl-x64.Microsoft.NETCore.DotNetAppHost" \
-      "runtime.linux-musl-x64.Microsoft.NETCore.DotNetHost" \
-      "runtime.linux-musl-x64.Microsoft.NETCore.DotNetHostPolicy" \
-      "runtime.linux-musl-x64.Microsoft.NETCore.DotNetHostResolver" \
-      "runtime.linux-x64.Microsoft.NETCore.DotNetAppHost" \
-      "runtime.linux-x64.Microsoft.NETCore.DotNetHost" \
-      "runtime.linux-x64.Microsoft.NETCore.DotNetHostPolicy" \
-      "runtime.linux-x64.Microsoft.NETCore.DotNetHostResolver" \
-      "runtime.osx-x64.Microsoft.NETCore.DotNetAppHost" \
-      "runtime.osx-x64.Microsoft.NETCore.DotNetHost" \
-      "runtime.osx-x64.Microsoft.NETCore.DotNetHostPolicy" \
-      "runtime.osx-x64.Microsoft.NETCore.DotNetHostResolver" \
-      "runtime.win-arm64.Microsoft.NETCore.DotNetAppHost" \
-      "runtime.win-arm64.Microsoft.NETCore.DotNetHost" \
-      "runtime.win-arm64.Microsoft.NETCore.DotNetHostPolicy" \
-      "runtime.win-arm64.Microsoft.NETCore.DotNetHostResolver" \
-      "runtime.win-x64.Microsoft.NETCore.DotNetAppHost" \
-      "runtime.win-x64.Microsoft.NETCore.DotNetHost" \
-      "runtime.win-x64.Microsoft.NETCore.DotNetHostPolicy" \
-      "runtime.win-x64.Microsoft.NETCore.DotNetHostResolver" \
-      "runtime.win-x86.Microsoft.NETCore.DotNetAppHost" \
-      "runtime.win-x86.Microsoft.NETCore.DotNetHost" \
-      "runtime.win-x86.Microsoft.NETCore.DotNetHostPolicy" \
-      "runtime.win-x86.Microsoft.NETCore.DotNetHostResolver" \
-      "Microsoft.NETCore.App.Host.linux-musl-arm" \
-      "Microsoft.NETCore.App.Host.osx-arm64" \
-      "Microsoft.NETCore.App.Runtime.linux-musl-arm" \
-      "Microsoft.NETCore.App.Runtime.osx-arm64" \
-      "Microsoft.NETCore.App.Ref" \
-      "Microsoft.NETCore.App.Runtime.Mono.linux-arm" \
-      "Microsoft.NETCore.App.Runtime.Mono.linux-arm64" \
-      "Microsoft.NETCore.App.Runtime.Mono.linux-musl-x64" \
-      "Microsoft.NETCore.App.Runtime.Mono.linux-x64" \
-      "Microsoft.NETCore.App.Runtime.Mono.osx-arm64" \
-      "Microsoft.NETCore.App.Runtime.Mono.osx-x64" \
-      "Microsoft.NETCore.App.Runtime.Mono.win-x64" \
-      "Microsoft.NETCore.App.Runtime.Mono.win-x86" \
-      "runtime.linux-musl-arm.Microsoft.NETCore.DotNetAppHost" \
-      "runtime.linux-musl-arm.Microsoft.NETCore.DotNetHost" \
-      "runtime.linux-musl-arm.Microsoft.NETCore.DotNetHostPolicy" \
-      "runtime.linux-musl-arm.Microsoft.NETCore.DotNetHostResolver" \
-      "runtime.osx-arm64.Microsoft.NETCore.DotNetAppHost" \
-      "runtime.osx-arm64.Microsoft.NETCore.DotNetHost" \
-      "runtime.osx-arm64.Microsoft.NETCore.DotNetHostPolicy" \
-      "runtime.osx-arm64.Microsoft.NETCore.DotNetHostResolver" \
-      "Microsoft.NETCore.App.Crossgen2.linux-musl-arm" \
-      "Microsoft.NETCore.App.Crossgen2.linux-musl-arm64" \
-      "Microsoft.NETCore.App.Crossgen2.linux-musl-x64" \
-      "Microsoft.NETCore.App.Crossgen2.linux-arm" \
-      "Microsoft.NETCore.App.Crossgen2.linux-arm64" \
-      "Microsoft.NETCore.App.Crossgen2.linux-x64" \
-      "Microsoft.NETCore.App.Crossgen2.osx-x64" \
-      "Microsoft.NETCore.App.Crossgen2.osx-arm64"
+    local rid=$2
+    local pkgs=(
+        "Microsoft.AspNetCore.App.Runtime.$rid"
     )
 
-    # These packages were removed on .NET 8
-    if version_older "$version" "8"; then
-        pkgs+=( \
-            "Microsoft.NETCore.App.Host.win-arm" \
-            "Microsoft.NETCore.App.Runtime.win-arm" \
-            "runtime.win-arm.Microsoft.NETCore.DotNetAppHost" \
-            "runtime.win-arm.Microsoft.NETCore.DotNetHost" \
-            "runtime.win-arm.Microsoft.NETCore.DotNetHostPolicy" \
-            "runtime.win-arm.Microsoft.NETCore.DotNetHostResolver" \
-            "Microsoft.NETCore.App.Composite" \
-        )
-    fi
-
-    # Packages that only apply to .NET 7 and up
-    if ! version_older "$version" "7"; then
-        pkgs+=( \
-          "runtime.linux-arm64.Microsoft.DotNet.ILCompiler" \
-          "runtime.linux-musl-arm64.Microsoft.DotNet.ILCompiler" \
-          "runtime.linux-musl-x64.Microsoft.DotNet.ILCompiler" \
-          "runtime.linux-x64.Microsoft.DotNet.ILCompiler" \
-          "runtime.osx-x64.Microsoft.DotNet.ILCompiler" \
-          "runtime.win-arm64.Microsoft.DotNet.ILCompiler" \
-          "runtime.win-x64.Microsoft.DotNet.ILCompiler" \
-        )
-    fi
-
-    # These packges were added on .NET 8
-    if ! version_older "$version" "8"; then
-        pkgs+=(
-            "Microsoft.NET.ILLink.Tasks"
-        )
-    fi
-
-    generate_package_list "$version" "${pkgs[@]}"
+    generate_package_list "$version" '      ' "${pkgs[@]}"
 }
 
-main () {
-  pname=$(basename "$0")
-  if [[ ! "$*" =~ ^.*[0-9]{1,}\.[0-9]{1,}.*$ ]]; then
-    echo "Usage: $pname [sem-versions]
+netcore_packages () {
+    local version=$1
+    local pkgs=(
+        Microsoft.NETCore.DotNetAppHost
+        Microsoft.NETCore.App.Ref
+    )
+
+    if ! versionAtLeast "$version" 9; then
+        pkgs+=(
+            Microsoft.NETCore.DotNetHost
+            Microsoft.NETCore.DotNetHostPolicy
+            Microsoft.NETCore.DotNetHostResolver
+        )
+    fi
+
+    if versionAtLeast "$version" 7; then
+        pkgs+=(
+            Microsoft.DotNet.ILCompiler
+        )
+    fi
+
+    if versionAtLeast "$version" 8; then
+        pkgs+=(
+            Microsoft.NET.ILLink.Tasks
+        )
+    fi
+
+    generate_package_list "$version" '    ' "${pkgs[@]}"
+}
+
+netcore_host_packages () {
+    local version=$1
+    local rid=$2
+    local pkgs=(
+        "Microsoft.NETCore.App.Crossgen2.$rid"
+    )
+
+    local min_ilcompiler=
+    case "$rid" in
+        linux-musl-arm) ;;
+        linux-arm) ;;
+        win-x86) ;;
+        osx-arm64) min_ilcompiler=8 ;;
+        *) min_ilcompiler=7 ;;
+    esac
+
+    if [[ -n "$min_ilcompiler" ]] && versionAtLeast "$version" "$min_ilcompiler"; then
+        pkgs+=(
+            "runtime.$rid.Microsoft.DotNet.ILCompiler"
+        )
+    fi
+
+    generate_package_list "$version" '      ' "${pkgs[@]}"
+}
+
+netcore_target_packages () {
+    local version=$1
+    local rid=$2
+    local pkgs=(
+        "Microsoft.NETCore.App.Host.$rid"
+        "Microsoft.NETCore.App.Runtime.$rid"
+        "runtime.$rid.Microsoft.NETCore.DotNetAppHost"
+    )
+
+    if ! versionAtLeast "$version" 9; then
+        pkgs+=(
+            "runtime.$rid.Microsoft.NETCore.DotNetHost"
+            "runtime.$rid.Microsoft.NETCore.DotNetHostPolicy"
+            "runtime.$rid.Microsoft.NETCore.DotNetHostResolver"
+        )
+        case "$rid" in
+            linux-musl-arm*) ;;
+            win-arm64) ;;
+            *) pkgs+=(
+                     "Microsoft.NETCore.App.Runtime.Mono.$rid"
+                 ) ;;
+        esac
+    fi
+
+    generate_package_list "$version" '      ' "${pkgs[@]}"
+}
+
+usage () {
+    echo "Usage: $pname [[--sdk] [-o output] sem-version] ...
 Get updated dotnet src (platform - url & sha512) expressions for specified versions
 
 Examples:
   $pname 6.0.14 7.0.201    - specific x.y.z versions
   $pname 6.0 7.0           - latest x.y versions
 " >&2
-    exit 1
-  fi
+}
 
-  for sem_version in "$@"; do
-    echo "Generating ./versions/${sem_version}.nix"
-    patch_specified=false
+update() {
+    local -r sem_version=$1 sdk=$2
+    local output=$3
+
+    local patch_specified=false
     # Check if a patch was specified as an argument.
     # If so, generate file for the specific version.
     # If only x.y version was provided, get the latest patch
     # version of the given x.y version.
-    if [[ "$sem_version" =~ ^[0-9]{1,}\.[0-9]{1,}\.[0-9]{1,}$ ]]; then
+    if [[ "$sem_version" =~ ^[0-9]{1,}\.[0-9]{1,}\.[0-9]{1,} ]]; then
         patch_specified=true
     elif [[ ! "$sem_version" =~ ^[0-9]{1,}\.[0-9]{1,}$ ]]; then
-        continue
+        usage
+        return 1
     fi
+
+    : ${output:="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"/versions/$sem_version.nix}
+    echo "Generating $output"
 
     # Make sure the x.y version is properly passed to .NET release metadata url.
     # Then get the json file and parse it to find the latest patch release.
+    local major_minor content major_minor_patch
     major_minor=$(sed 's/^\([0-9]*\.[0-9]*\).*$/\1/' <<< "$sem_version")
-    content=$(curl -sL https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/"$major_minor"/releases.json)
-    major_minor_patch=$([ "$patch_specified" == true ] && echo "$sem_version" || jq -r '."latest-sdk"' <<< "$content")
-    major_minor_underscore=${major_minor/./_}
+    content=$(curl -fsSL https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/"$major_minor"/releases.json)
+    if [[ -n $sdk ]]; then
+        major_minor_patch=$(
+            jq -er --arg version "$sem_version" '
+                .releases[] |
+                select(.sdks[].version == $version) |
+                ."release-version"' <<< "$content")
+    else
+        major_minor_patch=$([ "$patch_specified" == true ] && echo "$sem_version" || jq -er '."latest-release"' <<< "$content")
+    fi
+    local major_minor_underscore=${major_minor/./_}
 
-    sdk_version=$major_minor_patch
-    release_content=$(release "$content" "$sdk_version")
-    aspnetcore_version=$(jq -r '."aspnetcore-runtime".version' <<< "$release_content")
-    runtime_version=$(jq -r '.runtime.version' <<< "$release_content")
+    local release_content aspnetcore_version runtime_version
+    local -a sdk_versions
+
+    release_content=$(release "$content" "$major_minor_patch")
+    aspnetcore_version=$(jq -er '."aspnetcore-runtime".version' <<< "$release_content")
+    runtime_version=$(jq -er '.runtime.version' <<< "$release_content")
+
+    if [[ -n $sdk ]]; then
+        sdk_versions=("$sem_version")
+    else
+        mapfile -t sdk_versions < <(jq -er '.sdks[] | .version' <<< "$release_content" | sort -rn)
+    fi
 
     # If patch was not specified, check if the package is already the latest version
     # If it is, exit early
-    if [ "$patch_specified" == false ] && [ -f "./versions/${sem_version}.nix" ]; then
-        current_version=$(nix-instantiate --eval -E "(import ./versions/${sem_version}.nix { \
-            buildAspNetCore = { ... }: {}; \
-            buildNetRuntime = { ... }: {}; \
-            buildNetSdk = { version, ... }: version; \
-            }).sdk_${major_minor_underscore}" | jq -r)
-
-        if [[ "$current_version" == "$sdk_version" ]]; then
+    if [ "$patch_specified" == false ] && [ -f "$output" ]; then
+        local -a versions
+        IFS= readarray -d '' versions < <(
+            nix-instantiate --eval --json -E "{ output }: with (import output {
+                buildAspNetCore = { ... }: {};
+                buildNetSdk = { version, ... }: { inherit version; };
+                buildNetRuntime = { version, ... }: { inherit version; };
+                fetchNupkg = { ... }: {};
+            }); (x: builtins.deepSeq x x) [
+                runtime_${major_minor_underscore}.version
+                sdk_${major_minor_underscore}.version
+            ]" --argstr output "$output" | jq -e --raw-output0 .[])
+        if [[ "${versions[0]}" == "$major_minor_patch" && "${versions[1]}" == "${sdk_versions[0]}" ]]; then
             echo "Nothing to update."
-            exit
+            return
         fi
     fi
 
-    aspnetcore_files="$(release_files "$release_content" "aspnetcore-runtime")"
-    runtime_files="$(release_files "$release_content" "runtime")"
-    sdk_files="$(sdk_files "$release_content" "$sdk_version")"
+    local aspnetcore_files runtime_files
+    aspnetcore_files="$(release_files "$release_content" .\"aspnetcore-runtime\")"
+    runtime_files="$(release_files "$release_content" .runtime)"
 
-    channel_version=$(jq -r '."channel-version"' <<< "$content")
-    support_phase=$(jq -r '."support-phase"' <<< "$content")
+    local channel_version support_phase
+    channel_version=$(jq -er '."channel-version"' <<< "$content")
+    support_phase=$(jq -er '."support-phase"' <<< "$content")
 
-    result=$(mktemp)
+    local aspnetcore_sources runtime_sources
+    aspnetcore_sources="$(platform_sources "$aspnetcore_files")"
+    runtime_sources="$(platform_sources "$runtime_files")"
+
+    result=$(mktemp -t dotnet-XXXXXX.nix)
     trap "rm -f $result" TERM INT EXIT
 
-    echo "{ buildAspNetCore, buildNetRuntime, buildNetSdk }:
+    (
+        echo "{ buildAspNetCore, buildNetRuntime, buildNetSdk, fetchNupkg }:
 
 # v$channel_version ($support_phase)
-{
+
+let
+  commonPackages = ["
+        aspnetcore_packages "${aspnetcore_version}"
+        netcore_packages "${runtime_version}"
+        echo "  ];
+
+  hostPackages = {"
+        for rid in "${rids[@]}"; do
+            echo "    $rid = ["
+            netcore_host_packages "${runtime_version}" "$rid"
+            echo "    ];"
+        done
+        echo "  };
+
+  targetPackages = {"
+        for rid in "${rids[@]}"; do
+            echo "    $rid = ["
+            aspnetcore_target_packages "${aspnetcore_version}" "$rid"
+            netcore_target_packages "${runtime_version}" "$rid"
+            echo "    ];"
+        done
+        echo "  };
+
+in rec {
+  release_$major_minor_underscore = \"$major_minor_patch\";
+
   aspnetcore_$major_minor_underscore = buildAspNetCore {
     version = \"${aspnetcore_version}\";
-    $(platform_sources "$aspnetcore_files")
+    $aspnetcore_sources
   };
 
   runtime_$major_minor_underscore = buildNetRuntime {
     version = \"${runtime_version}\";
-    $(platform_sources "$runtime_files")
-  };
+    $runtime_sources
+  };"
 
-  sdk_$major_minor_underscore = buildNetSdk {
+        local -A feature_bands
+        unset latest_sdk
+
+        for sdk_version in "${sdk_versions[@]}"; do
+            local sdk_base_version=${sdk_version%-*}
+            local feature_band=${sdk_base_version:0:-2}xx
+            # sometimes one release has e.g. both 8.0.202 and 8.0.203
+            [[ ! ${feature_bands[$feature_band]+true} ]] || continue
+            feature_bands[$feature_band]=$sdk_version
+            local sdk_files sdk_sources
+            sdk_files="$(release_files "$release_content" ".sdks[] | select(.version == \"$sdk_version\")")"
+            sdk_sources="$(platform_sources "$sdk_files")"
+            local sdk_attrname=sdk_${feature_band//./_}
+            [[ -v latest_sdk ]] || local latest_sdk=$sdk_attrname
+
+            echo "
+  $sdk_attrname = buildNetSdk {
     version = \"${sdk_version}\";
-    $(platform_sources "$sdk_files")
-    packages = { fetchNuGet }: [
-$(aspnetcore_packages "${aspnetcore_version}")
-$(sdk_packages "${runtime_version}")
-    ];
-  };
-}" > "${result}"
+    $sdk_sources
+    inherit commonPackages hostPackages targetPackages;
+    runtime = runtime_$major_minor_underscore;
+    aspnetcore = aspnetcore_$major_minor_underscore;
+  };"
+        done
 
-    cp "${result}" "./versions/${sem_version}.nix"
-    echo "Generated ./versions/${sem_version}.nix"
-  done
+        if [[ -n $sdk ]]; then
+            echo "
+  sdk = sdk_$major_minor_underscore;
+"
+        fi
+
+        echo "
+  sdk_$major_minor_underscore = $latest_sdk;
+}"
+        )> "$result"
+
+    nixfmt "$result"
+    cp "$result" "$output"
+    echo "Generated $output"
+}
+
+main () {
+    local pname sdk output
+    pname=$(basename "$0")
+
+        sdk=
+        output=
+
+        while [ $# -gt 0 ]; do
+            case $1 in
+                --sdk)
+                    shift
+                    sdk=1
+                    ;;
+                -o)
+                    shift
+                    output=$1
+                    shift
+                    ;;
+                *)
+                    update "$1" "$sdk" "$output"
+                    shift
+                    ;;
+            esac
+        done
 }
 
 main "$@"

@@ -1,30 +1,37 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, less
-, libiconv
-, installShellFiles
-, makeWrapper
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  less,
+  installShellFiles,
+  makeWrapper,
+  zlib,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bat";
-  version = "0.24.0";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "bat";
     rev = "v${version}";
-    hash = "sha256-1RjlJEmY/jMf0IYQbrWrT1CHFyiqgarOl72u9xjjQiQ=";
+    hash = "sha256-82IhLhw0TdaMh21phBxcUZ5JI5xOXb0DrwnBmPwyfAQ=";
   };
-  cargoHash = "sha256-b7wNWdKQ4QLeCf7bNZRfzT9hD/D/oDglU7Xyb65IrGY=";
 
-  nativeBuildInputs = [ pkg-config installShellFiles makeWrapper ];
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-EnEc+B62dK3q6in8yn5wdeVmBw8XMkP8YKpCN7lCPnc=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+    makeWrapper
+  ];
+
+  buildInputs = [
+    zlib
+  ];
 
   postInstall = ''
     installManPage $releaseDir/build/bat-*/out/assets/manual/bat.1
@@ -52,6 +59,8 @@ rustPlatform.buildRustPackage rec {
     "--skip=pager_more"
     "--skip=pager_most"
     "--skip=pager_overwrite"
+    # Fails if the filesystem performs UTF-8 validation (such as ZFS with utf8only=on)
+    "--skip=file_with_invalid_utf8_filename"
   ];
 
   doInstallCheck = true;
@@ -67,12 +76,20 @@ rustPlatform.buildRustPackage rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
-    description = "A cat(1) clone with syntax highlighting and Git integration";
+  meta = {
+    description = "Cat(1) clone with syntax highlighting and Git integration";
     homepage = "https://github.com/sharkdp/bat";
     changelog = "https://github.com/sharkdp/bat/raw/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with lib.licenses; [
+      asl20 # or
+      mit
+    ];
     mainProgram = "bat";
-    maintainers = with maintainers; [ dywedir lilyball zowoq SuperSandro2000 ];
+    maintainers = with lib.maintainers; [
+      dywedir
+      zowoq
+      SuperSandro2000
+      sigmasquadron
+    ];
   };
 }

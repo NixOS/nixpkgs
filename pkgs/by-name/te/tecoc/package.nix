@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, ncurses
-, unstableGitUpdater
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  ncurses,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tecoc";
-  version = "unstable-2023-06-21";
+  version = "0-unstable-2023-06-21";
 
   src = fetchFromGitHub {
     owner = "blakemcbride";
@@ -18,17 +19,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ ncurses ];
 
-  makefile = if stdenv.hostPlatform.isDarwin
-             then "makefile.osx"
-             else if stdenv.hostPlatform.isFreeBSD
-             then "makefile.bsd"
-             else if stdenv.hostPlatform.isOpenBSD
-             then "makefile.bsd"
-             else if stdenv.hostPlatform.isWindows
-             then "makefile.win"
-             else "makefile.linux"; # I think Linux is a safe default...
+  makefile =
+    if stdenv.hostPlatform.isDarwin then
+      "makefile.osx"
+    else if stdenv.hostPlatform.isFreeBSD then
+      "makefile.bsd"
+    else if stdenv.hostPlatform.isOpenBSD then
+      "makefile.bsd"
+    else if stdenv.hostPlatform.isWindows then
+      "makefile.win"
+    else
+      "makefile.linux"; # I think Linux is a safe default...
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "-C src/" ];
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "-C src/"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -56,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/blakemcbride/TECOC";
-    description = "A clone of the good old TECO editor";
+    description = "Clone of the good old TECO editor";
     longDescription = ''
       For those who don't know: TECO is the acronym of Tape Editor and COrrector
       (because it was a paper tape edition tool in its debut days). Now the
@@ -74,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = {
       url = "https://github.com/blakemcbride/TECOC/blob/${finalAttrs.src.rev}/doc/readme-1st.txt";
     };
-    maintainers = [ lib.maintainers.AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

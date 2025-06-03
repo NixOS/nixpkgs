@@ -1,40 +1,43 @@
 {
   lts ? false,
+  meta,
+  patches,
+  src,
+  vendorHash,
+  version,
 
   lib,
   buildGoModule,
-  fetchpatch,
-  fetchFromGitHub,
   installShellFiles,
 }:
 let
-  releaseFile = if lts then ./lts.nix else ./latest.nix;
-  inherit (import releaseFile { inherit fetchpatch; }) version hash vendorHash;
+  pname = "incus${lib.optionalString lts "-lts"}-client";
 in
 
-buildGoModule rec {
-  pname = "incus-client";
+buildGoModule {
+  inherit
+    patches
+    pname
+    src
+    vendorHash
+    version
+    ;
 
-  inherit vendorHash version;
-
-  src = fetchFromGitHub {
-    owner = "lxc";
-    repo = "incus";
-    rev = "refs/tags/v${version}";
-    inherit hash;
-  };
-
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   nativeBuildInputs = [ installShellFiles ];
 
   subPackages = [ "cmd/incus" ];
 
   postInstall = ''
-    # use custom bash completion as it has extra logic for e.g. instance names
-    installShellCompletion --bash --name incus ./scripts/bash/incus
+    # Needed for builds on systems with auto-allocate-uids to pass.
+    # Incus tries to read ~/.config/incus while generating completions
+    # to resolve user aliases.
+    export HOME="$(mktemp -d)"
+    mkdir -p "$HOME/.config/incus"
 
     installShellCompletion --cmd incus \
+      --bash <($out/bin/incus completion bash) \
       --fish <($out/bin/incus completion fish) \
       --zsh <($out/bin/incus completion zsh)
   '';
@@ -42,13 +45,7 @@ buildGoModule rec {
   # don't run the full incus test suite
   doCheck = false;
 
-  meta = {
-    description = "Powerful system container and virtual machine manager";
-    homepage = "https://linuxcontainers.org/incus";
-    changelog = "https://github.com/lxc/incus/releases/tag/v${version}";
-    license = lib.licenses.asl20;
-    maintainers = lib.teams.lxc.members;
-    platforms = lib.platforms.unix;
-    mainProgram = "incus";
+  meta = meta // {
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

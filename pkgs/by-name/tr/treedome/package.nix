@@ -1,132 +1,70 @@
-{ lib
-, cargo-tauri
-, cmake
-, dbus
-, fetchgit
-, fetchYarnDeps
-, freetype
-, gsettings-desktop-schemas
-, gtk3
-, libsoup
-, mkYarnPackage
-, openssl
-, pkg-config
-, rustPlatform
-, webkitgtk
-, wrapGAppsHook
-, sqlite
+{
+  lib,
+  cargo-tauri,
+  dbus,
+  fetchgit,
+  fetchYarnDeps,
+  freetype,
+  gsettings-desktop-schemas,
+  yarnConfigHook,
+  nodejs,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  webkitgtk_4_1,
+  libayatana-appindicator,
+  wrapGAppsHook4,
+  sqlite,
 }:
 
-let
+rustPlatform.buildRustPackage rec {
   pname = "treedome";
-  version = "0.4";
+  version = "0.5.4";
 
   src = fetchgit {
     url = "https://codeberg.org/solver-orgz/treedome";
     rev = version;
-    hash = "sha256-HzpfctEeiPj5fO1LCiQDvWRuXCPJIX7RsYYr/Y/sahA=";
+    hash = "sha256-fJnrM9I11JKqzrprXa51mJiz9oO5hDp6u69FqJs5l8o=";
     fetchLFS = true;
   };
 
-  frontend-build = mkYarnPackage {
-    inherit version src;
-    pname = "treedome-ui";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-scCF4xpc1COdlg57/eNTPdgY7/cJkdcc2s1YNraXzXk=";
 
-    offlineCache = fetchYarnDeps {
-      yarnLock = "${src}/yarn.lock";
-      hash = "sha256-SU020NgQY2TXbAsGzrXa0gLEt0hllsgD82S5L2lEtKU=";
-    };
-
-    packageJSON = ./package.json;
-
-    configurePhase = ''
-      runHook preConfigure
-      ln -s $node_modules node_modules
-      runHook postConfigure
-    '';
-
-    buildPhase = ''
-      runHook preBuild
-
-      export HOME=$(mktemp -d)
-      yarn --offline run build
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out/dist
-      cp -r dist/** $out/dist
-
-      runHook postInstall
-    '';
-
-    doDist = false;
-  };
-in
-rustPlatform.buildRustPackage {
-  inherit version pname src;
-  sourceRoot = "${src.name}/src-tauri";
-
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "fix-path-env-0.0.0" = "sha256-ewE3CwqLC8dvi94UrQsWbp0mjmrzEJIGPDYtdmQ/sGs=";
-    };
+  offlineCache = fetchYarnDeps {
+    yarnLock = "${src}/yarn.lock";
+    hash = "sha256-in1A1XcfZK5F/EV5CYgfqig+8vKsxd6XhzfSv7Z0nNQ=";
   };
 
-  preConfigure = ''
-    mkdir -p dist
-    cp -R ${frontend-build}/dist/** dist
-  '';
-
-  # copy the frontend static resources to final build directory
-  # Also modify tauri.conf.json so that it expects the resources at the new location
   postPatch = ''
-    substituteInPlace ./tauri.conf.json \
-      --replace '"distDir": "../dist",' '"distDir": "dist",' \
-      --replace '"beforeBuildCommand": "yarn run build",' '"beforeBuildCommand": "",'
+    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+      --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
   '';
 
   nativeBuildInputs = [
-    cmake
+    cargo-tauri.hook
+    nodejs
     pkg-config
-    cargo-tauri
-    wrapGAppsHook
+    wrapGAppsHook4
+    yarnConfigHook
   ];
 
   buildInputs = [
     dbus
     openssl
     freetype
-    libsoup
-    gtk3
-    webkitgtk
+    webkitgtk_4_1
+    libayatana-appindicator
     gsettings-desktop-schemas
     sqlite
   ];
 
-  buildPhase = ''
-    runHook preBuild
+  cargoRoot = "src-tauri";
+  buildAndTestSubdir = cargoRoot;
 
-    cargo tauri build
-
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/bin/
-    mkdir -p $out/share/
-
-    cp target/release/bundle/deb/treedome_0.0.0_amd64/data/usr/bin/treedome $out/bin/treedome
-    cp -R target/release/bundle/deb/treedome_0.0.0_amd64/data/usr/share/** $out/share/
-
-    runHook postInstall
-  '';
+  env = {
+    VERGEN_GIT_DESCRIBE = version;
+  };
 
   # WEBKIT_DISABLE_COMPOSITING_MODE essential in NVIDIA + compositor https://github.com/NixOS/nixpkgs/issues/212064#issuecomment-1400202079
   postFixup = ''
@@ -135,9 +73,9 @@ rustPlatform.buildRustPackage {
   '';
 
   meta = with lib; {
-    description = "A local-first, encrypted, note taking application with tree-like structures, all written and saved in markdown";
+    description = "Local-first, encrypted, note taking application organized in tree-like structures";
     homepage = " https://codeberg.org/solver-orgz/treedome";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     platforms = [ "x86_64-linux" ];
     mainProgram = "treedome";
     maintainers = with maintainers; [ tengkuizdihar ];

@@ -1,65 +1,56 @@
-{ lib
-, aiohttp
-, attrs
-, backoff
-, backports-strenum
-, boto3
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pyhumps
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, warrant-lite
+{
+  lib,
+  aiohttp,
+  attrs,
+  backoff,
+  backports-strenum,
+  boto3,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pyhumps,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  warrant-lite,
 }:
 
 buildPythonPackage rec {
   pname = "pyoverkiz";
-  version = "1.13.8";
-  format = "pyproject";
+  version = "1.17.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "iMicknl";
     repo = "python-overkiz-api";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-tvS7aPfBTs75Rq1WGslWDMv1pOTVt7MtwpXPRJtqbuk=";
+    tag = "v${version}";
+    hash = "sha256-KkVII55CG2RiAp1XdQnuyQfckIkSSK+vG02+6M/U66M=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'pyhumps = "^3.0.2,!=3.7.3"' 'pyhumps = "^3.0.2"'
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     attrs
     backoff
-    backports-strenum
     boto3
     pyhumps
     warrant-lite
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ backports-strenum ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pyoverkiz"
-  ];
+  pythonImportsCheck = [ "pyoverkiz" ];
 
   meta = with lib; {
     description = "Module to interact with the Somfy TaHoma API or other OverKiz APIs";
     homepage = "https://github.com/iMicknl/python-overkiz-api";
-    changelog = "https://github.com/iMicknl/python-overkiz-api/releases/tag/v${version}";
+    changelog = "https://github.com/iMicknl/python-overkiz-api/releases/tag/${src.tag}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

@@ -1,44 +1,44 @@
-{ lib
-, branca
-, buildPythonPackage
-, fetchFromGitHub
-, geopandas
-, jinja2
-, nbconvert
-, numpy
-, pandas
-, pillow
-, pytestCheckHook
-, pythonOlder
-, requests
-, selenium
-, setuptools
-, setuptools-scm
-, wheel
-, xyzservices
+{
+  lib,
+  branca,
+  buildPythonPackage,
+  fetchFromGitHub,
+  geodatasets,
+  geopandas,
+  jinja2,
+  nbconvert,
+  numpy,
+  pandas,
+  pillow,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  selenium,
+  setuptools,
+  setuptools-scm,
+  xyzservices,
 }:
 
 buildPythonPackage rec {
   pname = "folium";
-  version = "0.15.1";
+  version = "0.19.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "python-visualization";
     repo = "folium";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-CHPHxp8xEZhEEMLvhs/xAiOr2Hw6B+5svFNY+QvQa+U=";
+    tag = "v${version}";
+    hash = "sha256-jZrGJWSmQXQNlZYldeNSh5AhlTHow5gxCEkksEoKZ7E=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     branca
     jinja2
     numpy
@@ -47,12 +47,12 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    geodatasets
     geopandas
     nbconvert
     pandas
     pillow
     pytestCheckHook
-    selenium
   ];
 
   disabledTests = [
@@ -64,17 +64,22 @@ buildPythonPackage rec {
     "test_notebook"
     "test_valid_png_size"
     "test_valid_png"
+    # pooch tries to write somewhere it can, and geodatasets does not give us an env var to customize this.
+    "test_timedynamic_geo_json"
   ];
 
-  pythonImportsCheck = [
-    "folium"
+  disabledTestPaths = [
+    # Import issue with selenium.webdriver.common.fedcm
+    "tests/selenium"
   ];
+
+  pythonImportsCheck = [ "folium" ];
 
   meta = {
     description = "Make beautiful maps with Leaflet.js & Python";
     homepage = "https://github.com/python-visualization/folium";
-    changelog = "https://github.com/python-visualization/folium/blob/v${version}/CHANGES.txt";
+    changelog = "https://github.com/python-visualization/folium/releases/tag/${src.tag}";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ fridh ];
+    teams = [ lib.teams.geospatial ];
   };
 }

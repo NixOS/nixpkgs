@@ -1,15 +1,24 @@
-{ lib, stdenv, fetchurl, kernel }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  kernel,
+  kernelModuleMakeFlags,
+}:
 
 stdenv.mkDerivation rec {
   pname = "vhba";
-  version = "20211218";
+  version = "20250329";
 
-  src  = fetchurl {
+  src = fetchurl {
     url = "mirror://sourceforge/cdemu/vhba-module-${version}.tar.xz";
-    sha256 = "sha256-csWowcRSgF5M74yv787MLSXOGXrkxnODCCgC5a3Nd7Y=";
+    hash = "sha256-piog1yDd8M/lpTIo9FE9SY2JwurZ6a8LG2lZ/4EmB14=";
   };
 
-  makeFlags = kernel.makeFlags ++ [ "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" "INSTALL_MOD_PATH=$(out)" ];
+  makeFlags = kernelModuleMakeFlags ++ [
+    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "INSTALL_MOD_PATH=$(out)"
+  ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   meta = with lib; {

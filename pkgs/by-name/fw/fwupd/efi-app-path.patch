@@ -1,9 +1,15 @@
+commit 1770b1871a567dfa78ae1e32094b6007bb7639e9
+Author: r-vdp <ramses@well-founded.dev>
+Date:   Mon Oct 28 12:08:49 2024 +0100
+
+    Get the efi app from fwupd-efi
+
 diff --git a/meson.build b/meson.build
-index b18108c74..7e674b4d2 100644
+index e4e764b97..8acaa3d2d 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -404,7 +404,7 @@ endif
-
+@@ -482,7 +482,7 @@ endif
+ 
  # EFI
  if build_standalone
 -  efi_app_location = join_paths(libexecdir, 'fwupd', 'efi')

@@ -1,53 +1,59 @@
-{ lib
-, fetchFromGitHub
-, buildDunePackage
-, bigarray-compat
-, containers
-, cppo
-, ctypes
-, integers
-, num
-, ppxlib
-, re
-, findlib
+{
+  lib,
+  ocaml,
+  fetchFromGitHub,
+  buildDunePackage,
+  bigarray-compat,
+  containers,
+  cppo,
+  ctypes,
+  integers,
+  num,
+  ppxlib,
+  re,
+  findlib,
 }:
 
-buildDunePackage rec {
-  pname = "ppx_cstubs";
-  version = "0.7.0";
+lib.throwIf (lib.versionAtLeast ocaml.version "5.2")
+  "ppx_cstubs is not available for OCaml ${ocaml.version}"
 
-  minimalOCamlVersion = "4.08";
+  buildDunePackage
+  rec {
+    pname = "ppx_cstubs";
+    version = "0.7.0";
 
-  duneVersion = "3";
+    minimalOCamlVersion = "4.08";
 
-  src = fetchFromGitHub {
-    owner = "fdopen";
-    repo = "ppx_cstubs";
-    rev = version;
-    hash = "sha256-qMmwRWCIfNyhCQYPKLiufnb57sTR3P+WInOqtPDywFs=";
-  };
+    src = fetchFromGitHub {
+      owner = "fdopen";
+      repo = "ppx_cstubs";
+      rev = version;
+      hash = "sha256-qMmwRWCIfNyhCQYPKLiufnb57sTR3P+WInOqtPDywFs=";
+    };
 
-  nativeBuildInputs = [ cppo ];
+    patches = [ ./ppxlib.patch ];
 
-  buildInputs = [
-    bigarray-compat
-    containers
-    findlib
-    integers
-    num
-    ppxlib
-    re
-  ];
+    nativeBuildInputs = [ cppo ];
 
-  propagatedBuildInputs = [
-    ctypes
-  ];
+    buildInputs = [
+      bigarray-compat
+      containers
+      findlib
+      integers
+      num
+      ppxlib
+      re
+    ];
 
-  meta = with lib; {
-    homepage = "https://github.com/fdopen/ppx_cstubs";
-    changelog = "https://github.com/fdopen/ppx_cstubs/raw/${version}/CHANGES.md";
-    description = "Preprocessor for easier stub generation with ocaml-ctypes";
-    license = licenses.lgpl21Plus;
-    maintainers = [ maintainers.osener ];
-  };
-}
+    propagatedBuildInputs = [
+      ctypes
+    ];
+
+    meta = with lib; {
+      homepage = "https://github.com/fdopen/ppx_cstubs";
+      changelog = "https://github.com/fdopen/ppx_cstubs/raw/${version}/CHANGES.md";
+      description = "Preprocessor for easier stub generation with ocaml-ctypes";
+      license = licenses.lgpl21Plus;
+      maintainers = [ maintainers.osener ];
+    };
+  }

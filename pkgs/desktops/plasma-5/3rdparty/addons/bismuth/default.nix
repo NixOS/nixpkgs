@@ -1,13 +1,14 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, kcoreaddons
-, kwindowsystem
-, plasma-framework
-, systemsettings
-, cmake
-, extra-cmake-modules
-, esbuild
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  kcoreaddons,
+  kwindowsystem,
+  plasma-framework,
+  systemsettings,
+  cmake,
+  extra-cmake-modules,
+  esbuild,
 }:
 
 mkDerivation rec {
@@ -44,7 +45,7 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A dynamic tiling extension for KWin";
+    description = "Dynamic tiling extension for KWin";
     license = licenses.mit;
     maintainers = with maintainers; [ pasqui23 ];
     homepage = "https://bismuth-forge.github.io/bismuth/";

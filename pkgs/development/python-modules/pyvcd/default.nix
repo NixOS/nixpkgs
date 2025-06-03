@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools-scm
-, six
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools-scm,
+  six,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  version = "0.4.0";
+  version = "0.4.1";
   format = "setuptools";
   pname = "pyvcd";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Mb4/UBRBqbjF3HJmD/e5z++bQ7ISGiPZb1htKGMnApA=";
+    hash = "sha256-3GJ16Vp5SbgjYIarLm0Dr+3nNEEkPsUQnJ6okHfz1pY=";
   };
 
   buildInputs = [ setuptools-scm ];
@@ -29,6 +30,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/SanDisk-Open-Source/pyvcd";
     changelog = "https://github.com/SanDisk-Open-Source/pyvcd/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ sb0 emily ];
+    maintainers = with maintainers; [
+      sb0
+    ];
   };
 }

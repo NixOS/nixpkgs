@@ -1,19 +1,20 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, google-auth
-, grpcio
-, protobuf
-, pytestCheckHook
-, pythonOlder
-, requests
-, setuptools
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  google-auth,
+  grpcio,
+  protobuf,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "gassist-text";
-  version = "0.0.10";
+  version = "0.0.12";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,13 +22,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tronikos";
     repo = "gassist_text";
-    rev = "refs/tags/${version}";
-    hash = "sha256-BSMflCSYNAaQVTOqKWyr9U9Q70ley1jjF6ndOVum+GA=";
+    tag = version;
+    hash = "sha256-ToHkep+jcPcl5t05jmzRTX2QAhJRW2R+Qyhwt/zpIfc=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     beautifulsoup4
@@ -37,13 +36,9 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "gassist_text"
-  ];
+  pythonImportsCheck = [ "gassist_text" ];
 
   meta = with lib; {
     description = "Module for interacting with Google Assistant API via text";

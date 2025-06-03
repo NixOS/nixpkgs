@@ -1,21 +1,22 @@
-{ lib
-, attrs
-, buildPythonPackage
-, colorlog
-, fetchFromGitHub
-, git
-, lxml
-, markdown
-, markupsafe
-, mock
-, postgresql
-, pylatexenc
-, pytest-mock
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, setuptools
-, tabulate
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  colorlog,
+  fetchFromGitHub,
+  git,
+  lxml,
+  markdown,
+  markupsafe,
+  mock,
+  postgresql,
+  pylatexenc,
+  pytest-mock,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  setuptools,
+  tabulate,
 }:
 
 buildPythonPackage rec {
@@ -26,7 +27,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "clld";
-    repo = pname;
+    repo = "clldutils";
     rev = "v${version}";
     hash = "sha256-OD+WJ9JuYZb/oXDgVqL4i5YlcVEt0+swq0SB3cutyRo=";
   };
@@ -36,9 +37,7 @@ buildPythonPackage rec {
       --replace-fail "--cov" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     attrs

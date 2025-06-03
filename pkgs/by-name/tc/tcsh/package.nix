@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, libxcrypt
-, ncurses
-, buildPackages
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libxcrypt,
+  ncurses,
+  buildPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tcsh";
-  version = "6.24.10";
+  version = "6.24.15";
 
   src = fetchurl {
     url = "mirror://tcsh/tcsh-${finalAttrs.version}.tar.gz";
-    hash = "sha256-E0dcD763QTnTPteTvwD/u7KsLcn7HURGekEHYKujZmQ=";
+    hash = "sha256-1NCypN8yD1elGORMNZ7za7z4XWT1FG0MuP80mE4NI/0=";
   };
 
   strictDeps = true;
@@ -30,7 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.tcsh.org/";
-    description = "An enhanced version of the Berkeley UNIX C shell (csh)";
+    description = "Enhanced version of the Berkeley UNIX C shell (csh)";
+    mainProgram = "tcsh";
     longDescription = ''
       tcsh is an enhanced but completely compatible version of the Berkeley UNIX
       C shell, csh. It is a command language interpreter usable both as an
@@ -44,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
       - job control
     '';
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ suominen ];
     platforms = lib.platforms.unix;
   };
 })

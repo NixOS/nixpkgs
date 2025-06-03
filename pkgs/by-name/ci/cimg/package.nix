@@ -1,22 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gmic
-, gmic-qt
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gmic,
+  gmic-qt,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cimg";
-  version = "3.3.3";
+  version = "3.5.4";
 
   src = fetchFromGitHub {
     owner = "GreycLab";
     repo = "CImg";
-    rev = "v.${finalAttrs.version}";
-    hash = "sha256-6rgtFBt2GcxuGWd4+/ZZzsJqr3XrnhEzJEPLgOt4G2Q=";
+    tag = "v.${finalAttrs.version}";
+    hash = "sha256-VCgMSIaQAcPH7DWUEfoJahCQDr49lzO7pUw1+NXHA60=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -37,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://cimg.eu/";
-    description = "A small, open source, C++ toolkit for image processing";
+    description = "Small, open source, C++ toolkit for image processing";
     longDescription = ''
       CImg stands for Cool Image. It is easy to use, efficient and is intended
       to be a very pleasant toolbox to design image processing algorithms in
@@ -45,10 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
       processing applications.
     '';
     license = lib.licenses.cecill-c;
-    maintainers = [
-      lib.maintainers.AndersonTorres
-      lib.maintainers.lilyinstarlight
-    ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

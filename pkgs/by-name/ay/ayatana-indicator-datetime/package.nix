@@ -1,30 +1,30 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, gitUpdater
-, nixosTests
-, ayatana-indicator-messages
-, cmake
-, dbus
-, dbus-test-runner
-, evolution-data-server
-, glib
-, gst_all_1
-, gtest
-, intltool
-, libaccounts-glib
-, libayatana-common
-, libical
-, libnotify
-, libuuid
-, lomiri
-, pkg-config
-, properties-cpp
-, python3
-, systemd
-, tzdata
-, wrapGAppsHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gitUpdater,
+  nixosTests,
+  ayatana-indicator-messages,
+  cmake,
+  dbus,
+  dbus-test-runner,
+  evolution-data-server,
+  glib,
+  gst_all_1,
+  gtest,
+  intltool,
+  libaccounts-glib,
+  libayatana-common,
+  libical,
+  libnotify,
+  libuuid,
+  lomiri,
+  pkg-config,
+  properties-cpp,
+  python3,
+  systemd,
+  tzdata,
+  wrapGAppsHook3,
 }:
 
 let
@@ -32,38 +32,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ayatana-indicator-datetime";
-  version = "23.10.1";
+  version = "24.5.1";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-datetime";
-    rev = finalAttrs.version;
-    hash = "sha256-cm1zhG9TODGe79n/fGuyVnWL/sjxUc3ZCu9FhqA1NLE=";
+    tag = finalAttrs.version;
+    hash = "sha256-rbKAixFjXOMYzduABmoIXissQXAoehfbkNntdtRyAqA=";
   };
 
-  patches = [
-    # Fix test-menus building & running
-    # Remove when version > 23.10.1
-    (fetchpatch {
-      name = "0001-ayatana-indicator-datetime-Fix-test-menus-tests.patch";
-      url = "https://github.com/AyatanaIndicators/ayatana-indicator-datetime/commit/ddabb4a61a496da14603573b700c5961a3e5b834.patch";
-      hash = "sha256-vf8aVXonCoTWMuAQZG6FuklWR2IaGY4hecFtoyNCGg8=";
-    })
-
-    # Fix EDS-related tests
-    # Remove when version > 23.10.1
-    (fetchpatch {
-      name = "0002-ayatana-indicator-datetime-Fix-EDS-colour-tests.patch";
-      url = "https://github.com/AyatanaIndicators/ayatana-indicator-datetime/commit/6d67f7b458911833e72e0b4a162b1d823609d6f8.patch";
-      hash = "sha256-VUdMJuma6rmsjUOeyO0W8UNKADODiM+wDVfj6aDhqgw=";
-    })
-  ];
-
   postPatch = ''
-    # Queries systemd user unit dir via pkg_get_variable, can't override prefix
+    # Override systemd prefix
     substituteInPlace data/CMakeLists.txt \
-      --replace-fail 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir)' 'set(SYSTEMD_USER_DIR ''${CMAKE_INSTALL_PREFIX}/lib/systemd/user)' \
-      --replace-fail '/etc' "\''${CMAKE_INSTALL_FULL_SYSCONFDIR}"
+      --replace-fail 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir)' 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})' \
+      --replace-fail 'XDG_AUTOSTART_DIR "/etc' 'XDG_AUTOSTART_DIR "''${CMAKE_INSTALL_FULL_SYSCONFDIR}'
 
     # Looking for Lomiri schemas for code generation
     substituteInPlace src/CMakeLists.txt \
@@ -77,36 +59,38 @@ stdenv.mkDerivation (finalAttrs: {
     glib # for schema hook
     intltool
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
-  buildInputs = [
-    ayatana-indicator-messages
-    evolution-data-server
-    glib
-    libaccounts-glib
-    libayatana-common
-    libical
-    libnotify
-    libuuid
-    properties-cpp
-    systemd
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-  ]) ++ (with lomiri; [
-    cmake-extras
-    lomiri-schemas
-    lomiri-sounds
-    lomiri-url-dispatcher
-  ]);
+  buildInputs =
+    [
+      ayatana-indicator-messages
+      evolution-data-server
+      glib
+      libaccounts-glib
+      libayatana-common
+      libical
+      libnotify
+      libuuid
+      properties-cpp
+      systemd
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+    ])
+    ++ (with lomiri; [
+      cmake-extras
+      lomiri-schemas
+      lomiri-sounds
+      lomiri-url-dispatcher
+    ]);
 
   nativeCheckInputs = [
     dbus
-    (python3.withPackages (ps: with ps; [
-      python-dbusmock
-    ]))
+    dbus-test-runner
+    (python3.withPackages (ps: with ps; [ python-dbusmock ]))
     tzdata
   ];
 
@@ -127,33 +111,39 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelChecking = false;
 
   preCheck = ''
-    export XDG_DATA_DIRS=${lib.strings.concatStringsSep ":" [
-      # org.ayatana.common schema
-      (glib.passthru.getSchemaDataDirPath libayatana-common)
+    export XDG_DATA_DIRS=${
+      lib.strings.concatStringsSep ":" [
+        # org.ayatana.common schema
+        (glib.passthru.getSchemaDataDirPath libayatana-common)
 
-      # loading EDS engines to handle ICS-loading
-      edsDataDir
-    ]}
+        # loading EDS engines to handle ICS-loading
+        edsDataDir
+      ]
+    }
   '';
 
+  # schema is already added automatically by wrapper, EDS needs to be added explicitly
   preFixup = ''
-    # schema is already added automatically by wrapper, EDS needs to be added explicitly
     gappsWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${edsDataDir}"
     )
   '';
 
   passthru = {
-    ayatana-indicators = [
-      "ayatana-indicator-datetime"
-    ];
+    ayatana-indicators = {
+      ayatana-indicator-datetime = [
+        "ayatana"
+        "lomiri"
+      ];
+    };
     tests = {
-      inherit (nixosTests) ayatana-indicators;
+      startup = nixosTests.ayatana-indicators;
+      lomiri = nixosTests.lomiri.desktop-ayatana-indicator-datetime;
     };
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Ayatana Indicator providing clock and calendar";
     longDescription = ''
       This Ayatana Indicator provides a combined calendar, clock, alarm and
@@ -161,8 +151,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/AyatanaIndicators/ayatana-indicator-datetime";
     changelog = "https://github.com/AyatanaIndicators/ayatana-indicator-datetime/blob/${finalAttrs.version}/ChangeLog";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.linux;
   };
 })

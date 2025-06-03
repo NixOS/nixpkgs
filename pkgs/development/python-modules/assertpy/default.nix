@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -10,19 +11,15 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "assertpy";
+    repo = "assertpy";
     rev = version;
     sha256 = "0hnfh45cmqyp7zasrllwf8gbq3mazqlhhk0sq1iqlh6fig0yfq2f";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "assertpy"
-  ];
+  pythonImportsCheck = [ "assertpy" ];
 
   meta = with lib; {
     description = "Simple assertion library for unit testing with a fluent API";

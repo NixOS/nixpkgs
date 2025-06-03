@@ -2,16 +2,20 @@
 
 let
   inherit (pkgs) fetchpatch lib;
-  checkAgainAfter = pkg: ver: msg: act:
-    if builtins.compareVersions pkg.version ver <= 0 then act
+  checkAgainAfter =
+    pkg: ver: msg: act:
+    if builtins.compareVersions pkg.version ver <= 0 then
+      act
     else
       builtins.throw "Check if '${msg}' was resolved in ${pkg.pname} ${pkg.version} and update or remove this";
 in
 
 with haskellLib;
-self: super: let
+self: super:
+let
   jailbreakForCurrentVersion = p: v: checkAgainAfter p v "bad bounds" (doJailbreak p);
-in {
+in
+{
   llvmPackages = lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
 
   # Disable GHC core libraries.
@@ -46,23 +50,38 @@ in {
   system-cxx-std-lib = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else doDistribute self.terminfo_0_4_1_6;
+  terminfo =
+    if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then
+      null
+    else
+      doDistribute self.terminfo_0_4_1_7;
   text = null;
   time = null;
   transformers = null;
   unix = null;
   # GHC only bundles the xhtml library if haddock is enabled, check if this is
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
-  xhtml = if self.ghc.hasHaddock or true then null else doDistribute self.xhtml_3000_3_0_0;
+  xhtml = if self.ghc.hasHaddock or true then null else doDistribute self.xhtml_3000_4_0_0;
+
+  # Becomes a core package in GHC >= 9.8
+  semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
+
+  # only broken for >= 9.6
+  calligraphy = doDistribute (unmarkBroken super.calligraphy);
 
   # Jailbreaks & Version Updates
 
   hashable-time = doJailbreak super.hashable-time;
   libmpd = doJailbreak super.libmpd;
-  lens-family-th = doJailbreak super.lens-family-th;  # template-haskell <2.19
 
   # generically needs base-orphans for 9.4 only
   base-orphans = dontCheck (doDistribute super.base-orphans);
+  generically = addBuildDepends [
+    self.base-orphans
+  ] super.generically;
+
+  # Needs base-orphans for GHC < 9.8 / base < 4.19
+  some = addBuildDepend self.base-orphans super.some;
 
   # the dontHaddock is due to a GHC panic. might be this bug, not sure.
   # https://gitlab.haskell.org/ghc/ghc/-/issues/21619
@@ -73,14 +92,8 @@ in {
     # 2021-10-10: 9.2.1 is not yet supported (also no issue)
     testFlags = [
       "--skip=/Hpack/renderCabalFile/is inverse to readCabalFile/"
-    ] ++ drv.testFlags or [];
+    ] ++ drv.testFlags or [ ];
   }) (doJailbreak super.hpack);
-
-  # Tests depend on `parseTime` which is no longer available
-  hourglass = dontCheck super.hourglass;
-
-  # https://github.com/sjakobi/bsb-http-chunked/issues/38
-  bsb-http-chunked = dontCheck super.bsb-http-chunked;
 
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
   hiedb = dontCheck super.hiedb;
@@ -88,20 +101,28 @@ in {
   # 2022-10-06: https://gitlab.haskell.org/ghc/ghc/-/issues/22260
   ghc-check = dontHaddock super.ghc-check;
 
-  ghc-tags = self.ghc-tags_1_6;
+  ghc-tags = doDistribute (doJailbreak self.ghc-tags_1_7); # aeson < 2.2
+
+  # ghc-lib >= 9.8 and friends no longer build with GHC 9.4 since they require semaphore-compat
+  ghc-lib-parser = doDistribute (
+    self.ghc-lib-parser_9_6_7_20250325.override {
+      happy = self.happy_1_20_1_1; # wants happy < 1.21
+    }
+  );
+  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_6_0_2;
+  ghc-lib = doDistribute (
+    self.ghc-lib_9_6_7_20250325.override {
+      happy = self.happy_1_20_1_1; # wants happy < 1.21
+    }
+  );
+
+  # A given major version of ghc-exactprint only supports one version of GHC.
+  ghc-exactprint = super.ghc-exactprint_1_6_1_3;
 
   # Too strict upper bound on template-haskell
   # https://github.com/mokus0/th-extras/issues/18
   th-extras = doJailbreak super.th-extras;
 
-  # requires newer versions to work with GHC 9.4
-  servant = doJailbreak super.servant;
-  servant-server = doJailbreak super.servant-server;
-  servant-auth = doJailbreak super.servant-auth;
-  servant-auth-swagger = doJailbreak super.servant-auth-swagger;
-  servant-swagger = doJailbreak super.servant-swagger;
-  servant-client-core = doJailbreak super.servant-client-core;
-  servant-client = doJailbreak super.servant-client;
   # https://github.com/kowainik/relude/issues/436
   relude = dontCheck super.relude;
 
@@ -109,26 +130,39 @@ in {
     (
       let
         hls_overlay = lself: lsuper: {
-          ghc-lib-parser = lself.ghc-lib-parser_9_6_3_20231121;
-          ghc-lib-parser-ex = doDistribute lself.ghc-lib-parser-ex_9_6_0_2;
-          Cabal-syntax = lself.Cabal-syntax_3_10_2_0;
+          Cabal-syntax = lself.Cabal-syntax_3_10_3_0;
+          Cabal = lself.Cabal_3_10_3_0;
         };
       in
       lib.mapAttrs (_: pkg: doDistribute (pkg.overrideScope hls_overlay)) {
         haskell-language-server = allowInconsistentDependencies super.haskell-language-server;
-        fourmolu = self.fourmolu_0_14_0_0;
-        ormolu = self.generateOptparseApplicativeCompletions [ "ormolu" ] (enableSeparateBinOutput super.ormolu_0_7_2_0);
-        hlint = super.hlint_3_6_1;
-        stylish-haskell = super.stylish-haskell;
+        fourmolu = doJailbreak self.fourmolu_0_14_0_0; # ansi-terminal, Diff
+        ormolu = doJailbreak self.ormolu_0_7_2_0; # ansi-terminal
+        hlint = self.hlint_3_6_1;
+        stylish-haskell = self.stylish-haskell_0_14_5_0;
       }
     )
     haskell-language-server
-    # HLS from 2.3 needs at least formolu 0.14.
-    # This means we need to bump a lot of other tools, too, because they all us ghc-lib-parser
-    # We do this globally to prevent inconsistent formatting or lints between hls and the command line tools.
     fourmolu
     ormolu
     hlint
     stylish-haskell
-  ;
+    ;
+
+  # Packages which need compat library for GHC < 9.6
+  inherit (lib.mapAttrs (_: addBuildDepends [ self.foldable1-classes-compat ]) super)
+    indexed-traversable
+    OneTuple
+    these
+    ;
+  base-compat-batteries = addBuildDepends [
+    self.foldable1-classes-compat
+    self.OneTuple
+  ] super.base-compat-batteries;
+
+  # Tests require nothunks < 0.3 (conflicting with Stackage) for GHC < 9.8
+  aeson = dontCheck super.aeson;
+
+  # Too strict lower bound on base
+  primitive-addr = doJailbreak super.primitive-addr;
 }

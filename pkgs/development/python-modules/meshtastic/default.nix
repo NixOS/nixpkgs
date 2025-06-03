@@ -1,129 +1,131 @@
-{ lib
-, bleak
-, buildPythonPackage
-, dotmap
-, fetchFromGitHub
-, pexpect
-, protobuf
-, pygatt
-, pypubsub
-, pyqrcode
-, pyserial
-, pytap2
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, setuptools
-, tabulate
-, timeago
+{
+  lib,
+  argcomplete,
+  bleak,
+  buildPythonPackage,
+  dash-bootstrap-components,
+  dash,
+  dotmap,
+  fetchFromGitHub,
+  hypothesis,
+  packaging,
+  pandas-stubs,
+  pandas,
+  parse,
+  platformdirs,
+  poetry-core,
+  ppk2-api,
+  print-color,
+  protobuf,
+  pyarrow,
+  pypubsub,
+  pyqrcode,
+  pyserial,
+  pytap2,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  riden,
+  setuptools,
+  tabulate,
+  wcwidth,
 }:
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "2.2.22";
+  version = "2.6.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "meshtastic";
-    repo = "Meshtastic-python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-bAg7Rr17Q+a+S0ZuHcFmmTM0sRcX2w0zRClKdFwix30=";
+    repo = "python";
+    tag = version;
+    hash = "sha256-pco8io8MzbK7Jv9rkzSK0A9UDLSyvfoZarFFjBLBNoM=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  pythonRelaxDeps = [
+    "bleak"
+    "protobuf"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     bleak
-    dotmap
-    pexpect
+    packaging
     protobuf
-    pygatt
     pypubsub
-    pyqrcode
     pyserial
     pyyaml
     requests
     setuptools
     tabulate
-    timeago
   ];
 
-  passthru.optional-dependencies = {
-    tunnel = [
-      pytap2
+  optional-dependencies = {
+    analysis = [
+      dash
+      dash-bootstrap-components
+      pandas
+      pandas-stubs
     ];
+    cli = [
+      argcomplete
+      dotmap
+      print-color
+      pyqrcode
+      wcwidth
+    ];
+    powermon = [
+      parse
+      platformdirs
+      ppk2-api
+      pyarrow
+      riden
+    ];
+    tunnel = [ pytap2 ];
   };
 
   nativeCheckInputs = [
-    pytap2
+    hypothesis
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export PATH="$PATH:$out/bin";
   '';
 
-  pythonImportsCheck = [
-    "meshtastic"
+  pythonImportsCheck = [ "meshtastic" ];
+
+  disabledTestPaths = [
+    # Circular import with dash-bootstrap-components
+    "meshtastic/tests/test_analysis.py"
   ];
 
   disabledTests = [
-    # AttributeError: 'HardwareMessage'...
-    "test_handleFromRadio_with_my_info"
-    "test_handleFromRadio_with_node_info"
-    "test_main_ch_longsfast_on_non_primary_channel"
-    "test_main_ch_set_name_with_ch_index"
-    "test_main_configure_with_camel_case_keys"
-    "test_main_configure_with_snake_case"
-    "test_main_export_config_called_from_main"
-    "test_main_export_config_use_camel"
-    "test_main_export_config"
-    "test_main_get_with_invalid"
-    "test_main_get_with_valid_values_camel"
-    "test_main_getPref_invalid_field_camel"
-    "test_main_getPref_invalid_field"
-    "test_main_getPref_valid_field_bool_camel"
-    "test_main_getPref_valid_field_bool"
-    "test_main_getPref_valid_field_camel"
-    "test_main_getPref_valid_field_string_camel"
-    "test_main_getPref_valid_field_string"
-    "test_main_getPref_valid_field"
-    "test_main_set_invalid_wifi_passwd"
-    "test_main_set_valid_camel_case"
-    "test_main_set_valid_wifi_passwd"
-    "test_main_set_valid"
-    "test_main_set_with_invalid"
-    "test_main_setPref_ignore_incoming_0"
-    "test_main_setPref_ignore_incoming_123"
-    "test_main_setPref_invalid_field_camel"
-    "test_main_setPref_invalid_field"
-    "test_main_setPref_valid_field_int_as_string"
-    "test_readGPIOs"
-    "test_onGPIOreceive"
-    "test_setURL_empty_url"
-    "test_watchGPIOs"
-    "test_writeConfig_with_no_radioConfig"
-    "test_writeGPIOs"
-    "test_reboot"
-    "test_shutdown"
-    "test_main_sendtext"
-    "test_main_sendtext_with_channel"
+    # TypeError
+    "test_main_info_with_seriallog_output_txt"
+    "test_main_info_with_seriallog_stdout"
+    "test_main_info_with_tcp_interfa"
+    "test_main_info"
+    "test_main_no_proto"
+    "test_main_support"
     "test_MeshInterface"
-    "test_getNode_not_local"
-    "test_getNode_not_local_timeout"
-    "test_main_onConnected_exception"
+    "test_message_to_json_shows_all"
+    "test_node"
+    "test_SerialInterface_single_port"
+    "test_support_info"
+    "test_TCPInterface"
   ];
 
   meta = with lib; {
     description = "Python API for talking to Meshtastic devices";
-    homepage = "https://github.com/meshtastic/Meshtastic-python";
+    homepage = "https://github.com/meshtastic/python";
     changelog = "https://github.com/meshtastic/python/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }

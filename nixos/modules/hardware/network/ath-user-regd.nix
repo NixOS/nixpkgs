@@ -1,6 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   kernelVersion = config.boot.kernelPackages.kernel.version;
   linuxKernelMinVersion = "5.8";
@@ -11,19 +14,19 @@ let
   };
 in
 {
-  options.networking.wireless.athUserRegulatoryDomain = mkOption {
+  options.networking.wireless.athUserRegulatoryDomain = lib.mkOption {
     default = false;
-    type = types.bool;
-    description = lib.mdDoc ''
+    type = lib.types.bool;
+    description = ''
       If enabled, sets the ATH_USER_REGD kernel config switch to true to
       disable the enforcement of EEPROM regulatory restrictions for ath
       drivers. Requires at least Linux ${linuxKernelMinVersion}.
     '';
   };
 
-  config = mkIf config.networking.wireless.athUserRegulatoryDomain {
-    assertions = singleton {
-      assertion = lessThan 0 (builtins.compareVersions kernelVersion linuxKernelMinVersion);
+  config = lib.mkIf config.networking.wireless.athUserRegulatoryDomain {
+    assertions = lib.singleton {
+      assertion = lib.lessThan 0 (builtins.compareVersions kernelVersion linuxKernelMinVersion);
       message = "ATH_USER_REGD patch for kernels older than ${linuxKernelMinVersion} not ported yet!";
     };
     boot.kernelPatches = [ kernelPatch ];

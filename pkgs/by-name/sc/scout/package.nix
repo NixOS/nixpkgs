@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -9,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "liamg";
-    repo = pname;
+    repo = "scout";
     rev = "v${version}";
     hash = "sha256-9SimePyBUXXfT4+ZtciQMaoyXpyKi9D3LTwud8QMJ6w=";
   };
@@ -18,6 +19,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Lightweight URL fuzzer and spider: Discover a web server's undisclosed files, directories and VHOSTs";
+    mainProgram = "scout";
     homepage = "https://github.com/liamg/scout";
     platforms = platforms.unix;
     license = licenses.unlicense;

@@ -1,33 +1,52 @@
-{ stdenv
-, lib
-, fetchurl
-, autoPatchelfHook
-, makeWrapper
-, writeScript
-, glibcLocales
-, python3Packages
-, gtk-sharp-2_0
-, gtk2-x11
-, screen
-, buildUnstable ? false
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchurl,
+  autoPatchelfHook,
+  makeWrapper,
+  nix-update-script,
+  glibcLocales,
+  python3Packages,
+  dotnetCorePackages,
+  gtk-sharp-3_0,
+  gtk3-x11,
+  dconf,
 }:
 
 let
-  pythonLibs = with python3Packages; makePythonPath [
-    construct
-    psutil
-    pyyaml
-    requests
-    robotframework
-  ];
+  pythonLibs =
+    with python3Packages;
+    makePythonPath [
+      construct
+      psutil
+      pyyaml
+      requests
+      tkinter
+
+      # from tools/csv2resd/requirements.txt
+      construct
+
+      # from tools/execution_tracer/requirements.txt
+      pyelftools
+
+      (robotframework.overrideDerivation (oldAttrs: {
+        src = fetchFromGitHub {
+          owner = "robotframework";
+          repo = "robotframework";
+          rev = "v6.1";
+          hash = "sha256-l1VupBKi52UWqJMisT2CVnXph3fGxB63mBVvYdM1NWE=";
+        };
+      }))
+    ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renode";
-  version = "1.14.0";
+  version = "1.15.3";
 
   src = fetchurl {
-    url = "https://builds.renode.io/renode-${finalAttrs.version}.linux-portable.tar.gz";
-    hash = "sha256-1wfVHtCYc99ACz8m2XEg1R0nIDh9xP4ffV/vxeeEHxE=";
+    url = "https://github.com/renode/renode/releases/download/v${finalAttrs.version}/renode-${finalAttrs.version}.linux-dotnet.tar.gz";
+    hash = "sha256-0CZWIwIG85nT7uSHhmBkH21S5mTx2womYWV0HG+g8Mk=";
   };
 
   nativeBuildInputs = [
@@ -36,9 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
-    gtk2-x11
-    gtk-sharp-2_0
-    screen
+    gtk-sharp-3_0
   ];
 
   strictDeps = true;
@@ -50,17 +67,18 @@ stdenv.mkDerivation (finalAttrs: {
 
     mv * $out/libexec/renode
     mv .renode-root $out/libexec/renode
-    chmod +x $out/libexec/renode/*.so
 
     makeWrapper "$out/libexec/renode/renode" "$out/bin/renode" \
-      --prefix PATH : "$out/libexec/renode" \
-      --suffix LD_LIBRARY_PATH : "${gtk2-x11}/lib" \
-      --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
-
-    makeWrapper "$out/libexec/renode/renode-test" "$out/bin/renode-test" \
-      --prefix PATH : "$out/libexec/renode" \
+      --prefix PATH : "$out/libexec/renode:${lib.makeBinPath [ dotnetCorePackages.runtime_8_0 ]}" \
+      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules" \
+      --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ gtk3-x11 ]}" \
       --prefix PYTHONPATH : "${pythonLibs}" \
-      --suffix LD_LIBRARY_PATH : "${gtk2-x11}/lib" \
+      --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
+    makeWrapper "$out/libexec/renode/renode-test" "$out/bin/renode-test" \
+      --prefix PATH : "$out/libexec/renode:${lib.makeBinPath [ dotnetCorePackages.runtime_8_0 ]}" \
+      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules" \
+      --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ gtk3-x11 ]}" \
+      --prefix PYTHONPATH : "${pythonLibs}" \
       --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
 
     substituteInPlace "$out/libexec/renode/renode-test" \
@@ -69,33 +87,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript =
-    let
-      versionRegex =
-        if buildUnstable
-        then "[0-9\.\+]+[^\+]*."
-        else "[0-9\.]+[^\+]*.";
-    in
-    writeScript "${finalAttrs.pname}-updater" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p common-updater-scripts curl gnugrep gnused pup
-
-      latestVersion=$(
-        curl -sS https://builds.renode.io \
-          | pup 'a text{}' \
-          | egrep 'renode-${versionRegex}\.linux-portable\.tar\.gz' \
-          | head -n1 \
-          | sed -e 's,renode-\(.*\)\.linux-portable\.tar\.gz,\1,g'
-      )
-
-      update-source-version ${finalAttrs.pname} "$latestVersion" \
-        --file=pkgs/by-name/re/${finalAttrs.pname}/package.nix \
-        --system=x86_64-linux
-    '';
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Virtual development framework for complex embedded systems";
-    homepage = "https://renode.org";
+    homepage = "https://renode.io";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ otavio ];
     platforms = [ "x86_64-linux" ];

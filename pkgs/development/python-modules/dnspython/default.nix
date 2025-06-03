@@ -1,95 +1,62 @@
-{ lib
-, stdenv
-, aioquic
-, buildPythonPackage
-, cacert
-, cryptography
-, curio
-, fetchPypi
-, h2
-, httpx
-, idna
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-toolbelt
-, sniffio
-, trio
+{
+  lib,
+  aioquic,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  h2,
+  httpcore,
+  httpx,
+  idna,
+  hatchling,
+  pytestCheckHook,
+  trio,
 }:
 
 buildPythonPackage rec {
   pname = "dnspython";
-  version = "2.4.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "2.7.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jc+ujHRgovhLQHLibxyfQQHKIMBxZJy3w06LapPViYQ=";
+    hash = "sha256-zpxDLtoNyRz2GKXO3xpOFCZRGWu80sgOie1akH5c+vE=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ hatchling ];
 
-  passthru.optional-dependencies = {
-    DOH = [
+  optional-dependencies = {
+    doh = [
       httpx
       h2
-      requests
-      requests-toolbelt
+      httpcore
     ];
-    IDNA = [
-      idna
-    ];
-    DNSSEC = [
-      cryptography
-    ];
-    trio = [
-      trio
-    ];
-    curio = [
-      curio
-      sniffio
-    ];
-    DOQ = [
-      aioquic
-    ];
+    idna = [ idna ];
+    dnssec = [ cryptography ];
+    trio = [ trio ];
+    doq = [ aioquic ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  checkInputs = [
-    cacert
-  ] ++ passthru.optional-dependencies.DNSSEC;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # dns.exception.SyntaxError: protocol not found
     "test_misc_good_WKS_text"
-    # fails if IPv6 isn't available
-    "test_resolver_override"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # Tests that run inconsistently on darwin systems
-    # 9 tests fail with: BlockingIOError: [Errno 35] Resource temporarily unavailable
-    "testQueryUDP"
-    # 6 tests fail with: dns.resolver.LifetimeTimeout: The resolution lifetime expired after ...
-    "testResolveCacheHit"
-    "testResolveTCP"
   ];
 
-  pythonImportsCheck = [
-    "dns"
-  ];
+  # disable network on all builds (including darwin)
+  # see https://github.com/NixOS/nixpkgs/issues/356803
+  preCheck = ''
+    export NO_INTERNET=1
+  '';
 
-  meta = with lib; {
-    description = "A DNS toolkit for Python";
+  pythonImportsCheck = [ "dns" ];
+
+  meta = {
+    description = "DNS toolkit for Python";
     homepage = "https://www.dnspython.org";
     changelog = "https://github.com/rthalley/dnspython/blob/v${version}/doc/whatsnew.rst";
-    license = with licenses; [ isc ];
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

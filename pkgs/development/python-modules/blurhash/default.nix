@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pillow
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pillow,
+  numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "blurhash";
   version = "1.1.4";
   format = "setuptools";

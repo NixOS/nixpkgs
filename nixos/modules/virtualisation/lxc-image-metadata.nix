@@ -1,57 +1,85 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 let
-  templateSubmodule = {...}: {
-    options = {
-      enable = lib.mkEnableOption "this template";
+  templateSubmodule =
+    { ... }:
+    {
+      options = {
+        enable = lib.mkEnableOption "this template";
 
-      target = lib.mkOption {
-        description = "Path in the container";
-        type = lib.types.path;
-      };
-      template = lib.mkOption {
-        description = ".tpl file for rendering the target";
-        type = lib.types.path;
-      };
-      when = lib.mkOption {
-        description = "Events which trigger a rewrite (create, copy)";
-        type = lib.types.listOf (lib.types.str);
-      };
-      properties = lib.mkOption {
-        description = "Additional properties";
-        type = lib.types.attrs;
-        default = {};
+        target = lib.mkOption {
+          description = "Path in the container";
+          type = lib.types.path;
+        };
+        template = lib.mkOption {
+          description = ".tpl file for rendering the target";
+          type = lib.types.path;
+        };
+        when = lib.mkOption {
+          description = "Events which trigger a rewrite (create, copy)";
+          type = lib.types.listOf (lib.types.str);
+        };
+        properties = lib.mkOption {
+          description = "Additional properties";
+          type = lib.types.attrs;
+          default = { };
+        };
       };
     };
-  };
 
-  toYAML = name: data: pkgs.writeText name (lib.generators.toYAML {} data);
+  toYAML = name: data: pkgs.writeText name (lib.generators.toYAML { } data);
 
   cfg = config.virtualisation.lxc;
-  templates = if cfg.templates != {} then let
-    list = lib.mapAttrsToList (name: value: { inherit name; } // value)
-      (lib.filterAttrs (name: value: value.enable) cfg.templates);
-  in
-    {
-      files = map (tpl: {
-        source = tpl.template;
-        target = "/templates/${tpl.name}.tpl";
-      }) list;
-      properties = lib.listToAttrs (map (tpl: lib.nameValuePair tpl.target {
-        when = tpl.when;
-        template = "${tpl.name}.tpl";
-        properties = tpl.properties;
-      }) list);
-    }
-  else { files = []; properties = {}; };
+  templates =
+    if cfg.templates != { } then
+      let
+        list = lib.mapAttrsToList (name: value: { inherit name; } // value) (
+          lib.filterAttrs (name: value: value.enable) cfg.templates
+        );
+      in
+      {
+        files = map (tpl: {
+          source = tpl.template;
+          target = "/templates/${tpl.name}.tpl";
+        }) list;
+        properties = lib.listToAttrs (
+          map (
+            tpl:
+            lib.nameValuePair tpl.target {
+              when = tpl.when;
+              template = "${tpl.name}.tpl";
+              properties = tpl.properties;
+            }
+          ) list
+        );
+      }
+    else
+      {
+        files = [ ];
+        properties = { };
+      };
 
-in {
+in
+{
+  imports = [
+    ../image/file-options.nix
+  ];
+
+  meta = {
+    maintainers = lib.teams.lxc.members;
+  };
+
   options = {
     virtualisation.lxc = {
       templates = lib.mkOption {
         description = "Templates for LXD";
         type = lib.types.attrsOf (lib.types.submodule templateSubmodule);
-        default = {};
+        default = { };
         example = lib.literalExpression ''
           {
             # create /etc/hostname on container creation
@@ -83,14 +111,22 @@ in {
   };
 
   config = {
+    system.nixos.tags = [
+      "lxc"
+      "metadata"
+    ];
+    image.extension = "tar.xz";
+    image.filePath = "tarball/${config.image.fileName}";
+    system.build.image = config.system.build.metadata;
     system.build.metadata = pkgs.callPackage ../../lib/make-system-tarball.nix {
+      fileName = config.image.baseName;
       contents = [
         {
           source = toYAML "metadata.yaml" {
-            architecture = builtins.elemAt (builtins.match "^([a-z0-9_]+).+" (toString pkgs.system)) 0;
+            architecture = builtins.elemAt (builtins.match "^([a-z0-9_]+).+" (toString pkgs.stdenv.hostPlatform.system)) 0;
             creation_date = 1;
             properties = {
-              description = "${config.system.nixos.distroName} ${config.system.nixos.codeName} ${config.system.nixos.label} ${pkgs.system}";
+              description = "${config.system.nixos.distroName} ${config.system.nixos.codeName} ${config.system.nixos.label} ${pkgs.stdenv.hostPlatform.system}";
               os = "${config.system.nixos.distroId}";
               release = "${config.system.nixos.codeName}";
             };

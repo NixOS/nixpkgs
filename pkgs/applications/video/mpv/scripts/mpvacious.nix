@@ -1,33 +1,32 @@
-{ lib
-, buildLua
-, fetchFromGitHub
-, gitUpdater
-, curl
-, wl-clipboard
-, xclip
+{
+  lib,
+  buildLua,
+  fetchFromGitHub,
+  gitUpdater,
+  curl,
+  wl-clipboard,
+  xclip,
 }:
 
 buildLua rec {
   pname = "mpvacious";
-  version = "0.25";
+  version = "0.40";
 
   src = fetchFromGitHub {
     owner = "Ajatt-Tools";
     repo = "mpvacious";
     rev = "v${version}";
-    sha256 = "sha256-XTnib4cguWFEvZtmsLfkesbjFbkt2YoyYLT587ajyUM=";
+    sha256 = "sha256-PxLbv9aGVQV4Gea2H/GcWv/yuaRSqBRqbzRXu612kLE=";
   };
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   postPatch = ''
     substituteInPlace utils/forvo.lua \
-      --replace "'curl" "'${curl}/bin/curl"
+      --replace-fail "'curl" "'${lib.getExe curl}"
     substituteInPlace platform/nix.lua \
-      --replace "'curl" "'${curl}/bin/curl" \
-      --replace "'wl-copy" "'${wl-clipboard}/bin/wl-copy" \
-      --replace "'xclip" "'${xclip}/bin/xclip"
+      --replace-fail "'curl" "'${lib.getExe curl}" \
+      --replace-fail "'wl-copy" "'${lib.getExe' wl-clipboard "wl-copy"}" \
+      --replace-fail "'xclip" "'${lib.getExe xclip}"
   '';
 
   installPhase = ''

@@ -1,28 +1,33 @@
-{ lib
-, buildPythonPackage
-, django
-, djangorestframework
-, fetchFromGitHub
-, pytest-django
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  django,
+  djangorestframework,
+  fetchFromGitHub,
+  pytest-django,
+  pytestCheckHook,
+  pythonOlder,
+  jwt,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "django-rest-registration";
-  version = "0.8.3";
-  format = "setuptools";
+  version = "0.9.0";
+  pyproject = true;
+
+  build-system = [ setuptools ];
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "apragacz";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-RDegK+1A01kfpit3LX+ToViqPlTiZ3dIve38ea7lNxE=";
+    repo = "django-rest-registration";
+    tag = "v${version}";
+    hash = "sha256-EaS1qN7GpfPPeSLwwQdVWSRO2dv0DG5LD7vnXckz4Bg=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
     djangorestframework
   ];
@@ -30,11 +35,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-django
+    jwt
   ];
 
-  pythonImportsCheck = [
-    "rest_registration"
-  ];
+  pythonImportsCheck = [ "rest_registration" ];
 
   disabledTests = [
     # This test fails on Python 3.10
@@ -43,11 +47,11 @@ buildPythonPackage rec {
     "test_coreapi_autoschema_success"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "User-related REST API based on the awesome Django REST Framework";
     homepage = "https://github.com/apragacz/django-rest-registration/";
     changelog = "https://github.com/apragacz/django-rest-registration/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sephi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sephi ];
   };
 }

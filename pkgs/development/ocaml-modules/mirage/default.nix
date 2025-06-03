@@ -1,6 +1,14 @@
-{ lib, buildDunePackage, ocaml, alcotest
-, functoria, mirage-runtime, bos
-, ipaddr, astring, logs, stdlib-shims
+{
+  buildDunePackage,
+  ocaml,
+  alcotest,
+  functoria,
+  mirage-runtime,
+  bos,
+  ipaddr,
+  astring,
+  logs,
+  stdlib-shims,
 }:
 
 buildDunePackage rec {
@@ -9,7 +17,10 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.08";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   propagatedBuildInputs = [
     ipaddr
@@ -34,6 +45,6 @@ buildDunePackage rec {
   '';
 
   meta = mirage-runtime.meta // {
-    description = "The MirageOS library operating system";
+    description = "MirageOS library operating system";
   };
 }

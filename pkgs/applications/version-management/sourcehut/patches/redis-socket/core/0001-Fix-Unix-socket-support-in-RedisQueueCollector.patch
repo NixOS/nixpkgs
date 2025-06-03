@@ -23,16 +23,17 @@ diff --git a/srht/metrics.py b/srht/metrics.py
 index 68caf8e..2df5777 100644
 --- a/srht/metrics.py
 +++ b/srht/metrics.py
-@@ -1,11 +1,12 @@
+@@ -1,12 +1,12 @@
  import time
 +from celery import Celery
  from prometheus_client.metrics_core import GaugeMetricFamily
- from redis import Redis, ResponseError
+ from redis import ResponseError
+-from srht.redis import from_url
  
  
  class RedisQueueCollector:
      def __init__(self, broker, name, documentation, queue_name="celery"):
--        self.redis = Redis.from_url(broker)
+-        self.redis = from_url(broker)
 +        self.redis = Celery("collector", broker=broker).connection_for_read().channel().client
          self.queue_name = queue_name
          self.name = name

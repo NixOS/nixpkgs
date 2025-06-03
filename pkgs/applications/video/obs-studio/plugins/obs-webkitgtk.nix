@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, obs-studio
-, webkitgtk
-, glib-networking
-, meson
-, cmake
-, pkg-config
-, ninja
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  obs-studio,
+  webkitgtk_4_1,
+  glib-networking,
+  meson,
+  cmake,
+  pkg-config,
+  ninja,
+  wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "obs-webkitgtk";
   version = "unstable-2023-11-10";
 
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     obs-studio
-    webkitgtk
+    webkitgtk_4_1
     glib-networking
   ];
 
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   postPatch = ''

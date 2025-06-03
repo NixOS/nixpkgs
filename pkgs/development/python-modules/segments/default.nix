@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, setuptools
-, regex
-, csvw
-, clldutils
-, pytestCheckHook
-, pytest-mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  setuptools,
+  regex,
+  csvw,
+  clldutils,
+  pytestCheckHook,
+  pytest-mock,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
       --replace-fail "--cov" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     regex
@@ -46,8 +45,9 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/cldf/segments/blob/${src.rev}/CHANGES.md";
     description = "Unicode Standard tokenization routines and orthography profile segmentation";
+    mainProgram = "segments";
     homepage = "https://github.com/cldf/segments";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

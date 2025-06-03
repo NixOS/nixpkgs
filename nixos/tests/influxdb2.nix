@@ -1,93 +1,107 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+{ pkgs, ... }:
+{
   name = "influxdb2";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ offline ];
   };
 
-  nodes.machine = { lib, ... }: {
-    environment.systemPackages = [ pkgs.influxdb2-cli ];
-    # Make sure that the service is restarted immediately if tokens need to be rewritten
-    # without relying on any Restart=on-failure behavior
-    systemd.services.influxdb2.serviceConfig.RestartSec = 6000;
-    services.influxdb2.enable = true;
-    services.influxdb2.provision = {
-      enable = true;
-      initialSetup = {
-        organization = "default";
-        bucket = "default";
-        passwordFile = pkgs.writeText "admin-pw" "ExAmPl3PA55W0rD";
-        tokenFile = pkgs.writeText "admin-token" "verysecureadmintoken";
-      };
-      organizations.someorg = {
-        buckets.somebucket = {};
-        auths.sometoken = {
-          description = "some auth token";
-          readBuckets = ["somebucket"];
-          writeBuckets = ["somebucket"];
-        };
-      };
-      users.someuser.passwordFile = pkgs.writeText "tmp-pw" "abcgoiuhaoga";
-    };
-
-    specialisation.withModifications.configuration = { ... }: {
+  nodes.machine =
+    { lib, ... }:
+    {
+      environment.systemPackages = [ pkgs.influxdb2-cli ];
+      # Make sure that the service is restarted immediately if tokens need to be rewritten
+      # without relying on any Restart=on-failure behavior
+      systemd.services.influxdb2.serviceConfig.RestartSec = 6000;
+      services.influxdb2.enable = true;
       services.influxdb2.provision = {
-        organizations.someorg.buckets.somebucket.present = false;
-        organizations.someorg.auths.sometoken.present = false;
-        users.someuser.present = false;
-
-        organizations.myorg = {
-          description = "Myorg description";
-          buckets.mybucket = {
-            description = "Mybucket description";
-          };
-          auths.mytoken = {
-            operator = true;
-            description = "operator token";
-            tokenFile = pkgs.writeText "tmp-tok" "someusertoken";
+        enable = true;
+        initialSetup = {
+          organization = "default";
+          bucket = "default";
+          passwordFile = pkgs.writeText "admin-pw" "ExAmPl3PA55W0rD";
+          tokenFile = pkgs.writeText "admin-token" "verysecureadmintoken";
+        };
+        organizations.someorg = {
+          buckets.somebucket = { };
+          auths.sometoken = {
+            description = "some auth token";
+            readBuckets = [ "somebucket" ];
+            writeBuckets = [ "somebucket" ];
           };
         };
-        users.myuser.passwordFile = pkgs.writeText "tmp-pw" "abcgoiuhaoga";
+        users.someuser.passwordFile = pkgs.writeText "tmp-pw" "abcgoiuhaoga";
       };
-    };
 
-    specialisation.withParentDelete.configuration = { ... }: {
-      services.influxdb2.provision = {
-        organizations.someorg.present = false;
-        # Deleting the parent implies:
-        #organizations.someorg.buckets.somebucket.present = false;
-        #organizations.someorg.auths.sometoken.present = false;
-      };
-    };
+      specialisation.withModifications.configuration =
+        { ... }:
+        {
+          services.influxdb2.provision = {
+            organizations.someorg.buckets.somebucket.present = false;
+            organizations.someorg.auths.sometoken.present = false;
+            users.someuser.present = false;
 
-    specialisation.withNewTokens.configuration = { ... }: {
-      services.influxdb2.provision = {
-        organizations.default = {
-          auths.operator = {
-            operator = true;
-            description = "new optoken";
-            tokenFile = pkgs.writeText "tmp-tok" "newoptoken";
-          };
-          auths.allaccess = {
-            operator = true;
-            description = "new allaccess";
-            tokenFile = pkgs.writeText "tmp-tok" "newallaccess";
-          };
-          auths.specifics = {
-            description = "new specifics";
-            readPermissions = ["users" "tasks"];
-            writePermissions = ["tasks"];
-            tokenFile = pkgs.writeText "tmp-tok" "newspecificstoken";
+            organizations.myorg = {
+              description = "Myorg description";
+              buckets.mybucket = {
+                description = "Mybucket description";
+              };
+              auths.mytoken = {
+                operator = true;
+                description = "operator token";
+                tokenFile = pkgs.writeText "tmp-tok" "someusertoken";
+              };
+            };
+            users.myuser.passwordFile = pkgs.writeText "tmp-pw" "abcgoiuhaoga";
           };
         };
-      };
-    };
-  };
 
-  testScript = { nodes, ... }:
+      specialisation.withParentDelete.configuration =
+        { ... }:
+        {
+          services.influxdb2.provision = {
+            organizations.someorg.present = false;
+            # Deleting the parent implies:
+            #organizations.someorg.buckets.somebucket.present = false;
+            #organizations.someorg.auths.sometoken.present = false;
+          };
+        };
+
+      specialisation.withNewTokens.configuration =
+        { ... }:
+        {
+          services.influxdb2.provision = {
+            organizations.default = {
+              auths.operator = {
+                operator = true;
+                description = "new optoken";
+                tokenFile = pkgs.writeText "tmp-tok" "newoptoken";
+              };
+              auths.allaccess = {
+                operator = true;
+                description = "new allaccess";
+                tokenFile = pkgs.writeText "tmp-tok" "newallaccess";
+              };
+              auths.specifics = {
+                description = "new specifics";
+                readPermissions = [
+                  "users"
+                  "tasks"
+                ];
+                writePermissions = [ "tasks" ];
+                tokenFile = pkgs.writeText "tmp-tok" "newspecificstoken";
+              };
+            };
+          };
+        };
+    };
+
+  testScript =
+    { nodes, ... }:
     let
       specialisations = "${nodes.machine.system.build.toplevel}/specialisation";
       tokenArg = "--token verysecureadmintoken";
-    in ''
+    in
+    ''
       def assert_contains(haystack, needle):
           if needle not in haystack:
               print("The haystack that will cause the following exception is:")
@@ -222,4 +236,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_contains(out, "new allaccess")
         assert_contains(out, "new specifics")
     '';
-})
+}

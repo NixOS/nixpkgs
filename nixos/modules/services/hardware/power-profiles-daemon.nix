@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.power-profiles-daemon;
@@ -15,7 +20,7 @@ in
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable power-profiles-daemon, a DBus daemon that allows
           changing system behavior based upon user-selected power profiles.
         '';
@@ -27,16 +32,23 @@ in
 
   };
 
-
   ###### implementation
 
   config = lib.mkIf cfg.enable {
 
     assertions = [
-      { assertion = !config.services.tlp.enable;
+      {
+        assertion = !config.services.tlp.enable;
         message = ''
           You have set services.power-profiles-daemon.enable = true;
           which conflicts with services.tlp.enable = true;
+        '';
+      }
+      {
+        assertion = !config.services.auto-cpufreq.enable;
+        message = ''
+          You have set services.power-profiles-daemon.enable = true;
+          which conflicts with services.auto-cpufreq.enable = true;
         '';
       }
     ];

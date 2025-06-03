@@ -1,58 +1,46 @@
- { lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, crcmod
-, defusedxml
-, fetchFromGitHub
-, freezegun
-, jsonpickle
-, munch
-, pyserial
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, semver
-, setuptools
-, wheel
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  defusedxml,
+  fetchFromGitHub,
+  freezegun,
+  jsonpickle,
+  munch,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "plugwise";
-  version = "0.37.1";
+  version = "1.7.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "plugwise";
     repo = "python-plugwise";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6o0g3il4GV6E8avp9V2YrkaVPf2z37asdJOxf6Phbmc=";
+    tag = "v${version}";
+    hash = "sha256-0Xfy1HKaVraEjhB6CS6V+EkU5gmKr6SQse+p7l1x8d8=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "setuptools~=68.0" "setuptools" \
-      --replace "wheel~=0.40.0" "wheel"
+    # setuptools and wheel
+    sed -i -e "s/~=[0-9.]*//g" pyproject.toml
   '';
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
-    async-timeout
-    crcmod
     defusedxml
     munch
-    pyserial
     python-dateutil
-    semver
   ];
 
   nativeCheckInputs = [
@@ -63,16 +51,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "plugwise"
-  ];
+  pythonImportsCheck = [ "plugwise" ];
 
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Python module for Plugwise Smiles, Stretch and USB stick";
     homepage = "https://github.com/plugwise/python-plugwise";
-    changelog = "https://github.com/plugwise/python-plugwise/releases/tag/v${version}";
+    changelog = "https://github.com/plugwise/python-plugwise/releases/tag/${src.tag}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

@@ -1,33 +1,32 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, stdenv
-, darwin
-, coreutils
-, gnome
-, libsecret
-, bash
-, openvpn
-, nerdfonts
-, gzip
-, killall
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  stdenv,
+  coreutils,
+  gnome-keyring,
+  libsecret,
+  openvpn,
+  gzip,
+  killall,
 }:
 
 rustPlatform.buildRustPackage {
   pname = "htb-toolkit";
-  version = "unstable-2024-01-17";
+  version = "0-unstable-2025-03-15";
 
   src = fetchFromGitHub {
     owner = "D3vil0p3r";
     repo = "htb-toolkit";
     # https://github.com/D3vil0p3r/htb-toolkit/issues/3
-    rev = "54e11774ea8746ea540548082d3b25c22306b4fc";
-    hash = "sha256-QYUqdqFV9Qn+VbJTnz5hx5I0XV1nrzCoCKtRS7jBLsE=";
+    rev = "dd193c2974cd5fd1bbc6f7f616ebd597e28539ec";
+    hash = "sha256-NTZv0BPyIB32CNXbINYTy4n8tNVJ3pRLr1QDhI/tg2Y=";
   };
 
-  cargoHash = "sha256-XDE6A6EIAUbuzt8Zb/ROfDAPp0ZyN0WQ4D1gWHjRVhg=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ReEe8pyW66GXIPwAy6IKsFEAUjxHmzw5mj21i/h4quQ=";
 
   # Patch to disable prompt change of the shell when a target machine is run. Needed due to Nix declarative nature
   patches = [
@@ -38,25 +37,25 @@ rustPlatform.buildRustPackage {
     pkg-config
   ];
 
-  buildInputs = [
-    gnome.gnome-keyring
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      gnome-keyring
+    ];
 
   postPatch = ''
     substituteInPlace src/manage.rs \
-      --replace /usr/share/htb-toolkit/icons/ $out/share/htb-toolkit/icons/
+      --replace-fail /usr/share/icons/htb-toolkit/ $out/share/icons/htb-toolkit/
     substituteInPlace src/utils.rs \
-      --replace /usr/bin/bash ${bash} \
-      --replace "\"base64\"" "\"${coreutils}/bin/base64\"" \
-      --replace "\"gunzip\"" "\"${gzip}/bin/gunzip\""
+      --replace-fail "\"base64\"" "\"${coreutils}/bin/base64\"" \
+      --replace-fail "\"gunzip\"" "\"${gzip}/bin/gunzip\""
     substituteInPlace src/appkey.rs \
-      --replace secret-tool ${lib.getExe libsecret}
+      --replace-fail secret-tool ${lib.getExe libsecret}
     substituteInPlace src/vpn.rs \
-      --replace "arg(\"openvpn\")" "arg(\"${openvpn}/bin/openvpn\")" \
-      --replace "arg(\"killall\")" "arg(\"${killall}/bin/killall\")"
+      --replace-fail "arg(\"openvpn\")" "arg(\"${openvpn}/bin/openvpn\")" \
+      --replace-fail "arg(\"killall\")" "arg(\"${killall}/bin/killall\")"
   '';
 
   meta = with lib; {

@@ -1,12 +1,20 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
-let cfg = config.services.networking.websockify; in {
+let
+  cfg = config.services.networking.websockify;
+in
+{
   options = {
     services.networking.websockify = {
       enable = mkOption {
-        description = lib.mdDoc "Whether to enable websockify to forward websocket connections to TCP connections.";
+        description = "Whether to enable websockify to forward websocket connections to TCP connections.";
 
         default = false;
 
@@ -14,20 +22,20 @@ let cfg = config.services.networking.websockify; in {
       };
 
       sslCert = mkOption {
-        description = lib.mdDoc "Path to the SSL certificate.";
+        description = "Path to the SSL certificate.";
         type = types.path;
       };
 
       sslKey = mkOption {
-        description = lib.mdDoc "Path to the SSL key.";
+        description = "Path to the SSL key.";
         default = cfg.sslCert;
         defaultText = literalExpression "config.services.networking.websockify.sslCert";
         type = types.path;
       };
 
       portMap = mkOption {
-        description = lib.mdDoc "Ports to map by default.";
-        default = {};
+        description = "Ports to map by default.";
+        default = { };
         type = types.attrsOf types.int;
       };
     };

@@ -1,39 +1,45 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, coreutils
-, fetchFromGitHub
-, google-auth
-, google-auth-oauthlib
-, google-cloud-pubsub
-, pydantic
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, requests-oauthlib
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  coreutils,
+  fetchFromGitHub,
+  google-auth,
+  google-auth-oauthlib,
+  google-cloud-pubsub,
+  mashumaro,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests-oauthlib,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-nest-sdm";
-  version = "3.0.3";
-  format = "setuptools";
+  version = "7.1.5";
+  pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "python-google-nest-sdm";
-    rev = "refs/tags/${version}";
-    hash = "sha256-VO/TY/QBzVFxqIumVJjw+Ic0hrqkRBS+7wQKBhcN9Jw=";
+    tag = version;
+    hash = "sha256-YpXpQnfRp5Kvr3fNAnlwsZwJdXuES7KXOykt+YK5Wz4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     google-auth
     google-auth-oauthlib
     google-cloud-pubsub
-    pydantic
+    mashumaro
+    pyyaml
     requests-oauthlib
   ];
 
@@ -46,9 +52,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "google_nest_sdm"
-  ];
+  pythonImportsCheck = [ "google_nest_sdm" ];
 
   disabledTests = [
     "test_clip_preview_transcode"
@@ -58,8 +62,9 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for Google Nest Device Access using the Smart Device Management API";
     homepage = "https://github.com/allenporter/python-google-nest-sdm";
-    changelog = "https://github.com/allenporter/python-google-nest-sdm/releases/tag/${version}";
+    changelog = "https://github.com/allenporter/python-google-nest-sdm/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "google_nest";
   };
 }

@@ -1,31 +1,36 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.birdwatcher;
 in
 {
   options = {
     services.birdwatcher = {
-      package = mkPackageOption pkgs "birdwatcher" { };
-      enable = mkEnableOption (lib.mdDoc "Birdwatcher");
-      flags = mkOption {
+      package = lib.mkPackageOption pkgs "birdwatcher" { };
+      enable = lib.mkEnableOption "Birdwatcher";
+      flags = lib.mkOption {
         default = [ ];
-        type = types.listOf types.str;
-        example = [ "-worker-pool-size 16" "-6" ];
-        description = lib.mdDoc ''
+        type = lib.types.listOf lib.types.str;
+        example = [
+          "-worker-pool-size 16"
+          "-6"
+        ];
+        description = ''
           Flags to append to the program call
         '';
       };
 
-      settings = mkOption {
-        type = types.lines;
+      settings = lib.mkOption {
+        type = lib.types.lines;
         default = { };
-        description = lib.mdDoc ''
+        description = ''
           birdwatcher configuration, for configuration options see the example on [github](https://github.com/alice-lg/birdwatcher/blob/master/etc/birdwatcher/birdwatcher.conf)
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           [server]
           allow_from = []
           allow_uncached = false
@@ -53,8 +58,8 @@ in
 
           [bird]
           listen = "0.0.0.0:29184"
-          config = "/etc/bird/bird2.conf"
-          birdc  = "''${pkgs.bird}/bin/birdc"
+          config = "/etc/bird/bird.conf"
+          birdc  = "''${pkgs.bird2}/bin/birdc"
           ttl = 5 # time to live (in minutes) for caching of cli output
 
           [parser]
@@ -72,8 +77,10 @@ in
   };
 
   config =
-    let flagsStr = escapeShellArgs cfg.flags;
-    in lib.mkIf cfg.enable {
+    let
+      flagsStr = lib.escapeShellArgs cfg.flags;
+    in
+    lib.mkIf cfg.enable {
       environment.etc."birdwatcher/birdwatcher.conf".source = pkgs.writeTextFile {
         name = "birdwatcher.conf";
         text = cfg.settings;

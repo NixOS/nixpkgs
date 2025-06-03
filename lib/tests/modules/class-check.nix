@@ -1,10 +1,13 @@
-{ lib, ... }: {
+{ lib, ... }:
+{
   options = {
     sub = {
       nixosOk = lib.mkOption {
         type = lib.types.submoduleWith {
           class = "nixos";
-          modules = [ ];
+          modules = [
+            ./assert-module-class-is-nixos.nix
+          ];
         };
       };
       # Same but will have bad definition
@@ -40,37 +43,40 @@
   ];
   config = {
     _module.freeformType = lib.types.anything;
-    ok =
-      lib.evalModules {
-        class = "nixos";
-        modules = [
-          ./module-class-is-nixos.nix
-        ];
-      };
+    ok = lib.evalModules {
+      class = "nixos";
+      modules = [
+        ./module-class-is-nixos.nix
+        ./assert-module-class-is-nixos.nix
+      ];
+    };
 
-    fail =
-      lib.evalModules {
-        class = "nixos";
-        modules = [
-          ./module-class-is-nixos.nix
-          ./module-class-is-darwin.nix
-        ];
-      };
+    fail = lib.evalModules {
+      class = "nixos";
+      modules = [
+        ./module-class-is-nixos.nix
+        ./module-class-is-darwin.nix
+      ];
+    };
 
-    fail-anon =
-      lib.evalModules {
-        class = "nixos";
-        modules = [
-          ./module-class-is-nixos.nix
-          { _file = "foo.nix#darwinModules.default";
-            _class = "darwin";
-            config = {};
-            imports = [];
-          }
-        ];
-      };
+    fail-anon = lib.evalModules {
+      class = "nixos";
+      modules = [
+        ./module-class-is-nixos.nix
+        {
+          _file = "foo.nix#darwinModules.default";
+          _class = "darwin";
+          config = { };
+          imports = [ ];
+        }
+      ];
+    };
 
-    sub.nixosOk = { _class = "nixos"; };
-    sub.nixosFail = { imports = [ ./module-class-is-darwin.nix ]; };
+    sub.nixosOk = {
+      _class = "nixos";
+    };
+    sub.nixosFail = {
+      imports = [ ./module-class-is-darwin.nix ];
+    };
   };
 }

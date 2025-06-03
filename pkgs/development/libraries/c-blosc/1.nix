@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  testers,
 
-, static ? stdenv.hostPlatform.isStatic
+  static ? stdenv.hostPlatform.isStatic,
 
-, lz4
-, zlib
-, zstd
+  lz4,
+  zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "c-blosc";
-  version = "1.21.5";
+  version = "1.21.6";
 
   src = fetchFromGitHub {
     owner = "Blosc";
     repo = "c-blosc";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-bz922lWiap3vMy8qS9dmXa8zUg5NJlg0bx3+/xz7QAk=";
+    sha256 = "sha256-YelKkEXAh27J0Mq1BExGuKNCYBgJCc3nwmmWLr4ZfVI=";
   };
 
   # https://github.com/NixOS/nixpkgs/issues/144170
@@ -56,9 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
-    description = "A blocking, shuffling and loss-less compression library";
+    description = "Blocking, shuffling and loss-less compression library";
     homepage = "https://www.blosc.org";
-    changelog = "https://github.com/Blosc/c-blosc/releases/tag/v${version}";
+    changelog = "https://github.com/Blosc/c-blosc/releases/tag/v${finalAttrs.version}";
     pkgConfigModules = [
       "blosc"
     ];

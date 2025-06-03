@@ -1,8 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, libcap
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  libcap,
+  pytestCheckHook,
+  distutils,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +19,17 @@ buildPythonPackage rec {
 
   buildInputs = [ libcap ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    distutils
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace test_prctl.py \
+      --replace-fail \
+        'sys.version[0:3]' \
+        '"cpython-%d%d" % (sys.version_info.major, sys.version_info.minor)'
+  '';
 
   disabledTests = [
     # Intel MPX support was removed in GCC 9.1 & Linux kernel 5.6

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  # Projec thas no tests
+  # Project thas no tests
   doCheck = false;
   pythonImportsCheck = [ "pymitv" ];
 

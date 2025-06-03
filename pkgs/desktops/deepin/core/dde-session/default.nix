@@ -1,30 +1,33 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapQtAppsHook
-, qtbase
-, dtkcore
-, gsettings-qt
-, libsecret
-, xorg
-, systemd
-, dde-polkit-agent
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libsForQt5,
+  dtkcore,
+  gsettings-qt,
+  libsecret,
+  xorg,
+  systemd,
+  dde-polkit-agent,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dde-session";
-  version = "1.1.9";
+  version = "1.2.12";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-CyHvvNALXe4fOMjD48By/iaU6/xNUhH9yG19Ob3bHy0=";
+    hash = "sha256-WiWG4f+vMgAYDBp/porjiV9a6ZqqdmxdXAqX1ISdlfU=";
   };
 
   postPatch = ''
+    substituteInPlace misc/CMakeLists.txt \
+      --replace "/etc" "$out/etc"
+
     # Avoid using absolute path to distinguish applications
     substituteInPlace src/dde-session/impl/sessionmanager.cpp \
       --replace 'file.readAll().startsWith("/usr/bin/dde-lock")' 'file.readAll().contains("dde-lock")' \
@@ -44,11 +47,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     dtkcore
     gsettings-qt
     libsecret
@@ -64,6 +67,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/dde-session";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }

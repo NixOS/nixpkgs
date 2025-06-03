@@ -1,24 +1,33 @@
-{ lib
-, aiohttp
-, attrs
-, buildPythonPackage
-, defusedxml
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  attrs,
+  buildPythonPackage,
+  defusedxml,
+  fetchFromGitHub,
+  pythonOlder,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
+  pytest-vcr,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "connect-box";
-  version = "0.3.1";
-  format = "setuptools";
+  version = "0.4.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
-  src = fetchPypi {
-    pname = "connect_box";
-    inherit version;
-    hash = "sha256-x1ozcj3IL+iI/QtS12yEudCqNknCmyb5ew88Z39xaLA=";
+  src = fetchFromGitHub {
+    owner = "home-assistant-ecosystem";
+    repo = "python-connect-box";
+    tag = version;
+    hash = "sha256-zUvZRnxVzg9izvUbp7QVcyu6Bw3dUXHOr0kOQRWEZVc=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -26,12 +35,16 @@ buildPythonPackage rec {
     defusedxml
   ];
 
-  # No tests are present
-  doCheck = false;
-
-  pythonImportsCheck = [
-    "connect_box"
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+    pytest-vcr
+    syrupy
   ];
+
+  pythonImportsCheck = [ "connect_box" ];
+
+  pytestFlagsArray = [ "--vcr-record=none" ];
 
   meta = with lib; {
     description = "Interact with a Compal CH7465LG cable modem/router";

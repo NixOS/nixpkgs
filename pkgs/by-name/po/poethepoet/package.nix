@@ -1,18 +1,19 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "poethepoet";
-  version = "0.24.4";
+  version = "0.28.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nat-n";
     repo = "poethepoet";
-    rev = "v${version}";
-    hash = "sha256-RTV3TVNciJE7dC/gtViZcSWFXR2A4qNMAJ/1OEzMAus=";
+    tag = "v${version}";
+    hash = "sha256-um17UHFLX7zLQXLWbYnEnaLUwMgFSxdGt85fjMBEhjQ=";
   };
 
   nativeBuildInputs = [
@@ -24,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
     tomli
   ];
 
-  passthru.optional-dependencies = with python3.pkgs; {
+  optional-dependencies = with python3.pkgs; {
     poetry_plugin = [
       poetry
     ];
@@ -33,9 +34,9 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [ "poethepoet" ];
 
   meta = with lib; {
-    description = "A task runner that works well with poetry";
+    description = "Task runner that works well with poetry";
     homepage = "https://github.com/nat-n/poethepoet";
-    changelog = "https://github.com/nat-n/poethepoet/releases/tag/${src.rev}";
+    changelog = "https://github.com/nat-n/poethepoet/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
     mainProgram = "poe";

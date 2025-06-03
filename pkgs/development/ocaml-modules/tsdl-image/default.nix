@@ -1,15 +1,16 @@
-{ buildDunePackage
-, dune-configurator
-, fetchFromGitHub
-, lib
-, SDL2
-, SDL2_image
-, tsdl
+{
+  buildDunePackage,
+  dune-configurator,
+  fetchFromGitHub,
+  lib,
+  SDL2,
+  SDL2_image,
+  tsdl,
 }:
 
 buildDunePackage rec {
   pname = "tsdl-image";
-  version = "0.5";
+  version = "0.6";
 
   duneVersion = "3";
 
@@ -17,7 +18,7 @@ buildDunePackage rec {
     owner = "sanette";
     repo = pname;
     rev = version;
-    hash = "sha256-khLhVJuiLNNWw76gTeg4W32v5XbkwAg11bIOWl67u2k=";
+    hash = "sha256-mgTFwkuFJVwJmHrzHSdNh8v4ehZIcWemK+eLqjglw5o=";
   };
 
   buildInputs = [
@@ -34,6 +35,6 @@ buildDunePackage rec {
     description = "OCaml SDL2_image bindings to go with Tsdl";
     homepage = "https://github.com/sanette/tsdl-image";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,30 +1,46 @@
-{ lib, stdenv, fetchurl, lzip, lzlib, texinfo }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  lzip,
+  lzlib,
+  texinfo,
+  versionCheckHook,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tarlz";
-  version = "0.25";
-  outputs = [ "out" "man" "info" ];
+  version = "0.27.1";
+  outputs = [
+    "out"
+    "man"
+    "info"
+  ];
 
-  nativeBuildInputs = [ lzip texinfo ];
+  nativeBuildInputs = [
+    lzip
+    texinfo
+    versionCheckHook
+  ];
   buildInputs = [ lzlib ];
 
   src = fetchurl {
-    url = "mirror://savannah/lzip/${pname}/${pname}-${version}.tar.lz";
-    sha256 = "7d0bbe9c3a137bb93a10be56988fcf7362e4dbc65490639edc4255b704105fce";
+    url = "mirror://savannah/lzip/tarlz/tarlz-${finalAttrs.version}.tar.lz";
+    sha256 = "7091968e8f9b5333730e7a558ebf5aa9089d9f0528e6aea994c6f24a9d46a03f";
   };
 
   enableParallelBuilding = true;
   makeFlags = [ "CXX:=$(CXX)" ];
 
   doCheck = false; # system clock issues
+  doInstallCheck = true;
 
   meta = with lib; {
-    homepage = "https://www.nongnu.org/lzip/${pname}.html";
-    description =
-      "Massively parallel combined implementation of the tar archiver and the lzip compressor";
+    homepage = "https://www.nongnu.org/lzip/tarlz.html";
+    description = "Massively parallel combined implementation of the tar archiver and the lzip compressor";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ ehmry ];
     mainProgram = "tarlz";
   };
-}
+})

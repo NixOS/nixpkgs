@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libuv
-, raft-cowsql
-, sqlite
-, incus
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libuv,
+  raft-cowsql,
+  sqlite,
+  incus,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cowsql";
-  version = "1.15.4";
+  version = "1.15.8";
 
   src = fetchFromGitHub {
     owner = "cowsql";
     repo = "cowsql";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-JbLiwWXOrEhqCdM8tWwxl68O5Sga4T7NYCXzqP9+Dh0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rwTa9owtnkyI9OpUKLk6V7WbAkqlYucpGzPnHHvKW/A=";
   };
 
   nativeBuildInputs = [
@@ -36,22 +37,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  outputs = [ "dev" "out" ];
+  outputs = [
+    "dev"
+    "out"
+  ];
 
   passthru = {
     inherit (incus) tests;
 
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
-    changelog = "https://github.com/cowsql/cowsql/releases/tag/${version}";
+    changelog = "https://github.com/cowsql/cowsql/releases/tag/${finalAttrs.version}";
     description = "Embeddable, replicated and fault tolerant SQL engine";
     homepage = "https://github.com/cowsql/cowsql";
     license = licenses.lgpl3Only;
-    maintainers = teams.lxc.members;
+    teams = [ teams.lxc ];
     platforms = platforms.unix;
   };
 })

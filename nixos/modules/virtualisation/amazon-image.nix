@@ -4,11 +4,15 @@
 # also to reconfigure instances. However, we can't rename it because
 # existing "configuration.nix" files on EC2 instances refer to it.)
 
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
+  inherit (lib) mkDefault mkIf;
   cfg = config.ec2;
 in
 
@@ -29,18 +33,22 @@ in
 
     boot.growPartition = true;
 
-    fileSystems."/" = mkIf (!cfg.zfs.enable) {
-      device = "/dev/disk/by-label/nixos";
-      fsType = "ext4";
-      autoResize = true;
-    };
+    fileSystems."/" = mkIf (!cfg.zfs.enable) (
+      lib.mkDefault {
+        device = "/dev/disk/by-label/nixos";
+        fsType = "ext4";
+        autoResize = true;
+      }
+    );
 
-    fileSystems."/boot" = mkIf (cfg.efi || cfg.zfs.enable) {
-      # The ZFS image uses a partition labeled ESP whether or not we're
-      # booting with EFI.
-      device = "/dev/disk/by-label/ESP";
-      fsType = "vfat";
-    };
+    fileSystems."/boot" = mkIf (cfg.efi || cfg.zfs.enable) (
+      lib.mkDefault {
+        # The ZFS image uses a partition labeled ESP whether or not we're
+        # booting with EFI.
+        device = "/dev/disk/by-label/ESP";
+        fsType = "vfat";
+      }
+    );
 
     services.zfs.expandOnBoot = mkIf cfg.zfs.enable "all";
 
@@ -51,13 +59,19 @@ in
     ];
     boot.initrd.kernelModules = [ "xen-blkfront" ];
     boot.initrd.availableKernelModules = [ "nvme" ];
-    boot.kernelParams = [ "console=ttyS0,115200n8" "random.trust_cpu=on" ];
+    boot.kernelParams = [
+      "console=ttyS0,115200n8"
+      "random.trust_cpu=on"
+    ];
 
     # Prevent the nouveau kernel module from being loaded, as it
     # interferes with the nvidia/nvidia-uvm modules needed for CUDA.
     # Also blacklist xen_fbfront to prevent a 30 second delay during
     # boot.
-    boot.blacklistedKernelModules = [ "nouveau" "xen_fbfront" ];
+    boot.blacklistedKernelModules = [
+      "nouveau"
+      "xen_fbfront"
+    ];
 
     boot.loader.grub.device = if cfg.efi then "nodev" else "/dev/xvda";
     boot.loader.grub.efiSupport = cfg.efi;
@@ -72,12 +86,16 @@ in
     systemd.services.fetch-ec2-metadata = {
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
-      after = ["network-online.target"];
+      after = [ "network-online.target" ];
       path = [ pkgs.curl ];
       script = builtins.readFile ./ec2-metadata-fetcher.sh;
       serviceConfig.Type = "oneshot";
       serviceConfig.StandardOutput = "journal+console";
     };
+
+    # Amazon-issued AMIs include the SSM Agent by default, so we do the same.
+    # https://docs.aws.amazon.com/systems-manager/latest/userguide/ami-preinstalled-agent.html
+    services.amazon-ssm-agent.enable = true;
 
     # Allow root logins only using the SSH key that the user specified
     # at instance creation time.
@@ -103,5 +121,5 @@ in
     # (e.g. it depends on GTK).
     services.udisks2.enable = false;
   };
-  meta.maintainers = with maintainers; [ arianvp ];
+  meta.maintainers = with lib.maintainers; [ arianvp ];
 }

@@ -1,24 +1,28 @@
-{ lib
-, stdenv
-, mkDerivationWith
-, fetchFromGitHub
-, doxygen
-, gtk3
-, libopenshot
-, python3
-, qtbase
-, qtsvg
-, wrapGAppsHook
+{
+  lib,
+  stdenv,
+  mkDerivationWith,
+  fetchFromGitHub,
+  doxygen,
+  gtk3,
+  libopenshot,
+  python3,
+  qtbase,
+  qtsvg,
+  qtwayland,
+  wayland,
+  waylandSupport ? stdenv.hostPlatform.isLinux,
+  wrapGAppsHook3,
 }:
 
 let
   pname = "openshot-qt";
-  version = "3.1.1";
+  version = "3.3.0";
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "openshot-qt";
-    rev = "v${version}";
-    hash = "sha256-kEz1APBitWLlnIbyloYMsqNrwC9RqU04kyyWzm5klYc=";
+    tag = "v${version}";
+    hash = "sha256-+QI1772ys1Czd+KSVBAdAUjLg9mUcMZs+UhkNljY7nQ=";
   };
 in
 mkDerivationWith python3.pkgs.buildPythonApplication {
@@ -28,12 +32,17 @@ mkDerivationWith python3.pkgs.buildPythonApplication {
 
   nativeBuildInputs = [
     doxygen
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
-  buildInputs = [
-    gtk3
-  ];
+  buildInputs =
+    [
+      gtk3
+    ]
+    ++ lib.optionals waylandSupport [
+      qtwayland
+      wayland
+    ];
 
   propagatedBuildInputs = with python3.pkgs; [
     httplib2
@@ -41,7 +50,7 @@ mkDerivationWith python3.pkgs.buildPythonApplication {
     pyqtwebengine
     pyzmq
     requests
-    sip4
+    sip
   ];
 
   strictDeps = true;
@@ -56,16 +65,18 @@ mkDerivationWith python3.pkgs.buildPythonApplication {
   dontWrapGApps = true;
   dontWrapQtApps = true;
 
-  postFixup = ''
-    wrapProgram $out/bin/openshot-qt \
-  ''
-  # Fix toolbar icons on Darwin
-  + lib.optionalString stdenv.isDarwin ''
-    --suffix QT_PLUGIN_PATH : "${lib.getBin qtsvg}/${qtbase.qtPluginPrefix}" \
-  '' + ''
-    "''${gappsWrapperArgs[@]}" \
-    "''${qtWrapperArgs[@]}"
-  '';
+  postFixup =
+    ''
+      wrapProgram $out/bin/openshot-qt \
+    ''
+    # Fix toolbar icons on Darwin
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      --suffix QT_PLUGIN_PATH : "${lib.getBin qtsvg}/${qtbase.qtPluginPrefix}" \
+    ''
+    + ''
+      "''${gappsWrapperArgs[@]}" \
+      "''${qtWrapperArgs[@]}"
+    '';
 
   passthru = {
     inherit libopenshot;
@@ -84,7 +95,7 @@ mkDerivationWith python3.pkgs.buildPythonApplication {
     '';
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "openshot-qt";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 }

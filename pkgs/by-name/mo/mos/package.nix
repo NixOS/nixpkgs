@@ -1,15 +1,17 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, undmg
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  undmg,
+  nix-update-script,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mos";
-  version = "3.4.1";
+  version = "3.5.0";
 
   src = fetchurl {
     url = "https://github.com/Caldis/Mos/releases/download/${finalAttrs.version}/Mos.Versions.${finalAttrs.version}.dmg";
-    sha256 = "38ea33e867815506414323484147b882b6d97df4af9759bca0a64d98c95029b3";
+    hash = "sha256-o2H4cfMudjoQHfKeV4ORiO9/szoomFP0IP6D6ecMAI4=";
   };
   sourceRoot = ".";
 
@@ -24,11 +26,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
-    description = "Smooths scrolling and set mouse scroll directions independently";
-    homepage = "http://mos.caldis.me/";
+    description = "Smooths scrolling and set mouse scroll directions independently on macOS";
+    homepage = "https://mos.caldis.me/";
+    changelog = "https://github.com/Caldis/Mos/releases/tag/${finalAttrs.version}";
     license = licenses.cc-by-nc-40;
-    maintainers = with maintainers; [ ];
+    maintainers = with lib.maintainers; [ xiaoxiangmoe ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = platforms.darwin;
   };

@@ -1,10 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, aiohttp
-, requests
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  aiohttp,
+  requests,
+  pytest-cov-stub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,16 +22,13 @@ buildPythonPackage rec {
     sha256 = "e704627dc7b9c0a50c67ae90f1d320b14f99f2b2fc9bf1ef0461b141dcf1bce9";
   };
 
-  postPatch = ''
-    sed -i '/--cov/d' setup.cfg
-  '';
-
   propagatedBuildInputs = [
     aiohttp
     requests
   ];
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytestCheckHook
   ];
 

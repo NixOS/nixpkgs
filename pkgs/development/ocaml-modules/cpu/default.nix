@@ -1,4 +1,10 @@
-{ lib, stdenv, buildDunePackage, fetchFromGitHub, autoconf }:
+{
+  lib,
+  stdenv,
+  buildDunePackage,
+  fetchFromGitHub,
+  autoconf,
+}:
 
 buildDunePackage rec {
   pname = "cpu";
@@ -8,8 +14,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "UnixJunkie";
-    repo   = pname;
-    rev    = "v${version}";
+    repo = pname;
+    rev = "v${version}";
     sha256 = "1vir6gh1bhvxgj2fcn69c38yhw3jgk7dyikmw789m5ld2csnyjiv";
   };
 
@@ -20,7 +26,7 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ autoconf ];
 
-  hardeningDisable = lib.optional stdenv.isDarwin "strictoverflow";
+  hardeningDisable = lib.optional stdenv.hostPlatform.isDarwin "strictoverflow";
 
   meta = with lib; {
     inherit (src.meta) homepage;

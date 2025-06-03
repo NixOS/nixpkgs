@@ -22,7 +22,7 @@
 #        |         Route:   192.0.2.0/24 via 100.64.0.1
 #        +------
 
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 
 {
   name = "tayga";
@@ -45,7 +45,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       ];
       networking = {
         useDHCP = false;
-        interfaces.eth1 = lib.mkForce {};
+        interfaces.eth1 = lib.mkForce { };
       };
       systemd.network = {
         enable = true;
@@ -55,10 +55,14 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
             "100.64.0.2/24"
           ];
           routes = [
-            { routeConfig = { Destination = "192.0.2.0/24"; Gateway = "100.64.0.1"; }; }
+            {
+              Destination = "192.0.2.0/24";
+              Gateway = "100.64.0.1";
+            }
           ];
         };
       };
+      programs.mtr.enable = true;
     };
 
     # The router is configured with static IPv4 addresses towards the server
@@ -88,12 +92,22 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         firewall.enable = false;
         interfaces.eth1 = lib.mkForce {
           ipv4 = {
-            addresses = [ { address = "100.64.0.1"; prefixLength = 24; } ];
+            addresses = [
+              {
+                address = "100.64.0.1";
+                prefixLength = 24;
+              }
+            ];
           };
         };
         interfaces.eth2 = lib.mkForce {
           ipv6 = {
-            addresses = [ { address = "2001:db8::1"; prefixLength = 64; } ];
+            addresses = [
+              {
+                address = "2001:db8::1";
+                prefixLength = 64;
+              }
+            ];
           };
         };
       };
@@ -119,6 +133,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
             address = "64:ff9b::";
             prefixLength = 96;
           };
+        };
+        mappings = {
+          "192.0.2.42" = "2001:db8::2";
         };
       };
     };
@@ -139,12 +156,22 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         firewall.enable = false;
         interfaces.eth1 = lib.mkForce {
           ipv4 = {
-            addresses = [ { address = "100.64.0.1"; prefixLength = 24; } ];
+            addresses = [
+              {
+                address = "100.64.0.1";
+                prefixLength = 24;
+              }
+            ];
           };
         };
         interfaces.eth2 = lib.mkForce {
           ipv6 = {
-            addresses = [ { address = "2001:db8::1"; prefixLength = 64; } ];
+            addresses = [
+              {
+                address = "2001:db8::1";
+                prefixLength = 64;
+              }
+            ];
           };
         };
       };
@@ -171,6 +198,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
             prefixLength = 96;
           };
         };
+        mappings = {
+          "192.0.2.42" = "2001:db8::2";
+        };
       };
     };
 
@@ -184,7 +214,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 
       networking = {
         useDHCP = false;
-        interfaces.eth1 = lib.mkForce {};
+        interfaces.eth1 = lib.mkForce { };
       };
 
       systemd.network = {
@@ -195,11 +225,14 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
             "2001:db8::2/64"
           ];
           routes = [
-            { routeConfig = { Destination = "64:ff9b::/96"; Gateway = "2001:db8::1"; }; }
+            {
+              Destination = "64:ff9b::/96";
+              Gateway = "2001:db8::1";
+            }
           ];
         };
       };
-      environment.systemPackages = [ pkgs.mtr ];
+      programs.mtr.enable = true;
     };
   };
 
@@ -225,13 +258,19 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       with subtest("Wait for tayga"):
         router.wait_for_unit("tayga.service")
 
-      with subtest("Test ICMP"):
+      with subtest("Test ICMP server -> client"):
+        server.wait_until_succeeds("ping -c 3 192.0.2.42 >&2")
+
+      with subtest("Test ICMP and show a traceroute server -> client"):
+        server.wait_until_succeeds("mtr --show-ips --report-wide 192.0.2.42 >&2")
+
+      with subtest("Test ICMP client -> server"):
         client.wait_until_succeeds("ping -c 3 64:ff9b::100.64.0.2 >&2")
 
-      with subtest("Test ICMP and show a traceroute"):
+      with subtest("Test ICMP and show a traceroute client -> server"):
         client.wait_until_succeeds("mtr --show-ips --report-wide 64:ff9b::100.64.0.2 >&2")
 
       router.log(router.execute("systemd-analyze security tayga.service")[1])
       router.shutdown()
   '';
-})
+}

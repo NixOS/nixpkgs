@@ -1,19 +1,20 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, sunwait
-, wallutils
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  sunwait,
+  wallutils,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sunpaper";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "hexive";
     repo = "sunpaper";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8s7SS79wCS0nRR7IpkshP5QWJqqKEeBu6EtFPDM+2cM=";
+    hash = "sha256-koCK0ntzRf8OXoUj5DJdPWsFDD8EAMjnGdM1B5oeBBc=";
   };
 
   buildInputs = [
@@ -23,9 +24,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace sunpaper.sh \
-      --replace "sunwait" "${lib.getExe sunwait}" \
-      --replace "setwallpaper" "${lib.getExe' wallutils "setwallpaper"}" \
-      --replace '$HOME/sunpaper/images/' "$out/share/sunpaper/images/"
+      --replace-fail "sunwait" "${lib.getExe sunwait}" \
+      --replace-fail "setwallpaper" "${lib.getExe' wallutils "setwallpaper"}" \
+      --replace-fail '$HOME/sunpaper/images/' "$out/share/sunpaper/images/" \
+      --replace-fail '/usr/share' '/etc'
   '';
 
   installPhase = ''
@@ -45,11 +47,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A utility to change wallpaper based on local weather, sunrise and sunset times";
+    description = "Utility to change wallpaper based on local weather, sunrise and sunset times";
     homepage = "https://github.com/hexive/sunpaper";
     license = lib.licenses.asl20;
     mainProgram = "sunpaper";
-    maintainers = with lib.maintainers; [ eclairevoyant jevy ];
+    maintainers = with lib.maintainers; [ jevy ];
     platforms = lib.platforms.linux;
   };
 })

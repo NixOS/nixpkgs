@@ -1,17 +1,18 @@
-{ lib
-, mkDerivation
-, cmake
-, extra-cmake-modules
-, karchive
-, kconfig
-, kcoreaddons
-, kfilemetadata
-, kguiaddons
-, ki18n
-, kiconthemes
-, kio
-, mauikit
-, poppler
+{
+  lib,
+  mkDerivation,
+  cmake,
+  extra-cmake-modules,
+  karchive,
+  kconfig,
+  kcoreaddons,
+  kfilemetadata,
+  kguiaddons,
+  ki18n,
+  kiconthemes,
+  kio,
+  mauikit,
+  poppler,
 }:
 
 mkDerivation {
@@ -38,7 +39,10 @@ mkDerivation {
   meta = {
     homepage = "https://invent.kde.org/maui/mauikit-documents";
     description = "MauiKit QtQuick plugins for text editing";
-    license = with lib.licenses; [ bsd2 lgpl21Plus ];
+    license = with lib.licenses; [
+      bsd2
+      lgpl21Plus
+    ];
     maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

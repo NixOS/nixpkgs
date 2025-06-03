@@ -1,9 +1,15 @@
-{ lib, fetchFromGitHub, buildPythonPackage, radicale }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  radicale,
+  setuptools,
+}:
 
 buildPythonPackage {
   pname = "radicale-infcloud";
   version = "unstable-2022-04-18";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Unrud";
@@ -12,7 +18,9 @@ buildPythonPackage {
     hash = "sha256-xzBWIx2OOkCtBjlff1Z0VqgMhxWtgiOKutXUadT3tIo=";
   };
 
-  propagatedBuildInputs = [ radicale ];
+  build-system = [ setuptools ];
+
+  dependencies = [ radicale ];
 
   # has no tests
   doCheck = false;
@@ -22,7 +30,10 @@ buildPythonPackage {
   meta = with lib; {
     homepage = "https://github.com/Unrud/RadicaleInfCloud/";
     description = "Integrate InfCloud into Radicale's web interface";
-    license = with licenses; [ agpl3 gpl3 ];
+    license = with licenses; [
+      agpl3Plus
+      gpl3Plus
+    ];
     maintainers = with maintainers; [ erictapen ];
   };
 }

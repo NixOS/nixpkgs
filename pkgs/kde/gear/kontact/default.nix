@@ -4,7 +4,6 @@
   akregator,
   kaddressbook,
   kmail,
-  knotes,
   korganizer,
   zanshin,
 }:
@@ -16,8 +15,8 @@ mkKdeDerivation {
     akregator
     kaddressbook
     kmail
-    knotes
     korganizer
     zanshin
   ];
+  meta.mainProgram = "kontact";
 }

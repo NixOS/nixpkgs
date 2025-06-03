@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
-, libiconv
-, makeBinaryWrapper
-, installShellFiles
-, fortuneAlias ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  libiconv,
+  makeBinaryWrapper,
+  installShellFiles,
+  fortuneAlias ? true,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,10 +20,16 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Tpg0Jq2EhkwQuz5ZOtv6Rb5YESSlmzLoJPTxYJNNgac=";
   };
 
-  cargoHash = "sha256-hxbvsAQsZWUAgj8QAlcxqBA5YagLO3/vz9lQGJMHUjw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Kp3pv9amEz9oFMDhz0IZDmhpsok5VgrvJZfwSPyz2X0=";
 
-  nativeBuildInputs = [ makeBinaryWrapper installShellFiles ];
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    installShellFiles
+  ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   buildNoDefaultFeatures = true;
 
@@ -43,15 +49,17 @@ rustPlatform.buildRustPackage rec {
     cp -r $src/fortunes $out/fortunes;
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/fortune-kind \
-      --prefix FORTUNE_DIR : "$out/fortunes"
-  ''+ lib.optionalString fortuneAlias ''
-    ln -s fortune-kind $out/bin/fortune
-  '';
+  postInstall =
+    ''
+      wrapProgram $out/bin/fortune-kind \
+        --set-default FORTUNE_DIR "$out/fortunes"
+    ''
+    + lib.optionalString fortuneAlias ''
+      ln -s fortune-kind $out/bin/fortune
+    '';
 
   meta = with lib; {
-    description = "A kinder, curated fortune, written in rust";
+    description = "Kinder, curated fortune, written in rust";
     longDescription = ''
       Historically, contributions to fortune-mod have had a less-than ideal
       quality control process, and as such, many of the fortunes that a user may

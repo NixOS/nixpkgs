@@ -1,44 +1,61 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake, pkg-config
-, alsa-lib, asio, avahi, boost179, flac, libogg, libvorbis, libopus, soxr
-, IOKit, AudioToolbox
-, aixlog, popl
-, pulseaudioSupport ? false, libpulseaudio
-, nixosTests }:
-
-assert pulseaudioSupport -> libpulseaudio != null;
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  alsa-lib,
+  asio,
+  avahi,
+  boost,
+  flac,
+  libogg,
+  libvorbis,
+  libopus,
+  soxr,
+  aixlog,
+  popl,
+  pulseaudioSupport ? false,
+  libpulseaudio,
+  nixosTests,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "snapcast";
-  version = "0.27.0";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
-    owner  = "badaix";
-    repo   = "snapcast";
-    rev    = "v${version}";
-    sha256 = "sha256-dlK1xQQqst4VQjioC7MZzqXwMC+JfqtvnD5lrOqGhYI=";
+    owner = "badaix";
+    repo = "snapcast";
+    rev = "v${version}";
+    hash = "sha256-EJgpZz4PnXfge0rkVH1F7cah+i9AvDJVSUVqL7qChDM=";
   };
 
-  patches = [
-    # Can be removed with next release after 0.27.0
-    (fetchpatch {
-      name = "include-cstdint.patch";
-      url = "https://github.com/badaix/snapcast/commit/481f08199ca31c60c9a3475f1064e6b06a503d12.patch";
-      hash = "sha256-klpvmBpBAlBMtcgnNfW6X6vDbJFnOuOsPUDXcNf5tGc=";
-    })
+  nativeBuildInputs = [
+    cmake
+    pkg-config
   ];
-
-  nativeBuildInputs = [ cmake pkg-config ];
   # snapcast also supports building against tremor but as we have libogg, that's
   # not needed
-  buildInputs = [
-    boost179
-    asio avahi flac libogg libvorbis libopus
-    aixlog popl soxr
-  ] ++ lib.optional pulseaudioSupport libpulseaudio
-  ++ lib.optional stdenv.isLinux alsa-lib
-  ++ lib.optionals stdenv.isDarwin [ IOKit AudioToolbox ];
+  buildInputs =
+    [
+      boost
+      asio
+      avahi
+      flac
+      libogg
+      libvorbis
+      libopus
+      aixlog
+      popl
+      soxr
+      openssl
+    ]
+    ++ lib.optional pulseaudioSupport libpulseaudio
+    ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib;
 
-  TARGET=lib.optionalString stdenv.isDarwin "MACOS";
+  TARGET = lib.optionalString stdenv.hostPlatform.isDarwin "MACOS";
 
   # Upstream systemd unit files are pretty awful, so we provide our own in a
   # NixOS module. It might make sense to get that upstreamed...

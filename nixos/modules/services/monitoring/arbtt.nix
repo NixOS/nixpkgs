@@ -1,37 +1,40 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.arbtt;
-in {
+in
+{
   options = {
     services.arbtt = {
-      enable = mkEnableOption (lib.mdDoc "Arbtt statistics capture service");
+      enable = lib.mkEnableOption "Arbtt statistics capture service";
 
-      package = mkPackageOption pkgs [ "haskellPackages" "arbtt" ] { };
+      package = lib.mkPackageOption pkgs [ "haskellPackages" "arbtt" ] { };
 
-      logFile = mkOption {
-        type = types.str;
+      logFile = lib.mkOption {
+        type = lib.types.str;
         default = "%h/.arbtt/capture.log";
         example = "/home/username/.arbtt-capture.log";
-        description = lib.mdDoc ''
+        description = ''
           The log file for captured samples.
         '';
       };
 
-      sampleRate = mkOption {
-        type = types.int;
+      sampleRate = lib.mkOption {
+        type = lib.types.int;
         default = 60;
         example = 120;
-        description = lib.mdDoc ''
+        description = ''
           The sampling interval in seconds.
         '';
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.user.services.arbtt = {
       description = "arbtt statistics capture service";
       wantedBy = [ "graphical-session.target" ];
@@ -45,5 +48,5 @@ in {
     };
   };
 
-  meta.maintainers = [ maintainers.michaelpj ];
+  meta.maintainers = [ ];
 }

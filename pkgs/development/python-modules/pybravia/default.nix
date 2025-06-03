@@ -1,39 +1,34 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pybravia";
-  version = "0.3.3";
+  version = "0.3.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Drafteed";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Ux9EereKKbgaVQORliW6J5FSBlytLM+m4PVFBk+OW6k=";
+    repo = "pybravia";
+    tag = "v${version}";
+    hash = "sha256-1LfYEVclRneU3eD52kvzjLYyGdzYSWVDQ5EADOviglw=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pybravia"
-  ];
+  pythonImportsCheck = [ "pybravia" ];
 
   meta = with lib; {
     description = "Library for remote control of Sony Bravia TVs 2013 and newer";

@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.serviio;
@@ -22,24 +24,25 @@ let
     exec ${pkgs.jre}/bin/java -Xmx512M -Xms20M -XX:+UseG1GC -XX:GCTimeRatio=1 -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=20 $JAVA_OPTS -classpath "$SERVIIO_CLASS_PATH" org.serviio.MediaServer "$@"
   '';
 
-in {
+in
+{
 
   ###### interface
   options = {
     services.serviio = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the Serviio Media Server.
         '';
       };
 
-      dataDir = mkOption {
-        type = types.path;
+      dataDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/serviio";
-        description = lib.mdDoc ''
+        description = ''
           The directory where serviio stores its state, data, etc.
         '';
       };
@@ -49,7 +52,7 @@ in {
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.serviio = {
       description = "Serviio Media Server";
       after = [ "network.target" ];
@@ -63,19 +66,19 @@ in {
       };
     };
 
-    users.users.serviio =
-      { group = "serviio";
-        home = cfg.dataDir;
-        description = "Serviio Media Server User";
-        createHome = true;
-        isSystemUser = true;
-      };
+    users.users.serviio = {
+      group = "serviio";
+      home = cfg.dataDir;
+      description = "Serviio Media Server User";
+      createHome = true;
+      isSystemUser = true;
+    };
 
     users.groups.serviio = { };
 
     networking.firewall = {
       allowedTCPPorts = [
-        8895  # serve UPnP responses
+        8895 # serve UPnP responses
         23423 # console
         23424 # mediabrowser
       ];

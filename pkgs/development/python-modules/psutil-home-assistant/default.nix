@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, psutil
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  psutil,
+  pytestCheckHook,
 }:
-
 
 buildPythonPackage rec {
   pname = "psutil-home-assistant";
@@ -14,23 +14,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "psutil-home-assistant";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6bj1aaa/JYZFVwUAJfxISRoldgTmumCG8WrlKhkb6kM=";
   };
 
-  propagatedBuildInputs = [
-    psutil
-  ];
+  propagatedBuildInputs = [ psutil ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     changelog = "https://github.com/home-assistant-libs/psutil-home-assistant/releases/tag/${version}";
     description = "Wrapper of psutil that removes reliance on globals";
     homepage = "https://github.com/home-assistant-libs/psutil-home-assistant";
     license = licenses.asl20;
-    maintainers = teams.home-assistant.members;
+    teams = [ teams.home-assistant ];
   };
 }

@@ -1,30 +1,32 @@
-{ lib
-, buildPythonPackage
-, dask
-, fetchPypi
-, fsspec
-, lxml
-, numpy
-, pytestCheckHook
-, pythonOlder
-, zarr
+{
+  lib,
+  buildPythonPackage,
+  dask,
+  fetchPypi,
+  fsspec,
+  lxml,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  zarr,
 }:
 
 buildPythonPackage rec {
   pname = "tifffile";
-  version = "2023.9.26";
-  format = "setuptools";
+  version = "2025.3.30";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Z+NV5Flaqzl/hAXQSv4bSufG9ipE4i2TP+4aVxpIx64=";
+    hash = "sha256-PN7kf+Bs11NnwWvD/zRSNxMVba5s1Jjjo5Lls5pRt4k=";
   };
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ numpy ];
 
   nativeCheckInputs = [
     dask
@@ -51,9 +53,7 @@ buildPythonPackage rec {
     "test_issue_invalid_predictor"
   ];
 
-  pythonImportsCheck = [
-    "tifffile"
-  ];
+  pythonImportsCheck = [ "tifffile" ];
 
   # flaky, often killed due to OOM or timeout
   env.SKIP_LARGE = "1";

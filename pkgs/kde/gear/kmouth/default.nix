@@ -5,5 +5,6 @@
 mkKdeDerivation {
   pname = "kmouth";
 
-  extraBuildInputs = [qtspeech];
+  extraBuildInputs = [ qtspeech ];
+  meta.mainProgram = "kmouth";
 }

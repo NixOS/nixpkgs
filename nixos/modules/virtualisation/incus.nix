@@ -1,8 +1,164 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.virtualisation.incus;
   preseedFormat = pkgs.formats.yaml { };
+
+  nvidiaEnabled = (lib.elem "nvidia" config.services.xserver.videoDrivers);
+
+  serverBinPath = ''/run/wrappers/bin:${pkgs.qemu_kvm}/libexec:${
+    lib.makeBinPath (
+      with pkgs;
+      [
+        cfg.package
+
+        acl
+        attr
+        bash
+        btrfs-progs
+        cdrkit
+        coreutils
+        criu
+        dnsmasq
+        e2fsprogs
+        findutils
+        getent
+        gawk
+        gnugrep
+        gnused
+        gnutar
+        gptfdisk
+        gzip
+        iproute2
+        iptables
+        iw
+        kmod
+        libxfs
+        lvm2
+        lxcfs
+        minio
+        minio-client
+        nftables
+        qemu-utils
+        qemu_kvm
+        rsync
+        squashfs-tools-ng
+        squashfsTools
+        sshfs
+        swtpm
+        systemd
+        thin-provisioning-tools
+        util-linux
+        virtiofsd
+        xdelta
+        xz
+      ]
+      ++ lib.optionals (lib.versionAtLeast cfg.package.version "6.3.0") [
+        skopeo
+        umoci
+      ]
+      ++ lib.optionals (lib.versionAtLeast cfg.package.version "6.11.0") [
+        lego
+      ]
+      ++ lib.optionals config.security.apparmor.enable [
+        apparmor-bin-utils
+
+        (writeShellScriptBin "apparmor_parser" ''
+          exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
+        '')
+      ]
+      ++ lib.optionals config.services.ceph.client.enable [ ceph-client ]
+      ++ lib.optionals config.virtualisation.vswitch.enable [ config.virtualisation.vswitch.package ]
+      ++ lib.optionals config.boot.zfs.enabled [
+        config.boot.zfs.package
+        "${config.boot.zfs.package}/lib/udev"
+      ]
+      ++ lib.optionals nvidiaEnabled [
+        libnvidia-container
+      ]
+    )
+  }'';
+
+  # https://github.com/lxc/incus/blob/cff35a29ee3d7a2af1f937cbb6cf23776941854b/internal/server/instance/drivers/driver_qemu.go#L123
+  OVMF2MB = pkgs.OVMF.override {
+    secureBoot = true;
+    fdSize2MB = true;
+  };
+  ovmf-prefix = if pkgs.stdenv.hostPlatform.isAarch64 then "AAVMF" else "OVMF";
+  ovmf = pkgs.linkFarm "incus-ovmf" (
+    [
+      # 2MB must remain the default or existing VMs will fail to boot. New VMs will prefer 4MB
+      {
+        name = "OVMF_CODE.fd";
+        path = "${OVMF2MB.fd}/FV/${ovmf-prefix}_CODE.fd";
+      }
+      {
+        name = "OVMF_VARS.fd";
+        path = "${OVMF2MB.fd}/FV/${ovmf-prefix}_VARS.fd";
+      }
+      {
+        name = "OVMF_VARS.ms.fd";
+        path = "${OVMF2MB.fd}/FV/${ovmf-prefix}_VARS.fd";
+      }
+
+      {
+        name = "OVMF_CODE.4MB.fd";
+        path = "${pkgs.OVMFFull.fd}/FV/${ovmf-prefix}_CODE.fd";
+      }
+      {
+        name = "OVMF_VARS.4MB.fd";
+        path = "${pkgs.OVMFFull.fd}/FV/${ovmf-prefix}_VARS.fd";
+      }
+      {
+        name = "OVMF_VARS.4MB.ms.fd";
+        path = "${pkgs.OVMFFull.fd}/FV/${ovmf-prefix}_VARS.fd";
+      }
+    ]
+    ++ lib.optionals pkgs.stdenv.hostPlatform.isx86_64 [
+      {
+        name = "seabios.bin";
+        path = "${pkgs.seabios-qemu}/share/seabios/bios.bin";
+      }
+    ]
+  );
+
+  environment = lib.mkMerge [
+    {
+      INCUS_DOCUMENTATION = "${cfg.package.doc}/html";
+      INCUS_EDK2_PATH = ovmf;
+      INCUS_LXC_HOOK = "${cfg.lxcPackage}/share/lxc/hooks";
+      INCUS_LXC_TEMPLATE_CONFIG = "${pkgs.lxcfs}/share/lxc/config";
+      INCUS_USBIDS_PATH = "${pkgs.hwdata}/share/hwdata/usb.ids";
+      PATH = lib.mkForce serverBinPath;
+    }
+    (lib.mkIf (cfg.ui.enable) { "INCUS_UI" = cfg.ui.package; })
+  ];
+
+  incus-startup = pkgs.writeShellScript "incus-startup" ''
+    case "$1" in
+        start)
+          systemctl is-active incus.service -q && exit 0
+          exec incusd activateifneeded
+        ;;
+
+        stop)
+          systemctl is-active incus.service -q || exit 0
+          exec incusd shutdown
+        ;;
+
+        *)
+          echo "unknown argument \`$1'" >&2
+          exit 1
+        ;;
+    esac
+
+    exit 0
+  '';
 in
 {
   meta = {
@@ -11,26 +167,47 @@ in
 
   options = {
     virtualisation.incus = {
-      enable = lib.mkEnableOption (lib.mdDoc ''
+      enable = lib.mkEnableOption ''
         incusd, a daemon that manages containers and virtual machines.
 
         Users in the "incus-admin" group can interact with
         the daemon (e.g. to start or stop containers) using the
         {command}`incus` command line tool, among others.
-      '');
+        Users in the "incus" group can also interact with
+        the daemon, but with lower permissions
+        (i.e. administrative operations are forbidden).
+      '';
 
-      package = lib.mkPackageOption pkgs "incus" { };
+      package = lib.mkPackageOption pkgs "incus-lts" { };
 
-      lxcPackage = lib.mkPackageOption pkgs "lxc" { };
+      lxcPackage = lib.mkOption {
+        type = lib.types.package;
+        default = config.virtualisation.lxc.package;
+        defaultText = lib.literalExpression "config.virtualisation.lxc.package";
+        description = "The lxc package to use.";
+      };
+
+      clientPackage = lib.mkOption {
+        type = lib.types.package;
+        default = cfg.package.client;
+        defaultText = lib.literalExpression "config.virtualisation.incus.package.client";
+        description = "The incus client package to use. This package is added to PATH.";
+      };
+
+      softDaemonRestart = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Allow for incus.service to be stopped without affecting running instances.
+        '';
+      };
 
       preseed = lib.mkOption {
-        type = lib.types.nullOr (
-          lib.types.submodule { freeformType = preseedFormat.type; }
-        );
+        type = lib.types.nullOr (lib.types.submodule { freeformType = preseedFormat.type; });
 
         default = null;
 
-        description = lib.mdDoc ''
+        description = ''
           Configuration for Incus preseed, see
           <https://linuxcontainers.org/incus/docs/main/howto/initialize/#non-interactive-configuration>
           for supported values.
@@ -80,18 +257,16 @@ in
         };
       };
 
-      socketActivation = lib.mkEnableOption (
-        lib.mdDoc ''
-          socket-activation for starting incus.service. Enabling this option
-          will stop incus.service from starting automatically on boot.
-        ''
-      );
+      socketActivation = lib.mkEnableOption (''
+        socket-activation for starting incus.service. Enabling this option
+        will stop incus.service from starting automatically on boot.
+      '');
 
       startTimeout = lib.mkOption {
         type = lib.types.ints.unsigned;
         default = 600;
         apply = toString;
-        description = lib.mdDoc ''
+        description = ''
           Time to wait (in seconds) for incusd to become ready to process requests.
           If incusd does not reply within the configured time, `incus.service` will be
           considered failed and systemd will attempt to restart it.
@@ -99,9 +274,9 @@ in
       };
 
       ui = {
-        enable = lib.mkEnableOption (lib.mdDoc "(experimental) Incus UI");
+        enable = lib.mkEnableOption "Incus Web UI";
 
-        package = lib.mkPackageOption pkgs [ "incus" "ui" ] { };
+        package = lib.mkPackageOption pkgs [ "incus-ui-canonical" ] { };
       };
     };
   };
@@ -109,7 +284,12 @@ in
   config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion = !(config.networking.firewall.enable && !config.networking.nftables.enable && config.virtualisation.incus.enable);
+        assertion =
+          !(
+            config.networking.firewall.enable
+            && !config.networking.nftables.enable
+            && config.virtualisation.incus.enable
+          );
         message = "Incus on NixOS is unsupported using iptables. Set `networking.nftables.enable = true;`";
       }
     ];
@@ -130,14 +310,20 @@ in
     };
 
     boot.kernelModules = [
+      "br_netfilter"
       "veth"
       "xt_comment"
       "xt_CHECKSUM"
       "xt_MASQUERADE"
       "vhost_vsock"
-    ] ++ lib.optionals (!config.networking.nftables.enable) [ "iptable_mangle" ];
+    ] ++ lib.optionals nvidiaEnabled [ "nvidia_uvm" ];
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [
+      cfg.clientPackage
+
+      # gui console support
+      pkgs.spice-gtk
+    ];
 
     # Note: the following options are also declared in virtualisation.lxc, but
     # the latter can't be simply enabled to reuse the formers, because it
@@ -153,42 +339,65 @@ in
         "lxc-containers".profile = ''
           include ${cfg.lxcPackage}/etc/apparmor.d/lxc-containers
         '';
+        "incusd".profile = ''
+          # This profile allows everything and only exists to give the
+          # application a name instead of having the label "unconfined"
+
+          abi <abi/4.0>,
+          include <tunables/global>
+
+          profile incusd ${lib.getExe' config.virtualisation.incus.package "incusd"} flags=(unconfined) {
+            userns,
+            </var/lib/incus/security/apparmor/cache>
+            </var/lib/incus/security/apparmor/profiles>
+
+            # Site-specific additions and overrides. See local/README for details.
+            include if exists <local/incusd>
+          }
+        '';
       };
+      includes."abstractions/base" =
+        ''
+          # Allow incusd's various AA profiles to load dynamic libraries from Nix store
+          # https://discuss.linuxcontainers.org/t/creating-new-containers-vms-blocked-by-apparmor-on-nixos/21908/6
+          mr /nix/store/*/lib/*.so*,
+          r ${pkgs.stdenv.cc.libc}/lib/gconv/gconv-modules,
+          r ${pkgs.stdenv.cc.libc}/lib/gconv/gconv-modules.d/,
+          r ${pkgs.stdenv.cc.libc}/lib/gconv/gconv-modules.d/gconv-modules-extra.conf,
+
+          # Support use of VM instance
+          mrix ${pkgs.qemu_kvm}/bin/*,
+          k ${OVMF2MB.fd}/FV/*.fd,
+          k ${pkgs.OVMFFull.fd}/FV/*.fd,
+        ''
+        + lib.optionalString pkgs.stdenv.hostPlatform.isx86_64 ''
+          k ${pkgs.seabios-qemu}/share/seabios/bios.bin,
+        '';
     };
 
     systemd.services.incus = {
       description = "Incus Container and Virtual Machine Management Daemon";
+
+      inherit environment;
 
       wantedBy = lib.mkIf (!cfg.socketActivation) [ "multi-user.target" ];
       after = [
         "network-online.target"
         "lxcfs.service"
         "incus.socket"
-      ];
+      ] ++ lib.optionals config.virtualisation.vswitch.enable [ "ovs-vswitchd.service" ];
+
       requires = [
         "lxcfs.service"
         "incus.socket"
-      ];
-      wants = [
-        "network-online.target"
-      ];
+      ] ++ lib.optionals config.virtualisation.vswitch.enable [ "ovs-vswitchd.service" ];
 
-      path = lib.mkIf config.boot.zfs.enabled [
-        config.boot.zfs.package
-        "${config.boot.zfs.package}/lib/udev"
-      ];
-
-      environment = lib.mkMerge [ {
-        # Override Path to the LXC template configuration directory
-        INCUS_LXC_TEMPLATE_CONFIG = "${pkgs.lxcfs}/share/lxc/config";
-      } (lib.mkIf (cfg.ui.enable) {
-        "INCUS_UI" = cfg.ui.package;
-      }) ];
+      wants = [ "network-online.target" ];
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/incusd --group incus-admin";
         ExecStartPost = "${cfg.package}/bin/incusd waitready --timeout=${cfg.startTimeout}";
-        ExecStop = "${cfg.package}/bin/incus admin shutdown";
+        ExecStop = lib.optionalString (!cfg.softDaemonRestart) "${cfg.package}/bin/incus admin shutdown";
 
         KillMode = "process"; # when stopping, leave the containers alone
         Delegate = "yes";
@@ -203,6 +412,49 @@ in
       };
     };
 
+    systemd.services.incus-user = {
+      description = "Incus Container and Virtual Machine Management User Daemon";
+
+      inherit environment;
+
+      after = [
+        "incus.service"
+        "incus-user.socket"
+      ];
+
+      requires = [
+        "incus-user.socket"
+      ];
+
+      serviceConfig = {
+        ExecStart = "${cfg.package}/bin/incus-user --group incus";
+
+        Restart = "on-failure";
+      };
+    };
+
+    systemd.services.incus-startup = lib.mkIf cfg.softDaemonRestart {
+      description = "Incus Instances Startup/Shutdown";
+
+      inherit environment;
+
+      after = [
+        "incus.service"
+        "incus.socket"
+      ];
+      requires = [ "incus.socket" ];
+      wantedBy = config.systemd.services.incus.wantedBy;
+
+      serviceConfig = {
+        ExecStart = "${incus-startup} start";
+        ExecStop = "${incus-startup} stop";
+        RemainAfterExit = true;
+        TimeoutStartSec = "600s";
+        TimeoutStopSec = "600s";
+        Type = "oneshot";
+      };
+    };
+
     systemd.sockets.incus = {
       description = "Incus UNIX socket";
       wantedBy = [ "sockets.target" ];
@@ -214,18 +466,27 @@ in
       };
     };
 
+    systemd.sockets.incus-user = {
+      description = "Incus user UNIX socket";
+      wantedBy = [ "sockets.target" ];
+
+      socketConfig = {
+        ListenStream = "/var/lib/incus/unix.socket.user";
+        SocketMode = "0660";
+        SocketGroup = "incus";
+      };
+    };
+
     systemd.services.incus-preseed = lib.mkIf (cfg.preseed != null) {
       description = "Incus initialization with preseed file";
 
-      wantedBy = ["incus.service"];
-      after = ["incus.service"];
-      bindsTo = ["incus.service"];
-      partOf = ["incus.service"];
+      wantedBy = [ "incus.service" ];
+      after = [ "incus.service" ];
+      bindsTo = [ "incus.service" ];
+      partOf = [ "incus.service" ];
 
       script = ''
-        ${cfg.package}/bin/incus admin init --preseed <${
-          preseedFormat.generate "incus-preseed.yaml" cfg.preseed
-        }
+        ${cfg.package}/bin/incus admin init --preseed <${preseedFormat.generate "incus-preseed.yaml" cfg.preseed}
       '';
 
       serviceConfig = {
@@ -234,6 +495,7 @@ in
       };
     };
 
+    users.groups.incus = { };
     users.groups.incus-admin = { };
 
     users.users.root = {

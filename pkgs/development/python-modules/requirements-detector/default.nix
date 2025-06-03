@@ -1,53 +1,50 @@
-{ lib
-, astroid
-, buildPythonPackage
-, fetchFromGitHub
-, packaging
-, poetry-core
-, semver
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, toml
+{
+  lib,
+  astroid,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  packaging,
+  poetry-core,
+  semver,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "requirements-detector";
-  version = "1.2.2";
+  version = "1.3.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "landscapeio";
     repo = "requirements-detector";
-    rev = "refs/tags/${version}";
-    hash = "sha256-qmrHFQRypBJOI1N6W/Dtc5ss9JGqoPhFlbqrLHcb6vc=";
+    tag = version;
+    hash = "sha256-IWVIYDE/5/9sFgOFftRE4nmY0IDJ0oOvvaGMODkozQg=";
   };
 
-  pythonRelaxDeps = [
-    "astroid"
+  patches = [
+    # Remove duplicate import, https://github.com/prospector-dev/requirements-detector/pull/53
+    (fetchpatch {
+      name = "remove-import.patch";
+      url = "https://github.com/prospector-dev/requirements-detector/commit/be412669f53a78b3376cac712c84f158fbb1374a.patch";
+      hash = "sha256-IskSs3BZ1pTeqjtCUksC8wL+3fOYqAi7nw/QD0zsie4=";
+    })
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     astroid
     packaging
-    toml
     semver
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "requirements_detector"
-  ];
+  pythonImportsCheck = [ "requirements_detector" ];
 
   meta = with lib; {
     description = "Python tool to find and list requirements of a Python project";
@@ -55,5 +52,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/landscapeio/requirements-detector/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ kamadorueda ];
+    mainProgram = "detect-requirements";
   };
 }

@@ -1,8 +1,12 @@
-import ./make-test-python.nix ({ lib, ... }: {
+{ lib, ... }:
+{
   name = "user-activation-scripts";
-  meta = with lib.maintainers; { maintainers = [ chkno ]; };
+  meta = with lib.maintainers; {
+    maintainers = [ chkno ];
+  };
 
   nodes.machine = {
+    system.switch.enable = true;
     system.userActivationScripts.foo = "mktemp ~/user-activation-ran.XXXXXX";
     users.users.alice = {
       initialPassword = "pass1";
@@ -33,4 +37,4 @@ import ./make-test-python.nix ({ lib, ... }: {
     verify_user_activation_run_count(2)
     machine.succeed("[[ ! -f /home/alice/file-to-remove ]] || false")
   '';
-})
+}

@@ -1,14 +1,16 @@
 { lib, ... }:
-{ options.services.nghttpx = {
-    enable = lib.mkEnableOption (lib.mdDoc "nghttpx");
+{
+  options.services.nghttpx = {
+    enable = lib.mkEnableOption "nghttpx";
 
     frontends = lib.mkOption {
-      type        = lib.types.listOf (lib.types.submodule (import ./frontend-submodule.nix));
-      description = lib.mdDoc ''
+      type = lib.types.listOf (lib.types.submodule (import ./frontend-submodule.nix));
+      description = ''
         A list of frontend listener specifications.
       '';
       example = [
-        { server = {
+        {
+          server = {
             host = "*";
             port = 80;
           };
@@ -20,19 +22,20 @@
       ];
     };
 
-    backends  = lib.mkOption {
+    backends = lib.mkOption {
       type = lib.types.listOf (lib.types.submodule (import ./backend-submodule.nix));
-      description = lib.mdDoc ''
+      description = ''
         A list of backend specifications.
       '';
       example = [
-        { server = {
+        {
+          server = {
             host = "172.16.0.22";
             port = 8443;
           };
           patterns = [ "/" ];
-          params   = {
-            proto               = "http/1.1";
+          params = {
+            proto = "http/1.1";
             redirect-if-not-tls = true;
           };
         }
@@ -40,9 +43,9 @@
     };
 
     tls = lib.mkOption {
-      type        = lib.types.nullOr (lib.types.submodule (import ./tls-submodule.nix));
-      default     = null;
-      description = lib.mdDoc ''
+      type = lib.types.nullOr (lib.types.submodule (import ./tls-submodule.nix));
+      default = null;
+      description = ''
         TLS certificate and key paths. Note that this does not enable
         TLS for a frontend listener, to do so, a frontend
         specification must set `params.tls` to true.
@@ -54,18 +57,18 @@
     };
 
     extraConfig = lib.mkOption {
-      type        = lib.types.lines;
-      default     = "";
-      description = lib.mdDoc ''
+      type = lib.types.lines;
+      default = "";
+      description = ''
         Extra configuration options to be appended to the generated
         configuration file.
       '';
     };
 
     single-process = lib.mkOption {
-      type        = lib.types.bool;
-      default     = false;
-      description = lib.mdDoc ''
+      type = lib.types.bool;
+      default = false;
+      description = ''
         Run this program in a single process mode for debugging
         purpose. Without this option, nghttpx creates at least 2
         processes: master and worker processes. If this option is
@@ -79,9 +82,9 @@
     };
 
     backlog = lib.mkOption {
-      type        = lib.types.int;
-      default     = 65536;
-      description = lib.mdDoc ''
+      type = lib.types.int;
+      default = 65536;
+      description = ''
         Listen backlog size.
 
         Please see https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx--backlog
@@ -95,7 +98,7 @@
         "IPv6"
       ];
       default = "auto";
-      description = lib.mdDoc ''
+      description = ''
         Specify address family of backend connections. If "auto" is
         given, both IPv4 and IPv6 are considered. If "IPv4" is given,
         only IPv4 address is considered. If "IPv6" is given, only IPv6
@@ -106,9 +109,9 @@
     };
 
     workers = lib.mkOption {
-      type        = lib.types.int;
-      default     = 1;
-      description = lib.mdDoc ''
+      type = lib.types.int;
+      default = 1;
+      description = ''
         Set the number of worker threads.
 
         Please see https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-n
@@ -116,9 +119,9 @@
     };
 
     single-thread = lib.mkOption {
-      type        = lib.types.bool;
-      default     = false;
-      description = lib.mdDoc ''
+      type = lib.types.bool;
+      default = false;
+      description = ''
         Run everything in one thread inside the worker process. This
         feature is provided for better debugging experience, or for
         the platforms which lack thread support. If threading is
@@ -129,9 +132,9 @@
     };
 
     rlimit-nofile = lib.mkOption {
-      type        = lib.types.int;
-      default     = 0;
-      description = lib.mdDoc ''
+      type = lib.types.int;
+      default = 0;
+      description = ''
         Set maximum number of open files (RLIMIT_NOFILE) to \<N\>. If 0
         is given, nghttpx does not set the limit.
 

@@ -1,33 +1,35 @@
-{ autoPatchelfHook
-, fetchurl
-, gcc-unwrapped
-, gsettings-desktop-schemas
-, gtk3
-, lib
-, makeDesktopItem
-, makeWrapper
-, nwjs
-, stdenv
-, unzip
-, udev
-, wrapGAppsHook
-, copyDesktopItems
+{
+  autoPatchelfHook,
+  fetchurl,
+  gcc-unwrapped,
+  gsettings-desktop-schemas,
+  gtk3,
+  lib,
+  libGL,
+  makeDesktopItem,
+  makeWrapper,
+  nwjs,
+  stdenv,
+  unzip,
+  udev,
+  wrapGAppsHook3,
+  copyDesktopItems,
 }:
 
 stdenv.mkDerivation rec {
   pname = "popcorntime";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchurl {
     url = "https://github.com/popcorn-official/popcorn-desktop/releases/download/v${version}/Popcorn-Time-${version}-linux64.zip";
-    hash = "sha256-A5G66KkCQ1AiOOO02dZFAVz6dqvComrd5lXQ4Wc1S0s=";
+    hash = "sha256-lCsIioR252GWP/+wNwkTw5PLSal/M9x6mlR/EKOd/hs=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
     makeWrapper
     unzip
-    wrapGAppsHook
+    wrapGAppsHook3
     copyDesktopItems
   ];
 
@@ -45,20 +47,30 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   makeWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gcc-unwrapped.lib gtk3 udev ]}"
+    "--prefix LD_LIBRARY_PATH : ${
+      lib.makeLibraryPath [
+        gcc-unwrapped.lib
+        gtk3
+        udev
+        libGL
+      ]
+    }"
     "--prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}"
   ];
 
   desktopItem = makeDesktopItem {
-      name = pname;
-      exec = pname;
-      icon = pname;
-      comment = meta.description;
-      genericName = meta.description;
-      type = "Application";
-      desktopName = "Popcorn-Time";
-      categories = [ "Video" "AudioVideo" ];
-    };
+    name = pname;
+    exec = pname;
+    icon = pname;
+    comment = meta.description;
+    genericName = meta.description;
+    type = "Application";
+    desktopName = "Popcorn-Time";
+    categories = [
+      "Video"
+      "AudioVideo"
+    ];
+  };
 
   # Extract and copy executable in $out/bin
   installPhase = ''

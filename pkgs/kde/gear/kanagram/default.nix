@@ -5,5 +5,6 @@
 mkKdeDerivation {
   pname = "kanagram";
 
-  extraBuildInputs = [qtspeech];
+  extraBuildInputs = [ qtspeech ];
+  meta.mainProgram = "kanagram";
 }

@@ -1,38 +1,46 @@
-{ lib
-, appdirs
-, beautifulsoup4
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, frozendict
-, html5lib
-, multitasking
-, numpy
-, pandas
-, peewee
-, pythonOlder
-, requests
-, lxml
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  cryptography,
+  curl-cffi,
+  fetchFromGitHub,
+  frozendict,
+  html5lib,
+  lxml,
+  multitasking,
+  numpy,
+  pandas,
+  peewee,
+  platformdirs,
+  protobuf,
+  pytz,
+  requests-cache,
+  requests-ratelimiter,
+  requests,
+  scipy,
+  setuptools,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "yfinance";
-  version = "0.2.36";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.2.61";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ranaroussi";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-oBpkWKQZ5FA+nyNWVOlRzoEyShCfh6SqCCrkFZBu1rQ=";
+    repo = "yfinance";
+    tag = version;
+    hash = "sha256-uOTsfXYXlbOXoP55AJ7QRBebOR7B441p5jkSiRyqQtI=";
   };
 
-  propagatedBuildInputs = [
-    appdirs
+  build-system = [ setuptools ];
+
+  dependencies = [
     beautifulsoup4
     cryptography
+    curl-cffi
     frozendict
     html5lib
     lxml
@@ -40,20 +48,32 @@ buildPythonPackage rec {
     numpy
     pandas
     peewee
+    platformdirs
+    protobuf
+    pytz
     requests
+    websockets
   ];
+
+  optional-dependencies = {
+    nospam = [
+      requests-cache
+      requests-ratelimiter
+    ];
+    repair = [
+      scipy
+    ];
+  };
 
   # Tests require internet access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "yfinance"
-  ];
+  pythonImportsCheck = [ "yfinance" ];
 
   meta = with lib; {
     description = "Module to doiwnload Yahoo! Finance market data";
     homepage = "https://github.com/ranaroussi/yfinance";
-    changelog = "https://github.com/ranaroussi/yfinance/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/ranaroussi/yfinance/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
   };

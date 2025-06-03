@@ -1,19 +1,19 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, pkg-config
-, vala
-, wrapGAppsHook
-, installShellFiles
-, scdoc
-, at-spi2-atk
-, at-spi2-core
-, dbus
-, gtk3
-, ibus
-, libgee
-, xorg
-, snippetexpanderd
+{
+  lib,
+  stdenv,
+  pkg-config,
+  vala,
+  wrapGAppsHook3,
+  installShellFiles,
+  scdoc,
+  at-spi2-atk,
+  at-spi2-core,
+  dbus,
+  gtk3,
+  ibus,
+  libgee,
+  xorg,
+  snippetexpanderd,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
 
   pname = "snippetexpanderx";
 
-  sourceRoot = "source/cmd/snippetexpanderx";
+  sourceRoot = "${src.name}/cmd/snippetexpanderx";
 
   nativeBuildInputs = [
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
     installShellFiles
     scdoc
   ];
@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
     snippetexpanderd
   ];
 
+  makeFlags = [ "VERSION=${src.rev}" ];
+
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
@@ -53,12 +55,12 @@ stdenv.mkDerivation rec {
   # There are no tests.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Your little expandable text snippet helper auto expander daemon";
     homepage = "https://snippetexpander.org";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ianmjones ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
     mainProgram = "snippetexpanderx";
   };
 }

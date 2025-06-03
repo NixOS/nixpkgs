@@ -1,28 +1,33 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, expects
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, yarl
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  expects,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytest-mock,
+  pytestCheckHook,
+  setuptools,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "aiosyncthing";
   version = "0.6.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zhulik";
-    repo = pname;
-    rev = "v${version}";
+    repo = "aiosyncthing";
+    tag = "v${version}";
     hash = "sha256-vn8S2/kRW5C2Hbes9oLM4LGm1jWWK0zeLdujR14y6EI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     yarl
   ];
@@ -31,25 +36,20 @@ buildPythonPackage rec {
     aioresponses
     expects
     pytestCheckHook
+    pytest-cov-stub
     pytest-asyncio
     pytest-mock
   ];
 
-  pytestFlagsArray = [
-    "--asyncio-mode=auto"
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=aiosyncthing --cov-report=html" ""
-  '';
+  pytestFlagsArray = [ "--asyncio-mode=auto" ];
 
   pythonImportsCheck = [ "aiosyncthing" ];
 
   meta = with lib; {
     description = "Python client for the Syncthing REST API";
     homepage = "https://github.com/zhulik/aiosyncthing";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/zhulik/aiosyncthing/releases/tag/v${version}";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

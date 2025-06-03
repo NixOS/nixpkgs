@@ -1,112 +1,200 @@
-{ lib
-, alembic
-, buildPythonPackage
-, click
-, cloudpickle
-, databricks-cli
-, docker
-, entrypoints
-, fetchpatch
-, fetchPypi
-, flask
-, gitpython
-, gorilla
-, gunicorn
-, importlib-metadata
-, markdown
-, matplotlib
-, numpy
-, packaging
-, pandas
-, prometheus-flask-exporter
-, protobuf
-, python-dateutil
-, pythonOlder
-, pythonRelaxDepsHook
-, pyarrow
-, pytz
-, pyyaml
-, querystring-parser
-, requests
-, scikit-learn
-, scipy
-, shap
-, simplejson
-, sqlalchemy
-, sqlparse
+{
+  lib,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  alembic,
+  buildPythonPackage,
+  cachetools,
+  click,
+  cloudpickle,
+  databricks-sdk,
+  docker,
+  flask,
+  gitpython,
+  graphene,
+  gunicorn,
+  importlib-metadata,
+  jinja2,
+  markdown,
+  matplotlib,
+  numpy,
+  opentelemetry-api,
+  opentelemetry-sdk,
+  packaging,
+  pandas,
+  protobuf,
+  pyarrow,
+  pyyaml,
+  requests,
+  scikit-learn,
+  scipy,
+  sqlalchemy,
+  sqlparse,
+
+  # tests
+  aiohttp,
+  azure-core,
+  azure-storage-blob,
+  azure-storage-file,
+  boto3,
+  botocore,
+  catboost,
+  datasets,
+  fastapi,
+  google-cloud-storage,
+  httpx,
+  jwt,
+  keras,
+  langchain,
+  librosa,
+  moto,
+  opentelemetry-exporter-otlp,
+  optuna,
+  pydantic,
+  pyspark,
+  pytestCheckHook,
+  pytorch-lightning,
+  sentence-transformers,
+  shap,
+  starlette,
+  statsmodels,
+  tensorflow,
+  torch,
+  transformers,
+  uvicorn,
+  xgboost,
 }:
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "2.10.2";
-  format = "setuptools";
+  version = "2.20.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Pd8yuiwB2seeTQd9S7ntRtgqCC3JkiMgfVYsfua+5nE=";
+  src = fetchFromGitHub {
+    owner = "mlflow";
+    repo = "mlflow";
+    tag = "v${version}";
+    hash = "sha256-kgohENAx5PpLQ9pBfl/zSq65l/DqJfufBf0gWR1WJHY=";
   };
 
-  postPatch = ''
-    substituteInPlace requirements/core-requirements.txt \
-      --replace "gunicorn<21" "gunicorn"
-  '';
+  pythonRelaxDeps = [
+    "gunicorn"
+    "importlib-metadata"
+    "packaging"
+    "protobuf"
+    "pytz"
+    "pyarrow"
+  ];
 
-  # Remove currently broken dependency `shap`, a model explainability package.
-  # This seems quite unprincipled especially with tests not being enabled,
-  # but not mlflow has a 'skinny' install option which does not require `shap`.
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-  pythonRemoveDeps = [ "shap" ];
-  pythonRelaxDeps = [ "pytz" "pyarrow" ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     alembic
+    cachetools
     click
     cloudpickle
-    databricks-cli
+    databricks-sdk
     docker
-    entrypoints
     flask
     gitpython
-    gorilla
+    graphene
     gunicorn
     importlib-metadata
+    jinja2
     markdown
     matplotlib
     numpy
+    opentelemetry-api
+    opentelemetry-sdk
     packaging
     pandas
-    prometheus-flask-exporter
     protobuf
-    python-dateutil
     pyarrow
-    pytz
+    pydantic
     pyyaml
-    querystring-parser
     requests
     scikit-learn
     scipy
-    #shap
-    simplejson
+    shap
     sqlalchemy
     sqlparse
   ];
 
-  pythonImportsCheck = [
-    "mlflow"
+  pythonImportsCheck = [ "mlflow" ];
+
+  nativeCheckInputs = [
+    aiohttp
+    azure-core
+    azure-storage-blob
+    azure-storage-file
+    boto3
+    botocore
+    catboost
+    datasets
+    fastapi
+    google-cloud-storage
+    httpx
+    jwt
+    keras
+    langchain
+    librosa
+    moto
+    opentelemetry-exporter-otlp
+    optuna
+    pydantic
+    pyspark
+    pytestCheckHook
+    pytorch-lightning
+    sentence-transformers
+    starlette
+    statsmodels
+    tensorflow
+    torch
+    transformers
+    uvicorn
+    xgboost
   ];
 
-  # no tests in PyPI dist
-  # run into https://stackoverflow.com/questions/51203641/attributeerror-module-alembic-context-has-no-attribute-config
-  # also, tests use conda so can't run on NixOS without buildFHSEnv
+  disabledTestPaths = [
+    # Requires unpackaged `autogen`
+    "tests/autogen/test_autogen_autolog.py"
+
+    # Requires unpackaged `diviner`
+    "tests/diviner/test_diviner_model_export.py"
+
+    # Requires unpackaged `sktime`
+    "examples/sktime/test_sktime_model_export.py"
+
+    # Requires `fastai` which would cause a circular dependency
+    "tests/fastai/test_fastai_autolog.py"
+    "tests/fastai/test_fastai_model_export.py"
+
+    # Requires `spacy` which would cause a circular dependency
+    "tests/spacy/test_spacy_model_export.py"
+
+    # Requires `tensorflow.keras` which is not included in our outdated version of `tensorflow` (2.13.0)
+    "tests/gateway/providers/test_ai21labs.py"
+    "tests/tensorflow/test_keras_model_export.py"
+    "tests/tensorflow/test_keras_pyfunc_model_works_with_all_input_types.py"
+    "tests/tensorflow/test_mlflow_callback.py"
+  ];
+
+  # I (@GaetanLepage) gave up at enabling tests:
+  # - They require a lot of dependencies (some unpackaged);
+  # - Many errors occur at collection time;
+  # - Most (all ?) tests require internet access anyway.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Open source platform for the machine learning lifecycle";
+    mainProgram = "mlflow";
     homepage = "https://github.com/mlflow/mlflow";
-    changelog = "https://github.com/mlflow/mlflow/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ tbenst ];
+    changelog = "https://github.com/mlflow/mlflow/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ tbenst ];
   };
 }

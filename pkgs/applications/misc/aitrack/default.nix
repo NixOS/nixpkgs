@@ -1,14 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, qmake
-, wrapQtAppsHook
-, opencv
-, spdlog
-, onnxruntime
-, qtx11extras
-}: stdenv.mkDerivation {
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  qmake,
+  wrapQtAppsHook,
+  opencv,
+  spdlog,
+  onnxruntime,
+  qtx11extras,
+}:
+stdenv.mkDerivation {
   pname = "aitrack";
   version = "0.6.5";
 
@@ -44,6 +46,7 @@
 
   meta = with lib; {
     description = "6DoF Head tracking software";
+    mainProgram = "aitrack";
     maintainers = with maintainers; [ ck3d ];
     platforms = platforms.linux;
     license = licenses.mit;

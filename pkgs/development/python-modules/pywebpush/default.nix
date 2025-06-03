@@ -1,28 +1,35 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, cryptography
-, http-ece
-, py-vapid
-, requests
-, six
-, coverage
-, flake8
-, mock
-, pytestCheckHook
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  http-ece,
+  mock,
+  py-vapid,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "pywebpush";
-  version = "1.14.1";
-  format = "setuptools";
+  version = "2.0.3";
+  pyproject = true;
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+I1+K/XofGFt+wS4yVwRkjjFEWWbAvc17nfMFoQoVe4=";
+    hash = "sha256-WEh448JD6HOiLbiJVQXZVxW8eW73TMG4/pn1lhdBYeM=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
+    aiohttp
     cryptography
     http-ece
     py-vapid
@@ -31,8 +38,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    coverage
-    flake8
     mock
     pytestCheckHook
   ];
@@ -42,7 +47,9 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Webpush Data encryption library for Python";
     homepage = "https://github.com/web-push-libs/pywebpush";
+    changelog = "https://github.com/web-push-libs/pywebpush/releases/tag/${version}";
     license = licenses.mpl20;
     maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "pywebpush";
   };
 }

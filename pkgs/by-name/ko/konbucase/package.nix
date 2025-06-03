@@ -1,24 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, vala
-, pkg-config
-, wrapGAppsHook
-, pantheon
-, gtksourceview5
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  vala,
+  pkg-config,
+  wrapGAppsHook3,
+  blueprint-compiler,
+  pantheon,
+  gtksourceview5,
+  chcase,
+  libadwaita,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "konbucase";
-  version = "4.1.1";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "ryonakano";
     repo = "konbucase";
-    rev = finalAttrs.version;
-    hash = "sha256-g3EDa9EXymi6c8dRHFZYGEAT7k8M2TXUAzZVKTnLzyk=";
+    tag = finalAttrs.version;
+    hash = "sha256-56P2RueZSsuQth8IB73r3WYXCQ+rEyfQpGXhLAAeFlY=";
     fetchSubmodules = true;
   };
 
@@ -27,26 +31,29 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     vala
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
+    blueprint-compiler
   ];
 
   buildInputs = [
     pantheon.granite7
     gtksourceview5
+    chcase
+    libadwaita
   ];
 
   postInstall = ''
     mv $out/bin/com.github.ryonakano.konbucase $out/bin/konbucase
     substituteInPlace $out/share/applications/com.github.ryonakano.konbucase.desktop \
-      --replace 'Exec=com.github.ryonakano.konbucase' 'Exec=${placeholder "out"}/bin/konbucase'
+      --replace-fail "Exec=com.github.ryonakano.konbucase" "Exec=konbucase"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ryonakano/konbucase";
-    description = "A case converting app suitable for coding or typing";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ galaxy ];
-    platforms = platforms.linux;
+    description = "Case converting app suitable for coding or typing";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ galaxy ];
+    platforms = lib.platforms.linux;
     mainProgram = "konbucase";
   };
 })

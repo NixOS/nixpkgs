@@ -1,26 +1,36 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, pytestCheckHook
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  pytestCheckHook,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "tcolorpy";
-  version = "0.1.4";
-  format = "setuptools";
+  version = "0.1.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thombashi";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cCdKeixRfXkvEGBqozMWw2RjliLdzhlMv8GE2Q40LZQ=";
+    repo = "tcolorpy";
+    tag = "v${version}";
+    hash = "sha256-0AXpwRQgBisO4360J+Xd4+EWzDtDJ64UpSUmDnSYjKE=";
   };
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  pythonImportsCheck = [ "tcolorpy" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/thombashi/tcolorpy";
-    description = "A library to apply true color for terminal text";
+    description = "Library to apply true color for terminal text";
     maintainers = with maintainers; [ genericnerdyusername ];
     license = licenses.mit;
   };

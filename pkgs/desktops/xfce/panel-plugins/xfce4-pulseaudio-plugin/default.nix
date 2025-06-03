@@ -1,32 +1,45 @@
-{ lib
-, mkXfceDerivation
-, automakeAddFlags
-, exo
-, gtk3
-, libcanberra
-, libpulseaudio
-, libnotify
-, libxfce4ui
-, libxfce4util
-, xfce4-panel
-, xfconf
-, keybinder3
-, glib
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  exo,
+  gtk3,
+  libcanberra,
+  libpulseaudio,
+  libnotify,
+  libxfce4ui,
+  libxfce4util,
+  libxfce4windowing,
+  meson,
+  ninja,
+  pkg-config,
+  xfce4-panel,
+  xfconf,
+  keybinder3,
+  glib,
+  gitUpdater,
 }:
 
-mkXfceDerivation {
-  category = "panel-plugins";
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-pulseaudio-plugin";
-  version = "0.4.8";
-  sha256 = "sha256-7vcjARm0O+/hVNFzOpxcgAnqD+wRNg5/eqXLcq4t/iU=";
+  version = "0.5.1";
+
+  src = fetchFromGitLab {
+    domain = "gitlab.xfce.org";
+    owner = "panel-plugins";
+    repo = "xfce4-pulseaudio-plugin";
+    tag = "xfce4-pulseaudio-plugin-${finalAttrs.version}";
+    hash = "sha256-068+lp1X2W201zWN15dklsfEy4Hdy3aOEqC/ic5fMNs=";
+  };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
-    automakeAddFlags
+    glib # glib-compile-resources
+    meson
+    ninja
+    pkg-config
   ];
-
-  postPatch = ''
-    substituteInPlace configure.ac.in --replace gio-2.0 gio-unix-2.0
-  '';
 
   buildInputs = [
     exo
@@ -38,12 +51,18 @@ mkXfceDerivation {
     libpulseaudio
     libxfce4ui
     libxfce4util
+    libxfce4windowing
     xfce4-panel
     xfconf
   ];
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater { rev-prefix = "xfce4-pulseaudio-plugin-"; };
+
+  meta = {
     description = "Adjust the audio volume of the PulseAudio sound system";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    homepage = "https://gitlab.xfce.org/panel-plugins/xfce4-pulseaudio-plugin";
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.xfce ];
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, pycryptodomex
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  pycryptodomex,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -17,27 +18,21 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "danifus";
     repo = "pyzipper";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+fZXoAUeB/bUI3LrIFlMTktJgn+GNFBiDHvH2Jgo0pg=";
   };
 
   __darwinAllowLocalNetworking = true;
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    pycryptodomex
-  ];
+  propagatedBuildInputs = [ pycryptodomex ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pyzipper"
-  ];
+  pythonImportsCheck = [ "pyzipper" ];
+
+  doCheck = pythonOlder "3.13"; # depends on removed nntplib battery
 
   disabledTests = [
     # Tests are parsing CLI output

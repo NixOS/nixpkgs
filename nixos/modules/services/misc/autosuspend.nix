@@ -1,67 +1,86 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
-  inherit (lib) mapAttrs' nameValuePair filterAttrs types mkEnableOption
-    mdDoc mkPackageOption mkOption literalExpression mkIf flatten
-    maintainers attrValues;
+  inherit (lib)
+    mapAttrs'
+    nameValuePair
+    filterAttrs
+    types
+    mkEnableOption
+    mkPackageOption
+    mkOption
+    literalExpression
+    mkIf
+    flatten
+    maintainers
+    attrValues
+    ;
 
   cfg = config.services.autosuspend;
 
   settingsFormat = pkgs.formats.ini { };
 
-  checks =
-    mapAttrs'
-      (n: v: nameValuePair "check.${n}" (filterAttrs (_: v: v != null) v))
-      cfg.checks;
-  wakeups =
-    mapAttrs'
-      (n: v: nameValuePair "wakeup.${n}" (filterAttrs (_: v: v != null) v))
-      cfg.wakeups;
+  checks = mapAttrs' (n: v: nameValuePair "check.${n}" (filterAttrs (_: v: v != null) v)) cfg.checks;
+  wakeups = mapAttrs' (
+    n: v: nameValuePair "wakeup.${n}" (filterAttrs (_: v: v != null) v)
+  ) cfg.wakeups;
 
   # Whether the given check is enabled
-  hasCheck = class:
-    (filterAttrs
-      (n: v: v.enabled && (if v.class == null then n else v.class) == class)
-      cfg.checks)
+  hasCheck =
+    class:
+    (filterAttrs (n: v: v.enabled && (if v.class == null then n else v.class) == class) cfg.checks)
     != { };
 
   # Dependencies needed by specific checks
   dependenciesForChecks = {
     "Smb" = pkgs.samba;
-    "XIdleTime" = [ pkgs.xprintidle pkgs.sudo ];
+    "XIdleTime" = [
+      pkgs.xprintidle
+      pkgs.sudo
+    ];
   };
 
-  autosuspend-conf =
-    settingsFormat.generate "autosuspend.conf" ({ general = cfg.settings; } // checks // wakeups);
+  autosuspend-conf = settingsFormat.generate "autosuspend.conf" (
+    { general = cfg.settings; } // checks // wakeups
+  );
 
   autosuspend = cfg.package;
 
   checkType = types.submodule {
     freeformType = settingsFormat.type.nestedTypes.elemType;
 
-    options.enabled = mkEnableOption (mdDoc "this activity check") // { default = true; };
+    options.enabled = mkEnableOption "this activity check" // {
+      default = true;
+    };
 
     options.class = mkOption {
       default = null;
-      type = with types; nullOr (enum [
-        "ActiveCalendarEvent"
-        "ActiveConnection"
-        "ExternalCommand"
-        "JsonPath"
-        "Kodi"
-        "KodiIdleTime"
-        "LastLogActivity"
-        "Load"
-        "LogindSessionsIdle"
-        "Mpd"
-        "NetworkBandwidth"
-        "Ping"
-        "Processes"
-        "Smb"
-        "Users"
-        "XIdleTime"
-        "XPath"
-      ]);
-      description = mdDoc ''
+      type =
+        with types;
+        nullOr (enum [
+          "ActiveCalendarEvent"
+          "ActiveConnection"
+          "ExternalCommand"
+          "JsonPath"
+          "Kodi"
+          "KodiIdleTime"
+          "LastLogActivity"
+          "Load"
+          "LogindSessionsIdle"
+          "Mpd"
+          "NetworkBandwidth"
+          "Ping"
+          "Processes"
+          "Smb"
+          "Users"
+          "XIdleTime"
+          "XPath"
+        ]);
+      description = ''
         Name of the class implementing the check.  If this option is not specified, the check's
         name must represent a valid internal check class.
       '';
@@ -71,20 +90,24 @@ let
   wakeupType = types.submodule {
     freeformType = settingsFormat.type.nestedTypes.elemType;
 
-    options.enabled = mkEnableOption (mdDoc "this wake-up check") // { default = true; };
+    options.enabled = mkEnableOption "this wake-up check" // {
+      default = true;
+    };
 
     options.class = mkOption {
       default = null;
-      type = with types; nullOr (enum [
-        "Calendar"
-        "Command"
-        "File"
-        "Periodic"
-        "SystemdTimer"
-        "XPath"
-        "XPathDelta"
-      ]);
-      description = mdDoc ''
+      type =
+        with types;
+        nullOr (enum [
+          "Calendar"
+          "Command"
+          "File"
+          "Periodic"
+          "SystemdTimer"
+          "XPath"
+          "XPathDelta"
+        ]);
+      description = ''
         Name of the class implementing the check.  If this option is not specified, the check's
         name must represent a valid internal check class.
       '';
@@ -94,7 +117,7 @@ in
 {
   options = {
     services.autosuspend = {
-      enable = mkEnableOption (mdDoc "the autosuspend daemon");
+      enable = mkEnableOption "the autosuspend daemon";
 
       package = mkPackageOption pkgs "autosuspend" { };
 
@@ -107,7 +130,7 @@ in
             suspend_cmd = mkOption {
               default = "systemctl suspend";
               type = with types; str;
-              description = mdDoc ''
+              description = ''
                 The command to execute in case the host shall be suspended. This line can contain
                 additional command line arguments to the command to execute.
               '';
@@ -115,7 +138,7 @@ in
             wakeup_cmd = mkOption {
               default = ''sh -c 'echo 0 > /sys/class/rtc/rtc0/wakealarm && echo {timestamp:.0f} > /sys/class/rtc/rtc0/wakealarm' '';
               type = with types; str;
-              description = mdDoc ''
+              description = ''
                 The command to execute for scheduling a wake up of the system. The given string is
                 processed using Python’s `str.format()` and a format argument called `timestamp`
                 encodes the UTC timestamp of the planned wake up time (float). Additionally `iso`
@@ -132,7 +155,7 @@ in
             idle_time = 120;
           }
         '';
-        description = mdDoc ''
+        description = ''
           Configuration for autosuspend, see
           <https://autosuspend.readthedocs.io/en/latest/configuration_file.html#general-configuration>
           for supported values.
@@ -142,7 +165,7 @@ in
       checks = mkOption {
         default = { };
         type = with types; attrsOf checkType;
-        description = mdDoc ''
+        description = ''
           Checks for activity.  For more information, see:
            - <https://autosuspend.readthedocs.io/en/latest/configuration_file.html#activity-check-configuration>
            - <https://autosuspend.readthedocs.io/en/latest/available_checks.html>
@@ -184,7 +207,7 @@ in
       wakeups = mkOption {
         default = { };
         type = with types; attrsOf wakeupType;
-        description = mdDoc ''
+        description = ''
           Checks for wake up.  For more information, see:
            - <https://autosuspend.readthedocs.io/en/latest/configuration_file.html#wake-up-check-configuration>
            - <https://autosuspend.readthedocs.io/en/latest/available_wakeups.html>

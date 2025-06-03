@@ -1,17 +1,19 @@
-{ lib
-, bluetooth-data-tools
-, bluetooth-sensor-state-data
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, sensor-state-data
+{
+  lib,
+  bluetooth-data-tools,
+  bluetooth-sensor-state-data,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  sensor-state-data,
 }:
 
 buildPythonPackage rec {
   pname = "thermobeacon-ble";
-  version = "0.6.2";
+  version = "0.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,38 +21,30 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
     repo = "thermobeacon-ble";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Nmu9oS6zkCTqk/cf8+fqDFhVcG/2JuDDumGTCubeS5o=";
+    tag = "v${version}";
+    hash = "sha256-+WQWb1D1Rw5KE4fvu55WYF2YsQY48MWtPA26G5MB6aY=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=thermobeacon_ble --cov-report=term-missing:skip-covered" ""
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     bluetooth-data-tools
     bluetooth-sensor-state-data
     sensor-state-data
   ];
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "thermobeacon_ble"
-  ];
+  pythonImportsCheck = [ "thermobeacon_ble" ];
 
   meta = with lib; {
     description = "Library for Thermobeacon BLE devices";
     homepage = "https://github.com/bluetooth-devices/thermobeacon-ble";
-    changelog = "https://github.com/Bluetooth-Devices/thermobeacon-ble/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/Bluetooth-Devices/thermobeacon-ble/releases/tag/${src.tag}";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

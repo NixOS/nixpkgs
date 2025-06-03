@@ -1,30 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, decorator
-, future
-, lxml
-, matplotlib
-, numpy
-, requests
-, scipy
-, sqlalchemy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  decorator,
+  lxml,
+  matplotlib,
+  numpy,
+  requests,
+  scipy,
+  sqlalchemy,
 }:
 
 buildPythonPackage rec {
   pname = "obspy";
-  version = "1.2.2";
-  format = "setuptools";
+  version = "1.4.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    sha256 = "a0f2b0915beeb597762563fa0358aa1b4d6b09ffda49909c760b5cdf5bdc419e";
+  src = fetchFromGitHub {
+    owner = "obspy";
+    repo = "obspy";
+    tag = version;
+    hash = "sha256-QBV9FRvUUy8/5KK5RdAXXLB8SK9llFy1XRnQ9T5bgcU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [ "sqlalchemy" ];
+
+  dependencies = [
     decorator
-    future
     lxml
     matplotlib
     numpy
@@ -38,10 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "obspy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python framework for seismological observatories";
     homepage = "https://www.obspy.org";
-    license = licenses.lgpl3;
-    maintainers = [ maintainers.ametrine ];
+    changelog = "https://github.com/obspy/obspy/releases/tag/${src.tag}";
+    license = lib.licenses.lgpl3Only;
+    maintainers = [ lib.maintainers.ametrine ];
   };
 }

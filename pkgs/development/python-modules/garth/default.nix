@@ -1,32 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pdm-backend
-, pydantic
-, pytest-vcr
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-oauthlib
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  pydantic,
+  pytest-vcr,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-oauthlib,
 }:
 
 buildPythonPackage rec {
   pname = "garth";
-  version = "0.4.44";
+  version = "0.5.12";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CgLWstmhWXI2w6KBSpIGp8G1smWAKXC0goHKw3I9rJ4=";
+    hash = "sha256-bzEPHhIg6F/WQOUoXuaVlZGxn9PU8VdevA/DQuQ7fBw=";
   };
 
-  nativeBuildInputs = [
-    pdm-backend
-  ];
+  pythonRelaxDeps = [ "requests-oauthlib" ];
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = [
     pydantic
     requests
     requests-oauthlib
@@ -37,9 +38,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "garth"
-  ];
+  pythonImportsCheck = [ "garth" ];
 
   disabledTests = [
     # Tests require network access

@@ -1,11 +1,12 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
 }:
 
 let
-  version = "0.4.5";
+  version = "0.4.6";
 in
 buildGoModule {
   pname = "unbound_exporter";
@@ -27,6 +28,7 @@ buildGoModule {
   meta = with lib; {
     changelog = "https://github.com/letsencrypt/unbound_exporter/releases/tag/v${version}";
     description = "Prometheus exporter for Unbound DNS resolver";
+    mainProgram = "unbound_exporter";
     homepage = "https://github.com/letsencrypt/unbound_exporter/tree/main";
     license = licenses.asl20;
     maintainers = with maintainers; [ hexa ];

@@ -1,56 +1,59 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.cadvisor;
 
-in {
+in
+{
   options = {
     services.cadvisor = {
-      enable = mkEnableOption (lib.mdDoc "Cadvisor service");
+      enable = lib.mkEnableOption "Cadvisor service";
 
-      listenAddress = mkOption {
+      listenAddress = lib.mkOption {
         default = "127.0.0.1";
-        type = types.str;
-        description = lib.mdDoc "Cadvisor listening host";
+        type = lib.types.str;
+        description = "Cadvisor listening host";
       };
 
-      port = mkOption {
+      port = lib.mkOption {
         default = 8080;
-        type = types.port;
-        description = lib.mdDoc "Cadvisor listening port";
+        type = lib.types.port;
+        description = "Cadvisor listening port";
       };
 
-      storageDriver = mkOption {
+      storageDriver = lib.mkOption {
         default = null;
-        type = types.nullOr types.str;
+        type = lib.types.nullOr lib.types.str;
         example = "influxdb";
-        description = lib.mdDoc "Cadvisor storage driver.";
+        description = "Cadvisor storage driver.";
       };
 
-      storageDriverHost = mkOption {
+      storageDriverHost = lib.mkOption {
         default = "localhost:8086";
-        type = types.str;
-        description = lib.mdDoc "Cadvisor storage driver host.";
+        type = lib.types.str;
+        description = "Cadvisor storage driver host.";
       };
 
-      storageDriverDb = mkOption {
+      storageDriverDb = lib.mkOption {
         default = "root";
-        type = types.str;
-        description = lib.mdDoc "Cadvisord storage driver database name.";
+        type = lib.types.str;
+        description = "Cadvisord storage driver database name.";
       };
 
-      storageDriverUser = mkOption {
+      storageDriverUser = lib.mkOption {
         default = "root";
-        type = types.str;
-        description = lib.mdDoc "Cadvisor storage driver username.";
+        type = lib.types.str;
+        description = "Cadvisor storage driver username.";
       };
 
-      storageDriverPassword = mkOption {
+      storageDriverPassword = lib.mkOption {
         default = "root";
-        type = types.str;
-        description = lib.mdDoc ''
+        type = lib.types.str;
+        description = ''
           Cadvisor storage driver password.
 
           Warning: this password is stored in the world-readable Nix store. It's
@@ -60,9 +63,9 @@ in {
         '';
       };
 
-      storageDriverPasswordFile = mkOption {
-        type = types.str;
-        description = lib.mdDoc ''
+      storageDriverPasswordFile = lib.mkOption {
+        type = lib.types.str;
+        description = ''
           File that contains the cadvisor storage driver password.
 
           {option}`storageDriverPasswordFile` takes precedence over {option}`storageDriverPassword`
@@ -75,16 +78,16 @@ in {
         '';
       };
 
-      storageDriverSecure = mkOption {
+      storageDriverSecure = lib.mkOption {
         default = false;
-        type = types.bool;
-        description = lib.mdDoc "Cadvisor storage driver, enable secure communication.";
+        type = lib.types.bool;
+        description = "Cadvisor storage driver, enable secure communication.";
       };
 
-      extraOptions = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = lib.mdDoc ''
+      extraOptions = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        description = ''
           Additional cadvisor options.
 
           See <https://github.com/google/cadvisor/blob/master/docs/runtime_options.md> for available options.
@@ -93,23 +96,32 @@ in {
     };
   };
 
-  config = mkMerge [
-    { services.cadvisor.storageDriverPasswordFile = mkIf (cfg.storageDriverPassword != "") (
-        mkDefault (toString (pkgs.writeTextFile {
-          name = "cadvisor-storage-driver-password";
-          text = cfg.storageDriverPassword;
-        }))
+  config = lib.mkMerge [
+    {
+      services.cadvisor.storageDriverPasswordFile = lib.mkIf (cfg.storageDriverPassword != "") (
+        lib.mkDefault (
+          toString (
+            pkgs.writeTextFile {
+              name = "cadvisor-storage-driver-password";
+              text = cfg.storageDriverPassword;
+            }
+          )
+        )
       );
     }
 
-    (mkIf cfg.enable {
+    (lib.mkIf cfg.enable {
       systemd.services.cadvisor = {
         wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" "docker.service" "influxdb.service" ];
+        after = [
+          "network.target"
+          "docker.service"
+          "influxdb.service"
+        ];
 
-        path = optionals config.boot.zfs.enabled [ pkgs.zfs ];
+        path = lib.optionals config.boot.zfs.enabled [ pkgs.zfs ];
 
-        postStart = mkBefore ''
+        postStart = lib.mkBefore ''
           until ${pkgs.curl.bin}/bin/curl -s -o /dev/null 'http://${cfg.listenAddress}:${toString cfg.port}/containers/'; do
             sleep 1;
           done
@@ -120,18 +132,18 @@ in {
             -logtostderr=true \
             -listen_ip="${cfg.listenAddress}" \
             -port="${toString cfg.port}" \
-            ${escapeShellArgs cfg.extraOptions} \
-            ${optionalString (cfg.storageDriver != null) ''
+            ${lib.escapeShellArgs cfg.extraOptions} \
+            ${lib.optionalString (cfg.storageDriver != null) ''
               -storage_driver "${cfg.storageDriver}" \
               -storage_driver_host "${cfg.storageDriverHost}" \
               -storage_driver_db "${cfg.storageDriverDb}" \
               -storage_driver_user "${cfg.storageDriverUser}" \
               -storage_driver_password "$(cat "${cfg.storageDriverPasswordFile}")" \
-              ${optionalString cfg.storageDriverSecure "-storage_driver_secure"}
+              ${lib.optionalString cfg.storageDriverSecure "-storage_driver_secure"}
             ''}
         '';
 
-        serviceConfig.TimeoutStartSec=300;
+        serviceConfig.TimeoutStartSec = 300;
       };
     })
   ];

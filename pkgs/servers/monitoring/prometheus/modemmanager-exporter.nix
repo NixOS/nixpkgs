@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "modemmanager-exporter";
@@ -18,6 +23,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/mdlayher/modemmanager_exporter";
     description = "Prometheus exporter for ModemManager and its devices";
+    mainProgram = "modemmanager_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ mdlayher ];
   };

@@ -1,12 +1,12 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitLab,
 }:
 let
-  version = "1.3.0";
-in buildGoModule {
+  version = "1.4.1";
+in
+buildGoModule {
   inherit version;
   pname = "reaction";
 
@@ -15,7 +15,7 @@ in buildGoModule {
     owner = "ppom";
     repo = "reaction";
     rev = "v${version}";
-    sha256 = "sha256-hlrso4dCGwn5/jOEPvjrK0RgctB4a70UhQkF+cv6NMc=";
+    hash = "sha256-UL3ck+gejZAu/mZS3ZiZ78a2/I+OesaSRZUhHirgu9o=";
   };
 
   vendorHash = "sha256-THUIoWFzkqaTofwH4clBgsmtUlLS9WIB2xjqW7vkhpg=";
@@ -26,8 +26,8 @@ in buildGoModule {
   ];
 
   postBuild = ''
-    gcc helpers_c/ip46tables.c -o ip46tables
-    gcc helpers_c/nft46.c -o nft46
+    $CC helpers_c/ip46tables.c -o ip46tables
+    $CC helpers_c/nft46.c -o nft46
   '';
 
   postInstall = ''
@@ -40,7 +40,7 @@ in buildGoModule {
     changelog = "https://framagit.org/ppom/reaction/-/releases/v${version}";
     license = licenses.agpl3Plus;
     mainProgram = "reaction";
-    maintainers = with maintainers; [ppom];
+    maintainers = with maintainers; [ ppom ];
     platforms = platforms.unix;
   };
 }

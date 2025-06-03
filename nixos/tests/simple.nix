@@ -1,17 +1,19 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+{ pkgs, ... }:
+{
   name = "simple";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco ];
+    maintainers = [ ];
   };
 
-  nodes.machine = { ... }: {
-    imports = [ ../modules/profiles/minimal.nix ];
-  };
+  nodes.machine =
+    { ... }:
+    {
+      imports = [ ../modules/profiles/minimal.nix ];
+    };
 
-  testScript =
-    ''
-      start_all()
-      machine.wait_for_unit("multi-user.target")
-      machine.shutdown()
-    '';
-})
+  testScript = ''
+    start_all()
+    machine.wait_for_unit("multi-user.target")
+    machine.shutdown()
+  '';
+}

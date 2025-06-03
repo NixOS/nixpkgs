@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gnupg
-, keyring
-, pass
-, poetry-core
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gnupg,
+  keyring,
+  pass,
+  poetry-core,
+  pythonOlder,
 }:
 buildPythonPackage rec {
   pname = "keyring-pass";
-  version = "0.9.2";
+  version = "0.9.3";
   disabled = pythonOlder "3.6";
 
   pyproject = true;
@@ -17,18 +18,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nazarewk";
     repo = "keyring_pass";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Sf7eDOB3prH2s6BzdBtxewSweC0ibLXVxNHBJRRaJe4=";
+    tag = "v${version}";
+    hash = "sha256-EsM+RUhYtelslRpxR5NQbqpOt8KaeCsFqkqZ1ZFx0I0=";
   };
 
   postPatch = ''
     substituteInPlace keyring_pass/__init__.py \
-      --replace 'pass_binary = "pass"' 'pass_binary = "${lib.getExe pass}"'
+      --replace-fail 'pass_binary = "pass"' 'pass_binary = "${lib.getExe pass}"'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   nativeCheckInputs = [
     keyring
@@ -65,9 +64,7 @@ buildPythonPackage rec {
     keyring del test-service test-username
   '';
 
-  pythonImportsCheck = [
-    "keyring_pass"
-  ];
+  pythonImportsCheck = [ "keyring_pass" ];
 
   meta = {
     description = "Password Store (pass) backend for python's keyring";

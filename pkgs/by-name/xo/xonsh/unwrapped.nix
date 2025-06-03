@@ -1,106 +1,138 @@
-{ lib
-, coreutils
-, fetchFromGitHub
-, git
-, gitUpdater
-, glibcLocales
-, python3
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  setuptools,
+  ply,
+  prompt-toolkit,
+  pygments,
+
+  addBinToPathHook,
+  writableTmpDirAsHomeHook,
+  gitMinimal,
+  glibcLocales,
+  pip,
+  pyte,
+  pytest-mock,
+  pytest-subprocess,
+  pytestCheckHook,
+  requests,
+
+  coreutils,
+
+  nix-update-script,
+  python,
+  callPackage,
 }:
 
-let
+buildPythonPackage rec {
   pname = "xonsh";
-  version = "0.14.4";
-in
-python3.pkgs.buildPythonApplication {
-  inherit pname version;
-
+  version = "0.19.4";
   pyproject = true;
 
-  # fetch from github because the pypi package ships incomplete tests
+  # PyPI package ships incomplete tests
   src = fetchFromGitHub {
     owner = "xonsh";
     repo = "xonsh";
-    rev = "refs/tags/${version}";
-    hash = "sha256-7qOEc4RSdOO059LietKnrxY7cy9MfgmfJjdqZZ5ENLU=";
+    tag = version;
+    hash = "sha256-gOk0BZNuKsEzs72Lukq7+7vltmtPE75gEs+JyLqBDdc=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = [
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = [
     ply
     prompt-toolkit
     pygments
   ];
 
-  env.LC_ALL = "en_US.UTF-8";
-
-  postPatch = ''
-    sed -ie "s|/bin/ls|${coreutils}/bin/ls|" tests/test_execer.py
-    sed -ie "s|SHELL=xonsh|SHELL=$out/bin/xonsh|" tests/test_integrations.py
-
-    sed -ie 's|/usr/bin/env|${coreutils}/bin/env|' tests/test_integrations.py
-    sed -ie 's|/usr/bin/env|${coreutils}/bin/env|' scripts/xon.sh
-    find scripts -name 'xonsh*' -exec sed -i -e "s|env -S|env|" {} \;
-    find -name "*.xsh" | xargs sed -ie 's|/usr/bin/env|${coreutils}/bin/env|'
-    patchShebangs .
-  '';
+  nativeCheckInputs = [
+    addBinToPathHook
+    writableTmpDirAsHomeHook
+    gitMinimal
+    glibcLocales
+    pip
+    pyte
+    pytest-mock
+    pytest-subprocess
+    pytestCheckHook
+    requests
+  ];
 
   disabledTests = [
     # fails on sandbox
+    "test_bsd_man_page_completions"
     "test_colorize_file"
     "test_loading_correctly"
     "test_no_command_path_completion"
-    "test_bsd_man_page_completions"
     "test_xonsh_activator"
+
     # fails on non-interactive shells
+    "test_bash_and_is_alias_is_only_functional_alias"
     "test_capture_always"
     "test_casting"
     "test_command_pipeline_capture"
     "test_dirty_working_directory"
     "test_man_completion"
     "test_vc_get_branch"
-    "test_bash_and_is_alias_is_only_functional_alias"
+
+    # flaky tests
+    "test_alias_stability"
+    "test_alias_stability_exception"
+    "test_complete_import"
+    "test_script"
+    "test_subproc_output_format"
+
+    # broken tests
+    "test_repath_backslash"
+
+    # https://github.com/xonsh/xonsh/issues/5569
+    "test_spec_decorator_alias_output_format"
+    "test_trace_in_script"
   ];
 
   disabledTestPaths = [
     # fails on sandbox
     "tests/completers/test_command_completers.py"
-    "tests/test_ptk_highlight.py"
-    "tests/test_ptk_shell.py"
+    "tests/shell/test_ptk_highlight.py"
+
     # fails on non-interactive shells
     "tests/prompt/test_gitstatus.py"
     "tests/completers/test_bash_completer.py"
   ];
 
-  nativeCheckInputs = [
-    git
-    glibcLocales
-  ] ++ (with python3.pkgs; [
-    pip
-    pyte
-    pytest-mock
-    pytest-subprocess
-    pytestCheckHook
-  ]);
+  # https://github.com/NixOS/nixpkgs/issues/248978
+  dontWrapPythonPrograms = true;
 
-  preCheck = ''
-    export HOME=$TMPDIR
+  env.LC_ALL = "en_US.UTF-8";
+
+  postPatch = ''
+    sed -i -e 's|/bin/ls|${lib.getExe' coreutils "ls"}|' tests/test_execer.py
+    sed -i -e 's|SHELL=xonsh|SHELL=$out/bin/xonsh|' tests/test_integrations.py
+
+    for script in tests/test_integrations.py scripts/xon.sh $(find -name "*.xsh"); do
+      sed -i -e 's|/usr/bin/env|${lib.getExe' coreutils "env"}|' $script
+    done
+    patchShebangs .
   '';
 
   passthru = {
+    inherit python;
     shellPath = "/bin/xonsh";
-    python = python3; # To the wrapper
-    updateScript = gitUpdater { };
+    wrapper = throw "The top-level xonsh package is now wrapped. Use it directly.";
+    updateScript = nix-update-script { };
+    xontribs = import ./xontribs { inherit callPackage; };
   };
 
-  meta =  {
+  meta = {
     homepage = "https://xon.sh/";
-    description = "A Python-ish, BASHwards-compatible shell";
-    changelog = "https://github.com/xonsh/xonsh/raw/${version}/CHANGELOG.rst";
+    description = "Python-ish, BASHwards-compatible shell";
+    changelog = "https://github.com/xonsh/xonsh/raw/main/CHANGELOG.rst";
     license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    mainProgram = "xonsh";
+    maintainers = with lib.maintainers; [ samlukeyes123 ];
   };
 }

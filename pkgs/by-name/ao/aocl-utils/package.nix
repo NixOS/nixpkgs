@@ -1,17 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, cmake } :
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "aocl-utils";
-  version = "4.2";
+  version = "5.1";
 
   src = fetchFromGitHub {
     owner = "amd";
     repo = "aocl-utils";
     rev = version;
-    hash = "sha256-tjmCgVSU4XjBhbKMUY3hsvj3bvuXvVdf5Bqva5nr1tc=";
+    hash = "sha256-1g5gERVxXKAeCyNR9/HheUfj+MPxJso3NzqDonvuyMo=";
   };
 
+  patches = [ ./pkg-config.patch ];
+
   nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "AU_BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
+    (lib.cmakeBool "AU_BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+  ];
 
   meta = with lib; {
     description = "Interface to all AMD AOCL libraries to access CPU features";

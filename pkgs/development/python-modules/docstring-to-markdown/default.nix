@@ -1,36 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "docstring-to-markdown";
-  version = "0.13";
+  version = "0.15";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python-lsp";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-r+TRYofTRDCBC0s+bJRhagepEQbbj5WeI5FRtaVPt24=";
+    repo = "docstring-to-markdown";
+    tag = "v${version}";
+    hash = "sha256-ykqY7LFIOTuAddYkKDzIltq8FpLVz4v2ZA3Y0cZH9ms=";
   };
 
-  patches = [
-    # So pytest-flake8 and pytest-cov won't be needed
-    ./remove-coverage-tests.patch
-  ];
+  postPatch = ''
+    sed -i -E '/--(cov|flake8)/d' setup.cfg
+  '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "docstring_to_markdown"
-  ];
+  pythonImportsCheck = [ "docstring_to_markdown" ];
 
   meta = with lib; {
     homepage = "https://github.com/python-lsp/docstring-to-markdown";

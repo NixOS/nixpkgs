@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qmake
-, nix-update-script
-, qtbase
-, qttools
-, qtlocation ? null # qt5 only
-, qtpositioning ? null # qt6 only
-, qtserialport
-, qtsvg
-, qt5compat ? null # qt6 only
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  nix-update-script,
+  qtbase,
+  qttools,
+  qtlocation ? null, # qt5 only
+  qtpositioning ? null, # qt6 only
+  qtserialport,
+  qtsvg,
+  wrapQtAppsHook,
 }:
 
 let
@@ -18,25 +18,31 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpxsee";
-  version = "13.16";
+  version = "13.43";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
-    rev = finalAttrs.version;
-    hash = "sha256-rw+I7Re1hqZ1k1flIAr7kW8Wst7pVdmFcqtQTg6L/9Y=";
+    tag = finalAttrs.version;
+    hash = "sha256-IP5l8YUsCNm9rixgpQqbyyhfcBNQgrZha1MNjetug2c=";
   };
 
-  buildInputs = [
-    qtserialport
-  ] ++ (if isQt6 then [
-    qtbase
-    qtpositioning
-    qtsvg
-    qt5compat
-  ] else [
-    qtlocation
-  ]);
+  buildInputs =
+    [
+      qtserialport
+    ]
+    ++ (
+      if isQt6 then
+        [
+          qtbase
+          qtpositioning
+          qtsvg
+        ]
+      else
+        [
+          qtlocation
+        ]
+    );
 
   nativeBuildInputs = [
     qmake
@@ -48,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     lrelease gpxsee.pro
   '';
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv GPXSee.app $out/Applications
     mkdir -p $out/bin
@@ -60,16 +66,19 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    broken = isQt6 && stdenv.isDarwin;
     changelog = "https://build.opensuse.org/package/view_file/home:tumic:GPXSee/gpxsee/gpxsee.changes";
     description = "GPS log file viewer and analyzer";
+    mainProgram = "gpxsee";
     homepage = "https://www.gpxsee.org/";
     license = lib.licenses.gpl3Only;
     longDescription = ''
       GPXSee is a Qt-based GPS log file viewer and analyzer that supports
       all common GPS log file formats.
     '';
-    maintainers = with lib.maintainers; [ womfoo sikmir ];
+    maintainers = with lib.maintainers; [
+      womfoo
+      sikmir
+    ];
     platforms = lib.platforms.unix;
   };
 })

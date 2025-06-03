@@ -1,38 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, swig
-, wheel
-, msgpack
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  swig,
+  msgpack,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ihm";
-  version = "1.0";
+  version = "2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ihmwg";
     repo = "python-ihm";
-    rev = "refs/tags/${version}";
-    hash = "sha256-a1M3YihN71M9TnkldAzN6N1UuPksDk6SPiBgr4HyC8g=";
+    tag = version;
+    hash = "sha256-U9Ytb2v9gzOu6MMz6HFn+yY5N+qCi692bN602Rt13S8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    swig
-    wheel
-  ];
+  nativeBuildInputs = [ swig ];
 
-  propagatedBuildInputs = [
-    msgpack
-  ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  dependencies = [ msgpack ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # requires network access
@@ -44,7 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python package for handling IHM mmCIF and BinaryCIF files";
     homepage = "https://github.com/ihmwg/python-ihm";
-    changelog = "https://github.com/ihmwg/python-ihm/blob/${src.rev}/ChangeLog.rst";
+    changelog = "https://github.com/ihmwg/python-ihm/blob/${src.tag}/ChangeLog.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
   };

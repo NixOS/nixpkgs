@@ -1,6 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation {
@@ -20,8 +22,18 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  patches = [
+    # Fix uninitialized variable in flags_attr, https://github.com/brauner/move-mount-beneath/pull/2
+    (fetchpatch {
+      name = "aarch64";
+      url = "https://github.com/brauner/move-mount-beneath/commit/0bd0b863f7b98608514d90d4f2a80a21ce2e6cd3.patch";
+      hash = "sha256-D3TttAT0aFqpYC8LuVnrkLwDcfVFOSeYzUDx6VqPu1Q=";
+    })
+  ];
+
   meta = {
     description = "Toy binary to illustrate adding a mount beneath an existing mount";
+    mainProgram = "move-mount";
     homepage = "https://github.com/brauner/move-mount-beneath";
     license = lib.licenses.mit0;
     maintainers = with lib.maintainers; [ nikstur ];

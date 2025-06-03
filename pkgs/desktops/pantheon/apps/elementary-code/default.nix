@@ -1,38 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, appstream
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, polkit
-, vala
-, wrapGAppsHook
-, editorconfig-core-c
-, granite
-, gtk3
-, gtksourceview4
-, gtkspell3
-, libgee
-, libgit2-glib
-, libhandy
-, libpeas
-, libsoup
-, vte
-, ctags
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  appstream,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  polkit,
+  vala,
+  wrapGAppsHook3,
+  editorconfig-core-c,
+  granite,
+  gtk3,
+  gtksourceview4,
+  gtkspell3,
+  libgee,
+  libgit2-glib,
+  libhandy,
+  libpeas,
+  libsoup_2_4,
+  vte,
+  ctags,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-code";
-  version = "7.2.0";
+  version = "7.4.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "code";
     rev = version;
-    sha256 = "sha256-6lvn8c+JfbtZQf5dtViosVqtt/RWL6B/MvksXqmCfFs=";
+    sha256 = "sha256-KoRpGBYen1eOdMBHOTBMopC+mPMOkD+iYWV3JA21mKc=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
     pkg-config
     polkit # needed for ITS rules
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
     libgit2-glib
     libhandy
     libpeas
-    libsoup
+    libsoup_2_4
     vte
   ];
 
@@ -76,7 +77,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/code";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
     mainProgram = "io.elementary.code";
   };
 }

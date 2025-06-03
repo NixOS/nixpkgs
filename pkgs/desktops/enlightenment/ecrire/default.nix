@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, efl
-, directoryListingUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  efl,
+  directoryListingUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,9 +32,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "EFL simple text editor";
+    mainProgram = "ecrire";
     homepage = "https://www.enlightenment.org/";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = teams.enlightenment.members;
+    teams = [ teams.enlightenment ];
   };
 }

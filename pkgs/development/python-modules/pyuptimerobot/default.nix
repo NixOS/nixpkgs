@@ -1,11 +1,12 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-asyncio
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytest-asyncio,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,8 +18,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "ludeeus";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "pyuptimerobot";
+    tag = version;
     hash = "sha256-hy/hmXxxEb44X8JUszoA1YF/41y7GkQqC4uS+Pax6WA=";
   };
 
@@ -28,9 +29,7 @@ buildPythonPackage rec {
       --replace 'version="main",' 'version="${version}",'
   '';
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   nativeCheckInputs = [
     aresponses
@@ -38,9 +37,7 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  pythonImportsCheck = [
-    "pyuptimerobot"
-  ];
+  pythonImportsCheck = [ "pyuptimerobot" ];
 
   meta = with lib; {
     description = "Python API wrapper for Uptime Robot";

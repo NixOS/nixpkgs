@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, hidapi }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  hidapi,
+}:
 
 stdenv.mkDerivation {
   pname = "footswitch";
@@ -8,7 +14,7 @@ stdenv.mkDerivation {
     owner = "rgerganov";
     repo = "footswitch";
     rev = "b7493170ecc956ac87df2c36183253c945be2dcf";
-    sha256 = "sha256-vwjeWjIXQiFJ0o/wgEBrKP3hQi8Xa/azVS1IE/Q/MyY=";
+    hash = "sha256-vwjeWjIXQiFJ0o/wgEBrKP3hQi8Xa/azVS1IE/Q/MyY=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -26,7 +32,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Command line utlities for programming PCsensor and Scythe foot switches.";
+    description = "Command line utlities for programming PCsensor and Scythe foot switches";
     homepage = "https://github.com/rgerganov/footswitch";
     license = licenses.mit;
     platforms = platforms.linux;

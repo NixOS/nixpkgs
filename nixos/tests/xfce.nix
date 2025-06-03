@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+{
   name = "xfce";
 
   nodes.machine =
@@ -10,28 +10,26 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       ];
 
       services.xserver.enable = true;
+      services.xserver.displayManager.lightdm.enable = true;
 
-      services.xserver.displayManager = {
-        lightdm.enable = true;
-        autoLogin = {
-          enable = true;
-          user = "alice";
-        };
+      services.displayManager.autoLogin = {
+        enable = true;
+        user = "alice";
       };
 
       services.xserver.desktopManager.xfce.enable = true;
       environment.systemPackages = [ pkgs.xfce.xfce4-whiskermenu-plugin ];
-
-      hardware.pulseaudio.enable = true; # needed for the factl test, /dev/snd/* exists without them but udev doesn't care then
-
     };
 
   enableOCR = true;
 
-  testScript = { nodes, ... }: let
-    user = nodes.machine.users.users.alice;
-    bus = "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/${toString user.uid}/bus";
-  in ''
+  testScript =
+    { nodes, ... }:
+    let
+      user = nodes.machine.users.users.alice;
+      bus = "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/${toString user.uid}/bus";
+    in
+    ''
       with subtest("Wait for login"):
         machine.wait_for_x()
         machine.wait_for_file("${user.home}/.Xauthority")
@@ -72,4 +70,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         machine.sleep(10)
         machine.screenshot("screen")
     '';
-})
+}

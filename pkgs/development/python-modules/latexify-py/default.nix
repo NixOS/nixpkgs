@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, dill
-, fetchFromGitHub
-, hatchling
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dill,
+  fetchFromGitHub,
+  hatchling,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "latexify-py";
-  version = "0.4.2";
+  version = "0.4.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,25 +18,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "latexify_py";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-bBtAtBJfpStNYWhOJoypDI9hhE4g1ZFHBU8p6S1yCgU=";
+    tag = "v${version}";
+    hash = "sha256-tyBIOIVRSNrhO1NOD7Zqmiksrvrm42DUY4w1IocVRl4=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
-    dill
-  ];
+  dependencies = [ dill ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "latexify"
-  ];
+  pythonImportsCheck = [ "latexify" ];
 
   preCheck = ''
     cd src

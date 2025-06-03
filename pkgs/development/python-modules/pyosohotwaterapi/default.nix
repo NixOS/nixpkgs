@@ -1,13 +1,14 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, loguru
-, numpy
-, pythonOlder
-, setuptools
-, unasync
-, urllib3
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  loguru,
+  numpy,
+  pythonOlder,
+  setuptools,
+  unasync,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -20,22 +21,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "osohotwateriot";
     repo = "apyosohotwaterapi";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-7FLGmmndrFqSl4oC8QFIYNlFJPr+xbiZG5ZRt4vx8+s=";
   };
 
-  postPatch = ''
-    # https://github.com/osohotwateriot/apyosohotwaterapi/pull/3
-    substituteInPlace requirements.txt \
-      --replace "pre-commit" ""
-  '';
+  # https://github.com/osohotwateriot/apyosohotwaterapi/pull/3
+  pythonRemoveDeps = [ "pre-commit" ];
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     unasync
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     loguru
     numpy
@@ -49,9 +47,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "apyosoenergyapi"
-  ];
+  pythonImportsCheck = [ "apyosoenergyapi" ];
 
   meta = with lib; {
     description = "Module for using the OSO Hotwater API";

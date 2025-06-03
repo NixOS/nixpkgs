@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, morphys
-, pytestCheckHook
-, python-baseconv
-, pythonOlder
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  morphys,
+  pytestCheckHook,
+  python-baseconv,
+  pythonOlder,
+  six,
 }:
 buildPythonPackage rec {
   pname = "py-multibase";
@@ -33,13 +34,9 @@ buildPythonPackage rec {
     six
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "multibase"
-  ];
+  pythonImportsCheck = [ "multibase" ];
 
   meta = with lib; {
     description = "Module for distinguishing base encodings and other simple string encodings";

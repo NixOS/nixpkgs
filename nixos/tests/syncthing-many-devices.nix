@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 
 # This nixosTest is supposed to check the following:
 #
@@ -27,15 +27,15 @@ let
       #
       # See also discussion at:
       # https://forum.syncthing.net/t/how-to-generate-dummy-device-ids/20927/8
-      test_device1.id  = "IVTZ5XF-EF3GKFT-GS4AZLG-IT6H2ZP-6WK75SF-AFXQXJJ-BNRZ4N6-XPDKVAU";
-      test_device2.id  = "5C35H56-Z2GFF4F-F3IVD4B-GJYVWIE-SMDBJZN-GI66KWP-52JIQGN-4AVLYAM";
-      test_device3.id  = "XKLSKHE-BZOHV7B-WQZACEF-GTH36NP-6JSBB6L-RXS3M7C-EEVWO2L-C5B4OAJ";
-      test_device4.id  = "APN5Q7J-35GZETO-5KCLF35-ZA7KBWK-HGWPBNG-FERF24R-UTLGMEX-4VJ6PQX";
-      test_device5.id  = "D4YXQEE-5MK6LIK-BRU5QWM-ZRXJCK2-N3RQBJE-23JKTQQ-LYGDPHF-RFPZIQX";
-      test_device6.id  = "TKMCH64-T44VSLI-6FN2YLF-URBZOBR-ATO4DYX-GEDRIII-CSMRQAI-UAQMDQG";
-      test_device7.id  = "472EEBG-Q4PZCD4-4CX6PGF-XS3FSQ2-UFXBZVB-PGNXWLX-7FKBLER-NJ3EMAR";
-      test_device8.id  = "HW6KUMK-WTBG24L-2HZQXLO-TGJSG2M-2JG3FHX-5OGYRUJ-T6L5NN7-L364QAZ";
-      test_device9.id  = "YAE24AP-7LSVY4T-J74ZSEM-A2IK6RB-FGA35TP-AG4CSLU-ED4UYYY-2J2TDQU";
+      test_device1.id = "IVTZ5XF-EF3GKFT-GS4AZLG-IT6H2ZP-6WK75SF-AFXQXJJ-BNRZ4N6-XPDKVAU";
+      test_device2.id = "5C35H56-Z2GFF4F-F3IVD4B-GJYVWIE-SMDBJZN-GI66KWP-52JIQGN-4AVLYAM";
+      test_device3.id = "XKLSKHE-BZOHV7B-WQZACEF-GTH36NP-6JSBB6L-RXS3M7C-EEVWO2L-C5B4OAJ";
+      test_device4.id = "APN5Q7J-35GZETO-5KCLF35-ZA7KBWK-HGWPBNG-FERF24R-UTLGMEX-4VJ6PQX";
+      test_device5.id = "D4YXQEE-5MK6LIK-BRU5QWM-ZRXJCK2-N3RQBJE-23JKTQQ-LYGDPHF-RFPZIQX";
+      test_device6.id = "TKMCH64-T44VSLI-6FN2YLF-URBZOBR-ATO4DYX-GEDRIII-CSMRQAI-UAQMDQG";
+      test_device7.id = "472EEBG-Q4PZCD4-4CX6PGF-XS3FSQ2-UFXBZVB-PGNXWLX-7FKBLER-NJ3EMAR";
+      test_device8.id = "HW6KUMK-WTBG24L-2HZQXLO-TGJSG2M-2JG3FHX-5OGYRUJ-T6L5NN7-L364QAZ";
+      test_device9.id = "YAE24AP-7LSVY4T-J74ZSEM-A2IK6RB-FGA35TP-AG4CSLU-ED4UYYY-2J2TDQU";
       test_device10.id = "277XFSB-OFMQOBI-3XGNGUE-Y7FWRV3-QQDADIY-QIIPQ26-EOGTYKW-JP2EXAI";
       test_device11.id = "2WWXVTN-Q3QWAAY-XFORMRM-2FDI5XZ-OGN33BD-XOLL42R-DHLT2ML-QYXDQAU";
     };
@@ -61,47 +61,56 @@ let
     };
   };
   # Used later when checking whether settings were set in config.xml:
-  checkSettingWithId = { t # t for type
-  , id
-  , not ? false
-  }: ''
-    print("Searching for a ${t} with id ${id}")
-    configVal_${t} = machine.succeed(
-        "${pkgs.libxml2}/bin/xmllint "
-        "--xpath 'string(//${t}[@id=\"${id}\"]/@id)' ${configPath}"
-    )
-    print("${t}.id = {}".format(configVal_${t}))
-    assert "${id}" ${if not then "not" else ""} in configVal_${t}
-  '';
+  checkSettingWithId =
+    {
+      t, # t for type
+      id,
+      not ? false,
+    }:
+    ''
+      print("Searching for a ${t} with id ${id}")
+      configVal_${t} = machine.succeed(
+          "${pkgs.libxml2}/bin/xmllint "
+          "--xpath 'string(//${t}[@id=\"${id}\"]/@id)' ${configPath}"
+      )
+      print("${t}.id = {}".format(configVal_${t}))
+      assert "${id}" ${if not then "not" else ""} in configVal_${t}
+    '';
   # Same as checkSettingWithId, but for 'options' and 'gui'
-  checkSettingWithoutId = { t # t for type
-  , n # n for name
-  , v # v for value
-  , not ? false
-  }: ''
-    print("checking whether setting ${t}.${n} is set to ${v}")
-    configVal_${t}_${n} = machine.succeed(
-        "${pkgs.libxml2}/bin/xmllint "
-        "--xpath 'string(/configuration/${t}/${n})' ${configPath}"
-    )
-    print("${t}.${n} = {}".format(configVal_${t}_${n}))
-    assert "${v}" ${if not then "not" else ""} in configVal_${t}_${n}
-  '';
+  checkSettingWithoutId =
+    {
+      t, # t for type
+      n, # n for name
+      v, # v for value
+      not ? false,
+    }:
+    ''
+      print("checking whether setting ${t}.${n} is set to ${v}")
+      configVal_${t}_${n} = machine.succeed(
+          "${pkgs.libxml2}/bin/xmllint "
+          "--xpath 'string(/configuration/${t}/${n})' ${configPath}"
+      )
+      print("${t}.${n} = {}".format(configVal_${t}_${n}))
+      assert "${v}" ${if not then "not" else ""} in configVal_${t}_${n}
+    '';
   # Removes duplication a bit to define this function for the IDs to delete -
   # we check whether they were added after our script ran, and before the
   # systemd unit's bash script ran, and afterwards - whether the systemd unit
   # worked.
-  checkSettingsToDelete = {
-    not
-  }: lib.pipe IDsToDelete [
-    (lib.mapAttrsToList (t: id:
-      checkSettingWithId {
-        inherit t id;
-        inherit not;
-      }
-    ))
-    lib.concatStrings
-  ];
+  checkSettingsToDelete =
+    {
+      not,
+    }:
+    lib.pipe IDsToDelete [
+      (lib.mapAttrsToList (
+        t: id:
+        checkSettingWithId {
+          inherit t id;
+          inherit not;
+        }
+      ))
+      lib.concatStrings
+    ];
   # These IDs are added to syncthing using the API, similarly to how the
   # generated systemd unit's bash script does it. Only we add it and expect the
   # systemd unit bash script to remove them when executed.
@@ -132,13 +141,14 @@ let
             --retry 1000 --retry-delay 1 --retry-all-errors \
             "$@"
     }
-    curl -d ${lib.escapeShellArg (builtins.toJSON { deviceID = IDsToDelete.device;})} \
+    curl -d ${lib.escapeShellArg (builtins.toJSON { deviceID = IDsToDelete.device; })} \
         -X POST 127.0.0.1:8384/rest/config/devices
-    curl -d ${lib.escapeShellArg (builtins.toJSON { id = IDsToDelete.folder;})} \
+    curl -d ${lib.escapeShellArg (builtins.toJSON { id = IDsToDelete.folder; })} \
         -X POST 127.0.0.1:8384/rest/config/folders
   '';
-in {
-  name = "syncthing-init";
+in
+{
+  name = "syncthing-many-devices";
   meta.maintainers = with lib.maintainers; [ doronbehar ];
 
   nodes.machine = {
@@ -149,55 +159,65 @@ in {
       settings = settingsWithoutId // settingsWithId;
     };
   };
-  testScript = ''
-    machine.wait_for_unit("syncthing-init.service")
-  '' + (lib.pipe settingsWithId [
-    # Check that folders and devices were added properly and that all IDs exist
-    (lib.mapAttrsRecursive (path: id:
-      checkSettingWithId {
-        # plural -> solitary
-        t = (lib.removeSuffix "s" (builtins.elemAt path 0));
-        inherit id;
-      }
-    ))
-    # Get all the values we applied the above function upon
-    (lib.collect builtins.isString)
-    lib.concatStrings
-  ]) + (lib.pipe settingsWithoutId [
-    # Check that all other syncthing.settings were added properly with correct
-    # values
-    (lib.mapAttrsRecursive (path: value:
-      checkSettingWithoutId {
-        t = (builtins.elemAt path 0);
-        n = (builtins.elemAt path 1);
-        v = (builtins.toString value);
-      }
-    ))
-    # Get all the values we applied the above function upon
-    (lib.collect builtins.isString)
-    lib.concatStrings
-  ]) + ''
-    # Run the script on the machine
-    machine.succeed("${addDeviceToDeleteScript}")
-  '' + (checkSettingsToDelete {
-    not = false;
-  }) + ''
-    # Useful for debugging later
-    machine.copy_from_vm("${configPath}", "before")
+  testScript =
+    ''
+      machine.wait_for_unit("syncthing-init.service")
+    ''
+    + (lib.pipe settingsWithId [
+      # Check that folders and devices were added properly and that all IDs exist
+      (lib.mapAttrsRecursive (
+        path: id:
+        checkSettingWithId {
+          # plural -> solitary
+          t = (lib.removeSuffix "s" (builtins.elemAt path 0));
+          inherit id;
+        }
+      ))
+      # Get all the values we applied the above function upon
+      (lib.collect builtins.isString)
+      lib.concatStrings
+    ])
+    + (lib.pipe settingsWithoutId [
+      # Check that all other syncthing.settings were added properly with correct
+      # values
+      (lib.mapAttrsRecursive (
+        path: value:
+        checkSettingWithoutId {
+          t = (builtins.elemAt path 0);
+          n = (builtins.elemAt path 1);
+          v = (builtins.toString value);
+        }
+      ))
+      # Get all the values we applied the above function upon
+      (lib.collect builtins.isString)
+      lib.concatStrings
+    ])
+    + ''
+      # Run the script on the machine
+      machine.succeed("${addDeviceToDeleteScript}")
+    ''
+    + (checkSettingsToDelete {
+      not = false;
+    })
+    + ''
+      # Useful for debugging later
+      machine.copy_from_vm("${configPath}", "before")
 
-    machine.systemctl("restart syncthing-init.service")
-    machine.wait_for_unit("syncthing-init.service")
-  '' + (checkSettingsToDelete {
-    not = true;
-  }) + ''
-    # Useful for debugging later
-    machine.copy_from_vm("${configPath}", "after")
+      machine.systemctl("restart syncthing-init.service")
+      machine.wait_for_unit("syncthing-init.service")
+    ''
+    + (checkSettingsToDelete {
+      not = true;
+    })
+    + ''
+      # Useful for debugging later
+      machine.copy_from_vm("${configPath}", "after")
 
-    # Copy the systemd unit's bash script, to inspect it for debugging.
-    mergeScript = machine.succeed(
-        "systemctl cat syncthing-init.service | "
-        "${pkgs.initool}/bin/initool g - Service ExecStart --value-only"
-    ).strip() # strip from new lines
-    machine.copy_from_vm(mergeScript, "")
-  '';
-})
+      # Copy the systemd unit's bash script, to inspect it for debugging.
+      mergeScript = machine.succeed(
+          "systemctl cat syncthing-init.service | "
+          "${pkgs.initool}/bin/initool g - Service ExecStart --value-only"
+      ).strip() # strip from new lines
+      machine.copy_from_vm(mergeScript, "")
+    '';
+}

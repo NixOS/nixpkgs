@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -17,17 +18,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyrogram";
     repo = "tgcrypto";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-u+mXzkmM79NBi4oHnb32RbN9WPnba/cm1q2Ko0uNEZg=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "tgcrypto" ];
 

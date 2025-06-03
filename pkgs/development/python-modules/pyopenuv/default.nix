@@ -1,15 +1,16 @@
-{ lib
-, aiohttp
-, aresponses
-, backoff
-, buildPythonPackage
-, certifi
-, fetchFromGitHub
-, poetry-core
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  backoff,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -22,13 +23,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "pyopenuv";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-r+StbiU77/1dz41tCseleIWjiIvuvRveVgPNr3n4CEY=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -50,9 +49,7 @@ buildPythonPackage rec {
     "examples/"
   ];
 
-  pythonImportsCheck = [
-    "pyopenuv"
-  ];
+  pythonImportsCheck = [ "pyopenuv" ];
 
   meta = with lib; {
     description = "Python API to retrieve data from openuv.io";

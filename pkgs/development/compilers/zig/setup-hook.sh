@@ -1,5 +1,6 @@
-# shellcheck shell=bash disable=SC2154,SC2086
+# shellcheck shell=bash
 
+# shellcheck disable=SC2034
 readonly zigDefaultFlagsArray=(@zig_default_flags@)
 
 function zigSetGlobalCacheDir {
@@ -10,13 +11,12 @@ function zigSetGlobalCacheDir {
 function zigBuildPhase {
     runHook preBuild
 
-    local flagsArray=(
-        "${zigDefaultFlagsArray[@]}"
-        $zigBuildFlags "${zigBuildFlagsArray[@]}"
-    )
+    local flagsArray=()
+    concatTo flagsArray zigDefaultFlagsArray \
+        zigBuildFlags zigBuildFlagsArray
 
     echoCmd 'zig build flags' "${flagsArray[@]}"
-    zig build "${flagsArray[@]}"
+    TERM=dumb zig build "${flagsArray[@]}" --verbose
 
     runHook postBuild
 }
@@ -24,13 +24,12 @@ function zigBuildPhase {
 function zigCheckPhase {
     runHook preCheck
 
-    local flagsArray=(
-        "${zigDefaultFlagsArray[@]}"
-        $zigCheckFlags "${zigCheckFlagsArray[@]}"
-    )
+    local flagsArray=()
+    concatTo flagsArray zigDefaultFlagsArray \
+        zigCheckFlags zigCheckFlagsArray
 
     echoCmd 'zig check flags' "${flagsArray[@]}"
-    zig build test "${flagsArray[@]}"
+    TERM=dumb zig build test "${flagsArray[@]}" --verbose
 
     runHook postCheck
 }
@@ -38,11 +37,10 @@ function zigCheckPhase {
 function zigInstallPhase {
     runHook preInstall
 
-    local flagsArray=(
-        "${zigDefaultFlagsArray[@]}"
-        $zigBuildFlags "${zigBuildFlagsArray[@]}"
-        $zigInstallFlags "${zigInstallFlagsArray[@]}"
-    )
+    local flagsArray=()
+    concatTo flagsArray zigDefaultFlagsArray \
+        zigBuildFlags zigBuildFlagsArray \
+        zigInstallFlags zigInstallFlagsArray
 
     if [ -z "${dontAddPrefix-}" ]; then
         # Zig does not recognize `--prefix=/dir/`, only `--prefix /dir/`
@@ -50,11 +48,12 @@ function zigInstallPhase {
     fi
 
     echoCmd 'zig install flags' "${flagsArray[@]}"
-    zig build install "${flagsArray[@]}"
+    TERM=dumb zig build install "${flagsArray[@]}" --verbose
 
     runHook postInstall
 }
 
+# shellcheck disable=SC2154
 addEnvHooks "$targetOffset" zigSetGlobalCacheDir
 
 if [ -z "${dontUseZigBuild-}" ] && [ -z "${buildPhase-}" ]; then

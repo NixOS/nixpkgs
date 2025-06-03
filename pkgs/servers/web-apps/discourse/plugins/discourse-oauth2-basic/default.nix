@@ -1,4 +1,8 @@
-{ lib, mkDiscoursePlugin, fetchFromGitHub }:
+{
+  lib,
+  mkDiscoursePlugin,
+  fetchFromGitHub,
+}:
 
 mkDiscoursePlugin rec {
   name = "discourse-oauth2-basic";
@@ -13,6 +17,6 @@ mkDiscoursePlugin rec {
     homepage = "https://github.com/discourse/${name}";
     maintainers = with maintainers; [ ehmry ];
     license = licenses.mit;
-    description = "A basic OAuth2 plugin for use with Discourse";
+    description = "Basic OAuth2 plugin for use with Discourse";
   };
 }

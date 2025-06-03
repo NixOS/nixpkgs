@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, pbr
-, setuptools
+  # build-system
+  pbr,
+  setuptools,
 
-# dependencies
-, testtools
+  # dependencies
+  testtools,
 
-# tests
-, python
+  # tests
+  python,
 }:
 
 buildPythonPackage rec {
@@ -48,9 +49,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A pyunit extension for dependency injection";
+    description = "Pyunit extension for dependency injection";
     homepage = "https://github.com/testing-cabal/testscenarios";
     license = licenses.asl20;
   };
-
 }

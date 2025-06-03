@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, buildDunePackage }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+}:
 
 buildDunePackage rec {
   pname = "mparser";
@@ -13,7 +17,7 @@ buildDunePackage rec {
   };
 
   meta = {
-    description = "A simple monadic parser combinator OCaml library";
+    description = "Simple monadic parser combinator OCaml library";
     license = lib.licenses.lgpl21Plus;
     homepage = "https://github.com/murmour/mparser";
     maintainers = [ lib.maintainers.vbgl ];

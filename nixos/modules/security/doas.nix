@@ -1,6 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.security.doas;
 
@@ -10,38 +13,43 @@ let
 
   mkGrpString = group: ":${toString group}";
 
-  mkOpts = rule: concatStringsSep " " [
-    (optionalString rule.noPass "nopass")
-    (optionalString rule.noLog "nolog")
-    (optionalString rule.persist "persist")
-    (optionalString rule.keepEnv "keepenv")
-    "setenv { SSH_AUTH_SOCK TERMINFO TERMINFO_DIRS ${concatStringsSep " " rule.setEnv} }"
-  ];
+  mkOpts =
+    rule:
+    lib.concatStringsSep " " [
+      (lib.optionalString rule.noPass "nopass")
+      (lib.optionalString rule.noLog "nolog")
+      (lib.optionalString rule.persist "persist")
+      (lib.optionalString rule.keepEnv "keepenv")
+      "setenv { SSH_AUTH_SOCK TERMINFO TERMINFO_DIRS ${lib.concatStringsSep " " rule.setEnv} }"
+    ];
 
-  mkArgs = rule:
-    if (rule.args == null) then ""
-    else if (length rule.args == 0) then "args"
-    else "args ${concatStringsSep " " rule.args}";
+  mkArgs =
+    rule:
+    if (rule.args == null) then
+      ""
+    else if (lib.length rule.args == 0) then
+      "args"
+    else
+      "args ${lib.concatStringsSep " " rule.args}";
 
-  mkRule = rule:
+  mkRule =
+    rule:
     let
       opts = mkOpts rule;
 
-      as = optionalString (rule.runAs != null) "as ${rule.runAs}";
+      as = lib.optionalString (rule.runAs != null) "as ${rule.runAs}";
 
-      cmd = optionalString (rule.cmd != null) "cmd ${rule.cmd}";
+      cmd = lib.optionalString (rule.cmd != null) "cmd ${rule.cmd}";
 
       args = mkArgs rule;
     in
-    optionals (length cfg.extraRules > 0) [
-      (
-        optionalString (length rule.users > 0)
-          (map (usr: "permit ${opts} ${mkUsrString usr} ${as} ${cmd} ${args}") rule.users)
-      )
-      (
-        optionalString (length rule.groups > 0)
-          (map (grp: "permit ${opts} ${mkGrpString grp} ${as} ${cmd} ${args}") rule.groups)
-      )
+    lib.optionals (lib.length cfg.extraRules > 0) [
+      (lib.optionalString (lib.length rule.users > 0) (
+        map (usr: "permit ${opts} ${mkUsrString usr} ${as} ${cmd} ${args}") rule.users
+      ))
+      (lib.optionalString (lib.length rule.groups > 0) (
+        map (grp: "permit ${opts} ${mkGrpString grp} ${as} ${cmd} ${args}") rule.groups
+      ))
     ];
 in
 {
@@ -50,27 +58,27 @@ in
 
   options.security.doas = {
 
-    enable = mkOption {
-      type = with types; bool;
+    enable = lib.mkOption {
+      type = with lib.types; bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable the {command}`doas` command, which allows
         non-root users to execute commands as root.
       '';
     };
 
-    wheelNeedsPassword = mkOption {
-      type = with types; bool;
+    wheelNeedsPassword = lib.mkOption {
+      type = with lib.types; bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether users of the `wheel` group must provide a password to
         run commands as super user via {command}`doas`.
       '';
     };
 
-    extraRules = mkOption {
-      default = [];
-      description = lib.mdDoc ''
+    extraRules = lib.mkOption {
+      default = [ ];
+      description = ''
         Define specific rules to be set in the
         {file}`/etc/doas.conf` file. More specific rules should
         come after more general ones in order to yield the expected behavior.
@@ -79,7 +87,7 @@ in
         this option cannot be used to override the behaviour allowing
         passwordless operation for root.
       '';
-      example = literalExpression ''
+      example = lib.literalExpression ''
         [
           # Allow execution of any command by any user in group doas, requiring
           # a password and keeping any previously-defined environment variables.
@@ -108,42 +116,43 @@ in
             setEnv = [ "-SSH_AUTH_SOCK" "ALPHA=1" "BETA" ]; }
         ]
       '';
-      type = with types; listOf (
-        submodule {
+      type =
+        with lib.types;
+        listOf (submodule {
           options = {
 
-            noPass = mkOption {
+            noPass = lib.mkOption {
               type = with types; bool;
               default = false;
-              description = lib.mdDoc ''
+              description = ''
                 If `true`, the user is not required to enter a
                 password.
               '';
             };
 
-            noLog = mkOption {
+            noLog = lib.mkOption {
               type = with types; bool;
               default = false;
-              description = lib.mdDoc ''
+              description = ''
                 If `true`, successful executions will not be logged
                 to
                 {manpage}`syslogd(8)`.
               '';
             };
 
-            persist = mkOption {
+            persist = lib.mkOption {
               type = with types; bool;
               default = false;
-              description = lib.mdDoc ''
+              description = ''
                 If `true`, do not ask for a password again for some
                 time after the user successfully authenticates.
               '';
             };
 
-            keepEnv = mkOption {
+            keepEnv = lib.mkOption {
               type = with types; bool;
               default = false;
-              description = lib.mdDoc ''
+              description = ''
                 If `true`, environment variables other than those
                 listed in
                 {manpage}`doas(1)`
@@ -151,10 +160,10 @@ in
               '';
             };
 
-            setEnv = mkOption {
+            setEnv = lib.mkOption {
               type = with types; listOf str;
-              default = [];
-              description = lib.mdDoc ''
+              default = [ ];
+              description = ''
                 Keep or set the specified variables. Variables may also be
                 removed with a leading '-' or set using
                 `variable=value`. If the first character of
@@ -170,22 +179,22 @@ in
               '';
             };
 
-            users = mkOption {
+            users = lib.mkOption {
               type = with types; listOf (either str int);
-              default = [];
-              description = lib.mdDoc "The usernames / UIDs this rule should apply for.";
+              default = [ ];
+              description = "The usernames / UIDs this rule should apply for.";
             };
 
-            groups = mkOption {
+            groups = lib.mkOption {
               type = with types; listOf (either str int);
-              default = [];
-              description = lib.mdDoc "The groups / GIDs this rule should apply for.";
+              default = [ ];
+              description = "The groups / GIDs this rule should apply for.";
             };
 
-            runAs = mkOption {
+            runAs = lib.mkOption {
               type = with types; nullOr str;
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 Which user or group the specified command is allowed to run as.
                 When set to `null` (the default), all users are
                 allowed.
@@ -196,10 +205,10 @@ in
               '';
             };
 
-            cmd = mkOption {
+            cmd = lib.mkOption {
               type = with types; nullOr str;
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 The command the user is allowed to run. When set to
                 `null` (the default), all commands are allowed.
 
@@ -209,23 +218,22 @@ in
               '';
             };
 
-            args = mkOption {
+            args = lib.mkOption {
               type = with types; nullOr (listOf str);
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 Arguments that must be provided to the command. When set to
                 `[]`, the command must be run without any arguments.
               '';
             };
           };
-        }
-      );
+        });
     };
 
-    extraConfig = mkOption {
-      type = with types; lines;
+    extraConfig = lib.mkOption {
+      type = with lib.types; lines;
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         Extra configuration text appended to {file}`doas.conf`. Be aware that
         this option cannot be used to override the behaviour allowing
         passwordless operation for root.
@@ -233,24 +241,23 @@ in
     };
   };
 
-
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    security.doas.extraRules = mkOrder 600 [
+    security.doas.extraRules = lib.mkOrder 600 [
       {
         groups = [ "wheel" ];
         noPass = !cfg.wheelNeedsPassword;
       }
     ];
 
-    security.wrappers.doas =
-      { setuid = true;
-        owner = "root";
-        group = "root";
-        source = "${doas}/bin/doas";
-      };
+    security.wrappers.doas = {
+      setuid = true;
+      owner = "root";
+      group = "root";
+      source = "${doas}/bin/doas";
+    };
 
     environment.systemPackages = [
       doas
@@ -262,31 +269,32 @@ in
     };
 
     environment.etc."doas.conf" = {
-      source = pkgs.runCommand "doas-conf"
-        {
-          src = pkgs.writeText "doas-conf-in" ''
-            # To modify this file, set the NixOS options
-            # `security.doas.extraRules` or `security.doas.extraConfig`. To
-            # completely replace the contents of this file, use
-            # `environment.etc."doas.conf"`.
+      source =
+        pkgs.runCommand "doas-conf"
+          {
+            src = pkgs.writeText "doas-conf-in" ''
+              # To modify this file, set the NixOS options
+              # `security.doas.extraRules` or `security.doas.extraConfig`. To
+              # completely replace the contents of this file, use
+              # `environment.etc."doas.conf"`.
 
-            # extraRules
-            ${concatStringsSep "\n" (lists.flatten (map mkRule cfg.extraRules))}
+              # extraRules
+              ${lib.concatStringsSep "\n" (lib.lists.flatten (map mkRule cfg.extraRules))}
 
-            # extraConfig
-            ${cfg.extraConfig}
+              # extraConfig
+              ${cfg.extraConfig}
 
-            # "root" is allowed to do anything.
-            permit nopass keepenv root
-          '';
-          preferLocalBuild = true;
-        }
-        # Make sure that the doas.conf file is syntactically valid.
-        "${pkgs.buildPackages.doas}/bin/doas -C $src && cp $src $out";
+              # "root" is allowed to do anything.
+              permit nopass keepenv root
+            '';
+            preferLocalBuild = true;
+          }
+          # Make sure that the doas.conf file is syntactically valid.
+          "${pkgs.buildPackages.doas}/bin/doas -C $src && cp $src $out";
       mode = "0440";
     };
 
   };
 
-  meta.maintainers = with maintainers; [ cole-h ];
+  meta.maintainers = with lib.maintainers; [ cole-h ];
 }

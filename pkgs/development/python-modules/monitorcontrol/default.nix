@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, pyudev
-, pytestCheckHook
-, voluptuous
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  pyudev,
+  pytestCheckHook,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
@@ -18,29 +19,24 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "newAM";
     repo = "monitorcontrol";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-fu0Lm7Tcw7TCCBDXTTY20JBAM7oeesyeHQFFILeZxX0=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    pyudev
-  ];
+  propagatedBuildInputs = [ pyudev ];
 
   nativeCheckInputs = [
     pytestCheckHook
     voluptuous
   ];
 
-  pythonImportsCheck = [
-    pname
-  ];
+  pythonImportsCheck = [ pname ];
 
   meta = with lib; {
     description = "Python monitor controls using DDC-CI";
+    mainProgram = "monitorcontrol";
     homepage = "https://github.com/newAM/monitorcontrol";
     changelog = "https://github.com/newAM/monitorcontrol/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

@@ -1,9 +1,17 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, fonttools
-, lxml, fs # for fonttools extras
-, setuptools-scm
-, pytestCheckHook, pytest-cov, pytest-xdist
-, runAllTests ? false, psautohint # for passthru.tests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  fonttools,
+  lxml,
+  fs, # for fonttools extras
+  setuptools-scm,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pytest-xdist,
+  runAllTests ? false,
+  psautohint, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -15,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "adobe-type-tools";
-    repo = pname;
+    repo = "psautohint";
     rev = "v${version}";
     sha256 = "125nx7accvbk626qlfar90va1995kp9qfrz6a978q4kv2kk37xai";
     fetchSubmodules = true; # data dir for tests
@@ -29,11 +37,15 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ fonttools lxml fs ];
+  propagatedBuildInputs = [
+    fonttools
+    lxml
+    fs
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
     pytest-xdist
   ];
   disabledTests = lib.optionals (!runAllTests) [

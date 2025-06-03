@@ -1,19 +1,20 @@
-{ stdenv
-, fetchurl
-, lib
-, extra-cmake-modules
-, kdoctools
-, wrapQtAppsHook
-, baloo
-, karchive
-, kconfig
-, kcrash
-, kfilemetadata
-, kinit
-, kirigami2
-, knewstuff
-, okular
-, plasma-framework
+{
+  stdenv,
+  fetchurl,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  wrapQtAppsHook,
+  baloo,
+  karchive,
+  kconfig,
+  kcrash,
+  kfilemetadata,
+  kinit,
+  kirigami2,
+  knewstuff,
+  okular,
+  plasma-framework,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -52,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   pathsToLink = [ "/etc/xdg/peruse.knsrc" ];
 
   meta = with lib; {
-    description = "A comic book reader";
+    description = "Comic book reader";
     homepage = "https://peruse.kde.org";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ peterhoeg ];

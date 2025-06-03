@@ -1,62 +1,60 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, SDL2
-, SDL2_mixer
-, SDL2_image
-, fluidsynth
-, soundfont-fluid
-, portmidi
-, dumb
-, libvorbis
-, libmad
-, libGLU
-, libzip
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  SDL2,
+  SDL2_mixer,
+  SDL2_image,
+  fluidsynth,
+  portmidi,
+  dumb,
+  libvorbis,
+  libmad,
+  libGLU,
+  libzip,
+  alsa-lib,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dsda-doom";
-  version = "0.27.5";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "kraflab";
     repo = "dsda-doom";
     rev = "v${version}";
-    hash = "sha256-+rvRj6RbJ/RaKmlDZdB2oBm/U6SuHNxye8TdpEOZwQw=";
+    hash = "sha256-mcg3GAQ90Qg7d1+/ci/XlTTF2q0tB6j+pp+Fb1Mpcao=";
   };
 
   sourceRoot = "${src.name}/prboom2";
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    SDL2
-    SDL2_mixer
-    SDL2_image
-    fluidsynth
-    portmidi
+    alsa-lib
     dumb
-    libvorbis
-    libmad
+    fluidsynth
     libGLU
+    libmad
+    libvorbis
     libzip
+    portmidi
+    SDL2
+    SDL2_image
+    SDL2_mixer
   ];
 
-  # Fixes impure path to soundfont
-  prePatch = ''
-    substituteInPlace src/m_misc.c --replace \
-      "/usr/share/sounds/sf3/default-GM.sf3" \
-      "${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2"
-  '';
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kraflab/dsda-doom";
-    description = "An advanced Doom source port with a focus on speedrunning, successor of PrBoom+";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.Gliczy ];
+    changelog = "https://github.com/kraflab/dsda-doom/releases/tag/v${version}";
+    description = "Advanced Doom source port with a focus on speedrunning, successor of PrBoom+";
+    mainProgram = "dsda-doom";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ Gliczy ];
   };
 }

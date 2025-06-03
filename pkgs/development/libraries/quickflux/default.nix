@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, qtbase
-, qtquickcontrols2
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  qtquickcontrols2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -55,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A Flux implementation for QML";
+    description = "Flux implementation for QML";
     homepage = "https://github.com/benlau/quickflux";
     license = licenses.asl20;
     maintainers = with maintainers; [ OPNA2608 ];

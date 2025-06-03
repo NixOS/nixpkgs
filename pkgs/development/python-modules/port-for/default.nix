@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -16,20 +17,19 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kmike";
     repo = "port-for";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/45TQ2crmTupRgL9hgZGw5IvFKywezSIHqHFbeAkMoo=";
   };
 
   nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "port_for" ];
 
   meta = with lib; {
     homepage = "https://github.com/kmike/port-for";
     description = "Command-line utility and library that helps with TCP port managment";
+    mainProgram = "port-for";
     changelog = "https://github.com/kmike/port-for/blob/v${version}/CHANGES.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];

@@ -1,16 +1,15 @@
-{ stdenv
-, fetchFromGitHub
-, fetchpatch
-, qmake
-, wrapQtAppsHook
-, qtbase
-, pkg-config
-, lua
-, flam3
-, libxml2
-, libpng
-, libjpeg
-, lib
+{
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  libsForQt5,
+  pkg-config,
+  lua,
+  flam3,
+  libxml2,
+  libpng,
+  libjpeg,
+  lib,
 }:
 
 stdenv.mkDerivation rec {
@@ -42,17 +41,21 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace qosmic.pro \
       --replace "/share" "/Applications/qosmic.app/Contents/Resources" \
       --replace "/qosmic/scripts" "/scripts" \
       --replace "install_icons install_desktop" ""
   '';
 
-  nativeBuildInputs = [ qmake wrapQtAppsHook pkg-config ];
+  nativeBuildInputs = [
+    libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
+    pkg-config
+  ];
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     lua
     flam3
     libxml2
@@ -65,13 +68,14 @@ stdenv.mkDerivation rec {
     "CONFIG+=link_pkgconfig"
   ];
 
-  preInstall = lib.optionalString stdenv.isDarwin ''
+  preInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv qosmic.app $out/Applications
   '';
 
   meta = with lib; {
-    description = "A cosmic recursive flame fractal editor";
+    description = "Cosmic recursive flame fractal editor";
+    mainProgram = "qosmic";
     homepage = "https://github.com/bitsed/qosmic";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.raboof ];
