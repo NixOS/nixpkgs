@@ -295,10 +295,10 @@
   },
   "datadog": {
     "pname": "datadog",
-    "version": "0.1.1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/datadog-0.1.1-py3-none-any.whl",
-    "hash": "sha256-mjj9XW0BZG8pnue19o6CrXCIicfQvXLgtraxPlRV6Tc=",
-    "description": "Microsoft Azure Command-Line Tools MicrosoftDatadogClient Extension"
+    "version": "1.0.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/datadog-1.0.0-py3-none-any.whl",
+    "hash": "sha256-VCcoKbYC+F8EbEMRzCMBX3a6LvdkkYKfM5OuC7WhUQI=",
+    "description": "Microsoft Azure Command-Line Tools Datadog Extension"
   },
   "datafactory": {
     "pname": "datafactory",
