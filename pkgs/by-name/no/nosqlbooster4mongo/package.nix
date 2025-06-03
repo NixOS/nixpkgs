@@ -8,7 +8,7 @@
 }:
 let
   pname = "nosqlbooster4mongo";
-  major_version = "10"
+  major_version = "10";
   version = "${major_version}.0.3";
   src = fetchurl {
     url = "https://s3.nosqlbooster.com/download/releasesv${major_version}/nosqlbooster4mongo-${version}.AppImage";
