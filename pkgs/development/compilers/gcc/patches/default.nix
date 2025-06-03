@@ -308,7 +308,11 @@ in
 ## gcc 11.0 and older ##############################################################################
 
 # openjdk build fails without this on -march=opteron; is upstream in gcc12
-++ optionals (is11) [ ./11/gcc-issue-103910.patch ]
+++ optional is11 (fetchpatch {
+  name = "darwin-aarch64-self-host-driver.patch";
+  url = "https://github.com/gcc-mirror/gcc/commit/d243f4009d8071b734df16cd70f4c5d09a373769.patch";
+  sha256 = "sha256-H97GZs2wwzfFGiFOgds/5KaweC+luCsWX3hRFf7+Sm4=";
+})
 
 ## gcc 10.0 and older ##############################################################################
 
