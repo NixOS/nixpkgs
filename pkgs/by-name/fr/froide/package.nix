@@ -114,7 +114,7 @@ python.pkgs.buildPythonApplication rec {
   postInstall = ''
     cp -r build manage.py $out/${python.sitePackages}/froide/
     makeWrapper $out/${python.sitePackages}/froide/manage.py $out/bin/froide \
-      --prefix PYTHONPATH : "$PYTHONPATH" \
+      --prefix PYTHONPATH : "${python3Packages.makePythonPath dependencies}" \
       --set GDAL_LIBRARY_PATH "${gdal}/lib/libgdal.so" \
       --set GEOS_LIBRARY_PATH "${geos}/lib/libgeos_c.so"
   '';
