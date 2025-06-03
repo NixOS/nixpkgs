@@ -10,14 +10,17 @@
   rav1e,
 }:
 
+let
+  # this version may need to be updated along with package version
+  cargoVersion = "0.80.0";
+in
 rustPlatform.buildRustPackage rec {
   pname = "cargo-c";
   version = "0.10.2";
 
   src = fetchCrate {
     inherit pname;
-    # this version may need to be updated along with package version
-    version = "${version}+cargo-0.80.0";
+    version = "${version}+cargo-${cargoVersion}";
     hash = "sha256-ltxd4n3oo8ZF/G/zmR4FSVtNOkxwCjDv6PdxkmWxZ+8=";
   };
 
@@ -47,8 +50,11 @@ rustPlatform.buildRustPackage rec {
     runHook postInstallCheck
   '';
 
-  passthru.tests = {
-    inherit rav1e;
+  passthru = {
+    tests = {
+      inherit rav1e;
+    };
+    updateScript.command = [ ./update.sh ];
   };
 
   meta = {
