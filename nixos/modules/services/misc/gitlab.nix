@@ -1540,7 +1540,7 @@ in
             ''}
             ${lib.optionalString (cfg.secrets.activeRecordDeterministicKeyFile != null) ''
               ardeterministic="$(<'${cfg.secrets.activeRecordDeterministicKeyFile}')"
-              export ardeterminstic
+              export ardeterministic
             ''}
             ${lib.optionalString (cfg.secrets.activeRecordSaltFile != null) ''
               arsalt="$(<'${cfg.secrets.activeRecordSaltFile}')"
