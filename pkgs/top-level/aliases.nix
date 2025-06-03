@@ -331,6 +331,7 @@ mapAliases {
   badtouch = authoscope; # Project was renamed, added 20210626
   badwolf = throw "'badwolf' has been removed due to being unmaintained"; # Added 2025-04-15
   baget = throw "'baget' has been removed due to being unmaintained";
+  base16-builder = throw "'base16-builder' has been removed due to being unmaintained"; # Added 2025-06-03
   bashInteractive_5 = throw "'bashInteractive_5' has been renamed to/replaced by 'bashInteractive'"; # Converted to throw 2024-10-17
   bash_5 = throw "'bash_5' has been renamed to/replaced by 'bash'"; # Converted to throw 2024-10-17
   bareboxTools = throw "bareboxTools has been removed due to lack of interest in maintaining it in nixpkgs"; # Added 2025-04-19
@@ -1050,6 +1051,7 @@ mapAliases {
   licensor = throw "'licensor' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   lightdm_gtk_greeter = lightdm-gtk-greeter; # Added 2022-08-01
   lightstep-tracer-cpp = throw "lightstep-tracer-cpp is deprecated since 2022-08-29; the upstream recommends migration to opentelemetry projects.";
+  ligo = throw "ligo has been removed from nixpkgs for lack of maintainance"; # Added 2025-06-03
   lima-bin = lib.warnOnInstantiate "lima-bin has been replaced by lima" lima; # Added 2025-05-13
   lime3ds = throw "lime3ds is deprecated, use 'azahar' instead."; # Added 2025-03-22
   limesctl = throw "limesctl has been removed because it is insignificant."; # Added 2024-11-25
@@ -1888,6 +1890,7 @@ mapAliases {
   tepl = libgedit-tepl; # Added 2024-04-29
   termplay = throw "'termplay' has been removed due to lack of maintenance upstream"; # Added 2025-01-25
   testVersion = testers.testVersion; # Added 2022-04-20
+  tezos-rust-libs = ligo; # Added 2025-06-03
   tfplugindocs = terraform-plugin-docs; # Added 2023-11-01
   thiefmd = throw "'thiefmd' has been removed due to lack of maintenance upstream and incompatible with newer Pandoc. Please use 'apostrophe' or 'folio' instead"; # Added 2025-02-20
   thefuck = throw "'thefuck' has been removed due to lack of maintenance upstream and incompatible with python 3.12+. Consider using 'pay-respects' instead"; # Added 2025-05-30

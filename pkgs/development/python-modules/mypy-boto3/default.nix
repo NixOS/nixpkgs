@@ -142,8 +142,8 @@ rec {
       "sha256-ksKIbASQfKzf67Pkdv5HUipoep/8Qv7jVcjC4KCqAoI=";
 
   mypy-boto3-athena =
-    buildMypyBoto3Package "athena" "1.38.13"
-      "sha256-1Fonc55fVM8ksqCTBwXVHeqhypgsYegoW8PEEPqcTF4=";
+    buildMypyBoto3Package "athena" "1.38.28"
+      "sha256-XX50pZpMd4N0hIKQ08RiZlgwlUSVkS7CJs4nCkpOrk0=";
 
   mypy-boto3-auditmanager =
     buildMypyBoto3Package "auditmanager" "1.38.22"
@@ -158,8 +158,8 @@ rec {
       "sha256-g+40VJVE4PQG5k1wjIFcEio5kyLpdaQzfSFp/ABEXh8=";
 
   mypy-boto3-backup =
-    buildMypyBoto3Package "backup" "1.38.0"
-      "sha256-XYfzsfQvrnPdBaA+C8t2LGaE9Y93DRUIsWVFylNz8VI=";
+    buildMypyBoto3Package "backup" "1.38.28"
+      "sha256-8si5OnwscqeipuFC7d2KA2CerV+vjFLvQ0YzN7JbG14=";
 
   mypy-boto3-backup-gateway =
     buildMypyBoto3Package "backup-gateway" "1.38.0"
@@ -330,8 +330,8 @@ rec {
       "sha256-VPJP8laiJsNC/uxn/K2jaH2jrQWfltP46xLJEg1erx0=";
 
   mypy-boto3-compute-optimizer =
-    buildMypyBoto3Package "compute-optimizer" "1.38.0"
-      "sha256-DNpcAOVA9BvJDK/ZnCUF/iXJrQM7nxQB0YkH1DkWgQs=";
+    buildMypyBoto3Package "compute-optimizer" "1.38.28"
+      "sha256-ItKYimrEeI5dR8fF76gJ7VQ6Ws/WQNU0srmtQyHFylo=";
 
   mypy-boto3-config =
     buildMypyBoto3Package "config" "1.38.0"
@@ -462,16 +462,16 @@ rec {
       "sha256-aSZu8mxsTho4pvWWbNwlJf0IROjqjTlIUEE5DJkAje4=";
 
   mypy-boto3-ecs =
-    buildMypyBoto3Package "ecs" "1.38.18"
-      "sha256-UjzMLvaDYVIrmHDFO/TlyofiwRqGlHA+aDqWcRepHdI=";
+    buildMypyBoto3Package "ecs" "1.38.28"
+      "sha256-f/ZRV3fRPB1B7xP8lJX/jPXVuFY+gdUm4lZJlZCj55k=";
 
   mypy-boto3-efs =
     buildMypyBoto3Package "efs" "1.38.0"
       "sha256-Z2LMQFtcTNqxsoWKGg4iBFtbwnXGVVXQrRa/bZdnl40=";
 
   mypy-boto3-eks =
-    buildMypyBoto3Package "eks" "1.38.0"
-      "sha256-Z2TfCH3Prd6E9SkUXRKrHApw2uwnmSZWGxlphcI5i2U=";
+    buildMypyBoto3Package "eks" "1.38.28"
+      "sha256-eCS3kazYfOaVavz2q1gxbSnuW7bULnS4xDwB7X8aTBg=";
 
   mypy-boto3-elastic-inference =
     buildMypyBoto3Package "elastic-inference" "1.36.0"
@@ -510,8 +510,8 @@ rec {
       "sha256-+BU0uQBQmQSxGwXalJ9A95Y8RXaFy9L6Lk8Z3D6QwkM=";
 
   mypy-boto3-entityresolution =
-    buildMypyBoto3Package "entityresolution" "1.38.0"
-      "sha256-U7q6B2Bh/5J3WBB0CmUJbNBFa+d28FYTsGiabMA5Kjc=";
+    buildMypyBoto3Package "entityresolution" "1.38.28"
+      "sha256-LsEqZ6G1W/lIijYQTf5H0VyBfWWyUi26j6IwEQcQ+8k=";
 
   mypy-boto3-es =
     buildMypyBoto3Package "es" "1.38.0"
@@ -1346,8 +1346,8 @@ rec {
       "sha256-b6TgvxWdQI5TAI/OsJzmzlte1v30NdJucdedKgCb9LY=";
 
   mypy-boto3-synthetics =
-    buildMypyBoto3Package "synthetics" "1.38.25"
-      "sha256-E9+a0LjuQfyxL/b/uZpMCrvWFmX2vPS+qJNMKcc10mU=";
+    buildMypyBoto3Package "synthetics" "1.38.28"
+      "sha256-demumYyUtBHj8Gzmml5374UxOLyWVMa71rN3pq55hDc=";
 
   mypy-boto3-textract =
     buildMypyBoto3Package "textract" "1.38.0"

@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Checks Java source against a coding standard";
     mainProgram = "checkstyle";
     longDescription = ''
@@ -38,9 +38,9 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "https://checkstyle.org/";
     changelog = "https://checkstyle.org/releasenotes.html#Release_${version}";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ pSub ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ pSub ];
     platforms = jre.meta.platforms;
   };
 }
