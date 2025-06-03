@@ -96,6 +96,7 @@ buildPythonPackage rec {
   meta = {
     description = "Rust HTTP server for Python ASGI/WSGI/RSGI applications";
     homepage = "https://github.com/emmett-framework/granian";
+    changelog = "https://github.com/emmett-framework/granian/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     mainProgram = "granian";
     maintainers = with lib.maintainers; [
