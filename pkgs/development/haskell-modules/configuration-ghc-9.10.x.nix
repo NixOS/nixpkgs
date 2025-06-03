@@ -76,8 +76,8 @@ in
   extensions = doJailbreak (doDistribute self.extensions_0_1_0_2);
   fourmolu = doDistribute self.fourmolu_0_16_0_0;
   # https://github.com/digital-asset/ghc-lib/issues/600
-  ghc-lib = doDistribute (doJailbreak self.ghc-lib_9_10_2_20250515);
-  ghc-lib-parser = doDistribute (doJailbreak self.ghc-lib-parser_9_10_2_20250515);
+  ghc-lib = doDistribute self.ghc-lib_9_10_2_20250515;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_10_2_20250515;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_10_0_0;
   htree = doDistribute self.htree_0_2_0_0;
   ormolu = doDistribute self.ormolu_0_7_7_0;
@@ -96,7 +96,6 @@ in
   #
   # Jailbreaks
   #
-  base64 = doJailbreak super.base64; # base <4.20
   # 2025-04-09: base <4.20, containers <0.7, filepath <1.5, Cabal-syntax <3.11
   cabal-install-parsers =
     assert super.cabal-install-parsers.version == "0.6.1.1";
@@ -106,15 +105,8 @@ in
   haddock-library =
     assert super.haddock-library.version == "1.11.0";
     doJailbreak super.haddock-library;
-  spdx = doJailbreak super.spdx; # Cabal-syntax < 3.13
-  tasty-coverage = doJailbreak super.tasty-coverage; # base <4.20, filepath <1.5
-  tree-diff = doJailbreak super.tree-diff; # base <4.20
+  large-generics = doJailbreak super.large-generics; # base <4.20
   tree-sitter = doJailbreak super.tree-sitter; # containers <0.7, filepath <1.5
-  time-compat = doJailbreak super.time-compat; # base <4.20
-  # https://github.com/haskell-party/feed/issues/73
-  feed = doJailbreak super.feed; # base
-
-  bitvec = doJailbreak super.bitvec; # primitive <0.9
 
   hashable_1_5_0_0 = doJailbreak super.hashable_1_5_0_0; # relax bounds for QuickCheck, tasty, and tasty-quickcheck
 
