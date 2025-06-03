@@ -825,13 +825,6 @@
     "hash": "sha256-/k47qFwfZZZqBZKR5G6+t8lW8o2isVtUGwSSdltiOZI=",
     "description": "Microsoft Azure Command-Line Tools PeeringManagementClient Extension"
   },
-  "pinecone": {
-    "pname": "pinecone",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/pinecone-1.0.0b1-py3-none-any.whl",
-    "hash": "sha256-5WXKpClTweNCLz/wW/PcKLbpFOdJagp1l7FOD3Ou/WM=",
-    "description": "Microsoft Azure Command-Line Tools Pinecone Extension"
-  },
   "playwright-cli-extension": {
     "pname": "playwright-cli-extension",
     "version": "1.0.0b1",
