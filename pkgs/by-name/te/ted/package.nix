@@ -9,10 +9,11 @@
   libjpeg,
   libtiff,
   libpng,
-  gtk2,
+  gtk2-x11,
   libpaper,
   makeWrapper,
   ghostscript,
+  libXft,
 }:
 
 stdenv.mkDerivation rec {
@@ -56,6 +57,8 @@ stdenv.mkDerivation rec {
     "compile.shared"
   ];
 
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-liconv";
+
   installPhase = ''
     runHook preInstall
 
@@ -91,8 +94,9 @@ stdenv.mkDerivation rec {
     libjpeg
     libtiff
     libpng
-    gtk2
+    gtk2-x11
     libpaper
+    libXft
   ];
 
   meta = with lib; {
@@ -112,7 +116,6 @@ stdenv.mkDerivation rec {
     homepage = "https://nllgg.nl/Ted/";
     license = licenses.gpl2Only;
     platforms = platforms.all;
-    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [ obadz ];
   };
 }
