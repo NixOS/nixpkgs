@@ -4,7 +4,7 @@
   fetchurl,
   jdk21,
   stdenv,
-  _7zz
+  _7zz,
 }:
 let
   pname = "nosqlbooster4mongo";
@@ -16,31 +16,37 @@ let
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit pname version src;
 
-  extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ [
-    # Required to run DynamoDB locally
-    pkgs.xorg.libXtst
-    pkgs.libnotify
-    pkgs.gnome2.GConf
-  ];
+  extraPkgs =
+    pkgs:
+    (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs)
+    ++ [
+      # Required to run DynamoDB locally
+      pkgs.xorg.libXtst
+      pkgs.libnotify
+      pkgs.gnome2.GConf
+    ];
 
-  extraInstallCommands = let
-    appimageContents = appimageTools.extract {
-      inherit pname version src;
-    };
-  in ''
-    mkdir -p $out/share/applications $out/share/pixmaps
+  extraInstallCommands =
+    let
+      appimageContents = appimageTools.extract {
+        inherit pname version src;
+      };
+    in
+    ''
+      mkdir -p $out/share/applications $out/share/pixmaps
 
-    # Install XDG Desktop file and its icon
-    install -Dm444 ${appimageContents}/${pname}.desktop -t $out/share/applications
-    install -Dm444 ${appimageContents}/${pname}.png -t $out/share/pixmaps
+      # Install XDG Desktop file and its icon
+      install -Dm444 ${appimageContents}/${pname}.desktop -t $out/share/applications
+      install -Dm444 ${appimageContents}/${pname}.png -t $out/share/pixmaps
 
-    # Replace wrong exec statement in XDG Desktop file
-    substituteInPlace $out/share/applications/${pname}.desktop \
-        --replace 'Exec=AppRun --no-sandbox %U' 'Exec=${pname}'
-  '';
+      # Replace wrong exec statement in XDG Desktop file
+      substituteInPlace $out/share/applications/${pname}.desktop \
+          --replace 'Exec=AppRun --no-sandbox %U' 'Exec=${pname}'
+    '';
 
   meta = {
     description = "Shell-centric GUI tool for MongoDB";
