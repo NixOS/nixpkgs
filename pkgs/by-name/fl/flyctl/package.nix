@@ -9,7 +9,7 @@
 
 buildGoModule rec {
   pname = "flyctl";
-  version = "0.3.85";
+  version = "0.3.137";
 
   src = fetchFromGitHub {
     owner = "superfly";
