@@ -25,6 +25,8 @@ runCommand "nixpkgs-vet"
     env.NIXPKGS_VET_NIX_PACKAGE = nix;
   }
   ''
+    export NIX_STATE_DIR=$(mktemp -d)
+
     nixpkgs-vet --base ${filtered base} ${filtered head}
 
     touch $out

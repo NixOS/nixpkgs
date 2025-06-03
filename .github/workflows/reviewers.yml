@@ -34,7 +34,7 @@ jobs:
           sparse-checkout: ci
 
       - name: Install Nix
-        uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
+        uses: cachix/install-nix-action@17fe5fb4a23ad6cbbe47d6b3f359611ad276644c # v31
         with:
           extra_nix_config: sandbox = true
 
@@ -44,7 +44,7 @@ jobs:
       # See ./codeowners-v2.yml, reuse the same App because we need the same permissions
       # Can't use the token received from permissions above, because it can't get enough permissions
       - uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
-        if: vars.OWNER_APP_ID
+        if: github.event_name == 'pull_request_target' && vars.OWNER_APP_ID
         id: app-token
         with:
           app-id: ${{ vars.OWNER_APP_ID }}
