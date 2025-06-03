@@ -109,8 +109,9 @@ buildPythonPackage rec {
     poppler-utils
     pytest-django
     pytest-factoryboy
-    pytest-playwright
     pytestCheckHook
+  ] ++ lib.optionals (!stdenv.hostPlatform.isRiscV) [
+    pytest-playwright
   ];
 
   disabledTests = [
