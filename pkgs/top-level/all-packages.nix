@@ -16931,8 +16931,6 @@ with pkgs;
 
   yaziPlugins = recurseIntoAttrs (callPackage ../by-name/ya/yazi/plugins { });
 
-  animdl = python3Packages.callPackage ../applications/video/animdl { };
-
   dillo = callPackage ../by-name/di/dillo/package.nix {
     fltk = fltk13;
   };
