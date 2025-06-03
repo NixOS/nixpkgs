@@ -249,6 +249,7 @@
   ./programs/liboping.nix
   ./programs/light.nix
   ./programs/localsend.nix
+  ./programs/mailspring.nix
   ./programs/mdevctl.nix
   ./programs/mepo.nix
   ./programs/mininet.nix

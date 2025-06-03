@@ -20601,6 +20601,13 @@
     githubId = 337811;
     name = "Rehno Lindeque";
   };
+  relief-melone = {
+    email = "relief.melone@proton.me";
+    github = "relief-melone";
+    githubId = 6393439;
+    name = "Relief Melone";
+    keys = [ { fingerprint = "8FA81E61BCA8A9DAA03463AF29AF463035D86E25"; } ];
+  };
   relrod = {
     email = "ricky@elrod.me";
     github = "relrod";
