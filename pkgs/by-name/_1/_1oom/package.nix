@@ -9,8 +9,6 @@
   libGLU,
   libX11,
   libXext,
-  SDL,
-  SDL_mixer,
   SDL2,
   SDL2_mixer,
   readline,
@@ -36,8 +34,6 @@ stdenv.mkDerivation rec {
     libGLU
     libX11
     libXext
-    SDL
-    SDL_mixer
     SDL2
     SDL2_mixer
     readline
