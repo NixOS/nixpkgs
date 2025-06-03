@@ -568,9 +568,9 @@
   },
   "informatica": {
     "pname": "informatica",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/informatica-1.0.0b1-py3-none-any.whl",
-    "hash": "sha256-YWaukceOdMAa870erS1igycH4XbqD31dMKXdSF9IJGI=",
+    "version": "1.0.0b2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/informatica-1.0.0b2-py3-none-any.whl",
+    "hash": "sha256-TGbjP7LsW7SgdBawNYMvFe8kAAdFzbzMCcJp+s0wy0w=",
     "description": "Microsoft Azure Command-Line Tools Informatica Extension"
   },
   "init": {
