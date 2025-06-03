@@ -68,7 +68,7 @@ let
     set(CMAKE_SYSTEM_PROCESSOR i686)
     set(CMAKE_C_COMPILER clang)
     set(CMAKE_CXX_COMPILER clang++)
-    set(CLANG_FLAGS \"-nodefaultlibs -nostartfiles -lstdc++ -target i686-linux-gnu -msse2 -mfpmath=sse --sysroot=${devRootFS} -iwithsysroot/usr/include\")
+    set(CLANG_FLAGS \"-nodefaultlibs -nostartfiles -target i686-linux-gnu -msse2 -mfpmath=sse --sysroot=${devRootFS} -iwithsysroot/usr/include\")
     set(CMAKE_C_COMPILER ${pkgsCross32.buildPackages.clang}/bin/i686-unknown-linux-gnu-clang)
     set(CMAKE_CXX_COMPILER ${pkgsCross32.buildPackages.clang}/bin/i686-unknown-linux-gnu-clang++)
     set(CMAKE_C_FLAGS \"\${CMAKE_C_FLAGS} \${CLANG_FLAGS}\")
@@ -82,7 +82,7 @@ let
     set(CMAKE_SYSTEM_PROCESSOR x86_64)
     set(CMAKE_C_COMPILER clang)
     set(CMAKE_CXX_COMPILER clang++)
-    set(CLANG_FLAGS \"-nodefaultlibs -nostartfiles -lstdc++ -target x86_64-linux-gnu --sysroot=${devRootFS} -iwithsysroot/usr/include\")
+    set(CLANG_FLAGS \"-nodefaultlibs -nostartfiles -target x86_64-linux-gnu --sysroot=${devRootFS} -iwithsysroot/usr/include\")
     set(CMAKE_C_COMPILER ${pkgsCross64.buildPackages.clang}/bin/x86_64-unknown-linux-gnu-clang)
     set(CMAKE_CXX_COMPILER ${pkgsCross64.buildPackages.clang}/bin/x86_64-unknown-linux-gnu-clang++)
     set(CMAKE_C_FLAGS \"\${CMAKE_C_FLAGS} \${CLANG_FLAGS}\")
@@ -92,7 +92,7 @@ in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "fex";
   # version = "2505";
-  version = "5a6e29f6d2aadf0a3537e20ec55d89a549fd1b2b";
+  version = "97f3e1f7c2c641478c5d9a098f332331015e69f5";
 
   src = fetchFromGitHub {
     owner = "neobrain";
@@ -100,7 +100,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     rev = "${finalAttrs.version}";
     # tag = "FEX-${finalAttrs.version}";
 
-    hash = "sha256-32BzKicsasqSoCZu1vynACFIthRK0gHRXbvPHjSqtRs=";
+    hash = "sha256-7lVFBwf5vhfuFfYZw3nJLysJtUGWLaSTBP8NpfP9Jtw=";
     leaveDotGit = true;
     postFetch = ''
       cd $out
