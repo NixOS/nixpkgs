@@ -14,14 +14,14 @@
   readline,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "1oom";
   version = "1.11.6";
 
   src = fetchFromGitHub {
     owner = "1oom-fork";
     repo = "1oom";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-w67BjS5CrQviMXOeKNWGR1SzDeJHZrIpY7FDGt86CPA=";
   };
 
@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    install -d $doc/share/doc/${pname}
-    install -t $doc/share/doc/${pname} \
+    install -d $doc/share/doc/1oom
+    install -t $doc/share/doc/1oom \
       HACKING NEWS PHILOSOPHY README.md doc/*.txt
   '';
 
@@ -58,10 +58,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/1oom-fork/1oom";
-    changelog = "https://github.com/1oom-fork/1oom/releases/tag/v${version}";
+    changelog = "https://github.com/1oom-fork/1oom/releases/tag/v${finalAttrs.version}";
     description = "Master of Orion (1993) game engine recreation; a more updated fork";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ ];
   };
-}
+})
