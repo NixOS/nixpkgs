@@ -84,12 +84,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "GObject based library API for managing information about operating systems, hypervisors and the (virtual) hardware devices they can support";
     homepage = "https://libosinfo.org/";
     changelog = "https://gitlab.com/libosinfo/libosinfo/-/blob/v${version}/NEWS";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 }

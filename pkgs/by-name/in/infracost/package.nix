@@ -61,7 +61,7 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://infracost.io";
     changelog = "https://github.com/infracost/infracost/releases/tag/v${version}";
     description = "Cloud cost estimates for Terraform in your CLI and pull requests";
@@ -70,8 +70,8 @@ buildGoModule rec {
       This helps developers, DevOps et al. quickly see the cost breakdown and
       compare different deployment options upfront.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       davegallant
       jk
       kashw2
