@@ -3486,21 +3486,6 @@ with pkgs;
 
   ksmoothdock = libsForQt5.callPackage ../applications/misc/ksmoothdock { };
 
-  ligo =
-    let
-      ocaml_p = ocaml-ng.ocamlPackages_4_14.overrideScope (
-        self: super: {
-          zarith = super.zarith.override { version = "1.13"; };
-        }
-      );
-    in
-    callPackage ../development/compilers/ligo {
-      coq = coq_8_13.override {
-        customOCamlPackages = ocaml_p;
-      };
-      ocamlPackages = ocaml_p;
-    };
-
   leocad = callPackage ../applications/graphics/leocad { };
 
   libcoap = callPackage ../applications/networking/libcoap {
