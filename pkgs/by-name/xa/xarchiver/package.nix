@@ -17,6 +17,7 @@
   gzip,
   lhasa,
   wrapGAppsHook3,
+  desktopToDarwinBundle,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +36,8 @@ stdenv.mkDerivation rec {
     pkg-config
     makeWrapper
     wrapGAppsHook3
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+
   buildInputs = [
     gtk3
     libxslt
@@ -59,7 +61,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
     description = "GTK frontend to 7z,zip,rar,tar,bzip2, gzip,arj, lha, rpm and deb (open and extract only)";
     homepage = "https://github.com/ib/xarchiver";
     maintainers = [ lib.maintainers.domenkozar ];
