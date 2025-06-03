@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "miniupnpc";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "miniupnp";
     repo = "miniupnp";
     tag = "miniupnpc_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-Fjd4JPk6Uc7cPPQu9NiBv82XArd11TW+7sTL3wC9/+s=";
+    hash = "sha256-8EWchUppW4H2kEUCGBXIk1meARJj2usKKO5gFYPoW3s=";
   };
 
   sourceRoot = "${src.name}/miniupnpc";
