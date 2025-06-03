@@ -8946,6 +8946,12 @@
     githubId = 62279738;
     name = "Håkon Arvidsen";
   };
+  harryfinbow = {
+    email = "harry@finbow.dev";
+    github = "harryfinbow";
+    githubId = 64917871;
+    name = "Harry Finbow";
+  };
   HaskellHegemonie = {
     name = "HaskellHegemonie";
     email = "haskellisierer@proton.me";
