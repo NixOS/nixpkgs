@@ -8,13 +8,13 @@
 
 buildDunePackage rec {
   pname = "xenstore";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "mirage";
     repo = "ocaml-xenstore";
-    rev = "v${version}";
-    hash = "sha256-LaynsbCE/+2QfbQCOLZi8nw1rqmZtgrwAov9cSxYZw8=";
+    rev = version;
+    hash = "sha256-ghzrsWM5xYpTjY8FsD3GgRTXRWp4JXovsjKALGluAJU=";
   };
 
   propagatedBuildInputs = [ lwt ];
