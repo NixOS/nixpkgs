@@ -11,7 +11,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "mongosh";
-  version = "2.5.1";
+  version = "@mongosh/snippet-manager@3.11.0";
 
   src = fetchFromGitHub {
     owner = "mongodb-js";
