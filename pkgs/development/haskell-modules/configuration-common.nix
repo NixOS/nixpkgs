@@ -237,14 +237,8 @@ with haskellLib;
     ];
   }) super.vector;
 
-  # Too strict bounds on base
-  # https://github.com/lspitzner/butcher/issues/7#issuecomment-1681394943
-  butcher = doJailbreak super.butcher;
   # https://github.com/lspitzner/data-tree-print/issues/4
   data-tree-print = doJailbreak super.data-tree-print;
-  # … and template-haskell.
-  # https://github.com/lspitzner/czipwith/issues/5
-  czipwith = doJailbreak super.czipwith;
 
   # jacinda needs latest version of alex and happy
   jacinda = super.jacinda.override {
@@ -1248,7 +1242,6 @@ with haskellLib;
 
   # 2025-02-10: Too strict bounds on text < 2.1
   digestive-functors-blaze = doJailbreak super.digestive-functors-blaze;
-  digestive-functors = doJailbreak super.digestive-functors;
 
   # Wrap the generated binaries to include their run-time dependencies in
   # $PATH. Also, cryptol needs a version of sbl that's newer than what we have
@@ -1720,9 +1713,6 @@ with haskellLib;
     })
   ] (doJailbreak super.Spock-core);
 
-  # https://github.com/strake/filtrable.hs/issues/6
-  filtrable = doJailbreak super.filtrable;
-
   hcoord = overrideCabal (drv: {
     # Remove when https://github.com/danfran/hcoord/pull/8 is merged.
     patches = [
@@ -2164,9 +2154,6 @@ with haskellLib;
     testFlags = [ "-j1" ];
   } super.libarchive;
 
-  # 2025-02-11: Too strict bounds on doclayout < 0.5
-  table-layout = doJailbreak super.table-layout;
-
   # https://github.com/plow-technologies/hspec-golden-aeson/issues/17
   hspec-golden-aeson = dontCheck super.hspec-golden-aeson;
 
@@ -2344,9 +2331,6 @@ with haskellLib;
 
   # 2025-02-11: Too strict bounds on hedgehog < 1.5, hspec-hedgehog < 0.2
   validation-selective = doJailbreak super.validation-selective;
-
-  # 2025-02-11: strict upper bounds on base < 4.18
-  shower = doJailbreak super.shower;
 
   # Test suite isn't supposed to succeed yet, apparently…
   # https://github.com/andrewufrank/uniform-error/blob/f40629ad119e90f8dae85e65e93d7eb149bddd53/test/Uniform/Error_test.hs#L124
@@ -2812,10 +2796,6 @@ with haskellLib;
   # Too strict bounds on base
   kewar = doJailbreak super.kewar;
 
-  # Too strict bounds on aeson and text
-  # https://github.com/finn-no/unleash-client-haskell/issues/14
-  unleash-client-haskell = doJailbreak super.unleash-client-haskell;
-
   # Tests rely on (missing) submodule
   unleash-client-haskell-core = dontCheck super.unleash-client-haskell-core;
 
@@ -2914,10 +2894,8 @@ with haskellLib;
     doJailbreak
   ];
 
-  testcontainers = lib.pipe super.testcontainers [
-    dontCheck # Tests require docker
-    doJailbreak # https://github.com/testcontainers/testcontainers-hs/pull/58
-  ];
+  # Tests require docker
+  testcontainers = dontCheck super.testcontainers;
 
   # https://bitbucket.org/echo_rm/hailgun/pull-requests/27
   hailgun = appendPatches [
@@ -3153,10 +3131,6 @@ with haskellLib;
 
   # 2025-04-13: jailbreak to allow bytestring >= 0.12, text >= 2.1
   ktx-codec = warnAfterVersion "0.0.2.1" (doJailbreak super.ktx-codec);
-
-  # 2025-04-23: jailbreak to allow text >= 2.1
-  # https://github.com/wereHamster/haskell-css-syntax/issues/8
-  css-syntax = doJailbreak super.css-syntax;
 
   # 2025-04-13: jailbreak to allow template-haskell >= 2.17
   sr-extra = warnAfterVersion "1.88" (

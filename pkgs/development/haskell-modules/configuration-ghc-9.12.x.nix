@@ -95,14 +95,7 @@ with haskellLib;
   # Jailbreaks
   #
 
-  lucid = doJailbreak super.lucid; # base <4.21
-  extensions_0_1_0_3 = doJailbreak super.extensions_0_1_0_3; # hedgehog >=1.0 && <1.5, hspec-hedgehog >=0.0.1 && <0.2
-  # https://github.com/haskell-party/feed/issues/73
-  feed = doJailbreak super.feed; # base, time
-  hie-compat = doJailbreak super.hie-compat; # base <4.21
-  hiedb = doJailbreak super.hiedb; # base >=4.12 && <4.21, ghc >=8.6 && <9.11
-  ed25519 = doJailbreak super.ed25519; # https://github.com/thoughtpolice/hs-ed25519/issues/39
-  ghc-trace-events = doJailbreak super.ghc-trace-events; # base <4.21
+  large-generics = doJailbreak super.large-generics; # base <4.20
   time-compat_1_9_8 = doJailbreak super.time-compat_1_9_8; # too strict lower bound on QuickCheck
   cpphs = overrideCabal (drv: {
     # jail break manually the conditional dependencies
@@ -111,10 +104,7 @@ with haskellLib;
     '';
   }) super.cpphs;
   vector = doJailbreak super.vector; # doctest >=0.15 && <0.24
-  binary-instances = doJailbreak super.binary-instances; # base >=4.6.0.1 && <4.21, tagged >=0.8.8 && <0.8.9
   cabal-install-parsers = doJailbreak super.cabal-install-parsers; # base, Cabal-syntax, etc.
-  http-api-data = doJailbreak super.http-api-data; # base < 4.21
-  servant = doJailbreak super.servant; # base < 4.21
   ghc-exactprint_1_12_0_0 = addBuildDepends [
     # somehow buildDepends was missing
     self.Diff
@@ -124,7 +114,6 @@ with haskellLib;
     self.syb
     self.HUnit
   ] super.ghc-exactprint_1_12_0_0;
-  co-log-core = doJailbreak super.co-log-core; # doctest >=0.16.0 && <0.24
 
   #
   # Test suite issues
