@@ -75,12 +75,12 @@ pythonPackages.buildPythonApplication rec {
     inherit (nixosTests) mopidy;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.mopidy.com/";
     description = "Extensible music server that plays music from local disk, Spotify, SoundCloud, and more";
     mainProgram = "mopidy";
-    license = licenses.asl20;
-    maintainers = [ maintainers.fpletz ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.fpletz ];
     hydraPlatforms = [ ];
   };
 }
