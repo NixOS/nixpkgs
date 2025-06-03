@@ -10,7 +10,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pyyaml";
+  pname = "pyyaml-ft";
   version = "7.0.1";
   pyproject = true;
 

@@ -2,6 +2,7 @@
   lib,
   buildHomeAssistantComponent,
   fetchFromGitHub,
+  aiofiles,
   shapely,
   pytestCheckHook,
   pytest-homeassistant-custom-component,
@@ -11,16 +12,17 @@
 buildHomeAssistantComponent rec {
   owner = "amitfin";
   domain = "oref_alert";
-  version = "2.20.1";
+  version = "2.21.1";
 
   src = fetchFromGitHub {
     owner = "amitfin";
     repo = "oref_alert";
     tag = "v${version}";
-    hash = "sha256-EsDGH7/newjHRYu4Lr5UkJ3qaaNupqlhe5CdffEpIVg=";
+    hash = "sha256-ov/smP7rflRfQMqYduTxDAYj5xQkpZJSzIQZrP0YADQ=";
   };
 
   dependencies = [
+    aiofiles
     shapely
   ];
 
