@@ -188,6 +188,13 @@
     "hash": "sha256-WNODVEbdk+WFsPa1IKLbZVG4qSfjXiXaR0fUz4pMAJs=",
     "description": "Microsoft Azure Command-Line Tools Blueprint Extension"
   },
+  "carbon": {
+    "pname": "carbon",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/carbon-1.0.0b1-py3-none-any.whl",
+    "hash": "sha256-w+HDLtCIAIhlFTpR4iUMEKPC2vInPWWmMTX0VT9q1lg=",
+    "description": "Microsoft Azure Command-Line Tools Carbon Extension"
+  },
   "change-analysis": {
     "pname": "change-analysis",
     "version": "0.1.0",
