@@ -63,7 +63,13 @@ in
 ## 1. Patches relevant to gcc>=12 on every platform ####################################
 
 [ ]
-++ optional (!atLeast12) ./fix-bug-80431.patch
+# Backport "c++: conversion to base of vbase in NSDMI"
+# Fixes https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80431
+++ optional (!atLeast12) (fetchpatch {
+  name = "gcc-bug80431-fix";
+  url = "https://github.com/gcc-mirror/gcc/commit/de31f5445b12fd9ab9969dc536d821fe6f0edad0.patch";
+  hash = "sha256-bnHKJP5jR8rNJjRTi58/N/qZ5fPkuFBk7WblJWQpKOs=";
+})
 # Pass the path to a C++ compiler directly in the Makefile.in
 ++ optional (!lib.systems.equals targetPlatform hostPlatform) ./libstdc++-target.patch
 ++ optionals (noSysDirs) (
