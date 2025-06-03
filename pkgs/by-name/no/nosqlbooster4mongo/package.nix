@@ -8,9 +8,10 @@
 }:
 let
   pname = "nosqlbooster4mongo";
-  version = "8.1.7";
+  major_version = "10"
+  version = "${major_version}.0.3";
   src = fetchurl {
-    url = "https://s3.nosqlbooster.com/download/releasesv8/nosqlbooster4mongo-${version}.AppImage";
+    url = "https://s3.nosqlbooster.com/download/releasesv${major_version}/nosqlbooster4mongo-${version}.AppImage";
     hash = "sha256-+LJS3lqRPAIcCbGniLcxoL1yfRhlmn7S1OrWuedHufU=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -31,7 +32,6 @@ in appimageTools.wrapType2 {
     };
   in ''
     mkdir -p $out/share/applications $out/share/pixmaps
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
 
     # Install XDG Desktop file and its icon
     install -Dm444 ${appimageContents}/${pname}.desktop -t $out/share/applications
@@ -45,7 +45,7 @@ in appimageTools.wrapType2 {
   meta = {
     description = "Shell-centric GUI tool for MongoDB";
     homepage = "https://nosqlbooster.com/home";
-    changelog = "https://nosqlbooster.com/blog/announcing-nosqlbooster-81/";
+    changelog = "https://nosqlbooster.com/blog/announcing-nosqlbooster-${major_version}/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ lynxeko ];
     platforms = [ "x86_64-linux" ];
