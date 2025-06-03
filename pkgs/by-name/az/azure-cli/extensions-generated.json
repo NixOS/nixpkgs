@@ -1119,13 +1119,6 @@
     "hash": "sha256-kIsN8HzvZSF2oPK/D9z1i10W+0kD7jwG9z8Ls5E6XA8=",
     "description": "Additional commands for Azure AppService"
   },
-  "weights-and-biases": {
-    "pname": "weights-and-biases",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/weights_and_biases-1.0.0b1-py3-none-any.whl",
-    "hash": "sha256-p961+8YG/7LsyS8b+xfEPq2hZeiwlwqBvnyXnkxoz3o=",
-    "description": "Microsoft Azure Command-Line Tools WeightsAndBiases Extension"
-  },
   "workloads": {
     "pname": "workloads",
     "version": "1.1.0",
