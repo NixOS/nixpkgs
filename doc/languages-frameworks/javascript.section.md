@@ -908,8 +908,8 @@ Related options:
 
 : The Flags passed to `deno install`.
 
-: _Default:_ `[ "--allow-scripts" "--frozen" ]` for `buildDenoDeps`
 : _Default:_ `[ "--allow-scripts" "--frozen" "--cached-only" ]` for `buildDenoPackage`
+: _Default:_ `[ "--allow-scripts" "--frozen" ]` for `buildDenoDeps` (`"--cached-only"` is filtered out)
 
 #### Private registries {#javascript-buildDenoPackage-private-registries}
 There are currently 2 options, which enable the use of private registries in a `buildDenoPackage` derivation.
@@ -1017,7 +1017,11 @@ Related options:
 
 *`denoCompileFlags`* (Array of string; optional)
 
-: Flags passed to `deno compile`.
+: Flags passed to `deno compile [denoTaskFlags] ${binaryEntrypointPath} [extraCompileFlags]`.
+
+*`extraCompileFlags`* (Array of string; optional)
+
+: Flags passed to `deno compile [denoTaskFlags] ${binaryEntrypointPath} [extraCompileFlags]`.
 
 *`binaryEntrypointPath`* (String or null; optional)
 
@@ -1093,7 +1097,11 @@ Related options:
 
 *`denoTaskFlags`* (Array of strings; optional)
 
-: The flags passed to `deno task`.
+: The flags passed to `deno task [denoTaskFlags] ${denoTaskScript} [extraTaskFlags]`.
+
+*`extraTaskFlags`* (Array of strings; optional)
+
+: The flags passed to `deno task [denoTaskFlags] ${denoTaskScript} [extraTaskFlags]`.
 
 *`denoTaskPrefix`* (String; optional)
 

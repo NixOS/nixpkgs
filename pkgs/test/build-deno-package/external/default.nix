@@ -27,4 +27,34 @@
     binaryEntrypointPath = "./src/mod.ts";
     targetSystem = "x86_64-linux";
   };
+  invidious-companion-cli-linux = buildDenoPackage {
+    pname = "invidious-companion-cli";
+    version = "";
+    denoDepsHash = "sha256-z78m/Na2jvUARi4cTQvtFnD6iF7YX9Vzh2D6DBSj/HA=";
+    src = fetchFromGitHub {
+      owner = "iv-org";
+      repo = "invidious-companion";
+      rev = "a34c27ff63e51f9e3adc0e8647cd12382f8f1ffe";
+      hash = "sha256-/S8F7G8li12k0objsdFuh+mle6p2mk8zNUUCrG9hgns=";
+    };
+    binaryEntrypointPath = "src/main.ts";
+    denoCompileFlags = [
+      "--include=./src/lib/helpers/youtubePlayerReq.ts"
+      "--include=./src/lib/helpers/getFetchClient.ts"
+      "--allow-import=github.com:443,jsr.io:443,cdn.jsdelivr.net:443,esm.sh:443,deno.land:443"
+      "--allow-net"
+      "--allow-env"
+      "--allow-read"
+      "--allow-sys=hostname"
+      "--allow-write=/var/tmp/youtubei.js"
+    ];
+    denoInstallFlags = [
+      "--allow-scripts"
+      "--frozen"
+      "--cached-only"
+      "--entrypoint"
+      "src/main.ts"
+    ];
+    targetSystem = "x86_64-linux";
+  };
 }

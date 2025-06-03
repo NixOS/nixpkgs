@@ -16,12 +16,20 @@ denoBuildHook() {
     deno compile \
       --output "$package_name" \
       --target "$hostPlatform_" \
-      "${denoWorkspacePath+$denoWorkspacePath/}$binaryEntrypointPath" \
       $denoCompileFlags \
-      $denoFlags
+      $denoFlags \
+      "${denoWorkspacePath+$denoWorkspacePath/}$binaryEntrypointPath"
+      $extraCompileFlags \
 
   elif [ -n "${denoTaskScript-}" ]; then
-    if ! @denoTaskPrefix@ deno task ${denoWorkspacePath+--cwd=$denoWorkspacePath} "$denoTaskScript" $denoTaskFlags $denoFlags @denoTaskSuffix@; then
+    if ! @denoTaskPrefix@ \
+      deno task \
+      ${denoWorkspacePath+--cwd=$denoWorkspacePath} \
+      $denoTaskFlags \
+      $denoFlags \
+      "$denoTaskScript" \
+      $extraTaskFlags \
+      @denoTaskSuffix@; then
       echo
       echo 'ERROR: `deno task` failed'
       echo

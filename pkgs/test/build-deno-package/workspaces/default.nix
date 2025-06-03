@@ -6,11 +6,12 @@ rec {
     denoDepsHash = "sha256-Qvn3g+2NeWpNCfmfqXtPcJU4+LwrOSh1nq51xAbZZhk=";
     src = nix-gitignore.gitignoreSource [ ] ./.;
     denoWorkspacePath = "./sub1";
-    denoTaskFlags = [
+    extraTaskFlags = [
       "--text"
       "sub1"
     ];
     denoTaskSuffix = ">out.txt";
+
     installPhase = ''
       cp out.txt $out
     '';
@@ -20,7 +21,7 @@ rec {
     version = "0.1.0";
     inherit (sub1) denoDeps src;
     denoWorkspacePath = "./sub2";
-    denoTaskFlags = [
+    extraTaskFlags = [
       "--text"
       "sub2"
     ];
