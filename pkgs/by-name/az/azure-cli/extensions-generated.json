@@ -113,9 +113,9 @@
   },
   "astronomer": {
     "pname": "astronomer",
-    "version": "1.0.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/astronomer-1.0.0-py3-none-any.whl",
-    "hash": "sha256-tMpBtdnLd67StGLe1KOSrjzols6NnLlKCGcdDLaBds0=",
+    "version": "1.0.1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/astronomer-1.0.1-py3-none-any.whl",
+    "hash": "sha256-71tmCfbCGCyOIQjP3QvdcpEnHC00tw9MIXqmGfcBCno=",
     "description": "Microsoft Azure Command-Line Tools Astronomer Extension"
   },
   "authV2": {
