@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.xbill.org/download/${pname}-${version}.tar.gz";
-    sha256 = "13b08lli2gvppmvyhy0xs8cbjbkvrn4b87302mx0pxrdrvqzzz8f";
+    hash = "sha256-Dv3/8c4t9wt6FWActIjNey65GNIdeOh3vXc/ESlFYI0=";
   };
 
   desktopItems = [
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     install -Dm644 pixmaps/icon.xpm $out/share/pixmaps/xbill.xpm
   '';
 
-  meta = with stdenv; {
+  meta = {
     description = "Protect a computer network from getting infected";
     homepage = "http://www.xbill.org/";
     license = lib.licenses.gpl1Only;
