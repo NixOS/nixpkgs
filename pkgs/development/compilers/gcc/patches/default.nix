@@ -324,7 +324,8 @@ in
       && (!lib.systems.equals targetPlatform buildPlatform)
     )
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/richard-vd/musl-cross-make/5e9e87f06fc3220e102c29d3413fbbffa456fcd6/patches/gcc-${version}/0008-darwin-aarch64-self-host-driver.patch";
+      name = "0008-darwin-aarch64-self-host-driver.patch";
+      url = "https://github.com/gcc-mirror/gcc/commit/834c8749ced550af3f17ebae4072fb7dfb90d271.diff";
       sha256 = "sha256-XtykrPd5h/tsnjY1wGjzSOJ+AyyNLsfnjuOZ5Ryq9vA=";
     })
 
