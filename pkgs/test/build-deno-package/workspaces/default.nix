@@ -1,10 +1,10 @@
-{ pkgs, buildDenoPackage }:
+{ nix-gitignore, buildDenoPackage }:
 rec {
   sub1 = buildDenoPackage {
     pname = "test-deno-build-workspaces-sub1";
     version = "0.1.0";
     denoDepsHash = "sha256-Qvn3g+2NeWpNCfmfqXtPcJU4+LwrOSh1nq51xAbZZhk=";
-    src = pkgs.nix-gitignore.gitignoreSource [ ] ./.;
+    src = nix-gitignore.gitignoreSource [ ] ./.;
     denoWorkspacePath = "./sub1";
     denoTaskFlags = [
       "--text"

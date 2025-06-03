@@ -11,7 +11,7 @@
     {
       name ? "deno-deps",
       src,
-      hash,
+      hash ? lib.fakeHash,
       denoPackage ? deno,
       denoFlags ? [ ],
       denoInstallFlags ? [

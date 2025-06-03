@@ -12,7 +12,7 @@
   denoConfigHook = makeSetupHook {
     name = "deno-config-hook";
     substitutions = {
-      denortBinary = lib.optionalString (binaryEntrypointPath != null) "${denort}/bin/denort";
+      denortBinary = lib.optionalString (binaryEntrypointPath != null) (lib.getExe denort);
     };
   } ./deno-config-hook.sh;
 
