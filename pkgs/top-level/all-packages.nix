@@ -1891,8 +1891,6 @@ with pkgs;
     libssl = openssl;
   };
 
-  base16-builder = callPackage ../misc/base16-builder { };
-
   babelfish = callPackage ../shells/fish/babelfish.nix { };
 
   bat-extras = recurseIntoAttrs (lib.makeScope newScope (callPackage ../tools/misc/bat-extras { }));
