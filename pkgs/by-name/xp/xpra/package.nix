@@ -37,7 +37,6 @@
   x264,
   x265,
   libavif,
-  libspng,
   openh264,
   libyuv,
   xauth,
@@ -166,7 +165,6 @@ buildPythonApplication rec {
       x264
       x265
       libavif
-      libspng
       openh264
       libyuv
       xxHash
