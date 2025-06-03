@@ -32,12 +32,12 @@ buildGoModule rec {
 
   postInstall = "rm $out/bin/cli"; # remove gendoc cli binary
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/gittuf/gittuf/blob/v${version}/CHANGELOG.md";
     description = "Security layer for Git repositories";
     homepage = "https://gittuf.dev";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "gittuf";
-    maintainers = with maintainers; [ flandweber ];
+    maintainers = with lib.maintainers; [ flandweber ];
   };
 }
