@@ -21,7 +21,7 @@
 buildPythonApplication {
   pname = "animdl";
   version = "1.7.27";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "justfoolingaround";
@@ -34,7 +34,9 @@ buildPythonApplication {
   pythonRemoveDeps = [
     "comtypes" # windows only
   ];
+
   pythonRelaxDeps = [
+    "cssselect"
     "httpx"
     "lxml"
     "packaging"
@@ -45,10 +47,11 @@ buildPythonApplication {
     "yarl"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
-  propagatedBuildInputs = [
+
+  dependencies = [
     anchor-kr
     anitopy
     click
