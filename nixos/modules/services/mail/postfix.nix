@@ -5,6 +5,10 @@
   ...
 }:
 let
+  inherit (lib)
+    mkOption
+    types
+    ;
 
   cfg = config.services.postfix;
   user = cfg.user;
@@ -47,7 +51,19 @@ let
           );
       mkEntry = name: value: "${escape name} =${mkVal value}";
     in
-    lib.concatStringsSep "\n" (lib.mapAttrsToList mkEntry cfg.config) + "\n" + cfg.extraConfig;
+    lib.concatStringsSep "\n" (
+      lib.mapAttrsToList mkEntry (
+        lib.filterAttrsRecursive (
+          _: value:
+          !lib.elem value [
+            null
+            [ ]
+          ]
+        ) cfg.config
+      )
+    )
+    + "\n"
+    + cfg.extraConfig;
 
   masterCfOptions =
     {
@@ -597,16 +613,25 @@ in
       };
 
       config = lib.mkOption {
-        type =
-          with lib.types;
-          attrsOf (oneOf [
-            bool
-            int
-            str
-            (listOf str)
-          ]);
+        type = lib.types.submodule {
+          freeformType =
+            with types;
+            attrsOf (
+              nullOr (oneOf [
+                bool
+                int
+                str
+                (listOf str)
+              ])
+            );
+          options = {
+          };
+        };
+
         description = ''
           The main.cf configuration file as key value set.
+
+          Values that are null or an empty list will not be rendered.
         '';
         example = {
           mail_owner = "postfix";
