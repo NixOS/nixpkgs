@@ -58,6 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Master of Orion (1993) game engine recreation; a more updated fork";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ marcin-serwin ];
   };
 })
