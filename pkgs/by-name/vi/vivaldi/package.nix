@@ -235,6 +235,7 @@ stdenv.mkDerivation rec {
     mainProgram = "vivaldi";
     maintainers = with lib.maintainers; [
       marcusramberg
+      max06
       rewine
     ];
     platforms = [
