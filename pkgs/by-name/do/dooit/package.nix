@@ -63,12 +63,12 @@ python3.pkgs.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "TUI todo manager";
     homepage = "https://github.com/dooit-org/dooit";
     changelog = "https://github.com/dooit-org/dooit/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       khaneliman
       wesleyjrz
       kraanzu
