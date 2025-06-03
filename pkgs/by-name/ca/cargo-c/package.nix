@@ -12,20 +12,20 @@
 
 let
   # this version may need to be updated along with package version
-  cargoVersion = "0.80.0";
+  cargoVersion = "0.89.0";
 in
 rustPlatform.buildRustPackage rec {
   pname = "cargo-c";
-  version = "0.10.2";
+  version = "0.10.14";
 
   src = fetchCrate {
     inherit pname;
     version = "${version}+cargo-${cargoVersion}";
-    hash = "sha256-ltxd4n3oo8ZF/G/zmR4FSVtNOkxwCjDv6PdxkmWxZ+8=";
+    hash = "sha256-t6cbufPdpyaFzwEFWt19Nid2S5FXCJCS+SHJ0aJICX0=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-tCJ7Giyj7Wqowhk0N7CkvAiWvF6DBNw7G7aAnn2+mp8=";
+  cargoHash = "sha256-nW+akmbpIGZnhJLBdwDAGI4m5eSwdT2Z/iY2RV4zMQY=";
 
   nativeBuildInputs = [
     pkg-config
