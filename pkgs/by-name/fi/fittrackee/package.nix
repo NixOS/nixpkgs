@@ -97,6 +97,9 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/SamR1/FitTrackee";
     changelog = "https://github.com/SamR1/FitTrackee/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ traxys ];
+    maintainers = with lib.maintainers; [
+      tebriel
+      traxys
+    ];
   };
 }
