@@ -1091,6 +1091,13 @@
     "hash": "sha256-LbbCU9Q4YtBqRSUHPWe2Hx00t8iDIWK9Owv//SS5raY=",
     "description": "Manage virtual WAN, hubs, VPN gateways and VPN sites"
   },
+  "vme": {
+    "pname": "vme",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/vme-1.0.0b1-py3-none-any.whl",
+    "hash": "sha256-cCAZh8ytxz5sEtyNuV/EqZ9KqOifBXr1W8PBJWctz/8=",
+    "description": "Microsoft Azure Command-Line Tools Vme Extension"
+  },
   "vmware": {
     "pname": "vmware",
     "version": "7.2.0",
