@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   src = fetchFromGitLab {
     owner = "phoneybadger";
     repo = "pokemon-colorscripts";
-    rev = "8fab453f15eeb20cbae61e297698e2a892a690b9";
+    rev = "5802ff67520be2ff6117a0abc78a08501f6252ad";
     hash = "sha256-gKVmpHKt7S2XhSxLDzbIHTjJMoiIk69Fch202FZffqU=";
   };
 
