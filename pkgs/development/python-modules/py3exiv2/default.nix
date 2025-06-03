@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  boost,
+  boost-python,
   buildPythonPackage,
   exiv2,
   fetchPypi,
@@ -23,11 +23,11 @@ buildPythonPackage rec {
   # py3exiv2 only checks in `/usr/local/lib` for Boost, which is obviously wrong in nixpkgs.
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace setup.py \
-      --replace-fail /usr/local/lib/ ${lib.escapeShellArg (lib.getLib boost)}/lib/
+      --replace-fail /usr/local/lib/ ${lib.escapeShellArg (lib.getLib boost-python)}/lib/
   '';
 
   buildInputs = [
-    boost
+    boost-python
     exiv2
   ];
 

@@ -15,10 +15,7 @@ mkKdeDerivation {
   ];
   extraBuildInputs = [
     qtdeclarative
-    (boost.override {
-      enablePython = true;
-      python = python3;
-    })
+    (boost.withPython python3)
     python3
   ];
 }
