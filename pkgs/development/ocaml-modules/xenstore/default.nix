@@ -22,11 +22,26 @@ buildDunePackage rec {
   doCheck = true;
   checkInputs = [ ounit2 ];
 
-  meta = with lib; {
+  meta = {
     description = "Xenstore protocol in pure OCaml";
-    license = licenses.lgpl21Only;
-    maintainers = [ maintainers.sternenseemann ];
-    teams = [ teams.xen ];
+    longDescription = ''
+      This repo contains:
+
+        1. a xenstore client library, a merge of the Mirage and XCP ones
+
+        2. a xenstore server library
+
+        3. a xenstore server instance which runs under Unix with libxc
+
+        4. a xenstore server instance which runs on mirage.
+
+
+        The client and the server libraries have sets of unit-tests.
+    '';
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ sternenseemann ];
+    teams = [ lib.teams.xen ];
     homepage = "https://github.com/mirage/ocaml-xenstore";
+    changelog = "https://github.com/mirage/ocaml-xenstore/releases/tag/${version}";
   };
 }
