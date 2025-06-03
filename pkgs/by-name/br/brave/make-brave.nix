@@ -205,7 +205,8 @@ stdenv.mkDerivation {
 
       # Fix path to bash in $BINARYWRAPPER
       substituteInPlace $BINARYWRAPPER \
-          --replace /bin/bash ${stdenv.shell}
+          --replace /bin/bash ${stdenv.shell} \
+          --replace-fail 'CHROME_WRAPPER' 'WRAPPER'
 
       ln -sf $BINARYWRAPPER $out/bin/brave
 
@@ -263,6 +264,7 @@ stdenv.mkDerivation {
           coreutils
         ]
       }
+      --set CHROME_WRAPPER ${pname}
       ${optionalString (enableFeatures != [ ]) ''
         --add-flags "--enable-features=${strings.concatStringsSep "," enableFeatures}\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+,WaylandWindowDecorations --enable-wayland-ime=true}}"
       ''}
