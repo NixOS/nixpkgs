@@ -1135,9 +1135,9 @@
   },
   "zones": {
     "pname": "zones",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/zones-1.0.0b1-py3-none-any.whl",
-    "hash": "sha256-/CPMEVqdxeyzt2l3K8+eqv5Hs+EWjXJeKdWtD4xxGG0=",
+    "version": "1.0.0b3",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/zones-1.0.0b3-py3-none-any.whl",
+    "hash": "sha256-O9gcKKvWDFmlnZabIioDGNIxqn8XDaE4xeOt3/q+7Rk=",
     "description": "Microsoft Azure Command-Line Tools Zones Extension"
   }
 }
