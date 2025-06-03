@@ -9,7 +9,7 @@
 }:
 let
   pname = "serpl";
-  version = "0.3.3";
+  version = "0.3.4";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage {
     owner = "yassinebridi";
     repo = "serpl";
     rev = version;
-    hash = "sha256-koD5aFqL+XVxc5Iq3reTYIHiPm0z7hAQ4K59IfbY4Hg=";
+    hash = "sha256-lEvUS1RlZ4CvervzyfODsFqRJAiA6PyLNUVWhSoPMDY=";
   };
 
   buildFeatures = [ "ast_grep" ];
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [ makeWrapper ];
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-YfSxjlpUyRwpSoKmHOZrULGIIWTQ14JJwbsNB807WYQ=";
+  cargoHash = "sha256-reeJsSNifPeDzqMKVpS1Pmyn9x1F+Vin/xy81d5rKVs=";
 
   postFixup = ''
     # Serpl needs ripgrep to function properly.
