@@ -65,16 +65,20 @@
   binaryEntrypointPath ? null,
   # Flags to pass to all deno commands.
   denoFlags ? [ ],
-  # Flags to pass to `deno task ${denoTaskScript}`.
+  # Flags to pass to `deno task [denoTaskFlags] ${denoTaskScript}`.
   denoTaskFlags ? [ ],
-  # Flags to pass to `deno compile`.
+  # Flags to pass to `deno compile [denoTaskFlags] ${binaryEntrypointPath}`.
   denoCompileFlags ? [ ],
-  # Flags to pass to `deno install`.
+  # Flags to pass to `deno install [denoInstallFlags]`.
   denoInstallFlags ? [
     "--allow-scripts"
     "--frozen"
     "--cached-only"
   ],
+  # Flags to pass to `deno task [denoTaskFlags] ${denoTaskScript} [extraTaskFlags]`.
+  extraTaskFlags ? [ ],
+  # Flags to pass to `deno compile [denoTaskFlags] ${binaryEntrypointPath} [extraCompileFlags]`.
+  extraCompileFlags ? [ ],
   nativeBuildInputs ? [ ],
   dontFixup ? true,
   # Custom denoConfigHook
@@ -98,6 +102,8 @@ let
   denoTaskFlags_ = builtins.concatStringsSep " " denoTaskFlags;
   denoCompileFlags_ = builtins.concatStringsSep " " denoCompileFlags;
   denoInstallFlags_ = builtins.concatStringsSep " " denoInstallFlags;
+  extraTaskFlags_ = builtins.concatStringsSep " " extraTaskFlags;
+  extraCompileFlags_ = builtins.concatStringsSep " " extraCompileFlags;
 
   args' = builtins.removeAttrs args [ "denoDepsInjectedEnvVars" ];
 
@@ -133,6 +139,8 @@ stdenvNoCC.mkDerivation (
       denoTaskFlags_
       denoCompileFlags_
       denoInstallFlags_
+      extraTaskFlags_
+      extraCompileFlags_
       binaryEntrypointPath
       hostPlatform_
       denoWorkspacePath

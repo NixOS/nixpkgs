@@ -12,5 +12,6 @@
   inherit (pkgs.callPackage ./external { })
     readma-cli-linux
     fresh-init-cli-linux
+    invidious-companion-cli-linux
     ;
 }
