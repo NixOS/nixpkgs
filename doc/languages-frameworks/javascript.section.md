@@ -1066,12 +1066,12 @@ or [other methods](https://unix.stackexchange.com/questions/522822/different-met
 ##### example binary build {#javascript-buildDenoPackage-compile-to-binary-example}
 
 ```nix
-{ buildDenoPackage, pkgs }:
+{ buildDenoPackage, nix-gitignore }:
 buildDenoPackage {
   pname = "myPackage";
   version = "0.1.0";
   denoDepsHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-  src = pkgs.nix-gitignore.gitignoreSource [ ] ./.;
+  src = nix-gitignore.gitignoreSource [ ] ./.;
   binaryEntrypointPath = "main.ts";
 }
 ```
@@ -1118,12 +1118,12 @@ Related options:
 ```
 
 ```nix
-{ buildDenoPackage, pkgs }:
+{ buildDenoPackage, nix-gitignore }:
 buildDenoPackage {
   pname = "myPackage";
   version = "0.1.0";
   denoDepsHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-  src = pkgs.nix-gitignore.gitignoreSource [ ] ./.;
+  src = nix-gitignore.gitignoreSource [ ] ./.;
   denoTaskSuffix = ">out.txt";
   installPhase = ''
     cp ./out.txt $out
@@ -1161,13 +1161,13 @@ Related options:
 ##### example workspaces {#javascript-buildDenoPackage-workspaces-example}
 
 ```nix
-{ buildDenoPackage, pkgs }:
+{ buildDenoPackage, nix-gitignore }:
 rec {
   sub1 = buildDenoPackage {
     pname = "sub1";
     version = "0.1.0";
     denoDepsHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
-    src = pkgs.nix-gitignore.gitignoreSource [ ] ./.;
+    src = nix-gitignore.gitignoreSource [ ] ./.;
     denoWorkspacePath = "./sub1";
     denoTaskFlags = [
       "--text"

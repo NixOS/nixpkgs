@@ -12,7 +12,7 @@ deno.overrideAttrs (
     meta = with lib; {
       homepage = "https://deno.land/";
       changelog = "https://github.com/denoland/deno/releases/tag/v${final.version}";
-      description = "Slim version of the deno runtime, used bundled with deno projects into standalone binaries";
+      description = "Slim version of the deno runtime, usually bundled with deno projects into standalone binaries";
       license = licenses.mit;
       mainProgram = "denort";
       maintainers = with maintainers; [

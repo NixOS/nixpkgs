@@ -15,9 +15,9 @@
   name ? "${args.pname}-${args.version}",
   src ? null,
   # The output hash of the dependencies for this project.
-  denoDepsHash ? "",
+  denoDepsHash ? lib.fakeHash,
   # The host platform, the output binary is compiled for.
-  hostPlatform ? builtins.currentSystem,
+  hostPlatform ? stdenvNoCC.hostPlatform.system,
   # A list of strings, which are names of impure env vars passed to the deps build.
   # Example:
   # `[ "NPM_TOKEN" ]`
