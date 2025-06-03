@@ -6,6 +6,7 @@
   makeWrapper,
   ast-grep,
   ripgrep,
+  versionCheckHook,
 }:
 let
   pname = "serpl";
@@ -37,6 +38,13 @@ rustPlatform.buildRustPackage {
         ]
       }"
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/serpl";
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
