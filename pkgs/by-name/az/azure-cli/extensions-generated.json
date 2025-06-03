@@ -246,9 +246,9 @@
   },
   "cosmosdb-preview": {
     "pname": "cosmosdb-preview",
-    "version": "1.4.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/cosmosdb_preview-1.4.0-py2.py3-none-any.whl",
-    "hash": "sha256-u8wSLjuIyy6aC4tPKou9dSk1nKeb19Tx8JhpUYVGH34=",
+    "version": "1.6.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/cosmosdb_preview-1.6.0-py2.py3-none-any.whl",
+    "hash": "sha256-OO8IjVRhGOfsCb/Oot7Dc7PmfNsDmaXiCuG0at8Hb44=",
     "description": "Microsoft Azure Command-Line Tools Cosmosdb-preview Extension"
   },
   "costmanagement": {
