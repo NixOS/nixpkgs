@@ -258,7 +258,7 @@ stdenv.mkDerivation (
           modifications to the core source
         - Improve extensibility with a new plugin architecture
       '';
-      homepage = "https://www.neovim.io";
+      homepage = "https://neovim.io";
       changelog = "https://github.com/neovim/neovim/releases/tag/${finalAttrs.src.tag}";
       mainProgram = "nvim";
       # "Contributions committed before b17d96 by authors who did not sign the
