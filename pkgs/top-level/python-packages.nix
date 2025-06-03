@@ -6895,6 +6895,8 @@ self: super: with self; {
 
   invoke = callPackage ../development/python-modules/invoke { };
 
+  inwx-domrobot = callPackage ../development/python-modules/inwx-domrobot { };
+
   iocapture = callPackage ../development/python-modules/iocapture { };
 
   iocextract = callPackage ../development/python-modules/iocextract { };
