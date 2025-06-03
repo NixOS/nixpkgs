@@ -43,6 +43,6 @@ buildFishPlugin rec {
     description = " Supercharge your command line with LLMs and get shell scripting assistance in Fish. 💪";
     homepage = "https://github.com/Realiserad/fish-ai";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ bndlfm ];
   };
 }
