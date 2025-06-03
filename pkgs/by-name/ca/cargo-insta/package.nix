@@ -6,17 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-insta";
-  version = "1.42.2";
+  version = "1.43.1";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "insta";
-    rev = "e81bae9b7b7f536bd9057158fe5a219facced116";
-    hash = "sha256-5IGp4WuC34wRB7xSiDWzScLvV26yjsdw/LT/7CN9hWc=";
+    rev = version;
+    hash = "sha256-8yFbf0MF5zDuMqG1AsCOvQhJc8D8cBH1WqCGulcXVH0=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Vx26ArAcsW0NNVNZa4M5hqz/sm1gecrun/bbRWMu07Q=";
+  cargoHash = "sha256-atPSV+dZgywgS+9M0LRtMqH4JP4UpYGjb2hyGAEwhkw=";
 
   checkFlags = [
     # Depends on `rustfmt` and does not matter for packaging.
