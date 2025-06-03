@@ -39,6 +39,10 @@ stdenv.mkDerivation rec {
     mv $out/bin/upnpc-* $out/bin/upnpc
     mv $out/bin/upnp-listdevices-* $out/bin/upnp-listdevices
     mv $out/bin/external-ip.sh $out/bin/external-ip
+    chmod +x $out/bin/external-ip
+    patchShebangs $out/bin/external-ip
+    substituteInPlace $out/bin/external-ip \
+      --replace-fail "upnpc" $out/bin/upnpc
   '';
 
   __darwinAllowLocalNetworking = true;
