@@ -36,8 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) pname version src;
-    sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      cargoRoot
+      ;
     hash = "sha256-MmdvEutdkX98DgX1aVuxs4gabuMX5aM8yC4eqgvd8Q4=";
   };
 
