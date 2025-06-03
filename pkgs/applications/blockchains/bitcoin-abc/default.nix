@@ -79,7 +79,7 @@ mkDerivation rec {
     find ./. -type f -iname "*.sh" -exec chmod +x {} \;
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Peer-to-peer electronic cash system (Cash client)";
     longDescription = ''
       Bitcoin ABC is the name of open source software which enables the use of Bitcoin.
@@ -90,10 +90,10 @@ mkDerivation rec {
     '';
     homepage = "https://bitcoinabc.org/";
     changelog = "https://www.bitcoinabc.org/doc/release-notes/release-notes-${version}.html";
-    maintainers = with maintainers; [ lassulus ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ lassulus ];
+    license = lib.licenses.mit;
     broken = stdenv.hostPlatform.isDarwin;
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "bitcoin-cli";
   };
 }

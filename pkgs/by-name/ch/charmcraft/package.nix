@@ -1,14 +1,38 @@
 {
   lib,
-  git,
-  python3Packages,
+  gitMinimal,
+  python3,
   fetchFromGitHub,
   nix-update-script,
+  cacert,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
+let
+  version = "4.10.0";
+  python = python3.override {
+    self = python;
+    packageOverrides = self: super: {
+      craft-application = super.craft-application.overridePythonAttrs (old: {
+        inherit version;
+        src = fetchFromGitHub {
+          owner = "canonical";
+          repo = "craft-application";
+          tag = version;
+          hash = "sha256-9M49/XQuWwKuQqseleTeZYcrwd/S16lNCljvlVsoXbs=";
+        };
 
-python3Packages.buildPythonApplication rec {
+        postPatch = ''
+          substituteInPlace pyproject.toml --replace-fail "setuptools==75.8.0" "setuptools"
+          substituteInPlace craft_application/git/_git_repo.py --replace-fail "/snap/core22/current/etc/ssl/certs" "${cacert}/etc/ssl/certs"
+        '';
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "charmcraft";
-  version = "3.4.6";
+  version = "3.5.0";
 
   pyproject = true;
 
@@ -16,14 +40,14 @@ python3Packages.buildPythonApplication rec {
     owner = "canonical";
     repo = "charmcraft";
     tag = version;
-    hash = "sha256-i7XhsVmeO3fzAWCQ1v9J/dv4oSdN00svauIColQcj9A=";
+    hash = "sha256-NIOfjd4r9mDP0x1IpIVJlU+Aza0a17bc3jDxtInrf4A=";
   };
 
   postPatch = ''
     substituteInPlace charmcraft/__init__.py --replace-fail "dev" "${version}"
   '';
 
-  dependencies = with python3Packages; [
+  dependencies = with python.pkgs; [
     craft-application
     craft-cli
     craft-parts
@@ -47,7 +71,7 @@ python3Packages.buildPythonApplication rec {
     urllib3
   ];
 
-  build-system = with python3Packages; [ setuptools-scm ];
+  build-system = with python.pkgs; [ setuptools-scm ];
 
   pythonRelaxDeps = [
     "urllib3"
@@ -57,7 +81,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   nativeCheckInputs =
-    with python3Packages;
+    with python.pkgs;
     [
       freezegun
       hypothesis
@@ -69,12 +93,12 @@ python3Packages.buildPythonApplication rec {
       responses
       setuptools
     ]
-    ++ [ git ];
-
-  preCheck = ''
-    mkdir -p check-phase
-    export HOME="$(pwd)/check-phase"
-  '';
+    ++ [
+      cacert
+      gitMinimal
+      versionCheckHook
+      writableTmpDirAsHomeHook
+    ];
 
   pytestFlagsArray = [ "tests/unit" ];
 
@@ -84,6 +108,9 @@ python3Packages.buildPythonApplication rec {
     "test_read_charm_from_yaml_file_self_contained_success[full-bases.yaml]"
     "test_read_charm_from_yaml_file_self_contained_success[full-platforms.yaml]"
   ];
+
+  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "SSL_CERT_FILE" ];
 
   passthru.updateScript = nix-update-script { };
 
