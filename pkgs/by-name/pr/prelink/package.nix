@@ -5,17 +5,18 @@
   autoreconfHook,
   libelf,
   libiberty,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
   pname = "prelink";
-  version = "unstable-2019-06-24";
+  version = "20151030-unstable-2024-07-02";
 
   src = fetchgit {
-    url = "https://git.yoctoproject.org/git/prelink-cross";
+    url = "https://git.yoctoproject.org/prelink-cross";
     branchName = "cross_prelink";
-    rev = "f9975537dbfd9ade0fc813bd5cf5fcbe41753a37";
-    sha256 = "sha256-O9/oZooLRyUBBZX3SFcB6LFMmi2vQqkUlqtZnrq5oZc=";
+    rev = "ff2561c02ade96c5d4d56ddd4e27ff064840a176";
+    sha256 = "sha256-wmX7ybrZDWEop9fiInZMvgK/fpEk3sq+Wu8DSWWIvQY=";
   };
 
   strictDeps = true;
@@ -39,6 +40,8 @@ stdenv.mkDerivation {
   doCheck = false;
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "ELF prelinking utility to speed up dynamic linking";
