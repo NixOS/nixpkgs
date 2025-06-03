@@ -8,14 +8,17 @@
   libXpm,
   libXt,
   motif,
-  ...
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "xbill";
   version = "2.1";
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = [
+    autoreconfHook
+    copyDesktopItems
+  ];
   buildInputs = [
     libX11
     libXpm
@@ -48,6 +51,8 @@ stdenv.mkDerivation rec {
       ];
     })
   ];
+
+  makeFlags = "-B";
 
   postInstall = ''
     install -Dm644 pixmaps/icon.xpm $out/share/pixmaps/xbill.xpm
