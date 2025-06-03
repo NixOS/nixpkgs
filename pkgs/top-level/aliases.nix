@@ -1050,6 +1050,7 @@ mapAliases {
   licensor = throw "'licensor' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   lightdm_gtk_greeter = lightdm-gtk-greeter; # Added 2022-08-01
   lightstep-tracer-cpp = throw "lightstep-tracer-cpp is deprecated since 2022-08-29; the upstream recommends migration to opentelemetry projects.";
+  ligo = throw "ligo has been removed from nixpkgs for lack of maintainance"; # Added 2025-06-03
   lima-bin = lib.warnOnInstantiate "lima-bin has been replaced by lima" lima; # Added 2025-05-13
   lime3ds = throw "lime3ds is deprecated, use 'azahar' instead."; # Added 2025-03-22
   limesctl = throw "limesctl has been removed because it is insignificant."; # Added 2024-11-25
