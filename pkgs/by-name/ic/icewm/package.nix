@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gccStdenv,
   fetchFromGitHub,
   cmake,
   expat,
@@ -39,7 +39,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gccStdenv.mkDerivation (finalAttrs: {
   pname = "icewm";
   version = "3.7.5";
 
@@ -99,6 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCFGDIR=/etc/icewm"
   ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString gccStdenv.hostPlatform.isDarwin "-D_DARWIN_C_SOURCE";
+
   # install legacy themes
   postInstall = ''
     cp -r ../lib/themes/{gtk2,Natural,nice,nice2,warp3,warp4,yellowmotif} \
@@ -123,6 +125,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = licenses.lgpl2Only;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 })
