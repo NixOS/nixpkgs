@@ -6,6 +6,7 @@
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +23,9 @@ buildPythonPackage rec {
     hash = "sha256-b3Z1NsYKp0CecUq8kaC/j3xR/ZZHDIw4MhUeadizz88=";
   };
 
-  nativeBuildInputs = [ flit-scm ];
+  build-system = [ flit-scm ];
+
+  dependencies = lib.optionals (pythonOlder "3.13") [ typing-extensions ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
