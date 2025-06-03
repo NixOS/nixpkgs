@@ -86,7 +86,7 @@ rec {
         };
 
         preBuild = ''
-          substituteInPlace Makefile --replace-warn "/bin/bash" "${lib.getExe bash}"
+          substituteInPlace Makefile --replace-warn "/bin/bash" "${stdenv.shell}"
         '';
 
         # docker/runc already include these patches / are not applicable

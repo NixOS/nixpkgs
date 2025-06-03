@@ -33,6 +33,7 @@
   libdrm,
   libpng,
   libuuid,
+  libsecret,
   libX11,
   libxcb,
   libxkbcommon,
@@ -130,6 +131,7 @@ let
             git
             ps
             usbutils
+            libsecret
           ]
         }" \
         --prefix LD_LIBRARY_PATH : "${
@@ -142,6 +144,7 @@ let
             libXi
             libXrender
             libXtst
+            libsecret
 
             # No crash, but attempted to load at startup
             e2fsprogs
@@ -344,7 +347,6 @@ let
             ."${channel}";
           mainProgram = pname;
           sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-          position = "pkgs/applications/editors/android-studio/common.nix:303";
         };
       }
       ''

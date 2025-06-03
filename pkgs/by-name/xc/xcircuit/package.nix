@@ -38,6 +38,11 @@ stdenv.mkDerivation {
     "--with-ngspice=${lib.getBin ngspice}/bin/ngspice"
   ];
 
+  patches = [
+    # fix compilation with GCC 14
+    ./declare-missing-prototype.patch
+  ];
+
   buildInputs = with xorg; [
     cairo
     ghostscript

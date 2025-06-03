@@ -63,8 +63,6 @@ stdenv.mkDerivation {
 
   inherit (param) patches;
 
-  createFindlibDestdir = true;
-
   postPatch =
     param.postPatchInit
     + ''
@@ -77,6 +75,10 @@ stdenv.mkDerivation {
     "all"
     "allopt"
   ];
+
+  preInstall = ''
+    mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs
+  '';
 
   postInstall = ''
     ln -s $out/lib/ocaml/${ocaml.version}/site-lib/{,caml}zip

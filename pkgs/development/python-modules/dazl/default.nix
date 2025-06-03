@@ -1,67 +1,64 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-
+  fetchFromGitHub,
   poetry-core,
-
-  aiohttp,
   googleapis-common-protos,
   grpcio,
   protobuf,
-  requests,
   semver,
-  toposort,
-
-  #, async_exit_stack
-  #, dataclasses
-  google-auth,
-  oauthlib,
-  prometheus-client,
   pygments,
   pyopenssl,
   typing-extensions,
+  pytestCheckHook,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "dazl";
-  version = "8.0.0";
+  version = "8.3.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-2EXbfXNl/vNhOIKfBv18TKMPizab72LlNV7QhEf4aVs=";
+  src = fetchFromGitHub {
+    owner = "digital-asset";
+    repo = "dazl-client";
+    tag = "v${version}";
+    hash = "sha256-w0jWhOOjOVLKUcfY2zR8dgckp7r/Gko+p3cuO8IIrM4=";
   };
 
   pythonRelaxDeps = [
     "grpcio"
   ];
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    aiohttp
+  dependencies = [
     googleapis-common-protos
     grpcio
     protobuf
-    requests
     semver
-    toposort
-
-    # optional
-
-    #async-exit-stack
-    #dataclasses
-    google-auth
-    oauthlib
-    prometheus-client
-    pygments
-    pyopenssl
     typing-extensions
   ];
 
-  meta = with lib; {
+  optional-dependencies = {
+    pygments = [ pygments ];
+    tls-testing = [ pyopenssl ];
+  };
+
+  pythonImportsCheck = [ "dazl" ];
+
+  # daml: command not found
+  doCheck = false;
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pyyaml
+  ];
+
+  meta = {
     description = "High-level Ledger API client for Daml ledgers";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
+    homepage = "https://github.com/digital-asset/dazl-client";
+    changelog = "https://github.com/digital-asset/dazl-client/releases/tag/${src.tag}";
   };
 }

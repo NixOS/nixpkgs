@@ -19,18 +19,21 @@
   pytest-asyncio,
   pytest-socket,
   pytestCheckHook,
+
+  # passthru
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-tests";
-  version = "0.3.17";
+  version = "0.3.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-tests==${version}";
-    hash = "sha256-jhdCpZsRvCxDIfaZpdqAdx+rxJTU6QHDgNKc4w7XmR8=";
+    hash = "sha256-DSTngWRFseJ6kSAY7Lxxkh77QFr0jhHxG3mH89QmdxA=";
   };
 
   sourceRoot = "${src.name}/libs/standard-tests";
@@ -39,7 +42,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     # Each component release requests the exact latest core.
-    # That prevents us from updating individul components.
+    # That prevents us from updating individual components.
     "langchain-core"
     "numpy"
   ];
@@ -61,8 +64,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  passthru = {
-    inherit (langchain-core) updateScript;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "langchain-tests==([0-9.]+)"
+    ];
   };
 
   meta = {

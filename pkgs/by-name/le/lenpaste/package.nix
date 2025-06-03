@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitea {
     domain = "git.lcomrade.su";
     owner = "root";
-    repo = pname;
+    repo = "lenpaste";
     rev = "v${version}";
     sha256 = "sha256-d+FjfEbInlxUllWIoVLwQRdRWjxBLTpNHYn+oYU3fBc=";
   };

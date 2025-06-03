@@ -15,7 +15,7 @@ buildNpmPackage rec {
 
   src = fetchFromGitHub {
     owner = "Jelmerro";
-    repo = pname;
+    repo = "vieb";
     rev = version;
     hash = "sha256-g3L+bzsDP3vfTaroqCWzRDymFTZE+6nLytRWzPMBoX8=";
   };

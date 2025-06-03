@@ -13,27 +13,27 @@
 
 let
   pname = "anytype";
-  version = "0.46.4";
+  version = "0.46.5";
 
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "anytype-ts";
     tag = "v${version}";
-    hash = "sha256-JA8DHOPRLPoc8/GXkHfktVy3sZ5BpSFmgn71Xt15iLE=";
+    hash = "sha256-gDlxyHxBLWVBLnaI6rFclfjwqkw9gneBEC7ssmWDKYU=";
   };
   description = "P2P note-taking tool";
 
   locales = fetchFromGitHub {
     owner = "anyproto";
     repo = "l10n-anytype-ts";
-    rev = "07eed415b0eec409dcdfedf848936d41f190c7ec";
-    hash = "sha256-PgDZkL/tg7/uZhLLenRjkb5NB1hQjUJflaAce2TlDRE=";
+    rev = "1d7ca0073bdd02d0145b8da3b1b956ca0652a108";
+    hash = "sha256-aL79DOIFH3CocbcLW0SJ472mYPZJXrPJyRKy8zXiF4o=";
   };
 in
 buildNpmPackage {
   inherit pname version src;
 
-  npmDepsHash = "sha256-4pMYKmQ7+f8BKztLF4Jfe89tuh+DiQNnS3ulL0i6Gw0=";
+  npmDepsHash = "sha256-WEw3RCi7dWs2eMYxLH7DcmWBrN4T8T6beIyplcXgJAA=";
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -52,6 +52,7 @@ buildNpmPackage {
 
   patches = [
     ./0001-feat-update-Disable-auto-checking-for-updates-and-updating-manually.patch
+    ./0001-fix-single-instance-detection-when-not-packaged.patch
   ];
 
   buildPhase = ''
@@ -100,11 +101,12 @@ buildNpmPackage {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "Anytype";
-      exec = "anytype";
+      name = "anytype";
+      exec = "anytype %U";
       icon = "anytype";
       desktopName = "Anytype";
       comment = description;
+      mimeTypes = [ "x-scheme-handler/anytype" ];
       categories = [
         "Utility"
         "Office"
@@ -121,7 +123,6 @@ buildNpmPackage {
     license = lib.licenses.unfreeRedistributable;
     mainProgram = "anytype";
     maintainers = with lib.maintainers; [
-      running-grass
       autrimpo
       adda
     ];

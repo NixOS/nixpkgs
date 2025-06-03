@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pep8-naming";
-  version = "0.15.0";
+  version = "0.15.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = "pep8-naming";
     tag = version;
-    hash = "sha256-LOHPLS0BtKsocghi3K24VitlRCwyHbYZB6916i7Gj9c=";
+    hash = "sha256-swSaMOrgd6R4i92LodJVsquls9wp5ZFyzK0LNqwODoc=";
   };
 
   build-system = [ setuptools ];

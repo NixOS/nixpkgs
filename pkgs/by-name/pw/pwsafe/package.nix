@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
   version = "1.21.0fp"; # do NOT update to 3.x Windows releases
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "pwsafe";
+    repo = "pwsafe";
     rev = version;
     hash = "sha256-pPKUFX6NNGtGGjHL3g0Y6xzj+bHU2KDNMhYCnpP9wgM=";
   };

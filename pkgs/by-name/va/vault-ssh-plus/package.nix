@@ -13,7 +13,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "isometry";
-    repo = pname;
+    repo = "vault-ssh-plus";
     rev = "v${version}";
     hash = "sha256-5rajB4pSRp7Pw4yx0u6MoOLxfkWWjhB7T2JGGb8ICRU=";
   };

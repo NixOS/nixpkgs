@@ -220,9 +220,6 @@ let
 in
 
 {
-  # Disable on Darwin due to assumptions with __bootPackages
-  __attrsFailEvaluation = stdenv.hostPlatform.isDarwin;
-
   # tests for hooks in `stdenv.defaultNativeBuildInputs`
   hooks = lib.recurseIntoAttrs (
     import ./hooks.nix {

@@ -3,10 +3,7 @@
   stdenv,
   fetchFromGitHub,
   replaceVars,
-  wrapQtAppsHook,
-  qmake,
-  qtsvg,
-  qtx11extras,
+  libsForQt5,
   graphviz,
 }:
 
@@ -31,11 +28,12 @@ stdenv.mkDerivation rec {
   );
 
   nativeBuildInputs = [
-    wrapQtAppsHook
-    qmake
+    libsForQt5.wrapQtAppsHook
+    libsForQt5.qmake
   ];
 
-  buildInputs = if stdenv.hostPlatform.isDarwin then [ qtsvg ] else [ qtx11extras ];
+  buildInputs =
+    if stdenv.hostPlatform.isDarwin then [ libsForQt5.qtsvg ] else [ libsForQt5.qtx11extras ];
 
   meta = with lib; {
     description = "Qt Visual Graph Editor";

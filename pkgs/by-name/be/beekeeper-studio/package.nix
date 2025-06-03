@@ -26,13 +26,12 @@
   vulkan-loader,
   systemd,
   libGL,
-  writeShellScript,
-  nix-update,
+  krb5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "beekeeper-studio";
-  version = "5.1.5";
+  version = "5.2.9";
 
   src =
     let
@@ -45,8 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     fetchurl {
       url = "https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v${finalAttrs.version}/beekeeper-studio_${finalAttrs.version}_${arch}.deb";
       hash = selectSystem {
-        x86_64-linux = "sha256-ClKD5OnNhEBo1O3E3rXOGu9X8vVGZAOrfXQFppuEnbU=";
-        aarch64-linux = "sha256-64ID+psuwfiVTfBayILeotJ3en21Hsv8FMQj+IQjjyE=";
+        x86_64-linux = "sha256-iooZSiIkHfd3jSk+Pk0E7s/g51UzbyqyP8qnfes3mts=";
+        aarch64-linux = "sha256-zLkEMOJhckIM0qPCKBNUgFwYiF1YjJU4wKmiLJ1pzNg=";
       };
     };
 
@@ -84,11 +83,10 @@ stdenv.mkDerivation (finalAttrs: {
     expat
     libgbm
     vulkan-loader
+    krb5
   ];
 
-  runtimeDependencies = map lib.getLib [
-    systemd
-  ];
+  runtimeDependencies = map lib.getLib [ systemd ];
 
   installPhase = ''
     runHook preInstall
@@ -106,6 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     patchelf --add-needed libGL.so.1 \
+      --add-needed libEGL.so.1 \
       --add-rpath ${
         lib.makeLibraryPath [
           libGL
@@ -113,10 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
       } $out/opt/beekeeper-studio/beekeeper-studio-bin
   '';
 
-  passthru.updateScript = writeShellScript "beekeeper-studio-update-script" ''
-    ${lib.getExe nix-update} beekeeper-studio --system x86_64-linux
-    ${lib.getExe nix-update} beekeeper-studio --system aarch64-linux --version "skip"
-  '';
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Modern and easy to use SQL client for MySQL, Postgres, SQLite, SQL Server, and more";

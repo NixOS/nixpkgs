@@ -17,13 +17,13 @@
 
 flutter329.buildFlutterApplication rec {
   pname = "saber";
-  version = "0.25.5";
+  version = "0.25.6";
 
   src = fetchFromGitHub {
     owner = "saber-notes";
     repo = "saber";
     tag = "v${version}";
-    hash = "sha256-iZy/Eb3BUe8Zs52gw7+hpncEqUwcgKFAgzB8VIsFv/E=";
+    hash = "sha256-OknqEbWAYLlxSTDWcggM6GP2V8cdKIAksbm7TmKzjKY=";
   };
 
   gitHashes = {

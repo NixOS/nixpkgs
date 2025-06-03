@@ -29,7 +29,9 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     installShellCompletion --cmd timew \
-      --bash completion/timew-completion.bash
+      --bash completion/timew-completion.bash \
+      --fish completion/timew.fish \
+      --zsh completion/timew.zsh
   '';
 
   meta = with lib; {

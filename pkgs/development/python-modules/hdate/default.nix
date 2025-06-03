@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "hdate";
-  version = "1.0.3";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "py-libhdate";
     repo = "py-libhdate";
     tag = "v${version}";
-    hash = "sha256-J2ZbfzQdQSlnwcygwapDKkvZIx2VrlaaRe244V8Zt5c=";
+    hash = "sha256-NNaspGNfrtZqo9sUOJVyYlJT7dhr/nzueuaqewUMlpM=";
   };
 
   pythonRelaxDeps = [

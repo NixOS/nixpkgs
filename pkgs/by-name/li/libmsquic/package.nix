@@ -26,10 +26,13 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ];
 
-  buildInputs = [
-    lttng-tools
-    libatomic_ops
-  ];
+  buildInputs =
+    [
+      libatomic_ops
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      lttng-tools
+    ];
 
   postUnpack = ''
     for f in "$(find . -type f -name "*.pl")"; do

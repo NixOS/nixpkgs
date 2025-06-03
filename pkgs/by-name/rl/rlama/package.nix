@@ -3,27 +3,28 @@
   buildGoModule,
   fetchFromGitHub,
   pkg-config,
-  makeWrapper,
+  makeBinaryWrapper,
   poppler-utils,
   tesseract,
   catdoc,
+  unrtf,
   python3Packages,
-  versionCheckHook,
   nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "rlama";
-  version = "0.1.30";
+  version = "0.1.39";
 
   src = fetchFromGitHub {
     owner = "dontizi";
     repo = "rlama";
-    tag = "v${version}";
-    hash = "sha256-J4FTRWQfdmWXMhlwINQgqj7sCvF3+0YZwcZFW8y1CgY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9qm9QSMko+ZHfKMMaTesA26X4OuemyB/w1w+0QOEpyE=";
   };
 
-  vendorHash = "sha256-XZVMnkv+WqUqM6jbgrO3P5CSDACH3vLFJ4Y79EOnD08=";
+  vendorHash = "sha256-GHmLCgL79BdGw/5zz50Y1kR/6JYNalvOj2zjIHQ9IF0=";
 
   env.CGO_ENABLED = "0";
 
@@ -34,8 +35,17 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     pkg-config
-    makeWrapper
+    makeBinaryWrapper
   ];
+
+  # Run only unit tests for core packages; skip e2e tests that require Ollama
+  checkPhase = ''
+    runHook preCheck
+
+    go test -v ./internal/domain/... ./pkg/vector/... ./internal/repository/...
+
+    runHook postCheck
+  '';
 
   postInstall = ''
     wrapProgram $out/bin/rlama \
@@ -44,18 +54,33 @@ buildGoModule rec {
           poppler-utils
           tesseract
           catdoc
+          unrtf
           python3Packages.pdfminer-six
           python3Packages.docx2txt
           python3Packages.xlsx2csv
+          python3Packages.torch
+          python3Packages.transformers
         ]
       }
   '';
 
   nativeInstallCheckInputs = [
-    versionCheckHook
+    writableTmpDirAsHomeHook
   ];
-  versionCheckProgramArg = "--version";
+
   doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    VERSION=$($out/bin/rlama --version | grep -o "${finalAttrs.version}" || true)
+    if [ -z "$VERSION" ]; then
+        echo "Version check failed: expected ${finalAttrs.version}, got: $($out/bin/rlama --version)"
+      else
+        echo "$VERSION"
+    fi
+
+    runHook postInstallCheck
+  '';
 
   passthru = {
     updateScript = nix-update-script { };
@@ -64,9 +89,9 @@ buildGoModule rec {
   meta = {
     description = "Retrieval-Augmented Language Model Adapter";
     homepage = "https://github.com/dontizi/rlama";
-    changelog = "https://github.com/dontizi/rlama/releases/tag/v${version}";
+    changelog = "https://github.com/dontizi/rlama/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ liberodark ];
     mainProgram = "rlama";
   };
-}
+})

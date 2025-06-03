@@ -16,7 +16,7 @@
   librsvg,
   streamripper,
   udisks,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   iconTheme ? adwaita-icon-theme,
   deviceDetectionSupport ? true,
   documentationSupport ? true,
@@ -36,13 +36,13 @@
 
 stdenv.mkDerivation rec {
   pname = "exaile";
-  version = "4.1.3";
+  version = "4.1.4";
 
   src = fetchFromGitHub {
     owner = "exaile";
     repo = "exaile";
     rev = version;
-    sha256 = "sha256-9SK0nvGdz2j6qp1JTmSuLezxX/kB93CZReSfAnfKZzg=";
+    sha256 = "sha256-iyK2txutlWe67CyfKuyesBrYQypkS5FOf1ZWUkRCq24=";
   };
 
   nativeBuildInputs =
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional multimediaKeySupport keybinder3
     ++ lib.optional (musicBrainzSupport || cdMetadataSupport) python3.pkgs.musicbrainzngs
     ++ lib.optional podcastSupport python3.pkgs.feedparser
-    ++ lib.optional wikipediaSupport webkitgtk_4_0;
+    ++ lib.optional wikipediaSupport webkitgtk_4_1;
 
   nativeCheckInputs = with python3.pkgs; [
     pytest

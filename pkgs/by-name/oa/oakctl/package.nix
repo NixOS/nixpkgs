@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/bin
-    install -D -m 0755 $src $out/bin/${finalAttrs.pname}
+    install -D -m 0755 $src $out/bin/oakctl
 
     runHook postInstall
   '';

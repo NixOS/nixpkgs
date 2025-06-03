@@ -25,12 +25,12 @@ let
     ];
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "redmine";
   inherit version;
 
   src = fetchurl {
-    url = "https://www.redmine.org/releases/redmine-${version}.tar.gz";
+    url = "https://www.redmine.org/releases/redmine-${finalAttrs.version}.tar.gz";
     hash = "sha256-lNzFMRXgWBrEbmDD7ZMY8ZJs5GS6u7OF5SNiF9Hmpk4=";
   };
 
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
     ];
     license = licenses.gpl2;
   };
-}
+})

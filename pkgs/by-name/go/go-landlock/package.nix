@@ -26,6 +26,6 @@ buildGoModule {
     description = "Go library for the Linux Landlock sandboxing feature";
     homepage = "https://github.com/landlock-lsm/go-landlock";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tomfitzhenry ];
+    maintainers = [ ];
   };
 }

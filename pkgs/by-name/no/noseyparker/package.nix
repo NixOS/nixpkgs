@@ -12,17 +12,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "noseyparker";
-  version = "0.23.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "praetorian-inc";
     repo = "noseyparker";
     rev = "v${version}";
-    hash = "sha256-n+lX49BwipIPQ2ZeQT+DFO2ILHHAU2VsOnhASOGX5RE=";
+    hash = "sha256-6GxkIxLEgbIgg4nSHvmRedm8PAPBwVxLQUnQzh3NonA=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-eAJlbJyGILc3veVxJNKqrTeZGQsAymAGYNCTU+Kakos=";
+  cargoHash = "sha256-hVBHIm/12WU6g45QMxxuGk41B0kwThk7A84fOxArvno=";
 
   nativeCheckInputs = [
     git

@@ -32,6 +32,7 @@
   flask-login,
   flask-principal,
   flask-wtf,
+  libpass,
   markupsafe,
   passlib,
   importlib-resources,
@@ -52,7 +53,7 @@
 
 buildPythonPackage rec {
   pname = "flask-security";
-  version = "5.6.1";
+  version = "5.6.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -61,7 +62,7 @@ buildPythonPackage rec {
     owner = "pallets-eco";
     repo = "flask-security";
     tag = version;
-    hash = "sha256-sAO8wQd/YgPbi5+nQmkmmcTg7DJPYdUoT/EOMUpzr/M=";
+    hash = "sha256-mEl98Yp4USKu+z636yAb5p5qPBzcdQraZ/XaPbDoGWU=";
   };
 
   build-system = [ flit-core ];
@@ -73,7 +74,7 @@ buildPythonPackage rec {
     flask-principal
     flask-wtf
     markupsafe
-    passlib
+    (if pythonOlder "3.12" then passlib else libpass)
     importlib-resources
     wtforms
   ];
@@ -132,7 +133,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "flask_security" ];
 
   meta = with lib; {
-    changelog = "https://github.com/pallets-eco/flask-security/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/pallets-eco/flask-security/blob/${src.tag}/CHANGES.rst";
     homepage = "https://github.com/pallets-eco/flask-security";
     description = "Quickly add security features to your Flask application";
     license = licenses.mit;

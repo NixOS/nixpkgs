@@ -222,18 +222,26 @@ chosenStdenv.mkDerivation (finalAttrs: {
         $out/lib/libtpm2_pkcs11.so.0.0.0
     '';
 
-  passthru = {
+  passthru = rec {
+    esapi = tpm2-pkcs11-esapi;
+    fapi = tpm2-pkcs11-fapi;
+    abrmd = tpm2-pkcs11.override {
+      abrmdSupport = true;
+    };
+    esapi-abrmd = tpm2-pkcs11-esapi.override {
+      abrmdSupport = true;
+    };
+    fapi-abrmd = tpm2-pkcs11-fapi.override {
+      abrmdSupport = true;
+    };
     tests = {
-      inherit tpm2-pkcs11-esapi tpm2-pkcs11-fapi;
-      tpm2-pkcs11-abrmd = tpm2-pkcs11.override {
-        abrmdSupport = true;
-      };
-      tpm2-pkcs11-esapi-abrmd = tpm2-pkcs11-esapi.override {
-        abrmdSupport = true;
-      };
-      tpm2-pkcs11-fapi-abrmd = tpm2-pkcs11-fapi.override {
-        abrmdSupport = true;
-      };
+      inherit
+        esapi
+        fapi
+        abrmd
+        esapi-abrmd
+        fapi-abrmd
+        ;
     };
   };
 

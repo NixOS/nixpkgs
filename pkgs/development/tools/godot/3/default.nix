@@ -83,6 +83,9 @@ stdenv.mkDerivation (self: {
     # of the OS. This isn't as surgical as just fixing the PATH, but it seems to work, and
     # seems to be the Nix community's current strategy when using Scons.
     /SConstruct/dontClobberEnvironment.patch
+    # Fix compile error with mono 6.14
+    # https://github.com/godotengine/godot/pull/106578
+    /move-MonoGCHandle-into-gdmono-namespace.patch
   ];
 
   enableParallelBuilding = true;

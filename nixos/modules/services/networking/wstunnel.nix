@@ -486,7 +486,7 @@ in
   };
 
   meta.maintainers = with lib.maintainers; [
-    alyaeanyx
+    pentane
     raylas
     rvdp
     neverbehave

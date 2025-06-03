@@ -61,6 +61,7 @@
 }:
 
 assert libXtSupport -> libX11Support;
+assert libraqmSupport -> freetypeSupport;
 
 let
   arch =

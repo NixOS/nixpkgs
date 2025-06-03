@@ -37,7 +37,8 @@
   nlsSupport ? true,
   osxkeychainSupport ? stdenv.hostPlatform.isDarwin,
   guiSupport ? false,
-  withManual ? true,
+  # Disable the manual since libxslt doesn't seem to parse the files correctly.
+  withManual ? !stdenv.hostPlatform.useLLVM,
   pythonSupport ? true,
   withpcre2 ? true,
   sendEmailSupport ? perlSupport,
@@ -456,6 +457,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   preInstallCheck =
     ''
+      # Some tests break with high concurrency
+      # https://github.com/NixOS/nixpkgs/pull/403237
+      if ((NIX_BUILD_CORES > 32)); then
+        NIX_BUILD_CORES=32
+      fi
+
       installCheckFlagsArray+=(
         GIT_PROVE_OPTS="--jobs $NIX_BUILD_CORES --failures --state=failed,save"
         GIT_TEST_INSTALLED=$out/bin
@@ -494,7 +501,11 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     + ''
       # Flaky tests:
+      disable_test t0027-auto-crlf
+      disable_test t1451-fsck-buffer
+      disable_test t5319-multi-pack-index
       disable_test t6421-merge-partial-clone
+      disable_test t7504-commit-msg-hook
 
       # Fails reproducibly on ZFS on Linux with formD normalization
       disable_test t0021-conversion

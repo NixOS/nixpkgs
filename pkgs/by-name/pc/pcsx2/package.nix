@@ -25,6 +25,7 @@
   wayland,
   zip,
   zstd,
+  fetchpatch,
 }:
 
 let
@@ -36,6 +37,16 @@ let
     qtwayland
     wrapQtAppsHook
     ;
+
+  cubeb' = cubeb.overrideAttrs (old: {
+    patches = (old.patches or [ ]) ++ [
+      (fetchpatch {
+        url = "https://github.com/PCSX2/pcsx2/commit/430e31abe4a9e09567cb542f1416b011bb9b6ef9.patch";
+        stripLen = 2;
+        hash = "sha256-bbH0c1X3lMeX6hfNKObhcq5xraFpicFV3mODQGYudvQ=";
+      })
+    ];
+  });
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   inherit (sources.pcsx2) pname version src;
@@ -43,6 +54,8 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Remove PCSX2_GIT_REV
     ./0000-define-rev.patch
+
+    ./remove-cubeb-vendor.patch
   ];
 
   cmakeFlags = [
@@ -54,6 +67,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     pkg-config
     strip-nondeterminism
     wrapQtAppsHook
@@ -62,7 +76,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     curl
-    extra-cmake-modules
     ffmpeg
     libaio
     libbacktrace
@@ -80,7 +93,8 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
     wayland
     zstd
-  ] ++ cubeb.passthru.backendLibs;
+    cubeb'
+  ];
 
   strictDeps = true;
 
@@ -94,13 +108,10 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   qtWrapperArgs =
     let
-      libs = lib.makeLibraryPath (
-        [
-          vulkan-loader
-          shaderc
-        ]
-        ++ cubeb.passthru.backendLibs
-      );
+      libs = lib.makeLibraryPath ([
+        vulkan-loader
+        shaderc
+      ]);
     in
     [ "--prefix LD_LIBRARY_PATH : ${libs}" ];
 

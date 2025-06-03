@@ -10,9 +10,13 @@ stdenv.mkDerivation {
   version = "11";
 
   src = fetchurl {
-    url = "http://call-with-current-continuation.org/ma/ma.tar.gz";
+    url = "https://web.archive.org/web/20250511210225/http://call-with-current-continuation.org/ma/ma.tar.gz";
     hash = "sha256-1UVxXbN2jSNm13BjyoN3jbKtkO3DUEEHaDOC2Ibbxf4=";
   };
+
+  postPatch = ''
+    substituteInPlace ./build --replace-fail gcc ${lib.getExe stdenv.cc}
+  '';
 
   buildInputs = [
     tclPackages.tk
@@ -40,7 +44,9 @@ stdenv.mkDerivation {
     homepage = "http://call-with-current-continuation.org/ma/ma.html";
     mainProgram = "ma";
     maintainers = with lib.maintainers; [ ehmry ];
-    license = lib.licenses.free;
+    # Per the README:
+    # > All of MA's source code is hereby placed in the public domain
+    license = lib.licenses.publicDomain;
     inherit (tclPackages.tk.meta) platforms;
   };
 }

@@ -17,13 +17,13 @@
 }:
 mkLibretroCore {
   core = "dolphin";
-  version = "0-unstable-2024-04-19";
+  version = "0-unstable-2025-05-17";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "dolphin";
-    rev = "89a4df725d4eb24537728f7d655cddb1add25c18";
-    hash = "sha256-f9O3//EuoCSPQC7GWmf0EzAEpjoKof30kIDBCDw0dbs=";
+    rev = "a09f78f735f0d2184f64ba5b134abe98ee99c65f";
+    hash = "sha256-NUnWNj47FmH8perfRwFFnaXeU58shUXqKFOzHf4ce5c=";
   };
 
   extraNativeBuildInputs = [

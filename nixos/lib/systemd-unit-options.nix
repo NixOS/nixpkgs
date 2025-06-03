@@ -15,7 +15,6 @@ let
   inherit (lib)
     any
     concatMap
-    filterOverrides
     isList
     literalExpression
     mergeEqualOption
@@ -56,13 +55,10 @@ rec {
     name = "systemd option";
     merge =
       loc: defs:
-      let
-        defs' = filterOverrides defs;
-      in
-      if any (def: isList def.value) defs' then
-        concatMap (def: toList def.value) defs'
+      if any (def: isList def.value) defs then
+        concatMap (def: toList def.value) defs
       else
-        mergeEqualOption loc defs';
+        mergeEqualOption loc defs;
   };
 
   sharedOptions = {
@@ -99,7 +95,7 @@ rec {
         Defines how unit configuration is provided for systemd:
 
         `asDropinIfExists` creates a unit file when no unit file is provided by the package
-        otherwise a drop-in file name `overrides.conf`.
+        otherwise it creates a drop-in file named `overrides.conf`.
 
         `asDropin` creates a drop-in file named `overrides.conf`.
         Mainly needed to define instances for systemd template units (e.g. `systemd-nspawn@mycontainer.service`).

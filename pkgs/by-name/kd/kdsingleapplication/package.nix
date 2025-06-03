@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "KDSingleApplication";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "KDAB";
     repo = "KDSingleApplication";
     tag = "v${version}";
-    hash = "sha256-Ymm+qOZMWULg7u5xEpGzcAfIrbWBQ3jsndnFSnh6/PA=";
+    hash = "sha256-rglt89Gw6OHXXVOEwf0TxezDzyHEvWepeGeup7fBlLs=";
   };
 
   nativeBuildInputs = [ cmake ];

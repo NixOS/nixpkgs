@@ -16,13 +16,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "terminator";
-  version = "2.1.4";
+  version = "2.1.5";
 
   src = fetchFromGitHub {
     owner = "gnome-terminator";
     repo = "terminator";
     tag = "v${version}";
-    hash = "sha256-0468d/sAM/UOiaSspwWaOGogoE8/Idth0G4CMCXWFFo=";
+    hash = "sha256-RM/7jUWGDV0EdMyMeLsCrvevH+5hZSJVAKmtalxNKG8=";
   };
 
   nativeBuildInputs = [
@@ -78,7 +78,7 @@ python3.pkgs.buildPythonApplication rec {
       quadkonsole, etc. in that the main focus is arranging terminals in grids
       (tabs is the most common default method, which Terminator also supports).
     '';
-    changelog = "https://github.com/gnome-terminator/terminator/releases/tag/v${version}";
+    changelog = "https://github.com/gnome-terminator/terminator/releases/tag/${src.tag}";
     homepage = "https://github.com/gnome-terminator/terminator";
     license = licenses.gpl2;
     maintainers = with maintainers; [ bjornfor ];

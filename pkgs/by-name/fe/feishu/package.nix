@@ -223,12 +223,13 @@ stdenv.mkDerivation {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "All-in-one collaboration suite";
     homepage = "https://www.feishu.cn/en/";
     downloadPage = "https://www.feishu.cn/en/#en_home_download_block";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = supportedPlatforms;
-    maintainers = with maintainers; [ billhuang ];
+    maintainers = with lib.maintainers; [ billhuang ];
+    mainProgram = "bytedance-feishu";
   };
 }

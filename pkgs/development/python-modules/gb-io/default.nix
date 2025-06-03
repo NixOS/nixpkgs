@@ -1,12 +1,10 @@
 {
-  stdenv,
   lib,
   fetchFromGitHub,
   buildPythonPackage,
   rustPlatform,
   cargo,
   rustc,
-  setuptools-rust,
   unittestCheckHook,
 }:
 
@@ -23,8 +21,12 @@ buildPythonPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src sourceRoot;
-    name = "${pname}-${version}";
+    inherit
+      pname
+      version
+      src
+      sourceRoot
+      ;
     hash = "sha256-97aEuXdq9oEqYJs6sgQU5a0vAMJmWJzu2WGjOqzxZ4c=";
   };
 
@@ -43,7 +45,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "gb_io" ];
 
   meta = with lib; {
-    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/althonos/gb-io.py";
     description = "Python interface to gb-io, a fast GenBank parser written in Rust";
     license = licenses.mit;

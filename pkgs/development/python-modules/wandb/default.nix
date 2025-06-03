@@ -7,6 +7,7 @@
   buildGoModule,
   git,
   versionCheckHook,
+  fetchpatch2,
 
   ## gpu-stats
   rustPlatform,
@@ -77,23 +78,23 @@
 }:
 
 let
-  version = "0.19.10";
+  version = "0.19.11";
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
     tag = "v${version}";
-    hash = "sha256-SptjImAK0hDAr7UZjUMWnAVB1bxyzoATlyrPek5Tm48=";
+    hash = "sha256-JsciaNN1l3Ldty8dB2meRXWz62JdLRXeG09b7PNrQx4=";
   };
 
   gpu-stats = rustPlatform.buildRustPackage {
     pname = "gpu-stats";
-    version = "0.3.0";
+    version = "0.4.0";
     inherit src;
 
     sourceRoot = "${src.name}/gpu_stats";
 
     useFetchCargoVendor = true;
-    cargoHash = "sha256-kkWvTLduxFVIEvi4e65QQ7S0kHTRJ8XW028o430L91s=";
+    cargoHash = "sha256-q8csheytw57C6+wPPaANkMkW1Smoo+IViiA6Cdrag4Q=";
 
     checkFlags = [
       # fails in sandbox
@@ -117,6 +118,23 @@ let
     inherit src version;
 
     sourceRoot = "${src.name}/core";
+
+    # x86_64-darwin fails with:
+    # "link: duplicated definition of symbol dlopen, from github.com/ebitengine/purego and github.com/ebitengine/purego"
+    # This is fixed in purego 0.8.3, but wandb-core uses 0.8.2, so we pull in the fix here.
+    patches = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+      (fetchpatch2 {
+        url = "https://github.com/ebitengine/purego/commit/1638563e361522e5f63511d84c4541ae1c5fd704.patch";
+        stripLen = 1;
+        extraPrefix = "vendor/github.com/ebitengine/purego/";
+        # These are not vendored by wandb-core
+        excludes = [
+          "vendor/github.com/ebitengine/purego/.github/workflows/test.yml"
+          "vendor/github.com/ebitengine/purego/internal/fakecgo/gen.go"
+        ];
+        hash = "sha256-GoT/OL6r3rJY5zoUyl3kGzSRpX3PoI7Yjpe7oRb0cFc=";
+      })
+    ];
 
     # hardcode the `gpu_stats` binary path.
     postPatch = ''

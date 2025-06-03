@@ -5,6 +5,7 @@
   stdenv,
   pkg-config,
   openssl,
+  rust-jemalloc-sys,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,6 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     openssl
+    rust-jemalloc-sys
   ];
 
   # tests don't work inside the sandbox

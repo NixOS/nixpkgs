@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-ole";
-  version = "3.10";
+  version = "3.11";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.ole";
     tag = version;
-    hash = "sha256-BGJnKL27Sz5CS+PEVK6AeXBuzYpLSA8qR9sz7qeOIWc=";
+    hash = "sha256-KdqEZxZ2V3AKHgpHfXmnw4sh+P8ZPOMvbRq0xENwiX8=";
   };
 
   build-system = [

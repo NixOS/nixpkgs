@@ -2,11 +2,19 @@
   lib,
   fetchurl,
   buildPythonPackage,
+  pythonAtLeast,
+
   pkg-config,
-  python,
-  dbus-python,
-  packaging,
+
   enlightenment,
+
+  packaging,
+  setuptools,
+
+  dbus-python,
+
+  pytestCheckHook,
+
   directoryListingUpdater,
 }:
 
@@ -15,10 +23,13 @@
 buildPythonPackage rec {
   pname = "python-efl";
   version = "1.26.1";
-  format = "setuptools";
+  pyproject = true;
+
+  # As of 1.26.1, native extensions fail to build with python 3.13+
+  disabled = pythonAtLeast "3.13";
 
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/bindings/python/${pname}-${version}.tar.xz";
+    url = "http://download.enlightenment.org/rel/bindings/python/python-efl-${version}.tar.xz";
     hash = "sha256-3Ns5fhIHihnpDYDnxvPP00WIZL/o1UWLzgNott4GKNc=";
   };
 
@@ -26,24 +37,43 @@ buildPythonPackage rec {
 
   buildInputs = [ enlightenment.efl ];
 
-  propagatedBuildInputs = [
-    dbus-python
+  build-system = [
     packaging
+    setuptools
+  ];
+
+  dependencies = [
+    dbus-python
   ];
 
   preConfigure = ''
     NIX_CFLAGS_COMPILE="$(pkg-config --cflags efl evas) $NIX_CFLAGS_COMPILE"
   '';
 
-  preBuild = ''
-    ${python.pythonOnBuildForHost.interpreter} setup.py build_ext
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    # make sure we load the library from $out instead of the cwd
+    # because cwd doesn't contain the built extensions
+    rm -r efl/
+
+    patchShebangs tests/ecore/exe_helper.sh
+
+    # use the new name instead of the removed alias
+    substituteInPlace tests/evas/test_01_rect.py \
+      --replace-fail ".assert_(" ".assertTrue("
   '';
 
-  installPhase = ''
-    ${python.pythonOnBuildForHost.interpreter} setup.py install --prefix=$out --single-version-externally-managed
-  '';
+  pytestFlagsArray = [ "tests/" ];
 
-  doCheck = false;
+  disabledTestPaths = [
+    "tests/dbus/test_01_basics.py" # needs dbus daemon
+    "tests/ecore/test_09_file_download.py" # uses network
+    "tests/ecore/test_11_con.py" # uses network
+    "tests/elementary/test_02_image_icon.py" # RuntimeWarning: Setting standard icon failed
+  ];
 
   passthru.updateScript = directoryListingUpdater { };
 

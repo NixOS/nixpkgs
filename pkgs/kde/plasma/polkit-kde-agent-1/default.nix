@@ -1,9 +1,13 @@
 {
   mkKdeDerivation,
   qtdeclarative,
+  kirigami,
 }:
 mkKdeDerivation {
   pname = "polkit-kde-agent-1";
 
-  extraBuildInputs = [ qtdeclarative ];
+  extraBuildInputs = [
+    qtdeclarative
+    kirigami
+  ];
 }

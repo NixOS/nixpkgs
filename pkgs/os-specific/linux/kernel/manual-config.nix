@@ -412,9 +412,17 @@ lib.makeOverridable (
             if kernelConf.target == "uImage" && stdenv.hostPlatform.linuxArch == "arm" then
               "uinstall"
             else if
-              kernelConf.target == "zImage"
-              || kernelConf.target == "Image.gz"
-              || kernelConf.target == "vmlinuz.efi"
+              (
+                kernelConf.target == "zImage"
+                || kernelConf.target == "Image.gz"
+                || kernelConf.target == "vmlinuz.efi"
+              )
+              && builtins.elem stdenv.hostPlatform.linuxArch [
+                "arm"
+                "arm64"
+                "parisc"
+                "riscv"
+              ]
             then
               "zinstall"
             else

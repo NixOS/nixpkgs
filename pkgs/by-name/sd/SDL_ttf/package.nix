@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_ttf";
-  version = "2.0.11.1-unstable-2024-04-23";
+  version = "2.0.11-unstable-2024-04-23";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";

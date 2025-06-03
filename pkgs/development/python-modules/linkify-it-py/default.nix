@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "tsutsu3";
-    repo = pname;
+    repo = "linkify-it-py";
     tag = "v${version}";
     hash = "sha256-BLwIityUZDVdSbvTpLf6QUlZUavWzG/45Nfffn18/vU=";
   };

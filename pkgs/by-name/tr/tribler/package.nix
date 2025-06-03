@@ -29,6 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-fQJOs9P4y71De/+svmD7YZ4+tm/bC3rspm7SbOHlSR4=";
   };
 
+  patches = [
+    ./startupwmclass.patch
+  ];
+
   nativeBuildInputs = [
     python3.pkgs.wrapPython
     makeWrapper

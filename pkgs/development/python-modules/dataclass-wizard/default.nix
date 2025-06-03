@@ -1,42 +1,46 @@
 {
   lib,
-  fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
+  fetchFromGitHub,
+  pytest-mock,
+  pytestCheckHook,
+  python-dotenv,
   pythonAtLeast,
+  pythonOlder,
   pytimeparse,
   pyyaml,
-  pytestCheckHook,
-  pytest-mock,
+  setuptools,
   typing-extensions,
+  tomli-w,
 }:
 
 buildPythonPackage rec {
   pname = "dataclass-wizard";
-  version = "0.22.2";
-  format = "setuptools";
+  version = "0.35.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rnag";
     repo = "dataclass-wizard";
-    rev = "v${version}";
-    hash = "sha256-Ufi4lZc+UkM6NZr4bS2OibpOmMjyiBEoVKxmrqauW50=";
+    tag = "v${version}";
+    hash = "sha256-Ed9/y2blOGYfNcmCCAe4TPWssKWUS0gxvRXKMf+cJh0=";
   };
 
-  propagatedBuildInputs = [ ] ++ lib.optionals (pythonOlder "3.9") [ typing-extensions ];
+  build-system = [ setuptools ];
+
+  dependencies = [ typing-extensions ];
 
   optional-dependencies = {
+    dotenv = [ python-dotenv ];
     timedelta = [ pytimeparse ];
+    toml = [ tomli-w ];
     yaml = [ pyyaml ];
   };
 
-  nativeCheckInputs =
-    [
-      pytestCheckHook
-      pytest-mock
-    ]
-    ++ optional-dependencies.timedelta
-    ++ optional-dependencies.yaml;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-mock
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTests =
     [ ]
@@ -53,11 +57,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "dataclass_wizard" ];
 
   meta = with lib; {
-    description = "Set of simple, yet elegant wizarding tools for interacting with the Python dataclasses module";
-    mainProgram = "wiz";
+    description = "Wizarding tools for interacting with the Python dataclasses module";
     homepage = "https://github.com/rnag/dataclass-wizard";
-    changelog = "https://github.com/rnag/dataclass-wizard/releases/tag/v${version}";
+    changelog = "https://github.com/rnag/dataclass-wizard/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ codifryed ];
+    mainProgram = "wiz";
   };
 }

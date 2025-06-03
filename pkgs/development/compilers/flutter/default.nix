@@ -87,6 +87,7 @@ let
                 chmod +w $out/bin
                 mkdir $out/bin/cache
                 cp $out/bin/internal/engine.version $out/bin/cache/engine.stamp
+                touch $out/bin/cache/engine.realm
               '')
             else
               source

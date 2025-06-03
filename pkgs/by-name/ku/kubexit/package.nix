@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "karlkfi";
-    repo = pname;
+    repo = "kubexit";
     rev = "v${version}";
     hash = "sha256-Kzom+/Xad6SI9czw4xvmTbJ+bNB9mF2oSq37IFn384U=";
   };

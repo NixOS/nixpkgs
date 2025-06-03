@@ -47,7 +47,7 @@ let
         runHook preInstallCheck
 
         mkdir empty && cd empty
-        dprint check --allow-no-files --plugins "$out/plugin.wasm"
+        dprint check --allow-no-files --config-discovery=false --plugins "$out/plugin.wasm"
 
         runHook postInstallCheck
       '';

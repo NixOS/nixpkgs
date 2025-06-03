@@ -8,18 +8,6 @@
 The files in this directory are added (in some way) to the `cudaPackages`
 package set by [cuda-packages.nix](../../top-level/cuda-packages.nix).
 
-## Top-level files
-
-Top-level nix files are included in the initial creation of the `cudaPackages`
-scope. These are typically required for the creation of the finalized
-`cudaPackages` scope:
-
-- `backend-stdenv.nix`: Standard environment for CUDA packages.
-- `flags.nix`: Flags set, or consumed by, NVCC in order to build packages.
-- `gpus.nix`: A list of supported NVIDIA GPUs.
-- `nvcc-compatibilities.nix`: NVCC releases and the version range of GCC/Clang
-    they support.
-
 ## Top-level directories
 
 - `cuda`: CUDA redistributables! Provides extension to `cudaPackages` scope.
@@ -48,9 +36,8 @@ scope. These are typically required for the creation of the finalized
     own. `cudnn` and `tensorrt` are examples of packages which provide such
     shims. These modules are further described in the
     [Modules](./modules/README.md) documentation.
-- `nccl`: NVIDIA NCCL library.
-- `nccl-tests`: NVIDIA NCCL tests.
-- `saxpy`: Example CMake project that uses CUDA.
+- `packages`: Contains packages which exist in every instance of the CUDA
+    package set. These packages are built in a `by-name` fashion.
 - `setup-hooks`: Nixpkgs setup hooks for CUDA.
 - `tensorrt`: NVIDIA TensorRT library.
 

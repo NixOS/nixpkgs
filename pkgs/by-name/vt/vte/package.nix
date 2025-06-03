@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   fetchpatch,
+  desktop-file-utils,
   gettext,
   pkg-config,
   meson,
@@ -34,7 +35,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vte";
-  version = "0.78.4";
+  version = "0.80.1";
 
   outputs = [
     "out"
@@ -43,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/vte/${lib.versions.majorMinor finalAttrs.version}/vte-${finalAttrs.version}.tar.xz";
-    hash = "sha256-LepOQSJmWStkYKP+RIj149UHEvE5gVeQwOy0RxD34X4=";
+    hash = "sha256-DNvQ6YOv2dIuBl4yOnQxYAcr9ktFPgCxXtvm8tzdpGw=";
   };
 
   patches = [
@@ -55,26 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://git.alpinelinux.org/aports/plain/community/vte3/fix-W_EXITCODE.patch?id=4d35c076ce77bfac7655f60c4c3e4c86933ab7dd";
       hash = "sha256-FkVyhsM0mRUzZmS2Gh172oqwcfXv6PyD6IEgjBhy2uU=";
     })
-    # build: Add fast_float dependency
-    # https://gitlab.gnome.org/GNOME/vte/-/issues/2823
-    (fetchpatch {
-      name = "0003-build-Add-fast_float-dependency.patch";
-      url = "https://gitlab.gnome.org/GNOME/vte/-/commit/f6095fca4d1baf950817e7010e6f1e7c313b9e2e.patch";
-      hash = "sha256-EL9PPiI5pDJOXf4Ck4nkRte/jHx/QWbxkjDFRSsp+so=";
-    })
-    (fetchpatch {
-      name = "0003-widget-termprops-Use-fast_float.patch";
-      url = "https://gitlab.gnome.org/GNOME/vte/-/commit/6c2761f51a0400772f443f12ea23a75576e195d3.patch";
-      hash = "sha256-jjM9bhl8EhtylUIQ2nMSNX3ugnkZQP/2POvSUDW0LM0=";
-    })
-    (fetchpatch {
-      name = "0003-build-Use-correct-path-to-include-fast_float.h.patch";
-      url = "https://gitlab.gnome.org/GNOME/vte/-/commit/d09330585e648b5c9991dffab4a06d1f127bf916.patch";
-      hash = "sha256-YGVXt2VojljYgTcmahQ2YEZGEysyUSwk+snQfoipJ+E=";
-    })
   ];
 
   nativeBuildInputs = [
+    desktop-file-utils # for desktop-file-validate
     gettext
     gobject-introspection
     gperf
@@ -134,6 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs perf/*
+    patchShebangs src/app/meson_desktopfile.py
     patchShebangs src/parser-seq.py
     patchShebangs src/minifont-coverage.py
     patchShebangs src/modes.py

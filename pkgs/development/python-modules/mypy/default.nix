@@ -6,6 +6,7 @@
   gitUpdater,
   pythonAtLeast,
   pythonOlder,
+  isPyPy,
 
   # build-system
   setuptools,
@@ -35,7 +36,8 @@ buildPythonPackage rec {
   version = "1.15.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  # relies on several CPython internals
+  disabled = pythonOlder "3.8" || isPyPy;
 
   src = fetchFromGitHub {
     owner = "python";

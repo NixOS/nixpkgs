@@ -2,63 +2,39 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pkg-config,
   rustPlatform,
   cargo,
-  rustc,
-  bzip2,
-  nettle,
-  openssl,
-  pcsclite,
-  stdenv,
-  libiconv,
 }:
 
 buildPythonPackage rec {
   pname = "pysequoia";
-  version = "0.1.26";
+  version = "0.1.28";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ip4yv54e1c+zshEtLVgK5D2VcB41AzSEJHuD5t8akXI=";
+    hash = "sha256-ixTszL2IN50SDYTDZqzlMI1nY6yNkEUnK5VxCoAG0jk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-vm9PpJHRznxNVtL28PBGnQcMUHwFn5uxW7Y9UufAUPg=";
+    inherit pname version src;
+    hash = "sha256-cq55j3wNcV8CRbnqZPV8zrRzvUud5RXJDX1oh7WZoiU=";
   };
 
   nativeBuildInputs = [
-    pkg-config
     rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
     cargo
-    rustc
   ];
-
-  buildInputs =
-    [
-      bzip2
-      nettle
-      openssl
-      pcsclite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
 
   pythonImportsCheck = [ "pysequoia" ];
 
-  meta = with lib; {
+  meta = {
     description = "This library provides OpenPGP facilities in Python through the Sequoia PGP library";
-    downloadPage = "https://codeberg.org/wiktor/pysequoia";
-    homepage = "https://sequoia-pgp.gitlab.io/pysequoia";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ doronbehar ];
-    # Broken since the 0.1.20 update according to ofborg. The errors are not clear...
-    broken = stdenv.hostPlatform.isDarwin;
+    downloadPage = "https://github.com/wiktor-k/pysequoia";
+    homepage = "https://github.com/wiktor-k/pysequoia";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

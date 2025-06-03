@@ -87,13 +87,13 @@ with pkgs;
       };
 
       llvmTests = recurseIntoAttrs llvmTests;
-      inherit gccTests;
+      gccTests = recurseIntoAttrs gccTests;
     };
 
   devShellTools = callPackage ../build-support/dev-shell-tools/tests { };
 
   stdenv-inputs = callPackage ./stdenv-inputs { };
-  stdenv = callPackage ./stdenv { };
+  stdenv = recurseIntoAttrs (callPackage ./stdenv { });
 
   hardeningFlags = recurseIntoAttrs (callPackage ./cc-wrapper/hardening.nix { });
   hardeningFlags-gcc = recurseIntoAttrs (
@@ -113,24 +113,28 @@ with pkgs;
 
   haskell = callPackage ./haskell { };
 
-  hooks = callPackage ./hooks { };
+  hooks = recurseIntoAttrs (callPackage ./hooks { });
 
   cc-multilib-gcc = callPackage ./cc-wrapper/multilib.nix { stdenv = gccMultiStdenv; };
   cc-multilib-clang = callPackage ./cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
 
   compress-drv = callPackage ../build-support/compress-drv/test.nix { };
 
-  fetchurl = callPackages ../build-support/fetchurl/tests.nix { };
-  fetchtorrent = callPackages ../build-support/fetchtorrent/tests.nix { };
-  fetchpatch = callPackages ../build-support/fetchpatch/tests.nix { };
-  fetchpatch2 = callPackages ../build-support/fetchpatch/tests.nix { fetchpatch = fetchpatch2; };
-  fetchDebianPatch = callPackages ../build-support/fetchdebianpatch/tests.nix { };
-  fetchzip = callPackages ../build-support/fetchzip/tests.nix { };
-  fetchgit = callPackages ../build-support/fetchgit/tests.nix { };
-  fetchFirefoxAddon = callPackages ../build-support/fetchfirefoxaddon/tests.nix { };
-  fetchPypiLegacy = callPackages ../build-support/fetchpypilegacy/tests.nix { };
+  fetchurl = recurseIntoAttrs (callPackages ../build-support/fetchurl/tests.nix { });
+  fetchtorrent = recurseIntoAttrs (callPackages ../build-support/fetchtorrent/tests.nix { });
+  fetchpatch = recurseIntoAttrs (callPackages ../build-support/fetchpatch/tests.nix { });
+  fetchpatch2 = recurseIntoAttrs (
+    callPackages ../build-support/fetchpatch/tests.nix { fetchpatch = fetchpatch2; }
+  );
+  fetchDebianPatch = recurseIntoAttrs (callPackages ../build-support/fetchdebianpatch/tests.nix { });
+  fetchzip = recurseIntoAttrs (callPackages ../build-support/fetchzip/tests.nix { });
+  fetchgit = recurseIntoAttrs (callPackages ../build-support/fetchgit/tests.nix { });
+  fetchFirefoxAddon = recurseIntoAttrs (
+    callPackages ../build-support/fetchfirefoxaddon/tests.nix { }
+  );
+  fetchPypiLegacy = recurseIntoAttrs (callPackages ../build-support/fetchpypilegacy/tests.nix { });
 
-  install-shell-files = callPackage ./install-shell-files { };
+  install-shell-files = recurseIntoAttrs (callPackage ./install-shell-files { });
 
   checkpointBuildTools = callPackage ./checkpointBuild { };
 
@@ -138,9 +142,7 @@ with pkgs;
 
   ld-library-path = callPackage ./ld-library-path { };
 
-  cross = callPackage ./cross { } // {
-    __attrsFailEvaluation = true;
-  };
+  cross = recurseIntoAttrs (callPackage ./cross { });
 
   php = recurseIntoAttrs (callPackages ./php { });
 
@@ -148,18 +150,18 @@ with pkgs;
     __recurseIntoDerivationForReleaseJobs = true;
   };
 
-  buildRustCrate = callPackage ../build-support/rust/build-rust-crate/test { };
-  importCargoLock = callPackage ../build-support/rust/test/import-cargo-lock { };
+  buildRustCrate = recurseIntoAttrs (callPackage ../build-support/rust/build-rust-crate/test { });
+  importCargoLock = recurseIntoAttrs (callPackage ../build-support/rust/test/import-cargo-lock { });
 
   vim = callPackage ./vim { };
 
   nixos-functions = callPackage ./nixos-functions { };
 
-  nixosOptionsDoc = callPackage ../../nixos/lib/make-options-doc/tests.nix { };
+  nixosOptionsDoc = recurseIntoAttrs (callPackage ../../nixos/lib/make-options-doc/tests.nix { });
 
   overriding = callPackage ./overriding.nix { };
 
-  texlive = callPackage ./texlive { };
+  texlive = recurseIntoAttrs (callPackage ./texlive { });
 
   cuda = callPackage ./cuda { };
 
@@ -177,7 +179,7 @@ with pkgs;
 
   dotnet = recurseIntoAttrs (callPackages ./dotnet { });
 
-  makeHardcodeGsettingsPatch = callPackage ./make-hardcode-gsettings-patch { };
+  makeHardcodeGsettingsPatch = recurseIntoAttrs (callPackage ./make-hardcode-gsettings-patch { });
 
   makeWrapper = callPackage ./make-wrapper { };
   makeBinaryWrapper = callPackage ./make-binary-wrapper {
@@ -196,8 +198,6 @@ with pkgs;
   pkgs-lib = recurseIntoAttrs (import ../pkgs-lib/tests { inherit pkgs; });
 
   buildFHSEnv = recurseIntoAttrs (callPackages ./buildFHSEnv { });
-
-  nixpkgs-check-by-name = throw "tests.nixpkgs-check-by-name is now specified in a separate repository: https://github.com/NixOS/nixpkgs-check-by-name";
 
   auto-patchelf-hook = callPackage ./auto-patchelf-hook { };
 

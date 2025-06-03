@@ -669,7 +669,11 @@ in
 
         # Caches
         PrivateTmp = true;
-        CacheDirectory = "frigate";
+        CacheDirectory = [
+          "frigate"
+          # https://github.com/blakeblackshear/frigate/discussions/18129
+          "frigate/model_cache"
+        ];
         CacheDirectoryMode = "0750";
 
         # Sockets/IPC

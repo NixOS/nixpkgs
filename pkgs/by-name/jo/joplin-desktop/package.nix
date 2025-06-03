@@ -60,7 +60,7 @@ let
 
     extraInstallCommands = ''
       wrapProgram $out/bin/joplin-desktop \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}"
       install -Dm644 ${appimageContents}/joplin.desktop $out/share/applications/joplin.desktop
       install -Dm644 ${appimageContents}/joplin.png $out/share/pixmaps/joplin.png
       substituteInPlace $out/share/applications/joplin.desktop \
@@ -82,11 +82,15 @@ let
 
     unpackPhase = ''
       runHook preUnpack
-      7zz x -x'!Joplin ${version}/Applications' $src
+      7zz x -x'!Joplin ${version}/Applications' -xr'!*:com.apple.cs.Code*' $src
       runHook postUnpack
     '';
 
     sourceRoot = if stdenv.hostPlatform.isx86_64 then "Joplin ${version}" else ".";
+
+    postPatch = ''
+      chmod a+x Joplin.app/Contents/Resources/build/7zip/7za
+    '';
 
     installPhase = ''
       runHook preInstall

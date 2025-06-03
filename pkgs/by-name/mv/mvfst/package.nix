@@ -60,6 +60,13 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
   ];
 
+  hardeningDisable = [
+    # causes test failures on aarch64
+    "pacret"
+    # causes empty cmake files to be generated
+    "trivialautovarinit"
+  ];
+
   cmakeFlags =
     [
       (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))

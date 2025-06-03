@@ -77,14 +77,14 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       runHook preInstall
 
-      mkdir -p $out/{bin,share/${finalAttrs.pname}}
-      install -Dm644 ${finalAttrs.src} $out/share/${finalAttrs.pname}/ocelot-desktop.jar
+      mkdir -p $out/{bin,share/ocelot-desktop}
+      install -Dm644 ${finalAttrs.src} $out/share/ocelot-desktop/ocelot-desktop.jar
 
       makeBinaryWrapper ${jre}/bin/java $out/bin/ocelot-desktop \
         --set JAVA_HOME ${jre.home} \
         --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeLibs}" \
         --prefix PATH : "${lib.makeBinPath runtimePrograms}" \
-        --add-flags "-jar $out/share/${finalAttrs.pname}/ocelot-desktop.jar"
+        --add-flags "-jar $out/share/ocelot-desktop/ocelot-desktop.jar"
 
       # copy icons from zip file
       # ocelot/desktop/images/icon*.png
@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       for size in 16 32 64 128 256; do
         mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-        unzip -p $out/share/${finalAttrs.pname}/ocelot-desktop.jar \
+        unzip -p $out/share/ocelot-desktop/ocelot-desktop.jar \
           ocelot/desktop/images/icon"$size".png > $out/share/icons/hicolor/"$size"x"$size"/apps/ocelot-desktop.png
       done
 

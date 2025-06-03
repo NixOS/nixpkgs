@@ -5,7 +5,9 @@
   installShellFiles,
   pkg-config,
   openssl,
-  nix-update-script,
+  writeShellScript,
+  nix-update,
+  gitMinimal,
   versionCheckHook,
   callPackage,
 }:
@@ -36,6 +38,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env = {
     GEN_ARTIFACTS = "artifacts";
     OPENSSL_NO_VENDOR = true;
+    # to not have "unknown hash" in help output
+    TYPST_VERSION = finalAttrs.version;
   };
 
   # Fix for "Found argument '--test-threads' which wasn't expected, or isn't valid in this context"
@@ -58,7 +62,25 @@ rustPlatform.buildRustPackage (finalAttrs: {
   versionCheckProgramArg = "--version";
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = {
+      command = [
+        (writeShellScript "update-typst.sh" ''
+          currentVersion=$(nix-instantiate --eval -E "with import ./. {}; typst.version or (lib.getVersion typst)" | tr -d '"')
+          ${lib.getExe nix-update} typst > /dev/null
+          latestVersion=$(nix-instantiate --eval -E "with import ./. {}; typst.version or (lib.getVersion typst)" | tr -d '"')
+          changes=()
+          if [[ "$currentVersion" != "$latestVersion" ]]; then
+            changes+=("{\"attrPath\":\"typst\",\"oldVersion\":\"$currentVersion\",\"newVersion\":\"$latestVersion\",\"files\":[\"pkgs/by-name/ty/typst/package.nix\"]}")
+          fi
+          maintainers/scripts/update-typst-packages.py --output pkgs/by-name/ty/typst/typst-packages-from-universe.toml > /dev/null
+          ${lib.getExe gitMinimal} diff --quiet HEAD -- pkgs/by-name/ty/typst/typst-packages-from-universe.toml || changes+=("{\"attrPath\":\"typstPackages\",\"oldVersion\":\"0\",\"newVersion\":\"1\",\"files\":[\"pkgs/by-name/ty/typst/typst-packages-from-universe.toml\"]}")
+          echo -n "["
+            IFS=,; echo -n "''${changes[*]}"
+          echo "]"
+        '')
+      ];
+      supportedFeatures = [ "commit" ];
+    };
     packages = callPackage ./typst-packages.nix { };
     withPackages = callPackage ./with-packages.nix { };
   };

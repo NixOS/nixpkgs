@@ -1,10 +1,9 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   cmake,
-  qtbase,
-  wrapQtAppsHook,
+  libsForQt5,
   libraw,
   exiv2,
   zlib,
@@ -14,7 +13,7 @@
   copyDesktopItems,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "hdrmerge";
   version = "0.5.0-unstable-2024-08-02";
   src = fetchFromGitHub {
@@ -27,12 +26,12 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
     copyDesktopItems
   ];
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     libraw
     exiv2
     zlib

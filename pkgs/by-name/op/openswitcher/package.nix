@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "openswitcher";
-  version = "0.11.0";
+  version = "0.12.0";
   format = "other";
 
   src = fetchFromSourcehut {
     owner = "~martijnbraam";
     repo = "pyatem";
     rev = version;
-    hash = "sha256-VBuOnUVB6n8ahVtunubgao9jHPu9ncX0dhDT0PdSFhU=";
+    hash = "sha256-2NuqZn/WZzQXLc/hVm5/5gp9l0LMIHHPBW5h4j34/a4=";
   };
 
   outputs = [

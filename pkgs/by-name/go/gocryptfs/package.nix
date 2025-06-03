@@ -16,7 +16,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "rfjakob";
-    repo = pname;
+    repo = "gocryptfs";
     rev = "v${version}";
     sha256 = "sha256-lDIKMcZLAE1ehijzhpx6G966xzdhusT40Dy06LXBn74=";
   };

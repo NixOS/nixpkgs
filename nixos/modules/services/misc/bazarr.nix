@@ -14,6 +14,12 @@ in
 
       package = lib.mkPackageOption pkgs "bazarr" { };
 
+      dataDir = lib.mkOption {
+        type = lib.types.str;
+        default = "/var/lib/bazarr";
+        description = "The directory where Bazarr stores its data files.";
+      };
+
       openFirewall = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -41,20 +47,24 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    systemd.tmpfiles.settings."10-bazarr".${cfg.dataDir}.d = {
+      inherit (cfg) user group;
+      mode = "0700";
+    };
+
     systemd.services.bazarr = {
       description = "Bazarr";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      serviceConfig = rec {
+      serviceConfig = {
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        StateDirectory = "bazarr";
         SyslogIdentifier = "bazarr";
         ExecStart = pkgs.writeShellScript "start-bazarr" ''
           ${cfg.package}/bin/bazarr \
-            --config '/var/lib/${StateDirectory}' \
+            --config '${cfg.dataDir}' \
             --port ${toString cfg.listenPort} \
             --no-update True
         '';
@@ -72,7 +82,7 @@ in
       bazarr = {
         isSystemUser = true;
         group = cfg.group;
-        home = "/var/lib/${config.systemd.services.bazarr.serviceConfig.StateDirectory}";
+        home = cfg.dataDir;
       };
     };
 

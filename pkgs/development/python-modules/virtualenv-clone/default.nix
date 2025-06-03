@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "edwardgeorge";
-    repo = pname;
+    repo = "virtualenv-clone";
     rev = version;
     hash = "sha256-qrN74IwLRqiVPxU8gVhdiM34yBmiS/5ot07uroYPDVw=";
   };
@@ -25,6 +25,14 @@ buildPythonPackage rec {
 
     substituteInPlace tests/test_virtualenv_sys.py \
       --replace-fail "'virtualenv'" "'${virtualenv}/bin/virtualenv'"
+
+    # PermissionError: [Errno 13] Permission denied: '/tmp/test_fixup_pth_file.pth'
+    # Unable to reproduce.
+    # Theory: this fixed path may collide with itself on darwin if this package is built for multiple python versions simultaneously
+    substituteInPlace tests/test_fixup_scripts.py \
+      --replace-fail \
+        "pth = '/tmp/test_fixup_pth_file.pth'" \
+        "pth = '$(mktemp -d)/test_fixup_pth_file.pth'"
   '';
 
   propagatedBuildInputs = [ virtualenv ];

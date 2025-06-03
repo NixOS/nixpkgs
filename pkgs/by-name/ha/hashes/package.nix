@@ -19,7 +19,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "hashes";
-  version = "1.1.1";
+  version = "1.1.2";
 
   pyproject = false;
 
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
     owner = "zefr0x";
     repo = "hashes";
     tag = "v${version}";
-    hash = "sha256-4khMRtKvYQkTwhiqv7FUy/jroGboNTdG1Q6wlTD4cwA=";
+    hash = "sha256-Nyf7jED6LnsFu86zWhRh05sdGKwVAybVsGLGFFsz6eA=";
   };
 
   nativeBuildInputs = [

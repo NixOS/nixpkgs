@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wob";
-  version = "0.15.1";
+  version = "0.16";
 
   src = fetchFromGitHub {
     owner = "francma";
     repo = "wob";
     rev = version;
-    sha256 = "sha256-9LFAEo17w861ldMJU+t1oLAKoM6gJc4Em4tSwQDXbKU=";
+    sha256 = "sha256-Bn/WN9Ix4vm9FDFVKc/vRLP4WeVNaJFz1WBuS9tqJhY=";
   };
 
   strictDeps = true;

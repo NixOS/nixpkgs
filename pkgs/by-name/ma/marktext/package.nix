@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "marktext";
-  version = "0.17.0-unstable-2024-06-10";
+  version = "0.17.1-unstable-2024-06-10";
 
   src = fetchFromGitHub {
     owner = "marktext";

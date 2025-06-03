@@ -10,7 +10,7 @@
   steam-run,
   replaceVars,
   unzip,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
 }:
 
@@ -61,7 +61,7 @@ python3Packages.buildPythonApplication rec {
   pythonPath = [
     python3Packages.pygobject3
     python3Packages.requests
-    webkitgtk_4_0
+    webkitgtk_4_1
   ];
 
   dontWrapGApps = true;

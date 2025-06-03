@@ -6,6 +6,8 @@
   libxcrypt-legacy,
   xz,
   zstd,
+  makeBinaryWrapper,
+  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,6 +36,11 @@ stdenv.mkDerivation rec {
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
+  nativeBuildInputs = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    makeBinaryWrapper
+    darwin.sigtool
+  ];
+
   patches = [
     # fix double entry in share/info/porting.info
     # https://github.com/NixOS/nixpkgs/issues/363902
@@ -52,22 +59,34 @@ stdenv.mkDerivation rec {
     rm $out/bin/{arm-none-eabi-gdb-py,arm-none-eabi-gdb-add-index-py} || :
   '';
 
-  preFixup = lib.optionalString stdenv.isLinux ''
-    find $out -type f | while read f; do
-      patchelf "$f" > /dev/null 2>&1 || continue
-      patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f" || true
-      patchelf --set-rpath ${
-        lib.makeLibraryPath [
-          "$out"
-          stdenv.cc.cc
-          ncurses6
-          libxcrypt-legacy
-          xz
-          zstd
-        ]
-      } "$f" || true
-    done
-  '';
+  preFixup =
+    lib.optionalString stdenv.isLinux ''
+      find $out -type f | while read f; do
+        patchelf "$f" > /dev/null 2>&1 || continue
+        patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f" || true
+        patchelf --set-rpath ${
+          lib.makeLibraryPath [
+            "$out"
+            stdenv.cc.cc
+            ncurses6
+            libxcrypt-legacy
+            xz
+            zstd
+          ]
+        } "$f" || true
+      done
+    ''
+    + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+      find "$out" -executable -type f | while read executable; do
+        ( \
+          install_name_tool \
+            -change "/usr/local/opt/zstd/lib/libzstd.1.dylib" "${lib.getLib zstd}/lib/libzstd.1.dylib" \
+            -change "/usr/local/opt/xz/lib/liblzma.5.dylib" "${lib.getLib xz}/lib/liblzma.5.dylib" \
+            "$executable" \
+          && codesign -f -s - "$executable" \
+        ) || true
+      done
+    '';
 
   meta = with lib; {
     description = "Pre-built GNU toolchain from ARM Cortex-M & Cortex-R processors";

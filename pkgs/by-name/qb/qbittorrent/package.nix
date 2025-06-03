@@ -20,21 +20,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qbittorrent" + lib.optionalString (!guiSupport) "-nox";
-  version = "5.0.4";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
     repo = "qBittorrent";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-8gSSUgYx0CSSb3ackFknZ9r0cWFLxkC7a3Tj8QJaylc=";
+    hash = "sha256-ZLmKEdvtOxCzEOnJ4JPQQhR427YA288vTRxpk6O0tUc=";
   };
-
-  # Partial backport of https://github.com/qbittorrent/qBittorrent/commit/a6809efbbbdf18a1b66df9c89d0d0aeefd78f461
-  # to fix build with Qt 6.9.
-  # FIXME: remove in next update
-  patches = [
-    ./qt-6.9.patch
-  ];
 
   nativeBuildInputs = [
     cmake

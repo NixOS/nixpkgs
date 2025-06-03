@@ -12,6 +12,7 @@
   xz,
   bzip2,
   zlib,
+  zstd,
   icu,
   ipython,
   jinja2,
@@ -53,6 +54,7 @@ buildPythonPackage rec {
       xz
       bzip2
       zlib
+      zstd
       icu
       libdeflate
     ]

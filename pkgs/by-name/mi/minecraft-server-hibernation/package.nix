@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "gekware";
-    repo = pname;
+    repo = "minecraft-server-hibernation";
     rev = "v${version}";
     hash = "sha256-b6LeqjIraIasHBpaVgy8esl4NV8rdBrfO7ewgeIocS8=";
   };

@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "aiomisc";
-  version = "17.7.3";
+  version = "17.7.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-w9SvoqZQYV7BS8Fc/ESgv+AQ/fYSJrqVBt7OokypNSc=";
+    hash = "sha256-zN3ryxjgbaJ4lcm3qwUY74h/kBjaWhHsxGJSM/tn3yU=";
   };
 
   build-system = [ poetry-core ];

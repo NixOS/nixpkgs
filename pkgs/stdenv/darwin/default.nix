@@ -439,6 +439,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               (superDarwin.binutils-unwrapped.override { enableManpages = false; }).overrideAttrs
                 (old: {
                   version = "boot";
+                  __intentionallyOverridingVersion = true; # to avoid a warning suggesting to provide src
                   passthru = (old.passthru or { }) // {
                     isFromBootstrapFiles = true;
                   };

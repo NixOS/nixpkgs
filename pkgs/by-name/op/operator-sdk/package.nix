@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "operator-framework";
-    repo = pname;
+    repo = "operator-sdk";
     tag = "v${version}";
     hash = "sha256-2Kv6mDC1MndUgttRYODnI8DZ84RVz8jn3+RpXmOemq0=";
   };

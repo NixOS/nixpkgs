@@ -233,6 +233,13 @@ stdenv.mkDerivation {
         relative = "include";
         hash = "sha256-9JvKQOAB19wQpWLNAhuB9eL8qKqXWTQHAJIXdLYMNG8=";
       })
+      # Fixes ABI detection on some platforms (like loongarch64)
+      (fetchpatch {
+        url = "https://github.com/boostorg/context/commit/63996e427b4470c7b99b0f4cafb94839ea3670b6.patch";
+        stripLen = 1;
+        extraPrefix = "libs/context/";
+        hash = "sha256-Z8uw2+4IEybqVcU25i/0XJKS16hi/+3MXUxs53ghjL0=";
+      })
     ];
 
   meta = with lib; {

@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "deepsource";
-  version = "0.8.6";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "DeepSourceCorp";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-6uNb4cQVerrlW/eUkjmlO1i1YKYX3qaVdo0i5cczt+I=";
+    hash = "sha256-GWIQT6VIvU4ZIHwK3v2bGasE4mJc2cMpUAJvIQ2zJR4=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

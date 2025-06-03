@@ -262,6 +262,8 @@ stdenv.mkDerivation rec {
       --replace-fail "/${bindir}/signal-desktop" ${meta.mainProgram} \
       --replace-fail "StartupWMClass=Signal" "StartupWMClass=signal"
 
+    mv $out/share/applications/signal{-desktop,}.desktop
+
     # Note: The following path contains bundled libraries:
     # $out/lib/signal-desktop/resources/app.asar.unpacked/node_modules/
     patchelf --add-needed ${libpulseaudio}/lib/libpulse.so "$out/lib/signal-desktop/resources/app.asar.unpacked/node_modules/@signalapp/ringrtc/build/linux/libringrtc-${ARCH}.node"
@@ -295,7 +297,6 @@ stdenv.mkDerivation rec {
       equirosa
       urandom
       bkchr
-      teutat3s
       emily
       Gliczy
     ];
