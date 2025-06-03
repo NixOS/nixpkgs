@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
       desktopName = "Gitify";
       exec = "gitify %U";
       icon = "gitify";
-      comment = "GitHub Notifications on your menu bar.";
+      comment = "GitHub notifications on your menu bar.";
       categories = [ "Development" ];
       startupWMClass = "Gitify";
     })
@@ -104,9 +104,9 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://www.gitify.io/";
+    homepage = "https://gitify.io/";
     changelog = "https://github.com/gitify-app/gitify/releases/tag/v${finalAttrs.version}";
-    description = "GitHub Notifications on your menu bar";
+    description = "GitHub notifications on your menu bar";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pineapplehunter ];
     platforms = lib.platforms.all;
