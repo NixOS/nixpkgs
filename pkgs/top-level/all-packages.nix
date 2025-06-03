@@ -9485,8 +9485,6 @@ with pkgs;
     }
   );
 
-  qv2ray = libsForQt5.callPackage ../applications/networking/qv2ray { };
-
   readline = readline82;
 
   readline70 = callPackage ../development/libraries/readline/7.0.nix { };
