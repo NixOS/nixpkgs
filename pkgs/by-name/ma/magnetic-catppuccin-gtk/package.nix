@@ -59,13 +59,13 @@ lib.checkListOfEnum "${pname} Valid theme accent(s)" validAccents accent lib.che
   stdenv.mkDerivation
   {
     pname = "magnetic-${lib.toLower pname}";
-    version = "0-unstable-2024-11-06";
+    version = "0-unstable-2025-04-25";
 
     src = fetchFromGitHub {
       owner = "Fausto-Korpsvart";
       repo = "Catppuccin-GTK-Theme";
-      rev = "be79b8289200aa1a17620f84dde3fe4c3b9c5998";
-      hash = "sha256-QItHmYZpe7BiPC+2CtFwiRXyMTG7+ex0sJTs63xmkAo=";
+      rev = "c961826d027ed93fae12a9a309616e36d140e6b9";
+      hash = "sha256-7F4FrhM+kBFPeLp2mjmYkoDiF9iKDUkC27LUBuFyz7g=";
     };
 
     nativeBuildInputs = [
