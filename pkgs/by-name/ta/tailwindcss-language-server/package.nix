@@ -5,20 +5,18 @@
   nodejs_latest,
   pnpm_9,
   cacert,
+  nix-update-script,
 }:
 
-let
-  version = "0.14.4";
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tailwindcss-language-server";
-  inherit version;
+  version = "0.14.19";
 
   src = fetchFromGitHub {
     owner = "tailwindlabs";
     repo = "tailwindcss-intellisense";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-ZSKvD0OnI+/i5MHHlrgYbcaa8g95fVwjb2oryaEParQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lAZ3BoecPB3+zmI8RataAcbk32avV9Ie+Ek6q/JcXnU=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
@@ -29,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
       pnpmWorkspaces
       prePnpmInstall
       ;
-    hash = "sha256-f7eNBQl6/qLE7heoCFnYpjq57cjZ9pwT9Td4WmY1oag=";
+    hash = "sha256-TxWaapm/nkyMi3JCj6TE56DhJYPBWBDGXOnzgB9uPjs=";
   };
 
   nativeBuildInputs = [
@@ -37,9 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm_9.configHook
   ];
 
-  buildInputs = [
-    nodejs_latest
-  ];
+  buildInputs = [ nodejs_latest ];
 
   pnpmWorkspaces = [ "@tailwindcss/language-server..." ];
   prePnpmInstall = ''
@@ -70,12 +66,15 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Tailwind CSS Language Server";
     homepage = "https://github.com/tailwindlabs/tailwindcss-intellisense";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    changelog = "https://github.com/tailwindlabs/tailwindcss-intellisense/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
     mainProgram = "tailwindcss-language-server";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

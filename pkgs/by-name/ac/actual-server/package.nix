@@ -207,6 +207,8 @@ stdenv.mkDerivation {
     homepage = "https://actualbudget.org/";
     mainProgram = "actual-server";
     license = lib.licenses.mit;
+    # https://github.com/NixOS/nixpkgs/issues/403846
+    broken = stdenv.isDarwin;
     maintainers = [
       lib.maintainers.oddlama
       lib.maintainers.patrickdag

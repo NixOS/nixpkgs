@@ -41,14 +41,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "signing-party";
-  version = "2.11";
+  version = "2.12";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "signing-party-team";
     repo = "signing-party";
     rev = "v${version}";
-    sha256 = "1aig5ssabzbk4mih7xd04vgr931bw0flbi8dz902wlr610gyv5s5";
+    sha256 = "sha256-hUlMClx/TRmnC2Ah6MIsNGpZGI/KmgWt2z4XzbIAnag=";
   };
 
   # TODO: Get this patch upstream...

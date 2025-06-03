@@ -4,18 +4,17 @@
   fetchFromGitHub,
   buildGoModule,
   testers,
-  podman-tui,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "podman-tui";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-tui";
-    rev = "v${version}";
-    hash = "sha256-dtXJRoOb/FhGuCaRB43/8y2DM3ZgpYVts1ATzsVsUFE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-t9VhDl4pBW5H5RhpskU8Us9NxpPJmyishKROvbAc2V0=";
   };
 
   vendorHash = null;
@@ -43,9 +42,9 @@ buildGoModule rec {
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru.tests.version = testers.testVersion {
-    package = podman-tui;
+    package = finalAttrs.finalPackage;
     command = "HOME=$(mktemp -d) podman-tui version";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
@@ -55,4 +54,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "podman-tui";
   };
-}
+})

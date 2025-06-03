@@ -1,24 +1,23 @@
 {
   lib,
-  # broken with go 1.24 for some reason
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
   gitMinimal,
   installShellFiles,
 }:
 
-buildGo123Module rec {
+buildGoModule rec {
   pname = "ko";
-  version = "0.17.1";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "ko-build";
-    repo = pname;
+    repo = "ko";
     tag = "v${version}";
-    hash = "sha256-OQtYyokARrjaf0MWQ0sMqJPb+C5pRkKFumAmtxS4SBo=";
+    hash = "sha256-fAdogzNCuz8vHWF1UOFmDKSRXbNvY5knKIhfJzXNGzw=";
   };
 
-  vendorHash = "sha256-YQggwX6fUsfZMM+GdgeNAIHkfX84FMF84xHsP/SNiS4=";
+  vendorHash = "sha256-R+vGG2u/unXffD/9Aq065zR7Xq9KEWZl4llYFxR0HLU=";
 
   nativeBuildInputs = [ installShellFiles ];
 

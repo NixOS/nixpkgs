@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "bump-my-version";
-  version = "1.1.2";
+  version = "1.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "callowayproject";
     repo = "bump-my-version";
     tag = version;
-    hash = "sha256-O7Ihw2AKJyOmBLReNI6TP5K3HgOFDuK1/9lN3d3/SrQ=";
+    hash = "sha256-oV7ije2q9eBimHxMDJauSJ81xQvwlfcfJw5rgZBHGUg=";
   };
 
   build-system = [
@@ -93,7 +93,7 @@ buildPythonPackage rec {
       by the correct increment and optionally commit and tag the changes.
     '';
     homepage = "https://github.com/callowayproject/bump-my-version";
-    changelog = "https://github.com/callowayproject/bump-my-version/tag/${version}";
+    changelog = "https://github.com/callowayproject/bump-my-version/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ daspk04 ];
     mainProgram = "bump-my-version";

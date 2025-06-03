@@ -1,12 +1,12 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   cmake,
-  mkDerivation,
-  qttools,
+  libsForQt5,
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "glabels-qt";
   version = "unstable-2021-02-06";
 
@@ -19,7 +19,8 @@ mkDerivation {
 
   nativeBuildInputs = [
     cmake
-    qttools
+    libsForQt5.wrapQtAppsHook
+    libsForQt5.qttools
   ];
 
   meta = with lib; {

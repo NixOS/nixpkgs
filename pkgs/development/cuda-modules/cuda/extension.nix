@@ -1,4 +1,4 @@
-{ cudaVersion, lib }:
+{ cudaMajorMinorVersion, lib }:
 let
   inherit (lib) attrsets modules trivial;
   redistName = "cuda";
@@ -23,10 +23,10 @@ let
   };
 
   # Check if the current CUDA version is supported.
-  cudaVersionMappingExists = builtins.hasAttr cudaVersion cudaVersionMap;
+  cudaVersionMappingExists = builtins.hasAttr cudaMajorMinorVersion cudaVersionMap;
 
   # fullCudaVersion : String
-  fullCudaVersion = cudaVersionMap.${cudaVersion};
+  fullCudaVersion = cudaVersionMap.${cudaMajorMinorVersion};
 
   evaluatedModules = modules.evalModules {
     modules = [
@@ -43,7 +43,7 @@ let
   };
 
   # Generally we prefer to do things involving getting attribute names with feature_manifest instead
-  # of redistrib_manifest because the feature manifest will have *only* the redist architecture
+  # of redistrib_manifest because the feature manifest will have *only* the redist system
   # names as the keys, whereas the redistrib manifest will also have things like version, name, license,
   # and license_path.
   featureManifest = evaluatedModules.config.cuda.manifests.feature;

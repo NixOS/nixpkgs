@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "morecantile";
-  version = "6.1.0";
+  version = "6.2.0";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "developmentseed";
     repo = "morecantile";
     tag = version;
-    hash = "sha256-+gfmXbse3fnLepZQBwuC8KTNmJs7Lb69jvV89Bv9DF8=";
+    hash = "sha256-ohTSgkjgaANS/Pli4fao+THA4ltts6svj5CdJEgorz0=";
   };
 
   nativeBuildInputs = [ flit ];

@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "mikitex70";
-    repo = pname;
+    repo = "plantuml-markdown";
     tag = version;
     hash = "sha256-DgHWqwPsZ5q1XqrfaAiUslKnJdHX4Pzw9lygF3iaxz4=";
   };

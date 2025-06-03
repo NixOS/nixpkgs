@@ -8,8 +8,6 @@
   wrapGAppsHook3,
   v2ray-geoip,
   v2ray-domain-list-community,
-  copyDesktopItems,
-  makeDesktopItem,
   libsoup,
 }:
 let
@@ -31,7 +29,7 @@ let
   };
 
   service-cargo-hash = "sha256-lMOQznPlkHIMSm5nOLuGP9qJXt3CXnd+q8nCu+Xbbt8=";
-  npm-hash = "sha256-v9+1NjXo/1ogmep+4IP+9qoUR1GJz87VGeOoMzQ1Rfw=";
+  pnpm-hash = "sha256-v9+1NjXo/1ogmep+4IP+9qoUR1GJz87VGeOoMzQ1Rfw=";
   vendor-hash = "sha256-y3XVHi00mnuVFxSd02YBgfWuXYRVIs+e0tITXNOFRsA=";
 
   service = callPackage ./service.nix {
@@ -44,23 +42,13 @@ let
       ;
   };
 
-  webui = callPackage ./webui.nix {
-    inherit
-      version
-      src
-      pname
-      meta
-      npm-hash
-      ;
-  };
-
   unwrapped = callPackage ./unwrapped.nix {
     inherit
       pname
       version
       src
+      pnpm-hash
       vendor-hash
-      webui
       meta
       libsoup
       ;
@@ -92,20 +80,6 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     wrapGAppsHook3
-    copyDesktopItems
-  ];
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "clash-verge";
-      exec = "clash-verge";
-      comment = "Clash Verge Rev";
-      type = "Application";
-      icon = "clash-verge";
-      desktopName = "Clash Verge Rev";
-      terminal = false;
-      categories = [ "Network" ];
-    })
   ];
 
   installPhase = ''
@@ -121,6 +95,7 @@ stdenv.mkDerivation {
     ln -s ${v2ray-geoip}/share/v2ray/geoip.dat $out/lib/Clash\ Verge/resources/geoip.dat
     ln -s ${v2ray-domain-list-community}/share/v2ray/geosite.dat $out/lib/Clash\ Verge/resources/geosite.dat
     ln -s ${dbip-country-lite.mmdb} $out/lib/Clash\ Verge/resources/Country.mmdb
+
     runHook postInstall
   '';
 }

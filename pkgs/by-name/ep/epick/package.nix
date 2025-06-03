@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "vv9k";
-    repo = pname;
+    repo = "epick";
     # Upstream has rewritten tags on multiple occasions.
     rev = "14ee92e049780406fffdc1e4a83bf1433775663f";
     sha256 = "sha256-gjqAQrGJ9KFdzn2a3fOgu0VJ9zrX5stsbzriOGJaD/4=";

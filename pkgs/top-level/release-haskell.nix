@@ -10,7 +10,7 @@
   $ hydra-eval-jobs -I . pkgs/top-level/release-haskell.nix
 */
 {
-  supportedSystems ? import ../../ci/supportedSystems.nix,
+  supportedSystems ? builtins.fromJSON (builtins.readFile ../../ci/supportedSystems.json),
 }:
 
 let
@@ -78,6 +78,7 @@ let
     ghc983
     ghc984
     ghc9101
+    ghc9102
     # exclude ghc9121 due to severe miscompilation bug
     ghc9122
   ];
@@ -574,7 +575,7 @@ let
         compilerNames.ghc9122
       ] released;
       Cabal_3_12_1_0 = released;
-      Cabal_3_14_1_1 = released;
+      Cabal_3_14_2_0 = released;
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
@@ -590,6 +591,7 @@ let
       hlint = lib.subtractLists [
         compilerNames.ghc902
         compilerNames.ghc9101
+        compilerNames.ghc9102
         compilerNames.ghc9122
       ] released;
       hpack = released;
@@ -623,6 +625,7 @@ let
       ];
       weeder = lib.subtractLists [
         compilerNames.ghc9101
+        compilerNames.ghc9102
         compilerNames.ghc9122
       ] released;
     })

@@ -14,7 +14,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
-    repo = pname;
+    repo = "dcgm-exporter";
     tag = version;
     hash = "sha256-BAMN2yuIW5FcHY3o9MUIMgPnTEFFRCbqhoAkcaZDxcM=";
   };

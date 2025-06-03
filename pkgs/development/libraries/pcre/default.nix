@@ -14,7 +14,6 @@
 assert lib.elem variant [
   null
   "cpp"
-  "pcre16"
   "pcre32"
 ];
 

@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  python,
+  python3,
   makeWrapper,
   eigen_3_4_0,
   fftw,
@@ -20,7 +20,7 @@
   withGui ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mrtrix";
   version = "3.0.4-unstable-2025-04-09";
 
@@ -35,14 +35,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     makeWrapper
     less
-    python
+    python3
   ] ++ lib.optional withGui qt5.wrapQtAppsHook;
 
   buildInputs =
     [
       ants
       eigen_3_4_0
-      python
+      python3
       fftw
       libtiff
       libpng

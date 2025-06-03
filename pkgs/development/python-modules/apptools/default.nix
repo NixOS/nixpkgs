@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "apptools";
-  version = "5.3.0";
+  version = "5.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "enthought";
     repo = "apptools";
     tag = version;
-    hash = "sha256-qNtDHmvl5HbtdbjnugVM7CKVCW+ysAwRB9e2Ounh808=";
+    hash = "sha256-46QiVLWdlM89GMCIqVNuNGJjT2nwWJ1c6DyyvEPcceQ=";
   };
 
   build-system = [ setuptools ];
@@ -57,7 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Set of packages that Enthought has found useful in creating a number of applications";
     homepage = "https://github.com/enthought/apptools";
-    changelog = "https://github.com/enthought/apptools/releases/tag/${version}";
+    changelog = "https://github.com/enthought/apptools/releases/tag/${src.tag}";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ ];
   };

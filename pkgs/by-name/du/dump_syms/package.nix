@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
 
   src = fetchFromGitHub {
     owner = "mozilla";
-    repo = pname;
+    repo = "dump_syms";
     rev = "v${version}";
     hash = "sha256-6VDuZ5rw2N4z6wOVbaOKO6TNaq8QA5RstsIzmuE3QrI=";
   };

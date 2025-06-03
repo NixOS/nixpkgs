@@ -50,12 +50,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "supercell-wx";
-  version = "0.4.8";
+  version = "0.4.9";
   src = fetchFromGitHub {
     owner = "dpaulat";
     repo = "supercell-wx";
     rev = "refs/tags/v${finalAttrs.version}-release";
-    sha256 = "sha256-gKR5Mfzw5B4f4/dWintlbDHX3q+d1RmFE+MNp5uSSuc=";
+    sha256 = "sha256-3fVUxbGosN4Y4h8BJXUV7DNv7VZTma+IsV94+Zt8DCA=";
     fetchSubmodules = true;
   };
 

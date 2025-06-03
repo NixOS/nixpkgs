@@ -12,7 +12,11 @@
     stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform perl,
   perl,
   withPython ?
-    !stdenv.hostPlatform.isStatic && lib.meta.availableOn stdenv.hostPlatform python3Packages.python,
+    # static can't load python libraries
+    !stdenv.hostPlatform.isStatic
+    && lib.meta.availableOn stdenv.hostPlatform python3Packages.python
+    # m4 python include script fails if cpu bit depth is different across machines
+    && stdenv.hostPlatform.parsed.cpu.bits == stdenv.buildPlatform.parsed.cpu.bits,
   python3Packages,
   swig,
   ncurses,
@@ -56,24 +60,14 @@ stdenv.mkDerivation (finalAttrs: {
       ncurses
       which
       dejagnu
+      perl # podchecker
     ]
     ++ lib.optionals withPython [
       python3Packages.setuptools
-    ]
-    ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
-      # TODO FIXME This is a super ugly HACK.
-      # perl is required for podchecker.
-      # It is a native build input on native platform because checks are enabled there.
-      # Checks can't be enabled on cross, but moving perl to
-      # nativeCheckInputs causes rebuilds on native compile.
-      # Thus, hacks!
-      # This should just be made unconditional and removed from nativeCheckInputs.
-      perl
     ];
 
   nativeCheckInputs = [
     python3Packages.pythonImportsCheckHook
-    perl
   ];
 
   buildInputs =

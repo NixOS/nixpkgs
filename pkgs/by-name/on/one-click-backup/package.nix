@@ -21,13 +21,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     ninja
     qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
     qt6.qtdeclarative
-    extra-cmake-modules
   ];
 
   meta = with lib; {

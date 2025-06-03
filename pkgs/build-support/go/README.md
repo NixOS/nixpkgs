@@ -3,14 +3,13 @@
 Go promises that "programs written to the Go 1 specification will continue to compile and run correctly, unchanged, over the lifetime of that specification" [1].
 Newer toolchain versions should build projects developed against older toolchains without problems.
 
+**Definition(a "toolchain-breaking" package):**
 There are however Go packages depending on internal APIs of the toolchain/runtime/stdlib that are not covered by the Go compatibility promise.
-These packages may break on toolchain updates.
-We name packages that (often) break on toolchain updates `toolchain-breaking`.
+These packages may break on toolchain minor version upgrades.
 
-There is another set of packages that depends on the toolchain, but in another way:
-Packages providing development support for the Go language (like `gopls`, `golangci-lint`,...) must be compiled with the version they should be used for.
+**Definition(a "toolchain-latest" package):**
+Packages providing development support for the Go language (like `gopls`, `golangci-lint`,...) depend on the toolchain in another way: they must be compiled at least with the version they should be used for.
 If `gopls` is compiled for Go 1.23, it won't work for projects that require Go 1.24.
-We name packages that must be built with the latest toolchain to work as expected `toolchain-latest`.
 
 Go only ever has two supported toolchains. With a new minor release, the second last Go toolchain is automatically end of life, meaning it won't receive security updates anymore.
 
@@ -26,7 +25,9 @@ Based on this, we align on the following policy for toolchain/builder upgrades:
     A comment MUST be added explaining why this is the case for a certain package.
     It is important to keep the number of packages using this builder within nixpkgs low, so the bump won't cause a mass rebuild.
 
-    Consumer outside of nixpkgs on the other hand MAY rely on this toolchain/builder if they prefer being upgraded earlier to the newest toolchain.
+    `go_latest` MUST not point to release candidates of Go.
+
+    Consumer outside of nixpkgs on the other hand MAY rely on this toolchain/builder if they prefer being upgraded earlier to the newest toolchain minor version.
 
 3. Packages in `toolchain-breaking` SHOULD pin a toolchain version by using a builder with a fixed Go version (`buildGo1xxModule`).
   The use of `buildGo1xxModule` MUST be accompanied with a comment explaining why this has a dependency on a specific Go version.

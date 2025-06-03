@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
   version = "3.2.0";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "mutmut";
     owner = "boxed";
     tag = version;
     hash = "sha256-+e2FmfpGtK401IW8LNqeHk0v8Hh5rF3LbZJkSOJ3yPY=";

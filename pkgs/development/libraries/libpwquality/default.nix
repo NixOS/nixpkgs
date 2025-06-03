@@ -9,7 +9,7 @@
   enablePAM ? stdenv.hostPlatform.isLinux,
   pam,
   enablePython ? false,
-  python,
+  python3,
 }:
 
 # python binding generates a shared library which are unavailable with musl build
@@ -67,14 +67,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     perl
-  ] ++ lib.optionals enablePython [ (python.withPackages (ps: with ps; [ setuptools ])) ];
+  ] ++ lib.optionals enablePython [ (python3.withPackages (ps: with ps; [ setuptools ])) ];
   buildInputs = [ cracklib ] ++ lib.optionals enablePAM [ pam ];
 
   configureFlags =
     if enablePython then
       [
         "--enable-python-bindings=yes"
-        "--with-pythonsitedir=\"${python.sitePackages}\""
+        "--with-pythonsitedir=\"${python3.sitePackages}\""
       ]
     else
       # change to `--enable-python-bindings=no` in the future

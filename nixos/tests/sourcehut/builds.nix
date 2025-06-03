@@ -49,15 +49,15 @@ import ../make-test-python.nix (
       machine.wait_for_unit("multi-user.target")
 
       with subtest("Check whether meta comes up"):
-           machine.wait_for_unit("metasrht-api.service")
-           machine.wait_for_unit("metasrht.service")
-           machine.wait_for_unit("metasrht-webhooks.service")
+           machine.wait_for_unit("meta.sr.ht-api.service")
+           machine.wait_for_unit("meta.sr.ht.service")
+           machine.wait_for_unit("meta.sr.ht-webhooks.service")
            machine.wait_for_open_port(5000)
            machine.succeed("curl -sL http://localhost:5000 | grep meta.${domain}")
            machine.succeed("curl -sL http://meta.${domain} | grep meta.${domain}")
 
       with subtest("Check whether builds comes up"):
-           machine.wait_for_unit("buildsrht.service")
+           machine.wait_for_unit("builds.sr.ht.service")
            machine.wait_for_open_port(5002)
            machine.succeed("curl -sL http://localhost:5002 | grep builds.${domain}")
            #machine.wait_for_unit("buildsrht-worker.service")

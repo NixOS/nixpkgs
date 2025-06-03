@@ -60,11 +60,7 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
-  checkPhase = ''
-    runHook preCheck
-    ctest -j 1
-    runHook postCheck
-  '';
+  enableParallelChecking = false;
 
   meta = with lib; {
     description = "Open framework for storing and sharing scene data";

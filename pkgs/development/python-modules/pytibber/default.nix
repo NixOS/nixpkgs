@@ -8,11 +8,12 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "pytibber";
-  version = "0.31.1";
+  version = "0.31.5";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "pyTibber";
     tag = version;
-    hash = "sha256-qQ/F7SF91wiWelV6kFBDjv5UmrrcD5TmwCsNuG5c25s=";
+    hash = "sha256-U6WMBX7p0dHQ7vEbw3lmFmysWEcoSbojG2dVZik9gA4=";
   };
 
   build-system = [ setuptools ];
@@ -29,7 +30,8 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     gql
-  ] ++ gql.optional-dependencies.websockets;
+    websockets
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -45,7 +47,7 @@ buildPythonPackage rec {
     description = "Python library to communicate with Tibber";
     homepage = "https://github.com/Danielhiversen/pyTibber";
     changelog = "https://github.com/Danielhiversen/pyTibber/releases/tag/${src.tag}";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
@@ -7,16 +8,16 @@
 
 buildGoModule rec {
   pname = "azurehound";
-  version = "2.4.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "SpecterOps";
     repo = "AzureHound";
     tag = "v${version}";
-    hash = "sha256-hLIXgb0LJs5INB23V3m33OViANarJodbwZewdx91css=";
+    hash = "sha256-Lusztzy5I91CzyPUSncqQLcth3Q34HS2XmLGQTRIbHc=";
   };
 
-  vendorHash = "sha256-FG3207OTzkMEoSvQsTH7Ky9T3ur7glG7k0ERfd12SO0=";
+  vendorHash = "sha256-z4ByWhvMFKDE5EUklbm1cuFFvY59n0RiQBB4E58E2xs=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
@@ -37,5 +38,6 @@ buildGoModule rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "azurehound";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -6,6 +6,9 @@
   cmake,
   help2man,
   gzip,
+  libXt,
+  openusd,
+  tbb,
   # There is a f3d overridden with EGL enabled vtk in top-level/all-packages.nix
   # compiling with EGL enabled vtk will result in f3d running in headless mode
   # See https://github.com/NixOS/nixpkgs/pull/324022. This may change later.
@@ -17,6 +20,7 @@
   fontconfig,
   withManual ? !stdenv.hostPlatform.isDarwin,
   withPythonBinding ? false,
+  withUsd ? openusd.meta.available,
 }:
 
 stdenv.mkDerivation rec {
@@ -66,6 +70,11 @@ stdenv.mkDerivation rec {
       python3Packages.python
       # Using C++ header files, not Python import
       python3Packages.pybind11
+    ]
+    ++ lib.optionals withUsd [
+      libXt
+      openusd
+      tbb
     ];
 
   cmakeFlags =
@@ -84,6 +93,9 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals withPythonBinding [
       "-DF3D_BINDINGS_PYTHON=ON"
+    ]
+    ++ lib.optionals withUsd [
+      "-DF3D_PLUGIN_BUILD_USD=ON"
     ];
 
   meta = with lib; {
@@ -97,8 +109,5 @@ stdenv.mkDerivation rec {
     ];
     platforms = with platforms; unix;
     mainProgram = "f3d";
-    # error: use of undeclared identifier 'NSMenuItem'
-    # adding AppKit does not solve it
-    broken = with stdenv.hostPlatform; isDarwin && isx86_64;
   };
 }

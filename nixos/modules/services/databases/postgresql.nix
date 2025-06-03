@@ -274,6 +274,14 @@ in
           Defines the mapping from system users to database users.
 
           See the [auth doc](https://postgresql.org/docs/current/auth-username-maps.html).
+
+          There is a default map "postgres" which is used for local peer authentication
+          as the postgres superuser role.
+          For example, to allow the root user to login as the postgres superuser, add:
+
+          ```
+          postgres root postgres
+          ```
         '';
       };
 
@@ -674,11 +682,19 @@ in
       (mkBefore "# Generated file; do not edit!")
       (mkAfter ''
         # default value of services.postgresql.authentication
+        local all postgres         peer map=postgres
         local all all              peer
         host  all all 127.0.0.1/32 md5
         host  all all ::1/128      md5
       '')
     ];
+
+    # The default allows to login with the same database username as the current system user.
+    # This is the default for peer authentication without a map, but needs to be made explicit
+    # once a map is used.
+    services.postgresql.identMap = mkAfter ''
+      postgres postgres postgres
+    '';
 
     services.postgresql.systemCallFilter = mkMerge [
       (mapAttrs (const mkDefault) {

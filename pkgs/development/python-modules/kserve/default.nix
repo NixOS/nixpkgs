@@ -46,6 +46,7 @@
   avro,
   grpcio-testing,
   pytest-asyncio,
+  pytest-httpx,
   pytest-xdist,
   pytestCheckHook,
   tomlkit,
@@ -53,14 +54,14 @@
 
 buildPythonPackage rec {
   pname = "kserve";
-  version = "0.15.0";
+  version = "0.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kserve";
     repo = "kserve";
     tag = "v${version}";
-    hash = "sha256-J2VFMHwhHpvtsywv3ixuVzpuDwq8y9w4heedYYWVBmM=";
+    hash = "sha256-k+uyOhsxWPpiA82wCCEn53W2VQgSHGgSABFipEPErRk=";
   };
 
   sourceRoot = "${src.name}/python/kserve";
@@ -115,7 +116,7 @@ buildPythonPackage rec {
     logging = [ asgi-logger ];
     ray = [ ray ];
     llm = [
-      # vllm (broken)
+      vllm
     ];
   };
 
@@ -123,6 +124,7 @@ buildPythonPackage rec {
     avro
     grpcio-testing
     pytest-asyncio
+    pytest-httpx
     pytest-xdist
     pytestCheckHook
     tomlkit
@@ -147,17 +149,13 @@ buildPythonPackage rec {
       "--deselect=test/test_server.py::TestRayServer::test_list_handler"
       "--deselect=test/test_server.py::TestRayServer::test_liveness_handler"
       "--deselect=test/test_server.py::TestRayServer::test_predict"
+      # Permission Error
+      "--deselect=test/test_server.py::TestMutiProcessServer::test_rest_server_multiprocess"
     ];
 
   disabledTestPaths = [
     # Looks for a config file at the root of the repository
     "test/test_inference_service_client.py"
-
-    # Require broken vllm
-    "test/test_dataplane.py"
-    "test/test_model_repository.py"
-    "test/test_openai_completion.py"
-    "test/test_openai_embedding.py"
   ];
 
   disabledTests =

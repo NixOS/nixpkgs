@@ -70,7 +70,7 @@
   config,
   cudaSupport ? config.cudaSupport,
   cudaPackages,
-  cudaCapabilities ? cudaPackages.cudaFlags.cudaCapabilities,
+  cudaCapabilities ? cudaPackages.flags.cudaCapabilities,
   mklSupport ? false,
   mkl,
   tensorboardSupport ? true,
@@ -149,7 +149,7 @@ let
   ];
 
   cudatoolkitDevMerged = symlinkJoin {
-    name = "cuda-${cudaPackages.cudaVersion}-dev-merged";
+    name = "cuda-${cudaPackages.cudaMajorMinorVersion}-dev-merged";
     paths = lib.concatMap (p: [
       (lib.getBin p)
       (lib.getDev p)

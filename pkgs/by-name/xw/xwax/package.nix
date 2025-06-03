@@ -4,6 +4,7 @@
   fetchurl,
   SDL,
   SDL_ttf,
+  alsa-lib,
   jack2,
   libmpg123,
   ffmpeg,
@@ -31,12 +32,19 @@ stdenv.mkDerivation (finalAttrs: {
     # therefore we patch interface.c to also look up in the dejavu_fonts nix store path
     substituteInPlace interface.c \
       --replace-fail "/usr/X11R6/lib/X11/fonts/TTF" "${dejavu_fonts.outPath}/share/fonts/truetype/"
+
+    # make paths to executed binaries hermetic:
+    substituteInPlace import \
+      --replace-fail "exec cdparanoia" "exec ${lib.getExe cdparanoia}" \
+      --replace-fail "exec ffmpeg" "exec ${lib.getExe ffmpeg}"
   '';
 
   buildInputs = [
     # sdl
     SDL
     SDL_ttf
+
+    alsa-lib
 
     # audio server
     jack2
@@ -55,16 +63,15 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-jack"
   ];
 
+  enableParallelBuilding = true;
+
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
+
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "-h";
   doInstallCheck = true;
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    cp xwax  $out/bin/xwax
-    runHook postInstall
-  '';
 
   meta = {
     homepage = "https://xwax.org";

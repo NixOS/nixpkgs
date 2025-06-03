@@ -24,7 +24,7 @@ let
 
   src = fetchFromGitHub {
     owner = "sambayless";
-    repo = pname;
+    repo = "monosat";
     inherit rev sha256;
   };
 

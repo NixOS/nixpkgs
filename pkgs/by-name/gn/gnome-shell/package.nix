@@ -69,7 +69,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell";
-  version = "47.4";
+  version = "48.1";
 
   outputs = [
     "out"
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major finalAttrs.version}/gnome-shell-${finalAttrs.version}.tar.xz";
-    hash = "sha256-aAuvaU9F+PyDLSRa2mxjtfxLAwzPvrv8Dg47wo2i5G0=";
+    hash = "sha256-uk9FWv1iE/OHVFlG482dqjnJBPerFt2DCsd6c/8QAso=";
   };
 
   patches = [
@@ -183,7 +183,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    patchShebangs src/data-to-c.py
+    patchShebangs \
+      src/data-to-c.py \
+      meson/generate-app-list.py
 
     # We can generate it ourselves.
     rm -f man/gnome-shell.1

@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "buchgr";
-    repo = pname;
+    repo = "bazel-remote";
     rev = "v${version}";
     hash = "sha256-PjhLybiZoq7Uies2bWdlLKAbKcG3+AQZ55Qp706u7hc=";
   };
@@ -27,13 +27,13 @@ buildGoModule rec {
     "-X main.gitCommit=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/buchgr/bazel-remote";
     description = "Remote HTTP/1.1 cache for Bazel";
     mainProgram = "bazel-remote";
     changelog = "https://github.com/buchgr/bazel-remote/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     teams = [ lib.teams.bazel ];
-    platforms = platforms.darwin ++ platforms.linux;
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
 }

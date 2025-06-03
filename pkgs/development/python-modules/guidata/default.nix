@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "guidata";
-  version = "3.8.0";
+  version = "3.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PlotPyStack";
     repo = "guidata";
     tag = "v${version}";
-    hash = "sha256-ljS2FJmLPPRHQesEwO4dTWr+OZRjviGjkuTYusB9O48=";
+    hash = "sha256-W3d7LGfQJ9DVngZxhnuQpoTHvXyHenaXzm7qeqi/zGQ=";
   };
 
   build-system = [
@@ -82,7 +82,6 @@ buildPythonPackage rec {
 
   passthru = {
     tests = {
-      # Should be compatible with all of these Qt implementations
       withPyQt6 = guidata.override {
         pyqt6 = pyqt6;
         qt6 = qt6;
@@ -95,6 +94,11 @@ buildPythonPackage rec {
         pyqt6 = pyqt5;
         qt6 = qt5;
       };
+    };
+    # Upstream doesn't officially supports all of them, although they use qtpy,
+    # see: https://github.com/PlotPyStack/PlotPy/issues/20 . See also the
+    # comment near this attribute at plotpy
+    knownFailingTests = {
       withPySide2 = guidata.override {
         pyqt6 = pyside2;
         qt6 = qt5;

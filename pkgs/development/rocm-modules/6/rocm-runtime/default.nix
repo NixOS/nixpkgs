@@ -43,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     elfutils
     libdrm
     numactl
+    # without valgrind, additional work for "kCodeCopyAligned11" is done in the installPhase
     valgrind
     libxml2
   ];
@@ -85,6 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    patchShebangs --build \
+      runtime/hsa-runtime/core/runtime/trap_handler/create_trap_handler_header.sh \
+      runtime/hsa-runtime/core/runtime/blit_shaders/create_blit_shader_header.sh \
+      runtime/hsa-runtime/image/blit_src/create_hsaco_ascii_file.sh
     patchShebangs --host image core runtime
 
     substituteInPlace CMakeLists.txt \

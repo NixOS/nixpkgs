@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
 
   # build-system
   pdm-backend,
@@ -25,18 +24,21 @@
   responses,
   syrupy,
   toml,
+
+  # passthru
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-openai";
-  version = "0.3.12";
+  version = "0.3.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-openai==${version}";
-    hash = "sha256-pIXdXGrYOoE8sF+cKpX82QfTaYna8kbzUv0n+yR7uHE=";
+    hash = "sha256-JsPdG62vvM8b/u5bo6FyXQhhGua/Sd74L/8CtMI7Fjc=";
   };
 
   sourceRoot = "${src.name}/libs/partners/openai";
@@ -50,7 +52,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     # Each component release requests the exact latest core.
-    # That prevents us from updating individul components.
+    # That prevents us from updating individual components.
     "langchain-core"
   ];
 
@@ -88,6 +90,7 @@ buildPythonPackage rec {
     "test_azure_openai_uses_actual_secret_value_from_secretstr"
     "test_azure_serialized_secrets"
     "test_chat_openai_get_num_tokens"
+    "test_embed_documents_with_custom_chunk_size"
     "test_get_num_tokens_from_messages"
     "test_get_token_ids"
     "test_init_o1"
@@ -99,7 +102,7 @@ buildPythonPackage rec {
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "^langchain-openai==([0-9.]+)$"
+      "langchain-openai==([0-9.]+)"
     ];
   };
 

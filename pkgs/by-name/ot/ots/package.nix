@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "sniptt-official";
-    repo = pname;
+    repo = "ots";
     rev = "v${version}";
     hash = "sha256-GOCuH9yiVs3N3sHCCoSGaQkaaJs4NY/klNBRWjZGLE4=";
   };

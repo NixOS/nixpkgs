@@ -45,7 +45,8 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
-  enableParallelBuilding = true;
+  # Makefile doesn't specify dependencies on parser.h correctly
+  enableParallelBuilding = false;
 
   doCheck = true;
 

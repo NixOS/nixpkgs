@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "aespipe";
-  version = "2.4h";
+  version = "2.4i";
 
   src = fetchurl {
     url = "mirror://sourceforge/loop-aes/aespipe/aespipe-v${version}.tar.bz2";
-    sha256 = "sha256-6rMR/CbqQyibw632YNYnBJJJSWByXSAm7EkXKUoaukk=";
+    sha256 = "sha256-tBx6qsJULlnY/1jB/52HtS1KjBhHt5nIr+yR2UUXx14=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -28,7 +28,9 @@ let
     { hypr-dynamic-cursors = import ./hypr-dynamic-cursors.nix; }
     { hyprfocus = import ./hyprfocus.nix; }
     { hyprgrass = import ./hyprgrass.nix; }
-    { hyprscroller = import ./hyprscroller.nix; }
+    {
+      hyprscroller = throw "hyprlandPlugins.hyprscroller has been removed as the upstream project is deprecated. Consider using `hyprlandPlugins.hyprscrolling`.";
+    } # Added 2025-05-09
     { hyprspace = import ./hyprspace.nix; }
     { hyprsplit = import ./hyprsplit.nix; }
     (import ./hyprland-plugins.nix)

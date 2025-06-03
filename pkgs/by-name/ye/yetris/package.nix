@@ -17,6 +17,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-k9CXXIaDk1eAtRBEj0VCfE+D1FtmIDX3niubAdrfjqw=";
   };
 
+  postPatch = ''
+    substituteInPlace src/Game/Entities/RotationSystemSRS.cpp \
+      --replace-fail 'char' 'signed char'
+    substituteInPlace src/Game/Entities/PieceDefinitions.cpp \
+      --replace-fail 'char' 'signed char'
+    substituteInPlace src/Game/Entities/PieceDefinitions.hpp \
+      --replace-fail 'char' 'signed char'
+  '';
+
   buildInputs = [
     ncurses
   ];

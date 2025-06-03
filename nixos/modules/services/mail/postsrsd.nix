@@ -22,7 +22,7 @@ let
     secrets-file = "''${CREDENTIALS_DIRECTORY}/secrets-file"
     domains = ${libconfuseDomains}
     separator = "${cfg.separator}"
-    socketmap = "unix:${runtimeDirectory}/socket"
+    socketmap = "unix:${cfg.socketPath}"
 
     # Disable postsrsd's jailing in favor of confinement with systemd.
     unprivileged-user = ""
@@ -92,6 +92,15 @@ in
         type = lib.types.str;
         default = "postsrsd";
         description = "Group for the daemon";
+      };
+
+      socketPath = lib.mkOption {
+        type = lib.types.path;
+        default = "${runtimeDirectory}/socket";
+        readOnly = true;
+        description = ''
+          Path to the Unix socket for connecting to postsrsd.
+          Read-only, intended for usage when integrating postsrsd into other NixOS config.'';
       };
     };
   };

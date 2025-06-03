@@ -795,6 +795,10 @@ Additionally, the following optional arguments can be given:
 : Clone the entire repository as opposing to just creating a shallow clone.
   This implies `leaveDotGit`.
 
+*`fetchTags`* (Boolean)
+
+: Whether to fetch all tags from the remote repository. This is useful when the build process needs to run `git describe` or other commands that require tag information to be available. This parameter implies `leaveDotGit`, as tags are stored in the `.git` directory.
+
 *`sparseCheckout`* (List of String)
 
 : Prevent git from fetching unnecessary blobs from server.

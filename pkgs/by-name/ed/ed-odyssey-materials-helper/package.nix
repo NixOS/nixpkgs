@@ -12,17 +12,17 @@
   glib,
   copyDesktopItems,
   makeDesktopItem,
-  nix-update-script,
+  writeScript,
 }:
 stdenv.mkDerivation rec {
   pname = "ed-odyssey-materials-helper";
-  version = "2.156";
+  version = "2.178";
 
   src = fetchFromGitHub {
     owner = "jixxed";
     repo = "ed-odyssey-materials-helper";
     tag = version;
-    hash = "sha256-T7Mh9QZRQbDJmW976bOg5YNQoFxJ2SUFl6qBjos8LSo=";
+    hash = "sha256-a/nrRw5FjUZBJE0CmSevGAw4LBI/A3jPAEJfg7GY5+U=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +45,10 @@ stdenv.mkDerivation rec {
       --replace-fail '"com.github.wille:oslib:master-SNAPSHOT"' '"com.github.wille:oslib:d6ee6549bb"'
     substituteInPlace application/src/main/java/module-info.java \
       --replace-fail 'requires oslib.master.SNAPSHOT;' 'requires oslib.d6ee6549bb;'
+
+    # remove "new version available" popup
+    substituteInPlace application/src/main/java/nl/jixxed/eliteodysseymaterials/FXApplication.java \
+      --replace-fail 'versionPopup();' ""
   '';
 
   mitmCache = gradle.fetchDeps {
@@ -55,7 +59,6 @@ stdenv.mkDerivation rec {
   gradleFlags = [ "-Dorg.gradle.java.home=${jdk23}" ];
 
   gradleBuildTask = "application:jpackage";
-  gradleUpdateTask = "application:nixDownloadDeps";
 
   installPhase = ''
     runHook preInstall
@@ -98,7 +101,20 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  passthru.updateScript = nix-update-script { };
+  gradleUpdateScript = ''
+    runHook preBuild
+
+    gradle application:nixDownloadDeps -Dos.family=linux -Dos.arch=amd64
+    gradle application:nixDownloadDeps -Dos.family=linux -Dos.arch=aarch64
+  '';
+
+  passthru.updateScript = writeScript "update-ed-odyssey-materials-helper" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p nix-update
+
+    nix-update ed-odyssey-materials-helper # update version and hash
+    `nix-build --no-out-link -A ed-odyssey-materials-helper.mitmCache.updateScript` # update deps.json
+  '';
 
   meta = {
     description = "Helper for managing materials in Elite Dangerous Odyssey";
@@ -115,6 +131,9 @@ stdenv.mkDerivation rec {
       toasteruwu
     ];
     mainProgram = "ed-odyssey-materials-helper";
-    platforms = lib.platforms.linux;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }

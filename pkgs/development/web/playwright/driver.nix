@@ -149,7 +149,10 @@ let
       description = "Framework for Web Testing and Automation";
       homepage = "https://playwright.dev";
       license = lib.licenses.asl20;
-      maintainers = with lib.maintainers; [ kalekseev ];
+      maintainers = with lib.maintainers; [
+        kalekseev
+        marie
+      ];
       inherit (nodejs.meta) platforms;
     };
   };
@@ -174,6 +177,7 @@ let
         withWebkit = false;
         withChromiumHeadlessShell = false;
       };
+      inherit components;
     };
   });
 
@@ -201,6 +205,32 @@ let
       mainProgram = "playwright";
     };
   });
+
+  components = {
+    chromium = callPackage ./chromium.nix {
+      inherit suffix system throwSystem;
+      inherit (playwright-core.passthru.browsersJSON.chromium) revision;
+      fontconfig_file = makeFontsConf {
+        fontDirectories = [ ];
+      };
+    };
+    chromium-headless-shell = callPackage ./chromium-headless-shell.nix {
+      inherit suffix system throwSystem;
+      inherit (playwright-core.passthru.browsersJSON.chromium) revision;
+    };
+    firefox = callPackage ./firefox.nix {
+      inherit suffix system throwSystem;
+      inherit (playwright-core.passthru.browsersJSON.firefox) revision;
+    };
+    webkit = callPackage ./webkit.nix {
+      inherit suffix system throwSystem;
+      inherit (playwright-core.passthru.browsersJSON.webkit) revision;
+    };
+    ffmpeg = callPackage ./ffmpeg.nix {
+      inherit suffix system throwSystem;
+      inherit (playwright-core.passthru.browsersJSON.ffmpeg) revision;
+    };
+  };
 
   browsers = lib.makeOverridable (
     {
@@ -232,17 +262,7 @@ let
           lib.nameValuePair
             # TODO check platform for revisionOverrides
             "${lib.replaceStrings [ "-" ] [ "_" ] name}-${value.revision}"
-            (
-              callPackage (./. + "/${name}.nix") (
-                {
-                  inherit suffix system throwSystem;
-                  inherit (value) revision;
-                }
-                // lib.optionalAttrs (name == "chromium") {
-                  inherit fontconfig_file;
-                }
-              )
-            )
+            components.${name}
         ) browsers
       )
     )

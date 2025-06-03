@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "16.10.0";
+  version = "16.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-tRq3qskZK39xfSof4RUTWC2h9mi7eGDHR6nI7reltm4=";
+    hash = "sha256-kEPVufS8wpoGi/A4Eh1u9gLVIEdJmoPDmAiY38DYDv4=";
   };
 
   patches = [
@@ -99,7 +99,7 @@ buildPythonPackage rec {
     maintainers = with maintainers; [
       dotlambda
     ];
-    changelog = "https://github.com/ocrmypdf/OCRmyPDF/blob/${src.rev}/docs/release_notes.rst";
+    changelog = "https://github.com/ocrmypdf/OCRmyPDF/blob/${src.rev}/docs/release_notes.md";
     mainProgram = "ocrmypdf";
   };
 }

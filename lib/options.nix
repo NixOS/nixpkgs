@@ -404,7 +404,7 @@ rec {
     ```nix
     myType = mkOptionType {
       name = "myType";
-      merge = mergeDefaultOption; # <- This line is redundant. It is the default aready.
+      merge = mergeDefaultOption; # <- This line is redundant. It is the default already.
     };
     ```
 
@@ -470,7 +470,7 @@ rec {
     args@{
       message,
       # WARNING: the default merge function assumes that the definition is a valid (option) value. You MUST pass a merge function if the return value needs to be
-      #   - type checked beyond what .check does (which should be very litte; only on the value head; not attribute values, etc)
+      #   - type checked beyond what .check does (which should be very little; only on the value head; not attribute values, etc)
       #   - if you want attribute values to be checked, or list items
       #   - if you want coercedTo-like behavior to work
       merge ? loc: defs: (head defs).value,

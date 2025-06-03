@@ -107,7 +107,8 @@ stdenv.mkDerivation {
 
     mkdir -p $out
     # the '.raw' suffix is mandatory by the portable service spec
-    mksquashfs nix ${rootFsScaffold}/* $out/"${pname}_${version}.raw" \
+    # We have to set SOURCE_DATE_EPOCH to 0 here for reproducibility (https://github.com/NixOS/nixpkgs/issues/390696)
+    SOURCE_DATE_EPOCH=0 mksquashfs nix ${rootFsScaffold}/* $out/"${pname}_${version}.raw" \
       -quiet -noappend \
       -exit-on-error \
       -keep-as-directory \

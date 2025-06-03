@@ -1,7 +1,7 @@
 {
   cwtch,
   fetchgit,
-  flutter,
+  flutter329,
   lib,
   tor,
 }:
@@ -10,7 +10,7 @@ let
     tor
   ];
 in
-flutter.buildFlutterApplication rec {
+flutter329.buildFlutterApplication rec {
   pname = "cwtch-ui";
   version = "1.15.5";
   # This Gitea instance has archive downloads disabled, so: fetchgit

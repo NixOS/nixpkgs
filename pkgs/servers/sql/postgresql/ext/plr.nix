@@ -8,7 +8,6 @@
   postgresqlTestExtension,
   R,
   rPackages,
-  stdenv,
 }:
 
 postgresqlBuildExtension (finalAttrs: {

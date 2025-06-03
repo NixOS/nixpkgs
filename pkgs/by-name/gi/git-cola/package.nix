@@ -7,19 +7,21 @@
   git,
   qt5,
   versionCheckHook,
+  copyDesktopItems,
+  imagemagick,
   nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "git-cola";
-  version = "4.12.0";
+  version = "4.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "git-cola";
     repo = "git-cola";
     tag = "v${version}";
-    hash = "sha256-1y/fYqvsPpgCEakL7XepI9SVPFgmk1m795uMPv1WgNc=";
+    hash = "sha256-FoCU10EKeNltYh7AEOR+98ryVA6rFVfCDMg5QUSpF0w=";
   };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ qt5.qtwayland ];
@@ -38,7 +40,8 @@ python3Packages.buildPythonApplication rec {
     gettext
     qt5.wrapQtAppsHook
     python3Packages.setuptools-scm
-  ];
+    imagemagick
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
 
   nativeCheckInputs = [
     git
@@ -55,6 +58,19 @@ python3Packages.buildPythonApplication rec {
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
+
+  desktopItems = [
+    "share/applications/git-cola-folder-handler.desktop"
+    "share/applications/git-cola.desktop"
+    "share/applications/git-dag.desktop"
+  ];
+
+  postInstall = ''
+    for i in 16 24 48 64 96 128 256 512; do
+      mkdir -p $out/share/icons/hicolor/''${i}x''${i}/apps
+      magick cola/icons/git-cola.svg -background none -resize ''${i}x''${i} $out/share/icons/hicolor/''${i}x''${i}/apps/${pname}.png
+    done
   '';
 
   passthru.updateScript = nix-update-script { };

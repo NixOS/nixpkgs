@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kdiff3";
-  version = "1.12.2";
+  version = "1.12.3";
 
   src = fetchurl {
     url = "mirror://kde/stable/kdiff3/kdiff3-${finalAttrs.version}.tar.xz";
-    hash = "sha256-MaN8vPnUIHintIRdQqwaAzp9cjKlq66qAo9kJbufpDk=";
+    hash = "sha256-4iZUxFeIF5mAgwVSnGtZbAydw4taLswULsdtRvaHP0w=";
   };
 
   nativeBuildInputs = [

@@ -58,11 +58,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  preCheck = ''
-    # httpx since 0.28.0+ depends on SSL_CERT_FILE
-    SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
-  '';
-
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "hypercorn" ];

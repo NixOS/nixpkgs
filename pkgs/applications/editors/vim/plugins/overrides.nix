@@ -120,6 +120,8 @@
   websocat,
   # luau-lsp-nvim dependencies
   luau-lsp,
+  # uv.nvim dependencies
+  uv,
   # nvim-vstsl dependencies
   vtsls,
 }:
@@ -294,6 +296,18 @@ in
 
   blink-cmp-git = super.blink-cmp-git.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
+  };
+
+  blink-cmp-npm-nvim = super.blink-cmp-npm-nvim.overrideAttrs {
+    nvimSkipModules = [
+      # Test files
+      "blink-cmp-npm.utils.compute_meta_spec"
+      "blink-cmp-npm.utils.generate_doc_spec"
+      "blink-cmp-npm.utils.ignore_version_spec"
+      "blink-cmp-npm.utils.is_cursor_in_dependencies_node_spec"
+      "blink-cmp-npm.utils.semantic_sort_spec"
+      "minit"
+    ];
   };
 
   blink-emoji-nvim = super.blink-emoji-nvim.overrideAttrs {
@@ -610,14 +624,25 @@ in
     dependencies = [ self.plenary-nvim ];
     nvimSkipModules = [
       # Optional provider dependencies
-      "codecompanion.providers.diff.mini_diff"
-      "codecompanion.providers.actions.telescope"
       "codecompanion.providers.actions.mini_pick"
+      "codecompanion.providers.actions.snacks"
+      "codecompanion.providers.actions.telescope"
+      "codecompanion.providers.actions.fzf_lua"
+      "codecompanion.providers.diff.mini_diff"
       # Requires setup call
       "codecompanion.actions.static"
       "codecompanion.actions.init"
       # Test
       "minimal"
+    ];
+  };
+
+  codecompanion-history-nvim = super.codecompanion-history-nvim.overrideAttrs {
+    dependencies = with self; [
+      # transitive dependency for codecompanion-nvim
+      plenary-nvim
+
+      codecompanion-nvim
     ];
   };
 
@@ -1069,6 +1094,12 @@ in
     ];
   };
 
+  ecolog-nvim = super.ecolog-nvim.overrideAttrs {
+    nvimSkipModules = [
+      "repro"
+    ];
+  };
+
   efmls-configs-nvim = super.efmls-configs-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
   };
@@ -1250,6 +1281,10 @@ in
     configurePhase = "cd plugins/nvim";
   };
 
+  gh-nvim = super.gh-nvim.overrideAttrs {
+    dependencies = [ self.litee-nvim ];
+  };
+
   gitlinker-nvim = super.gitlinker-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
@@ -1292,6 +1327,13 @@ in
       "go.snips"
       "snips.all"
       "snips.go"
+    ];
+  };
+
+  GPTModels-nvim = super.GPTModels-nvim.overrideAttrs {
+    dependencies = with self; [
+      nui-nvim
+      telescope-nvim
     ];
   };
 
@@ -1479,6 +1521,10 @@ in
       substituteInPlace lua/kulala/config/defaults.lua \
         --replace-fail 'curl_path = "curl"' 'curl_path = "${lib.getExe curl}"'
     '';
+    nvimSkipModules = [
+      # Requires some extra work to get CLI working in nixpkgs
+      "cli.kulala_cli"
+    ];
   };
 
   LazyVim = super.LazyVim.overrideAttrs {
@@ -1768,8 +1814,12 @@ in
   };
 
   mason-nvim = super.mason-nvim.overrideAttrs {
-    # lua/mason-vendor/zzlib/inflate-bwo.lua:15: 'end' expected near '&'
-    nvimSkipModules = "mason-vendor.zzlib.inflate-bwo";
+    nvimSkipModules = [
+      # lua/mason-vendor/zzlib/inflate-bwo.lua:15: 'end' expected near '&'
+      "mason-vendor.zzlib.inflate-bwo"
+      # E5108: Error executing lua ...mplugin-mason.nvim-2025-05-06/lua/mason-test/helpers.lua:7: module 'luassert.spy' not found:
+      "mason-test.helpers"
+    ];
   };
 
   mason-tool-installer-nvim = super.mason-tool-installer-nvim.overrideAttrs {
@@ -1857,6 +1907,7 @@ in
       # Optional image providers
       "load_image_nvim"
       "load_wezterm_nvim"
+      "load_snacks_nvim"
     ];
   };
 
@@ -3353,6 +3404,10 @@ in
     ];
   };
 
+  timerly = super.timerly.overrideAttrs {
+    dependencies = [ self.nvzone-volt ];
+  };
+
   tmux-complete-vim = super.tmux-complete-vim.overrideAttrs {
     # Vim plugin with optional nvim-compe lua module
     nvimSkipModules = [ "compe_tmux" ];
@@ -3473,6 +3528,13 @@ in
   unison = super.unison.overrideAttrs {
     # Editor stuff isn't at top level
     postPatch = "cd editor-support/vim";
+  };
+
+  uv-nvim = super.uv-nvim.overrideAttrs {
+    dependencies = with self; [
+      telescope-nvim
+    ];
+    runtimeDeps = [ uv ];
   };
 
   vCoolor-vim = super.vCoolor-vim.overrideAttrs {
@@ -3912,6 +3974,20 @@ in
     ];
   };
 
+  yaml-companion-nvim = super.yaml-companion-nvim.overrideAttrs {
+    dependencies = [
+      self.nvim-lspconfig
+      self.plenary-nvim
+    ];
+  };
+
+  yaml-schema-detect-nvim = super.yaml-schema-detect-nvim.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      nvim-lspconfig
+    ];
+  };
+
   yanky-nvim = super.yanky-nvim.overrideAttrs {
     nvimSkipModules = [
       # Optional telescope integration
@@ -4021,5 +4097,12 @@ in
       substituteInPlace autoload/zoxide.vim \
         --replace-fail "'zoxide_executable', 'zoxide'" "'zoxide_executable', '${zoxide}/bin/zoxide'"
     '';
+  };
+
+  nvim-k8s-crd = super.nvim-k8s-crd.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      nvim-lspconfig
+    ];
   };
 }

@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.0.38";
   src = fetchFromGitHub {
     owner = "modelica";
-    repo = finalAttrs.pname;
+    repo = "reference-fmus";
     rev = "v${finalAttrs.version}";
     hash = "sha256-FeDKYcm9K670q1FGqy41Tp2Ag8p2JidH4z78zpHOngw=";
   };

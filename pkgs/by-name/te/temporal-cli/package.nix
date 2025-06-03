@@ -6,14 +6,14 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "temporal-cli";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "cli";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9O+INXJhNwgwwvC0751ifdHmxbD0qI5A3LdDb4Krk/o=";
   };
 
@@ -36,7 +36,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/temporalio/cli/temporalcli.Version=${version}"
+    "-X github.com/temporalio/cli/temporalcli.Version=${finalAttrs.version}"
   ];
 
   # Tests fail with x86 on macOS Rosetta 2
@@ -62,4 +62,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "temporal";
   };
-}
+})

@@ -4,7 +4,6 @@
 
   buildGoModule,
   fetchFromGitHub,
-  fetchpatch,
 
   makeWrapper,
   installShellFiles,
@@ -24,7 +23,7 @@
 }:
 
 let
-  version = "1.82.5";
+  version = "1.84.1";
 in
 buildGoModule {
   pname = "tailscale";
@@ -39,10 +38,10 @@ buildGoModule {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    hash = "sha256-BFitj8A+TfNKTyXBB1YhsEs5NvLUfgJ2IbjB2ipf4xU=";
+    hash = "sha256-rEfBoRKOM1DnMfgEkPI6wzzMwGIOUhowJRlaAQ8QZjY=";
   };
 
-  vendorHash = "sha256-SiUkN6BQK1IQmLfkfPetzvYqRu9ENK6+6txtGxegF5Y=";
+  vendorHash = "sha256-QBYCMOWQOBCt+69NtJtluhTZIOiBWcQ78M9Gbki6bN0=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -60,6 +59,7 @@ buildGoModule {
     "cmd/derpprobe"
     "cmd/tailscaled"
     "cmd/tsidp"
+    "cmd/get-authkey"
   ];
 
   excludedPackages = [
@@ -95,8 +95,10 @@ buildGoModule {
     # want but also limits the tests
     unset subPackages
 
-    # several tests hang
-    rm tsnet/tsnet_test.go
+    # several tests hang, but keeping the file for tsnet/packet_filter_test.go
+    # packet_filter_test issue: https://github.com/tailscale/tailscale/issues/16051
+    substituteInPlace tsnet/tsnet_test.go \
+      --replace-fail 'func Test' 'func skippedTest'
   '';
 
   checkFlags =
@@ -137,6 +139,19 @@ buildGoModule {
 
           # flaky: https://github.com/tailscale/tailscale/issues/7030
           "TestConcurrent"
+
+          # flaky: https://github.com/tailscale/tailscale/issues/11762
+          "TestTwoDevicePing"
+
+          # timeout 10m
+          "TestTaildropIntegration"
+          "TestTaildropIntegration_Fresh"
+
+          # context deadline exceeded
+          "TestPacketFilterFromNetmap"
+
+          # flaky: https://github.com/tailscale/tailscale/issues/15348
+          "TestSafeFuncHappyPath"
         ]
         ++ lib.optionals stdenv.hostPlatform.isDarwin [
           # syscall default route interface en0 differs from netstat

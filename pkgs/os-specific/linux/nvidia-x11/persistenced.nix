@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ m4 ];
   buildInputs = [ libtirpc ];
 
-  inherit (nvidia_x11) makeFlags;
+  makeFlags = nvidia_x11.makeFlags ++ [ "DATE=true" ];
 
   installFlags = [ "PREFIX=$(out)" ];
 

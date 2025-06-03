@@ -6,17 +6,29 @@
   doxygen,
   graphviz,
   pkg-config,
+  python3,
+  nix-update-script,
 }:
+let
+  version = "4.2.0";
+  versionPrefix = "gz-cmake${lib.versions.major version}";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gz-cmake";
-  version = "4.1.1";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "gazebosim";
     repo = "gz-cmake";
-    tag = "gz-cmake${lib.versions.major finalAttrs.version}_${finalAttrs.version}";
-    hash = "sha256-BWgRm+3UW65Cu7TqXtFFG05JlYF52dbpAsIE8aDnJM0=";
+    tag = "${versionPrefix}_${finalAttrs.version}";
+    hash = "sha256-+bMOcGWfcwPhxR9CBp4iH02CZC4oplCjsTDpPDsDnSs=";
   };
+
+  postPatch = ''
+    patchShebangs examples/test_c_child_requires_c_no_deps.bash
+    substituteInPlace examples/CMakeLists.txt --replace-fail \
+      "$""{CMAKE_INSTALL_LIBDIR}" "${if stdenv.isDarwin then "lib" else "lib64"}"
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -24,6 +36,19 @@ stdenv.mkDerivation (finalAttrs: {
     graphviz
     pkg-config
   ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "BUILDSYSTEM_TESTING" finalAttrs.doCheck)
+  ];
+
+  nativeCheckInputs = [ python3 ];
+
+  doCheck = true;
+
+  # Extract the version by matching the tag's prefix.
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=${versionPrefix}_([\\d\\.]+)" ];
+  };
 
   meta = {
     description = "CMake modules to build Gazebo projects";

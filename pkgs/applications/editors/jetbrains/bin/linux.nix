@@ -35,6 +35,7 @@
   extraLdPath ? [ ],
   extraWrapperArgs ? [ ],
   extraBuildInputs ? [ ],
+  ...
 }@args:
 
 let
@@ -48,6 +49,7 @@ lib.makeOverridable mkDerivation (
   rec {
     inherit pname version src;
     passthru.buildNumber = buildNumber;
+    passthru.tests = args.passthru.tests;
     meta = args.meta // {
       mainProgram = pname;
     };

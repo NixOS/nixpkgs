@@ -12,17 +12,19 @@
   kmod,
   udev,
   util-linux,
+  libtracefs,
+  libtraceevent,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libndctl";
-  version = "79";
+  version = "81";
 
   src = fetchFromGitHub {
     owner = "pmem";
     repo = "ndctl";
-    rev = "v${version}";
-    sha256 = "sha256-gG1Rz5AtDLzikGFr8A3l25ypd+VoLw2oWjszy9ogDLk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-geOfaI5XehucLanNS8KTIyOAXOS5YSjs61hfrWbmqSs=";
   };
 
   patches = lib.optionals (!stdenv.hostPlatform.isGnu) [
@@ -52,12 +54,13 @@ stdenv.mkDerivation rec {
     kmod
     udev
     util-linux
+    libtracefs
+    libtraceevent
   ];
 
   mesonFlags = [
     (lib.mesonOption "rootprefix" "${placeholder "out"}")
     (lib.mesonOption "sysconfdir" "${placeholder "out"}/etc/ndctl.conf.d")
-    (lib.mesonEnable "libtracefs" false)
     # Use asciidoctor due to xmlto errors
     (lib.mesonEnable "asciidoctor" true)
     (lib.mesonEnable "systemd" false)
@@ -70,7 +73,7 @@ stdenv.mkDerivation rec {
     substituteInPlace git-version --replace-fail /bin/bash ${stdenv.shell}
     substituteInPlace git-version-gen --replace-fail /bin/sh ${stdenv.shell}
 
-    echo "m4_define([GIT_VERSION], [${version}])" > version.m4;
+    echo "m4_define([GIT_VERSION], [${finalAttrs.version}])" > version.m4;
   '';
 
   meta = {
@@ -80,4 +83,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ thoughtpolice ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    sitePackages=$out/${python3.sitePackages}/${finalAttrs.pname}
+    sitePackages=$out/${python3.sitePackages}/payload_dumper
 
     install -D ./payload_dumper.py $out/bin/payload_dumper
     install -D ./update_metadata_pb2.py $sitePackages/update_metadata_pb2.py

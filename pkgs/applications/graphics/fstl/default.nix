@@ -2,15 +2,18 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  mkDerivation,
   cmake,
+  libsForQt5,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "fstl";
   version = "0.11.0";
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    libsForQt5.wrapQtAppsHook
+  ];
 
   installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
     runHook preInstall

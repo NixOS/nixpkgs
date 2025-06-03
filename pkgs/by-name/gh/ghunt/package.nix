@@ -6,20 +6,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ghunt";
-  version = "2.1.0";
+  version = "2.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mxrch";
     repo = "ghunt";
-    tag = "v${version}";
-    hash = "sha256-UeHVATTyAH3Xdm/NVSUhiicM+tZ4UnLeJsy1jSLK3v8=";
+    # The newer releases aren't git-tagged to we just take the
+    # commit with the version bump
+    rev = "5782248bfd92a24875e112ed0a83e6986d4c70d0";
+    hash = "sha256-SQk/hy4r9LIffsu3kxLTv5LCcEvcZkP2jhmPA6Fzo8U=";
   };
 
   pythonRelaxDeps = true;
 
   nativeBuildInputs = with python3.pkgs; [
-    setuptools
+    poetry-core
   ];
 
   propagatedBuildInputs =
@@ -29,6 +31,7 @@ python3.pkgs.buildPythonApplication rec {
       autoslot
       beautifulsoup4
       beautifultable
+      dnspython
       geopy
       httpx
       humanize
@@ -39,7 +42,7 @@ python3.pkgs.buildPythonApplication rec {
       protobuf
       python-dateutil
       rich
-      trio
+      rich-argparse
       packaging
     ]
     ++ httpx.optional-dependencies.http2;

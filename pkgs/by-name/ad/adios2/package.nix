@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
       yaml-cpp
       nlohmann_json
 
-      # Todo: add these optional dependcies in nixpkgs.
+      # Todo: add these optional dependencies in nixpkgs.
       # sz
       # mgard
       # catalyst

@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "zerwes";
-    repo = pname;
+    repo = "hiyapyco";
     tag = "release-${version}";
     hash = "sha256-uF5DblAg4q8L1tZKopcjJ14NIQVQF5flNHdZ/jnw71M=";
   };

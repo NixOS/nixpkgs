@@ -247,6 +247,8 @@ makeScopeWithSplicing' {
 
         qcsxcad = callPackage ../development/libraries/science/electronics/qcsxcad { };
 
+        qcustomplot = callPackage ../development/libraries/qcustomplot { };
+
         qjson = callPackage ../development/libraries/qjson { };
 
         qmltermwidget = callPackage ../development/libraries/qmltermwidget { };

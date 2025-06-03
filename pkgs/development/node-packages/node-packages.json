@@ -130,7 +130,6 @@
 , "poor-mans-t-sql-formatter-cli"
 , "postcss"
 , "prebuild-install"
-, "prettier"
 , "pscid"
 , "pulp"
 , "purescript-language-server"

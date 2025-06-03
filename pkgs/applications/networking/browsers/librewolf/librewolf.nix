@@ -15,12 +15,8 @@ rec {
 
   extraPostPatch = ''
     while read patch_name; do
-      if [ "$patch_name" != "patches/macos-import-vector.patch" ]; then
-        echo "applying LibreWolf patch: $patch_name"
-        patch -p1 < ${source}/$patch_name
-      else
-        echo "skipping LibreWolf patch: $patch"
-      fi
+      echo "applying LibreWolf patch: $patch_name"
+      patch -p1 < ${source}/$patch_name
     done <${source}/assets/patches.txt
 
     cp -r ${source}/themes/browser .

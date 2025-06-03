@@ -15,7 +15,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "common-fate";
-    repo = pname;
+    repo = "granted";
     rev = "v${version}";
     sha256 = "sha256-xHpYtHG0fJ/VvJ/4lJ90ept3yGzJRnmtFQFbYxJtxwY=";
   };

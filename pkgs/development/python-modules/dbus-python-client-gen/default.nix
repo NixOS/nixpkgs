@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
-    repo = pname;
+    repo = "dbus-python-client-gen";
     tag = "v${version}";
     hash = "sha256-4Y4cL254ZlZKF6d6cStIOya3J4ZfypuumwKOdDNzuNc=";
   };

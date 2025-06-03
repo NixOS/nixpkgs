@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "doomrunner";
-  version = "1.9.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "Youda008";
     repo = "DoomRunner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rCoMTPGjIFAcNncBGg1IMdUahzjH0WlFZBZS0UmNI/g=";
+    hash = "sha256-N5kj2Z3QW29kOw2khET6Z4E9nFBBjNTgKw2xbCQrWKY=";
   };
 
   buildInputs = [ kdePackages.qtbase ];

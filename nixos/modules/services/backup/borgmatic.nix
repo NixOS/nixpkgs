@@ -17,7 +17,7 @@ let
   addRequiredBinaries =
     s:
     s
-    // {
+    // (lib.optionalAttrs (s ? postgresql_databases && s.postgresql_databases != [ ]) {
       postgresql_databases = map (
         d:
         let
@@ -33,7 +33,9 @@ let
           psql_command = "${as_user}${postgresql}/bin/psql";
         }
         // d
-      ) (s.postgresql_databases or [ ]);
+      ) s.postgresql_databases;
+    })
+    // (lib.optionalAttrs (s ? mariadb_databases && s.mariadb_databases != [ ]) {
       mariadb_databases = map (
         d:
         {
@@ -41,7 +43,9 @@ let
           mariadb_command = "${mysql}/bin/mariadb";
         }
         // d
-      ) (s.mariadb_databases or [ ]);
+      ) s.mariadb_databases;
+    })
+    // (lib.optionalAttrs (s ? mysql_databases && s.mysql_databases != [ ]) {
       mysql_databases = map (
         d:
         {
@@ -49,8 +53,8 @@ let
           mysql_command = "${mysql}/bin/mysql";
         }
         // d
-      ) (s.mysql_databases or [ ]);
-    };
+      ) s.mysql_databases;
+    });
 
   repository =
     with lib.types;
@@ -149,7 +153,9 @@ in
   config =
     let
       configFiles =
-        (lib.optionalAttrs (cfg.settings != null) { "borgmatic/config.yaml".source = cfgfile; })
+        (lib.optionalAttrs (cfg.settings != null) {
+          "borgmatic/config.yaml".source = cfgfile;
+        })
         // lib.mapAttrs' (
           name: value:
           lib.nameValuePair "borgmatic.d/${name}.yaml" {

@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
   version = "1.10.12";
   src = fetchFromGitHub {
     owner = "signalwire";
-    repo = pname;
+    repo = "freeswitch";
     rev = "v${version}";
     hash = "sha256-uOO+TpKjJkdjEp4nHzxcHtZOXqXzpkIF3dno1AX17d8=";
   };

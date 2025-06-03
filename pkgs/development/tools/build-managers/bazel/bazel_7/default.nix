@@ -323,11 +323,11 @@ stdenv.mkDerivation rec {
       # --{,tool_}java_runtime_version=local_jdk and rely on the fact no java
       # toolchain registered by default uses the local_jdk, making the selection
       # unambiguous.
-      # This toolchain has the advantage that it can use any ambiant java jdk,
+      # This toolchain has the advantage that it can use any ambient java jdk,
       # not only a given, fixed version. It allows bazel to work correctly in any
       # environment where JAVA_HOME is set to the right java version, like inside
       # nix derivations.
-      # However, this patch breaks bazel hermeticity, by picking the ambiant java
+      # However, this patch breaks bazel hermeticity, by picking the ambient java
       # version instead of the more hermetic remote_jdk prebuilt binaries that
       # rules_java provide by default. It also requires the user to have a
       # JAVA_HOME set to the exact version required by the project.
@@ -347,7 +347,7 @@ stdenv.mkDerivation rec {
       # guarantee that it will always run in any nix context.
       #
       # See also ./bazel_darwin_sandbox.patch in bazel_5. That patch uses
-      # NIX_BUILD_TOP env var to conditionnally disable sleep features inside the
+      # NIX_BUILD_TOP env var to conditionally disable sleep features inside the
       # sandbox.
       #
       # If you want to investigate the sandbox profile path,

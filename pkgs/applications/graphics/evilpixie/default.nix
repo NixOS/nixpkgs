@@ -5,8 +5,7 @@
   meson,
   ninja,
   pkg-config,
-  wrapQtAppsHook,
-  qtbase,
+  libsForQt5,
   libpng,
   giflib,
   libjpeg,
@@ -28,11 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     libpng
     giflib
     libjpeg

@@ -20,10 +20,14 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "masneyb";
-    repo = pname;
+    repo = "gftp";
     rev = version;
     hash = "sha256-0zdv2oYl24BXh61IGCWby/2CCkzNjLpDrAFc0J89Pw4=";
   };
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-incompatible-pointer-types" # https://github.com/masneyb/gftp/issues/178
+  ];
 
   nativeBuildInputs = [
     autoconf

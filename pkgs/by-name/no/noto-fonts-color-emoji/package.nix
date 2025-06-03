@@ -7,18 +7,11 @@
   cairo,
   imagemagick,
   zopfli,
+  nototools,
   pngquant,
   which,
 }:
 
-let
-  emojiPythonEnv = buildPackages.python3.withPackages (
-    p: with p; [
-      fonttools
-      nototools
-    ]
-  );
-in
 stdenvNoCC.mkDerivation rec {
   pname = "noto-fonts-color-emoji";
   version = "2.047";
@@ -39,9 +32,10 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [
     imagemagick
     zopfli
+    nototools
     pngquant
     which
-    emojiPythonEnv
+    buildPackages.python3.pkgs.fonttools
   ];
 
   postPatch = ''

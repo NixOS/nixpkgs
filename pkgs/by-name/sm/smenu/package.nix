@@ -6,14 +6,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.0";
+  version = "1.5.0";
   pname = "smenu";
 
   src = fetchFromGitHub {
     owner = "p-gen";
     repo = "smenu";
     rev = "v${version}";
-    sha256 = "sha256-pAbtTqDIdDWReeaRK7UHXh/PS5f44/PRWaICluH02ec=";
+    sha256 = "sha256-nTQe6sCMHGRW7Djpv33xY8nL4a7ZyC9YM7PGOvmpuSM=";
   };
 
   buildInputs = [ ncurses ];

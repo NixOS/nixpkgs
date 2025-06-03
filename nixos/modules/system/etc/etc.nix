@@ -41,8 +41,6 @@ let
               if [ "$(readlink "$out/etc/$target")" != "$src" ]; then
                 echo "mismatched duplicate entry $(readlink "$out/etc/$target") <-> $src"
                 ret=1
-
-                continue
               fi
             fi
 
@@ -285,23 +283,23 @@ in
             ''}
 
             tmpMetadataMount=$(TMPDIR="/run" mktemp --directory -t nixos-etc-metadata.XXXXXXXXXX)
-            mount --type erofs -o ro ${config.system.build.etcMetadataImage} $tmpMetadataMount
+            mount --type erofs --options ro,nodev,nosuid ${config.system.build.etcMetadataImage} $tmpMetadataMount
 
             # There was no previous /etc mounted. This happens when we're called
             # directly without an initrd, like with nixos-enter.
             if ! mountpoint -q /etc; then
-              mount --type overlay overlay \
-                --options lowerdir=$tmpMetadataMount::${config.system.build.etcBasedir},${etcOverlayOptions} \
-                /etc
+              mount --type overlay \
+                --options nodev,nosuid,lowerdir=$tmpMetadataMount::${config.system.build.etcBasedir},${etcOverlayOptions} \
+                overlay /etc
             else
               # Mount the new /etc overlay to a temporary private mount.
               # This needs the indirection via a private bind mount because you
               # cannot move shared mounts.
               tmpEtcMount=$(TMPDIR="/run" mktemp --directory -t nixos-etc.XXXXXXXXXX)
               mount --bind --make-private $tmpEtcMount $tmpEtcMount
-              mount --type overlay overlay \
-                --options lowerdir=$tmpMetadataMount::${config.system.build.etcBasedir},${etcOverlayOptions} \
-                $tmpEtcMount
+              mount --type overlay \
+                --options nodev,nosuid,lowerdir=$tmpMetadataMount::${config.system.build.etcBasedir},${etcOverlayOptions} \
+                overlay $tmpEtcMount
 
               # Before moving the new /etc overlay under the old /etc, we have to
               # move mounts on top of /etc to the new /etc mountpoint.
@@ -392,11 +390,11 @@ in
     system.build.etcMetadataImage =
       let
         etcJson = pkgs.writeText "etc-json" (builtins.toJSON etc');
-        etcDump = pkgs.runCommand "etc-dump" { } ''
+        etcDump = pkgs.runCommandLocal "etc-dump" { } ''
           ${lib.getExe pkgs.buildPackages.python3} ${./build-composefs-dump.py} ${etcJson} > $out
         '';
       in
-      pkgs.runCommand "etc-metadata.erofs"
+      pkgs.runCommandLocal "etc-metadata.erofs"
         {
           nativeBuildInputs = with pkgs.buildPackages; [
             composefs

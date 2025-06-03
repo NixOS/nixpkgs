@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "spyoungtech";
-    repo = pname;
+    repo = "pyclip";
     tag = "v${version}";
     hash = "sha256-0nOkNgT8XCwtXI9JZntkhoMspKQU602rTKBFajVKBoM=";
   };

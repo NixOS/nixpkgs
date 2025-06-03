@@ -56,24 +56,24 @@
 
 let
   pname = "gitkraken";
-  version = "11.0.0";
+  version = "11.1.1";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchzip {
-      url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
-      hash = "sha256-rUOBCxquTw5wh5cK0AEGmIMq808tZQe5E90V7lGRuNY=";
+      url = "https://api.gitkraken.dev/releases/production/linux/x64/${version}/gitkraken-amd64.tar.gz";
+      hash = "sha256-VKJjwWAhN53h9KU06OviIEL5SiIDwPtb7cKJSR4L9YA=";
     };
 
     x86_64-darwin = fetchzip {
-      url = "https://release.axocdn.com/darwin/GitKraken-v${version}.zip";
-      hash = "sha256-L2OLlHY8iix7HcI5TowZapqtrsvB/KWigdndQWIIIFU=";
+      url = "https://api.gitkraken.dev/releases/production/darwin/x64/${version}/GitKraken-v${version}.zip";
+      hash = "sha256-CNJ5EOFTGerzCQg7E23bPTPn11c41/AYP0PHHyrpUDA=";
     };
 
     aarch64-darwin = fetchzip {
-      url = "https://release.axocdn.com/darwin-arm64/GitKraken-v${version}.zip";
-      hash = "sha256-Rk6hSQ12CQl+vDYl17p0fQ74RpfOYhjMqrKZJ0/d1dw=";
+      url = "https://api.gitkraken.dev/releases/production/darwin/arm64/${version}/GitKraken-v${version}.zip";
+      hash = "sha256-5R106QjzDLDesiOaZMMLHhissvBtOQv0hgnCmVgApUc=";
     };
   };
 

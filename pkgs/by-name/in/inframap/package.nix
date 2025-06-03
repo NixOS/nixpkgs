@@ -9,7 +9,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "cycloidio";
-    repo = pname;
+    repo = "inframap";
     rev = "v${version}";
     hash = "sha256-jV9mMJNSsRWdbvHr7OvF1cF2KVqxUEjlM9AaVMxNqBI=";
   };

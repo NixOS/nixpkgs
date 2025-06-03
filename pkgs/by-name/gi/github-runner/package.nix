@@ -25,13 +25,13 @@ assert builtins.all (x: builtins.elem x [ "node20" ]) nodeRuntimes;
 
 buildDotnetModule (finalAttrs: {
   pname = "github-runner";
-  version = "2.323.0";
+  version = "2.324.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3KdNkQKmFR1999e99I4qKsM/10QW8G+7eUK44RisQr8=";
+    hash = "sha256-/ssjVM1Ujgp5JgeKZ7Tmngyy4V/bFcxTfakbPhnp6Co=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git-revision
@@ -199,6 +199,11 @@ buildDotnetModule (finalAttrs: {
       "RunnerLayoutParts_CheckExternalsHash"
       "RunnerLayoutParts_CheckDotnetRuntimeHash"
     ]
+    # Strictly require a Debug configuration to work
+    ++ [
+      # https://github.com/actions/runner/blob/da3412e/src/Runner.Common/HostContext.cs#L260-L266
+      "GitHub.Runner.Common.Tests.HostContextL0.AuthMigrationAutoReset"
+    ]
     ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
       # "JavaScript Actions in Alpine containers are only supported on x64 Linux runners. Detected Linux Arm64"
       "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNodeRuntimeVersionInAlpineContainerAsync"
@@ -217,6 +222,8 @@ buildDotnetModule (finalAttrs: {
 
   preCheck =
     ''
+      # Required by some tests
+      export GITHUB_ACTIONS_RUNNER_TRACE=1
       mkdir -p _layout/externals
     ''
     + lib.optionalString (lib.elem "node20" nodeRuntimes) ''

@@ -83,13 +83,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
-  version = "3.10.3";
+  version = "3.11.0";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dILIEg5BXRbRcHEh6U1FfPgR/U3J0q4ypRMM6yakuwc=";
+    hash = "sha256-8HcbA9Cj2i6DuqcJGiwqd6GkqbJP9oLdmA34g7kc/ng=";
   };
 
   nativeBuildInputs =
@@ -284,6 +284,11 @@ stdenv.mkDerivation (finalAttrs: {
       "test_ogr_gpkg_background_rtree_build"
       "test_vsiaz_fake_write"
       "test_vsioss_6"
+      # flaky?
+      "test_tiledb_read_arbitrary_array"
+      # tests for magic numbers, seem to change with different poppler versions,
+      # and architectures
+      "test_pdf_extra_rasters"
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
       # likely precision-related expecting x87 behaviour

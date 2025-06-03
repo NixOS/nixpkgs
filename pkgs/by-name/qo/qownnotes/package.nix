@@ -5,7 +5,7 @@
   qt6Packages,
   cmake,
   makeWrapper,
-  botan2,
+  botan3,
   pkg-config,
   nixosTests,
   installShellFiles,
@@ -17,11 +17,11 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "qownnotes";
   appname = "QOwnNotes";
-  version = "25.5.3";
+  version = "25.6.0";
 
   src = fetchurl {
     url = "https://github.com/pbek/QOwnNotes/releases/download/v${finalAttrs.version}/qownnotes-${finalAttrs.version}.tar.xz";
-    hash = "sha256-853xxUgRMtnL+frLCmzzGL44xstDwnrEMhYBFpL5hmQ=";
+    hash = "sha256-RUW8fWPJxTq7Ya+uZ6xGg7URHc+ojuBs9g++UXrK9I0=";
   };
 
   nativeBuildInputs =
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.qtdeclarative
     qt6Packages.qtsvg
     qt6Packages.qtwebsockets
-    botan2
+    botan3
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6Packages.qtwayland ];
 
   cmakeFlags = [
