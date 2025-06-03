@@ -50,7 +50,7 @@ stdenv.mkDerivation {
       It extracts content so that you can read it when you have time.
     '';
     license = licenses.mit;
-    homepage = "http://wallabag.org";
+    homepage = "https://wallabag.org";
     changelog = "https://github.com/wallabag/wallabag/releases/tag/${version}";
     maintainers = with maintainers; [ schneefux ];
     platforms = platforms.all;
