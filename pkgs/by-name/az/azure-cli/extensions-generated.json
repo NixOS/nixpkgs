@@ -281,9 +281,9 @@
   },
   "databox": {
     "pname": "databox",
-    "version": "1.1.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/databox-1.1.0-py3-none-any.whl",
-    "hash": "sha256-e0GmBSHXz2UtTNygUvydLsY3Hz14hOwKdLqafVAB17s=",
+    "version": "1.2.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/databox-1.2.0-py3-none-any.whl",
+    "hash": "sha256-bFHiTEUKirHc90iJUkqcPfKRrJlBonekcEMzVeReQfc=",
     "description": "Microsoft Azure Command-Line Tools Databox Extension"
   },
   "databricks": {
