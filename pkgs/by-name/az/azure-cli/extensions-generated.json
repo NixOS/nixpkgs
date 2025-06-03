@@ -699,6 +699,13 @@
     "hash": "sha256-LZVypO1wbfj2JsYgNq0i9GoVsRMnP4/5sGMTo4Cif1Y=",
     "description": "Microsoft Azure Command-Line Tools MobileNetwork Extension"
   },
+  "mongo-db": {
+    "pname": "mongo-db",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/mongo_db-1.0.0b1-py3-none-any.whl",
+    "hash": "sha256-z/i+P/kx4MT8XskhqjohRL3Xpne9teLe6jmfCv6iv+0=",
+    "description": "Microsoft Azure Command-Line Tools MongoDb Extension"
+  },
   "monitor-control-service": {
     "pname": "monitor-control-service",
     "version": "1.2.0",
