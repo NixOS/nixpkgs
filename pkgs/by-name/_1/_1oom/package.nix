@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-w67BjS5CrQviMXOeKNWGR1SzDeJHZrIpY7FDGt86CPA=";
   };
 
+  enableParallelBuilding = true;
+
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [
     allegro
