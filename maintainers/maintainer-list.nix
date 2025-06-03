@@ -18521,6 +18521,14 @@
     githubId = 107261;
     name = "Andrey Kuznetsov";
   };
+  ontake = {
+    name = "Louis Dalibard";
+    email = "ontake@ontake.dev";
+    github = "make-42";
+    githubId = 17462236;
+    matrix = "@ontake:matrix.ontake.dev";
+    keys = [ { fingerprint = "36BC 916D DD4E B1EE EE82 4BBF DC95 900F 6DA7 9992"; } ];
+  };
   onthestairs = {
     email = "austinplatt@gmail.com";
     github = "onthestairs";
