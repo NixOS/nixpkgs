@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       HACKING NEWS PHILOSOPHY README.md doc/*.txt
   '';
 
-  passthru.updateScript = gitUpdater { rev-prefix = "f"; };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     homepage = "https://github.com/1oom-fork/1oom";
