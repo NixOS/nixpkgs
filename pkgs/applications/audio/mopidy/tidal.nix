@@ -31,10 +31,11 @@ python3Packages.buildPythonApplication rec {
 
   pytestFlagsArray = [ "tests/" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mopidy extension for playing music from Tidal";
     homepage = "https://github.com/tehkillerbee/mopidy-tidal";
-    license = licenses.mit;
+    changelog = "https://github.com/tehkillerbee/mopidy-tidal/releases/tag/v${version}";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }
