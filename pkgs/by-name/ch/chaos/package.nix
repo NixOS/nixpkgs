@@ -31,12 +31,12 @@ buildGoModule rec {
 
   versionCheckProgramArg = "--version";
 
-  meta = with lib; {
+  meta = {
     description = "Tool to communicate with Chaos DNS API";
     homepage = "https://github.com/projectdiscovery/chaos-client";
     changelog = "https://github.com/projectdiscovery/chaos-client/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "chaos";
   };
 }

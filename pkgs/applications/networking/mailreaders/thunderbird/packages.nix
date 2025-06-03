@@ -60,21 +60,21 @@ let
         icu77 = icu77';
       };
 
-      meta = with lib; {
+      meta = {
         changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
         description = "Full-featured e-mail client";
         homepage = "https://thunderbird.net/";
         mainProgram = "thunderbird";
-        maintainers = with maintainers; [
+        maintainers = with lib.maintainers; [
           lovesegfault
           pierron
           vcunat
         ];
-        platforms = platforms.unix;
+        platforms = lib.platforms.unix;
         broken = stdenv.buildPlatform.is32bit;
         # since Firefox 60, build on 32-bit platforms fails with "out of memory".
         # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
-        license = licenses.mpl20;
+        license = lib.licenses.mpl20;
       };
     }).override
       {
