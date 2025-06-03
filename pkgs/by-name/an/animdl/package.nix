@@ -1,24 +1,9 @@
 {
   lib,
-  buildPythonApplication,
   fetchFromGitHub,
-  poetry-core,
-  anchor-kr,
-  anitopy,
-  click,
-  cssselect,
-  httpx,
-  lxml,
-  packaging,
-  pkginfo,
-  pycryptodomex,
-  pyyaml,
-  regex,
-  rich,
-  tqdm,
-  yarl,
+  python3Packages,
 }:
-buildPythonApplication {
+python3Packages.buildPythonApplication {
   pname = "animdl";
   version = "1.7.27";
   pyproject = true;
@@ -47,11 +32,11 @@ buildPythonApplication {
     "yarl"
   ];
 
-  build-system = [
+  build-system = with python3Packages; [
     poetry-core
   ];
 
-  dependencies = [
+  dependencies = with python3Packages; [
     anchor-kr
     anitopy
     click
