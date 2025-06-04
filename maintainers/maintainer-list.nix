@@ -2645,6 +2645,11 @@
     githubId = 9315;
     name = "Zhong Jianxin";
   };
+  b-fein = {
+    github = "b-fein";
+    githubId = 64250573;
+    name = "Benedikt Fein";
+  };
   b-m-f = {
     email = "maximilian@sodawa.com";
     github = "b-m-f";
