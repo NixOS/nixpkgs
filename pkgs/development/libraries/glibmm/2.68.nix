@@ -1,25 +1,28 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gnum4
-, glib
-, libsigcxx30
-, gnome
-, Cocoa
-, meson
-, ninja
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gnum4,
+  glib,
+  libsigcxx30,
+  gnome,
+  meson,
+  ninja,
 }:
 
 stdenv.mkDerivation rec {
   pname = "glibmm";
-  version = "2.80.0";
+  version = "2.84.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-U5sKKeFalmdsTwWUVBJQVmxcpE2l1Nh6NzL6LQeQnko=";
+    hash = "sha256-Vu5fUcis/Ar99GlZMW5MhVTLUO0ra8XOOJ2XnLtkJQk=";
   };
 
   nativeBuildInputs = [
@@ -28,10 +31,6 @@ stdenv.mkDerivation rec {
     ninja
     gnum4
     glib # for glib-compile-schemas
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
   ];
 
   propagatedBuildInputs = [
@@ -53,7 +52,8 @@ stdenv.mkDerivation rec {
     description = "C++ interface to the GLib library";
     homepage = "https://gtkmm.org/";
     license = licenses.lgpl2Plus;
-    maintainers = teams.gnome.members ++ (with maintainers; [ raskin ]);
+    maintainers = with maintainers; [ raskin ];
+    teams = [ teams.gnome ];
     platforms = platforms.unix;
   };
 }

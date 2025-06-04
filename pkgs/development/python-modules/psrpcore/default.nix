@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "psrpcore";
-  version = "0.3.0";
+  version = "0.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jborean93";
     repo = "psrpcore";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-YThumRHMOTyhP6/EmNEew47v/X4Y1aYg1nvgZJz2XUg=";
+    tag = "v${version}";
+    hash = "sha256-svfqTOKKFKMphIPnvXfAbPZrp1GTV2D+33I0Rajfv1Y=";
   };
 
   build-system = [ setuptools ];

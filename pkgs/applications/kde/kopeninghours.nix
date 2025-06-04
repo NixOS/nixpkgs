@@ -1,15 +1,19 @@
-{ mkDerivation
-, lib
-, bison
-, extra-cmake-modules
-, flex
-, kholidays
-, ki18n
+{
+  mkDerivation,
+  lib,
+  bison,
+  extra-cmake-modules,
+  flex,
+  kholidays,
+  ki18n,
 }:
 
 mkDerivation {
   pname = "kopeninghours";
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     bison
@@ -23,6 +27,10 @@ mkDerivation {
   ];
 
   meta = {
-    license = with lib.licenses; [ bsd3 cc0 lgpl2Plus ];
+    license = with lib.licenses; [
+      bsd3
+      cc0
+      lgpl2Plus
+    ];
   };
 }

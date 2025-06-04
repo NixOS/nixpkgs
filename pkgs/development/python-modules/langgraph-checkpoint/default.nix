@@ -1,41 +1,48 @@
 {
   lib,
   buildPythonPackage,
-  dataclasses-json,
   fetchFromGitHub,
-  langchain-core,
-  langgraph-sdk,
-  msgpack,
+
+  # build system
   poetry-core,
+
+  # dependencies
+  langchain-core,
+  msgpack,
+  ormsgpack,
+
+  # testing
+  dataclasses-json,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
+
+  # passthru
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint";
-  version = "2.0.0";
+  version = "2.0.26";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    rev = "refs/tags/checkpoint==${version}";
-    hash = "sha256-LBIQyDWKmT89OgYUk3LFIZ5VDXX9KQXFkR9A8XHOCBQ=";
+    tag = "checkpoint==${version}";
+    hash = "sha256-DSkjaxUfpsOg2ex0dgfO/UJ7WiQb5wQsAGgHPTckF6o=";
   };
 
   sourceRoot = "${src.name}/libs/checkpoint";
 
   build-system = [ poetry-core ];
 
-  dependencies = [ langchain-core ];
+  dependencies = [
+    langchain-core
+    ormsgpack
+  ];
 
   propagatedBuildInputs = [ msgpack ];
-
-  pythonRelaxDeps = [ "msgpack" ]; # Can drop after msgpack 1.0.10 lands in nixpkgs
 
   pythonImportsCheck = [ "langgraph.checkpoint" ];
 
@@ -46,13 +53,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # AssertionError
-    "test_serde_jsonplus"
-  ];
-
-  passthru = {
-    updateScript = langgraph-sdk.updateScript;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "checkpoint==([0-9.]+)"
+    ];
   };
 
   meta = {

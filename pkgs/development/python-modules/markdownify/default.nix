@@ -2,26 +2,32 @@
   lib,
   beautifulsoup4,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  setuptools-scm,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "markdownify";
-  version = "0.12.1";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-H7CMYYsw4O56MaObmY9EoY+yirJU9V9K8GttNaIXnic=";
+  src = fetchFromGitHub {
+    owner = "matthewwithanm";
+    repo = "python-markdownify";
+    tag = version;
+    hash = "sha256-eU0F3nc96q2U/3PGM/gnrRCmetIqutDugz6q+PIb8CU=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     beautifulsoup4
@@ -35,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "HTML to Markdown converter";
     homepage = "https://github.com/matthewwithanm/python-markdownify";
-    changelog = "https://github.com/matthewwithanm/python-markdownify/releases/tag/${version}";
+    changelog = "https://github.com/matthewwithanm/python-markdownify/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ McSinyx ];
     mainProgram = "markdownify";

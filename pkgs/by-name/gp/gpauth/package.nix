@@ -2,35 +2,34 @@
   rustPlatform,
   lib,
   fetchFromGitHub,
-  libsoup,
   openssl,
   pkg-config,
   perl,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gpauth";
-  version = "2.3.7";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "yuezk";
     repo = "GlobalProtect-openconnect";
     rev = "v${version}";
-    hash = "sha256-Zr888II65bUjrbStZfD0AYCXKY6VdKVJHQhbKwaY3is=";
+    hash = "sha256-MY4JvftrC6sR8M0dFvnGZOkvHIhPRcyct9AG/8527gw=";
   };
 
   buildAndTestSubdir = "apps/gpauth";
-  cargoHash = "sha256-AuYw8CC0bMJzIJJQXhcQajQ4SACz4aKv6rG4HMq7U18=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-8LSGuRnWRWeaY6t25GdZ2y4hGIJ+mP3UBXRjcvPuD6U=";
 
   nativeBuildInputs = [
     perl
     pkg-config
   ];
   buildInputs = [
-    libsoup
     openssl
-    webkitgtk_4_0
+    webkitgtk_4_1
   ];
 
   meta = with lib; {
@@ -45,6 +44,13 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/${src.owner}/${src.repo}";
     license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ binary-eater ];
+    maintainers = with maintainers; [
+      binary-eater
+      m1dugh
+    ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
   };
 }

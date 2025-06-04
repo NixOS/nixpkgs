@@ -15,22 +15,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtk6core";
-  version = "6.0.19";
+  version = "6.0.33";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dtk6core";
     rev = finalAttrs.version;
-    hash = "sha256-3MwvTnjtVVcMjQa1f4UdagEtWhJj8aDgfUlmnGo/R7s=";
+    hash = "sha256-AmGQoDt9qp0m0iV7WrR16DPTt80Y5leRUVXPOtHeugs=";
   };
 
   patches = [
     ./fix-pkgconfig-path.patch
     ./fix-pri-path.patch
     (fetchpatch {
-      name = "fix-build-on-qt-6.8.patch";
-      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/dtk6core/-/raw/d2e991f96b2940e8533b7e944bab5a7dd6aa0fb7/qt-6.8.patch";
-      hash = "sha256-HZxUrtUmVwnNUwcBoU7ewb+McsRkALQglPBbJU8HTkk=";
+      name = "resolve-compilation-issues-on-Qt-6_9.patch";
+      url = "https://github.com/linuxdeepin/dtkcore/commit/8f523a8b387a006b942268e2143d0d58c574f7c5.patch";
+      hash = "sha256-x8BfWCdsz8Bf/sAM7PymZWqlPyEabwP0e6ybfz/2oZ4=";
     })
   ];
 
@@ -93,6 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/linuxdeepin/dtk6core";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    teams = [ lib.teams.deepin ];
   };
 })

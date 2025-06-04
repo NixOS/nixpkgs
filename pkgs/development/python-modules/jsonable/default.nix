@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "halfak";
     repo = "python-jsonable";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-3FIzG2djSZOPDdoYeKqs3obQjgHrFtyp0sdBwZakkHA=";
   };
 

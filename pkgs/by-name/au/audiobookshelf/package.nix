@@ -4,7 +4,7 @@
   fetchFromGitHub,
   runCommand,
   buildNpmPackage,
-  nodejs_18,
+  nodejs,
   ffmpeg-full,
   nunicode,
   util-linux,
@@ -14,15 +14,13 @@
 }:
 
 let
-  nodejs = nodejs_18;
-
   source = builtins.fromJSON (builtins.readFile ./source.json);
   pname = "audiobookshelf";
 
   src = fetchFromGitHub {
     owner = "advplyr";
     repo = "audiobookshelf";
-    rev = "refs/tags/v${source.version}";
+    tag = "v${source.version}";
     inherit (source) hash;
   };
 

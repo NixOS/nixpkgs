@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "gspread";
-  version = "6.1.3";
+  version = "6.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "burnash";
     repo = "gspread";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZMzgIRLwMXvJ+JIz3BUps7CTaV/MhfjZYqkEbgHQh+A=";
+    tag = "v${version}";
+    hash = "sha256-j7UNti5N8c1mjw+1qTPIRCWJ6M4Ur0P9sG1uJnp170M=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Google Spreadsheets client library";
     homepage = "https://github.com/burnash/gspread";
-    changelog = "https://github.com/burnash/gspread/blob/v${version}/HISTORY.rst";
+    changelog = "https://github.com/burnash/gspread/blob/${src.tag}/HISTORY.rst";
     license = licenses.mit;
     maintainers = [ ];
   };

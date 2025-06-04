@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchzip,
   unzip,
   testers,
   chromedriver,
@@ -9,8 +9,8 @@
 
 let
   upstream-info =
-    (import ../../../../applications/networking/browsers/chromium/upstream-info.nix)
-    .stable.chromedriver;
+    (lib.importJSON ../../../../applications/networking/browsers/chromium/info.json)
+    .chromium.chromedriver;
 
   # See ./source.nix for Linux
   allSpecs = {
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   pname = "chromedriver";
   inherit version;
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://storage.googleapis.com/chrome-for-testing-public/${version}/${spec.system}/chromedriver-${spec.system}.zip";
     inherit (spec) hash;
   };

@@ -1,25 +1,32 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   name = "endlessh";
   meta.maintainers = with lib.maintainers; [ azahi ];
 
   nodes = {
-    server = { ... }: {
-      services.endlessh = {
-        enable = true;
-        openFirewall = true;
+    server =
+      { ... }:
+      {
+        services.endlessh = {
+          enable = true;
+          openFirewall = true;
+        };
+
+        specialisation = {
+          unprivileged.configuration.services.endlessh.port = 2222;
+
+          privileged.configuration.services.endlessh.port = 22;
+        };
       };
 
-      specialisation = {
-        unprivileged.configuration.services.endlessh.port = 2222;
-
-        privileged.configuration.services.endlessh.port = 22;
+    client =
+      { pkgs, ... }:
+      {
+        environment.systemPackages = with pkgs; [
+          curl
+          netcat
+        ];
       };
-    };
-
-    client = { pkgs, ... }: {
-      environment.systemPackages = with pkgs; [ curl netcat ];
-    };
   };
 
   testScript = ''
@@ -40,4 +47,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
         server.wait_for_open_port(22)
         client.succeed("nc -dvW5 server 22")
   '';
-})
+}

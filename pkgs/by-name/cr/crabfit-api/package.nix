@@ -8,8 +8,6 @@
   protobuf,
   openssl,
   sqlite,
-  stdenv,
-  darwin,
   adaptor ? "sql",
 }:
 
@@ -53,22 +51,18 @@ rustPlatform.buildRustPackage rec {
     protobuf
   ];
 
-  buildInputs =
-    [
-      openssl
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+    sqlite
+  ];
 
   buildFeatures = [ "${adaptor}-adaptor" ];
 
   PROTOC = "${protobuf}/bin/protoc";
 
-  passthru.tests = [ nixosTests.crabfit ];
+  passthru.tests = {
+    inherit (nixosTests) crabfit;
+  };
 
   meta = {
     description = "Enter your availability to find a time that works for everyone";

@@ -1,22 +1,23 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, pkg-config
-, libde265
-, libheif
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  libde265,
+  libheif,
 }:
 let
   pname = "matrix-media-repo";
-  version = "1.3.7";
+  version = "1.3.8";
 
   src = fetchFromGitHub {
     owner = "t2bot";
     repo = "matrix-media-repo";
     rev = "v${version}";
-    hash = "sha256-trVn+Mn98aJLQCpQX1+qps/uuA5+8zeDoM94eauxHO8=";
+    hash = "sha256-KP1ZyHqeATxk1PCLuM6lPk+GB4Rd0f7ppKVETIURx28=";
   };
 
-  vendorHash = "sha256-fKDdL7C3L33caoXxlutzoND2izB5GH+5qTeojTskIUg=";
+  vendorHash = "sha256-+sHy4Lgufs5jdN/V9W06U4dOZrsPiX87zmR1UwGHhQg=";
 
   asset-compiler = buildGoModule {
     pname = "${pname}-compile_assets";
@@ -29,7 +30,12 @@ let
 in
 
 buildGoModule {
-  inherit pname version src vendorHash;
+  inherit
+    pname
+    version
+    src
+    vendorHash
+    ;
 
   nativeBuildInputs = [
     pkg-config
@@ -48,7 +54,8 @@ buildGoModule {
   ldflags = [
     "-s"
     "-w"
-    "-X" "github.com/t2bot/matrix-media-repo/common/version.Version=${version}"
+    "-X"
+    "github.com/t2bot/matrix-media-repo/common/version.Version=${version}"
   ];
 
   doCheck = false; # requires docker

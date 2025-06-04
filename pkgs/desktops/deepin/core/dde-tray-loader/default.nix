@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dde-tray-loader";
-  version = "1.0.1";
+  version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dde-tray-loader";
     rev = finalAttrs.version;
-    hash = "sha256-FEvoVgwzDYN23TJxu1kRSMSbS4hELYFFByxOsEO9JKE=";
+    hash = "sha256-3rmLQRGtBLASr0VSsIfGP0R9HDxFlea+iNbVjkqKTVg=";
   };
 
   patches = [

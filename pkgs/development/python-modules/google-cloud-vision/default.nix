@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-vision";
-  version = "3.7.4";
+  version = "3.10.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_vision";
     inherit version;
-    hash = "sha256-gLZ/Ci3Fh6MddILT0mkqdz8l+9CUaP2d5F0AtnGq2Zk=";
+    hash = "sha256-Ux4QGyzK2SJDOtRsRqR1KeZKCXM0bzD5GgEt4WOlIxE=";
   };
 
   build-system = [ setuptools ];
@@ -56,8 +56,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Cloud Vision API API client library";
-    homepage = "https://github.com/googleapis/python-vision";
-    changelog = "https://github.com/googleapis/python-vision/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-vision";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-vision-v${version}/packages/google-cloud-vision/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = [ ];
   };

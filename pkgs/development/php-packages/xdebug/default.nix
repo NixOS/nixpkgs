@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "3.3.2";
+  version = "3.4.3";
 in
 buildPecl {
   inherit version;
@@ -16,7 +16,7 @@ buildPecl {
     owner = "xdebug";
     repo = "xdebug";
     rev = version;
-    hash = "sha256-3Hj/6pFLwJkVfsUIkX9lP8cOa1cVjobqHZd/cnH0TaU=";
+    hash = "sha256-B0sGUwCSKh/AZ9I4rwE22EitgkQWwWh4H+p8N02YAeY=";
   };
 
   doCheck = true;
@@ -28,6 +28,6 @@ buildPecl {
     description = "Provides functions for function traces and profiling";
     homepage = "https://xdebug.org/";
     license = lib.licenses.php301;
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 }

@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, libarchive
-, SDL
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libarchive,
+  SDL,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,6 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
+    (lib.enableFeature (!stdenv.hostPlatform.isDarwin) "sdltest")
     "--enable-debug-vdp"
     "--enable-debugger"
     "--enable-joystick"
@@ -33,6 +35,8 @@ stdenv.mkDerivation rec {
     "--with-mz80"
     "--with-star=no" # Needs ASM support
   ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-reserved-user-defined-literal";
 
   meta = with lib; {
     homepage = "https://dgen.sourceforge.net/";
@@ -64,7 +68,7 @@ stdenv.mkDerivation rec {
       - VGM dumping
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; unix;
   };
 }

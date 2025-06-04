@@ -4,11 +4,12 @@
   fetchpatch,
   isPyPy,
   lib,
+  stdenv,
   numpy,
   protobuf,
   pytestCheckHook,
   pythonAtLeast,
-  substituteAll,
+  replaceVars,
   tzdata,
 }:
 
@@ -30,8 +31,7 @@ buildPythonPackage {
   patches =
     lib.optionals (lib.versionAtLeast protobuf.version "22") [
       # Replace the vendored abseil-cpp with nixpkgs'
-      (substituteAll {
-        src = ./use-nixpkgs-abseil-cpp.patch;
+      (replaceVars ./use-nixpkgs-abseil-cpp.patch {
         abseil_cpp_include_path = "${lib.getDev protobuf.abseil-cpp}/include";
       })
     ]
@@ -84,15 +84,21 @@ buildPythonPackage {
     pytestCheckHook
   ] ++ lib.optionals (lib.versionAtLeast protobuf.version "22") [ numpy ];
 
-  disabledTests = lib.optionals isPyPy [
-    # error message differs
-    "testInvalidTimestamp"
-    # requires tracemalloc which pypy does not implement
-    # https://foss.heptapod.net/pypy/pypy/-/issues/3048
-    "testUnknownFieldsNoMemoryLeak"
-    # assertion is not raised for some reason
-    "testStrictUtf8Check"
-  ];
+  disabledTests =
+    lib.optionals isPyPy [
+      # error message differs
+      "testInvalidTimestamp"
+      # requires tracemalloc which pypy does not implement
+      # https://foss.heptapod.net/pypy/pypy/-/issues/3048
+      "testUnknownFieldsNoMemoryLeak"
+      # assertion is not raised for some reason
+      "testStrictUtf8Check"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.is32bit [
+      # OverflowError: timestamp out of range for platform time_t
+      "testTimezoneAwareDatetimeConversionWhereTimestampLosesPrecision"
+      "testTimezoneNaiveDatetimeConversionWhereTimestampLosesPrecision"
+    ];
 
   disabledTestPaths =
     lib.optionals (lib.versionAtLeast protobuf.version "23") [
@@ -123,7 +129,7 @@ buildPythonPackage {
     description = "Protocol Buffers are Google's data interchange format";
     homepage = "https://developers.google.com/protocol-buffers/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ knedlsepp ];
+    maintainers = with maintainers; [ ];
     broken = lib.versionAtLeast protobuf.version "26";
   };
 }

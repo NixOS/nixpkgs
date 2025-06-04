@@ -9,16 +9,16 @@
 
 buildPythonPackage rec {
   pname = "pathable";
-  version = "0.4.3";
+  version = "0.4.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "p1c2u";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-4QRFjbeaggoEPVGAmSY+qVMNW0DKqarNfRXaH6B58ew=";
+    repo = "pathable";
+    tag = version;
+    hash = "sha256-nN5jpI0Zi5ofdSuN9QbTHDXPmQRq9KAn8SoHuNDpZaw=";
   };
 
   nativeBuildInputs = [ poetry-core ];

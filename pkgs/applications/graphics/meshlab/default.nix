@@ -1,33 +1,40 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, libGLU
-, qtbase
-, qtscript
-, qtxmlpatterns
-, lib3ds
-, bzip2
-, muparser
-, eigen
-, glew
-, gmp
-, levmar
-, qhull
-, cmake
-, cgal
-, boost
-, mpfr
-, xercesc
-, tbb
-, embree
-, vcg
-, libigl
-, corto
-, openctm
-, structuresynth
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libsForQt5,
+  libGLU,
+  lib3ds,
+  bzip2,
+  muparser,
+  eigen,
+  glew,
+  gmp,
+  levmar,
+  qhull,
+  cmake,
+  cgal,
+  boost,
+  mpfr,
+  xercesc,
+  tbb,
+  embree,
+  vcg,
+  libigl,
+  corto,
+  openctm,
+  structuresynth,
 }:
 
-mkDerivation rec {
+let
+  tinygltf-src = fetchFromGitHub {
+    owner = "syoyo";
+    repo = "tinygltf";
+    rev = "v2.6.3";
+    hash = "sha256-IyezvHzgLRyc3z8HdNsQMqDEhP+Ytw0stFNak3C8lTo=";
+  };
+in
+stdenv.mkDerivation rec {
   pname = "meshlab";
   version = "2023.12";
 
@@ -40,9 +47,9 @@ mkDerivation rec {
 
   buildInputs = [
     libGLU
-    qtbase
-    qtscript
-    qtxmlpatterns
+    libsForQt5.qtbase
+    libsForQt5.qtscript
+    libsForQt5.qtxmlpatterns
     lib3ds
     bzip2
     muparser
@@ -64,10 +71,15 @@ mkDerivation rec {
     structuresynth
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    libsForQt5.wrapQtAppsHook
+  ];
 
   preConfigure = ''
     substituteAll ${./meshlab.desktop} resources/linux/meshlab.desktop
+    substituteInPlace src/external/tinygltf.cmake \
+      --replace-fail '$'{MESHLAB_EXTERNAL_DOWNLOAD_DIR}/tinygltf-2.6.3 ${tinygltf-src}
     substituteInPlace src/external/libigl.cmake \
       --replace-fail '$'{MESHLAB_EXTERNAL_DOWNLOAD_DIR}/libigl-2.4.0 ${libigl}
     substituteInPlace src/external/nexus.cmake \
@@ -89,6 +101,12 @@ mkDerivation rec {
   postFixup = ''
     patchelf --add-needed $out/lib/meshlab/libmeshlab-common.so $out/bin/.meshlab-wrapped
   '';
+
+  # display a black screen on wayland, so force XWayland for now.
+  # Might be fixed when upstream will be ready for Qt6.
+  qtWrapperArgs = [
+    "--set QT_QPA_PLATFORM xcb"
+  ];
 
   meta = {
     description = "System for processing and editing 3D triangular meshes";

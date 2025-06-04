@@ -1,8 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  isPy3k,
+  fetchFromGitHub,
+  setuptools,
   protobuf,
   googleapis-common-protos,
   pytestCheckHook,
@@ -11,21 +11,30 @@
 
 buildPythonPackage rec {
   pname = "proto-plus";
-  version = "1.24.0";
-  format = "setuptools";
-  disabled = !isPy3k;
+  version = "1.26.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-MLcqXsr+RAaw0znbNbVsQFkGTmkie4w72nRiOX+WZEU=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "proto-plus-python";
+    tag = "v${version}";
+    hash = "sha256-7FonHHXpgJC0vg9Y26bqz0g1NmLWwaZWyFZ0kv7PjY8=";
   };
 
-  propagatedBuildInputs = [ protobuf ];
+  build-system = [ setuptools ];
+
+  dependencies = [ protobuf ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytz
     googleapis-common-protos
+  ];
+
+  pytestFlagsArray = [
+    # pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   pythonImportsCheck = [ "proto" ];

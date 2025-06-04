@@ -12,9 +12,7 @@
   fetchFromGitHub,
   freezegun,
   frozendict,
-  importlib-resources,
   jsonschema,
-  pycryptodome,
   pyserial-asyncio,
   pytest-asyncio,
   pytest-timeout,
@@ -27,16 +25,14 @@
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.67.0";
+  version = "0.79.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-06RKvKOXMhq6LwKSk451cR7EUW+78AZzWsrqSMgq02E=";
+    tag = version;
+    hash = "sha256-4bvVn9Pv37zngsiwy54g+z05uej5Bfwpt3mC9cxF2hk=";
   };
 
   postPatch = ''
@@ -47,22 +43,18 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      attrs
-      aiohttp
-      aiosqlite
-      crccheck
-      cryptography
-      frozendict
-      jsonschema
-      pyserial-asyncio
-      typing-extensions
-      pycryptodome
-      voluptuous
-    ]
-    ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ]
-    ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  dependencies = [
+    attrs
+    aiohttp
+    aiosqlite
+    crccheck
+    cryptography
+    frozendict
+    jsonschema
+    pyserial-asyncio
+    typing-extensions
+    voluptuous
+  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
     aioresponses

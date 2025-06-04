@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 
 let
   api_token = "f87f42114e44b63ad1b9e3c3d33d6fbe"; # random md5 hash
@@ -50,9 +50,6 @@ in
         API_USER_NAME=api
         API_TOKEN=${api_token} # random md5 hash
 
-        # seeding database to get the admin roles
-        ${pkgs.librenms}/artisan db:seed --force --no-interaction
-
         # we don't need to know the password, it just has to exist
         API_USER_PASS=$(${pkgs.pwgen}/bin/pwgen -s 64 1)
         ${pkgs.librenms}/artisan user:add $API_USER_NAME -r admin -p $API_USER_PASS
@@ -101,4 +98,4 @@ in
     # wait until snmphost gets polled
     librenms.wait_until_succeeds("test $(curl -H 'X-Auth-Token: ${api_token}' http://localhost/api/v0/devices/snmphost | jq -Mr .devices[0].last_polled) != 'null'")
   '';
-})
+}

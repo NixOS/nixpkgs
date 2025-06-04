@@ -1,30 +1,36 @@
-{ lib
-, buildGoModule
-, cairo
-, fetchFromGitHub
-, gobject-introspection
-, gtk-layer-shell
-, gtk3
-, pkg-config
-, wrapGAppsHook3
-, xdg-utils
+{
+  lib,
+  buildGoModule,
+  cairo,
+  fetchFromGitHub,
+  gobject-introspection,
+  gtk-layer-shell,
+  gtk3,
+  pkg-config,
+  wrapGAppsHook3,
+  xdg-utils,
 }:
 
 let
   pname = "nwg-drawer";
-  version = "0.5.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-drawer";
     rev = "v${version}";
-    hash = "sha256-0ksvat0NDC2P+T0TyDAKh7YNLYhH+znxqLCqQ/5GDj8=";
+    hash = "sha256-M0+4/lr79CYBy2+ysB1Wb1obD7B/Qi8MBwNhIsiIDak=";
   };
 
-  vendorHash = "sha256-KULOXphc6GWIGP79C9sgfAIRMoqwcjaVp4jVyF6of/E=";
+  vendorHash = "sha256-1uZTZ7/p1l4Rue3mxlaMRSDfyARo94wR4KIKkQXBUMQ=";
 in
 buildGoModule {
-  inherit pname version src vendorHash;
+  inherit
+    pname
+    version
+    src
+    vendorHash
+    ;
 
   nativeBuildInputs = [
     gobject-introspection
@@ -57,9 +63,9 @@ buildGoModule {
     description = "Application drawer for sway Wayland compositor";
     homepage = "https://github.com/nwg-piotr/nwg-drawer";
     changelog = "https://github.com/nwg-piotr/nwg-drawer/releases/tag/${src.rev}";
-    license = with lib.licenses; [ mit ];
+    license = with lib.licenses; [ agpl3Plus ];
     mainProgram = "nwg-drawer";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = with lib.platforms; linux;
   };
 }

@@ -35,7 +35,7 @@ let
   installedPackageRoot = "${builtins.placeholder "out"}/${python.sitePackages}";
   self = buildPythonPackage rec {
     pname = "scikit-image";
-    version = "0.22.0";
+    version = "0.25.2";
     format = "pyproject";
 
     disabled = pythonOlder "3.8";
@@ -43,15 +43,12 @@ let
     src = fetchFromGitHub {
       owner = "scikit-image";
       repo = "scikit-image";
-      rev = "refs/tags/v${version}";
-      hash = "sha256-M18y5JBPf3DR7SlJcCf82nG2MzwILg2w1AhJMzZXslg=";
+      tag = "v${version}";
+      hash = "sha256-viRX7Uh9coacueI6gJHBtOay/UIiUQkBfjpmDLJgyZ4=";
     };
 
     postPatch = ''
       patchShebangs skimage/_build_utils/{version,cythoner}.py
-
-      substituteInPlace pyproject.toml \
-        --replace "numpy==" "numpy>="
     '';
 
     nativeBuildInputs = [
@@ -157,13 +154,13 @@ let
     ];
 
     passthru.tests = {
-      all-tests = self.override { doCheck = true; };
+      all-tests = self.overridePythonAttrs { doCheck = true; };
     };
 
     meta = {
       description = "Image processing routines for SciPy";
       homepage = "https://scikit-image.org";
-      changelog = "https://github.com/scikit-image/scikit-image/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+      changelog = "https://github.com/scikit-image/scikit-image/releases/tag/${src.tag}";
       license = lib.licenses.bsd3;
       maintainers = with lib.maintainers; [ yl3dy ];
     };

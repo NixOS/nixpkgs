@@ -1,19 +1,22 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} : {
+{ pkgs, lib, ... }:
+{
   name = "gotify-server";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ ];
   };
 
-  nodes.machine = { pkgs, ... }: {
-    environment.systemPackages = [ pkgs.jq ];
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      environment.systemPackages = [ pkgs.jq ];
 
-    services.gotify = {
-      enable = true;
-      environment = {
-        GOTIFY_SERVER_PORT = 3000;
+      services.gotify = {
+        enable = true;
+        environment = {
+          GOTIFY_SERVER_PORT = 3000;
+        };
       };
     };
-  };
 
   testScript = ''
     machine.start()
@@ -49,4 +52,4 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
     result = machine.succeed("curl -fsS localhost:3000")
     assert result, "HTTP response from localhost:3000 must not be empty!"
   '';
-})
+}

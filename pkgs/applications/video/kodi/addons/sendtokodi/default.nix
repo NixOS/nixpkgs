@@ -1,4 +1,10 @@
-{ lib, buildKodiAddon, fetchFromGitHub, kodi, inputstreamhelper }:
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+  kodi,
+  inputstreamhelper,
+}:
 
 buildKodiAddon rec {
   pname = "sendtokodi";
@@ -38,6 +44,7 @@ buildKodiAddon rec {
     homepage = "https://github.com/firsttris/plugin.video.sendtokodi";
     description = "Plays various stream sites on Kodi using yt-dlp";
     license = licenses.mit;
-    maintainers = teams.kodi.members ++ [ maintainers.pks ];
+    maintainers = [ maintainers.pks ];
+    teams = [ teams.kodi ];
   };
 }

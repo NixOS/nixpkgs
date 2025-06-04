@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, cairo
-, fontconfig
-, freetype
-, fribidi
-, libXcursor
-, libXft
-, libXinerama
-, libXpm
-, libXt
-, libpng
-, librsvg
-, libstroke
-, libxslt
-, perl
-, pkg-config
-, python3Packages
-, readline
-, enableGestures ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  cairo,
+  fontconfig,
+  freetype,
+  fribidi,
+  libXcursor,
+  libXft,
+  libXinerama,
+  libXpm,
+  libXt,
+  libpng,
+  librsvg,
+  libstroke,
+  libxslt,
+  perl,
+  pkg-config,
+  python3Packages,
+  readline,
+  enableGestures ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,8 +29,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "fvwmorg";
-    repo = pname;
-    rev = version;
+    repo = "fvwm";
+    tag = version;
     hash = "sha256-KcuX8las1n8UUE/BOHj7WOeZjva5hxgpFHtATMUk3bg=";
   };
 
@@ -65,6 +66,10 @@ stdenv.mkDerivation rec {
     "--enable-mandoc"
     "--disable-htmldoc"
   ];
+
+  # Fix build on GCC 14 (see https://github.com/fvwmorg/fvwm/pull/100)
+  # Will never be accepted as an upstream patch as FVWM2 is EOL
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion -Wno-error=incompatible-pointer-types";
 
   postFixup = ''
     wrapPythonPrograms

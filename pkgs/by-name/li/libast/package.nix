@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "mej";
-    repo = pname;
+    repo = "libast";
     rev = version;
     hash = "sha256-rnqToFi+d6D6O+JDHQxkVjTc/0RBag6Jqv4uDcE4PNc=";
   };
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Library of Assorted Spiffy Things";
     mainProgram = "libast-config";
     license = licenses.bsd2;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

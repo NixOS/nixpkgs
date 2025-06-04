@@ -1,41 +1,45 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, cmake
-, pkg-config
-, openssl
-, samba
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  openssl,
+  samba,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "legba";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "legba";
     rev = "v${version}";
-    hash = "sha256-emj2N3S26Nm0UiHGZIraCJN07rJNOMvdWRoUbHneknY=";
+    hash = "sha256-ioH/dy+d20p81iLLIcer+1fVib60TJ5Ezr6UlsL+F9g=";
   };
 
-  cargoHash = "sha256-viDfJ214Zf5segjrLSTbHav5T5e219NAF+MvuPow+JQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-eIgi6+f7ss/5AB3llEfrS75twejFzReS4i7fdbGWrCk=";
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ openssl.dev samba ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    openssl.dev
+    samba
   ];
 
   # Paho C test fails due to permission issue
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Multiprotocol credentials bruteforcer / password sprayer and enumerator";
     homepage = "https://github.com/evilsocket/legba";
     changelog = "https://github.com/evilsocket/legba/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ mikaelfangel ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ mikaelfangel ];
     mainProgram = "legba";
   };
 }

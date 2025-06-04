@@ -1,22 +1,24 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libunwind
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libunwind,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bugstalker";
-  version = "0.2.2";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "godzie44";
     repo = "BugStalker";
-    rev = "v${version}";
-    hash = "sha256-JacRt+zNwL7hdpdh5h9Mxztqi47f5eUbcZyx6ct/5Bc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-8Iqg2coFsPQY3ws5MEC1LhTu+Z1lXeI3ccjgoBS454o=";
   };
 
-  cargoHash = "sha256-ljT7Dl9553sfZBqTe6gT3iYPH+D1Jp9ZsyGVQGOekxw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-a5YI6bOo/rsi9hZO1BcVMjJtdrYq2aHqxtlO3F+P+8s=";
 
   buildInputs = [ libunwind ];
 
@@ -33,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "bs";
     platforms = [ "x86_64-linux" ];
   };
-}
+})

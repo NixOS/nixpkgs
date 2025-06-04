@@ -5,33 +5,29 @@
   linuxPackages,
   git,
   kernel ? linuxPackages.kernel,
+  kernelModuleMakeFlags,
 }:
 stdenv.mkDerivation {
   pname = "msi-ec-kmods";
-  version = "0-unstable-2024-09-19";
+  version = "0-unstable-2025-05-17";
 
   src = fetchFromGitHub {
     owner = "BeardOverflow";
     repo = "msi-ec";
-    rev = "94c2a45c04a07096e10d7cb1240e1a201a025dc0";
-    hash = "sha256-amJUoIf5Sl62BLyHLeam2fzN1s+APoWh2dH5QVfJhCs=";
+    rev = "796be9047b13c311ac4cdec33913775f4057f600";
+    hash = "sha256-npJbnWFBVb8TK9ynVD/kXWq2iqO0ACKF4UYsu5mQuok=";
   };
 
   dontMakeSourcesWritable = false;
 
-  postPatch =
-    let
-      targets = builtins.filter (v: v != "") [
-        (lib.strings.optionalString (kernel.kernelOlder "6.2") "older-kernel-patch")
-        (lib.strings.optionalString (kernel.kernelAtLeast "6.11") "6.11-kernel-patch")
-      ];
-      commands = builtins.map (target: "make ${target}") targets;
-    in
-    lib.concatStringsSep "\n" ([ "cp ${./patches/Makefile} ./Makefile" ] ++ commands);
+  patches = [
+    ./patches/makefile.patch
+    ./patches/kernel-string-choices.patch
+  ];
 
   hardeningDisable = [ "pic" ];
 
-  makeFlags = kernel.makeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=$(out)"
   ];
@@ -48,6 +44,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.m1dugh ];
     platforms = lib.platforms.linux;
-    broken = kernel.kernelOlder "6.2";
+    broken = kernel.kernelOlder "5.5";
   };
 }

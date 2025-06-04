@@ -8,16 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lutgen";
-  version = "0.11.2";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "ozwaldorf";
     repo = "lutgen-rs";
     rev = "v${version}";
-    hash = "sha256-jmMVeDDVb/TuxulDYj+8y4Kl42EJTAWb3tAsanfWduE=";
+    hash = "sha256-VE4R0rdQbZ7cyCPRtWWARUAnlR/KWGFUoJSJ4lySwzY=";
   };
 
-  cargoHash = "sha256-cT999TukdiKmmNUpK7SE1uiuNoLhmjdtz/2cYXFC6dk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-H913/EjCh14AcCIj/Em6neP5F6i88rSVbPMmnS3po/I=";
 
   nativeBuildInputs = [ installShellFiles ];
 

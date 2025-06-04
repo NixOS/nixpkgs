@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "karajan1001";
     repo = "aiooss2";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6tkJG6Jjvo2OaN9cRbs/7ApcrKiZ5tGSPUfugAx7iJU=";
   };
 
@@ -36,7 +36,6 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
   ];
-
 
   dependencies = [
     aiohttp

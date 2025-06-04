@@ -1,27 +1,58 @@
-{ lib, stdenv, fetchurl, wrapQtAppsHook
-, libglut, freealut, libGLU, libGL, libICE, libjpeg, openal, openscenegraph, plib
-, libSM, libunwind, libX11, xorgproto, libXext, libXi
-, libXmu, libXt, simgear, zlib, boost, cmake, libpng, udev, fltk13, apr
-, makeDesktopItem, qtbase, qtdeclarative, glew, curl
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  wrapQtAppsHook,
+  libglut,
+  freealut,
+  libGLU,
+  libGL,
+  libICE,
+  libjpeg,
+  openal,
+  openscenegraph,
+  plib,
+  libSM,
+  libunwind,
+  libX11,
+  xorgproto,
+  libXext,
+  libXi,
+  libXmu,
+  libXt,
+  simgear,
+  zlib,
+  boost,
+  cmake,
+  libpng,
+  udev,
+  fltk13,
+  apr,
+  qtbase,
+  qtquickcontrols2,
+  qtdeclarative,
+  glew,
+  curl,
 }:
 
 let
-  version = "2020.3.19";
-  shortVersion = builtins.substring 0 6 version;
+  version = "2024.1.1";
   data = stdenv.mkDerivation rec {
     pname = "flightgear-data";
     inherit version;
 
-    src = fetchurl {
-      url = "mirror://sourceforge/flightgear/release-${shortVersion}/FlightGear-${version}-data.txz";
-      sha256 = "sha256-863EnNBU+rYTdxHwMV6HbBu99lO6H3mKGuyumm6YR5U=";
+    src = fetchFromGitLab {
+      owner = "flightgear";
+      repo = "fgdata";
+      tag = "v${version}";
+      hash = "sha256-PdqsIZw9mSrvnqqB/fVFjWPW9njhXLWR/2LQCMoBLQI=";
     };
 
     dontUnpack = true;
 
     installPhase = ''
       mkdir -p "$out/share/FlightGear"
-      tar xf "${src}" -C "$out/share/FlightGear/" --strip-components=1
+      cp ${src}/* -a "$out/share/FlightGear/"
     '';
   };
 in
@@ -30,17 +61,47 @@ stdenv.mkDerivation rec {
   # inheriting data for `nix-prefetch-url -A pkgs.flightgear.data.src`
   inherit version data;
 
-  src = fetchurl {
-    url = "mirror://sourceforge/flightgear/release-${shortVersion}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-Fn0I3pzA9yIYs3myPNflbH9u4Y19VZUS2lGjvWfzjm4=";
+  src = fetchFromGitLab {
+    owner = "flightgear";
+    repo = "flightgear";
+    tag = "v${version}";
+    hash = "sha256-h4N18VAbJGQSBKA+eEQxej5e5MEwAcZpvH+dpTypM+k=";
   };
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+  ];
   buildInputs = [
-    libglut freealut libGLU libGL libICE libjpeg openal openscenegraph plib
-    libSM libunwind libX11 xorgproto libXext libXi
-    libXmu libXt simgear zlib boost libpng udev fltk13 apr qtbase
-    glew qtdeclarative curl
+    libglut
+    freealut
+    libGLU
+    libGL
+    libICE
+    libjpeg
+    openal
+    openscenegraph
+    plib
+    libSM
+    libunwind
+    libX11
+    xorgproto
+    libXext
+    libXi
+    libXmu
+    libXt
+    simgear
+    zlib
+    boost
+    libpng
+    udev
+    fltk13
+    apr
+    qtbase
+    qtquickcontrols2
+    glew
+    qtdeclarative
+    curl
   ];
 
   qtWrapperArgs = [
@@ -51,7 +112,7 @@ stdenv.mkDerivation rec {
     description = "Flight simulator";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
-    hydraPlatforms = []; # disabled from hydra because it's so big
+    hydraPlatforms = [ ]; # disabled from hydra because it's so big
     license = licenses.gpl2Plus;
     mainProgram = "fgfs";
   };

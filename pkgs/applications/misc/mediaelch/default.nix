@@ -1,22 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
 
-, cmake
-, qttools
-, wrapQtAppsHook
+  cmake,
+  qttools,
+  wrapQtAppsHook,
 
-, curl
-, ffmpeg
-, libmediainfo
-, libzen
-, qt5compat ? null # qt6 only
-, qtbase
-, qtdeclarative
-, qtmultimedia
-, qtsvg
-, qtwayland
-, quazip
+  curl,
+  ffmpeg,
+  libmediainfo,
+  libzen,
+  qt5compat ? null, # qt6 only
+  qtbase,
+  qtdeclarative,
+  qtmultimedia,
+  qtsvg,
+  qtwayland,
+  quazip,
 }:
 let
   qtVersion = lib.versions.major qtbase.version;
@@ -39,21 +41,30 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    curl
-    ffmpeg
-    libmediainfo
-    libzen
-    qtbase
-    qtdeclarative
-    qtmultimedia
-    qtsvg
-    qtwayland
-    quazip
-  ] ++ lib.optionals (qtVersion == "6") [
-    qt5compat
-  ];
+  buildInputs =
+    [
+      curl
+      ffmpeg
+      libmediainfo
+      libzen
+      qtbase
+      qtdeclarative
+      qtmultimedia
+      qtsvg
+      qtwayland
+      quazip
+    ]
+    ++ lib.optionals (qtVersion == "6") [
+      qt5compat
+    ];
 
+  patches = [
+    # fix from: https://github.com/Komet/MediaElch/pull/1878
+    (fetchpatch {
+      url = "https://github.com/Komet/MediaElch/commit/dbea12fbf2c1fe603819392aa2a181cffa168548.patch";
+      hash = "sha256-Lv6rvjKbRNr5XrdZhPyw4S4RRCOnfAGhWgcSLo0gqS8=";
+    })
+  ];
 
   cmakeFlags = [
     "-DDISABLE_UPDATER=ON"

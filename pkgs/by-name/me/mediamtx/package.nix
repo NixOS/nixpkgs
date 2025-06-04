@@ -1,34 +1,44 @@
 {
   lib,
+  buildGoModule,
   fetchFromGitHub,
   fetchurl,
-  buildGoModule,
   nixosTests,
 }:
 
 let
   hlsJs = fetchurl {
-    url = "https://cdn.jsdelivr.net/npm/hls.js@v1.5.15/dist/hls.min.js";
-    hash = "sha256-qRwhj9krOcLJKbGghAC8joXfNKXUdN7OkgEDosUWdd8=";
+    url = "https://cdn.jsdelivr.net/npm/hls.js@v1.6.2/dist/hls.min.js";
+    hash = "sha256-5lAT3DQ1tVo0tSV6fmWDWSbB9NVyCduomoENNQX08UM=";
   };
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mediamtx";
   # check for hls.js version updates in internal/servers/hls/hlsjsdownloader/VERSION
-  version = "1.9.2";
+  version = "1.12.3";
 
   src = fetchFromGitHub {
     owner = "bluenviron";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-aHVSGyrLuLX/RYf1I1dDackmOeU3m24QcwBus4Uly0I=";
+    repo = "mediamtx";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2eTvRWFSR6sXnUJJPKvzQhSqbg1Unh8QuxmyixAw8Cc=";
   };
 
-  vendorHash = "sha256-YpwbFCfI2kfmX3nI1G9OGUv5qpZ/JMis5VyUkqsESZA=";
+  vendorHash = "sha256-CdJS+RebJA6CpOo6YLlTpCXzE0eWSAnWzVXECvgMBvc=";
 
   postPatch = ''
     cp ${hlsJs} internal/servers/hls/hls.min.js
-    echo "v${version}" > internal/core/VERSION
+    echo "v${finalAttrs.version}" > internal/core/VERSION
+
+    # disable binary-only rpi camera support
+    substituteInPlace internal/staticsources/rpicamera/camera_disabled.go \
+      --replace-fail '!linux || (!arm && !arm64)' 'linux || !linux'
+    substituteInPlace internal/staticsources/rpicamera/{camera,params_serialize,pipe}.go \
+      --replace-fail '(linux && arm) || (linux && arm64)' 'linux && !linux'
+    substituteInPlace internal/staticsources/rpicamera/camera_32.go \
+      --replace-fail 'linux && arm' 'linux && !linux'
+    substituteInPlace internal/staticsources/rpicamera/camera_64.go \
+      --replace-fail 'linux && arm64' 'linux && !linux'
   '';
 
   subPackages = [ "." ];
@@ -40,11 +50,11 @@ buildGoModule rec {
     inherit (nixosTests) mediamtx;
   };
 
-  meta = with lib; {
-    description = "Ready-to-use RTSP server and RTSP proxy that allows to read and publish video and audio streams";
-    inherit (src.meta) homepage;
-    license = licenses.mit;
+  meta = {
+    description = "SRT, WebRTC, RTSP, RTMP, LL-HLS media server and media proxy";
+    inherit (finalAttrs.src.meta) homepage;
+    license = lib.licenses.mit;
     mainProgram = "mediamtx";
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with lib.maintainers; [ fpletz ];
   };
-}
+})

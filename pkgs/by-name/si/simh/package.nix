@@ -1,10 +1,12 @@
-{ lib, stdenv
-, fetchFromGitHub
-, SDL2
-, SDL2_ttf
-, libpcap
-, vde2
-, pcre
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  SDL2_ttf,
+  libpcap,
+  vde2,
+  pcre,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,12 +15,18 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "simh";
-    repo = pname;
+    repo = "simh";
     rev = "v${version}";
     sha256 = "sha256-65+YfOWpVXPeT64TZcSaWJY+ODQ0q/pwF9jb8xGdpIs=";
   };
 
-  buildInputs = [ SDL2 SDL2_ttf libpcap vde2 pcre ];
+  buildInputs = [
+    SDL2
+    SDL2_ttf
+    libpcap
+    vde2
+    pcre
+  ];
 
   dontConfigure = true;
 
@@ -27,7 +35,11 @@ stdenv.mkDerivation rec {
   #    https://github.com/simh/simh/issues/794
   env.NIX_CFLAGS_COMPILE = toString [ "-fcommon" ];
 
-  makeFlags = [ "GCC=${stdenv.cc.targetPrefix}cc" "CC_STD=-std=c99" "LDFLAGS=-lm" ];
+  makeFlags = [
+    "GCC=${stdenv.cc.targetPrefix}cc"
+    "CC_STD=-std=c99"
+    "LDFLAGS=-lm"
+  ];
 
   preInstall = ''
     install -d ${placeholder "out"}/bin
@@ -60,7 +72,7 @@ stdenv.mkDerivation rec {
       available copies of significant or representative software.
     '';
     license = with licenses; mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; unix;
   };
 }

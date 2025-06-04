@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "mihomo";
   meta.maintainers = with pkgs.lib.maintainers; [ Guanran928 ];
 
@@ -43,4 +44,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     target = '{"hello":"mihomo"}\n'
     assert result == target, f"{result!r} != {target!r}"
   '';
-})
+}

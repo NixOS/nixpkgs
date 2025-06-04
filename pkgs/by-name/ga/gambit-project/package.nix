@@ -1,30 +1,26 @@
-{ lib
-, autoreconfHook
-, fetchFromGitHub
-, stdenv
-, wxGTK31
-, darwin
-, withGui ? true
+{
+  lib,
+  autoreconfHook,
+  fetchFromGitHub,
+  stdenv,
+  wxGTK31,
+  withGui ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gambit-project";
-  version = "16.2.0";
+  version = "16.3.0";
 
   src = fetchFromGitHub {
     owner = "gambitproject";
     repo = "gambit";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OuI2DA/5CLgHqcHwOGUE9IdrnyjlGKy8B7tWueUfUtg=";
+    hash = "sha256-waRGnkykkKqOs7G1nlkL+eO4QRmerhGrZ7wjRgBsZc0=";
   };
 
-  nativeBuildInputs =
-    [ autoreconfHook ]
-    ++ lib.optional withGui wxGTK31;
+  nativeBuildInputs = [ autoreconfHook ] ++ lib.optional withGui wxGTK31;
 
-  buildInputs =
-    lib.optional withGui wxGTK31
-    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Cocoa;
+  buildInputs = lib.optional withGui wxGTK31;
 
   strictDeps = true;
 

@@ -1,31 +1,35 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+{
   name = "mate";
 
   meta = {
     maintainers = lib.teams.mate.members;
   };
 
-  nodes.machine = { ... }: {
-    imports = [
-      ./common/user-account.nix
-    ];
+  nodes.machine =
+    { ... }:
+    {
+      imports = [
+        ./common/user-account.nix
+      ];
 
-    services.xserver.enable = true;
+      services.xserver.enable = true;
 
-    services.xserver.displayManager = {
-      lightdm.enable = true;
-      autoLogin = {
-        enable = true;
-        user = "alice";
+      services.xserver.displayManager = {
+        lightdm.enable = true;
+        autoLogin = {
+          enable = true;
+          user = "alice";
+        };
       };
-    };
 
-    services.xserver.desktopManager.mate.enable = true;
-  };
+      services.xserver.desktopManager.mate.enable = true;
+    };
 
   enableOCR = true;
 
-  testScript = { nodes, ... }:
+  testScript =
+    { nodes, ... }:
     let
       user = nodes.machine.users.users.alice;
       env = "DISPLAY=:0.0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/${toString user.uid}/bus";
@@ -83,4 +87,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           machine.fail("coredumpctl --json=short | grep -E 'mate|marco|caja'")
           machine.screenshot("screen")
     '';
-})
+}

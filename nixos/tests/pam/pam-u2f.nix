@@ -1,4 +1,4 @@
-import ../make-test-python.nix ({ ... }:
+{ ... }:
 
 {
   name = "pam-u2f";
@@ -20,11 +20,10 @@ import ../make-test-python.nix ({ ... }:
       };
     };
 
-  testScript =
-    ''
-      machine.wait_for_unit("multi-user.target")
-      machine.succeed(
-          'egrep "auth required .*/lib/security/pam_u2f.so.*cue.*debug.*interactive.*origin=nixos-test.*userpresence=1" /etc/pam.d/ -R'
-      )
-    '';
-})
+  testScript = ''
+    machine.wait_for_unit("multi-user.target")
+    machine.succeed(
+        'egrep "auth required .*/lib/security/pam_u2f.so.*cue.*debug.*interactive.*origin=nixos-test.*userpresence=1" /etc/pam.d/ -R'
+    )
+  '';
+}

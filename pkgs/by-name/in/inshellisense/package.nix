@@ -1,17 +1,23 @@
-{ lib, stdenv, buildNpmPackage, fetchFromGitHub, cacert }:
+{
+  lib,
+  stdenv,
+  buildNpmPackage,
+  fetchFromGitHub,
+  cacert,
+}:
 
 buildNpmPackage rec {
   pname = "inshellisense";
-  version = "0.0.1-rc.16";
+  version = "0.0.1-rc.21";
 
   src = fetchFromGitHub {
     owner = "microsoft";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-jqLYN251ZvLOjYsSQJmvQ1TupO4jz3Q23aDpKX+Puvs=";
+    repo = "inshellisense";
+    tag = version;
+    hash = "sha256-zERwrvioPwGm/351kYuK9S3uOrrzs/6OFPRdNSSr7Tc=";
   };
 
-  npmDepsHash = "sha256-rGUyA0RLnNZ6ocmHPXfBLJ6ZmeeTN9w+TJTtfTQQ24M=";
+  npmDepsHash = "sha256-iD5SvkVbrHh0Hx44y6VtNerwBA8K7vSe/yfvhgndMEw=";
 
   # Needed for dependency `@homebridge/node-pty-prebuilt-multiarch`
   # On Darwin systems the build fails with,
@@ -30,4 +36,3 @@ buildNpmPackage rec {
     maintainers = [ maintainers.malo ];
   };
 }
-

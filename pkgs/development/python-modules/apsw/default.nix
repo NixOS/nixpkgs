@@ -1,10 +1,8 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  pytestCheckHook,
   setuptools,
   sqlite,
 }:
@@ -19,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rogerbinns";
     repo = "apsw";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-/MMCwdd2juFbv/lrYwuO2mdWm0+v+YFn6h9CwdQMTpg=";
   };
 
@@ -27,19 +25,13 @@ buildPythonPackage rec {
 
   buildInputs = [ sqlite ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  pytestFlagsArray = [ "apsw/tests.py" ];
-
-  disabledTests = [
-    # we don't build the test extension
-    "testLoadExtension"
-    "testShell"
-    "testVFS"
-    "testVFSWithWAL"
-    # no lines in errout.txt
-    "testWriteUnraisable"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "testzzForkChecker" ];
+  # apsw explicitly doesn't use pytest
+  # see https://github.com/rogerbinns/apsw/issues/548#issuecomment-2891633403
+  checkPhase = ''
+    runHook preCheck
+    python -m apsw.tests
+    runHook postCheck
+  '';
 
   pythonImportsCheck = [ "apsw" ];
 

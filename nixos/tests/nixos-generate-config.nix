@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ lib, ... } : {
+{ lib, ... }:
+{
   name = "nixos-generate-config";
   meta.maintainers = with lib.maintainers; [ basvandijk ];
   nodes.machine = {
@@ -11,16 +12,20 @@ import ./make-test-python.nix ({ lib, ... } : {
       }
     '';
 
-    system.nixos-generate-config.desktopConfiguration = [''
-      # DESKTOP
-      services.xserver.displayManager.gdm.enable = true;
-      services.xserver.desktopManager.gnome.enable = true;
-    ''];
+    system.nixos-generate-config.desktopConfiguration = [
+      ''
+        # DESKTOP
+        services.displayManager.gdm.enable = true;
+        services.desktopManager.gnome.enable = true;
+      ''
+    ];
   };
   testScript = ''
     start_all()
     machine.wait_for_unit("multi-user.target")
     machine.succeed("nixos-generate-config")
+
+    machine.succeed("nix-instantiate --parse /etc/nixos/configuration.nix /etc/nixos/hardware-configuration.nix")
 
     # Test if the configuration really is overridden
     machine.succeed("grep 'OVERRIDDEN' /etc/nixos/configuration.nix")
@@ -35,7 +40,11 @@ import ./make-test-python.nix ({ lib, ... } : {
 
     # Test if the Perl variable $desktopConfiguration is spliced correctly
     machine.succeed(
-        "grep 'services\\.xserver\\.desktopManager\\.gnome\\.enable = true;' /etc/nixos/configuration.nix"
+        "grep 'services\\.desktopManager\\.gnome\\.enable = true;' /etc/nixos/configuration.nix"
     )
+
+    machine.succeed("rm -rf /etc/nixos")
+    machine.succeed("nixos-generate-config --flake")
+    machine.succeed("nix-instantiate --parse /etc/nixos/flake.nix /etc/nixos/configuration.nix /etc/nixos/hardware-configuration.nix")
   '';
-})
+}

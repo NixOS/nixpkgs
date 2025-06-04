@@ -2,45 +2,56 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  installShellFiles,
   stdenv,
-  darwin,
   rust-jemalloc-sys,
   nix-update-script,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sqruff";
-  version = "0.17.0";
+  version = "0.25.28";
 
   src = fetchFromGitHub {
     owner = "quarylabs";
     repo = "sqruff";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-uUtbVf4U59jne5uORXpyzpqhFQoviKi2O9KQ5s1CfhU=";
+    tag = "v${version}";
+    hash = "sha256-Xea6jXQos5gyF1FeGF7B5YaQszqfsKhGw1k8j0m7J6c=";
   };
 
-  cargoHash = "sha256-kIBjPh+rL4vzIAqGNYMpw39A0vADbHxi/PkhoG+QL6c=";
-
-  # Requires nightly features (feature(let_chains) and feature(trait_upcasting))
-  RUSTC_BOOTSTRAP = true;
-
-  nativeBuildInputs = [ installShellFiles ];
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-agB//UDTsEje9pgig07dUy8/Fr+zx7/MC3AdLjqoKJY=";
 
   buildInputs = [
     rust-jemalloc-sys
-  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
+  ];
 
-  # Patch the tests to find the binary
+  # Disable the `python` feature which doesn't work on Nix yet
+  buildNoDefaultFeatures = true;
+  # The jinja and dbt template engines require the `python` feature which we disabled, so we disable these tests
+  patches = [
+    ./disable-templaters-test.diff
+    ./disable-ui_with_dbt-test.diff
+    ./disable-ui_with_jinja-test.diff
+    ./disable-ui_with_python-test.diff
+  ];
+
+  # Patch the tests to find the sqruff binary
   postPatch = ''
-    substituteInPlace crates/cli/tests/ui.rs \
+    substituteInPlace \
+      crates/cli/tests/config_not_found.rs \
+      crates/cli/tests/configure_rule.rs \
+      crates/cli/tests/fix_parse_errors.rs \
+      crates/cli/tests/fix_return_code.rs \
+      crates/cli/tests/ui_github.rs \
+      crates/cli/tests/ui_json.rs \
+      crates/cli/tests/ui.rs \
       --replace-fail \
-      'config.program.program = format!("../../target/{profile}/sqruff").into();' \
-      'config.program.program = "../../target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/sqruff".into();'
+      'sqruff_path.push(format!("../../target/{}/sqruff", profile));' \
+      'sqruff_path.push(format!("../../target/${stdenv.hostPlatform.rust.cargoShortTarget}/{}/sqruff", profile));'
   '';
 
   nativeCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

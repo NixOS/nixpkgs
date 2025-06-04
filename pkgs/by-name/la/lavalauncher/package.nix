@@ -1,30 +1,42 @@
-{ lib
-, stdenv
-, fetchgit
-, meson
-, ninja
-, pkg-config
-, scdoc
-, wayland-scanner
-, cairo
-, librsvg
-, libxkbcommon
-, wayland
-, wayland-protocols
+{
+  lib,
+  cairo,
+  fetchFromSourcehut,
+  librsvg,
+  libxkbcommon,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  stdenv,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lavalauncher";
   version = "2.1.1";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~leon_plickat/lavalauncher";
-    rev = "v${version}";
-    sha256 = "hobhZ6s9m2xCdAurdj0EF1BeS88j96133zu+2jb1FMM=";
+  src = fetchFromSourcehut {
+    pname = "lavalauncher-source";
+    inherit (finalAttrs) version;
+    owner = "~leon_plickat";
+    repo = "lavalauncher";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-hobhZ6s9m2xCdAurdj0EF1BeS88j96133zu+2jb1FMM=";
   };
 
   depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    scdoc
+    wayland-scanner
+  ];
+
   buildInputs = [
     cairo
     librsvg
@@ -33,7 +45,9 @@ stdenv.mkDerivation rec {
     wayland-protocols
   ];
 
-  meta = with lib; {
+  strictDeps = true;
+
+  meta = {
     homepage = "https://git.sr.ht/~leon_plickat/lavalauncher";
     description = "Simple launcher panel for Wayland desktops";
     longDescription = ''
@@ -52,9 +66,13 @@ stdenv.mkDerivation rec {
       The Wayland compositor must implement the Layer-Shell and XDG-Output for
       LavaLauncher to work.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; unix;
+    changelog = "https://git.sr.ht/~leon_plickat/lavalauncher/refs/${finalAttrs.src.rev}";
+    license = lib.licenses.gpl3Plus;
     mainProgram = "lavalauncher";
+    maintainers = with lib.maintainers; [ ];
+    inherit (wayland.meta) platforms;
+    # meson.build:52:23: ERROR: C shared or static library 'rt' not found
+    # https://logs.ofborg.org/?key=nixos/nixpkgs.340239&attempt_id=1f05cada-67d2-4cfe-b6a8-4bf4571b9375
+    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

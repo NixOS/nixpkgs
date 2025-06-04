@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   setuptools-scm,
@@ -9,26 +10,24 @@
 
 buildPythonPackage rec {
   pname = "asteval";
-  version = "1.0.5";
+  version = "1.0.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "lmfit";
     repo = "asteval";
-    rev = "refs/tags/${version}";
-    hash = "sha256-PRmTbP3zRnkCxdeb45LBz5m/Ymoi4lq2poKuG9Esg9g=";
+    tag = version;
+    hash = "sha256-DzLVe8TlWAPQXzai9CJlDAow6UTSmkA/DW3fT30YfZY=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=asteval --cov-report html" ""
-  '';
 
   build-system = [ setuptools-scm ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "asteval" ];
 
@@ -41,7 +40,7 @@ buildPythonPackage rec {
     description = "AST evaluator of Python expression using ast module";
     homepage = "https://github.com/lmfit/asteval";
     changelog = "https://github.com/lmfit/asteval/releases/tag/${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

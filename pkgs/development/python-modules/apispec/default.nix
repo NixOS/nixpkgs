@@ -15,19 +15,19 @@
 
 buildPythonPackage rec {
   pname = "apispec";
-  version = "6.6.1";
+  version = "6.8.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9cqkfO51/gO5xQtVlASLTAUu7KLCEuDawS27YXXZplk=";
+    hash = "sha256-zltpufzwJQy1a6DBpSp1/yLC98WGZU5XiEOZAYxRnyY=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [ packaging ];
+  dependencies = [ packaging ];
 
   optional-dependencies = {
     marshmallow = [ marshmallow ];

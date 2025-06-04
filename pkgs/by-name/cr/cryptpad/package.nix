@@ -1,15 +1,20 @@
 {
+  bash,
   buildNpmPackage,
+  coreutils,
   fetchFromGitHub,
+  fetchpatch,
+  fetchurl,
   lib,
   makeBinaryWrapper,
   nixosTests,
   nodejs,
   rdfind,
+  unzip,
 }:
 
 let
-  version = "2024.9.0";
+  version = "2025.3.0";
   # nix version of install-onlyoffice.sh
   # a later version could rebuild from sdkjs/web-apps as per
   # https://github.com/cryptpad/onlyoffice-builds/blob/main/build.sh
@@ -54,10 +59,21 @@ let
     }
     {
       subdir = "v7";
-      rev = "9d8b914a";
-      hash = "sha256-M+rPJ/Xo2olhqB5ViynGRaesMLLfG/1ltUoLnepMPnM=";
+      rev = "e1267803";
+      hash = "sha256-iIds0GnCHAyeIEdSD4aCCgDtnnwARh3NE470CywseS0=";
     }
   ];
+
+  x2t_version = "v7.3+1";
+  x2t = fetchurl {
+    url = "https://github.com/cryptpad/onlyoffice-x2t-wasm/releases/download/${x2t_version}/x2t.zip";
+    hash = "sha256-hrbxrI8RC1pBatGZ76TAiVfUbZid7+eRuXk6lmz7OgQ=";
+  };
+  x2t_install = ''
+    local X2T_DIR=$out_cryptpad/www/common/onlyoffice/dist/x2t
+    unzip ${x2t} -d "$X2T_DIR"
+    echo "${x2t_version}" > "$X2T_DIR"/.version
+  '';
 
 in
 buildNpmPackage {
@@ -68,14 +84,16 @@ buildNpmPackage {
     owner = "cryptpad";
     repo = "cryptpad";
     rev = version;
-    hash = "sha256-OUtWaDVLRUbKS0apwY0aNq4MalGFv+fH9VA7LvWWYRs=";
+    hash = "sha256-NxkVMsfLzdzifdn+f0C6mBJGd1oLwcMTAIXv+gBG7rI=";
   };
 
-  npmDepsHash = "sha256-pK0b7q1kJja9l8ANwudbfo3jpldwuO56kuulS8X9A5s=";
+  npmDepsHash = "sha256-GWkyRlizPSA72WwoY+mRLwaMeD/SXdo6oUVwsd2gp7c=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
     rdfind
+    unzip
+    bash
   ];
 
   patches = [
@@ -102,11 +120,18 @@ buildNpmPackage {
     # Move to install directory manually.
     npm run install:components
     mv www/components "$out_cryptpad/www/"
+    # and fix absolute symlink to /build...
+    ln -Tfs ../../src/tweetnacl "$out_cryptpad/www/components/tweetnacl"
 
     # install OnlyOffice (install-onlyoffice.sh without network)
     mkdir -p "$out_cryptpad/www/common/onlyoffice/dist"
     ${lib.concatMapStringsSep "\n" onlyoffice_install onlyoffice_versions}
-    rdfind -makehardlinks true -makeresultsfile false "$out_cryptpad/www/common/onlyoffice/dist"
+    ${x2t_install}
+    # Run upstream's `install-onlyoffice.sh` script in `--check` mode to
+    # verify that we've installed the correct versions of the various
+    # OnlyOffice components.
+    patchShebangs --build $out_cryptpad/install-onlyoffice.sh
+    $out_cryptpad/install-onlyoffice.sh --accept-license --check --rdfind
 
     # cryptpad assumes it runs in the source directory and also outputs
     # its state files there, which is not exactly great for us.
@@ -119,7 +144,7 @@ buildNpmPackage {
     # directory.
     makeWrapper "${lib.getExe nodejs}" "$out/bin/cryptpad" \
       --add-flags "$out_cryptpad/server.js" \
-      --run "for d in customize.dist lib www; do ln -sf \"$out_cryptpad/\$d\" .; done" \
+      --run "for d in customize.dist lib www scripts; do ${coreutils}/bin/ln -sf \"$out_cryptpad/\$d\" .; done" \
       --run "if ! [ -d customize ]; then \"${lib.getExe nodejs}\" \"$out_cryptpad/scripts/build.js\"; fi"
   '';
 

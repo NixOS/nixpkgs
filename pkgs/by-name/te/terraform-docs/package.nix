@@ -7,16 +7,16 @@
 }:
 buildGoModule rec {
   pname = "terraform-docs";
-  version = "0.18.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "terraform-docs";
-    repo = pname;
+    repo = "terraform-docs";
     rev = "v${version}";
-    hash = "sha256-XZS+mGp2QsrKS3fPZd0ja4w/CAfPcyzSgwolQ+StER0=";
+    hash = "sha256-DiKoYAe7vcNy35ormKHYZcZrGK/MEb6VmcHWPgrbmUg=";
   };
 
-  vendorHash = "sha256-aweKTHQBYYqSp8CymwhnVv1WNQ7cZ1/bJNz7DSo7PKc=";
+  vendorHash = "sha256-ynyYpX41LJxGhf5kF2AULj+VKROjsvTjVPBnqG+JGSg=";
 
   excludedPackages = [ "scripts" ];
 

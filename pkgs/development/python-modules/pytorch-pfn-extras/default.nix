@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -16,21 +17,19 @@
   onnx,
   pytestCheckHook,
   torchvision,
-
   pythonAtLeast,
-  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "pytorch-pfn-extras";
-  version = "0.7.7";
+  version = "0.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pfnet";
     repo = "pytorch-pfn-extras";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-0+ltkm7OH18hlpHYyZCmy1rRleF52IM2BjLoW44tJUY=";
+    tag = "v${version}";
+    hash = "sha256-FQwCdn9zUWHyUYAGHPNxQXN7O0bSLBHJrByxzCxUtio=";
   };
 
   build-system = [ setuptools ];
@@ -52,9 +51,6 @@ buildPythonPackage rec {
     # Requires CUDA access which is not possible in the nix environment.
     "-m 'not gpu and not mpi'"
     "-Wignore::DeprecationWarning"
-
-    # FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly...
-    "-Wignore::FutureWarning"
   ];
 
   pythonImportsCheck = [ "pytorch_pfn_extras" ];
@@ -65,8 +61,12 @@ buildPythonPackage rec {
       # where 4 = <MagicMock id='140733587469184'>.call_count
       "test_lr_scheduler_wait_for_first_optimizer_step"
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      # torch.distributed is not available on darwin
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # RuntimeError: Dynamo is not supported on Python 3.13+
+      "test_register"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # torch.distributed was not available on darwin at one point; revisit
       "test_create_distributed_evaluator"
       "test_distributed_evaluation"
       "test_distributed_evaluator_progress_bar"
@@ -90,14 +90,13 @@ buildPythonPackage rec {
 
       # RuntimeError: No Op registered for Gradient with domain_version of 9
       "tests/pytorch_pfn_extras_tests/onnx_tests/test_grad.py"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.12") [
-      # RuntimeError: Dynamo is not supported on Python 3.12+
+
+      # torch._dynamo.exc.BackendCompilerFailed: backend='compiler_fn' raised:
+      # AttributeError: module 'torch.fx.experimental.proxy_tensor' has no attribute 'maybe_disable_fake_tensor_mode'
       "tests/pytorch_pfn_extras_tests/dynamo_tests/test_compile.py"
-      "tests/pytorch_pfn_extras_tests/test_ops/test_register.py"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      # torch.distributed is not available on darwin
+      # torch.distributed was not available on darwin at one point; revisit
       "tests/pytorch_pfn_extras_tests/distributed_tests/test_distributed_validation_sampler.py"
       "tests/pytorch_pfn_extras_tests/nn_tests/parallel_tests/test_distributed.py"
       "tests/pytorch_pfn_extras_tests/profiler_tests/test_record.py"
@@ -114,8 +113,12 @@ buildPythonPackage rec {
   meta = {
     description = "Supplementary components to accelerate research and development in PyTorch";
     homepage = "https://github.com/pfnet/pytorch-pfn-extras";
-    changelog = "https://github.com/pfnet/pytorch-pfn-extras/releases/tag/v${version}";
+    changelog = "https://github.com/pfnet/pytorch-pfn-extras/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samuela ];
+    badPlatforms = [
+      # test_profile_report is broken on darwin
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }

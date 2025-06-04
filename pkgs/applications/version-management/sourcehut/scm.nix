@@ -1,16 +1,17 @@
-{ lib
-, fetchFromSourcehut
-, buildPythonPackage
-, srht
-, pyyaml
-, buildsrht
-, pythonOlder
-, setuptools
+{
+  lib,
+  fetchFromSourcehut,
+  buildPythonPackage,
+  srht,
+  pyyaml,
+  buildsrht,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "scmsrht";
-  version = "0.22.24";
+  version = "0.22.28";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,11 +20,11 @@ buildPythonPackage rec {
     owner = "~sircmpwn";
     repo = "scm.sr.ht";
     rev = version;
-    hash = "sha256-9IgMmYzInfrten7z8bznlSFJlUjHf3k3z76lkP6tP50=";
+    hash = "sha256-+zxqiz5yPpgTwAw7w8GqJFb3OCcJEH/UhS5u2Xs7pzo=";
   };
 
   nativeBuildInputs = [
-    setuptools
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
@@ -32,11 +33,7 @@ buildPythonPackage rec {
     buildsrht
   ];
 
-  preBuild = ''
-    export PKGVER=${version}
-  '';
-
-  dontUseSetuptoolsCheck = true;
+  env.PKGVER = version;
 
   pythonImportsCheck = [ "scmsrht" ];
 
@@ -44,6 +41,9 @@ buildPythonPackage rec {
     homepage = "https://git.sr.ht/~sircmpwn/scm.sr.ht";
     description = "Shared support code for sr.ht source control services";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ eadwu christoph-heiss ];
+    maintainers = with maintainers; [
+      eadwu
+      christoph-heiss
+    ];
   };
 }

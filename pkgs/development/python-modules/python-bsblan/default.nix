@@ -6,9 +6,10 @@
   backoff,
   buildPythonPackage,
   fetchFromGitHub,
+  mashumaro,
+  orjson,
   packaging,
   poetry-core,
-  mashumaro,
   pytest-asyncio,
   pytest-cov-stub,
   pytest-mock,
@@ -19,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "python-bsblan";
-  version = "0.6.2";
+  version = "1.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -27,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "liudger";
     repo = "python-bsblan";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/rdYCd5eyFqW96XaIzQOhsApzcTkrI46Gt226sLTLUQ=";
+    tag = "v${version}";
+    hash = "sha256-qzQP77bfV21g7DIdZfJCyv9FN/U6aQk9wWV9xPZFolk=";
   };
 
   postPatch = ''
@@ -39,12 +40,15 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
+  pythonRelaxDeps = [ "async-timeout" ];
+
   dependencies = [
     aiohttp
     async-timeout
     backoff
-    packaging
     mashumaro
+    orjson
+    packaging
     yarl
   ];
 

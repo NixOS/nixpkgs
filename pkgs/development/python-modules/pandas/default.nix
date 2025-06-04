@@ -3,14 +3,13 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
+  fetchpatch,
   pythonOlder,
 
   # build-system
   cython,
   meson-python,
   meson,
-  oldest-supported-numpy,
   pkg-config,
   versioneer,
   wheel,
@@ -54,7 +53,6 @@
   # tests
   adv_cmds,
   glibc,
-  glibcLocales,
   hypothesis,
   pytestCheckHook,
   pytest-xdist,
@@ -66,7 +64,7 @@
 let
   pandas = buildPythonPackage rec {
     pname = "pandas";
-    version = "2.2.2";
+    version = "2.2.3";
     pyproject = true;
 
     disabled = pythonOlder "3.9";
@@ -74,30 +72,45 @@ let
     src = fetchFromGitHub {
       owner = "pandas-dev";
       repo = "pandas";
-      rev = "refs/tags/v${version}";
-      hash = "sha256-+zQKrsJmP3FJeOiYwNH1u96+/ECDHQF39evzur3cKjc=";
+      tag = "v${version}";
+      hash = "sha256-6YUROcqOV2P1AbJF9IMBIqTt7/PSTeXDwGgE4uI9GME=";
     };
 
+    patches = [
+      (fetchpatch {
+        name = "musl.patch";
+        url = "https://github.com/pandas-dev/pandas/commit/1e487982ff7501f07e2bba7a7d924fb92b3d5c7f.patch";
+        hash = "sha256-F1pVce1W951Ea82Ux198e5fBFH6kDOG+EeslDTYbjio=";
+      })
+    ];
+
+    # A NOTE regarding the Numpy version relaxing: Both Numpy versions 1.x &
+    # 2.x are supported. However upstream wants to always build with Numpy 2,
+    # and with it to still be able to run with a Numpy 1 or 2. We insist to
+    # perform this substitution even though python3.pkgs.numpy is of version 2
+    # nowadays, because our ecosystem unfortunately doesn't allow easily
+    # separating runtime and build-system dependencies. See also:
+    #
+    # https://discourse.nixos.org/t/several-comments-about-priorities-and-new-policies-in-the-python-ecosystem/51790
+    #
+    # Being able to build (& run) with Numpy 1 helps for python environments
+    # that override globally the `numpy` attribute to point to `numpy_1`.
     postPatch = ''
       substituteInPlace pyproject.toml \
-        --replace-fail "Cython==3.0.5" "Cython>=3.0.5" \
+        --replace-fail "numpy>=2.0" numpy \
         --replace-fail "meson-python==0.13.1" "meson-python>=0.13.1" \
-        --replace-fail "meson==1.2.1" "meson>=1.2.1" \
-        --replace-fail "numpy>=2.0.0rc1" "numpy"
+        --replace-fail "meson==1.2.1" "meson>=1.2.1"
     '';
 
-    nativeBuildInputs =
-      [
-        cython
-        meson-python
-        meson
-        numpy
-        pkg-config
-        versioneer
-        wheel
-      ]
-      ++ versioneer.optional-dependencies.toml
-      ++ lib.optionals (pythonOlder "3.12") [ oldest-supported-numpy ];
+    nativeBuildInputs = [
+      cython
+      meson-python
+      meson
+      numpy
+      pkg-config
+      versioneer
+      wheel
+    ] ++ versioneer.optional-dependencies.toml;
 
     enableParallelBuilding = true;
 
@@ -177,7 +190,6 @@ let
 
     nativeCheckInputs =
       [
-        glibcLocales
         hypothesis
         pytest-asyncio
         pytest-xdist
@@ -229,7 +241,6 @@ let
     preCheck =
       ''
         export HOME=$TMPDIR
-        export LC_ALL="en_US.UTF-8"
         cd $out/${python.sitePackages}/pandas
       ''
       # TODO: Get locale and clipboard support working on darwin.
@@ -259,7 +270,6 @@ let
       '';
       maintainers = with maintainers; [
         raskin
-        knedlsepp
       ];
     };
   };

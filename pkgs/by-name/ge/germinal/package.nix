@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, appstream-glib
-, autoreconfHook
-, dbus
-, pango
-, pcre2
-, pkg-config
-, tmux
-, vte
-, wrapGAppsHook3
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  appstream-glib,
+  autoreconfHook,
+  dbus,
+  pango,
+  pcre2,
+  pkg-config,
+  tmux,
+  vte,
+  wrapGAppsHook3,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -59,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Keruspe/Germinal";
     license = lib.licenses.gpl3Plus;
     mainProgram = "germinal";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

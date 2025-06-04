@@ -4,6 +4,7 @@
   cargo,
   cmake,
   fetchFromGitHub,
+  fetchpatch,
   go,
   lib,
   libcap,
@@ -22,15 +23,36 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mozillavpn";
-  version = "2.24.1";
+  version = "2.27.0";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-X2rtHAZ9vbWjuOmD3B/uPasUQ1Q+b4SkNqk4MqGMaYo=";
+    hash = "sha256-TfiEc5Lptr0ntp4buEEWbQTvNkVjZbdMWDv8CEZa6IM=";
   };
-  patches = [ ];
+  patches = [
+    # Provide default args for LottieStatus::changed so moc can call it (#10420)
+    (fetchpatch {
+      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/commit/e5abe5714a5b506e398c088d21672f00d6f93240.patch";
+      hash = "sha256-DU5wQ1DDF8DbmMIlohoEIDJ7/9+9GVwrvsr51T9bGx8=";
+    })
+    # Remove Qt.labls.qmlmodels usage (#10422)
+    (fetchpatch {
+      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/commit/4497972b1bf7b7f215dc6c1227d76d6825f5b958.patch";
+      hash = "sha256-RPRdARM/jXSHmTGGjiOrfJ7KVejp3JmUfsN5pmKYPuY=";
+    })
+    # Qt compat: Make sure to include what we use
+    (fetchpatch {
+      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/commit/0909d43447a7ddbc6ec20d108637524552848bd6.patch";
+      hash = "sha256-Hpn69hQxa269XH+Ku/MYD2GwdFhfCX4yoVRCEDfIOKc=";
+    })
+    # Use QDesktopUnixServices after qt 6.9.0
+    (fetchpatch {
+      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/pull/10424/commits/81e66044388459ffe2b08804ab5a326586ac7113.patch";
+      hash = "sha256-+v3NoTAdkjKEyBPbbJZQ2d11hJMyE3E4B9uYUerVa7c=";
+    })
+  ];
 
   netfilter = buildGoModule {
     pname = "${finalAttrs.pname}-netfilter";
@@ -43,9 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
     vendorHash = "sha256-Cmo0wnl0z5r1paaEf1MhCPbInWeoMhGjnxCxGh0cyO8=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-ryJFvnJIiDKf2EqlzHj79hSPYrD+3UtZ5lT/QeFv6V0=";
+    hash = "sha256-SGC+YT5ATV/ZaP/wrm3c31OQBw6Pk8ZSXjxEPFdP2f8=";
   };
 
   buildInputs = [
@@ -76,13 +98,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    substituteInPlace scripts/cmake/addons.cmake \
+      --replace-fail 'set(ADDON_BUILD_ARGS ' 'set(ADDON_BUILD_ARGS -q ${qt6.qttools.dev}/bin '
+
     substituteInPlace src/cmake/linux.cmake \
-      --replace '/etc/xdg/autostart' "$out/etc/xdg/autostart" \
-      --replace '/usr/share/dbus-1' "$out/share/dbus-1" \
-      --replace '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
+      --replace-fail '/usr/share/dbus-1' "$out/share/dbus-1" \
+      --replace-fail '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
 
     substituteInPlace extension/CMakeLists.txt \
-      --replace '/etc' "$out/etc"
+      --replace-fail '/etc' "$out/etc"
+
+    substituteInPlace extension/socks5proxy/bin/CMakeLists.txt \
+      --replace-fail '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
 
     ln -s '${finalAttrs.netfilter.goModules}' linux/netfilter/vendor
   '';

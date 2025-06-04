@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "metafates";
-    repo = pname;
+    repo = "mangal";
     rev = "v${version}";
     hash = "sha256-nbJdePlzZFM2ihbvFIMKyYZ9C0uKjU3TE5VLduLvtKE=";
   };
@@ -26,7 +26,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     # Mangal creates a config file in the folder ~/.config/mangal and fails if not possible
     export HOME=$(mktemp -d)
     installShellCompletion --cmd mangal \

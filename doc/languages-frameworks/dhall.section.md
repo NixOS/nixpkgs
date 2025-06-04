@@ -90,7 +90,7 @@ buildDhallPackage {
 
 let
   nixpkgs = builtins.fetchTarball {
-    url    = "https://github.com/NixOS/nixpkgs/archive/94b2848559b12a8ed1fe433084686b2a81123c99.tar.gz";
+    url = "https://github.com/NixOS/nixpkgs/archive/94b2848559b12a8ed1fe433084686b2a81123c99.tar.gz";
     hash = "sha256-B4Q3c6IvTLg3Q92qYa8y+i4uTaphtFdjp+Ir3QQjdN0=";
   };
 
@@ -100,15 +100,17 @@ let
 
   overlay = self: super: {
     dhallPackages = super.dhallPackages.override (old: {
-      overrides =
-        self.lib.composeExtensions (old.overrides or (_: _: {})) dhallOverlay;
+      overrides = self.lib.composeExtensions (old.overrides or (_: _: { })) dhallOverlay;
     });
   };
 
-  pkgs = import nixpkgs { config = {}; overlays = [ overlay ]; };
+  pkgs = import nixpkgs {
+    config = { };
+    overlays = [ overlay ];
+  };
 
 in
-  pkgs
+pkgs
 ```
 
 … which we can then build using this command:
@@ -190,8 +192,7 @@ Dhall overlay like this:
 {
   dhallOverrides = self: super: {
     # Enable source for all Dhall packages
-    buildDhallPackage =
-      args: super.buildDhallPackage (args // { source = true; });
+    buildDhallPackage = args: super.buildDhallPackage (args // { source = true; });
 
     true = self.callPackage ./true.nix { };
   };

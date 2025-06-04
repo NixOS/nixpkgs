@@ -1,13 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  click,
   colorful,
   docopt,
   fetchFromGitHub,
   freezegun,
   humanize,
-  lark,
   lxml,
   parse-type,
   pysingleton,
@@ -20,27 +18,26 @@
 
 buildPythonPackage rec {
   pname = "radish-bdd";
-  version = "0.17.1";
+  version = "0.18.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "radish";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9Wt+W7PWUVijzAeZMvcOl/Na60OCCGJJqxh2UaAxAcM=";
+    tag = "v${version}";
+    hash = "sha256-SSrEKGs4q4rcnQM03/gc0/vEb7gmTmpfgeNp3e+Hyvg=";
   };
 
   propagatedBuildInputs = [
-    click
     colorful
     docopt
     humanize
-    lark
     lxml
     parse-type
     pysingleton
+    pyyaml
     tag-expressions
   ];
 
@@ -48,18 +45,18 @@ buildPythonPackage rec {
     freezegun
     pytest-mock
     pytestCheckHook
-    pyyaml
   ];
 
   pythonImportsCheck = [ "radish" ];
 
-  disabledTests = [ "test_main_cli_calls" ];
-
   meta = with lib; {
     description = "Behaviour-Driven-Development tool for python";
     homepage = "https://radish-bdd.github.io/";
-    changelog = "https://github.com/radish-bdd/radish/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/radish-bdd/radish/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [
+      kalbasit
+      l33tname
+    ];
   };
 }

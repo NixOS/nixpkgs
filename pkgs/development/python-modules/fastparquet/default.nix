@@ -7,7 +7,6 @@
   fsspec,
   git,
   numpy,
-  oldest-supported-numpy,
   packaging,
   pandas,
   pytestCheckHook,
@@ -21,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "2024.5.0";
+  version = "2024.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,14 +28,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dask";
     repo = "fastparquet";
-    rev = "refs/tags/${version}";
-    hash = "sha256-YiaVkpPzH8ZmTiEtCom9xLbKzByIt7Ilig/WlmGrYH4=";
+    tag = version;
+    hash = "sha256-GJ6dr36hGjpfEKcA96RpEqY8I1vXooLDGwc0A57yFTY=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2.0.0rc1" "oldest-supported-numpy"
-  '';
 
   build-system = [
     setuptools
@@ -47,7 +41,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cython
     git
-    oldest-supported-numpy
+    numpy
   ];
 
   dependencies = [

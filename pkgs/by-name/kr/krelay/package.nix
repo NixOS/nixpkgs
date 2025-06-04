@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "krelay";
@@ -6,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "knight42";
-    repo = pname;
+    repo = "krelay";
     rev = "v${version}";
     hash = "sha256-TonkGh4j+xLGgSpspCedg6c2NpIZIzp5pv8VtWFssPk=";
   };
@@ -15,7 +19,11 @@ buildGoModule rec {
 
   subPackages = [ "cmd/client" ];
 
-  ldflags = [ "-s" "-w" "-X github.com/knight42/krelay/pkg/constants.ClientVersion=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/knight42/krelay/pkg/constants.ClientVersion=${version}"
+  ];
 
   postInstall = ''
     mv $out/bin/client $out/bin/kubectl-relay

@@ -1,19 +1,19 @@
 {
   mkTmuxPlugin,
-  substituteAll,
+  replaceVars,
   fetchFromGitHub,
   crystal,
 }:
 let
   fingers = crystal.buildCrystalPackage rec {
     format = "shards";
-    version = "2.2.2";
+    version = "2.4.1";
     pname = "fingers";
     src = fetchFromGitHub {
       owner = "Morantron";
       repo = "tmux-fingers";
       rev = "${version}";
-      sha256 = "sha256-m9QON7diHVEDnnv/alXCJOG+BnfrAKygScrubZZ605I=";
+      sha256 = "sha256-djSf5zsxrUbkVhWzz6t8Usvk2HtBbQNCMeMc+5V3x/M=";
     };
 
     shardsFile = ./shards.nix;
@@ -38,8 +38,7 @@ mkTmuxPlugin {
   rtpFilePath = "tmux-fingers.tmux";
 
   patches = [
-    (substituteAll {
-      src = ./fix.patch;
+    (replaceVars ./fix.patch {
       tmuxFingersDir = "${fingers}/bin";
     })
   ];

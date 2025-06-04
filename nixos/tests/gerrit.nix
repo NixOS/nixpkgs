@@ -1,17 +1,23 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+{ pkgs, ... }:
 
 {
   name = "gerrit";
 
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ flokli zimbatm ];
+    maintainers = [
+      flokli
+      zimbatm
+    ];
   };
 
   nodes = {
     server =
-      { config, pkgs, ... }: {
-        networking.firewall.allowedTCPPorts = [ 80 2222 ];
-
+      { config, pkgs, ... }:
+      {
+        networking.firewall.allowedTCPPorts = [
+          80
+          2222
+        ];
 
         services.gerrit = {
           enable = true;
@@ -19,7 +25,10 @@ import ./make-test-python.nix ({ pkgs, ... }:
           listenAddress = "[::]:80";
           jvmHeapLimit = "1g";
 
-          builtinPlugins = [ "hooks" "webhooks" ];
+          builtinPlugins = [
+            "hooks"
+            "webhooks"
+          ];
           settings = {
             gerrit.canonicalWebUrl = "http://server";
             sshd.listenAddress = "[::]:2222";
@@ -29,7 +38,8 @@ import ./make-test-python.nix ({ pkgs, ... }:
       };
 
     client =
-      { ... }: {
+      { ... }:
+      {
       };
   };
 
@@ -42,4 +52,4 @@ import ./make-test-python.nix ({ pkgs, ... }:
     server.wait_for_open_port(2222)
     client.succeed("nc -z server 2222")
   '';
-})
+}

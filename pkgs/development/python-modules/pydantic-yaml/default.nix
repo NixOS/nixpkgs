@@ -13,15 +13,15 @@
 
 buildPythonPackage rec {
   pname = "pydantic-yaml";
-  version = "1.3.0";
+  version = "1.5.1";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NowanIlfideme";
     repo = "pydantic-yaml";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Kv1nLR91iwShmCgduXA07+a+2EP1nnvaC7fBAn/ufEM=";
+    tag = "v${version}";
+    hash = "sha256-UOehghNjPymuZtGp1yM5T15M6/XmK1rgTN9uVCVOst4=";
   };
 
   postPatch = ''
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   meta = {
     description = "Small helper library that adds some YAML capabilities to pydantic";
     homepage = "https://github.com/NowanIlfideme/pydantic-yaml";
-    changelog = "https://github.com/NowanIlfideme/pydantic-yaml/releases/tag/v${version}";
+    changelog = "https://github.com/NowanIlfideme/pydantic-yaml/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jnsgruk ];
   };

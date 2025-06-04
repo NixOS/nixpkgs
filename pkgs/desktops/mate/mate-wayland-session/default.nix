@@ -1,14 +1,15 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, glib
-, mate-polkit
-, mate-notification-daemon
-, wayfire
-, wayfirePlugins
-, gitUpdater
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  glib,
+  mate-polkit,
+  mate-notification-daemon,
+  wayfire,
+  wayfirePlugins,
+  gitUpdater,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -53,6 +54,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://mate-desktop.org";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

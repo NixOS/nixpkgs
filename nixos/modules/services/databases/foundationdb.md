@@ -18,7 +18,7 @@ To enable FoundationDB, add the following to your
 ```nix
 {
   services.foundationdb.enable = true;
-  services.foundationdb.package = pkgs.foundationdb71; # FoundationDB 7.1.x
+  services.foundationdb.package = pkgs.foundationdb73; # FoundationDB 7.3.x
 }
 ```
 
@@ -68,7 +68,7 @@ necessary Python modules).
 ```ShellSession
 a@link> cat fdb-status.py
 #! /usr/bin/env nix-shell
-#! nix-shell -i python -p python pythonPackages.foundationdb71
+#! nix-shell -i python -p python pythonPackages.foundationdb73
 
 import fdb
 import json

@@ -7,12 +7,12 @@
 }:
 buildPythonPackage rec {
   pname = "lottie";
-  version = "0.7.0";
+  version = "0.7.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oyQvi6NwUfvddQPs0WggOgjkrybxe+LsygimSvHn08E=";
+    hash = "sha256-hTBKwVLNBCyf6YpSe10TajHG/iqs2FnOHFgYm7lG0Sc=";
   };
 
   build-system = [ setuptools ];

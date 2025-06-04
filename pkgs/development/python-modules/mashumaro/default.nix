@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "mashumaro";
-  version = "3.13.1";
+  version = "3.15";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,13 +26,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Fatal1ty";
     repo = "mashumaro";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Km3RuDU77L3N2RQBhpcEztOjYtQhTXFZoGKu70g5EPU=";
+    tag = "v${version}";
+    hash = "sha256-Zv2FijxYOLGflJ3bc3udkM3SXgHHzHIeCGHlfybyLGE=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ typing-extensions ];
+  dependencies = [ typing-extensions ];
 
   optional-dependencies = {
     orjson = [ orjson ];

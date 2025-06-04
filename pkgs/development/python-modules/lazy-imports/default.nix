@@ -16,7 +16,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "telekom";
     repo = "lazy-imports";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-i+VPlBoxNqk56U4oiEgS1Ayhi1t2O8PtLZ/bzEurUY8=";
   };
 

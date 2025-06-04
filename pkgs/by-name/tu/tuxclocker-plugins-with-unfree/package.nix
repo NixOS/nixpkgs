@@ -1,6 +1,7 @@
-{ symlinkJoin
-, tuxclocker-nvidia-plugin
-, tuxclocker-plugins
+{
+  symlinkJoin,
+  tuxclocker-nvidia-plugin,
+  tuxclocker-plugins,
 }:
 
 symlinkJoin rec {

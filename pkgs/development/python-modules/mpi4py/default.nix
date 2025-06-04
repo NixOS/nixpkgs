@@ -1,53 +1,58 @@
 {
   lib,
-  fetchFromGitHub,
   buildPythonPackage,
+  fetchFromGitHub,
   cython,
   setuptools,
   mpi,
-  openssh,
+  toPythonModule,
   pytestCheckHook,
   mpiCheckPhaseHook,
 }:
 
 buildPythonPackage rec {
   pname = "mpi4py";
-  # See https://github.com/mpi4py/mpi4py/issues/386 . Part of the changes since
-  # the last release include Python 3.12 fixes.
-  version = "3.1.6-unstable-2024-07-08";
+  version = "4.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "mpi4py";
     owner = "mpi4py";
-    rev = "e9a59719bbce1b9c351e1e30ecd3be3b459e97cd";
-    hash = "sha256-C/nidWGr8xsLV73u7HRtnXoQgYmoRJkD45DFrdXXTPI=";
+    tag = version;
+    hash = "sha256-eN/tjlnNla6RHYOXcprVVqtec1nwCEGn+MBcV/5mHJg=";
   };
 
   build-system = [
     cython
     setuptools
-    mpi
   ];
-  dependencies = [
+
+  nativeBuildInputs = [
     mpi
   ];
 
-  __darwinAllowLocalNetworking = true;
+  dependencies = [
+    # Use toPythonModule so that also the mpi executables will be propagated to
+    # generated Python environment.
+    (toPythonModule mpi)
+  ];
+
+  pythonImportsCheck = [ "mpi4py" ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    openssh
     mpiCheckPhaseHook
   ];
-  # Most tests pass, (besides `test_spawn.py`), but when reaching ~80% tests
-  # progress, an orted process hangs and the tests don't finish. This issue is
-  # probably due to the sandbox.
-  doCheck = false;
-  disabledTestPaths = [
-    # Almost all tests in this file fail (TODO: Report about this upstream..)
-    "test/test_spawn.py"
+  disabledTestPaths = lib.optionals (mpi.pname == "mpich") [
+    # These tests from some reason cause pytest to crash, and therefor it is
+    # hard to debug them. Upstream mentions these tests to raise issues in
+    # https://github.com/mpi4py/mpi4py/issues/418  but the workaround suggested
+    # there (setting MPI4PY_RC_RECV_MPROBE=0) doesn't work.
+    "test/test_util_pool.py"
+    "demo/futures/test_futures.py"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   passthru = {
     inherit mpi;
@@ -56,6 +61,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for the Message Passing Interface standard";
     homepage = "https://github.com/mpi4py/mpi4py";
+    changelog = "https://github.com/mpi4py/mpi4py/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ doronbehar ];
   };

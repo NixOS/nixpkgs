@@ -4,8 +4,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  qttools,
-  wrapQtAppsHook,
+  libsForQt5,
   dtkwidget,
   dde-polkit-agent,
   qt5integration,
@@ -31,8 +30,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -47,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/dpa-ext-gnomekeyring";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }

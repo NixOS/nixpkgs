@@ -14,7 +14,6 @@
   # buildInputs
   opencl-headers,
   pybind11,
-  darwin,
   ocl-icd,
 
   # dependencies
@@ -23,23 +22,22 @@
 
   # tests
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
+  mako,
+  pocl,
 }:
 
-let
-  os-specific-buildInputs =
-    if stdenv.hostPlatform.isDarwin then [ darwin.apple_sdk.frameworks.OpenCL ] else [ ocl-icd ];
-in
 buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2024.3";
+  version = "2025.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "inducer";
     repo = "pyopencl";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-HE7dARgKnZxqjAXX4iI1ml0N2BalyTo+ZAzjC2ThEN8=";
+    hash = "sha256-wAZBDPMJbTmujP1j7LjK28ZozZaUwKPDPZLZbFFTeAs=";
   };
 
   build-system = [
@@ -54,8 +52,9 @@ buildPythonPackage rec {
 
   buildInputs = [
     opencl-headers
+    ocl-icd
     pybind11
-  ] ++ os-specific-buildInputs;
+  ];
 
   dependencies = [
     numpy
@@ -63,18 +62,22 @@ buildPythonPackage rec {
     pytools
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pocl
+    mako
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  env = {
+    CL_INC_DIR = "${opencl-headers}/include";
+    CL_LIB_DIR = "${ocl-icd}/lib";
+    CL_LIBNAME = "${ocl-icd}/lib/libOpenCL${stdenv.hostPlatform.extensions.sharedLibrary}";
+  };
 
   preCheck = ''
-    export HOME=$(mktemp -d)
-
-    # https://github.com/NixOS/nixpkgs/issues/255262
-    cd $out
+    rm -rf pyopencl
   '';
-
-  # https://github.com/inducer/pyopencl/issues/784 Note that these failing
-  # tests are all the tests that are available.
-  doCheck = false;
 
   pythonImportsCheck = [
     "pyopencl"
@@ -91,7 +94,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/inducer/pyopencl/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
-    # ld: symbol(s) not found for architecture arm64
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 }

@@ -3,7 +3,6 @@
   stdenv,
   alsa-lib,
   config,
-  darwin,
   dbus,
   fetchFromGitHub,
   libpulseaudio,
@@ -35,23 +34,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ncspot";
-  version = "1.2.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "hrkfdn";
     repo = "ncspot";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-FI/MZRxTyYWh+CWq3roO6d48xlPsyL58+euGmCZ8p4Y=";
+    tag = "v${version}";
+    hash = "sha256-4zeBTi1WBy9tXowsehUo4qou6bhznWPeCXFg+R3akho=";
   };
 
-  cargoHash = "sha256-Jg/P6aaMlgpunYd30eoBt1leL0vgEBn2wNRGZsP4abc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-c16qw2khbMXTA8IbYQnMKqivO63DwyAWKfV2P1aD7dU=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optional withClipboard python3;
 
   buildInputs =
     [ ncurses ]
     ++ lib.optional stdenv.hostPlatform.isLinux openssl
-    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Cocoa
     ++ lib.optional (withALSA || withRodio) alsa-lib
     ++ lib.optional withClipboard libxcb
     ++ lib.optional withCover ueberzug
@@ -80,8 +79,8 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optional withTermion "termion_backend";
 
   postInstall = ''
-    install -D --mode=444 $src/misc/ncspot.desktop $out/share/applications/nscpot.desktop
-    install -D --mode=444 $src/images/logo.svg $out/share/icons/hicolor/scalable/apps/nscpot.png
+    install -D --mode=444 $src/misc/ncspot.desktop $out/share/applications/ncspot.desktop
+    install -D --mode=444 $src/images/logo.svg $out/share/icons/hicolor/scalable/apps/ncspot.svg
   '';
 
   passthru = {

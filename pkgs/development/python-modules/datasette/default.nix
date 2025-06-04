@@ -6,17 +6,19 @@
   asgi-csrf,
   click,
   click-default-group,
+  flexcache,
+  flexparser,
+  httpx,
+  hupper,
   itsdangerous,
   janus,
   jinja2,
-  hupper,
   mergedeep,
-  pint,
+  platformdirs,
   pluggy,
-  python-baseconv,
   pyyaml,
+  typing-extensions,
   uvicorn,
-  httpx,
   pytestCheckHook,
   pytest-asyncio,
   pytest-timeout,
@@ -30,16 +32,16 @@
 
 buildPythonPackage rec {
   pname = "datasette";
-  version = "0.64.8";
-  format = "setuptools";
+  version = "0.65.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "simonw";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-Nt/e0j1mF5Qkpp/dRa9W7En1WoGD2MsR3iREv9IQu5E=";
+    repo = "datasette";
+    tag = version;
+    hash = "sha256-kVtldBuDy19DmyxEQLtAjs1qiNIjaT8+rnHlFfGNHec=";
   };
 
   postPatch = ''
@@ -47,23 +49,32 @@ buildPythonPackage rec {
       --replace '"pytest-runner"' ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  pythonRemoveDeps = [
+    "pip"
+    "setuptools"
+  ];
+
+  dependencies = [
     aiofiles
     asgi-csrf
     asgiref
     click
     click-default-group
+    flexcache
+    flexparser
     httpx
     hupper
     itsdangerous
     janus
     jinja2
     mergedeep
-    pint
+    platformdirs
     pluggy
-    python-baseconv
     pyyaml
     setuptools
+    typing-extensions
     uvicorn
   ];
 

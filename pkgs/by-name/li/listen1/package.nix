@@ -1,4 +1,8 @@
-{ lib, fetchurl, appimageTools }:
+{
+  lib,
+  fetchurl,
+  appimageTools,
+}:
 
 let
   pname = "listen1";
@@ -24,7 +28,7 @@ appimageTools.wrapType2 {
     description = "One for all free music in China";
     homepage = "http://listen1.github.io/listen1/";
     license = licenses.mit;
-    maintainers = with maintainers; [ running-grass ];
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "listen1";

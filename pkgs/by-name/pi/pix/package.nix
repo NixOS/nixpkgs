@@ -1,45 +1,46 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, meson
-, ninja
-, brasero
-, colord
-, exiv2
-, libheif
-, libjpeg
-, libjxl
-, libtiff
-, gst_all_1
-, libraw
-, libsecret
-, glib
-, gtk3
-, gsettings-desktop-schemas
-, librsvg
-, libwebp
-, libX11
-, lcms2
-, bison
-, flex
-, wrapGAppsHook3
-, shared-mime-info
-, python3
-, desktop-file-utils
-, itstool
-, xapp
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  meson,
+  ninja,
+  brasero,
+  colord,
+  exiv2,
+  libheif,
+  libjpeg,
+  libjxl,
+  libtiff,
+  gst_all_1,
+  libraw,
+  libsecret,
+  glib,
+  gtk3,
+  gsettings-desktop-schemas,
+  librsvg,
+  libwebp,
+  libX11,
+  lcms2,
+  bison,
+  flex,
+  wrapGAppsHook3,
+  shared-mime-info,
+  python3,
+  desktop-file-utils,
+  itstool,
+  xapp,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pix";
-  version = "3.4.3";
+  version = "3.4.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
+    repo = "pix";
     rev = version;
-    hash = "sha256-WL9EW7oKeQwufw1VYDigbqAt52GQTpc5RgDEmnKO6vc=";
+    hash = "sha256-c/+NQHvscW/XE49Twmg1Rk1IfsjReCtRQWffobZtgTs=";
   };
 
   nativeBuildInputs = [
@@ -103,6 +104,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxmint/pix";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    teams = [ teams.cinnamon ];
   };
 }

@@ -1,47 +1,44 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alsa-lib
-, appstream
-, appstream-glib
-, cargo
-, cmake
-, desktop-file-utils
-, dos2unix
-, glib
-, gst_all_1
-, gtk4
-, libadwaita
-, libxml2
-, meson
-, ninja
-, pkg-config
-, poppler
-, python3
-, rustPlatform
-, rustc
-, shared-mime-info
-, wrapGAppsHook4
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  appstream,
+  appstream-glib,
+  cargo,
+  cmake,
+  desktop-file-utils,
+  dos2unix,
+  glib,
+  gst_all_1,
+  gtk4,
+  libadwaita,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  poppler,
+  python3,
+  rustPlatform,
+  rustc,
+  shared-mime-info,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rnote";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "flxzt";
     repo = "rnote";
-    rev = "v${version}";
-    hash = "sha256-RbuEgmly6Mjmx58zOV+tg6Mv5ghCNy/dE5FXYrEXtdg=";
+    tag = "v${version}";
+    hash = "sha256-uEYamKIZIjR7c2LB+GydLmxy+EhcKrcxV+9vsveqGVk=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ink-stroke-modeler-rs-0.1.0" = "sha256-B6lT6qSOIHxqBpKTE4nO2+Xs9KF7JLVRUHOkYp8Sl+M=";
-      "piet-0.6.2" = "sha256-3juXzuKwoLuxia6MoVwbcBJ3jXBQ9QRNVoxo3yFp2Iw=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-bzB4yjBcMsOqbq1UCgPFErzVOXs55qy+CYBUinGEbg4=";
   };
 
   nativeBuildInputs = [
@@ -67,33 +64,39 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "cli" true)
   ];
 
-  buildInputs = [
-    appstream
-    glib
-    gst_all_1.gstreamer
-    gtk4
-    libadwaita
-    libxml2
-    poppler
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.AudioUnit
-  ];
+  buildInputs =
+    [
+      appstream
+      glib
+      gst_all_1.gstreamer
+      gtk4
+      libadwaita
+      libxml2
+      poppler
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+    ];
 
   postPatch = ''
     chmod +x build-aux/*.py
     patchShebangs build-aux
   '';
 
-  meta = with lib; {
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
+  };
+
+  meta = {
     homepage = "https://github.com/flxzt/rnote";
-    changelog = "https://github.com/flxzt/rnote/releases/tag/${src.rev}";
+    changelog = "https://github.com/flxzt/rnote/releases/tag/${src.tag}";
     description = "Simple drawing application to create handwritten notes";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda gepbird yrd ];
-    platforms = platforms.unix;
-    # compiler error since 2023-11-17
-    broken = stdenv.hostPlatform.isDarwin;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      dotlambda
+      gepbird
+      yrd
+    ];
+    platforms = lib.platforms.unix;
   };
 }

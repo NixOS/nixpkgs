@@ -1,26 +1,26 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, bison
-, libevent
-, libgrapheme
-, libressl
-, ncurses
-, autoreconfHook
-, buildPackages
-, memstreamHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  bison,
+  libevent,
+  libgrapheme,
+  libressl,
+  ncurses,
+  autoreconfHook,
+  buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "telescope";
-  version = "0.10.1";
+  version = "0.11";
 
   src = fetchFromGitHub {
     owner = "omar-polo";
-    repo = pname;
-    rev = version;
-    hash = "sha256-MVZ/pvDAETacQiEMEXM0gYM20LXqNiHtMfFGqS1vipY=";
+    repo = "telescope";
+    tag = finalAttrs.version;
+    hash = "sha256-GKeUXa4RKYkoywrCrpenfLt10Rdj9L0xYI3tf2hFAbk=";
   };
 
   postPatch = ''
@@ -39,17 +39,17 @@ stdenv.mkDerivation rec {
     libgrapheme
     libressl
     ncurses
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin memstreamHook;
+  ];
 
   configureFlags = [
     "HOSTCC=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Telescope is a w3m-like browser for Gemini";
-    homepage = "https://www.telescope-browser.org/";
-    license = licenses.isc;
-    maintainers = with maintainers; [ heph2 ];
-    platforms = platforms.unix;
+    homepage = "https://telescope-browser.org/";
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ heph2 ];
+    platforms = lib.platforms.unix;
   };
-}
+})

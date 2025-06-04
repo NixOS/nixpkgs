@@ -2,23 +2,24 @@
   coreutils,
   fetchFromGitHub,
   lib,
-  python39,
+  python3,
   bash,
+  openssl,
+  nixosTests,
 }:
 
 let
-  # the latest python version that waagent test against according to https://github.com/Azure/WALinuxAgent/blob/28345a55f9b21dae89472111635fd6e41809d958/.github/workflows/ci_pr.yml#L75
-  python = python39;
+  python = python3;
 
 in
 python.pkgs.buildPythonApplication rec {
   pname = "waagent";
-  version = "2.11.1.12";
+  version = "2.14.0.0";
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "WALinuxAgent";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1MaPjz9hWb/kJxuyJAUWPk065vpSyx2jq1ZSlDB4yFo=";
+    tag = "pre-v${version}";
+    hash = "sha256-nJZXyqdsSQgW+nGqyTS9XSW4z5mGRHtCYsDHKDw/eiM=";
   };
   patches = [
     # Suppress the following error when waagent tries to configure sshd:
@@ -30,11 +31,13 @@ python.pkgs.buildPythonApplication rec {
   # Replace tools used in udev rules with their full path and ensure they are present.
   postPatch = ''
     substituteInPlace config/66-azure-storage.rules \
-      --replace-fail readlink ${coreutils}/bin/readlink \
-      --replace-fail cut ${coreutils}/bin/cut \
-      --replace-fail /bin/sh ${bash}/bin/sh
+      --replace-fail readlink '${coreutils}/bin/readlink' \
+      --replace-fail cut '${coreutils}/bin/cut' \
+      --replace-fail '/bin/sh' '${bash}/bin/sh'
     substituteInPlace config/99-azure-product-uuid.rules \
-      --replace-fail "/bin/chmod" "${coreutils}/bin/chmod"
+      --replace-fail '/bin/chmod' '${coreutils}/bin/chmod'
+    substituteInPlace azurelinuxagent/common/conf.py \
+      --replace-fail '/usr/bin/openssl' '${openssl}/bin/openssl'
   '';
 
   propagatedBuildInputs = [ python.pkgs.distro ];
@@ -64,6 +67,10 @@ python.pkgs.buildPythonApplication rec {
 
   dontWrapPythonPrograms = false;
 
+  passthru.tests = {
+    inherit (nixosTests) waagent;
+  };
+
   meta = {
     description = "Microsoft Azure Linux Agent (waagent)";
     mainProgram = "waagent";
@@ -72,6 +79,8 @@ python.pkgs.buildPythonApplication rec {
       manages Linux provisioning and VM interaction with the Azure
       Fabric Controller'';
     homepage = "https://github.com/Azure/WALinuxAgent";
+    maintainers = with lib.maintainers; [ codgician ];
     license = with lib.licenses; [ asl20 ];
+    platforms = lib.platforms.linux;
   };
 }

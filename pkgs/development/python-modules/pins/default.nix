@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "pins";
-  version = "0.8.6";
+  version = "0.8.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "pins-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TRwdd0vxqXZgongjooJG5rzTnopUsjfl2I8z3nBocdg=";
+    tag = "v${version}";
+    hash = "sha256-79TVAfr872Twc7D2iej51jiKNwZ9ESOa66ItNDmyfFM=";
   };
 
   build-system = [

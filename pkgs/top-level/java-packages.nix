@@ -2,85 +2,84 @@
 
 with pkgs;
 
-let
-  openjfx17 = callPackage ../development/compilers/openjdk/openjfx/17 { };
-  openjfx21 = callPackage ../development/compilers/openjdk/openjfx/21 { };
-  openjfx22 = callPackage ../development/compilers/openjdk/openjfx/22 { };
+{
+  inherit (pkgs) openjfx17 openjfx21 openjfx23;
 
-in {
-  inherit openjfx17 openjfx21 openjfx22;
+  compiler =
+    let
+      # merge meta.platforms of both packages so that dependent packages and hydra build them
+      mergeMetaPlatforms =
+        jdk: other:
+        jdk
+        // {
+          meta = jdk.meta // {
+            platforms = lib.unique (jdk.meta.platforms ++ other.meta.platforms);
+          };
+        };
 
-  compiler = let
-    mkOpenjdk = path-linux: path-darwin: args:
-      if stdenv.hostPlatform.isLinux
-      then mkOpenjdkLinuxOnly path-linux args
-      else let
-        openjdk = callPackage path-darwin {};
-      in openjdk // { headless = openjdk; };
+      mkLinuxDarwin =
+        linux: darwin:
+        if stdenv.hostPlatform.isLinux then
+          mergeMetaPlatforms linux darwin
+        else
+          mergeMetaPlatforms darwin linux;
 
-    mkOpenjdkLinuxOnly = path-linux: args: let
-      openjdk = callPackage path-linux (args);
-    in assert stdenv.hostPlatform.isLinux; openjdk // {
-      headless = openjdk.override { headless = true; };
+      mkOpenjdk =
+        featureVersion:
+        let
+          openjdkLinux =
+            (callPackage ../development/compilers/openjdk/generic.nix { inherit featureVersion; })
+            // {
+              headless = mergeMetaPlatforms openjdkLinuxHeadless openjdkDarwin;
+            };
+          openjdkLinuxHeadless = openjdkLinux.override { headless = true; };
+          openjdkDarwin = (callPackage (../development/compilers/zulu + "/${featureVersion}.nix") { }) // {
+            headless = mergeMetaPlatforms openjdkDarwin openjdkLinuxHeadless;
+          };
+        in
+        mkLinuxDarwin openjdkLinux openjdkDarwin;
+    in
+    rec {
+      corretto11 = callPackage ../development/compilers/corretto/11.nix { };
+      corretto17 = callPackage ../development/compilers/corretto/17.nix { };
+      corretto21 = callPackage ../development/compilers/corretto/21.nix { };
+
+      openjdk8 = mkOpenjdk "8";
+      openjdk11 = mkOpenjdk "11";
+      openjdk17 = mkOpenjdk "17";
+      openjdk21 = mkOpenjdk "21";
+      openjdk23 = mkOpenjdk "23";
+      openjdk24 = mkOpenjdk "24";
+
+      # Legacy aliases
+      openjdk8-bootstrap = temurin-bin.jdk-8;
+      openjdk11-bootstrap = temurin-bin.jdk-11;
+      openjdk17-bootstrap = temurin-bin.jdk-17;
+
+      temurin-bin = recurseIntoAttrs (
+        let
+          temurinLinux = import ../development/compilers/temurin-bin/jdk-linux.nix {
+            inherit (pkgs) lib callPackage stdenv;
+          };
+          temurinDarwin = import ../development/compilers/temurin-bin/jdk-darwin.nix {
+            inherit (pkgs) lib callPackage;
+          };
+        in
+        lib.mapAttrs (name: drv: mkLinuxDarwin drv temurinDarwin.${name}) temurinLinux
+      );
+
+      semeru-bin = recurseIntoAttrs (
+        let
+          semeruLinux = import ../development/compilers/semeru-bin/jdk-linux.nix {
+            inherit (pkgs) lib callPackage;
+          };
+          semeruDarwin = import ../development/compilers/semeru-bin/jdk-darwin.nix {
+            inherit (pkgs) lib callPackage;
+          };
+        in
+        lib.mapAttrs (name: drv: mkLinuxDarwin drv semeruDarwin.${name}) semeruLinux
+      );
     };
-
-  in rec {
-    corretto11 = callPackage ../development/compilers/corretto/11.nix { };
-    corretto17 = callPackage ../development/compilers/corretto/17.nix { };
-    corretto21 = callPackage ../development/compilers/corretto/21.nix { };
-
-    openjdk8-bootstrap = temurin-bin.jdk-8;
-
-    openjdk11-bootstrap = temurin-bin.jdk-11;
-
-    openjdk17-bootstrap = temurin-bin.jdk-17;
-
-    openjdk8 = mkOpenjdk
-      ../development/compilers/openjdk/8.nix
-      ../development/compilers/zulu/8.nix
-      { };
-
-    openjdk11 = mkOpenjdk
-      ../development/compilers/openjdk/11.nix
-      ../development/compilers/zulu/11.nix
-      { openjfx = throw "JavaFX is not supported on OpenJDK 11"; };
-
-    openjdk17 = mkOpenjdk
-      ../development/compilers/openjdk/17.nix
-      ../development/compilers/zulu/17.nix
-      {
-        inherit openjdk17-bootstrap;
-        openjfx = openjfx17;
-      };
-
-    openjdk21 = mkOpenjdk
-      ../development/compilers/openjdk/21.nix
-      ../development/compilers/zulu/21.nix
-      {
-        openjdk21-bootstrap = temurin-bin.jdk-21;
-        openjfx = openjfx21;
-      };
-
-    openjdk22 = mkOpenjdk
-      ../development/compilers/openjdk/22.nix
-      ../development/compilers/zulu/22.nix
-      {
-        openjdk22-bootstrap = temurin-bin.jdk-22;
-        openjfx = openjfx22;
-      };
-
-    temurin-bin = recurseIntoAttrs (callPackage (
-      if stdenv.hostPlatform.isLinux
-      then ../development/compilers/temurin-bin/jdk-linux.nix
-      else ../development/compilers/temurin-bin/jdk-darwin.nix
-    ) {});
-
-    semeru-bin = recurseIntoAttrs (callPackage (
-      if stdenv.hostPlatform.isLinux
-      then ../development/compilers/semeru-bin/jdk-linux.nix
-      else ../development/compilers/semeru-bin/jdk-darwin.nix
-    ) {});
-  };
 }
 // lib.optionalAttrs config.allowAliases {
   jogl_2_4_0 = throw "'jogl_2_4_0' is renamed to/replaced by 'jogl'";

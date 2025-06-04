@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "joncar";
     repo = "pylitejet";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LHNMKU7aMDtSi4K+pZqRF9vAL3EKOFRFFNXKsQJVP2Y=";
   };
 

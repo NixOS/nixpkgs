@@ -26,6 +26,7 @@ OK_MISSING_BY_PACKAGE = {
         "Python3",  # only used for license checks
     },
     "discover": {
+        "ApkQt",  # we don't have APK (duh)
         "rpm-ostree-1",  # we don't have rpm-ostree (duh)
         "Snapd",  # we don't have snaps and probably never will
         "packagekitqt6",  # intentionally disabled

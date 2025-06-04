@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 let
   uiPort = 1234;
   backendPort = 5678;
@@ -6,7 +6,9 @@ let
 in
 {
   name = "lemmy";
-  meta = with lib.maintainers; { maintainers = [ mightyiam ]; };
+  meta = with lib.maintainers; {
+    maintainers = [ mightyiam ];
+  };
 
   nodes = {
     client = { };
@@ -97,4 +99,4 @@ in
         assert_http_code("${lemmyNodeName}/some-other-path", 404, "-H 'Accept: application/activity+json'")
         assert_http_code("${lemmyNodeName}/some-other-path", 404, "-H 'Accept: application/ld+json; profile=\"https://www.w3.org/ns/activitystreams\"'")
   '';
-})
+}

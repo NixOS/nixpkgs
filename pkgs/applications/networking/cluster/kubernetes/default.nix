@@ -1,47 +1,61 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, which
-, makeWrapper
-, rsync
-, installShellFiles
-, runtimeShell
-, kubectl
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  which,
+  makeWrapper,
+  rsync,
+  installShellFiles,
+  runtimeShell,
+  kubectl,
+  nixosTests,
+  nix-update-script,
 
-, components ? [
+  components ? [
     "cmd/kubelet"
     "cmd/kube-apiserver"
     "cmd/kube-controller-manager"
     "cmd/kube-proxy"
     "cmd/kube-scheduler"
-  ]
+  ],
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubernetes";
-  version = "1.31.0";
+  version = "1.33.1";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
-    rev = "v${version}";
-    hash = "sha256-Oy638nIuz2xWVvMGWHUeI4T7eycXIfT+XHp0U7h8G9w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fPKLe1P2jsu6pOTqofFrk1048kPOx/mmXYm7/tBzM84=";
   };
 
   vendorHash = null;
 
   doCheck = false;
 
-  nativeBuildInputs = [ makeWrapper which rsync installShellFiles ];
+  nativeBuildInputs = [
+    makeWrapper
+    which
+    rsync
+    installShellFiles
+  ];
 
-  outputs = [ "out" "man" "pause" ];
+  outputs = [
+    "out"
+    "man"
+    "pause"
+  ];
 
   patches = [ ./fixup-addonmanager-lib-path.patch ];
 
-  WHAT = lib.concatStringsSep " " ([
-    "cmd/kubeadm"
-  ] ++ components);
+  WHAT = lib.concatStringsSep " " (
+    [
+      "cmd/kubeadm"
+    ]
+    ++ components
+  );
 
   buildPhase = ''
     runHook preBuild
@@ -82,13 +96,18 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "Production-Grade Container Scheduling and Management";
-    license = licenses.asl20;
-    homepage = "https://kubernetes.io";
-    maintainers = with maintainers; [ ] ++ teams.kubernetes.members;
-    platforms = platforms.linux;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = nixosTests.kubernetes // {
+      inherit kubectl;
+    };
   };
 
-  passthru.tests = nixosTests.kubernetes // { inherit kubectl; };
-}
+  meta = {
+    description = "Production-Grade Container Scheduling and Management";
+    license = lib.licenses.asl20;
+    homepage = "https://kubernetes.io";
+    teams = [ lib.teams.kubernetes ];
+    platforms = lib.platforms.linux;
+  };
+})

@@ -1,6 +1,11 @@
 addOpenBSDMakeFlags() {
   prependToVar makeFlags "INCSDIR=${!outputDev}/include"
   prependToVar makeFlags "MANDIR=${!outputMan}/share/man"
+  # Variables are used to declare dependencies, but we handle them with cc-wrapper
+  prependToVar makeFlags "CRTBEGIN="
+  prependToVar makeFlags "CRTEND="
+  prependToVar makeFlags "LIBCRT0="
+  prependToVar makeFlags "LIBC="
 }
 
 fixOpenBSDInstallDirs() {

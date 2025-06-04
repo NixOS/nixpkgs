@@ -1,8 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
-  concatAndSort = name: files: pkgs.runCommand name {} ''
-    awk 1 ${lib.escapeShellArgs files} | sed '{ /^\s*$/d; s/^\s\+//; s/\s\+$// }' | sort | uniq > $out
-  '';
+  concatAndSort =
+    name: files:
+    pkgs.runCommand name { } ''
+      awk 1 ${lib.escapeShellArgs files} | sed '{ /^\s*$/d; s/^\s\+//; s/\s\+$// }' | sort | uniq > $out
+    '';
 in
 {
   options = {
@@ -50,9 +57,8 @@ in
   };
 
   config = lib.mkIf config.environment.wordlist.enable {
-    environment.variables =
-      lib.mapAttrs
-        (name: value: "${concatAndSort "wordlist-${name}" value}")
-        config.environment.wordlist.lists;
+    environment.variables = lib.mapAttrs (
+      name: value: "${concatAndSort "wordlist-${name}" value}"
+    ) config.environment.wordlist.lists;
   };
 }

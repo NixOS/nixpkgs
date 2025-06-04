@@ -1,12 +1,19 @@
-{ lib, stdenv, fetchurl, python, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bash,
+  python3,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lhapdf";
-  version = "6.5.4";
+  version = "6.5.5";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/lhapdf/LHAPDF-${version}.tar.gz";
-    sha256 = "sha256-JEOksyzDsFl8gki9biVwOs6ckaeiU8X2CxtUKO+chp4=";
+    sha256 = "sha256-ZB1eoJQreeREfhXlozSR/zxwMtcdYYEZk14UrSf146U=";
   };
 
   # The Apple SDK only exports locale_t from xlocale.h whereas glibc
@@ -15,15 +22,23 @@ stdenv.mkDerivation rec {
     substituteInPlace src/GridPDF.cc --replace '#include <locale>' '#include <xlocale.h>'
   '';
 
-  nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optionals (python != null && lib.versionAtLeast python.version "3.10") [ python.pkgs.cython ];
-  buildInputs = [ python ];
+  nativeBuildInputs =
+    [
+      bash
+      makeWrapper
+    ]
+    ++ lib.optionals (python3 != null && lib.versionAtLeast python3.version "3.10") [
+      python3.pkgs.cython
+    ];
+  buildInputs = [ python3 ];
 
-  configureFlags = lib.optionals (python == null) [ "--disable-python" ];
+  configureFlags = lib.optionals (python3 == null) [ "--disable-python" ];
 
-  preBuild = lib.optionalString (python != null && lib.versionAtLeast python.version "3.10") ''
+  preBuild = lib.optionalString (python3 != null && lib.versionAtLeast python3.version "3.10") ''
     rm wrappers/python/lhapdf.cpp
   '';
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
@@ -32,14 +47,15 @@ stdenv.mkDerivation rec {
   };
 
   postInstall = ''
+    patchShebangs --build $out/bin/lhapdf-config
     wrapProgram $out/bin/lhapdf --prefix PYTHONPATH : "$(toPythonPath "$out")"
   '';
 
   meta = with lib; {
     description = "General purpose interpolator, used for evaluating Parton Distribution Functions from discretised data files";
-    license     = licenses.gpl2;
-    homepage    = "http://lhapdf.hepforge.org";
-    platforms   = platforms.unix;
+    license = licenses.gpl3;
+    homepage = "https://www.lhapdf.org";
+    platforms = platforms.unix;
     maintainers = with maintainers; [ veprbl ];
   };
 }

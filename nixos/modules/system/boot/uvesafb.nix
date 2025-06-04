@@ -1,8 +1,19 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.boot.uvesafb;
-  inherit (lib) mkIf mkEnableOption mkOption types;
-in {
+  inherit (lib)
+    mkIf
+    mkEnableOption
+    mkOption
+    types
+    ;
+in
+{
   options = {
     boot.uvesafb = {
       enable = mkEnableOption "uvesafb";
@@ -16,9 +27,10 @@ in {
       v86d.package = mkOption {
         type = types.package;
         description = "Which v86d package to use with uvesafb";
-        defaultText = ''config.boot.kernelPackages.v86d.overrideAttrs (old: {
-          hardeningDisable = [ "all" ];
-        })'';
+        defaultText = ''
+          config.boot.kernelPackages.v86d.overrideAttrs (old: {
+                    hardeningDisable = [ "all" ];
+                  })'';
         default = config.boot.kernelPackages.v86d.overrideAttrs (old: {
           hardeningDisable = [ "all" ];
         });

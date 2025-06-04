@@ -1,22 +1,29 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, carapace }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  carapace,
+  nix-update-script,
+}:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "carapace";
-  version = "1.0.7";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "carapace-sh";
     repo = "carapace-bin";
-    rev = "v${version}";
-    hash = "sha256-ryFnccCSgQ0qEf3oRPmIO98fx2BlkK2dEFvNk2m9qSo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DgWC3IsuHncJzVfWxIGWDxknTAdHJEijvjhO7q14EYQ=";
   };
 
-  vendorHash = "sha256-biJN+WjNK/Fjjd3+ihZcFCu75fup3g9R6lIa6qHco5I=";
+  vendorHash = "sha256-oq1hZ2P093zsI+UAGHi5XfRXqGGxWpR5j7x7N7ng3xE=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   subPackages = [ "./cmd/carapace" ];
@@ -27,6 +34,7 @@ buildGoModule rec {
     GOOS= GOARCH= go generate ./...
   '';
 
+  passthru.updateScript = nix-update-script { };
   passthru.tests.version = testers.testVersion { package = carapace; };
 
   meta = with lib; {
@@ -36,4 +44,4 @@ buildGoModule rec {
     license = licenses.mit;
     mainProgram = "carapace";
   };
-}
+})

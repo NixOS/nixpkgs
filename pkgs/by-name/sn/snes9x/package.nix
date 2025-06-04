@@ -5,7 +5,7 @@
   cmake,
   fetchFromGitHub,
   gtkmm3,
-  libGL,
+  libGLX,
   libX11,
   libXdmcp,
   libXext,
@@ -42,57 +42,60 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-INMVyB3alwmsApO7ToAaUWgh7jlg2MeLxqHCEnUO88U=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    python3
-  ]
-  ++ lib.optionals withGtk [
-    cmake
-    ninja
-    wrapGAppsHook3
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      python3
+    ]
+    ++ lib.optionals withGtk [
+      cmake
+      ninja
+      wrapGAppsHook3
+    ];
 
-  buildInputs = [
-    libX11
-    libXv
-    minizip
-    zlib
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-    pulseaudio
-    libselinux
-    util-linuxMinimal # provides libmount
-  ]
-  ++ lib.optionals (!withGtk) [
-    libpng
-    libXext
-    libXinerama
-  ]
-  ++ lib.optionals withGtk [
-    gtkmm3
-    libepoxy
-    libXdmcp
-    libXrandr
-    pcre2
-    portaudio
-    SDL2
-  ];
+  buildInputs =
+    [
+      libX11
+      libXv
+      minizip
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      pulseaudio
+      libselinux
+      util-linuxMinimal # provides libmount
+    ]
+    ++ lib.optionals (!withGtk) [
+      libpng
+      libXext
+      libXinerama
+    ]
+    ++ lib.optionals withGtk [
+      gtkmm3
+      libepoxy
+      libXdmcp
+      libXrandr
+      pcre2
+      portaudio
+      SDL2
+    ];
 
   hardeningDisable = [ "format" ];
 
-  configureFlags = lib.optionals stdenv.hostPlatform.sse4_1Support [
-    "--enable-sse41"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.avx2Support [
-    "--enable-avx2"
-  ];
+  configureFlags =
+    lib.optionals stdenv.hostPlatform.sse4_1Support [
+      "--enable-sse41"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.avx2Support [
+      "--enable-avx2"
+    ];
 
-  postPatch = ''
+  postPatch = lib.optionalString withGtk ''
     substituteInPlace external/glad/src/egl.c \
-      --replace-fail libEGL.so.1 "${lib.getLib libGL}/lib/libEGL.so.1"
+      --replace-fail libEGL.so.1 "${lib.getLib libGLX}/lib/libEGL.so.1"
     substituteInPlace external/glad/src/glx.c \
-      --replace-fail libGL.so.1 ${lib.getLib libGL}/lib/libGL.so.1
+      --replace-fail libGL.so.1 ${lib.getLib libGLX}/lib/libGL.so.1
   '';
 
   preConfigure = ''
@@ -103,18 +106,19 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm755 snes9x -t "$out/bin/"
-    install -Dm644 snes9x.conf.default -t "$out/share/doc/${finalAttrs.pname}/"
+    install -Dm644 snes9x.conf.default -t "$out/share/doc/snes9x/"
     install -Dm644 ../docs/{control-inputs,controls,snapshots}.txt -t \
-      "$out/share/doc/${finalAttrs.pname}/"
+      "$out/share/doc/snes9x/"
 
     runHook postInstall
   '';
 
   enableParallelBuilding = true;
 
-  meta = let
-    interface = if withGtk then "GTK" else "X11";
-  in
+  meta =
+    let
+      interface = if withGtk then "GTK" else "X11";
+    in
     {
       homepage = "https://www.snes9x.com";
       description = "Super Nintendo Entertainment System (SNES) emulator, ${interface} version";
@@ -131,7 +135,6 @@ stdenv.mkDerivation (finalAttrs: {
       };
       mainProgram = "snes9x";
       maintainers = with lib.maintainers; [
-        AndersonTorres
         qknight
         thiagokokada
         sugar700

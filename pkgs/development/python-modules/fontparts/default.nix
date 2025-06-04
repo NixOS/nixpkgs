@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch2,
   pythonOlder,
 
   # build-system
@@ -21,33 +20,23 @@
 
 buildPythonPackage rec {
   pname = "fontparts";
-  version = "0.12.1";
+  version = "0.12.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "fontParts";
-    inherit version;
-    hash = "sha256-eeU13S1IcC+bsiK3YDlT4rVDeXDGcxx1wY/is8t5pCA=";
+    inherit pname version;
+    hash = "sha256-zg8QkiHh4UhhXdTRhDKulB+Q2E6GZyD0fnPIm6fWZGc=";
     extension = "zip";
   };
 
-  patches = [
-    (fetchpatch2 {
-      # replace remaining usage of assertEquals for Python 3.12 support
-      # https://github.com/robotools/fontParts/pull/720
-      url = "https://github.com/robotools/fontParts/commit/d7484cd98051aa1588683136da0bb99eac31523b.patch";
-      hash = "sha256-maoUgbmXY/RC4TUZI4triA9OIfB4T98qjUaQ94uhsbg=";
-    })
-  ];
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs =
+  dependencies =
     [
       booleanoperations
       defcon

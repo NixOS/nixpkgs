@@ -1,8 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.programs.extra-container;
-in {
+in
+{
   options = {
     programs.extra-container.enable = lib.mkEnableOption ''
       extra-container, a tool for running declarative NixOS containers

@@ -1,32 +1,30 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-
-, cmake
-, pkg-config
-
-, exiv2
-, mpv
-, opencv4
-, qtbase
-, qtimageformats
-, qtsvg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libsForQt5,
+  exiv2,
+  mpv,
+  opencv4,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qimgv";
-  version = "1.0.3-alpha";
+  version = "1.0.3-unstable-2024-10-11";
 
   src = fetchFromGitHub {
     owner = "easymodo";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-fHMSo8zlOl9Lt8nYwClUzON4TPB9Ogwven+TidsesxY=";
+    rev = "a4d475fae07847be7c106cb628fb97dad51ab920";
+    sha256 = "sha256-iURUJiPe8hbCnpaf6lk8OVSzVqrJKGab889yOic5yLI=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    libsForQt5.wrapQtAppsHook
   ];
 
   cmakeFlags = [
@@ -37,9 +35,10 @@ mkDerivation rec {
     exiv2
     mpv
     opencv4
-    qtbase
-    qtimageformats
-    qtsvg
+    libsForQt5.qtbase
+    libsForQt5.qtimageformats
+    libsForQt5.qtsvg
+    libsForQt5.qttools
   ];
 
   postPatch = ''

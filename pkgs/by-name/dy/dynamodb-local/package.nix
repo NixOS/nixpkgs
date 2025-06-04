@@ -1,16 +1,17 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, jdk_headless
-, jre_minimal
-, makeBinaryWrapper
-, curl
-, jq
-, yq
-, dynamodb-local
-, testers
-, common-updater-scripts
-, writeShellScript
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  jdk_headless,
+  jre_minimal,
+  makeBinaryWrapper,
+  curl,
+  jq,
+  yq,
+  dynamodb-local,
+  testers,
+  common-updater-scripts,
+  writeShellScript,
 }:
 let
   jre = jre_minimal.override {
@@ -26,11 +27,11 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dynamodb-local";
-  version = "2.5.2";
+  version = "2.6.0";
 
   src = fetchurl {
-    url = "https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_2024-06-20.tar.gz";
-    hash = "sha256-9SlgKNZFuy0/mf7eCjaUWVbrc4YXRDDnXADm+xs0540=";
+    url = "https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_2025-03-13.tar.gz";
+    hash = "sha256-mAXZX+L17+z9f3/sMq+O+zLcg7YKGKL72BhhTtS2xuw=";
   };
 
   sourceRoot = ".";
@@ -55,7 +56,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     };
     updateScript = writeShellScript "update-dynamodb-local" ''
       set -o errexit
-      export PATH="${lib.makeBinPath [ curl jq yq common-updater-scripts ]}:$PATH"
+      export PATH="${
+        lib.makeBinPath [
+          curl
+          jq
+          yq
+          common-updater-scripts
+        ]
+      }:$PATH"
 
       NEW_VERSION=$(curl -s https://repo1.maven.org/maven2/com/amazonaws/DynamoDBLocal/maven-metadata.xml | xq -r '.metadata.versioning.latest')
       NEW_VERSION_DATE=$(curl -s https://repo1.maven.org/maven2/com/amazonaws/DynamoDBLocal/maven-metadata.xml | xq -r '.metadata.versioning.lastUpdated | "\(.[:4])-\(.[4:6])-\(.[6:8])"')
@@ -77,7 +85,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html";
     license = licenses.unfree;
     mainProgram = "dynamodb-local";
-    maintainers = with maintainers; [ shyim martinjlowm ];
+    maintainers = with maintainers; [
+      shyim
+      martinjlowm
+    ];
     platforms = platforms.all;
     sourceProvenance = with lib.sourceTypes; [
       binaryBytecode

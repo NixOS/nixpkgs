@@ -1,195 +1,78 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, callPackage
-, pkg-config
-, cmake
-, ninja
-, clang
-, lld
-, python3
-, wrapQtAppsHook
-, removeReferencesTo
-, qtbase
-, qtimageformats
-, qtsvg
-, qtwayland
-, kcoreaddons
-, lz4
-, xxHash
-, ffmpeg
-, openalSoft
-, minizip
-, libopus
-, alsa-lib
-, libpulseaudio
-, range-v3
-, tl-expected
-, hunspell
-, gobject-introspection
-, jemalloc
-, rnnoise
-, microsoft-gsl
-, boost
-, libicns
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  libsForQt5,
+  yasm,
+  withWebkit ? true,
 }:
 
 let
-  tg_owt = callPackage ./tg_owt.nix {
-    # tg_owt should use the same compiler
-    inherit stdenv;
-  };
+  telegram-desktop = libsForQt5.callPackage ../telegram-desktop { inherit stdenv; };
+  version = "1.4.9";
+  tg_owt = telegram-desktop.tg_owt.overrideAttrs (oldAttrs: {
+    version = "0-unstable-2024-06-15";
 
-  mainProgram = if stdenv.hostPlatform.isLinux then "kotatogram-desktop" else "Kotatogram";
+    src = fetchFromGitHub {
+      owner = "desktop-app";
+      repo = "tg_owt";
+      rev = "c9cc4390ab951f2cbc103ff783a11f398b27660b";
+      hash = "sha256-FfWmSYaeryTDbsGJT3R7YK1oiyJcrR7YKKBOF+9PmpY=";
+      fetchSubmodules = true;
+    };
+
+    patches = [
+      (fetchpatch {
+        url = "https://webrtc.googlesource.com/src/+/e7d10047096880feb5e9846375f2da54aef91202%5E%21/?format=TEXT";
+        decode = "base64 -d";
+        stripLen = 1;
+        extraPrefix = "src/";
+        hash = "sha256-goxnuRRbwcdfIk1jFaKGiKCTCYn2saEj7En1Iyglzko=";
+      })
+    ];
+
+    nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ yasm ];
+  });
 in
-stdenv.mkDerivation rec {
+telegram-desktop.override {
   pname = "kotatogram-desktop";
-  version = "0-unstable-2024-09-27";
+  inherit withWebkit;
+  unwrapped = (telegram-desktop.unwrapped.override { inherit tg_owt; }).overrideAttrs {
+    pname = "kotatogram-desktop-unwrapped";
+    version = "${version}-unstable-2024-09-27";
 
-  src = fetchFromGitHub {
-    owner = "kotatogram";
-    repo = "kotatogram-desktop";
-    rev = "0581eb6219343b3cfcbb81124b372df1039b7568";
-    hash = "sha256-rvn8GZmHdMkVutLUe/LmUNIawlb9VgU3sYhPwZ2MWsI=";
-    fetchSubmodules = true;
-  };
+    src = fetchFromGitHub {
+      owner = "kotatogram";
+      repo = "kotatogram-desktop";
+      rev = "0581eb6219343b3cfcbb81124b372df1039b7568";
+      hash = "sha256-rvn8GZmHdMkVutLUe/LmUNIawlb9VgU3sYhPwZ2MWsI=";
+      fetchSubmodules = true;
+    };
 
-  patches = [
-    ./macos.patch
-    ./macos-opengl.patch
-  ];
+    patches = [
+      ./macos-qt5.patch
+      (fetchpatch {
+        url = "https://gitlab.com/mnauw/cppgir/-/commit/c8bb1c6017a6f7f2e47bd10543aea6b3ec69a966.patch";
+        stripLen = 1;
+        extraPrefix = "cmake/external/glib/cppgir/";
+        hash = "sha256-8B4h3BTG8dIlt3+uVgBI569E9eCebcor9uohtsrZpnI=";
+      })
+    ];
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
-      --replace-fail '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
-    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioOutputALSA.cpp \
-      --replace-fail '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
-    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
-      --replace-fail '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace Telegram/lib_webrtc/webrtc/platform/mac/webrtc_environment_mac.mm \
-      --replace-fail kAudioObjectPropertyElementMain kAudioObjectPropertyElementMaster
-  '';
+    meta = {
+      description = "Kotatogram – experimental Telegram Desktop fork";
+      longDescription = ''
+        Unofficial desktop client for the Telegram messenger, based on Telegram Desktop.
 
-  # Wrapping the inside of the app bundles, avoiding double-wrapping
-  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
-
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-    ninja
-    python3
-    wrapQtAppsHook
-    removeReferencesTo
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # to build bundled libdispatch
-    clang
-    gobject-introspection
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    lld
-  ];
-
-  buildInputs = [
-    qtbase
-    qtimageformats
-    qtsvg
-    lz4
-    xxHash
-    ffmpeg
-    openalSoft
-    minizip
-    libopus
-    range-v3
-    tl-expected
-    rnnoise
-    tg_owt
-    microsoft-gsl
-    boost
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    qtwayland
-    kcoreaddons
-    alsa-lib
-    libpulseaudio
-    hunspell
-    jemalloc
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
-    Cocoa
-    CoreFoundation
-    CoreServices
-    CoreText
-    CoreGraphics
-    CoreMedia
-    OpenGL
-    AudioUnit
-    ApplicationServices
-    Foundation
-    AGL
-    Security
-    SystemConfiguration
-    Carbon
-    AudioToolbox
-    VideoToolbox
-    VideoDecodeAcceleration
-    AVFoundation
-    CoreAudio
-    CoreVideo
-    CoreMediaIO
-    QuartzCore
-    AppKit
-    CoreWLAN
-    WebKit
-    IOKit
-    GSS
-    MediaPlayer
-    IOSurface
-    Metal
-    NaturalLanguage
-    libicns
-  ]);
-
-  enableParallelBuilding = true;
-
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    NIX_CFLAGS_LINK = "-fuse-ld=lld";
-  };
-
-  cmakeFlags = [
-    "-DTDESKTOP_API_TEST=ON"
-  ];
-
-  installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p $out/Applications
-    cp -r ${mainProgram}.app $out/Applications
-    ln -s $out/{Applications/${mainProgram}.app/Contents/MacOS,bin}
-  '';
-
-  preFixup = ''
-    remove-references-to -t ${stdenv.cc.cc} $out/bin/${mainProgram}
-    remove-references-to -t ${microsoft-gsl} $out/bin/${mainProgram}
-    remove-references-to -t ${tg_owt.dev} $out/bin/${mainProgram}
-  '';
-
-  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    wrapQtApp $out/Applications/${mainProgram}.app/Contents/MacOS/${mainProgram}
-  '';
-
-  passthru = {
-    inherit tg_owt;
-  };
-
-  meta = with lib; {
-    inherit mainProgram;
-    description = "Kotatogram – experimental Telegram Desktop fork";
-    longDescription = ''
-      Unofficial desktop client for the Telegram messenger, based on Telegram Desktop.
-
-      It contains some useful (or purely cosmetic) features, but they could be unstable. A detailed list is available here: https://kotatogram.github.io/changes
-    '';
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    homepage = "https://kotatogram.github.io";
-    changelog = "https://github.com/kotatogram/kotatogram-desktop/releases/tag/k{version}";
-    maintainers = with maintainers; [ ilya-fedin ];
+        It contains some useful (or purely cosmetic) features, but they could be unstable. A detailed list is available here: https://kotatogram.github.io/changes
+      '';
+      license = lib.licenses.gpl3Only;
+      platforms = lib.platforms.all;
+      homepage = "https://kotatogram.github.io";
+      changelog = "https://github.com/kotatogram/kotatogram-desktop/releases/tag/k${version}";
+      maintainers = with lib.maintainers; [ ilya-fedin ];
+      mainProgram = if stdenv.hostPlatform.isLinux then "kotatogram-desktop" else "Kotatogram";
+    };
   };
 }

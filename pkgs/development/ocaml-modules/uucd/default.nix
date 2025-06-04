@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, xmlm, topkg }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocaml,
+  findlib,
+  ocamlbuild,
+  xmlm,
+  topkg,
+}:
 
 let
   pname = "uucd";
@@ -13,7 +22,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-VVGPG6ZjchUqo8xMCJRahqCCF5WheDBpK1stuts+orM=";
   };
 
-  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    ocamlbuild
+    topkg
+  ];
   buildInputs = [ topkg ];
 
   strictDeps = true;

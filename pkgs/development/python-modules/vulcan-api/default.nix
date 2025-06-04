@@ -4,35 +4,36 @@
   aiodns,
   aiohttp,
   buildPythonPackage,
+  setuptools,
   faust-cchardet,
   fetchFromGitHub,
   pyopenssl,
   pythonOlder,
   pytz,
   related,
-  requests,
   uonet-request-signer-hebe,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "vulcan-api";
-  version = "2.3.2";
-  format = "setuptools";
+  version = "2.4.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kapi2289";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ebWKcRxAAkHVqV2RaftIHBRJe/TYSUxS+5Utxb0yhtw=";
+    repo = "vulcan-api";
+    tag = "v${version}";
+    hash = "sha256-oWtyqFacWkKhv4QvbZCuq3KHlM/o7SfENg90O/ygXUw=";
   };
 
-  pythonRemoveDeps = [ "faust-cchardet" ];
+  pythonRemoveDeps = [ "related-without-future" ];
 
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aenum
     aiodns
     aiohttp
@@ -40,7 +41,6 @@ buildPythonPackage rec {
     pyopenssl
     pytz
     related
-    requests
     uonet-request-signer-hebe
     yarl
   ];

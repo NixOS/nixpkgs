@@ -1,22 +1,23 @@
-{ stdenvNoCC
-, makeWrapper
-, lib
-, fetchFromGitHub
-, bash
-, nix
-, nixos-install
-, coreutils
-, testers
+{
+  stdenvNoCC,
+  makeWrapper,
+  lib,
+  fetchFromGitHub,
+  bash,
+  nix,
+  nixos-install,
+  coreutils,
+  testers,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "disko";
-  version = "1.8.2";
+  version = "1.12.0";
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "disko";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-O0QVhsj9I/hmcIqJ4qCqFyzvjYL+dtzJP0C5MFd8O/Y=";
+    hash = "sha256-eDoSOhxGEm2PykZFa/x9QG5eTH0MJdiJ9aR00VAofXE=";
   };
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ bash ];
@@ -30,7 +31,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       chmod 755 "$out/bin/$i"
       wrapProgram "$out/bin/$i" \
         --set DISKO_VERSION "${finalAttrs.version}" \
-        --prefix PATH : ${lib.makeBinPath [ nix coreutils nixos-install ]}
+        --prefix PATH : ${
+          lib.makeBinPath [
+            nix
+            coreutils
+            nixos-install
+          ]
+        }
     done
     runHook postInstall
   '';
@@ -49,7 +56,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Declarative disk partitioning and formatting using nix";
     license = lib.licenses.mit;
     mainProgram = "disko";
-    maintainers = with lib.maintainers; [ mic92 lassulus iFreilicht ];
+    maintainers = with lib.maintainers; [
+      mic92
+      lassulus
+      iFreilicht
+    ];
     platforms = lib.platforms.linux;
   };
 })

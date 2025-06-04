@@ -2,29 +2,31 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   # build-system
-  poetry-core,
+  pdm-backend,
 
   # dependencies
   aiohttp,
   dataclasses-json,
-  langchain-core,
+  httpx-sse,
   langchain,
+  langchain-core,
   langsmith,
+  numpy,
   pydantic-settings,
   pyyaml,
   requests,
   sqlalchemy,
   tenacity,
 
-  # optional-dependencies
-  typer,
-  numpy,
-
   # tests
+  blockbuster,
+  duckdb,
+  duckdb-engine,
   httpx,
-  langchain-standard-tests,
+  langchain-tests,
   lark,
   pandas,
   pytest-asyncio,
@@ -38,28 +40,42 @@
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.3.1";
+  version = "0.3.24";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
-    repo = "langchain";
-    rev = "refs/tags/langchain-community==${version}";
-    hash = "sha256-h7+89w8PkSpFxGGQKFC6FuB6Q2B27EYgLk0aiPqwp4s=";
+    repo = "langchain-community";
+    tag = "libs/community/v${version}";
+    hash = "sha256-4Rcczuz7tCb10HPvO15n48DBKjVBLXNPdRfD4lRKNGk=";
   };
 
   sourceRoot = "${src.name}/libs/community";
 
-  build-system = [ poetry-core ];
+  build-system = [ pdm-backend ];
 
-  pythonRelaxDeps = [ "pydantic-settings" ];
+  pythonRelaxDeps = [
+    # Each component release requests the exact latest langchain and -core.
+    # That prevents us from updating individual components.
+    "langchain"
+    "langchain-core"
+    "numpy"
+    "pydantic-settings"
+    "tenacity"
+  ];
+
+  pythonRemoveDeps = [
+    "bs4"
+  ];
 
   dependencies = [
     aiohttp
     dataclasses-json
-    langchain-core
+    httpx-sse
     langchain
+    langchain-core
     langsmith
+    numpy
     pydantic-settings
     pyyaml
     requests
@@ -67,16 +83,14 @@ buildPythonPackage rec {
     tenacity
   ];
 
-  optional-dependencies = {
-    cli = [ typer ];
-    numpy = [ numpy ];
-  };
-
   pythonImportsCheck = [ "langchain_community" ];
 
   nativeCheckInputs = [
+    blockbuster
+    duckdb
+    duckdb-engine
     httpx
-    langchain-standard-tests
+    langchain-tests
     lark
     pandas
     pytest-asyncio
@@ -88,29 +102,40 @@ buildPythonPackage rec {
     toml
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
-
-  passthru = {
-    inherit (langchain-core) updateScript;
-  };
+  pytestFlagsArray = [
+    "tests/unit_tests"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
   disabledTests = [
-    # Test require network access
-    "test_ovhcloud_embed_documents"
-    "test_yandex"
-    # duckdb-engine needs python-wasmer which is not yet available in Python 3.12
-    # See https://github.com/NixOS/nixpkgs/pull/326337 and https://github.com/wasmerio/wasmer-python/issues/778
-    "test_table_info"
-    "test_sql_database_run"
+    # requires bs4, aka BeautifulSoup
+    "test_importable_all"
+    # flaky
+    "test_llm_caching"
+    "test_llm_caching_async"
   ];
 
+  disabledTestPaths = [
+    # depends on Pydantic v1 notations, will not load
+    "tests/unit_tests/document_loaders/test_gitbook.py"
+  ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "libs/community/v([0-9.]+)"
+    ];
+  };
+
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-community==${version}";
     description = "Community contributed LangChain integrations";
-    homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/community";
+    homepage = "https://github.com/langchain-ai/langchain-community";
+    changelog = "https://github.com/langchain-ai/langchain-community/releases/tag/libs%2Fcommunity%2fv${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
   };
 }

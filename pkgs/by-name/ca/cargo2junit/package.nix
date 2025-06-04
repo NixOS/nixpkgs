@@ -17,7 +17,8 @@ rustPlatform.buildRustPackage rec {
     ./0001-update-time-rs.patch
   ];
 
-  cargoHash = "sha256-ncRELlbT8Dy8huLgZrroRWohCLeN5cRjMWrIW4JNcCM=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-FPCLy4mIuUeHMuYgYGTs/fn8tUf55LVWBwrrA5hiG2k=";
 
   meta = with lib; {
     description = "Converts cargo's json output (from stdin) to JUnit XML (to stdout)";

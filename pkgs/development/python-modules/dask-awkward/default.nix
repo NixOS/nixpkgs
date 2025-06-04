@@ -16,8 +16,7 @@
   # optional-dependencies
   pyarrow,
 
-  # checks
-  dask-histogram,
+  # tests
   distributed,
   hist,
   pandas,
@@ -27,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "dask-awkward";
-  version = "2024.9.0";
+  version = "2025.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask-contrib";
     repo = "dask-awkward";
-    rev = "refs/tags/${version}";
-    hash = "sha256-4CwixPj0bJHVjnwZ7fPkRdiDHs8/IzvNlwSPynXvcAo=";
+    tag = version;
+    hash = "sha256-TLMT7YxedBUfz05F8wTsS5LQ9LyBbcUhQENM8C7Xric=";
   };
 
   build-system = [
@@ -53,8 +52,8 @@ buildPythonPackage rec {
     io = [ pyarrow ];
   };
 
-  checkInputs = [
-    dask-histogram
+  nativeCheckInputs = [
+    # dask-histogram (circular dependency)
     distributed
     hist
     pandas
@@ -71,6 +70,13 @@ buildPythonPackage rec {
     "test_from_text"
     # ValueError: not a ROOT file: first four bytes...
     "test_basic_root_works"
+    # Flaky. https://github.com/dask-contrib/dask-awkward/issues/506.
+    "test_distance_behavior"
+
+    # RuntimeError: Attempting to use an asynchronous Client in a synchronous context of `dask.compute`
+    # https://github.com/dask-contrib/dask-awkward/issues/573
+    "test_persist"
+    "test_ravel_fail"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -78,7 +84,7 @@ buildPythonPackage rec {
   meta = {
     description = "Native Dask collection for awkward arrays, and the library to use it";
     homepage = "https://github.com/dask-contrib/dask-awkward";
-    changelog = "https://github.com/dask-contrib/dask-awkward/releases/tag/${version}";
+    changelog = "https://github.com/dask-contrib/dask-awkward/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };

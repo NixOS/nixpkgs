@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+
+  bashInteractive,
   dbus,
   docbook2x,
   libapparmor,
@@ -14,18 +16,20 @@
   openssl,
   pkg-config,
   systemd,
+
+  fetchpatch,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lxc";
-  version = "6.0.2";
+  version = "6.0.4";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxc";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-qc60oSs2KahQJpSmhrctXpV2Zumv7EvlnGFaOCSCX/E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zmL568PprrpIWTVCkScXHEzTZ+NduSH4r8ETnz4NY64=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    # some hooks use compgen
+    bashInteractive
     dbus
     libapparmor
     libcap
@@ -52,6 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix hardcoded path of lxc-user-nic
     # This is needed to use unprivileged containers
     ./user-nic.diff
+
+    # Fixes https://github.com/zabbly/incus/issues/81
+    (fetchpatch {
+      name = "4536.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/lxc/lxc/pull/4536.patch";
+      hash = "sha256-yEqK9deO2MhfPROPfBw44Z752Mc5bR8DBKl1KrGC+5c=";
+    })
   ];
 
   mesonFlags = [
@@ -85,8 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      incus-legacy-init = nixosTests.incus.container-legacy-init;
-      incus-systemd-init = nixosTests.incus.container-systemd-init;
+      incus-lts = nixosTests.incus-lts.container;
       lxc = nixosTests.lxc;
       lxd = nixosTests.lxd.container;
     };
@@ -94,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "v(6.0.*)"
+        "v(6\\.0\\.*)"
       ];
     };
   };
@@ -111,6 +123,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.lxc.members;
+    teams = [ lib.teams.lxc ];
   };
 })

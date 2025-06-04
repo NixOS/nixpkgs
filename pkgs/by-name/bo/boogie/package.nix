@@ -1,18 +1,26 @@
-{ lib, buildDotnetModule, fetchFromGitHub, z3 }:
+{
+  lib,
+  buildDotnetModule,
+  fetchFromGitHub,
+  z3,
+  dotnetCorePackages,
+  nix-update-script,
+}:
 
 buildDotnetModule rec {
   pname = "Boogie";
-  version = "3.2.4";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "boogie-org";
     repo = "boogie";
-    rev = "v${version}";
-    hash = "sha256-wpMENrhfD8+bt66gd29xkfLANcMbPpkzDacj0KPuXT4=";
+    tag = "v${version}";
+    hash = "sha256-0YZy4TYff6iupSAwDw8qvR6vdkUh8PDXKoKARfEyEPQ=";
   };
 
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
   projectFile = [ "Source/Boogie.sln" ];
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   # [...]Microsoft.NET.Publish.targets(248,5): error MSB3021: Unable to copy file "[...]/NUnit3.TestAdapter.pdb" to "[...]/NUnit3.TestAdapter.pdb". Access to the path '[...]/NUnit3.TestAdapter.pdb' is denied. [[...]/ExecutionEngineTests.csproj]
   enableParallelBuilding = false;
@@ -24,18 +32,17 @@ buildDotnetModule rec {
   ];
 
   postInstall = ''
-      # so that this derivation can be used as a vim plugin to install syntax highlighting
-      vimdir=$out/share/vim-plugins/boogie
-      install -Dt $vimdir/syntax/ Util/vim/syntax/boogie.vim
-      mkdir $vimdir/ftdetect
-      echo 'au BufRead,BufNewFile *.bpl set filetype=boogie' > $vimdir/ftdetect/bpl.vim
-      mkdir -p $out/share/nvim
-      ln -s $out/share/vim-plugins/boogie $out/share/nvim/site
+    # so that this derivation can be used as a vim plugin to install syntax highlighting
+    vimdir=$out/share/vim-plugins/boogie
+    install -Dt $vimdir/syntax/ Util/vim/syntax/boogie.vim
+    mkdir $vimdir/ftdetect
+    echo 'au BufRead,BufNewFile *.bpl set filetype=boogie' > $vimdir/ftdetect/bpl.vim
+    mkdir -p $out/share/nvim
+    ln -s $out/share/vim-plugins/boogie $out/share/nvim/site
   '';
 
   postFixup = ''
-      ln -s "$out/bin/BoogieDriver" "$out/bin/boogie"
-      rm -f $out/bin/{Microsoft,NUnit3,System}.* "$out/bin"/*Tests
+    ln -s "$out/bin/BoogieDriver" "$out/bin/boogie"
   '';
 
   doInstallCheck = true;
@@ -43,8 +50,11 @@ buildDotnetModule rec {
     $out/bin/boogie ${./install-check-file.bpl}
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Intermediate verification language";
+    changelog = "https://github.com/boogie-org/boogie/releases/tag/${src.tag}";
     homepage = "https://github.com/boogie-org/boogie";
     longDescription = ''
       Boogie is an intermediate verification language (IVL), intended as a
@@ -52,8 +62,9 @@ buildDotnetModule rec {
 
       This derivation may be used as a vim plugin to provide syntax highlighting.
     '';
-    license = licenses.mspl;
-    maintainers = [ maintainers.taktoa ];
-    platforms = with platforms; (linux ++ darwin);
+    license = lib.licenses.mspl;
+    mainProgram = "boogie";
+    maintainers = with lib.maintainers; [ taktoa ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

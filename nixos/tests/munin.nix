@@ -1,7 +1,8 @@
 # This test runs basic munin setup with node and cron job running on the same
 # machine.
 
-import ./make-test-python.nix ({ pkgs, ...} : {
+{ pkgs, ... }:
+{
   name = "munin";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ domenkozar ];
@@ -10,26 +11,26 @@ import ./make-test-python.nix ({ pkgs, ...} : {
   nodes = {
     one =
       { config, ... }:
-        {
-          services = {
-            munin-node = {
-              enable = true;
-              # disable a failing plugin to prevent irrelevant error message, see #23049
-              disabledPlugins = [ "apc_nis" ];
-            };
-            munin-cron = {
-             enable = true;
-             hosts = ''
-               [${config.networking.hostName}]
-               address localhost
-             '';
-            };
+      {
+        services = {
+          munin-node = {
+            enable = true;
+            # disable a failing plugin to prevent irrelevant error message, see #23049
+            disabledPlugins = [ "apc_nis" ];
           };
-
-          # increase the systemd timer interval so it fires more often
-          systemd.timers.munin-cron.timerConfig.OnCalendar = pkgs.lib.mkForce "*:*:0/10";
+          munin-cron = {
+            enable = true;
+            hosts = ''
+              [${config.networking.hostName}]
+              address localhost
+            '';
+          };
         };
-    };
+
+        # increase the systemd timer interval so it fires more often
+        systemd.timers.munin-cron.timerConfig.OnCalendar = pkgs.lib.mkForce "*:*:0/10";
+      };
+  };
 
   testScript = ''
     start_all()
@@ -43,4 +44,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         one.wait_for_file("/var/www/munin/one/index.html")
         one.wait_for_file("/var/www/munin/one/one/diskstat_iops_vda-day.png", timeout=60)
   '';
-})
+}

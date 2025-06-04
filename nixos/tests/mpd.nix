@@ -1,27 +1,38 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
-  let
-    track = pkgs.fetchurl {
-      # Sourced from http://freemusicarchive.org/music/Blue_Wave_Theory/Surf_Music_Month_Challenge/Skyhawk_Beach_fade_in
-      # License: http://creativecommons.org/licenses/by-sa/4.0/
+{ pkgs, lib, ... }:
+let
+  track = pkgs.fetchurl {
+    # Sourced from http://freemusicarchive.org/music/Blue_Wave_Theory/Surf_Music_Month_Challenge/Skyhawk_Beach_fade_in
 
-      name = "Blue_Wave_Theory-Skyhawk_Beach.mp3";
-      url = "https://freemusicarchive.org/file/music/ccCommunity/Blue_Wave_Theory/Surf_Music_Month_Challenge/Blue_Wave_Theory_-_04_-_Skyhawk_Beach.mp3";
-      sha256 = "0xw417bxkx4gqqy139bb21yldi37xx8xjfxrwaqa0gyw19dl6mgp";
-    };
+    name = "Blue_Wave_Theory-Skyhawk_Beach.mp3";
+    url = "https://freemusicarchive.org/file/music/ccCommunity/Blue_Wave_Theory/Surf_Music_Month_Challenge/Blue_Wave_Theory_-_04_-_Skyhawk_Beach.mp3";
+    hash = "sha256-91VDWwrcP6Cw4rk72VHvZ8RGfRBrpRE8xo/02dcJhHc=";
+    meta.license = lib.licenses.cc-by-sa-40;
+  };
 
-    defaultCfg = rec {
-      user = "mpd";
-      group = "mpd";
-      dataDir = "/var/lib/mpd";
-      musicDirectory = "${dataDir}/music";
-    };
+  defaultCfg = rec {
+    user = "mpd";
+    group = "mpd";
+    dataDir = "/var/lib/mpd";
+    musicDirectory = "${dataDir}/music";
+  };
 
-    defaultMpdCfg = with defaultCfg; {
-      inherit dataDir musicDirectory user group;
-      enable = true;
-    };
+  defaultMpdCfg = {
+    inherit (defaultCfg)
+      dataDir
+      musicDirectory
+      user
+      group
+      ;
+    enable = true;
+  };
 
-    musicService = { user, group, musicDirectory }: {
+  musicService =
+    {
+      user,
+      group,
+      musicDirectory,
+    }:
+    {
       description = "Sets up the music file(s) for MPD to use.";
       requires = [ "mpd.service" ];
       after = [ "mpd.service" ];
@@ -35,67 +46,71 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       };
     };
 
-    mkServer = { mpd, musicService, }:
-      { boot.kernelModules = [ "snd-dummy" ];
-        services.mpd = mpd;
-        systemd.services.musicService = musicService;
-      };
-  in {
-    name = "mpd";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ emmanuelrosa ];
+  mkServer =
+    { mpd, musicService }:
+    {
+      boot.kernelModules = [ "snd-dummy" ];
+      services.mpd = mpd;
+      systemd.services.musicService = musicService;
     };
+in
+{
+  name = "mpd";
+  meta = {
+    maintainers = with lib.maintainers; [ emmanuelrosa ];
+  };
 
-  nodes =
-    { client =
-      { ... }: { };
+  nodes = {
+    client = { ... }: { };
 
-      serverALSA =
-        { ... }: lib.mkMerge [
-          (mkServer {
-            mpd = defaultMpdCfg // {
-              network.listenAddress = "any";
-              extraConfig = ''
-                audio_output {
-                  type "alsa"
-                  name "ALSA"
-                  mixer_type "null"
-                }
-              '';
-            };
-            musicService = with defaultMpdCfg; musicService { inherit user group musicDirectory; };
-          })
-          { networking.firewall.allowedTCPPorts = [ 6600 ]; }
-        ];
+    serverALSA =
+      { ... }:
+      lib.mkMerge [
+        (mkServer {
+          mpd = defaultMpdCfg // {
+            network.listenAddress = "any";
+            extraConfig = ''
+              audio_output {
+                type "alsa"
+                name "ALSA"
+                mixer_type "null"
+              }
+            '';
+          };
+          musicService = musicService { inherit (defaultMpdCfg) user group musicDirectory; };
+        })
+        { networking.firewall.allowedTCPPorts = [ 6600 ]; }
+      ];
 
-      serverPulseAudio =
-        { ... }: lib.mkMerge [
-          (mkServer {
-            mpd = defaultMpdCfg // {
-              extraConfig = ''
-                audio_output {
-                  type "pulse"
-                  name "The Pulse"
-                }
-              '';
-            };
+    serverPulseAudio =
+      { ... }:
+      lib.mkMerge [
+        (mkServer {
+          mpd = defaultMpdCfg // {
+            extraConfig = ''
+              audio_output {
+                type "pulse"
+                name "The Pulse"
+              }
+            '';
+          };
 
-            musicService = with defaultCfg; musicService { inherit user group musicDirectory; };
-          })
-          {
-            hardware.pulseaudio = {
-              enable = true;
-              systemWide = true;
-              tcp.enable = true;
-              tcp.anonymousClients.allowAll = true;
-            };
-            systemd.services.mpd.environment.PULSE_SERVER = "localhost";
-          }
-        ];
-    };
+          musicService = musicService { inherit (defaultMpdCfg) user group musicDirectory; };
+        })
+        {
+          services.pulseaudio = {
+            enable = true;
+            systemWide = true;
+            tcp.enable = true;
+            tcp.anonymousClients.allowAll = true;
+          };
+          systemd.services.mpd.environment.PULSE_SERVER = "localhost";
+        }
+      ];
+  };
 
   testScript = ''
-    mpc = "${pkgs.mpc-cli}/bin/mpc --wait"
+    mpc = "${lib.getExe pkgs.mpc} --wait"
 
     # Connects to the given server and attempts to play a tune.
     def play_some_music(server):
@@ -130,4 +145,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     # to perform the following test:
     client.fail(f"{mpc} -h serverPulseAudio status")
   '';
-})
+}

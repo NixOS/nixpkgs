@@ -1,12 +1,15 @@
-{ buildGoModule, authentik }:
+{
+  buildGoModule,
+  authentik,
+}:
 
 buildGoModule {
   pname = "authentik-radius-outpost";
   inherit (authentik) version src;
 
-  vendorHash = "sha256-BcL9QAc2jJqoPaQImJIFtCiu176nxmVcCLPjXjNBwqI=";
+  vendorHash = "sha256-cEB22KFDONcJBq/FvLpYKN7Zd06mh8SACvCSuj5i4fI=";
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   subPackages = [ "cmd/radius" ];
 

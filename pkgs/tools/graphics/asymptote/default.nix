@@ -1,55 +1,131 @@
-{ lib, stdenv, fetchurl
-, autoreconfHook, bison, glm, flex, wrapQtAppsHook, cmake, pkg-config
-, libglut, ghostscriptX, imagemagick, fftw, eigen, libtirpc
-, boehmgc, libGLU, libGL, ncurses, readline, gsl, libsigsegv
-, python3, qtbase, qtsvg, boost
-, zlib, perl, curl
-, texinfo
-, texliveSmall
-, darwin
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  bison,
+  glm,
+  flex,
+  wrapQtAppsHook,
+  cmake,
+  pkg-config,
+  libglut,
+  ghostscriptX,
+  imagemagick,
+  fftw,
+  eigen,
+  libtirpc,
+  boehmgc,
+  libGLU,
+  libGL,
+  libglvnd,
+  ncurses,
+  readline,
+  gsl,
+  libsigsegv,
+  python3,
+  qtbase,
+  qtsvg,
+  boost186,
+  zlib,
+  perl,
+  curl,
+  texinfo,
+  texliveSmall,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.92";
+  version = "3.04";
   pname = "asymptote";
 
-  outputs = [ "out" "man" "info" "doc" "tex" ];
+  outputs = [
+    "out"
+    "man"
+    "info"
+    "doc"
+    "tex"
+  ];
 
   src = fetchurl {
     url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
-    hash = "sha256-nZtcb6fg+848HlT+sl4tUdKMT+d5jyTHbNyugpGo6mY=";
+    hash = "sha256-+T0n2SX9C8Mz0Fb+vkny1x+TWETC+NN67MjfD+6Twys=";
   };
 
   # override with TeX Live containers to avoid building sty, docs from source
   texContainer = null;
   texdocContainer = null;
 
-  nativeBuildInputs = [
-    autoreconfHook
-    bison
-    flex
-    bison
-    texinfo
-    wrapQtAppsHook
-    cmake
-    pkg-config
-  ] ++ lib.optional (finalAttrs.texContainer == null || finalAttrs.texdocContainer == null)
-    (texliveSmall.withPackages (ps: with ps; [ epsf cm-super ps.texinfo media9 ocgx2 collection-latexextra ]));
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      bison
+      flex
+      bison
+      texinfo
+      wrapQtAppsHook
+      cmake
+      ghostscriptX
+      perl
+      pkg-config
+      (python3.withPackages (
+        ps: with ps; [
+          click
+          cson
+          numpy
+          pyqt5
+        ]
+      ))
+    ]
+    ++ lib.optional (finalAttrs.texContainer == null || finalAttrs.texdocContainer == null) (
+      texliveSmall.withPackages (
+        ps: with ps; [
+          epsf
+          cm-super
+          ps.texinfo
+          media9
+          ocgx2
+          collection-latexextra
+        ]
+      )
+    );
 
   buildInputs = [
-    ghostscriptX imagemagick fftw eigen
-    boehmgc ncurses readline gsl libsigsegv
-    zlib perl curl qtbase qtsvg boost
-    (python3.withPackages (ps: with ps; [ cson numpy pyqt5 ]))
+    ghostscriptX
+    imagemagick
+    fftw
+    eigen
+    boehmgc
+    ncurses
+    readline
+    gsl
+    libsigsegv
+    zlib
+    perl
+    curl
+    qtbase
+    qtsvg
+    # relies on removed asio::io_service
+    # https://github.com/kuafuwang/LspCpp/issues/52
+    boost186
+    (python3.withPackages (
+      ps: with ps; [
+        cson
+        numpy
+        pyqt5
+      ]
+    ))
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libtirpc ];
 
-  propagatedBuildInputs = [
-    glm
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libglut libGLU libGL
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
-    OpenGL GLUT Cocoa
-  ]);
+  propagatedBuildInputs =
+    [
+      glm
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libglut
+      libGLU
+      libGL
+      libglvnd
+    ];
 
   dontWrapQtApps = true;
 
@@ -75,14 +151,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # do not use bundled libgc.so
-  configureFlags = [ "--enable-gc=system" ]
-    # TODO add open_memstream to enable XDR/V3D on Darwin (requires memstream or >=10.13 Apple SDK)
-    ++ lib.optional stdenv.hostPlatform.isDarwin "--enable-xdr=no";
+  configureFlags = [ "--enable-gc=system" ];
 
   env.NIX_CFLAGS_COMPILE = "-I${boehmgc.dev}/include/gc";
 
   postInstall = ''
     rm "$out"/bin/xasy
+    chmod +x "$out"/share/asymptote/GUI/xasy.py
     makeQtWrapper "$out"/share/asymptote/GUI/xasy.py "$out"/bin/xasy --prefix PATH : "$out"/bin
 
     if [[ -z $texdocContainer ]] ; then
@@ -126,7 +201,8 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelInstalling = false;
 
   meta = with lib; {
-    description =  "Tool for programming graphics intended to replace Metapost";
+    description = "Tool for programming graphics intended to replace Metapost";
+    homepage = "https://asymptote.sourceforge.io/";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux ++ platforms.darwin;

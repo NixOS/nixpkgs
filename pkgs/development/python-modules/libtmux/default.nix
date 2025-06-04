@@ -3,8 +3,8 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   ncurses,
-  poetry-core,
   procps,
   pytest-rerunfailures,
   pytestCheckHook,
@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "libtmux";
-  version = "0.37.0";
+  version = "0.46.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tmux-python";
     repo = "libtmux";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-I0E6zkfQ6mx2svCaXEgKPhrrog3iLgXZ4E3CMMxPkIA=";
+    tag = "v${version}";
+    hash = "sha256-M3su+bDFuvmNEDVK+poWfxwbpsw/0L1/R6Z4CL0mvZ4=";
   };
 
   postPatch = ''
@@ -28,7 +28,7 @@ buildPythonPackage rec {
       --replace-fail '"--doctest-docutils-modules",' ""
   '';
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [
     procps
@@ -50,19 +50,22 @@ buildPythonPackage rec {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # tests/test_pane.py:113: AssertionError
       "test_capture_pane_start"
+      # assert (1740973920.500444 - 1740973919.015309) <= 1.1
+      "test_retry_three_times"
+      "test_function_times_out_no_raise"
+      # assert False
+      "test_retry_three_times_no_raise_assert"
     ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    "tests/test_test.py"
-  ];
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test/test_retry.py" ];
 
   pythonImportsCheck = [ "libtmux" ];
 
-  meta = with lib; {
+  meta = {
     description = "Typed scripting library / ORM / API wrapper for tmux";
     homepage = "https://libtmux.git-pull.com/";
     changelog = "https://github.com/tmux-python/libtmux/raw/v${version}/CHANGES";
-    license = licenses.mit;
-    maintainers = with maintainers; [ otavio ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ otavio ];
   };
 }

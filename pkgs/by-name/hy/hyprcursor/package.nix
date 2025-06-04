@@ -1,30 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, cairo
-, hyprlang
-, librsvg
-, libzip
-, tomlplusplus
-, nix-update-script
+{
+  lib,
+  gcc14Stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  cairo,
+  hyprlang,
+  librsvg,
+  libzip,
+  xcur2png,
+  tomlplusplus,
+  nix-update-script,
 }:
-stdenv.mkDerivation (finalAttrs: {
+gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprcursor";
-  version = "0.1.9";
+  version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprcursor";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-FIN1wMoyePBTtibCbaeJaoKNLuAYIGwLCWAYC1DJanw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IvneQb4YFlEXWjXaKeA0y6lL7Z6JqTAvSAlcMDWnjK4=";
   };
-
-  patches = [
-    # fix icon directories system search path
-    "${finalAttrs.src}/nix/dirs.patch"
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -36,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     hyprlang
     librsvg
     libzip
+    xcur2png
     tomlplusplus
   ];
 
@@ -52,7 +50,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Hyprland cursor format, library and utilities";
     changelog = "https://github.com/hyprwm/hyprcursor/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ iynaix ];
+    maintainers = with lib.maintainers; [
+      iynaix
+    ];
+    teams = [ lib.teams.hyprland ];
     mainProgram = "hyprcursor-util";
     platforms = lib.platforms.linux;
   };

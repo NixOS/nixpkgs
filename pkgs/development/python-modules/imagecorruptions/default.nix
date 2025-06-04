@@ -5,7 +5,7 @@
   numpy,
   scikit-image,
   lib,
-  opencv4,
+  opencv-python,
 }:
 
 buildPythonPackage rec {
@@ -18,14 +18,12 @@ buildPythonPackage rec {
     sha256 = "044e173f24d5934899bdbf3596bfbec917e8083e507eed583ab217abebbe084d";
   };
 
-  pythonRemoveDeps = [ "opencv-python" ];
-
   build-system = [ setuptools ];
 
   dependencies = [
     numpy
     scikit-image
-    opencv4
+    opencv-python
   ];
 
   doCheck = false;

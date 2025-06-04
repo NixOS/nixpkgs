@@ -17,20 +17,23 @@ let
     "aarch64-darwin" = "macosx_11_0_arm64";
   };
   hashes = {
-    "310-x86_64-linux" = "sha256-oB68FjYzmRARWpbajQuLpAzWwg9CCji4tLZRFCsztjk=";
-    "311-x86_64-linux" = "sha256-kGEecBu7b3TFGUIRirI9q2W3nipiQwsh/1OB92RqDB4=";
-    "312-x86_64-linux" = "sha256-Vw8sT5kahSN20BQs3MOYesSUZqk4CuvfZR1z5nAO7g8=";
-    "310-aarch64-linux" = "sha256-Ocfg3VArM/14a06cpMuJDYP/MIo9rCvtFO4Cd3AahA4=";
-    "311-aarch64-linux" = "sha256-hegFeV3m0jpjTXNU6ue/3kGe1Cy+Pfeh4GDe96dvL7o=";
-    "312-aarch64-linux" = "sha256-O0VVtSqSEd4dqjmaXMTRvf/Bcc9YR7zzbz9N/8GVcXk=";
-    "310-aarch64-darwin" = "sha256-2vuVxmJMx/GeaHgzUS6rRdysQFHreVzZ5IT5YSDUJro=";
-    "311-aarch64-darwin" = "sha256-0xRVDSDE9upz2yU7mzpa3Y6l6M5FWOMAPKWBC8eY3Eo=";
-    "312-aarch64-darwin" = "sha256-i2TmLOl2aHD5iyzF6YpjbHKFmBGPx5ixPYyNKKQfRNM=";
+    "310-x86_64-linux" = "sha256-GmzcxS5LhB0j5Qovoo4Bbm2fYdbqkYjUVV6hibBAoPY=";
+    "311-x86_64-linux" = "sha256-NzVYuAPYwsV/xhOxEAeuWBOfGaPN3UQ6DeXXtTIeWWE=";
+    "312-x86_64-linux" = "sha256-ztVDC836f8s6a9xEczF2FYy4d7Nb3SM8rILiW0zJTpI=";
+    "313-x86_64-linux" = "sha256-UrVG8Hayw78hfGDwXeQSTMEZfOkvjoJufsc64yQHSlo=";
+    "310-aarch64-linux" = "sha256-lQQbVaLshtH2aQUS0Yg1gbGPL09Gw9l4lK6wrC22r38=";
+    "311-aarch64-linux" = "sha256-ZcOhoqNaG1N0A/NkA9JYyqtHflZLwPZBCblBzHe08gM=";
+    "312-aarch64-linux" = "sha256-h6l6NLBHXdx9KvxA5d1/jRJSKqge37zMs5Yoz1kUVNU=";
+    "313-aarch64-linux" = "sha256-YnbiebRetdm5XE3z55ViVfQU/UsSjS3hbYrs3obDY1c";
+    "310-aarch64-darwin" = "sha256-uWG7u3ocakjkwUBqmMrr60AEYeLnWgi23wwBMpQDehU=";
+    "311-aarch64-darwin" = "sha256-9A5zvNwzPfs/f+D88CO8vsQVM8mFZldxj/duzhoZAuA=";
+    "312-aarch64-darwin" = "sha256-06JP62GV8cIiFillwBB8n/VtMizKI+GfDmZjb264DxQ=";
+    "313-aarch64-darwin" = "sha256-3ohD+zRiiZ3nvN7qzLkjA6nWEAa8NjZN60qI30YyC6Q=";
   };
 in
 buildPythonPackage rec {
   pname = "tensorstore";
-  version = "0.1.65";
+  version = "0.1.71";
   format = "wheel";
 
   # The source build involves some wonky Bazel stuff.

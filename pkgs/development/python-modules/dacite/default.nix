@@ -15,8 +15,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "konradhalas";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "dacite";
+    tag = "v${version}";
     hash = "sha256-lvObQ+jyBH2s4GOwyDXEAYmG7ZGQN9WDqL8ftNItPCQ=";
   };
 

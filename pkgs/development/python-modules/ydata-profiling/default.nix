@@ -1,54 +1,65 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, dacite
-, htmlmin
-, imagehash
-, jinja2
-, matplotlib
-, multimethod
-, numba
-, numpy
-, pandas
-, phik
-, pyarrow
-, pydantic
-, pyyaml
-, requests
-, scipy
-, seaborn
-, statsmodels
-, tqdm
-, typeguard
-, visions
-, wordcloud
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  dacite,
+  htmlmin,
+  imagehash,
+  jinja2,
+  matplotlib,
+  multimethod,
+  numba,
+  numpy,
+  pandas,
+  phik,
+  pyarrow,
+  pydantic,
+  pyyaml,
+  requests,
+  scipy,
+  setuptools,
+  setuptools-scm,
+  seaborn,
+  statsmodels,
+  tqdm,
+  typeguard,
+  visions,
+  wordcloud,
 }:
 
 buildPythonPackage rec {
   pname = "ydata-profiling";
-  version = "4.10.0";
+  version = "4.16.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ydataai";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-uB8E7qp1xohAdcIIt1T2DxwSu93XhJoI8/qn54fSvGY=";
+    repo = "ydata-profiling";
+    tag = "v${version}";
+    hash = "sha256-gmMEW1aAwBar/xR22Wm98hbjP20ty3idvxfqCJ1uRGM=";
   };
 
   preBuild = ''
     echo ${version} > VERSION
   '';
 
-  pythonRelaxDeps = [
-    "scipy"
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "imagehash"
+    "matplotlib"
+    "multimethod"
+    "numpy"
+  ];
+
+  dependencies = [
     dacite
     htmlmin
     imagehash
@@ -64,6 +75,7 @@ buildPythonPackage rec {
     requests
     scipy
     seaborn
+    setuptools
     statsmodels
     tqdm
     typeguard
@@ -72,9 +84,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     pyarrow
+    pytestCheckHook
   ];
+
   disabledTestPaths = [
     # needs Spark:
     "tests/backends/spark_backend"
@@ -84,6 +97,7 @@ buildPythonPackage rec {
     "tests/unit/test_dataset_schema.py"
     "tests/unit/test_modular.py"
   ];
+
   disabledTests = [
     # try to download data:
     "test_decorator"
@@ -92,16 +106,14 @@ buildPythonPackage rec {
     "test_urls"
   ];
 
-  pythonImportsCheck = [
-    "ydata_profiling"
-  ];
+  pythonImportsCheck = [ "ydata_profiling" ];
 
-  meta = with lib; {
+  meta = {
     description = "Create HTML profiling reports from Pandas DataFrames";
     homepage = "https://ydata-profiling.ydata.ai";
-    changelog = "https://github.com/ydataai/ydata-profiling/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    changelog = "https://github.com/ydataai/ydata-profiling/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
     mainProgram = "ydata_profiling";
   };
 }

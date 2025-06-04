@@ -12,21 +12,22 @@
   pytestCheckHook,
   pythonOlder,
   pyyaml,
+  setuptools,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "aws-sam-translator";
-  version = "1.89.0";
-  format = "setuptools";
+  version = "1.95.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "serverless-application-model";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-wqM3n99lD0s/E9nd55q19Us31XgFtU/bBYJR1HTnnvk=";
+    tag = "v${version}";
+    hash = "sha256-Gz2lU/8QtcU02JYWsz3l9EqJajusr3h2LiTtFdwNc1k=";
   };
 
   postPatch = ''
@@ -34,7 +35,9 @@ buildPythonPackage rec {
     rm pytest.ini
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     boto3
     jsonschema
     pydantic
@@ -86,7 +89,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to transform SAM templates into AWS CloudFormation templates";
     homepage = "https://github.com/aws/serverless-application-model";
-    changelog = "https://github.com/aws/serverless-application-model/releases/tag/v${version}";
+    changelog = "https://github.com/aws/serverless-application-model/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = [ ];
   };

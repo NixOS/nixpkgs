@@ -18,16 +18,16 @@
 
 buildPythonPackage rec {
   pname = "hishel";
-  version = "0.0.33";
+  version = "0.1.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "karpetrosyan";
     repo = "hishel";
-    rev = "refs/tags/${version}";
-    hash = "sha256-zi+13X7u2pk9w2EoYjfl3/Y8O5hHpA0wZx3sSv2vU6U=";
+    tag = version;
+    hash = "sha256-EaVE70lzjvMqMJlXObz450FwunaPZv86kJCKgI174a8=";
   };
 
   build-system = [
@@ -67,7 +67,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "HTTP Cache implementation for HTTPX and HTTP Core";
     homepage = "https://github.com/karpetrosyan/hishel";
-    changelog = "https://github.com/karpetrosyan/hishel/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/karpetrosyan/hishel/blob/${src.tag}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };

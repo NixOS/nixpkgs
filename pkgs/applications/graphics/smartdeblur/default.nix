@@ -1,5 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, fftw
-, qtbase, qmake, wrapQtAppsHook }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fftw,
+  libsForQt5,
+}:
 
 stdenv.mkDerivation rec {
   pname = "smartdeblur";
@@ -14,8 +19,14 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${src.name}/src";
 
-  nativeBuildInputs = [ qmake wrapQtAppsHook ];
-  buildInputs = [ qtbase fftw ];
+  nativeBuildInputs = [
+    libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
+  ];
+  buildInputs = [
+    libsForQt5.qtbase
+    fftw
+  ];
 
   installPhase = ''
     runHook preInstall

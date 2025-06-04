@@ -11,13 +11,13 @@
   geocoder,
   numpy,
   onnx,
-  pyyaml,
-  requests,
-  tqdm,
   pandas,
   protobuf,
   py-machineid,
   pydantic,
+  pyyaml,
+  requests,
+  tqdm,
 
   # checks
   matplotlib,
@@ -32,26 +32,29 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "neuralmagic";
     repo = "sparsezoo";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-c4F95eVvj673eFO/rbmv4LY3pGmqo+arbsYqElznwdA=";
   };
 
   build-system = [ setuptools ];
 
-  pythonRelaxDeps = [ "onnx" ];
+  pythonRelaxDeps = [
+    "numpy"
+    "onnx"
+  ];
 
   dependencies = [
     click
     geocoder
     numpy
     onnx
-    pyyaml
-    requests
-    tqdm
     pandas
     protobuf
     py-machineid
     pydantic
+    pyyaml
+    requests
+    tqdm
   ];
 
   pythonImportsCheck = [ "sparsezoo" ];

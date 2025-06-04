@@ -1,49 +1,36 @@
-{ stdenv
-, lib
-, requireFile
-, wrapQtAppsHook
-, autoPatchelfHook
-, unixtools
-, fakeroot
-, mailcap
-, libGL
-, libpulseaudio
-, alsa-lib
-, nss
-, gd
-, gst_all_1
-, nspr
-, expat
-, fontconfig
-, dbus
-, glib
-, zlib
-, openssl
-, libdrm
-, cups
-, avahi-compat
-, xorg
-, wayland
-, libudev0-shim
-, bubblewrap
-, libjpeg8
-, gdk-pixbuf
-, gtk3
-, pango
-  # Qt 6 subpackages
-, qtbase
-, qtserialport
-, qtserialbus
-, qtvirtualkeyboard
-, qtmultimedia
-, qt3d
-, mlt
-, qtlocation
-, qtwebengine
-, qtquick3d
-, qtwayland
-, qtwebview
-, qtscxml
+{
+  stdenv,
+  lib,
+  requireFile,
+  autoPatchelfHook,
+  unixtools,
+  fakeroot,
+  mailcap,
+  libGL,
+  libpulseaudio,
+  alsa-lib,
+  nss,
+  gd,
+  gst_all_1,
+  nspr,
+  expat,
+  fontconfig,
+  dbus,
+  glib,
+  zlib,
+  openssl,
+  libdrm,
+  cups,
+  avahi-compat,
+  xorg,
+  wayland,
+  libudev0-shim,
+  bubblewrap,
+  libjpeg8,
+  gdk-pixbuf,
+  gtk3,
+  pango,
+  qt6Packages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -67,69 +54,71 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     unixtools.script
     fakeroot
-    wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
     autoPatchelfHook
     mailcap
     libudev0-shim
     bubblewrap
   ];
 
-  buildInputs = [
-    stdenv.cc.cc.lib
-    stdenv.cc
-    libGL
-    libpulseaudio
-    alsa-lib
-    nss
-    gd
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    nspr
-    expat
-    fontconfig
-    dbus
-    glib
-    zlib
-    openssl
-    libdrm
-    wayland
-    cups
-    avahi-compat
-    libjpeg8
-    gdk-pixbuf
-    gtk3
-    pango
-    # Qt stuff
-    qt3d
-    mlt
-    qtbase
-    #qtgamepad
-    qtserialport
-    qtserialbus
-    qtvirtualkeyboard
-    qtmultimedia
-    qtlocation
-    qtwebengine
-    qtquick3d
-    qtwayland
-    qtwebview
-    qtscxml
-  ] ++ (with xorg; [
-    libX11
-    libXdamage
-    xrandr
-    libXtst
-    libXcomposite
-    libXext
-    libXfixes
-    libXrandr
-    libxkbfile
-  ]);
+  buildInputs =
+    [
+      (lib.getLib stdenv.cc.cc)
+      stdenv.cc
+      libGL
+      libpulseaudio
+      alsa-lib
+      nss
+      gd
+      gst_all_1.gstreamer
+      gst_all_1.gst-plugins-base
+      nspr
+      expat
+      fontconfig
+      dbus
+      glib
+      zlib
+      openssl
+      libdrm
+      wayland
+      cups
+      avahi-compat
+      libjpeg8
+      gdk-pixbuf
+      gtk3
+      pango
+      # Qt stuff
+      qt6Packages.qt3d
+      qt6Packages.mlt
+      qt6Packages.qtbase
+      #qtgamepad
+      qt6Packages.qtserialport
+      qt6Packages.qtserialbus
+      qt6Packages.qtvirtualkeyboard
+      qt6Packages.qtmultimedia
+      qt6Packages.qtlocation
+      qt6Packages.qtwebengine
+      qt6Packages.qtquick3d
+      qt6Packages.qtwayland
+      qt6Packages.qtwebview
+      qt6Packages.qtscxml
+    ]
+    ++ (with xorg; [
+      libX11
+      libXdamage
+      xrandr
+      libXtst
+      libXcomposite
+      libXext
+      libXfixes
+      libXrandr
+      libxkbfile
+    ]);
 
   postPatch = ''
     patchelf ./installer \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath ${stdenv.cc.cc.lib}/lib
+      --set-rpath ${lib.getLib stdenv.cc.cc}/lib
   '';
 
   dontConfigure = true;

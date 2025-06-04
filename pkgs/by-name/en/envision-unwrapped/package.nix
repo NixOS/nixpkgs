@@ -1,5 +1,6 @@
 {
   appstream-glib,
+  applyPatches,
   cairo,
   cargo,
   desktop-file-utils,
@@ -25,29 +26,35 @@
   rustc,
   stdenv,
   vte-gtk4,
+  versionCheckHook,
   wrapGAppsHook4,
   zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "envision-unwrapped";
-  version = "0-unstable-2024-09-28";
+  version = "2.0.1";
 
   src = fetchFromGitLab {
     owner = "gabmus";
     repo = "envision";
-    rev = "56d500a9f914ce2ddad038223711192e4d1dcbe1";
-    hash = "sha256-8wU2sjhH026l6a11XZ5Qdu5x/EbI+ZqwE7AixsYMCFk=";
+    rev = finalAttrs.version;
+    hash = "sha256-J1zctfFOyu+uLpctTiAe5OWBM7nXanzQocTGs1ToUMA=";
   };
+
+  patches = [
+    ./support-headless-cli.patch
+  ];
 
   strictDeps = true;
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libmonado-rs-0.1.0" = "sha256-xztevBUaYBm5G3A0ZTb+3GV3g1IAU3SzfSS5BBqfp1Y=";
-      "openxr-0.18.0" = "sha256-ktkbhmExstkNJDYM/HYOwAwv3acex7P9SP0KMAOKhQk=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version;
+    # TODO: Use srcOnly instead
+    src = applyPatches {
+      inherit (finalAttrs) src patches;
     };
+    hash = "sha256-O3+urY2FlnHfxoJLn4iehnVWf1Y0uATEteyQVnZLxTQ=";
   };
 
   nativeBuildInputs = [
@@ -79,18 +86,29 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
+  # FIXME: error when running `env -i envision`:
+  # "HOME env var not defined: NotPresent"
+  doInstallCheck = false;
+  versionCheckProgram = "${placeholder "out"}/bin/envision";
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
   postInstall = ''
     wrapProgram $out/bin/envision \
       --prefix PATH : "${lib.makeBinPath [ gdb ]}"
   '';
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=main" ]; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "UI for building, configuring and running Monado, the open source OpenXR runtime";
     homepage = "https://gitlab.com/gabmus/envision";
     license = lib.licenses.agpl3Only;
     mainProgram = "envision";
+    # More maintainers needed!
+    # envision (wrapped) requires frequent updates to the dependency list;
+    # the more people that can help with this, the better.
     maintainers = with lib.maintainers; [
       pandapip1
       Scrumplex

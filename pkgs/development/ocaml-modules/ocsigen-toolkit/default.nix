@@ -1,18 +1,35 @@
-{ stdenv, lib, fetchFromGitHub, ocaml, findlib, opaline
-, calendar, eliom, js_of_ocaml-ppx_deriving_json
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  ocaml,
+  findlib,
+  opaline,
+  calendar,
+  eliom,
+  js_of_ocaml-ppx_deriving_json,
 }:
 
 stdenv.mkDerivation rec {
- pname = "ocsigen-toolkit";
- name = "ocaml${ocaml.version}-${pname}-${version}";
- version = "3.3.4";
+  pname = "ocsigen-toolkit";
+  name = "ocaml${ocaml.version}-${pname}-${version}";
+  version = "4.1.0";
 
- propagatedBuildInputs = [ calendar js_of_ocaml-ppx_deriving_json eliom ];
- nativeBuildInputs = [ ocaml findlib opaline eliom ];
+  propagatedBuildInputs = [
+    calendar
+    js_of_ocaml-ppx_deriving_json
+    eliom
+  ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    opaline
+    eliom
+  ];
 
- strictDeps = true;
+  strictDeps = true;
 
- installPhase = ''
+  installPhase = ''
     runHook preInstall
     mkdir -p $OCAMLFIND_DESTDIR
     export OCAMLPATH=$out/lib/ocaml/${ocaml.version}/site-lib/:$OCAMLPATH
@@ -25,7 +42,7 @@ stdenv.mkDerivation rec {
     owner = "ocsigen";
     repo = pname;
     rev = version;
-    hash = "sha256-6ccu8WJxUwpR5YyB4j1jQPWba8GhQDxuw+IDHswQpSA=";
+    hash = "sha256-1kw2HANajHDdMmjuYNB79ZDqy2Ml02nc5s+cJzIoxQ8=";
   };
 
   meta = {
@@ -35,6 +52,5 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.gal_bolle ];
     inherit (ocaml.meta) platforms;
   };
-
 
 }

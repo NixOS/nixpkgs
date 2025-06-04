@@ -17,7 +17,7 @@
   rpm,
   zchunk,
   cppunit,
-  python,
+  python3,
   swig,
   pcre2,
   sphinx,
@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libdnf";
-  version = "0.73.3";
+  version = "0.74.0";
 
   outputs = [
     "out"
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-XzPpjnmL2wwLZnLAJLuOQGWXAoCJnij14P6qSXglMhY=";
+    tag = version;
+    hash = "sha256-NAnE8VPz2j7h/gB1A4FDwG/x7ki7QEmBjcfvOb6/+VY=";
   };
 
   nativeBuildInputs = [
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     libyaml
     libmodulemd
     zchunk
-    python
+    python3
     swig
     sphinx
     pcre2.dev
@@ -80,21 +80,21 @@ stdenv.mkDerivation rec {
     substituteInPlace libdnf/libdnf.pc.in \
       --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
     substituteInPlace cmake/modules/FindPythonInstDir.cmake \
-      --replace "@PYTHON_INSTALL_DIR@" "$out/${python.sitePackages}"
+      --replace "@PYTHON_INSTALL_DIR@" "$out/${python3.sitePackages}"
   '';
 
   cmakeFlags = [
     "-DWITH_GTKDOC=OFF"
     "-DWITH_HTML=OFF"
-    "-DPYTHON_DESIRED=${lib.head (lib.splitString [ "." ] python.version)}"
+    "-DPYTHON_DESIRED=${lib.head (lib.splitString [ "." ] python3.version)}"
   ];
 
   postInstall = ''
-    rm -r $out/${python.sitePackages}/hawkey/test
+    rm -r $out/${python3.sitePackages}/hawkey/test
   '';
 
   postFixup = ''
-    moveToOutput "lib/${python.libPrefix}" "$py"
+    moveToOutput "lib/${python3.libPrefix}" "$py"
   '';
 
   meta = {

@@ -1,4 +1,11 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, pkg-config, pcsclite }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  pcsclite,
+}:
 
 buildGoModule rec {
   pname = "keycard-cli";
@@ -6,7 +13,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "status-im";
-    repo = pname;
+    repo = "keycard-cli";
     rev = version;
     hash = "sha256-K2XxajprpPjfIs8rrnf2coIEQjPnir9/U0fTvqV2++g=";
   };
@@ -16,7 +23,11 @@ buildGoModule rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pcsclite ];
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
 
   meta = with lib; {
     description = "Command line tool and shell to manage keycards";

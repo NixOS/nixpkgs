@@ -1,6 +1,11 @@
-{ lib, stdenv, fetchgit, postgresql }:
+{
+  fetchgit,
+  lib,
+  postgresql,
+  postgresqlBuildExtension,
+}:
 
-stdenv.mkDerivation rec {
+postgresqlBuildExtension {
   pname = "smlar-unstable";
   version = "2021-11-08";
 
@@ -10,21 +15,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-AC6w7uYw0OW70pQpWbK1A3rkCnMvTJzTCAdFiY3rO7A=";
   };
 
-  buildInputs = [ postgresql ];
-
   makeFlags = [ "USE_PGXS=1" ];
 
-  installPhase = ''
-    install -D -t $out/lib *.so
-    install -D -t $out/share/postgresql/extension *.sql
-    install -D -t $out/share/postgresql/extension *.control
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Compute similary of any one-dimensional arrays";
     homepage = "http://sigaev.ru/git/gitweb.cgi?p=smlar.git";
     platforms = postgresql.meta.platforms;
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
+    # Broken with no upstream fix available.
+    broken = lib.versionAtLeast postgresql.version "16";
   };
 }

@@ -3,41 +3,51 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
-  setuptools,
+
+  # build-system
+  hatchling,
+
+  # dependencies
   click,
   docutils,
   itsdangerous,
   jedi,
   markdown,
+  narwhals,
   packaging,
   psutil,
+  pycrdt,
   pygments,
   pymdown-extensions,
+  pyyaml,
   ruff,
   starlette,
   tomlkit,
+  typing-extensions,
   uvicorn,
   websockets,
-  pyyaml,
-  pytestCheckHook,
+
+  # tests
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "marimo";
-  version = "0.9.1";
+  version = "0.13.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
+  # The github archive does not include the static assets
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7sG6i1WusNuCpuaojFXhSfPWCA2/nzHXvMF29ApGTDg=";
+    hash = "sha256-Qsz0SJvWOJ/MH9eIMyBODCBCGC7vp2lzPsq+32tRKU8=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
-  # ruff is not packaged as a python module in nixpkgs
-  pythonRemoveDeps = [ "ruff" ];
+  pythonRelaxDeps = [
+    "pycrdt"
+    "websockets"
+  ];
 
   dependencies = [
     click
@@ -45,29 +55,35 @@ buildPythonPackage rec {
     itsdangerous
     jedi
     markdown
+    narwhals
     packaging
     psutil
+    pycrdt
     pygments
     pymdown-extensions
+    pyyaml
     ruff
     starlette
     tomlkit
     uvicorn
     websockets
-    pyyaml
-  ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
   pythonImportsCheck = [ "marimo" ];
 
-  meta = with lib; {
+  # The pypi archive does not contain tests so we do not use `pytestCheckHook`
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+
+  meta = {
     description = "Reactive Python notebook that's reproducible, git-friendly, and deployable as scripts or apps";
     homepage = "https://github.com/marimo-team/marimo";
     changelog = "https://github.com/marimo-team/marimo/releases/tag/${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "marimo";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       akshayka
       dmadisetti
     ];

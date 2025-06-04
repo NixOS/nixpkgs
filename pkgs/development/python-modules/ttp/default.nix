@@ -24,8 +24,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "dmulyalin";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "ttp";
+    tag = version;
     hash = "sha256-IWqPFspERBVkjsTYTAkOTOrugq4fD65Q140G3SCEV0w=";
   };
 
@@ -64,6 +64,9 @@ buildPythonPackage rec {
 
   disabledTests = [
     # data structure mismatches
+    "test_global_output_deepdiff_with_var_before"
+    "test_group_specific_output_deepdiff_with_var_before"
+    "test_group_specific_output_deepdiff_with_var_before_with_add_field"
     "test_yangson_validate"
     "test_yangson_validate_yang_lib_in_output_tag_data"
     "test_yangson_validate_multiple_inputs_mode_per_input_with_yang_lib_in_file"

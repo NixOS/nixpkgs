@@ -26,11 +26,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-clocks";
-  version = "46.0";
+  version = "48.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-clocks/${lib.versions.major finalAttrs.version}/gnome-clocks-${finalAttrs.version}.tar.xz";
-    hash = "sha256-6qPFeM3O+XVOZotWJnCbc/NSZxAjX0tyB20v9JpPmcc=";
+    hash = "sha256-YW7h+3UwCx8muXZiGelUdRNgyg+g9JExG8+DvzgIfGI=";
   };
 
   nativeBuildInputs = [
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
       - Set timers to properly cook your food
     '';
     mainProgram = "gnome-clocks";
-    maintainers = lib.teams.gnome.members;
+    teams = [ lib.teams.gnome ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };

@@ -58,8 +58,6 @@
   libdvdnav,
   libdvdcss,
   libbluray,
-  # Darwin-specific
-  darwin,
   # GTK
   # NOTE: 2019-07-19: The gtk3 package has a transitive dependency on dbus,
   # which in turn depends on systemd. systemd is not supported on Darwin, so
@@ -87,20 +85,14 @@
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks)
-    AudioToolbox
-    Foundation
-    VideoToolbox
-    ;
-  inherit (darwin) libobjc;
-  version = "1.8.2";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "HandBrake";
     repo = "HandBrake";
     # uses version commit for logic in version.txt
-    rev = "77f199ab02ff2e3bca4ca653e922e9fef67dec43";
-    hash = "sha256-vxvmyo03NcO2Nbjg76JLZqmYw7RiK4FehiB+iE3CgOw=";
+    rev = "e117cfe7fca37abeec59ea4201e5d93ed7477746";
+    hash = "sha256-cOEgFVvBgV0kYnTc7d1CdzoN7mMjd8rxSmc6i/dbRWI=";
   };
 
   # Handbrake maintains a set of ffmpeg patches. In particular, these
@@ -108,11 +100,11 @@ let
   # https://github.com/HandBrake/HandBrake/issues/4029
   # base ffmpeg version is specified in:
   # https://github.com/HandBrake/HandBrake/blob/master/contrib/ffmpeg/module.defs
-  ffmpeg-version = "7.0.2";
+  ffmpeg-version = "7.1";
   ffmpeg-hb =
     (ffmpeg_7-full.override {
       version = ffmpeg-version;
-      hash = "sha256-6bcTxMt0rH/Nso3X7zhrFNkkmWYtxsbUqVQKh25R1Fs=";
+      hash = "sha256-erTkv156VskhYEJWjpWFvHjmcr2hr6qgUi28Ho8NFYk=";
     }).overrideAttrs
       (old: {
         patches = (old.patches or [ ]) ++ [
@@ -120,28 +112,37 @@ let
           "${src}/contrib/ffmpeg/A02-movenc-write-3gpp-track-titl-tag.patch"
           "${src}/contrib/ffmpeg/A03-mov-read-3gpp-udta-tags.patch"
           "${src}/contrib/ffmpeg/A04-movenc-write-3gpp-track-names-tags-for-all-available.patch"
-          "${src}/contrib/ffmpeg/A05-dvdsubdec-fix-processing-of-partial-packets.patch"
-          "${src}/contrib/ffmpeg/A06-dvdsubdec-return-number-of-bytes-used.patch"
-          "${src}/contrib/ffmpeg/A07-dvdsubdec-use-pts-of-initial-packet.patch"
-          "${src}/contrib/ffmpeg/A08-dvdsubdec-do-not-discard-zero-sized-rects.patch"
-          "${src}/contrib/ffmpeg/A09-ccaption_dec-fix-pts-in-real_time-mode.patch"
-          "${src}/contrib/ffmpeg/A10-matroskaenc-aac-extradata-updated.patch"
-          "${src}/contrib/ffmpeg/A11-videotoolbox-disable-H.264-10-bit-on-Intel-macOS.patch"
+          "${src}/contrib/ffmpeg/A05-avformat-mov-add-support-audio-fallback-track-ref.patch"
+          "${src}/contrib/ffmpeg/A06-dvdsubdec-fix-processing-of-partial-packets.patch"
+          "${src}/contrib/ffmpeg/A07-dvdsubdec-return-number-of-bytes-used.patch"
+          "${src}/contrib/ffmpeg/A08-dvdsubdec-use-pts-of-initial-packet.patch"
+          "${src}/contrib/ffmpeg/A09-dvdsubdec-add-an-option-to-output-subtitles-with-emp.patch"
+          "${src}/contrib/ffmpeg/A10-ccaption_dec-fix-pts-in-real_time-mode.patch"
+          "${src}/contrib/ffmpeg/A11-avformat-matroskaenc-return-error-if-aac-extradata-c.patch"
+          "${src}/contrib/ffmpeg/A12-videotoolbox-disable-H.264-10-bit-on-Intel-macOS-it-.patch"
 
           # patch to fix <https://github.com/HandBrake/HandBrake/issues/5011>
           # commented out because it causes ffmpeg's filter-pixdesc-p010le test to fail.
-          # "${src}/contrib/ffmpeg/A12-libswscale-fix-yuv420p-to-p01xle-color-conversion-bu.patch"
+          # "${src}/contrib/ffmpeg/A13-libswscale-fix-yuv420p-to-p01xle-color-conversion-bu.patch"
 
-          "${src}/contrib/ffmpeg/A13-qsv-fix-decode-10bit-hdr.patch"
-          "${src}/contrib/ffmpeg/A14-amfenc-Add-support-for-pict_type-field.patch"
-          "${src}/contrib/ffmpeg/A15-amfenc-Fixes-the-color-information-in-the-ou.patch"
-          "${src}/contrib/ffmpeg/A16-amfenc-HDR-metadata.patch"
-          "${src}/contrib/ffmpeg/A17-av1dec-dovi-rpu.patch"
-          "${src}/contrib/ffmpeg/A18-avformat-mov-add-support-audio-fallback-track-ref.patch"
+          "${src}/contrib/ffmpeg/A14-hevc_mp4toannexb.c-fix-qsv-decode-of-10bit-hdr.patch"
+          "${src}/contrib/ffmpeg/A15-Expose-the-unmodified-Dolby-Vision-RPU-T35-buffers.patch"
+          "${src}/contrib/ffmpeg/A16-avcodec-amfenc-Add-support-for-on-demand-key-frames.patch"
+          "${src}/contrib/ffmpeg/A17-avcodec-amfenc-properly-set-primaries-transfer-and-m.patch"
+          "${src}/contrib/ffmpeg/A18-Revert-avcodec-amfenc-GPU-driver-version-check.patch"
+          "${src}/contrib/ffmpeg/A19-lavc-pgssubdec-Add-graphic-plane-and-cropping.patch"
+          "${src}/contrib/ffmpeg/A28-enable-av1_mf-encoder.patch"
+          "${src}/contrib/ffmpeg/A29-Revert-lavc-Check-codec_whitelist-early-in-avcodec_o.patch"
         ];
       });
 
   x265-hb = x265.overrideAttrs (old: {
+    version = "4.1";
+    sourceRoot = "x265_4.1/source";
+    src = fetchurl {
+      url = "https://bitbucket.org/multicoreware/x265_git/downloads/x265_4.1.tar.gz";
+      hash = "sha256-oxaZxqiYBrdLAVHl5qffZd5LSQUEgv5ev4pDedevjyk=";
+    };
     # nixpkgs' x265 sourceRoot is x265-.../source whereas handbrake's x265 patches
     # are written with respect to the parent directory instead of that source directory.
     # patches which don't cleanly apply are commented out.
@@ -149,12 +150,13 @@ let
       (old.postPatch or "")
       + ''
         pushd ..
-        patch -p1 < ${src}/contrib/x265/A01-threads-priority.patch
-        patch -p1 < ${src}/contrib/x265/A02-threads-pool-adjustments.patch
-        patch -p1 < ${src}/contrib/x265/A03-sei-length-crash-fix.patch
-        patch -p1 < ${src}/contrib/x265/A04-ambient-viewing-enviroment-sei.patch
-        # patch -p1 < ${src}/contrib/x265/A05-memory-leaks.patch
-        # patch -p1 < ${src}/contrib/x265/A06-crosscompile-fix.patch
+        patch -p1 < ${src}/contrib/x265/A01-Do-not-set-thread-priority-on-Windows.patch
+        # patch -p1 < ${src}/contrib/x265/A02-Apple-Silicon-tuning.patch
+        patch -p1 < ${src}/contrib/x265/A03-fix-crash-when-SEI-length-is-variable.patch
+        patch -p1 < ${src}/contrib/x265/A04-implement-ambient-viewing-environment-sei.patch
+        # patch -p1 < ${src}/contrib/x265/A05-Fix-Dolby-Vision-RPU-memory-management.patch
+        # patch -p1 < ${src}/contrib/x265/A06-Simplify-macOS-cross-compilation.patch
+        # patch -p1 < ${src}/contrib/x265/A07-add-new-matrix-coefficients-from-H.273-v3.patch
         popd
       '';
   });
@@ -175,7 +177,6 @@ let
     optional
     optionals
     optionalString
-    versions
     ;
 
   self = stdenv.mkDerivation rec {
@@ -286,12 +287,6 @@ let
         udev
       ]
       ++ optional useFdk fdk_aac
-      ++ optionals stdenv.hostPlatform.isDarwin [
-        AudioToolbox
-        Foundation
-        libobjc
-        VideoToolbox
-      ]
       # NOTE: 2018-12-27: Handbrake supports nv-codec-headers for Linux only,
       # look at ./make/configure.py search "enable_nvenc"
       ++ optional stdenv.hostPlatform.isLinux nv-codec-headers;
@@ -344,7 +339,7 @@ let
       };
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://handbrake.fr/";
       description = "Tool for converting video files and ripping DVDs";
       longDescription = ''
@@ -355,13 +350,13 @@ let
         CLI - `HandbrakeCLI`
         GTK GUI - `ghb`
       '';
-      license = licenses.gpl2Only;
-      maintainers = with maintainers; [
+      license = lib.licenses.gpl2Only;
+      maintainers = with lib.maintainers; [
         Anton-Latukha
         wmertens
       ];
       mainProgram = "HandBrakeCLI";
-      platforms = with platforms; unix;
+      platforms = with lib.platforms; unix;
       broken = stdenv.hostPlatform.isDarwin; # https://github.com/NixOS/nixpkgs/pull/297984#issuecomment-2016503434
     };
   };

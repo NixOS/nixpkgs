@@ -1,35 +1,56 @@
-{ lib, stdenv, fetchFromGitHub, qtbase, qmake, qtwebsockets, minizinc, makeWrapper, Cocoa }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qtbase,
+  qmake,
+  qtwebsockets,
+  minizinc,
+  makeWrapper,
+}:
 
 let
-  executableLoc = if stdenv.hostPlatform.isDarwin then "$out/Applications/MiniZincIDE.app/Contents/MacOS/MiniZincIDE" else "$out/bin/MiniZincIDE";
+  executableLoc =
+    if stdenv.hostPlatform.isDarwin then
+      "$out/Applications/MiniZincIDE.app/Contents/MacOS/MiniZincIDE"
+    else
+      "$out/bin/MiniZincIDE";
 in
 stdenv.mkDerivation rec {
   pname = "minizinc-ide";
-  version = "2.8.6";
+  version = "2.9.3";
 
   src = fetchFromGitHub {
     owner = "MiniZinc";
     repo = "MiniZincIDE";
     rev = version;
-    hash = "sha256-B164KCY06SQRxv4eD9yuCKyGRRrMZfJRuaQ+OEmQC5k=";
+    hash = "sha256-wYS46keOPPQLs0fFeSeb2wz+VX6A1UUGjiGzHZhPxVk=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ qmake makeWrapper ];
-  buildInputs = [ qtbase qtwebsockets ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+  nativeBuildInputs = [
+    qmake
+    makeWrapper
+  ];
+  buildInputs = [
+    qtbase
+    qtwebsockets
+  ];
 
   sourceRoot = "${src.name}/MiniZincIDE";
 
   dontWrapQtApps = true;
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p $out/Applications
-    mv $out/bin/MiniZincIDE.app $out/Applications/
-  '' + ''
-    wrapProgram ${executableLoc} \
-      --prefix PATH ":" ${lib.makeBinPath [ minizinc ]} \
-      --set QT_QPA_PLATFORM_PLUGIN_PATH "${qtbase}/lib/qt-6/plugins/platforms"
-  '';
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p $out/Applications
+      mv $out/bin/MiniZincIDE.app $out/Applications/
+    ''
+    + ''
+      wrapProgram ${executableLoc} \
+        --prefix PATH ":" ${lib.makeBinPath [ minizinc ]} \
+        --set QT_QPA_PLATFORM_PLUGIN_PATH "${qtbase}/lib/qt-6/plugins/platforms"
+    '';
 
   meta = with lib; {
     homepage = "https://www.minizinc.org/";

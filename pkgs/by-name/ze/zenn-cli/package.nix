@@ -35,13 +35,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zenn-cli";
-  version = "0.1.157";
+  version = "0.1.159";
 
   src = fetchFromGitHub {
     owner = "zenn-dev";
     repo = "zenn-editor";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-1+5UaSYtY00F+1oJfovLIBPnmfRnKpIkQHpxb93rO2k=";
+    tag = finalAttrs.version;
+    hash = "sha256-q28XSsGf+Uz+FTRwyu1xg/8bnYxuL6Jt+t3mk0CcWGY=";
     # turborepo requires .git directory
     leaveDotGit = true;
   };
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-FfqBe1WQc6ditizjxYLmjb8mvCjQJMpvyUDdaW29sXY=";
+    hash = "sha256-AjdXclrNl1AHJ4LXq9I5Rk6KGyDaWXW187o2uLwRy/o=";
   };
 
   preBuild =

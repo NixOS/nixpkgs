@@ -7,6 +7,7 @@
   certifi,
   ecs-logging,
   fetchFromGitHub,
+  fetchpatch,
   httpx,
   jinja2,
   jsonschema,
@@ -40,14 +41,21 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "apm-agent-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-S1Ebo9AWN+Mf3OFwxNTiR/AZtje3gNiYkZnVqGb7D4c=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-tests-with-latest-starlette-and-sanic.patch";
+      url = "https://github.com/elastic/apm-agent-python/commit/80d167f54b6bf1db8b6e7ee52e2ac6803bc64f54.patch";
+      hash = "sha256-VtA7+SyEZiL3aqpikyYJQ4tmdmsUpIdkSx6RtC1AzqY=";
+    })
+  ];
 
   pythonRelaxDeps = [ "wrapt" ];
 
   build-system = [ setuptools ];
-
 
   dependencies = [
     aiohttp
@@ -78,7 +86,10 @@ buildPythonPackage rec {
     webob
   ];
 
-  disabledTests = [ "elasticapm_client" ];
+  disabledTests = [
+    "elasticapm_client"
+    "test_get_name_from_func_partialmethod_unbound"
+  ];
 
   disabledTestPaths =
     [

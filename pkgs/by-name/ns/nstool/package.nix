@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jakcron";
     repo = "nstool";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-az6AkBCO7Ew5jK/9qKQ65adwAKYf+H7QEvVI6LCXFS0=";
     fetchSubmodules = true;
   };

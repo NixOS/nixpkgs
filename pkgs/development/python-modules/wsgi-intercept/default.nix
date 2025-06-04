@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cdent";
     repo = "wsgi-intercept";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-hs5yB0+eDlh/pNPaqYIU9C+RBpyrdPOAscQGIoqzmvU=";
   };
 

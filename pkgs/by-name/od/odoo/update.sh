@@ -1,9 +1,15 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p curl gnused nix coreutils nix-prefetch
+# shellcheck shell=bash
 
 set -euo pipefail
 
-VERSION="17.0" # must be incremented manually
+SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+PKG=$(basename "$SCRIPT_DIR")
+
+LATEST="18" # increment manually
+VERSION="${PKG/#odoo}"
+VERSION="${VERSION:-$LATEST}.0"
 
 RELEASE="$(
     curl "https://nightly.odoo.com/$VERSION/nightly/src/" |
@@ -12,15 +18,15 @@ RELEASE="$(
 )"
 
 latestVersion="$VERSION.$RELEASE"
-currentVersion=$(nix-instantiate --eval -E "with import ./. {}; odoo.version or (lib.getVersion odoo)" | tr -d '"')
+currentVersion=$(nix-instantiate --eval -E "with import ./. {}; $PKG.version or (lib.getVersion $PKG)" | tr -d '"')
 
 if [[ "$currentVersion" == "$latestVersion" ]]; then
-    echo "odoo is up-to-date: $currentVersion"
+    echo "$PKG is up-to-date: $currentVersion"
     exit 0
 fi
 
-cd "$(dirname "${BASH_SOURCE[0]}")"
+cd "$SCRIPT_DIR"
 
-sed -ri "s| hash.+ # odoo| hash = \"$(nix-prefetch -q fetchzip --url "https://nightly.odoo.com/${VERSION}/nightly/src/odoo_${latestVersion}.zip")\"; # odoo|g" package.nix
-sed -ri "s|, odoo_version \? .+|, odoo_version ? \"$VERSION\"|" package.nix
-sed -ri "s|, odoo_release \? .+|, odoo_release ? \"$RELEASE\"|" package.nix
+sed -ri "s| hash.+ # odoo| hash = \"$(nix-prefetch -q fetchzip --option extra-experimental-features flakes --url "https://nightly.odoo.com/${VERSION}/nightly/src/odoo_${latestVersion}.zip")\"; # odoo|g" package.nix
+sed -ri "s|odoo_version = .+|odoo_version = \"$VERSION\";|" package.nix
+sed -ri "s|odoo_release = .+|odoo_release = \"$RELEASE\";|" package.nix

@@ -1,31 +1,38 @@
-{ lib
-, python3
-, fetchPypi
-, pandoc
-, git
-, scriv
-, testers
+{
+  lib,
+  python3,
+  fetchPypi,
+  pandoc,
+  git,
+  scriv,
+  testers,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "scriv";
-  version = "1.5.1";
+  version = "1.7.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MK6f+NFE+ODPOUxOHTeVQvGzgjdnZClVtU7EDcALMrY=";
+    hash = "sha256-fBqL5jUdA2kuXnV4Te6g2PEbLJD5G+GLD7OjdVVbUl4=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    attrs
-    click
-    click-log
-    jinja2
-    markdown-it-py
-    requests
-  ] ++ lib.optionals (python3.pythonOlder "3.11") [
-    tomli
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies =
+    with python3.pkgs;
+    [
+      attrs
+      click
+      click-log
+      jinja2
+      markdown-it-py
+      requests
+    ]
+    ++ lib.optionals (python3.pythonOlder "3.11") [
+      tomli
+    ];
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
@@ -42,6 +49,8 @@ python3.pkgs.buildPythonApplication rec {
   disabledTests = [
     # assumes we have checked out the full repo (including remotes)
     "test_real_get_github_repos"
+    # test fails due to a pandoc bug (fixed in pandoc 3.6.4)
+    "test_convert_to_markdown"
   ];
 
   passthru.tests = {

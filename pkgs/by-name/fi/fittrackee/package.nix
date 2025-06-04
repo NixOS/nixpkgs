@@ -1,64 +1,48 @@
 {
   fetchFromGitHub,
-  fetchPypi,
   lib,
   stdenv,
   postgresql,
   postgresqlTestHook,
-  python3,
+  python3Packages,
 }:
-let
-  python = python3.override {
-    self = python;
-    packageOverrides = self: super: {
-      sqlalchemy = super.sqlalchemy_1_4;
-
-      flask-sqlalchemy = super.flask-sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-        version = "3.0.5";
-
-        src = fetchPypi {
-          pname = "flask_sqlalchemy";
-          inherit version;
-          hash = "sha256-xXZeWMoUVAG1IQbA9GF4VpJDxdolVWviwjHsxghnxbE=";
-        };
-      });
-    };
-  };
-
-in
-python.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "fittrackee";
-  version = "0.8.9";
+  version = "0.10.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SamR1";
     repo = "FitTrackee";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-raN6Ef/Z/JbdJDMKBIaBL8nmvFwvuZFX4rfC0ZgWgKI=";
+    tag = "v${version}";
+    hash = "sha256-ZCQ4Ft2TSjS62DmGDpQ7gG5Spnf82v82i5nnZtg1UmA=";
   };
 
   build-system = [
-    python.pkgs.poetry-core
+    python3Packages.poetry-core
   ];
 
   pythonRelaxDeps = [
     "authlib"
+    "flask"
     "flask-limiter"
-    "gunicorn"
-    "pyjwt"
+    "flask-migrate"
+    "nh3"
+    "lxml"
     "pyopenssl"
     "pytz"
     "sqlalchemy"
   ];
 
   dependencies =
-    with python.pkgs;
+    with python3Packages;
     [
       authlib
       babel
       click
       dramatiq
+      dramatiq-abort
+      fitdecode
       flask
       flask-bcrypt
       flask-dramatiq
@@ -68,21 +52,24 @@ python.pkgs.buildPythonApplication rec {
       gpxpy
       gunicorn
       humanize
+      jsonschema
+      nh3
       psycopg2-binary
       pyjwt
       pyopenssl
       pytz
       shortuuid
       sqlalchemy
-      staticmap
+      staticmap3
       ua-parser
+      xmltodict
     ]
     ++ dramatiq.optional-dependencies.redis
     ++ flask-limiter.optional-dependencies.redis;
 
   pythonImportsCheck = [ "fittrackee" ];
 
-  nativeCheckInputs = with python.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     freezegun
     postgresqlTestHook
@@ -102,13 +89,17 @@ python.pkgs.buildPythonApplication rec {
 
   preCheck = ''
     export TMP=$TMPDIR
+    export UI_URL=http://0.0.0.0:5000
   '';
 
   meta = {
     description = "Self-hosted outdoor activity tracker";
     homepage = "https://github.com/SamR1/FitTrackee";
-    changelog = "https://github.com/SamR1/FitTrackee/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/SamR1/FitTrackee/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ traxys ];
+    maintainers = with lib.maintainers; [
+      tebriel
+      traxys
+    ];
   };
 }

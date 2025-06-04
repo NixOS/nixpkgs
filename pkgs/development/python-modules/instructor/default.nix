@@ -2,16 +2,19 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   aiohttp,
   docstring-parser,
+  jinja2,
   jiter,
   openai,
   pydantic,
+  requests,
   rich,
   tenacity,
   typer,
@@ -21,39 +24,38 @@
   diskcache,
   fastapi,
   google-generativeai,
-  jinja2,
   pytest-asyncio,
   pytestCheckHook,
+  python-dotenv,
   redis,
 }:
 
 buildPythonPackage rec {
   pname = "instructor";
-  version = "1.5.0";
+  version = "1.7.9";
   pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jxnl";
     repo = "instructor";
-    rev = "refs/tags/${version}";
-    hash = "sha256-UrLbKDaQu2ioQHqKKS8SdRTpQj+Z0w+bcLrRuZT3DC0=";
+    tag = version;
+    hash = "sha256-3IwvbepDrylOIlL+IteyFChqYc/ZIu6IieIkbAPL+mw=";
   };
 
-  pythonRelaxDeps = [
-    "docstring-parser"
-    "jiter"
-    "pydantic"
-    "tenacity"
-  ];
+  build-system = [ hatchling ];
 
-  build-system = [ poetry-core ];
+  pythonRelaxDeps = [ "rich" ];
 
   dependencies = [
     aiohttp
     docstring-parser
+    jinja2
     jiter
     openai
     pydantic
+    requests
     rich
     tenacity
     typer
@@ -64,9 +66,9 @@ buildPythonPackage rec {
     diskcache
     fastapi
     google-generativeai
-    jinja2
     pytest-asyncio
     pytestCheckHook
+    python-dotenv
     redis
   ];
 
@@ -80,6 +82,14 @@ buildPythonPackage rec {
 
     # Requires unpackaged `vertexai`
     "test_json_preserves_description_of_non_english_characters_in_json_mode"
+
+    # Checks magic values and this fails on Python 3.13
+    "test_raw_base64_autodetect_jpeg"
+    "test_raw_base64_autodetect_png"
+
+    # Performance benchmarks that sometimes fail when running many parallel builds
+    "test_combine_system_messages_benchmark"
+    "test_extract_system_messages_benchmark"
   ];
 
   disabledTestPaths = [
@@ -91,7 +101,7 @@ buildPythonPackage rec {
   meta = {
     description = "Structured outputs for llm";
     homepage = "https://github.com/jxnl/instructor";
-    changelog = "https://github.com/jxnl/instructor/releases/tag/v${version}";
+    changelog = "https://github.com/jxnl/instructor/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mic92 ];
     mainProgram = "instructor";

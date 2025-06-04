@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rom1504";
     repo = "CLIP";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-4A8R9aEiOWC05uhMQslhVSkQ4hyjs6VsqkFi76miodY=";
   };
 
@@ -56,6 +56,6 @@ buildPythonPackage rec {
     description = "Contrastive Language-Image Pretraining";
     homepage = "https://github.com/rom1504/CLIP";
     license = licenses.mit;
-    maintainers = teams.tts.members;
+    teams = [ teams.tts ];
   };
 }

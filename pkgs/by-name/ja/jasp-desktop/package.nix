@@ -1,30 +1,34 @@
 {
   lib,
   stdenv,
+
   fetchFromGitHub,
+
   buildEnv,
   linkFarm,
-  substituteAll,
-  R,
-  rPackages,
+
   cmake,
   ninja,
   pkg-config,
+
   boost,
+  freexl,
   libarchive,
-  readstat,
   qt6,
+  R,
+  readstat,
+  rPackages,
 }:
 
 let
-  version = "0.19.0";
+  version = "0.19.3";
 
   src = fetchFromGitHub {
     owner = "jasp-stats";
     repo = "jasp-desktop";
-    rev = "v${version}";
-    hash = "sha256-G84bmR+40W9RV+OIXYuMmwdEFE0iPMp/wEOcRHYUoj8=";
+    tag = "v${version}";
     fetchSubmodules = true;
+    hash = "sha256-p489Q3jMQ7UWOCdAGskRF9KSLoRSatUwGVfj0/g4aPo=";
   };
 
   moduleSet = import ./modules.nix {
@@ -57,20 +61,19 @@ stdenv.mkDerivation {
   inherit version src;
 
   patches = [
-    # remove unused cmake deps, ensure boost is dynamically linked, patch readstat path
-    (substituteAll {
-      src = ./cmake.patch;
-      inherit readstat;
-    })
+    # - ensure boost is linked dynamically
+    # - fix readstat's find logic
+    # - disable some of the renv logic
+    # - dont't check for dependencies required for building modules
+    ./cmake.patch
   ];
 
   cmakeFlags = [
-    "-DGITHUB_PAT=dummy"
-    "-DGITHUB_PAT_DEF=dummy"
-    "-DINSTALL_R_FRAMEWORK=OFF"
-    "-DLINUX_LOCAL_BUILD=OFF"
-    "-DINSTALL_R_MODULES=OFF"
-    "-DCUSTOM_R_PATH=${customREnv}"
+    (lib.cmakeFeature "GITHUB_PAT" "dummy")
+    (lib.cmakeFeature "GITHUB_PAT_DEF" "dummy")
+    (lib.cmakeBool "LINUX_LOCAL_BUILD" false)
+    (lib.cmakeBool "INSTALL_R_MODULES" false)
+    (lib.cmakeFeature "CUSTOM_R_PATH" "${customREnv}")
   ];
 
   nativeBuildInputs = [
@@ -81,10 +84,12 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    customREnv
     boost
+    customREnv
+    freexl
     libarchive
     readstat
+
     qt6.qtbase
     qt6.qtdeclarative
     qt6.qtwebengine
@@ -92,6 +97,7 @@ stdenv.mkDerivation {
     qt6.qt5compat
   ];
 
+  # needed so that JASPEngine can find libRInside.so
   env.NIX_LDFLAGS = "-L${rPackages.RInside}/library/RInside/lib";
 
   postInstall = ''
@@ -101,7 +107,7 @@ stdenv.mkDerivation {
     # Remove flatpak proxy script
     rm $out/bin/org.jaspstats.JASP
     substituteInPlace $out/share/applications/org.jaspstats.JASP.desktop \
-        --replace-fail "Exec=org.jaspstats.JASP" "Exec=JASP"
+      --replace-fail "Exec=org.jaspstats.JASP" "Exec=JASP"
 
     # symlink modules from the store
     ln -s ${modulesDir} $out/Modules

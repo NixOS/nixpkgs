@@ -1,19 +1,22 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} : {
+{ pkgs, lib, ... }:
+{
   name = "gnome-flashback";
   meta.maintainers = lib.teams.gnome.members ++ [ lib.maintainers.chpatrick ];
 
-  nodes.machine = { nodes, ... }:
+  nodes.machine =
+    { nodes, ... }:
     let
       user = nodes.machine.users.users.alice;
     in
 
-    { imports = [ ./common/user-account.nix ];
+    {
+      imports = [ ./common/user-account.nix ];
 
       services.xserver.enable = true;
 
-      services.xserver.displayManager = {
-        gdm.enable = true;
-        gdm.debug = true;
+      services.displayManager.gdm = {
+        enable = true;
+        debug = true;
       };
 
       services.displayManager.autoLogin = {
@@ -21,17 +24,20 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
         user = user.name;
       };
 
-      services.xserver.desktopManager.gnome.enable = true;
-      services.xserver.desktopManager.gnome.debug = true;
-      services.xserver.desktopManager.gnome.flashback.enableMetacity = true;
+      services.desktopManager.gnome.enable = true;
+      services.desktopManager.gnome.debug = true;
+      services.desktopManager.gnome.flashback.enableMetacity = true;
       services.displayManager.defaultSession = "gnome-flashback-metacity";
     };
 
-  testScript = { nodes, ... }: let
-    user = nodes.machine.users.users.alice;
-    uid = toString user.uid;
-    xauthority = "/run/user/${uid}/gdm/Xauthority";
-  in ''
+  testScript =
+    { nodes, ... }:
+    let
+      user = nodes.machine.users.users.alice;
+      uid = toString user.uid;
+      xauthority = "/run/user/${uid}/gdm/Xauthority";
+    in
+    ''
       with subtest("Login to GNOME Flashback with GDM"):
           machine.wait_for_x()
           machine.wait_until_succeeds('journalctl -t gnome-session-binary --grep "Entering running state"')
@@ -50,4 +56,4 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
           machine.sleep(20)
           machine.screenshot("screen")
     '';
-})
+}

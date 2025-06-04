@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "mbtileserver";
@@ -6,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "consbio";
-    repo = pname;
+    repo = "mbtileserver";
     rev = "v${version}";
     sha256 = "sha256-RLaAhc24zdCFvpSN2LZXNyS1ygg9zCi4jEj8owdreWU=";
   };
@@ -19,6 +23,6 @@ buildGoModule rec {
     homepage = "https://github.com/consbio/mbtileserver";
     changelog = "https://github.com/consbio/mbtileserver/blob/v${version}/CHANGELOG.md";
     license = licenses.isc;
-    maintainers = teams.geospatial.members;
+    teams = [ teams.geospatial ];
   };
 }

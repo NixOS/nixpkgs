@@ -3,21 +3,24 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  curl,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "nbfc-linux";
-  version = "0.2.7";
+  version = "0.3.18";
 
   src = fetchFromGitHub {
     owner = "nbfc-linux";
     repo = "nbfc-linux";
-    rev = "${finalAttrs.version}";
-    hash = "sha256-1tLW/xEh01y8BjVbgIa95DkYWf7CDVSo/lI/1U28Xs8=";
+    tag = "${finalAttrs.version}";
+    hash = "sha256-6TyAhPt/692nd3pQVvcJEarXmUsByPiCXt1TuQBDTMQ=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
+
+  buildInputs = [ curl ];
+
   configureFlags = [
     "--prefix=${placeholder "out"}"
     "--sysconfdir=${placeholder "out"}/etc"
@@ -31,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/nbfc-linux/nbfc-linux";
     license = lib.licenses.gpl3;
-    maintainers = [lib.maintainers.Celibistrial];
+    maintainers = [ lib.maintainers.Celibistrial ];
     mainProgram = "nbfc";
     platforms = lib.platforms.linux;
   };

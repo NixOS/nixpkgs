@@ -1,27 +1,38 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, libtool
-, openssl
-, expat
-, pkg-config
-, check
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libtool,
+  openssl,
+  expat,
+  pkg-config,
+  check,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libstrophe";
-  version = "0.13.1";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "strophe";
-    repo = pname;
+    repo = "libstrophe";
     rev = version;
-    hash = "sha256-JMuvWspgXs+1dVWoo6kJVaf6cVvYj8lhyyu4ZILKeOg=";
+    hash = "sha256-53O8hHyw9y0Bzs+BpGouAxuSGJxh6NSNNWZqi7RHAsY=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ openssl expat libtool check zlib ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    openssl
+    expat
+    libtool
+    check
+    zlib
+  ];
 
   dontDisableStatic = true;
 
@@ -38,9 +49,14 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://strophe.im/libstrophe/";
     changelog = "https://github.com/strophe/libstrophe/blob/${src.rev}/ChangeLog";
-    license = with licenses; [ gpl3Only mit ];
+    license = with licenses; [
+      gpl3Only
+      mit
+    ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ devhell flosse ];
+    maintainers = with maintainers; [
+      devhell
+      flosse
+    ];
   };
 }
-

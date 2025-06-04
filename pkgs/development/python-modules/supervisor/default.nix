@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch,
   mock,
   pytestCheckHook,
   pythonOlder,
@@ -20,6 +21,16 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-NHYbrhojxYGSKBpRFfsH+/IsmwEzwIFmvv/HD+0+vBI=";
   };
+
+  patches = [
+    # adapted from 49b74cafb6e72e0e620e321711c1b81a0823be12
+    ./fix-python313-unittest.patch
+    # Fix SubprocessTests.test_getProcessStateDescription on python 3.13
+    (fetchpatch {
+      url = "https://github.com/Supervisor/supervisor/commit/27efcd59b454e4f3a81e5e1b02ab0d8d0ff2f45f.patch";
+      hash = "sha256-9KNcdRJwnZJA00dDy/mAS7RJuBei60YzVhWkeQgmJ8c=";
+    })
+  ];
 
   propagatedBuildInputs = [ setuptools ];
 

@@ -13,22 +13,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtk6gui";
-  version = "6.0.19";
+  version = "6.0.33";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dtk6gui";
     rev = finalAttrs.version;
-    hash = "sha256-nqwkBMcCQiW4iqYhceTaSNNxoR5tvCNfjKUVVHkzN3A=";
+    hash = "sha256-ZnRhrlgrQ7Vusod2diFwVEVnNGHYNq5Ij12GbW6LXWc=";
   };
 
   patches = [
     ./fix-pkgconfig-path.patch
     ./fix-pri-path.patch
     (fetchpatch {
-      name = "fix-build-on-qt-6.8.patch";
-      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/dtk6gui/-/raw/b6b8521fd69c28dbca5f6e8d1d8258c904b6caf1/qt-6.8.patch";
-      hash = "sha256-Fu5vwvKJGMW94JYoIPvDCeXs8WrAskQlVRX/3FYQFGY=";
+      name = "resolve-compilation-issues-on-Qt-6_9.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/dtk6gui/-/raw/ae64c77a73cdea069579ecf6833be63635237180/qt-6.9.patch";
+      hash = "sha256-45L3ZQ9Hv7tLdDjtazLhVl8XgKBtcHL3CT2nw6GkqgM=";
     })
   ];
 
@@ -47,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     qt6Packages.qtbase
+    qt6Packages.qtwayland
     librsvg
   ];
 
@@ -85,6 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/linuxdeepin/dtk6gui";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.deepin.members;
+    teams = [ lib.teams.deepin ];
   };
 })

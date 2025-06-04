@@ -10,27 +10,41 @@
   openssl,
   libepoxy,
   wrapGAppsHook4,
-  makeDesktopItem,
-  copyDesktopItems,
+  nix-update-script,
   stdenv,
+  meson,
+  ninja,
+  rustc,
+  cargo,
+  dbus,
+  desktop-file-utils,
+  versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+stdenv.mkDerivation rec {
   pname = "tsukimi";
-  version = "0.12.2";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "tsukinaha";
     repo = "tsukimi";
-    rev = "v${version}";
-    hash = "sha256-pJ+SUNGQS/kqBdOg21GgDeZThcjnB0FhgG00qLfqxYA=";
+    tag = "v${version}";
+    hash = "sha256-FmxNOMYHoQK//v4ZGvJ6vIHKYgMfQm7LTwQV9iEFo0A=";
   };
 
-  cargoHash = "sha256-PCJiSyfEgK8inzoRmRvnAU50kLnyVhNrgLrwtBUFpIU=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit src;
+    hash = "sha256-iH7vCZhCN2/gu2EC+YG/LUL9N/HMMnj7qHqXUdrlAh8=";
+  };
 
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook4
-    copyDesktopItems
+    meson
+    ninja
+    rustPlatform.cargoSetupHook
+    rustc
+    cargo
+    desktop-file-utils
   ];
 
   buildInputs =
@@ -40,6 +54,7 @@ rustPlatform.buildRustPackage rec {
       libadwaita
       openssl
       libepoxy
+      dbus
     ]
     ++ (with gst_all_1; [
       gstreamer
@@ -50,34 +65,11 @@ rustPlatform.buildRustPackage rec {
       gst-libav
     ]);
 
-  doCheck = false; # tests require networking
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "Tsukimi";
-      exec = "tsukimi";
-      type = "Application";
-      icon = "tsukimi";
-      categories = [ "AudioVideo" ];
-      startupWMClass = "moe.tsuna.tsukimi";
-      desktopName = "Tsukimi";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace build.rs \
-      --replace-fail 'i18n/locale' "$out/share/locale"
-
-    substituteInPlace src/main.rs \
-      --replace-fail '/usr/share/locale' "$out/share/locale"
-  '';
-
-  postInstall = ''
-    install -Dm644 moe.tsuna.tsukimi.gschema.xml -t $out/share/glib-2.0/schemas
-    glib-compile-schemas $out/share/glib-2.0/schemas
-
-    install -Dm644 resources/ui/icons/tsukimi.png -t $out/share/pixmaps
-  '';
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple third-party Emby client, featured with GTK4-RS, MPV and GStreamer";
@@ -89,8 +81,5 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "tsukimi";
     platforms = lib.platforms.linux;
-    # libmpv2 crate fail to compile
-    # expected raw pointer `*const u8` found raw pointer `*const i8`
-    broken = stdenv.hostPlatform.isAarch64;
   };
 }

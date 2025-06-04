@@ -1,34 +1,27 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
-  llvmPackages,
   nix-update-script,
-  ...
 }:
-rustPlatform.buildRustPackage rec {
+
+rustPlatform.buildRustPackage {
   pname = "nufmt";
-  version = "0-unstable-2024-10-15";
+  version = "0-unstable-2025-04-28";
 
   src = fetchFromGitHub {
     owner = "nushell";
     repo = "nufmt";
-    rev = "37b473be178fd752b5bf421f8b20f48209e9c2ec";
-    hash = "sha256-BrVWw6oklG70UomKDv5IBvoFIjtpajHKV37fh4fnK3E=";
+    rev = "feafe695659c4d5153018a78fad949d088d8a480";
+    hash = "sha256-4FnZIlZWuvSAXMQbdyONNrgIuMxH5Vq3MFbb8J2CnHM=";
   };
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      IOKit
-    ]
-  );
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
+  ];
 
-  env.LIBCLANG_PATH = lib.optionalString stdenv.cc.isClang "${llvmPackages.libclang.lib}/lib";
-
-  cargoHash = "sha256-eKQJanQ9ax5thc2DuO0yIgovor+i5Soylw58I2Y5cHw=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-zS4g/uMh1eOoPo/RZfanL6afCEU5cnyzHrIqkvuQVrg=";
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 

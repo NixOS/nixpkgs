@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchFromBitbucket, cmake, SDL, libGLU, libGL, upx, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromBitbucket,
+  cmake,
+  SDL,
+  libGLU,
+  libGL,
+  libX11,
+  upx,
+  zlib,
+}:
 
 stdenv.mkDerivation {
 
@@ -22,13 +33,25 @@ stdenv.mkDerivation {
   cmakeFlags = [ "-DLIBTCOD_SAMPLES=OFF" ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ SDL libGLU libGL upx zlib ];
+  buildInputs = [
+    SDL
+    libGLU
+    libGL
+    libX11
+    upx
+    zlib
+  ];
+
+  env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
+    "-Wno-error=implicit-int"
+    "-Wno-error=incompatible-pointer-types"
+  ];
 
   meta = {
     description = "API for roguelike games";
     homepage = "http://roguecentral.org/doryen/libtcod/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

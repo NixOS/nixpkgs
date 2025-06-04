@@ -1,28 +1,29 @@
-{ stdenv
-, lib
-, gettext
-, fetchurl
-, vala
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, gtk4
-, libadwaita
-, glib
-, libxml2
-, wrapGAppsHook4
-, itstool
-, gnome
+{
+  stdenv,
+  lib,
+  gettext,
+  fetchurl,
+  vala,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  gtk4,
+  libadwaita,
+  glib,
+  libxml2,
+  wrapGAppsHook4,
+  itstool,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
   pname = "baobab";
-  version = "46.0";
+  version = "48.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/baobab/${lib.versions.major version}/baobab-${version}.tar.xz";
-    hash = "sha256-zk3vXILQVnGlAJ9768+FrJhnXZ2BYNKK2RgbJppy43w=";
+    hash = "sha256-VFklBNSdgH8jWRvn5+7xDGyd/LesUnuBw6zVh4eyb9o=";
   };
 
   nativeBuildInputs = [
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
     mainProgram = "baobab";
     homepage = "https://apps.gnome.org/Baobab/";
     license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.unix;
   };
 }

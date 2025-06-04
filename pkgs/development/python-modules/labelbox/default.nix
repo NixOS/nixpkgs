@@ -10,7 +10,7 @@
   nbconvert,
   nbformat,
   numpy,
-  opencv4,
+  opencv-python-headless,
   pillow,
   pydantic,
   pyproj,
@@ -20,7 +20,6 @@
   pytest-xdist,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
   shapely,
   strenum,
@@ -29,30 +28,62 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
-  pname = "labelbox";
-  version = "5.2.1";
+let
+  version = "6.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Labelbox";
     repo = "labelbox-python";
-    rev = "refs/tags/v.${version}";
-    hash = "sha256-vfhlzkCTm1fhvCpzwAaXWPyXE8/2Yx63fTVHl5CWon4=";
+    tag = "v.${version}";
+    hash = "sha256-EstHsY9yFeUhQAx3pgvKk/o3EMkr3JeHDDg/p6meDIE=";
   };
+
+  lbox-clients = buildPythonPackage {
+    inherit src version pyproject;
+
+    pname = "lbox-clients";
+
+    sourceRoot = "${src.name}/libs/lbox-clients";
+
+    build-system = [ hatchling ];
+
+    postPatch = ''
+      substituteInPlace pyproject.toml \
+        --replace "--durations=20 --cov=lbox.example" "--durations=20"
+    '';
+
+    dependencies = [
+      google-api-core
+      requests
+    ];
+
+    nativeCheckInputs = [
+      pytestCheckHook
+    ];
+
+    doCheck = true;
+
+    __darwinAllowLocalNetworking = true;
+  };
+in
+buildPythonPackage rec {
+  inherit src version pyproject;
+
+  pname = "labelbox";
 
   sourceRoot = "${src.name}/libs/labelbox";
 
-  pythonRelaxDeps = [ "python-dateutil" ];
-
-  pythonRemoveDeps = [ "opencv-python-headless" ];
+  pythonRelaxDeps = [
+    "mypy"
+    "python-dateutil"
+  ];
 
   build-system = [ hatchling ];
 
   dependencies = [
     google-api-core
+    lbox-clients
     pydantic
     python-dateutil
     requests
@@ -67,7 +98,7 @@ buildPythonPackage rec {
       shapely
       numpy
       pillow
-      opencv4
+      opencv-python-headless
       typeguard
       imagesize
       pyproj
@@ -94,13 +125,17 @@ buildPythonPackage rec {
     "tests/unit/test_label_data_type.py"
   ];
 
+  doCheck = true;
+
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "labelbox" ];
 
-  meta = with lib; {
+  meta = {
     description = "Platform API for LabelBox";
     homepage = "https://github.com/Labelbox/labelbox-python";
-    changelog = "https://github.com/Labelbox/labelbox-python/releases/tag/v.${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ rakesh4g ];
+    changelog = "https://github.com/Labelbox/labelbox-python/releases/tag/v.${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ rakesh4g ];
   };
 }

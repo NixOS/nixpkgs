@@ -1,22 +1,23 @@
-{ stdenvNoCC
-, lib
-, fetchurl
-, autoPatchelfHook
-, buildPackages
-, gnome-keyring
-, libsecret
-, git
-, curl
-, nss
-, nspr
-, xorg
-, libdrm
-, alsa-lib
-, cups
-, mesa
-, systemd
-, openssl
-, libglvnd
+{
+  stdenvNoCC,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
+  buildPackages,
+  gnome-keyring,
+  libsecret,
+  git,
+  curl,
+  nss,
+  nspr,
+  xorg,
+  libdrm,
+  alsa-lib,
+  cups,
+  libgbm,
+  systemd,
+  openssl,
+  libglvnd,
 }:
 
 let
@@ -24,22 +25,24 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "github-desktop";
-  version = "3.4.2";
+  version = "3.4.13";
 
   src =
     let
       urls = {
         "x86_64-linux" = {
           url = "https://github.com/shiftkey/desktop/releases/download/release-${finalAttrs.version}-linux${rcversion}/GitHubDesktop-linux-amd64-${finalAttrs.version}-linux${rcversion}.deb";
-          hash = "sha256-qY5rCvOgf1/Z00XZ6yAn6zKdUZ+6l4PCthPU44XLKhc=";
+          hash = "sha256-i1V3dhx5AMrCiWtfvB2I9a6ki2zncUNyYr4qZqs42Yc=";
         };
         "aarch64-linux" = {
           url = "https://github.com/shiftkey/desktop/releases/download/release-${finalAttrs.version}-linux${rcversion}/GitHubDesktop-linux-arm64-${finalAttrs.version}-linux${rcversion}.deb";
-          hash = "sha256-VbPjTz4xYGaVO3uOG6lQNQrVEmx3+H/+y8+r0O55aUg=";
+          hash = "sha256-SN4qtEI4q/AAgfUaBiM5eWyCK5Kr77CrTHsIAmvEceU=";
         };
       };
     in
-    fetchurl urls."${stdenvNoCC.hostPlatform.system}" or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
+    fetchurl
+      urls."${stdenvNoCC.hostPlatform.system}"
+        or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -60,7 +63,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     libdrm
     alsa-lib
     cups
-    mesa
+    libgbm
     openssl
   ];
 
@@ -83,7 +86,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-wayland-ime=true}}"
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libglvnd ]}
     )
   '';

@@ -1,6 +1,7 @@
 {
   lib,
   aiohttp,
+  brotli,
   buildPythonPackage,
   fetchPypi,
   google-auth,
@@ -11,21 +12,25 @@
   pytestCheckHook,
   pythonOlder,
   requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-resumable-media";
-  version = "2.7.1";
-  format = "setuptools";
+  version = "2.7.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-6uRRp7LizbqqD9LrAMyKHuXpXha1VZc1nLw9J9fZDjM=";
+    pname = "google_resumable_media";
+    inherit version;
+    hash = "sha256-UoCu1GKfK2C4R7DUL5hX/Uk1wRryZnRN8z2AdMrpL+A=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-auth
     google-crc32c
   ];
@@ -36,6 +41,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    brotli
     google-cloud-testutils
     mock
     pytest-asyncio

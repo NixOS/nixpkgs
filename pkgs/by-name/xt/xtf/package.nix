@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "xtf";
-  version = "0-unstable-2024-09-13";
+  version = "0-unstable-2025-05-19";
 
   outputs = [
     "out" # xtf-runner and test suite.
@@ -20,8 +20,8 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = "https://xenbits.xenproject.org/git-http/xtf.git";
-    rev = "c9a5e404e70c21c7621db4b8cabdf68261db7e1c";
-    hash = "sha256-FMFbAdgH5KCpocAzUXb7nM3wpn4xs/gk/0M8AUVxXv0=";
+    rev = "419daf21e0685a1c9ca519bb744f4aadf992e007";
+    hash = "sha256-yCBEUd+0c6D5InoO67p1Ip1bi8qpwPG9CKQtXN7pDIg=";
   };
 
   nativeBuildInputs =
@@ -71,7 +71,7 @@ stdenv.mkDerivation {
     description = "Xen Test Framework and Suite for creating microkernel-based tests";
     homepage = "https://xenbits.xenproject.org/docs/xtf/index.html";
     license = lib.licenses.bsd2;
-    maintainers = lib.teams.xen.members;
+    teams = [ lib.teams.xen ];
     mainProgram = "xtf-runner";
     platforms = lib.lists.intersectLists lib.platforms.linux lib.platforms.x86_64;
   };

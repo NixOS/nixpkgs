@@ -1,3 +1,9 @@
+ecmCMakeFlags() {
+    appendToVar cmakeFlags "-DECM_DIR=@out@/share/ECM/cmake"
+}
+
+preConfigureHooks+=(ecmCMakeFlags)
+
 ecmEnvHook() {
     addToSearchPath XDG_DATA_DIRS "$1/share"
     addToSearchPath XDG_CONFIG_DIRS "$1/etc/xdg"
@@ -111,7 +117,7 @@ ecmHostPathHook() {
 
     if [ -d "$1/dbus-1" ]
     then
-        propagatedUserEnvPkgs+=" $1"
+        appendToVar propagatedUserEnvPkgs "$1"
     fi
 }
 addEnvHooks "$targetOffset" ecmHostPathHook

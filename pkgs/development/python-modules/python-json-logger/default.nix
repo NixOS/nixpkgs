@@ -1,29 +1,43 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  freezegun,
   pytestCheckHook,
   pythonAtLeast,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "python-json-logger";
-  version = "2.0.7";
-  format = "setuptools";
+  version = "3.2.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-I+fsAtNCN8WqHimgcBk6Tqh1g7tOf4/QbT3oJkxLLhw=";
+  src = fetchFromGitHub {
+    owner = "nhairs";
+    repo = "python-json-logger";
+    tag = "v${version}";
+    hash = "sha256-dM9/ehPY/BnJSNBq1BiTUpJRigdzbGb3jD8Uhx+hmKc=";
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  build-system = [ setuptools ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.12") [
-    # https://github.com/madzak/python-json-logger/issues/185
-    "test_custom_object_serialization"
-    "test_percentage_format"
-    "test_rename_reserved_attrs"
+  nativeCheckInputs = [
+    freezegun
+    pytestCheckHook
   ];
+
+  disabledTests =
+    lib.optionals (pythonAtLeast "3.12") [
+      # https://github.com/madzak/python-json-logger/issues/185
+      "test_custom_object_serialization"
+      "test_percentage_format"
+      "test_rename_reserved_attrs"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # https://github.com/madzak/python-json-logger/issues/198
+      "test_json_default_encoder_with_timestamp"
+    ];
 
   meta = with lib; {
     description = "Json Formatter for the standard python logger";

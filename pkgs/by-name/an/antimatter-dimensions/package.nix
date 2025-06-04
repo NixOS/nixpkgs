@@ -1,12 +1,13 @@
-{ buildNpmPackage
-, copyDesktopItems
-, electron
-, fetchFromGitHub
-, lib
-, makeDesktopItem
-, unstableGitUpdater
-, writeScriptBin
-, electronAppName ? "Antimatter Dimensions"
+{
+  buildNpmPackage,
+  copyDesktopItems,
+  electron,
+  fetchFromGitHub,
+  lib,
+  makeDesktopItem,
+  unstableGitUpdater,
+  writeScriptBin,
+  electronAppName ? "Antimatter Dimensions",
 }:
 
 let
@@ -18,12 +19,12 @@ let
 in
 buildNpmPackage rec {
   pname = "antimatter-dimensions";
-  version = "0-unstable-2024-08-12";
+  version = "0-unstable-2025-05-08";
   src = fetchFromGitHub {
     owner = "IvarK";
     repo = "AntimatterDimensionsSourceCode";
-    rev = "af840eef45bb2120bff4dcebb9b11c181067f9a8";
-    hash = "sha256-qlgu/Sw3LMn/ZSXJFi0DW6vYAZyF2D3cCpKmXhID3s4=";
+    rev = "7b29fa1c0771b93a8bf8198ca04886167ecffc0b";
+    hash = "sha256-z7dVToxu8qWCPajf0vKprXF4zSBCRDquBgjf55ZPgyE=";
   };
   nativeBuildInputs = [
     copyDesktopItems

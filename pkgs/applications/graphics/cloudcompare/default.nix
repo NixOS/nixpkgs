@@ -1,27 +1,26 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, makeDesktopItem
-, copyDesktopItems
-, cmake
-, boost
-, cgal
-, eigen
-, flann
-, gdal
-, gmp
-, laszip
-, mpfr
-, pcl
-, qtbase
-, qtsvg
-, qttools
-, tbb
-, xercesc
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeDesktopItem,
+  copyDesktopItems,
+  cmake,
+  boost,
+  cgal,
+  eigen,
+  flann,
+  gdal,
+  gmp,
+  laszip,
+  mpfr,
+  pcl,
+  libsForQt5,
+  tbb,
+  xercesc,
+  wrapGAppsHook3,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "cloudcompare";
   version = "2.13.2";
 
@@ -38,6 +37,7 @@ mkDerivation rec {
     eigen # header-only
     wrapGAppsHook3
     copyDesktopItems
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -49,9 +49,9 @@ mkDerivation rec {
     laszip
     mpfr
     pcl
-    qtbase
-    qtsvg
-    qttools
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
+    libsForQt5.qttools
     tbb
     xercesc
   ];
@@ -119,8 +119,15 @@ mkDerivation rec {
       comment = "3D point cloud and mesh processing software";
       exec = "CloudCompare";
       terminal = false;
-      categories = [ "Graphics" "3DGraphics" "Viewer" ];
-      keywords = [ "3d" "processing" ];
+      categories = [
+        "Graphics"
+        "3DGraphics"
+        "Viewer"
+      ];
+      keywords = [
+        "3d"
+        "processing"
+      ];
       icon = "CloudCompare";
     })
     (makeDesktopItem {
@@ -129,8 +136,15 @@ mkDerivation rec {
       comment = "3D point cloud and mesh processing software";
       exec = "ccViewer";
       terminal = false;
-      categories = [ "Graphics" "3DGraphics" "Viewer" ];
-      keywords = [ "3d" "viewer" ];
+      categories = [
+        "Graphics"
+        "3DGraphics"
+        "Viewer"
+      ];
+      keywords = [
+        "3d"
+        "viewer"
+      ];
       icon = "ccViewer";
     })
   ];

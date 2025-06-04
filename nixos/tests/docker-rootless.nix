@@ -1,31 +1,38 @@
 # This test runs docker and checks if simple container starts
-
-import ./make-test-python.nix ({ lib, pkgs, ...} : {
+{ lib, pkgs, ... }:
+{
   name = "docker-rootless";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ abbradar ];
   };
 
   nodes = {
-    machine = { pkgs, ... }: {
-      virtualisation.docker.rootless.enable = true;
+    machine =
+      { pkgs, ... }:
+      {
+        virtualisation.docker.rootless.enable = true;
 
-      users.users.alice = {
-        uid = 1000;
-        isNormalUser = true;
+        users.users.alice = {
+          uid = 1000;
+          isNormalUser = true;
+        };
       };
-    };
   };
 
-  testScript = { nodes, ... }:
+  testScript =
+    { nodes, ... }:
     let
       user = nodes.machine.config.users.users.alice;
       sudo = lib.concatStringsSep " " [
         "XDG_RUNTIME_DIR=/run/user/${toString user.uid}"
         "DOCKER_HOST=unix:///run/user/${toString user.uid}/docker.sock"
-        "sudo" "--preserve-env=XDG_RUNTIME_DIR,DOCKER_HOST" "-u" "alice"
+        "sudo"
+        "--preserve-env=XDG_RUNTIME_DIR,DOCKER_HOST"
+        "-u"
+        "alice"
       ];
-    in ''
+    in
+    ''
       machine.wait_for_unit("multi-user.target")
 
       machine.succeed("loginctl enable-linger alice")
@@ -38,4 +45,4 @@ import ./make-test-python.nix ({ lib, pkgs, ...} : {
       machine.succeed("${sudo} docker ps | grep sleeping")
       machine.succeed("${sudo} docker stop sleeping")
     '';
-})
+}

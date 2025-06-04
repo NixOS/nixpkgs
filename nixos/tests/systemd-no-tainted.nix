@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "systemd-no-tainted";
 
   nodes.machine = { };
@@ -11,4 +12,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         assert "Tainted" not in output
         assert "unmerged-usr" not in output
   '';
-})
+}

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery-storage";
-  version = "2.26.0";
+  version = "2.30.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_bigquery_storage";
     inherit version;
-    hash = "sha256-hAJ1vQpLIHwKyCG8xnQUBv+zte+UD6BQiakOtEA0U/o=";
+    hash = "sha256-QayD+p7dvIIBAhd5hKuS+Le736fZDqZLOgr17LT8o/I=";
   };
 
   build-system = [ setuptools ];

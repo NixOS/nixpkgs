@@ -1,72 +1,104 @@
-{ lib, stdenv, buildGo122Module, fetchFromGitHub, removeReferencesTo
-, tzdata, wire
-, yarn, nodejs, python3, cacert
-, jq, moreutils
-, nix-update-script, nixosTests, xcbuild
-, faketty
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  removeReferencesTo,
+  tzdata,
+  wire,
+  yarn-berry_4,
+  python3,
+  jq,
+  moreutils,
+  nix-update-script,
+  nixosTests,
+  xcbuild,
+  faketty,
 }:
 
-# TODO: Go back to using buildGoModule when upgrading to grafana 11.3.
-buildGo122Module rec {
+let
+  # Grafana seems to just set it to the latest version available
+  # nowadays.
+  # NOTE: sometimes, this is a no-op (i.e. `--replace-fail "X" "X"`).
+  # This is because Grafana raises the Go version above the patch-level we have
+  # on master if a security fix landed in Go (and our go may go through staging first).
+  #
+  # I(Ma27) decided to leave the code a no-op if this is not the case because
+  # pulling it out of the Git history every few months and checking which files
+  # we need to update now is slightly annoying.
+  patchGoVersion = ''
+    find . -name go.mod -not -path "./.bingo/*" -not -path "./.citools/*" -print0 | while IFS= read -r -d ''' line; do
+      substituteInPlace "$line" \
+        --replace-fail "go 1.24.2" "go 1.24.2"
+    done
+    find . -name go.work -print0 | while IFS= read -r -d ''' line; do
+      substituteInPlace "$line" \
+        --replace-fail "go 1.24.2" "go 1.24.2"
+    done
+    substituteInPlace Makefile \
+      --replace-fail "GO_VERSION = 1.24.2" "GO_VERSION = 1.24.2"
+  '';
+in
+buildGoModule rec {
   pname = "grafana";
-  version = "11.2.2+security-01";
+  version = "12.0.0+security-01";
 
-  subPackages = [ "pkg/cmd/grafana" "pkg/cmd/grafana-server" "pkg/cmd/grafana-cli" ];
+  subPackages = [
+    "pkg/cmd/grafana"
+    "pkg/cmd/grafana-server"
+    "pkg/cmd/grafana-cli"
+  ];
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-1ZDX0R3t6CAdIfrYfR373olGL5orSDs2iwriAszl7qk=";
+    hash = "sha256-4i9YHhoneptF72F4zvV+KVUJiP8xfiowPJExQ9iteK4=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
   env = {
     CYPRESS_INSTALL_BINARY = 0;
-  } // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
-    # Fix error: no member named 'aligned_alloc' in the global namespace.
-    # Occurs while building @esfx/equatable@npm:1.0.2 on x86_64-darwin
-    NIX_CFLAGS_COMPILE = "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
+
+    # The build OOMs on memory constrained aarch64 without this
+    NODE_OPTIONS = "--max_old_space_size=4096";
   };
 
-  offlineCache = stdenv.mkDerivation {
-    name = "${pname}-${version}-yarn-offline-cache";
-    inherit src env;
-    nativeBuildInputs = [
-      yarn nodejs cacert
-      jq moreutils python3
-    # @esfx/equatable@npm:1.0.2 fails to build on darwin as it requires `xcbuild`
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
-    buildPhase = ''
-      runHook preBuild
-      export HOME="$(mktemp -d)"
-      yarn config set enableTelemetry 0
-      yarn config set cacheFolder $out
-      yarn config set --json supportedArchitectures.os '[ "linux", "darwin" ]'
-      yarn config set --json supportedArchitectures.cpu '["arm", "arm64", "ia32", "x64"]'
-      yarn
-      runHook postBuild
-    '';
-    dontConfigure = true;
-    dontInstall = true;
-    dontFixup = true;
-    outputHashMode = "recursive";
-    outputHash = rec {
-      x86_64-linux = "sha256-rz/IP6wi4VKWgO8P4Mov3oviwsDe5iBSKamArVR/+T0=";
-      aarch64-linux = x86_64-linux;
-      aarch64-darwin = "sha256-9J9wD8nJ4JEUKroxCEBYZytywzjGkGhujdj9FcNe0rM=";
-      x86_64-darwin = aarch64-darwin;
-    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  missingHashes = ./missing-hashes.json;
+  offlineCache = yarn-berry_4.fetchYarnBerryDeps {
+    inherit src missingHashes;
+    hash = "sha256-yLrGllct+AGG/u/E2iX2gog1d/iKNfkYu6GV6Pw6nuc=";
   };
 
   disallowedRequisites = [ offlineCache ];
 
-  vendorHash = "sha256-shQ39N9YxksfzHDgHx3qjLbZfv5D1+sqtpALI0hCK3U=";
+  postPatch = patchGoVersion;
+
+  vendorHash = "sha256-dpLcU4ru/wIsxwYAI1qROtYwHJ2WOJSZpIhd9/qMwZo=";
 
   proxyVendor = true;
 
-  nativeBuildInputs = [ wire yarn jq moreutils removeReferencesTo python3 faketty ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
+  nativeBuildInputs = [
+    wire
+    jq
+    moreutils
+    removeReferencesTo
+    # required to run old node-gyp
+    (python3.withPackages (ps: [ ps.distutils ]))
+    faketty
+    yarn-berry_4
+    yarn-berry_4.yarnBerryConfigHook
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
+
+  # We have to remove this setupHook, otherwise it also runs in the `goModules`
+  # derivation and fails because `offlineCache` is missing there.
+  overrideModAttrs = (
+    old: {
+      nativeBuildInputs = lib.filter (
+        x: lib.getName x != (lib.getName yarn-berry_4.yarnBerryConfigHook)
+      ) old.nativeBuildInputs;
+    }
+  );
 
   postConfigure = ''
     # Generate DI code that's required to compile the package.
@@ -76,22 +108,7 @@ buildGo122Module rec {
 
     GOARCH= CGO_ENABLED=0 go generate ./kinds/gen.go
     GOARCH= CGO_ENABLED=0 go generate ./public/app/plugins/gen.go
-    # Setup node_modules
-    export HOME="$(mktemp -d)"
 
-    # Help node-gyp find Node.js headers
-    # (see https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/javascript.section.md#pitfalls-javascript-yarn2nix-pitfalls)
-    mkdir -p $HOME/.node-gyp/${nodejs.version}
-    echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
-    ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
-    export npm_config_nodedir=${nodejs}
-
-    yarn config set enableTelemetry 0
-    yarn config set cacheFolder $offlineCache
-    yarn install --immutable-cache
-
-    # The build OOMs on memory constrained aarch64 without this
-    export NODE_OPTIONS=--max_old_space_size=4096
   '';
 
   postBuild = ''
@@ -103,7 +120,9 @@ buildGo122Module rec {
   '';
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version}"
+    "-s"
+    "-w"
+    "-X main.version=${version}"
   ];
 
   # Tests start http servers which need to bind to local addresses:
@@ -136,8 +155,20 @@ buildGo122Module rec {
     description = "Gorgeous metric viz, dashboards & editors for Graphite, InfluxDB & OpenTSDB";
     license = licenses.agpl3Only;
     homepage = "https://grafana.com";
-    maintainers = with maintainers; [ offline fpletz willibutz globin ma27 Frostman ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
+    maintainers = with maintainers; [
+      offline
+      fpletz
+      willibutz
+      globin
+      ma27
+      Frostman
+    ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     mainProgram = "grafana-server";
   };
 }

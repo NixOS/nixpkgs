@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   gdb,
+  isPyPy,
   ncurses,
   numpy,
   pkg-config,
@@ -15,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "cython";
-  version = "3.0.11";
+  version = "3.0.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cython";
     repo = "cython";
-    rev = version;
-    hash = "sha256-ZyDNv95eS9YrVHIh5C/Xq8OvfX1cnI3f9GjA+OfaONA=";
+    tag = version;
+    hash = "sha256-clJXjQb6rVECirKRUGX0vD5a6LILzPwNo7+6KKYs2pI=";
   };
 
   build-system = [
@@ -36,7 +37,9 @@ buildPythonPackage rec {
     ncurses
   ];
 
-  env.LC_ALL = "en_US.UTF-8";
+  env = lib.optionalAttrs (!isPyPy) {
+    LC_ALL = "en_US.UTF-8";
+  };
 
   # https://github.com/cython/cython/issues/2785
   # Temporary solution
@@ -118,7 +121,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/cython/cython/blob/${version}/CHANGES.rst";
     license = lib.licenses.asl20;
     mainProgram = "cython";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
   };
 }
 # TODO: investigate recursive loop when doCheck is true

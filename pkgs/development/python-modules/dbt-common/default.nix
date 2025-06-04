@@ -1,42 +1,53 @@
 {
   lib,
-  agate,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  agate,
   colorama,
   deepdiff,
-  fetchPypi,
-  hatchling,
   isodate,
   jinja2,
   jsonschema,
   mashumaro,
   pathspec,
   protobuf,
-  pytest-mock,
-  pytest-xdist,
-  pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
   typing-extensions,
+
+  # tests
+  pytestCheckHook,
+  pytest-mock,
+  pytest-xdist,
 }:
 
 buildPythonPackage rec {
   pname = "dbt-common";
-  version = "1.8.0";
+  version = "1.23.0-unstable-2025-04-21";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    pname = "dbt_common";
-    inherit version;
-    hash = "sha256-ehZ+a3zznnWMY9NJx9LfRtkV1vHiIH0HEhsYWfMbmb4=";
+  src = fetchFromGitHub {
+    owner = "dbt-labs";
+    repo = "dbt-common";
+    rev = "03e09c01f20573975e8e17776a4b7c9088b3f212"; # They don't tag releases
+    hash = "sha256-KqnwlFZZRYuWRflMzjrqCPBnzY9q/pPhceM2DGqz5bw=";
   };
 
   build-system = [ hatchling ];
 
-  pythonRelaxDeps = [ "agate" ];
+  pythonRelaxDeps = [
+    "agate"
+    "deepdiff"
+    # 0.6.x -> 0.7.2 doesn't seem too risky at a glance
+    # https://pypi.org/project/isodate/0.7.2/
+    "isodate"
+    "protobuf"
+  ];
 
   dependencies = [
     agate
@@ -53,13 +64,15 @@ buildPythonPackage rec {
     typing-extensions
   ] ++ mashumaro.optional-dependencies.msgpack;
 
-  # Upstream stopped to tag the source fo rnow
-  doCheck = false;
-
   nativeCheckInputs = [
-    pytest-mock
-    pytest-xdist
     pytestCheckHook
+    pytest-xdist
+    pytest-mock
+  ];
+
+  disabledTests = [
+    # flaky test: https://github.com/dbt-labs/dbt-common/issues/280
+    "TestFindMatching"
   ];
 
   pythonImportsCheck = [ "dbt_common" ];

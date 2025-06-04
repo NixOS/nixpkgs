@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "elastic-transport";
-  version = "8.13.1";
+  version = "8.17.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "elastic-transport-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-zxx5BvqQf5ipaOANKpThWUTsfhDkNMJqUejAWH68wpo=";
+    tag = "v${version}";
+    hash = "sha256-ZCzG7a/SWvUDWiIWwzVfj4JG/w7XUa25yKuuR53XCEQ=";
   };
 
   postPatch = ''
@@ -61,6 +61,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "elastic_transport" ];
 
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
   disabledTests = [
     # Tests require network access
     "fingerprint"
@@ -77,12 +82,13 @@ buildPythonPackage rec {
     "test_debug_logging_no_body"
     "test_httpbin"
     "test_sniffed_nodes_added_to_pool"
+    "test_async_transport_httpbin"
   ];
 
   meta = with lib; {
     description = "Transport classes and utilities shared among Python Elastic client libraries";
     homepage = "https://github.com/elasticsearch/elastic-transport-python";
-    changelog = "https://github.com/elastic/elastic-transport-python/releases/tag/v${version}";
+    changelog = "https://github.com/elastic/elastic-transport-python/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

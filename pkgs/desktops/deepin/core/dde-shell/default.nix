@@ -2,10 +2,10 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   extra-cmake-modules,
   pkg-config,
-  wrapQtAppsHook,
   wayland-scanner,
   dtk6declarative,
   dtk6widget,
@@ -14,25 +14,33 @@
   qt6integration,
   qt6platform-plugins,
   dde-tray-loader,
+  dde-application-manager,
   wayland,
   wayland-protocols,
+  treeland-protocols,
   yaml-cpp,
   xorg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dde-shell";
-  version = "1.0.2";
+  version = "1.0.10";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dde-shell";
     rev = finalAttrs.version;
-    hash = "sha256-I3z6HL1h3qmLfOrwhyLhtSz3og4kHcAdlHJx4+SgPRo=";
+    hash = "sha256-0nyTvSIJglx8raehPi6pYfQcxIjsCAaD1hVbuGvtfY8=";
   };
 
   patches = [
     ./fix-path-for-nixos.diff
+    (fetchpatch {
+      name = "resolve-compilation-issues-on-Qt-6_9.patch";
+      url = "https://github.com/linuxdeepin/dde-shell/commit/936d62a2c20398b9ca6ae28f9101dd288c8b1678.patch";
+      hash = "sha256-u5TcPy2kZsOLGUgjTGZ5JX3mWnr/rOQ3SWBRyjWEiw4=";
+    })
+
   ];
 
   postPatch = ''
@@ -56,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     dde-tray-loader
+    dde-application-manager
     dtk6declarative
     dtk6widget
     dde-qt-dbus-factory
@@ -66,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6integration
     wayland
     wayland-protocols
+    treeland-protocols
     yaml-cpp
     xorg.libXcursor
     xorg.libXres

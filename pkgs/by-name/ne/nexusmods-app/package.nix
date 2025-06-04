@@ -5,11 +5,11 @@
   copyDesktopItems,
   desktop-file-utils,
   dotnetCorePackages,
-  fetchFromGitHub,
+  fetchgit,
   imagemagick,
   lib,
-  runCommand,
   xdg-utils,
+  nix-update-script,
   pname ? "nexusmods-app",
 }:
 let
@@ -24,14 +24,13 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.6.2";
+  version = "0.11.3";
 
-  src = fetchFromGitHub {
-    owner = "Nexus-Mods";
-    repo = "NexusMods.App";
-    rev = "v${finalAttrs.version}";
+  src = fetchgit {
+    url = "https://github.com/Nexus-Mods/NexusMods.App.git";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-EP51nhFKYfYRjOpgHiGLwXGmpDULoTlGh3hQXhR8sy8=";
     fetchSubmodules = true;
-    hash = "sha256-0uZdN24TvK4QoBEC0BSAYNALQv9swYZ8SgVJ03m2dzQ=";
   };
 
   enableParallelBuilding = false;
@@ -56,11 +55,11 @@ buildDotnetModule (finalAttrs: {
     imagemagick # For resizing SVG icon in postInstall
   ];
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   mapNuGetDependencies = true;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
   postPatch = ''
     # for some reason these tests fail (intermittently?) with a zero timestamp
@@ -90,7 +89,7 @@ buildDotnetModule (finalAttrs: {
       size=''${i}x''${i}
       dir=$out/share/icons/hicolor/$size/apps
       mkdir -p $dir
-      convert -background none -resize $size $icon $dir/com.nexusmods.app.png
+      magick -background none $icon -resize $size $dir/com.nexusmods.app.png
     done
   '';
 
@@ -103,7 +102,7 @@ buildDotnetModule (finalAttrs: {
   executables = [ "NexusMods.App" ];
 
   dotnetBuildFlags = [
-    # From https://github.com/Nexus-Mods/NexusMods.App/blob/v0.6.2/src/NexusMods.App/app.pupnet.conf#L38
+    # From https://github.com/Nexus-Mods/NexusMods.App/blob/v0.7.0/src/NexusMods.App/app.pupnet.conf#L38
     "--property:Version=${finalAttrs.version}"
     "--property:TieredCompilation=true"
     "--property:PublishReadyToRun=true"
@@ -125,42 +124,22 @@ buildDotnetModule (finalAttrs: {
 
   disabledTests =
     [
-      "NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_RemoteImage"
-      "NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_ImageStoredFile"
+      # Fails attempting to download game hashes DB from github:
+      # HttpRequestException : Resource temporarily unavailable (github.com:443)
+      "NexusMods.DataModel.SchemaVersions.Tests.LegacyDatabaseSupportTests.TestDatabase"
+      "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0001_ConvertTimestamps.OldTimestampsAreInRange"
+      "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0003_FixDuplicates.No_Duplicates"
+      "NexusMods.DataModel.SchemaVersions.Tests.MigrationSpecificTests.TestsFor_0004_RemoveGameFiles.Test"
 
-      # Fails with: Expected a <System.ArgumentException> to be thrown, but no exception was thrown.
-      "NexusMods.Networking.ModUpdates.Tests.PerFeedCacheUpdaterTests.Constructor_WithItemsFromDifferentGames_ShouldThrowArgumentException_InDebug"
+      # Fails attempting to fetch SMAPI version data from github:
+      # https://github.com/erri120/smapi-versions/raw/main/data/game-smapi-versions.json
+      "NexusMods.Games.StardewValley.Tests.SMAPIGameVersionDiagnosticEmitterTests.Test_TryGetLastSupportedSMAPIVersion"
     ]
     ++ lib.optionals (!_7zz.meta.unfree) [
       "NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
     ];
 
-  passthru = {
-    tests =
-      let
-        runTest =
-          name: script:
-          runCommand "${pname}-test-${name}" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
-            ${script}
-            touch $out
-          '';
-      in
-      {
-        serve = runTest "serve" ''
-          NexusMods.App
-        '';
-        help = runTest "help" ''
-          NexusMods.App --help
-        '';
-        associate-nxm = runTest "associate-nxm" ''
-          NexusMods.App associate-nxm
-        '';
-        list-tools = runTest "list-tools" ''
-          NexusMods.App list-tools
-        '';
-      };
-    updateScript = ./update.bash;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     mainProgram = "NexusMods.App";

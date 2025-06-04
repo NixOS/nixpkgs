@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "build";
-  version = "1.2.2";
+  version = "1.2.2.post1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "pypa";
     repo = "build";
     rev = "refs/tags/${version}";
-    hash = "sha256-pord65+Mg3TmHpAtU6PQAzxAmGtNu6MSxTruJsnA0EE=";
+    hash = "sha256-PHS7CjdKo5u4VTpbo409zLQAOmslV9bX0j0S83Gdv1U=";
   };
 
   postPatch = ''
@@ -110,6 +110,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/pypa/build";
     changelog = "https://github.com/pypa/build/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = teams.python.members ++ [ maintainers.fab ];
+    maintainers = [ maintainers.fab ];
+    teams = [ teams.python ];
   };
 }

@@ -71,20 +71,20 @@ nix-build -A nixosTests.hostname
 
 ### Testing outside the NixOS project {#sec-call-nixos-test-outside-nixos}
 
-Outside the `nixpkgs` repository, you can instantiate the test by first importing the NixOS library,
+Outside the `nixpkgs` repository, you can use the `runNixOSTest` function from
+`pkgs.testers`:
 
 ```nix
-let nixos-lib = import (nixpkgs + "/nixos/lib") { };
+let pkgs = import <nixpkgs> {};
 in
 
-nixos-lib.runTest {
+pkgs.testers.runNixOSTest {
   imports = [ ./test.nix ];
-  hostPkgs = pkgs;  # the Nixpkgs package set used outside the VMs
   defaults.services.foo.package = mypkg;
 }
 ```
 
-`runTest` returns a derivation that runs the test.
+`runNixOSTest` returns a derivation that runs the test.
 
 ## Configuring the nodes {#sec-nixos-test-nodes}
 
@@ -121,8 +121,7 @@ and checks that the output is more-or-less correct:
 ```py
 machine.start()
 machine.wait_for_unit("default.target")
-if not "Linux" in machine.succeed("uname"):
-  raise Exception("Wrong OS")
+t.assertIn("Linux", machine.succeed("uname"), "Wrong OS")
 ```
 
 The first line is technically unnecessary; machines are implicitly started
@@ -133,6 +132,8 @@ starting them in parallel:
 ```py
 start_all()
 ```
+
+Under the variable `t`, all assertions from [`unittest.TestCase`](https://docs.python.org/3/library/unittest.html) are available.
 
 If the hostname of a node contains characters that can't be used in a
 Python variable name, those characters will be replaced with

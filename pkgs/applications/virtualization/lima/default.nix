@@ -1,35 +1,40 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, qemu
-, xcbuild
-, sigtool
-, makeWrapper
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  qemu,
+  sigtool,
+  makeWrapper,
+  nix-update-script,
+  apple-sdk_15,
+  lima,
 }:
 
 buildGoModule rec {
   pname = "lima";
-  version = "0.22.0";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "lima-vm";
-    repo = pname;
+    repo = "lima";
     rev = "v${version}";
-    sha256 = "sha256-ZX2FSZz9q56zWPSHPvXUOf2lzBupjgdTXgWpH1SBJY8=";
+    hash = "sha256-pwSLQlYPJNzvXuW6KLmQoaafQyf3o6fjVAfKe9RJ3UE=";
   };
 
-  vendorHash = "sha256-P0Qnfu/cqLveAwz9jf/wTXxkoh0jvazlE5C/PcUrWsA=";
+  vendorHash = "sha256-JxrUX22yNb5/tZIBWDiBaMLOpEnOk+2lZdpzCjjqO4E=";
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcrun sigtool ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
 
-  # clean fails with read only vendor dir
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
+
   postPatch = ''
     substituteInPlace Makefile \
-      --replace 'binaries: clean' 'binaries:' \
-      --replace 'codesign --entitlements vz.entitlements -s -' 'codesign --force --entitlements vz.entitlements -s -'
+      --replace-fail 'codesign -f -v --entitlements vz.entitlements -s -' 'codesign -f --entitlements vz.entitlements -s -'
   '';
 
   # It attaches entitlements with codesign and strip removes those,
@@ -38,33 +43,53 @@ buildGoModule rec {
 
   buildPhase = ''
     runHook preBuild
-    make "VERSION=v${version}" binaries
+    make "VERSION=v${version}" "CC=${stdenv.cc.targetPrefix}cc" binaries
     runHook postBuild
   '';
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out
-    cp -r _output/* $out
-    wrapProgram $out/bin/limactl \
-      --prefix PATH : ${lib.makeBinPath [ qemu ]}
-    installShellCompletion --cmd limactl \
-      --bash <($out/bin/limactl completion bash) \
-      --fish <($out/bin/limactl completion fish) \
-      --zsh <($out/bin/limactl completion zsh)
-    runHook postInstall
+  preCheck = ''
+    # Workaround for: could not create "/homeless-shelter/.lima/_config" directory: mkdir /homeless-shelter: permission denied
+    export LIMA_HOME="$(mktemp -d)"
   '';
+
+  installPhase =
+    ''
+      runHook preInstall
+      mkdir -p $out
+      cp -r _output/* $out
+      wrapProgram $out/bin/limactl \
+        --prefix PATH : ${lib.makeBinPath [ qemu ]}
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd limactl \
+        --bash <($out/bin/limactl completion bash) \
+        --fish <($out/bin/limactl completion fish) \
+        --zsh <($out/bin/limactl completion zsh)
+    ''
+    + ''
+      runHook postInstall
+    '';
 
   doInstallCheck = true;
+  # Workaround for: "panic: $HOME is not defined" at https://github.com/lima-vm/lima/blob/cb99e9f8d01ebb82d000c7912fcadcd87ec13ad5/pkg/limayaml/defaults.go#L53
+  # Don't use versionCheckHook for this package. It cannot inject environment variables.
   installCheckPhase = ''
-    USER=nix $out/bin/limactl validate examples/default.yaml
+    if [[ "$(HOME="$(mktemp -d)" "$out/bin/limactl" --version | cut -d ' ' -f 3)" == "${version}" ]]; then
+      echo '${pname} smoke check passed'
+    else
+      echo '${pname} smoke check failed'
+      return 1
+    fi
+    USER=nix $out/bin/limactl validate templates/default.yaml
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://github.com/lima-vm/lima";
     description = "Linux virtual machines (on macOS, in most cases)";
     changelog = "https://github.com/lima-vm/lima/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ anhduy ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ anhduy ];
   };
 }

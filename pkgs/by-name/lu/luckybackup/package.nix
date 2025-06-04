@@ -34,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     rsync
     openssh
+    qt5.qtwayland
   ];
 
   strictDeps = true;
@@ -66,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl3Plus;
     mainProgram = "luckybackup";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 })

@@ -25,12 +25,14 @@ stdenv.mkDerivation {
 
 The same goes for Qt 5 where libraries and tools are under `libsForQt5`.
 
-Any Qt package should include `wrapQtAppsHook` in `nativeBuildInputs`, or explicitly set `dontWrapQtApps` to bypass generating the wrappers.
+Any Qt package should include `wrapQtAppsHook` or `wrapQtAppsNoGuiHook` in `nativeBuildInputs`, or explicitly set `dontWrapQtApps` to bypass generating the wrappers.
 
 ::: {.note}
-Qt 6 graphical applications should also include `qtwayland` in `buildInputs` on Linux (but not on platforms e.g. Darwin, where `qtwayland` is not available), to ensure the Wayland platform plugin is available.
 
-This may become default in the future, see [NixOS/nixpkgs#269674](https://github.com/NixOS/nixpkgs/pull/269674).
+`wrapQtAppsHook` propagates plugins and QML components from `qtwayland` on platforms that support it, to allow applications to act as native Wayland clients. It should be used for all graphical applications.
+
+`wrapQtAppsNoGuiHook` does not propagate `qtwayland` to reduce closure size for purely command-line applications.
+
 :::
 
 ## Packages supporting multiple Qt versions {#qt-versions}
@@ -62,14 +64,18 @@ and then create wrappers manually in `fixupPhase`, using `wrapQtApp`, which itse
 The `makeWrapper` arguments required for Qt are also exposed in the environment as `$qtWrapperArgs`.
 
 ```nix
-{ stdenv, lib, wrapQtAppsHook }:
+{
+  stdenv,
+  lib,
+  wrapQtAppsHook,
+}:
 
 stdenv.mkDerivation {
   # ...
   nativeBuildInputs = [ wrapQtAppsHook ];
   dontWrapQtApps = true;
   preFixup = ''
-      wrapQtApp "$out/bin/myapp" --prefix PATH : /path/to/bin
+    wrapQtApp "$out/bin/myapp" --prefix PATH : /path/to/bin
   '';
 }
 ```

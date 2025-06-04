@@ -6,16 +6,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kamp";
-  version = "0.2.1";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "vbauerster";
-    repo = pname;
+    repo = "kamp";
     rev = "v${version}";
-    hash = "sha256-9cakFhA9niMZ0jD0ilgCUztk4uL6wDp6zfHUJY/yLYw=";
+    hash = "sha256-coBKVqSqYBpf0PdWKIODnbfQxbOyp5Di45+O66ZGK1Q=";
   };
 
-  cargoHash = "sha256-BnVV0UnXEebq1kbQvv8PkmntLK0BwrOcMxxIODpZrxc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-+Jc3+3sN+muUk7yGZ0sDWR0xAwffZN14X0mcyF4EY20=";
 
   postInstall = ''
     install scripts/* -Dt $out/bin

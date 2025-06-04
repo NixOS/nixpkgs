@@ -28,16 +28,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libglut
-    gtk2
     libGLU
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ gtk2 ];
 
-  postPatch = ''
-    substituteInPlace tools/tinyxml/Makefile.linux \
-      --replace-warn "-Wno-format" "-Wno-format -Wno-format-security"
-    substituteInPlace tools/Makefile.linux \
-      --replace-warn "-lglut" "-lglut -lGL -lGLU"
-  '';
+  postPatch =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace "tools/tinyxml/Makefile.linux" \
+        --replace-warn "-Wno-format" "-Wno-format -Wno-format-security"
+      substituteInPlace "tools/Makefile.linux" \
+        --replace-warn "-lglut" "-lglut -lGL -lGLU"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace "lib/Makefile.macosx" \
+                        "tools/Makefile.macosx" \
+                        "tools/jpeg/makefile.macosx" \
+                        "tools/zlib/Makefile.macosx" \
+        --replace-warn "gcc" "${stdenv.cc.targetPrefix}cc"
+      substituteInPlace "lib/Makefile.macosx" "tools/Makefile.macosx" "tools/tinyxml/Makefile.macosx" \
+        --replace-warn "g++" "${stdenv.cc.targetPrefix}c++"
+    '';
 
   makeFlags = [
     "BINDIR=$(bin)/bin/"

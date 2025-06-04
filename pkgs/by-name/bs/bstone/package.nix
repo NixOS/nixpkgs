@@ -1,20 +1,20 @@
-{ lib
-, fetchFromGitHub
-, cmake
-, gcc12Stdenv
-, SDL2
-, libGL
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  sdl2-compat,
 }:
 
-gcc12Stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bstone";
-  version = "1.2.12";
+  version = "1.2.16";
 
   src = fetchFromGitHub {
     owner = "bibendovsky";
     repo = "bstone";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-wtW595cSoVTZaVykxOkJViNs3OmuIch9nA5s1SqwbJo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6BNIMBbLBcQoVx5lnUz14viAvBcFjoZLY8c30EgcvKQ=";
   };
 
   nativeBuildInputs = [
@@ -22,13 +22,13 @@ gcc12Stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libGL
-    SDL2
+    sdl2-compat
   ];
 
   postInstall = ''
-    mkdir -p $out/bin
-    mv $out/bstone* $out/bin
+    mkdir -p $out/{bin,share/bibendovsky/bstone}
+    mv $out/bstone $out/bin
+    mv $out/*.txt $out/share/bibendovsky/bstone
   '';
 
   meta = {
@@ -41,6 +41,6 @@ gcc12Stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [ keenanweaver ];
     mainProgram = "bstone";
-    platforms = lib.platforms.linux; #TODO: macOS / Darwin support
+    platforms = lib.platforms.linux; # TODO: macOS / Darwin support
   };
 })

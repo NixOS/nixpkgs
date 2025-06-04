@@ -1,5 +1,6 @@
 {
   lib,
+  nix-update-script,
   buildNpmPackage,
   fetchFromGitHub,
   nodejs_22,
@@ -7,18 +8,18 @@
   kpackage,
   zip,
 }:
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "krohnkite";
-  version = "0.9.8.2";
+  version = "0.9.9.1";
 
   src = fetchFromGitHub {
     owner = "anametologin";
     repo = "krohnkite";
-    rev = "refs/tags/${version}";
-    hash = "sha256-chADfJ1zaufnwi4jHbEN1Oec3XFNw0YsZxLFhnY3T9w=";
+    tag = finalAttrs.version;
+    hash = "sha256-Famg/g+Qwux4dZa6+CMKP6dDHNHNvJDKTsWQDukHHGk=";
   };
 
-  npmDepsHash = "sha256-3yE2gyyVkLn/dPDG9zDdkHAEb4/hqTJdyMXE5Y6Z5pM=";
+  npmDepsHash = "sha256-Q/D6s0wOPSEziE1dBXgTakjhXCGvzhvLVS7zXcZlPCI=";
 
   dontWrapQtApps = true;
 
@@ -40,17 +41,28 @@ buildNpmPackage rec {
     runHook preInstall
 
     substituteInPlace Makefile --replace-fail '7z a -tzip' 'zip -r'
-    make KWINPKG_FILE=krohnkite.kwinscript krohnkite.kwinscript
+    # Override PROJECT_VER and PROJECT_REV because we don't have .git
+    make \
+      KWINPKG_FILE=krohnkite.kwinscript \
+      PROJECT_REV=${finalAttrs.version} \
+      PROJECT_VER=${finalAttrs.version} \
+      krohnkite.kwinscript
     kpackagetool6 --type=KWin/Script --install=krohnkite.kwinscript --packageroot=$out/share/kwin/scripts
 
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Dynamic Tiling Extension for KWin 6";
     homepage = "https://github.com/anametologin/krohnkite";
+    changelog = "https://github.com/anametologin/krohnkite/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ben9986 ];
+    maintainers = with lib.maintainers; [
+      ben9986
+      dramforever
+    ];
     platforms = lib.platforms.all;
   };
-}
+})

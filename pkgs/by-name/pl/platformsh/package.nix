@@ -4,18 +4,27 @@
   fetchurl,
   testers,
   installShellFiles,
-  platformsh
+  platformsh,
 }:
 
-let versions = lib.importJSON ./versions.json;
-    arch = if stdenvNoCC.hostPlatform.isx86_64 then "amd64"
-           else if stdenvNoCC.hostPlatform.isAarch64 then "arm64"
-           else throw "Unsupported architecture";
-    os = if stdenvNoCC.hostPlatform.isLinux then "linux"
-         else if stdenvNoCC.hostPlatform.isDarwin then "darwin"
-         else throw "Unsupported os";
-    versionInfo = versions."${os}-${arch}";
-    inherit (versionInfo) hash url;
+let
+  versions = lib.importJSON ./versions.json;
+  arch =
+    if stdenvNoCC.hostPlatform.isx86_64 then
+      "amd64"
+    else if stdenvNoCC.hostPlatform.isAarch64 then
+      "arm64"
+    else
+      throw "Unsupported architecture";
+  os =
+    if stdenvNoCC.hostPlatform.isLinux then
+      "linux"
+    else if stdenvNoCC.hostPlatform.isDarwin then
+      "darwin"
+    else
+      throw "Unsupported os";
+  versionInfo = versions."${os}-${arch}";
+  inherit (versionInfo) hash url;
 
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -55,8 +64,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/platformsh/cli";
     license = lib.licenses.mit;
     mainProgram = "platform";
-    maintainers = with lib.maintainers; [ shyim spk ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    maintainers = with lib.maintainers; [
+      shyim
+      spk
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

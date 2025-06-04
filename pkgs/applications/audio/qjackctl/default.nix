@@ -1,11 +1,21 @@
-{ lib, mkDerivation, fetchFromGitHub
-, pkg-config, cmake, alsa-lib, libjack2, dbus, qtbase, qttools, qtx11extras
-# Enable jack session support
-, jackSession ? false
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  alsa-lib,
+  libjack2,
+  dbus,
+  qtbase,
+  qttools,
+  qtx11extras,
+  # Enable jack session support
+  jackSession ? false,
 }:
 
 mkDerivation rec {
-  version = "0.9.13";
+  version = "0.9.91";
   pname = "qjackctl";
 
   # some dependencies such as killall have to be installed additionally
@@ -13,8 +23,8 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rncbc";
     repo = "qjackctl";
-    rev = "${pname}_${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "sha256-tCABvZzAmDKgOfTylOf2uZsKeib8PgvdQd1niaI8RxM=";
+    rev = "${pname}_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    sha256 = "sha256-YfdRyylU/ktFvsh18FjpnG9MkV1HxHJBhRnHWQ7I+hY=";
   };
 
   buildInputs = [

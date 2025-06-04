@@ -7,7 +7,10 @@
   setuptools-scm,
   beautifulsoup4,
   boto3,
+  freezegun,
   lxml,
+  openpyxl,
+  parameterized,
   pdoc,
   pytestCheckHook,
   requests-mock,
@@ -16,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "bx-py-utils";
-  version = "98";
+  version = "108";
 
   disabled = pythonOlder "3.10";
 
@@ -25,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "boxine";
     repo = "bx_py_utils";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-VJ4510HLTqdRfeUEe2srT8+W9AaRpi+Mm6srZOOp0fc=";
+    tag = "v${version}";
+    hash = "sha256-VMGP5yl+7kiZ3Ww4ESJPHABDCMZG1VsVDgVoLnGU5r4=";
   };
 
   postPatch = ''
@@ -59,7 +62,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     beautifulsoup4
     boto3
+    freezegun
     lxml
+    openpyxl
+    parameterized
     pdoc
     pytestCheckHook
     requests-mock
@@ -82,9 +88,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Various Python utility functions";
-    mainProgram = "publish";
+    mainProgram = "bx_py_utils";
     homepage = "https://github.com/boxine/bx_py_utils";
-    changelog = "https://github.com/boxine/bx_py_utils/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/boxine/bx_py_utils/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

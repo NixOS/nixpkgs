@@ -1,30 +1,34 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, meson
-, ninja
-, python3
-, gtk4
-, glib
-, glibmm_2_68
-, cairomm_1_16
-, pangomm_2_48
-, libepoxy
-, gnome
-, makeFontsConf
-, xvfb-run
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  python3,
+  gtk4,
+  glib,
+  glibmm_2_68,
+  cairomm_1_16,
+  pangomm_2_48,
+  libepoxy,
+  gnome,
+  makeFontsConf,
+  xvfb-run,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gtkmm";
-  version = "4.14.0";
+  version = "4.18.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-k1CgREt0TKPcaVhuvRtnB1IJIrbZ9PIyEDzmA6Jx7No=";
+    hash = "sha256-LuMcFUefxNjpWLA8i1+7yOF7wSLCovVESXtOBWGeM+w=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +50,7 @@ stdenv.mkDerivation rec {
     pangomm_2_48
   ];
 
-  nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin)[
+  nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     xvfb-run
   ];
 
@@ -87,7 +91,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gtkmm.org/";
     license = licenses.lgpl2Plus;
-    maintainers = teams.gnome.members ++ (with maintainers; [ raskin ]);
+    maintainers = with maintainers; [ raskin ];
+    teams = [ teams.gnome ];
     platforms = platforms.unix;
   };
 }

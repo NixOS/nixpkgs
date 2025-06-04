@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qmake
-, nix-update-script
-, qtbase
-, qttools
-, qtlocation ? null # qt5 only
-, qtpositioning ? null # qt6 only
-, qtserialport
-, qtsvg
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  nix-update-script,
+  qtbase,
+  qttools,
+  qtlocation ? null, # qt5 only
+  qtpositioning ? null, # qt6 only
+  qtserialport,
+  qtsvg,
+  wrapQtAppsHook,
 }:
 
 let
@@ -17,24 +18,31 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpxsee";
-  version = "13.26";
+  version = "13.43";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
-    rev = finalAttrs.version;
-    hash = "sha256-EIeUcSHJXpd1/90fAPrP9F/DVyZhkcZk8MJd9VO1D70=";
+    tag = finalAttrs.version;
+    hash = "sha256-IP5l8YUsCNm9rixgpQqbyyhfcBNQgrZha1MNjetug2c=";
   };
 
-  buildInputs = [
-    qtserialport
-  ] ++ (if isQt6 then [
-    qtbase
-    qtpositioning
-    qtsvg
-  ] else [
-    qtlocation
-  ]);
+  buildInputs =
+    [
+      qtserialport
+    ]
+    ++ (
+      if isQt6 then
+        [
+          qtbase
+          qtpositioning
+          qtsvg
+        ]
+      else
+        [
+          qtlocation
+        ]
+    );
 
   nativeBuildInputs = [
     qmake
@@ -58,7 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    broken = isQt6 && stdenv.hostPlatform.isDarwin;
     changelog = "https://build.opensuse.org/package/view_file/home:tumic:GPXSee/gpxsee/gpxsee.changes";
     description = "GPS log file viewer and analyzer";
     mainProgram = "gpxsee";
@@ -68,7 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
       GPXSee is a Qt-based GPS log file viewer and analyzer that supports
       all common GPS log file formats.
     '';
-    maintainers = with lib.maintainers; [ womfoo sikmir ];
+    maintainers = with lib.maintainers; [
+      womfoo
+      sikmir
+    ];
     platforms = lib.platforms.unix;
   };
 })

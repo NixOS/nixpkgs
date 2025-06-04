@@ -1,35 +1,36 @@
-{ stdenv
-, lib
-, appstream
-, meson
-, ninja
-, vala
-, gettext
-, itstool
-, fetchurl
-, pkg-config
-, libxml2
-, gtk4
-, glib
-, gtksourceview5
-, wrapGAppsHook4
-, gnome
-, mpfr
-, gmp
-, libsoup_3
-, libmpc
-, libadwaita
-, gsettings-desktop-schemas
-, libgee
+{
+  stdenv,
+  lib,
+  appstream,
+  meson,
+  ninja,
+  vala,
+  gettext,
+  itstool,
+  fetchurl,
+  pkg-config,
+  libxml2,
+  gtk4,
+  glib,
+  gtksourceview5,
+  wrapGAppsHook4,
+  gnome,
+  mpfr,
+  gmp,
+  libsoup_3,
+  libmpc,
+  libadwaita,
+  gsettings-desktop-schemas,
+  libgee,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-calculator";
-  version = "46.1";
+  version = "48.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-calculator/${lib.versions.major version}/gnome-calculator-${version}.tar.xz";
-    hash = "sha256-LTZ1CnOJAIYSLPPwyD5oUXiRWFYVFlMG+hWWqRhmgkc=";
+    hash = "sha256-vEvUGpuhkPRcvuDYxnUs3F0osM7xxr0MAeLa4fPBkWI=";
   };
 
   nativeBuildInputs = [
@@ -73,7 +74,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://apps.gnome.org/Calculator/";
     description = "Application that solves mathematical equations and is suitable as a default application in a Desktop environment";
-    maintainers = teams.gnome.members;
+    mainProgram = "gnome-calculator";
+    teams = [ teams.gnome ];
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };

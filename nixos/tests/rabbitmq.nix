@@ -1,6 +1,6 @@
 # This test runs rabbitmq and checks if rabbitmq is up and running.
 
-import ./make-test-python.nix ({ pkgs, ... }:
+{ pkgs, ... }:
 let
   # in real life, you would keep this out of your repo and deploy it to a safe
   # location using safe means.
@@ -55,7 +55,7 @@ in
 
     # The password is the plaintext that was encrypted with rabbitmqctl encode above.
     machine.wait_until_succeeds(
-        '${pkgs.rabbitmq-java-client}/bin/PerfTest --time 10 --uri amqp://alice:dJT8isYu6t0Xb6u56rPglSj1vK51SlNVlXfwsRxw@localhost'
+        'echo Hello World | ${pkgs.lib.getExe pkgs.amqpcat} --producer --uri=amqp://alice:dJT8isYu6t0Xb6u56rPglSj1vK51SlNVlXfwsRxw@localhost --queue test'
     )
   '';
-})
+}

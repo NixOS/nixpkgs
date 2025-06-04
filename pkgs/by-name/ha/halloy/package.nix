@@ -1,12 +1,12 @@
 {
   lib,
   stdenv,
-  darwin,
   fetchFromGitHub,
   copyDesktopItems,
   makeDesktopItem,
   libxkbcommon,
   makeWrapper,
+  nix-update-script,
   openssl,
   pkg-config,
   rustPlatform,
@@ -18,23 +18,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "halloy";
-  version = "2024.12";
+  version = "2025.2";
 
   src = fetchFromGitHub {
     owner = "squidowl";
     repo = "halloy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-NEm6qsU/Kes1rtNCsEauShpJZzrhBtOqo70uzrWpYtE=";
+    tag = version;
+    hash = "sha256-ijSUGiAowxSqYwH3OxSWiGvm99n88ETJxAFn5x4m/BE=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "dpi-0.1.1" = "sha256-25sOvEBhlIaekTeWvy3UhjPI1xrJbOQvw/OkTg12kQY=";
-      "glyphon-0.5.0" = "sha256-OGXLqiMjaZ7gR5ANkuCgkfn/I7c/4h9SRE6MZZMW3m4=";
-      "iced-0.13.0-dev" = "sha256-VXaE4+qXakYSyO5rcBbCe4QuJv/oguxdqUEbhXfmh2U=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-j4lx3sSQZ7BKl+d5nFJQkMhgQWjn0xkNNCWMlbKLwVQ=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -44,26 +38,17 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
       libxkbcommon
-      openssl
       vulkan-loader
+      wayland
       xorg.libX11
       xorg.libXcursor
       xorg.libXi
-      xorg.libXrandr
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.CoreGraphics
-      darwin.apple_sdk.frameworks.Cocoa
-      darwin.apple_sdk.frameworks.Foundation
-      darwin.apple_sdk.frameworks.Metal
-      darwin.apple_sdk.frameworks.QuartzCore
-      darwin.apple_sdk.frameworks.Security
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ wayland ];
+    ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -76,6 +61,7 @@ rustPlatform.buildRustPackage rec {
       mimeTypes = [
         "x-scheme-handler/irc"
         "x-scheme-handler/ircs"
+        "x-scheme-handler/halloy"
       ];
       categories = [
         "Network"
@@ -103,28 +89,36 @@ rustPlatform.buildRustPackage rec {
     ''
   );
 
-  postInstall = ''
-    install -Dm644 assets/linux/icons/hicolor/128x128/apps/org.squidowl.halloy.png \
-      $out/share/icons/hicolor/128x128/apps/org.squidowl.halloy.png
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    APP_DIR="$out/Applications/Halloy.app/Contents"
+  postInstall =
+    ''
+      install -Dm644 assets/linux/icons/hicolor/128x128/apps/org.squidowl.halloy.png \
+        $out/share/icons/hicolor/128x128/apps/org.squidowl.halloy.png
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      APP_DIR="$out/Applications/Halloy.app/Contents"
 
-    mkdir -p "$APP_DIR/MacOS"
-    cp -r ${src}/assets/macos/Halloy.app/Contents/* "$APP_DIR"
+      mkdir -p "$APP_DIR/MacOS"
+      cp -r ${src}/assets/macos/Halloy.app/Contents/* "$APP_DIR"
 
-    substituteInPlace "$APP_DIR/Info.plist" \
-      --replace-fail "{{ VERSION }}" "${version}" \
-      --replace-fail "{{ BUILD }}" "${version}-nixpkgs"
+      substituteInPlace "$APP_DIR/Info.plist" \
+        --replace-fail "{{ VERSION }}" "${version}" \
+        --replace-fail "{{ BUILD }}" "${version}-nixpkgs"
 
-    makeWrapper "$out/bin/halloy" "$APP_DIR/MacOS/halloy"
-  '';
+      makeWrapper "$out/bin/halloy" "$APP_DIR/MacOS/halloy"
+    '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "IRC application";
     homepage = "https://github.com/squidowl/halloy";
     changelog = "https://github.com/squidowl/halloy/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab iivusly ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      fab
+      iivusly
+      ivyfanchiang
+    ];
     mainProgram = "halloy";
   };
 }

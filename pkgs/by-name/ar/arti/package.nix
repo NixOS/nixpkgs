@@ -6,35 +6,29 @@
   pkg-config,
   sqlite,
   openssl,
-  darwin,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "arti";
-  version = "1.2.8";
+  version = "1.4.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
     group = "tpo";
     owner = "core";
     repo = "arti";
-    rev = "arti-v${version}";
-    hash = "sha256-vw/hebZ23Pk+hQx3YN9iXsKWq20fqpwp91E2tul8zmA=";
+    tag = "arti-v${finalAttrs.version}";
+    hash = "sha256-uQUq3cDyCuATeBK0rDLyP3ymMj8ALCPoqpghWIxsfU0=";
   };
 
-  cargoHash = "sha256-4F+0KEVoeppNQ26QQ+a2CSIbrklE8NY3+OK11I5JstA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-W/CRwnv0BgVQQIpEFRxeYDlS0Cud5CVH5QUJfw17a/I=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
-  buildInputs =
-    [ sqlite ]
-    ++ lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        CoreServices
-      ]
-    );
+  buildInputs = [ sqlite ] ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   cargoBuildFlags = [
     "--package"
@@ -51,15 +45,25 @@ rustPlatform.buildRustPackage rec {
     "--skip=reload_cfg::test::watch_multiple"
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { extraArgs = [ "--version-regex=^arti-v(.*)$" ]; };
+  };
+
   meta = {
     description = "Implementation of Tor in Rust";
     mainProgram = "arti";
     homepage = "https://arti.torproject.org/";
-    changelog = "https://gitlab.torproject.org/tpo/core/arti/-/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://gitlab.torproject.org/tpo/core/arti/-/blob/arti-v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
     ];
     maintainers = with lib.maintainers; [ rapiteanu ];
   };
-}
+})

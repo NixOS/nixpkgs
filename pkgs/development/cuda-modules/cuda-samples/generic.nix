@@ -3,7 +3,7 @@
   backendStdenv,
   cmake,
   cudatoolkit,
-  cudaVersion,
+  cudaMajorMinorVersion,
   fetchFromGitHub,
   fetchpatch,
   freeimage,
@@ -20,7 +20,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "cuda-samples";
-  version = cudaVersion;
+  version = cudaMajorMinorVersion;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
@@ -73,6 +73,8 @@ backendStdenv.mkDerivation (finalAttrs: {
     description = "Samples for CUDA Developers which demonstrates features in CUDA Toolkit";
     # CUDA itself is proprietary, but these sample apps are not.
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ obsidian-systems-maintenance ] ++ lib.teams.cuda.members;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [ obsidian-systems-maintenance ];
+    teams = [ lib.teams.cuda ];
   };
 })

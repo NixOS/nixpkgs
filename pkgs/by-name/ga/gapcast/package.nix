@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ANDRVV";
     repo = "gapcast";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Ei5XfcnbUoegB8lNEEQ3PrCzNJGaVeVd2lfrMWYoODw=";
   };
 
@@ -37,6 +37,6 @@ buildGoModule rec {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "gapcast";
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

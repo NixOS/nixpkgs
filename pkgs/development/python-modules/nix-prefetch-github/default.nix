@@ -10,6 +10,7 @@
   sphinx-argparse,
   parameterized,
   setuptools,
+  nix,
 }:
 
 buildPythonPackage rec {
@@ -29,6 +30,8 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-eQd/MNlnuzXzgFzvwUMchvHoIvkIrbpGKV7iknO14Cc=";
   };
+
+  dependencies = [ nix ];
 
   nativeBuildInputs = [
     sphinxHook

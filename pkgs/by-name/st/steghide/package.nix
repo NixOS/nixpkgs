@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, libjpeg
-, libmcrypt
-, libmhash
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libjpeg,
+  libmcrypt,
+  libmhash,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,21 +25,26 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-     libjpeg
-     libmcrypt
-     libmhash
-     zlib
+    libjpeg
+    libmcrypt
+    libmhash
+    zlib
   ];
 
   postPatch = ''
     cd src
   '';
 
+  # std::binary_function and std::unary_function has been removed in c++17
+  makeFlags = lib.optionals stdenv.cc.isClang [
+    "CXXFLAGS=-D_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION"
+  ];
+
   meta = with lib; {
     homepage = "https://github.com/museoa/steghide";
     description = "Open source steganography program";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; unix;
     mainProgram = "steghide";
   };

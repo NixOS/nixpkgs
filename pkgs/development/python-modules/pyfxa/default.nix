@@ -12,24 +12,23 @@
   pythonOlder,
   requests,
   responses,
-  setuptools,
-  six,
+  hatchling,
+  parameterized,
 }:
 
 buildPythonPackage rec {
   pname = "pyfxa";
-  version = "0.7.8";
+  version = "0.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "PyFxA";
-    inherit version;
-    hash = "sha256-DMFZl1hbYNaScOTWkAbK2nKti6wD5SS5A30q7TW5vO4=";
+    inherit pname version;
+    hash = "sha256-3zxXWzFOjWcnX8hAQpRzGlzTmnXjZjn9jF+MdsHuGkw=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     cryptography
@@ -37,8 +36,6 @@ buildPythonPackage rec {
     pybrowserid
     pyjwt
     requests
-    setuptools # imports pkg_resources
-    six
   ];
 
   nativeCheckInputs = [
@@ -46,6 +43,7 @@ buildPythonPackage rec {
     mock
     responses
     pytestCheckHook
+    parameterized
   ];
 
   pythonImportsCheck = [ "fxa" ];

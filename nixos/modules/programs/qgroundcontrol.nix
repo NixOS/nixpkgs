@@ -14,7 +14,7 @@ in
     programs.qgroundcontrol = {
       enable = lib.mkEnableOption "qgroundcontrol";
 
-      package = lib.mkPackageOption pkgs "qgroundcontrol" {};
+      package = lib.mkPackageOption pkgs "qgroundcontrol" { };
 
       blacklistModemManagerFromTTYUSB = lib.mkOption {
         type = lib.types.bool;
@@ -40,13 +40,8 @@ in
       '';
     };
 
-    # Security wrapper
-    security.wrappers.qgroundcontrol = {
-      source = lib.getExe cfg.package;
-      owner = "root"; # Sensible default; not setuid so this is not a security risk
-      group = "tty";
-      setgid = true;
-    };
+    # Add to systemPackages for desktop entry file
+    environment.systemPackages = [ cfg.package ];
   };
 
   meta.maintainers = pkgs.qgroundcontrol.meta.maintainers;

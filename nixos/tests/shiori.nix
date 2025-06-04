@@ -1,26 +1,33 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 
-  {
-    name = "shiori";
-    meta.maintainers = with lib.maintainers; [ minijackson ];
+{
+  name = "shiori";
+  meta.maintainers = with lib.maintainers; [ minijackson ];
 
-    nodes.machine = { ... }: { services.shiori.enable = true; };
+  nodes.machine =
+    { ... }:
+    {
+      services.shiori.enable = true;
+    };
 
-    testScript = let
-      authJSON = pkgs.writeText "auth.json" (builtins.toJSON {
-        username = "shiori";
-        password = "gopher";
-        owner = true;
-      });
+  testScript =
+    let
+      authJSON = pkgs.writeText "auth.json" (
+        builtins.toJSON {
+          username = "shiori";
+          password = "gopher";
+          owner = true;
+        }
+      );
 
       insertBookmark = {
         url = "http://example.org";
         title = "Example Bookmark";
       };
 
-      insertBookmarkJSON =
-        pkgs.writeText "insertBookmark.json" (builtins.toJSON insertBookmark);
-    in ''
+      insertBookmarkJSON = pkgs.writeText "insertBookmark.json" (builtins.toJSON insertBookmark);
+    in
+    ''
       #import json
 
       machine.wait_for_unit("shiori.service")
@@ -78,4 +85,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       #        ):
       #            raise Exception("Inserted bookmark doesn't have same URL or title")
     '';
-  })
+}

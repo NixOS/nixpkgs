@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   cheroot,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
   defusedxml,
+  fetchFromGitHub,
   jinja2,
   json5,
+  lxml,
+  pytestCheckHook,
   python-pam,
+  pythonOlder,
   pyyaml,
   requests,
   setuptools,
@@ -25,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mar10";
     repo = "wsgidav";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vUqNC7ixpta0s7wRC5ROSKMa/MsgEBu5rr0XNu69FRw=";
   };
 
@@ -37,12 +38,16 @@ buildPythonPackage rec {
     defusedxml
     jinja2
     json5
-    python-pam
+    cheroot
+    lxml
     pyyaml
   ];
 
+  optional-dependencies = {
+    pam = [ python-pam ];
+  };
+
   nativeCheckInputs = [
-    cheroot
     pytestCheckHook
     requests
     webtest

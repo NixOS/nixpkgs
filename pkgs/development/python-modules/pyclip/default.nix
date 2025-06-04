@@ -18,8 +18,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "spyoungtech";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "pyclip";
+    tag = "v${version}";
     hash = "sha256-0nOkNgT8XCwtXI9JZntkhoMspKQU602rTKBFajVKBoM=";
   };
 
@@ -47,6 +47,6 @@ buildPythonPackage rec {
     mainProgram = "pyclip";
     homepage = "https://github.com/spyoungtech/pyclip";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ mcaju ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

@@ -1,28 +1,28 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pytestCheckHook,
   requests,
   segno,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "fritzconnection";
-  version = "1.13.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.15.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kbr";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-nWXtXhF2pUBxHdrivi4DA7+bFiZPyxb2nqsiN3j4HdI=";
+    repo = "fritzconnection";
+    tag = version;
+    hash = "sha256-ulY+nh9CSnxrktTlFSXAWJALkS4GwP/3dRIG07jQCWs=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   optional-dependencies = {
     qr = [ segno ];

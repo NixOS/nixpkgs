@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-geojson-nsw-rfs-incidents";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-JOvmUWrmYQt2hJ9u08Aliv9ImI3AOTk4uBx3Pv8/7/c=";
   };
 

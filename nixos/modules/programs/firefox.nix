@@ -118,7 +118,14 @@ in
         Some of these might be able to be configured more ergonomically
         using policies.
 
+        See [here](https://mozilla.github.io/policy-templates/#preferences) for allowed preferences.
+
         ${organisationInfo}
+      '';
+      example = lib.literalExpression ''
+        {
+          "browser.tabs.tabmanager.enabled" = false;
+        }
       '';
     };
 
@@ -313,7 +320,9 @@ in
             old.extraPrefsFiles or [ ]
             ++ cfg.autoConfigFiles
             ++ [ (pkgs.writeText "firefox-autoconfig.js" cfg.autoConfig) ];
-          nativeMessagingHosts = old.nativeMessagingHosts or [ ] ++ cfg.nativeMessagingHosts.packages;
+          nativeMessagingHosts = lib.unique (
+            old.nativeMessagingHosts or [ ] ++ cfg.nativeMessagingHosts.packages
+          );
           cfg = (old.cfg or { }) // cfg.wrapperConfig;
         }))
       ];

@@ -1,14 +1,15 @@
-{ lib
-, appimageTools
-, fetchurl
+{
+  lib,
+  appimageTools,
+  fetchurl,
 }:
 
 let
   pname = "fflogs";
-  version = "8.14.0";
+  version = "8.17.13";
   src = fetchurl {
     url = "https://github.com/RPGLogs/Uploaders-fflogs/releases/download/v${version}/fflogs-v${version}.AppImage";
-    hash = "sha256-hHgPtr25X2vZY+MKQn9FgkMLrF5vgklMQHzx4ksGrDk=";
+    hash = "sha256-mCHycRks9HXWhHOA/LbhjPCRjEuyGklgBuvY7e+KXnc=";
   };
   extracted = appimageTools.extractType2 { inherit pname version src; };
 in
@@ -19,7 +20,7 @@ appimageTools.wrapType2 {
     mkdir -p $out/share/applications
     cp -r ${extracted}/usr/share/icons $out/share/
     chmod -R +w $out/share/
-    mv $out/share/icons/hicolor/0x0 $out/share/icons/hicolor/512x512 # https://github.com/electron-userland/electron-builder/issues/5294
+    test ! -e $out/share/icons/hicolor/0x0 # check for regression of https://github.com/electron-userland/electron-builder/issues/5294
     cp ${extracted}/fflogs.desktop $out/share/applications/
     sed -i 's@^Exec=AppRun --no-sandbox@Exec=fflogs@g' $out/share/applications/fflogs.desktop
   '';
@@ -31,7 +32,7 @@ appimageTools.wrapType2 {
     license = licenses.unfree; # no license listed
     mainProgram = "fflogs";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ sersorrel ];
+    maintainers = with maintainers; [ keysmashes ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

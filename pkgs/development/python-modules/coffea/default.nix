@@ -33,28 +33,32 @@
   uproot,
   vector,
 
-  # checks
+  # tests
   distributed,
   pyinstrument,
-  pytestCheckHook,
   pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "coffea";
-  version = "2024.10.0";
+  version = "2025.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
     repo = "coffea";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-n17L/IuJGjDdYhVxW7Q0Qgeg+Y+pz9GphUxpLY4vXDM=";
+    tag = "v${version}";
+    hash = "sha256-NZ3r/Dyw5bB4qOO29DUAARPzdJJxgR9OO9LxVu3YbNo=";
   };
 
   build-system = [
     hatchling
     hatch-vcs
+  ];
+
+  pythonRelaxDeps = [
+    "dask"
   ];
 
   dependencies = [
@@ -87,8 +91,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     distributed
     pyinstrument
-    pytestCheckHook
     pytest-xdist
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "coffea" ];
@@ -97,6 +101,11 @@ buildPythonPackage rec {
     # Requires internet access
     # https://github.com/CoffeaTeam/coffea/issues/1094
     "test_lumimask"
+
+    # Flaky: FileNotFoundError: [Errno 2] No such file or directory
+    # https://github.com/scikit-hep/coffea/issues/1246
+    "test_packed_selection_cutflow_dak" # cutflow.npz
+    "test_packed_selection_nminusone_dak" # nminusone.npz
   ];
 
   __darwinAllowLocalNetworking = true;

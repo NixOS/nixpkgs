@@ -5,22 +5,21 @@
   python3Packages,
   fetchFromGitHub,
   installShellFiles,
-  ruff,
   testers,
   openapi-python-client,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "openapi-python-client";
-  version = "0.21.5";
+  version = "0.24.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     inherit version;
     owner = "openapi-generators";
     repo = "openapi-python-client";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/m/XXNqsr0FjYSEGMSw4zIUpWJDOqu9BzNuJKyb7fKY=";
+    tag = "v${version}";
+    hash = "sha256-EAHwICY8bjqYt0yGSG+SMcyTqeftfGCGTE4pJE120Mo=";
   };
 
   nativeBuildInputs =
@@ -35,22 +34,24 @@ python3Packages.buildPythonApplication rec {
     hatchling
   ];
 
-  dependencies =
-    (with python3Packages; [
+  dependencies = (
+    with python3Packages;
+    [
       attrs
       httpx
       jinja2
       pydantic
       python-dateutil
       ruamel-yaml
+      ruff
       shellingham
       typer
       typing-extensions
-    ])
-    ++ [ ruff ];
-
-  # ruff is not packaged as a python module in nixpkgs
-  pythonRemoveDeps = [ "ruff" ];
+    ]
+  );
+  # openapi-python-client defines upper bounds to the dependencies, ruff python library is
+  # just a simple wrapper to locate the binary. We'll remove the upper bound
+  pythonRelaxDeps = [ "ruff" ];
 
   postInstall = ''
     # see: https://github.com/fastapi/typer/blob/5889cf82f4ed925f92e6b0750bf1b1ed9ee672f3/typer/completion.py#L54
@@ -71,7 +72,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Generate modern Python clients from OpenAPI";
     homepage = "https://github.com/openapi-generators/openapi-python-client";
-    changelog = "https://github.com/openapi-generators/openapi-python-client/releases/tag/v${version}";
+    changelog = "https://github.com/openapi-generators/openapi-python-client/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     mainProgram = "openapi-python-client";
     maintainers = with lib.maintainers; [ konradmalik ];

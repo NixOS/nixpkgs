@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "sharkiq";
-  version = "1.0.2";
+  version = "1.1.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "JeffResc";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-UG460uEv1U/KTuVEcXMZlVbK/7REFpotkUk4U7z7KpA=";
+    repo = "sharkiq";
+    tag = "v${version}";
+    hash = "sha256-adSBFH5nGVPo7OBMak6rN5HA5uMKZCqnIVXBnR7REgQ=";
   };
 
   propagatedBuildInputs = [

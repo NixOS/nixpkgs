@@ -1,77 +1,77 @@
-{ lib
-, stdenv
-, fetchgit
-, fetchzip
-, alsa-lib
-, aubio
-, boost
-, cairomm
-, cppunit
-, curl
-, dbus
-, doxygen
-, ffmpeg
-, fftw
-, fftwSinglePrec
-, flac
-, fluidsynth
-, glibc
-, glibmm
-, graphviz
-, gtkmm2
-, harvid
-, hidapi
-, itstool
-, kissfft
-, libarchive
-, libjack2
-, liblo
-, libltc
-, libogg
-, libpulseaudio
-, librdf_raptor
-, librdf_rasqal
-, libsamplerate
-, libsigcxx
-, libsndfile
-, libusb1
-, libuv
-, libwebsockets
-, libxml2
-, libxslt
-, lilv
-, lrdf
-, lv2
-, makeWrapper
-, pango
-, perl
-, pkg-config
-, python3
-, qm-dsp
-, readline
-, rubberband
-, serd
-, sord
-, soundtouch
-, sratom
-, suil
-, taglib
-, vamp-plugin-sdk
-, wafHook
-, xjadeo
-, optimize ? true # disable to print Lua DSP script output to stdout
-, videoSupport ? true
+{
+  lib,
+  stdenv,
+  fetchgit,
+  fetchzip,
+  alsa-lib,
+  aubio,
+  boost,
+  cairomm,
+  cppunit,
+  curl,
+  dbus,
+  doxygen,
+  ffmpeg,
+  fftw,
+  fftwSinglePrec,
+  flac,
+  fluidsynth,
+  glibc,
+  glibmm,
+  graphviz,
+  gtkmm2,
+  harvid,
+  hidapi,
+  itstool,
+  kissfft,
+  libarchive,
+  libjack2,
+  liblo,
+  libltc,
+  libogg,
+  libpulseaudio,
+  librdf_rasqal,
+  libsamplerate,
+  libsigcxx,
+  libsndfile,
+  libusb1,
+  libuv,
+  libwebsockets,
+  libxml2,
+  libxslt,
+  lilv,
+  lrdf,
+  lv2,
+  makeWrapper,
+  pango,
+  perl,
+  pkg-config,
+  python3,
+  qm-dsp,
+  readline,
+  rubberband,
+  serd,
+  sord,
+  soundtouch,
+  sratom,
+  suil,
+  taglib,
+  vamp-plugin-sdk,
+  wafHook,
+  xjadeo,
+  optimize ? true, # disable to print Lua DSP script output to stdout
+  videoSupport ? true,
 }:
 stdenv.mkDerivation rec {
   pname = "ardour";
-  version = "8.8";
+  version = "8.11";
 
   # We can't use `fetchFromGitea` here, as attempting to fetch release archives from git.ardour.org
   # result in an empty archive. See https://tracker.ardour.org/view.php?id=7328 for more info.
   src = fetchgit {
     url = "git://git.ardour.org/ardour/ardour.git";
     rev = version;
-    hash = "sha256-S96hlk4M+38OjjF3T6lhDm3cBjN5t4y6EeYRmvAmVfE=";
+    hash = "sha256-z+rIWFVua1IG4GZ8kH3quKaBbN+I7Yr62vukJZk6KAg=";
   };
 
   bundledContent = fetchzip {
@@ -94,8 +94,8 @@ stdenv.mkDerivation rec {
     sed 's|/usr/include/libintl.h|${glibc.dev}/include/libintl.h|' -i wscript
     patchShebangs ./tools/
     substituteInPlace libs/ardour/video_tools_paths.cc \
-      --replace 'ffmpeg_exe = X_("");' 'ffmpeg_exe = X_("${ffmpeg}/bin/ffmpeg");' \
-      --replace 'ffprobe_exe = X_("");' 'ffprobe_exe = X_("${ffmpeg}/bin/ffprobe");'
+      --replace-fail 'ffmpeg_exe = X_("");' 'ffmpeg_exe = X_("${ffmpeg}/bin/ffmpeg");' \
+      --replace-fail 'ffprobe_exe = X_("");' 'ffprobe_exe = X_("${ffmpeg}/bin/ffprobe");'
   '';
 
   nativeBuildInputs = [
@@ -109,60 +109,64 @@ stdenv.mkDerivation rec {
     wafHook
   ];
 
-  buildInputs = [
-    alsa-lib
-    aubio
-    boost
-    cairomm
-    cppunit
-    curl
-    dbus
-    ffmpeg
-    fftw
-    fftwSinglePrec
-    flac
-    fluidsynth
-    glibmm
-    gtkmm2
-    hidapi
-    itstool
-    kissfft
-    libarchive
-    libjack2
-    liblo
-    libltc
-    libogg
-    libpulseaudio
-    librdf_raptor
-    librdf_rasqal
-    libsamplerate
-    libsigcxx
-    libsndfile
-    libusb1
-    libuv
-    libwebsockets
-    libxml2
-    libxslt
-    lilv
-    lrdf
-    lv2
-    pango
-    perl
-    python3
-    qm-dsp
-    readline
-    rubberband
-    serd
-    sord
-    soundtouch
-    sratom
-    suil
-    taglib
-    vamp-plugin-sdk
-  ] ++ lib.optionals videoSupport [ harvid xjadeo ];
+  buildInputs =
+    [
+      alsa-lib
+      aubio
+      boost
+      cairomm
+      cppunit
+      curl
+      dbus
+      ffmpeg
+      fftw
+      fftwSinglePrec
+      flac
+      fluidsynth
+      glibmm
+      gtkmm2
+      hidapi
+      itstool
+      kissfft
+      libarchive
+      libjack2
+      liblo
+      libltc
+      libogg
+      libpulseaudio
+      librdf_rasqal
+      libsamplerate
+      libsigcxx
+      libsndfile
+      libusb1
+      libuv
+      libwebsockets
+      libxml2
+      libxslt
+      lilv
+      lrdf
+      lv2
+      pango
+      perl
+      python3
+      qm-dsp
+      readline
+      rubberband
+      serd
+      sord
+      soundtouch
+      sratom
+      suil
+      taglib
+      vamp-plugin-sdk
+    ]
+    ++ lib.optionals videoSupport [
+      harvid
+      xjadeo
+    ];
 
   wafConfigureFlags = [
-    "--cxx11"
+    "--cxx17"
     "--docs"
     "--freedesktop"
     "--no-phone-home"
@@ -177,29 +181,36 @@ stdenv.mkDerivation rec {
     # "--use-external-libs"
   ] ++ lib.optional optimize "--optimize";
 
-  postInstall = ''
-    # wscript does not install these for some reason
-    install -vDm 644 "build/gtk2_ardour/ardour.xml" \
-      -t "$out/share/mime/packages"
-    install -vDm 644 "build/gtk2_ardour/ardour${lib.versions.major version}.desktop" \
-      -t "$out/share/applications"
-    for size in 16 22 32 48 256 512; do
-      install -vDm 644 "gtk2_ardour/resources/Ardour-icon_''${size}px.png" \
-        "$out/share/icons/hicolor/''${size}x''${size}/apps/ardour${lib.versions.major version}.png"
-    done
-    install -vDm 644 "ardour.1"* -t "$out/share/man/man1"
+  postInstall =
+    ''
+      # wscript does not install these for some reason
+      install -vDm 644 "build/gtk2_ardour/ardour.xml" \
+        -t "$out/share/mime/packages"
+      install -vDm 644 "build/gtk2_ardour/ardour${lib.versions.major version}.desktop" \
+        -t "$out/share/applications"
+      for size in 16 22 32 48 256 512; do
+        install -vDm 644 "gtk2_ardour/resources/Ardour-icon_''${size}px.png" \
+          "$out/share/icons/hicolor/''${size}x''${size}/apps/ardour${lib.versions.major version}.png"
+      done
+      install -vDm 644 "ardour.1"* -t "$out/share/man/man1"
 
-    # install additional bundled beats, chords and progressions
-    cp -rp "${bundledContent}"/* "$out/share/ardour${lib.versions.major version}/media"
-  '' + lib.optionalString videoSupport ''
-    # `harvid` and `xjadeo` must be accessible in `PATH` for video to work.
-    wrapProgram "$out/bin/ardour${lib.versions.major version}" \
-      --prefix PATH : "${lib.makeBinPath [ harvid xjadeo ]}"
-  '';
+      # install additional bundled beats, chords and progressions
+      cp -rp "${bundledContent}"/* "$out/share/ardour${lib.versions.major version}/media"
+    ''
+    + lib.optionalString videoSupport ''
+      # `harvid` and `xjadeo` must be accessible in `PATH` for video to work.
+      wrapProgram "$out/bin/ardour${lib.versions.major version}" \
+        --prefix PATH : "${
+          lib.makeBinPath [
+            harvid
+            xjadeo
+          ]
+        }"
+    '';
 
   LINKFLAGS = "-lpthread";
 
-  meta = with lib; {
+  meta = {
     description = "Multi-track hard disk recording software";
     longDescription = ''
       Ardour is a digital audio workstation (DAW), You can use it to
@@ -211,9 +222,12 @@ stdenv.mkDerivation rec {
       https://community.ardour.org/donate
     '';
     homepage = "https://ardour.org/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "ardour8";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ magnetophon mitchmindtree ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      magnetophon
+      mitchmindtree
+    ];
   };
 }

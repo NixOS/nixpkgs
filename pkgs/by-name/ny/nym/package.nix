@@ -6,50 +6,48 @@
   pkg-config,
   openssl,
   darwin,
-  nix-update-script,
+  gitUpdater,
   rustc,
+  fetchurl,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nym";
-  version = "2024.10-caramello";
+  version = "2024.14-crunch-patched";
 
   src = fetchFromGitHub {
     owner = "nymtech";
     repo = "nym";
-    rev = "nym-binaries-v${version}";
-    hash = "sha256-0vEvjVCbwyJ7lpvZnIT551Kul0JfkcNSeURbX2PUZ4w=";
+    tag = "nym-binaries-v${version}";
+    hash = "sha256-ze0N+Hg+jVFKaoreCrZUUA3cHGtUZFtxCh5RwTqOdsc=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "bls12_381-0.8.0" = "sha256-4+X/ZQ5Z+Nax4Ot1JWWvvLxuIUaucHkfnDB2L+Ak7Ro=";
-      "cosmos-sdk-proto-0.22.0-pre" = "sha256-nRfcAbjFcvAqool+6heYK8joiU5YaSWITnO6S5MRM1E=";
-      "indexed_db_futures-0.4.2" = "sha256-vVqrD40CBdSSEtU+kQeuZUfsgpJdl8ks+os0Fct8Ung=";
-    };
+  swagger-ui = fetchurl {
+    url = "https://github.com/swagger-api/swagger-ui/archive/refs/tags/v5.17.14.zip";
+    hash = "sha256-SBJE0IEgl7Efuu73n3HZQrFxYX+cn5UU5jrL4T5xzNw=";
+  };
+
+  cargoHash = "sha256-51QdzV4eYnA+pC1b7TagSF1g+n67IvZw3euJyI3ZRtM=";
+  useFetchCargoVendor = true;
+
+  env = {
+    SWAGGER_UI_DOWNLOAD_URL = "file://${swagger-ui}";
+    OPENSSL_NO_VENDOR = true;
   };
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-        SystemConfiguration
-        CoreServices
-      ]
-    );
+  buildInputs = [
+    openssl
+  ];
 
   checkType = "debug";
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "nym-binaries-v";
+  };
 
   env = {
     VERGEN_BUILD_TIMESTAMP = "0";
@@ -71,6 +69,7 @@ rustPlatform.buildRustPackage rec {
       Nym routes IP packets through other participating nodes to hide their source and destination.
       In contrast with Tor, it prevents timing attacks at the cost of latency.
     '';
+    changelog = "https://github.com/nymtech/nym/releases/tag/nym-binaries-v${version}";
     homepage = "https://nymtech.net";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;

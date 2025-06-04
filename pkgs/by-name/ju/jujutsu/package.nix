@@ -5,55 +5,41 @@
   fetchFromGitHub,
   installShellFiles,
   pkg-config,
-  zstd,
   libgit2,
   libssh2,
   openssl,
-  darwin,
-  libiconv,
   git,
   gnupg,
   openssh,
   buildPackages,
   nix-update-script,
-  testers,
-  jujutsu,
+  versionCheckHook,
 }:
 
-let
-  version = "0.22.0";
-in
-
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jujutsu";
-  inherit version;
+  version = "0.29.0";
 
   src = fetchFromGitHub {
-    owner = "martinvonz";
+    owner = "jj-vcs";
     repo = "jj";
-    rev = "v${version}";
-    hash = "sha256-GbKmX1Ev/8di3A1XT5ZIRjzn2zP6DMye2NpA26PGVIs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jyhjKppwK+emwLEXtOJKU0f4mPdLzDrQabnHhpyUzmw=";
   };
 
-  cargoHash = "sha256-+3oO2M2293Nba6P8bejgZD5OxgCpkIRdcPICDswJyEU=";
+  useFetchCargoVendor = true;
+
+  cargoHash = "sha256-1bb7YWXExS62s83rprHa0byUBJUCdw6JDYkQ3VZcje8=";
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
   ];
 
-  buildInputs =
-    [
-      zstd
-      libgit2
-      libssh2
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-      libiconv
-    ];
+  buildInputs = [
+    libgit2
+    libssh2
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
 
   nativeCheckInputs = [
     git
@@ -77,6 +63,12 @@ rustPlatform.buildRustPackage {
     "jj-cli"
   ];
 
+  # taplo-cli (used in tests) always creates a reqwest client, which
+  # requires configd access on macOS.
+  sandboxProfile = ''
+    (allow mach-lookup (global-name "com.apple.SystemConfiguration.configd"))
+  '';
+
   env = {
     # Disable vendored libraries.
     ZSTD_SYS_USE_PKG_CONFIG = "1";
@@ -89,29 +81,28 @@ rustPlatform.buildRustPackage {
       jj = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/jj";
     in
     lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
-      ${jj} util mangen > ./jj.1
-      installManPage ./jj.1
+      mkdir -p $out/share/man
+      ${jj} util install-man-pages $out/share/man/
 
       installShellCompletion --cmd jj \
-        --bash <(${jj} util completion bash) \
-        --fish <(${jj} util completion fish) \
-        --zsh <(${jj} util completion zsh)
+        --bash <(COMPLETE=bash ${jj}) \
+        --fish <(COMPLETE=fish ${jj}) \
+        --zsh <(COMPLETE=zsh ${jj})
     '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/jj";
+  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script { };
-    tests = {
-      version = testers.testVersion {
-        package = jujutsu;
-        command = "jj --version";
-      };
-    };
   };
 
   meta = {
     description = "Git-compatible DVCS that is both simple and powerful";
-    homepage = "https://github.com/martinvonz/jj";
-    changelog = "https://github.com/martinvonz/jj/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/jj-vcs/jj";
+    changelog = "https://github.com/jj-vcs/jj/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       _0x4A6F
@@ -121,4 +112,4 @@ rustPlatform.buildRustPackage {
     ];
     mainProgram = "jj";
   };
-}
+})

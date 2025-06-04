@@ -10,18 +10,21 @@
   fluidsynth,
   alsa-lib,
   libxmp,
+  libebur128,
   python3,
+  yyjson,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "woof-doom";
-  version = "14.5.0";
+  version = "15.2.0";
 
   src = fetchFromGitHub {
     owner = "fabiangreffrath";
     repo = "woof";
     rev = "woof_${finalAttrs.version}";
-    hash = "sha256-LA4blTlee0+nRK066hj19Zm/FL2qhaZ9Y5JMfMj3IRU=";
+    hash = "sha256-U1JxdWKSIbIbPMipnjY2SJ5lOP9AFMLNjyplK0mFhxE=";
   };
 
   nativeBuildInputs = [
@@ -36,8 +39,12 @@ stdenv.mkDerivation (finalAttrs: {
     fluidsynth
     libsndfile
     libxmp
+    libebur128
     openal
+    yyjson
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Woof! is a continuation of the Boom/MBF bloodline of Doom source ports";

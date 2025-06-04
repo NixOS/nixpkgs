@@ -3,34 +3,31 @@
   acme,
   certbot,
   google-api-python-client,
-  oauth2client,
+  google-auth,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "certbot-dns-google";
-  format = "setuptools";
-
   inherit (certbot) src version;
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   sourceRoot = "${src.name}/certbot-dns-google";
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     acme
     certbot
     google-api-python-client
-    oauth2client
+    google-auth
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [
-    "-o cache_dir=$(mktemp -d)"
-
-    # Monitor https://github.com/certbot/certbot/issues/9606 for a solution
-    "-W 'ignore:pkg_resources is deprecated as an API:DeprecationWarning'"
+    "-p no:cacheprovider"
   ];
 
   meta = certbot.meta // {

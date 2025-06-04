@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchzip
-, ant
-, stripJavaArchivesHook
-, jdk
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchzip,
+  ant,
+  stripJavaArchivesHook,
+  jdk,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://calcoo.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
     mainProgram = "calcoo";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     inherit (jdk.meta) platforms;
   };
 })

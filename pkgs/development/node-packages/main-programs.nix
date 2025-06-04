@@ -11,7 +11,6 @@
   "@babel/cli" = "babel";
   "@commitlint/cli" = "commitlint";
   "@gitbeaker/cli" = "gitbeaker";
-  "@prisma/language-server" = "prisma-language-server";
   "@uppy/companion" = "companion";
   "@webassemblyjs/repl-1.11.1" = "wasm";
   "@webassemblyjs/wasm-strip" = "wasm-strip";
@@ -28,26 +27,18 @@
   fauna-shell = "fauna";
   fkill-cli = "fkill";
   fleek-cli = "fleek";
-  graphql-cli = "graphql";
-  graphql-language-service-cli = "graphql-lsp";
   grunt-cli = "grunt";
   gulp-cli = "gulp";
-  kaput-cli = "kaput";
-  less = "lessc";
+  jsonlint = "jsonlint";
   localtunnel = "lt";
   lua-fmt = "luafmt";
-  neovim = "neovim-node-host";
   parsoid = "parse.js";
   poor-mans-t-sql-formatter-cli = "sqlformat";
-  postcss-cli = "postcss";
-  prettier = "prettier";
   pulp = "pulp";
   purescript-language-server = "purescript-language-server";
   purescript-psa = "psa";
   purs-tidy = "purs-tidy";
   purty = "purty";
   pscid = "pscid";
-  remod-cli = "remod";
   vscode-json-languageserver = "vscode-json-languageserver";
-  webtorrent-cli = "webtorrent";
 }

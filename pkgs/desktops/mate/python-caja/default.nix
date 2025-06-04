@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, caja
-, gtk3
-, python3Packages
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  caja,
+  gtk3,
+  python3Packages,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {
@@ -42,6 +43,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mate-desktop/python-caja";
     license = [ licenses.gpl2Plus ];
     platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

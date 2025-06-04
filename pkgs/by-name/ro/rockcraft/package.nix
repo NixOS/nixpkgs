@@ -4,34 +4,39 @@
   fetchFromGitHub,
   dpkg,
   nix-update-script,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "rockcraft";
-  version = "1.5.3";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "rockcraft";
-    rev = "1d87e33cf207b3a2f16eb125743ec11546fa0cb1";
-    hash = "sha256-QnW3BMu4Tuvj8PCt5eYJbNMiojXpyJ1uza6hpMxxSOE=";
+    rev = version;
+    hash = "sha256-yv+TGDSUBKJf5X+73Do9KrAcCodeBPqpIHgpYZslR3o=";
   };
 
-  postPatch = ''
-    substituteInPlace rockcraft/__init__.py \
-      --replace-fail "dev" "${version}"
-
-    substituteInPlace rockcraft/utils.py \
-      --replace-fail "distutils.util" "setuptools.dist"
-  '';
+  pyproject = true;
 
   build-system = with python3Packages; [ setuptools-scm ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail "setuptools~=80.8.0" "setuptools"
+  '';
 
   dependencies = with python3Packages; [
     craft-application
     craft-archives
     craft-platforms
     spdx-lookup
+    tabulate
+  ];
+
+  pythonRelaxDeps = [
+    "craft-providers"
   ];
 
   nativeCheckInputs =
@@ -42,15 +47,23 @@ python3Packages.buildPythonApplication rec {
       pytest-mock
       pytest-subprocess
       pytestCheckHook
+      versionCheckHook
+      writableTmpDirAsHomeHook
     ]
     ++ [ dpkg ];
 
-  preCheck = ''
-    mkdir -p check-phase
-    export HOME="$(pwd)/check-phase"
-  '';
+  pytestFlagsArray = [ "tests/unit" ];
 
-  disabledTests = [ "test_expand_extensions" ];
+  disabledTests = [
+    "test_project_all_platforms_invalid"
+    "test_run_init_flask"
+    "test_run_init_django"
+    # Mock is broken for Unix FHS reasons.
+    "test_run_pack_services"
+  ];
+
+  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "SSL_CERT_FILE" ];
 
   passthru.updateScript = nix-update-script { };
 

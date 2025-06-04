@@ -10,6 +10,8 @@
   nix-update-script,
   testers,
   awscli2,
+  addBinToPathHook,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -62,25 +64,25 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.17.64"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.27.2"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Hq86KhAIATSz3dF1zO6aSdZQAfLs4EcRqWglAOJUVGk=";
+    tag = version;
+    hash = "sha256-rdgjA6t5L4mNKnyRyNdIyzX6fjMUgbD0YCjresK94Dg=";
   };
-
-  patches = [ ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'awscrt>=0.19.18,<=0.21.2' 'awscrt>=0.19.18' \
-      --replace-fail 'cryptography>=40.0.0,<40.0.2' 'cryptography>=43.0.0' \
+      --replace-fail 'flit_core>=3.7.1,<3.9.1' 'flit_core>=3.7.1' \
+      --replace-fail 'awscrt==0.25.4' 'awscrt>=0.25.4' \
+      --replace-fail 'cryptography>=40.0.0,<43.0.2' 'cryptography>=43.0.0' \
       --replace-fail 'distro>=1.5.0,<1.9.0' 'distro>=1.5.0' \
       --replace-fail 'docutils>=0.10,<0.20' 'docutils>=0.10' \
-      --replace-fail 'prompt-toolkit>=3.0.24,<3.0.39' 'prompt-toolkit>=3.0.24'
+      --replace-fail 'prompt-toolkit>=3.0.24,<3.0.39' 'prompt-toolkit>=3.0.24' \
+      --replace-fail 'ruamel.yaml.clib>=0.2.0,<=0.2.12' 'ruamel.yaml.clib>=0.2.0' \
 
     substituteInPlace requirements-base.txt \
       --replace-fail "wheel==0.43.0" "wheel>=0.43.0"
@@ -113,6 +115,7 @@ py.pkgs.buildPythonApplication rec {
     pyyaml
     ruamel-yaml
     urllib3
+    zipp
   ];
 
   propagatedBuildInputs = [
@@ -121,9 +124,11 @@ py.pkgs.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = with py.pkgs; [
+    addBinToPathHook
     jsonschema
     mock
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   postInstall =
@@ -136,10 +141,14 @@ py.pkgs.buildPythonApplication rec {
       rm $out/bin/aws.cmd
     '';
 
-  preCheck = ''
-    export PATH=$PATH:$out/bin
-    export HOME=$(mktemp -d)
+  # Propagating dependencies leaks them through $PYTHONPATH which causes issues
+  # when used in nix-shell.
+  postFixup = ''
+    rm $out/nix-support/propagated-build-inputs
   '';
+
+  # tests/unit/customizations/sso/test_utils.py uses sockets
+  __darwinAllowLocalNetworking = true;
 
   pytestFlagsArray = [
     "-Wignore::DeprecationWarning"
@@ -167,7 +176,7 @@ py.pkgs.buildPythonApplication rec {
       # Excludes 1.x versions from the Github tags list
       extraArgs = [
         "--version-regex"
-        "^(2\.(.*))"
+        "^(2\\.(.*))"
       ];
     };
     tests.version = testers.testVersion {
@@ -177,12 +186,12 @@ py.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Unified tool to manage your AWS services";
     homepage = "https://aws.amazon.com/cli/";
     changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       bhipple
       davegallant
       bryanasdev000

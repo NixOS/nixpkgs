@@ -1,42 +1,47 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, vacuum-go }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+}:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "vacuum-go";
-  version = "0.12.1";
+  version = "0.16.13";
 
   src = fetchFromGitHub {
     owner = "daveshanley";
     repo = "vacuum";
     # using refs/tags because simple version gives: 'the given path has multiple possibilities' error
-    rev = "refs/tags/v${version}";
-    hash = "sha256-uNmjb1fj9bMawvNgITxu/RIZeLEn8JzIpFbSMrsmFIQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-S4YhPXPSB60infsjkI1GdPrBYb0bXoj0+rc9GINuh3Y=";
   };
 
-  vendorHash = "sha256-Yxzj3IAYp6C7qLbV2RV4lWZRDSheauZXvd+p5B5Y3qA=";
+  vendorHash = "sha256-rzJtYxnRWtSmMPeKEbBy6I2DFEOLEJ1Uj+nPpTKIDhw=";
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=v${version}"
+    "-X main.version=v${finalAttrs.version}"
   ];
 
   subPackages = [ "./vacuum.go" ];
 
   passthru = {
     tests.version = testers.testVersion {
-      package = vacuum-go;
+      package = finalAttrs.finalPackage;
       command = "vacuum version";
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
   meta = {
     description = "The world's fastest OpenAPI & Swagger linter";
     homepage = "https://quobix.com/vacuum";
-    changelog = "https://github.com/daveshanley/vacuum/releases/tag/v${version}";
+    changelog = "https://github.com/daveshanley/vacuum/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "vacuum";
     maintainers = with lib.maintainers; [ konradmalik ];
   };
-}
+})

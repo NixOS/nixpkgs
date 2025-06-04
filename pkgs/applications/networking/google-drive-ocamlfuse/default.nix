@@ -1,7 +1,14 @@
-{ lib, ocaml, buildDunePackage, fetchFromGitHub
-, extlib, ocamlfuse, gapi-ocaml, ocaml_sqlite3
-, tiny_httpd
-, ounit2
+{
+  lib,
+  ocaml,
+  buildDunePackage,
+  fetchFromGitHub,
+  extlib,
+  ocamlfuse,
+  gapi-ocaml,
+  ocaml_sqlite3,
+  tiny_httpd,
+  ounit2,
 }:
 
 buildDunePackage rec {
@@ -15,10 +22,16 @@ buildDunePackage rec {
     hash = "sha256-AWr1tcium70rXFKMTv6xcWxndOJua3UXG8Q04TN1Siw=";
   };
 
-  doCheck = lib.versionOlder ocaml.version "5.0";
+  doCheck = lib.versionAtLeast ocaml.version "5";
   checkInputs = [ ounit2 ];
 
-  buildInputs = [ extlib ocamlfuse gapi-ocaml ocaml_sqlite3 tiny_httpd ];
+  buildInputs = [
+    extlib
+    ocamlfuse
+    gapi-ocaml
+    ocaml_sqlite3
+    tiny_httpd
+  ];
 
   meta = {
     inherit (src.meta) homepage;

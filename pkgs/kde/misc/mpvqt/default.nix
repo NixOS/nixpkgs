@@ -4,21 +4,26 @@
   fetchFromGitLab,
   mpv-unwrapped,
   qtdeclarative,
+  qtbase,
 }:
+
 mkKdeDerivation rec {
   pname = "mpvqt";
-  version = "1.0.1";
+  version = "1.1.1";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "libraries";
     repo = "mpvqt";
-    rev = "v${version}";
-    hash = "sha256-baVTyz3sXfQC7NEO2VoN0bhXpgkKjclwrFN/CLsuoC0=";
+    tag = "v${version}";
+    hash = "sha256-qscubUiej/OqQI+V9gxQb7eVa3L2FJ5koqgXFoBw8tU=";
   };
 
   extraBuildInputs = [ qtdeclarative ];
+
   extraPropagatedBuildInputs = [ mpv-unwrapped ];
+
+  extraCmakeFlags = [ "-DQt6_DIR=${qtbase}/lib/cmake/Qt6" ];
 
   meta.license = with lib.licenses; [
     bsd2

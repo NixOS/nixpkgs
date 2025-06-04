@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   name = "kthxbye";
 
@@ -6,87 +6,89 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
     maintainers = [ nukaduka ];
   };
 
-  nodes.server = { ... }: {
-    environment.systemPackages = with pkgs; [ prometheus-alertmanager ];
-    services.prometheus = {
-      enable = true;
-
-      globalConfig = {
-        scrape_interval = "5s";
-        scrape_timeout = "5s";
-        evaluation_interval = "5s";
-      };
-
-      scrapeConfigs = [
-        {
-          job_name = "prometheus";
-          scrape_interval = "5s";
-          static_configs = [
-            {
-              targets = [ "localhost:9090" ];
-            }
-          ];
-        }
-      ];
-
-      rules = [
-        ''
-          groups:
-            - name: test
-              rules:
-                - alert: node_up
-                  expr: up != 0
-                  for: 5s
-                  labels:
-                    severity: bottom of the barrel
-                  annotations:
-                    summary: node is fine
-        ''
-      ];
-
-      alertmanagers = [
-        {
-          static_configs = [
-            {
-              targets = [
-                "localhost:9093"
-              ];
-            }
-          ];
-        }
-      ];
-
-      alertmanager = {
+  nodes.server =
+    { ... }:
+    {
+      environment.systemPackages = with pkgs; [ prometheus-alertmanager ];
+      services.prometheus = {
         enable = true;
-        openFirewall = true;
-        configuration.route = {
-          receiver = "test";
-          group_wait = "5s";
-          group_interval = "5s";
-          group_by = [ "..." ];
+
+        globalConfig = {
+          scrape_interval = "5s";
+          scrape_timeout = "5s";
+          evaluation_interval = "5s";
         };
-        configuration.receivers = [
+
+        scrapeConfigs = [
           {
-            name = "test";
-            webhook_configs = [
+            job_name = "prometheus";
+            scrape_interval = "5s";
+            static_configs = [
               {
-                url = "http://localhost:1234";
+                targets = [ "localhost:9090" ];
               }
             ];
           }
         ];
+
+        rules = [
+          ''
+            groups:
+              - name: test
+                rules:
+                  - alert: node_up
+                    expr: up != 0
+                    for: 5s
+                    labels:
+                      severity: bottom of the barrel
+                    annotations:
+                      summary: node is fine
+          ''
+        ];
+
+        alertmanagers = [
+          {
+            static_configs = [
+              {
+                targets = [
+                  "localhost:9093"
+                ];
+              }
+            ];
+          }
+        ];
+
+        alertmanager = {
+          enable = true;
+          openFirewall = true;
+          configuration.route = {
+            receiver = "test";
+            group_wait = "5s";
+            group_interval = "5s";
+            group_by = [ "..." ];
+          };
+          configuration.receivers = [
+            {
+              name = "test";
+              webhook_configs = [
+                {
+                  url = "http://localhost:1234";
+                }
+              ];
+            }
+          ];
+        };
+      };
+
+      services.kthxbye = {
+        enable = true;
+        openFirewall = true;
+        extendIfExpiringIn = "30s";
+        logJSON = true;
+        maxDuration = "15m";
+        interval = "5s";
       };
     };
-
-    services.kthxbye = {
-      enable = true;
-      openFirewall = true;
-      extendIfExpiringIn = "30s";
-      logJSON = true;
-      maxDuration = "15m";
-      interval = "5s";
-    };
-  };
 
   testScript = ''
     with subtest("start the server"):
@@ -107,4 +109,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
       server.systemctl("status kthxbye.service")
       server.succeed("amtool --alertmanager.url 'http://localhost:9093' silence | grep 'ACK'")
   '';
-})
+}

@@ -1,36 +1,39 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }: {
+{ lib, pkgs, ... }:
+{
   name = "systemd-initrd-luks-tpm2";
 
-  nodes.machine = { pkgs, ... }: {
-    # Use systemd-boot
-    virtualisation = {
-      emptyDiskImages = [ 512 ];
-      useBootLoader = true;
-      # Booting off the TPM2-encrypted device requires an available init script
-      mountHostNixStore = true;
-      useEFIBoot = true;
-      tpm.enable = true;
-    };
-    boot.loader.systemd-boot.enable = true;
-
-    boot.initrd.availableKernelModules = [ "tpm_tis" ];
-
-    environment.systemPackages = with pkgs; [ cryptsetup ];
-    boot.initrd.systemd = {
-      enable = true;
-    };
-
-    specialisation.boot-luks.configuration = {
-      boot.initrd.luks.devices = lib.mkVMOverride {
-        cryptroot = {
-          device = "/dev/vdb";
-          crypttabExtraOpts = [ "tpm2-device=auto" ];
-        };
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      # Use systemd-boot
+      virtualisation = {
+        emptyDiskImages = [ 512 ];
+        useBootLoader = true;
+        # Booting off the TPM2-encrypted device requires an available init script
+        mountHostNixStore = true;
+        useEFIBoot = true;
+        tpm.enable = true;
       };
-      virtualisation.rootDevice = "/dev/mapper/cryptroot";
-      virtualisation.fileSystems."/".autoFormat = true;
+      boot.loader.systemd-boot.enable = true;
+
+      boot.initrd.availableKernelModules = [ "tpm_tis" ];
+
+      environment.systemPackages = with pkgs; [ cryptsetup ];
+      boot.initrd.systemd = {
+        enable = true;
+      };
+
+      specialisation.boot-luks.configuration = {
+        boot.initrd.luks.devices = lib.mkVMOverride {
+          cryptroot = {
+            device = "/dev/vdb";
+            crypttabExtraOpts = [ "tpm2-device=auto" ];
+          };
+        };
+        virtualisation.rootDevice = "/dev/mapper/cryptroot";
+        virtualisation.fileSystems."/".autoFormat = true;
+      };
     };
-  };
 
   testScript = ''
     # Create encrypted volume
@@ -47,4 +50,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     machine.wait_for_unit("multi-user.target")
     assert "/dev/mapper/cryptroot on / type ext4" in machine.succeed("mount")
   '';
-})
+}

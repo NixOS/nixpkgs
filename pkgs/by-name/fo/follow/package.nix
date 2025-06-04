@@ -6,31 +6,31 @@
   makeDesktopItem,
   makeWrapper,
   nodejs,
-  pnpm,
+  pnpm_9,
   stdenv,
 }:
 stdenv.mkDerivation rec {
   pname = "follow";
 
-  version = "0.0.1-alpha.17";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "RSSNext";
     repo = "Follow";
     rev = "v${version}";
-    hash = "sha256-amW+jpJ2E7muKwiWbblONRFzH849js2SaT+poUWQWZI=";
+    hash = "sha256-TPzrQo6214fXQmF45p5agQ1zqLYzpmMpYb89ASPsWio=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpm_9.configHook
     makeWrapper
     imagemagick
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = "sha256-JFAONU1C8pB2Hu4PJqqdqcXk9Ec+iPiAL8J+dk4oPj0=";
+    hash = "sha256-xNGLYzEz1G5sZSqmji+ItJ9D1vvZcwkkygnDeuypcIM=";
   };
 
   env = {
@@ -38,15 +38,25 @@ stdenv.mkDerivation rec {
 
     # This environment variables inject the production Vite config at build time.
     # Copy from:
-    # 1. https://github.com/RSSNext/Follow/blob/0745ac07dd2a4a34e4251c034678ace15c302697/.github/workflows/build.yml#L18
+    # 1. https://github.com/RSSNext/Follow/blob/v0.3.7/.github/workflows/build.yml#L18
     # 2. And logs in the corresponding GitHub Actions: https://github.com/RSSNext/Follow/actions/workflows/build.yml
     VITE_WEB_URL = "https://app.follow.is";
     VITE_API_URL = "https://api.follow.is";
-    VITE_IMGPROXY_URL = "https://thumbor.follow.is";
     VITE_SENTRY_DSN = "https://e5bccf7428aa4e881ed5cb713fdff181@o4507542488023040.ingest.us.sentry.io/4507570439979008";
-    VITE_BUILD_TYPE = "production";
-    VITE_POSTHOG_KEY = "phc_EZGEvBt830JgBHTiwpHqJAEbWnbv63m5UpreojwEWNL";
+    VITE_OPENPANEL_CLIENT_ID = "0e477ab4-d92d-4d6e-b889-b09d86ab908e";
+    VITE_OPENPANEL_API_URL = "https://openpanel.follow.is/api";
+    VITE_FIREBASE_CONFIG = builtins.toJSON {
+      apiKey = "AIzaSyDuM93019tp8VI7wsszJv8ChOs7b1EE5Hk";
+      authDomain = "follow-428106.firebaseapp.com";
+      projectId = "follow-428106";
+      storageBucket = "follow-428106.appspot.com";
+      messagingSenderId = "194977404578";
+      appId = "1:194977404578:web:1920bb0c9ea5e2373669fb";
+      measurementId = "G-SJE57D4F14";
+    };
   };
+
+  dontCheckForBrokenSymlinks = true;
 
   desktopItem = makeDesktopItem {
     name = "follow";
@@ -83,7 +93,7 @@ stdenv.mkDerivation rec {
       --inherit-argv0 \
       --add-flags --disable-gpu-compositing \
       --add-flags $out/share/follow \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     install -m 444 -D "${desktopItem}/share/applications/"* \
         -t $out/share/applications/

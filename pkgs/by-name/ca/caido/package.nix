@@ -15,14 +15,14 @@ let
     "cli"
     "desktop"
   ];
-  version = "0.42.0";
+  version = "0.48.1";
   cli = fetchurl {
     url = "https://caido.download/releases/v${version}/caido-cli-v${version}-linux-x86_64.tar.gz";
-    hash = "sha256-Y0ygbdL9IKvTRLwR0oW1LjFQZfPxKOoZnSDV2zgtJjM=";
+    hash = "sha256-UdeC3BZmQVUdWmwQTC27ptF0+lZgCXpF8yXaf8Bjpbo=";
   };
   desktop = fetchurl {
     url = "https://caido.download/releases/v${version}/caido-desktop-v${version}-linux-x86_64.AppImage";
-    hash = "sha256-zS/lbcXK1iN2tuUMWc6Us0q2eUypD8mXsw0C+QKE3+w=";
+    hash = "sha256-4KQpgO8Cb+TkKuDOK+bAE0nOhlwjkSUVXLHJmHaj6NQ=";
   };
   appimageContents = appimageTools.extractType2 {
     inherit pname version;
@@ -70,6 +70,7 @@ let
     maintainers = with lib.maintainers; [
       octodi
       d3vil0p3r
+      blackzeshi
     ];
     platforms = [ "x86_64-linux" ];
   };

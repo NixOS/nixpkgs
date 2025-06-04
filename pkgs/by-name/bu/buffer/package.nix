@@ -1,29 +1,30 @@
-{ lib
-, desktop-file-utils
-, fetchFromGitLab
-, gobject-introspection
-, gtk4
-, gtksourceview5
-, libadwaita
-, libspelling
-, meson
-, ninja
-, pkg-config
-, python3
-, stdenv
-, wrapGAppsHook4
+{
+  lib,
+  desktop-file-utils,
+  fetchFromGitLab,
+  gobject-introspection,
+  gtk4,
+  gtksourceview5,
+  libadwaita,
+  libspelling,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  stdenv,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "buffer";
-  version = "0.9.5";
+  version = "0.9.10";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "cheywood";
     repo = "buffer";
-    rev = finalAttrs.version;
-    hash = "sha256-WhUSiZ2Nty5CdaJC8zZVkUptP5cRnMByZKy3e9TAyjs=";
+    tag = finalAttrs.version;
+    hash = "sha256-amWfrZX1b1OmLhL7w8j/+iEwYRnO1DVR580pLkjtS/g=";
   };
 
   nativeBuildInputs = [
@@ -40,9 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
     gtksourceview5
     libadwaita
     libspelling
-    (python3.withPackages (ps: with ps; [
-      pygobject3
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        pygobject3
+      ]
+    ))
   ];
 
   preFixup = ''
@@ -51,12 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Minimal editing space for all those things that don't need keeping";
     homepage = "https://gitlab.gnome.org/cheywood/buffer";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "buffer";
-    maintainers = with maintainers; [ michaelgrahamevans ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ michaelgrahamevans ];
+    platforms = lib.platforms.linux;
   };
 })

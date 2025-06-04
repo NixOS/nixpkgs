@@ -7,7 +7,7 @@
   ninja,
   python3,
   nix-update-script,
-  abseil-cpp,
+  abseil-cpp_202401,
   curl,
   gtest,
   nlohmann_json,
@@ -16,19 +16,19 @@
   libwebm,
   mbedtls,
   mimalloc,
-  protobuf,
+  protobuf_29,
   zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shaka-packager";
-  version = "3.2.0";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "shaka-project";
     repo = "shaka-packager";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-L10IMsc4dTMa5zwYq612F4J+uKOmEEChY8k/m09wuNE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Syty10LHGIlP5Jw+UneQMN+wBz/ggvV0xV8+3ThU8SM=";
   };
 
   patches = [
@@ -46,10 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     # The last step is necessary to keep the patch size to a minimum, otherwise we'd have
     # to add the namespace identifiers everywhere a dependency is used.
     ./0002-Unvendor-dependencies.patch
-    # As nixpkgs ships with a newer version of libcurl than the one vendored in shaka-packager,
-    # we have to fix one deprecation.
-    # See https://curl.se/libcurl/c/CURLOPT_PUT.html for further information.
-    ./0003-Fix-curl-deprecations.patch
   ];
 
   nativeBuildInputs = [
@@ -58,8 +54,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    python3
-    abseil-cpp
+    (python3.withPackages (ps: [
+      # As we remove the vendored protobuf in our patch,
+      # we must re-add it to the python package used for
+      # pssh_box.py.
+      ps.protobuf
+    ]))
+    abseil-cpp_202401
     curl
     gtest
     nlohmann_json
@@ -68,9 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
     libwebm
     mbedtls
     mimalloc
-    (protobuf.override {
+    (protobuf_29.override {
       # must be the same version as for shaka-packager
-      inherit abseil-cpp;
+      abseil-cpp = abseil-cpp_202401;
     })
     zlib
   ];
@@ -95,13 +96,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Media packaging framework for VOD and Live DASH and HLS applications";
     homepage = "https://shaka-project.github.io/shaka-packager/html/";
     changelog = "https://github.com/shaka-project/shaka-packager/releases/tag/v${finalAttrs.version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     mainProgram = "packager";
-    maintainers = with maintainers; [ niklaskorz ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ niklaskorz ];
+    platforms = lib.platforms.all;
   };
 })

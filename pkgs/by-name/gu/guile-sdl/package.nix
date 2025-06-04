@@ -28,6 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
+  configureFlags = [
+    (lib.enableFeature (!stdenv.hostPlatform.isDarwin) "sdltest")
+  ];
+
   buildInputs = [
     (lib.getDev SDL)
     (lib.getDev SDL_image)
@@ -50,11 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   meta = {
+    # clang-16: error: unsupported option '--visibility=hidden'; did you mean '-fvisibility=hidden'
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://www.gnu.org/software/guile-sdl/";
     description = "Guile bindings for SDL";
     license = lib.licenses.gpl3Plus;
-    maintainers = lib.teams.sdl.members
-                  ++ (with lib.maintainers; [ ]);
+    maintainers = [ ];
     inherit (guile.meta) platforms;
   };
 })

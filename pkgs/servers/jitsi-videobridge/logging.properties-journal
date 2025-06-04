@@ -1,7 +1,0 @@
-handlers = java.util.logging.ConsoleHandler
-java.util.logging.ConsoleHandler.level = ALL
-java.util.logging.ConsoleHandler.formatter = org.jitsi.utils.logging2.JitsiLogFormatter
-.level = INFO
-org.jitsi.videobridge.xmpp.ComponentImpl.level = FINE
-org.jitsi.impl.neomedia.MediaStreamImpl.level = WARNING
-org.jitsi.utils.logging2.JitsiLogFormatter.disableTimestamp = true

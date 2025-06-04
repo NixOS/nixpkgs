@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libwacom";
-  version = "2.13.0";
+  version = "2.15.0";
 
   outputs = [
     "out"
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "linuxwacom";
     repo = "libwacom";
     rev = "libwacom-${finalAttrs.version}";
-    hash = "sha256-OJQe0GdndgpvW4aJdgSKWw+u3ng1pn3FgdcA81jfmkQ=";
+    hash = "sha256-fc7ymkyIJ5BvrPxJg7Vw1h1mBy+icr+5kVDecODxRLQ=";
   };
 
   postPatch = ''
@@ -45,10 +45,16 @@ stdenv.mkDerivation (finalAttrs: {
     udev
     libevdev
     libgudev
+    (python3.withPackages (
+      pp: with pp; [
+        pp.libevdev
+        pp.pyudev
+      ]
+    ))
   ];
 
   mesonFlags = [
-    (lib.mesonEnable "tests" finalAttrs.doCheck)
+    (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
     (lib.mesonOption "sysconfdir" "/etc")
   ];
 
@@ -74,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://linuxwacom.github.io/";
     changelog = "https://github.com/linuxwacom/libwacom/blob/${finalAttrs.src.rev}/NEWS";
     description = "Libraries, configuration, and diagnostic tools for Wacom tablets running under Linux";
-    maintainers = lib.teams.freedesktop.members;
+    teams = [ lib.teams.freedesktop ];
     license = lib.licenses.hpnd;
   };
 })

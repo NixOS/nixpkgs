@@ -13,10 +13,10 @@
   ninja,
   gnome,
   cairo,
-  enchant,
   icu,
   itstool,
   libadwaita,
+  libspelling,
   editorconfig-core-c,
   libxml2,
   desktop-file-utils,
@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-text-editor";
-  version = "46.3";
+  version = "48.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-text-editor/${lib.versions.major finalAttrs.version}/gnome-text-editor-${finalAttrs.version}.tar.xz";
-    hash = "sha256-AFtIEEqQm+Zq4HRI0rxXBsfRE3gQV6JP9tpVvfMkxz0=";
+    hash = "sha256-/B9dR1vdJ9TAQ5pbj+ENbkAbQvHbo9BLdWeDkDbuICs=";
   };
 
   nativeBuildInputs = [
@@ -44,13 +44,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cairo
-    enchant
     icu
     glib
     gsettings-desktop-schemas
     gtk4
     gtksourceview5
     libadwaita
+    libspelling
     editorconfig-core-c
   ];
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.gnome.org/GNOME/gnome-text-editor/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Text Editor for GNOME";
     mainProgram = "gnome-text-editor";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };

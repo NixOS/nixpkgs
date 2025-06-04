@@ -1,11 +1,41 @@
-{ lib, stdenv, fetchzip, cmake, pkg-config
-, SDL2, libpng, zlib, xz, freetype, fontconfig
-, nlohmann_json, curl, icu, harfbuzz, expat, glib, pcre2
-, withOpenGFX ? true, withOpenSFX ? true, withOpenMSX ? true
-, withFluidSynth ? true, audioDriver ? "alsa"
-, fluidsynth, soundfont-fluid, libsndfile
-, flac, libogg, libvorbis, libopus, libmpg123, pulseaudio, alsa-lib, libjack2
-, procps, writeScriptBin, makeWrapper, runtimeShell }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  SDL2,
+  libpng,
+  zlib,
+  xz,
+  freetype,
+  fontconfig,
+  nlohmann_json,
+  curl,
+  icu,
+  harfbuzz,
+  expat,
+  glib,
+  pcre2,
+  withOpenGFX ? true,
+  withOpenSFX ? true,
+  withOpenMSX ? true,
+  withFluidSynth ? true,
+  fluidsynth,
+  soundfont-fluid,
+  soundfont-name ? "FluidR3_GM2-2",
+  libsndfile,
+  flac,
+  libogg,
+  libvorbis,
+  libopus,
+  libmpg123,
+  pulseaudio,
+  alsa-lib,
+  libjack2,
+  makeWrapper,
+}:
 
 let
   opengfx = fetchzip {
@@ -22,13 +52,6 @@ let
     url = "https://cdn.openttd.org/openmsx-releases/0.4.2/openmsx-0.4.2-all.zip";
     sha256 = "sha256-Cgrg2m+uTODFg39mKgX+hE8atV7v5bVyZd716vSZB8M=";
   };
-
-  playmidi = writeScriptBin "playmidi" ''
-    #!${runtimeShell}
-    trap "${procps}/bin/pkill fluidsynth" EXIT
-    ${fluidsynth}/bin/fluidsynth -a ${audioDriver} -i ${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2 $*
-  '';
-
 in
 stdenv.mkDerivation rec {
   pname = "openttd";
@@ -39,44 +62,71 @@ stdenv.mkDerivation rec {
     hash = "sha256-YT4IE/rJ9pnpeMWKbOra6AbSUwW19RwOKlXkxwoMeKY=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config makeWrapper ];
-  buildInputs = [
-    SDL2 libpng xz zlib freetype fontconfig
-    nlohmann_json curl icu harfbuzz expat glib pcre2
-  ] ++ lib.optionals withFluidSynth [
-    fluidsynth soundfont-fluid libsndfile
-    flac libogg libvorbis libopus libmpg123 pulseaudio alsa-lib libjack2
+  patches = [
+    # Fix build against icu-76:
+    #   https://github.com/OpenTTD/OpenTTD/pull/13048
+    (fetchpatch {
+      name = "icu-75.patch";
+      url = "https://github.com/OpenTTD/OpenTTD/commit/14fac2ad37bfb9cec56b4f9169d864f6f1c7b96e.patch";
+      hash = "sha256-L35ybnTKPO+HVP/7ZYzWM2mA+s1RAywhofSuzpy/6sc=";
+    })
   ];
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    makeWrapper
+  ];
+  buildInputs =
+    [
+      SDL2
+      libpng
+      xz
+      zlib
+      freetype
+      fontconfig
+      nlohmann_json
+      curl
+      icu
+      harfbuzz
+      expat
+      glib
+      pcre2
+    ]
+    ++ lib.optionals withFluidSynth [
+      fluidsynth
+      soundfont-fluid
+      libsndfile
+      flac
+      libogg
+      libvorbis
+      libopus
+      libmpg123
+      pulseaudio
+      alsa-lib
+      libjack2
+    ];
 
   prefixKey = "--prefix-dir=";
 
-  configureFlags = [
-    "--without-liblzo2"
-  ];
+  configureFlags = [ "--without-liblzo2" ];
 
-  postInstall = ''
-    ${lib.optionalString withOpenGFX ''
-      cp ${opengfx}/*.tar $out/share/games/openttd/baseset
-    ''}
-
-    mkdir -p $out/share/games/openttd/data
-
-    ${lib.optionalString withOpenSFX ''
-      cp ${opensfx}/*.tar $out/share/games/openttd/data
-    ''}
-
-    mkdir $out/share/games/openttd/baseset/openmsx
-
-    ${lib.optionalString withOpenMSX ''
-      cp ${openmsx}/*.tar $out/share/games/openttd/baseset/openmsx
-    ''}
-
-    ${lib.optionalString withFluidSynth ''
-      wrapProgram $out/bin/openttd \
-        --add-flags -m \
-        --add-flags extmidi:cmd=${playmidi}/bin/playmidi
-    ''}
+  postPatch = ''
+    substituteInPlace src/music/fluidsynth.cpp \
+      --replace-fail "/usr/share/soundfonts/default.sf2" \
+                     "${soundfont-fluid}/share/soundfonts/${soundfont-name}.sf2"
   '';
+
+  postInstall =
+    lib.optionalString withOpenGFX ''
+      cp ${opengfx}/*.tar $out/share/games/openttd/baseset
+    ''
+    + lib.optionalString withOpenSFX ''
+      cp ${opensfx}/*.tar $out/share/games/openttd/baseset
+    ''
+    + lib.optionalString withOpenMSX ''
+      tar -xf ${openmsx}/*.tar -C $out/share/games/openttd/baseset
+    '';
 
   meta = with lib; {
     description = ''Open source clone of the Microprose game "Transport Tycoon Deluxe"'';
@@ -95,6 +145,9 @@ stdenv.mkDerivation rec {
     changelog = "https://cdn.openttd.org/openttd-releases/${version}/changelog.txt";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jcumming fpletz ];
+    maintainers = with maintainers; [
+      jcumming
+      fpletz
+    ];
   };
 }

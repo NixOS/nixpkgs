@@ -2,27 +2,32 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  langgraph-checkpoint,
+
+  # build system
+  poetry-core,
+
+  # dependencies
   aiosqlite,
+  langgraph-checkpoint,
+
+  # testing
   pytest-asyncio,
   pytestCheckHook,
-  langgraph-sdk,
-  poetry-core,
-  pythonOlder,
+
+  # passthru
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint-sqlite";
-  version = "2.0.0";
+  version = "2.0.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    rev = "refs/tags/checkpointsqlite==${version}";
-    hash = "sha256-aG7kHdlOkrjfYcdDWwCum0mQvWNMlF2CcEDlkzbv4Zw=";
+    tag = "checkpointsqlite==${version}";
+    hash = "sha256-UUlrhQS0C2rPp//+LwU2rgR4R3AM5fM9X3CYvi/DAy8=";
   };
 
   sourceRoot = "${src.name}/libs/checkpoint-sqlite";
@@ -34,6 +39,13 @@ buildPythonPackage rec {
     langgraph-checkpoint
   ];
 
+  pythonRelaxDeps = [
+    "aiosqlite"
+
+    # Checkpoint clients are lagging behind langgraph-checkpoint
+    "langgraph-checkpoint"
+  ];
+
   pythonImportsCheck = [ "langgraph.checkpoint.sqlite" ];
 
   nativeCheckInputs = [
@@ -41,8 +53,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  passthru = {
-    updateScript = langgraph-sdk.updateScript;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "checkpoint-sqlite==(\\d+\\.\\d+\\.\\d+)"
+    ];
   };
 
   meta = {

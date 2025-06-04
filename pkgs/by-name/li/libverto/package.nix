@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, glib
-, libev
-, libevent
-, pkg-config
-, glibSupport ? true
-, libevSupport ? true
-, libeventSupport ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  glib,
+  libev,
+  libevent,
+  pkg-config,
+  glibSupport ? true,
+  libevSupport ? true,
+  libeventSupport ? true,
 }:
 
 let
@@ -31,9 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs =
-    optional glibSupport glib
-    ++ optional libevSupport libev
-    ++ optional libeventSupport libevent;
+    optional glibSupport glib ++ optional libevSupport libev ++ optional libeventSupport libevent;
 
   meta = with lib; {
     homepage = "https://github.com/latchset/libverto";
@@ -48,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       offload the choice of the main loop to the application.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 })

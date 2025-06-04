@@ -13,20 +13,21 @@
   setuptools,
   setuptools-scm,
   ufolib2,
+  ufomerge,
   vfblib,
 }:
 
 buildPythonPackage rec {
   pname = "babelfont";
-  version = "3.0.5";
+  version = "3.1.2";
   pyproject = true;
 
   # PyPI source tarballs omit tests, fetch from Github instead
   src = fetchFromGitHub {
     owner = "simoncozens";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9PEOkkm7qH4ExiJJKrTZX5Ph/urtOyFsy7jjtFepncU=";
+    repo = "babelfont";
+    tag = "v${version}";
+    hash = "sha256-XNoyM3kjKRc0NWA94ufzC2DBzAsufJNJbzFDUbLu8Lc=";
   };
 
   build-system = [
@@ -42,6 +43,7 @@ buildPythonPackage rec {
     openstep-plist
     orjson
     ufolib2
+    ufomerge
     vfblib
   ];
 
@@ -50,7 +52,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Want non exsiting test data
+  # Want non existing test data
   disabledTests = [
     "test_rename"
     "test_rename_nested"

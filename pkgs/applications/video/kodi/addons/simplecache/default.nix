@@ -1,4 +1,10 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+}:
 
 buildKodiAddon rec {
   pname = "simplecache";
@@ -21,6 +27,6 @@ buildKodiAddon rec {
     homepage = "https://github.com/kodi-community-addons/script.module.simplecache";
     description = "A simple object cache for Kodi addons";
     license = licenses.asl20;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

@@ -19,9 +19,9 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "obsrvbl";
-    repo = pname;
+    repo = "flowlogs-reader";
     # https://github.com/obsrvbl/flowlogs-reader/issues/57
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9UwCRLRKuIFRTh3ntAzlXCyN175J1wobT3GSLAhl+08=";
   };
 

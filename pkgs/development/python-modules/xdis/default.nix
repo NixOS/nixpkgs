@@ -3,40 +3,31 @@
   buildPythonPackage,
   click,
   fetchFromGitHub,
-  fetchpatch,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "xdis";
-  version = "6.1.1";
-  format = "setuptools";
+  version = "6.1.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "rocky";
     repo = "python-xdis";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Fn1cyUPMrn1SEXl4sdQwJiNHaY+BbxBDz3nKZY965/0=";
+    tag = version;
+    hash = "sha256-thgHaxEEXmkrJlkl9kF6ocKRrnWOuESTxQrdtM+uH1o=";
   };
 
-  # Backport magics for newer newer python versions
-  # 6.1.1 only supports up to 3.12.4 while nixpkgs is already on 3.12.5+
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/rocky/python-xdis/commit/fcba74a7f64c5e2879ca0779ff10f38f9229e7da.patch";
-      hash = "sha256-D7eJ97g4G6pmYL/guq0Ndf8yKTVBD2gAuUCAKwvlYbE=";
-    })
-    (fetchpatch {
-      url = "https://github.com/rocky/python-xdis/commit/b66976ff53a2c6e17a73fb7652ddd6c8054df8db.patch";
-      hash = "sha256-KO1y0nDTPmEZ+0/3Pjh+CvTdpr/p4AYZ8XdH5J+XzXo=";
-    })
+  build-system = [
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     six
   ];
@@ -70,7 +61,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python cross-version byte-code disassembler and marshal routines";
     homepage = "https://github.com/rocky/python-xdis";
-    changelog = "https://github.com/rocky/python-xdis/releases/tag/${version}";
+    changelog = "https://github.com/rocky/python-xdis/releases/tag/${src.tag}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       onny

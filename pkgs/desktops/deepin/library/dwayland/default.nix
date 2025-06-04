@@ -3,14 +3,12 @@
   lib,
   fetchFromGitHub,
   cmake,
-  qtbase,
-  qtwayland,
+  libsForQt5,
   wayland,
   wayland-protocols,
   wayland-scanner,
   extra-cmake-modules,
   deepin-wayland-protocols,
-  qttools,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,13 +25,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
-    qttools
+    libsForQt5.qttools
     wayland-scanner
   ];
 
   buildInputs = [
-    qtbase
-    qtwayland
+    libsForQt5.qtbase
+    libsForQt5.qtwayland
     wayland
     wayland-protocols
     deepin-wayland-protocols
@@ -51,6 +49,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/dwayland";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }

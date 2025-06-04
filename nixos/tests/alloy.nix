@@ -1,32 +1,35 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }:
+{ lib, ... }:
 
-  let
-    nodes = {
-      machine = {
-        services.alloy = {
-          enable = true;
-        };
-        environment.etc."alloy/config.alloy".text = "";
+let
+  nodes = {
+    machine = {
+      services.alloy = {
+        enable = true;
       };
+      environment.etc."alloy/config.alloy".text = "";
     };
-  in
-  {
-    name = "alloy";
+  };
+in
+{
+  name = "alloy";
 
-    meta = with lib.maintainers; {
-      maintainers = [ flokli hbjydev ];
-    };
+  meta = with lib.maintainers; {
+    maintainers = [
+      flokli
+      hbjydev
+    ];
+  };
 
-    inherit nodes;
+  inherit nodes;
 
-    testScript = ''
-      start_all()
+  testScript = ''
+    start_all()
 
-      machine.wait_for_unit("alloy.service")
-      machine.wait_for_open_port(12345)
-      machine.succeed(
-          "curl -sSfN http://127.0.0.1:12345/-/healthy"
-      )
-      machine.shutdown()
-    '';
-  })
+    machine.wait_for_unit("alloy.service")
+    machine.wait_for_open_port(12345)
+    machine.succeed(
+        "curl -sSfN http://127.0.0.1:12345/-/healthy"
+    )
+    machine.shutdown()
+  '';
+}

@@ -117,12 +117,19 @@ After you have identified the correct system, you need to override your package 
 For example, `dat` requires `node-gyp-build`, so we override its expression in [pkgs/development/node-packages/overrides.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/node-packages/overrides.nix):
 
 ```nix
-  {
-    dat = prev.dat.override (oldAttrs: {
-      buildInputs = [ final.node-gyp-build pkgs.libtool pkgs.autoconf pkgs.automake ];
-      meta = oldAttrs.meta // { broken = since "12"; };
-    });
-  }
+{
+  dat = prev.dat.override (oldAttrs: {
+    buildInputs = [
+      final.node-gyp-build
+      pkgs.libtool
+      pkgs.autoconf
+      pkgs.automake
+    ];
+    meta = oldAttrs.meta // {
+      broken = since "12";
+    };
+  });
+}
 ```
 
 ### Adding and Updating Javascript packages in nixpkgs {#javascript-adding-or-updating-packages}
@@ -185,16 +192,20 @@ It works by utilizing npm's cache functionality -- creating a reproducible cache
 Here's an example:
 
 ```nix
-{ lib, buildNpmPackage, fetchFromGitHub }:
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+}:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "flood";
   version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "jesec";
-    repo = pname;
-    rev = "v${version}";
+    repo = "flood";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BR+ZGkBBfd0dSQqAvujsbgsEPFYw/ThrylxUbOksYxM=";
   };
 
@@ -211,7 +222,7 @@ buildNpmPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ winter ];
   };
-}
+})
 ```
 
 In the default `installPhase` set by `buildNpmPackage`, it uses `npm pack --json --dry-run` to decide what files to install in `$out/lib/node_modules/$name/`, where `$name` is the `name` string defined in the package's `package.json`.
@@ -323,7 +334,9 @@ buildNpmPackage {
     npmRoot = ./.;
     fetcherOpts = {
       # Pass 'curlOptsList' to 'pkgs.fetchurl' while fetching 'axios'
-      { "node_modules/axios" = { curlOptsList = [ "--verbose" ]; }; }
+      "node_modules/axios" = {
+        curlOptsList = [ "--verbose" ];
+      };
     };
   };
 
@@ -369,6 +382,15 @@ pkgs.mkShell {
 ```
 will create a development shell where a `node_modules` directory is created & packages symlinked to the Nix store when activated.
 
+:::{.note}
+Commands like `npm install` & `npm add` that writes packages & executables needs to be used with `--package-lock-only`.
+
+This means `npm` installs dependencies by writing into `package-lock.json` without modifying the `node_modules` folder. Installation happens through reloading the devShell.
+This might be best practice since it gives the `nix shell` virtually exclusive ownership over your `node_modules` folder.
+
+It's recommended to set `package-lock-only = true` in your project-local [`.npmrc`](https://docs.npmjs.com/cli/v11/configuring-npm/npmrc).
+:::
+
 ### corepack {#javascript-corepack}
 
 This package puts the corepack wrappers for pnpm and yarn in your PATH, and they will honor the `packageManager` setting in the `package.json`.
@@ -403,14 +425,16 @@ When packaging an application that includes a `pnpm-lock.yaml`, you need to fetc
   stdenv,
   nodejs,
   # This is pinned as { pnpm = pnpm_9; }
-  pnpm
+  pnpm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "foo";
   version = "0-unstable-1980-01-01";
 
-  src = ...;
+  src = {
+    #...
+  };
 
   nativeBuildInputs = [
     nodejs
@@ -428,7 +452,28 @@ NOTE: It is highly recommended to use a pinned version of pnpm (i.e. `pnpm_8` or
 
 In case you are patching `package.json` or `pnpm-lock.yaml`, make sure to pass `finalAttrs.patches` to the function as well (i.e. `inherit (finalAttrs) patches`.
 
-`pnpm.configHook` supports adding additional `pnpm install` flags via `pnpmInstallFlags` which can be set to a Nix string array.
+`pnpm.configHook` supports adding additional `pnpm install` flags via `pnpmInstallFlags` which can be set to a Nix string array:
+
+```nix
+{
+  pnpm,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "foo";
+  version = "0-unstable-1980-01-01";
+
+  src = {
+    # ...
+  };
+
+  pnpmInstallFlags = [ "--shamefully-hoist" ];
+
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pnpmInstallFlags;
+  };
+})
+```
 
 #### Dealing with `sourceRoot` {#javascript-pnpm-sourceRoot}
 
@@ -447,45 +492,51 @@ Assuming the following directory structure, we can define `sourceRoot` and `pnpm
 ```
 
 ```nix
-  ...
+{
+  # ...
   pnpmDeps = pnpm.fetchDeps {
-    ...
+    # ...
     sourceRoot = "${finalAttrs.src.name}/frontend";
   };
 
   # by default the working directory is the extracted source
   pnpmRoot = "frontend";
+}
 ```
 
 #### PNPM Workspaces {#javascript-pnpm-workspaces}
 
-If you need to use a PNPM workspace for your project, then set `pnpmWorkspace = "<workspace project name>"` in your `pnpm.fetchDeps` call,
-which will make PNPM only install dependencies for that workspace package.
+If you need to use a PNPM workspace for your project, then set `pnpmWorkspaces = [ "<workspace project name 1>" "<workspace project name 2>" ]`, etc, in your `pnpm.fetchDeps` call,
+which will make PNPM only install dependencies for those workspace packages.
 
 For example:
 
 ```nix
-...
-pnpmWorkspace = "@astrojs/language-server";
-pnpmDeps = pnpm.fetchDeps {
-  inherit (finalAttrs) pnpmWorkspace;
-  ...
+{
+  # ...
+  pnpmWorkspaces = [ "@astrojs/language-server" ];
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pnpmWorkspaces;
+    #...
+  };
 }
 ```
 
 The above would make `pnpm.fetchDeps` call only install dependencies for the `@astrojs/language-server` workspace package.
 Note that you do not need to set `sourceRoot` to make this work.
 
-Usually in such cases, you'd want to use `pnpm --filter=$pnpmWorkspace build` to build your project, as `npmHooks.npmBuildHook` probably won't work. A `buildPhase` based on the following example will probably fit most workspace projects:
+Usually in such cases, you'd want to use `pnpm --filter=<pnpm workspace name> build` to build your project, as `npmHooks.npmBuildHook` probably won't work. A `buildPhase` based on the following example will probably fit most workspace projects:
 
 ```nix
-buildPhase = ''
-  runHook preBuild
+{
+  buildPhase = ''
+    runHook preBuild
 
-  pnpm --filter=@astrojs/language-server build
+    pnpm --filter=@astrojs/language-server build
 
-  runHook postBuild
-'';
+    runHook postBuild
+  '';
+}
 ```
 
 #### Additional PNPM Commands and settings {#javascript-pnpm-extraCommands}
@@ -494,13 +545,15 @@ If you require setting an additional PNPM configuration setting (such as `dedupe
 set `prePnpmInstall` to the right commands to run. For example:
 
 ```nix
-prePnpmInstall = ''
-  pnpm config set dedupe-peer-dependants false
-'';
-pnpmDeps = pnpm.fetchDeps {
-  inherit (finalAttrs) prePnpmInstall;
-  ...
-};
+{
+  prePnpmInstall = ''
+    pnpm config set dedupe-peer-dependants false
+  '';
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) prePnpmInstall;
+    # ...
+  };
+}
 ```
 
 In this example, `prePnpmInstall` will be run by both `pnpm.configHook` and by the `pnpm.fetchDeps` builder.
@@ -508,7 +561,15 @@ In this example, `prePnpmInstall` will be run by both `pnpm.configHook` and by t
 
 ### Yarn {#javascript-yarn}
 
-Yarn based projects use a `yarn.lock` file instead of a `package-lock.json` to pin dependencies. Nixpkgs provides the Nix function `fetchYarnDeps` which fetches an offline cache suitable for running `yarn install` before building the project. In addition, Nixpkgs provides the hooks:
+Yarn based projects use a `yarn.lock` file instead of a `package-lock.json` to pin dependencies.
+
+To package yarn-based applications, you need to distinguish by the version pointers in the `yarn.lock` file. See the following sections.
+
+#### Yarn v1 {#javascript-yarn-v1}
+
+Yarn v1 lockfiles contain a comment `# yarn lockfile v1` at the beginning of the file.
+
+Nixpkgs provides the Nix function `fetchYarnDeps` which fetches an offline cache suitable for running `yarn install` before building the project. In addition, Nixpkgs provides the hooks:
 
 - `yarnConfigHook`: Fetches the dependencies from the offline cache and installs them into `node_modules`.
 - `yarnBuildHook`: Runs `yarn build` or a specified `yarn` command that builds the project.
@@ -558,28 +619,28 @@ stdenv.mkDerivation (finalAttrs: {
 })
 ```
 
-#### `yarnConfigHook` arguments {#javascript-yarnconfighook}
+##### `yarnConfigHook` arguments {#javascript-yarnconfighook}
 
 By default, `yarnConfigHook` relies upon the attribute `${yarnOfflineCache}` (or `${offlineCache}` if the former is not set) to find the location of the offline cache produced by `fetchYarnDeps`. To disable this phase, you can set `dontYarnInstallDeps = true` or override the `configurePhase`.
 
-#### `yarnBuildHook` arguments {#javascript-yarnbuildhook}
+##### `yarnBuildHook` arguments {#javascript-yarnbuildhook}
 
 This script by default runs `yarn --offline build`, and it relies upon the project's dependencies installed at `node_modules`. Below is a list of additional `mkDerivation` arguments read by this hook:
 
 - `yarnBuildScript`: Sets a different `yarn --offline` subcommand (defaults to `build`).
 - `yarnBuildFlags`: Single string list of additional flags to pass the above command, or a Nix list of such additional flags.
 
-#### `yarnInstallHook` arguments {#javascript-yarninstallhook}
+##### `yarnInstallHook` arguments {#javascript-yarninstallhook}
 
 To install the package `yarnInstallHook` uses both `npm` and `yarn` to cleanup project files and dependencies. To disable this phase, you can set `dontYarnInstall = true` or override the `installPhase`. Below is a list of additional `mkDerivation` arguments read by this hook:
 
 - `yarnKeepDevDeps`: Disables the removal of devDependencies from `node_modules` before installation.
 
-### yarn2nix {#javascript-yarn2nix}
+#### yarn2nix {#javascript-yarn2nix}
 
-WARNING: The `yarn2nix` functions have been deprecated in favor of the new `yarnConfigHook`, `yarnBuildHook` and `yarnInstallHook`. Documentation for them still appears here for the sake of the packages that still use them. See also a tracking issue [#324246](https://github.com/NixOS/nixpkgs/issues/324246).
+WARNING: The `yarn2nix` functions have been deprecated in favor of `yarnConfigHook`, `yarnBuildHook` and `yarnInstallHook` (for Yarn v1) and `yarn-berry_*.*` tooling (Yarn v3 and v4). Documentation for `yarn2nix` functions still appears here for the sake of the packages that still use them. See also a tracking issue [#324246](https://github.com/NixOS/nixpkgs/issues/324246).
 
-#### Preparation {#javascript-yarn2nix-preparation}
+##### Preparation {#javascript-yarn2nix-preparation}
 
 You will need at least a `yarn.lock` file. If upstream does not have one you need to generate it and reference it in your package definition.
 
@@ -594,7 +655,7 @@ If the downloaded files contain the `package.json` and `yarn.lock` files they ca
 }
 ```
 
-#### mkYarnPackage {#javascript-yarn2nix-mkYarnPackage}
+##### mkYarnPackage {#javascript-yarn2nix-mkYarnPackage}
 
 `mkYarnPackage` will by default try to generate a binary. For package only generating static assets (Svelte, Vue, React, WebPack, ...), you will need to explicitly override the build step with your instructions.
 
@@ -602,9 +663,16 @@ It's important to use the `--offline` flag. For example if you script is `"build
 
 ```nix
 {
+  nativeBuildInputs = [
+    writableTmpDirAsHomeHook
+  ];
+
   buildPhase = ''
-    export HOME=$(mktemp -d)
+    runHook preBuild
+
     yarn --offline build
+
+    runHook postBuild
   '';
 }
 ```
@@ -622,7 +690,11 @@ The configure phase can sometimes fail because it makes many assumptions which m
 ```nix
 {
   configurePhase = ''
+    runHook preConfigure
+
     ln -s $node_modules node_modules
+
+    runHook postConfigure
   '';
 }
 ```
@@ -632,13 +704,17 @@ or if you need a writeable node_modules directory:
 ```nix
 {
   configurePhase = ''
+    runHook preConfigure
+
     cp -r $node_modules node_modules
     chmod +w node_modules
+
+    runHook postConfigure
   '';
 }
 ```
 
-#### mkYarnModules {#javascript-yarn2nix-mkYarnModules}
+##### mkYarnModules {#javascript-yarn2nix-mkYarnModules}
 
 This will generate a derivation including the `node_modules` directory.
 If you have to build a derivation for an integrated web framework (rails, phoenix..), this is probably the easiest way.
@@ -659,7 +735,11 @@ To fix this we will specify different versions of build inputs to use, as well a
 mkYarnPackage rec {
   pkgConfig = {
     node-sass = {
-      buildInputs = with final;[ python libsass pkg-config ];
+      buildInputs = with final; [
+        python
+        libsass
+        pkg-config
+      ];
       postInstall = ''
         LIBSASS_EXT=auto yarn --offline run build
         rm build/config.gypi
@@ -669,7 +749,7 @@ mkYarnPackage rec {
 }
 ```
 
-#### Pitfalls {#javascript-yarn2nix-pitfalls}
+##### Pitfalls {#javascript-yarn2nix-pitfalls}
 
 - If version is missing from upstream package.json, yarn will silently install nothing. In that case, you will need to override package.json as shown in the [package.json section](#javascript-upstream-package-json)
 - Having trouble with `node-gyp`? Try adding these lines to the `yarnPreBuild` steps:
@@ -688,6 +768,116 @@ mkYarnPackage rec {
   - The `echo 9` steps comes from this answer: <https://stackoverflow.com/a/49139496>
   - Exporting the headers in `npm_config_nodedir` comes from this issue: <https://github.com/nodejs/node-gyp/issues/1191#issuecomment-301243919>
 - `offlineCache` (described [above](#javascript-yarn2nix-preparation)) must be specified to avoid [Import From Derivation](#ssec-import-from-derivation) (IFD) when used inside Nixpkgs.
+
+#### Yarn Berry v3/v4 {#javascript-yarn-v3-v4}
+Yarn Berry (v3 / v4) have similar formats, they start with blocks like these:
+
+```yaml
+__metadata:
+  version: 6
+  cacheKey: 8[cX]
+```
+
+```yaml
+__metadata:
+  version: 8
+  cacheKey: 10[cX]
+```
+
+For these packages, we have some helpers exposed under the respective `yarn-berry_3` and `yarn-berry_4` packages:
+
+- `yarn-berry-fetcher`
+- `fetchYarnBerryDeps`
+- `yarnBerryConfigHook`
+
+It's recommended to ensure you're explicitly pinning the major version used, for example by capturing the `yarn-berry_Xn` argument and then re-defining it as a `yarn-berry` `let` binding.
+
+```nix
+{
+  stdenv,
+  nodejs,
+  yarn-berry_4,
+}:
+
+let
+  yarn-berry = yarn-berry_4;
+in
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "foo";
+  version = "0-unstable-1980-01-01";
+
+  src = {
+    #...
+  };
+
+  nativeBuildInputs = [
+    nodejs
+    yarn-berry.yarnBerryConfigHook
+  ];
+
+  offlineCache = yarn-berry.fetchYarnBerryDeps {
+    inherit (finalAttrs) src;
+    hash = "...";
+  };
+})
+```
+
+##### `yarn-berry_X.fetchYarnBerryDeps` {#javascript-fetchYarnBerryDeps}
+`fetchYarnBerryDeps` runs `yarn-berry-fetcher fetch` in a fixed-output-derivation. It is a custom fetcher designed to reproducibly download all files in the `yarn.lock` file, validating their hashes in the process. For git dependencies, it creates a checkout at `${offlineCache}/checkouts/<40-character-commit-hash>` (relying on the git commit hash to describe the contents of the checkout).
+
+To produce the `hash` argument for `fetchYarnBerryDeps` function call, the `yarn-berry-fetcher prefetch` command can be used:
+
+```console
+$ yarn-berry-fetcher prefetch </path/to/yarn.lock> [/path/to/missing-hashes.json]
+```
+
+This prints the hash to stdout and can be used in update scripts to recalculate the hash for a new version of `yarn.lock`.
+
+##### `yarn-berry_X.yarnBerryConfigHook` {#javascript-yarnBerryConfigHook}
+`yarnBerryConfigHook` uses the store path `offlineCache` points to, to run a `yarn install` during the build, producing a usable `node_modules` directory from the downloaded dependencies.
+
+Internally, this uses a patched version of Yarn to ensure git dependencies are re-packed and any attempted downloads fail immediately.
+
+##### Patching upstream `package.json` or `yarn.lock` files {#javascript-yarnBerry-patching}
+In case patching the upstream `package.json` or `yarn.lock` is needed, it's important to pass `finalAttrs.patches` to `fetchYarnBerryDeps` as well, so the patched variants are picked up (i.e. `inherit (finalAttrs) patches`.
+
+##### Missing hashes in the `yarn.lock` file {#javascript-yarnBerry-missing-hashes}
+Unfortunately, `yarn.lock` files do not include hashes for optional/platform-specific dependencies. This is [by design](https://github.com/yarnpkg/berry/issues/6759).
+
+To compensate for this, the `yarn-berry-fetcher missing-hashes` subcommand can be used to produce all missing hashes. These are usually stored in a `missing-hashes.json` file, which needs to be passed to both the build itself, as well as the `fetchYarnBerryDeps` helper:
+
+```nix
+{
+  stdenv,
+  nodejs,
+  yarn-berry_4,
+}:
+
+let
+  yarn-berry = yarn-berry_4;
+in
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "foo";
+  version = "0-unstable-1980-01-01";
+
+  src = {
+    #...
+  };
+
+  nativeBuildInputs = [
+    nodejs
+    yarn-berry.yarnBerryConfigHook
+  ];
+
+  missingHashes = ./missing-hashes.json;
+  offlineCache = yarn-berry.fetchYarnBerryDeps {
+    inherit (finalAttrs) src missingHashes;
+    hash = "...";
+  };
+})
+```
 
 ## Outside Nixpkgs {#javascript-outside-nixpkgs}
 

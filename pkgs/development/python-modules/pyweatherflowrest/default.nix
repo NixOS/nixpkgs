@@ -16,8 +16,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "briis";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "pyweatherflowrest";
+    tag = "v${version}";
     hash = "sha256-l1V3HgzqnnoY6sWHwfgBtcIR782RwKhekY2qOLrUMNY=";
   };
 

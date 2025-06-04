@@ -1,25 +1,26 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, flac
-, libpulseaudio
-, qtbase
-, qtgraphicaleffects
-, qtquickcontrols2
-, wrapQtAppsHook
-, makeWrapper
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  flac,
+  libpulseaudio,
+  qtbase,
+  qtgraphicaleffects,
+  qtquickcontrols2,
+  wrapQtAppsHook,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "noson";
-  version = "5.6.8";
+  version = "5.6.10";
 
   src = fetchFromGitHub {
     owner = "janbar";
     repo = "noson-app";
     rev = finalAttrs.version;
-    hash = "sha256-hCVGi+++6CcTRMXeRKH8xRncm/Gl83GgU3aAIPI/yGU=";
+    hash = "sha256-ERlZtQTwPu5Y1i5cV9c5IMSJW30ootjmFix0EiF+/x0=";
   };
 
   nativeBuildInputs = [

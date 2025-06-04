@@ -1,16 +1,16 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  installShellFiles,
 
-, waylandSupport ? true
-, x11Support ? true
+  waylandSupport ? true,
+  x11Support ? true,
 
-, rofi
-, wl-clipboard
-, wtype
-, xdotool
-, xsel
+  wl-clipboard,
+  wtype,
+  xdotool,
+  xsel,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "fdw";
     repo = "rofimoji";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-CY+ddF2Rth92R22QKqOb/Us+rZhvWTaU/jKy8fljWqQ=";
   };
 
@@ -32,9 +32,18 @@ python3Packages.buildPythonApplication rec {
 
   # `rofi` and the `waylandSupport` and `x11Support` dependencies
   # contain binaries needed at runtime.
-  propagatedBuildInputs = [ python3Packages.configargparse rofi ]
-    ++ lib.optionals waylandSupport [ wl-clipboard wtype ]
-    ++ lib.optionals x11Support [ xdotool xsel ];
+  propagatedBuildInputs =
+    [
+      python3Packages.configargparse
+    ]
+    ++ lib.optionals waylandSupport [
+      wl-clipboard
+      wtype
+    ]
+    ++ lib.optionals x11Support [
+      xdotool
+      xsel
+    ];
 
   # The 'extractors' sub-module is used for development
   # and has additional dependencies.

@@ -1,20 +1,19 @@
-{ lib
-, mkDerivation
-, fetchpatch
-, fetchFromGitHub
-, cmake
-, qtbase
-, wrapQtAppsHook
-, libraw
-, exiv2
-, zlib
-, alglib
-, pkg-config
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libsForQt5,
+  libraw,
+  exiv2,
+  zlib,
+  alglib,
+  pkg-config,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "hdrmerge";
   version = "0.5.0-unstable-2024-08-02";
   src = fetchFromGitHub {
@@ -27,11 +26,17 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
     copyDesktopItems
   ];
 
-  buildInputs = [ qtbase libraw exiv2 zlib alglib ];
+  buildInputs = [
+    libsForQt5.qtbase
+    libraw
+    exiv2
+    zlib
+    alglib
+  ];
 
   cmakeFlags = [
     "-DALGLIB_DIR:PATH=${alglib}"
@@ -51,7 +56,10 @@ mkDerivation rec {
       icon = "hdrmerge";
       exec = "hdrmerge %F";
       categories = [ "Graphics" ];
-      mimeTypes = [ "image/x-dcraw" "image/x-adobe-dng" ];
+      mimeTypes = [
+        "image/x-dcraw"
+        "image/x-adobe-dng"
+      ];
       terminal = false;
     })
   ];

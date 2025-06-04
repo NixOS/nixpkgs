@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, installShellFiles
-, python3Packages
-, ssm-session-manager-plugin
+{
+  lib,
+  fetchFromGitHub,
+  installShellFiles,
+  python3Packages,
+  ssm-session-manager-plugin,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -12,7 +13,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "xen0l";
-    repo = pname;
+    repo = "aws-gate";
     rev = version;
     hash = "sha256-9w2jP4s1HXf1gYiXX05Dt2iXt0bR0U48yc8h9T5M+EQ=";
   };
@@ -51,7 +52,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   checkPhase = ''
-    $out/bin/${pname} --version
+    $out/bin/aws-gate --version
   '';
 
   meta = with lib; {

@@ -5,10 +5,11 @@
   valgrind,
   pcre2,
   fetchFromGitHub,
+  php,
 }:
 
 let
-  version = "22.1.2";
+  version = "25.2.0";
 in
 buildPecl {
   inherit version;
@@ -18,7 +19,7 @@ buildPecl {
     owner = "openswoole";
     repo = "swoole-src";
     rev = "v${version}";
-    hash = "sha256-Z26E1PdKypB/MImCHFgA3rJW5LvVaLZsQUxRv0RcFuo=";
+    hash = "sha256-1Bq/relLhjPRROikpCzSzzrelxW3AiMA5G17Ln2lg34=";
   };
 
   buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ valgrind ];
@@ -33,6 +34,7 @@ buildPecl {
       It offers a range of multi-threaded I/O modules (HTTP Server, WebSockets, TaskWorkers, Process Pools) out of the box and support for popular PHP clients like PDO for MySQL, and CURL.
       You can use the sync or async, Coroutine API to write whole applications or create thousands of light weight Coroutines within one Linux process.
     '';
-    maintainers = teams.php.members;
+    teams = [ teams.php ];
+    broken = lib.versionOlder php.version "8.2";
   };
 }

@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, guile
-, libgcrypt
-, autoreconfHook
-, pkg-config
-, texinfo
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  guile,
+  libgcrypt,
+  autoreconfHook,
+  pkg-config,
+  texinfo,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +23,11 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [
-    autoreconfHook guile libgcrypt pkg-config texinfo
+    autoreconfHook
+    guile
+    libgcrypt
+    pkg-config
+    texinfo
   ];
   buildInputs = [
     guile

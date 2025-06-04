@@ -5,14 +5,15 @@
   dpkg,
   makeWrapper,
   electron,
+  asar,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "proton-pass";
-  version = "1.23.1";
+  version = "1.31.4";
 
   src = fetchurl {
     url = "https://proton.me/download/pass/linux/x64/proton-pass_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-D4OFHL9AS8oAwMZHoXaDpHKfMBQEaOd18eWAwVW4EJA=";
+    hash = "sha256-gl4qCj9BAN9B09b+F78v0f3tUyxRU4/IpsSvtK0CZOM=";
   };
 
   dontConfigure = true;
@@ -21,20 +22,31 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     dpkg
     makeWrapper
+    asar
   ];
+
+  # Rebuild the ASAR archive, hardcoding the resourcesPath
+  preInstall = ''
+    asar extract usr/lib/proton-pass/resources/app.asar tmp
+    rm usr/lib/proton-pass/resources/app.asar
+    substituteInPlace tmp/.webpack/main/index.js \
+      --replace-fail "process.resourcesPath" "'$out/share/proton-pass'"
+    asar pack tmp/ usr/lib/proton-pass/resources/app.asar
+    rm -fr tmp
+  '';
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out
+    mkdir -p $out/share/proton-pass
     cp -r usr/share/ $out/
-    cp -r usr/lib/proton-pass/resources/app.asar $out/share/
+    cp -r usr/lib/proton-pass/resources/{app.asar,assets} $out/share/proton-pass/
     runHook postInstall
   '';
 
   preFixup = ''
     makeWrapper ${lib.getExe electron} $out/bin/proton-pass \
-      --add-flags $out/share/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags $out/share/proton-pass/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0

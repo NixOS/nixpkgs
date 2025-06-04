@@ -13,13 +13,11 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "shiboken6";
-  version = "6.8";
+  version = "6.9.0";
 
   src = fetchurl {
-    # https://download.qt.io/official_releases/QtForPython/shiboken6/
-    # FIXME: inconsistent version numbers in directory name and tarball?
-    url = "mirror://qt/official_releases/QtForPython/shiboken6/PySide6-${finalAttrs.version}.0-src/pyside-setup-everywhere-src-${finalAttrs.version}.tar.xz";
-    hash = "sha256-XAWtOufnJ51tudyUpG6woF/Qk1NzCfdDnDhnG9clUZA=";
+    url = "mirror://qt/official_releases/QtForPython/pyside6/PySide6-${finalAttrs.version}-src/pyside-setup-everywhere-src-${finalAttrs.version}.tar.xz";
+    hash = "sha256-MVtzu3Vw1bnmeTqNP6/R0t1/Q9Ne67AdK1VOogaq2I4=";
   };
 
   sourceRoot = "pyside-setup-everywhere-src-${finalAttrs.version}/sources/shiboken6";
@@ -31,14 +29,18 @@ stdenv'.mkDerivation (finalAttrs: {
     (python.pythonOnBuildForHost.withPackages (ps: [ ps.setuptools ]))
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  buildInputs = [
-    llvmPackages.llvm
-    llvmPackages.libclang
-    python.pkgs.qt6.qtbase
-    python.pkgs.ninja
-    python.pkgs.packaging
-    python.pkgs.setuptools
-  ];
+  buildInputs =
+    [
+      llvmPackages.llvm
+      llvmPackages.libclang
+      python.pkgs.qt6.qtbase
+      python.pkgs.ninja
+      python.pkgs.packaging
+      python.pkgs.setuptools
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      python.pkgs.qt6.darwinVersionInputs
+    ];
 
   cmakeFlags = [ "-DBUILD_TESTS=OFF" ];
 
@@ -65,7 +67,7 @@ stdenv'.mkDerivation (finalAttrs: {
     ];
     homepage = "https://wiki.qt.io/Qt_for_Python";
     changelog = "https://code.qt.io/cgit/pyside/pyside-setup.git/tree/doc/changelogs/changes-${finalAttrs.version}?h=v${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ gebner ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
   };
 })

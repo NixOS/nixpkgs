@@ -13,9 +13,9 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "sqlalchemy-views";
     owner = "jklukas";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MJgikWXo3lpMsSYbb5sOSOTbJPOx5gEghW1V9jKvHKU=";
   };
 

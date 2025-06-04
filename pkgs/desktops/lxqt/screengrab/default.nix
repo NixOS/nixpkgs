@@ -1,34 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, autoPatchelfHook
-, gitUpdater
-, kwindowsystem
-, libXdmcp
-, libpthreadstubs
-, libqtxdg
-, perl
-, pkg-config
-, qtbase
-, qtsvg
-, qttools
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  autoPatchelfHook,
+  gitUpdater,
+  kwindowsystem,
+  layer-shell-qt,
+  libXdmcp,
+  libpthreadstubs,
+  libqtxdg,
+  lxqt-build-tools,
+  perl,
+  pkg-config,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtwayland,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "screengrab";
-  version = "2.8.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-PMe2NyIoc12n4l/oWPi3GL6pemuHyxL2HFBLTIyD690=";
+    hash = "sha256-6cGj3Ijv4DsAdJjcHKUg5et+yYc5miIHHZOTD2D9ASk=";
   };
 
   nativeBuildInputs = [
     cmake
+    lxqt-build-tools
     pkg-config
     perl # needed by LXQtTranslateDesktop.cmake
     qttools
@@ -38,11 +43,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     kwindowsystem
+    layer-shell-qt
     libXdmcp
     libpthreadstubs
     libqtxdg
     qtbase
     qtsvg
+    qtwayland
   ];
 
   passthru.updateScript = gitUpdater { };
@@ -53,6 +60,6 @@ stdenv.mkDerivation rec {
     mainProgram = "screengrab";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    teams = [ teams.lxqt ];
   };
 }

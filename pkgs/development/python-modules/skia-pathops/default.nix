@@ -10,21 +10,20 @@
   fetchPypi,
   gn,
   pytestCheckHook,
+  cctools,
   xcodebuild,
-  ApplicationServices,
-  OpenGL,
 }:
 
 buildPythonPackage rec {
   pname = "skia-pathops";
-  version = "0.8.0.post1";
-  format = "setuptools";
+  version = "0.8.0.post2";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "skia-pathops";
+    pname = "skia_pathops";
     inherit version;
     extension = "zip";
-    hash = "sha256-oFYkneL2H6VRFrnuVVE8aja4eK7gDJFFDkBNFgZIXLs=";
+    hash = "sha256-niUs3rbE0WLoKYbTHb2JxnXRZ3y4AZwuE+YpXUpVcmk=";
   };
 
   postPatch =
@@ -53,18 +52,20 @@ buildPythonPackage rec {
           EOF
         '';
 
-  nativeBuildInputs = [
+  build-system = [
     cython
-    ninja
+    setuptools
     setuptools-scm
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    ApplicationServices
-    OpenGL
   ];
 
-  propagatedBuildInputs = [ setuptools ];
+  nativeBuildInputs =
+    [
+      ninja
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      cctools.libtool
+      xcodebuild
+    ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

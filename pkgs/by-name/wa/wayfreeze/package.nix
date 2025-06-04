@@ -2,21 +2,25 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  libxkbcommon
+  libxkbcommon,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage {
   pname = "wayfreeze";
-  version = "0-unstable-2024-05-23";
+  version = "0-unstable-2025-03-18";
 
   src = fetchFromGitHub {
     owner = "Jappie3";
     repo = "wayfreeze";
-    rev = "069dea0b832bd5b7a7872a57bd53f51cd377f206";
-    hash = "sha256-3btFzZbkHT6kBBA3M7OwFsD710VpMiHSXIpHmvCD/es=";
+    rev = "8277f981b4aace2a8411b39e2fbd4e15ad211078";
+    hash = "sha256-3lYBzVO1Nssq/uxbZsop7v45yQ+mZs8QhfTMB6XoTzM=";
   };
 
-  cargoHash = "sha256-3OjZhWAgfmMZ0OGeRawk3KZpPqz1QCVkwsyGM+E7o88=";
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-jA+hVVV2hM/Hw/9rzGM63UuT/aq488kTMC/AKwSmoJk=";
 
   buildInputs = [
     libxkbcommon
@@ -26,7 +30,10 @@ rustPlatform.buildRustPackage {
     description = "Tool to freeze the screen of a Wayland compositor";
     homepage = "https://github.com/Jappie3/wayfreeze";
     license = licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ purrpurrn ];
+    maintainers = with lib.maintainers; [
+      purrpurrn
+      jappie3 # upstream dev
+    ];
     mainProgram = "wayfreeze";
     platforms = platforms.linux;
   };

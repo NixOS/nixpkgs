@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, lxqt-build-tools
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  lxqt-build-tools,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lxqt-themes";
-  version = "2.0.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-bAdwC1YrXCT4eJUafTK6kcfQ/YnMbBLHyyWvsBLIisA=";
+    hash = "sha256-oarj+byRfe9xHvtw80kifA2AspXHfigbuDwvi5xqrMQ=";
   };
 
   nativeBuildInputs = [
@@ -29,6 +30,6 @@ stdenv.mkDerivation rec {
     description = "Themes, graphics and icons for LXQt";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    teams = [ teams.lxqt ];
   };
 }

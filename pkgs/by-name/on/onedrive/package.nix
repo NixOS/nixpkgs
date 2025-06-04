@@ -1,6 +1,7 @@
 {
   lib,
   autoreconfHook,
+  coreutils,
   curl,
   fetchFromGitHub,
   installShellFiles,
@@ -17,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "onedrive";
-  version = "2.5.2";
+  version = "2.5.5";
 
   src = fetchFromGitHub {
     owner = "abraunegg";
     repo = "onedrive";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-neJi5lIx45GsuwZPzzwwEm1bfrL2DFSysVkxa4fCBww";
+    hash = "sha256-SoTkphmxWVAeSfqO7Vqm8bdPAP1hK57zFNR6N5elEOM=";
   };
 
   outputs = [
@@ -57,6 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
     installShellCompletion --bash --name onedrive contrib/completions/complete.bash
     installShellCompletion --fish --name onedrive contrib/completions/complete.fish
     installShellCompletion --zsh --name _onedrive contrib/completions/complete.zsh
+
+    substituteInPlace $out/lib/systemd/user/onedrive.service --replace-fail "/usr/bin/sleep" "${coreutils}/bin/sleep"
+    substituteInPlace $out/lib/systemd/system/onedrive@.service --replace-fail "/usr/bin/sleep" "${coreutils}/bin/sleep"
   '';
 
   passthru = {
@@ -72,7 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     mainProgram = "onedrive";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       peterhoeg
       bertof
     ];

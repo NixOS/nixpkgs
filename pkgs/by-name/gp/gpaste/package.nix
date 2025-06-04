@@ -1,29 +1,30 @@
-{ stdenv
-, lib
-, fetchurl
-, gjs
-, glib
-, gobject-introspection
-, gtk3
-, gtk4
-, gcr_4
-, libadwaita
-, meson
-, ninja
-, pango
-, pkg-config
-, vala
-, desktop-file-utils
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  fetchurl,
+  gjs,
+  glib,
+  gobject-introspection,
+  gtk3,
+  gtk4,
+  gcr_4,
+  libadwaita,
+  meson,
+  ninja,
+  pango,
+  pkg-config,
+  vala,
+  desktop-file-utils,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "45.1";
   pname = "gpaste";
+  version = "45.3";
 
   src = fetchurl {
     url = "https://www.imagination-land.org/files/gpaste/GPaste-${finalAttrs.version}.tar.xz";
-    hash = "sha256-yYLoHn3/2xlefBeErnydNfkvtJva8/9f9JHhfschBpQ=";
+    hash = "sha256-UU8pw7bqEwg2Vh7S6GTx8swI/2IhlwjQgkGNZCzoMwc=";
   };
 
   patches = [
@@ -71,10 +72,10 @@ stdenv.mkDerivation (finalAttrs: {
     mv "$extensionDir/"{prefs,.prefs-wrapped}.js
     substitute "${./wrapper.js}" "$extensionDir/extension.js" \
       --subst-var-by originalName "extension" \
-      --subst-var-by typelibPath "${placeholder "out"}/lib/girepository-1.0"
+      --subst-var-by typelibDir "${placeholder "out"}/lib/girepository-1.0"
     substitute "${./wrapper.js}" "$extensionDir/prefs.js" \
       --subst-var-by originalName "prefs" \
-      --subst-var-by typelibPath "${placeholder "out"}/lib/girepository-1.0"
+      --subst-var-by typelibDir "${placeholder "out"}/lib/girepository-1.0"
   '';
 
   meta = with lib; {
@@ -84,6 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "gpaste-client";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
   };
 })

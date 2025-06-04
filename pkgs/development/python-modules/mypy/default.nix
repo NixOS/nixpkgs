@@ -6,6 +6,7 @@
   gitUpdater,
   pythonAtLeast,
   pythonOlder,
+  isPyPy,
 
   # build-system
   setuptools,
@@ -32,19 +33,19 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "1.11.2";
+  version = "1.15.0";
   pyproject = true;
 
-  # mypy doesn't support python313 yet
-  # https://github.com/python/mypy/issues/17264
-  disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
+  # relies on several CPython internals
+  disabled = pythonOlder "3.8" || isPyPy;
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "mypy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5gfqIBtI/G5HARYdXHjYNYNRxeNgrk9dnpSgvMSu9bw=";
+    tag = "v${version}";
+    hash = "sha256-y67kt5i8mT9TcSbUGwnNuTAeqjy9apvWIbA2QD96LS4=";
   };
+
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
   };
@@ -130,12 +131,12 @@ buildPythonPackage rec {
     inherit (nixosTests) nixos-test-driver;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Optional static typing for Python";
     homepage = "https://www.mypy-lang.org";
     changelog = "https://github.com/python/mypy/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "mypy";
-    maintainers = with maintainers; [ lnl7 ];
+    maintainers = with lib.maintainers; [ lnl7 ];
   };
 }

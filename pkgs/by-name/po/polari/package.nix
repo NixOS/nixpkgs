@@ -14,7 +14,7 @@
   desktop-file-utils,
   pkg-config,
   gtk4,
-  tracker,
+  tinysparql,
   libadwaita,
   gtk3,
   glib,
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk4
-    tracker
+    tinysparql
     libadwaita
     gtk3 # for thumbnailer
     glib
@@ -86,7 +86,10 @@ stdenv.mkDerivation rec {
     homepage = "https://apps.gnome.org/Polari/";
     description = "IRC chat client designed to integrate with the GNOME desktop";
     mainProgram = "polari";
-    maintainers = teams.gnome.members;
+    teams = [
+      teams.gnome
+      teams.gnome-circle
+    ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

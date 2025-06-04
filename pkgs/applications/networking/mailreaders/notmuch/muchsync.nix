@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl
-, notmuch, openssl, pkg-config, sqlite, xapian, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  notmuch,
+  openssl,
+  pkg-config,
+  sqlite,
+  xapian,
+  zlib,
 }:
 stdenv.mkDerivation rec {
   version = "7";
@@ -12,7 +20,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-+D4vb80O9IE0df3cjTkoVoZlTaX0FWWh6ams14Gjvqw=";
   };
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ notmuch openssl sqlite xapian zlib ];
+  buildInputs = [
+    notmuch
+    openssl
+    sqlite
+    xapian
+    zlib
+  ];
   XAPIAN_CONFIG = "${xapian}/bin/xapian-config";
   meta = {
     description = "Synchronize maildirs and notmuch databases";

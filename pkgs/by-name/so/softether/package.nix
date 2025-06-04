@@ -1,22 +1,24 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   openssl,
   readline,
   ncurses,
   zlib,
+  bash,
   dataDir ? "/var/lib/softether",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "softether";
-  version = "4.38";
-  build = "9760";
+  version = "4.44-9807-rtm";
 
-  src = fetchurl {
-    url = "https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/releases/download/v${version}-${build}-rtm/softether-src-v${version}-${build}-rtm.tar.gz";
-    sha256 = "0d8zahi9lkv72jh8yj66pwrsi4451vk113d3khzrzgbic6s2i0g6";
+  src = fetchFromGitHub {
+    owner = "SoftEtherVPN";
+    repo = "SoftEtherVPN_Stable";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-roi5M/YmSBH44pRPSVZcADIHDbSpAfASiPbTdijisUM=";
   };
 
   buildInputs = [
@@ -24,6 +26,7 @@ stdenv.mkDerivation rec {
     readline
     ncurses
     zlib
+    bash
   ];
 
   preConfigure = ''
@@ -40,11 +43,26 @@ stdenv.mkDerivation rec {
       Makefile
   '';
 
-  meta = with lib; {
+  postInstall = ''
+    substituteInPlace $out/bin/vpnbridge --replace-fail /var/lib/softether/vpnbridge/vpnbridge $out/var/lib/softether/vpnbridge/vpnbridge
+    substituteInPlace $out/bin/vpnclient --replace-fail /var/lib/softether/vpnclient/vpnclient $out/var/lib/softether/vpnclient/vpnclient
+    substituteInPlace $out/bin/vpncmd --replace-fail /var/lib/softether/vpncmd/vpncmd $out/var/lib/softether/vpncmd/vpncmd
+    substituteInPlace $out/bin/vpnserver --replace-fail /var/lib/softether/vpnserver/vpnserver $out/var/lib/softether/vpnserver/vpnserver
+  '';
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-incompatible-pointer-types"
+    "-Wno-implicit-function-declaration"
+  ];
+
+  meta = {
     description = "Open-Source Free Cross-platform Multi-protocol VPN Program";
     homepage = "https://www.softether.org/";
-    license = licenses.asl20;
-    maintainers = [ maintainers.rick68 ];
-    platforms = [ "x86_64-linux" ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.rick68 ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
-}
+})

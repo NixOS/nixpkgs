@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, jsoncpp, libtins, libpcap, openssl, unstableGitUpdater, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  jsoncpp,
+  libtins,
+  libpcap,
+  openssl,
+  unstableGitUpdater,
+  nixosTests,
+}:
 
 stdenv.mkDerivation {
   pname = "dublin-traceroute";
@@ -11,9 +23,17 @@ stdenv.mkDerivation {
     hash = "sha256-UJeFPVi3423Jh72fVk8QbLX1tTNAQ504xYs9HwVCkZc=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ jsoncpp libtins libpcap openssl ];
+  buildInputs = [
+    jsoncpp
+    libtins
+    libpcap
+    openssl
+  ];
 
   outputs = [
     "out"

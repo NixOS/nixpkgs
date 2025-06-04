@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchzip
-, fetchurl
-, makeDesktopItem
-, copyDesktopItems
-, buildFHSEnv
-, alsa-lib
-, freetype
-, nghttp2
-, libX11
-, }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  fetchurl,
+  makeDesktopItem,
+  copyDesktopItems,
+  buildFHSEnv,
+  alsa-lib,
+  freetype,
+  nghttp2,
+  libX11,
+}:
 
 let
   pname = "decent-sampler";
-  version = "1.10.0";
+  version = "1.12.14";
 
   icon = fetchurl {
-    url = "https://archive.org/download/ds-256/DS256.png";
-    hash = "sha256-SV8zY5QJ6uRSrLuGTmT1zwGoIIXCV9GD2ZNiqK+i1Bc=";
+    url = "https://www.decentsamples.com/wp-content/uploads/2018/09/cropped-Favicon_512x512.png";
+    hash = "sha256-EXjaHrlXY0HU2EGTrActNbltIiqTLfdkFgP7FXoLzrM=";
   };
 
   decent-sampler = stdenv.mkDerivation {
@@ -25,8 +26,8 @@ let
 
     src = fetchzip {
       # dropbox links: https://www.dropbox.com/sh/dwyry6xpy5uut07/AABBJ84bjTTSQWzXGG5TOQpfa\
-      url = "https://archive.org/download/decent-sampler-linux-static-download-mirror/Decent_Sampler-${version}-Linux-Static-x86_64.tar.gz";
-      hash = "sha256-KYCf/F2/ziuXDHim4FPZQBARiSywvQDJBzKbHua+3SM=";
+      url = "https://www.dropbox.com/scl/fo/a0i0udw7ggfwnjoi05hh3/AFAQQGWSQ-kxJv5JggeMTrE/Decent_Sampler-1.12.14-Linux-Static-x86_64.tar.gz?rlkey=orvjprslmwn0dkfs0ncx6nxnm&dl=0";
+      hash = "sha256-n9WTR11chK9oCz84uYhymov1axTVRr4OLo6W0cRpdWc=";
     };
 
     nativeBuildInputs = [ copyDesktopItems ];
@@ -39,7 +40,10 @@ let
         comment = "DecentSampler player";
         icon = "decent-sampler";
         exec = "decent-sampler";
-        categories = [ "Audio" "AudioVideo" ];
+        categories = [
+          "Audio"
+          "AudioVideo"
+        ];
       })
     ];
 
@@ -78,16 +82,20 @@ buildFHSEnv {
   meta = with lib; {
     description = "Audio sample player";
     longDescription = ''
-        Decent Sampler is an audio sample player.
-        Allowing you to play sample libraries in the DecentSampler format
-        (files with extensions: dspreset and dslibrary).
+      Decent Sampler is an audio sample player.
+      Allowing you to play sample libraries in the DecentSampler format
+      (files with extensions: dspreset and dslibrary).
     '';
     mainProgram = "decent-sampler";
     homepage = "https://www.decentsamples.com/product/decent-sampler-plugin/";
     # It claims to be free but we currently cannot find any license
     # that it is released under.
     license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ adam248 ];
+    maintainers = with maintainers; [
+      adam248
+      chewblacka
+    ];
   };
 }

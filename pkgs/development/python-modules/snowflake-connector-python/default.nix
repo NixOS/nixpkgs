@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "3.12.2";
+  version = "3.14.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "snowflakedb";
     repo = "snowflake-connector-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-A6QnKCROd1vJpFCTrLEoHVo43xojdjpgYS3qQm64gcY=";
+    tag = "v${version}";
+    hash = "sha256-r3g+eVVyK9t5qpAGvimapuWilAh3eHJEFUw8VBwtKw8=";
   };
 
   build-system = [
@@ -64,6 +64,10 @@ buildPythonPackage rec {
     sortedcontainers
     tomlkit
     typing-extensions
+  ];
+
+  pythonRelaxDeps = [
+    "pyopenssl"
   ];
 
   optional-dependencies = {
@@ -102,6 +106,8 @@ buildPythonPackage rec {
     # Tests connect to the internet
     "test_status_when_num_of_chunks_is_zero"
     "test_test_socket_get_cert"
+    # Missing .wiremock/wiremock-standalone.jar
+    "test_wiremock"
   ];
 
   pythonImportsCheck = [

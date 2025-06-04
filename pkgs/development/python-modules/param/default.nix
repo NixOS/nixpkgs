@@ -17,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "param";
-  version = "2.1.1";
+  version = "2.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "holoviz";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-rGfFLDl5Y8D0OiO/1G05w2l3hAHZC368LuNADDzfBFs=";
+    repo = "param";
+    tag = "v${version}";
+    hash = "sha256-3aqABliOk+JtR84J/qiwda4yAkVgG2lJWewhQuSUgtA=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Declarative Python programming using Parameters";
     homepage = "https://param.holoviz.org/";
-    changelog = "https://github.com/holoviz/param/releases/tag/v${version}";
+    changelog = "https://github.com/holoviz/param/releases/tag/${src.tag}";
     license = licenses.bsd3;
     maintainers = [ ];
   };

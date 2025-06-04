@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pidgin, minixml, libxml2, sqlite, libgcrypt }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pidgin,
+  minixml,
+  libxml2,
+  sqlite,
+  libgcrypt,
+}:
 
 stdenv.mkDerivation rec {
   pname = "purple-lurch";
@@ -13,7 +23,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ pidgin minixml libxml2 sqlite libgcrypt ];
+  buildInputs = [
+    pidgin
+    minixml
+    libxml2
+    sqlite
+    libgcrypt
+  ];
 
   dontUseCmakeConfigure = true;
 

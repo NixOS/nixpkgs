@@ -1,27 +1,30 @@
-{ stdenv
-, lib
-, rustPlatform
-, installShellFiles
-, makeBinaryWrapper
-, darwin
-, fetchFromGitHub
-, nix-update-script
-, nvd
-, nix-output-monitor
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  installShellFiles,
+  makeBinaryWrapper,
+  fetchFromGitHub,
+  nix-update-script,
+  nvd,
+  nix-output-monitor,
+  buildPackages,
 }:
 let
-  version = "3.5.26";
-  runtimeDeps = [ nvd nix-output-monitor ];
+  runtimeDeps = [
+    nvd
+    nix-output-monitor
+  ];
 in
-rustPlatform.buildRustPackage {
-  inherit version;
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nh";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
-    owner = "viperML";
+    owner = "nix-community";
     repo = "nh";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-p38Uini6lChBCF0mZndHXTAy7ZH/OQLY696BFCHg92g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OiuhBrJe1AyVxC+AV4HMJ+vhDvUfCyLpBmj+Fy7MDtM=";
   };
 
   strictDeps = true;
@@ -31,31 +34,43 @@ rustPlatform.buildRustPackage {
     makeBinaryWrapper
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      mkdir completions
 
-  preFixup = ''
-    mkdir completions
-    $out/bin/nh completions --shell bash > completions/nh.bash
-    $out/bin/nh completions --shell zsh > completions/nh.zsh
-    $out/bin/nh completions --shell fish > completions/nh.fish
+      for shell in bash zsh fish; do
+        NH_NO_CHECKS=1 ${emulator} $out/bin/nh completions $shell > completions/nh.$shell
+      done
 
-    installShellCompletion completions/*
-  '';
+      installShellCompletion completions/*
+    ''
+  );
 
   postFixup = ''
     wrapProgram $out/bin/nh \
       --prefix PATH : ${lib.makeBinPath runtimeDeps}
   '';
 
-  cargoHash = "sha256-ejjgtjDNB7XBKi83R48xG3HLhTmm26Sdqdgh0xRVtNA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-/tbmzGUd1b4oa+29+eFdkE4l8vxMoIdHx40YgErY9pY=";
 
   passthru.updateScript = nix-update-script { };
 
+  env.NH_REV = finalAttrs.src.tag;
+
   meta = {
+    changelog = "https://github.com/nix-community/nh/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "Yet another nix cli helper";
-    homepage = "https://github.com/viperML/nh";
+    homepage = "https://github.com/nix-community/nh";
     license = lib.licenses.eupl12;
     mainProgram = "nh";
-    maintainers = with lib.maintainers; [ drupol viperML ];
+    maintainers = with lib.maintainers; [
+      drupol
+      NotAShelf
+      viperML
+    ];
   };
-}
+})

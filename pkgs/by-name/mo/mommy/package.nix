@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, writeText
-, shellspec
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  writeText,
+  shellspec,
   # usage:
   # pkgs.mommy.override {
   #  mommySettings.sweetie = "catgirl";
@@ -11,24 +12,24 @@
   #
   # $ mommy
   # who's my good catgirl~
-, mommySettings ? null
+  mommySettings ? null,
 }:
 
 let
-  variables = lib.mapAttrs'
-    (name: value: lib.nameValuePair "MOMMY_${lib.toUpper name}" value)
-    mommySettings;
+  variables = lib.mapAttrs' (
+    name: value: lib.nameValuePair "MOMMY_${lib.toUpper name}" value
+  ) mommySettings;
   configFile = writeText "mommy-config" (lib.toShellVars variables);
 in
 stdenv.mkDerivation rec {
   pname = "mommy";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "FWDekker";
-    repo = pname;
+    repo = "mommy";
     rev = "v${version}";
-    hash = "sha256-kNhoEIzrPjCe6RA/GHFB/NtKjYFByM5TpxAwCLo5TDo=";
+    hash = "sha256-ZxGHoBRWeGdUelykDdR51HigB85IrvNyswWjCTaOLvg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -45,13 +46,13 @@ stdenv.mkDerivation rec {
     ''}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "mommy's here to support you, in any shell, on any system~ ❤️";
     homepage = "https://github.com/FWDekker/mommy";
     changelog = "https://github.com/FWDekker/mommy/blob/v${version}/CHANGELOG.md";
-    license = licenses.unlicense;
-    platforms = platforms.all;
-    maintainers = [ ];
+    license = lib.licenses.unlicense;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "mommy";
   };
 }

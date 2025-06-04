@@ -1,40 +1,43 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, arcan
-, audit
-, dbus
-, libepoxy
-, fontutil
-, libGL
-, libX11
-, libXau
-, libXdmcp
-, libXfont2
-, libdrm
-, libgcrypt
-, libmd
-, libselinux
-, libtirpc
-, libxcb
-, libxkbfile
-, libxshmfence
-, mesa
-, meson
-, nettle
-, ninja
-, openssl
-, pixman
-, pkg-config
-, systemd
-, xcbutil
-, xcbutilwm
-, xcbutilimage
-, xkbcomp
-, xkeyboard_config
-, xorgproto
-, xtrans
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  arcan,
+  audit,
+  dbus,
+  dri-pkgconfig-stub,
+  libepoxy,
+  fontutil,
+  libGL,
+  libX11,
+  libXau,
+  libXdmcp,
+  libXfont2,
+  libdrm,
+  libgcrypt,
+  libmd,
+  libselinux,
+  libtirpc,
+  libxcb,
+  libxkbfile,
+  libxshmfence,
+  libgbm,
+  mesa-gl-headers,
+  meson,
+  nettle,
+  ninja,
+  openssl,
+  pixman,
+  pkg-config,
+  systemd,
+  xcbutil,
+  xcbutilwm,
+  xcbutilimage,
+  xkbcomp,
+  xkeyboard_config,
+  xorgproto,
+  xtrans,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalPackages: {
@@ -58,6 +61,7 @@ stdenv.mkDerivation (finalPackages: {
     arcan
     audit
     dbus
+    dri-pkgconfig-stub
     libepoxy
     fontutil
     libGL
@@ -73,7 +77,8 @@ stdenv.mkDerivation (finalPackages: {
     libxcb
     libxkbfile
     libxshmfence
-    mesa
+    libgbm
+    mesa-gl-headers
     nettle
     openssl
     pixman
@@ -106,9 +111,9 @@ stdenv.mkDerivation (finalPackages: {
     "--with-xkb-path=${xkeyboard_config}/share/X11/xkb"
   ];
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater { };
 
-  meta =  {
+  meta = {
     homepage = "https://github.com/letoram/letoram";
     description = "Patched Xserver that bridges connections to Arcan";
     mainProgram = "Xarcan";
@@ -118,7 +123,7 @@ stdenv.mkDerivation (finalPackages: {
       allows running an X session as a window under Arcan.
     '';
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

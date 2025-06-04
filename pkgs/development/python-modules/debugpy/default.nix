@@ -5,24 +5,27 @@
   pythonOlder,
   pythonAtLeast,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   gdb,
   lldb,
   pytestCheckHook,
   pytest-xdist,
   pytest-timeout,
+  pytest-retry,
   importlib-metadata,
   psutil,
+  untangle,
   django,
-  requests,
+  flask,
   gevent,
   numpy,
-  flask,
+  requests,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.8.7";
+  version = "1.8.14";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -30,15 +33,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "debugpy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-JFVhEAfdSfl2ACfXLMdoO/1otdif9bHialdQXucTM5A=";
+    tag = "v${version}";
+    hash = "sha256-IOR6Dbbg/HK4/1re0BEWafwmpBMnQJCo5ojDMB2KgV4=";
   };
 
   patches =
     [
       # Use nixpkgs version instead of versioneer
-      (substituteAll {
-        src = ./hardcode-version.patch;
+      (replaceVars ./hardcode-version.patch {
         inherit version;
       })
 
@@ -60,33 +62,30 @@ buildPythonPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       # Hard code GDB path (used to attach to process)
-      (substituteAll {
-        src = ./hardcode-gdb.patch;
+      (replaceVars ./hardcode-gdb.patch {
         inherit gdb;
       })
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Hard code LLDB path (used to attach to process)
-      (substituteAll {
-        src = ./hardcode-lldb.patch;
+      (replaceVars ./hardcode-lldb.patch {
         inherit lldb;
       })
     ];
 
-  # Remove pre-compiled "attach" libraries and recompile for host platform
-  # Compile flags taken from linux_and_mac/compile_linux.sh & linux_and_mac/compile_mac.sh
+  # Compile attach library for host platform
+  # Derived from linux_and_mac/compile_linux.sh & linux_and_mac/compile_mac.sh
   preBuild = ''
     (
         set -x
         cd src/debugpy/_vendored/pydevd/pydevd_attach_to_process
-        rm *.so *.dylib *.dll *.exe *.pdb
         $CXX linux_and_mac/attach.cpp -Ilinux_and_mac -std=c++11 -fPIC -nostartfiles ${
           {
             "x86_64-linux" = "-shared -o attach_linux_amd64.so";
             "i686-linux" = "-shared -o attach_linux_x86.so";
             "aarch64-linux" = "-shared -o attach_linux_arm64.so";
+            "riscv64-linux" = "-shared -o attach_linux_riscv64.so";
             "x86_64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach_x86_64.dylib";
-            "i686-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach_x86.dylib";
             "aarch64-darwin" = "-D_REENTRANT -dynamiclib -lc -o attach_arm64.dylib";
           }
           .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
@@ -101,10 +100,12 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-xdist
     pytest-timeout
+    pytest-retry
 
     ## Used by test helpers:
     importlib-metadata
     psutil
+    untangle
 
     ## Used in Python code that is run/debugged by the tests:
     django
@@ -112,6 +113,7 @@ buildPythonPackage rec {
     gevent
     numpy
     requests
+    typing-extensions
   ];
 
   preCheck =
@@ -129,7 +131,12 @@ buildPythonPackage rec {
   '';
 
   # Override default arguments in pytest.ini
-  pytestFlagsArray = [ "--timeout=0" ];
+  pytestFlags = [ "--timeout=0" ];
+
+  disabledTests = [
+    # hanging test (flaky)
+    "test_systemexit"
+  ];
 
   # Fixes hanging tests on Darwin
   __darwinAllowLocalNetworking = true;
@@ -139,7 +146,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Implementation of the Debug Adapter Protocol for Python";
     homepage = "https://github.com/microsoft/debugpy";
-    changelog = "https://github.com/microsoft/debugpy/releases/tag/v${version}";
+    changelog = "https://github.com/microsoft/debugpy/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ kira-bruneau ];
     platforms = [
@@ -147,8 +154,8 @@ buildPythonPackage rec {
       "i686-linux"
       "aarch64-linux"
       "x86_64-darwin"
-      "i686-darwin"
       "aarch64-darwin"
+      "riscv64-linux"
     ];
   };
 }

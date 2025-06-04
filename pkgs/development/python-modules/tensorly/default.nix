@@ -6,23 +6,26 @@
   pytestCheckHook,
   pythonOlder,
   scipy,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "tensorly";
-  version = "0.8.2";
-  format = "setuptools";
+  version = "0.9.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-kYKyLY2V6M53co+26ZTZP4U6bHkFebKI5Uhh1x1/N58=";
+    owner = "tensorly";
+    repo = "tensorly";
+    tag = version;
+    hash = "sha256-A6Zlp8fa7XFgf4qpg7SEtNLlYSNtDGLuRUEfzD+crQc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     numpy
     scipy
   ];
@@ -40,6 +43,7 @@ buildPythonPackage rec {
     "tensorly.tenalg"
     "tensorly.decomposition"
     "tensorly.regression"
+    "tensorly.solvers"
     "tensorly.metrics"
     "tensorly.random"
     "tensorly.datasets"
@@ -58,6 +62,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Tensor learning in Python";
     homepage = "https://tensorly.org/";
+    changelog = "https://github.com/tensorly/tensorly/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
   };

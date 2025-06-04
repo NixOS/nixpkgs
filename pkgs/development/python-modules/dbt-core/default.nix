@@ -1,56 +1,71 @@
 {
   lib,
-  agate,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  agate,
   click,
   daff,
   dbt-adapters,
   dbt-common,
   dbt-extractor,
   dbt-semantic-interfaces,
-  fetchFromGitHub,
   jinja2,
   logbook,
   mashumaro,
-  minimal-snowplow-tracker,
   networkx,
   packaging,
   pathspec,
   protobuf,
-  callPackage,
-  pythonOlder,
+  pydantic,
+  pydantic-settings,
   pytz,
   pyyaml,
   requests,
-  setuptools,
+  snowplow-tracker,
   sqlparse,
   typing-extensions,
+
+  # passthru
+  callPackage,
 }:
 
 buildPythonPackage rec {
   pname = "dbt-core";
-  version = "1.8.7";
+  version = "1.10.0b2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-core";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1NvdRAr8T2dDgtyj5tUIqhjHIu4sZYS+oj7hOMEqs0A=";
+    tag = "v${version}";
+    hash = "sha256-MTrdpbPqdakFDmLKRFJ23u9hLgGhZ5T+r4om9HPBjkw=";
   };
+
+  postPatch = ''
+    substituteInPlace dbt/utils/artifact_upload.py \
+      --replace-fail \
+        "from pydantic import BaseSettings" \
+        "from pydantic_settings import BaseSettings"
+  '';
 
   sourceRoot = "${src.name}/core";
 
   pythonRelaxDeps = [
     "agate"
     "click"
+    "dbt-common"
     "dbt-semantic-interfaces"
+    "logbook"
     "mashumaro"
     "networkx"
-    "logbook"
     "pathspec"
+    "protobuf"
+    "pydantic"
     "urllib3"
   ];
 
@@ -69,14 +84,16 @@ buildPythonPackage rec {
     jinja2
     logbook
     mashumaro
-    minimal-snowplow-tracker
     networkx
     packaging
     pathspec
     protobuf
+    pydantic
+    pydantic-settings
     pytz
     pyyaml
     requests
+    snowplow-tracker
     sqlparse
     typing-extensions
   ] ++ mashumaro.optional-dependencies.msgpack;
@@ -88,7 +105,7 @@ buildPythonPackage rec {
     withAdapters = callPackage ./with-adapters.nix { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Enables data analysts and engineers to transform their data using the same practices that software engineers use to build applications";
     longDescription = ''
       The dbt tool needs adapters to data sources in order to work. The available
@@ -107,9 +124,9 @@ buildPythonPackage rec {
         ])
     '';
     homepage = "https://github.com/dbt-labs/dbt-core";
-    changelog = "https://github.com/dbt-labs/dbt-core/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/dbt-labs/dbt-core/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       mausch
       tjni
     ];

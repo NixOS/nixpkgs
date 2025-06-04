@@ -1,27 +1,34 @@
-{ lib
-, fetchFromGitHub
-, pkg-config
-, libsodium
-, buildGoModule
+{
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  libsodium,
+  buildGoModule,
+  nix-update-script,
 }:
 
 buildGoModule rec {
-
-  version = "photos-v0.9.46";
   pname = "museum";
+  version = "1.0.10";
 
   src = fetchFromGitHub {
     owner = "ente-io";
     repo = "ente";
     sparseCheckout = [ "server" ];
-    rev = version;
-    hash = "sha256-dJCZxQLnKb+mFG0iaYNrXyDSaslqKdPTXMK4KwvqBd8=";
+    rev = "photos-v${version}";
+    hash = "sha256-CX12JrKlI7FMizk29LXO5e5i7pmgjzni/RY97020UZg=";
   };
+
+  vendorHash = "sha256-px4pMqeH73Fe06va4+n6hklIUDMbPmAQNKKRIhwv6ec=";
 
   sourceRoot = "${src.name}/server";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libsodium ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
+  buildInputs = [
+    libsodium
+  ];
 
   # fatal: "Not running tests in non-test environment"
   doCheck = false;
@@ -31,18 +38,25 @@ buildGoModule rec {
     cp -R configurations \
       migrations \
       mail-templates \
+      web-templates \
       $out/share/museum
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "photos-v(.*)"
+    ];
+  };
+
+  meta = {
     description = "API server for ente.io";
     homepage = "https://github.com/ente-io/ente/tree/main/server";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ surfaceflinger pinpox ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
+      pinpox
+    ];
     mainProgram = "museum";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-  vendorHash = "sha256-Vz9AodHoClSmo51ExdOS4bWH13i1Sug++LQMIsZY2xY=";
 }
-
-

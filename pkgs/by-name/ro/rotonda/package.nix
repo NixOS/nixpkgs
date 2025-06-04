@@ -1,27 +1,32 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rotonda";
-  version = "0.1.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = "rotonda";
-    rev = "v${version}";
-    hash = "sha256-bhuVzoEgDrfj4z2rfD+2agkXKNLZXN/MA+AxmEaeuLk=";
+    tag = "v${version}";
+    hash = "sha256-DpFrJH37ysNc3hv7UrDktqRWrucAX6ZlpwUAT0PDm5k=";
   };
 
-  cargoHash = "sha256-0i1dFMPNUAMgTdZ+f9fg0DvvhkpCmlPOjYoyFvHT4v4=";
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-cWPsFUa31hcNzqSSBbnhWccJqYGQbpbZNcVr0G14cqE=";
+
+  meta = {
     description = "Rotonda - composable, programmable BGP Engine";
     homepage = "https://github.com/NLnetLabs/rotonda";
-    changelog = "https://github.com/NLnetLabs/rotonda/blob/${src.rev}/Changelog.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ _0x4A6F ];
+    changelog = "https://github.com/NLnetLabs/rotonda/blob/refs/tags/${src.tag}/Changelog.md";
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ _0x4A6F ];
     mainProgram = "rotonda";
   };
 }

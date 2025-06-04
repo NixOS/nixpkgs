@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "qtconsole";
-  version = "5.6.0";
+  version = "5.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "qtconsole";
-    rev = "refs/tags/${version}";
-    hash = "sha256-V82tGAmpvfGeUoewtJXXsBBXx2HNcV9/IMJxJg3bJL8=";
+    tag = version;
+    hash = "sha256-esCt7UQ0va/FJ0gdSrcc/k/FgyBVqKy7ttrN6E6mx+E=";
   };
 
   build-system = [ setuptools ];

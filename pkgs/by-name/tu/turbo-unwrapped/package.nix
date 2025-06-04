@@ -1,11 +1,9 @@
 {
-  stdenv,
   lib,
-  fetchFromGitHub,
-  rustPlatform,
+  stdenv,
   capnproto,
-  darwin,
   extra-cmake-modules,
+  fetchFromGitHub,
   fontconfig,
   llvmPackages,
   nix-update-script,
@@ -13,26 +11,23 @@
   pkg-config,
   protobuf,
   rust-jemalloc-sys,
+  rustPlatform,
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "turbo-unwrapped";
-  version = "2.0.12";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "vercel";
-    repo = "turbo";
-    rev = "v${version}";
-    hash = "sha256-rh9BX8M3Kgu07Pz4G3AM6S9zeK3Bb6CzOpcYo7rQgIw=";
+    repo = "turborepo";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QcyRuLd+nMoCyrtX1j+8vFtsgVKC2KsQBAUjsvfG+rM=";
   };
 
-  patches = [
-    # upstream uses nightly where lazy_cell is stable
-    ./enable-lazy_cell.patch
-  ];
-
-  cargoHash = "sha256-oZHSoPrPCUwXSrxEASm4LuYO+XHyNDRRl38Q7U7F/lk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-zEkpWu/L5plFCnvliAtfu19ljB4pnrEesVQZOycOKRk=";
 
   nativeBuildInputs =
     [
@@ -44,21 +39,12 @@ rustPlatform.buildRustPackage rec {
     # https://github.com/vercel/turbo/blob/ea740706e0592b3906ab34c7cfa1768daafc2a84/CONTRIBUTING.md#linux-dependencies
     ++ lib.optional stdenv.hostPlatform.isLinux llvmPackages.bintools;
 
-  buildInputs =
-    [
-      fontconfig
-      openssl
-      rust-jemalloc-sys
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk_11_0.frameworks;
-      [
-        CoreFoundation
-        CoreServices
-        IOKit
-      ]
-    );
+  buildInputs = [
+    fontconfig
+    openssl
+    rust-jemalloc-sys
+    zlib
+  ];
 
   cargoBuildFlags = [
     "--package"
@@ -77,7 +63,7 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "'v(\d+\.\d+\.\d+)'"
+        "v(\\d+\\.\\d+\\.\\d+)$"
       ];
     };
   };
@@ -85,7 +71,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "High-performance build system for JavaScript and TypeScript codebases";
     homepage = "https://turbo.build/";
-    changelog = "https://github.com/vercel/turbo/releases/tag/v${version}";
+    changelog = "https://github.com/vercel/turborepo/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dlip
@@ -93,4 +79,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "turbo";
   };
-}
+})

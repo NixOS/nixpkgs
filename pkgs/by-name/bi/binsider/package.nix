@@ -1,32 +1,24 @@
 {
   lib,
-  darwin,
   rustPlatform,
   fetchFromGitHub,
   stdenv,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "binsider";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "binsider";
     rev = "v${version}";
-    hash = "sha256-VnWLslelEAXuSy7XnxrdgSkXqTrd+Ni7lQFsB2P+ILs=";
+    hash = "sha256-FNaYMp+vrFIziBzZ8//+ppq7kwRjBJypqsxg42XwdEs=";
   };
 
-  cargoHash = "sha256-eBZ7zUOucarzdxTjHecUxGqUsKTQPaaotOfs/v0MxHk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ZoZbhmUeC63IZ5kNuACfRaCsOicZNUAGYABSpCkUCXA=";
 
-  buildNoDefaultFeatures = !stdenv.isLinux;
-
-  buildInputs = lib.optionals stdenv.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      AppKit
-      CoreServices
-    ]
-  );
+  buildNoDefaultFeatures = !stdenv.hostPlatform.isLinux;
 
   checkType = "debug";
   checkFlags = [

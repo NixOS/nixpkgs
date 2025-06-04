@@ -1,14 +1,19 @@
-{ stdenvNoCC, lib, fetchFromGitHub, nixosTests }:
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "icingaweb2-ipl";
-  version = "0.14.1";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "Icinga";
     repo = "icinga-php-library";
     rev = "v${version}";
-    hash = "sha256-TR2hd8TdWA2zSyalxBaqqdcK6FO2CovqddF8mvvyb1U=";
+    hash = "sha256-1hq7jPe8WiCPAfz7j273BCBWsX1xLVp85vhTEV+2D/E=";
   };
 
   installPhase = ''
@@ -23,6 +28,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/Icinga/icinga-php-library";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ das_j ];
+    teams = [ lib.teams.helsinki-systems ];
   };
 }

@@ -21,19 +21,23 @@
   libjxl,
   libexif,
   libavif,
-  openexr_3,
+  libsixel,
+  libraw,
+  openexr,
   bash-completion,
   testers,
+  nix-update-script,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "swayimg";
-  version = "3.4";
+  version = "4.1";
 
   src = fetchFromGitHub {
     owner = "artemsen";
     repo = "swayimg";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-bUU4s7nlN48rYMX4SleUDAOCVz2fowGctEfP6KhMdoA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xwhEt+FhHPgfXJL1zTPsMD8ia5s+rr/eIJLlAlG8QzY=";
   };
 
   strictDeps = true;
@@ -70,20 +74,29 @@ stdenv.mkDerivation (finalAttrs: {
     libjxl
     libexif
     libavif
-    openexr_3
+    libsixel
+    libraw
+    openexr
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/artemsen/swayimg";
     description = "Image viewer for Sway/Wayland";
     changelog = "https://github.com/artemsen/swayimg/releases/tag/v${finalAttrs.version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      matthewcroughan
+      Gliczy
+    ];
+    platforms = lib.platforms.linux;
     mainProgram = "swayimg";
   };
 })

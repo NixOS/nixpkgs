@@ -1,31 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, obs-studio
-, ffmpeg
-, libjpeg
-, libimobiledevice
-, libusbmuxd
-, libplist
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  obs-studio,
+  ffmpeg,
+  libjpeg,
+  libimobiledevice,
+  libusbmuxd,
+  libplist,
+  pkg-config,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "droidcam-obs";
-  version = "2.0.2";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "dev47apps";
     repo = "droidcam-obs-plugin";
-    rev = version;
-    sha256 = "sha256-YtfWwgBhyQYx6QfrKld7p6qUf8BEV/kkQX4QcdHuaYU=";
+    tag = finalAttrs.version;
+    sha256 = "sha256-KWMLhddK561xA+EjvoG4tXRW4xoLil31JcTTfppblmA=";
   };
-
-  postPatch = ''
-    substituteInPlace ./linux/linux.mk \
-      --replace "-limobiledevice" "-limobiledevice-1.0" \
-      --replace "-I/usr/include/obs" "-I${obs-studio}/include/obs" \
-      --replace "-I/usr/include/ffmpeg" "-I${ffmpeg}/include"
-  '';
 
   preBuild = ''
     mkdir ./build
@@ -40,11 +34,22 @@ stdenv.mkDerivation rec {
     ffmpeg
   ];
 
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  # Flag reference in regard to:
+  # https://github.com/dev47apps/droidcam-obs-plugin/blob/master/linux/linux.mk
   makeFlags = [
     "ALLOW_STATIC=no"
     "JPEG_DIR=${lib.getDev libjpeg}"
     "JPEG_LIB=${lib.getLib libjpeg}/lib"
-    "IMOBILEDEV_DIR=${libimobiledevice}"
+    "IMOBILEDEV_DIR=${lib.getDev libimobiledevice}"
+    "IMOBILEDEV_DIR=${lib.getLib libimobiledevice}"
+    "LIBOBS_INCLUDES=${obs-studio}/include/obs"
+    "FFMPEG_INCLUDES=${lib.getLib ffmpeg}"
+    "LIBUSBMUXD=libusbmuxd-2.0"
+    "LIBIMOBILEDEV=libimobiledevice-1.0"
   ];
 
   installPhase = ''
@@ -60,11 +65,11 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "DroidCam OBS";
     homepage = "https://github.com/dev47apps/droidcam-obs-plugin";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ulrikstrid ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ NotAShelf ];
+    platforms = lib.platforms.linux;
   };
-}
+})

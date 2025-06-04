@@ -1,27 +1,32 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qt6
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qt6,
+  nix-update-script,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dsda-launcher";
-  version = "1.3.1-hotfix";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "Pedro-Beirao";
     repo = "dsda-launcher";
-    rev = "v${version}";
-    hash = "sha256-V6VLUl148L47LjKnPe5MZCuhZSMtI0wd18i8b+7jCvk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OMgxhb+9GdLK00nl/df9QiYYewr+YEjdX2KjQWvu1mk=";
   };
 
   nativeBuildInputs = [ qt6.wrapQtAppsHook ];
 
-  buildInputs = [ qt6.qtbase qt6.qtwayland ];
+  buildInputs = [
+    qt6.qtbase
+    qt6.qtwayland
+  ];
 
   buildPhase = ''
     runHook preBuild
-    mkdir -p "./dsda-launcher/build"
-    cd "./dsda-launcher/build"
+    mkdir -p "./src/build"
+    cd "./src/build"
     qmake6 ..
     make
     runHook postBuild
@@ -31,18 +36,19 @@ stdenv.mkDerivation rec {
     runHook preInstall
     mkdir -p $out/bin
     cp ./dsda-launcher $out/bin
-
     install -Dm444 ../icons/dsda-Launcher.desktop $out/share/applications/dsda-Launcher.desktop
     install -Dm444 ../icons/dsda-launcher.png $out/share/pixmaps/dsda-launcher.png
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://github.com/Pedro-Beirao/dsda-launcher";
     description = "This is a launcher GUI for the dsda-doom source port";
     mainProgram = "dsda-launcher";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.Gliczy ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ Gliczy ];
   };
-}
+})

@@ -1,26 +1,30 @@
-{ lib
-, symlinkJoin
-, makeBinaryWrapper
-, fcitx5
-, withConfigtool ? true
-, fcitx5-configtool
-, libsForQt5
-, qt6Packages
-, fcitx5-gtk
-, addons ? [ ]
+{
+  lib,
+  symlinkJoin,
+  makeBinaryWrapper,
+  fcitx5,
+  withConfigtool ? true,
+  fcitx5-configtool,
+  libsForQt5,
+  qt6Packages,
+  fcitx5-gtk,
+  addons ? [ ],
 }:
 
 symlinkJoin {
   name = "fcitx5-with-addons-${fcitx5.version}";
 
-  paths = [
-    fcitx5
-    libsForQt5.fcitx5-qt
-    qt6Packages.fcitx5-qt
-    fcitx5-gtk
-  ] ++ lib.optionals withConfigtool [
-    fcitx5-configtool
-  ] ++ addons;
+  paths =
+    [
+      fcitx5
+      libsForQt5.fcitx5-qt
+      qt6Packages.fcitx5-qt
+      fcitx5-gtk
+    ]
+    ++ lib.optionals withConfigtool [
+      fcitx5-configtool
+    ]
+    ++ addons;
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
@@ -29,7 +33,9 @@ symlinkJoin {
       --prefix FCITX_ADDON_DIRS : "$out/lib/fcitx5" \
       --suffix XDG_DATA_DIRS : "$out/share" \
       --suffix PATH : "$out/bin" \
-      --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath (lib.flatten (map (x: x.extraLdLibraries or []) addons))}"
+      --suffix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath (lib.flatten (map (x: x.extraLdLibraries or [ ]) addons))
+      }"
 
     ${lib.optionalString withConfigtool ''
       # Configtool call libexec/fcitx5-qt5-gui-wrapper for gui addons in FCITX_ADDON_DIRS

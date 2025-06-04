@@ -1,26 +1,27 @@
 {
   lib,
-  python3,
   fetchFromGitHub,
+
+  python3Packages,
 }:
 
-with python3.pkgs;
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "mapproxy";
-  version = "3.0.1";
+  version = "4.1.2";
+  disabled = python3Packages.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mapproxy";
     repo = "mapproxy";
-    rev = version;
-    hash = "sha256-74hUJIy1+DaKjUsCgd4+2MdMPGqqDUuHDrhBCFNn8Dk=";
+    tag = version;
+    hash = "sha256-sh0kViv1Ax/2YPL2ON+X03d5Moa2oPWhb4Rp6Ni5AAY=";
   };
 
   prePatch = ''
     substituteInPlace mapproxy/util/ext/serving.py --replace "args = [sys.executable] + sys.argv" "args = sys.argv"
   '';
 
-  dependencies = [
+  dependencies = with python3Packages; [
     boto3 # needed for caches service
     future
     jsonschema
@@ -33,19 +34,17 @@ buildPythonApplication rec {
     setuptools
     werkzeug
   ];
+
   # Tests are disabled:
   # 1) Dependency list is huge.
   #    https://github.com/mapproxy/mapproxy/blob/master/requirements-tests.txt
-  #
-  # 2) There are security issues with package Riak
-  #    https://github.com/NixOS/nixpkgs/issues/33876
-  #    https://github.com/NixOS/nixpkgs/pull/56480
   doCheck = false;
 
   meta = {
     description = "Open source proxy for geospatial data";
     homepage = "https://mapproxy.org/";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ rakesh4g ]);
+    maintainers = with lib.maintainers; [ rakesh4g ];
+    teams = [ lib.teams.geospatial ];
   };
 }

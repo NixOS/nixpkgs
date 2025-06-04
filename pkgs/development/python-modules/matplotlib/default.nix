@@ -21,7 +21,7 @@
   ffmpeg-headless,
   freetype,
   # By default, almost all tests fail due to the fact we use our version of
-  # freetype. We still define use this argument to define the overriden
+  # freetype. We still use this argument to define the overridden
   # derivation `matplotlib.passthru.tests.withoutOutdatedFreetype` - which
   # builds matplotlib with the freetype version they default to, with which all
   # tests should pass.
@@ -53,13 +53,7 @@
   # Tk
   # Darwin has its own "MacOSX" backend, PyPy has tkagg backend and does not support tkinter
   enableTk ? (!stdenv.hostPlatform.isDarwin && !isPyPy),
-  tcl,
-  tk,
   tkinter,
-
-  # Ghostscript
-  enableGhostscript ? true,
-  ghostscript,
 
   # Qt
   enableQt ? false,
@@ -72,9 +66,6 @@
   # nbagg
   enableNbagg ? false,
   ipykernel,
-
-  # darwin
-  Cocoa,
 
   # required for headless detection
   libX11,
@@ -89,15 +80,15 @@ let
 in
 
 buildPythonPackage rec {
-  version = "3.9.1";
+  version = "3.10.1";
   pname = "matplotlib";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3gaxm425XdM9DcF8kmx8nr7Z9XIHS2+sT2UGimgU0BA=";
+    hash = "sha256-6NLQ44gbEpJoWFv0dlrT7nOkWR13uaGMIUrH46efsro=";
   };
 
   env.XDG_RUNTIME_DIR = "/tmp";
@@ -111,7 +102,8 @@ buildPythonPackage rec {
   postPatch =
     ''
       substituteInPlace pyproject.toml \
-        --replace-fail '"numpy>=2.0.0rc1,<2.3",' ""
+        --replace-fail "meson-python>=0.13.1,<0.17.0" meson-python
+
       patchShebangs tools
     ''
     + lib.optionalString (stdenv.hostPlatform.isLinux && interactive) ''
@@ -129,17 +121,10 @@ buildPythonPackage rec {
       freetype
       qhull
     ]
-    ++ lib.optionals enableGhostscript [ ghostscript ]
     ++ lib.optionals enableGtk3 [
       cairo
       gtk3
-    ]
-    ++ lib.optionals enableTk [
-      libX11
-      tcl
-      tk
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+    ];
 
   # clang-11: error: argument unused during compilation: '-fno-strict-overflow' [-Werror,-Wunused-command-line-argument]
   hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [ "strictoverflow" ];
@@ -191,8 +176,8 @@ buildPythonPackage rec {
       doCheck = true;
       freetype = freetype.overrideAttrs (_: {
         src = fetchurl {
-          url = "https://download.savannah.gnu.org/releases/freetype/freetype-old/freetype-2.6.1.tar.gz";
-          sha256 = "sha256-Cjx9+9ptoej84pIy6OltmHq6u79x68jHVlnkEyw2cBQ=";
+          url = "mirror://savannah/freetype/freetype-old/freetype-2.6.1.tar.gz";
+          hash = "sha256-Cjx9+9ptoej84pIy6OltmHq6u79x68jHVlnkEyw2cBQ=";
         };
         patches = [ ];
       });

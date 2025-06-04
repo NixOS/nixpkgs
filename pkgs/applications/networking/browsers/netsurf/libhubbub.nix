@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, gperf
-, perl
-, pkg-config
-, buildsystem
-, libparserutils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gperf,
+  perl,
+  pkg-config,
+  buildsystem,
+  libparserutils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

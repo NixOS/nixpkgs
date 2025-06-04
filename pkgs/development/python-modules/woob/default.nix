@@ -49,7 +49,10 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  pythonRelaxDeps = [ "packaging" ];
+  pythonRelaxDeps = [
+    "packaging"
+    "rich"
+  ];
 
   propagatedBuildInputs = [
     babel

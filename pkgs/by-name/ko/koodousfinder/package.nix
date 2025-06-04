@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "koodousfinder";
   version = "0.1.0";
   pyproject = true;
@@ -21,7 +21,6 @@ python3.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = [ "keyring" ];
 
   build-system = with python3.pkgs; [ poetry-core ];
-
 
   dependencies = with python3.pkgs; [
     keyring

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "knocki";
-  version = "0.3.5";
+  version = "0.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "swan-solutions";
     repo = "knocki-homeassistant";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Fb3skFttY5gtm80k1LCUQ4Z7/TQGClCNcWt1k6bLQoI=";
+    tag = "v${version}";
+    hash = "sha256-85w+fj00VW0miNt+xRMcU6szg/Z7QaeKLGw2BV7X0T4=";
   };
 
   postPatch = ''
@@ -54,6 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Asynchronous Python client for Knocki vibration / door sensors";
     homepage = "https://github.com/swan-solutions/knocki-homeassistant";
+    changelog = "https://github.com/swan-solutions/knocki-homeassistant/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ mindstorms6 ];
   };

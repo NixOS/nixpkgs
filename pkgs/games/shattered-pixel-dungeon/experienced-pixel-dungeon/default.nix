@@ -1,16 +1,17 @@
-{ callPackage
-, fetchFromGitHub
+{
+  callPackage,
+  fetchFromGitHub,
 }:
 
 callPackage ../generic.nix rec {
   pname = "experienced-pixel-dungeon";
-  version = "2.18.2";
+  version = "2.19";
 
   src = fetchFromGitHub {
     owner = "TrashboxBobylev";
     repo = "Experienced-Pixel-Dungeon-Redone";
-    rev = "ExpPD-${version}";
-    hash = "sha256-REBltg7rKgrNSKHh3QuG8XVLPivS1fAtyqf/TRjH0W0=";
+    tag = "ExpPD-${version}";
+    hash = "sha256-O3FEHIOGe1sO8L4eDUF3NGXhB9LviLT8M6mGqpe42B4=";
   };
 
   desktopName = "Experienced Pixel Dungeon";

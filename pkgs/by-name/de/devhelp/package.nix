@@ -1,28 +1,32 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gnome
-, adwaita-icon-theme
-, gtk3
-, wrapGAppsHook3
-, glib
-, gobject-introspection
-, gi-docgen
-, webkitgtk_4_1
-, gettext
-, itstool
-, gsettings-desktop-schemas
-, shared-mime-info
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gnome,
+  adwaita-icon-theme,
+  gtk3,
+  wrapGAppsHook3,
+  glib,
+  gobject-introspection,
+  gi-docgen,
+  webkitgtk_4_1,
+  gettext,
+  itstool,
+  gsettings-desktop-schemas,
+  shared-mime-info,
 }:
 
 stdenv.mkDerivation rec {
   pname = "devhelp";
   version = "43.0";
 
-  outputs = [ "out" "devdoc" ];
+  outputs = [
+    "out"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/devhelp/${lib.versions.major version}/devhelp-${version}.tar.xz";
@@ -76,13 +80,13 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "API documentation browser for GNOME";
     mainProgram = "devhelp";
     homepage = "https://apps.gnome.org/Devhelp/";
     changelog = "https://gitlab.gnome.org/GNOME/devhelp/-/blob/${version}/NEWS?ref_type=tags";
-    license = licenses.gpl3Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,44 +1,45 @@
-{ lib
-, fetchurl
-, pkg-config
-, gnome
-, gtk3
-, wrapGAppsHook3
-, gobject-introspection
-, itstool
-, libxml2
-, python3
-, at-spi2-core
-, dbus
-, gettext
-, libwnck
-, adwaita-icon-theme
-, librsvg
+{
+  lib,
+  fetchurl,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  gnome,
+  gtk3,
+  wrapGAppsHook3,
+  gobject-introspection,
+  itstool,
+  python3,
+  at-spi2-core,
+  gettext,
+  libwnck,
+  librsvg,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "accerciser";
-  version = "3.42.0";
+  version = "3.46.2";
 
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-d2m9T09j3ImhQ+hs3ET+rr1/jJab6lwfWoaskxGQL0g=";
+    url = "mirror://gnome/sources/accerciser/${lib.versions.majorMinor version}/accerciser-${version}.tar.xz";
+    hash = "sha256-r/RpRR8k5YdpPE9/en+GpQU8ZrIDOndDrZ2DhHSWdw4=";
   };
 
   nativeBuildInputs = [
+    desktop-file-utils
     gettext
     gobject-introspection # For setup hook
     itstool
-    libxml2
+    meson
+    ninja
     pkg-config
-    dbus
     wrapGAppsHook3
   ];
 
   buildInputs = [
-    adwaita-icon-theme
     at-spi2-core
     gtk3
     libwnck
@@ -46,11 +47,13 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
+    dbus-python
     ipython
     pyatspi
     pycairo
     pygobject3
-    setuptools
+    pyxdg
+    setuptools # for pkg_resources
   ];
 
   dontWrapGApps = true;
@@ -66,13 +69,13 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/accerciser";
     changelog = "https://gitlab.gnome.org/GNOME/accerciser/-/blob/${version}/NEWS?ref_type=tags";
     description = "Interactive Python accessibility explorer";
     mainProgram = "accerciser";
-    maintainers = teams.gnome.members;
-    license = licenses.bsd3;
-    platforms = platforms.linux;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
   };
 }

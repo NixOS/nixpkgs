@@ -1,27 +1,30 @@
-{ lib
-, stdenvNoCC
-, fetchzip
-, copyDesktopItems
-, jdk11
-, makeDesktopItem
-, makeWrapper
-, unzip
-, xdg-utils
-, writeScript
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+  copyDesktopItems,
+  jdk11,
+  makeDesktopItem,
+  makeWrapper,
+  unzip,
+  xdg-utils,
+  writeScript,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "irpf";
-  version = "2024-1.4";
+  version = "2025-1.3";
 
   # https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/download/pgd/dirpf
   # Para outros sistemas operacionais -> Multi
-  src = let
-    year = lib.head (lib.splitVersion finalAttrs.version);
-  in fetchzip {
-    url = "https://downloadirpf.receita.fazenda.gov.br/irpf/${year}/irpf/arquivos/IRPF${finalAttrs.version}.zip";
-    hash = "sha256-223PZyGlLSK5GzR143IlGzhmJlXmvtBdscC2roPiQhc=";
-  };
+  src =
+    let
+      year = lib.head (lib.splitVersion finalAttrs.version);
+    in
+    fetchzip {
+      url = "https://downloadirpf.receita.fazenda.gov.br/irpf/${year}/irpf/arquivos/IRPF${finalAttrs.version}.zip";
+      hash = "sha256-BWCxnKPvkijVkXfbA1iVbdcgLZqY5SAzASqnzdjXwiw=";
+    };
 
   passthru.updateScript = writeScript "update-irpf" ''
     #!/usr/bin/env nix-shell
@@ -33,12 +36,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     update-source-version irpf "$version"
   '';
 
-  nativeBuildInputs = [ unzip makeWrapper copyDesktopItems ];
+  nativeBuildInputs = [
+    unzip
+    makeWrapper
+    copyDesktopItems
+  ];
 
   desktopItems = [
     (makeDesktopItem {
-      name = finalAttrs.pname;
-      exec = finalAttrs.pname;
+      name = "irpf";
+      exec = "irpf";
       icon = "rfb64";
       desktopName = "Imposto de Renda Pessoa Física";
       comment = "Programa Oficial da Receita para elaboração do IRPF";
@@ -49,7 +56,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    BASEDIR="$out/share/${finalAttrs.pname}"
+    BASEDIR="$out/share/irpf"
     mkdir -p "$BASEDIR"
 
     cp --no-preserve=mode -r help lib lib-modulos "$BASEDIR"
@@ -57,10 +64,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -Dm644 irpf.jar Leia-me.htm offline.png online.png pgd-updater.jar "$BASEDIR"
 
     # make xdg-open overrideable at runtime
-    makeWrapper ${jdk11}/bin/java $out/bin/${finalAttrs.pname} \
+    makeWrapper ${jdk11}/bin/java $out/bin/irpf \
       --add-flags "-Dawt.useSystemAAFontSettings=on" \
       --add-flags "-Dswing.aatext=true" \
-      --add-flags "-jar $BASEDIR/${finalAttrs.pname}.jar" \
+      --add-flags "-jar $BASEDIR/irpf.jar" \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
       --set _JAVA_AWT_WM_NONREPARENTING 1 \
       --set AWT_TOOLKIT MToolkit
@@ -82,7 +89,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = licenses.unfree;
     platforms = platforms.all;
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [ atila bryanasdev000 ];
+    maintainers = with maintainers; [
+      atila
+      bryanasdev000
+    ];
     mainProgram = "irpf";
   };
 })

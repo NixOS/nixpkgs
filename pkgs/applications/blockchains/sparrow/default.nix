@@ -1,33 +1,36 @@
-{ stdenv
-, stdenvNoCC
-, lib
-, makeWrapper
-, fetchurl
-, makeDesktopItem
-, copyDesktopItems
-, autoPatchelfHook
-, openjdk
-, gtk3
-, gsettings-desktop-schemas
-, writeScript
-, bash
-, gnugrep
-, tor
-, zlib
-, openimajgrabber
-, hwi
-, imagemagick
-, gzip
-, gnupg
+{
+  stdenv,
+  stdenvNoCC,
+  lib,
+  makeWrapper,
+  fetchurl,
+  makeDesktopItem,
+  copyDesktopItems,
+  autoPatchelfHook,
+  jdk23,
+  gtk3,
+  gsettings-desktop-schemas,
+  writeScript,
+  bash,
+  gnugrep,
+  tor,
+  zlib,
+  imagemagick,
+  gzip,
+  gnupg,
+  libusb1,
+  pcsclite,
 }:
 
 let
   pname = "sparrow";
-  version = "2.0.0";
+  version = "2.2.1";
+
+  openjdk = jdk23.override { enableJavaFX = true; };
 
   src = fetchurl {
-    url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-x86_64.tar.gz";
-    sha256 = "sha256-Z4rA3KObPAOuJeI+TzyYaXDyptAxBAWzYJDTplUvw50=";
+    url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/sparrowwallet-${version}-x86_64.tar.gz";
+    hash = "sha256-m6FHcz62MbEQFfLeDyW0ziqoB4YVYOOL/IB5AgunXrQ=";
 
     # nativeBuildInputs, downloadToTemp, and postFetch are used to verify the signed upstream package.
     # The signature is not a self-contained file. Instead the SHA256 of the package is added to a manifest file.
@@ -45,7 +48,7 @@ let
       mkdir -m 700 -p $GNUPGHOME
       ln -s ${manifest} ./manifest.txt
       ln -s ${manifestSignature} ./manifest.txt.asc
-      ln -s $downloadedFile ./${pname}-${version}-x86_64.tar.gz
+      ln -s $downloadedFile ./sparrowwallet-${version}-x86_64.tar.gz
       gpg --import ${publicKey}
       gpg --verify manifest.txt.asc manifest.txt
       sha256sum -c --ignore-missing manifest.txt
@@ -56,12 +59,12 @@ let
 
   manifest = fetchurl {
     url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-manifest.txt";
-    sha256 = "sha256-qjkKw3WmbRBf+yqcSIYVWmYz8M3u2JxnBriR0Ec/C7A=";
+    hash = "sha256-rbLTZAkqesmS1pg5wbnbTbnTuFnpWuDID0aCAwwM65w=";
   };
 
   manifestSignature = fetchurl {
     url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-manifest.txt.asc";
-    sha256 = "sha256-CRrEzWqFVFQGWsh2+rjSuGHuFmf+y6SetCi2G89jZ/0=";
+    hash = "sha256-Ct2PVjH5WEa+XqJtUNHlmMhlEN/r/Z+Y73vsHfMo5Qg=";
   };
 
   publicKey = ./publickey.asc;
@@ -69,6 +72,7 @@ let
   launcher = writeScript "sparrow" ''
     #! ${bash}/bin/bash
     params=(
+      -Dsun.security.smartcardio.library=${pcsclite.lib}/lib/libpcsclite.so.1
       --module-path @out@/lib:@jdkModules@/modules
       --add-opens=javafx.graphics/com.sun.javafx.css=org.controlsfx.controls
       --add-opens=javafx.graphics/javafx.scene=org.controlsfx.controls
@@ -136,7 +140,16 @@ let
   sparrow-modules = stdenvNoCC.mkDerivation {
     pname = "sparrow-modules";
     inherit version src;
-    nativeBuildInputs = [ makeWrapper gzip gnugrep openjdk autoPatchelfHook stdenv.cc.cc.lib zlib ];
+    nativeBuildInputs = [
+      makeWrapper
+      gzip
+      gnugrep
+      openjdk
+      autoPatchelfHook
+      (lib.getLib stdenv.cc.cc)
+      zlib
+      libusb1
+    ];
 
     buildPhase = ''
       # Extract Sparrow's JIMAGE and generate a list of them.
@@ -168,7 +181,10 @@ let
       rm -fR com.github.sarxos.webcam.capture/com/github/sarxos/webcam/ds/buildin/lib/linux_armel
       rm -fR com.github.sarxos.webcam.capture/com/github/sarxos/webcam/ds/buildin/lib/linux_armhf
       rm -fR com.github.sarxos.webcam.capture/com/github/sarxos/webcam/ds/buildin/lib/linux_x86
-      rm com.github.sarxos.webcam.capture/com/github/sarxos/webcam/ds/buildin/lib/linux_x64/OpenIMAJGrabber.so
+      rm -fR openpnp.capture.java/darwin-aarch64
+      rm -fR openpnp.capture.java/darwin-x86-64
+      rm -fR openpnp.capture.java/linux-aarch64
+      rm -fR openpnp.capture.java/win32-x86-64
       rm -fR com.nativelibs4java.bridj/org/bridj/lib/linux_arm32_armel
       rm -fR com.nativelibs4java.bridj/org/bridj/lib/linux_armel
       rm -fR com.nativelibs4java.bridj/org/bridj/lib/linux_armhf
@@ -178,7 +194,9 @@ let
       rm -fR com.sparrowwallet.merged.module/linux-aarch64
       rm -fR com.sparrowwallet.merged.module/linux-arm
       rm -fR com.sparrowwallet.merged.module/linux-x86
-      rm com.sparrowwallet.sparrow/native/linux/x64/hwi
+      rm -fR com.fazecast.jSerialComm/OpenBSD
+      rm -fR com.fazecast.jSerialComm/Android
+      rm -fR com.fazecast.jSerialComm/Solaris
 
       ls | xargs -d " " -- echo > ../manifest.txt
       find . | grep "\.so$" | xargs -- chmod ugo+x
@@ -187,22 +205,23 @@ let
       # Replace the embedded Tor binary (which is in a Tar archive)
       # with one from Nixpkgs.
       gzip -c ${torWrapper}  > tor.gz
-      cp tor.gz modules/kmp.tor.binary.linuxx64/kmptor/linux/x64/tor.gz
+      cp tor.gz modules/io.matthewnelson.kmp.tor.resource.exec.tor/io/matthewnelson/kmp/tor/resource/exec/tor/native/linux-libc/x86_64/tor.gz
     '';
 
     installPhase = ''
       mkdir -p $out
       cp manifest.txt $out/
       cp -r modules/ $out/
-      ln -s ${openimajgrabber}/lib/OpenIMAJGrabber.so $out/modules/com.github.sarxos.webcam.capture/com/github/sarxos/webcam/ds/buildin/lib/linux_x64/OpenIMAJGrabber.so
-      ln -s ${hwi}/bin/hwi $out/modules/com.sparrowwallet.sparrow/native/linux/x64/hwi
     '';
   };
 in
 stdenvNoCC.mkDerivation rec {
   inherit version src;
-  pname = "sparrow-unwrapped";
-  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
+  pname = "sparrow";
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -211,8 +230,17 @@ stdenvNoCC.mkDerivation rec {
       icon = "sparrow-desktop";
       desktopName = "Sparrow Bitcoin Wallet";
       genericName = "Bitcoin Wallet";
-      categories = [ "Finance" "Network" ];
-      mimeTypes = [ "application/psbt" "application/bitcoin-transaction" "x-scheme-handler/bitcoin" "x-scheme-handler/auth47" "x-scheme-handler/lightning" ];
+      categories = [
+        "Finance"
+        "Network"
+      ];
+      mimeTypes = [
+        "application/psbt"
+        "application/bitcoin-transaction"
+        "x-scheme-handler/bitcoin"
+        "x-scheme-handler/auth47"
+        "x-scheme-handler/lightning"
+      ];
       startupWMClass = "Sparrow";
     })
   ];
@@ -243,8 +271,8 @@ stdenvNoCC.mkDerivation rec {
     mkdir -p $out/share/icons
     ln -s ${sparrow-icons}/hicolor $out/share/icons
 
-    mkdir -p $out/etc/udev/rules.d
-    cp ${hwi}/lib/python*/site-packages/hwilib/udev/*.rules $out/etc/udev/rules.d
+    mkdir -p $out/etc/udev/
+    ln -s ${sparrow-modules}/modules/com.sparrowwallet.lark/udev $out/etc/udev/rules.d
 
     runHook postInstall
   '';
@@ -257,7 +285,10 @@ stdenvNoCC.mkDerivation rec {
       binaryNativeCode
     ];
     license = licenses.asl20;
-    maintainers = with maintainers; [ emmanuelrosa _1000101 ];
+    maintainers = with maintainers; [
+      emmanuelrosa
+      _1000101
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "sparrow-desktop";
   };

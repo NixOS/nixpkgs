@@ -14,8 +14,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "Ousret";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "kiss-headers";
+    tag = version;
     hash = "sha256-WeAzlC1yT+0nPSuB278z8T0XvPjbre051f/Rva5ujAk=";
   };
 

@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "soco";
-  version = "0.30.5";
+  version = "0.30.10";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SoCo";
     repo = "SoCo";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Lw/VXEfIb+avRpQHcy0TVhWDjdGQlHHtVs2gZZkAAM4=";
+    tag = "v${version}";
+    hash = "sha256-BTDKn6JVqXfLiry6jES/OnsO3SGniEMWW2osf9veukU=";
   };
 
   build-system = [ setuptools ];

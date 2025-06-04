@@ -1,4 +1,11 @@
-{ lib, rel, buildKodiAddon, fetchzip, fetchpatch, addonUpdateScript }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  fetchpatch,
+  addonUpdateScript,
+}:
 buildKodiAddon rec {
   pname = "inputstreamhelper";
   namespace = "script.module.inputstreamhelper";
@@ -27,6 +34,6 @@ buildKodiAddon rec {
     homepage = "https://github.com/emilsvennesson/script.module.inputstreamhelper";
     description = "Simple Kodi module that makes life easier for add-on developers relying on InputStream based add-ons and DRM playback";
     license = licenses.mit;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

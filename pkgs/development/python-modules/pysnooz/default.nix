@@ -25,8 +25,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "AustinBrunkhorst";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "pysnooz";
+    tag = "v${version}";
     hash = "sha256-jOXmaJprU35sdNRrBBx/YUyiDyyaE1qodWksXkTSEe0=";
   };
 

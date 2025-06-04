@@ -8,7 +8,7 @@
   certifi,
   cffi,
   cryptography-vectors ? (callPackage ./vectors.nix { }),
-  fetchPypi,
+  fetchFromGitHub,
   isPyPy,
   libiconv,
   libxcrypt,
@@ -19,34 +19,31 @@
   pytestCheckHook,
   pythonOlder,
   rustPlatform,
-  Security,
 }:
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "43.0.0"; # Also update the hash in vectors.nix
+  version = "44.0.2"; # Also update the hash in vectors.nix
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-uIB1raLVGqnxgoNTLJ9g5yFwBBu6iNfzfknLsQJ1KZ4=";
+  src = fetchFromGitHub {
+    owner = "pyca";
+    repo = "cryptography";
+    tag = version;
+    hash = "sha256-nXwW6v+U47/+CmjhREHcuQ7QQi/b26gagWBQ3F16DuQ=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    sourceRoot = "${pname}-${version}/${cargoRoot}";
-    name = "${pname}-${version}";
-    hash = "sha256-TEQy8PrIaZshiBFTqR/OJp3e/bVM1USjcmpDYcjPJPM=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-HbUsV+ABE89UvhCRZYXr+Q/zRDKUy+HgCVdQFHqaP4o=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "--benchmark-disable" ""
   '';
-
-  cargoRoot = "src/rust";
 
   build-system = [
     rustPlatform.cargoSetupHook
@@ -58,7 +55,6 @@ buildPythonPackage rec {
   buildInputs =
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
       libiconv
     ]
     ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];

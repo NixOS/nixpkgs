@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "cloudlog";
   meta = {
     maintainers = with pkgs.lib.maintainers; [ melling ];
@@ -15,4 +16,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.wait_for_open_port(80);
     machine.wait_until_succeeds("curl -s -L --fail http://localhost | grep 'Login - Cloudlog'")
   '';
-})
+}

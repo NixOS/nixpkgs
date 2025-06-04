@@ -1,4 +1,4 @@
-{ callPackage, symlinkJoin, lib }:
+{ callPackage, symlinkJoin, stdenv, lib }:
 let
   nixpkgsRoot = "@nixpkgs_root@";
   version = "@flutter_version@";
@@ -20,10 +20,9 @@ let
                 targetPlatform = lib.systems.elaborate targetPlatform;
                 hostPlatform = lib.systems.elaborate buildPlatform;
                 buildPlatform = lib.systems.elaborate buildPlatform;
-
                 flutterVersion = version;
                 version = engineVersion;
-                url = "https://github.com/flutter/engine.git@${engineVersion}";
+                url = "https://github.com/flutter/flutter.git@${engineVersion}";
                 hashes."${buildPlatform}"."${targetPlatform}" = lib.fakeSha256;
               })
             systemPlatforms)

@@ -1,13 +1,14 @@
 {
   lib,
   buildPythonPackage,
+  cacert,
   entrypoints,
-  fastentrypoints,
   fetchFromGitHub,
   freezegun,
   funcy,
-  git,
+  gitMinimal,
   pydantic,
+  pytest-cov-stub,
   pytest-mock,
   pytest-test-utils,
   pytestCheckHook,
@@ -16,40 +17,32 @@
   ruamel-yaml,
   scmrepo,
   semver,
-  setuptools,
   setuptools-scm,
+  setuptools,
   tabulate,
   typer,
 }:
 
 buildPythonPackage rec {
   pname = "gto";
-  version = "1.7.1";
+  version = "1.7.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "gto";
-    rev = "refs/tags/${version}";
-    hash = "sha256-fUi+/PW05EvgTnoEv1Im1BjZ07VzpZhyW0EjhLUqJGI=";
+    tag = version;
+    hash = "sha256-8ht22RqiGWqDoBrZnX5p3KKOLVPRm1a54962qKlTK4Q=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail ', "setuptools_scm_git_archive==1.4.1"' ""
-    substituteInPlace setup.cfg \
-      --replace-fail " --cov=gto --cov-report=term-missing --cov-report=xml" ""
-  '';
-
-  nativeBuildInputs = [
-    fastentrypoints
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     entrypoints
     funcy
     pydantic
@@ -63,7 +56,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
-    git
+    gitMinimal
+    pytest-cov-stub
     pytest-mock
     pytest-test-utils
     pytestCheckHook
@@ -74,6 +68,9 @@ buildPythonPackage rec {
 
     git config --global user.email "nobody@example.com"
     git config --global user.name "Nobody"
+
+    # _pygit2.GitError: OpenSSL error: failed to load certificates: error:00000000:lib(0)::reason(0)
+    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
   '';
 
   disabledTests = [

@@ -1,19 +1,21 @@
-import ../make-test-python.nix ({ pkgs, ... }:
-  let
-    homeserverDomain = "server";
-    homeserverUrl = "http://server:8008";
-    userName = "alice";
-    botUserName = "instagrambot";
+{ pkgs, ... }:
+let
+  homeserverDomain = "server";
+  homeserverUrl = "http://server:8008";
+  userName = "alice";
+  botUserName = "instagrambot";
 
-    asToken = "this-is-my-totally-randomly-generated-as-token";
-    hsToken = "this-is-my-totally-randomly-generated-hs-token";
-  in
-  {
-    name = "mautrix-meta-postgres";
-    meta.maintainers = pkgs.mautrix-meta.meta.maintainers;
+  asToken = "this-is-my-totally-randomly-generated-as-token";
+  hsToken = "this-is-my-totally-randomly-generated-hs-token";
+in
+{
+  name = "mautrix-meta-postgres";
+  meta.maintainers = pkgs.mautrix-meta.meta.maintainers;
 
-    nodes = {
-      server = { config, pkgs, ... }: {
+  nodes = {
+    server =
+      { config, pkgs, ... }:
+      {
         services.postgresql = {
           enable = true;
 
@@ -44,22 +46,27 @@ import ../make-test-python.nix ({ pkgs, ... }:
             # don't use this in production, always use some form of verification
             enable_registration_without_verification = true;
 
-            listeners = [ {
-              # The default but tls=false
-              bind_addresses = [
-                "0.0.0.0"
-              ];
-              port = 8008;
-              resources = [ {
-                "compress" = true;
-                "names" = [ "client" ];
-              } {
-                "compress" = false;
-                "names" = [ "federation" ];
-              } ];
-              tls = false;
-              type = "http";
-            } ];
+            listeners = [
+              {
+                # The default but tls=false
+                bind_addresses = [
+                  "0.0.0.0"
+                ];
+                port = 8008;
+                resources = [
+                  {
+                    "compress" = true;
+                    "names" = [ "client" ];
+                  }
+                  {
+                    "compress" = false;
+                    "names" = [ "federation" ];
+                  }
+                ];
+                tls = false;
+                type = "http";
+              }
+            ];
           };
         };
 
@@ -95,21 +102,27 @@ import ../make-test-python.nix ({ pkgs, ... }:
           };
         };
 
-        networking.firewall.allowedTCPPorts = [ 8008 8009 ];
+        networking.firewall.allowedTCPPorts = [
+          8008
+          8009
+        ];
       };
 
-      client = { pkgs, ... }: {
+    client =
+      { pkgs, ... }:
+      {
         environment.systemPackages = [
           (pkgs.writers.writePython3Bin "do_test"
-          {
-            libraries = [ pkgs.python3Packages.matrix-nio ];
-            flakeIgnore = [
-              # We don't live in the dark ages anymore.
-              # Languages like Python that are whitespace heavy will overrun
-              # 79 characters..
-              "E501"
-            ];
-          } ''
+            {
+              libraries = [ pkgs.python3Packages.matrix-nio ];
+              flakeIgnore = [
+                # We don't live in the dark ages anymore.
+                # Languages like Python that are whitespace heavy will overrun
+                # 79 characters..
+                "E501"
+              ];
+            }
+            ''
               import sys
               import functools
               import asyncio
@@ -152,70 +165,70 @@ import ../make-test-python.nix ({ pkgs, ... }:
           )
         ];
       };
-    };
+  };
 
-    testScript = ''
-      def extract_token(data):
-          stdout = data[1]
-          stdout = stdout.strip()
-          line = stdout.split('\n')[-1]
-          return line.split(':')[-1].strip("\" '\n")
+  testScript = ''
+    def extract_token(data):
+        stdout = data[1]
+        stdout = stdout.strip()
+        line = stdout.split('\n')[-1]
+        return line.split(':')[-1].strip("\" '\n")
 
-      def get_token_from(token, file):
-          data = server.execute(f"cat {file} | grep {token}")
-          return extract_token(data)
+    def get_token_from(token, file):
+        data = server.execute(f"cat {file} | grep {token}")
+        return extract_token(data)
 
-      def get_as_token_from(file):
-          return get_token_from("as_token", file)
+    def get_as_token_from(file):
+        return get_token_from("as_token", file)
 
-      def get_hs_token_from(file):
-          return get_token_from("hs_token", file)
+    def get_hs_token_from(file):
+        return get_token_from("hs_token", file)
 
-      config_yaml = "/var/lib/mautrix-meta-instagram/config.yaml"
-      registration_yaml = "/var/lib/mautrix-meta-instagram/meta-registration.yaml"
+    config_yaml = "/var/lib/mautrix-meta-instagram/config.yaml"
+    registration_yaml = "/var/lib/mautrix-meta-instagram/meta-registration.yaml"
 
-      expected_as_token = "${asToken}"
-      expected_hs_token = "${hsToken}"
+    expected_as_token = "${asToken}"
+    expected_hs_token = "${hsToken}"
 
-      start_all()
+    start_all()
 
-      with subtest("start the server"):
-          # bridge
-          server.wait_for_unit("mautrix-meta-instagram.service")
+    with subtest("start the server"):
+        # bridge
+        server.wait_for_unit("mautrix-meta-instagram.service")
 
-          # homeserver
-          server.wait_for_unit("matrix-synapse.service")
+        # homeserver
+        server.wait_for_unit("matrix-synapse.service")
 
-          server.wait_for_open_port(8008)
-          # Bridge only opens the port after it contacts the homeserver
-          server.wait_for_open_port(8009)
+        server.wait_for_open_port(8008)
+        # Bridge only opens the port after it contacts the homeserver
+        server.wait_for_open_port(8009)
 
-      with subtest("ensure messages can be exchanged"):
-          client.succeed("do_test ${homeserverUrl} >&2")
+    with subtest("ensure messages can be exchanged"):
+        client.succeed("do_test ${homeserverUrl} >&2")
 
-      with subtest("ensure as_token, hs_token match from environment file"):
-          as_token = get_as_token_from(config_yaml)
-          hs_token = get_hs_token_from(config_yaml)
-          as_token_registration = get_as_token_from(registration_yaml)
-          hs_token_registration = get_hs_token_from(registration_yaml)
+    with subtest("ensure as_token, hs_token match from environment file"):
+        as_token = get_as_token_from(config_yaml)
+        hs_token = get_hs_token_from(config_yaml)
+        as_token_registration = get_as_token_from(registration_yaml)
+        hs_token_registration = get_hs_token_from(registration_yaml)
 
-          assert as_token == expected_as_token, f"as_token in config should match the one specified (is: {as_token}, expected: {expected_as_token})"
-          assert hs_token == expected_hs_token, f"hs_token in config should match the one specified (is: {hs_token}, expected: {expected_hs_token})"
-          assert as_token_registration == expected_as_token, f"as_token in registration should match the one specified (is: {as_token_registration}, expected: {expected_as_token})"
-          assert hs_token_registration == expected_hs_token, f"hs_token in registration should match the one specified (is: {hs_token_registration}, expected: {expected_hs_token})"
+        assert as_token == expected_as_token, f"as_token in config should match the one specified (is: {as_token}, expected: {expected_as_token})"
+        assert hs_token == expected_hs_token, f"hs_token in config should match the one specified (is: {hs_token}, expected: {expected_hs_token})"
+        assert as_token_registration == expected_as_token, f"as_token in registration should match the one specified (is: {as_token_registration}, expected: {expected_as_token})"
+        assert hs_token_registration == expected_hs_token, f"hs_token in registration should match the one specified (is: {hs_token_registration}, expected: {expected_hs_token})"
 
-      with subtest("ensure as_token and hs_token stays same after restart"):
-          server.systemctl("restart mautrix-meta-instagram")
-          server.wait_for_open_port(8009)
+    with subtest("ensure as_token and hs_token stays same after restart"):
+        server.systemctl("restart mautrix-meta-instagram")
+        server.wait_for_open_port(8009)
 
-          as_token = get_as_token_from(config_yaml)
-          hs_token = get_hs_token_from(config_yaml)
-          as_token_registration = get_as_token_from(registration_yaml)
-          hs_token_registration = get_hs_token_from(registration_yaml)
+        as_token = get_as_token_from(config_yaml)
+        hs_token = get_hs_token_from(config_yaml)
+        as_token_registration = get_as_token_from(registration_yaml)
+        hs_token_registration = get_hs_token_from(registration_yaml)
 
-          assert as_token == expected_as_token, f"as_token in config should match the one specified (is: {as_token}, expected: {expected_as_token})"
-          assert hs_token == expected_hs_token, f"hs_token in config should match the one specified (is: {hs_token}, expected: {expected_hs_token})"
-          assert as_token_registration == expected_as_token, f"as_token in registration should match the one specified (is: {as_token_registration}, expected: {expected_as_token})"
-          assert hs_token_registration == expected_hs_token, f"hs_token in registration should match the one specified (is: {hs_token_registration}, expected: {expected_hs_token})"
-    '';
-  })
+        assert as_token == expected_as_token, f"as_token in config should match the one specified (is: {as_token}, expected: {expected_as_token})"
+        assert hs_token == expected_hs_token, f"hs_token in config should match the one specified (is: {hs_token}, expected: {expected_hs_token})"
+        assert as_token_registration == expected_as_token, f"as_token in registration should match the one specified (is: {as_token_registration}, expected: {expected_as_token})"
+        assert hs_token_registration == expected_hs_token, f"hs_token in registration should match the one specified (is: {hs_token_registration}, expected: {expected_hs_token})"
+  '';
+}

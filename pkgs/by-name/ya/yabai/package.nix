@@ -1,55 +1,33 @@
 {
   lib,
   stdenv,
-  overrideSDK,
   fetchFromGitHub,
   fetchzip,
-  installShellFiles,
-  testers,
-  writeShellScript,
+  apple-sdk_15,
   common-updater-scripts,
   curl,
-  darwin,
+  installShellFiles,
   jq,
-  xcodebuild,
+  versionCheckHook,
+  writeShellScript,
   xxd,
-  yabai,
 }:
-let
-  inherit (darwin.apple_sdk_11_0.frameworks)
-    Carbon
-    Cocoa
-    ScriptingBridge
-    SkyLight
-    ;
-
-  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yabai";
-  version = "7.1.3";
+  version = "7.1.15";
 
   src =
     finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  env = {
-    # silence service.h error
-    NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
-  };
-
   nativeBuildInputs =
     [ installShellFiles ]
     ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-      xcodebuild
       xxd
     ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isx86_64 [
-    Carbon
-    Cocoa
-    ScriptingBridge
-    SkyLight
+    apple-sdk_15
   ];
 
   dontConfigure = true;
@@ -74,54 +52,34 @@ stdenv'.mkDerivation (finalAttrs: {
         # aarch64 code is compiled on all targets, which causes our Apple SDK headers to error out.
         # Since multilib doesn't work on darwin i dont know of a better way of handling this.
         substituteInPlace makefile \
-        --replace "-arch arm64e" "" \
-        --replace "-arch arm64" "" \
-        --replace "clang" "${stdenv.cc.targetPrefix}clang"
-
-        # `NSScreen::safeAreaInsets` is only available on macOS 12.0 and above, which frameworks aren't packaged.
-        # When a lower OS version is detected upstream just returns 0, so we can hardcode that at compile time.
-        # https://github.com/koekeishiya/yabai/blob/v4.0.2/src/workspace.m#L109
-        substituteInPlace src/workspace.m \
-        --replace 'return screen.safeAreaInsets.top;' 'return 0;'
+        --replace-fail "-arch arm64e" "" \
+        --replace-fail "-arch arm64" ""
       '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = yabai;
-      version = "yabai-v${finalAttrs.version}";
-    };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
+  passthru = {
     sources = {
       # Unfortunately compiling yabai from source on aarch64-darwin is a bit complicated. We use the precompiled binary instead for now.
       # See the comments on https://github.com/NixOS/nixpkgs/pull/188322 for more information.
       "aarch64-darwin" = fetchzip {
         url = "https://github.com/koekeishiya/yabai/releases/download/v${finalAttrs.version}/yabai-v${finalAttrs.version}.tar.gz";
-        hash = "sha256-wp5B24DYX1RYHS/3+4WRRCzVE6FyCzatJDpzJWrEIpQ=";
+        hash = "sha256-QDGt/v5t7g6+y6ijpLRF7YkqF8bISfxk684m7uUg4eM=";
       };
       "x86_64-darwin" = fetchFromGitHub {
         owner = "koekeishiya";
         repo = "yabai";
         rev = "v${finalAttrs.version}";
-        hash = "sha256-hCwI6ziUR4yuJOv4MQXh3ufbausaDrG8XfjR+jIOeC4=";
+        hash = "sha256-HvaMPmXNlFVOezqWxqXaAUq8E8O2ZkXMQPwkKXCAOcY=";
       };
     };
 
     updateScript = writeShellScript "update-yabai" ''
-      set -o errexit
-      export PATH="${
-        lib.makeBinPath [
-          curl
-          jq
-          common-updater-scripts
-        ]
-      }"
-      NEW_VERSION=$(curl --silent https://api.github.com/repos/koekeishiya/yabai/releases/latest | jq '.tag_name | ltrimstr("v")' --raw-output)
-      if [[ "${finalAttrs.version}" = "$NEW_VERSION" ]]; then
-          echo "The new version same as the old version."
-          exit 0
-      fi
+      NEW_VERSION=$(${lib.getExe curl} --silent https://api.github.com/repos/koekeishiya/yabai/releases/latest | ${lib.getExe jq} '.tag_name | ltrimstr("v")' --raw-output)
       for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
-        update-source-version "yabai" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
+        ${lib.getExe' common-updater-scripts "update-source-version"} "yabai" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
       done
     '';
   };

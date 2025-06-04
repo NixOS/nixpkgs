@@ -1,27 +1,26 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, rustPlatform
-, openssl
-, zlib
-, zstd
-, pkg-config
-, python3
-, xorg
-, Libsystem
-, AppKit
-, Security
-, nghttp2
-, libgit2
-, withDefaultFeatures ? true
-, additionalFeatures ? (p: p)
-, testers
-, nushell
-, nix-update-script
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  openssl,
+  zlib,
+  zstd,
+  pkg-config,
+  python3,
+  xorg,
+  nghttp2,
+  libgit2,
+  withDefaultFeatures ? true,
+  additionalFeatures ? (p: p),
+  testers,
+  nushell,
+  nix-update-script,
+  curlMinimal,
 }:
 
 let
-  version = "0.99.0";
+  version = "0.104.1";
 in
 
 rustPlatform.buildRustPackage {
@@ -31,25 +30,34 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "nushell";
     repo = "nushell";
-    rev = version;
-    hash = "sha256-X/+i4CSGAkNQ7oW1kbDUj/g6Hbrf17IXwpNPVmkE4tU=";
+    tag = version;
+    hash = "sha256-ibQBwcoWzxl7t5q0KpiCiEmAasJJjBg2LMGf28y3sCk=";
   };
 
-  cargoHash = "sha256-6cGzEZdk0zgrRRTHlnlEqZg8AcoUi2GR3wZ3iq4WGKA=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-8HxLX94i86F9vsnlZFgvVdTCkponlEA51WXCT3zlc2w=";
 
-  nativeBuildInputs = [ pkg-config ]
+  nativeBuildInputs =
+    [ pkg-config ]
     ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ python3 ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
 
-  buildInputs = [ openssl zstd ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ zlib Libsystem Security ]
+  buildInputs =
+    [
+      openssl
+      zstd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      zlib
+    ]
     ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ xorg.libX11 ]
-    ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isDarwin) [ AppKit nghttp2 libgit2 ];
+    ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isDarwin) [
+      nghttp2
+      libgit2
+    ];
 
   buildNoDefaultFeatures = !withDefaultFeatures;
   buildFeatures = additionalFeatures [ ];
-
-  doCheck = ! stdenv.hostPlatform.isDarwin; # Skip checks on darwin. Failing tests since 0.96.0
 
   checkPhase = ''
     runHook preCheck
@@ -67,6 +75,10 @@ rustPlatform.buildRustPackage {
     runHook postCheck
   '';
 
+  checkInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    curlMinimal
+  ];
+
   passthru = {
     shellPath = "/bin/nu";
     tests.version = testers.testVersion {
@@ -79,7 +91,11 @@ rustPlatform.buildRustPackage {
     description = "Modern shell written in Rust";
     homepage = "https://www.nushell.sh/";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne johntitor joaquintrinanes ];
+    maintainers = with maintainers; [
+      Br1ght0ne
+      johntitor
+      joaquintrinanes
+    ];
     mainProgram = "nu";
   };
 }

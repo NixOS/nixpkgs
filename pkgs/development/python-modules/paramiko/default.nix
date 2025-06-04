@@ -11,19 +11,19 @@
   mock,
   pyasn1,
   pynacl,
-  pytestCheckHook,
   pytest-relaxed,
-  six,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "paramiko";
-  version = "3.5.0";
-  format = "setuptools";
+  version = "3.5.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rRHlQNpPVc7dpSkx8aP4Eqgjinr39ipg3lOM2AuygSQ=";
+    hash = "sha256-ssZlvEWyshW9fX8DmQGxSwZ9oA86EeZkCZX9WPJmSCI=";
   };
 
   patches = [
@@ -35,11 +35,12 @@ buildPythonPackage rec {
     })
   ];
 
+  build-system = [ setuptools ];
+
   dependencies = [
     bcrypt
     cryptography
-    pyasn1
-    six
+    pynacl
   ];
 
   optional-dependencies = {
@@ -47,10 +48,7 @@ buildPythonPackage rec {
       pyasn1
       gssapi
     ];
-    ed25519 = [
-      pynacl
-      bcrypt
-    ];
+    ed25519 = [ ];
     invoke = [ invoke ];
   };
 
@@ -76,6 +74,6 @@ buildPythonPackage rec {
       between python scripts. All major ciphers and hash methods are
       supported. SFTP client and server mode are both supported too.
     '';
-    maintainers = lib.teams.helsinki-systems.members;
+    teams = [ lib.teams.helsinki-systems ];
   };
 }

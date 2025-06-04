@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "collectd";
   meta = { };
 
@@ -35,4 +36,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.succeed(f"cp {file} before")
     machine.wait_until_fails(f"cmp before {file}")
   '';
-})
+}

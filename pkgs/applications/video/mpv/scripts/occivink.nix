@@ -19,12 +19,12 @@ let
     let
       self = rec {
         pname = camelToKebab name;
-        version = "0-unstable-2024-01-11";
+        version = "0-unstable-2025-03-09";
         src = fetchFromGitHub {
           owner = "occivink";
           repo = "mpv-scripts";
-          rev = "d0390c8e802c2e888ff4a2e1d5e4fb040f855b89";
-          hash = "sha256-pc2aaO7lZaoYMEXv5M0WI7PtmqgkNbdtNiLZZwVzppM=";
+          rev = "65aa1da29570e9c21b49292725ec5dd719ab6bb4";
+          hash = "sha256-pca24cZY2ZNxkY1XP2T2WKo1UbD8gsGn+EskGH+CggE=";
         };
         passthru.updateScript = unstableGitUpdater { };
 
@@ -42,19 +42,21 @@ let
     in
     buildLua (lib.attrsets.recursiveUpdate self args);
 in
-lib.mapAttrs (name: lib.makeOverridable (mkScript name)) {
+lib.recurseIntoAttrs (
+  lib.mapAttrs (name: lib.makeOverridable (mkScript name)) {
 
-  # Usage: `pkgs.mpv.override { scripts = [ pkgs.mpvScripts.seekTo ]; }`
-  crop.meta.description = "Crop the current video in a visual manner";
-  seekTo.meta.description = "Mpv script for seeking to a specific position";
-  blacklistExtensions.meta.description = "Automatically remove playlist entries based on their extension";
+    # Usage: `pkgs.mpv.override { scripts = [ pkgs.mpvScripts.seekTo ]; }`
+    crop.meta.description = "Crop the current video in a visual manner";
+    seekTo.meta.description = "Mpv script for seeking to a specific position";
+    blacklistExtensions.meta.description = "Automatically remove playlist entries based on their extension";
 
-  encode = {
-    meta.description = "Make an extract of the video currently playing using ffmpeg";
+    encode = {
+      meta.description = "Make an extract of the video currently playing using ffmpeg";
 
-    postPatch = ''
-      substituteInPlace scripts/encode.lua \
-          --replace-fail '"ffmpeg"' '"${lib.getExe ffmpeg}"'
-    '';
-  };
-}
+      postPatch = ''
+        substituteInPlace scripts/encode.lua \
+            --replace-fail '"ffmpeg"' '"${lib.getExe ffmpeg}"'
+      '';
+    };
+  }
+)

@@ -19,7 +19,7 @@ cargoBuildHook() {
 
     local flagsArray=(
         "-j" "$NIX_BUILD_CORES"
-        "--target" "@rustHostPlatformSpec@"
+        "--target" "@rustcTarget@"
         "--offline"
     )
 

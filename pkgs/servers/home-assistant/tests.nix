@@ -1,29 +1,30 @@
-{ lib
-, home-assistant
+{
+  lib,
+  home-assistant,
 }:
 
 let
+  getComponentDeps = component: home-assistant.getPackages component home-assistant.python.pkgs;
+
   # some components' tests have additional dependencies
   extraCheckInputs = with home-assistant.python.pkgs; {
-    airzone_cloud = [
-      aioairzone
-    ];
-    androidtv = home-assistant.getPackages "asuswrt" home-assistant.python.pkgs;
-    bluetooth = [
-      pyswitchbot
-    ];
+    axis = getComponentDeps "deconz";
+    gardena_bluetooth = getComponentDeps "husqvarna_automower_ble";
     govee_ble = [
       ibeacon-ble
     ];
+    hassio = getComponentDeps "homeassistant_yellow";
+    homeassistant_hardware = getComponentDeps "otbr" ++ getComponentDeps "zha";
+    homeassistant_sky_connect = getComponentDeps "zha";
+    homeassistant_yellow = getComponentDeps "zha";
+    husqvarna_automower_ble = getComponentDeps "gardena_bluetooth";
     lovelace = [
       pychromecast
     ];
     matrix = [
       pydantic
     ];
-    mopeka = [
-      pyswitchbot
-    ];
+    mopeka = getComponentDeps "switchbot";
     onboarding = [
       pymetno
       radios
@@ -38,12 +39,11 @@ let
     songpal = [
       isal
     ];
+    swiss_public_transport = getComponentDeps "cookidoo";
     system_log = [
       isal
     ];
-    tilt_ble = [
-      ibeacon-ble
-    ];
+    tesla_fleet = getComponentDeps "teslemetry";
     xiaomi_miio = [
       arrow
     ];
@@ -56,43 +56,54 @@ let
   };
 
   extraDisabledTestPaths = {
+    overseerr = [
+      # imports broken future module
+      "tests/components/overseerr/test_event.py"
+    ];
   };
 
   extraDisabledTests = {
-    advantage_air = [
-      # AssertionError: assert 2 == 1 (Expected two calls, got one)
-      "test_binary_sensor_async_setup_entry"
+    forecast_solar = [
+      # language fixture mismatch
+      "test_enabling_disable_by_default"
     ];
-    hassio = [
-      # fails to load the hardware component
-      "test_device_registry_calls"
-    ];
-    husqvarna_automower = [
-      # snapshot mismatch
-      "test_device_diagnostics"
-    ];
-    recorder = [
-      # call not happening, likely due to timezone issues
-      "test_auto_purge"
+    sensor = [
+      # Failed: Translation not found for sensor
+      "test_validate_unit_change_convertible"
+      "test_validate_statistics_unit_change_no_device_class"
+      "test_validate_statistics_state_class_removed"
+      "test_validate_statistics_state_class_removed_issue_cleaned_up"
+      "test_validate_statistics_unit_change_no_conversion"
+      "test_validate_statistics_unit_change_equivalent_units_2"
+      "test_update_statistics_issues"
+      "test_validate_statistics_mean_type_changed"
     ];
     shell_command = [
       # tries to retrieve file from github
       "test_non_text_stdout_capture"
     ];
-    sma = [
-      # missing operating_status attribute in entity
-      "test_sensor_entities"
+    smartthings = [
+      # outdated snapshots
+      "test_all_entities"
     ];
     websocket_api = [
-      # racy
+      # AssertionError: assert 'unknown_error' == 'template_error'
       "test_render_template_with_timeout"
+    ];
+    zeroconf = [
+      # multicast socket bind, not possible in the sandbox
+      "test_subscribe_discovery"
     ];
   };
 
   extraPytestFlagsArray = {
-    cloud = [
-      # Tries to connect to alexa-api.nabucasa.com:443
-      "--deselect tests/components/cloud/test_http_api.py::test_websocket_update_preferences_alexa_report_state"
+    backup = [
+      # outdated snapshot
+      "--deselect tests/components/backup/test_sensors.py::test_sensors"
+    ];
+    bmw_connected_drive = [
+      # outdated snapshot
+      "--deselect tests/components/bmw_connected_drive/test_binary_sensor.py::test_entity_state_attrs"
     ];
     dnsip = [
       # Tries to resolve DNS entries
@@ -102,50 +113,60 @@ let
       # AssertionError: assert 'audio/x-flac' == 'audio/flac'
       "--deselect tests/components/jellyfin/test_media_source.py::test_resolve"
       "--deselect tests/components/jellyfin/test_media_source.py::test_audio_codec_resolve"
-      # AssertionError: assert [+ received] == [- snapshot]
       "--deselect tests/components/jellyfin/test_media_source.py::test_music_library"
+    ];
+    matter = [
+      # outdated snapshot in eve_weather_sensor variant
+      "--deselect tests/components/matter/test_number.py::test_numbers"
     ];
     modem_callerid = [
       # aioserial mock produces wrong state
       "--deselect tests/components/modem_callerid/test_init.py::test_setup_entry"
     ];
-    velux = [
-      # uses unmocked sockets
-      "--deselect tests/components/velux/test_config_flow.py::test_user_success"
-      "--deselect tests/components/velux/test_config_flow.py::test_import_valid_config"
+    openai_conversation = [
+      # outdated snapshot
+      "--deselect tests/components/openai_conversation/test_conversation.py::test_function_call"
+    ];
+    technove = [
+      # outdated snapshot
+      "--deselect tests/components/technove/test_switch.py::test_switches"
     ];
   };
-in lib.listToAttrs (map (component: lib.nameValuePair component (
-  home-assistant.overridePythonAttrs (old: {
-    pname = "homeassistant-test-${component}";
-    pyproject = null;
-    format = "other";
+in
+lib.listToAttrs (
+  map (
+    component:
+    lib.nameValuePair component (
+      home-assistant.overridePythonAttrs (old: {
+        pname = "homeassistant-test-${component}";
+        pyproject = null;
+        format = "other";
 
-    dontBuild = true;
-    dontInstall = true;
+        dontBuild = true;
+        dontInstall = true;
 
-    nativeCheckInputs = old.nativeCheckInputs
-      ++ home-assistant.getPackages component home-assistant.python.pkgs
-      ++ extraCheckInputs.${component} or [ ];
+        nativeCheckInputs =
+          old.nativeCheckInputs
+          ++ home-assistant.getPackages component home-assistant.python.pkgs
+          ++ extraCheckInputs.${component} or [ ];
 
-    disabledTests = old.disabledTests or [] ++ extraDisabledTests.${component} or [];
-    disabledTestPaths = old.disabledTestPaths or [] ++ extraDisabledTestPaths.${component} or [ ];
+        disabledTests = old.disabledTests or [ ] ++ extraDisabledTests.${component} or [ ];
+        disabledTestPaths = old.disabledTestPaths or [ ] ++ extraDisabledTestPaths.${component} or [ ];
 
-    # components are more often racy than the core
-    dontUsePytestXdist = true;
+        # components are more often racy than the core
+        dontUsePytestXdist = true;
 
-    pytestFlagsArray = lib.remove "tests" old.pytestFlagsArray
-      ++ extraPytestFlagsArray.${component} or [ ]
-      ++ [ "tests/components/${component}" ];
+        pytestFlagsArray =
+          lib.remove "tests" old.pytestFlagsArray
+          ++ extraPytestFlagsArray.${component} or [ ]
+          ++ [ "tests/components/${component}" ];
 
-    preCheck = old.preCheck + lib.optionalString (builtins.elem component [ "emulated_hue" "songpal" "system_log" ]) ''
-      patch -p1 < ${./patches/tests-mock-source-ip.patch}
-    '';
-
-    meta = old.meta // {
-      broken = lib.elem component [ ];
-      # upstream only tests on Linux, so do we.
-      platforms = lib.platforms.linux;
-    };
-  })
-)) home-assistant.supportedComponentsWithTests)
+        meta = old.meta // {
+          broken = lib.elem component [ ];
+          # upstream only tests on Linux, so do we.
+          platforms = lib.platforms.linux;
+        };
+      })
+    )
+  ) home-assistant.supportedComponentsWithTests
+)

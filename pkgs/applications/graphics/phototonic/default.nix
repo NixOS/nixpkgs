@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, qmake, wrapQtAppsHook, qtbase, exiv2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  libsForQt5,
+  exiv2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "phototonic";
@@ -19,8 +26,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ qmake wrapQtAppsHook ];
-  buildInputs = [ qtbase exiv2 ];
+  nativeBuildInputs = [
+    libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
+  ];
+  buildInputs = [
+    libsForQt5.qtbase
+    exiv2
+  ];
 
   preConfigure = ''
     sed -i 's;/usr;$$PREFIX/;g' phototonic.pro

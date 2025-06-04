@@ -1,7 +1,12 @@
 {
-  mkDerivation, fetchurl, lib,
-  extra-cmake-modules, kdoctools,
-  kconfig, kcrash, kinit
+  mkDerivation,
+  fetchurl,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  kconfig,
+  kcrash,
+  kinit,
 }:
 
 mkDerivation rec {
@@ -20,6 +25,13 @@ mkDerivation rec {
     maintainers = with maintainers; [ peterhoeg ];
     mainProgram = "kronometer";
   };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  propagatedBuildInputs = [ kconfig kcrash kinit ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    kdoctools
+  ];
+  propagatedBuildInputs = [
+    kconfig
+    kcrash
+    kinit
+  ];
 }

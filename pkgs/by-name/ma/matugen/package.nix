@@ -1,34 +1,29 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "matugen";
-  version = "2.3.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "InioX";
     repo = "matugen";
-    rev = "v${version}";
-    hash = "sha256-WFitpFF1Ah4HkzSe4H4aN/ZM0EEIcP5ozLMUWaDggFU=";
+    tag = "v${version}";
+    hash = "sha256-+UibbVz5CTisKMms/5VXGe39FYr56qzaEtX4TWQPkjk=";
   };
 
-  cargoHash = "sha256-pD1NKUJmvMTnYKWjRrGnvbA0zVvGpWRIlf/9ovP9Jq4=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ZCH8ka740X/yRbn4Mbno63jZifPMEaDABsftS3juDTo=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Material you color generation tool";
     homepage = "https://github.com/InioX/matugen";
     changelog = "https://github.com/InioX/matugen/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ lampros ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ lampros ];
     mainProgram = "matugen";
   };
 }

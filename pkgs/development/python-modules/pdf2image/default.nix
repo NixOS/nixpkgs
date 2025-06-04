@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   pillow,
-  poppler_utils,
+  poppler-utils,
   pythonOlder,
 }:
 
@@ -20,8 +20,10 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    # Only replace first match in file
-    sed -i '0,/poppler_path=None/s||poppler_path="${poppler_utils}/bin"|' pdf2image/pdf2image.py
+    # replace all default values of paths to poppler-utils
+    substituteInPlace pdf2image/pdf2image.py \
+      --replace-fail 'poppler_path: Union[str, PurePath] = None' \
+                     'poppler_path: Union[str, PurePath] = "${poppler-utils}/bin"'
   '';
 
   propagatedBuildInputs = [ pillow ];

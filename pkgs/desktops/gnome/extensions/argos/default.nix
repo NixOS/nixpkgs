@@ -1,14 +1,19 @@
-{ fetchFromGitHub, lib, stdenv, unstableGitUpdater }:
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  unstableGitUpdater,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "argos";
-  version = "unstable-2024-04-03";
+  version = "unstable-2024-10-28";
 
   src = fetchFromGitHub {
     owner = "p-e-w";
     repo = "argos";
-    rev = "0449229e11bc2bb5c66e6f1d8503635cdf276bcf";
-    hash = "sha256-szBk3zW+HzfxTI34lLB1DFdnwZ3W+BgeVgDkwf0UzQU=";
+    rev = "cd0de7c79072979bed41e0ad75741bbd8e113950";
+    hash = "sha256-rNS2rvHZOpl9mSoERfsX6UfEaAb6lWTI9y6HXKrl81E=";
   };
 
   installPhase = ''

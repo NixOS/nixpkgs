@@ -1,22 +1,39 @@
-{ lib, stdenv, fetchFromGitHub, cmake, postgresql, openssl, libkrb5, nixosTests, enableUnfree ? true }:
+{
+  cmake,
+  fetchFromGitHub,
+  lib,
+  libkrb5,
+  openssl,
+  postgresql,
+  postgresqlBuildExtension,
+  postgresqlTestExtension,
 
-stdenv.mkDerivation rec {
+  enableUnfree ? true,
+}:
+
+postgresqlBuildExtension (finalAttrs: {
   pname = "timescaledb${lib.optionalString (!enableUnfree) "-apache"}";
-  version = "2.14.2";
-
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ postgresql openssl libkrb5 ];
+  version = "2.20.1";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "timescaledb";
-    rev = version;
-    hash = "sha256-gJViEWHtIczvIiQKuvvuwCfWJMxAYoBhCHhD75no6r0=";
+    tag = finalAttrs.version;
+    hash = "sha256-eB88YPoK3uUhvbKP1mob5L+pyemxvGVuGGcJAXDDets=";
   };
 
-  cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" "-DREGRESS_CHECKS=OFF" "-DTAP_CHECKS=OFF" ]
-    ++ lib.optionals (!enableUnfree) [ "-DAPACHE_ONLY=ON" ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DLINTER=OFF" ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [
+    openssl
+    libkrb5
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "SEND_TELEMETRY_DEFAULT" false)
+    (lib.cmakeBool "REGRESS_CHECKS" false)
+    (lib.cmakeBool "TAP_CHECKS" false)
+    (lib.cmakeBool "APACHE_ONLY" (!enableUnfree))
+  ];
 
   # Fix the install phase which tries to install into the pgsql extension dir,
   # and cannot be manually overridden. This is rather fragile but works OK.
@@ -32,15 +49,58 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru.tests = { inherit (nixosTests) timescaledb; };
+  passthru.tests.extension = postgresqlTestExtension {
+    inherit (finalAttrs) finalPackage;
+    withPackages = [ "timescaledb_toolkit" ];
+    postgresqlExtraSettings = ''
+      shared_preload_libraries='timescaledb,timescaledb_toolkit'
+    '';
+    sql = ''
+      CREATE EXTENSION timescaledb;
+      CREATE EXTENSION timescaledb_toolkit;
 
-  meta = with lib; {
+      CREATE TABLE sth (
+        time TIMESTAMPTZ NOT NULL,
+        value DOUBLE PRECISION
+      );
+
+      SELECT create_hypertable('sth', 'time');
+
+      INSERT INTO sth (time, value) VALUES
+      ('2003-04-12 04:05:06 America/New_York', 1.0),
+      ('2003-04-12 04:05:07 America/New_York', 2.0),
+      ('2003-04-12 04:05:08 America/New_York', 3.0),
+      ('2003-04-12 04:05:09 America/New_York', 4.0),
+      ('2003-04-12 04:05:10 America/New_York', 5.0)
+      ;
+
+      WITH t AS (
+        SELECT
+          time_bucket('1 day'::interval, time) AS dt,
+          stats_agg(value) AS stats
+        FROM sth
+        GROUP BY time_bucket('1 day'::interval, time)
+      )
+      SELECT
+        average(stats)
+      FROM t;
+    '';
+    asserts = [
+      {
+        query = "SELECT count(*) FROM sth";
+        expected = "5";
+        description = "hypertable can be queried successfully.";
+      }
+    ];
+  };
+
+  meta = {
     description = "Scales PostgreSQL for time-series data via automatic partitioning across time and space";
     homepage = "https://www.timescale.com/";
-    changelog = "https://github.com/timescale/timescaledb/blob/${version}/CHANGELOG.md";
-    maintainers = [ ];
+    changelog = "https://github.com/timescale/timescaledb/blob/${finalAttrs.version}/CHANGELOG.md";
+    maintainers = with lib.maintainers; [ kirillrdy ];
     platforms = postgresql.meta.platforms;
-    license = with licenses; if enableUnfree then tsl else asl20;
-    broken = versionOlder postgresql.version "13";
+    license = with lib.licenses; if enableUnfree then tsl else asl20;
+    broken = lib.versionOlder postgresql.version "15";
   };
-}
+})

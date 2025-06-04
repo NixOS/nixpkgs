@@ -1,23 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, flex
-, bison
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  flex,
+  bison,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "myanon";
-  version = "0.6";
+  version = "0.7";
 
   src = fetchFromGitHub {
     owner = "ppomes";
     repo = "myanon";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-sB6ykRywaoG2gfHOEQ9UoVn62nMciBWgCM9DhovBoe0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pbClzLj9b4ZsehjSXwJjPlxpT6tlKcsZfEEfXVstlnA=";
   };
 
-  nativeBuildInputs = [ autoreconfHook flex bison ];
+  nativeBuildInputs = [
+    autoreconfHook
+    flex
+    bison
+  ];
 
   meta = {
     description = "Myanon is a mysqldump anonymizer, reading a dump from stdin, and producing on the fly an anonymized version to stdout";
@@ -27,4 +32,3 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
   };
 })
-

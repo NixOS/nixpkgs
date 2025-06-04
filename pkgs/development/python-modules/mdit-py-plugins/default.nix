@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "mdit-py-plugins";
-  version = "0.4.1";
+  version = "0.4.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-xIbP2zHvHWV+2wW17i78vxc5npCvRBYP6QuL/mCBIww=";
+    repo = "mdit-py-plugins";
+    tag = "v${version}";
+    hash = "sha256-aY2DMLh1OkWVcN6A29FLba1ETerf/EOqSjHVpsdE21M=";
   };
 
   nativeBuildInputs = [ flit-core ];

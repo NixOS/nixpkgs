@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "edk2-pytool-library";
-  version = "0.21.12";
+  version = "0.23.3";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tianocore";
     repo = "edk2-pytool-library";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-PIQ/OrZnm+WOlvTzCHb64/bj7/JGKBEbh6lHD0Pm0ro=";
+    tag = "v${version}";
+    hash = "sha256-fWt9epsc77YCQiB5BeuCHUZ2Or8ddgMDSZPHC4f3yZ8=";
   };
 
   build-system = [
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library package that supports UEFI development";
     homepage = "https://github.com/tianocore/edk2-pytool-library";
-    changelog = "https://github.com/tianocore/edk2-pytool-library/releases/tag/v${version}";
+    changelog = "https://github.com/tianocore/edk2-pytool-library/releases/tag/${src.tag}";
     license = licenses.bsd2Patent;
     maintainers = with maintainers; [ nickcao ];
     platforms = platforms.linux;

@@ -1,13 +1,15 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 {
   name = "photonvision";
 
   nodes = {
-    machine = { pkgs, ... }: {
-      services.photonvision = {
-        enable = true;
+    machine =
+      { pkgs, ... }:
+      {
+        services.photonvision = {
+          enable = true;
+        };
       };
-    };
   };
 
   testScript = ''
@@ -17,5 +19,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
   '';
 
   meta.maintainers = with lib.maintainers; [ max-niederman ];
-})
-
+}

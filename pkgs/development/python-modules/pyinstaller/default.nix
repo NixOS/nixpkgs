@@ -1,35 +1,39 @@
 {
-  lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, zlib
-, altgraph
-, packaging
-, pyinstaller-hooks-contrib
-, testers
-, pyinstaller
-, glibc
-, binutils
-, macholib
-, installShellFiles
-, stdenv
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  setuptools,
+
+  # native dependencies
+  zlib,
+
+  # dependencies
+  altgraph,
+  macholib,
+  packaging,
+  pyinstaller-hooks-contrib,
+
+  # tests
+  binutils,
+  glibc,
+  pyinstaller,
+  testers,
 }:
 
 buildPythonPackage rec {
   pname = "pyinstaller";
-  version = "6.9.0";
+  version = "6.13.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9KdcVS+swuKjcPHkIrlxteXNtAWP84zqAjWqIfwLN48=";
+    hash = "sha256-OJEf7sLF4hXlFZp+Zv2xJAAWi9EWFDtUqKejfwhzNFY=";
   };
 
-
   build-system = [ setuptools ];
-
-  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [ zlib.dev ];
 
@@ -41,12 +45,14 @@ buildPythonPackage rec {
   ];
 
   makeWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
-    "--prefix" "PATH" ":"  (lib.makeBinPath [ glibc binutils ])
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      glibc
+      binutils
+    ])
   ];
-
-  postInstall = ''
-    installManPage doc/pyinstaller.1 doc/pyi-makespec.1
-  '';
 
   pythonImportsCheck = [ "PyInstaller" ];
 

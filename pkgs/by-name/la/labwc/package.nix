@@ -8,6 +8,7 @@
   libinput,
   libpng,
   librsvg,
+  libsfdo,
   libxcb,
   libxkbcommon,
   libxml2,
@@ -17,6 +18,7 @@
   pkg-config,
   scdoc,
   stdenv,
+  versionCheckHook,
   wayland,
   wayland-protocols,
   wayland-scanner,
@@ -27,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "labwc";
-  version = "0.8.0";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "labwc";
     repo = "labwc";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-1PyPk6r/hXkC0EfOIeDqNGrrpvo616derD9u7i3XjkA=";
+    tag = finalAttrs.version;
+    hash = "sha256-JeEw1xKwgsTMllZXvNaXXdgmZnmIFUyG/cJ14QFQf/E=";
   };
 
   outputs = [
@@ -58,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     libinput
     libpng
     librsvg
+    libsfdo
     libxcb
     libxkbcommon
     libxml2
@@ -69,9 +72,14 @@ stdenv.mkDerivation (finalAttrs: {
     xwayland
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   mesonFlags = [ (lib.mesonEnable "xwayland" true) ];
 
   strictDeps = true;
+
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
 
   passthru = {
     providedSessions = [ "labwc" ];
@@ -80,9 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/labwc/labwc";
     description = "Wayland stacking compositor, inspired by Openbox";
+    changelog = "https://github.com/labwc/labwc/blob/master/NEWS.md";
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "labwc";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     inherit (wayland.meta) platforms;
   };
 })

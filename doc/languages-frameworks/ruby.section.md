@@ -36,8 +36,13 @@ As explained [in the `nix-shell` section](https://nixos.org/manual/nix/stable/co
 Say we want to have Ruby, `nokogori`, and `pry`. Consider a `shell.nix` file with:
 
 ```nix
-with import <nixpkgs> {};
-ruby.withPackages (ps: with ps; [ nokogiri pry ])
+with import <nixpkgs> { };
+ruby.withPackages (
+  ps: with ps; [
+    nokogiri
+    pry
+  ]
+)
 ```
 
 What's happening here?
@@ -107,7 +112,13 @@ let
     name = "gems-for-some-project";
     gemdir = ./.;
   };
-in mkShell { packages = [ gems gems.wrappedRuby ]; }
+in
+mkShell {
+  packages = [
+    gems
+    gems.wrappedRuby
+  ];
+}
 ```
 
 With this file in your directory, you can run `nix-shell` to build and use the gems. The important parts here are `bundlerEnv` and `wrappedRuby`.
@@ -118,7 +129,12 @@ One common issue that you might have is that you have Ruby, but also `bundler` i
 
 ```nix
 # ...
-mkShell { buildInputs = [ gems (lowPrio gems.wrappedRuby) ]; }
+mkShell {
+  buildInputs = [
+    gems
+    (lowPrio gems.wrappedRuby)
+  ];
+}
 ```
 
 Sometimes a Gemfile references other files. Such as `.ruby-version` or vendored gems. When copying the Gemfile to the nix store we need to copy those files alongside. This can be done using `extraConfigPaths`. For example:
@@ -148,41 +164,54 @@ Two places that allow this modification are the `ruby` derivation, or `bundlerEn
 Here's the `ruby` one:
 
 ```nix
-{ pg_version ? "10", pkgs ? import <nixpkgs> { } }:
+{
+  pg_version ? "10",
+  pkgs ? import <nixpkgs> { },
+}:
 let
   myRuby = pkgs.ruby.override {
     defaultGemConfig = pkgs.defaultGemConfig // {
       pg = attrs: {
-        buildFlags =
-        [ "--with-pg-config=${lib.getDev pkgs."postgresql_${pg_version}"}/bin/pg_config" ];
+        buildFlags = [ "--with-pg-config=${pkgs."postgresql_${pg_version}".pg_config}/bin/pg_config" ];
       };
     };
   };
-in myRuby.withPackages (ps: with ps; [ pg ])
+in
+myRuby.withPackages (ps: with ps; [ pg ])
 ```
 
 And an example with `bundlerEnv`:
 
 ```nix
-{ pg_version ? "10", pkgs ? import <nixpkgs> { } }:
+{
+  pg_version ? "10",
+  pkgs ? import <nixpkgs> { },
+}:
 let
   gems = pkgs.bundlerEnv {
     name = "gems-for-some-project";
     gemdir = ./.;
     gemConfig = pkgs.defaultGemConfig // {
       pg = attrs: {
-        buildFlags =
-        [ "--with-pg-config=${lib.getDev pkgs."postgresql_${pg_version}"}/bin/pg_config" ];
+        buildFlags = [ "--with-pg-config=${pkgs."postgresql_${pg_version}".pg_config}/bin/pg_config" ];
       };
     };
   };
-in mkShell { buildInputs = [ gems gems.wrappedRuby ]; }
+in
+mkShell {
+  buildInputs = [
+    gems
+    gems.wrappedRuby
+  ];
+}
 ```
 
 And finally via overlays:
 
 ```nix
-{ pg_version ? "10" }:
+{
+  pg_version ? "10",
+}:
 let
   pkgs = import <nixpkgs> {
     overlays = [
@@ -190,14 +219,15 @@ let
         defaultGemConfig = super.defaultGemConfig // {
           pg = attrs: {
             buildFlags = [
-              "--with-pg-config=${lib.getDev pkgs."postgresql_${pg_version}"}/bin/pg_config"
+              "--with-pg-config=${pkgs."postgresql_${pg_version}".pg_config}/bin/pg_config"
             ];
           };
         };
       })
     ];
   };
-in pkgs.ruby.withPackages (ps: with ps; [ pg ])
+in
+pkgs.ruby.withPackages (ps: with ps; [ pg ])
 ```
 
 Then we can get whichever postgresql version we desire and the `pg` gem will always reference it correctly:
@@ -278,7 +308,14 @@ Of course you could also make a custom `gemConfig` if you know exactly how to pa
 Here's another example:
 
 ```nix
-{ lib, bundlerApp, makeWrapper, git, gnutar, gzip }:
+{
+  lib,
+  bundlerApp,
+  makeWrapper,
+  git,
+  gnutar,
+  gzip,
+}:
 
 bundlerApp {
   pname = "r10k";
@@ -288,7 +325,13 @@ bundlerApp {
   nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
-    wrapProgram $out/bin/r10k --prefix PATH : ${lib.makeBinPath [ git gnutar gzip ]}
+    wrapProgram $out/bin/r10k --prefix PATH : ${
+      lib.makeBinPath [
+        git
+        gnutar
+        gzip
+      ]
+    }
   '';
 }
 ```

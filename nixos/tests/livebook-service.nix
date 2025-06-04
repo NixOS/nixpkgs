@@ -1,25 +1,29 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }: {
+{ lib, pkgs, ... }:
+{
   name = "livebook-service";
 
   nodes = {
-    machine = { config, pkgs, ... }: {
-      imports = [
-        ./common/user-account.nix
-      ];
+    machine =
+      { config, pkgs, ... }:
+      {
+        imports = [
+          ./common/user-account.nix
+        ];
 
-      services.livebook = {
-        enableUserService = true;
-        environment = {
-          LIVEBOOK_PORT = 20123;
+        services.livebook = {
+          enableUserService = true;
+          environment = {
+            LIVEBOOK_PORT = 20123;
+          };
+          environmentFile = pkgs.writeText "livebook.env" ''
+            LIVEBOOK_PASSWORD = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+          '';
         };
-        environmentFile = pkgs.writeText "livebook.env" ''
-          LIVEBOOK_PASSWORD = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-        '';
       };
-    };
   };
 
-  testScript = { nodes, ... }:
+  testScript =
+    { nodes, ... }:
     let
       user = nodes.machine.users.users.alice;
       sudo = lib.concatStringsSep " " [
@@ -39,4 +43,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
 
       machine.succeed("curl -L localhost:20123 | grep 'Type password'")
     '';
-})
+}

@@ -3,7 +3,7 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  electron_31,
+  electron_36,
   darwin,
   copyDesktopItems,
   makeDesktopItem,
@@ -11,22 +11,22 @@
 }:
 let
   pname = "feishin";
-  version = "0.10.1";
+  version = "0.12.6";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
     rev = "v${version}";
-    hash = "sha256-YdtGhGcG5qVoVa1534NQIbI02gy0pzR9U1PU2lL1u/A=";
+    hash = "sha256-cnlPks/sJdcxHdIppHn8Q8d2tkwVlPMofQxjdAlBreg=";
   };
 
-  electron = electron_31;
+  electron = electron_36;
 in
 buildNpmPackage {
   inherit pname version;
 
   inherit src;
-  npmDepsHash = "sha256-3fY0NCswRTnpDDsr1fDK9YZm8TUKCIMJ1+yw38dj0M8=";
+  npmDepsHash = "sha256-lThh29prT/cHRrp2mEtUW4eeVfCtkk+54EPNUyGHyq8=";
 
   npmFlags = [ "--legacy-peer-deps" ];
   makeCacheWritable = true;
@@ -60,7 +60,7 @@ buildNpmPackage {
         inherit version;
 
         src = "${src}/release/app";
-        npmDepsHash = "sha256-YkLT69QU7WMGRe95rfZ8TmnfIdWwtpWaqGY+wU48veQ=";
+        npmDepsHash = "sha256-kEe5HH/oslH8vtAcJuWTOLc0ZQPxlDVMS4U0RpD8enE=";
 
         npmFlags = [ "--ignore-scripts" ];
         dontNpmBuild = true;
@@ -115,7 +115,7 @@ buildNpmPackage {
       # https://github.com/electron/electron/issues/35153#issuecomment-1202718531
       makeWrapper ${lib.getExe electron} $out/bin/feishin \
         --add-flags $out/share/feishin/resources/app.asar \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --set ELECTRON_FORCE_IS_PACKAGED=1 \
         --inherit-argv0
 
@@ -145,15 +145,15 @@ buildNpmPackage {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Full-featured Subsonic/Jellyfin compatible desktop music player";
     homepage = "https://github.com/jeffvli/feishin";
     changelog = "https://github.com/jeffvli/feishin/releases/tag/v${version}";
-    sourceProvenance = with sourceTypes; [ fromSource ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "feishin";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       onny
       jlbribeiro
     ];

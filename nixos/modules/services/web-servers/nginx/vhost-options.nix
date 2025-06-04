@@ -19,50 +19,65 @@ with lib;
 
     serverAliases = mkOption {
       type = types.listOf types.str;
-      default = [];
-      example = [ "www.example.org" "example.org" ];
+      default = [ ];
+      example = [
+        "www.example.org"
+        "example.org"
+      ];
       description = ''
         Additional names of virtual hosts served by this virtual host configuration.
       '';
     };
 
     listen = mkOption {
-      type = with types; listOf (submodule {
-        options = {
-          addr = mkOption {
-            type = str;
-            description = "Listen address.";
+      type =
+        with types;
+        listOf (submodule {
+          options = {
+            addr = mkOption {
+              type = str;
+              description = "Listen address.";
+            };
+            port = mkOption {
+              type = types.nullOr port;
+              description = ''
+                Port number to listen on.
+                If unset and the listen address is not a socket then nginx defaults to 80.
+              '';
+              default = null;
+            };
+            ssl = mkOption {
+              type = bool;
+              description = "Enable SSL.";
+              default = false;
+            };
+            proxyProtocol = mkOption {
+              type = bool;
+              description = "Enable PROXY protocol.";
+              default = false;
+            };
+            extraParameters = mkOption {
+              type = listOf str;
+              description = "Extra parameters of this listen directive.";
+              default = [ ];
+              example = [
+                "backlog=1024"
+                "deferred"
+              ];
+            };
           };
-          port = mkOption {
-            type = types.nullOr port;
-            description = ''
-              Port number to listen on.
-              If unset and the listen address is not a socket then nginx defaults to 80.
-            '';
-            default = null;
-          };
-          ssl = mkOption {
-            type = bool;
-            description = "Enable SSL.";
-            default = false;
-          };
-          proxyProtocol = mkOption {
-            type = bool;
-            description = "Enable PROXY protocol.";
-            default = false;
-          };
-          extraParameters = mkOption {
-            type = listOf str;
-            description = "Extra parameters of this listen directive.";
-            default = [ ];
-            example = [ "backlog=1024" "deferred" ];
-          };
-        };
-      });
-      default = [];
+        });
+      default = [ ];
       example = [
-        { addr = "195.154.1.1"; port = 443; ssl = true; }
-        { addr = "192.154.1.1"; port = 80; }
+        {
+          addr = "195.154.1.1";
+          port = 443;
+          ssl = true;
+        }
+        {
+          addr = "192.154.1.1";
+          port = 80;
+        }
         { addr = "unix:/var/run/nginx.sock"; }
       ];
       description = ''
@@ -86,8 +101,11 @@ with lib;
 
         Note: This option overrides `enableIPv6`
       '';
-      default = [];
-      example = [ "127.0.0.1" "[::1]" ];
+      default = [ ];
+      example = [
+        "127.0.0.1"
+        "[::1]"
+      ];
     };
 
     enableACME = mkOption {
@@ -326,7 +344,7 @@ with lib;
 
     basicAuth = mkOption {
       type = types.attrsOf types.str;
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           user = "password";
@@ -345,18 +363,19 @@ with lib;
       default = null;
       description = ''
         Basic Auth password file for a vhost.
-        Can be created via: {command}`htpasswd -c <filename> <username>`.
-
-        WARNING: The generate file contains the users' passwords in a
-        non-cryptographically-securely hashed way.
+        Can be created by running {command}`nix-shell --packages apacheHttpd --run 'htpasswd -B -c FILENAME USERNAME'`.
       '';
     };
 
     locations = mkOption {
-      type = types.attrsOf (types.submodule (import ./location-options.nix {
-        inherit lib config;
-      }));
-      default = {};
+      type = types.attrsOf (
+        types.submodule (
+          import ./location-options.nix {
+            inherit lib config;
+          }
+        )
+      );
+      default = { };
       example = literalExpression ''
         {
           "/" = {

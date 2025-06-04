@@ -37,7 +37,10 @@ let
     lib.attrNames (
       lib.filterAttrs (
         name: value:
-        isPythonInterpreter name && name != pname && interpreterName name == interpreterName pname
+        # use tryEval to handle entries in aliases.nix
+        (builtins.tryEval (
+          isPythonInterpreter name && name != pname && interpreterName name == interpreterName pname
+        )).value
       ) pkgs
     );
 

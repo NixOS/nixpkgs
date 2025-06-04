@@ -5,10 +5,10 @@
   fetchFromGitHub,
   pytestCheckHook,
   libxcrypt,
-  pythonOlder,
   gtest,
   pybind11,
   nlohmann_json,
+  setuptools,
 }:
 
 let
@@ -21,16 +21,14 @@ let
 in
 buildPythonPackage rec {
   pname = "yaramod";
-  version = "3.23.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "4.3.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "avast";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TB0dnWA+5beyHAoYUjqocmw5uGFgo/h9eKDbuKbmfsw=";
+    repo = "yaramod";
+    tag = "v${version}";
+    hash = "sha256-b0IdhnKlOPkjq/oZtEHbOzEjp5gUhX+NqDid61ubovc=";
   };
 
   postPatch = ''
@@ -48,12 +46,16 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cmake
     pog
-    gtest
   ];
 
-  setupPyBuildFlags = [ "--with-unit-tests" ];
+  build-system = [ setuptools ];
 
-  checkInputs = [ pytestCheckHook ];
+  env.ENV_YARAMOD_BUILD_WITH_UNIT_TESTS = true;
+
+  nativeCheckInputs = [
+    gtest
+    pytestCheckHook
+  ];
 
   pytestFlagsArray = [ "tests/" ];
 

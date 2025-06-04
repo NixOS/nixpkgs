@@ -4,47 +4,47 @@
   buildPythonPackage,
   fetchFromGitHub,
   nix-update-script,
-  pythonOlder,
-  # pyproject
+
+  # build-system
   hatchling,
   hatch-requirements-txt,
   hatch-fancy-pypi-readme,
-  # runtime
-  setuptools,
+
+  # dependencies
   fsspec,
   httpx,
   huggingface-hub,
   packaging,
   typing-extensions,
   websockets,
-  # checkInputs
-  pytestCheckHook,
-  pytest-asyncio,
-  pydub,
-  rich,
-  tomlkit,
+
+  # tests
   gradio,
+  pydub,
+  pytest-asyncio,
+  pytestCheckHook,
+  rich,
+  safehttpx,
+  tomlkit,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "gradio-client";
-  version = "1.3.0";
+  version = "1.10.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   # no tests on pypi
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
     # not to be confused with @gradio/client@${version}
-    rev = "refs/tags/gradio_client@${version}";
+    tag = "gradio_client@${version}";
     sparseCheckout = [ "client/python" ];
-    hash = "sha256-UZQWguUN3l0cj2wb2f7A61RTLy9nPYcIEwHIo+F1kR0=";
+    hash = "sha256-jIJkJvXy4mKQN0gVb4nm3hCzgk9qofBrXc3Tws2n2qw=";
   };
-  prePatch = ''
-    cd client/python
-  '';
+
+  sourceRoot = "${src.name}/client/python";
 
   # upstream adds upper constraints because they can, not because the need to
   # https://github.com/gradio-app/gradio/pull/4885
@@ -60,7 +60,6 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    setuptools # needed for 'pkg_resources'
     fsspec
     httpx
     huggingface-hub
@@ -70,19 +69,20 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-asyncio
-    pydub
-    rich
-    tomlkit
     gradio.sans-reverse-dependencies
+    pydub
+    pytest-asyncio
+    pytestCheckHook
+    rich
+    safehttpx
+    tomlkit
+    writableTmpDirAsHomeHook
   ];
   # ensuring we don't propagate this intermediate build
   disallowedReferences = [ gradio.sans-reverse-dependencies ];
 
   # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
   preCheck = ''
-    export HOME=$TMPDIR
     cat ${./conftest-skip-network-errors.py} >> test/conftest.py
   '';
 
@@ -105,13 +105,17 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex" "gradio_client@(.*)" ];
+    extraArgs = [
+      "--version-regex"
+      "gradio_client@(.*)"
+    ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gradio.app/";
+    changelog = "https://github.com/gradio-app/gradio/releases/tag/gradio_client@${version}";
     description = "Lightweight library to use any Gradio app as an API";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

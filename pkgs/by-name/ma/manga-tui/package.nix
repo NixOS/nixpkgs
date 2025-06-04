@@ -3,13 +3,14 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  dbus,
   openssl,
-  sqlite,
-  stdenv,
-  darwin,
+  perl,
+  cacert,
+  nix-update-script,
 }:
 let
-  version = "0.3.1";
+  version = "0.8.0";
 in
 rustPlatform.buildRustPackage {
   pname = "manga-tui";
@@ -19,32 +20,35 @@ rustPlatform.buildRustPackage {
     owner = "josueBarretogit";
     repo = "manga-tui";
     rev = "v${version}";
-    hash = "sha256-672AuQWviwihnUS3G0xSn4IAMHy0fPE1VLDfu8wrPGg=";
+    hash = "sha256-81P5LwL9njxA0qx4FvqgrHdqVgUXkZTTzAXLdRTftS4=";
   };
 
-  cargoHash = "sha256-yf0hISz/jHtrO1clTSIKfxFiwI+W0Mu3mY+XW6+ynJU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-dne0sJ0K/UVXGaj/vUM9O++ZS0hu69bdLnV8VAr3tbM=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      openssl
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [
+    dbus
+    (lib.getDev openssl)
+  ];
+
+  checkInputs = [
+    perl
+    cacert
+  ];
 
   meta = {
     description = "Terminal-based manga reader and downloader with image support";
     homepage = "https://github.com/josueBarretogit/manga-tui";
     changelog = "https://github.com/josueBarretogit/manga-tui/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ isabelroses ];
+    maintainers = with lib.maintainers; [
+      isabelroses
+      youwen5
+    ];
     mainProgram = "manga-tui";
   };
+
+  passthru.updateScript = nix-update-script { };
 }

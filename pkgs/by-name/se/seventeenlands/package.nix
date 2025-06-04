@@ -5,11 +5,11 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "seventeenlands";
-  version = "0.1.42";
+  version = "0.1.43";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-P/imV4vvyd6wgjqXzgfIAURFtFhLwX1eS8eiPl79oZk=";
+    hash = "sha256-oTF4dtMKhx2YR80goKTcyq2P0mxAKLE2Ze5HbMNvyGg=";
   };
 
   # No tests

@@ -1,31 +1,32 @@
-{ fetchFromGitHub
-, stdenv
-, lib
-, openssl
-, boost
-, curl
-, libevent
-, libzip
-, qrencode
-, qtbase
-, qttools
-, wrapQtAppsHook
-, autoreconfHook
-, pkg-config
-, libtool
-, miniupnpc
-, hexdump
+{
+  fetchFromGitHub,
+  stdenv,
+  lib,
+  openssl,
+  boost,
+  curl,
+  libevent,
+  libzip,
+  qrencode,
+  qtbase,
+  qttools,
+  wrapQtAppsHook,
+  autoreconfHook,
+  pkg-config,
+  libtool,
+  miniupnpc,
+  hexdump,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gridcoin-research";
-  version = "5.4.8.0-hotfix-1";
+  version = "5.4.9.0";
 
   src = fetchFromGitHub {
     owner = "gridcoin-community";
     repo = "Gridcoin-Research";
     rev = "${version}";
-    hash = "sha256-e58GJNiZq4LP/HTeveTQD6APeTvUbhUTwMwhU+PiVc0=";
+    hash = "sha256-nupZB4nNbitpf5EBCNy0e+ovjayAszup/r7qxbxA5jI=";
   };
 
   nativeBuildInputs = [

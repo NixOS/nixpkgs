@@ -1,6 +1,11 @@
-{ buildDunePackage, fetchFromGitHub, lib, reason }:
+{
+  buildDunePackage,
+  fetchFromGitHub,
+  lib,
+  reason,
+}:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "flex";
   version = "unstable-2020-09-12";
 

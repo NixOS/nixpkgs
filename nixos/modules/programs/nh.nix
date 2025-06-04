@@ -1,13 +1,17 @@
-{ config
-, lib
-, pkgs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  ...
 }:
 let
   cfg = config.programs.nh;
 in
 {
-  meta.maintainers = [ lib.maintainers.viperML ];
+  meta.maintainers = with lib.maintainers; [
+    NotAShelf
+    viperML
+  ];
 
   options.programs.nh = {
     enable = lib.mkEnableOption "nh, yet another Nix CLI helper";
@@ -15,12 +19,21 @@ in
     package = lib.mkPackageOption pkgs "nh" { };
 
     flake = lib.mkOption {
-      type = lib.types.nullOr lib.types.path;
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
-        The path that will be used for the `FLAKE` environment variable.
+        The string that will be used for the `NH_FLAKE` environment variable.
 
-        `FLAKE` is used by nh as the default flake for performing actions, like `nh os switch`.
+        `NH_FLAKE` is used by nh as the default flake for performing actions, such as
+        `nh os switch`. This behaviour can be overriden per-command with environment
+        variables that will take priority.
+
+        - `NH_OS_FLAKE`: will take priority for `nh os` commands.
+        - `NH_HOME_FLAKE`: will take priority for `nh home` commands.
+        - `NH_DARWIN_FLAKE`: will take priority for `nh darwin` commands.
+
+        The formerly valid `FLAKE` is now deprecated by nh, and will cause hard errors
+        in future releases if `NH_FLAKE` is not set.
       '';
     };
 
@@ -53,9 +66,12 @@ in
 
   config = {
     warnings =
-      if (!(cfg.clean.enable -> !config.nix.gc.automatic)) then [
-        "programs.nh.clean.enable and nix.gc.automatic are both enabled. Please use one or the other to avoid conflict."
-      ] else [ ];
+      if (!(cfg.clean.enable -> !config.nix.gc.automatic)) then
+        [
+          "programs.nh.clean.enable and nix.gc.automatic are both enabled. Please use one or the other to avoid conflict."
+        ]
+      else
+        [ ];
 
     assertions = [
       # Not strictly required but probably a good assertion to have
@@ -73,7 +89,7 @@ in
     environment = lib.mkIf cfg.enable {
       systemPackages = [ cfg.package ];
       variables = lib.mkIf (cfg.flake != null) {
-        FLAKE = cfg.flake;
+        NH_FLAKE = cfg.flake;
       };
     };
 

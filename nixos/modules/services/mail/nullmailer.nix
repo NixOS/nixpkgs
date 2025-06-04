@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
 
   options = {
@@ -70,10 +75,10 @@
           type = lib.types.nullOr lib.types.str;
           default = null;
           description = ''
-             The content of this attribute is appended to any host name that
-             does not contain a period (except localhost), including defaulthost
-             and idhost. Defaults to the value of the me attribute, if it exists,
-             otherwise the literal name defauldomain.
+            The content of this attribute is appended to any host name that
+            does not contain a period (except localhost), including defaulthost
+            and idhost. Defaults to the value of the me attribute, if it exists,
+            otherwise the literal name defauldomain.
           '';
         };
 
@@ -81,9 +86,9 @@
           type = lib.types.nullOr lib.types.str;
           default = null;
           description = ''
-             The content of this attribute is appended to any address that
-             is missing a host name. Defaults to the value of the me control
-             attribute, if it exists, otherwise the literal name defaulthost.
+            The content of this attribute is appended to any address that
+            is missing a host name. Defaults to the value of the me control
+            attribute, if it exists, otherwise the literal name defaulthost.
           '';
         };
 
@@ -117,11 +122,16 @@
         };
 
         maxpause = lib.mkOption {
-          type = with lib.types; nullOr (oneOf [ str int ]);
+          type =
+            with lib.types;
+            nullOr (oneOf [
+              str
+              int
+            ]);
           default = null;
           description = ''
-             The maximum time to pause between successive queue runs, in seconds.
-             Defaults to 24 hours (86400).
+            The maximum time to pause between successive queue runs, in seconds.
+            Defaults to 24 hours (86400).
           '';
         };
 
@@ -129,13 +139,18 @@
           type = lib.types.nullOr lib.types.str;
           default = null;
           description = ''
-             The fully-qualifiled host name of the computer running nullmailer.
-             Defaults to the literal name me.
+            The fully-qualifiled host name of the computer running nullmailer.
+            Defaults to the literal name me.
           '';
         };
 
         pausetime = lib.mkOption {
-          type = with lib.types; nullOr (oneOf [ str int ]);
+          type =
+            with lib.types;
+            nullOr (oneOf [
+              str
+              int
+            ]);
           default = null;
           description = ''
             The minimum time to pause between successive queue runs when there
@@ -165,7 +180,12 @@
         };
 
         sendtimeout = lib.mkOption {
-          type = with lib.types; nullOr (oneOf [ str int ]);
+          type =
+            with lib.types;
+            nullOr (oneOf [
+              str
+              int
+            ]);
           default = null;
           description = ''
             The  time to wait for a remote module listed above to complete sending
@@ -178,66 +198,72 @@
     };
   };
 
-  config = let
-    cfg = config.services.nullmailer;
-  in lib.mkIf cfg.enable {
+  config =
+    let
+      cfg = config.services.nullmailer;
+    in
+    lib.mkIf cfg.enable {
 
-    assertions = [
-      { assertion = cfg.config.remotes == null || cfg.remotesFile == null;
-        message = "Only one of `remotesFile` or `config.remotes` may be used at a time.";
-      }
-    ];
+      assertions = [
+        {
+          assertion = cfg.config.remotes == null || cfg.remotesFile == null;
+          message = "Only one of `remotesFile` or `config.remotes` may be used at a time.";
+        }
+      ];
 
-    environment = {
-      systemPackages = [ pkgs.nullmailer ];
-      etc = let
-        validAttrs = lib.mapAttrs (_: toString) (lib.filterAttrs (_: value: value != null) cfg.config);
-      in
-        (lib.foldl' (as: name: as // { "nullmailer/${name}".text = validAttrs.${name}; }) {} (lib.attrNames validAttrs))
+      environment = {
+        systemPackages = [ pkgs.nullmailer ];
+        etc =
+          let
+            validAttrs = lib.mapAttrs (_: toString) (lib.filterAttrs (_: value: value != null) cfg.config);
+          in
+          (lib.foldl' (as: name: as // { "nullmailer/${name}".text = validAttrs.${name}; }) { } (
+            lib.attrNames validAttrs
+          ))
           // lib.optionalAttrs (cfg.remotesFile != null) { "nullmailer/remotes".source = cfg.remotesFile; };
-    };
+      };
 
-    users = {
-      users.${cfg.user} = {
-        description = "Nullmailer relay-only mta user";
+      users = {
+        users.${cfg.user} = {
+          description = "Nullmailer relay-only mta user";
+          inherit (cfg) group;
+          isSystemUser = true;
+        };
+
+        groups.${cfg.group} = { };
+      };
+
+      systemd.tmpfiles.rules = [
+        "d /var/spool/nullmailer - ${cfg.user} ${cfg.group} - -"
+        "d /var/spool/nullmailer/failed 770 ${cfg.user} ${cfg.group} - -"
+        "d /var/spool/nullmailer/queue 770 ${cfg.user} ${cfg.group} - -"
+        "d /var/spool/nullmailer/tmp 770 ${cfg.user} ${cfg.group} - -"
+      ];
+
+      systemd.services.nullmailer = {
+        description = "nullmailer";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
+
+        preStart = ''
+          rm -f /var/spool/nullmailer/trigger && mkfifo -m 660 /var/spool/nullmailer/trigger
+        '';
+
+        serviceConfig = {
+          User = cfg.user;
+          Group = cfg.group;
+          ExecStart = "${pkgs.nullmailer}/bin/nullmailer-send";
+          Restart = "always";
+        };
+      };
+
+      services.mail.sendmailSetuidWrapper = lib.mkIf cfg.setSendmail {
+        program = "sendmail";
+        source = "${pkgs.nullmailer}/bin/sendmail";
+        owner = cfg.user;
         inherit (cfg) group;
-        isSystemUser = true;
-      };
-
-      groups.${cfg.group} = { };
-    };
-
-    systemd.tmpfiles.rules = [
-      "d /var/spool/nullmailer - ${cfg.user} ${cfg.group} - -"
-      "d /var/spool/nullmailer/failed 770 ${cfg.user} ${cfg.group} - -"
-      "d /var/spool/nullmailer/queue 770 ${cfg.user} ${cfg.group} - -"
-      "d /var/spool/nullmailer/tmp 770 ${cfg.user} ${cfg.group} - -"
-    ];
-
-    systemd.services.nullmailer = {
-      description = "nullmailer";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-
-      preStart = ''
-        rm -f /var/spool/nullmailer/trigger && mkfifo -m 660 /var/spool/nullmailer/trigger
-      '';
-
-      serviceConfig = {
-        User = cfg.user;
-        Group = cfg.group;
-        ExecStart = "${pkgs.nullmailer}/bin/nullmailer-send";
-        Restart = "always";
+        setuid = true;
+        setgid = true;
       };
     };
-
-    services.mail.sendmailSetuidWrapper = lib.mkIf cfg.setSendmail {
-      program = "sendmail";
-      source = "${pkgs.nullmailer}/bin/sendmail";
-      owner = cfg.user;
-      inherit (cfg) group;
-      setuid = true;
-      setgid = true;
-    };
-  };
 }

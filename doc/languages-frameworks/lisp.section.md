@@ -48,7 +48,8 @@ Also one can create a `pkgs.mkShell` environment in `shell.nix`/`flake.nix`:
 ```nix
 let
   sbcl' = sbcl.withPackages (ps: [ ps.alexandria ]);
-in mkShell {
+in
+mkShell {
   packages = [ sbcl' ];
 }
 ```
@@ -58,7 +59,11 @@ Such a Lisp can be now used e.g. to compile your sources:
 ```nix
 {
   buildPhase = ''
+    runHook preBuild
+
     ${sbcl'}/bin/sbcl --load my-build-file.lisp
+
+    runHook postBuild
   '';
 }
 ```
@@ -134,7 +139,6 @@ During Quicklisp import:
 - names starting with a number have a `_` prepended (`3d-vectors`->`_3d-vectors`)
 - `_` in names is converted to `__` for reversibility
 
-
 ## Defining packages manually inside Nixpkgs {#lisp-defining-packages-inside}
 
 Packages that for some reason are not in Quicklisp, and so cannot be
@@ -184,14 +188,17 @@ let
       domain = "gitlab.common-lisp.net";
       owner = "alexandria";
       repo = "alexandria";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-1Hzxt65dZvgOFIljjjlSGgKYkj+YBLwJCACi5DZsKmQ=";
     };
   };
-  sbcl' = sbcl.withOverrides (self: super: {
-    inherit alexandria;
-  });
-in sbcl'.pkgs.alexandria
+  sbcl' = sbcl.withOverrides (
+    self: super: {
+      inherit alexandria;
+    }
+  );
+in
+sbcl'.pkgs.alexandria
 ```
 
 ## Overriding package attributes {#lisp-overriding-package-attributes}
@@ -208,7 +215,7 @@ sbcl.pkgs.alexandria.overrideLispAttrs (oldAttrs: rec {
     domain = "gitlab.common-lisp.net";
     owner = "alexandria";
     repo = "alexandria";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-1Hzxt65dZvgOFIljjjlSGgKYkj+YBLwJCACi5DZsKmQ=";
   };
 })
@@ -296,6 +303,9 @@ This example wraps CLISP:
 wrapLisp {
   pkg = clisp;
   faslExt = "fas";
-  flags = ["-E" "UTF8"];
+  flags = [
+    "-E"
+    "UTF8"
+  ];
 }
 ```

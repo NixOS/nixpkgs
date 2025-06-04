@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, cmake, hdf5, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  cmake,
+  hdf5,
+  zlib,
+  nix-update-script,
+}:
 
 stdenv.mkDerivation rec {
   pname = "kallisto";
@@ -11,14 +20,22 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-hfdeztEyHvuOnLS71oSv8sPqFe2UCX5KlANqrT/Gfx8=";
   };
 
-  nativeBuildInputs = [ autoconf cmake ];
+  nativeBuildInputs = [
+    autoconf
+    cmake
+  ];
 
-  buildInputs = [ hdf5 zlib ];
+  buildInputs = [
+    hdf5
+    zlib
+  ];
 
   cmakeFlags = [ "-DUSE_HDF5=ON" ];
 
   # Parallel build fails in some cases: https://github.com/pachterlab/kallisto/issues/160
   enableParallelBuilding = false;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Program for quantifying abundances of transcripts from RNA-Seq data";

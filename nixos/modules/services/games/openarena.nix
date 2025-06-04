@@ -1,7 +1,18 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) concatStringsSep mkEnableOption mkIf mkOption types;
+  inherit (lib)
+    concatStringsSep
+    mkEnableOption
+    mkIf
+    mkOption
+    types
+    ;
   cfg = config.services.openarena;
 in
 {
@@ -18,7 +29,7 @@ in
 
       extraFlags = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "Extra flags to pass to {command}`oa_ded`";
         example = [
           "+set dedicated 2"

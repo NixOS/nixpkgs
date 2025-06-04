@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SecurityInnovation";
@@ -24,24 +24,35 @@ buildPythonPackage rec {
     hash = "sha256-47YiHNxmjyCOYHHUV3Zyhs3Att9HZtCXYfbN34ooTxU=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pyasn1
     cryptography
   ];
 
+  patches = [
+    # https://github.com/SecurityInnovation/PGPy/issues/462
+    ./pr-443.patch
+  ];
+
+  postPatch = ''
+    # https://github.com/SecurityInnovation/PGPy/issues/472
+    substituteInPlace tests/test_10_exceptions.py \
+      --replace-fail ", 512" ", 1024" # We need longer test key because pgp deprecated length=512
+  '';
+
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/SecurityInnovation/PGPy";
     description = "Pretty Good Privacy for Python";
     longDescription = ''
       PGPy is a Python library for implementing Pretty Good Privacy into Python
       programs, conforming to the OpenPGP specification per RFC 4880.
     '';
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       eadwu
       dotlambda
     ];

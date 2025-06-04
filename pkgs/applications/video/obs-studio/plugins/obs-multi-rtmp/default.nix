@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, obs-studio, cmake, qtbase, fetchpatch }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  obs-studio,
+  cmake,
+  qtbase,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   pname = "obs-multi-rtmp";
@@ -21,7 +29,10 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ obs-studio qtbase ];
+  buildInputs = [
+    obs-studio
+    qtbase
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_QT" true)
@@ -39,12 +50,15 @@ stdenv.mkDerivation rec {
     rm -rf $out/dist
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sorayuki/obs-multi-rtmp/";
     changelog = "https://github.com/sorayuki/obs-multi-rtmp/releases/tag/${version}";
     description = "Multi-site simultaneous broadcast plugin for OBS Studio";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ jk ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ jk ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
   };
 }

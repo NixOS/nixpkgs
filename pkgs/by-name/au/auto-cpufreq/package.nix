@@ -2,21 +2,23 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   gobject-introspection,
   wrapGAppsHook3,
   gtk3,
+  getent,
+  nixosTests,
 }:
 python3Packages.buildPythonPackage rec {
   pname = "auto-cpufreq";
-  version = "2.4.0";
+  version = "2.6.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "AdnanHodzic";
     repo = "auto-cpufreq";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Xsh3d7rQY7RKzZ7J0swrgxZEyITb7B3oX5F/tcBGjfk=";
+    tag = "v${version}";
+    hash = "sha256-DEs6jbWYJFJgpaPtF5NT3DQs3erjzdm2brLNHpjrEPA=";
   };
 
   nativeBuildInputs = [
@@ -29,23 +31,28 @@ python3Packages.buildPythonPackage rec {
     python3Packages.poetry-core
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    click
-    distro
-    psutil
-    pygobject3
-    poetry-dynamic-versioning
-    setuptools
-    pyinotify
-  ];
+  propagatedBuildInputs =
+    with python3Packages;
+    [
+      click
+      distro
+      psutil
+      pygobject3
+      poetry-dynamic-versioning
+      setuptools
+      pyinotify
+      urwid
+      pyasyncore
+      requests
+    ]
+    ++ [ getent ];
 
   doCheck = false;
   pythonImportsCheck = [ "auto_cpufreq" ];
 
   patches = [
     # hardcodes version output
-    (substituteAll {
-      src = ./fix-version-output.patch;
+    (replaceVars ./fix-version-output.patch {
       inherit version;
     })
 
@@ -88,6 +95,10 @@ python3Packages.buildPythonPackage rec {
     mkdir -p $out/share/polkit-1/actions
     cp scripts/org.auto-cpufreq.pkexec.policy $out/share/polkit-1/actions
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) auto-cpufreq;
+  };
 
   meta = {
     mainProgram = "auto-cpufreq";

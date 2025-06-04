@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libusb1
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libusb1,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

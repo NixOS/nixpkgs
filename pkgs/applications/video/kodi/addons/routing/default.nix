@@ -1,4 +1,10 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+}:
 buildKodiAddon rec {
   pname = "routing";
   namespace = "script.module.routing";
@@ -20,6 +26,6 @@ buildKodiAddon rec {
     homepage = "https://github.com/tamland/kodi-plugin-routing";
     description = "Routing module for kodi plugins";
     license = licenses.gpl3Plus;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

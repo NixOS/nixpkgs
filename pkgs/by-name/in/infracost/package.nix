@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "infracost";
@@ -12,7 +17,11 @@ buildGoModule rec {
   };
   vendorHash = "sha256-bLSj4/+7h0uHdR956VL4iLqRddKV5Ac+FIL1zJxPCW8=";
 
-  ldflags = [ "-s" "-w" "-X github.com/infracost/infracost/internal/version.Version=v${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/infracost/infracost/internal/version.Version=v${version}"
+  ];
 
   subPackages = [ "cmd/infracost" ];
 
@@ -52,7 +61,7 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://infracost.io";
     changelog = "https://github.com/infracost/infracost/releases/tag/v${version}";
     description = "Cloud cost estimates for Terraform in your CLI and pull requests";
@@ -61,8 +70,12 @@ buildGoModule rec {
       This helps developers, DevOps et al. quickly see the cost breakdown and
       compare different deployment options upfront.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ davegallant jk kashw2 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      davegallant
+      jk
+      kashw2
+    ];
     mainProgram = "infracost";
   };
 }

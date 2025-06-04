@@ -1,7 +1,8 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitLab
-, nix-update-script
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitLab,
+  nix-update-script,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "xr-hardware";

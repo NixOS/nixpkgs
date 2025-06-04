@@ -1,15 +1,30 @@
-{ lib, stdenv, fetchurl
-, unzip, mono, makeWrapper, icoutils
-, substituteAll, xsel, xorg, xdotool, coreutils, unixtools, glib
-, gtk2, makeDesktopItem, plugins ? [] }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  mono,
+  makeWrapper,
+  icoutils,
+  replaceVars,
+  xsel,
+  xorg,
+  xdotool,
+  coreutils,
+  unixtools,
+  glib,
+  gtk2,
+  makeDesktopItem,
+  plugins ? [ ],
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keepass";
-  version = "2.57";
+  version = "2.57.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/keepass/KeePass-${finalAttrs.version}-Source.zip";
-    hash = "sha256-emJ4QhhIaUowG4SAUzRK6hUendc/H6JH09Js2Ji9PQ0=";
+    hash = "sha256-97ZX1EzhMv4B3YZ3HoUqlGTEMsQn3cmNGr+uvS6AKYY=";
   };
 
   sourceRoot = ".";
@@ -22,8 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ icoutils ];
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       xsel = "${xsel}/bin/xsel";
       xprop = "${xorg.xprop}/bin/xprop";
       xdotool = "${xdotool}/bin/xdotool";
@@ -39,21 +53,28 @@ stdenv.mkDerivation (finalAttrs: {
   #
   # This derivation patches KeePass to search for plugins in specified
   # plugin derivations in the Nix store and nowhere else.
-  pluginLoadPathsPatch = let
-    inherit (builtins) toString;
-    inherit (lib.strings) readFile concatStrings replaceStrings unsafeDiscardStringContext;
-    inherit (lib.lists) map length;
-    inherit (lib) add;
+  pluginLoadPathsPatch =
+    let
+      inherit (builtins) toString;
+      inherit (lib.strings)
+        readFile
+        concatStrings
+        replaceStrings
+        unsafeDiscardStringContext
+        ;
+      inherit (lib.lists) map length;
+      inherit (lib) add;
 
-    outputLc = toString (add 7 (length plugins));
-    patchTemplate = readFile ./keepass-plugins.patch;
-    loadTemplate  = readFile ./keepass-plugins-load.patch;
-    loads = concatStrings
-      (map
-        (p: replaceStrings ["$PATH$"] [ (unsafeDiscardStringContext (toString p)) ] loadTemplate)
-          plugins);
-  in
-  replaceStrings ["$OUTPUT_LC$" "$DO_LOADS$"] [outputLc loads] patchTemplate;
+      outputLc = toString (add 7 (length plugins));
+      patchTemplate = readFile ./keepass-plugins.patch;
+      loadTemplate = readFile ./keepass-plugins-load.patch;
+      loads = concatStrings (
+        map (
+          p: replaceStrings [ "$PATH$" ] [ (unsafeDiscardStringContext (toString p)) ] loadTemplate
+        ) plugins
+      );
+    in
+    replaceStrings [ "$OUTPUT_LC$" "$DO_LOADS$" ] [ outputLc loads ] patchTemplate;
 
   passAsFile = [ "pluginLoadPathsPatch" ];
   postPatch = ''
@@ -102,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    target="$out/lib/dotnet/${finalAttrs.pname}"
+    target="$out/lib/dotnet/keepass"
     mkdir -p "$target"
 
     cp -rv $outputFiles "$target"
@@ -143,7 +164,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "GUI password manager with strong cryptography";
     homepage = "http://www.keepass.info/";
-    maintainers = with lib.maintainers; [ amorsillo obadz ];
+    maintainers = with lib.maintainers; [
+      amorsillo
+      obadz
+    ];
     platforms = with lib.platforms; all;
     license = lib.licenses.gpl2;
     mainProgram = "keepass";

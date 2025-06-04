@@ -1,9 +1,10 @@
-{ fetchFromGitHub
-, fixDarwinDylibNames
-, lib
-, meson
-, ninja
-, stdenv
+{
+  fetchFromGitHub,
+  fixDarwinDylibNames,
+  lib,
+  meson,
+  ninja,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,19 +18,21 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-KF8IR9YV6b9ro+L9m6nHs1IggakEZddfcBKm/oKCVZY=";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    fixDarwinDylibNames
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      fixDarwinDylibNames
+    ];
 
   meta = {
     description = "Client library for MPD (music player daemon)";
     homepage = "https://www.musicpd.org/libs/libmpdclient/";
     changelog = "https://raw.githubusercontent.com/MusicPlayerDaemon/libmpdclient/${finalAttrs.src.rev}/NEWS";
     license = with lib.licenses; [ bsd2 ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

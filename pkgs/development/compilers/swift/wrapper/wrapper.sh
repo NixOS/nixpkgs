@@ -12,6 +12,8 @@ cc_wrapper="${NIX_CC:-@default_cc_wrapper@}"
 
 source $cc_wrapper/nix-support/utils.bash
 
+source $cc_wrapper/nix-support/darwin-sdk-setup.bash
+
 expandResponseParams "$@"
 
 # Check if we should wrap this Swift invocation at all, and how. Specifically,
@@ -154,6 +156,14 @@ fi
 # Put this one second so libc ldflags take priority.
 if [ -z "${NIX_CC_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
     source $cc_wrapper/nix-support/add-flags.sh
+fi
+
+# Only add darwin min version flag and set up `DEVELOPER_DIR` if a default darwin min version is set,
+# which is a signal that we're targeting darwin. (Copied from add-flags in libc but tailored for Swift).
+if [ "@darwinMinVersion@" ]; then
+    # Make sure the wrapped Swift compiler can find the overlays in the SDK.
+    NIX_SWIFTFLAGS_COMPILE+=" -I $SDKROOT/usr/lib/swift"
+    NIX_LDFLAGS_@suffixSalt@+=" -L $SDKROOT/usr/lib/swift"
 fi
 
 if [[ "$isCxx" = 1 ]]; then

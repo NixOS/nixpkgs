@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "zwave-js-server-python";
-  version = "0.58.1";
+  version = "0.63.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "zwave-js-server-python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-hszt14ymZQsUg0zfJ7+cY08DlXNaWzxKwV/i4i29DtI=";
+    tag = version;
+    hash = "sha256-GQ55IvicdVi6EfRimuyuEbwGDWQIdpLrgi/3ZCj+wJM=";
   };
 
   build-system = [ setuptools ];
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python wrapper for zwave-js-server";
     homepage = "https://github.com/home-assistant-libs/zwave-js-server-python";
-    changelog = "https://github.com/home-assistant-libs/zwave-js-server-python/releases/tag/${version}";
+    changelog = "https://github.com/home-assistant-libs/zwave-js-server-python/releases/tag/${src.tag}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
     mainProgram = "zwave-js-server-python";

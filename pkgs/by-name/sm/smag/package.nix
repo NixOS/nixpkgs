@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "smag";
@@ -6,12 +10,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "aantn";
-    repo = pname;
+    repo = "smag";
     rev = "v${version}";
     hash = "sha256-Vyd35wYDNI4T7DdqihwpmJOAZGxjnCeWS609o3L+gHM=";
   };
 
-  cargoHash = "sha256-ujQAT36qzlfliEC7rFYiWUb3DuwkqCvpUS5Q3v+6378=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-qOinPZwZqcfQ4gv0Z+sfF53zd4tlEWCczaGGmLL79iE=";
 
   meta = with lib; {
     description = "Easily create graphs from cli commands and view them in the terminal";

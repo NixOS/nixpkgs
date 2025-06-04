@@ -8,18 +8,15 @@
   setuptools,
 
   # dependencies
-  coloredlogs,
   datasets,
   huggingface-hub,
   numpy,
   packaging,
-  sympy,
   torch,
   transformers,
 
   # optional-dependencies
   diffusers,
-  evaluate,
   h5py,
   onnx,
   onnxruntime,
@@ -31,16 +28,16 @@
 
 buildPythonPackage rec {
   pname = "optimum";
-  version = "1.23.0";
+  version = "1.25.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "optimum";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1A430tvuUsMiVmDbISdj2g5l05D6FswGKsjdUBpZrP0=";
+    tag = "v${version}";
+    hash = "sha256-SVyGtWFI5GjfxbaVKICf+QSSMYI62dDVMzphu8TngvY=";
   };
 
   build-system = [ setuptools ];
@@ -48,12 +45,9 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "transformers" ];
 
   dependencies = [
-    coloredlogs
-    datasets
     huggingface-hub
     numpy
     packaging
-    sympy
     torch
     transformers
   ] ++ transformers.optional-dependencies.sentencepiece;
@@ -61,24 +55,25 @@ buildPythonPackage rec {
   optional-dependencies = {
     onnxruntime = [
       onnx
-      onnxruntime
       datasets
-      evaluate
       protobuf
+      onnxruntime
     ];
     exporters = [
       onnx
-      onnxruntime
       timm
+      onnxruntime
+      protobuf
     ];
     exporters-tf = [
-      tensorflow
-      tf2onnx
       onnx
-      onnxruntime
       timm
       h5py
+      tf2onnx
+      onnxruntime
       numpy
+      datasets
+      tensorflow
     ];
     diffusers = [ diffusers ];
     intel = [
@@ -120,7 +115,7 @@ buildPythonPackage rec {
     description = "Accelerate training and inference of 🤗 Transformers and 🤗 Diffusers with easy to use hardware optimization tools";
     mainProgram = "optimum-cli";
     homepage = "https://github.com/huggingface/optimum";
-    changelog = "https://github.com/huggingface/optimum/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/huggingface/optimum/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
   };

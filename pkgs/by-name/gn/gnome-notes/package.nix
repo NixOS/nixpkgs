@@ -24,7 +24,7 @@
   adwaita-icon-theme,
   libxml2,
   gsettings-desktop-schemas,
-  tracker,
+  tinysparql,
 }:
 
 stdenv.mkDerivation rec {
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     curl
     libhandy
     webkitgtk_4_0
-    tracker
+    tinysparql
     gnome-online-accounts
     gsettings-desktop-schemas
     evolution-data-server
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     mainProgram = "bijiben";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-notes";
     license = licenses.gpl3;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.linux;
   };
 }

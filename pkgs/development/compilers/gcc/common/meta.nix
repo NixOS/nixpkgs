@@ -1,4 +1,4 @@
-{ lib, version, }:
+{ lib, version }:
 
 let
   inherit (lib)
@@ -23,6 +23,6 @@ in
   '';
 
   platforms = platforms.unix;
-  maintainers = teams.gcc.members;
+  teams = [ teams.gcc ];
 
 }

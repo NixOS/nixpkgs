@@ -11,25 +11,25 @@
   libxml2,
   json_c,
   ncurses,
-  darwin,
   asciidoctor,
   libiconv,
   makeWrapper,
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "newsboat";
-  version = "2.37";
+  version = "2.39";
 
   src = fetchFromGitHub {
     owner = "newsboat";
     repo = "newsboat";
-    rev = "r${version}";
-    hash = "sha256-RNvzGGvicujqkRWVHBwnlROuhpH5XqPNWmx6q7n4g+U=";
+    rev = "r${finalAttrs.version}";
+    hash = "sha256-ypAn9Z27S20f82wqsZIELO1DHN0deqcTHYA77ddtb8g=";
   };
 
-  cargoHash = "sha256-EBA+ucegXr3YtU2K7bhwli8O+knnugMMUuSksDuaY9E=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-LDv5Rrv5ZKs7cspPTWt49omvLWY01y1TDGrfl7Jea3g=";
 
   # TODO: Check if that's still needed
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -58,15 +58,10 @@ rustPlatform.buildRustPackage rec {
       json_c
       ncurses
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-        Foundation
-        libiconv
-        gettext
-      ]
-    );
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+      gettext
+    ];
 
   postBuild = ''
     make -j $NIX_BUILD_CORES prefix="$out"
@@ -99,9 +94,16 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 newsboat $out/bin/newsboat
+    install -Dm755 podboat $out/bin/podboat
+    runHook postInstall
+  '';
+
   meta = {
     homepage = "https://newsboat.org/";
-    changelog = "https://github.com/newsboat/newsboat/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/newsboat/newsboat/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Fork of Newsbeuter, an RSS/Atom feed reader for the text console";
     maintainers = with lib.maintainers; [
       dotlambda
@@ -111,4 +113,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.unix;
     mainProgram = "newsboat";
   };
-}
+})

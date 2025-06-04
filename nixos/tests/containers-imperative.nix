@@ -1,43 +1,66 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+{
   name = "containers-imperative";
   meta = {
-    maintainers = with lib.maintainers; [ aristid aszlig kampfschlaefer ];
+    maintainers = with lib.maintainers; [
+      aristid
+      aszlig
+      kampfschlaefer
+    ];
   };
 
   nodes.machine =
-    { config, pkgs, lib, ... }:
-    { imports = [ ../modules/installer/cd-dvd/channel.nix ];
+    {
+      config,
+      pkgs,
+      lib,
+      ...
+    }:
+    {
+      imports = [ ../modules/installer/cd-dvd/channel.nix ];
 
       # XXX: Sandbox setup fails while trying to hardlink files from the host's
       #      store file system into the prepared chroot directory.
       nix.settings.sandbox = false;
-      nix.settings.substituters = []; # don't try to access cache.nixos.org
+      nix.settings.substituters = [ ]; # don't try to access cache.nixos.org
 
       virtualisation.memorySize = 2048;
       virtualisation.writableStore = true;
       # Make sure we always have all the required dependencies for creating a
       # container available within the VM, because we don't have network access.
-      virtualisation.additionalPaths = let
-        emptyContainer = import ../lib/eval-config.nix {
-          modules = lib.singleton {
-            nixpkgs = { inherit (config.nixpkgs) localSystem; };
+      virtualisation.additionalPaths =
+        let
+          emptyContainer = import ../lib/eval-config.nix {
+            modules = lib.singleton {
+              nixpkgs.hostPlatform = { inherit (pkgs.stdenv.hostPlatform) system; };
 
-            containers.foo.config = {};
+              containers.foo.config = { };
+            };
+
+            # The system is inherited from the host above.
+            # Set it to null, to remove the "legacy" entrypoint's non-hermetic default.
+            system = null;
           };
-
-          # The system is inherited from the host above.
-          # Set it to null, to remove the "legacy" entrypoint's non-hermetic default.
-          system = null;
-        };
-      in with pkgs; [
-        stdenv stdenvNoCC emptyContainer.config.containers.foo.path
-        libxslt desktop-file-utils texinfo docbook5 libxml2
-        docbook_xsl_ns xorg.lndir documentation-highlighter
-        perlPackages.ConfigIniFiles
-      ];
+        in
+        with pkgs;
+        [
+          stdenv
+          stdenvNoCC
+          emptyContainer.config.containers.foo.path
+          libxslt
+          desktop-file-utils
+          texinfo
+          docbook5
+          libxml2
+          docbook_xsl_ns
+          xorg.lndir
+          documentation-highlighter
+          perlPackages.ConfigIniFiles
+        ];
     };
 
-  testScript = let
+  testScript =
+    let
       tmpfilesContainerConfig = pkgs.writeText "container-config-tmpfiles" ''
         {
           systemd.tmpfiles.rules = [ "d /foo - - - - -" ];
@@ -57,7 +80,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           ];
         }
       '';
-    in ''
+    in
+    ''
       with subtest("Make sure we have a NixOS tree (required by ‘nixos-container create’)"):
           machine.succeed("PAGER=cat nix-env -qa -A nixos.hello >&2")
 
@@ -168,4 +192,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           )
           machine.succeed("test ! -e /var/lib/nixos-containers/b0rk")
     '';
-})
+}

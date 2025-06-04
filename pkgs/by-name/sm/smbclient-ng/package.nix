@@ -6,19 +6,20 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "smbclient-ng";
-  version = "2.1.6";
+  version = "2.1.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p0dalirius";
     repo = "smbclient-ng";
-    rev = "refs/tags/${version}";
-    hash = "sha256-T1OAiRL7AGMz12dFIPOESS77lVd62iaBt9vXCdzqJBQ=";
+    tag = version;
+    hash = "sha256-gZbXtgxB5GkypU6U2oe9miobBbwnz/eXs/yWkzVUCcc=";
   };
 
   pythonRelaxDeps = [
     "impacket"
     "pefile"
+    "rich"
   ];
 
   build-system = with python3.pkgs; [ poetry-core ];
@@ -29,6 +30,9 @@ python3.pkgs.buildPythonApplication rec {
     pefile
     rich
   ];
+
+  # Project has no unit tests
+  doCheck = false;
 
   pythonImportsCheck = [ "smbclientng" ];
 

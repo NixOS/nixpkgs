@@ -1,7 +1,15 @@
-{ mkDerivation, lib, fetchFromGitHub, alsa-lib, pkg-config, qtbase, qtscript, qmake
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  alsa-lib,
+  pkg-config,
+  qtbase,
+  qtscript,
+  qmake,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "iannix";
   version = "unstable-2020-12-09";
 
@@ -12,8 +20,15 @@ mkDerivation rec {
     sha256 = "AhoP+Ok78Vk8Aee/RP572hJeM8O7v2ZTvFalOZZqRy8=";
   };
 
-  nativeBuildInputs = [ pkg-config qmake ];
-  buildInputs = [ alsa-lib qtbase qtscript ];
+  nativeBuildInputs = [
+    pkg-config
+    qmake
+  ];
+  buildInputs = [
+    alsa-lib
+    qtbase
+    qtscript
+  ];
 
   qmakeFlags = [ "PREFIX=/" ];
 

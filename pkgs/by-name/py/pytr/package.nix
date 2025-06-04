@@ -8,19 +8,19 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pytr";
-  version = "0.2.5";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytr-org";
     repo = "pytr";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9FKG4QgRBU+DaaYJIDMDqqxFMCAguv5iRUUrQr6RMz8=";
+    tag = "v${version}";
+    hash = "sha256-7554su1bR3m6wcIcmT64O+x/kvVlDMsG/hkTym25B/Q=";
   };
 
   build-system = with python3Packages; [
-    babel
-    setuptools
+    hatchling
+    hatch-babel
   ];
 
   dependencies = with python3Packages; [
@@ -46,10 +46,12 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = [ versionCheckHook ];
 
+  versionCheckProgramArg = "--version";
+
   pythonImportsCheck = [ "pytr" ];
 
   meta = {
-    changelog = "https://github.com/pytr-org/pytr/releases/tag/${version}";
+    changelog = "https://github.com/pytr-org/pytr/releases/tag/${src.tag}";
     description = "Use TradeRepublic in terminal and mass download all documents";
     homepage = "https://github.com/pytr-org/pytr";
     license = lib.licenses.mit;

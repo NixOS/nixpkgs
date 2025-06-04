@@ -1,20 +1,31 @@
-{ pkg-config, libusb1, dbus, lib, rustPlatform, fetchFromGitHub }:
+{
+  pkg-config,
+  libusb1,
+  dbus,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "system76-power";
-  version = "1.1.23";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "system76-power";
-    rev = version;
-    sha256 = "sha256-RuYDG4eZE599oa04xUR+W5B3/IPOpQUss1x7hzoydUQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-SHGfs3ZokPOM2nkd/8F/5zjxh9sPXVBtHWkCbmKwEMo=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ dbus libusb1 ];
+  buildInputs = [
+    dbus
+    libusb1
+  ];
 
-  cargoHash = "sha256-Vps02ZRVmeOQ8jDFZJYAUb502MhqY+2YV2W1/9XGY+0=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Q/6OFNbqvRDTCT1MyJ3gqd4BTXXRouvnKSM3cm1jQ1g=";
 
   postInstall = ''
     install -D -m 0644 data/com.system76.PowerDaemon.conf $out/etc/dbus-1/system.d/com.system76.PowerDaemon.conf
@@ -22,12 +33,19 @@ rustPlatform.buildRustPackage rec {
     install -D -m 0644 data/com.system76.PowerDaemon.xml $out/share/dbus-1/interfaces/com.system76.PowerDaemon.xml
   '';
 
-  meta = with lib; {
+  meta = {
     description = "System76 Power Management";
     mainProgram = "system76-power";
     homepage = "https://github.com/pop-os/system76-power";
-    license = licenses.gpl3Plus;
-    platforms = [ "i686-linux" "x86_64-linux" ];
-    maintainers = [ ];
+    license = lib.licenses.gpl3Plus;
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+    maintainers = with lib.maintainers; [
+      smonson
+      ahoneybun
+    ];
   };
-}
+})

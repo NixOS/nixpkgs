@@ -1,7 +1,6 @@
 {
   stdenv,
   lib,
-  python2,
   python3,
   kernel,
   makeWrapper,
@@ -13,17 +12,19 @@
 let
   libexec = "libexec/hypervkvpd";
 
-  fcopy_name = (if lib.versionOlder kernel.version "6.10" then "fcopy" else "fcopy_uio");
+  fcopy_name =
+    if lib.versionOlder kernel.version "6.10" then
+      "fcopy"
+    else
+      # The fcopy program is explicitly left out in the Makefile on aarch64
+      (if stdenv.hostPlatform.isAarch64 then null else "fcopy_uio");
 
-  daemons = stdenv.mkDerivation rec {
+  daemons = stdenv.mkDerivation {
     pname = "hyperv-daemons-bin";
     inherit (kernel) src version;
 
     nativeBuildInputs = [ makeWrapper ];
-    buildInputs = [ (if lib.versionOlder version "4.19" then python2 else python3) ];
-
-    # as of 4.9 compilation will fail due to -Werror=format-security
-    hardeningDisable = [ "format" ];
+    buildInputs = [ python3 ];
 
     postPatch = ''
       cd tools/hv
@@ -31,22 +32,12 @@ let
         --replace /usr/libexec/hypervkvpd/ $out/${libexec}/
     '';
 
-    # We don't actually need the hv_get_{dhcp,dns}_info scripts on NixOS in
-    # their current incarnation but with them in place, we stop the spam of
-    # errors in the log.
-    installPhase = ''
-      runHook preInstall
-
-      for f in ${fcopy_name} kvp vss ; do
-        install -Dm755 hv_''${f}_daemon -t $out/bin
-      done
-
-      install -Dm755 lsvmbus             $out/bin/lsvmbus
-      install -Dm755 hv_get_dhcp_info.sh $out/${libexec}/hv_get_dhcp_info
-      install -Dm755 hv_get_dns_info.sh  $out/${libexec}/hv_get_dns_info
-
-      runHook postInstall
-    '';
+    makeFlags = [
+      "ARCH=${stdenv.hostPlatform.parsed.cpu.name}"
+      "DESTDIR=$(out)"
+      "sbindir=/bin"
+      "libexecdir=/libexec"
+    ];
 
     postFixup = ''
       wrapProgram $out/bin/hv_kvp_daemon \
@@ -91,22 +82,29 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [ daemons ];
+  passthru = {
+    inherit daemons;
+  };
 
   buildCommand = ''
     system=$lib/lib/systemd/system
 
-    install -Dm444 ${
-      service "${
-        fcopy_name
-      }" "file copy (FCOPY)" "/sys/bus/vmbus/devices/eb765408-105f-49b6-b4aa-c123b64d17d4/uio"
-    } $system/hv-fcopy.service
+    ${lib.optionalString (fcopy_name != null) ''
+      install -Dm444 ${
+        service fcopy_name "file copy (FCOPY)"
+          "/sys/bus/vmbus/devices/eb765408-105f-49b6-b4aa-c123b64d17d4/uio"
+      } $system/hv-fcopy.service
+    ''}
     install -Dm444 ${service "kvp" "key-value pair (KVP)" "hv_kvp"} $system/hv-kvp.service
     install -Dm444 ${service "vss" "volume shadow copy (VSS)" "hv_vss"} $system/hv-vss.service
 
     cat > $system/hyperv-daemons.target <<EOF
     [Unit]
     Description=Hyper-V Daemons
-    Wants=hv-fcopy.service hv-kvp.service hv-vss.service
+    Wants=hv-kvp.service hv-vss.service
+    ${lib.optionalString (fcopy_name != null) ''
+      Wants=hv-fcopy.service
+    ''}
     EOF
 
     for f in $lib/lib/systemd/system/*.service ; do

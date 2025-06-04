@@ -7,10 +7,10 @@
 let
   appthreat-vulnerability-db = (
     python3.pkgs.appthreat-vulnerability-db.overrideAttrs (oldAttrs: rec {
-      version = "5.7.3";
+      version = "5.8.1";
       src = oldAttrs.src.override {
-        rev = "refs/tags/v${version}";
-        hash = "sha256-MrlgBUx3T2G46Pnah3obe5b4yKDzsAFVC/B7AHM0kZY=";
+        tag = "v${version}";
+        hash = "sha256-/Yo0yyDp2vd9KJhy3LGRml55eqTiaHSSuSoe2h2bSw0=";
       };
     })
   );
@@ -18,15 +18,17 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "dep-scan";
-  version = "5.4.3";
+  version = "5.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "owasp-dep-scan";
     repo = "dep-scan";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-m0vDsCetOSfScu1eprrGaDJ1VuXxuNFBitK8N5GtfSQ=";
+    tag = "v${version}";
+    hash = "sha256-lgqS8GY5JuHL3strNcb0B3mGieFkQTzGuRyV4dBp5e4=";
   };
+
+  pythonRelaxDeps = [ "oras" ];
 
   build-system = with python3.pkgs; [ setuptools ];
 
@@ -62,12 +64,12 @@ python3.pkgs.buildPythonApplication rec {
     "test_query_metadata2"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Security and risk audit tool based on known vulnerabilities, advisories, and license limitations for project dependencies";
     homepage = "https://github.com/owasp-dep-scan/dep-scan";
     changelog = "https://github.com/owasp-dep-scan/dep-scan/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "dep-scan";
   };
 }

@@ -12,6 +12,7 @@
   xz,
   bzip2,
   zlib,
+  zstd,
   icu,
   ipython,
   jinja2,
@@ -26,14 +27,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.5.16";
+  version = "3.5.17";
   format = "setuptools";
   pname = "rpy2";
 
   disabled = isPyPy;
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-g34vdFg2WKXEwzl2GnP5Q08z75ztPjDGTadWIWXCgBs=";
+    hash = "sha256-2/8Iww89eRYZImI4WKWztoo/uo7hdH1q9BvEumjz1YI=";
   };
 
   patches = [
@@ -53,6 +54,7 @@ buildPythonPackage rec {
       xz
       bzip2
       zlib
+      zstd
       icu
       libdeflate
     ]

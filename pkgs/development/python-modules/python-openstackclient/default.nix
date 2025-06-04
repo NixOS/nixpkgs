@@ -33,12 +33,13 @@
 
 buildPythonPackage rec {
   pname = "python-openstackclient";
-  version = "7.1.2";
+  version = "8.1.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-hLbxcm/LkqMU2dyTMYhIB12iR7eYMUhC0bFS8zZEGl0=";
+    pname = "python_openstackclient";
+    inherit version;
+    hash = "sha256-m5xCs/a8S0tICmJU/FYKywGXh4MeCUOW2/msmuVxrks=";
   };
 
   build-system = [
@@ -50,13 +51,16 @@ buildPythonPackage rec {
 
   sphinxBuilders = [ "man" ];
 
-  dependencies = [
-    osc-lib
-    pbr
-    python-cinderclient
-    python-keystoneclient
-    requests
-  ];
+  dependencies =
+    [
+      osc-lib
+      pbr
+      python-cinderclient
+      python-keystoneclient
+      requests
+    ]
+    # to support proxy envs like ALL_PROXY in requests
+    ++ requests.optional-dependencies.socks;
 
   nativeCheckInputs = [
     ddt
@@ -103,6 +107,6 @@ buildPythonPackage rec {
     mainProgram = "openstack";
     homepage = "https://github.com/openstack/python-openstackclient";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

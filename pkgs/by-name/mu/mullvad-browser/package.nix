@@ -1,60 +1,62 @@
-{ lib
-, stdenv
-, fetchurl
-, makeDesktopItem
-, copyDesktopItems
-, makeWrapper
-, writeText
-, wrapGAppsHook3
-, autoPatchelfHook
-, callPackage
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeDesktopItem,
+  copyDesktopItems,
+  makeWrapper,
+  writeText,
+  wrapGAppsHook3,
+  autoPatchelfHook,
+  patchelfUnstable, # have to use patchelfUnstable to support --no-clobber-old-sections
+  callPackage,
 
-, atk
-, cairo
-, dbus
-, dbus-glib
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, gtk3
-, libxcb
-, libX11
-, libXext
-, libXrender
-, libXt
-, libXtst
-, mesa
-, pango
-, pciutils
-, zlib
+  atk,
+  cairo,
+  dbus,
+  dbus-glib,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  libxcb,
+  libX11,
+  libXext,
+  libXrender,
+  libXt,
+  libXtst,
+  libgbm,
+  pango,
+  pciutils,
+  zlib,
 
-, libnotifySupport ? stdenv.hostPlatform.isLinux
-, libnotify
+  libnotifySupport ? stdenv.hostPlatform.isLinux,
+  libnotify,
 
-, waylandSupport ? stdenv.hostPlatform.isLinux
-, libxkbcommon
-, libdrm
-, libGL
+  waylandSupport ? stdenv.hostPlatform.isLinux,
+  libxkbcommon,
+  libdrm,
+  libGL,
 
-, mediaSupport ? true
-, ffmpeg
+  mediaSupport ? true,
+  ffmpeg,
 
-, audioSupport ? mediaSupport
+  audioSupport ? mediaSupport,
 
-, pipewireSupport ? audioSupport
-, pipewire
+  pipewireSupport ? audioSupport,
+  pipewire,
 
-, pulseaudioSupport ? audioSupport
-, libpulseaudio
-, apulse
-, alsa-lib
+  pulseaudioSupport ? audioSupport,
+  libpulseaudio,
+  apulse,
+  alsa-lib,
 
-, libvaSupport ? mediaSupport
-, libva
+  libvaSupport ? mediaSupport,
+  libva,
 
-# Extra preferences
-, extraPrefs ? ""
+  # Extra preferences
+  extraPrefs ? "",
 }:
 
 let
@@ -76,21 +78,26 @@ let
       libXrender
       libXt
       libXtst
-      mesa # for libgbm
+      libgbm
       pango
       pciutils
       stdenv.cc.cc
       stdenv.cc.libc
       zlib
-    ] ++ lib.optionals libnotifySupport [ libnotify ]
-      ++ lib.optionals waylandSupport [ libxkbcommon libdrm libGL ]
-      ++ lib.optionals pipewireSupport [ pipewire ]
-      ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
-      ++ lib.optionals libvaSupport [ libva ]
-      ++ lib.optionals mediaSupport [ ffmpeg ]
+    ]
+    ++ lib.optionals libnotifySupport [ libnotify ]
+    ++ lib.optionals waylandSupport [
+      libxkbcommon
+      libdrm
+      libGL
+    ]
+    ++ lib.optionals pipewireSupport [ pipewire ]
+    ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
+    ++ lib.optionals libvaSupport [ libva ]
+    ++ lib.optionals mediaSupport [ ffmpeg ]
   );
 
-  version = "13.5.7";
+  version = "14.5.3";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -102,30 +109,42 @@ let
         "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-Te6Cw3fUs4XGz07lL54bKUU9HYC5soaKFlbWGujd/oU=";
+      hash = "sha256-W005Lkgw96sYseB8LBE76b7+RxMC5vNb1+3KrDp8IE0=";
     };
   };
 
-  distributionIni = writeText "distribution.ini" (lib.generators.toINI {} {
-    # Some light branding indicating this build uses our distro preferences
-    Global = {
-      id = "nixos";
-      version = "1.0";
-      about = "Mullvad Browser for NixOS";
-    };
-  });
+  distributionIni = writeText "distribution.ini" (
+    lib.generators.toINI { } {
+      # Some light branding indicating this build uses our distro preferences
+      Global = {
+        id = "nixos";
+        version = "1.0";
+        about = "Mullvad Browser for NixOS";
+      };
+    }
+  );
 
-  policiesJson = writeText "policies.json" (builtins.toJSON {
-    policies.DisableAppUpdate = true;
-  });
+  policiesJson = writeText "policies.json" (
+    builtins.toJSON {
+      policies.DisableAppUpdate = true;
+    }
+  );
 in
 stdenv.mkDerivation rec {
   pname = "mullvad-browser";
   inherit version;
 
-  src = sources.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+  src =
+    sources.${stdenv.hostPlatform.system}
+      or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper wrapGAppsHook3 autoPatchelfHook ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    patchelfUnstable
+    copyDesktopItems
+    makeWrapper
+    wrapGAppsHook3
+  ];
   buildInputs = [
     gtk3
     alsa-lib
@@ -133,26 +152,35 @@ stdenv.mkDerivation rec {
     libXtst
   ];
 
+  # Firefox uses "relrhack" to manually process relocations from a fixed offset
+  patchelfFlags = [ "--no-clobber-old-sections" ];
+
   preferLocalBuild = true;
   allowSubstitutes = false;
 
-  desktopItems = [(makeDesktopItem {
-    name = "mullvad-browser";
-    exec = "mullvad-browser %U";
-    icon = "mullvad-browser";
-    desktopName = "Mullvad Browser";
-    genericName = "Web Browser";
-    comment = meta.description;
-    categories = [ "Network" "WebBrowser" "Security" ];
-    mimeTypes = [
-      "text/html"
-      "text/xml"
-      "application/xhtml+xml"
-      "application/vnd.mozilla.xul+xml"
-      "x-scheme-handler/http"
-      "x-scheme-handler/https"
-    ];
-  })];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "mullvad-browser";
+      exec = "mullvad-browser %U";
+      icon = "mullvad-browser";
+      desktopName = "Mullvad Browser";
+      genericName = "Web Browser";
+      comment = meta.description;
+      categories = [
+        "Network"
+        "WebBrowser"
+        "Security"
+      ];
+      mimeTypes = [
+        "text/html"
+        "text/xml"
+        "application/xhtml+xml"
+        "application/vnd.mozilla.xul+xml"
+        "x-scheme-handler/http"
+        "x-scheme-handler/https"
+      ];
+    })
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -165,7 +193,8 @@ stdenv.mkDerivation rec {
     tar xf "$src" -C "$MB_IN_STORE" --strip-components=2
     pushd "$MB_IN_STORE"
 
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "mullvadbrowser.real"
+    # Set ELF interpreter
+    autoPatchelf mullvadbrowser.real
 
     # mullvadbrowser is a wrapper that checks for a more recent libstdc++ & appends it to the ld path
     mv mullvadbrowser.real mullvadbrowser
@@ -201,11 +230,16 @@ stdenv.mkDerivation rec {
     lockPref("noscript.firstRunRedirection", false);
 
     // Allow sandbox access to sound devices if using ALSA directly
-    ${if (audioSupport && !pulseaudioSupport) then ''
-      pref("security.sandbox.content.write_path_whitelist", "/dev/snd/");
-    '' else ''
-      clearPref("security.sandbox.content.write_path_whitelist");
-    ''}
+    ${
+      if (audioSupport && !pulseaudioSupport) then
+        ''
+          pref("security.sandbox.content.write_path_whitelist", "/dev/snd/");
+        ''
+      else
+        ''
+          clearPref("security.sandbox.content.write_path_whitelist");
+        ''
+    }
 
     ${lib.optionalString (extraPrefs != "") ''
       ${extraPrefs}
@@ -215,7 +249,7 @@ stdenv.mkDerivation rec {
     # FONTCONFIG_FILE is required to make fontconfig read the MB
     # fonts.conf; upstream uses FONTCONFIG_PATH, but FC_DEBUG=1024
     # indicates the system fonts.conf being used instead.
-    FONTCONFIG_FILE=$MB_IN_STORE/fontconfig/fonts.conf
+    FONTCONFIG_FILE=$MB_IN_STORE/fonts/fonts.conf
     substituteInPlace "$FONTCONFIG_FILE" \
       --replace-fail '<dir prefix="cwd">fonts</dir>' "<dir>$MB_IN_STORE/fonts</dir>"
 
@@ -228,7 +262,7 @@ stdenv.mkDerivation rec {
 
     # Easier access to docs
     mkdir -p $out/share/doc
-    ln -s $MB_IN_STORE/Data/Docs $out/share/doc/mullvad-browser
+    ln -s $MB_IN_STORE/MullvadBrowser/Docs $out/share/doc/mullvad-browser
 
     # Install icons
     for i in 16 32 48 64 128; do
@@ -267,11 +301,20 @@ stdenv.mkDerivation rec {
     mainProgram = "mullvad-browser";
     homepage = "https://mullvad.net/en/browser";
     platforms = attrNames sources;
-    maintainers = with maintainers; [ felschr panicgh ];
+    maintainers = with maintainers; [
+      felschr
+      panicgh
+      sigmasquadron
+    ];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.
-    license = with licenses; [ mpl20 lgpl21Plus lgpl3Plus free ];
+    license = with licenses; [
+      mpl20
+      lgpl21Plus
+      lgpl3Plus
+      free
+    ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

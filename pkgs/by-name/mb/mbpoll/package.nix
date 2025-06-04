@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, cmake
-, pkg-config
-, fetchFromGitHub
-, libmodbus
+{
+  lib,
+  stdenv,
+  cmake,
+  pkg-config,
+  fetchFromGitHub,
+  libmodbus,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,7 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [ libmodbus ];
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   meta = with lib; {
     description = "Command line utility to communicate with ModBus slave (RTU or TCP)";

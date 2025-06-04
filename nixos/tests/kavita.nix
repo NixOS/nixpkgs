@@ -1,16 +1,19 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "kavita";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ misterio77 ];
   };
 
   nodes = {
-    kavita = { config, pkgs, ... }: {
-      services.kavita = {
-        enable = true;
-        tokenKeyFile = builtins.toFile "kavita.key" "d26ba694b455271a8872415830fb7b5c58f8da98f9ef7f58b2ca4c34bd406512";
+    kavita =
+      { config, pkgs, ... }:
+      {
+        services.kavita = {
+          enable = true;
+          tokenKeyFile = builtins.toFile "kavita.key" "d26ba694b455271a8872415830fb7b5c58f8da98f9ef7f58b2ca4c34bd406512";
+        };
       };
-    };
   };
 
   testScript =
@@ -39,4 +42,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       locales = json.loads(kavita.succeed(f"curl -fX GET ${localeUrl} -H 'Authorization: Bearer {session['token']}'"))
       assert len(locales) > 0, "expected a list of locales"
     '';
-})
+}

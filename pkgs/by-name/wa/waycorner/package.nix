@@ -5,6 +5,7 @@
   pkg-config,
   fetchFromGitHub,
   wayland,
+  gitUpdater,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "waycorner";
@@ -13,11 +14,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "AndreasBackx";
     repo = "waycorner";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-b8juIhJ3kh+NJc8RUVVoatqjWISSW0ir/vk2Dz/428Y=";
   };
 
-  cargoHash = "sha256-LGxFRGzQ8jOfxT5di3+YGqfS5KM4+Br6KlTFpPbkJyU=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-sMsqH4+Vhqiu5GKPs9FQMQjjc2H6ZGZosd4Qj3DlBqA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -29,6 +31,8 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/waycorner \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ wayland ]}
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Hot corners for Wayland";

@@ -1,4 +1,10 @@
-{ stdenv, lib, bundlerEnv, bundlerUpdateScript, makeWrapper }:
+{
+  stdenv,
+  lib,
+  bundlerEnv,
+  bundlerUpdateScript,
+  makeWrapper,
+}:
 
 let
   rubyEnv = bundlerEnv {
@@ -6,7 +12,7 @@ let
     gemdir = ./.;
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "uniscribe";
   version = (import ./gemset.nix).uniscribe.version;
 

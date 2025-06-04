@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchzip
-, fetchFromGitHub
-, cmake
-, curl
-, nasm
-, game-music-emu
-, libpng
-, SDL2
-, SDL2_mixer
-, zlib
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  fetchzip,
+  fetchFromGitHub,
+  cmake,
+  curl,
+  nasm,
+  game-music-emu,
+  libpng,
+  SDL2,
+  SDL2_mixer,
+  zlib,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -72,8 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
   desktopItems = [
     (makeDesktopItem rec {
       name = "Sonic Robo Blast 2 Kart";
-      exec = finalAttrs.pname;
-      icon = finalAttrs.pname;
+      exec = "srb2kart";
+      icon = "srb2kart";
       comment = "Kart racing mod based on SRB2";
       desktopName = name;
       genericName = name;

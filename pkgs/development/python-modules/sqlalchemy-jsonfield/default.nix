@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "penguinolog";
     repo = "sqlalchemy_jsonfield";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-4zLXB3UQh6pgQ80KrxkLeC5yiv1R8t2+JmSukmGXr7I=";
   };
 

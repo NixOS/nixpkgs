@@ -15,24 +15,24 @@
   libadwaita,
   gst_all_1,
   ffmpeg-headless,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "video-trimmer";
-  version = "0.8.2";
+  version = "25.03";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "YaLTeR";
     repo = "video-trimmer";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-GXFbfebwiESplOeYDWxBH8Q0SCgV0vePYV7rv0qgrHM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pJCXL0voOoc8KpYECYRWGefYMrsApNPST4wv8SQlH34=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) src;
-    name = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-szxJzBFtyFZ1T5TZb2MDPFJzn+EYETa/JbPdlg6UrTk=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-3ycc4jXneGsz9Jp9Arzf224JPAKM+PxUkitWcIXre8Y=";
   };
 
   nativeBuildInputs = [
@@ -62,19 +62,26 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  strictDeps = true;
+
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix PATH : "${lib.makeBinPath [ ffmpeg-headless ]}"
     )
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     homepage = "https://gitlab.gnome.org/YaLTeR/video-trimmer";
     description = "Trim videos quickly";
+    changelog = "https://gitlab.gnome.org/YaLTeR/video-trimmer/-/releases/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       doronbehar
-      aleksana
     ];
+    teams = [ lib.teams.gnome-circle ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "video-trimmer";

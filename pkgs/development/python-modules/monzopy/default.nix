@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "monzopy";
-  version = "1.3.2";
+  version = "1.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "JakeMartin-ICL";
     repo = "monzopy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9Gj0312NOumoIWN/ES+dgPL3IblgvBSCPZA97OKuhZQ=";
+    tag = "v${version}";
+    hash = "sha256-LMg3hCaNa9LF3pZEQ/uQgt81V6qKmOwZnKHdsI8MHLY=";
   };
 
   build-system = [ setuptools ];

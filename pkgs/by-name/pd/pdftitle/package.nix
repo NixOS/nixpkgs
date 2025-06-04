@@ -2,34 +2,40 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  pdfminer
+  openai,
+  pdfminer,
+
+  withOpenai ? false,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "pdftitle";
-  version = "0.14";
+  version = "0.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "metebalci";
     repo = "pdftitle";
-    rev = "v${version}";
-    hash = "sha256-7tIvvRlaKRC3/eRUS8F3d3qiJnCU0Z14Pj9E4v0X4+o=";
+    tag = "v${version}";
+    hash = "sha256-05SaAXYJ7l0ZldYufj0x9mYRwwGT7vlmq9a+ZF4pYiA=";
   };
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
+  build-system = with python3Packages; [ setuptools ];
 
-  dependencies = with python3Packages; [
-    pdfminer
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      pdfminer
+      python-dotenv
+    ]
+    ++ lib.optional withOpenai openai;
 
   pythonImportsCheck = [ "pdftitle" ];
 
   meta = {
     description = "Utility to extract the title from a PDF file";
     homepage = "https://github.com/metebalci/pdftitle";
+    changelog = "https://github.com/metebalci/pdftitle/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dansbandit ];
     mainProgram = "pdftitle";

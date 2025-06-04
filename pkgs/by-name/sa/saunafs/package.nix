@@ -6,7 +6,7 @@
   cmake,
   asciidoc,
   jemalloc,
-  boost,
+  boost186,
   fmt,
   fuse3,
   spdlog,
@@ -17,18 +17,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "saunafs";
-  version = "4.5.1";
+  version = "4.8.1";
 
   src = fetchFromGitHub {
     owner = "leil-io";
     repo = "saunafs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-oMFS5eNNzCpaineCLn0hh3bXGw3SNdj+Pdvk3pevIZg=";
+    hash = "sha256-CGnU32TuHkDZYbC3bbjfz4lFWjYe3yrhX08K+UIP51Q=";
   };
 
   patches = [
     ./sfstool.patch
-
   ];
 
   outputs = [
@@ -46,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     spdlog
     yaml-cpp
     fuse3
-    boost
+    boost186
     jemalloc
     isa-l
     judy

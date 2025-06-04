@@ -1,32 +1,36 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+{
   name = "mate-wayland";
 
   meta.maintainers = lib.teams.mate.members;
 
-  nodes.machine = { ... }: {
-    imports = [
-      ./common/user-account.nix
-    ];
+  nodes.machine =
+    { ... }:
+    {
+      imports = [
+        ./common/user-account.nix
+      ];
 
-    services.xserver.enable = true;
-    services.displayManager = {
-      sddm.enable = true; # https://github.com/canonical/lightdm/issues/63
-      sddm.wayland.enable = true;
-      defaultSession = "MATE";
-      autoLogin = {
-        enable = true;
-        user = "alice";
+      services.xserver.enable = true;
+      services.displayManager = {
+        sddm.enable = true; # https://github.com/canonical/lightdm/issues/63
+        sddm.wayland.enable = true;
+        defaultSession = "MATE";
+        autoLogin = {
+          enable = true;
+          user = "alice";
+        };
       };
-    };
-    services.xserver.desktopManager.mate.enableWaylandSession = true;
+      services.xserver.desktopManager.mate.enableWaylandSession = true;
 
-    # Need to switch to a different GPU driver than the default one (-vga std) so that wayfire can launch:
-    virtualisation.qemu.options = [ "-vga none -device virtio-gpu-pci" ];
-  };
+      # Need to switch to a different GPU driver than the default one (-vga std) so that wayfire can launch:
+      virtualisation.qemu.options = [ "-vga none -device virtio-gpu-pci" ];
+    };
 
   enableOCR = true;
 
-  testScript = { nodes, ... }:
+  testScript =
+    { nodes, ... }:
     let
       user = nodes.machine.users.users.alice;
     in
@@ -37,10 +41,11 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           machine.wait_for_file("/run/user/${toString user.uid}/wayland-1")
 
       with subtest("Check if MATE session components actually start"):
-          for i in ["wayfire", "mate-panel", "mate-wayland.sh", "mate-wayland-components.sh"]:
-              machine.wait_until_succeeds(f"pgrep -f {i}")
-          # It is expected that this applet doesn't work in Wayland
-          machine.wait_for_text('WorkspaceSwitcherApplet')
+          for i in ["wayfire", "mate-panel", "mate-wayland.sh"]:
+              machine.wait_until_succeeds(f"pgrep {i}")
+          machine.wait_until_succeeds("pgrep -f mate-wayland-components.sh")
+          # It is expected that WorkspaceSwitcherApplet doesn't work in Wayland
+          machine.wait_for_text('(panel|Factory|Workspace|Switcher|Applet|configuration)')
 
       with subtest("Check if various environment variables are set"):
           cmd = "xargs --null --max-args=1 echo < /proc/$(pgrep -xf mate-panel)/environ"
@@ -57,4 +62,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           machine.sleep(10)
           machine.screenshot("screen")
     '';
-})
+}

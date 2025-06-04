@@ -1,31 +1,32 @@
-{ lib
-, stdenv
-, bzip2
-, cjson
-, cmake
-, curl
-, docutils
-, fetchFromGitHub
-, libarchive
-, libev
-, libgccjit
-, libssh
-, lz4
-, openssl
-, systemd
-, zlib
-, zstd
+{
+  lib,
+  stdenv,
+  bzip2,
+  cjson,
+  cmake,
+  curl,
+  docutils,
+  fetchFromGitHub,
+  libarchive,
+  libev,
+  libgccjit,
+  libssh,
+  lz4,
+  openssl,
+  systemd,
+  zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pgmoneta";
-  version = "0.14.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "pgmoneta";
     repo = "pgmoneta";
     rev = version;
-    hash = "sha256-gB6iArOYwOh8UPGl4x5Tf3H2FSxSXxpfKrwvgmtFFcs=";
+    hash = "sha256-UMsINV0Atl1bWN4v9XfuwDkxNJCye8R8V8n0EnHf2w0=";
   };
 
   nativeBuildInputs = [

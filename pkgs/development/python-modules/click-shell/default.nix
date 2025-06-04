@@ -15,8 +15,8 @@ buildPythonPackage rec {
   # PyPi release is missing tests
   src = fetchFromGitHub {
     owner = "clarkperkins";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "click-shell";
+    tag = version;
     hash = "sha256-4QpQzg0yFuOFymGiTI+A8o6LyX78iTJMqr0ernYbilI=";
   };
 

@@ -1,31 +1,32 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPackages
-, pkg-config
-, meson
-, ninja
-, libusb-compat-0_1
-, readline
-, libewf
-, perl
-, zlib
-, openssl
-, libuv
-, file
-, libzip
-, xxHash
-, gtk2
-, vte
-, gtkdialog
-, python3
-, ruby
-, lua
-, lz4
-, capstone
-, useX11 ? false
-, rubyBindings ? false
-, luaBindings ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPackages,
+  pkg-config,
+  meson,
+  ninja,
+  libusb-compat-0_1,
+  readline,
+  libewf,
+  perl,
+  zlib,
+  openssl,
+  libuv,
+  file,
+  libzip,
+  xxHash,
+  gtk2,
+  vte,
+  gtkdialog,
+  python3,
+  ruby,
+  lua,
+  lz4,
+  capstone,
+  useX11 ? false,
+  rubyBindings ? false,
+  luaBindings ? false,
 }:
 
 let
@@ -46,13 +47,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "radare2";
-  version = "5.9.6";
+  version = "5.9.8";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-t/BMsYqNLMAlBBYm6JCDkFYL5YwJBwmEaaIY4KFYxY4=";
+    tag = finalAttrs.version;
+    hash = "sha256-XSnv0yWEPlXHUPjf1Qu50AN3Gvgr0o6Q4e0dOyRdO9A=";
   };
 
   preBuild = ''
@@ -70,13 +71,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   mesonFlags = [
-   "-Dr2_gittap=${finalAttrs.version}"
-   "-Duse_sys_capstone=true"
-   "-Duse_sys_lz4=true"
-   "-Duse_sys_magic=true"
-   "-Duse_sys_openssl=true"
-   "-Duse_sys_xxhash=true"
-   "-Duse_sys_zip=true"
+    "-Dr2_gittap=${finalAttrs.version}"
+    "-Duse_sys_capstone=true"
+    "-Duse_sys_lz4=true"
+    "-Duse_sys_magic=true"
+    "-Duse_sys_openssl=true"
+    "-Duse_sys_xxhash=true"
+    "-Duse_sys_zip=true"
+    "-Duse_sys_zlib=true"
   ];
 
   enableParallelBuilding = true;
@@ -85,20 +87,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ pkg-config meson ninja python3 ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    python3
+  ];
 
-  buildInputs = [
-    capstone
-    file
-    readline
-    libusb-compat-0_1
-    libewf
-    perl
-    zlib
-    openssl
-    libuv
-    lz4
-  ] ++ lib.optionals useX11 [ gtkdialog vte gtk2 ]
+  buildInputs =
+    [
+      capstone
+      file
+      readline
+      libusb-compat-0_1
+      libewf
+      perl
+      zlib
+      openssl
+      libuv
+      lz4
+    ]
+    ++ lib.optionals useX11 [
+      gtkdialog
+      vte
+      gtk2
+    ]
     ++ lib.optionals rubyBindings [ ruby ]
     ++ lib.optionals luaBindings [ lua ];
 
@@ -128,8 +141,17 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://radare.org";
     changelog = "https://github.com/radareorg/radare2/releases/tag/${finalAttrs.version}";
-    license = with licenses; [ gpl3Only lgpl3Only ];
-    maintainers = with maintainers; [ azahi raskin makefu mic92 arkivm ];
+    license = with licenses; [
+      gpl3Only
+      lgpl3Only
+    ];
+    maintainers = with maintainers; [
+      azahi
+      raskin
+      makefu
+      mic92
+      arkivm
+    ];
     mainProgram = "radare2";
     platforms = platforms.unix;
   };

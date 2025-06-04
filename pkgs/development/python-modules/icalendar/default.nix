@@ -3,10 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   replaceVars,
-  pythonOlder,
   hatch-vcs,
   hatchling,
-  backports-zoneinfo,
   python-dateutil,
   tzdata,
   hypothesis,
@@ -14,15 +12,15 @@
 }:
 
 buildPythonPackage rec {
-  version = "6.0.1";
+  version = "6.3.0";
   pname = "icalendar";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "collective";
     repo = "icalendar";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pcTiXRiHtx7jVzxDkY6WDhzo8sg8fPecqTpRSRIdvfs=";
+    tag = "v${version}";
+    hash = "sha256-sAZVVVkugwd3veMGAqnhKA46KZpGdZdeWFbCUgyG1js=";
   };
 
   patches = [
@@ -39,17 +37,23 @@ buildPythonPackage rec {
   dependencies = [
     python-dateutil
     tzdata
-  ] ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
+  ];
 
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # AssertionError: assert {'Atlantic/Jan_Mayen'} == {'Arctic/Longyearbyen'}
+    "test_dateutil_timezone_is_matched_with_tzname"
+    "test_docstring_of_python_file"
+  ];
+
   pytestFlagsArray = [ "src/icalendar" ];
 
   meta = with lib; {
-    changelog = "https://github.com/collective/icalendar/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/collective/icalendar/blob/${src.tag}/CHANGES.rst";
     description = "Parser/generator of iCalendar files";
     mainProgram = "icalendar";
     homepage = "https://github.com/collective/icalendar";

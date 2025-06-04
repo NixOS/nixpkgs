@@ -24,7 +24,7 @@
 }:
 buildPythonPackage rec {
   pname = "clickhouse-connect";
-  version = "0.7.12";
+  version = "0.8.17";
 
   format = "setuptools";
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "clickhouse-connect";
     owner = "ClickHouse";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-UJSg/ADxVsO4xuym8NGjbgQafWmu7J3Is2hKvObYhU8=";
+    tag = "v${version}";
+    hash = "sha256-UFsAKROnzaaAyUDHHARZIO8zZP3knUYoBdGSf9ZGjXo=";
   };
 
   nativeBuildInputs = [ cython ];
@@ -50,15 +50,17 @@ buildPythonPackage rec {
     lz4
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-dotenv
-  ] ++ optional-dependencies.sqlalchemy ++ optional-dependencies.numpy;
+  nativeCheckInputs =
+    [
+      pytestCheckHook
+      pytest-dotenv
+    ]
+    ++ optional-dependencies.sqlalchemy
+    ++ optional-dependencies.numpy;
 
   # these tests require a running clickhouse instance
   disabledTestPaths = [
     "tests/integration_tests"
-    "tests/tls"
   ];
 
   pythonImportsCheck = [

@@ -1,4 +1,10 @@
-{ lib, rel, buildKodiBinaryAddon, fetchFromGitHub, tinyxml }:
+{
+  lib,
+  rel,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  tinyxml,
+}:
 
 buildKodiBinaryAddon rec {
   pname = "libretro";
@@ -19,6 +25,6 @@ buildKodiBinaryAddon rec {
     description = "Libretro wrapper for Kodi's Game API";
     platforms = platforms.all;
     license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

@@ -1,31 +1,65 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, R, postgresql }:
+{
+  buildEnv,
+  fetchFromGitHub,
+  lib,
+  pkg-config,
+  postgresql,
+  postgresqlBuildExtension,
+  postgresqlTestExtension,
+  R,
+  rPackages,
+}:
 
-stdenv.mkDerivation rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "plr";
-  version = "8.4.6";
+  version = "${builtins.replaceStrings [ "_" ] [ "." ] (
+    lib.strings.removePrefix "REL" finalAttrs.src.rev
+  )}";
 
   src = fetchFromGitHub {
     owner = "postgres-plr";
     repo = "plr";
-    rev = "REL${builtins.replaceStrings ["."] ["_"] version}";
-    sha256 = "sha256-c+wKWL66pulihVQnhdbzivrZOMD1/FfOpb+vFoHgqVg=";
+    tag = "REL8_4_7";
+    hash = "sha256-PdvFEmtKfLT/xfaf6obomPR5hKC9F+wqpfi1heBphRk=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ R postgresql ];
+  buildInputs = [ R ];
 
   makeFlags = [ "USE_PGXS=1" ];
 
-  installPhase = ''
-    install -D plr${postgresql.dlSuffix} -t $out/lib/
-    install -D {plr--*.sql,plr.control} -t $out/share/postgresql/extension
-  '';
+  passthru = {
+    withPackages =
+      f:
+      let
+        pkgs = f rPackages;
+        paths = lib.concatMapStringsSep ":" (pkg: "${pkg}/library") pkgs;
+      in
+      buildEnv {
+        name = "${finalAttrs.pname}-with-packages-${finalAttrs.version}";
+        paths = [ finalAttrs.finalPackage ];
+        passthru.wrapperArgs = [
+          ''--set R_LIBS_SITE "${paths}"''
+        ];
+      };
+    tests.extension = postgresqlTestExtension {
+      finalPackage = finalAttrs.finalPackage.withPackages (ps: [ ps.base64enc ]);
+      sql = ''
+        CREATE EXTENSION plr;
+        DO LANGUAGE plr $$
+          require('base64enc')
+          base64encode(1:100)
+        $$;
+      '';
+    };
+  };
 
-  meta = with lib; {
+  meta = {
     description = "PL/R - R Procedural Language for PostgreSQL";
     homepage = "https://github.com/postgres-plr/plr";
-    maintainers = with maintainers; [ qoelet ];
+    changelog = "https://github.com/postgres-plr/plr/blob/${finalAttrs.src.rev}/changelog.md";
+    maintainers = with lib.maintainers; [ qoelet ];
     platforms = postgresql.meta.platforms;
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
   };
-}
+})

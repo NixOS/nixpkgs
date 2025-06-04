@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gtk3
-, glib
-, gsettings-desktop-schemas
-, pkg-config
-, curl
-, openssl
-, jansson
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gtk3,
+  glib,
+  gsettings-desktop-schemas,
+  pkg-config,
+  curl,
+  openssl,
+  jansson,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {

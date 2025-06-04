@@ -2,46 +2,51 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-
   lxml,
-  pyproj,
+  pytest-cov-stub,
+  pytest-httpserver,
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
-  pytz,
   pyyaml,
   requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "owslib";
-  version = "0.31.0";
-  format = "setuptools";
+  version = "0.34.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "geopython";
     repo = "OWSLib";
-    rev = version;
-    hash = "sha256-vjJsLavVOqTTrVtYbtA0G+nl0HanKeGtzNFFj92Frw8=";
+    tag = version;
+    hash = "sha256-6jY5QvNObAV7+eJP0cB5PSmVQ3Z+Bs4OoCJIlggcFW0=";
   };
 
   postPatch = ''
     substituteInPlace tox.ini \
-      --replace " --doctest-modules --doctest-glob 'tests/**/*.txt' --cov-report term-missing --cov owslib" ""
+      --replace-fail "--doctest-modules" "" \
+      --replace-fail "--doctest-glob='tests/**/*.txt'" ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     lxml
-    pyproj
     python-dateutil
-    pytz
     pyyaml
     requests
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytest-httpserver
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "owslib" ];
 
@@ -51,15 +56,20 @@ buildPythonPackage rec {
   '';
 
   pytestFlagsArray = [
-    # disable tests which require network access
+    # Disable tests which require network access
     "-m 'not online'"
+  ];
+
+  disabledTestPaths = [
+    # Tests requires network access
+    "tests/test_ogcapi_connectedsystems_osh.py"
   ];
 
   meta = with lib; {
     description = "Client for Open Geospatial Consortium web service interface standards";
     homepage = "https://www.osgeo.org/projects/owslib/";
-    changelog = "https://github.com/geopython/OWSLib/releases/tag/${version}";
+    changelog = "https://github.com/geopython/OWSLib/releases/tag/${src.tag}";
     license = licenses.bsd3;
-    maintainers = teams.geospatial.members;
+    teams = [ teams.geospatial ];
   };
 }

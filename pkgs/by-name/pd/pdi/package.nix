@@ -30,22 +30,22 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pdi";
-  version = "1.7.1";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "pdidev";
     repo = "pdi";
-    rev = "refs/tags/${version}-gh";
-    hash = "sha256-VTbXsUUJb/6zNyn4QXNHajgzzgjSwdW/d+bTSDcpRaE=";
+    tag = finalAttrs.version;
+    hash = "sha256-Tmn4M+tcnNH6Bm4t5D/VgciOu4dDKKqYkbERKgpHX/Y=";
   };
 
   # Current hdf5 version in nixpkgs is 1.14.4.3 which is 4 numbers long and doesn't match the 3 number regex. :')
   # Patch it to make it match a 4 number-long version.
   postPatch = ''
     substituteInPlace plugins/decl_hdf5/cmake/FindHDF5.cmake \
-      --replace-fail '"H5_VERSION[ \t]+\"([0-9]+\\.[0-9]+\\.[0-9]+)' '"H5_VERSION[ \t]+\"([0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+)'
+      --replace-fail '"H5_VERSION[ \t]+\"([0-9]+\\.[0-9]+\\.[0-9]+)' '"H5_VERSION[ \t]+\"([0-9]+\\.[0-9]+\\.[0-9]+(\\.[0-9]+)*)'
   '';
 
   nativeBuildInputs = [
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     # Force using nix gbenchmark instead of vendored version
-    "-DUSE_benchmark=SYSTEM"
+    (lib.cmakeFeature "USE_benchmark" "SYSTEM")
   ];
 
   passthru = {
@@ -81,8 +81,13 @@ stdenv.mkDerivation rec {
   meta = {
     description = "PDI supports loose coupling of simulation codes with data handling libraries";
     homepage = "https://pdi.dev/master/";
+    changelog = "https://github.com/pdidev/pdi/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     mainProgram = "pdirun";
     maintainers = with lib.maintainers; [ GaetanLepage ];
+    badPlatforms = [
+      # fatal error: 'link.h' file not found
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
-}
+})

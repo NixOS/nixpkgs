@@ -59,7 +59,7 @@ let
 in
 buildPythonPackage rec {
   pname = "numpy";
-  version = "2.1.2";
+  version = "2.2.5";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -67,7 +67,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-E1MqCIIX+mJMmbhD7rVGQN4js0FLFKpm0COAXrcxBmw=";
+    hash = "sha256-qcDZlGgM2ZGxy3cuiylzQAhUZqb+lkvJ1OgPXi9DwpE=";
   };
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
@@ -99,11 +99,6 @@ buildPythonPackage rec {
   preConfigure = ''
     sed -i 's/-faltivec//' numpy/distutils/system_info.py
     export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 64 ? 64 : NIX_BUILD_CORES))
-  '';
-
-  # HACK: copy mesonEmulatorHook's flags to the variable used by meson-python
-  postConfigure = ''
-    mesonFlags="$mesonFlags ''${mesonFlagsArray[@]}"
   '';
 
   buildInputs = [
@@ -140,7 +135,11 @@ buildPythonPackage rec {
   ];
 
   disabledTests =
-    lib.optionals (pythonAtLeast "3.13") [
+    [
+      # Tries to import numpy.distutils.msvccompiler, removed in setuptools 74.0
+      "test_api_importable"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
       # https://github.com/numpy/numpy/issues/26713
       "test_iter_refcount"
     ]
@@ -160,6 +159,10 @@ buildPythonPackage rec {
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
       # AssertionError: (np.int64(0), np.longdouble('9.9999999999999994515e-21'), np.longdouble('3.9696755572509052902e+20'), 'arctanh')
       "test_loss_of_precision"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform ? gcc.arch) [
+      # remove if https://github.com/numpy/numpy/issues/27460 is resolved
+      "test_validate_transcendentals"
     ];
 
   passthru = {

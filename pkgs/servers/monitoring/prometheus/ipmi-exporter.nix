@@ -1,17 +1,24 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests, makeWrapper, freeipmi }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+  makeWrapper,
+  freeipmi,
+}:
 
 buildGoModule rec {
   pname = "ipmi_exporter";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "prometheus-community";
     repo = "ipmi_exporter";
     rev = "v${version}";
-    hash = "sha256-0JNt3XbXGbAfaBQ13X/vrBhhN39hY4kwoBQ9obxsAd0=";
+    hash = "sha256-Go47Txf/NX9ytMvvFQeNVCw0ORWqbsg2sIWK4MVRyIA=";
   };
 
-  vendorHash = "sha256-dUf++LhoKWJxQfu9Latr8mCkeid5EAi+6yRdWDkTeP8=";
+  vendorHash = "sha256-OXVUFamFv1BZTXuIfmaYHc1y9B9j4ndo1/2CGLNavh0=";
 
   nativeBuildInputs = [ makeWrapper ];
 

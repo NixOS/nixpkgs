@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
@@ -13,21 +12,21 @@
 
 buildPythonPackage rec {
   pname = "pyvlx";
-  version = "0.2.23";
+  version = "0.2.26";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Julius2342";
     repo = "pyvlx";
-    rev = "refs/tags/${version}";
-    hash = "sha256-J+oJQHsULrJQNdZqYsl2hufNubMwV1KtG10jZH0jbU4=";
+    tag = version;
+    hash = "sha256-JwgElt0FFSGs3v+04AKPwTTpxvn8YzihJeD/+llbSMI=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pyyaml
     typing-extensions
     zeroconf
@@ -45,8 +44,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/Julius2342/pyvlx";
     changelog = "https://github.com/Julius2342/pyvlx/releases/tag/${version}";
-    license = with licenses; [ lgpl2Only ];
+    license = licenses.lgpl2Only;
     maintainers = with maintainers; [ fab ];
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

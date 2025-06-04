@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "python-heatclient";
-  version = "4.0.0";
+  version = "4.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ozpv4yyu8lmWmKg2iGMMN8IJ29zr87Gj73dn5QMgifI=";
+    hash = "sha256-1oSZzmcDEwThBbF8M/nvY//axJLyQUxDAVOYIsLr9w0=";
   };
 
   build-system = [
@@ -82,6 +82,6 @@ buildPythonPackage rec {
     mainProgram = "heat";
     homepage = "https://github.com/openstack/python-heatclient";
     license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    teams = [ teams.openstack ];
   };
 }

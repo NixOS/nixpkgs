@@ -1,14 +1,19 @@
-{ lib, stdenvNoCC, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "wd";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "mfaerevaag";
     repo = "wd";
     rev = "v${version}";
-    hash = "sha256-8gL0+SZwVCQRokcYwSljDHtSusYY79/T9hqJGgAK1EU=";
+    hash = "sha256-/xOe7XFzQt+qVGf6kfsOPPM8szWYhnmx5Mq/QIw0y1c=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

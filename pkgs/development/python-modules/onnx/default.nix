@@ -8,9 +8,6 @@
   pybind11,
   setuptools,
 
-  # nativeBuildInputs
-  protobuf-core,
-
   # buildInputs
   abseil-cpp,
   protobuf,
@@ -18,13 +15,17 @@
 
   # dependencies
   numpy,
+  typing-extensions,
 
+  # tests
   google-re2,
+  ml-dtypes,
   nbval,
   parameterized,
   pillow,
   pytestCheckHook,
   tabulate,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -32,24 +33,20 @@ let
 in
 buildPythonPackage rec {
   pname = "onnx";
-  version = "1.17.0";
+  version = "1.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "onnx";
     repo = "onnx";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9oORW0YlQ6SphqfbjcYb0dTlHc+1gzy9quH/Lj6By8Q=";
+    tag = "v${version}";
+    hash = "sha256-UhtF+CWuyv5/Pq/5agLL4Y95YNP63W2BraprhRqJOag=";
   };
 
   build-system = [
     cmake
     protobuf
     setuptools
-  ];
-
-  nativeBuildInputs = [
-    protobuf-core # `protoc` required
   ];
 
   buildInputs = [
@@ -61,15 +58,18 @@ buildPythonPackage rec {
   dependencies = [
     protobuf
     numpy
+    typing-extensions
   ];
 
   nativeCheckInputs = [
     google-re2
+    ml-dtypes
     nbval
     parameterized
     pillow
     pytestCheckHook
     tabulate
+    writableTmpDirAsHomeHook
   ];
 
   postPatch = ''
@@ -99,11 +99,9 @@ buildPythonPackage rec {
   # The setup.py does all the configuration
   dontUseCmakeConfigure = true;
 
+  # detecting source dir as a python package confuses pytest
   preCheck = ''
-    export HOME=$(mktemp -d)
-
-    # detecting source dir as a python package confuses pytest
-    mv onnx/__init__.py onnx/__init__.py.hidden
+    rm onnx/__init__.py
   '';
 
   pytestFlagsArray = [
@@ -123,7 +121,7 @@ buildPythonPackage rec {
   meta = {
     description = "Open Neural Network Exchange";
     homepage = "https://onnx.ai";
-    changelog = "https://github.com/onnx/onnx/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/onnx/onnx/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ acairncross ];
   };

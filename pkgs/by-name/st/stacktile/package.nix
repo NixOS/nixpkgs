@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, wayland
-, wayland-scanner
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  wayland,
+  wayland-scanner,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,7 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-IOFxgYMjh92jx2CPfBRZDL/1ucgfHtUyAL5rS2EG+Gc=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   nativeBuildInputs = [
     wayland-scanner
@@ -38,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Layout generator for the river Wayland compositor";
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "stacktile";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 })

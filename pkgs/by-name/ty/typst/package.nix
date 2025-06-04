@@ -5,54 +5,45 @@
   installShellFiles,
   pkg-config,
   openssl,
-  xz,
-  stdenv,
-  darwin,
-  nix-update-script,
+  writeShellScript,
+  nix-update,
+  gitMinimal,
   versionCheckHook,
+  callPackage,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typst";
-  version = "0.12.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "typst";
     repo = "typst";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-OfTMJ7ylVOJjL295W3Flj2upTiUQXmfkyDFSE1v8+a4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vbBwIQt4xWZaKpXgFwDsRQIQ0mmsQPRR39m8iZnnuj0=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "typst-dev-assets-0.12.0" = "sha256-YLxLuhpAUzktjyprZAhZ4GjcXEDUDdLtSzc5onzLuto=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-4kVj2BODEFjLcrh5sxfcgsdLF2Zd3K1GnhA4DEz1Nl4=";
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-      xz
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    openssl
+  ];
 
   env = {
     GEN_ARTIFACTS = "artifacts";
     OPENSSL_NO_VENDOR = true;
+    # to not have "unknown hash" in help output
+    TYPST_VERSION = finalAttrs.version;
   };
 
+  # Fix for "Found argument '--test-threads' which wasn't expected, or isn't valid in this context"
   postPatch = ''
-    # Fix for "Found argument '--test-threads' which wasn't expected, or isn't valid in this context"
     substituteInPlace tests/src/tests.rs --replace-fail 'ARGS.num_threads' 'ARGS.test_threads'
     substituteInPlace tests/src/args.rs --replace-fail 'num_threads' 'test_threads'
   '';
@@ -66,16 +57,36 @@ rustPlatform.buildRustPackage rec {
 
   cargoTestFlags = [ "--workspace" ];
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = {
+      command = [
+        (writeShellScript "update-typst.sh" ''
+          currentVersion=$(nix-instantiate --eval -E "with import ./. {}; typst.version or (lib.getVersion typst)" | tr -d '"')
+          ${lib.getExe nix-update} typst > /dev/null
+          latestVersion=$(nix-instantiate --eval -E "with import ./. {}; typst.version or (lib.getVersion typst)" | tr -d '"')
+          changes=()
+          if [[ "$currentVersion" != "$latestVersion" ]]; then
+            changes+=("{\"attrPath\":\"typst\",\"oldVersion\":\"$currentVersion\",\"newVersion\":\"$latestVersion\",\"files\":[\"pkgs/by-name/ty/typst/package.nix\"]}")
+          fi
+          maintainers/scripts/update-typst-packages.py --output pkgs/by-name/ty/typst/typst-packages-from-universe.toml > /dev/null
+          ${lib.getExe gitMinimal} diff --quiet HEAD -- pkgs/by-name/ty/typst/typst-packages-from-universe.toml || changes+=("{\"attrPath\":\"typstPackages\",\"oldVersion\":\"0\",\"newVersion\":\"1\",\"files\":[\"pkgs/by-name/ty/typst/typst-packages-from-universe.toml\"]}")
+          echo -n "["
+            IFS=,; echo -n "''${changes[*]}"
+          echo "]"
+        '')
+      ];
+      supportedFeatures = [ "commit" ];
+    };
+    packages = callPackage ./typst-packages.nix { };
+    withPackages = callPackage ./with-packages.nix { };
+  };
 
   meta = {
-    changelog = "https://github.com/typst/typst/releases/tag/${src.rev}";
+    changelog = "https://github.com/typst/typst/releases/tag/v${finalAttrs.version}";
     description = "New markup-based typesetting system that is powerful and easy to learn";
     homepage = "https://github.com/typst/typst";
     license = lib.licenses.asl20;
@@ -84,6 +95,7 @@ rustPlatform.buildRustPackage rec {
       drupol
       figsoda
       kanashimia
+      RossSmyth
     ];
   };
-}
+})

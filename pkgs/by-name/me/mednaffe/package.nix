@@ -39,14 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
     gappsWrapperArgs+=(
       --prefix PATH ':' "${mednafen}/bin"
     )
-   '';
+  '';
 
   meta = {
     description = "GTK-based frontend for mednafen emulator";
     mainProgram = "mednaffe";
     homepage = "https://github.com/AmatCoder/mednaffe";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

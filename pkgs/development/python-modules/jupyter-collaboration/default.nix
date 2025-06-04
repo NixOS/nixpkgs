@@ -1,74 +1,66 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
-  hatch-jupyter-builder,
-  hatch-nodejs-version,
   hatchling,
-  jupyterlab,
 
   # dependencies
-  jsonschema,
-  jupyter-events,
-  jupyter-server,
-  jupyter-server-fileid,
-  jupyter-ydoc,
-  pycrdt,
-  pycrdt-websocket,
+  jupyter-collaboration-ui,
+  jupyter-docprovider,
+  jupyter-server-ydoc,
+  jupyterlab,
 
   # tests
+  dirty-equals,
+  httpx-ws,
   pytest-jupyter,
+  pytest-timeout,
   pytestCheckHook,
-  websockets,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-collaboration";
-  version = "2.1.4";
+  version = "4.0.2";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "jupyter_collaboration";
-    inherit version;
-    hash = "sha256-YT3wrTQ8imuTK8zeJbwscHtawtqspf1oItGzMMfg5io=";
+  src = fetchFromGitHub {
+    owner = "jupyterlab";
+    repo = "jupyter-collaboration";
+    tag = "v${version}";
+    hash = "sha256-BCvTtrlP45YC9G/m/e8Nvbls7AugIaQzO2Gect1EmGE=";
   };
 
-  postPatch = ''
-    sed -i "/^timeout/d" pyproject.toml
-  '';
+  sourceRoot = "${src.name}/projects/jupyter-collaboration";
 
-  build-system = [
-    hatch-jupyter-builder
-    hatch-nodejs-version
-    hatchling
-    jupyterlab
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
-    jsonschema
-    jupyter-events
-    jupyter-server
-    jupyter-server-fileid
-    jupyter-ydoc
-    pycrdt
-    pycrdt-websocket
-  ];
-
-  nativeCheckInputs = [
-    pytest-jupyter
-    pytestCheckHook
-    websockets
+    jupyter-collaboration-ui
+    jupyter-docprovider
+    jupyter-server-ydoc
+    jupyterlab
   ];
 
   pythonImportsCheck = [ "jupyter_collaboration" ];
 
-  preCheck = ''
-    export HOME=$TEMP
-  '';
+  nativeCheckInputs = [
+    dirty-equals
+    httpx-ws
+    pytest-jupyter
+    pytest-timeout
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
-  pytestFlagsArray = [ "-Wignore::DeprecationWarning" ];
+  pytestFlagsArray = [
+    # pytest.PytestCacheWarning: could not create cache path /build/source/.pytest_cache/v/cache/nodeids: [Errno 13] Permission denied: '/build/source/pytest-cache-files-plraagdr'
+    "-p"
+    "no:cacheprovider"
+    "$src/tests"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -77,6 +69,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyterlab/jupyter_collaboration";
     changelog = "https://github.com/jupyterlab/jupyter_collaboration/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
   };
 }

@@ -11,7 +11,7 @@
   mpfr,
   pcre2,
   pkg-config,
-  python3,
+  python3Packages,
   stdenv,
 }:
 
@@ -41,7 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
     gtk-doc
     libxslt
     pkg-config
-    python3
+    python3Packages.python
+  ];
+
+  nativeInstallCheckInputs = [
+    python3Packages.pythonImportsCheckHook
   ];
 
   buildInputs = [
@@ -50,14 +54,25 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
   ];
 
+  doInstallCheck = true;
   strictDeps = true;
+
+  postInstall = ''
+    substituteInPlace $out/${python3Packages.python.sitePackages}/bytesize/bytesize.py \
+      --replace-fail 'CDLL("libbytesize.so.1")' "CDLL('$out/lib/libbytesize.so.1')"
+
+    # Force compilation of .pyc files to make them deterministic
+    ${python3Packages.python.pythonOnBuildForHost.interpreter} -m compileall $out/${python3Packages.python.sitePackages}/bytesize
+  '';
+
+  pythonImportsCheck = [ "bytesize" ];
 
   meta = {
     homepage = "https://github.com/storaged-project/libbytesize";
     description = "Tiny library providing a C 'class' for working with arbitrary big sizes in bytes";
     license = lib.licenses.lgpl2Plus;
     mainProgram = "bscalc";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 })

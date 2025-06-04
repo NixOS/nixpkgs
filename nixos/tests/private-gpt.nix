@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 let
   mainPort = "8001";
 in
@@ -9,11 +9,13 @@ in
   };
 
   nodes = {
-    machine = { ... }: {
-      services.private-gpt = {
-        enable = true;
+    machine =
+      { ... }:
+      {
+        services.private-gpt = {
+          enable = true;
+        };
       };
-    };
   };
 
   testScript = ''
@@ -24,4 +26,4 @@ in
 
     machine.succeed("curl http://127.0.0.1:${mainPort}")
   '';
-})
+}

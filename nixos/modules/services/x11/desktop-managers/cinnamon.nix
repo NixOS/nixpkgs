@@ -1,4 +1,10 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 
 with lib;
 
@@ -12,7 +18,7 @@ let
     extraGSettingsOverrides = cfg.extraGSettingsOverrides;
   };
 
-  notExcluded = pkg: (!(lib.elem pkg config.environment.cinnamon.excludePackages));
+  notExcluded = pkg: utils.disablePackageByName pkg config.environment.cinnamon.excludePackages;
 in
 
 {
@@ -25,7 +31,7 @@ in
       enable = mkEnableOption "the cinnamon desktop manager";
 
       sessionPath = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.package;
         example = literalExpression "[ pkgs.gpaste ]";
         description = ''
@@ -43,14 +49,14 @@ in
       };
 
       extraGSettingsOverridePackages = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.path;
         description = "List of packages for which gsettings are overridden.";
       };
     };
 
     environment.cinnamon.excludePackages = mkOption {
-      default = [];
+      default = [ ];
       example = literalExpression "[ pkgs.blueman ]";
       type = types.listOf types.package;
       description = "Which packages cinnamon should exclude from the default environment";
@@ -111,6 +117,7 @@ in
       services.gnome.glib-networking.enable = true;
       services.gnome.gnome-keyring.enable = true;
       services.gvfs.enable = true;
+      services.power-profiles-daemon.enable = mkDefault true;
       services.switcherooControl.enable = mkDefault true; # xapp-gpu-offload-helper
       services.touchegg.enable = mkDefault true;
       services.udisks2.enable = true;
@@ -130,61 +137,74 @@ in
 
       # Fix lockscreen
       security.pam.services = {
-        cinnamon-screensaver = {};
+        cinnamon-screensaver = { };
       };
 
-      environment.systemPackages = with pkgs; ([
-        desktop-file-utils
+      environment.systemPackages =
+        with pkgs;
+        (
+          [
+            # Teach nemo-desktop how to launch file browser.
+            # https://github.com/linuxmint/nemo/blob/6.4.0/src/nemo-desktop-application.c#L398
+            (writeTextFile {
+              name = "x-cinnamon-mimeapps";
+              destination = "/share/applications/x-cinnamon-mimeapps.list";
+              text = ''
+                [Default Applications]
+                inode/directory=nemo.desktop
+              '';
+            })
 
-        # common-files
-        cinnamon-common
-        cinnamon-session
-        cinnamon-desktop
-        cinnamon-menus
-        cinnamon-translations
+            desktop-file-utils
 
-        # utils needed by some scripts
-        killall
+            # common-files
+            cinnamon-common
+            cinnamon-session
+            cinnamon-desktop
+            cinnamon-menus
+            cinnamon-translations
 
-        # session requirements
-        cinnamon-screensaver
-        # cinnamon-killer-daemon: provided by cinnamon-common
-        networkmanagerapplet # session requirement - also nm-applet not needed
+            # utils needed by some scripts
+            killall
 
-        # For a polkit authentication agent
-        polkit_gnome
+            # session requirements
+            cinnamon-screensaver
+            # cinnamon-killer-daemon: provided by cinnamon-common
+            networkmanagerapplet # session requirement - also nm-applet not needed
 
-        # packages
-        nemo-with-extensions
-        gnome-online-accounts-gtk
-        cinnamon-control-center
-        cinnamon-settings-daemon
-        libgnomekbd
+            # packages
+            nemo-with-extensions
+            gnome-online-accounts-gtk
+            cinnamon-control-center
+            cinnamon-settings-daemon
+            libgnomekbd
 
-        # theme
-        adwaita-icon-theme
-        gnome-themes-extra
-        gtk3.out
+            # theme
+            adwaita-icon-theme
+            gnome-themes-extra
+            gtk3.out
 
-        # other
-        glib # for gsettings
-        xdg-user-dirs
-      ] ++ utils.removePackagesByName [
-        # accessibility
-        onboard
+            # other
+            glib # for gsettings
+            xdg-user-dirs
+          ]
+          ++ utils.removePackagesByName [
+            # accessibility
+            onboard
 
-        # theme
-        sound-theme-freedesktop
-        nixos-artwork.wallpapers.simple-dark-gray
-        mint-artwork
-        mint-cursor-themes
-        mint-l-icons
-        mint-l-theme
-        mint-themes
-        mint-x-icons
-        mint-y-icons
-        xapp # provides some xapp-* icons
-      ] config.environment.cinnamon.excludePackages);
+            # theme
+            sound-theme-freedesktop
+            nixos-artwork.wallpapers.simple-dark-gray
+            mint-artwork
+            mint-cursor-themes
+            mint-l-icons
+            mint-l-theme
+            mint-themes
+            mint-x-icons
+            mint-y-icons
+            xapp # provides some xapp-* icons
+          ] config.environment.cinnamon.excludePackages
+        );
 
       xdg.mime.enable = true;
       xdg.icons.enable = true;
@@ -211,13 +231,6 @@ in
       programs.bash.vteIntegration = mkDefault true;
       programs.zsh.vteIntegration = mkDefault true;
 
-      # Qt application style
-      qt = {
-        enable = mkDefault true;
-        style = mkDefault "gtk2";
-        platformTheme = mkDefault "gtk2";
-      };
-
       # Default Fonts
       fonts.packages = with pkgs; [
         dejavu_fonts # Default monospace font in LMDE 6+
@@ -230,23 +243,25 @@ in
       programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome-terminal);
       programs.file-roller.enable = mkDefault (notExcluded pkgs.file-roller);
 
-      environment.systemPackages = with pkgs; utils.removePackagesByName [
-        # cinnamon team apps
-        bulky
-        warpinator
+      environment.systemPackages =
+        with pkgs;
+        utils.removePackagesByName [
+          # cinnamon team apps
+          bulky
+          warpinator
 
-        # cinnamon xapp
-        xviewer
-        xreader
-        xed-editor
-        xplayer
-        pix
+          # cinnamon xapp
+          xviewer
+          xreader
+          xed-editor
+          pix
 
-        # external apps shipped with linux-mint
-        gnome-calculator
-        gnome-calendar
-        gnome-screenshot
-      ] config.environment.cinnamon.excludePackages;
+          # external apps shipped with linux-mint
+          celluloid
+          gnome-calculator
+          gnome-calendar
+          gnome-screenshot
+        ] config.environment.cinnamon.excludePackages;
     })
   ];
 }

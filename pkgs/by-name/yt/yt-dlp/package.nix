@@ -17,30 +17,38 @@ python3Packages.buildPythonApplication rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2024.10.7";
+  version = "2025.5.22";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "yt_dlp";
-    hash = "sha256-C68atRfJdI1+M3ztkcVUPDb8FiRqnr7awy6/IMGZjOs=";
+    hash = "sha256-6nOFTF2rwSTymjWo+um8XUIu8yMb6+6ivfqCrBkanCk=";
   };
 
   build-system = with python3Packages; [
     hatchling
   ];
 
-  dependencies = with python3Packages; [
-    brotli
-    certifi
-    curl-cffi
-    mutagen
-    pycryptodomex
-    requests
-    secretstorage # "optional", as in not in requirements.txt, needed for `--cookies-from-browser`
-    urllib3
-    websockets
-  ];
+  # expose optional-dependencies, but provide all features
+  dependencies = lib.flatten (lib.attrValues optional-dependencies);
+
+  optional-dependencies = {
+    default = with python3Packages; [
+      brotli
+      certifi
+      mutagen
+      pycryptodomex
+      requests
+      urllib3
+      websockets
+    ];
+    curl-cffi = [ python3Packages.curl-cffi ];
+    secretstorage = with python3Packages; [
+      cffi
+      secretstorage
+    ];
+  };
 
   pythonRelaxDeps = [ "websockets" ];
 
@@ -87,11 +95,11 @@ python3Packages.buildPythonApplication rec {
       youtube-dl is released to the public domain, which means
       you can modify it, redistribute it or use it however you like.
     '';
-    changelog = "https://github.com/yt-dlp/yt-dlp/releases/tag/${version}";
+    changelog = "https://github.com/yt-dlp/yt-dlp/blob/HEAD/Changelog.md";
     license = licenses.unlicense;
     maintainers = with maintainers; [
-      mkg20001
       SuperSandro2000
+      donteatoreo
     ];
     mainProgram = "yt-dlp";
   };

@@ -1,24 +1,21 @@
-# TODO: We already package the CoreFoundation component of Foundation in:
-#   pkgs/os-specific/darwin/swift-corelibs/corefoundation.nix
-# This is separate because the CF build is completely different and part of
-# stdenv. Merging the two was kept outside of the scope of Swift work.
-
-{ lib
-, stdenv
-, fetchpatch
-, callPackage
-, cmake
-, ninja
-, swift
-, Dispatch
-, icu
-, libxml2
-, curl
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  callPackage,
+  cmake,
+  ninja,
+  swift,
+  Dispatch,
+  icu,
+  libxml2,
+  curl,
 }:
 
 let
   sources = callPackage ../sources.nix { };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "swift-corelibs-foundation";
 
   inherit (sources) version;
@@ -33,10 +30,21 @@ in stdenv.mkDerivation {
     })
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  nativeBuildInputs = [ cmake ninja swift ];
-  buildInputs = [ icu libxml2 curl ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    swift
+  ];
+  buildInputs = [
+    icu
+    libxml2
+    curl
+  ];
   propagatedBuildInputs = [ Dispatch ];
 
   preConfigure = ''
@@ -67,6 +75,6 @@ in stdenv.mkDerivation {
     homepage = "https://github.com/apple/swift-corelibs-foundation";
     platforms = lib.platforms.linux;
     license = lib.licenses.asl20;
-    maintainers = lib.teams.swift.members;
+    teams = [ lib.teams.swift ];
   };
 }

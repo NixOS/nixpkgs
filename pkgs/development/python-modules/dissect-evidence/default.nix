@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-evidence";
-  version = "3.10";
+  version = "3.11";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.evidence";
-    rev = "refs/tags/${version}";
-    hash = "sha256-VUdJkMtJkWGn79iopeZCTjAoD7mZkRxQaJ9Lem7Wkt8=";
+    tag = version;
+    hash = "sha256-1MXOlPhiSAOJtX2MDaLFw4tFpp+GaGUxlU3jq/Mereo=";
   };
 
   build-system = [
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing a parsers for various forensic evidence file containers";
     homepage = "https://github.com/fox-it/dissect.evidence";
-    changelog = "https://github.com/fox-it/dissect.evidence/releases/tag/${version}";
+    changelog = "https://github.com/fox-it/dissect.evidence/releases/tag/${src.tag}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

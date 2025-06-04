@@ -1,4 +1,11 @@
-{ mkDerivation, lib, extra-cmake-modules, kdoctools, ki18n, kio }:
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  ki18n,
+  kio,
+}:
 
 mkDerivation {
   pname = "ktimer";

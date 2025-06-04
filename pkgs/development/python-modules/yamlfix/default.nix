@@ -12,6 +12,17 @@
   ruyaml,
   setuptools,
 }:
+let
+  maison143 = maison.overridePythonAttrs (old: rec {
+    version = "1.4.3";
+    src = fetchFromGitHub {
+      owner = "dbatten5";
+      repo = "maison";
+      tag = "v${version}";
+      hash = "sha256-2hUmk91wr5o2cV3un2nMoXDG+3GT7SaIOKY+QaZY3nw=";
+    };
+  });
+in
 
 buildPythonPackage rec {
   pname = "yamlfix";
@@ -23,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lyz-code";
     repo = "yamlfix";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-nadyBIzXHbWm0QvympRaYU38tuPJ3TPJg8EbvVv+4L0=";
   };
 
@@ -34,7 +45,7 @@ buildPythonPackage rec {
 
   dependencies = [
     click
-    maison
+    maison143
     ruyaml
   ];
 

@@ -15,8 +15,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "WojciechMula";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "pyahocorasick";
+    tag = version;
     hash = "sha256-SCIgu0uEjiSUiIP0WesJG+y+3ZqFBfI5PdgUzviOVrs=";
   };
 

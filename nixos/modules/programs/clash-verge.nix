@@ -6,6 +6,8 @@
 }:
 
 {
+  imports = [
+  ];
   options.programs.clash-verge = {
     enable = lib.mkEnableOption "Clash Verge";
     package = lib.mkOption {
@@ -15,10 +17,12 @@
         clash-verge-rev and clash-nyanpasu, both are forks of
         the original clash-verge project.
       '';
-      example = "pkgs.clash-verge-rev";
+      default = pkgs.clash-verge-rev;
+      defaultText = lib.literalExpression "pkgs.clash-verge-rev";
     };
+    serviceMode = lib.mkEnableOption "Service Mode";
+    tunMode = lib.mkEnableOption "Setcap for TUN Mode. DNS settings won't work on this way";
     autoStart = lib.mkEnableOption "Clash Verge auto launch";
-    tunMode = lib.mkEnableOption "Clash Verge TUN mode";
   };
 
   config =
@@ -40,10 +44,51 @@
       security.wrappers.clash-verge = lib.mkIf cfg.tunMode {
         owner = "root";
         group = "root";
-        capabilities = "cap_net_bind_service,cap_net_admin=+ep";
+        capabilities = "cap_net_bind_service,cap_net_raw,cap_net_admin=+ep";
         source = "${lib.getExe cfg.package}";
+      };
+
+      systemd.services.clash-verge = lib.mkIf cfg.serviceMode {
+        enable = true;
+        description = "Clash Verge Service Mode";
+        serviceConfig = {
+          ExecStart = "${cfg.package}/bin/clash-verge-service";
+          Restart = "on-failure";
+          ProtectSystem = "strict";
+          NoNewPrivileges = true;
+          ProtectHostname = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          SystemCallArchitectures = "native";
+          PrivateTmp = true;
+          PrivateMounts = true;
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectKernelLogs = true;
+          ProtectControlGroups = true;
+          LockPersonality = true;
+          RestrictRealtime = true;
+          ProtectClock = true;
+          MemoryDenyWriteExecute = true;
+          RestrictSUIDSGID = true;
+          RestrictNamespaces = [ "~user cgroup ipc mnt uts" ];
+          RestrictAddressFamilies = [
+            "AF_INET AF_INET6 AF_NETLINK AF_PACKET AF_RAW"
+          ];
+          CapabilityBoundingSet = [
+            "CAP_NET_ADMIN CAP_NET_RAW CAP_SYS_ADMIN CAP_DAC_OVERRIDE CAP_SETUID CAP_SETGID CAP_CHOWN CAP_MKNOD"
+          ];
+          SystemCallFilter = [
+            "~@aio @chown @clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @pkey @privileged @raw-io @reboot @sandbox @setuid @swap @timer"
+          ];
+          SystemCallErrorNumber = "EPERM";
+        };
+        wantedBy = [ "multi-user.target" ];
       };
     };
 
-  meta.maintainers = with lib.maintainers; [ zendo ];
+  meta.maintainers = with lib.maintainers; [
+    bot-wxt1221
+    Guanran928
+  ];
 }

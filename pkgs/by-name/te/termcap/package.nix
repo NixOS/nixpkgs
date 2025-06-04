@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, autoreconfHook
-, enableStatic ? stdenv.hostPlatform.isStatic
-, enableShared ? !stdenv.hostPlatform.isStatic
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  enableStatic ? stdenv.hostPlatform.isStatic,
+  enableShared ? !stdenv.hostPlatform.isStatic,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +25,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   enableParallelBuilding = true;
 
@@ -36,26 +40,34 @@ stdenv.mkDerivation rec {
     "AR=${stdenv.cc.targetPrefix}ar"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString ([
-    "-DSTDC_HEADERS"
-  ] ++ lib.optionals stdenv.cc.isClang [
-    "-Wno-implicit-function-declaration"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    [
+      "-DSTDC_HEADERS"
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      "-Wno-implicit-function-declaration"
+    ]
+  );
 
   # Library only statically links by default
-  postInstall = lib.optionalString (!enableStatic) ''
-    rm $out/lib/libtermcap.a
-  '' + lib.optionalString enableShared (let
-    libName = "libtermcap${stdenv.hostPlatform.extensions.sharedLibrary}";
-    impLibName = "libtermcap.dll.a";
-    winImpLib = lib.optionalString stdenv.hostPlatform.isWindows
-      "-Wl,--out-implib,${impLibName}";
-  in ''
-    ${stdenv.cc.targetPrefix}cc -shared -o ${libName} termcap.o tparam.o version.o ${winImpLib}
-    install -Dm644 ${libName} $out/lib
-  '' + lib.optionalString stdenv.hostPlatform.isWindows ''
-    install -Dm644 ${impLibName} $out/lib
-  '');
+  postInstall =
+    lib.optionalString (!enableStatic) ''
+      rm $out/lib/libtermcap.a
+    ''
+    + lib.optionalString enableShared (
+      let
+        libName = "libtermcap${stdenv.hostPlatform.extensions.sharedLibrary}";
+        impLibName = "libtermcap.dll.a";
+        winImpLib = lib.optionalString stdenv.hostPlatform.isWindows "-Wl,--out-implib,${impLibName}";
+      in
+      ''
+        ${stdenv.cc.targetPrefix}cc -shared -o ${libName} termcap.o tparam.o version.o ${winImpLib}
+        install -Dm644 ${libName} $out/lib
+      ''
+      + lib.optionalString stdenv.hostPlatform.isWindows ''
+        install -Dm644 ${impLibName} $out/lib
+      ''
+    );
 
   meta = {
     description = "Terminal feature database";

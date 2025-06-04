@@ -5,53 +5,54 @@
   python311,
   testers,
   nix-update-script,
+  extraPackages ? [ ],
 }:
 let
   python3 = python311;
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "dooit";
-  version = "2.2.0";
+  version = "3.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "kraanzu";
+    owner = "dooit-org";
     repo = "dooit";
-    rev = "v${version}";
-    hash = "sha256-GtXRzj+o+FClleh73kqelk0JrSyafZhf847lX1BiS9k=";
+    tag = "v${version}";
+    hash = "sha256-2W3iO4AOuDdDKJDMMY8YKXlI+dQKRI3PQtkdi9J3wZo=";
   };
 
   build-system = with python3.pkgs; [ poetry-core ];
 
   pythonRelaxDeps = [
     "tzlocal"
+    "textual"
+    "sqlalchemy"
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    appdirs
-    pyperclip
-    python-dateutil
-    pyyaml
-    (textual.overridePythonAttrs (oldAttrs: {
-      version = "0.47.1";
-      src = fetchFromGitHub {
-        owner = "Textualize";
-        repo = "textual";
-        rev = "refs/tags/v0.47.1";
-        hash = "sha256-RFaZKQ+0o6ZvfZxx95a1FjSHVJ0VOIAfzkdxYQXYBKU=";
-      };
-      disabledTests = [
-        "test_tracked_slugs"
-        "test_textual_env_var"
-        "test_register_language"
-        "test_register_language_existing_language"
-      ];
-    }))
-    tzlocal
-  ];
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      pyperclip
+      textual
+      pyyaml
+      python-dateutil
+      sqlalchemy
+      platformdirs
+      tzlocal
+      click
+    ]
+    ++ extraPackages;
 
-  # No tests available
-  doCheck = false;
+  # /homeless-shelter
+  preBuild = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  checkInputs = with python3.pkgs; [
+    pytestCheckHook
+    faker
+  ];
 
   passthru = {
     tests.version = testers.testVersion {
@@ -62,12 +63,12 @@ python3.pkgs.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "TUI todo manager";
-    homepage = "https://github.com/kraanzu/dooit";
-    changelog = "https://github.com/kraanzu/dooit/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    homepage = "https://github.com/dooit-org/dooit";
+    changelog = "https://github.com/dooit-org/dooit/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       khaneliman
       wesleyjrz
       kraanzu

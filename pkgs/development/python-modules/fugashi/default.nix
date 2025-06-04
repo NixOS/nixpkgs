@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "polm";
     repo = "fugashi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4i7Q+TtXTQNSJ1EIcS8KHrVPdCJAgZh86Y6lB8772XU=";
   };
 

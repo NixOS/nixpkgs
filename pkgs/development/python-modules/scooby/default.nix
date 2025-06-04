@@ -14,19 +14,19 @@
 
 buildPythonPackage rec {
   pname = "scooby";
-  version = "0.10.0";
-  format = "setuptools";
+  version = "0.10.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "banesullivan";
     repo = "scooby";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-KXhLN8KPz61l+4v88+kVSvodT6OXDJ3Pw9A9aFWSqYE=";
+    tag = "v${version}";
+    hash = "sha256-ldDmw2TDvXgfu0fMj6dSr2zh9WfYGNpBGZb3MixKq+k=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
   nativeCheckInputs = [
     beautifulsoup4

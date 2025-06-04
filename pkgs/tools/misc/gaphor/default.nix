@@ -1,52 +1,73 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, copyDesktopItems
-, gobject-introspection
-, poetry-core
-, wrapGAppsHook3
-, gtksourceview4
-, pango
-, gaphas
-, generic
-, jedi
-, pycairo
-, pygobject3
-, tinycss2
-, gtk3
-, librsvg
-, makeDesktopItem
-, python
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  copyDesktopItems,
+  gobject-introspection,
+  poetry-core,
+  wrapGAppsHook4,
+  gtksourceview5,
+  libadwaita,
+  pango,
+  gaphas,
+  generic,
+  jedi,
+  pycairo,
+  pillow,
+  dulwich,
+  pydot,
+  defusedxml,
+  better-exceptions,
+  babel,
+  pygobject3,
+  tinycss2,
+  gtk4,
+  librsvg,
+  makeDesktopItem,
+  python,
+  nix-update-script,
 }:
 
 buildPythonApplication rec {
   pname = "gaphor";
-  version = "2.8.2";
-
-  format = "pyproject";
+  version = "3.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+qqsSLjdY2I19fxdfkOEQ9DhTTHccUDll4O5yqtLiz0=";
+    hash = "sha256-I5n0XeZLQw4qje6gwh2aMu5Zo5tuXgESHhkR0xegaYM=";
   };
+
+  pythonRelaxDeps = [
+    "defusedxml"
+    "gaphas"
+  ];
 
   nativeBuildInputs = [
     copyDesktopItems
     gobject-introspection
-    poetry-core
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    gtksourceview4
+    gtksourceview5
     pango
+    libadwaita
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
+    babel
+    better-exceptions
+    defusedxml
+    dulwich
     gaphas
     generic
     jedi
+    pillow
     pycairo
+    pydot
     pygobject3
     tinycss2
   ];
@@ -61,7 +82,7 @@ buildPythonApplication rec {
     })
   ];
 
-  # Disable automatic wrapGAppsHook3 to prevent double wrapping
+  # Disable automatic wrapGAppsHook4 to prevent double wrapping
   dontWrapGApps = true;
 
   postInstall = ''
@@ -71,16 +92,21 @@ buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=(
       "''${gappsWrapperArgs[@]}" \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
+      --prefix XDG_DATA_DIRS : "${gtk4}/share/gsettings-schemas/${gtk4.name}/" \
       --set GDK_PIXBUF_MODULE_FILE "${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"
     )
   '';
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Simple modeling tool written in Python";
-    maintainers = [ ];
     homepage = "https://github.com/gaphor/gaphor";
-    license = licenses.asl20;
-    platforms = [ "x86_64-linux" ];
+    changelog = "https://github.com/gaphor/gaphor/releases/tag/${version}";
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.gnome-circle ];
+    platforms = lib.platforms.linux;
   };
 }

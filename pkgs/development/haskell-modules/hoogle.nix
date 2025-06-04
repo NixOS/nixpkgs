@@ -2,8 +2,13 @@
 # database which provides "Source" links to all specified 'packages' -- or the
 # current Haskell Platform if no custom package set is provided.
 
-{ lib, stdenv, buildPackages, haskellPackages
-, writeText
+{
+  lib,
+  stdenv,
+  buildPackages,
+  haskellPackages,
+  writeText,
+  runCommand,
 }:
 
 # This argument is a function which selects a list of Haskell packages from any
@@ -20,30 +25,32 @@ let
   wrapper = ./hoogle-local-wrapper.sh;
   isGhcjs = ghc.isGhcjs or false;
   opts = lib.optionalString;
-  haddockExe =
-    if !isGhcjs
-    then "haddock"
-    else "haddock-ghcjs";
-  ghcDocLibDir =
-    if !isGhcjs
-    then ghc.doc + "/share/doc/ghc*/html/libraries"
-    else ghc     + "/doc/lib";
+  haddockExe = if !isGhcjs then "haddock" else "haddock-ghcjs";
+  ghcDocLibDir = if !isGhcjs then ghc.doc + "/share/doc/ghc*/html/libraries" else ghc + "/doc/lib";
   # On GHCJS, use a stripped down version of GHC's prologue.txt
   prologue =
-    if !isGhcjs
-    then "${ghcDocLibDir}/prologue.txt"
-    else writeText "ghcjs-prologue.txt" ''
-      This index includes documentation for many Haskell modules.
-    '';
+    if !isGhcjs then
+      "${ghcDocLibDir}/prologue.txt"
+    else
+      writeText "ghcjs-prologue.txt" ''
+        This index includes documentation for many Haskell modules.
+      '';
 
-  docPackages = lib.closePropagation
-    # we grab the doc outputs
-    (map (lib.getOutput "doc") packages);
+  docPackages =
+    lib.closePropagation
+      # we grab the doc outputs
+      (map (lib.getOutput "doc") packages);
+
+  # Hoogle database path, relative to `$out`.
+  databasePath = "share/doc/hoogle/default.hoo";
 
 in
-buildPackages.stdenv.mkDerivation {
+buildPackages.stdenv.mkDerivation (finalAttrs: {
   name = "hoogle-with-packages";
-  buildInputs = [ghc hoogle];
+  buildInputs = [
+    ghc
+    hoogle
+  ];
 
   # compiling databases takes less time than copying the results
   # between machines.
@@ -57,16 +64,21 @@ buildPackages.stdenv.mkDerivation {
 
   inherit docPackages;
 
-  passAsFile = ["buildCommand"];
+  passAsFile = [ "buildCommand" ];
 
   buildCommand = ''
-    ${let # Filter out nulls here to work around https://github.com/NixOS/nixpkgs/issues/82245
-          # If we don't then grabbing `p.name` here will fail.
-          packages' = lib.filter (p: p != null) packages;
-      in lib.optionalString (packages' != [] -> docPackages == [])
-       ("echo WARNING: localHoogle package list empty, even though"
-       + " the following were specified: "
-       + lib.concatMapStringsSep ", " (p: p.name) packages')}
+    ${
+      let
+        # Filter out nulls here to work around https://github.com/NixOS/nixpkgs/issues/82245
+        # If we don't then grabbing `p.name` here will fail.
+        packages' = lib.filter (p: p != null) packages;
+      in
+      lib.optionalString (packages' != [ ] -> docPackages == [ ]) (
+        "echo WARNING: localHoogle package list empty, even though"
+        + " the following were specified: "
+        + lib.concatMapStringsSep ", " (p: p.name) packages'
+      )
+    }
     mkdir -p $out/share/doc/hoogle
 
     echo importing builtin packages
@@ -79,16 +91,24 @@ buildPackages.stdenv.mkDerivation {
     done
 
     echo importing other packages
-    ${lib.concatMapStringsSep "\n" (el: ''
+    ${lib.concatMapStringsSep "\n"
+      (el: ''
         ln -sfn ${el.haddockDir} "$out/share/doc/hoogle/${el.name}"
       '')
-      (lib.filter (el: el.haddockDir != null)
-        (builtins.map (p: { haddockDir = if p ? haddockDir then p.haddockDir p else null;
-                            name = p.pname; })
-          docPackages))}
+      (
+        lib.filter (el: el.haddockDir != null) (
+          builtins.map (p: {
+            haddockDir = if p ? haddockDir then p.haddockDir p else null;
+            name = p.pname;
+          }) docPackages
+        )
+      )
+    }
+
+    databasePath="$out/"${lib.escapeShellArg databasePath}
 
     echo building hoogle database
-    hoogle generate --database $out/share/doc/hoogle/default.hoo --local=$out/share/doc/hoogle
+    hoogle generate --database "$databasePath" --local=$out/share/doc/hoogle
 
     echo building haddock index
     # adapted from GHC's gen_contents_index
@@ -108,13 +128,23 @@ buildPackages.stdenv.mkDerivation {
     echo finishing up
     mkdir -p $out/bin
     substitute ${wrapper} $out/bin/hoogle \
-        --subst-var out --subst-var-by shell ${stdenv.shell} \
+        --subst-var-by shell ${stdenv.shell} \
+        --subst-var-by database "$databasePath" \
         --subst-var-by hoogle ${hoogle}
     chmod +x $out/bin/hoogle
   '';
 
   passthru = {
     isHaskellLibrary = false; # for the filter in ./with-packages-wrapper.nix
+
+    # The path to the Hoogle database.
+    database = "${finalAttrs.finalPackage}/${databasePath}";
+
+    tests.can-search-database = runCommand "can-search-database" { } ''
+      # This succeeds even if no results are found, but `Prelude.map` should
+      # always be available.
+      ${finalAttrs.finalPackage}/bin/hoogle search Prelude.map > $out
+    '';
   };
 
   meta = {
@@ -123,4 +153,4 @@ buildPackages.stdenv.mkDerivation {
     hydraPlatforms = with lib.platforms; none;
     maintainers = with lib.maintainers; [ ttuegel ];
   };
-}
+})

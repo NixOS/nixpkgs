@@ -26,8 +26,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "cgarciae";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "treex";
+    tag = version;
     hash = "sha256-ObOnbtAT4SlrwOms1jtn7/XKZorGISGY6VuhQlC3DaQ=";
   };
 

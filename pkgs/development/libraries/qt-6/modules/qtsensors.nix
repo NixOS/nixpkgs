@@ -1,10 +1,15 @@
-{ qtModule
-, qtbase
-, qtdeclarative
-, qtsvg
+{
+  qtModule,
+  qtbase,
+  qtdeclarative,
+  qtsvg,
 }:
 
 qtModule {
   pname = "qtsensors";
-  propagatedBuildInputs = [ qtbase qtdeclarative qtsvg ];
+  propagatedBuildInputs = [
+    qtbase
+    qtdeclarative
+    qtsvg
+  ];
 }

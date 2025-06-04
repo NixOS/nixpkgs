@@ -5,7 +5,7 @@
   gettext,
   fetchurl,
   gdk-pixbuf,
-  tracker,
+  tinysparql,
   libxml2,
   python3,
   libnotify,
@@ -31,13 +31,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-music";
-  version = "46.1";
+  version = "48.0";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-music/${lib.versions.major version}/gnome-music-${version}.tar.xz";
-    hash = "sha256-Eb4tbCib5NxDOwxPtZo9rDvtAcf1oorualRBl6NTv/0=";
+    hash = "sha256-jNqs0FJitjuxYIolrK1RboksMyIyNXy5t/aPLPuG1m4=";
   };
 
   nativeBuildInputs = [
@@ -68,7 +68,7 @@ python3.pkgs.buildPythonApplication rec {
       libsoup_3
       libadwaita
       gsettings-desktop-schemas
-      tracker
+      tinysparql
     ]
     ++ (with gst_all_1; [
       gstreamer
@@ -105,7 +105,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://apps.gnome.org/Music/";
     description = "Music player and management application for the GNOME desktop environment";
     mainProgram = "gnome-music";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };

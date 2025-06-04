@@ -4,7 +4,7 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "peertube-viewer";
   version = "1.8.6";
 
@@ -15,12 +15,14 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ZzeWk01migUrKR7GndtNo0kLYSCUXCg0H0eCXgrDXaM==";
   };
 
-  cargoHash = "sha256-5u5240PL5cKhnHsT7sRdccrbZBAbRN+fa+FhJP1gX/4==";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Pf8Jj8XGYbNOAyYEBdAysOK92S3S7bZHerQh/2UlrbQ=";
 
   meta = with lib; {
     description = "A simple CLI browser for the peertube federated video platform";
     homepage = "https://gitlab.com/peertube-viewer/peertube-viewer-rs";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ haruki7049 ];
+    mainProgram = "peertube-viewer-rs";
   };
 }

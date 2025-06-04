@@ -20,8 +20,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "bambinos";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "formulae";
+    tag = version;
     hash = "sha256-SSyQa7soIp+wSXX5wek9LG95q7J7K34mztzx01lPiWo=";
   };
 

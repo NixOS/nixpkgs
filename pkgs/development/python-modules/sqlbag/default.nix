@@ -17,14 +17,14 @@
   postgresql,
   postgresqlTestHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "sqlbag";
   version = "0.1.1617247075";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "djrobstep";
-    repo = pname;
+    repo = "sqlbag";
     # no tags on github, version patch number is unix time.
     rev = "eaaeec4158ffa139fba1ec30d7887f4d836f4120";
     hash = "sha256-lipgnkqrzjzqwbhtVcWDQypBNzq6Dct/qoM8y/FNiNs=";
@@ -82,7 +82,7 @@ buildPythonPackage rec {
     description = "Handy python code for doing database things";
     homepage = "https://github.com/djrobstep/sqlbag";
     license = with licenses; [ unlicense ];
-    maintainers = with maintainers; [ soispha ];
+    maintainers = with maintainers; [ bpeetz ];
     broken = true; # Fails to build against the current flask version
   };
 }

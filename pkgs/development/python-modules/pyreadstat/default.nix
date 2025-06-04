@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyreadstat";
-  version = "1.2.7";
+  version = "1.2.9";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Roche";
     repo = "pyreadstat";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-XuLFLpZbaCj/MHq0+l6GoNqR5nAldAlEJhoO5ioWYTA=";
+    tag = "v${version}";
+    hash = "sha256-4SdA4yYf3ha42ktyObTa2eOG16sq5tq+7Iyi16V00bw=";
   };
 
   build-system = [
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to read SAS, SPSS and Stata files into pandas data frames";
     homepage = "https://github.com/Roche/pyreadstat";
-    changelog = "https://github.com/Roche/pyreadstat/blob/v${version}/change_log.md";
+    changelog = "https://github.com/Roche/pyreadstat/blob/${src.tag}/change_log.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ swflint ];
   };

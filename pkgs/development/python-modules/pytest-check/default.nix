@@ -2,23 +2,23 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  flit-core,
+  hatchling,
   pytest,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-check";
-  version = "2.4.1";
+  version = "2.5.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pytest_check";
     inherit version;
-    hash = "sha256-UiTvzvBZv38M2iU/jQ9icEtIGf9IyT9RxnWupqAU9lA=";
+    hash = "sha256-I1fX33fDldMMDElXck/fzhp16ovJ6yMIwP/lb2KscMo=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ hatchling ];
 
   buildInputs = [ pytest ];
 

@@ -7,20 +7,54 @@
 #   3) used by `google-cloud-sdk` only on GCE guests
 #
 
-{ stdenv, lib, fetchurl, makeWrapper, python, openssl, jq, callPackage, installShellFiles, with-gce ? false }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  python3,
+  openssl,
+  jq,
+  callPackage,
+  installShellFiles,
+  with-gce ? false,
+}:
 
 let
-  pythonEnv = python.withPackages (p: with p; [
-    cffi
-    cryptography
-    pyopenssl
-    crcmod
-    numpy
-  ] ++ lib.optional (with-gce) google-compute-engine);
+  # include a compatible pyopenssl version: https://github.com/NixOS/nixpkgs/issues/379291
+  # remove ASAP: https://github.com/googleapis/google-api-python-client/issues/2554
+  pythonCustom = python3.override {
+    self = pythonCustom;
+    packageOverrides = _: super: {
+      pyopenssl = super.pyopenssl.overridePythonAttrs (old: rec {
+        version = "24.2.1";
+        src = old.src.override {
+          tag = version;
+          hash = "sha256-/TQnDWdycN4hQ7ZGvBhMJEZVafmL+0wy9eJ8hC6rfio=";
+        };
+        disabledTests = old.disabledTests ++ [
+          "test_shutdown_closed"
+          "test_closed"
+        ];
+      });
+    };
+  };
+
+  pythonEnv = pythonCustom.withPackages (
+    p:
+    with p;
+    [
+      cffi
+      cryptography
+      pyopenssl
+      crcmod
+      numpy
+    ]
+    ++ lib.optional (with-gce) google-compute-engine
+  );
 
   data = import ./data.nix { };
-  sources = system:
-    data.googleCloudSdkPkgs.${system} or (throw "Unsupported system: ${system}");
+  sources = system: data.googleCloudSdkPkgs.${system} or (throw "Unsupported system: ${system}");
 
   components = callPackage ./components.nix {
     snapshotPath = ./components.json;
@@ -28,15 +62,20 @@ let
 
   withExtraComponents = callPackage ./withExtraComponents.nix { inherit components; };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "google-cloud-sdk";
   inherit (data) version;
 
   src = fetchurl (sources stdenv.hostPlatform.system);
 
-  buildInputs = [ python ];
+  buildInputs = [ python3 ];
 
-  nativeBuildInputs = [ jq makeWrapper installShellFiles ];
+  nativeBuildInputs = [
+    jq
+    makeWrapper
+    installShellFiles
+  ];
 
   patches = [
     # For kubectl configs, don't store the absolute path of the `gcloud` binary as it can be garbage-collected
@@ -65,7 +104,7 @@ in stdenv.mkDerivation rec {
         wrapProgram "$programPath" \
             --set CLOUDSDK_PYTHON "${pythonEnv}/bin/python" \
             --set CLOUDSDK_PYTHON_ARGS "-S -W ignore" \
-            --prefix PYTHONPATH : "${pythonEnv}/${python.sitePackages}" \
+            --prefix PYTHONPATH : "${pythonEnv}/${python3.sitePackages}" \
             --prefix PATH : "${openssl.bin}/bin"
 
         mkdir -p $out/bin
@@ -120,6 +159,7 @@ in stdenv.mkDerivation rec {
     # Avoid trying to write logs to homeless-shelter
     export HOME=$(mktemp -d)
     $out/bin/gcloud version --format json | jq '."Google Cloud SDK"' | grep "${version}"
+    $out/bin/gsutil version | grep -w "$(cat platform/gsutil/VERSION)"
   '';
 
   passthru = {
@@ -132,13 +172,19 @@ in stdenv.mkDerivation rec {
     longDescription = "The Google Cloud SDK for GCE hosts. Used by `google-cloud-sdk` only on GCE guests.";
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryNativeCode  # anthoscli and possibly more
+      binaryNativeCode # anthoscli and possibly more
     ];
     # This package contains vendored dependencies. All have free licenses.
     license = licenses.free;
     homepage = "https://cloud.google.com/sdk/";
     changelog = "https://cloud.google.com/sdk/docs/release-notes";
-    maintainers = with maintainers; [ iammrinal0 marcusramberg pradyuman stephenmw zimbatm ];
+    maintainers = with maintainers; [
+      iammrinal0
+      marcusramberg
+      pradyuman
+      stephenmw
+      zimbatm
+    ];
     platforms = builtins.attrNames data.googleCloudSdkPkgs;
     mainProgram = "gcloud";
   };

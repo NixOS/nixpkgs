@@ -9,7 +9,8 @@ IBus needs to be configured accordingly to activate `typing-booster`. The config
 On NixOS, you need to explicitly enable `ibus` with given engines before customizing your desktop to use `typing-booster`. This can be achieved using the `ibus` module:
 
 ```nix
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   i18n.inputMethod = {
     enable = true;
     type = "ibus";
@@ -23,7 +24,12 @@ On NixOS, you need to explicitly enable `ibus` with given engines before customi
 The IBus engine is based on `hunspell` to support completion in many languages. By default, the dictionaries `de-de`, `en-us`, `fr-moderne` `es-es`, `it-it`, `sv-se` and `sv-fi` are in use. To add another dictionary, the package can be overridden like this:
 
 ```nix
-ibus-engines.typing-booster.override { langs = [ "de-at" "en-gb" ]; }
+ibus-engines.typing-booster.override {
+  langs = [
+    "de-at"
+    "en-gb"
+  ];
+}
 ```
 
 _Note: each language passed to `langs` must be an attribute name in `pkgs.hunspellDicts`._
@@ -35,7 +41,8 @@ The `ibus-engines.typing-booster` package contains a program named `emoji-picker
 On NixOS, it can be installed using the following expression:
 
 ```nix
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   fonts.packages = with pkgs; [ noto-fonts-color-emoji ];
 }
 ```

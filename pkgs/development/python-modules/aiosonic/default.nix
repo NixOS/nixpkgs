@@ -10,32 +10,20 @@
   h2,
   onecache,
   # test dependencies
-  asgiref,
-  black,
-  django,
-  click,
   httpx,
-  proxy-py,
   pytest-aiohttp,
-  pytest-asyncio,
-  pytest-django,
+  pytest-cov-stub,
   pytest-mock,
-  pytest-sugar,
-  pytest-timeout,
   uvicorn,
-  httptools,
-  typed-ast,
-  uvloop,
   requests,
   aiohttp,
-  aiodns,
   pytestCheckHook,
   stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "aiosonic";
-  version = "0.21.0";
+  version = "0.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -45,14 +33,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sonic182";
     repo = "aiosonic";
-    rev = "refs/tags/${version}";
-    hash = "sha256-YvqRuxl+Dgnsla/iotvWREdh93jwnXaq+F9py9MGP0o=";
+    tag = version;
+    hash = "sha256-wBYGiSTSRhi11uqTyGgF1YpnBVoDraCr2GKC8VkQEWc=";
   };
 
   postPatch = ''
     substituteInPlace pytest.ini --replace-fail \
-      "addopts = --black --cov=aiosonic --cov-report term --cov-report html --doctest-modules" \
-      "addopts = --doctest-modules"
+      "addopts = --black " \
+      "addopts = "
   '';
 
   build-system = [ poetry-core ];
@@ -65,26 +53,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aiohttp
-    aiodns
-    asgiref
-    black
-    django
-    click
     httpx
-    proxy-py
     pytest-aiohttp
-    pytest-asyncio
-    pytest-django
+    pytest-cov-stub
     pytest-mock
-    pytest-sugar
-    pytest-timeout
     uvicorn
-    httptools
-    typed-ast
-    uvloop
     requests
     pytestCheckHook
-    nodejs
   ];
 
   pythonImportsCheck = [ "aiosonic" ];

@@ -1,32 +1,38 @@
-{ lib
-, python3Packages
-, gtk3
-, cairo
-, adwaita-icon-theme
-, librsvg
-, xvfb-run
-, dbus
-, libnotify
-, wrapGAppsHook3
-, fetchFromGitLab
-, which
-, gettext
-, gobject-introspection
-, gdk-pixbuf
-, texliveSmall
-, imagemagick
-, perlPackages
-, writeScript
+{
+  lib,
+  callPackage,
+  python3Packages,
+  gtk3,
+  cairo,
+  adwaita-icon-theme,
+  librsvg,
+  xvfb-run,
+  dbus,
+  libnotify,
+  wrapGAppsHook3,
+  which,
+  gettext,
+  gobject-introspection,
+  gdk-pixbuf,
+  texliveSmall,
+  imagemagick,
+  perlPackages,
+  writeScript,
 }:
 
 let
   documentation_deps = [
-    (texliveSmall.withPackages (ps: with ps; [ wrapfig gensymb ]))
+    (texliveSmall.withPackages (
+      ps: with ps; [
+        wrapfig
+        gensymb
+      ]
+    ))
     xvfb-run
     imagemagick
     perlPackages.Po4a
   ];
-  inherit (import ./src.nix { inherit fetchFromGitLab; }) version src sample_documents;
+  inherit (callPackage ./src.nix { }) version src sample_documents;
 in
 
 python3Packages.buildPythonApplication rec {
@@ -146,7 +152,10 @@ python3Packages.buildPythonApplication rec {
     description = "Personal document manager for scanned documents";
     homepage = "https://openpaper.work/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ aszlig symphorien ];
+    maintainers = with lib.maintainers; [
+      aszlig
+      symphorien
+    ];
     platforms = lib.platforms.linux;
   };
 }

@@ -14,7 +14,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "sigstore";
-    repo = pname;
+    repo = "k8s-manifest-sigstore";
     rev = "v${version}";
     hash = "sha256-BDBkPXDg9DruIt5f7RrpStFeuTGiOOpsb6JiKaCTOOk=";
   };

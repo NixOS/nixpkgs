@@ -5,6 +5,7 @@
   git,
   pytestCheckHook,
   pythonOlder,
+  distutils,
   setuptools-scm,
   writeScript,
 }:
@@ -18,10 +19,12 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "acsone";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "setuptools-odoo";
+    tag = version;
     hash = "sha256-38YlkDH/PuJ1yvQ43OYmdnRd1SGJULv6fC/+fitLDJ8=";
   };
+
+  nativeBuildInputs = [ distutils ];
 
   propagatedBuildInputs = [ setuptools-scm ];
 

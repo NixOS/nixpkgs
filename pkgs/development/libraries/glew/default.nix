@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, cmake
-, libGLU
-, libXmu
-, libXi
-, libXext
-, OpenGL
-, enableEGL ? (!stdenv.hostPlatform.isDarwin)
-, testers
-, mesa
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  cmake,
+  libGLU,
+  libXmu,
+  libXi,
+  libXext,
+  enableEGL ? (!stdenv.hostPlatform.isDarwin),
+  testers,
+  mesa,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,7 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "1qak8f7g1iswgswrgkzc7idk7jmqgwrs58fhg2ai007v7j4q5z6l";
   };
 
-  outputs = [ "bin" "out" "dev" ];
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+  ];
 
   patches = [
     # https://github.com/nigels-com/glew/pull/342
@@ -40,8 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libXmu libXi libXext ];
-  propagatedBuildInputs = if stdenv.hostPlatform.isDarwin then [ OpenGL ] else [ libGLU ]; # GL/glew.h includes GL/glu.h
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libXmu
+    libXi
+    libXext
+  ];
+  propagatedBuildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libGLU ]; # GL/glew.h includes GL/glu.h
 
   cmakeDir = "cmake";
   cmakeFlags = [
@@ -71,12 +79,15 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "OpenGL extension loading library for C/C++";
     homepage = "https://glew.sourceforge.net/";
-    license = with licenses; [ /* modified bsd */ free mit gpl2Only ]; # For full details, see https://github.com/nigels-com/glew#copyright-and-licensing
+    license = with licenses; [
+      # modified bsd
+      free
+      mit
+      gpl2Only
+    ]; # For full details, see https://github.com/nigels-com/glew#copyright-and-licensing
     pkgConfigModules = [ "glew" ];
-    platforms = with platforms;
-      if enableEGL then
-        subtractLists darwin mesa.meta.platforms
-      else
-        mesa.meta.platforms;
+    platforms =
+      with platforms;
+      if enableEGL then subtractLists darwin mesa.meta.platforms else mesa.meta.platforms;
   };
 })

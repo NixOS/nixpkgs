@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "json-stream-rs-tokenizer";
-  version = "0.4.26";
+  version = "0.4.29";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,15 +25,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "smheidrich";
     repo = "py-json-stream-rs-tokenizer";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ogX0KsfHRQW7+exRMKGwJiNINrOKPiTKxAqiTZyEWrg=";
+    tag = "v${version}";
+    hash = "sha256-eXlxbZRiUdp28taLxsuQ4wh1rPO/zUAC0Owt7yc0bzc=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "utf8-read-0.4.0" = "sha256-L/NcgbB+2Rwtc+1e39fQh1D9S4RqQY6CCFOTh8CI8Ts=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-Zvtu7pH50hPPuLKVn7itcuO+BeSJKRQmZCWtQkMIZI8=";
   };
 
   nativeBuildInputs = [

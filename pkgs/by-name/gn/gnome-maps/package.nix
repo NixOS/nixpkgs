@@ -5,7 +5,6 @@
   meson,
   ninja,
   gettext,
-  python3,
   pkg-config,
   gnome,
   glib,
@@ -26,15 +25,16 @@
   libadwaita,
   geocode-glib_2,
   tzdata,
+  writeText,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-maps";
-  version = "46.11";
+  version = "48.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-maps/${lib.versions.major finalAttrs.version}/gnome-maps-${finalAttrs.version}.tar.xz";
-    hash = "sha256-lAtBuXQLCBMyXjkWdYcWz4+g7k4MkZHyYM7AbZITWDU=";
+    hash = "sha256-rW3WEmiF+xaG7kv0mnh6clfHzF93nlQTQVWmgKMKjLk=";
   };
 
   doCheck = !stdenv.hostPlatform.isDarwin;
@@ -69,14 +69,21 @@ stdenv.mkDerivation (finalAttrs: {
     libsoup_3
   ];
 
+  mesonFlags = [
+    "--cross-file=${writeText "crossfile.ini" ''
+      [binaries]
+      gjs = '${lib.getExe gjs}'
+    ''}"
+  ];
+
   postPatch = ''
     # The .service file isn't wrapped with the correct environment
     # so misses GIR files when started. By re-pointing from the gjs
     # entry point to the wrapped binary we get back to a wrapped
     # binary.
     substituteInPlace "data/org.gnome.Maps.service.in" \
-        --replace "Exec=@pkgdatadir@/@app-id@" \
-                  "Exec=$out/bin/gnome-maps"
+      --replace-fail "Exec=@pkgdatadir@/@app-id@" \
+                     "Exec=$out/bin/gnome-maps"
   '';
 
   preCheck = ''
@@ -97,6 +104,12 @@ stdenv.mkDerivation (finalAttrs: {
     rm $out/lib/gnome-maps/libgnome-maps.so.0
   '';
 
+  preFixup = ''
+    substituteInPlace "$out/share/applications/org.gnome.Maps.desktop" \
+      --replace-fail "Exec=gapplication launch org.gnome.Maps" \
+                     "Exec=gnome-maps"
+  '';
+
   passthru = {
     updateScript = gnome.updateScript { packageName = "gnome-maps"; };
   };
@@ -105,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://apps.gnome.org/Maps/";
     description = "Map application for GNOME 3";
     mainProgram = "gnome-maps";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };

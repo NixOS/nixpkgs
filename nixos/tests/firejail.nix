@@ -1,50 +1,53 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+{ pkgs, ... }:
+{
   name = "firejail";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ sgo ];
   };
 
-  nodes.machine = { ... }: {
-    imports = [ ./common/user-account.nix ];
+  nodes.machine =
+    { ... }:
+    {
+      imports = [ ./common/user-account.nix ];
 
-    programs.firejail = {
-      enable = true;
-      wrappedBinaries = {
-        bash-jailed  = "${pkgs.bash}/bin/bash";
-        bash-jailed2  = {
-          executable = "${pkgs.bash}/bin/bash";
-          extraArgs = [ "--private=~/firejail-home" ];
+      programs.firejail = {
+        enable = true;
+        wrappedBinaries = {
+          bash-jailed = "${pkgs.bash}/bin/bash";
+          bash-jailed2 = {
+            executable = "${pkgs.bash}/bin/bash";
+            extraArgs = [ "--private=~/firejail-home" ];
+          };
         };
       };
-    };
 
-    systemd.services.setupFirejailTest = {
-      wantedBy = [ "multi-user.target" ];
-      before = [ "multi-user.target" ];
+      systemd.services.setupFirejailTest = {
+        wantedBy = [ "multi-user.target" ];
+        before = [ "multi-user.target" ];
 
-      environment = {
-        HOME = "/home/alice";
+        environment = {
+          HOME = "/home/alice";
+        };
+
+        unitConfig = {
+          type = "oneshot";
+          RemainAfterExit = true;
+          user = "alice";
+        };
+
+        script = ''
+          cd $HOME
+
+          mkdir .password-store && echo s3cret > .password-store/secret
+          mkdir my-secrets && echo s3cret > my-secrets/secret
+
+          echo publ1c > public
+
+          mkdir -p .config/firejail
+          echo 'blacklist ''${HOME}/my-secrets' > .config/firejail/globals.local
+        '';
       };
-
-      unitConfig = {
-        type = "oneshot";
-        RemainAfterExit = true;
-        user = "alice";
-      };
-
-      script = ''
-        cd $HOME
-
-        mkdir .password-store && echo s3cret > .password-store/secret
-        mkdir my-secrets && echo s3cret > my-secrets/secret
-
-        echo publ1c > public
-
-        mkdir -p .config/firejail
-        echo 'blacklist ''${HOME}/my-secrets' > .config/firejail/globals.local
-      '';
     };
-  };
 
   testScript = ''
     start_all()
@@ -87,5 +90,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         "sudo -u alice firejail --private-tmp --output=/tmp/foo 'bash -c $(id>/tmp/vuln2;echo id)' && cat /tmp/vuln2"
     )
   '';
-})
-
+}

@@ -1,25 +1,32 @@
-{ lib, buildGoModule, fetchFromGitHub, buildNpmPackage
-, nixosTests, debianutils, mkdocs, python3, python3Packages
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  buildNpmPackage,
+  nixosTests,
+  debianutils,
+  mkdocs,
+  python3,
+  python3Packages,
 }:
-
 
 buildGoModule rec {
   pname = "ntfy-sh";
-  version = "2.11.0";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "binwiederhier";
     repo = "ntfy";
-    rev = "v${version}";
-    hash = "sha256-lSj4LfS4nBC1xtTE/ee2Nhx9TmlU+138miwC0nEfVRY=";
+    tag = "v${version}";
+    hash = "sha256-fnnDVx84dc0iHA1Xa7AgdiBzLxCm4UIZjbMkc24GLVI=";
   };
 
-  vendorHash = "sha256-V8LgbprUsr+8Ub4xeTPrE4Bp9qOP/R35/qPj0Udgod0=";
+  vendorHash = "sha256-DXvQbVKFviGhTosW4F+FB/tbJBzM5FHULWv4cO3RnK4=";
 
   ui = buildNpmPackage {
     inherit src version;
     pname = "ntfy-sh-ui";
-    npmDepsHash = "sha256-PCkRULHfC3ktShO+3wIQFLG24l5LBSB1niWcIrCT9Bo=";
+    npmDepsHash = "sha256-SmSItsOjpi874c2AK/3Xmtb0/PisXM+07eoQEEYWKt0=";
 
     prePatch = ''
       cd web/
@@ -35,7 +42,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
 
   nativeBuildInputs = [
     debianutils
@@ -63,6 +74,9 @@ buildGoModule rec {
     description = "Send push notifications to your phone or desktop via PUT/POST";
     homepage = "https://ntfy.sh";
     license = licenses.asl20;
-    maintainers = with maintainers; [ arjan-s fpletz ];
+    maintainers = with maintainers; [
+      arjan-s
+      fpletz
+    ];
   };
 }

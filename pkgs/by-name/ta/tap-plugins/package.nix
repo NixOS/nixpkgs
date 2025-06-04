@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ladspa-sdk
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ladspa-sdk,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
       TubeWarmth, TAP Vibrato.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

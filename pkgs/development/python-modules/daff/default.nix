@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "daff";
-  version = "1.3.46";
+  version = "1.4.2";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ItDan9ajJ1tUySapyXsYD5JYqtZRE+oY8/7FLLrc2Bg=";
+    hash = "sha256-R/A5Htp+K1AR98ysAGuReKzLRlvLlKLJ8oQlf/9dJoY=";
   };
 
   # there are no tests

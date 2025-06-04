@@ -1,44 +1,41 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  six,
+  fetchFromGitHub,
+  hatchling,
   snowflake-connector-python,
   sqlalchemy,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "snowflake-sqlalchemy";
-  version = "1.5.3";
-  format = "setuptools";
+  version = "1.7.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-eRkew/6/syvP/s1m8qfdVhvVcTRepLzL9BzB+1wGgv8=";
+  src = fetchFromGitHub {
+    owner = "snowflakedb";
+    repo = "snowflake-sqlalchemy";
+    tag = "v${version}";
+    hash = "sha256-E3UnlsGaQPlxHSgBVGrG8pGCA8fE7yN5x9eidbMQ10w=";
   };
 
-  propagatedBuildInputs = [
-    six
+  build-system = [ hatchling ];
+
+  dependencies = [
     snowflake-connector-python
     sqlalchemy
   ];
 
-  # Pypi does not include tests
+  # Tests require a database
   doCheck = false;
 
   pythonImportsCheck = [ "snowflake.sqlalchemy" ];
 
   meta = with lib; {
-    changelog = "https://github.com/snowflakedb/snowflake-sqlalchemy/blob/v${version}/DESCRIPTION.md";
     description = "Snowflake SQLAlchemy Dialect";
+    changelog = "https://github.com/snowflakedb/snowflake-sqlalchemy/blob/v${version}/DESCRIPTION.md";
     homepage = "https://github.com/snowflakedb/snowflake-sqlalchemy";
     license = licenses.asl20;
     maintainers = [ ];
-
-    # https://github.com/snowflakedb/snowflake-sqlalchemy/issues/380
-    broken = versionAtLeast sqlalchemy.version "2";
   };
 }

@@ -1,70 +1,68 @@
-{ stdenv
-, lib
-, fetchurl
-, substituteAll
-, pkg-config
-, gnome
-, _experimental-update-script-combinators
-, python3
-, gobject-introspection
-, gettext
-, libsoup_3
-, libxml2
-, libsecret
-, icu
-, sqlite
-, tzdata
-, libcanberra-gtk3
-, p11-kit
-, db
-, nspr
-, nss
-, libical
-, gperf
-, wrapGAppsHook3
-, glib-networking
-, gsettings-desktop-schemas
-, pcre
-, vala
-, cmake
-, ninja
-, libkrb5
-, openldap
-, enableOAuth2 ? stdenv.hostPlatform.isLinux
-, webkitgtk_4_1
-, webkitgtk_6_0
-, json-glib
-, glib
-, gtk3
-, gtk4
-, withGtk3 ? true
-, withGtk4 ? false
-, libphonenumber
-, gnome-online-accounts
-, libgweather
-, boost
-, protobuf
-, libiconv
-, makeHardcodeGsettingsPatch
+{
+  stdenv,
+  lib,
+  buildPackages,
+  fetchurl,
+  pkg-config,
+  gnome,
+  _experimental-update-script-combinators,
+  python3,
+  gobject-introspection,
+  gettext,
+  libsoup_3,
+  libxml2,
+  libsecret,
+  icu,
+  sqlite,
+  libcanberra-gtk3,
+  p11-kit,
+  db,
+  nspr,
+  nss,
+  libical,
+  gperf,
+  wrapGAppsHook3,
+  glib-networking,
+  gsettings-desktop-schemas,
+  vala,
+  cmake,
+  ninja,
+  libkrb5,
+  openldap,
+  enableOAuth2 ? stdenv.hostPlatform.isLinux,
+  webkitgtk_4_1,
+  webkitgtk_6_0,
+  json-glib,
+  glib,
+  gtk3,
+  gtk4,
+  withGtk3 ? true,
+  withGtk4 ? false,
+  libphonenumber,
+  libuuid,
+  gnome-online-accounts,
+  libgweather,
+  boost,
+  protobuf,
+  libiconv,
+  makeHardcodeGsettingsPatch,
 }:
 
 stdenv.mkDerivation rec {
   pname = "evolution-data-server";
-  version = "3.52.4";
+  version = "3.56.1";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/evolution-data-server-${version}.tar.xz";
-    hash = "sha256-GzaoOdscjYmAZuGb54uZWTCgovKohvFJ5PZOF1XwZPc=";
+    hash = "sha256-ZGzAA32j+fKVeUxjfZU5StdvjJvuImi+LEGD4ncgwTc=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit tzdata;
-    })
-
     # Avoid using wrapper function, which the hardcode gsettings
     # patch generator cannot handle.
     ./drop-tentative-settings-constructor.patch
@@ -89,34 +87,40 @@ stdenv.mkDerivation rec {
     vala
   ];
 
-  buildInputs = [
-    glib
-    libsecret
-    libsoup_3
-    gnome-online-accounts
-    p11-kit
-    libgweather
-    icu
-    sqlite
-    libkrb5
-    openldap
-    glib-networking
-    libcanberra-gtk3
-    pcre
-    libphonenumber
-    boost
-    protobuf
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ] ++ lib.optionals withGtk3 [
-    gtk3
-  ] ++ lib.optionals (withGtk3 && enableOAuth2) [
-    webkitgtk_4_1
-  ] ++ lib.optionals withGtk4 [
-    gtk4
-  ] ++ lib.optionals (withGtk4 && enableOAuth2) [
-    webkitgtk_6_0
-  ];
+  buildInputs =
+    [
+      glib
+      libsecret
+      libsoup_3
+      gnome-online-accounts
+      p11-kit
+      libgweather
+      icu
+      sqlite
+      libkrb5
+      openldap
+      glib-networking
+      libcanberra-gtk3
+      libphonenumber
+      libuuid
+      boost
+      protobuf
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ]
+    ++ lib.optionals withGtk3 [
+      gtk3
+    ]
+    ++ lib.optionals (withGtk3 && enableOAuth2) [
+      webkitgtk_4_1
+    ]
+    ++ lib.optionals withGtk4 [
+      gtk4
+    ]
+    ++ lib.optionals (withGtk4 && enableOAuth2) [
+      webkitgtk_6_0
+    ];
 
   propagatedBuildInputs = [
     db
@@ -128,25 +132,40 @@ stdenv.mkDerivation rec {
     json-glib
   ];
 
-  cmakeFlags = [
-    "-DENABLE_VALA_BINDINGS=ON"
-    "-DENABLE_INTROSPECTION=ON"
-    "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
-    "-DWITH_PHONENUMBER=ON"
-    "-DENABLE_GTK=${lib.boolToString withGtk3}"
-    "-DENABLE_EXAMPLES=${lib.boolToString withGtk3}"
-    "-DENABLE_CANBERRA=${lib.boolToString withGtk3}"
-    "-DENABLE_GTK4=${lib.boolToString withGtk4}"
-    "-DENABLE_OAUTH2_WEBKITGTK=${lib.boolToString (withGtk3 && enableOAuth2)}"
-    "-DENABLE_OAUTH2_WEBKITGTK4=${lib.boolToString (withGtk4 && enableOAuth2)}"
-  ];
+  cmakeFlags =
+    [
+      "-DENABLE_VALA_BINDINGS=ON"
+      "-DENABLE_INTROSPECTION=ON"
+      "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
+      "-DWITH_PHONENUMBER=ON"
+      "-DENABLE_GTK=${lib.boolToString withGtk3}"
+      "-DENABLE_EXAMPLES=${lib.boolToString withGtk3}"
+      "-DENABLE_CANBERRA=${lib.boolToString withGtk3}"
+      "-DENABLE_GTK4=${lib.boolToString withGtk4}"
+      "-DENABLE_OAUTH2_WEBKITGTK=${lib.boolToString (withGtk3 && enableOAuth2)}"
+      "-DENABLE_OAUTH2_WEBKITGTK4=${lib.boolToString (withGtk4 && enableOAuth2)}"
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages))
+    ];
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace cmake/modules/SetupBuildFlags.cmake \
-      --replace "-Wl,--no-undefined" ""
-    substituteInPlace src/services/evolution-alarm-notify/e-alarm-notify.c \
-      --replace "G_OS_WIN32" "__APPLE__"
-  '';
+  strictDeps = true;
+
+  postPatch =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace cmake/modules/SetupBuildFlags.cmake \
+        --replace "-Wl,--no-undefined" ""
+      substituteInPlace src/services/evolution-alarm-notify/e-alarm-notify.c \
+        --replace "G_OS_WIN32" "__APPLE__"
+    ''
+    + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      substituteInPlace src/addressbook/libebook-contacts/CMakeLists.txt --replace-fail \
+        'COMMAND ''${CMAKE_CURRENT_BINARY_DIR}/gen-western-table' \
+        'COMMAND ${stdenv.hostPlatform.emulator buildPackages} ''${CMAKE_CURRENT_BINARY_DIR}/gen-western-table'
+      substituteInPlace src/camel/CMakeLists.txt --replace-fail \
+        'COMMAND ''${CMAKE_CURRENT_BINARY_DIR}/camel-gen-tables' \
+        'COMMAND ${stdenv.hostPlatform.emulator buildPackages} ''${CMAKE_CURRENT_BINARY_DIR}/camel-gen-tables'
+    '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     ln -s $out/lib/evolution-data-server/*.dylib $out/lib/
@@ -183,7 +202,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/evolution-data-server";
     changelog = "https://gitlab.gnome.org/GNOME/evolution-data-server/-/blob/${version}/NEWS?ref_type=tags";
     license = licenses.lgpl2Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.unix;
+    teams = [ teams.gnome ];
+    platforms = platforms.linux; # requires libuuid
   };
 }

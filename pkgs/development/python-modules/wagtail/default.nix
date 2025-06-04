@@ -1,58 +1,62 @@
 {
   lib,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   anyascii,
   beautifulsoup4,
-  buildPythonPackage,
-  callPackage,
   django,
   django-filter,
   django-modelcluster,
   django-taggit,
+  django-tasks,
   django-treebeard,
   djangorestframework,
   draftjs-exporter,
-  fetchPypi,
-  html5lib,
-  l18n,
   laces,
   openpyxl,
   permissionedforms,
   pillow,
-  pythonOlder,
   requests,
   telepath,
   willow,
+
+  # tests
+  callPackage,
 }:
 
 buildPythonPackage rec {
   pname = "wagtail";
-  version = "6.2";
-  format = "setuptools";
+  version = "6.4.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
+  # The GitHub source requires some assets to be compiled, which in turn
+  # requires fixing the upstream package lock. We need to use the PyPI release
+  # until https://github.com/wagtail/wagtail/pull/13136 gets merged.
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WQhujKGBsQ8nSxE5JFAFBN7W/BaCTBl283w8vd0QDSQ=";
+    hash = "sha256-zsPm1JIKbRePoetvSvgLNw/dVXDtkkuXkQThV/EMoJc=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "django-filter>=23.3,<24" "django-filter>=23.3,<24.3"
-  '';
+  build-system = [
+    setuptools
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     anyascii
     beautifulsoup4
     django
-    django-treebeard
     django-filter
     django-modelcluster
     django-taggit
+    django-tasks
+    django-treebeard
     djangorestframework
     draftjs-exporter
-    html5lib
-    l18n
     laces
     openpyxl
     permissionedforms
@@ -70,12 +74,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wagtail" ];
 
-  meta = with lib; {
+  meta = {
     description = "Django content management system focused on flexibility and user experience";
     mainProgram = "wagtail";
     homepage = "https://github.com/wagtail/wagtail";
     changelog = "https://github.com/wagtail/wagtail/blob/v${version}/CHANGELOG.txt";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sephi ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sephi ];
   };
 }

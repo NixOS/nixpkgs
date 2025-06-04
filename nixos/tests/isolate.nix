@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ lib, ... }:
+{ lib, ... }:
 {
   name = "isolate";
   meta.maintainers = with lib.maintainers; [ virchau13 ];
@@ -35,4 +35,4 @@ import ./make-test-python.nix ({ lib, ... }:
         machine.fail(sleep_test_cg(0.5, 1))
         machine.succeed('isolate --cg --cleanup')
   '';
-})
+}

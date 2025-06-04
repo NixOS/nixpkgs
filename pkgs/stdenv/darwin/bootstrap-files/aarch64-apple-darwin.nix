@@ -2,20 +2,20 @@
 # $ ./refresh-tarballs.bash --targets=aarch64-apple-darwin
 #
 # Metadata:
-# - nixpkgs revision: d03a4482228d4d6dbd2d4b425b6dfcd49ebe765f
+# - nixpkgs revision: d8657587c0c1ce2191b4b489299c386b5b7148c6
 # - hydra build: https://hydra.nixos.org/job/nixpkgs/trunk/stdenvBootstrapTools.aarch64-apple-darwin.build/latest
-# - resolved hydra build: https://hydra.nixos.org/build/255282138
-# - instantiated derivation: /nix/store/cahnprnkg9z2aij3hj4rkbkc4l8190mf-stdenv-bootstrap-tools.drv
-# - output directory: /nix/store/zxxcz7sza5ypy061rsg7cmr7h0a96hbb-stdenv-bootstrap-tools
-# - build time: Wed, 03 Apr 2024 07:59:44 +0000
+# - resolved hydra build: https://hydra.nixos.org/build/290554342
+# - instantiated derivation: /nix/store/g4x0vd6rfvr124sbxqfphkf8l06sy4pc-stdenv-bootstrap-tools.drv
+# - output directory: /nix/store/8wbnh6accpx3fcf20jvbnapcalvm1cmd-stdenv-bootstrap-tools
+# - build time: Thu, 20 Feb 2025 12:38:34 +0000
 {
   bootstrapTools = import <nix/fetchurl.nix> {
-    url = "http://tarballs.nixos.org/stdenv/aarch64-apple-darwin/d03a4482228d4d6dbd2d4b425b6dfcd49ebe765f/bootstrap-tools.tar.xz";
-    hash = "sha256-a37OgMdTHjFyKs4UTxoD7zx6Te3A7zsSjhbFHzbNxQ8=";
+    url = "http://tarballs.nixos.org/stdenv/aarch64-apple-darwin/d8657587c0c1ce2191b4b489299c386b5b7148c6/bootstrap-tools.tar.xz";
+    hash = "sha256-i+KwTIY6P3dKfNmE42BWC9+qUomoDxazO50uvrzNlpE=";
   };
   unpack = import <nix/fetchurl.nix> {
-    url = "http://tarballs.nixos.org/stdenv/aarch64-apple-darwin/d03a4482228d4d6dbd2d4b425b6dfcd49ebe765f/unpack.nar.xz";
-    hash = "sha256-XCVy6TMDJ1DKFnhIT1NHzdQUjY/TPKLV67Zi/ANIpms=";
+    url = "http://tarballs.nixos.org/stdenv/aarch64-apple-darwin/d8657587c0c1ce2191b4b489299c386b5b7148c6/unpack.nar.xz";
+    hash = "sha256-mzql+dmvqtn663HvzWZORA8f9d9RPShwPJNIk9VGEvU=";
     name = "unpack";
     unpack = true;
   };

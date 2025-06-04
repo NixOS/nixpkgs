@@ -1,5 +1,6 @@
-{ buildDunePackage
-, mirage-clock
+{
+  buildDunePackage,
+  mirage-clock,
 }:
 
 buildDunePackage {

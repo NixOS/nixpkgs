@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
+{ pkgs, lib, ... }:
+{
   name = "goss";
   meta.maintainers = [ lib.maintainers.anthonyroussel ];
 
@@ -45,5 +46,5 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       assert len(result["results"]) == 8, f".results should be an array of 10 items, was {result['results']!r}"
       assert result["summary"]["failed-count"] == 0, f".summary.failed-count should be zero, was {result['summary']['failed-count']}"
       assert result["summary"]["test-count"] == 8, f".summary.test-count should be 10, was {result['summary']['test-count']}"
-    '';
-})
+  '';
+}

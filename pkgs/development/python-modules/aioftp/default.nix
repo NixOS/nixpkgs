@@ -6,6 +6,7 @@
   fetchPypi,
   pytest-asyncio,
   pytest-cov-stub,
+  pytest-mock,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -15,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "aioftp";
-  version = "0.23.1";
+  version = "0.25.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uA6t2MqV0ru8+r594Vy+AawRey50Z3FzdN5Ge62TVws=";
+    hash = "sha256-TS+wt30/2kKCz/zQW6cFZ9iUDNn97t8QvfeIoAEggBY=";
   };
 
   build-system = [ setuptools ];
@@ -35,6 +36,7 @@ buildPythonPackage rec {
     async-timeout
     pytest-asyncio
     pytest-cov-stub
+    pytest-mock
     pytestCheckHook
     trustme
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
@@ -49,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python FTP client/server for asyncio";
     homepage = "https://aioftp.readthedocs.io/";
+    changelog = "https://github.com/aio-libs/aioftp/blob/${version}/history.rst";
     license = licenses.asl20;
     maintainers = [ ];
   };

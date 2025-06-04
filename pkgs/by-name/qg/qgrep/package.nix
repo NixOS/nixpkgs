@@ -1,8 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,15 +25,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-    darwin.apple_sdk.frameworks.CoreFoundation
-  ];
-
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isDarwin [
-    "-Wno-error=unused-command-line-argument"
-    "-Wno-error=unqualified-std-cast-call"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      "-Wno-error=unused-command-line-argument"
+      "-Wno-error=unqualified-std-cast-call"
+    ]
+  );
 
   installPhase = ''
     runHook preInstall

@@ -1,44 +1,51 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+{ pkgs, ... }:
 {
   name = "systemd-journal-upload";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ minijackson raitobezarius ];
+    maintainers = [
+      minijackson
+      raitobezarius
+    ];
   };
 
-  nodes.server = { nodes, ... }: {
-    services.journald.remote = {
-      enable = true;
-      listen = "http";
-      settings.Remote = {
-        ServerCertificateFile = "/run/secrets/sever.cert.pem";
-        ServerKeyFile = "/run/secrets/sever.key.pem";
-        TrustedCertificateFile = "/run/secrets/ca.cert.pem";
-        Seal = true;
+  nodes.server =
+    { nodes, ... }:
+    {
+      services.journald.remote = {
+        enable = true;
+        listen = "http";
+        settings.Remote = {
+          ServerCertificateFile = "/run/secrets/sever.cert.pem";
+          ServerKeyFile = "/run/secrets/sever.key.pem";
+          TrustedCertificateFile = "/run/secrets/ca.cert.pem";
+          Seal = true;
+        };
+      };
+
+      networking.firewall.allowedTCPPorts = [ nodes.server.services.journald.remote.port ];
+    };
+
+  nodes.client =
+    { lib, nodes, ... }:
+    {
+      services.journald.upload = {
+        enable = true;
+        settings.Upload = {
+          URL = "http://server:${toString nodes.server.services.journald.remote.port}";
+          ServerCertificateFile = "/run/secrets/client.cert.pem";
+          ServerKeyFile = "/run/secrets/client.key.pem";
+          TrustedCertificateFile = "/run/secrets/ca.cert.pem";
+        };
+      };
+
+      # Wait for the PEMs to arrive
+      systemd.services.systemd-journal-upload.wantedBy = lib.mkForce [ ];
+      systemd.paths.systemd-journal-upload = {
+        wantedBy = [ "default.target" ];
+        # This file must be copied last
+        pathConfig.PathExists = [ "/run/secrets/ca.cert.pem" ];
       };
     };
-
-    networking.firewall.allowedTCPPorts = [ nodes.server.services.journald.remote.port ];
-  };
-
-  nodes.client = { lib, nodes, ... }: {
-    services.journald.upload = {
-      enable = true;
-      settings.Upload = {
-        URL = "http://server:${toString nodes.server.services.journald.remote.port}";
-        ServerCertificateFile = "/run/secrets/client.cert.pem";
-        ServerKeyFile = "/run/secrets/client.key.pem";
-        TrustedCertificateFile = "/run/secrets/ca.cert.pem";
-      };
-    };
-
-    # Wait for the PEMs to arrive
-    systemd.services.systemd-journal-upload.wantedBy = lib.mkForce [];
-    systemd.paths.systemd-journal-upload = {
-      wantedBy = [ "default.target" ];
-      # This file must be copied last
-      pathConfig.PathExists = [ "/run/secrets/ca.cert.pem" ];
-    };
-  };
 
   testScript = ''
     import subprocess
@@ -98,4 +105,4 @@ import ./make-test-python.nix ({ pkgs, ... }:
       f"journalctl --file /var/log/journal/remote/remote-*.journal --identifier={identifier} | grep -F '{message}'"
     )
   '';
-})
+}

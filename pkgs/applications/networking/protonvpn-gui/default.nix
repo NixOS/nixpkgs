@@ -5,20 +5,14 @@
   gobject-introspection,
   setuptools,
   wrapGAppsHook3,
+  libnotify,
   dbus-python,
   packaging,
   proton-core,
   proton-keyring-linux,
-  proton-keyring-linux-secretservice,
   proton-vpn-api-core,
-  proton-vpn-connection,
-  proton-vpn-killswitch,
-  proton-vpn-killswitch-network-manager,
-  proton-vpn-logger,
+  proton-vpn-local-agent,
   proton-vpn-network-manager,
-  proton-vpn-network-manager-openvpn,
-  proton-vpn-network-manager-wireguard,
-  proton-vpn-session,
   pycairo,
   pygobject3,
   withIndicator ? true,
@@ -28,14 +22,14 @@
 
 buildPythonApplication rec {
   pname = "protonvpn-gui";
-  version = "4.4.4";
+  version = "4.9.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "proton-vpn-gtk-app";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-e581FgXrk1cfjsl/UaG9M+3VBYXcV0mggeLeEW9s9KM=";
+    tag = "${version}";
+    hash = "sha256-Undf3qSClcRa1e9f6B/1hLPIjc2KPG745AXxYHQA0nE=";
   };
 
   nativeBuildInputs = [
@@ -44,12 +38,16 @@ buildPythonApplication rec {
     wrapGAppsHook3
   ];
 
-  buildInputs = lib.optionals withIndicator [
-    # Adds AppIndicator3 namespace
-    libappindicator-gtk3
-    # Adds AyatanaAppIndicator3 namespace
-    libayatana-appindicator
-  ];
+  buildInputs =
+    [
+      libnotify # gir typelib is used
+    ]
+    ++ lib.optionals withIndicator [
+      # Adds AppIndicator3 namespace
+      libappindicator-gtk3
+      # Adds AyatanaAppIndicator3 namespace
+      libayatana-appindicator
+    ];
 
   build-system = [
     setuptools
@@ -60,16 +58,9 @@ buildPythonApplication rec {
     packaging
     proton-core
     proton-keyring-linux
-    proton-keyring-linux-secretservice
     proton-vpn-api-core
-    proton-vpn-connection
-    proton-vpn-killswitch
-    proton-vpn-killswitch-network-manager
-    proton-vpn-logger
+    proton-vpn-local-agent
     proton-vpn-network-manager
-    proton-vpn-network-manager-openvpn
-    proton-vpn-network-manager-wireguard
-    proton-vpn-session
     pycairo
     pygobject3
   ];
@@ -94,6 +85,9 @@ buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "protonvpn-app";
-    maintainers = with lib.maintainers; [ sebtm ];
+    maintainers = with lib.maintainers; [
+      sebtm
+      rapiteanu
+    ];
   };
 }

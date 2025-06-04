@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hjson";
     repo = "hjson-py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-VrCLHfXShF45IEhGVQpryBzjxreQEunyghazDNKRh8k=";
   };
 

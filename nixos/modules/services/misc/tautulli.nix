@@ -1,60 +1,62 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.tautulli;
 in
 {
   imports = [
-    (mkRenamedOptionModule [ "services" "plexpy" ] [ "services" "tautulli" ])
+    (lib.mkRenamedOptionModule [ "services" "plexpy" ] [ "services" "tautulli" ])
   ];
 
   options = {
     services.tautulli = {
-      enable = mkEnableOption "Tautulli Plex Monitor";
+      enable = lib.mkEnableOption "Tautulli Plex Monitor";
 
-      dataDir = mkOption {
-        type = types.str;
+      dataDir = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/plexpy";
         description = "The directory where Tautulli stores its data files.";
       };
 
-      configFile = mkOption {
-        type = types.str;
+      configFile = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/plexpy/config.ini";
         description = "The location of Tautulli's config file.";
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 8181;
         description = "TCP port where Tautulli listens.";
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Open ports in the firewall for Tautulli.";
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "plexpy";
         description = "User account under which Tautulli runs.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "nogroup";
         description = "Group under which Tautulli runs.";
       };
 
-      package = mkPackageOption pkgs "tautulli" { };
+      package = lib.mkPackageOption pkgs "tautulli" { };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"
     ];
@@ -73,10 +75,13 @@ in
       };
     };
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
 
-    users.users = mkIf (cfg.user == "plexpy") {
-      plexpy = { group = cfg.group; uid = config.ids.uids.plexpy; };
+    users.users = lib.mkIf (cfg.user == "plexpy") {
+      plexpy = {
+        group = cfg.group;
+        uid = config.ids.uids.plexpy;
+      };
     };
   };
 }

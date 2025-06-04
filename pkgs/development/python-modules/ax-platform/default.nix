@@ -1,34 +1,45 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
   botorch,
   ipywidgets,
   jinja2,
+  markdown,
   pandas,
   plotly,
-  setuptools,
-  setuptools-scm,
-  typeguard,
-  hypothesis,
-  mercurial,
+  pyre-extensions,
+  scikit-learn,
+  scipy,
+  sympy,
+
+  # tests
   pyfakefs,
   pytestCheckHook,
-  yappi,
-  pyre-extensions,
+  sqlalchemy,
+  tabulate,
 }:
 
 buildPythonPackage rec {
   pname = "ax-platform";
-  version = "0.4.1";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "ax";
-    rev = "refs/tags/${version}";
-    hash = "sha256-ygMMMKY5XsoQGp9yUMFAQqkSUlXNBJCb8xgGE10db4U=";
+    tag = version;
+    hash = "sha256-DFsV1w6J7bTZNUq9OYExDvfc7IfTcthGKAnRMNujRKI=";
   };
+
+  env.ALLOW_BOTORCH_LATEST = "1";
 
   build-system = [
     setuptools
@@ -39,51 +50,70 @@ buildPythonPackage rec {
     botorch
     ipywidgets
     jinja2
+    markdown
     pandas
     plotly
-    typeguard
     pyre-extensions
+    scikit-learn
+    scipy
+    sympy
   ];
-
-  env.ALLOW_BOTORCH_LATEST = "1";
 
   nativeCheckInputs = [
-    hypothesis
-    mercurial
     pyfakefs
+    # pytest-xdist
     pytestCheckHook
-    yappi
+    sqlalchemy
+    tabulate
   ];
   pytestFlagsArray = [
-    "--ignore=ax/benchmark"
-    "--ignore=ax/runners/tests/test_torchx.py"
-    # requires pyre_extensions
-    "--ignore=ax/telemetry/tests"
-    "--ignore=ax/core/tests/test_utils.py"
-    "--ignore=ax/early_stopping/tests/test_strategies.py"
+    # Hangs forever
+    "--deselect=ax/analysis/plotly/tests/test_top_surfaces.py::TestTopSurfacesAnalysis::test_online"
+  ];
+
+  disabledTestPaths = [
+    "ax/benchmark"
+    "ax/runners/tests/test_torchx.py"
+
     # broken with sqlalchemy 2
-    "--ignore=ax/service/tests/test_ax_client.py"
-    "--ignore=ax/service/tests/test_scheduler.py"
-    "--ignore=ax/service/tests/test_with_db_settings_base.py"
-    "--ignore=ax/storage"
+    "ax/core/tests/test_experiment.py"
+    "ax/service/tests/test_ax_client.py"
+    "ax/service/tests/test_scheduler.py"
+    "ax/service/tests/test_with_db_settings_base.py"
   ];
-  disabledTests = [
-    # exact comparison of floating points
-    "test_optimize_l0_homotopy"
-    # AssertionError: 5 != 2
-    "test_get_standard_plots_moo"
-    # AssertionError: Expected 'warning' to be called once. Called 3 times
-    "test_validate_kwarg_typing"
-    # uses torch.equal
-    "test_convert_observations"
-  ];
+
+  disabledTests =
+    [
+      # sqlalchemy.exc.ArgumentError: Strings are not accepted for attribute names in loader options; please use class-bound attributes directly.
+      "SQAStoreUtilsTest"
+      "SQAStoreTest"
+
+      # ValueError: `db_settings` argument should be of type ax.storage.sqa_store
+      "test_get_next_trials_with_db"
+
+      # exact comparison of floating points
+      "test_optimize_l0_homotopy"
+      # AssertionError: 5 != 2
+      "test_get_standard_plots_moo"
+      # AssertionError: Expected 'warning' to be called once. Called 3 times
+      "test_validate_kwarg_typing"
+      # uses torch.equal
+      "test_convert_observations"
+      # broken with sqlalchemy 2
+      "test_sql_storage"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # flaky on x86
+      "test_gen_with_expanded_parameter_space"
+    ];
+
   pythonImportsCheck = [ "ax" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/facebook/Ax/releases/tag/${version}";
-    description = "Ax is an accessible, general-purpose platform for understanding, managing, deploying, and automating adaptive experiments";
+  meta = {
+    description = "Platform for understanding, managing, deploying, and automating adaptive experiments";
     homepage = "https://ax.dev/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ veprbl ];
+    changelog = "https://github.com/facebook/Ax/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

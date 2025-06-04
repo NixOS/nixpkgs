@@ -7,12 +7,8 @@
   qt5platform-plugins,
   udisks2-qt5,
   cmake,
-  qtbase,
-  qttools,
   pkg-config,
-  kcodecs,
-  karchive,
-  wrapQtAppsHook,
+  libsForQt5,
   minizip,
   libzip,
   libuuid,
@@ -39,9 +35,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    qttools
+    libsForQt5.qttools
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -49,8 +45,8 @@ stdenv.mkDerivation rec {
     qt5integration
     qt5platform-plugins
     udisks2-qt5
-    kcodecs
-    karchive
+    libsForQt5.kcodecs
+    libsForQt5.karchive
     minizip
     libzip
     libuuid
@@ -62,9 +58,6 @@ stdenv.mkDerivation rec {
     "-DUSE_TEST=OFF"
   ];
 
-  # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
-  qtWrapperArgs = [ "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}" ];
-
   strictDeps = true;
 
   meta = with lib; {
@@ -73,6 +66,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/deepin-compressor";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }

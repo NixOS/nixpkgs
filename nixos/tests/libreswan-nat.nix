@@ -32,20 +32,28 @@ let
   # Common IPsec configuration
   baseTunnel = {
     services.libreswan.enable = true;
-    environment.etc."ipsec.d/tunnel.secrets" =
-      { text = ''@server %any : PSK "j1JbIi9WY07rxwcNQ6nbyThKCf9DGxWOyokXIQcAQUnafsNTUJxfsxwk9WYK8fHj"'';
-        mode = "600";
-      };
+    environment.etc."ipsec.d/tunnel.secrets" = {
+      text = ''@server %any : PSK "j1JbIi9WY07rxwcNQ6nbyThKCf9DGxWOyokXIQcAQUnafsNTUJxfsxwk9WYK8fHj"'';
+      mode = "600";
+    };
   };
 
   # Helpers to add a static IP address on an interface
   setAddress4 = iface: addr: {
-    networking.interfaces.${iface}.ipv4.addresses =
-      lib.mkVMOverride [ { address = addr; prefixLength = 24; } ];
+    networking.interfaces.${iface}.ipv4.addresses = lib.mkVMOverride [
+      {
+        address = addr;
+        prefixLength = 24;
+      }
+    ];
   };
   setAddress6 = iface: addr: {
-    networking.interfaces.${iface}.ipv6.addresses =
-      lib.mkVMOverride [ { address = addr; prefixLength = 64; } ];
+    networking.interfaces.${iface}.ipv6.addresses = lib.mkVMOverride [
+      {
+        address = addr;
+        prefixLength = 64;
+      }
+    ];
   };
 
 in
@@ -56,21 +64,26 @@ in
     maintainers = [ rnhmjoj ];
   };
 
-  nodes.router = { pkgs, ... }: lib.mkMerge [
-    baseNetwork
-    (setAddress4 "eth1" "203.0.113.1")
-    (setAddress4 "eth2" "192.168.1.1")
-    {
-      virtualisation.vlans = [ 1 2 ];
-      environment.systemPackages = [ pkgs.tcpdump ];
-      networking.nat = {
-        enable = true;
-        externalInterface = "eth1";
-        internalInterfaces = [ "eth2" ];
-      };
-      networking.firewall.trustedInterfaces = [ "eth2" ];
-    }
-  ];
+  nodes.router =
+    { pkgs, ... }:
+    lib.mkMerge [
+      baseNetwork
+      (setAddress4 "eth1" "203.0.113.1")
+      (setAddress4 "eth2" "192.168.1.1")
+      {
+        virtualisation.vlans = [
+          1
+          2
+        ];
+        environment.systemPackages = [ pkgs.tcpdump ];
+        networking.nat = {
+          enable = true;
+          externalInterface = "eth1";
+          internalInterfaces = [ "eth2" ];
+        };
+        networking.firewall.trustedInterfaces = [ "eth2" ];
+      }
+    ];
 
   nodes.inner = lib.mkMerge [
     baseNetwork
@@ -84,8 +97,14 @@ in
     (setAddress4 "eth1" "203.0.113.2")
     (setAddress6 "eth2" "2001:db8::1")
     {
-      virtualisation.vlans = [ 1 3 ];
-      networking.firewall.allowedUDPPorts = [ 500 4500 ];
+      virtualisation.vlans = [
+        1
+        3
+      ];
+      networking.firewall.allowedUDPPorts = [
+        500
+        4500
+      ];
       networking.firewall.allowedTCPPorts = [ 993 ];
 
       # see https://github.com/NixOS/nixpkgs/pull/310857
@@ -172,67 +191,66 @@ in
     }
   ];
 
-  testScript =
-    ''
-      def client_to_host(machine, msg: str):
-          """
-          Sends a message from client to server
-          """
-          machine.execute("nc -lu :: 1234 >/tmp/msg &")
-          client.sleep(1)
-          client.succeed(f"echo '{msg}' | nc -uw 0 {machine.name} 1234")
-          client.sleep(1)
-          machine.succeed(f"grep '{msg}' /tmp/msg")
+  testScript = ''
+    def client_to_host(machine, msg: str):
+        """
+        Sends a message from client to server
+        """
+        machine.execute("nc -lu :: 1234 >/tmp/msg &")
+        client.sleep(1)
+        client.succeed(f"echo '{msg}' | nc -uw 0 {machine.name} 1234")
+        client.sleep(1)
+        machine.succeed(f"grep '{msg}' /tmp/msg")
 
 
-      def eavesdrop():
-          """
-          Starts eavesdropping on the router
-          """
-          match = "udp port 1234"
-          router.execute(f"tcpdump -i eth1 -c 1 -Avv {match} >/tmp/log &")
+    def eavesdrop():
+        """
+        Starts eavesdropping on the router
+        """
+        match = "udp port 1234"
+        router.execute(f"tcpdump -i eth1 -c 1 -Avv {match} >/tmp/log &")
 
 
-      start_all()
+    start_all()
 
-      with subtest("Network is up"):
-          client.wait_until_succeeds("ping -c1 server")
-          client.succeed("systemctl restart ipsec")
-          server.succeed("systemctl restart ipsec")
+    with subtest("Network is up"):
+        client.wait_until_succeeds("ping -c1 server")
+        client.succeed("systemctl restart ipsec")
+        server.succeed("systemctl restart ipsec")
 
-      with subtest("Router can eavesdrop cleartext traffic"):
-          eavesdrop()
-          client_to_host(server, "I secretly love turnip")
-          router.sleep(1)
-          router.succeed("grep turnip /tmp/log")
+    with subtest("Router can eavesdrop cleartext traffic"):
+        eavesdrop()
+        client_to_host(server, "I secretly love turnip")
+        router.sleep(1)
+        router.succeed("grep turnip /tmp/log")
 
-      with subtest("Libreswan is ready"):
-          client.wait_for_unit("ipsec")
-          server.wait_for_unit("ipsec")
-          client.succeed("ipsec checkconfig")
-          server.succeed("ipsec checkconfig")
+    with subtest("Libreswan is ready"):
+        client.wait_for_unit("ipsec")
+        server.wait_for_unit("ipsec")
+        client.succeed("ipsec checkconfig")
+        server.succeed("ipsec checkconfig")
 
-      with subtest("Client can't ping VPN host"):
-          client.fail("ping -c1 inner")
+    with subtest("Client can't ping VPN host"):
+        client.fail("ping -c1 inner")
 
-      with subtest("Client can start the tunnel"):
-          client.succeed("ipsec start tunnel")
-          client.succeed("ip -6 addr show lo | grep -q 2001:db8:0:0:c")
+    with subtest("Client can start the tunnel"):
+        client.succeed("ipsec start tunnel")
+        client.succeed("ip -6 addr show lo | grep -q 2001:db8:0:0:c")
 
-      with subtest("Client can ping VPN host"):
-          client.wait_until_succeeds("ping -c1 2001:db8::1")
-          client.succeed("ping -c1 inner")
+    with subtest("Client can ping VPN host"):
+        client.wait_until_succeeds("ping -c1 2001:db8::1")
+        client.succeed("ping -c1 inner")
 
-      with subtest("Eve no longer can eavesdrop"):
-          eavesdrop()
-          client_to_host(inner, "Just kidding, I actually like rhubarb")
-          router.sleep(1)
-          router.fail("grep rhubarb /tmp/log")
+    with subtest("Eve no longer can eavesdrop"):
+        eavesdrop()
+        client_to_host(inner, "Just kidding, I actually like rhubarb")
+        router.sleep(1)
+        router.fail("grep rhubarb /tmp/log")
 
-      with subtest("TCP fallback is available"):
-          server.succeed("iptables -I nixos-fw -p udp -j DROP")
-          client.succeed("ipsec restart")
-          client.execute("ipsec start tunnel")
-          client.wait_until_succeeds("ping -c1 inner")
-    '';
+    with subtest("TCP fallback is available"):
+        server.succeed("iptables -I nixos-fw -p udp -j DROP")
+        client.succeed("ipsec restart")
+        client.execute("ipsec start tunnel")
+        client.wait_until_succeeds("ping -c1 inner")
+  '';
 }

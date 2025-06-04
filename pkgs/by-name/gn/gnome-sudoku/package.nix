@@ -10,6 +10,7 @@
   gettext,
   gtk4,
   gnome,
+  blueprint-compiler,
   wrapGAppsHook4,
   libadwaita,
   libgee,
@@ -22,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-sudoku";
-  version = "46.4";
+  version = "48.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-sudoku/${lib.versions.major version}/gnome-sudoku-${version}.tar.xz";
-    hash = "sha256-SmsMRQbolRIlOxyZO3P2QOjv2awfHrUqAkgZCHYjpKI=";
+    hash = "sha256-eXE62CpZkEzWlv8CJV627ZNk6I8+eDNDsfnQygnyx+M=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
     itstool
     libxml2
     desktop-file-utils
+    blueprint-compiler
     wrapGAppsHook4
   ];
 
@@ -59,7 +61,7 @@ stdenv.mkDerivation rec {
     changelog = "https://gitlab.gnome.org/GNOME/gnome-sudoku/-/blob/${version}/NEWS?ref_type=tags";
     description = "Test your logic skills in this number grid puzzle";
     mainProgram = "gnome-sudoku";
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };

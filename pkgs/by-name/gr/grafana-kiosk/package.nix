@@ -1,17 +1,23 @@
-{ lib, buildGoModule, fetchFromGitHub, chromium, makeWrapper }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  chromium,
+  makeWrapper,
+}:
 
 buildGoModule rec {
   pname = "grafana-kiosk";
-  version = "1.0.7";
+  version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana-kiosk";
     rev = "v${version}";
-    hash = "sha256-JTz3EaedJFWE3YqsBLjKH4hWI7+dNeMlp0sZ2kW8IR8=";
+    hash = "sha256-kh62qGMVHNTssQMEBwLaEW0tRtP3iWMrxXeQU+fe+44=";
   };
 
-  vendorHash = "sha256-8sxfbSj0Jq5f0oJoe8PtP72PDWvLzgOeRiP7I/Pfam4=";
+  vendorHash = "sha256-LZLmXGPYvNR4meqen0h0UHj62392hfPs9BLNK+X6sKA=";
 
   nativeBuildInputs = [ makeWrapper ];
   postFixup = ''

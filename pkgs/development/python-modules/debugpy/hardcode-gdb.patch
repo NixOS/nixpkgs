@@ -1,5 +1,5 @@
 diff --git a/src/debugpy/_vendored/pydevd/pydevd_attach_to_process/add_code_to_python_process.py b/src/debugpy/_vendored/pydevd/pydevd_attach_to_process/add_code_to_python_process.py
-index a1a852a0..0bb91807 100644
+index 2e328f61..ba7221fe 100644
 --- a/src/debugpy/_vendored/pydevd/pydevd_attach_to_process/add_code_to_python_process.py
 +++ b/src/debugpy/_vendored/pydevd/pydevd_attach_to_process/add_code_to_python_process.py
 @@ -412,7 +412,7 @@ def run_python_code_linux(pid, python_code, connect_debugger_tracing=False, show

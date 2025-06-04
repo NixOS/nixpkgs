@@ -9,27 +9,27 @@
   pyyaml,
   requests-unixsocket,
   setuptools-scm,
-  urllib3,
   pytest-check,
   pytest-mock,
   pytestCheckHook,
   responses,
   freezegun,
   pytest-subprocess,
-  pytest-logdog,
+  logassert,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "craft-providers";
-  version = "2.0.3";
+  version = "2.3.0";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-providers";
-    rev = "refs/tags/${version}";
-    hash = "sha256-DTUXT5vFIDI06oxka3diWJ5E5oqiX6GXB4ivq6+VrDk=";
+    tag = version;
+    hash = "sha256-EJoFuESgjEKoI1BKO02jd4iI/DFBphLujR/vGST/JGk=";
   };
 
   patches = [
@@ -51,8 +51,7 @@ buildPythonPackage rec {
     # The urllib3 incompat: https://github.com/msabramo/requests-unixsocket/pull/69
     # This is already patched in nixpkgs.
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==73.0.1" "setuptools" \
-      --replace-fail "urllib3<2" "urllib3"
+      --replace-fail "setuptools==75.2.0" "setuptools"
   '';
 
   pythonRelaxDeps = [ "requests" ];
@@ -65,25 +64,20 @@ buildPythonPackage rec {
     pydantic
     pyyaml
     requests-unixsocket
-    urllib3
   ];
 
   pythonImportsCheck = [ "craft_providers" ];
 
   nativeCheckInputs = [
     freezegun
+    logassert
     pytest-check
     pytest-mock
     pytest-subprocess
-    pytest-logdog
     pytestCheckHook
     responses
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    mkdir -p check-phase
-    export HOME="$(pwd)/check-phase"
-  '';
 
   pytestFlagsArray = [ "tests/unit" ];
 
@@ -105,7 +99,7 @@ buildPythonPackage rec {
   meta = {
     description = "Interfaces for instantiating and controlling a variety of build environments";
     homepage = "https://github.com/canonical/craft-providers";
-    changelog = "https://github.com/canonical/craft-providers/releases/tag/${version}";
+    changelog = "https://github.com/canonical/craft-providers/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.linux;

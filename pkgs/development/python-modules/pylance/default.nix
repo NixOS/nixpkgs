@@ -9,9 +9,8 @@
   pkg-config,
 
   # buildInputs
-  libiconv,
+  openssl,
   protobuf,
-  darwin,
 
   # dependencies
   numpy,
@@ -21,6 +20,7 @@
   torch,
 
   # tests
+  datafusion,
   duckdb,
   ml-dtypes,
   pandas,
@@ -28,50 +28,47 @@
   polars,
   pytestCheckHook,
   tqdm,
-
-  # passthru
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "pylance";
-  version = "0.17.0";
+  version = "0.27.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-E+29CbVNbzmrQnBZt0860IvL4xYZqzE+uzSuKDwgxzg=";
+    tag = "v${version}";
+    hash = "sha256-fk32CnWH9wVKfTgT2Es6+tnvB+rPzkA8in0J726JHx0=";
   };
 
-  buildAndTestSubdir = "python";
+  sourceRoot = "${src.name}/python";
 
-  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit
+      pname
+      version
+      src
+      sourceRoot
+      ;
+    hash = "sha256-N7ODbv+q9xX8lb4vvUzMGTul/whNw+dVrBp/YcEaREI=";
+  };
 
   nativeBuildInputs = [
     pkg-config
+    protobuf # for protoc
     rustPlatform.cargoSetupHook
   ];
 
-  build-system = [ rustPlatform.maturinBuildHook ];
+  build-system = [
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
+  ];
 
-  buildInputs =
-    [
-      libiconv
-      protobuf
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [
+    openssl
+    protobuf
+  ];
 
   pythonRelaxDeps = [ "pyarrow" ];
 
@@ -87,6 +84,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "lance" ];
 
   nativeCheckInputs = [
+    datafusion
     duckdb
     ml-dtypes
     pandas
@@ -97,32 +95,26 @@ buildPythonPackage rec {
   ] ++ optional-dependencies.torch;
 
   preCheck = ''
-    cd python/python/tests
+    cd python/tests
   '';
 
   disabledTests =
-    lib.optionals stdenv.hostPlatform.isDarwin [
-      # AttributeError: module 'torch.distributed' has no attribute 'is_initialized'
-      "test_convert_int_tensors"
-      "test_ground_truth"
-      "test_index_cast_centroids"
-      "test_index_with_no_centroid_movement"
-      "test_iter_filter"
-      "test_iter_over_dataset_fixed_shape_tensor"
-      "test_iter_over_dataset_fixed_size_lists"
-    ]
-    ++ [
-      # incompatible with duckdb 1.1.1
-      "test_duckdb_pushdown_extension_types"
-    ];
+    [
+      # Writes to read-only build directory
+      "test_add_data_storage_version"
+      "test_fix_data_storage_version"
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--generate-lockfile"
-      "--lockfile-metadata-path"
-      "python"
+      # AttributeError: 'SessionContext' object has no attribute 'register_table_provider'
+      "test_table_loading"
+
+      # subprocess.CalledProcessError: Command ... returned non-zero exit status 1.
+      # ModuleNotFoundError: No module named 'lance'
+      "test_tracing"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # OSError: LanceError(IO): Resources exhausted: Failed to allocate additional 1245184 bytes for ExternalSorter[0]...
+      "test_merge_insert_large"
     ];
-  };
 
   meta = {
     description = "Python wrapper for Lance columnar format";
@@ -130,8 +122,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/lancedb/lance/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
-    # test_indices.py ...sss.Fatal Python error: Fatal Python error: Illegal instructionIllegal instruction
-    # File "/nix/store/wiiccrs0vd1qbh4j6ki9p40xmamsjix3-python3.12-pylance-0.17.0/lib/python3.12/site-packages/lance/indices.py", line 237 in train_ivf
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }

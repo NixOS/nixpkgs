@@ -4,11 +4,9 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  stdenv,
-  darwin,
 }:
 let
-  version = "0.18.0";
+  version = "0.22.0";
 in
 rustPlatform.buildRustPackage {
   pname = "markuplinkchecker";
@@ -18,22 +16,15 @@ rustPlatform.buildRustPackage {
     owner = "becheran";
     repo = "mlc";
     rev = "v${version}";
-    hash = "sha256-hMS0ZX4Ta1xq5e8R7mvmOQCEW3UCk1nd2TGzWOyOGY8=";
+    hash = "sha256-3saRIAKVTCi145hoD0SGPloCeIwVKR3Wp3Qo3zo9g7k=";
   };
 
-  cargoHash = "sha256-adJZcuUynxYpj2h6YKozb6W/2WjNsWq9IwxJaIVl0YI=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-DHpOReEdufQ4++74CJDnW6EJtUwhtq+RgZ6hVGqHkKE=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [ openssl ];
 
   env = {
     OPENSSL_NO_VENDOR = true;

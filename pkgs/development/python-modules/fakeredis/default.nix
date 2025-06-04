@@ -12,21 +12,22 @@
   pytestCheckHook,
   pythonOlder,
   redis,
+  redisTestHook,
   sortedcontainers,
 }:
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "2.23.5";
+  version = "2.26.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dsoftwareinc";
     repo = "fakeredis-py";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-gwTOtwBOHl6FNL0ekOq2rewwT/XoQ31+cyxU/OCBOTA=";
+    tag = "v${version}";
+    hash = "sha256-jD0e04ltH1MjExfrPsR6LUn4X0/qoJZWzX9i2A58HHI=";
   };
 
   build-system = [ poetry-core ];
@@ -34,13 +35,6 @@ buildPythonPackage rec {
   dependencies = [
     redis
     sortedcontainers
-  ];
-
-  nativeCheckInputs = [
-    hypothesis
-    pytest-asyncio
-    pytest-mock
-    pytestCheckHook
   ];
 
   optional-dependencies = {
@@ -51,12 +45,21 @@ buildPythonPackage rec {
     probabilistic = [ pyprobables ];
   };
 
+  nativeCheckInputs = [
+    hypothesis
+    pytest-asyncio
+    pytest-mock
+    pytestCheckHook
+    redisTestHook
+  ];
+
   pythonImportsCheck = [ "fakeredis" ];
 
-  disabledTests = [
-    # AssertionError
-    "test_command"
-  ];
+  pytestFlagsArray = [ "-m 'not slow'" ];
+
+  preCheck = ''
+    redisTestPort=6390
+  '';
 
   meta = with lib; {
     description = "Fake implementation of Redis API";

@@ -11,14 +11,18 @@
 
 buildPerlPackage rec {
   pname = "Image-ExifTool";
-  version = "12.84";
+  version = "13.25";
 
   src = fetchurl {
     url = "https://exiftool.org/Image-ExifTool-${version}.tar.gz";
-    hash = "sha256-sfSnx5bS7vI0KIhBOpB5VYzP6g8oi0rR7mUTxxNWEA0=";
+    hash = "sha256-HNVVFEhGooKYeDvr86tFIjUnPHg1hBCBPj1Ok8ZTsfo=";
   };
 
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+
+  postPatch = ''
+    patchShebangs exiftool
+  '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     shortenPerlShebang $out/bin/exiftool
@@ -48,8 +52,14 @@ buildPerlPackage rec {
     '';
     homepage = "https://exiftool.org/";
     changelog = "https://exiftool.org/history.html";
-    license = with lib.licenses; [ gpl1Plus /* or */ artistic2 ];
-    maintainers = with lib.maintainers; [ kiloreux anthonyroussel ];
+    license = with lib.licenses; [
+      gpl1Plus # or
+      artistic2
+    ];
+    maintainers = with lib.maintainers; [
+      kiloreux
+      anthonyroussel
+    ];
     mainProgram = "exiftool";
   };
 }

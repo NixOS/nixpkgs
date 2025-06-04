@@ -3,15 +3,12 @@
   lib,
   fetchFromGitHub,
   cmake,
-  qttools,
   pkg-config,
-  wrapQtAppsHook,
+  libsForQt5,
   dtkwidget,
   qt5integration,
   qt5platform-plugins,
   dde-qt-dbus-factory,
-  qtbase,
-  qtsvg,
   libical,
   sqlite,
   runtimeShell,
@@ -38,17 +35,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    qttools
+    libsForQt5.qttools
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     qt5integration
     qt5platform-plugins
     dtkwidget
-    qtbase
-    qtsvg
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
     dde-qt-dbus-factory
     libical
     sqlite
@@ -64,6 +61,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxdeepin/dde-calendar";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    teams = [ teams.deepin ];
   };
 }

@@ -1,19 +1,25 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 
-  {
-    name = "tinywl";
-    meta = {
-      maintainers = with lib.maintainers; [ primeos ];
-    };
+{
+  name = "tinywl";
+  meta = {
+    maintainers = with lib.maintainers; [ primeos ];
+  };
 
-    nodes.machine = { config, ... }: {
+  nodes.machine =
+    { config, ... }:
+    {
       # Automatically login on tty1 as a normal user:
       imports = [ ./common/user-account.nix ];
       services.getty.autologinUser = "alice";
       security.polkit.enable = true;
 
       environment = {
-        systemPackages = with pkgs; [ tinywl foot wayland-utils ];
+        systemPackages = with pkgs; [
+          tinywl
+          foot
+          wayland-utils
+        ];
       };
 
       hardware.graphics.enable = true;
@@ -34,7 +40,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       virtualisation.qemu.options = [ "-vga none -device virtio-gpu-pci" ];
     };
 
-    testScript = { nodes, ... }: ''
+  testScript =
+    { nodes, ... }:
+    ''
       start_all()
       machine.wait_for_unit("multi-user.target")
 
@@ -56,4 +64,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       machine.wait_for_file("/tmp/tinywl-exit-ok")
       machine.copy_from_vm("/tmp/tinywl.log")
     '';
-  })
+}

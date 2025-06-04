@@ -3,35 +3,75 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  darwin,
+  installShellFiles,
+  pkg-config,
+  alsa-lib,
   versionCheckHook,
+  bacon,
+  buildPackages,
   nix-update-script,
+
+  withSound ? false,
 }:
 
-rustPlatform.buildRustPackage rec {
+let
+  soundDependencies =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # bindgenHook is only included on darwin as it is needed to build `coreaudio-sys`, a darwin-specific crate
+      rustPlatform.bindgenHook
+    ];
+in
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bacon";
-  version = "3.0.0";
+  version = "3.15.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "bacon";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-fSlakjZbY8jrFkCqVxPr3UKwf1Oq4yPhLmVbzsksSeg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8f+EphnooB/9KY9M+mi8xBUX/cH7EvoyHlD/4RjgeaA=";
   };
 
-  cargoHash = "sha256-WT0uXmchhapss3AU4+e2wA3nBVjzikfRNRyAvQnpJfY=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-48QDMJrxm+9psSeCRG7rsNPwxv+FKLrkLMvIvwsV3GQ=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
+  buildFeatures = lib.optionals withSound [
+    "sound"
   ];
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = [ "--version" ];
+  nativeBuildInputs =
+    [
+      installShellFiles
+    ]
+    ++ lib.optionals withSound [
+      pkg-config
+    ];
+
+  buildInputs = lib.optionals withSound soundDependencies;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
+  postInstall =
+    let
+      bacon = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/bacon";
+    in
+    lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+      installShellCompletion --cmd bacon \
+        --bash <(COMPLETE=bash ${bacon}) \
+        --fish <(COMPLETE=fish ${bacon}) \
+        --zsh <(COMPLETE=zsh ${bacon})
+    '';
+
   passthru = {
+    tests = {
+      withSound = bacon.override { withSound = true; };
+    };
     updateScript = nix-update-script { };
   };
 
@@ -39,8 +79,11 @@ rustPlatform.buildRustPackage rec {
     description = "Background rust code checker";
     mainProgram = "bacon";
     homepage = "https://github.com/Canop/bacon";
-    changelog = "https://github.com/Canop/bacon/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Canop/bacon/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ FlorianFranzen ];
+    maintainers = with lib.maintainers; [
+      FlorianFranzen
+      matthiasbeyer
+    ];
   };
-}
+})

@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 let
   accessKey = "BKIKJAA5BMMU2RHO6IBB";
   secretKey = "V7f1CwQqAcwo80UEIJEjc5gVQUSSx5ohQ9GSrr12";
@@ -15,8 +15,11 @@ in
 
   meta.maintainers = lib.teams.cyberus.members;
 
-  nodes = {
-    outline = { pkgs, config, ... }: {
+  node.pkgsReadOnly = false;
+
+  nodes.outline =
+    { pkgs, config, ... }:
+    {
       nixpkgs.config.allowUnfree = true;
       environment.systemPackages = [ pkgs.minio-client ];
       services.outline = {
@@ -34,21 +37,19 @@ in
         inherit rootCredentialsFile;
       };
     };
-  };
 
-  testScript =
-    ''
-      machine.wait_for_unit("minio.service")
-      machine.wait_for_open_port(9000)
+  testScript = ''
+    machine.wait_for_unit("minio.service")
+    machine.wait_for_open_port(9000)
 
-      # Create a test bucket on the server
-      machine.succeed(
-          "mc config host add minio http://localhost:9000 ${accessKey} ${secretKey} --api s3v4"
-      )
-      machine.succeed("mc mb minio/outline")
+    # Create a test bucket on the server
+    machine.succeed(
+        "mc config host add minio http://localhost:9000 ${accessKey} ${secretKey} --api s3v4"
+    )
+    machine.succeed("mc mb minio/outline")
 
-      outline.wait_for_unit("outline.service")
-      outline.wait_for_open_port(3000)
-      outline.succeed("curl --fail http://localhost:3000/")
-    '';
-})
+    outline.wait_for_unit("outline.service")
+    outline.wait_for_open_port(3000)
+    outline.succeed("curl --fail http://localhost:3000/")
+  '';
+}

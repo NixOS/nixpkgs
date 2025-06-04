@@ -1,35 +1,39 @@
-{ libX11
-, libxcb
-, libXcomposite
-, libXdamage
-, libXext
-, libXfixes
-, libXrandr
-, stdenv
-, lib
-, alsa-lib
-, at-spi2-atk
-, atkmm
-, cairo
-, cups
-, dbus
-, expat
-, glib
-, gtk3
-, libdrm
-, libglvnd
-, libxkbcommon
-, mesa
-, nspr
-, nss
-, pango
-, systemd
-, fetchurl
-, autoPatchelfHook
-, dpkg
+{
+  libX11,
+  libxcb,
+  libXcomposite,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXrandr,
+  stdenv,
+  lib,
+  alsa-lib,
+  at-spi2-atk,
+  atkmm,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  glib,
+  gtk3,
+  libdrm,
+  libglvnd,
+  libxkbcommon,
+  libgbm,
+  nspr,
+  nss,
+  pango,
+  systemd,
+  fetchurl,
+  autoPatchelfHook,
+  dpkg,
 }:
 let
-  glLibs = [ libglvnd mesa ];
+  glLibs = [
+    libglvnd
+    libgbm
+  ];
   libs = [
     alsa-lib
     atkmm
@@ -54,8 +58,11 @@ let
     pango
   ];
   buildInputs = glLibs ++ libs;
-  runpathPackages = glLibs ++ [ stdenv.cc.cc stdenv.cc.libc ];
-  version = "1.0.16";
+  runpathPackages = glLibs ++ [
+    stdenv.cc.cc
+    stdenv.cc.libc
+  ];
+  version = "1.0.31";
 in
 stdenv.mkDerivation {
   pname = "tana";
@@ -63,7 +70,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/tanainc/tana-desktop-releases/releases/download/v${version}/tana_${version}_amd64.deb";
-    hash = "sha256-XLjzvMai5HyxEGK02DfBAKy5jva9wEGcf5A/38jzu+s=";
+    hash = "sha256-+KJ2peQWb378h6nWmoj5J4zAmSi4AHvR6fqrjRC/c8w=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +78,9 @@ stdenv.mkDerivation {
     dpkg
   ];
 
-  appendRunpaths = map (pkg: "${lib.getLib pkg}/lib") runpathPackages ++ [ "${placeholder "out"}/lib/tana" ];
+  appendRunpaths = map (pkg: "${lib.getLib pkg}/lib") runpathPackages ++ [
+    "${placeholder "out"}/lib/tana"
+  ];
 
   # Needed for Zygote
   runtimeDependencies = [

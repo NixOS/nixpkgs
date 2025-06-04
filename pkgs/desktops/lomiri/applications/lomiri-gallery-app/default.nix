@@ -130,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl3Only
       cc-by-sa-30
     ];
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     mainProgram = "lomiri-gallery-app";
     platforms = lib.platforms.linux;
   };

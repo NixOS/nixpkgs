@@ -1,22 +1,23 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, testers
-, gh-dash
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  testers,
+  gh-dash,
 }:
 
 buildGoModule rec {
   pname = "gh-dash";
-  version = "4.7.0";
+  version = "4.16.0";
 
   src = fetchFromGitHub {
     owner = "dlvhdr";
     repo = "gh-dash";
     rev = "v${version}";
-    hash = "sha256-+tUG+ReP8y6wI4XZsR2Look4LAwK79CZf9fWUgkx4O0=";
+    hash = "sha256-qqQ+UmeHvqA57evAn9dBLBeXx1n2z804XcmP82ZgEKc=";
   };
 
-  vendorHash = "sha256-lqmz+6Cr9U5IBoJ5OeSN6HKY/nKSAmszfvifzbxG7NE=";
+  vendorHash = "sha256-9nSuXZyi/+gyU2D1OL+6Bw9GKvYPdsj7dUmBcESHePw=";
 
   ldflags = [
     "-s"

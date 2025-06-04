@@ -1,33 +1,32 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alsa-lib
-, copyDesktopItems
-, gtk3
-, makeDesktopItem
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  copyDesktopItems,
+  wrapGAppsHook3,
+  makeDesktopItem,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "free42";
-  version = "3.1.8";
+  version = "3.3.5";
 
   src = fetchFromGitHub {
     owner = "thomasokken";
     repo = "free42";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-z1HlI2e3mCRJ/sWMdsLF7IpcvTh+Zlrk77M8gaJXMzQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OJ9eECMMfUHLZqcbLRQnDrtqn6LJ0QL+j1WzF8WryiY=";
   };
 
   nativeBuildInputs = [
     copyDesktopItems
     pkg-config
+    wrapGAppsHook3
   ];
 
-  buildInputs = [
-    alsa-lib
-    gtk3
-  ];
+  buildInputs = [ alsa-lib ];
 
   postPatch = ''
     sed -i -e "s|/bin/ls|ls|" gtk/Makefile
@@ -43,7 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
       exec = "free42bin";
       type = "Application";
       comment = "A software clone of HP-42S Calculator";
-      categories = [ "Utility" "Calculator" ];
+      icon = "free42";
+      categories = [
+        "Utility"
+        "Calculator"
+      ];
     })
     (makeDesktopItem {
       name = "com.thomasokken.free42dec";
@@ -52,7 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
       exec = "free42dec";
       type = "Application";
       comment = "A software clone of HP-42S Calculator";
-      categories = [ "Utility" "Calculator" ];
+      icon = "free42";
+      categories = [
+        "Utility"
+        "Calculator"
+      ];
     })
   ];
 
@@ -77,11 +84,10 @@ stdenv.mkDerivation (finalAttrs: {
                         $out/share/icons/hicolor/128x128/apps
 
     install -m755 gtk/free42dec gtk/free42bin $out/bin
-    install -m644 gtk/README $out/share/doc/free42/README-GTK
     install -m644 README $out/share/doc/free42/README
 
-    install -m644 gtk/icon-48x48.xpm $out/share/icons/hicolor/48x48/apps
-    install -m644 gtk/icon-128x128.xpm $out/share/icons/hicolor/128x128/apps
+    install -m644 gtk/icon-48x48.xpm $out/share/icons/hicolor/48x48/apps/free42.xpm
+    install -m644 gtk/icon-128x128.xpm $out/share/icons/hicolor/128x128/apps/free42.xpm
     install -m644 skins/* $out/share/free42/skins
 
     runHook postInstall
@@ -91,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/thomasokken/free42";
     description = "Software clone of HP-42S Calculator";
     license = with lib.licenses; [ gpl2Only ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "free42dec";
     platforms = with lib.platforms; unix;
   };

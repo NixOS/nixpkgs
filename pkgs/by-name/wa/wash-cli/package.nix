@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchCrate, rustPlatform, pkg-config, openssl, darwin, fetchurl }:
+{
+  lib,
+  fetchCrate,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  fetchurl,
+}:
 
 let
   wasiPreviewCommandComponentAdapter = fetchurl {
@@ -10,24 +17,22 @@ let
     hash = "sha256-oE53IRMZgysSWT7RhrpZJjdaIyzCRf0h4d1yjqj/PSk=";
   };
 
-in rustPlatform.buildRustPackage rec {
+in
+rustPlatform.buildRustPackage rec {
   pname = "wash-cli";
-  version = "0.29.2";
+  version = "0.39.0";
 
   src = fetchCrate {
     inherit version pname;
-      hash = "sha256-A66KSDYFbByguhnlzzU5nf8pE3lhnYQjI3h73SKB2Zo=";
+    hash = "sha256-qOxYBhwkcn4g1cUBHuF0AoecpxN4ukgTjBnzVhWtw7A=";
   };
 
-  cargoHash = "sha256-2mo30xHQ3aCExdI0ITDY9g/C5peN48PdUNFVVxM//+c=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-dPHzRZh5jBxbPt+1a9wVbsBclAkfrcAXhpZgTw7e4Qo=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-      darwin.apple_sdk.frameworks.CoreServices
-    ];
+  buildInputs = [ openssl ];
 
   preBuild = "
     export WASI_PREVIEW1_COMMAND_COMPONENT_ADAPTER=${wasiPreviewCommandComponentAdapter}

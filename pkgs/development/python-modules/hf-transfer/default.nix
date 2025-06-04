@@ -12,26 +12,24 @@
   # buildInputs
   openssl,
   stdenv,
-  darwin,
   libiconv,
 }:
 
 buildPythonPackage rec {
   pname = "hf-transfer";
-  version = "0.1.8";
+  version = "0.1.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "hf_transfer";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Uh8q14OeN0fYsywYyNrH8C3wq/qRjQKEAIufi/a5RXA=";
+    tag = "v${version}";
+    hash = "sha256-mcU3YuJVfuwBvtLfqceV3glcJcpjSX7M3VjvbvLCxZg=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-I4APdz1r2KJ8pTfKAg8g240wYy8gtMlHwmBye4796Tk=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-O4aKqVSShFpt8mdZkY3WV55j9CIczRSRkIMC7dJoGv0=";
   };
 
   build-system = [
@@ -46,9 +44,7 @@ buildPythonPackage rec {
     [
       openssl
     ]
-    ++ lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
     ];
 

@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "erfanoabdi";
-    repo = pname;
+    repo = "gbinder-python";
     rev = version;
     sha256 = "1X9gAux9w/mCEVmE3Yqvvq3kU7hu4iAFaZWNZZZxt3E=";
   };
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/erfanoabdi/gbinder-python";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ mcaju ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

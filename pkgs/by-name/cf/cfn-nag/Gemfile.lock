@@ -1,6 +1,28 @@
-PATH
-  remote: .
+GEM
+  remote: https://rubygems.org/
   specs:
+    aws-eventstream (1.3.2)
+    aws-partitions (1.1106.0)
+    aws-sdk-core (3.224.0)
+      aws-eventstream (~> 1, >= 1.3.0)
+      aws-partitions (~> 1, >= 1.992.0)
+      aws-sigv4 (~> 1.9)
+      base64
+      jmespath (~> 1, >= 1.6.1)
+      logger
+    aws-sdk-kms (1.101.0)
+      aws-sdk-core (~> 3, >= 3.216.0)
+      aws-sigv4 (~> 1.5)
+    aws-sdk-s3 (1.186.1)
+      aws-sdk-core (~> 3, >= 3.216.0)
+      aws-sdk-kms (~> 1)
+      aws-sigv4 (~> 1.5)
+    aws-sigv4 (1.11.0)
+      aws-eventstream (~> 1, >= 1.0.2)
+    base64 (0.2.0)
+    cfn-model (0.6.6)
+      kwalify (= 0.7.2)
+      psych (~> 3)
     cfn-nag (0.8.10)
       aws-sdk-s3 (~> 1.76)
       cfn-model (= 0.6.6)
@@ -9,98 +31,31 @@ PATH
       netaddr (~> 2.0.4)
       optimist (~> 3.0.0)
       rexml
-
-GEM
-  remote: https://rubygems.org/
-  specs:
-    ast (2.4.2)
-    aws-eventstream (1.3.0)
-    aws-partitions (1.982.0)
-    aws-sdk-core (3.209.1)
-      aws-eventstream (~> 1, >= 1.3.0)
-      aws-partitions (~> 1, >= 1.651.0)
-      aws-sigv4 (~> 1.9)
-      jmespath (~> 1, >= 1.6.1)
-    aws-sdk-kms (1.94.0)
-      aws-sdk-core (~> 3, >= 3.207.0)
-      aws-sigv4 (~> 1.5)
-    aws-sdk-s3 (1.166.0)
-      aws-sdk-core (~> 3, >= 3.207.0)
-      aws-sdk-kms (~> 1)
-      aws-sigv4 (~> 1.5)
-    aws-sigv4 (1.10.0)
-      aws-eventstream (~> 1, >= 1.0.2)
-    cfn-model (0.6.6)
-      kwalify (= 0.7.2)
-      psych (~> 3)
-    diff-lcs (1.5.1)
-    docile (1.4.1)
     jmespath (1.6.2)
-    json (2.7.2)
     kwalify (0.7.2)
-    language_server-protocol (3.17.0.3)
     lightly (0.3.3)
     little-plugger (1.1.4)
+    logger (1.7.0)
     logging (2.2.2)
       little-plugger (~> 1.1)
       multi_json (~> 1.10)
     multi_json (1.15.0)
     netaddr (2.0.6)
     optimist (3.0.1)
-    parallel (1.26.3)
-    parser (3.3.5.0)
-      ast (~> 2.4.1)
-      racc
+    ostruct (0.6.1)
     psych (3.3.4)
-    racc (1.8.1)
-    rainbow (3.1.1)
-    rake (13.2.1)
-    regexp_parser (2.9.2)
-    rexml (3.3.8)
-    rspec (3.13.0)
-      rspec-core (~> 3.13.0)
-      rspec-expectations (~> 3.13.0)
-      rspec-mocks (~> 3.13.0)
-    rspec-core (3.13.1)
-      rspec-support (~> 3.13.0)
-    rspec-expectations (3.13.3)
-      diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.13.0)
-    rspec-mocks (3.13.1)
-      diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.13.0)
-    rspec-support (3.13.1)
-    rubocop (1.66.1)
-      json (~> 2.3)
-      language_server-protocol (>= 3.17.0)
-      parallel (~> 1.10)
-      parser (>= 3.3.0.2)
-      rainbow (>= 2.2.2, < 4.0)
-      regexp_parser (>= 2.4, < 3.0)
-      rubocop-ast (>= 1.32.2, < 2.0)
-      ruby-progressbar (~> 1.7)
-      unicode-display_width (>= 2.4.0, < 3.0)
-    rubocop-ast (1.32.3)
-      parser (>= 3.3.1.0)
-    ruby-progressbar (1.13.0)
-    simplecov (0.22.0)
-      docile (~> 1.1)
-      simplecov-html (~> 0.11)
-      simplecov_json_formatter (~> 0.1)
-    simplecov-html (0.13.1)
-    simplecov_json_formatter (0.1.4)
-    unicode-display_width (2.6.0)
+    rexml (3.4.1)
+    syslog (0.3.0)
+      logger
 
 PLATFORMS
-  arm64-darwin-23
   ruby
 
 DEPENDENCIES
-  cfn-nag!
-  rake
-  rspec (~> 3.4)
-  rubocop
-  simplecov (~> 0.21)
+  cfn-nag
+  logger
+  ostruct
+  syslog
 
 BUNDLED WITH
-   2.5.11
+   2.6.6

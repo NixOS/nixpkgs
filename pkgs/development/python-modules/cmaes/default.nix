@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CyberAgentAILab";
     repo = "cmaes";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-u2CgU9n8N9AMxfMBbDbnYzBMdl/IGOLTxOeh8RlnB/Y=";
   };
 

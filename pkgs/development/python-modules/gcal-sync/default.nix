@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "gcal-sync";
-  version = "6.1.6";
+  version = "7.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -23,13 +23,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "gcal_sync";
-    rev = "refs/tags/${version}";
-    hash = "sha256-dVpPq2TJsR+0VWfup2SNLsnBP2j/HUQsoxJebNkD8Sw=";
+    tag = version;
+    hash = "sha256-jdhPoZdkgMg9TBIV9j3dvaEnEOpOoa1OKBeR1YAWWKs=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     ical
     pydantic
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for syncing Google Calendar to local storage";
     homepage = "https://github.com/allenporter/gcal_sync";
-    changelog = "https://github.com/allenporter/gcal_sync/releases/tag/${version}";
+    changelog = "https://github.com/allenporter/gcal_sync/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];
   };

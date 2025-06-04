@@ -1,27 +1,32 @@
-{ lib, stdenv
-, fetchFromGitHub
-, gobject-introspection
-, wrapGAppsHook3
-, python3
-, ibus
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gobject-introspection,
+  wrapGAppsHook3,
+  python3,
+  ibus,
 }:
 
 let
-  python = python3.withPackages (ps: with ps; [
-    pygobject3
-    (toPythonModule ibus)
-    pyxdg
-    levenshtein
-  ]);
-in stdenv.mkDerivation rec {
+  python = python3.withPackages (
+    ps: with ps; [
+      pygobject3
+      (toPythonModule ibus)
+      pyxdg
+      levenshtein
+    ]
+  );
+in
+stdenv.mkDerivation rec {
   pname = "ibus-uniemoji";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "salty-horse";
     repo = "ibus-uniemoji";
-    rev = "v${version}";
-    sha256 = "121zh3q0li1k537fcvbd4ns4jgl9bbb9gm9ihy8cfxgirv38lcfa";
+    tag = "v${version}";
+    hash = "sha256-iP72lExXnLFeWNJQfaDI/T4tRlXjHbRy+1X8+cAT+Zo=";
   };
 
   patches = [
@@ -29,7 +34,6 @@ in stdenv.mkDerivation rec {
     # the wrapped script will have Python in shebang anyway.
     ./allow-wrapping.patch
   ];
-
 
   nativeBuildInputs = [
     wrapGAppsHook3
@@ -48,15 +52,20 @@ in stdenv.mkDerivation rec {
   ];
 
   postFixup = ''
-    wrapGApp $out/share/ibus-uniemoji/uniemoji.py
+    chmod +x      "$out/share/ibus-uniemoji/ibus.py"
+    patchShebangs "$out/share/ibus-uniemoji/ibus.py"
+    wrapGApp      "$out/share/ibus-uniemoji/ibus.py"
   '';
 
-  meta = with lib; {
+  meta = {
     isIbusEngine = true;
     description = "Input method (ibus) for entering unicode symbols and emoji by name";
     homepage = "https://github.com/salty-horse/ibus-uniemoji";
-    license = with licenses; [ gpl3 mit ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ aske ];
+    license = with lib.licenses; [
+      gpl3
+      mit
+    ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ aske ];
   };
 }

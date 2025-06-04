@@ -1,6 +1,8 @@
-{ fetchFromGitHub
-, lib
-, rustPlatform }:
+{
+  fetchFromGitHub,
+  lib,
+  rustPlatform,
+}:
 
 let
   # Constants
@@ -11,17 +13,19 @@ let
   version = "0.2.0";
   rev = "0a8ab772fd5c0f1579e4847c5d05aa443ffa2bc8";
   hash = "sha256-ZRAbvSMrPtgaWy9RwlykQ3iiPxHCMh/tS5p67/4XqqA=";
-  cargoHash = "sha256-qt3S6ZcLEP9ZQoP5+kSQdmBlxdMgGUqLszdU7JkFNVI=";
+  cargoHash = "sha256-GrHH98jcJaEkCzHe1hoVAeZvTvE0kXdp0bPTIiiOYss=";
 
   inherit (rustPlatform) buildRustPackage;
-in buildRustPackage rec {
+in
+buildRustPackage {
   inherit pname version;
 
   src = fetchFromGitHub {
     inherit owner rev hash;
-    repo = pname;
+    repo = "cargo-profiler";
   };
 
+  useFetchCargoVendor = true;
   inherit cargoHash;
 
   meta = with lib; {

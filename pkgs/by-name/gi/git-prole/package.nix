@@ -1,13 +1,17 @@
 {
   lib,
+  stdenv,
+  buildPackages,
   fetchFromGitHub,
   rustPlatform,
   git,
-  bash,
   nix-update-script,
+  installShellFiles,
 }:
 let
-  version = "0.1.1";
+  emulatorAvailable = stdenv.hostPlatform.emulatorAvailable buildPackages;
+  emulator = stdenv.hostPlatform.emulator buildPackages;
+  version = "0.5.3";
 in
 rustPlatform.buildRustPackage {
   pname = "git-prole";
@@ -16,16 +20,35 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "9999years";
     repo = "git-prole";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-IJsNZt5eID1ghz5Rj53OfidgPoMS2qq+7qgqYEu4zPc=";
+    tag = "v${version}";
+    hash = "sha256-QwLkByC8gdAnt6geZS285ErdH8nfV3vsWjMF4hTzq9Y=";
   };
 
-  cargoHash = "sha256-2z7UEHVomm2zuImdcQq0G9fEhKrHLrPNUhVrFugG3w4=";
+  buildFeatures = [ "clap_mangen" ];
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-qghc8HtJfpTYXAwC2xjq8lLlCu419Ttnu/AYapkAulI=";
 
   nativeCheckInputs = [
     git
-    bash
   ];
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  postInstall = lib.optionalString emulatorAvailable ''
+    manpages=$(mktemp -d)
+    ${emulator} $out/bin/git-prole manpages "$manpages"
+    for manpage in "$manpages"/*; do
+      installManPage "$manpage"
+    done
+
+    installShellCompletion --cmd git-prole \
+      --bash <(${emulator} $out/bin/git-prole completions bash) \
+      --fish <(${emulator} $out/bin/git-prole completions fish) \
+      --zsh <(${emulator} $out/bin/git-prole completions zsh)
+  '';
 
   meta = {
     homepage = "https://github.com/9999years/git-prole";

@@ -12,11 +12,12 @@
   libbacktrace,
   libpcap,
   libwebp,
-  llvmPackages_17,
+  llvmPackages,
   lz4,
   makeWrapper,
   pkg-config,
   qt6,
+  shaderc,
   soundtouch,
   strip-nondeterminism,
   vulkan-headers,
@@ -24,6 +25,7 @@
   wayland,
   zip,
   zstd,
+  fetchpatch,
 }:
 
 let
@@ -35,16 +37,29 @@ let
     qtwayland
     wrapQtAppsHook
     ;
+
+  cubeb' = cubeb.overrideAttrs (old: {
+    patches = (old.patches or [ ]) ++ [
+      (fetchpatch {
+        url = "https://github.com/PCSX2/pcsx2/commit/430e31abe4a9e09567cb542f1416b011bb9b6ef9.patch";
+        stripLen = 2;
+        hash = "sha256-bbH0c1X3lMeX6hfNKObhcq5xraFpicFV3mODQGYudvQ=";
+      })
+    ];
+  });
 in
-llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
+llvmPackages.stdenv.mkDerivation (finalAttrs: {
   inherit (sources.pcsx2) pname version src;
 
   patches = [
     # Remove PCSX2_GIT_REV
     ./0000-define-rev.patch
+
+    ./remove-cubeb-vendor.patch
   ];
 
   cmakeFlags = [
+    (lib.cmakeBool "PACKAGE_MODE" true)
     (lib.cmakeBool "DISABLE_ADVANCE_SIMD" true)
     (lib.cmakeBool "USE_LINKED_FFMPEG" true)
     (lib.cmakeFeature "PCSX2_GIT_REV" finalAttrs.src.rev)
@@ -52,6 +67,7 @@ llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    extra-cmake-modules
     pkg-config
     strip-nondeterminism
     wrapQtAppsHook
@@ -60,7 +76,6 @@ llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     curl
-    extra-cmake-modules
     ffmpeg
     libaio
     libbacktrace
@@ -73,37 +88,30 @@ llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
     qttools
     qtwayland
     SDL2
-    sources.shaderc-patched
+    shaderc
     soundtouch
     vulkan-headers
     wayland
     zstd
-  ] ++ cubeb.passthru.backendLibs;
+    cubeb'
+  ];
 
   strictDeps = true;
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    cp -a bin/pcsx2-qt bin/resources $out/bin/
-
+  postInstall = ''
     install -Dm644 $src/pcsx2-qt/resources/icons/AppIcon64.png $out/share/pixmaps/PCSX2.png
     install -Dm644 $src/.github/workflows/scripts/linux/pcsx2-qt.desktop $out/share/applications/PCSX2.desktop
 
-    zip -jq $out/bin/resources/patches.zip ${sources.pcsx2_patches.src}/patches/*
-    strip-nondeterminism $out/bin/resources/patches.zip
-    runHook postInstall
+    zip -jq $out/share/PCSX2/resources/patches.zip ${sources.pcsx2_patches.src}/patches/*
+    strip-nondeterminism $out/share/PCSX2/resources/patches.zip
   '';
 
   qtWrapperArgs =
     let
-      libs = lib.makeLibraryPath (
-        [
-          vulkan-loader
-          sources.shaderc-patched
-        ]
-        ++ cubeb.passthru.backendLibs
-      );
+      libs = lib.makeLibraryPath ([
+        vulkan-loader
+        shaderc
+      ]);
     in
     [ "--prefix LD_LIBRARY_PATH : ${libs}" ];
 
@@ -133,13 +141,10 @@ llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "pcsx2-qt";
     maintainers = with lib.maintainers; [
-      AndersonTorres
       hrdinka
       govanify
       matteopacini
     ];
-    platforms = lib.systems.inspect.patternLogicalAnd
-      lib.systems.inspect.patterns.isLinux
-      lib.systems.inspect.patterns.isx86_64;
+    platforms = lib.systems.inspect.patternLogicalAnd lib.systems.inspect.patterns.isLinux lib.systems.inspect.patterns.isx86_64;
   };
 })

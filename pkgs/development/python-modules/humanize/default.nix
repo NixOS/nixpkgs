@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "humanize";
-  version = "4.10.0";
+  version = "4.12.2";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "python-humanize";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-zzasFAaWH284IEnWwWKvCL1lt/ItNfdbWhq1K30gSPU=";
+    repo = "humanize";
+    tag = version;
+    hash = "sha256-MGWjh7C9JXTwH+eLyrjU0pjcZ2+oH925eiqHgBS8198=";
   };
 
   nativeBuildInputs = [
@@ -30,12 +30,6 @@ buildPythonPackage rec {
     hatchling
     gettext
   ];
-
-  postPatch = ''
-    # Remove dependency on pytest-cov
-    substituteInPlace pyproject.toml --replace-fail \
-      '"ignore:sys.monitoring isn'"'"'t available, using default core:coverage.exceptions.CoverageWarning",' ""
-  '';
 
   postBuild = ''
     scripts/generate-translation-binaries.sh

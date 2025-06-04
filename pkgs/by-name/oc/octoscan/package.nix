@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "octoscan";
-  version = "0.1.1";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "synacktiv";
     repo = "octoscan";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-KoNM+Wqv+NmlXHYUn5YIXrG4rHkccVk2QWsNd0iK8YI=";
+    tag = "v${version}";
+    hash = "sha256-SG6QHpDG9kPfb9jvHwz58U7+HZpFwYzwsDERNRW5R10=";
   };
 
-  vendorHash = "sha256-9IT8qTFzn8otWGTBP7ODcT8iBckIJ/3+jkbF1dq6aDw=";
+  vendorHash = "sha256-Jx4OEVqCTiW/BSygeLtwwqijiACEuPk0BT26JQoL3Ds=";
 
   ldflags = [
     "-s"

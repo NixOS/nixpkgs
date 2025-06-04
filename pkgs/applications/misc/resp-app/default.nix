@@ -1,26 +1,27 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, fetchpatch
-, brotli
-, lz4
-, pyotherside
-, python3
-, python3Packages
-, qtbase
-, qtcharts
-, qmake
-, qttools
-, rdbtools
-, snappy
-, wrapQtAppsHook
-, zstd
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  brotli,
+  lz4,
+  pyotherside,
+  python3,
+  python3Packages,
+  qtbase,
+  qtcharts,
+  qmake,
+  qttools,
+  rdbtools,
+  snappy,
+  wrapQtAppsHook,
+  zstd,
 }:
 
 let
   rdbtools-patched = rdbtools.overridePythonAttrs (oldAttrs: {
     # Add required additional flag for resp-app
-    patches = [
+    patches = oldAttrs.patches or [ ] ++ [
       (fetchpatch {
         name = "Add-flag-to-parse-only-key-names.patch";
         url = "https://github.com/uglide/redis-rdb-tools/commit/b74946e6fbca589947ef0186429d5ce45a074b87.patch";
@@ -58,7 +59,6 @@ mkDerivation rec {
     snappy
     zstd
   ] ++ pythonPath;
-
 
   pythonPath = with python3Packages; [
     bitstring

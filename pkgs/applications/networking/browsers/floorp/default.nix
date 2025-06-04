@@ -9,7 +9,7 @@
 (
   (buildMozillaMach rec {
     pname = "floorp";
-    packageVersion = "11.19.1";
+    packageVersion = "11.27.0";
     applicationName = "Floorp";
     binaryName = "floorp";
     branding = "browser/branding/official";
@@ -17,18 +17,17 @@
     allowAddonSideload = true;
 
     # Must match the contents of `browser/config/version.txt` in the source tree
-    version = "128.4.0";
+    version = "128.12.0";
 
     src = fetchFromGitHub {
       owner = "Floorp-Projects";
       repo = "Floorp";
       fetchSubmodules = true;
       rev = "v${packageVersion}";
-      hash = "sha256-RFJ3aRbLwCf0qaluqImcF9+6frvJbw8QE3jBpxNxFjE=";
+      hash = "sha256-lQ84NNWlu4hVKK/CDIDS5JKGdD4i7TTjv4x/dQhDJwo=";
     };
 
     extraConfigureFlags = [
-      "--with-app-name=${pname}"
       "--with-app-basename=${applicationName}"
       "--with-unsigned-addon-scopes=app,system"
       "--enable-proxy-bypass-protection"
@@ -46,11 +45,10 @@
     updateScript = ./update.sh;
 
     meta = {
-      description = "Fork of Firefox, focused on keeping the Open, Private and Sustainable Web alive, built in Japan";
+      description = "Fork of Firefox that seeks balance between versatility, privacy and web openness";
       homepage = "https://floorp.app/";
       maintainers = with lib.maintainers; [ christoph-heiss ];
       platforms = lib.platforms.unix;
-      badPlatforms = lib.platforms.darwin;
       broken = stdenv.buildPlatform.is32bit;
       # since Firefox 60, build on 32-bit platforms fails with "out of memory".
       # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
@@ -68,19 +66,10 @@
     privacySupport = true;
     webrtcSupport = true;
     enableOfficialBranding = false;
-    googleAPISupport = true;
-    mlsAPISupport = true;
+    geolocationSupport = true;
   }
 ).overrideAttrs
   (prev: {
     MOZ_DATA_REPORTING = "";
     MOZ_TELEMETRY_REPORTING = "";
-
-    # Upstream already includes some of the bugfix patches that are applied by
-    # `buildMozillaMach`. Pick out only the relevant ones for Floorp and override
-    # the list here.
-    patches = [
-      ../firefox/env_var_for_system_dir-ff111.patch
-      ../firefox/no-buildconfig-ffx121.patch
-    ];
   })

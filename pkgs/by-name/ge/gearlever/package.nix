@@ -11,24 +11,26 @@
   desktop-file-utils,
   libadwaita,
   file,
-  p7zip,
+  _7zz,
   which,
   appimage-run,
   gtk4,
   bintools,
   libnotify,
+  dwarfs,
+  squashfsTools,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gearlever";
-  version = "2.0.7";
+  version = "3.2.4";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "mijorus";
     repo = "gearlever";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Zp0w6ZJFRV5IANF0sY/n8jqgG+3h9J2eV/dUP+we8PY=";
+    tag = version;
+    hash = "sha256-i7Yqe89b9kAR+ygHL2dlYvdPizBZG6MRMlPFvbHsIdQ=";
   };
 
   postPatch =
@@ -47,6 +49,8 @@ python3Packages.buildPythonApplication rec {
     + ''
       substituteInPlace src/AppDetails.py \
         --replace-fail "sandbox_sh(['arch'])" '"${stdenv.hostPlatform.uname.processor}"'
+      substituteInPlace src/models/UpdateManager.py \
+        --replace-fail "terminal.sandbox_sh(['arch'])" '"${stdenv.hostPlatform.uname.processor}"'
     '';
 
   nativeBuildInputs = [
@@ -74,13 +78,15 @@ python3Packages.buildPythonApplication rec {
     "--prefix PATH : ${
       lib.makeBinPath [
         file
-        p7zip
+        _7zz # 7zz
         which
         appimage-run
         desktop-file-utils # update-desktop-database
         gtk4.dev # gtk4-launch
         bintools # readelf
         libnotify # notify-send
+        dwarfs # dwarfsextract, dwarfsck
+        squashfsTools # unsquashfs
       ]
     }"
   ];

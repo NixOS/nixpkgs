@@ -3,32 +3,33 @@
   lib,
   fetchFromGitHub,
   pkg-config,
+  wayland,
   wayland-scanner,
   wayland-protocols,
   unstableGitUpdater,
   pixman,
   fcft,
-  wayland,
+  writeText,
+  # Boolean flags
+  withCustomConfigH ? (configH != null),
+  # Configurable options
+  configH ? null,
 }:
 
 stdenv.mkDerivation {
   pname = "dwlb";
-  version = "0-unstable-2024-05-16";
+  version = "0-unstable-2025-05-20";
 
   src = fetchFromGitHub {
     owner = "kolunmi";
     repo = "dwlb";
-    rev = "0daa1c1fdd82c4d790e477bf171e23ca2fdfa0cb";
-    hash = "sha256-Bu20IqRwBP1WRBgbcEQU4Q2BZ2FBnVaySOTsCn0iSSE=";
+    rev = "48dbe00bdb98a1ae6a0e60558ce14503616aa759";
+    hash = "sha256-S0jkoELkF+oEmXqiWZ8KJYtWAHEXR/Y93jl5yHgUuSM=";
   };
 
   nativeBuildInputs = [
     pkg-config
   ];
-
-  env = {
-    PREFIX = placeholder "out";
-  };
 
   buildInputs = [
     wayland-scanner
@@ -38,6 +39,26 @@ stdenv.mkDerivation {
     wayland
   ];
 
+  # Allow alternative config.def.h usage. Taken from dwl.nix.
+  postPatch =
+    let
+      configFile =
+        if lib.isDerivation configH || builtins.isPath configH then
+          configH
+        else
+          writeText "config.h" configH;
+    in
+    lib.optionalString withCustomConfigH "cp ${configFile} config.h";
+
+  env = {
+    PREFIX = placeholder "out";
+  };
+
+  outputs = [
+    "out"
+    "man"
+  ];
+
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {
@@ -45,7 +66,10 @@ stdenv.mkDerivation {
     homepage = "https://github.com/kolunmi/dwlb";
     license = lib.licenses.gpl3Plus;
     mainProgram = "dwlb";
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    maintainers = with lib.maintainers; [
+      bot-wxt1221
+      lonyelon
+    ];
     platforms = wayland.meta.platforms;
   };
 }

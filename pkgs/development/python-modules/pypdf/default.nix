@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   pythonOlder,
 
   # build-system
@@ -28,16 +27,18 @@
 
 buildPythonPackage rec {
   pname = "pypdf";
-  version = "5.0.0";
+  version = "5.5.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "py-pdf";
     repo = "pypdf";
-    rev = "refs/tags/${version}";
+    tag = version;
     # fetch sample files used in tests
     fetchSubmodules = true;
-    hash = "sha256-omnNC1mzph59aqrXqLCuCk0LgzfJv/JhbQRrAgRhAIg=";
+    hash = "sha256-L/dj8yJIkGLsDdsZ1xFK46yyAVJ14F3RSh7HLhEcVhI=";
   };
 
   outputs = [
@@ -45,29 +46,20 @@ buildPythonPackage rec {
     "doc"
   ];
 
-  nativeBuildInputs = [
-    flit-core
-
-    # docs
-    sphinxHook
-    sphinx-rtd-theme
-    myst-parser
-  ];
-
-  patches = [
-    (fetchpatch2 {
-      # Mark test_increment_writer as enable_socket (https://github.com/py-pdf/pypdf/pull/2867)
-      url = "https://github.com/py-pdf/pypdf/commit/d974d5c755a7b65f3b9c68c5742afdbc0c1693f6.patch";
-      hash = "sha256-4xiCAStP615IktTUgk31JbIxkxx8d6PQdu8Nfmhc1jo=";
-    })
-  ];
-
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "--disable-socket" ""
   '';
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  build-system = [ flit-core ];
+
+  nativeBuildInputs = [
+    sphinxHook
+    sphinx-rtd-theme
+    myst-parser
+  ];
+
+  dependencies = lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
   optional-dependencies = rec {
     full = crypto ++ image;
@@ -92,7 +84,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Pure-python PDF library capable of splitting, merging, cropping, and transforming the pages of PDF files";
     homepage = "https://github.com/py-pdf/pypdf";
-    changelog = "https://github.com/py-pdf/pypdf/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/py-pdf/pypdf/blob/${src.tag}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ javaes ];
   };

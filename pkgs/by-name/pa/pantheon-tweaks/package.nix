@@ -1,28 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, sassc
-, vala
-, wrapGAppsHook4
-, gtk4
-, libgee
-, pango
-, pantheon
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  sassc,
+  vala,
+  wrapGAppsHook4,
+  gnome-settings-daemon,
+  gtk4,
+  libgee,
+  pango,
+  pantheon,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pantheon-tweaks";
-  version = "2.1.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "pantheon-tweaks";
-    repo = pname;
+    repo = "pantheon-tweaks";
     rev = version;
-    hash = "sha256-NrDBr7Wtfxf9UA/sbi9ilgrlxK6QGQAopuz3TV2ITjs=";
+    hash = "sha256-+dkjmeY4WJfXwgNR8HlRaVfvS/2icbi8eSAkiB9x7uI=";
   };
 
   nativeBuildInputs = [
@@ -34,21 +36,24 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
   ];
 
-  buildInputs = [
-    gtk4
-    libgee
-    pango
-  ] ++ (with pantheon; [
-    elementary-files # settings schemas
-    elementary-terminal # settings schemas
-    granite7
-    switchboard
-  ]);
+  buildInputs =
+    [
+      gnome-settings-daemon # org.gnome.settings-daemon.plugins.xsettings
+      gtk4
+      libgee
+      pango
+    ]
+    ++ (with pantheon; [
+      elementary-files # io.elementary.files.preferences
+      elementary-terminal # io.elementary.terminal.settings
+      granite7
+      switchboard
+      wingpanel-indicator-sound # io.elementary.desktop.wingpanel.sound
+    ]);
 
-  postPatch = ''
-    substituteInPlace src/Settings/ThemeSettings.vala \
-      --replace-fail "/usr/share/" "/run/current-system/sw/share/"
-  '';
+  mesonFlags = [
+    "-Dsystheme_rootdir=/run/current-system/sw/share"
+  ];
 
   passthru = {
     updateScript = nix-update-script { };
@@ -63,7 +68,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/pantheon-tweaks/pantheon-tweaks";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
     mainProgram = "pantheon-tweaks";
   };
 }

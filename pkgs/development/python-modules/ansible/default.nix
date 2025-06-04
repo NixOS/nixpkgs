@@ -3,6 +3,7 @@
   pythonOlder,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   jsonschema,
   jxmlease,
   ncclient,
@@ -14,6 +15,7 @@
   textfsm,
   ttp,
   xmltodict,
+  passlib,
 
   # optionals
   withJunos ? false,
@@ -22,28 +24,31 @@
 
 let
   pname = "ansible";
-  version = "10.2.0";
+  version = "11.5.0";
 in
 buildPythonPackage {
   inherit pname version;
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iqBim6js7WRl4s60kCnpPTN8Sm/Fo+bpiCXCWN1qcFc=";
+    hash = "sha256-GKP8cxIKSa3pqaZ+uPnU9QCdIQbDT/65ZjrZKLdu1Zs=";
   };
 
-  postPatch = ''
-    # we make ansible-core depend on ansible, not the other way around
-    sed -Ei '/ansible-core/d' setup.py
-  '';
+  # we make ansible-core depend on ansible, not the other way around,
+  # since when you install ansible-core you will not have ansible
+  # executables installed in the PATH variable
+  pythonRemoveDeps = [ "ansible-core" ];
 
-  propagatedBuildInputs = lib.unique (
+  build-system = [ setuptools ];
+
+  dependencies = lib.unique (
     [
       # Support ansible collections by default, make all others optional
       # ansible.netcommon
+      passlib
       jxmlease
       ncclient
       netaddr
@@ -62,7 +67,7 @@ buildPythonPackage {
       # add the dependencies for the collections you need conditionally and install
       # ansible using overrides to enable the collections you need.
     ]
-    ++ lib.optionals (withJunos) [
+    ++ lib.optionals withJunos [
       # ansible_collections/junipernetworks/junos/requirements.txt
       jxmlease
       ncclient
@@ -71,7 +76,7 @@ buildPythonPackage {
       scp
       xmltodict
     ]
-    ++ lib.optionals (withNetbox) [
+    ++ lib.optionals withNetbox [
       # ansible_collections/netbox/netbox/pyproject.toml
       pynetbox
     ]

@@ -1,24 +1,35 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake
-, brotli, libev, nghttp3, quictls
-, CoreServices
-, withJemalloc ? false, jemalloc
-, curlHTTP3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  brotli,
+  libev,
+  nghttp3,
+  quictls,
+  withJemalloc ? false,
+  jemalloc,
+  curlHTTP3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ngtcp2";
-  version = "1.8.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-AIz4wQo5NimeSEKvk741abq2q3lyWpHz0kfU/PrOyYQ=";
+    repo = "ngtcp2";
+    # must match version usage in meta.changelog
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SnzKCPNfa42fV+fNdbgOe588JoaPdDVNtb2AStAsK9k=";
     fetchSubmodules = true;
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
@@ -26,8 +37,6 @@ stdenv.mkDerivation rec {
     libev
     nghttp3
     quictls
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreServices
   ] ++ lib.optional withJemalloc jemalloc;
 
   cmakeFlags = [
@@ -40,11 +49,12 @@ stdenv.mkDerivation rec {
     inherit curlHTTP3;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ngtcp2/ngtcp2";
-    description = "ngtcp2 project is an effort to implement QUIC protocol which is now being discussed in IETF QUICWG for its standardization";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ izorkin ];
+    changelog = "https://github.com/ngtcp2/ngtcp2/releases/tag/v${finalAttrs.version}";
+    description = "Implementation of the QUIC protocol (RFC9000)";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ izorkin ];
   };
-}
+})

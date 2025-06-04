@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ocamlPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ocamlPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +31,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "ReactiveML: a programming language for implementing interactive systems";
     homepage = "https://rml.lri.fr";
-    license = with licenses; [ qpl lgpl21Plus ];
+    license = with licenses; [
+      qpl
+      lgpl21Plus
+    ];
     maintainers = with maintainers; [ wegank ];
   };
 }

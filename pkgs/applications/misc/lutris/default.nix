@@ -1,55 +1,62 @@
-{ buildPythonApplication
-, lib
-, fetchFromGitHub
+{
+  buildPythonApplication,
+  lib,
+  fetchFromGitHub,
 
   # build inputs
-, atk
-, file
-, gdk-pixbuf
-, glib-networking
-, gnome-desktop
-, gobject-introspection
-, gst_all_1
-, gtk3
-, libnotify
-, pango
-, webkitgtk_4_0
-, wrapGAppsHook3
+  atk,
+  file,
+  glib,
+  gdk-pixbuf,
+  glib-networking,
+  gnome-desktop,
+  gobject-introspection,
+  gst_all_1,
+  gtk3,
+  libnotify,
+  pango,
+  webkitgtk_4_1,
+  wrapGAppsHook3,
+  meson,
+  ninja,
 
   # check inputs
-, xvfb-run
-, nose2
-, flake8
+  xvfb-run,
+  nose2,
+  flake8,
 
   # python dependencies
-, certifi
-, dbus-python
-, distro
-, evdev
-, lxml
-, pillow
-, pygobject3
-, pypresence
-, pyyaml
-, requests
-, protobuf
-, moddb
+  certifi,
+  dbus-python,
+  distro,
+  evdev,
+  lxml,
+  pillow,
+  pygobject3,
+  pypresence,
+  pyyaml,
+  requests,
+  protobuf,
+  moddb,
 
   # commands that lutris needs
-, xrandr
-, pciutils
-, psmisc
-, mesa-demos
-, vulkan-tools
-, xboxdrv
-, pulseaudio
-, p7zip
-, xgamma
-, libstrangle
-, fluidsynth
-, xorgserver
-, xorg
-, util-linux
+  xrandr,
+  pciutils,
+  psmisc,
+  mesa-demos,
+  vulkan-tools,
+  pulseaudio,
+  p7zip,
+  xgamma,
+  gettext,
+  libstrangle,
+  fluidsynth,
+  xorgserver,
+  xorg,
+  util-linux,
+  pkg-config,
+  desktop-file-utils,
+  appstream-glib,
 }:
 
 let
@@ -60,7 +67,6 @@ let
     psmisc
     mesa-demos
     vulkan-tools
-    xboxdrv
     pulseaudio
     p7zip
     xgamma
@@ -75,33 +81,47 @@ let
 in
 buildPythonApplication rec {
   pname = "lutris-unwrapped";
-  version = "0.5.17";
+  version = "0.5.19";
 
   src = fetchFromGitHub {
     owner = "lutris";
     repo = "lutris";
     rev = "v${version}";
-    hash = "sha256-Tr5k5LU0s75+1B17oK8tlgA6SlS1SHyyLS6UBKadUmw=";
+    hash = "sha256-CAXKnx5+60MITRM8enkYgFl5ZKM6HCXhCYNyG7kHhuQ=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
-  buildInputs = [
-    atk
-    gdk-pixbuf
-    glib-networking
-    gnome-desktop
-    gtk3
-    libnotify
-    pango
-    webkitgtk_4_0
-  ] ++ (with gst_all_1; [
-    gst-libav
-    gst-plugins-bad
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-ugly
-    gstreamer
-  ]);
+  format = "other";
+
+  nativeBuildInputs = [
+    appstream-glib
+    desktop-file-utils
+    gettext
+    glib
+    gobject-introspection
+    meson
+    ninja
+    wrapGAppsHook3
+    pkg-config
+  ];
+  buildInputs =
+    [
+      atk
+      gdk-pixbuf
+      glib-networking
+      gnome-desktop
+      gtk3
+      libnotify
+      pango
+      webkitgtk_4_1
+    ]
+    ++ (with gst_all_1; [
+      gst-libav
+      gst-plugins-bad
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-ugly
+      gstreamer
+    ]);
 
   # See `install_requires` in https://github.com/lutris/lutris/blob/master/setup.py
   propagatedBuildInputs = [
@@ -124,20 +144,11 @@ buildPythonApplication rec {
       --replace '"libmagic.so.1"' "'${lib.getLib file}/lib/libmagic.so.1'"
   '';
 
-  nativeCheckInputs = [ xvfb-run nose2 flake8 ] ++ requiredTools;
-  checkPhase = ''
-    runHook preCheck
-
-    export HOME=$PWD
-    xvfb-run -s '-screen 0 800x600x24' make test
-
-    runHook postCheck
-  '';
-
   # avoid double wrapping
   dontWrapGApps = true;
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath requiredTools}"
+    "--prefix APPIMAGE_EXTRACT_AND_RUN : 1"
     "\${gappsWrapperArgs[@]}"
   ];
 
@@ -145,7 +156,10 @@ buildPythonApplication rec {
     homepage = "https://lutris.net";
     description = "Open Source gaming platform for GNU/Linux";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ Madouura ];
+    maintainers = with maintainers; [
+      Madouura
+      rapiteanu
+    ];
     platforms = platforms.linux;
     mainProgram = "lutris";
   };

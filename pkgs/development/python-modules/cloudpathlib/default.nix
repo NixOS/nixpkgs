@@ -4,46 +4,53 @@
   pythonOlder,
   fetchFromGitHub,
   flit-core,
-  importlib-metadata,
   typing-extensions,
-  cloudpathlib,
+  azure-identity,
   azure-storage-blob,
+  azure-storage-file-datalake,
   google-cloud-storage,
   boto3,
   psutil,
   pydantic,
-  pytest7CheckHook,
+  pytestCheckHook,
   pytest-cases,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-xdist,
   python-dotenv,
   shortuuid,
+  tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "cloudpathlib";
-  version = "0.18.1";
+  version = "0.21.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "drivendataorg";
     repo = "cloudpathlib";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-RrdRUqQ3QyMUpTi1FEsSXK6WS37r77SdPBH1oVVvSw0=";
+    tag = "v${version}";
+    hash = "sha256-Bhr92xMK/WV3u0SG8q9SvO0kGnwSVXHzq6lK/RD2ssk=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  postPatch = ''
+    # missing pytest-reportlog test dependency
+    substituteInPlace pyproject.toml \
+      --replace-fail "--report-log reportlog.jsonl" ""
+  '';
 
-  propagatedBuildInputs = [
-    importlib-metadata
-    typing-extensions
-  ];
+  build-system = [ flit-core ];
+
+  dependencies = lib.optional (pythonOlder "3.11") typing-extensions;
 
   optional-dependencies = {
-    all = [ cloudpathlib ];
-    azure = [ azure-storage-blob ];
+    all = optional-dependencies.azure ++ optional-dependencies.gs ++ optional-dependencies.s3;
+    azure = [
+      azure-storage-blob
+      azure-storage-file-datalake
+    ];
     gs = [ google-cloud-storage ];
     s3 = [ boto3 ];
   };
@@ -51,18 +58,17 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "cloudpathlib" ];
 
   nativeCheckInputs = [
-    azure-storage-blob
-    boto3
-    google-cloud-storage
+    azure-identity
     psutil
     pydantic
-    pytest7CheckHook
+    pytestCheckHook
     pytest-cases
-    pytest-cov
+    pytest-cov-stub
     pytest-xdist
     python-dotenv
     shortuuid
-  ];
+    tenacity
+  ] ++ optional-dependencies.all;
 
   meta = with lib; {
     description = "Python pathlib-style classes for cloud storage services such as Amazon S3, Azure Blob Storage, and Google Cloud Storage";

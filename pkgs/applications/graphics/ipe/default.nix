@@ -1,60 +1,79 @@
-{ lib
-, stdenv
-, makeDesktopItem
-, fetchurl
-, pkg-config
-, copyDesktopItems
-, cairo
-, freetype
-, ghostscript
-, gsl
-, libjpeg
-, libpng
-, libspiro
-, lua5
-, qtbase
-, qtsvg
-, texliveSmall
-, wrapQtAppsHook
-, zlib
-, withTeXLive ? true
-, buildPackages
+{
+  lib,
+  stdenv,
+  makeDesktopItem,
+  fetchFromGitHub,
+  pkg-config,
+  copyDesktopItems,
+  cairo,
+  freetype,
+  ghostscript,
+  gsl,
+  libjpeg,
+  libpng,
+  libspiro,
+  lua5,
+  qtbase,
+  qtsvg,
+  texliveSmall,
+  qhull,
+  wrapQtAppsHook,
+  zlib,
+  withTeXLive ? true,
+  withQVoronoi ? false,
+  buildPackages,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ipe";
-  version = "7.2.27";
+  version = "7.2.30";
 
-  src = fetchurl {
-    url = "https://github.com/otfried/ipe/releases/download/v${version}/ipe-${version}-src.tar.gz";
-    sha256 = "sha256-wx/bZy8kB7dpZsz58BeRGdS1BzbrIoafgEmLyFg7wZU=";
+  src = fetchFromGitHub {
+    owner = "otfried";
+    repo = "ipe";
+    tag = "v${version}";
+    hash = "sha256-bvwEgEP/cinigixJr8e964sm6secSK+7Ul7WFfwM0gE=";
   };
 
-  nativeBuildInputs = [ pkg-config copyDesktopItems wrapQtAppsHook ];
-
-  buildInputs = [
-    cairo
-    freetype
-    ghostscript
-    gsl
-    libjpeg
-    libpng
-    libspiro
-    lua5
-    qtbase
-    qtsvg
-    zlib
-  ] ++ (lib.optionals withTeXLive [
-    texliveSmall
-  ]);
-
-  makeFlags = [
-    "-C src"
-    "IPEPREFIX=${placeholder "out"}"
-    "LUA_PACKAGE=lua"
-    "MOC=${buildPackages.qt6Packages.qtbase}/libexec/moc"
-    "IPE_NO_SPELLCHECK=1" # qtSpell is not yet packaged
+  nativeBuildInputs = [
+    pkg-config
+    copyDesktopItems
+    wrapQtAppsHook
   ];
+
+  buildInputs =
+    [
+      cairo
+      freetype
+      ghostscript
+      gsl
+      libjpeg
+      libpng
+      libspiro
+      lua5
+      qtbase
+      qtsvg
+      zlib
+    ]
+    ++ (lib.optionals withTeXLive [
+      texliveSmall
+    ])
+    ++ (lib.optionals withQVoronoi [
+      qhull
+    ]);
+
+  makeFlags =
+    [
+      "-C src"
+      "IPEPREFIX=${placeholder "out"}"
+      "LUA_PACKAGE=lua"
+      "MOC=${buildPackages.qt6Packages.qtbase}/libexec/moc"
+      "IPE_NO_SPELLCHECK=1" # qtSpell is not yet packaged
+    ]
+    ++ (lib.optionals withQVoronoi [
+      "IPEQVORONOI=1"
+      "QHULL_CFLAGS=-I${qhull}/include/libqhull_r"
+    ]);
 
   qtWrapperArgs = lib.optionals withTeXLive [ "--prefix PATH : ${lib.makeBinPath [ texliveSmall ]}" ];
 
@@ -68,8 +87,14 @@ stdenv.mkDerivation rec {
       comment = "A drawing editor for creating figures in PDF format";
       exec = "ipe";
       icon = "ipe";
-      mimeTypes = [ "text/xml" "application/pdf" ];
-      categories = [ "Graphics" "Qt" ];
+      mimeTypes = [
+        "text/xml"
+        "application/pdf"
+      ];
+      categories = [
+        "Graphics"
+        "Qt"
+      ];
       startupNotify = true;
       startupWMClass = "ipe";
     })

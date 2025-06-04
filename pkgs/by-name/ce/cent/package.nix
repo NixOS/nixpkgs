@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "xm1k3";
     repo = "cent";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xwGmBZgdpyYJ1AKoNUUPEMbU5/racalE4SLrx/E51wM=";
   };
 
@@ -22,12 +22,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to handle Nuclei community templates";
     homepage = "https://github.com/xm1k3/cent";
     changelog = "https://github.com/xm1k3/cent/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "cent";
   };
 }

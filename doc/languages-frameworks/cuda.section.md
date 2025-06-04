@@ -12,11 +12,13 @@ compatible are available as well. For example, there can be a
 
 To use one or more CUDA packages in an expression, give the expression a `cudaPackages` parameter, and in case CUDA is optional
 ```nix
-{ config
-, cudaSupport ? config.cudaSupport
-, cudaPackages ? { }
-, ...
-}: {}
+{
+  config,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages ? { },
+  ...
+}:
+{ }
 ```
 
 When using `callPackage`, you can choose to pass in a different variant, e.g.
@@ -32,11 +34,15 @@ package set to make it the default. This guarantees you get a consistent package
 set.
 ```nix
 {
-  mypkg = let
-    cudaPackages = cudaPackages_11_5.overrideScope (final: prev: {
-      cudnn = prev.cudnn_8_3;
-    });
-  in callPackage { inherit cudaPackages; };
+  mypkg =
+    let
+      cudaPackages = cudaPackages_11_5.overrideScope (
+        final: prev: {
+          cudnn = prev.cudnn_8_3;
+        }
+      );
+    in
+    callPackage { inherit cudaPackages; };
 }
 ```
 
@@ -109,8 +115,8 @@ All new projects should use the CUDA redistributables available in [`cudaPackage
 
 ### Updating supported compilers and GPUs {#updating-supported-compilers-and-gpus}
 
-1. Update `nvcc-compatibilities.nix` in `pkgs/development/cuda-modules/` to include the newest release of NVCC, as well as any newly supported host compilers.
-2. Update `gpus.nix` in `pkgs/development/cuda-modules/` to include any new GPUs supported by the new release of CUDA.
+1. Update `nvccCompatibilities` in `pkgs/development/cuda-modules/_cuda/data/nvcc.nix` to include the newest release of NVCC, as well as any newly supported host compilers.
+2. Update `cudaCapabilityToInfo` in `pkgs/development/cuda-modules/_cuda/data/cuda.nix` to include any new GPUs supported by the new release of CUDA.
 
 ### Updating the CUDA Toolkit runfile installer {#updating-the-cuda-toolkit}
 
@@ -150,7 +156,7 @@ All new projects should use the CUDA redistributables available in [`cudaPackage
 
 In the scenario you are unable to run the resulting binary: this is arguably the most complicated as it could be any combination of the previous reasons. This type of failure typically occurs when a library attempts to load or open a library it depends on that it does not declare in its `DT_NEEDED` section. As a first step, ensure that dependencies are patched with [`autoAddDriverRunpath`](https://search.nixos.org/packages?channel=unstable&type=packages&query=autoAddDriverRunpath). Failing that, try running the application with [`nixGL`](https://github.com/guibou/nixGL) or a similar wrapper tool. If that works, it likely means that the application is attempting to load a library that is not in the `RPATH` or `RUNPATH` of the binary.
 
-## Running Docker or Podman containers with CUDA support {#running-docker-or-podman-containers-with-cuda-support}
+## Running Docker or Podman containers with CUDA support {#cuda-docker-podman}
 
 It is possible to run Docker or Podman containers with CUDA support. The recommended mechanism to perform this task is to use the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/index.html).
 

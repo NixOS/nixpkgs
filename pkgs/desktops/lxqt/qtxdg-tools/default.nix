@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libqtxdg
-, lxqt-build-tools
-, qtbase
-, qtsvg
-, wrapQtAppsHook
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libqtxdg,
+  lxqt-build-tools,
+  qtbase,
+  qtsvg,
+  wrapQtAppsHook,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "qtxdg-tools";
-  version = "4.0.0";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-w9pFHG+q2oT33Lfg88MUzfWSyvHUgC0Fi2V8XcueJ/Q=";
+    hash = "sha256-hVX1UfPWa1KHMhjazSopAc1/Kk3tnUQzwtG4P7K32eE=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +42,6 @@ stdenv.mkDerivation rec {
     mainProgram = "qtxdg-mat";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    teams = [ teams.lxqt ];
   };
 }

@@ -1,43 +1,48 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, substituteAll
-, openssl
-, gsound
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, wrapGAppsHook3
-, glib
-, glib-networking
-, gtk3
-, openssh
-, gnome-shell
-, evolution-data-server-gtk4
-, gjs
-, nixosTests
-, desktop-file-utils
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  replaceVars,
+  openssl,
+  gsound,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  wrapGAppsHook3,
+  glib,
+  glib-networking,
+  gtk3,
+  openssh,
+  gnome-shell,
+  evolution-data-server-gtk4,
+  gjs,
+  nixosTests,
+  desktop-file-utils,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-gsconnect";
-  version = "57";
+  version = "62";
 
-  outputs = [ "out" "installedTests" ];
+  outputs = [
+    "out"
+    "installedTests"
+  ];
 
   src = fetchFromGitHub {
     owner = "GSConnect";
     repo = "gnome-shell-extension-gsconnect";
     rev = "v${version}";
-    hash = "sha256-0o5CEkdFPL7bZkHIA/zFWB8sY1OYROl4P3rl24+lze0=";
+    hash = "sha256-HFm04XC61AjkJSt4YBc4dO9v563w+LsYDSaZckPYE14=";
   };
 
   patches = [
     # Make typelibs available in the extension
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       gapplication = "${glib.bin}/bin/gapplication";
+      # Replaced in postPatch
+      typelibPath = null;
     })
 
     # Allow installing installed tests to a separate output
@@ -78,10 +83,8 @@ stdenv.mkDerivation rec {
 
     # TODO: do not include every typelib everywhere
     # for example, we definitely do not need nautilus
-    for file in src/extension.js src/prefs.js; do
-      substituteInPlace "$file" \
-        --subst-var-by typelibPath "$GI_TYPELIB_PATH"
-    done
+    substituteInPlace src/__nix-prepend-search-paths.js \
+      --subst-var-by typelibPath "$GI_TYPELIB_PATH"
 
     # slightly janky fix for gsettings_schemadir being removed
     substituteInPlace data/config.js.in \
@@ -117,7 +120,8 @@ stdenv.mkDerivation rec {
     description = "KDE Connect implementation for Gnome Shell";
     homepage = "https://github.com/GSConnect/gnome-shell-extension-gsconnect/wiki";
     license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
+    maintainers = [ maintainers.doronbehar ];
+    teams = [ teams.gnome ];
     platforms = platforms.linux;
   };
 }

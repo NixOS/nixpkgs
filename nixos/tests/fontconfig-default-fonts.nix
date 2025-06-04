@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ lib, ... }:
+{ lib, ... }:
 {
   name = "fontconfig-default-fonts";
 
@@ -6,22 +6,24 @@ import ./make-test-python.nix ({ lib, ... }:
     jtojnar
   ];
 
-  nodes.machine = { config, pkgs, ... }: {
-    fonts.enableDefaultPackages = true; # Background fonts
-    fonts.packages = with pkgs; [
-      noto-fonts-color-emoji
-      cantarell-fonts
-      twitter-color-emoji
-      source-code-pro
-      gentium
-    ];
-    fonts.fontconfig.defaultFonts = {
-      serif = [ "Gentium Plus" ];
-      sansSerif = [ "Cantarell" ];
-      monospace = [ "Source Code Pro" ];
-      emoji = [ "Twitter Color Emoji" ];
+  nodes.machine =
+    { config, pkgs, ... }:
+    {
+      fonts.enableDefaultPackages = true; # Background fonts
+      fonts.packages = with pkgs; [
+        noto-fonts-color-emoji
+        cantarell-fonts
+        twitter-color-emoji
+        source-code-pro
+        gentium
+      ];
+      fonts.fontconfig.defaultFonts = {
+        serif = [ "Gentium Plus" ];
+        sansSerif = [ "Cantarell" ];
+        monospace = [ "Source Code Pro" ];
+        emoji = [ "Twitter Color Emoji" ];
+      };
     };
-  };
 
   testScript = ''
     machine.succeed("fc-match serif | grep '\"Gentium Plus\"'")
@@ -29,4 +31,4 @@ import ./make-test-python.nix ({ lib, ... }:
     machine.succeed("fc-match monospace | grep '\"Source Code Pro\"'")
     machine.succeed("fc-match emoji | grep '\"Twitter Color Emoji\"'")
   '';
-})
+}

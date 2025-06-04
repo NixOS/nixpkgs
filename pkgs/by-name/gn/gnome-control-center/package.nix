@@ -2,7 +2,7 @@
   fetchurl,
   lib,
   stdenv,
-  substituteAll,
+  replaceVars,
   accountsservice,
   adwaita-icon-theme,
   colord,
@@ -60,11 +60,12 @@
   shadow,
   shared-mime-info,
   sound-theme-freedesktop,
-  tracker,
-  tracker-miners,
+  tinysparql,
+  localsearch,
   tzdata,
   udisks2,
   upower,
+  wayland-scanner,
   libepoxy,
   gnome-user-share,
   gnome-remote-desktop,
@@ -74,16 +75,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-control-center";
-  version = "46.4";
+  version = "48.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-control-center/${lib.versions.major finalAttrs.version}/gnome-control-center-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Wb0wWDl3v6KOVCJ+7iEeqG9If81tORXtIfWTJCZxAeA=";
+    hash = "sha256-AYPbNlqqj4W0SyPMnK5nXRyDNgSf7BGoym6pvb6MSP4=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./paths.patch;
+    (replaceVars ./paths.patch {
       gcm = gnome-color-manager;
       inherit glibc tzdata shadow;
       inherit cups networkmanagerapplet;
@@ -99,6 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     shared-mime-info
+    wayland-scanner
     wrapGAppsHook4
   ];
 
@@ -144,8 +145,8 @@ stdenv.mkDerivation (finalAttrs: {
     networkmanager
     polkit
     samba
-    tracker
-    tracker-miners # for search locations dialog
+    tinysparql
+    localsearch # for search locations dialog
     udisks2
     upower
     # For animations in Mouse panel.
@@ -197,9 +198,6 @@ stdenv.mkDerivation (finalAttrs: {
       # WM keyboard shortcuts
       --prefix XDG_DATA_DIRS : "${mutter}/share"
     )
-    for i in $out/share/applications/*; do
-      substituteInPlace $i --replace "Exec=gnome-control-center" "Exec=$out/bin/gnome-control-center"
-    done
   '';
 
   separateDebugInfo = true;
@@ -214,7 +212,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Utilities to configure the GNOME desktop";
     mainProgram = "gnome-control-center";
     license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.linux;
   };
 })

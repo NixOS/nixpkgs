@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "qgroundcontrol";
-  version = "4.4.2";
+  version = "4.4.5";
 
   propagatedBuildInputs = with libsForQt5; [
     qtbase
@@ -87,9 +87,13 @@ stdenv.mkDerivation rec {
     owner = "mavlink";
     repo = "qgroundcontrol";
     rev = "v${version}";
-    hash = "sha256-2Bc4uC/2e+PTsvFZ4RjnTzkOiBO9vsYHeLPkcwpDRrg=";
+    hash = "sha256-wjrfwE97J+UzBPIARQ6cPadN6xIdqR8i+ZKbtiDproM=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    ./disable-bad-message.patch
+  ];
 
   meta = {
     description = "Provides full ground station support and configuration for the PX4 and APM Flight Stacks";

@@ -1,30 +1,30 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
-, substituteAll
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  replaceVars,
 }:
 buildGoModule rec {
   pname = "flottbot";
-  version = "0.13.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "target";
     repo = "flottbot";
     rev = version;
-    hash = "sha256-Fv4ZBCQA7gwt11ULIiyFwn+QgoMNgu+1TM9yy2Jz7og=";
+    hash = "sha256-Z17CkJhxIwoF3Fa0doDfE6N2eUtiBeEEhDwDUoWCCQ8=";
   };
 
   patches = [
-    # patch out debug.ReadBuidlInfo since version information is not available with buildGoModule
-    (substituteAll {
-      src = ./version.patch;
+    # patch out debug.ReadBuildInfo since version information is not available with buildGoModule
+    (replaceVars ./version.patch {
       version = version;
       vcsHash = version; # Maybe there is a way to get the git ref from src? idk.
     })
   ];
 
-  vendorHash = "sha256-wOUQKFd2Xm/2rvLw8kw8Ejbcq/JUvup/BzZs0fllBYY=";
+  vendorHash = "sha256-q4oMlrCN6mjfTTnDc5Q4ncLjKstNttzlEzcXPVw5cLc=";
 
   subPackages = [ "cmd/flottbot" ];
 

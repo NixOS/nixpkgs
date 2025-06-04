@@ -1,37 +1,47 @@
-{lib, stdenv, fetchurl, libGLU, libGL, libglut, glew, libXmu, libXext, libX11
-, qmake, GLUT, fixDarwinDylibNames }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  libGLU,
+  libGL,
+  libglut,
+  glew,
+  libXmu,
+  libXext,
+  libX11,
+  fixDarwinDylibNames,
+}:
 
-stdenv.mkDerivation rec {
-  version = "1.6.0";
+stdenv.mkDerivation (finalAttrs: {
   pname = "opencsg";
+  version = "1.8.1";
+
   src = fetchurl {
-    url = "http://www.opencsg.org/OpenCSG-${version}.tar.gz";
-    hash = "sha256-v4+4Dj4M4R2H3XjdFaDehy27iXLYf1+Jz/xGHvrUe+g=";
+    url = "http://www.opencsg.org/OpenCSG-${finalAttrs.version}.tar.gz";
+    hash = "sha256-r8wASontO8R4qeS6ObIPPVibJOI+J1tzg/kaWQ1NV8U=";
   };
 
-  nativeBuildInputs = [ qmake ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./opencsgexample.patch ];
 
-  buildInputs = [ glew ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libGLU libGL libglut libXmu libXext libX11 ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin GLUT;
+  nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+
+  buildInputs =
+    [ glew ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libGLU
+      libGL
+      libglut
+      libXmu
+      libXext
+      libX11
+    ];
 
   doCheck = false;
 
-  preConfigure = ''
-    rm example/Makefile src/Makefile
-    qmakeFlags=("''${qmakeFlags[@]}" "INSTALLDIR=$out")
-  '';
-
   postInstall = ''
-    install -D copying.txt "$out/share/doc/opencsg/copying.txt"
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p $out/Applications
-    mv $out/bin/*.app $out/Applications
-    rmdir $out/bin || true
+    install -D ../copying.txt "$out/share/doc/opencsg/copying.txt"
   '';
-
-  dontWrapQtApps = true;
 
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     app=$out/Applications/opencsgexample.app/Contents/MacOS/opencsgexample
@@ -41,13 +51,12 @@ stdenv.mkDerivation rec {
       $app
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Constructive Solid Geometry library";
     mainProgram = "opencsgexample";
     homepage = "http://www.opencsg.org/";
-    platforms = platforms.unix;
-    maintainers = [ maintainers.raskin ];
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.raskin ];
+    license = lib.licenses.gpl2Plus;
   };
-}
-
+})

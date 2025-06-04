@@ -12,7 +12,7 @@ in
   name = "darling-dmg";
   meta.maintainers = with lib.maintainers; [ Luflosi ];
 
-  nodes.machine = {};
+  nodes.machine = { };
 
   testScript = ''
     start_all()

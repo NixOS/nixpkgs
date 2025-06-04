@@ -1,13 +1,26 @@
-import ./make-test-python.nix ({ pkgs, ... } : {
+{ pkgs, ... }:
+{
   name = "hardened";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ joachifm ];
   };
 
   nodes.machine =
-    { lib, pkgs, config, ... }:
-    { users.users.alice = { isNormalUser = true; extraGroups = [ "proc" ]; };
-      users.users.sybil = { isNormalUser = true; group = "wheel"; };
+    {
+      lib,
+      pkgs,
+      config,
+      ...
+    }:
+    {
+      users.users.alice = {
+        isNormalUser = true;
+        extraGroups = [ "proc" ];
+      };
+      users.users.sybil = {
+        isNormalUser = true;
+        group = "wheel";
+      };
       imports = [ ../modules/profiles/hardened.nix ];
       environment.memoryAllocator.provider = "graphene-hardened";
       nix.settings.sandbox = false;
@@ -22,9 +35,7 @@ import ./make-test-python.nix ({ pkgs, ... } : {
           options = [ "noauto" ];
         };
       };
-      boot.extraModulePackages =
-        pkgs.lib.optional (pkgs.lib.versionOlder config.boot.kernelPackages.kernel.version "5.6")
-          config.boot.kernelPackages.wireguard;
+      boot.extraModulePackages = pkgs.lib.optional (pkgs.lib.versionOlder config.boot.kernelPackages.kernel.version "5.6") config.boot.kernelPackages.wireguard;
       boot.kernelModules = [ "wireguard" ];
     };
 
@@ -97,4 +108,4 @@ import ./make-test-python.nix ({ pkgs, ... } : {
       with subtest("The hardened memory allocator works"):
           machine.succeed("${hardened-malloc-tests}/bin/run-tests")
     '';
-})
+}

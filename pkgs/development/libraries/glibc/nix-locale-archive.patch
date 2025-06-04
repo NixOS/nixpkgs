@@ -17,9 +17,9 @@ index 512769eaec..171dbb4ad9 100644
 +  if (path && fd < 0)
 +    fd = __open_nocancel (path, O_RDONLY|O_LARGEFILE|O_CLOEXEC);
 +  if (fd < 0)
-+    fd = __open_nocancel (archfname, O_RDONLY|O_LARGEFILE|O_CLOEXEC);
-+  if (fd < 0)
 +    fd = __open_nocancel ("/usr/lib/locale/locale-archive", O_RDONLY|O_LARGEFILE|O_CLOEXEC);
++  if (fd < 0)
++    fd = __open_nocancel (archfname, O_RDONLY|O_LARGEFILE|O_CLOEXEC);
 +  return fd;
 +}
 +
@@ -64,9 +64,9 @@ index ca0a95be99..e484783402 100644
 +  if (path && fd < 0)
 +    fd = open64 (path, O_RDONLY);
 +  if (fd < 0)
-+    fd = open64 (ARCHIVE_NAME, O_RDONLY);
-+  if (fd < 0)
 +    fd = open64 ("/usr/lib/locale/locale-archive", O_RDONLY);
++  if (fd < 0)
++    fd = open64 (ARCHIVE_NAME, O_RDONLY);
 +  return fd;
 +}
 +

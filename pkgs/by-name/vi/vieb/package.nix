@@ -1,21 +1,30 @@
-{ stdenv, buildNpmPackage, fetchFromGitHub, electron, makeWrapper, python3, makeDesktopItem, lib }:
+{
+  stdenv,
+  buildNpmPackage,
+  fetchFromGitHub,
+  electron,
+  makeWrapper,
+  python3,
+  makeDesktopItem,
+  lib,
+}:
 
 buildNpmPackage rec {
   pname = "vieb";
-  version = "12.0.0";
+  version = "12.3.0";
 
   src = fetchFromGitHub {
     owner = "Jelmerro";
-    repo = pname;
+    repo = "vieb";
     rev = version;
-    hash = "sha256-/gMAGmTsaS9B0qHXHq2Z/77LgcAMKjF6Mt7OiJ9l4wU=";
+    hash = "sha256-g3L+bzsDP3vfTaroqCWzRDymFTZE+6nLytRWzPMBoX8=";
   };
 
   postPatch = ''
     sed -i '/"electron"/d' package.json
   '';
 
-  npmDepsHash = "sha256-sGDygjb9+tIBHykMUb3UGZrCF8btkFVObTdyx4Y3Q2c=";
+  npmDepsHash = "sha256-0V2fKdfqO64DLqLGz1OK9BZEbwGDqPFUdxu9F6v6Ms4=";
   makeCacheWritable = true;
   dontNpmBuild = true;
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
@@ -28,7 +37,10 @@ buildNpmPackage rec {
     icon = "vieb";
     desktopName = "Web Browser";
     genericName = "Web Browser";
-    categories = [ "Network" "WebBrowser" ];
+    categories = [
+      "Network"
+      "WebBrowser"
+    ];
     mimeTypes = [
       "text/html"
       "application/xhtml+xml"
@@ -58,7 +70,9 @@ buildNpmPackage rec {
     changelog = "https://github.com/Jelmerro/Vieb/releases/tag/${version}";
     description = "Vim Inspired Electron Browser";
     mainProgram = "vieb";
-    maintainers = with maintainers; [ gebner tejing ];
+    maintainers = with maintainers; [
+      tejing
+    ];
     platforms = platforms.unix;
     license = licenses.gpl3Plus;
   };

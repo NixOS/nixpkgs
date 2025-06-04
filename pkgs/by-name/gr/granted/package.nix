@@ -1,27 +1,26 @@
-{ bash
-, buildGoModule
-, fetchFromGitHub
+{
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
 
-, withFish ? false
-, fish
-
-, lib
-, makeWrapper
-, xdg-utils
+  lib,
+  makeWrapper,
+  xdg-utils,
 }:
 
 buildGoModule rec {
   pname = "granted";
-  version = "0.34.1";
+  version = "0.38.0";
 
   src = fetchFromGitHub {
     owner = "common-fate";
-    repo = pname;
+    repo = "granted";
     rev = "v${version}";
-    sha256 = "sha256-iNGagF4+Lz73Ctvh8Qs90E+xvuGi7LWHV/VbjjqMqRY=";
+    sha256 = "sha256-xHpYtHG0fJ/VvJ/4lJ90ept3yGzJRnmtFQFbYxJtxwY=";
   };
 
-  vendorHash = "sha256-uKzs+plk1W2S7iPv2J1Mi1Ff88+82zrIXLy2eTzD/Hc=";
+  vendorHash = "sha256-Y8g5495IYgQ2lvq5qbnQmoxwEYfzzx12KfMS6wF2QXE=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -32,6 +31,7 @@ buildGoModule rec {
     "-X github.com/common-fate/granted/internal/build.Commit=${src.rev}"
     "-X github.com/common-fate/granted/internal/build.Date=1970-01-01-00:00:01"
     "-X github.com/common-fate/granted/internal/build.BuiltBy=Nix"
+    "-X github.com/common-fate/granted/internal/build.ConfigFolderName=.granted"
   ];
 
   subPackages = [
@@ -73,18 +73,25 @@ buildGoModule rec {
 
       # Insert below the #!/bin/sh shebang
       echo "$addToPath" | sed "/#!\/bin\/sh/r /dev/stdin" $src/scripts/assume >> $out/bin/assume
-  '' + lib.optionalString withFish ''
-    # Install fish script
-    install -Dm755 $src/scripts/assume.fish $out/share/assume.fish
-    substituteInPlace $out/share/assume.fish \
-      --replace /bin/fish ${fish}/bin/fish
-  '';
 
-  meta = with lib; {
+      # Install fish script
+      install -Dm755 $src/scripts/assume.fish $out/share/assume.fish
+      substituteInPlace $out/share/assume.fish \
+        --replace-fail "#!/bin/fish" "#!/usr/bin/env fish"
+    '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Easiest way to access your cloud";
     homepage = "https://github.com/common-fate/granted";
     changelog = "https://github.com/common-fate/granted/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = [ maintainers.ivankovnatsky ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      jlbribeiro
+    ];
   };
 }

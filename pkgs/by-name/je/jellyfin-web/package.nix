@@ -1,33 +1,19 @@
 {
   lib,
   stdenv,
-  overrideSDK,
   fetchFromGitHub,
   buildNpmPackage,
-  jellyfin,
+  nodejs_20,
   nix-update-script,
   pkg-config,
   xcbuild,
   pango,
   giflib,
-  darwin,
+  jellyfin,
 }:
-let
-  # node-canvas builds code that requires aligned_alloc,
-  # which on Darwin requires at least the 10.15 SDK
-  stdenv' =
-    if stdenv.hostPlatform.isDarwin then
-      overrideSDK stdenv {
-        darwinMinVersion = "10.15";
-        darwinSdkVersion = "11.0";
-      }
-    else
-      stdenv;
-  buildNpmPackage' = buildNpmPackage.override { stdenv = stdenv'; };
-in
-buildNpmPackage' rec {
+buildNpmPackage rec {
   pname = "jellyfin-web";
-  version = "10.9.11";
+  version = "10.10.7";
 
   src =
     assert version == jellyfin.version;
@@ -35,10 +21,22 @@ buildNpmPackage' rec {
       owner = "jellyfin";
       repo = "jellyfin-web";
       rev = "v${version}";
-      hash = "sha256-zt0Exx/4B5gqiN3fxvQuVh1MqRNNtJG6/G0/reqVHRc=";
+      hash = "sha256-jX9Qut8YsJRyKI2L7Aww4+6G8z741WzN37CUx3KWQfY=";
     };
 
-  npmDepsHash = "sha256-kQxfh8o8NBshKmmjQrLdxiOQK83LG+lxhZwzDkEJwEo=";
+  nodejs = nodejs_20; # does not build with 22
+
+  postPatch = ''
+    substituteInPlace webpack.common.js \
+      --replace-fail "git describe --always --dirty" "echo ${src.rev}" \
+  '';
+
+  npmDepsHash = "sha256-nfvqVByD3Kweq+nFJQY4R2uRX3mx/qJvGFiKiOyMUdw=";
+
+  preBuild = ''
+    # using sass-embedded fails at executing node_modules/sass-embedded-linux-x64/dart-sass/src/dart
+    rm -r node_modules/sass-embedded*
+  '';
 
   npmBuildScript = [ "build:production" ];
 
@@ -48,7 +46,6 @@ buildNpmPackage' rec {
     [ pango ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       giflib
-      darwin.apple_sdk.frameworks.CoreText
     ];
 
   installPhase = ''

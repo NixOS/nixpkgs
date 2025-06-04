@@ -1,17 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPackages
-, cmake
-, installShellFiles
-, boost
-, lua
-, protobuf_21
-, rapidjson
-, shapelib
-, sqlite
-, zlib
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPackages,
+  fetchpatch,
+  cmake,
+  installShellFiles,
+  boost,
+  lua,
+  protobuf_21,
+  rapidjson,
+  shapelib,
+  sqlite,
+  zlib,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,6 +27,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-rB5oP03yaIzklwkGsIeS9ELbHOY9AObwjRrK9HBQFI4=";
   };
 
+  patches = [
+    # fixes for Boost 1.86
+    (fetchpatch {
+      url = "https://github.com/systemed/tilemaker/commit/6509f0cf50943a90b36b5c6802118b72124b1e7a.patch";
+      hash = "sha256-C4aCUGTTUtY24oARihMnljjRbw80xRdMUyvu/b1Nsdw=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace src/options_parser.cpp \
       --replace-fail "config.json" "$out/share/tilemaker/config-openmaptiles.json" \
@@ -33,12 +43,24 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "default_value(\"static\")" "default_value(\"$out/share/tilemaker/static\")"
   '';
 
-  nativeBuildInputs = [ cmake installShellFiles ];
+  nativeBuildInputs = [
+    cmake
+    installShellFiles
+  ];
 
-  buildInputs = [ boost lua protobuf_21 rapidjson shapelib sqlite zlib ];
+  buildInputs = [
+    boost
+    lua
+    protobuf_21
+    rapidjson
+    shapelib
+    sqlite
+    zlib
+  ];
 
-  cmakeFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-    (lib.cmakeFeature "PROTOBUF_PROTOC_EXECUTABLE" "${buildPackages.protobuf}/bin/protoc");
+  cmakeFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) (
+    lib.cmakeFeature "PROTOBUF_PROTOC_EXECUTABLE" "${buildPackages.protobuf}/bin/protoc"
+  );
 
   env.NIX_CFLAGS_COMPILE = toString [ "-DTM_VERSION=${finalAttrs.version}" ];
 

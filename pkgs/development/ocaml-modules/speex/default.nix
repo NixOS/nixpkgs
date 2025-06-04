@@ -1,4 +1,11 @@
-{ lib, buildDunePackage, fetchFromGitHub, dune-configurator, ogg, speex }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  dune-configurator,
+  ogg,
+  speex,
+}:
 
 buildDunePackage rec {
   pname = "speex";
@@ -14,7 +21,10 @@ buildDunePackage rec {
   };
 
   buildInputs = [ dune-configurator ];
-  propagatedBuildInputs = [ ogg speex.dev ];
+  propagatedBuildInputs = [
+    ogg
+    speex.dev
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/savonet/ocaml-speex";

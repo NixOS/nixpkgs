@@ -1,5 +1,10 @@
 # This module adds Memtest86+ to the GRUB boot menu.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -23,7 +28,7 @@ in
       };
 
       params = mkOption {
-        default = [];
+        default = [ ];
         example = [ "console=ttyS0,115200" ];
         type = types.listOf types.str;
         description = ''

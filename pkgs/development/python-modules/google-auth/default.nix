@@ -11,8 +11,8 @@
   freezegun,
   grpcio,
   mock,
-  oauth2client,
   pyasn1-modules,
+  pyjwt,
   pyopenssl,
   pytest-asyncio,
   pytest-localserver,
@@ -27,19 +27,20 @@
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.30.0";
+  version = "2.38.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-q2MKEyD2cgkJrXan29toQc31xmsyjWkAJ+SGe9+xZog=";
+    pname = "google_auth";
+    inherit version;
+    hash = "sha256-goURNgfTuAo/FUO3WWJEe6ign+hXg0MqeE/e72rAlMQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cachetools
     pyasn1-modules
     rsa
@@ -58,38 +59,34 @@ buildPythonPackage rec {
       cryptography
       pyopenssl
     ];
+    pyjwt = [
+      cryptography
+      pyjwt
+    ];
     reauth = [ pyu2f ];
     requests = [ requests ];
   };
 
-  nativeCheckInputs =
-    [
-      aioresponses
-      flask
-      freezegun
-      grpcio
-      mock
-      oauth2client
-      pytest-asyncio
-      pytest-localserver
-      pytestCheckHook
-      responses
-    ]
-    ++ optional-dependencies.aiohttp
-    ++ optional-dependencies.enterprise_cert
-    ++ optional-dependencies.reauth;
+  nativeCheckInputs = [
+    aioresponses
+    flask
+    freezegun
+    grpcio
+    mock
+    pytest-asyncio
+    pytest-localserver
+    pytestCheckHook
+    responses
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [
     "google.auth"
     "google.oauth2"
   ];
 
-  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-    # Disable tests using pyOpenSSL as it does not build on M1 Macs
-    "tests/transport/test__mtls_helper.py"
-    "tests/transport/test_requests.py"
-    "tests/transport/test_urllib3.py"
-    "tests/transport/test__custom_tls_signer.py"
+  pytestFlagsArray = [
+    # cryptography 44 compat issue
+    "--deselect=tests/transport/test__mtls_helper.py::TestDecryptPrivateKey::test_success"
   ];
 
   __darwinAllowLocalNetworking = true;

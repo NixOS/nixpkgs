@@ -4,7 +4,12 @@ import ./make-test-python.nix {
 
   nodes.machine = {
     virtualisation.fileSystems."/var" = {
-      options = [ "bind" "nosuid" "nodev" "noexec" ];
+      options = [
+        "bind"
+        "nosuid"
+        "nodev"
+        "noexec"
+      ];
       device = "/var";
     };
   };

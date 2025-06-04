@@ -1,15 +1,14 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "buckle";
   version = "1.1.0";
-  cargoHash = "sha256-O90/Xo9WjLVGFEkh6S6IyvanceRBJHneEret6W8e5Yc=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-2QUgyml4ebPLt0oXrdCNYIORvVyBKvsDfC+ZgsVn+cQ=";
 
   src = fetchFromGitHub {
     owner = "benbrittain";
@@ -18,18 +17,13 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-eWhcDzw+6I5N0dse5avwhcQ/y6YZ6b3QKyBwWBrA/xo=";
   };
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
-
   checkFlags = [
     # Both tests access the network.
     "--skip=test_buck2_latest"
     "--skip=test_buck2_specific_version"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Buck2 launcher";
     longDescription = ''
       Buckle is a launcher for [Buck2](https://buck2.build). It manages
@@ -39,8 +33,8 @@ rustPlatform.buildRustPackage rec {
       enforcing the prelude is upgraded in sync.
     '';
     homepage = "https://github.com/benbrittain/buckle";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cbarrete ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cbarrete ];
     mainProgram = "buckle";
   };
 }

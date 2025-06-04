@@ -1,20 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, perl
-, zlib
-, libxml2
-, eigen
-, python
-, cairo
-, pcre
-, pkg-config
-, swig
-, rapidjson
-, boost
-, maeparser
-, coordgenlibs
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  perl,
+  zlib,
+  libxml2,
+  eigen,
+  python3,
+  cairo,
+  pkg-config,
+  swig,
+  rapidjson,
+  boost,
+  maeparser,
+  coordgenlibs,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,22 +32,37 @@ stdenv.mkDerivation rec {
     sed '1i#include <ctime>' -i include/openbabel/obutil.h # gcc12
   '';
 
-  buildInputs = [ perl zlib libxml2 eigen python cairo pcre swig rapidjson boost maeparser coordgenlibs ];
+  buildInputs = [
+    perl
+    zlib
+    libxml2
+    eigen
+    python3
+    cairo
+    rapidjson
+    boost
+    maeparser
+    coordgenlibs
+  ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    swig
+    pkg-config
+  ];
 
   preConfigure = ''
     cmakeFlagsArray+=(
       "-DRUN_SWIG=ON"
       "-DPYTHON_BINDINGS=ON"
-      "-DPYTHON_INSTDIR=$out/${python.sitePackages}"
+      "-DPYTHON_INSTDIR=$out/${python3.sitePackages}"
     )
   '';
 
   # Setuptools only accepts PEP 440 version strings. The "unstable" identifier
   # can not be used. Instead we pretend to be the 3.2 beta release.
   postFixup = ''
-    cat << EOF > $out/${python.sitePackages}/setup.py
+    cat << EOF > $out/${python3.sitePackages}/setup.py
     from setuptools import setup
 
     setup(

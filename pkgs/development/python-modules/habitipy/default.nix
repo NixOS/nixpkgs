@@ -12,15 +12,14 @@
 
 buildPythonPackage rec {
   pname = "habitipy";
-  version = "0.3.1";
+  version = "0.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ASMfreaK";
     repo = "habitipy";
-    # TODO: https://github.com/ASMfreaK/habitipy/issues/27
-    rev = "faaca8840575fe8b807bf17acea6266d5ce92a99";
-    hash = "sha256-BGFUAntSNH0YYWn9nfKjIlpevF7MFs0csCPSp6IT6Ro=";
+    tag = "v${version}";
+    hash = "sha256-AEeTCrxLXkokRRnNUfW4y23Qdh8ek1F88GmCPLGb84A=";
   };
 
   build-system = [ setuptools ];

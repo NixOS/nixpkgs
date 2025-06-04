@@ -6,6 +6,7 @@
   fetchFromGitHub,
   hatchling,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
@@ -20,13 +21,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eifinger";
     repo = "aioweenect";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2qTjRXQdTExqY5/ckB6UrkmavzjZK/agfL9+o6fXS0M=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "--cov --cov-report term-missing --cov=src/aioweenect --asyncio-mode=auto" ""
+      --replace-fail "--asyncio-mode=auto" ""
   '';
 
   pythonRelaxDeps = [ "aiohttp" ];
@@ -38,8 +39,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "aioweenect" ];
 

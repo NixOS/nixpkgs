@@ -9,6 +9,8 @@ let
   cfg = config.virtualisation.incus;
   preseedFormat = pkgs.formats.yaml { };
 
+  nvidiaEnabled = (lib.elem "nvidia" config.services.xserver.videoDrivers);
+
   serverBinPath = ''/run/wrappers/bin:${pkgs.qemu_kvm}/libexec:${
     lib.makeBinPath (
       with pkgs;
@@ -26,6 +28,7 @@ let
         e2fsprogs
         findutils
         getent
+        gawk
         gnugrep
         gnused
         gnutar
@@ -35,9 +38,9 @@ let
         iptables
         iw
         kmod
-        libnvidia-container
         libxfs
         lvm2
+        lxcfs
         minio
         minio-client
         nftables
@@ -59,6 +62,9 @@ let
         skopeo
         umoci
       ]
+      ++ lib.optionals (lib.versionAtLeast cfg.package.version "6.11.0") [
+        lego
+      ]
       ++ lib.optionals config.security.apparmor.enable [
         apparmor-bin-utils
 
@@ -72,6 +78,9 @@ let
         config.boot.zfs.package
         "${config.boot.zfs.package}/lib/udev"
       ]
+      ++ lib.optionals nvidiaEnabled [
+        libnvidia-container
+      ]
     )
   }'';
 
@@ -81,38 +90,48 @@ let
     fdSize2MB = true;
   };
   ovmf-prefix = if pkgs.stdenv.hostPlatform.isAarch64 then "AAVMF" else "OVMF";
-  ovmf = pkgs.linkFarm "incus-ovmf" [
-    # 2MB must remain the default or existing VMs will fail to boot. New VMs will prefer 4MB
-    {
-      name = "OVMF_CODE.fd";
-      path = "${OVMF2MB.fd}/FV/${ovmf-prefix}_CODE.fd";
-    }
-    {
-      name = "OVMF_VARS.fd";
-      path = "${OVMF2MB.fd}/FV/${ovmf-prefix}_VARS.fd";
-    }
-    {
-      name = "OVMF_VARS.ms.fd";
-      path = "${OVMF2MB.fd}/FV/${ovmf-prefix}_VARS.fd";
-    }
+  ovmf = pkgs.linkFarm "incus-ovmf" (
+    [
+      # 2MB must remain the default or existing VMs will fail to boot. New VMs will prefer 4MB
+      {
+        name = "OVMF_CODE.fd";
+        path = "${OVMF2MB.fd}/FV/${ovmf-prefix}_CODE.fd";
+      }
+      {
+        name = "OVMF_VARS.fd";
+        path = "${OVMF2MB.fd}/FV/${ovmf-prefix}_VARS.fd";
+      }
+      {
+        name = "OVMF_VARS.ms.fd";
+        path = "${OVMF2MB.fd}/FV/${ovmf-prefix}_VARS.fd";
+      }
 
-    {
-      name = "OVMF_CODE.4MB.fd";
-      path = "${pkgs.OVMFFull.fd}/FV/${ovmf-prefix}_CODE.fd";
-    }
-    {
-      name = "OVMF_VARS.4MB.fd";
-      path = "${pkgs.OVMFFull.fd}/FV/${ovmf-prefix}_VARS.fd";
-    }
-    {
-      name = "OVMF_VARS.4MB.ms.fd";
-      path = "${pkgs.OVMFFull.fd}/FV/${ovmf-prefix}_VARS.fd";
-    }
-  ];
+      {
+        name = "OVMF_CODE.4MB.fd";
+        path = "${pkgs.OVMFFull.fd}/FV/${ovmf-prefix}_CODE.fd";
+      }
+      {
+        name = "OVMF_VARS.4MB.fd";
+        path = "${pkgs.OVMFFull.fd}/FV/${ovmf-prefix}_VARS.fd";
+      }
+      {
+        name = "OVMF_VARS.4MB.ms.fd";
+        path = "${pkgs.OVMFFull.fd}/FV/${ovmf-prefix}_VARS.fd";
+      }
+    ]
+    ++ lib.optionals pkgs.stdenv.hostPlatform.isx86_64 [
+      {
+        name = "seabios.bin";
+        path = "${pkgs.seabios-qemu}/share/seabios/bios.bin";
+      }
+    ]
+  );
 
   environment = lib.mkMerge [
     {
+      INCUS_DOCUMENTATION = "${cfg.package.doc}/html";
       INCUS_EDK2_PATH = ovmf;
+      INCUS_LXC_HOOK = "${cfg.lxcPackage}/share/lxc/hooks";
       INCUS_LXC_TEMPLATE_CONFIG = "${pkgs.lxcfs}/share/lxc/config";
       INCUS_USBIDS_PATH = "${pkgs.hwdata}/share/hwdata/usb.ids";
       PATH = lib.mkForce serverBinPath;
@@ -153,7 +172,10 @@ in
 
         Users in the "incus-admin" group can interact with
         the daemon (e.g. to start or stop containers) using the
-        {command}`incus` command line tool, among others
+        {command}`incus` command line tool, among others.
+        Users in the "incus" group can also interact with
+        the daemon, but with lower permissions
+        (i.e. administrative operations are forbidden).
       '';
 
       package = lib.mkPackageOption pkgs "incus-lts" { };
@@ -252,12 +274,9 @@ in
       };
 
       ui = {
-        enable = lib.mkEnableOption "(experimental) Incus UI";
+        enable = lib.mkEnableOption "Incus Web UI";
 
-        package = lib.mkPackageOption pkgs [
-          "incus"
-          "ui"
-        ] { };
+        package = lib.mkPackageOption pkgs [ "incus-ui-canonical" ] { };
       };
     };
   };
@@ -291,12 +310,13 @@ in
     };
 
     boot.kernelModules = [
+      "br_netfilter"
       "veth"
       "xt_comment"
       "xt_CHECKSUM"
       "xt_MASQUERADE"
       "vhost_vsock"
-    ] ++ lib.optionals (!config.networking.nftables.enable) [ "iptable_mangle" ];
+    ] ++ lib.optionals nvidiaEnabled [ "nvidia_uvm" ];
 
     environment.systemPackages = [
       cfg.clientPackage
@@ -319,7 +339,40 @@ in
         "lxc-containers".profile = ''
           include ${cfg.lxcPackage}/etc/apparmor.d/lxc-containers
         '';
+        "incusd".profile = ''
+          # This profile allows everything and only exists to give the
+          # application a name instead of having the label "unconfined"
+
+          abi <abi/4.0>,
+          include <tunables/global>
+
+          profile incusd ${lib.getExe' config.virtualisation.incus.package "incusd"} flags=(unconfined) {
+            userns,
+            </var/lib/incus/security/apparmor/cache>
+            </var/lib/incus/security/apparmor/profiles>
+
+            # Site-specific additions and overrides. See local/README for details.
+            include if exists <local/incusd>
+          }
+        '';
       };
+      includes."abstractions/base" =
+        ''
+          # Allow incusd's various AA profiles to load dynamic libraries from Nix store
+          # https://discuss.linuxcontainers.org/t/creating-new-containers-vms-blocked-by-apparmor-on-nixos/21908/6
+          mr /nix/store/*/lib/*.so*,
+          r ${pkgs.stdenv.cc.libc}/lib/gconv/gconv-modules,
+          r ${pkgs.stdenv.cc.libc}/lib/gconv/gconv-modules.d/,
+          r ${pkgs.stdenv.cc.libc}/lib/gconv/gconv-modules.d/gconv-modules-extra.conf,
+
+          # Support use of VM instance
+          mrix ${pkgs.qemu_kvm}/bin/*,
+          k ${OVMF2MB.fd}/FV/*.fd,
+          k ${pkgs.OVMFFull.fd}/FV/*.fd,
+        ''
+        + lib.optionalString pkgs.stdenv.hostPlatform.isx86_64 ''
+          k ${pkgs.seabios-qemu}/share/seabios/bios.bin,
+        '';
     };
 
     systemd.services.incus = {
@@ -359,6 +412,27 @@ in
       };
     };
 
+    systemd.services.incus-user = {
+      description = "Incus Container and Virtual Machine Management User Daemon";
+
+      inherit environment;
+
+      after = [
+        "incus.service"
+        "incus-user.socket"
+      ];
+
+      requires = [
+        "incus-user.socket"
+      ];
+
+      serviceConfig = {
+        ExecStart = "${cfg.package}/bin/incus-user --group incus";
+
+        Restart = "on-failure";
+      };
+    };
+
     systemd.services.incus-startup = lib.mkIf cfg.softDaemonRestart {
       description = "Incus Instances Startup/Shutdown";
 
@@ -369,6 +443,7 @@ in
         "incus.socket"
       ];
       requires = [ "incus.socket" ];
+      wantedBy = config.systemd.services.incus.wantedBy;
 
       serviceConfig = {
         ExecStart = "${incus-startup} start";
@@ -391,6 +466,17 @@ in
       };
     };
 
+    systemd.sockets.incus-user = {
+      description = "Incus user UNIX socket";
+      wantedBy = [ "sockets.target" ];
+
+      socketConfig = {
+        ListenStream = "/var/lib/incus/unix.socket.user";
+        SocketMode = "0660";
+        SocketGroup = "incus";
+      };
+    };
+
     systemd.services.incus-preseed = lib.mkIf (cfg.preseed != null) {
       description = "Incus initialization with preseed file";
 
@@ -409,6 +495,7 @@ in
       };
     };
 
+    users.groups.incus = { };
     users.groups.incus-admin = { };
 
     users.users.root = {

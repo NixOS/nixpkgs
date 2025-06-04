@@ -20,23 +20,21 @@
 }:
 buildPythonPackage rec {
   pname = "myst-parser";
-  version = "3.0.1";
-  format = "pyproject";
+  version = "4.0.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TKo1lanZNM+XrOKZ0ZmtlhEPoAYQUspkyHXZm1wNTFE=";
+    repo = "myst-parser";
+    tag = "v${version}";
+    hash = "sha256-/Prauz4zuJY39EK2BmgBbH1uwjF4K38e5X5hPYwRBl0=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     docutils
     jinja2
     mdit-py-plugins
@@ -56,9 +54,13 @@ buildPythonPackage rec {
   ] ++ markdown-it-py.optional-dependencies.linkify;
 
   disabledTests = [
-    # sphinx 7.4 compat
-    "test_gettext"
-    "test_gettext_additional_targets"
+    # sphinx 8.2 compat
+    # https://github.com/executablebooks/MyST-Parser/issues/1030
+    "test_sphinx_directives"
+    "test_references_singlehtml"
+    "test_extended_syntaxes"
+    "test_fieldlist_extension"
+    "test_includes"
   ];
 
   pythonImportsCheck = [ "myst_parser" ];

@@ -1,4 +1,9 @@
-{ lib, fetchzip, buildDunePackage, re }:
+{
+  lib,
+  fetchzip,
+  buildDunePackage,
+  re,
+}:
 
 buildDunePackage rec {
   pname = "ninja_utils";

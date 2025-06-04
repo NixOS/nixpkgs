@@ -6,7 +6,7 @@
   fetchurl,
   perl,
   libintl,
-  bash,
+  bashNonInteractive,
   updateAutotoolsGnuConfigScriptsHook,
   gnulib,
   gawk,
@@ -14,7 +14,7 @@
   libiconv,
   xz,
 
-  # we are a dependency of gcc, this simplifies bootstraping
+  # we are a dependency of gcc, this simplifies bootstrapping
   interactive ? false,
   ncurses,
   procps,
@@ -57,7 +57,7 @@ let
       xz
       libintl
       libiconv
-      bash
+      bashNonInteractive
       gnulib
       gawk
       freebsd
@@ -102,7 +102,7 @@ in
     patches = [ ./fix-glibc-2.34.patch ];
   };
   texinfo7 = buildTexinfo {
-    version = "7.1";
-    hash = "sha256-3u7J8Z8VngRv34rSIjGYGAbawzLMNy8cdjUErYKzCVM=";
+    version = "7.2";
+    hash = "sha256-AynXeI++8RP6gsuAiJyhl6NEzg33ZG/gAJdMXXFDY6Y=";
   };
 }

@@ -3,21 +3,21 @@
   stdenv,
   fetchurl,
   fetchpatch,
-  substituteAll,
+  replaceVars,
   meson,
   ninja,
   pkg-config,
   glib,
   json-glib,
   itstool,
-  xorg,
   accountsservice,
   libX11,
+  libXdmcp,
+  libxcb,
   gnome,
   systemd,
   dconf,
   gtk3,
-  libcanberra-gtk3,
   pam,
   libgudev,
   libselinux,
@@ -35,8 +35,7 @@
 
 let
 
-  override = substituteAll {
-    src = ./org.gnome.login-screen.gschema.override;
+  override = replaceVars ./org.gnome.login-screen.gschema.override {
     icon = "${nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake-white.svg";
   };
 
@@ -44,7 +43,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdm";
-  version = "46.2";
+  version = "48.0";
 
   outputs = [
     "out"
@@ -53,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdm/${lib.versions.major finalAttrs.version}/gdm-${finalAttrs.version}.tar.xz";
-    hash = "sha256-TuNFQioWU3FQzYQkUM2lKyyoaYS8Ue4gzcAl3PS9Jos=";
+    hash = "sha256-G8Btr/CT7HteN+y0+S5do0dKGxugdu25FR7pZ9HDCt8=";
   };
 
   mesonFlags = [
@@ -85,13 +84,13 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     keyutils
     libX11
-    libcanberra-gtk3
+    libXdmcp
+    libxcb
     libgudev
     libselinux
     pam
     plymouth
     systemd
-    xorg.libXdmcp
   ];
 
   patches = [
@@ -105,8 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
 
     # Change hardcoded paths to nix store paths.
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit
         coreutils
         plymouth
@@ -117,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
 
     # The following patches implement certain environment variables in GDM which are set by
-    # the gdm configuration module (nixos/modules/services/x11/display-managers/gdm.nix).
+    # the gdm configuration module (gdm.nix).
 
     ./gdm-x-session_extra_args.patch
 
@@ -136,8 +134,14 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # Upstream checks some common paths to find an `X` binary. We already know it.
     echo #!/bin/sh > build-aux/find-x-server.sh
-    echo "echo ${lib.getBin xorg.xorgserver}/bin/X" >> build-aux/find-x-server.sh
+    echo "echo ${lib.getBin xorgserver}/bin/X" >> build-aux/find-x-server.sh
     patchShebangs build-aux/find-x-server.sh
+
+    # Reverts https://gitlab.gnome.org/GNOME/gdm/-/commit/b0f802e36ff948a415bfd2bccaa268b6990515b7
+    # The gdm-auth-config tool is probably not too useful for NixOS, but we still want the dconf profile
+    # installed (mostly just because .passthru.tests can make use of it).
+    substituteInPlace meson.build \
+      --replace-fail "dconf_prefix = dconf_dep.get_variable(pkgconfig: 'prefix')" "dconf_prefix = gdm_prefix"
   '';
 
   preInstall = ''
@@ -156,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Ensure we did not forget to install anything.
     rmdir --parents --ignore-fail-on-non-empty "$DESTDIR${builtins.storeDir}"
-    ! test -e "$DESTDIR"
+    [ ! -e "$DESTDIR" ] || (echo "Some files are still left in a temporary DESTDIR and aren't properly installed."; exit 1)
 
     # We are setting DESTDIR so the post-install script does not compile the schemas.
     glib-compile-schemas "$out/share/glib-2.0/schemas"
@@ -199,7 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/GNOME/gdm";
     changelog = "https://gitlab.gnome.org/GNOME/gdm/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.linux;
   };
 })

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildPythonPackage,
   pythonOlder,
@@ -34,7 +35,7 @@
 
 buildPythonPackage rec {
   pname = "connexion";
-  version = "3.1.0";
+  version = "3.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -42,8 +43,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "spec-first";
     repo = "connexion";
-    rev = "refs/tags/${version}";
-    hash = "sha256-rngQDU9kXw/Z+Al0SCVnWN8xnphueTtZ0+xPBR5MbEM=";
+    tag = version;
+    hash = "sha256-ruwpA2yd7FRME1FvYrZh0EOnhmQ26YVouXzpVD9ph6g=";
   };
 
   build-system = [ poetry-core ];
@@ -79,26 +80,26 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "connexion" ];
 
-  disabledTests = [
-    "test_build_example"
-    "test_mock_resolver_no_example"
-    # Tests require network access
-    "test_remote_api"
-    # AssertionError
-    "test_headers"
-    # waiter.acquire() deadlock
-    "test_cors_server_error"
-    "test_get_bad_default_response"
-    "test_schema_response"
-    "test_writeonly"
-  ];
+  disabledTests =
+    [
+      "test_build_example"
+      "test_mock_resolver_no_example"
+      "test_sort_apis_by_basepath"
+      "test_sort_routes"
+      # Tests require network access
+      "test_remote_api"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # ImportError: Error while finding loader for '/private/tmp/nix-build-python3.12-connexion-3.1.0.drv-0/source' (<class 'ModuleNotFoundError'>: No module named '/private/tmp/nix-build-python3')
+      "test_lifespan"
+    ];
 
-  meta = with lib; {
+  meta = {
     description = "Swagger/OpenAPI First framework on top of Flask";
     homepage = "https://github.com/spec-first/connexion";
     changelog = "https://github.com/spec-first/connexion/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
     mainProgram = "connexion";
   };
 }

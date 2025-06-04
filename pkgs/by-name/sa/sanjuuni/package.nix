@@ -31,6 +31,12 @@ stdenv.mkDerivation rec {
     opencl-clhpp
   ];
 
+  postPatch = ''
+    # TODO: Remove when https://github.com/MCJack123/sanjuuni/commit/778644b164c8877e56f9f5512480dde857133815 is released
+    substituteInPlace configure \
+      --replace-fail "swr_alloc_set_opts" "swr_alloc_set_opts2"
+  '';
+
   installPhase = ''
     runHook preInstall
 

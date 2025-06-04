@@ -1,52 +1,68 @@
-import ../make-test-python.nix ({ lib, pkgs, ... }: let
-  oldNetbox = pkgs.netbox_3_6;
-  newNetbox = pkgs.netbox_3_7;
-in {
+{ lib, pkgs, ... }:
+let
+  oldNetbox = "netbox_4_1";
+  newNetbox = "netbox_4_2";
+
+  apiVersion =
+    version:
+    lib.pipe version [
+      (lib.splitString ".")
+      (lib.take 2)
+      (lib.concatStringsSep ".")
+    ];
+  oldApiVersion = apiVersion pkgs.${oldNetbox}.version;
+  newApiVersion = apiVersion pkgs.${newNetbox}.version;
+in
+{
   name = "netbox-upgrade";
 
-  meta = with lib.maintainers; {
-    maintainers = [ minijackson raitobezarius ];
-  };
+  meta.maintainers = with lib.maintainers; [
+    minijackson
+    raitobezarius
+  ];
 
-  nodes.machine = { config, ... }: {
-    virtualisation.memorySize = 2048;
-    services.netbox = {
-      enable = true;
-      package = oldNetbox;
-      secretKeyFile = pkgs.writeText "secret" ''
-        abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
-      '';
-    };
+  node.pkgsReadOnly = false;
 
-    services.nginx = {
-      enable = true;
-
-      recommendedProxySettings = true;
-
-      virtualHosts.netbox = {
-        default = true;
-        locations."/".proxyPass = "http://localhost:${toString config.services.netbox.port}";
-        locations."/static/".alias = "/var/lib/netbox/static/";
-      };
-    };
-
-    users.users.nginx.extraGroups = [ "netbox" ];
-
-    networking.firewall.allowedTCPPorts = [ 80 ];
-
-    specialisation.upgrade.configuration.services.netbox.package = lib.mkForce newNetbox;
-  };
-
-  testScript = { nodes, ... }:
+  nodes.machine =
     let
-      apiVersion = version: lib.pipe version [
-        (lib.splitString ".")
-        (lib.take 2)
-        (lib.concatStringsSep ".")
-      ];
-      oldApiVersion = apiVersion oldNetbox.version;
-      newApiVersion = apiVersion newNetbox.version;
+      pkgs' = pkgs;
     in
+    { config, pkgs, ... }:
+    {
+      virtualisation.memorySize = 2048;
+      services.netbox = {
+        enable = true;
+        # Pick the NetBox package from this config's "pkgs" argument,
+        # so that `nixpkgs.config.permittedInsecurePackages` works
+        package = pkgs.${oldNetbox};
+        secretKeyFile = pkgs.writeText "secret" ''
+          abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+        '';
+      };
+
+      services.nginx = {
+        enable = true;
+
+        recommendedProxySettings = true;
+
+        virtualHosts.netbox = {
+          default = true;
+          locations."/".proxyPass = "http://localhost:${toString config.services.netbox.port}";
+          locations."/static/".alias = "/var/lib/netbox/static/";
+        };
+      };
+
+      users.users.nginx.extraGroups = [ "netbox" ];
+
+      networking.firewall.allowedTCPPorts = [ 80 ];
+
+      nixpkgs.config.permittedInsecurePackages = [ pkgs'.${oldNetbox}.name ];
+
+      specialisation.upgrade.configuration.services.netbox.package = lib.mkForce pkgs.${newNetbox};
+    };
+
+  testScript =
+    { nodes, ... }:
     ''
       start_all()
       machine.wait_for_unit("netbox.target")
@@ -58,8 +74,10 @@ in {
           return header.split()[1]
 
       def check_api_version(version):
+          # Returns 403 with NetBox >= 4.0,
+          # but we still get the API version in the headers
           headers = machine.succeed(
-            "curl -sSfL http://localhost/api/ --head -H 'Content-Type: application/json'"
+            "curl -sSL http://localhost/api/ --head -H 'Content-Type: application/json'"
           )
           assert api_version(headers) == version
 
@@ -84,4 +102,4 @@ in {
       with subtest("NetBox version is the new one"):
           check_api_version("${newApiVersion}")
     '';
-})
+}

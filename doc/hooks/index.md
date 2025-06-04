@@ -7,7 +7,9 @@ The stdenv built-in hooks are documented in [](#ssec-setup-hooks).
 ```{=include=} sections
 autoconf.section.md
 automake.section.md
+autopatchcil.section.md
 autopatchelf.section.md
+aws-c-common.section.md
 bmake.section.md
 breakpoint.section.md
 cernlib.section.md
@@ -33,10 +35,12 @@ python.section.md
 scons.section.md
 tauri.section.md
 tetex-tex-live.section.md
+udevCheckHook.section.md
 unzip.section.md
 validatePkgConfig.section.md
 versionCheckHook.section.md
 waf.section.md
 zig.section.md
 xcbuild.section.md
+xfce4-dev-tools.section.md
 ```

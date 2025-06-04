@@ -1,23 +1,25 @@
-{ lib, stdenv
-, mkDerivation
-, fetchurl
-, autoconf
-, automake
-, libtool
-, pkg-config
-, djvulibre
-, qtbase
-, qttools
-, xorg
-, libtiff
-, darwin
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoconf,
+  automake,
+  libtool,
+  pkg-config,
+  djvulibre,
+  libsForQt5,
+  xorg,
+  libtiff,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "djview";
   version = "4.12";
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchurl {
     url = "mirror://sourceforge/djvu/${pname}-${version}.tar.gz";
@@ -29,15 +31,16 @@ mkDerivation rec {
     automake
     libtool
     pkg-config
-    qttools
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     djvulibre
-    qtbase
+    libsForQt5.qtbase
     xorg.libXt
     libtiff
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.AGL;
+  ];
 
   preConfigure = ''
     NOCONFIGURE=1 ./autogen.sh

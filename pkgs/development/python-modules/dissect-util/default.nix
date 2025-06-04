@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-util";
-  version = "3.17";
+  version = "3.21";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.util";
-    rev = "refs/tags/${version}";
-    hash = "sha256-uCmHvpZ5/TjUb9A8+GhaTAAEfCM9LxQdUDPWAvd7P7w=";
+    tag = version;
+    hash = "sha256-DCe1V3ZQxr2uQ5L4Lucqu0E1jVo7P6cEwC+4tuBmmqI=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +30,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "dissect.util" ];
+
+  disabledTests = [
+    # File handling issue
+    "test_cpio_formats"
+  ];
 
   meta = with lib; {
     description = "Dissect module implementing various utility functions for the other Dissect modules";

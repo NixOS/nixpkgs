@@ -9,6 +9,7 @@
   docbook-xsl-nons,
   gettext,
   desktop-file-utils,
+  wayland-scanner,
   wrapGAppsHook4,
   gtk4,
   libadwaita,
@@ -24,13 +25,12 @@
   libseccomp,
   librsvg,
   webp-pixbuf-loader,
-  tracker,
-  tracker-miners,
+  tinysparql,
+  localsearch,
   gexiv2,
   libselinux,
   libcloudproviders,
   gdk-pixbuf,
-  substituteAll,
   gnome-desktop,
   gst_all_1,
   gsettings-desktop-schemas,
@@ -40,7 +40,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nautilus";
-  version = "46.2";
+  version = "48.1";
 
   outputs = [
     "out"
@@ -50,18 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/nautilus/${lib.versions.major finalAttrs.version}/nautilus-${finalAttrs.version}.tar.xz";
-    hash = "sha256-bujJkBm540R/aRjWgjKiDeyonlUlwFgFQyt9iEDKcfo=";
+    hash = "sha256-eZWioXwp1LCav53ZrKFLje597DvXR3bdN5US8ubXNH8=";
   };
 
   patches = [
     # Allow changing extension directory using environment variable.
     ./extension_dir.patch
-
-    # Hardcode required paths.
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit tracker;
-    })
   ];
 
   nativeBuildInputs = [
@@ -73,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     gi-docgen
     docbook-xsl-nons
+    wayland-scanner
     wrapGAppsHook4
   ];
 
@@ -94,8 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     libcloudproviders
     shared-mime-info
-    tracker
-    tracker-miners
+    tinysparql
+    localsearch
     gnome-autoar
   ];
 
@@ -105,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Ddocs=true"
+    "-Dtests=${if finalAttrs.finalPackage.doCheck then "all" else "none"}"
   ];
 
   preFixup = ''
@@ -134,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://apps.gnome.org/Nautilus/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     mainProgram = "nautilus";
   };
 })

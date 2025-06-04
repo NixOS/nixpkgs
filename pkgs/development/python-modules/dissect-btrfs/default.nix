@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-btrfs";
-  version = "1.4";
+  version = "1.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.btrfs";
-    rev = "refs/tags/${version}";
-    hash = "sha256-cQC9lY80JOgLJZpNCwpvDldWjfbbI14uc9q/miAOBGM=";
+    tag = version;
+    hash = "sha256-BREkGrQ1khz+uPahHeMwD0V8JytQY1K/oYa7nxP+bR0=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing a parser for the BTRFS file system";
     homepage = "https://github.com/fox-it/dissect.btrfs";
-    changelog = "https://github.com/fox-it/dissect.btrfs/releases/tag/${version}";
+    changelog = "https://github.com/fox-it/dissect.btrfs/releases/tag/${src.tag}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

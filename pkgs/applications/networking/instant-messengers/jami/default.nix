@@ -24,7 +24,6 @@
   libnatpmp,
   libpulseaudio,
   libupnp,
-  yaml-cpp,
   msgpack-cxx,
   openssl,
   restinio,
@@ -32,6 +31,7 @@
   speex,
   udev,
   webrtc-audio-processing,
+  yaml-cpp,
   zlib,
 
   # for dhtnet
@@ -68,31 +68,32 @@
 
 stdenv.mkDerivation rec {
   pname = "jami";
-  version = "20240823.0";
+  version = "20250523.0";
 
   src = fetchFromGitLab {
     domain = "git.jami.net";
     owner = "savoirfairelinux";
     repo = "jami-client-qt";
     rev = "stable/${version}";
-    hash = "sha256-7jGH54sFiS6qrdEiKSS64lJyJXL1FOJVbesxo/FFmyA=";
+    hash = "sha256-uc2IcSAaCTkTMwjhgMRVdWsStLkOO5dPU2Hx+cYUUL0=";
     fetchSubmodules = true;
   };
 
-  pjsip-jami = pjsip.overrideAttrs (old: rec {
-    version = "8fc165b833eea6e3c88d67a541385424b129fd3f";
+  pjsip-jami = pjsip.overrideAttrs (old: {
+    version = "sfl-2.15-unstable-2025-02-24";
 
     src = fetchFromGitHub {
       owner = "savoirfairelinux";
       repo = "pjproject";
-      rev = version;
-      hash = "sha256-uA6ZJYUgAu3cK4CKCGtqaI0KPM/0szExPS2pCOflz5A=";
+      rev = "37130c943d59f25a71935803ea2d84515074a237";
+      hash = "sha256-7gAiriuooqqF38oajAuD/Lj5trn/9VMkCGOumcV45NA=";
     };
 
     configureFlags = [
       "--disable-sound"
       "--enable-video"
       "--enable-ext-sound"
+      "--disable-android-mediacodec"
       "--disable-speex-aec"
       "--disable-g711-codec"
       "--disable-l16-codec"
@@ -115,30 +116,21 @@ stdenv.mkDerivation rec {
     buildInputs = old.buildInputs ++ [ gnutls ];
   });
 
-  opendht-jami =
-    (opendht.overrideAttrs {
-      src = fetchFromGitHub {
-        owner = "savoirfairelinux";
-        repo = "opendht";
-        rev = "074e05cc3254d5d73b0d96ee772a6e01bb3113e5";
-        hash = "sha256-WuaURlC7eDDxvnM3YuyU9CNrwnE4WBQUIEw3z/0zjN8=";
-      };
-    }).override
-      {
-        enableProxyServerAndClient = true;
-        enablePushNotifications = true;
-      };
+  opendht-jami = opendht.override {
+    enableProxyServerAndClient = true;
+    enablePushNotifications = true;
+  };
 
   dhtnet = stdenv.mkDerivation {
     pname = "dhtnet";
-    version = "unstable-2024-07-22";
+    version = "unstable-2025-03-19";
 
     src = fetchFromGitLab {
       domain = "git.jami.net";
       owner = "savoirfairelinux";
       repo = "dhtnet";
-      rev = "cfe512b0632eea046f683b22e42d01eeb943d751";
-      hash = "sha256-SGidaCi5z7hO0ePJIZIkcWAkb+cKsZTdksVS7ldpjME=";
+      rev = "7e7359ff5dadd9aaf6d341486f3ee41029f645e1";
+      hash = "sha256-sT7OgYUBnO+HfIeCaR3lmoFJ9qE1Y5TEK1/KHzhvK7M=";
     };
 
     postPatch = ''
@@ -173,6 +165,8 @@ stdenv.mkDerivation rec {
       "-DBUILD_BENCHMARKS=Off"
       "-DBUILD_TOOLS=Off"
       "-DBUILD_TESTING=Off"
+      "-DBUILD_DEPENDENCIES=Off"
+      "-DBUILD_EXAMPLE=Off"
     ];
 
     meta = with lib; {
@@ -187,6 +181,12 @@ stdenv.mkDerivation rec {
     pname = "jami-daemon";
     inherit src version meta;
     sourceRoot = "${src.name}/daemon";
+
+    # Fix for libgit2 breaking changes
+    postPatch = ''
+      substituteInPlace src/jamidht/conversationrepository.cpp \
+        --replace-fail "git_commit* const" "const git_commit*"
+    '';
 
     nativeBuildInputs = [
       autoreconfHook
@@ -212,7 +212,6 @@ stdenv.mkDerivation rec {
       libnatpmp
       libpulseaudio
       libupnp
-      yaml-cpp
       msgpack-cxx
       opendht-jami
       openssl
@@ -222,24 +221,25 @@ stdenv.mkDerivation rec {
       speex
       udev
       webrtc-audio-processing
+      yaml-cpp
       zlib
     ];
 
     enableParallelBuilding = true;
   };
 
-  qwindowkit = fetchFromGitHub {
+  qwindowkit-src = fetchFromGitHub {
     owner = "stdware";
     repo = "qwindowkit";
-    rev = "79b1f3110754f9c21af2d7dacbd07b1a9dbaf6ef";
-    hash = "sha256-iZfmv3ADVjHf47HPK/FdrfeAzrXbxbjH3H5MFVg/ZWE=";
+    rev = "758b00cb6c2d924be3a1ea137ec366dc33a5132d";
+    hash = "sha256-qpVsF4gUX2noG9nKgjNP7FCEe59okZtDA8R/aZOef7Q=";
     fetchSubmodules = true;
   };
 
   postPatch = ''
     sed -i -e '/GIT_REPOSITORY/,+1c SOURCE_DIR ''${CMAKE_CURRENT_SOURCE_DIR}/qwindowkit' extras/build/cmake/contrib_tools.cmake
     sed -i -e 's/if(DISTRO_NEEDS_QMSETUP_PATCH)/if(TRUE)/' CMakeLists.txt
-    cp -R --no-preserve=mode,ownership ${qwindowkit} qwindowkit
+    cp -R --no-preserve=mode,ownership ${qwindowkit-src} qwindowkit
   '';
 
   preConfigure = ''

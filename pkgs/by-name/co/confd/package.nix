@@ -1,9 +1,12 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule {
   pname = "confd";
   version = "0.16-unstable-2023-12-09";
-
 
   src = fetchFromGitHub {
     owner = "kelseyhightower";
@@ -16,7 +19,10 @@ buildGoModule {
 
   subPackages = [ "." ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = {
     description = "Manage local application configuration files using templates and data from etcd or consul";

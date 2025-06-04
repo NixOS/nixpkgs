@@ -1,34 +1,39 @@
-{ lib, buildGo123Module, fetchFromGitLab, installShellFiles, stdenv }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitLab,
+  installShellFiles,
+  stdenv,
+  nix-update-script,
+  writableTmpDirAsHomeHook,
+}:
 
-buildGo123Module rec {
+buildGoModule (finalAttrs: {
   pname = "glab";
-  version = "1.47.0";
+  version = "1.57.0";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "cli";
-    rev = "v${version}";
-    hash = "sha256-mAM11nQ6YJJWNFOR9xQbgma7Plvo4MdcW2Syniw7o60=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-a5gV47DP8+WOaMVcEWlTcriobnj74JTYKVDqYzJgGRU=";
   };
 
-  vendorHash = "sha256-uwSVdebZtIpSol553gJC0ItkEqa6qXXOAVFvzjsHSSI=";
+  vendorHash = "sha256-9NKY8CACcR70EdHGRWicROoA4khXYZjLPNd8A+VkjuY=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
-  preCheck = ''
-    # failed to read configuration:  mkdir /homeless-shelter: permission denied
-    export HOME=$TMPDIR
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   subPackages = [ "cmd/glab" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     make manpage
     installManPage share/man/man1/*
     installShellCompletion --cmd glab \
@@ -37,12 +42,17 @@ buildGo123Module rec {
       --zsh <($out/bin/glab completion -s zsh)
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "GitLab CLI tool bringing GitLab to your command line";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://gitlab.com/gitlab-org/cli";
-    changelog = "https://gitlab.com/gitlab-org/cli/-/releases/v${version}";
-    maintainers = with maintainers; [ freezeboy ];
+    changelog = "https://gitlab.com/gitlab-org/cli/-/releases/v${finalAttrs.version}";
+    maintainers = with lib.maintainers; [
+      freezeboy
+      luftmensch-luftmensch
+    ];
     mainProgram = "glab";
   };
-}
+})

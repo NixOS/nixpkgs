@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -16,19 +17,23 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   build-system = with python3.pkgs; [
+    setuptools
     wheel
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    requests
-    grequests
-    cjkwrap
-    pytz
-    beautifulsoup4
-    lxml
-    mpv
-    python-vlc
-  ] ++ requests.optional-dependencies.socks;
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      requests
+      grequests
+      cjkwrap
+      pytz
+      beautifulsoup4
+      lxml
+      mpv
+      python-vlc
+    ]
+    ++ requests.optional-dependencies.socks;
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
@@ -44,6 +49,11 @@ python3.pkgs.buildPythonApplication rec {
     "test_datafile_download"
     "test_display_get_input_str"
     "test_display_get_y_n"
+    # > assert mymenu.metadata == episode1.metadata
+    # E AssertionError: assert '' == <MagicMock name='mock.metadata' id='140737279137104'>
+    # E  +  where '' = <castero.menus.episodemenu.EpisodeMenu object at 0x7ffff3acd0d0>.metadata
+    # E  +  and   <MagicMock name='mock.metadata' id='140737279137104'> = episode1.metadata
+    "test_menu_episode_metadata"
   ];
 
   pythonImportsCheck = [
@@ -55,7 +65,7 @@ python3.pkgs.buildPythonApplication rec {
     export HOME=$(mktemp -d)
   '';
 
-  # Satisfy the python-mpv depedency, which is mpv within NixOS
+  # Satisfy the python-mpv dependency, which is mpv within NixOS
   postPatch = ''
     substituteInPlace setup.py --replace-fail "python-mpv" "mpv"
   '';

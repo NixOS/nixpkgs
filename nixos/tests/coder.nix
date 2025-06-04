@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ pkgs, ... }:
+{
   name = "coder";
   meta.maintainers = pkgs.coder.meta.maintainers;
 
@@ -19,4 +20,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
     machine.succeed("curl --fail http://localhost:3000")
   '';
-})
+}

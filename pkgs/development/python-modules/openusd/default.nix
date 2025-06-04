@@ -4,7 +4,7 @@
   boost,
   buildPythonPackage,
   cmake,
-  darwin,
+  distutils,
   doxygen,
   draco,
   embree,
@@ -51,27 +51,26 @@ in
 
 buildPythonPackage rec {
   pname = "openusd";
-  version = "24.05";
+  version = "25.05.01";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenUSD";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-akwLIB5YUbnDiaQXX/K5YLXzWlTYWZG51dtxbSFxPt0=";
+    tag = "v${version}";
+    hash = "sha256-gxikEC4MqTkhgYaRsCVYtS/VmXClSaCMdzpQ0LmiR7Q=";
   };
 
-  stdenv =
-    if python.stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else python.stdenv;
+  stdenv = python.stdenv;
 
   outputs = [ "out" ] ++ lib.optional withDocs "doc";
-
-  format = "other";
 
   patches = [
     (fetchpatch {
       name = "port-to-embree-4.patch";
-      url = "https://github.com/PixarAnimationStudios/OpenUSD/pull/2266/commits/4b6c23d459c602fdac5e0ebc9b7722cbd5475e86.patch";
-      hash = "sha256-yjqdGAVqfEsOX1W/tG6c+GgQLYya5U9xgUe/sNIuDbw=";
+      # https://github.com/PixarAnimationStudios/OpenUSD/pull/2266
+      url = "https://github.com/PixarAnimationStudios/OpenUSD/commit/9ea3bc1ab550ec46c426dab04292d9667ccd2518.patch?full_index=1";
+      hash = "sha256-QjA3kjUDsSleUr+S/bQLb+QK723SNFvnmRPT+ojjgq8=";
     })
   ];
 
@@ -101,6 +100,8 @@ buildPythonPackage rec {
       cmake
       ninja
       setuptools
+      opensubdiv.dev
+      opensubdiv.static
     ]
     ++ lib.optionals withDocs [
       git
@@ -113,7 +114,6 @@ buildPythonPackage rec {
     [
       alembic.dev
       bison
-      boost
       draco
       embree
       flex
@@ -121,7 +121,6 @@ buildPythonPackage rec {
       materialx
       opencolorio
       openimageio
-      opensubdiv
       ptex
       tbb
     ]
@@ -130,20 +129,18 @@ buildPythonPackage rec {
       libX11
       libXt
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk_11_0.frameworks; [ Cocoa ])
     ++ lib.optionals withOsl [ osl ]
     ++ lib.optionals withUsdView [ qt6.qtbase ]
-    ++ lib.optionals (withUsdView && stdenv.hostPlatform.isLinux) [
-      qt6.qtbase
-      qt6.qtwayland
-    ];
+    ++ lib.optionals (withUsdView && stdenv.hostPlatform.isLinux) [ qt6.qtwayland ];
 
   propagatedBuildInputs =
     [
       boost
       jinja2
       numpy
+      opensubdiv
       pyopengl
+      distutils
     ]
     ++ lib.optionals (withTools || withUsdView) [
       pyside-tools-uic
@@ -175,7 +172,11 @@ buildPythonPackage rec {
       for interchange between graphics applications.
     '';
     homepage = "https://openusd.org/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ shaddydc ];
+    changelog = "https://github.com/PixarAnimationStudios/OpenUSD/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.tost;
+    maintainers = with lib.maintainers; [
+      shaddydc
+      gador
+    ];
   };
 }

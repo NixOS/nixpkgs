@@ -4,7 +4,6 @@
   pythonAtLeast,
   pythonOlder,
   fetchFromGitHub,
-  fetchpatch2,
   isPyPy,
 
   # build-system
@@ -20,6 +19,7 @@
   packaging,
   pygments,
   requests,
+  roman-numerals-py,
   snowballstemmer,
   sphinxcontrib-applehelp,
   sphinxcontrib-devhelp,
@@ -36,18 +36,23 @@
   html5lib,
   pytestCheckHook,
   pytest-xdist,
+  typing-extensions,
+
+  # reverse dependencies to test
+  breathe,
 }:
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "7.3.7";
-  format = "pyproject";
-  disabled = pythonOlder "3.9";
+  version = "8.2.3";
+  pyproject = true;
+
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = "sphinx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     postFetch = ''
       # Change ä to æ in file names, since ä can be encoded multiple ways on different
       # filesystems, leading to different hashes on different platforms.
@@ -55,16 +60,8 @@ buildPythonPackage rec {
       mv tests/roots/test-images/{testimäge,testimæge}.png
       sed -i 's/testimäge/testimæge/g' tests/{test_build*.py,roots/test-images/index.rst}
     '';
-    hash = "sha256-XGGRWEvd1SbQsK8W5yxDzBd5hlvXcDzr8t5Qa6skH/M=";
+    hash = "sha256-FoyCpDGDKNN2GMhE7gDpJLmWRWhbMCYlcVEaBTfXSEw=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "python-3.13-compat.patch";
-      url = "https://github.com/sphinx-doc/sphinx/commit/3496de62b743942115acb486cf35dfcc102586c3.patch";
-      hash = "sha256-5VBPOQeGyj3a8VBq4hc9S/eKaeVZeGCTNislwgsauZo=";
-    })
-  ];
 
   build-system = [ flit-core ];
 
@@ -78,6 +75,7 @@ buildPythonPackage rec {
       packaging
       pygments
       requests
+      roman-numerals-py
       snowballstemmer
       sphinxcontrib-applehelp
       sphinxcontrib-devhelp
@@ -99,6 +97,7 @@ buildPythonPackage rec {
     html5lib
     pytestCheckHook
     pytest-xdist
+    typing-extensions
   ];
 
   preCheck = ''
@@ -121,10 +120,20 @@ buildPythonPackage rec {
       "test_class_alias_having_doccomment"
       "test_class_alias_for_imported_object_having_doccomment"
       "test_decorators"
+      # racy with too many threads
+      # https://github.com/NixOS/nixpkgs/issues/353176
+      "test_document_toc_only"
+      # Assertion error
+      "test_gettext_literalblock_additional"
       # requires cython_0, but fails miserably on 3.11
       "test_cython"
       # Could not fetch remote image: http://localhost:7777/sphinx.png
       "test_copy_images"
+      # ModuleNotFoundError: No module named 'fish_licence.halibut'
+      "test_import_native_module_stubs"
+      # Racy tex file creation
+      "test_literalinclude_namedlink_latex"
+      "test_literalinclude_caption_latex"
     ]
     ++ lib.optionals (pythonAtLeast "3.12") [
       # https://github.com/sphinx-doc/sphinx/issues/12430
@@ -143,6 +152,10 @@ buildPythonPackage rec {
       "test_methoddescriptor"
       "test_partialfunction"
     ];
+
+  passthru.tests = {
+    inherit breathe;
+  };
 
   meta = {
     description = "Python documentation generator";
@@ -177,6 +190,6 @@ buildPythonPackage rec {
     homepage = "https://www.sphinx-doc.org";
     changelog = "https://www.sphinx-doc.org/en/master/changes.html";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.sphinx.members;
+    teams = [ lib.teams.sphinx ];
   };
 }

@@ -1,49 +1,59 @@
-{ lib
-, stdenv
-, buildNpmPackage
-, fetchFromGitHub
-, pkg-config
-, libsecret
-, darwin
-, python3
-, testers
-, vsce
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  pkg-config,
+  libsecret,
+  python3,
+  testers,
+  vsce,
+  nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "vsce";
-  version = "3.1.0";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode-vsce";
-    rev = "v${version}";
-    hash = "sha256-k2jeYeDLpSVw3puiOqlrtQ1a156OV1Er/TqdJuJ+578=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-T3uboozO4YRA8qqu833pIFt4yzIYRBZQdm8nawEZo2s=";
   };
 
-  npmDepsHash = "sha256-k6LdGCpVoBNpHe4z7NrS0T/gcB1EQBvBxGAM3zo+AAo=";
+  npmDepsHash = "sha256-J7ES/a6RHeTY1grdzgYu9ex7BOzadqng2/h2LlTZLns=";
 
   postPatch = ''
-    substituteInPlace package.json --replace '"version": "0.0.0"' '"version": "${version}"'
+    substituteInPlace package.json --replace-fail '"version": "0.0.0"' '"version": "${finalAttrs.version}"'
   '';
 
-  nativeBuildInputs = [ pkg-config python3 ];
+  nativeBuildInputs = [
+    pkg-config
+    python3
+  ];
 
-  buildInputs = [ libsecret ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ AppKit Security ]);
+  buildInputs = [ libsecret ];
 
   makeCacheWritable = true;
   npmFlags = [ "--legacy-peer-deps" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = vsce;
+  passthru = {
+    tests.version = testers.testVersion {
+      package = vsce;
+    };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^v(\\d+\\.\\d+\\.\\d+)$"
+      ];
+    };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/microsoft/vscode-vsce";
     description = "Visual Studio Code Extension Manager";
-    maintainers = with maintainers; [ aaronjheng ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ aaronjheng ];
+    license = lib.licenses.mit;
     mainProgram = "vsce";
   };
-}
+})

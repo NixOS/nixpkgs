@@ -1,4 +1,14 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml, ocaml-syntax-shims, alcotest, bigstringaf, ppx_let, gitUpdater }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  ocaml,
+  ocaml-syntax-shims,
+  alcotest,
+  bigstringaf,
+  ppx_let,
+  gitUpdater,
+}:
 
 buildDunePackage rec {
   pname = "angstrom";
@@ -7,13 +17,16 @@ buildDunePackage rec {
   minimalOCamlVersion = "4.04";
 
   src = fetchFromGitHub {
-    owner  = "inhabitedtype";
-    repo   = pname;
-    rev    = version;
+    owner = "inhabitedtype";
+    repo = pname;
+    rev = version;
     hash = "sha256-EPqDK+7RU2vHEHvuoTXb8V2FkdXQ6tGu0ghbNPS3gZ4=";
   };
 
-  checkInputs = [ alcotest ppx_let ];
+  checkInputs = [
+    alcotest
+    ppx_let
+  ];
   buildInputs = [ ocaml-syntax-shims ];
   propagatedBuildInputs = [ bigstringaf ];
   doCheck = lib.versionAtLeast ocaml.version "4.08";

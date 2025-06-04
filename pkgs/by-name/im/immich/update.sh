@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl jq prefetch-npm-deps nix-prefetch-github coreutils
+#!nix-shell -i bash -p curl jq prefetch-npm-deps nix-prefetch-github coreutils ripgrep
 
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
@@ -39,6 +39,24 @@ for npm_component in cli server web "open-api/typescript-sdk"; do
       '.components += {($npm_component): {npmDepsHash: $hash, version: $version}}' \
       "$sources_tmp")" > "$sources_tmp"
 done
-
 rm "$lock"
+
+url="http://download.geonames.org/export/dump"
+curl -s "http://web.archive.org/save/$url/cities500.zip"
+curl -s "http://web.archive.org/save/$url/admin1CodesASCII.txt"
+curl -s "http://web.archive.org/save/$url/admin1Codes.txt"
+timestamp=$(curl -s \
+    "http://archive.org/wayback/available?url=$url/cities500.zip" \
+    | jq -r ".archived_snapshots.closest.timestamp")
+echo "$(jq --arg timestamp "$timestamp" --arg hash "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" \
+    '.components += {geonames: {timestamp: $timestamp, hash: $hash}}' \
+    "$sources_tmp")" > "$sources_tmp"
+
+cp "$sources_tmp" sources.json
+set +o pipefail
+output="$(nix-build ../../../.. -A immich.geodata 2>&1 || true)"
+set -o pipefail
+hash=$(echo "$output" | rg 'got:\s+(sha256-.*)$' -or '$1')
+echo "$(jq --arg hash "$hash" '.components.geonames.hash = $hash' "$sources_tmp")" > "$sources_tmp"
+
 mv "$sources_tmp" sources.json

@@ -1,32 +1,30 @@
-{ lib, stdenv, fetchFromGitHub, postgresql }:
+{
+  fetchFromGitHub,
+  lib,
+  postgresql,
+  postgresqlBuildExtension,
+}:
 
-stdenv.mkDerivation rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pg_auto_failover";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "citusdata";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-OIWykfFbVskrkPG/zSmZtZjc+W956KSfIzK7f5QOqpI=";
+    repo = "pg_auto_failover";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lsnVry+5n08kLOun8u0B7XFvI5ijTKJtFJ84fixMHe4=";
   };
 
-  buildInputs = postgresql.buildInputs ++ [ postgresql ];
+  buildInputs = postgresql.buildInputs;
 
-  installPhase = ''
-    install -D -t $out/bin src/bin/pg_autoctl/pg_autoctl
-    install -D -t $out/lib src/monitor/pgautofailover.so
-    install -D -t $out/share/postgresql/extension src/monitor/*.sql
-    install -D -t $out/share/postgresql/extension src/monitor/pgautofailover.control
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "PostgreSQL extension and service for automated failover and high-availability";
     mainProgram = "pg_autoctl";
     homepage = "https://github.com/citusdata/pg_auto_failover";
-    changelog = "https://github.com/citusdata/pg_auto_failover/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/citusdata/pg_auto_failover/blob/v${finalAttrs.version}/CHANGELOG.md";
     maintainers = [ ];
     platforms = postgresql.meta.platforms;
-    license = licenses.postgresql;
+    license = lib.licenses.postgresql;
   };
-}
+})

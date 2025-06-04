@@ -33,29 +33,31 @@
   wrapGAppsHook3,
   wxGTK32,
   zarchive,
+  bluez,
 }:
 
 let
-  # cemu doesn't build with imgui 1.90.2 or newer:
-  # error: 'struct ImGuiIO' has no member named 'ImeWindowHandle'
+  # cemu doesn't build with imgui 1.91.4 or newer:
+  # before v1.91.4 (2024/10/08) the default type for ImTextureID was void*.
   imgui' = imgui.overrideAttrs rec {
-    version = "1.90.1";
+    version = "1.91.3";
     src = fetchFromGitHub {
       owner = "ocornut";
       repo = "imgui";
-      rev = "v${version}";
-      hash = "sha256-gf47uLeNiXQic43buB5ZnMqiotlUfIyAsP+3H7yJuFg=";
+      tag = "v${version}";
+      hash = "sha256-J4gz4rnydu8JlzqNC/OIoVoRcgeFd6B1Qboxu5drOKY=";
     };
   };
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "cemu";
-  version = "2.0-92";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "cemu-project";
     repo = "Cemu";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-bjt+2RzmG8iKcdyka4HsHM5NEzCwGah4s9eiywSHXbw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YO3rMhlBZ5fGu0ceAFB0R3owFuSobx39faWL9EUFwAM=";
   };
 
   patches = [
@@ -63,6 +65,7 @@ in stdenv.mkDerivation (finalAttrs: {
     # > The following imported targets are referenced, but are missing:
     # > SPIRV-Tools-opt
     ./0000-spirv-tools-opt-cmakelists.patch
+    ./0002-cemu-imgui.patch
   ];
 
   nativeBuildInputs = [
@@ -98,6 +101,7 @@ in stdenv.mkDerivation (finalAttrs: {
     wayland
     wxGTK32
     zarchive
+    bluez
   ];
 
   cmakeFlags = [
@@ -113,15 +117,20 @@ in stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  preConfigure = let
-    tag = lib.last (lib.splitString "-" finalAttrs.version);
-  in ''
-    rm -rf dependencies/imgui
-    # cemu expects imgui source code, not just header files
-    ln -s ${imgui'.src} dependencies/imgui
-    substituteInPlace src/Common/version.h --replace-fail " (experimental)" "-${tag} (experimental)"
-    substituteInPlace dependencies/gamemode/lib/gamemode_client.h --replace-fail "libgamemode.so.0" "${gamemode.lib}/lib/libgamemode.so.0"
-  '';
+  preConfigure =
+    let
+      tag = lib.splitString "." (lib.last (lib.splitString "-" finalAttrs.version));
+      majorv = builtins.elemAt tag 0;
+      minorv = builtins.elemAt tag 1;
+    in
+    ''
+      rm -rf dependencies/imgui
+      # cemu expects imgui source code, not just header files
+      ln -s ${imgui'.src} dependencies/imgui
+      substituteInPlace CMakeLists.txt --replace-fail "EMULATOR_VERSION_MAJOR \"0\"" "EMULATOR_VERSION_MAJOR \"${majorv}\""
+      substituteInPlace CMakeLists.txt --replace-fail "EMULATOR_VERSION_MINOR \"0\"" "EMULATOR_VERSION_MINOR \"${minorv}\""
+      substituteInPlace dependencies/gamemode/lib/gamemode_client.h --replace-fail "libgamemode.so.0" "${gamemode.lib}/lib/libgamemode.so.0"
+    '';
 
   installPhase = ''
     runHook preInstall
@@ -139,13 +148,15 @@ in stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  preFixup = let
-    libs = [ vulkan-loader ] ++ cubeb.passthru.backendLibs;
-  in ''
-    gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath libs}"
-    )
-  '';
+  preFixup =
+    let
+      libs = [ vulkan-loader ];
+    in
+    ''
+      gappsWrapperArgs+=(
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath libs}"
+      )
+    '';
 
   passthru = {
     updateScript = nix-update-script { };
@@ -161,7 +172,10 @@ in stdenv.mkDerivation (finalAttrs: {
     homepage = "https://cemu.info";
     license = lib.licenses.mpl20;
     mainProgram = "cemu";
-    maintainers = with lib.maintainers; [ zhaofengli baduhai AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      zhaofengli
+      baduhai
+    ];
     platforms = [ "x86_64-linux" ];
   };
 })

@@ -2,13 +2,20 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  flit-core,
+
+  # dependencies
   docutils,
+  pip,
   requests,
+  tomli-w,
+
+  # tests
   pytestCheckHook,
   testpath,
   responses,
-  flit-core,
-  tomli-w,
 }:
 
 # Flit is actually an application to build universal wheels.
@@ -18,22 +25,23 @@
 
 buildPythonPackage rec {
   pname = "flit";
-  version = "3.9.0";
+  version = "3.12.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
-    owner = "takluyver";
+    owner = "pypa";
     repo = "flit";
     rev = version;
-    hash = "sha256-yl2+PcKr7xRW4oIBWl+gzh/nKhSNu5GH9fWKRGgaNHU=";
+    hash = "sha256-oWV+KK22+iK99iCOCKCV1OCLq2Ef1bcYRKXT5GHwiL8=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     docutils
-    requests
     flit-core
+    pip
+    requests
     tomli-w
   ];
 

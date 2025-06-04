@@ -2,44 +2,54 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  jinja2,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
   markdown-it-py,
   platformdirs,
-  poetry-core,
+  rich,
+  typing-extensions,
+
+  # optional-dependencies
+  tree-sitter,
+  tree-sitter-languages,
+
+  # tests
+  jinja2,
   pytest-aiohttp,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
-  rich,
   syrupy,
   time-machine,
-  tree-sitter,
-  tree-sitter-languages,
-  typing-extensions,
+  tree-sitter-markdown,
+  tree-sitter-python,
 }:
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "0.82.0";
+  version = "3.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "textual";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-belpoXQ+CkTchK+FjI/Ur8v4cNgzX39xLdNfPCwaU6E=";
+    tag = "v${version}";
+    hash = "sha256-GsdWWK8Y/9Wg+Ka3YJXovRuQDrvUJUYqtA64wc8Xv9k=";
   };
 
   build-system = [ poetry-core ];
 
-  dependencies = [
-    platformdirs
-    markdown-it-py
-    rich
-    typing-extensions
-  ] ++ markdown-it-py.optional-dependencies.plugins ++ markdown-it-py.optional-dependencies.linkify;
+  dependencies =
+    [
+      markdown-it-py
+      platformdirs
+      rich
+      typing-extensions
+    ]
+    ++ markdown-it-py.optional-dependencies.plugins
+    ++ markdown-it-py.optional-dependencies.linkify;
 
   optional-dependencies = {
     syntax = [
@@ -55,6 +65,8 @@ buildPythonPackage rec {
     syrupy
     time-machine
     tree-sitter
+    tree-sitter-markdown
+    tree-sitter-python
   ];
 
   disabledTestPaths = [
@@ -65,25 +77,23 @@ buildPythonPackage rec {
   disabledTests = [
     # Assertion issues
     "test_textual_env_var"
-
-    # Requirements for tests are not quite ready
-    "test_register_language"
-    "test_language_binary_missing"
   ];
 
-  # Some tests in groups require state from previous tests
-  # See https://github.com/Textualize/textual/issues/4924#issuecomment-2304889067
-  pytestFlagsArray = [ "--dist=loadgroup" ];
+  pytestFlagsArray = [
+    # Some tests in groups require state from previous tests
+    # See https://github.com/Textualize/textual/issues/4924#issuecomment-2304889067
+    "--dist=loadgroup"
+  ];
 
   pythonImportsCheck = [ "textual" ];
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "TUI framework for Python inspired by modern web development";
     homepage = "https://github.com/Textualize/textual";
-    changelog = "https://github.com/Textualize/textual/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = [ ];
+    changelog = "https://github.com/Textualize/textual/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ gepbird ];
   };
 }

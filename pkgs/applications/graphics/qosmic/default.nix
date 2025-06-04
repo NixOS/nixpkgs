@@ -1,16 +1,15 @@
-{ stdenv
-, fetchFromGitHub
-, fetchpatch
-, qmake
-, wrapQtAppsHook
-, qtbase
-, pkg-config
-, lua
-, flam3
-, libxml2
-, libpng
-, libjpeg
-, lib
+{
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  libsForQt5,
+  pkg-config,
+  lua,
+  flam3,
+  libxml2,
+  libpng,
+  libjpeg,
+  lib,
 }:
 
 stdenv.mkDerivation rec {
@@ -49,10 +48,14 @@ stdenv.mkDerivation rec {
       --replace "install_icons install_desktop" ""
   '';
 
-  nativeBuildInputs = [ qmake wrapQtAppsHook pkg-config ];
+  nativeBuildInputs = [
+    libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
+    pkg-config
+  ];
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     lua
     flam3
     libxml2

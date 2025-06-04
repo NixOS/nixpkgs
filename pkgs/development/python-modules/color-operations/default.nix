@@ -19,15 +19,16 @@
 
 buildPythonPackage rec {
   pname = "color-operations";
-  version = "0.1.4";
+  version = "0.2.0";
   pyproject = true;
-  disabled = pythonOlder "3.8";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "vincentsarago";
     repo = "color-operations";
-    rev = "refs/tags/${version}";
-    hash = "sha256-qqOTmVYD3VfjeVJtYvDQw+cxjcTsmqTYQNL1qMX+fL4=";
+    tag = version;
+    hash = "sha256-LUO9PxrXCkFqyguvX4GT6vmlALMyfkDqXeGZAQG76vw=";
   };
 
   build-system = [
@@ -52,7 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "Apply basic color-oriented image operations. Fork of rio-color";
     homepage = "https://github.com/vincentsarago/color-operations";
+    changelog = "https://github.com/vincentsarago/color-operations/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
 }

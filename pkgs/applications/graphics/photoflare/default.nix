@@ -1,7 +1,12 @@
-{ mkDerivation, lib, graphicsmagick, fetchFromGitHub, qmake, qtbase, qttools
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libsForQt5,
+  graphicsmagick,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "photoflare";
   version = "1.6.13";
 
@@ -12,8 +17,15 @@ mkDerivation rec {
     sha256 = "sha256-0eAuof/FBro2IKxkJ6JHauW6C96VTPxy7QtfPVzPFi4=";
   };
 
-  nativeBuildInputs = [ qmake qttools ];
-  buildInputs = [ qtbase graphicsmagick ];
+  nativeBuildInputs = [
+    libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
+    libsForQt5.qttools
+  ];
+  buildInputs = [
+    libsForQt5.qtbase
+    graphicsmagick
+  ];
 
   qmakeFlags = [ "PREFIX=${placeholder "out"}" ];
 

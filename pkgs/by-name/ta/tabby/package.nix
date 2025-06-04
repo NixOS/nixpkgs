@@ -1,28 +1,28 @@
-{ config
-, lib
-, rustPlatform
-, fetchFromGitHub
-, nix-update-script
-, stdenv
+{
+  config,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
+  stdenv,
 
-, git
-, openssl
-, pkg-config
-, protobuf
+  git,
+  openssl,
+  pkg-config,
+  protobuf,
+  cmake,
 
-, llama-cpp
+  llama-cpp,
 
-, autoAddDriverRunpath
-, cudaSupport ? config.cudaSupport
-, cudaPackages ? { }
+  apple-sdk_15,
+  autoAddDriverRunpath,
+  versionCheckHook,
 
-, rocmSupport ? config.rocmSupport
-
-, darwin
-, metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
-
+  cudaSupport ? config.cudaSupport,
+  rocmSupport ? config.rocmSupport,
+  metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64,
   # one of [ null "cpu" "rocm" "cuda" "metal" ];
-, acceleration ? null
+  acceleration ? null,
 }:
 
 let
@@ -32,8 +32,7 @@ let
   # https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/ollama/default.nix
 
   pname = "tabby";
-  version = "0.11.1";
-
+  version = "0.28.0";
 
   availableAccelerations = flatten [
     (optional cudaSupport "cuda")
@@ -41,32 +40,49 @@ let
     (optional metalSupport "metal")
   ];
 
-  warnIfMultipleAccelerationMethods = configured: (let
-    len = builtins.length configured;
-    result = if len == 0 then "cpu" else (builtins.head configured);
-  in
-    lib.warnIf (len > 1) ''
-      building tabby with multiple acceleration methods enabled is not
-      supported; falling back to `${result}`
-    ''
-    result
-  );
+  warnIfMultipleAccelerationMethods =
+    configured:
+    (
+      let
+        len = builtins.length configured;
+        result = if len == 0 then "cpu" else (builtins.head configured);
+      in
+      lib.warnIf (len > 1) ''
+        building tabby with multiple acceleration methods enabled is not
+        supported; falling back to `${result}`
+      '' result
+    );
 
   # If user did not not override the acceleration attribute, then try to use one of
   # - nixpkgs.config.cudaSupport
   # - nixpkgs.config.rocmSupport
   # - metal if (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
   # !! warn if multiple acceleration methods are enabled and default to the first one in the list
-  featureDevice = if (builtins.isNull acceleration) then (warnIfMultipleAccelerationMethods availableAccelerations) else acceleration;
+  featureDevice =
+    if (builtins.isNull acceleration) then
+      (warnIfMultipleAccelerationMethods availableAccelerations)
+    else
+      acceleration;
 
-  warnIfNotLinux = api: (lib.warnIfNot stdenv.hostPlatform.isLinux
-    "building tabby with `${api}` is only supported on linux; falling back to cpu"
-    stdenv.hostPlatform.isLinux);
-  warnIfNotDarwinAarch64 = api: (lib.warnIfNot (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
-    "building tabby with `${api}` is only supported on Darwin-aarch64; falling back to cpu"
-    (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64));
+  warnIfNotLinux =
+    api:
+    (lib.warnIfNot stdenv.hostPlatform.isLinux
+      "building tabby with `${api}` is only supported on linux; falling back to cpu"
+      stdenv.hostPlatform.isLinux
+    );
+  warnIfNotDarwinAarch64 =
+    api:
+    (lib.warnIfNot (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
+      "building tabby with `${api}` is only supported on Darwin-aarch64; falling back to cpu"
+      (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
+    );
 
-  validAccel = lib.assertOneOf "tabby.featureDevice" featureDevice [ "cpu" "rocm" "cuda" "metal" ];
+  validAccel = lib.assertOneOf "tabby.featureDevice" featureDevice [
+    "cpu"
+    "rocm"
+    "cuda"
+    "metal"
+  ];
 
   # TODO(ghthor): there is a bug here where featureDevice could be cuda, but enableCuda is false
   #  The would result in a startup failure of the service module.
@@ -87,14 +103,11 @@ let
   };
 
   # TODO(ghthor): some of this can be removed
-  darwinBuildInputs = [ llamaccpPackage ]
-  ++ optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
-    Foundation
-    Accelerate
-    CoreVideo
-    CoreGraphics
-  ]
-  ++ optionals enableMetal [ Metal MetalKit ]);
+  darwinBuildInputs =
+    [ llamaccpPackage ]
+    ++ optionals stdenv.hostPlatform.isDarwin ([
+      apple-sdk_15
+    ]);
 
   cudaBuildInputs = [ llamaccpPackage ];
   rocmBuildInputs = [ llamaccpPackage ];
@@ -107,63 +120,75 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "TabbyML";
     repo = "tabby";
-    rev = "v${version}";
-    hash = "sha256-OgAE526aW3mVqf6fVmBmL5/B4gH9B54QLEITQk9Kgsg=";
+    tag = "v${version}";
+    hash = "sha256-cdY1/k7zZ4am6JP9ghnnJFHop/ZcnC/9alzd2MS8xqc=";
     fetchSubmodules = true;
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "apalis-0.5.1" = "sha256-hGvVuSy32lSTR5DJdiyf8q1sXbIeuLSGrtyq6m2QlUQ=";
-      "tree-sitter-c-0.20.6" = "sha256-Etl4s29YSOxiqPo4Z49N6zIYqNpIsdk/Qd0jR8jdvW4=";
-      "tree-sitter-cpp-0.20.3" = "sha256-UrQ48CoUMSHmlHzOMu22c9N4hxJtHL2ZYRabYjf5byA=";
-      "tree-sitter-solidity-0.0.3" = "sha256-b+LthCf+g19sjKeNgXZmUV0RNi94O3u0WmXfgKRpaE0=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-yEns0QAARmuV697/na08K8uwJWZihY3pMyCZcERDlFM=";
 
-  # https://github.com/TabbyML/tabby/blob/v0.7.0/.github/workflows/release.yml#L39
+  # Don't need to build llama-cpp-server (included in default build)
+  # We also don't add CUDA features here since we're using the overridden llama-cpp package
   cargoBuildFlags = [
-    "--release"
-    "--package" "tabby"
-  ] ++ optionals enableRocm [
-    "--features" "rocm"
-  ] ++ optionals enableCuda [
-    "--features" "cuda"
+    "--no-default-features"
+    "--features"
+    "ee"
+    "--package"
+    "tabby"
   ];
 
-  OPENSSL_NO_VENDOR = 1;
-
-  nativeBuildInputs = [
-    pkg-config
-    protobuf
-    git
-  ] ++ optionals enableCuda [
-    autoAddDriverRunpath
+  nativeInstallCheckInputs = [
+    versionCheckHook
   ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
-  buildInputs = [ openssl ]
-  ++ optionals stdenv.hostPlatform.isDarwin darwinBuildInputs
-  ++ optionals enableCuda cudaBuildInputs
-  ++ optionals enableRocm rocmBuildInputs
-  ;
+  nativeBuildInputs =
+    [
+      git
+      pkg-config
+      protobuf
+      cmake
+    ]
+    ++ optionals enableCuda [
+      autoAddDriverRunpath
+    ];
 
-  env.LLAMA_CPP_LIB = "${lib.getLib llamaccpPackage}/lib";
-  patches = [ ./0001-nix-build-use-nix-native-llama-cpp-package.patch ];
+  buildInputs =
+    [ openssl ]
+    ++ optionals stdenv.hostPlatform.isDarwin darwinBuildInputs
+    ++ optionals enableCuda cudaBuildInputs
+    ++ optionals enableRocm rocmBuildInputs;
+
+  postInstall = ''
+    # NOTE: Project contains a subproject for building llama-server
+    # But, we already have a derivation for this
+    ln -s ${lib.getExe' llama-cpp "llama-server"} $out/bin/llama-server
+  '';
+
+  env = {
+    OPENSSL_NO_VENDOR = 1;
+  };
 
   # Fails with:
   # file cannot create directory: /var/empty/local/lib64/cmake/Llama
   doCheck = false;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v([0-9.]+)$"
+    ];
+  };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/TabbyML/tabby";
     changelog = "https://github.com/TabbyML/tabby/releases/tag/v${version}";
     description = "Self-hosted AI coding assistant";
     mainProgram = "tabby";
-    license = licenses.asl20;
-    maintainers = [ maintainers.ghthor ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.ghthor ];
     broken = stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64;
   };
 }

@@ -1,33 +1,34 @@
-{ lib
-, desktop-file-utils
-, fetchFromGitHub
-, fetchYarnDeps
-, fixup_yarn_lock
-, gjs
-, glib-networking
-, gobject-introspection
-, gst_all_1
-, gtk4
-, libadwaita
-, libsoup_3
-, meson
-, ninja
-, pkg-config
-, stdenv
-, wrapGAppsHook4
-, yarn
-, nodejs
+{
+  lib,
+  desktop-file-utils,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  fixup_yarn_lock,
+  gjs,
+  glib-networking,
+  gobject-introspection,
+  gst_all_1,
+  gtk4,
+  libadwaita,
+  libsoup_3,
+  meson,
+  ninja,
+  pkg-config,
+  stdenv,
+  wrapGAppsHook4,
+  yarn,
+  nodejs,
 }:
 
 stdenv.mkDerivation rec {
   pname = "sticky-notes";
-  version = "0.2.5";
+  version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "vixalien";
     repo = "sticky";
     rev = "v${version}";
-    hash = "sha256-+++xUiMjO+19hmLLBamOL6tMUqB0a8ixTXca/6A8ZK8=";
+    hash = "sha256-82Yxw8NSw82rxhuAgsdN2lCiQ/hli4tQiU6jCgGyp4U=";
     fetchSubmodules = true;
   };
 
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-GThcufSAr/VYL9AWFOBY2FDXQZGY5L7TbBdadPh7CAc=";
+    hash = "sha256-NDGuG2rXJH0bHsD7yQMY6HAZDkMq0j63SYVz8+X3fPQ=";
   };
 
   preConfigure = ''

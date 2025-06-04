@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "proxmoxer";
-  version = "2.1.0";
+  version = "2.2.0-unstable-2025-02-18";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "proxmoxer";
     repo = "proxmoxer";
-    rev = "refs/tags/${version}";
-    hash = "sha256-bwNv9eBuatMAWZ/ZOoF4VUZFIYAxJDEEwGQaAwPWcHY=";
+    rev = "cf1bcde696537c74ef00d8e71fb86735fb4c2c79";
+    hash = "sha256-h5Sla7/4XiZSGwKstyiqs/T2Qgi13jI9YMVPqDcF3sA=";
   };
 
   build-system = [ setuptools ];

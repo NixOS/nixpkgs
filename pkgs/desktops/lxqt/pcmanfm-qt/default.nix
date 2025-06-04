@@ -1,32 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, layer-shell-qt
-, libexif
-, libfm-qt
-, lxqt-build-tools
-, lxqt-menu-data
-, menu-cache
-, pkg-config
-, qtbase
-, qtimageformats
-, qttools
-, qtwayland
-, qtsvg
-, wrapQtAppsHook
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  layer-shell-qt,
+  libexif,
+  libfm-qt,
+  lxqt-build-tools,
+  lxqt-menu-data,
+  menu-cache,
+  pkg-config,
+  qtbase,
+  qtimageformats,
+  qttools,
+  qtwayland,
+  qtsvg,
+  wrapQtAppsHook,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pcmanfm-qt";
-  version = "2.0.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-PyCtcn+QHwX/iy85A3y7Phf8ogdSRrwtXrJYGxrjyLM=";
+    hash = "sha256-mYjbOb9c7Qc3qhVYt1EHy50YOVguLnwg0NJg2zBgwOM=";
   };
 
   nativeBuildInputs = [
@@ -61,6 +62,6 @@ stdenv.mkDerivation rec {
     mainProgram = "pcmanfm-qt";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
-    maintainers = teams.lxqt.members;
+    teams = [ teams.lxqt ];
   };
 }

@@ -1,98 +1,114 @@
-{ lib
-, fetchFromSourcehut
-, buildGoModule
-, buildPythonPackage
-, python
-, srht
-, scmsrht
-, pygit2
-, minio
-, pythonOlder
-, unzip
-, pip
-, setuptools
+{
+  lib,
+  fetchFromSourcehut,
+  buildGoModule,
+  buildPythonPackage,
+  python,
+  srht,
+  scmsrht,
+  pygit2,
+  minio,
+  pythonOlder,
+  unzip,
+  pip,
+  setuptools-scm,
 }:
 let
-  version = "0.85.9";
-  gqlgen = import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.42"; };
+  version = "0.88.10";
+  gqlgen = import ./fix-gqlgen-trimpath.nix {
+    inherit unzip;
+    gqlgenVersion = "0.17.64";
+  };
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "git.sr.ht";
     rev = version;
-    hash = "sha256-tmbBw6x3nqN9nRIR3xOXQ+L5EACXLQYLXQYK3lsOsAI=";
+    hash = "sha256-o7d2EIx9oJAQSIrMMG/TYjAo7PJwT6rE8kcVMKoYenY=";
   };
 
-  gitApi = buildGoModule ({
-    inherit src version;
-    pname = "gitsrht-api";
-    modRoot = "api";
-    vendorHash = "sha256-4KwnUi6ILUagMDXzuBG9CRT2N8uyjvRM74TwJqIzicc=";
-  } // gqlgen);
+  patches = [ ./patches/core-go-update/git/patch-deps.patch ];
 
-  gitDispatch = buildGoModule ({
-    inherit src version;
-    pname = "gitsrht-dispatch";
-    modRoot = "gitsrht-dispatch";
-    vendorHash = "sha256-4KwnUi6ILUagMDXzuBG9CRT2N8uyjvRM74TwJqIzicc=";
+  gitApi = buildGoModule (
+    {
+      inherit src version patches;
+      pname = "gitsrht-api";
+      modRoot = "api";
+      vendorHash = "sha256-20SxOZrvj41L8A5nuOro9DYiK6FyhwJK5cNAvxPB7qw=";
+    }
+    // gqlgen
+  );
 
-    postPatch = ''
-      substituteInPlace gitsrht-dispatch/main.go \
-        --replace /var/log/gitsrht-dispatch /var/log/sourcehut/gitsrht-dispatch
-    '';
-  } // gqlgen);
+  gitDispatch = buildGoModule (
+    {
+      inherit src version patches;
+      pname = "gitsrht-dispatch";
+      modRoot = "dispatch";
+      vendorHash = "sha256-MXLF7vO8SmUkU1nOxhObuzjT2ZRQQluIX7TRrxL7/3Y=";
 
-  gitKeys = buildGoModule ({
-    inherit src version;
-    pname = "gitsrht-keys";
-    modRoot = "gitsrht-keys";
-    vendorHash = "sha256-4KwnUi6ILUagMDXzuBG9CRT2N8uyjvRM74TwJqIzicc=";
+      postPatch = ''
+        substituteInPlace dispatch/main.go \
+          --replace-fail /var/log/git.sr.ht-dispatch /var/log/sourcehut/git.sr.ht-dispatch
+      '';
+    }
+    // gqlgen
+  );
 
-    postPatch = ''
-      substituteInPlace gitsrht-keys/main.go \
-        --replace /var/log/gitsrht-keys /var/log/sourcehut/gitsrht-keys
-    '';
-  } // gqlgen);
+  gitKeys = buildGoModule (
+    {
+      inherit src version patches;
+      pname = "gitsrht-keys";
+      modRoot = "keys";
+      vendorHash = "sha256-MXLF7vO8SmUkU1nOxhObuzjT2ZRQQluIX7TRrxL7/3Y=";
 
-  gitShell = buildGoModule ({
-    inherit src version;
-    pname = "gitsrht-shell";
-    modRoot = "gitsrht-shell";
-    vendorHash = "sha256-4KwnUi6ILUagMDXzuBG9CRT2N8uyjvRM74TwJqIzicc=";
+      postPatch = ''
+        substituteInPlace keys/main.go \
+          --replace-fail /var/log/git.sr.ht-keys /var/log/sourcehut/git.sr.ht-keys
+      '';
+    }
+    // gqlgen
+  );
 
-    postPatch = ''
-      substituteInPlace gitsrht-shell/main.go \
-        --replace /var/log/gitsrht-shell /var/log/sourcehut/gitsrht-shell
-    '';
-  } // gqlgen);
+  gitShell = buildGoModule (
+    {
+      inherit src version patches;
+      pname = "gitsrht-shell";
+      modRoot = "shell";
+      vendorHash = "sha256-MXLF7vO8SmUkU1nOxhObuzjT2ZRQQluIX7TRrxL7/3Y=";
 
-  gitUpdateHook = buildGoModule ({
-    inherit src version;
-    pname = "gitsrht-update-hook";
-    modRoot = "gitsrht-update-hook";
-    vendorHash = "sha256-4KwnUi6ILUagMDXzuBG9CRT2N8uyjvRM74TwJqIzicc=";
+      postPatch = ''
+        substituteInPlace shell/main.go \
+          --replace-fail /var/log/git.sr.ht-shell /var/log/sourcehut/git.sr.ht-shell
+      '';
+    }
+    // gqlgen
+  );
 
-    postPatch = ''
-      substituteInPlace gitsrht-update-hook/main.go \
-        --replace /var/log/gitsrht-update-hook /var/log/sourcehut/gitsrht-update-hook
-    '';
-  } // gqlgen);
+  gitUpdateHook = buildGoModule (
+    {
+      inherit src version patches;
+      pname = "gitsrht-update-hook";
+      modRoot = "update-hook";
+      vendorHash = "sha256-MXLF7vO8SmUkU1nOxhObuzjT2ZRQQluIX7TRrxL7/3Y=";
+
+      postPatch = ''
+        substituteInPlace update-hook/main.go \
+          --replace-fail /var/log/git.sr.ht-update-hook /var/log/sourcehut/git.sr.ht-update-hook
+      '';
+    }
+    // gqlgen
+  );
 in
 buildPythonPackage rec {
-  inherit src version;
+  inherit src version patches;
   pname = "gitsrht";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace "all: api gitsrht-dispatch gitsrht-keys gitsrht-shell gitsrht-update-hook" ""
-  '';
-
   nativeBuildInputs = [
     pip
-    setuptools
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
@@ -102,18 +118,25 @@ buildPythonPackage rec {
     minio
   ];
 
-  preBuild = ''
-    export PKGVER=${version}
-    export SRHT_PATH=${srht}/${python.sitePackages}/srht
+  env = {
+    PKGVER = version;
+    SRHT_PATH = "${srht}/${python.sitePackages}/srht";
+    PREFIX = placeholder "out";
+  };
+
+  postBuild = ''
+    make SASSC_INCLUDE=-I${srht}/share/sourcehut/scss/ all-share
   '';
 
   postInstall = ''
     mkdir -p $out/bin
-    ln -s ${gitApi}/bin/api $out/bin/gitsrht-api
-    ln -s ${gitDispatch}/bin/gitsrht-dispatch $out/bin/gitsrht-dispatch
-    ln -s ${gitKeys}/bin/gitsrht-keys $out/bin/gitsrht-keys
-    ln -s ${gitShell}/bin/gitsrht-shell $out/bin/gitsrht-shell
-    ln -s ${gitUpdateHook}/bin/gitsrht-update-hook $out/bin/gitsrht-update-hook
+    ln -s ${gitApi}/bin/api $out/bin/git.sr.ht-api
+    ln -s ${gitDispatch}/bin/dispatch $out/bin/git.sr.ht-dispatch
+    ln -s ${gitKeys}/bin/keys $out/bin/git.sr.ht-keys
+    ln -s ${gitShell}/bin/shell $out/bin/git.sr.ht-shell
+    ln -s ${gitUpdateHook}/bin/update-hook $out/bin/git.sr.ht-update-hook
+    install -Dm644 schema.sql $out/share/sourcehut/git.sr.ht-schema.sql
+    make PREFIX=$out install-share
   '';
 
   pythonImportsCheck = [ "gitsrht" ];
@@ -122,6 +145,9 @@ buildPythonPackage rec {
     homepage = "https://git.sr.ht/~sircmpwn/git.sr.ht";
     description = "Git repository hosting service for the sr.ht network";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ eadwu christoph-heiss ];
+    maintainers = with maintainers; [
+      eadwu
+      christoph-heiss
+    ];
   };
 }

@@ -13,12 +13,13 @@
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
+  pytz,
   time-machine,
 }:
 
 buildPythonPackage rec {
   pname = "aioswitcher";
-  version = "4.1.0";
+  version = "6.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,8 +27,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "TomerFi";
     repo = "aioswitcher";
-    rev = "refs/tags/${version}";
-    hash = "sha256-iWEmKyg20qCww/Q+HjOj4Owp26xgY1kXQHVkmxFPfr4=";
+    tag = version;
+    hash = "sha256-w1gTLieZkn4iGrswyqRjwMrHX9ZtEMPB2zaKblJFlSw=";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -52,6 +53,7 @@ buildPythonPackage rec {
     pytest-mockservers
     pytest-resource-path
     pytestCheckHook
+    pytz
     time-machine
   ];
 
@@ -74,7 +76,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to interact with Switcher water heater";
     homepage = "https://github.com/TomerFi/aioswitcher";
-    changelog = "https://github.com/TomerFi/aioswitcher/releases/tag/${version}";
+    changelog = "https://github.com/TomerFi/aioswitcher/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

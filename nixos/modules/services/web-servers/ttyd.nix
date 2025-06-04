@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
 
@@ -11,22 +16,59 @@ let
     ;
 
   # Command line arguments for the ttyd daemon
-  args = [ "--port" (toString cfg.port) ]
-         ++ optionals (cfg.socket != null) [ "--interface" cfg.socket ]
-         ++ optionals (cfg.interface != null) [ "--interface" cfg.interface ]
-         ++ [ "--signal" (toString cfg.signal) ]
-         ++ (lib.concatLists (lib.mapAttrsToList (_k: _v: [ "--client-option" "${_k}=${_v}" ]) cfg.clientOptions))
-         ++ [ "--terminal-type" cfg.terminalType ]
-         ++ optionals cfg.checkOrigin [ "--check-origin" ]
-         ++ optionals cfg.writeable [ "--writable" ] # the typo is correct
-         ++ [ "--max-clients" (toString cfg.maxClients) ]
-         ++ optionals (cfg.indexFile != null) [ "--index" cfg.indexFile ]
-         ++ optionals cfg.enableIPv6 [ "--ipv6" ]
-         ++ optionals cfg.enableSSL [ "--ssl"
-                                      "--ssl-cert" cfg.certFile
-                                      "--ssl-key" cfg.keyFile ]
-         ++ optionals ( cfg.enableSSL && cfg.caFile != null ) [ "--ssl-ca" cfg.caFile ]
-         ++ [ "--debug" (toString cfg.logLevel) ];
+  args =
+    [
+      "--port"
+      (toString cfg.port)
+    ]
+    ++ optionals (cfg.socket != null) [
+      "--interface"
+      cfg.socket
+    ]
+    ++ optionals (cfg.interface != null) [
+      "--interface"
+      cfg.interface
+    ]
+    ++ [
+      "--signal"
+      (toString cfg.signal)
+    ]
+    ++ (lib.concatLists (
+      lib.mapAttrsToList (_k: _v: [
+        "--client-option"
+        "${_k}=${_v}"
+      ]) cfg.clientOptions
+    ))
+    ++ [
+      "--terminal-type"
+      cfg.terminalType
+    ]
+    ++ optionals cfg.checkOrigin [ "--check-origin" ]
+    ++ optionals cfg.writeable [ "--writable" ] # the typo is correct
+    ++ [
+      "--max-clients"
+      (toString cfg.maxClients)
+    ]
+    ++ optionals (cfg.indexFile != null) [
+      "--index"
+      cfg.indexFile
+    ]
+    ++ optionals cfg.enableIPv6 [ "--ipv6" ]
+    ++ optionals cfg.enableSSL [
+      "--ssl"
+      "--ssl-cert"
+      cfg.certFile
+      "--ssl-key"
+      cfg.keyFile
+    ]
+    ++ optionals (cfg.enableSSL && cfg.caFile != null) [
+      "--ssl-ca"
+      cfg.caFile
+    ]
+    ++ [
+      "--debug"
+      (toString cfg.logLevel)
+    ];
 
 in
 
@@ -110,7 +152,7 @@ in
 
       clientOptions = mkOption {
         type = types.attrsOf types.str;
-        default = {};
+        default = { };
         example = lib.literalExpression ''
           {
             fontSize = "16";
@@ -194,17 +236,24 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    assertions =
-      [ { assertion = cfg.enableSSL
-            -> cfg.certFile != null && cfg.keyFile != null;
-          message = "SSL is enabled for ttyd, but no certFile or keyFile has been specified."; }
-        { assertion = cfg.writeable != null;
-          message = "services.ttyd.writeable must be set"; }
-        { assertion = ! (cfg.interface != null && cfg.socket != null);
-          message = "Cannot set both interface and socket for ttyd."; }
-        { assertion = (cfg.username != null) == (cfg.passwordFile != null);
-          message = "Need to set both username and passwordFile for ttyd"; }
-      ];
+    assertions = [
+      {
+        assertion = cfg.enableSSL -> cfg.certFile != null && cfg.keyFile != null;
+        message = "SSL is enabled for ttyd, but no certFile or keyFile has been specified.";
+      }
+      {
+        assertion = cfg.writeable != null;
+        message = "services.ttyd.writeable must be set";
+      }
+      {
+        assertion = !(cfg.interface != null && cfg.socket != null);
+        message = "Cannot set both interface and socket for ttyd.";
+      }
+      {
+        assertion = (cfg.username != null) == (cfg.passwordFile != null);
+        message = "Need to set both username and passwordFile for ttyd";
+      }
+    ];
 
     systemd.services.ttyd = {
       description = "ttyd Web Server Daemon";
@@ -213,19 +262,24 @@ in
 
       serviceConfig = {
         User = cfg.user;
-        LoadCredential = lib.optionalString (cfg.passwordFile != null) "TTYD_PASSWORD_FILE:${cfg.passwordFile}";
+        LoadCredential = lib.optionalString (
+          cfg.passwordFile != null
+        ) "TTYD_PASSWORD_FILE:${cfg.passwordFile}";
       };
 
-      script = if cfg.passwordFile != null then ''
-        PASSWORD=$(cat "$CREDENTIALS_DIRECTORY/TTYD_PASSWORD_FILE")
-        ${pkgs.ttyd}/bin/ttyd ${lib.escapeShellArgs args} \
-          --credential ${lib.escapeShellArg cfg.username}:"$PASSWORD" \
-          ${cfg.entrypoint}
-      ''
-      else ''
-        ${pkgs.ttyd}/bin/ttyd ${lib.escapeShellArgs args} \
-          ${cfg.entrypoint}
-      '';
+      script =
+        if cfg.passwordFile != null then
+          ''
+            PASSWORD=$(cat "$CREDENTIALS_DIRECTORY/TTYD_PASSWORD_FILE")
+            ${pkgs.ttyd}/bin/ttyd ${lib.escapeShellArgs args} \
+              --credential ${lib.escapeShellArg cfg.username}:"$PASSWORD" \
+              ${cfg.entrypoint}
+          ''
+        else
+          ''
+            ${pkgs.ttyd}/bin/ttyd ${lib.escapeShellArgs args} \
+              ${cfg.entrypoint}
+          '';
     };
   };
 }

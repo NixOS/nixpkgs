@@ -18,8 +18,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "matthewwithanm";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "pilkit";
+    tag = version;
     hash = "sha256-NmD9PFCkz3lz4AnGoQUpkt35q0zvDVm+kx7lVDFBcHk=";
   };
 

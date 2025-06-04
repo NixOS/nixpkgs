@@ -1,29 +1,39 @@
-{ lib
-, writeShellScript
-, coreutils
-, gnused
-, gnugrep
-, curl
-, gnupg
-, nix
-, common-updater-scripts
+{
+  lib,
+  writeShellScript,
+  coreutils,
+  gnused,
+  gnugrep,
+  curl,
+  gnupg,
+  nix,
+  common-updater-scripts,
 
-# options
-, pname
-, version
-, meta
-, baseUrl ? "https://dist.torproject.org/torbrowser/"
-# name used to match published archive
-, name ? "tor-browser"
-, prerelease ? false
+  # options
+  pname,
+  version,
+  meta,
+  baseUrl ? "https://dist.torproject.org/torbrowser/",
+  # name used to match published archive
+  name ? "tor-browser",
+  prerelease ? false,
 }:
 
 let
-  versionMatch = if prerelease
-    then ''[0-9]+(\.[0-9]+)*.*''
-    else ''[0-9]+(\.[0-9]+)*'';
-in writeShellScript "update-${pname}" ''
-  PATH="${lib.makeBinPath [ coreutils curl gnugrep gnused gnupg nix common-updater-scripts ]}"
+  versionMatch = if prerelease then ''[0-9]+(\.[0-9]+)*.*'' else ''[0-9]+(\.[0-9]+)*'';
+in
+writeShellScript "update-${pname}" ''
+  PATH="${
+    lib.makeBinPath [
+      coreutils
+      curl
+      gnugrep
+      gnused
+      gnupg
+      nix
+      common-updater-scripts
+    ]
+  }"
   set -euo pipefail
 
   trap
