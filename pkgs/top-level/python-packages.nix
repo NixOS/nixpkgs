@@ -4969,6 +4969,8 @@ self: super: with self; {
 
   filelock = callPackage ../development/python-modules/filelock { };
 
+  files-to-prompt = callPackage ../development/python-modules/files-to-prompt { };
+
   filetype = callPackage ../development/python-modules/filetype { };
 
   filterpy = callPackage ../development/python-modules/filterpy { };
@@ -6652,6 +6654,8 @@ self: super: with self; {
 
   icalevents = callPackage ../development/python-modules/icalevents { };
 
+  icdiff = callPackage ../development/python-modules/icdiff { };
+
   icecream = callPackage ../development/python-modules/icecream { };
 
   iceportal = callPackage ../development/python-modules/iceportal { };
@@ -8304,15 +8308,65 @@ self: super: with self; {
 
   llm-cmd = callPackage ../development/python-modules/llm-cmd { };
 
+  llm-command-r = callPackage ../development/python-modules/llm-command-r { };
+
+  llm-deepseek = callPackage ../development/python-modules/llm-deepseek { };
+
+  llm-docs = callPackage ../development/python-modules/llm-docs { };
+
+  llm-echo = callPackage ../development/python-modules/llm-echo { };
+
+  llm-fragments-github = callPackage ../development/python-modules/llm-fragments-github { };
+
+  llm-fragments-pypi = callPackage ../development/python-modules/llm-fragments-pypi { };
+
+  llm-fragments-reader = callPackage ../development/python-modules/llm-fragments-reader { };
+
+  llm-fragments-symbex = callPackage ../development/python-modules/llm-fragments-symbex { };
+
   llm-gemini = callPackage ../development/python-modules/llm-gemini { };
 
   llm-gguf = callPackage ../development/python-modules/llm-gguf { };
 
+  llm-git = callPackage ../development/python-modules/llm-git { };
+
+  llm-grok = callPackage ../development/python-modules/llm-grok { };
+
+  llm-groq = callPackage ../development/python-modules/llm-groq { };
+
+  llm-hacker-news = callPackage ../development/python-modules/llm-hacker-news { };
+
   llm-jq = callPackage ../development/python-modules/llm-jq { };
+
+  llm-llama-server = callPackage ../development/python-modules/llm-llama-server { };
+
+  llm-mistral = callPackage ../development/python-modules/llm-mistral { };
 
   llm-ollama = callPackage ../development/python-modules/llm-ollama { };
 
   llm-openai-plugin = callPackage ../development/python-modules/llm-openai-plugin { };
+
+  llm-openrouter = callPackage ../development/python-modules/llm-openrouter { };
+
+  llm-pdf-to-images = callPackage ../development/python-modules/llm-pdf-to-images { };
+
+  llm-sentence-transformers = callPackage ../development/python-modules/llm-sentence-transformers { };
+
+  llm-templates-fabric = callPackage ../development/python-modules/llm-templates-fabric { };
+
+  llm-templates-github = callPackage ../development/python-modules/llm-templates-github { };
+
+  llm-tools-datasette = callPackage ../development/python-modules/llm-tools-datasette { };
+
+  llm-tools-quickjs = callPackage ../development/python-modules/llm-tools-quickjs { };
+
+  llm-tools-simpleeval = callPackage ../development/python-modules/llm-tools-simpleeval { };
+
+  llm-tools-sqlite = callPackage ../development/python-modules/llm-tools-sqlite { };
+
+  llm-venice = callPackage ../development/python-modules/llm-venice { };
+
+  llm-video-frames = callPackage ../development/python-modules/llm-video-frames { };
 
   llmx = callPackage ../development/python-modules/llmx { };
 
@@ -13825,6 +13879,8 @@ self: super: with self; {
 
   pytest-httpx = callPackage ../development/python-modules/pytest-httpx { };
 
+  pytest-icdiff = callPackage ../development/python-modules/pytest-icdiff { };
+
   pytest-image-diff = callPackage ../development/python-modules/pytest-image-diff { };
 
   pytest-instafail = callPackage ../development/python-modules/pytest-instafail { };
@@ -14873,6 +14929,8 @@ self: super: with self; {
   questo = callPackage ../development/python-modules/questo { };
 
   queuelib = callPackage ../development/python-modules/queuelib { };
+
+  quickjs = callPackage ../development/python-modules/quickjs { };
 
   quil = callPackage ../development/python-modules/quil { };
 
@@ -17030,6 +17088,8 @@ self: super: with self; {
   swspotify = callPackage ../development/python-modules/swspotify { };
 
   sybil = callPackage ../development/python-modules/sybil { };
+
+  symbex = callPackage ../development/python-modules/symbex { };
 
   symbolic = callPackage ../development/python-modules/symbolic { };
 
