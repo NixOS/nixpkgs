@@ -5,15 +5,12 @@
   hatchling,
   requests,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "google-i18n-address";
   version = "3.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mirumee";
@@ -30,12 +27,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "i18naddress" ];
 
-  meta = with lib; {
+  meta = {
     description = "Google's i18n address data packaged for Python";
     homepage = "https://github.com/mirumee/google-i18n-address";
-    changelog = "https://github.com/mirumee/google-i18n-address/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = [ ];
+    changelog = "https://github.com/mirumee/google-i18n-address/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.sarahec ];
     mainProgram = "update-validation-files";
   };
 }
