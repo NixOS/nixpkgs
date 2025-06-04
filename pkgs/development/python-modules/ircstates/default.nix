@@ -23,6 +23,8 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [ "pendulum" ];
+
   dependencies = [
     irctokens
     pendulum
