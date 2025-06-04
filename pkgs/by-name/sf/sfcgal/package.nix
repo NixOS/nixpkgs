@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sfcgal";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitLab {
     owner = "sfcgal";
     repo = "SFCGAL";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-cx0QJCtAPR/WkWPpH+mZvq2803eDT7b+qlI5ma+CveE=";
+    hash = "sha256-m8oyfL3rF4qLugoEFa8iiqS5D1Oljg+x1qMp9KfiQ5c=";
   };
 
   buildInputs = [
@@ -28,11 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [ cmake ];
-
-  patches = [
-    # https://gitlab.com/sfcgal/SFCGAL/-/merge_requests/384
-    ./cmake-fix.patch
-  ];
 
   meta = {
     description = "C++ wrapper library around CGAL with the aim of supporting ISO 191007:2013 and OGC Simple Features for 3D operations";
