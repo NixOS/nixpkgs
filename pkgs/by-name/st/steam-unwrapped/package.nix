@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = ./update.py;
 
-  meta = with lib; {
+  meta = {
     description = "Digital distribution platform";
     longDescription = ''
       Steam is a video game digital distribution service and storefront from Valve.
@@ -51,9 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
       To install on NixOS, please use the option `programs.steam.enable = true`.
     '';
     homepage = "https://store.steampowered.com/";
-    license = licenses.unfreeRedistributable;
-    maintainers = [ lib.maintainers.jagajaga ];
-    teams = [ lib.teams.steam ];
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = with lib.maintainers; [ jagajaga ];
+    teams = with lib.teams; [ steam ];
     mainProgram = "steam";
   };
 })
