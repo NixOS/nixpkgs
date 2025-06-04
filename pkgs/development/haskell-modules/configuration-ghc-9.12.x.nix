@@ -5,19 +5,11 @@ self: super:
 let
   inherit (pkgs) lib;
 
-  versionAtMost = a: b: lib.versionAtLeast b a;
-
-  warnVersion =
-    predicate: ver: pkg:
-    let
-      pname = pkg.pname;
-    in
-    lib.warnIf (predicate ver
-      super.${pname}.version
-    ) "override for haskell.packages.ghc912.${pname} may no longer be needed" pkg;
-
-  warnAfterVersion = warnVersion lib.versionOlder;
-  warnFromVersion = warnVersion versionAtMost;
+  warnAfterVersion =
+    ver: pkg:
+    lib.warnIf (lib.versionOlder ver
+      super.${pkg.pname}.version
+    ) "override for haskell.packages.ghc912.${pkg.pname} may no longer be needed" pkg;
 
 in
 
@@ -93,8 +85,10 @@ with haskellLib;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_12_2_20250421;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_12_0_0;
   hlint = doDistribute self.hlint_3_10;
-  fourmolu = doDistribute self.fourmolu_0_18_0_0;
+  # fourmolu checks require Diff > 1.0, which is not yet supported by various other deps of hls.
+  fourmolu = doDistribute (dontCheck self.fourmolu_0_18_0_0);
   ormolu = doDistribute self.ormolu_0_8_0_0;
+  stylish-haskell = doDistribute self.stylish-haskell_0_15_1_0;
   apply-refact = doDistribute self.apply-refact_0_15_0_0;
 
   #
@@ -103,6 +97,8 @@ with haskellLib;
 
   lucid = doJailbreak super.lucid; # base <4.21
   extensions_0_1_0_3 = doJailbreak super.extensions_0_1_0_3; # hedgehog >=1.0 && <1.5, hspec-hedgehog >=0.0.1 && <0.2
+  # https://github.com/haskell-party/feed/issues/73
+  feed = doJailbreak super.feed; # base, time
   hie-compat = doJailbreak super.hie-compat; # base <4.21
   hiedb = doJailbreak super.hiedb; # base >=4.12 && <4.21, ghc >=8.6 && <9.11
   ed25519 = doJailbreak super.ed25519; # https://github.com/thoughtpolice/hs-ed25519/issues/39
@@ -173,13 +169,6 @@ with haskellLib;
   # Multiple issues
   #
 
-  fourmolu_0_18_0_0 = dontCheck (
-    super.fourmolu_0_18_0_0.override {
-      # Diff >=1 && <2
-      Diff = super.Diff_1_0_2;
-    }
-  );
-
   doctest-parallel = overrideCabal (drv: {
     patches = drv.patches or [ ] ++ [
       (pkgs.fetchpatch {
@@ -191,15 +180,10 @@ with haskellLib;
     ];
   }) (dontCheck (doJailbreak super.doctest-parallel)); # Cabal >=2.4 && <3.13
 
-  haskell-language-server = disableCabalFlag "retrie" (
-    disableCabalFlag "stylishhaskel" (
-      super.haskell-language-server.override {
-        stylish-haskell = null;
-        floskell = null;
-        retrie = null;
-      }
-    )
-  );
+  haskell-language-server = super.haskell-language-server.override {
+    floskell = null;
+    retrie = null;
+  };
 
   # Allow Cabal 3.14
   hpack = doDistribute self.hpack_0_38_0;
