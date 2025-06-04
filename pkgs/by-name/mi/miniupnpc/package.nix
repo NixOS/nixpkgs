@@ -7,18 +7,18 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "miniupnpc";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "miniupnp";
     repo = "miniupnp";
-    tag = "miniupnpc_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-Fjd4JPk6Uc7cPPQu9NiBv82XArd11TW+7sTL3wC9/+s=";
+    tag = "miniupnpc_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-8EWchUppW4H2kEUCGBXIk1meARJj2usKKO5gFYPoW3s=";
   };
 
-  sourceRoot = "${src.name}/miniupnpc";
+  sourceRoot = "${finalAttrs.src.name}/miniupnpc";
 
   nativeBuildInputs = [ cmake ];
 
@@ -39,6 +39,10 @@ stdenv.mkDerivation rec {
     mv $out/bin/upnpc-* $out/bin/upnpc
     mv $out/bin/upnp-listdevices-* $out/bin/upnp-listdevices
     mv $out/bin/external-ip.sh $out/bin/external-ip
+    chmod +x $out/bin/external-ip
+    patchShebangs $out/bin/external-ip
+    substituteInPlace $out/bin/external-ip \
+      --replace-fail "upnpc" $out/bin/upnpc
   '';
 
   __darwinAllowLocalNetworking = true;
@@ -54,4 +58,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     mainProgram = "upnpc";
   };
-}
+})
