@@ -16937,6 +16937,11 @@ with pkgs;
     fltk = fltk13;
   };
 
+  abiword = callPackage ../by-name/ab/abiword/package.nix {
+    # Use an older version of llvm that doesn't error on char_traits violations
+    stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_16.stdenv else stdenv;
+  };
+
   cantata = callPackage ../by-name/ca/cantata/package.nix {
     ffmpeg = ffmpeg_6;
   };
