@@ -129,6 +129,7 @@ buildDotnetModule {
   dotnetFlags = [
     "--property:TargetFramework=net8.0"
     "--property:EnableAnalyzers=false"
+    "--property:SentryUploadSymbols=false" # Fix Sentry upload failed warnings
     # Override defaults in src/Directory.Build.props that use current time.
     "--property:Copyright=Copyright 2014-2025 sonarr.tv (GNU General Public v3)"
     "--property:AssemblyVersion=${version}"
