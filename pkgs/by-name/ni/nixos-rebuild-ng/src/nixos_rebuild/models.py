@@ -41,9 +41,23 @@ class Action(Enum):
     def __str__(self) -> str:
         return self.value
 
-    @staticmethod
-    def values() -> list[str]:
-        return [a.value for a in Action]
+    @classmethod
+    def values(cls) -> list[str]:
+        return [a.value for a in cls]
+
+
+class TransferMode(Enum):
+    DEFAULT = "default"
+    NIX_2_3 = "nix23"
+    BASTION = "bastion"
+
+    @override
+    def __str__(self) -> str:
+        return self.value
+
+    @classmethod
+    def values(cls) -> list[str]:
+        return [a.value for a in cls]
 
 
 @dataclass(frozen=True)
