@@ -59,6 +59,18 @@
   "module-services-firefox-syncserver-clients-desktop": [
     "index.html#module-services-firefox-syncserver-clients-desktop"
   ],
+  "module-services-graphhopper": [
+    "index.html#module-services-graphhopper"
+  ],
+  "module-services-graphhopper-basic-usage": [
+    "index.html#module-services-graphhopper-basic-usage"
+  ],
+  "module-services-graphhopper-basic-usage-sourcing-data": [
+    "index.html#module-services-graphhopper-basic-usage-sourcing-data"
+  ],
+  "module-services-graphhopper-extended-options": [
+    "index.html#module-services-graphhopper-extended-options"
+  ],
   "module-services-opencloud": [
     "index.html#module-services-opencloud"
   ],
