@@ -72,10 +72,10 @@
       sourceVersion = {
         major = "3";
         minor = "12";
-        patch = "10";
+        patch = "11";
         suffix = "";
       };
-      hash = "sha256-B6tpdHRZXgbwZkdBfTx/qX3tB6/Bp+RFTFY5kZtG6uo=";
+      hash = "sha256-wwuyS38emhmxG1WlRkNPdOc5u0wnGj46gP9DgNSfets=";
       inherit passthruFun;
     };
 
