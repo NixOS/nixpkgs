@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pyatmo";
-  version = "9.2.0";
+  version = "9.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "jabesq";
     repo = "pyatmo";
     tag = "v${version}";
-    hash = "sha256-7qdgKp1E2efsOdt7cvd911/H7lYzcQidizQPkdLcFNk=";
+    hash = "sha256-vSyZsWhqyQqKFukD6GbtkAJd3QBmRwdmRIYD19DXQW0=";
   };
 
   pythonRelaxDeps = [
