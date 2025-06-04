@@ -4496,6 +4496,8 @@ with pkgs;
 
   teamviewer = libsForQt5.callPackage ../applications/networking/remote/teamviewer { };
 
+  buildTeleport = callPackage ../build-support/teleport { };
+
   telepresence = callPackage ../tools/networking/telepresence {
     pythonPackages = python3Packages;
   };
