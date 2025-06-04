@@ -25,12 +25,12 @@ buildGoModule rec {
     "-X main.VERSION=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Kubernetes controller and tool for one-way encrypted Secrets";
     mainProgram = "kubeseal";
     homepage = "https://github.com/bitnami-labs/sealed-secrets";
     changelog = "https://github.com/bitnami-labs/sealed-secrets/blob/v${version}/RELEASE-NOTES.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ groodt ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ groodt ];
   };
 }
