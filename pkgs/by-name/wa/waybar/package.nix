@@ -12,7 +12,6 @@
   gtk-layer-shell,
   gtkmm3,
   howard-hinnant-date,
-  hyprland,
   iniparser,
   jsoncpp,
   libcava,
@@ -38,7 +37,6 @@
   sndio,
   spdlog,
   systemdMinimal,
-  sway,
   udev,
   upower,
   versionCheckHook,
@@ -51,7 +49,6 @@
   enableManpages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   evdevSupport ? true,
   experimentalPatches ? true,
-  hyprlandSupport ? true,
   inputSupport ? true,
   jackSupport ? true,
   mpdSupport ? true,
@@ -64,7 +61,6 @@
   runTests ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   sndioSupport ? true,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
-  swaySupport ? true,
   traySupport ? true,
   udevSupport ? true,
   upowerSupport ? true,
@@ -131,7 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
       portaudio
     ]
     ++ lib.optional evdevSupport libevdev
-    ++ lib.optional hyprlandSupport hyprland
     ++ lib.optional inputSupport libinput
     ++ lib.optional jackSupport libjack2
     ++ lib.optional mpdSupport libmpdclient
@@ -139,7 +134,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional nlSupport libnl
     ++ lib.optional pulseSupport libpulseaudio
     ++ lib.optional sndioSupport sndio
-    ++ lib.optional swaySupport sway
     ++ lib.optional systemdSupport systemdMinimal
     ++ lib.optional traySupport libdbusmenu-gtk3
     ++ lib.optional udevSupport udev
