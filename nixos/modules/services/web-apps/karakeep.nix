@@ -26,21 +26,30 @@
     user = lib.mkOption {
       type = lib.types.str;
       default = "karakeep";
-      description = "User to run karakeep-web and karakeep-workers.";
+      description = "User used by the KaraKeep service.";
     };
 
     group = lib.mkOption {
       type = lib.types.str;
       default = "karakeep";
-      description = "Group to run karakeep-web and karakeep-workers.";
+      description = "Group used by the KaraKeep service.";
     };
 
     extraEnvironment = lib.mkOption {
       type = lib.types.submodule {
-        freeformType = with lib.types; attrsOf str;
+        freeformType =
+          with lib.types;
+          attrsOf (
+            coercedTo (oneOf [
+              int
+              bool
+              str
+            ]) (value: if lib.isBool value then lib.boolToString value else toString value) str
+          );
         options = {
           PORT = lib.mkOption {
             type = lib.types.port;
+            apply = toString;
             default = 3000;
             description = "Port KaraKeep should use to listen for requests.";
           };
@@ -48,14 +57,11 @@
             type = lib.types.path;
             default = "/var/lib/karakeep";
             readOnly = true;
-          };
-          DISABLE_SIGNUPS = lib.mkOption {
-            type = lib.types.bool;
-            default = false;
-          };
-          DISABLE_NEW_RELEASE_CHECK = lib.mkOption {
-            type = lib.types.bool;
-            default = true;
+            description = ''
+              Directory used for all services except the browser driver.
+
+              Changing this option is currently currently not supported.
+            '';
           };
         };
       };
@@ -69,6 +75,8 @@
       example = lib.literalExpression ''
         {
           HOST = "0.0.0.0";
+          DISABLE_SIGNUPS = true;
+          DISABLE_NEW_RELEASE_CHECK = true;
           INFERENCE_LANG = "english";
         }
       '';
@@ -143,7 +151,6 @@
             in
             lib.mkDefault "http://${listenAddress}:${toString listenPort}";
           BROWSER_WEB_URL = lib.mkDefault "http://127.0.0.1:${toString cfg.browser.port}";
-          NEXTAUTH_URL = lib.mkDefault "localhost";
         };
 
         # add settings.env generated in karakeep-init first to be overridable
@@ -162,9 +169,7 @@
             StateDirectory = "karakeep";
             UMask = "0077";
           };
-          environment = lib.mapAttrs (
-            name: value: if lib.isBool value then lib.boolToString value else toString value
-          ) cfg.extraEnvironment;
+          environment = cfg.extraEnvironment;
           EnvironmentFile = cfg.environmentFiles;
         in
         {

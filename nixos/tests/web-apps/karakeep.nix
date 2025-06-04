@@ -18,6 +18,7 @@ in
           extraEnvironment = {
             HOST = host;
             PORT = port;
+            DISABLE_NEW_RELEASE_CHECK = true;
           };
           meilisearch.enable = true;
         };
