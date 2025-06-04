@@ -7,6 +7,8 @@
   qtwebsockets,
   minizinc,
   makeWrapper,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 
 let
@@ -31,10 +33,28 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     qmake
     makeWrapper
+    copyDesktopItems
   ];
   buildInputs = [
     qtbase
     qtwebsockets
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "minizinc";
+      desktopName = "MiniZincIDE";
+      icon = "minizinc";
+      comment = meta.description;
+      exec = "MiniZincIDE";
+      type = "Application";
+      terminal = false;
+      categories = [
+        "Science"
+        "Development"
+        "Education"
+      ];
+    })
   ];
 
   sourceRoot = "${src.name}/MiniZincIDE";
