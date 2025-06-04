@@ -7,7 +7,6 @@
   buildPackages,
   nix-update-script,
   testers,
-  az-pim-cli,
 }:
 buildGoModule (finalAttrs: {
   pname = "az-pim-cli";
@@ -20,10 +19,22 @@ buildGoModule (finalAttrs: {
     hash = "sha256-gf4VscHaUr3JtsJO5PAq1nyPeJxIwGPaiH/QdXKpvQ0=";
   };
 
+  patches = [
+    # removes info we don't have from version command
+    ./version-build-info.patch
+  ];
+
   vendorHash = "sha256-PHrpUlAG/PBe3NKUGBQ1U7dCcqkSlErWX2dp9ZPB3+8=";
 
   nativeBuildInputs = [
     installShellFiles
+  ];
+
+  env.CGO_ENABLED = 0;
+
+  ldflags = [
+    "-s"
+    "-X github.com/netr0m/az-pim-cli/cmd.version=v${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
@@ -41,8 +52,9 @@ buildGoModule (finalAttrs: {
   passthru = {
     updateScript = nix-update-script { };
     tests.version = testers.testVersion {
-      command = "HOME=$TMPDIR az-pim-cli --version";
-      package = az-pim-cli;
+      command = "HOME=$TMPDIR az-pim-cli version";
+      package = finalAttrs.finalPackage;
+      version = "v${finalAttrs.version}";
     };
   };
 
