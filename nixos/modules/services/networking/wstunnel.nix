@@ -233,6 +233,12 @@ let
           default = null;
         };
 
+        tlsEch = lib.mkOption {
+          description = "Enable ECH (encrypted sni) during TLS handshake to wstunnel server.";
+          type = lib.types.bool;
+          default = false;
+        };
+
         tlsVerifyCertificate = lib.mkOption {
           description = "Whether to verify the TLS certificate of the server. It might be useful to set this to `false` when working with the `tlsSNI` option.";
           type = lib.types.bool;
@@ -394,6 +400,7 @@ let
                 socket-so-mark = soMark;
                 http-upgrade-path-prefix = upgradePathPrefix;
                 tls-sni-override = tlsSNI;
+                tls-ech-enable = tlsEch;
                 tls-verify-certificate = tlsVerifyCertificate;
                 websocket-ping-frequency-sec = websocketPingInterval;
                 http-upgrade-credentials = upgradeCredentials;
