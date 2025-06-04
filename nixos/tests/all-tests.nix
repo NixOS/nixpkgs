@@ -530,6 +530,7 @@ in
   ft2-clone = runTest ./ft2-clone.nix;
   legit = runTest ./legit.nix;
   mimir = runTest ./mimir.nix;
+  gai-conf = runTest ./gai-conf.nix;
   galene = discoverTests (import ./galene.nix);
   gancio = runTest ./gancio.nix;
   garage = handleTest ./garage { };
