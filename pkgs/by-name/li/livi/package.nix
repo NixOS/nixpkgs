@@ -45,13 +45,13 @@ stdenv.mkDerivation rec {
   ];
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/guidog/livi";
     changelog = "https://gitlab.gnome.org/guidog/livi/-/blob/v${version}/NEWS?ref_type=tags";
     description = "Small video player targeting mobile devices (also named μPlayer)";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "livi";
-    maintainers = with maintainers; [ mksafavi ];
+    maintainers = with lib.maintainers; [ mksafavi ];
   };
 }

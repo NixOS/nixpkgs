@@ -70,12 +70,12 @@ rustPlatform.buildRustPackage rec {
     install -Dm644 "${desktopItem}/share/applications/"* -t $out/share/applications/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Clone of the original Duke Nukum 1 Jump'n Run game";
     homepage = "https://salsa.debian.org/silwol/freenukum";
     changelog = "https://salsa.debian.org/silwol/freenukum/-/blob/v${version}/CHANGELOG.md";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ _0x4A6F ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ _0x4A6F ];
     broken = stdenv.hostPlatform.isDarwin;
   };
 }
