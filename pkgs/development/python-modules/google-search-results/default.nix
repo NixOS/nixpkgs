@@ -32,6 +32,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/serpapi/google-search-results-python";
     changelog = "https://github.com/serpapi/google-search-results-python/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
   };
 }
