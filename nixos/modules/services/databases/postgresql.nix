@@ -879,4 +879,9 @@ in
     thoughtpolice
     danbst
   ];
+  meta.tests =
+    { nixosTests }:
+    {
+      inherit (nixosTests) postgresql;
+    };
 }

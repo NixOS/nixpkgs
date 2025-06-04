@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 let
   maintainer = lib.mkOptionType {
     name = "maintainer";
@@ -39,6 +39,64 @@ let
     #   { file = "module location"; value = <path/to/doc.xml>; }
     merge = loc: defs: defs;
   };
+
+  /**
+    Custom type for `meta.tests` option.
+  */
+  testsType = lib.mkOptionType {
+    name = "tests";
+    check = value: lib.isFunction value;
+    merge = _loc: defs: rec {
+      byModulePath =
+        lib.zipAttrsWith
+          (
+            _fileName: values:
+            # These are per file, so we don't need to merge definitions.
+            # We could, but it's not implemented yet.
+            assert (lib.length values == 1);
+            lib.head values { inherit (pkgs) nixosTests; }
+          )
+          (
+            map (
+              { file, value, ... }:
+              {
+                "${toString file}" = value;
+              }
+            ) defs
+          );
+      /**
+        Given a list of file names, return a nested attribute set of tests to run, in an efficient lexicographic order.
+      */
+      filter =
+        paths:
+        let
+          pathSet = lib.genAttrs (map toString paths) (_path: null);
+          relevant = builtins.intersectAttrs pathSet byModulePath;
+
+          # Optimize evaluation order by sorting by test name. This way, even
+          # if multiple files reference the same tests, and if you split
+          # evaluation, you can likely resume from a given point in the nested
+          # attrset without encountering already evaluated tests again. (or
+          # split work across multiple processes)
+          /**
+            An attrset structure of <testName>.<fileName> = derivation;
+          */
+          transposed = lib.zipAttrsWith (_k: lib.mergeAttrsList) (
+            lib.mapAttrsToList (fileName: values: lib.mapAttrs (k: v: { "${fileName}" = v; }) values) relevant
+          );
+
+        in
+        transposed;
+
+      /**
+        Given a list of file names, return a list of test derivations for `nix-build`.
+
+        This is like `filter`, but solves the problem that `nix-build` ignores attributes with `.` in their names.
+      */
+      filterForNixBuild = paths: lib.concatMap lib.attrValues (lib.attrValues (filter paths));
+    };
+  };
+
 in
 
 {
@@ -81,8 +139,51 @@ in
         '';
       };
 
+      tests = lib.mkOption {
+        type = testsType;
+        description = ''
+          Tests for particular modules.
+
+          Definitions are tied to the location of the module, so the definition syntax is distinct from the option value format.
+
+          Example definition:
+          ```nix
+          # module.nix
+          {
+            meta.tests = { nixosTests }:
+              {
+                inherit (nixosTests) foo;
+              };
+          }
+          ```
+
+          Example option value:
+          ```nix
+          { nixosTests }:
+          {
+            byPath = {
+              "/path/to/module.nix" = {
+                foo = nixosTests.foo;
+              };
+              # ...
+            };
+            filter = paths: { ... };
+            filterForNixBuild = paths: [ ... ];
+          }
+          ```
+
+          The filter functions have `nix repl` `:doc` documentation.
+
+          This can be used for tooling to figure out which tests are relevant, given a set of changed files.
+        '';
+        default = { ... }: { };
+      };
+
     };
   };
 
-  meta.maintainers = lib.singleton lib.maintainers.pierron;
+  meta.maintainers = [
+    lib.maintainers.pierron
+    lib.maintainers.roberth
+  ];
 }
