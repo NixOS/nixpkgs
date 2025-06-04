@@ -10744,6 +10744,13 @@
     name = "Antoine Labarussias";
     keys = [ { fingerprint = "5CB5 9AA0 D180 1997 2FB3  E0EC 943A 1DE9 372E BE4E"; } ];
   };
+  invertedEcho = {
+    email = "jakob.stechow@pm.me";
+    github = "invertedEcho";
+    githubId = 80119822;
+    name = "Jakob Stechow";
+    keys = [ { fingerprint = "3A1D 9065 FF53 B4EB FB26  BC7A 46C7 6661 69A1 1502"; } ];
+  };
   invokes-su = {
     email = "nixpkgs-commits@deshaw.com";
     github = "invokes-su";
