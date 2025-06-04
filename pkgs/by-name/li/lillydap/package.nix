@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lillydap";
-  version = "1.0.1";
+  version = "1.0.0";
 
   src = fetchFromGitLab {
     owner = "arpa2";
     repo = "lillydap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SQuvu1A9Iq/fKthfYyVQGWFuyHYnhIry/wvnwgdMKHY=";
+    hash = "sha256-Tu20jkz8UFa+oTuqZulDdmTeza3yH5U677lqY48J2Jo=";
   };
 
   strictDeps = true;
