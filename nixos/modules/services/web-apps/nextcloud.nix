@@ -118,6 +118,7 @@ let
   runtimeSystemdCredentials =
     [ ]
     ++ (lib.optional (cfg.config.dbpassFile != null) "dbpass:${cfg.config.dbpassFile}")
+    ++ (lib.optional (cfg.config.mail.passFile != null) "mail_password:${cfg.config.mail.passFile}")
     ++ (lib.optional (cfg.config.objectstore.s3.enable) "s3_secret:${cfg.config.objectstore.s3.secretFile}")
     ++ (lib.optional (
       cfg.config.objectstore.s3.sseCKeyFile != null
@@ -222,6 +223,26 @@ let
             ],
           ]
         '';
+      mailConfig =
+        let
+          m = c.mail;
+        in
+        lib.optionalString (m.mode != null) ''
+          'mail_smtpmode' => '${m.mode}',
+          ${lib.optionalString (m.host != null) "'mail_smtphost' => '${m.host}',"}
+          ${lib.optionalString (m.port != null) "'mail_smtpport' => ${toString m.port},"}
+          ${lib.optionalString m.secure "'mail_smtpsecure' => 'ssl',"}
+          ${lib.optionalString (m.timeout != null) "'mail_smtptimeout' => ${toString m.timeout},"}
+          ${lib.optionalString (m.user != null || m.passFile != null) ''
+            'mail_smtpauth' => true,
+            ${lib.optionalString (m.user != null) "'mail_smtpname' => '${m.user}',"}
+            ${lib.optionalString (
+              m.passFile != null
+            ) "'mail_smtppassword' => nix_read_secret('mail_password'),"}
+          ''}
+          ${lib.optionalString (m.fromAddress != null) "'mail_from_address' => '${m.fromAddress}',"}
+          ${lib.optionalString (m.domain != null) "'mail_domain' => '${m.domain}',"}
+        '';
       showAppStoreSetting = cfg.appstoreEnable != null || cfg.extraApps != { };
       renderedAppStoreSetting =
         let
@@ -296,6 +317,7 @@ let
         ${optionalString (c.dbpassFile != null) "'dbpassword' => nix_read_secret('dbpass'),"}
         'dbtype' => '${c.dbtype}',
         ${objectstoreConfig}
+        ${mailConfig}
       ];
 
       $CONFIG = array_replace_recursive($CONFIG, nix_decode_json_file(
@@ -637,6 +659,103 @@ in
           with installations that were originally provisioned with Nextcloud <20.
         '';
       };
+
+      # mail specific config
+      # https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/email_configuration.html
+      mail = {
+        mode = lib.mkOption {
+          type = lib.types.nullOr (
+            lib.types.enum [
+              "smtp"
+              "sendmail"
+              "qmail"
+            ]
+          );
+          default = null;
+          description = ''
+            Mail backend to use for sending emails.
+
+            - smtp: Use SMTP server (recommended)
+            - sendmail: Use local sendmail binary
+            - qmail: Use local qmail binary
+          '';
+        };
+        host = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          example = "smtp.example.com";
+          description = ''
+            SMTP server hostname or IP address.
+            Only used when mode is "smtp".
+          '';
+        };
+        port = lib.mkOption {
+          type = lib.types.nullOr lib.types.port;
+          default = (if cfg.config.mail.secure then 465 else 25);
+          defaultText = literalExpression "(if cfg.config.mail.secure then 465 else 25)";
+          example = 587;
+          description = ''
+            SMTP server port.
+            Defaults to 25 for plain/STARTTLS, 465 for SSL.
+            Only used when mode is "smtp".
+          '';
+        };
+        secure = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = ''
+            SMTP security mode.
+
+            If required by the SMTP server, a secure SSL/TLS connection can be enforced via the SMTPS protocol.
+          '';
+        };
+        timeout = lib.mkOption {
+          type = lib.types.nullOr lib.types.ints.positive;
+          default = null;
+          example = 30;
+          description = ''
+            SMTP connection timeout in seconds.
+            Useful when malware/SPAM scanners cause delays.
+            Only used when mode is "smtp".
+          '';
+        };
+        user = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          example = "user@example.com";
+          description = ''
+            SMTP username for authentication.
+            Only used when mode is "smtp" and auth is true.
+          '';
+        };
+        passFile = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          example = "/run/secrets/nextcloud-mail-password";
+          description = ''
+            Path to file containing SMTP password for authentication.
+            Only used when mode is "smtp" and auth is true.
+          '';
+        };
+        fromAddress = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          example = "nextcloud@example.com";
+          description = ''
+            Default "From" address for outgoing emails.
+          '';
+        };
+        domain = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          example = "example.com";
+          description = ''
+            The default domain name used for the sender address is the hostname where your Nextcloud installation is served.
+            If you have a different mail domain name you can override this behavior here.
+          '';
+        };
+      };
+
       adminuser = mkOption {
         type = types.str;
         default = "root";
