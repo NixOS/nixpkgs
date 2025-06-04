@@ -48,14 +48,14 @@ let
 in
 buildPythonPackage rec {
   pname = "parsedmarc";
-  version = "8.18.1";
+  version = "8.18.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "domainaware";
     repo = "parsedmarc";
     tag = version;
-    hash = "sha256-PndhtbZgN4q23v8flPU7uKRsxnN9MR/JaaVfecwEA54=";
+    hash = "sha256-y8wFR9UN1u/IDYiKB+8PrN8c0YCgagxUr7CeAbQWdtg=";
   };
 
   build-system = [
