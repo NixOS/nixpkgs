@@ -11,7 +11,7 @@
 
   testScript = # python
     ''
-      def login_as_alice():
+      def log_in_as_alice():
           machine.wait_until_tty_matches("1", "login: ")
           machine.send_chars("alice\n")
           machine.wait_until_tty_matches("1", "Password: ")
@@ -19,7 +19,7 @@
           machine.wait_until_tty_matches("1", "alice\@machine")
 
 
-      def logout():
+      def log_out():
           machine.send_chars("logout\n")
           machine.wait_until_tty_matches("1", "login: ")
 
@@ -36,9 +36,9 @@
           machine.succeed("echo foobar | fscrypt encrypt --skip-unlock --source=pam_passphrase --user=alice /home/alice")
 
       with subtest("Create file as alice"):
-          login_as_alice()
+          log_in_as_alice()
           machine.succeed("echo hello > /home/alice/world")
-          logout()
+          log_out()
           # Wait for logout to be processed
           machine.sleep(1)
 
@@ -46,9 +46,9 @@
           machine.fail("cat /home/alice/world")
 
       with subtest("File should be readable again as alice"):
-          login_as_alice()
+          log_in_as_alice()
           assert "Unlocked: Yes" in machine.succeed("fscrypt status /home/alice")
           assert "hello" in machine.succeed("cat /home/alice/world")
-          logout()
+          log_out()
     '';
 }
