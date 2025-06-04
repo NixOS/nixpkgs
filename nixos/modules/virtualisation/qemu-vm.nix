@@ -1472,4 +1472,15 @@ in
 
   # uses types of services/x11/xserver.nix
   meta.buildDocsInSandbox = false;
+
+  meta.tests =
+    { nixosTests }:
+    {
+      inherit (nixosTests)
+        qemu-vm-restrictnetwork
+        qemu-vm-volatile-root
+        qemu-vm-external-disk-image
+        qemu-vm-store
+        ;
+    };
 }
