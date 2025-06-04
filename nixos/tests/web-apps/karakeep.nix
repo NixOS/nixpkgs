@@ -17,8 +17,9 @@ in
           enable = true;
           extraEnvironment = {
             HOST = host;
-            PORT = toString port;
+            PORT = port;
           };
+          meilisearch.enable = true;
         };
       };
     client = { };
