@@ -190,7 +190,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "X86_32_TOOLCHAIN_FILE" "${toolchain32}")
     (lib.cmakeFeature "X86_64_TOOLCHAIN_FILE" "${toolchain}")
     (lib.cmakeFeature "X86_DEV_ROOTFS" "${devRootFS}")
-    (lib.cmakeFeature "OVERRIDE_VERSION" "2506")
   ];
 
   strictDeps = true;
