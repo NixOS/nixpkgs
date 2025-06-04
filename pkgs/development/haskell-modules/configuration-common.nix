@@ -1581,6 +1581,16 @@ with haskellLib;
       # https://github.com/NixOS/nixpkgs/issues/198495
       (dontCheckIf (pkgs.postgresqlTestHook.meta.broken) super.persistent-postgresql);
 
+  # Downgrade persistent-test to a version that's compatible with
+  # persistent < 2.16 (which Stackage prescribed).  Unfortunately, the
+  # bad version of persistent-test slipped into Stackage LTS because
+  # PVP allows it and LTS doesn't continuously run test suites (contrary
+  # to nightly).
+  # See also https://github.com/yesodweb/persistent/pull/1584#issuecomment-2939756529
+  #          https://github.com/commercialhaskell/stackage/issues/7768
+  persistent-test_2_13_1_4 = dontDistribute super.persistent-test;
+  persistent-test = doDistribute self.persistent-test_2_13_1_3;
+
   # Needs matching lsp-types
   # Allow lens >= 5.3
   lsp_2_4_0_0 = doDistribute (
