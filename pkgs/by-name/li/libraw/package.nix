@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    inherit imagemagick hdrmerge freeimage;
+    inherit imagemagick hdrmerge; # freeimage
     inherit (python3.pkgs) rawkit;
   };
 
