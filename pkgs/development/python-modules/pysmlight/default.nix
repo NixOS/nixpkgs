@@ -41,6 +41,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     changelog = "https://github.com/smlight-tech/pysmlight/releases/tag/${src.tag}";
     description = "Library implementing API control of the SMLIGHT SLZB-06 LAN Coordinators";
