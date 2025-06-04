@@ -91,16 +91,15 @@ let
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "fex";
-  # version = "2505";
-  version = "97f3e1f7c2c641478c5d9a098f332331015e69f5";
+  version = "2506";
 
   src = fetchFromGitHub {
-    owner = "neobrain";
+    owner = "FEX-Emu";
     repo = "FEX";
-    rev = "${finalAttrs.version}";
-    # tag = "FEX-${finalAttrs.version}";
+    tag = "FEX-${finalAttrs.version}";
 
-    hash = "sha256-7lVFBwf5vhfuFfYZw3nJLysJtUGWLaSTBP8NpfP9Jtw=";
+    hash = "sha256-wzUAyNCfMlABBd3yzFZkPUiy7spuHrekTqVoyUB9jxI=";
+
     leaveDotGit = true;
     postFetch = ''
       cd $out
