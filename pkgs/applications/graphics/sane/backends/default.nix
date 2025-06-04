@@ -42,13 +42,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sane-backends";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchFromGitLab {
     owner = "sane-project";
     repo = "backends";
     rev = "refs/tags/${version}";
-    hash = "sha256-4mwPGeRsyzngDxBQ8/48mK+VR9LYV6082xr8lTrUZrk=";
+    hash = "sha256-e7Wjda+CobYatblvVCGkMAO2aWrdSCp7q+qIEGnGDCY=";
   };
 
   postPatch = ''
