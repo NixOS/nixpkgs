@@ -34,5 +34,6 @@ buildGraalvmNativeImage rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.epl10;
     maintainers = with maintainers; [ ericdallo ];
+    mainProgram = "jet";
   };
 }

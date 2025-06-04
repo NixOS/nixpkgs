@@ -80,5 +80,6 @@ buildGraalvmNativeImage rec {
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ericdallo ];
+    mainProgram = "clojure-lsp";
   };
 }
