@@ -6,34 +6,33 @@
   zlint,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "zlint";
-  version = "3.6.4";
+  version = "3.6.6";
 
   src = fetchFromGitHub {
     owner = "zmap";
     repo = "zlint";
-    tag = "v${version}";
-    hash = "sha256-FFgBRuNvm4Cnjls9y+L256vMGGNu10x7Vh+V9HBon70=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-e17cMR2Zlhramv7RG3oriWTDR+UBjXUl+t8lZtqc34Q=";
   };
 
   modRoot = "v3";
 
-  vendorHash = "sha256-RX7B9RyNmEO9grMR9Mqn1jXDH5sgT0QDvdhXgY1HYtQ=";
+  vendorHash = "sha256-AdJxcJ/qjY6lzoK4PGNjR+7lYAypgCOk6Nt5sqP+ayA=";
 
   postPatch = ''
     # Remove a package which is not declared in go.mod.
     rm -rf v3/cmd/genTestCerts
+    rm -rf v3/cmd/gen_test_crl
   '';
 
-  excludedPackages = [
-    "lints"
-  ];
+  excludedPackages = [ "lints" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
   passthru.tests.version = testers.testVersion {
@@ -41,7 +40,7 @@ buildGoModule rec {
     command = "zlint -version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "X.509 Certificate Linter focused on Web PKI standards and requirements";
     longDescription = ''
       ZLint is a X.509 certificate linter written in Go that checks for
@@ -49,8 +48,8 @@ buildGoModule rec {
       requirements (e.g. CA/Browser Forum Baseline Requirements).
     '';
     homepage = "https://github.com/zmap/zlint";
-    changelog = "https://github.com/zmap/zlint/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ baloo ];
+    changelog = "https://github.com/zmap/zlint/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ baloo ];
   };
-}
+})
