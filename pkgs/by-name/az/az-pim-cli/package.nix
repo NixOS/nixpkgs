@@ -4,7 +4,6 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
-  buildPackages,
   nix-update-script,
   testers,
 }:
@@ -37,17 +36,12 @@ buildGoModule (finalAttrs: {
     "-X github.com/netr0m/az-pim-cli/cmd.version=v${finalAttrs.version}"
   ];
 
-  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
-    let
-      emulator = stdenv.hostPlatform.emulator buildPackages;
-    in
-    ''
-      installShellCompletion --cmd az-pim-cli \
-        --bash <(${emulator} $out/bin/az-pim-cli completion bash) \
-        --fish <(${emulator} $out/bin/az-pim-cli completion fish) \
-        --zsh <(${emulator} $out/bin/az-pim-cli completion zsh)
-    ''
-  );
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd az-pim-cli \
+      --bash <($out/bin/az-pim-cli completion bash) \
+      --fish <($out/bin/az-pim-cli completion fish) \
+      --zsh <($out/bin/az-pim-cli completion zsh)
+  '';
 
   passthru = {
     updateScript = nix-update-script { };
