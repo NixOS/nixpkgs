@@ -25678,6 +25678,9 @@ with self;
       url = "mirror://cpan/authors/id/J/JU/JUERD/Net-MQTT-Simple-1.28.tar.gz";
       hash = "sha256-Sp6hB+a8IuJrUzZ4oKPMbEI7N4TsP8ROjjM5t8Vr7gM=";
     };
+    propagatedBuildInputs = [
+      IOSocketSSL
+    ];
     meta = {
       description = "Minimal MQTT version 3 interface";
       license = with lib.licenses; [

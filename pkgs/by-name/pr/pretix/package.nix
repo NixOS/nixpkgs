@@ -7,6 +7,7 @@
   python3,
   gettext,
   nixosTests,
+  pretix,
   plugins ? [ ],
 }:
 
@@ -35,6 +36,7 @@ let
         };
       };
 
+      pretix = self.toPythonModule pretix;
       pretix-plugin-build = self.callPackage ./plugin-build.nix { };
     };
   };

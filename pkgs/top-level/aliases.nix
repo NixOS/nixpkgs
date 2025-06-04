@@ -1646,6 +1646,7 @@ mapAliases {
   quicklispPackagesGCL = throw "Lisp packages have been redesigned. See 'lisp-modules' in the nixpkgs manual."; # Added 2024-05-07
   quicklispPackagesSBCL = throw "Lisp packages have been redesigned. See 'lisp-modules' in the nixpkgs manual."; # Added 2024-05-07
   quickserve = throw "'quickserve' has been removed because its upstream is unavailable"; # Added 2025-05-10
+  qv2ray = throw "'qv2ray' has been removed as it was unmaintained"; # Added 2025-06-03
   qxw = throw "'qxw' has been removed due to lack of maintenance upstream. Consider using 'crosswords' instead"; # Added 2024-10-19
 
   ### R ###
