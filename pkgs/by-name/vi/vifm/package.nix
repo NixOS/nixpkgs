@@ -48,6 +48,8 @@ stdenv.mkDerivation rec {
     patchShebangs --build src/helpztags
   '';
 
+  enableParallelBuilding = true;
+
   postFixup =
     let
       path = lib.makeBinPath [
