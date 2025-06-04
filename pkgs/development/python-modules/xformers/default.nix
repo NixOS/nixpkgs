@@ -30,7 +30,7 @@
 }:
 let
   inherit (torch) cudaCapabilities cudaPackages cudaSupport;
-  version = "0.0.28.post3";
+  version = "0.0.30";
 in
 buildPythonPackage {
   pname = "xformers";
@@ -43,8 +43,8 @@ buildPythonPackage {
     owner = "facebookresearch";
     repo = "xformers";
     tag = "v${version}";
-    hash = "sha256-23tnhCHK+Z0No8fqZxkgDFp2VIgXZR4jpM+pkb/vvmw=";
     fetchSubmodules = true;
+    hash = "sha256-ozaw9z8qnGpZ28LQNtwmKeVnrn7KDWNeJKtT6g6Q/W0=";
   };
 
   patches = [ ./0001-fix-allow-building-without-git.patch ];
@@ -117,11 +117,15 @@ buildPythonPackage {
     # flash-attn
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of composable Transformer building blocks";
     homepage = "https://github.com/facebookresearch/xformers";
     changelog = "https://github.com/facebookresearch/xformers/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ happysalada ];
+    badPlatforms = [
+      # fatal error: 'omp.h' file not found
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }

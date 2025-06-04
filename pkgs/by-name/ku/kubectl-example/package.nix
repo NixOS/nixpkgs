@@ -17,12 +17,12 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  meta = with lib; {
+  meta = {
     description = "kubectl plugin for retrieving resource example YAMLs";
     mainProgram = "kubectl-example";
     homepage = "https://github.com/seredot/kubectl-example";
     changelog = "https://github.com/seredot/kubectl-example/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = [ maintainers.bryanasdev000 ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.bryanasdev000 ];
   };
 }

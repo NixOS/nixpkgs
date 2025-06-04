@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "shell-gpt";
-  version = "1.4.4";
+  version = "1.4.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TheR1D";
     repo = "shell_gpt";
     tag = version;
-    hash = "sha256-4/5CLzIq+RXVTJk4chrd65GeazRp8VFKdOMt3fT+mbI=";
+    hash = "sha256-e0zKlbt508psiV1ryuE/JV0rWM/XZDhMChqReGHefig=";
   };
 
   pythonRelaxDeps = [
@@ -33,9 +33,14 @@ python3.pkgs.buildPythonApplication rec {
     click
     distro
     instructor
+    litellm
     openai
     rich
     typer
+  ];
+
+  buildInputs = with python3.pkgs; [
+    litellm
   ];
 
   # Tests want to read the OpenAI API key from stdin
