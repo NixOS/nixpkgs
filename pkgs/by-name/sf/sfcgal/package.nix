@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C++ wrapper library around CGAL with the aim of supporting ISO 191007:2013 and OGC Simple Features for 3D operations";
     homepage = "https://sfcgal.gitlab.io/SFCGAL/";
     changelog = "https://gitlab.com/sfcgal/SFCGAL/-/releases/v${finalAttrs.version}";
-    license = lib.licenses.lgpl2;
+    license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ fqidz ];
     teams = [ lib.teams.geospatial ];
