@@ -4562,10 +4562,6 @@ with pkgs;
 
   kernelshark = qt6Packages.callPackage ../os-specific/linux/trace-cmd/kernelshark.nix { };
 
-  tracee = callPackage ../tools/security/tracee {
-    clang = clang_14;
-  };
-
   translatelocally-models = recurseIntoAttrs (callPackages ../misc/translatelocally-models { });
 
   translatepy = with python3.pkgs; toPythonApplication translatepy;
