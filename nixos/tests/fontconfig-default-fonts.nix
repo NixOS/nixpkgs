@@ -15,7 +15,7 @@
         cantarell-fonts
         twitter-color-emoji
         source-code-pro
-        gentium
+        gentium-plus
       ];
       fonts.fontconfig.defaultFonts = {
         serif = [ "Gentium Plus" ];
