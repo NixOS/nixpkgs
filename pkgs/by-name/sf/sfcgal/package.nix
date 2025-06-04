@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://sfcgal.gitlab.io/SFCGAL/";
     changelog = "https://gitlab.com/sfcgal/SFCGAL/-/releases/v${finalAttrs.version}";
     license = lib.licenses.lgpl2Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fqidz ];
     teams = [ lib.teams.geospatial ];
   };
