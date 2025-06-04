@@ -18,6 +18,7 @@
   kparts,
   kwindowsystem,
   libelf,
+  libsForQt5,
   linuxPackages,
   qtbase,
   qtsvg,
@@ -38,6 +39,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-O2wp19scyHIwIY2AzKmPmorGXDH249/OhSg+KtzOYhI=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    ./0001-fix-install-test-binaries-to-correct-paths.patch
+    ./0001-fix-also-support-and-as-branch-visualization-charact.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -67,6 +73,8 @@ stdenv.mkDerivation rec {
     zstd
   ];
 
+  doCheck = true;
+
   qtWrapperArgs = [
     "--suffix PATH : ${
       lib.makeBinPath [
@@ -81,6 +89,12 @@ stdenv.mkDerivation rec {
       --add-rpath ${lib.makeLibraryPath [ rustc-demangle ]} \
       --add-needed librustc_demangle.so \
       $out/libexec/hotspot-perfparser
+  '';
+
+  preConfigure = ''
+    # qt.qpa.plugin: Could not find the Qt platform plugin "minimal"
+    # A workaround is to set QT_PLUGIN_PATH explicitly
+    export QT_PLUGIN_PATH=${libsForQt5.qtbase.bin}/${libsForQt5.qtbase.qtPluginPrefix}
   '';
 
   meta = with lib; {

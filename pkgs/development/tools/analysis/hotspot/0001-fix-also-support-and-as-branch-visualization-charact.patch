@@ -1,0 +1,48 @@
+From f326ef0d2f651d45ceff36050039cbccb2eac6c7 Mon Sep 17 00:00:00 2001
+From: Milian Wolff <milian.wolff@kdab.com>
+Date: Mon, 2 Sep 2024 10:10:16 +0200
+Subject: [PATCH] fix: also support ' and , as branch visualization characters
+
+My objdump from arch uses these chars now, so let's support them too
+---
+ src/resultsdisassemblypage.cpp             | 2 ++
+ tests/modeltests/tst_disassemblyoutput.cpp | 7 ++++---
+ 2 files changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/src/resultsdisassemblypage.cpp b/src/resultsdisassemblypage.cpp
+index 229adbb..dfeb022 100644
+--- a/src/resultsdisassemblypage.cpp
++++ b/src/resultsdisassemblypage.cpp
+@@ -142,9 +142,11 @@ public:
+                 startHorizontalLine(x);
+                 verticalLine();
+                 break;
++            case '\'':
+             case '\\':
+                 topRightEdge();
+                 break;
++            case ',':
+             case '/':
+                 bottomLeftEdge();
+                 break;
+diff --git a/tests/modeltests/tst_disassemblyoutput.cpp b/tests/modeltests/tst_disassemblyoutput.cpp
+index 9a4e4d5..ebfb413 100644
+--- a/tests/modeltests/tst_disassemblyoutput.cpp
++++ b/tests/modeltests/tst_disassemblyoutput.cpp
+@@ -243,9 +243,10 @@ private slots:
+         QVERIFY(result.errorMessage.isEmpty());
+ 
+         auto isValidVisualisationCharacter = [](QChar character) {
+-            const static auto validCharacters = std::initializer_list<QChar> {
+-                QLatin1Char(' '), QLatin1Char('\t'), QLatin1Char('|'), QLatin1Char('/'), QLatin1Char('\\'),
+-                QLatin1Char('-'), QLatin1Char('>'),  QLatin1Char('+'), QLatin1Char('X')};
++            const static auto validCharacters =
++                std::initializer_list<QChar> {QLatin1Char(' '),  QLatin1Char('\t'), QLatin1Char('|'), QLatin1Char('/'),
++                                              QLatin1Char('\\'), QLatin1Char('-'),  QLatin1Char('>'), QLatin1Char('+'),
++                                              QLatin1Char('X'),  QLatin1Char(','),  QLatin1Char('\'')};
+ 
+             return std::any_of(validCharacters.begin(), validCharacters.end(),
+                                [character](auto validCharacter) { return character == validCharacter; });
+-- 
+2.49.0
+
