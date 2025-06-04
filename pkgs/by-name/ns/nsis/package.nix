@@ -14,13 +14,13 @@ stdenv.mkDerivation rec {
   version = "3.11";
 
   src = fetchurl {
-      url = "mirror://sourceforge/project/nsis/NSIS%203/${version}/nsis-${version}-src.tar.bz2";
-      sha256 = "19e72062676ebdc67c11dc032ba80b979cdbffd3886c60b04bb442cdd401ff4b";
-    };
+    url = "mirror://sourceforge/project/nsis/NSIS%203/${version}/nsis-${version}-src.tar.bz2";
+    sha256 = "19e72062676ebdc67c11dc032ba80b979cdbffd3886c60b04bb442cdd401ff4b";
+  };
   srcWinDistributable = fetchzip {
-      url = "mirror://sourceforge/project/nsis/NSIS%203/${version}/nsis-${version}.zip";
-      sha256 = "e574f335ab9d3ad73118f46615e5c9f2a52f3e4622ecbb7e5886badbc8601348";
-    };
+    url = "mirror://sourceforge/project/nsis/NSIS%203/${version}/nsis-${version}.zip";
+    sha256 = "e574f335ab9d3ad73118f46615e5c9f2a52f3e4622ecbb7e5886badbc8601348";
+  };
 
   postUnpack = ''
     mkdir -p $out/share/nsis
