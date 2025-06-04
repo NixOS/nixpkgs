@@ -37,7 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     # this just installs a link, "steam.desktop -> /lib/steam/steam.desktop"
     rm $out/share/applications/steam.desktop
-    sed -e 's,/usr/bin/steam,steam,g' steam.desktop > $out/share/applications/steam.desktop
+    substitute steam.desktop $out/share/applications/steam.desktop \
+      --replace-fail /usr/bin/steam steam
   '';
 
   passthru.updateScript = ./update.py;
