@@ -399,6 +399,17 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
 : The same `url` attribute passed in the argument to `fetchurl`.
 
+`unpacked` (Derivation)
+
+: A convenience derivation for quick access to downloaded archives, as unpacked by the standard [`unpackPhase`](#ssec-unpack-phase) in [`stdenv`](#chap-stdenv).
+  If `recursiveHash` is set to `true` then this output will avoid unnecessary builds and reference the `fetchurl` result directly.
+
+  This attribute can be quickly built with e.g. `nix-build . -A hello.src.unpacked`.
+  Internally it makes use of `pkgs.srcOnly`, but it will not apply any patches since it is not aware of any.
+
+  Using this will push duplicate data to the store.
+  As such it will raise a warning on instantiation, primarily to disallow use within Nixpkgs.
+
 ### Examples {#ssec-pkgs-fetchers-fetchurl-examples}
 
 :::{.example #ex-fetchers-fetchurl-nixpkgs-version}
@@ -944,4 +955,3 @@ fetchtorrent {
 
 - `config`: When using `transmission` as the `backend`, a json configuration can
   be supplied to transmission. Refer to the [upstream documentation](https://github.com/transmission/transmission/blob/main/docs/Editing-Configuration-Files.md) for information on how to configure.
-
