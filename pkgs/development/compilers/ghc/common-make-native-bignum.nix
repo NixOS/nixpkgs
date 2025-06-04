@@ -593,6 +593,12 @@ stdenv.mkDerivation (
     # Hydra which already warrants a significant speedup
     requiredSystemFeatures = [ "big-parallel" ];
 
+    # Install occasionally fails due to a race condition in minimal builds.
+    # See https://hydra.nixos.org/build/299142554/nixlog/48
+    preInstall = ''
+      mkdir -p "$out/lib/${passthru.haskellCompilerName}"
+    '';
+
     postInstall =
       ''
         settingsFile="$out/lib/${targetPrefix}${passthru.haskellCompilerName}/settings"
