@@ -25,11 +25,11 @@
 # installed.
 #
 {
+  lib,
+  haskellPackages,
   fetchFromGitHub,
   python3,
   git,
-  lib,
-  haskellPackages,
 }:
 
 haskellPackages.callPackage (
@@ -43,29 +43,32 @@ haskellPackages.callPackage (
   }:
   mkDerivation rec {
     pname = "zsh-git-prompt";
-    version = "0.4z"; # While we await a real 0.5 release.
+    version = "0.6";
     src = fetchFromGitHub {
-      owner = "starcraftman";
+      owner = "zsh-git-prompt";
       repo = "zsh-git-prompt";
-      rev = "11b83ba3b85d14c66cf2ab79faefab6d838da28e";
-      sha256 = "04aylsjfb03ckw219plkzpyiq4j9g66bjxa5pa56h1p7df6pjssb";
+      tag = "v${version}";
+      hash = "sha256-F9tREogSVMfIcu0cFpWzF187C9pkVX+7jMVXI+uj28A=";
     };
     prePatch = ''
-      substituteInPlace zshrc.sh                       \
-        --replace ':-"python"' ':-"haskell"'           \
-        --replace 'python '    '${python3.interpreter} ' \
-        --replace 'git '       '${git}/bin/git '
+      substituteInPlace zshrc.sh \
+        --replace-fail ':-"python"' ':-"haskell"' \
+        --replace-fail 'git ' '${git}/bin/git '
     '';
-    preCompileBuildDriver = "cd src";
+    preCompileBuildDriver = "cd haskell";
     postInstall = ''
       cd ..
-      gpshare=$out/share/${pname}
-      gpdoc=$out/share/doc/${pname}
+      gpshare=$out/share/zsh-git-prompt
+      gpdoc=$out/share/doc/zsh-git-prompt
       mkdir -p $gpshare/src $gpdoc
       cp README.md $gpdoc
-      cp zshrc.sh gitstatus.py $gpshare
+      substituteInPlace zshrc.sh \
+        --replace-fail "#!/bin/zsh" ""
+      cp zshrc.sh python/gitstatus.py $gpshare
       mv $out/bin $gpshare/src/.bin
     '';
+    # upstream is not updated
+    doCheck = false;
     isLibrary = false;
     isExecutable = true;
     libraryHaskellDepends = [
@@ -73,10 +76,11 @@ haskellPackages.callPackage (
       parsec
       process
       QuickCheck
+      python3
     ];
     executableHaskellDepends = libraryHaskellDepends;
     testHaskellDepends = [ HUnit ] ++ libraryHaskellDepends;
-    homepage = "https://github.com/olivierverdier/zsh-git-prompt#readme";
+    homepage = "https://github.com/zsh-git-prompt/zsh-git-prompt";
     description = "Informative git prompt for zsh";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.league ];
