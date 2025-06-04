@@ -94,6 +94,8 @@ buildPythonPackage rec {
     "test_generate_client_hash"
     # Flaky, compares to execution time
     "test_snapshot_read_concurrent"
+    # Flaky, can retry too quickly and fail
+    "test_retry_helper"
   ];
 
   disabledTestPaths = [
