@@ -1803,11 +1803,6 @@ with pkgs;
 
   kavita = callPackage ../servers/web-apps/kavita { };
 
-  livebook = callPackage ../by-name/li/livebook/package.nix {
-    elixir = elixir_1_17;
-    beamPackages = beamPackages.extend (self: super: { elixir = elixir_1_17; });
-  };
-
   pass = callPackage ../tools/security/pass { };
 
   pass-nodmenu = callPackage ../tools/security/pass {
@@ -4565,10 +4560,6 @@ with pkgs;
   trace-cmd = callPackage ../os-specific/linux/trace-cmd { };
 
   kernelshark = qt6Packages.callPackage ../os-specific/linux/trace-cmd/kernelshark.nix { };
-
-  tracee = callPackage ../tools/security/tracee {
-    clang = clang_14;
-  };
 
   translatelocally-models = recurseIntoAttrs (callPackages ../misc/translatelocally-models { });
 
