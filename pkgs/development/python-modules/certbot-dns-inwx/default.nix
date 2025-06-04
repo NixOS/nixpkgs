@@ -5,6 +5,7 @@
   setuptools,
   acme,
   certbot,
+  inwx-domrobot,
 }:
 
 buildPythonPackage rec {
@@ -21,23 +22,24 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     acme
     certbot
+    inwx-domrobot
   ];
 
   # Doesn't have any tests
   doCheck = false;
 
-  pytestImportsCheck = [ "certbot_dns_inwx" ];
+  pythonImportsCheck = [ "certbot_dns_inwx" ];
 
-  meta = with lib; {
+  meta = {
     description = "INWX DNS Authenticator plugin for Certbot";
     homepage = "https://github.com/oGGy990/certbot-dns-inwx";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ onny ];
+    maintainers = with lib.maintainers; [ onny ];
   };
 }
