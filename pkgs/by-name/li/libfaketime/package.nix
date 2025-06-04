@@ -2,19 +2,19 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
+
   perl,
   coreutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libfaketime";
   version = "0.9.11";
 
   src = fetchFromGitHub {
     owner = "wolfcw";
     repo = "libfaketime";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-a0TjHYzwbkRQyvr9Sj/DqjgLBnE1Z8kjsTQxTfGqLjE=";
   };
 
@@ -24,11 +24,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs test src
-    for a in test/functests/test_exclude_mono.sh src/faketime.c ; do
-      substituteInPlace $a \
-        --replace-fail /bin/bash ${stdenv.shell}
-    done
-    substituteInPlace src/faketime.c --replace-fail @DATE_CMD@ ${coreutils}/bin/date
+    substituteInPlace test/functests/test_exclude_mono.sh src/faketime.c \
+      --replace-fail /bin/bash ${stdenv.shell}
+    substituteInPlace src/faketime.c \
+      --replace-fail @DATE_CMD@ ${lib.getExe' coreutils "date"}
   '';
 
   PREFIX = placeholder "out";
@@ -49,12 +48,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Report faked system time to programs without having to change the system-wide time";
     homepage = "https://github.com/wolfcw/libfaketime/";
-    license = licenses.gpl2;
-    platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.bjornfor ];
     mainProgram = "faketime";
   };
-}
+})
