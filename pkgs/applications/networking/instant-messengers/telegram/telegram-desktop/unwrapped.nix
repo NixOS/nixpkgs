@@ -10,6 +10,10 @@
   python3,
   tdlib,
   tg_owt ? callPackage ./tg_owt.nix { inherit stdenv; },
+  libavif,
+  libheif,
+  libjxl,
+  kimageformats,
   qtbase,
   qtimageformats,
   qtsvg,
@@ -47,14 +51,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop-unwrapped";
-  version = "5.14.3";
+  version = "5.15.2";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-nNYQpWbBK+E/LAbwTWpNUhs2+wb8iuMfqkxJKjaFmhg=";
+    hash = "sha256-T+gzNY3jPfCWjV9yFEGlz8kNGeAioyDUD2qazM/j05I=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -98,6 +102,13 @@ stdenv.mkDerivation (finalAttrs: {
       boost
       ada
       (tdlib.override { tde2eOnly = true; })
+      # even though the last 3 dependencies are already in `kimageformats`,
+      # because of a logic error in the cmake files, in td 5.15.{1,2} it
+      # doesn't link when you don't add them explicitly
+      kimageformats
+      libavif
+      libheif
+      libjxl
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       protobuf
