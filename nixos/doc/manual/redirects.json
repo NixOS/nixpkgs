@@ -56,6 +56,12 @@
   "module-services-opencloud-basic-usage": [
     "index.html#module-services-opencloud-basic-usage"
   ],
+  "module-services-networking-pihole-ftl-configuration-inherit-dnsmasq": [
+    "index.html#module-services-networking-pihole-ftl-configuration-inherit-dnsmasq"
+  ],
+  "module-services-networking-pihole-ftl-configuration-multiple-interfaces": [
+    "index.html#module-services-networking-pihole-ftl-configuration-multiple-interfaces"
+  ],
   "module-services-strfry": [
     "index.html#module-services-strfry"
   ],
@@ -1447,6 +1453,21 @@
   ],
   "module-services-input-methods-kime": [
     "index.html#module-services-input-methods-kime"
+  ],
+  "module-services-networking-pihole-ftl": [
+    "index.html#module-services-networking-pihole-ftl"
+  ],
+  "module-services-networking-pihole-ftl-administration": [
+    "index.html#module-services-networking-pihole-ftl-administration"
+  ],
+  "module-services-networking-pihole-ftl-configuration": [
+    "index.html#module-services-networking-pihole-ftl-configuration"
+  ],
+  "module-services-web-apps-pihole-web": [
+    "index.html#module-services-web-apps-pihole-web"
+  ],
+  "module-services-web-apps-pihole-web-configuration": [
+    "index.html#module-services-web-apps-pihole-web-configuration"
   ],
   "ch-profiles": [
     "index.html#ch-profiles"
