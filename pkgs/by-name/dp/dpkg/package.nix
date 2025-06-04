@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
+  fetchgit,
   perl,
   gnutar,
   zlib,
@@ -21,12 +21,10 @@ stdenv.mkDerivation rec {
   pname = "dpkg";
   version = "1.22.19";
 
-  src = fetchFromGitLab {
-    domain = "salsa.debian.org";
-    owner = "dpkg-team";
-    repo = "dpkg";
-    tag = version;
-    hash = "sha256-h6leMVVveVvjc/QWFTU0gjVJBwf0j1WovwM14Ih7+dI=";
+  src = fetchgit {
+    url = "https://git.launchpad.net/ubuntu/+source/dpkg";
+    rev = "applied/${version}";
+    hash = "sha256-lSuq5VqBj5yKusZaT50sOf82/wd2FeS4g2ILaZT0HPM=";
   };
 
   configureFlags = [
