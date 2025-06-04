@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
@@ -82,6 +83,16 @@ buildPythonPackage rec {
     "test_user_args"
     "test_vendored_meson"
   ];
+  # meson-python respectes MACOSX_DEPLOYMENT_TARGET, but compares it with the
+  # actual platform version during tests, which mismatches.
+  # https://github.com/mesonbuild/meson-python/issues/760
+  preCheck =
+    if stdenv.hostPlatform.isDarwin then
+      ''
+        unset MACOSX_DEPLOYMENT_TARGET
+      ''
+    else
+      null;
 
   setupHooks = [ ./add-build-flags.sh ];
 
