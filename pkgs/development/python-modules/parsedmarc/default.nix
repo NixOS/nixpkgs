@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   fetchurl,
 
   # build-system
@@ -35,6 +35,9 @@
   requests,
   tqdm,
   xmltodict,
+
+  # test
+  unittestCheckHook,
 }:
 
 let
@@ -48,9 +51,11 @@ buildPythonPackage rec {
   version = "8.18.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-qE/WMovVlB9u0lyVl3HapHzvhG+fGTC+6DDBUKRU/2w=";
+  src = fetchFromGitHub {
+    owner = "domainaware";
+    repo = "parsedmarc";
+    tag = version;
+    hash = "sha256-PndhtbZgN4q23v8flPU7uKRsxnN9MR/JaaVfecwEA54=";
   };
 
   build-system = [
@@ -91,9 +96,9 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  # no tests on PyPI, no tags on GitHub
-  # https://github.com/domainaware/parsedmarc/issues/426
-  doCheck = false;
+  nativeCheckInputs = [
+    unittestCheckHook
+  ];
 
   pythonImportsCheck = [ "parsedmarc" ];
 
@@ -105,9 +110,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module and CLI utility for parsing DMARC reports";
     homepage = "https://domainaware.github.io/parsedmarc/";
-    changelog = "https://github.com/domainaware/parsedmarc/blob/master/CHANGELOG.md#${
-      lib.replaceStrings [ "." ] [ "" ] version
-    }";
+    changelog = "https://github.com/domainaware/parsedmarc/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ talyz ];
     mainProgram = "parsedmarc";
