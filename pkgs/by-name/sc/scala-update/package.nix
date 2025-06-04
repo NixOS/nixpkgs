@@ -52,5 +52,6 @@ buildGraalvmNativeImage {
     homepage = "https://github.com/kitlangton/scala-update";
     license = licenses.asl20;
     maintainers = [ maintainers.rtimush ];
+    mainProgram = "scala-update";
   };
 }

@@ -31,5 +31,6 @@ buildGraalvmNativeImage rec {
       jlesquembre
       bandresen
     ];
+    mainProgram = "clj-kondo";
   };
 }
