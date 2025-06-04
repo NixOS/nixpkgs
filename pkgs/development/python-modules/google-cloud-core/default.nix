@@ -49,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.cloud" ];
 
-  meta = with lib; {
+  meta = {
     description = "API Client library for Google Cloud: Core Helpers";
     homepage = "https://github.com/googleapis/python-cloud-core";
     changelog = "https://github.com/googleapis/python-cloud-core/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.sarahec ];
   };
 }
