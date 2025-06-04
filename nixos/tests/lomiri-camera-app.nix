@@ -201,7 +201,7 @@ in
               with pkgs;
               [
                 ffmpeg # fake webcam stream
-                gnome-text-editor # somewhere to paste QR result
+                xclip # inspect QR contents copied into clipboard
                 xdotool # clicking on QR button
               ]
               ++ (with pkgs.lomiri; [
@@ -246,40 +246,11 @@ in
             machine.wait_for_text("${feedLabel}")
             machine.succeed("xdotool mousemove 510 670 click 1") # open up QR decode result
 
-            # OCR is struggling to recognise the text. Click the clipboard button and paste the result somewhere else
+            # OCR is struggling to recognise the text. Click the clipboard button, check what got copied
             machine.sleep(5)
             machine.screenshot("lomiri-barcode_decode")
             machine.succeed("xdotool mousemove 540 590 click 1")
-            machine.sleep(5)
-
-            # Need to make a new window without closing camera app, otherwise clipboard content gets lost?
-            machine.send_key("ctrl-alt-right")
-            machine.succeed("gnome-text-editor >&2 &")
-            machine.sleep(10)
-            machine.send_key("alt-f10")
-            machine.sleep(5)
-            machine.wait_for_text("New")
-
-            # Font size up to help with OCR
-            machine.send_key("ctrl-kp_add")
-            machine.send_key("ctrl-kp_add")
-            machine.send_key("ctrl-kp_add")
-            machine.send_key("ctrl-kp_add")
-            machine.send_key("ctrl-kp_add")
-            machine.send_key("ctrl-kp_add")
-            machine.send_key("ctrl-kp_add")
-            machine.send_key("ctrl-kp_add")
-            machine.send_key("ctrl-kp_add")
-            machine.send_key("ctrl-kp_add")
-            machine.send_key("ctrl-kp_add")
-            machine.send_key("ctrl-kp_add")
-            machine.send_key("ctrl-kp_add")
-            machine.send_key("ctrl-kp_add")
-            machine.send_key("ctrl-kp_add")
-            machine.send_key("ctrl-kp_add")
-
-            machine.send_key("ctrl-v")
-            machine.wait_for_text("${feedQrContent}")
+            machine.wait_until_succeeds("env DISPLAY=:0 xclip -selection clipboard -o | grep -q '${feedQrContent}'")
       '';
     }
   );
