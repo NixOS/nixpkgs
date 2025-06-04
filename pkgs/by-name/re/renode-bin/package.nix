@@ -50,7 +50,7 @@ let
     ];
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "renode";
+  pname = "renode-bin";
   version = "1.15.3";
 
   src = fetchurl {
