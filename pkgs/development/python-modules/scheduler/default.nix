@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "scheduler";
-  version = "0.8.5";
+  version = "0.8.8";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8t1AUbD6cpETSoqoY88bSZmj7FuaF6c+7kJDJX2Lp4k=";
+    hash = "sha256-RXWhLNJp5OSJZAmDb9kRVgy2P7djQ2DuYqovpOxJX/0=";
   };
 
   nativeBuildInputs = [
