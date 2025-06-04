@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/etc/udev/rules.d/
     cp ./subprojects/steam-devices/*.rules $out/etc/udev/rules.d/
     substituteInPlace $out/etc/udev/rules.d/60-steam-input.rules \
-      --replace "/bin/sh" "${bash}/bin/bash"
+      --replace-fail "/bin/sh" "${bash}/bin/bash"
 
     # this just installs a link, "steam.desktop -> /lib/steam/steam.desktop"
     rm $out/share/applications/steam.desktop
