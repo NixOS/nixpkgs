@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-
+  fetchpatch,
   perl,
   coreutils,
 }:
@@ -18,9 +18,15 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-a0TjHYzwbkRQyvr9Sj/DqjgLBnE1Z8kjsTQxTfGqLjE=";
   };
 
-  patches = [
-    ./nix-store-date.patch
-  ];
+  patches =
+    [
+      ./nix-store-date.patch
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # fix things on darwin. ref https://github.com/wolfcw/libfaketime/pull/497
+      # This were merged upstream and can be removed on next release
+      ./497_compile-for-arm64-on-darwin-again.patch
+    ];
 
   postPatch =
     ''
@@ -30,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace src/faketime.c \
         --replace-fail @DATE_CMD@ ${lib.getExe' coreutils "date"}
     ''
-    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # ignore a failing test for now
       # ref. https://github.com/wolfcw/libfaketime/issues/498
       substituteInPlace test/functests/test_exclude_mono.sh \

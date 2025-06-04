@@ -1,0 +1,100 @@
+From 3a3d1deebc05f50edea074752066583d087f704d Mon Sep 17 00:00:00 2001
+From: usertam <code@usertam.dev>
+Date: Sun, 1 Jun 2025 01:03:58 +0800
+Subject: [PATCH 1/2] Revert "Check if the user is on ARM64, add target to
+ CFLAGS/LDFLAGS"
+
+This reverts commit 2a2af0fcdcbe845eefbe12e493dcdf7037fce9f2.
+---
+ Makefile         | 19 -------------------
+ src/Makefile.OSX | 15 ---------------
+ 2 files changed, 34 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index a4a2a62..e69c055 100644
+--- a/Makefile
++++ b/Makefile
+@@ -33,23 +33,4 @@ distclean:
+ 	$(MAKE) $(SELECTOR) -C src distclean
+ 	$(MAKE) $(SELECTOR) -C test distclean
+ 
+-macarm64:
+-	$(MAKE) $(SELECTOR) -C src clean
+-	$(MAKE) $(SELECTOR) -C src distclean
+-	$(MAKE) $(SELECTOR) -C src all
+-# 	$(MAKE) $(SELECTOR) -C test all
+-# 	$(MAKE) $(SELECTOR) -C test distclean
+-	$(MAKE) $(SELECTOR) -C src install
+-	$(MAKE) $(SELECTOR) -C man install
+-	$(INSTALL) -dm0755 "${DESTDIR}${PREFIX}/share/doc/faketime/"
+-	$(INSTALL) -m0644 README "${DESTDIR}${PREFIX}/share/doc/faketime/README"
+-	$(INSTALL) -m0644 NEWS "${DESTDIR}${PREFIX}/share/doc/faketime/NEWS"
+-
+-macarm64full:
+-	$(MAKE) $(SELECTOR) -C src clean
+-	$(MAKE) $(SELECTOR) -C src distclean
+-	$(MAKE) $(SELECTOR) -C src all
+-	$(MAKE) $(SELECTOR) -C test all
+-# 	$(MAKE) $(SELECTOR) -C test distclean
+-
+ .PHONY: all test install uninstall clean distclean
+diff --git a/src/Makefile.OSX b/src/Makefile.OSX
+index d90b961..4743437 100644
+--- a/src/Makefile.OSX
++++ b/src/Makefile.OSX
+@@ -58,21 +58,6 @@ PREFIX ?= /usr/local
+ CFLAGS += -DFAKE_SLEEP -DFAKE_INTERNAL_CALLS -DPREFIX='"'${PREFIX}'"' $(FAKETIME_COMPILE_CFLAGS) -DMACOS_DYLD_INTERPOSE -DFAKE_SETTIME
+ LIB_LDFLAGS += -dynamiclib -current_version 0.9.11 -compatibility_version 0.7
+ 
+-# ARM64 MacOS (M1/M2/M3/Apple Silicon/etc) processors require a target set as their current version, or they
+-# will receive the following error:
+-# dyld[6675]: terminating because inserted dylib '/usr/local/lib/faketime/libfaketime.1.dylib' could not be loaded: tried: '/usr/local/lib/faketime/libfaketime.1.dylib' (mach-o file, but is an incompatible architecture (have 'arm64', need 'arm64e')), '/System/Volumes/Preboot/Cryptexes/OS/usr/local/lib/faketime/libfaketime.1.dylib' (no such file), '/usr/local/lib/faketime/libfaketime.1.dylib' (mach-o file, but is an incompatible architecture (have 'arm64', need 'arm64e'))
+-# dyld[6675]: tried: '/usr/local/lib/faketime/libfaketime.1.dylib' (mach-o file, but is an incompatible architecture (have 'arm64', need 'arm64e')), '/System/Volumes/Preboot/Cryptexes/OS/usr/local/lib/faketime/libfaketime.1.dylib' (no such file), '/usr/local/lib/faketime/libfaketime.1.dylib' (mach-o file, but is an incompatible architecture (have 'arm64', need 'arm64e'))
+-# Outputs `arm64` on ARM64
+-OS := $(shell uname -m)
+-# Outputs a number, eg 14.4 for MacOS Sonoma 14.4
+-MACOS_PRODUCT_VERSION := $(shell sw_vers --productVersion | cut -d. -f1,2)
+-
+-# Check if arm64 is in OS, if so, add the target
+-ifeq ($(OS),arm64)
+-  CFLAGS += -target arm64e-apple-macos$(MACOS_PRODUCT_VERSION)
+-  LIB_LDFLAGS += -target arm64e-apple-macos$(MACOS_PRODUCT_VERSION)
+-endif
+-
+ SONAME = 1
+ LIBS = libfaketime.${SONAME}.dylib
+ BINS = faketime
+
+From 264e8efad74ea3418b20e603271cbd66f0a2034d Mon Sep 17 00:00:00 2001
+From: usertam <code@usertam.dev>
+Date: Sun, 1 Jun 2025 22:50:46 +0800
+Subject: [PATCH 2/2] Makefile.OSX: compile a fat library of both arm64e and
+ arm64
+
+---
+ src/Makefile.OSX | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/src/Makefile.OSX b/src/Makefile.OSX
+index 4743437..9bdf922 100644
+--- a/src/Makefile.OSX
++++ b/src/Makefile.OSX
+@@ -58,6 +58,18 @@ PREFIX ?= /usr/local
+ CFLAGS += -DFAKE_SLEEP -DFAKE_INTERNAL_CALLS -DPREFIX='"'${PREFIX}'"' $(FAKETIME_COMPILE_CFLAGS) -DMACOS_DYLD_INTERPOSE -DFAKE_SETTIME
+ LIB_LDFLAGS += -dynamiclib -current_version 0.9.11 -compatibility_version 0.7
+ 
++# From macOS 13 onwards, system binaries are compiled against the new arm64e ABI on Apple Silicon.
++# These arm64e binaries enforce Pointer Authentication Code (PAC), and will refuse to run with
++# "unprotected" arm64 libraries. Meanwhile, older platforms might not recognize the new arm64e ABI.
++
++# Therefore, we now compile for two ABIs at the same time, producing a fat library of arm64e and arm64,
++# so in the end the OS gets to pick which architecture it wants at runtime.
++ARCH := $(shell uname -m)
++
++ifeq ($(ARCH),arm64)
++    CFLAGS += -arch arm64e -arch arm64
++endif
++
+ SONAME = 1
+ LIBS = libfaketime.${SONAME}.dylib
+ BINS = faketime
