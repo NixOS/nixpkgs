@@ -104,7 +104,7 @@ let
 
         binning = callPackage ../development/ocaml-modules/binning { };
 
-        biocaml = janeStreet_0_15.biocaml;
+        biocaml = throw "biocaml has been removed"; # 2025-06-04
 
         biotk = callPackage ../development/ocaml-modules/biotk { };
 
@@ -971,15 +971,6 @@ let
                   ocurl = self.ocurl.override { inherit lwt_ppx; };
                   piqi = self.piqi.override { inherit sedlex; };
                   piqi-ocaml = self.piqi-ocaml.override { inherit piqi; };
-                };
-
-              biocaml =
-                let
-                  angstrom = self.angstrom.override { inherit ppx_let; };
-                in
-                callPackage ../development/ocaml-modules/biocaml {
-                  uri = self.uri.override { inherit angstrom; };
-                  cfstream = self.cfstream.override { inherit core_kernel; };
                 };
 
               ppx_bap = callPackage ../development/ocaml-modules/ppx_bap { };
