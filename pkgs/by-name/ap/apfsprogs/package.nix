@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nixosTests,
   testers,
+  nix-update-script,
 }:
 let
   tools = [
@@ -67,6 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
       apfs = nixosTests.apfs;
     }
     // versionTests;
+
+  passthru.updateScript = nix-update-script { };
 
   strictDeps = true;
 
