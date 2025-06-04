@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   versionCheckHook,
   nixosTests,
@@ -19,6 +20,16 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   sourceRoot = "${finalAttrs.src.name}/miniupnpc";
+
+  patches = [
+    # fix missing include
+    # remove on next release
+    (fetchpatch {
+      url = "https://github.com/miniupnp/miniupnp/commit/e263ab6f56c382e10fed31347ec68095d691a0e8.patch";
+      hash = "sha256-PHqjruFOcsGT3rdFS/GD3wEvalCmoRY4BtIKFxCjKDw=";
+      stripLen = 1;
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 
