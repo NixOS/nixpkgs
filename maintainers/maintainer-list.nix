@@ -2539,6 +2539,13 @@
     githubId = 59499799;
     keys = [ { fingerprint = "A0FF 4F26 6B80 0B86 726D  EA5B 3C23 C7BD 9945 2036"; } ];
   };
+  averyvigolo = {
+    email = "nixpkgs@averyv.me";
+    github = "averyvigolo";
+    githubId = 26379999;
+    name = "Avery Vigolo";
+    keys = [ { fingerprint = "9848 B216 BCBE 29BB 1C6A  E0D5 7A4D F5A8 CDBD 49C7"; } ];
+  };
   avh4 = {
     email = "gruen0aermel@gmail.com";
     github = "avh4";
@@ -26643,13 +26650,6 @@
     github = "willcohen";
     githubId = 5185341;
     name = "Will Cohen";
-  };
-  williamvds = {
-    email = "nixpkgs@williamvds.me";
-    github = "williamvds";
-    githubId = 26379999;
-    name = "William Vigolo";
-    keys = [ { fingerprint = "9848 B216 BCBE 29BB 1C6A  E0D5 7A4D F5A8 CDBD 49C7"; } ];
   };
   willibutz = {
     email = "willibutz@posteo.de";
