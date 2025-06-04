@@ -30,6 +30,7 @@
   libsForQt5,
   libspnav,
   libzip,
+  manifold,
   mesa,
   mpfr,
   python3,
@@ -45,12 +46,12 @@
 # clang consume much less RAM than GCC
 clangStdenv.mkDerivation rec {
   pname = "openscad-unstable";
-  version = "2025-05-17";
+  version = "2025-06-04";
   src = fetchFromGitHub {
     owner = "openscad";
     repo = "openscad";
-    rev = "c76900f9a62fcb98c503dcc5ccce380db8ac564b";
-    hash = "sha256-R2/8T5+BugVTRIUVLaz6SxKQ1YrtyAGbiE4K1Fuc6bg=";
+    rev = "65856c9330f8cc4ffcaccf03d91b4217f2eae28d";
+    hash = "sha256-jozcLFGVSfw8G12oSxHjqUyFtAfENgIByID+omk08mU=";
     fetchSubmodules = true; # Only really need sanitizers-cmake and MCAD and manifold
   };
 
@@ -87,7 +88,6 @@ clangStdenv.mkDerivation rec {
       eigen
       fontconfig
       freetype
-      ghostscript
       glib
       gmp
       opencsg
@@ -96,6 +96,7 @@ clangStdenv.mkDerivation rec {
       lib3mf
       libspnav
       libzip
+      manifold
       mpfr
       qscintilla
       qtbase
@@ -115,9 +116,7 @@ clangStdenv.mkDerivation rec {
     "-DEXPERIMENTAL=ON" # enable experimental options
     "-DSNAPSHOT=ON" # nightly icons
     "-DUSE_BUILTIN_OPENCSG=OFF"
-    # use builtin manifold: 3.1.0 doesn't pass tests, builtin is 7c8fbe1, between 3.0.1 and 3.1.0
-    # FIXME revisit on version update
-    "-DUSE_BUILTIN_MANIFOLD=ON"
+    "-DUSE_BUILTIN_MANIFOLD=OFF"
     "-DUSE_BUILTIN_CLIPPER2=OFF"
     "-DOPENSCAD_VERSION=\"${builtins.replaceStrings [ "-" ] [ "." ] version}\""
     "-DCMAKE_UNITY_BUILD=OFF" # broken compile with unity
@@ -150,15 +149,10 @@ clangStdenv.mkDerivation rec {
   nativeCheckInputs = [
     mesa.llvmpipeHook
     ctestCheckHook
+    ghostscript
   ];
 
   dontUseNinjaCheck = true;
-  checkFlags = [
-    "-E"
-    # some fontconfig issues cause pdf output to have wrong font
-    # manifold update caused slight rendering changes
-    "pdfexporttest|amfrendermanifoldtest_(issue1105|bad-stl-pcbvicebar|bad-stl-tardis)"
-  ];
 
   meta = with lib; {
     description = "3D parametric model compiler (unstable)";
