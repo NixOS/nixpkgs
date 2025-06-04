@@ -593,6 +593,13 @@ stdenv.mkDerivation (
     # Hydra which already warrants a significant speedup
     requiredSystemFeatures = [ "big-parallel" ];
 
+    # Install occasionally fails due to a race condition in minimal builds.
+    # > /nix/store/wyzpysxwgs3qpvmylm9krmfzh2plicix-coreutils-9.7/bin/install -c -m 755 -d "/nix/store/xzb3390rhvhg2a0cvzmrvjspw1d8nf8h-ghc-riscv64-unknown-linux-gnu-9.4.8/bin"
+    # > install: cannot create regular file '/nix/store/xzb3390rhvhg2a0cvzmrvjspw1d8nf8h-ghc-riscv64-unknown-linux-gnu-9.4.8/lib/ghc-9.4.8': No such file or directory
+    preInstall = ''
+      mkdir -p "$out/lib/${passthru.haskellCompilerName}"
+    '';
+
     postInstall =
       ''
         settingsFile="$out/lib/${targetPrefix}${passthru.haskellCompilerName}/settings"
