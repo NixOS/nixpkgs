@@ -3,6 +3,10 @@
   stdenv,
   fetchFromGitHub,
   znc,
+  cmake,
+  pkg-config,
+  python3,
+  which,
 }:
 
 let
@@ -31,6 +35,15 @@ let
       a
       // {
         inherit buildPhase installPhase;
+
+        nativeBuildInputs = [
+          python3
+          which
+          cmake
+          pkg-config
+        ];
+
+        dontUseCmakeConfigure = true;
 
         buildInputs = znc.buildInputs;
 
