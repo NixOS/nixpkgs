@@ -534,6 +534,7 @@ in
   gancio = runTest ./gancio.nix;
   garage = handleTest ./garage { };
   gatus = runTest ./gatus.nix;
+  getaddrinfo = runTest ./getaddrinfo.nix;
   gemstash = handleTest ./gemstash.nix { };
   geoclue2 = runTest ./geoclue2.nix;
   geoserver = runTest ./geoserver.nix;
