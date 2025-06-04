@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "slusarz";
     repo = "dovecot-fts-flatcurve";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-96sR/pl0G0sSjh/YrXdgVgASJPhrL32xHCbBGrDxzoU=";
   };
 

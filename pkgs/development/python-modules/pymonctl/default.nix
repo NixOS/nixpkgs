@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Kalmat";
     repo = "PyMonCtl";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-eFB+HqYBud836VNEA8q8o1KQKA+GHwSC0YfU1KCbDXw=";
   };
 

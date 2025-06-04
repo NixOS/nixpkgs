@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "dpaulat";
     repo = "supercell-wx";
-    rev = "refs/tags/v${finalAttrs.version}-release";
+    tag = "v${finalAttrs.version}-release";
     sha256 = "sha256-3fVUxbGosN4Y4h8BJXUV7DNv7VZTma+IsV94+Zt8DCA=";
     fetchSubmodules = true;
   };

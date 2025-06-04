@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "wallpapers";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-JST5Rt4Ec1lRu62PUt98S2G1vKthAyOSpyCpuCnkGmw=";
   };
 

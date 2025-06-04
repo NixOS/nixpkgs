@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "KeisukeYamashita";
     repo = "commitlint-rs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9az7AJ4NXmisRZiCFTdHQBVatgEIdRuKU6ZEKVHEgnQ=";
   };
 
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Lint commit messages with conventional commit messages";
     homepage = "https://keisukeyamashita.github.io/commitlint-rs";
-    changelog = "https://github.com/KeisukeYamashita/commitlint-rs/releases/tag/${src.rev}";
+    changelog = "https://github.com/KeisukeYamashita/commitlint-rs/releases/tag/v${version}";
     license = with lib.licenses; [
       mit
       asl20
