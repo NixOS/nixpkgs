@@ -103,7 +103,7 @@ python.pkgs.buildPythonApplication rec {
     cp -r project $out/${python.sitePackages}/froide_govplan/
     cp -r froide_govplan/locale $out/${python.sitePackages}/froide_govplan/
     makeWrapper $out/${python.sitePackages}/froide_govplan/manage.py $out/bin/froide-govplan \
-      --prefix PYTHONPATH : "${python3Packages.makePythonPath dependencies}" \
+      --prefix PYTHONPATH : "$out/${python.sitePackages}:${python.pkgs.makePythonPath dependencies}" \
       --set GDAL_LIBRARY_PATH "${gdal}/lib/libgdal.so" \
       --set GEOS_LIBRARY_PATH "${geos}/lib/libgeos_c.so"
   '';
