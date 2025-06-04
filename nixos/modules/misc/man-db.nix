@@ -7,6 +7,65 @@
 
 let
   cfg = config.documentation.man.man-db;
+
+  generateMandb =
+    package:
+    pkgs.runCommand
+      (
+        with lib.strings;
+        let
+          storeLength = stringLength storeDir + 34; # Nix' StorePath::HashLen + 2 for the separating slash and dash
+          pathName = substring storeLength (stringLength package - storeLength) package;
+        in
+        (package.name or pathName) + "_man-db"
+      )
+      (
+        {
+          inherit package;
+          nativeBuildInputs = [
+            cfg.package
+            pkgs.gdbm
+            pkgs.findutils
+          ];
+          preferLocalBuild = true;
+        }
+        // lib.optionalAttrs (package ? meta.priority) { meta.priority = package.meta.priority; }
+      )
+      ''
+        mkdir -p $out
+        if [ -d $package/share/man ]; then
+          echo "MANDB_MAP $package/share/man $out" > man.conf
+          mandb -C man.conf -psc >/dev/null 2>&1
+        fi
+      '';
+
+  # reverse sort on priority so that man pages from higher priority packages are processed last
+  paths = lib.reverseList (
+    lib.sortProperties (lib.subtractLists cfg.skipPackages config.environment.systemPackages)
+  );
+  pathsMan = builtins.map lib.getMan paths;
+  pathsDevman = lib.optionals config.documentation.dev.enable (
+    builtins.map (lib.getOutput "devman") paths
+  );
+
+  mergedMandb =
+    pkgs.runCommand "merged-system-man-db"
+      {
+        # TODO: use cfg.manualPages
+        dbs = builtins.map generateMandb (lib.unique (paths ++ pathsMan ++ pathsDevman));
+        nativeBuildInputs = [
+          pkgs.findutils
+          pkgs.gdbm
+        ];
+      }
+      ''
+        for dir in $dbs; do
+          for db in $(find $dir -type f -name index.db -printf '%P\n'); do
+            mkdir -p "$out/$(dirname $db)"
+            gdbm_dump "$dir/$db" | gdbm_load --update --replace --no-meta - "$out/$db"
+          done
+        done
+      '';
 in
 
 {
@@ -69,15 +128,7 @@ in
     environment.systemPackages = [ cfg.package ];
     environment.etc."man_db.conf".text =
       let
-        manualCache =
-          pkgs.runCommand "man-cache"
-            {
-              nativeBuildInputs = [ cfg.package ];
-            }
-            ''
-              echo "MANDB_MAP ${cfg.manualPages}/share/man $out" > man.conf
-              mandb -C man.conf -psc >/dev/null 2>&1
-            '';
+        manualCache = mergedMandb;
       in
       ''
         # Manual pages paths for NixOS
