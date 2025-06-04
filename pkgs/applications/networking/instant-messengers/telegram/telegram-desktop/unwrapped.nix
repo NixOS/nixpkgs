@@ -158,6 +158,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://desktop.telegram.org/";
     changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ nickcao ];
-    mainProgram = if stdenv.hostPlatform.isLinux then "telegram-desktop" else "Telegram";
+    mainProgram = "Telegram";
   };
 })
