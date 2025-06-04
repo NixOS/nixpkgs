@@ -8,11 +8,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "silverbullet";
-  version = "0.9.4";
+  version = "0.10.4";
 
   src = fetchurl {
     url = "https://github.com/silverbulletmd/silverbullet/releases/download/${finalAttrs.version}/silverbullet.js";
-    hash = "sha256-J0fy1e/ObpujBNSRKA55oU30kXNfus+5P2ebggEN6Dw=";
+    hash = "sha256-ko1zXfvn0rVY+lp9zTZ71BL41h7AOazooBVeqELP3Ps=";
   };
 
   dontUnpack = true;
@@ -21,10 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/{bin,lib}
+    mkdir -p $out/{bin,lib/cache}
     cp $src $out/lib/silverbullet.js
     makeWrapper ${lib.getExe deno} $out/bin/silverbullet \
         --set DENO_NO_UPDATE_CHECK "1" \
+        --set DENO_DIR "/tmp/silverbullet_deno_cache" \
         --add-flags "run -A --unstable-kv --unstable-worker-options ${placeholder "out"}/lib/silverbullet.js"
     runHook postInstall
   '';
