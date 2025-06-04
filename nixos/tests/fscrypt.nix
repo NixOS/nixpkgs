@@ -36,19 +36,19 @@
           machine.succeed("echo foobar | fscrypt encrypt --skip-unlock --source=pam_passphrase --user=alice /home/alice")
 
       with subtest("Create file as alice"):
-        login_as_alice()
-        machine.succeed("echo hello > /home/alice/world")
-        logout()
-        # Wait for logout to be processed
-        machine.sleep(1)
+          login_as_alice()
+          machine.succeed("echo hello > /home/alice/world")
+          logout()
+          # Wait for logout to be processed
+          machine.sleep(1)
 
       with subtest("File should not be readable without being logged in as alice"):
-        machine.fail("cat /home/alice/world")
+          machine.fail("cat /home/alice/world")
 
       with subtest("File should be readable again as alice"):
-        login_as_alice()
-        assert "Unlocked: Yes" in machine.succeed("fscrypt status /home/alice")
-        assert "hello" in machine.succeed("cat /home/alice/world")
-        logout()
+          login_as_alice()
+          assert "Unlocked: Yes" in machine.succeed("fscrypt status /home/alice")
+          assert "hello" in machine.succeed("cat /home/alice/world")
+          logout()
     '';
 }
