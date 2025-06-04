@@ -43,6 +43,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     downloadPage = "https://software.sil.org/gentium/download/";
     maintainers = with lib.maintainers; [
+      b-fein
       raskin
       rycee
     ];
