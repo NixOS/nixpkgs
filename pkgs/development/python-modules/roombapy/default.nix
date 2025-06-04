@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "roombapy";
-  version = "1.9.0";
+  version = "1.9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "pschmitt";
     repo = "roombapy";
     tag = version;
-    hash = "sha256-fcCK6yby9Jfc4lSSETn13Y+4A3qjvYfm4Ps3T5yG4Rc=";
+    hash = "sha256-63PqNmJC0IWPPMVyZdKoZikvBA4phMcYxlTBk/m1cq0=";
   };
 
   nativeBuildInputs = [
@@ -67,7 +67,7 @@ buildPythonPackage rec {
     description = "Python program and library to control Wi-Fi enabled iRobot Roombas";
     mainProgram = "roombapy";
     homepage = "https://github.com/pschmitt/roombapy";
-    changelog = "https://github.com/pschmitt/roombapy/releases/tag/${version}";
+    changelog = "https://github.com/pschmitt/roombapy/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = [ ];
   };
