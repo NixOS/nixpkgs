@@ -23,8 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   makeFlags = [
-    "DESTDIR=$(out)"
-    "PREFIX="
+    "PREFIX=${placeholder "out"}"
   ];
 
   postInstall = ''
