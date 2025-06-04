@@ -91,7 +91,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.14.0";
+  version = "8.14.1";
 
   src = fetchurl {
     urls = [
@@ -100,15 +100,8 @@ stdenv.mkDerivation (finalAttrs: {
         builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
       }/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-s2NM/FOMcsnGynlO9Mc9f9vRceje4tuDfYOl5FIxACo=";
+    hash = "sha256-9GGaHiR0xLv+3IinwhkSCcgzS0j6H05T/VhMwS6RIN0=";
   };
-
-  patches = [
-    # Backport of https://github.com/curl/curl/commit/d16ccbd55de80c271fe822f4ba8b6271fd9166ff
-    # Fixes a regression introduced in 8.14.0
-    # Remove with 8.14.1
-    ./fix-add_handle-resizing.patch
-  ];
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
   # necessary for FreeBSD code path in configure
