@@ -140,7 +140,7 @@ in
 
           See <https://docs.celeryq.dev/en/stable/reference/cli.html#celery-worker> for more info.
         '';
-        apply = utils.escapeSystemdExecArgs;
+        apply = lib.concatStringsSep " ";
       };
     };
 
