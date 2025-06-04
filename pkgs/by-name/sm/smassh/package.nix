@@ -11,14 +11,14 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "smassh";
-  version = "3.1.6";
+  version = "3.1.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kraanzu";
     repo = "smassh";
     rev = "v${version}";
-    hash = "sha256-P0fZHSsaKIwJspEBxM5MEK3Z4kemXJWlIOQI9cmvlF4=";
+    hash = "sha256-NqeOeyzVn+hBPX+76A0hMBezPQqDNFZsHBSaRtsrfrA=";
   };
 
   nativeBuildInputs = with python3.pkgs; [ poetry-core ];
