@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "sfcgal";
     repo = "SFCGAL";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-m8oyfL3rF4qLugoEFa8iiqS5D1Oljg+x1qMp9KfiQ5c=";
   };
 
