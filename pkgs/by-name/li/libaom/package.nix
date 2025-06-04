@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Alliance for Open Media AV1 codec library";
     longDescription = ''
       Libaom is the reference implementation of the AV1 codec from the Alliance
@@ -127,13 +127,13 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://aomedia.org/av1-features/get-started/";
     changelog = "https://aomedia.googlesource.com/aom/+/refs/tags/v${version}/CHANGELOG";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       primeos
       kiloreux
       dandellion
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     outputsToInstall = [ "bin" ];
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
 }

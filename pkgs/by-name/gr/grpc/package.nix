@@ -129,12 +129,12 @@ stdenv.mkDerivation rec {
     inherit arrow-cpp;
   };
 
-  meta = with lib; {
+  meta = {
     description = "C based gRPC (C++, Python, Ruby, Objective-C, PHP, C#)";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lnl7 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lnl7 ];
     homepage = "https://grpc.io/";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     changelog = "https://github.com/grpc/grpc/releases/tag/v${version}";
   };
 }
