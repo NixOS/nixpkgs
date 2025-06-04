@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
       FTLDNS.
     '';
     license = lib.licenses.eupl12;
-    maintainers = with lib.maintainers; [ williamvds ];
+    maintainers = with lib.maintainers; [ averyvigolo ];
     platforms = lib.platforms.linux;
   };
 })
