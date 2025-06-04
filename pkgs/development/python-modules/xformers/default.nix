@@ -123,5 +123,9 @@ buildPythonPackage {
     changelog = "https://github.com/facebookresearch/xformers/blob/${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ happysalada ];
+    badPlatforms = [
+      # fatal error: 'omp.h' file not found
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }
