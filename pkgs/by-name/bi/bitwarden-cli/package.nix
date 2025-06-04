@@ -97,6 +97,8 @@ buildNpmPackage rec {
   };
 
   meta = {
+    # https://github.com/NixOS/nixpkgs/issues/339576
+    broken = stdenv.hostPlatform.isDarwin;
     changelog = "https://github.com/bitwarden/clients/releases/tag/${src.tag}";
     description = "Secure and free password manager for all of your devices";
     homepage = "https://bitwarden.com";
