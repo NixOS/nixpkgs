@@ -45,6 +45,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs ./dpf/utils/generate-ttl.sh
+    for f in plugins/*/Makefile; do
+      substituteInPlace "$f" \
+        --replace-quiet 'pkg-config' '${stdenv.cc.targetPrefix}pkg-config'
+    done
   '';
 
   makeFlags = [
@@ -59,5 +63,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;
+    # tries to run dpf/utils/lv2_ttl_generator (built for host)
+    broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
 }
