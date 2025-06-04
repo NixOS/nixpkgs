@@ -21,12 +21,11 @@
 }:
 
 let
+  # include a compatible pyopenssl version: https://github.com/NixOS/nixpkgs/issues/379291
   # remove ASAP: https://github.com/googleapis/google-api-python-client/issues/2554
   pythonCustom = python3.override {
     self = pythonCustom;
     packageOverrides = _: super: {
-      # include a compatible pyopenssl version: https://github.com/NixOS/nixpkgs/issues/379291
-      # remove ASAP: https://github.com/googleapis/google-api-python-client/issues/2554
       pyopenssl = super.pyopenssl.overridePythonAttrs (old: rec {
         version = "24.2.1";
         src = old.src.override {
