@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/koreader/koreader";
     changelog = "https://github.com/koreader/koreader/releases/tag/v${version}";
-    description = "An ebook reader application supporting PDF, DjVu, EPUB, FB2 and many more formats, running on Cervantes, Kindle, Kobo, PocketBook and Android devices";
+    description = "Ebook reader application supporting PDF, DjVu, EPUB, FB2 and many more formats, running on Cervantes, Kindle, Kobo, PocketBook and Android devices";
     mainProgram = "koreader";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [

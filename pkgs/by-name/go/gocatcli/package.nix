@@ -38,7 +38,7 @@ buildGoModule rec {
   meta = {
     homepage = "https://github.com/deadc0de6/gocatcli";
     changelog = "https://github.com/deadc0de6/gocatcli/releases/tag/v${version}";
-    description = "The command line catalog tool for your offline data";
+    description = "Command line catalog tool for your offline data";
     longDescription = ''
       gocatcli is a catalog tool for your offline data. It indexes external
       media in a catalog file and allows to quickly find specific files or even

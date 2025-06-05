@@ -14,7 +14,7 @@ buildGoModule {
   subPackages = [ "cmd/ldap" ];
 
   meta = authentik.meta // {
-    description = "The authentik ldap outpost. Needed for the external ldap API.";
+    description = "Authentik ldap outpost. Needed for the external ldap API";
     homepage = "https://goauthentik.io/docs/providers/ldap/";
     mainProgram = "ldap";
   };

@@ -36,7 +36,7 @@
 
   azure-iot = mkAzExtension rec {
     pname = "azure-iot";
-    description = "The Azure IoT extension for Azure CLI.";
+    description = "Azure IoT extension for Azure CLI";
     version = "0.25.0";
     url = "https://github.com/Azure/azure-iot-cli-extension/releases/download/v${version}/azure_iot-${version}-py3-none-any.whl";
     hash = "sha256-fbS8B2Z++oRyUT2eEh+yVR/K6uaCVce8B2itQXfBscY=";

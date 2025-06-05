@@ -232,7 +232,7 @@
     };
 
   meta = {
-    description = "A black hole for Internet advertisements";
+    description = "Black hole for Internet advertisements";
     license = lib.licenses.eupl12;
     maintainers = with lib.maintainers; [ averyvigolo ];
     platforms = lib.platforms.linux;
