@@ -60,7 +60,7 @@ let
       };
       patches = [
         # Disable Coq related targets which are missing in the fsf-14 branch
-        ./0001-fix-install.patch
+        ./0001-fix-install-fsf-14.patch
 
         # Suppress warnings on aarch64: https://github.com/AdaCore/spark2014/issues/54
         ./0002-mute-aarch64-warnings.patch
@@ -69,6 +69,27 @@ let
         ./0003-Adjust-after-category-change-for-N_Formal_Package_De.patch
       ];
       commit_date = "2024-01-11";
+    };
+    "15" = {
+      # src = fetchSpark2014 {
+      #   rev = "";
+      #   hash = "";
+      # };
+      src = fetchFromGitHub {
+        owner = "heijligen";
+        repo = "spark2014";
+        fetchSubmodules = true;
+        rev = "2af199ca9c18ad8f3ff6947e9924efd89f4df3ac";
+        hash = "sha256-A87UTMM4GhUjMb/8UiT2ydaGLTHwc/23tySnRg3aoYk=";
+      };
+      patches = [
+        # Disable Coq related targets which are missing in the fsf-15 branch
+        ./0001-fix-install-fsf-15.patch
+
+        # Fix pointer types: https://github.com/AdaCore/why3/issues/6
+        ./0004-wallclock_timeline_reached-inclompatible-pointer-typ.patch
+      ];
+      commit_date = "2025-05-08";
     };
   };
 
@@ -116,6 +137,9 @@ stdenv.mkDerivation {
     ])
     ++ (lib.optionals (gnat_version == "14") [
       gpr2_24_2_next
+    ])
+    ++ (lib.optionals (gnat_version == "15") [
+      gpr2
     ]);
 
   propagatedBuildInputs = [
