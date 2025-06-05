@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
   cacert,
@@ -14,7 +13,6 @@
   pytest-asyncio,
   websockets,
   httpx,
-  rust-jemalloc-sys,
   sniffio,
   nix-update-script,
 }:
@@ -31,6 +29,14 @@ buildPythonPackage rec {
     hash = "sha256-qJ65ILj7xLqOWmpn1UzNQHUnzFg714gntVSmYHpI65I=";
   };
 
+  # Granian forces a custom allocator for all the things it runs,
+  # which breaks some libraries in funny ways. Make it not do that,
+  # and allow the final application to make the allocator decision
+  # via LD_PRELOAD or similar.
+  patches = [
+    ./no-alloc.patch
+  ];
+
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
     hash = "sha256-swfqKp8AsxNAUc7dlce6J4dNQbNGWrCcUDc31AhuMmI=";
@@ -39,22 +45,6 @@ buildPythonPackage rec {
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
-  ];
-
-  buildInputs = lib.optionals (stdenv.hostPlatform.isAarch64) [
-    # fix "Unsupported system page size" on aarch64-linux with 16k pages
-    # https://github.com/NixOS/nixpkgs/issues/410572
-    # only enabled on aarch64 due to https://github.com/NixOS/nixpkgs/pull/410611#issuecomment-2939564567
-    (rust-jemalloc-sys.overrideAttrs (
-      { configureFlags, ... }:
-      {
-        configureFlags = configureFlags ++ [
-          # otherwise import check fails with:
-          # ImportError: {{storeDir}}/lib/libjemalloc.so.2: cannot allocate memory in static TLS block
-          "--disable-initial-exec-tls"
-        ];
-      }
-    ))
   ];
 
   dependencies = [
