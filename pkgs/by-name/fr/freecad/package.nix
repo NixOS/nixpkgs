@@ -18,12 +18,13 @@
   libXmu,
   medfile,
   mpi,
+  netgen,
   ninja,
   ode,
   opencascade-occt_7_6,
   opencascade-occt,
   pkg-config,
-  python311Packages,
+  python312Packages,
   spaceNavSupport ? stdenv.hostPlatform.isLinux,
   ifcSupport ? false,
   stdenv,
@@ -40,7 +41,7 @@
   nix-update-script,
 }:
 let
-  inherit (python311Packages)
+  inherit (python312Packages)
     boost
     gitpython
     ifcopenshell
@@ -79,6 +80,7 @@ freecad-utils.makeCustomizable (
       [
         cmake
         ninja
+        netgen
         pkg-config
         gfortran
         swig
@@ -105,6 +107,7 @@ freecad-utils.makeCustomizable (
         matplotlib
         medfile
         mpi
+        netgen
         ode
         opencamlib
         pivy
@@ -166,6 +169,9 @@ freecad-utils.makeCustomizable (
         "-DBUILD_FLAT_MESH:BOOL=ON"
         "-DINSTALL_TO_SITEPACKAGES=OFF"
         "-DFREECAD_USE_PYBIND11=ON"
+        "-DBUILD_NETGEN=ON"
+        "-DBUILD_FEM_NETGEN=ON"
+
       ]
       ++ lib.optionals (qtVersion == 5) [
         "-DBUILD_QT5=ON"
