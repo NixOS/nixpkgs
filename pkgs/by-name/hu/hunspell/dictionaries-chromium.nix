@@ -90,4 +90,13 @@ rec {
     dictFileName = "fr-FR-3-0.bdic";
     shortDescription = "French (France)";
   };
+
+  # SWEDISH
+
+  sv_SE = sv-se;
+  sv-se = mkDictFromChromium {
+    shortName = "sv-se";
+    dictFileName = "sv-SE-3-0.bdic";
+    shortDescription = "Swedish (Sweden)";
+  };
 }
