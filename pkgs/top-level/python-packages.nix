@@ -15398,6 +15398,10 @@ self: super: with self; {
 
   robotframework = callPackage ../development/python-modules/robotframework { };
 
+  robotframework-assertion-engine =
+    callPackage ../development/python-modules/robotframework-assertion-engine
+      { };
+
   robotframework-databaselibrary =
     callPackage ../development/python-modules/robotframework-databaselibrary
       { };
