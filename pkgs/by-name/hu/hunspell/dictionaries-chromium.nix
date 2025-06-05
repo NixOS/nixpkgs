@@ -57,6 +57,8 @@ let
 in
 rec {
 
+  inherit mkDictFromChromium;
+
   # ENGLISH
 
   en_US = en-us;
