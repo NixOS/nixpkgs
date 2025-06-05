@@ -482,6 +482,27 @@ let
           };
 
       pkgsCross = {
+        aarch64-android-prebuilt.pkgsStatic =
+          removePlatforms
+            [
+              # Android NDK package doesn't support building on
+              "aarch64-darwin"
+              "aarch64-linux"
+
+              # Fails when building ghc
+              "x86_64-darwin"
+            ]
+            {
+              haskell.packages.ghc912 = {
+                inherit
+                  (packagePlatforms pkgs.pkgsCross.aarch64-android-prebuilt.pkgsStatic.haskell.packages.ghc912)
+                  ghc
+                  hello
+                  microlens
+                  ;
+              };
+            };
+
         ghcjs =
           removePlatforms
             [
@@ -512,14 +533,6 @@ let
                   microlens
                   miso
                   reflex-dom
-                  ;
-              };
-
-              haskell.packages.ghc912 = {
-                inherit (packagePlatforms pkgs.pkgsCross.aarch64-android-prebuilt.haskell.packages.ghc912)
-                  ghc
-                  hello
-                  microlens
                   ;
               };
 
