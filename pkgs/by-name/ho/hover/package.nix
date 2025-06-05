@@ -49,9 +49,9 @@ let
     vendorHash = "sha256-GDoX5d2aDfaAx9JsKuS4r8137t3swT6rgcCghmaThSM=";
 
     src = fetchFromGitHub {
-      rev = "v${version}";
+      tag = "v${version}";
       owner = "go-flutter-desktop";
-      repo = pname;
+      repo = "hover";
       sha256 = "sha256-ch59Wx4g72u7x99807ppURI4I+5aJ/W8Zr35q8X68v4=";
     };
 
