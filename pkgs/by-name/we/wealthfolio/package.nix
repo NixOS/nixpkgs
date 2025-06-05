@@ -62,14 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     webkitgtk_4_1
   ];
 
-  postPatch = ''
-    jq \
-      '.plugins.updater.endpoints = [ ]
-      | .bundle.createUpdaterArtifacts = false' \
-      src-tauri/tauri.conf.json \
-      | sponge src-tauri/tauri.conf.json
-  '';
-
   passthru.updateScript = nix-update-script { };
 
   meta = {
