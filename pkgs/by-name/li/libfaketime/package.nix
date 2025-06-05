@@ -9,18 +9,26 @@
 
 stdenv.mkDerivation rec {
   pname = "libfaketime";
-  version = "0.9.10";
+  # 0.9.10 break dict-db-wiktionary and quartus-prime-lite on linux,
+  # and 0.9.11 break everything on darwin
+  version = if stdenv.hostPlatform.isDarwin then "0.9.10" else "0.9.11";
 
   src = fetchFromGitHub {
     owner = "wolfcw";
     repo = "libfaketime";
     rev = "v${version}";
-    sha256 = "sha256-DYRuQmIhQu0CNEboBAtHOr/NnWxoXecuPMSR/UQ/VIQ=";
+    sha256 =
+      if stdenv.hostPlatform.isDarwin then
+        "sha256-DYRuQmIhQu0CNEboBAtHOr/NnWxoXecuPMSR/UQ/VIQ="
+      else
+        "sha256-a0TjHYzwbkRQyvr9Sj/DqjgLBnE1Z8kjsTQxTfGqLjE=";
   };
 
   patches =
     [
       ./nix-store-date.patch
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       (fetchpatch {
         name = "0001-libfaketime.c-wrap-timespec_get-in-TIME_UTC-macro.patch";
         url = "https://github.com/wolfcw/libfaketime/commit/e0e6b79568d36a8fd2b3c41f7214769221182128.patch";
@@ -31,11 +39,9 @@ stdenv.mkDerivation rec {
         url = "https://github.com/wolfcw/libfaketime/commit/f32986867addc9d22b0fab29c1c927f079d44ac1.patch";
         hash = "sha256-fIXuxxcV9J2IcgwcwSrMo4maObkH9WYv1DC/wdtbq/g=";
       })
-    ]
-    ++ (lib.optionals stdenv.cc.isClang [
       # https://github.com/wolfcw/libfaketime/issues/277
       ./0001-Remove-unsupported-clang-flags.patch
-    ]);
+    ];
 
   postPatch = ''
     patchShebangs test src
