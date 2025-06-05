@@ -7,78 +7,6 @@
 
 let
   cfg = config.documentation.man.man-db;
-
-  generateMandb =
-    package:
-    pkgs.runCommand
-      (
-        with lib.strings;
-        let
-          storeLength = stringLength storeDir + 34; # Nix' StorePath::HashLen + 2 for the separating slash and dash
-          pathName = substring storeLength (stringLength package - storeLength) package;
-        in
-        (package.name or pathName) + "_man-db"
-      )
-      (
-        {
-          nativeBuildInputs = [
-            cfg.package
-            pkgs.findutils
-          ];
-          preferLocalBuild = true;
-        }
-        // lib.optionalAttrs (package ? meta.priority) { meta.priority = package.meta.priority; }
-      )
-      ''
-        mkdir -p $out
-        if [ -d ${package}/share/man ]; then
-          echo "MANDB_MAP ${package}/share/man $out" > man.conf
-          mandb -C man.conf -psc >/dev/null 2>&1
-        fi
-      '';
-
-  paths = lib.pipe config.environment.systemPackages [
-    (lib.subtractLists cfg.skipPackages)
-
-    # reverse sort on priority so that man pages from higher priority packages are processed last
-    lib.sortProperties
-    lib.reverseList
-  ];
-
-  # lib.getMan is insufficient to replicate the behaviour of pkgs.buildEnv:
-  #  - lib.getMan pkgs.libressl.nc => pkgs.libressl.nc
-  #  - while pkgs.buildEnv with paths = [ pkgs.libressl.nc ] and extraOutputsToInstall = [ "man" ]
-  #    will include the output of pkgs.libressl.nc.man
-  pathsMan = builtins.map (p: if p ? man then p.man else p) paths;
-
-  pathsDevman = lib.optionals config.documentation.dev.enable (
-    builtins.map (p: if p ? devman then p.devman else p) paths
-  );
-
-  mergedMandb =
-    pkgs.runCommand "merged-system-man-db"
-      {
-        # TODO: use cfg.manualPages
-        packages = lib.pipe (paths ++ pathsMan ++ pathsDevman) [
-          lib.unique
-          (builtins.map generateMandb)
-        ];
-        nativeBuildInputs = [
-          pkgs.findutils
-          pkgs.gdbm
-        ];
-      }
-      ''
-        # don't fail if there are no man pages
-        mkdir -p $out
-
-        for in in $packages; do
-          find "$in" -type f -name index.db -printf '%P\n' | while IFS="" read -r db; do
-            mkdir -p "$out/$(dirname $db)"
-            gdbm_dump "$in/$db" | gdbm_load --update --replace --no-meta - "$out/$db"
-          done
-        done
-      '';
 in
 
 {
@@ -141,7 +69,77 @@ in
     environment.systemPackages = [ cfg.package ];
     environment.etc."man_db.conf".text =
       let
-        manualCache = mergedMandb;
+        generateMandb =
+          package:
+          pkgs.runCommand
+            (
+              with lib.strings;
+              let
+                storeLength = stringLength storeDir + 34; # Nix' StorePath::HashLen + 2 for the separating slash and dash
+                pathName = substring storeLength (stringLength package - storeLength) package;
+              in
+              (package.name or pathName) + "_man-db"
+            )
+            (
+              {
+                nativeBuildInputs = [
+                  cfg.package
+                  pkgs.findutils
+                ];
+                preferLocalBuild = true;
+              }
+              // lib.optionalAttrs (package ? meta.priority) { meta.priority = package.meta.priority; }
+            )
+            ''
+              mkdir -p $out
+              if [ -d ${package}/share/man ]; then
+                echo "MANDB_MAP ${package}/share/man $out" > man.conf
+                mandb -C man.conf -psc >/dev/null 2>&1
+              fi
+            '';
+
+        paths = lib.pipe config.environment.systemPackages [
+          (lib.subtractLists cfg.skipPackages)
+
+          # reverse sort on priority so that man pages from higher priority packages are processed last
+          lib.sortProperties
+          lib.reverseList
+        ];
+
+        # lib.getMan is insufficient to replicate the behaviour of pkgs.buildEnv:
+        #  - lib.getMan pkgs.libressl.nc => pkgs.libressl.nc
+        #  - while pkgs.buildEnv with paths= [ pkgs.libressl.nc ] and extraOutputsToInstall = [ "man" ]
+        #    will include the output of pkgs.libressl.nc.man
+        pathsMan = builtins.map (p: if p ? man then p.man else p) paths;
+
+        pathsDevman = lib.optionals config.documentation.dev.enable (
+          builtins.map (p: if p ? devman then p.devman else p) paths
+        );
+
+        manualCache =
+          pkgs.runCommand "merged-system-man-db"
+            {
+              # TODO: use cfg.manualPages
+              packages = lib.pipe (paths ++ pathsMan ++ pathsDevman) [
+                lib.unique
+                (builtins.map generateMandb)
+              ];
+              nativeBuildInputs = [
+                pkgs.findutils
+                pkgs.gdbm
+              ];
+            }
+            ''
+              # don't fail if there are no man pages
+              mkdir -p $out
+
+              for in in $packages; do
+                find "$in" -type f -name index.db -printf '%P\n' | while IFS="" read -r db; do
+                  mkdir -p "$out/$(dirname $db)"
+                  gdbm_dump "$in/$db" | gdbm_load --update --replace --no-meta - "$out/$db"
+                done
+              done
+            '';
       in
       ''
         # Manual pages paths for NixOS
