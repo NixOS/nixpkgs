@@ -190,10 +190,10 @@ let
           hash = "sha256-F1/1m4tNZKRxZMD9POrUj+HSnx9oSzr0cdssGifC3NM=";
         };
         "pak96.hd" = {
-          fetcher = fetchzip' { stripRoot = false; };
-          url = "https://hd.simutrans.com/release/PakHD_v04B_100-0.zip";
-          prefix = "/pakHD";
-          hash = "sha256-+/DZqRpYXEglM/NFAdGZR0TO9+aYTFhDMB5+9NEJeRk=";
+          basePath = "OldFiles";
+          srcPath = [ "PakHD_v04B_100-0.zip" ];
+          prefix = "/simutrans/pakHD";
+          hash = "sha256-koiCoM4YyhOC5sr6PMkvZrjoR5/o/QIFfito92S3uW0=";
         };
 
         pak128 = {
