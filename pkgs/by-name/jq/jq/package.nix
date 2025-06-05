@@ -8,8 +8,8 @@
   onigurumaSupport ? true,
   oniguruma,
   tzdata,
-  versionCheckHook,
   nix-update-script,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -85,7 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
   installCheckTarget = "check";
-  nativeInstallCheckInputs = [ versionCheckHook ];
 
   preInstallCheck = ''
     substituteInPlace tests/shtest \
@@ -98,6 +97,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit onigurumaSupport;
+    tests.version = testers.testVersion {
+      package = lib.getBin finalAttrs.finalPackage;
+      command = "jq --version";
+    };
+
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
