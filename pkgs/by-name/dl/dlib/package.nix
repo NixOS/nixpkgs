@@ -42,7 +42,7 @@
     ]
     ++ lib.optionals cudaSupport [
       (lib.cmakeFeature "DLIB_USE_CUDA_COMPUTE_CAPABILITIES" (
-        builtins.concatStringsSep "," (with cudaPackages.flags; map dropDot cudaCapabilities)
+        builtins.concatStringsSep "," (with cudaPackages.flags; map dropDots cudaCapabilities)
       ))
     ];
 
