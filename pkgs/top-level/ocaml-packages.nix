@@ -1883,6 +1883,10 @@ let
 
         slug = callPackage ../development/ocaml-modules/slug { };
 
+        smtml = callPackage ../development/ocaml-modules/smtml {
+          mdx = mdx.override { inherit logs; };
+        };
+
         sodium = callPackage ../development/ocaml-modules/sodium { };
 
         sosa = callPackage ../development/ocaml-modules/sosa { };
