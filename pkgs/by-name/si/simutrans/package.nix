@@ -334,6 +334,11 @@ let
             --run 'export SIMUTRANS_USERDIR=''${SIMUTRANS_USERDIR-${default-home}}' \
             --run 'export SIMUTRANS_INSTALLDIR=''${SIMUTRANS_INSTALLDIR-${default-home}/paksets}' \
             --add-flags "-set_basedir $out/share/simutrans"
+
+          mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}
+
+          cp ${src}/trunk/src/simutrans/simutrans.svg $out/share/icons/hicolor/scalable/apps/simutrans.svg
+          cp ${src}/trunk/src/linux/simutrans.desktop $out/share/applications/simutrans.desktop
         '';
 
       strip = false;
