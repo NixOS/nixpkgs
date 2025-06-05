@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A tool to temporarily manipulate the NixOS firewall";
+    description = "Tool to temporarily manipulate the NixOS firewall";
     license = licenses.mit;
     maintainers = with maintainers; [
       clerie

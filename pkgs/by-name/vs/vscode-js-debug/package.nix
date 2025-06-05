@@ -75,7 +75,7 @@ buildNpmPackage rec {
       '';
 
   meta = with lib; {
-    description = "A DAP-compatible JavaScript debugger";
+    description = "DAP-compatible JavaScript debugger";
     longDescription = ''
       This is a [DAP](https://microsoft.github.io/debug-adapter-protocol/)-based
       JavaScript debugger. It debugs Node.js, Chrome, Edge, WebView2, VS Code

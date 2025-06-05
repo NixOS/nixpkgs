@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   passthru.local-packages = { inherit atools marble; };
 
   meta = {
-    description = "A free flight planner, navigation tool, moving map, airport search and airport information system for Flight Simulator X, Microsoft Flight Simulator 2020, Prepar3D and X-Plane";
+    description = "Free flight planner, navigation tool, moving map, airport search and airport information system for Flight Simulator X, Microsoft Flight Simulator 2020, Prepar3D and X-Plane";
     homepage = "https://github.com/albar965/littlenavmap";
     changelog = "https://github.com/albar965/littlenavmap/blob/${src.rev}/CHANGELOG.txt";
     license = lib.licenses.gpl3Only;

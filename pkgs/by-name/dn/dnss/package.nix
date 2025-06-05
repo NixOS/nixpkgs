@@ -17,7 +17,7 @@ buildGoModule {
   vendorHash = "sha256-d9aGSBRblkvH5Ixw3jpbgC8lMW/qEYNJfLTVeUlos7A=";
 
   meta = with lib; {
-    description = "A daemon for using DNS over HTTPS";
+    description = "Daemon for using DNS over HTTPS";
     homepage = "https://blitiri.com.ar/git/r/dnss/";
     license = licenses.asl20;
     mainProgram = "dnss";
