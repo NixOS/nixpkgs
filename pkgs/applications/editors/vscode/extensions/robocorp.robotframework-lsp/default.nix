@@ -7,7 +7,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     name = "robotframework-lsp";
     publisher = "robocorp";
     version = "1.13.0";
-    hash = "";
+    hash = "sha256-3hyKKAMUy4kXGRWBQCL4adV1W6xtgS1OYhJJYSzswbo=";
   };
 
   meta = {
