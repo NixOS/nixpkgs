@@ -16,12 +16,12 @@
   curl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jenkins";
   version = "2.504.1";
 
   src = fetchurl {
-    url = "https://get.jenkins.io/war-stable/${version}/jenkins.war";
+    url = "https://get.jenkins.io/war-stable/${finalAttrs.version}/jenkins.war";
     hash = "sha256-gQJtsYsMSq1rYs9AjkxC5Xl2YbQcUXs332BiOOibnfE=";
   };
 
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
     cp "$src" "$out/webapps/jenkins.war"
 
     # Create the `jenkins-cli` command.
-    ${openjdk}/bin/jar -xf "$src" WEB-INF/lib/cli-${version}.jar \
-      && mv WEB-INF/lib/cli-${version}.jar "$out/share/jenkins-cli.jar"
+    ${openjdk}/bin/jar -xf "$src" WEB-INF/lib/cli-${finalAttrs.version}.jar \
+      && mv WEB-INF/lib/cli-${finalAttrs.version}.jar "$out/share/jenkins-cli.jar"
 
     makeWrapper "${openjdk}/bin/java" "$out/bin/jenkins-cli" \
       --add-flags "-jar $out/share/jenkins-cli.jar"
@@ -84,8 +84,8 @@ stdenv.mkDerivation rec {
       earldouglas
       nequissimus
     ];
-    changelog = "https://www.jenkins.io/changelog-stable/#v${version}";
+    changelog = "https://www.jenkins.io/changelog-stable/#v${finalAttrs.version}";
     mainProgram = "jenkins-cli";
     platforms = platforms.all;
   };
-}
+})
