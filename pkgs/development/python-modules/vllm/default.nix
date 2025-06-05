@@ -295,7 +295,7 @@ buildPythonPackage rec {
     lib.optionals cpuSupport [
       oneDNN
     ]
-    ++ lib.optionals (cpuSupport && stdenv.isLinux) [
+    ++ lib.optionals (cpuSupport && stdenv.hostPlatform.isLinux) [
       numactl
     ]
     ++ lib.optionals cudaSupport (

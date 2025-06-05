@@ -132,7 +132,7 @@ buildPythonPackage rec {
       "test_visit_webpage"
       "test_wikipedia_search"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Missing dependencies
       "test_get_mlx"
 
