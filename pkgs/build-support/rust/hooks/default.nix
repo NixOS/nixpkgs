@@ -113,10 +113,12 @@
               if pkgsTargetTarget.stdenv.targetPlatform.isStatic then "+" else "-"
             }crt-static" ]
           ''
-          + ''
-            [target."${stdenv.hostPlatform.rust.rustcTarget}"]
-            "linker" = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
-          '';
+          +
+            lib.optionalString (stdenv.hostPlatform.rust.rustcTarget != stdenv.targetPlatform.rust.rustcTarget)
+              ''
+                [target."${stdenv.hostPlatform.rust.rustcTarget}"]
+                "linker" = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
+              '';
       };
       passthru.tests =
         {
