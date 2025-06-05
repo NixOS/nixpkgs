@@ -1670,6 +1670,8 @@ let
 
         path_glob = callPackage ../development/ocaml-modules/path_glob { };
 
+        patricia-tree = callPackage ../development/ocaml-modules/patricia-tree { };
+
         pbkdf = callPackage ../development/ocaml-modules/pbkdf { };
 
         pbrt = callPackage ../development/ocaml-modules/pbrt { };
