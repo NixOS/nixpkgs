@@ -14,7 +14,6 @@ buildPythonPackage {
     pname
     version
     src
-    meta
     env
     ;
 
@@ -42,4 +41,9 @@ buildPythonPackage {
   '';
 
   enableParallelBuilding = true;
+
+  meta = base.meta // {
+    # Related issue: https://github.com/horizon-eda/horizon/issues/809
+    broken = true;
+  };
 }
