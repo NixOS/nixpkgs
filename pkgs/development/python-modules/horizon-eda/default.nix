@@ -15,7 +15,7 @@ buildPythonPackage {
     version
     src
     meta
-    CASROOT
+    env
     ;
 
   pyproject = false;
