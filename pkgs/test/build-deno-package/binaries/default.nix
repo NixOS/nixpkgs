@@ -1,10 +1,18 @@
 { nix-gitignore, buildDenoPackage }:
 {
-  linux = buildDenoPackage rec {
-    pname = "test-deno-build-binaries-${targetSystem}";
+  with-npm-linux = buildDenoPackage rec {
+    pname = "test-deno-build-binaries-with-npm-${targetSystem}";
     version = "0.1.0";
-    denoDepsHash = "sha256-oSCeCTujkOq3dRzQlMaKfcqishgAvI9+LYZx69PR48c=";
-    src = nix-gitignore.gitignoreSource [ ] ./.;
+    denoDepsHash = "sha256-qHnbucFuPassVF/OuL3/FKbgehXWEQ/WDbw5icxFUzI=";
+    src = nix-gitignore.gitignoreSource [ ] ./with-npm;
+    binaryEntrypointPath = "./main.ts";
+    targetSystem = "x86_64-linux";
+  };
+  without-npm-linux = buildDenoPackage rec {
+    pname = "test-deno-build-binaries-without-npm-${targetSystem}";
+    version = "0.1.0";
+    denoDepsHash = "sha256-keshKcgawVcuSGNYAIepUrRl7iqpp0ExRJag4aiV18c=";
+    src = nix-gitignore.gitignoreSource [ ] ./without-npm;
     binaryEntrypointPath = "./main.ts";
     targetSystem = "x86_64-linux";
   };
