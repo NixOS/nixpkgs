@@ -14,11 +14,13 @@
   lziprecover,
   lzop,
   p7zip,
+  partclone,
   sasquatch,
   sasquatch-v4be,
   simg2img,
   ubi_reader,
   unar,
+  upx,
   zstd,
   versionCheckHook,
 }:
@@ -37,13 +39,14 @@ let
     ubi_reader
     simg2img
     unar
+    upx
     zstd
     lz4
-  ];
+  ] ++ lib.optional stdenvNoCC.isLinux partclone;
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "unblob";
-  version = "25.4.14";
+  version = "25.5.26";
   pyproject = true;
   disabled = python3.pkgs.pythonOlder "3.9";
 
@@ -51,14 +54,14 @@ python3.pkgs.buildPythonApplication rec {
     owner = "onekey-sec";
     repo = "unblob";
     tag = version;
-    hash = "sha256-kWZGQX8uSKdFW+uauunHcruXhJ5XpBfyDY7gPyWGK90=";
+    hash = "sha256-vTakXZFAcD3cmd+y4CwYg3X4O4NmtOzuqMLWLMX2Duk=";
     forceFetchGit = true;
     fetchLFS = true;
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-lGsDax7+CUACeYChDqdPsVbKE/hH94CPek6UBVz1eqs=";
+    hash = "sha256-NirDPuAcKuNquMs9mBZoEkQf+QJ+cMd7JXjj1anB9Zw=";
   };
 
   strictDeps = true;
