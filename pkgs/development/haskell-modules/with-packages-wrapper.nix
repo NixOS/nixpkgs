@@ -160,7 +160,9 @@ else
           fi
 
           for d in $(grep -Poz "dynamic-library-dirs:\s*\K .+\n" $packageConfDir/*|awk '{print $2}'|sort -u); do
-            find "$d" -name '*.dylib' -exec ln -s {} "$dynamicLinksDir" \;
+            if [[ -d "$d" ]]; then
+              find "$d" -name '*.dylib' -exec ln -s {} "$dynamicLinksDir" \;
+            fi
           done
           for f in $packageConfDir/*.conf; do
             # Initially, $f is a symlink to a read-only file in one of the inputs
