@@ -28,6 +28,7 @@ let
 
   fetchzip' = defaults: args: fetchzip (defaults // args);
 
+  # it is okay if this is unused. keep it around for future use.
   fetch-svn-patch =
     {
       rev,
@@ -63,13 +64,13 @@ let
         --replace-fail "${repo}/trunk/" ""
     '';
 
-  version = "124.0";
+  version = "124.3.1";
 
   src = fetchsvn {
     url = "svn://servers.simutrans.org/simutrans";
     # The rev can be found in the forum thread for the release: https://forum.simutrans.com/index.php/board,3.0.html
-    rev = "11164";
-    hash = "sha256-+9dPnuy894qHzj7jNTfWC6Hl/QGKVgBCdmIAP9BKD+Q=";
+    rev = "11671";
+    hash = "sha256-Ya5R7Z7dZQtA5kURBNdRZD4v8gB3WpNK01jpZMEn5ss=";
   };
 
   # There are several sources of paksets.
@@ -126,14 +127,20 @@ let
           url = "https://github.com/Varkalandar/pak48.Excentrique/releases/download/v0.19_RC3/pak48.excentrique_v019rc3.zip";
           hash = "sha256-vlAMRP+gaKspDuEkrpRcc+UdL+5d3rX9uWIMowr1yw8=";
         };
+        "pak48.bitlit" = {
+          fetcher = fetchzip' { stripRoot = false; };
+          url = "https://codeberg.org/Nazalassa/pak48.bitlit/releases/download/0.1d/pak48.bitlit_0.1d.zip";
+          prefix = "/pak48.bitlit";
+          hash = "sha256-pk8aB5YZHFgJh5diaUUpp9hAoBJ5Y+T9wQSw25evnA0=";
+        };
 
         pak64 = {
           srcPath = [
-            "124-0"
-            "simupak64-124-0.zip"
+            "124-3"
+            "simupak64-124-3.zip"
           ];
           prefix = "/pak";
-          hash = "sha256-jnEjsHjABxq/cyNOTAgES7SxDKjLfEeNhXzh5tchDsU=";
+          hash = "sha256-mtxZ5i33O0gYbH4TRDqKGclRs0QnMuhws7Ic4bSGKac=";
         };
         "pak64.classic" = {
           basePath = "pakHAJO";
@@ -149,9 +156,9 @@ let
           hash = "sha256-pacX91SOCqIRRNr9yfroMJQX2Zw+S5sK/Wfz7lzUupQ=";
         };
         "pak64.german" = {
-          url = "https://simutrans-germany.com/pak.german/pak64.german_0-124-0-0-2_full.zip";
+          url = "https://simutrans-germany.com/pak.german/pak64.german_0-124-0-0-5_full.zip";
           prefix = "/pak64.german";
-          hash = "sha256-gNTM85/WcqnnLS/9j+IeN9KNyrRTVH+m7qkcRHeFmo4=";
+          hash = "sha256-maeevTsrSi8zwM44xo7kgVA1fqBBrqH0iM52wQDROc4=";
         };
         "pak64.ho-scale" = {
           url = "http://simutrans.bilkinfo.de/pak64.ho-scale-latest.tar.gz";
@@ -192,17 +199,17 @@ let
         "pak96.hd" = {
           basePath = "OldFiles";
           srcPath = [ "PakHD_v04B_100-0.zip" ];
-          prefix = "/simutrans/pakHD";
-          hash = "sha256-koiCoM4YyhOC5sr6PMkvZrjoR5/o/QIFfito92S3uW0=";
+          prefix = "/pakHD";
+          hash = "sha256-w2Yx4+embGf0AInTErA7Rna+oq0OxYFihrAWJ3GM1Eg=";
         };
 
         pak128 = {
           srcPath = [
-            "pak128 for ST 124up (2.9)"
-            "simupak128-2.9-for124.zip"
+            "pak128 for ST 124.3up (2.10.0)"
+            "simupak128-2-10-for124-3up.zip"
           ];
           prefix = "/pak128";
-          hash = "sha256-qjgnlIz7aQ73W7gFJpqBiE8BXabSrVgHwWVQotGwseE=";
+          hash = "sha256-MC1NR5vUMq+59Irxya9PXPh5kh0lpXhnuwKH7cA+jUM=";
         };
         "pak128.britain" = {
           srcPath = [
@@ -214,9 +221,8 @@ let
         };
         "pak128.cs" = {
           basePath = "Pak128.CS";
-          # This one is called "nightly builds" on the official site.
-          # It's referenced in the game version 124.0, and it was last updated in 2021.
-          # So, despite the name, it is compatible with the stable game (124.0 is from 2024)
+          # I'm not sure why this is in "nightly builds",
+          # but it's still referenced in 124.3.1, so it's gotta be compatible.
           srcPath = [
             "nightly builds"
             "pak128.CS-r2096.zip"
@@ -224,13 +230,9 @@ let
           hash = "sha256-vQ8HZqwICB3CUGQW8NwEWGVA3anUbCOdj3BEV3lLLpk=";
         };
         "pak128.german" = {
-          basePath = "PAK128.german";
-          srcPath = [
-            "PAK128.german_2.2_for_ST_124.0"
-            "PAK128.german_2.2_for_ST_124.0.zip"
-          ];
+          url = "https://pak128-german.de/PAK128.german_2.3_beta.zip";
           prefix = "/PAK128.german";
-          hash = "sha256-hs8R7+MKCdGR1ahgUg6tggrMTejDexSgPFLieerTqMg=";
+          hash = "sha256-anWImSrS5ayjYzqVV7MY2VZ4dD/jLkhaavcZaufre+k=";
         };
         "pak128.japan" = {
           fetcher = fetchcab;
@@ -240,16 +242,13 @@ let
         };
 
         "pak144.excentrique" = {
-          # 124.0 ships a nightly tag of this pakset. We're using a permanent tag.
-          # Upstream has been notified, and it has been fixed in their development branch.
-          # The only consequence will be that the in-game downloader will break for this pakset.
           url = "https://github.com/Varkalandar/pak144.Excentrique/releases/download/r0.08/pak144.Excentrique_v008.zip";
           hash = "sha256-Iqe6enB3AD8BgaLshwTHjv61xfp9OMaoLwkfDakr53I=";
         };
 
         "pak192.comic" = {
-          url = "https://github.com/Flemmbrav/Pak192.Comic/releases/download/V0.7.1/pak192.comic-serverset.zip";
-          hash = "sha256-T3FdreBWA76wGdPSSF0G0YWQoPsmancJe2Nl7akFBz0=";
+          url = "https://github.com/Flemmbrav/Pak192.Comic/releases/download/V0.7.2/pak192.comic-serverset.zip";
+          hash = "sha256-SnuB39iUIJLO9wWK7gT/OQTH0oV7rjp8bUOvZx9+rkQ=";
         };
       };
 
@@ -349,46 +348,20 @@ let
 
     sourceRoot = "simutrans-r${src.rev}/trunk";
 
-    # We're building from the stable revision, but we still need to apply some patches.
-    # These patches are all merged upstream. Generate them with `svn diff -r ${x-1}:${x}`.
-    # Modified by hand to be prefixed with `a/` and `b/` and exclude the svn "Index:" line.
-    # We're *not* building a newer revision because multiplayer compatibility depends on the revision number.
+    # We always build from the stable revision, but we may need to apply some patches.
+    #
+    # Use `fetch-svn-patch` to get the patches if they are merged upstream.
+    #
+    #     fetch-svn-patch {
+    #       rev = 11174; # or whatever revision we need
+    #       hash = lib.fakeHash; # replace with the actual hash
+    #     }
+    #
+    # And if they aren't merged upstream, fetch them from wherever else or vendor next to this file.
+    #
+    # We do *not* ever build a newer revision, because multiplayer compatibility depends on the revision number.
     patches = [
-      # The Makefile contains a typo.
-      # We need this to build.
-      (fetch-svn-patch {
-        rev = 11174;
-        hash = "sha256-6qZGxB2zXgTyKhAYYk/vaLW/waMb/chPZjlA1HYoj2M=";
-      })
-      # The implementation of check_and_set_dir() is broken (rejects all user and install directories).
-      # We depend on this function to set the user and install directories.
-      (fetch-svn-patch {
-        rev = 11175;
-        hash = "sha256-tZz8ztYa0NVkAmLwUxRZdq4tPw5GCe9A4PI3p+cuLms=";
-      })
-      # r11175 contains a use-after-free when validating the base directory.
-      # I don't think it's exploitable on NixOS, but we should fix it anyway.
-      (fetch-svn-patch {
-        rev = 11178;
-        hash = "sha256-kymcjo9rW1yFfYP/5tojCgpRAiqt7NYUJPb5w6937kE=";
-      })
-      # The fixed implementation of check_and_set_dir() still has a bug where it doesn't allow nonexistent directories.
-      # We need this so that the overridden directories can be created on startup.
-      # That can be worked around with `mkdir` in the wrapper but it's better to fix at the source.
-      (fetch-svn-patch {
-        rev = 11204;
-        hash = "sha256-iDAeOzlGhUS6kHJGaMtG2Jfq6jgIWpNRqx1ddHiBg/A=";
-      })
-      # This is a part of r11273, but not the full patch, since the same revision contains changes unrelated to UPNP.
-      # It's necessary because miniupnpc had breaking changes.
-      # See also:
-      # - https://github.com/NixOS/nixpkgs/pull/325273
-      # - https://github.com/miniupnp/miniupnp/issues/758
-      # - https://github.com/NixOS/nixpkgs/pull/326402
-      # Additionally, the patch does not apply cleanly as-is due to whitespace differences.
-      # So, this patch has first been applied `patch -p1 --ignore-whitespace < miniupnpc.patch`.
-      # Then, i took the `diff --unified` of the result and got a visually identical patch.
-      ./miniupnpc.patch
+      # currently, no patches are needed.
     ];
 
     nativeBuildInputs = [ pkg-config ];
