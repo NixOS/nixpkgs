@@ -124,6 +124,10 @@
                 find -L ./node_modules -name 'node_analysis_cache_v2' -type f | xargs rm -f
                 find -L ./node_modules -name v8_code_cache_v2 -type f | xargs rm -f
                 rm -f ./node_modules/.deno/.deno.lock.poll
+
+                # sometimes a .deno dir is slipped into a node_modules package
+                # it's unclear why. but it can just be deleted
+                rm -rf ./node_modules/*/.deno/
               fi
 
               rm -f "$DENO_DIR"/dep_analysis_cache_v2-shm
