@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
@@ -21,11 +22,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-21tb45F66yR5rquWML22EAPsExOkmas6Yquq9vEmhdk=";
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     pkg-config
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     fontconfig
   ];
 
