@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "certbot-dns-inwx";
-  version = "3.0.1";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oGGy990";
     repo = "certbot-dns-inwx";
     tag = "v${version}";
-    hash = "sha256-9dDSJcXlPq065CloaszwutUXsGn+Y9fIeTiGmiXGonY=";
+    hash = "sha256-x4wDg36J9MvXXHBxUMCoHO3p6c3FKBBB879CpxG/1NA=";
   };
 
   build-system = [ setuptools ];
