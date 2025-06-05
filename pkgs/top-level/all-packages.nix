@@ -9255,7 +9255,7 @@ with pkgs;
 
   libressl = libressl_4_0;
 
-  openssl = openssl_3_4;
+  openssl = openssl_3_5;
 
   openssl_legacy = openssl.override {
     conf = ../development/libraries/openssl/3.0/legacy.cnf;
@@ -9264,7 +9264,7 @@ with pkgs;
   inherit (callPackages ../development/libraries/openssl { })
     openssl_1_1
     openssl_3
-    openssl_3_4
+    openssl_3_5
     ;
 
   openwebrx = callPackage ../applications/radio/openwebrx {
