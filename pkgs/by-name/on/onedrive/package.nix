@@ -62,12 +62,15 @@ stdenv.mkDerivation (finalAttrs: {
   # we could also pass --enable-completions to configure but we would then have to
   # figure out the paths manually and pass those along.
   postInstall = ''
-    installShellCompletion --bash --name onedrive contrib/completions/complete.bash
-    installShellCompletion --fish --name onedrive contrib/completions/complete.fish
-    installShellCompletion --zsh --name _onedrive contrib/completions/complete.zsh
+    installShellCompletion --cmd onedrive \
+      --bash contrib/completions/complete.bash \
+      --fish contrib/completions/complete.fish \
+      --zsh contrib/completions/complete.zsh
 
-    substituteInPlace $out/lib/systemd/user/onedrive.service --replace-fail "/usr/bin/sleep" "${coreutils}/bin/sleep"
-    substituteInPlace $out/lib/systemd/system/onedrive@.service --replace-fail "/usr/bin/sleep" "${coreutils}/bin/sleep"
+    for s in $out/lib/systemd/user/onedrive.service $out/lib/systemd/system/onedrive@.service; do
+      substituteInPlace $s \
+        --replace-fail "/usr/bin/sleep" "${coreutils}/bin/sleep"
+    done
   '';
 
   passthru = {
