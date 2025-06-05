@@ -106,7 +106,7 @@ in
           lib.reverseList
         ];
 
-        # lib.getMan is insufficient to replicate the behaviour of pkgs.buildEnv:
+        # lib.getOutput is insufficient to replicate the behaviour of pkgs.buildEnv:
         #  - lib.getMan pkgs.libressl.nc => pkgs.libressl.nc
         #  - while pkgs.buildEnv with paths= [ pkgs.libressl.nc ] and extraOutputsToInstall = [ "man" ]
         #    will include the output of pkgs.libressl.nc.man
