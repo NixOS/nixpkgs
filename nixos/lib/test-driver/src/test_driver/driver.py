@@ -39,15 +39,15 @@ def get_tmp_dir() -> Path:
     Raises an exception in case the retrieved temporary directory is not writeable
     See https://docs.python.org/3/library/tempfile.html#tempfile.gettempdir
     """
-    tmp_dir = Path(tempfile.gettempdir())
+    tmp_dir = Path(os.environ.get("XDG_RUNTIME_DIR", tempfile.gettempdir()))
     tmp_dir.mkdir(mode=0o700, exist_ok=True)
     if not tmp_dir.is_dir():
         raise NotADirectoryError(
-            f"The directory defined by TMPDIR, TEMP, TMP or CWD: {tmp_dir} is not a directory"
+            f"The directory defined by XDG_RUNTIME_DIR, TMPDIR, TEMP, TMP or CWD: {tmp_dir} is not a directory"
         )
     if not os.access(tmp_dir, os.W_OK):
         raise PermissionError(
-            f"The directory defined by TMPDIR, TEMP, TMP, or CWD: {tmp_dir} is not writeable"
+            f"The directory defined by XDG_RUNTIME_DIR, TMPDIR, TEMP, TMP, or CWD: {tmp_dir} is not writeable"
         )
     return tmp_dir
 
