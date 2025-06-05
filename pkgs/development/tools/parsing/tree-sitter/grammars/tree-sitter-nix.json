@@ -1,12 +1,13 @@
 {
   "url": "https://github.com/cstrahan/tree-sitter-nix",
-  "rev": "b3a88cf3e597d48c33657deca4fda7a75c0069c1",
-  "date": "2025-01-31T17:04:23Z",
-  "path": "/nix/store/lvw6n2174vjd5g7jmylpk84040gpsyj6-tree-sitter-nix",
-  "sha256": "16gkm286jvkv7kygs6ap9h06dvp96akahjdvqrdjzzp1vlsqlf5s",
-  "hash": "sha256-ujiKNd3h/i9bxrtJqKYy6e5mAExXGf38PHtuaZCo85k=",
+  "rev": "cfc53fd287d23ab7281440a8526c73542984669b",
+  "date": "2025-03-10T21:49:48Z",
+  "path": "/nix/store/aqzm346ck43x74b409jiikbbxqchgyr1-tree-sitter-nix",
+  "sha256": "0bmalpgvfcz1zd72wq43r5qvhj3dqqp7zn9kfb6bs0valrxagaks",
+  "hash": "sha256-eqqneqZqA73McjPZfy7GbUi4ccmDYC5O++Ezt9+lqi4=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
+  "fetchTags": false,
   "leaveDotGit": false
 }
