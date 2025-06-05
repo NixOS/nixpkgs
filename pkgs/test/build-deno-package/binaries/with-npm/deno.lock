@@ -1,5 +1,5 @@
 {
-  "version": "4",
+  "version": "5",
   "specifiers": {
     "jsr:@luca/cases@1.0.0": "1.0.0",
     "jsr:@std/cli@1.0.17": "1.0.17",
@@ -53,7 +53,8 @@
         "string-width@2.1.1",
         "strip-final-newline",
         "yargs"
-      ]
+      ],
+      "bin": true
     },
     "decamelize@1.2.0": {
       "integrity": "sha512-z2S+W9X73hAUUki+N+9Za2lBlun89zigOyGrsax+KUQ6wKW4ZoWpEYBkGhQjwAjjDCkWxhY0VKEhk8wzY7F5cA=="
@@ -180,9 +181,6 @@
         "yargs-parser"
       ]
     }
-  },
-  "redirects": {
-    "https://deno.land/x/case/mod.ts": "https://deno.land/x/case@2.2.0/mod.ts"
   },
   "remote": {
     "https://deno.land/x/case@2.2.0/camelCase.ts": "b9a4cf361a7c9740ecb75e00b5e2c006bd4e5d40e442d26c5f2760286fa66796",
