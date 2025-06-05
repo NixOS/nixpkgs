@@ -1768,6 +1768,8 @@ let
 
         pratter = callPackage ../development/ocaml-modules/pratter { };
 
+        prelude = callPackage ../development/ocaml-modules/prelude { };
+
         prettym = callPackage ../development/ocaml-modules/prettym { };
 
         printbox = callPackage ../development/ocaml-modules/printbox { };
