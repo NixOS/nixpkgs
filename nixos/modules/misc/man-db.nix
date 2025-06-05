@@ -37,10 +37,13 @@ let
         fi
       '';
 
-  # reverse sort on priority so that man pages from higher priority packages are processed last
-  paths = lib.reverseList (
-    lib.sortProperties (lib.subtractLists cfg.skipPackages config.environment.systemPackages)
-  );
+  paths = lib.pipe config.environment.systemPackages [
+    (lib.subtractLists cfg.skipPackages)
+
+    # reverse sort on priority so that man pages from higher priority packages are processed last
+    lib.sortProperties
+    lib.reverseList
+  ];
 
   # lib.getMan is insufficient to replicate the behaviour of pkgs.buildEnv:
   #  - lib.getMan pkgs.libressl.nc => pkgs.libressl.nc
@@ -56,7 +59,10 @@ let
     pkgs.runCommand "merged-system-man-db"
       {
         # TODO: use cfg.manualPages
-        packages = builtins.map generateMandb (lib.unique (paths ++ pathsMan ++ pathsDevman));
+        packages = lib.pipe (paths ++ pathsMan ++ pathsDevman) [
+          lib.unique
+          (builtins.map generateMandb)
+        ];
         nativeBuildInputs = [
           pkgs.findutils
           pkgs.gdbm
