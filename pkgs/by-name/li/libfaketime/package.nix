@@ -6,6 +6,12 @@
   perl,
   coreutils,
 }:
+let
+  hashes = {
+    "0.9.10" = "sha256-DYRuQmIhQu0CNEboBAtHOr/NnWxoXecuPMSR/UQ/VIQ=";
+    "0.9.11" = "sha256-a0TjHYzwbkRQyvr9Sj/DqjgLBnE1Z8kjsTQxTfGqLjE=";
+  };
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libfaketime";
@@ -16,12 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "wolfcw";
     repo = "libfaketime";
-    rev = "v${finalAttrs.version}";
-    sha256 =
-      if stdenv.hostPlatform.isDarwin then
-        "sha256-DYRuQmIhQu0CNEboBAtHOr/NnWxoXecuPMSR/UQ/VIQ="
-      else
-        "sha256-a0TjHYzwbkRQyvr9Sj/DqjgLBnE1Z8kjsTQxTfGqLjE=";
+    tag = "v${finalAttrs.version}";
+    hash = hashes.${finalAttrs.version};
   };
 
   patches =
