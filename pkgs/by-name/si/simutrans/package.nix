@@ -311,21 +311,23 @@ let
       # Prior to version 124.0, none of this was applicable. The game only ever used ~/simutrans and $PWD.
       # The previous versions of this package in nixpkgs would patch the game to use ~/.simutrans instead.
       #
-      # For backwards compatibility, it is desirable to default to ~/.simutrans still, but still use $XDG_DATA_HOME/simutrans.
-      # That is what ${default-home} is for.
-      # It will be set to $XDG_DATA_HOME/simutrans if $XDG_DATA_HOME is non-empty, otherwise it will be set to ~/.simutrans.
-      # That's, again, not following the XDG basedir spec. It should be "${XDG_DATA_HOME:-$HOME/.local/share}/simutrans".
+      # For backwards compatibility, it is desirable to default to ~/.simutrans still, if it already exists,
+      # but prefer using $XDG_DATA_HOME/simutrans in all other cases. That is what `default-home` is for.
+      # It will be set to ~/.simutrans if and only if it exists, otherwise it will be set to "${XDG_DATA_HOME:-$HOME/.local/share}/simutrans".
+      # That is, we intentionally follow the XDG basedir spec, and **override the default behaviour of the executable here**,
+      # which, again, wouldn't normally follow the XDG basedir spec. It normally wants "${XDG_DATA_HOME:-$HOME}/simutrans" (which we override)
       #
       # Then, we use it to set defaults for SIMUTRANS_USERDIR and SIMUTRANS_INSTALLDIR.
       # These should be '--set-default's, but wrapProgram will only accept literal strings here.
       # We're reading from the environment, so we use --run instead.
+      #
       # A user can overwrite these values:
       # - Setting SIMUTRANS_USERDIR and SIMUTRANS_INSTALLDIR in the environment will take priority over these defaults.
       # - Setting SIMUTRANS_USERDIR and SIMUTRANS_INSTALLDIR to empty strings will disable them.
       # - Passing '-set_userdir' and '-set_installdir' to the game will take priority over the environment variables.
       postBuild =
         let
-          default-home = ''$(if [ -n "$XDG_DATA_HOME" ]; then echo "$XDG_DATA_HOME/simutrans"; else echo "$HOME/.simutrans"; fi)'';
+          default-home = ''$(if [ -d "$HOME/.simutrans" ]; then echo "$HOME/.simutrans"; else echo "''${XDG_DATA_HOME:-$HOME/.local/share}/simutrans"; fi)'';
         in
         ''
           wrapProgram $out/bin/simutrans \
