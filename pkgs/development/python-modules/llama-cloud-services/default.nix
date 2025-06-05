@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "llama-cloud-services";
-  version = "0.6.23";
+  version = "0.6.25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "run-llama";
     repo = "llama_cloud_services";
     tag = "v${version}";
-    hash = "sha256-G1qjm7GpSZDgGWys+toXiQoRJHIQUcwG6+0JK8k3XfE=";
+    hash = "sha256-rdMlQRLmqu7L4CO/taJDrKnHwmlu6f6QoR95DXe4s68=";
   };
 
   pythonRelaxDeps = [ "llama-cloud" ];
