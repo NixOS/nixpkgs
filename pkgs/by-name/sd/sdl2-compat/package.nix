@@ -17,7 +17,11 @@
   libX11,
   libGL,
 }:
-
+let
+  # tray support on sdl3 pulls in gtk3, which is quite an expensive dependency.
+  # sdl2 does not support the tray, so we can just disable that requirement.
+  sdl3' = sdl3.override { traySupport = false; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl2-compat";
   version = "2.32.56";
@@ -35,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    sdl3
+    sdl3'
     libX11
   ];
 
@@ -53,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "SDL2COMPAT_TESTS" finalAttrs.finalPackage.doCheck)
-    (lib.cmakeFeature "CMAKE_INSTALL_RPATH" (lib.makeLibraryPath [ sdl3 ]))
+    (lib.cmakeFeature "CMAKE_INSTALL_RPATH" (lib.makeLibraryPath [ sdl3' ]))
   ];
 
   # skip timing-based tests as those are flaky
