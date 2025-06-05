@@ -747,6 +747,8 @@ let
 
         hashcons = callPackage ../development/ocaml-modules/hashcons { };
 
+        hc = callPackage ../development/ocaml-modules/hc { };
+
         hex = callPackage ../development/ocaml-modules/hex { };
 
         hidapi = callPackage ../development/ocaml-modules/hidapi { };
