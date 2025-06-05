@@ -10,15 +10,15 @@
 
 stdenv.mkDerivation {
   pname = "bc-soci";
-  version = "linphone-4.4.1";
+  version = "linphone-5.2.6";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     group = "BC";
     owner = "public/external";
     repo = "soci";
-    rev = "bc8ce0c5628dd48eca6ef5ce0a0a2f52547d88b6";
-    sha256 = "sha256-qo26aYp/G2C6UkGA1qkHQwTKD5go7TQ9JWxb9xtbe6M=";
+    rev = "d26d42eae02051ccbc53e8684cbc8b5aeb6cea13";
+    sha256 = "sha256-L40HxTmYIM7eAtD4/8Ag8EddKorOcUUtTRywxpQKpcE=";
   };
 
   patches = [
