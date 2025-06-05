@@ -41,9 +41,15 @@ let
   paths = lib.reverseList (
     lib.sortProperties (lib.subtractLists cfg.skipPackages config.environment.systemPackages)
   );
-  pathsMan = builtins.map lib.getMan paths;
+
+  # lib.getMan is insufficient to replicate the behaviour of pkgs.buildEnv:
+  #  - lib.getMan pkgs.libressl.nc => pkgs.libressl.nc
+  #  - while pkgs.buildEnv with paths = [ pkgs.libressl.nc ] and extraOutputsToInstall = [ "man" ]
+  #    will include the output of pkgs.libressl.nc.man
+  pathsMan = builtins.map (p: if p ? man then p.man else p) paths;
+
   pathsDevman = lib.optionals config.documentation.dev.enable (
-    builtins.map (lib.getOutput "devman") paths
+    builtins.map (p: if p ? devman then p.devman else p) paths
   );
 
   mergedMandb =
