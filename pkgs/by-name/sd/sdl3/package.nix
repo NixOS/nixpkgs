@@ -46,6 +46,7 @@
   libudevSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   sndioSupport ? false,
   testSupport ? true,
+  traySupport ? true,
   waylandSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   x11Support ? !stdenv.hostPlatform.isAndroid && !stdenv.hostPlatform.isWindows,
 }:
@@ -121,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
       libusb1
     ]
     ++ lib.optional (
-      stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isDarwin
+      stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isDarwin && traySupport
     ) libayatana-appindicator
     ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional dbusSupport dbus
@@ -168,6 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SDL_PULSEAUDIO" pulseaudioSupport)
     (lib.cmakeBool "SDL_SNDIO" sndioSupport)
     (lib.cmakeBool "SDL_TEST_LIBRARY" testSupport)
+    (lib.cmakeBool "SDL_TRAY_DUMMY" (!traySupport))
     (lib.cmakeBool "SDL_WAYLAND" waylandSupport)
     (lib.cmakeBool "SDL_WAYLAND_LIBDECOR" libdecorSupport)
     (lib.cmakeBool "SDL_X11" x11Support)
