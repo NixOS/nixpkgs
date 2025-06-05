@@ -1198,6 +1198,10 @@ The locations currently used are:
 - `/etc/ssl/certs/ca-certificates.crt`
 - `/etc/pki/tls/certs/ca-bundle.crt`
 
+### nixConf {#sssec-pkgs-dockerTools-helpers-nixConf}
+
+Helper to bootstrap /etc/nix/nix.conf based on nix language expression.
+
 []{#ssec-pkgs-dockerTools-fakeNss}
 ### fakeNss {#sssec-pkgs-dockerTools-helpers-fakeNss}
 
