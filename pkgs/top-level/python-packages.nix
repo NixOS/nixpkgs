@@ -13231,6 +13231,8 @@ self: super: with self; {
 
   pyprobables = callPackage ../development/python-modules/pyprobables { };
 
+  pyprobeplus = callPackage ../development/python-modules/pyprobeplus { };
+
   pyprof2calltree = callPackage ../development/python-modules/pyprof2calltree { };
 
   pyproj = callPackage ../development/python-modules/pyproj { };
