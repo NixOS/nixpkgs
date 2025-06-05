@@ -4,7 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  git,
+  gitMinimal,
   gnupg,
   openssh,
   buildPackages,
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    git
+    gitMinimal
     gnupg
     openssh
   ];
