@@ -169,7 +169,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An all-round MQTT client that provides a structured topic overview";
+    description = "All-round MQTT client that provides a structured topic overview";
     homepage = "https://github.com/thomasnordquist/MQTT-Explorer";
     changelog = "https://github.com/thomasnordquist/MQTT-Explorer/releases/tag/v${version}";
     license = licenses.cc-by-nd-40;

@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "A small utility to help with kanidm provisioning";
+    description = "Small utility to help with kanidm provisioning";
     homepage = "https://github.com/oddlama/kanidm-provision";
     license = with lib.licenses; [
       asl20

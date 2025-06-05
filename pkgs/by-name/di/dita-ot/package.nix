@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://dita-ot.org";
     changelog = "https://www.dita-ot.org/dev/release-notes/#v${finalAttrs.version}";
-    description = "The open-source publishing engine for content authored in the Darwin Information Typing Architecture";
+    description = "Open-source publishing engine for content authored in the Darwin Information Typing Architecture";
     license = lib.licenses.asl20;
     mainProgram = "dita";
     platforms = openjdk17.meta.platforms;

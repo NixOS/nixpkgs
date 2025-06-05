@@ -23,7 +23,7 @@ buildGoModule rec {
   ];
 
   meta = {
-    description = "A command-line tool to perform Local Health Check Probes inside Container Images (ECS, Docker)";
+    description = "Command-line tool to perform Local Health Check Probes inside Container Images (ECS, Docker)";
     homepage = "https://github.com/fivexl/lprobe";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
