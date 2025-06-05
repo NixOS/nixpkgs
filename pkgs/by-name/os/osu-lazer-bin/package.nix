@@ -55,7 +55,7 @@ let
 
   passthru.updateScript = ./update.sh;
 in
-if stdenvNoCC.isDarwin then
+if stdenvNoCC.hostPlatform.isDarwin then
   stdenvNoCC.mkDerivation {
     inherit
       pname

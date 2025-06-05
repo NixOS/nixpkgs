@@ -569,7 +569,7 @@ import ../make-test-python.nix (
             shutdown_queue.task_done()
         threading.Thread(target=shutdown_worker, daemon=True).start()
 
-        ${pkgs.lib.optionalString pkgs.stdenv.isx86_64 ''
+        ${pkgs.lib.optionalString pkgs.stdenv.hostPlatform.isx86_64 ''
           # Only run the MySQL tests on x86_64 so we don't have to debug MySQL ARM issues.
           run_mattermost_tests(
             shutdown_queue,
