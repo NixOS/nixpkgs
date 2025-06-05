@@ -445,7 +445,10 @@ let
         artistic1
         gpl1Plus
       ];
-      maintainers = with lib.maintainers; [ sodiboo ];
+      maintainers = with lib.maintainers; [
+        sodiboo
+        Makuru
+      ];
       platforms = lib.platforms.linux; # TODO: ++ darwin;
     };
   };
