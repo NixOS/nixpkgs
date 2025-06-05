@@ -51,17 +51,20 @@ let
     pkgs.runCommand "merged-system-man-db"
       {
         # TODO: use cfg.manualPages
-        dbs = builtins.map generateMandb (lib.unique (paths ++ pathsMan ++ pathsDevman));
+        packages = builtins.map generateMandb (lib.unique (paths ++ pathsMan ++ pathsDevman));
         nativeBuildInputs = [
           pkgs.findutils
           pkgs.gdbm
         ];
       }
       ''
-        for dir in $dbs; do
-          for db in $(find $dir -type f -name index.db -printf '%P\n'); do
+        # don't fail if there are no man pages
+        mkdir -p $out
+
+        for in in $packages; do
+          find "$in" -type f -name index.db -printf '%P\n' | while IFS="" read -r db; do
             mkdir -p "$out/$(dirname $db)"
-            gdbm_dump "$dir/$db" | gdbm_load --update --replace --no-meta - "$out/$db"
+            gdbm_dump "$in/$db" | gdbm_load --update --replace --no-meta - "$out/$db"
           done
         done
       '';
