@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mlib";
-  version = "0.7.4";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "P-p-H-d";
     repo = "mlib";
     rev = "V${version}";
-    hash = "sha256-yP0oTlUJPllhmSLz0i3t3tIZhSnzwPJD6kzoFnEtrLM=";
+    hash = "sha256-l91UGIxCd6868F21jHTEQd6CgKtuUigxgZJTTnuVPwo=";
   };
 
   makeFlags = [

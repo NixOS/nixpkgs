@@ -4,21 +4,22 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "watchexec";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "watchexec";
     repo = "watchexec";
-    rev = "v${version}";
-    hash = "sha256-ldxB1/WgOe1uGfKXkMEtGHIlWiKJgnZz6j/7eCOGD8s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BJRvz3rFLaOCNhOsEo0rSOgB9BCJ2LMB9XEw8RBWXXs=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-LdjJlf4HPN+kZOQKPNSdbYApGBD4Z6tKV9Y0FFKpAf0=";
+  cargoHash = "sha256-VtSRC4lyjMo2O9dNbVllcDEx08zQWJMQmQ/2bNMup6U=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -35,14 +36,22 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     installManPage doc/watchexec.1
-    installShellCompletion --zsh --name _watchexec completions/zsh
+    installShellCompletion --cmd watchexec \
+      --bash completions/bash \
+      --fish completions/fish \
+      --zsh completions/zsh
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Executes commands in response to file modifications";
     homepage = "https://watchexec.github.io/";
-    license = with licenses; [ asl20 ];
-    maintainers = [ maintainers.michalrus ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [
+      michalrus
+      prince213
+    ];
     mainProgram = "watchexec";
   };
-}
+})

@@ -56,7 +56,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     # Each component release requests the exact latest langchain and -core.
-    # That prevents us from updating individul components.
+    # That prevents us from updating individual components.
     "langchain"
     "langchain-core"
     "numpy"

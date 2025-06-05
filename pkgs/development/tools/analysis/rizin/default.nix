@@ -29,11 +29,11 @@
 let
   rizin = stdenv.mkDerivation rec {
     pname = "rizin";
-    version = "0.7.4";
+    version = "0.8.1";
 
     src = fetchurl {
       url = "https://github.com/rizinorg/rizin/releases/download/v${version}/rizin-src-v${version}.tar.xz";
-      hash = "sha256-9xGJEOXchDw4uqPgCzDsAZoc3VwTK6K8Fs8MdJdjEgE=";
+      hash = "sha256-7yseZSXX3DasQ1JblWdJwcyge/F8H+2LZkAtggEKTsI=";
     };
 
     mesonFlags = [
@@ -60,10 +60,6 @@ let
       # caching it. This patch replaces the entire logic to only look at
       # the env var NIX_RZ_PREFIX
       ./librz-wrapper-support.patch
-
-      ./0001-fix-compilation-with-clang.patch
-      # Can be dropped when upstream fixes this: https://github.com/NixOS/nixpkgs/issues/300056
-      ./0002-disable-pcre2-jit.patch
     ];
 
     nativeBuildInputs = [

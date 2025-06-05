@@ -22,6 +22,8 @@
 
   obs-advanced-masks = callPackage ./obs-advanced-masks.nix { };
 
+  obs-aitum-multistream = qt6Packages.callPackage ./obs-aitum-multistream.nix { };
+
   obs-backgroundremoval = callPackage ./obs-backgroundremoval { };
 
   obs-color-monitor = qt6Packages.callPackage ./obs-color-monitor.nix { };
@@ -29,6 +31,8 @@
   obs-command-source = callPackage ./obs-command-source.nix { };
 
   obs-composite-blur = callPackage ./obs-composite-blur.nix { };
+
+  obs-dir-watch-media = callPackage ./obs-dir-watch-media.nix { };
 
   obs-dvd-screensaver = callPackage ./obs-dvd-screensaver.nix { };
 
@@ -41,6 +45,8 @@
   obs-hyperion = qt6Packages.callPackage ./obs-hyperion/default.nix { };
 
   obs-livesplit-one = callPackage ./obs-livesplit-one { };
+
+  obs-markdown = callPackage ./obs-markdown.nix { };
 
   obs-media-controls = qt6Packages.callPackage ./obs-media-controls.nix { };
 
@@ -61,6 +67,8 @@
   obs-recursion-effect = callPackage ./obs-recursion-effect.nix { };
 
   obs-replay-source = qt6Packages.callPackage ./obs-replay-source.nix { };
+
+  obs-retro-effects = callPackage ./obs-retro-effects.nix { };
 
   obs-rgb-levels = callPackage ./obs-rgb-levels.nix { };
 

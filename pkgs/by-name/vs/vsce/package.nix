@@ -12,13 +12,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "vsce";
-  version = "3.4.1";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode-vsce";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ufSEKkLqP+D/D5l5teL82RsoVgIFhbyOVjnZfnecsKI=";
+    hash = "sha256-T3uboozO4YRA8qqu833pIFt4yzIYRBZQdm8nawEZo2s=";
   };
 
   npmDepsHash = "sha256-J7ES/a6RHeTY1grdzgYu9ex7BOzadqng2/h2LlTZLns=";

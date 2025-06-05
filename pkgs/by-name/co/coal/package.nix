@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   postFixup = ''
     moveToOutput share/ament_index "$dev"
-    moveToOutput share/${finalAttrs.pname} "$dev"
+    moveToOutput share/coal "$dev"
   '';
 
   meta = {

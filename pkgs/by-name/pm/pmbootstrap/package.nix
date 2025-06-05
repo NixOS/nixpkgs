@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pmbootstrap";
-  version = "3.4.0";
+  version = "3.4.2";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "postmarketOS";
     repo = "pmbootstrap";
     tag = version;
-    hash = "sha256-vNa0MMU5NHO8RjgfKxNjhQDKQ2Rd/ZGU0HndOD2Sypo=";
+    hash = "sha256-5N8yAd/1gSzHP2wXpqZb+LpylQ/LYspJ+YaY2YaWCSs=";
     domain = "gitlab.postmarketos.org";
   };
 
@@ -80,7 +80,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "Sophisticated chroot/build/flash tool to develop and install postmarketOS";
-    homepage = "https://gitlab.com/postmarketOS/pmbootstrap";
+    homepage = "https://gitlab.postmarketos.org/postmarketOS/pmbootstrap";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       onny

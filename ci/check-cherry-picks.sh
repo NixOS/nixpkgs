@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
 # Find alleged cherry-picks
 
-set -eo pipefail
+set -euo pipefail
 
-if [ $# != "2" ] ; then
-  echo "usage: check-cherry-picks.sh base_rev head_rev"
+if [[ $# != "2" && $# != "3" ]] ; then
+  echo "usage: check-cherry-picks.sh base_rev head_rev [markdown_file]"
   exit 2
 fi
+
+markdown_file="$(realpath ${3:-/dev/null})"
+[ -v 3 ] && rm -f "$markdown_file"
 
 # Make sure we are inside the nixpkgs repo, even when called from outside
 cd "$(dirname "${BASH_SOURCE[0]}")"
@@ -19,11 +22,43 @@ remote="$(git remote -v | grep -i 'NixOS/nixpkgs' | head -n1 | cut -f1 || true)"
 
 commits="$(git rev-list --reverse "$1..$2")"
 
-while read -r new_commit_sha ; do
-  if [ -z "$new_commit_sha" ] ; then
-    continue  # skip empty lines
+log() {
+  type="$1"
+  shift 1
+
+  local -A prefix
+  prefix[success]="  ✔ "
+  if [ -v GITHUB_ACTIONS ]; then
+    prefix[warning]="::warning::"
+    prefix[error]="::error::"
+  else
+    prefix[warning]="  ⚠ "
+    prefix[error]="  ✘ "
   fi
-  if [ "$GITHUB_ACTIONS" = 'true' ] ; then
+
+  echo "${prefix[$type]}$@"
+
+  # Only logging errors and warnings, which allows comparing the markdown file
+  # between pushes to the PR. Even if a new, proper cherry-pick, commit is added
+  # it won't change the markdown file's content and thus not trigger another comment.
+  if [ "$type" != "success" ]; then
+    local -A alert
+    alert[warning]="WARNING"
+    alert[error]="CAUTION"
+    echo >> $markdown_file
+    echo "> [!${alert[$type]}]" >> $markdown_file
+    echo "> $@" >> $markdown_file
+  fi
+}
+
+endgroup() {
+  if [ -v GITHUB_ACTIONS ] ; then
+    echo ::endgroup::
+  fi
+}
+
+while read -r new_commit_sha ; do
+  if [ -v GITHUB_ACTIONS ] ; then
     echo "::group::Commit $new_commit_sha"
   else
     echo "================================================="
@@ -37,15 +72,8 @@ while read -r new_commit_sha ; do
     | grep -Eoi -m1 '[0-9a-f]{40}' || true
   )
   if [ -z "$original_commit_sha" ] ; then
-    if [ "$GITHUB_ACTIONS" = 'true' ] ; then
-      echo ::endgroup::
-      echo -n "::error ::"
-    else
-      echo -n "  ✘ "
-    fi
-    echo "Couldn't locate original commit hash in message"
-    echo "Note this should not necessarily be treated as a hard fail, but a reviewer's attention should" \
-      "be drawn to it and github actions have no way of doing that but to raise a 'failure'"
+    endgroup
+    log warning "Couldn't locate original commit hash in message of $new_commit_sha."
     problem=1
     continue
   fi
@@ -65,8 +93,6 @@ while read -r new_commit_sha ; do
 
     while read -r picked_branch ; do
       if git merge-base --is-ancestor "$original_commit_sha" "$picked_branch" ; then
-        echo "  ✔ $original_commit_sha present in branch $picked_branch"
-
         range_diff_common='git --no-pager range-diff
           --no-notes
           --creation-factor=100
@@ -75,23 +101,38 @@ while read -r new_commit_sha ; do
         '
 
         if $range_diff_common --no-color 2> /dev/null | grep -E '^ {4}[+-]{2}' > /dev/null ; then
-          if [ "$GITHUB_ACTIONS" = 'true' ] ; then
-            echo ::endgroup::
-            echo -n "::warning ::"
-          else
-            echo -n "  ⚠ "
+          log success "$original_commit_sha present in branch $picked_branch"
+          endgroup
+          log warning "Difference between $new_commit_sha and original $original_commit_sha may warrant inspection."
+
+          # First line contains commit SHAs, which we already printed.
+          $range_diff_common --color | tail -n +2
+
+          echo -e "> <details><summary>Show diff</summary>\n>" >> $markdown_file
+          echo '> ```diff' >> $markdown_file
+          # The output of `git range-diff` is indented with 4 spaces, which we need to match with the
+          # code blocks indent to get proper syntax highlighting on GitHub.
+          diff="$($range_diff_common | tail -n +2 | sed -Ee 's/^ {4}/> /g')"
+          # Also limit the output to 10k bytes (and remove the last, potentially incomplete line), because
+          # GitHub comments are limited in length. The value of 10k is arbitrary with the assumption, that
+          # after the range-diff becomes a certain size, a reviewer is better off reviewing the regular diff
+          # in GitHub's UI anyway, thus treating the commit as "new" and not cherry-picked.
+          # Note: This could still lead to a too lengthy comment with multiple commits touching the limit. We
+          # consider this too unlikely to happen, to deal with explicitly.
+          max_length=10000
+          if [ "${#diff}" -gt $max_length ]; then
+            printf -v diff "%s\n\n[...truncated...]" "$(echo "$diff" | head -c $max_length | head -n-1)"
           fi
-          echo "Difference between $new_commit_sha and original $original_commit_sha may warrant inspection:"
+          echo "$diff" >> $markdown_file
+          echo '> ```' >> $markdown_file
+          echo "> </details>" >> $markdown_file
 
-          $range_diff_common --color
-
-          echo "Note this should not necessarily be treated as a hard fail, but a reviewer's attention should" \
-            "be drawn to it and github actions have no way of doing that but to raise a 'failure'"
           problem=1
         else
-          echo "  ✔ $original_commit_sha highly similar to $new_commit_sha"
+          log success "$original_commit_sha present in branch $picked_branch"
+          log success "$original_commit_sha highly similar to $new_commit_sha"
           $range_diff_common --color
-          [ "$GITHUB_ACTIONS" = 'true' ] && echo ::endgroup::
+          endgroup
         fi
 
         # move on to next commit
@@ -100,13 +141,8 @@ while read -r new_commit_sha ; do
     done <<< "$branches"
   done
 
-  if [ "$GITHUB_ACTIONS" = 'true' ] ; then
-    echo ::endgroup::
-    echo -n "::error ::"
-  else
-    echo -n "  ✘ "
-  fi
-  echo "$original_commit_sha not found in any pickable branch"
+  endgroup
+  log error "$original_commit_sha given in $new_commit_sha not found in any pickable branch."
 
   problem=1
 done <<< "$commits"

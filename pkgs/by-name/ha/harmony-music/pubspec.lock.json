@@ -642,8 +642,8 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "06de226da469f5c55dd780b215bcc45a0d6269fb",
-        "resolved-ref": "06de226da469f5c55dd780b215bcc45a0d6269fb",
+        "ref": "3738e6bcc07e289ff9621cf2514f1906c99de9aa",
+        "resolved-ref": "3738e6bcc07e289ff9621cf2514f1906c99de9aa",
         "url": "https://github.com/anandnet/just_audio_media_kit.git"
       },
       "source": "git",

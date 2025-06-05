@@ -81,13 +81,13 @@ python3.pkgs.buildPythonApplication rec {
     cd "$out"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://help.cloudsmith.io/docs/cli/";
     description = "Cloudsmith Command Line Interface";
     mainProgram = "cloudsmith";
     changelog = "https://github.com/cloudsmith-io/cloudsmith-cli/blob/v${version}/CHANGELOG.md";
-    maintainers = [ ];
-    license = licenses.asl20;
-    platforms = with platforms; unix;
+    maintainers = with lib.maintainers; [ ];
+    license = lib.licenses.asl20;
+    platforms = with lib.platforms; unix;
   };
 }

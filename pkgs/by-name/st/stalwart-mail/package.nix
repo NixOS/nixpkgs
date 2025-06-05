@@ -9,6 +9,7 @@
   sqlite,
   foundationdb,
   zstd,
+  rust-jemalloc-sys-unprefixed,
   stdenv,
   nix-update-script,
   nixosTests,
@@ -18,19 +19,33 @@
   stalwartEnterprise ? false,
 }:
 
+let
+  rocksdbJemalloc = rocksdb.override { enableJemalloc = true; };
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stalwart-mail" + (lib.optionalString stalwartEnterprise "-enterprise");
-  version = "0.11.8";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
-    repo = "mail-server";
+    repo = "stalwart";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VqGosbSQxNeOS+kGtvXAmz6vyz5mJlXvKZM57B1Xue4=";
+    hash = "sha256-P19jeEzFE8Gu6hqHZJiPoJ70r+zOmzOpEwfFqPQczZY=";
   };
 
+  # rocksdb does not properly distinguish between pointers it has allocated itself
+  # and pointers which were passed in and might be registered with a different
+  # allocator, so we enable the unprefixed_malloc_on_supported_platforms to use
+  # jemalloc implicitly in the entire process.
+  postPatch = ''
+    for file in crates/main/Cargo.toml tests/Cargo.toml; do
+      substituteInPlace $file --replace-fail \
+        'jemallocator = "0.5.0"' 'jemallocator = { version = "0.5.0", features = ["unprefixed_malloc_on_supported_platforms"] }'
+    done
+  '';
+
   useFetchCargoVendor = true;
-  cargoHash = "sha256-iheURWxO0cOvO+FV01l2Vmo0B+S2mXzue6mx3gapftQ=";
+  cargoHash = "sha256-WVvDapCA9pTgOtPpbsK78u2AC2hUfo3sOejZ6pJSlQk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -43,9 +58,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
     sqlite
     zstd
+    rust-jemalloc-sys-unprefixed
+    rocksdbJemalloc
   ] ++ lib.optionals (stdenv.hostPlatform.isLinux && withFoundationdb) [ foundationdb ];
 
-  # Issue: https://github.com/stalwartlabs/mail-server/issues/1104
+  # Issue: https://github.com/stalwartlabs/stalwart/issues/1104
   buildNoDefaultFeatures = true;
   buildFeatures =
     [
@@ -63,8 +80,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env = {
     OPENSSL_NO_VENDOR = true;
     ZSTD_SYS_USE_PKG_CONFIG = true;
-    ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
-    ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+    ROCKSDB_INCLUDE_DIR = "${rocksdbJemalloc}/include";
+    ROCKSDB_LIB_DIR = "${rocksdbJemalloc}/lib";
   };
 
   postInstall = ''
@@ -116,6 +133,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=smtp::queue::retry::queue_retry"
     # Missing store type. Try running `STORE=<store_type> cargo test`: NotPresent
     "--skip=store::store_tests"
+    # Missing store type. Try running `STORE=<store_type> cargo test`: NotPresent
+    "--skip=cluster::cluster_tests"
+    # Missing store type. Try running `STORE=<store_type> cargo test`: NotPresent
+    "--skip=webdav::webdav_tests"
     # thread 'config::parser::tests::toml_parse' panicked at crates/utils/src/config/parser.rs:463:58:
     # called `Result::unwrap()` on an `Err` value: "Expected ['\\n'] but found '!' in value at line 70."
     "--skip=config::parser::tests::toml_parse"
@@ -151,7 +172,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   passthru = {
-    inherit rocksdb; # make used rocksdb version available (e.g., for backup scripts)
+    rocksdb = rocksdbJemalloc; # make used rocksdb version available (e.g., for backup scripts)
     webadmin = callPackage ./webadmin.nix { };
     updateScript = nix-update-script { };
     tests.stalwart-mail = nixosTests.stalwart-mail;
@@ -172,6 +193,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         }
       ];
 
+    mainProgram = "stalwart";
     maintainers = with lib.maintainers; [
       happysalada
       onny

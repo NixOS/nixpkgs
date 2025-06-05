@@ -6,6 +6,7 @@
   fetchFromGitHub,
   fetchpatch,
   python,
+  toPythonModule,
 
   # build-system
   libclang,
@@ -39,6 +40,8 @@ let
     enablePython = true;
     python3 = python;
   };
+  mupdf-cxx-lib = toPythonModule (lib.getLib mupdf-cxx);
+  mupdf-cxx-dev = lib.getDev mupdf-cxx;
 in
 buildPythonPackage rec {
   pname = "pymupdf";
@@ -87,7 +90,7 @@ buildPythonPackage rec {
     gumbo
   ];
 
-  propagatedBuildInputs = [ mupdf-cxx ];
+  propagatedBuildInputs = [ mupdf-cxx-lib ];
 
   env = {
     # force using system MuPDF (must be defined in environment and empty)
@@ -95,14 +98,14 @@ buildPythonPackage rec {
     # Setup the name of the package away from the default 'libclang'
     PYMUPDF_SETUP_LIBCLANG = "clang";
     # provide MuPDF paths
-    PYMUPDF_MUPDF_LIB = "${lib.getLib mupdf-cxx}/lib";
-    PYMUPDF_MUPDF_INCLUDE = "${lib.getDev mupdf-cxx}/include";
+    PYMUPDF_MUPDF_LIB = "${mupdf-cxx-lib}/lib";
+    PYMUPDF_MUPDF_INCLUDE = "${mupdf-cxx-dev}/include";
   };
 
   # TODO: manually add mupdf rpath until upstream fixes it
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     for lib in */*.so $out/${python.sitePackages}/*/*.so; do
-      install_name_tool -add_rpath ${lib.getLib mupdf-cxx}/lib "$lib"
+      install_name_tool -add_rpath ${mupdf-cxx-lib}/lib "$lib"
     done
   '';
 

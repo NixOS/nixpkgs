@@ -7,6 +7,7 @@ on:
   pull_request_target:
     branches:
       - master
+      - release-*
     paths:
       - "nixos/**"
       # Also build when the nixpkgs doc changed, since we take things like
@@ -16,6 +17,10 @@ on:
       # Build when something in lib changes
       # Since the lib functions are used to 'massage' the options before producing the manual
       - "lib/**"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 
 permissions: {}
 
@@ -40,7 +45,7 @@ jobs:
         with:
           merged-as-untrusted: true
 
-      - uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
+      - uses: cachix/install-nix-action@17fe5fb4a23ad6cbbe47d6b3f359611ad276644c # v31
         with:
           extra_nix_config: sandbox = true
 
@@ -52,7 +57,7 @@ jobs:
 
       - name: Build NixOS manual
         id: build-manual
-        run: NIX_PATH=nixpkgs=$(pwd)/untrusted nix-build --option restrict-eval true untrusted/ci -A manual-nixos --argstr system ${{ matrix.system }}
+        run: nix-build untrusted/ci -A manual-nixos --argstr system ${{ matrix.system }}
 
       - name: Upload NixOS manual
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2

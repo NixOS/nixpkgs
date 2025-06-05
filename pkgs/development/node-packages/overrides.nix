@@ -231,12 +231,6 @@ final: prev: {
     };
   };
 
-  prettier = prev.prettier.override {
-    passthru.tests.version = pkgs.testers.testVersion {
-      package = final.prettier;
-    };
-  };
-
   wavedrom-cli = prev.wavedrom-cli.override {
     nativeBuildInputs = [
       pkgs.pkg-config

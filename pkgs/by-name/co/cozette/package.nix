@@ -28,12 +28,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Bitmap programming font optimized for coziness";
     homepage = "https://github.com/slavfox/cozette";
     changelog = "https://github.com/slavfox/Cozette/blob/v.${version}/CHANGELOG.md";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ brettlyons ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ brettlyons ];
   };
 }

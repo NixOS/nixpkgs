@@ -145,15 +145,15 @@ buildNpmPackage {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Full-featured Subsonic/Jellyfin compatible desktop music player";
     homepage = "https://github.com/jeffvli/feishin";
     changelog = "https://github.com/jeffvli/feishin/releases/tag/v${version}";
-    sourceProvenance = with sourceTypes; [ fromSource ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "feishin";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       onny
       jlbribeiro
     ];

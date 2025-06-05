@@ -59,11 +59,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
-    mkdir -p $out/{bin,share/${finalAttrs.pname}-${finalAttrs.version}}
-    cp -r * $out/share/${finalAttrs.pname}-${finalAttrs.version}/.
+    mkdir -p $out/{bin,share/flaresolverr-${finalAttrs.version}}
+    cp -r * $out/share/flaresolverr-${finalAttrs.version}/.
 
     makeWrapper ${python}/bin/python $out/bin/flaresolverr \
-      --add-flags "$out/share/${finalAttrs.pname}-${finalAttrs.version}/src/flaresolverr.py" \
+      --add-flags "$out/share/flaresolverr-${finalAttrs.version}/src/flaresolverr.py" \
       --prefix PATH : "${lib.makeBinPath [ xorg.xvfb ]}"
   '';
 

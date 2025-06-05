@@ -6652,6 +6652,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  kanso-nvim = buildVimPlugin {
+    pname = "kanso.nvim";
+    version = "2025-06-03";
+    src = fetchFromGitHub {
+      owner = "webhooked";
+      repo = "kanso.nvim";
+      rev = "d5975aa93bc157cfc60d4863d0704ab1d6e4deca";
+      sha256 = "17faa8mk90ch2s774lrvf17r4461askvv64b0ls95b9ilps9vl4j";
+    };
+    meta.homepage = "https://github.com/webhooked/kanso.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   kdl-vim = buildVimPlugin {
     pname = "kdl.vim";
     version = "2023-02-20";
@@ -15286,6 +15299,19 @@ final: prev: {
       sha256 = "0ax68nmzlka9193n2h82qzvhzv4dv6lm7rg3b1vhj2pn1r6ci6p4";
     };
     meta.homepage = "https://github.com/vim-scripts/utl.vim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  uv-nvim = buildVimPlugin {
+    pname = "uv.nvim";
+    version = "2025-05-31";
+    src = fetchFromGitHub {
+      owner = "benomahony";
+      repo = "uv.nvim";
+      rev = "642e45d392a65fe15dbebd63444e45e21a38f883";
+      sha256 = "1l681q5d3c8hqr1vvb4rxs6y5a1fs3m3cx3v0n6lvmlcdbdn4mjb";
+    };
+    meta.homepage = "https://github.com/benomahony/uv.nvim/";
     meta.hydraPlatforms = [ ];
   };
 

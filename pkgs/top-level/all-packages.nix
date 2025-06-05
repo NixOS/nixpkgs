@@ -1804,11 +1804,6 @@ with pkgs;
 
   kavita = callPackage ../servers/web-apps/kavita { };
 
-  livebook = callPackage ../by-name/li/livebook/package.nix {
-    elixir = elixir_1_17;
-    beamPackages = beamPackages.extend (self: super: { elixir = elixir_1_17; });
-  };
-
   pass = callPackage ../tools/security/pass { };
 
   pass-nodmenu = callPackage ../tools/security/pass {
@@ -1890,8 +1885,6 @@ with pkgs;
   axel = callPackage ../tools/networking/axel {
     libssl = openssl;
   };
-
-  base16-builder = callPackage ../misc/base16-builder { };
 
   babelfish = callPackage ../shells/fish/babelfish.nix { };
 
@@ -3488,21 +3481,6 @@ with pkgs;
 
   ksmoothdock = libsForQt5.callPackage ../applications/misc/ksmoothdock { };
 
-  ligo =
-    let
-      ocaml_p = ocaml-ng.ocamlPackages_4_14.overrideScope (
-        self: super: {
-          zarith = super.zarith.override { version = "1.13"; };
-        }
-      );
-    in
-    callPackage ../development/compilers/ligo {
-      coq = coq_8_13.override {
-        customOCamlPackages = ocaml_p;
-      };
-      ocamlPackages = ocaml_p;
-    };
-
   leocad = callPackage ../applications/graphics/leocad { };
 
   libcoap = callPackage ../applications/networking/libcoap {
@@ -3518,8 +3496,6 @@ with pkgs;
     ffmpeg = ffmpeg_6-full;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
-
-  llm = with python3Packages; toPythonApplication llm;
 
   loganalyzer = libsForQt5.callPackage ../development/tools/loganalyzer { };
 
@@ -3658,7 +3634,7 @@ with pkgs;
 
   libhandy = callPackage ../development/libraries/libhandy { };
 
-  # Needed for apps that still depend on the unstable verison of the library (not libhandy-1)
+  # Needed for apps that still depend on the unstable version of the library (not libhandy-1)
   libhandy_0 = callPackage ../development/libraries/libhandy/0.x.nix { };
 
   libint = callPackage ../development/libraries/libint { };
@@ -4586,10 +4562,6 @@ with pkgs;
 
   kernelshark = qt6Packages.callPackage ../os-specific/linux/trace-cmd/kernelshark.nix { };
 
-  tracee = callPackage ../tools/security/tracee {
-    clang = clang_14;
-  };
-
   translatelocally-models = recurseIntoAttrs (callPackages ../misc/translatelocally-models { });
 
   translatepy = with python3.pkgs; toPythonApplication translatepy;
@@ -4853,7 +4825,7 @@ with pkgs;
 
   zbar = libsForQt5.callPackage ../tools/graphics/zbar { };
 
-  # Nvidia support does not require any propietary libraries, so CI can build it.
+  # Nvidia support does not require any proprietary libraries, so CI can build it.
   # Note that when enabling this unconditionally, non-nvidia users will always have an empty "GPU" section.
   zenith-nvidia = zenith.override {
     nvidiaSupport = true;
@@ -7057,7 +7029,7 @@ with pkgs;
   # host platform.
   #
   # Because this is the *next* stages choice, it's a bit non-modular to put
-  # here. In theory, bootstraping is supposed to not be a chain but at tree,
+  # here. In theory, bootstrapping is supposed to not be a chain but at tree,
   # where each stage supports many "successor" stages, like multiple possible
   # futures. We don't have a better alternative, but with this downside in
   # mind, please be judicious when using this attribute. E.g. for building
@@ -7930,6 +7902,7 @@ with pkgs;
     cp: with cp; [
       # FIXME unbreak certbot-dns-cloudflare
       certbot-dns-google
+      certbot-dns-inwx
       certbot-dns-ovh
       certbot-dns-rfc2136
       certbot-dns-route53
@@ -8209,7 +8182,7 @@ with pkgs;
     stdenv = stdenvNoLibc;
   };
 
-  # These are used when buiding compiler-rt / libgcc, prior to building libc.
+  # These are used when building compiler-rt / libgcc, prior to building libc.
   preLibcCrossHeaders =
     let
       inherit (stdenv.targetPlatform) libc;
@@ -9485,8 +9458,6 @@ with pkgs;
     }
   );
 
-  qv2ray = libsForQt5.callPackage ../applications/networking/qv2ray { };
-
   readline = readline82;
 
   readline70 = callPackage ../development/libraries/readline/7.0.nix { };
@@ -10575,7 +10546,7 @@ with pkgs;
 
   nginxModules = recurseIntoAttrs (callPackage ../servers/http/nginx/modules.nix { });
 
-  # We should move to dynmaic modules and create a nginxFull package with all modules
+  # We should move to dynamic modules and create a nginxFull package with all modules
   nginxShibboleth = nginxStable.override {
     modules = [
       nginxModules.rtmp
@@ -10886,10 +10857,6 @@ with pkgs;
   qcal = callPackage ../tools/networking/qcal/default.nix { };
 
   rake = callPackage ../development/tools/build-managers/rake { };
-
-  restic = callPackage ../tools/backup/restic { };
-
-  restic-rest-server = callPackage ../tools/backup/restic/rest-server.nix { };
 
   rethinkdb = callPackage ../servers/nosql/rethinkdb {
     stdenv = clangStdenv;
@@ -13546,9 +13513,7 @@ with pkgs;
 
   mythtv = libsForQt5.callPackage ../applications/video/mythtv { };
 
-  ncdu = callPackage ../tools/misc/ncdu { };
-
-  ncdu_1 = callPackage ../tools/misc/ncdu/1.nix { };
+  ncdu_1 = callPackage ../by-name/nc/ncdu/1.nix { };
 
   notepadqq = libsForQt5.callPackage ../applications/editors/notepadqq { };
 
@@ -13693,8 +13658,6 @@ with pkgs;
 
   plexamp = callPackage ../applications/audio/plexamp { };
 
-  plex-media-player = libsForQt5.callPackage ../applications/video/plex-media-player { };
-
   plex-mpv-shim = python3Packages.callPackage ../applications/video/plex-mpv-shim { };
 
   plover = recurseIntoAttrs (libsForQt5.callPackage ../applications/misc/plover { });
@@ -13711,7 +13674,7 @@ with pkgs;
     jdk = jdk17;
   };
 
-  # perhaps there are better apps for this task? It's how I had configured my preivous system.
+  # perhaps there are better apps for this task? It's how I had configured my previous system.
   # And I don't want to rewrite all rules
   profanity = callPackage ../applications/networking/instant-messengers/profanity (
     {
@@ -16938,8 +16901,6 @@ with pkgs;
   duden = python3Packages.toPythonApplication python3Packages.duden;
 
   yaziPlugins = recurseIntoAttrs (callPackage ../by-name/ya/yazi/plugins { });
-
-  animdl = python3Packages.callPackage ../applications/video/animdl { };
 
   dillo = callPackage ../by-name/di/dillo/package.nix {
     fltk = fltk13;

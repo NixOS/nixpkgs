@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       libsForQt5.qtmacextras # can be removed when using qt6
     ];
 
-  # custom Darwin install instructions taken from the upsteam compileOSX.sh script
+  # custom Darwin install instructions taken from the upstream compileOSX.sh script
   installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
     runHook preInstall
 

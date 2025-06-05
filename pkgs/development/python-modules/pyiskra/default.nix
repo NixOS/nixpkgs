@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyiskra";
-  version = "0.1.18";
+  version = "0.1.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Iskramis";
     repo = "pyiskra";
     tag = "v${version}";
-    hash = "sha256-O6OCO8vH+1XyhkUZgRd+s0fpvHa+t7Tuzx9N7Jl7iYI=";
+    hash = "sha256-M44dXA4hBlyRvIwgIolxaGE8QmystPoEGX3ongvLB04=";
   };
 
   build-system = [ setuptools ];

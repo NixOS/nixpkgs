@@ -45,10 +45,10 @@ index 2922035..6497a38 100644
    ],
    "electronVersion": "34.0.0",
    "generateUpdatesFilesForAllChannels": true,
-@@ -67,7 +67,6 @@
-       ],
+@@ -68,7 +68,6 @@
        "CFBundleDevelopmentRegion": "en"
      },
+     "provisioningProfile": "bitwarden_desktop_developer_id.provisionprofile",
 -    "singleArchFiles": "node_modules/@bitwarden/desktop-napi/desktop_napi.darwin-*.node",
      "extraFiles": [
        {

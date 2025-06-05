@@ -23,14 +23,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pan";
-  version = "0.162";
+  version = "0.163";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "pan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YXZA0WguDAV/CCqjdkNWB2bnkBwDN7AfWtaSaJ1ztmM=";
+    hash = "sha256-zClHwIvrWqAn8l1hpcy3FgScRmVUUk8UPQkT0KD59hM=";
   };
 
   nativeBuildInputs = [
