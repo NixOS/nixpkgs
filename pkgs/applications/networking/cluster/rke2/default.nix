@@ -46,6 +46,6 @@ rec {
   ) extraArgs;
 
   # Automatically set by update script
-  rke2_stable = rke2_1_31;
+  rke2_stable = rke2_1_32;
   rke2_latest = rke2_1_32;
 }
