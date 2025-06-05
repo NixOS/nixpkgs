@@ -24,7 +24,6 @@ let
           inherit package;
           nativeBuildInputs = [
             cfg.package
-            pkgs.gdbm
             pkgs.findutils
           ];
           preferLocalBuild = true;
