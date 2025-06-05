@@ -51,14 +51,12 @@ let
       ];
   });
 
-  pname = "littlenavmap";
-
   desktopItem = makeDesktopItem {
     name = "Little Navmap";
     desktopName = "Little Navmap";
-    icon = pname;
+    icon = "littlenavmap";
     terminal = false;
-    exec = pname;
+    exec = "littlenavmap";
     categories = [
       "Qt"
       "Utility"
@@ -67,14 +65,14 @@ let
     ];
   };
 in
-stdenv.mkDerivation (finalAttrs: rec {
-  inherit pname;
+stdenv.mkDerivation (finalAttrs: {
+  pname = "littlenavmap";
   version = "3.0.17";
 
   src = fetchFromGitHub {
     owner = "albar965";
     repo = "littlenavmap";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/1YB2uEQzT0K6IylpWDqOaMSENDR9GuyJNty+2C8kXM=";
   };
 
@@ -122,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   meta = {
     description = "A free flight planner, navigation tool, moving map, airport search and airport information system for Flight Simulator X, Microsoft Flight Simulator 2020, Prepar3D and X-Plane";
     homepage = "https://github.com/albar965/littlenavmap";
-    changelog = "https://github.com/albar965/littlenavmap/blob/${src.rev}/CHANGELOG.txt";
+    changelog = "https://github.com/albar965/littlenavmap/blob/${finalAttrs.src.tag}/CHANGELOG.txt";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ ck3d ];
     mainProgram = "littlenavmap";
