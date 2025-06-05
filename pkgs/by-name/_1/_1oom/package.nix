@@ -6,36 +6,34 @@
   autoreconfHook,
   allegro,
   libsamplerate,
-  libGLU,
   libX11,
-  libXext,
-  SDL,
-  SDL_mixer,
   SDL2,
   SDL2_mixer,
   readline,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "1oom";
-  version = "1.11.2";
+  version = "1.11.6";
 
   src = fetchFromGitHub {
     owner = "1oom-fork";
     repo = "1oom";
-    tag = "v${version}";
-    hash = "sha256-xvVl/XzOnItIvW0T3RpQ4tswqANHGWFvwnoY0+uHhx8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-w67BjS5CrQviMXOeKNWGR1SzDeJHZrIpY7FDGt86CPA=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  strictDeps = true;
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [
+    autoreconfHook
+    SDL2
+  ];
   buildInputs = [
     allegro
     libsamplerate
-    libGLU
     libX11
-    libXext
-    SDL
-    SDL_mixer
     SDL2
     SDL2_mixer
     readline
@@ -47,19 +45,19 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    install -d $doc/share/doc/${pname}
-    install -t $doc/share/doc/${pname} \
+    install -d $doc/share/doc/1oom
+    install -t $doc/share/doc/1oom \
       HACKING NEWS PHILOSOPHY README.md doc/*.txt
   '';
 
-  passthru.updateScript = gitUpdater { rev-prefix = "f"; };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/1oom-fork/1oom";
-    changelog = "https://github.com/1oom-fork/1oom/releases/tag/v${version}";
+    changelog = "https://github.com/1oom-fork/1oom/releases/tag/v${finalAttrs.version}";
     description = "Master of Orion (1993) game engine recreation; a more updated fork";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = [ ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ marcin-serwin ];
   };
-}
+})
