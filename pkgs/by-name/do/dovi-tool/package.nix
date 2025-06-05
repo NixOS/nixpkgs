@@ -5,10 +5,16 @@
   fetchFromGitHub,
   pkg-config,
   fontconfig,
+  makeFontsConf,
   versionCheckHook,
   nix-update-script,
 }:
 
+let
+  fontsConf = makeFontsConf {
+    fontDirectories = [ ];
+  };
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dovi-tool";
   version = "2.3.1";
@@ -30,9 +36,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     fontconfig
   ];
 
-  checkFlags = [
-    # fails because nix-store is read only
-    "--skip=rpu::plot::plot_p7"
+  preCheck = lib.optionals (!stdenv.hostPlatform.isDarwin) ''
+    # Fontconfig error: Cannot load default config file: No such file: (null)
+    export FONTCONFIG_FILE="${fontsConf}"
+    # Fontconfig error: No writable cache directories
+    export XDG_CACHE_HOME="$(mktemp -d)"
+  '';
+
+  # Needed for rpu::plot::plot_p7 to pass in the sandbox.
+  __impureHostDeps = lib.optionals stdenv.hostPlatform.isDarwin [
+    "/System/Library/Fonts/Supplemental/Arial.ttf"
   ];
 
   nativeInstallCheckInputs = [
