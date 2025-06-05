@@ -911,6 +911,34 @@ Related options:
 : _Default:_ `[ "--allow-scripts" "--frozen" "--cached-only" ]` for `buildDenoPackage`
 : _Default:_ `[ "--allow-scripts" "--frozen" ]` for `buildDenoDeps` (`"--cached-only"` is filtered out)
 
+::: {.tip}
+If you receive and error like this:
+
+```
+error: The lockfile is out of date. Run `deno install --frozen=false`, or rerun with `--frozen=false` to update it.
+```
+
+This can happen due to the `deno install` command deducing different packages, than what the actual package needs.
+
+To fix this, add the entrypoint to the install flags:
+
+```nix
+{ buildDenoPackage, nix-gitignore }:
+buildDenoPackage {
+  pname = "myPackage";
+  version = "0.1.0";
+  denoDepsHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+  src = nix-gitignore.gitignoreSource [ ] ./.;
+  binaryEntrypointPath = "main.ts";
+  denoInstallFlags = [
+    "--entrypoint"
+    "<path/to/entrypoint/script>"
+  ];
+}
+```
+
+:::
+
 #### Private registries {#javascript-buildDenoPackage-private-registries}
 There are currently 2 options, which enable the use of private registries in a `buildDenoPackage` derivation.
 
