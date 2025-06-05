@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -16,6 +17,8 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-y2eSuMCDZTGdCs70zYdA8NKbuPPN5xmnRfMNK+AE/q8=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/tobias-kuendig/hacompanion/releases/tag/v${version}";
