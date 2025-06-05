@@ -3852,7 +3852,7 @@ with pkgs;
   };
 
   # Not in aliases because it wouldn't get picked up by callPackage
-  netbox = netbox_4_2;
+  netbox = netbox_4_3;
 
   netcat = libressl.nc.overrideAttrs (old: {
     meta = old.meta // {
