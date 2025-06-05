@@ -117,12 +117,15 @@
 
               # There are various small databases used by deno for caching that
               # we can simply delete.
-              find -L ./node_modules -name '*cache_v2-shm' -type f | xargs rm -f
-              find -L ./node_modules -name '*cache_v2-wal' -type f | xargs rm -f
-              find -L ./node_modules -name 'dep_analysis_cache_v2' -type f | xargs rm -f
-              find -L ./node_modules -name 'node_analysis_cache_v2' -type f | xargs rm -f
-              find -L ./node_modules -name v8_code_cache_v2 -type f | xargs rm -f
-              rm -f ./node_modules/.deno/.deno.lock.poll
+              if [[ -d "./node_modules" ]]; then
+                find -L ./node_modules -name '*cache_v2-shm' -type f | xargs rm -f
+                find -L ./node_modules -name '*cache_v2-wal' -type f | xargs rm -f
+                find -L ./node_modules -name 'dep_analysis_cache_v2' -type f | xargs rm -f
+                find -L ./node_modules -name 'node_analysis_cache_v2' -type f | xargs rm -f
+                find -L ./node_modules -name v8_code_cache_v2 -type f | xargs rm -f
+                rm -f ./node_modules/.deno/.deno.lock.poll
+              fi
+
               rm -f "$DENO_DIR"/dep_analysis_cache_v2-shm
               rm -f "$DENO_DIR"/dep_analysis_cache_v2-wal
               rm -f "$DENO_DIR"/dep_analysis_cache_v2
