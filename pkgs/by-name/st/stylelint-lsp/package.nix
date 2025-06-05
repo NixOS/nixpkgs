@@ -62,7 +62,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A stylelint Language Server";
+    description = "Stylelint Language Server";
     homepage = "https://github.com/bmatcuk/stylelint-lsp";
     license = lib.licenses.mit;
     mainProgram = "stylelint-lsp";

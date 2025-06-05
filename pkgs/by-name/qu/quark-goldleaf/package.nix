@@ -98,7 +98,7 @@ maven.buildMavenPackage rec {
 
   meta = {
     changelog = "https://github.com/XorTroll/Goldleaf/releases/tag/${src.rev}";
-    description = "A GUI tool for transfering files between a computer and a Nintendo Switch running Goldleaf";
+    description = "GUI tool for transfering files between a computer and a Nintendo Switch running Goldleaf";
     homepage = "https://github.com/XorTroll/Goldleaf#quark-and-remote-browsing";
     longDescription = ''
       ${meta.description}

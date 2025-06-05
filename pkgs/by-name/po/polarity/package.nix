@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
-    description = "A Language with Dependent Data and Codata Types";
+    description = "Language with Dependent Data and Codata Types";
     homepage = "https://polarity-lang.github.io/";
     changelog = "https://github.com/polarity-lang/polarity/blob/${src.rev}/CHANGELOG.md";
     license = with lib.licenses; [
