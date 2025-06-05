@@ -99,6 +99,6 @@ in
 
   meta = {
     doc = ./pihole-web.md;
-    maintainers = with lib.maintainers; [ williamvds ];
+    maintainers = with lib.maintainers; [ averyvigolo ];
   };
 }

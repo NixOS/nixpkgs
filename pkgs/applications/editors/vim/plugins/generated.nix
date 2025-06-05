@@ -6652,6 +6652,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  kanso-nvim = buildVimPlugin {
+    pname = "kanso.nvim";
+    version = "2025-06-03";
+    src = fetchFromGitHub {
+      owner = "webhooked";
+      repo = "kanso.nvim";
+      rev = "d5975aa93bc157cfc60d4863d0704ab1d6e4deca";
+      sha256 = "17faa8mk90ch2s774lrvf17r4461askvv64b0ls95b9ilps9vl4j";
+    };
+    meta.homepage = "https://github.com/webhooked/kanso.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   kdl-vim = buildVimPlugin {
     pname = "kdl.vim";
     version = "2023-02-20";

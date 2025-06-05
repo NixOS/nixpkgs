@@ -478,6 +478,6 @@ in
 
   meta = {
     doc = ./pihole-ftl.md;
-    maintainers = with lib.maintainers; [ williamvds ];
+    maintainers = with lib.maintainers; [ averyvigolo ];
   };
 }
