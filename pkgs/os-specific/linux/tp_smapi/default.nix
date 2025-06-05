@@ -4,13 +4,6 @@
   fetchFromGitHub,
   fetchpatch,
   kernel,
-  writeScript,
-  coreutils,
-  gnugrep,
-  jq,
-  curl,
-  common-updater-scripts,
-  runtimeShell,
 }:
 
 stdenv.mkDerivation rec {
@@ -52,19 +45,6 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   enableParallelBuilding = true;
-
-  passthru.updateScript = import ./update.nix {
-    inherit
-      lib
-      writeScript
-      coreutils
-      gnugrep
-      jq
-      curl
-      common-updater-scripts
-      runtimeShell
-      ;
-  };
 
   meta = {
     description = "IBM ThinkPad hardware functions driver";
