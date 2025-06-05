@@ -3,13 +3,17 @@
   readma-cli-linux = buildDenoPackage rec {
     pname = "readma-cli";
     version = "2.11.0";
-    denoDepsHash = "sha256-uh+yaT8oPMD0FRENH4LaoCsvbWmQ0j+xPbAL3e4Mfws=";
+    denoDepsHash = "sha256-xh+kP3yZvqzVXqypS3YFsIBmU/bp4YiNxvpK3/KlxAA=";
     src = fetchFromGitHub {
       owner = "elcoosp";
       repo = "readma";
       rev = "${version}";
       hash = "sha256-FVQTn+r7Ztj02vNvqFZIRIsokWeo1tPfFYffK2tvxjA=";
     };
+    denoInstallFlags = [
+      "--entrypoint"
+      "./cli/mod.ts"
+    ];
     binaryEntrypointPath = "./cli/mod.ts";
     targetSystem = "x86_64-linux";
   };
