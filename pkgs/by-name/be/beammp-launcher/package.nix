@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchzip,
+  fetchFromGitHub,
   cmake,
   pkg-config,
   boost,
@@ -14,17 +14,19 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "beammp-launcher";
   version = "2.4.0";
 
-  meta = with lib; {
+  meta = {
     description = "Official BeamMP Launcher";
     homepage = "https://github.com/BeamMP/BeamMP-Launcher";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ invertedEcho ];
-    platforms = platforms.linux;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [invertedEcho];
+    platforms = lib.platforms.linux;
   };
 
-  src = fetchzip {
-    url = "https://github.com/BeamMP/BeamMP-Launcher/archive/refs/tags/v2.4.0.tar.gz";
-    sha256 = "sha256-aAQmgK03a3BY4YWuDyTmJzcePchD74SXfbkHwnaOYW8=";
+  src = fetchFromGitHub {
+    owner = "BeamMP";
+    repo = "BeamMP-Launcher";
+    rev = "v2.4.0";
+    hash = "sha256-aAQmgK03a3BY4YWuDyTmJzcePchD74SXfbkHwnaOYW8=";
   };
 
   nativeBuildInputs = [
@@ -40,9 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
-    runHoook preInstall
-    mkdir -p $out/bin
-    cp BeamMP-Launcher $out/bin
+    runHook preInstall
+    install -Dm755 BeamMP-Launcher $out/bin/BeamMP-Launcher
     runHook postInstall
   '';
 })
