@@ -173,6 +173,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false; # fails, wants DRI access for OpenGL
 
+  preFixup = ''
+    moveToOutput "lib/gstreamer-1.0/pkgconfig" "$dev"
+  '';
+
   passthru = {
     # Downstream `gst-*` packages depending on `gst-plugins-base`
     # have meson build options like 'gl' etc. that depend
