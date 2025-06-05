@@ -16,7 +16,7 @@
   fresh-init-cli-linux = buildDenoPackage {
     pname = "fresh-init-cli";
     version = "";
-    denoDepsHash = "sha256-ycSMUyY7xj+o9gIVwUWbcoN+5Gf27P2x0dFUmtWGGlQ=";
+    denoDepsHash = "sha256-g+/W0d3PG5QJlxyhKfSUXpnk4qcrew5BwZMvRvJGDzM=";
     src = fetchFromGitHub {
       owner = "denoland";
       repo = "fresh";
