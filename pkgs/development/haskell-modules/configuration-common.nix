@@ -1518,6 +1518,31 @@ with haskellLib;
     })
   ] super.servant-routes;
 
+  # Fix test suite with text >= 2.1.2
+  servant-client =
+    appendPatches
+      [
+        (pkgs.fetchpatch {
+          name = "servant-client-text-2.1.2.patch";
+          url = "https://github.com/haskell-servant/servant/commit/9cda0cfb356a01ad402ee949e0b0d5c0494eace2.patch";
+          sha256 = "19vpn7h108wra9b84r642zxg0mii66rq4vjbqhi7ackkdb0mx9yn";
+          relative = "servant-client";
+          # patch to servant-client.cabal doesn't apply on 0.20.2
+          includes = [ "README.md" ];
+        })
+      ]
+      (
+        overrideCabal (drv: {
+          postPatch =
+            super.postPatch or ""
+            + ''
+              # Restore the symlink (to the file we patch) which becomes a regular file
+              # in the hackage tarball
+              ln -sf README.md README.lhs
+            '';
+        }) super.servant-client
+      );
+
   # it wants to build a statically linked binary by default
   hledger-flow = overrideCabal (drv: {
     postPatch =
