@@ -333,6 +333,8 @@ self: super: with self; {
 
   aioimaplib = callPackage ../development/python-modules/aioimaplib { };
 
+  aioimmich = callPackage ../development/python-modules/aioimmich { };
+
   aioinflux = callPackage ../development/python-modules/aioinflux { };
 
   aioitertools = callPackage ../development/python-modules/aioitertools { };
