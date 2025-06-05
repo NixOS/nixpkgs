@@ -22,6 +22,15 @@ in
       '';
     };
 
+    gracefulShutdownLimitSecs = lib.mkOption {
+      type = lib.types.ints.positive;
+      default = 60;
+      description = ''
+        Set the duration in seconds to wait for graceful shutdown after SIGINT or SIGTERM are received.
+        After the duration has passed, Vector will force shutdown.
+      '';
+    };
+
     settings = lib.mkOption {
       type = (pkgs.formats.json { }).type;
       default = { };
@@ -56,7 +65,7 @@ in
               '';
         in
         {
-          ExecStart = "${lib.getExe cfg.package} --config ${validateConfig conf}";
+          ExecStart = "${lib.getExe cfg.package} --config ${validateConfig conf} --graceful-shutdown-limit-secs ${builtins.toString cfg.gracefulShutdownLimitSecs}";
           DynamicUser = true;
           Restart = "always";
           StateDirectory = "vector";
