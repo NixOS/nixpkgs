@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchzip,
+  mpi,
   gfortran,
   fixDarwinDylibNames,
   blas,
@@ -51,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
   # Setting this magic var is an optional solution
   __structuredAttrs = true;
 
+  strictDeps = true;
+
   src = fetchzip {
     url = "https://mumps-solver.org/MUMPS_${finalAttrs.version}.tar.gz";
     hash = "sha256-opJW7+Z/YhyUFwYTTTuWZuykz8Z4do6/XTBThHyTVCs=";
@@ -98,9 +101,12 @@ stdenv.mkDerivation (finalAttrs: {
       ln -s $out/include/mumps_seq/mpi.h $out/include/mumps_mpi.h
     '';
 
-  nativeBuildInputs = [
-    gfortran
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs =
+    [
+      gfortran
+    ]
+    ++ lib.optional mpiSupport mpi
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   # Parmetis should be placed before scotch to avoid conflict of header file "parmetis.h"
   buildInputs =
