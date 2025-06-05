@@ -23,7 +23,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   postInstall = ''
     cd "$out/$installPrefix"
-    jq '.contributes.configuration.properties."prettier.prettierPath".default = "${prettier}/lib/node_modules/prettier"' package.json | sponge package.json
+    jq '.contributes.configuration.properties."prettier.prettierPath".default = "${prettier}"' package.json | sponge package.json
   '';
 
   meta = {

@@ -71,7 +71,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "tests" ];
 
   # These tests fail when MPS devices are detected
-  disabledTests = lib.optional stdenv.isDarwin [
+  disabledTests = lib.optional stdenv.hostPlatform.isDarwin [
     "gpu"
   ];
 

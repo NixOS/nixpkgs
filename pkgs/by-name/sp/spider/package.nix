@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "--skip=pdl_is_fresh"
       "--skip=verify_revision_available"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Sandbox limitation: attempted to create a NULL object
       "--skip=website::test_link_duplicates"
       "--skip=website::not_crawl_blacklist"

@@ -39,11 +39,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1QMEN/tDa7HZOo29v7RrqqYGEzGPT7P1hx1ygV0e7YA=";
   };
 
-  outputs = [
-    "out"
-    "doc"
-    "man"
-  ];
+  # TODO: sdcc version 4.5.0 does not currently produce a man output.
+  # Until the fix to sdcc's makefiles is released, this workaround
+  # conditionally withholds the man output on darwin.
+  #
+  # sdcc's tracking issue:
+  # <https://sourceforge.net/p/sdcc/bugs/3848/>
+  outputs =
+    [
+      "out"
+      "doc"
+    ]
+    ++ lib.optionals (!stdenv.isDarwin) [
+      "man"
+    ];
 
   enableParallelBuilding = true;
 
