@@ -5,14 +5,14 @@
   lib,
   makeWrapper,
   nix-update-script,
-  python3Packages,
+  python312Packages,
   squashfsTools,
   cacert,
   stdenv,
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python312Packages.buildPythonApplication rec {
   pname = "snapcraft";
   version = "8.8.1";
 
@@ -58,7 +58,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  dependencies = with python3Packages; [
+  dependencies = with python312Packages; [
     attrs
     catkin-pkg
     click
@@ -102,7 +102,7 @@ python3Packages.buildPythonApplication rec {
     validators
   ];
 
-  build-system = with python3Packages; [ setuptools-scm ];
+  build-system = with python312Packages; [ setuptools-scm ];
 
   pythonRelaxDeps = [
     "click"
@@ -125,7 +125,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   nativeCheckInputs =
-    with python3Packages;
+    with python312Packages;
     [
       pytest-check
       pytest-cov-stub
