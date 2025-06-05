@@ -1,13 +1,10 @@
 {
   lib,
   fetchFromGitHub,
-  python311,
+  python3,
   dooit,
   nix-update-script,
 }:
-let
-  python3 = python311;
-in
 python3.pkgs.buildPythonPackage rec {
   pname = "dooit-extras";
   version = "0.2.1";
