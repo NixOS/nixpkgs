@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Pi-hole FTL engine";
     homepage = "https://github.com/pi-hole/FTL";
     license = lib.licenses.eupl12;
-    maintainers = with lib.maintainers; [ williamvds ];
+    maintainers = with lib.maintainers; [ averyvigolo ];
     platforms = lib.platforms.linux;
     mainProgram = "pihole-FTL";
   };
