@@ -14,18 +14,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "beammp-launcher";
   version = "2.4.0";
 
-  meta = {
-    description = "Official BeamMP Launcher";
-    homepage = "https://github.com/BeamMP/BeamMP-Launcher";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [invertedEcho];
-    platforms = lib.platforms.linux;
-  };
-
   src = fetchFromGitHub {
     owner = "BeamMP";
     repo = "BeamMP-Launcher";
-    rev = "v2.4.0";
+    rev = "${finalAttrs.version}";
     hash = "sha256-aAQmgK03a3BY4YWuDyTmJzcePchD74SXfbkHwnaOYW8=";
   };
 
@@ -46,4 +38,13 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 BeamMP-Launcher $out/bin/BeamMP-Launcher
     runHook postInstall
   '';
+
+  meta = {
+    description = "Launcher for the BeamMP mod for BeamNG.drive";
+    homepage = "https://github.com/BeamMP/BeamMP-Launcher";
+    mainProgram = "BeamMP-Launcher";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ invertedEcho ];
+    platforms = lib.platforms.linux;
+  };
 })
