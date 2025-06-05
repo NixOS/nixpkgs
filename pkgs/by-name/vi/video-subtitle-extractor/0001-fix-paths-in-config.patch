@@ -1,0 +1,39 @@
+--- a/backend/config.py
++++ b/backend/config.py
+@@ -35,7 +35,7 @@ class Config(QConfig):
+         'Tiếng Việt': 'vi',
+         'Español': 'es'
+     }
+-    interface = OptionsConfigItem("Window", "Interface", "ChineseSimplified", OptionsValidator(intefaceTexts.values()), restart = True)
++    interface = OptionsConfigItem("Window", "Interface", "en", OptionsValidator(intefaceTexts.values()), restart = True)
+     
+     # 窗口位置和大小
+     windowX = ConfigItem("Window", "X", None)
+@@ -49,7 +49,7 @@ class Config(QConfig):
+     subtitleSelectionAreaH = ConfigItem("Main", "SubtitleSelectionAreaH", 0.21)
+ 
+     # 字幕语言设置
+-    language = OptionsConfigItem("Main", "Language", "ch", OptionsValidator([name for name in tr["Language"]]))
++    language = OptionsConfigItem("Main", "Language", "en", OptionsValidator([name for name in tr["Language"]]))
+     # 识别模式设置
+     mode = OptionsConfigItem("Main", "Mode", "fast",  OptionsValidator(["auto", "fast", "accurate"]))
+     # 是否生成TXT文本字幕
+@@ -89,13 +89,16 @@ class Config(QConfig):
+     # 是否使用硬件加速
+     hardwareAcceleration = ConfigItem("Main", "HardwareAcceleration", HARDWARD_ACCELERATION_OPTION, BoolValidator())
+     # 启动时检查应用更新
+-    checkUpdateOnStartup = ConfigItem("Main", "CheckUpdateOnStartup", True, BoolValidator())
++    checkUpdateOnStartup = ConfigItem("Main", "CheckUpdateOnStartup", False, BoolValidator())
+     # VideoSubFinder CPU核心数
+     videoSubFinderCpuCores = RangeConfigItem("Main", "VideoSubFinderCpuCores", 0, RangeValidator(0, os.cpu_count()))
+     # VideoSubFinder 视频解码组件
+     videoSubFinderDecoder = OptionsConfigItem("Main", "VideoSubFinderDecoder", VideoSubFinderDecoder.OPENCV, OptionsValidator(VideoSubFinderDecoder), EnumSerializer(VideoSubFinderDecoder))
+     
+-CONFIG_FILE = 'config/config.json'
++CONFIG_DIR = os.path.join(os.path.expanduser('~'), '.config', 'video-subtitle-extractor')
++CONFIG_FILE = os.path.join(CONFIG_DIR, 'config.json')
++os.makedirs(CONFIG_DIR, exist_ok=True)
++
+ config = Config()
+ qconfig.load(CONFIG_FILE, config)
+ 

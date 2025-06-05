@@ -1,0 +1,53 @@
+--- a/backend/tools/reformat.py
++++ b/backend/tools/reformat.py
+@@ -12,6 +12,7 @@ import traceback
+ import pysrt
+ import wordsegment as ws
+ import re
++import shutil
+ 
+ def execute(path, lang='en'):
+     try:
+@@ -43,14 +44,34 @@ def execute(path, lang='en'):
+                     "needn't", "oughtn't", "shan't", "shouldn't", "usedn't", "won't", "wouldn't", "that's", "what's", "it'll"]
+         verb_form_map = {}
+ 
+-        typo_map_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'configs', 'typoMap.json')
+-        try:
+-            with open(typo_map_path, 'r', encoding='utf-8') as load_f:
+-                typo_map = json.load(load_f)
+-        except Exception as e:
+-            print(f"Error: Failed to load typoMap.json: {str(e)}")
+-            print(traceback.format_exc())
+-            typo_map = {}
++        config_dir = os.path.join(os.path.expanduser('~'), '.config', 'video-subtitle-extractor')
++        user_typo_map_path = os.path.join(config_dir, 'typoMap.json')
++        default_typo_map_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'configs', 'typoMap.json')
++        
++        if os.path.exists(user_typo_map_path):
++            typo_map_path = user_typo_map_path
++        elif os.path.exists(default_typo_map_path):
++            os.makedirs(config_dir, exist_ok=True)
++            import shutil
++            shutil.copy2(default_typo_map_path, user_typo_map_path)
++            os.chmod(user_typo_map_path, 0o664)  # Make the file writable for the user
++            typo_map_path = user_typo_map_path
++            print(f"Created user typoMap.json at: {user_typo_map_path}")
++        else:
++            typo_map_path = None
++        
++        typo_map = {}
++        if typo_map_path:
++            try:
++                with open(typo_map_path, 'r', encoding='utf-8') as load_f:
++                    typo_map = json.load(load_f)
++                print(f"Loaded typoMap.json from: {typo_map_path}")
++            except Exception as e:
++                print(f"Error: Failed to load typoMap.json: {str(e)}")
++                print(traceback.format_exc())
++                typo_map = {}
++        else:
++            print("No typoMap.json found, using empty typo corrections")
+ 
+         for verb in verb_forms:
+             verb_form_map[verb.replace("'", "").lower()] = verb
