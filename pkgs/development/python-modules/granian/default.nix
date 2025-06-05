@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   rustPlatform,
   cacert,
@@ -40,9 +41,10 @@ buildPythonPackage rec {
     maturinBuildHook
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals (stdenv.hostPlatform.isAarch64) [
     # fix "Unsupported system page size" on aarch64-linux with 16k pages
     # https://github.com/NixOS/nixpkgs/issues/410572
+    # only enabled on aarch64 due to https://github.com/NixOS/nixpkgs/pull/410611#issuecomment-2939564567
     (rust-jemalloc-sys.overrideAttrs (
       { configureFlags, ... }:
       {
