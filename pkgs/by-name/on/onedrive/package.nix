@@ -1,18 +1,23 @@
 {
   lib,
-  autoreconfHook,
-  coreutils,
-  curl,
+  stdenv,
   fetchFromGitHub,
+
+  # native
+  autoreconfHook,
   installShellFiles,
   ldc,
-  libnotify,
   pkg-config,
-  sqlite,
-  stdenv,
+
+  # host
+  coreutils,
+  curl,
   dbus,
+  libnotify,
+  sqlite,
   systemd,
   testers,
+
   # Boolean flags
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
