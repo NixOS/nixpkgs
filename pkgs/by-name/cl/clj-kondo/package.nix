@@ -7,11 +7,11 @@
 
 buildGraalvmNativeImage rec {
   pname = "clj-kondo";
-  version = "2025.04.07";
+  version = "2025.06.05";
 
   src = fetchurl {
     url = "https://github.com/clj-kondo/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "sha256-yJyRqQglJUiHotB70zga5NhFquHsKgmwT9sryZHEFRU=";
+    sha256 = "sha256-jmQFiL8MFIuMrHPSxW27E7yZIGf+k8J5nFVXgNGIKoM=";
   };
 
   graalvmDrv = graalvmPackages.graalvm-ce;
