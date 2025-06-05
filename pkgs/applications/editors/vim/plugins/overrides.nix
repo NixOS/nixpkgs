@@ -621,14 +621,18 @@ in
   };
 
   codecompanion-nvim = super.codecompanion-nvim.overrideAttrs {
+    checkInputs = with self; [
+      # Optional completion
+      blink-cmp
+      nvim-cmp
+      # Optional pickers
+      fzf-lua
+      mini-nvim
+      snacks-nvim
+      telescope-nvim
+    ];
     dependencies = [ self.plenary-nvim ];
     nvimSkipModules = [
-      # Optional provider dependencies
-      "codecompanion.providers.actions.mini_pick"
-      "codecompanion.providers.actions.snacks"
-      "codecompanion.providers.actions.telescope"
-      "codecompanion.providers.actions.fzf_lua"
-      "codecompanion.providers.diff.mini_diff"
       # Requires setup call
       "codecompanion.actions.static"
       "codecompanion.actions.init"
