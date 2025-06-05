@@ -19556,6 +19556,8 @@ self: super: with self; {
 
   zcbor = callPackage ../development/python-modules/zcbor { };
 
+  zcc-helper = callPackage ../development/python-modules/zcc-helper { };
+
   zconfig = callPackage ../development/python-modules/zconfig { };
 
   zdaemon = callPackage ../development/python-modules/zdaemon { };
