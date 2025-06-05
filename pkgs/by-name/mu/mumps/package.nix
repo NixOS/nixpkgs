@@ -1,19 +1,19 @@
 {
-  blas,
+  lib,
+  stdenv,
   fetchzip,
   gfortran,
+  fixDarwinDylibNames,
+  blas,
   lapack,
-  lib,
+  scalapack,
+  scotch,
   metis,
   parmetis,
-  withParmetis ? false, # default to false due to unfree license
-  scotch,
-  withPtScotch ? mpiSupport,
-  stdenv,
-  fixDarwinDylibNames,
-  mpiSupport ? false,
   mpiCheckPhaseHook,
-  scalapack,
+  mpiSupport ? false,
+  withParmetis ? false, # default to false due to unfree license
+  withPtScotch ? mpiSupport,
 }:
 assert withParmetis -> mpiSupport;
 assert withPtScotch -> mpiSupport;
