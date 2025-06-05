@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  subversion,
   fetchsvn,
   fetchzip,
   pkg-config,
@@ -26,6 +27,41 @@ let
     '';
 
   fetchzip' = defaults: args: fetchzip (defaults // args);
+
+  fetch-svn-patch =
+    {
+      rev,
+      repo ? "simutrans",
+      url ? "svn://servers.simutrans.org",
+      hash,
+    }:
+    let
+      prev = toString (rev - 1);
+      this = toString rev;
+
+      name = "${repo}-r${this}.patch";
+
+      raw =
+        runCommand name
+          {
+            nativeBuildInputs = [ subversion ];
+            outputHashMode = "recursive";
+            outputHash = hash;
+          }
+          ''
+            svn diff --git ${
+              lib.escapeShellArgs [
+                "${url}@${prev}"
+                "${url}@${this}"
+              ]
+            } > $out
+          '';
+    in
+    # this is necessary to make the patch git-compatible
+    runCommand name { } ''
+      substitute ${raw} $out \
+        --replace-fail "${repo}/trunk/" ""
+    '';
 
   version = "124.0";
 
@@ -320,17 +356,29 @@ let
     patches = [
       # The Makefile contains a typo.
       # We need this to build.
-      ./r11174.patch
+      (fetch-svn-patch {
+        rev = 11174;
+        hash = "sha256-6qZGxB2zXgTyKhAYYk/vaLW/waMb/chPZjlA1HYoj2M=";
+      })
       # The implementation of check_and_set_dir() is broken (rejects all user and install directories).
       # We depend on this function to set the user and install directories.
-      ./r11175.patch
+      (fetch-svn-patch {
+        rev = 11175;
+        hash = "sha256-tZz8ztYa0NVkAmLwUxRZdq4tPw5GCe9A4PI3p+cuLms=";
+      })
       # r11175 contains a use-after-free when validating the base directory.
       # I don't think it's exploitable on NixOS, but we should fix it anyway.
-      ./r11178.patch
+      (fetch-svn-patch {
+        rev = 11178;
+        hash = "sha256-kymcjo9rW1yFfYP/5tojCgpRAiqt7NYUJPb5w6937kE=";
+      })
       # The fixed implementation of check_and_set_dir() still has a bug where it doesn't allow nonexistent directories.
       # We need this so that the overridden directories can be created on startup.
       # That can be worked around with `mkdir` in the wrapper but it's better to fix at the source.
-      ./r11204.patch
+      (fetch-svn-patch {
+        rev = 11204;
+        hash = "sha256-iDAeOzlGhUS6kHJGaMtG2Jfq6jgIWpNRqx1ddHiBg/A=";
+      })
       # This is a part of r11273, but not the full patch, since the same revision contains changes unrelated to UPNP.
       # It's necessary because miniupnpc had breaking changes.
       # See also:
