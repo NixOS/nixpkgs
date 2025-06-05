@@ -274,8 +274,10 @@ let
   withPaks =
     paks:
     symlinkJoin {
-      inherit (binaries) name;
-      paths = [ binaries ] ++ paks;
+      pname = "simutrans";
+      inherit version;
+
+      paths = [ simutrans-bin ] ++ paks;
       nativeBuildInputs = [ makeWrapper ];
       # The game has three directories it reads data from:
       #
@@ -346,15 +348,15 @@ let
         '';
 
       strip = false;
-      passthru.meta = binaries.meta // {
+      passthru.meta = simutrans-bin.meta // {
         hydraPlatforms = [ ];
       };
-      passthru.binaries = binaries;
+      passthru.bin = simutrans-bin;
       passthru.pakSpec = pakSpec;
     };
 
-  binaries = stdenv.mkDerivation {
-    pname = "simutrans";
+  simutrans-bin = stdenv.mkDerivation {
+    pname = "simutrans-bin";
     inherit version src;
 
     sourceRoot = "simutrans-r${src.rev}/trunk";

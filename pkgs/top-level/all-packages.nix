@@ -15245,7 +15245,7 @@ with pkgs;
   tower-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon/tower-pixel-dungeon { };
 
   # get binaries without data built by Hydra
-  simutrans_binaries = lowPrio simutrans.binaries;
+  simutrans-bin = lowPrio simutrans.bin;
 
   soi = callPackage ../games/soi {
     lua = lua5_1;
