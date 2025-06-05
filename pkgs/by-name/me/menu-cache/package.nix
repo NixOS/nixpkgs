@@ -11,14 +11,14 @@
   libfm-extra,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "menu-cache";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "lxde";
     repo = "menu-cache";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-5Vp2btrflimy+Hq+3MLpic/quZMJ3uwsMq12G7s4DGI=";
   };
 
@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
     libfm-extra
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to read freedesktop.org menu files";
-    homepage = "https://blog.lxde.org/tag/menu-cache/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.ttuegel ];
-    platforms = platforms.linux ++ platforms.darwin;
+    homepage = "https://github.com/lxde/menu-cache";
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.ttuegel ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})
