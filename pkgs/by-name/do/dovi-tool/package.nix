@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dovi-tool";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "quietvoid";
     repo = "dovi_tool";
     tag = finalAttrs.version;
-    hash = "sha256-z783L6gBr9o44moKYZGwymWEMp5ZW7yOhZcpvbznXK4=";
+    hash = "sha256-CsF/KgY4D2pBXYzm6FtJt2xo7mSLt3JGkvajRYA4MWA=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-pwB6QBLeHALbYZHzTBm/ODLPHhxM3B5n+B/0iXYNuVc=";
+  cargoHash = "sha256-21tb45F66yR5rquWML22EAPsExOkmas6Yquq9vEmhdk=";
 
   nativeBuildInputs = [
     pkg-config
