@@ -21,7 +21,6 @@ let
       )
       (
         {
-          inherit package;
           nativeBuildInputs = [
             cfg.package
             pkgs.findutils
@@ -32,8 +31,8 @@ let
       )
       ''
         mkdir -p $out
-        if [ -d $package/share/man ]; then
-          echo "MANDB_MAP $package/share/man $out" > man.conf
+        if [ -d ${package}/share/man ]; then
+          echo "MANDB_MAP ${package}/share/man $out" > man.conf
           mandb -C man.conf -psc >/dev/null 2>&1
         fi
       '';
