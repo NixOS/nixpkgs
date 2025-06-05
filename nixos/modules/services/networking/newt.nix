@@ -88,4 +88,5 @@ in
       };
     };
   };
+  meta.maintainers = with lib.maintainers; [ jackr ];
 }
