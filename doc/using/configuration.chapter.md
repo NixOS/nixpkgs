@@ -33,7 +33,7 @@ Most unfree licenses prohibit either executing or distributing the software.
 
 ## Installing broken packages {#sec-allow-broken}
 
-There are two ways to try compiling a package which has been marked as broken.
+There are several ways to try compiling a package which has been marked as broken.
 
 -   For allowing the build of a broken package once, you can use an environment variable for a single invocation of the nix tools:
 
@@ -41,7 +41,15 @@ There are two ways to try compiling a package which has been marked as broken.
     $ export NIXPKGS_ALLOW_BROKEN=1
     ```
 
--   For permanently allowing broken packages to be built, you may add `allowBroken = true;` to your user's configuration file, like this:
+-   For permanently allowing broken packages that match some condition to be built, you may add `allowBrokenPredicate` to your user's configuration file with the desired condition, for example:
+
+    ```nix
+    {
+      allowBrokenPredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [ "hello" ];
+    }
+    ```
+
+-   For permanently allowing all broken packages to be built, you may add `allowBroken = true;` to your user's configuration file, like this:
 
     ```nix
     {
