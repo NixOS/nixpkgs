@@ -56,9 +56,8 @@ rec {
   ];
 
   env = {
+    CASROOT = opencascade-occt;
   };
-
-  CASROOT = opencascade-occt;
 
   meta = {
     description = "Free EDA software to develop printed circuit boards";
