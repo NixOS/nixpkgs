@@ -8,13 +8,13 @@
 
 buildFishPlugin rec {
   pname = "pure";
-  version = "4.11.0";
+  version = "4.11.2";
 
   src = fetchFromGitHub {
     owner = "pure-fish";
     repo = "pure";
     rev = "v${version}";
-    hash = "sha256-8zxqPU9N5XGbKc0b3bZYkQ3yH64qcbakMsHIpHZSne4=";
+    hash = "sha256-rQIHJCtY83eZOJaoy58QcnFufqZITGO7ZvxROktD8D8=";
   };
 
   nativeCheckInputs = [ git ];
