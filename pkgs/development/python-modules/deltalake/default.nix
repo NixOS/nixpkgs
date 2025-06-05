@@ -76,7 +76,10 @@ buildPythonPackage rec {
     rm -rf deltalake
   '';
 
-  pytestFlagsArray = [ "-m 'not integration'" ];
+  pytestFlagsArray = [
+    "--benchmark-disable"
+    "-m 'not integration'"
+  ];
 
   meta = with lib; {
     description = "Native Rust library for Delta Lake, with bindings into Python";
