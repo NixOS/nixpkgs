@@ -905,8 +905,8 @@ let
           boolValues
           ++ [
             "static"
-            "dhcp-on-stop"
-            "dhcp"
+            "dynamic-on-stop"
+            "dynamic"
           ]
         ))
       ];
