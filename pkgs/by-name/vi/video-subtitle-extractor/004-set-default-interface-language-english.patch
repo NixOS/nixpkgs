@@ -1,0 +1,11 @@
+--- a/backend/config.py
++++ b/backend/config.py
+@@ -37,7 +37,7 @@
+         'Tiếng Việt': 'vi',
+         'Español': 'es'
+     }
+-    interface = OptionsConfigItem("Window", "Interface", "ChineseSimplified", OptionsValidator(intefaceTexts.values()), restart = True)
++    interface = OptionsConfigItem("Window", "Interface", "en", OptionsValidator(intefaceTexts.values()), restart = True)
+     
+     # 窗口位置和大小
+     windowX = ConfigItem("Window", "X", None) 

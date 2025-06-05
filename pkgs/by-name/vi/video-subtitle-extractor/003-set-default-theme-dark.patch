@@ -1,0 +1,11 @@
+--- a/gui.py
++++ b/gui.py
+@@ -37,7 +37,7 @@
+         # 禁用云母效果
+         self.setMicaEffectEnabled(False)
+         # 设置深色主题并跟随系统主题色
+-        # setTheme(Theme.LIGHT)
++        setTheme(Theme.DARK)
+         # setThemeColor(getSystemAccentColor(), save=True)
+ 
+         # 初始化系统主题监听器并连接信号 

@@ -1,0 +1,19 @@
+--- a/backend/tools/reformat.py
++++ b/backend/tools/reformat.py
+@@ -43,14 +43,14 @@ def execute(path, lang='en'):
+                     "they'll", "there'll", "there'd", "can't", "couldn't", "daren't", "hadn't", "mightn't", "mustn't",
+                     "needn't", "oughtn't", "shan't", "shouldn't", "usedn't", "won't", "wouldn't", "that's", "what's", "it'll"]
+         verb_form_map = {}
+ 
+-        typo_map_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'configs', 'typoMap.json')
++        typo_map_path = os.path.expanduser('~/.config/video-subtitle-extractor/typoMap.json')
+         try:
+             with open(typo_map_path, 'r', encoding='utf-8') as load_f:
+                 typo_map = json.load(load_f)
+         except Exception as e:
+-            print(f"Error: Failed to load typoMap.json: {str(e)}")
++            print(f"Warning: typoMap.json not found, using empty configuration: {str(e)}")
+             print(traceback.format_exc())
+             typo_map = {}
+ 
+         for verb in verb_forms: 
