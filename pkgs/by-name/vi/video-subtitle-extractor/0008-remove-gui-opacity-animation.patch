@@ -1,0 +1,18 @@
+--- a/gui.py
++++ b/gui.py
+@@ -172,14 +172,6 @@
+     app = QtWidgets.QApplication(sys.argv)
+     app.setAttribute(Qt.AA_DontCreateNativeWidgetSiblings)
+     window = SubtitleExtractorGUI()
+-    # 先设置透明, 再显示, 否则会有闪烁的效果
+-    window.setWindowOpacity(0.0)
+     window.show()
+     window.load_window_position()
+-    # 使用动画效果逐渐显示窗口
+-    animation = QtCore.QPropertyAnimation(window, b"windowOpacity")
+-    animation.setDuration(300)  # 300毫秒的动画
+-    animation.setStartValue(0.0)
+-    animation.setEndValue(1.0)
+-    animation.start()
+     app.exec()
+\ No newline at end of file

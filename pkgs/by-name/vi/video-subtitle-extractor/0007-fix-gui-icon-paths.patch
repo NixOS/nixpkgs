@@ -1,0 +1,26 @@
+--- a/ui/icon/my_fluent_icon.py
++++ b/ui/icon/my_fluent_icon.py
+@@ -1,3 +1,4 @@
++import os
+ from enum import Enum
+ 
+ from qfluentwidgets import getIconColor, Theme, FluentIconBase
+@@ -8,4 +9,4 @@ class MyFluentIcon(FluentIconBase, Enum)
+ 
+     def path(self, theme=Theme.AUTO):
+         # getIconColor() return "white" or "black" according to current theme
+-        return f'./ui/icon/{self.value}_{getIconColor(theme)}.svg'
++        return os.path.abspath(os.path.join(os.path.dirname(__file__), f'{self.value}_{getIconColor(theme)}.svg'))
+--- a/gui.py
++++ b/gui.py
+@@ -43,7 +43,9 @@
+         # self.themeListener.start()
+  
+         # 设置窗口图标
+-        self.setWindowIcon(QtGui.QIcon("design/vse.ico"))
++        script_dir = os.path.dirname(os.path.abspath(__file__))
++        icon_path = os.path.abspath(os.path.join(script_dir, "..", "icons", "hicolor", "128x128", "apps", "video-subtitle-extractor.png"))
++        self.setWindowIcon(QtGui.QIcon(icon_path))
+         self.setWindowTitle(tr['SubtitleExtractorGUI']['Title'] + " v" + VERSION)
+         # 创建界面布局
+         self._create_layout()
