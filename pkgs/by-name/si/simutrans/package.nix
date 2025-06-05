@@ -337,6 +337,12 @@ let
             --run 'export SIMUTRANS_USERDIR=''${SIMUTRANS_USERDIR-${default-home}}' \
             --run 'export SIMUTRANS_INSTALLDIR=''${SIMUTRANS_INSTALLDIR-${default-home}/paksets}' \
             --add-flags "-set_basedir $out/share/simutrans"
+
+          mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}
+
+          ln -s ${src}/trunk/src/simutrans/simutrans.svg $out/share/icons/hicolor/scalable/apps/simutrans.svg
+          substitute ${src}/trunk/src/linux/simutrans.desktop $out/share/applications/simutrans.desktop \
+            --replace-fail "Exec=simutrans" "Exec=$out/bin/simutrans"
         '';
 
       strip = false;
@@ -420,10 +426,8 @@ let
     enableParallelBuilding = true;
 
     installPhase = ''
-      mkdir -p $out/share/
-      mv simutrans $out/share/
-
-      mkdir -p $out/bin/
+      mkdir -p $out/{bin,share}
+      mv simutrans $out/share/simutrans
       mv build/default/sim $out/bin/simutrans
     '';
 
