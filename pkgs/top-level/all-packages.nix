@@ -3306,8 +3306,6 @@ with pkgs;
 
   hotdoc = python3Packages.callPackage ../development/tools/hotdoc { };
 
-  hotspot = libsForQt5.callPackage ../development/tools/analysis/hotspot { };
-
   hpccm = with python3Packages; toPythonApplication hpccm;
 
   hqplayer-desktop = qt6Packages.callPackage ../applications/audio/hqplayer-desktop { };
@@ -8573,8 +8571,6 @@ with pkgs;
   rust-jemalloc-sys-unprefixed = rust-jemalloc-sys.override { unprefixed = true; };
 
   json2yaml = haskell.lib.compose.justStaticExecutables haskellPackages.json2yaml;
-
-  kddockwidgets = libsForQt5.callPackage ../development/libraries/kddockwidgets { };
 
   keybinder = callPackage ../development/libraries/keybinder {
     automake = automake111x;
