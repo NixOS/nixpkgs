@@ -12,6 +12,7 @@
   metis,
   parmetis,
   mpiCheckPhaseHook,
+  static ? stdenv.hostPlatform.isStatic,
   mpiSupport ? false,
   withParmetis ? false, # default to false due to unfree license
   withPtScotch ? mpiSupport,
@@ -85,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
       "OPTC=-O3"
       "OPTL=-O3"
       "SCALAP=-lscalapack"
-      "allshared"
+      "${if static then "all" else "allshared"}"
     ];
 
   installPhase =
