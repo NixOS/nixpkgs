@@ -2,8 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  qmake,
-  wrapQtAppsHook,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,8 +17,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    qmake
-    wrapQtAppsHook
+    libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
   ];
 
   patches = [ ./disable_version_check.patch ];
