@@ -1001,6 +1001,11 @@ It's possible to compile a Deno project to a single binary using `deno compile`.
 The binary will be named like the `.name` property in `deno.json`, if available,
 or the `name` attribute of the derivation.
 
+:::{.caution}
+When using packages with a `npm:` specifier, the resulting binary will not be reproducible.
+See [this issue](https://github.com/denoland/deno/issues/29619) for more information.
+:::
+
 Related options:
 
 *`hostPlatform`* (String; optional)

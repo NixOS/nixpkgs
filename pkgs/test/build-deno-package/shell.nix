@@ -1,5 +1,5 @@
 let
-  pkgs = import <nixpkgs> { };
+  pkgs = import ../../../default.nix { };
 in
 pkgs.mkShell {
   buildInputs = [ pkgs.deno ];
