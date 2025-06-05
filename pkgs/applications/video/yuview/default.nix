@@ -6,15 +6,15 @@
   wrapQtAppsHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yuview";
-  version = "2.13";
+  version = "2.14";
 
   src = fetchFromGitHub {
     owner = "IENT";
     repo = "YUView";
-    rev = "v.${version}";
-    sha256 = "sha256-2mNIuyY/ni+zkUc8V/iXUEa7JeBJyOnNod7friMYAm8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YuKPRYBr1CKrwickk1T89ZCYFt99jP86tdanp+JZMO4=";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/IENT/YUView/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://ient.github.io/YUView";
     description = "YUV Viewer and Analysis Tool";
     longDescription = ''
@@ -42,9 +43,9 @@ stdenv.mkDerivation rec {
       sequences, and many more. Further information can be found in the YUV help
       in the application itself or in our wiki.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ leixb ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ leixb ];
+    platforms = lib.platforms.unix;
     mainProgram = "YUView";
   };
-}
+})
