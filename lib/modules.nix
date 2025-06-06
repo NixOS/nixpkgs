@@ -1151,29 +1151,31 @@ let
         throw
           "The option `${showOption loc}' was accessed but has no value defined. Try setting the option.";
 
-    ensureMergedValueEnvelope =
-      v:
-      if attrNames v == attrNames defaultCheckedAndMerged then
-        v
-      else
-        throw "Invalid 'type.merge.v2' of type: '${type.name}' must return exactly the following attributes: ${builtins.toJSON (attrNames defaultCheckedAndMerged)} but got ${builtins.toJSON (attrNames v)}";
-
-    defaultCheckedAndMerged = {
-      headError = null;
-      value = mergedValue;
-      valueMeta = { };
-    };
-
-    checkedAndMerged = ensureMergedValueEnvelope (
-      if type.merge ? v2 then
-        type.merge.v2 {
-          inherit loc;
-          defs = defsFinal;
-        }
-      else
-        defaultCheckedAndMerged
-
-    );
+    checkedAndMerged =
+      (
+        # This immediately invoked inline function is used to ensure that the merged value
+        # has the required attributes as defined:
+        # For future performance optimizations this function adds a cost of: nr.thunks (+5399, +0.08%) on a plain NixOS evaluation
+        {
+          headError,
+          value,
+          valueMeta,
+        }@args:
+        args
+      )
+        (
+          if type.merge ? v2 then
+            type.merge.v2 {
+              inherit loc;
+              defs = defsFinal;
+            }
+          else
+            {
+              headError = null;
+              value = mergedValue;
+              valueMeta = { };
+            }
+        );
 
     isDefined = defsFinal != [ ];
 

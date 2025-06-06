@@ -1507,23 +1507,27 @@ let
             v2 =
               { loc, defs }:
               let
-                isMergeV2 = coercedType.merge ? v2;
-                coerceDef =
-                  def:
-                  let
-                    merged = coercedType.merge.v2 {
-                      inherit loc;
-                      defs = [ def ];
-                    };
-                  in
-                  if isMergeV2 then
-                    if merged.headError == null then coerceFunc def.value else def.value
-                  else if coercedType.check def.value then
-                    coerceFunc def.value
-                  else
-                    def.value;
-
-                finalDefs = (map (def: def // { value = coerceDef def; }) defs);
+                finalDefs = (
+                  map (
+                    def:
+                    def
+                    // {
+                      value =
+                        let
+                          merged = coercedType.merge.v2 {
+                            inherit loc;
+                            defs = [ def ];
+                          };
+                        in
+                        if coercedType.merge ? v2 then
+                          if merged.headError == null then coerceFunc def.value else def.value
+                        else if coercedType.check def.value then
+                          coerceFunc def.value
+                        else
+                          def.value;
+                    }
+                  ) defs
+                );
               in
               if finalType.merge ? v2 then
                 finalType.merge.v2 {
@@ -1534,7 +1538,7 @@ let
                 {
                   value = finalType.merge loc finalDefs;
                   valueMeta = { };
-                  headError = checkDefsForError check loc finalDefs;
+                  headError = checkDefsForError check loc defs;
                 };
           };
           emptyValue = finalType.emptyValue;
