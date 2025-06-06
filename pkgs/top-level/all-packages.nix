@@ -14626,8 +14626,6 @@ with pkgs;
 
   youtube-viewer = perlPackages.WWWYoutubeViewer;
 
-  yuview = libsForQt5.yuview;
-
   zathuraPkgs = callPackage ../applications/misc/zathura { };
   zathura = zathuraPkgs.zathuraWrapper;
 
