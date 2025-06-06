@@ -32,6 +32,7 @@ rustPlatform.buildRustPackage rec {
       nickcao
       leona
       kloenk
+      johnazoidberg
     ];
     mainProgram = "framework_tool";
   };
