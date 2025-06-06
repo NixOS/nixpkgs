@@ -5,26 +5,26 @@
   linux-pam,
   libxcb,
   makeBinaryWrapper,
-  zig_0_13,
+  zig_0_14,
   callPackage,
   nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ly";
-  version = "1.0.3";
+  version = "1.1.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "AnErrupTion";
     repo = "ly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TsEn0kH7j4myjjgwHnbOUmIZjHn8A1d/7IjamoWxpXQ=";
+    hash = "sha256-+rRvrlzV5MDwb/7pr/oZjxxDmE1kbnchyUi70xwp0Cw=";
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
-    zig_0_13.hook
+    zig_0_14.hook
   ];
   buildInputs = [
     libxcb
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     ln -s ${
       callPackage ./deps.nix {
-        zig = zig_0_13;
+        zig = zig_0_14;
       }
     } $ZIG_GLOBAL_CACHE_DIR/p
   '';
