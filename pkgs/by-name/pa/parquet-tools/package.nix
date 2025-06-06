@@ -71,12 +71,12 @@ python3Packages.buildPythonApplication rec {
     "parquet_tools"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool for parquet files";
     homepage = "https://github.com/ktrueda/parquet-tools";
     changelog = "https://github.com/ktrueda/parquet-tools/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cpcloud ];
     mainProgram = "parquet-tools";
   };
 }
