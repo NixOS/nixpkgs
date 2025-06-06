@@ -682,6 +682,8 @@ self: super:
 
   matterhorn = doJailbreak super.matterhorn;
 
+  lz4-frame-conduit = addTestToolDepends [ pkgs.lz4 ] super.lz4-frame-conduit;
+
   # Too strict bounds on transformers and resourcet
   # https://github.com/alphaHeavy/lzma-conduit/issues/23
   lzma-conduit = doJailbreak super.lzma-conduit;
