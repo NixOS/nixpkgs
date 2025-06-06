@@ -1143,6 +1143,7 @@
   ./services/networking/gns3-server.nix
   ./services/networking/gnunet.nix
   ./services/networking/go-autoconfig.nix
+  ./services/networking/go-away.nix
   ./services/networking/go-camo.nix
   ./services/networking/go-neb.nix
   ./services/networking/go-shadowsocks2.nix
