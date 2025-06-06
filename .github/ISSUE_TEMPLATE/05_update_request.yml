@@ -20,7 +20,9 @@ body:
 
         > [!TIP]
         > For instance, if you were filing a request against the out of date `hello` package, where the current version in Nixpkgs is 1.0.0, but the latest version upstream is 1.0.1, your title would be as follows:
-        > `Update Request: hello 1.0.0 → 1.0.1`
+        > ```
+        > Update Request: hello 1.0.0 → 1.0.1
+        > ```
 
         ---
   - type: "dropdown"
