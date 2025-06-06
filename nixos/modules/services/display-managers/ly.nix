@@ -41,13 +41,11 @@ let
     path = "/run/current-system/sw/bin";
     term_reset_cmd = "${pkgs.ncurses}/bin/tput reset";
     term_restore_cursor_cmd = "${pkgs.ncurses}/bin/tput cnorm";
-    mcookie_cmd = "/run/current-system/sw/bin/mcookie";
     waylandsessions = "${dmcfg.sessionData.desktops}/share/wayland-sessions";
-    wayland_cmd = dmcfg.sessionData.wrapper;
     xsessions = "${dmcfg.sessionData.desktops}/share/xsessions";
     xauth_cmd = lib.optionalString xcfg.enable "${pkgs.xorg.xauth}/bin/xauth";
     x_cmd = lib.optionalString xcfg.enable xserverWrapper;
-    x_cmd_setup = dmcfg.sessionData.wrapper;
+    setup_cmd = dmcfg.sessionData.wrapper;
   };
 
   finalConfig = defaultConfig // cfg.settings;
