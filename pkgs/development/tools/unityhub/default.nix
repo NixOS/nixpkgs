@@ -110,6 +110,10 @@ stdenv.mkDerivation rec {
         # Unity Editor 6000 specific dependencies
         harfbuzz
         vulkan-loader
+
+        # Unity Bug Reporter specific dependencies
+        xorg.libICE
+        xorg.libSM
       ]
       ++ extraLibs pkgs;
   };
