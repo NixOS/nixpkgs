@@ -21,18 +21,18 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "onedrive";
   version = "2.5.6";
 
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
   src = fetchFromGitHub {
     owner = "abraunegg";
     repo = "onedrive";
     tag = "v${finalAttrs.version}";
     hash = "sha256-AFaz1RkrtsdTZfaWobdcADbzsAhbdCzJPkQX6Pa7hN8=";
   };
-
-  outputs = [
-    "out"
-    "doc"
-    "man"
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
