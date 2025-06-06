@@ -94,11 +94,39 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
+    # adios2 builtin modules
+    (lib.cmakeBool "ADIOS2_USE_DataMan" true)
+    (lib.cmakeBool "ADIOS2_USE_MHS" true)
+    (lib.cmakeBool "ADIOS2_USE_SST" true)
+
+    # declare thirdparty dependencies explicitly
+    (lib.cmakeBool "ADIOS2_USE_EXTERNAL_DEPENDENCIES" true)
+    (lib.cmakeBool "ADIOS2_USE_Blosc2" true)
+    (lib.cmakeBool "ADIOS2_USE_BZip2" true)
+    (lib.cmakeBool "ADIOS2_USE_ZFP" true)
+    (lib.cmakeBool "ADIOS2_USE_SZ" false)
+    (lib.cmakeBool "ADIOS2_USE_LIBPRESSIO" false)
+    (lib.cmakeBool "ADIOS2_USE_MGARD" false)
+    (lib.cmakeBool "ADIOS2_USE_PNG" true)
+    (lib.cmakeBool "ADIOS2_USE_CUDA" false)
+    (lib.cmakeBool "ADIOS2_USE_Kokkos" false)
+    (lib.cmakeBool "ADIOS2_USE_MPI" true)
+    (lib.cmakeBool "ADIOS2_USE_DAOS" false)
+    (lib.cmakeBool "ADIOS2_USE_DataSpaces" false)
+    (lib.cmakeBool "ADIOS2_USE_ZeroMQ" true)
     (lib.cmakeBool "ADIOS2_USE_HDF5" true)
     (lib.cmakeBool "ADIOS2_USE_HDF5_VOL" true)
+    (lib.cmakeBool "ADIOS2_USE_IME" false)
+    (lib.cmakeBool "ADIOS2_USE_Python" pythonSupport)
+    (lib.cmakeBool "ADIOS2_USE_Fortran" true)
+    (lib.cmakeBool "ADIOS2_USE_UCX" (lib.meta.availableOn stdenv.hostPlatform ucx))
+    (lib.cmakeBool "ADIOS2_USE_Sodium" true)
+    (lib.cmakeBool "ADIOS2_USE_Catalyst" false)
+    (lib.cmakeBool "ADIOS2_USE_Campaign" true)
+    (lib.cmakeBool "ADIOS2_USE_AWSSDK" false)
+
     (lib.cmakeBool "BUILD_TESTING" false)
     (lib.cmakeBool "ADIOS2_BUILD_EXAMPLES" withExamples)
-    (lib.cmakeBool "ADIOS2_USE_EXTERNAL_DEPENDENCIES" true)
     (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
     (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
