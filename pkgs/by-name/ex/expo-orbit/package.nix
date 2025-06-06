@@ -94,7 +94,7 @@ in
       wrapProgram $out/bin/expo-orbit \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime=true}}"
 
-      sed -i "s|Exec.*$|Exec=$out/bin/expo-orbit %U|" $out/share/applications/expo-orbit.desktop
+      sed -i "s|Exec.*$|Exec=expo-orbit %U|" $out/share/applications/expo-orbit.desktop
 
       runHook postInstall
     '';
