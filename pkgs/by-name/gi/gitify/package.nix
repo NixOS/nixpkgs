@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
       desktopName = "Gitify";
       exec = "gitify %U";
       icon = "gitify";
-      comment = "GitHub notifications on your menu bar.";
+      comment = "GitHub notifications on your menu bar";
       categories = [ "Development" ];
       startupWMClass = "Gitify";
     })
