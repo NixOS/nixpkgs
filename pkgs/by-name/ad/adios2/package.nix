@@ -105,8 +105,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_PYTHONDIR" python3.sitePackages)
   ];
 
-  # equired for finding the generated adios2-config.cmake file
-  env.adios2_DIR = "${placeholder "out"}/lib/cmake/adios2";
+  # required for finding the generated adios2-config.cmake file
+  preInstall = ''
+    export adios2_DIR=$out/lib/cmake/adios2
+  '';
 
   # Ctest takes too much time, so we only perform some smoke Python tests.
   doInstallCheck = pythonSupport;
