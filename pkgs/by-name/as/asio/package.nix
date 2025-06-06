@@ -4,18 +4,15 @@
   fetchurl,
   boost,
   openssl,
-  version,
-  sha256,
-  ...
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "asio";
-  inherit version;
+  version = "1.24.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/asio/asio-${version}.tar.bz2";
-    inherit sha256;
+    hash = "sha256-iXaBLCShGGAPb88HGiBgZjCmmv5MCr7jsN6lKOaCxYU=";
   };
 
   propagatedBuildInputs = [ boost ];
