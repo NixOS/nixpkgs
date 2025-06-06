@@ -26175,6 +26175,12 @@
     githubId = 6148271;
     name = "Dave Nicponski";
   };
+  vivan = {
+    email = "vivan.waghela23@gmail.com";
+    github = "highjeans";
+    githubId = 77588045;
+    name = "Vivan Waghela";
+  };
   vizanto = {
     email = "danny@prime.vc";
     github = "vizanto";
