@@ -1,29 +1,50 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
   boost,
   openssl,
+  testers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "asio";
-  version = "1.24.0";
+  version = "1.34.2";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/asio/asio-${version}.tar.bz2";
-    hash = "sha256-iXaBLCShGGAPb88HGiBgZjCmmv5MCr7jsN6lKOaCxYU=";
+  src = fetchFromGitHub {
+    owner = "chriskohlhoff";
+    repo = "asio";
+    tag = "asio-${lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
+    hash = "sha256-B9tFXcmBn7n4wEdnfjw5o90fC/cG5+WMdu/K4T6Y+jI=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/asio";
+
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   propagatedBuildInputs = [ boost ];
 
   buildInputs = [ openssl ];
 
-  meta = with lib; {
-    homepage = "http://asio.sourceforge.net/";
-    description = "Cross-platform C++ library for network and low-level I/O programming";
-    license = licenses.boost;
-    broken = stdenv.hostPlatform.isDarwin && lib.versionOlder version "1.16.1";
-    platforms = platforms.unix;
+  enableParallelBuilding = true;
+
+  doCheck = true;
+
+  passthru.tests.pkg-config = testers.hasPkgConfigModules {
+    package = finalAttrs.finalPackage;
+    versionCheck = true;
   };
-}
+
+  meta = {
+    homepage = "https://think-async.com/Asio";
+    description = "Cross-platform C++ library for network and low-level I/O programming";
+    license = lib.licenses.boost;
+    platforms = lib.platforms.unix;
+    pkgConfigModules = [ "asio" ];
+  };
+})
