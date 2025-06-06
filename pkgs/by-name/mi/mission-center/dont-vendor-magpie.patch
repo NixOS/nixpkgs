@@ -1,0 +1,16 @@
+diff --git a/meson.build b/meson.build
+index 3195288..c3859c5 100644
+--- a/meson.build
++++ b/meson.build
+@@ -13,10 +13,7 @@ c_compiler = meson.get_compiler('c')
+ skip_codegen = get_option('skip-codegen')
+ 
+ if get_option('flatpak') == false
+-    proj_magpie = subproject('magpie', default_options: [
+-                                 'skip-codegen=' + skip_codegen.to_string(),
+-                                 'b_lto=' + get_option('b_lto').to_string(),
+-                             ])
++    magpie_dep = dependency('magpie', required: true)
+ endif
+ 
+ subdir('data')
