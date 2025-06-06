@@ -12237,6 +12237,11 @@
     github = "joshniemela";
     githubId = 88747315;
   };
+  joshprk = {
+    name = "Joshua Park";
+    github = "joshprk";
+    githubId = 123624726;
+  };
   joshuafern = {
     name = "Joshua Fern";
     email = "joshuafern@protonmail.com";
