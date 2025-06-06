@@ -27246,6 +27246,11 @@
     githubId = 4113027;
     name = "Jesper Geertsen Jonsson";
   };
+  yethal = {
+    github = "yethal";
+    githubId = 26117918;
+    name = "Yethal";
+  };
   yinfeng = {
     email = "lin.yinfeng@outlook.com";
     github = "linyinfeng";
