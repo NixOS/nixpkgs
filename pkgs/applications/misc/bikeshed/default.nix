@@ -10,6 +10,7 @@
   alive-progress,
   async-timeout,
   attrs,
+  cddlparser,
   certifi,
   charset-normalizer,
   cssselect,
@@ -38,12 +39,12 @@
 
 buildPythonApplication rec {
   pname = "bikeshed";
-  version = "5.1.2";
+  version = "5.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QIADVcxgJreH2pvXRVIBE5p6nEEYZtTiSo00RrpFT+E=";
+    hash = "sha256-HUPkLEpwLRnrffUMN62WPqsZX2UsGqPfjEa91UMbUMM=";
   };
 
   build-system = [ setuptools ];
@@ -58,6 +59,7 @@ buildPythonApplication rec {
     alive-progress
     async-timeout
     attrs
+    cddlparser
     certifi
     charset-normalizer
     cssselect
