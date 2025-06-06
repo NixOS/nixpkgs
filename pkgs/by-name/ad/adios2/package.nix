@@ -11,7 +11,7 @@
   mpi,
   bzip2,
   c-blosc2,
-  hdf5-mpi,
+  hdf5,
   libfabric,
   libpng,
   libsodium,
@@ -25,9 +25,19 @@
   nlohmann_json,
   llvmPackages,
   testers,
+  mpiSupport ? true,
   pythonSupport ? false,
   withExamples ? false,
 }:
+let
+  adios2Packages = {
+    hdf5 = hdf5.override {
+      inherit mpi mpiSupport;
+      cppSupport = !mpiSupport;
+    };
+    mpi4py = python3Packages.mpi4py.override { inherit mpi; };
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   version = "2.10.2";
   pname = "adios2";
@@ -66,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       bzip2
       c-blosc2
-      (hdf5-mpi.override { inherit mpi; })
+      adios2Packages.hdf5
       libfabric
       libpng
       libsodium
@@ -88,19 +98,15 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   propagatedBuildInputs =
-    [
-      mpi
-    ]
-    ++ lib.optionals pythonSupport [
-      (python3Packages.mpi4py.override { inherit mpi; })
-      python3Packages.numpy
-    ];
+    lib.optional mpiSupport mpi
+    ++ lib.optional pythonSupport python3Packages.numpy
+    ++ lib.optional (mpiSupport && pythonSupport) adios2Packages.mpi4py;
 
   cmakeFlags = [
     # adios2 builtin modules
     (lib.cmakeBool "ADIOS2_USE_DataMan" true)
     (lib.cmakeBool "ADIOS2_USE_MHS" true)
-    (lib.cmakeBool "ADIOS2_USE_SST" true)
+    (lib.cmakeBool "ADIOS2_USE_SST" mpiSupport)
 
     # declare thirdparty dependencies explicitly
     (lib.cmakeBool "ADIOS2_USE_EXTERNAL_DEPENDENCIES" true)
@@ -113,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ADIOS2_USE_PNG" true)
     (lib.cmakeBool "ADIOS2_USE_CUDA" false)
     (lib.cmakeBool "ADIOS2_USE_Kokkos" false)
-    (lib.cmakeBool "ADIOS2_USE_MPI" true)
+    (lib.cmakeBool "ADIOS2_USE_MPI" mpiSupport)
     (lib.cmakeBool "ADIOS2_USE_DAOS" false)
     (lib.cmakeBool "ADIOS2_USE_DataSpaces" false)
     (lib.cmakeBool "ADIOS2_USE_ZeroMQ" true)
