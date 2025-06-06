@@ -30,8 +30,7 @@ body:
       description: |
         What version of Nixpkgs are you using?
 
-        > [!IMPORTANT]
-        > If you are using an older or stable version, please update to the latest **unstable** version and check if the module still does not exist before continuing this request.
+        If you are using an older or stable version, please update to the latest **unstable** version and check if the module still does not exist before continuing this request.
       options:
         - "Please select a version."
         - "- Unstable (25.11)"

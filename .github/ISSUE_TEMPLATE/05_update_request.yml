@@ -30,9 +30,9 @@ body:
       description: |
         What version of Nixpkgs are you using?
 
-        > [!IMPORTANT]
-        > If you are using an older or stable version, please update to the latest **unstable** version and check if the package is still out of date.
-        > If the package has been updated in unstable, but you believe the update should be backported to the stable release of Nixpkgs, please file the '**Request: backport to stable**' form instead.
+        If you are using an older or stable version, please update to the latest **unstable** version and check if the package is still out of date.
+
+        If the package has been updated in unstable, but you believe the update should be backported to the stable release of Nixpkgs, please file the '**Request: backport to stable**' form instead.
       options:
         - "Please select a version."
         - "- Unstable (25.11)"

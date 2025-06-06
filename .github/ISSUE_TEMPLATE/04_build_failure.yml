@@ -30,9 +30,9 @@ body:
       description: |
         In what version of Nixpkgs did the build failure occur?
 
-        > [!IMPORTANT]
-        > If you are using an older version, please update to the latest stable version and check if the build failure persists before continuing this report.
-        > If you are purposefully trying to build an ancient version of a package in an older Nixpkgs, please coordinate with the [NixOS Archivists](https://matrix.to/#/#archivists:nixos.org).
+        If you are using an older version, please update to the latest stable version and check if the build failure persists before continuing this report.
+
+        If you are purposefully trying to build an ancient version of a package in an older Nixpkgs, please coordinate with the [NixOS Archivists](https://matrix.to/#/#archivists:nixos.org).
       options:
         - "Please select a version."
         - "- Unstable (25.11)"
