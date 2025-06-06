@@ -122,6 +122,7 @@ let
       # enable itk modules for otb
       # https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/blob/develop/SuperBuild/CMake/External_itk.cmake?ref_type=heads
       # https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/blob/develop/SuperBuild/CMake/External_itk.cmake?ref_type=heads#L143
+      (lib.cmakeBool "VNL_CONFIG_LEGACY_METHODS" true)
       (lib.cmakeBool "BUILD_TESTING" false)
       (lib.cmakeBool "ITK_BUILD_DEFAULT_MODULES" false)
       (lib.cmakeBool "ITKGroup_Core" false)
