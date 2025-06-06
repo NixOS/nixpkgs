@@ -912,13 +912,33 @@ Related options:
 : _Default:_ `[ "--allow-scripts" "--frozen" ]` for `buildDenoDeps` (`"--cached-only"` is filtered out)
 
 ::: {.tip}
-If you receive and error like this:
+If you receive errors like these:
 
 ```
 error: The lockfile is out of date. Run `deno install --frozen=false`, or rerun with `--frozen=false` to update it.
 ```
 
-This can happen due to the `deno install` command deducing different packages, than what the actual package needs.
+or
+
+```
+error: Import '<url>' failed.
+    0: error sending request for url (<url>): client error (Connect): dns error: failed to lookup address information: Temporary failure in name resolution: failed to lookup address information:Temporary failure in name resolution
+    1: client error (Connect)
+    2: dns error: failed to lookup address information: Temporary failure in name resolution
+    3: failed to lookup address information: Temporary failure in name resolution
+    at file:///build/source/src/lib/helpers/verifyRequest.ts:2:21
+build for <your-package> failed in buildPhase with exit code 1
+```
+
+or
+
+```
+error: Specifier not found in cache: "<url>", --cached-only is specified.
+
+ERROR: deno failed to install dependencies
+```
+
+This can happen due to the `deno install` command deducing different packages than what the actual package needs.
 
 To fix this, add the entrypoint to the install flags:
 
@@ -931,6 +951,9 @@ buildDenoPackage {
   src = nix-gitignore.gitignoreSource [ ] ./.;
   binaryEntrypointPath = "main.ts";
   denoInstallFlags = [
+    "--allow-scripts"
+    "--frozen"
+    "--cached-only"
     "--entrypoint"
     "<path/to/entrypoint/script>"
   ];
