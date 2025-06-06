@@ -6181,7 +6181,7 @@ with pkgs;
   wrapBintoolsWith =
     {
       bintools,
-      libc ? if stdenv.targetPlatform != stdenv.hostPlatform then targetPackages.libc else stdenv.cc.libc,
+      libc ? targetPackages.libc or pkgs.libc,
       ...
     }@extraArgs:
     callPackage ../build-support/bintools-wrapper (
@@ -8198,57 +8198,53 @@ with pkgs;
 
   # We can choose:
   libc =
-    if stdenv.hostPlatform == stdenv.buildPlatform then
-      # TODO get rid of this branch after the native boostrap is reworked
-      stdenv.cc.libc
+    let
+      inherit (stdenv.hostPlatform) libc;
+      # libc is hackily often used from the previous stage. This `or`
+      # hack fixes the hack, *sigh*.
+    in
+    if libc == null then
+      null
+    else if libc == "glibc" then
+      glibc
+    else if libc == "bionic" then
+      bionic
+    else if libc == "uclibc" then
+      uclibc
+    else if libc == "avrlibc" then
+      avrlibc
+    else if libc == "newlib" && stdenv.hostPlatform.isMsp430 then
+      msp430Newlib
+    else if libc == "newlib" && stdenv.hostPlatform.isVc4 then
+      vc4-newlib
+    else if libc == "newlib" && stdenv.hostPlatform.isOr1k then
+      or1k-newlib
+    else if libc == "newlib" then
+      newlib
+    else if libc == "newlib-nano" then
+      newlib-nano
+    else if libc == "musl" then
+      musl
+    else if libc == "msvcrt" then
+      windows.mingw_w64
+    else if libc == "ucrt" then
+      windows.mingw_w64
+    else if libc == "libSystem" then
+      if stdenv.hostPlatform.useiOSPrebuilt then darwin.iosSdkPkgs.libraries else darwin.libSystem
+    else if libc == "fblibc" then
+      freebsd.libc
+    else if libc == "oblibc" then
+      openbsd.libc
+    else if libc == "nblibc" then
+      netbsd.libc
+    else if libc == "wasilibc" then
+      wasilibc
+    else if libc == "relibc" then
+      relibc
+    else if name == "llvm" then
+      llvmPackages_20.libc
     else
-      let
-        inherit (stdenv.hostPlatform) libc;
-        # libc is hackily often used from the previous stage. This `or`
-        # hack fixes the hack, *sigh*.
-      in
-      if libc == null then
-        null
-      else if libc == "glibc" then
-        glibc
-      else if libc == "bionic" then
-        bionic
-      else if libc == "uclibc" then
-        uclibc
-      else if libc == "avrlibc" then
-        avrlibc
-      else if libc == "newlib" && stdenv.hostPlatform.isMsp430 then
-        msp430Newlib
-      else if libc == "newlib" && stdenv.hostPlatform.isVc4 then
-        vc4-newlib
-      else if libc == "newlib" && stdenv.hostPlatform.isOr1k then
-        or1k-newlib
-      else if libc == "newlib" then
-        newlib
-      else if libc == "newlib-nano" then
-        newlib-nano
-      else if libc == "musl" then
-        musl
-      else if libc == "msvcrt" then
-        windows.mingw_w64
-      else if libc == "ucrt" then
-        windows.mingw_w64
-      else if libc == "libSystem" then
-        if stdenv.hostPlatform.useiOSPrebuilt then darwin.iosSdkPkgs.libraries else darwin.libSystem
-      else if libc == "fblibc" then
-        freebsd.libc
-      else if libc == "oblibc" then
-        openbsd.libc
-      else if libc == "nblibc" then
-        netbsd.libc
-      else if libc == "wasilibc" then
-        wasilibc
-      else if libc == "relibc" then
-        relibc
-      else if name == "llvm" then
-        llvmPackages_20.libc
-      else
-        throw "Unknown libc ${libc}";
+      throw "Unknown libc ${libc}";
 
   threads =
     lib.optionalAttrs (stdenv.hostPlatform.isMinGW && !(stdenv.hostPlatform.useLLVM or false))
@@ -8772,7 +8768,7 @@ with pkgs;
         "fblibc"
       ]
     then
-      libcIconv (if stdenv.hostPlatform != stdenv.buildPlatform then libc else stdenv.cc.libc)
+      libcIconv pkgs.libc
     else if stdenv.hostPlatform.isDarwin then
       darwin.libiconv
     else
@@ -8798,7 +8794,7 @@ with pkgs;
         "musl"
       ]
     then
-      lib.getBin stdenv.cc.libc
+      lib.getBin libc
     else if stdenv.hostPlatform.isDarwin then
       lib.getBin libiconv
     else if stdenv.hostPlatform.isFreeBSD then
