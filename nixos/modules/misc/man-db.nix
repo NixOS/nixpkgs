@@ -98,32 +98,46 @@ in
               fi
             '';
 
-        paths = lib.pipe config.environment.systemPackages [
-          (lib.subtractLists cfg.skipPackages)
-
-          # reverse sort on priority so that man pages from higher priority packages are processed last
-          lib.sortProperties
-          lib.reverseList
-        ];
-
-        # lib.getOutput is insufficient to replicate the behaviour of pkgs.buildEnv:
-        #  - lib.getMan pkgs.libressl.nc => pkgs.libressl.nc
-        #  - while pkgs.buildEnv with paths= [ pkgs.libressl.nc ] and extraOutputsToInstall = [ "man" ]
-        #    will include the output of pkgs.libressl.nc.man
-        pathsMan = builtins.map (p: if p ? man then p.man else p) paths;
-
-        pathsDevman = lib.optionals config.documentation.dev.enable (
-          builtins.map (p: if p ? devman then p.devman else p) paths
-        );
+        extraOutputsToInstall = [ "man" ] ++ lib.optionals config.documentation.dev.enable [ "devman" ];
 
         manualCache =
           pkgs.runCommand "merged-system-man-db"
             {
               # TODO: use cfg.manualPages
-              packages = lib.pipe (paths ++ pathsMan ++ pathsDevman) [
+              packages = lib.pipe config.environment.systemPackages [
+                (lib.subtractLists cfg.skipPackages)
+
+                # chosenOutputs from pkgs.buildEnv
+                (builtins.map (drv: {
+                  paths =
+                    # First add the usual output(s): respect if user has chosen explicitly,
+                    # and otherwise use `meta.outputsToInstall`. The attribute is guaranteed
+                    # to exist in mkDerivation-created cases. The other cases (e.g. runCommand)
+                    # aren't expected to have multiple outputs.
+                    (
+                      if
+                        (!drv ? outputSpecified || !drv.outputSpecified) && drv.meta.outputsToInstall or null != null
+                      then
+                        map (outName: drv.${outName}) drv.meta.outputsToInstall
+                      else
+                        [ drv ]
+                    )
+                    # Add any extra outputs specified by the caller of `buildEnv`.
+                    ++ lib.filter (p: p != null) (builtins.map (outName: drv.${outName} or null) extraOutputsToInstall);
+                  priority = drv.meta.priority or lib.meta.defaultPriority;
+                }))
+
+                # reverse sort on priority so that man pages from higher priority packages are processed last
+                lib.sortProperties
+                lib.reverseList
+
+                (builtins.map (p: p.paths))
+                lib.lists.flatten
+
                 lib.unique
                 (builtins.map generateMandb)
               ];
+
               nativeBuildInputs = [
                 pkgs.findutils
                 pkgs.gdbm
