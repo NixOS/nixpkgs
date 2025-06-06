@@ -1,12 +1,14 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p python3 python3Packages.requests python3Packages.packaging nix curl git
+#!nix-shell -i python3 -p python3 python3Packages.requests python3Packages.packaging nix curl git argparse
 
+import argparse
+import json
 import os
 import re
 import subprocess
 import sys
 from pathlib import Path
-from typing import Dict, Tuple
+from typing import Dict, List, Optional, Tuple
 
 import requests
 from packaging import version
@@ -17,9 +19,10 @@ def run_command(cmd: str, capture_output: bool = True) -> str:
     result = subprocess.run(cmd, shell=True, text=True, capture_output=capture_output)
     if result.returncode != 0:
         if capture_output:
-            print(f"Error running command: {cmd}")
-            print(f"stderr: {result.stderr}")
-        sys.exit(1)
+            error_msg = f"Error running command: {cmd}\nstderr: {result.stderr}"
+            raise RuntimeError(error_msg)
+        else:
+            raise RuntimeError(f"Command failed: {cmd}")
     return result.stdout.strip() if capture_output else ""
 
 
@@ -74,8 +77,7 @@ def fetch_plugin_content(owner: str, repo: str, plugin_pname: str, headers: Dict
         response.raise_for_status()
         return response.text
     except requests.RequestException as e:
-        print(f"Error fetching plugin content: {e}")
-        sys.exit(1)
+        raise RuntimeError(f"Error fetching plugin content: {e}")
 
 
 def check_version_compatibility(plugin_content: str, plugin_name: str, yazi_version: str) -> str:
@@ -88,8 +90,9 @@ def check_version_compatibility(plugin_content: str, plugin_name: str, yazi_vers
     else:
         # Check if the plugin is compatible with current Yazi version
         if version.parse(required_version) > version.parse(yazi_version):
-            print(f"{plugin_name} plugin requires Yazi {required_version}, but we have {yazi_version}")
-            sys.exit(0)
+            message = f"{plugin_name} plugin requires Yazi {required_version}, but we have {yazi_version}"
+            print(message)
+            raise RuntimeError(message)
 
     return required_version
 
@@ -110,8 +113,7 @@ def get_latest_commit(owner: str, repo: str, plugin_pname: str, headers: Dict[st
         response.raise_for_status()
         commit_data = response.json()
     except requests.RequestException as e:
-        print(f"Error fetching commit data: {e}")
-        sys.exit(1)
+        raise RuntimeError(f"Error fetching commit data: {e}")
 
     if owner == "yazi-rs":
         latest_commit = commit_data[0]["sha"]
@@ -121,8 +123,7 @@ def get_latest_commit(owner: str, repo: str, plugin_pname: str, headers: Dict[st
         commit_date = commit_data["commit"]["committer"]["date"].split("T")[0]
 
     if not latest_commit:
-        print("Error: Could not get latest commit hash")
-        sys.exit(1)
+        raise RuntimeError("Could not get latest commit hash")
 
     return latest_commit, commit_date
 
@@ -145,13 +146,11 @@ def calculate_sri_hash(owner: str, repo: str, latest_commit: str) -> str:
                 raw_hash = run_command(f"nix-prefetch-url --type sha256 {prefetch_url} 2>/dev/null")
                 new_hash = run_command(f"nix hash to-sri --type sha256 {raw_hash} 2>/dev/null")
     except Exception as e:
-        print(f"Error calculating hash: {e}")
-        sys.exit(1)
+        raise RuntimeError(f"Error calculating hash: {e}")
 
     # Verify we got a valid SRI hash
     if not new_hash.startswith("sha256-"):
-        print(f"Error: Failed to generate valid SRI hash. Output was: {new_hash}")
-        sys.exit(1)
+        raise RuntimeError(f"Failed to generate valid SRI hash. Output was: {new_hash}")
 
     return new_hash
 
@@ -162,8 +161,7 @@ def read_nix_file(file_path: str) -> str:
         with open(file_path, 'r') as f:
             return f.read()
     except IOError as e:
-        print(f"Error reading file {file_path}: {e}")
-        sys.exit(1)
+        raise RuntimeError(f"Error reading file {file_path}: {e}")
 
 
 def write_nix_file(file_path: str, content: str) -> None:
@@ -172,8 +170,7 @@ def write_nix_file(file_path: str, content: str) -> None:
         with open(file_path, 'w') as f:
             f.write(content)
     except IOError as e:
-        print(f"Error writing to file {file_path}: {e}")
-        sys.exit(1)
+        raise RuntimeError(f"Error writing to file {file_path}: {e}")
 
 
 def update_nix_file(default_nix_path: str, latest_commit: str, new_version: str, new_hash: str) -> None:
@@ -196,8 +193,7 @@ def update_nix_file(default_nix_path: str, latest_commit: str, new_version: str,
     elif 'fetchFromGitHub' in default_nix_content:
         default_nix_content = re.sub(r'sha256 = "[^"]*"', f'sha256 = "{new_hash}"', default_nix_content)
     else:
-        print(f"Error: Could not find hash attribute in {default_nix_path}")
-        sys.exit(1)
+        raise RuntimeError(f"Could not find hash attribute in {default_nix_path}")
 
     # Write the updated content back to the file
     write_nix_file(default_nix_path, default_nix_content)
@@ -207,33 +203,63 @@ def update_nix_file(default_nix_path: str, latest_commit: str, new_version: str,
     if f'hash = "{new_hash}"' in updated_content or f'sha256 = "{new_hash}"' in updated_content:
         print(f"Successfully updated hash to: {new_hash}")
     else:
-        print(f"Error: Failed to update hash in {default_nix_path}")
-        sys.exit(1)
+        raise RuntimeError(f"Failed to update hash in {default_nix_path}")
 
 
-def validate_environment() -> Tuple[str, str, str]:
+def get_all_plugins(nixpkgs_dir: str) -> List[Dict[str, str]]:
+    """Get all available Yazi plugins from the Nix expression"""
+    try:
+        # Get all plugin names
+        plugin_names_json = run_command(f'nix eval --impure --json --expr "builtins.attrNames (import {nixpkgs_dir} {{}}).yaziPlugins"')
+        plugin_names = json.loads(plugin_names_json)
+
+        # Filter out known non-plugin attributes (like functions and special attributes)
+        excluded_attrs = ["mkYaziPlugin", "override", "overrideDerivation", "overrideAttrs", "recurseForDerivations"]
+        plugin_names = [name for name in plugin_names if name not in excluded_attrs]
+
+        plugins = []
+        for name in plugin_names:
+            # Check if the attribute is a derivation by trying to get its type
+            try:
+                # First check if it's a derivation by looking for the pname attribute
+                pname = run_command(f'nix eval --raw -f {nixpkgs_dir} "yaziPlugins.{name}.pname"')
+                plugins.append({
+                    "name": name,  # Attribute name in yaziPlugins set
+                    "pname": pname  # Package name (used in repo paths)
+                })
+            except Exception as e:
+                print(f"Warning: Could not get pname for plugin {name}, skipping: {e}")
+                continue
+
+        return plugins
+    except Exception as e:
+        raise RuntimeError(f"Error getting plugin list: {e}")
+
+
+def validate_environment(plugin_name: Optional[str] = None, plugin_pname: Optional[str] = None) -> Tuple[str, Optional[str], Optional[str]]:
     """Validate environment variables and paths"""
     nixpkgs_dir = os.getcwd()
 
-    plugin_name = os.environ.get("PLUGIN_NAME")
-    plugin_pname = os.environ.get("PLUGIN_PNAME")
-
+    # If plugin name and pname are not provided, check environment variables
     if not plugin_name or not plugin_pname:
-        print("Error: PLUGIN_NAME and PLUGIN_PNAME environment variables must be set")
-        sys.exit(1)
+        plugin_name = os.environ.get("PLUGIN_NAME")
+        plugin_pname = os.environ.get("PLUGIN_PNAME")
 
-    plugin_dir = f"{nixpkgs_dir}/pkgs/by-name/ya/yazi/plugins/{plugin_name}"
-    if not Path(f"{plugin_dir}/default.nix").exists():
-        print(f"Error: Could not find default.nix for plugin {plugin_name} at {plugin_dir}")
-        sys.exit(1)
+    # For single plugin update, we need both name and pname
+    if plugin_name and not plugin_pname:
+        raise RuntimeError(f"pname not provided for plugin {plugin_name}")
+
+    # Validate plugin directory if a specific plugin is specified
+    if plugin_name:
+        plugin_dir = f"{nixpkgs_dir}/pkgs/by-name/ya/yazi/plugins/{plugin_name}"
+        if not Path(f"{plugin_dir}/default.nix").exists():
+            raise RuntimeError(f"Could not find default.nix for plugin {plugin_name} at {plugin_dir}")
 
     return nixpkgs_dir, plugin_name, plugin_pname
 
 
-def main():
-    """Main function to update a Yazi plugin"""
-    # Basic setup and validation
-    nixpkgs_dir, plugin_name, plugin_pname = validate_environment()
+def update_single_plugin(nixpkgs_dir: str, plugin_name: str, plugin_pname: str) -> None:
+    """Update a single Yazi plugin"""
     plugin_dir = f"{nixpkgs_dir}/pkgs/by-name/ya/yazi/plugins/{plugin_name}"
     default_nix_path = f"{plugin_dir}/default.nix"
 
@@ -267,6 +293,100 @@ def main():
     update_nix_file(default_nix_path, latest_commit, new_version, new_hash)
 
     print(f"Successfully updated {plugin_name} to version {new_version} (commit {latest_commit})")
+
+
+def update_all_plugins(nixpkgs_dir: str) -> None:
+    """Update all available Yazi plugins"""
+    plugins = get_all_plugins(nixpkgs_dir)
+
+    if not plugins:
+        print("No plugins found to update")
+        return
+
+    print(f"Found {len(plugins)} plugins to update")
+
+    # Get Yazi version once for all plugins
+    yazi_version = get_yazi_version(nixpkgs_dir)
+
+    # Setup GitHub API headers once for all plugins
+    headers = get_github_headers()
+
+    success_count = 0
+    failed_plugins = []
+
+    for plugin in plugins:
+        plugin_name = plugin["name"]
+        plugin_pname = plugin["pname"]
+
+        try:
+            print(f"\n{'=' * 50}")
+            print(f"Updating plugin: {plugin_name}")
+            print(f"{'=' * 50}")
+
+            try:
+                update_single_plugin(nixpkgs_dir, plugin_name, plugin_pname)
+                success_count += 1
+            except KeyboardInterrupt:
+                print("\nUpdate process interrupted by user")
+                sys.exit(1)
+            except Exception as e:
+                print(f"Error updating plugin {plugin_name}: {e}")
+                failed_plugins.append({"name": plugin_name, "error": str(e)})
+                continue
+        except Exception as e:
+            print(f"Unexpected error with plugin {plugin_name}: {e}")
+            failed_plugins.append({"name": plugin_name, "error": str(e)})
+            continue
+
+    # Print summary
+    print(f"\n{'=' * 50}")
+    print(f"Update summary: {success_count}/{len(plugins)} plugins updated successfully")
+
+    if failed_plugins:
+        print(f"Failed to update {len(failed_plugins)} plugins:")
+        for plugin in failed_plugins:
+            print(f"  - {plugin['name']}: {plugin['error']}")
+
+
+def main():
+    """Main function to update Yazi plugins"""
+
+    parser = argparse.ArgumentParser(description="Update Yazi plugins")
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("--all", action="store_true", help="Update all Yazi plugins")
+    group.add_argument("--plugin", type=str, help="Update a specific plugin by name")
+    args = parser.parse_args()
+
+    # Get nixpkgs directory
+    nixpkgs_dir = os.getcwd()
+
+    if args.all:
+        # Update all plugins
+        print("Updating all Yazi plugins...")
+        update_all_plugins(nixpkgs_dir)
+    elif args.plugin:
+        # Update a specific plugin
+        plugin_name = args.plugin
+        try:
+            # Get the pname for the specified plugin
+            plugin_pname = run_command(f'nix eval --raw -f {nixpkgs_dir} "yaziPlugins.{plugin_name}.pname"')
+            print(f"Updating Yazi plugin: {plugin_name}")
+            update_single_plugin(nixpkgs_dir, plugin_name, plugin_pname)
+        except Exception as e:
+            print(f"Error: {e}")
+            sys.exit(1)  # We exit here because this is a single plugin update, not a batch operation
+    else:
+        # Check environment variables
+        nixpkgs_dir, plugin_name, plugin_pname = validate_environment()
+
+        if plugin_name and plugin_pname:
+            # Update a single plugin using environment variables
+            print(f"Updating Yazi plugin: {plugin_name}")
+            update_single_plugin(nixpkgs_dir, plugin_name, plugin_pname)
+        else:
+            # No plugin specified, show help
+            parser.print_help()
+            sys.exit(0)
 
 
 if __name__ == "__main__":
