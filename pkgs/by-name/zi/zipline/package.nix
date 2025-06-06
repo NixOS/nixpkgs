@@ -29,18 +29,18 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zipline";
-  version = "4.1.1";
+  version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "diced";
     repo = "zipline";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5/qVczCypQ2HybpBzEJe9THsrT5Iu3md+IXffLJnVmQ=";
+    hash = "sha256-xxe64tGxZ2Udr+p21CKTZCHJ19ZOsdgPLlil+v+j5j4=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-zpNl6Ua4xRvBa62IHf+frnk4tWQHHF/HyEYGuUF2a78=";
+    hash = "sha256-O8RLaKff4Dj/JDeUOyf7GtcFcOu/aOuclyaZmVqVi5s=";
   };
 
   buildInputs = [ vips ];
