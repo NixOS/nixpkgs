@@ -98,7 +98,7 @@ in
       runHook postInstall
     '';
 
-    doInstallCheck = false;
+    doInstallCheck = true;
 
     passthru.updateScript = ./update.sh;
 
