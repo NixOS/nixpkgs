@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitHub,
+  fetchFromGitLab,
   cmake,
   pkg-config,
   kdePackages,
@@ -15,10 +15,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "qxmpp";
   version = "1.10.2";
 
-  src = fetchFromGitHub {
-    owner = "qxmpp-project";
+  src = fetchFromGitLab {
+    domain = "invent.kde.org";
+    owner = "libraries";
     repo = "qxmpp";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-M3F4tNIO3RvDxk/lce8/J6kmQtnsGLILQ15uEzgyfds=";
   };
 
@@ -59,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Cross-platform C++ XMPP client and server library";
-    homepage = "https://github.com/qxmpp-project/qxmpp";
+    homepage = "https://invent.kde.org/libraries/qxmpp";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ astro ];
     platforms = with lib.platforms; linux;
