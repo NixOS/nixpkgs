@@ -2,7 +2,7 @@
   stdenv,
   lib,
   pkg-config,
-  pkgsCross,
+  crossStdenv,
   bintools-unwrapped,
   libffi,
   libusb1,
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     python3
-    pkgsCross.avr.stdenv.cc
+    crossStdenv.configs.avr.cc
     gcc-arm-embedded
     bintools-unwrapped
     libffi

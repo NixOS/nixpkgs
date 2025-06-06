@@ -1366,6 +1366,9 @@
   "ssec-cross-cookbook": [
     "index.html#ssec-cross-cookbook"
   ],
+  "cross-qa-cross-compile-in-nixpkgs": [
+    "index.html#cross-qa-cross-compile-in-nixpkgs"
+  ],
   "cross-qa-fails-to-find-binutils": [
     "index.html#cross-qa-fails-to-find-binutils"
   ],

@@ -1369,7 +1369,10 @@ with pkgs;
   };
 
   box64 = callPackage ../applications/emulators/box64 {
-    hello-x86_64 = if stdenv.hostPlatform.isx86_64 then hello else pkgsCross.gnu64.hello;
+    hello-x86_64 = hello.override {
+      stdenv =
+        if stdenv.hostPlatform.isx86_64 then stdenv else crossStdenv.configs.x86_64-unknown-linux-gnu;
+    };
   };
 
   box86 =
@@ -7037,20 +7040,24 @@ with pkgs;
   #
   # In other words, try to only use this in wrappers, and only use those
   # wrappers from the next stage.
-  bintools-unwrapped =
-    let
-      inherit (stdenv.targetPlatform) linker;
-    in
-    if linker == "lld" then
+
+  bintoolsChooser =
+    name:
+    if name == null then
+      null
+    else if name == "lld" then
       llvmPackages.bintools-unwrapped
-    else if linker == "cctools" then
+    else if name == "cctools" then
       darwin.binutils-unwrapped
-    else if linker == "bfd" then
+    else if name == "bfd" then
       binutils-unwrapped
-    else if linker == "gold" then
+    else if name == "gold" then
       binutils-unwrapped.override { enableGoldDefault = true; }
     else
-      null;
+      throw "Unknown linker/bintools ${name}";
+
+  bintools-unwrapped = bintoolsChooser stdenv.targetPlatform.linker;
+
   bintoolsNoLibc = wrapBintoolsWith {
     bintools = bintools-unwrapped;
     libc = targetPackages.preLibcHeaders;
@@ -8195,6 +8202,126 @@ with pkgs;
       netbsd.headers
     else
       null;
+
+  cxxlibCrossChooser =
+    name:
+    if name == null then
+      null
+    else if name == "libcxx" then
+      llvmPackages.libcxx
+    else if name == "libstdcxx" then
+      # TODO: split libstdcxx out of gcc
+      null
+    else
+      throw "Unknown libc ${name}";
+
+  cxxlibCross =
+    if stdenv.targetPlatform == stdenv.buildPlatform then
+      null
+    else
+      # TODO: use cxxlib when https://github.com/NixOS/nixpkgs/pull/365057 is merged
+      cxxlibCrossChooser (
+        if
+          stdenv.targetPlatform.useLLVM
+          || (stdenv.targetPlatform.useArocc or false)
+          || (stdenv.targetPlatform.useZig or false)
+          || stdenv.targetPlatform.isDarwin
+        then
+          "libcxx"
+        else
+          "libstdcxx"
+      );
+
+  unwinderlibCrossChooser =
+    name:
+    if name == null then
+      null
+    else if name == "libunwind" then
+      llvmPackages.libunwind
+    else if name == "libunwind-system" then
+      darwin.libunwind
+    else if name == "libgcc_s" then
+      libgcc
+    else
+      throw "Unknown unwinderlib ${name}";
+
+  unwinderlibCross =
+    if stdenv.targetPlatform == stdenv.buildPlatform then
+      null
+    else
+      # TODO: use unwinderlib when https://github.com/NixOS/nixpkgs/pull/365057 is merged
+      unwinderlibCrossChooser (
+        if
+          stdenv.targetPlatform.useLLVM
+          || (stdenv.targetPlatform.useArocc or false)
+          || (stdenv.targetPlatform.useZig or false)
+        then
+          "libunwind"
+        else if stdenv.targetPlatform.isDarwin then
+          "libunwind-system"
+        else
+          "libgcc_s"
+      );
+
+  rtlibCrossChooser =
+    name:
+    if name == null then
+      null
+    else if name == "compiler-rt" then
+      llvmPackages.compiler-rt
+    else if name == "libgcc" then
+      libgcc
+    else
+      throw "Unknown rtlib ${name}";
+
+  rtlibCross =
+    if stdenv.targetPlatform == stdenv.buildPlatform then
+      null
+    else
+      # TODO: use rtlib when https://github.com/NixOS/nixpkgs/pull/365057 is merged
+      rtlibCrossChooser (
+        if
+          stdenv.targetPlatform.useLLVM
+          || (stdenv.targetPlatform.useArocc or false)
+          || (stdenv.targetPlatform.useZig or false)
+          || (stdenv.targetPlatform.isDarwin)
+        then
+          "compiler-rt"
+        else
+          "libgcc"
+      );
+
+  # We can choose:
+  ccCrossChooser =
+    name:
+    if name == null then
+      null
+    else if name == "gcc" then
+      gcc
+    else if name == "clang" then
+      llvmPackages.clang
+    else if name == "arocc" then
+      arocc
+    else if name == "zig" then
+      zig.cc
+    else
+      throw "Unknown CC ${name}";
+
+  ccCross =
+    if stdenv.targetPlatform == stdenv.buildPlatform then
+      null
+    else
+      # TODO: use cc when https://github.com/NixOS/nixpkgs/pull/365057 is merged
+      ccCrossChooser (
+        if stdenv.targetPlatform.useLLVM or stdenv.targetPlatform.isDarwin then
+          "clang"
+        else if stdenv.targetPlatform.useArocc or false then
+          "arocc"
+        else if stdenv.targetPlatform.useZig or false then
+          "zig"
+        else
+          "gcc"
+      );
 
   # We can choose:
   libc =
