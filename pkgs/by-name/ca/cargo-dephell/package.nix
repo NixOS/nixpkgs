@@ -20,9 +20,13 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-NOjkKttA+mwPCpl4uiRIYD58DlMomVFpwnM9KGfWd+w=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoPatches = [
+    # update Cargo.lock to work with openssl 3
+    ./openssl3-support.patch
+  ];
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-+5ElAfYuUfosXzR3O2QIFGy4QJuPrWDMg5LacZKi3c8=";
 
   nativeBuildInputs =
     [
@@ -40,11 +44,6 @@ rustPlatform.buildRustPackage rec {
       curl
       libgit2
     ];
-
-  # update Cargo.lock to work with openssl 3
-  postPatch = ''
-    ln -sf ${./Cargo.lock} Cargo.lock
-  '';
 
   env = {
     LIBGIT2_NO_VENDOR = 1;
