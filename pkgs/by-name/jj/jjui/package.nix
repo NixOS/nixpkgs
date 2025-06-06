@@ -20,7 +20,7 @@ buildGoModule (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A TUI for Jujutsu VCS";
+    description = "TUI for Jujutsu VCS";
     homepage = "https://github.com/idursun/jjui";
     changelog = "https://github.com/idursun/jjui/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;

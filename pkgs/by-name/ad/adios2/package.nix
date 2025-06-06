@@ -132,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://adios2.readthedocs.io/en/latest/";
-    description = "The Adaptable Input/Output System version 2";
+    description = "Adaptable Input/Output System version 2";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ qbisi ];

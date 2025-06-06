@@ -3,27 +3,16 @@
   stdenv,
   binutils,
   cmake,
-  extra-cmake-modules,
   patchelfUnstable,
-  wrapQtAppsHook,
   elfutils,
   fetchFromGitHub,
-  kconfigwidgets,
+  fetchpatch,
   kddockwidgets,
-  ki18n,
-  kio,
-  kitemmodels,
-  kitemviews,
-  konsole,
-  kparts,
-  kwindowsystem,
+  kdePackages,
   libelf,
   linuxPackages,
-  qtbase,
-  qtsvg,
+  qt6,
   rustc-demangle,
-  syntax-highlighting,
-  threadweaver,
   zstd,
 }:
 
@@ -41,31 +30,47 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     # stable patchelf corrupts the binary
     patchelfUnstable
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
-  buildInputs = [
-    (elfutils.override { enableDebuginfod = true; }) # perfparser needs to find debuginfod.h
-    kconfigwidgets
-    kddockwidgets
-    ki18n
-    kio
-    kitemmodels
-    kitemviews
-    konsole
-    kparts
-    kwindowsystem
-    libelf
-    qtbase
-    qtsvg
-    rustc-demangle
-    syntax-highlighting
-    threadweaver
-    zstd
+  patches = [
+    # Fix build issue with Qt 6.9, can be removed in next release
+    (fetchpatch {
+      url = "https://github.com/KDAB/hotspot/pull/694/commits/5ef04c1dd60846b0d1746132e7e63289ee25f259.patch";
+      hash = "sha256-WYMM1/CY05fztSiRNZQ2Q16n5erjY+AE6gSQgSlb3HA=";
+    })
   ];
+
+  cmakeFlags = [ (lib.strings.cmakeBool "QT6_BUILD" true) ];
+
+  buildInputs =
+    [
+      (elfutils.override { enableDebuginfod = true; }) # perfparser needs to find debuginfod.h
+      kddockwidgets
+      libelf
+      qt6.qtbase
+      qt6.qtsvg
+      rustc-demangle
+      zstd
+    ]
+    ++ (with kdePackages; [
+      kconfig
+      kconfigwidgets
+      kgraphviewer
+      ki18n
+      kio
+      kitemmodels
+      kitemviews
+      konsole
+      kparts
+      kwindowsystem
+      qcustomplot
+      syntax-highlighting
+      threadweaver
+    ]);
 
   qtWrapperArgs = [
     "--suffix PATH : ${
@@ -98,6 +103,9 @@ stdenv.mkDerivation rec {
       gpl3Only
     ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nh2 ];
+    maintainers = with maintainers; [
+      nh2
+      tmarkus
+    ];
   };
 }
