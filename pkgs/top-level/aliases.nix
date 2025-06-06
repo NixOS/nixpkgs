@@ -664,6 +664,8 @@ mapAliases {
   finger_bsd = bsd-finger;
   fingerd_bsd = bsd-fingerd;
   fira-code-nerdfont = lib.warnOnInstantiate "fira-code-nerdfont is redundant. Use nerd-fonts.fira-code instead." nerd-fonts.fira-code; # Added 2024-11-10
+  firefox-beta-bin = throw "`firefox-beta-bin` is removed.  Please use `firefox-beta` or `firefox-bin` instead.";
+  firefox-devedition-bin = throw "`firefox-devedition-bin` is removed.  Please use `firefox-devedition` or `firefox-bin` instead.";
   firefox-esr-115 = throw "The Firefox 115 ESR series has reached its end of life. Upgrade to `firefox-esr` or `firefox-esr-128` instead.";
   firefox-esr-115-unwrapped = throw "The Firefox 115 ESR series has reached its end of life. Upgrade to `firefox-esr-unwrapped` or `firefox-esr-128-unwrapped` instead.";
   firefox-wayland = firefox; # Added 2022-11-15
