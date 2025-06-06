@@ -57,6 +57,10 @@ buildPythonPackage rec {
     "test_suspend_worker_execution"
   ];
 
+  # Hangs forever:
+  # Could not connect to Valkey at /private/tmp/nix-build-python3.12-rq-2.3.3.drv-1/run/redis.sock: No such file or directory
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
+
   pythonImportsCheck = [ "rq" ];
 
   meta = {
