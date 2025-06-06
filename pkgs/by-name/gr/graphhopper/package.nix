@@ -68,10 +68,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   version = version.patch;
 
-  buildInputs = [
+  nativeBuildInputs = [
     makeWrapper
     maven
   ];
+
+  strictDeps = true;
 
   configurePhase = ''
     runHook preConfigure
