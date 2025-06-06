@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "luarocks_bootstrap";
-  version = "3.11.1";
+  version = "3.12.0";
 
   src = fetchFromGitHub {
     owner = "luarocks";
     repo = "luarocks";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-GglygI8HP+aDFEuucOkjQ2Pgfv4+jW+og+2vL3KoZCQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PGK4gjEhCJt2+0viNU0/qJBBOxPIy2swXplQOolmP2E=";
   };
 
   patches = [
