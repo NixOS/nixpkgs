@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "A flat window for Stardust XR";
+    description = "Flat window for Stardust XR";
     homepage = "https://stardustxr.org";
     license = lib.licenses.mit;
     mainProgram = "flatland";

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   meta = with lib; {
-    description = "A full-featured BDD unit testing framework for bash, ksh, zsh, dash and all POSIX shells";
+    description = "Full-featured BDD unit testing framework for bash, ksh, zsh, dash and all POSIX shells";
     homepage = "https://shellspec.info/";
     changelog = "https://github.com/shellspec/shellspec/releases/tag/${version}";
     license = licenses.mit;

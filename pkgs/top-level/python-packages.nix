@@ -5710,6 +5710,8 @@ self: super: with self; {
 
   gitpython = callPackage ../development/python-modules/gitpython { };
 
+  giturlparse = callPackage ../development/python-modules/giturlparse { };
+
   glad = callPackage ../development/python-modules/glad { };
 
   glad2 = callPackage ../development/python-modules/glad2 { };
@@ -13402,7 +13404,9 @@ self: super: with self; {
 
   pyregion = callPackage ../development/python-modules/pyregion { };
 
-  pyrender = callPackage ../development/python-modules/pyrender { };
+  pyrender = callPackage ../development/python-modules/pyrender {
+    inherit (pkgs) mesa;
+  };
 
   pyrevolve = callPackage ../development/python-modules/pyrevolve { };
 

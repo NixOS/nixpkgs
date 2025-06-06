@@ -274,6 +274,8 @@ with pkgs;
         ''
       );
 
+  alacritty-graphics = callPackage ../by-name/al/alacritty/package.nix { withGraphics = true; };
+
   # addDriverRunpath is the preferred package name, as this enables
   # many more scenarios than just opengl now.
   aocd = with python3Packages; toPythonApplication aocd;
@@ -626,6 +628,7 @@ with pkgs;
       makeOverridable (import ../build-support/fetchurl) {
         inherit lib stdenvNoCC buildPackages;
         inherit cacert;
+        inherit (config) rewriteURL;
         curl = buildPackages.curlMinimal.override (old: rec {
           # break dependency cycles
           fetchurl = stdenv.fetchurlBoot;
@@ -1260,8 +1263,6 @@ with pkgs;
     perlSupport = false;
     withpcre2 = false;
   };
-
-  bitbucket-server-cli = callPackage ../applications/version-management/bitbucket-server-cli { };
 
   bump2version = with python3Packages; toPythonApplication bump2version;
 
@@ -2245,7 +2246,7 @@ with pkgs;
     stdenv = gcc14Stdenv;
   };
 
-  hyprshade = python311Packages.callPackage ../applications/window-managers/hyprwm/hyprshade { };
+  hyprshade = python3Packages.callPackage ../applications/window-managers/hyprwm/hyprshade { };
 
   hyprlandPlugins = recurseIntoAttrs (
     callPackage ../applications/window-managers/hyprwm/hyprland-plugins { }
@@ -3302,8 +3303,6 @@ with pkgs;
 
   hotdoc = python3Packages.callPackage ../development/tools/hotdoc { };
 
-  hotspot = libsForQt5.callPackage ../development/tools/analysis/hotspot { };
-
   hpccm = with python3Packages; toPythonApplication hpccm;
 
   hqplayer-desktop = qt6Packages.callPackage ../applications/audio/hqplayer-desktop { };
@@ -3579,26 +3578,26 @@ with pkgs;
 
   nixnote2 = libsForQt5.callPackage ../applications/misc/nixnote2 { };
 
-  nodejs = hiPrio nodejs_22;
+  nodejs = nodejs_22;
   nodejs-slim = nodejs-slim_22;
-  corepack = hiPrio corepack_22;
+  corepack = corepack_22;
 
   nodejs_20 = callPackage ../development/web/nodejs/v20.nix { };
   nodejs-slim_20 = callPackage ../development/web/nodejs/v20.nix { enableNpm = false; };
-  corepack_20 = hiPrio (callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_20; });
+  corepack_20 = callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_20; };
 
   nodejs_22 = callPackage ../development/web/nodejs/v22.nix { };
   nodejs-slim_22 = callPackage ../development/web/nodejs/v22.nix { enableNpm = false; };
-  corepack_22 = hiPrio (callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_22; });
+  corepack_22 = callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_22; };
 
   nodejs_24 = callPackage ../development/web/nodejs/v24.nix { };
   nodejs-slim_24 = callPackage ../development/web/nodejs/v24.nix { enableNpm = false; };
-  corepack_24 = hiPrio (callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_24; });
+  corepack_24 = callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_24; };
 
   # Update this when adding the newest nodejs major version!
   nodejs_latest = nodejs_24;
   nodejs-slim_latest = nodejs-slim_24;
-  corepack_latest = hiPrio corepack_24;
+  corepack_latest = corepack_24;
 
   buildNpmPackage = callPackage ../build-support/node/build-npm-package { };
 
@@ -6663,8 +6662,7 @@ with pkgs;
 
   wireplumber = callPackage ../development/libraries/pipewire/wireplumber.nix { };
 
-  racket = callPackage ../development/interpreters/racket { };
-  racket-minimal = callPackage ../development/interpreters/racket/minimal.nix {
+  racket-minimal = callPackage ../by-name/ra/racket/minimal.nix {
     stdenv = stdenvAdapters.makeStaticLibraries stdenv;
   };
 
@@ -8564,8 +8562,6 @@ with pkgs;
   rust-jemalloc-sys-unprefixed = rust-jemalloc-sys.override { unprefixed = true; };
 
   json2yaml = haskell.lib.compose.justStaticExecutables haskellPackages.json2yaml;
-
-  kddockwidgets = libsForQt5.callPackage ../development/libraries/kddockwidgets { };
 
   keybinder = callPackage ../development/libraries/keybinder {
     automake = automake111x;
@@ -12612,9 +12608,7 @@ with pkgs;
     }
   );
 
-  manuskript = libsForQt5.callPackage ../applications/editors/manuskript {
-    python3Packages = python311Packages;
-  };
+  manuskript = libsForQt5.callPackage ../applications/editors/manuskript { };
 
   minari = python3Packages.toPythonApplication python3Packages.minari;
 
@@ -12647,12 +12641,6 @@ with pkgs;
     withGUI = true;
     withDoc = true;
   };
-
-  gpu-screen-recorder = callPackage ../applications/video/gpu-screen-recorder { };
-
-  gpu-screen-recorder-gtk =
-    callPackage ../applications/video/gpu-screen-recorder/gpu-screen-recorder-gtk.nix
-      { };
 
   gpxsee-qt5 = libsForQt5.callPackage ../applications/misc/gpxsee { };
 
@@ -15203,9 +15191,7 @@ with pkgs;
     ncurses = ncurses5;
   };
 
-  rott = callPackage ../games/rott { SDL = SDL_compat; };
-
-  rott-shareware = rott.override {
+  rott-shareware = callPackage ../by-name/ro/rott/package.nix {
     buildShareware = true;
   };
 
@@ -15259,7 +15245,7 @@ with pkgs;
 
   steam-run-free = steam-fhsenv-without-steam.run;
 
-  steamback = python311.pkgs.callPackage ../tools/games/steamback { };
+  steamback = python3.pkgs.callPackage ../tools/games/steamback { };
 
   protontricks = python3Packages.callPackage ../tools/package-management/protontricks {
     steam-run = steam-run-free;
@@ -15539,9 +15525,7 @@ with pkgs;
 
   deepdiff = with python3Packages; toPythonApplication deepdiff;
 
-  deepsecrets = callPackage ../tools/security/deepsecrets {
-    python3 = python311;
-  };
+  deepsecrets = callPackage ../tools/security/deepsecrets { };
 
   deep-translator = with python3Packages; toPythonApplication deep-translator;
 
