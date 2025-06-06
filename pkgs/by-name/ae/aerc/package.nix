@@ -39,6 +39,11 @@ buildGoModule rec {
       url = "https://git.sr.ht/~rjarry/aerc/commit/7346d20.patch";
       hash = "sha256-OCm8BcovYN2IDSgslZklQxkGVkSYQ8HLCrf2+DRB2mM=";
     })
+
+    # TODO remove these with the next release
+    # they resolve a path injection vulnerability when saving attachments (CVE-2025-49466)
+    ./basename-temp-file.patch
+    ./basename-temp-file-fixup.patch
   ];
 
   postPatch = ''
