@@ -45,6 +45,9 @@ buildDunePackage rec {
       bsd2 # mirage-crypto-rng-mirage
       mit # mirage-crypto-ec
     ];
-    maintainers = with lib.maintainers; [ sternenseemann ];
+    maintainers = with lib.maintainers; [
+      sternenseemann
+      momeemt
+    ];
   };
 }
