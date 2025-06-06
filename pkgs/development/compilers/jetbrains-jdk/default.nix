@@ -6,6 +6,7 @@
   jdk,
   git,
   autoconf,
+  zip,
   unzip,
   rsync,
   debugBuild ? false,
@@ -26,6 +27,7 @@
   libgbm,
   wayland,
   udev,
+  darwin,
 }:
 
 assert debugBuild -> withJcef;
@@ -35,9 +37,12 @@ let
     {
       "aarch64-linux" = "aarch64";
       "x86_64-linux" = "x64";
+      "aarch64-darwin" = "aarch64";
+      "x86_64-darwin" = "x64";
     }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    .${stdenv.hostPlatform.system};
   cpu = stdenv.hostPlatform.parsed.cpu.name;
+  os = if stdenv.isDarwin then "macosx" else "linux";
 in
 jdk.overrideAttrs (oldAttrs: rec {
   pname = "jetbrains-jdk" + lib.optionalString withJcef "-jcef";
@@ -66,49 +71,104 @@ jdk.overrideAttrs (oldAttrs: rec {
 
   dontConfigure = true;
 
-  buildPhase = ''
-    runHook preBuild
+  jcefDestName = if stdenv.isDarwin then "jcef_mac" else "jcef_linux_${arch}";
 
-    ${lib.optionalString withJcef "cp -r ${jetbrains.jcef} jcef_linux_${arch}"}
+  mkimagesSh =
+    if stdenv.isDarwin then
+      "./jb/project/tools/mac/scripts/mkimages.sh"
+    else
+      "./jb/project/tools/linux/scripts/mkimages_${arch}.sh";
 
-    sed \
-        -e "s/OPENJDK_TAG=.*/OPENJDK_TAG=${openjdkTag}/" \
-        -e "s/SOURCE_DATE_EPOCH=.*//" \
-        -e "s/export SOURCE_DATE_EPOCH//" \
-        -i jb/project/tools/common/scripts/common.sh
-    configureFlags=$(echo $configureFlags | sed 's/--host=[^ ]*//')
-    sed -i "s|STATIC_CONF_ARGS|STATIC_CONF_ARGS \$configureFlags|" jb/project/tools/linux/scripts/mkimages_${arch}.sh
-    sed \
-        -e "s/create_image_bundle \"jb/#/" \
-        -e "s/echo Creating /exit 0 #/" \
-        -i jb/project/tools/linux/scripts/mkimages_${arch}.sh
+  osSpecificPatch =
+    if stdenv.isDarwin then
+      ''
+        sed -i '40i\--with-xcode-path="${darwin.xcode_16_1}" \\' ./jb/project/tools/mac/scripts/mkimages.sh
+        # See https://github.com/JetBrains/JetBrainsRuntime/issues/461
+        sed \
+          -e 's/C_O_FLAG_HIGHEST_JVM="-O3"/C_O_FLAG_HIGHEST_JVM="-O1"/g' \
+          -e 's/C_O_FLAG_HIGHEST="-O3"/C_O_FLAG_HIGHEST="-O1"/g' \
+          -e 's/C_O_FLAG_HI="-O3"/C_O_FLAG_HI="-O1"/g' \
+          -i make/autoconf/flags-cflags.m4
+      ''
+    else
+      "";
 
-    patchShebangs .
-    ./jb/project/tools/linux/scripts/mkimages_${arch}.sh ${build} ${
-      if debugBuild then "fd" else (if withJcef then "jcef" else "nomod")
-    }
+  buildPhase =
+    ''
+      runHook preBuild
 
-    runHook postBuild
-  '';
+      ${lib.optionalString withJcef "cp -r ${jetbrains.jcef} ${jcefDestName}"}
+
+      ${osSpecificPatch}
+
+      configureFlags=$(echo $configureFlags | sed 's/--host=[^ ]*//')
+      sed -i "s|STATIC_CONF_ARGS|STATIC_CONF_ARGS \$configureFlags|" ${mkimagesSh}
+      sed \
+          -e "s/create_image_bundle \"jb/#/" \
+          -e "s/echo Creating /exit 0 #/" \
+          -i ${mkimagesSh}
+      sed \
+          -e "s/OPENJDK_TAG=.*/OPENJDK_TAG=${openjdkTag}/" \
+          -e "s/SOURCE_DATE_EPOCH=.*//" \
+          -e "s/export SOURCE_DATE_EPOCH//" \
+          -e "s/date -u -r /date --utc --date=@/" \
+          -i jb/project/tools/common/scripts/common.sh
+
+      patchShebangs .
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export PATH=${darwin.xcode_16_1}/Contents/Developer/usr/bin/:${darwin.xcode_16_1}/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/:$PATH
+      export MIGCC=${darwin.xcode_16_1}/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc
+      unset SDKROOT
+    ''
+    + ''
+      ${mkimagesSh} ${build} ${
+        if debugBuild then "fd" else (if withJcef then "jcef" else "nomod")
+      } ${arch}
+
+      runHook postBuild
+    '';
 
   installPhase =
     let
       buildType = if debugBuild then "fastdebug" else "release";
       debugSuffix = if debugBuild then "-fastdebug" else "";
       jcefSuffix = if debugBuild || !withJcef then "" else "_jcef";
-      jbrsdkDir = "jbrsdk${jcefSuffix}-${javaVersion}-linux-${arch}${debugSuffix}-b${build}";
+      jbrsdkDir = "jbrsdk${jcefSuffix}-${javaVersion}-${os}-${arch}${debugSuffix}-b${build}";
     in
-    ''
-      runHook preInstall
+    (
+      if stdenv.isLinux then
+        ''
+          runHook preInstall
 
-      mv build/linux-${cpu}-server-${buildType}/images/jdk/man build/linux-${cpu}-server-${buildType}/images/${jbrsdkDir}
-      rm -rf build/linux-${cpu}-server-${buildType}/images/jdk
-      mv build/linux-${cpu}-server-${buildType}/images/${jbrsdkDir} build/linux-${cpu}-server-${buildType}/images/jdk
-    ''
-    + oldAttrs.installPhase
+          mv build/${os}-${cpu}-server-${buildType}/images/jdk/man build/${os}-${cpu}-server-${buildType}/images/${jbrsdkDir}
+          rm -rf build/${os}-${cpu}-server-${buildType}/images/jdk
+          mv build/${os}-${cpu}-server-${buildType}/images/${jbrsdkDir} build/${os}-${cpu}-server-${buildType}/images/jdk
+        ''
+        + oldAttrs.installPhase
+      else
+        ''
+          # We need to implement the install phase manually because the default jdk is zulu instead of OpenJDK.
+          mkdir -p $out/lib
+
+          cp -r build/${os}-${cpu}-server-${buildType}/images/jdk $out/lib/openjdk
+
+          # Remove some broken manpages.
+          rm -rf $out/lib/openjdk/man/ja*
+
+          # Mirror some stuff in top-level.
+          mkdir -p $out/share
+          ln -s $out/lib/openjdk/include $out/include
+          ln -s $out/lib/openjdk/man $out/share/man
+          ln -s $out/lib/openjdk/lib/src.zip $out/lib/src.zip
+          ln -s $out/include/linux/*_md.h $out/include/
+          ln -s $out/lib/openjdk/bin $out/bin
+        ''
+    )
     + "runHook postInstall";
 
-  postInstall = lib.optionalString withJcef ''
+  # This is only available on Linux https://github.com/JetBrains/JetBrainsRuntime/releases/tag/jbr-release-21.0.6b631.42
+  postInstall = lib.optionalString (withJcef && stdenv.isLinux) ''
     chmod +x $out/lib/openjdk/lib/chrome-sandbox
   '';
 
@@ -117,23 +177,27 @@ jdk.overrideAttrs (oldAttrs: rec {
   postFixup = ''
     # Build the set of output library directories to rpath against
     LIBDIRS="${
-      lib.makeLibraryPath [
-        libXdamage
-        libXxf86vm
-        libXrandr
-        libXi
-        libXcursor
-        libXrender
-        libX11
-        libXext
-        libxcb
-        nss
-        nspr
-        libdrm
-        libgbm
-        wayland
-        udev
-      ]
+      lib.makeLibraryPath (
+        [
+          libXdamage
+          libXxf86vm
+          libXrandr
+          libXi
+          libXcursor
+          libXrender
+          libX11
+          libXext
+          libxcb
+          nss
+          nspr
+          wayland
+        ]
+        ++ lib.optionals stdenv.isLinux [
+          libgbm
+          libdrm
+          udev
+        ]
+      )
     }"
     for output in $outputs; do
       if [ "$output" = debug ]; then continue; fi
@@ -151,12 +215,21 @@ jdk.overrideAttrs (oldAttrs: rec {
     done
   '';
 
-  nativeBuildInputs = [
-    git
-    autoconf
-    unzip
-    rsync
-  ] ++ oldAttrs.nativeBuildInputs;
+  nativeBuildInputs =
+    [
+      git
+      autoconf
+      zip
+      unzip
+      rsync
+    ]
+    ++ oldAttrs.nativeBuildInputs
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.bootstrap_cmds
+      darwin.xattr
+      darwin.stubs.setfile
+      darwin.xcode_16_1
+    ];
 
   meta = with lib; {
     description = "OpenJDK fork to better support Jetbrains's products";
@@ -176,8 +249,6 @@ jdk.overrideAttrs (oldAttrs: rec {
       edwtjo
       aoli-al
     ];
-
-    broken = stdenv.hostPlatform.isDarwin;
   };
 
   passthru = oldAttrs.passthru // {
