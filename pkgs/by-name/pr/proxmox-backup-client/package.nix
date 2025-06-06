@@ -3,7 +3,6 @@
   fetchgit,
   fetchFromGitHub,
   rustPlatform,
-  pkg-config,
   pkgconf,
   openssl,
   fuse3,
@@ -152,7 +151,6 @@ rustPlatform.buildRustPackage {
   REPOID = "";
 
   nativeBuildInputs = [
-    pkg-config
     pkgconf
     rustPlatform.bindgenHook
     installShellFiles
