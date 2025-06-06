@@ -11590,10 +11590,6 @@ with pkgs;
 
   breath-theme = libsForQt5.callPackage ../data/themes/breath-theme { };
 
-  cnspec = callPackage ../tools/security/cnspec {
-    buildGoModule = buildGo123Module;
-  };
-
   colloid-kde = libsForQt5.callPackage ../data/themes/colloid-kde { };
 
   dejavu_fonts = lowPrio (callPackage ../data/fonts/dejavu-fonts { });
