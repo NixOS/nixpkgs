@@ -50,7 +50,7 @@ stdenv.mkDerivation {
       cddl
       gpl2Plus
     ];
-    homepage = "http://www.brendangregg.com/flamegraphs.html";
+    homepage = "https://www.brendangregg.com/flamegraphs.html";
     description = "Visualization for profiled code";
     mainProgram = "flamegraph.pl";
     platforms = platforms.unix;

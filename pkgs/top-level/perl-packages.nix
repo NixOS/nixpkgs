@@ -9495,7 +9495,7 @@ with self;
     doCheck = false;
     meta = {
       description = "Code coverage metrics for Perl";
-      homepage = "http://www.pjcj.net/perl.html";
+      homepage = "https://www.pjcj.net/perl.html";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
