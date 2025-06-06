@@ -3,7 +3,6 @@
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
-  fetchpatch,
   installShellFiles,
   python3,
   strace,
@@ -19,25 +18,19 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "shh";
-  version = "2025.6.4";
+  version = "2025.6.5";
 
   src = fetchFromGitHub {
     owner = "desbma";
     repo = "shh";
     tag = "v${version}";
-    hash = "sha256-rhn7qy/cF1vjCFnEoVzVmKNcI/TBUEMxp5pzzC8c9bw=";
+    hash = "sha256-cKN5SK7pVw4Ey6QmCZRYIlDPJ69eg9ihQ1M2vZDmGZ0=";
   };
 
-  cargoHash = "sha256-hk4IG/FOwrLrV7kPDQigkpWwQzmvf1LvyrIesMYO3jk=";
+  cargoHash = "sha256-09mQDautFnL0RYfIfn6KC2T7Ah57gV7JD1JkqmApmYI=";
 
   patches = [
     ./fix_run_checks.patch
-    (fetchpatch {
-      # to be removed after next release
-      name = "support-kernels-without-kernel-unprivileged_userns_clone.patch";
-      url = "https://github.com/desbma/shh/commit/f103b06c756dbb43aec615b590680cc99cbb0f00.patch";
-      hash = "sha256-K68tU7EN51jUayoP+WAUuvqqB2eqyDXnAdLsWEd/eAM=";
-    })
   ];
 
   env = {
