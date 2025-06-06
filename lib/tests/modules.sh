@@ -302,7 +302,7 @@ checkConfigError 'The option .value. in .*/declare-coerced-value.nix. is already
 
 # Check coerced value with unsound coercion
 checkConfigOutput '^12$' config.value ./declare-coerced-value-unsound.nix
-checkConfigError 'A definition for option .* is not of type .*.\n\s*- In .*: 1000' config.value ./declare-coerced-value-unsound.nix ./define-value-string-bigint.nix
+checkConfigError 'A definition for option .* is not of type .*.\n\s*- In .*: "1000"' config.value ./declare-coerced-value-unsound.nix ./define-value-string-bigint.nix
 checkConfigError 'toInt: Could not convert .* to int' config.value ./declare-coerced-value-unsound.nix ./define-value-string-arbitrary.nix
 
 # Check mkAliasOptionModule.
