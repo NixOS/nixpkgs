@@ -15,6 +15,7 @@
   pywebview,
   tkinter,
   wrapGAppsHook3,
+  pypresence,
 }:
 
 buildPythonApplication rec {
@@ -45,6 +46,9 @@ buildPythonApplication rec {
     # display_mirror dependencies
     jinja2
     pywebview
+    
+    # discord rich presence dependencie
+    pypresence
   ];
 
   # override $HOME directory:
