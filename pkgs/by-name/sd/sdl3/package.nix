@@ -90,6 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString waylandSupport ''
       substituteInPlace src/video/wayland/SDL_waylandmessagebox.c \
         --replace-fail '"zenity"' '"${lib.getExe zenity}"'
+      substituteInPlace src/dialog/unix/SDL_zenitydialog.c \
+        --replace-fail '"zenity"' '"${lib.getExe zenity}"'
     '';
 
   strictDeps = true;
