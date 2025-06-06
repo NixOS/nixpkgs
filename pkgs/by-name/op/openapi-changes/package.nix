@@ -35,11 +35,11 @@ buildGoModule rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "World's sexiest OpenAPI breaking changes detector";
     homepage = "https://pb33f.io/openapi-changes/";
     changelog = "https://github.com/pb33f/openapi-changes/releases/tag/v${version}";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ mguentner ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ mguentner ];
   };
 }
