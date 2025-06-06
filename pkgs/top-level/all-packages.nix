@@ -1264,8 +1264,6 @@ with pkgs;
     withpcre2 = false;
   };
 
-  bitbucket-server-cli = callPackage ../applications/version-management/bitbucket-server-cli { };
-
   bump2version = with python3Packages; toPythonApplication bump2version;
 
   cgit = callPackage ../applications/version-management/cgit { };
