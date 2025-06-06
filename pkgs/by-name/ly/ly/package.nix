@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitHub,
+  fetchFromGitea,
   linux-pam,
   libxcb,
   makeBinaryWrapper,
@@ -14,8 +14,9 @@ stdenv.mkDerivation {
   pname = "ly";
   version = "1.0.3";
 
-  src = fetchFromGitHub {
-    owner = "fairyglade";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "AnErrupTion";
     repo = "ly";
     rev = "v1.0.3";
     hash = "sha256-TsEn0kH7j4myjjgwHnbOUmIZjHn8A1d/7IjamoWxpXQ=";
@@ -43,7 +44,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "TUI display manager";
     license = licenses.wtfpl;
-    homepage = "https://github.com/fairyglade/ly";
+    homepage = "https://codeberg.org/AnErrupTion/ly";
     maintainers = [ maintainers.vidister ];
     platforms = platforms.linux;
     mainProgram = "ly";
