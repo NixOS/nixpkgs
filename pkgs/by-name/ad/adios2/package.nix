@@ -134,6 +134,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ADIOS2_USE_Campaign" true)
     (lib.cmakeBool "ADIOS2_USE_AWSSDK" false)
 
+    # Enable support for Little/Big Endian Interoperability
+    (lib.cmakeBool "ADIOS2_USE_Endian_Reverse" true)
+
     (lib.cmakeBool "BUILD_TESTING" false)
     (lib.cmakeBool "ADIOS2_BUILD_EXAMPLES" withExamples)
     (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
