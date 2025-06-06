@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-6WkTH5PKefvGTVdyShA1c1iBVVpSYA2+acaeq3LJ/NE=";
   };
 
+  patches = [ ./CVE-2025-29087.patch ];
+
   outputs = [
     "bin"
     "dev"
