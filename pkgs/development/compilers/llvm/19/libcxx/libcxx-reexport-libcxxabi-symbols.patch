@@ -1,0 +1,9 @@
+diff --git a/libcxx/src/CMakeLists.txt b/libcxx/src/CMakeLists.txt
+index 4e9bf900af..b66db45a52 100644
+--- a/libcxx/src/CMakeLists.txt
++++ b/libcxx/src/CMakeLists.txt
+@@ -212,3 +212,4 @@
+ if (APPLE AND LIBCXX_CXX_ABI MATCHES "libcxxabi$"
+           AND NOT LIBCXX_STATICALLY_LINK_ABI_IN_SHARED_LIBRARY)
++  target_link_libraries(cxx_shared PRIVATE cxxabi-reexports)
+   target_link_libraries(cxx_shared PRIVATE
