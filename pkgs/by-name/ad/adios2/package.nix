@@ -24,6 +24,7 @@
   yaml-cpp,
   nlohmann_json,
   llvmPackages,
+  testers,
   pythonSupport ? false,
   withExamples ? false,
 }:
@@ -63,7 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      mpi
       bzip2
       c-blosc2
       (hdf5-mpi.override { inherit mpi; })
@@ -87,10 +87,14 @@ stdenv.mkDerivation (finalAttrs: {
     # openmp required by zfp
     ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
-  propagatedBuildInputs = lib.optionals pythonSupport [
-    (python3Packages.mpi4py.override { inherit mpi; })
-    python3Packages.numpy
-  ];
+  propagatedBuildInputs =
+    [
+      mpi
+    ]
+    ++ lib.optionals pythonSupport [
+      (python3Packages.mpi4py.override { inherit mpi; })
+      python3Packages.numpy
+    ];
 
   cmakeFlags = [
     # adios2 builtin modules
@@ -158,6 +162,11 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.pythonImportsCheckHook
     python3Packages.pytestCheckHook
   ];
+
+  passthru.tests.cmake-config = testers.hasCmakeConfigModules {
+    moduleNames = [ "adios2" ];
+    package = finalAttrs.finalPackage;
+  };
 
   meta = {
     homepage = "https://adios2.readthedocs.io/en/latest/";
