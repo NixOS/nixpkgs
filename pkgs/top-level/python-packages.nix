@@ -10185,6 +10185,8 @@ self: super: with self; {
 
   nominal-api = callPackage ../development/python-modules/nominal-api { };
 
+  nominal-api-protos = callPackage ../development/python-modules/nominal-api-protos { };
+
   nonbloat-db = callPackage ../development/python-modules/nonbloat-db { };
 
   noneprompt = callPackage ../development/python-modules/noneprompt { };
