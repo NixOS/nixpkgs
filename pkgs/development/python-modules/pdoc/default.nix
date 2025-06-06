@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pdoc";
-  version = "15.0.3";
+  version = "15.0.4";
   disabled = pythonOlder "3.9";
 
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "mitmproxy";
     repo = "pdoc";
     rev = "v${version}";
-    hash = "sha256-qr0K+ZOmEPWMkm/cPisdw6gSPZI4FvICaKQNt/sef40=";
+    hash = "sha256-l0aaQbjxAMcTZZwDN6g8A7bjSsl6yP2FoAnwTYkKYH8=";
   };
 
   build-system = [ setuptools ];
