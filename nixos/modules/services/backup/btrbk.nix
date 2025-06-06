@@ -276,6 +276,12 @@ in
                 ];
                 description = "What actions can be performed with this SSH key. See ssh_filter_btrbk(1) for details";
               };
+              restrictPath = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                example = "/path/prefix/to/target";
+                description = "Restrict commands to <path>. See --restrict-path in ssh_filter_btrbk(1).";
+              };
             };
           });
         default = [ ];
@@ -333,10 +339,11 @@ in
             }
             .${cfg.ioSchedulingClass};
           sudo_doas_flag = "--${sudo_doas}";
+          restrictPathOption = optionalString (v.restrictPath != null) "--restrict-path ${v.restrictPath}";
         in
         ''command="${pkgs.util-linux}/bin/ionice -t -c ${toString ioniceClass} ${
           optionalString (cfg.niceness >= 1) "${pkgs.coreutils}/bin/nice -n ${toString cfg.niceness}"
-        } ${pkgs.btrbk}/share/btrbk/scripts/ssh_filter_btrbk.sh ${sudo_doas_flag} ${options}" ${v.key}''
+        } ${pkgs.btrbk}/share/btrbk/scripts/ssh_filter_btrbk.sh ${sudo_doas_flag} ${options} ${restrictPathOption}" ${v.key}''
       ) cfg.sshAccess;
     };
     users.groups.btrbk = { };
