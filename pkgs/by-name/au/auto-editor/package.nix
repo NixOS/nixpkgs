@@ -2,40 +2,30 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  replaceVars,
   yt-dlp,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "auto-editor";
-  version = "26.2.0";
+  version = "28.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "WyattBlue";
     repo = "auto-editor";
     tag = version;
-    hash = "sha256-BYpt/EelCChhphfuTcqI/VIVis6dnt0J4FcNhWeiiyY=";
+    hash = "sha256-9U3hDVtSuOdiGnEsKs0InV9v0UrlI3qKaBqfCtVTD0E=";
   };
 
-  patches = [
-    (replaceVars ./set-exe-paths.patch {
-      yt_dlp = lib.getExe yt-dlp;
-    })
-  ];
-
   postPatch = ''
-    # pyav is a fork of av, but has since mostly been un-forked
-    substituteInPlace pyproject.toml \
-        --replace-fail '"pyav==14.*"' '"av"'
+    substituteInPlace auto_editor/__main__.py \
+      --replace-fail '"yt-dlp"' '"${lib.getExe yt-dlp}"'
   '';
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
+  build-system = with python3Packages; [ setuptools ];
 
   dependencies = with python3Packages; [
-    av
+    basswood-av
     numpy
   ];
 
