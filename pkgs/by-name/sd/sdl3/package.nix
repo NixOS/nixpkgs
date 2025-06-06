@@ -54,6 +54,7 @@
 assert lib.assertMsg (
   waylandSupport -> openglSupport
 ) "SDL3 requires OpenGL support to enable Wayland";
+assert lib.assertMsg (ibusSupport -> dbusSupport) "SDL3 requires dbus support to enable ibus";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3";
