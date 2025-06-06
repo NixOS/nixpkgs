@@ -46,7 +46,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ];
     text = ''
       url=$(curl --silent "https://svn.code.sf.net/p/xld/code/appcast/xld-appcast_e.xml")
-      version=$(echo "$url" | xmlstarlet sel -t -v "substring-before(substring-after(//enclosure/@url, 'version='), '&')")
+      version=$(echo "$url" | xmlstarlet sel -t -v "//enclosure/@sparkle:shortVersionString")
       update-source-version xld "$version" --file=./pkgs/by-name/xl/xld/package.nix
     '';
   });
