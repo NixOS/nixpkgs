@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch,
   autoreconfHook269,
   autoconf-archive,
   pkg-config,
@@ -20,28 +21,38 @@
   libxslt,
   goffice,
   wrapGAppsHook3,
-  gitUpdater,
+  unstableGitUpdater,
+  desktopToDarwinBundle,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "abiword";
-  version = "3.0.6";
+  version = "0-unstable-2024-11-02";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "AbiWord";
-    rev = "refs/tags/release-${version}";
-    hash = "sha256-PPK4O+NKXdl7DKPOgGlVyCFTol8hhmtq0wdTTtwKQ/4=";
+    rev = "542cb5c8aa0a97efd033f78d29f706d1fbae74e7";
+    hash = "sha256-1/lr0sCHhDAJCSnbTxIyoe7GOiJlnjcXqItpP9VO0GE=";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook269
-    autoconf-archive
-    pkg-config
-    wrapGAppsHook3
-    perl
+  patches = [
+    # https://gitlab.gnome.org/World/AbiWord/-/merge_requests/19
+    ./fix-nonnull-implicit-this-build-failure.patch
   ];
+
+  nativeBuildInputs =
+    [
+      autoreconfHook269
+      autoconf-archive
+      pkg-config
+      wrapGAppsHook3
+      perl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      desktopToDarwinBundle
+    ];
 
   buildInputs = [
     gtk3
@@ -64,14 +75,20 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs ./tools/cdump/xp/cdump.pl ./po/ui-backport.pl
+
+    # cocoa implementation is broken and incomplete
+    substituteInPlace configure.ac \
+      --replace-fail 'TOOLKIT="cocoa"' 'TOOLKIT="gtk"'
   '';
 
   preAutoreconf = ''
     ./autogen-common.sh
   '';
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "release-";
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-ljpeg -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lgmodule-2.0";
+
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true; # tags are not defined on the master branch
   };
 
   meta = with lib; {
@@ -79,7 +96,7 @@ stdenv.mkDerivation rec {
     mainProgram = "abiword";
     homepage = "https://gitlab.gnome.org/World/AbiWord/";
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [
       pSub
       ylwghst
