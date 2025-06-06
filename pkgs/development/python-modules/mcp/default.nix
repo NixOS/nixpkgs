@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -100,22 +101,27 @@ buildPythonPackage rec {
     "ignore::pydantic.warnings.PydanticDeprecatedSince211"
   ];
 
-  disabledTests = [
-    # attempts to run the package manager uv
-    "test_command_execution"
+  disabledTests =
+    [
+      # attempts to run the package manager uv
+      "test_command_execution"
 
-    # performance-dependent test
-    "test_messages_are_executed_concurrently"
+      # performance-dependent test
+      "test_messages_are_executed_concurrently"
 
-    # ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
-    "test_client_session_version_negotiation_failure"
+      # ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+      "test_client_session_version_negotiation_failure"
 
-    # AttributeError: 'coroutine' object has no attribute 'client_metadata'
-    "TestOAuthClientProvider"
+      # AttributeError: 'coroutine' object has no attribute 'client_metadata'
+      "TestOAuthClientProvider"
 
-    # inline_snapshot._exceptions.UsageError: snapshot value should not change. Use Is(...) for dynamic snapshot parts
-    "test_build_metadata"
-  ];
+      # inline_snapshot._exceptions.UsageError: snapshot value should not change. Use Is(...) for dynamic snapshot parts
+      "test_build_metadata"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Flaky: ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+      "test_notification_validation_error"
+    ];
 
   __darwinAllowLocalNetworking = true;
 
