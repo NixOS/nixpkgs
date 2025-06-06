@@ -81,6 +81,7 @@ export type PathsByRegistry = {
 
 export type RegistryJson = {
   "dist-tags": any;
+  "_deno.etag": string;
   versions: { [version: string]: any };
   name: string;
 };
@@ -224,6 +225,7 @@ export function pruneRegistryJson(
 
   const newRegistryJson: RegistryJson = {
     ...registryJson,
+    "_deno.etag": "",
     "dist-tags": {},
     versions: {},
   };
