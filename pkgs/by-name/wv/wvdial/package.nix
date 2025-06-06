@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    description = "A dialer that automatically recognises the modem";
+    description = "Dialer that automatically recognises the modem";
     homepage = "https://gitea.osmocom.org/retronetworking/wvdial";
     license = lib.licenses.lgpl2;
     maintainers = with lib.maintainers; [ flokli ];

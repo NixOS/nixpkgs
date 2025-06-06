@@ -36,7 +36,7 @@ buildGoModule rec {
   '';
 
   meta = {
-    description = "A command-line tool for LeetCode";
+    description = "Command-line tool for LeetCode";
     homepage = "https://github.com/j178/leetgo";
     changelog = "https://github.com/j178/leetgo/releases/tag/v${version}";
     license = lib.licenses.mit;

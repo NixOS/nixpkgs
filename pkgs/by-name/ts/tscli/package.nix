@@ -33,7 +33,7 @@ buildGoModule rec {
   '';
 
   meta = {
-    description = "A CLI tool to interact with the Tailscale API";
+    description = "CLI tool to interact with the Tailscale API";
     homepage = "https://github.com/jaxxstorm/tscli";
     changelog = "https://github.com/jaxxstorm/tscli/releases/tag/${src.tag}/CHANGELOG.md";
     mainProgram = "tscli";

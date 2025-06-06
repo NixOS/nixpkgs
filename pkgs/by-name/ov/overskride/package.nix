@@ -78,7 +78,7 @@ rustPlatform.buildRustPackage {
   '';
 
   meta = with lib; {
-    description = "A Bluetooth and Obex client that is straight to the point, DE/WM agnostic, and beautiful";
+    description = "Bluetooth and Obex client that is straight to the point, DE/WM agnostic, and beautiful";
     homepage = "https://github.com/${owner}/${name}";
     changelog = "https://github.com/${owner}/${name}/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Only;

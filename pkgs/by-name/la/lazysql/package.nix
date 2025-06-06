@@ -34,7 +34,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A cross-platform TUI database management tool written in Go";
+    description = "Cross-platform TUI database management tool written in Go";
     homepage = "https://github.com/jorgerojas26/lazysql";
     license = licenses.mit;
     maintainers = with maintainers; [ kanielrkirby ];
