@@ -50,6 +50,8 @@ stdenv.mkDerivation (finalPackage: rec {
       ./fix-darwin-build.patch
       # https://github.com/util-linux/util-linux/pull/3479 (fixes https://github.com/util-linux/util-linux/issues/3474)
       ./fix-mount-regression.patch
+      ./libmount-subdir-remove-unused-code.patch
+      ./libmount-subdir-restrict-for-real-mounts-only.patch
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
       (fetchurl {
