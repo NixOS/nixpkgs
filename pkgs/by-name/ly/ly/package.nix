@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitHub,
+  fetchFromGitea,
   linux-pam,
   libxcb,
   makeBinaryWrapper,
@@ -10,14 +10,15 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ly";
   version = "1.0.3";
 
-  src = fetchFromGitHub {
-    owner = "fairyglade";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "AnErrupTion";
     repo = "ly";
-    rev = "v1.0.3";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TsEn0kH7j4myjjgwHnbOUmIZjHn8A1d/7IjamoWxpXQ=";
   };
 
@@ -40,12 +41,12 @@ stdenv.mkDerivation {
 
   passthru.tests = { inherit (nixosTests) ly; };
 
-  meta = with lib; {
+  meta = {
     description = "TUI display manager";
-    license = licenses.wtfpl;
-    homepage = "https://github.com/fairyglade/ly";
-    maintainers = [ maintainers.vidister ];
-    platforms = platforms.linux;
+    license = lib.licenses.wtfpl;
+    homepage = "https://codeberg.org/AnErrupTion/ly";
+    maintainers = [ lib.maintainers.vidister ];
+    platforms = lib.platforms.linux;
     mainProgram = "ly";
   };
-}
+})
