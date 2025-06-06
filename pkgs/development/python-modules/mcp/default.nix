@@ -27,22 +27,24 @@
   websockets,
 
   # tests
+  inline-snapshot,
   pytest-asyncio,
   pytest-examples,
+  pytest-xdist,
   pytestCheckHook,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "mcp";
-  version = "1.9.1";
+  version = "1.9.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "python-sdk";
     tag = "v${version}";
-    hash = "sha256-8u02/tHR2F1CpjcHXHC8sZC+/JrWz1satqYa/zdSGDw=";
+    hash = "sha256-3r7NG2AnxxKgAAd3n+tjjPTz4WJRmc7isfh3p21hUa0=";
   };
 
   postPatch = ''
@@ -85,8 +87,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mcp" ];
 
   nativeCheckInputs = [
+    inline-snapshot
     pytest-asyncio
     pytest-examples
+    pytest-xdist
     pytestCheckHook
     requests
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
@@ -108,6 +112,9 @@ buildPythonPackage rec {
 
     # AttributeError: 'coroutine' object has no attribute 'client_metadata'
     "TestOAuthClientProvider"
+
+    # inline_snapshot._exceptions.UsageError: snapshot value should not change. Use Is(...) for dynamic snapshot parts
+    "test_build_metadata"
   ];
 
   __darwinAllowLocalNetworking = true;
