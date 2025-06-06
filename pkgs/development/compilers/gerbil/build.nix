@@ -48,6 +48,8 @@ stdenv.mkDerivation rec {
     gambit_stamp_ymd=${gambit-stampYmd}
     gambit_stamp_hms=${gambit-stampHms}
     EOF
+  ''
+  + lib.optionalString (!(lib.hasPrefix "unstable" version)) ''
     for f in src/bootstrap/gerbil/compiler/driver__0.scm \
              src/build/build-libgerbil.ss \
              src/gerbil/compiler/driver.ss ; do
@@ -106,11 +108,13 @@ stdenv.mkDerivation rec {
 
     # Build, replacing make by build.sh
     ( cd src && sh build.sh )
-
+  ''
+  + lib.optionalString (!(lib.hasPrefix "unstable" version)) ''
     f=build/lib/libgerbil.so.ldd ; [ -f $f ] && :
     substituteInPlace "$f" --replace '(' \
       '(${lib.strings.concatStrings (map (x: "\"${x}\" ") extraLdOptions)}'
-
+  ''
+  + ''
     runHook postBuild
   '';
 
