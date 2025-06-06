@@ -258,12 +258,22 @@ def validate_environment(plugin_name: Optional[str] = None, plugin_pname: Option
     return nixpkgs_dir, plugin_name, plugin_pname
 
 
-def update_single_plugin(nixpkgs_dir: str, plugin_name: str, plugin_pname: str) -> None:
-    """Update a single Yazi plugin"""
+def update_single_plugin(nixpkgs_dir: str, plugin_name: str, plugin_pname: str) -> Optional[Dict[str, str]]:
+    """Update a single Yazi plugin
+
+    Returns:
+        Dict with update info including old_version, new_version, etc. or None if no change
+    """
     plugin_dir = f"{nixpkgs_dir}/pkgs/by-name/ya/yazi/plugins/{plugin_name}"
     default_nix_path = f"{plugin_dir}/default.nix"
 
     # Get repository info
+    nix_content = read_nix_file(default_nix_path)
+    old_version_match = re.search(r'version = "([^"]*)"', nix_content)
+    old_version = old_version_match.group(1) if old_version_match else "unknown"
+    old_commit_match = re.search(r'rev = "([^"]*)"', nix_content)
+    old_commit = old_commit_match.group(1) if old_commit_match else "unknown"
+
     plugin_info = get_plugin_info(nixpkgs_dir, plugin_name)
     owner = plugin_info["owner"]
     repo = plugin_info["repo"]
@@ -280,7 +290,13 @@ def update_single_plugin(nixpkgs_dir: str, plugin_name: str, plugin_pname: str) 
 
     # Get latest commit info
     latest_commit, commit_date = get_latest_commit(owner, repo, plugin_pname, headers)
-    print(f"Updating {plugin_name} to commit {latest_commit} ({commit_date})")
+    print(f"Checking {plugin_name} latest commit {latest_commit} ({commit_date})")
+
+    if latest_commit == old_commit:
+        print(f"No changes for {plugin_name}, already at latest commit {latest_commit}")
+        return None
+
+    print(f"Updating {plugin_name} from commit {old_commit} to {latest_commit}")
 
     # Generate new version string
     new_version = f"{required_version}-unstable-{commit_date}"
@@ -292,26 +308,34 @@ def update_single_plugin(nixpkgs_dir: str, plugin_name: str, plugin_pname: str) 
     # Update the default.nix file
     update_nix_file(default_nix_path, latest_commit, new_version, new_hash)
 
-    print(f"Successfully updated {plugin_name} to version {new_version} (commit {latest_commit})")
+    print(f"Successfully updated {plugin_name} from {old_version} to {new_version}")
+
+    return {
+        "name": plugin_name,
+        "old_version": old_version,
+        "new_version": new_version,
+        "old_commit": old_commit,
+        "new_commit": latest_commit
+    }
 
 
-def update_all_plugins(nixpkgs_dir: str) -> None:
-    """Update all available Yazi plugins"""
+def update_all_plugins(nixpkgs_dir: str) -> List[Dict[str, str]]:
+    """Update all available Yazi plugins
+
+    Returns:
+        List[Dict[str, str]]: List of successfully updated plugin info dicts
+    """
     plugins = get_all_plugins(nixpkgs_dir)
+    updated_plugins = []
 
     if not plugins:
         print("No plugins found to update")
-        return
+        return updated_plugins
 
     print(f"Found {len(plugins)} plugins to update")
 
-    # Get Yazi version once for all plugins
-    yazi_version = get_yazi_version(nixpkgs_dir)
-
-    # Setup GitHub API headers once for all plugins
-    headers = get_github_headers()
-
-    success_count = 0
+    checked_count = 0
+    updated_count = 0
     failed_plugins = []
 
     for plugin in plugins:
@@ -320,12 +344,16 @@ def update_all_plugins(nixpkgs_dir: str) -> None:
 
         try:
             print(f"\n{'=' * 50}")
-            print(f"Updating plugin: {plugin_name}")
+            print(f"Checking plugin: {plugin_name}")
             print(f"{'=' * 50}")
 
             try:
-                update_single_plugin(nixpkgs_dir, plugin_name, plugin_pname)
-                success_count += 1
+                update_info = update_single_plugin(nixpkgs_dir, plugin_name, plugin_pname)
+                checked_count += 1
+
+                if update_info:
+                    updated_count += 1
+                    updated_plugins.append(update_info)
             except KeyboardInterrupt:
                 print("\nUpdate process interrupted by user")
                 sys.exit(1)
@@ -340,12 +368,49 @@ def update_all_plugins(nixpkgs_dir: str) -> None:
 
     # Print summary
     print(f"\n{'=' * 50}")
-    print(f"Update summary: {success_count}/{len(plugins)} plugins updated successfully")
+    print(f"Update summary: {updated_count} plugins updated out of {checked_count} checked")
+
+    if updated_count > 0:
+        print("\nUpdated plugins:")
+        for plugin in updated_plugins:
+            print(f"  - {plugin['name']}: {plugin['old_version']} → {plugin['new_version']}")
 
     if failed_plugins:
-        print(f"Failed to update {len(failed_plugins)} plugins:")
+        print(f"\nFailed to update {len(failed_plugins)} plugins:")
         for plugin in failed_plugins:
             print(f"  - {plugin['name']}: {plugin['error']}")
+
+    return updated_plugins
+
+
+def commit_changes(updated_plugins: List[Dict[str, str]]) -> None:
+    """Commit all changes after updating plugins"""
+    if not updated_plugins:
+        print("No plugins were updated, skipping commit")
+        return
+
+    try:
+        status_output = run_command("git status --porcelain", capture_output=True)
+        if not status_output:
+            print("No changes to commit")
+            return
+
+        current_date = run_command("date +%Y-%m-%d", capture_output=True)
+
+        if len(updated_plugins) == 1:
+            plugin = updated_plugins[0]
+            commit_message = f"yaziPlugins.{plugin['name']}: update from {plugin['old_version']} to {plugin['new_version']}"
+        else:
+            commit_message = f"yaziPlugins: update on {current_date}\n\n"
+            for plugin in sorted(updated_plugins, key=lambda x: x['name']):
+                commit_message += f"- {plugin['name']}: {plugin['old_version']} → {plugin['new_version']}\n"
+
+        run_command("git add pkgs/by-name/ya/yazi/plugins/", capture_output=False)
+
+        run_command(f'git commit -m "{commit_message}"', capture_output=False)
+        print(f"\nCommitted changes with message: {commit_message}")
+    except Exception as e:
+        print(f"Error committing changes: {e}")
 
 
 def main():
@@ -355,38 +420,41 @@ def main():
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--all", action="store_true", help="Update all Yazi plugins")
     group.add_argument("--plugin", type=str, help="Update a specific plugin by name")
+    parser.add_argument("--commit", action="store_true", help="Commit changes after updating")
     args = parser.parse_args()
 
-    # Get nixpkgs directory
     nixpkgs_dir = os.getcwd()
+    updated_plugins = []
 
     if args.all:
-        # Update all plugins
         print("Updating all Yazi plugins...")
-        update_all_plugins(nixpkgs_dir)
+        updated_plugins = update_all_plugins(nixpkgs_dir)
+
     elif args.plugin:
-        # Update a specific plugin
         plugin_name = args.plugin
         try:
-            # Get the pname for the specified plugin
             plugin_pname = run_command(f'nix eval --raw -f {nixpkgs_dir} "yaziPlugins.{plugin_name}.pname"')
             print(f"Updating Yazi plugin: {plugin_name}")
-            update_single_plugin(nixpkgs_dir, plugin_name, plugin_pname)
+            update_info = update_single_plugin(nixpkgs_dir, plugin_name, plugin_pname)
+            if update_info:
+                updated_plugins.append(update_info)
         except Exception as e:
             print(f"Error: {e}")
-            sys.exit(1)  # We exit here because this is a single plugin update, not a batch operation
+            sys.exit(1)
     else:
-        # Check environment variables
         nixpkgs_dir, plugin_name, plugin_pname = validate_environment()
 
         if plugin_name and plugin_pname:
-            # Update a single plugin using environment variables
             print(f"Updating Yazi plugin: {plugin_name}")
-            update_single_plugin(nixpkgs_dir, plugin_name, plugin_pname)
+            update_info = update_single_plugin(nixpkgs_dir, plugin_name, plugin_pname)
+            if update_info:
+                updated_plugins.append(update_info)
         else:
-            # No plugin specified, show help
             parser.print_help()
             sys.exit(0)
+
+    if args.commit and updated_plugins:
+        commit_changes(updated_plugins)
 
 
 if __name__ == "__main__":
