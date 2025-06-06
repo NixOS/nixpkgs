@@ -1295,6 +1295,10 @@ self: super: with self; {
 
   azure-keyvault-secrets = callPackage ../development/python-modules/azure-keyvault-secrets { };
 
+  azure-keyvault-securitydomain =
+    callPackage ../development/python-modules/azure-keyvault-securitydomain
+      { };
+
   azure-kusto-data = callPackage ../development/python-modules/azure-kusto-data { };
 
   azure-kusto-ingest = callPackage ../development/python-modules/azure-kusto-ingest { };
