@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   fetchFromGitLab,
-  fetchpatch,
   cairo,
   cmake,
   boost,
@@ -60,7 +59,7 @@ let
     hash = "sha256-bImTdlhMAA79kwbKPrHN3a9vVrtsgBh3rFjH3B7tEbQ=";
   };
 in
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "poppler-${suffix}";
   version = "25.05.0"; # beware: updates often break cups-filters build, check scribus too!
 
@@ -70,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   ];
 
   src = fetchurl {
-    url = "https://poppler.freedesktop.org/poppler-${version}.tar.xz";
+    url = "https://poppler.freedesktop.org/poppler-${finalAttrs.version}.tar.xz";
     hash = "sha256-mxYnxbdoFqxeQFKgP1tgW6QLRc8GsCyt0EeWILSZqzg=";
   };
 
@@ -182,7 +181,7 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   meta = {
     homepage = "https://poppler.freedesktop.org/";
-    changelog = "https://gitlab.freedesktop.org/poppler/poppler/-/blob/poppler-${version}/NEWS";
+    changelog = "https://gitlab.freedesktop.org/poppler/poppler/-/blob/poppler-${finalAttrs.version}/NEWS";
     description = "PDF rendering library";
     longDescription = ''
       Poppler is a PDF rendering library based on the xpdf-3.0 code base. In

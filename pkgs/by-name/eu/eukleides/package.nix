@@ -11,12 +11,12 @@
   texlive,
 }:
 
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eukleides";
   version = "1.5.4";
 
   src = fetchurl {
-    url = "http://www.eukleides.org/files/${pname}-${version}.tar.bz2";
+    url = "http://www.eukleides.org/files/eukleides-${finalAttrs.version}.tar.bz2";
     sha256 = "0s8cyh75hdj89v6kpm3z24i48yzpkr8qf0cwxbs9ijxj1i38ki0q";
   };
 
