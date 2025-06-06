@@ -12,11 +12,12 @@
 
 stdenv.mkDerivation rec {
   pname = "fwupd-efi";
-  version = "1.6";
+  version = "1.7";
 
   src = fetchurl {
-    url = "https://github.com/fwupd/fwupd-efi/releases/download/${version}/fwupd-efi-${version}.tar.xz";
-    hash = "sha256-r9CAWirQgafK/y71vABM46AUe1OAFejsqWY0FxaxJg4=";
+    url = "https://github.com/fwupd/fwupd-efi/archive/refs/tags/${version}.tar.gz";
+    hash = "sha256-ltT8RUZxWbJmTOhu59UDDiZf201KTXdAgGVNL1sVYf8=";
+
   };
 
   nativeBuildInputs = [
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     "-Defi_sbat_distro_pkgname=${pname}"
     "-Defi_sbat_distro_version=${version}"
     "-Defi_sbat_distro_url=https://search.nixos.org/packages?channel=unstable&show=fwupd-efi&from=0&size=50&sort=relevance&query=fwupd-efi"
+    "-Dgenpeimg=disabled"
   ];
 
   meta = with lib; {
