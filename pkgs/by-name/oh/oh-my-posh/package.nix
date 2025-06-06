@@ -17,7 +17,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-BucMDbubJ+gEb5tBBSOf+P0A+KkDnUSAJRALyL9uhXU=";
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   ldflags = [
     "-s"
