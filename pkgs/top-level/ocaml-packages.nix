@@ -1774,6 +1774,8 @@ let
 
         process = callPackage ../development/ocaml-modules/process { };
 
+        processor = callPackage ../development/ocaml-modules/processor { };
+
         prometheus = callPackage ../development/ocaml-modules/prometheus { };
 
         progress = callPackage ../development/ocaml-modules/progress { };
