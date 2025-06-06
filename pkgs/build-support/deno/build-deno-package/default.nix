@@ -8,7 +8,6 @@
   jq,
   fetchDenoDeps,
   buildPackages,
-  breakpointHook,
   lib,
 }:
 {
@@ -156,7 +155,6 @@ stdenvNoCC.mkDerivation (
       diffutils
       zip
       jq
-      breakpointHook
     ];
 
     DENO_DIR = denoDir;
