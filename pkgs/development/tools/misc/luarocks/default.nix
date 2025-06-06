@@ -15,6 +15,7 @@
   which,
   unzip,
   lua,
+  versionCheckHook,
   # for 'luarocks pack'
   zip,
   nix-update-script,
@@ -64,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     installShellFiles
     lua
     unzip
+    versionCheckHook
   ];
 
   buildInputs = [
@@ -106,6 +108,10 @@ stdenv.mkDerivation (finalAttrs: {
     unzip
     cmake
   ];
+
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/luarocks";
+  versionCheckProgramArg = "--version";
 
   # unpack hook for src.rock and rockspec files
   setupHook = ./setup-hook.sh;
