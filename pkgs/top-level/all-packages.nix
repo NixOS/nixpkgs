@@ -6663,8 +6663,7 @@ with pkgs;
 
   wireplumber = callPackage ../development/libraries/pipewire/wireplumber.nix { };
 
-  racket = callPackage ../development/interpreters/racket { };
-  racket-minimal = callPackage ../development/interpreters/racket/minimal.nix {
+  racket-minimal = callPackage ../by-name/ra/racket/minimal.nix {
     stdenv = stdenvAdapters.makeStaticLibraries stdenv;
   };
 
