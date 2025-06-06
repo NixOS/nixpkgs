@@ -14332,7 +14332,6 @@ with pkgs;
 
   virtualbox = libsForQt5.callPackage ../applications/virtualization/virtualbox {
     stdenv = stdenv_32bit;
-    inherit (gnome2) libIDL;
 
     # VirtualBox uses wsimport, which was removed after JDK 8.
     jdk = jdk8;
