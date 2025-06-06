@@ -26,14 +26,14 @@
 }:
 
 let
-  version = "2.73.0";
+  version = "2.74.0";
 
   src = fetchFromGitHub {
     name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
     tag = "azure-cli-${version}";
-    hash = "sha256-MLmTV/tg5fM3XFEMtBLPdvsiUS5Gj8CH/zvdehDoka0=";
+    hash = "sha256-wX1XKC3snnKEQeqlW+btshjdcMR/5m2Z69QtcJe2Opc=";
   };
 
   # put packages that needs to be overridden in the py package scope
@@ -168,6 +168,7 @@ py.pkgs.toPythonApplication (
         azure-keyvault-certificates
         azure-keyvault-keys
         azure-keyvault-secrets
+        azure-keyvault-securitydomain
         azure-mgmt-advisor
         azure-mgmt-apimanagement
         azure-mgmt-appconfiguration
