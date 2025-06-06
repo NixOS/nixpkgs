@@ -36,12 +36,12 @@ buildGraalvmNativeImage rec {
     "-H:ReflectionConfigurationFiles=${build-src}/package/reflection-config.json"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Clojure Query: A Command-line Data Processor for JSON, YAML, EDN, XML and more";
     homepage = "https://github.com/markus-wa/cq";
     changelog = "https://github.com/markus-wa/cq/releases/releases/tag/${version}";
-    license = licenses.epl20;
-    maintainers = with maintainers; [ farcaller ];
-    platforms = platforms.unix;
+    license = lib.licenses.epl20;
+    maintainers = with lib.maintainers; [ farcaller ];
+    platforms = lib.platforms.unix;
   };
 }

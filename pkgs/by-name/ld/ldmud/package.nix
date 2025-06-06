@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
     cp -v ../COPYRIGHT $out/share/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Gamedriver for LPMuds including a LPC compiler, interpreter and runtime";
     homepage = "https://ldmud.eu";
     changelog = "https://github.com/ldmud/ldmud/blob/${version}/HISTORY";
@@ -116,8 +116,8 @@ stdenv.mkDerivation rec {
       a driver in its own right.
     '';
     # See https://github.com/ldmud/ldmud/blob/master/COPYRIGHT
-    license = licenses.unfreeRedistributable;
-    platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ cpu ];
+    license = lib.licenses.unfreeRedistributable;
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [ cpu ];
   };
 }
