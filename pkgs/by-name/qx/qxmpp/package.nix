@@ -57,11 +57,11 @@ stdenv.mkDerivation rec {
       "-DBUILD_OMEMO=ON"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform C++ XMPP client and server library";
     homepage = "https://github.com/qxmpp-project/qxmpp";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ astro ];
-    platforms = with platforms; linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ astro ];
+    platforms = with lib.platforms; linux;
   };
 }
