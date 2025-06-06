@@ -79,7 +79,7 @@ buildGoModule rec {
     ];
 
   meta = {
-    description = "A secure runtime platform for National Security. https://uds.defenseunicorns.com/";
+    description = "Secure runtime platform for National Security. https://uds.defenseunicorns.com/";
     homepage = "https://uds.defenseunicorns.com/";
     mainProgram = "uds";
     license = lib.licenses.agpl3Plus;
