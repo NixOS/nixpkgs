@@ -2825,6 +2825,8 @@ self: super: with self; {
 
   confuse = callPackage ../development/python-modules/confuse { };
 
+  conjure-python-client = callPackage ../development/python-modules/conjure-python-client { };
+
   connect-box = callPackage ../development/python-modules/connect-box { };
 
   connected-components-3d = callPackage ../development/python-modules/connected-components-3d { };
