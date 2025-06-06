@@ -50,7 +50,7 @@ let
         runHook postInstall
       '';
 
-      postInstallPhase = ''
+      postInstall = ''
         ln -s ${cfg.filesDir} $out/share/php/drupal/sites/default/files
         ln -s ${cfg.stateDir}/sites/default/settings.php $out/share/php/drupal/sites/default/settings.php
         ln -s ${cfg.modulesDir} $out/share/php/drupal/modules
@@ -76,7 +76,7 @@ let
           default = "/var/lib/drupal/${name}/sites/default/files";
           defaultText = "/var/lib/drupal/<name>/sites/default/files";
           description = ''
-            The location of the Drupal files directory.
+            The location of the Drupal files directory. Ideally, this should be somewhere in the state directory.
           '';
         };
 
@@ -84,21 +84,21 @@ let
           type = types.path;
           default = "/var/lib/drupal/${name}";
           defaultText = "/var/lib/drupal/<name>";
-          description = "The location of the Drupal site state directory.";
+          description = "The location of the Drupal site state directory. Stores files that developers can edit and interact with.";
         };
 
         modulesDir = mkOption {
           type = types.path;
           default = "/var/lib/drupal/${name}/modules";
           defaultText = "/var/lib/drupal/<name>/modules";
-          description = "The location of Drupal modules.";
+          description = "The location for users to instsall Drupal modules. Ideally, this should be somewhere in the state directory.";
         };
 
         themesDir = mkOption {
           type = types.path;
           default = "/var/lib/drupal/${name}/themes";
-          defaultText = "/varlib/drupal/<name>/themes";
-          description = "The location of Drupal themes.";
+          defaultText = "/var/lib/drupal/<name>/themes";
+          description = "The location for users to install Drupal themes. Ideally, this should be somewhere in the state directory";
         };
 
         phpOptions = mkOption {
