@@ -4,6 +4,7 @@
   fetchFromGitHub,
   hatchling,
   beautifulsoup4,
+  defusedxml,
   ffmpeg-headless,
   magika,
   mammoth,
@@ -45,6 +46,7 @@ buildPythonPackage rec {
 
   dependencies = [
     beautifulsoup4
+    defusedxml
     ffmpeg-headless
     lxml
     magika
