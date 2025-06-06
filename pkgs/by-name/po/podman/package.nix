@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   pkg-config,
   installShellFiles,
   buildGoModule,
@@ -74,13 +75,13 @@ let
 in
 buildGoModule rec {
   pname = "podman";
-  version = "5.4.1";
+  version = "5.5.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    hash = "sha256-RirMBb45KeBLdBJrRa86WxI4FiXdBar+RnVQ2ezEEYc=";
+    hash = "sha256-B6n1NybTFhjTMDrhmXS54ZUaLtsmiqLu783bJoDgkyk=";
   };
 
   patches = [
@@ -90,6 +91,12 @@ buildGoModule rec {
 
     # we intentionally don't build and install the helper so we shouldn't display messages to users about it
     ./rm-podman-mac-helper-msg.patch
+
+    # TODO: remove once 5.5.1 is released
+    (fetchpatch2 {
+      url = "https://github.com/containers/podman/commit/db65baaa215b68d73996ca17dd8c596901ab8bdb.patch?full_index=1";
+      hash = "sha256-YUSsnIgjT8QY+oaTRwlPNFpxMgBO4x/5GgNhvaqGkvw=";
+    })
   ];
 
   vendorHash = null;
