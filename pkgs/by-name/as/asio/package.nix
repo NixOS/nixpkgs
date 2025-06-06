@@ -62,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://think-async.com/Asio";
     description = "Cross-platform C++ library for network and low-level I/O programming";
     license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.unix;
     pkgConfigModules = [ "asio" ];
   };
