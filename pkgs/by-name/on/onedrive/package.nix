@@ -12,6 +12,7 @@
   stdenv,
   systemd,
   testers,
+  dbus,
   # Boolean flags
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
@@ -23,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "abraunegg";
     repo = "onedrive";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-AFaz1RkrtsdTZfaWobdcADbzsAhbdCzJPkQX6Pa7hN8=";
   };
 
@@ -44,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     libnotify
     sqlite
+    dbus
   ] ++ lib.optionals withSystemd [ systemd ];
 
   configureFlags = [
