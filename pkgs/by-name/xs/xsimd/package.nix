@@ -2,39 +2,28 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   doctest,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xsimd";
-  version = "13.0.0";
+  version = "13.2.0";
 
   src = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xsimd";
     tag = finalAttrs.version;
-    hash = "sha256-qElJYW5QDj3s59L3NgZj5zkhnUMzIP2mBa1sPks3/CE=";
+    hash = "sha256-L4ttJxP46uNwQAEUMoJ8rsc51Le2GeIGbT1kX7ZzcPA=";
   };
 
-  patches =
-    [
-      # Fix of https://github.com/xtensor-stack/xsimd/pull/1024 for
-      # https://github.com/xtensor-stack/xsimd/issues/456 and
-      # https://github.com/xtensor-stack/xsimd/issues/807,
-      (fetchpatch {
-        url = "https://github.com/xtensor-stack/xsimd/commit/c8a87ed6e04b6782f48f94713adfb0cad6c11ddf.patch";
-        hash = "sha256-2/FvBGdqTPcayD7rdHPSzL+F8IYKAfMW0WBJ0cW9EZ0=";
-      })
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # https://github.com/xtensor-stack/xsimd/issues/1030
-      ./disable-test_error_gamma.patch
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
+    # https://github.com/xtensor-stack/xsimd/issues/1030
+    ./disable-test_error_gamma.patch
 
-      # https://github.com/xtensor-stack/xsimd/issues/1063
-      ./relax-asin-precision.diff
-    ];
+    # https://github.com/xtensor-stack/xsimd/issues/1063
+    ./relax-asin-precision.diff
+  ];
 
   # strictDeps raises the chance that xsimd will be able to be cross compiled
   strictDeps = true;
