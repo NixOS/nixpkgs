@@ -32,14 +32,14 @@
   pantheon,
 }:
 
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "SwayNotificationCenter";
   version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "ErikReider";
     repo = "SwayNotificationCenter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-kRawYbBLVx0ie4t7tChkA8QJShS83fUcGrJSKkxBy8Q=";
   };
 
@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   meta = with lib; {
     description = "Simple notification daemon with a GUI built for Sway";
     homepage = "https://github.com/ErikReider/SwayNotificationCenter";
-    changelog = "https://github.com/ErikReider/SwayNotificationCenter/releases/tag/v${version}";
+    changelog = "https://github.com/ErikReider/SwayNotificationCenter/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl3;
     platforms = platforms.linux;
     mainProgram = "swaync";
