@@ -10,12 +10,14 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "xsimd";
   version = "13.0.0";
+
   src = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xsimd";
     tag = finalAttrs.version;
     hash = "sha256-qElJYW5QDj3s59L3NgZj5zkhnUMzIP2mBa1sPks3/CE=";
   };
+
   patches =
     [
       # Fix of https://github.com/xtensor-stack/xsimd/pull/1024 for
