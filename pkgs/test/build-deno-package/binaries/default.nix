@@ -3,7 +3,7 @@
   with-npm-linux = buildDenoPackage rec {
     pname = "test-deno-build-binaries-with-npm-${targetSystem}";
     version = "0.1.0";
-    denoDepsHash = "sha256-qHnbucFuPassVF/OuL3/FKbgehXWEQ/WDbw5icxFUzI=";
+    denoDepsHash = "sha256-k2js/8XsxGVu83rGMJed457orraue8WUZF+JUMMfhVQ=";
     src = nix-gitignore.gitignoreSource [ ] ./with-npm;
     binaryEntrypointPath = "./main.ts";
     targetSystem = "x86_64-linux";
