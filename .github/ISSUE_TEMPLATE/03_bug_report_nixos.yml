@@ -20,7 +20,9 @@ body:
 
         > [!TIP]
         > For instance, if you were filing a bug against the [`systemd-boot`](https://search.nixos.org/options?channel=unstable&show=boot.loader.systemd-boot.enable&from=0&size=1) module about it failing to install [`memtest86`](https://search.nixos.org/options?channel=unstable&show=boot.loader.systemd-boot.memtest86.enable&from=0&size=1), your title would be as follows:
-        > `nixos/systemd-boot: fails to install memtest86`
+        > ```
+        > nixos/systemd-boot: fails to install memtest86
+        > ```
 
         ---
   - type: "dropdown"

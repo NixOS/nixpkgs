@@ -18,14 +18,18 @@ body:
 
         > [!CAUTION]
         > **Before you begin:** Be advised that backports are subject to the [release suitability guidelines](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#changes-acceptable-for-releases).
-        > Stable releases of Nixpkgs do not receive breaking changes, which include major package updates that have incompatible API changes and break backwards compatibility. In the [Semantic Versioning standard](https://semver.org/), this is the first version number. (1.X.X)
+        >
+        > Stable releases of Nixpkgs do not receive breaking changes, which include major package updates that have incompatible API changes and break backwards compatibility. In the [Semantic Versioning standard](https://semver.org/), this is the first version number (1.X.X).
+        >
         > Generally, only minor package updates, such as security patches, bug fixes and feature additions (but not removals!) will be considered for backporting. Please read the rules above carefully before filing this backport request.
 
         Welcome to Nixpkgs. Please replace the **`Backport to Stable: PACKAGENAME OLDVERSION → NEWVERSION`** template above with the correct package name (As seen in the [NixOS Package Search](https://search.nixos.org/packages)), the current version of the package in Nixpkgs Stable and the current version of the package in Nixpkgs Unstable.
 
         > [!TIP]
         > For instance, if you were filing a request against the out of date `hello` package, where the current version in Nixpkgs Unstable is 1.0.1, but the current version in Nixpkgs Stable is 1.0.0, your title would be as follows:
-        > `Backport to Stable: hello 1.0.0 → 1.0.1`
+        > ```
+        > Backport to Stable: hello 1.0.0 → 1.0.1
+        > ```
 
         ---
   - type: "input"

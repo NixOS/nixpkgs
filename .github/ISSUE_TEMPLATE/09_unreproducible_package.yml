@@ -20,6 +20,7 @@ body:
 
         > [!NOTE]
         > This form is for reporting unreproducible packages. For more information, see the [Reproducible Builds Status](https://reproducible.nixos.org/) page.
+        >
         > To report a package that fails to build entirely, please use the "Build Failure" form instead.
 
         ---

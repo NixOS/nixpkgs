@@ -20,7 +20,9 @@ body:
 
         > [!TIP]
         > For instance, if you were filing a request against the missing `hello` module, your title would be as follows:
-        > `Module Request: nixos/hello`
+        > ```
+        > Module Request: nixos/hello
+        > ```
 
         ---
   - type: "dropdown"

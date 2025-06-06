@@ -20,7 +20,9 @@ body:
 
         > [!TIP]
         > For instance, if you were filing a bug against the [`hello`](https://search.nixos.org/packages?channel=unstable&from=0&size=1&buckets=%7B%22package_attr_set%22%3A%5B%22No%20package%20set%22%5D%2C%22package_license_set%22%3A%5B%22GNU%20General%20Public%20License%20v3.0%20or%20later%22%5D%2C%22package_maintainers_set%22%3A%5B%5D%2C%22package_platforms%22%3A%5B%5D%7D&sort=relevance&type=packages&query=hello) package about it failing to launch on Apple Silicon, your title would be as follows:
-        > `hello: fails to launch on aarch64-darwin`
+        > ```
+        > hello: fails to launch on aarch64-darwin
+        > ```
 
         ---
   - type: "dropdown"
