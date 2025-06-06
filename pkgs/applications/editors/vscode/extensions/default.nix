@@ -1279,8 +1279,8 @@ let
         mktplcRef = {
           name = "vscode-markdownlint";
           publisher = "DavidAnson";
-          version = "0.59.0";
-          hash = "sha256-zbK7kRa9k5xIM7BcwMOT1pRO7637eMUCUzgQwnpBCvI=";
+          version = "0.60.0";
+          hash = "sha256-Buwa63HahT96qhhuvARW7p1u9kbkoEyA9usoh60m3KE=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DavidAnson.vscode-markdownlint/changelog";
