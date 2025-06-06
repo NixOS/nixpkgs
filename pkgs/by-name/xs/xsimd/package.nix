@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xsimd";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-qElJYW5QDj3s59L3NgZj5zkhnUMzIP2mBa1sPks3/CE=";
   };
   patches =
