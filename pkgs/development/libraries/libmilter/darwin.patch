@@ -1,0 +1,28 @@
+Fix build issues on Darwin.
+
+--- a/devtools/OS/Darwin	2014-03-05 01:59:45.000000000 +0100
++++ b/devtools/OS/Darwin	2020-05-18 14:47:57.000000000 +0200
+@@ -8,6 +8,8 @@
+ #    We look a lot more like 4.4BSD than NeXTStep or OpenStep.
+ #
+ define(`confCC', `cc -traditional-cpp -pipe ${Extra_CC_Flags}')
++define(`confCCOPTS_SO', `-fPIC')
++define(`confSOEXT', `dylib')
+ define(`confMAPDEF', `-DNEWDB -DNIS -DMAP_REGEX -DNETINFO -DAUTO_NETINFO_ALIASES -DAUTO_NETINFO_HOSTS')
+ define(`confENVDEF', `-DDARWIN')
+ define(`confLDOPTS', `${Extra_LD_Flags}')
+--- a/sendmail/sendmail.h	2020-05-18 14:51:17.000000000 +0200
++++ b/sendmail/sendmail.h	2020-05-18 14:51:00.000000000 +0200
+@@ -122,7 +122,11 @@
+ # endif
+ 
+ #if NAMED_BIND
+-# include <arpa/nameser.h>
++# ifdef __APPLE__
++#  include <arpa/nameser_compat.h>
++# else
++#  include <arpa/nameser.h>
++# endif
+ # ifdef NOERROR
+ #  undef NOERROR		/* avoid <sys/streams.h> conflict */
+ # endif

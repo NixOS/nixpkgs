@@ -1,0 +1,26 @@
+diff --git a/src/daemon/input_linux.c b/src/daemon/input_linux.c
+index 933e628..c4f97f2 100644
+--- a/src/daemon/input_linux.c
++++ b/src/daemon/input_linux.c
+@@ -70,7 +70,7 @@ int os_inputopen(usbdevice* kb){
+ 
+     // If not available, load the module
+     if(fd < 0){
+-        if(system("modprobe uinput") != 0) {
++        if(system("@kmod@/bin/modprobe uinput") != 0) {
+             ckb_fatal("Failed to load uinput module");
+             return 1;
+         }
+diff --git a/src/gui/mainwindow.cpp b/src/gui/mainwindow.cpp
+index eeadaf8..87de71f 100644
+--- a/src/gui/mainwindow.cpp
++++ b/src/gui/mainwindow.cpp
+@@ -309,7 +309,7 @@ void MainWindow::updateVersion(){
+ #elif defined(Q_OS_LINUX)
+             if(!(QFileInfo("/dev/uinput").exists() || QFileInfo("/dev/input/uinput").exists())){
+                 QProcess modprobe;
+-                modprobe.start("modprobe", QStringList("uinput"));
++                modprobe.start("@kmod@/bin/modprobe", QStringList("uinput"));
+ 
+                 if(!modprobe.waitForFinished())
+                     qDebug() << "Modprobe error";

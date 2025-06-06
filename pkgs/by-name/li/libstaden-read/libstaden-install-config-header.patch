@@ -1,0 +1,12 @@
+diff --git a/Makefile.am b/Makefile.am
+index 31286d1..2631af1 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -61,6 +61,7 @@ man_MANS = \
+ 	man/man4/Read.4
+ 
+ pkginclude_HEADERS = \
++        io_lib_config.h \
+ 	io_lib/Read.h \
+ 	io_lib/scf_extras.h \
+ 	io_lib/translate.h \

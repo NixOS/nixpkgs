@@ -1,0 +1,12 @@
+diff --git a/Lib/venv/__init__.py b/Lib/venv/__init__.py
+index 4856594755..6769ab8026 100644
+--- a/Lib/venv/__init__.py
++++ b/Lib/venv/__init__.py
+@@ -522,6 +522,7 @@ def skip_file(f):
+                     with open(dstfile, 'wb') as f:
+                         f.write(new_data)
+                     shutil.copymode(srcfile, dstfile)
++                os.chmod(dstfile, 0o644)
+ 
+     def upgrade_dependencies(self, context):
+         logger.debug(

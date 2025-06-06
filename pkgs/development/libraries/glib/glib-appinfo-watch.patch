@@ -1,0 +1,90 @@
+diff --git a/gio/gdesktopappinfo.c b/gio/gdesktopappinfo.c
+index 87db7a97a..2e1689ed7 100644
+--- a/gio/gdesktopappinfo.c
++++ b/gio/gdesktopappinfo.c
+@@ -147,6 +147,7 @@ typedef struct
+   gchar                      *alternatively_watching;
+   gboolean                    is_config;
+   gboolean                    is_setup;
++  gchar                      *nix_profile_watch_dir;
+   GFileMonitor               *monitor;
+   GHashTable                 *app_names;
+   GHashTable                 *mime_tweaks;
+@@ -179,6 +180,7 @@ desktop_file_dir_unref (DesktopFileDir *dir)
+     {
+       desktop_file_dir_reset (dir);
+       g_free (dir->path);
++      g_free (dir->nix_profile_watch_dir);
+       g_free (dir);
+     }
+ }
+@@ -203,6 +205,14 @@ desktop_file_dir_get_alternative_dir (DesktopFileDir *dir)
+ {
+   gchar *parent;
+ 
++  /* If DIR is a profile, watch the specified directory--e.g.,
++   * /nix/var/nix/profiles/per-user/$USER/ for the user profile.  Do not watch
++   * ~/.nix-profile or /run/current-system/sw because GFileMonitor does
++   * not pass IN_DONT_FOLLOW and thus cannot notice any change.
++   * /etc/profiles/per-user is monitored directly for the same reason. */
++  if (dir->nix_profile_watch_dir != NULL)
++    return g_strdup (dir->nix_profile_watch_dir);
++
+   /* If the directory itself exists then we need no alternative. */
+   if (g_access (dir->path, R_OK | X_OK) == 0)
+     return NULL;
+@@ -248,11 +258,11 @@ desktop_file_dir_changed (GFileMonitor      *monitor,
+    *
+    * If this is a notification for a parent directory (because the
+    * desktop directory didn't exist) then we shouldn't fire the signal
+-   * unless something actually changed.
++   * unless something actually changed or it's part of a Nix profile.
+    */
+   g_mutex_lock (&desktop_file_dir_lock);
+ 
+-  if (dir->alternatively_watching)
++  if (dir->alternatively_watching && dir->nix_profile_watch_dir == NULL)
+     {
+       gchar *alternative_dir;
+ 
+@@ -1650,6 +1660,40 @@ desktop_file_dirs_lock (void)
+       for (i = 0; dirs[i]; i++)
+         g_ptr_array_add (desktop_file_dirs, desktop_file_dir_new (dirs[i]));
+ 
++      {
++        /* Monitor the system and user profile under /nix/var/nix/profiles and
++         * treat modifications to them as if they were modifications to their
++         * /share sub-directory.  */
++        const gchar *user;
++        DesktopFileDir *system_profile_dir, *user_profile_dir, *user_env_dir;
++
++        system_profile_dir =
++          desktop_file_dir_new ("/nix/var/nix/profiles/system/sw/share");
++        system_profile_dir->nix_profile_watch_dir = g_strdup ("/nix/var/nix/profiles");
++        g_ptr_array_add (desktop_file_dirs, desktop_file_dir_ref (system_profile_dir));
++
++        user = g_get_user_name ();
++        if (user != NULL)
++          {
++            gchar *profile_dir, *user_data_dir, *env_dir, *env_data_dir;
++
++            profile_dir = g_build_filename ("/nix/var/nix/profiles/per-user", user, NULL);
++            user_data_dir = g_build_filename (profile_dir, "profile", "share", NULL);
++            user_profile_dir = desktop_file_dir_new (user_data_dir);
++            user_profile_dir->nix_profile_watch_dir = profile_dir;
++
++            env_dir = g_build_filename ("/etc/profiles/per-user", NULL);
++            env_data_dir = g_build_filename (env_dir, user, "share", NULL);
++            user_env_dir = desktop_file_dir_new (env_data_dir);
++            user_env_dir->nix_profile_watch_dir = env_dir;
++
++            g_ptr_array_add (desktop_file_dirs, desktop_file_dir_ref (user_profile_dir));
++            g_ptr_array_add (desktop_file_dirs, desktop_file_dir_ref (user_env_dir));
++            g_free (user_data_dir);
++            g_free (env_data_dir);
++          }
++      }
++
+       /* The list of directories will never change after this, unless
+        * g_get_user_config_dir() changes due to %G_TEST_OPTION_ISOLATE_DIRS. */
+       desktop_file_dirs_config_dir = user_config_dir;

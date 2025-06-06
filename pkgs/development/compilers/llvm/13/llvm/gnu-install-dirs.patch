@@ -1,0 +1,381 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 135036f509d2..265c36f8211b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -270,15 +270,21 @@ if (CMAKE_BUILD_TYPE AND
+   message(FATAL_ERROR "Invalid value for CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
+ endif()
+ 
++include(GNUInstallDirs)
++
+ set(LLVM_LIBDIR_SUFFIX "" CACHE STRING "Define suffix of library directory name (32/64)" )
+ 
+-set(LLVM_TOOLS_INSTALL_DIR "bin" CACHE STRING "Path for binary subdirectory (defaults to 'bin')")
++set(LLVM_TOOLS_INSTALL_DIR "${CMAKE_INSTALL_BINDIR}" CACHE STRING
++    "Path for binary subdirectory (defaults to 'bin')")
+ mark_as_advanced(LLVM_TOOLS_INSTALL_DIR)
+ 
+ set(LLVM_UTILS_INSTALL_DIR "${LLVM_TOOLS_INSTALL_DIR}" CACHE STRING
+     "Path to install LLVM utilities (enabled by LLVM_INSTALL_UTILS=ON) (defaults to LLVM_TOOLS_INSTALL_DIR)")
+ mark_as_advanced(LLVM_UTILS_INSTALL_DIR)
+ 
++set(LLVM_INSTALL_CMAKE_DIR "${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}/cmake/llvm" CACHE STRING
++	"Path for CMake subdirectory (defaults to lib/cmake/llvm)" )
++
+ # They are used as destination of target generators.
+ set(LLVM_RUNTIME_OUTPUT_INTDIR ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/bin)
+ set(LLVM_LIBRARY_OUTPUT_INTDIR ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/lib${LLVM_LIBDIR_SUFFIX})
+@@ -581,9 +587,9 @@ option (LLVM_ENABLE_SPHINX "Use Sphinx to generate llvm documentation." OFF)
+ option (LLVM_ENABLE_OCAMLDOC "Build OCaml bindings documentation." ON)
+ option (LLVM_ENABLE_BINDINGS "Build bindings." ON)
+ 
+-set(LLVM_INSTALL_DOXYGEN_HTML_DIR "share/doc/llvm/doxygen-html"
++set(LLVM_INSTALL_DOXYGEN_HTML_DIR "${CMAKE_INSTALL_DOCDIR}/${project}/doxygen-html"
+     CACHE STRING "Doxygen-generated HTML documentation install directory")
+-set(LLVM_INSTALL_OCAMLDOC_HTML_DIR "share/doc/llvm/ocaml-html"
++set(LLVM_INSTALL_OCAMLDOC_HTML_DIR "${CMAKE_INSTALL_DOCDIR}/${project}/ocaml-html"
+     CACHE STRING "OCamldoc-generated HTML documentation install directory")
+ 
+ option (LLVM_BUILD_EXTERNAL_COMPILER_RT
+@@ -1048,7 +1054,7 @@ endif()
+ 
+ if (NOT LLVM_INSTALL_TOOLCHAIN_ONLY)
+   install(DIRECTORY include/llvm include/llvm-c
+-    DESTINATION include
++    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+     COMPONENT llvm-headers
+     FILES_MATCHING
+     PATTERN "*.def"
+@@ -1059,7 +1065,7 @@ if (NOT LLVM_INSTALL_TOOLCHAIN_ONLY)
+     )
+ 
+   install(DIRECTORY ${LLVM_INCLUDE_DIR}/llvm ${LLVM_INCLUDE_DIR}/llvm-c
+-    DESTINATION include
++    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+     COMPONENT llvm-headers
+     FILES_MATCHING
+     PATTERN "*.def"
+@@ -1073,13 +1079,13 @@ if (NOT LLVM_INSTALL_TOOLCHAIN_ONLY)
+ 
+   if (LLVM_INSTALL_MODULEMAPS)
+     install(DIRECTORY include/llvm include/llvm-c
+-            DESTINATION include
++            DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+             COMPONENT llvm-headers
+             FILES_MATCHING
+             PATTERN "module.modulemap"
+             )
+     install(FILES include/llvm/module.install.modulemap
+-            DESTINATION include/llvm
++            DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/llvm
+             COMPONENT llvm-headers
+             RENAME "module.extern.modulemap"
+             )
+diff --git a/cmake/modules/AddLLVM.cmake b/cmake/modules/AddLLVM.cmake
+index 9c2b85374307..5531ceeb2eeb 100644
+--- a/cmake/modules/AddLLVM.cmake
++++ b/cmake/modules/AddLLVM.cmake
+@@ -818,9 +818,9 @@ macro(add_llvm_library name)
+       get_target_export_arg(${name} LLVM export_to_llvmexports ${umbrella})
+       install(TARGETS ${name}
+               ${export_to_llvmexports}
+-              LIBRARY DESTINATION lib${LLVM_LIBDIR_SUFFIX} COMPONENT ${name}
+-              ARCHIVE DESTINATION lib${LLVM_LIBDIR_SUFFIX} COMPONENT ${name}
+-              RUNTIME DESTINATION bin COMPONENT ${name})
++              LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX} COMPONENT ${name}
++              ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX} COMPONENT ${name}
++              RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT ${name})
+ 
+       if (NOT LLVM_ENABLE_IDE)
+         add_llvm_install_targets(install-${name}
+@@ -1036,7 +1036,7 @@ function(process_llvm_pass_plugins)
+           "set(LLVM_STATIC_EXTENSIONS ${LLVM_STATIC_EXTENSIONS})")
+       install(FILES
+           ${llvm_cmake_builddir}/LLVMConfigExtensions.cmake
+-          DESTINATION ${LLVM_INSTALL_PACKAGE_DIR}
++          DESTINATION ${LLVM_INSTALL_CMAKE_DIR}
+           COMPONENT cmake-exports)
+ 
+       set(ExtensionDef "${LLVM_BINARY_DIR}/include/llvm/Support/Extension.def")
+@@ -1250,7 +1250,7 @@ macro(add_llvm_example name)
+   endif()
+   add_llvm_executable(${name} ${ARGN})
+   if( LLVM_BUILD_EXAMPLES )
+-    install(TARGETS ${name} RUNTIME DESTINATION examples)
++    install(TARGETS ${name} RUNTIME DESTINATION ${CMAKE_INSTALL_DOCDIR}/examples)
+   endif()
+   set_target_properties(${name} PROPERTIES FOLDER "Examples")
+ endmacro(add_llvm_example name)
+@@ -1868,7 +1868,7 @@ function(llvm_install_library_symlink name dest type)
+   set(full_name ${CMAKE_${type}_LIBRARY_PREFIX}${name}${CMAKE_${type}_LIBRARY_SUFFIX})
+   set(full_dest ${CMAKE_${type}_LIBRARY_PREFIX}${dest}${CMAKE_${type}_LIBRARY_SUFFIX})
+ 
+-  set(output_dir lib${LLVM_LIBDIR_SUFFIX})
++  set(output_dir ${CMAKE_INSTALL_FULL_LIBDIR}${LLVM_LIBDIR_SUFFIX})
+   if(WIN32 AND "${type}" STREQUAL "SHARED")
+     set(output_dir bin)
+   endif()
+@@ -1879,7 +1879,7 @@ function(llvm_install_library_symlink name dest type)
+ 
+ endfunction()
+ 
+-function(llvm_install_symlink name dest)
++function(llvm_install_symlink name dest output_dir)
+   cmake_parse_arguments(ARG "ALWAYS_GENERATE" "COMPONENT" "" ${ARGN})
+   foreach(path ${CMAKE_MODULE_PATH})
+     if(EXISTS ${path}/LLVMInstallSymlink.cmake)
+@@ -1902,7 +1902,7 @@ function(llvm_install_symlink name dest)
+   set(full_dest ${dest}${CMAKE_EXECUTABLE_SUFFIX})
+ 
+   install(SCRIPT ${INSTALL_SYMLINK}
+-          CODE "install_symlink(${full_name} ${full_dest} ${LLVM_TOOLS_INSTALL_DIR})"
++          CODE "install_symlink(${full_name} ${full_dest} ${output_dir})"
+           COMPONENT ${component})
+ 
+   if (NOT LLVM_ENABLE_IDE AND NOT ARG_ALWAYS_GENERATE)
+@@ -1985,7 +1985,8 @@ function(add_llvm_tool_symlink link_name target)
+     endif()
+ 
+     if ((TOOL_IS_TOOLCHAIN OR NOT LLVM_INSTALL_TOOLCHAIN_ONLY) AND LLVM_BUILD_TOOLS)
+-      llvm_install_symlink(${link_name} ${target})
++      GNUInstallDirs_get_absolute_install_dir(output_dir LLVM_TOOLS_INSTALL_DIR)
++      llvm_install_symlink(${link_name} ${target} ${output_dir})
+     endif()
+   endif()
+ endfunction()
+@@ -2114,9 +2115,9 @@ function(llvm_setup_rpath name)
+     # Since BUILD_SHARED_LIBS is only recommended for use by developers,
+     # hardcode the rpath to build/install lib dir first in this mode.
+     # FIXME: update this when there is better solution.
+-    set(_install_rpath "${LLVM_LIBRARY_OUTPUT_INTDIR}" "${CMAKE_INSTALL_PREFIX}/lib${LLVM_LIBDIR_SUFFIX}" ${extra_libdir})
++    set(_install_rpath "${LLVM_LIBRARY_OUTPUT_INTDIR}" "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}" ${extra_libdir})
+   elseif(UNIX)
+-    set(_install_rpath "\$ORIGIN/../lib${LLVM_LIBDIR_SUFFIX}" ${extra_libdir})
++    set(_install_rpath "\$ORIGIN/../${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}" ${extra_libdir})
+     if(${CMAKE_SYSTEM_NAME} MATCHES "(FreeBSD|DragonFly)")
+       set_property(TARGET ${name} APPEND_STRING PROPERTY
+                    LINK_FLAGS " -Wl,-z,origin ")
+diff --git a/cmake/modules/AddOCaml.cmake b/cmake/modules/AddOCaml.cmake
+index 554046b20edf..4d1ad980641e 100644
+--- a/cmake/modules/AddOCaml.cmake
++++ b/cmake/modules/AddOCaml.cmake
+@@ -144,9 +144,9 @@ function(add_ocaml_library name)
+   endforeach()
+ 
+   if( APPLE )
+-    set(ocaml_rpath "@executable_path/../../../lib${LLVM_LIBDIR_SUFFIX}")
++    set(ocaml_rpath "@executable_path/../../../${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}")
+   elseif( UNIX )
+-    set(ocaml_rpath "\\$ORIGIN/../../../lib${LLVM_LIBDIR_SUFFIX}")
++    set(ocaml_rpath "\\$ORIGIN/../../../${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}")
+   endif()
+   list(APPEND ocaml_flags "-ldopt" "-Wl,-rpath,${ocaml_rpath}")
+ 
+diff --git a/cmake/modules/AddSphinxTarget.cmake b/cmake/modules/AddSphinxTarget.cmake
+index e80c3b5c1cac..482f6d715ef5 100644
+--- a/cmake/modules/AddSphinxTarget.cmake
++++ b/cmake/modules/AddSphinxTarget.cmake
+@@ -90,7 +90,7 @@ function (add_sphinx_target builder project)
+         endif()
+       elseif (builder STREQUAL html)
+         string(TOUPPER "${project}" project_upper)
+-        set(${project_upper}_INSTALL_SPHINX_HTML_DIR "share/doc/${project}/html"
++        set(${project_upper}_INSTALL_SPHINX_HTML_DIR "${CMAKE_INSTALL_DOCDIR}/${project}/html"
+             CACHE STRING "HTML documentation install directory for ${project}")
+ 
+         # '/.' indicates: copy the contents of the directory directly into
+diff --git a/cmake/modules/CMakeLists.txt b/cmake/modules/CMakeLists.txt
+index 51b6a4fdc284..4adc2acfc074 100644
+--- a/cmake/modules/CMakeLists.txt
++++ b/cmake/modules/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ include(LLVMDistributionSupport)
+ 
+-set(LLVM_INSTALL_PACKAGE_DIR lib${LLVM_LIBDIR_SUFFIX}/cmake/llvm)
++set(LLVM_INSTALL_PACKAGE_DIR ${LLVM_INSTALL_CMAKE_DIR} CACHE STRING "Path for CMake subdirectory (defaults to 'cmake/llvm')")
+ set(llvm_cmake_builddir "${LLVM_BINARY_DIR}/${LLVM_INSTALL_PACKAGE_DIR}")
+ 
+ # First for users who use an installed LLVM, create the LLVMExports.cmake file.
+@@ -109,13 +109,13 @@ foreach(p ${_count})
+   set(LLVM_CONFIG_CODE "${LLVM_CONFIG_CODE}
+ get_filename_component(LLVM_INSTALL_PREFIX \"\${LLVM_INSTALL_PREFIX}\" PATH)")
+ endforeach(p)
+-set(LLVM_CONFIG_INCLUDE_DIRS "\${LLVM_INSTALL_PREFIX}/include")
++set(LLVM_CONFIG_INCLUDE_DIRS "\${LLVM_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}")
+ set(LLVM_CONFIG_INCLUDE_DIR "${LLVM_CONFIG_INCLUDE_DIRS}")
+ set(LLVM_CONFIG_MAIN_INCLUDE_DIR "${LLVM_CONFIG_INCLUDE_DIRS}")
+-set(LLVM_CONFIG_LIBRARY_DIRS "\${LLVM_INSTALL_PREFIX}/lib\${LLVM_LIBDIR_SUFFIX}")
++set(LLVM_CONFIG_LIBRARY_DIRS "\${LLVM_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}\${LLVM_LIBDIR_SUFFIX}")
+ set(LLVM_CONFIG_CMAKE_DIR "\${LLVM_INSTALL_PREFIX}/${LLVM_INSTALL_PACKAGE_DIR}")
+ set(LLVM_CONFIG_BINARY_DIR "\${LLVM_INSTALL_PREFIX}")
+-set(LLVM_CONFIG_TOOLS_BINARY_DIR "\${LLVM_INSTALL_PREFIX}/bin")
++set(LLVM_CONFIG_TOOLS_BINARY_DIR "\${LLVM_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
+ 
+ # Generate a default location for lit
+ if (LLVM_INSTALL_UTILS AND LLVM_BUILD_UTILS)
+diff --git a/cmake/modules/LLVMInstallSymlink.cmake b/cmake/modules/LLVMInstallSymlink.cmake
+index 3e6a2c9a2648..52e14d955c60 100644
+--- a/cmake/modules/LLVMInstallSymlink.cmake
++++ b/cmake/modules/LLVMInstallSymlink.cmake
+@@ -4,7 +4,7 @@
+ 
+ function(install_symlink name target outdir)
+   set(DESTDIR $ENV{DESTDIR})
+-  set(bindir "${DESTDIR}${CMAKE_INSTALL_PREFIX}/${outdir}/")
++  set(bindir "${DESTDIR}${outdir}/")
+ 
+   message(STATUS "Creating ${name}")
+ 
+diff --git a/docs/CMake.rst b/docs/CMake.rst
+index f1ac2c7d4934..c6e1469b5e13 100644
+--- a/docs/CMake.rst
++++ b/docs/CMake.rst
+@@ -202,7 +202,7 @@ CMake manual, or execute ``cmake --help-variable VARIABLE_NAME``.
+ **LLVM_LIBDIR_SUFFIX**:STRING
+   Extra suffix to append to the directory where libraries are to be
+   installed. On a 64-bit architecture, one could use ``-DLLVM_LIBDIR_SUFFIX=64``
+-  to install libraries to ``/usr/lib64``.
++  to install libraries to ``/usr/lib64``. See also ``CMAKE_INSTALL_LIBDIR``.
+ 
+ Rarely-used CMake variables
+ ---------------------------
+@@ -551,8 +551,8 @@ LLVM-specific variables
+ 
+ **LLVM_INSTALL_DOXYGEN_HTML_DIR**:STRING
+   The path to install Doxygen-generated HTML documentation to. This path can
+-  either be absolute or relative to the CMAKE_INSTALL_PREFIX. Defaults to
+-  `share/doc/llvm/doxygen-html`.
++  either be absolute or relative to the ``CMAKE_INSTALL_PREFIX``. Defaults to
++  `${CMAKE_INSTALL_DOCDIR}/${project}/doxygen-html`.
+ 
+ **LLVM_LINK_LLVM_DYLIB**:BOOL
+   If enabled, tools will be linked with the libLLVM shared library. Defaults
+@@ -792,9 +792,11 @@ the ``cmake`` command or by setting it directly in ``ccmake`` or ``cmake-gui``).
+ 
+ This file is available in two different locations.
+ 
+-* ``<INSTALL_PREFIX>/lib/cmake/llvm/LLVMConfig.cmake`` where
+-  ``<INSTALL_PREFIX>`` is the install prefix of an installed version of LLVM.
+-  On Linux typically this is ``/usr/lib/cmake/llvm/LLVMConfig.cmake``.
++* ``<LLVM_INSTALL_PACKAGE_DIR>LLVMConfig.cmake`` where
++  ``<LLVM_INSTALL_PACKAGE_DIR>`` is the location where LLVM CMake modules are
++  installed as part of an installed version of LLVM. This is typically
++  ``cmake/llvm/`` within the lib directory. On Linux, this is typically
++  ``/usr/lib/cmake/llvm/LLVMConfig.cmake``.
+ 
+ * ``<LLVM_BUILD_ROOT>/lib/cmake/llvm/LLVMConfig.cmake`` where
+   ``<LLVM_BUILD_ROOT>`` is the root of the LLVM build tree. **Note: this is only
+diff --git a/examples/Bye/CMakeLists.txt b/examples/Bye/CMakeLists.txt
+index bb96edb4b4bf..678c22fb43c8 100644
+--- a/examples/Bye/CMakeLists.txt
++++ b/examples/Bye/CMakeLists.txt
+@@ -14,6 +14,6 @@ if (NOT WIN32)
+     BUILDTREE_ONLY
+    )
+ 
+-  install(TARGETS ${name} RUNTIME DESTINATION examples)
++  install(TARGETS ${name} RUNTIME DESTINATION ${CMAKE_INSTALL_DOCDIR}/examples)
+   set_target_properties(${name} PROPERTIES FOLDER "Examples")
+ endif()
+diff --git a/include/llvm/CMakeLists.txt b/include/llvm/CMakeLists.txt
+index b46319f24fc8..2feabd1954e4 100644
+--- a/include/llvm/CMakeLists.txt
++++ b/include/llvm/CMakeLists.txt
+@@ -5,5 +5,5 @@ add_subdirectory(Frontend)
+ # If we're doing an out-of-tree build, copy a module map for generated
+ # header files into the build area.
+ if (NOT "${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
+-  configure_file(module.modulemap.build module.modulemap COPYONLY)
++  configure_file(module.modulemap.build ${LLVM_INCLUDE_DIR}/module.modulemap COPYONLY)
+ endif (NOT "${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
+diff --git a/tools/llvm-config/BuildVariables.inc.in b/tools/llvm-config/BuildVariables.inc.in
+index ebe5b73a5c65..70c497be12f5 100644
+--- a/tools/llvm-config/BuildVariables.inc.in
++++ b/tools/llvm-config/BuildVariables.inc.in
+@@ -23,6 +23,10 @@
+ #define LLVM_CXXFLAGS "@LLVM_CXXFLAGS@"
+ #define LLVM_BUILDMODE "@LLVM_BUILDMODE@"
+ #define LLVM_LIBDIR_SUFFIX "@LLVM_LIBDIR_SUFFIX@"
++#define LLVM_INSTALL_BINDIR "@CMAKE_INSTALL_BINDIR@"
++#define LLVM_INSTALL_LIBDIR "@CMAKE_INSTALL_LIBDIR@"
++#define LLVM_INSTALL_INCLUDEDIR "@CMAKE_INSTALL_INCLUDEDIR@"
++#define LLVM_INSTALL_CMAKEDIR "@LLVM_INSTALL_CMAKE_DIR@"
+ #define LLVM_TARGETS_BUILT "@LLVM_TARGETS_BUILT@"
+ #define LLVM_SYSTEM_LIBS "@LLVM_SYSTEM_LIBS@"
+ #define LLVM_BUILD_SYSTEM "@LLVM_BUILD_SYSTEM@"
+diff --git a/tools/llvm-config/llvm-config.cpp b/tools/llvm-config/llvm-config.cpp
+index 1a2f04552d13..44fa7d3eec6b 100644
+--- a/tools/llvm-config/llvm-config.cpp
++++ b/tools/llvm-config/llvm-config.cpp
+@@ -357,12 +357,26 @@ int main(int argc, char **argv) {
+         ("-I" + ActiveIncludeDir + " " + "-I" + ActiveObjRoot + "/include");
+   } else {
+     ActivePrefix = CurrentExecPrefix;
+-    ActiveIncludeDir = ActivePrefix + "/include";
+-    SmallString<256> path(StringRef(LLVM_TOOLS_INSTALL_DIR));
+-    sys::fs::make_absolute(ActivePrefix, path);
+-    ActiveBinDir = std::string(path.str());
+-    ActiveLibDir = ActivePrefix + "/lib" + LLVM_LIBDIR_SUFFIX;
+-    ActiveCMakeDir = ActiveLibDir + "/cmake/llvm";
++    {
++      SmallString<256> path(StringRef(LLVM_INSTALL_INCLUDEDIR));
++      sys::fs::make_absolute(ActivePrefix, path);
++      ActiveIncludeDir = std::string(path.str());
++    }
++    {
++      SmallString<256> path(StringRef(LLVM_INSTALL_BINDIR));
++      sys::fs::make_absolute(ActivePrefix, path);
++      ActiveBinDir = std::string(path.str());
++    }
++    {
++      SmallString<256> path(StringRef(LLVM_INSTALL_LIBDIR LLVM_LIBDIR_SUFFIX));
++      sys::fs::make_absolute(ActivePrefix, path);
++      ActiveLibDir = std::string(path.str());
++    }
++    {
++      SmallString<256> path(StringRef(LLVM_INSTALL_CMAKEDIR));
++      sys::fs::make_absolute(ActivePrefix, path);
++      ActiveCMakeDir = std::string(path.str());
++    }
+     ActiveIncludeOption = "-I" + ActiveIncludeDir;
+   }
+ 
+diff --git a/tools/lto/CMakeLists.txt b/tools/lto/CMakeLists.txt
+index 0af29ad762c5..37b99b83e35c 100644
+--- a/tools/lto/CMakeLists.txt
++++ b/tools/lto/CMakeLists.txt
+@@ -33,7 +33,7 @@ add_llvm_library(${LTO_LIBRARY_NAME} ${LTO_LIBRARY_TYPE} INSTALL_WITH_TOOLCHAIN
+     ${SOURCES} DEPENDS intrinsics_gen)
+ 
+ install(FILES ${LLVM_MAIN_INCLUDE_DIR}/llvm-c/lto.h
+-  DESTINATION include/llvm-c
++  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/llvm-c
+   COMPONENT LTO)
+ 
+ if (APPLE)
+diff --git a/tools/opt-viewer/CMakeLists.txt b/tools/opt-viewer/CMakeLists.txt
+index ead73ec13a8f..250362021f17 100644
+--- a/tools/opt-viewer/CMakeLists.txt
++++ b/tools/opt-viewer/CMakeLists.txt
+@@ -8,7 +8,7 @@ set (files
+ 
+ foreach (file ${files})
+   install(PROGRAMS ${file}
+-    DESTINATION share/opt-viewer
++    DESTINATION ${CMAKE_INSTALL_DATADIR}/opt-viewer
+     COMPONENT opt-viewer)
+ endforeach (file)
+ 
+diff --git a/tools/remarks-shlib/CMakeLists.txt b/tools/remarks-shlib/CMakeLists.txt
+index 865436247270..ce1daa62f6ab 100644
+--- a/tools/remarks-shlib/CMakeLists.txt
++++ b/tools/remarks-shlib/CMakeLists.txt
+@@ -19,7 +19,7 @@ if(LLVM_ENABLE_PIC)
+   endif()
+   
+   install(FILES ${LLVM_MAIN_INCLUDE_DIR}/llvm-c/Remarks.h
+-    DESTINATION include/llvm-c
++    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/llvm-c
+     COMPONENT Remarks)
+ 
+   if (APPLE)

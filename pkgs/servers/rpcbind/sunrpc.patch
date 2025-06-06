@@ -1,0 +1,29 @@
+http://projects.archlinux.org/svntogit/packages.git/tree/trunk/rpcbind-sunrpc.patch?h=packages/rpcbind
+
+Lookup "sunrpc" instead of "rpcbind" in /etc/services, since the former is the
+official IANA name.
+
+diff -ru3 rpcbind-0.2.3/src/rpcbind.c rpcbind-0.2.3.new/src/rpcbind.c
+--- rpcbind-0.2.3/src/rpcbind.c	2015-04-27 17:07:43.000000000 +0300
++++ rpcbind-0.2.3.new/src/rpcbind.c	2015-05-18 16:29:24.938380694 +0300
+@@ -132,7 +132,7 @@
+ char *udp_uaddr;	/* Universal UDP address */
+ char *tcp_uaddr;	/* Universal TCP address */
+ #endif
+-static char servname[] = "rpcbind";
++static char servname[] = "sunrpc";
+ static char superuser[] = "superuser";
+ 
+ int main __P((int, char *[]));
+diff -ru3 rpcbind-0.2.3/src/rpcinfo.c rpcbind-0.2.3.new/src/rpcinfo.c
+--- rpcbind-0.2.3/src/rpcinfo.c	2015-04-27 17:07:43.000000000 +0300
++++ rpcbind-0.2.3.new/src/rpcinfo.c	2015-05-18 16:30:14.197025336 +0300
+@@ -1842,7 +1842,7 @@
+ 
+   /* Get the address of the rpcbind */
+   memset (&hints, 0, sizeof hints);
+-  if ((getaddrinfo (host, "rpcbind", &hints, &res) != 0) &&
++  if ((getaddrinfo (host, "sunrpc", &hints, &res) != 0) &&
+       (getaddrinfo (host, "portmapper",&hints, &res) != 0))
+     {
+       rpc_createerr.cf_stat = RPC_N2AXLATEFAILURE;

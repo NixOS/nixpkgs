@@ -1,0 +1,37 @@
+diff --git a/packages/flutter_tools/lib/src/runner/flutter_command.dart b/packages/flutter_tools/lib/src/runner/flutter_command.dart
+index b7e624b4e2..edfdde118b 100644
+--- a/packages/flutter_tools/lib/src/runner/flutter_command.dart
++++ b/packages/flutter_tools/lib/src/runner/flutter_command.dart
+@@ -1554,7 +1554,7 @@ Run 'flutter -h' (or 'flutter <command> -h') for available flutter commands and
+ 
+     // Populate the cache. We call this before pub get below so that the
+     // sky_engine package is available in the flutter cache for pub to find.
+-    if (shouldUpdateCache) {
++    if (false) {
+       // First always update universal artifacts, as some of these (e.g.
+       // ios-deploy on macOS) are required to determine `requiredArtifacts`.
+       final bool offline;
+diff --git a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
+index 5d6d78639f..90a4dfa555 100644
+--- a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
++++ b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
+@@ -297,7 +297,6 @@ class FlutterCommandRunner extends CommandRunner<void> {
+           globals.flutterUsage.suppressAnalytics = true;
+         }
+ 
+-        globals.flutterVersion.ensureVersionFile();
+         final bool machineFlag = topLevelResults[FlutterGlobalOptions.kMachineFlag] as bool? ?? false;
+         final bool ci = await globals.botDetector.isRunningOnBot;
+         final bool redirectedCompletion = !globals.stdio.hasTerminal &&
+@@ -306,11 +305,6 @@ class FlutterCommandRunner extends CommandRunner<void> {
+         final bool versionCheckFlag = topLevelResults[FlutterGlobalOptions.kVersionCheckFlag] as bool? ?? false;
+         final bool explicitVersionCheckPassed = topLevelResults.wasParsed(FlutterGlobalOptions.kVersionCheckFlag) && versionCheckFlag;
+ 
+-        if (topLevelResults.command?.name != 'upgrade' &&
+-            (explicitVersionCheckPassed || (versionCheckFlag && !isMachine))) {
+-          await globals.flutterVersion.checkFlutterVersionFreshness();
+-        }
+-
+         // See if the user specified a specific device.
+         final String? specifiedDeviceId = topLevelResults[FlutterGlobalOptions.kDeviceIdOption] as String?;
+         if (specifiedDeviceId != null) {

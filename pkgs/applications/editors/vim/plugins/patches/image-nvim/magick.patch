@@ -1,0 +1,11 @@
+diff --git a/lua/image/magick.lua b/lua/image/magick.lua
+index a0c5a64..e3b57d4 100644
+--- a/lua/image/magick.lua
++++ b/lua/image/magick.lua
+@@ -1,3 +1,6 @@
++package.path = package.path .. ";@nix_magick@/share/lua/5.1/?/init.lua;"
++package.path = package.path .. ";@nix_magick@/share/lua/5.1/?.lua;"
++
+ local has_magick, magick = pcall(require, "magick")
+ 
+ ---@return MagickImage

@@ -1,0 +1,38 @@
+diff --git a/src/extension.ts b/src/extension.ts
+index f34e865..f12d4db 100644
+--- a/src/extension.ts
++++ b/src/extension.ts
+@@ -556,7 +556,7 @@ export class Ext extends Ecs.System<ExtEvent> {
+             return true;
+         };
+ 
+-        const ipc = utils.async_process_ipc(['gjs', '--module', path]);
++        const ipc = utils.async_process_ipc([path]);
+ 
+         if (ipc) {
+             const generator = (stdout: any, res: any) => {
+diff --git a/src/panel_settings.ts b/src/panel_settings.ts
+index fbcafbf..ef409ee 100644
+--- a/src/panel_settings.ts
++++ b/src/panel_settings.ts
+@@ -352,7 +352,7 @@ function color_selector(ext: Ext, menu: any) {
+     color_selector_item.add_child(color_button);
+     color_button.connect('button-press-event', () => {
+         let path = get_current_path() + '/color_dialog/main.js';
+-        let resp = GLib.spawn_command_line_async(`gjs --module ${path}`);
++        let resp = GLib.spawn_command_line_async(`${path}`);
+         if (!resp) {
+             return null;
+         }
+diff --git a/src/color_dialog/src/main.ts b/src/color_dialog/src/main.ts
+index a9637e5..5cb86ce 100644
+--- a/src/color_dialog/src/main.ts
++++ b/src/color_dialog/src/main.ts
+@@ -6,6 +6,7 @@ import Gtk from 'gi://Gtk?version=3.0';
+ import Gdk from 'gi://Gdk';
+ 
+ const EXT_PATH_DEFAULTS = [
++    '/run/current-system/sw/share/gnome-shell/extensions/',
+     GLib.get_home_dir() + '/.local/share/gnome-shell/extensions/',
+     '/usr/share/gnome-shell/extensions/',
+ ];

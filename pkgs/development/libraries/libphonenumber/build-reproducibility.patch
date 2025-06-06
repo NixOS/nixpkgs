@@ -1,0 +1,28 @@
+--- a/tools/cpp/src/cpp-build/generate_geocoding_data.cc.orig	1970-01-01 01:00:01.000000000 +0100
++++ b/tools/cpp/src/cpp-build/generate_geocoding_data.cc	2024-01-16 19:03:45.409089423 +0100
+@@ -94,7 +94,8 @@
+   DirEntryKinds kind_;
+ };
+ 
+-// Lists directory entries in path. "." and ".." are excluded. Returns true on
++// Lists directory entries in path. "." and ".." are excluded. Entries are
++// returned in a consistent order to ensure reproducibility. Returns true on
+ // success.
+ bool ListDirectory(const string& path, vector<DirEntry>* entries) {
+   entries->clear();
+@@ -114,8 +115,14 @@
+     // http://pubs.opengroup.org/onlinepubs/9699919799/functions/readdir.html
+     errno = 0;
+     entry = readdir(dir);
++    if (errno != 0) {
++      return false;
++    }
+     if (entry == NULL) {
+-      return errno == 0;
++      std::sort(
++          entries->begin(), entries->end(),
++          [](const DirEntry& a, const DirEntry& b) { return a.name() < b.name(); });
++      return true;
+     }
+     if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
+        continue;
