@@ -24,7 +24,10 @@ buildHomeAssistantComponent rec {
   meta = with lib; {
     description = "Send notifications with ntfy.sh and selfhosted ntfy-servers";
     homepage = "https://github.com/hbrennhaeuser/homeassistant_integration_ntfy";
-    maintainers = with maintainers; [ koral ];
+    maintainers = with maintainers; [
+      koral
+      baksa
+    ];
     license = licenses.gpl3;
   };
 }
