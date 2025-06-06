@@ -104,7 +104,7 @@ let
     let
       invalidDefs = filter (def: !check def.value) defs;
     in
-    if invalidDefs != [ ] then "Definition values: ${showDefs invalidDefs}" else null;
+    if invalidDefs != [ ] then { message = "Definition values: ${showDefs invalidDefs}"; } else null;
 
   outer_types = rec {
     isType = type: x: (x._type or "") == type;
@@ -1450,8 +1450,10 @@ let
                       valueMeta = {
                         inherit headError;
                       };
-                      headError = "The option `${showOption loc}` is neither a value of type `${t1.description}` nor `${t2.description}`, Definition values: ${showDefs defs}";
-                      value = null;
+                      headError = {
+                        message = "The option `${showOption loc}` is neither a value of type `${t1.description}` nor `${t2.description}`, Definition values: ${showDefs defs}";
+                      };
+                      value = abort "(t.merge.v2 defs).value must only be accessed when `.headError == null`. This is a bug in code that consumes a module system type.";
                     };
               in
               checkedAndMerged;
