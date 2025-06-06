@@ -84,7 +84,6 @@ in
               {
                 nativeBuildInputs = [
                   cfg.package
-                  pkgs.findutils
                 ];
                 preferLocalBuild = true;
               }
