@@ -104,7 +104,7 @@ let
     let
       invalidDefs = filter (def: !check def.value) defs;
     in
-    if invalidDefs != [ ] then "Definition values: ${showDefs invalidDefs}" else null;
+    if invalidDefs != [ ] then { message = "Definition values: ${showDefs invalidDefs}"; } else null;
 
   outer_types = rec {
     isType = type: x: (x._type or "") == type;

@@ -1135,7 +1135,7 @@ let
           # check and merge share the same closure
           # .headError is either non-present null or an error describing string
           if checkedAndMerged.headError or null != null then
-            throw "A definition for option `${showOption loc}' is not of type `${type.description}'. TypeError: ${checkedAndMerged.headError}"
+            throw "A definition for option `${showOption loc}' is not of type `${type.description}'. TypeError: ${checkedAndMerged.headError.message}"
           else
             checkedAndMerged.value
         else if all (def: type.check def.value) defsFinal then
