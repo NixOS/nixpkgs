@@ -10,13 +10,13 @@
 
 buildDunePackage rec {
   pname = "encore";
-  version = "0.8";
+  version = "0.8.1";
 
-  minimalOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.07";
 
   src = fetchurl {
-    url = "https://github.com/mirage/encore/releases/download/v${version}/encore-v${version}.tbz";
-    sha256 = "a406bc9863b04bb424692045939d6c170a2bb65a98521ae5608d25b0559344f6";
+    url = "https://github.com/mirage/encore/releases/download/v${version}/encore-${version}.tbz";
+    hash = "sha256-qg6heSBc6OSfb7vZxEi4rrKh+nx+ffnsCfVvhVR3yY0=";
   };
 
   duneVersion = "3";
