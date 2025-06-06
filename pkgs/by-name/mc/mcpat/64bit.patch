@@ -1,0 +1,23 @@
+diff --git a/mcpat.mk b/mcpat.mk
+index f2c4fd5..cae5a5a 100644
+--- a/mcpat.mk
++++ b/mcpat.mk
+@@ -21,9 +21,15 @@ else
+ endif
+ 
+ #CXXFLAGS = -Wall -Wno-unknown-pragmas -Winline $(DBG) $(OPT) 
+-CXXFLAGS = -Wno-unknown-pragmas $(DBG) $(OPT) 
+-CXX = g++ -m32
+-CC  = gcc -m32
++CXXFLAGS = -Wno-unknown-pragmas $(DBG) $(OPT)
++
++ifeq ($(shell uname -m),x86_64)
++  CXX = g++
++  CC  = gcc
++else
++  CXX = g++ -m32
++  CC  = gcc -m32
++endif
+ 
+ VPATH = cacti
+ 
