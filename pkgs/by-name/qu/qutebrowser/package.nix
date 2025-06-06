@@ -155,14 +155,14 @@ python3.pkgs.buildPythonApplication {
       )
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/qutebrowser/qutebrowser";
     changelog = "https://github.com/qutebrowser/qutebrowser/blob/v${version}/doc/changelog.asciidoc";
     description = "Keyboard-focused browser with a minimal GUI";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "qutebrowser";
     platforms = if enableWideVine then [ "x86_64-linux" ] else qt6Packages.qtwebengine.meta.platforms;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jagajaga
       rnhmjoj
       ebzzry

@@ -59,15 +59,15 @@ rustPlatform.buildRustPackage rec {
       echo '(a(aa)aa)' | ${rg} -P '\((a*|(?R))*\)'
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Utility that combines the usability of The Silver Searcher with the raw speed of grep";
     homepage = "https://github.com/BurntSushi/ripgrep";
     changelog = "https://github.com/BurntSushi/ripgrep/releases/tag/${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       unlicense # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       globin
       ma27
       zowoq

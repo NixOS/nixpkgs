@@ -35,12 +35,12 @@ rustPlatform.buildRustPackage rec {
 
   GEN_ARTIFACTS = "artifacts";
 
-  meta = with lib; {
+  meta = {
     description = "Mod packager for factorio";
     mainProgram = "pactorio";
     homepage = "https://github.com/figsoda/pactorio";
     changelog = "https://github.com/figsoda/pactorio/blob/v${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }
