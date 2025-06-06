@@ -7,7 +7,6 @@
   ninja,
   gfortran,
   pkg-config,
-  python3,
   python3Packages,
   mpi,
   bzip2,
@@ -58,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
       pkg-config
     ]
     ++ lib.optionals pythonSupport [
-      python3
+      python3Packages.python
       python3Packages.pybind11
     ];
 
@@ -130,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
     (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
-    (lib.cmakeFeature "CMAKE_INSTALL_PYTHONDIR" python3.sitePackages)
+    (lib.cmakeFeature "CMAKE_INSTALL_PYTHONDIR" python3Packages.python.sitePackages)
   ];
 
   # required for finding the generated adios2-config.cmake file
@@ -143,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preCheck =
     ''
-      export PYTHONPATH=$out/${python3.sitePackages}:$PYTHONPATH
+      export PYTHONPATH=$out/${python3Packages.python.sitePackages}:$PYTHONPATH
     ''
     + lib.optionalString (stdenv.hostPlatform.system == "aarch64-linux") ''
       rm ../testing/adios2/python/TestBPWriteTypesHighLevelAPI.py
