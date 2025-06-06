@@ -28,12 +28,12 @@ rustPlatform.buildRustPackage rec {
     install -Dm644 -t $out/include crates/c-api/*.h
   '';
 
-  meta = with lib; {
+  meta = {
     description = "SVG rendering library";
     homepage = "https://github.com/RazrFalcon/resvg";
     changelog = "https://github.com/RazrFalcon/resvg/blob/v${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = [ ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "resvg";
   };
 }
