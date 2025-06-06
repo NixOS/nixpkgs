@@ -132,7 +132,7 @@ let
             bintools = prevStage.darwin.binutils;
 
             isClang = true;
-            libc = prevStage.darwin.libSystem;
+            inherit (prevStage) libc;
             inherit (prevStage.llvmPackages) libcxx;
 
             inherit lib;
@@ -582,7 +582,10 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
     assert allDeps isFromNixpkgs [
       (sdkPackagesNoCC prevStage)
-      { inherit (prevStage.darwin) binutils libSystem; }
+      {
+        inherit (prevStage.darwin) binutils libSystem;
+        inherit (prevStage) libc;
+      }
     ];
 
     stageFun prevStage {
@@ -1260,6 +1263,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
     assert isBuiltByNixpkgsCompiler prevStage.darwin.sigtool;
 
     assert isFromNixpkgs prevStage.darwin.libSystem;
+    assert isFromNixpkgs prevStage.libc;
     assert isFromNixpkgs prevStage.darwin.binutils-unwrapped;
 
     assert isBuiltByNixpkgsCompiler prevStage.llvmPackages.clang-unwrapped;
