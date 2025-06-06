@@ -30,12 +30,12 @@ buildGoModule rec {
     package = yamlfmt;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Extensible command line tool or library to format yaml files";
     homepage = "https://github.com/google/yamlfmt";
     changelog = "https://github.com/google/yamlfmt/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ sno2wman ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ sno2wman ];
     mainProgram = "yamlfmt";
   };
 }
