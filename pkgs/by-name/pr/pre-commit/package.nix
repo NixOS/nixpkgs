@@ -12,12 +12,14 @@
   perl,
   cabal-install,
   julia,
+  julia-bin,
   pre-commit,
 }:
 
 with python3Packages;
 let
   i686Linux = stdenv.buildPlatform.system == "i686-linux";
+  julia' = if lib.meta.availableOn stdenv.hostPlatform julia then julia else julia-bin;
 in
 buildPythonApplication rec {
   pname = "pre-commit";
@@ -61,7 +63,7 @@ buildPythonApplication rec {
       pytestCheckHook
       re-assert
       cabal-install
-      julia
+      julia'
     ]
     ++ lib.optionals (!i686Linux) [
       # coursier can be moved back to the main nativeCheckInputs list once we’re able to bootstrap a
