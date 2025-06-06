@@ -11,15 +11,15 @@
   gst_all_1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kaidan";
   version = "0.11.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "network";
-    repo = pname;
-    rev = "v${version}";
+    repo = "kaidan";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8pC4vINeKSYY+LlVgCXUtBq9UjraPdTikBOwLBLeQ3Y=";
   };
 
@@ -76,4 +76,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ astro ];
     platforms = with platforms; linux;
   };
-}
+})
