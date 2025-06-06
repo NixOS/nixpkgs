@@ -105,6 +105,10 @@ stdenv.mkDerivation (finalAttrs: {
       # even though the last 3 dependencies are already in `kimageformats`,
       # because of a logic error in the cmake files, in td 5.15.{1,2} it
       # doesn't link when you don't add them explicitly
+      #
+      # this has been fixed
+      # (https://github.com/desktop-app/cmake_helpers/pull/413), remove next
+      # release
       kimageformats
       libavif
       libheif
