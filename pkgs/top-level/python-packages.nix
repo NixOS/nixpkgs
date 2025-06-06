@@ -10183,6 +10183,8 @@ self: super: with self; {
 
   nomadnet = callPackage ../development/python-modules/nomadnet { };
 
+  nominal-api = callPackage ../development/python-modules/nominal-api { };
+
   nonbloat-db = callPackage ../development/python-modules/nonbloat-db { };
 
   noneprompt = callPackage ../development/python-modules/noneprompt { };
