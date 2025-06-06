@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "python-gitlab";
-  version = "5.6.0";
+  version = "6.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "python_gitlab";
     inherit version;
-    hash = "sha256-vFMei6PlZBtgQJRF1JGazmiiwYyw7G1I+87WYWuVQWY=";
+    hash = "sha256-cEv1SMJY8c/i8JuOzprxzI+mroKKxv5qHL6VfJhDFBQ=";
   };
 
   build-system = [ setuptools ];
