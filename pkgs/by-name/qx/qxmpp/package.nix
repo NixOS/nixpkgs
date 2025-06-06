@@ -11,14 +11,14 @@
   libomemo-c,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qxmpp";
   version = "1.10.2";
 
   src = fetchFromGitHub {
     owner = "qxmpp-project";
-    repo = pname;
-    rev = "v${version}";
+    repo = "qxmpp";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-M3F4tNIO3RvDxk/lce8/J6kmQtnsGLILQ15uEzgyfds=";
   };
 
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ astro ];
     platforms = with lib.platforms; linux;
   };
-}
+})
