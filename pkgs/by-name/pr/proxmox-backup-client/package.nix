@@ -10,7 +10,6 @@
   libuuid,
   acl,
   libxcrypt,
-  git,
   installShellFiles,
   sphinx,
   systemd,
@@ -149,8 +148,10 @@ rustPlatform.buildRustPackage {
 
   doCheck = false;
 
+  # pbs-buildcfg requires this set, would be the git commit id
+  REPOID = "";
+
   nativeBuildInputs = [
-    git
     pkg-config
     pkgconf
     rustPlatform.bindgenHook
