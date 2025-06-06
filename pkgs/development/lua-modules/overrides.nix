@@ -50,6 +50,7 @@
   tree-sitter,
   unbound,
   unzip,
+  versionCheckHook,
   vimPlugins,
   yajl,
   zip,
@@ -577,9 +578,13 @@ in
       installShellFiles
       lua
       unzip
+      versionCheckHook
     ];
     # cmake is just to compile packages with "cmake" buildType, not luarocks itself
     dontUseCmakeConfigure = true;
+
+    doInstallCheck = true;
+    versionCheckProgramArg = "--version";
 
     propagatedBuildInputs = [
       zip
