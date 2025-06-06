@@ -63,7 +63,7 @@ lib.fix (
   self:
   lib.makeOverridable (
     {
-      npmDepsHash ? "sha256-pPbN/goBsRHGAnDzof50PlQtS0RMux4dq1b8Gn5jEP4=",
+      npmDepsHash ? "sha256-7/DH0p66FTfC0N42FhWTqehg5m/yq929ANhL4jAt7Ss=",
       patches ? [ ],
     }@args:
     buildNpmPackage {
@@ -77,7 +77,7 @@ lib.fix (
       # separate hash.
       src = fetchgit {
         inherit (radicle-httpd.src) url rev;
-        hash = "sha256-jxiGL9gEbl4n+GmFeRc8cVljfD8hrFRfSrA9GnOeE40=";
+        hash = "sha256-HRSrLdiDETTWNF+Rzvlg1XQerXcCE2xaY+6Xbq5pItI=";
       };
 
       postPatch = ''
