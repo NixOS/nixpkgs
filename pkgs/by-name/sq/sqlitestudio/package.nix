@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Free, open source, multi-platform SQLite database manager";
     homepage = "https://sqlitestudio.pl/";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Only;
     mainProgram = "sqlitestudio";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ asterismono ];
