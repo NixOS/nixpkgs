@@ -13153,6 +13153,8 @@ self: super: with self; {
 
   pypandoc = callPackage ../development/python-modules/pypandoc { };
 
+  pypaperless = callPackage ../development/python-modules/pypaperless { };
+
   pyparser = callPackage ../development/python-modules/pyparser { };
 
   pyparsing = callPackage ../development/python-modules/pyparsing { };
