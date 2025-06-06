@@ -17715,6 +17715,12 @@
     github = "nikstur";
     githubId = 61635709;
   };
+  nilathedragon = {
+    email = "nilathedragon@pm.me";
+    name = "Nila The Dragon";
+    github = "nilathedragon";
+    githubId = 43315617;
+  };
   nilp0inter = {
     email = "robertomartinezp@gmail.com";
     github = "nilp0inter";

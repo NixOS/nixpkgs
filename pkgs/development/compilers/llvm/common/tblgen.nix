@@ -56,11 +56,11 @@ let
     else
       src;
 
-  self = stdenv.mkDerivation (finalAttrs: rec {
+  self = stdenv.mkDerivation (finalAttrs: {
     inherit pname version patches;
 
     src = src';
-    sourceRoot = "${src.name}/llvm";
+    sourceRoot = "${finalAttrs.src.name}/llvm";
 
     postPatch = ''
       (

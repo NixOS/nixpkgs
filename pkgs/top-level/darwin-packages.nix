@@ -6,7 +6,6 @@
   generateSplicesForMkScope,
   makeScopeWithSplicing',
   stdenv,
-  preLibcCrossHeaders,
   config,
 }:
 
@@ -57,7 +56,8 @@ makeScopeWithSplicing' {
       };
 
       binutils = pkgs.wrapBintoolsWith {
-        libc = if stdenv.targetPlatform != stdenv.hostPlatform then pkgs.libcCross else pkgs.stdenv.cc.libc;
+        libc =
+          if stdenv.targetPlatform != stdenv.hostPlatform then targetPackages.libc else pkgs.stdenv.cc.libc;
         bintools = self.binutils-unwrapped;
       };
 
@@ -88,7 +88,7 @@ makeScopeWithSplicing' {
       };
 
       binutilsNoLibc = pkgs.wrapBintoolsWith {
-        libc = preLibcCrossHeaders;
+        libc = targetPackages.preLibcHeaders;
         bintools = self.binutils-unwrapped;
       };
 

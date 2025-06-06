@@ -46,14 +46,14 @@ let
     ++ lib.optional (!asioSupport) boost;
 
 in
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libpulsar";
   version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "pulsar-client-cpp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-RHWi0KCq7U7Dr3Ic7kduc8P64VpAThTQ3lDxLLEqzIU=";
   };
 
@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   meta = with lib; {
     homepage = "https://pulsar.apache.org/docs/next/client-libraries-cpp/";
     description = "Apache Pulsar C++ library";
-    changelog = "https://github.com/apache/pulsar-client-cpp/releases/tag/v${version}";
+    changelog = "https://github.com/apache/pulsar-client-cpp/releases/tag/v${finalAttrs.version}";
     platforms = platforms.all;
     license = licenses.asl20;
     maintainers = with maintainers; [
