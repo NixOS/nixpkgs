@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/centic9/headset-charge-indicator";
-    description = "A app-indicator for GNOME desktops for controlling some features of various wireless headsets";
+    description = "App-indicator for GNOME desktops for controlling some features of various wireless headsets";
     longDescription = "A simple app-indicator for GNOME desktops to display the battery charge of some wireless headsets which also allows to control some functions like LEDs, sidetone and others.";
     platforms = platforms.linux;
     maintainers = with maintainers; [ zebreus ];

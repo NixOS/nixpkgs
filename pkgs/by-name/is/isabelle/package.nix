@@ -229,7 +229,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   };
 
   meta = with lib; {
-    description = "A generic proof assistant";
+    description = "Generic proof assistant";
 
     longDescription = ''
       Isabelle is a generic proof assistant.  It allows mathematical formulas

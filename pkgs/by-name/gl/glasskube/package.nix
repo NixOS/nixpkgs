@@ -78,7 +78,7 @@ buildGo123Module rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "The missing Package Manager for Kubernetes featuring a GUI and a CLI";
+    description = "Missing Package Manager for Kubernetes featuring a GUI and a CLI";
     homepage = "https://github.com/glasskube/glasskube";
     changelog = "https://github.com/glasskube/glasskube/releases/tag/v${version}";
     maintainers = with lib.maintainers; [ jakuzure ];

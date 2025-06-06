@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   meta = {
-    description = "A static library extending Qt for exception handling, a log4j like logging framework, Flight Simulator related utilities like BGL reader and more";
+    description = "Static library extending Qt for exception handling, a log4j like logging framework, Flight Simulator related utilities like BGL reader and more";
     homepage = "https://github.com/albar965/atools";
     changelog = "https://github.com/albar965/atools/blob/${src.rev}/CHANGELOG.txt";
     license = lib.licenses.gpl3Only;

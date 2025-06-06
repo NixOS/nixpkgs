@@ -67,7 +67,7 @@ buildGoModule rec {
     mainProgram = "opa";
     homepage = "https://www.openpolicyagent.org/docs/latest/envoy-introduction/";
     changelog = "https://github.com/open-policy-agent/opa-envoy-plugin/blob/v${version}/CHANGELOG.md";
-    description = "A plugin to enforce OPA policies with Envoy";
+    description = "Plugin to enforce OPA policies with Envoy";
     longDescription = ''
       OPA-Envoy extends OPA with a gRPC server that implements the Envoy
       External Authorization API. You can use this version of OPA to enforce

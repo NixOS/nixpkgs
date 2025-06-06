@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/music-assistant/frontend/releases/tag/${version}";
-    description = "The Music Assistant frontend";
+    description = "Music Assistant frontend";
     homepage = "https://github.com/music-assistant/frontend";
     license = licenses.asl20;
     maintainers = with maintainers; [ hexa ];

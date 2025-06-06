@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/${src.owner}/${src.repo}/blob/${src.rev}/changelog.md";
-    description = "A CLI for GlobalProtect VPN, based on OpenConnect, supports the SSO authentication method";
+    description = "CLI for GlobalProtect VPN, based on OpenConnect, supports the SSO authentication method";
     longDescription = ''
       A CLI for GlobalProtect VPN, based on OpenConnect, supports the SSO
       authentication method. Inspired by gp-saml-gui.

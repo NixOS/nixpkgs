@@ -20,14 +20,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ocrodjvu";
-  version = "0.13.2";
+  version = "0.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "FriedrichFroebel";
     repo = "ocrodjvu";
-    rev = version;
-    hash = "sha256-EiMCrRFUAJbu9QLgKpFIKqigCZ77lpTDD6AvZuMbyhA=";
+    tag = version;
+    hash = "sha256-/TPo8YCE8JKKKBBeV12ilgTNDmuklwfy0TPI/7dBiOs=";
   };
 
   build-system = with python3Packages; [

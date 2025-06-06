@@ -84,7 +84,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     mainProgram = "liana-gui";
-    description = "A Bitcoin wallet leveraging on-chain timelocks for safety and recovery";
+    description = "Bitcoin wallet leveraging on-chain timelocks for safety and recovery";
     homepage = "https://wizardsardine.com/liana";
     changelog = "https://github.com/wizardsardine/liana/releases/tag/${src.rev}";
     license = licenses.bsd3;
