@@ -32,7 +32,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nvidia-container-toolkit";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-AQi61oot4fdMvQ8A139AvygxN9U7EM1YkJau3zAy3+I=";
 
   };
@@ -122,12 +122,12 @@ buildGoModule rec {
         --subst-var-by glibcbin ${lib.getBin glibc}
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/nvidia/container-toolkit/container-toolkit";
     description = "NVIDIA Container Toolkit";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       cpcloud
       christoph-heiss
     ];
