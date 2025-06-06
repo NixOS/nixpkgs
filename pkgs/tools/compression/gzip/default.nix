@@ -61,6 +61,8 @@ stdenv.mkDerivation rec {
         --add-flags "\''${GZIP_NO_TIMESTAMPS:+-n}"
     '';
 
+  setupHook = ./setup-hook.sh;
+
   meta = {
     homepage = "https://www.gnu.org/software/gzip/";
     description = "GNU zip compression program";
