@@ -127,7 +127,7 @@
 
                 # sometimes a .deno dir is slipped into a node_modules package
                 # it's unclear why. but it can just be deleted
-                rm -rf ./node_modules/*/.deno/
+                find -L ./node_modules/* -name ".deno" -type d | xargs rm -rf
               fi
 
               rm -f "$DENO_DIR"/dep_analysis_cache_v2-shm
