@@ -88,7 +88,6 @@ def check_version_compatibility(plugin_content: str, plugin_name: str, yazi_vers
     if required_version == "0":
         print(f"No version requirement found for {plugin_name}, assuming compatible with any Yazi version")
     else:
-        # Check if the plugin is compatible with current Yazi version
         if version.parse(required_version) > version.parse(yazi_version):
             message = f"{plugin_name} plugin requires Yazi {required_version}, but we have {yazi_version}"
             print(message)
@@ -135,12 +134,9 @@ def calculate_sri_hash(owner: str, repo: str, latest_commit: str) -> str:
     try:
         new_hash = run_command(f"nix-prefetch-url --unpack --type sha256 {prefetch_url} 2>/dev/null")
 
-        # If the hash is not in SRI format, convert it
         if not new_hash.startswith("sha256-"):
-            # Try to convert the hash to SRI format
             new_hash = run_command(f"nix hash to-sri --type sha256 {new_hash} 2>/dev/null")
 
-            # If that fails, try another approach
             if not new_hash.startswith("sha256-"):
                 print("Warning: Failed to get SRI hash directly, trying alternative method...")
                 raw_hash = run_command(f"nix-prefetch-url --type sha256 {prefetch_url} 2>/dev/null")
@@ -148,7 +144,6 @@ def calculate_sri_hash(owner: str, repo: str, latest_commit: str) -> str:
     except Exception as e:
         raise RuntimeError(f"Error calculating hash: {e}")
 
-    # Verify we got a valid SRI hash
     if not new_hash.startswith("sha256-"):
         raise RuntimeError(f"Failed to generate valid SRI hash. Output was: {new_hash}")
 
@@ -177,17 +172,13 @@ def update_nix_file(default_nix_path: str, latest_commit: str, new_version: str,
     """Update the default.nix file with new version, revision and hash"""
     default_nix_content = read_nix_file(default_nix_path)
 
-    # Update the revision in default.nix
     default_nix_content = re.sub(r'rev = "[^"]*"', f'rev = "{latest_commit}"', default_nix_content)
 
-    # Update the version in default.nix
     if 'version = "' in default_nix_content:
         default_nix_content = re.sub(r'version = "[^"]*"', f'version = "{new_version}"', default_nix_content)
     else:
-        # Add version attribute after pname if it doesn't exist
         default_nix_content = re.sub(r'(pname = "[^"]*";)', f'\\1\n  version = "{new_version}";', default_nix_content)
 
-    # Update hash in default.nix
     if 'hash = "' in default_nix_content:
         default_nix_content = re.sub(r'hash = "[^"]*"', f'hash = "{new_hash}"', default_nix_content)
     elif 'fetchFromGitHub' in default_nix_content:
@@ -195,10 +186,8 @@ def update_nix_file(default_nix_path: str, latest_commit: str, new_version: str,
     else:
         raise RuntimeError(f"Could not find hash attribute in {default_nix_path}")
 
-    # Write the updated content back to the file
     write_nix_file(default_nix_path, default_nix_content)
 
-    # Verify the hash was updated
     updated_content = read_nix_file(default_nix_path)
     if f'hash = "{new_hash}"' in updated_content or f'sha256 = "{new_hash}"' in updated_content:
         print(f"Successfully updated hash to: {new_hash}")
@@ -209,19 +198,15 @@ def update_nix_file(default_nix_path: str, latest_commit: str, new_version: str,
 def get_all_plugins(nixpkgs_dir: str) -> List[Dict[str, str]]:
     """Get all available Yazi plugins from the Nix expression"""
     try:
-        # Get all plugin names
         plugin_names_json = run_command(f'nix eval --impure --json --expr "builtins.attrNames (import {nixpkgs_dir} {{}}).yaziPlugins"')
         plugin_names = json.loads(plugin_names_json)
 
-        # Filter out known non-plugin attributes (like functions and special attributes)
         excluded_attrs = ["mkYaziPlugin", "override", "overrideDerivation", "overrideAttrs", "recurseForDerivations"]
         plugin_names = [name for name in plugin_names if name not in excluded_attrs]
 
         plugins = []
         for name in plugin_names:
-            # Check if the attribute is a derivation by trying to get its type
             try:
-                # First check if it's a derivation by looking for the pname attribute
                 pname = run_command(f'nix eval --raw -f {nixpkgs_dir} "yaziPlugins.{name}.pname"')
                 plugins.append({
                     "name": name,  # Attribute name in yaziPlugins set
@@ -240,16 +225,9 @@ def validate_environment(plugin_name: Optional[str] = None, plugin_pname: Option
     """Validate environment variables and paths"""
     nixpkgs_dir = os.getcwd()
 
-    # If plugin name and pname are not provided, check environment variables
-    if not plugin_name or not plugin_pname:
-        plugin_name = os.environ.get("PLUGIN_NAME")
-        plugin_pname = os.environ.get("PLUGIN_PNAME")
-
-    # For single plugin update, we need both name and pname
     if plugin_name and not plugin_pname:
         raise RuntimeError(f"pname not provided for plugin {plugin_name}")
 
-    # Validate plugin directory if a specific plugin is specified
     if plugin_name:
         plugin_dir = f"{nixpkgs_dir}/pkgs/by-name/ya/yazi/plugins/{plugin_name}"
         if not Path(f"{plugin_dir}/default.nix").exists():
@@ -267,7 +245,6 @@ def update_single_plugin(nixpkgs_dir: str, plugin_name: str, plugin_pname: str) 
     plugin_dir = f"{nixpkgs_dir}/pkgs/by-name/ya/yazi/plugins/{plugin_name}"
     default_nix_path = f"{plugin_dir}/default.nix"
 
-    # Get repository info
     nix_content = read_nix_file(default_nix_path)
     old_version_match = re.search(r'version = "([^"]*)"', nix_content)
     old_version = old_version_match.group(1) if old_version_match else "unknown"
@@ -278,17 +255,13 @@ def update_single_plugin(nixpkgs_dir: str, plugin_name: str, plugin_pname: str) 
     owner = plugin_info["owner"]
     repo = plugin_info["repo"]
 
-    # Get Yazi version separately
     yazi_version = get_yazi_version(nixpkgs_dir)
 
-    # Setup GitHub API headers
     headers = get_github_headers()
 
-    # Check plugin compatibility with current Yazi version
     plugin_content = fetch_plugin_content(owner, repo, plugin_pname, headers)
     required_version = check_version_compatibility(plugin_content, plugin_name, yazi_version)
 
-    # Get latest commit info
     latest_commit, commit_date = get_latest_commit(owner, repo, plugin_pname, headers)
     print(f"Checking {plugin_name} latest commit {latest_commit} ({commit_date})")
 
@@ -298,14 +271,11 @@ def update_single_plugin(nixpkgs_dir: str, plugin_name: str, plugin_pname: str) 
 
     print(f"Updating {plugin_name} from commit {old_commit} to {latest_commit}")
 
-    # Generate new version string
     new_version = f"{required_version}-unstable-{commit_date}"
 
-    # Calculate hash for the plugin
     new_hash = calculate_sri_hash(owner, repo, latest_commit)
     print(f"Generated SRI hash: {new_hash}")
 
-    # Update the default.nix file
     update_nix_file(default_nix_path, latest_commit, new_version, new_hash)
 
     print(f"Successfully updated {plugin_name} from {old_version} to {new_version}")
@@ -366,7 +336,6 @@ def update_all_plugins(nixpkgs_dir: str) -> List[Dict[str, str]]:
             failed_plugins.append({"name": plugin_name, "error": str(e)})
             continue
 
-    # Print summary
     print(f"\n{'=' * 50}")
     print(f"Update summary: {updated_count} plugins updated out of {checked_count} checked")
 
