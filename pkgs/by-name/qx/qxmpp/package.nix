@@ -4,9 +4,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  wrapQtAppsNoGuiHook,
-  qtbase,
-  qca,
+  kdePackages,
   withGstreamer ? true,
   gst_all_1,
   withOmemo ? true,
@@ -27,7 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs =
     [
       cmake
-      wrapQtAppsNoGuiHook
+      kdePackages.wrapQtAppsNoGuiHook
     ]
     ++ lib.optionals (withGstreamer || withOmemo) [
       pkg-config
@@ -43,8 +41,8 @@ stdenv.mkDerivation rec {
       ]
     )
     ++ lib.optionals withOmemo [
-      qtbase
-      qca
+      kdePackages.qtbase
+      kdePackages.qca
       libomemo-c
     ];
   cmakeFlags =
