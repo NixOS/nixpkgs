@@ -256,3 +256,32 @@ services:
             - nvidia.com/gpu=0
             - nvidia.com/gpu=1
 ```
+
+## Writing tests for CUDA-enabled packages {#cuda-testing-packages}
+
+Tests for CUDA-enabled packages should be added to the package's `passthru` attribute set in two places, where appropriate: `testers` and `tests`.
+
+TODO: Where should these tests be aggregated? Should this be a manual process, or an automatic traversal of Nixpkgs?
+
+### `passthru.testers` {#cuda-testing-packages-passthru-testers}
+
+The `passthru.testers` attribute set exists to allow running tests outside the Nix sandbox. There are a number of reasons why this is useful:
+
+- The test, when wrapped with utilities like `nixGL` or `nix-gl-host`, can be run on non-NixOS systems.
+- The test has network access patterns which are difficult or impossible to sandbox.
+- The test produces output which is not deterministic, such as timing information.
+
+Attributes added to `passthru.testers` are derivations which produce an executable which runs a test. The produced executable should:
+
+- Take care to set up the environment, make temporary directories, and so on.
+- Be registered as the derivation's `meta.mainProgram` so that it can be run directly.
+
+TODO: EXAMPLE.
+
+### `passthru.tests` {#cuda-testing-packages-passthru-tests}
+
+Contrary to `passthru.testers`, the `passthru.tests` attribute set is used to run tests inside the Nix sandbox. This is useful for tests which are deterministic (e.g., checking exit codes) and which can be provided with all necessary resources in the sandbox.
+
+Where possible, `passthru.tests` should re-use executables produced by `passthru.testers` to avoid duplication of test logic.
+
+TODO: EXAMPLE.
