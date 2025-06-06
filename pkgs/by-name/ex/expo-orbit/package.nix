@@ -19,7 +19,6 @@
   autoPatchelfHook,
   systemd,
   makeWrapper,
-  maintainers,
 }: let
   deps = [
     alsa-lib
@@ -110,6 +109,6 @@ in
       sourceProvenance = with lib.sourceTypes; [binaryNativeCode];
       license = lib.licenses.mit;
       platforms = ["x86_64-linux"];
-      maintainers = with maintainers; [dreamingcodes];
+      maintainers = with lib.maintainers; [dreamingcodes];
     };
   }
