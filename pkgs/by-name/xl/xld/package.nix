@@ -11,11 +11,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "xld";
-  version = "20240511";
+  version = "20250302";
 
   src = fetchurl {
     url = "mirror://sourceforge/xld/xld-${finalAttrs.version}.dmg";
-    hash = "sha256-8xfjAWgtSdbD8gGlkGzT8QRz7egIf4PE/rFsFEDX0+c=";
+    hash = "sha256-ADKlRw6k4yoRo1uAd+v0mGECiR+OuCdDCU8sZiGtius=";
   };
 
   buildInputs = [ undmg ];
