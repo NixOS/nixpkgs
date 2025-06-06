@@ -5,22 +5,10 @@
   cmake,
   extra-cmake-modules,
   pkg-config,
-  wrapQtAppsHook,
-  qtbase,
-  qttools,
-  qtmultimedia,
-  qtlocation,
-  qqc2-desktop-style,
-  kirigami-addons,
-  kirigami,
-  kio,
-  knotifications,
-  kquickimageedit,
+  kdePackages,
   zxing-cpp,
   qxmpp,
-  sonnet,
   gst_all_1,
-  prison,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,28 +27,28 @@ stdenv.mkDerivation rec {
     cmake
     extra-cmake-modules
     pkg-config
-    wrapQtAppsHook
+    kdePackages.wrapQtAppsHook
   ];
 
-  buildInputs = with gst_all_1; [
-    qtbase
-    qttools
-    qtmultimedia
-    qtlocation
-    qqc2-desktop-style
-    kirigami-addons
-    kirigami
-    kio
-    knotifications
-    kquickimageedit
+  buildInputs = [
+    kdePackages.kio
+    kdePackages.kirigami
+    kdePackages.kirigami-addons
+    kdePackages.knotifications
+    kdePackages.kquickimageedit
+    kdePackages.prison
+    kdePackages.qtbase
+    kdePackages.qttools
+    kdePackages.qtmultimedia
+    kdePackages.qtlocation
+    kdePackages.qqc2-desktop-style
+    kdePackages.sonnet
     zxing-cpp
     qxmpp
-    sonnet
-    gstreamer
-    gst-plugins-bad
-    gst-plugins-base
-    (gst-plugins-good.override { qt6Support = true; })
-    prison
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-base
+    (gst_all_1.gst-plugins-good.override { qt6Support = true; })
   ];
   postInstall = ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
