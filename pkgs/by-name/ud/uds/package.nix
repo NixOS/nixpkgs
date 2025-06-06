@@ -11,14 +11,6 @@ buildGoModule rec {
   pname = "uds";
   version = "0.27.6";
 
-  meta = {
-    description = "A secure runtime platform for National Security. https://uds.defenseunicorns.com/";
-    homepage = "https://uds.defenseunicorns.com/";
-    mainProgram = "uds";
-    license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ realnedsanders ];
-  };
-
   src = fetchFromGitHub {
     owner = "defenseunicorns";
     repo = "uds-cli";
@@ -85,4 +77,12 @@ buildGoModule rec {
       "-X github.com/zarf-dev/zarf/src/cmd/tools.archiverVersion=${getGoVersion "github.com/mholt/archives"}"
       "-X github.com/zarf-dev/zarf/src/cmd/tools.helmVersion=${getGoVersion "helm.sh/helm/v3"}"
     ];
+
+  meta = {
+    description = "A secure runtime platform for National Security. https://uds.defenseunicorns.com/";
+    homepage = "https://uds.defenseunicorns.com/";
+    mainProgram = "uds";
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ realnedsanders ];
+  };
 }
