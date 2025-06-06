@@ -54,6 +54,8 @@ buildPythonPackage rec {
     pytest-rerunfailures
   ];
 
+  pytestFlagsArray = [ "--benchmark-disable" ];
+
   meta = {
     description = "Knock on the Python GIL, determine how busy it is";
     homepage = "https://github.com/milesgranger/gilknocker";
