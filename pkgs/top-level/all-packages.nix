@@ -12651,12 +12651,6 @@ with pkgs;
     withDoc = true;
   };
 
-  gpu-screen-recorder = callPackage ../applications/video/gpu-screen-recorder { };
-
-  gpu-screen-recorder-gtk =
-    callPackage ../applications/video/gpu-screen-recorder/gpu-screen-recorder-gtk.nix
-      { };
-
   gpxsee-qt5 = libsForQt5.callPackage ../applications/misc/gpxsee { };
 
   gpxsee-qt6 = qt6Packages.callPackage ../applications/misc/gpxsee { };
