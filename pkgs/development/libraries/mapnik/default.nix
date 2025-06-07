@@ -27,14 +27,14 @@
   sparsehash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mapnik";
   version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "mapnik";
     repo = "mapnik";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-EhRMG0xPOGwcRAMQD2B4z7nVlXQf4HFFfL3oUaUfXBY=";
     fetchSubmodules = true;
   };
@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
     rm -r scons
     # Remove bundled 'sparsehash' directory in favor of 'sparsehash' package
     rm -r deps/mapnik/sparsehash
+    # Remove bundled 'protozero' directory in favor of 'protozero' package
+    rm -r deps/mapbox/protozero
   '';
 
   # a distinct dev output makes python-mapnik fail
@@ -118,19 +120,19 @@ stdenv.mkDerivation rec {
   '';
 
   preInstall = ''
-    mkdir -p $out/bin
-    cp ../utils/mapnik-config/mapnik-config $out/bin/mapnik-config
+    install -Dm755 ../utils/mapnik-config/mapnik-config -t $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source toolkit for developing mapping applications";
     homepage = "https://mapnik.org";
-    maintainers = with maintainers; [
+    changelog = "https://github.com/mapnik/mapnik/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    maintainers = with lib.maintainers; [
       hrdinka
       hummeltech
     ];
-    teams = [ teams.geospatial ];
-    license = licenses.lgpl21Plus;
-    platforms = platforms.all;
+    teams = [ lib.teams.geospatial ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.all;
   };
-}
+})
