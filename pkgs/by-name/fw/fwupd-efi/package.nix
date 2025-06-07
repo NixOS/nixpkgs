@@ -10,7 +10,7 @@
   python3Packages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd-efi";
   version = "1.7";
 
