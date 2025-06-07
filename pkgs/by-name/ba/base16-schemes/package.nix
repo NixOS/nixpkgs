@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  ...
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "base16-schemes";
@@ -24,10 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "All the color schemes for use in base16 packages";
-    homepage = finalAttrs.src.meta.homepage;
-    maintainers = [ maintainers.DamienCassou ];
-    license = licenses.mit;
+    homepage = "https://github.com/tinted-theming/schemes";
+    maintainers = [ lib.maintainers.DamienCassou ];
+    license = lib.licenses.mit;
   };
 })
