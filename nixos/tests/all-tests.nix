@@ -248,7 +248,7 @@ in
   };
   bind = runTest ./bind.nix;
   bird = runTest ./bird.nix;
-  birdwatcher = handleTest ./birdwatcher.nix { };
+  birdwatcher = runTest ./birdwatcher.nix;
   bitbox-bridge = runTest ./bitbox-bridge.nix;
   bitcoind = runTest ./bitcoind.nix;
   bittorrent = runTest ./bittorrent.nix;
