@@ -2771,6 +2771,13 @@
     githubId = 68944906;
     name = "Nikita";
   };
+  bandithedoge = {
+    email = "bandithedoge@protonmail.com";
+    matrix = "@bandithedoge:matrix.org";
+    github = "bandithedoge";
+    githubId = 26331682;
+    name = "Mikołaj Lercher";
+  };
   bandresen = {
     email = "bandresen@gmail.com";
     github = "bennyandresen";
