@@ -5,6 +5,7 @@
   pkg-config,
   libsodium,
   nix-update-script,
+  nixosTests,
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage rec {
@@ -29,6 +30,11 @@ rustPlatform.buildRustPackage rec {
   };
 
   passthru.updateScript = nix-update-script { };
+
+  passthru.tests = {
+    inherit (nixosTests) encrypted-dns-server;
+    service = nixosTests.encrypted-dns-server;
+  };
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
