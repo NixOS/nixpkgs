@@ -24,6 +24,9 @@ const stripJsonComments = (jsonString) => {
 	// Remove multi-line comments (/* ... */)
 	result = result.replace(/\/\*[\s\S]*?\*\//g, '');
 
+	// Remove trailing commas in objects and arrays
+	result = result.replace(/,(\s*[}\]])/g, '$1');
+
 	return result;
 }
 
