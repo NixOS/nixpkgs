@@ -3,6 +3,8 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  makeBinaryWrapper,
+  cmake,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,12 +23,15 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
+    makeBinaryWrapper
   ];
 
   postInstall = ''
     installShellCompletion --bash completions/bash/neocmakelsp
     installShellCompletion --fish completions/fish/neocmakelsp.fish
     installShellCompletion --zsh completions/zsh/_neocmakelsp
+
+    wrapProgram $out/bin/neocmakelsp --prefix PATH : ${lib.makeBinPath [ cmake ]}
   '';
 
   meta = {
