@@ -24,6 +24,8 @@
   yaml-cpp,
   nlohmann_json,
   llvmPackages,
+  ctestCheckHook,
+  mpiCheckPhaseHook,
   testers,
   mpiSupport ? true,
   pythonSupport ? false,
@@ -51,7 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch =
     ''
-      patchShebangs cmake/install/post/generate-adios2-config.sh.in
+      chmod +x cmake/install/post/adios2-config.pre.sh.in
+      patchShebangs cmake/install/post/{generate-adios2-config,adios2-config.pre}.sh.in
     ''
     # Dynamic cast to nullptr on darwin platform, switch to unsafe reinterpret cast.
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -135,10 +138,20 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ADIOS2_USE_Campaign" true)
     (lib.cmakeBool "ADIOS2_USE_AWSSDK" false)
 
+    (lib.cmakeBool "BUILD_TESTING" false)
+    # use vendored gtest as nixpkgs#gtest does not include <iomanip> in <gtest/gtest.h>
+    (lib.cmakeBool "ADIOS2_USE_EXTERNAL_GTEST" false)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
+    # higher MPIEXEC_MAX_NUMPROCS>8 might cause tests failure in
+    #   - Engine.BP.BPJoinedArray.MultiBlock.BP4.MPI
+    #   - Engine.BP.BPJoinedArray.MultiBlock.BP5.MPI
+    #   - Bindings.Fortran.BPWriteReadHeatMap6D.MPI
+    # due to insufficiently robust data generation and comparison for larger MPI sizes.
+    (lib.cmakeFeature "MPIEXEC_MAX_NUMPROCS" "4")
+
     # Enable support for Little/Big Endian Interoperability
     (lib.cmakeBool "ADIOS2_USE_Endian_Reverse" true)
 
-    (lib.cmakeBool "BUILD_TESTING" false)
     (lib.cmakeBool "ADIOS2_BUILD_EXAMPLES" withExamples)
     (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
@@ -146,35 +159,47 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_PYTHONDIR" python3Packages.python.sitePackages)
   ];
 
+  # Tests are time-consuming and moved to passthru.tests.withCheck.
+  doCheck = false;
+
+  dontUseNinjaCheck = true;
+
+  # required for INSTALL.* tests
+  preCheck = ''
+    export adios2_DIR=$PWD
+  '';
+
+  enableParallelChecking = false;
+
+  __darwinAllowLocalNetworking = finalAttrs.finalPackage.doCheck && mpiSupport;
+
+  nativeCheckInputs = [
+    python3Packages.python
+    ctestCheckHook
+    mpiCheckPhaseHook
+  ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # TypeError: cannot pickle 'TextIOWrapper' instances
+    "Test.Engine.DataMan1xN.Serial"
+    "Test.Engine.DataManSingleValues"
+  ];
+
   # required for finding the generated adios2-config.cmake file
   preInstall = ''
     export adios2_DIR=$out/lib/cmake/adios2
   '';
 
-  # Ctest takes too much time, so we only perform some smoke Python tests.
-  doInstallCheck = pythonSupport;
-
-  preCheck =
-    ''
-      export PYTHONPATH=$out/${python3Packages.python.sitePackages}:$PYTHONPATH
-    ''
-    + lib.optionalString (stdenv.hostPlatform.system == "aarch64-linux") ''
-      rm ../testing/adios2/python/TestBPWriteTypesHighLevelAPI.py
-    '';
-
-  pytestFlagsArray = [
-    "../testing/adios2/python/Test*.py"
-  ];
-
   pythonImportsCheck = [ "adios2" ];
 
-  nativeInstallCheckInputs = lib.optionals pythonSupport [
-    python3Packages.pytestCheckHook
-  ];
-
-  passthru.tests.cmake-config = testers.hasCmakeConfigModules {
-    moduleNames = [ "adios2" ];
-    package = finalAttrs.finalPackage;
+  passthru.tests = {
+    withCheck = finalAttrs.finalPackage.overrideAttrs {
+      doCheck = true;
+    };
+    cmake-config = testers.hasCmakeConfigModules {
+      moduleNames = [ "adios2" ];
+      package = finalAttrs.finalPackage;
+    };
   };
 
   meta = {
