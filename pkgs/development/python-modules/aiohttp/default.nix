@@ -8,7 +8,8 @@
   isPyPy,
 
   # build-system
-  cython,
+  cython_3_1,
+  pkgconfig,
   setuptools,
 
   # native dependencies
@@ -30,8 +31,10 @@
   brotlicffi,
 
   # tests
+  blockbuster,
   freezegun,
   gunicorn,
+  isal,
   proxy-py,
   pytest-codspeed,
   pytest-cov-stub,
@@ -41,41 +44,46 @@
   python-on-whales,
   re-assert,
   trustme,
+  zlib-ng,
 }:
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.11.18";
+  version = "3.12.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp";
     tag = "v${version}";
-    hash = "sha256-+vnrYdUz1Stti9XE99InAouKN5kfTSaOuEG9Anxb3gs=";
+    hash = "sha256-ciZGOOfVXYoLzYNIkota3MXMRMxlztf+mFFo0y9r+Lk=";
   };
-
-  patches = [
-    (replaceVars ./unvendor-llhttp.patch {
-      llhttpDev = lib.getDev llhttp;
-      llhttpLib = lib.getLib llhttp;
-    })
-  ];
 
   postPatch = ''
     rm -r vendor
     patchShebangs tools
     touch .git  # tools/gen.py uses .git to find the project root
+
+    # don't install Cython using pip
+    substituteInPlace Makefile \
+      --replace-fail "cythonize: .install-cython" "cythonize:"
   '';
 
   build-system = [
-    cython
+    cython_3_1
+    pkgconfig
     setuptools
   ];
 
   preBuild = ''
     make cythonize
   '';
+
+  buildInputs = [
+    llhttp
+  ];
+
+  env.AIOHTTP_USE_SYSTEM_DEPS = true;
 
   dependencies = [
     aiohappyeyeballs
@@ -94,8 +102,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    blockbuster
     freezegun
     gunicorn
+    isal
     proxy-py
     pytest-codspeed
     pytest-cov-stub
@@ -105,6 +115,7 @@ buildPythonPackage rec {
     python-on-whales
     re-assert
     trustme
+    zlib-ng
   ];
 
   disabledTests =
@@ -117,6 +128,8 @@ buildPythonPackage rec {
       "test_import_time"
       # racy
       "test_uvloop_secure_https_proxy"
+      # Cannot connect to host example.com:443 ssl:default [Could not contact DNS servers]
+      "test_tcp_connector_ssl_shutdown_timeout_passed_to_create_connection"
     ]
     # these tests fail with python310 but succeeds with 11+
     ++ lib.optionals isPy310 [
@@ -145,7 +158,7 @@ buildPythonPackage rec {
     '';
 
   meta = with lib; {
-    changelog = "https://github.com/aio-libs/aiohttp/blob/v${version}/CHANGES.rst";
+    changelog = "https://docs.aiohttp.org/en/${src.tag}/changes.html";
     description = "Asynchronous HTTP Client/Server for Python and asyncio";
     license = licenses.asl20;
     homepage = "https://github.com/aio-libs/aiohttp";
