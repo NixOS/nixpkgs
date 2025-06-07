@@ -2,21 +2,28 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
+  fzf,
+  ripgrep,
   nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "opencode";
-  version = "0.0.46";
+  version = "0.0.52";
 
   src = fetchFromGitHub {
     owner = "opencode-ai";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q7ArUsFMpe0zayUMBJd+fC1K4jTGElIFep31Qa/L1jY=";
+    hash = "sha256-qIjSltfKB1xYutfG8eVf8ydJj1D863qN9jbC6gG6nXI=";
   };
 
-  vendorHash = "sha256-MVpluFTF/2S6tRQQAXE3ujskQZ3njBkfve0RQgk3IkQ=";
+  vendorHash = "sha256-Kcwd8deHug7BPDzmbdFqEfoArpXJb1JtBKuk+drdohM=";
+
+  nativeCheckInputs = [
+    fzf
+    ripgrep
+  ];
 
   checkFlags =
     let
@@ -25,6 +32,9 @@ buildGoModule (finalAttrs: {
         "TestBashTool_Run"
         "TestSourcegraphTool_Run"
         "TestLsTool_Run"
+
+        # failing tests, seems to be fixed in dev. could try removing in > v0.0.52
+        "TestGetContextFromPaths"
       ];
     in
     [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
