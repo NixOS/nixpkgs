@@ -4,6 +4,7 @@
   cmake,
   fetchFromGitHub,
   flex,
+  git,
   lib,
   netcat,
   perl,
@@ -12,6 +13,8 @@
   postgresqlBuildExtension,
   postgresqlTestExtension,
   python3,
+  unstableGitUpdater,
+  writeShellScript,
 }:
 
 let
@@ -19,13 +22,13 @@ let
 in
 postgresqlBuildExtension (finalAttrs: {
   pname = "omnigres";
-  version = "0-unstable-2025-05-16";
+  version = "0-unstable-2025-06-03";
 
   src = fetchFromGitHub {
     owner = "omnigres";
     repo = "omnigres";
-    rev = "84f14792d80fb6fd60b680b7825245a8e7c5583e";
-    hash = "sha256-jOlHXl7ANhMwOPizd5KH+wYZmBNNkkIa9jbXZR8Xu28=";
+    rev = "d347be5ae1d79645ac277d19080eacba7b229cf8";
+    hash = "sha256-LKsH+aeLg7v2RfK80D3mgXdPB8jMIv5uFdf+3c5Z0vA=";
   };
 
   strictDeps = true;
@@ -72,6 +75,14 @@ postgresqlBuildExtension (finalAttrs: {
       CREATE EXTENSION omni_id;
 
       SELECT identity_type('user_id');
+    '';
+  };
+
+  passthru.updateScript = unstableGitUpdater {
+    branch = "master";
+    tagConverter = writeShellScript "tag-converter.sh" ''
+      suffix=$(${lib.getExe git} show -s --date=format:'%Y-%m-%d' --format=%cd)
+      echo "0-unstable-$suffix"
     '';
   };
 
