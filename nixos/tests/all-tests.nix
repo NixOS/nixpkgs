@@ -283,7 +283,7 @@ in
   buildkite-agents = runTest ./buildkite-agents.nix;
   c2fmzq = runTest ./c2fmzq.nix;
   caddy = runTest ./caddy.nix;
-  cadvisor = handleTestOn [ "x86_64-linux" ] ./cadvisor.nix { };
+  cadvisor = runTestOn [ "x86_64-linux" ] ./cadvisor.nix;
   cage = runTest ./cage.nix;
   cagebreak = runTest ./cagebreak.nix;
   calibre-web = runTest ./calibre-web.nix;
