@@ -133,7 +133,10 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/llvm/llvm-project/pull/99837/commits/14ae0a660a38e1feb151928a14f35ff0f4487351.patch";
       hash = "sha256-JykABCaNNhYhZQxCvKiBn54DZ5ZguksgCHnpdwWF2no=";
       relative = "compiler-rt";
-    });
+    })
+    ++ lib.optionals (lib.versionAtLeast release_version "20") [
+      (getVersionFile "compiler-rt/libc-free.patch")
+    ];
 
   nativeBuildInputs =
     [
