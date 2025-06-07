@@ -29,11 +29,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "debian-devscripts";
-  version = "2.25.10";
+  version = "2.25.14";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/devscripts/devscripts_${finalAttrs.version}.tar.xz";
-    hash = "sha256-pEzXrKV/bZbYG7j5QXjRDATZRGLt0fhdpwTDbCoKcus=";
+    hash = "sha256-z95BOgGNYFvleqCv8e6B7Tl91xPzgQHkcxIg55maXvQ=";
   };
 
   patches = [
