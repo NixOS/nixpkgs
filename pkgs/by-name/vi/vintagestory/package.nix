@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
   ];
 
-  runtimeLibs = lib.makeLibraryPath (
+  env.runtimeLibs = lib.makeLibraryPath (
     [
       gtk2
       sqlite
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup =
     let
       wrapperFlags = lib.trim ''
-        --prefix LD_LIBRARY_PATH : "${finalAttrs.runtimeLibs}" \
+        --prefix LD_LIBRARY_PATH : "''${runtimeLibs[@]}" \
         --set-default mesa_glthread true
       '';
     in
