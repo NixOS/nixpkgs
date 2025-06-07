@@ -347,7 +347,7 @@ in
   containers-tmpfs = runTest ./containers-tmpfs.nix;
   containers-unified-hierarchy = runTest ./containers-unified-hierarchy.nix;
   convos = runTest ./convos.nix;
-  corerad = handleTest ./corerad.nix { };
+  corerad = runTest ./corerad.nix;
   cosmic = runTest {
     imports = [ ./cosmic.nix ];
     _module.args.testName = "cosmic";
