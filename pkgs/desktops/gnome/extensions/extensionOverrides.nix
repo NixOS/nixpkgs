@@ -142,7 +142,7 @@ lib.trivial.pipe super [
         xdg_utils = xdg-utils;
         gtk_update_icon_cache = "${gtk4.out}/bin/gtk4-update-icon-cache";
         update_desktop_database = "${desktop-file-utils.out}/bin/update-desktop-database";
-        xdg_user_dirs = lib.getExe xdg-user-dirs;
+        xdg_user_dirs = xdg-user-dirs;
         nautilus_gsettings_path = glib.getSchemaPath nautilus;
       })
     ];
