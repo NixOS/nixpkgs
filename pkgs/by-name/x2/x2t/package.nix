@@ -1,17 +1,23 @@
 {
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  pkg-config,
+  autoconf,
+  automake,
   boost,
-  icu,
-  qt5,
+  buildNpmPackage,
+  closurecompiler,
+  fetchFromGitHub,
+  glibc,
   harfbuzz,
+  icu,
+  jdk,
+  lib,
+  nodejs,
+  nodePackages,
   # needs to be static and built with MD2 support!
   openssl,
+  pkg-config,
+  qt5,
   runCommand,
-  nodejs,
-  onlyoffice-documentserver,
+  stdenv,
   writeScript,
   x2t,
 }:
@@ -103,6 +109,96 @@ let
     # rev that the 'core' submodule in documentserver points at
     rev = core-rev;
     hash = "sha256-EXeqG8MJWS1asjFihnuMnDSHeKt2x+Ui+8MYK50AnSY=";
+  };
+  web-apps = buildNpmPackage (finalAttrs: {
+    name = "onlyoffice-core-webapps";
+
+    #src = /home/aengelen/d/onlyoffice/documentserver/web-apps;
+    #sourceRoot = "/build/web-apps/build";
+    src = fetchFromGitHub {
+      owner = "ONLYOFFICE";
+      repo = "web-apps";
+      # rev that the 'web-apps' submodule in documentserver points at
+      rev = "5255c27b1af64f6edf08d1aba20a23b8149e338c";
+      hash = "sha256-49v2h+ILQ0X/gNHny6LQcj94A6h7nS99liUAnLRNxzw=";
+    };
+    sourceRoot = "${finalAttrs.src.name}/build";
+
+    patches = [
+      ./web-apps-avoid-phantomjs.patch
+    ];
+
+    npmDepsHash = "sha256-Uen7gl6w/0A4MDk+7j+exkdwfCYqMSPJidad8AM60eQ=";
+
+    nativeBuildInputs = [
+      autoconf
+      automake
+      nodePackages.grunt-cli
+    ];
+
+    dontNpmBuild = true;
+
+    postBuild = ''
+      chmod u+w ..
+      mkdir ../deploy
+      chmod u+w -R ../apps
+      grunt --force
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      cp -r ../deploy/web-apps $out
+
+      runHook postInstall
+    '';
+  });
+  sdkjs = buildNpmPackage (finalAttrs: {
+    name = "onlyoffice-core-sdkjs";
+    src = fetchFromGitHub {
+      owner = "ONLYOFFICE";
+      repo = "sdkjs";
+      # rev that the 'sdkjs' submodule in documentserver points at
+      rev = "0e50652cb08c7753a9ab72d0558560ada5d43046";
+      hash = "sha256-fApr34aT0X8ffPwbsUEWnA3SK8pT5RKNan3YxzhvtAU=";
+    };
+    sourceRoot = "${finalAttrs.src.name}/build";
+
+    postPatch = ''
+      cp npm-shrinkwrap.json package-lock.json
+    '';
+
+    npmDepsHash = "sha256-Hpf+z3RGqZ1LTdow6xP00hNmWf4xs+KnVBj4NbPW4uM=";
+
+    dontNpmBuild = true;
+
+    nativeBuildInputs = [
+      nodePackages.grunt-cli
+      jdk
+    ];
+
+    postBuild = ''
+      chmod u+w ..
+
+      # the one from node_modules seems a weird hybrid between dynamic and static linking
+      cp ${closurecompiler}/bin/closure-compiler node_modules/google-closure-compiler-linux/compiler
+
+      grunt
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      cp -r ../deploy/sdkjs $out
+
+      runHook postInstall
+    '';
+  });
+  dictionaries = fetchFromGitHub {
+    owner = "ONLYOFFICE";
+    repo = "dictionaries";
+    tag = "v8.2.0.103";
+    hash = "sha256-3BwWAvnw0RCD6fxTCRstJSrF5QgfVNVBe8rN1hHhCoU=";
   };
   buildCoreComponent =
     rootdir: attrs:
@@ -630,12 +726,12 @@ buildCoreComponent "X2tConverter/build/Qt" {
     mkdir -p $out/etc
     cat >$out/etc/DoctRenderer.config <<EOF
           <Settings>
-            <file>${onlyoffice-documentserver}/var/www/onlyoffice/documentserver/sdkjs/common/Native/native.js</file>
-            <file>${onlyoffice-documentserver}/var/www/onlyoffice/documentserver/sdkjs/common/Native/jquery_native.js</file>
+            <file>${sdkjs}/common/Native/native.js</file>
+            <file>${sdkjs}//common/Native/jquery_native.js</file>
             <allfonts>${allfonts}/converter/AllFonts.js</allfonts>
-            <file>${onlyoffice-documentserver}/var/www/onlyoffice/documentserver/web-apps/vendor/xregexp/xregexp-all-min.js</file>
-            <sdkjs>${onlyoffice-documentserver}/var/www/onlyoffice/documentserver/sdkjs</sdkjs>
-            <dictionaries>${onlyoffice-documentserver}/var/www/onlyoffice/documentserver/dictionaries</dictionaries>
+            <file>${web-apps}/vendor/xregexp/xregexp-all-min.js</file>
+            <sdkjs>${sdkjs}</sdkjs>
+            <dictionaries>${dictionaries}</dictionaries>
           </Settings>
     EOF
 
@@ -669,6 +765,9 @@ buildCoreComponent "X2tConverter/build/Qt" {
       epubfile
       fb2file
       iworkfile
+      web-apps
+      sdkjs
+      dictionaries
       ;
   };
   meta = {
@@ -676,6 +775,6 @@ buildCoreComponent "X2tConverter/build/Qt" {
     homepage = "https://github.com/ONLYOFFICE/core/tree/master/X2tConverter";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ raboof ];
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.linux;
   };
 }
