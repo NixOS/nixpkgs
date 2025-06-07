@@ -50,7 +50,12 @@ in
     args = lib.mkOption {
       default = { };
       description = "extra args to append to the containerd cmdline";
-      type = attrsOf str;
+      type = attrsOf (oneOf [
+        str
+        int
+        bool
+        (listOf str)
+      ]);
     };
   };
 
