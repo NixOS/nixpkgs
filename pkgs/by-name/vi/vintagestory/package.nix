@@ -76,6 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     magick $out/share/vintagestory/assets/gameicon.xpm $out/share/icons/hicolor/512x512/apps/vintagestory.png
     cp $out/share/vintagestory/assets/game/fonts/*.ttf $out/share/fonts/truetype
 
+    rm -rvf $out/share/vintagestory/{install,run,server}.sh
+
     runHook postInstall
   '';
 
