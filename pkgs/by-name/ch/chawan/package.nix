@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation {
   pname = "chawan";
-  version = "0-unstable-2025-05-25";
+  version = "0-unstable-2025-06-04";
 
   src = fetchFromSourcehut {
     owner = "~bptato";
     repo = "chawan";
-    rev = "e571c8b1ede3a3c6dc4a5a4d0c6c8f48473076d2";
-    hash = "sha256-OBXc4jnB5Y+KXO9J7P1Z2HXkNCS+xnG+IGWw8wb66J8=";
+    rev = "577788b1d7d8121b2bc848e38647e23cd8bd55a2";
+    hash = "sha256-3iS6j4posJN6lSr1ODoceIfwhYudXcOWhJDKdYKt5+M=";
   };
 
   patches = [ ./mancha-augment-path.diff ];
