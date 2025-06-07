@@ -305,7 +305,7 @@ in
     "aarch64-linux"
     "x86_64-linux"
   ] ./ceph-single-node-bluestore-dmcrypt.nix;
-  certmgr = handleTest ./certmgr.nix { };
+  certmgr = import ./certmgr.nix { inherit pkgs runTest; };
   cfssl = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./cfssl.nix { };
   cgit = runTest ./cgit.nix;
   charliecloud = runTest ./charliecloud.nix;
