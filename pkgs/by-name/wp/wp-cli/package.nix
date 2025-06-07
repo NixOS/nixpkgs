@@ -1,16 +1,19 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchurl,
   formats,
   installShellFiles,
   makeWrapper,
   php,
+  writeScript,
+  nix-update,
+  common-updater-scripts,
   phpIniFile ? null,
 }:
 
 let
-  version = "2.10.0";
+  version = "2.12.0";
 
   completion = fetchurl {
     url = "https://raw.githubusercontent.com/wp-cli/wp-cli/v${version}/utils/wp-completion.bash";
@@ -33,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/wp-cli/wp-cli/releases/download/v${version}/wp-cli-${version}.phar";
-    hash = "sha256-TGqTzsrn9JnKSB+nptbUKZyLkyFOXlMI4mdw2/02Md8=";
+    hash = "sha256-zjTd2Dj3NR1nWQaNCXk/JnVUY7SkYQpaXAqXtoIg2Fw=";
   };
 
   dontUnpack = true;
@@ -72,8 +75,21 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/wp --info
+
+    runHook postInstallCheck
   '';
+
+  passthru = {
+    inherit completion;
+    updateScript = writeScript "update-wp-cli" ''
+      ${lib.getExe nix-update}
+      version=$(nix-instantiate --eval -E "with import ./. {}; wp-cli.version or (lib.getVersion wp-cli)" | tr -d '"')
+      ${lib.getExe' common-updater-scripts "update-source-version"} wp-cli $version --source-key=completion --ignore-same-version --ignore-same-hash
+    '';
+  };
 
   meta = {
     description = "Command line interface for WordPress";
