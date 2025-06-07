@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/sp-nitech/SPTK/releases/tag/v${version}";
     description = "Suite of speech signal processing tools";
     homepage = "https://github.com/sp-nitech/SPTK";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

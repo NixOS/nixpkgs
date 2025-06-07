@@ -50,12 +50,12 @@ buildGoModule rec {
     package = temporal;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Microservice orchestration platform which enables developers to build scalable applications without sacrificing productivity or reliability";
     homepage = "https://temporal.io";
     changelog = "https://github.com/temporalio/temporal/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jpds ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jpds ];
     mainProgram = "temporal-server";
   };
 }

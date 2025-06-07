@@ -128,12 +128,12 @@ python.pkgs.buildPythonApplication rec {
 
   passthru.tests.version = testers.testVersion { package = pdm; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pdm-project.org";
     changelog = "https://github.com/pdm-project/pdm/releases/tag/${version}";
     description = "Modern Python package and dependency manager supporting the latest PEP standards";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       cpcloud
       natsukium
       misilelab
