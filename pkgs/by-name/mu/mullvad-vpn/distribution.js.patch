@@ -1,0 +1,56 @@
+diff --git a/desktop/packages/mullvad-vpn/tasks/distribution.js b/desktop/packages/mullvad-vpn/tasks/distribution.js
+index 56a007d103..70d53e1146 100644
+--- a/desktop/packages/mullvad-vpn/tasks/distribution.js
++++ b/desktop/packages/mullvad-vpn/tasks/distribution.js
+@@ -28,6 +28,7 @@ function newConfig() {
+     publish: null,
+     asar: true,
+     compression: noCompression ? 'store' : 'normal',
++    electronDist: '@electron-dist@',
+     extraResources: [
+       { from: distAssets('ca.crt'), to: '.' },
+       { from: buildAssets('relays.json'), to: '.' },
+@@ -181,11 +182,7 @@ function newConfig() {
+     linux: {
+       target: [
+         {
+-          target: 'deb',
+-          arch: getLinuxTargetArch(),
+-        },
+-        {
+-          target: 'rpm',
++          target: 'dir',
+           arch: getLinuxTargetArch(),
+         },
+       ],
+@@ -194,14 +191,6 @@ function newConfig() {
+       icon: distAssets('icon.icns'),
+       extraFiles: [{ from: distAssets('linux/mullvad-gui-launcher.sh'), to: '.' }],
+       extraResources: [
+-        { from: distAssets(path.join(getLinuxTargetSubdir(), 'mullvad-problem-report')), to: '.' },
+-        { from: distAssets(path.join(getLinuxTargetSubdir(), 'mullvad-setup')), to: '.' },
+-        {
+-          from: distAssets(path.join(getLinuxTargetSubdir(), 'libtalpid_openvpn_plugin.so')),
+-          to: '.',
+-        },
+-        { from: distAssets(path.join('linux', 'apparmor_mullvad')), to: '.' },
+-        { from: distAssets(path.join('binaries', '${env.TARGET_TRIPLE}', 'openvpn')), to: '.' },
+       ],
+     },
+ 
+@@ -504,6 +493,7 @@ function getMacArch() {
+ // than a non-tilde version component
+ // https://docs.fedoraproject.org/en-US/packaging-guidelines/Versioning/#_complex_versioning
+ function getLinuxVersion() {
++  return "@version@";
+   const [version, ...prereleaseParts] = productVersion([]).split('-');
+   const [major, minor] = version.split('.');
+   const prerelease = prereleaseParts.join('-');
+@@ -519,6 +509,7 @@ function getLinuxVersion() {
+ // Returns the product version. The `args` argument is optional. Set it to `'semver'`
+ // to get the version in semver format.
+ function productVersion(extraArgs) {
++  return "@version@";
+   const args = ['run', '-q', '--bin', 'mullvad-version', ...extraArgs];
+   return execFileSync('cargo', args, { encoding: 'utf-8' }).trim();
+ }
