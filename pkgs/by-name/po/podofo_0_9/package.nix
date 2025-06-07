@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   cmake,
   zlib,
   freetype,
@@ -13,16 +13,17 @@
   lua5,
   pkg-config,
   libidn,
-  expat,
 }:
 
 stdenv.mkDerivation rec {
   version = "0.9.8";
   pname = "podofo";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/podofo/${pname}-${version}.tar.gz";
-    sha256 = "sha256-XeYH4V8ZK4rZBzgwB1nYjeoPXM3OO/AASKDJMrxkUVQ=";
+  src = fetchFromGitHub {
+    owner = "podofo";
+    repo = "podofo";
+    rev = version;
+    hash = "sha256-VGsACeCC8xKC1n/ackT576ZU3ZR1LAw8H0l/Q9cH27s=";
   };
 
   outputs = [
@@ -45,7 +46,6 @@ stdenv.mkDerivation rec {
     openssl
     libpng
     libidn
-    expat
     lua5
   ];
 
@@ -64,13 +64,16 @@ stdenv.mkDerivation rec {
         -e 's/^libdir=.*/libdir=@CMAKE_INSTALL_LIBDIR@/' -e "$failNoMatches"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://podofo.sourceforge.net";
     description = "Library to work with the PDF file format";
-    platforms = platforms.all;
-    license = with licenses; [
+    platforms = lib.platforms.all;
+    license = with lib.licenses; [
       gpl2Plus
       lgpl2Plus
+    ];
+    maintainers = with lib.maintainers; [
+      kuflierl
     ];
   };
 }
