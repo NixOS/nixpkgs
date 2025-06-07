@@ -12,7 +12,7 @@ let
   cfg = config.services.displayManager.ly;
   xEnv = config.systemd.services.display-manager.environment;
 
-  ly = cfg.package;
+  ly = cfg.package.override { x11Support = cfg.x11Support; };
 
   iniFmt = pkgs.formats.iniWithGlobalSection { };
 
@@ -57,6 +57,11 @@ in
   options = {
     services.displayManager.ly = {
       enable = mkEnableOption "ly as the display manager";
+      x11Support = mkOption {
+        description = "Whether to enable support for X11";
+        type = lib.types.bool;
+        default = true;
+      };
 
       package = mkPackageOption pkgs [ "ly" ] { };
 
