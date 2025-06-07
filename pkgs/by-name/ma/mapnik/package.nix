@@ -55,12 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" ];
 
   patches = [
-    # The lib/cmake/harfbuzz/harfbuzz-config.cmake file in harfbuzz.dev is faulty,
-    # as it provides the wrong libdir. The workaround is to just rely on
-    # pkg-config to locate harfbuzz shared object files.
-    # Upstream HarfBuzz wants to drop CMake support anyway.
-    # See discussion: https://github.com/mapnik/mapnik/issues/4265
-    ./cmake-harfbuzz.patch
     # Account for full paths when generating libmapnik.pc
     ./export-pkg-config-full-paths.patch
     # Use 'sparsehash' package.
@@ -99,6 +93,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_DEMO_CPP" false)
     ## Would require QT otherwise.
     (lib.cmakeBool "BUILD_DEMO_VIEWER" false)
+    # disable the find_package call and force pkg-config, see https://github.com/mapnik/mapnik/pull/4270
+    (lib.cmakeBool "CMAKE_DISABLE_FIND_PACKAGE_harfbuzz" true)
     # Use 'protozero' package.
     (lib.cmakeBool "USE_EXTERNAL_MAPBOX_PROTOZERO" true)
     # macOS builds fail when using memory mapped file cache.
