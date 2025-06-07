@@ -22,12 +22,12 @@ buildGoModule rec {
     "-s"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for attacking JWT";
     homepage = "https://github.com/hahwul/jwt-hack";
     changelog = "https://github.com/hahwul/jwt-hack/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "jwt-hack";
   };
 }
