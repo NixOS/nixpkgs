@@ -39,32 +39,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-LkiL/8W9MKpmJxtK+s5JvqhOza0BLap1SsaDvbLYR0c=";
   };
 
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
     imagemagick
-  ];
-
-  runtimeLibs = [
-    gtk2
-    sqlite
-    openal
-    cairo
-    libGLU
-    SDL2
-    freealut
-    libglvnd
-    pipewire
-    libpulseaudio
-  ]
-  ++ lib.optionals x11Support [
-    libx11
-    libxi
-    libxcursor
-  ]
-  ++ lib.optionals waylandSupport [
-    wayland
-    libxkbcommon
   ];
 
   desktopItems = [
@@ -99,31 +79,59 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  preFixup =
-    let
-      runtimeLibs' = lib.strings.makeLibraryPath finalAttrs.runtimeLibs;
-    in
-    ''
-      makeWrapper ${lib.meta.getExe dotnet-runtime_8} $out/bin/vintagestory \
-        --prefix LD_LIBRARY_PATH : "${runtimeLibs'}" \
-        --set-default mesa_glthread true \
-        ${lib.strings.optionalString waylandSupport ''
-          --set-default OPENTK_4_USE_WAYLAND 1 \
-        ''} \
-        --add-flags $out/share/vintagestory/Vintagestory.dll
+  makeWrapperArgs = [
+    "--set-default"
+    "mesa_glthread"
+    "true"
+  ]
+  ++ lib.optionals waylandSupport [
+    "--set-default"
+    "OPENTK_4_USE_WAYLAND"
+    "1"
+  ];
 
-      makeWrapper ${lib.meta.getExe dotnet-runtime_8} $out/bin/vintagestory-server \
-        --prefix LD_LIBRARY_PATH : "${runtimeLibs'}" \
-        --set-default mesa_glthread true \
-        --add-flags $out/share/vintagestory/VintagestoryServer.dll
+  runtimeLibraryPath = lib.makeLibraryPath finalAttrs.passthru.runtimeLibs;
+  preFixup = ''
+     makeWrapperArgs+=(--prefix LD_LIBRARY_PATH : "$runtimeLibraryPath")
 
-      find "$out/share/vintagestory/assets/" -not -path "*/fonts/*" -regex ".*/.*[A-Z].*" | while read -r file; do
-        local filename="$(basename -- "$file")"
-        ln -sf "$filename" "''${file%/*}"/"''${filename,,}"
-      done
-    '';
+     makeWrapper ${lib.meta.getExe dotnet-runtime_8} $out/bin/vintagestory \
+      "''${makeWrapperArgs[@]}" \
+       --add-flags $out/share/vintagestory/Vintagestory.dll
 
-  passthru.updateScript = ./update.sh;
+    makeWrapper ${lib.getExe dotnet-runtime_8} $out/bin/vintagestory-server \
+      "''${makeWrapperArgs[@]}" \
+      --add-flags $out/share/vintagestory/VintagestoryServer.dll
+
+     find "$out/share/vintagestory/assets/" -not -path "*/fonts/*" -regex ".*/.*[A-Z].*" | while read -r file; do
+       local filename="$(basename -- "$file")"
+       ln -sf "$filename" "''${file%/*}"/"''${filename,,}"
+     done
+  '';
+
+  passthru = {
+    updateScript = ./update.sh;
+    runtimeLibs = [
+      gtk2
+      sqlite
+      openal
+      cairo
+      libGLU
+      SDL2
+      freealut
+      libglvnd
+      pipewire
+      libpulseaudio
+    ]
+    ++ lib.optionals x11Support [
+      libx11
+      libxi
+      libxcursor
+    ]
+    ++ lib.optionals waylandSupport [
+      wayland
+      libxkbcommon
+    ];
+  };
 
   meta = {
     description = "In-development indie sandbox game about innovation and exploration";
