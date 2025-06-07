@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gentium";
   version = "6.200";
 
   src = fetchzip {
-    url = "http://software.sil.org/downloads/r/gentium/GentiumPlus-${version}.zip";
+    url = "http://software.sil.org/downloads/r/gentium/GentiumPlus-${finalAttrs.version}.zip";
     hash = "sha256-gpVOtmF4Kp3y1Rm00c4o3WQEskO7mY1Z5SVaYHI0hzg=";
   };
 
@@ -17,8 +17,8 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     install -Dm644 *.ttf -t $out/share/fonts/truetype
-    install -Dm644 FONTLOG.txt README.txt -t $out/share/doc/${pname}-${version}
-    cp -r documentation $out/share/doc/${pname}-${version}
+    install -Dm644 FONTLOG.txt README.txt -t $out/share/doc/${finalAttrs.pname}-${finalAttrs.version}
+    cp -r documentation $out/share/doc/${finalAttrs.pname}-${finalAttrs.version}
 
     runHook postInstall
   '';
@@ -49,4 +49,4 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.ofl;
     platforms = platforms.all;
   };
-}
+})
