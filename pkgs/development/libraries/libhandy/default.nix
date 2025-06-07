@@ -25,7 +25,7 @@
   runCommand,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libhandy";
   version = "1.8.3";
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/libhandy/${lib.versions.majorMinor finalAttrs.version}/libhandy-${finalAttrs.version}.tar.xz";
     hash = "sha256-BbSXIpBz/1V/ELMm4HTFBm+HQ6MC1IIKuXvLXNLasIc=";
   };
 
@@ -122,8 +122,9 @@ stdenv.mkDerivation rec {
 
   passthru =
     {
+      bin = finalAttrs.finalPackage.${finalAttrs.outputBin}; # fixes lib.getExe
       updateScript = gnome.updateScript {
-        packageName = pname;
+        packageName = "libhandy";
         versionPolicy = "odd-unstable";
       };
     }
@@ -150,4 +151,4 @@ stdenv.mkDerivation rec {
     teams = [ teams.gnome ];
     platforms = platforms.unix;
   };
-}
+})
