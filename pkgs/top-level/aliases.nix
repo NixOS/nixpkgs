@@ -1,4 +1,4 @@
-lib: self: _super:
+lib': self: _super:
 
 ### Deprecated aliases - for backward compatibility
 ### Please maintain this list in ASCIIbetical ordering.
@@ -209,14 +209,59 @@ let
     n: alias:
     if builtins.hasAttr n _super then throw "Alias ${n} is still in all-packages.nix" else alias;
 
+  # `config.warnAliases` machinery
+  # These are no-ops when warnAliases=false
+
+  selfWithAliasWarningNames =
+    if _super.config.warnAliases then
+      lib.mapAttrs (
+        name: package:
+        if lib.isDerivation package then
+          # smuggle the attribute name of each package
+          package // { __aliasWarningAttrName = name; }
+        else
+          package
+      ) self
+    else
+      self;
+
+  addAliasWarnOnInstantiate =
+    if _super.config.warnAliases then
+      name: alias:
+      if !alias ? __aliasWarningAttrName then
+        alias
+      else
+        # our lib.warnOnInstantiate override also removes __aliasWarningAttrName
+        lib.warnOnInstantiate "'${name}' has been renamed to/replaced by '${alias.__aliasWarningAttrName}'"
+          alias
+    else
+      name: alias: alias;
+
+  lib = lib'.extend (
+    final: prev:
+    lib'.optionalAttrs _super.config.warnAliases {
+      # make warnOnInstantiate also remove __aliasWarningAttrName
+      # to enable tailoring alias warnings without producing double warnings
+      warnOnInstantiate =
+        message: package:
+        prev.warnOnInstantiate message (prev.removeAttrs package [ "__aliasWarningAttrName" ]);
+    }
+  );
+
   mapAliases =
     aliases:
     lib.mapAttrs (
-      n: alias: removeDistribute (removeRecurseForDerivations (checkInPkgs n alias))
+      name: alias:
+      addAliasWarnOnInstantiate name (
+        removeDistribute (removeRecurseForDerivations (checkInPkgs name alias))
+      )
     ) aliases;
 in
 
-with self;
+with selfWithAliasWarningNames;
+let
+  pkgs = selfWithAliasWarningNames;
+in
 
 mapAliases {
   # Added 2018-07-16 preserve, reason: forceSystem should not be used directly in Nixpkgs.

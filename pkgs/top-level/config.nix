@@ -101,6 +101,23 @@ let
       '';
     };
 
+    warnAliases = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to show warnings when accessing aliases.
+
+        While it is true by default it is perfectly okay to disable
+        this. For example it make sense to disable alias warnings when
+        running `nix search`.
+
+        This is a tool to gently let you know which attributes in your code
+        are aliases. Projects that aren't Nixpkgs should however be cautious
+        of instantly removing all usages of aliases, as migrating too soon
+        can break compatibility with the stable Nixpkgs releases.
+      '';
+    };
+
     allowUnfree = mkOption {
       type = types.bool;
       default = false;
