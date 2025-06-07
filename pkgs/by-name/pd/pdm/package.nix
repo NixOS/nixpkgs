@@ -19,6 +19,10 @@ let
           hash = "sha256-UBdgFN+fvbjz+rp8+rog8FW2jwO/jCfUPV7UehJKiV8=";
         };
       });
+      # pdm requires ...... -> jbig2dec which is AGPL only
+      moto = super.moto.overridePythonAttrs (old: rec {
+        doCheck = false;
+      });
     };
   };
 in
