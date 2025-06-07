@@ -17,6 +17,7 @@
   gnused,
   gnutls,
   iproute2,
+  hostname,
   json-glib,
   krb5,
   libssh,
@@ -36,6 +37,9 @@
   systemd,
   udev,
   xmlto,
+
+  withBranding ? true,
+  nixos-icons ? null,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -147,6 +151,17 @@ stdenv.mkDerivation (finalAttrs: {
 
     # hardcode libexecdir, I am assuming that cockpit only use it to find it's binaries
     printf 'def get_libexecdir() -> str:\n\treturn "%s"' "$out/libexec" >> src/cockpit/packages.py
+
+    # patch paths used as visibility conditions in apps
+    substituteInPlace pkg/*/manifest.json \
+      --replace-warn '"/usr/bin' '"/run/current-system/sw/bin' \
+      --replace-warn '"/usr/sbin' '"/run/current-system/sw/bin' \
+      --replace-warn '"/usr/share' '"/run/current-system/sw/share' \
+      --replace-warn '"/lib/systemd' '"/run/current-system/sw/lib/systemd'
+
+    # replace reference to system python interpreter, used for e.g. sosreport
+    substituteInPlace pkg/lib/python.ts \
+      --replace-fail /usr/libexec/platform-python ${python3Packages.python.interpreter}
   '';
 
   configureFlags = [
@@ -185,6 +200,7 @@ stdenv.mkDerivation (finalAttrs: {
         lib.makeBinPath [
           iproute2
           gnused
+          hostname
         ]
       }
 
@@ -197,6 +213,19 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace $out/lib/systemd/*/* \
       --replace-warn /bin /run/current-system/sw/bin
+
+    ${lib.optionalString withBranding ''
+      mkdir -p $out/share/cockpit/branding/nixos
+      pushd $out/share/cockpit/branding/nixos
+
+      icons="${nixos-icons}/share/icons/hicolor"
+      ln -s $icons/16x16/apps/nix-snowflake.png favicon.ico
+      ln -s $icons/256x256/apps/nix-snowflake.png logo.png
+      ln -s $icons/256x256/apps/nix-snowflake.png apple-touch-icon.png
+      cp ${./branding.css} branding.css
+
+      popd
+    ''}
 
     runHook postFixup
   '';
@@ -217,7 +246,7 @@ stdenv.mkDerivation (finalAttrs: {
     export G_MESSAGES_DEBUG=cockpit-ws,cockpit-wrapper,cockpit-bridge
     export PATH=$PATH:$(pwd)
 
-    make check  -j$NIX_BUILD_CORES || true
+    make check -j$NIX_BUILD_CORES || true
     npm run eslint
     npm run stylelint
   '';
