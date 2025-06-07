@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  bash,
   fetchFromGitHub,
   gtk3,
   pkg-config,
@@ -32,13 +33,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     intltool
-    pkg-config
+    libxslt
     makeWrapper
+    pkg-config
     wrapGAppsHook3
   ];
   buildInputs = [
     gtk3
-    libxslt
+    bash # so patchShebangs can patch #!/bin/sh in xarchiver.tap
   ];
 
   postFixup = ''
@@ -57,6 +59,8 @@ stdenv.mkDerivation rec {
       ]
     }
   '';
+
+  strictDeps = true;
 
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
