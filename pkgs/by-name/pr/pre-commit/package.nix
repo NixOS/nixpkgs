@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  libiconv,
   cargo,
   coursier,
   dotnet-sdk,
@@ -14,6 +13,8 @@
   julia,
   julia-bin,
   pre-commit,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 with python3Packages;
@@ -24,9 +25,7 @@ in
 buildPythonApplication rec {
   pname = "pre-commit";
   version = "4.2.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pre-commit";
@@ -41,7 +40,11 @@ buildPythonApplication rec {
     ./pygrep-pythonpath.patch
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     cfgv
     identify
     nodeenv
@@ -55,7 +58,7 @@ buildPythonApplication rec {
       cargo
       gitMinimal
       go
-      libiconv # For rust tests on Darwin
+      # libiconv # For rust tests on Darwin
       perl
       pytest-env
       pytest-forked
@@ -64,6 +67,8 @@ buildPythonApplication rec {
       re-assert
       cabal-install
       julia'
+      versionCheckHook
+      writableTmpDirAsHomeHook
     ]
     ++ lib.optionals (!i686Linux) [
       # coursier can be moved back to the main nativeCheckInputs list once we’re able to bootstrap a
@@ -79,6 +84,7 @@ buildPythonApplication rec {
       # Node.js-related tests that are currently disabled on i686-linux.
       nodejs
     ];
+  versionCheckProgramArg = "--version";
 
   postPatch = ''
     substituteInPlace pre_commit/resources/hook-tmpl \
@@ -110,8 +116,6 @@ buildPythonApplication rec {
       export DOTNET_ROOT="${dotnet-sdk}/share/dotnet"
     ''
     + ''
-      export HOME=$(mktemp -d)
-
       git init -b master
 
       python -m venv --system-site-packages venv
@@ -213,11 +217,12 @@ buildPythonApplication rec {
     inherit gitMinimal pre-commit;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Framework for managing and maintaining multi-language pre-commit hooks";
     homepage = "https://pre-commit.com/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ borisbabic ];
+    changelog = "https://github.com/pre-commit/pre-commit/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ borisbabic ];
     mainProgram = "pre-commit";
   };
 }
