@@ -38,18 +38,23 @@ versionCheckHook(){
     : "${versionCheckKeepEnvironment:=}"
 
     local cmdProgram cmdArg echoPrefix
-    if [[ -z "${versionCheckProgram-}" ]]; then
-        if [[ -z "${pname-}" ]]; then
-            echo "both \$pname and \$versionCheckProgram are empty, so" \
-                "we don't know which program to run the versionCheckPhase" \
-                "upon" >&2
-            exit 2
-        else
-            cmdProgram="${!outputBin}/bin/$pname"
-        fi
-    else
+    if [[ ! -z "${versionCheckProgram-}" ]]; then
         cmdProgram="$versionCheckProgram"
+    elif [[ ! -z "${NIX_MAIN_PROGRAM-}" ]]; then
+        cmdProgram="${!outputBin}/bin/${NIX_MAIN_PROGRAM}"
+    elif [[ ! -z "${pname-}" ]]; then
+        echo "versionCheckHook: Package \`${pname}\` does not have the \`meta.mainProgram\` attribute." \
+            "We'll assume that the main program has the same name for now, but this behavior is deprecated," \
+            "because it leads to surprising errors when the assumption does not hold." \
+            "If the package has a main program, please set \`meta.mainProgram\` in its definition to make this warning go away." \
+            "Should the binary that outputs the intended version differ from \`meta.mainProgram\`, consider setting \`versionCheckProgram\` instead." >&2
+        cmdProgram="${!outputBin}/bin/${pname}"
+    else
+        echo "versionCheckHook: \$versionCheckProgram, \$NIX_MAIN_PROGRAM and \$pname are all empty, so" \
+            "we don't know which program to run the versionCheckPhase upon" >&2
+        exit 2
     fi
+
     if [[ ! -x "$cmdProgram" ]]; then
         echo "versionCheckHook: $cmdProgram was not found, or is not an executable" >&2
         exit 2
