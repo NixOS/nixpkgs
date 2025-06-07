@@ -520,8 +520,14 @@ in
   };
   firefoxpwa = runTest ./firefoxpwa.nix;
   firejail = runTest ./firejail.nix;
-  firewall = handleTest ./firewall.nix { nftables = false; };
-  firewall-nftables = handleTest ./firewall.nix { nftables = true; };
+  firewall = runTest {
+    imports = [ ./firewall.nix ];
+    _module.args.nftables = false;
+  };
+  firewall-nftables = runTest {
+    imports = [ ./firewall.nix ];
+    _module.args.nftables = true;
+  };
   fish = runTest ./fish.nix;
   firezone = runTest ./firezone/firezone.nix;
   flannel = handleTestOn [ "x86_64-linux" ] ./flannel.nix { };
