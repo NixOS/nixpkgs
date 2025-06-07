@@ -6,18 +6,19 @@
   gobject-introspection,
   gtk4-layer-shell,
   libadwaita,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonPackage rec {
   pname = "niriswitcher";
-  version = "0.5.2";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "isaksamsten";
     repo = "niriswitcher";
     tag = version;
-    hash = "sha256-jXnob/CJ3wrqYhbFRu7TnnnCrsKaDazD3t9lZoJVhdQ=";
+    hash = "sha256-njEd9s432qlBeQSXRL5gDSIEgzF0qwceND09aGTRo0U=";
   };
 
   build-system = [ python3Packages.hatchling ];
@@ -42,6 +43,8 @@ python3Packages.buildPythonPackage rec {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gtk4-layer-shell ]}
     )
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Application switcher for niri";
