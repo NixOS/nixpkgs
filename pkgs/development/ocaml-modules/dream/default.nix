@@ -1,5 +1,4 @@
 {
-  lib,
   buildDunePackage,
   dream-pure,
   lwt_ppx,
@@ -18,13 +17,38 @@
   markup,
   mirage-clock,
   mirage-crypto-rng,
-  mirage-crypto-rng-lwt,
   multipart_form-lwt,
   ssl,
   unstrctrd,
   uri,
   yojson,
+  # for mirage-crypro-rng-lwt 1.2.0
+  # It is removed from mirage-crypto 2.1.0 now.
+  fetchurl,
+  duration,
+  logs,
+  mtime,
+  lwt,
 }:
+
+let
+  mirage-crypto-rng-lwt = buildDunePackage rec {
+    pname = "mirage-crypto-rng-lwt";
+    version = "1.2.0";
+    src = fetchurl {
+      url = "https://github.com/mirage/mirage-crypto/releases/download/v${version}/mirage-crypto-${version}.tbz";
+      hash = "sha256-CVQrzZbB02j/m6iFMQX0wXgdjJTCQA3586wGEO4H5n4=";
+    };
+    doCheck = true;
+    propagatedBuildInputs = [
+      mirage-crypto-rng
+      duration
+      logs
+      mtime
+      lwt
+    ];
+  };
+in
 
 buildDunePackage {
   pname = "dream";
