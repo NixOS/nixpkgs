@@ -1,10 +1,6 @@
-{
-  system ? builtins.currentSystem,
-  pkgs ? import ../.. { inherit system; },
-  ...
-}:
+{ runTest, pkgs }:
 let
-  lib = pkgs.lib;
+  inherit (pkgs) lib;
   testScript = ''
     machine.start()
     machine.wait_for_unit("ferretdb.service")
@@ -12,10 +8,8 @@ let
     machine.succeed("mongosh --eval 'use myNewDatabase;' --eval 'db.myCollection.insertOne( { x: 1 } );'")
   '';
 in
-with import ../lib/testing-python.nix { inherit system; };
 {
-
-  postgresql = makeTest {
+  postgresql = runTest {
     inherit testScript;
     name = "ferretdb-postgresql";
     meta.maintainers = with lib.maintainers; [ julienmalka ];
@@ -47,8 +41,7 @@ with import ../lib/testing-python.nix { inherit system; };
         environment.systemPackages = with pkgs; [ mongosh ];
       };
   };
-
-  sqlite = makeTest {
+  sqlite = runTest {
     inherit testScript;
     name = "ferretdb-sqlite";
     meta.maintainers = with lib.maintainers; [ julienmalka ];
