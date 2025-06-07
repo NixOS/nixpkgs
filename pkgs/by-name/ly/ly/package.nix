@@ -8,6 +8,7 @@
   zig_0_14,
   callPackage,
   nixosTests,
+  x11Support ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,9 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
     zig_0_14.hook
   ];
   buildInputs = [
-    libxcb
     linux-pam
-  ];
+  ] ++ (lib.optionals x11Support [ libxcb ]);
 
   postPatch = ''
     ln -s ${
@@ -38,6 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
       }
     } $ZIG_GLOBAL_CACHE_DIR/p
   '';
+  zigBuildFlags = [
+    "-Denable_x11_support=${lib.boolToString x11Support}"
+  ];
 
   passthru.tests = { inherit (nixosTests) ly; };
 
