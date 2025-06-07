@@ -4,33 +4,25 @@
   boost,
   cmake,
   extra-cmake-modules,
-  kparts,
-  kpmcore,
-  kirigami2,
-  kservice,
+  kdePackages,
   libatasmart,
   libxcb,
   yaml-cpp,
   libpwquality,
   parted,
-  polkit-qt,
   python3,
-  qtbase,
-  qtquickcontrols,
-  qtsvg,
-  qttools,
-  qtwebengine,
+  qt6,
+  stdenv,
   util-linux,
   tzdata,
   ckbcomp,
   xkeyboard_config,
-  mkDerivation,
   nixos-extensions ? false,
   # passthru.tests
   calamares-nixos,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "calamares";
   version = "3.3.13";
 
@@ -60,25 +52,25 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    qt6.wrapQtAppsHook
   ];
   buildInputs = [
     boost
-    kparts.dev
-    kpmcore.out
-    kservice.dev
-    kirigami2
+    kdePackages.kparts.dev
+    kdePackages.kpmcore.dev
+    kdePackages.kservice.dev
+    kdePackages.kirigami
     libatasmart
     libxcb
     yaml-cpp
     libpwquality
     parted
-    polkit-qt
+    kdePackages.polkit-qt-1
     python3
-    qtbase
-    qtquickcontrols
-    qtsvg
-    qttools
-    qtwebengine.dev
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qttools
+    qt6.qtwebengine.dev
     util-linux
   ];
 
