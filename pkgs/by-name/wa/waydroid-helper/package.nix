@@ -16,6 +16,7 @@
   dbus,
   systemd,
   bash,
+  fakeroot,
   gobject-introspection,
 }:
 
@@ -54,6 +55,7 @@ python3Packages.buildPythonApplication rec {
     pkg-config
     wrapGAppsHook4
     desktop-file-utils
+    fakeroot
     gobject-introspection
   ];
 
