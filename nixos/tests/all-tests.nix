@@ -319,7 +319,7 @@ in
   clatd = runTest ./clatd.nix;
   clickhouse = import ./clickhouse { inherit runTest; };
   cloud-init = runTest ./cloud-init.nix;
-  cloud-init-hostname = handleTest ./cloud-init-hostname.nix { };
+  cloud-init-hostname = runTest ./cloud-init-hostname.nix;
   cloudlog = runTest ./cloudlog.nix;
   cntr = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./cntr.nix { };
   cockpit = runTest ./cockpit.nix;
