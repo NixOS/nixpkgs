@@ -14,8 +14,7 @@ buildPythonPackage {
     pname
     version
     src
-    meta
-    CASROOT
+    env
     ;
 
   pyproject = false;
@@ -42,4 +41,9 @@ buildPythonPackage {
   '';
 
   enableParallelBuilding = true;
+
+  meta = base.meta // {
+    # Related issue: https://github.com/horizon-eda/horizon/issues/809
+    broken = true;
+  };
 }
