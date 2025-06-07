@@ -237,7 +237,8 @@ let
       }
     );
 
-  condaTests =
+  # depends on mypy, which depends on CPython internals
+  condaTests = lib.optionalAttrs (!python.isPyPy) (
     let
       requests = callPackage (
         {
@@ -276,7 +277,8 @@ let
       condaExamplePackage = runCommand "import-requests" { } ''
         ${pythonWithRequests.interpreter} -c "import requests" > $out
       '';
-    };
+    }
+  );
 
 in
 lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform) (
