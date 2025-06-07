@@ -70,10 +70,12 @@ in
   # Rely on GCP's firewall instead
   networking.firewall.enable = mkDefault false;
 
-  # Configure default metadata hostnames
-  networking.extraHosts = ''
-    169.254.169.254 metadata.google.internal metadata
-  '';
+  networking.hosts = {
+    "169.254.169.254" = [
+      "metadata.google.internal"
+      "metadata"
+    ];
+  };
 
   networking.timeServers = [ "metadata.google.internal" ];
 

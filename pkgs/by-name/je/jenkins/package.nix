@@ -8,7 +8,7 @@
   gnused,
   makeWrapper,
   nix,
-  openjdk,
+  jdk21,
   writeScript,
   nixosTests,
   jq,
@@ -33,10 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
     cp "$src" "$out/webapps/jenkins.war"
 
     # Create the `jenkins-cli` command.
-    ${openjdk}/bin/jar -xf "$src" WEB-INF/lib/cli-${finalAttrs.version}.jar \
+    ${jdk21}/bin/jar -xf "$src" WEB-INF/lib/cli-${finalAttrs.version}.jar \
       && mv WEB-INF/lib/cli-${finalAttrs.version}.jar "$out/share/jenkins-cli.jar"
 
-    makeWrapper "${openjdk}/bin/java" "$out/bin/jenkins-cli" \
+    makeWrapper "${jdk21}/bin/java" "$out/bin/jenkins-cli" \
       --add-flags "-jar $out/share/jenkins-cli.jar"
   '';
 

@@ -1960,6 +1960,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  checkmate-nvim = buildVimPlugin {
+    pname = "checkmate.nvim";
+    version = "2025-06-05";
+    src = fetchFromGitHub {
+      owner = "bngarren";
+      repo = "checkmate.nvim";
+      rev = "aabe87c58d3c30f45aadab4bef38536e9933cd4a";
+      sha256 = "1qc3i32hkp59sha7rxbil1r76krlxgqqxn9wj7qlabc99bh11d3s";
+    };
+    meta.homepage = "https://github.com/bngarren/checkmate.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   ci_dark = buildVimPlugin {
     pname = "ci_dark";
     version = "2022-03-27";
