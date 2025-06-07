@@ -32,12 +32,12 @@ python3.pkgs.buildPythonApplication rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to monitor creation, deletion and changes to LDAP objects";
     mainProgram = "ldapmonitor";
     homepage = "https://github.com/p0dalirius/LDAPmonitor";
     changelog = "https://github.com/p0dalirius/LDAPmonitor/releases/tag/${version}";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }
