@@ -6,7 +6,7 @@
   gperf,
   arpa2cm,
   quickder,
-  nix-update-script,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     quickder
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "Little LDAP: Event-driven, lock-free kernel for dynamic data servers, clients, filters";
