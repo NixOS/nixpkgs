@@ -4,22 +4,22 @@
   fetchFromGitHub,
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "pngpaste";
   version = "0.2.3";
-in
-stdenv.mkDerivation {
-  inherit pname version;
+
   src = fetchFromGitHub {
     owner = "jcsalterego";
     repo = "pngpaste";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "uvajxSelk1Wfd5is5kmT2fzDShlufBgC0PDCeabEOSE=";
   };
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp pngpaste $out/bin
+    runHook postInstall
   '';
 
   meta = {
@@ -32,9 +32,9 @@ stdenv.mkDerivation {
       falling back to PNG.
     '';
     homepage = "https://github.com/jcsalterego/pngpaste";
-    changelog = "https://github.com/jcsalterego/pngpaste/raw/${version}/CHANGELOG.md";
+    changelog = "https://github.com/jcsalterego/pngpaste/raw/${finalAttrs.version}/CHANGELOG.md";
     platforms = lib.platforms.darwin;
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ samw ];
   };
-}
+})
