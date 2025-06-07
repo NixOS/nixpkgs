@@ -5743,10 +5743,7 @@ with pkgs;
   openjdk_headless = jdk_headless;
 
   graalvmPackages = recurseIntoAttrs (callPackage ../development/compilers/graalvm { });
-  buildGraalvmNativeImage =
-    (callPackage ../build-support/build-graalvm-native-image {
-      graalvmDrv = graalvmPackages.graalvm-ce;
-    }).override;
+  buildGraalvmNativeImage = callPackage ../build-support/build-graalvm-native-image { };
 
   openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt { };
 
