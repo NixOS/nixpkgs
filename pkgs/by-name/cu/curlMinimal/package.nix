@@ -46,7 +46,7 @@
   libpsl,
   rtmpSupport ? false,
   rtmpdump,
-  scpSupport ? zlibSupport && !stdenv.hostPlatform.isSunOS && !stdenv.hostPlatform.isCygwin,
+  scpSupport ? false,
   libssh2,
   wolfsslSupport ? false,
   wolfssl,

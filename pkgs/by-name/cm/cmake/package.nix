@@ -50,10 +50,22 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString qt5UI "-qt5UI";
   version = "3.31.7";
 
-  src = fetchurl {
-    url = "https://cmake.org/files/v${lib.versions.majorMinor finalAttrs.version}/cmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ptLrHr65kTDf5j71o0DD/bEUMczj18oUhSTBJZJM6mg=";
-  };
+  src =
+    let
+      # detect bootstrapping fetchurl and avoid the override there as it isn't overridable
+      fetchurl' =
+        if lib.isAttrs fetchurl then
+          fetchurl.override {
+            # avoid infinite recursion through curl -> libssh2 -> cmakeMinimal
+            curl = curlMinimal;
+          }
+        else
+          fetchurl;
+    in
+    fetchurl' {
+      url = "https://cmake.org/files/v${lib.versions.majorMinor finalAttrs.version}/cmake-${finalAttrs.version}.tar.gz";
+      hash = "sha256-ptLrHr65kTDf5j71o0DD/bEUMczj18oUhSTBJZJM6mg=";
+    };
 
   patches =
     [
