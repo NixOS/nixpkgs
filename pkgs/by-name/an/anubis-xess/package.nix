@@ -4,7 +4,7 @@ buildNpmPackage {
   pname = "${anubis.pname}-xess";
   inherit (anubis) version src;
 
-  npmDepsHash = "sha256-hTKTTBmfMGv6I+4YbWrOt6F+qD6ysVYi+DEC1konBFk=";
+  npmDepsHash = "sha256-wI8XCUGq3aI20B++RAT3lc/nBrDMEmE9+810lewzXa0=";
 
   buildPhase = ''
     runHook preBuild
