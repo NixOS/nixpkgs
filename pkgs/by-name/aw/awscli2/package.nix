@@ -64,20 +64,20 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.27.2"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.27.8"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     tag = version;
-    hash = "sha256-rdgjA6t5L4mNKnyRyNdIyzX6fjMUgbD0YCjresK94Dg=";
+    hash = "sha256-AluBRKB5HKK+8Pb2UooUWqrE48ZNGffkW1z3mLHzVRg=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail 'flit_core>=3.7.1,<3.9.1' 'flit_core>=3.7.1' \
-      --replace-fail 'awscrt==0.25.4' 'awscrt>=0.25.4' \
+      --replace-fail 'awscrt==' 'awscrt>=' \
       --replace-fail 'cryptography>=40.0.0,<43.0.2' 'cryptography>=43.0.0' \
       --replace-fail 'distro>=1.5.0,<1.9.0' 'distro>=1.5.0' \
       --replace-fail 'docutils>=0.10,<0.20' 'docutils>=0.10' \

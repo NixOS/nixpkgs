@@ -4,6 +4,7 @@
   fetchFromGitHub,
   kernel,
   kernelModuleMakeFlags,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,13 +18,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-jVkcvURFlihKW2vFvAaqzKdtexPXywRa2LkPkIhmdeU=";
   };
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ udevCheckHook ] ++ kernel.moduleBuildDependencies;
 
   makeFlags = kernelModuleMakeFlags ++ [
     "KERNELRELEASE=${kernel.modDirVersion}"
     "BUILD_KERNEL_PATH=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=$(out)/lib/modules/${kernel.modDirVersion}"
   ];
+
+  doInstallCheck = true;
 
   postInstall = ''
     mkdir -p $out/etc/udev/rules.d

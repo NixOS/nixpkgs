@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   asciidoc,
   docbook_xml_dtd_45,
   docbook_xsl,
@@ -51,6 +52,15 @@ stdenv.mkDerivation (finalAttrs: {
       docbook_xsl
       libxslt.bin
     ];
+
+  # TODO: remove together with ninja 1.11
+  patches = lib.optionals (lib.versionOlder finalAttrs.version "1.12") [
+    (fetchpatch {
+      name = "ninja1.11-python3.13-compat.patch";
+      url = "https://github.com/ninja-build/ninja/commit/9cf13cd1ecb7ae649394f4133d121a01e191560b.patch";
+      hash = "sha256-zlMs9LDJ2thtiSUjbsONyqoyYxrB/Ilt2Ljr0nCU6nQ=";
+    })
+  ];
 
   postPatch = ''
     # write rebuild args to file after bootstrap

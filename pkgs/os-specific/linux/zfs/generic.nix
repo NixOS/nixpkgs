@@ -10,6 +10,7 @@ let
       coreutils,
       linuxPackages,
       perl,
+      udevCheckHook,
       configFile ? "all",
 
       # Userspace dependencies
@@ -145,7 +146,10 @@ let
           nukeReferences
         ]
         ++ optionals buildKernel (kernel.moduleBuildDependencies ++ [ perl ])
-        ++ optional buildUser pkg-config;
+        ++ optionals buildUser [
+          pkg-config
+          udevCheckHook
+        ];
       buildInputs =
         optionals buildUser [
           zlib
@@ -197,6 +201,8 @@ let
       makeFlags = optionals buildKernel kernelModuleMakeFlags;
 
       enableParallelBuilding = true;
+
+      doInstallCheck = true;
 
       installFlags = [
         "sysconfdir=\${out}/etc"

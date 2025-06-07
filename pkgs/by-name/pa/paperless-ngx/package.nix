@@ -150,6 +150,7 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "django-allauth"
+    "redis"
   ];
 
   dependencies =

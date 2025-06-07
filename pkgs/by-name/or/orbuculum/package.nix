@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
     SDL2
   ];
 
+  doInstallCheck = true;
+
   installFlags = [
     "INSTALL_ROOT=$(out)/"
   ];

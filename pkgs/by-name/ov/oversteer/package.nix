@@ -17,6 +17,7 @@
   gobject-introspection,
   bash,
   linuxConsoleTools,
+  udevCheckHook,
 }:
 
 let
@@ -60,6 +61,7 @@ stdenv.mkDerivation {
     gobject-introspection
     meson
     udev
+    udevCheckHook
     ninja
     appstream
     appstream-glib
@@ -92,6 +94,8 @@ stdenv.mkDerivation {
     substituteInPlace $out/lib/udev/rules.d/99-fanatec-wheel-perms.rules \
       --replace-fail /usr/bin/evdev-joystick ${linuxConsoleTools}/bin/evdev-joystick
   '';
+
+  doInstallCheck = true;
 
   patches = [ ];
 

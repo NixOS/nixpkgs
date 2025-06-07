@@ -114,6 +114,8 @@ stdenv.mkDerivation {
       "-DNO_GUI=ON"
     ];
 
+  doInstallCheck = true;
+
   postInstall =
     ''
       # But when we put all the libraries in lib/${system}-gnu, then SANE can't find the

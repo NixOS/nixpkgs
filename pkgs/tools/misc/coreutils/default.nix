@@ -55,6 +55,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-6LsmrQKT+bWh/EP7QrqXDjEsZs6SwbCxZxPXUA2yUb8=";
   };
 
+  patches = [
+    # Heap buffer overflow that's been here since coreutils 7.2 in 2009:
+    # https://www.openwall.com/lists/oss-security/2025/05/27/2
+    ./CVE-2025-5278.patch
+  ];
+
   postPatch =
     ''
       # The test tends to fail on btrfs, f2fs and maybe other unusual filesystems.

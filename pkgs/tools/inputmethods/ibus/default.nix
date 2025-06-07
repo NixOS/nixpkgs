@@ -31,6 +31,8 @@
   withWayland ? true,
   libxkbcommon,
   wayland,
+  wayland-protocols,
+  wayland-scanner,
   buildPackages,
   runtimeShell,
   nixosTests,
@@ -61,13 +63,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "ibus";
-  version = "1.5.31";
+  version = "1.5.32";
 
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus";
-    rev = version;
-    sha256 = "sha256-YMCtLIK/9iUdS37Oiow7WMhFFPKhomNXvzWbLzlUkdQ=";
+    tag = version;
+    hash = "sha256-Rp2Aw2C2LXMBp8++pnZtPHiPoFDERpkDsKd0E//twuY=";
   };
 
   patches = [
@@ -136,18 +138,22 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  nativeBuildInputs = [
-    autoreconfHook
-    gtk-doc
-    gettext
-    makeWrapper
-    pkg-config
-    python3BuildEnv
-    vala
-    wrapGAppsHook3
-    dbus-launch
-    gobject-introspection
-  ];
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      gtk-doc
+      gettext
+      makeWrapper
+      pkg-config
+      python3BuildEnv
+      vala
+      wrapGAppsHook3
+      dbus-launch
+      gobject-introspection
+    ]
+    ++ lib.optionals withWayland [
+      wayland-scanner
+    ];
 
   propagatedBuildInputs = [
     glib
@@ -171,6 +177,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withWayland [
       libxkbcommon
       wayland
+      wayland-protocols
     ];
 
   enableParallelBuilding = true;

@@ -99,14 +99,6 @@ let
   };
 
   kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
-  # Determine the set of modules that we need to mount the root FS.
-  modulesClosure = pkgs.makeModulesClosure {
-    rootModules = config.boot.initrd.availableKernelModules ++ config.boot.initrd.kernelModules;
-    kernel = config.system.modulesTree;
-    firmware = config.hardware.firmware;
-    allowMissing = false;
-    inherit (config.boot.initrd) extraFirmwarePaths;
-  };
 
   initrdBinEnv = pkgs.buildEnv {
     name = "initrd-bin-env";
@@ -475,7 +467,7 @@ in
             }
           '';
 
-          "/lib".source = "${modulesClosure}/lib";
+          "/lib".source = "${config.system.build.modulesClosure}/lib";
 
           "/etc/modules-load.d/nixos.conf".text = concatStringsSep "\n" config.boot.initrd.kernelModules;
 

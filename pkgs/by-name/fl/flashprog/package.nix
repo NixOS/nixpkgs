@@ -58,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 ../util/50-flashprog.rules "$out/lib/udev/rules.d/50-flashprog.rules"
   '';
 
+  doInstallCheck = true;
+
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
     allowedVersions = "^[0-9\\.]+$";

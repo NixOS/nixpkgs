@@ -8,6 +8,7 @@
   enableUdev ?
     stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isAndroid,
   udev,
+  udevCheckHook,
   withExamples ? false,
   withStatic ? false,
   withDocs ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
@@ -34,6 +35,10 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ] ++ lib.optionals withDocs [ doxygen ];
   propagatedBuildInputs = lib.optional enableUdev udev;
+
+  # Many dependents are dealing with hardware devices, exposing udev rules for them.
+  # Checking these by propagated hook might improve discoverability
+  propagatedNativeBuildInputs = lib.optional enableUdev udevCheckHook;
 
   dontDisableStatic = withStatic;
 
