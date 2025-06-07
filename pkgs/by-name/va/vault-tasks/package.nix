@@ -2,10 +2,11 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  installShellFiles,
   nix-update-script,
 }:
 let
-  version = "0.11.2";
+  version = "0.12.0";
 in
 rustPlatform.buildRustPackage {
   pname = "vault-tasks";
@@ -14,12 +15,23 @@ rustPlatform.buildRustPackage {
     owner = "louis-thevenet";
     repo = "vault-tasks";
     rev = "v${version}";
-    hash = "sha256-DcnOuQ37fzLVJOteP7ZiA9IxNAd6lH6zelaO5GCvakk=";
+    hash = "sha256-PMqGqvyxgkGRVahQ+ruDA0vFT0162DrZU92nT4SMTGw=";
   };
   useFetchCargoVendor = true;
-  cargoHash = "sha256-/5CpIPdqIvxwiplMqXZ1J04oQoK9rnzDP1N7ffrbJDk=";
+  cargoHash = "sha256-34c5i2kIoQuTkm1SF7bYX109noVGaGJ47b2FCxQUyB8=";
 
-  postInstall = "install -Dm444 desktop/vault-tasks.desktop -t $out/share/applications";
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  postInstall = ''
+    install -Dm444 desktop/vault-tasks.desktop -t $out/share/applications
+
+    installShellCompletion \
+      --bash $(out/bin/vault-tasks generate-completions bash) \
+      --fish $(out/bin/vault-tasks generate-completions fish) \
+      --zsh $(out/bin/vault-tasks generate-completions zsh)
+  '';
 
   passthru.updateScript = nix-update-script { };
 
