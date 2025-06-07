@@ -25,5 +25,6 @@ buildDunePackage rec {
     '';
     changelog = "https://raw.githubusercontent.com/Chris00/ocaml-benchmark/refs/tags/v${version}/CHANGES.md";
     license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ momeemt ];
   };
 }
