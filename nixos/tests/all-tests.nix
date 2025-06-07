@@ -558,7 +558,7 @@ in
   gancio = runTest ./gancio.nix;
   garage = handleTest ./garage { };
   gatus = runTest ./gatus.nix;
-  gemstash = handleTest ./gemstash.nix { };
+  gemstash = import ./gemstash.nix { inherit pkgs runTest; };
   geoclue2 = runTest ./geoclue2.nix;
   geoserver = runTest ./geoserver.nix;
   gerrit = runTest ./gerrit.nix;
