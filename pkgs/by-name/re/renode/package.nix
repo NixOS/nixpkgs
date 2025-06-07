@@ -1,99 +1,110 @@
 {
-  stdenv,
-  lib,
   fetchFromGitHub,
-  fetchurl,
-  autoPatchelfHook,
+  fetchNuGet,
+  glib,
+  gtk-sharp-2_0,
+  lib,
   makeWrapper,
-  nix-update-script,
-  glibcLocales,
-  python3Packages,
-  dotnetCorePackages,
-  gtk-sharp-3_0,
-  gtk3-x11,
-  dconf,
+  mono,
+  pkg-config,
+  stdenv,
 }:
 
 let
-  pythonLibs =
-    with python3Packages;
-    makePythonPath [
-      construct
-      psutil
-      pyyaml
-      requests
-      tkinter
+  nunit = fetchNuGet {
+    pname = "NUnit";
+    version = "3.13.1";
+    hash = "sha256-qdbPWgCXueQdHpGdNQtdz16Zfg+XESI9xDlRD/IzJRw=";
+    outputFiles = [ "lib/*" ];
+  };
 
-      # from tools/csv2resd/requirements.txt
-      construct
+  nunit3 = nunit.overrideAttrs (_: {
+    postInstall = ''
+      mkdir -p $out/lib/pkgconfig
 
-      # from tools/execution_tracer/requirements.txt
-      pyelftools
+      cat > $out/lib/pkgconfig/nunit.framework.pc  << EOF
+      Libraries=$out/lib/dotnet/NUnit/net45/nunit.framework.dll
 
-      (robotframework.overrideDerivation (oldAttrs: {
-        src = fetchFromGitHub {
-          owner = "robotframework";
-          repo = "robotframework";
-          rev = "v6.1";
-          hash = "sha256-l1VupBKi52UWqJMisT2CVnXph3fGxB63mBVvYdM1NWE=";
-        };
-      }))
-    ];
+      Name: nunit.framework
+      Description: nunit.framework
+      Version: 3.13.1
+      Libs: -r:nunit.framework.dll
+
+      EOF
+    '';
+  });
+
+  resources = fetchFromGitHub {
+    owner = "renode";
+    repo = "renode-resources";
+    rev = "d3d69f8f17ed164ee23e46f0c06844a69bf4c004";
+    hash = "sha256-wR3heL58NOQLENwCzL4lPM4KuvT/ON7dlc/KUqrlRjg=";
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renode";
   version = "1.15.3";
 
-  src = fetchurl {
-    url = "https://github.com/renode/renode/releases/download/v${finalAttrs.version}/renode-${finalAttrs.version}.linux-dotnet.tar.gz";
-    hash = "sha256-0CZWIwIG85nT7uSHhmBkH21S5mTx2womYWV0HG+g8Mk=";
+  src = fetchFromGitHub {
+    owner = "renode";
+    repo = "renode";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sZhO332seVPuYhk6Cx5UEPyGWfN9TkuavvpVyLJU2Sw=";
+    fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    makeWrapper
-  ];
-
-  propagatedBuildInputs = [
-    gtk-sharp-3_0
-  ];
+  postPatch = ''
+    patchShebangs build.sh tools/
+  '';
 
   strictDeps = true;
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [
+    makeWrapper
+    mono
+    pkg-config
+  ];
 
-    mkdir -p $out/{bin,libexec/renode}
+  buildInputs = [
+    gtk-sharp-2_0
+    nunit3
+  ];
 
-    mv * $out/libexec/renode
-    mv .renode-root $out/libexec/renode
+  preBuild = ''
+    mkdir -p lib/resources/
+    ln -s ${resources}/* lib/resources/
 
-    makeWrapper "$out/libexec/renode/renode" "$out/bin/renode" \
-      --prefix PATH : "$out/libexec/renode:${lib.makeBinPath [ dotnetCorePackages.runtime_8_0 ]}" \
-      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules" \
-      --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ gtk3-x11 ]}" \
-      --prefix PYTHONPATH : "${pythonLibs}" \
-      --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
-    makeWrapper "$out/libexec/renode/renode-test" "$out/bin/renode-test" \
-      --prefix PATH : "$out/libexec/renode:${lib.makeBinPath [ dotnetCorePackages.runtime_8_0 ]}" \
-      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules" \
-      --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ gtk3-x11 ]}" \
-      --prefix PYTHONPATH : "${pythonLibs}" \
-      --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
-
-    substituteInPlace "$out/libexec/renode/renode-test" \
-      --replace '$PYTHON_RUNNER' '${python3Packages.python}/bin/python3'
-
-    runHook postInstall
+    chmod +x build.sh tools/building/check_weak_implementations.sh
   '';
 
-  passthru.updateScript = nix-update-script { };
+  postBuild = "./build.sh";
+
+  postInstall = ''
+    mkdir -p $out/{bin,lib/renode}
+
+    mv output/bin/Release/* .renode-root $out/lib/renode
+
+    makeWrapper ${mono}/bin/mono $out/bin/renode \
+      --add-flags "$out/lib/renode/Renode.exe" \
+      --prefix MONO_GAC_PREFIX : ${gtk-sharp-2_0} \
+      --suffix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          glib
+          gtk-sharp-2_0
+          gtk-sharp-2_0.gtk
+        ]
+      }"
+  '';
 
   meta = {
+    changelog = "https://github.com/renode/renode/blob/${finalAttrs.version}/CHANGELOG.rst";
     description = "Virtual development framework for complex embedded systems";
+    downloadPage = "https://github.com/renode/renode";
     homepage = "https://renode.io";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ otavio ];
+    maintainers = with lib.maintainers; [
+      otavio
+    ];
     platforms = [ "x86_64-linux" ];
   };
 })
