@@ -155,7 +155,7 @@ stdenv.mkDerivation (
       changelog = "https://github.com/element-hq/element-desktop/blob/v${finalAttrs.version}/CHANGELOG.md";
       license = licenses.asl20;
       teams = [ teams.matrix ];
-      inherit (electron.meta) platforms;
+      platforms = electron.meta.platforms ++ lib.platforms.darwin;
       mainProgram = "element-desktop";
     };
   }
