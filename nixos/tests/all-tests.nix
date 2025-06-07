@@ -247,7 +247,7 @@ in
     _module.args.compression = "xz";
   };
   bind = runTest ./bind.nix;
-  bird = handleTest ./bird.nix { };
+  bird = runTest ./bird.nix;
   birdwatcher = handleTest ./birdwatcher.nix { };
   bitbox-bridge = runTest ./bitbox-bridge.nix;
   bitcoind = runTest ./bitcoind.nix;
