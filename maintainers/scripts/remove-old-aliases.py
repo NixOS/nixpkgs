@@ -42,11 +42,12 @@ def process_args() -> argparse.Namespace:
 
 def get_date_lists(
     txt: list[str], cutoffdate: datetimedate, only_throws: bool
-) -> tuple[list[str], list[str], list[str]]:
+) -> tuple[list[str], list[str], list[str], list[str]]:
     """get a list of lines in which the date is older than $cutoffdate"""
     date_older_list: list[str] = []
     date_older_throw_list: list[str] = []
     date_sep_line_list: list[str] = []
+    date_too_complex_list: list[str] = []
 
     for lineno, line in enumerate(txt, start=1):
         line = line.rstrip()
@@ -70,11 +71,17 @@ def get_date_lists(
             continue
 
         if "=" not in line:
-            date_sep_line_list.append(f"{lineno} {line}")
+            date_sep_line_list.append(f"{lineno:>5} {line}")
         # 'if' lines could be complicated
         elif "if " in line and "if =" not in line:
-            print(f"RESOLVE MANUALLY {line}")
-        elif "throw" in line:
+            date_too_complex_list.append(f"{lineno:>5} {line}")
+        elif "= with " in line:
+            date_too_complex_list.append(f"{lineno:>5} {line}")
+        elif "lib.warnOnInstantiate" in line:
+            date_too_complex_list.append(f"{lineno:>5} {line}")
+        elif '"' in line:
+            date_too_complex_list.append(f"{lineno:>5} {line}")
+        elif " = throw" in line:
             date_older_throw_list.append(line)
         elif not only_throws:
             date_older_list.append(line)
@@ -82,6 +89,7 @@ def get_date_lists(
     return (
         date_older_list,
         date_sep_line_list,
+        date_too_complex_list,
         date_older_throw_list,
     )
 
@@ -180,8 +188,14 @@ def main() -> None:
     date_older_list: list[str] = []
     date_sep_line_list: list[str] = []
     date_older_throw_list: list[str] = []
+    date_too_complex_list: list[str] = []
 
-    date_older_list, date_sep_line_list, date_older_throw_list = get_date_lists(
+    (
+        date_older_list,
+        date_sep_line_list,
+        date_too_complex_list,
+        date_older_throw_list
+    ) = get_date_lists(
         txt, cutoffdate, only_throws
     )
 
@@ -195,6 +209,11 @@ def main() -> None:
     if date_older_throw_list:
         print(" Will be removed. ".center(100, "-"))
         for l_n in date_older_throw_list:
+            print(l_n)
+
+    if date_too_complex_list:
+        print(" Too complex, resolve manually. ".center(100, "-"))
+        for l_n in date_too_complex_list:
             print(l_n)
 
     if date_sep_line_list:
