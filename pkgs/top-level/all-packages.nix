@@ -13875,9 +13875,7 @@ with pkgs;
     backend = "wayland";
   };
 
-  rstudio = callPackage ../applications/editors/rstudio {
-    jdk = jdk8;
-  };
+  rstudio = callPackage ../applications/editors/rstudio { };
 
   rstudio-server = rstudio.override { server = true; };
 
