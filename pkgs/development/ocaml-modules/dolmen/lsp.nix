@@ -7,7 +7,7 @@
   linol,
   linol-lwt,
   logs,
-# lsp, # transitive dependency from linol
+  lsp,
 }:
 
 buildDunePackage {
@@ -23,7 +23,7 @@ buildDunePackage {
     linol
     linol-lwt
     logs
-    # lsp # transitive dependency from linol
+    lsp
   ];
 
   meta = dolmen.meta // {
