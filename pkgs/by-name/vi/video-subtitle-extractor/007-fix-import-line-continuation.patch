@@ -1,0 +1,13 @@
+--- a/backend/config.py
++++ b/backend/config.py
+@@ -3,8 +3,9 @@
+ import os
+ from pathlib import Path
+-from qfluentwidgets import (qconfig, ConfigItem, QConfig, OptionsValidator, BoolValidator, OptionsConfigItem, 
+-                            EnumSerializer, RangeValidator, RangeConfigItem)
++from qfluentwidgets import (qconfig, ConfigItem, QConfig, OptionsValidator,
++                          BoolValidator, OptionsConfigItem, EnumSerializer,
++                          RangeValidator, RangeConfigItem)
+ from backend.tools.constant import SubtitleArea, VideoSubFinderDecoder
+ import configparser
+ 

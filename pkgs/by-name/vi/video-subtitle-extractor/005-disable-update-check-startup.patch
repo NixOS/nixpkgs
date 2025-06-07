@@ -1,0 +1,11 @@
+--- a/backend/config.py
++++ b/backend/config.py
+@@ -91,7 +91,7 @@
+     # 是否使用硬件加速
+     hardwareAcceleration = ConfigItem("Main", "HardwareAcceleration", HARDWARD_ACCELERATION_OPTION, BoolValidator())
+     # 启动时检查应用更新
+-    checkUpdateOnStartup = ConfigItem("Main", "CheckUpdateOnStartup", True, BoolValidator())
++    checkUpdateOnStartup = ConfigItem("Main", "CheckUpdateOnStartup", False, BoolValidator())
+     # VideoSubFinder CPU核心数
+     videoSubFinderCpuCores = RangeConfigItem("Main", "VideoSubFinderCpuCores", 0, RangeValidator(0, os.cpu_count()))
+     # VideoSubFinder 视频解码组件 

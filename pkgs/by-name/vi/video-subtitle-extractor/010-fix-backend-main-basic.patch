@@ -1,0 +1,39 @@
+--- a/backend/main.py
++++ b/backend/main.py
+@@ -20,6 +20,9 @@ import sys
+ 
+ sys.path.insert(0, os.path.dirname(__file__))
+ import subprocess
++import sys
++import tempfile
++import shutil
+ from backend.config import *
+ from backend.tools.hardware_accelerator import HardwareAccelerator
+ from tools import reformat
+@@ -473,7 +476,7 @@ class SubtitleExtractor:
+             path_vsf = os.path.join(BASE_DIR, 'subfinder', 'windows', 'VideoSubFinderWXW.exe')
+         else:
+             path_vsf = os.path.join(BASE_DIR, 'subfinder', 'linux', 'VideoSubFinderCli.run')
+-            os.chmod(path_vsf, 0o775)
++            # os.chmod(path_vsf, 0o775)  # Disabled for NixOS read-only filesystem
+         # ：图像上半部分所占百分比，取值【0-1】
+         top_end = 1 - self.sub_area[0] / self.frame_height
+         # bottom_end：图像下半部分所占百分比，取值【0-1】
+@@ -500,7 +503,7 @@ class SubtitleExtractor:
+                 Thread(target=count_process, daemon=True).start()       
+                 # 已知BUG: test_chinese_cht.flv在net drive上会导致无法停止, 但在本地不会, 可能是vsf的原因
+                 p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1,
+-                                    close_fds='posix' in sys.builtin_module_names, shell=False, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
++                                    close_fds='posix' in sys.builtin_module_names, shell=False)
+                 ProcessManager.instance().add_process(p)
+                 self.manage_process(p.pid)
+                 p.wait()
+@@ -516,7 +519,7 @@ class SubtitleExtractor:
+             self.vsf_running = True
+             try:
+                 p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1,
+-                                    close_fds='posix' in sys.builtin_module_names, shell=True, creationflags=subprocess.CREATE_NEW_PROCESS_GROUP)
++                                    close_fds='posix' in sys.builtin_module_names, shell=True)
+                 Thread(target=vsf_output, daemon=True, args=(p.stderr,)).start()
+                 ProcessManager.instance().add_process(p)
+                 self.manage_process(p.pid)

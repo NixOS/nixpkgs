@@ -1,0 +1,10 @@
+--- a/backend/config.py
++++ b/backend/config.py
+@@ -44,7 +44,7 @@
+ 
+     # 字幕语言设置
+-    language = OptionsConfigItem("Main", "Language", "ch", OptionsValidator([name for name in tr["Language"]]))
++    language = OptionsConfigItem("Main", "Language", "en", OptionsValidator([name for name in tr["Language"]]))
+     # 识别模式设置
+     mode = OptionsConfigItem("Main", "Mode", "fast",  OptionsValidator(["auto", "fast", "accurate"]))
+     # 是否生成TXT文本字幕 

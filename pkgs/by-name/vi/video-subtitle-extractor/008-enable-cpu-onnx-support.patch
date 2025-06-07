@@ -1,0 +1,10 @@
+--- a/backend/tools/hardware_accelerator.py
++++ b/backend/tools/hardware_accelerator.py
+@@ -41,7 +41,7 @@
+             for provider in available_providers:
+                 if provider in [
+-                    "CPUExecutionProvider"
++                    #"CPUExecutionProvider"  # Enable CPU ONNX for better performance
+                 ]:
+                     continue
+                 if provider not in [ 

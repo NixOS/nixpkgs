@@ -1,0 +1,12 @@
+--- a/backend/main.py
++++ b/backend/main.py
+@@ -84,7 +84,7 @@
+         # 通过视频路径获取视频名称
+         self.vd_name = Path(self.video_path).stem
+         # 临时存储文件夹
+-        self.temp_output_dir = os.path.join(os.path.dirname(BASE_DIR), 'output', str(self.vd_name))
++        self.temp_output_dir = os.path.join(os.path.expanduser('~/.cache/video-subtitle-extractor'), str(self.vd_name))
+         # 视频帧总数
+         self.frame_count = self.video_cap.get(cv2.CAP_PROP_FRAME_COUNT)
+         # 视频帧率
+``` 

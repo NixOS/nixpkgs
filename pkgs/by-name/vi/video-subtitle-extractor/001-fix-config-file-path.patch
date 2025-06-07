@@ -1,0 +1,8 @@
+--- a/backend/config.py
++++ b/backend/config.py
+@@ -1,1 +1,1 @@
+-CONFIG_FILE = 'config/config.json'
++CONFIG_FILE = os.path.expanduser('~/.config/video-subtitle-extractor/config.json')
+@@ -1,0 +1,1 @@
++os.makedirs(os.path.dirname(CONFIG_FILE), exist_ok=True)
+ config = Config() 
