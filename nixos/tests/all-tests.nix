@@ -301,10 +301,10 @@ in
     "aarch64-linux"
     "x86_64-linux"
   ] ./ceph-single-node-bluestore.nix;
-  ceph-single-node-bluestore-dmcrypt = handleTestOn [
+  ceph-single-node-bluestore-dmcrypt = runTestOn [
     "aarch64-linux"
     "x86_64-linux"
-  ] ./ceph-single-node-bluestore-dmcrypt.nix { };
+  ] ./ceph-single-node-bluestore-dmcrypt.nix;
   certmgr = handleTest ./certmgr.nix { };
   cfssl = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./cfssl.nix { };
   cgit = runTest ./cgit.nix;
