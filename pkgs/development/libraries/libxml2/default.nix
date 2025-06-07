@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch,
   pkg-config,
   autoreconfHook,
   libintl,
@@ -50,6 +51,14 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor finalAttrs.version}/libxml2-${finalAttrs.version}.tar.xz";
     hash = "sha256-beVcrMjCvHWPLvb5PDE8sw5N1dhKxdPHzL2TRNjMaDM=";
   };
+
+  patches = [
+    # Fix for a bug affecting libreoffice test suite among others: https://www.mail-archive.com/debian-bugs-dist@lists.debian.org/msg2040734.html
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/5133461b05f0f66e6c5b0fecd5f29dc5cd967302.patch";
+      hash = "sha256-pkaLBeLAiNbEIMnWPw0w0uK+GHAxRxY+CwhQWrSTwEI=";
+    })
+  ];
 
   strictDeps = true;
 
