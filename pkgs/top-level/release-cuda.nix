@@ -98,6 +98,7 @@ let
       monado = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
       noisetorch = linux;
       obs-studio-plugins.obs-backgroundremoval = linux;
+      octave = linux; # because depend on SuiteSparse which need rebuild when cuda enabled
       ollama = linux;
       onnxruntime = linux;
       openmvg = linux;
