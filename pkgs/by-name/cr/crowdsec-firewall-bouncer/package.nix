@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "crowdsecurity";
     repo = "cs-firewall-bouncer";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-4fxxAW2sXGNxjsc75fd499ciuN8tjGqlpRIaHYUXwQ0=";
   };
 
