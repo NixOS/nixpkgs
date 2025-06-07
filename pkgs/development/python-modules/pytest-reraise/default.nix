@@ -35,9 +35,6 @@ buildPythonPackage rec {
 
   meta = {
     description = "Make multi-threaded pytest test cases fail when they should";
-    longDescription = ''
-      Make multi-threaded pytest test cases fail when they should
-    '';
     homepage = "https://github.com/bjoluc/pytest-reraise";
     changelog = "https://github.com/bjoluc/pytest-reraise/releases/tag/${src.tag}";
     license = lib.licenses.mit;
