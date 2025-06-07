@@ -142,5 +142,43 @@ fi
 echo "SUCCESS: parallelMap passed additional arguments correctly"
 rm -f /tmp/map-args-output
 
+echo "Testing empty input handling..."
+
+# Test parallelRun with empty input
+empty_output=$(printf "" | parallelRun sh -c '
+  while read -r -d ""; do
+    echo "This should not run"
+  done
+' 2>&1)
+
+if [ $? -ne 0 ]; then
+  echo "ERROR: parallelRun failed with empty input"
+  exit 1
+fi
+
+if [[ "$empty_output" == *"This should not run"* ]]; then
+  echo "ERROR: parallelRun produced unexpected output with empty input: $empty_output"
+  exit 1
+fi
+echo "SUCCESS: parallelRun handled empty input gracefully"
+
+# Test parallelMap with empty input
+emptyFunc() {
+  echo "This should not run"
+}
+
+empty_map_output=$(printf "" | parallelMap emptyFunc 2>&1)
+
+if [ $? -ne 0 ]; then
+  echo "ERROR: parallelMap failed with empty input"
+  exit 1
+fi
+
+if [[ "$empty_map_output" == *"This should not run"* ]]; then
+  echo "ERROR: parallelMap produced unexpected output with empty input: $empty_map_output"
+  exit 1
+fi
+echo "SUCCESS: parallelMap handled empty input gracefully"
+
 echo "All parallelRun and parallelMap tests passed!"
 touch $out

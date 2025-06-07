@@ -113,7 +113,12 @@ with pkgs;
 
   haskell = callPackage ./haskell { };
 
-  hooks = recurseIntoAttrs (callPackage ./hooks { });
+  hooks = recurseIntoAttrs (
+    # TODO: migrate tests from ./hooks to ../build-support/setup-hooks/tests
+    # (Their architecture based on earlyStdenv is suboptimal as this still
+    #   rebuilds a number of expensive derivations on each change.)
+    (callPackage ./hooks { }) // (callPackages ../build-support/setup-hooks/tests { })
+  );
 
   cc-multilib-gcc = callPackage ./cc-wrapper/multilib.nix { stdenv = gccMultiStdenv; };
   cc-multilib-clang = callPackage ./cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
@@ -212,6 +217,4 @@ with pkgs;
   build-environment-info = callPackage ./build-environment-info { };
 
   rust-hooks = recurseIntoAttrs (callPackages ../build-support/rust/hooks/test { });
-
-  setup-hooks = recurseIntoAttrs (callPackages ../build-support/setup-hooks/tests { });
 }

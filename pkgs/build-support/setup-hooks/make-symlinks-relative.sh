@@ -1,37 +1,43 @@
 # symlinks are often created in postFixup
 # don't use fixupOutputHooks, it is before postFixup
-postFixupHooks+=(_makeSymlinksRelativeInAllOutputs)
+if [[ -z "${dontRewriteSymlinks-}" ]]; then
+  postFixupHooks+=(_makeSymlinksRelative)
+fi
+
 
 # For every symlink in $output that refers to another file in $output
-# ensure that the symlink is relative. This removes references to the output
-# has from the resulting store paths and thus the NAR files.
+# ensure that the symlink is relative.
+# This increases the chance that NAR files can be deduplicated.
 _makeSymlinksRelative() {
-    local symlinkTarget
+  local prefixes
+  prefixes=()
+  for output in $(getAllOutputNames); do
+    [ ! -e "${!output}" ] && continue
+    prefixes+=( "${!output}" )
+  done
 
-    if [ "${dontRewriteSymlinks-}" ] || [ ! -e "$prefix" ]; then
-       return
+  # Process a single symlink
+  _processSymlink() {
+    local entry="$1"
+    # Split on newline: first line is output, second line is link
+    local output="${entry%%$'\n'*}"
+    local link="${entry#*$'\n'}"
+
+    linkTarget=$(readlink "$link")
+
+    # only touch links that point inside the same output tree
+    [[ $linkTarget == "$output"/* ]] || return 0
+
+    if [ ! -e "$linkTarget" ]; then
+      echo "the symlink $link is broken, it points to $linkTarget (which is missing)"
     fi
 
-    while IFS= read -r -d $'\0' f; do
-        symlinkTarget=$(readlink "$f")
-        if [[ "$symlinkTarget"/ != "$prefix"/* ]]; then
-            # skip this symlink as it doesn't point to $prefix
-            continue
-        fi
+    echo "making symlink relative: $link"
+    ln -snrf "$linkTarget" "$link"
+  }
 
-        if [ ! -e "$symlinkTarget" ]; then
-            echo "the symlink $f is broken, it points to $symlinkTarget (which is missing)"
-        fi
+  find "${prefixes[@]}" -type l -printf '%H\n%p\0' \
+    | parallelMap _processSymlink
 
-        echo "rewriting symlink $f to be relative to $prefix"
-        ln -snrf "$symlinkTarget" "$f"
-
-    done < <(find $prefix -type l -print0)
-}
-
-_makeSymlinksRelativeInAllOutputs() {
-  local output
-  for output in $(getAllOutputNames); do
-    prefix="${!output}" _makeSymlinksRelative
-  done
+  unset -f _processSymlink
 }
