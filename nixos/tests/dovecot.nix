@@ -12,7 +12,6 @@ import ./make-test-python.nix {
           "imap"
           "pop3"
         ];
-        modules = [ pkgs.dovecot_pigeonhole ];
         mailUser = "vmail";
         mailGroup = "vmail";
       };
@@ -75,6 +74,7 @@ import ./make-test-python.nix {
 
         in
         [
+          pkgs.dovecot_pigeonhole
           sendTestMail
           sendTestMailViaDeliveryAgent
           testImap
