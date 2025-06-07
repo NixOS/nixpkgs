@@ -19,12 +19,12 @@
   dotnet-runtime_7,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vintagestory";
   version = "1.20.12";
 
   src = fetchurl {
-    url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${version}.tar.gz";
+    url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${finalAttrs.version}.tar.gz";
     hash = "sha256-h6YXEZoVVV9IuKkgtK9Z3NTvJogVNHmXdAcKxwfvqcE=";
   };
 
@@ -77,12 +77,12 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     makeWrapper ${dotnet-runtime_7}/bin/dotnet $out/bin/vintagestory \
-      --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
+      --prefix LD_LIBRARY_PATH : "${finalAttrs.runtimeLibs}" \
       --set-default mesa_glthread true \
       --add-flags $out/share/vintagestory/Vintagestory.dll
 
     makeWrapper ${dotnet-runtime_7}/bin/dotnet $out/bin/vintagestory-server \
-      --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
+      --prefix LD_LIBRARY_PATH : "${finalAttrs.runtimeLibs}" \
       --set-default mesa_glthread true \
       --add-flags $out/share/vintagestory/VintagestoryServer.dll
 
@@ -106,4 +106,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "vintagestory";
   };
-}
+})
