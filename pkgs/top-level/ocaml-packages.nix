@@ -2004,6 +2004,10 @@ let
           inherit (pkgs) git;
         };
 
+        tar-eio = callPackage ../development/ocaml-modules/tar/eio.nix {
+          inherit (pkgs) git;
+        };
+
         tcpip = callPackage ../development/ocaml-modules/tcpip { };
 
         tcslib = callPackage ../development/ocaml-modules/tcslib { };
