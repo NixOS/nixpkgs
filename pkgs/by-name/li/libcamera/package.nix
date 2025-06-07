@@ -16,7 +16,7 @@
   doxygen,
   python3,
   python3Packages,
-  systemd, # for libudev
+  udev,
   libpisp,
   withTracing ? lib.meta.availableOn stdenv.hostPlatform lttng-ust,
   lttng-ust, # withTracing
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
       libdrm
 
       # hotplugging
-      systemd
+      udev
 
       # pycamera
       python3Packages.pybind11
