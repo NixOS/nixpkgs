@@ -43,7 +43,7 @@ linux.override {
       '';
     };
 
-    passthru.updateScript = ./update-libre.sh;
+    extraPassthru.updateScript = ./update-libre.sh;
 
     maintainers = with lib.maintainers; [ qyliss ];
   };
