@@ -51,11 +51,15 @@ logFailure() {
     printf '\033[1;31mTEST FAILED\033[0m at %s\n' "$(loc 2)"
 }
 
+local-nix-instantiate() {
+    nix-instantiate --timeout 1 --eval-only --show-trace --read-write-mode --json --strict "$@"
+}
+
 evalConfig() {
     local attr=$1
     shift
     local script="import ./default.nix { modules = [ $* ];}"
-    nix-instantiate --timeout 1 -E "$script" -A "$attr" --eval-only --show-trace --read-write-mode --json
+    local-nix-instantiate -E "$script" -A "$attr"
 }
 
 reportFailure() {
@@ -80,6 +84,24 @@ checkConfigOutput() {
         logFailure
         logEndFailure
     fi
+}
+
+checkJsonOutput() {
+  local path=$1
+  local actual expected diff
+  actual="$(local-nix-instantiate -A actual "$path")"
+  expected="$(local-nix-instantiate -A expected "$path")"
+  diff=$(jd <(echo "$actual") <(echo "$expected") || true)
+
+  if [[ -z "$diff" ]]; then
+      ((++pass))
+  else
+      logStartFailure
+      echo "$diff"
+      ((++fail))
+      logFailure
+      logEndFailure
+  fi
 }
 
 checkConfigError() {
@@ -304,6 +326,9 @@ checkConfigError 'The option .value. in .*/declare-coerced-value.nix. is already
 checkConfigOutput '^12$' config.value ./declare-coerced-value-unsound.nix
 checkConfigError 'A definition for option .* is not of type .*. Definition values:\n\s*- In .*: "1000"' config.value ./declare-coerced-value-unsound.nix ./define-value-string-bigint.nix
 checkConfigError 'toInt: Could not convert .* to int' config.value ./declare-coerced-value-unsound.nix ./define-value-string-arbitrary.nix
+
+# Check `graph` attribute
+checkJsonOutput './graph/test.nix'
 
 # Check mkAliasOptionModule.
 checkConfigOutput '^true$' config.enable ./alias-with-priority.nix

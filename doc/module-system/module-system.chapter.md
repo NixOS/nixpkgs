@@ -115,3 +115,12 @@ A nominal type marker, always `"configuration"`.
 #### `class` {#module-system-lib-evalModules-return-value-_configurationClass}
 
 The [`class` argument](#module-system-lib-evalModules-param-class).
+
+#### `graph` {#module-system-lib-evalModules-return-value-graph}
+
+Represents all the modules that took part in the evaluation.
+It is a list of `ModuleGraph` where `ModuleGraph` has the following attributes:
+
+- `key`: `string`
+- `imports`: `[ ModuleGraph ]`
+- `disabled`: `bool`

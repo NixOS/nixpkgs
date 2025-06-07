@@ -26,6 +26,7 @@ pkgs.runCommand "nixpkgs-lib-tests-nix-${nix.version}"
     nativeBuildInputs = [
       nix
       pkgs.gitMinimal
+      pkgs.jd-diff-patch
     ] ++ lib.optional pkgs.stdenv.hostPlatform.isLinux pkgs.inotify-tools;
     strictDeps = true;
   }
