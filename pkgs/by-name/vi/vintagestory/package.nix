@@ -19,12 +19,12 @@
   dotnet-runtime_7,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vintagestory";
   version = "1.20.11";
 
   src = fetchurl {
-    url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${version}.tar.gz";
+    url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${finalAttrs.version}.tar.gz";
     hash = "sha256-IOreg6j/jLhOK8jm2AgSnYQrql5R6QxsshvPs8OUcQA=";
   };
 
@@ -80,10 +80,10 @@ stdenv.mkDerivation rec {
   preFixup =
     ''
       makeWrapper ${dotnet-runtime_7}/bin/dotnet $out/bin/vintagestory \
-        --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
+        --prefix LD_LIBRARY_PATH : "${finalAttrs.runtimeLibs}" \
         --add-flags $out/share/vintagestory/Vintagestory.dll
       makeWrapper ${dotnet-runtime_7}/bin/dotnet $out/bin/vintagestory-server \
-        --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
+        --prefix LD_LIBRARY_PATH : "${finalAttrs.runtimeLibs}" \
         --add-flags $out/share/vintagestory/VintagestoryServer.dll
     ''
     + ''
@@ -103,4 +103,4 @@ stdenv.mkDerivation rec {
       niraethm
     ];
   };
-}
+})
