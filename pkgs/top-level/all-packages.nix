@@ -9825,8 +9825,6 @@ with pkgs;
 
   yubikey-manager-qt = libsForQt5.callPackage ../tools/misc/yubikey-manager-qt { };
 
-  yubikey-personalization-gui = libsForQt5.callPackage ../tools/misc/yubikey-personalization-gui { };
-
   zlib = callPackage ../development/libraries/zlib {
     stdenv =
       # zlib is a dependency of xcbuild. Avoid an infinite recursion by using a bootstrap stdenv
