@@ -717,6 +717,7 @@ stdenvNoCC.mkDerivation {
     + optionalString (libcxx == null && isClang && (useGccForLibs && gccForLibs.langCC or false)) ''
       for dir in ${gccForLibs}/include/c++/*; do
         echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
+        echo "-isystem $dir/backward" >> $out/nix-support/libcxx-cxxflags
       done
       for dir in ${gccForLibs}/include/c++/*/${targetPlatform.config}; do
         echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
