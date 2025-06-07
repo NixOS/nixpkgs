@@ -16,15 +16,17 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "1oom";
   version = "1.11.6";
 
+  outputs = [
+    "out"
+    "doc"
+  ];
+
   src = fetchFromGitHub {
     owner = "1oom-fork";
     repo = "1oom";
     tag = "v${finalAttrs.version}";
     hash = "sha256-w67BjS5CrQviMXOeKNWGR1SzDeJHZrIpY7FDGt86CPA=";
   };
-
-  strictDeps = true;
-  enableParallelBuilding = true;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -39,10 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
     readline
   ];
 
-  outputs = [
-    "out"
-    "doc"
-  ];
+  strictDeps = true;
+  enableParallelBuilding = true;
 
   postInstall = ''
     install -d $doc/share/doc/1oom
