@@ -100,6 +100,7 @@
 let
 
   inherit (import ./internal.nix { inherit lib; })
+    _create
     _coerce
     _singleton
     _coerceMany
@@ -196,6 +197,28 @@ in
       _emptyWithoutBase
     else
       _singleton path;
+
+  /**
+    Create a file set from any path.
+    The path is not checked for existence.
+
+    # Inputs
+
+    `path`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    virtual :: Path -> FileSet
+    ```
+  */
+  virtual =
+    path:
+    _create true (dirOf path) {
+      ${baseNameOf path} = "virtual";
+    };
 
   /**
     Incrementally evaluate and trace a file set in a pretty way.
@@ -767,9 +790,9 @@ in
 
       Other attributes may be added in the future.
 
-    `path`
+    `fileset`
 
-    : The path whose files to filter
+    : The file set whose files to filter
 
     # Type
 
@@ -781,7 +804,7 @@ in
         hasExt :: String -> Bool,
         ...
       } -> Bool)
-      -> Path
+      -> FileSet
       -> FileSet
     ```
 
@@ -806,20 +829,11 @@ in
     :::
   */
   fileFilter =
-    predicate: path:
+    predicate: fileset:
     if !isFunction predicate then
       throw ''lib.fileset.fileFilter: First argument is of type ${typeOf predicate}, but it should be a function instead.''
-    else if !isPath path then
-      if path._type or "" == "fileset" then
-        throw ''
-          lib.fileset.fileFilter: Second argument is a file set, but it should be a path instead.
-              If you need to filter files in a file set, use `intersection fileset (fileFilter pred ./.)` instead.''
-      else
-        throw ''lib.fileset.fileFilter: Second argument is of type ${typeOf path}, but it should be a path instead.''
-    else if !pathExists path then
-      throw ''lib.fileset.fileFilter: Second argument (${toString path}) is a path that does not exist.''
     else
-      _fileFilter predicate path;
+      _fileFilter predicate (_coerce "lib.fileset.fileFilter: Second argument" fileset);
 
   /**
     Create a file set with the same files as a `lib.sources`-based value.
