@@ -9001,12 +9001,6 @@ with pkgs;
     asciidoc = asciidoc-full;
   };
 
-  mapnik = callPackage ../development/libraries/mapnik {
-    harfbuzz = harfbuzz.override {
-      withIcu = true;
-    };
-  };
-
   matterhorn =
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
     (
