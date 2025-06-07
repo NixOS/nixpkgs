@@ -2,12 +2,12 @@
   directoryListingUpdater,
   fetchurl,
   lib,
-  stdenv,
+  stdenvNoCC,
   coreutils,
   kmod,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "alsa-ucm-conf";
   version = "1.2.14";
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail "/bin/rm" "${coreutils}/bin/rm" \
         --replace-fail "/bin/mkdir" "${coreutils}/bin/mkdir"
     ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
+    + lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
       substituteInPlace ucm2/common/ctl/led.conf \
         --replace-fail '/sbin/modprobe' '${kmod}/bin/modprobe'
     ''
