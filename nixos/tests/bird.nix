@@ -1,18 +1,7 @@
 # This test does a basic functionality check for all bird variants and demonstrates a use
 # of the preCheckConfig option.
 
-{
-  system ? builtins.currentSystem,
-  pkgs ? import ../.. {
-    inherit system;
-    config = { };
-  },
-}:
-
 let
-  inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
-  inherit (pkgs.lib) optionalString;
-
   makeBirdHost =
     hostId:
     { pkgs, ... }:
@@ -106,7 +95,7 @@ let
       ];
     };
 in
-makeTest {
+{
   name = "bird";
 
   nodes.host1 = makeBirdHost "1";
