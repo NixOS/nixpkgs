@@ -482,6 +482,14 @@ with lib.maintainers;
     shortName = "gitlab";
   };
 
+  godot = {
+    members = [
+      corngood
+    ];
+    scope = "Maintainers of the godot packages";
+    shortName = "godot";
+  };
+
   golang = {
     members = [
       kalbasit
