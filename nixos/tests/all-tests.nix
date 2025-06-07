@@ -312,7 +312,7 @@ in
   chromadb = runTest ./chromadb.nix;
   chromium = (handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./chromium.nix { }).stable or { };
   chrony = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./chrony.nix;
-  chrony-ptp = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./chrony-ptp.nix { };
+  chrony-ptp = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./chrony-ptp.nix;
   cinnamon = runTest ./cinnamon.nix;
   cinnamon-wayland = runTest ./cinnamon-wayland.nix;
   cjdns = runTest ./cjdns.nix;
