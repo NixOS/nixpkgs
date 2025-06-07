@@ -14,7 +14,7 @@
   overrideCC,
   wrapCCWith,
   wrapBintoolsWith,
-  buildPackages,
+  pkgsBuildBuild,
   buildLlvmTools, # tools, but from the previous stage, for cross
   targetLlvmLibraries, # libraries, but from the next stage, for cross
   targetLlvm,
@@ -29,6 +29,7 @@
   monorepoSrc ? null,
   version ? null,
   patchesFn ? lib.id,
+  libxml2,
   # Allows passthrough to packages via newScope. This makes it possible to
   # do `(llvmPackages.override { <someLlvmDependency> = bar; }).clang` and get
   # an llvmPackages whose packages are overridden in an internally consistent way.
@@ -114,7 +115,21 @@ let
   tools = lib.makeExtensible (
     tools:
     let
-      callPackage = newScope (tools // args // metadata);
+      callPackage = newScope (
+        tools
+        // args
+        // metadata
+        // {
+          libxml2 =
+            if stdenv.targetPlatform.libc == "llvm" then
+              libxml2.override {
+                pythonSupport = false;
+              }
+            else
+              libxml2;
+        }
+      );
+
       clangVersion =
         if (lib.versionOlder metadata.release_version "16") then
           metadata.release_version
@@ -573,13 +588,6 @@ let
           # Use clang due to "gnu::naked" not working on aarch64.
           # Issue: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=77882
           stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcNoRt;
-          cmake =
-            if stdenv.targetPlatform.libc == "llvm" then buildPackages.cmakeMinimal else buildPackages.cmake;
-          python3 =
-            if stdenv.targetPlatform.libc == "llvm" then
-              buildPackages.python3Minimal
-            else
-              buildPackages.python3;
         };
 
         libc = if stdenv.targetPlatform.libc == "llvm" then libraries.libc-full else libraries.libc-overlay;
