@@ -34,6 +34,7 @@ in
             enable = true;
             settings.DefaultAction = "deny";
             settings.ProcMonitorMethod = m;
+            settings.LogLevel = 0;
           };
         }
       ) monitorMethods
@@ -46,6 +47,7 @@ in
             enable = true;
             settings.DefaultAction = "deny";
             settings.ProcMonitorMethod = m;
+            settings.LogLevel = 0;
             rules = {
               curl = {
                 name = "curl";
@@ -73,11 +75,16 @@ in
     ''
     + lib.concatLines (
       map (m: ''
+        # https://github.com/evilsocket/opensnitch/issues/1357
+        # symlinks currently do not work for eBPF backend,
+        # meaning running curl from $PATH (`/run/current-system/sw/bin/curl`)
+        # does not get matched agains the rule for /nix/store/<curl-pkg>/bin/curl
+
         client_blocked_${m}.wait_for_unit("opensnitchd.service")
-        client_blocked_${m}.fail("curl http://server")
+        client_blocked_${m}.fail("${pkgs.curl}/bin/curl http://server")
 
         client_allowed_${m}.wait_for_unit("opensnitchd.service")
-        client_allowed_${m}.succeed("curl http://server")
+        client_allowed_${m}.succeed("${pkgs.curl}/bin/curl http://server")
       '') monitorMethods
     );
 }

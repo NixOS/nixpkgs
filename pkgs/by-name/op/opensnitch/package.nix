@@ -34,13 +34,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "opensnitch";
-  version = "1.6.9";
+  version = "1.7.0.0";
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "opensnitch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c+VAlm32/NXvUr5i0AY/zuTrFIQLtPxNNeSiQTMoJAY=";
+    hash = "sha256-ZkXqocgxyJGo5uQq4Ct1wmUIQljtx5oPzj4JfWWAuSE=";
   };
 
   postPatch = ''
@@ -63,7 +63,7 @@ buildGoModule (finalAttrs: {
     protoc-gen-go-grpc'
   ];
 
-  vendorHash = "sha256-urRujxcp58ZuhUtTAqCK0etSZ16YYG/6JY/aOUodl9g=";
+  vendorHash = "sha256-IByoQuJsGORmePlv1HzvF8RSu2XhP5Sry1j3NoY2WP8=";
 
   preBuild = ''
     make -C ../proto ../daemon/ui/protocol/ui.pb.go
