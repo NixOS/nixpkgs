@@ -51,12 +51,12 @@ stdenv.mkDerivation rec {
     cp $src/Support/60-orbcode.rules $out/etc/udev/rules.d/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cortex M SWO SWV Demux and Postprocess for the ORBTrace";
     homepage = "https://orbcode.org";
     changelog = "https://github.com/orbcode/orbuculum/blob/V${version}/CHANGES.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ newam ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ newam ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -14,8 +14,6 @@
 
   # passthru.tests
   testers,
-  pcsx2,
-  duckstation,
 
   alsaSupport ? !stdenv.hostPlatform.isDarwin,
   pulseSupport ? !stdenv.hostPlatform.isDarwin,
@@ -26,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cubeb";
-  version = "0-unstable-2025-04-02";
+  version = "0-unstable-2025-05-29";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "cubeb";
-    rev = "975a727e5e308a04cfb9ecdf7ddaf1150ea3f733";
-    hash = "sha256-3IP++tdiJUwXR6t5mf/MkPd524K/LYESNMkQ8vy10jo=";
+    rev = "78ee5f0efaaa395e3e1806e8ef85dcb15c7c063d";
+    hash = "sha256-PsBlZQTPiBt8Y3okFOZYhiFn58adxVlaf/hLA0doX0o=";
   };
 
   outputs = [
@@ -56,14 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional pulseSupport libpulseaudio
     ++ lib.optional sndioSupport sndio;
 
-  patches = [
-    # https://github.com/mozilla/cubeb/pull/813
-    ./0001-cmake-add-pkg-config-file-generation.patch
-
-    # https://github.com/mozilla/cubeb/pull/814
-    ./0001-cmake-don-t-hardcode-include-as-the-includedir.patch
-  ];
-
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)
     (lib.cmakeBool "BUILD_TESTS" false) # tests require an audio server
@@ -76,12 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
-
-    tests = {
-      # These packages depend on a patched version of cubeb
-      inherit pcsx2 duckstation;
-      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    };
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   meta = {

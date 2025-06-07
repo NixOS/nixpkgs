@@ -27,12 +27,12 @@ buildGoModule rec {
     "-X github.com/cycloidio/terracognita/cmd.Version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Reads from existing Cloud Providers (reverse Terraform) and generates your infrastructure as code on Terraform configuration";
     mainProgram = "terracognita";
     homepage = "https://github.com/cycloidio/terracognita";
     changelog = "https://github.com/cycloidio/terracognita/raw/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
   };
 }
