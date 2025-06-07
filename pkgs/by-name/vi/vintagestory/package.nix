@@ -28,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-dG1D2Buqht+bRyxx2ie34Z+U1bdKgi5R3w29BG/a5jg=";
   };
 
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
@@ -85,15 +87,20 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  makeWrapperArgs = [
+    "--set-default"
+    "mesa_glthread"
+    "true"
+  ];
+
   preFixup = ''
+    makeWrapperArgs+=(--prefix LD_LIBRARY_PATH : ''${runtimeLibs[*]})
     makeWrapper ${lib.getExe dotnet-runtime_8} $out/bin/vintagestory \
-      --prefix LD_LIBRARY_PATH : "${finalAttrs.runtimeLibs}" \
-      --set-default mesa_glthread true \
+      "''${makeWrapperArgs[@]}" \
       --add-flags $out/share/vintagestory/Vintagestory.dll
 
     makeWrapper ${lib.getExe dotnet-runtime_8} $out/bin/vintagestory-server \
-      --prefix LD_LIBRARY_PATH : "${finalAttrs.runtimeLibs}" \
-      --set-default mesa_glthread true \
+      "''${makeWrapperArgs[@]}" \
       --add-flags $out/share/vintagestory/VintagestoryServer.dll
 
     find "$out/share/vintagestory/assets/" -not -path "*/fonts/*" -regex ".*/.*[A-Z].*" | while read -r file; do
