@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     freetype
     gdal
-    harfbuzz
+    (harfbuzz.override { withIcu = true; })
     icu
     libjpeg
     libpng
