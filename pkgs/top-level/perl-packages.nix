@@ -12881,10 +12881,10 @@ with self; {
 
   IOPty = buildPerlModule {
     pname = "IO-Pty";
-    version = "1.16";
+    version = "1.20";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TODDR/IO-Tty-1.16.tar.gz";
-      hash = "sha256-jxoJwHBzitxpXfkD8uf3QwjdjZkbkUwLw5Cg5gISlN0=";
+      url = "mirror://cpan/authors/id/T/TO/TODDR/IO-Tty-1.20.tar.gz";
+      hash = "sha256-sVMJ/IViOJMonLmyuI36ntHmkVa3XymThVOkW+bXMK8=";
     };
     buildPhase = "make";
     checkPhase = "make test";
