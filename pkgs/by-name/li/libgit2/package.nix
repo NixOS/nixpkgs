@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgit2";
-  version = "1.9.0";
+  version = "1.9.1";
   # also check the following packages for updates: python3Packages.pygit2 and libgit2-glib
 
   outputs = [
@@ -36,16 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libgit2";
     repo = "libgit2";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-v32yGMo5oFEl6HUdg8czCsCLDL+sy9PPT0AEWmKxUhk=";
+    hash = "sha256-/xI3v7LNhpgfjv/m+sZwYDhhYvS6kQYxiiiG3+EF8Mw=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "libgit2-darwin-case-sensitive-build.patch";
-      url = "https://github.com/libgit2/libgit2/commit/1b348a31349e847b1d8548281aa92f26b9783f2f.patch";
-      hash = "sha256-CBaUuEr3nPdUuOdyJtmPgyqR0MNnVyOFYbYXF3ncupU=";
-    })
-  ];
 
   cmakeFlags =
     [
