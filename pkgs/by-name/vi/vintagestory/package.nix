@@ -104,6 +104,7 @@ stdenv.mkDerivation rec {
       artturin
       gigglesquid
       niraethm
+      dtomvan
     ];
     mainProgram = "vintagestory";
   };
