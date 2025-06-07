@@ -408,7 +408,7 @@ in
   dhparams = runTest ./dhparams.nix;
   disable-installer-tools = runTest ./disable-installer-tools.nix;
   discourse = runTest ./discourse.nix;
-  dnscrypt-proxy2 = handleTestOn [ "x86_64-linux" ] ./dnscrypt-proxy2.nix { };
+  dnscrypt-proxy2 = runTestOn [ "x86_64-linux" ] ./dnscrypt-proxy2.nix;
   dnsdist = import ./dnsdist.nix { inherit pkgs runTest; };
   doas = runTest ./doas.nix;
   docker = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./docker.nix;
