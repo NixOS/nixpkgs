@@ -14509,7 +14509,7 @@ with pkgs;
     autoconf = buildPackages.autoconf269;
   };
 
-  x2goclient = libsForQt5.callPackage ../applications/networking/remote/x2goclient { };
+  x2goclient = callPackage ../applications/networking/remote/x2goclient { };
 
   x32edit = callPackage ../applications/audio/midas/x32edit.nix { };
 
