@@ -557,8 +557,14 @@ in
   froide-govplan = runTest ./web-apps/froide-govplan.nix;
   frp = runTest ./frp.nix;
   frr = runTest ./frr.nix;
-  fsck = handleTest ./fsck.nix { };
-  fsck-systemd-stage-1 = handleTest ./fsck.nix { systemdStage1 = true; };
+  fsck = runTest {
+    imports = [ ./fsck.nix ];
+    _module.args.systemdStage1 = false;
+  };
+  fsck-systemd-stage-1 = runTest {
+    imports = [ ./fsck.nix ];
+    _module.args.systemdStage1 = true;
+  };
   ft2-clone = runTest ./ft2-clone.nix;
   legit = runTest ./legit.nix;
   mimir = runTest ./mimir.nix;
