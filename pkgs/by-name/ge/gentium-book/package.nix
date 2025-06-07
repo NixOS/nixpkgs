@@ -5,12 +5,12 @@
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "gentium";
+  pname = "gentium-book";
   version = "7.000";
 
   src = fetchzip {
-    url = "http://software.sil.org/downloads/r/gentium/Gentium-${finalAttrs.version}.zip";
-    hash = "sha256-RBBecFdi/yyFfBk1CcQebOuAdKNUczpwOP52zVtbc2o=";
+    url = "http://software.sil.org/downloads/r/gentium/GentiumBook-${finalAttrs.version}.zip";
+    hash = "sha256-A/QZX8OYrifaxChC08SNOaspdnSr8PxOtYgFAwUc5WY=";
   };
 
   installPhase = ''
@@ -38,8 +38,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       treated with careful thought and attention to their use. Gentium also
       supports both polytonic and monotonic Greek.
 
-      This package contains the regular and italic styles for the Gentium font
-      family, along with documentation.
+      This package contains the regular and italic styles for the Gentium Book
+      font family, along with documentation.
     '';
     downloadPage = "https://software.sil.org/gentium/download/";
     maintainers = with lib.maintainers; [

@@ -5,12 +5,12 @@
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "gentium";
-  version = "7.000";
+  pname = "gentium-plus";
+  version = "6.200";
 
   src = fetchzip {
-    url = "http://software.sil.org/downloads/r/gentium/Gentium-${finalAttrs.version}.zip";
-    hash = "sha256-RBBecFdi/yyFfBk1CcQebOuAdKNUczpwOP52zVtbc2o=";
+    url = "http://software.sil.org/downloads/r/gentium/GentiumPlus-${finalAttrs.version}.zip";
+    hash = "sha256-gpVOtmF4Kp3y1Rm00c4o3WQEskO7mY1Z5SVaYHI0hzg=";
   };
 
   installPhase = ''
@@ -35,15 +35,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       The design is intended to be highly readable, reasonably compact, and
       visually attractive. The additional ‘extended’ Latin letters are designed
       to naturally harmonize with the traditional 26 ones. Diacritics are
-      treated with careful thought and attention to their use. Gentium also
+      treated with careful thought and attention to their use. Gentium Plus also
       supports both polytonic and monotonic Greek.
 
-      This package contains the regular and italic styles for the Gentium font
-      family, along with documentation.
+      This package contains the regular and italic styles for the Gentium Plus
+      font family, along with documentation.
     '';
     downloadPage = "https://software.sil.org/gentium/download/";
     maintainers = with lib.maintainers; [
-      b-fein
       raskin
       rycee
     ];
