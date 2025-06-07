@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  perl,
   coreutils,
+  perl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,14 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
       dateCmd = lib.getExe' coreutils "date";
     in
     ''
-      patchShebangs test
-
       substituteInPlace src/faketime.c \
         --replace-fail 'date_cmd = "date"' 'date_cmd = "${dateCmd}"' \
         --replace-fail 'date_cmd = "gdate"' 'date_cmd = "${dateCmd}"'
-
-      substituteInPlace test/functests/test_exclude_mono.sh \
-        --replace-fail '/bin/bash' '$0'
     '';
 
   PREFIX = placeholder "out";
@@ -51,6 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [ perl ];
 
   doCheck = true;
+
+  preCheck = ''
+    patchShebangs test
+    substituteInPlace test/functests/test_exclude_mono.sh \
+      --replace-fail '/bin/bash' '$0'
+  '';
 
   meta = {
     description = "Report faked system time to programs without having to change the system-wide time";
