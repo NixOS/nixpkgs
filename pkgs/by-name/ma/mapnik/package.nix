@@ -55,12 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" ];
 
   patches = [
-    # The lib/cmake/harfbuzz/harfbuzz-config.cmake file in harfbuzz.dev is faulty,
-    # as it provides the wrong libdir. The workaround is to just rely on
-    # pkg-config to locate harfbuzz shared object files.
-    # Upstream HarfBuzz wants to drop CMake support anyway.
-    # See discussion: https://github.com/mapnik/mapnik/issues/4265
-    ./cmake-harfbuzz.patch
     # Account for full paths when generating libmapnik.pc
     ./export-pkg-config-full-paths.patch
     # Use 'sparsehash' package.
