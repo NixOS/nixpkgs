@@ -3826,6 +3826,10 @@ with pkgs;
   # Not in aliases because it wouldn't get picked up by callPackage
   netbox = netbox_4_2;
 
+  netcap-nodpi = callPackage ../by-name/ne/netcap/package.nix {
+    withDpi = false;
+  };
+
   netcat = libressl.nc.overrideAttrs (old: {
     meta = old.meta // {
       description = "Utility which reads and writes data across network connections — LibreSSL implementation";
