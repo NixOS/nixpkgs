@@ -3247,6 +3247,8 @@ self: super: with self; {
 
   datadog = callPackage ../development/python-modules/datadog { };
 
+  dataframe_image = callPackage ../development/python-modules/dataframe_image { };
+
   datafusion = callPackage ../development/python-modules/datafusion {
     protoc = pkgs.protobuf;
   };
