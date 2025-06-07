@@ -5,14 +5,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "librashader";
   version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "SnowflakePowered";
     repo = "librashader";
-    rev = "librashader-v0.6.2";
+    tag = "librashader-v${finalAttrs.version}";
     hash = "sha256-zkvCpQ5Cq3sDOspc12/gPmNi6hn/nBe1UfWrMGi/o0Q=";
   };
 
@@ -68,4 +68,4 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ nadiaholmquist ];
     platforms = lib.platforms.all;
   };
-}
+})
