@@ -679,6 +679,7 @@ mapAliases {
   flutter319 = throw "flutter319 has been removed because it isn't updated anymore, and no packages in nixpkgs use it. If you still need it, use flutter.mkFlutter to get a custom version"; # Added 2024-12-03
   flutter322 = throw "flutter322 has been removed because it isn't updated anymore, and no packages in nixpkgs use it. If you still need it, use flutter.mkFlutter to get a custom version"; # Added 2024-10-05
   flutter323 = throw "flutter323 has been removed because it isn't updated anymore, and no packages in nixpkgs use it. If you still need it, use flutter.mkFlutter to get a custom version"; # Added 2024-10-05
+  flutter326 = throw "flutter326 has been removed because it isn't updated anymore, and no packages in nixpkgs use it. If you still need it, use flutter.mkFlutter to get a custom version"; # Added 2025-06-08
   fluxctl = throw "fluxctl is unmaintained and has been removed. Migration to flux2 is recommended"; # Added 2025-05-11
   fluxus = throw "fluxus has been removed because it hasn't been updated in 9 years and depended on insecure Racket 7.9"; # Added 2024-12-06
   fmt_8 = throw "fmt_8 has been removed as it is obsolete and was no longer used in the tree"; # Added 2024-11-12
