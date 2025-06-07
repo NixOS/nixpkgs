@@ -384,7 +384,7 @@ in
   coturn = runTest ./coturn.nix;
   couchdb = runTest ./couchdb.nix;
   crabfit = runTest ./crabfit.nix;
-  cri-o = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./cri-o.nix { };
+  cri-o = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./cri-o.nix;
   cryptpad = runTest ./cryptpad.nix;
   cups-pdf = runTest ./cups-pdf.nix;
   curl-impersonate = runTest ./curl-impersonate.nix;
