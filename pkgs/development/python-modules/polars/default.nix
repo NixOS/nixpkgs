@@ -17,46 +17,25 @@
   runCommand,
 
   mimalloc,
-  jemalloc,
-  rust-jemalloc-sys,
   # Another alternative is to try `mimalloc`
   polarsMemoryAllocator ? mimalloc, # polarsJemalloc,
-  polarsJemalloc ?
-    let
-      jemalloc' = rust-jemalloc-sys.override {
-        jemalloc = jemalloc.override {
-          # "libjemalloc.so.2: cannot allocate memory in static TLS block"
-
-          # https://github.com/pola-rs/polars/issues/5401#issuecomment-1300998316
-          disableInitExecTls = true;
-        };
-      };
-    in
-    assert builtins.elem "--disable-initial-exec-tls" jemalloc'.configureFlags;
-    jemalloc',
-
   polars,
   python,
+  nix-update-script,
 }:
 
 let
-  version = "1.27.1";
-
-  # Hide symbols to prevent accidental use
-  rust-jemalloc-sys = throw "polars: use polarsMemoryAllocator over rust-jemalloc-sys";
-  jemalloc = throw "polars: use polarsMemoryAllocator over jemalloc";
-in
-
-buildPythonPackage rec {
   pname = "polars";
-  inherit version;
-
+  version = "1.28.1";
   src = fetchFromGitHub {
     owner = "pola-rs";
     repo = "polars";
     tag = "py-${version}";
-    hash = "sha256-/VigBBjZglPleXB9jhWHtA+y7WixjboVbzslprZ/A98=";
+    hash = "sha256-jfmVVoFoj8MAt2TPOC2F8BLGKnijK2iNwec/PAivNIM=";
   };
+in
+buildPythonPackage {
+  inherit src version pname;
 
   # Do not type-check assertions because some of them use unstable features (`is_none_or`)
   postPatch = ''
@@ -67,7 +46,7 @@ buildPythonPackage rec {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-dbPhEMhfe8DZO1D8U+3W1goNK1TAVyLzXHwXzzRvASw=";
+    hash = "sha256-5IURp1dZuklanMF3gV95katpQAbX+VCg63GJb8d4gns=";
   };
 
   requiredSystemFeatures = [ "big-parallel" ];
@@ -133,6 +112,13 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "polars"
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^(\\d+\\.\\d+\\.\\d+)$"
+    ];
+  };
 
   passthru.tests.dynloading-1 =
     runCommand "polars-dynloading-1"
