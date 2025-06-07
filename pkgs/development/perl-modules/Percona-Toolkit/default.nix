@@ -7,18 +7,36 @@
   DBI,
   IOSocketSSL,
   TermReadKey,
+  go,
+  buildGoModule,
+  git,
 }:
 
-buildPerlPackage rec {
-  pname = "Percona-Toolkit";
-  version = "3.2.0";
+let
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "percona";
     repo = "percona-toolkit";
     rev = "v${version}";
-    sha256 = "084ldpskvlfm32lfss5qqzm5y9b8hf029aa4i5pcnzgb53xaxkqx";
+    sha256 = "sha256-pseVW6T98dkry9iNPKuH8tj8OhkBBJYVomhNfuL58jQ=";
+
+    # needed for build script
+    leaveDotGit = true;
   };
+
+  goDeps =
+    (buildGoModule {
+      pname = "Percona-Toolkit go-bindings";
+      inherit src version;
+
+      vendorHash = "sha256-HAaoVYK6av085zSG0ZRpbmUgEA2UEt7CGWF/834e+z4=";
+    }).goModules;
+in
+buildPerlPackage {
+  pname = "Percona-Toolkit";
+
+  inherit src version;
 
   outputs = [ "out" ];
 
@@ -26,10 +44,23 @@ buildPerlPackage rec {
 
   buildInputs = [
     DBDmysql
+    go
     DBI
     IOSocketSSL
     TermReadKey
+    git
   ];
+
+  postPatch = ''
+    cp -r --reflink=auto ${goDeps} vendor
+    chmod -R u+rw vendor
+    substituteInPlace src/go/Makefile \
+      --replace "go get ./..." "echo 'Skipping go get due to offline build'"
+  '';
+
+  preBuild = ''
+    export HOME=$TMPDIR
+  '';
 
   postInstall = ''
     shortenPerlShebang $(grep -l "/bin/env perl" $out/bin/*)
