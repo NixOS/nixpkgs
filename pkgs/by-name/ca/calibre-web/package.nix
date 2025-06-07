@@ -28,6 +28,8 @@ python3Packages.buildPythonApplication rec {
     # and exit. This is gonna be used to configure calibre-web declaratively, as most of its configuration parameters
     # are stored in the DB.
     ./db-migrations.patch
+    # https://github.com/janeczku/calibre-web/commit/646937272a0849aa72cc2c1b95cc8445e460c0f8#diff-4d7c51b1efe9043e44439a949dfd92e5827321b34082903477fd04876edb7552
+    ./tornado.patch
   ];
 
   # calibre-web doesn't follow setuptools directory structure.
