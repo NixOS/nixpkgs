@@ -32,12 +32,12 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Generate a Go ORM tailored to your database schema";
     homepage = "https://github.com/volatiletech/sqlboiler";
     changelog = "https://github.com/volatiletech/sqlboiler/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ mrityunjaygr8 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ mrityunjaygr8 ];
     mainProgram = "sqlboiler";
   };
 }

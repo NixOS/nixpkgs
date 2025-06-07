@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
     inherit curl libsoup_3;
   };
 
-  meta = with lib; {
+  meta = {
     description = "HTTP/2 C library and tools";
     longDescription = ''
       nghttp2 is an implementation of the HyperText Transfer Protocol version 2 in C.
@@ -137,8 +137,8 @@ stdenv.mkDerivation rec {
     homepage = "https://nghttp2.org/";
     changelog = "https://github.com/nghttp2/nghttp2/releases/tag/v${version}";
     # News articles with changes summary can be found here: https://nghttp2.org/blog/archives/
-    license = licenses.mit;
-    maintainers = with maintainers; [ c0bw3b ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ c0bw3b ];
+    platforms = lib.platforms.all;
   };
 }

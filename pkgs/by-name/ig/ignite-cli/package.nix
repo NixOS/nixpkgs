@@ -38,12 +38,12 @@ buildGoModule rec {
     }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ignite.com/";
     changelog = "https://github.com/ignite/cli/releases/tag/v${version}";
     description = "All-in-one platform to build, launch, and maintain any crypto application on a sovereign and secured blockchain";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ kashw2 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ kashw2 ];
     mainProgram = "ignite";
   };
 }

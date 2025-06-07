@@ -38,16 +38,16 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Version Control System for $HOME";
     homepage = "https://github.com/RichiH/vcsh";
     changelog = "https://github.com/RichiH/vcsh/blob/v${version}/changelog";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       ttuegel
       alerque
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "vcsh";
   };
 }

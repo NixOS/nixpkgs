@@ -39,12 +39,12 @@ buildGoModule rec {
     command = "otel-desktop-viewer --version";
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/CtrlSpice/otel-desktop-viewer/releases/tag/v${version}";
     description = "Receive & visualize OpenTelemtry traces locally within one CLI tool";
     homepage = "https://github.com/CtrlSpice/otel-desktop-viewer";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ gaelreyrol ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ gaelreyrol ];
     mainProgram = "otel-desktop-viewer";
   };
 }

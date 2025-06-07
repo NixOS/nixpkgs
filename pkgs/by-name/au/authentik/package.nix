@@ -25,14 +25,14 @@ let
     hash = "sha256-idShMSYIrf3ViG9VFNGNu6TSjBz3Q+GJMMeCzcJwfG4=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Authentication glue you need";
     changelog = "https://github.com/goauthentik/authentik/releases/tag/version%2F${version}";
     homepage = "https://goauthentik.io/";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     broken = stdenvNoCC.buildPlatform != stdenvNoCC.hostPlatform;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jvanbruegge
       risson
     ];
