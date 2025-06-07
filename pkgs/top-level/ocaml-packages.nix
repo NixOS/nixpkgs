@@ -1288,6 +1288,10 @@ let
           callPackage ../development/ocaml-modules/mirage-crypto/rng-mirage.nix
             { };
 
+        mirage-crypto-rng-miou-unix =
+          callPackage ../development/ocaml-modules/mirage-crypto/rng-miou-unix.nix
+            { };
+
         mirage-device = callPackage ../development/ocaml-modules/mirage-device { };
 
         mirage-flow = callPackage ../development/ocaml-modules/mirage-flow { };
