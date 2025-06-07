@@ -269,7 +269,7 @@ in
   borgbackup = runTest ./borgbackup.nix;
   borgmatic = runTest ./borgmatic.nix;
   botamusique = runTest ./botamusique.nix;
-  bpf = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./bpf.nix { };
+  bpf = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./bpf.nix;
   bpftune = runTest ./bpftune.nix;
   breitbandmessung = runTest ./breitbandmessung.nix;
   broadcast-box = runTest ./broadcast-box.nix;
