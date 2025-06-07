@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Kalmat";
     repo = "EWMHlib";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NELOgUV8KuN+CqmoSbLYImguHlp8dyhGmJtoxJjOBkA=";
   };
 

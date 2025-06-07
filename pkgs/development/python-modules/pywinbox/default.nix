@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Kalmat";
     repo = "PyWinBox";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Z/gedrIFNpQvzRWqGxMEl5MoEIo9znZz/FZLMVl0Eb4=";
   };
 

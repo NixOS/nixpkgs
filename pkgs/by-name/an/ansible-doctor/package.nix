@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "thegeeklab";
     repo = "ansible-doctor";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nZv1PdR0kGrke2AjcDWjDWBdsw64UpHYFNDFAe/UoJo=";
   };
 

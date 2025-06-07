@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "xou816";
     repo = "spot";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-7zWK0wkh53ojnoznv4T/X//JeyKJVKOrfYF0IkvciIY=";
   };
 
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Native Spotify client for the GNOME desktop";
     homepage = "https://github.com/xou816/spot";
-    changelog = "https://github.com/xou816/spot/releases/tag/${src.rev}";
+    changelog = "https://github.com/xou816/spot/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "spot";

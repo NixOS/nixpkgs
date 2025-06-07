@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "wyoming-openwakeword";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-5suYJ+Z6ofVAysoCdHi5b5K0JTYaqeFZ32Cm76wC5LU=";
   };
 
