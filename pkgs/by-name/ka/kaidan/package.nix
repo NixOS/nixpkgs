@@ -5,33 +5,21 @@
   cmake,
   extra-cmake-modules,
   pkg-config,
-  wrapQtAppsHook,
-  qtbase,
-  qttools,
-  qtmultimedia,
-  qtlocation,
-  qqc2-desktop-style,
-  kirigami-addons,
-  kirigami,
-  kio,
-  knotifications,
-  kquickimageedit,
+  kdePackages,
   zxing-cpp,
   qxmpp,
-  sonnet,
   gst_all_1,
-  prison,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kaidan";
   version = "0.11.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "network";
-    repo = pname;
-    rev = "v${version}";
+    repo = "kaidan";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8pC4vINeKSYY+LlVgCXUtBq9UjraPdTikBOwLBLeQ3Y=";
   };
 
@@ -39,34 +27,34 @@ stdenv.mkDerivation rec {
     cmake
     extra-cmake-modules
     pkg-config
-    wrapQtAppsHook
+    kdePackages.wrapQtAppsHook
   ];
 
-  buildInputs = with gst_all_1; [
-    qtbase
-    qttools
-    qtmultimedia
-    qtlocation
-    qqc2-desktop-style
-    kirigami-addons
-    kirigami
-    kio
-    knotifications
-    kquickimageedit
+  buildInputs = [
+    kdePackages.kio
+    kdePackages.kirigami
+    kdePackages.kirigami-addons
+    kdePackages.knotifications
+    kdePackages.kquickimageedit
+    kdePackages.prison
+    kdePackages.qtbase
+    kdePackages.qttools
+    kdePackages.qtmultimedia
+    kdePackages.qtlocation
+    kdePackages.qqc2-desktop-style
+    kdePackages.sonnet
     zxing-cpp
     qxmpp
-    sonnet
-    gstreamer
-    gst-plugins-bad
-    gst-plugins-base
-    (gst-plugins-good.override { qt6Support = true; })
-    prison
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-base
+    (gst_all_1.gst-plugins-good.override { qt6Support = true; })
   ];
   postInstall = ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "User-friendly and modern chat app, using XMPP";
     mainProgram = "kaidan";
     longDescription = ''
@@ -79,13 +67,13 @@ stdenv.mkDerivation rec {
       messages, and file sharing.
     '';
     homepage = "https://www.kaidan.im";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       mit
       asl20
       cc-by-sa-40
     ];
-    maintainers = with maintainers; [ astro ];
-    platforms = with platforms; linux;
+    maintainers = with lib.maintainers; [ astro ];
+    platforms = with lib.platforms; linux;
   };
-}
+})
