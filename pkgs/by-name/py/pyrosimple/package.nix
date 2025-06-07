@@ -63,12 +63,12 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "RTorrent client";
     homepage = "https://kannibalox.github.io/pyrosimple/";
     changelog = "https://github.com/kannibalox/pyrosimple/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       ne9z
       vamega
     ];

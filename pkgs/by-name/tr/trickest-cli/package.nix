@@ -22,12 +22,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool to execute Trickest workflows";
     homepage = "https://github.com/trickest/trickest-cli";
     changelog = "https://github.com/trickest/trickest-cli/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "trickest";
   };
 }

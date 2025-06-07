@@ -46,12 +46,12 @@ python3.pkgs.buildPythonApplication rec {
   # Tests want to read the OpenAI API key from stdin
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Access ChatGPT from your terminal";
     homepage = "https://github.com/TheR1D/shell_gpt";
     changelog = "https://github.com/TheR1D/shell_gpt/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SohamG ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SohamG ];
     mainProgram = "sgpt";
   };
 }

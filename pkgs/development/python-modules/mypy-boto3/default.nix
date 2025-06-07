@@ -226,8 +226,8 @@ rec {
       "sha256-E/vP9Z9Cd6QZDJ2es245eXiUjTSsV1XNN9qNnIbXJ7E=";
 
   mypy-boto3-cloudformation =
-    buildMypyBoto3Package "cloudformation" "1.38.0"
-      "sha256-VjOZFmwH6R4GlfseWBA6JIsr7g214sPwcVV3bdYxGAU=";
+    buildMypyBoto3Package "cloudformation" "1.38.31"
+      "sha256-9BhSMfqrl7+1CyXcEyMzPGMKCS/6jBU1byERb8kqf0I=";
 
   mypy-boto3-cloudfront =
     buildMypyBoto3Package "cloudfront" "1.38.12"
@@ -762,8 +762,8 @@ rec {
       "sha256-PKOF/jd1Wjz8lCwbCd4cfHeStkvcDhQu7a7bpHaizgU=";
 
   mypy-boto3-kms =
-    buildMypyBoto3Package "kms" "1.38.0"
-      "sha256-s1D6mzq5T7G8jm2nxUr7Kq6QeT3oDBOF4yafahD+fq4=";
+    buildMypyBoto3Package "kms" "1.38.31"
+      "sha256-hCN7Docv7FRJrUW1JveU8v68OFl97PQ+xQRICQ8D9rY=";
 
   mypy-boto3-lakeformation =
     buildMypyBoto3Package "lakeformation" "1.38.0"
@@ -1398,8 +1398,8 @@ rec {
       "sha256-ndTROc1T2APmQHL7EsSeU3XxWPYzp1e32tzqe4UDs/8=";
 
   mypy-boto3-wafv2 =
-    buildMypyBoto3Package "wafv2" "1.38.0"
-      "sha256-j50nk+lk4EaSjKHQ94ZWz0euxQSubBx3pTRSRObxBtc=";
+    buildMypyBoto3Package "wafv2" "1.38.31"
+      "sha256-mWZAUafk2fNj9Se9q06vAKSswzLFqeqnt7e5mncqhdM=";
 
   mypy-boto3-wellarchitected =
     buildMypyBoto3Package "wellarchitected" "1.38.0"
