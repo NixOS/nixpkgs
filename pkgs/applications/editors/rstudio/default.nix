@@ -224,7 +224,7 @@ stdenv.mkDerivation rec {
   '';
 
   yarnOfflineCache = fetchYarnDeps {
-    yarnLock = quartoSrc + "/yarn.lock";
+    src = quartoSrc;
     hash = "sha256-F+gqVNNhLmyrC+tJuElw7cpx5z/WLHOiYow/y86KR5c=";
   };
 
@@ -244,41 +244,43 @@ stdenv.mkDerivation rec {
     hash = "sha256-ispV6FJdtOELtFNIZDn1lKbwvO/iTO8mrZ8nIOs2uhs=";
   };
 
-  preConfigure = ''
-    # populate the directories used by cmake's FetchContent
-    mkdir -p build/_deps
-    cp -r "$extSrcs"/* build/_deps
-    chmod -R u+w build/_deps
+  preConfigure =
+    ''
+      # populate the directories used by cmake's FetchContent
+      mkdir -p build/_deps
+      cp -r "$extSrcs"/* build/_deps
+      chmod -R u+w build/_deps
 
-    # set up node_modules directory inside quarto so that panmirror can be built
-    mkdir src/gwt/lib/quarto
-    cp -r --no-preserve=all ${quartoSrc}/* src/gwt/lib/quarto
-    pushd src/gwt/lib/quarto
-    yarnConfigHook
-    popd
+      # set up node_modules directory inside quarto so that panmirror can be built
+      mkdir src/gwt/lib/quarto
+      cp -r --no-preserve=all ${quartoSrc}/* src/gwt/lib/quarto
+      pushd src/gwt/lib/quarto
+      yarnConfigHook
+      popd
 
-    ### set up dependencies that will be copied into the result
-    # note: only the directory names have to match upstream, the actual versions don't
-    # note: symlinks are preserved
+      ### set up dependencies that will be copied into the result
+      # note: only the directory names have to match upstream, the actual versions don't
+      # note: symlinks are preserved
 
-    mkdir dependencies/dictionaries
-    for dict in ${builtins.concatStringsSep " " dictionaries}; do
-      for i in "$dict/share/hunspell/"*; do
-        ln -s $i dependencies/dictionaries/
+      mkdir dependencies/dictionaries
+      for dict in ${builtins.concatStringsSep " " dictionaries}; do
+        for i in "$dict/share/hunspell/"*; do
+          ln -s $i dependencies/dictionaries/
+        done
       done
-    done
 
-    ln -s ${quartoWrapper} dependencies/quarto
+      ln -s ${quartoWrapper} dependencies/quarto
 
-    # version in dependencies/common/install-mathjax
-    ln -s ${mathJaxSrc} dependencies/mathjax-27
+      # version in dependencies/common/install-mathjax
+      ln -s ${mathJaxSrc} dependencies/mathjax-27
 
-    mkdir -p dependencies/common/node
-    # node used by cmake
-    # version in cmake/globals.cmake (RSTUDIO_NODE_VERSION)
-    ln -s ${nodejs} dependencies/common/node/22.13.1
+      mkdir -p dependencies/common/node
+      # node used by cmake
+      # version in cmake/globals.cmake (RSTUDIO_NODE_VERSION)
+      ln -s ${nodejs} dependencies/common/node/22.13.1
 
-    ${lib.optionalString (!server) ''
+    ''
+    + lib.optionalString (!server) ''
       pushd $npmRoot
 
       substituteInPlace package.json \
@@ -308,23 +310,22 @@ stdenv.mkDerivation rec {
       # Work around known nan issue for electron_33 and above
       # https://github.com/nodejs/nan/issues/978
       substituteInPlace node_modules/nan/nan.h \
-          --replace-fail '#include "nan_scriptorigin.h"' ""
+        --replace-fail '#include "nan_scriptorigin.h"' ""
 
       # now that we patched everything, we still have to run the scripts we ignored with --ignore-scripts
       npm rebuild
 
       popd
-    ''}
-  '';
+    '';
 
-  postInstall = ''
-    mkdir -p $out/bin
-
-    ${lib.optionalString (server && stdenv.hostPlatform.isLinux) ''
+  postInstall =
+    ''
+      mkdir -p $out/bin
+    ''
+    + lib.optionalString (server && stdenv.hostPlatform.isLinux) ''
       ln -s $out/lib/rstudio/bin/{crash-handler-proxy,postback,r-ldpath,rpostback,rserver,rserver-pam,rsession,rstudio-server} $out/bin
-    ''}
-
-    ${lib.optionalString (!server && stdenv.hostPlatform.isLinux) ''
+    ''
+    + lib.optionalString (!server && stdenv.hostPlatform.isLinux) ''
       # remove unneeded electron files, since we'll wrap the app with our own electron
       shopt -s extglob
       rm -r $out/lib/rstudio/!(locales|resources|resources.pak)
@@ -335,19 +336,16 @@ stdenv.mkDerivation rec {
         --suffix PATH : ${lib.makeBinPath [ gnumake ]}
 
       ln -s $out/lib/rstudio/resources/app/bin/{diagnostics,rpostback} $out/bin
-    ''}
-
-    ${lib.optionalString (server && stdenv.hostPlatform.isDarwin) ''
+    ''
+    + lib.optionalString (server && stdenv.hostPlatform.isDarwin) ''
       ln -s $out/Applications/RStudio.app/Contents/MacOS/{crash-handler-proxy,postback,r-ldpath,rpostback,rserver,rserver-pam,rsession,rstudio-server} $out/bin
-    ''}
-
-    ${lib.optionalString (!server && stdenv.hostPlatform.isDarwin) ''
+    ''
+    + lib.optionalString (!server && stdenv.hostPlatform.isDarwin) ''
       # electron can't find its files if we use a symlink here
       makeWrapper $out/Applications/RStudio.app/Contents/MacOS/RStudio $out/bin/rstudio
 
       ln -s $out/Applications/RStudio.app/Contents/Resources/app/bin/{diagnostics,rpostback} $out/bin
-    ''}
-  '';
+    '';
 
   passthru = {
     inherit server;
