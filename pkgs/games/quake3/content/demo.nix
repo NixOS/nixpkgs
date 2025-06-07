@@ -32,11 +32,11 @@ stdenv.mkDerivation {
 
       To switch to such a resolution, you will have to enter something like this in the quake console (invoke with ~ by default)
 
-      r_mode -1; r_customwidth 1920; r_customheight 1080; r_fullscreen 1; vid_restart
+      r_mode -1; r_customwidth 2560; r_customheight 1440; r_fullscreen 1; vid_restart
 
       Or call the quake commandline with these parameters
 
-      $ quake3 +set r_mode -1 +set r_customwidth 1920 +set r_customheight 1080 +set r_fullscreen 1 +vid_restart
+      $ quake3 +set r_mode -1 +set r_customwidth 2560 +set r_customheight 1440 +set r_fullscreen 1
     '';
     homepage = "https://www.idsoftware.com/";
     license = licenses.unfreeRedistributable;
