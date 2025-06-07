@@ -76,12 +76,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preFixup = ''
-    makeWrapper ${dotnet-runtime_7}/bin/dotnet $out/bin/vintagestory \
+    makeWrapper ${lib.getExe dotnet-runtime_7} $out/bin/vintagestory \
       --prefix LD_LIBRARY_PATH : "${finalAttrs.runtimeLibs}" \
       --set-default mesa_glthread true \
       --add-flags $out/share/vintagestory/Vintagestory.dll
 
-    makeWrapper ${dotnet-runtime_7}/bin/dotnet $out/bin/vintagestory-server \
+    makeWrapper ${lib.getExe dotnet-runtime_7} $out/bin/vintagestory-server \
       --prefix LD_LIBRARY_PATH : "${finalAttrs.runtimeLibs}" \
       --set-default mesa_glthread true \
       --add-flags $out/share/vintagestory/VintagestoryServer.dll
