@@ -12,8 +12,8 @@ stdenv.mkDerivation {
   inherit pname version;
   src = fetchFromGitHub {
     owner = "jcsalterego";
-    repo = pname;
-    rev = version;
+    repo = "pngpaste";
+    tag = version;
     sha256 = "uvajxSelk1Wfd5is5kmT2fzDShlufBgC0PDCeabEOSE=";
   };
 
