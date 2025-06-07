@@ -18,12 +18,12 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-kIrbHt6aAUgdF4Jx/aUOYpiBj1+pyFLCVak6R+JN2Ug=";
 
-  meta = with lib; {
+  meta = {
     description = "Ping the host continuously and write results to a file";
     homepage = "https://github.com/audiusGmbH/audion";
     changelog = "https://github.com/audiusGmbH/audion/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "audion";
   };
 }

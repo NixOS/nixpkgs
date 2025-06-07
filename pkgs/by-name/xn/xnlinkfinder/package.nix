@@ -44,12 +44,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "xnLinkFinder" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to discover endpoints, potential parameters, and a target specific wordlist for a given target";
     homepage = "https://github.com/xnl-h4ck3r/xnLinkFinder";
     changelog = "https://github.com/xnl-h4ck3r/xnLinkFinder/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "xnLinkFinder";
   };
 }
