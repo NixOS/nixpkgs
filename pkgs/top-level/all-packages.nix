@@ -177,6 +177,23 @@ with pkgs;
 
   __flattenIncludeHackHook = callPackage ../build-support/setup-hooks/flatten-include-hack { };
 
+  arrayUtilities =
+    let
+      arrayUtilitiesPackages = makeScopeWithSplicing' {
+        otherSplices = generateSplicesForMkScope "arrayUtilities";
+        f =
+          finalArrayUtilities:
+          {
+            callPackages = lib.callPackagesWith (pkgs // finalArrayUtilities);
+          }
+          // lib.packagesFromDirectoryRecursive {
+            inherit (finalArrayUtilities) callPackage;
+            directory = ../build-support/setup-hooks/arrayUtilities;
+          };
+      };
+    in
+    recurseIntoAttrs arrayUtilitiesPackages;
+
   addBinToPathHook = callPackage (
     { makeSetupHook }:
     makeSetupHook {
