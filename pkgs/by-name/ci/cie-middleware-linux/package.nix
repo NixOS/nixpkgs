@@ -145,8 +145,6 @@ stdenv.mkDerivation {
     '';
     license = licenses.bsd3;
     platforms = platforms.unix;
-    # Note: fails due to a lot of broken type conversions
-    badPlatforms = platforms.darwin;
     maintainers = with maintainers; [ rnhmjoj ];
   };
 }
