@@ -552,7 +552,7 @@ in
   freenet = runTest ./freenet.nix;
   freeswitch = runTest ./freeswitch.nix;
   freetube = discoverTests (import ./freetube.nix);
-  freshrss = handleTest ./freshrss { };
+  freshrss = import ./freshrss { inherit runTest; };
   frigate = runTest ./frigate.nix;
   froide-govplan = runTest ./web-apps/froide-govplan.nix;
   frp = runTest ./frp.nix;
