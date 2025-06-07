@@ -2,11 +2,12 @@
   lib,
   fetchFromGitHub,
   buildDunePackage,
+  fpath,
 }:
 
 buildDunePackage rec {
   pname = "directories";
-  version = "0.5";
+  version = "0.6";
   useDune2 = true;
 
   minimalOCamlVersion = "4.07";
@@ -15,8 +16,12 @@ buildDunePackage rec {
     owner = "ocamlpro";
     repo = pname;
     rev = version;
-    sha256 = "sha256-31CGhmmfOORJ1ewgp+IU+p1+f2kfX/W+lxK7EGU62vc=";
+    sha256 = "sha256-c/9ChiSODD1K7YsMj65tjErAwXeWvEQ8BkAcUvsr19c=";
   };
+
+  propagatedBuildInputs = [
+    fpath
+  ];
 
   meta = {
     homepage = "https://github.com/ocamlpro/directories";
