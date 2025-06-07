@@ -620,6 +620,8 @@ with pkgs;
 
   fetchNextcloudApp = callPackage ../build-support/fetchnextcloudapp { };
 
+  mirrors = config.mirrors;
+
   # `fetchurl' downloads a file from the network.
   fetchurl =
     if stdenv.buildPlatform != stdenv.hostPlatform then
@@ -628,6 +630,7 @@ with pkgs;
       makeOverridable (import ../build-support/fetchurl) {
         inherit lib stdenvNoCC buildPackages;
         inherit cacert;
+        inherit mirrors;
         inherit (config) rewriteURL;
         curl = buildPackages.curlMinimal.override (old: rec {
           # break dependency cycles
