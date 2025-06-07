@@ -486,7 +486,7 @@ in
   fedimintd = runTest ./fedimintd.nix;
   fenics = runTest ./fenics.nix;
   ferm = runTest ./ferm.nix;
-  ferretdb = handleTest ./ferretdb.nix { };
+  ferretdb = import ./ferretdb.nix { inherit pkgs runTest; };
   fider = runTest ./fider.nix;
   filesender = runTest ./filesender.nix;
   filebrowser = runTest ./filebrowser.nix;
