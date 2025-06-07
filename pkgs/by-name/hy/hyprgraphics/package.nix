@@ -10,7 +10,6 @@
   hyprutils,
   libjpeg,
   libjxl,
-  libspng,
   libwebp,
   pixman,
 }:
@@ -26,6 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-prQ5JKopXtzCMX2eT3dXbaVvGmzjMRE2bXStQDdazpM=";
   };
 
+  patches = [
+    ./remove-spng.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -37,7 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     hyprutils
     libjpeg
     libjxl
-    libspng
     libwebp
     pixman
   ];
