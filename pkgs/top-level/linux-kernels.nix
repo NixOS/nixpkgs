@@ -709,6 +709,8 @@ in
 
         qc71_laptop = callPackage ../os-specific/linux/qc71_laptop { };
 
+        qc71_slimbook_laptop = callPackage ../os-specific/linux/qc71_slimbook_laptop { };
+
         hid-ite8291r3 = callPackage ../os-specific/linux/hid-ite8291r3 { };
 
         hid-t150 = callPackage ../os-specific/linux/hid-t150 { };
