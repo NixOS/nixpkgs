@@ -21,6 +21,7 @@
       "gfx908"
       "gfx90a"
       "gfx942"
+      "gfx1010"
       "gfx1030"
       "gfx1100"
       "gfx1101"
@@ -28,6 +29,10 @@
     ]
   ),
 }:
+
+assert lib.warnIf (builtins.elem "gfx1010" gpuTargets)
+  "The current ROCm release does not support gfx1010 hardware and it's considered to be experimental"
+  true;
 
 stdenv.mkDerivation (finalAttrs: {
   preBuild = ''
@@ -115,6 +120,13 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals buildTests [
       "-DGOOGLETEST_DIR=${gtest.src}" # Custom linker names
     ];
+
+  patches = [
+    # Required to gfx1010 support
+    ./5465fcc9e25ab9828b9d34ce5d341a127ff8ea9e.patch
+    ./3e23090b5b29d0eea3bbec0ee1b03a182894c831.patch
+    ./88952b6d4e6bea810aaa4c063bdaf5b8252acb1c.patch
+  ];
 
   # No flags to build selectively it seems...
   postPatch =
