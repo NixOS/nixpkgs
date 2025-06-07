@@ -8,18 +8,18 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "hyprswitch";
-  version = "3.3.2";
+  pname = "hyprshell";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "H3rmt";
     repo = "hyprswitch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cmo544QvdacVTHPqmc6er4xnSSc63e6Z71BS0FxSklE=";
+    hash = "sha256-eSTeNVHkfUS6qlN1pWWpMVeT+jjacithCHOpOhRKanA=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-DEifup2oAcqZplx2JoN3hkP1VmxwYVFS8ZqfpR80baA=";
+  cargoHash = "sha256-NzyK46zmHWxFaTS9mzFC7kBUMys1sjmcWaZUcwLusEk=";
 
   nativeBuildInputs = [
     wrapGAppsHook4
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "CLI/GUI that allows switching between windows in Hyprland";
-    mainProgram = "hyprswitch";
+    mainProgram = "hyprshell";
     homepage = "https://github.com/H3rmt/hyprswitch";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
