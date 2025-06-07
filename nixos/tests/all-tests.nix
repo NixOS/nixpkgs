@@ -297,10 +297,10 @@ in
   centrifugo = runTest ./centrifugo.nix;
   ceph-multi-node = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./ceph-multi-node.nix;
   ceph-single-node = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./ceph-single-node.nix;
-  ceph-single-node-bluestore = handleTestOn [
+  ceph-single-node-bluestore = runTestOn [
     "aarch64-linux"
     "x86_64-linux"
-  ] ./ceph-single-node-bluestore.nix { };
+  ] ./ceph-single-node-bluestore.nix;
   ceph-single-node-bluestore-dmcrypt = handleTestOn [
     "aarch64-linux"
     "x86_64-linux"
