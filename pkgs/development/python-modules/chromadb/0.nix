@@ -3,7 +3,10 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchurl,
+
+  # build-system
+  setuptools-scm,
+  setuptools,
 
   # build inputs
   cargo,
@@ -11,7 +14,6 @@
   protobuf,
   rustc,
   rustPlatform,
-  pkgs, # zstd hidden by python3Packages.zstd
   openssl,
 
   # dependencies
@@ -21,7 +23,6 @@
   grpcio,
   httpx,
   importlib-resources,
-  jsonschema,
   kubernetes,
   mmh3,
   numpy,
@@ -44,20 +45,16 @@
   typer,
   typing-extensions,
   uvicorn,
+  zstd,
 
   # optional dependencies
   chroma-hnswlib,
 
   # tests
-  hnswlib,
   hypothesis,
-  pandas,
   psutil,
   pytest-asyncio,
-  pytest-xdist,
   pytestCheckHook,
-  sqlite,
-  starlette,
 
   # passthru
   nixosTests,
@@ -65,46 +62,32 @@
 }:
 
 buildPythonPackage rec {
-  pname = "chromadb";
-  version = "1.0.12";
+  pname = "chromadb_0";
+  version = "0.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chroma-core";
     repo = "chroma";
     tag = version;
-    hash = "sha256-Q4PhJTRNzJeVx6DIPWirnI9KksNb8vfOtqb/q9tSK3c=";
+    hash = "sha256-yvAX8buETsdPvMQmRK5+WFz4fVaGIdNlfhSadtHwU5U=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    name = "${pname}-${version}-vendor";
-    hash = "sha256-+Ea2aRrsBGfVCLdOF41jeMehJhMurc8d0UKrpR6ndag=";
+    name = "${pname}-${version}";
+    hash = "sha256-lHRBXJa/OFNf4x7afEJw9XcuDveTBIy3XpQ3+19JXn4=";
   };
-
-  # Can't use fetchFromGitHub as the build expects a zipfile
-  swagger-ui = fetchurl {
-    url = "https://github.com/swagger-api/swagger-ui/archive/refs/tags/v5.22.0.zip";
-    hash = "sha256-H+kXxA/6rKzYA19v7Zlx2HbIg/DGicD5FDIs0noVGSk=";
-  };
-
-  patches = [
-    # The fastapi servers can't set up their networking in the test environment, so disable for testing
-    ./disable-fastapi-fixtures.patch
-  ];
-
-  postPatch = ''
-    # Nixpkgs is taking the version from `chromadb_rust_bindings` which is versioned independently
-    substituteInPlace pyproject.toml \
-      --replace-fail "dynamic = [\"version\"]" "version = \"${version}\""
-  '';
 
   pythonRelaxDeps = [
-    "fastapi"
+    "chroma-hnswlib"
+    "orjson"
+    "tokenizers"
   ];
 
   build-system = [
-    rustPlatform.maturinBuildHook
+    setuptools
+    setuptools-scm
   ];
 
   nativeBuildInputs = [
@@ -117,17 +100,17 @@ buildPythonPackage rec {
 
   buildInputs = [
     openssl
-    pkgs.zstd
+    zstd
   ];
 
   dependencies = [
     bcrypt
     build
+    chroma-hnswlib
     fastapi
     grpcio
     httpx
     importlib-resources
-    jsonschema
     kubernetes
     mmh3
     numpy
@@ -152,21 +135,11 @@ buildPythonPackage rec {
     uvicorn
   ];
 
-  optional-dependencies = {
-    dev = [ chroma-hnswlib ];
-  };
-
   nativeCheckInputs = [
-    chroma-hnswlib
-    hnswlib
     hypothesis
-    pandas
     psutil
     pytest-asyncio
-    pytest-xdist
     pytestCheckHook
-    sqlite
-    starlette
   ];
 
   # Disable on aarch64-linux due to broken onnxruntime
@@ -178,16 +151,11 @@ buildPythonPackage rec {
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
-    SWAGGER_UI_DOWNLOAD_URL = "file://${swagger-ui}";
   };
 
   pytestFlagsArray = [
     "-x" # these are slow tests, so stop on the first failure
     "-v"
-    "-W"
-    "ignore:DeprecationWarning"
-    "-W"
-    "ignore:PytestCollectionWarning"
   ];
 
   preCheck = ''
@@ -205,61 +173,38 @@ buildPythonPackage rec {
 
     # httpx ReadError
     "test_not_existing_collection_delete"
-
-    # Tests launch a server and try to connect to it
-    # These either have https connection errors or name resolution errors
-    "test_collection_query_with_invalid_collection_throws"
-    "test_collection_update_with_invalid_collection_throws"
-    "test_default_embedding"
-    "test_invalid_index_params"
-    "test_peek"
-    "test_persist_index_loading"
-    "test_query_id_filtering_e2e"
-    "test_query_id_filtering_medium_dataset"
-    "test_query_id_filtering_small_dataset"
-    "test_ssl_self_signed_without_ssl_verify"
-    "test_ssl_self_signed"
-
-    # Apparent race condition with sqlite
-    # See https://github.com/chroma-core/chroma/issues/4661
-    "test_multithreaded_get_or_create"
   ];
 
   disabledTestPaths = [
     # Tests require network access
-    "bin/rust_python_compat_test.py"
-    "chromadb/test/configurations/test_collection_configuration.py"
+    "chromadb/test/auth/test_simple_rbac_authz.py"
+    "chromadb/test/db/test_system.py"
     "chromadb/test/ef/test_default_ef.py"
-    "chromadb/test/ef/test_onnx_mini_lm_l6_v2.py"
-    "chromadb/test/ef/test_voyageai_ef.py"
     "chromadb/test/property/"
     "chromadb/test/property/test_cross_version_persist.py"
     "chromadb/test/stress/"
     "chromadb/test/test_api.py"
 
-    # Tests time out (waiting for server)
-    "chromadb/test/test_cli.py"
+    # httpx failures
+    "chromadb/test/api/test_delete_database.py"
 
-    # Cannot find protobuf file while loading test
-    "chromadb/test/distributed/test_log_failover.py"
+    # Cannot be loaded by pytest without path hacks (fixed in 1.0.0)
+    "chromadb/test/test_logservice.py"
+    "chromadb/test/proto/test_utils.py"
+    "chromadb/test/segment/distributed/test_protobuf_translation.py"
+
+    # Hypothesis FailedHealthCheck due to nested @given tests
+    "chromadb/test/cache/test_cache.py"
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  passthru = {
-    tests = {
-      inherit (nixosTests) chromadb;
-    };
-
-    updateScript = nix-update-script {
-      # we have to update both the python hash and the cargo one,
-      # so use nix-update-script
-      extraArgs = [
-        "--versionRegex"
-        "([0-9].+)"
-      ];
-    };
+  passthru.tests = {
+    inherit (nixosTests) chromadb;
   };
+
+  # nixpkgs-update: no auto update
+  # 0.6.3 is the last of the 0.x series
 
   meta = {
     description = "AI-native open-source embedding database";

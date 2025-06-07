@@ -2458,6 +2458,8 @@ self: super: with self; {
 
   chromadb = callPackage ../development/python-modules/chromadb { };
 
+  chromadb_0 = callPackage ../development/python-modules/chromadb/0.nix { };
+
   chromaprint = callPackage ../development/python-modules/chromaprint { };
 
   ci-info = callPackage ../development/python-modules/ci-info { };
