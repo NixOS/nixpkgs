@@ -10,15 +10,14 @@
 }:
 
 buildDunePackage rec {
-  duneVersion = "3";
-  minimalOCamlVersion = "4.08";
-
-  version = "2.4.0";
+  version = "2.5.0";
   pname = "cow";
 
+  minimalOCamlVersion = "4.03";
+
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-cow/releases/download/v${version}/cow-v${version}.tbz";
-    sha256 = "1x77lwpskda4zyikwxh500xjn90pgdwz6jm7ca7f36pyav4vl6zx";
+    url = "https://github.com/mirage/ocaml-cow/releases/download/v${version}/cow-${version}.tbz";
+    hash = "sha256-8rNK+5oWUbi91gXvdz/66YQu5+iXp0Co8wk0Isv6b9Y=";
   };
 
   propagatedBuildInputs = [
