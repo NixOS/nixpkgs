@@ -103,5 +103,6 @@ stdenv.mkDerivation rec {
       gigglesquid
       niraethm
     ];
+    mainProgram = "vintagestory";
   };
 }
