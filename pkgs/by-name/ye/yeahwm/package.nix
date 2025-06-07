@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   installShellFiles,
-  lesstif,
+  motif,
   libX11,
   libXext,
   libXinerama,
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    lesstif
+    motif
     libX11
     libXext
     libXinerama
