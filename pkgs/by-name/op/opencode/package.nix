@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
@@ -27,6 +28,8 @@ buildGoModule (finalAttrs: {
       ];
     in
     [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Powerful terminal-based AI assistant providing intelligent coding assistance";
