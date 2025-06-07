@@ -1,0 +1,33 @@
+{
+  "lockfileVersion": 1,
+  "workspaces": {
+    "": {
+      "name": "monorepo-test",
+      "devDependencies": {
+        "typescript": "5.8.3"
+      }
+    },
+    "packages/core": {
+      "name": "@test/core",
+      "version": "1.0.0",
+      "dependencies": {
+        "lodash": "^4.17.21"
+      }
+    },
+    "packages/ui": {
+      "name": "@test/ui",
+      "version": "1.0.0",
+      "dependencies": {
+        "@test/core": "workspace:*",
+        "react": "^18.2.0"
+      }
+    }
+  },
+  "packages": {
+    "@test/core": ["@test/core@workspace:packages/core"],
+    "@test/ui": ["@test/ui@workspace:packages/ui"],
+    "lodash": ["lodash@4.17.21", "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz", {}, "sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg=="],
+    "react": ["react@18.2.0", "https://registry.npmjs.org/react/-/react-18.2.0.tgz", {}, "sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ=="],
+    "typescript": ["typescript@5.8.3", "https://registry.npmjs.org/typescript/-/typescript-5.8.3.tgz", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof7sfgPjvMzKePZqFYcbGaF+7sfgPeQ=="]
+  }
+}
