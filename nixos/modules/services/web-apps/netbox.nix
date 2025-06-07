@@ -103,19 +103,17 @@ in
       type = lib.types.package;
       default =
         if lib.versionAtLeast config.system.stateVersion "25.05" then
+          pkgs.netbox_4_3
+        else if lib.versionAtLeast config.system.stateVersion "25.05" then
           pkgs.netbox_4_2
-        else if lib.versionAtLeast config.system.stateVersion "24.11" then
-          pkgs.netbox_4_1
-        else if lib.versionAtLeast config.system.stateVersion "24.05" then
-          pkgs.netbox_3_7
         else
-          pkgs.netbox_3_6;
+          pkgs.netbox_4_1;
       defaultText = lib.literalExpression ''
-        if lib.versionAtLeast config.system.stateVersion "24.11"
-        then pkgs.netbox_4_1
-        else if lib.versionAtLeast config.system.stateVersion "24.05"
-        then pkgs.netbox_3_7
-        else pkgs.netbox_3_6;
+        if lib.versionAtLeast config.system.stateVersion "25.11"
+        then pkgs.netbox_4_3
+        else if lib.versionAtLeast config.system.stateVersion "25.05"
+        then pkgs.netbox_4_2
+        else pkgs.netbox_4_1;
       '';
       description = ''
         NetBox package to use.
