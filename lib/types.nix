@@ -1082,6 +1082,15 @@ let
           nestedTypes.elemType = elemType;
         };
 
+      extensionFunction = lib.mkOptionType {
+        name = "extensionFunction";
+        description = "extension function";
+        check = lib.isFunction;
+        # A more capable function is possible, see
+        # https://github.com/NixOS/nixpkgs/issues/215486
+        merge = lib.mergeOneOption;
+      };
+
       # A submodule (like typed attribute set). See NixOS manual.
       submodule =
         modules:

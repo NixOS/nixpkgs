@@ -44,13 +44,6 @@ let
     merge = args: lib.foldr (def: mergeConfig def.value) { };
   };
 
-  overlayType = lib.mkOptionType {
-    name = "nixpkgs-overlay";
-    description = "nixpkgs overlay";
-    check = lib.isFunction;
-    merge = lib.mergeOneOption;
-  };
-
   pkgsType = lib.types.pkgs // {
     # This type is only used by itself, so let's elaborate the description a bit
     # for the purpose of documentation.
@@ -183,7 +176,7 @@ in
           })
         ]
       '';
-      type = lib.types.listOf overlayType;
+      type = lib.types.listOf lib.types.extensionFunction;
       description = ''
         List of overlays to apply to Nixpkgs.
         This option allows modifying the Nixpkgs package set accessed through the `pkgs` module argument.

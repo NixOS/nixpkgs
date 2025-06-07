@@ -139,6 +139,11 @@ merging is handled.
 
 :   A type for the top level Nixpkgs package set.
 
+`types.extensionFunction`
+
+:   An extension function (e.g. `final: prev: { }`). Typically used to overlay
+    the Nixpkgs package set or other "extensible" attrsets.
+
 ### Numeric types {#sec-option-types-numeric}
 
 `types.int`
