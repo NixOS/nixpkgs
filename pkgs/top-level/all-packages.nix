@@ -13870,10 +13870,6 @@ with pkgs;
     backend = "wayland";
   };
 
-  rstudio = callPackage ../applications/editors/rstudio {
-    jdk = jdk8;
-  };
-
   rstudio-server = rstudio.override { server = true; };
 
   rsync = callPackage ../applications/networking/sync/rsync (config.rsync or { });
