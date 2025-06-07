@@ -1259,6 +1259,13 @@ as many tests should be enabled as possible. Failing tests can still be
 a good indication that the package is not in a valid state.
 :::
 
+::: {.note}
+We only want to test the functionality of a package. In particular, we are not
+interested in coverage, formatting, and type checking. If pytest fails with
+`unrecognized arguments: --cov`, add `pytest-cov-stub` to `nativeCheckInputs`
+rather than `pytest-cov`.
+:::
+
 #### Using pytest {#using-pytest}
 
 Pytest is the most common test runner for python repositories. A trivial
