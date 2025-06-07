@@ -6974,6 +6974,11 @@ with pkgs;
     bazel_self = bazel_7;
   };
 
+  bazel_8 = callPackage ../by-name/ba/bazel_8/package.nix {
+    # https://github.com/bazelbuild/bazel/issues/25124
+    stdenv = if stdenv.cc.isClang then llvmPackages_17.stdenv else stdenv;
+  };
+
   buildifier = bazel-buildtools;
   buildozer = bazel-buildtools;
   unused_deps = bazel-buildtools;
