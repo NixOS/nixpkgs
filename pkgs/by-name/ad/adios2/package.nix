@@ -70,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals pythonSupport [
       python3Packages.python
       python3Packages.pybind11
+      python3Packages.pythonImportsCheckHook
     ];
 
   buildInputs =
@@ -168,7 +169,6 @@ stdenv.mkDerivation (finalAttrs: {
   pythonImportsCheck = [ "adios2" ];
 
   nativeInstallCheckInputs = lib.optionals pythonSupport [
-    python3Packages.pythonImportsCheckHook
     python3Packages.pytestCheckHook
   ];
 
