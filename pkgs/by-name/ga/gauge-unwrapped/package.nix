@@ -17,7 +17,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "getgauge";
     repo = "gauge";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-cBB0sDPuM4qxxkRug+8sNyH5CwGZhKK4PdKbb3B3KRE=";
   };
 
