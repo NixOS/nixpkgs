@@ -10,18 +10,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "easytier";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "EasyTier";
     repo = "EasyTier";
     tag = "v${version}";
-    hash = "sha256-F///8C7lyJZj5+u80nauDdrPFrEE40s0DeNzQeblImw=";
+    hash = "sha256-urcwzM5nup3+guvSngw+I2QBjmjSc/WV7BWFpISVDBg=";
   };
 
   useFetchCargoVendor = true;
 
-  cargoHash = "sha256-f64tOU8AKC14tqX9Q3MLa7/pmIuI4FeFGOct8ZTAe+k=";
+  cargoHash = "sha256-rqL8tnLPeXK2BLvSFrzMRvtJAqHgOqNh4fE0w8c0ThU=";
 
   nativeBuildInputs = [
     protobuf
