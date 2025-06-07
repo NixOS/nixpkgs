@@ -287,7 +287,10 @@ in
 
     systemd.packages = [ pkgs.pdns-recursor ];
 
-    systemd.services.pdns-recursor.wantedBy = [ "multi-user.target" ];
+    systemd.services.pdns-recursor = {
+      restartTriggers = [ config.environment.etc."/pdns-recursor/recursor.yml".source ];
+      wantedBy = [ "multi-user.target" ];
+    };
 
     users.users.pdns-recursor = {
       isSystemUser = true;
