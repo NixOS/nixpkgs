@@ -465,6 +465,17 @@ in
                 apply = unique;
                 default = [ ];
               };
+
+              overwriteMembers = mkOption {
+                description = ''
+                  Whether the member list should be overwritten each time (true) or appended
+                  (false). Append mode allows interactive group management in addition to the
+                  declared members. Also, future member removals cannot be reflected
+                  automatically in append mode.
+                '';
+                type = types.bool;
+                default = true;
+              };
             };
             config.members = concatLists (
               flip mapAttrsToList cfg.provision.persons (
