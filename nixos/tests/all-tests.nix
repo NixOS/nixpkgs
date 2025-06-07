@@ -388,7 +388,7 @@ in
   cryptpad = runTest ./cryptpad.nix;
   cups-pdf = runTest ./cups-pdf.nix;
   curl-impersonate = runTest ./curl-impersonate.nix;
-  custom-ca = handleTest ./custom-ca.nix { };
+  custom-ca = import ./custom-ca.nix { inherit pkgs runTest; };
   croc = runTest ./croc.nix;
   cross-seed = runTest ./cross-seed.nix;
   cyrus-imap = runTest ./cyrus-imap.nix;
