@@ -97,6 +97,7 @@ stdenv.mkDerivation rec {
     description = "In-development indie sandbox game about innovation and exploration";
     homepage = "https://www.vintagestory.at/";
     license = lib.licenses.unfree;
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
     maintainers = with lib.maintainers; [
       artturin
       gigglesquid
