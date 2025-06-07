@@ -3,6 +3,7 @@
   runCommand,
   fetchurl,
   fetchgit,
+  fetchpatch,
   fetchpatch2,
   lib,
   pam,
@@ -466,7 +467,16 @@ stdenv.mkDerivation (finalAttrs: {
       libwpd
       libwpg
       libwps
-      libxml2
+      (libxml2.overrideAttrs (old: {
+        # Fix for a libxml2 bug: https://www.mail-archive.com/debian-bugs-dist@lists.debian.org/msg2040734.html
+        # This should be reverted and applied on our libxml2 globally on staging
+        patches = [
+          (fetchpatch {
+            url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/5133461b05f0f66e6c5b0fecd5f29dc5cd967302.patch";
+            hash = "sha256-pkaLBeLAiNbEIMnWPw0w0uK+GHAxRxY+CwhQWrSTwEI=";
+          })
+        ];
+      }))
       xorg.libxshmfence
       libxslt
       libzmf
