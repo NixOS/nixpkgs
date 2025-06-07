@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sudo-rs";
-  version = "0.2.6";
+  version = "0.2.6-man";
 
   src = fetchFromGitHub {
     owner = "trifectatechfoundation";
     repo = "sudo-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vZv3IVSW6N0puoWJBYQPmNntgHPt9SPV07TEuWN/bHw=";
+    hash = "sha256-vYhsskZ0l4hw9pVZ2qvJOqVnNOvPmkpgtbPUw1t5Hh8=";
   };
   useFetchCargoVendor = true;
   cargoHash = "sha256-/CbU2ds2VQ2IXx7GKxRO3vePzLXJXabA1FcyIGPsngw=";
