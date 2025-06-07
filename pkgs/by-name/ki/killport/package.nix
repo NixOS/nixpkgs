@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Command-line tool to easily kill processes running on a specified port";
     homepage = "https://github.com/jkfran/killport";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sno2wman ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "killport";
   };
 })
