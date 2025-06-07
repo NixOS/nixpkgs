@@ -580,7 +580,7 @@ in
   };
   gatus = runTest ./gatus.nix;
   getaddrinfo = runTest ./getaddrinfo.nix;
-  gemstash = handleTest ./gemstash.nix { };
+  gemstash = import ./gemstash.nix { inherit pkgs runTest; };
   geoclue2 = runTest ./geoclue2.nix;
   geoserver = runTest ./geoserver.nix;
   gerrit = runTest ./gerrit.nix;
