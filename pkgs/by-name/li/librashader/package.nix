@@ -1,6 +1,7 @@
 {
   fetchFromGitHub,
   lib,
+  nix-update-script,
   rustPlatform,
   stdenv,
 }:
@@ -57,6 +58,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       install -m644 ../../include/librashader_ld.h -t $out/include/librashader
       runHook postInstall
     '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "librashader-v(.*)"
+    ];
+  };
 
   meta = {
     description = "RetroArch Shaders for All";
