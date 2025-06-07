@@ -30,7 +30,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://crowdsec.net/";
-    changelog = "https://github.com/${src.owner}/${src.repo}/releases/tag/v${version}";
+    changelog = "https://github.com/${src.owner}/${src.repo}/releases/tag/${src.tag}";
     description = "Crowdsec bouncer written in golang for firewalls";
     longDescription = ''
       CrowdSec Remediation Component written in golang for firewalls.
