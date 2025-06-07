@@ -482,7 +482,7 @@ in
   fakeroute = runTest ./fakeroute.nix;
   fancontrol = runTest ./fancontrol.nix;
   fanout = runTest ./fanout.nix;
-  fcitx5 = handleTest ./fcitx5 { };
+  fcitx5 = runTest ./fcitx5;
   fedimintd = runTest ./fedimintd.nix;
   fenics = runTest ./fenics.nix;
   ferm = runTest ./ferm.nix;
