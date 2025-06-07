@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
-  meta = with lib; {
+  meta = {
     description = "C++ implementation of a fast hash map and hash set using robin hood hashing";
     homepage = "https://github.com/Tessil/robin-map";
     changelog = "https://github.com/Tessil/robin-map/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = [ ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.unix;
   };
 }

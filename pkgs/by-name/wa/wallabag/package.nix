@@ -42,17 +42,17 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "wallabag is a self hostable application for saving web pages";
     longDescription = ''
       wallabag is a self-hostable PHP application allowing you to not
       miss any content anymore. Click, save and read it when you can.
       It extracts content so that you can read it when you have time.
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://wallabag.org";
     changelog = "https://github.com/wallabag/wallabag/releases/tag/${version}";
-    maintainers = with maintainers; [ schneefux ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ schneefux ];
+    platforms = lib.platforms.all;
   };
 }

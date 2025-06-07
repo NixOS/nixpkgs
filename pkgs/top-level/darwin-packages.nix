@@ -56,8 +56,7 @@ makeScopeWithSplicing' {
       };
 
       binutils = pkgs.wrapBintoolsWith {
-        libc =
-          if stdenv.targetPlatform != stdenv.hostPlatform then targetPackages.libc else pkgs.stdenv.cc.libc;
+        inherit (targetPackages) libc;
         bintools = self.binutils-unwrapped;
       };
 

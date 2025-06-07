@@ -34,13 +34,13 @@ buildGoModule {
     cp ip46tables nft46 $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Scan logs and take action: an alternative to fail2ban";
     homepage = "https://framagit.org/ppom/reaction";
     changelog = "https://framagit.org/ppom/reaction/-/releases/v${version}";
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
     mainProgram = "reaction";
-    maintainers = with maintainers; [ ppom ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ ppom ];
+    platforms = lib.platforms.unix;
   };
 }
