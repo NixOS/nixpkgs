@@ -50,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/puppylinux-woof-CE/gtkdialog";
     description = "Small utility for fast and easy GUI building from many scripted and compiled languages";
     mainProgram = "gtkdialog";
+    maintainers = with lib.maintainers; [ aleksana ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };
