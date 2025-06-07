@@ -6,16 +6,16 @@
 
 buildDunePackage rec {
   pname = "benchmark";
-  version = "1.6";
+  version = "1.7";
 
   src = fetchurl {
-    url = "https://github.com/Chris00/ocaml-benchmark/releases/download/${version}/benchmark-${version}.tbz";
-    hash = "sha256-Mw19cYya/MEy52PVRYE/B6TnqCWw5tEz9CUrUfKAnPA=";
+    url = "https://github.com/Chris00/ocaml-benchmark/releases/download/v${version}/benchmark-${version}.tbz";
+    hash = "sha256-Aij7vJzamNWQfjLeGgENlIp6Il8+Wc9hsahr4eDGs68=";
   };
 
   meta = {
     homepage = "https://github.com/Chris00/ocaml-benchmark";
     description = "Benchmark running times of code";
-    license = lib.licenses.lgpl21;
+    license = lib.licenses.lgpl3;
   };
 }
