@@ -6324,6 +6324,8 @@ self: super: with self; {
 
   hawkauthlib = callPackage ../development/python-modules/hawkauthlib { };
 
+  hawkmoth = callPackage ../development/python-modules/hawkmoth { };
+
   haystack-ai = callPackage ../development/python-modules/haystack-ai { };
 
   hcloud = callPackage ../development/python-modules/hcloud { };
