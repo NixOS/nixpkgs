@@ -71,8 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm755 nekoray "$out/share/nekoray/nekoray"
-
-    install -Dm644 "$src/res/public/nekobox.png" "$out/share/pixmaps/nekoray.png"
+    install -Dm644 "$src/res/public/nekobox.png" "$out/share/icons/hicolor/256x256/apps/nekoray.png"
 
     mkdir -p "$out/bin"
     ln -s "$out/share/nekoray/nekoray" "$out/bin"
@@ -90,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
   desktopItems = [
     (makeDesktopItem {
       name = "nekoray";
-      desktopName = "nekoray";
+      desktopName = "Nekoray";
       exec = "nekoray";
       icon = "nekoray";
       comment = finalAttrs.meta.description;
