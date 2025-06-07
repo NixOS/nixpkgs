@@ -425,7 +425,7 @@ in
   dokuwiki = runTest ./dokuwiki.nix;
   dolibarr = runTest ./dolibarr.nix;
   domination = runTest ./domination.nix;
-  dovecot = handleTest ./dovecot.nix { };
+  dovecot = runTest ./dovecot.nix;
   drawterm = discoverTests (import ./drawterm.nix);
   draupnir = runTest ./matrix/draupnir.nix;
   drbd = runTest ./drbd.nix;
