@@ -585,9 +585,13 @@ effectiveStdenv.mkDerivation {
       mkdir -p "$cxxdev/nix-support"
       echo "''${!outputDev}" >> "$cxxdev/nix-support/propagated-build-inputs"
     ''
+    # hard-wire CUDA_TOOLKIT_ROOT_DIR so FindCUDA sees the toolkit
     # remove the requirement that the exact same version of CUDA is used in packages
-    # consuming OpenCV's CMakes files
+    #   consuming OpenCV's CMakes files
     + optionalString enableCuda ''
+      sed -i '1s;^;set(CUDA_TOOLKIT_ROOT_DIR ${cudaPackages.cudatoolkit})\n;' \
+        "$out/lib/cmake/opencv4/OpenCVConfig.cmake"
+
       substituteInPlace "$out/lib/cmake/opencv4/OpenCVConfig.cmake" \
         --replace-fail \
           'find_host_package(CUDA ''${OpenCV_CUDA_VERSION} EXACT REQUIRED)' \
