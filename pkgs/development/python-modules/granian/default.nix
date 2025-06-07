@@ -41,20 +41,12 @@ buildPythonPackage rec {
     maturinBuildHook
   ];
 
-  buildInputs = lib.optionals (stdenv.hostPlatform.isAarch64) [
-    # fix "Unsupported system page size" on aarch64-linux with 16k pages
+  maturinBuildFlags = [
+    # preferred over jemalloc, as that caused issues
     # https://github.com/NixOS/nixpkgs/issues/410572
-    # only enabled on aarch64 due to https://github.com/NixOS/nixpkgs/pull/410611#issuecomment-2939564567
-    (rust-jemalloc-sys.overrideAttrs (
-      { configureFlags, ... }:
-      {
-        configureFlags = configureFlags ++ [
-          # otherwise import check fails with:
-          # ImportError: {{storeDir}}/lib/libjemalloc.so.2: cannot allocate memory in static TLS block
-          "--disable-initial-exec-tls"
-        ];
-      }
-    ))
+    # https://github.com/NixOS/nixpkgs/pull/410611#issuecomment-2939564567
+    # https://github.com/NixOS/nixpkgs/issues/414214
+    "--features mimalloc"
   ];
 
   dependencies = [
