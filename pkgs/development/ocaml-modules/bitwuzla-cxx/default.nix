@@ -5,19 +5,15 @@
   zarith,
 }:
 
-let
-  version = "0.6.1";
-in
-
-buildDunePackage {
+buildDunePackage rec {
   pname = "bitwuzla-cxx";
-  inherit version;
+  version = "0.8.0";
 
   minimalOCamlVersion = "4.12";
 
   src = fetchurl {
     url = "https://github.com/bitwuzla/ocaml-bitwuzla/releases/download/${version}/bitwuzla-cxx-${version}.tbz";
-    hash = "sha256-QgZy0a4QPVkgiB+lhEw40pE9TeuOOeMowtUb0F+BN6c=";
+    hash = "sha256-t8Vgbiec5m6CYV8bINJqs6uhx0YAJcRZeaWRGNoD6AQ=";
   };
 
   propagatedBuildInputs = [ zarith ];
