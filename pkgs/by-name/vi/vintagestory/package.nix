@@ -101,5 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
       gigglesquid
       niraethm
     ];
+    mainProgram = "vintagestory";
   };
 })
