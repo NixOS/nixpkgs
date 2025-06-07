@@ -28,8 +28,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-Gq3QvQSRfxRovzuvdboLCheNuMW58GFO9x2N2os+p38=";
   };
 
