@@ -7535,6 +7535,10 @@ with pkgs;
     })
   );
 
+  u-config = callPackage ../build-support/pkg-config-wrapper {
+    pkg-config = u-config-unwrapped;
+  };
+
   portableService = callPackage ../build-support/portable-service { };
 
   polar = callPackage ../tools/misc/polar { };
