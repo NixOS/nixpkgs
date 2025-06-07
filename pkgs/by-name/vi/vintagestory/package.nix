@@ -72,6 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp $out/share/vintagestory/assets/gameicon.xpm $out/share/pixmaps/vintagestory.xpm
     cp $out/share/vintagestory/assets/game/fonts/*.ttf $out/share/fonts/truetype
 
+    rm -rvf $out/share/vintagestory/{install,run,server}.sh
+
     runHook postInstall
   '';
 
