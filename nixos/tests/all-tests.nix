@@ -530,7 +530,7 @@ in
   };
   fish = runTest ./fish.nix;
   firezone = runTest ./firezone/firezone.nix;
-  flannel = handleTestOn [ "x86_64-linux" ] ./flannel.nix { };
+  flannel = runTestOn [ "x86_64-linux" ] ./flannel.nix;
   flaresolverr = runTest ./flaresolverr.nix;
   flood = runTest ./flood.nix;
   floorp = runTest {
