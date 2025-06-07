@@ -3625,6 +3625,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  darcubox-nvim = buildVimPlugin {
+    pname = "darcubox-nvim";
+    version = "2025-06-03";
+    src = fetchFromGitHub {
+      owner = "Koalhack";
+      repo = "darcubox-nvim";
+      rev = "59754cb99fee640da1b64730a17476593af92fd3";
+      sha256 = "1xbpisq980hkdybjkd2pxdz8ghhk1a4y33ygpgi311rzx1ijapgs";
+    };
+    meta.homepage = "https://github.com/Koalhack/darcubox-nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   darkearth-nvim = buildVimPlugin {
     pname = "darkearth-nvim";
     version = "2025-04-27";
