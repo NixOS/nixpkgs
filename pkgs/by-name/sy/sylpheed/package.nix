@@ -36,6 +36,11 @@ stdenv.mkDerivation rec {
       url = "https://git.claws-mail.org/?p=claws.git;a=patch;h=ac286a71ed78429e16c612161251b9ea90ccd431";
       sha256 = "sha256-oLmUShtvO6io3jibKT67eO0O58vEDZEeaB51QTd3UkU=";
     })
+    (fetchurl {
+      name = "0013-fix-FTBFS-GCC-14.patch";
+      url = "https://salsa.debian.org/sylpheed-team/sylpheed/-/raw/22984c6d2bf76b0667256a9e8b660447497e1220/debian/patches/0013-fix-FTBFS-GCC-14.patch?inline=false";
+      sha256 = "sha256-ZfQKiOK8pMrN87hrP0/2LxYZZdnaciBoa0khG1Djelo=";
+    })
   ];
 
   nativeBuildInputs = [ pkg-config ];
