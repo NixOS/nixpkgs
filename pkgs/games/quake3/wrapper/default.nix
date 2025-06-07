@@ -65,6 +65,7 @@ stdenv.mkDerivation {
     '';
 
   meta = {
+    mainProgram = "${pname}";
     inherit ((lib.head paks).meta)
       description
       longDescription
