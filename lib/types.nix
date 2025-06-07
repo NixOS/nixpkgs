@@ -237,10 +237,14 @@ let
         # issue deprecation warnings recursively. Can also be used to reuse
         # nested types
         nestedTypes ? { },
+        # Comparison function that returns true if two values of this type are equal.
+        # If comparison is not possible it statically returns false.
+        eq ? a: b: a == b,
       }:
       {
         _type = "option-type";
         inherit
+          eq
           name
           check
           merge
@@ -734,6 +738,61 @@ let
           functor = (elemTypeFunctor name { inherit elemType; }) // {
             type = payload: types.listOf payload.elemType;
           };
+          nestedTypes.elemType = elemType;
+        };
+
+      setWith =
+        { elemType }:
+        mkOptionType rec {
+          name = "setOf";
+          description = "set of ${
+            optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType
+          }";
+          descriptionClass = "composite";
+          check = isList;
+
+          merge =
+            loc: defs:
+            map (x: x.value) (
+              filter (x: x ? value) (
+                foldl'
+                  (
+                    final: defs:
+                    foldl' (
+                      res: def:
+                      if
+                        lib.any (r: elemType.eq r.value def.value) res || lib.any (r: elemType.eq r.value def.value) final
+                      then
+                        res
+                      else
+                        res ++ [ def ]
+                    ) [ ] defs
+                    ++ final
+                  )
+                  [ ]
+                  (
+                    imap1 (
+                      n: def:
+                      imap1 (
+                        m: def':
+                        (mergeDefinitions (loc ++ [ "[definition ${toString n}-entry ${toString m}]" ]) elemType [
+                          {
+                            inherit (def) file;
+                            value = def';
+                          }
+                        ]).optionalValue
+                      ) def.value
+                    ) defs
+                  )
+              )
+            );
+          emptyValue = {
+            value = [ ];
+          };
+          getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "*" ]);
+          getSubModules = elemType.getSubModules;
+          substSubModules = m: setWith { elemType = (elemType.substSubModules m); };
+          functor = (elemTypeFunctor name { inherit elemType; });
           nestedTypes.elemType = elemType;
         };
 
