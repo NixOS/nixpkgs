@@ -1084,14 +1084,10 @@ in
           ) config.containers;
 
         # Generate /etc/hosts entries for the containers.
-        networking.extraHosts = concatStrings (
-          mapAttrsToList (
-            name: cfg:
-            optionalString (cfg.localAddress != null) ''
-              ${head (splitString "/" cfg.localAddress)} ${name}.containers
-            ''
-          ) config.containers
-        );
+        networking.hosts = lib.mapAttrs' (name: cfg: {
+          name = head (splitString "/" cfg.localAddress);
+          value = lib.optionals (cfg.localAddress != null) [ "${name}.containers" ];
+        }) config.containers;
 
         networking.dhcpcd.denyInterfaces = [
           "ve-*"

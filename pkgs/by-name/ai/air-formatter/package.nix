@@ -7,20 +7,20 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "air-formatter";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "air";
     tag = finalAttrs.version;
-    hash = "sha256-32/wdz4CFYM/PFVSQiqYErXGHHn2KJyreiQq48vQryY=";
+    hash = "sha256-jFOhTol5e3TcU217HgcCKutydTePmc5/viilgiJqpqE=";
   };
 
   # Remove duplicate entries from cargo lock
   cargoPatches = [ ./cargo-lock.patch ];
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-zPT47K8OGtprxQt3ZOF2xmf6IRV5rsKWXeaXlyBdVlE=";
+  cargoHash = "sha256-3v/pgm6BjPvQToSmZ2PrUWTrgffjifB3Xmp1liWCUck=";
 
   useNextest = true;
 
