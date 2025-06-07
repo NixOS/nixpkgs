@@ -28,26 +28,33 @@
   libdecor,
   pipewire,
   libpulseaudio,
+  giflib,
+  janet,
+  libpng,
+  lua5_3,
+  quickjs,
+  SDL2,
   # Whether to build TIC-80's "Pro" version, which is an incentive to support the project financially,
   # that enables some additional features. It is, however, fully open source.
   withPro ? false,
 }:
 let
-  major = "1";
-  minor = "1";
-  revision = "2837";
-  year = "2023";
+  # git rev-list HEAD --count
+  revision = "3016";
+  year = "2025";
 in
 
 stdenv.mkDerivation rec {
   pname = "tic-80";
-  version = "${major}.${minor}.${revision}";
+  # use an untagged version until the next tag one; we want
+  # 'PREFER_SYSTEM_LIBRARIES', and without it tic-80 won't build
+  version = "1.1-unstable-2025-05-26";
 
   src = fetchFromGitHub {
     owner = "nesbox";
     repo = "TIC-80";
-    rev = "v" + version;
-    hash = "sha256-p7OyuD/4KxAzylQDlXW681TvEZwKYDD4zq2KDRkcv48=";
+    rev = "663d43924abf6fd7620de6bf25c009ce5b30ab83";
+    hash = "sha256-UjBnXxYZ5gfk58sI1qek5fkKpJ7LzOVmrxdjVgONcXc=";
     # TIC-80 vendors its dependencies as submodules, so to use its current build system,
     # we need to fetch them. Managing the dependencies ourselves would require a lot of
     # changes in the build system, which doesn't seem worth it right now. In future versions,
@@ -61,7 +68,7 @@ stdenv.mkDerivation rec {
   # To avoid the awkward copyright range of "2017-1980", which would be caused by the
   # sandbox environment, hardcode the year of the release.
   postPatch = ''
-    substituteInPlace CMakeLists.txt \
+    substituteInPlace cmake/version.cmake \
       --replace-fail 'set(VERSION_REVISION 0)' 'set(VERSION_REVISION ${revision})' \
       --replace-fail 'string(TIMESTAMP VERSION_YEAR "%Y")' 'set(VERSION_YEAR "${year}")'
   '';
@@ -72,7 +79,26 @@ stdenv.mkDerivation rec {
     unset LD
   '';
 
-  cmakeFlags = lib.optionals withPro [ "-DBUILD_PRO=On" ] ++ [ "-DBUILD_SDLGPU=On" ];
+  cmakeFlags =
+    let
+      enableCmakeBool = (lib.flip lib.cmakeBool) true;
+    in
+    [
+      (lib.cmakeBool "BUILD_PRO" withPro)
+    ]
+    ++ (map enableCmakeBool [
+      "BUILD_STATIC"
+      "PREFER_SYSTEM_LIBRARIES"
+      "BUILD_SDLGPU"
+      "BUILD_WITH_FENNEL"
+      "BUILD_WITH_JANET"
+      "BUILD_WITH_JS"
+      "BUILD_WITH_LUA"
+      "BUILD_WITH_RUBY"
+      "BUILD_WITH_SCHEME"
+      "BUILD_WITH_SQUIRREL"
+    ]);
+
   nativeBuildInputs = [
     cmake
     curl
@@ -102,6 +128,13 @@ stdenv.mkDerivation rec {
     wayland
     wayland-protocols
     wayland-scanner
+
+    giflib
+    janet
+    libpng
+    (lua5_3.withPackages (ps: [ ps.fennel ]))
+    quickjs
+    SDL2
   ];
 
   # This package borrows heavily from pkgs/development/libraries/SDL2/default.nix
@@ -151,7 +184,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     mainProgram = "tic80";
     maintainers = with maintainers; [ blinry ];
-    # /build/source/vendor/sdl2/src/audio/pipewire/SDL_pipewire.c:623:37: error: passing argument 1 of 'pw_node_enum_params' from incompatible pointer type [-Wincompatible-pointer-types]
-    broken = true;
   };
 }
