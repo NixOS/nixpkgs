@@ -72,6 +72,12 @@ buildPythonPackage rec {
       url = "https://github.com/PixarAnimationStudios/OpenUSD/commit/9ea3bc1ab550ec46c426dab04292d9667ccd2518.patch?full_index=1";
       hash = "sha256-QjA3kjUDsSleUr+S/bQLb+QK723SNFvnmRPT+ojjgq8=";
     })
+    (fetchpatch {
+      name = "propagate-dependencies-opengl-and-x11.patch";
+      # https://github.com/PixarAnimationStudios/OpenUSD/pull/3648
+      url = "https://github.com/PixarAnimationStudios/OpenUSD/pull/3648/commits/5996cd970235aeca740b972139c41d4c1f1487d8.patch?full_index=1";
+      hash = "sha256-D6GFuyVAj63kAnpn+7j3Cw6dO8yO66fFdBjoQFdhEIA=";
+    })
   ];
 
   env.OSL_LOCATION = "${osl}";
@@ -124,11 +130,6 @@ buildPythonPackage rec {
       ptex
       tbb
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libGL
-      libX11
-      libXt
-    ]
     ++ lib.optionals withOsl [ osl ]
     ++ lib.optionals withUsdView [ qt6.qtbase ]
     ++ lib.optionals (withUsdView && stdenv.hostPlatform.isLinux) [ qt6.qtwayland ];
@@ -141,6 +142,11 @@ buildPythonPackage rec {
       opensubdiv
       pyopengl
       distutils
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libGL
+      libX11
+      libXt
     ]
     ++ lib.optionals (withTools || withUsdView) [
       pyside-tools-uic
