@@ -9,6 +9,7 @@
   ncurses,
   perl,
   cyrus_sasl,
+  gitUpdater,
   gss,
   gpgme,
   libkrb5,
@@ -163,6 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
       rev = "8e97688693ca47ea1055f3d15055a4f4ecc5c832";
       hash = "sha256-tx5Y819rNDxOpjg3B/Y2lPcqJDArAxVwjbYarVmJ79k=";
     };
+    updateScript = gitUpdater { };
   };
 
   checkTarget = "test";
