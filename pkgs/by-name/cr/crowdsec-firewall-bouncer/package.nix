@@ -18,6 +18,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-Bhp6Z2UlCJ32vdc3uINCGleZFP2WeUn/XK+Q29szUzQ=";
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  versionCheckProgram = "${placeholder "out"}/bin/cs-firewall-bouncer";
+  versionCheckProgramArg = "-version";
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
   };
