@@ -45,7 +45,7 @@ let
         };
       in
       fetchzip {
-        url = "https://download.jetbrains.com/toolbox/jetbrains-toolbox-${version}${arch}.tar.gz";
+        url = "mirror://jetbrains/toolbox/jetbrains-toolbox-${version}${arch}.tar.gz";
         hash = selectSystem {
           x86_64-linux = "sha256-nIvlO313GZhIpgyCUhp2FUzllD3tk0oRrxFzxtHSIQA=";
           aarch64-linux = "sha256-iggrnpjqLEqiteXnmA+eynTB7cs9YeOnNW4DWGP6mk0=";
@@ -87,7 +87,7 @@ let
         };
       in
       fetchurl {
-        url = "https://download.jetbrains.com/toolbox/jetbrains-toolbox-${finalAttrs.version}${arch}.dmg";
+        url = "mirror://jetbrains/toolbox/jetbrains-toolbox-${finalAttrs.version}${arch}.dmg";
         hash = selectSystem {
           x86_64-darwin = "sha256-518Ew3yhj6wrTfPklNTC6La0EOb/XmrFcNmoeNbod8k=";
           aarch64-darwin = "sha256-Enyn4iJn8qLUdrvin44bGLv0dzl5VOL6KPi4AODhtPE=";

@@ -123,6 +123,12 @@
     "ftp://ftp.sunet.se/mirror/imagemagick.org/ftp/" # also contains older versions removed from most mirrors
   ];
 
+  # JetBrain's mirrors
+  jetbrains = [
+    "https://download.jetbrains.com/"
+    "https://download-cf.jetbrains.com/"
+  ];
+
   kde = [
     "https://download.kde.org/"
     "https://ftp.funet.fi/pub/mirrors/ftp.kde.org/pub/kde/"
