@@ -11,8 +11,84 @@
   xxHash,
   fmt,
   nasm,
+  buildEnv,
+  writeText,
+  pkgsCross,
+  libclang,
+  libllvm,
+  alsa-lib,
+  libdrm,
+  libGL,
+  wayland,
+  xorg,
 }:
 
+let
+  pkgsCross32 = pkgsCross.gnu32;
+  pkgsCross64 = pkgsCross.gnu64;
+  devRootFS = buildEnv {
+    name = "fex-dev-rootfs";
+    paths = [
+      # later stdenv seems to have shuffled around the headers
+      # pkgsCross64.stdenv.cc.libc_dev
+      # pkgsCross32.stdenv.cc.libc_dev
+      # pkgsCross64.stdenv.cc.cc
+      # pkgsCross32.stdenv.cc.cc
+      pkgsCross64.gcc13Stdenv.cc.libc_dev
+      pkgsCross32.gcc13Stdenv.cc.libc_dev
+      pkgsCross64.gcc13Stdenv.cc.cc
+      pkgsCross32.gcc13Stdenv.cc.cc
+
+      alsa-lib.dev
+      libdrm.dev
+      libGL.dev
+      wayland.dev
+      xorg.libX11.dev
+      xorg.libxcb.dev
+      xorg.libXrandr.dev
+      xorg.libXrender.dev
+      xorg.xorgproto
+    ];
+    ignoreCollisions = true;
+    pathsToLink = [
+      "/include"
+      "/lib"
+    ];
+
+    postBuild = ''
+      mkdir -p $out/usr
+      ln -s $out/include $out/usr/
+    '';
+  };
+
+  toolchain32 = writeText "toolchain_nix_x86_32.txt" "
+    set(CMAKE_EXE_LINKER_FLAGS_INIT \"-fuse-ld=lld\")
+    set(CMAKE_MODULE_LINKER_FLAGS_INIT \"-fuse-ld=lld\")
+    set(CMAKE_SHARED_LINKER_FLAGS_INIT \"-fuse-ld=lld\")
+    set(CMAKE_SYSTEM_PROCESSOR i686)
+    set(CMAKE_C_COMPILER clang)
+    set(CMAKE_CXX_COMPILER clang++)
+    set(CLANG_FLAGS \"-nodefaultlibs -nostartfiles -target i686-linux-gnu -msse2 -mfpmath=sse --sysroot=${devRootFS} -iwithsysroot/usr/include\")
+    set(CMAKE_C_COMPILER ${pkgsCross32.buildPackages.clang}/bin/i686-unknown-linux-gnu-clang)
+    set(CMAKE_CXX_COMPILER ${pkgsCross32.buildPackages.clang}/bin/i686-unknown-linux-gnu-clang++)
+    set(CMAKE_C_FLAGS \"\${CMAKE_C_FLAGS} \${CLANG_FLAGS}\")
+    set(CMAKE_CXX_FLAGS \"\${CMAKE_CXX_FLAGS} \${CLANG_FLAGS}\")
+  ";
+
+  toolchain = writeText "toolchain_nix_x86_64.txt" "
+    set(CMAKE_EXE_LINKER_FLAGS_INIT \"-fuse-ld=lld\")
+    set(CMAKE_MODULE_LINKER_FLAGS_INIT \"-fuse-ld=lld\")
+    set(CMAKE_SHARED_LINKER_FLAGS_INIT \"-fuse-ld=lld\")
+    set(CMAKE_SYSTEM_PROCESSOR x86_64)
+    set(CMAKE_C_COMPILER clang)
+    set(CMAKE_CXX_COMPILER clang++)
+    set(CLANG_FLAGS \"-nodefaultlibs -nostartfiles -target x86_64-linux-gnu --sysroot=${devRootFS} -iwithsysroot/usr/include\")
+    set(CMAKE_C_COMPILER ${pkgsCross64.buildPackages.clang}/bin/x86_64-unknown-linux-gnu-clang)
+    set(CMAKE_CXX_COMPILER ${pkgsCross64.buildPackages.clang}/bin/x86_64-unknown-linux-gnu-clang++)
+    set(CMAKE_C_FLAGS \"\${CMAKE_C_FLAGS} \${CLANG_FLAGS}\")
+    set(CMAKE_CXX_FLAGS \"\${CMAKE_CXX_FLAGS} \${CLANG_FLAGS}\")
+  ";
+in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "fex";
   version = "2506";
@@ -49,6 +125,16 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+  postPatch = ''
+    substituteInPlace ThunkLibs/GuestLibs/CMakeLists.txt --replace "/usr/include/libdrm" "${devRootFS}/include/libdrm"
+    substituteInPlace ThunkLibs/HostLibs/CMakeLists.txt --replace "/usr/include/libdrm" "${devRootFS}/include/libdrm"
+    substituteInPlace ThunkLibs/GuestLibs/CMakeLists.txt --replace "/usr/include/wayland" "${devRootFS}/include/wayland"
+    substituteInPlace ThunkLibs/HostLibs/CMakeLists.txt --replace "/usr/include/wayland" "${devRootFS}/include/wayland"
+
+    # Add include paths for thunkgen invocation
+    substituteInPlace ThunkLibs/HostLibs/CMakeLists.txt --replace "-- " "-- $(cat ${llvmPackages.stdenv.cc}/nix-support/libc-cflags) $(cat ${llvmPackages.stdenv.cc}/nix-support/libcxx-cxxflags) $NIX_CFLAGS_COMPILE"
+  '';
+
   nativeBuildInputs = [
     cmake
     ninja
@@ -70,6 +156,21 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     [
       xxHash
       fmt
+      pkgsCross64.buildPackages.clang
+      pkgsCross32.buildPackages.clang
+      libclang
+      libllvm
+
+      # Headers required to build the ThunkLibs subtree
+      alsa-lib.dev
+      libdrm.dev
+      libGL.dev
+      wayland.dev
+      xorg.libX11.dev
+      xorg.libxcb.dev
+      xorg.libXrandr.dev
+      xorg.libXrender.dev
+      xorg.xorgproto
     ]
     ++ (with qt5; [
       qtbase
@@ -85,6 +186,10 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_ASSERTIONS" false)
     (lib.cmakeFeature "OVERRIDE_VERSION" finalAttrs.version)
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "BUILD_THUNKS" true)
+    (lib.cmakeFeature "X86_32_TOOLCHAIN_FILE" "${toolchain32}")
+    (lib.cmakeFeature "X86_64_TOOLCHAIN_FILE" "${toolchain}")
+    (lib.cmakeFeature "X86_DEV_ROOTFS" "${devRootFS}")
   ];
 
   strictDeps = true;
@@ -100,6 +205,13 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     "fexcore_apitests"
     "emitter_tests"
   ];
+
+  # placeholder build phase for quick testing
+  # buildPhase = ''
+  #   make drm-host-64 -j5
+  #   make asound-host-64 -j5
+  #   make wayland-client-host-64 -j5
+  # '';
 
   # Avoid wrapping anything other than FEXConfig, since the wrapped executables
   # don't seem to work when registered as binfmts.
