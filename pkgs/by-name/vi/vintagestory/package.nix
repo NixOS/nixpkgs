@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchzip,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
@@ -23,9 +23,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "vintagestory";
   version = "1.20.12";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${finalAttrs.version}.tar.gz";
-    hash = "sha256-h6YXEZoVVV9IuKkgtK9Z3NTvJogVNHmXdAcKxwfvqcE=";
+    hash = "sha256-GlxBpnQBk1yZfh/uPK83ODrwn/VoORA3gGkvcXy+nV8=";
   };
 
   nativeBuildInputs = [
