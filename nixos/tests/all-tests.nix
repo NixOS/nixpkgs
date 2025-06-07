@@ -329,7 +329,7 @@ in
     ];
   };
   cockpit = runTest ./cockpit.nix;
-  cockroachdb = handleTestOn [ "x86_64-linux" ] ./cockroachdb.nix { };
+  cockroachdb = runTestOn [ "x86_64-linux" ] ./cockroachdb.nix;
   code-server = runTest ./code-server.nix;
   coder = runTest ./coder.nix;
   collectd = runTest ./collectd.nix;
