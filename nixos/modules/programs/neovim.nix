@@ -75,6 +75,9 @@ in
           customRC = '''
             " here your custom configuration goes!
           ''';
+          customLuaRC = '''
+            -- or if you prefer Lua, your Lua configuration goes here!
+          ''';
           packages.myVimPackage = with pkgs.vimPlugins; {
             # loaded on launch
             start = [ fugitive ];
