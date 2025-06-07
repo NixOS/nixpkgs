@@ -17,7 +17,6 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/fwupd/fwupd-efi/archive/refs/tags/${version}.tar.gz";
     hash = "sha256-ltT8RUZxWbJmTOhu59UDDiZf201KTXdAgGVNL1sVYf8=";
-
   };
 
   nativeBuildInputs = [
