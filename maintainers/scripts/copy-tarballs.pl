@@ -22,7 +22,9 @@ use JSON;
 use Net::Amazon::S3;
 use Nix::Store;
 
-isValidPath("/nix/store/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-foo"); # FIXME: forces Nix::Store initialisation
+my $MACHINE_LOCAL_STORE = Nix::Store->new();
+
+$MACHINE_LOCAL_STORE->isValidPath("/nix/store/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-foo"); # FIXME: forces Nix::Store initialisation
 
 sub usage {
     die "Syntax: $0 [--dry-run] [--exclude REGEXP] [--expr EXPR | --file FILES...]\n";
@@ -216,12 +218,12 @@ elsif (defined $expr) {
             }
 
             # Substitute the output.
-            if (!isValidPath($storePath)) {
+            if (!$MACHINE_LOCAL_STORE->isValidPath($storePath)) {
                 system("nix-store", "-r", $storePath);
             }
 
             # Otherwise download the file using nix-prefetch-url.
-            if (!isValidPath($storePath)) {
+            if (!$MACHINE_LOCAL_STORE->isValidPath($storePath)) {
                 $ENV{QUIET} = 1;
                 $ENV{PRINT_PATH} = 1;
                 my $fh;
