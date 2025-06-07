@@ -435,7 +435,7 @@ in
   dublin-traceroute = runTest ./dublin-traceroute.nix;
   dwl = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./dwl.nix;
   earlyoom = runTestOn [ "x86_64-linux" ] ./earlyoom.nix;
-  early-mount-options = handleTest ./early-mount-options.nix { };
+  early-mount-options = runTest ./early-mount-options.nix;
   ec2-config = (handleTestOn [ "x86_64-linux" ] ./ec2.nix { }).boot-ec2-config or { };
   ec2-nixops = (handleTestOn [ "x86_64-linux" ] ./ec2.nix { }).boot-ec2-nixops or { };
   echoip = runTest ./echoip.nix;
