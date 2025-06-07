@@ -414,7 +414,7 @@ in
   docker = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./docker.nix;
   docker-rootless = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./docker-rootless.nix;
   docker-registry = runTest ./docker-registry.nix;
-  docker-tools = handleTestOn [ "x86_64-linux" ] ./docker-tools.nix { };
+  docker-tools = runTestOn [ "x86_64-linux" ] ./docker-tools.nix;
   docker-tools-nix-shell = runTest ./docker-tools-nix-shell.nix;
   docker-tools-cross = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./docker-tools-cross.nix;
   docker-tools-overlay = runTestOn [ "x86_64-linux" ] ./docker-tools-overlay.nix;
