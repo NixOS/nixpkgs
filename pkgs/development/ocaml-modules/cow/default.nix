@@ -29,14 +29,14 @@ buildDunePackage rec {
   checkInputs = [ alcotest ];
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Caml on the Web";
     longDescription = ''
       Writing web-applications requires a lot of skills: HTML, XML, JSON and
       Markdown, to name but a few! This library provides OCaml combinators
       for these web formats.
     '';
-    license = licenses.isc;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ sternenseemann ];
   };
 }
