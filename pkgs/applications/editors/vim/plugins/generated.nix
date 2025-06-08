@@ -3807,6 +3807,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  debugmaster-nvim = buildVimPlugin {
+    pname = "debugmaster.nvim";
+    version = "2025-05-26";
+    src = fetchFromGitHub {
+      owner = "miroshQa";
+      repo = "debugmaster.nvim";
+      rev = "aeae4c324be259856a3e9e436db89875421b78ca";
+      sha256 = "1b919qrljmrczi89cn276rx5yib63yhnr3wscbypckda2d62bh5a";
+    };
+    meta.homepage = "https://github.com/miroshQa/debugmaster.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   debugprint-nvim = buildVimPlugin {
     pname = "debugprint.nvim";
     version = "2025-05-28";
