@@ -1034,6 +1034,7 @@ rec {
             "tag"
             "url"
             "outputHash"
+            "outputHashAlgo"
           ] src
         );
       in
