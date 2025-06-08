@@ -10,6 +10,7 @@
   libapplewm,
   libdmx,
   libfontenc,
+  libfs,
   libpciaccess,
   libpthread-stubs,
   libx11,
@@ -58,6 +59,7 @@ self: with self; {
   fontalias = font-alias;
   fontutil = font-util;
   libAppleWM = libapplewm;
+  libFS = libfs;
   libpthreadstubs = libpthread-stubs;
   libX11 = libx11;
   libXau = libxau;
@@ -1700,42 +1702,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libFS = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      xtrans,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libFS";
-      version = "1.0.10";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libFS-1.0.10.tar.xz";
-        sha256 = "0xrv9x5v6km7ib3d5k9xr704xkhfvigh8i507mb9i706hqybvawv";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        xtrans
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "libfs" ];
         platforms = lib.platforms.unix;
       };
     })
