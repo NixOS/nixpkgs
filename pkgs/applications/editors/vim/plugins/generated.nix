@@ -8617,6 +8617,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  multicursor-nvim = buildVimPlugin {
+    pname = "multicursor.nvim";
+    version = "2025-05-29";
+    src = fetchFromGitHub {
+      owner = "jake-stewart";
+      repo = "multicursor.nvim";
+      rev = "6fba38bccf45cfb681f4ff6098f886213f299a34";
+      sha256 = "1d3lsxg9kmn4622nacn2ycg56ca3skazjaar0smc61v1asa8jhrm";
+    };
+    meta.homepage = "https://github.com/jake-stewart/multicursor.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   multicursors-nvim = buildVimPlugin {
     pname = "multicursors.nvim";
     version = "2025-02-26";
