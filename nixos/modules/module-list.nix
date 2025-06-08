@@ -1587,6 +1587,7 @@
   ./services/web-apps/keycloak.nix
   ./services/web-apps/kimai.nix
   ./services/web-apps/komga.nix
+  ./services/web-apps/kutt.nix
   ./services/web-apps/lanraragi.nix
   ./services/web-apps/lasuite-docs.nix
   ./services/web-apps/lemmy.nix
