@@ -10,13 +10,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "smplayer";
-  version = "24.5.0";
+  version = "25.6.0";
 
   src = fetchFromGitHub {
     owner = "smplayer-dev";
     repo = "smplayer";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KblVDlE8EglMMAclGFZm81obipm6/JLUvsn5sLrpKqc=";
+    hash = "sha256-dyUT8PdvsFZsEZQNSsC2TQd90KOrY9FIb9Do+JKdUHs=";
   };
 
   nativeBuildInputs = [
