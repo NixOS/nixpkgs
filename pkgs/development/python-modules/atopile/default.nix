@@ -43,6 +43,7 @@
   shapely,
   typer,
   urllib3,
+  zstd,
   pythonOlder,
 
   # tests
@@ -54,7 +55,7 @@
 
 buildPythonPackage rec {
   pname = "atopile";
-  version = "0.8.2";
+  version = "0.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -63,7 +64,7 @@ buildPythonPackage rec {
     owner = "atopile";
     repo = "atopile";
     tag = "v${version}";
-    hash = "sha256-NnaPXNJAwLF9Q/5qqbZoz4nxfOIjnO5nefC7NnHZeWw=";
+    hash = "sha256-kmoOP9Dp3wBiabq022uKnN/UtpBfH6oSUOd0HC2f0I0=";
   };
 
   build-system = [
@@ -113,12 +114,14 @@ buildPythonPackage rec {
     shapely
     typer
     urllib3
+    zstd
   ];
 
   pythonRelaxDeps = [
     "black"
     "rich"
     "psutil"
+    "zstd"
   ];
 
   postPatch = ''
