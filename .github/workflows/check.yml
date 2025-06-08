@@ -1,14 +1,7 @@
 name: Check
 
 on:
-  pull_request:
-    paths:
-      - .github/workflows/check.yml
-  pull_request_target:
-
-concurrency:
-  group: check-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
-  cancel-in-progress: true
+  workflow_call:
 
 permissions: {}
 
