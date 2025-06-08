@@ -46,6 +46,7 @@ $pcMap{"xbitmaps"} = "xbitmaps";
 $pcMap{"xcb-proto"} = "xcbproto";
 $pcMap{"xdmcp"} = "libXdmcp";
 $pcMap{"xext"} = "libXext";
+$pcMap{"xfixes"} = "libXfixes";
 $pcMap{"xtrans"} = "xtrans";
 $pcMap{"xv"} = "libXv";
 $pcMap{"\$PIXMAN"} = "pixman";
@@ -300,6 +301,7 @@ print OUT <<EOF;
   libxcvt,
   libxdmcp,
   libxext,
+  libxfixes,
   libxv,
   lndir,
   luit,
@@ -342,6 +344,7 @@ self: with self; {
   libXau = libxau;
   libXdmcp = libxdmcp;
   libXext = libxext;
+  libXfixes = libxfixes;
   libXv = libxv;
   utilmacros = util-macros;
   xcbproto = xcb-proto;

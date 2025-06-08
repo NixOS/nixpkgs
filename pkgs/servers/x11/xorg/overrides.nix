@@ -316,13 +316,6 @@ self: super:
     };
   });
 
-  libXfixes = super.libXfixes.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-  });
-
   libXi = super.libXi.overrideAttrs (attrs: {
     outputs = [
       "out"

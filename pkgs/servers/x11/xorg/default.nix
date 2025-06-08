@@ -14,6 +14,7 @@
   libxcvt,
   libxdmcp,
   libxext,
+  libxfixes,
   libxv,
   lndir,
   luit,
@@ -56,6 +57,7 @@ self: with self; {
   libXau = libxau;
   libXdmcp = libxdmcp;
   libXext = libxext;
+  libXfixes = libxfixes;
   libXv = libxv;
   utilmacros = util-macros;
   xcbproto = xcb-proto;
@@ -2157,42 +2159,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xdamage" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXfixes = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libX11,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXfixes";
-      version = "6.0.1";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXfixes-6.0.1.tar.xz";
-        sha256 = "0n1dq2mi60i0c06i7j6lq64cq335ir2l89yj0amj3529s8ygk5dn";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libX11
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xfixes" ];
         platforms = lib.platforms.unix;
       };
     })
