@@ -7553,6 +7553,8 @@ self: super: with self; {
 
   kfactory = callPackage ../development/python-modules/kfactory { };
 
+  kgb = callPackage ../development/python-modules/kgb { };
+
   khanaa = callPackage ../development/python-modules/khanaa { };
 
   kicad = toPythonModule (pkgs.kicad.override { python3 = python; }).src;
