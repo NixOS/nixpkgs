@@ -3,7 +3,7 @@
 # requires the CUDA toolkit (via nvcc) to be available.
 #
 # This means that if you plan to use flashinfer, you will need to set the
-# environment varaible `CUDA_HOME` to `cudatoolkit`.
+# environment variable `CUDA_HOME` to `cudatoolkit`.
 {
   lib,
   config,

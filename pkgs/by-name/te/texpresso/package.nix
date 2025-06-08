@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -Dm0755 -t "$out/bin/" "build/${finalAttrs.pname}"
+    install -Dm0755 -t "$out/bin/" "build/texpresso"
     runHook postInstall
   '';
 

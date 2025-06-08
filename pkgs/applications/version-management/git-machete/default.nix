@@ -48,12 +48,12 @@ buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/VirtusLab/git-machete";
     description = "Git repository organizer and rebase/merge workflow automation tool";
     changelog = "https://github.com/VirtusLab/git-machete/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ blitz ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ blitz ];
     mainProgram = "git-machete";
   };
 }

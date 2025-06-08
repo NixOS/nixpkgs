@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = {
-    description = "The MOE Song font, a Song-style Chinese character typeface";
+    description = "MOE Song font, a Song-style Chinese character typeface";
     longDescription = ''
       A Song-style Chinese character typeface published by the Ministry of Education of the Republic of China (Taiwan). The Song style is also referred to as 宋體, 宋体, sòngtǐ, 明體, 明体, or míngtǐ, in Chinese; 명조체, 明朝體, or myeongjo in Korean; 明朝体, みんちょうたい, or minchōtai in Japanese.
     '';

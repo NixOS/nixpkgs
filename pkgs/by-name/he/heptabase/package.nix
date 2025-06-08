@@ -28,7 +28,7 @@ appimageTools.wrapType2 {
 
   meta = {
     changelog = "https://github.com/heptameta/project-meta/releases/tag/v${version}";
-    description = "A visual note-taking tool for learning complex topics";
+    description = "Visual note-taking tool for learning complex topics";
     homepage = "https://heptabase.com/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];

@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "An active set-based NLP solver";
+    description = "Active set-based NLP solver";
     homepage = "https://github.com/chrhansk/sleqp";
     changelog = "https://github.com/chrhansk/sleqp/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.lgpl3Only;

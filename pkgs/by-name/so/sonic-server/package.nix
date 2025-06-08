@@ -55,14 +55,14 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fast, lightweight and schema-less search backend";
     homepage = "https://github.com/valeriansaliou/sonic";
     changelog = "https://github.com/valeriansaliou/sonic/releases/tag/v${version}";
-    license = licenses.mpl20;
-    platforms = platforms.unix;
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.unix;
     mainProgram = "sonic";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       pleshevskiy
       anthonyroussel
     ];

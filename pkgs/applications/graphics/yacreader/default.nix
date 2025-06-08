@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       libsForQt5.qtmacextras # can be removed when using qt6
     ];
 
-  # custom Darwin install instructions taken from the upsteam compileOSX.sh script
+  # custom Darwin install instructions taken from the upstream compileOSX.sh script
   installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
     runHook preInstall
 
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Comic reader for cross-platform reading and managing your digital comic collection";
-    homepage = "http://www.yacreader.com";
+    homepage = "https://www.yacreader.com";
     license = lib.licenses.gpl3;
     mainProgram = "YACReader";
     maintainers = [ ];

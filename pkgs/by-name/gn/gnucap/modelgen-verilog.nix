@@ -35,13 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
     installManPage man/*.*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "gnucap modelgen to preprocess, parse and dump vams files";
     homepage = "http://www.gnucap.org/";
-    changelog = "https://git.savannah.gnu.org/cgit/gnucap.git/plain/NEWS?h=v${version}";
+    changelog = "https://git.savannah.gnu.org/cgit/gnucap.git/plain/NEWS?h=v${finalAttrs.version}";
     mainProgram = "gnucap-mg-vams";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = [ maintainers.raboof ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.raboof ];
   };
 })

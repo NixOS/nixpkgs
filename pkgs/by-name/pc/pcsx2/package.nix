@@ -25,7 +25,6 @@
   wayland,
   zip,
   zstd,
-  fetchpatch,
 }:
 
 let
@@ -37,16 +36,6 @@ let
     qtwayland
     wrapQtAppsHook
     ;
-
-  cubeb' = cubeb.overrideAttrs (old: {
-    patches = (old.patches or [ ]) ++ [
-      (fetchpatch {
-        url = "https://github.com/PCSX2/pcsx2/commit/430e31abe4a9e09567cb542f1416b011bb9b6ef9.patch";
-        stripLen = 2;
-        hash = "sha256-bbH0c1X3lMeX6hfNKObhcq5xraFpicFV3mODQGYudvQ=";
-      })
-    ];
-  });
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   inherit (sources.pcsx2) pname version src;
@@ -93,7 +82,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
     wayland
     zstd
-    cubeb'
+    cubeb
   ];
 
   strictDeps = true;

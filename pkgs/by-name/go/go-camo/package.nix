@@ -43,12 +43,12 @@ buildGo124Module rec {
     rm pkg/camo/proxy_{,filter_}test.go
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Camo server is a special type of image proxy that proxies non-secure images over SSL/TLS";
     homepage = "https://github.com/cactus/go-camo";
     changelog = "https://github.com/cactus/go-camo/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "go-camo";
-    maintainers = with maintainers; [ viraptor ];
+    maintainers = with lib.maintainers; [ viraptor ];
   };
 }

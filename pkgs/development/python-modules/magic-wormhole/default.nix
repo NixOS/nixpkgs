@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  installShellFiles,
 
   # build-system
   setuptools,
@@ -88,6 +89,10 @@ buildPythonPackage rec {
     dilation = [ noiseprotocol ];
   };
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   nativeCheckInputs =
     [
       magic-wormhole-mailbox-server
@@ -101,6 +106,10 @@ buildPythonPackage rec {
 
   postInstall = ''
     install -Dm644 docs/wormhole.1 $out/share/man/man1/wormhole.1
+    installShellCompletion --cmd ${meta.mainProgram} \
+      --bash wormhole_complete.bash \
+      --fish wormhole_complete.fish \
+      --zsh wormhole_complete.zsh
   '';
 
   meta = {

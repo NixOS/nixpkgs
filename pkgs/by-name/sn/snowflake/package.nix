@@ -19,14 +19,14 @@ buildGoModule rec {
 
   vendorHash = "sha256-vopRE4B4WhncUdBfmBTzRbZzCU20vsHoNCYcPG4BGc0=";
 
-  meta = with lib; {
+  meta = {
     description = "System to defeat internet censorship";
     homepage = "https://snowflake.torproject.org/";
     changelog = "https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/snowflake/-/raw/v${version}/ChangeLog";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       bbjubjub
       yayayayaka
     ];
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

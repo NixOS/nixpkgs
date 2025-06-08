@@ -23,12 +23,12 @@ buildGoModule rec {
     "-X 'main.version=${version}'"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Language Server Protocol server for Jsonnet";
     mainProgram = "jsonnet-language-server";
     homepage = "https://github.com/grafana/jsonnet-language-server";
     changelog = "https://github.com/grafana/jsonnet-language-server/releases/tag/v${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ hardselius ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ hardselius ];
   };
 }

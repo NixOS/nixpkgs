@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "tests test";
 
-  meta = with lib; {
+  meta = {
     description = "High-level, multiplatform C++ network packet sniffing and crafting library";
     homepage = "https://libtins.github.io/";
     changelog = "https://raw.githubusercontent.com/mfontanini/libtins/v${version}/CHANGES.md";
     license = lib.licenses.bsd2;
-    maintainers = with maintainers; [ fdns ];
+    maintainers = with lib.maintainers; [ fdns ];
     platforms = lib.platforms.unix;
   };
 }

@@ -378,6 +378,9 @@ buildPythonPackage rec {
 
       # RuntimeError: *** -[__NSPlaceholderArray initWithObjects:count:]: attempt to insert nil object from objects[1]
       "test_wandb_image_with_matplotlib_figure"
+
+      # HandleAbandonedError / SystemExit when run in sandbox
+      "test_makedirs_raises_oserror__uses_temp_dir"
     ];
 
   pythonImportsCheck = [ "wandb" ];

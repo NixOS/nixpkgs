@@ -15,12 +15,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "qmk";
-  version = "1.1.7";
+  version = "1.1.8";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4Qhzsa5GAAeSgt7FZsRWIVO1ZB+010WtBv9SV38Xgto=";
+    hash = "sha256-C0Jra/IK61tngGsuEnMD4mySRc/iZVgdYEbMXtwpBZ0=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -53,7 +53,7 @@ python3.pkgs.buildPythonApplication rec {
       pkgsCross.avr.buildPackages.binutils
       pkgsCross.avr.buildPackages.binutils.bintools
       pkgsCross.avr.buildPackages.gcc
-      pkgsCross.avr.libcCross
+      pkgsCross.avr.libc
     ];
 
   # no tests implemented

@@ -7,11 +7,11 @@
 
 buildGraalvmNativeImage rec {
   pname = "clj-kondo";
-  version = "2025.04.07";
+  version = "2025.06.05";
 
   src = fetchurl {
     url = "https://github.com/clj-kondo/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "sha256-yJyRqQglJUiHotB70zga5NhFquHsKgmwT9sryZHEFRU=";
+    sha256 = "sha256-jmQFiL8MFIuMrHPSxW27E7yZIGf+k8J5nFVXgNGIKoM=";
   };
 
   graalvmDrv = graalvmPackages.graalvm-ce;
@@ -21,13 +21,13 @@ buildGraalvmNativeImage rec {
     "--no-fallback"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Linter for Clojure code that sparks joy";
     homepage = "https://github.com/clj-kondo/clj-kondo";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.epl10;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.epl10;
     changelog = "https://github.com/clj-kondo/clj-kondo/blob/v${version}/CHANGELOG.md";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jlesquembre
       bandresen
     ];

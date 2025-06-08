@@ -125,14 +125,14 @@ stdenv.mkDerivation rec {
     }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://smuxi.im/";
     downloadPage = "https://smuxi.im/download/";
     changelog = "https://github.com/meebey/smuxi/releases/tag/v${version}";
     description = "irssi-inspired, detachable, cross-platform, multi-protocol (IRC, XMPP/Jabber) chat client for the GNOME desktop";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       meebey
     ];
   };

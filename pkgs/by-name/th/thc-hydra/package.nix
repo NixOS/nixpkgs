@@ -69,12 +69,12 @@ stdenv.mkDerivation rec {
       --add-flags --hydra-path --add-flags "$out/bin/hydra"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Very fast network logon cracker which support many different services";
     homepage = "https://github.com/vanhauser-thc/thc-hydra"; # https://www.thc.org/
     changelog = "https://github.com/vanhauser-thc/thc-hydra/raw/v${version}/CHANGES";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ offline ];
-    platforms = platforms.unix;
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ offline ];
+    platforms = lib.platforms.unix;
   };
 }

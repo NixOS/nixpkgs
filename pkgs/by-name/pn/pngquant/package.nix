@@ -45,17 +45,17 @@ rustPlatform.buildRustPackage rec {
     install -Dpm0444 pngquant.1 $man/share/man/man1/pngquant.1
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pngquant.org/";
     description = "Tool to convert 24/32-bit RGBA PNGs to 8-bit palette with alpha channel preserved";
     changelog = "https://github.com/kornelski/pngquant/raw/${version}/CHANGELOG";
-    platforms = platforms.unix;
-    license = with licenses; [
+    platforms = lib.platforms.unix;
+    license = with lib.licenses; [
       gpl3Plus
       hpnd
       bsd2
     ];
     mainProgram = "pngquant";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

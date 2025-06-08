@@ -100,7 +100,7 @@ maven.buildMavenPackage rec {
     });
 
   meta = {
-    description = "The Apache Maven Daemon";
+    description = "Apache Maven Daemon";
     homepage = "https://maven.apache.org/";
     license = lib.licenses.asl20;
     platforms = builtins.attrNames platformMap;

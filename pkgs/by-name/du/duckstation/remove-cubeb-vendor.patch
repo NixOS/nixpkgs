@@ -15,15 +15,19 @@ index af35687..8347825 100644
  disable_compiler_warnings_for_target(kissfft)
  
 diff --git a/src/util/cubeb_audio_stream.cpp b/src/util/cubeb_audio_stream.cpp
-index 85579c4..526d168 100644
+index 85579c4..339190a 100644
 --- a/src/util/cubeb_audio_stream.cpp
 +++ b/src/util/cubeb_audio_stream.cpp
-@@ -261,7 +261,7 @@ std::vector<std::pair<std::string, std::string>> AudioStream::GetCubebDriverName
+@@ -261,9 +261,9 @@ std::vector<std::pair<std::string, std::string>> AudioStream::GetCubebDriverName
    std::vector<std::pair<std::string, std::string>> names;
    names.emplace_back(std::string(), TRANSLATE_STR("AudioStream", "Default"));
  
 -  const char** cubeb_names = cubeb_get_backend_names();
-+  const char*const * cubeb_names = cubeb_get_backend_names();
-   for (u32 i = 0; cubeb_names[i] != nullptr; i++)
-     names.emplace_back(cubeb_names[i], cubeb_names[i]);
+-  for (u32 i = 0; cubeb_names[i] != nullptr; i++)
+-    names.emplace_back(cubeb_names[i], cubeb_names[i]);
++  cubeb_backend_names backends = cubeb_get_backend_names();
++  for (u32 i = 0; i < backends.count; i++)
++    names.emplace_back(backends.names[i], backends.names[i]);
    return names;
+ }
+

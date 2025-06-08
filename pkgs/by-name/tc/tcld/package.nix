@@ -39,7 +39,7 @@ buildGoModule (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "The temporal cloud cli.";
+    description = "Temporal cloud cli";
     homepage = "https://www.github.com/temporalio/tcld";
     license = lib.licenses.mit;
     teams = [ lib.teams.mercury ];

@@ -33,7 +33,7 @@
 
   <https://github.com/Microsoft/vscode-cpptools/issues/35>
 
-  Once the symbolic link temporary solution taken, everything shoud run smootly.
+  Once the symbolic link temporary solution taken, everything should run smootly.
 */
 
 let

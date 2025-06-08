@@ -22,12 +22,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Kubernetes exploitation tool";
     homepage = "https://github.com/Rolix44/Kubestroyer";
     changelog = "https://github.com/Rolix44/Kubestroyer/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "kubestroyer";
   };
 }

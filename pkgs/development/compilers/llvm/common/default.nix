@@ -2,9 +2,9 @@
   lowPrio,
   newScope,
   pkgs,
+  targetPackages,
   lib,
   stdenv,
-  preLibcCrossHeaders,
   libxcrypt,
   substitute,
   replaceVars,
@@ -268,7 +268,7 @@ let
 
       bintoolsNoLibc = wrapBintoolsWith {
         bintools = tools.bintools-unwrapped;
-        libc = preLibcCrossHeaders;
+        libc = targetPackages.preLibcHeaders;
       };
 
       bintools = wrapBintoolsWith { bintools = tools.bintools-unwrapped; };

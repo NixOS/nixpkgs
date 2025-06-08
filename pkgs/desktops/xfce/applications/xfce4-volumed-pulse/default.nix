@@ -1,19 +1,41 @@
 {
+  stdenv,
   lib,
-  mkXfceDerivation,
+  fetchFromGitLab,
+  gettext,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook3,
   gtk3,
   libnotify,
   libpulseaudio,
   keybinder3,
   xfconf,
+  gitUpdater,
 }:
 
-mkXfceDerivation {
-  category = "apps";
+stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-volumed-pulse";
-  version = "0.2.5";
+  version = "0.3.0";
 
-  sha256 = "sha256-A7PM4zHL4hkhsZjYEPuEiujP1ofP7V/QVqDNgGoGIm8=";
+  src = fetchFromGitLab {
+    domain = "gitlab.xfce.org";
+    owner = "apps";
+    repo = "xfce4-volumed-pulse";
+    tag = "xfce4-volumed-pulse-${finalAttrs.version}";
+    hash = "sha256-TdvqvlpNDs9i7IzegqGYTdvy2OVMdQUFvuENNmpkqAY=";
+  };
+
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    gettext
+    meson
+    ninja
+    pkg-config
+    wrapGAppsHook3
+  ];
 
   buildInputs = [
     gtk3
@@ -23,11 +45,15 @@ mkXfceDerivation {
     xfconf
   ];
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater { rev-prefix = "xfce4-volumed-pulse-"; };
+
+  meta = {
     description = "Volume keys control daemon for Xfce using pulseaudio";
+    homepage = "https://gitlab.xfce.org/apps/xfce4-volumed-pulse";
     mainProgram = "xfce4-volumed-pulse";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ abbradar ];
-    teams = [ teams.xfce ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ abbradar ];
+    teams = [ lib.teams.xfce ];
+    platforms = lib.platforms.linux;
   };
-}
+})

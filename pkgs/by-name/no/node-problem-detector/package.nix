@@ -41,11 +41,11 @@ buildGoModule rec {
     "-X k8s.io/node-problem-detector/pkg/version.version=v${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Various problem detectors running on the Kubernetes nodes";
     homepage = "https://github.com/kubernetes/node-problem-detector";
     changelog = "https://github.com/kubernetes/node-problem-detector/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lbpdt ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lbpdt ];
   };
 }

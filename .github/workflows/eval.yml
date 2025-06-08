@@ -4,7 +4,7 @@ on:
   pull_request:
     paths:
       - .github/workflows/eval.yml
-      - .github/workflows/reviews.yml # needs eval results from the same event type
+      - .github/workflows/reviewers.yml # needs eval results from the same event type
   pull_request_target:
   push:
     # Keep this synced with ci/request-reviews/dev-branches.txt
@@ -68,7 +68,7 @@ jobs:
           path: untrusted
 
       - name: Install Nix
-        uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
+        uses: cachix/install-nix-action@17fe5fb4a23ad6cbbe47d6b3f359611ad276644c # v31
         with:
           extra_nix_config: sandbox = true
 
@@ -180,7 +180,7 @@ jobs:
           path: trusted
 
       - name: Install Nix
-        uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
+        uses: cachix/install-nix-action@17fe5fb4a23ad6cbbe47d6b3f359611ad276644c # v31
         with:
           extra_nix_config: sandbox = true
 

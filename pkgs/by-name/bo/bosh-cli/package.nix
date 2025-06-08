@@ -34,12 +34,12 @@ buildGoModule rec {
     wrapProgram $out/bin/bosh --prefix PATH : '${lib.makeBinPath [ openssh ]}'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line interface to CloudFoundry BOSH";
     homepage = "https://bosh.io";
     changelog = "https://github.com/cloudfoundry/bosh-cli/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ris ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ris ];
     mainProgram = "bosh";
   };
 }

@@ -19,6 +19,7 @@
   srcOverride ? callPackage ./source.nix { inherit patches; },
   gemset ? ./. + "/gemset.nix",
   yarnHash ? srcOverride.yarnHash,
+  yarnMissingHashes ? srcOverride.yarnMissingHashes,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,9 +37,11 @@ stdenv.mkDerivation rec {
     pname = "${pname}-modules";
     inherit src version;
 
+    missingHashes = yarnMissingHashes;
     yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
       inherit src;
       hash = yarnHash;
+      missingHashes = yarnMissingHashes;
     };
 
     nativeBuildInputs = [

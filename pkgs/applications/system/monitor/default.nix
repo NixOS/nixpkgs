@@ -84,6 +84,12 @@ stdenv.mkDerivation rec {
     substituteInPlace meson.build --replace \
       "meson.get_compiler('c').find_library('libcurl', dirs: vapidir)" \
       "meson.get_compiler('c').find_library('libcurl', dirs: '${curl.out}/lib')"
+
+    # Fix build with Vala 0.56.18
+    # https://github.com/elementary/monitor/issues/444
+    for i in $(find src/Resources -type f -name "*.vala"); do
+      substituteInPlace $i --replace-warn "[Compact]" ""
+    done
   '';
 
   passthru = {
