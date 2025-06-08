@@ -26,6 +26,7 @@ python3Packages.buildPythonApplication rec {
     "pyarrow"
     "textual"
     "syrupy"
+    "tree-sitter-sql"
   ];
 
   build-system = with python3Packages; [ poetry-core ];
@@ -48,6 +49,7 @@ python3Packages.buildPythonApplication rec {
       textual-fastdatatable
       textual-textarea
       tomlkit
+      tree-sitter-sql
     ]
     ++ lib.optionals withPostgresAdapter [ harlequin-postgres ]
     ++ lib.optionals withBigQueryAdapter [ harlequin-bigquery ];
