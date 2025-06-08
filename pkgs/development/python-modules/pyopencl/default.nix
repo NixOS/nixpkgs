@@ -19,6 +19,7 @@
   # dependencies
   platformdirs,
   pytools,
+  typing-extensions,
 
   # tests
   pytestCheckHook,
@@ -29,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2025.1";
+  version = "2025.2";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -37,7 +38,7 @@ buildPythonPackage rec {
     repo = "pyopencl";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-wAZBDPMJbTmujP1j7LjK28ZozZaUwKPDPZLZbFFTeAs=";
+    hash = "sha256-cV4ff52qB7+zFC04swMt4s3Vrzrd+UZU3owEaJFFOms=";
   };
 
   build-system = [
@@ -60,6 +61,7 @@ buildPythonPackage rec {
     numpy
     platformdirs
     pytools
+    typing-extensions
   ];
 
   nativeCheckInputs = [
