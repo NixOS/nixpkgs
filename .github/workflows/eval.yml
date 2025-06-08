@@ -1,24 +1,10 @@
 name: Eval
 
 on:
-  pull_request:
-    paths:
-      - .github/workflows/eval.yml
-      - .github/workflows/reviewers.yml # needs eval results from the same event type
-  pull_request_target:
-  push:
-    # Keep this synced with ci/request-reviews/dev-branches.txt
-    branches:
-      - master
-      - staging
-      - release-*
-      - staging-*
-      - haskell-updates
-      - python-updates
-
-concurrency:
-  group: eval-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
-  cancel-in-progress: true
+  workflow_call:
+    secrets:
+      OWNER_APP_PRIVATE_KEY:
+        required: false
 
 permissions: {}
 
@@ -109,12 +95,12 @@ jobs:
               run_id = (await github.rest.actions.listWorkflowRuns({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                workflow_id: 'eval.yml',
+                workflow_id: 'push.yml',
                 event: 'push',
                 head_sha: targetSha
               })).data.workflow_runs[0].id
             } catch {
-              throw new Error(`Could not find an eval.yml workflow run for ${targetSha}.`)
+              throw new Error(`Could not find an push.yml workflow run for ${targetSha}.`)
             }
 
             core.setOutput('targetRunId', run_id)
@@ -265,4 +251,5 @@ jobs:
     needs: [prepare, outpaths]
     if: needs.prepare.outputs.targetSha
     uses: ./.github/workflows/reviewers.yml
-    secrets: inherit
+    secrets:
+      OWNER_APP_PRIVATE_KEY: ${{ secrets.OWNER_APP_PRIVATE_KEY }}

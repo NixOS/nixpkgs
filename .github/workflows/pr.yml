@@ -1,0 +1,47 @@
+name: PR
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/build.yml
+      - .github/workflows/check.yml
+      - .github/workflows/eval.yml
+      - .github/workflows/lint.yml
+      - .github/workflows/pr.yml
+      - .github/workflows/reviewers.yml # needs eval results from the same event type
+  pull_request_target:
+
+concurrency:
+  group: pr-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  check:
+    name: Check
+    uses: ./.github/workflows/check.yml
+    permissions:
+      # cherry-picks
+      pull-requests: write
+
+  lint:
+    name: Lint
+    uses: ./.github/workflows/lint.yml
+
+  eval:
+    name: Eval
+    uses: ./.github/workflows/eval.yml
+    permissions:
+      # compare
+      issues: write
+      pull-requests: write
+      statuses: write
+    secrets:
+      OWNER_APP_PRIVATE_KEY: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
+
+  build:
+    name: Build
+    uses: ./.github/workflows/build.yml
+    secrets:
+      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
