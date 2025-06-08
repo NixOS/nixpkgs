@@ -54,6 +54,7 @@
   libxft,
   libxi,
   libxinerama,
+  libxkbfile,
   libxmu,
   libxp,
   libxpm,
@@ -134,6 +135,7 @@ self: with self; {
     libpciaccess
     libxcb
     libxcvt
+    libxkbfile
     listres
     lndir
     luit
@@ -1364,42 +1366,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xtst" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libxkbfile = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libX11,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libxkbfile";
-      version = "1.1.3";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libxkbfile-1.1.3.tar.xz";
-        sha256 = "1v2bhw1q1cj3wjfs0igq393iz10whcavbyxlm3k9xfvsk7m3xdm9";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libX11
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xkbfile" ];
         platforms = lib.platforms.unix;
       };
     })
