@@ -619,7 +619,7 @@ buildPythonPackage rec {
     hypothesis
     ninja
     psutil
-  ];
+  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   checkPhase =
     with lib.versions;
