@@ -84,7 +84,7 @@ let
         "all"
       ];
 
-      enableParallelBuilding = true;
+      enableParallelBuilding = false;
 
       nativeBuildInputs = [
         file
@@ -115,7 +115,7 @@ let
       '';
 
       meta = {
-        description = "Cross-platform virtual machine for Squeak, Pharo, Cuis, and Newspeak";
+        description = "Cross-platform virtual machine for Squeak, Pharo, and Cuis";
         mainProgram = scriptName;
         homepage = "https://opensmalltalk.org/";
         license = with lib.licenses; [ mit ];
@@ -132,7 +132,7 @@ let
         scriptName = "squeak";
         configureFlagsArray = ''
           (
-            CFLAGS="-DNDEBUG -DDEBUGVM=0 -DMUSL -D_GNU_SOURCE -DUSEEVDEV -DCOGMTVM=0 -DDUAL_MAPPED_CODE_ZONE=1"
+            CFLAGS="-fpermissive -DNDEBUG -DDEBUGVM=0 -DMUSL -D_GNU_SOURCE -DUSEEVDEV -DCOGMTVM=0 -DDUAL_MAPPED_CODE_ZONE=1"
             LIBS="-lrt"
           )
         '';
@@ -141,6 +141,7 @@ let
           "--with-src=src/spur64.cog"
           "--without-npsqueak"
           "--enable-fast-bitblt"
+          "--disable-dynamicopenssl"
         ];
       };
 
@@ -150,7 +151,7 @@ let
         scriptName = "squeak";
         configureFlagsArray = ''
           (
-            CFLAGS="-DNDEBUG -DDEBUGVM=0 -DMUSL -D_GNU_SOURCE -DUSEEVDEV -D__ARM_ARCH_ISA_A64 -DARM64 -D__arm__ -D__arm64__ -D__aarch64__"
+            CFLAGS="-fpermissive -DNDEBUG -DDEBUGVM=0 -DMUSL -D_GNU_SOURCE -DUSEEVDEV -D__ARM_ARCH_ISA_A64 -DARM64 -D__arm__ -D__arm64__ -D__aarch64__"
           )
         '';
         configureFlags = [
@@ -158,41 +159,26 @@ let
           "--with-src=src/spur64.stack"
           "--disable-cogit"
           "--without-npsqueak"
+          "--disable-dynamicopenssl"
         ];
       };
     };
 
     "x86_64-linux" = {
-      "newspeak-cog-spur" = buildVM {
-        platformDir = "linux64x64";
-        vmName = "newspeak.cog.spur";
-        scriptName = "newspeak";
-        configureFlagsArray = ''
-          (
-            CFLAGS="-DNDEBUG -DDEBUGVM=0"
-          )
-        '';
-        configureFlags = [
-          "--with-vmversion=5.0"
-          "--with-src=src/spur64.cog.newspeak"
-          "--without-vm-display-fbdev"
-          "--without-npsqueak"
-        ];
-      };
-
       "squeak-cog-spur" = buildVM {
         platformDir = "linux64x64";
         vmName = "squeak.cog.spur";
         scriptName = "squeak";
         configureFlagsArray = ''
           (
-            CFLAGS="-DNDEBUG -DDEBUGVM=0 -DCOGMTVM=0"
+            CFLAGS="-fpermissive -DNDEBUG -DDEBUGVM=0 -DCOGMTVM=0"
           )
         '';
         configureFlags = [
           "--with-vmversion=5.0"
           "--with-src=src/spur64.cog"
           "--without-npsqueak"
+          "--disable-dynamicopenssl"
         ];
       };
     };
