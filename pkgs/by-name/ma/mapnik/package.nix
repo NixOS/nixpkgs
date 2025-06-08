@@ -27,15 +27,15 @@
   sparsehash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mapnik";
-  version = "4.0.7";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "mapnik";
     repo = "mapnik";
-    rev = "v${version}";
-    hash = "sha256-gJktRWcJiSGxxjvWFt+Kl9d7g+TOSPk2PfGP0LIVxt4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EhRMG0xPOGwcRAMQD2B4z7nVlXQf4HFFfL3oUaUfXBY=";
     fetchSubmodules = true;
   };
 
@@ -47,18 +47,14 @@ stdenv.mkDerivation rec {
     rm -r scons
     # Remove bundled 'sparsehash' directory in favor of 'sparsehash' package
     rm -r deps/mapnik/sparsehash
+    # Remove bundled 'protozero' directory in favor of 'protozero' package
+    rm -r deps/mapbox/protozero
   '';
 
   # a distinct dev output makes python-mapnik fail
   outputs = [ "out" ];
 
   patches = [
-    # The lib/cmake/harfbuzz/harfbuzz-config.cmake file in harfbuzz.dev is faulty,
-    # as it provides the wrong libdir. The workaround is to just rely on
-    # pkg-config to locate harfbuzz shared object files.
-    # Upstream HarfBuzz wants to drop CMake support anyway.
-    # See discussion: https://github.com/mapnik/mapnik/issues/4265
-    ./cmake-harfbuzz.patch
     # Account for full paths when generating libmapnik.pc
     ./export-pkg-config-full-paths.patch
     # Use 'sparsehash' package.
@@ -75,7 +71,7 @@ stdenv.mkDerivation rec {
     cairo
     freetype
     gdal
-    harfbuzz
+    (harfbuzz.override { withIcu = true; })
     icu
     libjpeg
     libpng
@@ -97,6 +93,8 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "BUILD_DEMO_CPP" false)
     ## Would require QT otherwise.
     (lib.cmakeBool "BUILD_DEMO_VIEWER" false)
+    # disable the find_package call and force pkg-config, see https://github.com/mapnik/mapnik/pull/4270
+    (lib.cmakeBool "CMAKE_DISABLE_FIND_PACKAGE_harfbuzz" true)
     # Use 'protozero' package.
     (lib.cmakeBool "USE_EXTERNAL_MAPBOX_PROTOZERO" true)
     # macOS builds fail when using memory mapped file cache.
@@ -118,19 +116,19 @@ stdenv.mkDerivation rec {
   '';
 
   preInstall = ''
-    mkdir -p $out/bin
-    cp ../utils/mapnik-config/mapnik-config $out/bin/mapnik-config
+    install -Dm755 ../utils/mapnik-config/mapnik-config -t $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source toolkit for developing mapping applications";
     homepage = "https://mapnik.org";
-    maintainers = with maintainers; [
+    changelog = "https://github.com/mapnik/mapnik/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    maintainers = with lib.maintainers; [
       hrdinka
       hummeltech
     ];
-    teams = [ teams.geospatial ];
-    license = licenses.lgpl21Plus;
-    platforms = platforms.all;
+    teams = [ lib.teams.geospatial ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.all;
   };
-}
+})
