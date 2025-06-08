@@ -25,6 +25,7 @@
   xcmsdb,
   xdriinfo,
   xkeyboard-config,
+  xlsatoms,
   xorg-cf-files,
   xorg-docs,
   xorgproto,
@@ -49,6 +50,7 @@ self: with self; {
     xbitmaps
     xcmsdb
     xdriinfo
+    xlsatoms
     xorgproto
     xtrans
     ;
@@ -6870,38 +6872,6 @@ self: with self; {
         xorgproto
         libXt
       ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xlsatoms = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libxcb,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xlsatoms";
-      version = "1.1.4";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xlsatoms-1.1.4.tar.xz";
-        sha256 = "1dviriynilkw0jwl0s2h8y95pwh8cxj95cnmllkd6rn0args3gzl";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [ libxcb ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ ];
