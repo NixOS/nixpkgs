@@ -1,0 +1,29 @@
+name: Push
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/push.yml
+      # eval is tested via pr.yml
+  push:
+    # Keep this synced with ci/request-reviews/dev-branches.txt
+    branches:
+      - master
+      - staging
+      - release-*
+      - staging-*
+      - haskell-updates
+      - python-updates
+
+permissions: {}
+
+jobs:
+  eval:
+    name: Eval
+    uses: ./.github/workflows/eval.yml
+    # Those are not actually used on push, but will throw an error if not set.
+    permissions:
+      # compare
+      issues: write
+      pull-requests: write
+      statuses: write
