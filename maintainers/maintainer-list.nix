@@ -9862,6 +9862,12 @@
     githubId = 155722885;
     name = "Joachim Ernst";
   };
+  hemera = {
+    email = "neikos@neikos.email";
+    github = "TheNeikos";
+    githubId = 1631166;
+    name = "Marcel Müller";
+  };
   henkery = {
     email = "jim@reupload.nl";
     github = "henkery";
