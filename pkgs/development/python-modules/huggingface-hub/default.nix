@@ -9,6 +9,7 @@
   # dependencies
   filelock,
   fsspec,
+  hf-xet,
   packaging,
   pyyaml,
   requests,
@@ -25,8 +26,6 @@
   safetensors,
   # hf_transfer
   hf-transfer,
-  # hf_xet
-  hf-xet,
   # fastai
   toml,
   fastai,
@@ -41,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "huggingface-hub";
-  version = "0.31.4";
+  version = "0.32.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
     tag = "v${version}";
-    hash = "sha256-V/FbInskBHefbPkbwQyx+aWBcdrk5WaXXbR/v3fNU+Y=";
+    hash = "sha256-qCFwzhjQI1L7mgSSqDPw59woTSTDY0boWSHcm7dgx2A=";
   };
 
   build-system = [ setuptools ];
@@ -56,6 +55,7 @@ buildPythonPackage rec {
   dependencies = [
     filelock
     fsspec
+    hf-xet
     packaging
     pyyaml
     requests
