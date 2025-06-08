@@ -178,13 +178,6 @@ self: super:
     };
   });
 
-  libxkbfile = super.libxkbfile.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ]; # mainly to avoid propagation
-  });
-
   libxshmfence = super.libxshmfence.overrideAttrs (attrs: {
     outputs = [
       "out"

@@ -73,6 +73,7 @@ $pcMap{"xfont2"} = "libXfont2";
 $pcMap{"xft"} = "libXft";
 $pcMap{"xi"} = "libXi";
 $pcMap{"xinerama"} = "libXinerama";
+$pcMap{"xkbfile"} = "libxkbfile";
 $pcMap{"xmu"} = "libXmu";
 $pcMap{"xmuu"} = "libXmu";
 $pcMap{"xp"} = "libXp";
@@ -392,6 +393,7 @@ print OUT <<EOF;
   libxft,
   libxi,
   libxinerama,
+  libxkbfile,
   libxmu,
   libxp,
   libxpm,
@@ -473,6 +475,7 @@ self: with self; {
     libpciaccess
     libxcb
     libxcvt
+    libxkbfile
     listres
     lndir
     luit
