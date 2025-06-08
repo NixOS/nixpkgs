@@ -38,7 +38,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   preConfigure = ''
-    export LIBS="$LIBS -lz"
+    export LIBS="$LIBS -lz -lboost_timer"
   '';
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ];
