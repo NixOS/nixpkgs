@@ -6482,6 +6482,8 @@ self: super: with self; {
 
   horizon-eda = callPackage ../development/python-modules/horizon-eda { inherit (pkgs) horizon-eda; };
 
+  housekeeping = callPackage ../development/python-modules/housekeeping { };
+
   howdoi = callPackage ../development/python-modules/howdoi { };
 
   hpack = callPackage ../development/python-modules/hpack { };
@@ -7552,6 +7554,8 @@ self: super: with self; {
   keyutils = callPackage ../development/python-modules/keyutils { inherit (pkgs) keyutils; };
 
   kfactory = callPackage ../development/python-modules/kfactory { };
+
+  kgb = callPackage ../development/python-modules/kgb { };
 
   khanaa = callPackage ../development/python-modules/khanaa { };
 
@@ -12376,6 +12380,8 @@ self: super: with self; {
   pydicom = callPackage ../development/python-modules/pydicom { };
 
   pydicom-seg = callPackage ../development/python-modules/pydicom-seg { };
+
+  pydiffx = callPackage ../development/python-modules/pydiffx { };
 
   pydigiham = callPackage ../development/python-modules/pydigiham { };
 
