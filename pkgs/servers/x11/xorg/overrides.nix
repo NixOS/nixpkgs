@@ -372,16 +372,6 @@ self: super:
     ];
   });
 
-  libXrender = super.libXrender.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "doc"
-    ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.xorgproto ];
-  });
-
   libXres = super.libXres.overrideAttrs (attrs: {
     outputs = [
       "out"
