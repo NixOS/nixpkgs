@@ -31,10 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];
-
-  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    install -Dm444 doc/newsraft.desktop -t $out/share/applications
-  '';
+  installTargets = "install install-desktop";
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-D_DARWIN_C_SOURCE";
 
@@ -42,7 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Feed reader for terminal";
-    homepage = "https://codeberg.org/grisha/newsraft";
+    homepage = "https://codeberg.org/newsraft/newsraft";
+    changelog = "https://codeberg.org/newsraft/newsraft/releases/tag/newsraft-${finalAttrs.version}";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
       arthsmn
