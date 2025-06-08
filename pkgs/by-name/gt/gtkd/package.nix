@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchzip,
+  fetchFromGitHub,
   atk,
   cairo,
   dcompiler ? ldc,
@@ -24,12 +24,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gtkd";
-  version = "3.10.0";
+  version = "3.11.0";
 
-  src = fetchzip {
-    url = "https://gtkd.org/Downloads/sources/GtkD-${version}.zip";
-    sha256 = "DEKVDexGyg/T3SdnnvRjaHq1LbDo8ekNslxKROpMCCE=";
-    stripRoot = false;
+  src = fetchFromGitHub {
+    owner = "gtkd-developers";
+    repo = "GtkD";
+    tag = "v${version}";
+    hash = "sha256-UpPoskHtnI4nUOKdLorK89grgUUPrCvO4zrAl9LfjHA=";
   };
 
   nativeBuildInputs = [
