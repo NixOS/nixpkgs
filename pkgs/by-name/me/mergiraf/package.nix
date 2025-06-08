@@ -42,6 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       zimbatm
       genga898
+      defelo
     ];
     mainProgram = "mergiraf";
   };
