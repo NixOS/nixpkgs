@@ -2,6 +2,7 @@
   lib,
   fetchFromGitea,
   rustPlatform,
+  nix-update-script,
 
   # native check inputs
   git,
@@ -29,6 +30,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Syntax-aware git merge driver for a growing collection of programming languages and file formats";
