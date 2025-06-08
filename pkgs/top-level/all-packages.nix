@@ -13997,8 +13997,6 @@ with pkgs;
 
   sonic-visualiser = libsForQt5.callPackage ../applications/audio/sonic-visualiser { };
 
-  soulseekqt = libsForQt5.callPackage ../applications/networking/p2p/soulseekqt { };
-
   spek = callPackage ../applications/audio/spek {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
