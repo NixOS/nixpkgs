@@ -1,8 +1,8 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch,
   pythonOlder,
 
   # build-system, dependencies
@@ -13,6 +13,7 @@
 
   # tests
   cython,
+  git,
   pytestCheckHook,
   pytest-mock,
 }:
@@ -28,6 +29,14 @@ buildPythonPackage rec {
     hash = "sha256-xWqZ7J32aaQGYv5GlgMhr25LFBBsFNsihwnBYo4jhI0=";
   };
 
+  patches = [
+    (fetchpatch {
+      # TODO: Remove in 0.19.0
+      url = "https://github.com/mesonbuild/meson-python/commit/1e69e7a23f2b24d688dc4220e93de6f0e2bcf9d2.patch";
+      hash = "sha256-FC2ll/OrLV1R0CDB6UkrknVASJQ7rSU+sApdAk75x44=";
+    })
+  ];
+
   build-system = [
     meson
     ninja
@@ -42,57 +51,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     cython
+    git
     pytestCheckHook
     pytest-mock
   ];
-
-  disabledTests = [
-    # Tests require a Git checkout
-    "test_configure_data"
-    "test_contents"
-    "test_contents"
-    "test_contents_license_file"
-    "test_contents_subdirs"
-    "test_contents_unstaged"
-    "test_detect_wheel_tag_module"
-    "test_detect_wheel_tag_script"
-    "test_dynamic_version"
-    "test_editable_install"
-    "test_editable_verbose"
-    "test_editble_reentrant"
-    "test_entrypoints"
-    "test_executable_bit"
-    "test_executable_bit"
-    "test_generated_files"
-    "test_install_subdir"
-    "test_license_pep639"
-    "test_limited_api"
-    "test_link_library_in_subproject"
-    "test_local_lib"
-    "test_long_path"
-    "test_meson_build_metadata"
-    "test_pep621_metadata"
-    "test_pure"
-    "test_purelib_and_platlib"
-    "test_reproducible"
-    "test_rpath"
-    "test_scipy_like"
-    "test_sharedlib_in_package"
-    "test_symlinks"
-    "test_uneeded_rpath"
-    "test_user_args"
-    "test_vendored_meson"
-  ];
-  # meson-python respectes MACOSX_DEPLOYMENT_TARGET, but compares it with the
-  # actual platform version during tests, which mismatches.
-  # https://github.com/mesonbuild/meson-python/issues/760
-  preCheck =
-    if stdenv.hostPlatform.isDarwin then
-      ''
-        unset MACOSX_DEPLOYMENT_TARGET
-      ''
-    else
-      null;
 
   setupHooks = [ ./add-build-flags.sh ];
 
