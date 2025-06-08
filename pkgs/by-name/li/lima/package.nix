@@ -10,6 +10,8 @@
   nix-update-script,
   apple-sdk_15,
   writableTmpDirAsHomeHook,
+  findutils,
+  gzip,
 }:
 
 buildGoModule (finalAttrs: {
@@ -28,6 +30,9 @@ buildGoModule (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     installShellFiles
+
+    # For checkPhase, and installPhase(required to build completion)
+    writableTmpDirAsHomeHook
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.sigtool ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
@@ -35,6 +40,9 @@ buildGoModule (finalAttrs: {
   postPatch = ''
     substituteInPlace Makefile \
       --replace-fail 'codesign -f -v --entitlements vz.entitlements -s -' 'codesign -f --entitlements vz.entitlements -s -'
+
+    substituteInPlace Makefile \
+      --replace-fail 'rm -rf _output vendor' 'rm -rf _output'
   '';
 
   # It attaches entitlements with codesign and strip removes those,
@@ -43,14 +51,9 @@ buildGoModule (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
-    make "VERSION=v${finalAttrs.version}" "CC=${stdenv.cc.targetPrefix}cc" binaries
+    make "VERSION=v${finalAttrs.version}" "CC=${stdenv.cc.targetPrefix}cc" native
     runHook postBuild
   '';
-
-  nativeCheckInputs = [
-    # Workaround for: could not create "/homeless-shelter/.lima/_config" directory: mkdir /homeless-shelter: permission denied
-    writableTmpDirAsHomeHook
-  ];
 
   installPhase =
     ''
@@ -73,14 +76,31 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [
     # Workaround for: "panic: $HOME is not defined" at https://github.com/lima-vm/lima/blob/cb99e9f8d01ebb82d000c7912fcadcd87ec13ad5/pkg/limayaml/defaults.go#L53
     writableTmpDirAsHomeHook
+
+    findutils
+    gzip
   ];
   doInstallCheck = true;
 
   # Don't use versionCheckHook for this package until Env solutions like #403971 or #411609 are available on the master branch.
-  installCheckPhase = ''
-    [[ "$("$out/bin/limactl" --version | cut -d ' ' -f 3)" == "${finalAttrs.version}" ]]
-    USER=nix $out/bin/limactl validate templates/default.yaml
-  '';
+  installCheckPhase =
+    ''
+      runHook preInstallCheck
+
+      [[ "$("$out/bin/limactl" --version | cut -d ' ' -f 3)" == "${finalAttrs.version}" ]]
+      USER=nix $out/bin/limactl validate templates/default.yaml
+      [[ "$(find "$out/share" -type f -name 'lima-guestagent.Linux-*.gz' | wc -l)" -eq 1 ]]
+    ''
+    # This agent matches the host's architecture and is for Linux VMs, so it can only be tested on Linux.
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      cp $out/share/lima/lima-guestagent.*.gz ./
+      gzip -dc lima-guestagent.*.gz > lima-guestagent
+      chmod +x lima-guestagent
+      [[ "$(./lima-guestagent --version | cut -d ' ' -f 3)" == "${finalAttrs.version}" ]]
+    ''
+    + ''
+      runHook postInstallCheck
+    '';
 
   passthru.updateScript = nix-update-script { };
 
