@@ -5,22 +5,22 @@
   fetchFromGitHub,
   installShellFiles,
   qemu,
-  sigtool,
+  darwin,
   makeWrapper,
   nix-update-script,
   apple-sdk_15,
-  lima,
+  writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lima";
   version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "lima-vm";
     repo = "lima";
-    rev = "v${version}";
-    hash = "sha256-pwSLQlYPJNzvXuW6KLmQoaafQyf3o6fjVAfKe9RJ3UE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pwSLQlYPJNzvXuW6KLmQoaafQyf3o6fjVAfKe9RJ3UE";
   };
 
   vendorHash = "sha256-JxrUX22yNb5/tZIBWDiBaMLOpEnOk+2lZdpzCjjqO4E=";
@@ -28,7 +28,7 @@ buildGoModule rec {
   nativeBuildInputs = [
     makeWrapper
     installShellFiles
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.sigtool ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
 
@@ -43,14 +43,14 @@ buildGoModule rec {
 
   buildPhase = ''
     runHook preBuild
-    make "VERSION=v${version}" "CC=${stdenv.cc.targetPrefix}cc" binaries
+    make "VERSION=v${finalAttrs.version}" "CC=${stdenv.cc.targetPrefix}cc" binaries
     runHook postBuild
   '';
 
-  preCheck = ''
+  nativeCheckInputs = [
     # Workaround for: could not create "/homeless-shelter/.lima/_config" directory: mkdir /homeless-shelter: permission denied
-    export LIMA_HOME="$(mktemp -d)"
-  '';
+    writableTmpDirAsHomeHook
+  ];
 
   installPhase =
     ''
@@ -70,16 +70,15 @@ buildGoModule rec {
       runHook postInstall
     '';
 
+  nativeInstallCheckInputs = [
+    # Workaround for: "panic: $HOME is not defined" at https://github.com/lima-vm/lima/blob/cb99e9f8d01ebb82d000c7912fcadcd87ec13ad5/pkg/limayaml/defaults.go#L53
+    writableTmpDirAsHomeHook
+  ];
   doInstallCheck = true;
-  # Workaround for: "panic: $HOME is not defined" at https://github.com/lima-vm/lima/blob/cb99e9f8d01ebb82d000c7912fcadcd87ec13ad5/pkg/limayaml/defaults.go#L53
-  # Don't use versionCheckHook for this package. It cannot inject environment variables.
+
+  # Don't use versionCheckHook for this package until Env solutions like #403971 or #411609 are available on the master branch.
   installCheckPhase = ''
-    if [[ "$(HOME="$(mktemp -d)" "$out/bin/limactl" --version | cut -d ' ' -f 3)" == "${version}" ]]; then
-      echo '${pname} smoke check passed'
-    else
-      echo '${pname} smoke check failed'
-      return 1
-    fi
+    [[ "$("$out/bin/limactl" --version | cut -d ' ' -f 3)" == "${finalAttrs.version}" ]]
     USER=nix $out/bin/limactl validate templates/default.yaml
   '';
 
@@ -87,9 +86,9 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://github.com/lima-vm/lima";
-    description = "Linux virtual machines (on macOS, in most cases)";
-    changelog = "https://github.com/lima-vm/lima/releases/tag/v${version}";
+    description = "Linux virtual machines with automatic file sharing and port forwarding";
+    changelog = "https://github.com/lima-vm/lima/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ anhduy ];
   };
-}
+})
