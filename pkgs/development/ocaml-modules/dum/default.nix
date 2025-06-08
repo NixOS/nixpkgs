@@ -1,21 +1,17 @@
 {
   lib,
-  stdenv,
-  fetchFromGitHub,
-  ocaml,
-  findlib,
   easy-format,
+  buildDunePackage,
+  fetchurl,
 }:
 
-stdenv.mkDerivation rec {
-  pname = "ocaml${ocaml.version}-dum";
-  version = "1.0.1";
+buildDunePackage rec {
+  pname = "dum";
+  version = "1.0.3";
 
-  src = fetchFromGitHub {
-    owner = "mjambon";
-    repo = "dum";
-    rev = "v${version}";
-    sha256 = "0yrxl97szjc0s2ghngs346x3y0xszx2chidgzxk93frjjpsr1mlr";
+  src = fetchurl {
+    url = "https://github.com/mjambon/dum/releases/download/${version}/dum-${version}.tbz";
+    hash = "sha256-ZFojUD/IoxVTDfGyh2wveFsSz4D19pKkHrNuU+LFJlE=";
   };
 
   postPatch = ''
@@ -24,15 +20,7 @@ stdenv.mkDerivation rec {
     --replace "Obj.final_tag" "Obj.custom_tag"
   '';
 
-  nativeBuildInputs = [
-    ocaml
-    findlib
-  ];
   propagatedBuildInputs = [ easy-format ];
-
-  strictDeps = true;
-
-  createFindlibDestdir = true;
 
   meta = with lib; {
     homepage = "https://github.com/mjambon/dum";
