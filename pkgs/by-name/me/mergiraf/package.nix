@@ -8,7 +8,7 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mergiraf";
   version = "0.10.0";
 
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     domain = "codeberg.org";
     owner = "mergiraf";
     repo = "mergiraf";
-    rev = "refs/tags/v${version}";
+    rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-wnXOl7KzSvvxQP4CebOJ+fEIn7fQDKTmO2PkGMRA4t4=";
   };
 
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Syntax-aware git merge driver for a growing collection of programming languages and file formats";
     homepage = "https://mergiraf.org/";
-    changelog = "https://codeberg.org/mergiraf/mergiraf/releases/tag/v${version}";
+    changelog = "https://codeberg.org/mergiraf/mergiraf/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       zimbatm
@@ -41,4 +41,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "mergiraf";
   };
-}
+})
