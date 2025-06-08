@@ -11,6 +11,7 @@
   minizip-ng,
   libbass,
   libbassmidi,
+  unstableGitUpdater,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vgmtrans-beta";
@@ -42,6 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${zlib-ng.src} lib/zlib-ng
     ln -s ${minizip-ng.src} lib/minizip-ng
   '';
+
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   meta = {
     description = "Tool to convert proprietary, sequenced videogame music to industry-standard formats";
