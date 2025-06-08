@@ -281,13 +281,6 @@ self: super:
     propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libXmu ];
   });
 
-  libXcursor = super.libXcursor.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-  });
-
   libXdamage = super.libXdamage.overrideAttrs (attrs: {
     outputs = [
       "out"

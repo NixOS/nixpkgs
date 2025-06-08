@@ -44,6 +44,7 @@ $pcMap{"x11-xcb"} = "libX11";
 $pcMap{"xau"} = "libXau";
 $pcMap{"xbitmaps"} = "xbitmaps";
 $pcMap{"xcb-proto"} = "xcbproto";
+$pcMap{"xcursor"} = "libXcursor";
 $pcMap{"xdmcp"} = "libXdmcp";
 $pcMap{"xext"} = "libXext";
 $pcMap{"xfixes"} = "libXfixes";
@@ -300,6 +301,7 @@ print OUT <<EOF;
   libxau,
   libxcb,
   libxcvt,
+  libxcursor,
   libxdmcp,
   libxext,
   libxfixes,
@@ -344,6 +346,7 @@ self: with self; {
   libpthreadstubs = libpthread-stubs;
   libX11 = libx11;
   libXau = libxau;
+  libXcursor = libxcursor;
   libXdmcp = libxdmcp;
   libXext = libxext;
   libXfixes = libxfixes;

@@ -12,6 +12,7 @@
   libxau,
   libxcb,
   libxcvt,
+  libxcursor,
   libxdmcp,
   libxext,
   libxfixes,
@@ -56,6 +57,7 @@ self: with self; {
   libpthreadstubs = libpthread-stubs;
   libX11 = libx11;
   libXau = libxau;
+  libXcursor = libxcursor;
   libXdmcp = libxdmcp;
   libXext = libxext;
   libXfixes = libxfixes;
@@ -2083,46 +2085,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "xcomposite" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libXcursor = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libX11,
-      libXfixes,
-      libXrender,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libXcursor";
-      version = "1.2.3";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libXcursor-1.2.3.tar.xz";
-        sha256 = "1h62narayrhrkqalrmx7z3s6yppw1acbp5id3skrvrygshnl1sgx";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libX11
-        libXfixes
-        libXrender
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "xcursor" ];
         platforms = lib.platforms.unix;
       };
     })
