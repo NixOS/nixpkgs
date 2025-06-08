@@ -22,6 +22,7 @@
   util-macros,
   xbitmaps,
   xcb-proto,
+  xcmsdb,
   xkeyboard-config,
   xorg-cf-files,
   xorg-docs,
@@ -45,6 +46,7 @@ self: with self; {
     pixman
     sessreg
     xbitmaps
+    xcmsdb
     xorgproto
     xtrans
     ;
@@ -3954,38 +3956,6 @@ self: with self; {
         libXrender
         libXt
       ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xcmsdb = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xcmsdb";
-      version = "1.0.7";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xcmsdb-1.0.7.tar.xz";
-        sha256 = "0f5wddi707cjqm21hynckkqr12mpjqn3dq9fm5gb11w19270di2y";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [ libX11 ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ ];
