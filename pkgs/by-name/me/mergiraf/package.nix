@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   fetchFromGitea,
   rustPlatform,
@@ -24,14 +23,10 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-jShWfd3m9g6YlUFLOzlMPFtuXAAfjh+sBujCJ9F2Uj0=";
 
-  nativeCheckInputs = [
-    git
-  ];
+  nativeCheckInputs = [ git ];
 
   doInstallCheck = true;
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   versionCheckProgramArg = "--version";
 
