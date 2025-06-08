@@ -9927,6 +9927,8 @@ self: super: with self; {
 
   natsort = callPackage ../development/python-modules/natsort { };
 
+  natto-py = callPackage ../development/python-modules/natto-py { };
+
   natural = callPackage ../development/python-modules/natural { };
 
   naturalsort = callPackage ../development/python-modules/naturalsort { };
