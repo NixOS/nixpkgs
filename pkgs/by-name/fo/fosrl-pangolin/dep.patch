@@ -1,0 +1,20 @@
+--- a/src/app/layout.tsx	2025-04-20 22:37:45.982737981 +0200
++++ b/src/app/layout.tsx	2025-04-20 22:38:51.409074861 +0200
+@@ -1,6 +1,6 @@
+ import type { Metadata } from "next";
+ import "./globals.css";
+-import { Figtree, Inter } from "next/font/google";
++// import { Figtree, Inter } from "next/font/google";
+ import { Toaster } from "@/components/ui/toaster";
+ import { ThemeProvider } from "@app/providers/ThemeProvider";
+ import EnvProvider from "@app/providers/EnvProvider";
+@@ -21,7 +21,8 @@
+ export const dynamic = 'force-dynamic';
+ 
+ // const font = Figtree({ subsets: ["latin"] });
+-const font = Inter({ subsets: ["latin"] });
++// patch out latin font
++const font = {className: ""}
+ 
+ export default async function RootLayout({
+     children
