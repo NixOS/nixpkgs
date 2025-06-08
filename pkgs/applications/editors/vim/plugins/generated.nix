@@ -12066,6 +12066,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  patterns-nvim = buildVimPlugin {
+    pname = "patterns.nvim";
+    version = "2025-05-12";
+    src = fetchFromGitHub {
+      owner = "OXY2DEV";
+      repo = "patterns.nvim";
+      rev = "f45abad8b6e8606279c933017d68dcf1d0dc53d4";
+      sha256 = "1pxkiz759c60fds2cbc089zwk9yqxymzva81dxkm20iprc988cc7";
+    };
+    meta.homepage = "https://github.com/OXY2DEV/patterns.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   pckr-nvim = buildVimPlugin {
     pname = "pckr.nvim";
     version = "2025-05-09";
