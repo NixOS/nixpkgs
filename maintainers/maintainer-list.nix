@@ -23655,6 +23655,12 @@
     githubId = 6362238;
     name = "Christoph Honal";
   };
+  starius = {
+    email = "bnagaev@gmail.com";
+    github = "starius";
+    githubId = 920155;
+    name = "Boris Nagaev";
+  };
   starkca90 = {
     email = "starkca90@gmail.com";
     github = "starkca90";
