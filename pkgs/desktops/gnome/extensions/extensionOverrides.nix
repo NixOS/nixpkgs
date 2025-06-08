@@ -216,4 +216,18 @@ lib.trivial.pipe super [
         --replace "GLib.build_filenamev([GLib.DIR_SEPARATOR_S, 'usr', 'share', 'touchegg', 'touchegg.conf'])" "'${touchegg}/share/touchegg/touchegg.conf'"
     '';
   }))
+
+  (patchExtension "pwcalc@thilomaurer.de" {
+    postPatch = ''
+      # remove unused dangling symlink
+      rm settings-importexport.ui
+    '';
+  })
+
+  (patchExtension "TeaTimer@zener.sbg.at" {
+    postPatch = ''
+      # remove unused dangling symlink
+      rm utilities-teatime.svg
+    '';
+  })
 ]
