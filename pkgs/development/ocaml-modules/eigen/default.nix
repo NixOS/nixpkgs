@@ -14,8 +14,8 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "owlbarn";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-8V4DQ+b2rzy58NTenK1BsJEJiJKYV6hIp2fJWqczHRY=";
+    tag = version;
+    hash = "sha256-8V4DQ+b2rzy58NTenK1BsJEJiJKYV6hIp2fJWqczHRY=";
   };
 
   minimalOCamlVersion = "4.02";
@@ -26,11 +26,11 @@ buildDunePackage rec {
 
   buildInputs = [ dune-configurator ];
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Minimal/incomplete Ocaml interface to Eigen3, mostly for Owl";
-    platforms = platforms.x86_64;
-    maintainers = [ maintainers.bcdarwin ];
-    license = licenses.mit;
+    platforms = lib.platforms.x86_64;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
   };
 }
