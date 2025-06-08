@@ -15315,6 +15315,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  unified-nvim = buildVimPlugin {
+    pname = "unified.nvim";
+    version = "2025-06-08";
+    src = fetchFromGitHub {
+      owner = "axkirillov";
+      repo = "unified.nvim";
+      rev = "0d8eebd3909b86ca30407d79b547a245185082c2";
+      sha256 = "1r3pdh3rhlkrp9ykzxwaqrfww87dpa6b72kfvxf3j24firl0m9nv";
+    };
+    meta.homepage = "https://github.com/axkirillov/unified.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   unimpaired-nvim = buildVimPlugin {
     pname = "unimpaired.nvim";
     version = "2025-03-29";
