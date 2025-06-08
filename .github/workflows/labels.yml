@@ -147,7 +147,7 @@ jobs:
 
                   const run_id = (await github.rest.actions.listWorkflowRuns({
                     ...context.repo,
-                    workflow_id: 'eval.yml',
+                    workflow_id: 'pr.yml',
                     event: 'pull_request_target',
                     // For PR events, the workflow run is still in progress with this job itself.
                     status: prEventCondition ? 'in_progress' : 'success',
