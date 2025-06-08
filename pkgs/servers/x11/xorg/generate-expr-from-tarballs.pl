@@ -367,6 +367,7 @@ print OUT <<EOF;
   libpciaccess,
   libpthread-stubs,
   libsm,
+  libwindowswm,
   libx11,
   libxau,
   libxaw,
@@ -546,6 +547,7 @@ self: with self; {
   libICE = libice;
   libpthreadstubs = libpthread-stubs;
   libSM = libsm;
+  libWindowsWM = libwindowswm;
   libX11 = libx11;
   libXau = libxau;
   libXaw = libxaw;
