@@ -7167,6 +7167,8 @@ self: super: with self; {
 
   jenkinsapi = callPackage ../development/python-modules/jenkinsapi { };
 
+  jetpytools = callPackage ../development/python-modules/jetpytools { };
+
   jfx-bridge = callPackage ../development/python-modules/jfx-bridge { };
 
   jh2 = callPackage ../development/python-modules/jh2 { };
