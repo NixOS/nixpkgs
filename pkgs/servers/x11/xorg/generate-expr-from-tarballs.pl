@@ -48,6 +48,7 @@ $pcMap{"xcursor"} = "libXcursor";
 $pcMap{"xdmcp"} = "libXdmcp";
 $pcMap{"xext"} = "libXext";
 $pcMap{"xfixes"} = "libXfixes";
+$pcMap{"xrandr"} = "libXrandr";
 $pcMap{"xrender"} = "libXrender";
 $pcMap{"xtrans"} = "xtrans";
 $pcMap{"xv"} = "libXv";
@@ -305,6 +306,7 @@ print OUT <<EOF;
   libxdmcp,
   libxext,
   libxfixes,
+  libxrandr,
   libxrender,
   libxv,
   lndir,
@@ -350,6 +352,7 @@ self: with self; {
   libXdmcp = libxdmcp;
   libXext = libxext;
   libXfixes = libxfixes;
+  libXrandr = libxrandr;
   libXrender = libxrender;
   libXv = libxv;
   utilmacros = util-macros;
