@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "psudohash";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "t3l3machus";
     repo = "psudohash";
     tag = "v${version}";
-    hash = "sha256-l/Rp9405Wf6vh85PFrRTtTLJE7GPODowseNqEw42J18=";
+    hash = "sha256-I/vHQraGmIWmx/v+szL5ZQJpjkSBaCpEx0r4Mc6FgKA=";
   };
 
   buildInputs = [ python3 ];
