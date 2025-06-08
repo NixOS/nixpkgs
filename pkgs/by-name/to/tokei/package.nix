@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  fetchpatch2,
   libiconv,
   zlib,
 }:
@@ -17,6 +18,14 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     sha256 = "sha256-jCI9VM3y76RI65E5UGuAPuPkDRTMyi+ydx64JWHcGfE=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # https://github.com/XAMPPRocky/tokei/pull/1209
+      url = "https://github.com/XAMPPRocky/tokei/commit/ce8d8535276a2e41878981a8199232986ab96c6b.patch";
+      hash = "sha256-1tb+WmjVsTxs8Awf1mbKOBIhJ3ddoOT8ZjBKA2BMocg=";
+    })
+  ];
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-LzlyrKaRjUo6JnVLQnHidtI4OWa+GrhAc4D8RkL+nmQ=";
