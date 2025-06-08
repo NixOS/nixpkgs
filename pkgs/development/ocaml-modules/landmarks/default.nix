@@ -5,16 +5,16 @@
   ocaml,
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "landmarks";
-  version = "1.4";
+  version = "1.5";
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "LexiFi";
     repo = "landmarks";
-    rev = "b0c753cd2a4c4aa00dffdd3be187d8ed592fabf7";
-    hash = "sha256-Wpr76JURUFrj7v39rdM/2Lr7boa7nL/bnPEz1vMrmQo";
+    tag = "v${version}";
+    hash = "sha256-eIq02D19OzDOrMDHE1Ecrgk+T6s9vj2X6B2HY+z+K8Q=";
   };
 
   doCheck = lib.versionAtLeast ocaml.version "4.08" && lib.versionOlder ocaml.version "5.0";
