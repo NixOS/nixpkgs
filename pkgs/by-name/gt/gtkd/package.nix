@@ -156,10 +156,10 @@ stdenv.mkDerivation rec {
     inherit dcompiler;
   };
 
-  meta = with lib; {
+  meta = {
     description = "D binding and OO wrapper for GTK";
     homepage = "https://gtkd.org";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.lgpl3Plus;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }
