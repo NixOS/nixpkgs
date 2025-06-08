@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
   future,
   pyusb,
 }:
@@ -12,7 +11,6 @@ buildPythonPackage rec {
   pname = "pygreat";
   version = "2024.0.5";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
