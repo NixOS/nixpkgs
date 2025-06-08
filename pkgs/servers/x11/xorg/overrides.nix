@@ -150,16 +150,6 @@ self: super:
 
   mkfontdir = xorg.mkfontscale;
 
-  libAppleWM = super.libAppleWM.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [
-      autoreconfHook
-      xorg.utilmacros
-    ];
-    meta = attrs.meta // {
-      platforms = lib.platforms.darwin;
-    };
-  });
-
   libXtst = super.libXtst.overrideAttrs (attrs: {
     meta = attrs.meta // {
       pkgConfigModules = [ "xtst" ];

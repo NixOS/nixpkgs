@@ -7,6 +7,7 @@
   gccmakedep,
   ico,
   imake,
+  libapplewm,
   libpciaccess,
   libpthread-stubs,
   libx11,
@@ -52,6 +53,7 @@ self: with self; {
     ;
   fontalias = font-alias;
   fontutil = font-util;
+  libAppleWM = libapplewm;
   libpthreadstubs = libpthread-stubs;
   libX11 = libx11;
   libXau = libxau;
@@ -1694,44 +1696,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libAppleWM = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libX11,
-      libXext,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libAppleWM";
-      version = "be972ebc3a97292e7d2b2350eff55ae12df99a42";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "https://gitlab.freedesktop.org/xorg/lib/libAppleWM/-/archive/be972ebc3a97292e7d2b2350eff55ae12df99a42/libAppleWM-be972ebc3a97292e7d2b2350eff55ae12df99a42.tar.bz2";
-        sha256 = "1hrq03pahmrbb05r6a7j7m1nxl65wlfi6d2lwm1kvra63q91f9ph";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libX11
-        libXext
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "applewm" ];
         platforms = lib.platforms.unix;
       };
     })

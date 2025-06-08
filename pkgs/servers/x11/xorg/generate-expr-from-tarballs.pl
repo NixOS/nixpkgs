@@ -292,6 +292,7 @@ print OUT <<EOF;
   gccmakedep,
   ico,
   imake,
+  libapplewm,
   libpciaccess,
   libpthread-stubs,
   libx11,
@@ -337,6 +338,7 @@ self: with self; {
     ;
   fontalias = font-alias;
   fontutil = font-util;
+  libAppleWM = libapplewm;
   libpthreadstubs = libpthread-stubs;
   libX11 = libx11;
   libXau = libxau;
