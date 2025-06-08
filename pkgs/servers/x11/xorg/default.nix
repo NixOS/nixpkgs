@@ -30,6 +30,7 @@
   libpciaccess,
   libpthread-stubs,
   libsm,
+  libwindowswm,
   libx11,
   libxau,
   libxaw,
@@ -199,6 +200,7 @@ self: with self; {
   libICE = libice;
   libpthreadstubs = libpthread-stubs;
   libSM = libsm;
+  libWindowsWM = libwindowswm;
   libX11 = libx11;
   libXau = libxau;
   libXaw = libxaw;
@@ -1280,44 +1282,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libWindowsWM = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      libX11,
-      libXext,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libWindowsWM";
-      version = "1.0.1";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/lib/libWindowsWM-1.0.1.tar.bz2";
-        sha256 = "1p0flwb67xawyv6yhri9w17m1i4lji5qnd0gq8v1vsfb8zw7rw15";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        xorgproto
-        libX11
-        libXext
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "windowswm" ];
         platforms = lib.platforms.unix;
       };
     })
