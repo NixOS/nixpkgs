@@ -311,6 +311,7 @@ print OUT <<EOF;
   xdriinfo,
   xkeyboard-config,
   xlsatoms,
+  xlsclients,
   xorg-cf-files,
   xorg-docs,
   xorgproto,
@@ -336,6 +337,7 @@ self: with self; {
     xcmsdb
     xdriinfo
     xlsatoms
+    xlsclients
     xorgproto
     xtrans
     ;

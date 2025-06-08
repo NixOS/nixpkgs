@@ -1198,7 +1198,6 @@ self: super:
   xkbprint = addMainProgram super.xkbprint { };
   xkill = addMainProgram super.xkill { };
   xload = addMainProgram super.xload { };
-  xlsclients = addMainProgram super.xlsclients { };
   xmag = addMainProgram super.xmag { };
   xmessage = addMainProgram super.xmessage { };
   xmodmap = addMainProgram super.xmodmap { };
