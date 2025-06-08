@@ -17,13 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-7IrnznWa5NI/2gFHVTRQ0IerOkodStbr0aGpKPpeLQk=";
   };
 
-  sourceRoot = "source";
-
-  unpackPhase = ''
-    runHook preUnpack
-    unzip $src -d "$sourceRoot"
-    runHook postUnpack
-  '';
+  sourceRoot = ".";
 
   patches = [
     # set GEOSERVER_DATA_DIR to current working directory if not provided
@@ -92,12 +86,12 @@ stdenv.mkDerivation (finalAttrs: {
       updateScript = ./update.sh;
     };
 
-  meta = with lib; {
+  meta = {
     description = "Open source server for sharing geospatial data";
     homepage = "https://geoserver.org/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl2Plus;
-    teams = [ teams.geospatial ];
-    platforms = platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.geospatial ];
+    platforms = lib.platforms.all;
   };
 })
