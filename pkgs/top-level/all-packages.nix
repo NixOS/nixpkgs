@@ -3208,8 +3208,6 @@ with pkgs;
 
   gssdp-tools = callPackage ../development/libraries/gssdp/tools.nix { };
 
-  gtkd = callPackage ../development/libraries/gtkd { dcompiler = ldc; };
-
   gup = callPackage ../development/tools/build-managers/gup { };
 
   gupnp = callPackage ../development/libraries/gupnp { };
