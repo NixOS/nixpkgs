@@ -22,12 +22,17 @@ stdenv.mkDerivation rec {
     "--with-objectstore-backend-db"
     "--sysconfdir=$out/etc"
     "--localstatedir=$out/var"
+    # The configure script checks for the sqlite3 command, but never uses it.
+    # Provide an arbitrary executable file for cross scenarios.
+    "ac_cv_path_SQLITE3=/"
   ];
 
   buildInputs = [
     botan2
     sqlite
   ];
+
+  strictDeps = true;
 
   postInstall = "rm -rf $out/var";
 

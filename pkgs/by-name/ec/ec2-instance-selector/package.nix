@@ -31,6 +31,9 @@ buildGoModule (finalAttrs: {
     mv $out/bin/cmd $out/bin/ec2-instance-selector
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "HOME" ];
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

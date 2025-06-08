@@ -33,6 +33,7 @@ The variables that this phase control are:
 - `dontVersionCheck`: Disable adding this hook to the [`preInstallCheckHooks`](#ssec-installCheck-phase). Useful if you do want to load the bash functions of the hook, but run them differently.
 - `versionCheckProgram`: The full path to the program that should print the `${version}` string. Defaults roughly to `${placeholder "out"}/bin/${pname}`. Using `$out` in the value of this variable won't work, as environment variables from this variable are not expanded by the hook. Hence using `placeholder` is unavoidable.
 - `versionCheckProgramArg`: The argument that needs to be passed to `versionCheckProgram`. If undefined the hook tries first `--help` and then `--version`. Examples: `version`, `-V`, `-v`.
+- `versionCheckKeepEnvironment`: A list of environment variables to keep and pass to the command. Only those variables should be added to this list that are actually required for the version command to work. If it is not feasible to explicitly list all these environment variables you can set this parameter to the special value `"*"` to disable the `--ignore-environment` flag and thus keep all environment variables.
 - `preVersionCheck`: A hook to run before the check is done.
 - `postVersionCheck`: A hook to run after the check is done.
 

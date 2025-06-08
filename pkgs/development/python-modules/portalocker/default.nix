@@ -13,6 +13,7 @@
 
   # tests
   pygments,
+  pytest-cov-stub,
   pytestCheckHook,
 }:
 
@@ -28,10 +29,6 @@ buildPythonPackage rec {
     hash = "sha256-7CD23aKtnOifo5ml8x9PFJX1FZWPDLfKZUPO97tadJ4=";
   };
 
-  postPatch = ''
-    sed -i "/--cov/d" pytest.ini
-  '';
-
   nativeBuildInputs = [
     setuptools
     setuptools-scm
@@ -41,6 +38,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pygments
+    pytest-cov-stub
     pytestCheckHook
   ];
 

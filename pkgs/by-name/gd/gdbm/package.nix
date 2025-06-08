@@ -1,6 +1,7 @@
 {
   lib,
   fetchurl,
+  fetchpatch,
   stdenv,
   testers,
   updateAutotoolsGnuConfigScriptsHook,
@@ -15,12 +16,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-0C2zxZJu2Hf4gXuBzR+S9T73TKjG21Q/u6AnGzTzk+w=";
   };
 
-  patches = [
-    # Remove on next release.
-    ./upstream-darwin-clock-nanosleep-fix.patch
-    ./upstream-lockwait-test-fixes.patch
-    ./upstream-musl-ssize_t-fix.patch
-  ];
+  patches =
+    [
+      # Remove on next release.
+      ./upstream-darwin-clock-nanosleep-fix.patch
+      ./upstream-lockwait-test-fixes.patch
+      ./upstream-musl-ssize_t-fix.patch
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+      ./freebsd-patch-src-lock-c.patch
+    ];
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 

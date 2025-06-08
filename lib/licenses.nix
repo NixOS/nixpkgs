@@ -702,6 +702,18 @@ lib.mapAttrs mkLicense (
       fullName = "Historic Permission Notice and Disclaimer";
     };
 
+    hpndDifferentDisclaimer = {
+      fullName = "HPND with different disclaimer";
+      url = "https://gitlab.freedesktop.org/xorg/proto/xorgproto/-/blob/1914233e662d23ffb3812b80fadd0bbd064ad91c/COPYING-x11proto#L69-88";
+      # TODO: if the license gets accepted to spdx then
+      #   add spdxId
+      # else
+      #   remove license
+      #   && replace reference with whatever this license is supposed to be then
+      # https://tools.spdx.org/app/license_requests/456
+      # https://github.com/spdx/license-list-xml/issues/2753
+    };
+
     hpndSellVariant = {
       fullName = "Historical Permission Notice and Disclaimer - sell variant";
       spdxId = "HPND-sell-variant";

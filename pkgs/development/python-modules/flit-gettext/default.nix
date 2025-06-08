@@ -15,6 +15,7 @@
   # tests
   build,
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -35,10 +36,6 @@ buildPythonPackage rec {
     })
   ];
 
-  postPatch = ''
-    sed -i "s/--cov//" pyproject.toml
-  '';
-
   nativeBuildInputs = [
     flit-scm
     wheel
@@ -53,6 +50,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     build
     pytestCheckHook
+    pytest-cov-stub
     wheel
   ] ++ optional-dependencies.scm;
 

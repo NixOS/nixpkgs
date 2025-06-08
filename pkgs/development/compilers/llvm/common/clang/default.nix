@@ -201,6 +201,8 @@ stdenv.mkDerivation (
       "python"
     ];
 
+    separateDebugInfo = true;
+
     postInstall =
       ''
         ln -sv $out/bin/clang $out/bin/cpp

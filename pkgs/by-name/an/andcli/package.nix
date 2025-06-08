@@ -2,6 +2,8 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -26,7 +28,13 @@ buildGoModule (finalAttrs: {
     "-X github.com/tjblackheart/andcli/v2/internal/buildinfo.AppVersion=${finalAttrs.src.tag}"
   ];
 
-  # As stated in #404465 the versionCheckHook does not work so it is not used here
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  versionCheckKeepEnvironment = [ "HOME" ];
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://github.com/tjblackheart/andcli";

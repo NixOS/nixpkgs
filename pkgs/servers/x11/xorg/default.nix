@@ -1,21 +1,26 @@
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
 {
   lib,
+  bdftopcf,
   font-alias,
   font-util,
   gccmakedep,
+  imake,
   libpciaccess,
   libpthread-stubs,
   libxcvt,
+  lndir,
   luit,
   makedepend,
   pixman,
+  sessreg,
   util-macros,
   xbitmaps,
   xcb-proto,
   xkeyboard-config,
   xorg-cf-files,
   xorg-docs,
+  xorgproto,
   xorg-sgml-doctools,
   xtrans,
 }:
@@ -23,13 +28,18 @@
 self: with self; {
 
   inherit
+    bdftopcf
     gccmakedep
+    imake
     libpciaccess
     libxcvt
+    lndir
     luit
     makedepend
     pixman
+    sessreg
     xbitmaps
+    xorgproto
     xtrans
     ;
   fontalias = font-alias;
@@ -72,38 +82,6 @@ self: with self; {
         xorgproto
         libXt
       ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  bdftopcf = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "bdftopcf";
-      version = "1.1.2";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/util/bdftopcf-1.1.2.tar.xz";
-        sha256 = "0fjjn1z0cbsmhxkms93w73j2jbzf9f3xgbnjvnisl3rk0icvwq5w";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [ xorgproto ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ ];
@@ -1746,38 +1724,6 @@ self: with self; {
   ) { };
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  imake = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "imake";
-      version = "1.0.10";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/util/imake-1.0.10.tar.xz";
-        sha256 = "1xgcsamfij22ggc4p8anvvihwyf4adg6gjdd6v7m9cypm37cppkm";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [ xorgproto ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libAppleWM = callPackage (
     {
       stdenv,
@@ -3406,38 +3352,6 @@ self: with self; {
   ) { };
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  lndir = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "lndir";
-      version = "1.0.5";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/util/lndir-1.0.5.tar.xz";
-        sha256 = "1nsd23kz6iqxfcis3432zq01i54n98b94m2gcsay1k3mamx5fr9v";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [ xorgproto ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   mkfontscale = callPackage (
     {
       stdenv,
@@ -3515,38 +3429,6 @@ self: with self; {
         libXmu
         libXt
       ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  sessreg = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "sessreg";
-      version = "1.1.3";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/sessreg-1.1.3.tar.xz";
-        sha256 = "1hmc9wsfgl2wmy0kccwa4brxbv02w5wiz5hrz72dsz87x1fwsah2";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [ xorgproto ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ ];
@@ -7608,82 +7490,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xorgproto = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libXt,
-      python3,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xorgproto";
-      version = "2024.1";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/proto/xorgproto-2024.1.tar.xz";
-        sha256 = "0nfbbi4j130m2gxzp20hp642xizbbl68jpbzahiq8nw183yja8ip";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [
-        pkg-config
-        python3
-      ];
-      buildInputs = [ libXt ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [
-          "applewmproto"
-          "bigreqsproto"
-          "compositeproto"
-          "damageproto"
-          "dmxproto"
-          "dpmsproto"
-          "dri2proto"
-          "dri3proto"
-          "evieproto"
-          "fixesproto"
-          "fontcacheproto"
-          "fontsproto"
-          "glproto"
-          "inputproto"
-          "kbproto"
-          "lg3dproto"
-          "presentproto"
-          "printproto"
-          "randrproto"
-          "recordproto"
-          "renderproto"
-          "resourceproto"
-          "scrnsaverproto"
-          "trapproto"
-          "videoproto"
-          "windowswmproto"
-          "xcalibrateproto"
-          "xcmiscproto"
-          "xextproto"
-          "xf86bigfontproto"
-          "xf86dgaproto"
-          "xf86driproto"
-          "xf86miscproto"
-          "xf86rushproto"
-          "xf86vidmodeproto"
-          "xineramaproto"
-          "xproto"
-          "xproxymngproto"
-          "xwaylandproto"
-        ];
         platforms = lib.platforms.unix;
       };
     })

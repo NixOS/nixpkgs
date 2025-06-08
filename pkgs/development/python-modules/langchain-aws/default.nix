@@ -16,6 +16,7 @@
   # tests
   langchain-tests,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
 }:
 
@@ -33,8 +34,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "--snapshot-warn-unused" "" \
-      --replace-fail "--cov=langchain_aws" ""
+      --replace-fail "--snapshot-warn-unused" ""
     substituteInPlace tests/unit_tests/{test_standard.py,chat_models/test_bedrock_converse.py} \
       --replace-fail "langchain_standard_tests" "langchain_tests"
   '';
@@ -61,6 +61,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     langchain-tests
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
