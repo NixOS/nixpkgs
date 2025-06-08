@@ -4656,6 +4656,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  endec-nvim = buildVimPlugin {
+    pname = "endec.nvim";
+    version = "2025-04-07";
+    src = fetchFromGitHub {
+      owner = "ovk";
+      repo = "endec.nvim";
+      rev = "3765f250064040725fa637e9a308253e1421b1fd";
+      sha256 = "088fv7yag7phpwxrmcq82mgy1fin6zcsyb6cz853z22hsn4zb7z5";
+    };
+    meta.homepage = "https://github.com/ovk/endec.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   errormarker-vim = buildVimPlugin {
     pname = "errormarker.vim";
     version = "2015-01-26";
