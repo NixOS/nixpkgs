@@ -1,32 +1,36 @@
 {
   lib,
-  fetchFromGitHub,
+  stdenv,
   python3Packages,
-  libiconv,
-  cargo,
-  coursier,
-  dotnet-sdk,
-  gitMinimal,
-  go,
-  nodejs,
-  perl,
-  cabal-install,
+  fetchFromGitHub,
   julia,
   julia-bin,
+
+  # tests
+  cabal-install,
+  cargo,
+  gitMinimal,
+  go,
+  perl,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
+  coursier,
+  dotnet-sdk,
+  nodejs,
+
+  # passthru
+  callPackage,
   pre-commit,
 }:
 
-with python3Packages;
 let
   i686Linux = stdenv.buildPlatform.system == "i686-linux";
   julia' = if lib.meta.availableOn stdenv.hostPlatform julia then julia else julia-bin;
 in
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "pre-commit";
   version = "4.2.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pre-commit";
@@ -41,7 +45,11 @@ buildPythonApplication rec {
     ./pygrep-pythonpath.patch
   ];
 
-  propagatedBuildInputs = [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     cfgv
     identify
     nodeenv
@@ -52,19 +60,22 @@ buildPythonApplication rec {
 
   nativeCheckInputs =
     [
+      cabal-install
       cargo
       gitMinimal
       go
-      libiconv # For rust tests on Darwin
+      julia'
       perl
+      versionCheckHook
+      writableTmpDirAsHomeHook
+    ]
+    ++ (with python3Packages; [
       pytest-env
       pytest-forked
       pytest-xdist
       pytestCheckHook
       re-assert
-      cabal-install
-      julia'
-    ]
+    ])
     ++ lib.optionals (!i686Linux) [
       # coursier can be moved back to the main nativeCheckInputs list once we’re able to bootstrap a
       # JRE on i686-linux: <https://github.com/NixOS/nixpkgs/issues/314873>. When coursier gets
@@ -79,14 +90,15 @@ buildPythonApplication rec {
       # Node.js-related tests that are currently disabled on i686-linux.
       nodejs
     ];
+  versionCheckProgramArg = "--version";
 
   postPatch = ''
     substituteInPlace pre_commit/resources/hook-tmpl \
       --subst-var-by pre-commit $out
     substituteInPlace pre_commit/languages/python.py \
-      --subst-var-by virtualenv ${virtualenv}
+      --subst-var-by virtualenv ${python3Packages.virtualenv}
     substituteInPlace pre_commit/languages/node.py \
-      --subst-var-by nodeenv ${nodeenv}
+      --subst-var-by nodeenv ${python3Packages.nodeenv}
 
     patchShebangs pre_commit/resources/hook-tmpl
   '';
@@ -110,8 +122,6 @@ buildPythonApplication rec {
       export DOTNET_ROOT="${dotnet-sdk}/share/dotnet"
     ''
     + ''
-      export HOME=$(mktemp -d)
-
       git init -b master
 
       python -m venv --system-site-packages venv
@@ -213,11 +223,12 @@ buildPythonApplication rec {
     inherit gitMinimal pre-commit;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Framework for managing and maintaining multi-language pre-commit hooks";
     homepage = "https://pre-commit.com/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ borisbabic ];
+    changelog = "https://github.com/pre-commit/pre-commit/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ borisbabic ];
     mainProgram = "pre-commit";
   };
 }
