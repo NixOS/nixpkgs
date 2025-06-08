@@ -23,6 +23,7 @@
   xbitmaps,
   xcb-proto,
   xcmsdb,
+  xdriinfo,
   xkeyboard-config,
   xorg-cf-files,
   xorg-docs,
@@ -47,6 +48,7 @@ self: with self; {
     sessreg
     xbitmaps
     xcmsdb
+    xdriinfo
     xorgproto
     xtrans
     ;
@@ -4235,44 +4237,6 @@ self: with self; {
         libXxf86dga
         libXxf86misc
         libXxf86vm
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xdriinfo = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libGL,
-      xorgproto,
-      libX11,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xdriinfo";
-      version = "1.0.7";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xdriinfo-1.0.7.tar.xz";
-        sha256 = "0d7p9fj3znq0av9pjgi2kphqaz5w7b9hxlz63zbxs69bknp8p0yx";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libGL
-        xorgproto
-        libX11
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {

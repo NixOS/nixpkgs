@@ -745,13 +745,6 @@ self: super:
     };
   });
 
-  xdriinfo = super.xdriinfo.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ libGL ];
-    meta = attrs.meta // {
-      mainProgram = "xdriinfo";
-    };
-  });
-
   xev = addMainProgram super.xev { };
   xeyes = addMainProgram super.xeyes { };
 
