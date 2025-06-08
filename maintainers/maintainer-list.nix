@@ -11234,6 +11234,11 @@
     github = "jaredmontoya";
     githubId = 49511278;
   };
+  jasanfarah = {
+    github = "jasanfarah";
+    githubId = 69898185;
+    name = "Jasan Farah";
+  };
   jasoncarr = {
     email = "jcarr250@gmail.com";
     github = "jasoncarr0";
