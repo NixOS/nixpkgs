@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "dlvhdr";
     repo = "diffnav";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-admPiEKyatdUkR89vZP8RYHTqtZVSJ8KSvtpnsBViBw=";
   };
 
@@ -31,7 +31,7 @@ buildGoModule rec {
   '';
 
   meta = {
-    changelog = "https://github.com/dlvhdr/diffnav/releases/tag/${src.rev}";
+    changelog = "https://github.com/dlvhdr/diffnav/releases/tag/v${version}";
     description = "Git diff pager based on delta but with a file tree, à la GitHub";
     homepage = "https://github.com/dlvhdr/diffnav";
     license = lib.licenses.mit;

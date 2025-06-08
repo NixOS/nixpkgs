@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Gemba";
     repo = "skyscraper";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-VcXa+aI2z+EKJgAtMKsYO/QZ3Ky2acsRYcqDqMFNedg=";
   };
 
