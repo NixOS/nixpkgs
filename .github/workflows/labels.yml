@@ -6,14 +6,18 @@
 name: "Label PR"
 
 on:
-  pull_request_target:
+  workflow_call:
+    inputs:
+      caller:
+        description: Name of the calling workflow.
+        required: true
+        type: string
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.run_id }}
+  group: ${{ inputs.caller }}-${{ github.workflow }}-${{ github.event_name }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
 permissions:
-  contents: read
   issues: write # needed to create *new* labels
   pull-requests: write
 
@@ -23,7 +27,55 @@ jobs:
     runs-on: ubuntu-24.04-arm
     if: "!contains(github.event.pull_request.title, '[skip treewide]')"
     steps:
+      - name: Download the comparison results
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        with:
+          pattern: comparison
+          path: comparison
+          merge-multiple: true
+
+      - name: Labels from eval
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            const { readFile } = require('node:fs/promises')
+
+            const pr = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number
+            }
+
+            // Get all currently set labels that we manage
+            const before =
+              (await github.paginate(github.rest.issues.listLabelsOnIssue, pr))
+              .map(({ name }) => name)
+              .filter(name => name.startsWith('10.rebuild') || name == '11.by: package-maintainer')
+
+            // And the labels that should be there
+            const after = JSON.parse(await readFile('comparison/changed-paths.json', 'utf-8')).labels
+
+            // Remove the ones not needed anymore
+            await Promise.all(
+              before.filter(name => !after.includes(name))
+              .map(name => github.rest.issues.removeLabel({
+                ...pr,
+                name
+              }))
+            )
+
+            // And add the ones that aren't set already
+            const added = after.filter(name => !before.includes(name))
+            if (added.length > 0) {
+              await github.rest.issues.addLabels({
+                ...pr,
+                labels: added
+              })
+            }
+
       - uses: actions/labeler@8558fd74291d67161a8a78ce36a881fa63b766a9 # v5.0.0
+        name: Labels from touched files
         if: |
           github.event.pull_request.head.repo.owner.login != 'NixOS' || !(
             github.head_ref == 'haskell-updates' ||
@@ -36,6 +88,7 @@ jobs:
           configuration-path: .github/labeler.yml # default
           sync-labels: true
       - uses: actions/labeler@8558fd74291d67161a8a78ce36a881fa63b766a9 # v5.0.0
+        name: Labels from touched files (no sync)
         if: |
           github.event.pull_request.head.repo.owner.login != 'NixOS' || !(
             github.head_ref == 'haskell-updates' ||
@@ -48,6 +101,7 @@ jobs:
           configuration-path: .github/labeler-no-sync.yml
           sync-labels: false
       - uses: actions/labeler@8558fd74291d67161a8a78ce36a881fa63b766a9 # v5.0.0
+        name: Labels from touched files (development branches)
         # Development branches like staging-next, haskell-updates and python-updates get special labels.
         # This is to avoid the mass of labels there, which is mostly useless - and really annoying for
         # the backport labels.
