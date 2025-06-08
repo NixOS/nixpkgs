@@ -9738,6 +9738,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  ng-nvim = buildVimPlugin {
+    pname = "ng.nvim";
+    version = "2025-04-21";
+    src = fetchFromGitHub {
+      owner = "joeveiga";
+      repo = "ng.nvim";
+      rev = "28b87c46fe813c8859d607f4a31b7b5fbdbd75d3";
+      sha256 = "0i6y9p2cvbka97qnlwpl0kmfbl7xf98sx0khnjd5nappi7kb9zi8";
+    };
+    meta.homepage = "https://github.com/joeveiga/ng.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   nginx-vim = buildVimPlugin {
     pname = "nginx.vim";
     version = "2023-11-26";
