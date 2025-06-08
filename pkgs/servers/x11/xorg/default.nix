@@ -27,6 +27,7 @@
   xkeyboard-config,
   xlsatoms,
   xlsclients,
+  xlsfonts,
   xorg-cf-files,
   xorg-docs,
   xorgproto,
@@ -53,6 +54,7 @@ self: with self; {
     xdriinfo
     xlsatoms
     xlsclients
+    xlsfonts
     xorgproto
     xtrans
     ;
@@ -6873,42 +6875,6 @@ self: with self; {
         libXmu
         xorgproto
         libXt
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xlsfonts = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xlsfonts";
-      version = "1.0.8";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xlsfonts-1.0.8.tar.xz";
-        sha256 = "1kdnzyrm1wqwylghavn9lqi0h4lwf9ifkcv3zikbi176mjg90zw0";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        xorgproto
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {

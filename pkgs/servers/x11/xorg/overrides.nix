@@ -819,13 +819,6 @@ self: super:
       postPatch = lib.concatStrings (lib.mapAttrsToList patchIn layouts);
     });
 
-  xlsfonts = super.xlsfonts.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      license = lib.licenses.mit;
-      mainProgram = "xlsfonts";
-    };
-  });
-
   xorgserver = super.xorgserver.overrideAttrs (
     attrs_passed:
     let

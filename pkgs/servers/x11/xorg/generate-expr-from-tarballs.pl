@@ -312,6 +312,7 @@ print OUT <<EOF;
   xkeyboard-config,
   xlsatoms,
   xlsclients,
+  xlsfonts,
   xorg-cf-files,
   xorg-docs,
   xorgproto,
@@ -338,6 +339,7 @@ self: with self; {
     xdriinfo
     xlsatoms
     xlsclients
+    xlsfonts
     xorgproto
     xtrans
     ;
