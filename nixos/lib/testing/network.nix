@@ -13,7 +13,6 @@ let
     nameValuePair
     optionalAttrs
     optionalString
-    optionals
     range
     toLower
     types
@@ -96,18 +95,16 @@ let
           name: config:
           let
             hostnames =
-              [
-                "${config.networking.hostName}"
-              ]
-              ++ optionals (config.networking.domain != null) [
-                "${config.networking.hostName}.${config.networking.domain}"
-              ];
+              optionalString (
+                config.networking.domain != null
+              ) "${config.networking.hostName}.${config.networking.domain} "
+              + "${config.networking.hostName}\n";
           in
           optionalAttrs (config.networking.primaryIPAddress != "") {
-            "${config.networking.primaryIPAddress}" = hostnames;
+            "${config.networking.primaryIPAddress}" = [ hostnames ];
           }
           // optionalAttrs (config.networking.primaryIPv6Address != "") {
-            "${config.networking.primaryIPv6Address}" = hostnames;
+            "${config.networking.primaryIPv6Address}" = [ hostnames ];
           }
         ) nodes;
 
