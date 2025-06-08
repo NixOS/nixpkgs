@@ -213,46 +213,6 @@ jobs:
           name: comparison
           path: comparison/*
 
-      - name: Labelling pull request
-        if: ${{ github.event_name == 'pull_request_target' }}
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
-        with:
-          script: |
-            const { readFile } = require('node:fs/promises')
-
-            const pr = {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.payload.pull_request.number
-            }
-
-            // Get all currently set labels that we manage
-            const before =
-              (await github.paginate(github.rest.issues.listLabelsOnIssue, pr))
-              .map(({ name }) => name)
-              .filter(name => name.startsWith('10.rebuild') || name == '11.by: package-maintainer')
-
-            // And the labels that should be there
-            const after = JSON.parse(await readFile('comparison/changed-paths.json', 'utf-8')).labels
-
-            // Remove the ones not needed anymore
-            await Promise.all(
-              before.filter(name => !after.includes(name))
-              .map(name => github.rest.issues.removeLabel({
-                ...pr,
-                name
-              }))
-            )
-
-            // And add the ones that aren't set already
-            const added = after.filter(name => !before.includes(name))
-            if (added.length > 0) {
-              await github.rest.issues.addLabels({
-                ...pr,
-                labels: added
-              })
-            }
-
       - name: Add eval summary to commit statuses
         if: ${{ github.event_name == 'pull_request_target' }}
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
@@ -284,6 +244,16 @@ jobs:
               description,
               target_url
             })
+
+  labels:
+    name: Labels
+    needs: [ compare ]
+    uses: ./.github/workflows/labels.yml
+    permissions:
+      issues: write
+      pull-requests: write
+    with:
+      caller: ${{ github.workflow }}
 
   reviewers:
     name: Reviewers
