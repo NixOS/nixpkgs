@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     domain = "codeberg.org";
     owner = "mergiraf";
     repo = "mergiraf";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wnXOl7KzSvvxQP4CebOJ+fEIn7fQDKTmO2PkGMRA4t4=";
   };
 
