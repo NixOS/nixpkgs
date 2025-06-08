@@ -40,7 +40,7 @@ in
     security.pki.certificateFiles = lib.mkOption {
       type = lib.types.listOf lib.types.path;
       default = [ ];
-      example = lib.literalExpression ''[ "''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt" ]'';
+      example = lib.literalExpression ''[ "''${pkgs.dn42-cacert}/etc/ssl/certs/dn42-ca.crt" ]'';
       description = ''
         A list of files containing trusted root certificates in PEM
         format. These are concatenated to form
