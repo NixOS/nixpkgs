@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch,
   installShellFiles,
   iana-etc,
   libredirect,
@@ -19,6 +20,15 @@ buildGoModule rec {
     tag = "v${version}";
     hash = "sha256-CrdMxRAgrDE1lJ3v9AhCN+cKOVqmIVwjE0x+msSVT+c=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-machine-map-endpoint-vulnerability.patch";
+      url = "https://github.com/juanfont/headscale/pull/2642.patch";
+      excludes = [ "CHANGELOG.md" ];
+      hash = "sha256-OmggrI0mkA3mk+k18oYWrQWt9iIFIbKE1cyB3ZBwbC4=";
+    })
+  ];
 
   vendorHash = "sha256-ZQj2A0GdLhHc7JLW7qgpGBveXXNWg9ueSG47OZQQXEw=";
 

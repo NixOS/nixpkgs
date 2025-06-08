@@ -5,15 +5,21 @@ let
   extraArgs = builtins.removeAttrs args [ "callPackage" ];
 in
 rec {
-  rke2_1_29 = common (
-    (import ./1_29/versions.nix)
-    // {
-      updateScript = [
-        ./update-script.sh
-        "29"
-      ];
-    }
-  ) extraArgs;
+  rke2_1_29 =
+    (common (
+      (import ./1_29/versions.nix)
+      // {
+        updateScript = [
+          ./update-script.sh
+          "29"
+        ];
+      }
+    ) extraArgs).overrideAttrs
+      {
+        meta.knownVulnerabilities = [
+          "rke2_1_29 has reached end-of-life on 2025-02-28. See https://www.suse.com/lifecycle#rke2"
+        ];
+      };
 
   rke2_1_30 = common (
     (import ./1_30/versions.nix)
