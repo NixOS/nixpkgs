@@ -401,7 +401,7 @@ let
         (mkIf config.isNormalUser {
           group = mkDefault "users";
           createHome = mkDefault true;
-          home = mkDefault "/home/${config.name}";
+          home = mkDefault "/${cfg.defaultHomeDirectory}/${config.name}";
           homeMode = mkDefault "700";
           useDefaultShell = mkDefault true;
           isSystemUser = mkDefault false;
@@ -618,6 +618,30 @@ in {
         a password or an SSH key.
 
         WARNING: enabling this can lock you out of your system. Enable this only if you know what are you doing.
+      '';
+    };
+
+    users.defaultHomeDirectory = mkOption {
+      type = types.str;
+      default = "/home";
+      description = ''
+        The default directory normal user's home folders are created in. Defaults to /home and can be overriden
+        per user with e.g.
+
+        ```
+        users.defaultHomeDirectory = "/users";
+
+
+        # Alice gets a home of /users/alice
+        users.users.alice = {
+          isNormalUser = true;
+        };
+
+        # Bob gets a home of /remote/home/bob
+        users.users.bob = {
+          home = "/remote/home/bob";
+        };
+        ```
       '';
     };
 

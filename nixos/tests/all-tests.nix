@@ -258,6 +258,7 @@ in {
   ddns-updater = handleTest ./ddns-updater.nix {};
   deconz = handleTest ./deconz.nix {};
   deepin = handleTest ./deepin.nix {};
+  default-home-directory = handleTest ./default-home-directory.nix {};
   deluge = handleTest ./deluge.nix {};
   dendrite = handleTest ./matrix/dendrite.nix {};
   dependency-track = handleTest ./dependency-track.nix {};
