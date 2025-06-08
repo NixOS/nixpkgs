@@ -3538,6 +3538,8 @@ let
         };
       };
 
+      ms-vscode.remote-explorer = callPackage ./ms-vscode.remote-explorer { };
+
       ms-vscode.test-adapter-converter = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "test-adapter-converter";
