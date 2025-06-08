@@ -976,6 +976,10 @@ in
     dependencies = [ self.denops-vim ];
   };
 
+  debugmaster-nvim = super.debugmaster-nvim.overrideAttrs {
+    dependencies = [ self.nvim-dap ];
+  };
+
   defx-nvim = super.defx-nvim.overrideAttrs {
     dependencies = [ self.nvim-yarp ];
   };
