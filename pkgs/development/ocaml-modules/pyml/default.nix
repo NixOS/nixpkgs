@@ -5,6 +5,7 @@
   utop,
   python3,
   stdcompat,
+  writableTmpDirAsHomeHook,
 }:
 
 buildDunePackage rec {
@@ -17,6 +18,10 @@ buildDunePackage rec {
     rev = version;
     sha256 = "sha256-0Yy5T/S3Npwt0XJmEsdXGg5AXYi9vV9UG9nMSzz/CEc=";
   };
+
+  nativeBuildInputs = [
+    writableTmpDirAsHomeHook
+  ];
 
   buildInputs = [
     utop
