@@ -526,6 +526,8 @@ stdenv.mkDerivation (
         optionalString stdenv.hostPlatform.isFreeBSD ''
           rm test/tools/llvm-libtool-darwin/L-and-l.test
           rm test/ExecutionEngine/Interpreter/intrinsics.ll
+          # Fails in sandbox
+          substituteInPlace unittests/Support/LockFileManagerTest.cpp --replace-fail "Basic" "DISABLED_Basic"
         ''
       + ''
         patchShebangs test/BugPoint/compile-custom.ll.py

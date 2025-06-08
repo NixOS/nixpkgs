@@ -5,6 +5,7 @@
   mock,
   pillow,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
   setuptools,
 }:
@@ -30,11 +31,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   postPatch = ''
-    substituteInPlace tox.ini \
-      --replace " --cov --cov-report term-missing:skip-covered" ""
     substituteInPlace pilkit/processors/resize.py \
       --replace "Image.ANTIALIAS" "Image.Resampling.LANCZOS"
   '';
