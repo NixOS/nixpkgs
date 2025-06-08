@@ -7,29 +7,6 @@
 
 let
   cfg = config.services.kutt;
-  kutt = pkgs.buildNpmPackage (finalAttrs: {
-    pname = "kutt";
-    version = "3.2.3";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "thedevs-network";
-      repo = "kutt";
-      tag = "v${finalAttrs.version}";
-      hash = "sha256-mBfwgSTyE8qGdPLrR0w9yBgs/KL+rJ/EmepHJMpGF6Y=";
-    };
-
-    npmDepsHash = "sha256-6TCPP8CNcDfVYFt0/dkL/TZ/H2ATJJDCbx8LiGCEvsc=";
-
-    dontNpmBuild = true;
-    npmPackFlags = [ "--ignore-scripts" ];
-
-    meta = {
-      description = "Free Modern URL Shortener.";
-      homepage = "https://kutt.it";
-      license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [ e0 ];
-    };
-  });
 
   settings = lib.mkMerge ([
     cfg.settings
@@ -54,6 +31,7 @@ in
       inherit (lib)
         mkEnableOption
         mkOption
+        mkPackageOption
         types
         literalExpression
         ;
@@ -61,9 +39,10 @@ in
     {
       enable = mkEnableOption "Kutt, a free modern URL shortener";
 
+      package = mkPackageOption pkgs "kutt" { };
       nodePackage = mkOption {
         type = types.package;
-        default = pkgs.nodejs_24;
+        default = pkgs.nodejs_22;
         defaultText = literalExpression "pkgs.nodejs_24";
         description = "Node.js package to use.";
       };
@@ -92,7 +71,7 @@ in
         description = "Group account under which the Kutt service runs.";
       };
 
-      configureRedis = mkEnableOption "Whether to configure kutt to use the a local redis server";
+      configureRedis = mkEnableOption "Whether to configure kutt to use a local Redis server";
       configurePostgres = mkEnableOption "Whether to configure kutt to use the the local postgresql server";
       configureNginx = mkEnableOption "Whether to configure kutt to use nginx as reverse proxy";
 
@@ -110,12 +89,12 @@ in
     };
 
   config = lib.mkIf cfg.enable {
-    users.users.${cfg.user} = {
+    users.users.kutt = lib.mkIf (cfg.user == "kutt") {
       isSystemUser = true;
       group = cfg.group;
     };
 
-    users.groups.${cfg.group} = { };
+    users.groups.kutt = lib.mkIf (cfg.group == "kutt") { };
 
     services.kutt.settings = with lib; {
       PORT = mkDefault "3000";
@@ -133,7 +112,7 @@ in
       wants = [ "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
 
-      preStart = "${kutt}/lib/node_modules/kutt/node_modules/.bin/knex migrate:latest";
+      preStart = "${cfg.package}/lib/node_modules/kutt/node_modules/.bin/knex migrate:latest";
       script = "${cfg.nodePackage}/bin/node server/server.js --production";
 
       environment = settings;
@@ -142,7 +121,7 @@ in
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        WorkingDirectory = "${kutt}/lib/node_modules/kutt";
+        WorkingDirectory = "${cfg.package}/lib/node_modules/kutt";
         EnvironmentFile = cfg.environmentFile;
         Restart = "always";
 
