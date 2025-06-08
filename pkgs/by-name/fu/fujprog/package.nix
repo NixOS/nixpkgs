@@ -29,13 +29,13 @@ stdenv.mkDerivation rec {
     libusb-compat-0_1
   ];
 
-  meta = with lib; {
+  meta = {
     description = "JTAG programmer for the ULX3S and ULX2S open hardware FPGA development boards";
     mainProgram = "fujprog";
     homepage = "https://github.com/kost/fujprog";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ trepetti ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ trepetti ];
+    platforms = lib.platforms.all;
     changelog = "https://github.com/kost/fujprog/releases/tag/v${version}";
   };
 }

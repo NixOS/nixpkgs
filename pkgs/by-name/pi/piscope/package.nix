@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://abyz.me.uk/rpi/pigpio/piscope.html";
-    description = "A logic analyser (digital waveform viewer) for the Raspberry";
+    description = "Logic analyser (digital waveform viewer) for the Raspberry";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ doronbehar ];
     platforms = lib.platforms.linux;

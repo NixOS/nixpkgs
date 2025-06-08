@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  check,
   libiconv,
   libshout,
   taglib,
@@ -11,12 +12,16 @@
 
 stdenv.mkDerivation rec {
   pname = "ezstream";
-  version = "0.6.0";
+  version = "1.0.2";
 
   src = fetchurl {
     url = "https://ftp.osuosl.org/pub/xiph/releases/ezstream/${pname}-${version}.tar.gz";
-    sha256 = "f86eb8163b470c3acbc182b42406f08313f85187bd9017afb8b79b02f03635c9";
+    hash = "sha256-Ed6Jf0ValbpYVGvc1AqV072mmGbsX3h5qDsCQSbFTCo=";
   };
+
+  checkInputs = [
+    check
+  ];
 
   buildInputs = [
     libiconv

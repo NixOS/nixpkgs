@@ -149,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://www.luanti.org/";
-    description = "An open source voxel game engine (formerly Minetest)";
+    description = "Open source voxel game engine (formerly Minetest)";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [

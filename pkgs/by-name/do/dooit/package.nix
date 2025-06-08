@@ -2,14 +2,11 @@
   lib,
   fetchFromGitHub,
   dooit,
-  python311,
+  python3,
   testers,
   nix-update-script,
   extraPackages ? [ ],
 }:
-let
-  python3 = python311;
-in
 python3.pkgs.buildPythonApplication rec {
   pname = "dooit";
   version = "3.2.2";
@@ -63,12 +60,12 @@ python3.pkgs.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "TUI todo manager";
     homepage = "https://github.com/dooit-org/dooit";
     changelog = "https://github.com/dooit-org/dooit/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       khaneliman
       wesleyjrz
       kraanzu

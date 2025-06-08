@@ -56,12 +56,12 @@ buildGoModule rec {
       --prefix PATH ":" "$binPath"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Guest Agent for Google Compute Engine";
     homepage = "https://github.com/GoogleCloudPlatform/guest-agent";
     changelog = "https://github.com/GoogleCloudPlatform/guest-agent/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ abbradar ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ abbradar ];
+    platforms = lib.platforms.linux;
   };
 }

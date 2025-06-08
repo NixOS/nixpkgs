@@ -399,6 +399,7 @@ let
       fetchurlBoot = import ../../build-support/fetchurl {
         inherit lib stdenvNoCC;
         inherit (prevStage) curl;
+        inherit (config) rewriteURL;
       };
       stdenv = import ../generic {
         inherit

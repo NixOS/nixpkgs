@@ -77,13 +77,13 @@ buildGoModule rec {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cloudflare Tunnel daemon, Cloudflare Access toolkit, and DNS-over-HTTPS client";
     homepage = "https://www.cloudflare.com/products/tunnel";
     changelog = "https://github.com/cloudflare/cloudflared/releases/tag/${version}";
-    license = licenses.asl20;
-    platforms = platforms.unix ++ platforms.windows;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
+    maintainers = with lib.maintainers; [
       bbigras
       enorris
       thoughtpolice

@@ -25,17 +25,17 @@ rustPlatform.buildRustPackage rec {
     systemd
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://git.qyliss.net/pr-tracker/plain/NEWS?h=${version}";
     description = "Nixpkgs pull request channel tracker";
     longDescription = ''
       A web server that displays the path a Nixpkgs pull request will take
       through the various release channels.
     '';
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     homepage = "https://git.qyliss.net/pr-tracker";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       qyliss
       sumnerevans
     ];

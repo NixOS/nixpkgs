@@ -23,12 +23,12 @@ rustPlatform.buildRustPackage rec {
     command = "commitmsgfmt -V";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/mkjeldsen/commitmsgfmt";
     changelog = "https://gitlab.com/mkjeldsen/commitmsgfmt/-/raw/v${version}/CHANGELOG.md";
     description = "Formats commit messages better than fmt(1) and Vim";
     mainProgram = "commitmsgfmt";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mmlb ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mmlb ];
   };
 }

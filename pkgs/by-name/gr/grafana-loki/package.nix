@@ -69,16 +69,16 @@ buildGoModule rec {
       "-X ${t}.Revision=unknown"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Like Prometheus, but for logs";
     mainProgram = "promtail";
-    license = with licenses; [
+    license = with lib.licenses; [
       agpl3Only
       asl20
     ];
     homepage = "https://grafana.com/oss/loki/";
     changelog = "https://github.com/grafana/loki/releases/tag/v${version}";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       willibutz
       globin
       mmahut

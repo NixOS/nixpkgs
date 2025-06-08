@@ -11,6 +11,7 @@
   libXcursor,
   alsa-lib,
   cmake,
+  pkg-config,
   zlib,
   libpng,
   libvorbis,
@@ -36,7 +37,10 @@ stdenv.mkDerivation rec {
     ./encoding.patch
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
   buildInputs = [
     texinfo6_5
     libXext

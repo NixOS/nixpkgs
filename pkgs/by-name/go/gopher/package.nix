@@ -7,20 +7,16 @@
 
 stdenv.mkDerivation rec {
   pname = "gopher";
-  version = "3.0.18";
+  version = "3.0.19";
 
   src = fetchFromGitHub {
     owner = "jgoerzen";
     repo = "gopher";
     rev = "release/${version}";
-    sha256 = "sha256-YAcpEV3SbiUZ4nqYk6k1M41YWdTGSSH7rNB15gv31qQ=";
+    sha256 = "sha256-8J63TnC3Yq7+64PPLrlPEueMa9D/eWkPsb08t1+rPAA=";
   };
 
   buildInputs = [ ncurses ];
-
-  patches = [
-    ./int_main.patch # https://github.com/jgoerzen/gopher/pull/8
-  ];
 
   preConfigure = "export LIBS=-lncurses";
 

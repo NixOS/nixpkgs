@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A visual tool for browsing and editing HDF4 and HDF5 files";
+    description = "Visual tool for browsing and editing HDF4 and HDF5 files";
     license = lib.licenses.free; # BSD-like
     homepage = "https://www.hdfgroup.org/downloads/hdfview";
     downloadPage = "https://github.com/HDFGroup/hdfview";

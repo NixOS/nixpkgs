@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "caldav";
-  version = "1.5.0";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-caldav";
     repo = "caldav";
     tag = "v${version}";
-    hash = "sha256-SYjfQG4muuBcnVeu9cl00Zb2fGUhw157LLxA5/N5EJ0=";
+    hash = "sha256-SWecaXiXp8DSOLVWzgPsbL7UGCtTBfNXYmuDQGdyqbQ=";
   };
 
   build-system = [

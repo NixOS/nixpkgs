@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
 
   cmake,
   qttools,
@@ -56,6 +57,14 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (qtVersion == "6") [
       qt5compat
     ];
+
+  patches = [
+    # fix from: https://github.com/Komet/MediaElch/pull/1878
+    (fetchpatch {
+      url = "https://github.com/Komet/MediaElch/commit/dbea12fbf2c1fe603819392aa2a181cffa168548.patch";
+      hash = "sha256-Lv6rvjKbRNr5XrdZhPyw4S4RRCOnfAGhWgcSLo0gqS8=";
+    })
+  ];
 
   cmakeFlags = [
     "-DDISABLE_UPDATER=ON"

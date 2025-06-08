@@ -14,7 +14,7 @@
   libxslt,
   libxcrypt,
   pkg-config,
-  glibcCross ? null,
+  glibc ? null,
   pam ? null,
   withLibbsd ? lib.meta.availableOn stdenv.hostPlatform libbsd,
   libbsd,
@@ -22,9 +22,9 @@
   tcb,
 }:
 let
-  glibc =
+  glibc' =
     if stdenv.hostPlatform != stdenv.buildPlatform then
-      glibcCross
+      glibc
     else
       assert stdenv.hostPlatform.libc == "glibc";
       stdenv.cc.libc;
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withTcb "--with-tcb";
 
   preBuild = lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
-    substituteInPlace lib/nscd.c --replace /usr/sbin/nscd ${glibc.bin}/bin/nscd
+    substituteInPlace lib/nscd.c --replace /usr/sbin/nscd ${glibc'.bin}/bin/nscd
   '';
 
   postInstall = ''

@@ -18,6 +18,7 @@
   net-snmp,
   curl,
   systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   libxml2,
   poppler,
   gawk,
@@ -111,6 +112,8 @@ stdenv.mkDerivation rec {
       libieee1284
       libv4l
       net-snmp
+    ]
+    ++ lib.optionals withSystemd [
       systemd
     ];
 

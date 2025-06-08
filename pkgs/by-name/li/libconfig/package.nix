@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.8";
 
   src = fetchurl {
-    url = "https://hyperrealm.github.io/${finalAttrs.pname}/dist/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "https://hyperrealm.github.io/libconfig/dist/libconfig-${finalAttrs.version}.tar.gz";
     hash = "sha256-BR4V3Q6QfESQXzF5M/VIcxTypW6MZybIMEzpkIhIUKo=";
   };
 

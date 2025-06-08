@@ -75,13 +75,13 @@ stdenv.mkDerivation (finalAttrs: {
     $out/bin/wp --info
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line interface for WordPress";
     homepage = "https://wp-cli.org";
-    changelog = "https://github.com/wp-cli/wp-cli/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.all;
+    changelog = "https://github.com/wp-cli/wp-cli/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.all;
     mainProgram = "wp";
   };
 })

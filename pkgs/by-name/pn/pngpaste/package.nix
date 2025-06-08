@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     cp pngpaste $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Paste image files from clipboard to file on MacOS";
     longDescription = ''
       Paste PNG into files on MacOS, much like pbpaste does for text.
@@ -33,8 +33,8 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/jcsalterego/pngpaste";
     changelog = "https://github.com/jcsalterego/pngpaste/raw/${version}/CHANGELOG.md";
-    platforms = platforms.darwin;
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ samw ];
+    platforms = lib.platforms.darwin;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ samw ];
   };
 }

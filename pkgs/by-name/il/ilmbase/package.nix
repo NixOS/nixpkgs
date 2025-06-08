@@ -3,7 +3,7 @@
   lib,
   buildPackages,
   cmake,
-  # explicitely depending on openexr_2 because ilmbase doesn't exist for v3
+  # explicitly depending on openexr_2 because ilmbase doesn't exist for v3
   openexr_2,
 }:
 

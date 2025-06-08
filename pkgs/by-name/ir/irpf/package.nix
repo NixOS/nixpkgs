@@ -44,8 +44,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   desktopItems = [
     (makeDesktopItem {
-      name = finalAttrs.pname;
-      exec = finalAttrs.pname;
+      name = "irpf";
+      exec = "irpf";
       icon = "rfb64";
       desktopName = "Imposto de Renda Pessoa Física";
       comment = "Programa Oficial da Receita para elaboração do IRPF";
@@ -56,7 +56,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    BASEDIR="$out/share/${finalAttrs.pname}"
+    BASEDIR="$out/share/irpf"
     mkdir -p "$BASEDIR"
 
     cp --no-preserve=mode -r help lib lib-modulos "$BASEDIR"
@@ -64,10 +64,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -Dm644 irpf.jar Leia-me.htm offline.png online.png pgd-updater.jar "$BASEDIR"
 
     # make xdg-open overrideable at runtime
-    makeWrapper ${jdk11}/bin/java $out/bin/${finalAttrs.pname} \
+    makeWrapper ${jdk11}/bin/java $out/bin/irpf \
       --add-flags "-Dawt.useSystemAAFontSettings=on" \
       --add-flags "-Dswing.aatext=true" \
-      --add-flags "-jar $BASEDIR/${finalAttrs.pname}.jar" \
+      --add-flags "-jar $BASEDIR/irpf.jar" \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
       --set _JAVA_AWT_WM_NONREPARENTING 1 \
       --set AWT_TOOLKIT MToolkit

@@ -78,12 +78,12 @@ python3.pkgs.buildPythonApplication rec {
     "test_parser"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for collecting vulnerability data from various sources";
     homepage = "https://github.com/anchore/vunnel";
     changelog = "https://github.com/anchore/vunnel/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "vunnel";
   };
 }

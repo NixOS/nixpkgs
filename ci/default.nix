@@ -1,5 +1,5 @@
 let
-  pinnedNixpkgs = builtins.fromJSON (builtins.readFile ./pinned-nixpkgs.json);
+  pinned = (builtins.fromJSON (builtins.readFile ./pinned.json)).pins;
 in
 {
   system ? builtins.currentSystem,
@@ -10,8 +10,8 @@ let
   nixpkgs' =
     if nixpkgs == null then
       fetchTarball {
-        url = "https://github.com/NixOS/nixpkgs/archive/${pinnedNixpkgs.rev}.tar.gz";
-        sha256 = pinnedNixpkgs.sha256;
+        inherit (pinned.nixpkgs) url;
+        sha256 = pinned.nixpkgs.hash;
       }
     else
       nixpkgs;
@@ -25,9 +25,8 @@ let
   fmt =
     let
       treefmtNixSrc = fetchTarball {
-        # Master at 2025-02-12
-        url = "https://github.com/numtide/treefmt-nix/archive/4f09b473c936d41582dd744e19f34ec27592c5fd.tar.gz";
-        sha256 = "051vh6raskrxw5k6jncm8zbk9fhbzgm1gxpq9gm5xw1b6wgbgcna";
+        inherit (pinned.treefmt-nix) url;
+        sha256 = pinned.treefmt-nix.hash;
       };
       treefmtEval = (import treefmtNixSrc).evalModule pkgs {
         # Important: The auto-rebase script uses `git filter-branch --tree-filter`,

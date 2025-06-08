@@ -37,11 +37,11 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Poetry plugin to simplify package updates";
     homepage = "https://github.com/MousaZeidBaker/poetry-plugin-up";
     changelog = "https://github.com/MousaZeidBaker/poetry-plugin-up/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = [ maintainers.k900 ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.k900 ];
   };
 }

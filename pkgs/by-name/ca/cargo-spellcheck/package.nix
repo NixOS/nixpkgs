@@ -28,16 +28,16 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::e2e::issue_226"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Checks rust documentation for spelling and grammar mistakes";
     mainProgram = "cargo-spellcheck";
     homepage = "https://github.com/drahnr/cargo-spellcheck";
     changelog = "https://github.com/drahnr/cargo-spellcheck/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       newam
       matthiasbeyer
     ];

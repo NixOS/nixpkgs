@@ -47,12 +47,12 @@ buildGoModule rec {
     version = "v${version}"; # needed because testVersion uses grep -Fw
   };
 
-  meta = with lib; {
+  meta = {
     description = "Kubernetes Native Policy Management";
     mainProgram = "kyverno";
     homepage = "https://kyverno.io/";
     changelog = "https://github.com/kyverno/kyverno/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bryanasdev000 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bryanasdev000 ];
   };
 }

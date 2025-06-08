@@ -57,15 +57,15 @@ stdenv.mkDerivation rec {
     mv $out/lib/obs-vaapi.so $out/lib/obs-plugins/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "OBS Studio VAAPI support via GStreamer";
     homepage = "https://github.com/fzwoch/obs-vaapi";
     changelog = "https://github.com/fzwoch/obs-vaapi/releases/tag/${version}";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ahuzik
       pedrohlc
     ];
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = [
       "x86_64-linux"
       "i686-linux"
