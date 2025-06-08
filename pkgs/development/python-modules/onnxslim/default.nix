@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "onnxslim";
-  version = "0.1.51";
+  version = "0.1.56";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RH0UnMRJvs+lT/YblJcSE1TflAosJLB3XwD8XhqSdsw=";
+    hash = "sha256-/c2id6XH0QQUdiISRlC8YDZNAm7E+8sEdfYfgv8J0Mw=";
   };
 
   build-system = [
