@@ -78,6 +78,7 @@ stdenv.mkDerivation rec {
     description = "Program to configure the Linux IP packet filtering ruleset";
     homepage = "https://www.netfilter.org/projects/iptables/index.html";
     platforms = platforms.linux;
+    mainProgram = "iptables";
     maintainers = with maintainers; [ fpletz ];
     license = licenses.gpl2Plus;
     downloadPage = "https://www.netfilter.org/projects/iptables/files/";
