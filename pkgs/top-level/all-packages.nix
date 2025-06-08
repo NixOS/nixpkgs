@@ -16186,10 +16186,6 @@ with pkgs;
 
   utsushi-networkscan = callPackage ../misc/drivers/utsushi/networkscan.nix { };
 
-  lima = callPackage ../applications/virtualization/lima {
-    inherit (darwin) sigtool;
-  };
-
   image_optim = callPackage ../applications/graphics/image_optim { inherit (nodePackages) svgo; };
 
   # using the new configuration style proposal which is unstable
