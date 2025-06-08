@@ -34,6 +34,8 @@
   magic-wormhole-transit-relay,
   magic-wormhole-mailbox-server,
   pytestCheckHook,
+
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -111,6 +113,8 @@ buildPythonPackage rec {
       --fish wormhole_complete.fish \
       --zsh wormhole_complete.zsh
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     changelog = "https://github.com/magic-wormhole/magic-wormhole/blob/${version}/NEWS.md";
