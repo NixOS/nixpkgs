@@ -11,14 +11,14 @@
   lxd-lts,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dqlite";
   version = "1.18.1";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "dqlite";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7ou077ozbpH21PcvEEcprr4UYJ/X398Ph9dh5C3YyBQ=";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = platforms.linux;
   };
-}
+})
