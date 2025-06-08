@@ -18975,6 +18975,8 @@ self: super: with self; {
 
   vqgan-jax = callPackage ../development/python-modules/vqgan-jax { };
 
+  vsjetpack = callPackage ../development/python-modules/vsjetpack { };
+
   vsts = callPackage ../development/python-modules/vsts { };
 
   vsts-cd-manager = callPackage ../development/python-modules/vsts-cd-manager { };
