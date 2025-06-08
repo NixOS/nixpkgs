@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   installShellFiles,
+  nix-update-script,
   python3Packages,
   perl,
   ffmpeg,
@@ -75,6 +76,8 @@ buildPythonApplication {
   postInstallCheck = ''
     $out/bin/svtplay-dl --help > /dev/null
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/spaam/svtplay-dl";
