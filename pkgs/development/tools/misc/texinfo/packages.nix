@@ -69,25 +69,6 @@ let
   };
 in
 {
-  texinfo413 = stdenv.mkDerivation (finalAttrs: {
-    pname = "texinfo";
-    version = "4.13a";
-
-    src = fetchurl {
-      url = "mirror://gnu/texinfo/texinfo-${finalAttrs.version}.tar.lzma";
-      hash = "sha256-bSiwzq6GbjU2FC/FUuejvJ+EyDAxGcJXMbJHju9kyeU=";
-    };
-
-    buildInputs = [ ncurses ];
-    nativeBuildInputs = [ xz ];
-
-    # Disabled because we don't have zdiff in the stdenv bootstrap.
-    #doCheck = true;
-
-    meta = meta // {
-      branch = finalAttrs.version;
-    };
-  });
   texinfo6_5 = buildTexinfo {
     version = "6.5";
     hash = "sha256-d3dLP0oGwgcFzC7xyASGRCLjz5UjXpZbHwCkbffaX2I=";
