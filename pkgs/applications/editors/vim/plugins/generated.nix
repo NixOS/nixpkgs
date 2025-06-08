@@ -7290,6 +7290,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  live-share-nvim = buildVimPlugin {
+    pname = "live-share.nvim";
+    version = "2025-05-03";
+    src = fetchFromGitHub {
+      owner = "azratul";
+      repo = "live-share.nvim";
+      rev = "11edb945131752c534fc903b7af2abfd6cf7edc6";
+      sha256 = "11aiy4ki2gd67zfvf8bn3c0vghwmk8i87ylx3h1v0kvdjbq3bxww";
+    };
+    meta.homepage = "https://github.com/azratul/live-share.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   llama-vim = buildVimPlugin {
     pname = "llama.vim";
     version = "2025-05-22";
