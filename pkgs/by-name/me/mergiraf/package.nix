@@ -36,6 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Syntax-aware git merge driver for a growing collection of programming languages and file formats";
     homepage = "https://mergiraf.org/";
+    downloadPage = "https://codeberg.org/mergiraf/mergiraf";
     changelog = "https://codeberg.org/mergiraf/mergiraf/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
