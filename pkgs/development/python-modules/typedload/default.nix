@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  preBuild = "python3 gensetup.py --pyproject.toml; rm -rf perftest;";
+  preBuild = "python${python.pythonVersion} gensetup.py --pyproject.toml; rm -rf perftest;";
 
   nativeCheckInputs = [
     attrs
