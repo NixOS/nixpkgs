@@ -35,7 +35,7 @@ buildGoModule rec {
     homepage = "https://github.com/google/yamlfmt";
     changelog = "https://github.com/google/yamlfmt/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ sno2wman ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "yamlfmt";
   };
 }
