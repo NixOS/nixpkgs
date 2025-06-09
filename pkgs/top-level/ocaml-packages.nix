@@ -2203,9 +2203,7 @@ let
 
         ### Z ###
 
-        z3 = callPackage ../development/ocaml-modules/z3 {
-          inherit (pkgs) z3;
-        };
+        z3 = callPackage ../development/ocaml-modules/z3 { };
 
         zarith = callPackage ../development/ocaml-modules/zarith { };
 
