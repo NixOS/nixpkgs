@@ -6,6 +6,7 @@
   six,
   numpy,
   scipy,
+  decorator,
   matplotlib,
 }:
 
@@ -25,6 +26,7 @@ buildPythonPackage rec {
     six
     numpy
     scipy
+    decorator
     matplotlib
   ];
 
