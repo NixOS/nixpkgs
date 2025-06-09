@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "resticprofile";
-  version = "0.30.1";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "creativeprojects";
     repo = "resticprofile";
     tag = "v${version}";
-    hash = "sha256-Pg7rqllNRc/pN5VSgy7KiHQ7V7xOxiGM5fk5Y6+OBjw=";
+    hash = "sha256-ezelvyroQG1EW3SU63OVHJ/T4qjN5DRllvPIXnei1Z4=";
   };
 
   postPatch = ''
