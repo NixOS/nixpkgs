@@ -27,5 +27,6 @@ buildGoModule rec {
     homepage = "https://github.com/Zuplu/postfix-tlspol";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ valodim ];
+    mainProgram = "postfix-tlspol";
   };
 }
