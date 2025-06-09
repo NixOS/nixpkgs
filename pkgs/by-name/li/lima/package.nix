@@ -89,6 +89,9 @@ buildGoModule (finalAttrs: {
     description = "Linux virtual machines with automatic file sharing and port forwarding";
     changelog = "https://github.com/lima-vm/lima/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ anhduy ];
+    maintainers = with lib.maintainers; [
+      anhduy
+      kachick
+    ];
   };
 })
