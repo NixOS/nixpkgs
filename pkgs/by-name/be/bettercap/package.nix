@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  buildGo122Module,
+  buildGoModule,
   fetchFromGitHub,
   pkg-config,
   libpcap,
