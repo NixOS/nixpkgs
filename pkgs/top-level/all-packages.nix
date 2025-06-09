@@ -12979,8 +12979,6 @@ with pkgs;
 
   kbibtex = libsForQt5.callPackage ../applications/office/kbibtex { };
 
-  kaidan = kdePackages.callPackage ../applications/networking/instant-messengers/kaidan { };
-
   kexi = libsForQt5.callPackage ../applications/office/kexi { };
 
   kgraphviewer = callPackage ../applications/graphics/kgraphviewer { };
