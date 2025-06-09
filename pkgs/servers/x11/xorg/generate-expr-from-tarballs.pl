@@ -313,6 +313,7 @@ print OUT <<EOF;
   xlsatoms,
   xlsclients,
   xlsfonts,
+  xmodmap,
   xorg-cf-files,
   xorg-docs,
   xorgproto,
@@ -340,6 +341,7 @@ self: with self; {
     xlsatoms
     xlsclients
     xlsfonts
+    xmodmap
     xorgproto
     xtrans
     ;

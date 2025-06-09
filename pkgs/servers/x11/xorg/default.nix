@@ -28,6 +28,7 @@
   xlsatoms,
   xlsclients,
   xlsfonts,
+  xmodmap,
   xorg-cf-files,
   xorg-docs,
   xorgproto,
@@ -55,6 +56,7 @@ self: with self; {
     xlsatoms
     xlsclients
     xlsfonts
+    xmodmap
     xorgproto
     xtrans
     ;
@@ -6961,42 +6963,6 @@ self: with self; {
       buildInputs = [
         libXaw
         libXt
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xmodmap = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xmodmap";
-      version = "1.0.11";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xmodmap-1.0.11.tar.xz";
-        sha256 = "10byhzdfv1xckqc3d2v52xg1ggxn5j806x4450l3ig5hyxl82bws";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        xorgproto
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {

@@ -1193,7 +1193,6 @@ self: super:
   xload = addMainProgram super.xload { };
   xmag = addMainProgram super.xmag { };
   xmessage = addMainProgram super.xmessage { };
-  xmodmap = addMainProgram super.xmodmap { };
   xmore = addMainProgram super.xmore { };
 
   xpr = addMainProgram super.xpr { };
