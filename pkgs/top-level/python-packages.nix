@@ -2458,6 +2458,8 @@ self: super: with self; {
 
   chromadb = callPackage ../development/python-modules/chromadb { };
 
+  chromadb_0 = callPackage ../development/python-modules/chromadb/0.nix { };
+
   chromaprint = callPackage ../development/python-modules/chromaprint { };
 
   ci-info = callPackage ../development/python-modules/ci-info { };
@@ -6480,6 +6482,8 @@ self: super: with self; {
 
   horizon-eda = callPackage ../development/python-modules/horizon-eda { inherit (pkgs) horizon-eda; };
 
+  housekeeping = callPackage ../development/python-modules/housekeeping { };
+
   howdoi = callPackage ../development/python-modules/howdoi { };
 
   hpack = callPackage ../development/python-modules/hpack { };
@@ -7550,6 +7554,8 @@ self: super: with self; {
   keyutils = callPackage ../development/python-modules/keyutils { inherit (pkgs) keyutils; };
 
   kfactory = callPackage ../development/python-modules/kfactory { };
+
+  kgb = callPackage ../development/python-modules/kgb { };
 
   khanaa = callPackage ../development/python-modules/khanaa { };
 
@@ -12375,6 +12381,8 @@ self: super: with self; {
 
   pydicom-seg = callPackage ../development/python-modules/pydicom-seg { };
 
+  pydiffx = callPackage ../development/python-modules/pydiffx { };
+
   pydigiham = callPackage ../development/python-modules/pydigiham { };
 
   pydiscourse = callPackage ../development/python-modules/pydiscourse { };
@@ -13264,6 +13272,8 @@ self: super: with self; {
   pyprind = callPackage ../development/python-modules/pyprind { };
 
   pyprobables = callPackage ../development/python-modules/pyprobables { };
+
+  pyprobeplus = callPackage ../development/python-modules/pyprobeplus { };
 
   pyprof2calltree = callPackage ../development/python-modules/pyprof2calltree { };
 
@@ -17901,6 +17911,8 @@ self: super: with self; {
 
   tree-sitter-rust = callPackage ../development/python-modules/tree-sitter-rust { };
 
+  tree-sitter-sql = callPackage ../development/python-modules/tree-sitter-sql { };
+
   tree-sitter-yaml = callPackage ../development/python-modules/tree-sitter-yaml { };
 
   treelib = callPackage ../development/python-modules/treelib { };
@@ -19605,6 +19617,8 @@ self: super: with self; {
   zc-lockfile = callPackage ../development/python-modules/zc-lockfile { };
 
   zcbor = callPackage ../development/python-modules/zcbor { };
+
+  zcc-helper = callPackage ../development/python-modules/zcc-helper { };
 
   zconfig = callPackage ../development/python-modules/zconfig { };
 
