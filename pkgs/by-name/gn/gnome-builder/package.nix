@@ -12,6 +12,7 @@
   gi-docgen,
   gobject-introspection,
   gom,
+  glib,
   gtk4,
   gtksourceview5,
   json-glib,
@@ -142,6 +143,8 @@ stdenv.mkDerivation (finalAttrs: {
     gappsWrapperArgs+=(
       # For sysprof-agent
       --prefix PATH : "${sysprof}/bin"
+      # For detecting a11y bus on host
+      --prefix PATH : "${glib}/bin"
       # libpanel icons
       --prefix XDG_DATA_DIRS : "${libpanel}/share"
     )
