@@ -15120,6 +15120,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  ts-autotag-nvim = buildVimPlugin {
+    pname = "ts-autotag.nvim";
+    version = "2025-01-15";
+    src = fetchFromGitHub {
+      owner = "tronikelis";
+      repo = "ts-autotag.nvim";
+      rev = "0f1dc38fddd99b468ef58938d7cd99ce1d6bcb0e";
+      sha256 = "1m0gng9v5dn6mm026nxw0n24bvysr156xhwvf83pv9xqp28xfwar";
+    };
+    meta.homepage = "https://github.com/tronikelis/ts-autotag.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   ts-comments-nvim = buildVimPlugin {
     pname = "ts-comments.nvim";
     version = "2025-02-27";
