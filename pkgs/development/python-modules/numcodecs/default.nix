@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "numcodecs";
-  version = "0.15.1";
+  version = "0.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7u135NZjZkGizGBfvGB4x6jyzEDz36Kz9h5S5gkbBP8=";
+    hash = "sha256-9xIpqVHEmRqyJt9BR/N4DJiNHOzxMJ44jZ5XvLqCc4c=";
   };
 
   build-system = [
