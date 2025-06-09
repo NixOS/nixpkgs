@@ -22,21 +22,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-9QEcAOFB3CtGNqr8LoDaj2vP3KMONlUVooeXECtGsxc=";
   };
 
-  postPatch =
-    ''
-      # Skipped test: ssidst
-      # hwloc/linux: failed to find sysfs cpu topology directory, aborting linux discovery.
-      substituteInPlace tests/meson.build --replace-fail \
-        "subdir('ssids')" \
-        ""
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Skipped test: lsmrt, segfault
-      substituteInPlace tests/meson.build --replace-fail \
-        "['lsmrt', files('lsmr.f90')]," \
-        ""
-    '';
-
   nativeBuildInputs = [
     gfortran
     meson
