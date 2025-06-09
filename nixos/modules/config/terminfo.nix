@@ -41,6 +41,7 @@
         with pkgs.pkgsBuildBuild;
         [
           alacritty
+          alacritty-graphics
           contour
           foot
           ghostty
