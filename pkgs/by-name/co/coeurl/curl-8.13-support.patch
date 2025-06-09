@@ -1,0 +1,15 @@
+diff --git a/lib/request.cpp b/lib/request.cpp
+index 9e555f0..2e13811 100644
+--- a/lib/request.cpp
++++ b/lib/request.cpp
+@@ -132,10 +132,6 @@ Request::Request(Client *client, Method m, std::string url__) : url_(std::move(u
+     curl_easy_setopt(this->easy, CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
+ #endif
+ 
+-    // enable altsvc support, which allows us to switch to http3
+-    curl_easy_setopt(this->easy, CURLOPT_ALTSVC_CTRL, CURLALTSVC_H1 | CURLALTSVC_H2 | CURLALTSVC_H3);
+-    curl_easy_setopt(this->easy, CURLOPT_ALTSVC, client->alt_svc_cache_path().c_str());
+-
+     // default to all supported encodings
+     curl_easy_setopt(this->easy, CURLOPT_ACCEPT_ENCODING, "");
+ 
