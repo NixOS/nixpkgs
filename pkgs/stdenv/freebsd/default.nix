@@ -230,6 +230,7 @@ let
       ];
     };
     iconv = linkBootstrap { paths = [ "bin/iconv" ]; };
+    libiconv = linkBootstrap { paths = [ "include/iconv.h" ]; };
     patch = linkBootstrap { paths = [ "bin/patch" ]; };
     gnutar = linkBootstrap { paths = [ "bin/tar" ]; };
     gawk = linkBootstrap {
@@ -486,6 +487,7 @@ in
           diffutils
           findutils
           iconv
+          libiconv
           patch
           gnutar
           gawk
@@ -501,6 +503,7 @@ in
           inherit lib;
           inherit (self) stdenvNoCC;
           inherit (prevStage) curl;
+          inherit (config) rewriteURL;
         };
         gettext = super.gettext.overrideAttrs {
           NIX_CFLAGS_COMPILE = "-DHAVE_ICONV=1"; # we clearly have iconv. what do you want?
