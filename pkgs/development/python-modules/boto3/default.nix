@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "boto";
     repo = "boto3";
     tag = version;
-    hash = "sha256-OYD/PC/UO6jqBBlMwXJE+5kdIIX72C1Bpz4iswmQ/IA=";
+    hash = "sha256-3NK9xp58w+Wrhs/i7eXLF/P9Dwadptrr4LlpV6MRbGM=";
   };
 
   build-system = [
