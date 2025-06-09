@@ -47,11 +47,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
-    homepage = "https://wifiman.com";
+  meta = with lib; {
     description = "Desktop App for UniFi Device Discovery and Teleport VPN";
+    homepage = "https://wifiman.com";
+    license = licenses.unfree;
+    mainProgram = "wi-fiman-desktop";
+    maintainers = with maintainers; [ neverbehave ];
     platforms = [ "x86_64-linux" ];
-    license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.neverbehave ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }
