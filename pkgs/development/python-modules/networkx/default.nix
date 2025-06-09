@@ -44,7 +44,7 @@ buildPythonPackage rec {
   patches = [
     (fetchpatch {
       url = "https://github.com/networkx/networkx/commit/d85b04a8b9619580d8901f35400414f612c83113.patch";
-      includes = ["networkx/generators/lattice.py"];
+      includes = [ "networkx/generators/lattice.py" ];
       hash = "sha256-6y/aJBDgNkUzmQ6o52CGVVzqoQgkCEXA4iAXhv1cS0c=";
     })
   ];
