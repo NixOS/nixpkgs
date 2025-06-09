@@ -2,7 +2,6 @@
   bash,
   cargo,
   fetchFromGitHub,
-  hatch,
   lib,
   nix-update-script,
   python3Packages,
@@ -35,9 +34,10 @@ python3Packages.buildPythonPackage rec {
 
   nativeBuildInputs = [
     cargo
-    hatch
     python3Packages.build
     python3Packages.installer
+    python3Packages.hatchling
+    python3Packages.hatch-vcs
     rustPlatform.cargoSetupHook
     scdoc
   ];
