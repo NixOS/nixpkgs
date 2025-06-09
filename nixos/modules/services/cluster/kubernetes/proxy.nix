@@ -47,8 +47,8 @@ in
 
     hostname = mkOption {
       description = "Kubernetes proxy hostname override.";
-      default = config.networking.hostName;
-      defaultText = literalExpression "config.networking.hostName";
+      default = config.networking.fqdn;
+      defaultText = literalExpression "config.networking.fqdn";
       type = str;
     };
 
