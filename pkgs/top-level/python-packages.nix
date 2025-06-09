@@ -2291,6 +2291,13 @@ self: super: with self; {
 
   catalogue = callPackage ../development/python-modules/catalogue { };
 
+  catalyst = toPythonModule (
+    pkgs.catalyst.override {
+      python3Packages = self;
+      pythonSupport = true;
+    }
+  );
+
   catboost = callPackage ../development/python-modules/catboost {
     catboost = pkgs.catboost.override {
       pythonSupport = true;
