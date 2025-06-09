@@ -11,7 +11,7 @@
   pkg-config,
   pytestCheckHook,
   pytest-benchmark,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-mock,
   pandas,
   azure-storage-blob,
@@ -62,7 +62,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pandas
     pytest-benchmark
-    pytest-cov
+    pytest-cov-stub
     pytest-mock
     azure-storage-blob
   ];
