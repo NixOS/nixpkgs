@@ -12,10 +12,12 @@
   sdl3,
   stdenv,
 }:
-
-stdenv.mkDerivation rec {
+let
   pname = "lite-xl";
   version = "2.1.8";
+in
+stdenv.mkDerivation {
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "lite-xl";
@@ -43,12 +45,12 @@ stdenv.mkDerivation rec {
     "-Duse_system_lua=true"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight text editor written in Lua";
     homepage = "https://github.com/lite-xl/lite-xl";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sefidel ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sefidel ];
+    platforms = lib.platforms.unix;
     mainProgram = "lite-xl";
   };
 }
