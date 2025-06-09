@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "crosswords";
-  version = "0.3.12";
+  version = "0.3.15";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "jrb";
     repo = "crosswords";
     rev = version;
-    hash = "sha256-3RL2LJdIHmDAjXaxqsE0n5UQMsuBJWEMoyAEoSBemR0=";
+    hash = "sha256-KcHcTjPoQNA5TBXnKgudjBTV/0JbeVMJ09XVAL7SizI=";
   };
 
   nativeBuildInputs = [
