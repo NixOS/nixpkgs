@@ -915,6 +915,7 @@ with lib.maintainers;
       eljamm
       ethancedwards8
       fricklerhandwerk
+      prince213
       wegank
     ];
     scope = "Maintain NGI-supported software.";
