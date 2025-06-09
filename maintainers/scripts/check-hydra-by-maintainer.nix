@@ -18,7 +18,9 @@ let
               # that have disabled Python pkgs as dependencies.
               builtins.seq pkg.outPath [ (return "${prefix}${name}") ]
             else if
-              pkg.recurseForDerivations or false || pkg.recurseForRelease or false
+              pkg.recurseForDerivations or false
+              || pkg.recurseForRelease or false
+              || pkg.__recurseIntoDerivationForReleaseJobs or false
             # then packagesWith cond return pkg
             then
               packagesWith cond return "${name}." pkg
