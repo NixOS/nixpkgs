@@ -28,6 +28,7 @@
   xorgproto,
   xorg-sgml-doctools,
   xtrans,
+  xwininfo,
 }:
 
 self: with self; {
@@ -47,6 +48,7 @@ self: with self; {
     xbitmaps
     xorgproto
     xtrans
+    xwininfo
     ;
   fontalias = font-alias;
   fontutil = font-util;
@@ -7728,44 +7730,6 @@ self: with self; {
       buildInputs = [
         libxkbfile
         libX11
-        xorgproto
-      ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xwininfo = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      libX11,
-      libxcb,
-      xorgproto,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "xwininfo";
-      version = "1.1.6";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/app/xwininfo-1.1.6.tar.xz";
-        sha256 = "0gr5m4lyvkil3cl63zf0sw7bq5qgraqrnvddk6xgk3a42xy8j61m";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
-        libX11
-        libxcb
         xorgproto
       ];
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
