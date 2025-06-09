@@ -945,3 +945,32 @@ fetchtorrent {
 - `config`: When using `transmission` as the `backend`, a json configuration can
   be supplied to transmission. Refer to the [upstream documentation](https://github.com/transmission/transmission/blob/main/docs/Editing-Configuration-Files.md) for information on how to configure.
 
+## `fetchtor` {#fetchtor}
+
+`fetchtor` proxies HTTP requests over a temporary Tor process, allowing `.onion` addresses to be accessed. By default, it behaves like `fetchgit`, `fetchzip`, or `fetchurl`, depending on parameters, but the underlying fetcher can be any fetcher that handles the `ALL_PROXY` and `NO_PROXY` environment variables the same way that curl does.
+
+::: {.example #ex-fetchtor}
+# `fetchtor` usage example
+```nix
+{ fetchtor }:
+fetchtor {
+  url = "http://eweiibe6tdjsdprb4px6rqrzzcsi22m4koia44kc5pcjr7nec2rlxyad.onion/tpo/core/tor";
+  rev = "933c5491db00c703d5d8264fdabd5a5b10aff96f";
+  hash = "sha256-o6Wpso8GSlQH39GpH3IXZyrVhdP8pEYFxLDq9a7yHX0=";
+}
+```
+:::
+
+### Parameters {#fetchtor-parameters}
+
+- `fetcher`: The underlying fetcher to use over Tor.
+
+   This defaults to `fetchgit` if a `rev` attribute is specified, `fetchzip` if
+   the `url` attribute looks like an archive, and `fetchurl` otherwise.
+
+- `noTor`: A list of domains not to proxy through Tor. Default: `[ ]`.
+
+   This is useful when using `fetchgit` and there are submodules that are
+   accessible from the clearnet.
+
+All other parameters are passed to `fetcher` as-is.
