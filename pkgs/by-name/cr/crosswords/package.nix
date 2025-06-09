@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
     libipuz
   ];
 
+  passthru.updateScript = ./update.bash;
+
   meta = {
     description = "Crossword player and editor for GNOME";
     homepage = "https://gitlab.gnome.org/jrb/crosswords";
