@@ -3012,9 +3012,7 @@ with pkgs;
 
   fstl = callPackage ../applications/graphics/fstl { };
 
-  fwknop = callPackage ../tools/security/fwknop {
-    texinfo = texinfo6_7; # Uses @setcontentsaftertitlepage, removed in 6.8.
-  };
+  fwknop = callPackage ../tools/security/fwknop { };
 
   uniscribe = callPackage ../tools/text/uniscribe { };
 
