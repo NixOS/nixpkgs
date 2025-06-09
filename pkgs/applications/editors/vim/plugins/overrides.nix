@@ -3011,6 +3011,10 @@ in
     dependencies = [ self.plenary-nvim ];
   };
 
+  schema-companion-nvim = super.schema-companion-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+  };
+
   scretch-nvim = super.scretch-nvim.overrideAttrs {
   };
 
