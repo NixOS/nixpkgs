@@ -1,0 +1,190 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3cb30d7..af97beb 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -17,7 +17,30 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+ 
+ add_subdirectory(ulog_cpp)
+ 
++option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
++
+ if(MAIN_PROJECT)
++	include(CMakePackageConfigHelpers)
++
++	write_basic_package_version_file(
++		"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
++		VERSION 1.0.0
++		COMPATIBILITY AnyNewerVersion
++	)
++
++	configure_package_config_file(
++		"${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in"
++		"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
++		INSTALL_DESTINATION lib/cmake/${PROJECT_NAME}
++	)
++
++	install(FILES
++		"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
++		"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
++		DESTINATION lib/cmake/${PROJECT_NAME}
++	)
++
++
+ 	add_compile_options(
+ 		# Warnings
+ 		-Wall
+diff --git a/cmake/ulog_cppConfig.cmake.in b/cmake/ulog_cppConfig.cmake.in
+new file mode 100644
+index 0000000..f539113
+--- /dev/null
++++ b/cmake/ulog_cppConfig.cmake.in
+@@ -0,0 +1,3 @@
++@PACKAGE_INIT@
++
++include("${CMAKE_CURRENT_LIST_DIR}/ulog_cppTargets.cmake")
+diff --git a/examples/CMakeLists.txt b/examples/CMakeLists.txt
+index 6f76837..484a21c 100644
+--- a/examples/CMakeLists.txt
++++ b/examples/CMakeLists.txt
+@@ -1,16 +1,16 @@
+-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
++set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/examples)
+ 
+ add_executable(ulog_info ulog_info.cpp)
+ target_link_libraries(ulog_info PUBLIC
+-		ulog_cpp::ulog_cpp
+-		)
++	ulog_cpp::ulog_cpp
++)
+ 
+ add_executable(ulog_data ulog_data.cpp)
+ target_link_libraries(ulog_data PUBLIC
+-		ulog_cpp::ulog_cpp
+-		)
++	ulog_cpp::ulog_cpp
++)
+ 
+ add_executable(ulog_writer ulog_writer.cpp)
+ target_link_libraries(ulog_writer PUBLIC
+-		ulog_cpp::ulog_cpp
+-		)
++	ulog_cpp::ulog_cpp
++)
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index 17f7527..3aef3fc 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -1,5 +1,3 @@
+-
+-
+ include(FetchContent)
+ 
+ set(SYSTEM_ARG SYSTEM)
+@@ -7,31 +5,40 @@ set(SYSTEM_ARG SYSTEM)
+ if (CMAKE_VERSION VERSION_LESS "3.25")
+ 	set(SYSTEM_ARG "")
+ endif ()
+-FetchContent_Declare(
+-		DocTest
+-		GIT_REPOSITORY "https://github.com/doctest/doctest.git"
+-		GIT_TAG "v2.4.11"
+-		${SYSTEM_ARG}
+-)
+-
+ 
+-FetchContent_MakeAvailable(DocTest)
++find_package(doctest CONFIG)
+ 
++if(NOT doctest_FOUND)
++	include(FetchContent)
++	FetchContent_Declare(
++		doctest
++		GIT_REPOSITORY "https://github.com/doctest/doctest.git"
++		GIT_TAG "v2.4.11"
++	)
++	FetchContent_MakeAvailable(doctest)
++endif()
+ 
+ add_executable(tests
+-    main.cpp
+-    ulog_parsing_test.cpp
+-    read_api_test.cpp
++	main.cpp
++	ulog_parsing_test.cpp
++	read_api_test.cpp
+ )
+ 
+ target_link_libraries(tests PUBLIC
+-    doctest::doctest
+-    ulog_cpp::ulog_cpp
++	doctest::doctest
++	ulog_cpp::ulog_cpp
+ )
+ 
++add_dependencies(tests ulog_cpp)
++
+ add_custom_target(
+ 	run-unit-tests
+ 	COMMAND $<TARGET_FILE:tests>
+ 	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+ 	USES_TERMINAL
+ )
++
++add_dependencies(run-unit-tests tests)
++
++enable_testing()
++add_test(NAME unit-tests COMMAND tests)
+diff --git a/ulog_cpp/CMakeLists.txt b/ulog_cpp/CMakeLists.txt
+index 95787b3..333df35 100644
+--- a/ulog_cpp/CMakeLists.txt
++++ b/ulog_cpp/CMakeLists.txt
+@@ -1,10 +1,42 @@
++if(BUILD_SHARED_LIBS)
++    add_library(${PROJECT_NAME} SHARED
++        data_container.cpp
++        messages.cpp
++        reader.cpp
++        writer.cpp
++        simple_writer.cpp
++    )
++else()
++    add_library(${PROJECT_NAME} STATIC
++        data_container.cpp
++        messages.cpp
++        reader.cpp
++        writer.cpp
++        simple_writer.cpp
++    )
++endif()
++add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+ 
+-add_library(${PROJECT_NAME}
+-	data_container.cpp
+-	messages.cpp
+-	reader.cpp
+-	writer.cpp
+-	simple_writer.cpp
++target_include_directories(${PROJECT_NAME}
++    PUBLIC
++      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
++      $<INSTALL_INTERFACE:include/ulog_cpp>
++)
++
++install(TARGETS ${PROJECT_NAME}
++    EXPORT ${PROJECT_NAME}Targets
++    ARCHIVE DESTINATION lib
++    LIBRARY DESTINATION lib
++    RUNTIME DESTINATION bin
+ )
+-add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+ 
++install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/
++    DESTINATION include/ulog_cpp
++    FILES_MATCHING PATTERN "*.hpp"
++)
++
++install(EXPORT ${PROJECT_NAME}Targets
++    FILE ${PROJECT_NAME}Targets.cmake
++    NAMESPACE ${PROJECT_NAME}::
++    DESTINATION lib/cmake/${PROJECT_NAME}
++)
