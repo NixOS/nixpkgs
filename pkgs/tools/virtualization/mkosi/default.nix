@@ -118,7 +118,7 @@ buildPythonApplication rec {
     ./tools/make-man-page.sh
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

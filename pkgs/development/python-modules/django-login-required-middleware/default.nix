@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ django ];
 
-  checkInputs = [ djangorestframework ];
+  nativeCheckInputs = [ djangorestframework ];
 
   pythonImportsCheck = [ "login_required" ];
 

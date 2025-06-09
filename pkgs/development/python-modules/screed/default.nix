@@ -21,7 +21,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools-scm ];
 
   pythonImportsCheck = [ "screed" ];
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # These tests use the screed CLI and make assumptions on how screed is
   # installed that break with nix. Can be enabled when upstream is fixed.

@@ -29,7 +29,7 @@ buildPythonPackage rec {
     numpy
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Universal Histogram Interface";

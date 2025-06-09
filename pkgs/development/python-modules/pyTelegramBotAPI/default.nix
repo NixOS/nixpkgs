@@ -47,7 +47,7 @@ buildPythonPackage rec {
     watchdog = [ watchdog ];
   };
 
-  checkInputs =
+  nativeCheckInputs =
     [
       pytestCheckHook
       requests

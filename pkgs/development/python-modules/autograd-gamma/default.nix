@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "autograd_gamma" ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     homepage = "https://github.com/CamDavidsonPilon/autograd-gamma";

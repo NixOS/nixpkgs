@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   DJANGO_SETTINGS_MODULE = "ckeditor_demo.settings";
 
-  checkInputs = [
+  nativeCheckInputs = [
     django-extensions
     selenium
   ];

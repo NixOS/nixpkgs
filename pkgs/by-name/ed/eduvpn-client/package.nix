@@ -47,7 +47,7 @@ python3Packages.buildPythonApplication rec {
     ln -s $out/${python3Packages.python.sitePackages}/eduvpn/data/share/ $out/share
   '';
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
 

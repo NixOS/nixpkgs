@@ -32,7 +32,7 @@ python3Packages.buildPythonPackage rec {
     python3Packages.humanfriendly
     python3Packages.rustworkx
   ];
-  checkInputs = [ python3Packages.pytestCheckHook ];
+  nativeCheckInputs = [ python3Packages.pytestCheckHook ];
 
   preCheck = "mv nix_heuristic_gc .nix_heuristic_gc";
 

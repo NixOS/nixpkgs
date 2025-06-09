@@ -40,7 +40,7 @@ buildPythonPackage rec {
     redis
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-celery
     pytest-cov-stub

@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pathspec" ];
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   passthru.tests = {
     inherit

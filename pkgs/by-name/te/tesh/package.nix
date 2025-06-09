@@ -16,7 +16,7 @@ python3Packages.buildPythonPackage rec {
     hash = "sha256-GIwg7Cv7tkLu81dmKT65c34eeVnRR5MIYfNwTE7j2Vs=";
   };
 
-  checkInputs = [ python3Packages.pytest ];
+  nativeCheckInputs = [ python3Packages.pytest ];
   nativeBuildInputs = [ python3Packages.poetry-core ];
   propagatedBuildInputs = with python3Packages; [
     click

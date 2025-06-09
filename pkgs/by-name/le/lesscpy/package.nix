@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-EEXRepj2iGRsp1jf8lTm6cA3RWSOBRoIGwOVw7d8gkw=";
   };
 
-  checkInputs = with python3Packages; [ pytestCheckHook ];
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
   pythonImportsCheck = [ "lesscpy" ];
   propagatedBuildInputs = with python3Packages; [
     ply

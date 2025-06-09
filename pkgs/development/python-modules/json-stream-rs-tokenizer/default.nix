@@ -49,7 +49,7 @@ buildPythonPackage rec {
   # To avoid infinite recursion, we only enable tests when building passthru.tests.
   doCheck = false;
 
-  checkInputs = [ json-stream ];
+  nativeCheckInputs = [ json-stream ];
 
   pythonImportsCheck = [ "json_stream_rs_tokenizer" ];
 

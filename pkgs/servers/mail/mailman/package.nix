@@ -46,7 +46,7 @@ buildPythonPackage rec {
     zope-configuration
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     sphinx
   ];
 

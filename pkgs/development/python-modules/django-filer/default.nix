@@ -40,7 +40,7 @@ buildPythonPackage rec {
     heif = [ pillow-heif ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     distutils
     django-app-helper
   ];

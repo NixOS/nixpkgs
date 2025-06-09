@@ -23,7 +23,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  checkInputs = [ netbox ];
+  nativeCheckInputs = [ netbox ];
 
   preFixup = ''
     export PYTHONPATH=${netbox}/opt/netbox/netbox:$PYTHONPATH

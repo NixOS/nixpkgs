@@ -65,7 +65,7 @@ buildPythonPackage rec {
     pygobject3
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gst_all_1.gst-rtsp-server
   ];
 

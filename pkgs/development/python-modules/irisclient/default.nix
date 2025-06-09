@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   dependencies = [ requests ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     httmock
     pytestCheckHook
     pytest-mock

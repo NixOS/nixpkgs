@@ -18,7 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-MS4Q41WVSrjFmFjv4fztyf0U2+5WkNU79aPEKv/CeUQ=";
   };
 
-  checkInputs = [ django ];
+  nativeCheckInputs = [ django ];
 
   checkPhase = ''
     ${python.interpreter} -m django test --settings=telepath.test_settings

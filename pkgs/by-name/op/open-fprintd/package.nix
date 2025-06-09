@@ -27,7 +27,7 @@ python3Packages.buildPythonPackage rec {
     pygobject3
   ];
 
-  checkInputs = with python3Packages; [ dbus-python ];
+  nativeCheckInputs = with python3Packages; [ dbus-python ];
 
   postInstall = ''
     install -D -m 644 debian/open-fprintd.service \

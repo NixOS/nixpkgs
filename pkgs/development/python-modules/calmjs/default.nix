@@ -28,7 +28,7 @@ buildPythonPackage rec {
     calmjs-types
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # spacing changes in argparse output

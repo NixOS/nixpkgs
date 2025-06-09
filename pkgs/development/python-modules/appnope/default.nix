@@ -17,7 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-JYzNOPD1ofOrtZK5TTKxbF1ausmczsltR7F1Vwss8Sw=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Disable App Nap on macOS";

@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ igraph ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ddt
     unittestCheckHook
   ];

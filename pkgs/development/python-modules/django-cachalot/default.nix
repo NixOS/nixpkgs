@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ django ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     beautifulsoup4
     django-debug-toolbar
     psycopg2

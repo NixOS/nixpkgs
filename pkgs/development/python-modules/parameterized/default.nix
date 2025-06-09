@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];

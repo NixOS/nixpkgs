@@ -72,7 +72,7 @@ python3Packages.buildPythonApplication {
     export HOME=$(mktemp -d)
   '';
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytest-aiohttp
     pytest-rerunfailures
     pytestCheckHook

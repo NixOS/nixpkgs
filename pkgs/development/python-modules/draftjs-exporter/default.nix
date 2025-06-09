@@ -28,7 +28,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = optional-dependencies.lxml ++ optional-dependencies.html5lib;
+  nativeCheckInputs = optional-dependencies.lxml ++ optional-dependencies.html5lib;
 
   checkPhase = ''
     # 2 tests in this file randomly fail because they depend on the order of

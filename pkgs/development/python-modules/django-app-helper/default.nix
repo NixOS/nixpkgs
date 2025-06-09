@@ -35,7 +35,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [ django-filer ];
+  nativeCheckInputs = [ django-filer ];
 
   # Tests depend on django-filer, which depends on this package.
   # To avoid infinite recursion, we only enable tests when building passthru.tests.

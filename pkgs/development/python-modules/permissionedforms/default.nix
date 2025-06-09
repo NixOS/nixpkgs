@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ django ];
 
-  checkInputs = [ django-modelcluster ];
+  nativeCheckInputs = [ django-modelcluster ];
 
   checkPhase = ''
     ${python.interpreter} runtests.py

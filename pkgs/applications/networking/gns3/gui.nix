@@ -55,7 +55,7 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = true;
 
-  checkInputs = with python3Packages; [ pytestCheckHook ];
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

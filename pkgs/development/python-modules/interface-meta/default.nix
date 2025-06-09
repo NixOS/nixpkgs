@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "interface_meta" ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     homepage = "https://github.com/matthewwardrop/interface_meta";

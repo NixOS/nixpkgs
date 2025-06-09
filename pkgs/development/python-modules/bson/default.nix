@@ -28,7 +28,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "bson" ];
 

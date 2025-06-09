@@ -43,7 +43,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  checkInputs = [ taskwarrior2 ];
+  nativeCheckInputs = [ taskwarrior2 ];
 
   # TODO: doesn't pass because `can_use` fails and `task --version` seems not to be answering.
   # pythonImportsCheck = [ "taskw_ng" ];

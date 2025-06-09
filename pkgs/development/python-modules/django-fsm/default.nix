@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   dependencies = [ django ];
 
-  checkInputs = [ django-guardian ];
+  nativeCheckInputs = [ django-guardian ];
 
   checkPhase = ''
     ${python.interpreter} tests/manage.py test

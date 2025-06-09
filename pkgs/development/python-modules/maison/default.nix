@@ -36,7 +36,7 @@ buildPythonPackage rec {
     toml
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "maison" ];
 

@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyqt5 ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "qasync" ];
 

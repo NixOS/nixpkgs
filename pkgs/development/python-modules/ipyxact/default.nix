@@ -13,7 +13,7 @@ buildPythonPackage rec {
   format = "setuptools";
 
   propagatedBuildInputs = [ pyyaml ];
-  checkInputs = [
+  nativeCheckInputs = [
     six
     lxml
   ];

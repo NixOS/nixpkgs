@@ -26,7 +26,7 @@ buildPythonPackage rec {
       --replace "install_requires=install_requires" "install_requires=[],"
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "merkletools" ];
 

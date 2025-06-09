@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jupyter_server_fileid" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-jupyter
     pytestCheckHook
   ];

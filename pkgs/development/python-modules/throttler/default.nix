@@ -22,7 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-fE35zPjBUn4e1VRkkIUMtYJ/+LbnUxnxyfnU+UEPwr4=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiohttp
     flake8
     pytest

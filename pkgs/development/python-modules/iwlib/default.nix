@@ -23,7 +23,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pytest ];
   pythonImportsCheck = [ "iwlib" ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   checkPhase = "python iwlib/_iwlib_build.py; pytest -v";
 
   meta = with lib; {

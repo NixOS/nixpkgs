@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Package provides integer types that have a specific range of valid values";

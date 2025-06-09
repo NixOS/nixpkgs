@@ -17,7 +17,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "calmjs.types" ];
 

@@ -37,7 +37,7 @@ buildPythonPackage rec {
     django-parler
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     beautifulsoup4
     distutils
     django-app-helper

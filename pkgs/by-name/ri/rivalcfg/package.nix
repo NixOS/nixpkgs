@@ -20,7 +20,7 @@ python3Packages.buildPythonPackage rec {
     setuptools
   ];
 
-  checkInputs = [ python3Packages.pytest ];
+  nativeCheckInputs = [ python3Packages.pytest ];
   checkPhase = "pytest";
 
   # tests are broken

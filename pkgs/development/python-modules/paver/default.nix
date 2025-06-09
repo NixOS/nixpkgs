@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   dependencies = [ six ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cogapp
     mock
     pytestCheckHook

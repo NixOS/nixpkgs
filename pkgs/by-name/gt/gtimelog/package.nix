@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [
     pygobject3
   ];
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     freezegun
   ];
 

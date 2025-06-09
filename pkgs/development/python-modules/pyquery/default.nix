@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyquery" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     requests
     webob

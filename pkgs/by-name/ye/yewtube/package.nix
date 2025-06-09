@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     pylast
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     dbus-python
     pygobject3

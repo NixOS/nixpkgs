@@ -33,7 +33,7 @@ buildPythonPackage rec {
     uhi
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Pretty print histograms to the console";
