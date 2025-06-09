@@ -152,6 +152,31 @@ in
       description = "Certificate db configuration file. Path must be writeable.";
     };
 
+    disable = lib.mkOption {
+      default = [];
+      type = lib.types.listOf lib.types.str;
+      description = ''
+        Endpoints to disable.
+
+        Even if authentication is enabled, some endpoints don't require
+        authentication and allow issuing certificates unauthorized.
+
+        https://github.com/cloudflare/cfssl/issues/250
+      '';
+      example = [
+        "bundle"
+        "certinfo"
+        "crl"
+        "health"
+        "init_ca"
+        "newcert"
+        "newkey"
+        "revoke"
+        "scan"
+        "scaninfo"
+      ];
+    };
+
     logLevel = lib.mkOption {
       default = 1;
       type = lib.types.enum [
@@ -200,6 +225,7 @@ in
             with cfg;
             let
               opt = n: v: lib.optionalString (v != null) ''-${n}="${v}"'';
+              disabledEndpoints = if disable == [] then null else (lib.concatStringsSep "," disable);
             in
             lib.concatStringsSep " \\\n" [
               "${pkgs.cfssl}/bin/cfssl serve"
@@ -223,6 +249,7 @@ in
               (opt "mutual-tls-client-cert" mutualTlsClientCert)
               (opt "tls-remote-ca" tlsRemoteCa)
               (opt "db-config" dbConfig)
+              (opt "disable" disabledEndpoints)
               (opt "loglevel" (toString logLevel))
               (opt "disable" disable)
             ];
