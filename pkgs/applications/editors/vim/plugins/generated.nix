@@ -13148,6 +13148,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  schema-companion-nvim = buildVimPlugin {
+    pname = "schema-companion.nvim";
+    version = "2025-06-05";
+    src = fetchFromGitHub {
+      owner = "cenk1cenk2";
+      repo = "schema-companion.nvim";
+      rev = "a39cbf5a31ae7aec71e5aaec5e6d409f22b05099";
+      sha256 = "1s0lqxz1rh4f7jspl45pa9981zwz0i0h9c4ml0zy55y926454339";
+    };
+    meta.homepage = "https://github.com/cenk1cenk2/schema-companion.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   scnvim = buildVimPlugin {
     pname = "scnvim";
     version = "2025-01-29";
