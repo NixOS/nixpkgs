@@ -13,14 +13,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.1.0";
+  version = "1.1.3";
   pname = "wifiman";
 
-  # in case of file change
-  # https://web.archive.org/web/20250106030049/https://desktop.wifiman.com/wifiman-desktop-1.1.0-amd64.deb
   src = fetchurl {
     url = "https://desktop.wifiman.com/wifiman-desktop-${version}-amd64.deb";
-    hash = "sha256-GH+/lCNDpVO6GNsBqca7K8drLa6jjwtN+esVmfTftsY=";
+    hash = "sha256-y//hyqymtgEdrKZt3milTb4pp+TDEDQf6RehYgDnhzA=";
   };
 
   nativeBuildInputs = [
