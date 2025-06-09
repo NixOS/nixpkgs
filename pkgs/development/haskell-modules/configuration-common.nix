@@ -383,6 +383,10 @@ self: super:
     })
   ] super.lukko;
 
+  # Relax version constraints (network < 3.2, text < 2.1)
+  # https://github.com/essandess/adblock2privoxy/pull/43
+  adblock2privoxy = doJailbreak super.adblock2privoxy;
+
   # Fixes compilation for basement on i686 for GHC >= 9.4
   # https://github.com/haskell-foundation/foundation/pull/573
   # Patch would not work for GHC >= 9.2 where it breaks compilation on x86_64
