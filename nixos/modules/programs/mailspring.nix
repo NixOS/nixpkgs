@@ -37,6 +37,9 @@ let
             ++ lib.optional (settings.log-file != null) "--log-file=${settings.log-file}"
             ++ lib.optional (settings.background != null) "--background=${toString settings.background}"
             ++ lib.optional (settings.safe != null) "--safe=${toString settings.safe}"
+            ++ lib.optional (settings.safe != null) "--safe=${toString settings.safe}"
+            ++ lib.optional (settings.enable-features != null) "--enable-features=${settings.enable-features}"
+            ++ lib.optional (settings.ozone-platform != null) "--ozone-platform=${settings.ozone-platform}"
           )
         }
 
@@ -99,6 +102,18 @@ in
       type = lib.types.nullOr lib.types.bool;
       default = null;
       description = "Do not load packages from the settings 'packages' or 'dev/packages' folders.";
+    };
+
+    settings.enable-features = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = "Enable features flag";
+    };
+
+    settings.ozone-platform = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = "OzonePlatform to use";
     };
   };
 
