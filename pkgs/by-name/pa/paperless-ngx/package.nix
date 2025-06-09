@@ -26,13 +26,13 @@
   xorg,
 }:
 let
-  version = "2.16.2";
+  version = "2.16.3";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${version}";
-    hash = "sha256-w6VS3m661EvLGk1lVbTAYNzwVgXjvegn0KByGDBFjz0=";
+    hash = "sha256-mtzr/rRzcYcZl9tUkhxEKoFQWm1QTToOYZJXhynwDmk=";
   };
 
   python = python3.override {
@@ -69,7 +69,7 @@ let
 
       pnpmDeps = pnpm.fetchDeps {
         inherit pname version src;
-        hash = "sha256-tSBpZ+1aPLUI0SKpOyKo+OLsJZiyDCxRb+5hKMPrxL8=";
+        hash = "sha256-Z7c+AstVnxbPnEhc51qSqOYhRXqNJVwTvgHFcFp+pYg=";
       };
 
       nativeBuildInputs =
@@ -134,8 +134,8 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     # pytest-xdist with to many threads makes the tests flaky
-    if (( $NIX_BUILD_CORES > 4)); then
-      NIX_BUILD_CORES=4
+    if (( $NIX_BUILD_CORES > 3)); then
+      NIX_BUILD_CORES=3
     fi
     substituteInPlace pyproject.toml \
       --replace-fail '"--numprocesses=auto",' "" \
