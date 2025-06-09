@@ -2,10 +2,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   lib,
-  pkg-config,
-  python3,
-  stdenv,
-  nodejs_22,
+  pkgs,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "kutt";
@@ -23,10 +20,16 @@ buildNpmPackage (finalAttrs: {
   dontNpmBuild = true;
   npmPackFlags = [ "--ignore-scripts" ];
 
+  postInstall = ''
+    makeWrapper ${pkgs.nodejs_22}/bin/node $out/bin/kutt --chdir $out/lib/node_modules/kutt --add-flag server/server.js
+    makeWrapper $out/lib/node_modules/kutt/node_modules/.bin/knex $out/bin/kutt-knex --chdir $out/lib/node_modules/kutt
+  '';
+
   meta = {
     description = "Free modern URL shortener";
     homepage = "https://kutt.it";
     license = lib.licenses.mit;
+    mainProgram = "kutt";
     maintainers = with lib.maintainers; [ e0 ];
   };
 })

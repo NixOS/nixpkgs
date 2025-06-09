@@ -42,12 +42,6 @@ in
       enable = mkEnableOption "Kutt, a free modern URL shortener";
 
       package = mkPackageOption pkgs "kutt" { };
-      nodePackage = mkOption {
-        type = types.package;
-        default = pkgs.nodejs_22;
-        defaultText = literalExpression "pkgs.nodejs_24";
-        description = "Node.js package to use.";
-      };
 
       environmentFile = mkOption {
         type = types.path;
@@ -131,8 +125,8 @@ in
       wants = [ "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
 
-      preStart = "${cfg.package}/lib/node_modules/kutt/node_modules/.bin/knex migrate:latest";
-      script = "${cfg.nodePackage}/bin/node server/server.js --production";
+      preStart = "${cfg.package}/bin/kutt-knex migrate:latest";
+      script = "${cfg.package}/bin/kutt --production";
 
       environment = settings;
 
@@ -140,7 +134,6 @@ in
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        WorkingDirectory = "${cfg.package}/lib/node_modules/kutt";
         EnvironmentFile = cfg.environmentFile;
         Restart = "always";
 
